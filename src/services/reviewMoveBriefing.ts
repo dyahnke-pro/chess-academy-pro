@@ -45,16 +45,23 @@ import { deepFact, theirTarget, binding, moveHit } from './threeFacts';
 import { pieceRoute } from './pieceRoute';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import type { PhraseMemory } from '../utils/phraseMemory';
-import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { withArticle } from '../utils/andList';
+import type { IdeaKind } from './ideaKind';
 
 const PIECE_WORD = PIECE_NAMES;
 /** The piece a SAN names by its first letter (a pawn move names none). */
 const SAN_PIECE: Record<string, string> = { N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king' };
 
-interface Aspect {
+export interface Aspect {
   /** Seat-agnostic clause fragment ("winning the knight", "threatening Nxc7 — a fork"). */
   text: string;
+  /** The same fact led by a verb, for a line of its own ("wins the knight") —
+   *  two renderings of one computed fact (the one composer speaks this). */
+  verb: string;
+  /** Which idea it is (ONE vocabulary, `ideaKind.ts`). */
+  idea: IdeaKind;
+  /** The squares it is about beyond the move itself. */
+  squares: string[];
   /** Importance 0-100 (most-important-first). */
   weight: number;
   /** A hard load-bearing beat (mate/threat) always leads, even if another aspect
@@ -245,7 +252,15 @@ function exchangeOn(fenAfter: string, sq: string): { reply: string; again: strin
  * stated most-important-first. Null only when the move genuinely did nothing
  * nameable (kept silent).
  */
-export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string | null {
+/**
+ * WHAT A MOVE DOES ON THE BOARD, as separate facts (WO-ONE-COACH-01): the
+ * threat it makes, the material it wins or trades, the tactic it lands, the
+ * check, the promotion, the king cover it prises open, the structure it makes
+ * or concedes. One computer for both the review briefing (which joins them
+ * after the move) and the one composer (which speaks each as a line of the
+ * move's thought). Null when the move is illegal.
+ */
+export function moveAspects(input: { fenBefore: string; san: string; prev: PrevCaptureContext; moverIsStudent?: boolean }): { mate: boolean; aspects: Aspect[]; threat: ReturnType<typeof detectNewThreat> } | null {
   const { fenBefore, san, prev, moverIsStudent } = input;
   let mv: ReturnType<Chess['move']> | null = null;
   let fenAfter = '';
@@ -257,7 +272,6 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
     return null;
   }
   if (!mv) return null;
-
   const moverWB: 'w' | 'b' = mv.color;
   // Locked perspective (David 2026-08-28): the student is "you/your", the
   // opponent "they/their" — never "we/our". These stamp the seat-dependent
@@ -269,13 +283,7 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   const toSquare = mv.san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?!.*[a-h][1-8])/)?.[1] ?? mv.to;
   const before = describeStructure(fenBefore);
   const after = describeStructure(fenAfter);
-
-  // ── Checkmate ends the game — the one beat, nothing else matters.
-  if (facts.isMate) {
-    const subj = moverIsStudent === true ? 'You deliver' : moverIsStudent === false ? 'They deliver' : 'This delivers';
-    return `${subj} checkmate — the king has no reply. Game over.`;
-  }
-
+  if (facts.isMate) return { mate: true, aspects: [], threat: null };
   const aspects: Aspect[] = [];
 
   // 1. THE CONCRETE THREAT the move creates — "what it threatens" (David's ask).
@@ -283,7 +291,7 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   const threat = facts.isCheck ? null : detectNewThreat(fenBefore, fenAfter, moverWB);
   if (threat) {
     const kw = threat.kind === 'mate' ? 96 : 88;
-    aspects.push({ text: `threatening ${cleanSan(threat.san)} — ${threat.detail}`, weight: kw, keystone: true });
+    aspects.push({ text: `threatening ${cleanSan(threat.san)} — ${threat.detail}`, verb: `threatens ${cleanSan(threat.san)} — ${threat.detail}`, idea: threat.kind === 'mate' ? 'mate' : 'threat', squares: [threatSquare(threat.san)].filter((x): x is string => !!x), weight: kw, keystone: true });
   }
 
   const recapture = !!mv.captured && prev.square === mv.to && prev.capturedValue > 0;
@@ -298,7 +306,8 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
     const back = recapture ? null : exchangeOn(fenAfter, mv.to);
     aspects.push({
       text: back ? `winning ${withArticle(took)} — if ${back.reply}, ${back.again}` : `winning the ${took}`,
-      weight: 90, keystone: true,
+      verb: back ? `wins ${withArticle(took)} — if ${back.reply}, ${back.again}` : `wins the ${took}`,
+      idea: 'win-material', squares: [mv.to], weight: 90, keystone: true,
     });
   }
 
@@ -312,12 +321,15 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
     const text = recapture ? `taking back the ${took}${again ? `, but ${again} takes again` : ''}`
       : mv.piece === mv.captured ? `trading ${took}s`
         : `trading the ${PIECE_WORD[mv.piece] ?? 'piece'} for the ${took}`;
+    const verb = recapture ? `takes back the ${took}${again ? `, but ${again} takes again` : ''}`
+      : mv.piece === mv.captured ? `trades ${took}s`
+        : `trades the ${PIECE_WORD[mv.piece] ?? 'piece'} for the ${took}`;
     // A take-back that walks into a second capture says a consequence; so
     // does one that wins the bishop pair (Danya's take-backs, measured
     // 2026-10-28: "you recapture with the b-pawn … for the bishop pair"). A
     // plain trade or take-back only restates the capture.
     const pair = !again && gainedBishopPair(fenBefore, san);
-    aspects.push({ text: pair ? `${text} and winning the bishop pair` : text, weight: 60, keystone: true, restates: !again && !pair });
+    aspects.push({ text: pair ? `${text} and winning the bishop pair` : text, verb: pair ? `${verb} and wins the bishop pair` : verb, idea: recapture ? 'recapture' : 'trade', squares: [mv.to], weight: 60, keystone: true, restates: !again && !pair });
   }
 
   // 2c. A capture that LOSES material and is not a take-back: when every
@@ -329,44 +341,71 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   if (mv.captured && facts.materialGained <= -1 && !recapture && (lossBeyondBestAlternative(fenBefore, san) ?? 1) < 1) {
     const took = PIECE_WORD[mv.captured] ?? 'piece';
     const gave = PIECE_WORD[mv.piece] ?? 'piece';
-    aspects.push({ text: `giving up the ${gave} for the ${took} — every other move loses more`, weight: 80, keystone: true });
+    aspects.push({ text: `giving up the ${gave} for the ${took} — every other move loses more`, verb: `gives up the ${gave} for the ${took} — every other move loses more`, idea: 'trade', squares: [mv.to], weight: 80, keystone: true });
   }
 
   // 3. A tactic LANDED (fork / pin / skewer) — when it isn't already the threat.
   if (facts.tacticLanded && !threat) {
-    aspects.push({ text: `landing ${withArticle(tacticWord(facts.tacticLanded))}`, weight: 84, keystone: true });
+    aspects.push({ text: `landing ${withArticle(tacticWord(facts.tacticLanded))}`, verb: `lands ${withArticle(tacticWord(facts.tacticLanded))}`, idea: 'tactic', squares: [], weight: 84, keystone: true });
   }
   // 3b. Battery / discovery / overload the fork/pin/skewer set doesn't carry.
   const namedTactic = newNamedTactic(fenBefore, fenAfter, toSquare, ['battery', 'discovery', 'overload']);
-  if (namedTactic) aspects.push({ text: `setting up ${withArticle(namedTactic)}`, weight: 66 });
+  if (namedTactic) aspects.push({ text: `setting up ${withArticle(namedTactic)}`, verb: `sets up ${withArticle(namedTactic)}`, idea: 'tactic', squares: [], weight: 66 });
 
   // 4. Check (a beat of its own when not mate/threat-carried).
-  if (facts.isCheck) aspects.push({ text: 'checking the king, forcing a reply', weight: 72, keystone: true, restates: true });
+  if (facts.isCheck) aspects.push({ text: 'checking the king, forcing a reply', verb: 'checks the king, forcing a reply', idea: 'check', squares: [], weight: 72, keystone: true, restates: true });
 
   // 5. Promotion.
-  if (facts.promotion) aspects.push({ text: `promoting to ${withArticle(facts.promotion)}`, weight: 86, keystone: true });
+  if (facts.promotion) aspects.push({ text: `promoting to ${withArticle(facts.promotion)}`, verb: `promotes to ${withArticle(facts.promotion)}`, idea: 'promote', squares: [mv.to], weight: 86, keystone: true });
 
   // 6. Prising open the enemy king's cover (an attacking ramification).
-  if (facts.shieldLost > 0) aspects.push({ text: `prising open ${enemyPoss} king's cover`, weight: 68 });
+  if (facts.shieldLost > 0) aspects.push({ text: `prising open ${enemyPoss} king's cover`, verb: `prises open ${enemyPoss} king's cover`, idea: 'attack-king', squares: [], weight: 68 });
 
   // 7. Structure the move MAKES for the mover.
   if (facts.outpostGained) aspects.push({ text: facts.outpostPiece && facts.outpostLanded === false
     ? `making ${facts.outpostGained} an outpost for the ${facts.outpostPiece} that no pawn can challenge`
-    : `planting an outpost on ${facts.outpostGained} that no pawn can challenge`, weight: 52 });
-  if (facts.newPassedPawns.length > 0) aspects.push({ text: `creating a passed pawn on ${facts.newPassedPawns[0]}`, weight: 54 });
-  if (facts.passedPawnsHanded.length > 0) aspects.push({ text: `handing ${moverIsStudent === undefined ? 'the other side' : enemyObj} a passed pawn on ${facts.passedPawnsHanded[0]}`, weight: 54 });
-  if (facts.newOpenFiles.length > 0) aspects.push({ text: `opening the ${facts.newOpenFiles[0]}-file`, weight: 44 });
+    : `planting an outpost on ${facts.outpostGained} that no pawn can challenge`, verb: facts.outpostPiece && facts.outpostLanded === false
+    ? `makes ${facts.outpostGained} an outpost for the ${facts.outpostPiece} that no pawn can challenge`
+    : `plants an outpost on ${facts.outpostGained} that no pawn can challenge`, idea: 'outpost', squares: [facts.outpostGained], weight: 52 });
+  if (facts.newPassedPawns.length > 0) aspects.push({ text: `creating a passed pawn on ${facts.newPassedPawns[0]}`, verb: `creates a passed pawn on ${facts.newPassedPawns[0]}`, idea: 'passed-pawn', squares: [facts.newPassedPawns[0]], weight: 54 });
+  if (facts.passedPawnsHanded.length > 0) aspects.push({ text: `handing ${moverIsStudent === undefined ? 'the other side' : enemyObj} a passed pawn on ${facts.passedPawnsHanded[0]}`, verb: `hands ${moverIsStudent === undefined ? 'the other side' : enemyObj} a passed pawn on ${facts.passedPawnsHanded[0]}`, idea: 'weakness', squares: [facts.passedPawnsHanded[0]], weight: 54 });
+  if (facts.newOpenFiles.length > 0) aspects.push({ text: `opening the ${facts.newOpenFiles[0]}-file`, verb: `opens the ${facts.newOpenFiles[0]}-file`, idea: 'file', squares: [], weight: 44 });
 
   // 8. Structural damage the move INFLICTS on the opponent vs CONCEDES in its own
   //    camp — both are real ramifications; the self-inflicted one is a downside.
   const enemyWeak = newPawnWeakness(before, after, moverWB === 'w' ? 'b' : 'w');
-  if (enemyWeak) aspects.push({ text: `leaving ${enemyObj} with ${enemyWeak}`, weight: 50 });
+  if (enemyWeak) aspects.push({ text: `leaving ${enemyObj} with ${enemyWeak}`, verb: `leaves ${enemyObj} with ${enemyWeak}`, idea: 'weakness', squares: [], weight: 50 });
   const ownWeak = newPawnWeakness(before, after, moverWB);
-  if (ownWeak) aspects.push({ text: `but conceding ${ownWeak} of ${ownPoss} own`, weight: 47 });
+  if (ownWeak) aspects.push({ text: `but conceding ${ownWeak} of ${ownPoss} own`, verb: `concedes ${ownWeak} of ${ownPoss} own`, idea: 'weakness', squares: [], weight: 47 });
 
   // 9. Loosening the mover's OWN king cover (a downside worth flagging).
   const ownShieldLoss = shieldLoss(fenBefore, fenAfter, moverWB);
-  if (ownShieldLoss > 0) aspects.push({ text: `loosening ${ownPoss} own king's cover`, weight: 58 });
+  if (ownShieldLoss > 0) aspects.push({ text: `loosening ${ownPoss} own king's cover`, verb: `loosens ${ownPoss} own king's cover`, idea: 'king-safety', squares: [], weight: 58 });
+  return { mate: false, aspects, threat };
+}
+
+export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string | null {
+  const { fenBefore, san, prev, moverIsStudent } = input;
+  let mv: ReturnType<Chess['move']> | null = null;
+  let fenAfter = '';
+  try {
+    const c = new Chess(fenBefore);
+    mv = c.move(san);
+    fenAfter = c.fen();
+  } catch {
+    return null;
+  }
+  if (!mv) return null;
+
+  const read = moveAspects({ fenBefore, san, prev, moverIsStudent });
+  if (!read) return null;
+  // ── Checkmate ends the game — the one beat, nothing else matters.
+  if (read.mate) {
+    const subj = moverIsStudent === true ? 'You deliver' : moverIsStudent === false ? 'They deliver' : 'This delivers';
+    return `${subj} checkmate — the king has no reply. Game over.`;
+  }
+  const aspects: Aspect[] = [...read.aspects];
+  const threat = read.threat;
 
   // 9b. THE DEEP FACT (the three facts, WO-DECIDER-02): what this move made
   //     possible down the line — "making room for your bishop on g7, where it
@@ -374,20 +413,20 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   //     more profound: it outweighs the positional fallback below, which then
   //     stays silent.
   const deep = moverIsStudent === undefined ? null : deepFact(fenBefore, san, input.line, moverIsStudent);
-  if (deep) aspects.push({ text: deep.text, weight: 56 });
+  if (deep) aspects.push({ text: deep.text, verb: deep.verb, idea: 'set-up', squares: [deep.target], weight: 56 });
 
   // 9c. THE PIECE'S TRIP (lesson voice, P4: the Italian's Nbd2 — "heads for the
   //     kingside by the long road: d2, then f1, then on to e3"). Read down the
   //     line that follows; not said when the deep fact already carries the same
   //     piece on (it says the trip and what it hits at the end).
   const route = pieceRoute(fenBefore, san, input.line);
-  if (route && !(deep && route.path.includes(deep.follow.from))) aspects.push({ text: route.text, weight: 52 });
+  if (route && !(deep && route.path.includes(deep.follow.from))) aspects.push({ text: route.text, verb: route.text, idea: 'route', squares: [...route.path], weight: 52 });
 
   // 10. The positional idea — the quiet fallback so a purely developing move
   //     still teaches (buildReviewMoveTeaching never returns null).
   if (aspects.length === 0 || aspects.every((a) => a.weight < 40)) {
     const concept = buildReviewMoveTeaching(fenBefore, san, moverIsStudent !== false, input.phrases);
-    if (concept) aspects.push({ text: toClause(concept), weight: 25 });
+    if (concept) aspects.push({ text: toClause(concept), verb: toClause(concept), idea: 'develop', squares: [], weight: 25 });
   }
 
   // EVAL REASONING — the assessment (WHY the position is what it is) + the DELTA
@@ -466,7 +505,7 @@ function cleanSan(san: string): string {
 
 /** A full teaching SENTENCE → a lower-cased clause that flows after a subject,
  *  keeping its article ("The knight bears down…" → "the knight bears down…"). */
-function toClause(sentence: string): string {
+export function toClause(sentence: string): string {
   const s = sentence.trim().replace(/\.$/, '').replace(/^(It|Now)\s+/i, '');
   const clause = continueSentence(s);
   // A VERB-LED sentence ("Stakes a claim in the center and opens lines") has
@@ -477,7 +516,7 @@ function toClause(sentence: string): string {
 
 /** Join the ranked aspect clauses into one review-register sentence, seat-stamped:
  *  the student is "you", the opponent "they". A seat-free caller gets "The move X". */
-function joinReview(clauses: string[], moverIsStudent: boolean | undefined, san: string): string {
+export function joinReview(clauses: string[], moverIsStudent: boolean | undefined, san: string): string {
   const subject = moverIsStudent === true ? 'You play ' : moverIsStudent === false ? 'They play ' : `${cleanSan(san)}: `;
   // The clauses are gerund/participle fragments ("winning the knight", "opening
   // the c-file") that read as a list after the move; the "but conceding…" clause
@@ -509,25 +548,9 @@ export interface LessonVoice { phrases: PhraseMemory; keys: Set<string> }
 export function newLessonVoice(): LessonVoice { return { phrases: new Map(), keys: new Set() }; }
 export function forkLessonVoice(v: LessonVoice): LessonVoice { return { phrases: new Map(v.phrases), keys: new Set(v.keys) }; }
 
-/** A LESSON BEAT THROUGH THE DNA DOOR (David 2026-10-07: "pass all narrations
- *  through Danya's DNA template"). The computed briefing, said through the
- *  same `buildVoicePackage` Learn and Review speak through — praise, interface
- *  talk and move numbers cut, the board-truth grade applied, and a sentence or
- *  claim this lesson already said dropped — with the lesson's phrase memory so
- *  an idea is taught in full once and referred to after. '' when nothing is
- *  left to say: silence beats a repeat. */
 /** HOW MUCH OF THE LINE AHEAD A BRIEFING READS: six moves a side — the trip a
  *  piece makes (`pieceRoute`) and the deep fact's proven tier (five of the
  *  mover's moves, `threeFacts`) both sit inside it. Every caller passes this
  *  much of the line that follows (the taught line, the game's own moves). */
 export const BRIEFING_LINE_PLIES = 12;
 
-export function lessonBeat(input: Omit<ReviewMoveBriefingInput, 'phrases'>, voice: LessonVoice): string {
-  const raw = buildReviewMoveBriefing({ ...input, phrases: voice.phrases });
-  if (!raw) return '';
-  let fenAfter = input.fenBefore;
-  try { const c = new Chess(input.fenBefore); c.move(input.san); fenAfter = c.fen(); } catch { return ''; }
-  const pkg = buildVoicePackage([{ kind: 'computed', text: raw, fen: fenAfter }], undefined, voice.keys);
-  for (const k of spokenSentenceKeys(pkg)) voice.keys.add(k);
-  return pkg.spoken;
-}

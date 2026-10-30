@@ -25,7 +25,8 @@
  */
 import { Chess } from 'chess.js';
 import { isGenericAnnotationText } from './walkthroughNarration';
-import { BRIEFING_LINE_PLIES, lessonBeat, newLessonVoice, type LessonVoice } from './reviewMoveBriefing';
+import { BRIEFING_LINE_PLIES, newLessonVoice, type LessonVoice } from './reviewMoveBriefing';
+import { lessonThought } from './moveThoughtFacts';
 import { afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
 
 interface WalkthroughNarrationInput {
@@ -146,12 +147,11 @@ function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveConte
  *  nothing nameable: silence is allowed, filler is not. */
 function computeFill(ctx: PerMoveContext, studentSide: 'white' | 'black' | undefined, voice: LessonVoice): string {
   try {
-    return lessonBeat({
+    return lessonThought({
       fenBefore: ctx.fenBefore,
       san: ctx.san,
       prev: ctx.prev,
       moverIsStudent: studentSide ? ctx.mover === studentSide : undefined,
-      register: 'teach',
       line: ctx.line,
       theirLast: ctx.theirLast,
     }, voice);

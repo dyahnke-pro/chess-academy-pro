@@ -52,7 +52,8 @@ import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
-import { BRIEFING_LINE_PLIES, forkLessonVoice, lessonBeat, newLessonVoice, type LessonVoice } from './reviewMoveBriefing';
+import { BRIEFING_LINE_PLIES, forkLessonVoice, newLessonVoice, type LessonVoice } from './reviewMoveBriefing';
+import { lessonThought } from './moveThoughtFacts';
 import { authoredNoteAt, authoredEntryFor } from './authoredOpeningNotes';
 import { landedTacticTeaching } from './dnaLineNarrator';
 import authoredRepertoire from '../data/repertoire.json';
@@ -1652,12 +1653,11 @@ function computedPlyBeat(
     // Through the DNA door, with the lesson's own memory: an idea is taught
     // in full once and referred to after (David 2026-10-07: "teach me x has a
     // lot of repeated phrases" — 2,167 repeats over 25 lessons).
-    return lessonBeat({
+    return lessonThought({
       fenBefore,
       san: stripSanAnnotations(san),
       prev,
       moverIsStudent,
-      register: 'teach',
       line: line ? line.map(stripSanAnnotations) : null,
       theirLast: theirLast ? { fenBefore: theirLast.fenBefore, san: stripSanAnnotations(theirLast.san) } : null,
     }, voice);
@@ -2253,13 +2253,17 @@ async function generateOpeningFromDbNarration(
       // tempting alternatives) when we have it for this student ply. Even a
       // silent generated idea now speaks the discussion; the taught move stays
       // the conclusion (the weighing carries no "the move is X").
-      if (landed) return fallback ? `${firstSentence(fallback)} ${landed.text}` : landed.text;
+      // THE MOVE'S THOUGHT SPEAKS WHOLE (WO-ONE-COACH-01): the one composer
+      // already chose what the move says — its lead and a second job only when
+      // it weighs as much — so it is never cut back to its first sentence. The
+      // tactic it lands, or the move most people play instead, or the weighing,
+      // follows it: what the move did, then the choices, in his order.
+      if (landed) return fallback ? `${fallback} ${landed.text}` : landed.text;
       // The refuted alternative outranks the plain weighing: same subject (the
       // tempting move), but with the DB frequency, the line and the concept.
-      if (refuted) return fallback ? `${firstSentence(fallback)} ${refuted}` : refuted;
+      if (refuted) return fallback ? `${fallback} ${refuted}` : refuted;
       const delib = deliberationByPly[i];
-      // Same two-beat contract: the weighing is beat two behind the prose.
-      if (delib) return fallback ? `${firstSentence(fallback)} ${delib}` : delib;
+      if (delib) return fallback ? `${fallback} ${delib}` : delib;
       return fallback;
     } catch {
       /* the corpus is a bonus, never a blocker */
@@ -2528,12 +2532,11 @@ function buildFallbackTreeFromDb(
   // and say-once must run forward or the last ply is the one taught in full).
   const dbVoice = newLessonVoice();
   const dbRuns = captureContextsAlong(fensBefore[0], entry.moves.map(stripSanAnnotations));
-  const dbIdeas = entry.moves.map((san, i) => lessonBeat({
+  const dbIdeas = entry.moves.map((san, i) => lessonThought({
     fenBefore: fensBefore[i],
     san: stripSanAnnotations(san),
     prev: dbRuns[i],
     moverIsStudent: (i % 2 === 0 ? 'white' : 'black') === studentSide,
-    register: 'teach',
     line: entry.moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map(stripSanAnnotations),
     theirLast: i > 0 ? { fenBefore: fensBefore[i - 1], san: stripSanAnnotations(entry.moves[i - 1]) } : null,
   }, dbVoice));

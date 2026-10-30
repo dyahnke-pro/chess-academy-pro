@@ -31,6 +31,9 @@ const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 
 export interface DeepFact {
   /** "making room for your bishop on g7, where it hits their rook on a1 once their b4 opens the diagonal" */
   text: string;
+  /** The same fact led by a verb, for a line of its own ("makes room for your
+   *  bishop on g7, where it hits …") — two renderings of one computed fact. */
+  verb: string;
   /** The square the deep fact's hit lands on (the rook's a1). */
   target: string;
   squares: string[];
@@ -227,11 +230,14 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
       ? (taken ? `taking ${taken}${later}` : via ? `heading on to ${n.to} by way of ${via}` : `heading on to ${n.to}${later}`)
       : n.to === m.from ? `making room for ${own} ${piece} on ${n.to}${later}`
         : taken ? `opening the way for ${own} ${piece} to take ${taken}${later}` : `opening the way for ${own} ${piece} to ${n.to}${later}`;
-    const text = opener && ray
-      ? `${goes}, where it ${verb} ${victim} once ${other} ${opener} opens the ${ray.kind}`
-      : `${goes}, where it ${verb} ${victim}`;
+    const goesVerb = samePiece
+      ? (taken ? `takes ${taken}${later}` : via ? `heads on to ${n.to} by way of ${via}` : `heads on to ${n.to}${later}`)
+      : n.to === m.from ? `makes room for ${own} ${piece} on ${n.to}${later}`
+        : taken ? `opens the way for ${own} ${piece} to take ${taken}${later}` : `opens the way for ${own} ${piece} to ${n.to}${later}`;
+    const where = opener && ray ? `, where it ${verb} ${victim} once ${other} ${opener} opens the ${ray.kind}` : `, where it ${verb} ${victim}`;
+    const text = `${goes}${where}`;
     return {
-      text, target: hit.square, squares: [n.from, n.to, hit.square],
+      text, verb: `${goesVerb}${where}`, target: hit.square, squares: [n.from, n.to, hit.square],
       follow: { piece: n.piece, from: n.from, to: n.to, san: n.san, uci: `${n.from}${n.to}${n.promotion ?? ''}` },
       hit: { square: hit.square, type: hit.type, words: `${verb} ${victim}` },
       opener: openerMove ? { san: openerMove.san, from: openerMove.from, to: openerMove.to } : null,
@@ -291,6 +297,12 @@ export function theirTarget(theirLast: { fenBefore: string; san: string } | null
  * move does not answer is a different lesson.
  */
 export function binding(fenBefore: string, san: string, target: TheirTarget, ownPointSquare: string | null, moverIsStudent: boolean): string | null {
+  return bindingFact(fenBefore, san, target, ownPointSquare, moverIsStudent)?.text ?? null;
+}
+
+/** `binding`, with which idea the answer is: a guard (it covers the target)
+ *  or a threat (it goes after the attacker, or hits back on that wing). */
+export function bindingFact(fenBefore: string, san: string, target: TheirTarget, ownPointSquare: string | null, moverIsStudent: boolean): { text: string; idea: 'guard' | 'threat' } | null {
   const before = (() => { try { return new Chess(fenBefore); } catch { return null; } })();
   const r = play(fenBefore, san);
   if (!before || !r) return null;
@@ -299,14 +311,14 @@ export function binding(fenBefore: string, san: string, target: TheirTarget, own
   // its own words (the capture, the retreat) — the binding is not the point.
   if (r.move.to === target.by || r.move.from === target.square) return null;
   if (r.board.attackers(target.square as Square, mover).length > before.attackers(target.square as Square, mover).length) {
-    return 'and this covers it';
+    return { text: 'and this covers it', idea: 'guard' };
   }
   // GOING AFTER THE ATTACKER: the moved piece now hits the piece doing it
   // (…h6 against Bg5) — read off the board, whatever else the move does.
   if (!r.move.captured && hits(r.board, r.move.to, mover).some((h) => h.square === target.by)) {
     const attacker = r.board.get(target.by as Square);
     // A check on their king says itself; "goes after the king" is not a line.
-    if (attacker && attacker.type !== 'k') return `and this goes after the ${PIECE[attacker.type]} doing it`;
+    if (attacker && attacker.type !== 'k') return { text: `and this goes after the ${PIECE[attacker.type]} doing it`, idea: 'threat' };
   }
   // HITTING BACK is only a counter when it is one: the move captured nothing
   // (a capture's point is the capture) and what it hits is worth at least
@@ -318,7 +330,7 @@ export function binding(fenBefore: string, san: string, target: TheirTarget, own
   const worth = (t: string): number => (t === 'k' ? 100 : MATERIAL_VALUE[t] ?? 0);
   if (worth(own.type) < worth(theirs.type)) return null;
   if (wing(ownPointSquare as string) === wing(target.square) && wing(target.square) !== 'centre') {
-    return `so this hits back on the side ${moverIsStudent ? 'they\'re' : 'you\'re'} attacking`;
+    return { text: `so this hits back on the side ${moverIsStudent ? 'they\'re' : 'you\'re'} attacking`, idea: 'threat' };
   }
   return null;
 }

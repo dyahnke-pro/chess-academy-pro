@@ -2,7 +2,7 @@
 // WO-ALL-OPENINGS-01 item 4: "computer narration in the written style, graded
 // blind against the written notes"). For every hand-written beat of the
 // masterclass lessons, the line the computer says at the SAME move — the one
-// briefing every lesson and opening page speaks (`lessonBeat`, the teach
+// line every lesson and opening page speaks (`lessonThought`, the teach
 // register), with the lesson's own memory, the line it sets up and the move
 // before it. David grades the pairs without knowing which is which; the grade
 // decides whether computed narration can stand where the written notes do.
@@ -14,7 +14,8 @@ import { describe, it, expect } from 'vitest';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { getLessonScript } from '../data/lessons';
-import { BRIEFING_LINE_PLIES, lessonBeat, newLessonVoice } from './reviewMoveBriefing';
+import { BRIEFING_LINE_PLIES, newLessonVoice } from './reviewMoveBriefing';
+import { lessonThought } from './moveThoughtFacts';
 import { captureContextsAlong } from './pvPlayback';
 
 const RUN = process.env.P4_PAIRS === '1';
@@ -50,8 +51,8 @@ describe.skipIf(!RUN)('P4 — written notes vs the computed voice, same move', (
         const moverIsStudent = mover === lesson.orientation;
         let computed = '';
         try {
-          computed = lessonBeat({
-            fenBefore: fens[n - 1], san, prev: runs[n - 1], moverIsStudent, register: 'teach',
+          computed = lessonThought({
+            fenBefore: fens[n - 1], san, prev: runs[n - 1], moverIsStudent,
             line: line.slice(n, n + BRIEFING_LINE_PLIES),
             theirLast: n >= 2 ? { fenBefore: fens[n - 2], san: line[n - 2] } : null,
           }, voice);

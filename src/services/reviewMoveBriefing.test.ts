@@ -129,19 +129,21 @@ describe('the one "what a move does" sentence (census group 6, 2026-10-07)', () 
 
 describe('the DNA template on a whole lesson (David 2026-10-07: "teach me x has a lot of repeated phrases")', () => {
   it('teaches an idea in full once, then refers to it — and never says a sentence twice', async () => {
-    const { lessonBeat, newLessonVoice } = await import('./reviewMoveBriefing');
+    const { newLessonVoice } = await import('./reviewMoveBriefing');
+    const { lessonThought } = await import('./moveThoughtFacts');
     const line = 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a5 h3 h6 Nbd2 Be6 Bb5 Qb8 Nf1 Qa7 Be3 Bxe3 Nxe3 Ne7 a4 Ng6 d4'.split(' ');
     const voice = newLessonVoice();
     const c = new Chess(); const fens: string[] = []; const said: string[] = [];
     line.forEach((san, i) => {
       fens.push(c.fen());
-      said.push(lessonBeat({ line: null, theirLast: null, fenBefore: c.fen(), san, prev: i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(fens[i - 1], line[i - 1]), moverIsStudent: i % 2 === 0, register: 'teach' }, voice));
+      said.push(lessonThought({ line: null, theirLast: null, fenBefore: c.fen(), san, prev: i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(fens[i - 1], line[i - 1]), moverIsStudent: i % 2 === 0 }, voice));
       c.move(san);
     });
     const all = said.join(' ');
     // Before: "fighting for the center" on every developing move.
     expect(all.match(/fighting for the center/g)?.length ?? 0).toBeLessThanOrEqual(1);
-    expect(all.match(/stakes a claim in the center/g)?.length ?? 0).toBe(1);
+    // The centre's stock phrase is said in full once (whichever computer leads it).
+    expect(all.match(/stakes (?:a claim in|out) the center/g)?.length ?? 0).toBe(1);
     const spoken = said.filter(Boolean);
     expect(new Set(spoken).size).toBe(spoken.length);
     // The move names its piece once: never "You play Nf3 — the knight …".

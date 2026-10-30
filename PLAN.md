@@ -42,7 +42,49 @@
      | The line | 44% | 0% |
 
    - The lessons' problem is wiring.
-2. **One fact shape**: every computer hands the composer a fact, never a sentence. A fact carries:
+   - **Full bench, 2,493 notes (2026-10-30):**
+
+     | | Any of his ideas | His lead idea | Words |
+     |---|---|---|---|
+     | Built (any computer) | 82% | 68% | – |
+     | Old lesson line (`lessonBeat`) | 23% | 16% | 17 |
+     | The one composer (weights, + the weighing) | 38% | 28% | 23 |
+     | `moveWhy` alone | 34% | 27% | 10 |
+     | Bench composer, his order, 1 a step, Learn length | 53% | 38% | 42 |
+
+   - **Learned values were tried and dropped.** For each computer and idea, the bench measured how often Danya says the same idea at that position. For example: castles 92–95%, takes back 76%, "attacks their bishop" 6%. Ordering by those values scored 31% / 22% against 33% / 24% for the producers' own weights, on the same held-out notes, so the code and its table were deleted. The bench still reports them (`fact-values*.json`) for step 4.
+2. ✅ **One fact shape** (lessons, 2026-10-30). The fact carries:
+   - its step;
+   - its idea (`ideaKind.ts`, one vocabulary: `Record`s map the book job's kinds and the fundamentals' ids, and the board teacher's readings carry theirs);
+   - squares;
+   - weight;
+   - stakes;
+   - proof;
+   - seat;
+   - whether it only restates the board.
+
+   Adapters (`moveThoughtFacts`) wrap the briefing's aspects (`moveAspects`, now one function for Review and lessons), the move's job, the fundamentals (student's move only, seat-worded), the board teacher, the deep fact, the answer to their last move (`bindingFact`), the trip and the stop.
+3. ⏳ **One composer** (`thoughtComposer.composeThought`).
+   - **Lessons are on it** (`lessonThought` replaces `lessonBeat`, deleted). The four callers are moved: the generator, the walkthrough runtime, the walkthrough narrator, the DB fallback.
+   - **What it does:**
+     - Steps are said in his order.
+     - One idea on one square is said once.
+     - The same squares in other words are one claim.
+     - A second job speaks when it weighs within 15 of the lead.
+     - A restatement never leads.
+     - A move whose facts only restate is silent.
+     - A step's next fact leads when its first was already said this lesson.
+     - A stock phrase (develop, centre, castle, space) is said in full once a lesson, then by the board teacher's shorter form.
+   - **The lesson line speaks whole:** the first-sentence cut on the computed beat is gone; the tactic it lands, the refuted alternative or the weighing follows it.
+   - **On Danya's own positions:**
+     - h3 now leads with "keeps their bishop off g4" (was "luft").
+     - …d6 guards e5 once.
+     - Nbd2 says its trip.
+   - Tests: `thoughtComposer.test.ts`, `moveThoughtFacts.test.ts`.
+   - Revision: `WALKTHROUGH_GEN_REV = 2026-10-30-one-composer`.
+   - **Still to do:** Review, Learn and chat onto it (Build 3).
+
+   (Original design notes follow.) A fact carries:
    - its step in his order (the one `ThoughtStep` vocabulary, plus the line);
    - the idea's claim;
    - the squares;

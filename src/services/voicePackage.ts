@@ -409,7 +409,8 @@ const sayKey = (s: string): string => {
 
 /** A claim's key in the ledger. Namespaced with a colon, which `sayKey` never
  *  produces, so a claim can never collide with a sentence. */
-const claimKey = (c: string): string => `claim:${c}`;
+/** The ledger key a claim is said under (one key space with the sentences). */
+export const claimKey = (c: string): string => `claim:${c}`;
 
 export function buildVoicePackage(
   facts: VoiceFact[],

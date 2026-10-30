@@ -4,7 +4,8 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { pieceRoute } from './pieceRoute';
-import { lessonBeat, newLessonVoice, BRIEFING_LINE_PLIES } from './reviewMoveBriefing';
+import { newLessonVoice, BRIEFING_LINE_PLIES } from './reviewMoveBriefing';
+import { lessonThought } from './moveThoughtFacts';
 import { captureContextsAlong } from './pvPlayback';
 
 const ITALIAN = 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a5 h3 h6 Nbd2 Be6 Bb5 Qb8 Nf1 Qa7 Be3 Bxe3 Nxe3 Ne7 a4 Ng6'.split(' ');
@@ -50,11 +51,11 @@ describe('the lesson beat says the trip', () => {
     const runs = captureContextsAlong(fens[0], ITALIAN);
     const voice = newLessonVoice();
     const n = 17;
-    const text = lessonBeat({
-      fenBefore: fens[n - 1], san: ITALIAN[n - 1], prev: runs[n - 1], moverIsStudent: true, register: 'teach',
+    const text = lessonThought({
+      fenBefore: fens[n - 1], san: ITALIAN[n - 1], prev: runs[n - 1], moverIsStudent: true,
       line: ITALIAN.slice(n, n + BRIEFING_LINE_PLIES),
       theirLast: { fenBefore: fens[n - 2], san: ITALIAN[n - 2] },
     }, voice);
-    expect(text).toMatch(/sending the knight on to e3, by way of f1/);
+    expect(text).toMatch(/sending the knight on to e3, by way of f1|sends the knight on to e3, by way of f1/);
   });
 });

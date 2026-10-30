@@ -34,4 +34,4 @@
 // a move says the guard it goes after, the target only its king guards, the
 // central break, what a fianchetto bishop aims at, a piece's trip; the
 // briefing reads 12 plies of the line ahead; a follow-up trade is a trade.
-export const WALKTHROUGH_GEN_REV = '2026-10-30-lesson-voice';
+export const WALKTHROUGH_GEN_REV = '2026-10-30-one-composer';

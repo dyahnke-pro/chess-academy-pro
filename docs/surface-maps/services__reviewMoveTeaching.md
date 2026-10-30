@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**923 lines · 5 exports · 20 importers · 11 tests · 0 audits**
+**928 lines · 5 exports · 22 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,11 +13,13 @@
 ## Who calls in
 
 - `src/services/coachFeatureService.ts`
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/discussionPractice.ts`
 - `src/services/guardPressure.test.ts`
 - `src/services/learnBoardTeaching.ts`
 - `src/services/learnMoveTeaching.ts`
 - `src/services/lessonVoiceIdeas.test.ts`
+- `src/services/moveThoughtFacts.ts`
 - `src/services/playCommentary.ts`
 - `src/services/projectedLineVoice.ts`
 - `src/services/reviewFullData.ts`
@@ -44,9 +46,10 @@
 - `src/services/teachMistakeWhy.test.ts:47`
 - `src/services/walkOct1Learn.test.ts:85`
 
-### `buildReviewMoveTeaching` (function) — 51 call sites
+### `buildReviewMoveTeaching` (function) — 52 call sites
 - `src/services/coachFeatureService.ts:1117`
 - `src/services/coachFeatureService.ts:3874`
+- `src/services/danyaBench.measure.test.ts:345`
 - `src/services/discussionPractice.ts:173`
 - `src/services/guardPressure.test.ts:20`
 - `src/services/guardPressure.test.ts:24`
@@ -66,7 +69,7 @@
 - `src/services/lessonVoiceIdeas.test.ts:63`
 - `src/services/lessonVoiceIdeas.test.ts:70`
 - `src/services/projectedLineVoice.ts:144`
-- `src/services/reviewMoveBriefing.ts:389`
+- `src/services/reviewMoveBriefing.ts:428`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`
@@ -97,8 +100,9 @@
 - `src/services/squareRole.test.ts:29`
 - `src/services/squareRole.test.ts:44`
 
-### `buildReviewMoveTeachingFact` (function) — 4 call sites
+### `buildReviewMoveTeachingFact` (function) — 5 call sites
 - `src/services/learnBoardTeaching.ts:1272`
+- `src/services/moveThoughtFacts.ts:129`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
 - `src/services/reviewMoveTeaching.test.ts:216`
@@ -123,6 +127,7 @@
 
 ## Tests
 
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/guardPressure.test.ts`
 - `src/services/lessonVoiceIdeas.test.ts`
 - `src/services/reviewMoveTeaching.denied.test.ts`

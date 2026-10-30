@@ -193,7 +193,8 @@ describe('useTeachWalkthrough', () => {
     // The ONE briefing every generated lesson bakes (census group 6) — seat-
     // stamped to the student, never the private computer that called a
     // defended pawn a target.
-    expect(spoken).toMatch(/You play e4 — it stakes a claim in the center/);
+    // The one composer's line for the move (WO-ONE-COACH-01): what e4 does to the centre.
+    expect(spoken).toMatch(/You play e4 — it stakes (?:a claim in|out) the center/);
   }, 15000);
 
   it('stop returns to idle and clears the tree', async () => {

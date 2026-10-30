@@ -23,6 +23,8 @@ const MAX_WAIT = 2;
 export interface PieceRoute {
   /** "sending the knight on to e3, by way of f1" */
   text: string;
+  /** The same trip led by a verb: "sends the knight on to e3, by way of f1". */
+  verb: string;
   /** Where the piece stands now, then each square it goes on to. */
   path: string[];
 }
@@ -69,6 +71,7 @@ export function pieceRoute(fenBefore: string, san: string, line: readonly string
   const dest = path[path.length - 1];
   return {
     text: `sending the ${PIECE[first.piece]} on to ${dest}${routeVia(routeWaypoints(path))}`,
+    verb: `sends the ${PIECE[first.piece]} on to ${dest}${routeVia(routeWaypoints(path))}`,
     path,
   };
 }

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4279 lines · 30 exports · 21 importers · 22 tests · 10 audits**
+**4282 lines · 30 exports · 21 importers · 22 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -132,11 +132,11 @@
 - `src/services/openingGenerator.test.ts:918`
 
 ### `firstSentence` (function) — 14 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:2030`
-- `src/components/Openings/OpeningDetailPage.tsx:2032`
-- `src/services/openingCourse.ts:143`
-- `src/services/openingCourse.ts:266`
-- `src/services/openingCourse.ts:275`
+- `src/components/Openings/OpeningDetailPage.tsx:1848`
+- `src/components/Openings/OpeningDetailPage.tsx:1850`
+- `src/services/openingCourse.ts:165`
+- `src/services/openingCourse.ts:288`
+- `src/services/openingCourse.ts:297`
 - `src/services/openingGenerator.twoBeats.test.ts:23`
 - `src/services/openingGenerator.twoBeats.test.ts:31`
 - `src/services/openingGenerator.twoBeats.test.ts:40`

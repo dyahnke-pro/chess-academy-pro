@@ -27,7 +27,7 @@ import { existsSync, readFileSync, readdirSync, mkdirSync, writeFileSync } from 
 import { Chess } from 'chess.js';
 import type { AnalysisLine, StockfishAnalysis } from '../types';
 import { mateEvalFor } from './engineConstants';
-import { lessonBeat, newLessonVoice, BRIEFING_LINE_PLIES } from './reviewMoveBriefing';
+import { newLessonVoice, BRIEFING_LINE_PLIES } from './reviewMoveBriefing';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { computePositionFacts } from './positionFacts';
 import { studentMoveTeaching } from './learnBoardTeaching';
@@ -43,6 +43,9 @@ import { notYetPlayed } from './notYetPlayed';
 import { moveIntent } from './moveIntent';
 import { afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
 import { NO_SECOND_READ } from './inaccuracyCall';
+import { composeThought, newThoughtMemory } from './thoughtComposer';
+import { moveThoughtFacts, choiceFact, lessonThought } from './moveThoughtFacts';
+import type { IdeaKind } from './ideaKind';
 
 // ── the corpus and the cached reads ─────────────────────────────────────────
 
@@ -113,7 +116,8 @@ function loadPositions(): Position[] {
   }
   out.sort((a, b) => a.note.id.localeCompare(b.note.id));
   const every = Math.max(1, Number(process.env.DANYA_BENCH_EVERY ?? 1));
-  const sampled = out.filter((_, k) => k % every === 0);
+  const offset = Number(process.env.DANYA_BENCH_OFFSET ?? 0) % every;
+  const sampled = out.filter((_, k) => k % every === offset);
   const limit = Number(process.env.DANYA_BENCH_LIMIT ?? 0);
   return limit > 0 ? sampled.slice(0, limit) : sampled;
 }
@@ -209,6 +213,18 @@ const STEP_OF: Record<Kind, 'changed' | 'choices' | 'notYet' | 'line' | 'habit' 
 };
 
 interface Idea { kind: Kind; squares: ReadonlySet<string> }
+
+/** The composer's structured idea, in the tagger's kinds — so a fact can be
+ *  scored by the idea its producer SAID it states, never by reading its words. */
+const IDEA_AS_KINDS: Record<IdeaKind, Kind[]> = {
+  mate: ['mate'], 'win-material': ['capture', 'material'], trade: ['trade'], recapture: ['capture', 'trade'],
+  rescue: ['defend'], guard: ['defend'], threat: ['attack'], pressure: ['attack'], tactic: ['fork', 'pin', 'skewer', 'discovered', 'attack'],
+  check: ['attack'], prevent: ['prevent'], prepare: ['prepare'], unpin: ['pin'], develop: ['develop'], castle: ['castle'],
+  'king-safety': ['king-safety', 'castle'], 'attack-king': ['king-safety', 'attack'], center: ['center', 'break'], space: ['space'],
+  outpost: ['outpost'], file: ['file'], diagonal: ['diagonal'], 'passed-pawn': ['endgame'], promote: ['endgame'],
+  weakness: ['weakness', 'structure'], tempo: ['tempo'], 'king-activity': ['endgame', 'activity'], route: ['activity', 'plan'],
+  'set-up': ['prepare', 'line', 'attack'], choice: ['alternative'],
+};
 const SQUARE = /\b[a-h][1-8]\b/g;
 function sentencesOf(text: string): string[] {
   return text.replace(/\s+/g, ' ').split(/(?<=[.!?])\s+(?=[A-Z…"“])/).map((s) => s.trim()).filter(Boolean);
@@ -252,21 +268,36 @@ function words(text: string): number { return text.trim() ? text.trim().split(/\
 type SourceId =
   | 'lesson' | 'reviewInventory' | 'liveCandidates' | 'studentMove' | 'deliberation' | 'moveJob'
   | 'fundamentals' | 'boardTeacher' | 'moveWhy' | 'bestMoveReason' | 'moveIntent' | 'deepFact'
-  | 'theirTarget' | 'prophylaxis' | 'notYet' | 'notYetPlayed' | 'speedRun' | 'alternatives' | 'bookDeparture';
+  | 'theirTarget' | 'prophylaxis' | 'notYet' | 'notYetPlayed' | 'speedRun' | 'alternatives' | 'bookDeparture' | 'thought';
 
 /** Which sources are a SURFACE'S COMPOSER (what the student hears there) —
  *  every other source is a computer whose output only counts toward BUILT. */
 const COMPOSER: Partial<Record<SourceId, string>> = {
   lesson: 'Lessons (the beat a lesson speaks with no note)',
+  thought: 'The one composer (WO-ONE-COACH-01), lesson register',
   reviewInventory: 'Review (every facet the walk computes for the move)',
   liveCandidates: 'Live composer (every clause before the door)',
 };
 
 const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Promise<string | string[] | null>> = {
-  lesson: (p) => lessonBeat({
-    fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own, register: 'teach',
+  lesson: (p) => lessonThought({
+    fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own,
     line: p.after[0] ? sansOf(p.fenAfter, p.after[0].pv) : null, theirLast: p.theirLast,
   }, newLessonVoice()),
+  // THE ONE COMPOSER on the lesson's inputs: the move's facts, plus the
+  // weighing the lesson computes for the student's own moves.
+  thought: (p) => {
+    const facts = moveThoughtFacts({
+      fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
+      line: p.after[0] ? sansOf(p.fenAfter, p.after[0].pv) : null, theirLast: p.theirLast, phrases: null,
+    });
+    if (p.own) {
+      const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, excludeSan: p.san, opponentLastSan: p.theirLast?.san ?? null });
+      const alt = d ? deliberationAlternativesFacts(d) : '';
+      if (alt) facts.push(choiceFact('alternatives', alt, p.fenBefore, true, 50));
+    }
+    return composeThought(facts, 'lesson', newThoughtMemory()).spoken;
+  },
   reviewInventory: (p) => {
     const best = p.before[0];
     const bestSan = best ? sansOf(p.fenBefore, [best.uci], 1)[0] ?? null : null;
@@ -490,6 +521,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
   const wordStats = new Map<string, { n: number; words: number; empty: number; errors: number }>();
   const examples: Array<{ id: string; danya: string; said: Record<string, string> }> = [];
   const kept: KeptNote[] = [];
+  const factValues = new Map<string, { n: number; hits: number; lead: number }>();
   let danyaWords = 0;
   const started = Date.now();
 
@@ -533,9 +565,36 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
       if (d.length > 0) {
         bump(noteHit, src, d.some((di) => covers(ideas, di)));
         bump(lead, src, covers(ideas, d[0]));
+        // The same, split by whose move the note is about (a seat-worded
+        // computer only speaks for the student's move).
+        bump(noteHit, `${src}@${p.own ? 'own' : 'their'}`, d.some((di) => covers(ideas, di)));
+        bump(lead, `${src}@${p.own ? 'own' : 'their'}`, covers(ideas, d[0]));
       }
     }
     if (examples.length < 40 && n % 37 === 0) examples.push({ id: p.note.id, danya: danyaText, said });
+    // DANYA_BENCH_SHOW=<n> prints the first n notes beside each composer's line.
+    if (n < Number(process.env.DANYA_BENCH_SHOW ?? 0)) {
+      console.log(`\n# ${p.note.id} ${p.own ? 'yours' : 'theirs'} ${p.san}\n  DANYA: ${danyaText}\n${Object.entries(COMPOSER).map(([k]) => `  ${k}: ${said[k] ?? ''}`).join('\n')}`);
+    }
+    // EVERY COMPOSER FACT, SCORED BY ITS OWN IDEA: how often Danya says the
+    // idea a source states, when that source states it (the learned order).
+    {
+      const facts = moveThoughtFacts({
+        fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
+        line: p.after[0] ? sansOf(p.fenAfter, p.after[0].pv) : null, theirLast: p.theirLast, phrases: null,
+      });
+      for (const f of facts) {
+        const sq = new Set<string>(f.squares.length ? f.squares : [p.to]);
+        const ideas = IDEA_AS_KINDS[f.idea].map((k) => ({ kind: k, squares: sq }));
+        const hit = d.some((di) => covers(ideas, di));
+        const key = `${f.source}|${f.idea}`;
+        const t = factValues.get(key) ?? { n: 0, hits: 0, lead: 0 };
+        t.n += 1;
+        if (hit) t.hits += 1;
+        if (d[0] && covers(ideas, d[0])) t.lead += 1;
+        factValues.set(key, t);
+      }
+    }
     kept.push({
       video: p.note.id.replace(/^vc-/, '').replace(/-\d+$/, ''), danya: d,
       sentences: ids.flatMap((id) => sentencesOf(said[id] ?? '').map((text) => ({ source: id, text, ideas: ideasOf(text, p.to) }))),
@@ -564,6 +623,8 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
   lines.push('');
   lines.push(['kind (Danya count)', ...srcs].join(' | '));
   for (const k of kinds) lines.push([`${k} (${byKind.get('BUILT')!.get(k)!.danya})`, ...srcs.map((s) => pct(byKind.get(s)?.get(k)))].join(' | '));
+  lines.push('');
+  lines.push('by seat (any idea / his lead idea): ' + srcs.map((s) => `${s} own ${pct(noteHit.get(`${s}@own`))}/${pct(lead.get(`${s}@own`))} their ${pct(noteHit.get(`${s}@their`))}/${pct(lead.get(`${s}@their`))}`).join(' · '));
   console.log(lines.join('\n'));
 
   // ── the composer orders (David: "different computers wired in different
@@ -573,10 +634,15 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
   for (const v of variants) vLines.push([v.name, v.any, v.lead, String(v.words), ...THOUGHT_STEPS.map((st) => v.steps[st] ?? '–')].join(' | '));
   console.log(vLines.join('\n'));
 
+  // The learned values, per source and idea, most-said first.
+  const fv = [...factValues.entries()].sort((a, b) => b[1].n - a[1].n);
+  console.log('\nfact values (source|idea: said, Danya says it too, his lead):\n' + fv.map(([k, v]) => `${k}: ${v.n}, ${Math.round((100 * v.hits) / v.n)}%, lead ${Math.round((100 * v.lead) / v.n)}%`).join('\n'));
+
   mkdirSync('audit-reports/danya-bench', { recursive: true });
+  writeFileSync(`audit-reports/danya-bench/fact-values${process.env.DANYA_BENCH_TAG ? `-${process.env.DANYA_BENCH_TAG}` : ''}.json`, JSON.stringify(Object.fromEntries(fv), null, 1));
   const toObj = (m: Map<string, Map<string, Tally>>): Record<string, Record<string, Tally>> =>
     Object.fromEntries([...m].map(([k, v]) => [k, Object.fromEntries(v)]));
-  writeFileSync('audit-reports/danya-bench/report.json', JSON.stringify({
+  writeFileSync(`audit-reports/danya-bench/report${process.env.DANYA_BENCH_TAG ? `-${process.env.DANYA_BENCH_TAG}` : ''}.json`, JSON.stringify({
     notes: positions.length, own: positions.filter((p) => p.own).length, danyaWordsPerNote: danyaWords / positions.length,
     composers: COMPOSER, byKind: toObj(byKind), byStep: toObj(byStep),
     anyIdea: Object.fromEntries(noteHit), leadIdea: Object.fromEntries(lead), words: Object.fromEntries(wordStats), examples, variants,

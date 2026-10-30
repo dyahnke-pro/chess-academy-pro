@@ -4,20 +4,23 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**534 lines · 8 exports · 11 importers · 7 tests · 0 audits**
+**557 lines · 11 exports · 14 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **⏰ Standing notes** (CLAUDE.md:3124) — names `buildReviewMoveBriefing`
-- **The standard post-deploy ritual** (CLAUDE.md:6785) — names `reviewMoveBriefing`
+- **The standard post-deploy ritual** (CLAUDE.md:6785) — names `Aspect`
 
 ## Who calls in
 
 - `src/hooks/useTeachWalkthrough.ts`
 - `src/services/captureRun.test.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/guardPressure.test.ts`
 - `src/services/materialSites.test.ts`
+- `src/services/moveThoughtFacts.test.ts`
+- `src/services/moveThoughtFacts.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/pieceRoute.test.ts`
 - `src/services/reviewMoveBriefing.test.ts`
@@ -26,6 +29,12 @@
 - `src/services/writtenVsComputed.measure.test.ts`
 
 ## Exports and every call site
+
+### `Aspect` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `moveAspects` (function) — 1 call site
+- `src/services/moveThoughtFacts.ts:94`
 
 ### `buildReviewMoveBriefing` (function) — 22 call sites
 - `src/services/captureRun.test.ts:45`
@@ -47,22 +56,31 @@
 - `src/services/reviewMoveBriefing.test.ts:88`
 - `src/services/reviewMoveBriefing.test.ts:105`
 - `src/services/reviewMoveBriefing.test.ts:122`
-- `src/services/reviewMoveBriefing.test.ts:154`
+- `src/services/reviewMoveBriefing.test.ts:156`
 - `src/services/threeFacts.briefing.test.ts:17`
 - `src/services/threeFacts.briefing.test.ts:43`
+
+### `toClause` (function) — 1 call site
+- `src/services/moveThoughtFacts.ts:134`
+
+### `joinReview` (function) — 1 call site
+- `src/services/moveThoughtFacts.ts:134`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newLessonVoice` (function) — 8 call sites
-- `src/hooks/useTeachWalkthrough.ts:889`
+### `newLessonVoice` (function) — 11 call sites
 - `src/hooks/useTeachWalkthrough.ts:890`
+- `src/hooks/useTeachWalkthrough.ts:891`
+- `src/services/danyaBench.measure.test.ts:286`
+- `src/services/moveThoughtFacts.test.ts:18`
+- `src/services/moveThoughtFacts.test.ts:57`
 - `src/services/openingGenerator.ts:1845`
-- `src/services/openingGenerator.ts:2529`
-- `src/services/pieceRoute.test.ts:51`
-- `src/services/reviewMoveBriefing.test.ts:134`
-- `src/services/walkthroughLlmNarrator.ts:95`
-- `src/services/writtenVsComputed.measure.test.ts:42`
+- `src/services/openingGenerator.ts:2533`
+- `src/services/pieceRoute.test.ts:52`
+- `src/services/reviewMoveBriefing.test.ts:135`
+- `src/services/walkthroughLlmNarrator.ts:96`
+- `src/services/writtenVsComputed.measure.test.ts:43`
 
 ### `forkLessonVoice` (function) — 1 call site
 - `src/services/openingGenerator.ts:1941`
@@ -70,19 +88,10 @@
 ### `BRIEFING_LINE_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `lessonBeat` (function) — 7 call sites
-- `src/hooks/useTeachWalkthrough.ts:1431`
-- `src/services/openingGenerator.ts:1655`
-- `src/services/openingGenerator.ts:2531`
-- `src/services/pieceRoute.test.ts:53`
-- `src/services/reviewMoveBriefing.test.ts:138`
-- `src/services/walkthroughLlmNarrator.ts:149`
-- `src/services/writtenVsComputed.measure.test.ts:53`
-
 ### `prevCaptureOf` (re-export) — 3 call sites
 - `src/services/pvPlayback.ts:230`
 - `src/services/reviewMoveBriefing.test.ts:101`
-- `src/services/reviewMoveBriefing.test.ts:138`
+- `src/services/reviewMoveBriefing.test.ts:139`
 
 ### `NO_PREV_CAPTURE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -90,8 +99,10 @@
 ## Tests
 
 - `src/services/captureRun.test.ts`
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/guardPressure.test.ts`
 - `src/services/materialSites.test.ts`
+- `src/services/moveThoughtFacts.test.ts`
 - `src/services/pieceRoute.test.ts`
 - `src/services/reviewMoveBriefing.test.ts`
 - `src/services/threeFacts.briefing.test.ts`

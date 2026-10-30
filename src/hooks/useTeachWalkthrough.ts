@@ -41,7 +41,8 @@ import { buildDrillWrongTeaching, buildDrillBetterLine, buildDrillThreatSpot, bu
 import { playOutPunish, advantageAlreadyShown } from '../services/punishPlayout';
 import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
 import { squaresNamedIn } from '../utils/squaresNamedIn';
-import { BRIEFING_LINE_PLIES, lessonBeat, newLessonVoice, type LessonVoice } from '../services/reviewMoveBriefing';
+import { BRIEFING_LINE_PLIES, newLessonVoice, type LessonVoice } from '../services/reviewMoveBriefing';
+import { lessonThought } from '../services/moveThoughtFacts';
 import { captureContextAfter } from '../services/pvPlayback';
 import {
   isStartablePunishLesson,
@@ -1428,10 +1429,9 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         const theirLast = pathSans.length >= 2
           ? { fenBefore: fenForPath(pathSans.slice(0, -2), treeRef.current?.startFen), san: pathSans[pathSans.length - 2] }
           : null;
-        idea = lessonBeat({
+        idea = lessonThought({
           fenBefore, san: node.san, prev,
           moverIsStudent: mover === (treeRef.current?.studentSide ?? 'white'),
-          register: 'teach',
           line,
           theirLast,
         }, lessonVoiceRef.current.voice);
