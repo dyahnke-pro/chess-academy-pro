@@ -4,10 +4,6 @@
  * detectors.md). "The puzzles are the test bench because we already know the
  * solutions" (David 2026-09-14).
  *
- * Runs as a TEST (not a tsx script) so the stockfish-native import chain that
- * conceptForSolution pulls in via pvPlayback resolves under the mocked test env —
- * a plain `tsx` script dies on `capacitor-stockfish-native`.
- *
  * SKIPPED by default (it reads the full puzzle corpus and runs detectTactics over
  * a large sample — too slow for ship-check). Run it on demand:
  *   RUN_CONCEPT_COVERAGE=1 npx vitest run src/services/conceptCoverage.report.test.ts

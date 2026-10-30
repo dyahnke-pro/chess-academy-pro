@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Native Stockfish 14.1 (classical) engine for Capacitor iOS, streaming UCI over the bridge.",
   "license": "GPL-3.0-only",
+  "type": "module",
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",

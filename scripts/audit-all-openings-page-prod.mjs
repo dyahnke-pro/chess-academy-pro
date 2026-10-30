@@ -169,9 +169,13 @@ try {
   // Positive control: Naroditsky's Caro-Kann main line stops at move 7, before
   // either side castles; the games carry it on six plies to the middlegame,
   // and the card shows the plan read there with the way written out.
+  // A course with a hand-written lesson plays its Watch on a first visit (the
+  // page's auto-start), over the card; the student steps back out to the
+  // page, and so does the audit.
   const caro = await get(`/goto?path=${encodeURIComponent('/openings/pro/naroditsky/pro-naroditsky-caro-kann')}&ms=4000`).then(() => href());
   let plan = false;
   for (let i = 0; i < 30 && !plan; i += 1) {
+    await js('const b = document.querySelector("[data-testid=lesson-back]"); if (b) b.click(); return !!b');
     plan = await hasPlan();
     if (!plan) await sleep(2000);
   }
