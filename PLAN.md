@@ -13,6 +13,106 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🏀 WO-STORY-MATRIX-01 — one matrix runs every computer and tells the game's story (David 2026-10-30: "We need a matrix that is able to run these all, filter them down, and produce sentences that are meaningful to the game/position and create a story that follows the game" → "a tournament bracket … ties are allowed" → "Write this all up as the plan. We start by wiring in the computers. Then we start the matrix")
+
+**Why (measured 2026-10-30):**
+- **355 teaching computers; 51 are wired on none of the six surfaces.** 28 are only held by Learn's door, 16 reach only screens outside the six (silent Play, kid, openings page, library, Campaign, the record), 7 have no production caller. Report: `scratchpad/memory/inventory.md`.
+
+  | Surface | wired | held | not wired |
+  |---|---|---|---|
+  | Learn free play (the tactics focus owns the voice) | 28 | 220 | 107 |
+  | Review walk | 225 | — | 130 |
+  | Lessons / opening walkthroughs | 96 | — | 259 |
+  | Chat | 199 | — | 156 |
+  | Play's tapped read | 156 | — | 199 |
+  | Tactics / My Mistakes | 99 | — | 256 |
+
+- **One real game (Gotham–Jelena, Caro Advance, 14-move mate), every computer every move** (`scratchpad/onegame/short-game-dump.md`):
+  - six computers never reach the lesson composer: `moveWhy`, `bestMoveReason`, `studentMove`, `deliberation`, `speedRun`, `theirTarget` — on the worst moves they held the right line;
+  - 13.Bxf7+ was told "it creates a passed pawn on e5" while `deliberation` held "Kxf7, Qxd8 wins a queen";
+  - 10…Qe7 (the losing move) was told "it takes the half-open e-file"; 13…Ke7 (into mate in one) "it hits your bishop on f7";
+  - every move is composed with no memory: "not as precise" on 7 of 13 White moves.
+- **Root cause of the wrong lead:** every lesson fact enters the composer with `stakes: null`, so the ranking falls to hand weights (the passed pawn weighs 54). Note: Build 4 tried raw stakes on every lesson fact and LOST 1.6 points on the bench ("develops with tempo" lost to a bare threat) — raw centipawns alone are not the answer; stakes go in as winning chances and are weighed with the story.
+- **Phase split, Danya's 748 notes vs our lesson line:** we over-say attack / defend / center / develop (attack 32–37% ours vs 8–17% his) and under-say captures, the plan (middlegame 11% vs 1%), the alternatives (opening 8% vs 0.3%), trades and theory (7% vs 0%). Prevention, "not yet" and the deep fact barely fire in any phase. Report: `scratchpad/phase/report.md`.
+- **"Board" is a junk drawer:** 35 of the fact kinds share one step (`FACT_STEP` board), so a plan, a tactic, a passer and a concept are ranked as one thing; plans are filed as board facts instead of being the story.
+- **A capture is said twice** ("Qxd8 takes the queen" → "queen takes d8, takes the queen"): 69 of 748 bench lines, ~10 producers each with its own wording.
+- **The story lives in pieces:** plan memory (`planMemory`, `planThread`, `planArc`), say-once (`standingFactMemory`, `learnMemory`, page refs), the opening story, the cause-and-effect chain, Review's thesis and turning point — each surface keeps its own, lessons keep none. `teachingSelector`'s `planByPly` is written and never read. Maps: `scratchpad/memory/{plans,say-once,story}.md`.
+
+### PHASE 1 — wire in the computers (first)
+1. **One fact shape carries everything the matrix needs, REQUIRED** (a computer fails to compile until it answers):
+   - its **group** (one of the 14 below) and **story thread**;
+   - its **stakes** — the gap between the line its computer proved and the next-best outcome, in winning chances, discounted by distance;
+   - **needs / causes** — the board relations its claim depends on and the ones its line changes (attacks, guards, open files, pins, passers, the king's cover, material), from one relation snapshot per move, never scraped from the words;
+   - its **proof** (exact / engine / estimate) and **seat**.
+2. **Every teaching computer reaches the matrix on every surface.** The registry (`boardComputers.ts`) gains the lesson surface and a phase column. The 51 wired nowhere are each wired or deleted (G8.5); none stays switched off.
+3. **Merge the board memories into one per-game story state** that every surface reads and writes: the plan trackers, say-once, the opening story, the cause-and-effect chain, the turning point and thesis. Calculators (`exchangeLedger`, `sacrificeLedger`), wording rotation (`motifLedger`) and the student's cross-game memory (`teachingLedger`, `coachThread`, `studentMemory`) stay separate.
+4. **One way to say a capture**, used by every producer; a gate fails any line that follows a capture move with "takes / captures / wins the …".
+5. **Measure:** the bench reports, per computer, built vs reaches-the-composer on every surface.
+
+### PHASE 2 — the matrix (a bracket)
+**Sections.** One bracket engine, run separately per section, each with its own settings row (`Record<Surface, …>`, so a new section fails to compile until it answers):
+
+| Section | What weighs most | Held back | How many speak |
+|---|---|---|---|
+| Learn | your next decision, both seats | never names your move before you play it | the lead + its closest teammate |
+| Review | what each move cost or won, both seats, theory | nothing | the whole team, deeper |
+| Lessons / openings | the opening's idea, plans, the story | mistakes (a model line) | the lead + team, his pace |
+| Chat | the region your question asks | the regions you did not ask | what answers you |
+| Tactics / My Mistakes | the miss | the answer until asked | the miss + the habit |
+| Play | runs and records | everything | silent |
+
+**Regions = five bundles of complementary groups**, in Danya's order:
+
+| Bundle | Groups | Job |
+|---|---|---|
+| A. The story | story (plans, opening story, cause chain, turning point) · name (opening, book, departure, transposition, model game) · structure & pieces · verdict | what this game is about, where we are, who is winning it |
+| B. The threat | danger · their side · not yet / prevention | what they want, what must be answered, what to do first |
+| C. The decision | the move · the choices · the line | your move, the moves you'd weigh and why each falls short, the line played out |
+| D. The knowledge | tactics on board · endgame technique · concepts / nuggets | the named pattern that takes years to find alone |
+| E. The habit | habit | how to find it next time — closes every turn |
+
+Phase decides which groups are live: name in the opening, structure in the middlegame, technique in the endgame; the story every move.
+
+**Rounds:**
+1. **Qualify** — proven and true on the board.
+2. **Merge** — the same claim from two computers becomes one entry.
+3. **Story** — a fact that changes nothing in the story (said before, nothing new) is out.
+4. **Region final** — score = **stakes × story × student × proof** (story: opens or ends a thread high, advances medium, unchanged zero; student: the record raises or quiets, grey teaches; proof: exact full, engine short form only, an estimate cannot lead). Facts with no stakes rank below every staked fact.
+5. **The final** — the region champions meet; the top score is the **lead** and sets the turn's thread.
+6. **The final bracket pieces the thread together** — seat 1 is the lead (connected first to the open story thread); each next seat, in Danya's order (choices → not yet → the line → the name → the habit), goes to the champion with the strongest **link** to what was already said. No link, no seat; the turn ends when nothing connects (no word cap). Links, computed from needs/causes:
+
+   | Link | Test | Strength |
+   |---|---|---|
+   | cause → effect | A's causes meet B's needs | 3 |
+   | same line | one proof line contains the other | 2 |
+   | same decision | both answer the same position (the tempting alternative) | 2 |
+   | same piece / same thread | one tracked piece, or one thread id | 1 |
+   | same square only | — | 0 |
+
+**Ties are allowed** — a tie is anything within a small margin. Co-champions on one thread both speak, in Danya's order; on different threads both speak only if they link, else the one continuing the story speaks and the other waits. Never broken by chance.
+
+**The main idea (the thread).** Each move the candidate threads (the opening's idea, each side's plan, the structure, an imbalance, a standing threat) are scored on: whether the engine's best line for both sides acts on it (strongest), what it is worth if it flipped (a what-if read), how long it has mattered, and the phase. **It is sticky:** a new thread takes over only when the old one ends (said out loud) or a new one beats it by a clear margin. **A tactic interrupts, it does not replace** — the shot leads one turn and the story resumes. Review may read the whole game (hindsight: the thread the turning point ran through); Learn reads forward only.
+
+**Speaking.** The lead and its team are phrased by one sentence builder that decides nothing (G0). The turn writes back to the story state; the losers go to the record and can win a later move when they start to matter. Silence when nothing clears the bar is a computed answer. The matrix replaces the three composers (the deciding door, the lesson composer, the live board read) — one door, and the old ones are deleted, not switched off (G8.5).
+
+**Target on 13.Bxf7+:** "Bxf7+ — if the king takes, your queen takes theirs on d8: the king was its only guard. Qxc6+ looks like a fork, but it loses your queen. That's deflection — checks first, a check can drag a guard off its post."
+
+### How we know it works (the Danya bench + the short game)
+- the lead matches his lead (held-out videos);
+- the idea mix by phase moves toward his;
+- the link we pick matches the next thing he said;
+- the thread's staying power and switch rate match his across a video;
+- the Gotham game's three worst lines come out right.
+Weights (distance discount, story multipliers, margins, bars) are fitted on half his videos and scored on the other half — never hand-set.
+
+### Rules held throughout
+Root-cause fixes with a test that fails on the old code · G0 (computers decide, the voice phrases) · no caps (G4.5) · one coach · nothing built and left unwired (G8.5) · Learn names no move unasked · Play stays silent · each phase ends with one ship-check, one push, the muted prod audits read line by line.
+
+### Decision for David
+- 🟠 **Learn free play:** today the tactics focus owns the voice, so the matrix would only record there. Does the matrix speak in Learn free play, or does the focus keep the voice?
+
+**Status:** ⏳ Phase 1 next.
+
 ## 🔌 WO-ONE-COACH-01 — the wiring map, the Danya bench, one composer (David 2026-10-30: "All of this is built! Why is it not wired in?" → "I want different computers wired in different orders and quickly compared to how Danya narrates" → "Go")
 
 **The map** (https://claude.ai/artifact/FeKZ4cRGtUo2e561sUyxxs, from `scratchpad/map/*.json`):
