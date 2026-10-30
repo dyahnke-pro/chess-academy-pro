@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**541 lines · 8 exports · 11 importers · 7 tests · 0 audits**
+**534 lines · 8 exports · 11 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,7 +16,7 @@
 - `src/hooks/useTeachWalkthrough.ts`
 - `src/services/captureRun.test.ts`
 - `src/services/coachFeatureService.ts`
-- `src/services/defenderPressure.test.ts`
+- `src/services/guardPressure.test.ts`
 - `src/services/materialSites.test.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/pieceRoute.test.ts`
@@ -27,13 +27,11 @@
 
 ## Exports and every call site
 
-### `buildReviewMoveBriefing` (function) — 24 call sites
+### `buildReviewMoveBriefing` (function) — 22 call sites
 - `src/services/captureRun.test.ts:45`
 - `src/services/captureRun.test.ts:56`
 - `src/services/coachFeatureService.ts:1961`
-- `src/services/defenderPressure.test.ts:40`
-- `src/services/defenderPressure.test.ts:47`
-- `src/services/defenderPressure.test.ts:48`
+- `src/services/guardPressure.test.ts:42`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
 - `src/services/reviewMoveBriefing.test.ts:23`
@@ -92,7 +90,7 @@
 ## Tests
 
 - `src/services/captureRun.test.ts`
-- `src/services/defenderPressure.test.ts`
+- `src/services/guardPressure.test.ts`
 - `src/services/materialSites.test.ts`
 - `src/services/pieceRoute.test.ts`
 - `src/services/reviewMoveBriefing.test.ts`

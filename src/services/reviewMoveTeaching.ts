@@ -23,7 +23,7 @@ import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
 import { namedSquares } from './squareRole';
 import { outpostKey } from './conceptKey';
 import { kickBreaksPin, pawnKickNext, pinsAgainst } from './pawnKickNext';
-import { defenderPressure } from './defenderPressure';
+import { computeMoveFundamentals } from './moveFundamentals';
 import { andList } from '../utils/andList';
 
 // Q1 — OCCUPATION. A pawn reaching one of these has staked the centre.
@@ -32,6 +32,31 @@ const BROAD_CENTER = new Set(CENTRAL_SQUARES);
 const FIANCHETTO = new Set(['b2', 'g2', 'b7', 'g7']);
 
 type Sq = Parameters<Chess['get']>[0];
+
+/** THE MOVE GOES AFTER THE ONLY GUARD of something the mover already hits —
+ *  the fundamentals' `attack-defender` (squares: the move's square, the guard,
+ *  what it guards), said once in full a lesson and referred to after. */
+function guardPressure(
+  fenBefore: string, mv: Move, after: Chess, moverIsStudent: boolean, phrases: PhraseMemory | null,
+): { text: string; squares: string[] } | null {
+  const job = computeMoveFundamentals(fenBefore, mv.san, mv.color === 'w' ? 'white' : 'black').find((f) => f.id === 'attack-defender');
+  const [, guardSq, targetSq] = job?.squares ?? [];
+  const guard = guardSq ? after.get(guardSq as Sq) : null;
+  const target = targetSq ? after.get(targetSq as Sq) : null;
+  if (!guard || !target) return null;
+  const theirs = moverIsStudent ? 'their' : 'your';
+  const piece = PIECE_NOUN[mv.piece];
+  const g = `${theirs} ${PIECE_NOUN[guard.type]} on ${guardSq}`;
+  const t = `${theirs} ${PIECE_NOUN[target.type]} on ${targetSq}`;
+  return {
+    text: sayIdea(phrases, `pressure-${guardSq}-${targetSq}`, [
+      `The ${piece} goes after ${g}, the only guard of ${t}.`,
+      `The ${piece} keeps going after ${g}, the guard of ${targetSq}.`,
+      `The ${piece} keeps the pressure on ${g}.`,
+    ]),
+    squares: [guardSq, targetSq],
+  };
+}
 
 /** THE CENTRAL BREAK (P4: the Ruy's d4 — the written note says "after nine
  *  moves of preparation the central break lands … d4 and e5 collide"; the
@@ -86,7 +111,8 @@ function longDiagonalRead(chess: Chess, from: string, color: 'w' | 'b', moverIsS
   /** Its own units in the way, in order from the bishop. */
   const own: Array<{ words: string; square: string }> = [];
   const waits = (): { text: string; squares: string[] } => ({
-    text: `The bishop waits behind ${andList(own.map((o) => o.words))} — the long diagonal opens when ${own.length > 1 ? 'they move' : 'it moves'}.`,
+    // "they" is the opponent's word (the one perspective), never two pieces.
+    text: `The bishop waits behind ${andList(own.map((o) => o.words))} — the long diagonal opens when ${own.length > 1 ? 'those two move' : 'it moves'}.`,
     squares: own.map((o) => o.square),
   });
   let f = from.charCodeAt(0) - 97 + df;
@@ -503,12 +529,14 @@ export function buildReviewMoveTeachingFact(
     // where the gloss said "bears down on d5").
     const guard = guardPoint(fenBefore, chess, mv, moverIsStudent);
     if (guard) return out(guard.text, guard.squares);
-    // PRESSURE ON A GUARD (P4: the Ruy's Bb5 — the written note teaches "White
-    // attacks its defender — the c6-knight" where this said "it bears down on
-    // c4"). The same computer the lesson briefing reads, so Learn, Review and
-    // the lessons say one idea.
-    const pressure = defenderPressure(fenBefore, mv.san, moverIsStudent);
-    if (pressure) return out(sayIdea(phrases, pressure.key, pressure.sentences), pressure.squares);
+    // PRESSURE ON THE ONLY GUARD (P4: the Ruy's Bb5 — the written note teaches
+    // "White attacks its defender — the c6-knight" where this said "it bears
+    // down on c4"). Decided by the one computer of it, the fundamentals'
+    // `attack-defender` (Review leads its ply with the same idea); its squares
+    // are read here and said from the speaker's seat, never its mover-seated
+    // words, so their move says it as well as yours.
+    const pressure = guardPressure(fenBefore, mv, chess, moverIsStudent, phrases);
+    if (pressure) return out(pressure.text, pressure.squares);
     // A KING THAT STEPS ASIDE FOR ITS ROOK (9.Kh2: the rook can come to g1).
     const aside = kingAsidePoint(chess, mv);
     if (aside) return out(aside.text, aside.squares);

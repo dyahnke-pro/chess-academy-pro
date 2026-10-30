@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**895 lines · 5 exports · 20 importers · 11 tests · 0 audits**
+**923 lines · 5 exports · 20 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,8 +13,8 @@
 ## Who calls in
 
 - `src/services/coachFeatureService.ts`
-- `src/services/defenderPressure.test.ts`
 - `src/services/discussionPractice.ts`
+- `src/services/guardPressure.test.ts`
 - `src/services/learnBoardTeaching.ts`
 - `src/services/learnMoveTeaching.ts`
 - `src/services/lessonVoiceIdeas.test.ts`
@@ -44,12 +44,15 @@
 - `src/services/teachMistakeWhy.test.ts:47`
 - `src/services/walkOct1Learn.test.ts:85`
 
-### `buildReviewMoveTeaching` (function) — 48 call sites
+### `buildReviewMoveTeaching` (function) — 51 call sites
 - `src/services/coachFeatureService.ts:1117`
 - `src/services/coachFeatureService.ts:3874`
-- `src/services/defenderPressure.test.ts:59`
-- `src/services/defenderPressure.test.ts:63`
 - `src/services/discussionPractice.ts:173`
+- `src/services/guardPressure.test.ts:20`
+- `src/services/guardPressure.test.ts:24`
+- `src/services/guardPressure.test.ts:28`
+- `src/services/guardPressure.test.ts:32`
+- `src/services/guardPressure.test.ts:36`
 - `src/services/learnMoveTeaching.ts:47`
 - `src/services/learnMoveTeaching.ts:105`
 - `src/services/lessonVoiceIdeas.test.ts:28`
@@ -63,7 +66,7 @@
 - `src/services/lessonVoiceIdeas.test.ts:63`
 - `src/services/lessonVoiceIdeas.test.ts:70`
 - `src/services/projectedLineVoice.ts:144`
-- `src/services/reviewMoveBriefing.ts:396`
+- `src/services/reviewMoveBriefing.ts:389`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`
@@ -120,7 +123,7 @@
 
 ## Tests
 
-- `src/services/defenderPressure.test.ts`
+- `src/services/guardPressure.test.ts`
 - `src/services/lessonVoiceIdeas.test.ts`
 - `src/services/reviewMoveTeaching.denied.test.ts`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts`

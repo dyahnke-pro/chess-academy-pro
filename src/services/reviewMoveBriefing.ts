@@ -42,10 +42,9 @@ import { shieldLoss } from './kingSafety';
 import { gainedBishopPair } from './bishopPair';
 import { lossBeyondBestAlternative } from './voluntaryLoss';
 import { deepFact, theirTarget, binding, moveHit } from './threeFacts';
-import { defenderPressure } from './defenderPressure';
 import { pieceRoute } from './pieceRoute';
 import { PIECE_NAMES } from '../types/tacticTypes';
-import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
+import type { PhraseMemory } from '../utils/phraseMemory';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { withArticle } from '../utils/andList';
 
@@ -377,13 +376,7 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   const deep = moverIsStudent === undefined ? null : deepFact(fenBefore, san, input.line, moverIsStudent);
   if (deep) aspects.push({ text: deep.text, weight: 56 });
 
-  // 9c. THE GUARD THIS MOVE GOES AFTER (lesson voice, P4: the Ruy's Bb5 said
-  //     "it bears down on c4" where the written note teaches the attack on
-  //     e5's guard): a tie the mover holds, and this move hits its guard.
-  const pressure = moverIsStudent === undefined ? null : defenderPressure(fenBefore, san, moverIsStudent);
-  if (pressure) aspects.push({ text: sayIdea(input.phrases, pressure.key, pressure.clauses), weight: 55 });
-
-  // 9d. THE PIECE'S TRIP (lesson voice, P4: the Italian's Nbd2 — "heads for the
+  // 9c. THE PIECE'S TRIP (lesson voice, P4: the Italian's Nbd2 — "heads for the
   //     kingside by the long road: d2, then f1, then on to e3"). Read down the
   //     line that follows; not said when the deep fact already carries the same
   //     piece on (it says the trip and what it hits at the end).
