@@ -21,7 +21,6 @@ import type { ClauseKind } from './positionFacts';
 import { stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 import type { TeachingLayer } from './teachingLayers';
 import type { NoProofReason } from './proof';
-import type { ThoughtStep } from './thoughtComposer';
 
 /** Every tag `computeMoveFacets` (and the review's own passes) can emit. The
  *  Record below is exhaustive over this union, so a NEW tag fails to compile
@@ -56,7 +55,19 @@ export type FacetTag =
   // The fundamental's HOW — the habit that finds it next game — split from the
   // principle it closes so it is said last (WO-ONE-COACH-01). It sits in the
   // principle's layer, so it shortens when the principle does.
-  | 'how';
+  | 'how'
+  // THE OPENING'S STORY BY ITS OWN KINDS (WO-STORY-MATRIX-01 P1-4): Review
+  // filed every beat under `opening` (the name) while Learn placed each beat
+  // by what it is about; the producer now names each beat's kind
+  // (`openingStory.STORY_KIND`) and the one group table places it — the
+  // price of the student's move with the move, their system with their side,
+  // the rest as the opening's story, the crossroads by the bench. Each is
+  // worth what `opening` is worth.
+  | 'opening-cost' | 'opening-theirs' | 'opening-story' | 'opening-fork'
+  // The priority before the move (`buildPriorityFirst`): Review and the live
+  // read filed it as the method, Learn as a choice — one kind now, worth what
+  // the method is worth, placed by the group table.
+  | 'priority';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -138,6 +149,10 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // beside the rule it kept, never above the verdict on the move.
   point: 28,
   opening: 28,
+  'opening-cost': 28,
+  'opening-theirs': 28,
+  'opening-story': 28,
+  'opening-fork': 28,
   // "That move has a point: it stops your threat" — the purpose of an
   // opponent move that threatens nothing (S3). Just above their targets.
   stopped: 27,
@@ -207,6 +222,7 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // student has seen the evidence. It only ever fires on moments whose floor is
   // 0 (critical / blunder / must-defend), so a low rank never silences it.
   method: 8,
+  priority: 8,
   how: 8,
 };
 
@@ -247,6 +263,11 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   method: 'teach',
   how: 'teach',
   opening: 'teach',        // naming the opening is the first move of the arc
+  'opening-cost': 'teach',
+  'opening-theirs': 'teach',
+  'opening-story': 'teach',
+  'opening-fork': 'teach',
+  priority: 'teach',
   endgame: 'teach',        // the ending's technique, said once
   technique: 'teach',
   contrast: 'teach',
@@ -317,6 +338,8 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
  */
 export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   status: 'teach',
+  // The registry's kinds the live read speaks (`BOARD_COMPUTERS[id].kind`).
+  opening: 'teach', 'last-here': 'teach', priority: 'teach',
   deliberation: 'teach',
   'latent-danger': 'teach',
   'latent-chance': 'teach',
@@ -359,45 +382,6 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   'opponent-leans': 'describe',
 };
 
-/** WHERE A LIVE CLAUSE SITS IN THE THOUGHT (WO-THINK-01; one table for Learn
- *  and the door). Every kind answers. */
-export const CLAUSE_STEP: Record<ClauseKind, ThoughtStep> = {
-  'must-defend': 'danger',
-  equivalence: 'name',
-  fundamental: 'yours', rule: 'yours', stopped: 'yours', trade: 'yours', timing: 'yours', 'capture-choice': 'yours',
-  'opponent-intent': 'theirs', 'opponent-leans': 'theirs', 'their-read': 'theirs',
-  deliberation: 'choices', 'key-moment': 'choices', refuted: 'choices', bluff: 'choices', 'stop-flaw': 'choices', kick: 'choices', 'prevent-test': 'choices',
-  'not-yet': 'notYet',
-  line: 'line',
-  'latent-danger': 'board', 'latent-chance': 'board', 'student-leans': 'board', 'structure-plan': 'board', concept: 'board', stock: 'board',
-  'hole-access': 'board', 'speedrun-read': 'board', tactic: 'board', 'king-read': 'board', 'trade-idea': 'board',
-  'defence-idea': 'board', nugget: 'board', 'plan-race': 'board', 'attack-pattern': 'board',
-  status: 'verdict', convert: 'verdict',
-  method: 'habit', 'their-habit': 'habit', 'your-habit': 'habit',
-};
-
-/** WHERE A REVIEW FACET SITS IN THE THOUGHT (WO-ONE-COACH-01): the door says a
- *  ply in Danya's order — what is in danger, the opening's name, what the move
- *  changed, what theirs changed, the choices, "not yet", the line, the idea on
- *  the board, the verdict, the habit — and inside a step by value. Every tag
- *  answers, so a new facet fails to compile until it is placed. */
-export const FACET_STEP: Record<FacetTag, ThoughtStep> = {
-  threat: 'danger',
-  opening: 'name', 'last-here': 'name', equivalence: 'name',
-  principle: 'yours', quality: 'yours', praise: 'yours', move: 'yours', trade: 'yours', forced: 'yours', sac: 'yours', 'sac-why': 'yours',
-  does: 'yours', note: 'yours', held: 'yours', rule: 'yours', stopped: 'yours', point: 'yours', 'move-job': 'yours',
-  'opp-dev': 'theirs', 'opp-target': 'theirs', 'their-cost': 'theirs', 'their-read': 'theirs',
-  refuted: 'choices', bluff: 'choices', contrast: 'choices', 'capture-choice': 'choices', kick: 'choices',
-  timing: 'notYet', 'prevent-test': 'notYet',
-  consequence: 'line',
-  tactic: 'board', loose: 'board', count: 'board', royal: 'board', trapped: 'board', 'king-read': 'board', king: 'board', rook7: 'board',
-  passer: 'board', badbishop: 'board', worst: 'board', minority: 'board', complex: 'board', structure: 'board', endgame: 'board',
-  'plan-now': 'board', 'plan-race': 'board', 'plan-arc': 'board', 'plan-opening': 'board', 'plan-middlegame': 'board', 'plan-line': 'board',
-  technique: 'board', stock: 'board', 'trade-idea': 'board', 'defence-idea': 'board', nugget: 'board', 'attack-pattern': 'board', judgement: 'board',
-  eval: 'verdict', delta: 'verdict', verdict: 'verdict', 'game-end': 'verdict', murky: 'verdict',
-  method: 'habit', how: 'habit', 'their-habit': 'habit', 'your-habit': 'habit',
-};
-
 /**
  * ONE VOCABULARY (David 2026-09-23: "Unified coach!"). Review's facts carry a
  * `[tag]`; the live composer's carry a clause kind. The two name sets do not
@@ -408,8 +392,10 @@ export const FACET_STEP: Record<FacetTag, ThoughtStep> = {
 export type FactKind = FacetTag | ClauseKind;
 
 export const FACT_ROLE: Record<FactKind, FacetRole> = { ...FACET_ROLE, ...CLAUSE_ROLE };
-/** The step every fact says in the one thought, both vocabularies. */
-export const FACT_STEP: Record<FactKind, ThoughtStep> = { ...FACET_STEP, ...CLAUSE_STEP };
+// The step every fact says in is not a table here: it is read from the one
+// group table (`coachFact.FACT_GROUP`, WO-STORY-MATRIX-01 P1-4) — four step
+// tables (Review's facets, the live clauses, their spread and Learn's lanes)
+// disagreed on the same fact.
 
 /**
  * THE TEACHING LAYER OF EVERY FACT KIND (WO-LAYERS-01, David 2026-09-23) — see
@@ -433,6 +419,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   'trade-idea': 'safety', 'defence-idea': 'safety',
   // PRINCIPLE — development, the king, the opening, converting.
   principle: 'principle', how: 'principle', technique: 'principle', king: 'principle', opening: 'principle', endgame: 'principle',
+  'opening-cost': 'principle', 'opening-theirs': 'principle', 'opening-story': 'principle', 'opening-fork': 'principle', priority: 'safety',
   'move-job': 'principle', rule: 'principle', nugget: 'principle', equivalence: 'principle',
   does: 'principle', point: 'plan', 'their-cost': 'plan', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
   status: 'principle', 'their-habit': 'principle', 'your-habit': 'principle', 'hole-access': 'plan', 'speedrun-read': 'plan',
@@ -480,7 +467,11 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   // A move's job names the squares it rests on.
   'move-job': 'stated',
   // NAMES.
-  opening: 'name',
+  opening: 'name', 'opening-fork': 'name',
+  // The opening's story, a reading of the opening said as one.
+  'opening-cost': 'description', 'opening-theirs': 'description', 'opening-story': 'description',
+  // The priority is a method: the habit of asking what to deal with first.
+  priority: 'method',
   // THE PLAN AND THE STRUCTURE — a reading of the position, said as one.
   point: 'description', contrast: 'description', 'plan-arc': 'description', 'plan-now': 'description',
   'plan-opening': 'description', 'plan-middlegame': 'description', 'plan-line': 'description',
@@ -543,6 +534,9 @@ const CLAUSE_TIE: Record<ClauseKind, number> = {
   'their-read': FACET_RANK['their-read'],
   'prevent-test': FACET_RANK['prevent-test'],
   'attack-pattern': FACET_RANK['attack-pattern'],
+  opening: FACET_RANK.opening,
+  'last-here': FACET_RANK['last-here'],
+  priority: FACET_RANK.priority,
 };
 export const TIE_ORDER: Record<FactKind, number> = { ...FACET_RANK, ...CLAUSE_TIE };
 

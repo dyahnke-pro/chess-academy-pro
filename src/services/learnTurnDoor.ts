@@ -34,12 +34,14 @@ import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type Vo
 
 import { costStakes, stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 import { sameClaim } from './factSelector';
-import { FACT_ROLE, CLAUSE_STEP, type FacetRole } from './reviewFacetRank';
+import { FACT_ROLE, type FacetRole, type FactKind } from './reviewFacetRank';
+import { isCoachFactKind, stepOf } from './coachFact';
+import { BOARD_COMPUTERS } from './boardComputers';
 import { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
-import type { PhaseFact, ClauseKind } from './positionFacts';
+import type { PhaseFact } from './positionFacts';
 export type { PhaseFact } from './positionFacts';
 import { isEndgameByMaterial } from './gamePhaseService';
-import type { StoryBeat } from './openingStory';
+import { STORY_KIND, type StoryBeat } from './openingStory';
 import { namesPlayableStudentMove, type NamesStudentMove } from './studentMoveNaming';
 import { samePosition } from '../utils/samePosition';
 import { focusTags, type FocusId } from '../coach/focus/focusCard';
@@ -157,6 +159,11 @@ export type LearnLane =
 const DESCRIPTION_LEAD = 40;
 
 interface LaneRule {
+  /** THE KIND OF FACT THE LANE SAYS (WO-STORY-MATRIX-01 P1-4, REQUIRED): its
+   *  step is read from the one group table (`FACT_GROUP[factKind]`), never
+   *  from a lane table of its own. A lane fed by a registry computer takes
+   *  that computer's kind, a story lane its beats' kind (`STORY_KIND`). */
+  factKind: FactKind;
   /** The kind the package ranks it as. */
   kind: VoiceFactKind;
   /** What the lane teaches, in one line. */
@@ -230,40 +237,16 @@ export { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
  *  support (it shares a square) or as news in its own right (real stakes). */
 export const CORE_STEPS: ReadonlySet<ThoughtStep> = new Set<ThoughtStep>(['choices', 'notYet', 'board']);
 
-/** Every lane answers which step of the thought it says — a new lane fails to
- *  compile until it does. A lane is placed by what it is ABOUT: the move just
- *  played (yours / theirs), the move to come (choices / notYet), the board. */
-export const THOUGHT_STEP: Record<LearnLane, ThoughtStep> = {
-  threat: 'danger', dangerLevels: 'danger', threatAnswer: 'danger',
-  opening: 'name', openingIdentity: 'name', openingEquivalence: 'name',
-  // The position's memory rides beside the name, as it always has (whether it
-  // is said at all is David's call, OUTLINE 2026-10-28) — never one of the
-  // move's reasons, so it neither takes nor gives way to one.
-  lastTimeHere: 'name', sameAsLastTime: 'name',
-  movePoint: 'yours', moveIntent: 'yours', foundMove: 'yours', heldMove: 'yours', slipAnswer: 'yours', recapture: 'yours',
-  strongChoice: 'yours', falseAlarm: 'yours', tradeLedger: 'yours', captureChoice: 'yours', breakRace: 'yours', fileRace: 'yours',
-  trade: 'yours', kingAttack: 'yours', ruleException: 'yours', timing: 'yours', moveOrder: 'yours', openingChoice: 'yours',
-  openingCost: 'yours', mistake: 'yours', drawback: 'yours', fundamental: 'yours', bookMove: 'yours', causalChain: 'yours',
-  theirPurpose: 'theirs', theirIntent: 'theirs', theirMoveCost: 'theirs', coachMistake: 'theirs', gap: 'theirs', openingTheirs: 'theirs', tempo: 'theirs',
-  register: 'choices', rejectedTempting: 'choices', patternFails: 'choices', priorityFirst: 'choices', prophylaxis: 'choices',
-  checkMethod: 'choices', stalemate: 'choices', openingRoads: 'choices', kickMap: 'choices',
-  notYetPlayed: 'notYet', holdResource: 'notYet',
-  tactic: 'board', playedConcept: 'board', planArc: 'board', structureJudgement: 'board', openingIdea: 'board', openingStory: 'board',
-  structure: 'board', pieceQuality: 'board', commentary: 'board', positional: 'board', kingSafety: 'board', behavior: 'board', positionFacts: 'board',
-  phase: 'verdict', character: 'verdict', pushOrHold: 'verdict',
-  blunderCheck: 'habit', mistakeHabit: 'habit', countMethod: 'habit', kneeJerk: 'habit', autopilot: 'habit', keepPressing: 'habit', pawnEnding: 'habit',
-};
-
-// The clause table is the door's too (`reviewFacetRank.CLAUSE_STEP`).
-export { CLAUSE_STEP } from './reviewFacetRank';
-
-/** The step a fact says: its own clause kind for the lanes that carry many
- *  kinds, else its lane's. */
+/** The step a fact says: its own kind for the lanes that carry many kinds,
+ *  else its lane's — both read from the one group table (`FACT_GROUP`,
+ *  WO-STORY-MATRIX-01 P1-4). A lane is placed by what it is ABOUT: the move
+ *  just played (yours / theirs), the move to come (choices / notYet), the
+ *  board. */
 export function thoughtStepOf(lane: LearnLane, factKind?: string): ThoughtStep {
-  if ((lane === 'positionFacts' || lane === 'phase') && factKind && Object.prototype.hasOwnProperty.call(CLAUSE_STEP, factKind)) {
-    return CLAUSE_STEP[factKind as ClauseKind];
+  if ((lane === 'positionFacts' || lane === 'phase') && factKind && isCoachFactKind(factKind)) {
+    return stepOf(factKind, 'student');
   }
-  return THOUGHT_STEP[lane];
+  return stepOf(LEARN_LANES[lane].factKind, 'student');
 }
 
 /** An answer the coach owes — a question posed, then answered once the
@@ -309,20 +292,26 @@ const STORY_LANES: ReadonlySet<LearnLane> = new Set(Object.values(STORY_LANE));
  *  - `any`: true in every phase;
  *  - `not-ending`: opening and middlegame only. */
 type LanePhase = 'any' | 'not-ending';
+/** A lane fed by one registry computer takes that computer's phase column
+ *  (`BOARD_COMPUTERS[id].phase`, WO-STORY-MATRIX-01 P1-4) — never a second
+ *  answer here. */
+const phaseOfComputer = (phase: ReadonlySet<string>): LanePhase => (phase.has('any') || phase.has('endgame') ? 'any' : 'not-ending');
+const STORY_PHASE = phaseOfComputer(BOARD_COMPUTERS.openingStory.phase);
 export const LANE_PHASE: Record<LearnLane, LanePhase> = {
-  tactic: 'any', prophylaxis: 'any', threat: 'any', dangerLevels: 'any', playedConcept: 'any',
+  tactic: 'any', prophylaxis: phaseOfComputer(BOARD_COMPUTERS.prophylaxis.phase), threat: 'any', dangerLevels: 'any', playedConcept: 'any',
   commentary: 'not-ending', behavior: 'not-ending', positional: 'not-ending',
-  openingIdea: 'not-ending', openingIdentity: 'not-ending', openingEquivalence: 'not-ending',
-  openingRoads: 'not-ending', openingChoice: 'not-ending', openingCost: 'not-ending', openingTheirs: 'not-ending', openingStory: 'not-ending',
-  opening: 'not-ending', bookMove: 'not-ending', lastTimeHere: 'not-ending', sameAsLastTime: 'not-ending',
+  openingIdea: STORY_PHASE, openingIdentity: STORY_PHASE, openingEquivalence: 'not-ending',
+  openingRoads: STORY_PHASE, openingChoice: STORY_PHASE, openingCost: STORY_PHASE, openingTheirs: STORY_PHASE, openingStory: STORY_PHASE,
+  opening: 'not-ending', bookMove: phaseOfComputer(BOARD_COMPUTERS.bookMove.phase),
+  lastTimeHere: phaseOfComputer(BOARD_COMPUTERS.lastTimeHere.phase), sameAsLastTime: phaseOfComputer(BOARD_COMPUTERS.lastTimeHere.phase),
   tempo: 'not-ending', notYetPlayed: 'not-ending', holdResource: 'not-ending',
   structure: 'not-ending', kingSafety: 'not-ending', kingAttack: 'not-ending',
-  pieceQuality: 'any', register: 'any', gap: 'any', positionFacts: 'any', priorityFirst: 'any', rejectedTempting: 'any',
+  pieceQuality: 'any', register: 'any', gap: 'any', positionFacts: 'any', priorityFirst: phaseOfComputer(BOARD_COMPUTERS.priorityFirst.phase), rejectedTempting: 'any',
   planArc: 'any', drawback: 'any', mistake: 'any', coachMistake: 'any', fundamental: 'any', movePoint: 'any',
-  foundMove: 'any', heldMove: 'any', slipAnswer: 'any', moveIntent: 'any', moveOrder: 'any', theirMoveCost: 'any',
+  foundMove: 'any', heldMove: 'any', slipAnswer: 'any', moveIntent: 'any', moveOrder: phaseOfComputer(BOARD_COMPUTERS.moveOrder.phase), theirMoveCost: 'any',
   recapture: 'any', ruleException: 'any', falseAlarm: 'any', threatAnswer: 'any', pushOrHold: 'any', causalChain: 'any',
   phase: 'any', character: 'any', theirPurpose: 'any', theirIntent: 'any', fileRace: 'any', stalemate: 'any',
-  countMethod: 'any', timing: 'any', checkMethod: 'any', trade: 'any', kneeJerk: 'any', blunderCheck: 'any', mistakeHabit: 'any',
+  countMethod: phaseOfComputer(BOARD_COMPUTERS.countMethod.phase), timing: 'any', checkMethod: 'any', trade: 'any', kneeJerk: 'any', blunderCheck: 'any', mistakeHabit: 'any',
   autopilot: 'any', keepPressing: 'any', pawnEnding: 'any', strongChoice: 'any', tradeLedger: 'any',
   captureChoice: 'any', kickMap: 'any', breakRace: 'any', patternFails: 'any', structureJudgement: 'any',
 };
@@ -337,66 +326,68 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // ── batch 1 (opening equivalence, order and timing) ──
   // The named opening this board is with moves thrown in or the colours
   // reversed — rides with the name, said once a game.
-  openingEquivalence: { kind: 'computed', why: 'the named opening this board is, with a move each thrown in or the colours reversed', lead: 44, always: true },
-  tradeLedger: { kind: 'computed', why: 'the trade, counted in moves: their recapturing piece had already moved, or their much-moved piece went for a fresh one', lead: 67 },
-  notYetPlayed: { kind: 'computed', why: 'development first: the piece that would hit your pawn has not come out yet', lead: 63 },
-  holdResource: { kind: 'computed', why: 'a pin or check kept in hand until their knight develops into it', lead: 65 },
-  captureChoice: { kind: 'computed', why: 'which pawn capture — the other one hands their knight a square for good', lead: 71 },
-  kickMap: { kind: 'computed', why: 'the capture dragged their piece onto a square a pawn kicks it from, and where it can land', lead: 67 },
-  breakRace: { kind: 'computed', why: 'both sides wanted one square for a pawn and yours got there first', lead: 66 },
-  patternFails: { kind: 'computed', why: 'a stock shot that looks right and fails on this board, played out', lead: 72 },
+  openingEquivalence: { factKind: 'equivalence', kind: 'computed', why: 'the named opening this board is, with a move each thrown in or the colours reversed', lead: 44, always: true },
+  tradeLedger: { factKind: 'trade', kind: 'computed', why: 'the trade, counted in moves: their recapturing piece had already moved, or their much-moved piece went for a fresh one', lead: 67 },
+  notYetPlayed: { factKind: 'not-yet', kind: 'computed', why: 'development first: the piece that would hit your pawn has not come out yet', lead: 63 },
+  holdResource: { factKind: 'not-yet', kind: 'computed', why: 'a pin or check kept in hand until their knight develops into it', lead: 65 },
+  captureChoice: { factKind: 'capture-choice', kind: 'computed', why: 'which pawn capture — the other one hands their knight a square for good', lead: 71 },
+  kickMap: { factKind: 'kick', kind: 'computed', why: 'the capture dragged their piece onto a square a pawn kicks it from, and where it can land', lead: 67 },
+  breakRace: { factKind: 'point', kind: 'computed', why: 'both sides wanted one square for a pawn and yours got there first', lead: 66 },
+  patternFails: { factKind: 'refuted', kind: 'computed', why: 'a stock shot that looks right and fails on this board, played out', lead: 72 },
   // MEMORY (David 2026-10-15): the student left theory from THIS position in
   // another game at a cost (`lastTimeHere`, off the book-departure rows). A
   // different move this time is the green direction; the same move again is the
-  // hole repeating. Rare and earned, so both ride.
-  lastTimeHere: { kind: 'computed', why: 'what the student played here in another game, what it cost, and that this time went another way', lead: 69, always: true },
-  sameAsLastTime: { kind: 'computed', why: 'the same costly move the student played here in another game', lead: 78, always: true },
-  tactic: { kind: 'tactic', why: 'a tactic the detectors proved for the student', lead: 90, always: true },
-  threat: { kind: 'threat', why: 'danger to the student on this board', lead: 95, always: true },
+  // hole repeating. Rare and earned, so both ride. Its kind (`last-here`)
+  // rides beside the name, as it always has (whether it is said at all is
+  // David's call, OUTLINE 2026-10-28) — never one of the move's reasons.
+  lastTimeHere: { factKind: BOARD_COMPUTERS.lastTimeHere.kind, kind: 'computed', why: 'what the student played here in another game, what it cost, and that this time went another way', lead: 69, always: true },
+  sameAsLastTime: { factKind: BOARD_COMPUTERS.lastTimeHere.kind, kind: 'computed', why: 'the same costly move the student played here in another game', lead: 78, always: true },
+  tactic: { factKind: 'tactic', kind: 'tactic', why: 'a tactic the detectors proved for the student', lead: 90, always: true },
+  threat: { factKind: 'threat', kind: 'threat', why: 'danger to the student on this board', lead: 95, always: true },
   // DANGER LEVELS (David 2026-10-18): a threat answered with a bigger one —
   // why their piece was left, and the line that punishes taking it. It covers
   // the threat it names, so it leads it.
   // THE CONCEPT A MOVE JUST PLAYED, either side (David 2026-10-18) — quiet on
   // a concept the student has proven (conceptRecord).
-  playedConcept: { kind: 'computed', why: 'the concept the move just played — a fork, a pin, a discovered attack — named for either side', lead: 78 },
-  dangerLevels: { kind: 'threat', why: 'a threat answered with a bigger one: the piece left, the bigger piece hit, and the line that punishes taking it', lead: 96, always: true },
-  commentary: { kind: 'computed', why: 'the computed board read (playCommentary)', lead: 30 },
-  behavior: { kind: 'observation', why: 'a Danya behaviour, rate-matched to his corpus', lead: 25 },
+  playedConcept: { factKind: 'concept', kind: 'computed', why: 'the concept the move just played — a fork, a pin, a discovered attack — named for either side', lead: 78 },
+  dangerLevels: { factKind: 'must-defend', kind: 'threat', why: 'a threat answered with a bigger one: the piece left, the bigger piece hit, and the line that punishes taking it', lead: 96, always: true },
+  commentary: { factKind: 'concept', kind: 'computed', why: 'the computed board read (playCommentary)', lead: 30 },
+  behavior: { factKind: 'student-leans', kind: 'observation', why: 'a Danya behaviour, rate-matched to his corpus', lead: 25 },
   // The opening's plan counted off master games (P2 #0): the break each side
   // actually goes for, with its share. Computed, never authored.
-  openingIdea: { kind: 'computed', why: 'the key break master games go for, as an idea while it still needs preparing (`openingStory`), and the opening summary', lead: 61 },
+  openingIdea: { factKind: STORY_KIND['key-break'], kind: 'computed', why: 'the key break master games go for, as an idea while it still needs preparing (`openingStory`), and the opening summary', lead: 61 },
   // THE OPENING'S STORY (OS-3, `openingStory` through the board registry): on a
   // calm opening move these are the teaching — every fact teaches (role), so
   // none is an aside, and the turn's holds (a verdict, danger, a trade in
   // progress) keep them for a calm move.
-  openingCost: { kind: 'computed', why: "the hole the student's own pawn move left, and their piece that can reach it", lead: 63 },
-  openingChoice: { kind: 'computed', why: 'the branch the student chose against the main road, or the move that pays their structure its price', lead: 62 },
-  openingTheirs: { kind: 'computed', why: 'the system their move chose and its master-game plan, or the hole their move gave away', lead: 60 },
-  openingStory: { kind: 'computed', why: "the coming game's character once the kings are placed, or the board's plan once master games run out", lead: 59 },
-  openingRoads: { kind: 'computed', why: 'the real crossroads in front of the student, by family name, from master games', lead: 58 },
+  openingCost: { factKind: STORY_KIND['structure-cost'], kind: 'computed', why: "the hole the student's own pawn move left, and their piece that can reach it", lead: 63 },
+  openingChoice: { factKind: STORY_KIND['branch-choice'], kind: 'computed', why: 'the branch the student chose against the main road, or the move that pays their structure its price', lead: 62 },
+  openingTheirs: { factKind: STORY_KIND['their-setup'], kind: 'computed', why: 'the system their move chose and its master-game plan, or the hole their move gave away', lead: 60 },
+  openingStory: { factKind: STORY_KIND.character, kind: 'computed', why: "the coming game's character once the kings are placed, or the board's plan once master games run out", lead: 59 },
+  openingRoads: { factKind: STORY_KIND.fork, kind: 'computed', why: 'the real crossroads in front of the student, by family name, from master games', lead: 58 },
   // What the opening IS (the identity computer): what it provokes, the
   // structure its master main line reaches, a lasting gambit, sharpness, OTB
   // master games. Said once per game, right after the name.
   // Rides with the name (walk 2026-09-30, game 1: held all game because it
   // shares no square with the move being discussed).
-  openingIdentity: { kind: 'computed', why: 'what the named opening provokes, aims for and costs — computed from the master database (`openingStory`)', lead: 44, always: true },
-  positional: { kind: 'observation', why: 'the positional read', lead: 25 },
-  opening: { kind: 'opening', why: 'the opening named once, when it settles', lead: 45, always: true },
-  structure: { kind: 'computed', why: 'the named pawn structure and its plan', lead: 40 },
-  pieceQuality: { kind: 'computed', why: 'their best piece / your worst piece', lead: 35 },
-  register: { kind: 'computed', why: 'but-turn / hedge / candidate compare, where the move is earned', lead: 64 },
-  gap: { kind: 'computed', why: 'what the opponent’s move left undone', lead: 60 },
-  positionFacts: { kind: 'computed', why: 'position facts, already through coachDecider', lead: 50 },
-  priorityFirst: { kind: 'computed', why: 'the priority before the move', lead: 68 },
+  openingIdentity: { factKind: STORY_KIND.identity, kind: 'computed', why: 'what the named opening provokes, aims for and costs — computed from the master database (`openingStory`)', lead: 44, always: true },
+  positional: { factKind: 'structure', kind: 'observation', why: 'the positional read', lead: 25 },
+  opening: { factKind: 'opening', kind: 'opening', why: 'the opening named once, when it settles', lead: 45, always: true },
+  structure: { factKind: 'structure', kind: 'computed', why: 'the named pawn structure and its plan', lead: 40 },
+  pieceQuality: { factKind: 'worst', kind: 'computed', why: 'their best piece / your worst piece', lead: 35 },
+  register: { factKind: 'deliberation', kind: 'computed', why: 'but-turn / hedge / candidate compare, where the move is earned', lead: 64 },
+  gap: { factKind: 'their-cost', kind: 'computed', why: 'what the opponent’s move left undone', lead: 60 },
+  positionFacts: { factKind: 'concept', kind: 'computed', why: 'position facts, already through coachDecider', lead: 50 },
+  priorityFirst: { factKind: BOARD_COMPUTERS.priorityFirst.kind, kind: 'computed', why: 'the priority before the move', lead: 68 },
   // PROPHYLAXIS (census rank 2): the quiet move that stops their pin or kick before it lands.
-  prophylaxis: { kind: 'computed', why: 'the quiet move that stops their next pin or kick before it lands', lead: 66 },
-  rejectedTempting: { kind: 'computed', why: 'the tempting move and its refutation', lead: 66 },
+  prophylaxis: { factKind: BOARD_COMPUTERS.prophylaxis.kind, kind: 'computed', why: 'the quiet move that stops their next pin or kick before it lands', lead: 66 },
+  rejectedTempting: { factKind: 'refuted', kind: 'computed', why: 'the tempting move and its refutation', lead: 66 },
   // The book move the student left, named with the job it does on the board
   // and what their move left undone (bookMoveWhy) — the "but" of their move.
   // RIDES WITH ITS DEPARTURE (Learn audit 2026-10-14, game 1: a threat turn
   // held the reason and "You left the book with …" spoke bare). It is offered
   // only on the departure ply, where the `opening` line (always) names it.
-  bookMove: { kind: 'computed', why: 'the book move the student left, with the job it does on the board', lead: 64, always: true },
+  bookMove: { factKind: BOARD_COMPUTERS.bookMove.kind, kind: 'computed', why: 'the book move the student left, with the job it does on the board', lead: 64, always: true },
   // Behind the walkability check (2026-09-29): walk 2 heard 3 false lines in 4
   // — routes read off one engine line the CURRENT board cannot walk. Learn
   // filters aims through planArc.aimWalkableNow, and a student plan the
@@ -404,28 +395,28 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // Always rides (2026-09-30): it spoke 0 times in 252 walked plies, held
   // behind every stronger lead, though the computer fired 41 times offline on
   // 20 of his games. Their plan advancing IS the why of their move.
-  planArc: { kind: 'plan', why: 'the plan taking shape / advancing / landing / given up — read twice, walkable from this board', lead: 70, always: true },
+  planArc: { factKind: 'plan-arc', kind: 'plan', why: 'the plan taking shape / advancing / landing / given up — read twice, walkable from this board', lead: 70, always: true },
   // THE VERDICT ON THE STUDENT'S OWN MOVE always rides (Learn walk
   // 2026-10-01, game 1: …Rf6 threw −0.2 → −2.9 and the turn spoke only the
   // back-rank warning — the grade shared no square with it, so it was held).
   // backwardLook returns ONE of these two per move, so this adds one sentence.
-  drawback: { kind: 'drawback', why: 'what the student’s own move handed over', lead: 83, always: true },
-  mistake: { kind: 'mistake', why: 'the mistake call-out', lead: 85, always: true },
-  coachMistake: { kind: 'coachMistake', why: 'the coach owning its own inaccuracy', lead: 84 },
-  fundamental: { kind: 'drawback', why: 'the fundamental the move broke', lead: 82 },
-  movePoint: { kind: 'computed', why: 'the point of the student’s clean move', lead: 62 },
+  drawback: { factKind: 'quality', kind: 'drawback', why: 'what the student’s own move handed over', lead: 83, always: true },
+  mistake: { factKind: 'move', kind: 'mistake', why: 'the mistake call-out', lead: 85, always: true },
+  coachMistake: { factKind: 'their-cost', kind: 'coachMistake', why: 'the coach owning its own inaccuracy', lead: 84 },
+  fundamental: { factKind: 'fundamental', kind: 'drawback', why: 'the fundamental the move broke', lead: 82 },
+  movePoint: { factKind: 'point', kind: 'computed', why: 'the point of the student’s clean move', lead: 62 },
   // The verdict on a GOOD move at a decision moment (P2 #2): the student found
   // one of the only moves that held, and why the others failed.
-  foundMove: { kind: 'computed', why: 'the student found one of the only moves that held — and why the rest failed', lead: 79 },
+  foundMove: { factKind: 'quality', kind: 'computed', why: 'the student found one of the only moves that held — and why the rest failed', lead: 79 },
   // THE ANSWER TO A HELD QUESTION (David 2026-10-02): at a deciding moment the
   // move was held back; once the student has played, it is revealed with its
   // reason. Always rides — a question posed and never answered is a tease.
-  heldMove: { kind: 'computed', why: 'the move held back at a deciding moment, revealed after the student answered', lead: 80, always: true },
-  slipAnswer: { kind: 'computed', why: 'the answer to the opponent\'s slip, revealed after the student moved from the board the coach said to look at', lead: 80, always: true },
+  heldMove: { factKind: 'held', kind: 'computed', why: 'the move held back at a deciding moment, revealed after the student answered', lead: 80, always: true },
+  slipAnswer: { factKind: 'held', kind: 'computed', why: 'the answer to the opponent\'s slip, revealed after the student moved from the board the coach said to look at', lead: 80, always: true },
   // What a quiet move is FOR — the reply it took away or the move it made
   // possible, both engine-proven (moveIntent). His most frequent point on a
   // clean move, and the one a board description never says.
-  moveIntent: { kind: 'computed', why: 'what the student’s move prevents or prepares, engine-proven', lead: 75 },
+  moveIntent: { factKind: 'point', kind: 'computed', why: 'what the student’s move prevents or prepares, engine-proven', lead: 75 },
   // "X first — Y straight away would have run into R" (census #1, his most
   // frequent missing point). Engine-proven by playing the follow-up first.
   // What THEIR move cost them (census #5): a hole your knight can use, their
@@ -434,7 +425,7 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // doubled pawn it avoids, the queen that would be hit with tempo.
   // Bringing pieces to their king (census #2): a shelter pawn taken, a
   // defender removed, a piece brought over or heading there next.
-  kingAttack: { kind: 'computed', why: 'how the student’s move adds to the attack on their king', lead: 76 },
+  kingAttack: { factKind: 'point', kind: 'computed', why: 'how the student’s move adds to the attack on their king', lead: 76 },
   // A rule broken for a reason (census #10): the same piece twice, a pawn in
   // front of your own king, the queen out early — the engine agrees, and the
   // board says why here.
@@ -442,62 +433,64 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // it, and the student played that move — "you didn't have to react".
   // Push for a win or hold (census #14): what a pawn up or down is worth in
   // THIS ending, while the engine keeps it better-not-won / worse-not-lost.
-  pushOrHold: { kind: 'computed', why: 'whether the ending is worth pressing or holding, by its type', lead: 60 },
+  pushOrHold: { factKind: 'convert', kind: 'computed', why: 'whether the ending is worth pressing or holding, by its type', lead: 60 },
   // The answer to the threat the instant wave just named (census T4): question
   // first, then what the engine's move does about it. Always rides — a threat
   // said without its answer is the describing he never does.
-  threatAnswer: { kind: 'computed', why: 'what to do about the threat just named — take, step out, kick, block, guard, or it can wait', lead: 81, always: true },
-  falseAlarm: { kind: 'computed', why: 'a threat the student rightly ignored, and what answers it', lead: 72 },
-  ruleException: { kind: 'computed', why: 'a beginner’s rule the move breaks, and why it is right here', lead: 73 },
-  recapture: { kind: 'computed', why: 'which piece takes back and why — compared with the other recapture', lead: 66 },
-  theirMoveCost: { kind: 'computed', why: 'what the opponent’s move cost them that the student can use', lead: 74 },
-  moveOrder: { kind: 'computed', why: 'why the move had to come first — the follow-up played first loses material', lead: 77 },
+  threatAnswer: { factKind: 'must-defend', kind: 'computed', why: 'what to do about the threat just named — take, step out, kick, block, guard, or it can wait', lead: 81, always: true },
+  falseAlarm: { factKind: 'point', kind: 'computed', why: 'a threat the student rightly ignored, and what answers it', lead: 72 },
+  ruleException: { factKind: 'rule', kind: 'computed', why: 'a beginner’s rule the move breaks, and why it is right here', lead: 73 },
+  recapture: { factKind: 'trade', kind: 'computed', why: 'which piece takes back and why — compared with the other recapture', lead: 66 },
+  theirMoveCost: { factKind: 'their-cost', kind: 'computed', why: 'what the opponent’s move cost them that the student can use', lead: 74 },
+  moveOrder: { factKind: BOARD_COMPUTERS.moveOrder.kind, kind: 'computed', why: 'why the move had to come first — the follow-up played first loses material', lead: 77 },
   // ALWAYS rides: a switch is said once, the move it happens — held behind a
   // threat it is lost for good (Fried Liver walk 2026-09-29: the turn to sharp
   // came WITH the threat, lost the lead to it, and was never heard).
-  character: { kind: 'computed', why: 'what the position is about just changed — tactical, positional, converting or holding', lead: 73, always: true },
+  character: { factKind: 'verdict', kind: 'computed', why: 'what the position is about just changed — tactical, positional, converting or holding', lead: 73, always: true },
   // THEIR MOVE'S PURPOSE (hand walk 2026-09-30, Ruy …g6: "g6 has a point: it
   // stops the mate with Qxh7" was HELD behind "Qd3 takes aim at the center" —
   // both rode `positionFacts` and offer order picked). The scoreboard's
   // "their move's purpose" is one of his biggest teaching kinds (4% landed);
   // it is what just happened, so it outranks every description.
-  theirPurpose: { kind: 'computed', why: "what the opponent's move was FOR — the threat of yours it stopped", lead: 74 },
+  theirPurpose: { factKind: 'opponent-intent', kind: 'computed', why: "what the opponent's move was FOR — the threat of yours it stopped", lead: 74 },
   // What their QUIET move prepares (P2 #5), engine-proven from their seat.
-  theirIntent: { kind: 'computed', why: "what the opponent's quiet move prepares — engine-proven from their seat", lead: 73 },
+  theirIntent: { factKind: 'opponent-intent', kind: 'computed', why: "what the opponent's quiet move prepares — engine-proven from their seat", lead: 73 },
   // TEMPO, COUNTED (P2 #7): their piece's third move while the student develops.
   // The contested open file, taken by the student's rook (planRace, live).
-  fileRace: { kind: 'computed', why: 'you both wanted the open file and your rook took it first', lead: 64 },
-  tempo: { kind: 'computed', why: 'their piece keeps moving in the opening while you develop — free moves, counted', lead: 70 },
+  fileRace: { factKind: 'point', kind: 'computed', why: 'you both wanted the open file and your rook took it first', lead: 64 },
+  tempo: { factKind: 'opp-dev', kind: 'computed', why: 'their piece keeps moving in the opening while you develop — free moves, counted', lead: 70 },
   // A STRONG PLAYER'S CHOICE (P3, depersonalized): what a strong player plays here.
-  strongChoice: { kind: 'computed', why: 'what a strong player chooses in this exact position, from real games', lead: 57 },
+  strongChoice: { factKind: 'quality', kind: 'computed', why: 'what a strong player chooses in this exact position, from real games', lead: 57 },
   // THE SAFETY HABITS (P3 method beats): close the beat after the grade.
-  blunderCheck: { kind: 'computed', why: 'the move left a piece they simply took — the habit that catches it', lead: 61 },
+  blunderCheck: { factKind: 'method', kind: 'computed', why: 'the move left a piece they simply took — the habit that catches it', lead: 61 },
   // The mistake's habit closes the turn it belongs to (WO-ONE-COACH-01).
-  mistakeHabit: { kind: 'computed', why: 'the habit that finds this mistake next game — said after the loss', lead: 61 },
-  autopilot: { kind: 'computed', why: 'the popular move here cost — the moment to stop and check', lead: 59 },
-  keepPressing: { kind: 'computed', why: 'winning, and a slow move gave them time — keep forcing', lead: 58 },
-  pawnEnding: { kind: 'computed', why: 'the last pieces came off — count the pawn ending; the outside passer is a decoy', lead: 62 },
+  mistakeHabit: { factKind: 'your-habit', kind: 'computed', why: 'the habit that finds this mistake next game — said after the loss', lead: 61 },
+  autopilot: { factKind: 'your-habit', kind: 'computed', why: 'the popular move here cost — the moment to stop and check', lead: 59 },
+  keepPressing: { factKind: 'method', kind: 'computed', why: 'winning, and a slow move gave them time — keep forcing', lead: 58 },
+  pawnEnding: { factKind: 'method', kind: 'computed', why: 'the last pieces came off — count the pawn ending; the outside passer is a decoy', lead: 62 },
   // QUESTION THE KNEE-JERK (P3 method beat): closes the beat after the grade.
-  kneeJerk: { kind: 'computed', why: 'the reflex recapture cost — ask what comes first', lead: 60 },
+  kneeJerk: { factKind: 'your-habit', kind: 'computed', why: 'the reflex recapture cost — ask what comes first', lead: 60 },
   // WAS THE TRADE A GOOD DEAL (P3, T3 #45).
-  trade: { kind: 'computed', why: 'the trade you just made — good or bad deal, and why', lead: 68 },
+  trade: { factKind: 'trade', kind: 'computed', why: 'the trade you just made — good or bad deal, and why', lead: 68 },
   // THREE WAYS TO MEET CHECK (P3 method beat): once per game, before the student moves.
-  checkMethod: { kind: 'computed', why: 'you are in check and the king move is not the best answer — list all three', lead: 78 },
+  checkMethod: { factKind: 'deliberation', kind: 'computed', why: 'you are in check and the king move is not the best answer — list all three', lead: 78 },
   // THE TIMING (P3, parity with review): the move is right NOW because of what came first.
-  timing: { kind: 'computed', why: 'why this move works now and did not a move earlier', lead: 69 },
+  // The timing of the student's own move ("it works now because their
+  // bishop has left") — a reason for the move, not "not yet, first this".
+  timing: { factKind: 'point', kind: 'computed', why: 'why this move works now and did not a move earlier', lead: 69 },
   // STALEMATE WATCH (P2 #9): the one move that throws away a won game.
   // Count before you take (P3 how-to-calculate): the student's move lost the count.
   // Split the position (P3 method beat): opposite-side castling, two races.
-  countMethod: { kind: 'computed', why: 'the move took or stood on a square their pieces outnumber — count before you go', lead: 77 },
-  stalemate: { kind: 'computed', why: 'you are winning and one of your moves would stalemate them', lead: 81 },
-  phase: { kind: 'computed', why: 'the game has changed phase — take stock of what the position is about now', lead: 72 },
-  kingSafety: { kind: 'observation', why: 'your own king is still in the centre and castling is ready', lead: 55 },
+  countMethod: { factKind: BOARD_COMPUTERS.countMethod.kind, kind: 'computed', why: 'the move took or stood on a square their pieces outnumber — count before you go', lead: 77 },
+  stalemate: { factKind: 'deliberation', kind: 'computed', why: 'you are winning and one of your moves would stalemate them', lead: 81 },
+  phase: { factKind: 'status', kind: 'computed', why: 'the game has changed phase — take stock of what the position is about now', lead: 72 },
+  kingSafety: { factKind: 'king', kind: 'observation', why: 'your own king is still in the centre and castling is ready', lead: 55 },
   // THE STRUCTURE JUDGEMENTS (batch 6, `structureReads`): the second weakness,
   // the key pawn, the semi-outpost, the right piece, the route that fails, the
   // fighting line — a plan-layer reason, proven by its squares or its line.
   // Below what a move is FOR, above the board descriptions.
-  structureJudgement: { kind: 'computed', why: 'a structural judgement — the weakness to aim at, the square, the piece, the route or the plan — proven on the board', lead: 54 },
-  causalChain: { kind: 'tactic', why: 'a cross-move cause proven on the board — the earlier move that left the piece loose', lead: 80 },
+  structureJudgement: { factKind: 'judgement', kind: 'computed', why: 'a structural judgement — the weakness to aim at, the square, the piece, the route or the plan — proven on the board', lead: 54 },
+  causalChain: { factKind: 'does', kind: 'tactic', why: 'a cross-move cause proven on the board — the earlier move that left the piece loose', lead: 80 },
 };
 
 export interface LaneFact {
@@ -525,7 +518,7 @@ export interface LaneFact {
   /** The producing computer's own kind for this fact (a position-facts clause
    *  kind: deliberation, your-habit, …). The lane says which producer; this
    *  says which of its facts — emitted on the row, and for the lanes that
-   *  carry many kinds it places the fact in the thought (`CLAUSE_STEP`). */
+   *  carry many kinds it places the fact in the thought (`thoughtStepOf`). */
   factKind?: string;
   /** THIS FACT IS A REASON FOR THE STUDENT'S OWN LAST MOVE, from a lane that
    *  also carries other kinds (a position-facts rule: "Your Qa5 saves it from
@@ -736,7 +729,7 @@ export function decideTurn(
   /** Which step of the thought a surviving fact says (its own clause kind for
    *  the lanes that carry many). */
   const stepOf = (x: { fact: VoiceFact; lane: LearnLane }): ThoughtStep =>
-    open.find((o) => o.lane === x.lane && (o.text === x.fact.text || o.text.includes(x.fact.text)))?.step ?? THOUGHT_STEP[x.lane];
+    open.find((o) => o.lane === x.lane && (o.text === x.fact.text || o.text.includes(x.fact.text)))?.step ?? thoughtStepOf(x.lane);
   /** A reason for the student's own move that teaches (never its verdict). */
   const ownReasonOf = (x: { fact: VoiceFact; lane: LearnLane }): boolean => ownMoveReasonStep(x.lane, stepOf(x)) && teaches(x);
   // ONE CLAIM, ONE SEAT (unity U6, Learn walk #26: the d5 pawn was "a

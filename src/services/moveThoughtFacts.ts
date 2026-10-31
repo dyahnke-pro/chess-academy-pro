@@ -24,6 +24,7 @@ import { pvSanToUci } from './principleAttribution';
 import { BOOK_JOB_IDEA, FUNDAMENTAL_IDEA, ideaClaim, type IdeaKind } from './ideaKind';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { composeThought, type ThoughtFact, type ThoughtSource } from './thoughtComposer';
+import { placeFact, type CoachFactKind, type ComputerName } from './coachFact';
 import type { LessonVoice } from './reviewMoveBriefing';
 
 export interface MoveThoughtInput {
@@ -70,7 +71,6 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   }
   const mine = i.moverIsStudent !== false;
   const seat: 'student' | 'opponent' = mine ? 'student' : 'opponent';
-  const step = mine ? 'yours' : 'theirs';
   const san = i.san.replace(/[!?]+$/, '');
   /** "You play Nf3 — it …", "They play …", or seat-free "Nf3: it …". */
   // A clause that carries its own dash takes a colon after the move, so one
@@ -85,15 +85,17 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   const beyond = (sqs: readonly string[]): string[] => [...new Set(sqs)].filter((s) => s !== from && s !== to);
   const facts: ThoughtFact[] = [];
   // A fact's claim is THIS move's idea on its squares — two moves never share
-  // one (…d5's own claim on the centre is not c4's strike at d5).
-  const add = (source: ThoughtSource, idea: IdeaKind, text: string, alsoText: string | undefined, squares: readonly string[], weight: number, restates = false, extraClaims: readonly string[] = []): void => {
+  // one (…d5's own claim on the centre is not c4's strike at d5). Every call
+  // names the fact's KIND and the computer that made it; the group and the
+  // step follow from the kind (`placeFact`), never from the words.
+  const add = (kind: CoachFactKind, computer: ComputerName, source: ThoughtSource, idea: IdeaKind, text: string, alsoText: string | undefined, squares: readonly string[], weight: number, restates = false, extraClaims: readonly string[] = []): void => {
     const sq = beyond(squares);
     // ITS PROOF IS ITS SQUARES: the moved piece and every square the idea
     // rests on, marked on the board when the student asks Why — the same
     // proof Learn's geometry lanes hand in.
     const said = close(text);
     facts.push({
-      step, source, idea, text: said, alsoText: alsoText ? close(alsoText) : undefined, squares: sq, weight,
+      ...placeFact(kind, seat), computer, source, idea, text: said, alsoText: alsoText ? close(alsoText) : undefined, squares: sq, weight,
       stakes: null, proof: squaresProof(said, [...new Set([to, ...squares])]) ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
       claims: [`move:${from}${to}:${ideaClaim(idea, sq)}`, ...extraClaims], restates,
     });
@@ -103,11 +105,11 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // the check, the promotion, the king cover, the structure made or conceded.
   const read = moveAspects({ fenBefore: i.fenBefore, san: i.san, prev: i.prev, moverIsStudent: i.moverIsStudent });
   if (read?.mate) {
-    add('briefing', 'mate', `${i.moverIsStudent === undefined ? 'This delivers' : mine ? 'You deliver' : 'They deliver'} checkmate — the king has no reply`, undefined, [], 100);
+    add('checkmate', 'moveAspects', 'briefing', 'mate', `${i.moverIsStudent === undefined ? 'This delivers' : mine ? 'You deliver' : 'They deliver'} checkmate — the king has no reply`, undefined, [], 100);
     return facts;
   }
   for (const a of read?.aspects ?? []) {
-    add('briefing', a.idea, lead(a.verb), `It also ${a.verb}`, a.squares, a.weight, a.restates === true);
+    add(a.kind, 'moveAspects', 'briefing', a.idea, lead(a.verb), `It also ${a.verb}`, a.squares, a.weight, a.restates === true);
   }
 
   // THE MOVE'S JOB, from the speaker's seat.
@@ -127,7 +129,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       ? sayIdea(i.phrases, `job-context:${job.contextKey}`, [job.clause, job.compact])
       : job.forms?.length ? sayIdea(i.phrases, `job-kind:${job.kind}`, job.forms) : job.clause;
     const clause = worded.replace(/^it\s+/i, '');
-    add('moveJob', BOOK_JOB_IDEA[job.kind], lead(clause), `It also ${clause}`, job.squares, JOB_WEIGHT[job.kind], isBareJob(job));
+    add('move-job', 'moveJob', 'moveJob', BOOK_JOB_IDEA[job.kind], lead(clause), `It also ${clause}`, job.squares, JOB_WEIGHT[job.kind], isBareJob(job));
   }
 
   // THE FUNDAMENTALS — worded from the mover's own seat ("saves the queen from
@@ -146,7 +148,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   const seated = (clause: string): string => (mine ? clause : toOtherSeat(clause));
   for (const f of computeMoveFundamentals(i.fenBefore, i.san, sideOf(i.fenBefore) === 'w' ? 'white' : 'black')) {
     const idea = FUNDAMENTAL_IDEA[f.id];
-    add('fundamental', idea, lead(seated(f.led)), `It also ${seated(f.led)}`, f.squares, f.weight, false, [`phrase:${idea}`]);
+    add('fundamental', 'computeMoveFundamentals', 'fundamental', idea, lead(seated(f.led)), `It also ${seated(f.led)}`, f.squares, f.weight, false, [`phrase:${idea}`]);
   }
 
   // THE BOARD TEACHER — the move's idea on the board, from the speaker's seat.
@@ -155,26 +157,26 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     const subjectLed = /^(The|A|An|This|That|Their|Your)\b/.test(teacher.text);
     // Its develop reading is its last resort ("the knight develops to d2,
     // joining the game") — the move read back, said only when nothing else is.
-    add('boardTeacher', teacher.idea, joinReview([toClause(teacher.text)], i.moverIsStudent, i.san),
+    add('board-teacher', 'buildReviewMoveTeachingFact', 'boardTeacher', teacher.idea, joinReview([toClause(teacher.text)], i.moverIsStudent, i.san),
       subjectLed ? teacher.text : `It also ${continueSentence(teacher.text)}`, teacher.squares, 50, teacher.idea === 'develop' || teacher.restates === true);
   }
 
   // THE DEEP FACT — what the move made possible down the line.
   const deep = deepFact(i.fenBefore, i.san, i.line, mine);
-  if (deep) add('deepFact', 'set-up', gerund(deep.text), `It also ${deep.verb}`, [deep.target], 56);
+  if (deep) add('deep-fact', 'deepFact', 'deepFact', 'set-up', gerund(deep.text), `It also ${deep.verb}`, [deep.target], 56);
 
   // THE ANSWER TO THEIR LAST MOVE — what it aimed at, and how this meets it.
   const tgt = theirTarget(i.theirLast, mine);
   if (tgt) {
     const ownPoint = deep?.target ?? read?.threat?.san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?:=[QRBN])?$/)?.[1] ?? moveHit(i.fenBefore, i.san);
     const bind = bindingFact(i.fenBefore, i.san, tgt, ownPoint, mine);
-    if (bind) add('binding', bind.idea, `${openSentence(tgt.text)}, ${bind.text}`, `${openSentence(tgt.text)}, ${bind.text}`, [tgt.square], 62);
+    if (bind) add('binding', 'bindingFact', 'binding', bind.idea, `${openSentence(tgt.text)}, ${bind.text}`, `${openSentence(tgt.text)}, ${bind.text}`, [tgt.square], 62);
   }
 
   // THE PIECE'S TRIP down the line that follows.
   const route = pieceRoute(i.fenBefore, i.san, i.line);
   if (route && !(deep && route.path.includes(deep.follow.from))) {
-    add('pieceRoute', 'route', gerund(route.text), `It also ${route.verb}`, route.path, 52);
+    add('route', 'pieceRoute', 'pieceRoute', 'route', gerund(route.text), `It also ${route.verb}`, route.path, 52);
   }
 
   // NOT YET — FIRST THIS (his "I didn't take on h4 right away; Be5 first,
@@ -194,7 +196,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
         : `They don't take on ${ib.captureSquare} yet — it isn't going anywhere. ${first} comes first, and they take after`;
       const said = close(text);
       facts.push({
-        step: 'notYet', source: 'notYet', idea: 'order', text: said, squares: [ib.captureSquare], weight: 70, stakes: null,
+        ...placeFact('not-yet', seat), computer: 'inBetweenMove', source: 'notYet', idea: 'order', text: said, squares: [ib.captureSquare], weight: 70, stakes: null,
         proof: lineProof({ fen: i.fenBefore, sans: ib.line }, mine ? 'you' : 'they') ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
         claims: [`not-yet:${from}${to}:${ib.captureSquare}`],
       });
@@ -210,7 +212,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   if (stop && stop.prevention.san.replace(/[+#]$/, '') === i.san.replace(/[+#!?]+$/, '')) {
     const verb = stop.kind === 'pin' ? 'pin' : stop.kind === 'fork' ? 'fork' : 'hit';
     const why = seated(`${stop.intent.san} would ${verb} your ${PIECE_NAME[stop.victim.piece] ?? 'piece'} on ${stop.victim.square}`);
-    add('prophylaxis', 'prevent', lead(`takes away ${stop.intent.to}: ${why}`), `It also takes away ${stop.intent.to}: ${why}`, stop.squares, 72);
+    add('stop', 'findProphylaxis', 'prophylaxis', 'prevent', lead(`takes away ${stop.intent.to}: ${why}`), `It also takes away ${stop.intent.to}: ${why}`, stop.squares, 72);
   }
   return facts;
 }

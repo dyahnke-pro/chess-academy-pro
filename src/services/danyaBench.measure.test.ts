@@ -48,6 +48,7 @@ import { afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './captur
 import { NO_SECOND_READ } from './inaccuracyCall';
 import { composeThought, type ComposedThought, type ThoughtFact, type ThoughtSource } from './thoughtComposer';
 import type { FactKind } from './reviewFacetRank';
+import { placeFact } from './coachFact';
 import { moveThoughtFacts, lessonThought } from './moveThoughtFacts';
 import { NO_PROOF } from './proof';
 import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
@@ -56,7 +57,7 @@ import { classifyCpLoss } from './gameAnalysisService';
 /** The bench's own variant: the weighing as a choices-step fact. */
 function choiceFact(text: string, fen: string): ThoughtFact {
   return {
-    step: 'choices', source: 'alternatives', idea: 'choice', text: /[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`, squares: [], weight: 50, stakes: null,
+    ...placeFact('deliberation', 'student'), computer: 'deliberationAlternativesFacts', source: 'alternatives', idea: 'choice', text: /[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`, squares: [], weight: 50, stakes: null,
     proof: NO_PROOF.description, seat: 'student', fen, claims: [`choice:${fen}`],
   };
 }
@@ -624,6 +625,13 @@ const FACT_COMPUTER: Record<FactKind, string> = {
   'stop-flaw': 'services/thinkAloud.ts#obviousStopFlaw',
   'hole-access': 'services/moveInsight.ts#holeAccess',
   'speedrun-read': 'services/thinkAloud.ts#depthClauses',
+  // The opening's story beats and the priority read carry their own kinds
+  // since the one group table (P1-4).
+  priority: 'services/playCommentary.ts#buildPriorityFirst',
+  'opening-story': 'services/openingStory.ts#openingStoryAt',
+  'opening-cost': 'services/openingStory.ts#openingStoryAt',
+  'opening-theirs': 'services/openingStory.ts#openingStoryAt',
+  'opening-fork': 'services/openingStory.ts#openingStoryAt',
 };
 
 /** The bench's own computer sources → the computer each one runs (the

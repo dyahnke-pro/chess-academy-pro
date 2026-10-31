@@ -36,10 +36,30 @@ import { NO_PROOF, squaresProof, type FactProof } from './proof';
 import { andList, countWord } from '../utils/andList';
 import { shareAdverb } from '../utils/shareWords';
 import { positionOf } from '../utils/samePosition';
+import type { FacetTag } from './reviewFacetRank';
 
 export type StoryBeat =
   | 'fork' | 'identity' | 'their-setup' | 'branch-choice' | 'structure-cost' | 'structure-paid'
   | 'character' | 'key-break' | 'consequence' | 'horizon-plan';
+
+/** THE KIND OF EACH BEAT (WO-STORY-MATRIX-01 P1-4) — the producer's own
+ *  answer, so no surface relabels a beat: the opening's name; the price the
+ *  student's move paid; the system their move chose and what it gave away;
+ *  the opening's story (the branch, the price paid back, the coming game); the
+ *  crossroads in front of the student. A new beat fails to compile until it
+ *  is named here. */
+export const STORY_KIND: Record<StoryBeat, FacetTag> = {
+  identity: 'opening',
+  fork: 'opening-fork',
+  // The price the student's own move paid — said with the move, and with its
+  // verdict on a slip (OS-3, 2026-10-19).
+  'structure-cost': 'opening-cost',
+  // What their move chose, and what it gave away.
+  'their-setup': 'opening-theirs', consequence: 'opening-theirs',
+  // The student's branch, the move that pays the price back, the coming game.
+  'branch-choice': 'opening-story', 'structure-paid': 'opening-story',
+  character: 'opening-story', 'key-break': 'opening-story', 'horizon-plan': 'opening-story',
+};
 
 export interface StoryFact {
   beat: StoryBeat;

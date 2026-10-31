@@ -45,7 +45,7 @@ import { trickSidestepped } from './forkTrick';
 import { findProphylaxis, prophylaxisProof } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { lineProof, lineProofFromUci, legalLineProof, proofForStudent, squaresProof, isProof, type FactProof, type Proof } from './proof';
-import { readBoardAll, type BoardRead } from './boardComputers';
+import { BOARD_COMPUTERS, readBoardAll, type BoardRead, type ReviewComputer } from './boardComputers';
 import { tradeLedger } from './tempoCount';
 import { notYetPlayed } from './notYetPlayed';
 import { heldResource } from './holdResource';
@@ -1477,7 +1477,7 @@ export function computeMoveFacets(
     const lom = ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : undefined;
     for (const g of readBoardAll('tacticGeometry', { fen: fenBefore, me: studentColorWB, pv: ctx.bestLineUci, register: 'review', played: san, ...(lom ? { lastOpponentMove: lom } : {}) })) {
       if (g.namesMove && playedBest) continue;
-      const f = `[tactic] ${g.text}`;
+      const f = `[${BOARD_COMPUTERS.tacticGeometry.kind}] ${g.text}`;
       facets.push(f);
       recProof(f, isProof(g.proof) ? g.proof : null);
       recSquares(f, g.squares);
@@ -1492,9 +1492,12 @@ export function computeMoveFacets(
   // their move, with the student to move; or on the student's own move — and
   // each said once a game through the `hint:` ledger.
   if (studentColorWB) {
-    const add = (tag: string, r: BoardRead | null): void => {
+    // Each read under its computer's own kind (`BOARD_COMPUTERS[id].kind`) —
+    // never a tag picked here: the same read used to be a habit on Review, a
+    // choice on Learn and a rule on the live read (WO-STORY-MATRIX-01 P1-4).
+    const add = (id: ReviewComputer, r: BoardRead | null): void => {
       if (!r) return;
-      const f = `[${tag}] ${r.text}`;
+      const f = `[${BOARD_COMPUTERS[id].kind}] ${r.text}`;
       facets.push(f);
       recProof(f, isProof(r.proof) ? r.proof : null);
       recSquares(f, r.squares);
@@ -1503,26 +1506,26 @@ export function computeMoveFacets(
     };
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.
-      add('their-read', readBoardAll('obligationLifted', { fenBefore, fenAfter, student: studentColorWB })[0] ?? null);
+      add('obligationLifted', readBoardAll('obligationLifted', { fenBefore, fenAfter, student: studentColorWB })[0] ?? null);
       // Your pinned piece walks out with tempo — the pin is not what it looks.
-      add('tactic', readBoardAll('pinBreakOwn', { fen: fenAfter, student: studentColorWB })[0] ?? null);
+      add('pinBreakOwn', readBoardAll('pinBreakOwn', { fen: fenAfter, student: studentColorWB })[0] ?? null);
       // Their piece you pin can walk out the same way.
       try {
         for (const t of detectTactics(fenAfter).tactics) {
           if (t.type !== 'pin' || t.beneficiary !== studentColorWB || !t.involvedSquares[1]) continue;
-          add('tactic', readBoardAll('pinBreakTheirs', { fen: fenAfter, student: studentColorWB, pinned: t.involvedSquares[1] })[0] ?? null);
+          add('pinBreakTheirs', readBoardAll('pinBreakTheirs', { fen: fenAfter, student: studentColorWB, pinned: t.involvedSquares[1] })[0] ?? null);
         }
       } catch { /* no tactic read, no pin break */ }
       // A capture that looks free and leaves your queen with no way out.
-      add('tactic', readBoardAll('queenGrabTrap', { fen: fenAfter })[0] ?? null);
+      add('queenGrabTrap', readBoardAll('queenGrabTrap', { fen: fenAfter })[0] ?? null);
     } else {
       // The engine's line plays A first because A clears the road B needs.
-      if (ctx.bestLineUci.length >= 2) add('timing', readBoardAll('moveOrder', { fen: fenBefore, pv: ctx.bestLineUci })[0] ?? null);
+      if (ctx.bestLineUci.length >= 2) add('moveOrder', readBoardAll('moveOrder', { fen: fenBefore, pv: ctx.bestLineUci })[0] ?? null);
       // The book move the student just left, with its job on the board.
-      add('opening', readBoardAll('bookMove', { history: ctx.allSans.slice(0, ply), student: studentColorWB })[0] ?? null);
+      add('bookMove', readBoardAll('bookMove', { history: ctx.allSans.slice(0, ply), student: studentColorWB })[0] ?? null);
       // The count, only when the student's move lost it; the priority they faced.
-      add('method', readBoardAll('countMethod', { fenBefore, playedSan: san, student: studentColorWB, costCp: swing })[0] ?? null);
-      if (ctx.bestLineUci[0]) add('method', readBoardAll('priorityFirst', { fen: fenBefore, student: studentColorWB, bestUci: ctx.bestLineUci[0] })[0] ?? null);
+      add('countMethod', readBoardAll('countMethod', { fenBefore, playedSan: san, student: studentColorWB, costCp: swing })[0] ?? null);
+      if (ctx.bestLineUci[0]) add('priorityFirst', readBoardAll('priorityFirst', { fen: fenBefore, student: studentColorWB, bestUci: ctx.bestLineUci[0] })[0] ?? null);
     }
   }
 
