@@ -51,6 +51,9 @@ import { Chess, type Square, type PieceSymbol, type Color } from 'chess.js';
 import type { TacticPattern } from '../types/tacticTypes';
 import { BISHOP_DIRS, ROOK_DIRS, traceRay } from './lineGeometry';
 import { openSentence } from '../utils/openSentence';
+// The value of a piece for pricing a capture (the king only as "more than
+// anything") — the app's one CAPTURE table, not a private copy of it.
+import { CAPTURE_VALUE } from './pieceValues';
 
 type Vec = readonly [number, number];
 
@@ -166,10 +169,6 @@ export function isRealPin(args: {
     && args.chess.attackers(args.pinned, front.color).length === 0) return false;
   return pinBites(args.chess, args.attacker, args.pinned, args.behind);
 }
-
-/** The value of a piece for pricing a capture; the king is never captured, so
- *  its value only matters as "more than anything". */
-const CAPTURE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
 /**
  * Would the attacker actually WIN something by taking the piece behind once the

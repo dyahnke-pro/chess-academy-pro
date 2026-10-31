@@ -509,7 +509,7 @@
 - `src/services/positionReadingService.test.ts:71`
 - `src/services/positionReadingService.test.ts:79`
 - `src/services/positionReadingService.test.ts:83`
-- `src/services/relations.ts:217`
+- `src/services/relations.ts:220`
 - `src/services/tacticClassifier.ts:436`
 - `src/services/thinkingForcingStep.ts:37`
 - `src/services/thinkingForcingStep.ts:84`

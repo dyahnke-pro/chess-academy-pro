@@ -17,6 +17,10 @@
  *   Qxd8 moves material from −1 to +8. No tactic detector names that
  *   deflection — the diff does.
  *
+ * A line's diff (`lineDiff` in the design) is not built here yet: it ships
+ * with its first reader (G8.5 — needs and causes, P1-11). A reader of a line
+ * diffs the snapshots of the line's own boards.
+ *
  * A LEAF: chess.js and the relation computers (no engine, no Dexie, no I/O).
  * `detectTactics` (21 ms a board, 103 worst) and `findPinBreaks` (24 / 112 ms)
  * stay OUT of the eager snapshot — their facts carry their own relations.
@@ -24,7 +28,6 @@
  * N is the board before ply N+1).
  */
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
-import type { SpokenLine } from './voicePackage';
 import { findPins, absolutePinRay } from './pinGeometry';
 import { findLoosePieces } from './loosePieces';
 import { findHangingBySee } from './positionReadingService';
@@ -292,36 +295,4 @@ export function diff(a: RelationSnapshot, b: RelationSnapshot): RelationDiff {
     gained: b.relations.filter((r) => !a.byKey.has(relationKey(r))),
     lost: a.relations.filter((r) => !b.byKey.has(relationKey(r))),
   };
-}
-
-export interface LineDiff {
-  /** The boards of the line: the start, then after each move. */
-  fens: string[];
-  /** One diff per move, `steps[i]` = what `sans[i]` changed. */
-  steps: RelationDiff[];
-  /** What the whole line changed, start board to end board. */
-  whole: RelationDiff;
-}
-
-/** What a line of moves changed, move by move and as a whole. Null when the
- *  line is not legal from its board. */
-export function lineDiff(line: SpokenLine): LineDiff | null {
-  const fens: string[] = [line.fen];
-  try {
-    const c = new Chess(line.fen);
-    for (const san of line.sans) {
-      // chess.js throws on an illegal move: the catch below answers it.
-      c.move(san.replace(/[?!]+$/, ''));
-      fens.push(c.fen());
-    }
-  } catch { return null; }
-  const snaps: RelationSnapshot[] = [];
-  for (const f of fens) {
-    const s = snapshot(f);
-    if (!s) return null;
-    snaps.push(s);
-  }
-  const steps: RelationDiff[] = [];
-  for (let i = 1; i < snaps.length; i++) steps.push(diff(snaps[i - 1], snaps[i]));
-  return { fens, steps, whole: diff(snaps[0], snaps[snaps.length - 1]) };
 }

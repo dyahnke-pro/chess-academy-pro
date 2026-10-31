@@ -1,19 +1,32 @@
 /**
  * The relation snapshot (WO-STORY-MATRIX-01 P1-7, 2026-10-30): one read of a
- * board's relations, the diff of two boards, and a line's diff move by move.
+ * board's relations, the diff of two boards, and a line read move by move as
+ * the diffs of its own boards.
  */
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { diff, lineDiff, relationKey, snapshot, RELATION_RENDER, type Relation } from './relations';
+import { diff, relationKey, snapshot, RELATION_RENDER, type Relation, type RelationDiff } from './relations';
 
 const keys = (rs: readonly Relation[]): string[] => rs.map(relationKey);
 
-describe('lineDiff — the deflection no tactic detector names (Gotham–Jelena, 13.Bxf7+)', () => {
+/** A line's boards, then each move's diff and the whole line's diff. */
+function diffLine(fen: string, sans: readonly string[]): { steps: RelationDiff[]; whole: RelationDiff } {
+  const c = new Chess(fen);
+  const snaps = [snapshot(fen)!];
+  for (const san of sans) {
+    c.move(san);
+    snaps.push(snapshot(c.fen())!);
+  }
+  const steps = snaps.slice(1).map((s, i) => diff(snaps[i], s));
+  return { steps, whole: diff(snaps[0], snaps[snaps.length - 1]) };
+}
+
+describe('the deflection no tactic detector names (Gotham–Jelena, 13.Bxf7+)', () => {
   // The queen on d8 has one guard, the king. Bxf7+ drags the king to f7, and
   // Qxd8 collects the queen. `detectTactics` finds no tactic on the start board
   // and `computeBoardDelta('Bxf7+')` says nothing; the relations say all of it.
   const FEN = 'rnQqkbnr/p4pp1/2b4p/2p1P3/2B3PP/2N5/PP3P2/R1B1K1NR w KQkq - 3 13';
-  const line = lineDiff({ fen: FEN, sans: ['Bxf7+', 'Kxf7', 'Qxd8'] });
+  const line = diffLine(FEN, ['Bxf7+', 'Kxf7', 'Qxd8']);
 
   it('the king is the queen\'s only guard on the start board', () => {
     const start = snapshot(FEN);
@@ -22,29 +35,24 @@ describe('lineDiff — the deflection no tactic detector names (Gotham–Jelena,
   });
 
   it('Kxf7 loses that guard and leaves the queen loose', () => {
-    expect(line).not.toBeNull();
-    const kxf7 = line!.steps[1];
+    const kxf7 = line.steps[1];
     expect(keys(kxf7.lost)).toContain('guard:d8(bq)<e8(bk)');
     expect(keys(kxf7.gained)).toContain('loose:d8(bq)');
     expect(keys(kxf7.gained)).toContain('hanging:d8(bq)');
   });
 
   it('Qxd8 moves material from −1 to +8', () => {
-    const qxd8 = line!.steps[2];
+    const qxd8 = line.steps[2];
     expect(keys(qxd8.lost)).toContain('material:-1');
     expect(keys(qxd8.gained)).toContain('material:8');
   });
 
   it('the whole line loses the guard and the queen with it', () => {
-    expect(keys(line!.whole.lost)).toEqual(expect.arrayContaining(['guard:d8(bq)<e8(bk)', 'material:1']));
-    expect(keys(line!.whole.gained)).toContain('material:8');
+    expect(keys(line.whole.lost)).toEqual(expect.arrayContaining(['guard:d8(bq)<e8(bk)', 'material:1']));
+    expect(keys(line.whole.gained)).toContain('material:8');
     // A capture on d8 replaced Black's queen with White's: the key names the
     // piece, so the relation on the square does not survive the swap.
-    expect(keys(line!.whole.lost).some((k) => k.startsWith('attack:d8(bq)'))).toBe(true);
-  });
-
-  it('an illegal line has no diff', () => {
-    expect(lineDiff({ fen: FEN, sans: ['Bxf7+', 'Qxd8'] })).toBeNull();
+    expect(keys(line.whole.lost).some((k) => k.startsWith('attack:d8(bq)'))).toBe(true);
   });
 });
 

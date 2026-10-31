@@ -2,7 +2,7 @@
  * PATTERN · PIN — a bishop, rook or queen of the side pins an enemy piece.
  *
  * The test is the app's ONE pin test (`pinGeometry.isRealPin`), walked over
- * the side's sliders exactly as `tacticsDetector.findPins` walks them
+ * the side's sliders exactly as `pinGeometry.findPins` walks them
  * (`lineGeometry.traceRay`, the first two pieces on each ray). The computer
  * that teaches a pin is the one that finds it here.
  *
