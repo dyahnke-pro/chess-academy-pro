@@ -5167,6 +5167,12 @@ async function augmentWithProjections(
   for (const nf of deepOppFens.values()) deepOppPv.set(nf, await poolLine(nf, deepThreatPlies));
   // Said once per line, as on the student's side (review walk 2026-10-01).
   const deepOppSaid = new Set<string>();
+  // ONE STEM, ROTATED ON HOW MANY IDEAS THE GAME HAS TOLD (prod Review
+  // 2026-10-31: "Watch what they're building — left alone, their idea goes:
+  // they play … takes … — they win a …" three times in one game, a formula).
+  // Every stem carries a projection marker the board checkers cut at
+  // ("watch what they're building", "played out from here", "it runs").
+  let oppIdeasTold = 0;
   for (let i = 0; i < segments.length; i++) {
     const s = segments[i];
     if (deepOppBudget <= 0) break;
@@ -5215,12 +5221,18 @@ async function augmentWithProjections(
       // A proof when the line settles something; otherwise the IDEA is still
       // the teaching (what they want) — named by its first move, not recited.
       const oppRun = render(line, 'opponent');
+      const stem = ([
+        { goes: `Watch what they're building — left alone, their ${oppDeepKind} goes:`, starts: `Watch what they're building — left alone, their ${oppDeepKind} starts with` },
+        { goes: `Their next ${oppDeepKind}, played out from here:`, starts: `Their next ${oppDeepKind}, played out from here, starts with` },
+        { goes: `Another ${oppDeepKind} of theirs, if nothing stops it — it runs:`, starts: `Another ${oppDeepKind} of theirs, if nothing stops it — it runs from` },
+      ] as const)[oppIdeasTold % 3];
+      oppIdeasTold += 1;
       let callOut = oppRun
-        ? `Watch what they're building — left alone, their ${oppDeepKind} goes: ${oppRun}.`
+        ? `${stem.goes} ${oppRun}.`
         // THE STAKE IS ITS WHY (review audit 2026-10-14: "their idea starts
         // with d5." and nothing more). The line was kept BECAUSE it mates or
         // swings the game, so that is said with it.
-        : `Watch what they're building — left alone, their ${oppDeepKind} starts with ${line.plies[0].san}${matesOut ? ', and it ends in mate' : oppPovNow !== null && oppPovTerminal !== null ? `, and it swings the game by ${costWords(oppPovTerminal - oppPovNow)}` : ''}.`;
+        : `${stem.starts} ${line.plies[0].san}${matesOut ? ', and it ends in mate' : oppPovNow !== null && oppPovTerminal !== null ? `, and it swings the game by ${costWords(oppPovTerminal - oppPovNow)}` : ''}.`;
       // Its REAL purpose — what the line wins, when that is not what their
       // first move looks aimed at (missed computers, 2026-10-08).
       const purpose = (() => { try { return threatPurpose(line, studentColorWB); } catch { return null; } })();
@@ -5629,7 +5641,7 @@ const SERIES_VERB = new RegExp(`, ${V_ALT}\\b`, 'g');
 // …and a method list or a conditional race is advice, not history (amateur
 // review walk 2026-09-27: "Checks, captured, threats"; a passer race "you got
 // there first once the queens came off" while the queens were still on).
-const PRESCRIPTIVE = /(the plan (?:from here|is|changes)|so the plan is|here's (?:exactly )?how|your defense starts with|watch what they|follow it up|don't play|spend two or three tempi|that's your cue|is your cue|your whole job|wants to run|checks, captures|pushes from queening|once the queens come off)/i;
+const PRESCRIPTIVE = /(the plan (?:from here|is|changes)|so the plan is|here's (?:exactly )?how|your defense starts with|watch what they|played out from here|if nothing stops it|follow it up|don't play|spend two or three tempi|that's your cue|is your cue|your whole job|wants to run|checks, captures|pushes from queening|once the queens come off)/i;
 /** Case-preserving contraction rewrite: "You're" → "You were", never "you were"
  *  mid-narration with a lowercase head (the `/gi` replacement used to lowercase
  *  every sentence it opened). */
