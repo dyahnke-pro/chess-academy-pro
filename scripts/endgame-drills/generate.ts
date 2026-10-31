@@ -15,8 +15,8 @@
 // /tmp/claude-0/eg/tb-cache.json so reruns are cheap.
 import { Chess } from 'chess.js';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { outsidePasserDecoy, kingCourse, findBreakthrough } from '../../src/services/endgamePawnReads';
-import { readZugzwang, findTriangulation, triangulationSentence, type ZugzwangRead } from '../../src/services/zugzwang';
+import { outsidePasserDecoy, kingCourse, findBreakthrough, findTriangulation, triangulationSentence } from '../../src/services/endgamePawnReads';
+import { readZugzwang, type ZugzwangRead } from '../../src/services/zugzwang';
 import { detectPlanRace, planRaceClause } from '../../src/services/planRace';
 import type { TablebaseMovesResult } from '../../src/services/endgameTablebaseService';
 import { queenVsSeventh } from '../../src/services/queenVsPawn';

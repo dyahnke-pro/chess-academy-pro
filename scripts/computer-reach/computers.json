@@ -3509,12 +3509,12 @@
  },
  {
   "name": "findTriangulation + triangulationSentence (losing a tempo on purpose)",
-  "file": "services/zugzwang.ts",
+  "file": "services/endgamePawnReads.ts",
   "fn": "findTriangulation",
   "says": "A best line in which only kings move and the same placement returns with the other side to move (a tempo handed over)",
   "origin": "map",
   "nodes": [
-   "services/zugzwang.ts#findTriangulation"
+   "services/endgamePawnReads.ts#findTriangulation"
   ]
  },
  {

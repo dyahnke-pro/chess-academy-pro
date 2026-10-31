@@ -38,16 +38,18 @@ describe('pawnEndingTrade', () => {
   });
 });
 
-describe('the pawn-ending lane fires through Learn', () => {
-  it('a losing trade into the pawn ending is said, once per game by its claim', async () => {
-    const { studentMoveTeaching } = await import('./learnBoardTeaching');
+describe('the pawn-ending lane fires through Learn', async () => {
+  // Imported at collection, not inside a test: the Learn module graph takes
+  // 10-30 s to load on a busy box, which timed the first test out and left the
+  // second reading a half-run lane (story-matrix build, 2026-10-31).
+  const { studentMoveTeaching } = await import('./learnBoardTeaching');
+  it('a losing trade into the pawn ending is said, once per game by its claim', () => {
     const hints = studentMoveTeaching({ fenBefore: '3rk3/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1', san: 'Rxd8+', history: ['Rxd8+'], cpLoss: 150, bothCp: true, bestSan: 'Kf1', bestLine: undefined, reply: 'Kxd8', cpAfter: -150 });
     const h = hints.find((x) => x.lane === 'pawnEnding');
     expect(h?.text).toMatch(/count the pawn ending out/);
     expect(h?.claims).toEqual(['method:pawn-ending-trade']);
   }, 30_000);
-  it('the outside passer decoy is said after the move that leaves it', async () => {
-    const { studentMoveTeaching } = await import('./learnBoardTeaching');
+  it('the outside passer decoy is said after the move that leaves it', () => {
     const hints = studentMoveTeaching({ fenBefore: '8/4kppp/8/8/8/P7/4KPPP/8 w - - 0 1', san: 'a4', history: ['a4'], cpLoss: 0, bothCp: true, bestSan: 'a4', bestLine: undefined, reply: null, cpAfter: 300 });
     expect(hints.find((x) => x.lane === 'pawnEnding')?.text).toMatch(/outside passed pawn on a4 is a decoy/);
   }, 30_000);

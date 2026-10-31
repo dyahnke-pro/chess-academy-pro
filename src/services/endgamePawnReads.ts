@@ -232,3 +232,9 @@ export function findTriangulation(fen: string, line: readonly string[]): { plies
   }
   return null;
 }
+
+/** The triangulation in demo voice (White/Black) — the endgame drill
+ *  generator's explanation (`scripts/endgame-drills/generate.ts`). */
+export function triangulationSentence(side: string, other: string, t: { squares: string[] }): string {
+  return `${side} to move — and ${side} would rather it were ${other}'s move. So ${side}'s king walks a triangle (${t.squares.join(', ')}) and comes back: the same position, but now ${other} has to move. That is triangulation — losing a tempo on purpose.`;
+}

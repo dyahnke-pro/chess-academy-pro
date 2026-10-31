@@ -5,8 +5,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import drills from './endgame-concept-drills.json';
-import { outsidePasserDecoy, kingCourse, findBreakthrough } from '../services/endgamePawnReads';
-import { findTriangulation } from '../services/zugzwang';
+import { outsidePasserDecoy, kingCourse, findBreakthrough, findTriangulation } from '../services/endgamePawnReads';
 import { queenVsSeventh } from '../services/queenVsPawn';
 import { getEndgameLessonById } from '../services/endgameLessonsService';
 import { detectPlanRace } from '../services/planRace';
