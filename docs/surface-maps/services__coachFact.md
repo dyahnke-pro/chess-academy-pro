@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**275 lines · 14 exports · 11 importers · 3 tests · 0 audits**
+**331 lines · 16 exports · 16 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,9 @@
 
 ## Who calls in
 
+- `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/boardComputers.test.ts`
+- `src/services/boardComputers.ts`
 - `src/services/coachDecider.ts`
 - `src/services/coachFact.test.ts`
 - `src/services/coachFeatureService.ts`
@@ -23,7 +26,9 @@
 - `src/services/gameStory.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/moveThoughtFacts.ts`
+- `src/services/planThread.ts`
 - `src/services/positionFacts.ts`
+- `src/services/reviewFullData.ts`
 - `src/services/thoughtComposer.ts`
 - `src/test/doorFact.ts`
 
@@ -48,26 +53,28 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCoachFactKind` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:557`
+- `src/services/learnTurnDoor.ts:556`
 
-### `stepOf` (function) — 15 call sites
+### `stepOf` (function) — 16 call sites
+- `src/services/boardComputers.test.ts:76`
 - `src/services/coachFact.test.ts:75`
 - `src/services/coachFact.test.ts:76`
-- `src/services/coachFeatureService.ts:2481`
-- `src/services/coachFeatureService.ts:3077`
+- `src/services/coachFeatureService.ts:2503`
+- `src/services/coachFeatureService.ts:3100`
 - `src/services/learnTurnDoor.ts:246`
-- `src/services/learnTurnDoor.ts:777`
-- `src/services/learnTurnDoor.ts:834`
-- `src/services/learnTurnDoor.ts:855`
-- `src/services/learnTurnDoor.ts:859`
-- `src/services/learnTurnDoor.ts:902`
-- `src/services/learnTurnDoor.ts:928`
-- `src/services/learnTurnDoor.ts:938`
-- `src/services/learnTurnDoor.ts:942`
-- `src/services/learnTurnDoor.ts:1076`
-- `src/services/learnTurnDoor.ts:1139`
+- `src/services/learnTurnDoor.ts:776`
+- `src/services/learnTurnDoor.ts:833`
+- `src/services/learnTurnDoor.ts:854`
+- `src/services/learnTurnDoor.ts:858`
+- `src/services/learnTurnDoor.ts:901`
+- `src/services/learnTurnDoor.ts:927`
+- `src/services/learnTurnDoor.ts:937`
+- `src/services/learnTurnDoor.ts:941`
+- `src/services/learnTurnDoor.ts:1075`
+- `src/services/learnTurnDoor.ts:1138`
 
-### `placeFact` (function) — 3 call sites
+### `placeFact` (function) — 4 call sites
+- `src/services/boardComputers.ts:560`
 - `src/services/danyaBench.measure.test.ts:61`
 - `src/services/moveThoughtFacts.ts:125`
 - `src/services/moveThoughtFacts.ts:227`
@@ -81,17 +88,24 @@
 ### `CoachFact` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `HeldForm` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `FactMarks` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `LOCAL_THREAD` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `toCoachFact` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2807`
-- `src/services/learnTurnDoor.ts:571`
+- `src/services/coachFeatureService.ts:2830`
+- `src/services/learnTurnDoor.ts:570`
 - `src/services/positionFacts.ts:504`
 - `src/test/doorFact.ts:19`
 
 ## Tests
 
+- `src/services/boardComputers.test.ts`
 - `src/services/coachFact.test.ts`
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/oneGroupTable.gate.test.ts`

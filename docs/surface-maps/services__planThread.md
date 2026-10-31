@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**273 lines · 6 exports · 7 importers · 6 tests · 1 audits**
+**277 lines · 6 exports · 7 importers · 6 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,7 +24,7 @@
 ## Exports and every call site
 
 ### `planChangeSentence` (function) — 1 call site
-- `src/services/positionFacts.ts:878`
+- `src/services/positionFacts.ts:909`
 
 ### `structurePlanEvent` (function) — 7 call sites
 - `src/services/planThread.test.ts:190`
@@ -33,7 +33,7 @@
 - `src/services/planThread.test.ts:198`
 - `src/services/planThread.test.ts:202`
 - `src/services/planThread.test.ts:206`
-- `src/services/positionFacts.ts:868`
+- `src/services/positionFacts.ts:899`
 
 ### `PLAN_THREAD_HOLD_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -42,13 +42,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12139`
+- `src/components/Coach/CoachTeachPage.tsx:12148`
 - `src/services/gameStory.rewind.test.ts:27`
 - `src/services/planThread.test.ts:106`
 - `src/services/planThread.test.ts:113`
 
 ### `planThreadTurn` (function) — 24 call sites
-- `src/services/boardComputers.ts:446`
+- `src/services/boardComputers.ts:488`
 - `src/services/gameStory.rewind.test.ts:25`
 - `src/services/planArcFade.test.ts:30`
 - `src/services/planChoice.test.ts:78`

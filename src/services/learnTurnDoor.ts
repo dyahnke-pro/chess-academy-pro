@@ -541,12 +541,11 @@ export interface LaneInput {
 /** A LEARN FACT AT THE DOOR — the one fact shape (`coachFact`) with the lane
  *  it rides (WO-STORY-MATRIX-01 P1-5). Every record the door weighs rides on
  *  the fact, so what the voice package kept is known by its id, never by its
- *  words. Two of the lane's own answers stay beside it until its producers
- *  emit `CoachFact` (P1-6e): the role a producer gave (else the lane's lead
- *  decides) and the producer's own kind, said on the row. */
+ *  words — the role a producer gave among them (`CoachFact.role`, else the
+ *  lane's lead decides). The producer's own kind, said on the row, stays
+ *  beside it until its producers emit `CoachFact` (P1-6e). */
 export type LaneFact = CoachFact & {
   lane: LearnLane;
-  role?: FacetRole;
   factKind?: string;
 };
 
