@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { createLearnMemory, markOpeningFactsSpoken, NEVER_FIRED, type LearnMemory } from './learnMemory';
+import { identityHeard, noteOpening, openingAt } from './gameStory';
 
 const PAGE = 'src/components/Coach/CoachTeachPage.tsx';
 
@@ -118,12 +119,12 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
   it('a TAKEBACK keeps the memory and the game id (rewind, then observe)', () => {
     const { mem, set } = onBoard();
     set(14); mem.observe();
-    mem.spokenOpeningName = 'Scandinavian Defense';
+    noteOpening(mem.story, 10, 'named', 'Scandinavian Defense');
     const id = mem.gameId;
     mem.rewind(12);                              // took two plies back
     set(12); expect(mem.observe()).toBe(false);
     set(13); expect(mem.observe()).toBe(false);
-    expect(mem.spokenOpeningName).toBe('Scandinavian Defense');
+    expect(openingAt(mem.story.current(), 'named'), 'named before the board it went back to: still heard').toBe('Scandinavian Defense');
     expect(mem.gameId).toBe(id);
     // …and a real new game still resets.
     set(1); expect(mem.observe()).toBe(true);
@@ -132,14 +133,14 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
 
   it('observe() forgets when the board goes BACKWARDS — a second game', () => {
     const { mem, set } = onBoard();
-    mem.spokenOpeningName = 'Scandinavian Defense: Lasker Variation';
-    mem.detectedOpeningName = 'Scandinavian Defense: Lasker Variation';
+    noteOpening(mem.story, 0, 'named', 'Scandinavian Defense: Lasker Variation');
+    noteOpening(mem.story, 0, 'read', 'Scandinavian Defense: Lasker Variation');
     set(14); expect(mem.observe(), 'a game in progress must not forget').toBe(false);
     set(16); expect(mem.observe()).toBe(false);
     // A NEW game: the board is back near the start.
     set(1); expect(mem.observe(), 'fewer plies than before = a new or rewound game').toBe(true);
-    expect(mem.spokenOpeningName).toBeNull();
-    expect(mem.detectedOpeningName).toBeNull();
+    expect(openingAt(mem.story.current(), 'named')).toBeNull();
+    expect(openingAt(mem.story.current(), 'read')).toBeNull();
   });
 
   // GATE-1 AUDIT 2026-10-21: every Campaign game on prod was filed under three
@@ -175,31 +176,31 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     const announce = src.slice(src.indexOf('── OPENING ANNOUNCEMENT'));
     const body = announce.slice(0, announce.indexOf('captureEvent('));
     expect(
-      /spokenOpeningName\s*=(?!=)/.test(body),
+      /noteOpening\([^)]*'named'/.test(body),
       'the announcement must not spend the say-once flag before the voice has it',
     ).toBe(false);
     expect(
-      /detectedOpeningName\s*=\s*det\.name/.test(body),
+      /noteOpening\(learnMemRef\.current\.story, history\.length, 'read', det\.name\)/.test(body),
       'detection is still recorded immediately — it is context, not an utterance',
     ).toBe(true);
   });
 
-  it('spokenOpeningName is written only where an `opening` fact actually survived', () => {
+  it('the opening is NAMED only where an `opening` fact actually survived', () => {
     // Both packages can carry the name, so both promote it — through ONE
     // helper fed what the package KEPT (2026-10-14), which writes only on an
     // `opening` fact. No inline write remains on the page.
     const src = readFileSync(PAGE, 'utf8');
-    expect(src.split("\n").filter((l) => /learnMemRef\.current\.spokenOpeningName\s*=(?!=)/.test(l))).toEqual([]);
+    expect(src.split("\n").filter((l) => /noteOpening\([^)]*'named'/.test(l))).toEqual([]);
     // One page helper (`noteOpeningFactsHeard`) marks and counts what was heard.
     expect(src).toMatch(/noteOpeningFactsHeard\(instant\.pkg\.kept\)/);
     expect(src).toMatch(/noteOpeningFactsHeard\(hintPkg\.kept\)/);
-    expect(src.match(/markOpeningFactsSpoken\(learnMemRef\.current, kept\)/g) ?? []).toHaveLength(1);
+    expect(src.match(/markOpeningFactsSpoken\(learnMemRef\.current, kept, gameRef\.current\.plies\)/g) ?? []).toHaveLength(1);
     const mem = createLearnMemory({ livePlies: () => 0 });
-    mem.detectedOpeningName = 'Scandinavian Defense';
-    markOpeningFactsSpoken(mem, [{ kind: 'computed' }]);
-    expect(mem.spokenOpeningName).toBeNull();
-    markOpeningFactsSpoken(mem, [{ kind: 'opening' }]);
-    expect(mem.spokenOpeningName).toBe('Scandinavian Defense');
+    noteOpening(mem.story, 4, 'read', 'Scandinavian Defense');
+    markOpeningFactsSpoken(mem, [{ kind: 'computed' }], 5);
+    expect(openingAt(mem.story.current(), 'named')).toBeNull();
+    markOpeningFactsSpoken(mem, [{ kind: 'opening' }], 5);
+    expect(openingAt(mem.story.current(), 'named')).toBe('Scandinavian Defense');
   });
 
   it('the note-primary stand-down fires on a NOTE, not on any substantive fact', () => {
@@ -274,10 +275,10 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
 describe('queueing is not saying — opening facts are marked from the voice (2026-10-14)', () => {
   it('a HELD identity stays unsaid; a SPOKEN one is marked', () => {
     const mem = createLearnMemory({ livePlies: () => 0 });
-    markOpeningFactsSpoken(mem, [{ kind: 'computed', claims: ['threat:e5'] }]);
-    expect(mem.identitySaid).toBeNull();
-    markOpeningFactsSpoken(mem, [{ kind: 'computed', claims: ['opening-identity:Scandinavian Defense'] }]);
-    expect(mem.identitySaid).toBe('opening-identity:Scandinavian Defense');
+    markOpeningFactsSpoken(mem, [{ kind: 'computed', claims: ['threat:e5'] }], 5);
+    expect(identityHeard(mem.story.current())).toBeNull();
+    markOpeningFactsSpoken(mem, [{ kind: 'computed', claims: ['opening-identity:Scandinavian Defense'] }], 5);
+    expect(identityHeard(mem.story.current())).toBe('opening-identity:Scandinavian Defense');
   });
   it('Learn no longer marks the identity or the plan at queue time', () => {
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
@@ -285,10 +286,10 @@ describe('queueing is not saying — opening facts are marked from the voice (20
   });
   it('the NAME carries its identity in one line, and hearing it marks both (2026-10-14)', () => {
     const mem = createLearnMemory({ livePlies: () => 0 });
-    mem.detectedOpeningName = 'Scandinavian Defense';
-    markOpeningFactsSpoken(mem, [{ kind: 'opening', claims: ['opening-name:Scandinavian Defense', 'opening-identity:Scandinavian Defense'] }]);
-    expect(mem.spokenOpeningName).toBe('Scandinavian Defense');
-    expect(mem.identitySaid).toBe('opening-identity:Scandinavian Defense');
+    noteOpening(mem.story, 4, 'read', 'Scandinavian Defense');
+    markOpeningFactsSpoken(mem, [{ kind: 'opening', claims: ['opening-name:Scandinavian Defense', 'opening-identity:Scandinavian Defense'] }], 5);
+    expect(openingAt(mem.story.current(), 'named')).toBe('Scandinavian Defense');
+    expect(identityHeard(mem.story.current())).toBe('opening-identity:Scandinavian Defense');
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src).toMatch(/announceLine = `\$\{announce\} \$\{idWith\.text\}`/);
     expect(src).toMatch(/claims: announceClaims/);

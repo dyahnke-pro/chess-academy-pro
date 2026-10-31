@@ -33,7 +33,7 @@ import { computeNeed, coldStudent, type StudentNeedContext, type NeedVerdict } f
 import { matchFundamental, matchTacticPattern, matchTag, boostFor } from './weaknessSignal';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { moveLabel, spokenMoveLabel, type TurningPointSegmentLike } from './reviewTurningPoint';
-import { rankTurns } from './turningPoints';
+import { gameTurn, rankTurns } from './turningPoints';
 import { landedTacticTeaching } from './dnaLineNarrator';
 import { buildCausalChain, type CausalChain } from './causalChain';
 import { structurePlan } from './nextPlans';
@@ -77,10 +77,6 @@ interface SelectorInput {
   /** THE STUDENT (N2). When given, every student ply gets a computed need
    *  verdict (`needByPly`); absent = a cold student (the rating prior teaches). */
   student?: StudentNeedContext;
-  /** THE GAME'S TURN, when the caller already computed it (`gameTurn`, unity
-   *  U1). The moment at this ply leads, so the thesis names the same move the
-   *  review asked about — never a second answer to "where did it turn?". */
-  turnPly?: number;
 }
 
 interface Moment {
@@ -98,7 +94,7 @@ interface Moment {
   san: string;
 }
 
-interface Thesis {
+export interface Thesis {
   kind: 'turned' | 'landed' | 'plan' | 'none';
   ply: number | null;
   label: string | null;
@@ -252,39 +248,16 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
     seen.add(p.ply);
   }
 
-  // 3b. ONE TURNING POINT (unity U1): the caller's computed turn leads.
-  if (input.turnPly !== undefined) {
-    const at = moments.findIndex((m) => m.ply === input.turnPly);
-    if (at > 0) moments.unshift(...moments.splice(at, 1));
-    else if (at < 0) {
-      const p = byPly.get(input.turnPly);
-      if (p) {
-        const seg = toSegment(p);
-        const sign = p.playerColor === 'white' ? 1 : -1;
-        const cost = seg.evalBefore != null && seg.evalAfter != null ? ((seg.evalBefore - seg.evalAfter) * sign) / 100 : null;
-        moments.unshift({ ply: p.ply, label: moveLabel(seg), kind: 'swing', swingPawns: cost !== null && cost > 0 ? cost : null, tactic: landedByPly.get(p.ply) ?? null, fenBefore: p.fenBefore, san: p.san });
-      }
-    }
-  }
-
   // 4. The chain through the top moment (root cause → tactic), when one exists.
-  let chain: CausalChain | null = null;
   const top = moments[0];
-  if (top) {
-    try {
-      chain = buildCausalChain({ historySans: plies.slice(0, top.ply).map((p) => p.san), focusPly: top.ply });
-    } catch { chain = null; }
-  }
+  const chain = top ? chainThrough(plies, top.ply) : null;
   const onThread = new Set<number>(moments.map((m) => m.ply));
   if (chain) for (const n of chain.nodes) if (typeof n.ply === 'number') onThread.add(n.ply);
 
   // 5. The thesis — one computed fact the whole package serves.
   let thesis: Thesis = NONE;
-  if (top && top.kind === 'swing') {
-    const theirs = byPly.get(top.ply)?.playerColor !== input.studentColor;
-    thesis = { kind: 'turned', ply: top.ply, label: top.label, swingPawns: top.swingPawns, tactic: top.tactic, plan: null, chainRoot: chain?.nodes[0]?.kind ?? null, ...(theirs ? { theirs } : {}) };
-  } else if (top) {
-    thesis = { kind: 'landed', ply: top.ply, label: top.label, swingPawns: null, tactic: top.tactic, plan: null, chainRoot: chain?.nodes[0]?.kind ?? null };
+  if (top) {
+    thesis = momentThesis(top, chain, byPly.get(top.ply)?.playerColor !== input.studentColor);
   } else if (kind === 'line') {
     const last = plies[plies.length - 1];
     let plan: string | null = null;
@@ -367,6 +340,40 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
   return { thesis, moments, chain, onThread, kind, needByPly, boostByPly };
 }
 
+/** The causal chain through a moment (root cause → tactic), or null. */
+function chainThrough(plies: readonly SelectorPly[], ply: number): CausalChain | null {
+  try {
+    return buildCausalChain({ historySans: plies.slice(0, ply).map((p) => p.san), focusPly: ply });
+  } catch { return null; }
+}
+
+/** A moment as the thesis: a swing is where the game TURNED (said as theirs
+ *  when it was the opponent's move), a landed tactic what LANDED. */
+function momentThesis(top: Moment, chain: CausalChain | null, theirs: boolean): Thesis {
+  const chainRoot = chain?.nodes[0]?.kind ?? null;
+  return top.kind === 'swing'
+    ? { kind: 'turned', ply: top.ply, label: top.label, swingPawns: top.swingPawns, tactic: top.tactic, plan: null, chainRoot, ...(theirs ? { theirs } : {}) }
+    : { kind: 'landed', ply: top.ply, label: top.label, swingPawns: null, tactic: top.tactic, plan: null, chainRoot };
+}
+
+/**
+ * THE GAME'S TURNING POINT AS ITS THESIS (unity U1, WO-STORY-MATRIX-01 P1-8c):
+ * the top of the one turn ranking (`gameTurn`, either side), what landed on it
+ * and the chain that led there. The Review build reads it once and keeps it in
+ * the game's story; the walk's closing line reads it from there — it used to
+ * run the whole selector a second time over the segments to find the same move.
+ * Null on a clean game.
+ */
+export function turnThesis(plies: readonly SelectorPly[], studentColor: 'white' | 'black'): Thesis | null {
+  const turn = gameTurn(plies.map(toSegment));
+  const p = turn ? plies.find((x) => x.ply === turn.ply) : undefined;
+  if (!turn || !p) return null;
+  let tactic: string | null = null;
+  try { tactic = landedTacticTeaching(p.fenBefore, p.san)?.type ?? null; } catch { tactic = null; }
+  const top: Moment = { ply: p.ply, label: moveLabel(toSegment(p)), kind: 'swing', swingPawns: turn.swingPawns, tactic, fenBefore: p.fenBefore, san: p.san };
+  return momentThesis(top, chainThrough(plies, p.ply), p.playerColor !== studentColor);
+}
+
 export type ThesisRegister = 'retrospective' | 'present';
 
 /**
@@ -422,33 +429,6 @@ export function pliesFromSans(sans: readonly string[], evals?: readonly (number 
     if (evals) evalBefore = evalAfter ?? evalBefore;
   }
   return out;
-}
-
-/** The review walk's segments carry everything the selector needs. Structural
- *  type so the component never imports a review-only shape into the selector. */
-interface SegmentLike {
-  ply: number;
-  san: string;
-  fenBefore: string;
-  fenAfter: string;
-  playerColor: 'white' | 'black';
-  evalBefore: number | null;
-  evalAfter: number | null;
-  classification: string | null;
-}
-
-export function selectTeachingForSegments(
-  segments: ReadonlyArray<SegmentLike>,
-  studentColor: 'white' | 'black',
-  rating: number | undefined,
-  surface: CoachSurface,
-  student?: StudentNeedContext,
-  turnPly?: number,
-): TeachingPackage {
-  return selectTeaching({
-    plies: segments.map((s) => ({ ply: s.ply, san: s.san, fenBefore: s.fenBefore, fenAfter: s.fenAfter, playerColor: s.playerColor, evalBefore: s.evalBefore, evalAfter: s.evalAfter, classification: s.classification })),
-    studentColor, rating, kind: 'game', surface, student, turnPly,
-  });
 }
 
 /** The serializable slice of a package a cached WalkthroughTree carries

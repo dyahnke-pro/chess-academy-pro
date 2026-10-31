@@ -21,8 +21,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `findPinBreaks` (function) — 16 call sites
-- `src/services/boardComputers.ts:193`
-- `src/services/boardComputers.ts:202`
+- `src/services/boardComputers.ts:220`
+- `src/services/boardComputers.ts:231`
 - `src/services/pinBreak.test.ts:18`
 - `src/services/pinBreak.test.ts:22`
 - `src/services/pinBreak.test.ts:25`
@@ -39,8 +39,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/captureSaidOnce.gate.test.ts:238`
 
 ### `pinBreakLine` (function) — 9 call sites
-- `src/services/boardComputers.ts:196`
-- `src/services/boardComputers.ts:205`
+- `src/services/boardComputers.ts:223`
+- `src/services/boardComputers.ts:234`
 - `src/services/pinBreak.test.ts:33`
 - `src/services/pinBreak.test.ts:34`
 - `src/services/pinBreak.test.ts:37`
@@ -50,8 +50,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/captureSaidOnce.gate.test.ts:238`
 
 ### `pinBreakProof` (function) — 3 call sites
-- `src/services/boardComputers.ts:195`
-- `src/services/boardComputers.ts:204`
+- `src/services/boardComputers.ts:222`
+- `src/services/boardComputers.ts:233`
 - `src/services/pinBreak.test.ts:40`
 
 ## Tests

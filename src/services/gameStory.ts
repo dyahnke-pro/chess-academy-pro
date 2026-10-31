@@ -38,12 +38,28 @@
  *  - ONE CHECKPOINT (`serialize` / `restore`): a rebuilt review starts the
  *    plies ahead from what the walk had said, plans included.
  *
- * Events (phase, opening named, verdicts) join in 8c.
+ * Commit 8c moves the EVENTS in: what happened in the game and what the coach
+ * said about it as a whole — the phase boundaries crossed, the opening read,
+ * queued and named, its identity said, the position's character switching,
+ * the verdict word, the ideas promised and paid off, the student's slips, the
+ * model game cited and (Review) the game's turning point. What it replaced: on
+ * Learn the page's `phaseStateRef` (never reset in a mount — a second game
+ * crossed into the middlegame in silence), `characterRef` and
+ * `openingBreakRef`, and learnMemory's `identitySaid`, `spokenOpeningName`,
+ * `queuedOpeningName`, `detectedOpeningName`, `promises` and `slipsThisGame`;
+ * in Review `spokenOpening`, `announcedOpeningNames` / `Families`,
+ * `lastAnnouncedOpeningName`, `storyShown`, `endgameAnnounced`,
+ * `lastVerdictWord` and the slip tally — none of them rewound by a takeback,
+ * and Review's never carried into a rebuilt or explored line. A cause chain
+ * said is a claim in the one claim map (`causalChainKey`), the same key on
+ * both surfaces.
  */
 import { positionOf } from '../utils/samePosition';
 import type { PlanThread } from './planThread';
 import type { ArcState } from './planArc';
 import type { CoachFact, FactSeat } from './coachFact';
+import type { Character, CharacterState } from './positionCharacter';
+import type { Thesis } from './teachingSelector';
 
 /** A PLAN'S THREAD: whose plan it is and what it is aimed at — the plan-aim
  *  key (`nextPlans.planAimKey`: `plan-aim:passer:a`, `plan-aim:outpost:d5`,
@@ -88,15 +104,86 @@ export interface ThreadState {
 }
 
 /** THE PLAN COMPUTERS' OWN STATE, as the step functions keep it — they stay
- *  calculators (`planThreadTurn`, `stepArc`); the story only holds what they
- *  carry from move to move, checkpointed by ply so a takeback restores it. */
+ *  calculators (`planThreadTurn`, `stepArc`, `stepCharacter`); the story only
+ *  holds what they carry from move to move, checkpointed by ply so a takeback
+ *  restores it. */
 export interface PlanDesk {
   /** The student's structural plan across the game (`planThread`). */
   readonly thread: PlanThread;
   /** Each side's plan followed across the game (`planArc`): the student's
    *  and the opponent's. */
   readonly arc: Readonly<Record<FactSeat, ArcState>>;
+  /** What the position is ABOUT and the read waiting to confirm a switch
+   *  (`positionCharacter`, P1-8c) — the main idea the game's plans serve. */
+  readonly character: CharacterState;
 }
+
+/** An idea the coach voiced, with the student move that would pay it off and
+ *  the line that closes the loop — computed when the idea is said (G0). One
+ *  shape for every producer and for the story that holds it (P1-8c: it lived
+ *  on `learnMemory.promises`). */
+export interface GamePromise {
+  /** Identity: one open promise per key per game. */
+  key: string;
+  /** The piece the paying move moves ('p', 'n', …, 'k' for castling). */
+  piece: string;
+  /** Where it lands. */
+  square: string;
+  /** The paying move must take something there. */
+  takes?: boolean;
+  /** The closing line, spoken when the student pays it off. */
+  say: string;
+  /** What the paying move must hit, checked on the board it lands on — a line
+   *  computed moves earlier is said only while it is still true. */
+  hits?: { square: string; type: string };
+}
+
+/** A phase boundary the game crossed, by the phase it entered. */
+export type PhaseEdge = 'middlegame' | 'endgame';
+
+/** An opening name's three stages: READ off the board (context — which
+ *  opening this is, what the curated-beat selector and the opening's break
+ *  read), QUEUED for the voice (one queue per name per game — re-queueing the
+ *  same name every turn spoke "This game is now the Caro-Kann Defense." on two
+ *  consecutive plies, Learn walk 2026-09-23), NAMED (the student heard it).
+ *  🚨 SPENT BY SPEAKING, NEVER BY QUEUEING (2026-09-18): one field once did
+ *  "detected" and "said" both, marked itself done the instant it was queued,
+ *  and a dropped announcement never retried — measured on prod, game 2's
+ *  opening was computed five times and spoken zero. Only a door that kept the
+ *  `opening` fact writes NAMED. */
+export type OpeningStage = 'read' | 'queued' | 'named';
+
+/** WHAT HAPPENED IN THE GAME (P1-8c), each at the ply it happened. A board
+ *  event (a phase crossed, an opening read, a slip, a promise paid) is noted
+ *  when the board shows it; a said event (an opening named, a switch, a
+ *  verdict, a promise made) is written when the door keeps its line. */
+export type StoryEvent =
+  /** The game crossed into a phase (`detectPhaseTransition`'s edge; Review's
+   *  endgame named). */
+  | { readonly kind: 'phase'; readonly ply: number; readonly edge: PhaseEdge }
+  | { readonly kind: 'opening'; readonly ply: number; readonly stage: OpeningStage; readonly name: string }
+  /** The opening's identity paragraph heard (its claim key). */
+  | { readonly kind: 'identity'; readonly ply: number; readonly claim: string }
+  /** The break the opening is played for, read in the opening (the summary
+   *  says whether it came). */
+  | { readonly kind: 'opening-break'; readonly ply: number; readonly san: string; readonly square: string }
+  /** The position's character switch said. */
+  | { readonly kind: 'character'; readonly ply: number; readonly to: Character }
+  /** The positional verdict word said. */
+  | { readonly kind: 'verdict'; readonly ply: number; readonly word: string }
+  | { readonly kind: 'promise'; readonly ply: number; readonly promise: GamePromise }
+  /** The student's move paid a promise off (said or not, it is spent). */
+  | { readonly kind: 'paid'; readonly ply: number; readonly key: string }
+  /** A slip of the student's, by fundamental. */
+  | { readonly kind: 'slip'; readonly ply: number; readonly id: string }
+  /** A master game cited as the story of the opening. */
+  | { readonly kind: 'model-game'; readonly ply: number; readonly citation: string }
+  /** The game's turning point and its thesis (Review): where the game turned,
+   *  read once by the build and stated when the walk reaches the end. */
+  | { readonly kind: 'turn'; readonly ply: number; readonly thesis: Thesis };
+
+/** An event as a writer hands it in — the store stamps the ply. */
+export type StoryEventInput = StoryEvent extends infer E ? (E extends StoryEvent ? Omit<E, 'ply'> : never) : never;
 
 export interface GameStory {
   readonly gameId: string;
@@ -110,6 +197,8 @@ export interface GameStory {
   readonly sentences: ReadonlyMap<string, number>;
   /** Each plan the game has said, by its thread. */
   readonly threads: ReadonlyMap<ThreadKey, ThreadState>;
+  /** What happened in the game, in order (P1-8c). */
+  readonly events: readonly StoryEvent[];
 }
 
 /** What one door kept: claims and sentence keys. */
@@ -136,6 +225,9 @@ export interface TurnOffer {
   readonly sentences?: readonly string[];
   /** The plan thread the line is on, written when the door keeps it. */
   readonly thread?: ThreadLine;
+  /** What the line makes happen in the game's story (a switch said, an idea
+   *  promised), written when the door keeps it. */
+  readonly events?: readonly StoryEventInput[];
 }
 
 /** What a board's turn may treat as said: the game's ledger plus what this
@@ -156,6 +248,9 @@ export interface StoryStore {
   /** Record the thread of every fact a door kept — a fact on a plan thread is
    *  a step on it; a fact about the move alone (`{ none: 'local' }`) is not. */
   commitFacts(ply: number, kept: ReadonlyArray<Pick<CoachFact, 'thread'>>): void;
+  /** Record events at `ply`: a board event when the board shows it, a said
+   *  event where the line is said (a door's commit, a line said outright). */
+  note(ply: number, events: readonly StoryEventInput[]): void;
   /** Offer a line's keys on `board`'s turn. A different board starts a new turn. */
   offer(board: string, offer: TurnOffer): void;
   /** The game's ledger plus `board`'s offers (none when `board` is not this turn's). */
@@ -236,6 +331,109 @@ export function toldBoards(story: GameStory, seat: FactSeat): Set<string> {
   return out;
 }
 
+// ── THE EVENTS, READ (P1-8c) ────────────────────────────────────────────────
+
+/** Has the game crossed into this phase? */
+export function phaseCrossed(story: GameStory, edge: PhaseEdge): boolean {
+  return story.events.some((e) => e.kind === 'phase' && e.edge === edge);
+}
+
+/** The opening name at a stage, as last recorded (null: none yet). */
+export function openingAt(story: GameStory, stage: OpeningStage): string | null {
+  for (let k = story.events.length - 1; k >= 0; k -= 1) {
+    const e = story.events[k];
+    if (e.kind === 'opening' && e.stage === stage) return e.name;
+  }
+  return null;
+}
+
+/** Every opening name the student heard, in the order heard. */
+export function openingsNamed(story: GameStory): string[] {
+  return story.events.flatMap((e) => (e.kind === 'opening' && e.stage === 'named' ? [e.name] : []));
+}
+
+/** Record an opening name at a stage — once per change: a board that reads
+ *  the same opening as last time adds nothing. */
+export function noteOpening(store: StoryStore, ply: number, stage: OpeningStage, name: string): void {
+  if (openingAt(store.current(), stage) !== name) store.note(ply, [{ kind: 'opening', stage, name }]);
+}
+
+/** The opening identity the student heard last (its claim key), or null. */
+export function identityHeard(story: GameStory): string | null {
+  for (let k = story.events.length - 1; k >= 0; k -= 1) {
+    const e = story.events[k];
+    if (e.kind === 'identity') return e.claim;
+  }
+  return null;
+}
+
+/** The break the opening is played for, as read in the opening, with the ply
+ *  it was read on — or null. */
+export function openingBreak(story: GameStory): { san: string; square: string; ply: number } | null {
+  const e = story.events.find((x): x is Extract<StoryEvent, { kind: 'opening-break' }> => x.kind === 'opening-break');
+  return e ? { san: e.san, square: e.square, ply: e.ply } : null;
+}
+
+/** How many switches INTO each character were said — the switch's words
+ *  rotate on it, so the second turn to "sharp" never repeats the first. */
+export function switchesSaid(story: GameStory): Record<Character, number> {
+  const out: Record<Character, number> = { tactical: 0, positional: 0, conversion: 0, defence: 0 };
+  for (const e of story.events) if (e.kind === 'character') out[e.to] += 1;
+  return out;
+}
+
+/** The verdict word said last, or null. */
+export function lastVerdict(story: GameStory): string | null {
+  for (let k = story.events.length - 1; k >= 0; k -= 1) {
+    const e = story.events[k];
+    if (e.kind === 'verdict') return e.word;
+  }
+  return null;
+}
+
+/** The promises still open at `ply`: made, not paid, and younger than
+ *  `window` plies. One per key — the first made, until it is paid or ages
+ *  out; a key made again after that opens a new one. */
+export function promisesOpen(story: GameStory, ply: number, window: number): Array<GamePromise & { ply: number }> {
+  const open = new Map<string, GamePromise & { ply: number }>();
+  for (const e of story.events) {
+    if (e.kind === 'promise') {
+      const was = open.get(e.promise.key);
+      if (!was || e.ply - was.ply > window) open.set(e.promise.key, { ...e.promise, ply: e.ply });
+    } else if (e.kind === 'paid') {
+      open.delete(e.key);
+    }
+  }
+  return [...open.values()].filter((q) => ply - q.ply <= window);
+}
+
+/** How many times the student slipped on this fundamental this game. */
+export function slipCount(story: GameStory, id: string): number {
+  return story.events.filter((e) => e.kind === 'slip' && e.id === id).length;
+}
+
+/** Was a master game cited this game? */
+export function modelGameCited(story: GameStory): boolean {
+  return story.events.some((e) => e.kind === 'model-game');
+}
+
+/** The game's turning point and its thesis (Review), or null. */
+export function storyTurn(story: GameStory): { ply: number; thesis: Thesis } | null {
+  for (let k = story.events.length - 1; k >= 0; k -= 1) {
+    const e = story.events[k];
+    if (e.kind === 'turn') return { ply: e.ply, thesis: e.thesis };
+  }
+  return null;
+}
+
+/** The story a checkpoint holds (`StoryStore.serialize`), read without a
+ *  store of one's own; null is the empty story. */
+export function storyOf(checkpoint: string | null): GameStory {
+  const s = createStoryStore('checkpoint');
+  s.restore(checkpoint);
+  return s.current();
+}
+
 /** A fact's thread, when it is on one. */
 function threadOf(f: Pick<CoachFact, 'thread'>): ThreadKey | null {
   return typeof f.thread === 'string' ? f.thread : null;
@@ -272,18 +470,25 @@ export function copyPlanThread(t: PlanThread): PlanThread {
  *  step returns a new one — so a copy may share it.) */
 export const EMPTY_ARC_STATE: ArcState = { entries: {}, done: [], emerged: 0 };
 
-const emptyDesk = (): PlanDesk => ({ thread: emptyPlanThread(), arc: { student: EMPTY_ARC_STATE, opponent: EMPTY_ARC_STATE } });
-const copyDesk = (d: PlanDesk): PlanDesk => ({ thread: copyPlanThread(d.thread), arc: { student: d.arc.student, opponent: d.arc.opponent } });
+/** A game whose character nothing has read yet: the first read settles it
+ *  silently. (Never mutated — a step returns a new one.) */
+export const EMPTY_CHARACTER_STATE: CharacterState = { current: null, pending: null };
 
-/** The serialized shape. A PlanThread's Sets travel as arrays. */
+const emptyDesk = (): PlanDesk => ({ thread: emptyPlanThread(), arc: { student: EMPTY_ARC_STATE, opponent: EMPTY_ARC_STATE }, character: EMPTY_CHARACTER_STATE });
+const copyDesk = (d: PlanDesk): PlanDesk => ({ thread: copyPlanThread(d.thread), arc: { student: d.arc.student, opponent: d.arc.opponent }, character: d.character });
+
+/** The serialized shape. A PlanThread's Sets travel as arrays. v2 (P1-8c)
+ *  carries the events and the character; a v1 checkpoint has neither and is
+ *  read as the empty story (the narration cache's rev moved with it). */
 interface Checkpoint {
-  v: 1;
+  v: 2;
   gameId: string;
   ply: number;
   said: Array<[string, number]>;
   sentences: Array<[string, number]>;
   threads: Array<[ThreadKey, ThreadSaid[]]>;
-  plans: { ply: number; thread: Omit<PlanThread, 'howSaid' | 'whyAsked'> & { howSaid: string[]; whyAsked: string[] }; arc: Record<FactSeat, ArcState> } | null;
+  events: StoryEvent[];
+  plans: { ply: number; thread: Omit<PlanThread, 'howSaid' | 'whyAsked'> & { howSaid: string[]; whyAsked: string[] }; arc: Record<FactSeat, ArcState>; character: CharacterState } | null;
 }
 
 export function createStoryStore(gameId: string): StoryStore {
@@ -292,6 +497,7 @@ export function createStoryStore(gameId: string): StoryStore {
   let said = new Map<string, number>();
   let sentences = new Map<string, number>();
   let threads = new Map<ThreadKey, { said: ThreadSaid[] }>();
+  let events: StoryEvent[] = [];
   /** The plan computers' state after each ply that changed it, oldest first. */
   let plans: Array<{ ply: number; desk: PlanDesk }> = [];
   let turn: { board: string; offers: TurnOffer[] } | null = null;
@@ -305,6 +511,9 @@ export function createStoryStore(gameId: string): StoryStore {
     t.said.push({ ply: at, kind: line.kind, variant: line.variant ?? null, board: line.told && board ? boardKey(board) : null });
     threads.set(line.key, t);
   };
+  const putEvents = (list: readonly StoryEventInput[] | undefined, at: number): void => {
+    for (const e of list ?? []) events.push({ ...e, ply: at } as StoryEvent);
+  };
   const offersOn = (board: string | null): readonly TurnOffer[] =>
     board && turn && positionOf(turn.board) === positionOf(board) ? turn.offers : [];
   const dropAfter = (map: Map<string, number>, target: number): void => {
@@ -313,7 +522,7 @@ export function createStoryStore(gameId: string): StoryStore {
   const latest = (): PlanDesk => plans[plans.length - 1]?.desk ?? emptyDesk();
 
   const store: StoryStore = {
-    current: (): GameStory => ({ gameId: id, ply, said, sentences, threads }),
+    current: (): GameStory => ({ gameId: id, ply, said, sentences, threads, events }),
     commit(at: number, s: StorySaid): void {
       put(said, s.claims, at);
       put(sentences, s.sentences, at);
@@ -326,6 +535,9 @@ export function createStoryStore(gameId: string): StoryStore {
         const key = threadOf(f);
         if (key) putThread({ key, kind: 'step' }, at, null);
       }
+    },
+    note(at: number, list: readonly StoryEventInput[]): void {
+      putEvents(list, at);
     },
     offer(board: string, o: TurnOffer): void {
       if (!turn || positionOf(turn.board) !== positionOf(board)) turn = { board, offers: [] };
@@ -342,12 +554,24 @@ export function createStoryStore(gameId: string): StoryStore {
       return { has: (c: string): boolean => claims.has(c), claims, sentences: spoken };
     },
     commitKept(at: number, board: string, kept: ReadonlyArray<{ text: string }>): void {
+      const spent = new Set<TurnOffer>();
+      // One line offered twice on the board (its producer ran again, the door
+      // held it the first time) makes its events happen once.
+      const happened = new Map<string, StoryEventInput>();
       for (const o of offersOn(board)) {
         if (!keptCarries(kept, o.text)) continue;
         put(said, o.claims, at);
         put(sentences, o.sentences, at);
         if (o.thread) putThread(o.thread, at, board);
+        for (const e of o.events ?? []) happened.set(JSON.stringify(e), e);
+        spent.add(o);
       }
+      putEvents([...happened.values()], at);
+      // A KEPT OFFER IS SPENT (P1-8c): a second door on the same board (the
+      // late wave after the instant one) must not write its thread or its
+      // events again — a switch said once would count twice. Its claims are
+      // the game's now, so the turn still reads them as heard.
+      if (turn && spent.size > 0) turn.offers = turn.offers.filter((o) => !spent.has(o));
     },
     commitKeptThreads(at: number, board: string, lines: ReadonlyArray<{ text: string; thread?: ThreadLine }>, kept: ReadonlyArray<{ text: string }>): void {
       for (const l of lines) if (l.thread && keptCarries(kept, l.text)) putThread(l.thread, at, board);
@@ -373,6 +597,7 @@ export function createStoryStore(gameId: string): StoryStore {
         t.said = t.said.filter((s) => s.ply <= to);
         if (t.said.length === 0) threads.delete(k);
       }
+      events = events.filter((e) => e.ply <= to);
       plans = plans.filter((p) => p.ply <= to);
       ply = Math.min(ply, to);
       turn = null;
@@ -381,6 +606,7 @@ export function createStoryStore(gameId: string): StoryStore {
       const to = Math.max(0, at);
       for (const map of [said, sentences]) for (const [k, p] of map) if (p > to) map.set(k, to);
       for (const t of threads.values()) t.said = t.said.map((s) => (s.ply > to ? { ...s, ply: to } : s));
+      events = events.map((e) => (e.ply > to ? { ...e, ply: to } : e));
       const desk = plans[plans.length - 1]?.desk;
       plans = desk ? [{ ply: to, desk }] : [];
       ply = to;
@@ -392,18 +618,21 @@ export function createStoryStore(gameId: string): StoryStore {
       said = new Map();
       sentences = new Map();
       threads = new Map();
+      events = [];
       plans = [];
       turn = null;
     },
     serialize(): string {
       const last = plans[plans.length - 1];
       const cp: Checkpoint = {
-        v: 1, gameId: id, ply,
+        v: 2, gameId: id, ply,
         said: [...said], sentences: [...sentences], threads: [...threads].map(([k, t]) => [k, t.said]),
+        events: [...events],
         plans: last ? {
           ply: last.ply,
           thread: { ...last.desk.thread, howSaid: [...last.desk.thread.howSaid], whyAsked: [...last.desk.thread.whyAsked] },
           arc: { student: last.desk.arc.student, opponent: last.desk.arc.opponent },
+          character: last.desk.character,
         } : null,
       };
       return JSON.stringify(cp);
@@ -411,15 +640,16 @@ export function createStoryStore(gameId: string): StoryStore {
     restore(checkpoint: string | null): void {
       let cp: Checkpoint | null = null;
       try { cp = checkpoint ? JSON.parse(checkpoint) as Checkpoint : null; } catch { cp = null; }
-      if (!cp || cp.v !== 1) { store.newGame(id); return; }
+      if (!cp || cp.v !== 2) { store.newGame(id); return; }
       id = cp.gameId;
       ply = cp.ply;
       said = new Map(cp.said);
       sentences = new Map(cp.sentences);
       threads = new Map(cp.threads.map(([k, said]) => [k, { said }]));
+      events = [...cp.events];
       plans = cp.plans ? [{
         ply: cp.plans.ply,
-        desk: { thread: { ...cp.plans.thread, howSaid: new Set(cp.plans.thread.howSaid), whyAsked: new Set(cp.plans.thread.whyAsked) }, arc: cp.plans.arc },
+        desk: { thread: { ...cp.plans.thread, howSaid: new Set(cp.plans.thread.howSaid), whyAsked: new Set(cp.plans.thread.whyAsked) }, arc: cp.plans.arc, character: cp.plans.character },
       }] : [];
       turn = null;
     },

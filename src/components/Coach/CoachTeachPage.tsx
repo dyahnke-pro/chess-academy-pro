@@ -14,11 +14,11 @@ import { legalMoveFor, bookContinuation } from '../../utils/legalMoveFor';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { CoachBoardBar } from '../Board/CoachBoardBar';
 import { useBoardFit } from '../../hooks/useBoardFit';
-import { characterOf, provenTacticLive, sharpGap, stepCharacter, EMPTY_CHARACTER, SHARP_GAP_CP, type CharacterState } from '../../services/positionCharacter';
+import { characterOf, provenTacticLive, sharpGap, stepCharacter, SHARP_GAP_CP } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { startLearnTranscript, stopLearnTranscript, noteLearnEntry } from '../../services/learnTranscript';
 import { createLearnMemory, markOpeningFactsSpoken, nextStem, rememberKeptClaims, type LearnMemory } from '../../services/learnMemory';
-import { STORY_KEY, PLAN_GOAL, keysUnder, threadKey, threadVariant, toldBoards, type StoryHeard } from '../../services/gameStory';
+import { STORY_KEY, PLAN_GOAL, keysUnder, threadKey, threadVariant, toldBoards, identityHeard, noteOpening, openingAt, openingBreak, switchesSaid, type StoryHeard } from '../../services/gameStory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -73,7 +73,7 @@ import { buildPositionalRead, rookReachesFile } from '../../services/positionalR
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -114,11 +114,7 @@ import { useStudentNeed } from '../../hooks/useStudentNeed';
 import { DEFAULT_STUDENT_RATING, isBeginnerMode } from '../../services/ratingBands';
 import { useFadeLevels, useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import { useStudentRecord } from '../../hooks/useStudentRecord';
-import {
-  createPhaseTransitionState,
-  detectPhaseTransition,
-  type PhaseTransitionState,
-} from '../../services/phaseTransitionDetector';
+import { storyPhaseTransition } from '../../services/phaseTransitionDetector';
 import { resolvePhaseNarrationVerbosity } from '../../utils/coachNarration';
 import { useTeachWalkthrough, isStartablePunishLesson, isValidConceptsQuestion, isValidFindMoveQuestion, isValidDrillLine } from '../../hooks/useTeachWalkthrough';
 import { stageArrayHasUsableEntry } from '../../services/stageEntryValidity';
@@ -318,7 +314,7 @@ import { gradePlayedMove, liveMovePrice, priceLabel, studentMovePrice, uciOfSan,
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK, upcomingTacticSquares } from '../../services/liveTacticsContext';
-import { buildCausalChain, causalChainHighlights } from '../../services/causalChain';
+import { buildCausalChain, causalChainHighlights, causalChainKey } from '../../services/causalChain';
 import { renderCausalChain } from '../../services/causalChainVoice';
 import { seatPieceReferences } from '../../services/groundedAnswer';
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
@@ -1875,11 +1871,9 @@ export function CoachTeachPage({ mode }: {
     steeredPliesRef.current.clear();
     coachMadePliesRef.current.clear();
     announcedBoardsRef.current.clear();
-    openingBreakRef.current = null;
     liveGradesRef.current.clear();
     // A turn's plan trial waiting for its door belongs to the game it was tried in.
     planTrialRef.current = null;
-    characterRef.current = EMPTY_CHARACTER;
     priorityFirstLastPlyRef.current = -999;
     lastBoardMoveRef.current = null;
     setHeldMoveFen(null);
@@ -1970,10 +1964,6 @@ export function CoachTeachPage({ mode }: {
    *  filed into `announcedPliesRef`, so every evidence row it writes is
    *  PROMPTED (P4 honesty: being told is not proving). */
   const announcedBoardsRef = useRef(new Set<string>());
-  /** The student's master-game break named with the opening's plan, and the
-   *  ply it was named at — the opening summary reads it when the middlegame
-   *  begins (census #52). `said` keeps it once per game. */
-  const openingBreakRef = useRef<{ san: string; square: string; atPly: number; said: boolean } | null>(null);
   // THE LIVE PER-MOVE EVALUATIONS (C7, 2026-09-22). Every student ply is
   // graded off the paid-for pre-move read (`gradePlayedMove`, below) and the
   // saved record used to carry `annotations: null` regardless. Keyed by ply so
@@ -2013,8 +2003,6 @@ export function CoachTeachPage({ mode }: {
     fenBefore: string; playedSan: string; evalAfterWhiteCp: number;
     afterIsMate: boolean; afterMateIn: number | null; fenAfter: string;
   } | null>(null);
-  /** What the position is about, followed across the game (WO-2). */
-  const characterRef = useRef<CharacterState>(EMPTY_CHARACTER);
   /** The moment Stockfish reports a forced mate FOR the student, the async engine
    *  pass flags it here (keyed by the FEN it read) so the instant package can call
    *  the mating NET at mate-in-N — not wait for the board to reach mate-in-1
@@ -2375,9 +2363,9 @@ export function CoachTeachPage({ mode }: {
    *  merely offered, and the identity event only when it rode the name). */
   const noteOpeningFactsHeard = (kept: ReadonlyArray<{ kind?: string; claims?: readonly string[] }>): void => {
     const claims = kept.flatMap((f) => f.claims ?? []);
-    if (learnMemRef.current.identitySaid === null && claims.some((c) => c.startsWith('opening-identity:'))) captureEvent('coach_opening_identity', { surface: 'coach-teach' });
+    if (identityHeard(learnMemRef.current.story.current()) === null && claims.some((c) => c.startsWith('opening-identity:'))) captureEvent('coach_opening_identity', { surface: 'coach-teach' });
     if (claims.some((c) => c.startsWith('story:break:'))) captureEvent('coach_opening_plan_named', { surface: 'coach-teach' });
-    markOpeningFactsSpoken(learnMemRef.current, kept);
+    markOpeningFactsSpoken(learnMemRef.current, kept, gameRef.current.plies);
   };
   // THE VISUALIZATION TEST, BOTH WAYS (David 2026-10-17): when the coach asks
   // "there's a forced mate — can you see it?", the student's next move answers
@@ -8666,8 +8654,9 @@ export function CoachTeachPage({ mode }: {
   // and the endgame in silence, and none of the middlegame/endgame corpus
   // teaching could reach it. With the question cards gone this IS the teaching:
   // the coach marks the moment the opening ends and says what the position is
-  // now about. Report lands in the chat, same as Play.
-  const phaseStateRef = useRef<PhaseTransitionState>(createPhaseTransitionState());
+  // now about. Report lands in the chat, same as Play. Which boundaries the game
+  // has crossed is the game's story (`storyPhaseTransition`, P1-8c): a ref held
+  // here was never reset in a mount, so a second game crossed in silence.
   /** The lead this turn's voice has spoken so far, and the board it spoke on —
    *  the phase wave competes with it (one thought per turn, WO-1b). */
   const turnLeadRef = useRef<{ fen: string; lead: NonNullable<TurnDecision['lead']> } | null>(null);
@@ -8786,9 +8775,9 @@ export function CoachTeachPage({ mode }: {
     // so the flux is read off the full history (the one `inFluxAfter` rule).
     if (pendingRecapture(gameRef.current.history)) return;
     try {
-      const event = detectPhaseTransition(
+      const event = storyPhaseTransition(
+        learnMemRef.current.story,
         { fen, san, moveNumber: plyCount, isCoachMove: false },
-        phaseStateRef.current,
         playerColor,
       );
       if (!event) return;
@@ -8984,7 +8973,7 @@ export function CoachTeachPage({ mode }: {
     // per-game gate, so every refined name — Sicilian, Najdorf, English
     // Attack — said its family's identity again under a new claim key).
     const storyReads = readBoardAll('openingStory', { history, fen: args.fenAfterReply, student: studentCC, namesStudentMoves: false })
-      .filter((r) => r.storyBeat !== 'identity' || learnMemRef.current.identitySaid === null);
+      .filter((r) => r.storyBeat !== 'identity' || identityHeard(learnMemRef.current.story.current()) === null);
     // 🔒 A NEW GAME IS DETECTED FROM THE BOARD, NOT FROM A CODE PATH.
     // This runs on every ply, so it is the one place that cannot be bypassed
     // by whichever intent branch started the game. See `learnMemory.observe`
@@ -9533,14 +9522,17 @@ export function CoachTeachPage({ mode }: {
       // THE TRANSPOSITION READER: the board may be a named opening the move
       // order never reached — name the position, and say it transposed.
       const { det, transposed } = openingNameForBoard(byOrder, args.fenAfterReply, history.length);
-      if (det && det.name) learnMemRef.current.detectedOpeningName = det.name;
+      if (det && det.name) noteOpening(learnMemRef.current.story, history.length, 'read', det.name);
       // WHEN to name it is one rule shared with the late lane below
       // (`openingAnnouncement`): first identification, then the settled
       // name once, where the game leaves book — never every refinement.
       // Compared as SPOKEN — "Indian Defense" and "Indian Defense: Normal
       // Variation" read the same once the filler tail goes, and the student
       // heard "This game is the Indian Defense" twice (walk 2026-09-27).
-      const queuedLabel = learnMemRef.current.queuedOpeningName ? spokenOpeningLabel(learnMemRef.current.queuedOpeningName) : null;
+      const told = learnMemRef.current.story.current();
+      const queuedName = openingAt(told, 'queued');
+      const spokenName = openingAt(told, 'named');
+      const queuedLabel = queuedName ? spokenOpeningLabel(queuedName) : null;
       // Not the opening the student asked to play, and the first name only
       // with its idea (`learnNameMaySpeak`, lead 2026-10-20).
       const mayName = !!det && learnNameMaySpeak({
@@ -9549,19 +9541,18 @@ export function CoachTeachPage({ mode }: {
         transposed,
         identityReady: storyReads.some((r) => r.storyBeat === 'identity'),
         ideaCanCome: openingIdeaCanCome(det.name, playerColor === 'white' ? 'w' : 'b', args.fenAfterReply, history.length),
-        spokenOpening: learnMemRef.current.spokenOpeningName,
+        spokenOpening: spokenName,
       });
-      const announce = det && mayName && det.name !== learnMemRef.current.queuedOpeningName && spokenOpeningLabel(det.name) !== queuedLabel
-        ? openingAnnouncementForGame(det, history, learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b', transposed)
+      const announce = det && mayName && det.name !== queuedName && spokenOpeningLabel(det.name) !== queuedLabel
+        ? openingAnnouncementForGame(det, history, spokenName, playerColor === 'white' ? 'w' : 'b', transposed)
         : null;
       if (det && announce) {
-        const firstResolve = learnMemRef.current.spokenOpeningName === null;
-        // NOT marked spoken here. Queueing is not saying — see the field's note
-        // in `learnMemory.ts`. The late package sets `spokenOpeningName` when
-        // the `opening` fact actually survives to the voice; until then this
-        // re-queues every turn, which is the honest behaviour for a line the
-        // student has not yet heard. The name to promote is already stored as
-        // `detectedOpeningName`, so no second variable carries it.
+        const firstResolve = spokenName === null;
+        // NOT marked spoken here. Queueing is not saying — see `OpeningStage`
+        // in `gameStory.ts`. The door names it (`markOpeningFactsSpoken`) when
+        // the `opening` fact actually survives to the voice. The name to
+        // promote is the one the board was READ as, so no second variable
+        // carries it.
         // A PLACEHOLDER NAME EARNS NO KEY IDEA. David 2026-08-08, from a live
         // run: after 1.e4 e5 the coach said "This game is now the King's Pawn
         // Game. Key idea: The queen is the last piece still out of the fight…
@@ -9606,7 +9597,7 @@ export function CoachTeachPage({ mode }: {
         // late-package path as the plan/structure/register so a busy turn can't
         // swallow it.
         queueSpokenHint(args.fenAfterReply, announceLine, 'opening', NO_PROOF.name, NAMES_NO_MOVE, announceSquares.length ? announceSquares : undefined, announceClaims);
-        learnMemRef.current.queuedOpeningName = det.name;
+        noteOpening(learnMemRef.current.story, history.length, 'queued', det.name);
         captureEvent('opening_announced', {
           surface: 'coach-teach', name: det.name, first: firstResolve, has_idea: false,
         });
@@ -9769,9 +9760,10 @@ export function CoachTeachPage({ mode }: {
     // review: tied to the key-break offer, a break the student could already
     // play was never recorded, so "you got its break in" could never be said).
     try {
-      if (!openingBreakRef.current && history.length >= 6 && classifyPhase(args.fenAfterReply, { ply: history.length }) === 'opening') {
-        const brk = openingBreakFor(args.fenAfterReply, studentCC, learnMemRef.current.detectedOpeningName);
-        if (brk) openingBreakRef.current = { ...brk, atPly: history.length, said: false };
+      const story = learnMemRef.current.story;
+      if (!openingBreak(story.current()) && history.length >= 6 && classifyPhase(args.fenAfterReply, { ply: history.length }) === 'opening') {
+        const brk = openingBreakFor(args.fenAfterReply, studentCC, openingAt(story.current(), 'read'));
+        if (brk) story.note(history.length, [{ kind: 'opening-break', san: brk.san, square: brk.square }]);
       }
     } catch { /* the summary's break is a bonus, never a blocker */ }
 
@@ -11304,7 +11296,10 @@ export function CoachTeachPage({ mode }: {
                       // walk 2026-09-27: the c7 fork warned at plies 18 and 24).
                       // (written by `rememberKeptClaims` once the door keeps it)
                       // THE THREAD: an idea said now is remembered with the move that pays it off.
-                      if (c.promise) notePromise(learnMemRef.current, c.promise, probe.history().length);
+                      // An idea is remembered only once it is SAID: it rides its
+                      // line, the game's when the door keeps it (P1-8c).
+                      const promised = c.promise ? promiseEvent(learnMemRef.current.story, c.promise, probe.history().length) : null;
+                      if (promised) learnMemRef.current.story.offer(probe.fen(), { text: c.text, events: [promised] });
                       // Their move's purpose rides its own lane, above the
                       // board descriptions it used to lose to on offer order.
                       const lane = c.kind === 'stopped' ? 'theirPurpose' as const : 'positionFacts' as const;
@@ -11436,8 +11431,11 @@ export function CoachTeachPage({ mode }: {
                       // The reason the switch names ("there is a tactic") reads the
                       // same proven set the character did — never a hanging piece.
                       const tacticLiveNow = provenTacticLive(tctxNow.immediate);
-                      const step = stepCharacter(characterRef.current, now, tacticLiveNow ? 'tactic' : gap !== null && gap >= SHARP_GAP_CP ? 'gap' : undefined);
-                      characterRef.current = step.next;
+                      // The character is the game's story (P1-8c): stepped on its
+                      // desk, its words rotated on the switches the student heard.
+                      const story = learnMemRef.current.story;
+                      const step = stepCharacter(story.plans().character, now, switchesSaid(story.current()), tacticLiveNow ? 'tactic' : gap !== null && gap >= SHARP_GAP_CP ? 'gap' : undefined);
+                      story.setPlans(gameRef.current.plies, { ...story.plans(), character: step.next });
                       // A forced mate already says what the position is about;
                       // "it has turned sharp" beside it is the same fact twice
                       // (run C walk 2026-09-30, the mate-in-4 ply).
@@ -11460,7 +11458,10 @@ export function CoachTeachPage({ mode }: {
                       })();
                       const quietButConcrete = step.switched?.to === 'positional'
                         && ((tctxNow.immediate?.length ?? 0) > 0 || (gap !== null && gap >= SHARP_GAP_CP) || looseNow);
-                      if (step.switched && !mateOnBoard && !quietOnCheck && !quietButConcrete) queueSpokenHint(probe.fen(), step.switched.text, 'character', NO_PROOF.description, NAMES_NO_MOVE, undefined, step.switched.to === 'conversion' ? ['convert-method', convertKey('trade-pieces')] : undefined);
+                      if (step.switched && !mateOnBoard && !quietOnCheck && !quietButConcrete) {
+                        queueSpokenHint(probe.fen(), step.switched.text, 'character', NO_PROOF.description, NAMES_NO_MOVE, undefined, step.switched.to === 'conversion' ? ['convert-method', convertKey('trade-pieces')] : undefined);
+                        story.offer(probe.fen(), { text: step.switched.text, events: [{ kind: 'character', to: step.switched.to }] });
+                      }
                     } catch { /* the character read is a bonus, never a blocker */ }
 
                     if (!(await breathe())) return;
@@ -11605,7 +11606,7 @@ export function CoachTeachPage({ mode }: {
                         // a facts list nobody heard while its arrows still
                         // painted — marks without words (G8.5). The package now
                         // marks the squares only if the words survive.
-                        queueSpokenHint(probe.fen(), chainLines.join(' '), 'causalChain', squaresProof(chainLines.join(' '), causalChainHighlights(chain).map((h) => h.square)) ?? NO_PROOF.description, NAMES_NO_MOVE, causalChainHighlights(chain).map((h) => h.square), [`causal:${causalChainHighlights(chain).map((h) => h.square).join(',')}`]);
+                        queueSpokenHint(probe.fen(), chainLines.join(' '), 'causalChain', squaresProof(chainLines.join(' '), causalChainHighlights(chain).map((h) => h.square)) ?? NO_PROOF.description, NAMES_NO_MOVE, causalChainHighlights(chain).map((h) => h.square), [causalChainKey(chain)]);
                         // A DIAGNOSTIC, NOT A SPOKEN LINE: the line is queued, and
                         // the package decides whether it is heard. Filed as
                         // "spoken", this summary landed in the run G tape as
@@ -12359,7 +12360,7 @@ export function CoachTeachPage({ mode }: {
                     // THE THREAD ACROSS MOVES (David 2026-10-06): the student's move
                     // pays off an idea the coach said earlier — close the loop.
                     {
-                      const pay = payoffFor(learnMemRef.current, ((): { piece: string; to: string; captured?: string; san: string; after: string } | null => { try { return new Chess(fenBefore).move(move.san); } catch { return null; } })(), move.history.length);
+                      const pay = payoffFor(learnMemRef.current.story, ((): { piece: string; to: string; captured?: string; san: string; after: string } | null => { try { return new Chess(fenBefore).move(move.san); } catch { return null; } })(), move.history.length);
                       if (pay) queueSpokenHint(fenAfterReply, pay.say, 'movePoint', squaresProof(pay.say, [pay.square]) ?? NO_PROOF.description, NAMES_NO_MOVE, [pay.square], [`payoff:${pay.key}`], move.fen);
                     }
                     // THE TIE THE MOVE CREATED (tiedDefender): their guard now cannot
@@ -12392,10 +12393,20 @@ export function CoachTeachPage({ mode }: {
                     // THE OPENING SUMMARY (census #52): the first move out of the
                     // opening says whether the break it is played for came.
                     try {
-                      const brk = openingBreakRef.current;
-                      if (brk && !brk.said && classifyPhase(move.fen, { ply: move.history.length }) !== 'opening') {
-                        brk.said = true;
-                        const mine = move.history.filter((_, i) => i >= brk.atPly && (i % 2 === 0) === (playerColor === 'white'));
+                      // THE FIRST MOVE OUT: read off the boards, never a flag —
+                      // the board after the student's previous move was still in
+                      // the opening and this one is not (a ref marked at queue
+                      // time used to hold it; P1-8c). Said once a game: its claim
+                      // is the story's when the door keeps the line.
+                      const brk = openingBreak(learnMemRef.current.story.current());
+                      const ply = move.history.length;
+                      const prevOwnBoard = ((): string | null => {
+                        try { const c = new Chess(); for (const san of move.history.slice(0, -2)) c.move(san); return c.fen(); } catch { return null; }
+                      })();
+                      const firstOut = classifyPhase(move.fen, { ply }) !== 'opening'
+                        && (prevOwnBoard === null || classifyPhase(prevOwnBoard, { ply: ply - 2 }) === 'opening');
+                      if (brk && firstOut && !learnMemRef.current.story.heard(fenAfterReply).has(`opening-summary:${brk.san}`)) {
+                        const mine = move.history.filter((_, i) => i >= brk.ply && (i % 2 === 0) === (playerColor === 'white'));
                         const line = openingSummaryLine(brk, mine, fenAfterReply);
                         if (line) queueSpokenHint(fenAfterReply, line, 'openingIdea', NO_PROOF.description, namesMoves((playerColor === 'white' ? 'w' : 'b'), fenAfterReply, namedSan(fenAfterReply, brk.san)), [brk.square], [`opening-summary:${brk.san}`]);
                       }
@@ -12597,7 +12608,7 @@ export function CoachTeachPage({ mode }: {
                       // taught — never beside a mate (the mate is the whole story).
                       const turnLine = mistakeTurnLine({
                         fund, evidence, lostSquare: look.lostSquare ?? null, bookSaid,
-                        slipPrefix: () => (fund ? noteSlip(learnMemRef.current, fund.id) : ''),
+                        slipPrefix: () => (fund ? noteSlip(learnMemRef.current.story, fund.id, move.history.length) : ''),
                         plainTail: definitionOn(fenAfterReply)(look.pattern),
                         concession,
                         // The habit's question, once a game: OFFERED under its
@@ -12654,9 +12665,9 @@ export function CoachTeachPage({ mode }: {
                       const fundamentalClaims = fundamental.howOnly
                         ? [...(fundamental.id === 'botched-conversion' ? ['convert-method'] : []), 'method:fundamental']
                         : fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined;
-                      if (!bookSaidAlone && fundamental.diagnosis) queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current, fundamental.id)}${fundamental.diagnosis}`, 'fundamental', NO_PROOF.method, NAMES_NO_MOVE, [], fundamental.howOnly ? undefined : fundamentalClaims, move.fen, undefined, fundamental.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG[fundamental.id] ?? undefined);
+                      if (!bookSaidAlone && fundamental.diagnosis) queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current.story, fundamental.id, move.history.length)}${fundamental.diagnosis}`, 'fundamental', NO_PROOF.method, NAMES_NO_MOVE, [], fundamental.howOnly ? undefined : fundamentalClaims, move.fen, undefined, fundamental.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG[fundamental.id] ?? undefined);
                       // Its habit closes the turn, in the habit step (WO-ONE-COACH-01).
-                      if (fundamental.howOnly) queueSpokenHint(fenAfterReply, `${bookSaidAlone ? noteSlip(learnMemRef.current, fundamental.id) : ''}${fundamental.howOnly}`, 'mistakeHabit', NO_PROOF.method, NAMES_NO_MOVE, [], fundamentalClaims, move.fen, undefined, undefined, undefined, undefined, undefined, FUNDAMENTAL_TAG[fundamental.id]);
+                      if (fundamental.howOnly) queueSpokenHint(fenAfterReply, `${bookSaidAlone ? noteSlip(learnMemRef.current.story, fundamental.id, move.history.length) : ''}${fundamental.howOnly}`, 'mistakeHabit', NO_PROOF.method, NAMES_NO_MOVE, [], fundamentalClaims, move.fen, undefined, undefined, undefined, undefined, undefined, FUNDAMENTAL_TAG[fundamental.id]);
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });
@@ -13105,7 +13116,7 @@ export function CoachTeachPage({ mode }: {
                   }
                   {
                     const yours = studentDeepFactPromise(fenBefore, move.san, reply ?? null, lineAfterReply);
-                    if (yours) notePromise(learnMemRef.current, yours, move.history.length);
+                    if (yours) notePromise(learnMemRef.current.story, yours, move.history.length);
                   }
                 } catch { /* a bonus, never a blocker */ }
 

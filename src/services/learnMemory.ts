@@ -46,7 +46,7 @@
  *  first gap test passes. */
 import type { Proof } from './proof';
 import type { LooseSpells } from './conceptKey';
-import { createStoryStore, type StoryStore } from './gameStory';
+import { createStoryStore, identityHeard, noteOpening, openingAt, type StoryStore } from './gameStory';
 
 export const NEVER_FIRED = -999;
 
@@ -97,42 +97,6 @@ export interface LearnMemory {
   /** Tactic motif → the move number it was first taught (S6 transfer). */
   /** Structurally `MotifLedger` — this module imports nothing (pure memory). */
   readonly motifLastSpoken: Map<string, { move: number; instance: string; seen: number }>;
-  /** The opening name already QUEUED for the voice this game. Queueing is not
-   *  saying (see `spokenOpeningName`), but re-queueing the SAME name every turn
-   *  spoke "This game is now the Caro-Kann Defense." on two consecutive plies
-   *  (Learn walk 2026-09-23). One queue per name per game. */
-  queuedOpeningName: string | null;
-  /** The opening-identity paragraph the student has HEARD this game (its claim
-   *  key) — what the opening provokes/aims for is said ONCE per game, after the
-   *  name. Set by the voice (`markOpeningFactsSpoken`), never by the queue: a
-   *  held paragraph marked at queue time was never retried (2026-10-14, offered
-   *  twice and held twice in one game, never heard). */
-  identitySaid: string | null;
-  /**
-   * The opening name the student has actually HEARD. Per game: a second game of
-   * the same line must be named again, because the student is being told what
-   * they are now playing, not being reminded of a fact they already hold.
-   *
-   * 🚨 SPENT BY SPEAKING, NEVER BY QUEUEING (found reading the code, 2026-09-18).
-   * This was ONE field doing TWO jobs — "the opening we have detected" and "the
-   * opening we have said" — and the announcement marked itself done the instant
-   * it was QUEUED. It then had to survive a delivery path that could discard it,
-   * and on any turn where the instant package said something substantive it did
-   * not: `pendingVoiceRef` was nulled wholesale. The name was already marked
-   * announced, so it never retried, and the fallback site guarded on the same
-   * field so it could never fire either. Measured on prod: game 2's opening was
-   * computed FIVE times and spoken ZERO.
-   *
-   * So the two jobs are two fields. A reader asking "what opening is this" reads
-   * `detectedOpeningName`; only real delivery writes this one. An announcement
-   * that is dropped is therefore re-queued next turn, which is the honest
-   * behaviour: it keeps trying because it has not yet succeeded.
-   */
-  spokenOpeningName: string | null;
-  /** What the detector last resolved, set the moment it resolves. This is
-   *  CONTEXT — which opening the board is in — and is what the curated-beat
-   *  selector and the refrain lane want. It says nothing about what was said. */
-  detectedOpeningName: string | null;
   /**
    * Note how many plies are on the board. Forgets everything when the board
    * has gone BACKWARDS — a new or rewound game. Returns true when it forgot.
@@ -201,33 +165,6 @@ export interface LearnMemory {
    * (`story.current().gameId`), which `newGame()` renews under a new one.
    */
   readonly gameId: string;
-  /** THE STUDENT'S SLIPS THIS GAME, by fundamental id — so the coach can say
-   *  "that's the second time this game" (David 2026-10-06: a coach reacts to
-   *  the student, it does not narrate each move in isolation). */
-  slipsThisGame: Map<string, number>;
-  /** IDEAS THE COACH SAID THIS GAME, with the move that pays them off — the
-   *  thread across moves: when the board pays an idea off, the coach closes
-   *  the loop instead of moving on as if it had never spoken. */
-  promises: Map<string, GamePromise & { ply: number }>;
-}
-
-/** An idea the coach voiced, with the student move that would pay it off and
- *  the line that closes the loop — computed when the idea is said (G0). One
- *  shape for every producer and for the memory that holds it. */
-export interface GamePromise {
-  /** Identity: one promise per key per game. */
-  key: string;
-  /** The piece the paying move moves ('p', 'n', …, 'k' for castling). */
-  piece: string;
-  /** Where it lands. */
-  square: string;
-  /** The paying move must take something there. */
-  takes?: boolean;
-  /** The closing line, spoken when the student pays it off. */
-  say: string;
-  /** What the paying move must hit, checked on the board it lands on — a line
-   *  computed moves earlier is said only while it is still true. */
-  hits?: { square: string; type: string };
 }
 
 /** `teach-` prefixed to match the id shape the saved Learn `GameRecord` has
@@ -266,12 +203,6 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
     slipAnswer: null,
     lastReplyDictated: null,
     lastComputed: '',
-    spokenOpeningName: null,
-    detectedOpeningName: null,
-    queuedOpeningName: null,
-    identitySaid: null,
-    slipsThisGame: new Map<string, number>(),
-    promises: new Map<string, GamePromise & { ply: number }>(),
     observe(): boolean {
       const plies = livePlies();
       const forgot = plies < story.current().ply;
@@ -286,9 +217,7 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
       story.jump(plies);
     },
     newGame(): void {
-      mem.slipsThisGame.clear();
       mem.stemCounts.clear();
-      mem.promises.clear();
       mem.lastProof = null;
       motifLastSpoken.clear();
       mem.lastTacticKey = '';
@@ -298,10 +227,6 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
       mem.slipAnswer = null;
       mem.lastReplyDictated = null;
       mem.lastComputed = '';
-      mem.spokenOpeningName = null;
-      mem.detectedOpeningName = null;
-      mem.queuedOpeningName = null;
-      mem.identitySaid = null;
       // A NEW GAME IS A NEW STORY UNDER A NEW ID — everything said, the ply
       // watermark and the id, in one call. Re-minting here (rather than at a
       // call site) is what makes it impossible to record game 2's slips
@@ -318,15 +243,19 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
 
 /** QUEUEING IS NOT SAYING (2026-10-14). The opening's name, its identity and its
  *  master plan are each said once per game — marked here, from what the voice
- *  actually CARRIED, so a fact the door held one turn is offered again. */
+ *  actually CARRIED, so a fact the door held one turn is offered again. The
+ *  name heard is the one the board was READ as (the detector's, never the
+ *  queue's); both are the game's story (P1-8c), at the ply the door spoke. */
 export function markOpeningFactsSpoken(
-  mem: Pick<LearnMemory, 'spokenOpeningName' | 'detectedOpeningName' | 'identitySaid'>,
+  mem: Pick<LearnMemory, 'story'>,
   kept: ReadonlyArray<{ kind?: string; claims?: readonly string[] }>,
+  ply: number,
 ): void {
-  if (kept.some((f) => f.kind === 'opening')) mem.spokenOpeningName = mem.detectedOpeningName;
+  const read = openingAt(mem.story.current(), 'read');
+  if (read && kept.some((f) => f.kind === 'opening')) noteOpening(mem.story, ply, 'named', read);
   const claims = kept.flatMap((f) => f.claims ?? []);
   const identity = claims.find((c) => c.startsWith('opening-identity:'));
-  if (identity) mem.identitySaid = identity;
+  if (identity && identityHeard(mem.story.current()) !== identity) mem.story.note(ply, [{ kind: 'identity', claim: identity }]);
 }
 
 /** The next rotation index for a reason formula, counted per game. */

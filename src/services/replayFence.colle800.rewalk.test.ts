@@ -54,7 +54,7 @@ describe('ply 27 — Ng5 hangs the knight, and the coach says so', () => {
     const { readFileSync } = await import('node:fs');
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src).toMatch(/queueSpokenHint\(fenAfterReply, line, look\.kind,[\s\S]{0,420}?\?\? NO_PROOF\.description, NAMES_NO_MOVE, lookSquares, winClaim, move\.fen,/);
-    expect(src).toMatch(/queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current, fundamental\.id\)\}\$\{fundamental\.diagnosis\}`, 'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamental\.howOnly \? undefined : fundamentalClaims, move\.fen, undefined, fundamental\.lines[,)]/);
+    expect(src).toMatch(/queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current\.story, fundamental\.id, move\.history\.length\)\}\$\{fundamental\.diagnosis\}`, 'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamental\.howOnly \? undefined : fundamentalClaims, move\.fen, undefined, fundamental\.lines[,)]/);
     expect(src).toMatch(/fen: gradeFen \?\? pending\.fen/);
   });
 });

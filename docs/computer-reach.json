@@ -2,7 +2,7 @@
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.",
  "graph": {
   "files": 1744,
-  "nodes": 16142
+  "nodes": 16168
  },
  "totals": {
   "computers": 347,
@@ -18,12 +18,12 @@
     "no": 97
    },
    "review": {
-    "yes": 228,
-    "no": 119
+    "yes": 227,
+    "no": 120
    },
    "lesson": {
-    "yes": 100,
-    "no": 247
+    "yes": 99,
+    "no": 248
    },
    "chat": {
     "yes": 202,
@@ -4282,26 +4282,6 @@
    ]
   },
   {
-   "key": "services/planMemory.ts#stepPlan",
-   "name": "planMemory — stepPlan / foldPlans / planChangeSentence",
-   "file": "services/planMemory.ts",
-   "fn": "stepPlan",
-   "says": "Whether the structure plan is new, carried or changed since it was announced, and the 'the plan changes' sentence",
-   "origin": "map",
-   "learn": "held",
-   "review": "yes",
-   "lesson": "yes",
-   "chat": "yes",
-   "tapped": "yes",
-   "tactics": "no",
-   "app": true,
-   "other": [
-    "kid",
-    "campaign",
-    "playSilent"
-   ]
-  },
-  {
    "key": "services/planRace.ts#detectPlanRace",
    "name": "planRace — detectPlanRace / planRaceClause / planRaceProof / fileClaimed / oppositeWingsRace / pawnSquareRaceRead / pawnSquareTaken",
    "file": "services/planRace.ts",
@@ -4441,6 +4421,26 @@
    ],
    "registry": [
     "planThread"
+   ]
+  },
+  {
+   "key": "services/planThread.ts#structurePlanEvent",
+   "name": "structurePlanEvent / planChangeSentence (planMemory folded into planThread, P1-8b)",
+   "file": "services/planThread.ts",
+   "fn": "structurePlanEvent",
+   "says": "Whether the structure plan is new, carried or changed since it was announced, and the 'the plan changes' sentence",
+   "origin": "map",
+   "learn": "held",
+   "review": "no",
+   "lesson": "no",
+   "chat": "yes",
+   "tapped": "yes",
+   "tactics": "no",
+   "app": true,
+   "other": [
+    "kid",
+    "campaign",
+    "playSilent"
    ]
   },
   {

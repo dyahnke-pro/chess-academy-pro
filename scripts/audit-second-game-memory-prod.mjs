@@ -58,7 +58,7 @@ const TEACHINGS = [
   // Index 0 is the opening announcement. It is NOT asserted in the per-teaching
   // loop below — it gets its own COMPUTED-vs-SPOKEN pair (D2/D3), because for
   // this one the two answers are different bugs. The regex is still used there.
-  { id: 'opening-name', ref: 'learnMemory.spokenOpeningName', re: /this game is (?:now )?the|the line has sharpened into|you're (?:in|playing) the/i, split: true },
+  { id: 'opening-name', ref: 'story event opening (named)', re: /this game is (?:now )?the|the line has sharpened into|you're (?:in|playing) the/i, split: true },
   { id: 'concept-invariant', ref: 'story said (definitionKey)', re: /piece in front|two targets|valuable piece|no safe square/i },
   { id: 'threat-call', ref: 'story said (alert:threat)', re: /attacked and nothing's defending|hanging|is attacked/i },
 ];

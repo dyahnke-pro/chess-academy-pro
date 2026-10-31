@@ -47,9 +47,9 @@
 - `src/services/walkOct1Learn.test.ts:85`
 
 ### `buildReviewMoveTeaching` (function) — 52 call sites
-- `src/services/coachFeatureService.ts:1125`
-- `src/services/coachFeatureService.ts:3968`
-- `src/services/danyaBench.measure.test.ts:448`
+- `src/services/coachFeatureService.ts:1132`
+- `src/services/coachFeatureService.ts:3974`
+- `src/services/danyaBench.measure.test.ts:449`
 - `src/services/discussionPractice.ts:173`
 - `src/services/guardPressure.test.ts:20`
 - `src/services/guardPressure.test.ts:24`
@@ -69,7 +69,7 @@
 - `src/services/lessonVoiceIdeas.test.ts:63`
 - `src/services/lessonVoiceIdeas.test.ts:70`
 - `src/services/projectedLineVoice.ts:144`
-- `src/services/reviewMoveBriefing.ts:446`
+- `src/services/reviewMoveBriefing.ts:461`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`
@@ -101,16 +101,16 @@
 - `src/services/squareRole.test.ts:44`
 
 ### `buildReviewMoveTeachingFact` (function) — 6 call sites
-- `src/services/learnBoardTeaching.ts:1251`
-- `src/services/moveThoughtFacts.ts:153`
+- `src/services/learnBoardTeaching.ts:1262`
+- `src/services/moveThoughtFacts.ts:181`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
 - `src/services/reviewMoveTeaching.test.ts:216`
 - `src/services/reviewMoveTeaching.test.ts:230`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3876`
-- `src/services/reviewFullData.ts:1621`
+- `src/services/coachFeatureService.ts:3882`
+- `src/services/reviewFullData.ts:1624`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`
@@ -118,7 +118,7 @@
 - `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3873`
+- `src/services/coachFeatureService.ts:3877`
 - `src/services/reviewMoveTeaching.test.ts:121`
 - `src/services/reviewMoveTeaching.test.ts:124`
 - `src/services/reviewMoveTeaching.test.ts:130`
