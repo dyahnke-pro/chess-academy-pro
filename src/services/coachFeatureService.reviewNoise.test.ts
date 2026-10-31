@@ -167,7 +167,7 @@ describe('review noise — a rebuild mid-walk keeps what the walk already said (
     const late = segs.filter((s) => s.ply > 8).flatMap((s) => (s.ledgerKeys ?? []).map((k) => ({ k, ply: s.ply })));
     expect(late.length).toBeGreaterThan(0);
     const { k } = late[0];
-    const seeded = buildReviewSegmentsForTests(inputs, 'white', null, true, 1400, [], undefined, null, new Map(), new Map(), { throughPly: 8, keys: new Set([k]) });
+    const seeded = buildReviewSegmentsForTests(inputs, 'white', null, true, 1400, [], undefined, null, new Map(), new Map(), { throughPly: 8, keys: new Set([k]), story: null });
     expect(seeded.filter((s) => s.ply > 8).flatMap((s) => s.ledgerKeys ?? [])).not.toContain(k);
   }, 60_000);
 });

@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest';
 import { withoutTags } from '../utils/thinkPause';
 import { Chess } from 'chess.js';
 import { deriveNextPlanFacts } from './nextPlans';
-import { newPlanThread, planThreadTurn, PLAN_THREAD_HOLD_PLIES, clonePlanThread, adoptPlanTrial } from './planThread';
+import { newPlanThread, planThreadTurn, PLAN_THREAD_HOLD_PLIES, clonePlanThread, adoptPlanTrial, structurePlanEvent } from './planThread';
 
 const CENTRE_KING = 'r3k2r/ppp2ppp/2n2n2/8/8/2N2N2/PPPQ1PPP/R3K2R b KQkq - 0 12';
 /** The same board with Black's king already walked to f8 — no castling left. */
@@ -174,5 +174,33 @@ describe('no plan is stated to a student in check', () => {
     const t = newPlanThread();
     const first = planThreadTurn(t, { ply: 22, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w', holdPlayable: false });
     expect(first.map((l) => l.text).join(' ')).toMatch(/plan/i);
+  });
+});
+
+// THE STRUCTURE'S PLAN, ONE AT A TIME (folded in from planMemory, WO-STORY-
+// MATRIX-01 P1-8b): announced once, carried while it stands, said as a change
+// when a different one replaces it. Its memory is the story's structure thread.
+describe('structurePlanEvent — a plan is announced once and carried until the structure changes', () => {
+  const PASSER = { id: 'passer-mine', text: 'push the passed pawn' };
+  const IQP = { id: 'iqp-theirs', text: 'blockade the isolated pawn' };
+
+  it('announces the first plan, carries the same plan, marks a different one as changed', () => {
+    expect(structurePlanEvent(null, PASSER)).toBe('announce');
+    expect(structurePlanEvent('passer-mine', PASSER)).toBe('carry');
+    expect(structurePlanEvent('passer-mine', IQP)).toBe('changed');
+  });
+
+  it('IDENTITY, NOT PROSE — advancing the pawn you were told to advance is not a new plan', () => {
+    // The regression this replaced: the rendered sentence was compared, so
+    // "your passed pawn on b5" → "on b6" read as the coach changing its mind.
+    expect(structurePlanEvent('passer-mine', { id: 'passer-mine', text: 'your passed pawn on b6 is the trump' })).toBe('carry');
+  });
+
+  it('a race whose WINNER FLIPS really is a new plan', () => {
+    expect(structurePlanEvent('passer-race:you', { id: 'passer-race:them', text: 'they get there first' })).toBe('changed');
+  });
+
+  it('a board with no plan says nothing', () => {
+    expect(structurePlanEvent('iqp-mine', null)).toBe('none');
   });
 });

@@ -306,7 +306,8 @@ describe('the move → plan link (P3): advance events carry their step', () => {
     const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(page).toMatch(/e\.kind === 'arrive' \|\| \(e\.kind === 'advance' && e\.step === 1\)/);
     // A move after the student's plan was told is prompted for the plan skill.
-    expect(page).toMatch(/recordHeld\('no-plan'[^\n]*planToldBoardsRef\.current\.has/);
+    // (The boards it was told on are the story's student threads, P1-8b.)
+    expect(page).toMatch(/recordHeld\('no-plan'[^\n]*toldBoards\(learnMemRef\.current\.story\.current\(\), 'student'\)\.has/);
   });
 });
 

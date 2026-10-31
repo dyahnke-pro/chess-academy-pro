@@ -44,7 +44,6 @@
 
 /** "No think-aloud has fired yet." Far enough below any real ply that the
  *  first gap test passes. */
-import type { PlanThread } from './planThread';
 import type { Proof } from './proof';
 import type { LooseSpells } from './conceptKey';
 import { createStoryStore, type StoryStore } from './gameStory';
@@ -54,8 +53,10 @@ export const NEVER_FIRED = -999;
 export interface LearnMemory {
   /** THE GAME'S STORY (WO-STORY-MATRIX-01 P1-8): everything said this game,
    *  each with the ply it was said — every say-once memory this object and the
-   *  page used to hold (gameStory.ts). Renewed by `newGame()`, rewound by
-   *  `rewind()`; the game's id and its ply watermark live in it. */
+   *  page used to hold — and each side's plans with the state the plan
+   *  computers step (the student's plan thread, the plan arcs), checkpointed
+   *  by ply (gameStory.ts). Renewed by `newGame()`, rewound by `rewind()`; the
+   *  game's id and its ply watermark live in it. */
   readonly story: StoryStore;
   /** How many times each rotated reason formula has been said this game — the
    *  rotation key (David 2026-10-14: no reason formula more than twice a
@@ -80,9 +81,6 @@ export interface LearnMemory {
   lastReplyDictated: string | null;
   /** The last computed line, so two consecutive plies never repeat it. */
   lastComputed: string;
-  /** The student's structural plan across the game — stated, stopped (with its
-   *  proof), changed (`planThread`, the same thread Review keeps). */
-  planThread: PlanThread | null;
   /** The proof behind the last conclusion the coach SPOKE — what "Why?" says
    *  in full (proof.ts). Null until a proof-bearing conclusion is spoken. */
   lastProof: Proof | null;
@@ -172,8 +170,9 @@ export interface LearnMemory {
    *  (attack round 2026-10-07: a takeback re-announced the opening and re-said
    *  every definition, and split the game's evidence across two ids). What was
    *  said AFTER that board is forgotten — it was said about moves that are no
-   *  longer on it (`story.rewind`). Lowers the watermark `observe` compares
-   *  against; never raises it. */
+   *  longer on it — and the plans go back to their state at it
+   *  (`story.rewind`). Lowers the watermark `observe` compares against; never
+   *  raises it. */
   rewind(plies: number): void;
   /** A NEW BOARD INSIDE THE GAME (a scenario phase): the game and everything
    *  said stay; the watermark restarts at the new board's ply. */
@@ -258,7 +257,6 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
     story,
     get gameId(): string { return story.current().gameId; },
     stemCounts: new Map<string, number>(),
-    planThread: null,
     lastProof: null,
     motifLastSpoken,
     lastTacticKey: '',
@@ -291,7 +289,6 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
       mem.slipsThisGame.clear();
       mem.stemCounts.clear();
       mem.promises.clear();
-      mem.planThread = null;
       mem.lastProof = null;
       motifLastSpoken.clear();
       mem.lastTacticKey = '';

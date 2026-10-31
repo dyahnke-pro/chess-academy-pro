@@ -12,17 +12,18 @@
 //     now it's …" when it changed for any other reason.
 //   • A plan that changes WITHOUT a proven cause inside PLAN_HOLD_PLIES of the
 //     last one is the read wobbling, not the plan — held.
-// PURE: no store, no voice. The caller speaks the lines and keeps the thread.
-import { openSentence } from '../utils/openSentence';
+// PURE: no store, no voice. The caller speaks the lines; the game's story
+// keeps the thread (`gameStory`'s plan desk, checkpointed by ply).
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { Chess, type Color, type Square } from 'chess.js';
-import { deriveNextPlanFacts, planAimKey, type PlanFact, type PlanKind } from './nextPlans';
+import { deriveNextPlanFacts, planAimKey, type PlanFact, type PlanKind, type StructurePlanFact } from './nextPlans';
 import { planStoppedProof, planStoppedLine } from './planStopped';
 import { NO_PROOF, type FactProof } from './proof';
 import { methodRead, methodPlanSentence, whyThisPlan, planWorth, type RouteArrow } from './planChoice';
 import { planStepLine } from './planStep';
 import { askThenAnswer } from '../utils/thinkPause';
 import { classifyPhase } from './gamePhaseService';
-import { planChangeSentence } from './planMemory';
+import { emptyPlanThread, copyPlanThread } from './gameStory';
 
 
 /** The plan kinds in the order `deriveNextPlanFacts` ranks them (lower =
@@ -50,6 +51,34 @@ function moveBetween(fenBefore: string, fenAfter: string): string | null {
   return null;
 }
 
+/** A PLAN THAT REPLACES THE ONE THE STUDENT LAST HEARD, said as the change —
+ *  the one stem (OS-11 duplicate map #7: planThread and positionFacts each had
+ *  their own "The plan changes here"). `infinitive`: the plan's goal as "win
+ *  their weak pawn on c3"; `statement`: a sentence about the position. */
+export function planChangeSentence(text: string, shape: 'infinitive' | 'statement'): string {
+  return shape === 'infinitive'
+    ? `The plan changes here — now it's to ${text.replace(/\.$/, '')}.`
+    : `The plan changes here: ${continueSentence(text)}`;
+}
+
+/** THE STRUCTURE'S OWN PLAN (`structurePlanFact`: the passer, its blockade or
+ *  race, the isolani), one at a time — folded in from planMemory (WO-STORY-
+ *  MATRIX-01 P1-8b), whose state now lives in the game's story as the
+ *  structure thread (`PLAN_GOAL.structure`, the plan's id its variant).
+ *
+ *  🚨 IDENTITY, NOT PROSE. This compared the rendered SENTENCE once, so a plan
+ *  naming a square that moves re-announced itself on every push: "your passed
+ *  pawn on b5" became "on b6" and read as a brand-new plan — the coach changing
+ *  its mind about the plan it had just told you to carry out. The identity is
+ *  the plan's KIND (`StructurePlanFact.id`), so advancing the pawn is `carry`
+ *  and only a genuinely different plan (or a race whose winner FLIPPED) is
+ *  `changed`. `lastHeard` is the id of the plan the student last heard. */
+export function structurePlanEvent(lastHeard: string | null, plan: StructurePlanFact | null): 'announce' | 'carry' | 'changed' | 'none' {
+  if (!plan) return 'none';
+  if (lastHeard === plan.id) return 'carry';
+  return lastHeard ? 'changed' : 'announce';
+}
+
 /** How long a stated plan holds before an unexplained change may replace it. */
 export const PLAN_THREAD_HOLD_PLIES = 4;
 
@@ -69,14 +98,15 @@ export interface PlanThread {
   whyAsked: Set<string>;
 }
 
+/** A thread with nothing stated — the story's one empty value. */
 export function newPlanThread(): PlanThread {
-  return { stated: null, stoppedInRow: 0, wasStopped: false, lastStatedPly: null, howSaid: new Set<string>(), methodSaid: false, whyAsked: new Set<string>() };
+  return emptyPlanThread();
 }
 
-/** A copy to try a turn on: a surface that commits only what was SPOKEN
- *  (review's door) runs the turn on the copy and adopts it when a line speaks. */
+/** A copy to try a turn on: a surface that commits only what was SPOKEN runs
+ *  the turn on the copy and adopts it when a line speaks (the story's copy). */
 export function clonePlanThread(t: PlanThread): PlanThread {
-  return { ...t, howSaid: new Set(t.howSaid), whyAsked: new Set(t.whyAsked) };
+  return copyPlanThread(t);
 }
 
 /** ADOPT A TRIED TURN ONLY WHAT WAS SAID (A-plan P3, prod Learn 2026-10-16:

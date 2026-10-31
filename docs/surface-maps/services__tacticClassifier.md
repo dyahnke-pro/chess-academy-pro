@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6817) — names `tacticClassifier`
+- **The standard post-deploy ritual** (CLAUDE.md:6819) — names `tacticClassifier`
 
 ## Who calls in
 
@@ -59,7 +59,7 @@
 - `src/test/kingIsNeverHanging.test.ts:56`
 
 ### `classifyPosition` (function) — 34 call sites
-- `src/components/Coach/CoachGamePage.tsx:3306`
+- `src/components/Coach/CoachGamePage.tsx:3197`
 - `src/services/missedTacticService.ts:546`
 - `src/services/oneSkewerRule.test.ts:16`
 - `src/services/pvPlayback.ts:451`
@@ -95,7 +95,7 @@
 - `src/services/tacticClassifier.test.ts:357`
 
 ### `scanUpcomingTactics` (function) — 5 call sites
-- `src/components/Coach/CoachGamePage.tsx:2828`
+- `src/components/Coach/CoachGamePage.tsx:2719`
 - `src/services/liveTacticsContext.ts:99`
 - `src/services/tacticClassifier.skewer.test.ts:13`
 - `src/services/tacticClassifier.skewer.test.ts:15`

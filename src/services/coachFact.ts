@@ -24,6 +24,7 @@ import type { FactStakes } from './factStakes';
 import type { FactProof } from './proof';
 import type { IdeaKind } from './ideaKind';
 import type { SpokenLine } from './voicePackage';
+import type { ThreadKey } from './gameStory';
 
 /** THE FOURTEEN GROUPS (PLAN WO-STORY-MATRIX-01, the regions table): the
  *  story (plans, the opening's story, the cause chain), the name (the opening,
@@ -220,6 +221,14 @@ export interface CoachFact {
   proof: FactProof;
   /** Whose move or plan it is about. */
   seat: FactSeat;
+  /** THE PLAN THREAD IT IS ON (REQUIRED, WO-STORY-MATRIX-01 P1-8b) — the
+   *  seat's plan it advances, keyed by its goal (`gameStory.threadKey`: a
+   *  passer made is a step on that side's passer thread, an outpost planted a
+   *  step on the outpost's), or `{ none: 'local' }`: a fact about the move
+   *  alone. Read by the game's story when the door keeps the fact
+   *  (`StoryStore.commitFacts`), so a thread is followed by what was SAID on
+   *  it, on every surface. */
+  thread: ThreadKey | { none: 'local' };
   /** The board the claim was computed on; the package grades it there. */
   fen: string;
   /** A second board it may describe (the one before the move). */

@@ -24,8 +24,10 @@ import { pvSanToUci } from './principleAttribution';
 import { BOOK_JOB_IDEA, FUNDAMENTAL_IDEA, ideaClaim, type IdeaKind } from './ideaKind';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { composeThought, type ThoughtFact, type ThoughtSource } from './thoughtComposer';
-import { placeFact, type CoachFactKind, type ComputerName } from './coachFact';
+import { placeFact, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat } from './coachFact';
 import type { LessonVoice } from './reviewMoveBriefing';
+import { planAimKey } from './nextPlans';
+import { threadKey } from './gameStory';
 
 export interface MoveThoughtInput {
   fenBefore: string;
@@ -53,6 +55,30 @@ const JOB_WEIGHT: Record<BookJobKind, number> = {
 };
 
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** A fact about the move alone. */
+const LOCAL = { none: 'local' } as const;
+
+/** THE PLAN THREAD A MOVE'S FACT IS ON (WO-STORY-MATRIX-01 P1-8b): a goal the
+ *  move works toward, keyed by its square — a passer made is a step on the
+ *  mover's passer thread on that file, a passer handed over on the other
+ *  side's, an outpost planted on the mover's outpost thread, their king's
+ *  cover prised open on the mover's attack on it. Every other fact is about
+ *  the move alone. */
+function threadFor(kind: CoachFactKind, seat: FactSeat, squares: readonly string[]): CoachFact['thread'] {
+  const on = (goal: string, at: string | null, whose: FactSeat): CoachFact['thread'] => {
+    const aim = planAimKey(goal, at);
+    return aim ? threadKey(whose, aim) : LOCAL;
+  };
+  const other: FactSeat = seat === 'student' ? 'opponent' : 'student';
+  switch (kind) {
+    case 'aspect-passer': return on('passer', squares[0] ?? null, seat);
+    case 'aspect-passer-handed': return on('passer', squares[0] ?? null, other);
+    case 'aspect-outpost': return on('outpost', squares[0] ?? null, seat);
+    case 'aspect-opens-king': return on('king-attack', null, seat);
+    default: return LOCAL;
+  }
+}
 const close = (s: string): string => (/[.!?]$/.test(s.trim()) ? s.trim() : `${s.trim()}.`);
 
 /** Every fact a move earns on its own board. */
@@ -96,7 +122,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     const said = close(text);
     facts.push({
       ...placeFact(kind, seat), computer, source, idea, text: said, alsoText: alsoText ? close(alsoText) : undefined, squares: sq, weight,
-      stakes: null, proof: squaresProof(said, [...new Set([to, ...squares])]) ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
+      thread: threadFor(kind, seat, squares), stakes: null, proof: squaresProof(said, [...new Set([to, ...squares])]) ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
       claims: [`move:${from}${to}:${ideaClaim(idea, sq)}`, ...extraClaims], restates,
     });
   };
@@ -196,7 +222,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
         : `They don't take on ${ib.captureSquare} yet — it isn't going anywhere. ${first} comes first, and they take after`;
       const said = close(text);
       facts.push({
-        ...placeFact('not-yet', seat), computer: 'inBetweenMove', source: 'notYet', idea: 'order', text: said, squares: [ib.captureSquare], weight: 70, stakes: null,
+        ...placeFact('not-yet', seat), computer: 'inBetweenMove', source: 'notYet', idea: 'order', text: said, squares: [ib.captureSquare], weight: 70, thread: LOCAL, stakes: null,
         proof: lineProof({ fen: i.fenBefore, sans: ib.line }, mine ? 'you' : 'they') ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
         claims: [`not-yet:${from}${to}:${ib.captureSquare}`],
       });

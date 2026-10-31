@@ -4,21 +4,35 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**253 lines · 6 exports · 5 importers · 3 tests · 1 audits**
+**283 lines · 8 exports · 7 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5789) — names `planThread`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5791) — names `planThread`
 
 ## Who calls in
 
 - `src/services/boardComputers.ts`
 - `src/services/coachFeatureService.ts`
-- `src/services/learnMemory.ts`
+- `src/services/gameStory.rewind.test.ts`
+- `src/services/gameStory.ts`
 - `src/services/planArcFade.test.ts`
 - `src/services/planThread.test.ts`
+- `src/services/positionFacts.ts`
 
 ## Exports and every call site
+
+### `planChangeSentence` (function) — 1 call site
+- `src/services/positionFacts.ts:878`
+
+### `structurePlanEvent` (function) — 7 call sites
+- `src/services/planThread.test.ts:188`
+- `src/services/planThread.test.ts:189`
+- `src/services/planThread.test.ts:190`
+- `src/services/planThread.test.ts:196`
+- `src/services/planThread.test.ts:200`
+- `src/services/planThread.test.ts:204`
+- `src/services/positionFacts.ts:868`
 
 ### `PLAN_THREAD_HOLD_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -26,10 +40,8 @@
 ### `PlanThread` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newPlanThread` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11000`
+### `newPlanThread` (function) — 22 call sites
 - `src/services/boardComputers.test.ts:55`
-- `src/services/coachFeatureService.ts:1646`
 - `src/services/planArcFade.test.ts:29`
 - `src/services/planChoice.test.ts:77`
 - `src/services/planChoice.test.ts:91`
@@ -47,21 +59,26 @@
 - `src/services/planThread.test.ts:153`
 - `src/services/planThread.test.ts:170`
 - `src/services/planThread.test.ts:174`
+- `src/test/oneStoryState.gate.test.ts:151`
+- `src/test/oneStoryState.gate.test.ts:170`
+- `src/test/oneStoryState.gate.test.ts:174`
+- `src/test/oneStoryState.gate.test.ts:180`
 
 ### `clonePlanThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11001`
-- `src/services/coachFeatureService.ts:2612`
 - `src/services/planThread.test.ts:100`
 - `src/services/planThread.test.ts:108`
+- `src/test/oneStoryState.gate.test.ts:151`
+- `src/test/oneStoryState.gate.test.ts:171`
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11033`
-- `src/components/Coach/CoachTeachPage.tsx:12090`
+- `src/components/Coach/CoachTeachPage.tsx:12139`
+- `src/services/gameStory.rewind.test.ts:27`
 - `src/services/planThread.test.ts:104`
 - `src/services/planThread.test.ts:111`
 
-### `planThreadTurn` (function) — 23 call sites
-- `src/services/boardComputers.ts:380`
+### `planThreadTurn` (function) — 24 call sites
+- `src/services/boardComputers.ts:446`
+- `src/services/gameStory.rewind.test.ts:25`
 - `src/services/planArcFade.test.ts:29`
 - `src/services/planChoice.test.ts:77`
 - `src/services/planChoice.test.ts:91`
@@ -87,9 +104,11 @@
 
 ## Tests
 
+- `src/services/gameStory.rewind.test.ts`
 - `src/services/planArcFade.test.ts`
 - `src/services/planChoice.test.ts`
 - `src/services/planThread.test.ts`
+- `src/test/onePlanSentence.gate.test.ts`
 
 ## Audits that reach it
 

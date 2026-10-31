@@ -499,7 +499,7 @@ function outOfPhase(phase: ReadonlySet<GamePhase | 'any'>, ctx: object): boolean
 }
 
 /** A fresh plan thread for a surface's memory. */
-export { newPlanThread, clonePlanThread, adoptPlanTrial, type PlanThread } from './planThread';
+export { newPlanThread, adoptPlanTrial, type PlanThread } from './planThread';
 
 /** Every read, in speaking order. */
 export function readBoardAll<K extends ComputerId>(id: K, ctx: BoardContexts[K]): BoardRead[] {

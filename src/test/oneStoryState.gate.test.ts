@@ -138,3 +138,70 @@ describe('the say-once family lives in GameStory', () => {
     expect(page).not.toMatch(/pf\.principleSpoken\.split\('\|'\)\)[^;]*commit/);
   });
 });
+
+/**
+ * 🔒 THE PLANS LIVE IN THE STORY TOO (P1-8b). Learn kept the student's plan
+ * thread on `learnMemory`, each side's arc and the boards a plan was told on in
+ * page refs; Review kept its own `planT` and three one-claim memories
+ * (`passerPlanFiles`, `convertTaughtPly`, `lastRaceVerdict`); the positional
+ * read kept the structure's plan as `plan:<id>#<n>` keys in the say-once set.
+ * None was rewound by a takeback, and Review's were rebuilt from nothing by a
+ * seeded rebuild. One state now: the story's plan desk and threads.
+ */
+const PLAN_MEMORY = /\b(planArcRef|planToldBoardsRef|newPlanThread(?=\()|clonePlanThread(?=\()|EMPTY_ARC|learnMemRef\.current\.planThread)(?!\w)/g;
+const REVIEW_PLAN_MEMORY = /\b(?:const|let)\s+(planT|passerPlanFiles|convertTaughtPly|lastRaceVerdict)\b|\bnewPlanThread\(/g;
+
+function planMemoryIn(src: string, pattern: RegExp): string[] {
+  // The named group when the pattern names one, else the whole match.
+  return [...stripComments(src).matchAll(pattern)].map((m) => (m[1] as string | undefined) ?? m[0]);
+}
+
+/** The body of `reviewSegmentSteps` — the one Review build. */
+function reviewBuild(src: string): string {
+  const at = src.indexOf('function* reviewSegmentSteps(');
+  return at < 0 ? '' : src.slice(at, src.indexOf('\nexport ', at));
+}
+
+describe('the plan family lives in GameStory', () => {
+  it('the scanners see the shapes they must (negative control: the old code)', () => {
+    const oldPage = `
+      const planToldBoardsRef = useRef(new Set<string>());
+      const planArcRef = useRef<{ theirs: ArcState; mine: ArcState }>({ theirs: EMPTY_ARC, mine: EMPTY_ARC });
+      const planLive = learnMemRef.current.planThread ??= newPlanThread();
+      const planTrial = clonePlanThread(planLive);`;
+    expect(planMemoryIn(oldPage, PLAN_MEMORY)).toEqual(['planToldBoardsRef', 'planArcRef', 'EMPTY_ARC', 'EMPTY_ARC', 'learnMemRef.current.planThread', 'newPlanThread', 'clonePlanThread']);
+    const oldReview = `function* reviewSegmentSteps(
+      const planT: PlanThread = newPlanThread();
+      let convertTaughtPly: number | null = null;
+      const passerPlanFiles = new Set<string>();
+      let lastRaceVerdict: string | null = null;
+    }
+export function x() {}`;
+    expect(planMemoryIn(reviewBuild(oldReview), REVIEW_PLAN_MEMORY)).toEqual(['planT', 'newPlanThread(', 'convertTaughtPly', 'passerPlanFiles', 'lastRaceVerdict']);
+  });
+
+  for (const file of FILES) {
+    it(`${file} keeps no plan memory of its own`, () => {
+      expect(planMemoryIn(readFileSync(file, 'utf8'), PLAN_MEMORY), 'the plans are the story\'s (gameStory.ts: plans(), setPlans, threads)').toEqual([]);
+    });
+  }
+
+  it('learnMemory holds no plan thread beside the story', () => {
+    expect(stripComments(readFileSync('src/services/learnMemory.ts', 'utf8'))).not.toMatch(/\bplanThread\b/);
+  });
+
+  it('Review\'s build keeps its plans in its story, never in locals', () => {
+    const build = reviewBuild(readFileSync('src/services/coachFeatureService.ts', 'utf8'));
+    expect(build.length, 'reviewSegmentSteps found').toBeGreaterThan(1000);
+    expect(planMemoryIn(build, REVIEW_PLAN_MEMORY)).toEqual([]);
+    expect(build).toMatch(/const story = createStoryStore\(/);
+    // The seed restores the plans the walk had said.
+    expect(build).toMatch(/story\.restore\(spokenBefore\.story\)/);
+  });
+
+  it('the positional read reads the structure thread, never a count hidden in the say-once set', () => {
+    const pf = stripComments(readFileSync('src/services/positionFacts.ts', 'utf8'));
+    expect(pf).not.toMatch(/plan:\$\{[^}]*\}#|\^plan:\(\.\+\)#/);
+    expect(pf).toMatch(/structurePlanEvent\(asked \? null : input\.structurePlanHeard/);
+  });
+});

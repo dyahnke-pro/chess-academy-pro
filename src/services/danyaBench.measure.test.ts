@@ -57,7 +57,7 @@ import { classifyCpLoss } from './gameAnalysisService';
 /** The bench's own variant: the weighing as a choices-step fact. */
 function choiceFact(text: string, fen: string): ThoughtFact {
   return {
-    ...placeFact('deliberation', 'student'), computer: 'deliberationAlternativesFacts', source: 'alternatives', idea: 'choice', text: /[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`, squares: [], weight: 50, stakes: null,
+    ...placeFact('deliberation', 'student'), computer: 'deliberationAlternativesFacts', source: 'alternatives', idea: 'choice', thread: { none: 'local' }, text: /[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`, squares: [], weight: 50, stakes: null,
     proof: NO_PROOF.description, seat: 'student', fen, claims: [`choice:${fen}`],
   };
 }

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**655 lines · 15 exports · 15 importers · 6 tests · 0 audits**
+**655 lines · 15 exports · 16 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@
 - `src/services/coachDecider.ts`
 - `src/services/coachFact.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/factSelector.ts`
 - `src/services/learnTurnDoor.ts`
@@ -71,8 +72,8 @@
 - `src/services/coachDecider.ts:461`
 
 ### `facetTag` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:2492`
-- `src/services/coachFeatureService.ts:3078`
+- `src/services/coachFeatureService.ts:2515`
+- `src/services/coachFeatureService.ts:3104`
 - `src/services/reviewFacetRank.test.ts:19`
 - `src/services/reviewFacetRank.test.ts:20`
 - `src/services/reviewFacetRank.test.ts:21`
@@ -95,6 +96,7 @@
 ## Tests
 
 - `src/services/batch2Wiring.test.ts`
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/reviewFacetRank.test.ts`

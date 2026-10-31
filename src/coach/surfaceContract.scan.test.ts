@@ -59,7 +59,7 @@ describe('source scan — no surface decides its own voice', () => {
 
   // SHRINK-ONLY baseline (CLAUDE.md sealed-gates rule): the ceiling may go
   // down when a call is routed through the selector; it may never go up.
-  const FACT_COMPUTERS = ['rankTurns(', 'landedTacticTeaching(', 'buildCausalChain(', 'structurePlan(', 'computeNeed(', 'refutedAlternative(', 'foldPlans('];
+  const FACT_COMPUTERS = ['rankTurns(', 'landedTacticTeaching(', 'buildCausalChain(', 'structurePlan(', 'computeNeed(', 'refutedAlternative('];
   const BASELINE_CEILING = 1; // CoachTeachPage.tsx: buildCausalChain (pre-N1 live-commentary chain)
 
   it(`components/hooks call the fact-computers directly at most ${BASELINE_CEILING} time(s)`, () => {

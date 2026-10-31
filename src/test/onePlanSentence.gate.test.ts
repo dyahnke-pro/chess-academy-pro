@@ -20,8 +20,8 @@ describe('each plan sentence has one producer', () => {
   it('"So the plan:" is built only by planChoice.methodPlanSentence', () => {
     expect(owners('So the plan:')).toEqual(['src/services/planChoice.ts']);
   });
-  it('"The plan changes here" is built only by planMemory.planChangeSentence', () => {
-    expect(owners('The plan changes here')).toEqual(['src/services/planMemory.ts']);
+  it('"The plan changes here" is built only by planThread.planChangeSentence', () => {
+    expect(owners('The plan changes here')).toEqual(['src/services/planThread.ts']);
   });
 });
 

@@ -7,7 +7,7 @@
  * was computed, before the door decided whether it spoke.
  */
 import { describe, it, expect } from 'vitest';
-import { createStoryStore, keysUnder, STORY_KEY } from './gameStory';
+import { createStoryStore, keysUnder, STORY_KEY, threadKey, threadStated, threadVariant, toldBoards, PLAN_GOAL } from './gameStory';
 import { createLearnMemory } from './learnMemory';
 
 const B10 = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
@@ -154,5 +154,107 @@ describe('namespaces read back in their own vocabulary', () => {
     const keys = [STORY_KEY.principle('develop-knights'), STORY_KEY.fundamental('hung-piece'), 'principle-like', STORY_KEY.principle('castle-early')];
     expect([...keysUnder(keys, STORY_KEY.principle(''))].sort()).toEqual(['castle-early', 'develop-knights']);
     expect([...keysUnder(keys, STORY_KEY.fundamental(''))]).toEqual(['hung-piece']);
+  });
+});
+
+describe('the plans are the story\'s (P1-8b): threads keyed by their goal, the plan state checkpointed', () => {
+  const PASSER_D = threadKey('student', 'plan-aim:passer:d');
+  const STRUCTURE = threadKey('student', PLAN_GOAL.structure);
+
+  it('a thread key is the seat and the plan-aim key — the arc\'s aim ids join it', () => {
+    expect(threadKey('student', 'plan-aim:outpost:d5')).toBe('student|plan-aim:outpost:d5');
+    expect(threadKey('opponent', 'outpost:d5')).toBe('opponent|plan-aim:outpost:d5');
+  });
+
+  it('rewind forgets a plan stated after the board, and its variant goes back to the one before', () => {
+    const s = createStoryStore('g1');
+    s.commitThreads(9, [{ key: STRUCTURE, kind: 'stated', variant: 'passer-mine' }]);
+    s.commitThreads(15, [{ key: STRUCTURE, kind: 'stated', variant: 'iqp-theirs' }, { key: PASSER_D, kind: 'stated' }]);
+    expect(threadVariant(s.current(), STRUCTURE)).toBe('iqp-theirs');
+    s.rewind(12);
+    expect(threadVariant(s.current(), STRUCTURE)).toBe('passer-mine');
+    expect(threadStated(s.current(), PASSER_D)).toBeNull();
+    s.rewind(8);
+    expect(s.current().threads.has(STRUCTURE)).toBe(false);
+  });
+
+  it('the plan computers\' state is checkpointed by ply: rewind restores the state at the board', () => {
+    const s = createStoryStore('g1');
+    const d9 = s.plans();
+    d9.thread.methodSaid = true;
+    s.setPlans(9, d9);
+    const d11 = s.plans();
+    d11.thread.howSaid.add('passer:d4');
+    s.setPlans(11, d11);
+    expect(s.plans().thread.howSaid.has('passer:d4')).toBe(true);
+    // plans() hands out a copy: stepping it changes nothing until handed back.
+    s.plans().thread.howSaid.add('scratch');
+    expect(s.plans().thread.howSaid.has('scratch')).toBe(false);
+    s.rewind(10);
+    expect(s.plans().thread.methodSaid).toBe(true);
+    expect(s.plans().thread.howSaid.has('passer:d4')).toBe(false);
+    s.rewind(8);
+    expect(s.plans().thread.methodSaid).toBe(false);
+  });
+
+  it('a plan line the door KEPT is the thread\'s; one it held is not — and a told line records its board', () => {
+    const s = createStoryStore('g1');
+    s.offer(B10, { text: 'The plan for you here: the outpost on d5.', thread: { key: threadKey('student', 'outpost:d5'), kind: 'stated', told: true } });
+    s.offer(B10, { text: 'Their plan: the c-file.', thread: { key: threadKey('opponent', 'file:c'), kind: 'stated' } });
+    s.commitKept(12, B10, [{ text: 'The plan for you here: the outpost on d5.' }]);
+    expect(threadStated(s.current(), threadKey('student', 'outpost:d5'))).toBe(12);
+    expect(threadStated(s.current(), threadKey('opponent', 'file:c'))).toBeNull();
+    expect([...toldBoards(s.current(), 'student')]).toEqual([B10.split(' ').slice(0, 2).join(' ')]);
+    expect(toldBoards(s.current(), 'opponent').size).toBe(0);
+  });
+
+  it('a wave that hands its door its lines commits the threads of the ones kept', () => {
+    const s = createStoryStore('g1');
+    s.commitKeptThreads(20, B10, [
+      { text: 'Your passed pawn on d5 is the trump here.', thread: { key: STRUCTURE, kind: 'stated', variant: 'passer-mine' } },
+      { text: 'A line with no thread.' },
+    ], [{ text: 'Your passed pawn on d5 is the trump here.' }]);
+    expect(threadVariant(s.current(), STRUCTURE)).toBe('passer-mine');
+  });
+
+  it('a kept CoachFact on a thread is a step on it; a fact about the move alone writes nothing', () => {
+    const s = createStoryStore('g1');
+    s.commitFacts(7, [{ thread: PASSER_D }, { thread: { none: 'local' } }]);
+    expect(s.current().threads.get(PASSER_D)?.said).toEqual([{ ply: 7, kind: 'step', variant: null, board: null }]);
+    // A step is not a statement of the plan.
+    expect(threadStated(s.current(), PASSER_D)).toBeNull();
+    expect(s.current().threads.size).toBe(1);
+  });
+
+  it('serialize → restore carries the whole story: said, threads and the plan state', () => {
+    const a = createStoryStore('g1');
+    a.commit(5, { claims: ['def:pin'], sentences: ['claim:def:pin'] });
+    a.commitThreads(9, [{ key: STRUCTURE, kind: 'stated', variant: 'passer-race:you' }]);
+    const d = a.plans();
+    d.thread.methodSaid = true;
+    d.thread.whyAsked.add('seizing the c-file');
+    a.setPlans(9, d);
+    const b = createStoryStore('other');
+    b.commitThreads(3, [{ key: PASSER_D, kind: 'stated' }]);
+    b.restore(a.serialize());
+    expect(b.current().gameId).toBe('g1');
+    expect(b.current().said.get('def:pin')).toBe(5);
+    expect(threadVariant(b.current(), STRUCTURE)).toBe('passer-race:you');
+    expect(threadStated(b.current(), PASSER_D)).toBeNull();
+    expect(b.plans().thread.methodSaid).toBe(true);
+    expect(b.plans().thread.whyAsked.has('seizing the c-file')).toBe(true);
+    // null is the empty story: the walk had said nothing yet.
+    b.restore(null);
+    expect(b.current().threads.size).toBe(0);
+    expect(b.plans().thread.methodSaid).toBe(false);
+  });
+
+  it('a new game forgets the threads and the plans', () => {
+    const s = createStoryStore('g1');
+    s.commitThreads(9, [{ key: STRUCTURE, kind: 'stated', variant: 'iqp-mine' }]);
+    const d = s.plans(); d.thread.methodSaid = true; s.setPlans(9, d);
+    s.newGame('g2');
+    expect(s.current().threads.size).toBe(0);
+    expect(s.plans().thread.methodSaid).toBe(false);
   });
 });

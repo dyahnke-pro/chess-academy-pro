@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**230 lines · 12 exports · 7 importers · 3 tests · 0 audits**
+**239 lines · 12 exports · 8 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFact.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/danyaBench.measure.test.ts`
+- `src/services/gameStory.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/moveThoughtFacts.ts`
 - `src/services/thoughtComposer.ts`
@@ -47,8 +48,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachDecider.ts:527`
 - `src/services/coachFact.test.ts:75`
 - `src/services/coachFact.test.ts:76`
-- `src/services/coachFeatureService.ts:2493`
-- `src/services/coachFeatureService.ts:3078`
+- `src/services/coachFeatureService.ts:2516`
+- `src/services/coachFeatureService.ts:3104`
 - `src/services/learnTurnDoor.ts:247`
 - `src/services/learnTurnDoor.ts:249`
 - `src/services/learnTurnDoor.ts:734`
@@ -63,9 +64,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnTurnDoor.ts:1099`
 
 ### `placeFact` (function) — 3 call sites
-- `src/services/danyaBench.measure.test.ts:56`
-- `src/services/moveThoughtFacts.ts:98`
-- `src/services/moveThoughtFacts.ts:199`
+- `src/services/danyaBench.measure.test.ts:60`
+- `src/services/moveThoughtFacts.ts:124`
+- `src/services/moveThoughtFacts.ts:225`
 
 ### `COMPUTER_CATALOG` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

@@ -7,7 +7,8 @@
 // every line spoken, over real games walked with their cached engine reads —
 //   review — Review's walk (`buildReviewSegmentsForTests`), every move;
 //   learn  — Learn's live lane (`computePositionFacts` as CoachTeachPage calls
-//            it: the student's move, the coach's reply, the say-once carried);
+//            it: the student's move, the coach's reply, the say-once and the
+//            structure plan heard carried);
 //   chat   — the asked read at every board where the student is to move (as
 //            boardTurnAnswer calls it);
 //   lesson — the lesson's line for every move (`lessonThought`, one voice).
@@ -62,6 +63,8 @@ async function learnSource(g: FixtureGame): Promise<SourceRecord> {
   const plies = replayPlies(g);
   const student: 'w' | 'b' = g.studentSide === 'white' ? 'w' : 'b';
   const said = new Set<string>();
+  // The story's structure thread: the plan the student last heard.
+  let planHeard: string | null = null;
   const out: SourceRecord = { rows: [], spoken: [] };
   for (let k = 0; k + 1 < plies.length; k++) {
     const p = plies[k];
@@ -86,9 +89,11 @@ async function learnSource(g: FixtureGame): Promise<SourceRecord> {
         fanBefore: linesOf(p.before),
       },
       alreadySaid: new Set(said),
+      structurePlanHeard: planHeard,
       opponentLastMove: { fenBefore: r.fenBefore, san: r.san },
     }));
     for (const t of result.remember) said.add(t);
+    planHeard = result.structurePlanSaid ?? planHeard;
     out.rows.push(...rows);
     out.spoken.push(`${r.ply}: ${clausesSaid(result)}`);
   }

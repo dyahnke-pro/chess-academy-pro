@@ -8,7 +8,7 @@ vi.mock('./coachFeatureService', () => ({
 }));
 
 import { db } from '../db/schema';
-import { getOrBuildReviewNarration, type ReviewNarrationRequest } from './reviewNarrationBuild';
+import { getOrBuildReviewNarration, spokenLedgerSeed, type ReviewNarrationRequest } from './reviewNarrationBuild';
 
 const narration = { intro: 'intro', segments: [{ ply: 1, san: 'e4', narration: 'x' }], closing: null };
 
@@ -57,5 +57,17 @@ describe('reviewNarrationBuild — one door for a game\'s review narration', () 
     const res = await getOrBuildReviewNarration(deeper);
     expect(res.cacheHit).toBe(false);
     expect(generate).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('the seed carries the story the walk had (WO-STORY-MATRIX-01 P1-8b)', () => {
+  const seg = (ply: number, extra: Record<string, unknown>) => ({ ply, san: 'x', narration: null, ...extra });
+  const walk = { intro: '', closing: null, segments: [seg(5, { ledgerKeys: ['h:a'], storyCheckpoint: 'cp5' }), seg(9, { storyCheckpoint: 'cp9' }), seg(7, { ledgerKeys: ['h:b'] }), seg(12, { storyCheckpoint: 'cp12' })] } as never;
+  it('the last checkpoint at or before the walked ply, in ply order', () => {
+    expect(spokenLedgerSeed(walk, 10)).toEqual({ throughPly: 10, keys: new Set(['h:a', 'h:b']), story: 'cp9' });
+    expect(spokenLedgerSeed(walk, 8)?.story).toBe('cp5');
+  });
+  it('no checkpoint yet: the walk had said no plan', () => {
+    expect(spokenLedgerSeed(walk, 4)?.story).toBeNull();
   });
 });
