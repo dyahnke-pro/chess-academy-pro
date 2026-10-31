@@ -44,6 +44,7 @@ import { moveIntent } from './moveIntent';
 import { afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
 import { NO_SECOND_READ } from './inaccuracyCall';
 import { composeThought, type ThoughtFact } from './thoughtComposer';
+import { placeFact } from './coachFact';
 import { moveThoughtFacts, lessonThought } from './moveThoughtFacts';
 import { NO_PROOF } from './proof';
 import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
@@ -52,7 +53,7 @@ import { classifyCpLoss } from './gameAnalysisService';
 /** The bench's own variant: the weighing as a choices-step fact. */
 function choiceFact(text: string, fen: string): ThoughtFact {
   return {
-    step: 'choices', source: 'alternatives', idea: 'choice', text: /[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`, squares: [], weight: 50, stakes: null,
+    ...placeFact('deliberation', 'student'), computer: 'deliberationAlternativesFacts', source: 'alternatives', idea: 'choice', text: /[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`, squares: [], weight: 50, stakes: null,
     proof: NO_PROOF.description, seat: 'student', fen, claims: [`choice:${fen}`],
   };
 }

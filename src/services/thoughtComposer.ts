@@ -22,12 +22,11 @@
 //      interface talk).
 // Surfaces differ only in which steps they ask for and how many facts a step
 // may carry; the order and the choice are this file's.
-import type { FactStakes } from './factStakes';
 import { stakeValue } from './factStakes';
+import type { CoachFact } from './coachFact';
 import thoughtPolicy from '../data/thought-policy.json';
-import type { FactProof } from './proof';
-import { sameIdea, type IdeaKind } from './ideaKind';
-import { buildVoicePackage, claimKey, joinSpoken, spokenSentenceKeys, type SpokenLine, type VoiceFact } from './voicePackage';
+import { sameIdea } from './ideaKind';
+import { buildVoicePackage, claimKey, joinSpoken, spokenSentenceKeys, type VoiceFact } from './voicePackage';
 
 /** THE STEPS OF ONE THOUGHT, in the order they are said (WO-THINK-01):
  *    danger  — what is attacked on the board right now (always first);
@@ -70,43 +69,9 @@ export const SOURCE_RANK: Record<ThoughtSource, number> = {
   pieceRoute: 13,
 };
 
-/** ONE FACT, the composer's only input. */
-export interface ThoughtFact {
-  step: ThoughtStep;
-  source: ThoughtSource;
-  /** The words, a whole sentence with its own subject — said when the fact
-   *  leads its step ("You play h3 — it keeps their bishop off g4"). */
-  text: string;
-  /** The words when it speaks BEHIND its step's lead ("It also makes luft"),
-   *  where the lead already named the move. Absent: `text` serves both. */
-  alsoText?: string;
-  /** Which idea it states (ONE vocabulary). Two facts of one idea on the same
-   *  squares are one idea: the step keeps the one that leads. */
-  idea: IdeaKind;
-  /** The idea it states, as claim keys — the say-once ledger keeps one fact
-   *  per claim across the whole lesson, review or game. */
-  claims: readonly string[];
-  /** The squares it is about (the board's half; support is read off these). */
-  squares: readonly string[];
-  /** What rides on it — the step's lead is the fact worth most. */
-  stakes: FactStakes | null;
-  /** The producer's own importance on this board, 0–100 (the briefing's
-   *  aspect weight, the fundamental's weight) — the order after the stakes. */
-  weight: number;
-  /** It only restates what the board shows (the capture, the check, a bare
-   *  develop) — THE QUIET-MOVE RULE: a step of nothing else is not said. */
-  restates?: boolean;
-  /** Its proof, or why it needs none (REQUIRED, proof.ts). */
-  proof: FactProof;
-  /** Whose move or plan it is about. */
-  seat: 'student' | 'opponent';
-  /** The board the claim was computed on; the package grades it there. */
-  fen: string;
-  /** A second board it may describe (the one before the move). */
-  altFen?: string;
-  /** The lines it says, played on the board. */
-  lines?: readonly SpokenLine[];
-}
+/** ONE FACT, the composer's only input — the one fact shape (`coachFact.ts`),
+ *  its step derived from its kind. */
+export type ThoughtFact = CoachFact;
 
 /** HOW DEEP A SURFACE GOES. Every surface says the same steps in the same
  *  order; Review may let a step carry its further facts, the live surfaces

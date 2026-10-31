@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**564 lines · 11 exports · 17 importers · 11 tests · 0 audits**
+**579 lines · 12 exports · 19 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,8 @@
 
 - `src/hooks/useTeachWalkthrough.ts`
 - `src/services/captureRun.test.ts`
+- `src/services/coachFact.test.ts`
+- `src/services/coachFact.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/gamesCourse.ts`
@@ -33,6 +35,9 @@
 
 ## Exports and every call site
 
+### `AspectKind` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `Aspect` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -43,7 +48,7 @@
 ### `buildReviewMoveBriefing` (function) — 22 call sites
 - `src/services/captureRun.test.ts:45`
 - `src/services/captureRun.test.ts:56`
-- `src/services/coachFeatureService.ts:1999`
+- `src/services/coachFeatureService.ts:2002`
 - `src/services/guardPressure.test.ts:42`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
@@ -65,10 +70,10 @@
 - `src/services/threeFacts.briefing.test.ts:43`
 
 ### `toClause` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:157`
+- `src/services/moveThoughtFacts.ts:160`
 
 ### `joinReview` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:157`
+- `src/services/moveThoughtFacts.ts:160`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -76,7 +81,7 @@
 ### `newLessonVoice` (function) — 19 call sites
 - `src/hooks/useTeachWalkthrough.ts:890`
 - `src/hooks/useTeachWalkthrough.ts:891`
-- `src/services/danyaBench.measure.test.ts:343`
+- `src/services/danyaBench.measure.test.ts:347`
 - `src/services/gamesCourse.ts:281`
 - `src/services/moveThoughtFacts.test.ts:19`
 - `src/services/moveThoughtFacts.test.ts:58`
@@ -111,6 +116,7 @@
 ## Tests
 
 - `src/services/captureRun.test.ts`
+- `src/services/coachFact.test.ts`
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/guardPressure.test.ts`
 - `src/services/materialSites.test.ts`
