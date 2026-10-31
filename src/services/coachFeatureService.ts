@@ -51,7 +51,7 @@ import { classifyPhase } from './gamePhaseService';
 import { inaccuracySpeaks, loadInaccuracyVoice } from './inaccuracyVoice';
 import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
-import { coachTurn, habitNeedFrom } from './coachDecider';
+import { coachTurn, habitNeedFrom, type DoorFact } from './coachDecider';
 import { advantageWasMissed } from './reviewWithholding';
 import { newPlanThread, clonePlanThread, PLAN_THREAD_HOLD_PLIES, type PlanThread } from './planThread';
 import { boardStateAfter } from './boardState';
@@ -107,9 +107,9 @@ import { mateDescription } from './matePatterns';
 import { isMinorAtHome } from './development';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
-import { facetTag, FACET_ROLE, type FacetTag } from './reviewFacetRank';
-import { stepOf } from './coachFact';
-import type { FactProof, Proof } from './proof';
+import { facetTag, factKind, FACET_ROLE, type FacetTag } from './reviewFacetRank';
+import { stepOf, toCoachFact } from './coachFact';
+import { NO_PROOF, type FactProof, type Proof } from './proof';
 import { newPhraseMemory } from '../utils/phraseMemory';
 import { whyItEnded, idlePiece, quietDecider, exploreInvite, murkyRead, type EndRead, type GamePly } from './gameEndReads';
 import { positionOf } from '../utils/samePosition';
@@ -2082,21 +2082,6 @@ function* reviewSegmentSteps(
       // standing, a pin's context), committed only if the fact SPOKE — after
       // the door, like every ledger (B4: a fact on a silenced ply is not said).
       const facetCommits = new Map<string, () => void>();
-      // A facet REWRITTEN on its way to the door (the loose tail turned into the
-      // habit) keeps every record coupled to it — squares, stakes, proof,
-      // claims, identity, the incoming flag, its commit — so one rewrite cannot
-      // drop a side map it forgot (the habit lost its claims, and the door
-      // then heard it as a restatement and silenced it, 2026-10-21).
-      const rekeyFacet = (from: string, to: string): void => {
-        if (from === to) return;
-        const sq = facetSquares.get(from); if (sq) facetSquares.set(to, sq);
-        const st = facetStakes.get(from); if (st) facetStakes.set(to, st);
-        const pf = facetProofs.get(from); if (pf) facetProofs.set(to, pf);
-        const cl = facetClaims.get(from); if (cl) facetClaims.set(to, cl);
-        const id = facetIdentity.get(from); if (id) facetIdentity.set(to, id);
-        const cm = facetCommits.get(from); if (cm) facetCommits.set(to, cm);
-        if (facetIncoming.has(from)) facetIncoming.add(to);
-      };
       const verdictReasonOut: { text: string | null; playedLine?: boolean; punishSan?: string } = { text: null };
       const facets = computeMoveFacets({
         fundamentals,
@@ -2578,6 +2563,15 @@ function* reviewSegmentSteps(
       // (dedupe within the ply, as before) and registers a COMMIT; the commits
       // run after the door and the quiet-ply gate, for the facts that spoke.
       const keptRaw: string[] = [];
+      // THE KEY EACH KEPT FACET'S RECORDS ARE FILED UNDER — its producer's own
+      // words, before any rewrite on its way here (WO-STORY-MATRIX-01 P1-5). A
+      // facet REWRITTEN on its way to the door (the loose tail turned into the
+      // habit) keeps every record coupled to it — squares, stakes, proof,
+      // claims, identity, the incoming flag, its commit — by this key, so one
+      // rewrite cannot drop a record it forgot to copy (the habit lost its
+      // claims, and the door then heard it as a restatement and silenced it,
+      // 2026-10-21). It replaced a copy of all seven maps under the new words.
+      const keptKey: string[] = [];
       const claimedThisPly = new Set<string>();
       const commitByRaw = new Map<string, () => void>();
       const claim = (key: string): boolean => { if (claimedThisPly.has(key)) return false; claimedThisPly.add(key); return true; };
@@ -2586,11 +2580,12 @@ function* reviewSegmentSteps(
       // your …", "stand a knight's jump apart" — the second time on a new board
       // is the same lesson again. The verdict lanes (quality, tactic, threat,
       // the principle and its method) are per-move facts and stay.
-      const keep = (raw: string, commit?: () => void): void => {
+      const keep = (raw: string, commit?: () => void, key: string = raw): void => {
         const tm = /^\[([a-z-]+)\] (.*)$/.exec(raw);
         const formula = tm && FORMULA_ONCE.has(tm[1]) ? reasonFormula(tm[2]) : null;
         if (formula && formulasSaid.has(formula)) return;
         keptRaw.push(raw);
+        keptKey.push(key);
         if (commit || formula) commitByRaw.set(raw, () => { commit?.(); if (formula) formulasSaid.add(formula); });
       };
       let verdictWordThisPly: string | null = null;
@@ -2656,9 +2651,8 @@ function* reviewSegmentSteps(
                 ? ` — that's the second time they've left a piece with no guard: after every move of theirs, look first for what it leaves loose`
                 : ` — that's the second time you've left a piece with no guard: before every move, check what it leaves without one`;
               f = f0.replace(/(?: — nothing guards .*| — .* has no guard|, and .* is loose)\.$/, `${habit}.`);
-              rekeyFacet(f0, f);
             }
-            keep(f, () => { looseSaid.add(`${owner}#${n + 1}`); });
+            keep(f, () => { looseSaid.add(`${owner}#${n + 1}`); }, f0);
             continue;
           }
         }
@@ -2788,36 +2782,47 @@ function* reviewSegmentSteps(
       const claimedRefrains = new Set<number>();
       const refrained = keptRaw.map((raw) => refrainOnce(raw, claimedRefrains));
       const kept = refrained.map((r) => r.text);
-      // THE DOOR SEES `kept`, the side maps are keyed by the RAW facet. The
-      // refrain-once pass can change the text, and a changed fact used to reach
-      // the door with no squares, no stakes and no "incoming" flag — blind to
-      // subsumption and to support. Re-key all three by position.
-      const keptSquares = new Map<string, readonly string[]>();
-      const keptStakes = new Map<string, FactStakes>();
-      const keptProofs = new Map<string, FactProof>();
-      const keptClaims = new Map<string, readonly string[]>();
-      const keptIncoming = new Set<string>();
+      // THE DOOR'S FACTS (WO-STORY-MATRIX-01 P1-5): each kept facet as the one
+      // fact shape, its records read off the producer's maps by the key it was
+      // filed under — the refrain-once pass and the loose rewrite change the
+      // words, never the key — and riding on the fact from here on. Deleted
+      // when the facets are emitted as `CoachFact` (P1-6d).
       // A [rule] fact that restates a facet (the passed-pawn rule beside the
-      // [passer] read of the same pawn) joins that facet's claim family, so the
-      // door's subsumption sees ONE claim. The join is FUNDAMENTAL_CLAIM_FAMILY.
-      const keptFamily = new Map<string, string>();
-      kept.forEach((k, i) => {
-        const raw = keptRaw[i];
-        const ruleId = ruleIdOf(facetIdentity.get(raw));
-        const fam = ruleId ? FUNDAMENTAL_CLAIM_FAMILY[ruleId] : null;
-        if (fam) keptFamily.set(k, fam);
-        const sq = facetSquares.get(raw); if (sq) keptSquares.set(k, sq);
-        const st = facetStakes.get(raw); if (st) keptStakes.set(k, st);
-        const pf = facetProofs.get(raw); if (pf) keptProofs.set(k, pf);
-        const cl = facetClaims.get(raw); if (cl) keptClaims.set(k, cl);
-        if (facetIncoming.has(raw)) keptIncoming.add(k);
+      // [passer] read of the same pawn) takes that facet's kind, so the door's
+      // subsumption sees ONE claim. The join is FUNDAMENTAL_CLAIM_FAMILY.
+      // Review names no move the student has yet to find: the game is over.
+      const facetFacts: DoorFact[] = kept.map((text, i) => {
+        const key = keptKey[i];
+        const ruleId = ruleIdOf(facetIdentity.get(key));
+        const kind = factKind(text, ruleId ? FUNDAMENTAL_CLAIM_FAMILY[ruleId] : null);
+        // Every facet is built from a typed tag; one without is a broken
+        // producer, never a fact to weigh.
+        if (kind === null) throw new Error(`a Review facet reached the door with no kind: ${text}`);
+        return toCoachFact({
+          id: `facet:${i}`, kind, text, fen: fenPair.fenAfter, altFen: fenPair.fenBefore,
+          squares: facetSquares.get(key) ?? [], claims: facetClaims.get(key) ?? [],
+          stakes: facetStakes.get(key) ?? null, proof: facetProofs.get(key) ?? NO_PROOF.description,
+          seat: facetIncoming.has(key) ? 'opponent' : 'student', namesStudentMove: false,
+          // THE EXACT HOLE FOR THE FACT THAT NAMES IT (2026-09-21). The
+          // `[principle]` facet IS the attributed fundamental, so ranking it by
+          // `clauseKindForTag('principle') → 'structure-plan'` asked the coarse
+          // bucket a question this ply already has an exact answer to. Every
+          // other facet is left to the tag join, which is the right route for
+          // it — only this one carries an id.
+          //
+          // `null` when the attributor named a fundamental the student has NO
+          // record of: that is GREY, and grey is not a hole. It must not fall
+          // back to the bucket, or "never asked" would borrow an unrelated
+          // weakness's weight.
+          ...(text.startsWith('[principle] ') ? { hole: fundamentals[0] ? matchFundamental(fundamentals[0].id, studentWeaknesses ?? []) : null } : {}),
+        });
       });
       // KEY-SQUARE HIGHLIGHTS (David 2026-09-13): every square a KEPT facet
       // named, from the computer's own squares (facetSquares), so the review
       // board leads the eye in yellow exactly where the narration points —
       // matched to the RAW facet strings (the map keys), before refrainOnce
       // rewrites them, so a highlight only rides a facet actually spoken.
-      const segKeySquares = [...new Set(keptRaw.flatMap((f) => facetSquares.get(f) ?? []))];
+      const segKeySquares = [...new Set(keptKey.flatMap((k) => facetSquares.get(k) ?? []))];
       // FUNDAMENTALS-FIRST on a flagged student ply (David 2026-09-05 overhaul:
       // "narrate the fundamentals FIRST"). computeMoveFacets emits the neglected
       // principle as a [principle] facet, but AFTER the move-mechanics facets —
@@ -2897,27 +2902,11 @@ function* reviewSegmentSteps(
           // student's next move, so the live advice gate does not apply.
           moveAdvice: null,
         }, bundle: {
-          facts: kept, squares: keptSquares, incoming: keptIncoming, stakes: keptStakes, family: keptFamily, proofs: keptProofs, claims: keptClaims,
+          facts: facetFacts,
           // THE BOARD AFTER THIS PLY — a recapture pending, or mate for the
           // side to move (`boardState`). Review had no such guard at all: "You're
           // a piece up" one ply before the piece was taken back.
           board: boardStateAfter(fenPair.fenBefore, m.san, m.fenAfter, m.evaluation ?? null),
-          // THE EXACT HOLE FOR THE FACT THAT NAMES IT (2026-09-21). The
-          // `[principle]` facet IS the attributed fundamental, so ranking it by
-          // `clauseKindForTag('principle') → 'structure-plan'` asked the coarse
-          // bucket a question this ply already has an exact answer to. Every
-          // other facet is left to the tag join, which is the right route for
-          // it — only this one carries an id.
-          //
-          // `null` when the attributor named a fundamental the student has NO
-          // record of: that is GREY, and grey is not a hole. It must not fall
-          // back to the bucket, or "never asked" would borrow an unrelated
-          // weakness's weight.
-          holeByFact: new Map(kept
-            .filter((f) => f.startsWith('[principle] '))
-            .map((f) => [f, fundamentals[0]
-              ? matchFundamental(fundamentals[0].id, studentWeaknesses ?? [])
-              : null] as const)),
         },
         // REVIEW IS A WALK: the student asked to be taken through the game, so a
         // quiet moment is a shorter beat, never a skipped one. Gating review on
@@ -2967,6 +2956,10 @@ function* reviewSegmentSteps(
       const uncappedParts = rankedParts;
       // The door's fact keys, before any later rewrite, for the fade lookup.
       const doorKeys = [...uncappedParts];
+      // The squares each spoken line's fact carries — after the door the walk
+      // still speaks facet words (until P1-6d), so a line finds its fact's
+      // squares by them, as the fade does.
+      const spokenSquaresOf = new Map(facetFacts.filter((f) => f.squares.length > 0).map((f) => [f.text, f.squares] as const));
       // 🔒 THE BOOK-MOVE RULE APPLIES HERE TOO (CLAUDE.md narration-by-need
       // standard, N2). The capped cascade has carried the need gate since N2
       // landed — but `isReviewUncapped()` is TRUE by default, so THIS is the
@@ -3017,9 +3010,9 @@ function* reviewSegmentSteps(
         keptRaw.forEach((raw, i) => {
           if (!spokenSet.has(kept[i])) return;
           commitByRaw.get(raw)?.();
-          facetCommits.get(raw)?.();
+          facetCommits.get(keptKey[i])?.();
           // The plan that spoke shows its routes (David 2026-10-15: "Arrows trace its route?").
-          const route = planRouteByRaw.get(raw);
+          const route = planRouteByRaw.get(keptKey[i]);
           if (route && !(causalArrows && causalArrows.length)) {
             causalArrows = admitArrows(route.map((a): ArrowClaim => ({ from: a.from, to: a.to, role: 'line', fen: a.fen, source: 'review.planRoute' })), { fen: fenPair.fenAfter, studentColor: playerColor ?? moverColor }).arrows;
           }
@@ -3031,8 +3024,8 @@ function* reviewSegmentSteps(
         //  • motif:<t>  — S6 transfer: a tactic whose motif was spoken at an
         //    earlier move names that move ("same idea as move 12").
         for (let k = 0; k < uncappedParts.length; k += 1) {
-          const raw = keptRaw[kept.indexOf(uncappedParts[k])] ?? uncappedParts[k];
-          const identity = facetIdentity.get(raw);
+          const at = kept.indexOf(uncappedParts[k]);
+          const identity = facetIdentity.get(at >= 0 ? keptKey[at] : uncappedParts[k]);
           if (!identity) continue;
           if (identity.startsWith('rule:')) { for (const k of identity.slice(5).split('|')) { principlesTaught.add(k); if (!principleTaughtAt.has(k)) principleTaughtAt.set(k, m.ply); } continue; }
           if (identity.startsWith('refuted:')) { refutedSaid.add(identity); continue; }
@@ -3105,7 +3098,7 @@ function* reviewSegmentSteps(
         ...(verdictReasonOut.playedLine ? { verdictPlayedLine: true } : {}),
         ...(verdictReasonOut.punishSan ? { verdictPunishSan: verdictReasonOut.punishSan } : {}),
         ...(doorNarration && decision.proofOf.size ? { proofs: [...decision.proofOf.values()] } : {}),
-        ...(doorNarration ? { spokenSquares: doorKeys.flatMap((k) => { const sq = keptSquares.get(k); return sq && sq.length ? [sq] : []; }) } : {}),
+        ...(doorNarration ? { spokenSquares: doorKeys.flatMap((k) => { const sq = spokenSquaresOf.get(k); return sq ? [sq] : []; }) } : {}),
       });
       try {
         prevCap = afterCapture(prevCap, new Chess(fenPair.fenBefore).move(m.san));

@@ -195,7 +195,7 @@
 - `src/services/bookMoveWhy.ts:349`
 - `src/services/bookMoveWhy.ts:421`
 - `src/services/bookMoveWhy.ts:440`
-- `src/services/coachFeatureService.ts:3381`
+- `src/services/coachFeatureService.ts:3365`
 - `src/services/groundedAnswer.ts:7233`
 - `src/services/moveIntent.ts:310`
 - `src/services/moveIntent.ts:327`
@@ -272,8 +272,8 @@
 - `src/services/structureReads.ts:132`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12677`
-- `src/components/Coach/CoachTeachPage.tsx:12738`
+- `src/components/Coach/CoachTeachPage.tsx:12683`
+- `src/components/Coach/CoachTeachPage.tsx:12744`
 - `src/services/principleAttribution.ts:346`
 - `src/services/principleAttribution.ts:809`
 
@@ -288,7 +288,7 @@
 - `src/coach/focus/focusChances.ts:539`
 - `src/coach/focus/focusChances.ts:564`
 - `src/coach/focus/focusChances.ts:767`
-- `src/components/Coach/CoachTeachPage.tsx:11460`
+- `src/components/Coach/CoachTeachPage.tsx:11466`
 - `src/missions/checks/freePieceStayAhead.test.ts:96`
 - `src/missions/checks/freePieceStayAhead.test.ts:104`
 - `src/missions/checks/freePieceStayAhead.test.ts:151`
@@ -421,7 +421,7 @@
 
 ### `signedLegalSeeFor` (function) — 32 call sites
 - `src/components/Coach/CoachTeachPage.tsx:910`
-- `src/components/Coach/CoachTeachPage.tsx:9226`
+- `src/components/Coach/CoachTeachPage.tsx:9228`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -454,11 +454,11 @@
 - `src/services/tradeQuality.ts:178`
 
 ### `takingTheAttackerAnswers` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9258`
+- `src/components/Coach/CoachTeachPage.tsx:9260`
 - `src/services/boardUrgency.ts:62`
 - `src/services/groundedAnswer.ts:647`
 - `src/services/methodSignals.ts:46`
-- `src/services/positionFacts.ts:1734`
+- `src/services/positionFacts.ts:1754`
 - `src/services/takingTheAttacker.test.ts:17`
 - `src/services/takingTheAttacker.test.ts:22`
 - `src/services/takingTheAttacker.test.ts:26`
@@ -494,8 +494,8 @@
 
 ### `findHangingBySee` (function) — 27 call sites
 - `src/coach/chatTurnAnswers.ts:173`
-- `src/components/Coach/CoachTeachPage.tsx:9070`
-- `src/components/Coach/CoachTeachPage.tsx:9076`
+- `src/components/Coach/CoachTeachPage.tsx:9072`
+- `src/components/Coach/CoachTeachPage.tsx:9078`
 - `src/services/computedMaterialTruth.corpus.test.ts:216`
 - `src/services/computedMaterialTruth.corpus.test.ts:226`
 - `src/services/conversionMethod.ts:64`

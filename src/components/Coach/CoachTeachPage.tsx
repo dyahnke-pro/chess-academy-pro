@@ -2006,8 +2006,10 @@ export function CoachTeachPage({ mode }: {
     fen: string;
     /** `squares` rides along so the board can be drawn from what SURVIVED the
      *  package rather than re-derived from its prose — see `VoiceFact.squares`. */
-    lines: Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; namesStudentMove: NamesStudentMove; role?: FacetRole; factKind?: string; skill?: string; ownMoveReason?: boolean }>;
+    lines: Array<{ id: string; lane: LearnLane; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; namesStudentMove: NamesStudentMove; role?: FacetRole; factKind?: string; skill?: string; ownMoveReason?: boolean }>;
   } | null>(null);
+  /** The next queued line's number — its id at the Learn door. */
+  const queuedLineSeqRef = useRef(0);
   /** The coach's own last move, captured for judging. See the callout below —
    *  the inputs are gathered while the engine work runs and the verdict is
    *  taken where the line is spoken, so a race between two engine reads cannot
@@ -10249,7 +10251,7 @@ export function CoachTeachPage({ mode }: {
     } catch { /* unreadable FEN — the lanes' own board checks still apply */ }
     const pending = pendingVoiceRef.current?.fen === fen
       ? pendingVoiceRef.current
-      : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; namesStudentMove: NamesStudentMove; role?: FacetRole; factKind?: string; skill?: string; ownMoveReason?: boolean }> };
+      : { fen, lines: [] as Array<{ id: string; lane: LearnLane; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; namesStudentMove: NamesStudentMove; role?: FacetRole; factKind?: string; skill?: string; ownMoveReason?: boolean }> };
     // EVERY MOVE A LINE NAMES GETS ITS ARROW (G6) — the lane's own arrows
     // AND every other move the sentence names (a lane that drew its line
     // used to leave the rest of the sentence's moves bare). The board before
@@ -10265,7 +10267,11 @@ export function CoachTeachPage({ mode }: {
     const named = namedMoveArrows(text, gradeFen ?? fen, playerColorRef.current === 'white' ? 'w' : 'b', prevFen);
     const own = arrows ?? [];
     const drawn = [...own, ...named.filter((n) => !own.some((a) => a.from === n.from && a.to === n.to))];
-    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows: drawn, lines, stakes, proof, namesStudentMove, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}),
+    // Its id is what the door hands back on the line it kept (`VoiceFact.factId`),
+    // so the line finds its arrows by it, never by its words. Numbered for the
+    // page's life: the verdict wave takes its lines out of the queue, so a
+    // count of the queue would hand a later line an id already used.
+    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ id: `queued:${queuedLineSeqRef.current++}`, lane, text, squares, claims, gradeFen, arrows: drawn, lines, stakes, proof, namesStudentMove, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}),
       // A position-facts RULE is the principle the student's own last move kept
       // — a reason for that move, so the board-teacher fallback stands down.
       ...(factKind === 'rule' || ownMoveReason ? { ownMoveReason: true } : {}) });
@@ -12114,7 +12120,7 @@ export function CoachTeachPage({ mode }: {
                       // when what it is doing is attacking the rook (run E walk).
                       // A live threat is the answer; the slow plan waits.
                       .filter((l) => !(l.lane === 'planArc' && /^What is their /.test(l.text) && /(?:^|\. )(?:Watch out|Careful) —/.test(instantSpokenText)))
-                      .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof, namesStudentMove, role, factKind, skill, ownMoveReason }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, namesStudentMove, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}), ...(ownMoveReason ? { ownMoveReason } : {}), fen: gradeFen ?? pending.fen })),
+                      .map(({ id, lane, text, squares, claims, gradeFen, lines, stakes, proof, namesStudentMove, role, factKind, skill, ownMoveReason }) => ({ id, lane, text, squares, claims, lines, stakes, proof, namesStudentMove, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}), ...(ownMoveReason ? { ownMoveReason } : {}), fen: gradeFen ?? pending.fen })),
                     alreadySaid: instantSpokenText,
                     turnHolds: turnHoldsFor(fenAfterReply),
                     owner: turnOwner,
@@ -12182,17 +12188,17 @@ export function CoachTeachPage({ mode }: {
                     }
                     // …AND DRAW ITS ARROWS (David 2026-09-30: "make sure arrows are
                     // firing to illustrate the ideas that are being spoken"). A
-                    // kept fact finds its queued line by its first claim; the
-                    // arrows go through the one door, on the live board.
+                    // kept fact finds its line by the id the door handed back
+                    // (WO-STORY-MATRIX-01 P1-5) — among this wave's own lines:
+                    // the verdict wave's lines are out of the queue by now, and
+                    // looking there drew none of their arrows. The arrows go
+                    // through the one door, on the live board.
                     const owedArrows: ArrowClaim[] = [];
                     for (const f of hintPkg.kept) {
                       // A question's arrows are its answer: they wait for the move,
                       // and by then they belong to a board that is gone.
                       if (f.text.includes(THINK_MARK)) continue;
-                      const key = f.claims?.[0];
-                      // Without a claim, by text — and a kept line may be its queued line with
-                      // a sentence the ledger had already heard taken out.
-                      const src = key ? pending.lines.find((l) => l.claims?.[0] === key) : pending.lines.find((l) => l.text === f.text || l.text.includes(f.text));
+                      const src = lines.find((l) => l.id === f.factId);
                       if (src?.arrows?.length) owedArrows.push(...src.arrows);
                     }
                     // THE NEW IDEA'S ARROWS REPLACE THE OLD ONES (David 2026-10-18:

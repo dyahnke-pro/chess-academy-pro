@@ -10,14 +10,14 @@ import { describe, it, expect } from 'vitest';
 import { NO_PROOF } from './proof';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { costStakes } from './factStakes';
-import { decideTurn, thoughtStepOf, LEARN_LANES, STORY_LANE, type LaneFact, type LearnLane } from './learnTurnDoor';
+import { decideTurn, thoughtStepOf, LEARN_LANES, STORY_LANE, type LaneInput, type LearnLane } from './learnTurnDoor';
 import { STORY_KIND, type StoryBeat } from './openingStory';
 import { BOARD_COMPUTERS } from './boardComputers';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const LATE = { kind: 'late' as const, ply: 14, slipCp: null, priceSettled: true, price: null, midExchange: null };
 
-function fact(lane: LearnLane, text: string, squares: readonly string[], extra: Partial<LaneFact> = {}): LaneFact {
+function fact(lane: LearnLane, text: string, squares: readonly string[], extra: Partial<LaneInput> = {}): LaneInput {
   return { lane, text, fen: FEN, squares, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, role: 'teach', ...extra };
 }
 

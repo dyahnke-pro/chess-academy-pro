@@ -4,7 +4,7 @@
 // Every leak below is reproduced on a real board and fails on the old code.
 import { describe, it, expect, vi } from 'vitest';
 import { Chess } from 'chess.js';
-import { decideTurn, type LaneFact } from './learnTurnDoor';
+import { decideTurn, type LaneInput } from './learnTurnDoor';
 import { computePositionFacts } from './positionFacts';
 import { prizeTeaching } from './learnBoardTeaching';
 import { flexibleFirst } from './speedRunReads';
@@ -25,7 +25,7 @@ const GAME = 'e4 c5 d4 cxd4 c3 dxc3 Nxc3 d6 Bc4 Nc6 Nf3 g6 O-O Bg7 Bxf7+ Kxf7 Ng
 const F = fens(GAME);
 
 describe('the door holds a fact that names a move the student can play next', () => {
-  const fact = (namesStudentMove: LaneFact['namesStudentMove']): LaneFact => ({ lane: 'positionFacts', text: 'Bishop to c4 is a common try here.', fen: F[8], proof: NO_PROOF.description, namesStudentMove });
+  const fact = (namesStudentMove: LaneInput['namesStudentMove']): LaneInput => ({ lane: 'positionFacts', text: 'Bishop to c4 is a common try here.', fen: F[8], proof: NO_PROOF.description, namesStudentMove });
   it('held while the named move is legal for the student', () => {
     const d = decideTurn([fact(namesMoves('w', F[8], { from: 'f1', to: 'c4' }))], undefined, undefined, null, null, false, null);
     expect(d.held).toContain('positionFacts');

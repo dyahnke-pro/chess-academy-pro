@@ -375,8 +375,8 @@
 - `src/services/coachFeatureService.test.ts:69`
 - `src/services/coachFeatureService.test.ts:84`
 - `src/services/coachFeatureService.test.ts:91`
-- `src/services/coachFeatureService.ts:3213`
-- `src/services/coachFeatureService.ts:3237`
+- `src/services/coachFeatureService.ts:3197`
+- `src/services/coachFeatureService.ts:3221`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:15`
 - `src/services/explainBestMoveLines.test.ts:19`
@@ -1033,7 +1033,7 @@
 - `src/services/bluffDetector.ts:73`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:3570`
+- `src/services/coachFeatureService.ts:3554`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
@@ -1042,7 +1042,7 @@
 - `src/services/moveInsight.ts:769`
 - `src/services/opponentMovePurpose.ts:64`
 - `src/services/reviewFullData.ts:947`
-- `src/services/reviewMoveBriefing.ts:290`
+- `src/services/reviewMoveBriefing.ts:301`
 - `src/services/reviewNarrationFidelity.test.ts:143`
 - `src/services/reviewNarrationFidelity.test.ts:152`
 - `src/services/reviewNarrationFidelity.test.ts:164`
@@ -1054,7 +1054,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3491`
+- `src/services/coachFeatureService.ts:3475`
 - `src/services/reviewNarrationFidelity.test.ts:109`
 - `src/services/reviewNarrationFidelity.test.ts:121`
 - `src/services/reviewNarrationFidelity.test.ts:129`
@@ -1070,7 +1070,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:3591`
+- `src/services/coachFeatureService.ts:3575`
 - `src/services/reviewNarrationFidelity.test.ts:179`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1104,10 +1104,10 @@
 - `src/services/coachApi.ts:6324`
 
 ### `seatPieceReferences` (re-export) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9315`
-- `src/services/coachFeatureService.ts:4898`
-- `src/services/coachFeatureService.ts:4987`
-- `src/services/coachFeatureService.ts:6050`
+- `src/components/Coach/CoachTeachPage.tsx:9317`
+- `src/services/coachFeatureService.ts:4882`
+- `src/services/coachFeatureService.ts:4971`
+- `src/services/coachFeatureService.ts:6034`
 - `src/services/liveTacticsContext.ts:486`
 - `src/services/liveTacticsContext.ts:495`
 - `src/services/lookaheadPlan.ts:132`

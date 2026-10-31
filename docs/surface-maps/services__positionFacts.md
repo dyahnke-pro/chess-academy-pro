@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2086 lines · 15 exports · 39 importers · 43 tests · 3 audits**
+**2099 lines · 15 exports · 40 importers · 44 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,8 +13,8 @@
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1314) — names `positionFacts`
 - **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4471) — names `ClauseKind`, `positionFacts`
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4623) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6685) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6798) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6687) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6800) — names `positionFacts`
 
 ## Who calls in
 
@@ -54,6 +54,7 @@
 - `src/services/speedRunReads.scale.test.ts`
 - `src/services/whyBestMove.ts`
 - `src/test/computedOrderWired.test.ts`
+- `src/test/decisionRows.baseline.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts`
 - `src/test/teach02Wired.test.ts`
@@ -95,9 +96,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11270`
+- `src/components/Coach/CoachTeachPage.tsx:11319`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
-- `src/hooks/usePhaseNarration.ts:468`
+- `src/hooks/usePhaseNarration.ts:460`
 - `src/services/raceAimOneVoice.test.ts:19`
 
 ### `clauseText` (function) — 11 call sites
@@ -113,12 +114,12 @@
 - `src/services/positionReadComposer.ts:158`
 - `src/services/whyBestMove.ts:151`
 
-### `computePositionFacts` (function) — 106 call sites
+### `computePositionFacts` (function) — 108 call sites
 - `src/coach/boardTurnAnswer.ts:136`
-- `src/components/Coach/CoachTeachPage.tsx:11141`
+- `src/components/Coach/CoachTeachPage.tsx:11185`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:268`
-- `src/hooks/usePhaseNarration.ts:432`
+- `src/hooks/usePhaseNarration.ts:423`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
 - `src/services/chatBoardRead.ts:81`
@@ -126,7 +127,7 @@
 - `src/services/computerAccuracy.audit.test.ts:112`
 - `src/services/criticalMoment.frame.test.ts:24`
 - `src/services/criticalMoment.oneCount.test.ts:25`
-- `src/services/danyaBench.measure.test.ts:412`
+- `src/services/danyaBench.measure.test.ts:413`
 - `src/services/deliberation.ruleOutOnce.test.ts:86`
 - `src/services/deliberation.ruleOutOnce.test.ts:89`
 - `src/services/deliberation.ruleOutOnce.test.ts:98`
@@ -135,10 +136,10 @@
 - `src/services/forkTrick.test.ts:49`
 - `src/services/latentFork.test.ts:151`
 - `src/services/learnNamesNoMove.os10.test.ts:50`
-- `src/services/liveNeedGate.test.ts:132`
-- `src/services/liveNeedGate.test.ts:137`
-- `src/services/liveNeedGate.test.ts:151`
-- `src/services/liveNeedGate.test.ts:157`
+- `src/services/liveNeedGate.test.ts:130`
+- `src/services/liveNeedGate.test.ts:135`
+- `src/services/liveNeedGate.test.ts:149`
+- `src/services/liveNeedGate.test.ts:155`
 - `src/services/liveNeedWire.test.ts:22`
 - `src/services/liveNeedWire.test.ts:31`
 - `src/services/loopCloses.test.ts:112`
@@ -210,6 +211,8 @@
 - `src/services/whyBestMove.needWire.test.ts:10`
 - `src/services/whyBestMove.ts:128`
 - `src/test/computedOrderWired.test.ts:32`
+- `src/test/decisionRows.baseline.test.ts:71`
+- `src/test/decisionRows.baseline.test.ts:107`
 - `src/test/everySurfaceSpeaks.test.ts:117`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts:248`
 - `src/test/teach02Wired.test.ts:85`
@@ -222,7 +225,7 @@
 - `src/test/teach02Wired.test.ts:139`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11422`
+- `src/components/Coach/CoachTeachPage.tsx:11471`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -237,8 +240,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `conceptInstanceKey` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9306`
-- `src/components/Coach/CoachTeachPage.tsx:9440`
+- `src/components/Coach/CoachTeachPage.tsx:9313`
+- `src/components/Coach/CoachTeachPage.tsx:9447`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:30`
@@ -247,7 +250,7 @@
 - `src/services/conceptKey.ts:11`
 - `src/services/danyaBehaviors.ts:526`
 - `src/services/kingAttackReads.ts:660`
-- `src/services/learnBoardTeaching.ts:513`
+- `src/services/learnBoardTeaching.ts:511`
 - `src/services/looseStill.test.ts:36`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`
@@ -292,6 +295,7 @@
 - `src/services/studentMomentBoost.test.ts`
 - `src/services/whyBestMove.needWire.test.ts`
 - `src/test/computedOrderWired.test.ts`
+- `src/test/decisionRows.baseline.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 - `src/test/latentForkOpensTheDoor.test.ts`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts`

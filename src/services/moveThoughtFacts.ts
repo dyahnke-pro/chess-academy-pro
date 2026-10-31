@@ -84,6 +84,9 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   /** The squares an idea is about beyond the move itself. */
   const beyond = (sqs: readonly string[]): string[] => [...new Set(sqs)].filter((s) => s !== from && s !== to);
   const facts: ThoughtFact[] = [];
+  // A LESSON SHOWS THE LINE IT TEACHES: the student asked to be walked
+  // through it, so no fact here names a move they have yet to find
+  // (`CoachFact.namesStudentMove`). Each is known by its computer and place.
   // A fact's claim is THIS move's idea on its squares — two moves never share
   // one (…d5's own claim on the centre is not c4's strike at d5). Every call
   // names the fact's KIND and the computer that made it; the group and the
@@ -95,6 +98,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // proof Learn's geometry lanes hand in.
     const said = close(text);
     facts.push({
+      id: `${computer}:${facts.length}`, namesStudentMove: false,
       ...placeFact(kind, seat), computer, source, idea, text: said, alsoText: alsoText ? close(alsoText) : undefined, squares: sq, weight,
       stakes: null, proof: squaresProof(said, [...new Set([to, ...squares])]) ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
       claims: [`move:${from}${to}:${ideaClaim(idea, sq)}`, ...extraClaims], restates,
@@ -196,6 +200,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
         : `They don't take on ${ib.captureSquare} yet — it isn't going anywhere. ${first} comes first, and they take after`;
       const said = close(text);
       facts.push({
+        id: `inBetweenMove:${facts.length}`, namesStudentMove: false,
         ...placeFact('not-yet', seat), computer: 'inBetweenMove', source: 'notYet', idea: 'order', text: said, squares: [ib.captureSquare], weight: 70, stakes: null,
         proof: lineProof({ fen: i.fenBefore, sans: ib.line }, mine ? 'you' : 'they') ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
         claims: [`not-yet:${from}${to}:${ib.captureSquare}`],

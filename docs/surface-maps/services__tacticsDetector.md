@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:313) — names `detectTactics`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5638) — names `detectTactics`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5640) — names `detectTactics`
 
 ## Who calls in
 
@@ -72,8 +72,8 @@
 - `src/missions/patterns/agreement.test.ts:65`
 - `src/services/boardConcepts.ts:296`
 - `src/services/computerAccuracy.audit.test.ts:117`
-- `src/services/conceptEngine.ts:501`
-- `src/services/conceptEngine.ts:709`
+- `src/services/conceptEngine.ts:476`
+- `src/services/conceptEngine.ts:717`
 - `src/services/danyaBehaviors.ts:487`
 - `src/services/discussionPractice.ts:59`
 - `src/services/discussionPractice.ts:104`
@@ -111,7 +111,7 @@
 - `src/services/playCommentary.ts:651`
 - `src/services/playedConcept.ts:59`
 - `src/services/playedConcept.ts:66`
-- `src/services/positionFacts.ts:1248`
+- `src/services/positionFacts.ts:1286`
 - `src/services/pvPlayback.ts:386`
 - `src/services/pvPlayback.ts:406`
 - `src/services/relationClaimCost.report.test.ts:52`
@@ -122,9 +122,9 @@
 - `src/services/reviewDepth.eval.measure.test.ts:258`
 - `src/services/reviewFullData.ts:802`
 - `src/services/reviewFullData.ts:882`
-- `src/services/reviewFullData.ts:1511`
-- `src/services/reviewMoveBriefing.ts:94`
-- `src/services/reviewMoveBriefing.ts:95`
+- `src/services/reviewFullData.ts:1514`
+- `src/services/reviewMoveBriefing.ts:105`
+- `src/services/reviewMoveBriefing.ts:106`
 - `src/services/reviewNarrationFidelity.test.ts:230`
 - `src/services/reviewOpponentCommentary.ts:74`
 - `src/services/reviewWalk1500.test.ts:23`

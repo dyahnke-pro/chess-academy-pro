@@ -35,7 +35,7 @@ import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type Vo
 import { costStakes, stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 import { sameClaim } from './factSelector';
 import { FACT_ROLE, type FacetRole, type FactKind } from './reviewFacetRank';
-import { isCoachFactKind, stepOf } from './coachFact';
+import { isCoachFactKind, stepOf, toCoachFact, type CoachFact, type CoachFactKind } from './coachFact';
 import { BOARD_COMPUTERS } from './boardComputers';
 import { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
 import type { PhaseFact } from './positionFacts';
@@ -243,10 +243,7 @@ export const CORE_STEPS: ReadonlySet<ThoughtStep> = new Set<ThoughtStep>(['choic
  *  just played (yours / theirs), the move to come (choices / notYet), the
  *  board. */
 export function thoughtStepOf(lane: LearnLane, factKind?: string): ThoughtStep {
-  if ((lane === 'positionFacts' || lane === 'phase') && factKind && isCoachFactKind(factKind)) {
-    return stepOf(factKind, 'student');
-  }
-  return stepOf(LEARN_LANES[lane].factKind, 'student');
+  return stepOf(laneKind(lane, factKind), 'student');
 }
 
 /** An answer the coach owes — a question posed, then answered once the
@@ -493,16 +490,20 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   causalChain: { factKind: 'does', kind: 'tactic', why: 'a cross-move cause proven on the board — the earlier move that left the piece loose', lead: 80 },
 };
 
-export interface LaneFact {
+/** A LEARN FACT AS ITS PRODUCER HANDS IT IN — the lane's own shape, made into
+ *  the one fact at the door (`laneFact`) until the producer emits `CoachFact`
+ *  itself (WO-STORY-MATRIX-01 P1-6e). */
+export interface LaneInput {
   lane: LearnLane;
+  /** The producer's own name for this fact, when it keeps one to find what
+   *  the door kept (the page's queued lines and their arrows) — a kept fact
+   *  carries it back (`VoiceFact.factId`). Absent: the door numbers it. */
+  id?: string;
   text: string;
   fen: string;
   squares?: readonly string[];
   /** The lines the sentence says — see `VoiceFact.lines`. */
   lines?: readonly SpokenLine[];
-  /** Only for lanes whose producer decides the kind itself (the backward look
-   *  returns drawback | mistake | coachMistake). */
-  kind?: VoiceFactKind;
   /** The claims this line makes, so a claim already said is dropped (the
    *  claim ledger, `voicePackage`). */
   claims?: readonly string[];
@@ -535,6 +536,48 @@ export interface LaneFact {
   /** WHICH OF THE STUDENT'S MOVES IT NAMES — REQUIRED (OS-10): held while one
    *  of them is legal for the student (LEARN NAMES NO MOVE UNASKED). */
   namesStudentMove: NamesStudentMove;
+}
+
+/** A LEARN FACT AT THE DOOR — the one fact shape (`coachFact`) with the lane
+ *  it rides (WO-STORY-MATRIX-01 P1-5). Every record the door weighs rides on
+ *  the fact, so what the voice package kept is known by its id, never by its
+ *  words. Two of the lane's own answers stay beside it until its producers
+ *  emit `CoachFact` (P1-6e): the role a producer gave (else the lane's lead
+ *  decides) and the producer's own kind, said on the row. */
+export type LaneFact = CoachFact & {
+  lane: LearnLane;
+  role?: FacetRole;
+  factKind?: string;
+};
+
+/** The kind a Learn fact is placed by: its producer's own kind on the lanes
+ *  that carry many (`positionFacts`, `phase`), else its lane's — the one group
+ *  table places both (`FACT_GROUP`, WO-STORY-MATRIX-01 P1-4). */
+function laneKind(lane: LearnLane, factKind: string | undefined): CoachFactKind {
+  return (lane === 'positionFacts' || lane === 'phase') && factKind && isCoachFactKind(factKind) ? factKind : LEARN_LANES[lane].factKind;
+}
+
+/** A LANE'S FACT AS THE ONE FACT (the door's adapter, P1-5; deleted when the
+ *  producers emit `CoachFact`, P1-6e). It is placed as the door always placed
+ *  it — from the student's seat (`thoughtStepOf`), or in the student's own
+ *  step when its producer marks it as the reason for their move
+ *  (`ownMoveReason`) — and its seat is the side that step is about: theirs in
+ *  their step, the student's otherwise. Whether it names a move the student
+ *  has yet to find is answered here once, off the producer's own answer. */
+function laneFact(f: LaneInput, i: number): LaneFact {
+  const kind = laneKind(f.lane, f.factKind);
+  const step: ThoughtStep = f.ownMoveReason ? 'yours' : thoughtStepOf(f.lane, f.factKind);
+  return {
+    ...toCoachFact({
+      id: f.id ?? `lane:${i}`, kind, text: f.text, fen: f.fen, squares: f.squares ?? [], claims: f.claims ?? [],
+      stakes: f.stakes ?? null, proof: f.proof, seat: step === 'theirs' ? 'opponent' : 'student', step,
+      namesStudentMove: namesPlayableStudentMove(f.namesStudentMove),
+      ...(f.lines ? { lines: f.lines } : {}), ...(f.skill ? { skill: f.skill } : {}),
+    }),
+    lane: f.lane,
+    ...(f.role ? { role: f.role } : {}),
+    ...(f.factKind ? { factKind: f.factKind } : {}),
+  };
 }
 
 /** DANGER speaks first, whatever else is on the board (David 2026-10-05:
@@ -617,7 +660,9 @@ function ownMoveReasonStep(lane: LearnLane, step: ThoughtStep): boolean { return
 function theirMoveReasonStep(lane: LearnLane, step: ThoughtStep): boolean { return step === 'theirs' && !THEIR_MOVE_VERDICT.has(lane); }
 
 export function decideTurn(
-  facts: readonly LaneFact[],
+  /** Each lane's fact as its producer hands it in — made into the one fact
+   *  here (`laneFact`) before anything is weighed. */
+  inputs: readonly LaneInput[],
   /** What this turn has already said out loud (see `buildVoicePackage`). */
   alreadySaid?: string,
   /** Every phrase already spoken this game. */
@@ -647,21 +692,24 @@ export function decideTurn(
   owner: VoiceOwner = 'open',
 ): TurnDecision {
   const decideStart = Date.now();
+  // THE DOOR'S ADAPTER (WO-STORY-MATRIX-01 P1-5): every lane's fact as the
+  // one fact shape, before anything is weighed.
+  const facts = inputs.map(laneFact);
   if (owner !== 'open') return ownedTurn(facts, turn, decideStart, owner);
   const offered: LearnLane[] = [];
   const faded: LearnLane[] = [];
-  const open: Array<VoiceFact & { lane: LearnLane; step: ThoughtStep; offerValue: number; offerRank: number }> = [];
+  const open: Array<VoiceFact & { factId: string; lane: LearnLane; offerValue: number; offerRank: number }> = [];
   const phaseHeld: LearnLane[] = [];
   const moveHeld: LearnLane[] = [];
   const heldEarlier: LearnLane[] = [];
   for (const f of facts) {
     if (!f.text.trim()) continue;
     offered.push(f.lane);
-    if (laneOutOfPhase(f.lane, f.fen)) { if (!phaseHeld.includes(f.lane)) phaseHeld.push(f.lane); for (const c of f.claims ?? []) heldThisTurn?.add(c); continue; }
-    if (heldThisTurn && f.claims?.some((c) => heldThisTurn.has(c))) { if (!heldEarlier.includes(f.lane)) heldEarlier.push(f.lane); continue; }
+    if (laneOutOfPhase(f.lane, f.fen)) { if (!phaseHeld.includes(f.lane)) phaseHeld.push(f.lane); for (const c of f.claims) heldThisTurn?.add(c); continue; }
+    if (heldThisTurn && f.claims.some((c) => heldThisTurn.has(c))) { if (!heldEarlier.includes(f.lane)) heldEarlier.push(f.lane); continue; }
     // LEARN NAMES NO MOVE UNASKED (OS-10): a fact that names a move the
     // student can play next waits — the producer said which (REQUIRED).
-    if (namesPlayableStudentMove(f.namesStudentMove)) { if (!moveHeld.includes(f.lane)) moveHeld.push(f.lane); for (const c of f.claims ?? []) heldThisTurn?.add(c); continue; }
+    if (f.namesStudentMove) { if (!moveHeld.includes(f.lane)) moveHeld.push(f.lane); for (const c of f.claims) heldThisTurn?.add(c); continue; }
     const text = fadeWhenGreen(f.lane, f.text, green ?? null, f.skill);
     if (text !== f.text && !faded.includes(f.lane)) faded.push(f.lane);
     // ONE REASON PER MOVE, ACROSS EVERY WAVE AND BOTH SEATS (Learn tapes
@@ -673,14 +721,15 @@ export function decideTurn(
     // (the package keeps the first of a claim, and the facts go in by value),
     // and in a later wave the reason an earlier one already said.
     // A producer that knows its fact is the reason for the student's own move
-    // says so (`ownMoveReason`); the lane is only the fallback.
-    const step: ThoughtStep = f.ownMoveReason ? 'yours' : thoughtStepOf(f.lane, f.factKind);
+    // said so (`ownMoveReason`, placed in the fact's step at the door); the
+    // lane is only the fallback.
     const moveClaim = turn && turn.kind !== 'phase'
-      ? (ownMoveReasonStep(f.lane, step) ? `own-move-reason:${turn.ply}` : theirMoveReasonStep(f.lane, step) ? `their-move-reason:${turn.ply}` : null)
+      ? (ownMoveReasonStep(f.lane, f.step) ? `own-move-reason:${turn.ply}` : theirMoveReasonStep(f.lane, f.step) ? `their-move-reason:${turn.ply}` : null)
       : null;
-    const claims = moveClaim ? [...(f.claims ?? []), moveClaim] : f.claims;
-    // A story beat speaks whole or not at all (prod audit 2026-10-20).
-    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof, whole: STORY_LANES.has(f.lane), step,
+    const claims = moveClaim ? [...f.claims, moveClaim] : f.claims;
+    // A story beat speaks whole or not at all (prod audit 2026-10-20). The
+    // fact's id rides into the package, so what it keeps is known by its id.
+    open.push({ factId: f.id, lane: f.lane, kind: LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof, whole: STORY_LANES.has(f.lane),
       offerValue: stakeValue(f.stakes) ?? LEARN_LANES[f.lane].lead,
       offerRank: (OWED_ANSWER.has(f.lane) ? 1 : 0) - (fallbackReason(f.claims) ? 1 : 0) });
   }
@@ -689,15 +738,20 @@ export function decideTurn(
   // answer the coach owes goes first; a move's fallback reason (its board job)
   // last — it is said only when no sharper computer had one.
   const byOffer = open.map((o, i) => ({ o, i })).sort((a, b) => b.o.offerRank - a.o.offerRank || b.o.offerValue - a.o.offerValue || a.i - b.i).map((x) => x.o);
-  const verified = buildVoicePackage(byOffer.map(({ kind, text, fen, squares, claims, lines, whole }) => ({ kind, text, fen, squares, claims, lines, whole })), alreadySaid, priorKeys);
-  // Which lane each surviving fact came from (the package may trim the text).
-  const laneOf = (k: VoiceFact): LearnLane | undefined =>
-    open.find((o) => o.text === k.text || (k.text.length > 0 && o.text.includes(k.text)))?.lane;
-  const survivors = verified.kept
-    .map((k) => ({ fact: k, lane: laneOf(k) }))
-    .filter((x): x is { fact: VoiceFact; lane: LearnLane } => x.lane !== undefined);
+  const verified = buildVoicePackage(byOffer.map(({ factId, kind, text, fen, squares, claims, lines, whole }) => ({ factId, kind, text, fen, squares, claims, lines, whole })), alreadySaid, priorKeys);
+  // THE FACT EACH SURVIVOR CAME FROM, BY ITS ID (WO-STORY-MATRIX-01 P1-5).
+  // The package may trim a sentence, and two facts may share words; this
+  // used to find the lane by the first fact whose words CONTAINED the kept
+  // text, so "your knight on f3 attacks the pawn on e5" was filed under the
+  // fact that said "Mark it: your knight on f3 attacks the pawn on e5" — its
+  // lane, its step, its stakes and its proof. Every record below is read off
+  // the fact itself (`src`).
+  const factById = new Map(facts.map((f) => [f.id, f] as const));
+  const sourceOf = (k: VoiceFact): LaneFact | undefined => (k.factId === undefined ? undefined : factById.get(k.factId));
+  type Survivor = { fact: VoiceFact; lane: LearnLane; src: LaneFact };
+  const survivors: Survivor[] = verified.kept.flatMap((k) => { const src = sourceOf(k); return src ? [{ fact: k, lane: src.lane, src }] : []; });
   const refusedWhy: Partial<Record<LearnLane, string>> = {};
-  for (const d of verified.dropped) { const l = laneOf(d.fact); if (l && !survivors.some((x) => x.lane === l)) refusedWhy[l] ??= d.reason; }
+  for (const d of verified.dropped) { const l = sourceOf(d.fact)?.lane; if (l && !survivors.some((x) => x.lane === l)) refusedWhy[l] ??= d.reason; }
 
   // ONE ORDER, NO HOLD (David 2026-10-05: "If there are 5 important facts or a
   // plan that comes from the move then the user needs to hear it"). The door
@@ -708,36 +762,25 @@ export function decideTurn(
   //   3. then the rest in his turn grammar (the DNA beat), stakes first
   //      inside a beat, the lane table only as the tie-break for facts that
   //      carry no stakes.
-  const stakesOf = (lane: LearnLane, text: string): FactStakes | undefined => {
-    const f = open.find((o) => o.lane === lane && (o.text === text || o.text.includes(text)));
-    return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null, x.skill) === f.text))?.stakes : undefined;
-  };
-  const stakeOf = (lane: LearnLane, text: string): number => stakeValue(stakesOf(lane, text)) ?? 0;
-  // The fact's own role (`LaneFact.role`), read the same way as its stakes.
-  const roleOf = (lane: LearnLane, text: string): FacetRole | undefined => {
-    const f = open.find((o) => o.lane === lane && (o.text === text || o.text.includes(text)));
-    return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null, x.skill) === f.text))?.role : undefined;
-  };
+  const stakeOf = (x: Survivor): number => stakeValue(x.src.stakes) ?? 0;
   /** A fact that TEACHES — its role says so, or (no role) its lane is not a
    *  board description. A teaching fact is a reason, never "an aside". */
-  const teaches = (x: { fact: VoiceFact; lane: LearnLane }): boolean => {
-    const r = roleOf(x.lane, x.fact.text);
+  const teaches = (x: Survivor): boolean => {
+    const r = x.src.role;
     if (r) return r === 'teach';
     return !(LEARN_LANES[x.lane].lead <= DESCRIPTION_LEAD || x.lane === 'positionFacts');
   };
-  const value = (x: { fact: VoiceFact; lane: LearnLane }): number => stakeOf(x.lane, x.fact.text) || LEARN_LANES[x.lane].lead;
-  /** Which step of the thought a surviving fact says (its own clause kind for
-   *  the lanes that carry many). */
-  const stepOf = (x: { fact: VoiceFact; lane: LearnLane }): ThoughtStep =>
-    open.find((o) => o.lane === x.lane && (o.text === x.fact.text || o.text.includes(x.fact.text)))?.step ?? thoughtStepOf(x.lane);
+  const value = (x: Survivor): number => stakeOf(x) || LEARN_LANES[x.lane].lead;
+  /** Which step of the thought a surviving fact says — its own. */
+  const stepOf = (x: Survivor): ThoughtStep => x.src.step;
   /** A reason for the student's own move that teaches (never its verdict). */
-  const ownReasonOf = (x: { fact: VoiceFact; lane: LearnLane }): boolean => ownMoveReasonStep(x.lane, stepOf(x)) && teaches(x);
+  const ownReasonOf = (x: Survivor): boolean => ownMoveReasonStep(x.lane, stepOf(x)) && teaches(x);
   // ONE CLAIM, ONE SEAT (unity U6, Learn walk #26: the d5 pawn was "a
   // discovered attack in waiting" for them AND "pinned by your rook" — one
   // geometry read from both sides). Facts about the same squares collapse to
   // the one that matters: danger first, then the bigger stake. Squares are
   // the facts' own, coupled at emission — never read back out of the prose.
-  const subsumed = new Set<{ fact: VoiceFact; lane: LearnLane }>();
+  const subsumed = new Set<Survivor>();
   for (const a of survivors) {
     if (subsumed.has(a)) continue;
     for (const b of survivors) {
@@ -767,7 +810,7 @@ export function decideTurn(
   // (`mateStakes`), never from the prose.
   const ownForcedMate = survivors.some((x) => {
     if (subsumed.has(x)) return false;
-    const m = stakesOf(x.lane, x.fact.text)?.mate;
+    const m = x.src.stakes?.mate;
     return m?.for === 'you' && m.forced;
   });
   const dangerWaits = (x: { lane: LearnLane }): boolean => ownForcedMate && DANGER_LANES.has(x.lane);
@@ -776,7 +819,7 @@ export function decideTurn(
   // empty"). A fact staked at a forced mate makes every fact that is neither
   // danger nor itself a mate wait for a calm board.
   // A forced mate, whoever's and however far — read off the stake's own flag.
-  const isMateFact = (x: { fact: VoiceFact; lane: LearnLane }): boolean => !!stakesOf(x.lane, x.fact.text)?.mate?.forced;
+  const isMateFact = (x: Survivor): boolean => !!x.src.stakes?.mate?.forced;
   const mateTurn = !!priorLead?.mateTurn || survivors.some((x) => !subsumed.has(x) && isMateFact(x));
   const verdict = survivors.find((x) => x.lane === 'mistake' && !subsumed.has(x)) ?? null;
   // A DANGER THAT COSTS SOMETHING NOW (OS-1 replay 2026-10-19, 22.Rxa5: "No
@@ -787,8 +830,8 @@ export function decideTurn(
   // speaks — the stakes are the producer's own (`threatStakes`), never prose.
   // Read by the thought's own step, so a board clause that is danger
   // (`must-defend`) is held by the same rule as a danger lane.
-  const presentDanger = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
-    (DANGER_LANES.has(x.lane) || stepOf(x) === 'danger') && stakeOf(x.lane, x.fact.text) > 0;
+  const presentDanger = (x: Survivor): boolean =>
+    (DANGER_LANES.has(x.lane) || stepOf(x) === 'danger') && stakeOf(x) > 0;
   /** A slip the turn SAYS makes this whole turn a verdict turn, weighed by
    *  its own price — the one grade, never a raw-cp bar beside it. */
   const slipCp = turn ? turn.slipCp : null;
@@ -800,7 +843,7 @@ export function decideTurn(
   const priceUnsettled = !!turn && !turn.priceSettled;
   // ONE ANSWER PER HELD FACT: why it waits (the hold and its reason used to be
   // two computations, and a costly-move hold was reported as 'mate-turn').
-  const holdWhy = (x: { fact: VoiceFact; lane: LearnLane }): HoldReason | null => {
+  const holdWhy = (x: Survivor): HoldReason | null => {
     // AN AFFIRM NEVER SPEAKS ON AN UNSETTLED PRICE: it can wait a turn; a
     // move praised at depth 14 and a mistake at 16 is the coach lying twice.
     if (priceUnsettled && DNA_BEAT[x.lane] === 'affirm') return 'price-unsettled';
@@ -810,11 +853,11 @@ export function decideTurn(
     // grade, its cost ('but' beats) and any danger speak; a plan, a route or a
     // method aside worth less than the verdict waits for a calm move.
     if (verdict && x !== verdict && !presentDanger(x) && !VERDICT_TURN_STEPS.has(stepOf(x))
-      && stakeOf(x.lane, x.fact.text) < stakeOf(verdict.lane, verdict.fact.text)) return 'verdict-turn';
+      && stakeOf(x) < stakeOf(verdict)) return 'verdict-turn';
     // …AND A COSTLY MOVE IS A VERDICT TURN IN EVERY WAVE, whichever lane
     // carries the grade: the move's own cost is the verdict's weight.
     if (!verdict && costTurnValue !== null && !presentDanger(x) && !VERDICT_TURN_STEPS.has(stepOf(x))
-      && stakeOf(x.lane, x.fact.text) < costTurnValue) return 'verdict-turn';
+      && stakeOf(x) < costTurnValue) return 'verdict-turn';
     // A TRADE IN PROGRESS IS A NOW TURN (Learn walk 2026-10-19, 12…Nxb3 and
     // 13…Bxg3: "break open with the pawn push that is ready now" and
     // "overprotect your best piece" while the recapture was owed). An idea, a
@@ -823,8 +866,8 @@ export function decideTurn(
     if (midExchange && (DNA_BEAT[x.lane] === 'point' || STORY_LANES.has(x.lane)) && x.lane !== 'tactic' && !isMateFact(x)) return 'mid-exchange';
     return null;
   };
-  const turnHolds = (x: { fact: VoiceFact; lane: LearnLane }): boolean => holdWhy(x) !== null;
-  let top: { fact: VoiceFact; lane: LearnLane } | null = null;
+  const turnHolds = (x: Survivor): boolean => holdWhy(x) !== null;
+  let top: Survivor | null = null;
   for (const x of survivors) {
     if (subsumed.has(x) || dangerWaits(x) || turnHolds(x)) continue;
     if (!top) { top = x; continue; }
@@ -840,13 +883,13 @@ export function decideTurn(
   // is never an aside — on a good move it was held whenever a plan or a board
   // read led the turn, so the coach explained danger and never what a good
   // move was for.
-  const live = (x: { fact: VoiceFact; lane: LearnLane }): boolean => !subsumed.has(x) && !dangerWaits(x) && !turnHolds(x);
+  const live = (x: Survivor): boolean => !subsumed.has(x) && !dangerWaits(x) && !turnHolds(x);
   // IMPORTANT IS COMPUTED, NOT COUNTED (David 2026-10-06: "if there are 5
   // important facts … the user needs to hear it"): at least a pawn at stake
   // (`factStakes`, discounted by distance), a forced mate, or a beginner's
   // principle speaks in its step whatever else the step holds.
-  const important = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
-    stakeOf(x.lane, x.fact.text) >= STAKED_FLOOR + 100 || isMateFact(x) || (beginner && BEGINNER_ALWAYS.has(x.lane));
+  const important = (x: Survivor): boolean =>
+    stakeOf(x) >= STAKED_FLOOR + 100 || isMateFact(x) || (beginner && BEGINNER_ALWAYS.has(x.lane));
   // ONE FACT PER STEP (WO-THINK-01): each move keeps one reason, the student's
   // move one cost and their move one verdict, the position one verdict, the
   // turn one habit — the most valuable (an answer the coach owes first, a
@@ -855,7 +898,7 @@ export function decideTurn(
   // each carries the slip's price); a second reason for one move never does.
   // The move claims above keep the reason one across waves.
   type Slot = 'yours-reason' | 'yours-cost' | 'their-reason' | 'their-verdict' | 'verdict' | 'habit';
-  const slotOf = (x: { fact: VoiceFact; lane: LearnLane }): Slot | null => {
+  const slotOf = (x: Survivor): Slot | null => {
     const st = stepOf(x);
     if (st === 'verdict' || st === 'habit') return st;
     if (st === 'yours') return DNA_BEAT[x.lane] === 'but' ? 'yours-cost' : 'yours-reason';
@@ -864,9 +907,9 @@ export function decideTurn(
   };
   // The turn is about the slip, so its own habit is the turn's one habit —
   // as it was when the habit rode inside the verdict (WO-ONE-COACH-01).
-  const slotRank = (x: { fact: VoiceFact; lane: LearnLane }): number =>
+  const slotRank = (x: Survivor): number =>
     (OWED_ANSWER.has(x.lane) || x.lane === 'mistakeHabit' ? 1e6 : 0) - (fallbackReason(x.fact.claims) ? 1e6 : 0) + value(x);
-  const slotPick = new Map<Slot, { fact: VoiceFact; lane: LearnLane }>();
+  const slotPick = new Map<Slot, Survivor>();
   for (const x of survivors) {
     const slot = slotOf(x);
     if (!slot || !live(x)) continue;
@@ -874,7 +917,7 @@ export function decideTurn(
     if (!best || slotRank(x) > slotRank(best)) slotPick.set(slot, x);
   }
   // The move's one reason (when it teaches) — never an aside, it rides.
-  const ownReason = ((): { fact: VoiceFact; lane: LearnLane } | null => { const p = slotPick.get('yours-reason'); return p && ownReasonOf(p) ? p : null; })();
+  const ownReason = ((): Survivor | null => { const p = slotPick.get('yours-reason'); return p && ownReasonOf(p) ? p : null; })();
   // ONE THREAD FOR THE MOVE TO COME (WO-THINK-01, David 2026-10-29: "One
   // thread, never a stack"; prod Learn 2026-10-29 said "don't cash in on g4
   // yet", "nothing attacks f7 yet", "a pawn break is ready now" and "their
@@ -882,14 +925,14 @@ export function decideTurn(
   // board carry ONE idea: the most valuable leads it, and another speaks only
   // as its support — it shares a square, one per step — or as news in its own
   // right (important). An earlier wave's idea anchors this wave's.
-  const isCore = (x: { fact: VoiceFact; lane: LearnLane }): boolean => CORE_STEPS.has(stepOf(x));
+  const isCore = (x: Survivor): boolean => CORE_STEPS.has(stepOf(x));
   // A reason leads the thread over a description; then the more valuable.
   const coreLive = survivors.filter((x) => live(x) && isCore(x)).sort((a, b) => Number(teaches(b)) - Number(teaches(a)) || value(b) - value(a));
   const priorThread = priorLead?.thread ?? null;
   const touches = (x: { fact: VoiceFact }, sq: readonly string[]): boolean => (x.fact.squares ?? []).some((q) => sq.includes(q));
   const thread = priorThread ? coreLive.find((x) => touches(x, priorThread)) ?? null : coreLive[0] ?? null;
   const threadSquares = thread ? (thread.fact.squares ?? []) : (priorThread ?? []);
-  const coreKeep = new Set<{ fact: VoiceFact; lane: LearnLane }>();
+  const coreKeep = new Set<Survivor>();
   {
     const usedStep = new Set<ThoughtStep>();
     if (thread) { coreKeep.add(thread); usedStep.add(stepOf(thread)); }
@@ -900,7 +943,7 @@ export function decideTurn(
     }
   }
   /** Why the thought holds this fact, or null when it speaks. */
-  const thoughtHold = (x: { fact: VoiceFact; lane: LearnLane }): HoldReason | null => {
+  const thoughtHold = (x: Survivor): HoldReason | null => {
     if (isCore(x)) return coreKeep.has(x) ? null : 'second-thought';
     const slot = slotOf(x);
     if (!slot || slotPick.get(slot) === x) return null;
@@ -929,7 +972,7 @@ export function decideTurn(
   // hinges on your next move"). Both were true — every top move met the fork —
   // but the calm read only speaks on a turn where nothing else is at stake.
   const calmRead = (x: { fact: VoiceFact }): boolean => !!x.fact.claims?.includes('srr:any-move-fine');
-  const somethingAtStake = survivors.some((y) => !calmRead(y) && !subsumed.has(y) && stakeOf(y.lane, y.fact.text) > 0);
+  const somethingAtStake = survivors.some((y) => !calmRead(y) && !subsumed.has(y) && stakeOf(y) > 0);
   for (const x of survivors) {
     { const why = holdWhy(x); if (why) { hold(x.lane, why); continue; } }
     if (dangerWaits(x)) { hold(x.lane, 'danger-waits'); continue; }
@@ -940,7 +983,7 @@ export function decideTurn(
     // queen on d3 takes aim at the center" beside "g6 stops the mate" is the
     // board described where he explains the move (hand walks 2026-09-30).
     // Everything staked or teaching speaks, however many there are.
-    const describes = x !== ownLead && stakeOf(x.lane, x.fact.text) === 0 && !(beginner && BEGINNER_ALWAYS.has(x.lane))
+    const describes = x !== ownLead && stakeOf(x) === 0 && !(beginner && BEGINNER_ALWAYS.has(x.lane))
       && !teaches(x);
     const sq = x.fact.squares ?? [];
     const restates = describes && !(sq.some((q) => anchor.includes(q)) && sq.some((q) => !anchor.includes(q)));
@@ -986,7 +1029,7 @@ export function decideTurn(
     for (const x of methodKept) {
       if (x === winner) continue;
       keep.splice(keep.indexOf(x.fact), 1);
-      if (!keep.some((f) => survivors.find((y) => y.fact === f)?.lane === x.lane)) { const i = spoke.indexOf(x.lane); if (i >= 0) spoke.splice(i, 1); }
+      if (!keep.some((f) => sourceOf(f)?.lane === x.lane)) { const i = spoke.indexOf(x.lane); if (i >= 0) spoke.splice(i, 1); }
       hold(x.lane, 'one-method');
     }
     if (winner) heldThisTurn?.add(METHOD_SAID);
@@ -1002,21 +1045,20 @@ export function decideTurn(
   // beginner's principle always ride. No word cap (2026-10-15): a staked fact
   // still speaks however long the turn — the bar rises, it never stops.
   const wordsIn = (t: string): number => t.split(/\s+/).filter(Boolean).length;
-  const rides = (x: { fact: VoiceFact; lane: LearnLane }): boolean => x === ownLead || x === ownReason
+  const rides = (x: Survivor): boolean => x === ownLead || x === ownReason
     || DANGER_LANES.has(x.lane) || DNA_BEAT[x.lane] === 'but' || isMateFact(x) || (beginner && BEGINNER_ALWAYS.has(x.lane));
-  const laneOfKept = (f: VoiceFact): LearnLane | undefined => survivors.find((y) => y.fact === f)?.lane;
   const kept = survivors.filter((x) => keep.includes(x.fact));
   let words = wordsIn(alreadySaid ?? '') + kept.filter(rides).reduce((n, x) => n + wordsIn(x.fact.text), 0);
   for (const x of kept.filter((k) => !rides(k)).sort((a, b) => value(b) - value(a))) {
-    if (words >= TURN_WORD_TARGET && stakeOf(x.lane, x.fact.text) < STAKED_FLOOR + 100) {
+    if (words >= TURN_WORD_TARGET && stakeOf(x) < STAKED_FLOOR + 100) {
       keep.splice(keep.indexOf(x.fact), 1);
-      if (!keep.some((f) => laneOfKept(f) === x.lane)) { const i = spoke.indexOf(x.lane); if (i >= 0) spoke.splice(i, 1); }
+      if (!keep.some((f) => sourceOf(f)?.lane === x.lane)) { const i = spoke.indexOf(x.lane); if (i >= 0) spoke.splice(i, 1); }
       hold(x.lane, 'marginal');
       continue;
     }
     words += wordsIn(x.fact.text);
   }
-  const laneFor = (f: VoiceFact): LearnLane | undefined => survivors.find((x) => x.fact === f)?.lane;
+  const laneFor = (f: VoiceFact): LearnLane | undefined => sourceOf(f)?.lane;
   const beatOf = (f: VoiceFact): number => {
     const lane = laneFor(f);
     return lane ? BEAT_ORDER[DNA_BEAT[lane]] : BEAT_ORDER.point;
@@ -1034,7 +1076,7 @@ export function decideTurn(
     return DANGER_LANES.has(x.lane) ? -1 : THOUGHT_ORDER[stepOf(x)];
   };
   const threadFirst = (f: VoiceFact): number => (thread && f === thread.fact ? 0 : 1);
-  const worth = (f: VoiceFact): number => { const lane = laneFor(f); return lane ? value({ fact: f, lane }) : 0; };
+  const worth = (f: VoiceFact): number => { const src = sourceOf(f); return src ? value({ fact: f, lane: src.lane, src }) : 0; };
   keep.sort((a, b) => stepRank(a) - stepRank(b) || threadFirst(a) - threadFirst(b) || beatOf(a) - beatOf(b) || worth(b) - worth(a));
   // What this wave held joins the turn's holds — the producer's own claims,
   // never the per-move reason marker (a held reason must not silence the
@@ -1071,11 +1113,10 @@ export function decideTurn(
   const proofOf = new Map<string, Proof>();
   const unprovenLanes: LearnLane[] = [];
   for (const k of keep) {
-    const lane = laneFor(k);
-    const src = lane ? open.find((o) => o.lane === lane && (o.text === k.text || o.text.includes(k.text))) : undefined;
+    const src = sourceOf(k);
     if (!src) continue;
     if (isProof(src.proof)) proofOf.set(k.text, src.proof);
-    else if (src.proof && src.proof.none === 'stated' && lane && !unprovenLanes.includes(lane)) unprovenLanes.push(lane);
+    else if (src.proof.none === 'stated' && !unprovenLanes.includes(src.lane)) unprovenLanes.push(src.lane);
   }
   // THE WHY THAT WAS COMPUTED AND NOT SAID — measured, never decided here.
   const proofUnsaid: LearnLane[] = [];
@@ -1087,16 +1128,15 @@ export function decideTurn(
   const heldStaked: LearnLane[] = [];
   for (const x of survivors) {
     if (keep.includes(x.fact)) continue;
-    const src = open.find((o) => o.lane === x.lane && (o.text === x.fact.text || o.text.includes(x.fact.text)));
-    if (isProof(src?.proof) && !heldWithProof.includes(x.lane)) heldWithProof.push(x.lane);
-    if (stakeOf(x.lane, x.fact.text) > 0 && !heldStaked.includes(x.lane)) heldStaked.push(x.lane);
+    if (isProof(x.src.proof) && !heldWithProof.includes(x.lane)) heldWithProof.push(x.lane);
+    if (stakeOf(x) > 0 && !heldStaked.includes(x.lane)) heldStaked.push(x.lane);
   }
   // EMIT every decision (the algo-audit rule): a door whose decisions cannot be
   // inspected can only be judged by reading the tape.
   // Read off the thought's "yours" step — the facts about the student's own
   // move, whichever lane carried them (a position-facts rule, a binding) —
   // with the DNA beat saying a reason ('affirm') from a cost ('but').
-  const ownKept = keep.map((f) => survivors.find((x) => x.fact === f)).filter((x): x is { fact: VoiceFact; lane: LearnLane } => !!x && stepOf(x) === 'yours');
+  const ownKept = keep.map((f) => survivors.find((x) => x.fact === f)).filter((x): x is Survivor => !!x && stepOf(x) === 'yours');
   const ownMove = ownKept.some((x) => DNA_BEAT[x.lane] === 'but') ? 'but' : ownKept.length > 0 ? 'affirm' : null;
   // WHICH COMPUTER gave the move its reason — so an audit can tell an
   // engine-proven purpose from a board description (the why counter reads
@@ -1108,11 +1148,7 @@ export function decideTurn(
   const ownProven = ownKept.some((x) => proofOf.has(x.fact.text));
   // WHAT spoke inside a many-fact lane (A-plan P0: the weighing and the habit
   // ride the position-facts lane, so a lane count could not see them).
-  const spokeKinds = keep.flatMap((f) => {
-    const l = laneFor(f);
-    const k = facts.find((x) => x.lane === l && (x.text === f.text || x.text.includes(f.text) || f.text.includes(x.text)))?.factKind;
-    return k ? [k] : [];
-  });
+  const spokeKinds = keep.flatMap((f) => { const k = sourceOf(f)?.factKind; return k ? [k] : []; });
   if (offered.length > 0) emitLearnTurn({ spokeKinds, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }

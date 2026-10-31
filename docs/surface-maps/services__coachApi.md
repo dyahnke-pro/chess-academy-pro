@@ -229,7 +229,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:583`
-- `src/components/Coach/CoachTeachPage.tsx:4419`
+- `src/components/Coach/CoachTeachPage.tsx:4421`
 - `src/services/coachSessionRouter.ts:119`
 - `src/services/coachSettingsAction.ts:262`
 
@@ -279,8 +279,8 @@
 - `src/services/coachApi.computedOnly.test.ts:20`
 - `src/services/coachChatText.ts:221`
 - `src/services/coachFeatureService.ts:373`
-- `src/services/coachFeatureService.ts:5934`
-- `src/services/coachFeatureService.ts:6093`
+- `src/services/coachFeatureService.ts:5918`
+- `src/services/coachFeatureService.ts:6077`
 - `src/services/coachLaneWiring.test.ts:158`
 - `src/services/gameReviewService.ts:58`
 - `src/services/kidGameCoach.ts:220`

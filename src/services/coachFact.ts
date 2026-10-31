@@ -16,14 +16,14 @@
 // never set by hand — four step tables that disagreed with each other is the
 // drift this file exists to end.
 //
-// A LEAF: types and tables only, no chess.
+// A LEAF: types, tables and the doors' adapter (`toCoachFact`) — no chess.
 import type { FactKind } from './reviewFacetRank';
-import type { ThoughtSource, ThoughtStep } from './thoughtComposer';
+import type { ThoughtStep } from './thoughtComposer';
 import type { AspectKind } from './reviewMoveBriefing';
 import type { FactStakes } from './factStakes';
 import type { FactProof } from './proof';
-import type { IdeaKind } from './ideaKind';
 import type { SpokenLine } from './voicePackage';
+import type { WeaknessSignal } from './weaknessSignal';
 
 /** THE FOURTEEN GROUPS (PLAN WO-STORY-MATRIX-01, the regions table): the
  *  story (plans, the opening's story, the cause chain), the name (the opening,
@@ -65,9 +65,11 @@ export const GROUP_STEP: Record<FactGroup, (seat: FactSeat) => ThoughtStep> = {
  *  one composer that the door's vocabulary (`FactKind`: Review's facets and
  *  the live clauses) has no name for: one per briefing aspect, the mate, the
  *  board teacher, the deep fact, the answer to their last move, the trip and
- *  the stop. They join the door's tables (role, layer, proof, tie order) in
- *  the step that first hands a lesson fact to the door (P1-5), with their
- *  first reader — never as rows nothing reads. */
+ *  the stop. They join the deciding door's tables (role, layer, proof, tie
+ *  order) in the step that first hands a lesson fact to that door (Review's
+ *  thought facts, P1-6d), with their first reader — never as rows nothing
+ *  reads. Until then the door takes only facts of its own vocabulary
+ *  (`coachDecider.DoorFact`). */
 export type LessonFactKind = AspectKind | 'checkmate' | 'board-teacher' | 'deep-fact' | 'binding' | 'route' | 'stop';
 
 /** The one vocabulary of fact kinds: the door's and the lesson composer's. */
@@ -179,12 +181,22 @@ export const COMPUTER_CATALOG = {
   // The weighing as a choices fact — handed to the composer by the Danya
   // bench's `thought` variant today; the lesson reads it in P1-9.
   deliberationAlternativesFacts: { file: 'services/deliberation.ts', says: 'the moves you would weigh here and why each falls short' },
+  // THE DOORS' ADAPTER (P1-5): every fact a door is handed in its producer's
+  // old shape is made here. Its row goes with the last old shape (P1-6), when
+  // each of those producers emits CoachFact under its own name.
+  toCoachFact: { file: 'services/coachFact.ts', says: 'a fact a door was handed in its producer\'s own shape — a live clause, a Review facet, a Learn lane, a phase report — until that producer emits CoachFact itself' },
 } satisfies Record<string, CatalogRow>;
 
 export type ComputerName = keyof typeof COMPUTER_CATALOG;
 
-/** ONE FACT, every composer's input. */
+/** ONE FACT, every door's and every composer's input. */
 export interface CoachFact {
+  /** WHICH FACT IT IS — REQUIRED, unique among the facts handed to one
+   *  decision (WO-STORY-MATRIX-01 P1-5). A door knows a fact by this and never
+   *  by its words: the voice package may trim a sentence, two facts may share
+   *  words ("It also guards e5" / "guards e5"), and Review rewords a fact on
+   *  its way in. What a door kept carries it back (`VoiceFact.factId`). */
+  id: string;
   /** What kind of fact it is (the one vocabulary). */
   kind: CoachFactKind;
   /** Its group — always `FACT_GROUP[kind]` (`placeFact`), never set by hand. */
@@ -193,37 +205,56 @@ export interface CoachFact {
   computer: ComputerName;
   /** The step it is said in — DERIVED: `GROUP_STEP[group](seat)`. */
   step: ThoughtStep;
-  source: ThoughtSource;
   /** The words, a whole sentence with its own subject — said when the fact
    *  leads its step ("You play h3 — it keeps their bishop off g4"). */
   text: string;
-  /** The words when it speaks BEHIND its step's lead ("It also makes luft"),
-   *  where the lead already named the move. Absent: `text` serves both. */
-  alsoText?: string;
-  /** Which idea it states (ONE vocabulary). Two facts of one idea on the same
-   *  squares are one idea: the step keeps the one that leads. */
-  idea: IdeaKind;
   /** The idea it states, as claim keys — the say-once ledger keeps one fact
-   *  per claim across the whole lesson, review or game. */
+   *  per claim across the whole lesson, review or game. At the deciding door
+   *  they are also what a description claims beyond the relation its squares
+   *  draw (`supportedFacts`). */
   claims: readonly string[];
   /** The squares it is about (the board's half; support is read off these). */
   squares: readonly string[];
   /** What rides on it — the step's lead is the fact worth most. */
   stakes: FactStakes | null;
-  /** The producer's own importance on this board, 0–100 (the briefing's
-   *  aspect weight, the fundamental's weight) — the order after the stakes. */
-  weight: number;
-  /** It only restates what the board shows (the capture, the check, a bare
-   *  develop) — THE QUIET-MOVE RULE: a step of nothing else is not said. */
-  restates?: boolean;
   /** Its proof, or why it needs none (REQUIRED, proof.ts). */
   proof: FactProof;
-  /** Whose move or plan it is about. */
+  /** Whose move or plan it is about. At the deciding door, a fact about what
+   *  the opponent is doing TO the student breaks a tie inside a same-claim
+   *  group (`selectFacts`). */
   seat: FactSeat;
+  /** IT NAMES A MOVE THE STUDENT HAS YET TO FIND — REQUIRED (P1-5; OS-10,
+   *  LEARN NAMES NO MOVE UNASKED): a move of theirs that is legal on the board
+   *  they move on next (`namesPlayableStudentMove`). The Learn door holds such
+   *  a fact until the move is past. A lesson or a review shows the student a
+   *  line they asked to see, so nothing there is theirs to find. */
+  namesStudentMove: boolean;
   /** The board the claim was computed on; the package grades it there. */
   fen: string;
   /** A second board it may describe (the one before the move). */
   altFen?: string;
   /** The lines it says, played on the board. */
   lines?: readonly SpokenLine[];
+  /** The skill it teaches (a MisconceptionTagId), when its computer knows it —
+   *  the fade reads it per skill, before the fact's layer or lane. */
+  skill?: string;
+  /** THE STUDENT'S HOLE THE SURFACE ALREADY MATCHED to this exact fact — the
+   *  student term of its value (`factValue`'s `matched`). Absent: the door
+   *  joins the fact's kind to the record. Null: the student has no record of
+   *  it — grey, never a hole borrowed from a coarser bucket. */
+  hole?: WeaknessSignal | null;
+}
+
+/** THE DOORS' ADAPTER (WO-STORY-MATRIX-01 P1-5) — a fact a door was handed in
+ *  its producer's own shape (a live clause, a Review facet, a Learn lane, a
+ *  phase report), as the one fact. Its place comes from its kind like every
+ *  producer's (`placeFact`); a Learn producer that marks its fact as the
+ *  reason for the student's own move places it in that step whatever its kind
+ *  (`step`). Deleted with the last old shape (P1-6), when each producer emits
+ *  CoachFact itself. */
+export function toCoachFact<K extends CoachFactKind>(
+  f: Omit<CoachFact, 'kind' | 'group' | 'step' | 'computer'> & { kind: K; step?: ThoughtStep },
+): CoachFact & { kind: K } {
+  const placed = placeFact(f.kind, f.seat);
+  return { ...f, kind: f.kind, group: placed.group, step: f.step ?? placed.step, computer: 'toCoachFact' };
 }

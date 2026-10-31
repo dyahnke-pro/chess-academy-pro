@@ -106,7 +106,7 @@
 - `src/services/conceptEngine.test.ts:191`
 - `src/services/conceptEngine.test.ts:209`
 - `src/services/liveTacticsContext.ts:123`
-- `src/services/positionFacts.ts:931`
+- `src/services/positionFacts.ts:966`
 
 ### `conceptForLine` (function) — 17 call sites
 - `src/services/conceptCoverage.report.test.ts:59`
@@ -133,17 +133,17 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8655`
+- `src/components/Coach/CoachTeachPage.tsx:8657`
 - `src/services/learnWalkBlumenfeld.test.ts:142`
-- `src/services/positionFacts.ts:1374`
-- `src/services/positionFacts.ts:1376`
-- `src/services/positionFacts.ts:1830`
-- `src/services/positionFacts.ts:1834`
+- `src/services/positionFacts.ts:1394`
+- `src/services/positionFacts.ts:1396`
+- `src/services/positionFacts.ts:1850`
+- `src/services/positionFacts.ts:1854`
 - `src/services/reviewFullData.ts:696`
 - `src/services/reviewFullData.ts:699`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8658`
+- `src/components/Coach/CoachTeachPage.tsx:8660`
 - `src/services/dnaLineNarrator.ts:57`
 - `src/services/projectedLineVoice.ts:99`
 - `src/services/puzzleConceptExplanation.ts:131`

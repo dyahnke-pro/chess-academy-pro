@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**655 lines · 15 exports · 15 importers · 6 tests · 0 audits**
+**654 lines · 15 exports · 18 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,14 +21,17 @@
 - `src/services/coachDecider.ts`
 - `src/services/coachFact.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/factSelector.ts`
+- `src/services/factStakes.test.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/openingStory.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/reviewFacetRank.test.ts`
 - `src/services/supportedFacts.test.ts`
 - `src/services/tacticGeometry.test.ts`
+- `src/test/doorFact.ts`
 
 ## Exports and every call site
 
@@ -62,24 +65,23 @@
 ### `TIE_ORDER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `factKind` (function) — 3 call sites
-- `src/services/coachDecider.ts:353`
-- `src/services/coachDecider.ts:454`
+### `factKind` (function) — 2 call sites
+- `src/services/coachFeatureService.ts:2797`
 - `src/services/exchangeIdeas.test.ts:224`
 
 ### `factValue` (function) — 1 call site
-- `src/services/coachDecider.ts:461`
+- `src/services/coachDecider.ts:430`
 
 ### `facetTag` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:2492`
-- `src/services/coachFeatureService.ts:3078`
+- `src/services/coachFeatureService.ts:2477`
+- `src/services/coachFeatureService.ts:3071`
 - `src/services/reviewFacetRank.test.ts:19`
 - `src/services/reviewFacetRank.test.ts:20`
 - `src/services/reviewFacetRank.test.ts:21`
-- `src/services/supportedFacts.test.ts:9`
+- `src/test/doorFact.ts:17`
 
 ### `facetRank` (function) — 4 call sites
-- `src/services/factSelector.ts:219`
+- `src/services/factSelector.ts:204`
 - `src/services/reviewFacetRank.test.ts:51`
 - `src/services/reviewFacetRank.test.ts:55`
 - `src/services/reviewFacetRank.test.ts:61`
@@ -95,7 +97,9 @@
 ## Tests
 
 - `src/services/batch2Wiring.test.ts`
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/exchangeIdeas.test.ts`
+- `src/services/factStakes.test.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/reviewFacetRank.test.ts`
 - `src/services/supportedFacts.test.ts`

@@ -542,9 +542,8 @@ export const TIE_ORDER: Record<FactKind, number> = { ...FACET_RANK, ...CLAUSE_TI
 
 /** The kind of a fact: the surface's declared family first (the live clause
  *  kind), else the `[tag]` prefix. Null for untagged prose (the causal lead). */
-export function factKind(text: string, family?: ReadonlyMap<string, string>): FactKind | null {
-  const declared = family?.get(text);
-  if (declared !== undefined && declared in TIE_ORDER) return declared as FactKind;
+export function factKind(text: string, family: string | null = null): FactKind | null {
+  if (family !== null && family in TIE_ORDER) return family as FactKind;
   return facetTag(text);
 }
 
