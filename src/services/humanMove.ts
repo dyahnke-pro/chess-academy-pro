@@ -24,6 +24,7 @@
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import model from '../data/human-move-model.json';
 import { CAPTURE_VALUE, MATERIAL_VALUE } from './pieceValues';
+import { winningChances } from './winChance';
 
 /** The features, in the model's order. A new one changes the model file. */
 export const HUMAN_FEATURES = [
@@ -80,11 +81,6 @@ if (MODEL.features.join(',') !== HUMAN_FEATURES.join(',')) {
 export interface ScoredMove {
   uci: string;
   cp: number;
-}
-
-/** Lichess's winning-chances curve (−1..1). */
-export function winningChances(cp: number): number {
-  return 2 / (1 + Math.exp(-0.00368208 * cp)) - 1;
 }
 
 function lowestAttacker(c: Chess, sq: Square, by: Color): number | null {
