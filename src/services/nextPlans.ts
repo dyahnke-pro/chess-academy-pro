@@ -20,6 +20,7 @@ import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { openSentence } from '../utils/openSentence';
 import { withMover } from '../utils/sideToMove';
 import { detectPlanRace, planRaceClause, stepsToPromote } from './planRace';
+import { absolutePinRay } from './pinGeometry';
 
 export const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -144,43 +145,13 @@ export function worstPieceNote(fen: string, color: Color): { square: Square; pie
   return least;
 }
 
+/** Is the `color` piece on `sq` absolutely pinned to its own king — THE LEGAL
+ *  PIN, read off `pinGeometry.absolutePinRay` (WO-STORY-MATRIX-01 P1-7,
+ *  2026-10-30). This file walked its own copy of that ray; `kingSafety` walked
+ *  a third, which read a piece standing beyond a checking slider as pinned. */
 export function isPinnedPiece(chess: Chess, sq: Square, color: Color): boolean {
   try {
-    const king = cells(chess).find((c) => c.type === 'k' && c.color === color);
-    if (!king) return false;
-    const enemy: Color = color === 'w' ? 'b' : 'w';
-    const f = (s: string): number => s.charCodeAt(0) - 97;
-    const r = (s: string): number => Number(s[1]) - 1;
-    const df = Math.sign(f(sq) - f(king.square));
-    const dr = Math.sign(r(sq) - r(king.square));
-    if (df === 0 && dr === 0) return false;
-    // ON A KING LINE AT ALL (computers batch 3): a piece not on the king's file,
-    // rank or diagonal is never pinned to it. Without this the walk from the
-    // king ran off the board without meeting the piece and then read whatever
-    // slider sat beyond it — a rook on d6 "pinned" to a king on g1.
-    const ddf = Math.abs(f(sq) - f(king.square)); const ddr = Math.abs(r(sq) - r(king.square));
-    if (ddf !== 0 && ddr !== 0 && ddf !== ddr) return false;
-    // Must be on a king ray with nothing between, and a slider behind it.
-    let cf = f(king.square) + df;
-    let cr = r(king.square) + dr;
-    while (cf >= 0 && cf < 8 && cr >= 0 && cr < 8) {
-      const at = `${String.fromCharCode(97 + cf)}${cr + 1}`;
-      if (at === sq) break;
-      if (chess.get(at as Square)) return false; // blocked before the piece
-      cf += df; cr += dr;
-    }
-    cf = f(sq) + df; cr = r(sq) + dr;
-    while (cf >= 0 && cf < 8 && cr >= 0 && cr < 8) {
-      const at = `${String.fromCharCode(97 + cf)}${cr + 1}`;
-      const pc = chess.get(at as Square);
-      if (pc) {
-        if (pc.color !== enemy) return false;
-        const diag = df !== 0 && dr !== 0;
-        return pc.type === 'q' || (diag ? pc.type === 'b' : pc.type === 'r');
-      }
-      cf += df; cr += dr;
-    }
-    return false;
+    return chess.get(sq)?.color === color && absolutePinRay(chess, sq) !== null;
   } catch { return false; }
 }
 

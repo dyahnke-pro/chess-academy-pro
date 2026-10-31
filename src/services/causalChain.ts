@@ -9,7 +9,9 @@
  * G0 by construction: pure chess.js, no engine, no model, no I/O. EVERY causal
  * EDGE is a board counterfactual proven right here (a knight on f3 DOES defend
  * g5; the knight on e2 does NOT; f3 IS occupied by a friendly piece). The LLM
- * only VOICES the chain (causalChainVoice.ts); it never decides an edge.
+ * only VOICES the chain (causalChainVoice.ts); it never decides an edge. The
+ * guards and attacks it reads are the RELATION SNAPSHOT's (`relations.ts`,
+ * WO-STORY-MATRIX-01 P1-7), over the game's own boards — never a replay.
  *
  * SILENT ON UNPROVABLE LINKS (David's pick 2026-09-07): a link is emitted only
  * when its board proof holds. The chain is the MAXIMAL proven prefix of causes;
@@ -28,6 +30,7 @@ import type { FundamentalId } from './principleAttribution';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { legalSeeGainFor, standsSafe } from './positionReadingService';
 import { developedMinorCount, homeMinorCount } from './development';
+import { diff, snapshot, type RelationKind, type RelationSnapshot } from './relations';
 
 /** Pin/legality-aware "is the piece on `square` winnable by its enemy?" — the
  *  exact semantics `seeGain` had here (net material the side NOT owning the piece
@@ -59,14 +62,16 @@ type MarkerColor = 'green' | 'yellow' | 'red' | 'blue';
 export interface CausalArrow { from: Square; to: Square; color: MarkerColor; }
 export interface CausalHighlight { square: Square; color: MarkerColor; }
 
+/** What an edge links by. A board relation is named in the relation
+ *  snapshot's one vocabulary (`RelationKind`, `relations.ts` — WO-STORY-MATRIX-01
+ *  P1-7, 2026-10-30): 'guard' is the guard the cause took away (or, in the
+ *  premature-queen pattern, the guard the displaced knight would hold). Two
+ *  links are not board relations and keep their own labels. The old
+ *  'removes-defender' is 'guard'; 'leaves-loose' was never emitted. */
 type CausalRelation =
+  | RelationKind
   /** A occupies the natural developing square another friendly piece needed. */
   | 'occupies-developing-square'
-  /** Because that square is taken, the piece that would guard the target isn't
-   *  guarding it (displaced / left home). */
-  | 'removes-defender'
-  /** The target has no defender → loose (LPDO). */
-  | 'leaves-loose'
   /** A standing weakness is the tactic's target/mechanism. */
   | 'enables-tactic';
 
@@ -214,27 +219,86 @@ function knightSquaresHitting(target: Square): Square[] {
   return out;
 }
 
-/** true when a friendly (of `color`) line-piece would attack `target` from `from`
- *  along a clear ray — used to test whether a vacated square unveils an attack.
- *  Board-true: rebuilds the board with the mover's from-square emptied. */
-function raySees(chess: Chess, from: Square, target: Square): boolean {
-  const atk = chess.attackers(target, chess.get(from)?.color ?? 'w');
-  return atk.includes(from);
+// ─── the game's boards, once ────────────────────────────────────────────────
+
+/** THE GAME'S BOARDS, built once and extended, never replayed (WO-STORY-MATRIX-01
+ *  P1-7, 2026-10-30). Every call here used to replay the game from move one —
+ *  three times a pattern, and once per earlier ply to find when a piece arrived
+ *  (O(n²)) — while Review asks for a chain at every ply three times over. */
+interface GameBoards {
+  /** fens[i] = the board after i plies; fens[0] is the start. */
+  fens: readonly string[];
+  /** moves[i] = ply i + 1. Stops at the first move that is not legal. */
+  moves: readonly Move[];
 }
 
-/** A position where it is `color` to move regardless of whose turn it is (so
- *  chess.attackers works uniformly). Castling/ep neutralised for safety. */
-function replay(historySans: readonly string[], upto: number): { chess: Chess; moves: Move[] } | null {
-  const chess = new Chess();
-  const moves: Move[] = [];
-  try {
-    for (let i = 0; i < upto; i++) {
-      const m = chess.move(historySans[i].replace(/[?!]+$/, ''));
-      if (!m) return null;
-      moves.push(m);
-    }
-  } catch { return null; }
-  return { chess, moves };
+const BOARDS_MEMO_MAX = 32;
+const boardsMemo = new Map<string, GameBoards>();
+
+function cleanSan(san: string): string { return san.replace(/[?!]+$/, ''); }
+
+/** The boards of `historySans`, extended from the longest prefix already built
+ *  (Review walks a game ply by ply, so each call adds one move). */
+function boardsFor(historySans: readonly string[]): GameBoards {
+  const key = historySans.join(' ');
+  const hit = boardsMemo.get(key);
+  if (hit) {
+    // Least recently used goes first: Review asks for the whole game every
+    // ply, between the growing prefixes.
+    boardsMemo.delete(key);
+    boardsMemo.set(key, hit);
+    return hit;
+  }
+  let base: GameBoards = { fens: [new Chess().fen()], moves: [] };
+  let baseLen = 0;
+  for (const [k, v] of boardsMemo) {
+    const len = k === '' ? 0 : k.split(' ').length;
+    if (len <= baseLen || len > historySans.length || v.moves.length < len) continue;
+    if (k === '' || key === k || key.startsWith(`${k} `)) { base = v; baseLen = len; }
+  }
+  const fens = [...base.fens];
+  const moves = [...base.moves];
+  const chess = new Chess(fens[fens.length - 1]);
+  for (let i = baseLen; i < historySans.length; i++) {
+    let m: Move | null = null;
+    try { m = chess.move(cleanSan(historySans[i])); } catch { m = null; }
+    if (!m) break;
+    moves.push(m);
+    fens.push(chess.fen());
+  }
+  const out: GameBoards = { fens, moves };
+  if (boardsMemo.size >= BOARDS_MEMO_MAX) {
+    const oldest = boardsMemo.keys().next().value;
+    if (oldest !== undefined) boardsMemo.delete(oldest);
+  }
+  boardsMemo.set(key, out);
+  return out;
+}
+
+/** The boards of the first `plies` moves, plus one more move — a hypothetical
+ *  focus for the both-ways lookahead, without touching the memo. */
+function boardsWith(g: GameBoards, plies: number, m: Move, fenAfter: string): GameBoards {
+  return { fens: [...g.fens.slice(0, plies + 1), fenAfter], moves: [...g.moves.slice(0, plies), m] };
+}
+
+// ─── relation reads (the snapshot, `relations.ts`) ──────────────────────────
+
+/** `color`'s pieces attacking the piece on `sq` on this board, `attackers()` order. */
+function attackersOn(s: RelationSnapshot, sq: Square, color: Color): Square[] {
+  return s.relations.filter((r) => r.kind === 'attack' && r.square === sq && r.byPiece[0] === color).map((r) => (r as { by: Square }).by);
+}
+
+/** How many of `mover`'s pieces attack `sq` and how many of the owner's pieces
+ *  REALLY guard it — a guard pinned off the square cannot recapture, so it is
+ *  not counted (`guard-pinned`) — the counts behind "won", so the sentence says
+ *  them instead of assuming the guards were zero (review 2026-10-19,
+ *  chesscom-1040709576: "nothing left guarding" a bishop the queen on d1 still
+ *  guarded). */
+function guardCount(s: RelationSnapshot, sq: Square, mover: Color): { attackers: number; guards: number } {
+  return {
+    attackers: attackersOn(s, sq, mover).length,
+    guards: s.relations.filter((r) => r.kind === 'guard' && r.square === sq).length,
+  };
 }
 
 // ─── relation detectors (each board-proven) ─────────────────────────────────
@@ -243,31 +307,23 @@ function replay(historySans: readonly string[], upto: number): { chess: Chess; m
  *  (no defender). "Newly" = it was not attacked by the mover before the move, so
  *  THIS move created the attack. Returns the target + whether the moved piece is
  *  one of the attackers. Null when no such loose target. */
-/** How many of `mover`'s pieces attack `sq` and how many of the owner's guard
- *  it — the counts behind "won", so the sentence says them instead of
- *  assuming the guards were zero (review 2026-10-19, chesscom-1040709576:
- *  "nothing left guarding" a bishop the queen on d1 still guarded). */
-function guardCount(c: Chess, sq: Square, mover: Color): { attackers: number; guards: number } {
-  return { attackers: c.attackers(sq, mover).length, guards: c.attackers(sq, other(mover)).length };
-}
-
-function exploitedLoosePiece(before: Chess, after: Chess, focus: Move): { target: Square; type: PieceSymbol; movedPieceAttacks: boolean } | null {
+function exploitedLoosePiece(before: RelationSnapshot, after: RelationSnapshot, afterBoard: Chess, focus: Move): { target: Square; type: PieceSymbol; movedPieceAttacks: boolean } | null {
   const mover = focus.color;
   const enemy = other(mover);
   let best: { target: Square; type: PieceSymbol; movedPieceAttacks: boolean } | null = null;
-  for (const p of pieces(after, enemy)) {
+  for (const p of pieces(afterBoard, enemy)) {
     if (p.type === 'k' || VAL[p.type] < 3) continue;
-    const attackersNow = after.attackers(p.square, mover);
+    const attackersNow = attackersOn(after, p.square, mover);
     if (attackersNow.length === 0) continue;
     // Pin-aware "loose": the mover wins the FULL piece — i.e. there is no REAL,
-    // unpinned recapturer. `after.attackers(_, enemy).length > 0` counted a
-    // defender pinned to its own king as a live guard, so a genuinely loose
-    // piece read as defended and the chain went unbuilt (deep-dive C#5).
-    // winnableGain drives off legal captures, so a pinned defender no longer
-    // masks the win (and a pinned would-be recapturer can't inflate the count).
-    if (winnableGain(after, p.square) < VAL[p.type]) continue;
-    const attackedBefore = before.get(p.square)?.color === enemy && before.attackers(p.square, mover).length > 0;
-    if (attackedBefore) continue;                        // the move didn't create the attack
+    // unpinned recapturer. A geometric guard count read a defender pinned to its
+    // own king as a live guard, so a genuinely loose piece read as defended and
+    // the chain went unbuilt (deep-dive C#5). winnableGain drives off legal
+    // captures, so a pinned defender no longer masks the win (and a pinned
+    // would-be recapturer can't inflate the count).
+    if (winnableGain(afterBoard, p.square) < VAL[p.type]) continue;
+    // The move didn't create the attack when the mover already attacked it.
+    if (attackersOn(before, p.square, mover).length > 0) continue;
     const cand = { target: p.square, type: p.type, movedPieceAttacks: attackersNow.includes(focus.to) };
     if (!best || VAL[p.type] > VAL[best.type]) best = cand;
   }
@@ -277,25 +333,20 @@ function exploitedLoosePiece(before: Chess, after: Chess, focus: Move): { target
 /** The focus move VACATED its from-square, unveiling a friendly line-piece's
  *  attack on `target` (a discovery). PROOF: a mover bishop/rook/queen attacks
  *  target AFTER the move but did NOT before, and the from-square lies on that
- *  piece's ray to the target. Returns the unveiled attacker's square, or null.
- *  Minor-piece TARGETS are allowed here (the live tactic detector excludes them;
- *  this cross-move detector must not — gap #1). */
-function discoveryUnveiled(before: Chess, after: Chess, focus: Move, target: Square): Square | null {
-  const mover = focus.color;
-  const afterAttackers = after.attackers(target, mover);
-  const beforeAttackers = new Set(before.attackers(target, mover));
-  for (const sq of afterAttackers) {
-    if (sq === focus.to) continue;                       // that's the moved piece, not the unveiled one
-    if (beforeAttackers.has(sq)) continue;               // was already attacking → not unveiled
-    const pc = after.get(sq);
-    if (!pc || (pc.type !== 'b' && pc.type !== 'r' && pc.type !== 'q')) continue;
+ *  piece's ray to the target — the attack relation the move gained, read off the
+ *  two snapshots. Returns the unveiled attacker's square, or null. Minor-piece
+ *  TARGETS are allowed here (the live tactic detector excludes them; this
+ *  cross-move detector must not — gap #1). */
+function discoveryUnveiled(before: RelationSnapshot, after: RelationSnapshot, focus: Move, target: Square): Square | null {
+  const beforeAttackers = new Set(attackersOn(before, target, focus.color));
+  for (const r of after.relations) {
+    if (r.kind !== 'attack' || r.square !== target || r.byPiece[0] !== focus.color) continue;
+    if (r.by === focus.to) continue;                     // that's the moved piece, not the unveiled one
+    if (beforeAttackers.has(r.by)) continue;             // was already attacking → not unveiled
+    if (r.byPiece[1] !== 'b' && r.byPiece[1] !== 'r' && r.byPiece[1] !== 'q') continue;
     // The from-square must lie between the unveiled piece and the target (the
-    // focus piece was the shutter). Prove it: the unveiler could see the target
-    // through from BEFORE only if from were empty — i.e. before the move the
-    // unveiler did NOT attack target but its ray passes through from.
-    if (!raySees(after, sq, target)) continue;
-    // from-square on the line: same file/rank/diagonal between sq and target.
-    if (onSegment(sq, focus.from, target)) return sq;
+    // focus piece was the shutter).
+    if (onSegment(r.by, focus.from, target)) return r.by;
   }
   return null;
 }
@@ -325,14 +376,14 @@ function onSegment(a: string, mid: string, b: string): boolean {
  *  Returns the ideal defending square + the blocker + the actual knight, or null.
  *  Board-proven counterfactual (a knight on the ideal square really does hit the
  *  target; the blocker really is there; the knight really is elsewhere). */
-function missingNaturalDefender(after: Chess, target: Square, targetColor: Color):
+function missingNaturalDefender(after: Chess, afterSnap: RelationSnapshot, target: Square, targetColor: Color):
   { idealSquare: Square; blocker: PieceSymbol; blockerSquare: Square; knightSquare: Square } | null {
   const hitting = knightSquaresHitting(target);
   const natural = KNIGHT_NATURAL[targetColor];
   const knights = pieces(after, targetColor, 'n');
   if (knights.length === 0) return null;
-  // A knight of targetColor already defending target → nothing missing.
-  if (after.attackers(target, targetColor).some((sq) => after.get(sq)?.type === 'n')) return null;
+  // A knight of targetColor already covering target → nothing missing.
+  if (afterSnap.relations.some((r) => (r.kind === 'guard' || r.kind === 'guard-pinned') && r.square === target && r.byPiece === `${targetColor}n`)) return null;
   for (const ideal of hitting) {
     if (!natural.includes(ideal)) continue;              // only canonical developing squares tell an honest story
     const occ = after.get(ideal);
@@ -351,23 +402,16 @@ function missingNaturalDefender(after: Chess, target: Square, targetColor: Color
 }
 
 /** The ply (1-based) at which `color` last moved a piece TO `square`, with the
- *  board state right before it (for premature testing). Null when never. */
-function plyPieceArrived(historySans: readonly string[], color: Color, square: Square, before: number):
+ *  board right before it (for premature testing). Null when never. Read off the
+ *  game's own moves — this walked back replaying the game once per ply. */
+function plyPieceArrived(g: GameBoards, color: Color, square: Square, before: number):
   { ply: number; move: Move; boardBefore: Chess } | null {
-  for (let i = before - 1; i >= 0; i--) {
-    const r = replay(historySans, i);
-    if (!r) continue;
-    // Whose move is at ply i+1? side to move at position i.
-    const sideToMove = r.chess.turn();
-    if (sideToMove !== color) continue;
-    const step = new Chess(r.chess.fen());
-    let m: Move | null = null;
-    try { m = step.move(historySans[i].replace(/[?!]+$/, '')); } catch { m = null; }
-    if (m && m.to === square) return { ply: i + 1, move: m, boardBefore: r.chess };
+  for (let i = Math.min(before, g.moves.length) - 1; i >= 0; i--) {
+    const m = g.moves[i];
+    if (m.color === color && m.to === square) return { ply: i + 1, move: m, boardBefore: new Chess(g.fens[i]) };
   }
   return null;
 }
-
 /** Was moving `move` to its square premature? (early-queen-sortie criteria,
  *  reused board-side-agnostic): a queen off the back rank with < 3 minors
  *  developed. Board-proven from the position before the move. */
@@ -391,28 +435,20 @@ function wasPrematureQueen(boardBefore: Chess, move: Move): boolean {
  * attack. The airtight case from David's game. Returns null unless every link is
  * board-proven (silent-on-unprovable).
  */
-function buildPrematureQueenDiscoveryChain(input: CausalChainInput): CausalChain | null {
-  const { historySans } = input;
-  const focusPly = input.focusPly ?? historySans.length;
-  if (focusPly < 1 || focusPly > historySans.length) return null;
-
-  const beforeR = replay(historySans, focusPly - 1);
-  const afterR = replay(historySans, focusPly);
-  if (!beforeR || !afterR) return null;
-  const before = beforeR.chess;
-  const after = afterR.chess;
-  const focus = afterR.moves[afterR.moves.length - 1];
-  if (!focus) return null;
+function buildPrematureQueenDiscoveryChain(g: GameBoards, focusPly: number): CausalChain | null {
+  if (focusPly < 1 || focusPly > g.moves.length) return null;
+  const beforeSnap = snapshot(g.fens[focusPly - 1]);
+  const afterSnap = snapshot(g.fens[focusPly]);
+  if (!beforeSnap || !afterSnap) return null;
+  const after = new Chess(g.fens[focusPly]);
+  const focus = g.moves[focusPly - 1];
   const mover = focus.color;
   const enemy = other(mover);
 
   // 1. The tactic: did this move win/attack a LOOSE enemy piece it wasn't
   //    attacking before?
-  const loose = exploitedLoosePiece(before, after, focus);
+  const loose = exploitedLoosePiece(beforeSnap, afterSnap, after, focus);
   if (!loose) return null;
-
-  // Is it a DISCOVERY (a second attacker unveiled)?
-  const unveiler = discoveryUnveiled(before, after, focus, loose.target);
 
   // 🔒 REQUIRE A GENUINE DISCOVERED ATTACK. A single attacker on an undefended
   // piece is often just a KICK the piece escapes (…h6 hits Bg5, the bishop simply
@@ -421,6 +457,7 @@ function buildPrematureQueenDiscoveryChain(input: CausalChainInput): CausalChain
   // so it cannot dodge both. No unveiled second attacker → not a won piece →
   // silence (David 2026-09-07: "don't overstate the why"; a kicked piece is not
   // a dropped piece).
+  const unveiler = discoveryUnveiled(beforeSnap, afterSnap, focus, loose.target);
   if (!unveiler) return null;
 
   // An arrow only when its `from` really holds a piece on the focus board.
@@ -431,27 +468,18 @@ function buildPrematureQueenDiscoveryChain(input: CausalChainInput): CausalChain
   // lead the eye: the unveiled piece and the moved piece both bearing on the
   // loose target (the discovered double attack), the target itself in red. No
   // fundamental/tag — this is the beneficiary's WINNING move, not a mistake.
-  const tacticNode: CausalNode = unveiler
-    ? {
-        kind: 'discovered-attack', ply: focusPly, color: mover,
-        squares: [focus.from, focus.to, unveiler, loose.target],
-        data: { move: focus.san, unveiler, target: loose.target, targetPiece: PIECE_NOUN[loose.type], from: focus.from, to: focus.to },
-        fundamentalId: null,
-        arrows: [...arrowIf(unveiler, loose.target, 'green'), ...arrowIf(focus.to, loose.target, 'green')],
-        highlights: [{ square: loose.target, color: 'red' }],
-      }
-    : {
-        kind: 'won-loose-piece', ply: focusPly, color: mover,
-        squares: [focus.to, loose.target],
-        data: { move: focus.san, target: loose.target, targetPiece: PIECE_NOUN[loose.type], to: focus.to, ...guardCount(after, loose.target, mover) },
-        fundamentalId: null,
-        arrows: arrowIf(focus.to, loose.target, 'green'),
-        highlights: [{ square: loose.target, color: 'red' }],
-      };
+  const tacticNode: CausalNode = {
+    kind: 'discovered-attack', ply: focusPly, color: mover,
+    squares: [focus.from, focus.to, unveiler, loose.target],
+    data: { move: focus.san, unveiler, target: loose.target, targetPiece: PIECE_NOUN[loose.type], from: focus.from, to: focus.to },
+    fundamentalId: null,
+    arrows: [...arrowIf(unveiler, loose.target, 'green'), ...arrowIf(focus.to, loose.target, 'green')],
+    highlights: [{ square: loose.target, color: 'red' }],
+  };
 
   // 2. WHY was the target loose? A missing natural defender (displaced by a
   //    friendly piece squatting on its square).
-  const missing = missingNaturalDefender(after, loose.target, enemy);
+  const missing = missingNaturalDefender(after, afterSnap, loose.target, enemy);
 
   if (!missing) {
     // No provable cross-move cause. A bare "you won a loose piece" is not a
@@ -460,14 +488,14 @@ function buildPrematureQueenDiscoveryChain(input: CausalChainInput): CausalChain
   }
 
   // The loose-piece node — the target in red, with a green arrow from every
-  // attacker bearing on it (board-true: the attackers come straight from the FEN).
+  // attacker bearing on it (board-true: the attack relations of the focus board).
   const looseNode: CausalNode = {
     kind: 'loose-piece', ply: null, color: enemy,
     squares: [loose.target],
     data: { square: loose.target, piece: PIECE_NOUN[loose.type] },
     fundamentalId: 'loose-piece',
     tag: 'hung-material',
-    arrows: after.attackers(loose.target, mover).map((sq) => ({ from: sq, to: loose.target, color: 'green' as const })),
+    arrows: attackersOn(afterSnap, loose.target, mover).map((sq) => ({ from: sq, to: loose.target, color: 'green' as const })),
     highlights: [{ square: loose.target, color: 'red' }],
   };
 
@@ -494,7 +522,7 @@ function buildPrematureQueenDiscoveryChain(input: CausalChainInput): CausalChain
 
   // 3. WHY is the defender displaced? A friendly blocker occupies its natural
   //    square. Find when the blocker arrived + whether it was premature.
-  const arrival = plyPieceArrived(historySans, enemy, missing.idealSquare, focusPly);
+  const arrival = plyPieceArrived(g, enemy, missing.idealSquare, focusPly);
   const premature = arrival ? wasPrematureQueen(arrival.boardBefore, arrival.move) : false;
 
   // 🔒 STRICT ROOT — only a PREMATURE PIECE that took the defender's square is a
@@ -530,19 +558,18 @@ function buildPrematureQueenDiscoveryChain(input: CausalChainInput): CausalChain
     relation: 'occupies-developing-square',
     proof: `${arrival.move.san} put the ${PIECE_NOUN[arrival.move.piece]} on ${missing.idealSquare}, the knight's natural developing square`,
   });
-  // displaced-defender → loose-piece (removes-defender; board-proven).
+  // displaced-defender → loose-piece: the GUARD the knight would hold
+  // (board-proven counterfactual).
   nodes.push(displacedNode);
   edges.push({
-    relation: 'removes-defender',
+    relation: 'guard',
     proof: `a knight on ${missing.idealSquare} defends ${loose.target}; the knight on ${missing.knightSquare} does not`,
   });
   // loose-piece → tactic (enables-tactic).
   nodes.push(looseNode);
   edges.push({
     relation: 'enables-tactic',
-    proof: unveiler
-      ? `${focus.san} unveils ${unveiler}'s attack on the loose ${PIECE_NOUN[loose.type]} on ${loose.target}`
-      : `${focus.san} attacks the loose ${PIECE_NOUN[loose.type]} on ${loose.target}`,
+    proof: `${focus.san} unveils ${unveiler}'s attack on the loose ${PIECE_NOUN[loose.type]} on ${loose.target}`,
   });
   nodes.push(tacticNode);
 
@@ -560,18 +587,14 @@ function buildPrematureQueenDiscoveryChain(input: CausalChainInput): CausalChain
  * move removed a defender of it, and it is now winnable and gets captured.
  * Silent unless every link holds.
  */
-function buildRemovedDefenderChain(input: CausalChainInput): CausalChain | null {
-  const { historySans } = input;
-  const focusPly = input.focusPly ?? historySans.length;
-  if (focusPly < 3 || focusPly > historySans.length) return null; // need an opponent move before
+function buildRemovedDefenderChain(g: GameBoards, focusPly: number): CausalChain | null {
+  if (focusPly < 3 || focusPly > g.moves.length) return null; // need an opponent move before
 
-  const afterR = replay(historySans, focusPly);
-  const beforeR = replay(historySans, focusPly - 1);  // after the opponent's move, before focus
-  const prevR = replay(historySans, focusPly - 2);    // before the opponent's move
-  if (!afterR || !beforeR || !prevR) return null;
-  const focus = afterR.moves[afterR.moves.length - 1];
-  const oppMove = beforeR.moves[beforeR.moves.length - 1];
-  if (!focus || !oppMove) return null;
+  const afterBoard = new Chess(g.fens[focusPly]);
+  const beforeBoard = new Chess(g.fens[focusPly - 1]);   // after the opponent's move, before focus
+  const prevBoard = new Chess(g.fens[focusPly - 2]);     // before the opponent's move
+  const focus = g.moves[focusPly - 1];
+  const oppMove = g.moves[focusPly - 2];
   const mover = focus.color;
   const enemy = other(mover);
   if (oppMove.color !== enemy) return null;
@@ -580,28 +603,30 @@ function buildRemovedDefenderChain(input: CausalChainInput): CausalChain | null 
   // material grab, not an equal trade.
   if (!focus.captured) return null;
   const s = focus.to;
-  const victimType = beforeR.chess.get(s)?.type;
+  const victimType = beforeBoard.get(s)?.type;
   if (!victimType || victimType === 'k' || VAL[victimType] < 3) return null;
-  if (winnableGain(beforeR.chess, s) < 2) return null;   // capturing it wins material NOW
+  if (winnableGain(beforeBoard, s) < 2) return null;   // capturing it wins material NOW
   // …and the capturer SITS SAFELY afterwards — else it's a trade in a flurry, not
   // a won piece (the single-square SEE win must survive the recapture).
-  if (!safeOn(afterR.chess, s)) return null;
+  if (!safeOn(afterBoard, s)) return null;
 
   // It was SAFE before the opponent's move: the SAME enemy piece stood on s and
   // was not winnable then. (Excludes recaptures — if the opponent had just
-  // captured on s, prevR's s held a MOVER piece, not this enemy victim.)
-  const prevPiece = prevR.chess.get(s);
+  // captured on s, prev's s held a MOVER piece, not this enemy victim.)
+  const prevPiece = prevBoard.get(s);
   if (!prevPiece || prevPiece.color !== enemy || prevPiece.type !== victimType) return null;
-  if (winnableGain(prevR.chess, s) > 0) return null;     // already hanging before → not the opponent's doing
+  if (winnableGain(prevBoard, s) > 0) return null;     // already hanging before → not the opponent's doing
 
-  // The opponent's move MOVED one of s's own defenders away (abandonment). The
-  // guard was defending s before and no longer is, and the opponent moved it.
-  const defendersBefore = new Set(prevR.chess.attackers(s, enemy));
-  const defendersNow = new Set(beforeR.chess.attackers(s, enemy));
-  const guardLeft = defendersBefore.has(oppMove.from as never) && !defendersNow.has(oppMove.from as never);
-  if (!guardLeft) return null;                       // the opponent's move is not what removed the guard
-  const guardType = prevPiece && prevR.chess.get(oppMove.from)?.type;
-  if (!guardType) return null;
+  // The opponent's move took one of s's REAL guards away: a `guard` relation on
+  // s held by the piece on the move's from-square before, and gone after (the
+  // snapshot diff). A pinned "guard" is a `guard-pinned` relation, so it never
+  // counts — moving a piece that could not recapture is not what left s loose.
+  const prevSnap = snapshot(g.fens[focusPly - 2]);
+  const beforeSnap = snapshot(g.fens[focusPly - 1]);
+  if (!prevSnap || !beforeSnap) return null;
+  const guardLost = diff(prevSnap, beforeSnap).lost.find((r) => r.kind === 'guard' && r.square === s && r.by === oppMove.from);
+  if (!guardLost || guardLost.kind !== 'guard') return null;
+  const guardType = guardLost.byPiece[1];
 
   // 🔒 IT MUST HAVE BEEN A CHOICE, NOT A FORCED MOVE (David 2026-09-07). The true
   // counterfactual — the same discipline principleAttribution uses: was there a
@@ -610,12 +635,13 @@ function buildRemovedDefenderChain(input: CausalChainInput): CausalChain | null 
   // unavoidable and blaming this move overstates the why → silence. This is
   // stronger than a crude "was in check" proxy (an in-check player with a saving
   // block still made a choice; a player whose only legal move drops it did not).
-  if (!targetWasSavable(prevR.chess, s, enemy, victimType)) return null;
+  if (!targetWasSavable(prevBoard, s, enemy, victimType)) return null;
 
+  const counts = guardCount(beforeSnap, s, mover);
   const causeNode: CausalNode = {
     kind: 'defender-removed', ply: focusPly - 1, color: enemy,
     squares: [oppMove.from, s],
-    data: { move: oppMove.san, guardPiece: PIECE_NOUN[guardType], from: oppMove.from, target: s, targetPiece: PIECE_NOUN[victimType], ...guardCount(beforeR.chess, s, mover) },
+    data: { move: oppMove.san, guardPiece: PIECE_NOUN[guardType], from: oppMove.from, target: s, targetPiece: PIECE_NOUN[victimType], ...counts },
     fundamentalId: 'loose-piece',
     tag: 'hung-material',
     arrows: [],
@@ -624,18 +650,24 @@ function buildRemovedDefenderChain(input: CausalChainInput): CausalChain | null 
   const tacticNode: CausalNode = {
     kind: 'won-loose-piece', ply: focusPly, color: mover,
     squares: [focus.to, s],
-    data: { move: focus.san, target: s, targetPiece: PIECE_NOUN[victimType], to: focus.to, ...guardCount(beforeR.chess, s, mover) },
+    data: { move: focus.san, target: s, targetPiece: PIECE_NOUN[victimType], to: focus.to, ...counts },
     fundamentalId: null,
     arrows: [],
     highlights: [{ square: s, color: 'red' }],
   };
   return {
     nodes: [causeNode, tacticNode],
-    edges: [{ relation: 'removes-defender', proof: `${oppMove.san} moved the ${PIECE_NOUN[guardType]} off ${oppMove.from}; it was defending ${s}, now winnable (SEE ${winnableGain(beforeR.chess, s)})` }],
+    edges: [{ relation: 'guard', proof: `${oppMove.san} moved the ${PIECE_NOUN[guardType]} off ${oppMove.from}; it was defending ${s}, now winnable (SEE ${winnableGain(beforeBoard, s)})` }],
     beneficiary: mover,
     focusPly,
     stance: 'played',
   };
+}
+
+/** Both patterns, in priority order, on the game's boards. */
+function chainOn(g: GameBoards, focusPly: number): CausalChain | null {
+  return buildPrematureQueenDiscoveryChain(g, focusPly)
+    ?? buildRemovedDefenderChain(g, focusPly);
 }
 
 /**
@@ -645,8 +677,9 @@ function buildRemovedDefenderChain(input: CausalChainInput): CausalChain | null 
  * board-proven, game-validated pattern at a time.
  */
 export function buildCausalChain(input: CausalChainInput): CausalChain | null {
-  return buildPrematureQueenDiscoveryChain(input)
-    ?? buildRemovedDefenderChain(input);
+  const focusPly = input.focusPly ?? input.historySans.length;
+  if (focusPly < 1 || focusPly > input.historySans.length) return null;
+  return chainOn(boardsFor(input.historySans), focusPly);
 }
 
 // ─── both-ways: available (missed / allowed) chains ─────────────────────────
@@ -664,21 +697,24 @@ function chainTargetSquare(chain: CausalChain): Square | null {
  *  Tries each CAPTURING move for `side` as a hypothetical focus (both patterns'
  *  tactic is a capture) and returns the first that fires a chain, plus its SAN.
  *  Pure lookahead — nothing is committed to the game. */
-function chainAvailableFor(historySans: readonly string[], plyBefore: number, side: Color): { chain: CausalChain; moveSan: string } | null {
-  const r = replay(historySans, plyBefore);
-  if (!r) return null;
-  if (r.chess.turn() !== side) return null;
+function chainAvailableFor(g: GameBoards, plyBefore: number, side: Color): { chain: CausalChain; moveSan: string } | null {
+  if (plyBefore > g.moves.length) return null;
+  const board = new Chess(g.fens[plyBefore]);
+  if (board.turn() !== side) return null;
   let moves: Move[];
-  try { moves = r.chess.moves({ verbose: true }); } catch { return null; }
-  const base = historySans.slice(0, plyBefore);
+  try { moves = board.moves({ verbose: true }); } catch { return null; }
   for (const m of moves) {
     if (!m.captured) continue;                 // the tactic move is always a capture
     // Only a capture of a genuinely WINNABLE piece can be a chain tactic — this
     // prunes the candidate set to ~1-2 (the hot-path optimisation that keeps the
     // both-ways lookahead cheap enough to run per move).
-    let g = 0; try { g = winnableGain(r.chess, m.to); } catch { g = 0; }
-    if (g < 2) continue;
-    const chain = buildCausalChain({ historySans: [...base, m.san], focusPly: plyBefore + 1 });
+    let gain = 0; try { gain = winnableGain(board, m.to); } catch { gain = 0; }
+    if (gain < 2) continue;
+    const next = new Chess(g.fens[plyBefore]);
+    let played: Move | null = null;
+    try { played = next.move({ from: m.from, to: m.to, promotion: m.promotion }); } catch { played = null; }
+    if (!played) continue;
+    const chain = chainOn(boardsWith(g, plyBefore, played, next.fen()), plyBefore + 1);
     if (chain) return { chain, moveSan: m.san };
   }
   return null;
@@ -691,15 +727,17 @@ function chainAvailableFor(historySans: readonly string[], plyBefore: number, si
  */
 export function findMissedChain(historySans: readonly string[], studentMovePly: number, studentColor: Color): CausalChain | null {
   if (studentMovePly < 1 || studentMovePly > historySans.length) return null;
-  const before = replay(historySans, studentMovePly - 1);
-  if (!before || before.chess.turn() !== studentColor) return null;   // must be the student's move
+  const g = boardsFor(historySans);
+  if (studentMovePly - 1 > g.moves.length) return null;
+  const before = new Chess(g.fens[studentMovePly - 1]);
+  if (before.turn() !== studentColor) return null;   // must be the student's move
   // Cheap gate: no enemy piece hangs → no missed win to find. Skips the lookahead.
-  if (!hasWinnablePiece(before.chess, other(studentColor))) return null;
-  const avail = chainAvailableFor(historySans, studentMovePly - 1, studentColor);
+  if (!hasWinnablePiece(before, other(studentColor))) return null;
+  const avail = chainAvailableFor(g, studentMovePly - 1, studentColor);
   if (!avail) return null;
   const actualRaw = historySans[studentMovePly - 1];
-  const actual = actualRaw.replace(/[?!]+$/, '');
-  if (avail.moveSan.replace(/[?!]+$/, '') === actual) return null;     // they DID play it → 'played', not missed
+  const actual = cleanSan(actualRaw);
+  if (cleanSan(avail.moveSan) === actual) return null;     // they DID play it → 'played', not missed
   // Don't call it a "miss" when the student played a CHECK — that is their own
   // forcing plan (often a mating attack), not an oversight (David 2026-09-07:
   // "don't overstate the why"). A quiet or equal-trade move that let a free win
@@ -710,9 +748,9 @@ export function findMissedChain(historySans: readonly string[], studentMovePly: 
   // "You could have won their knight on d3 with Bxd3 … You played Rxa4", where
   // Rxa4 took back a queen).
   const tsq = chainTargetSquare(avail.chain);
-  const target = tsq ? before.chess.get(tsq) : null;
+  const target = tsq ? before.get(tsq) : null;
   let tookValue = 0;
-  try { const mv = new Chess(before.chess.fen()).move(actual); if (mv?.captured) tookValue = VAL[mv.captured] ?? 0; } catch { tookValue = 0; }
+  try { const mv = new Chess(before.fen()).move(actual); if (mv?.captured) tookValue = VAL[mv.captured] ?? 0; } catch { tookValue = 0; }
   if (target && tookValue >= (VAL[target.type] ?? 0)) return null;
   return { ...avail.chain, stance: 'missed', missedMove: avail.moveSan, playedInstead: historySans[studentMovePly - 1] };
 }
@@ -726,11 +764,12 @@ export function findMissedChain(historySans: readonly string[], studentMovePly: 
 export function findAllowedChain(historySans: readonly string[], studentMovePly: number, studentColor: Color): CausalChain | null {
   if (studentMovePly < 1 || studentMovePly > historySans.length) return null;
   const opponent = other(studentColor);
+  const g = boardsFor(historySans);
+  if (studentMovePly > g.moves.length) return null;
   // Cheap gate: after the student's move, does a student piece hang? If nothing
   // is winnable, the opponent has no chain to allow → skip the lookahead.
-  const posAfter = replay(historySans, studentMovePly);
-  if (!posAfter || !hasWinnablePiece(posAfter.chess, studentColor)) return null;
-  const avail = chainAvailableFor(historySans, studentMovePly, opponent);
+  if (!hasWinnablePiece(new Chess(g.fens[studentMovePly]), studentColor)) return null;
+  const avail = chainAvailableFor(g, studentMovePly, opponent);
   if (!avail) return null;
   // Avoidance — a legal student move (instead of the one played) after which the
   // chain's target is no longer winnable by the opponent, and that doesn't itself
@@ -739,14 +778,14 @@ export function findAllowedChain(historySans: readonly string[], studentMovePly:
   // chain itself.
   let avoidance: string | undefined;
   const targetSq = chainTargetSquare(avail.chain);
-  const posBefore = replay(historySans, studentMovePly - 1);
-  if (targetSq && posBefore && posBefore.chess.turn() === studentColor) {
+  const posBefore = new Chess(g.fens[studentMovePly - 1]);
+  if (targetSq && posBefore.turn() === studentColor) {
     let moves: Move[] = [];
-    try { moves = posBefore.chess.moves({ verbose: true }); } catch { moves = []; }
-    const played = historySans[studentMovePly - 1].replace(/[?!]+$/, '');
+    try { moves = posBefore.moves({ verbose: true }); } catch { moves = []; }
+    const played = cleanSan(historySans[studentMovePly - 1]);
     for (const m of moves) {
-      if (m.san.replace(/[?!]+$/, '') === played) continue;   // the move they actually played
-      const c = new Chess(posBefore.chess.fen());
+      if (cleanSan(m.san) === played) continue;   // the move they actually played
+      const c = new Chess(posBefore.fen());
       try { if (!c.move({ from: m.from, to: m.to, promotion: m.promotion })) continue; } catch { continue; }
       if (!safeOn(c, m.to)) continue;                     // don't suggest a move that hangs
       if (!safeOn(c, targetSq)) continue;                 // the target is still winnable → not an avoidance

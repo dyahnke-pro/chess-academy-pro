@@ -4,23 +4,30 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**242 lines · 4 exports · 5 importers · 2 tests · 0 audits**
+**369 lines · 6 exports · 11 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **Why determinism** (CLAUDE.md:340) — names `findPins`
 
 ## Who calls in
 
+- `src/missions/patterns/agreement.test.ts`
+- `src/missions/patterns/pin.ts`
 - `src/services/groundedAnswer.ts`
+- `src/services/kingSafety.ts`
+- `src/services/nextPlans.ts`
 - `src/services/oneSkewerRule.test.ts`
 - `src/services/pinGeometry.test.ts`
+- `src/services/pinReaders.test.ts`
+- `src/services/relations.ts`
 - `src/services/tacticClassifier.ts`
 - `src/services/tacticsDetector.ts`
 
 ## Exports and every call site
 
-### `canLeaveLine` (function) — 8 call sites
+### `canLeaveLine` (function) — 9 call sites
+- `src/missions/patterns/pin.ts:87`
 - `src/services/pinGeometry.test.ts:13`
 - `src/services/pinGeometry.test.ts:18`
 - `src/services/pinGeometry.test.ts:24`
@@ -31,11 +38,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinGeometry.test.ts:104`
 
 ### `isRealPin` (function) — 3 call sites
-- `src/services/groundedAnswer.ts:2841`
-- `src/services/tacticClassifier.ts:208`
-- `src/services/tacticsDetector.ts:194`
+- `src/missions/patterns/agreement.test.ts:83`
+- `src/missions/patterns/pin.ts:104`
+- `src/services/groundedAnswer.ts:2882`
 
-### `pinBites` (function) — 3 call sites
+### `pinBites` (function) — 4 call sites
+- `src/missions/patterns/pin.ts:90`
 - `src/services/pinGeometry.test.ts:89`
 - `src/services/pinGeometry.test.ts:96`
 - `src/services/pinGeometry.test.ts:105`
@@ -43,13 +51,34 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `isRealSkewer` (function) — 4 call sites
 - `src/services/oneSkewerRule.test.ts:23`
 - `src/services/oneSkewerRule.test.ts:29`
-- `src/services/tacticClassifier.ts:259`
-- `src/services/tacticsDetector.ts:253`
+- `src/services/tacticClassifier.ts:225`
+- `src/services/tacticsDetector.ts:193`
+
+### `findPins` (function) — 8 call sites
+- `src/missions/patterns/pin.ts:99`
+- `src/services/pinReaders.test.ts:51`
+- `src/services/pinReaders.test.ts:59`
+- `src/services/pinReaders.test.ts:80`
+- `src/services/pinReaders.test.ts:112`
+- `src/services/relations.ts:168`
+- `src/services/tacticClassifier.ts:190`
+- `src/services/tacticsDetector.ts:663`
+
+### `absolutePinRay` (function) — 7 call sites
+- `src/services/kingSafety.ts:332`
+- `src/services/nextPlans.ts:154`
+- `src/services/pinReaders.test.ts:63`
+- `src/services/pinReaders.test.ts:99`
+- `src/services/pinReaders.test.ts:113`
+- `src/services/pinReaders.test.ts:123`
+- `src/services/relations.ts:155`
 
 ## Tests
 
+- `src/missions/patterns/agreement.test.ts`
 - `src/services/oneSkewerRule.test.ts`
 - `src/services/pinGeometry.test.ts`
+- `src/services/pinReaders.test.ts`
 
 ## Audits that reach it
 
@@ -57,4 +86,4 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._
+- `scripts/audit-learn-designed-probes-prod.mjs`

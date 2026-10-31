@@ -4,26 +4,27 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**803 lines · 2 exports · 40 importers · 19 tests · 0 audits**
+**743 lines · 2 exports · 47 importers · 25 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:43) — names `detectTactics`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5162) — names `detectTactics`
+- **The tools are COMPUTERS** (CLAUDE.md:313) — names `detectTactics`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5638) — names `detectTactics`
 
 ## Who calls in
 
-- `src/components/Board/BoardPageLayout.tsx`
 - `src/components/Tactics/PatternSchoolPage.tsx`
+- `src/missions/patterns/agreement.test.ts`
 - `src/services/boardConcepts.ts`
-- `src/services/coachPrompts.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/conceptEngine.ts`
 - `src/services/danyaBehaviors.ts`
 - `src/services/discussionPractice.ts`
+- `src/services/learnRecordTerms.ts`
 - `src/services/liveNoteTruth.test.ts`
 - `src/services/liveTacticsContext.ts`
 - `src/services/lookaheadPlan.ts`
+- `src/services/looseClaim.test.ts`
 - `src/services/misconceptionClassifier.ts`
 - `src/services/mistakeNarration.ts`
 - `src/services/moveInsight.ts`
@@ -34,6 +35,8 @@
 - `src/services/pinPressure.ts`
 - `src/services/pinnerPinned.test.ts`
 - `src/services/playCommentary.ts`
+- `src/services/playedConcept.ts`
+- `src/services/positionFacts.ts`
 - `src/services/pvPlayback.ts`
 - `src/services/relationClaimCost.report.test.ts`
 - `src/services/replayFence.alekhine1500.test.ts`
@@ -43,6 +46,7 @@
 - `src/services/reviewOpponentCommentary.ts`
 - `src/services/reviewWalk1500.test.ts`
 - `src/services/reviewWalk900.test.ts`
+- `src/services/tacticClaimOneKey.test.ts`
 - `src/services/tacticClaimValidator.test.ts`
 - `src/services/tacticClaimValidator.ts`
 - `src/services/tacticLaneVocabulary.test.ts`
@@ -51,6 +55,9 @@
 - `src/services/tacticsDetector.expansion.test.ts`
 - `src/services/tacticsDetector.groundTruth.test.ts`
 - `src/services/tacticsDetector.test.ts`
+- `src/services/theirWantedPin.os1.test.ts`
+- `src/services/threatAnswerEvidence.ts`
+- `src/services/threatSaidOnce.os1.test.ts`
 - `src/services/weaknessAnalyzer.ts`
 - `src/test/narrationScanner.ts`
 
@@ -59,33 +66,36 @@
 ### `TacticsDetectionResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectTactics` (function) — 107 call sites
-- `src/components/Board/BoardPageLayout.tsx:124`
+### `detectTactics` (function) — 119 call sites
 - `src/components/Tactics/PatternSchoolPage.tsx:68`
+- `src/missions/patterns/agreement.test.ts:48`
+- `src/missions/patterns/agreement.test.ts:65`
 - `src/services/boardConcepts.ts:296`
-- `src/services/coachPrompts.ts:702`
-- `src/services/coachPrompts.ts:708`
 - `src/services/computerAccuracy.audit.test.ts:117`
 - `src/services/conceptEngine.ts:501`
 - `src/services/conceptEngine.ts:709`
-- `src/services/danyaBehaviors.ts:486`
-- `src/services/discussionPractice.ts:57`
-- `src/services/discussionPractice.ts:102`
-- `src/services/discussionPractice.ts:145`
-- `src/services/learnWalkOct3c.test.ts:88`
-- `src/services/learnWalkOct3c.test.ts:94`
+- `src/services/danyaBehaviors.ts:487`
+- `src/services/discussionPractice.ts:59`
+- `src/services/discussionPractice.ts:104`
+- `src/services/discussionPractice.ts:147`
+- `src/services/learnRecordTerms.ts:169`
+- `src/services/learnWalkOct3c.test.ts:91`
+- `src/services/learnWalkOct3c.test.ts:97`
 - `src/services/liveNoteTruth.test.ts:59`
-- `src/services/liveTacticsContext.ts:358`
-- `src/services/lookaheadPlan.ts:1342`
-- `src/services/lookaheadPlan.ts:1405`
-- `src/services/misconceptionClassifier.ts:113`
-- `src/services/misconceptionClassifier.ts:264`
-- `src/services/mistakeNarration.ts:411`
-- `src/services/moveInsight.ts:115`
-- `src/services/moveInsight.ts:1067`
+- `src/services/liveTacticsContext.ts:362`
+- `src/services/liveTacticsContext.ts:510`
+- `src/services/lookaheadPlan.ts:1393`
+- `src/services/lookaheadPlan.ts:1456`
+- `src/services/looseClaim.test.ts:18`
+- `src/services/misconceptionClassifier.ts:107`
+- `src/services/misconceptionClassifier.ts:140`
+- `src/services/misconceptionClassifier.ts:305`
+- `src/services/mistakeNarration.ts:395`
+- `src/services/moveInsight.ts:116`
+- `src/services/moveInsight.ts:1092`
 - `src/services/oneSkewerRule.test.ts:18`
-- `src/services/openingGenerator.ts:3538`
-- `src/services/pinBreak.ts:169`
+- `src/services/openingGenerator.ts:3496`
+- `src/services/pinBreak.ts:174`
 - `src/services/pinGeometry.test.ts:72`
 - `src/services/pinGeometry.test.ts:74`
 - `src/services/pinGeometry.test.ts:90`
@@ -95,31 +105,37 @@
 - `src/services/pinGeometry.test.ts:134`
 - `src/services/pinGeometry.test.ts:141`
 - `src/services/pinGeometry.test.ts:142`
-- `src/services/pinPressure.ts:113`
-- `src/services/pinPressure.ts:128`
+- `src/services/pinPressure.ts:108`
+- `src/services/pinPressure.ts:123`
 - `src/services/pinnerPinned.test.ts:6`
-- `src/services/playCommentary.ts:764`
-- `src/services/pvPlayback.ts:356`
-- `src/services/pvPlayback.ts:376`
+- `src/services/playCommentary.ts:651`
+- `src/services/playedConcept.ts:59`
+- `src/services/playedConcept.ts:66`
+- `src/services/positionFacts.ts:1248`
+- `src/services/pvPlayback.ts:386`
+- `src/services/pvPlayback.ts:406`
 - `src/services/relationClaimCost.report.test.ts:52`
-- `src/services/replayFence.alekhine1500.test.ts:35`
-- `src/services/replayFence.alekhine1500.test.ts:85`
-- `src/services/replayFence.bowdler1000.rewalk.test.ts:60`
+- `src/services/replayFence.alekhine1500.test.ts:36`
+- `src/services/replayFence.alekhine1500.test.ts:86`
+- `src/services/replayFence.bowdler1000.rewalk.test.ts:61`
 - `src/services/reviewCorpusNote.test.ts:61`
-- `src/services/reviewFullData.ts:708`
-- `src/services/reviewFullData.ts:778`
-- `src/services/reviewMoveBriefing.ts:77`
-- `src/services/reviewMoveBriefing.ts:78`
-- `src/services/reviewNarrationFidelity.test.ts:324`
-- `src/services/reviewOpponentCommentary.ts:73`
+- `src/services/reviewDepth.eval.measure.test.ts:258`
+- `src/services/reviewFullData.ts:802`
+- `src/services/reviewFullData.ts:882`
+- `src/services/reviewFullData.ts:1511`
+- `src/services/reviewMoveBriefing.ts:94`
+- `src/services/reviewMoveBriefing.ts:95`
+- `src/services/reviewNarrationFidelity.test.ts:230`
+- `src/services/reviewOpponentCommentary.ts:74`
 - `src/services/reviewWalk1500.test.ts:23`
 - `src/services/reviewWalk900.test.ts:20`
+- `src/services/tacticClaimOneKey.test.ts:13`
 - `src/services/tacticClaimValidator.test.ts:200`
 - `src/services/tacticClaimValidator.ts:151`
 - `src/services/tacticLaneVocabulary.test.ts:69`
 - `src/services/tacticVisuals.ts:43`
 - `src/services/tacticVisuals.ts:60`
-- `src/services/tacticalRead.ts:155`
+- `src/services/tacticalRead.ts:153`
 - `src/services/tacticsDetector.expansion.test.ts:10`
 - `src/services/tacticsDetector.expansion.test.ts:73`
 - `src/services/tacticsDetector.groundTruth.test.ts:48`
@@ -165,15 +181,20 @@
 - `src/services/tacticsDetector.test.ts:380`
 - `src/services/tacticsDetector.test.ts:388`
 - `src/services/tacticsDetector.test.ts:393`
+- `src/services/theirWantedPin.os1.test.ts:32`
+- `src/services/threatAnswerEvidence.ts:213`
+- `src/services/threatSaidOnce.os1.test.ts:17`
 - `src/services/weaknessAnalyzer.ts:1183`
-- `src/test/narrationScanner.ts:128`
+- `src/test/narrationScanner.ts:135`
 
 ## Tests
 
 - `src/hooks/useDiscussionPractice.test.ts`
+- `src/missions/patterns/agreement.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/learnWalkOct3c.test.ts`
 - `src/services/liveNoteTruth.test.ts`
+- `src/services/looseClaim.test.ts`
 - `src/services/oneSkewerRule.test.ts`
 - `src/services/pinGeometry.test.ts`
 - `src/services/pinnerPinned.test.ts`
@@ -181,14 +202,18 @@
 - `src/services/replayFence.alekhine1500.test.ts`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts`
 - `src/services/reviewCorpusNote.test.ts`
+- `src/services/reviewDepth.eval.measure.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/reviewWalk1500.test.ts`
 - `src/services/reviewWalk900.test.ts`
+- `src/services/tacticClaimOneKey.test.ts`
 - `src/services/tacticClaimValidator.test.ts`
 - `src/services/tacticLaneVocabulary.test.ts`
 - `src/services/tacticsDetector.expansion.test.ts`
 - `src/services/tacticsDetector.groundTruth.test.ts`
 - `src/services/tacticsDetector.test.ts`
+- `src/services/theirWantedPin.os1.test.ts`
+- `src/services/threatSaidOnce.os1.test.ts`
 
 ## Audits that reach it
 
