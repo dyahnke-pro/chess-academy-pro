@@ -1005,30 +1005,41 @@ export function kingCourseTeaching(fen: string, student: 'w' | 'b'): TeachingHin
 }
 
 // ─── THE THREAD ACROSS MOVES + THE STUDENT'S SLIPS (David 2026-10-06) ──────
-// The data lives in `learnMemory` (pure memory); what counts as paying an idea
-// off is a board question, so it is answered here.
-import type { LearnMemory, GamePromise } from './learnMemory';
+// The data lives in the game's story (`GameStory` events, P1-8c — pure memory,
+// shared by Learn and Review); what counts as paying an idea off is a board
+// question, so it is answered here.
+import { promisesOpen, slipCount, type GamePromise, type StoryStore } from './gameStory';
 import { positionOf } from '../utils/samePosition';
 import { NAMES_NO_MOVE, namesMoves, studentMovesInLine, boardAfterSans, type NamesStudentMove } from './studentMoveNaming';
 
-export type { GamePromise } from './learnMemory';
+export type { GamePromise } from './gameStory';
 
 /** How long a promise stays open, in plies. Past it the moment has moved on. */
 const PROMISE_PLIES = 16;
 
-/** Note a slip and return its this-game prefix ('' the first time). */
-export function noteSlip(mem: Pick<LearnMemory, 'slipsThisGame'>, id: string): string {
-  const n = (mem.slipsThisGame.get(id) ?? 0) + 1;
-  mem.slipsThisGame.set(id, n);
+/** Note a slip at `ply` and return its this-game prefix ('' the first time). */
+export function noteSlip(story: StoryStore, id: string, ply: number): string {
+  story.note(ply, [{ kind: 'slip', id }]);
+  const n = slipCount(story.current(), id);
   if (n === 2) return "That's the second time this game. ";
   if (n === 3) return 'Third time this game — this is the habit to fix. ';
   return n > 3 ? 'Again. ' : '';
 }
 
-/** Remember an idea the coach just said (once per key). */
-export function notePromise(mem: Pick<LearnMemory, 'promises'>, p: GamePromise, ply: number): void {
-  if (mem.promises.has(p.key)) return;
-  mem.promises.set(p.key, { ...p, ply });
+/** The story event that remembers an idea — once per key while it is open.
+ *  Null when the same idea is already waiting to be paid off. A producer whose
+ *  idea is SAID rides it on its line (`StoryStore.offer`), so the game
+ *  remembers the idea only when the door kept the line; one whose line is held
+ *  for the move (`studentDeepFactPromise`) notes it outright. */
+export function promiseEvent(story: StoryStore, p: GamePromise, ply: number): { kind: 'promise'; promise: GamePromise } | null {
+  return promisesOpen(story.current(), ply, PROMISE_PLIES).some((q) => q.key === p.key) ? null : { kind: 'promise', promise: p };
+}
+
+/** Remember an idea now, once per key while it is open — for an idea whose
+ *  line waits for the move (nothing is said until the student plays it). */
+export function notePromise(story: StoryStore, p: GamePromise, ply: number): void {
+  const e = promiseEvent(story, p, ply);
+  if (e) story.note(ply, [e]);
 }
 
 /**
@@ -1110,15 +1121,15 @@ export function studentDeepFactPromise(fenBefore: string, san: string, reply: st
 }
 
 /** The student's move pays an open promise off → its closing line, and the
- *  promise is spent. Stale promises are dropped on the way. */
-/** `mv` is the student's move, parsed by the caller (this module stays pure memory). */
-export function payoffFor(mem: Pick<LearnMemory, 'promises'>, mv: { piece: string; to: string; captured?: string; san: string; after?: string } | null, ply: number): { say: string; square: string; key: string } | null {
-  for (const [k, q] of mem.promises) if (ply - q.ply > PROMISE_PLIES) mem.promises.delete(k);
+ *  promise is spent: the MOVE paid it, so it is noted paid at `ply` whether or
+ *  not the line is heard. A promise older than `PROMISE_PLIES` is not open.
+ *  `mv` is the student's move, parsed by the caller (the story stays pure memory). */
+export function payoffFor(story: StoryStore, mv: { piece: string; to: string; captured?: string; san: string; after?: string } | null, ply: number): { say: string; square: string; key: string } | null {
   if (!mv) return null;
   const castleSquare = mv.san.startsWith('O-O') ? mv.to : null;
-  const hit = [...mem.promises.values()].find((q) => (q.piece === mv.piece || (q.piece === 'k' && castleSquare)) && q.square === (castleSquare ?? mv.to) && (!q.takes || !!mv.captured));
+  const hit = promisesOpen(story.current(), ply, PROMISE_PLIES).find((q) => (q.piece === mv.piece || (q.piece === 'k' && castleSquare)) && q.square === (castleSquare ?? mv.to) && (!q.takes || !!mv.captured));
   if (!hit) return null;
-  mem.promises.delete(hit.key);
+  story.note(ply, [{ kind: 'paid', key: hit.key }]);
   if (hit.hits && !hitStands(mv.after ?? null, hit.square, hit.hits)) return null;
   return { say: hit.say, square: hit.square, key: hit.key };
 }

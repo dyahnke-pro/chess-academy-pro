@@ -53,8 +53,8 @@
 ### `stepOf` (function) — 15 call sites
 - `src/services/coachFact.test.ts:75`
 - `src/services/coachFact.test.ts:76`
-- `src/services/coachFeatureService.ts:2501`
-- `src/services/coachFeatureService.ts:3097`
+- `src/services/coachFeatureService.ts:2481`
+- `src/services/coachFeatureService.ts:3077`
 - `src/services/learnTurnDoor.ts:246`
 - `src/services/learnTurnDoor.ts:777`
 - `src/services/learnTurnDoor.ts:834`
@@ -85,7 +85,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `toCoachFact` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2827`
+- `src/services/coachFeatureService.ts:2807`
 - `src/services/learnTurnDoor.ts:571`
 - `src/services/positionFacts.ts:504`
 - `src/test/doorFact.ts:19`

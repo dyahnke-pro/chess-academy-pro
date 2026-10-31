@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**141 lines · 8 exports · 4 importers · 3 tests · 0 audits**
+**137 lines · 7 exports · 5 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/gameStory.ts`
 - `src/services/positionCharacter.pin.test.ts`
 - `src/services/positionCharacter.test.ts`
 - `src/services/walkOct2a.test.ts`
@@ -26,43 +27,43 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `sharpGap` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10838`
-- `src/services/positionCharacter.test.ts:77`
-- `src/services/positionCharacter.test.ts:78`
-- `src/services/positionCharacter.test.ts:79`
-- `src/services/positionCharacter.test.ts:80`
-- `src/services/positionCharacter.test.ts:81`
+- `src/components/Coach/CoachTeachPage.tsx:11425`
+- `src/services/positionCharacter.test.ts:90`
+- `src/services/positionCharacter.test.ts:91`
+- `src/services/positionCharacter.test.ts:92`
+- `src/services/positionCharacter.test.ts:93`
+- `src/services/positionCharacter.test.ts:94`
 
 ### `provenTacticLive` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10847`
-- `src/components/Coach/CoachTeachPage.tsx:10852`
+- `src/components/Coach/CoachTeachPage.tsx:11434`
+- `src/components/Coach/CoachTeachPage.tsx:11439`
 - `src/services/positionCharacter.pin.test.ts:17`
 - `src/services/positionCharacter.pin.test.ts:23`
 - `src/services/positionCharacter.pin.test.ts:27`
 
 ### `characterOf` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10839`
-- `src/services/positionCharacter.test.ts:10`
-- `src/services/positionCharacter.test.ts:14`
-- `src/services/positionCharacter.test.ts:15`
-- `src/services/positionCharacter.test.ts:19`
-- `src/services/positionCharacter.test.ts:20`
+- `src/components/Coach/CoachTeachPage.tsx:11426`
+- `src/services/positionCharacter.test.ts:13`
+- `src/services/positionCharacter.test.ts:17`
+- `src/services/positionCharacter.test.ts:18`
 - `src/services/positionCharacter.test.ts:22`
-- `src/services/walkOct2a.test.ts:119`
+- `src/services/positionCharacter.test.ts:23`
+- `src/services/positionCharacter.test.ts:25`
+- `src/services/walkOct2a.test.ts:135`
 
 ### `CharacterState` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `EMPTY_CHARACTER` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `stepCharacter` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10853`
-- `src/services/positionCharacter.test.ts:31`
-- `src/services/positionCharacter.test.ts:56`
-- `src/services/positionCharacter.test.ts:68`
-- `src/services/positionCharacter.test.ts:69`
+### `stepCharacter` (function) — 9 call sites
+- `src/components/Coach/CoachTeachPage.tsx:11443`
+- `src/services/positionCharacter.test.ts:34`
+- `src/services/positionCharacter.test.ts:60`
 - `src/services/positionCharacter.test.ts:70`
+- `src/services/positionCharacter.test.ts:71`
+- `src/services/positionCharacter.test.ts:73`
+- `src/services/positionCharacter.test.ts:81`
+- `src/services/positionCharacter.test.ts:82`
+- `src/services/positionCharacter.test.ts:83`
 
 ## Tests
 

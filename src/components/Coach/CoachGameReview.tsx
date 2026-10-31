@@ -37,7 +37,7 @@ import { getPhaseBreakdown, phaseScopedReviewSummary, isPhaseFocus } from '../..
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { buildHoldChallenge, judgeGuidedFindAttempt, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
-import { selectTurningPoints, gameTurn, turningReveal, recordSecondReads, NO_SECOND_READ, type TurningPoint, type TurningTrace } from '../../services/turningPoints';
+import { selectTurningPoints, turningReveal, recordSecondReads, NO_SECOND_READ, type TurningPoint, type TurningTrace } from '../../services/turningPoints';
 import { costWords, isMateEval, TRUSTED_LINE_DEPTH } from '../../services/engineConstants';
 import { betterLineClosing } from '../../services/betterLineClosing';
 import { computePvLine, type PvLine } from '../../services/pvPlayback';
@@ -51,7 +51,8 @@ import { findRewindTarget, type RewindTarget } from '../../services/blunderRewin
 import { buildCriticalMomentQuestion, judgeCriticalMomentPick, type CriticalMomentQuestion } from '../../services/reviewTurningPoint';
 import { computeTurningPointHinge } from '../../services/reviewHinge';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
-import { selectTeachingForSegments, renderThesis } from '../../services/teachingSelector';
+import { renderThesis } from '../../services/teachingSelector';
+import { storyOf, storyTurn, type GameStory } from '../../services/gameStory';
 import { registerFor } from '../../coach/surfaceContract';
 import { buildOpeningTheoryLecture, buildTheoryLectureBeats, lectureSequence, lectureNoteSelector, loadLectureCorpus, resolveCuratedOpeningIdeas, enrichLectureWithEngine, warmLectureSources, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
@@ -206,6 +207,12 @@ const REVIEW_LOCKED: Record<'play' | 'takeBack' | 'setPosition' | 'reset', strin
   setPosition: 'set_board_position is locked on the review surface — the timeline is the source of truth.',
   reset: 'reset_board is locked on the review surface — the student can use the Jump-to-Start nav button to rewind.',
 };
+
+/** The game's story as the walk's newest build left it: the last checkpoint on
+ *  its segments (WO-STORY-MATRIX-01 P1-8c) — where the build kept the turn. */
+function walkStory(narration: ReviewNarration): GameStory {
+  return storyOf(spokenLedgerSeed(narration, Number.POSITIVE_INFINITY)?.story ?? null);
+}
 
 /** One ply of a line walked on the review board, through the arrow door —
  *  checked on the board BEFORE it, coloured by whose move it is. */
@@ -1522,21 +1529,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     turningAskedRef.current = true; // once per game
     // THE ONE TURNING POINT (OS-11 census 5): the top of the one win-chance
     // ranking, either side — the questions are the student's entries of it.
-    const turn = gameTurn(walkNarration.segments);
+    // The build read it once and kept it in the game's story (P1-8c); the walk
+    // reads it from there instead of running the selector over the game again.
+    const turn = storyTurn(walkStory(walkNarration));
     if (!turn) return; // clean game — nothing turned, nothing to say
     const turnSeg = walkNarration.segments.find((sg) => sg.ply === turn.ply);
-    let thesis = '';
-    try {
-      const pkg = selectTeachingForSegments(walkNarration.segments, playerColor, playerRating ?? undefined, 'review', undefined, turn.ply);
-      if (pkg.thesis.ply === turn.ply) thesis = renderThesis(pkg.thesis, registerFor('review'));
-      void logAppAudit({
-        kind: 'coach-surface-migrated',
-        category: 'subsystem',
-        source: 'CoachGameReview.teachingSelector',
-        summary: `selector read the game: thesis=${pkg.thesis.kind}@${pkg.thesis.ply ?? '-'} turn=${turn.ply}(${turn.mover}) moments=[${pkg.moments.map((m) => m.ply).join(',')}] thread=[${[...pkg.onThread].join(',')}]`,
-      });
-    } catch { thesis = ''; }
-    if (!thesis) return; // the selector could not read the turn — silence over a guess
+    const thesis = renderThesis(turn.thesis, registerFor('review'));
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'CoachGameReview.teachingSelector',
+      summary: `the story's turn: thesis=${turn.thesis.kind}@${turn.ply}${turn.thesis.theirs ? ' (theirs)' : ''}`,
+    });
+    if (!thesis) return; // the thesis could not be said — silence over a guess
     // Phase 5: the theme's reprise closes the line — but only when it was
     // actually NAMED during the walk (never introduced cold here).
     const reprise = themeSpokenRef.current && themeRef.current
@@ -2493,7 +2498,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (themeRef.current || !walkNarration || walkNarration.segments.length === 0) return;
     // The theme reads the whole game's trace — never a part read so far.
     if (!gradingComplete) return;
-    themeRef.current = classifyGameTheme(walkNarration.segments, playerColor, gameTurn(walkNarration.segments)?.ply);
+    themeRef.current = classifyGameTheme(walkNarration.segments, playerColor, storyTurn(walkStory(walkNarration))?.ply);
     if (themeRef.current) {
       captureEvent('review_theme_classified', {
         theme: themeRef.current.theme,

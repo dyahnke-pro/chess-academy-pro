@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { characterOf, stepCharacter, EMPTY_CHARACTER, type Character } from './positionCharacter';
+import { characterOf, stepCharacter, type Character } from './positionCharacter';
+import { EMPTY_CHARACTER_STATE } from './gameStory';
+
+const NONE_SAID: Record<Character, number> = { tactical: 0, positional: 0, conversion: 0, defence: 0 };
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 /** White is a rook up (Black's a8 rook gone). */
@@ -25,10 +28,10 @@ describe('characterOf — what the position is about', () => {
 
 describe('stepCharacter — a switch is spoken only once it holds', () => {
   const run = (reads: Character[]): Array<string | null> => {
-    let s = EMPTY_CHARACTER;
+    let s = EMPTY_CHARACTER_STATE;
     const out: Array<string | null> = [];
     for (const r of reads) {
-      const step = stepCharacter(s, r);
+      const step = stepCharacter(s, r, NONE_SAID);
       s = step.next;
       out.push(step.switched?.to ?? null);
     }
@@ -49,25 +52,35 @@ describe('stepCharacter — a switch is spoken only once it holds', () => {
       .toEqual([null, null, 'tactical', null, 'positional', null, 'tactical']);
   });
 
-  it('the words rotate on a counter, never at random', () => {
-    let s = EMPTY_CHARACTER;
+  it('the words rotate on the switches HEARD, never at random', () => {
+    let s = EMPTY_CHARACTER_STATE;
+    const heard = { ...NONE_SAID };
     const said: string[] = [];
     for (const r of ['positional', 'tactical', 'tactical', 'positional', 'positional', 'tactical', 'tactical'] as Character[]) {
-      const step = stepCharacter(s, r);
+      const step = stepCharacter(s, r, heard);
       s = step.next;
-      if (step.switched) said.push(step.switched.text);
+      if (step.switched) { said.push(step.switched.text); heard[step.switched.to] += 1; }
     }
     expect(said).toHaveLength(3);
     expect(said[0]).not.toBe(said[2]); // two tactical switches, two different stems
+  });
+
+  it('a switch the door HELD spends no stem: the next one says the first words (P1-8c)', () => {
+    const settled = { ...EMPTY_CHARACTER_STATE, current: 'positional' as const };
+    const first = stepCharacter(stepCharacter(settled, 'tactical', NONE_SAID).next, 'tactical', NONE_SAID);
+    const back = stepCharacter(stepCharacter(first.next, 'positional', NONE_SAID).next, 'positional', NONE_SAID);
+    // Nothing was heard, so the turn back to sharp opens with the same stem.
+    const again = stepCharacter(stepCharacter(back.next, 'tactical', NONE_SAID).next, 'tactical', NONE_SAID);
+    expect(again.switched?.text).toBe(first.switched?.text);
   });
 });
 
 describe('the switch says WHY it turned sharp (walk 2026-09-30)', () => {
   it('names a live tactic, or the one move that works', () => {
-    const settled = { ...EMPTY_CHARACTER, current: 'positional' as const };
-    const hold = stepCharacter(settled, 'tactical', 'tactic').next;
-    expect(stepCharacter(hold, 'tactical', 'tactic').switched?.text).toMatch(/there is a tactic on the board/);
-    expect(stepCharacter(stepCharacter(settled, 'tactical', 'gap').next, 'tactical', 'gap').switched?.text).toMatch(/one move here is far better than the rest/);
+    const settled = { ...EMPTY_CHARACTER_STATE, current: 'positional' as const };
+    const hold = stepCharacter(settled, 'tactical', NONE_SAID, 'tactic').next;
+    expect(stepCharacter(hold, 'tactical', NONE_SAID, 'tactic').switched?.text).toMatch(/there is a tactic on the board/);
+    expect(stepCharacter(stepCharacter(settled, 'tactical', NONE_SAID, 'gap').next, 'tactical', NONE_SAID, 'gap').switched?.text).toMatch(/one move here is far better than the rest/);
   });
 });
 

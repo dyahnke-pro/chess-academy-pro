@@ -798,6 +798,15 @@ export function findAllowedChain(historySans: readonly string[], studentMovePly:
 
 // ─── consumer helpers ───────────────────────────────────────────────────────
 
+/** THE CHAIN'S CLAIM — one key for "this cross-move story was said", the same
+ *  on every surface (WO-STORY-MATRIX-01 P1-8c): its stance and each node's kind
+ *  and squares. Learn keyed its chain line by the highlighted squares and
+ *  Review by this signature in a set of its own, so the game's story could not
+ *  tell that the two had said the same chain. */
+export function causalChainKey(chain: CausalChain): string {
+  return `cause:${chain.stance}:${chain.nodes.map((n) => `${n.kind}${n.squares.join('')}`).join('|')}`;
+}
+
 /** Every lead-the-eye arrow across the chain, deduped, for ONE board frame (the
  *  focus position — where all the chain's pieces stand). Feeds the review
  *  segment's planArrows / a lesson beat's arrows. */

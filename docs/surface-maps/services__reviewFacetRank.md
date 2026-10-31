@@ -66,15 +66,15 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `factKind` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2823`
+- `src/services/coachFeatureService.ts:2803`
 - `src/services/exchangeIdeas.test.ts:224`
 
 ### `factValue` (function) — 1 call site
 - `src/services/coachDecider.ts:430`
 
 ### `facetTag` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:2500`
-- `src/services/coachFeatureService.ts:3097`
+- `src/services/coachFeatureService.ts:2480`
+- `src/services/coachFeatureService.ts:3077`
 - `src/services/reviewFacetRank.test.ts:19`
 - `src/services/reviewFacetRank.test.ts:20`
 - `src/services/reviewFacetRank.test.ts:21`

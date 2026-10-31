@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**474 lines · 10 exports · 8 importers · 5 tests · 1 audits**
+**454 lines · 11 exports · 10 importers · 6 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:3142) — names `renderThesis`
+- **⏰ Standing notes** (CLAUDE.md:3142) — names `Thesis`
 
 ## Who calls in
 
@@ -16,14 +16,19 @@
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/hooks/usePhaseNarration.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/gameStory.ts`
 - `src/services/gameTurn.test.ts`
 - `src/services/needCoverage.report.test.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/teachingSelector.test.ts`
+- `src/test/reviewTurnFromStory.test.ts`
 
 ## Exports and every call site
 
 ### `SelectorPly` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `Thesis` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `landedTacticIsMoment` (function) — 3 call sites
@@ -42,7 +47,7 @@
 
 ### `selectTeaching` (function) — 16 call sites
 - `src/hooks/usePhaseNarration.ts:345`
-- `src/services/coachFeatureService.ts:1520`
+- `src/services/coachFeatureService.ts:1534`
 - `src/services/gameTurn.test.ts:42`
 - `src/services/gameTurn.test.ts:48`
 - `src/services/needCoverage.report.test.ts:60`
@@ -58,12 +63,15 @@
 - `src/services/teachingSelector.test.ts:102`
 - `src/services/teachingSelector.test.ts:115`
 
+### `turnThesis` (function) — 1 call site
+- `src/services/coachFeatureService.ts:4039`
+
 ### `ThesisRegister` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderThesis` (function) — 12 call sites
+### `renderThesis` (function) — 13 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
-- `src/components/Coach/CoachGameReview.tsx:1531`
+- `src/components/Coach/CoachGameReview.tsx:1537`
 - `src/hooks/usePhaseNarration.ts:349`
 - `src/services/gameTurn.test.ts:44`
 - `src/services/gameTurn.test.ts:50`
@@ -74,6 +82,7 @@
 - `src/services/teachingSelector.test.ts:90`
 - `src/services/teachingSelector.test.ts:152`
 - `src/services/teachingSelector.test.ts:157`
+- `src/test/reviewTurnFromStory.test.ts:35`
 
 ### `pliesFromSans` (function) — 6 call sites
 - `src/hooks/usePhaseNarration.ts:345`
@@ -82,9 +91,6 @@
 - `src/services/teachingSelector.test.ts:111`
 - `src/services/teachingSelector.test.ts:112`
 - `src/services/teachingSelector.test.ts:115`
-
-### `selectTeachingForSegments` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:1530`
 
 ### `summarizeTeaching` (function) — 3 call sites
 - `src/services/openingGenerator.ts:533`
@@ -98,6 +104,7 @@
 - `src/services/needCoverage.report.test.ts`
 - `src/services/studentMomentBoost.test.ts`
 - `src/services/teachingSelector.test.ts`
+- `src/test/reviewTurnFromStory.test.ts`
 
 ## Audits that reach it
 

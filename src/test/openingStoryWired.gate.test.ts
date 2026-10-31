@@ -11,11 +11,11 @@ const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
 
 describe('Learn: the opening story is wired once', () => {
   it('the identity is filtered once a game at the story read', () => {
-    expect(src).toMatch(/readBoardAll\('openingStory'[^\n]*\)\n\s*\.filter\(\(r\) => r\.storyBeat !== 'identity' \|\| learnMemRef\.current\.identitySaid === null\)/);
+    expect(src).toMatch(/readBoardAll\('openingStory'[^\n]*\)\n\s*\.filter\(\(r\) => r\.storyBeat !== 'identity' \|\| identityHeard\(learnMemRef\.current\.story\.current\(\)\) === null\)/);
   });
   it('the summary break is recorded from the masters plan, not from the key-break offer', () => {
     expect(src).not.toMatch(/storyReads\.some\(\(r\) => r\.storyBeat === 'key-break'\)/);
-    expect(src).toMatch(/if \(!openingBreakRef\.current && history\.length >= 6 && classifyPhase\(/);
+    expect(src).toMatch(/if \(!openingBreak\(story\.current\(\)\) && history\.length >= 6 && classifyPhase\(/);
   });
   it('opening analytics fire only from what was heard', () => {
     const helper = src.indexOf('const noteOpeningFactsHeard = ');
