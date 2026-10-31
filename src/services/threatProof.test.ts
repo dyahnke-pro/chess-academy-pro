@@ -29,7 +29,7 @@ describe('threatProof — the cost a threat warning claims, proven on the board'
     // hits it. Black to move. Guarded twice — and still a knight for a pawn.
     const fen = '3qk3/5ppp/5n2/6P1/8/8/8/4K3 b - - 0 1';
     const p = threatProof(fen, 'b', ['f6']);
-    expect(p?.short).toMatch(/^gxf6 .*your knight.*their pawn|^gxf6 .*their pawn for your knight/);
+    expect(p?.short).toMatch(/^gxf6 wins a knight for a pawn|^gxf6 .*their pawn for your knight|^After gxf6, taking back only gets you a pawn/);
     expect(p?.short).toMatch(/take back|taking back/);
     expect(p?.short).not.toMatch(/\d+ points?/);
     expect(p?.short).not.toMatch(/guarded/);

@@ -17,6 +17,7 @@
  */
 import { gainedBishopPair } from './bishopPair';
 import { andList, fileList, withArticle } from '../utils/andList';
+import { afterCaptureSan } from '../utils/captureWords';
 import { Chess } from 'chess.js';
 import { shieldLoss } from './kingSafety';
 import type { Square } from 'chess.js';
@@ -729,9 +730,9 @@ function outpostPhrase(f: Pick<PlyFacts, 'outpostGained' | 'outpostPiece' | 'out
 /** The SAME per-move facts as `plyFactsSentence`, but as a SUBJECT-LESS clause
  *  (no "The move X" prefix) so the caller can frame the subject — "You …" for
  *  the student, "Your opponent …" for the other side (David 2026-07-20: "always
- *  narrate both sides"). Returns e.g. "captures the knight, lands a fork and wins
- *  material", or null on a genuinely quiet move — and null on a capture or
- *  check that does nothing more (`factsOnlyRestate`). Board-true (G0).
+ *  narrate both sides"). Returns e.g. "captures the knight on e5 and lands a
+ *  fork", or null on a genuinely quiet move — and null on a capture or check
+ *  that does nothing more (`factsOnlyRestate`). Board-true (G0).
  *
  *  🔴 The example above used to end "wins 3 POINTS of material". That is the
  *  pre-2026-07-24 wording and the emit site below has said so ever since
@@ -741,11 +742,21 @@ function outpostPhrase(f: Pick<PlyFacts, 'outpostGained' | 'outpostPiece' | 'out
 export function plyFactsClause(
   fenBefore: string,
   san: string,
-  prev?: PrevCaptureContext,
-  /** Whose piece a capture takes, from the listener's seat — 'your' when the
-   *  opponent captures, 'their' when the student does. Absent → "the". */
-  victimOwner?: 'your' | 'their',
+  opts: {
+    prev?: PrevCaptureContext;
+    /** Whose piece a capture takes, from the listener's seat — 'your' when
+     *  the opponent captures, 'their' when the student does. Absent → "the". */
+    victimOwner?: 'your' | 'their';
+    /** REQUIRED — does the line say the move's SAN right before this clause?
+     *  The SAN already says a capture ("Qxd8" is spoken "queen takes d 8"),
+     *  so after it the clause says only what the capture leads to ("Qxd8 — it
+     *  wins a queen"), never the capture again; with no SAN ("Your opponent
+     *  …") the capture is said in words (David 2026-10-30: "queen takes d8,
+     *  takes the queen"; `captureWords`). */
+    sanSaid: boolean;
+  },
 ): string | null {
+  const { prev, victimOwner } = opts;
   try {
     const c = new Chess(fenBefore);
     const mv = c.move(san);
@@ -763,7 +774,9 @@ export function plyFactsClause(
     // material won — name the piece and its square, and say "wins" instead of
     // a second clause that restates it.
     const wonByCapture = !!f.captured && f.materialGained >= 1;
-    if (f.captured) parts.push(`${wonByCapture ? 'wins' : 'captures'} ${victimOwner ?? 'the'} ${f.captured} on ${mv.to}`);
+    if (f.captured && opts.sanSaid) {
+      if (wonByCapture) parts.push(afterCaptureSan({ kind: 'nets', captured: mv.captured ?? 'p', free: false }, 'verb'));
+    } else if (f.captured) parts.push(`${wonByCapture ? 'wins' : 'captures'} ${victimOwner ?? 'the'} ${f.captured} on ${mv.to}`);
     if (f.isMate) parts.push('delivers checkmate');
     else if (f.isCheck) parts.push('gives check');
     if (f.promotion) parts.push(`promotes to ${withArticle(f.promotion)}`);
@@ -906,7 +919,16 @@ export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent?: bool
     const victim = isYou ? 'their' : isThem ? 'your' : 'the';
     const plural = (n: number): string => (n > 1 ? 's' : '');
     const parts: string[] = [];
-    if (f.captured) parts.push(vb(`take ${victim} ${f.captured}`, `captures the ${f.captured}`));
+    // THE SUBJECT-LESS FORM LEADS WITH THE SAN ("The move cxd4 …", which
+    // Review turns into "Your cxd4 …"), and the SAN already says the capture:
+    // after it only what the capture won is said, never the capture again
+    // ("Your cxd4 captures the pawn" was "c-pawn takes d4 captures the pawn",
+    // 69 times on the Danya bench, David 2026-10-30; `captureWords`).
+    const sanLed = !isYou && !isThem;
+    const wonByCapture = !!f.captured && f.materialGained >= 1;
+    if (f.captured && sanLed) {
+      if (wonByCapture) parts.push(afterCaptureSan({ kind: 'nets', captured: f.captured, free: false }, 'verb'));
+    } else if (f.captured) parts.push(vb(`take ${victim} ${f.captured}`, `captures the ${f.captured}`));
     if (f.isMate) parts.push(vb('deliver checkmate', 'delivers checkmate'));
     else if (f.isCheck) parts.push(vb('give check', 'gives check'));
     if (f.promotion) parts.push(vb(`promote to ${withArticle(f.promotion)}`, `promotes to ${withArticle(f.promotion)}`));
@@ -917,7 +939,7 @@ export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent?: bool
     if (f.newOpenFiles.length > 0) parts.push(vb(`open the ${f.newOpenFiles[0]}-file`, `opens the ${f.newOpenFiles[0]}-file`));
     if (f.shieldLost > 0) parts.push(vb(`strip ${f.shieldLost} pawn${plural(f.shieldLost)} from the king's cover`, `strips ${f.shieldLost} pawn${plural(f.shieldLost)} from the king's cover`));
     // "win/wins material", never the point count (David 2026-07-24 — sounds bad).
-    if (f.materialGained >= 1) parts.push(vb('win material', 'wins material'));
+    if (f.materialGained >= 1 && !(sanLed && wonByCapture)) parts.push(vb('win material', 'wins material'));
 
     if (parts.length === 0 || onlyBareCapture) return null;
     // A check ALONE teaches nothing as bare "gives check" — say what it DOES:

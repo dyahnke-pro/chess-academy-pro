@@ -23,6 +23,6 @@ function inputs(): ReviewMoveInput[] {
 describe('review speaks the Learn student-move lanes (A2)', () => {
   it('4.Nxd4 teaches which piece takes back, and why', () => {
     const segs = buildReviewSegmentsForTests(inputs(), 'white', 'Sicilian Defense', true, 1200, [], coldStudent(1200), 'g');
-    expect(segs.find((s) => s.ply === 7)?.narration ?? '').toMatch(/taking back with the knight/);
+    expect(segs.find((s) => s.ply === 7)?.narration ?? '').toMatch(/\[rule\] Nxd4 — the knight lands in the centre on d4; Qxd4 would put the queen on d4/);
   });
 });

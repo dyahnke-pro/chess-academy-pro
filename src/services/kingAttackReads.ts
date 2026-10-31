@@ -43,6 +43,7 @@ import { oppositeWingsRace, OPPOSITE_WINGS_CLAIM } from './planRace';
 import { conceptInstanceKey } from './conceptKey';
 import { lineSeatAt } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { captureInWords } from '../utils/captureWords';
 
 export type KingReadId =
   | 'mate-over-material' | 'material-not-mate' | 'mate-division'
@@ -186,7 +187,7 @@ export function mateOrMaterial(fen: string, me: Color, lines: Lines): KingRead |
   if (!proof) return null;
   return {
     id: 'material-not-mate',
-    text: `${rot(fen, 'No mate here', "There's no mate to find here", 'The attack has no mate in it')} — ${sayMoveClause(first.san, fen)} takes their ${name(first.captured)} with check, and the material is the win.`,
+    text: `${rot(fen, 'No mate here', "There's no mate to find here", 'The attack has no mate in it')} — ${captureInWords({ piece: first.piece, captured: first.captured, square: first.to }, 'you')} with check, and the material is the win.`,
     idea: 'There is no mate in this attack — the win is material, taken with check.',
     squares: [first.from, first.to],
     proof, stakes: { points: piecePoints(first.captured), plies: 0 }, namesMove: true,

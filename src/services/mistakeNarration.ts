@@ -574,10 +574,10 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
 /** "Qc5 keeps your pawn on d6 protected." when the played move let them win
  *  a piece on a square and the best move leaves that capture losing. */
 function keepsWhatWasDropped(fen: string, playedSan: string, replySan: string | null, bestSan: string): string | null {
-  const p = replyPunishment(fen, playedSan, replySan);
-  const target = p?.gerund.match(/^winning your (\w+) on ([a-h][1-8])$/);
+  // The piece the reply won, as data (never read back out of the words).
+  const target = replyPunishment(fen, playedSan, replySan)?.won;
   if (!target) return null;
-  const [, piece, square] = target;
+  const { piece, square } = target;
   try {
     const c = new Chess(fen);
     const best = c.move(bestSan);

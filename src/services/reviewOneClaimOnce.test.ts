@@ -123,7 +123,9 @@ describe('a free capture said three times is not one template three times', () =
     const segs = buildReviewSegmentsForTests(game, 'white', null, true, 1200, [], coldStudent(1200), 'g');
     const job = (ply: number): string => (segs.find((s) => s.ply === ply)?.narration ?? '').match(/[^.]*nothing can take back\./)?.[0] ?? '';
     const said = [3, 7, 9].map(job);
-    for (const s of said) expect(s).toMatch(/their pawn on [bgf]5/);
+    // Each says what the capture nets, never the capture again (David
+    // 2026-10-30: "queen takes d8, takes the queen").
+    for (const s of said) expect(s).toMatch(/\ba (?:free )?pawn\b/);
     expect(new Set(said.map((s) => s.replace(/[a-h][1-8]/g, 'SQ').trim())).size).toBe(3);
   });
 });

@@ -36,7 +36,7 @@ describe('the computed questions', () => {
   });
   it('grab: each capture counted — a losing one says who takes back', () => {
     expect(topicOf('can I take that pawn with my queen?')).toBe('grab');
-    expect(answer('can I take that pawn with my queen?')).toMatch(/^Qxd5 takes the pawn, but their knight takes back — you give up more than you win\. Before any capture, count: who takes back, and with what\.$/);
+    expect(answer('can I take that pawn with my queen?')).toMatch(/^Qxd5 — but their knight takes back, and you give up more than you win\. Before any capture, count: who takes back, and with what\.$/);
   });
   it('tied: the named piece first', () => {
     expect(answer('is my bishop tied down?')).toMatch(/^No — your bishop on e2 is free to move: nothing it guards falls if it leaves\. Their queen on d8 is tied to guarding their pawn on d5/);

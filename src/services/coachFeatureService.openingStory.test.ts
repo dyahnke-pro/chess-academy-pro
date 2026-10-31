@@ -88,8 +88,8 @@ describe('review walk — both seats, captures included (BACKLOG §6)', () => {
     const at = (ply: number): string => segs[ply - 1].narration ?? '';
     // A plain trade restates the move (lead 2026-10-20): nothing on 5.exd5.
     expect(at(9)).not.toMatch(/and you can take back/);
-    expect(at(11)).toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ |(?:You|They) play \S+(?: — it|: it|\. It) )takes on f7 and hits your queen on d8 and your rook on h8 at once\./);
-    expect(at(12)).toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ |(?:You|They) play \S+(?: — it|: it|\. It) )takes back on f7: you get a knight for the pawn they took, but your king has left its back rank to do it, out in the open — that is what they gave the knight for\./);
+    expect(at(11)).toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ |(?:You|They) play \S+(?: — it|: it|\. It) )hits your queen on d8 and your rook on h8 at once\./);
+    expect(at(12)).toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ |(?:You|They) play \S+(?: — it|: it|\. It) )gets you a knight for the pawn they took, but your king has left its back rank to do it, out in the open — that is what they gave the knight for\./);
     expect(at(15)).toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ |(?:You|They) play \S+(?: — it|: it|\. It) )adds a third attacker on your knight on d5, and it needs an answer this move\./);
     // The pin was said with 7…Ke6's guard; 8…Nb4 says only its own guard.
     // 8…Nb4 hits c2 AND holds the pinned knight: both halves — the rule says

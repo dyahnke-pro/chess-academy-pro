@@ -39,7 +39,9 @@ describe('ply 52 — the gap line and the weighing name Bf6 once', () => {
 });
 
 describe('ply 27 — Ng5 hangs the knight, and the coach says so', () => {
-  const VERDICT = "Loose pieces drop off: the knight on g5 is left hanging, and Bxg5 just takes it.";
+  // The capture said once — "Bxg5 just takes it" was "bishop takes g5 just
+  // takes it" (David 2026-10-30).
+  const VERDICT = "Loose pieces drop off: the knight on g5 is left hanging, and after Bxg5 nothing can take back.";
   const AFTER_MOVE = fenAt(27);  // Ng5 on the board, Black to move
   const AFTER_REPLY = fenAt(28); // …Bxg5 taken
   it('the verdict is true on the board it describes, and dies on the board after their reply', async () => {

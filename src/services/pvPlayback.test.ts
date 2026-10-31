@@ -220,7 +220,7 @@ describe('material truth + tactic agent (David 2026-07-20 Opera nitpick)', () =>
     const prev = { square: 'f3', capturedValue: 3, net: 3 }; // Black just took the knight on f3
     // The take-back claims no windfall — its one point is the bishop pair it
     // wins (Black is left one bishop, White keeps two).
-    const clause = plyFactsClause(fb, 'Qxf3', prev) ?? '';
+    const clause = plyFactsClause(fb, 'Qxf3', { prev, sanSaid: true }) ?? '';
     expect(clause).toMatch(/wins the bishop pair/);
     expect(clause).not.toMatch(/wins material|wins \d+ point/i);
     // And the walk suppresses the bare even-trade restatement entirely.
@@ -234,7 +234,7 @@ describe('material truth + tactic agent (David 2026-07-20 Opera nitpick)', () =>
     // netting 1 − 0 and the walk spoke "You capture the pawn, win material."
     const fb = fenBefore(['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4']);
     const prev = { square: 'd4', capturedValue: 0, net: 0 }; // 4.d4 landed here, captured nothing
-    const clause = plyFactsClause(fb, 'cxd4', prev) ?? '';
+    const clause = plyFactsClause(fb, 'cxd4', { prev, sanSaid: true }) ?? '';
     expect(clause).not.toMatch(/wins? material|wins \d+ point/i);
     expect(plyFactsForMove(fb, 'cxd4', prev, true)).toBeNull();
   });
@@ -243,8 +243,11 @@ describe('material truth + tactic agent (David 2026-07-20 Opera nitpick)', () =>
     // White knight on e5 hangs; Black's d6 pawn takes it for free.
     const fb = 'rnbqkbnr/ppp2ppp/3p4/4N3/8/8/PPPPPPPP/RNBQKB1R b KQkq - 0 1';
     const line = plyFactsForMove(fb, 'dxe5') ?? '';
-    // "wins material" — no point count spoken (David 2026-07-24: "sounds bad").
-    expect(line).toMatch(/wins material/i);
+    // What it won, as a count — no point count spoken (David 2026-07-24:
+    // "sounds bad") and no second capture after the SAN (David 2026-10-30:
+    // "The move dxe5 captures the knight" said the capture twice).
+    expect(line).toMatch(/^The move dxe5 wins a knight/);
+    expect(line).not.toMatch(/captures the/);
     expect(line).not.toMatch(/wins \d+ point/i);
   });
 
@@ -252,7 +255,7 @@ describe('material truth + tactic agent (David 2026-07-20 Opera nitpick)', () =>
     // 11...Rd8 lands BEHIND White\'s pinned-knight setup — it is White\'s Rd1
     // pin, not Black\'s. The mover must not be credited with "lands a pin".
     const fb = fenBefore(OPERA.slice(0, 23)); // up to O-O-O, Black to play Rd8
-    const clause = plyFactsClause(fb, 'Rd8') ?? '';
+    const clause = plyFactsClause(fb, 'Rd8', { sanSaid: true }) ?? '';
     expect(clause).not.toMatch(/pin/i);
   });
 
@@ -388,8 +391,8 @@ describe('passed pawns are owned by a side (walk 5, R16)', () => {
     const f = computePlyFacts(fen, c.fen(), { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion });
     expect(f.newPassedPawns).toEqual([]);
     expect(f.passedPawnsHanded).toEqual(['e6']);
-    expect(plyFactsClause(fen, 'exf6')).not.toMatch(/creates a passed pawn/);
-    expect(plyFactsClause(fen, 'exf6')).toMatch(/leaves the other side a passed pawn on e6/);
+    expect(plyFactsClause(fen, 'exf6', { sanSaid: true })).not.toMatch(/creates a passed pawn/);
+    expect(plyFactsClause(fen, 'exf6', { sanSaid: true })).toMatch(/leaves the other side a passed pawn on e6/);
   });
 });
 
@@ -440,12 +443,15 @@ describe('a ply-fact list reads as a sentence (review audit 2026-10-14: "capture
   it('joins the last fact with "and"', async () => {
     const { plyFactsClause } = await import('./pvPlayback');
     // The queen takes a loose knight with check: two facts on one move.
-    const out = plyFactsClause('4k3/8/8/4n3/8/8/4Q3/4K3 w - - 0 1', 'Qxe5+');
+    const out = plyFactsClause('4k3/8/8/4n3/8/8/4Q3/4K3 w - - 0 1', 'Qxe5+', { sanSaid: false });
     expect(out).toBe('wins the knight on e5 and gives check');
+    // After its SAN the capture is said once (David 2026-10-30: "queen takes
+    // d8, takes the queen"): "Qxe5+ — it wins a knight and gives check".
+    expect(plyFactsClause('4k3/8/8/4n3/8/8/4Q3/4K3 w - - 0 1', 'Qxe5+', { sanSaid: true })).toBe('wins a knight and gives check');
   });
   it('a winning capture is said once, with whose piece and where (review tape 2026-10-15)', async () => {
     const { plyFactsClause } = await import('./pvPlayback');
-    const out = plyFactsClause('4k3/8/8/4n3/8/8/4Q3/4K3 w - - 0 1', 'Qxe5+', undefined, 'your') ?? '';
+    const out = plyFactsClause('4k3/8/8/4n3/8/8/4Q3/4K3 w - - 0 1', 'Qxe5+', { victimOwner: 'your', sanSaid: false }) ?? '';
     expect(out).toMatch(/^wins your knight on e5/);
     expect(out).not.toMatch(/wins material/);
   });
@@ -491,6 +497,6 @@ describe('the quiet-move rule: a move that only restates the board (WO-DECIDER-0
     for (const m of ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'a3', 'Bxc3+']) c.move(m);
     const prev = { square: 'c3', capturedValue: 3, net: 3 };
     expect(moveOnlyRestates(c.fen(), 'bxc3', prev)).toBe(false);
-    expect(plyFactsClause(c.fen(), 'bxc3', prev, 'their')).toMatch(/wins the bishop pair/);
+    expect(plyFactsClause(c.fen(), 'bxc3', { prev, victimOwner: 'their', sanSaid: true })).toMatch(/wins the bishop pair/);
   });
 });

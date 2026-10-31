@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**942 lines · 5 exports · 22 importers · 12 tests · 0 audits**
+**944 lines · 5 exports · 22 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,7 +38,7 @@
 ## Exports and every call site
 
 ### `quietMovePoint` (function) — 7 call sites
-- `src/services/playCommentary.ts:904`
+- `src/services/playCommentary.ts:907`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
 - `src/services/reviewWalkOct1.test.ts:70`
@@ -49,7 +49,7 @@
 ### `buildReviewMoveTeaching` (function) — 52 call sites
 - `src/services/coachFeatureService.ts:1125`
 - `src/services/coachFeatureService.ts:3968`
-- `src/services/danyaBench.measure.test.ts:433`
+- `src/services/danyaBench.measure.test.ts:436`
 - `src/services/discussionPractice.ts:173`
 - `src/services/guardPressure.test.ts:20`
 - `src/services/guardPressure.test.ts:24`
@@ -69,7 +69,7 @@
 - `src/services/lessonVoiceIdeas.test.ts:63`
 - `src/services/lessonVoiceIdeas.test.ts:70`
 - `src/services/projectedLineVoice.ts:144`
-- `src/services/reviewMoveBriefing.ts:435`
+- `src/services/reviewMoveBriefing.ts:441`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`
