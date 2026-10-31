@@ -113,7 +113,13 @@ Root-cause fixes with a test that fails on the old code · G0 (computers decide,
 
 **Phase 1 build order** (design: `docs/plans/2026-10-30-story-matrix-phase1.md`, from four maps of the code — 9 fact shapes, 3 composers, 4 step tables that disagree, a relation snapshot at ~2 ms a board built from existing computers, stakes as the win-chance gap on the decision each fact explains, 57 computers: 19 wired, 29 deleted, 9 kept out with a reason): P1-0 instruments and baselines · P1-1 delete the dead and switched-off producers · P1-2 one win-chance converter · P1-3 `CoachFact` (kind, group, computer) · P1-4 one group table, the registry's lesson surface and phase column · P1-5 doors take objects, the text joins deleted · P1-6 every producer emits `CoachFact` (5 commits) · P1-7 one reader per relation and the snapshot · P1-8 `GameStory` (5 commits) · P1-9 engine reads reach the move's facts (the one missing input behind six silent computers) · P1-10 stakes as win chance under four rules (one per Build 4 cause) · P1-11 needs and causes · P1-12 the remaining wires and deletes · P1-13 close.
 
-**Status:** ⏳ Phase 1 building — P1-0, P1-1, P1-2 in progress (2026-10-30 evening); the capture phrasing built alongside.
+**Status (2026-10-31, overnight):**
+- ✅ P1-0 instruments: `scripts/computer-reach.mjs` (355 computers, 51 wired nowhere, reproduced row for row), the Gotham–Jelena fixture, `decisionRows.baseline.test.ts` (every coach-decision row and spoken line from Review, Learn, chat's read and the lesson on four games — proven to catch a planted change).
+- ✅ P1-7 relations: one reader each for pins (the teaching pin and the legal pin, two named readers), open files, king cover and king zones; `relations.ts` (snapshot, diff, guard-pinned); `causalChain` reads it (88.7 → 5.6 ms a ply, the replay deleted) and `computeBoardDelta` renders its diff. The decision baseline did not move.
+- ✅ P1-8a one say-once ledger: `gameStory.ts` replaces ~18 Learn/phase say-once memories; writes at the door only, rewinds on takeback, one new-game door. Behaviour changes are listed in the commit (a line the door held is no longer marked said).
+- ✅ P1-12 (part): breakthrough, triangulation and queen-vs-a-pawn-on-the-seventh read by the concept engine.
+- ⏳ in review: P1-1 (the deletes, ~4,100 lines), the capture phrasing (one helper, ~25 producers, the gate: 0 doubled captures on real games where there were thousands).
+- ⏳ building: P1-2 (one win-chance converter), P1-3/4 (`CoachFact`, one group table).
 
 ## 🔌 WO-ONE-COACH-01 — the wiring map, the Danya bench, one composer (David 2026-10-30: "All of this is built! Why is it not wired in?" → "I want different computers wired in different orders and quickly compared to how Danya narrates" → "Go")
 
