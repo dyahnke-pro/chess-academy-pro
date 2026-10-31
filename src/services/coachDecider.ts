@@ -33,7 +33,8 @@ import { boardVeto, type BoardState } from './boardState';
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, supportedFacts, barForTier, type QuietFact } from './factSelector';
 import { fadeLevelOf, type FadeLevel, type FadeLevels } from './fadeText';
-import { factKind, factValue, FACT_ROLE, FACT_LAYER, FACT_PROOF, FACT_STEP, type FactKind, type FacetRole } from './reviewFacetRank';
+import { factKind, factValue, FACT_ROLE, FACT_LAYER, FACT_PROOF, type FactKind, type FacetRole } from './reviewFacetRank';
+import { stepOf as stepOfKind } from './coachFact';
 import { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
 import { isProof, type FactProof, type Proof } from './proof';
 import { layerBonus, type LayerStandings } from './teachingLayers';
@@ -520,7 +521,7 @@ export function decide(
   // line it played out after the habit; every surface through this door now
   // speaks the order Learn and the lessons do. Untagged prose (the causal
   // lead) is what the move changed.
-  const stepOf = (t: string): ThoughtStep => { const k = kindOf(t); return k === null ? 'yours' : FACT_STEP[k]; };
+  const stepOf = (t: string): ThoughtStep => { const k = kindOf(t); return k === null ? 'yours' : stepOfKind(k, 'student'); };
   const order = new Map(value);
   const stepOrder = new Map<string, number>();
   for (const t of selection.spoken) stepOrder.set(t, THOUGHT_ORDER[stepOf(t)]);

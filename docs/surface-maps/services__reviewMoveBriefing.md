@@ -48,7 +48,7 @@
 ### `buildReviewMoveBriefing` (function) — 22 call sites
 - `src/services/captureRun.test.ts:45`
 - `src/services/captureRun.test.ts:56`
-- `src/services/coachFeatureService.ts:2002`
+- `src/services/coachFeatureService.ts:1991`
 - `src/services/guardPressure.test.ts:42`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`

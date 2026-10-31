@@ -10,7 +10,9 @@ import { describe, it, expect } from 'vitest';
 import { NO_PROOF } from './proof';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { costStakes } from './factStakes';
-import { decideTurn, THOUGHT_STEP, CLAUSE_STEP, thoughtStepOf, type LaneFact, type LearnLane } from './learnTurnDoor';
+import { decideTurn, thoughtStepOf, LEARN_LANES, STORY_LANE, type LaneFact, type LearnLane } from './learnTurnDoor';
+import { STORY_KIND, type StoryBeat } from './openingStory';
+import { BOARD_COMPUTERS } from './boardComputers';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const LATE = { kind: 'late' as const, ply: 14, slipCp: null, priceSettled: true, price: null, midExchange: null };
@@ -115,14 +117,44 @@ describe('the thought is said in his order', () => {
 });
 
 describe('every lane and every clause kind answers which step it says', () => {
-  it('the tables are total and place the facts by what they are about', () => {
-    expect(THOUGHT_STEP.theirIntent).toBe('theirs');
-    expect(THOUGHT_STEP.heldMove).toBe('yours');
-    expect(THOUGHT_STEP.notYetPlayed).toBe('notYet');
-    expect(CLAUSE_STEP.deliberation).toBe('choices');
+  it('the one group table places the facts by what they are about', () => {
+    expect(thoughtStepOf('theirIntent')).toBe('theirs');
+    expect(thoughtStepOf('heldMove')).toBe('yours');
+    expect(thoughtStepOf('notYetPlayed')).toBe('notYet');
+    expect(thoughtStepOf('positionFacts', 'deliberation')).toBe('choices');
     expect(thoughtStepOf('positionFacts', 'rule')).toBe('yours');
     expect(thoughtStepOf('positionFacts', 'not-a-kind')).toBe('board');
     expect(thoughtStepOf('phase', 'not-yet')).toBe('notYet');
+  });
+
+  it('a lane fed by a registry computer speaks that computer\'s kind (WO-STORY-MATRIX-01 P1-4)', () => {
+    const fed: Array<[LearnLane, keyof typeof BOARD_COMPUTERS]> = [
+      ['moveOrder', 'moveOrder'], ['bookMove', 'bookMove'], ['priorityFirst', 'priorityFirst'], ['prophylaxis', 'prophylaxis'],
+      ['countMethod', 'countMethod'], ['lastTimeHere', 'lastTimeHere'], ['sameAsLastTime', 'lastTimeHere'],
+    ];
+    for (const [lane, id] of fed) expect(LEARN_LANES[lane].factKind, lane).toBe(BOARD_COMPUTERS[id].kind);
+  });
+
+  it('every story beat is said under its producer\'s kind, on Learn as on Review', () => {
+    for (const beat of Object.keys(STORY_KIND) as StoryBeat[]) {
+      expect(LEARN_LANES[STORY_LANE[beat]].factKind, beat).toBe(STORY_KIND[beat]);
+    }
+  });
+
+  it('the listed placements: each story beat by what it is about, the book move is the name, the move order is "not yet"', () => {
+    expect(thoughtStepOf(STORY_LANE.identity)).toBe('name');
+    expect(thoughtStepOf(STORY_LANE['structure-cost'])).toBe('yours');
+    for (const beat of ['their-setup', 'consequence'] as StoryBeat[]) expect(thoughtStepOf(STORY_LANE[beat]), beat).toBe('theirs');
+    for (const beat of ['branch-choice', 'structure-paid', 'character', 'key-break', 'horizon-plan'] as StoryBeat[]) expect(thoughtStepOf(STORY_LANE[beat]), beat).toBe('board');
+    expect(thoughtStepOf('bookMove')).toBe('name');
+    expect(thoughtStepOf('moveOrder')).toBe('notYet');
+    expect(thoughtStepOf('prophylaxis')).toBe('notYet');
+    expect(thoughtStepOf('captureChoice')).toBe('choices');
+    // The live clause `timing` (orderReads: develop first, hold the pin, the
+    // capture too early) is "not yet"; Learn's `timing` lane is the student's
+    // own move working now — a reason for the move.
+    expect(thoughtStepOf('positionFacts', 'timing')).toBe('notYet');
+    expect(thoughtStepOf('timing')).toBe('yours');
   });
 });
 

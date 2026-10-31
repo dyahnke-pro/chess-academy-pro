@@ -97,6 +97,20 @@ export const FACT_GROUP: Record<CoachFactKind, FactGroup> = {
   // ── the story: plans, the opening's story ──
   'plan-now': 'story', 'plan-race': 'story', 'plan-arc': 'story', 'plan-opening': 'story', 'plan-middlegame': 'story',
   'plan-line': 'story', 'structure-plan': 'story', 'student-leans': 'story',
+  // The opening's story, each beat by what it is about: the price the
+  // student's move paid is the move's (said with its verdict, OS-3
+  // 2026-10-19), their system is their side, the rest is the story.
+  'opening-cost': 'move', 'opening-theirs': 'theirSide', 'opening-story': 'story',
+  // BENCH-PLACED (WO-STORY-MATRIX-01 P1-4): the plan's group definitions
+  // leave two candidates for each of these — the crossroads ahead of the
+  // student's move (choices / the name) and the priority before it (choices
+  // / the habit). The Danya bench scored both placements alike (2026-10-31,
+  // on the ~half of his notes read so far: the priority fires on 6 of 459
+  // sampled notes and his idea is said on 2 of the 4 that carry one, either
+  // way; the fork's step moves only its order, which the bench does not
+  // score), so each stays where it is about the move to come: the choices.
+  'opening-fork': 'choices',
+  priority: 'choices',
   // ── structure and pieces ──
   structure: 'structure', passer: 'structure', badbishop: 'structure', worst: 'structure', minority: 'structure',
   complex: 'structure', king: 'structure', rook7: 'structure', judgement: 'structure', 'hole-access': 'structure',
@@ -119,6 +133,12 @@ export const FACT_GROUP: Record<CoachFactKind, FactGroup> = {
   'aspect-opens-file': 'move', 'aspect-their-weakness': 'move', 'aspect-own-weakness': 'move', 'aspect-own-king-cover': 'move',
   checkmate: 'move', 'board-teacher': 'move', 'deep-fact': 'move', binding: 'move', route: 'move', stop: 'move',
 };
+
+/** Is this string a kind of the one vocabulary? (A Learn fact carries its
+ *  producer's kind as a string; an unknown one falls back to its lane's.) */
+export function isCoachFactKind(kind: string): kind is CoachFactKind {
+  return Object.prototype.hasOwnProperty.call(FACT_GROUP, kind);
+}
 
 /** The step a fact of this kind is said in, for this seat. */
 export function stepOf(kind: CoachFactKind, seat: FactSeat): ThoughtStep {
