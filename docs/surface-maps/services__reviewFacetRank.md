@@ -72,8 +72,8 @@
 - `src/services/coachDecider.ts:461`
 
 ### `facetTag` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:2492`
-- `src/services/coachFeatureService.ts:3078`
+- `src/services/coachFeatureService.ts:2515`
+- `src/services/coachFeatureService.ts:3104`
 - `src/services/reviewFacetRank.test.ts:19`
 - `src/services/reviewFacetRank.test.ts:20`
 - `src/services/reviewFacetRank.test.ts:21`

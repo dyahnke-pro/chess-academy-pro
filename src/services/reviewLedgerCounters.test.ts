@@ -13,14 +13,14 @@ const inputs = (): ReviewMoveInput[] => {
   const c = new Chess();
   return ALAPIN.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
 };
-const build = (seed: { throughPly: number; keys: Set<string> } | null): ReviewMoveSegment[] =>
+const build = (seed: { throughPly: number; keys: Set<string>; story: string | null } | null): ReviewMoveSegment[] =>
   buildReviewSegmentsForTests(inputs(), 'black', 'Sicilian Defense: Alapin Variation', true, 1500, [], undefined, null, new Map(), new Map(), seed);
 const at = (segs: ReviewMoveSegment[], ply: number): string => segs.find((s) => s.ply === ply)?.narration ?? '';
 
 describe('the loose-piece count rides the seed', () => {
   it('a loose piece of theirs the walk already named makes the next one the habit, not the bare formula', () => {
     expect(at(build(null), 22)).toMatch(/nothing guards their bishop on f4/);
-    const seeded = at(build({ throughPly: 21, keys: new Set(['l:their#1']) }), 22);
+    const seeded = at(build({ throughPly: 21, keys: new Set(['l:their#1']), story: null }), 22);
     expect(seeded).not.toMatch(/nothing guards their bishop on f4/);
     expect(seeded).toMatch(/that's the second time they've left a piece with no guard/);
   }, 120000);
@@ -29,7 +29,7 @@ describe('the loose-piece count rides the seed', () => {
 describe('the motif transfer rides the seed', () => {
   it('a pin the walk spoke earlier makes a new pin "the same idea"', () => {
     expect(at(build(null), 33)).not.toMatch(/(same idea as|this idea on|the idea from) move/);
-    const seeded = at(build({ throughPly: 21, keys: new Set(['m:pin@w|9|a1b2c3']) }), 33);
+    const seeded = at(build({ throughPly: 21, keys: new Set(['m:pin@w|9|a1b2c3']), story: null }), 33);
     expect(seeded).toMatch(/(same idea as|this idea on|the idea from) move 9\b/);
   }, 120000);
 });
@@ -37,7 +37,7 @@ describe('the motif transfer rides the seed', () => {
 describe('every say-once ledger rides the seed (the swap re-said "A rare book move")', () => {
   it('a standing tactic the walk already read is not read again after a swap', () => {
     expect(at(build(null), 33)).toMatch(/pins your knight on d4/);
-    const seeded = at(build({ throughPly: 21, keys: new Set(['ss:rook on d1 pins knight on d4 against king on d7']) }), 33);
+    const seeded = at(build({ throughPly: 21, keys: new Set(['ss:rook on d1 pins knight on d4 against king on d7']), story: null }), 33);
     expect(seeded).not.toMatch(/pins your knight on d4/);
   }, 120000);
   it('the book standing is a key on the seed', () => {
@@ -58,7 +58,7 @@ describe('the standing refrains ride the seed', () => {
     expect([...spoken].some((k) => k.startsWith('rf:'))).toBe(true);
     // The deeper build no longer says it at ply 3, so its own fold would say it in full at 10.
     const swapped = [seg(3, 'A quiet move.'), seg(10, FULL)];
-    foldReviewRefrains(swapped, { throughPly: 5, keys: spoken });
+    foldReviewRefrains(swapped, { throughPly: 5, keys: spoken, story: null });
     expect(swapped[1].narration).toMatch(/you still own the d-file/);
     expect(swapped[1].narration).not.toMatch(/you own the open d-file/);
   });

@@ -2098,13 +2098,13 @@
   "origin": "extra"
  },
  {
-  "name": "planMemory — stepPlan / foldPlans / planChangeSentence",
-  "file": "services/planMemory.ts",
-  "fn": "stepPlan",
+  "name": "structurePlanEvent / planChangeSentence (planMemory folded into planThread, P1-8b)",
+  "file": "services/planThread.ts",
+  "fn": "structurePlanEvent",
   "says": "Whether the structure plan is new, carried or changed since it was announced, and the 'the plan changes' sentence",
   "origin": "map",
   "nodes": [
-   "services/planMemory.ts#stepPlan"
+   "services/planThread.ts#structurePlanEvent"
   ]
  },
  {

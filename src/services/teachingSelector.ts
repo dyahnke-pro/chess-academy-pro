@@ -37,7 +37,6 @@ import { rankTurns } from './turningPoints';
 import { landedTacticTeaching } from './dnaLineNarrator';
 import { buildCausalChain, type CausalChain } from './causalChain';
 import { structurePlan } from './nextPlans';
-import { foldPlans, type PlanPly } from './planMemory';
 import { tacticWord } from './pvPlayback';
 import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';
 import { studentMomentBoost, type StudentBoost } from './studentMomentBoost';
@@ -127,11 +126,6 @@ interface TeachingPackage {
    *  teaching beat here? (Moments / must-defend / mate speak on their own
    *  importance regardless.) Computed from `input.student` (cold when absent). */
   needByPly: ReadonlyMap<number, NeedVerdict>;
-  /** N3 — plan memory: per ply, the structure→plan in force and whether this
-   *  ply ANNOUNCES it (first time / structure changed) or merely carries it. A
-   *  surface speaks the plan on 'announce' and refers to progress otherwise —
-   *  never re-announces. */
-  planByPly: ReadonlyMap<number, PlanPly>;
   /** THE STUDENT TERM FOR THE RANKER, per student ply (David 2026-09-18: "the
    *  ranking computer decides ... which teachings are important enough to
    *  say"). RAISE-ONLY and applied under `rank > 0`, so it re-weights a moment
@@ -203,7 +197,7 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
   const { plies, kind } = input;
   const rating = input.rating ?? DEFAULT_STUDENT_RATING;
   const studentWB: Color = input.studentColor === 'white' ? 'w' : 'b';
-  if (plies.length === 0) return { thesis: NONE, moments: [], chain: null, onThread: new Set(), kind, needByPly: new Map(), planByPly: new Map(), boostByPly: new Map() };
+  if (plies.length === 0) return { thesis: NONE, moments: [], chain: null, onThread: new Set(), kind, needByPly: new Map(), boostByPly: new Map() };
 
   // 1. Landed tactics, per ply (cheap; the same computer the live beat speaks).
   const landedByPly = new Map<number, string>();
@@ -366,11 +360,11 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
     }, student));
   }
 
-  // 7. PLAN MEMORY (N3) — announced once, carried until the structure changes.
-  let planByPly: Map<number, PlanPly>;
-  try { planByPly = foldPlans(plies, input.studentColor); } catch { planByPly = new Map(); }
-
-  return { thesis, moments, chain, onThread, kind, needByPly, planByPly, boostByPly };
+  // (Plan memory — announced once, carried until the structure changes — is
+  // the game's story's structure thread, kept by the surface that speaks it:
+  // the fold that filled `planByPly` here had no reader, WO-STORY-MATRIX-01
+  // P1-8b.)
+  return { thesis, moments, chain, onThread, kind, needByPly, boostByPly };
 }
 
 export type ThesisRegister = 'retrospective' | 'present';

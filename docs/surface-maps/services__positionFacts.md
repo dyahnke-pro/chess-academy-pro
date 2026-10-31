@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2088 lines · 15 exports · 40 importers · 44 tests · 3 audits**
+**2089 lines · 15 exports · 40 importers · 45 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -96,13 +96,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11313`
+- `src/components/Coach/CoachTeachPage.tsx:11311`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
-- `src/hooks/usePhaseNarration.ts:460`
+- `src/hooks/usePhaseNarration.ts:468`
 - `src/services/raceAimOneVoice.test.ts:19`
 
 ### `clauseText` (function) — 11 call sites
-- `src/hooks/useLiveCoach.ts:300`
+- `src/hooks/useLiveCoach.ts:305`
 - `src/services/chatBoardRead.ts:112`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:259`
@@ -116,10 +116,10 @@
 
 ### `computePositionFacts` (function) — 108 call sites
 - `src/coach/boardTurnAnswer.ts:136`
-- `src/components/Coach/CoachTeachPage.tsx:11179`
+- `src/components/Coach/CoachTeachPage.tsx:11171`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
-- `src/hooks/useLiveCoach.ts:268`
-- `src/hooks/usePhaseNarration.ts:423`
+- `src/hooks/useLiveCoach.ts:271`
+- `src/hooks/usePhaseNarration.ts:430`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
 - `src/services/chatBoardRead.ts:81`
@@ -194,12 +194,12 @@
 - `src/services/positionFacts.test.ts:442`
 - `src/services/positionFacts.test.ts:455`
 - `src/services/positionFacts.test.ts:468`
-- `src/services/positionFacts.test.ts:471`
-- `src/services/positionFacts.test.ts:482`
-- `src/services/positionFacts.test.ts:486`
-- `src/services/positionFacts.test.ts:490`
-- `src/services/positionFacts.test.ts:498`
-- `src/services/positionFacts.test.ts:508`
+- `src/services/positionFacts.test.ts:473`
+- `src/services/positionFacts.test.ts:484`
+- `src/services/positionFacts.test.ts:488`
+- `src/services/positionFacts.test.ts:492`
+- `src/services/positionFacts.test.ts:500`
+- `src/services/positionFacts.test.ts:510`
 - `src/services/positionFacts.weakness.test.ts:22`
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
@@ -211,8 +211,8 @@
 - `src/services/whyBestMove.needWire.test.ts:10`
 - `src/services/whyBestMove.ts:128`
 - `src/test/computedOrderWired.test.ts:32`
-- `src/test/decisionRows.baseline.test.ts:71`
-- `src/test/decisionRows.baseline.test.ts:107`
+- `src/test/decisionRows.baseline.test.ts:74`
+- `src/test/decisionRows.baseline.test.ts:112`
 - `src/test/everySurfaceSpeaks.test.ts:117`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts:248`
 - `src/test/teach02Wired.test.ts:85`
@@ -225,7 +225,7 @@
 - `src/test/teach02Wired.test.ts:139`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11465`
+- `src/components/Coach/CoachTeachPage.tsx:11463`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -240,8 +240,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `conceptInstanceKey` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9311`
-- `src/components/Coach/CoachTeachPage.tsx:9445`
+- `src/components/Coach/CoachTeachPage.tsx:9303`
+- `src/components/Coach/CoachTeachPage.tsx:9437`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:30`
@@ -249,7 +249,7 @@
 - `src/services/conceptKey.test.ts:9`
 - `src/services/conceptKey.ts:11`
 - `src/services/danyaBehaviors.ts:526`
-- `src/services/kingAttackReads.ts:661`
+- `src/services/kingAttackReads.ts:660`
 - `src/services/learnBoardTeaching.ts:511`
 - `src/services/looseStill.test.ts:36`
 - `src/services/replayFence.alekhine1500.test.ts:25`
@@ -301,6 +301,7 @@
 - `src/test/learnNamesNoMoveOs11.gate.test.ts`
 - `src/test/learnNamesNoMoveUnasked.gate.test.ts`
 - `src/test/onePrice.gate.test.ts`
+- `src/test/oneStoryState.gate.test.ts`
 - `src/test/preGateSeesTheStudent.test.ts`
 - `src/test/teach02Wired.test.ts`
 

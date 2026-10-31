@@ -19,6 +19,7 @@ import type { PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
 import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 import { positionOf } from '../utils/samePosition';
+import { PLAN_GOAL, threadKey } from '../services/gameStory';
 
 interface UsePhaseNarrationArgs {
   /** Full PGN at narration time — fed into the grounding block. */
@@ -58,6 +59,12 @@ interface UsePhaseNarrationArgs {
    *  that each kept their own memory). The hook only READS it: what the report
    *  says is written by the surface's door, from what it kept (P1-8a). */
   getSaid: (fen: string) => ReadonlySet<string>;
+  /** The structure's plan the game last said (its id) — the story's structure
+   *  thread, REQUIRED for the same reason as `getSaid`: one memory of the plan,
+   *  so the phase turn's report never announces a plan the positional read
+   *  already said, and says a new one as the change it is. Read only; the
+   *  surface's door writes it when it keeps the line (`PhaseFact.thread`). */
+  getStructurePlan: () => string | null;
   /** The surface's turn door — REQUIRED. The report is handed over ONCE, as
    *  typed facts carrying their claim keys, and decided as one wave of the
    *  turn it was read on, never sentence by sentence (root causes 5 and 6,
@@ -443,6 +450,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             // SAY-ONCE across the game: a standing fact (the structure line)
             // would otherwise open every transition identically.
             alreadySaid: argsRef.current.getSaid(event.fen),
+            structurePlanHeard: argsRef.current.getStructurePlan(),
             // What they keep doing — the game so far (the speed-run depth).
             history: sansOfPgn(argsRef.current.getPgn() ?? ''),
             // WO-TEACH-02 S4 — this board IS the turn of the game, so the
@@ -458,6 +466,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
               pfConcrete = true;
               offerFact({
                 text: c.text, claims: clauseClaims(pf, i, event.fen), proof: c.proof ?? NO_PROOF.description, namesStudentMove: c.namesStudentMove,
+                ...(c.kind === 'structure-plan' && pf.structurePlanSaid ? { thread: { key: threadKey('student', PLAN_GOAL.structure), kind: 'stated' as const, variant: pf.structurePlanSaid } } : {}),
                 ...(c.squares ? { squares: c.squares } : {}), ...(c.stakes ? { stakes: c.stakes } : {}),
                 ...(c.lines ? { lines: c.lines } : {}), ...(c.gradeFen ? { gradeFen: c.gradeFen } : {}),
                 factKind: c.kind, ...(c.skill ? { skill: c.skill } : {}),

@@ -711,7 +711,10 @@ describe('the habit closes the turn, the verdict opens it (Learn tape 2026-10-15
 describe('Learn tries the plan thread on a copy and adopts only what spoke (A-plan P3)', () => {
   it('the live thread is never handed to the producer, and the door\'s kept claims decide', () => {
     expect(TEACH_CODE).toMatch(/readBoardAll\('planThread', \{\s*thread: planTrial,/);
-    expect(TEACH_CODE).toMatch(/adoptPlanTrial\(planTry\.live, planTry\.trial, planTry\.offered, hintPkg\.kept\.flatMap/);
+    expect(TEACH_CODE).toMatch(/adoptPlanTrial\(desk\.thread, planTry\.trial, planTry\.offered, hintPkg\.kept\.flatMap/);
+    // The trial is a copy of the story's thread, and what spoke goes back to it.
+    expect(TEACH_CODE).toMatch(/const planTrial = story\.plans\(\)\.thread;/);
+    expect(TEACH_CODE).toMatch(/\)\) learnMemRef\.current\.story\.setPlans\(gameRef\.current\.plies, desk\);/);
   });
 });
 
@@ -741,7 +744,7 @@ describe('their next idea speaks by what it would win (A-plan P2, prod Learn 202
 
 describe('a plan trial whose lines were all graded away is not adopted (prod Learn 2026-10-17)', () => {
   it('Learn adopts an empty trial only when nothing was produced', () => {
-    expect(TEACH_CODE).toMatch(/if \(plansNow\.length === 0\) adoptPlanTrial\(planLive, planTrial, \[\], \[\]\);\s*else if \(planOffered\.length > 0\) planTrialRef\.current =/);
+    expect(TEACH_CODE).toMatch(/if \(plansNow\.length === 0\) story\.setPlans\(gameRef\.current\.plies, \{ \.\.\.story\.plans\(\), thread: planTrial \}\);\s*else if \(planOffered\.length > 0\) planTrialRef\.current =/);
   });
 });
 

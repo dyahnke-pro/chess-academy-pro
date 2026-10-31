@@ -107,7 +107,7 @@ export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   tempo: { computer: 'tempoCount', tag: null, held: OPP('their wasted moves'), broken: OPP('their wasted moves'), askable: { state: 'wired', via: 'isOpponentMoveQuestion' } },
   causalChain: { computer: 'causalChain', tag: 'hung-material', held: { state: 'na', why: 'explains a slip across moves' }, broken: SLIP, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   openingIdea: { computer: 'openingStory', tag: null, held: DESC('the masters plan'), broken: DESC('the masters plan'), askable: { state: 'wired', via: 'isPlanQuestion' } },
-  planArc: { computer: 'planArc', tag: 'no-plan', held: { state: 'wired', via: "recordHeld ('no-plan' at the student's next move; a board the plan was told on files it prompted — planToldBoardsRef)" }, broken: { state: 'na', why: 'a dropped plan the student was never told is not a miss' }, askable: { state: 'wired', via: 'isPlanQuestion' } },
+  planArc: { computer: 'planArc', tag: 'no-plan', held: { state: 'wired', via: "recordHeld ('no-plan' at the student's next move; a board the plan was told on files it prompted — the story's student threads, toldBoards)" }, broken: { state: 'na', why: 'a dropped plan the student was never told is not a miss' }, askable: { state: 'wired', via: 'isPlanQuestion' } },
   openingIdentity: { computer: 'openingStory', tag: null, held: DESC('what the opening is'), broken: DESC('what the opening is'), askable: { state: 'wired', via: 'openingIdentityQuery' } },
   // Names the FAMILIES at the student's fork, never a move: a move made after
   // it answers no skill's question, so it must not turn that move's evidence

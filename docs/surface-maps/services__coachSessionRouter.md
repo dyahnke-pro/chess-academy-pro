@@ -105,8 +105,8 @@
 - `src/services/coachSessionRouter.test.ts:395`
 
 ### `ownTakebackPlies` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2924`
-- `src/components/Coach/CoachTeachPage.tsx:15006`
+- `src/components/Coach/CoachTeachPage.tsx:2913`
+- `src/components/Coach/CoachTeachPage.tsx:15013`
 - `src/services/coachSessionRouter.ownTakeback.test.ts:6`
 - `src/services/coachSessionRouter.ownTakeback.test.ts:7`
 - `src/services/coachSessionRouter.ownTakeback.test.ts:10`
@@ -119,7 +119,7 @@
 ### `tryRouteIntent` (function) — 47 call sites
 - `src/components/Board/VoiceChatMic.tsx:239`
 - `src/components/Coach/CoachGameReview.tsx:2612`
-- `src/components/Coach/CoachTeachPage.tsx:4170`
+- `src/components/Coach/CoachTeachPage.tsx:4159`
 - `src/components/Coach/GameChatPanel.tsx:556`
 - `src/services/coachHands.test.ts:35`
 - `src/services/coachHands.test.ts:141`

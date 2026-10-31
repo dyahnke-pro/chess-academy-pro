@@ -4,7 +4,9 @@ import { describe, it, expect } from 'vitest';
 import { withoutTags } from '../utils/thinkPause';
 import { Chess } from 'chess.js';
 import { deriveNextPlanFacts } from './nextPlans';
-import { newPlanThread, planThreadTurn, PLAN_THREAD_HOLD_PLIES, clonePlanThread, adoptPlanTrial } from './planThread';
+import { planThreadTurn, PLAN_THREAD_HOLD_PLIES, adoptPlanTrial, structurePlanEvent } from './planThread';
+// The plan thread's values are the game's story's (WO-STORY-MATRIX-01 P1-8b).
+import { emptyPlanThread, copyPlanThread } from './gameStory';
 
 const CENTRE_KING = 'r3k2r/ppp2ppp/2n2n2/8/8/2N2N2/PPPQ1PPP/R3K2R b KQkq - 0 12';
 /** The same board with Black's king already walked to f8 — no castling left. */
@@ -15,7 +17,7 @@ const asWhite = (fen: string): string => fen.replace(' b ', ' w ');
 
 describe('planThread — stated once, stopped with its proof', () => {
   it('states the board\'s plan, then says HOW their move stopped it, then the new plan', () => {
-    const t = newPlanThread();
+    const t = emptyPlanThread();
     const first = planThreadTurn(t, { ply: 22, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w', holdPlayable: false });
     // The first plan of a game is FOUND out loud: the three questions, a
     // pause, the answers, the plan, and why it beats the next plan.
@@ -31,7 +33,7 @@ describe('planThread — stated once, stopped with its proof', () => {
   });
 
   it('the second stop in a row is said like a coach', () => {
-    const t = newPlanThread();
+    const t = emptyPlanThread();
     t.stoppedInRow = 1;
     t.stated = { fact: deriveNextPlanFacts(asWhite(OPEN_C), 'w', { namesStudentMoves: true }).find((p) => p.kind === 'open-file')!, ply: 40 };
     const lines = planThreadTurn(t, { ply: 42, fenBefore: OPEN_C, fenAfter: after(OPEN_C, 'Rc8'), student: 'w', holdPlayable: false });
@@ -40,7 +42,7 @@ describe('planThread — stated once, stopped with its proof', () => {
   });
 
   it('a plan that stands is not said again; a quiet move proves nothing', () => {
-    const t = newPlanThread();
+    const t = emptyPlanThread();
     planThreadTurn(t, { ply: 22, fenBefore: CENTRE_KING, fenAfter: asWhite(CENTRE_KING), student: 'w', holdPlayable: false });
     expect(planThreadTurn(t, { ply: 24, fenBefore: CENTRE_KING, fenAfter: after(CENTRE_KING, 'a6'), student: 'w', holdPlayable: false })).toEqual([]);
   });
@@ -48,8 +50,8 @@ describe('planThread — stated once, stopped with its proof', () => {
 
 describe('a plan teaches its how-to once a game (Learn audit 2026-10-15)', () => {
   it('restated after a break, the plan names its goal without the how', async () => {
-    const { newPlanThread, planThreadTurn } = await import('./planThread');
-    const t = newPlanThread();
+    const { planThreadTurn } = await import('./planThread');
+    const t = emptyPlanThread();
     const fen = asWhite(KING_F8);
     // The first statement is the method's own plan; the how waits for the
     // plan's own statement, said once.
@@ -83,7 +85,7 @@ describe('one plan, one announcement — the thread and the arc share the plan g
 describe('a stronger plan replaces the one that stands; an equal or weaker one never does', () => {
   const SANS = 'e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 Nc6 Nc3 Nb6 Nf3 d6 exd6 Qxd6 Be2 Bg4 Nb5 Qd7 Bf4 Nd5 Ne5 Bxe2 Qxe2 Nxf4 Nxd7 Nxe2 Nc7+ Kxd7 Nxa8 Nexd4 Rd1 e5 a3 Bc5 b4 Nxb4 axb4 Bxb4+ Kf1 Rxa8 Rb1 a5 h4 Rc8'.split(' ');
   it('the passed pawn is stated once it runs', () => {
-    const c = new Chess(); const t = newPlanThread();
+    const c = new Chess(); const t = emptyPlanThread();
     const said: Array<{ ply: number; text: string }> = [];
     SANS.forEach((san, i) => {
       const before = c.fen(); c.move(san);
@@ -96,8 +98,8 @@ describe('a stronger plan replaces the one that stands; an equal or weaker one n
 
 describe('a plan HELD by the door is offered again — the thread adopts only what was said (A-plan P3)', () => {
   it('the method-bearing first plan, held on a threat turn, comes back on the next turn', () => {
-    const t = newPlanThread();
-    const trial = clonePlanThread(t);
+    const t = emptyPlanThread();
+    const trial = copyPlanThread(t);
     const first = planThreadTurn(trial, { ply: 22, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w', holdPlayable: false });
     expect(first[0].text).toMatch(/^How do you find a plan\?/);
     // The door held it: nothing of it spoke.
@@ -105,7 +107,7 @@ describe('a plan HELD by the door is offered again — the thread adopts only wh
     expect(t.methodSaid).toBe(false);
     expect(t.stated).toBeNull();
     // Next turn it is offered again, method and all — and this time it speaks.
-    const trial2 = clonePlanThread(t);
+    const trial2 = copyPlanThread(t);
     const again = planThreadTurn(trial2, { ply: 24, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w', holdPlayable: false });
     expect(again[0].text).toMatch(/^How do you find a plan\?/);
     expect(adoptPlanTrial(t, trial2, again.map((l) => l.claim), [again[0].claim])).toBe(true);
@@ -116,12 +118,12 @@ describe('a plan HELD by the door is offered again — the thread adopts only wh
 describe('the opening has no structural plan (David 2026-10-19: "the plan in the opening is to develop and castle")', () => {
   it('move 4 of the Smith-Morra: no "worst piece is your rook on a1"', async () => {
     const { Chess } = await import('chess.js');
-    const { newPlanThread, planThreadTurn } = await import('./planThread');
+    const { planThreadTurn } = await import('./planThread');
     const c = new Chess();
     for (const m of ['e4', 'c5', 'd4', 'cxd4', 'c3', 'dxc3', 'Nxc3']) c.move(m);
     const fenBefore = c.fen();
     c.move('d6');
-    const lines = planThreadTurn(newPlanThread(), { ply: 8, fenBefore, fenAfter: c.fen(), student: 'w', holdPlayable: true });
+    const lines = planThreadTurn(emptyPlanThread(), { ply: 8, fenBefore, fenAfter: c.fen(), student: 'w', holdPlayable: true });
     expect(lines.map((l) => l.text).join(' ')).not.toMatch(/plan|worst piece/i);
   });
 });
@@ -131,12 +133,12 @@ describe('their move as a step of THEIR plan (WO-DECIDER-02: one reader, both se
   // The STUDENT is Black, so White's Nd4 is their step — said from your seat.
   const ISO = 'r2q1rk1/pp2bppp/2n2n2/3p4/8/2N2N2/PP2BPPP/R2Q1RK1 w - - 0 12';
   it('their knight planted in front of your weak pawn is named as their plan at work', () => {
-    const t = newPlanThread();
+    const t = emptyPlanThread();
     const lines = planThreadTurn(t, { ply: 23, fenBefore: ISO, fenAfter: after(ISO, 'Nd4'), student: 'b', holdPlayable: false });
     expect(lines.map((l) => l.text)).toContain('Their knight to d4 was a step of their plan: it sits in front of your weak pawn on d5, so the pawn can never advance.');
   });
   it('a move that is no step of their plan says nothing of it', () => {
-    const t = newPlanThread();
+    const t = emptyPlanThread();
     const lines = planThreadTurn(t, { ply: 23, fenBefore: ISO, fenAfter: after(ISO, 'h3'), student: 'b', holdPlayable: false });
     expect(lines.some((l) => /their plan/.test(l.text))).toBe(false);
   });
@@ -150,7 +152,7 @@ describe('the same pawn is the same plan', () => {
   const BEFORE = '8/5k2/8/8/2P3RP/1P3K2/r7/8 w - - 0 49';
   const AFTER = '8/5k2/8/7P/2P3R1/1P3K2/r7/8 b - - 0 49';
   it('a weak pawn that steps forward and is still weak keeps the plan — no stop, no "new plan"', () => {
-    const t = newPlanThread();
+    const t = emptyPlanThread();
     const fact = deriveNextPlanFacts(BEFORE.replace(' w ', ' b '), 'b', { namesStudentMoves: true }).find((p) => p.kind === 'weak-pawn' && p.squares[0] === 'h4');
     expect(fact).toBeTruthy();
     t.stated = { fact: fact!, ply: 90 };
@@ -167,12 +169,40 @@ describe('no plan is stated to a student in check', () => {
   const BEFORE = '1nb1k2r/5ppp/2Pp4/rN1Qp1q1/p3P3/6P1/PPP2P1P/R3K1NR w KQk - 1 14';
   const AFTER = '1nb1k2r/5ppp/2PN4/r2Qp1q1/p3P3/6P1/PPP2P1P/R3K1NR b KQk - 0 14';
   it('their check: nothing about a plan', () => {
-    const lines = planThreadTurn(newPlanThread(), { ply: 27, fenBefore: BEFORE, fenAfter: AFTER, student: 'b', holdPlayable: false });
+    const lines = planThreadTurn(emptyPlanThread(), { ply: 27, fenBefore: BEFORE, fenAfter: AFTER, student: 'b', holdPlayable: false });
     expect(lines.map((l) => l.text).join(' ')).not.toMatch(/plan/i);
   });
   it('NEGATIVE CONTROL: the same thread states a plan on a quiet board', () => {
-    const t = newPlanThread();
+    const t = emptyPlanThread();
     const first = planThreadTurn(t, { ply: 22, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w', holdPlayable: false });
     expect(first.map((l) => l.text).join(' ')).toMatch(/plan/i);
+  });
+});
+
+// THE STRUCTURE'S PLAN, ONE AT A TIME (folded in from planMemory, WO-STORY-
+// MATRIX-01 P1-8b): announced once, carried while it stands, said as a change
+// when a different one replaces it. Its memory is the story's structure thread.
+describe('structurePlanEvent — a plan is announced once and carried until the structure changes', () => {
+  const PASSER = { id: 'passer-mine', text: 'push the passed pawn' };
+  const IQP = { id: 'iqp-theirs', text: 'blockade the isolated pawn' };
+
+  it('announces the first plan, carries the same plan, marks a different one as changed', () => {
+    expect(structurePlanEvent(null, PASSER)).toBe('announce');
+    expect(structurePlanEvent('passer-mine', PASSER)).toBe('carry');
+    expect(structurePlanEvent('passer-mine', IQP)).toBe('changed');
+  });
+
+  it('IDENTITY, NOT PROSE — advancing the pawn you were told to advance is not a new plan', () => {
+    // The regression this replaced: the rendered sentence was compared, so
+    // "your passed pawn on b5" → "on b6" read as the coach changing its mind.
+    expect(structurePlanEvent('passer-mine', { id: 'passer-mine', text: 'your passed pawn on b6 is the trump' })).toBe('carry');
+  });
+
+  it('a race whose WINNER FLIPS really is a new plan', () => {
+    expect(structurePlanEvent('passer-race:you', { id: 'passer-race:them', text: 'they get there first' })).toBe('changed');
+  });
+
+  it('a board with no plan says nothing', () => {
+    expect(structurePlanEvent('iqp-mine', null)).toBe('none');
   });
 });

@@ -468,7 +468,9 @@ describe('a structure plan is said once by its PLAN, not its words (hand walk 12
     const first = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: a, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true });
     const plan = first.clauses.find((c) => c.kind === 'structure-plan');
     expect(plan, 'fixture must speak a plan').toBeTruthy();
-    const second = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: b, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true, alreadySaid: new Set(first.remember) });
+    // The story's structure thread carries the plan heard (WO-STORY-MATRIX-01 P1-8b).
+    expect(first.structurePlanSaid).toBe('passer-race:you');
+    const second = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: b, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true, alreadySaid: new Set(first.remember), structurePlanHeard: first.structurePlanSaid });
     expect(second.clauses.some((c) => c.kind === 'structure-plan')).toBe(false);
   });
 });
@@ -483,11 +485,11 @@ describe('when the structure plan changes, the coach says so (David 2026-09-25)'
     const firstPlan = first.clauses.find((c) => c.kind === 'structure-plan');
     expect(firstPlan?.text).not.toMatch(/plan changes/);
     const said = new Set(first.remember);
-    const second = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: theirsOnly, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true, alreadySaid: said });
+    const second = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: theirsOnly, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true, alreadySaid: said, structurePlanHeard: first.structurePlanSaid });
     const changed = second.clauses.find((c) => c.kind === 'structure-plan');
     expect(changed?.text).toMatch(/^The plan changes here: their passed pawn on a7/);
     for (const k of second.remember) said.add(k);
-    const third = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: theirsOnly, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true, alreadySaid: said });
+    const third = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: theirsOnly, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true, alreadySaid: said, structurePlanHeard: second.structurePlanSaid ?? first.structurePlanSaid });
     expect(third.clauses.some((c) => c.kind === 'structure-plan')).toBe(false);
   });
 });

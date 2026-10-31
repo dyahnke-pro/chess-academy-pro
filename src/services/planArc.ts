@@ -29,6 +29,7 @@ import type { SidePlan } from './lookaheadPlan';
 import { CAPTURE_VALUE } from './pieceValues';
 import { andList, fileList } from '../utils/andList';
 import { routeNoun, type RouteSpec } from '../utils/routeWords';
+import { EMPTY_ARC_STATE } from './gameStory';
 
 export type AimKind = 'king-attack' | 'outpost' | 'file' | 'passer' | 'route' | 'shield';
 
@@ -137,7 +138,8 @@ export interface ArcState {
   emerged: number;
 }
 
-export const EMPTY_ARC: ArcState = { entries: {}, done: [], emerged: 0 };
+/** An arc that has followed nothing yet — the game's story's own empty value. */
+export const EMPTY_ARC: ArcState = EMPTY_ARC_STATE;
 
 const EMERGE: Record<Seat, ReadonlyArray<(p: string) => string>> = {
   opponent: [
