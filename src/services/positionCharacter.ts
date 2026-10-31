@@ -124,13 +124,13 @@ const TACTICAL_WHY: Record<SharpReason, readonly string[]> = {
 /** One read of the position. The first read settles the character silently —
  *  the game does not "change" into the character it started in. `said` is how
  *  many switches INTO each character the student has heard this
- *  game (the story's `switchesSaid`) — the stems rotate on it, so the second
- *  turn to "sharp" never repeats the first one's words, and a switch the door
- *  held does not spend a stem. */
-export function stepCharacter(state: CharacterState, now: Character, said: Readonly<Record<Character, number>>, reason?: SharpReason): CharacterStep {
+ *  game (the story's `switchesSaid`; none said when a character has no entry) —
+ *  the stems rotate on it, so the second turn to "sharp" never repeats the
+ *  first one's words, and a switch the door held does not spend a stem. */
+export function stepCharacter(state: CharacterState, now: Character, said: Readonly<Partial<Record<Character, number>>>, reason?: SharpReason): CharacterStep {
   if (state.current === null) return { next: { current: now, pending: null }, switched: null };
   if (now === state.current) return { next: { ...state, pending: null }, switched: null };
   if (state.pending !== now) return { next: { ...state, pending: now }, switched: null };
   const stems = now === 'tactical' && reason ? TACTICAL_WHY[reason] : SWITCH[now];
-  return { next: { current: now, pending: null }, switched: { to: now, text: stems[said[now] % stems.length] } };
+  return { next: { current: now, pending: null }, switched: { to: now, text: stems[(said[now] ?? 0) % stems.length] } };
 }

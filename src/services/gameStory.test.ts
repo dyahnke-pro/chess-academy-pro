@@ -286,7 +286,7 @@ describe('the events are the story\'s (P1-8c): what happened, at the ply it happ
     const s = createStoryStore('g1');
     s.offer(B10, { text: 'The position has turned sharp.', events: [{ kind: 'character', to: 'tactical' }] });
     s.commitKept(8, B10, [{ text: 'Something else.' }]);
-    expect(switchesSaid(s.current()).tactical).toBe(0);
+    expect(switchesSaid(s.current()).tactical, 'a held switch is not counted').toBeUndefined();
     s.offer(B10, { text: 'The position has turned sharp.', events: [{ kind: 'character', to: 'tactical' }] });
     s.commitKept(8, B10, [{ text: 'The position has turned sharp.' }]);
     expect(switchesSaid(s.current()).tactical).toBe(1);

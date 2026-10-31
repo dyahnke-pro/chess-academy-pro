@@ -208,14 +208,14 @@ const REVIEW_LOCKED: Record<'play' | 'takeBack' | 'setPosition' | 'reset', strin
   reset: 'reset_board is locked on the review surface — the student can use the Jump-to-Start nav button to rewind.',
 };
 
-/** One ply of a line walked on the review board, through the arrow door —
- *  checked on the board BEFORE it, coloured by whose move it is. */
 /** The game's story as the walk's newest build left it: the last checkpoint on
  *  its segments (WO-STORY-MATRIX-01 P1-8c) — where the build kept the turn. */
 function walkStory(narration: ReviewNarration): GameStory {
   return storyOf(spokenLedgerSeed(narration, Number.POSITIVE_INFINITY)?.story ?? null);
 }
 
+/** One ply of a line walked on the review board, through the arrow door —
+ *  checked on the board BEFORE it, coloured by whose move it is. */
 function lineArrow(fenBefore: string, uci: string, studentColor: 'white' | 'black'): BoardArrow[] | null {
   const a = admitArrow({ from: uci.slice(0, 2), to: uci.slice(2, 4), role: 'line', fen: fenBefore, source: 'review.line' }, { fen: fenBefore, studentColor });
   return a ? [a] : null;

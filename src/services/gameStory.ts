@@ -375,10 +375,14 @@ export function openingBreak(story: GameStory): { san: string; square: string; p
 }
 
 /** How many switches INTO each character were said — the switch's words
- *  rotate on it, so the second turn to "sharp" never repeats the first. */
-export function switchesSaid(story: GameStory): Record<Character, number> {
-  const out: Record<Character, number> = { tactical: 0, positional: 0, conversion: 0, defence: 0 };
-  for (const e of story.events) if (e.kind === 'character') out[e.to] += 1;
+ *  rotate on it, so the second turn to "sharp" never repeats the first. A
+ *  character never switched into has no entry (none said). Counted by the
+ *  event's own key: the story is pure memory and names no character itself
+ *  (surfaceComposition.scan: a memory holder answers no question about the
+ *  board). */
+export function switchesSaid(story: GameStory): Readonly<Partial<Record<Character, number>>> {
+  const out: Partial<Record<Character, number>> = {};
+  for (const e of story.events) if (e.kind === 'character') out[e.to] = (out[e.to] ?? 0) + 1;
   return out;
 }
 
