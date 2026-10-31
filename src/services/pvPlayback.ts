@@ -115,7 +115,10 @@ function agentSurvives(
   tactic: { type: string; involvedSquares: readonly string[] },
   agent: string,
 ): boolean {
-  if (tactic.type !== 'fork') return true;
+  // A DISCOVERY too (prod Learn 2026-10-31, …Ra8+ Kc7: the king's step
+  // "unveiled" the rook on h8 against the rook on a8 — and with them to move,
+  // Rxh8 took the revealer for nothing). The revealer is the discovery's agent.
+  if (tactic.type !== 'fork' && tactic.type !== 'discovery') return true;
   const attackerVal = pieceVal(board.get(agent as Square)?.type);
   const agentColor = board.get(agent as Square)?.color;
   const weDefendAgent = agentColor
@@ -464,7 +467,8 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
             const revealer = t.involvedSquares[1];
             const target = t.involvedSquares[2];
             const revealerVal = pieceVal(afterBoard.get(revealer as Square)?.type);
-            if (rayClear(afterBoard, revealer, target) && winnableBy(afterBoard, target, revealerVal)) { tacticLanded = 'discovery'; break; }
+            if (rayClear(afterBoard, revealer, target) && winnableBy(afterBoard, target, revealerVal)
+              && agentSurvives(afterBoard, { type: 'discovery', involvedSquares: t.involvedSquares }, revealer)) { tacticLanded = 'discovery'; break; }
           }
           if (t.type === 'removal_of_guard' && moved && mv.captured) {
             // involvedSquares = [captureSquare, nowUnguarded]. Two things must

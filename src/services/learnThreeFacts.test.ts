@@ -9,10 +9,10 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, notePromise, payoffFor } from './learnBoardTeaching';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
-import type { LearnMemory } from './learnMemory';
+import { createStoryStore, type StoryStore } from './gameStory';
 
 const fenAfter = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
-const memory = (): Pick<LearnMemory, 'promises'> => ({ promises: new Map() });
+const memory = (): StoryStore => createStoryStore('three-facts');
 
 describe('their move: what it sets up, said with their move', () => {
   it('…g6 makes room for their bishop on g7 a move later, where it hits your rook on a1', () => {

@@ -106,9 +106,9 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     expect(TEACH).toMatch(/const concession = lookConcession\(fenBefore, move\.san, cpLoss, studentEvalAfterCp\);/);
     // A fundamental with NO material drawback still speaks, on its own.
     // (Colle re-walk 2026-09-27: graded on the student-move board, `move.fen`.)
-    expect(TEACH).toMatch(/if \(!bookSaidAlone && fundamental\.diagnosis\) queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current, fundamental\.id\)\}\$\{fundamental\.diagnosis\}`, 'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamental\.howOnly \? undefined : fundamentalClaims, move\.fen, undefined, fundamental\.lines[,)]/);
+    expect(TEACH).toMatch(/if \(!bookSaidAlone && fundamental\.diagnosis\) queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current\.story, fundamental\.id, move\.history\.length\)\}\$\{fundamental\.diagnosis\}`, 'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamental\.howOnly \? undefined : fundamentalClaims, move\.fen, undefined, fundamental\.lines[,)]/);
     // Its habit closes the turn, in the habit step (WO-ONE-COACH-01).
-    expect(TEACH).toMatch(/if \(fundamental\.howOnly\) queueSpokenHint\(fenAfterReply, `\$\{bookSaidAlone \? noteSlip\(learnMemRef\.current, fundamental\.id\) : ''\}\$\{fundamental\.howOnly\}`, 'mistakeHabit', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamentalClaims, move\.fen/);
+    expect(TEACH).toMatch(/if \(fundamental\.howOnly\) queueSpokenHint\(fenAfterReply, `\$\{bookSaidAlone \? noteSlip\(learnMemRef\.current\.story, fundamental\.id, move\.history\.length\) : ''\}\$\{fundamental\.howOnly\}`, 'mistakeHabit', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamentalClaims, move\.fen/);
   });
 
   it('the hint register speaks rather than only prompting', () => {

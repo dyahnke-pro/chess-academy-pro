@@ -123,7 +123,6 @@
   "src/services/playedMoveGrade.ts::clearMovePriceMemo",
   "src/services/positionFactsCache.ts::clearPositionFactsCache",
   "src/services/positionProvenance.ts::clearRememberedPositions",
-  "src/services/positionTransformation.ts::transformationLabel",
   "src/services/proGameReferenceService.ts::storeGameReferences",
   "src/services/proRepertoireService.ts::findTrapTilesForCanonicalLine",
   "src/services/proRepertoireService.ts::getTrapLineKind",

@@ -64,10 +64,11 @@ describe('CoachTeachPage — one fresh-game reset', () => {
     const start = SRC.indexOf('const forgetPageRefs = useCallback');
     const body = SRC.slice(start, SRC.indexOf('}, []);', start));
     // (The say-once refs this list held — `fundamentalSeenRef`,
-    // `positionalSaidRef` — are the game's story now, renewed by the memory's
+    // `positionalSaidRef` — and the event refs — `characterRef`,
+    // `openingBreakRef` — are the game's story now, renewed by the memory's
     // own `newGame()`: oneStoryState.gate.test.ts.)
     for (const ref of [
-      'announcedPliesRef', 'characterRef', 'priorityFirstLastPlyRef',
+      'announcedPliesRef', 'priorityFirstLastPlyRef',
     ]) {
       expect(body, `${ref} is not forgotten on a fresh game`).toContain(ref);
     }

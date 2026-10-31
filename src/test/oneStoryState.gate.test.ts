@@ -213,3 +213,78 @@ export function x() {}`;
     expect(pf).toMatch(/structurePlanEvent\(asked \? null : input\.structurePlanHeard/);
   });
 });
+
+/**
+ * 🔒 THE EVENTS LIVE IN THE STORY TOO (P1-8c). Learn kept the phase detector's
+ * ledger in a page ref nothing reset (`phaseStateRef`: a second game crossed
+ * into the middlegame in silence), the position's character and the opening's
+ * break in two more, and six event slots on `learnMemory` (the opening read,
+ * queued, named and its identity, the promises, the slips). Review kept its
+ * own opening names and families, the endgame and model-game flags, the last
+ * verdict word, the slips and the cause chains said — none rewound by a
+ * takeback, and most of them never carried into a rebuilt or explored line.
+ * Review's closing line ran the whole selector a second time to find the turn
+ * the build had already read. One story now.
+ */
+const EVENT_MEMORY = /\b(phaseStateRef|characterRef|openingBreakRef|createPhaseTransitionState|EMPTY_CHARACTER(?!_STATE)|learnMemRef\.current\.(?:identitySaid|spokenOpeningName|queuedOpeningName|detectedOpeningName|promises|slipsThisGame))\b/g;
+const REVIEW_EVENT_MEMORY = /\b(?:const|let)\s+(spokenOpening|announcedOpeningNames|announcedOpeningFamilies|lastAnnouncedOpeningName|storyShown|endgameAnnounced|lastVerdictWord|causalChainsSeen|reviewSlips)\b/g;
+
+describe('the event family lives in GameStory', () => {
+  it('the scanners see the shapes they must (negative control: the old code)', () => {
+    const oldPage = `
+      const phaseStateRef = useRef<PhaseTransitionState>(createPhaseTransitionState());
+      const characterRef = useRef<CharacterState>(EMPTY_CHARACTER);
+      const openingBreakRef = useRef(null);
+      if (learnMemRef.current.identitySaid === null) {}
+      learnMemRef.current.detectedOpeningName = det.name;`;
+    expect(planMemoryIn(oldPage, EVENT_MEMORY)).toEqual([
+      'phaseStateRef', 'createPhaseTransitionState', 'characterRef', 'EMPTY_CHARACTER', 'openingBreakRef',
+      'learnMemRef.current.identitySaid', 'learnMemRef.current.detectedOpeningName',
+    ]);
+    const oldReview = `function* reviewSegmentSteps(
+      let endgameAnnounced = false;
+      const announcedOpeningFamilies = new Set<string>();
+      let lastVerdictWord: string | null = null;
+      const causalChainsSeen = new Set<string>();
+    }
+export function x() {}`;
+    expect(planMemoryIn(reviewBuild(oldReview), REVIEW_EVENT_MEMORY)).toEqual(['endgameAnnounced', 'announcedOpeningFamilies', 'lastVerdictWord', 'causalChainsSeen']);
+  });
+
+  for (const file of FILES) {
+    it(`${file} keeps no event memory of its own`, () => {
+      expect(planMemoryIn(readFileSync(file, 'utf8'), EVENT_MEMORY), 'the events are the story\'s (gameStory.ts: note, offer events, the readers)').toEqual([]);
+    });
+  }
+
+  it('learnMemory holds none of the event slots', () => {
+    const code = stripComments(readFileSync('src/services/learnMemory.ts', 'utf8'));
+    for (const slot of ['identitySaid', 'spokenOpeningName', 'queuedOpeningName', 'detectedOpeningName', 'promises', 'slipsThisGame']) {
+      expect(code, `learnMemory still declares ${slot}`).not.toMatch(new RegExp(`\\b${slot}\\b`));
+    }
+  });
+
+  it('Review\'s build keeps its events in its story, never in locals or seeded flags', () => {
+    const build = reviewBuild(readFileSync('src/services/coachFeatureService.ts', 'utf8'));
+    expect(planMemoryIn(build, REVIEW_EVENT_MEMORY)).toEqual([]);
+    // The seed's flags and ledgers no longer carry them: the checkpoint does.
+    expect(build).not.toMatch(/\['(?:on|of|cc):'/);
+    expect(build).not.toMatch(/'(?:endgameAnnounced|storyShown)'|opening=\$\{/);
+    // The turn is read once, by the build, and kept.
+    expect(build).toMatch(/story\.note\(turn\.ply, \[\{ kind: 'turn', thesis: turn \}\]\)/);
+  });
+
+  it('the walk\'s closing line reads the turn from the story — no second selector run', () => {
+    const review = stripComments(readFileSync('src/components/Coach/CoachGameReview.tsx', 'utf8'));
+    expect(review).not.toMatch(/\bselectTeaching\w*\(|\bgameTurn\(/);
+    expect(review).toMatch(/storyTurn\(walkStory\(walkNarration\)\)/);
+  });
+
+  it('a cause chain said is one claim on both surfaces', () => {
+    const page = stripComments(readFileSync(FILES[0], 'utf8'));
+    const build = reviewBuild(readFileSync('src/services/coachFeatureService.ts', 'utf8'));
+    expect(page).toMatch(/\[causalChainKey\(chain\)\]/);
+    expect(page).not.toMatch(/`causal:/);
+    expect(build).toMatch(/causalChainKey\(chain\)/);
+  });
+});

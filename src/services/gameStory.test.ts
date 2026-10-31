@@ -7,7 +7,11 @@
  * was computed, before the door decided whether it spoke.
  */
 import { describe, it, expect } from 'vitest';
-import { createStoryStore, keysUnder, STORY_KEY, threadKey, threadStated, threadVariant, toldBoards, PLAN_GOAL } from './gameStory';
+import {
+  createStoryStore, keysUnder, STORY_KEY, threadKey, threadStated, threadVariant, toldBoards, PLAN_GOAL,
+  phaseCrossed, openingAt, openingsNamed, noteOpening, identityHeard, openingBreak, switchesSaid, lastVerdict,
+  promisesOpen, slipCount, modelGameCited, storyTurn, storyOf, EMPTY_CHARACTER_STATE,
+} from './gameStory';
 import { createLearnMemory } from './learnMemory';
 
 const B10 = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
@@ -256,5 +260,91 @@ describe('the plans are the story\'s (P1-8b): threads keyed by their goal, the p
     s.newGame('g2');
     expect(s.current().threads.size).toBe(0);
     expect(s.plans().thread.methodSaid).toBe(false);
+  });
+});
+
+describe('the events are the story\'s (P1-8c): what happened, at the ply it happened', () => {
+  it('rewind drops the events after the board, jump keeps them, newGame forgets them', () => {
+    const s = createStoryStore('g1');
+    s.note(6, [{ kind: 'opening', stage: 'read', name: 'Italian Game' }]);
+    s.note(21, [{ kind: 'phase', edge: 'middlegame' }]);
+    s.note(25, [{ kind: 'verdict', word: 'better' }]);
+    s.rewind(22);
+    expect(phaseCrossed(s.current(), 'middlegame')).toBe(true);
+    expect(lastVerdict(s.current()), 'said after the board the takeback returned to').toBeNull();
+    s.rewind(20);
+    expect(phaseCrossed(s.current(), 'middlegame')).toBe(false);
+    expect(openingAt(s.current(), 'read')).toBe('Italian Game');
+    s.note(30, [{ kind: 'slip', id: 'loose-piece' }]);
+    s.jump(4);
+    expect(slipCount(s.current(), 'loose-piece'), 'a scenario jump keeps everything').toBe(1);
+    s.newGame('g2');
+    expect(s.current().events).toEqual([]);
+  });
+
+  it('an event offered with a line is the game\'s only when the door keeps the line', () => {
+    const s = createStoryStore('g1');
+    s.offer(B10, { text: 'The position has turned sharp.', events: [{ kind: 'character', to: 'tactical' }] });
+    s.commitKept(8, B10, [{ text: 'Something else.' }]);
+    expect(switchesSaid(s.current()).tactical, 'a held switch is not counted').toBeUndefined();
+    s.offer(B10, { text: 'The position has turned sharp.', events: [{ kind: 'character', to: 'tactical' }] });
+    s.commitKept(8, B10, [{ text: 'The position has turned sharp.' }]);
+    expect(switchesSaid(s.current()).tactical).toBe(1);
+  });
+
+  it('an opening is recorded once per change at each stage; the names heard keep their order', () => {
+    const s = createStoryStore('g1');
+    noteOpening(s, 4, 'read', 'Sicilian Defense');
+    noteOpening(s, 6, 'read', 'Sicilian Defense');
+    noteOpening(s, 8, 'read', 'Sicilian Defense: Najdorf Variation');
+    expect(s.current().events.filter((e) => e.kind === 'opening')).toHaveLength(2);
+    noteOpening(s, 5, 'named', 'Sicilian Defense');
+    noteOpening(s, 9, 'named', 'Sicilian Defense: Najdorf Variation');
+    expect(openingsNamed(s.current())).toEqual(['Sicilian Defense', 'Sicilian Defense: Najdorf Variation']);
+    expect(openingAt(s.current(), 'queued')).toBeNull();
+  });
+
+  it('a promise is open until paid or aged out; made again after that, it opens anew', () => {
+    const s = createStoryStore('g1');
+    const p = { key: 'break:c4', piece: 'p', square: 'c4', say: 'There is the break.' };
+    s.note(8, [{ kind: 'promise', promise: p }]);
+    s.note(10, [{ kind: 'promise', promise: { ...p, say: 'a second making, while the first is open' } }]);
+    expect(promisesOpen(s.current(), 12, 16).map((q) => [q.ply, q.say])).toEqual([[8, 'There is the break.']]);
+    expect(promisesOpen(s.current(), 30, 16), 'older than the window').toEqual([]);
+    s.note(14, [{ kind: 'paid', key: 'break:c4' }]);
+    expect(promisesOpen(s.current(), 15, 16)).toEqual([]);
+    s.note(16, [{ kind: 'promise', promise: p }]);
+    expect(promisesOpen(s.current(), 18, 16).map((q) => q.ply)).toEqual([16]);
+  });
+
+  it('the identity, the break, the model game and the turn read back', () => {
+    const s = createStoryStore('g1');
+    expect(identityHeard(s.current())).toBeNull();
+    s.note(5, [{ kind: 'identity', claim: 'opening-identity:this-game' }]);
+    s.note(7, [{ kind: 'opening-break', san: 'd4', square: 'd4' }]);
+    s.note(13, [{ kind: 'model-game', citation: 'Carlsen–Caruana, 2018' }]);
+    const thesis = { kind: 'turned' as const, ply: 31, label: '16. Bxf7+', swingPawns: 3, tactic: null, plan: null, chainRoot: null };
+    s.note(31, [{ kind: 'turn', thesis }]);
+    expect(identityHeard(s.current())).toBe('opening-identity:this-game');
+    expect(openingBreak(s.current())).toEqual({ san: 'd4', square: 'd4', ply: 7 });
+    expect(modelGameCited(s.current())).toBe(true);
+    expect(storyTurn(s.current())).toEqual({ ply: 31, thesis });
+  });
+
+  it('the checkpoint carries the events and the character; an older checkpoint reads as the empty story', () => {
+    const a = createStoryStore('g1');
+    a.note(21, [{ kind: 'phase', edge: 'middlegame' }]);
+    a.setPlans(21, { ...a.plans(), character: { current: 'tactical', pending: null } });
+    const b = storyOf(a.serialize());
+    expect(phaseCrossed(b, 'middlegame')).toBe(true);
+    const c = createStoryStore('c');
+    c.restore(a.serialize());
+    expect(c.plans().character.current).toBe('tactical');
+    const v1 = JSON.stringify({ ...JSON.parse(a.serialize()) as object, v: 1 });
+    expect(storyOf(v1).events).toEqual([]);
+    expect(storyOf(null).events).toEqual([]);
+    // A new game forgets the character with the plans.
+    c.newGame('c2');
+    expect(c.plans().character).toEqual(EMPTY_CHARACTER_STATE);
   });
 });

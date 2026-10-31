@@ -59,8 +59,8 @@
 - `src/services/boardComputers.test.ts:76`
 - `src/services/coachFact.test.ts:75`
 - `src/services/coachFact.test.ts:76`
-- `src/services/coachFeatureService.ts:2503`
-- `src/services/coachFeatureService.ts:3100`
+- `src/services/coachFeatureService.ts:2483`
+- `src/services/coachFeatureService.ts:3080`
 - `src/services/learnTurnDoor.ts:246`
 - `src/services/learnTurnDoor.ts:776`
 - `src/services/learnTurnDoor.ts:833`
@@ -98,7 +98,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `toCoachFact` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2830`
+- `src/services/coachFeatureService.ts:2810`
 - `src/services/learnTurnDoor.ts:570`
 - `src/services/positionFacts.ts:504`
 - `src/test/doorFact.ts:19`

@@ -1,5 +1,6 @@
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
 import { hasCastled, rooksOnBackRank, countDevelopedMinors, hasMajorPieceCaptured, openingEndRule } from './openingEnd';
+import { phaseCrossed, type StoryEventInput, type StoryStore } from './gameStory';
 export { rooksOnBackRank, countDevelopedMinors, hasMajorPieceCaptured, centralPawnsResolved } from './openingEnd';
 
 
@@ -145,6 +146,33 @@ export function detectPhaseTransition(
   }
 
   return null;
+}
+
+/**
+ * THE GAME'S STORY IS THE LEDGER (WO-STORY-MATRIX-01 P1-8c). The detector's
+ * "already fired" flags are the phase boundaries the game's story says it has
+ * crossed: read off the story, marked by the detector, and every boundary it
+ * marked is noted back at the move's ply. So a new game (a new story) fires
+ * its phases again, and a takeback before the boundary takes it back — Learn's
+ * own ledger (`phaseStateRef`) was never reset in a mount, so a second game
+ * crossed into the middlegame and the endgame in silence.
+ */
+export function storyPhaseTransition(
+  story: StoryStore,
+  lastMove: LastMoveSnapshot,
+  playerColor: 'white' | 'black',
+): PhaseTransitionEvent | null {
+  const now = story.current();
+  const ledger: PhaseTransitionState = {
+    openingToMiddlegameFired: phaseCrossed(now, 'middlegame'),
+    middlegameToEndgameFired: phaseCrossed(now, 'endgame'),
+  };
+  const event = detectPhaseTransition(lastMove, ledger, playerColor);
+  const crossed: StoryEventInput[] = [];
+  if (ledger.openingToMiddlegameFired && !phaseCrossed(now, 'middlegame')) crossed.push({ kind: 'phase', edge: 'middlegame' });
+  if (ledger.middlegameToEndgameFired && !phaseCrossed(now, 'endgame')) crossed.push({ kind: 'phase', edge: 'endgame' });
+  if (crossed.length > 0) story.note(lastMove.moveNumber, crossed);
+  return event;
 }
 
 /**

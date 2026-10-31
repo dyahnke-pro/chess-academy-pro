@@ -20,14 +20,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `wrongMoveReason` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3612`
+- `src/components/Coach/CoachTeachPage.tsx:3591`
 - `src/services/drillReasons.test.ts:11`
 - `src/services/drillReasons.test.ts:19`
 - `src/services/drillReasons.test.ts:26`
 - `src/services/drillReasons.test.ts:29`
 
 ### `goodButWeakerBeat` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3610`
+- `src/components/Coach/CoachTeachPage.tsx:3589`
 - `src/services/drillReasons.test.ts:50`
 - `src/services/drillReasons.test.ts:56`
 - `src/services/drillReasons.test.ts:57`

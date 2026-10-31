@@ -1058,12 +1058,15 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     await add('THESIS no-turning-question', askCount === 0, `turning-point questions asked=${askCount} (must be 0)`);
     const thesisCount = lines.filter((t) => /The game turned at /.test(t)).length;
     const legacyCount = lines.filter((t) => /The turning point was /.test(t)).length;
-    // THE APP TELLS US THE KIND — `selector read the game: thesis=<kind>@<ply>
-    // turn=<ply>`. The thesis is spoken only when it is 'turned' at that same
-    // ply; otherwise the plain computed line for the biggest swing is.
+    // THE APP TELLS US THE KIND — `the story's turn: thesis=<kind>@<ply>`
+    // (WO-STORY-MATRIX-01 P1-8c: the build reads the turn once and keeps it in
+    // the game's story; before it, `selector read the game: thesis=<kind>@<ply>
+    // turn=<ply>`, still read so the audit runs against either build). The
+    // thesis is spoken only when it is 'turned' at that same ply; otherwise the
+    // plain computed line for the biggest swing is.
     const selLine = events()
       .map((e) => String(e.summary ?? ''))
-      .filter((t) => /selector read the game/.test(t))
+      .filter((t) => /the story's turn|selector read the game/.test(t))
       .pop() ?? '';
     const kindM = /thesis=([a-z]+)@([0-9-]+)/.exec(selLine);
     const turnM = /turn=([0-9-]+)/.exec(selLine);

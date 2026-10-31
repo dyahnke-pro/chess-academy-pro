@@ -68,19 +68,15 @@ export function characterOf(i: CharacterInputs): Character {
   return 'positional';
 }
 
+/** The stepper's state across reads. It lives in the game's story
+ *  (`GameStory`'s plan desk, P1-8c — `EMPTY_CHARACTER_STATE` is the fresh
+ *  one), so a takeback restores it and a new game forgets it. */
 export interface CharacterState {
   /** The character last announced (or settled silently on the first read). */
-  current: Character | null;
+  readonly current: Character | null;
   /** A different character seen on the most recent read, not yet held. */
-  pending: Character | null;
-  /** Switches spoken INTO each character — rotates that character's stems,
-   *  so the second turn to "sharp" never repeats the first one's words. */
-  spoken: Readonly<Record<Character, number>>;
+  readonly pending: Character | null;
 }
-
-export const EMPTY_CHARACTER: CharacterState = {
-  current: null, pending: null, spoken: { tactical: 0, positional: 0, conversion: 0, defence: 0 },
-};
 
 const SWITCH: Record<Character, readonly string[]> = {
   // WITH ITS REASON (walk 2026-09-30: "the position has turned sharp" said
@@ -110,8 +106,6 @@ interface CharacterStep {
   switched: { to: Character; text: string } | null;
 }
 
-/** One read of the position. The first read settles the character silently —
- *  the game does not "change" into the character it started in. */
 /** What made it sharp, when the caller knows: a tactic live on the board, or
  *  one move far better than every other (the engine's best-move gap). */
 type SharpReason = 'tactic' | 'gap';
@@ -127,14 +121,16 @@ const TACTICAL_WHY: Record<SharpReason, readonly string[]> = {
   ],
 };
 
-export function stepCharacter(state: CharacterState, now: Character, reason?: SharpReason): CharacterStep {
-  if (state.current === null) return { next: { ...state, current: now, pending: null }, switched: null };
+/** One read of the position. The first read settles the character silently —
+ *  the game does not "change" into the character it started in. `said` is how
+ *  many switches INTO each character the student has heard this
+ *  game (the story's `switchesSaid`; none said when a character has no entry) —
+ *  the stems rotate on it, so the second turn to "sharp" never repeats the
+ *  first one's words, and a switch the door held does not spend a stem. */
+export function stepCharacter(state: CharacterState, now: Character, said: Readonly<Partial<Record<Character, number>>>, reason?: SharpReason): CharacterStep {
+  if (state.current === null) return { next: { current: now, pending: null }, switched: null };
   if (now === state.current) return { next: { ...state, pending: null }, switched: null };
   if (state.pending !== now) return { next: { ...state, pending: now }, switched: null };
   const stems = now === 'tactical' && reason ? TACTICAL_WHY[reason] : SWITCH[now];
-  const text = stems[state.spoken[now] % stems.length];
-  return {
-    next: { current: now, pending: null, spoken: { ...state.spoken, [now]: state.spoken[now] + 1 } },
-    switched: { to: now, text },
-  };
+  return { next: { current: now, pending: null }, switched: { to: now, text: stems[(said[now] ?? 0) % stems.length] } };
 }
