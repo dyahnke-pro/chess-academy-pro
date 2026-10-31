@@ -13,7 +13,9 @@
 //   • A plan that changes WITHOUT a proven cause inside PLAN_HOLD_PLIES of the
 //     last one is the read wobbling, not the plan — held.
 // PURE: no store, no voice. The caller speaks the lines; the game's story
-// keeps the thread (`gameStory`'s plan desk, checkpointed by ply).
+// keeps the thread (`gameStory`'s plan desk, checkpointed by ply) and owns its
+// values: a fresh thread is `gameStory.emptyPlanThread`, the copy a turn is
+// tried on is the story's `plans()`.
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { Chess, type Color, type Square } from 'chess.js';
 import { deriveNextPlanFacts, planAimKey, type PlanFact, type PlanKind, type StructurePlanFact } from './nextPlans';
@@ -23,7 +25,6 @@ import { methodRead, methodPlanSentence, whyThisPlan, planWorth, type RouteArrow
 import { planStepLine } from './planStep';
 import { askThenAnswer } from '../utils/thinkPause';
 import { classifyPhase } from './gamePhaseService';
-import { emptyPlanThread, copyPlanThread } from './gameStory';
 
 
 /** The plan kinds in the order `deriveNextPlanFacts` ranks them (lower =
@@ -98,23 +99,12 @@ export interface PlanThread {
   whyAsked: Set<string>;
 }
 
-/** A thread with nothing stated — the story's one empty value. */
-export function newPlanThread(): PlanThread {
-  return emptyPlanThread();
-}
-
-/** A copy to try a turn on: a surface that commits only what was SPOKEN runs
- *  the turn on the copy and adopts it when a line speaks (the story's copy). */
-export function clonePlanThread(t: PlanThread): PlanThread {
-  return copyPlanThread(t);
-}
-
 /** ADOPT A TRIED TURN ONLY WHAT WAS SAID (A-plan P3, prod Learn 2026-10-16:
  *  the first plan — the one that asks the method — was offered while a threat
  *  led the turn, the door held it, and the thread had already marked it stated,
- *  so the method was never heard all game). A surface runs the turn on
- *  `clonePlanThread`, offers its lines, and hands back the claims that SPOKE:
- *  the copy becomes the thread when one of its lines spoke, or when it offered
+ *  so the method was never heard all game). A surface runs the turn on a
+ *  copy (the story's `plans()`), offers its lines, and hands back the claims
+ *  that SPOKE: the copy becomes the thread when one of its lines spoke, or when it offered
  *  none (its bookkeeping still holds). Lines offered and all held leave the
  *  thread as it was, so the plan is offered again on the next calm turn.
  *  Returns whether the trial was adopted. */

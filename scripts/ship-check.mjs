@@ -519,6 +519,9 @@ const GATE_TESTS = [
   'src/services/needScore.test.ts',
   'src/services/reviewNeedGate.test.ts',
   'src/services/refutedAlternative.test.ts',
+  // The structure's plan announced once and carried (folded in from planMemory,
+  // whose gate this was — WO-STORY-MATRIX-01 P1-8b).
+  'src/services/planThread.test.ts',
   'src/coach/surfaceContract.scan.test.ts',
   'src/services/needCoverage.report.test.ts', // N6: the need-coverage number per profile — cold floor never drops, mastered ceiling never rises // N4: the surface table is exhaustive; no surface hard-codes a register or calls a fact-computer directly (shrink-only baseline) // N1: THE ONE SELECTOR — thesis/moments/chain, surface-blind, the review card's own candidates
   'src/services/tacticTypeBackfill.test.ts', // N0: persisted tactic tags are re-tagged through the ONE unified classifier on boot (idempotent, sync-safe, never guesses)
@@ -646,6 +649,8 @@ const GATE_TESTS = [
   'src/coach/surfaceComposition.scan.test.ts',
   // The forget-on-rewind say-once rule, implemented twice under two ref names.
   'src/services/gameStory.test.ts',
+  // A takeback takes back the plan too: rewind restores the plan state (P1-8b).
+  'src/services/gameStory.rewind.test.ts',
   // Importance gates the INTERRUPT and scaled by rating alone — identical for a
   // student with 200 analysed games and one with zero, while needScore had been
   // data-driven all along. Raise-only; a hole must never invent a moment.

@@ -43,7 +43,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.test.ts:29`
 - `src/services/planChooser.ts:65`
 - `src/services/planChooser.ts:66`
-- `src/services/planThread.test.ts:76`
+- `src/services/planThread.test.ts:78`
 - `src/test/thinkMarkClosed.gate.test.ts:77`
 
 ### `phraseFrom` (function) — 3 call sites

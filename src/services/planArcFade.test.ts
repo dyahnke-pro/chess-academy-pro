@@ -11,7 +11,8 @@ import { readFileSync } from 'node:fs';
 import { heatMap } from './heatMap';
 import { fadeLevelsFrom } from './fadeText';
 import { decideTurn } from './learnTurnDoor';
-import { newPlanThread, planThreadTurn } from './planThread';
+import { planThreadTurn } from './planThread';
+import { emptyPlanThread } from './gameStory';
 import { NO_PROOF } from './proof';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
 import type { CapabilityEvidenceRecord } from './capabilityEvidence';
@@ -26,7 +27,7 @@ const DAVID = JSON.parse(readFileSync('src/test/fixtures/david-no-plan-record.js
 const KING_F8 = 'r4k1r/ppp2ppp/2n2n2/8/8/2N2N2/PPPQ1PPP/R3K2R b KQ - 0 12';
 const BOARD = KING_F8.replace(' b ', ' w ');
 const planLine = ((): { text: string; squares: string[] } => {
-  const [l] = planThreadTurn(newPlanThread(), { ply: 22, fenBefore: KING_F8, fenAfter: BOARD, student: 'w', holdPlayable: false });
+  const [l] = planThreadTurn(emptyPlanThread(), { ply: 22, fenBefore: KING_F8, fenAfter: BOARD, student: 'w', holdPlayable: false });
   return { text: l.text, squares: [...(l.squares ?? [])] };
 })();
 

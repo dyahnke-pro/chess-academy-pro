@@ -490,7 +490,7 @@
 - `src/coach/chatComputedQuestions.test.ts:21`
 - `src/coach/chatComputedQuestions.test.ts:24`
 - `src/services/coachApi.ts:4375`
-- `src/services/planChoice.test.ts:84`
+- `src/services/planChoice.test.ts:85`
 
 ### `assembleMethodAnswer` (function) — 6 call sites
 - `src/services/coachApi.ts:4391`

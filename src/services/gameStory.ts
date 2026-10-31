@@ -254,8 +254,9 @@ function keptCarries(kept: ReadonlyArray<{ text: string }>, text: string): boole
 }
 
 // THE PLAN STATE'S OWN VALUES live with the state (the story holds it; the
-// step functions only step it): `planThread.newPlanThread` / `clonePlanThread`
-// and `planArc.EMPTY_ARC` read these, so one empty value and one copy exist.
+// step functions only step it): a fresh thread and the copy a turn is tried on
+// exist here only (`planThread` keeps no constructor of its own), and
+// `planArc.EMPTY_ARC` reads the empty arc, so one empty value and one copy exist.
 
 /** A plan thread with nothing stated yet. */
 export function emptyPlanThread(): PlanThread {

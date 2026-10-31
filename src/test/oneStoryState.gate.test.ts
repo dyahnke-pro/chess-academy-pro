@@ -186,6 +186,14 @@ export function x() {}`;
     });
   }
 
+  it('the plan state\'s values are the story\'s alone: the step functions keep no constructor or copy of their own', () => {
+    // A second constructor is how a surface grows its own plan memory again
+    // (`newPlanThread()` beside the story); the story's `emptyPlanThread` /
+    // `copyPlanThread` and its `plans()` copy are the only ones.
+    expect(stripComments(readFileSync('src/services/planThread.ts', 'utf8'))).not.toMatch(/export function (newPlanThread|clonePlanThread)\b/);
+    expect(stripComments(readFileSync('src/services/boardComputers.ts', 'utf8'))).not.toMatch(/\b(newPlanThread|clonePlanThread)\b/);
+  });
+
   it('learnMemory holds no plan thread beside the story', () => {
     expect(stripComments(readFileSync('src/services/learnMemory.ts', 'utf8'))).not.toMatch(/\bplanThread\b/);
   });

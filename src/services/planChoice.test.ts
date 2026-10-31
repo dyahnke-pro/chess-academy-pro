@@ -73,8 +73,9 @@ describe('a step that drops the piece is never credited', () => {
 describe('the method\'s answers make the plan', () => {
   const FEN = 'r3nrk1/pp1p1ppp/8/4P3/8/3B1N2/PP3PPP/R4RK1 b - - 0 15';
   it('rook to the open file, knight to the hole, then the break — and why that order', async () => {
-    const { newPlanThread, planThreadTurn } = await import('./planThread');
-    const line = planThreadTurn(newPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b', holdPlayable: false })[0]?.text ?? '';
+    const { planThreadTurn } = await import('./planThread');
+    const { emptyPlanThread } = await import('./gameStory');
+    const line = planThreadTurn(emptyPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b', holdPlayable: false })[0]?.text ?? '';
     expect(line).toMatch(/Your worst piece: your rook on a8, with no open file yet\./);
     expect(line).toMatch(/So the plan: put a rook on the open c-file; bring your knight on e8 to d4, by way of c7 and e6 — no pawn of theirs can attack it there; then break open with the push to d6 or f6\./);
     expect(line).toMatch(/Why in that order\? A break opens the position/);
@@ -86,9 +87,10 @@ describe('the method\'s answers make the plan', () => {
     expect(a).not.toMatch(/Beyond that: plant a knight/);
   }, 60000);
   it('a passed pawn outranks the three questions: no method before an unrelated plan', async () => {
-    const { newPlanThread, planThreadTurn } = await import('./planThread');
+    const { planThreadTurn } = await import('./planThread');
+    const { emptyPlanThread } = await import('./gameStory');
     const passer = '6k1/5ppp/8/P7/8/8/5PPP/6K1 w - - 0 30';
-    const line = planThreadTurn(newPlanThread(), { ply: 59, fenBefore: passer, fenAfter: passer, student: 'w', holdPlayable: false })[0]?.text ?? '';
+    const line = planThreadTurn(emptyPlanThread(), { ply: 59, fenBefore: passer, fenAfter: passer, student: 'w', holdPlayable: false })[0]?.text ?? '';
     expect(line).toMatch(/passed pawn/);
     expect(line).not.toMatch(/How do you find a plan/);
   });
@@ -99,9 +101,10 @@ describe('the method\'s answers make the plan', () => {
 describe('the plan traces its routes', () => {
   const FEN = 'r3nrk1/pp1p1ppp/8/4P3/8/3B1N2/PP3PPP/R4RK1 b - - 0 15';
   it('rook to the file, the knight hop by hop, the break pushes', async () => {
-    const { newPlanThread, planThreadTurn } = await import('./planThread');
+    const { planThreadTurn } = await import('./planThread');
+    const { emptyPlanThread } = await import('./gameStory');
     const { Chess } = await import('chess.js');
-    const l = planThreadTurn(newPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b', holdPlayable: false })[0];
+    const l = planThreadTurn(emptyPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b', holdPlayable: false })[0];
     expect(l?.arrows?.map((a) => a.from + a.to)).toEqual(['a8c8', 'e8c7', 'c7e6', 'e6d4', 'd7d6', 'f7f6']);
     for (const a of l?.arrows ?? []) {
       const parts = a.fen.split(' '); parts[1] = 'b';
@@ -139,8 +142,9 @@ describe('checks, captures, threats come first', () => {
 
 describe('a why question is never asked twice in a game', () => {
   it('the second plan beating the same alternative says "Why it matters:"', async () => {
-    const { newPlanThread, planThreadTurn } = await import('./planThread');
-    const t = newPlanThread();
+    const { planThreadTurn } = await import('./planThread');
+    const { emptyPlanThread } = await import('./gameStory');
+    const t = emptyPlanThread();
     t.methodSaid = true;
     t.whyAsked.add('seizing the open c-file');
     const fen = '6k1/1P3ppp/8/8/8/8/5PPP/2r3K1 w - - 0 30';
