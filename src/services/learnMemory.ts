@@ -24,8 +24,7 @@
  *
  * And the curated beats' and the explainers' said-sets were never reset, so
  * a beat said in game 1 was suppressed in games 2, 3 and 4 of the same
- * session. That is exactly what `standingFactMemory`'s doc warns about: "a set that never clears
- * makes the coach mute for the rest of a session after one mention."
+ * session — the coach mute for the rest of a session after one mention.
  *
  * Site A's comment even said "Both said-sets are per-GAME" while clearing four —
  * the comment had already drifted from the code it described.
@@ -48,12 +47,16 @@
 import type { PlanThread } from './planThread';
 import type { Proof } from './proof';
 import type { LooseSpells } from './conceptKey';
+import { createStoryStore, type StoryStore } from './gameStory';
 
 export const NEVER_FIRED = -999;
 
 export interface LearnMemory {
-  /** Explainer lines already given this game. */
-  readonly saidExplainers: Set<string>;
+  /** THE GAME'S STORY (WO-STORY-MATRIX-01 P1-8): everything said this game,
+   *  each with the ply it was said — every say-once memory this object and the
+   *  page used to hold (gameStory.ts). Renewed by `newGame()`, rewound by
+   *  `rewind()`; the game's id and its ply watermark live in it. */
+  readonly story: StoryStore;
   /** How many times each rotated reason formula has been said this game — the
    *  rotation key (David 2026-10-14: no reason formula more than twice a
    *  game). A move number collided: three alerts on moves with the same
@@ -83,47 +86,16 @@ export interface LearnMemory {
   /** The proof behind the last conclusion the coach SPOKE — what "Why?" says
    *  in full (proof.ts). Null until a proof-bearing conclusion is spoken. */
   lastProof: Proof | null;
-  /** The threat and tactic lanes' say-once memory — the last spoken KEY (so a
-   *  standing danger alerts once, not every ply) and EVERY sentence already
-   *  spoken this game (an alternating pair walks straight through a single
-   *  slot). These four lived as hand refs on the page, cleared inside ONE
-   *  intent branch — so a second game in the same mount reached the same
-   *  board, produced the identical threat line, and was told it had already
-   *  said it. Measured 2026-09-19 (`audit-second-game-memory-prod`, 3/3 runs):
-   *  the queen-attacked line and the pin invariant riding on it went silent
-   *  in game 2 at the one shared position. Here, the board-driven `observe`
-   *  reset forgets them like everything else. */
+  /** The tactic lane's last spoken KEY, so a standing tactic alerts once, not
+   *  every ply (its words, and the threat lane's key and words, are the story's
+   *  — `STORY_KEY`). This lived as a hand ref on the page, cleared inside ONE
+   *  intent branch — so a second game in the same mount reached the same board,
+   *  produced the identical line, and was told it had already said it
+   *  (`audit-second-game-memory-prod`, 2026-09-19). */
   lastTacticKey: string;
-  lastThreatKey: string;
   /** The student's pieces loose now, each with the ply its spell began —
    *  `looseClaim` reads it to say a loose piece once, then once "still". */
   looseSpells: LooseSpells;
-  /** Loud alarms (a piece or the game at stake) said this game: the first is
-   *  said with full weight, later ones as "Again —", so the alarm keeps its
-   *  meaning (live tape 2026-10-06: seven "Drop everything" in one game). */
-  readonly loudAlarms: Set<string>;
-  readonly spokenTacticLines: Set<string>;
-  readonly spokenThreatLines: Set<string>;
-  /** Threat answers said this game — rotates their question stem by
-   *  occurrence, so consecutive answers never open with the same words. */
-  readonly questionsAnswered: Set<string>;
-  /** Pieces already called out this game by `pieceQualityLines`. */
-  readonly pieceQualitySaid: Set<string>;
-  /** EVERY phrase the coach has spoken this game, across every lane and both
-   *  packages of every turn — the CROSS-turn, cross-lane repeat guard.
-   *
-   *  🚨 It is also the last thing that kept the second game quiet after the
-   *  board-driven forget landed, and the reason is worth stating: the teachings
-   *  that stayed silent were exactly the ones whose sentence is IDENTICAL
-   *  between games ("This game is now the Scandinavian Defense.", the pin
-   *  invariant), while the threat lines — different text, different board —
-   *  came back immediately. A session-lived phrase set does not make the coach
-   *  repeat less; it makes it teach the same lesson to only the first game. */
-  readonly spokenKeys: Set<string>;
-  /** Concept invariants already taught this game, by tactic type. */
-  readonly conceptTaught: Set<string>;
-  /** Opening principles taught this game (WO-TEACH-02 S2) — each once. */
-  readonly principleTaught: Set<string>;
   /** Tactic motif → the move number it was first taught (S6 transfer). */
   /** Structurally `MotifLedger` — this module imports nothing (pure memory). */
   readonly motifLastSpoken: Map<string, { move: number; instance: string; seen: number }>;
@@ -166,6 +138,7 @@ export interface LearnMemory {
   /**
    * Note how many plies are on the board. Forgets everything when the board
    * has gone BACKWARDS — a new or rewound game. Returns true when it forgot.
+   * The watermark it compares with is the story's `ply`.
    *
    * 🚨 THIS, not the call sites, is what makes the reset reliable. The two
    * hand-placed "fresh game" sites are PATH-DEPENDENT, and a second game
@@ -176,12 +149,12 @@ export interface LearnMemory {
    * is never true on the first coach reply of a game the student plays as
    * Black (`e4 d5 exd5` is already 3); the other hangs off one intent branch.
    *
-   * The board cannot be fooled by any of that. It is the same rule
-   * `standingFactMemory` states for the same reason — neither surface has a
-   * game id, so without it a second game inherits the first game's silence —
-   * and rewinding is the safe direction to be wrong in: forgetting makes the
-   * coach repeat itself, suppressing makes it mute for a reason nobody can
-   * trace.
+   * The board cannot be fooled by any of that. Without it a second game
+   * inherits the first game's silence, and rewinding is the safe direction to
+   * be wrong in: forgetting makes the coach repeat itself, suppressing makes it
+   * mute for a reason nobody can trace. It is the ONE board detector: the
+   * standing-fact ledger's own full-move detector went with it into the story
+   * (P1-8a).
    *
    * 🔒 IT READS THE LIVE BOARD, NEVER A NUMBER HANDED IN (gate-1 audit
    * 2026-10-21). It used to take `plies` from the caller, and its one caller
@@ -195,11 +168,16 @@ export interface LearnMemory {
    */
   observe(): boolean;
   /** A TAKEBACK, not a new game: the board went backwards on purpose, so the
-   *  memory keeps what was said and the game keeps its id (attack round
-   *  2026-10-07: a takeback re-announced the opening and re-said every
-   *  definition, and split the game's evidence across two ids). Lowers the
-   *  watermark `observe` compares against; never raises it. */
+   *  game keeps its id and everything said up to the board it returns to
+   *  (attack round 2026-10-07: a takeback re-announced the opening and re-said
+   *  every definition, and split the game's evidence across two ids). What was
+   *  said AFTER that board is forgotten — it was said about moves that are no
+   *  longer on it (`story.rewind`). Lowers the watermark `observe` compares
+   *  against; never raises it. */
   rewind(plies: number): void;
+  /** A NEW BOARD INSIDE THE GAME (a scenario phase): the game and everything
+   *  said stay; the watermark restarts at the new board's ply. */
+  jump(plies: number): void;
   /** Forget everything. Every "a new game starts" site calls THIS. */
   newGame(): void;
   /**
@@ -220,7 +198,8 @@ export interface LearnMemory {
    * path-dependent in precisely the way `observe` exists to fix.
    *
    * The SAVED `GameRecord` uses this same id, so the slips captured mid-game
-   * and the game they happened in join without a lookup.
+   * and the game they happened in join without a lookup. Held by the story
+   * (`story.current().gameId`), which `newGame()` renews under a new one.
    */
   readonly gameId: string;
   /** THE STUDENT'S SLIPS THIS GAME, by fundamental id — so the coach can say
@@ -273,35 +252,17 @@ function mintGameId(): string {
  */
 export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: () => void }): LearnMemory {
   const { livePlies, onNewGame } = opts;
-  const saidExplainers = new Set<string>();
-  const pieceQualitySaid = new Set<string>();
-  const spokenKeys = new Set<string>();
-  const conceptTaught = new Set<string>();
-  const principleTaught = new Set<string>();
+  const story = createStoryStore(mintGameId());
   const motifLastSpoken = new Map<string, { move: number; instance: string; seen: number }>();
-  const spokenTacticLines = new Set<string>();
-  const spokenThreatLines = new Set<string>();
-  const loudAlarms = new Set<string>();
-  const questionsAnswered = new Set<string>();
-  let lastPlies = 0;
   const mem: LearnMemory = {
-    gameId: mintGameId(),
-    saidExplainers,
+    story,
+    get gameId(): string { return story.current().gameId; },
     stemCounts: new Map<string, number>(),
     planThread: null,
     lastProof: null,
-    pieceQualitySaid,
-    spokenKeys,
-    conceptTaught,
-    principleTaught,
     motifLastSpoken,
     lastTacticKey: '',
-    lastThreatKey: '',
     looseSpells: new Map(),
-    loudAlarms,
-    questionsAnswered,
-    spokenTacticLines,
-    spokenThreatLines,
     heldMove: null,
     theirPrep: null,
     slipAnswer: null,
@@ -315,33 +276,26 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
     promises: new Map<string, GamePromise & { ply: number }>(),
     observe(): boolean {
       const plies = livePlies();
-      const forgot = plies < lastPlies;
+      const forgot = plies < story.current().ply;
       if (forgot) mem.newGame();
-      lastPlies = plies;
+      story.reach(plies);
       return forgot;
     },
     rewind(plies: number): void {
-      lastPlies = Math.min(lastPlies, Math.max(0, plies));
+      story.rewind(plies);
+    },
+    jump(plies: number): void {
+      story.jump(plies);
     },
     newGame(): void {
       mem.slipsThisGame.clear();
       mem.stemCounts.clear();
       mem.promises.clear();
-      saidExplainers.clear();
       mem.planThread = null;
       mem.lastProof = null;
-      pieceQualitySaid.clear();
-      spokenKeys.clear();
-      conceptTaught.clear();
-      principleTaught.clear();
       motifLastSpoken.clear();
-      spokenTacticLines.clear();
-      spokenThreatLines.clear();
       mem.lastTacticKey = '';
-      mem.lastThreatKey = '';
       mem.looseSpells = new Map();
-      loudAlarms.clear();
-      questionsAnswered.clear();
       mem.heldMove = null;
       mem.theirPrep = null;
       mem.slipAnswer = null;
@@ -351,10 +305,11 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
       mem.detectedOpeningName = null;
       mem.queuedOpeningName = null;
       mem.identitySaid = null;
-      lastPlies = 0;
-      // A NEW GAME IS A NEW ID. Re-minting here (rather than at a call site)
-      // is what makes it impossible to record game 2's slips against game 1.
-      (mem as { gameId: string }).gameId = mintGameId();
+      // A NEW GAME IS A NEW STORY UNDER A NEW ID — everything said, the ply
+      // watermark and the id, in one call. Re-minting here (rather than at a
+      // call site) is what makes it impossible to record game 2's slips
+      // against game 1.
+      story.newGame(mintGameId());
       // ONE SIGNAL, EVERY DOOR. Whoever decided a new game started — a caller,
       // or `observe` reading the board going backwards — the surface's own
       // per-game refs are forgotten in the same breath.
@@ -391,17 +346,4 @@ export function nextStem(mem: Pick<LearnMemory, 'stemCounts'>, key: string): num
  *  claim about one turn, never an idea said once a game. */
 export function rememberKeptClaims(kept: ReadonlyArray<{ claims?: readonly string[] }>, remember: (key: string) => void): void {
   for (const f of kept) for (const c of f.claims ?? []) if (!/^win-[a-h][1-8]$/.test(c)) remember(c);
-}
-
-/** The position-facts say-once keys (`rememberByClause`) of the clauses a kept
- *  fact actually voiced — matched by text, which the door may have trimmed. */
-export function rememberKeptClauses(
-  kept: ReadonlyArray<{ text: string }>,
-  byClause: ReadonlyArray<{ text: string; keys: readonly string[] }>,
-  remember: (key: string) => void,
-): void {
-  for (const c of byClause) {
-    if (!c.text || c.keys.length === 0) continue;
-    if (kept.some((f) => f.text === c.text || f.text.includes(c.text) || c.text.includes(f.text))) for (const k of c.keys) remember(k);
-  }
 }

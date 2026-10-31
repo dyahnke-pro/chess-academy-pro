@@ -63,9 +63,11 @@ describe('CoachTeachPage — one fresh-game reset', () => {
   it('the reset forgets every per-game ref the page holds by hand', () => {
     const start = SRC.indexOf('const forgetPageRefs = useCallback');
     const body = SRC.slice(start, SRC.indexOf('}, []);', start));
+    // (The say-once refs this list held — `fundamentalSeenRef`,
+    // `positionalSaidRef` — are the game's story now, renewed by the memory's
+    // own `newGame()`: oneStoryState.gate.test.ts.)
     for (const ref of [
-      'announcedPliesRef', 'fundamentalSeenRef', 'characterRef',
-      'positionalSaidRef', 'priorityFirstLastPlyRef',
+      'announcedPliesRef', 'characterRef', 'priorityFirstLastPlyRef',
     ]) {
       expect(body, `${ref} is not forgotten on a fresh game`).toContain(ref);
     }
@@ -78,8 +80,9 @@ describe('CoachTeachPage — one fresh-game reset', () => {
   // LIVE board.
   it('every new-game detector reads the LIVE board, never a turn\'s snapshot', () => {
     expect(SRC, 'learnMemory.observe takes no ply count').toMatch(/learnMemRef\.current\.observe\(\)/);
-    const standing = [...SRC.matchAll(/standingRef\.current\.observe\(([^;]*)\);/g)].map((m) => m[1]);
-    expect(standing.length).toBeGreaterThan(0);
-    for (const arg of standing) expect(arg, 'the standing ledger observes the live game').toMatch(/gameRef\.current\.fen/);
+    // …and it is the ONE detector: the standing ledger's full-move detector
+    // (which also mistook a takeback for a new game) went into the story
+    // (P1-8a), so no second detector can disagree with it.
+    expect(SRC).not.toMatch(/standingRef\.current\.observe\(/);
   });
 });

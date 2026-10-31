@@ -823,6 +823,13 @@ export function studentMovePoint(
   return studentMovePointFact(fenBefore, san, opponentLastSan, lineUci)?.text ?? null;
 }
 
+/** The point of the move that wins the bishop pair, and the ideas it states —
+ *  the positional read's and the behaviour lane's keys for the pair — so
+ *  whichever line says it first spends the pair for the game (one fact, one
+ *  owner: re-walk 1380, 19.Rxf3). */
+export const BISHOP_PAIR_POINT = 'Now you have the two bishops — open the position and they get stronger.';
+export const BISHOP_PAIR_CLAIMS: readonly string[] = ['bishop-pair', 'student-bishop-pair'];
+
 /** `studentMovePoint`, keeping what the ledger proved: the squares, the
  *  material the settled exchange nets (its stake) and the engine line it was
  *  read off (its proof). A quiet move's point carries none — it is a
@@ -893,7 +900,7 @@ export function studentMovePointFact(
     };
   }
   if (gainedBishopPair(fenBefore, san)) {
-    return { text: 'Now you have the two bishops — open the position and they get stronger.', squares: [], stakes: null, line: null };
+    return { text: BISHOP_PAIR_POINT, squares: [], stakes: null, line: null };
   }
   // A capture's point is the capture — Raxd8 taking the queen back is not
   // "unpins your rook on e8" (hand walk 2026-09-25).

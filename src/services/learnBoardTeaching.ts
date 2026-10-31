@@ -170,8 +170,9 @@ export interface StudentMoveInput {
    *  the stock shot that fails here (`patternFails`). Absent → that lane is
    *  silent. */
   topLines?: readonly AnalysisLine[];
-  /** Say-once keys already spoken this game (`learnMemory.spokenKeys`), so a
-   *  habit asked in full once is asked again as a short callback. */
+  /** Say-once keys already spoken this game (the game story's sentence keys,
+   *  `learnMemory.story`), so a habit asked in full once is asked again as a
+   *  short callback. */
   saidClaims?: ReadonlySet<string>;
 }
 

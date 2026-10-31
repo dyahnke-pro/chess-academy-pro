@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { createStandingFactMemory, fullmoveOf, type StandingFactMemory } from '../services/standingFactMemory';
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { computePositionFacts, clauseClaims, type LastMoveInput, type PhaseFact, NAMES_NO_MOVE } from '../services/positionFacts';
@@ -51,13 +50,14 @@ interface UsePhaseNarrationArgs {
    *  a transient banner that pops up then disappears). Called once with the
    *  final report text when the narration content is finalized. */
   onReport?: (text: string) => void;
-  /** The page's say-once memory for THIS game, or null to keep the hook's own.
-   *  Required so a surface decides: Learn passes its memory, so the balance
-   *  sheet at the phase turn and the page's positional read are ONE ledger
-   *  (Learn walk, fresh Nimzo game, 2026-09-26: "their king is still in the
-   *  centre" and "a3 is isolated" said on three moves through two lanes that
-   *  each kept their own memory). */
-  getStanding: (() => StandingFactMemory) | null;
+  /** What the game has said, as the turn on `fen` may read it — the surface's
+   *  story (`gameStory`), REQUIRED: the hook keeps no ledger of its own, so the
+   *  balance sheet at the phase turn and the surface's positional read are ONE
+   *  ledger (Learn walk, fresh Nimzo game, 2026-09-26: "their king is still in
+   *  the centre" and "a3 is isolated" said on three moves through two lanes
+   *  that each kept their own memory). The hook only READS it: what the report
+   *  says is written by the surface's door, from what it kept (P1-8a). */
+  getSaid: (fen: string) => ReadonlySet<string>;
   /** The surface's turn door — REQUIRED. The report is handed over ONCE, as
    *  typed facts carrying their claim keys, and decided as one wave of the
    *  turn it was read on, never sentence by sentence (root causes 5 and 6,
@@ -133,14 +133,6 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
     studentColor: args.playerColor, openingId: null, eco: null,
     sans: () => sansOfPgn(argsRef.current.getPgn() ?? ''),
   });
-  // SAY-ONCE across the game — see useLiveCoach for the reasoning. Phase
-  // transitions are rarer, but the structure line is exactly the kind of
-  // standing fact that would open every one of them identically.
-  // …and the set FORGETS when the board goes backwards. The rule (and the
-  // reasoning) lives in `standingFactMemory` — CoachTeachPage carried its own
-  // copy of it, under different ref names, with a comment admitting as much.
-  const ownStandingRef = useRef(createStandingFactMemory());
-  const standingRef = { get current(): StandingFactMemory { return argsRef.current.getStanding?.() ?? ownStandingRef.current; } };
   const [isNarrating, setIsNarrating] = useState(false);
   const [currentText, setCurrentText] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -427,7 +419,6 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // drops the eval/decision framing (David 2026-08-23). Reuses the analysis
       // already read; the importance model gates whether anything speaks.
       try {
-        standingRef.current.observe(fullmoveOf(event.fen));
         if (stockfishAnalysis?.topLines?.length) {
           const pf = await computePositionFacts({
       boardComputers: 'composer',
@@ -449,14 +440,15 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
               return lm ? { lastMove: lm } : {};
             })(),
             studentNeedContext: studentNeedRef.current,
-            alreadySaid: standingRef.current.said,
+            // SAY-ONCE across the game: a standing fact (the structure line)
+            // would otherwise open every transition identically.
+            alreadySaid: argsRef.current.getSaid(event.fen),
             // What they keep doing — the game so far (the speed-run depth).
             history: sansOfPgn(argsRef.current.getPgn() ?? ''),
             // WO-TEACH-02 S4 — this board IS the turn of the game, so the
             // composer takes stock: who's better, and why.
             phaseTurn: event.kind === 'opening-to-middlegame' ? 'middlegame' : 'endgame',
           });
-          for (const t of pf.remember) standingRef.current.said.add(t);
           // EVERY CLAUSE AS ITSELF, carrying the claim keys the turn's own
           // position-facts lane gives the same clause (`clauseClaims`), so
           // the door's ledger sees one fact where both lanes say it.

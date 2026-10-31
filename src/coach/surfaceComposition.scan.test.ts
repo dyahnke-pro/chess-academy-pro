@@ -112,16 +112,17 @@ const INFRA = new Set(['learnTranscript',
   // ceiling: the import that put the scan at 255 was this one, and a signal
   // bus is not a computer.
   'weaknessModelEvents',
-  // `standingFactMemory` computes NO chess fact — it is the say-once set and
-  // its forget-on-rewind rule, the same class as a cache. Added here when the
-  // rule was extracted from the two surfaces that each carried a copy.
+  // `gameStory` computes NO chess fact — it is the game's say-once ledger,
+  // each key with the ply it was said, and its rewind / new-game rules: the
+  // same class as a cache. It replaced `standingFactMemory` (this entry's
+  // first occupant) and the other say-once memories (P1-8a).
   //
   // ⚠️ This is the shape of the cheat this gate warns about, so it is stated
   // out loud: moving a real computer into INFRA would lower the count without
   // routing a single call. The test below names nine computers and asserts
   // they are NOT here. If you add something to this list, it must be provable
   // that it answers no question about the board.
-  'standingFactMemory',
+  'gameStory',
   // `proof` is the CARRIER of a computed fact's proof (2026-10-07, one-coach
   // P3): the Proof type, the no-proof reasons, and the renderers that say or
   // walk a line a computer already proved (`withProof`, `lineProof`,
@@ -256,7 +257,12 @@ const JUDGEMENT_WORDS = /\b(?:tactic|eval|centipawn|material|threat|attack|blund
 const NUMERIC_TABLES = ['ratingBands'];
 
 /** The INFRA entries that claim to be pure memory, checked below. */
-const MEMORY_HOLDERS = ['standingFactMemory', 'learnMemory'];
+const MEMORY_HOLDERS = ['gameStory', 'learnMemory'];
+/** What a memory holder may import and still compute nothing: another memory
+ *  holder (learnMemory holds the game's story), and the ONE position key —
+ *  dropping a FEN's clocks is bookkeeping, the same class as reading its move
+ *  number (the note on CHESS_WORDS below). */
+const MEMORY_IMPORTS = /^import \{[^}]*\} from '(?:\.\/(?:gameStory|learnMemory)|\.\.\/utils\/samePosition)';$/;
 
 /** The vocabulary of a chess JUDGEMENT — pieces, evaluation, tactics, material.
  *
@@ -346,7 +352,7 @@ describe('surface composition — the coach/third-coach divergence, measured', (
         // `import type` is erased at compile — it can carry a shape, never
         // run a computation, so a memory may hold a typed value (2026-10-07:
         // learnMemory keeps the plan thread and the last proof).
-        [...code.matchAll(/^import (?!type ).*$/gm)].map((m) => m[0]),
+        [...code.matchAll(/^import (?!type ).*$/gm)].map((m) => m[0]).filter((l) => !MEMORY_IMPORTS.test(l)),
         `${mod} imports something — it is not pure memory`,
       ).toEqual([]);
       const chess = code.match(CHESS_WORDS);

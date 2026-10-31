@@ -182,6 +182,9 @@ export function weakestByDelta(
 interface PieceQualityLine {
   text: string;
   kind: 'their-best-piece' | 'your-worst-piece';
+  /** The say-once key this line spends (once a phase) — the caller's story
+   *  remembers it when the door keeps the line, never when it is offered. */
+  onceKey: string;
   /** The idea this line states, in the ledger other lanes share — an unmoved
    *  piece is the DEVELOPMENT idea, which the positional read and the
    *  behaviour lane also state (fresh-game walk 2026-09-27: development said
@@ -345,6 +348,7 @@ export function pieceQualityLines(
       const ch = challengeMove(opts?.fen, best.v.square, me);
       out.push({
         kind: 'their-best-piece',
+        onceKey: key,
         squares: [best.v.square, ...(ch ? [ch.to] : [])],
         text: askThenAnswer('Which of their pieces is doing the most work?', `The ${NAME[best.v.piece.toLowerCase()]} on ${best.v.square}${ch ? ` — ${ch.san} challenges it` : ''}, and trading it off takes the sting out of the position.`, (m) => {
           const pn = NAME[best.v.piece.toLowerCase()];
@@ -383,6 +387,7 @@ export function pieceQualityLines(
       said?.add(key);
       out.push({
         kind: 'your-worst-piece',
+        onceKey: key,
         squares: [worst.v.square],
         ideaKey: onHomeSquare(worst.v) ? 'student-development' : undefined,
         // Still on its home square it is UNDEVELOPED, not misplaced — the

@@ -646,7 +646,7 @@ const GATE_TESTS = [
   // fact-computer imports across 56 surfaces, 62 of them in CoachTeachPage.
   'src/coach/surfaceComposition.scan.test.ts',
   // The forget-on-rewind say-once rule, implemented twice under two ref names.
-  'src/services/standingFactMemory.test.ts',
+  'src/services/gameStory.test.ts',
   // Importance gates the INTERRUPT and scaled by rating alone — identical for a
   // student with 200 analysed games and one with zero, while needScore had been
   // data-driven all along. Raise-only; a hole must never invent a moment.

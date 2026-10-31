@@ -63,7 +63,7 @@ describe('usePhaseNarration with a turn door', () => {
     const door = vi.fn(async (_facts: readonly PhaseFact[], _fen: string) => 'spoken');
     const { result } = renderHook(() => usePhaseNarration({
       getPgn: () => SANS, playerColor: 'white', getOpeningName: () => 'Sicilian Defense: Smith-Morra Gambit',
-      getLiveFen: () => MOVE8, getStanding: null, speakFacts: door,
+      getLiveFen: () => MOVE8, getSaid: () => new Set<string>(), speakFacts: door,
     }));
     await act(async () => {
       await result.current.narrate({ kind: 'opening-to-middlegame', fen: MOVE8, playerColor: 'white', moveNumber: 14 } as PhaseTransitionEvent, 'full');
@@ -89,7 +89,7 @@ const mount = (live: () => string, pgn = SANS, color: 'white' | 'black' = 'white
   const door = vi.fn(async (_facts: readonly PhaseFact[], _fen: string) => 'spoken');
   const { result } = renderHook(() => usePhaseNarration({
     getPgn: () => pgn, playerColor: color, getOpeningName: () => null,
-    getLiveFen: live, getStanding: null, speakFacts: door,
+    getLiveFen: live, getSaid: () => new Set<string>(), speakFacts: door,
   }));
   return { result, door };
 };

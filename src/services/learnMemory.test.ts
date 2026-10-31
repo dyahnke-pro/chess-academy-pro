@@ -45,7 +45,9 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     // test — a new game must mint a new id — which is why excluding it here
     // does not create a hole. Named explicitly so a future slot cannot ride
     // out on a vague filter.
-    const IDENTITY_SLOTS = new Set<string>(['gameId']);
+    // `story` is the game's STORY (gameStory.ts): an object with its own
+    // reset, renewed by `newGame()` — asserted in its own test below.
+    const IDENTITY_SLOTS = new Set<string>(['gameId', 'story']);
     const slots = (Object.keys(mem) as Array<keyof LearnMemory>)
       .filter((k) => typeof mem[k] !== 'function' && !IDENTITY_SLOTS.has(k));
     expect(slots.length).toBeGreaterThan(5);
@@ -72,6 +74,15 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
         : v === null || v === '' || v === NEVER_FIRED;
       expect(clean, `newGame() did not forget "${k}" — add it to newGame()`).toBe(true);
     }
+  });
+
+  it('newGame() renews the STORY — everything said this game is forgotten, under the new id', () => {
+    const mem = createLearnMemory({ livePlies: () => 0 });
+    mem.story.commit(4, { claims: ['def:pin'], sentences: ['claim:def:pin'] });
+    mem.newGame();
+    expect(mem.story.current().said.size).toBe(0);
+    expect(mem.story.current().sentences.size).toBe(0);
+    expect(mem.story.current().gameId).toBe(mem.gameId);
   });
 
   it('newGame() mints a NEW gameId — game 2 cannot record against game 1', () => {
@@ -256,7 +267,7 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     const src = readFileSync(PAGE, 'utf8');
     const declared = [...src.matchAll(/const (\w+Ref) = useRef/g)].map((m) => m[1]);
     expect(declared.length).toBeGreaterThan(30);
-    expect(declared).toContain('positionalSaidRef');
+    expect(declared).toContain('announcedPliesRef');
   });
 });
 
@@ -299,17 +310,17 @@ describe('reason wordings rotate per game, not per move number (David 2026-10-14
 
 describe('Learn remembers what SPOKE, never what was offered (prod Learn 2026-10-16)', () => {
   it('a held fact leaves no say-once key; a kept one writes its claims, a one-turn threat never', async () => {
-    const { rememberKeptClaims, rememberKeptClauses } = await import('./learnMemory');
+    const { rememberKeptClaims } = await import('./learnMemory');
     const said: string[] = [];
     rememberKeptClaims([{ claims: ['file-d', 'win-e5'] }], (k) => said.push(k));
     expect(said).toEqual(['file-d']);
-    const byClause = [
-      { text: 'They keep moving the same piece twice.', keys: ['They keep moving the same piece twice.'] },
-      { text: 'How do you find a plan?', keys: ['method:plan'] },
-    ];
-    const kept: string[] = [];
-    // Only the habit clause spoke; the method clause was held.
-    rememberKeptClauses([{ text: 'They keep moving the same piece twice.' }], byClause, (k) => kept.push(k));
-    expect(kept).toEqual(['They keep moving the same piece twice.']);
+    // Only the habit clause spoke; the method clause was held — the offers
+    // commit by the kept text (gameStory `commitKept`).
+    const mem = createLearnMemory({ livePlies: () => 0 });
+    const B = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
+    mem.story.offer(B, { text: 'They keep moving the same piece twice.', claims: ['They keep moving the same piece twice.'] });
+    mem.story.offer(B, { text: 'How do you find a plan?', claims: ['method:plan'] });
+    mem.story.commitKept(2, B, [{ text: 'They keep moving the same piece twice.' }]);
+    expect([...mem.story.current().said.keys()]).toEqual(['They keep moving the same piece twice.']);
   });
 });
