@@ -30,7 +30,13 @@
  * per computer: its function, or its module, and the registry ids that reach
  * it). The reach is recomputed from the code every run.
  *
- *   node scripts/computer-reach.mjs        → writes docs/computer-reach.json
+ *   node scripts/computer-reach.mjs           → writes docs/computer-reach.json
+ *   node scripts/computer-reach.mjs --verify  → regenerates it in memory and
+ *     FAILS when the committed report is stale or a catalog row names a
+ *     computer the code no longer has (ship-check runs this, the way it runs
+ *     `surface-map --verify`: a reach report nobody regenerates reports
+ *     wiring that is not there — 2026-10-31, 12 wired computers read as
+ *     unreached for a day after the registry became a `satisfies` literal).
  */
 import ts from 'typescript';
 import fs from 'node:fs';
@@ -442,8 +448,32 @@ const report = {
   missingFromCode: missing,
   computers: rows,
 };
+const text = `${JSON.stringify(report, null, 1)}\n`;
+if (process.argv.includes('--verify')) {
+  const committed = fs.existsSync(OUT) ? fs.readFileSync(OUT, 'utf8') : '';
+  const problems = [];
+  if (missing.length) problems.push(`${missing.length} catalog row(s) name a computer the code no longer has: ${missing.join(', ')} — drop them from scripts/computer-reach/computers.json`);
+  if (committed !== text) {
+    const was = committed ? JSON.parse(committed) : { computers: [] };
+    const old = new Map(was.computers.map((c) => [c.key, c]));
+    const moved = [];
+    for (const c of rows) {
+      const o = old.get(c.key);
+      if (!o) { moved.push(`${c.key} (new row)`); continue; }
+      for (const s of SURFACES) if (o[s] !== c[s]) moved.push(`${c.key} ${s}: ${o[s]} → ${c[s]}`);
+    }
+    for (const k of old.keys()) if (!rows.some((c) => c.key === k)) moved.push(`${k} (row removed)`);
+    problems.push(`docs/computer-reach.json is stale — run node scripts/computer-reach.mjs and commit it${moved.length ? `:\n    ${moved.slice(0, 40).join('\n    ')}${moved.length > 40 ? `\n    … and ${moved.length - 40} more` : ''}` : ' (totals or ordering moved)'}`);
+  }
+  if (problems.length) {
+    console.error(`computer-reach --verify FAILED:\n  ${problems.join('\n  ')}`);
+    process.exit(1);
+  }
+  console.log(`computer-reach --verify: fresh (${rows.length} computers, ${nowhere.length} wired nowhere)`);
+  process.exit(0);
+}
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
-fs.writeFileSync(OUT, `${JSON.stringify(report, null, 1)}\n`);
+fs.writeFileSync(OUT, text);
 console.log(`computer-reach: ${rows.length} computers, ${nowhere.length} wired nowhere (${heldOnly.length} held by Learn only, ${elsewhere.length} other screens only, ${dead.length} dead)${missing.length ? `, ${missing.length} MISSING from the code: ${missing.join(', ')}` : ''}`);
 for (const s of SURFACES) console.log(`  ${s.padEnd(8)} yes ${count(s, 'yes')}${s === 'learn' ? ` held ${count(s, 'held')}` : ''} no ${count(s, 'no')}`);
 console.log(`→ ${path.relative(ROOT, OUT)}`);
