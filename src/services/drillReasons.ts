@@ -16,6 +16,7 @@ import { openSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import { findHangingBySee } from './positionReadingService';
 import { sayMoveClause } from './spokenMove';
+import { afterCaptureSan } from '../utils/captureWords';
 import { MATE_EVAL_THRESHOLD } from './engineConstants';
 
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -92,7 +93,10 @@ export function goodButWeakerBeat(args: {
   const wrong = pov(args.evalAfterWrong);
   const best = pov(args.evalAfterBest);
   if (wrong < STILL_GOOD_CP || best - wrong < STRONGER_BY_CP) return null;
-  const wins = captured && captured !== 'k' ? ` — it wins the ${PIECE_NAME[captured]}` : ' — it keeps your edge';
+  // The move is said in words that carry its capture ("the bishop takes
+  // e5"): what it wins is the count, never the capture again (David
+  // 2026-10-30; `captureWords`).
+  const wins = captured && captured !== 'k' ? ` — it ${afterCaptureSan({ kind: 'nets', captured, free: false, gave: null }, 'verb')}` : ' — it keeps your edge';
   const head = `${cap(sayMoveClause(args.wrongSan, args.fenBefore))} is a good move${wins}.`;
   // withTail false: the caller follows with the position's own direction
   // (moveInsight.positionAsk), which says WHERE to look.

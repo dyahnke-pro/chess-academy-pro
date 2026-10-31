@@ -266,7 +266,9 @@ function studentClause(p: ReadPly, opts: { first: boolean; last: boolean; result
   const lead = opts.first ? p.san : `then ${p.san}`;
   if (opts.last && opts.result) return `${lead}, and you win ${opts.result}`;
   if (p.promotion) return p.promotion === 'q' ? `${lead} — the pawn queens` : `${lead} — the pawn becomes ${withArticle(PIECE_NAME[p.promotion] ?? 'piece')}`;
-  if (p.captured) return `${lead} takes the ${PIECE_NAME[p.captured] ?? 'piece'}`;
+  // A capture is said by its SAN alone — "Bxe5" is spoken "bishop takes e5",
+  // and "Bxe5 takes the knight" said it twice (David 2026-10-30); what the
+  // line won is the last move's `result`.
   return lead;
 }
 

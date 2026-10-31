@@ -11,7 +11,7 @@ const B = '2kr1b1r/ppp2ppp/2n1pn2/q7/3PN1P1/5N2/PPPB1PP1/R2QKB1R b KQ - 1 9';
 
 describe('what a move allowed is what they NET', () => {
   it('a queen they pay a bishop for is said as that trade', () => {
-    expect(replyPunishment(B, 'Nxe4', 'Bxa5')?.gerund).toBe('winning your queen on a5 for their bishop');
+    expect(replyPunishment(B, 'Nxe4', 'Bxa5')?.gerund).toBe('winning a queen for a bishop');
   });
   it('the line reader never says "wins the queen" off a line that gives material back', () => {
     expect(allowedReply(B, 'Nxe4', ['d2a5', 'c6a5', 'f1d3'], 'black')).toBeNull();

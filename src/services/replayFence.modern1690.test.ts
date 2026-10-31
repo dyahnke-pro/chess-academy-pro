@@ -53,7 +53,7 @@ describe('taking the forking piece is not "guarding" (ply 37)', () => {
     const { threatAnswerWhy } = await import('./deliberation');
     const why = threatAnswerWhy(fenAt(36), 'Nxf7', 'w') ?? '';
     expect(why).not.toMatch(/guards the queen/);
-    expect(why).toMatch(/takes the knight that was hitting the queen on h6/);
+    expect(why).toMatch(/removes the knight that was hitting the queen on h6/);
   });
 });
 

@@ -6,7 +6,7 @@ import { whatTheMoveAllowed as describeWhatMoveAllowed } from './mistakeNarratio
 describe('describeWhatMoveAllowed — lead with what the move let them do', () => {
   it('a hung pawn: R2b3 lets Qxd6 take the loose d-pawn', () => {
     const fen = '1r4k1/p2b1p1p/3ppbp1/q7/4P3/P1PQ1NPP/1r3PB1/R1R3K1 b - - 2 23';
-    expect(describeWhatMoveAllowed(fen, 'R2b3', 'Qxd6')).toBe('R2b3 lets them play Qxd6, winning your pawn on d6.');
+    expect(describeWhatMoveAllowed(fen, 'R2b3', 'Qxd6')).toBe('R2b3 lets them play Qxd6, winning a pawn.');
   });
 
   it('a fork: Kh8 walks into Ng6+, the knight that card used to call pinned', () => {

@@ -20,6 +20,7 @@ import { detectTactics } from './tacticsDetector';
 import { withProof, type Proof, type ProofSize } from './proof';
 import { CAPTURE_VALUE, sideMaterial } from './pieceValues';
 import { withMover } from '../utils/sideToMove';
+import { afterCaptureSan } from '../utils/captureWords';
 
 type PinBreakHow = 'check' | 'threat' | 'discovery';
 
@@ -242,15 +243,14 @@ export function pinBreakProof(b: PinBreak, student: Color): Proof {
   // The pinned side takes; the holder answered. Said from the student's seat.
   const taker = studentIsPinned ? 'you play' : 'they play';
   const replyOwner = studentIsPinned ? 'their' : 'your';
-  // WHOSE piece falls is said here, from the line — the holder's (v5 re-run
-  // 2026-10-29: "your best is Qxc5, and they play Nxc5, winning their queen
-  // on c5" — a later pass read c5 off the board BEFORE the line, where their
-  // queen stood, and gave your queen to them). And a capture that only takes
-  // back what the reply took is a trade, never a win.
-  const owner = studentIsPinned ? 'their' : 'your';
+  // A capture that only takes back what the reply took is a trade, never a
+  // win. The taker's SAN says the capture; after it only what it leads to —
+  // "winning a queen", whose piece plain from who plays it (v5 re-run
+  // 2026-10-29: "winning their queen on c5" once named the wrong owner; David
+  // 2026-10-30: "queen takes d8, takes the queen"; `captureWords`).
   const evenBack = !!reply?.captured && !!cap && VALUE[cap.captured] <= VALUE[reply.captured];
   const win = cap
-    ? evenBack ? `${taker} ${cap.san}, taking back on ${cap.to}` : `${taker} ${cap.san}, winning ${owner} ${PIECE[cap.captured]} on ${cap.to}`
+    ? evenBack ? `${taker} ${cap.san}, ${afterCaptureSan({ kind: 'take-back', next: null }, 'participle')}` : `${taker} ${cap.san}, ${afterCaptureSan({ kind: 'nets', captured: cap.captured, free: false, gave: null }, 'participle')}`
     : 'the pin is gone';
   const full = reply ? `After ${b.san}, ${replyOwner} best is ${reply.san}, and ${win}` : `After ${b.san}, ${win}`;
   const short = cap ? `Then ${win}` : '';

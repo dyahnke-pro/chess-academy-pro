@@ -9,7 +9,7 @@ const HANGING_KNIGHT = '4k3/8/8/8/3n4/8/8/3QK3 w - - 0 1';
 describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
   it('names the piece won on a winning capture (never a bare "wins material")', () => {
     const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true });
-    expect(out).toMatch(/winning the knight/);
+    expect(out).toMatch(/winning a knight/);
     expect(out).not.toMatch(/wins material/);
     expect(out).toMatch(/^You play Qxd4,/);
   });
@@ -27,7 +27,7 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
   it('leads with the criticality line when the moment was critical, then the facts', () => {
     const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true, criticalMoment: true });
     expect(out).toMatch(/^This was the moment to slow down\. /);
-    expect(out).toMatch(/winning the knight/); // facts still follow
+    expect(out).toMatch(/winning a knight/); // facts still follow
   });
 
   it('teach register phrases the criticality lead present-tense', () => {
@@ -36,7 +36,7 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
     expect(review).toMatch(/^This was the moment to slow down\./);
     expect(teach).toMatch(/^This is the critical moment\./);
     // same computed facts either way
-    expect(teach).toMatch(/winning the knight/);
+    expect(teach).toMatch(/winning a knight/);
   });
 
   it('uses the locked perspective — "you" for the student, "they" for the opponent', () => {
@@ -74,7 +74,7 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
     });
     expect(out).toMatch(/winning|better/i);   // an eval verdict is present
     expect(out).toMatch(/up a|piece|pawn/i);  // a WHY (material) is present
-    expect(out).toMatch(/winning the knight/); // the move mechanic still there
+    expect(out).toMatch(/winning a knight/); // the move mechanic still there
   });
 
   it('PRINT: sample briefings', () => {
@@ -120,7 +120,7 @@ describe('the one "what a move does" sentence (census group 6, 2026-10-07)', () 
   it('at a critical moment the recapture is the move the line hangs on — taking back, never winning', () => {
     const { fen, prev } = at(24);
     const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, fenBefore: fen, san: line[24], prev, moverIsStudent: true, register: 'teach', criticalMoment: true }) ?? '';
-    expect(out).toBe('This is the critical moment. You play Nxe3, taking back the bishop.');
+    expect(out).toBe('This is the critical moment. You play Nxe3, completing the trade.');
   });
   it('a pawn, a rook lift and a retreat are never said to "develop"', () => {
     for (const n of [8, 12, 20]) expect(brief(n, n % 2 === 0)).not.toMatch(/develops/);

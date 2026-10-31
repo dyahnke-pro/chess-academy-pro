@@ -14,7 +14,7 @@ const beforeRecapture = (() => {
 
 describe('a recapture is never a win', () => {
   it('without the previous capture it reads as winning the queen (why the param is required)', () => {
-    expect(describeMoveMerit(beforeRecapture, 'gxf6', 'black', null) ?? '').toMatch(/wins their queen/);
+    expect(describeMoveMerit(beforeRecapture, 'gxf6', 'black', null) ?? '').toMatch(/wins a queen/);
   });
   it('taking back the queen that just took yours is not "wins their queen"', () => {
     const said = describeMoveMerit(beforeRecapture, 'gxf6', 'black', { square: 'f6', capturedValue: 9, net: 9 }) ?? '';
@@ -22,6 +22,6 @@ describe('a recapture is never a win', () => {
   });
   it('capturing MORE than was taken is still a win', () => {
     // Previous move took a pawn on f6; taking a queen there is a real gain.
-    expect(describeMoveMerit(beforeRecapture, 'gxf6', 'black', { square: 'f6', capturedValue: 1, net: 1 }) ?? '').toMatch(/wins their queen/);
+    expect(describeMoveMerit(beforeRecapture, 'gxf6', 'black', { square: 'f6', capturedValue: 1, net: 1 }) ?? '').toMatch(/wins a queen/);
   });
 });

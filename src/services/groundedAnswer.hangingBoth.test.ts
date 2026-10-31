@@ -23,7 +23,7 @@ describe('a recapture takes back, it does not win', async () => {
   const { explainBestMoveGrounded } = await import('./groundedAnswer');
   it('…dxe5 after 13.Nxe5', () => {
     const why = explainBestMoveGrounded(FEN, null, 'd6e5', 'black', { square: 'e5', capturedValue: 3, net: 3 }, null, 'mover') ?? '';
-    expect(why).toMatch(/takes back the knight on e5/);
+    expect(why).toMatch(/completes the trade/);
     expect(why).not.toMatch(/wins the knight/);
   });
 });

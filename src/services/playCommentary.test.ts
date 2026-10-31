@@ -542,7 +542,7 @@ describe('the spoken form is the student\'s, never the prompt package (2026-09-3
   ];
   it('asks "why not" first, then refutes — no instruction text', () => {
     const rt = buildRejectedTempting({ fen, studentColor: 'white', lines });
-    expect(withoutTags(rt?.spoken ?? '')).toBe('Why not exd5? ‖ It grabs the pawn on d5, but Qxd5 refutes it. ‖');
+    expect(withoutTags(rt?.spoken ?? '')).toBe('Why not exd5? ‖ It wins a pawn, but Qxd5 refutes it. ‖');
     expect(rt?.spoken).not.toMatch(/Do NOT|exactly as given|TEMPTING BUT/);
     expect(rt?.refutation).toMatchObject({ from: 'd8', to: 'd5' });
   });

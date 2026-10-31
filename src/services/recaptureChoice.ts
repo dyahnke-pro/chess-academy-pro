@@ -133,12 +133,15 @@ export function recaptureChoice(
     return null;
   }
   const good = mine.plus[0]; const bad = other.minus[0];
-  if (good && bad) return `${P}, taking back with ${what(played)} — ${good}; ${O} ${bad}.`;
+  // The SAN says which piece takes back ("exd5" is spoken "e-pawn takes
+  // d5"); "exd5, taking back with the e-pawn" said the capture twice (David
+  // 2026-10-30).
+  if (good && bad) return `${P} — ${good}; ${O} ${bad}.`;
   // A PLACEMENT ALONE IS THE BOARD (Review noise walk 2026-10-20: "Nxe5,
   // taking back with the knight: the knight lands in the centre on e5" said
   // with no contrast). Where the piece lands earns a line only against what
   // the other recapture would cost; on its own only a consequence speaks.
-  if (good && !PLACEMENT_ONLY.test(good)) return `${P}, taking back with ${what(played)}: ${good}.`;
+  if (good && !PLACEMENT_ONLY.test(good)) return `${P}: ${good}.`;
   if (bad) return `${P}, not ${O}, which ${bad}.`;
   return null;
 }

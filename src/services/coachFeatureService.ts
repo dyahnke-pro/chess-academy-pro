@@ -3951,7 +3951,7 @@ function* reviewSegmentSteps(
       && playerColor !== undefined
       && (m.classification === null || m.classification === 'book' || m.classification === 'good' || m.classification === 'great' || m.classification === 'brilliant')
     ) {
-      const clause = plyFactsClause(fenPair.fenBefore, m.san, prevCap, 'your');
+      const clause = plyFactsClause(fenPair.fenBefore, m.san, { prev: prevCap, victimOwner: 'your', sanSaid: false });
       if (clause) {
         narration = `Your opponent ${clause}.`;
         narrationSource = 'opponent';
@@ -5041,7 +5041,7 @@ async function augmentWithProjections(
     } else if (s.narration) {
       // DISAGREEMENT — the engine sees a stronger idea. Replace the static
       // sentence with the engine's own line, explained by the same statics.
-      const engineWhy = plyFactsClause(line.plies[0].fenBefore, line.plies[0].san);
+      const engineWhy = plyFactsClause(line.plies[0].fenBefore, line.plies[0].san, { sanSaid: true });
       const replacement = ` And the real threat here, per the engine: ${line.plies[0].san}${engineWhy ? ` — it ${engineWhy}` : ''}.`;
       s.narration = s.narration.replace(s.staticThreat.sentence, replacement);
       attachLineArrows(s, line, 3); // engine's replacement threat line

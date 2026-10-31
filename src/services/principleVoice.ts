@@ -215,9 +215,12 @@ const VERDICT_WITHOUT_BETTER: Partial<Record<FundamentalId, (f: Facts) => string
   'no-plan': (f) => `A move without a purpose: the board wanted you to ${f.plan}, and ${f.played} works on something else entirely.`,
   'missed-pin-pressure': (f) => `A pinned piece can't run, so attack it again: the ${f.piece} on ${f.square} was pinned to the ${f.behind} on ${f.behindSq}, and this move let it off.`,
   'missed-guard-removal': (f) => `Removing the guard: the ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq}, and this move let it keep its post.`,
+  // "Bxf3 took it" was "bishop takes f3 took it" (David 2026-10-30: "queen
+  // takes d8, takes the queen"): the SAN says the capture, and the idea is
+  // the guard's removal.
   'ignored-guard-removal': (f) => (Number(f.played) === 1
-    ? `Your ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq}, and ${f.hit} ${Number(f.chase) === 1 ? 'chased it off' : 'took it'} — the ${f.piece} falls.`
-    : `Your ${f.piece} on ${f.square} has one guard, the ${f.guard} on ${f.guardSq}, and ${f.hit} ${Number(f.chase) === 1 ? 'chases it off' : 'takes it'} — the ${f.piece} falls.`),
+    ? `Your ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq}, and ${f.hit} ${Number(f.chase) === 1 ? 'chased it off' : 'removed it'} — the ${f.piece} falls.`
+    : `Your ${f.piece} on ${f.square} has one guard, the ${f.guard} on ${f.guardSq}, and ${f.hit} ${Number(f.chase) === 1 ? 'chases it off' : 'removes it'} — the ${f.piece} falls.`),
   'ignored-pin-pressure': (f) => (Number(f.played) === 1
     ? `Your ${f.piece} on ${f.square} is pinned to the ${f.behind} on ${f.behindSq}, and they piled on with ${f.pile} — a pinned piece can't run.`
     : `Your ${f.piece} on ${f.square} is pinned to the ${f.behind} on ${f.behindSq}, and ${f.pile} piles on it — a pinned piece can't run.`),
@@ -423,7 +426,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       return s[v % s.length];
     }
     case 'missed-guard-removal': {
-      const how = Number(f.chase) === 1 ? 'chases it off' : 'takes it';
+      const how = Number(f.chase) === 1 ? 'chases it off' : 'removes it';
       const s = [
         `Removing the guard: the ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq} — ${f.better} ${how}, and the ${f.piece} falls.`,
         `The ${f.piece} on ${f.square} was held by the ${f.guard} alone; ${f.better} ${how}, and this move let the chance go.`,
@@ -431,7 +434,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       return s[v % s.length];
     }
     case 'ignored-guard-removal': {
-      const how = Number(f.played) === 1 ? (Number(f.chase) === 1 ? 'chased it off' : 'took it') : (Number(f.chase) === 1 ? 'chases it off' : 'takes it');
+      const how = Number(f.played) === 1 ? (Number(f.chase) === 1 ? 'chased it off' : 'removed it') : (Number(f.chase) === 1 ? 'chases it off' : 'removes it');
       const s = [
         `Your ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq}, and ${f.hit} ${how} — the ${f.piece} falls${f.better ? `; ${f.better} kept it safe` : ''}.`,
         `One guard is not enough: the ${f.guard} on ${f.guardSq} held your ${f.piece} on ${f.square} alone, and ${f.hit} ${how}${f.better ? ` — after ${f.better} it would have held` : ''}.`,
@@ -449,15 +452,17 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     case 'loose-piece': {
       if (guarded(f)) {
         const g = [
-          `Guarded is not safe: the ${f.piece} on ${f.square} has a guard, but ${kick ?? 'the cheaper attacker'} still wins it.`,
+          // After the capture's SAN only what it leads to, never the capture
+          // again ("Bxe5 still wins it", David 2026-10-30).
+          `Guarded is not safe: the ${f.piece} on ${f.square} has a guard, but ${kick ?? 'the cheaper attacker'} still comes out ahead.`,
           `That leaves the ${f.piece} on ${f.square} short of guards — ${kick ?? 'a capture'} comes out ahead.`,
           `The ${f.piece} on ${f.square} can be won after this; ${kick ?? 'taking it'} gains material even with its guard.`,
         ];
         return g[v % g.length];
       }
       const s = [
-        `Loose pieces drop off: the ${f.piece} on ${f.square} is left hanging, and ${kick ?? 'the capture'} just takes it.`,
-        `That leaves the ${f.piece} on ${f.square} undefended — ${kick ?? 'a capture'} wins it outright.`,
+        `Loose pieces drop off: the ${f.piece} on ${f.square} is left hanging, and after ${kick ?? 'the capture'} nothing can take back.`,
+        `That leaves the ${f.piece} on ${f.square} undefended — ${kick ?? 'a capture'} is free.`,
         `The ${f.piece} on ${f.square} hangs after this; ${kick ?? 'taking it'} is free material.`,
       ];
       return s[v % s.length];
@@ -469,16 +474,18 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       if (f.line) {
         const t = [
           `Their threat came first — ${f.line} — and your ${f.piece} on ${f.square} goes; this move doesn't stop it${f.better ? `, ${f.better} does` : ''}.`,
-          `Before your own plan, answer theirs: ${f.line}, and your ${f.piece} on ${f.square} goes. This move leaves it on${f.better ? ` — ${f.better} takes it away` : ''}.`,
+          `Before your own plan, answer theirs: ${f.line}, and your ${f.piece} on ${f.square} goes. This move leaves it on${f.better ? ` — ${f.better} gets it to safety` : ''}.`,
         ];
         return t[v % t.length];
       }
+      // The capture's SAN says the capture once: "Bxe5 wins it" and "Bxe5
+      // collects" said it twice (David 2026-10-30).
       const s = [
-        `Their threat first: the ${f.piece} on ${f.square} was already attacked, and this move doesn't deal with it — ${kick ?? 'the capture'} wins it.`,
+        `Their threat first: the ${f.piece} on ${f.square} was already attacked, and this move doesn't deal with it — ${kick ?? 'the capture'} is coming.`,
         guarded(f)
           ? `The ${f.piece} on ${f.square} could be won before you moved, and it still can; ${kick ?? 'they take it'} next.`
           : `The ${f.piece} on ${f.square} was hanging before you moved, and it's still hanging after; ${kick ?? 'they take it'} next.`,
-        `Answer the threat before your own plan — the ${f.piece} on ${f.square} stays en prise and ${kick ?? 'the capture'} collects.`,
+        `Answer the threat before your own plan — the ${f.piece} on ${f.square} stays en prise and ${kick ?? 'the capture'} wins material.`,
       ];
       return s[v % s.length];
     }

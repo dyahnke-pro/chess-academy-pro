@@ -48,7 +48,7 @@ describe('goodButWeakerBeat — a good move is called good (walk 2026-10-04 defe
   const fen = 'r3k3/2p1q3/8/3N4/8/8/8/7K w - - 0 1';
   it('names what it wins and that there is something stronger, without naming it', () => {
     const line = goodButWeakerBeat({ fenBefore: fen, wrongSan: 'Nxc7+', evalAfterWrong: 180, evalAfterBest: 350 });
-    expect(line).toMatch(/good move — it wins the pawn/);
+    expect(line).toMatch(/good move — it wins a pawn/);
     expect(line).toMatch(/something stronger/);
     expect(line).not.toMatch(/e7/);
   });

@@ -44,7 +44,7 @@ describe('Review says a move through the one composer', () => {
 
   it("a move another line already teaches adds only a second job (…Nxd5: the rule's take-back, no trivia)", () => {
     const ply10 = walk('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5', 'black')[9];
-    expect(ply10).toMatch(/\[rule\] …Nxd5, taking back with the knight/);
+    expect(ply10).toMatch(/\[rule\] …Nxd5 — /);
     expect(ply10).not.toMatch(/\[move-job\]/);
   }, 60_000);
 

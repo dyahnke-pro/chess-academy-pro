@@ -1031,7 +1031,7 @@ describe('explainBestMoveGrounded — hanging is legal-capture + SEE grounded (n
     // short-circuits before the cost clause.
     const out = explainBestMoveGrounded('4k3/8/2n5/8/3P4/8/8/4K3 w - - 0 1', 'Ke2', 'd4d5', 'white', null, null, 'mover');
     expect(out).toContain('Nxd4'); // a real, legal, material-winning capture
-    expect(out).toContain('winning your pawn');
+    expect(out).toContain('winning a pawn');
   });
 });
 
@@ -1065,7 +1065,7 @@ describe('explainMoveOrder — grounded "why THIS move first" (David 2026-06-27)
     // Bc4 x d5 wins the pawn; Black can't recapture.
     const out = explainMoveOrder({ fenBefore: '4k3/8/8/3p4/2B5/8/8/4K3 w - - 0 1', betterSan: 'Bxd5', worseSan: 'Ke2', moverColor: 'white' });
     expect(out!.mechanism).toBe('material');
-    expect(out!.text).toContain('wins the pawn on d5');
+    expect(out!.text).toContain('wins a pawn');
   });
 
   it('spells out the COST of the wrong order when a refutation is supplied', () => {
@@ -1111,7 +1111,7 @@ describe('describeMoveGeometry — grounded one-phrase "what the move does" (Dav
 
   it('names a MATERIAL win', () => {
     const out = describeMoveGeometry('4k3/8/8/3p4/2B5/8/8/4K3 w - - 0 1', 'Bxd5', 'white');
-    expect(out).toBe('wins the pawn on d5');
+    expect(out).toBe('wins a pawn');
   });
 
   it('names a CHECK when the move only hits the king', () => {

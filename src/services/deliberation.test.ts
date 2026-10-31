@@ -152,7 +152,7 @@ describe('a capture that wins material says so (hand walk 2340, move 9)', () => 
     for (const m of 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4 Bd2 Bxc3 Bxc3 Nge7'.split(' ')) c.move(m);
     const analysis = { topLines: [line(1, 120, 'd4e5'), line(2, -150, 'd1d2')] };
     const d = buildDeliberation({ analysis, fenBefore: c.fen(), moverColor: 'w', opponentLastSan: null })!;
-    expect(d.bestWhy).toBe('wins the pawn on e5');
+    expect(d.bestWhy).toBe('wins a pawn');
   });
 
   it('a plain recapture is a trade, not a win', () => {
@@ -171,7 +171,7 @@ describe('a recapture is the trade finishing (hand walk 2026-09-25, Qxd8 Rexd8)'
     const d = buildDeliberation({ analysis, fenBefore: c.fen(), moverColor: 'b', opponentLastSan: 'Qxd8' })!;
     expect(d.bestWhy ?? '').not.toMatch(/wins the queen/);
     // …and taking back IS the reason, not "it takes the open d-file".
-    expect(d.bestWhy).toBe('takes back the queen');
+    expect(d.bestWhy).toBe('completes the trade');
   });
 });
 

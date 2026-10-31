@@ -30,7 +30,8 @@
 import { capturedSquare } from '../utils/capturedSquare';
 import { evalBand } from './evalBand';
 import { andList, lineShape, seatedLine, lineSeatAt } from '../utils/andList';
-import { bestMoveReason, moveWhy } from './deliberation';
+import { bareCaptureLead, bestMoveReason, moveWhy } from './deliberation';
+import { captureLeadsTo } from './captureLeadsTo';
 import { captureHasCounterTactic } from './groundedAnswer';
 import { toOtherSeat } from '../utils/seatPronouns';
 import { Chess, type Square } from 'chess.js';
@@ -244,7 +245,12 @@ function boardHalfReason(fenBefore: string, bestSan: string, moverColor: 'white'
   // An even trade is the move's first job, never why it BEATS another move
   // ("Rxf8+ was cleaner — it takes their rook on f8, with check": Kxf8 takes
   // back). A winning capture is worded by the line half above.
-  if (!board || /^takes their [a-z]+ on [a-h][1-8](?: en passant)?(?:, with check)?$/.test(board)) return null;
+  // Read off the board, never back out of the words: the reason IS the
+  // capture's own lead and the capture wins nothing (a trade, or a piece
+  // given, said after the SAN by `captureWords`). A capture that NETS
+  // material keeps its reason — "it would win a pawn" — exactly as before
+  // the capture wording moved into one helper.
+  if (!board || (board === bareCaptureLead(fenBefore, bestSan) && captureLeadsTo(fenBefore, bestSan)?.kind !== 'nets')) return null;
   // A move NOT played is said as a conditional, like the line half ("it would
   // …"): "the stronger move was Re8 — it attacks your rook on c8" read as a
   // claim about the board after Rxc8 had taken that rook (corpus sweep).
