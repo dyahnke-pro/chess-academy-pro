@@ -29,8 +29,7 @@
 import { it, expect } from 'vitest';
 import { existsSync, readFileSync, readdirSync, mkdirSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import type { AnalysisLine, StockfishAnalysis } from '../types';
-import { mateEvalFor } from './engineConstants';
+import { analysisOf, evalOf, linesOf, moverCost, type EngineRead } from '../test/replayGame';
 import { newLessonVoice, BRIEFING_LINE_PLIES } from './reviewMoveBriefing';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { computePositionFacts, type PositionFactsResult } from './positionFacts';
@@ -65,7 +64,9 @@ import type { IdeaKind } from './ideaKind';
 
 // ── the corpus and the cached reads ─────────────────────────────────────────
 
-interface Read { uci: string; cp: number | null; mate: number | null; pv: string[] }
+/** A cached engine read: the one shape `src/test/replayGame.ts` reads (the
+ *  decision baseline and the short game read the same files the same way). */
+type Read = EngineRead;
 interface Note {
   id: string; lineSan: string[]; phase: string; studentSide: 'white' | 'black';
   explains: string; teaches: string; plans: string;
@@ -181,17 +182,6 @@ function loadPositions(): Position[] {
 
 // ── reads in the app's shapes ───────────────────────────────────────────────
 
-function evalOf(r: Read): number { return r.mate !== null ? mateEvalFor(r.mate) : (r.cp ?? 0); }
-function linesOf(reads: Read[]): AnalysisLine[] {
-  return reads.map((r, k) => ({ rank: k + 1, evaluation: evalOf(r), moves: [...r.pv], mate: r.mate }));
-}
-function analysisOf(reads: Read[]): StockfishAnalysis {
-  const top: Read | undefined = reads.at(0);
-  return {
-    bestMove: top?.uci ?? '(none)', evaluation: top ? evalOf(top) : 0, isMate: top?.mate != null,
-    mateIn: top?.mate ?? null, depth: 14, topLines: linesOf(reads), nodesPerSecond: 0,
-  } as StockfishAnalysis;
-}
 function sansOf(fen: string, uci: readonly string[], max = BRIEFING_LINE_PLIES): string[] {
   const c = new Chess(fen);
   const out: string[] = [];
@@ -208,12 +198,7 @@ function uciOf(fen: string, san: string): string | null {
 }
 /** Mover-POV cost of the played move, from the two cached reads. */
 function costCp(p: Position): number | null {
-  if (!p.best || !p.reply) return null;
-  const sign = p.mover === 'w' ? 1 : -1;
-  const best = evalOf(p.best) * sign;
-  const played = evalOf(p.reply) * sign;
-  if (Math.abs(best) > 5000 || Math.abs(played) > 5000) return null;
-  return Math.max(0, best - played);
+  return moverCost(p.mover, p.best, p.reply);
 }
 
 // ── the one tagger ──────────────────────────────────────────────────────────

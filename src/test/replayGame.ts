@@ -5,8 +5,9 @@
 // mate kept as its distance. So a test walks the game the way the app does —
 // the lesson's line, Review's walk, the live composer — with no engine.
 //
-// One reader for the measure (`shortGame.measure.test.ts`) and the decision
-// baseline (`decisionRows.baseline.test.ts`), so the two never read a fixture
+// One reader for the measure (`shortGame.measure.test.ts`), the decision
+// baseline (`decisionRows.baseline.test.ts`) and the Danya bench's read
+// helpers (`danyaBench.measure.test.ts`), so none of them reads an engine read
 // two ways.
 import { Chess } from 'chess.js';
 import type { AnalysisLine, StockfishAnalysis } from '../types';
@@ -72,8 +73,9 @@ export function analysisOf(reads: readonly EngineRead[]): StockfishAnalysis {
 }
 
 /** The mover's cost of the played move: the best read before minus the read
- *  after, in the mover's view (the bench's own rule, so the two agree). */
-function moverCost(mover: 'w' | 'b', best: EngineRead | undefined, reply: EngineRead | undefined): number | null {
+ *  after, in the mover's view. The Danya bench reads its cost here too, so the
+ *  bench, the short game and the decision baseline grade a move one way. */
+export function moverCost(mover: 'w' | 'b', best: EngineRead | undefined, reply: EngineRead | undefined): number | null {
   if (!best || !reply) return null;
   const sign = mover === 'w' ? 1 : -1;
   const b = evalOf(best) * sign;
