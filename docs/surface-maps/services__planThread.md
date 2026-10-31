@@ -9,6 +9,7 @@
 ## Locked rules that govern this surface
 
 - **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5791) — names `planThread`
+- **The standard post-deploy ritual** (CLAUDE.md:6836) — names `planThread`
 
 ## Who calls in
 

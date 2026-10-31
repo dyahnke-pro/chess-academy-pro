@@ -631,13 +631,6 @@ const FACT_COMPUTER: Record<FactKind, string> = {
   'stop-flaw': 'services/thinkAloud.ts#obviousStopFlaw',
   'hole-access': 'services/moveInsight.ts#holeAccess',
   'speedrun-read': 'services/thinkAloud.ts#depthClauses',
-  // The opening's story beats and the priority read carry their own kinds
-  // since the one group table (P1-4).
-  priority: 'services/playCommentary.ts#buildPriorityFirst',
-  'opening-story': 'services/openingStory.ts#openingStoryAt',
-  'opening-cost': 'services/openingStory.ts#openingStoryAt',
-  'opening-theirs': 'services/openingStory.ts#openingStoryAt',
-  'opening-fork': 'services/openingStory.ts#openingStoryAt',
 };
 
 /** The bench's own computer sources → the computer each one runs (the
