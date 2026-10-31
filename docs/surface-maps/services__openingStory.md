@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**577 lines · 6 exports · 7 importers · 4 tests · 0 audits**
+**597 lines · 7 exports · 7 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,9 +13,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/boardComputers.ts`
-- `src/services/coachFeatureService.ts`
 - `src/services/holeKey.test.ts`
 - `src/services/learnBoardTeaching.ts`
+- `src/services/learnTurnDoor.thought.test.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/openingStory.test.ts`
 - `src/services/openingStoryWholeBeat.test.ts`
@@ -25,14 +25,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `StoryBeat` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `STORY_KIND` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `StoryFact` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `heldWhilePlayable` (function) — 1 call site
-- `src/services/boardComputers.ts:250`
+- `src/services/boardComputers.ts:290`
 
 ### `openingStoryAt` (function) — 9 call sites
-- `src/services/boardComputers.ts:249`
+- `src/services/boardComputers.ts:289`
 - `src/services/holeKey.test.ts:15`
 - `src/services/openingStory.test.ts:22`
 - `src/services/openingStory.test.ts:126`
@@ -46,13 +49,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `prefetchOpeningStory` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:89`
+- `src/services/learnBoardTeaching.ts:90`
 - `src/services/openingStory.test.ts:139`
 
 ## Tests
 
 - `src/services/holeKey.test.ts`
 - `src/services/holeOneKey.test.ts`
+- `src/services/learnTurnDoor.thought.test.ts`
+- `src/services/oneGroupTable.gate.test.ts`
 - `src/services/openingStory.test.ts`
 - `src/services/openingStoryWholeBeat.test.ts`
 

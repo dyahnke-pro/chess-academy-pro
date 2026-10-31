@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6236 lines · 31 exports · 64 importers · 78 tests · 4 audits**
+**6227 lines · 31 exports · 64 importers · 78 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:346) — names `coachFeatureService`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4707) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6844) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6845) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -223,7 +223,7 @@
 - `src/services/coachFeatureService.trade.test.ts:19`
 - `src/services/coachNoRecall.test.ts:37`
 - `src/services/coachNoRecall.test.ts:49`
-- `src/services/danyaBench.measure.test.ts:385`
+- `src/services/danyaBench.measure.test.ts:389`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
 - `src/services/habitBothSeats.test.ts:29`
