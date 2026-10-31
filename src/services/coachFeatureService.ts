@@ -37,7 +37,7 @@ import { ensureMastersDbLoaded, mastersMovesSync, masterMovesCachedSync } from '
 import { moveJob, whatItAsks, MINE, THEIRS, JOB_RESTATED_BY_RULE, type BookJobKind, type PriorCapture } from './bookMoveWhy';
 import { refutedAlternative, candidatesForPosition, SINGLETON_SCORER, type RefutedAlternative } from './refutedAlternative';
 import { recordedMoveCost } from './moveCost';
-import { findWorstPlacedPiece } from './nextPlans';
+import { findWorstPlacedPiece, planAimKey } from './nextPlans';
 import { transferClause, transferMotifOf, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening, detectOpeningByOrder } from './openingDetectionService';
@@ -53,7 +53,8 @@ import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { coachTurn, habitNeedFrom, type DoorFact } from './coachDecider';
 import { advantageWasMissed } from './reviewWithholding';
-import { newPlanThread, clonePlanThread, PLAN_THREAD_HOLD_PLIES, type PlanThread } from './planThread';
+import { PLAN_THREAD_HOLD_PLIES } from './planThread';
+import { createStoryStore, threadKey, threadStated, threadVariant, PLAN_GOAL, type ThreadKey } from './gameStory';
 import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
@@ -108,7 +109,7 @@ import { isMinorAtHome } from './development';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
 import { facetTag, factKind, FACET_ROLE, type FacetTag } from './reviewFacetRank';
-import { stepOf, toCoachFact } from './coachFact';
+import { LOCAL_THREAD, stepOf, toCoachFact } from './coachFact';
 import { NO_PROOF, type FactProof, type Proof } from './proof';
 import { newPhraseMemory } from '../utils/phraseMemory';
 import { whyItEnded, idlePiece, quietDecider, exploreInvite, murkyRead, type EndRead, type GamePly } from './gameEndReads';
@@ -468,8 +469,10 @@ export function foldReviewRefrains(segments: ReviewMoveSegment[], spokenBefore: 
   }
 }
 
-/** The say-once keys the student already heard, through `throughPly`. */
-export interface SpokenLedgerSeed { throughPly: number; keys: ReadonlySet<string> }
+/** The say-once keys the student already heard, through `throughPly` — and
+ *  the game's story as the walk had it there (`storyCheckpoint`; null: the
+ *  walk had said no plan yet). */
+export interface SpokenLedgerSeed { throughPly: number; keys: ReadonlySet<string>; story: string | null }
 
 export interface ReviewMoveSegment {
   /** 1-indexed ply count. Ply 1 = White's first move, ply 2 = Black's first. */
@@ -477,6 +480,10 @@ export interface ReviewMoveSegment {
   /** The say-once keys this ply COMMITTED (tagged by ledger) — what a walk
    *  that has spoken this ply has said, so a rebuild can start from it. */
   ledgerKeys?: string[];
+  /** The game's story after this ply (`StoryStore.serialize`), when this ply
+   *  changed it — its plans as the walk said them, so a rebuild of the plies
+   *  ahead starts from them (`SpokenLedgerSeed.story`). */
+  storyCheckpoint?: string;
   /** Chess "full move number" — Math.ceil(ply / 2). */
   moveNumber: number;
   san: string;
@@ -1629,18 +1636,23 @@ function* reviewSegmentSteps(
   // re-listing the whole pile every ply ("bishop pair; a7 isolated; passer…").
   let lastVerdictWord: string | null = null;
   const verdictReasonsSeen = new Set<string>();
-  /** The plan the student last HEARD, its stops in a row, and whether the last
-   *  one ended because they stopped it — the same thread shape Learn keeps
-   *  (`planThread`), so both surfaces remember a plan one way. */
-  const planT: PlanThread = newPlanThread();
+  /** THE GAME'S STORY — its plans (WO-STORY-MATRIX-01 P1-8b): the plan the
+   *  student last HEARD with its stops in a row (the same plan thread Learn
+   *  keeps, so both surfaces remember a plan one way), and the threads each
+   *  plan was said on. Checkpointed on the segments (`storyCheckpoint`), so a
+   *  rebuild of the plies ahead starts from what the walk said. */
+  const story = createStoryStore(currentGameId ?? 'review');
   // ONE CLAIM, MANY LANES (review walk 2026-10-01). "Convert your extra
   // material" (the plan), "trade pieces, not pawns" (the conversion method) and
   // "when you're ahead the plan is to trade" (the concept fill) are one claim;
   // so are "get your passed pawn on c3 promoting", "your passed pawn on c3
   // wants to run" and "the plan for you here: pushing the passed pawn on the
-  // c-file". The first lane to speak claims it for the game.
-  let convertTaughtPly: number | null = null;
-  const passerPlanFiles = new Set<string>();
+  // c-file". The first lane to speak claims it for the game: its thread.
+  const CONVERT_THREAD = threadKey('student', PLAN_GOAL.convert);
+  const RACE_THREAD = threadKey('student', PLAN_GOAL.race);
+  const passerThread = (file: string): ThreadKey => threadKey('student', planAimKey('passer', file) as string);
+  const passerTaught = (file: string): boolean => threadStated(story.current(), passerThread(file)) !== null;
+  const convertTaughtAt = (): number | null => threadStated(story.current(), CONVERT_THREAD);
   const conversionFacets = new Set<string>();
   /** Refuted alternatives already SPOKEN this game, by the move refuted. */
   const refutedSaid = new Set<string>();
@@ -1707,11 +1719,11 @@ function* reviewSegmentSteps(
   // rebuild seeded from what the walk spoke carries it (review noise, #8).
   const looseSaid = new Set<string>();
   const looseCount = (owner: 'your' | 'their'): number => [...looseSaid].filter((k) => k.startsWith(`${owner}#`)).length;
-  // The RACE verdict last spoken. Keyed on WHO ARRIVES FIRST, not on the counts:
-  // the counts change on every push, so keying on them would re-announce the race
-  // each ply. A flip — you were winning the race and now you are not — IS the
-  // moment worth teaching, and it is the only repeat this lets through.
-  let lastRaceVerdict: string | null = null;
+  // The RACE verdict last spoken is the race thread's variant. Keyed on WHO
+  // ARRIVES FIRST, not on the counts: the counts change on every push, so keying
+  // on them would re-announce the race each ply. A flip — you were winning the
+  // race and now you are not — IS the moment worth teaching, and it is the only
+  // repeat this lets through.
   // A standing TACTIC is keyed by its claim, the first sentence: the hold
   // after it rotates by ply (`pinConsequence`), and a key on the whole line
   // would re-say the same pin every ply in new words.
@@ -1905,7 +1917,7 @@ function* reviewSegmentSteps(
     ['fu:', seenFundamentals as Set<string>], ['cv:', seenConversionSteps as Set<string>], ['dc:', seenDecoys],
     ['tr:', trappedAnnounced], ['th:', threatsAnnounced], ['cc:', causalChainsSeen], ['rc:', lastHereSaid],
     ['ds:', deepShotAnnounced], ['sg:', signalsAnnounced], ['sf:', emittedStaticFacets], ['ss:', standingSpoken],
-    ['sc:', sacSpoken], ['vr:', verdictReasonsSeen], ['pp:', passerPlanFiles], ['cf:', conversionFacets],
+    ['sc:', sacSpoken], ['vr:', verdictReasonsSeen], ['cf:', conversionFacets],
     ['tk:', thoughtKeys], ['sa:', structAtomsSeen], ['os:', oneShotTags], ['ot:', oppTargetsSeen],
     ['on:', announcedOpeningNames], ['of:', announcedOpeningFamilies], ['g:', flagsSaid],
   ];
@@ -1929,12 +1941,19 @@ function* reviewSegmentSteps(
     const op = [...flagsSaid].filter((k) => k.startsWith('opening=')).pop();
     spokenOpening = op ? op.slice('opening='.length) : null;
   };
+  // THE STORY'S CHECKPOINT rides the segment whose ply changed it — the whole
+  // story, not a delta (a plan restated or stopped is a new state, not a key
+  // added), so a seed reads the last one at or before the ply it starts from.
+  let lastCheckpoint = story.serialize();
   const stampLedgerKeys = (): void => {
     syncFlags();
     const keys = ledgers.flatMap(([tag, set], k) => [...set].slice(ledgerSizes[k]).map((x) => `${tag}${x}`));
     ledgerSizes = ledgers.map(([, set]) => set.size);
     const last = segments[segments.length - 1];
     if (last && keys.length > 0) last.ledgerKeys = [...(last.ledgerKeys ?? []), ...keys];
+    const checkpoint = story.serialize();
+    if (last && checkpoint !== lastCheckpoint) last.storyCheckpoint = checkpoint;
+    if (last) lastCheckpoint = checkpoint;
   };
   for (let i = 0; i < usable; i++) {
     yield;
@@ -1951,6 +1970,10 @@ function* reviewSegmentSteps(
       }).sort((a, b) => a.move - b.move);
       for (const r of replay) recordMotif(r.motif, r.instance, r.move, motifLastSpoken);
       restoreFlags();
+      // The plans the walk had said, as it had them (WO-STORY-MATRIX-01
+      // P1-8b): the plan thread and every plan's thread start from the walk's
+      // checkpoint, never this build's own guess at them.
+      story.restore(spokenBefore.story);
       ledgerSizes = ledgers.map(([, set]) => set.size);
     }
     const m0 = moves[i];
@@ -2152,7 +2175,7 @@ function* reviewSegmentSteps(
       // per game (the step only changes when the board does).
       if (moverColor === playerColor && studentColorWB) {
         const conv = readConversion(fenPair.fenAfter, studentColorWB);
-        if (conv && !seenConversionSteps.has(conv.step) && !(conv.step === 'trade-pieces' && convertTaughtPly !== null)) {
+        if (conv && !seenConversionSteps.has(conv.step) && !(conv.step === 'trade-pieces' && convertTaughtAt() !== null)) {
           seenConversionSteps.add(conv.step);
           const raw = `[technique] ${conv.text}`;
           facets.push(raw);
@@ -2511,6 +2534,9 @@ function* reviewSegmentSteps(
             standingSaid = nextStanding;
             for (const k of memoryHere.keys) thoughtKeys.add(k);
             for (const [k, n] of phrasesHere) thoughtPhrases.set(k, n);
+            // A kept fact on a plan thread (a passer made, an outpost
+            // planted) is a step the story follows.
+            story.commitFacts(m.ply, thought.kept);
           });
         }
         // A STANDING WITH NO JOB IS HELD (lead 2026-10-20, Najdorf Zagreb: "A
@@ -2595,7 +2621,7 @@ function* reviewSegmentSteps(
       // offered, which said two plans in one turn and changed a plan that still
       // stood (review tape 2026-10-15). Run on a copy; the copy becomes the
       // thread once one of its lines is spoken (commit after the door).
-      const planTrial = clonePlanThread(planT);
+      const planTrial = story.plans().thread;
       // The plan's routes, hop by hop, drawn when its line speaks.
       const planRouteByRaw = new Map<string, Array<{ from: string; to: string; fen: string }>>();
       if (studentColorWB && !isStudentForAttr) {
@@ -2617,12 +2643,12 @@ function* reviewSegmentSteps(
       const planPasserFile = newPlan?.kind === 'passer' ? (newPlan.squares[0]?.[0] ?? null) : null;
       // One claim, many lanes: a passer or conversion plan another lane already
       // taught this game is not stated again.
-      const planLineHeld = (planPasserFile !== null && passerPlanFiles.has(planPasserFile))
-        || (newPlan?.kind === 'convert' && convertTaughtPly !== null);
+      const planLineHeld = (planPasserFile !== null && passerTaught(planPasserFile))
+        || (newPlan?.kind === 'convert' && convertTaughtAt() !== null);
       const planNowPasserFiles = new Set(planPasserFile && !planLineHeld ? [planPasserFile] : []);
       const adoptPlanThread = (): void => {
-        Object.assign(planT, planTrial);
-        if (planLineHeld) { planT.stated = null; planT.lastStatedPly = null; }
+        const thread = planLineHeld ? { ...planTrial, stated: null, lastStatedPly: null } : planTrial;
+        story.setPlans(m.ply, { ...story.plans(), thread });
       };
       for (const f0 of facets) {
         let f = f0;
@@ -2687,8 +2713,8 @@ function* reviewSegmentSteps(
             if (planLineHeld) continue;
             keep(f, () => {
               adoptPlanThread();
-              if (newPlan?.kind === 'convert') convertTaughtPly ??= m.ply;
-              if (planPasserFile) passerPlanFiles.add(planPasserFile);
+              if (newPlan?.kind === 'convert') story.commitThreads(m.ply, [{ key: CONVERT_THREAD, kind: 'stated' }]);
+              if (planPasserFile) story.commitThreads(m.ply, [{ key: passerThread(planPasserFile), kind: 'stated' }]);
             });
           } else if (role === 'plan-thread:stop') {
             keep(f, adoptPlanThread);
@@ -2697,18 +2723,18 @@ function* reviewSegmentSteps(
           }
           continue;
         }
-        // The RACE — once, then only when the verdict FLIPS (see lastRaceVerdict).
+        // The RACE — once, then only when the verdict FLIPS (the race thread).
         if (/^\[plan-race\]/.test(f)) {
           const verdict = /they get there first|they got there first|they would get there first/i.test(f) ? 'them' : 'you';
-          if (lastRaceVerdict === verdict || !claim(`race:${verdict}`)) continue;
-          keep(f, () => { lastRaceVerdict = verdict; });
+          if (threadVariant(story.current(), RACE_THREAD) === verdict || !claim(`race:${verdict}`)) continue;
+          keep(f, () => { story.commitThreads(m.ply, [{ key: RACE_THREAD, kind: 'stated', variant: verdict }]); });
           continue;
         }
         // STANDING teaching read (live tactic / undefended piece / count /
         // royal-fork target / rook-on-7th) — taught ONCE per game by signature.
         if (conversionFacets.has(f)) {
-          if (convertTaughtPly !== null || !claim('convert')) continue;
-          keep(f, () => { convertTaughtPly ??= m.ply; });
+          if (convertTaughtAt() !== null || !claim('convert')) continue;
+          keep(f, () => { story.commitThreads(m.ply, [{ key: CONVERT_THREAD, kind: 'stated' }]); });
           continue;
         }
         {
@@ -2717,8 +2743,8 @@ function* reviewSegmentSteps(
           if (pf) {
             // The full plan outranks the one-line note and the arc for the same
             // pawn: when it is on this ply, they defer to it.
-            if (passerPlanFiles.has(pf) || planNowPasserFiles.has(pf) || !claim(`passer:${pf}`)) continue;
-            keep(f, () => passerPlanFiles.add(pf));
+            if (passerTaught(pf) || planNowPasserFiles.has(pf) || !claim(`passer:${pf}`)) continue;
+            keep(f, () => story.commitThreads(m.ply, [{ key: passerThread(pf), kind: 'stated' }]));
             continue;
           }
         }
@@ -2802,7 +2828,7 @@ function* reviewSegmentSteps(
           id: `facet:${i}`, kind, text, fen: fenPair.fenAfter, altFen: fenPair.fenBefore,
           squares: facetSquares.get(key) ?? [], claims: facetClaims.get(key) ?? [],
           stakes: facetStakes.get(key) ?? null, proof: facetProofs.get(key) ?? NO_PROOF.description,
-          seat: facetIncoming.has(key) ? 'opponent' : 'student', namesStudentMove: false,
+          seat: facetIncoming.has(key) ? 'opponent' : 'student', namesStudentMove: false, thread: LOCAL_THREAD,
           // THE EXACT HOLE FOR THE FACT THAT NAMES IT (2026-09-21). The
           // `[principle]` facet IS the attributed fundamental, so ranking it by
           // `clauseKindForTag('principle') → 'structure-plan'` asked the coarse
@@ -3935,7 +3961,7 @@ function* reviewSegmentSteps(
       && playerColor !== undefined
       && (m.classification === null || m.classification === 'book' || m.classification === 'good' || m.classification === 'great' || m.classification === 'brilliant')
     ) {
-      const clause = plyFactsClause(fenPair.fenBefore, m.san, prevCap, 'your');
+      const clause = plyFactsClause(fenPair.fenBefore, m.san, { prev: prevCap, victimOwner: 'your', sanSaid: false });
       if (clause) {
         narration = `Your opponent ${clause}.`;
         narrationSource = 'opponent';
@@ -4026,8 +4052,9 @@ function* reviewSegmentSteps(
       details: JSON.stringify(reviewPkgTally),
     });
   }
-  if (convertTaughtPly !== null) {
-    const at = segments.find((x) => x.ply === convertTaughtPly);
+  const convertAt = convertTaughtAt();
+  if (convertAt !== null) {
+    const at = segments.find((x) => x.ply === convertAt);
     if (at) at.convertTaught = true;
   }
   // SAY-ONCE, MADE VISIBLE: a quiet student move whose only lesson is a
@@ -5025,7 +5052,7 @@ async function augmentWithProjections(
     } else if (s.narration) {
       // DISAGREEMENT — the engine sees a stronger idea. Replace the static
       // sentence with the engine's own line, explained by the same statics.
-      const engineWhy = plyFactsClause(line.plies[0].fenBefore, line.plies[0].san);
+      const engineWhy = plyFactsClause(line.plies[0].fenBefore, line.plies[0].san, { sanSaid: true });
       const replacement = ` And the real threat here, per the engine: ${line.plies[0].san}${engineWhy ? ` — it ${engineWhy}` : ''}.`;
       s.narration = s.narration.replace(s.staticThreat.sentence, replacement);
       attachLineArrows(s, line, 3); // engine's replacement threat line

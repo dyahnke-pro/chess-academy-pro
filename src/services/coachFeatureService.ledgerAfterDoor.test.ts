@@ -64,7 +64,7 @@ describe('review — the say-once ledgers commit after the door, for spoken fact
     // Strip every deferred commit closure (`() => X` / `() => { … }`); what is
     // left is the code that runs WHILE the candidate list is built.
     const eager = loop.replace(/\(\) => \{[\s\S]*?\}\)/g, '').replace(/\(\) => [^,\n]+/g, '');
-    const LEDGERS = ['verdictReasonsSeen', 'passerPlanFiles', 'standingSpoken', 'sacSpoken', 'oneShotTags', 'emittedStaticFacets', 'structAtomsSeen'];
+    const LEDGERS = ['verdictReasonsSeen', 'standingSpoken', 'sacSpoken', 'oneShotTags', 'emittedStaticFacets', 'structAtomsSeen'];
     for (const ledger of LEDGERS) {
       // Non-vacuity: the loop DOES commit to every ledger (inside a closure)…
       expect(loop, `${ledger} is never committed from the loop?`).toMatch(new RegExp(`${ledger}\\.add\\(`));
@@ -72,7 +72,15 @@ describe('review — the say-once ledgers commit after the door, for spoken fact
       expect(eager, `${ledger} is written eagerly inside the candidate loop`).not.toMatch(new RegExp(`${ledger}\\.add\\(`));
     }
     expect(eager).not.toMatch(/lastVerdictWord = /);
-    expect(eager).not.toMatch(/lastRaceVerdict = /);
+    // The plans live in the game's story (P1-8b): a thread is written only by
+    // a commit, never while the candidates are built. The plan thread's
+    // adoption is a named commit (`adoptPlanThread`), run only from `keep`.
+    expect(loop, 'the story is never committed from the loop?').toMatch(/story\.commitThreads\(/);
+    const adopt = /const adoptPlanThread = \(\): void => \{[\s\S]*?\n {6}\};/;
+    expect(eager, 'the plan thread\'s adoption is defined in the loop').toMatch(adopt);
+    const eagerOutsideAdopt = eager.replace(adopt, '');
+    expect(eagerOutsideAdopt).not.toMatch(/story\.(?:commitThreads|commitFacts|setPlans)\(/);
+    expect(eagerOutsideAdopt, 'the plan thread is adopted only by a commit').not.toMatch(/adoptPlanThread\(\)/);
     expect(eager).not.toMatch(/kingCenterTaught = true/);
     // The commit runs off what actually SPOKE — the door's verdict after the
     // turn's length (2026-10-15) — after the quiet-ply gate.

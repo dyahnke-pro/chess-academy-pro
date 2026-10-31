@@ -597,7 +597,8 @@ function mostAdvanced(squares: string[], color: Color): string | null {
 /**
  * A plan's TEXT and its stable IDENTITY.
  *
- * `planMemory.stepPlan` decided "has the plan changed?" by comparing the
+ * The plan memory (once `planMemory.stepPlan`, now `planThread.structurePlanEvent`)
+ * decided "has the plan changed?" by comparing the
  * rendered SENTENCE, so every plan that names a square which MOVES re-announced
  * itself on each push — "your passed pawn on b5" became "on b6" and read as a
  * brand-new plan. Comparing rendered prose to establish identity is the same

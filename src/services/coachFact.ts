@@ -24,6 +24,7 @@ import type { FactStakes } from './factStakes';
 import type { FactProof } from './proof';
 import type { SpokenLine } from './voicePackage';
 import type { WeaknessSignal } from './weaknessSignal';
+import type { ThreadKey } from './gameStory';
 
 /** THE FOURTEEN GROUPS (PLAN WO-STORY-MATRIX-01, the regions table): the
  *  story (plans, the opening's story, the cause chain), the name (the opening,
@@ -229,6 +230,14 @@ export interface CoachFact {
    *  a fact until the move is past. A lesson or a review shows the student a
    *  line they asked to see, so nothing there is theirs to find. */
   namesStudentMove: boolean;
+  /** THE PLAN THREAD IT IS ON (REQUIRED, WO-STORY-MATRIX-01 P1-8b) — the
+   *  seat's plan it advances, keyed by its goal (`gameStory.threadKey`: a
+   *  passer made is a step on that side's passer thread, an outpost planted a
+   *  step on the outpost's), or `{ none: 'local' }`: a fact about the move
+   *  alone. Read by the game's story when the door keeps the fact
+   *  (`StoryStore.commitFacts`), so a thread is followed by what was SAID on
+   *  it, on every surface. */
+  thread: ThreadKey | typeof LOCAL_THREAD;
   /** The board the claim was computed on; the package grades it there. */
   fen: string;
   /** A second board it may describe (the one before the move). */
@@ -245,13 +254,18 @@ export interface CoachFact {
   hole?: WeaknessSignal | null;
 }
 
+/** A fact about the move alone — on no plan thread (`CoachFact.thread`). The
+ *  one constant every producer answers with. */
+export const LOCAL_THREAD = { none: 'local' } as const;
+
 /** THE DOORS' ADAPTER (WO-STORY-MATRIX-01 P1-5) — a fact a door was handed in
  *  its producer's own shape (a live clause, a Review facet, a Learn lane, a
  *  phase report), as the one fact. Its place comes from its kind like every
  *  producer's (`placeFact`); a Learn producer that marks its fact as the
  *  reason for the student's own move places it in that step whatever its kind
- *  (`step`). Deleted with the last old shape (P1-6), when each producer emits
- *  CoachFact itself. */
+ *  (`step`). The old shapes carry no plan thread (P1-8b threads the lesson
+ *  composer's facts), so each caller answers `LOCAL_THREAD` until its producer
+ *  emits CoachFact and answers its own. Deleted with the last old shape (P1-6). */
 export function toCoachFact<K extends CoachFactKind>(
   f: Omit<CoachFact, 'kind' | 'group' | 'step' | 'computer'> & { kind: K; step?: ThoughtStep },
 ): CoachFact & { kind: K } {

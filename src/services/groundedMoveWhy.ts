@@ -19,6 +19,8 @@ import type { Move } from 'chess.js';
 import { describeMoveGeometry } from './groundedAnswer';
 import { teachingSourceForBoard } from './danyaTeachingService';
 import { sanToSpeech } from '../utils/sanToSpeech';
+import { afterCaptureSan } from '../utils/captureWords';
+import { captureLeadsTo } from './captureLeadsTo';
 import { sideToMove } from './conceptEngine';
 
 /** The concrete floor: name the piece/square/concept from chess.js flags.
@@ -28,7 +30,12 @@ function moveTypeFloor(mv: Move): string {
   if (mv.isQueensideCastle()) return 'castling queenside — the king tucks away and the rook comes toward the centre';
   if (mv.san.includes('#')) return 'delivering checkmate';
   if (mv.san.includes('+')) return `a check on ${mv.to}, forcing the king to react`;
-  if (mv.isCapture() || mv.isEnPassant()) return `capturing on ${mv.to}`;
+  // Read after the move's SAN, which already says the capture ("capturing
+  // on e5" after "Nxe5" said it twice, David 2026-10-30): what it leads to.
+  if (mv.isCapture() || mv.isEnPassant()) {
+    const leadsTo = captureLeadsTo(mv.before, mv.san);
+    return leadsTo ? afterCaptureSan(leadsTo, 'participle') : `playing ${sanToSpeech(mv.san)}`;
+  }
   // Only a minor leaving its home rank DEVELOPS (census group 6: Nf1 was
   // "developing the knight toward the centre").
   if ((mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === (mv.color === 'w' ? '1' : '8')) return `developing the ${mv.piece === 'n' ? 'knight' : 'bishop'} toward the centre`;

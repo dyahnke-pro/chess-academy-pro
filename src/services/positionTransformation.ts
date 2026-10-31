@@ -26,6 +26,7 @@
 // low recall): when the shape isn't clearly a trade, it returns null and the
 // position is left to the tactical gate.
 import { Chess } from 'chess.js';
+import { abandonedDuty, defenderTrade, onlyDevelopedTrade, spoilTheirPawns, type ExchangeIdea } from './exchangeIdeas';
 
 const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 /** Two pieces are "an even trade" when their values are within this margin
@@ -118,12 +119,6 @@ export function detectPositionTransformation(
 
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-/** A short, board-true label for the weakness a transformation miss represents. */
-export function transformationLabel(r: TransformationResult): string {
-  if (r.kind === 'unfavorable-trade') return 'Unfavorable trades';
-  return 'Missed favorable trades';
-}
-
 /** A one-line prompt naming the structural error (code-authored, G0). */
 export function transformationPrompt(r: TransformationResult): string {
   const captured = PIECE_NAME[r.captured] ?? 'piece';
@@ -131,4 +126,31 @@ export function transformationPrompt(r: TransformationResult): string {
     return `That trade of the ${captured} transformed the position against you — find the move that keeps the tension instead.`;
   }
   return `A favorable exchange was on the table here — find the trade that improves your position.`;
+}
+
+/** WHY THE DECLINED TRADE WAS GOOD, in the words Learn and Review teach trades
+ *  with (`exchangeIdeas`), so the computer that CATCHES the miss and the one
+ *  that TEACHES the idea say one thing (WO-STORY-MATRIX-01 P1-12). Read on the
+ *  engine's trade the player skipped, from the player's seat. Only the missed
+ *  favourable trade is read: the trade readers prove what a trade WINS, so on
+ *  an unfavourable trade they would praise the mistake. Null when no reader
+ *  proves its claim. The read names the trade, so it is said once the student
+ *  has played it, never before. */
+export function missedTradeReason(fenBefore: string, playerUci: string, bestUci: string): ExchangeIdea | null {
+  const r = detectPositionTransformation(fenBefore, playerUci, bestUci);
+  if (r?.kind !== 'missed-favorable-trade') return null;
+  let bestSan: string;
+  let student: 'w' | 'b';
+  try {
+    const c = new Chess(fenBefore);
+    student = c.turn();
+    bestSan = c.move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci[4] }).san;
+  } catch {
+    return null;
+  }
+  for (const read of [abandonedDuty, spoilTheirPawns, defenderTrade, onlyDevelopedTrade]) {
+    const x = read(fenBefore, bestSan, student);
+    if (x) return x;
+  }
+  return null;
 }

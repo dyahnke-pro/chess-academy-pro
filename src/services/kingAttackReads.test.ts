@@ -43,7 +43,7 @@ describe('mateOrMaterial — mate beats material, and the honest converse', () =
     const r = mateOrMaterial(NO_MATE, 'w', [line(['a1a8', 'g8h7'], null, 600), line(['c4f7', 'g8f7'], null, 0)]);
     expect(r?.id).toBe('material-not-mate');
     expect(r?.text).toMatch(/No mate here|no mate|no mate in it/i);
-    expect(r?.text).toMatch(/rook with check/);
+    expect(r?.text).toMatch(/your queen takes their rook on [a-h][1-8] with check/);
   });
   it('stays silent on the converse when another line mates', () => {
     expect(mateOrMaterial(NO_MATE, 'w', [line(['a1a8', 'g8h7'], null, 600), line(['a1a8'], 3)])).toBeNull();

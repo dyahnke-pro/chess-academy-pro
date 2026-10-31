@@ -13,6 +13,7 @@
 import { Chess } from 'chess.js';
 import { computeMustDefend } from './threatOut';
 import { CAPTURE_VALUE } from './pieceValues';
+import { afterCaptureSan } from '../utils/captureWords';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -84,6 +85,11 @@ export function counterThreatLine(c: CounterThreat, byStudent: boolean): string 
   if (byStudent) {
     return `You left your ${left} on ${c.left.square} and went after their ${hit} on ${c.hit.square} instead — the bigger threat comes first. ${idea}`;
   }
-  const proof = c.line ? ` Take the ${left} with ${c.line.sans[0]}, and ${c.line.sans[1]} takes your ${hit}.` : '';
+  // Each capture is said once, by its SAN, and then what it leads to ("Take
+  // the knight with Rxf2, and Bxf3 takes your queen" said both twice, David
+  // 2026-10-30; `captureWords`) — and whose piece it costs, which two bare
+  // SANs cannot say ("Rxf2 wins a knight, but Bxf3 wins a queen" left whose
+  // queen to guess).
+  const proof = c.line ? ` ${c.line.sans[0]} ${afterCaptureSan({ kind: 'nets', captured: c.left.piece, free: false, gave: null }, 'verb')}, but ${c.line.sans[1]} costs you your ${hit}.` : '';
   return `They left their ${left} on ${c.left.square} and hit your ${hit} on ${c.hit.square} instead — the bigger threat comes first. ${idea}${proof}`;
 }

@@ -204,7 +204,11 @@ describe('pass 1 (QGD, 1.d4 d5 2.c4 e6 3.Nc3 dxc4)', () => {
   it('why did they take on c4: the capture is said once', async () => {
     const { assembleOpponentMoveAnswer } = await import('../services/groundedAnswer');
     const facts = assembleOpponentMoveAnswer({ fen: b6().fen, moveHistory: H, studentColor: 'white' })?.facts ?? '';
-    expect(facts.match(/on c4/g)?.length).toBe(1);
+    // Said once: by the SAN, then what it leads to — never "captured your
+    // pawn on c4" after dxc4, nor the material twice (David 2026-10-30).
+    expect(facts).toMatch(/^They played dxc4 — it wins a pawn/);
+    expect(facts.match(/wins a pawn/g)?.length).toBe(1);
+    expect(facts).not.toMatch(/captured your pawn/);
   });
   it('"can I take on e5" is still a question about that move', () => {
     expect(readTurnInCode('can i take on c4?', b6())?.kind).toBe('candidate-move');

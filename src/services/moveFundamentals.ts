@@ -703,11 +703,15 @@ export function computeMoveFundamentals(
     if (openness) {
       const name = PIECE_NAME[mv.piece];
       const fileName = `${fileOf(mv.to)}-file`;
+      // Said after the move's SAN: a capture's SAN already says "takes"
+      // ("Rxf5 — it takes the open f-file" was "rook takes f5, it takes…",
+      // David 2026-10-30), so a capture seizes the file.
+      const take = mv.captured ? 'seizes' : 'takes';
       out.push({
         id: 'open-file',
         weight: phase === 'endgame' ? 60 : 72,
         // A file is where a ROOK belongs; a queen merely uses it.
-        led: mv.piece === 'r' ? `takes the ${openness} ${fileName}, where the rook belongs` : `takes the ${openness} ${fileName}`,
+        led: mv.piece === 'r' ? `${take} the ${openness} ${fileName}, where the rook belongs` : `${take} the ${openness} ${fileName}`,
         selfContained: `brings the ${name} to the ${openness} ${fileName}`,
         imperative: mv.piece === 'r' ? `take the ${openness} ${fileName}, where the rook belongs` : `take the ${openness} ${fileName} with the queen`,
         squares: [mv.to],

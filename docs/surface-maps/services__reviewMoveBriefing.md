@@ -44,12 +44,12 @@
 
 ### `moveAspects` (function) — 2 call sites
 - `src/services/midExchangeStructure.test.ts:13`
-- `src/services/moveThoughtFacts.ts:110`
+- `src/services/moveThoughtFacts.ts:132`
 
 ### `buildReviewMoveBriefing` (function) — 22 call sites
 - `src/services/captureRun.test.ts:45`
 - `src/services/captureRun.test.ts:56`
-- `src/services/coachFeatureService.ts:1991`
+- `src/services/coachFeatureService.ts:2014`
 - `src/services/guardPressure.test.ts:42`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
@@ -71,10 +71,10 @@
 - `src/services/threeFacts.briefing.test.ts:43`
 
 ### `toClause` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:164`
+- `src/services/moveThoughtFacts.ts:186`
 
 ### `joinReview` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:164`
+- `src/services/moveThoughtFacts.ts:186`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -82,7 +82,7 @@
 ### `newLessonVoice` (function) — 20 call sites
 - `src/hooks/useTeachWalkthrough.ts:890`
 - `src/hooks/useTeachWalkthrough.ts:891`
-- `src/services/danyaBench.measure.test.ts:429`
+- `src/services/danyaBench.measure.test.ts:428`
 - `src/services/gamesCourse.ts:281`
 - `src/services/moveThoughtFacts.test.ts:19`
 - `src/services/moveThoughtFacts.test.ts:58`

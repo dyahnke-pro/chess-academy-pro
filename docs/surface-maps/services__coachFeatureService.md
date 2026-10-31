@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6220 lines · 31 exports · 65 importers · 78 tests · 4 audits**
+**6254 lines · 31 exports · 66 importers · 80 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -79,6 +79,7 @@
 - `src/test/everySurfaceSpeaks.test.ts`
 - `src/test/mateSaidOnce.gate.test.ts`
 - `src/test/replayGame.ts`
+- `src/test/reviewExplore.continuity.test.ts`
 
 ## Exports and every call site
 
@@ -157,7 +158,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegmentsForTests` (function) — 111 call sites
+### `buildReviewSegmentsForTests` (function) — 113 call sites
 - `src/services/batch2Wiring.test.ts:74`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -174,7 +175,7 @@
 - `src/services/coachFeatureService.learnParity.test.ts:64`
 - `src/services/coachFeatureService.learnParity.test.ts:82`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:42`
-- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:94`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:102`
 - `src/services/coachFeatureService.oneCost.test.ts:28`
 - `src/services/coachFeatureService.oneCost.test.ts:33`
 - `src/services/coachFeatureService.openingStory.test.ts:33`
@@ -224,7 +225,7 @@
 - `src/services/coachFeatureService.trade.test.ts:19`
 - `src/services/coachNoRecall.test.ts:44`
 - `src/services/coachNoRecall.test.ts:56`
-- `src/services/danyaBench.measure.test.ts:387`
+- `src/services/danyaBench.measure.test.ts:386`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
 - `src/services/habitBothSeats.test.ts:29`
@@ -269,6 +270,8 @@
 - `src/test/computedOrderWired.test.ts:59`
 - `src/test/everySurfaceSpeaks.test.ts:94`
 - `src/test/replayGame.ts:149`
+- `src/test/reviewExplore.continuity.test.ts:35`
+- `src/test/reviewExplore.continuity.test.ts:45`
 
 ### `buildReviewSegmentsYielding` (function) — 2 call sites
 - `src/components/Coach/CoachGameReview.tsx:1823`
@@ -319,8 +322,8 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8797`
-- `src/components/Coach/CoachTeachPage.tsx:8895`
+- `src/components/Coach/CoachTeachPage.tsx:8787`
+- `src/components/Coach/CoachTeachPage.tsx:8885`
 - `src/components/Coach/CoachTeachPage.tsx:11720`
 - `src/components/Coach/CoachTeachPage.tsx:12111`
 - `src/services/coachFeatureService.test.ts:904`
@@ -473,6 +476,8 @@
 - `src/test/corpusScope.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 - `src/test/mateSaidOnce.gate.test.ts`
+- `src/test/oneStoryState.gate.test.ts`
+- `src/test/reviewExplore.continuity.test.ts`
 
 ## Audits that reach it
 

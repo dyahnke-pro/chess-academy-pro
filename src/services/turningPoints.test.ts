@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { causeLine, selectTurningPoints, turningReveal, winChance, type TurningSegmentLike, type TurningTrace } from './turningPoints';
+import { causeLine, selectTurningPoints, turningReveal, type TurningSegmentLike, type TurningTrace } from './turningPoints';
+import { winChancePercent } from './winChance';
 import { NO_SECOND_READ } from './inaccuracyCall';
 
 // KID game (walkGames fixture, 2026-09-25), move 15: Black played Qh4 when Nxf1
@@ -20,7 +21,7 @@ describe('turningPoints — the biggest few, the cause counted across the game',
     ];
     const tps = selectTurningPoints(segs, 'black');
     expect([...tps.keys()].sort()).toEqual([10, 14]);
-    expect(winChance(0)).toBeCloseTo(50, 5);
+    expect(winChancePercent(0)).toBeCloseTo(50, 5);
   });
 
   it('asks a classified mistake even when the swing is small, ranks by swing, and records why it skipped the rest', () => {

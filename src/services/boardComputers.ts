@@ -498,8 +498,8 @@ function outOfPhase(phase: ReadonlySet<GamePhase | 'any'>, ctx: object): boolean
   try { return isEndgameByMaterial(fen); } catch { return false; }
 }
 
-/** A fresh plan thread for a surface's memory. */
-export { newPlanThread, clonePlanThread, adoptPlanTrial, type PlanThread } from './planThread';
+/** The plan thread's adopt step (its state is the game's story's). */
+export { adoptPlanTrial, type PlanThread } from './planThread';
 
 /** Every read, in speaking order. */
 export function readBoardAll<K extends ComputerId>(id: K, ctx: BoardContexts[K]): BoardRead[] {

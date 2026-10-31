@@ -29,7 +29,7 @@ function puzzle(over: Partial<MistakePuzzle>): MistakePuzzle {
     sourceMode: 'lichess',
     playerColor: 'white',
     promptText: '',
-    narration: { intro: '', moveNarrations: [], outro: '', conceptHint: '' },
+    narration: { intro: '', moveNarrations: [], conceptHint: '' },
     createdAt: new Date().toISOString(),
     opponentName: null,
     gameDate: null,

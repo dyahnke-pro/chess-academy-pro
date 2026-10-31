@@ -35,7 +35,7 @@ import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type Vo
 import { costStakes, stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 import { sameClaim } from './factSelector';
 import { FACT_ROLE, type FacetRole, type FactKind } from './reviewFacetRank';
-import { isCoachFactKind, stepOf, toCoachFact, type CoachFact, type CoachFactKind } from './coachFact';
+import { isCoachFactKind, LOCAL_THREAD, stepOf, toCoachFact, type CoachFact, type CoachFactKind } from './coachFact';
 import { BOARD_COMPUTERS } from './boardComputers';
 import { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
 import type { PhaseFact } from './positionFacts';
@@ -571,7 +571,7 @@ function laneFact(f: LaneInput, i: number): LaneFact {
     ...toCoachFact({
       id: f.id ?? `lane:${i}`, kind, text: f.text, fen: f.fen, squares: f.squares ?? [], claims: f.claims ?? [],
       stakes: f.stakes ?? null, proof: f.proof, seat: step === 'theirs' ? 'opponent' : 'student', step,
-      namesStudentMove: namesPlayableStudentMove(f.namesStudentMove),
+      namesStudentMove: namesPlayableStudentMove(f.namesStudentMove), thread: LOCAL_THREAD,
       ...(f.lines ? { lines: f.lines } : {}), ...(f.skill ? { skill: f.skill } : {}),
     }),
     lane: f.lane,

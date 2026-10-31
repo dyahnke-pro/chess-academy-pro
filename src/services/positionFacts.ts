@@ -14,7 +14,7 @@
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
 import { NAMES_NO_MOVE, namesMoves, namedSan, namesPlayableStudentMove, type NamesStudentMove } from './studentMoveNaming';
-import { toCoachFact, type CoachFact } from './coachFact';
+import { LOCAL_THREAD, toCoachFact, type CoachFact } from './coachFact';
 import { fadeLevelsFrom, fadeText } from './fadeText';
 import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
@@ -63,7 +63,8 @@ import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from '.
 import { planAimKey, structurePlanFact } from './nextPlans';
 import { BOARD_COMPUTERS, readBoard, type BoardRead, type LiveComputer } from './boardComputers';
 import { detectTactics } from './tacticsDetector';
-import { stepPlan, EMPTY_PLAN_STATE, planChangeSentence } from './planMemory';
+import { structurePlanEvent, planChangeSentence } from './planThread';
+import type { ThreadLine } from './gameStory';
 import { matchClauseKind, matchTacticPattern, matchTag, boostFor, type WeaknessSignal } from './weaknessSignal';
 import { studentMomentBoost, isGreyDecision } from './studentMomentBoost';
 import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';
@@ -169,6 +170,13 @@ interface PositionFactsInput {
    *  these surfaces actually suffer from — not duplicate geometry. Omit it and
    *  nothing is suppressed (the wire is inert until a caller keeps the set). */
   alreadySaid?: ReadonlySet<string>;
+  /** THE STRUCTURE'S PLAN THE STUDENT LAST HEARD this game (its id), from the
+   *  game's story — the structure thread (`threadVariant(story,
+   *  PLAN_GOAL.structure)`). The same plan stays quiet; a different one is
+   *  said as a change. Absent: a read with no game memory (an asked read), so
+   *  any plan is news. It lived as `plan:<id>#<n>` keys hidden in
+   *  `alreadySaid`, parsed back out by their count (WO-STORY-MATRIX-01 P1-8b). */
+  structurePlanHeard?: string | null;
   /** The spells of the student's loose pieces (Learn keeps them a game): the
    *  must-defend clause says a piece once, then once "still" (`looseClaim`). */
   looseSpells?: LooseSpells | null;
@@ -324,6 +332,10 @@ export interface PositionFactsResult {
   /** The id of the opening principle that SPOKE this ply (S2), or null — the
    *  surface adds it to `taughtPrinciples` so it is never taught twice. */
   principleSpoken: string | null;
+  /** The structure's plan (its id) this read SAID — announced, or said as a
+   *  change — or null. The surface's door writes it to the story's structure
+   *  thread when it keeps the line (`structurePlanHeard` next read). */
+  structurePlanSaid: string | null;
   /** Did this moment earn naming the student's next move, and why — null on
    *  the opponent's ply. Surfaces gate their own move-choice lines on it (the
    *  but-turn / hedge / compare), so there is one decision, not one per lane. */
@@ -458,14 +470,6 @@ export interface ClauseItem {
  *  move-specific — `concept`, `deliberation`, `fundamental`, `opponent-intent`,
  *  `key-moment`, `method` (which rotates its own stems), `convert`, `status`
  *  (already fires only on a band CHANGE). */
-/** A structure plan that REPLACES the one the student last heard is said as a
- *  change — the plan moving is itself the teaching. */
-function plyNumberForPlan(fen: string): number {
-  const parts = fen.split(' ');
-  const move = Number(parts[5] ?? '1') || 1;
-  return (move - 1) * 2 + (parts[1] === 'b' ? 1 : 0);
-}
-
 
 const SAY_ONCE_KINDS: ReadonlySet<ClauseKind> = new Set<ClauseKind>(['their-habit', 'your-habit', 'hole-access', 
   'structure-plan', 'latent-danger', 'student-leans', 'opponent-leans',
@@ -501,7 +505,7 @@ function clauseFact(c: ClauseItem, i: number, fen: string, weaknesses: readonly 
     id: `clause:${i}`, kind: c.kind, text: c.text, fen: c.gradeFen ?? fen, squares: c.squares ?? [], claims: [],
     stakes: c.stakes ?? null, proof: c.proof ?? NO_PROOF.description,
     seat: INCOMING_KINDS.has(c.kind) ? 'opponent' : 'student',
-    namesStudentMove: namesPlayableStudentMove(c.namesStudentMove),
+    namesStudentMove: namesPlayableStudentMove(c.namesStudentMove), thread: LOCAL_THREAD,
     hole: clauseHole(c, weaknesses),
     ...(c.lines ? { lines: c.lines } : {}), ...(c.skill ? { skill: c.skill } : {}),
   });
@@ -530,6 +534,9 @@ export interface PhaseFact {
   gradeFen?: string;
   factKind?: string;
   skill?: string;
+  /** The plan thread the line states (the structure's plan), written to the
+   *  surface's story when its door keeps the line. */
+  thread?: ThreadLine;
 }
 
 /** THE CLAIM KEYS of the `i`th spoken clause — the ONE answer every lane that
@@ -883,25 +890,20 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // plan id carries the verdict (`passer-race:you`), so a FLIP still speaks.
   //
   // AND WHEN THE PLAN CHANGES, SAY SO (David 2026-09-25: "If the structure plan
-  // changes then coach should say so"). The memory keeps each spoken plan as
-  // `plan:<id>#<n>`, n counting up, so the LAST plan spoken is recoverable from
-  // a set: the same plan stays quiet, a different one — including a return to
-  // an earlier one — speaks as a change.
+  // changes then coach should say so"). The game's story keeps the plan the
+  // student last heard (`structurePlanHeard`, the structure thread): the same
+  // plan stays quiet, a different one — including a return to an earlier one —
+  // speaks as a change.
   const planFact = (!quietOpening && (asked || importance.speak)) ? structurePlanFact(fen, studentColor) : null;
-  const priorPlans = [...(said ?? [])]
-    .map((k) => /^plan:(.+)#(\d+)$/.exec(k))
-    .filter((m): m is RegExpExecArray => m !== null)
-    .map((m) => ({ id: m[1], n: Number(m[2]) }))
-    .sort((a, b) => b.n - a.n);
-  const lastPlan = priorPlans[0] ?? null;
-  // ONE identity rule for "the same plan" — `planMemory.stepPlan`, the fold
-  // review's selector already runs — so the two surfaces cannot disagree.
-  const planEvent = stepPlan(lastPlan ? { plan: null, id: lastPlan.id, announcedAt: null } : EMPTY_PLAN_STATE, plyNumberForPlan(fen), planFact).event;
+  // ONE identity rule for "the same plan" (`structurePlanEvent`, the plan's id).
+  const planEvent = structurePlanEvent(asked ? null : input.structurePlanHeard ?? null, planFact);
   // The same idea already spoken by the positional read speaks nowhere else.
   // Heard under either of its keys: the positional read's idea, or the plan
   // thread's aim for the same goal (census 9: one passer plan, two keys).
   const planIdeaHeard = (!!planFact?.ideaKey && !!said?.has(planFact.ideaKey)) || (!!planFact?.aim && !!said?.has(planFact.aim));
-  const planKey = planFact && !planIdeaHeard && (planEvent === 'announce' || planEvent === 'changed') ? `plan:${planFact.id}#${(lastPlan?.n ?? 0) + 1}` : null;
+  // The plan this read states — the caller's door writes it to the story's
+  // structure thread when it keeps the line.
+  const planSaid = planFact && !planIdeaHeard && (planEvent === 'announce' || planEvent === 'changed') ? planFact.id : null;
   const structureText = planIdeaHeard ? ''
     : planFact && planEvent === 'announce' ? planFact.text
     : planFact && planEvent === 'changed' ? planChangeSentence(planFact.text, 'statement')
@@ -1384,7 +1386,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ...(c.kind === 'trade' && c.rank === 34 && tradeTargetKey ? [tradeTargetKey] : []),
     // A batch-5 read is said once a game, keyed on its own claim.
     ...((c.kind === 'trade-idea' || c.kind === 'defence-idea' || c.kind === 'nugget') && c.claim ? [c.claim] : []),
-    ...(c.kind === 'structure-plan' && planKey ? [planKey, ...(planFact?.ideaKey ? [planFact.ideaKey] : []), ...(planFact?.aim ? [planFact.aim] : [])] : []),
+    ...(c.kind === 'structure-plan' && planSaid ? [...(planFact?.ideaKey ? [planFact.ideaKey] : []), ...(planFact?.aim ? [planFact.aim] : [])] : []),
     ...convertRemember([c], input.fen, studentSeat),
     // The passer's shared idea key, so the plan does not re-announce the pawn
     // the conversion line already talked about.
@@ -1412,6 +1414,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     rememberByClause: clauses.map((c) => ({ text: c.text, keys: rememberFor(c) })),
     // Only a principle the door actually SPOKE is committed as taught.
     principleSpoken: ruleHere && clauses.some((c) => c.kind === 'rule') ? ruleHere.id : null,
+    structurePlanSaid: planSaid && clauses.some((c) => c.kind === 'structure-plan') ? planSaid : null,
     moveAdvice,
     heldVerdict,
   };
@@ -2057,7 +2060,9 @@ function guardRemovalConcept(fen: string, student: 'w' | 'b'): NonNullable<Param
   const move = gr.moves[0];
   const full = mine
     ? `Their ${piece} on ${gr.target} has one guard, the ${guard} on ${gr.guard}. ${rotateStem(GUARD_REMOVAL_PRINCIPLE, key)}`
-    : `Your ${piece} on ${gr.target} has one guard, the ${guard} on ${gr.guard}, and ${move.san} ${move.kind === 'chase' ? 'chases it off' : 'takes it'}. ${rotateStem(GUARD_REMOVAL_WARNING, key)}`;
+    // "Bxf3 takes it" was "bishop takes f3 takes it" (David 2026-10-30): the
+    // SAN says the capture, and the idea is the guard's removal.
+    : `Your ${piece} on ${gr.target} has one guard, the ${guard} on ${gr.guard}, and ${move.san} ${move.kind === 'chase' ? 'chases it off' : 'removes it'}. ${rotateStem(GUARD_REMOVAL_WARNING, key)}`;
   return {
     id: 'removal_of_guard', source: 'tactic', full, short: full,
     squares: [gr.target, gr.guard],

@@ -170,7 +170,7 @@ describe('puzzle explanation reads like a coach (live walk 2026-10-03)', () => {
   it('a recapture is "take back", and a multi-capture line nets out ("a rook")', () => {
     const r = explain('r5k1/ppp1B1pp/6r1/b5N1/3nP3/2p5/P4PPP/RNR3K1 w - - 1 17', 'b1c3 a5c3 c1c3 d4e2 g1f1 e2c3', ['attraction', 'crushing', 'fork', 'long', 'middlegame']);
     expect(r).not.toBeNull();
-    expect(r!.spoken).toMatch(/Bxc3 takes the knight\. They take back with Rxc3\. Then Ne2\+\./);
+    expect(r!.spoken).toMatch(/Bxc3\. They take back with Rxc3\. Then Ne2\+\./);
     expect(r!.spoken).toMatch(/Nxc3, and you win a rook\.$/);
     expect(r!.spoken).not.toMatch(FILLER);
   });

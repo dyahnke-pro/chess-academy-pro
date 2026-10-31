@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**106 lines · 2 exports · 2 importers · 0 tests · 0 audits**
+**113 lines · 2 exports · 2 importers · 0 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,11 +18,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `groundedMoveWhy` (function) — 2 call sites
-- `src/services/proForkWalkthrough.ts:27`
-- `src/services/whyBestMove.ts:107`
+- `src/services/proForkWalkthrough.ts:29`
+- `src/services/whyBestMove.ts:115`
 
 ### `positionTeachingWhy` (function) — 1 call site
-- `src/services/whyBestMove.ts:82`
+- `src/services/whyBestMove.ts:75`
 
 ## Tests
 

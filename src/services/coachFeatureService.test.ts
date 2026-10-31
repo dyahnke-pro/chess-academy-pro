@@ -38,7 +38,7 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     // White Rd1 can win the undefended black bishop on d4; the player instead
     // shuffled the king (Kf1). best = Rxd4 (d1d4).
     const r = explainBestMoveGrounded('4k3/8/8/8/3b4/8/8/3RK3 w - - 0 1', 'Kf1', 'd1d4', 'white', null, null, 'mover');
-    expect(r).toBe('It wins the bishop on d4.');
+    expect(r).toBe('It wins a bishop, and nothing can take back.');
   });
 
   it('plays out the punishment when the played move hangs a piece', () => {

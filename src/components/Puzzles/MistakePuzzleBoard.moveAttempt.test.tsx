@@ -77,7 +77,7 @@ describe('MistakePuzzleBoard — move-attempt rows', () => {
     const puzzle = buildMistakePuzzle({
       fen: AFTER_1E4_E5, playerMove: 'f2f4', playerMoveSan: 'f4',
       bestMove: 'g1f3', bestMoveSan: 'Nf3', moves: 'g1f3', playerColor: 'white', cpLoss: 120,
-      narration: { intro: '', moveNarrations: [], outro: '', conceptHint: '' },
+      narration: { intro: '', moveNarrations: [], conceptHint: '' },
     });
     render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);
     await screen.findByTestId('mock-board');

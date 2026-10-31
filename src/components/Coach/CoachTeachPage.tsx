@@ -18,7 +18,7 @@ import { characterOf, provenTacticLive, sharpGap, stepCharacter, EMPTY_CHARACTER
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { startLearnTranscript, stopLearnTranscript, noteLearnEntry } from '../../services/learnTranscript';
 import { createLearnMemory, markOpeningFactsSpoken, nextStem, rememberKeptClaims, type LearnMemory } from '../../services/learnMemory';
-import { STORY_KEY, keysUnder, type StoryHeard } from '../../services/gameStory';
+import { STORY_KEY, PLAN_GOAL, keysUnder, threadKey, threadVariant, toldBoards, type StoryHeard } from '../../services/gameStory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -238,7 +238,7 @@ import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead';
 
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
-import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence } from '../../services/lookaheadPlan';
+import { aimsOf, aimWalkableNow, stepArc, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, saidSlipCp, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf, secondReadsOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
@@ -340,7 +340,7 @@ import { gameOpponentStrength } from '../../services/engineStrength';
 import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { lineSeatAt, withArticle } from '../../utils/andList';
-import { readBoard, readBoardAll, newPlanThread, clonePlanThread, adoptPlanTrial, type PlanThread, type BoardRead } from '../../services/boardComputers';
+import { readBoard, readBoardAll, adoptPlanTrial, type PlanThread, type BoardRead } from '../../services/boardComputers';
 import { splitThink, stripThink, resolveOwed, THINK_MARK } from '../../utils/thinkPause';
 import { scheduleMarks } from '../../services/markPacing';
 import { withTimeout } from '../../coach/withTimeout';
@@ -1875,10 +1875,10 @@ export function CoachTeachPage({ mode }: {
     steeredPliesRef.current.clear();
     coachMadePliesRef.current.clear();
     announcedBoardsRef.current.clear();
-    planToldBoardsRef.current.clear();
     openingBreakRef.current = null;
     liveGradesRef.current.clear();
-    planArcRef.current = { theirs: EMPTY_ARC, mine: EMPTY_ARC };
+    // A turn's plan trial waiting for its door belongs to the game it was tried in.
+    planTrialRef.current = null;
     characterRef.current = EMPTY_CHARACTER;
     priorityFirstLastPlyRef.current = -999;
     lastBoardMoveRef.current = null;
@@ -1970,10 +1970,6 @@ export function CoachTeachPage({ mode }: {
    *  filed into `announcedPliesRef`, so every evidence row it writes is
    *  PROMPTED (P4 honesty: being told is not proving). */
   const announcedBoardsRef = useRef(new Set<string>());
-  /** Boards on which the student's OWN plan was told to them (planArc's
-   *  prescriptive emerge). A move from one that serves the plan is PROMPTED for
-   *  the plan skill (`no-plan`) only — the plan was said; the tactics were not. */
-  const planToldBoardsRef = useRef(new Set<string>());
   /** The student's master-game break named with the opening's plan, and the
    *  ply it was named at — the opening summary reads it when the middlegame
    *  begins (census #52). `said` keeps it once per game. */
@@ -2000,8 +1996,9 @@ export function CoachTeachPage({ mode }: {
    *  Keyed by fen because these are computed asynchronously, after the instant
    *  package has shipped, and a hint about a board the student has moved past
    *  is worse than no hint. */
-  /** The plan thread's turn, tried on a copy until the door says whether it spoke. */
-  const planTrialRef = useRef<{ fen: string; live: PlanThread; trial: PlanThread; offered: string[] } | null>(null);
+  /** The plan thread's turn, tried on a copy of the story's thread until the
+   *  door says whether it spoke. */
+  const planTrialRef = useRef<{ fen: string; trial: PlanThread; offered: string[] } | null>(null);
   const pendingVoiceRef = useRef<{
     fen: string;
     /** `squares` rides along so the board can be drawn from what SURVIVED the
@@ -2018,14 +2015,6 @@ export function CoachTeachPage({ mode }: {
     fenBefore: string; playedSan: string; evalAfterWhiteCp: number;
     afterIsMate: boolean; afterMateIn: number | null; fenAfter: string;
   } | null>(null);
-  /** Plan clauses already spoken this game. A plan is stable across plies — the
-   *  same pin is still coming three moves later — so without this the coach
-   *  chants. A five-ply sample from a real game repeated one line four times. */
-  /** Each side's plan FOLLOWED across the game (`planArc`): the plan read
-   *  above forgets itself every move, so on its own the coach could say what
-   *  they want now and never "there it is — that was the plan" or "they have
-   *  given it up". Per game, reset with the other page refs. */
-  const planArcRef = useRef<{ theirs: ArcState; mine: ArcState }>({ theirs: EMPTY_ARC, mine: EMPTY_ARC });
   /** What the position is about, followed across the game (WO-2). */
   const characterRef = useRef<CharacterState>(EMPTY_CHARACTER);
   /** The moment Stockfish reports a forced mate FOR the student, the async engine
@@ -8710,6 +8699,7 @@ export function CoachTeachPage({ mode }: {
     // the story the positional read and every other lane write, with what the
     // turn on its board has offered so far.
     getSaid: (fen) => learnMemRef.current.story.heard(fen).claims,
+    getStructurePlan: () => threadVariant(learnMemRef.current.story.current(), threadKey('student', PLAN_GOAL.structure)),
     // THROUGH THE DOOR (WO-1b). A phase transition is one more wave of the
     // turn: its sentences compete with the lead the turn already spoke, so
     // "the middlegame starts here" takes the turn only if it outranks it,
@@ -8753,11 +8743,13 @@ export function CoachTeachPage({ mode }: {
       });
       if (!d.pkg.spoken) return '';
       if (d.lead) turnLeadRef.current = { fen: liveFenRef.current ?? fen, lead: d.lead };
-      // WHAT THE DOOR KEPT is what the game has said: its phrases and claims.
+      // WHAT THE DOOR KEPT is what the game has said: its phrases and claims,
+      // and the plan thread a kept line states.
       {
         const claims: string[] = [];
         rememberKeptClaims(d.pkg.kept, (k) => { claims.push(k); });
         learnMemRef.current.story.commit(gameRef.current.plies, { sentences: spokenSentenceKeys(d.pkg), claims });
+        learnMemRef.current.story.commitKeptThreads(gameRef.current.plies, live?.fen ?? fen, facts, d.pkg.kept);
       }
       // ITS LINES ON THE BOARD, like every wave's (`keptLineArrows`).
       const boardNow = liveFenRef.current ?? fen;
@@ -11042,11 +11034,11 @@ export function CoachTeachPage({ mode }: {
                     // once, its stop said with the PROOF read off their move,
                     // "good defending" when they stop two in a row.
                     try {
-                      // ON A COPY, adopted after the door from what SPOKE
-                      // (`adoptPlanTrial`): a plan held on a threat turn is
-                      // offered again instead of being marked said.
-                      const planLive = learnMemRef.current.planThread ??= newPlanThread();
-                      const planTrial = clonePlanThread(planLive);
+                      // ON A COPY of the story's thread, adopted after the door
+                      // from what SPOKE (`adoptPlanTrial`): a plan held on a
+                      // threat turn is offered again instead of being marked said.
+                      const story = learnMemRef.current.story;
+                      const planTrial = story.plans().thread;
                       const planOffered: string[] = [];
                       const plansNow = readBoardAll('planThread', {
                         thread: planTrial,
@@ -11078,8 +11070,8 @@ export function CoachTeachPage({ mode }: {
                       // dropped and the plan is offered again (prod Learn 2026-10-17:
                       // adopted unsaid, the method was never asked and the next plan
                       // came out as "the plan changes here").
-                      if (plansNow.length === 0) adoptPlanTrial(planLive, planTrial, [], []);
-                      else if (planOffered.length > 0) planTrialRef.current = { fen: probe.fen(), live: planLive, trial: planTrial, offered: planOffered };
+                      if (plansNow.length === 0) story.setPlans(gameRef.current.plies, { ...story.plans(), thread: planTrial });
+                      else if (planOffered.length > 0) planTrialRef.current = { fen: probe.fen(), trial: planTrial, offered: planOffered };
                     } catch { /* the plan is a bonus, never a blocker */ }
                   }
                 } catch { /* the read is a bonus, never a blocker */ }
@@ -11238,6 +11230,8 @@ export function CoachTeachPage({ mode }: {
                       // The positional read's ideas count as said too — one
                       // passer, one claim (fresh-game walk 2026-09-27).
                       alreadySaid: learnMemRef.current.story.heard(probe.fen()).claims,
+                      // The structure's plan the student last heard (the story's thread).
+                      structurePlanHeard: threadVariant(learnMemRef.current.story.current(), threadKey('student', PLAN_GOAL.structure)),
                       // The spells of the student's loose pieces — the must-defend
                       // clause keys on them like the threat line (`looseClaim`).
                       looseSpells: learnMemRef.current.looseSpells,
@@ -11303,6 +11297,10 @@ export function CoachTeachPage({ mode }: {
                     // SPOKE is taught": it was committed here, before the door).
                     const ruleClause = pf.principleSpoken ? pf.clauses.find((c) => c.kind === 'rule') : undefined;
                     if (pf.principleSpoken && ruleClause?.text) learnMemRef.current.story.offer(probe.fen(), { text: ruleClause.text, claims: pf.principleSpoken.split('|').map(STORY_KEY.principle) });
+                    // …and the structure's plan it states rides its line to the
+                    // story's structure thread, written when the door keeps it.
+                    const planClause = pf.structurePlanSaid ? pf.clauses.find((c) => c.kind === 'structure-plan') : undefined;
+                    if (pf.structurePlanSaid && planClause?.text) learnMemRef.current.story.offer(probe.fen(), { text: planClause.text, thread: { key: threadKey('student', PLAN_GOAL.structure), kind: 'stated', variant: pf.structurePlanSaid } });
                     // The student is to move at `probe`; their coming move is ply history+1.
                     if (studentMoveIsPrompted(pf.clauses.map((c) => c.kind), !!moveAdviceHere?.speak && !held)) announcedPliesRef.current.add(probe.history().length + 1);
                     for (const [ci, c] of pf.clauses.entries()) {
@@ -11521,14 +11519,18 @@ export function CoachTeachPage({ mode }: {
                         try {
                           const oppColor = playerColor === 'white' ? 'b' : 'w';
                           const studColor = playerColor === 'white' ? 'w' : 'b';
-                          const theirStep = stepArc(planArcRef.current.theirs, aimsOf(plan.theirs, 'opponent').filter((a) => aimWalkableNow(a, probe.fen(), oppColor, [...move.history, m.san])),
+                          // Each side's arc is the story's (checkpointed by ply,
+                          // so a takeback restores it).
+                          const story = learnMemRef.current.story;
+                          const desk = story.plans();
+                          const theirStep = stepArc(desk.arc.opponent, aimsOf(plan.theirs, 'opponent').filter((a) => aimWalkableNow(a, probe.fen(), oppColor, [...move.history, m.san])),
                             { from: m.from, to: m.to, piece: m.piece, promotion: m.promotion }, probe.fen(), oppColor, 'opponent');
                           const studentPiece = new Chess(move.fen).get(move.to as Square)?.type ?? null;
                           const mineStep = studentPiece
-                            ? stepArc(planArcRef.current.mine, aimsOf(plan.mine, 'student').filter((a) => aimWalkableNow(a, probe.fen(), studColor, [...move.history, m.san])),
+                            ? stepArc(desk.arc.student, aimsOf(plan.mine, 'student').filter((a) => aimWalkableNow(a, probe.fen(), studColor, [...move.history, m.san])),
                               { from: move.from, to: move.to, piece: studentPiece, promotion: move.promotion }, probe.fen(), studColor, 'student')
                             : null;
-                          planArcRef.current = { theirs: theirStep.next, mine: mineStep?.next ?? planArcRef.current.mine };
+                          story.setPlans(gameRef.current.plies, { ...story.plans(), arc: { opponent: theirStep.next, student: mineStep?.next ?? desk.arc.student } });
                           const arcLines = [
                             // Their ADVANCE speaks now: it is the why of the move they just
                             // made, question first (2026-09-30).
@@ -11549,7 +11551,11 @@ export function CoachTeachPage({ mode }: {
                             const line = gradeNarrationText(e.text, probe.fen(), 'CoachTeachPage.planArc')?.trim();
                             if (!line) continue;
                             queueSpokenHint(probe.fen(), line, 'planArc', NO_PROOF.description, NAMES_NO_MOVE, e.squares, [`plan:${e.seat}:${e.id}:${e.kind}${e.kind === 'advance' ? `:${e.step ?? 0}` : ''}`, ...(e.seat === 'student' && e.kind === 'emerge' ? [`plan-aim:${e.id}`] : [])]);
-                            if (e.seat === 'student' && e.kind === 'emerge') planToldBoardsRef.current.add(probe.fen().split(' ').slice(0, 2).join(' '));
+                            // The student's own plan, TOLD on this board before
+                            // they move from it: the story's thread records the
+                            // board when the door keeps the line, and a move from
+                            // it is prompted for the plan skill (`toldBoards`).
+                            if (e.seat === 'student' && e.kind === 'emerge') story.offer(probe.fen(), { text: line, thread: { key: threadKey('student', e.id), kind: 'stated', told: true } });
                           }
                         } catch { /* the arc is a bonus, never a blocker */ }
                         // The look-ahead PARAGRAPH (key square, board read, line
@@ -12135,7 +12141,8 @@ export function CoachTeachPage({ mode }: {
                   // The plan thread adopts its tried turn only if a line of it spoke.
                   const planTry = planTrialRef.current;
                   if (planTry && samePosition(planTry.fen, pending.fen)) {
-                    adoptPlanTrial(planTry.live, planTry.trial, planTry.offered, hintPkg.kept.flatMap((f) => f.claims ?? []));
+                    const desk = learnMemRef.current.story.plans();
+                    if (adoptPlanTrial(desk.thread, planTry.trial, planTry.offered, hintPkg.kept.flatMap((f) => f.claims ?? []))) learnMemRef.current.story.setPlans(gameRef.current.plies, desk);
                     planTrialRef.current = null;
                   }
                   if (announcesTheMove(lateDecision.spoke)) announcedBoardsRef.current.add(pending.fen.split(' ').slice(0, 2).join(' '));
@@ -12877,12 +12884,12 @@ export function CoachTeachPage({ mode }: {
                         // showed. Held here; a miss reaches the record through
                         // the game sweep (lane rows are held-only).
                         if (learned?.posed) {
-                          recordHeld(learned.posed.tag, learned.posed.posedImportance, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || planToldBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
+                          recordHeld(learned.posed.tag, learned.posed.posedImportance, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || toldBoards(learnMemRef.current.story.current(), 'student').has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
                         }
                         if (intent) {
                           // DUAL-USE (P4): an engine-proven purpose (prevents / prepares)
                           // is the no-plan question answered.
-                          recordHeld('no-plan', 60, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || planToldBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
+                          recordHeld('no-plan', 60, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || toldBoards(learnMemRef.current.story.current(), 'student').has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
                           // B1: the rule behind what the move prepares, once a game
                           // (the same ledger the principle lines use).
                           // Its keys ride as `principle:` claims, committed once the door keeps the line.

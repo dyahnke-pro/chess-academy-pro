@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**261 lines · 13 exports · 10 importers · 3 tests · 0 audits**
+**239 lines · 12 exports · 8 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,12 +16,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFact.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/danyaBench.measure.test.ts`
-- `src/services/factSelector.ts`
+- `src/services/gameStory.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/moveThoughtFacts.ts`
-- `src/services/positionFacts.ts`
 - `src/services/thoughtComposer.ts`
-- `src/test/doorFact.ts`
 
 ## Exports and every call site
 
@@ -44,29 +42,31 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCoachFactKind` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:557`
+- `src/services/learnTurnDoor.ts:246`
 
-### `stepOf` (function) — 15 call sites
+### `stepOf` (function) — 17 call sites
+- `src/services/coachDecider.ts:527`
 - `src/services/coachFact.test.ts:75`
 - `src/services/coachFact.test.ts:76`
-- `src/services/coachFeatureService.ts:2478`
-- `src/services/coachFeatureService.ts:3071`
-- `src/services/learnTurnDoor.ts:246`
-- `src/services/learnTurnDoor.ts:777`
-- `src/services/learnTurnDoor.ts:834`
-- `src/services/learnTurnDoor.ts:855`
+- `src/services/coachFeatureService.ts:2516`
+- `src/services/coachFeatureService.ts:3104`
+- `src/services/learnTurnDoor.ts:247`
+- `src/services/learnTurnDoor.ts:249`
+- `src/services/learnTurnDoor.ts:734`
+- `src/services/learnTurnDoor.ts:791`
+- `src/services/learnTurnDoor.ts:812`
+- `src/services/learnTurnDoor.ts:816`
 - `src/services/learnTurnDoor.ts:859`
-- `src/services/learnTurnDoor.ts:902`
-- `src/services/learnTurnDoor.ts:928`
-- `src/services/learnTurnDoor.ts:938`
-- `src/services/learnTurnDoor.ts:942`
-- `src/services/learnTurnDoor.ts:1076`
-- `src/services/learnTurnDoor.ts:1139`
+- `src/services/learnTurnDoor.ts:885`
+- `src/services/learnTurnDoor.ts:895`
+- `src/services/learnTurnDoor.ts:899`
+- `src/services/learnTurnDoor.ts:1034`
+- `src/services/learnTurnDoor.ts:1099`
 
 ### `placeFact` (function) — 3 call sites
-- `src/services/danyaBench.measure.test.ts:61`
-- `src/services/moveThoughtFacts.ts:102`
-- `src/services/moveThoughtFacts.ts:204`
+- `src/services/danyaBench.measure.test.ts:60`
+- `src/services/moveThoughtFacts.ts:124`
+- `src/services/moveThoughtFacts.ts:225`
 
 ### `COMPUTER_CATALOG` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -76,12 +76,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `CoachFact` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
-
-### `toCoachFact` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2801`
-- `src/services/learnTurnDoor.ts:571`
-- `src/services/positionFacts.ts:500`
-- `src/test/doorFact.ts:19`
 
 ## Tests
 

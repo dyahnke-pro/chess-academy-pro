@@ -123,7 +123,8 @@ Each one has zero live voice or zero callers (verdicts in `p1/unwired.md`). Befo
 ### P1-2 One win-chance converter (rot rule, byte-identical)
 
 **Files:**
-- New leaf `src/services/winChance.ts` with `expectedScore(cp)` (0..1), `seatCp(line, seat)`, `wcGap(cpFor, cpAgainst)`, and one mate constant.
+- New leaf `src/services/winChance.ts` with `winningChances(cp)` (−1..1), `winChancePercent(cp)` (0..100), `seatCp(line, seat)`, `moverCp(fen, line)`, and one mate constant.
+- `expectedScore(cp)` (0..1) and `wcGap(cpFor, cpAgainst)` are NOT in P1-2: nothing reads them until P1-10, and an export with no caller is parked code (G8.5). They land in the leaf with their first reader in P1-10.
 - Delegate to it:
   - `accuracyService.winPercent` (:28-31). Keep its ±1500 cap as an explicit argument.
   - `turningPoints.winChance` (:113-115).

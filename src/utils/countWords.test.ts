@@ -61,7 +61,10 @@ describe('routeWords — the one route phraser', () => {
     for (const f of readdirSync(dir)) {
       if (!f.endsWith('.ts') || f.endsWith('.test.ts')) continue;
       const src = readFileSync(join(dir, f), 'utf8');
-      if (/\/\^?(walk the |getting the \(|.*by way of)/.test(src.replace(/^\s*(\/\/|\*).*$/gm, ''))) bad.push(f);
+      // Comments out first — block comments whole, so a one-line doc comment
+      // quoting a route ("/** \"…, by way of f1\" */") is not read as a regex.
+      const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+      if (/\/\^?(walk the |getting the \(|.*by way of)/.test(code)) bad.push(f);
     }
     expect(bad).toEqual([]);
   });

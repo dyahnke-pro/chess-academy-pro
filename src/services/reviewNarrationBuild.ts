@@ -166,11 +166,15 @@ export async function prebuildReviewNarration(gameId: string, reason: string): P
  *  plies already walked keep the words they were given (and so does the intro,
  *  once spoken), every later ply takes the newer build. A move is never
  *  re-narrated under a student who has heard it. */
-/** The say-once keys a walk has SPOKEN: every ply it has walked through. */
+/** The say-once keys a walk has SPOKEN: every ply it has walked through —
+ *  and the game's story as it stood there: the last checkpoint at or before
+ *  that ply (none: the walk had said no plan yet). */
 export function spokenLedgerSeed(narration: ReviewNarration | null, walkedThroughPly: number): SpokenLedgerSeed | null {
   if (!narration || walkedThroughPly <= 0) return null;
-  const keys = new Set(narration.segments.filter((sg) => sg.ply <= walkedThroughPly).flatMap((sg) => sg.ledgerKeys ?? []));
-  return { throughPly: walkedThroughPly, keys };
+  const walked = narration.segments.filter((sg) => sg.ply <= walkedThroughPly).sort((a, b) => a.ply - b.ply);
+  const keys = new Set(walked.flatMap((sg) => sg.ledgerKeys ?? []));
+  const story = walked.reduce<string | null>((at, sg) => sg.storyCheckpoint ?? at, null);
+  return { throughPly: walkedThroughPly, keys, story };
 }
 
 /** THE MERGE INSTRUMENT (the lead, 2026-10-20): at a mid-walk swap, the

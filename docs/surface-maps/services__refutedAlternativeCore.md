@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**277 lines · 13 exports · 8 importers · 2 tests · 0 audits**
+**274 lines · 13 exports · 8 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -64,7 +64,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternative.ts:168`
 
 ### `candidatesFromAmateur` (function) — 2 call sites
-- `src/services/positionFacts.ts:1003`
+- `src/services/positionFacts.ts:1007`
 - `src/services/refutedAlternative.ts:167`
 
 ### `FanLine` (interface) — 0 call sites
@@ -81,12 +81,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternative.ts:116`
 
 ### `refutedFromFan` (function) — 2 call sites
-- `src/services/positionFacts.ts:1003`
+- `src/services/positionFacts.ts:1007`
 - `src/services/refutedAlternativeCore.test.ts:14`
 
 ### `refutedAltProof` (function) — 2 call sites
-- `src/services/positionFacts.ts:1111`
-- `src/services/reviewFullData.ts:1291`
+- `src/services/positionFacts.ts:1115`
+- `src/services/reviewFullData.ts:1253`
 
 ## Tests
 

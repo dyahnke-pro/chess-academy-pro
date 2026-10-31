@@ -131,7 +131,6 @@ describe('mistakePuzzleService', () => {
       expect(blunder?.playerMoveSan).toBe('Bc4');
       expect(blunder?.narration).toBeDefined();
       expect(blunder?.narration.intro).toBeTruthy();
-      expect(blunder?.narration.outro).toBeTruthy();
       expect(Array.isArray(blunder?.narration.moveNarrations)).toBe(true);
 
       // Second puzzle: d3 mistake (move 4)

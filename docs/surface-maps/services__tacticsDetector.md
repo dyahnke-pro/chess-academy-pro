@@ -111,7 +111,7 @@
 - `src/services/playCommentary.ts:651`
 - `src/services/playedConcept.ts:59`
 - `src/services/playedConcept.ts:66`
-- `src/services/positionFacts.ts:1286`
+- `src/services/positionFacts.ts:1257`
 - `src/services/pvPlayback.ts:386`
 - `src/services/pvPlayback.ts:406`
 - `src/services/relationClaimCost.report.test.ts:52`

@@ -318,16 +318,6 @@
   "at": "coachFeatureService (line 1958 in reviewSegmentSteps)"
  },
  {
-  "name": "generateMoveCommentary — Play's LLM move commentary",
-  "file": "services/coachMoveCommentary.ts",
-  "fn": "generateMoveCommentary",
-  "says": "LLM-phrased per-move commentary on Play over grounded facts",
-  "origin": "map",
-  "nodes": [
-   "services/coachMoveCommentary.ts#generateMoveCommentary"
-  ]
- },
- {
   "name": "coachsCall",
   "file": "services/coachsCall.ts",
   "fn": "(module)",
@@ -373,26 +363,6 @@
   "origin": "map",
   "nodes": [
    "services/conceptEngine.ts#conceptForBoard"
-  ]
- },
- {
-  "name": "conceptForSolution (puzzle-solution concept)",
-  "file": "services/conceptEngine.ts",
-  "fn": "conceptForSolution",
-  "says": "The concept behind a puzzle's verified solution (conceptForLine with the Lichess solver side)",
-  "origin": "map",
-  "nodes": [
-   "services/conceptEngine.ts#conceptForSolution"
-  ]
- },
- {
-  "name": "framingSide (which side a concept is framed for)",
-  "file": "services/conceptEngine.ts",
-  "fn": "framingSide",
-  "says": "Which side a concept should be framed as 'you' for",
-  "origin": "map",
-  "nodes": [
-   "services/conceptEngine.ts#framingSide"
   ]
  },
  {
@@ -805,13 +775,6 @@
   "origin": "extra"
  },
  {
-  "name": "gameNarrationBuilder",
-  "file": "services/gameNarrationBuilder.ts",
-  "fn": "(module)",
-  "says": "gameNarrationBuilder -------------------- Convert a stored `GameRecord` into a `WalkthroughSession` that replays the game move-by-move wit",
-  "origin": "extra"
- },
- {
   "name": "classifyPhase / isEndgameByMaterial (THE phase classifier)",
   "file": "services/gamePhaseService.ts",
   "fn": "classifyPhase",
@@ -846,16 +809,6 @@
    "services/groundedAnswer.ts#assembleHangingAnswer"
   ],
   "note": "internal helper (reach = its exported callers)"
- },
- {
-  "name": "assembleSlipNarration — Play's slip verdict + 'X was stronger — why'",
-  "file": "services/groundedAnswer.ts",
-  "fn": "assembleSlipNarration",
-  "says": "On a Play slip: 'X is a mistake — it gives up …' + 'Y was stronger — <explainBestMoveGrounded>'",
-  "origin": "map",
-  "nodes": [
-   "services/groundedAnswer.ts#assembleSlipNarration"
-  ]
  },
  {
   "name": "describeMoveGeometry (one-move geometry)",
@@ -1186,16 +1139,6 @@
   "origin": "map",
   "nodes": [
    "services/latentFork.ts#detectLatentFork"
-  ]
- },
- {
-  "name": "winningLine / foundMoveTeaching / drilledTransferLine / priorFromHistory (Learn line adapters)",
-  "file": "services/learnBoardTeaching.ts",
-  "fn": "drilledTransferLine",
-  "says": "When the student FOUND the move: the critical-moment credit (criticalMomentFound), the mate or winning line it starts (mateLine/lineWins), t",
-  "origin": "map",
-  "nodes": [
-   "services/learnBoardTeaching.ts#drilledTransferLine"
   ]
  },
  {
@@ -2155,13 +2098,13 @@
   "origin": "extra"
  },
  {
-  "name": "planMemory — stepPlan / foldPlans / planChangeSentence",
-  "file": "services/planMemory.ts",
-  "fn": "stepPlan",
+  "name": "structurePlanEvent / planChangeSentence (planMemory folded into planThread, P1-8b)",
+  "file": "services/planThread.ts",
+  "fn": "structurePlanEvent",
   "says": "Whether the structure plan is new, carried or changed since it was announced, and the 'the plan changes' sentence",
   "origin": "map",
   "nodes": [
-   "services/planMemory.ts#stepPlan"
+   "services/planThread.ts#structurePlanEvent"
   ]
  },
  {
@@ -2284,13 +2227,6 @@
   "origin": "extra"
  },
  {
-  "name": "playEntryNarration",
-  "file": "services/playEntryNarration.ts",
-  "fn": "(module)",
-  "says": "playEntryNarration ------------------ Templates for the one-line coach beat that fires on `/coach/play` mount when the user arrived via a",
-  "origin": "extra"
- },
- {
   "name": "readPosition / buildPositionalRead (the quiet-position observation)",
   "file": "services/positionalRead.ts",
   "fn": "readPosition",
@@ -2388,16 +2324,6 @@
   "origin": "map",
   "nodes": [
    "services/positionReadingService.ts#findXrays"
-  ]
- },
- {
-  "name": "formatReadingFacts (prompt block of reading facts)",
-  "file": "services/positionReadingService.ts",
-  "fn": "formatReadingFacts",
-  "says": "A grounded 'READING FACTS' prompt block: SEE material at risk, pawn breaks, piece quality",
-  "origin": "map",
-  "nodes": [
-   "services/positionReadingService.ts#formatReadingFacts"
   ]
  },
  {

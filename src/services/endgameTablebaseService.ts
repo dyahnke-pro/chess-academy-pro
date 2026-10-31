@@ -19,6 +19,8 @@
 import { Chess } from 'chess.js';
 import type { TablebaseCategory } from './lichessTablebaseService';
 import { endgameConceptFor } from './conceptEngine';
+import { afterCaptureSan } from '../utils/captureWords';
+import { captureLeadsTo } from './captureLeadsTo';
 import { WEB_ORIGIN, withWebOrigin } from '../utils/webOrigin';
 
 const TABLEBASE_PROXY_PATH = '/api/lichess-tablebase';
@@ -212,7 +214,12 @@ function bestMovePoint(fen: string, best: TablebaseMove, subject: 'move' | 'side
     if (!mv) return null;
     if (mv.san.includes('#')) return subject === 'side' ? 'deliver checkmate' : 'is checkmate';
     if (mv.promotion) return v('queens the pawn', 'queen the pawn');
-    if (mv.captured) return v(`takes on ${mv.to}`, `take on ${mv.to}`);
+    // `move` reads after the SAN, which already says the capture ("Kxe5
+    // takes on e5", David 2026-10-30): what it leads to instead.
+    if (mv.captured) {
+      const leadsTo = captureLeadsTo(fen, mv.san);
+      return subject === 'side' ? `take on ${mv.to}` : leadsTo ? afterCaptureSan(leadsTo, 'verb') : null;
+    }
     if (mv.san.includes('+')) return v('checks the king', 'check the king');
     if (mv.piece === 'k') return v(`walks the king to ${mv.to}`, `walk the king to ${mv.to}`);
     if (mv.piece === 'p') return v(`pushes to ${mv.to}`, `push to ${mv.to}`);

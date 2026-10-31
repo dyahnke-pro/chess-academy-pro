@@ -123,7 +123,6 @@ describe('MistakePuzzleBoard', () => {
       narration: {
         intro: 'You played Ng5, but d4 was better.',
         moveNarrations: [],
-        outro: 'Always develop pieces first.',
         conceptHint: '',
       },
     });
@@ -148,7 +147,7 @@ describe('MistakePuzzleBoard', () => {
 
   it('does not speak when narration is empty', async () => {
     const puzzle = buildMistakePuzzle({
-      narration: { intro: '', moveNarrations: [], outro: '', conceptHint: '' },
+      narration: { intro: '', moveNarrations: [], conceptHint: '' },
     });
     render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} />);
 

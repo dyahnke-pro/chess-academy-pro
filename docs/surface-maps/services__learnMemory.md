@@ -4,16 +4,21 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**225 lines · 3 exports · 2 importers · 1 tests · 1 audits**
+**347 lines · 7 exports · 7 importers · 8 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5680) — names `learnMemory`
+- **The standard post-deploy ritual** (CLAUDE.md:6780) — names `learnMemory`
 
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/gameStory.rewind.test.ts`
+- `src/services/gameStory.test.ts`
+- `src/services/gameThread.test.ts`
+- `src/services/learnBoardTeaching.ts`
 - `src/services/learnMemory.test.ts`
+- `src/services/learnThreeFacts.test.ts`
 
 ## Exports and every call site
 
@@ -23,18 +28,74 @@
 ### `LearnMemory` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `createLearnMemory` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1723`
-- `src/services/learnMemory.test.ts:35`
-- `src/services/learnMemory.test.ts:78`
-- `src/services/learnMemory.test.ts:91`
-- `src/services/learnMemory.test.ts:99`
-- `src/services/learnMemory.test.ts:181`
+### `GamePromise` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `createLearnMemory` (function) — 22 call sites
+- `src/components/Coach/CoachTeachPage.tsx:2071`
+- `src/services/gameStory.rewind.test.ts:35`
+- `src/services/gameStory.rewind.test.ts:57`
+- `src/services/gameStory.rewind.test.ts:68`
+- `src/services/gameStory.test.ts:43`
+- `src/services/gameStory.test.ts:59`
+- `src/services/gameStory.test.ts:75`
+- `src/services/gameStory.test.ts:92`
+- `src/services/gameThread.test.ts:13`
+- `src/services/gameThread.test.ts:28`
+- `src/services/gameThread.test.ts:37`
+- `src/services/gameThread.test.ts:44`
+- `src/services/gameThread.test.ts:55`
+- `src/services/learnMemory.test.ts:34`
+- `src/services/learnMemory.test.ts:80`
+- `src/services/learnMemory.test.ts:89`
+- `src/services/learnMemory.test.ts:101`
+- `src/services/learnMemory.test.ts:197`
+- `src/services/learnMemory.test.ts:276`
+- `src/services/learnMemory.test.ts:287`
+- `src/services/learnMemory.test.ts:303`
+- `src/services/learnMemory.test.ts:319`
+
+### `markOpeningFactsSpoken` (function) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:2380`
+- `src/services/learnMemory.test.ts:199`
+- `src/services/learnMemory.test.ts:201`
+- `src/services/learnMemory.test.ts:277`
+- `src/services/learnMemory.test.ts:279`
+- `src/services/learnMemory.test.ts:289`
+
+### `nextStem` (function) — 11 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9135`
+- `src/components/Coach/CoachTeachPage.tsx:9173`
+- `src/components/Coach/CoachTeachPage.tsx:9310`
+- `src/components/Coach/CoachTeachPage.tsx:9384`
+- `src/components/Coach/CoachTeachPage.tsx:9409`
+- `src/components/Coach/CoachTeachPage.tsx:12012`
+- `src/components/Coach/CoachTeachPage.tsx:12514`
+- `src/services/learnBoardTeaching.ts:729`
+- `src/services/learnMemory.test.ts:304`
+- `src/services/learnMemory.test.ts:305`
+- `src/services/learnMemory.test.ts:307`
+
+### `rememberKeptClaims` (function) — 3 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8748`
+- `src/components/Coach/CoachTeachPage.tsx:12164`
+- `src/services/learnMemory.test.ts:315`
 
 ## Tests
 
+- `src/services/gameStory.rewind.test.ts`
+- `src/services/gameStory.test.ts`
+- `src/services/gameThread.test.ts`
 - `src/services/learnMemory.test.ts`
+- `src/services/learnThreeFacts.test.ts`
+- `src/test/coachOpensOnLiveBoard.gate.test.ts`
+- `src/test/oneFreshGameReset.test.ts`
+- `src/test/oneStoryState.gate.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-second-game-memory-prod.mjs`

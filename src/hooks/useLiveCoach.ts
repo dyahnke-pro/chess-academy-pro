@@ -164,10 +164,13 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
   // move after move. Holds only what `computePositionFacts` judged safe to say
   // once; a piece still hanging is NOT in here and says so again.
   const saidRef = useRef<Set<string>>(new Set());
+  /** The structure's plan last said this game (its id) — the same plan stays
+   *  quiet, a different one is said as a change (`structurePlanHeard`). */
+  const structurePlanRef = useRef<string | null>(null);
   // …and a NEW GAME starts from silence. Carrying the set across games would
   // mute the second game's structure line because the first game happened to
   // share a pawn structure — a silence nobody could trace back to here.
-  useEffect(() => { saidRef.current = new Set(); }, [gameId]);
+  useEffect(() => { saidRef.current = new Set(); structurePlanRef.current = null; }, [gameId]);
 
   // student-perspective eval rolling window, oldest first; used by the
   // recovery detector. Capped at the last 12 plies to keep memory
@@ -288,8 +291,10 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
               ...(ctx.lastMove ? { lastMove: ctx.lastMove } : {}),
               studentNeedContext: studentNeedRef.current,
               alreadySaid: saidRef.current,
+              structurePlanHeard: structurePlanRef.current,
             });
             for (const t of pf.remember) saidRef.current.add(t);
+            structurePlanRef.current = pf.structurePlanSaid ?? structurePlanRef.current;
             // 🔒 THE SAME FILTER DECIDES THE WORDS AND THE SQUARES. `clauseText`
             // takes an EXCLUDE list, so the spoken set is everything BUT these
             // two kinds. Painting from `pf.clauses` directly would highlight a

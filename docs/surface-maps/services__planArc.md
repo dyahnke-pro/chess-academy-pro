@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**686 lines · 13 exports · 9 importers · 10 tests · 5 audits**
+**688 lines · 13 exports · 10 importers · 10 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/services/gameStory.ts`
 - `src/services/lookaheadPlan.ts`
 - `src/services/planArc.phraseFrom.test.ts`
 - `src/services/planArc.test.ts`
@@ -34,15 +35,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `aimsOf` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11469`
-- `src/components/Coach/CoachTeachPage.tsx:11473`
+- `src/components/Coach/CoachTeachPage.tsx:11520`
+- `src/components/Coach/CoachTeachPage.tsx:11524`
 - `src/services/lookaheadPlan.ts:1694`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
 - `src/services/planChooser.ts:65`
 - `src/services/planChooser.ts:66`
-- `src/services/planThread.test.ts:76`
+- `src/services/planThread.test.ts:78`
 - `src/test/thinkMarkClosed.gate.test.ts:77`
 
 ### `phraseFrom` (function) — 3 call sites
@@ -66,12 +67,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `routePoint` (function) — 2 call sites
-- `src/services/planArc.test.ts:333`
-- `src/services/planArc.test.ts:338`
+- `src/services/planArc.test.ts:334`
+- `src/services/planArc.test.ts:339`
 
 ### `stepArc` (function) — 34 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11469`
-- `src/components/Coach/CoachTeachPage.tsx:11473`
+- `src/components/Coach/CoachTeachPage.tsx:11520`
+- `src/components/Coach/CoachTeachPage.tsx:11524`
 - `src/services/lookaheadPlan.ts:1695`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:97`
@@ -93,11 +94,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.test.ts:185`
 - `src/services/planArc.test.ts:186`
 - `src/services/planArc.test.ts:285`
-- `src/services/planArc.test.ts:317`
 - `src/services/planArc.test.ts:318`
-- `src/services/planArc.test.ts:321`
-- `src/services/planArc.test.ts:346`
+- `src/services/planArc.test.ts:319`
+- `src/services/planArc.test.ts:322`
 - `src/services/planArc.test.ts:347`
+- `src/services/planArc.test.ts:348`
 - `src/services/planArc.truth.test.ts:12`
 - `src/services/planArc.truth.test.ts:15`
 - `src/services/planArc.truth.test.ts:22`
@@ -106,8 +107,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/thinkMarkClosed.gate.test.ts:77`
 
 ### `aimWalkableNow` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11469`
-- `src/components/Coach/CoachTeachPage.tsx:11473`
+- `src/components/Coach/CoachTeachPage.tsx:11520`
+- `src/components/Coach/CoachTeachPage.tsx:11524`
 - `src/services/lookaheadPlan.ts:1694`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`

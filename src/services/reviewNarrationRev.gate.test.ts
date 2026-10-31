@@ -1,6 +1,6 @@
 // REVIEW_NARRATION_REV moves with the Review walk's words (the rev fingerprint
 // gate — src/test/revFingerprint.ts). Three of David's games, the segment
-// builder's narration and its say-once keys, ply by ply.
+// builder's narration, its say-once keys and its story checkpoints, ply by ply.
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
@@ -30,7 +30,8 @@ describe('REVIEW_NARRATION_REV moves with the narration', () => {
         return { ply: i + 1, san, fenAfter: d.fen(), isCoachMove: g.side === 'white' ? i % 2 === 1 : i % 2 === 0, classification: classification ?? 'good', preMoveEval: preMoveEval ?? 0, evaluation: evaluation ?? 0, bestMove } as unknown as ReviewMoveInput;
       });
       const segs = buildReviewSegmentsForTests(inputs, g.side, null, true, 1400);
-      parts[g.id] = fingerprint(segs.map((s) => [s.ply, s.narration ?? null, s.ledgerKeys ?? []]));
+      // …and the story's checkpoint, which a rebuild seeded from the cache reads.
+      parts[g.id] = fingerprint(segs.map((s) => [s.ply, s.narration ?? null, s.ledgerKeys ?? [], s.storyCheckpoint ?? null]));
     }
     setOpeningIdentity(null);
     expect(checkRevFingerprint('review-narration', REVIEW_NARRATION_REV, parts, 'src/services/reviewNarrationRev.gate.test.ts')).toBeNull();

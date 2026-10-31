@@ -18,6 +18,7 @@ import { pawnSquareRaceRead, pawnSquareRaceProof } from './planRace';
 import { kickLineRead } from './kickMap';
 import { legalLineProof, squaresProof, type Proof } from './proof';
 import { costStakes, type FactStakes } from './factStakes';
+import { moverCp } from './winChance';
 import { lineSeatAt } from '../utils/andList';
 
 type OrderReadKind = 'equivalence' | 'timing' | 'refuted' | 'capture-choice' | 'plan-race' | 'kick';
@@ -36,11 +37,6 @@ interface OrderRead {
 }
 
 type Line = { moves: readonly string[]; evaluation: number; mate: number | null };
-
-const seatCp = (fen: string, l: Line): number => {
-  const white = l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation;
-  return fen.split(' ')[1] === 'w' ? white : -white;
-};
 
 /**
  * `fen` = the board; `history` = every SAN of the game to it; `student` the
@@ -99,7 +95,7 @@ export function orderReads(args: {
     const tempting = args.topLines.find((l) => {
       try { return new Chess(fen).move({ from: l.moves[0].slice(0, 2), to: l.moves[0].slice(2, 4), promotion: l.moves[0][4] }).san === pf.tempting; } catch { return false; }
     });
-    const gap = tempting && args.topLines[0] ? seatCp(fen, args.topLines[0]) - seatCp(fen, tempting) : null;
+    const gap = tempting && args.topLines[0] ? moverCp(fen, args.topLines[0]) - moverCp(fen, tempting) : null;
     out.push({ kind: 'refuted', text: pf.text, proof: pf.proof, squares: pf.squares, claim: `pattern-fails:${pf.tempting}`, ...(pf.proof.line ? { lines: [{ fen: pf.proof.line.fen, sans: [...pf.proof.line.sans] }] } : {}), ...(gap !== null && costStakes(gap) ? { stakes: costStakes(gap) as FactStakes } : {}), namesMove: false });
   }
 

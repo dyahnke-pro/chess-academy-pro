@@ -34,6 +34,7 @@ import { captureRead, findWeakPawns } from './positionReadingService';
 import { seatBare } from '../utils/seatPieces';
 import { mateDescription } from './matePatterns';
 import { withArticle } from '../utils/andList';
+import { afterCaptureSan } from '../utils/captureWords';
 
 type CommentaryKind =
   | 'tactic'
@@ -404,7 +405,9 @@ export function buildRejectedTempting(args: {
       const refutation = probe.move({ from: line.replyUci.slice(0, 2) as Square, to: line.replyUci.slice(2, 4) as Square, promotion: (line.replyUci[4] as 'q' | undefined) ?? undefined });
       if (!refutation) continue;
       const why = tempting.captured !== undefined
-        ? `it grabs the ${NAME[tempting.captured] ?? 'piece'} on ${tempting.to}`
+        // Said after its SAN ("Bxg5 would not have worked: it …"), which
+        // already says the capture: the count, never the capture again.
+        ? `it ${afterCaptureSan({ kind: 'nets', captured: tempting.captured, free: false, gave: null }, 'verb')}`
         : 'it comes with check';
       // Tiered so the REGISTER decides how much of this is handed over
       // (hintRegister.packageForRegister). The anchor carries both moves

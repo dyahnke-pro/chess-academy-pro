@@ -1,41 +1,41 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.",
  "graph": {
-  "files": 1744,
-  "nodes": 16135
+  "files": 1745,
+  "nodes": 16140
  },
  "totals": {
-  "computers": 355,
-  "wiredNowhere": 51,
-  "heldByLearnOnly": 28,
-  "otherScreensOnly": 16,
-  "dead": 7,
+  "computers": 347,
+  "wiredNowhere": 39,
+  "heldByLearnOnly": 27,
+  "otherScreensOnly": 11,
+  "dead": 1,
   "missingFromCode": 0,
   "surfaces": {
    "learn": {
-    "yes": 28,
-    "held": 220,
-    "no": 107
+    "yes": 31,
+    "held": 219,
+    "no": 97
    },
    "review": {
-    "yes": 225,
-    "no": 130
+    "yes": 228,
+    "no": 119
    },
    "lesson": {
-    "yes": 96,
-    "no": 259
+    "yes": 100,
+    "no": 247
    },
    "chat": {
-    "yes": 199,
-    "no": 156
+    "yes": 202,
+    "no": 145
    },
    "tapped": {
-    "yes": 156,
-    "no": 199
+    "yes": 159,
+    "no": 188
    },
    "tactics": {
-    "yes": 99,
-    "no": 256
+    "yes": 104,
+    "no": 243
    }
   }
  },
@@ -46,7 +46,6 @@
    "services/danyaBehaviors.ts#detectBehaviors",
    "services/drillReasons.ts#(module)",
    "services/inaccuracyCall.ts#callInaccuracyDetailed",
-   "services/learnBoardTeaching.ts#drilledTransferLine",
    "services/learnBoardTeaching.ts#hangingPieceLine",
    "services/learnBoardTeaching.ts#learnMoveReason",
    "services/learnBoardTeaching.ts#slipQuestion",
@@ -73,29 +72,18 @@
   "otherScreensOnly": [
    "missions/patterns/index.ts#(module)",
    "services/bookMoveQuestion.ts#(module)",
-   "services/coachMoveCommentary.ts#generateMoveCommentary",
    "services/coachTemplates.ts#(module)",
    "services/coachTrainingService.ts#getCoachGreeting",
    "services/computedPlan.ts#computedPlanAt",
-   "services/gameNarrationBuilder.ts#(module)",
    "services/gemCrushLines.ts#(module)",
-   "services/groundedAnswer.ts#assembleSlipNarration",
    "services/kidBoardAnswers.ts#(module)",
    "services/kidGameCoach.ts#(module)",
    "services/kidPuzzleService.ts#(module)",
-   "services/playEntryNarration.ts#(module)",
-   "services/positionTransformation.ts#(module)",
    "services/shareableInsightsService.ts#(module)",
    "services/tacticAlertService.ts#detectGameplayTactic"
   ],
   "dead": [
-   "services/conceptEngine.ts#conceptForSolution",
-   "services/conceptEngine.ts#framingSide",
-   "services/endgamePawnReads.ts#findBreakthrough",
-   "services/missedTacticService.ts#legacyTacticGeometry",
-   "services/positionReadingService.ts#formatReadingFacts",
-   "services/queenVsPawn.ts#queenVsSeventh",
-   "services/zugzwang.ts#findTriangulation"
+   "services/missedTacticService.ts#legacyTacticGeometry"
   ]
  },
  "missingFromCode": [],
@@ -705,25 +693,6 @@
    ]
   },
   {
-   "key": "services/coachMoveCommentary.ts#generateMoveCommentary",
-   "name": "generateMoveCommentary — Play's LLM move commentary",
-   "file": "services/coachMoveCommentary.ts",
-   "fn": "generateMoveCommentary",
-   "says": "LLM-phrased per-move commentary on Play over grounded facts",
-   "origin": "map",
-   "learn": "no",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": true,
-   "other": [
-    "playSilent"
-   ],
-   "where": "components/Coach/CoachGamePage.tsx#CoachGamePage"
-  },
-  {
    "key": "services/coachsCall.ts#(module)",
    "name": "coachsCall",
    "file": "services/coachsCall.ts",
@@ -815,40 +784,6 @@
     "campaign",
     "playSilent"
    ]
-  },
-  {
-   "key": "services/conceptEngine.ts#conceptForSolution",
-   "name": "conceptForSolution (puzzle-solution concept)",
-   "file": "services/conceptEngine.ts",
-   "fn": "conceptForSolution",
-   "says": "The concept behind a puzzle's verified solution (conceptForLine with the Lichess solver side)",
-   "origin": "map",
-   "learn": "no",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": false,
-   "other": [],
-   "where": "dead (no production caller)"
-  },
-  {
-   "key": "services/conceptEngine.ts#framingSide",
-   "name": "framingSide (which side a concept is framed for)",
-   "file": "services/conceptEngine.ts",
-   "fn": "framingSide",
-   "says": "Which side a concept should be framed as 'you' for",
-   "origin": "map",
-   "learn": "no",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": false,
-   "other": [],
-   "where": "dead (no production caller)"
   },
   {
    "key": "services/concessionBeat.ts#findConcession",
@@ -1312,15 +1247,44 @@
    "fn": "findBreakthrough",
    "says": "In a king-and-pawn ending, the line's first move is a pawn sacrifice and a pawn of that side promotes within ten plies",
    "origin": "map",
-   "learn": "no",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": false,
-   "other": [],
-   "where": "dead (no production caller)"
+   "learn": "yes",
+   "review": "yes",
+   "lesson": "yes",
+   "chat": "yes",
+   "tapped": "yes",
+   "tactics": "yes",
+   "app": true,
+   "other": [
+    "openingsPage",
+    "kid",
+    "campaign",
+    "playSilent",
+    "insights",
+    "endgame"
+   ]
+  },
+  {
+   "key": "services/endgamePawnReads.ts#findTriangulation",
+   "name": "findTriangulation + triangulationSentence (losing a tempo on purpose)",
+   "file": "services/endgamePawnReads.ts",
+   "fn": "findTriangulation",
+   "says": "A best line in which only kings move and the same placement returns with the other side to move (a tempo handed over)",
+   "origin": "map",
+   "learn": "yes",
+   "review": "yes",
+   "lesson": "yes",
+   "chat": "yes",
+   "tapped": "yes",
+   "tactics": "yes",
+   "app": true,
+   "other": [
+    "openingsPage",
+    "kid",
+    "campaign",
+    "playSilent",
+    "insights",
+    "endgame"
+   ]
   },
   {
    "key": "services/endgamePawnReads.ts#passerKinds",
@@ -1440,7 +1404,7 @@
    "lesson": "no",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "kid",
@@ -1693,23 +1657,6 @@
    ]
   },
   {
-   "key": "services/gameNarrationBuilder.ts#(module)",
-   "name": "gameNarrationBuilder",
-   "file": "services/gameNarrationBuilder.ts",
-   "fn": "(module)",
-   "says": "gameNarrationBuilder -------------------- Convert a stored `GameRecord` into a `WalkthroughSession` that replays the game move-by-move wit",
-   "origin": "extra",
-   "learn": "no",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": true,
-   "other": [],
-   "where": "components/Coach/CoachSessionPage.tsx#CoachSessionPage"
-  },
-  {
    "key": "services/gamePhaseService.ts#classifyPhase",
    "name": "classifyPhase / isEndgameByMaterial (THE phase classifier)",
    "file": "services/gamePhaseService.ts",
@@ -1787,25 +1734,6 @@
     "kid",
     "campaign"
    ]
-  },
-  {
-   "key": "services/groundedAnswer.ts#assembleSlipNarration",
-   "name": "assembleSlipNarration — Play's slip verdict + 'X was stronger — why'",
-   "file": "services/groundedAnswer.ts",
-   "fn": "assembleSlipNarration",
-   "says": "On a Play slip: 'X is a mistake — it gives up …' + 'Y was stronger — <explainBestMoveGrounded>'",
-   "origin": "map",
-   "learn": "no",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": true,
-   "other": [
-    "playSilent"
-   ],
-   "where": "components/Coach/CoachGamePage.tsx#CoachGamePage"
   },
   {
    "key": "services/groundedAnswer.ts#describeMoveGeometry",
@@ -2491,23 +2419,6 @@
    ]
   },
   {
-   "key": "services/learnBoardTeaching.ts#drilledTransferLine",
-   "name": "winningLine / foundMoveTeaching / drilledTransferLine / priorFromHistory (Learn line adapters)",
-   "file": "services/learnBoardTeaching.ts",
-   "fn": "drilledTransferLine",
-   "says": "When the student FOUND the move: the critical-moment credit (criticalMomentFound), the mate or winning line it starts (mateLine/lineWins), t",
-   "origin": "map",
-   "learn": "held",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": true,
-   "other": [],
-   "where": "components/Coach/CoachTeachPage.tsx#CoachTeachPage"
-  },
-  {
    "key": "services/learnBoardTeaching.ts#hangingPieceLine",
    "name": "Learn's own threat lane (hangingPieceLine / cheaperAttackerLine / openThreatLine / learnThreatVoice)",
    "file": "services/learnBoardTeaching.ts",
@@ -2719,7 +2630,7 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "yes",
@@ -4627,25 +4538,6 @@
    "where": "components/Coach/CoachTeachPage.tsx#CoachTeachPage"
   },
   {
-   "key": "services/playEntryNarration.ts#(module)",
-   "name": "playEntryNarration",
-   "file": "services/playEntryNarration.ts",
-   "fn": "(module)",
-   "says": "playEntryNarration ------------------ Templates for the one-line coach beat that fires on `/coach/play` mount when the user arrived via a",
-   "origin": "extra",
-   "learn": "no",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": true,
-   "other": [
-    "playSilent"
-   ],
-   "where": "components/Coach/CoachGamePage.tsx#CoachGamePage"
-  },
-  {
    "key": "services/positionalRead.ts#readPosition",
    "name": "readPosition / buildPositionalRead (the quiet-position observation)",
    "file": "services/positionalRead.ts",
@@ -4856,23 +4748,6 @@
    ]
   },
   {
-   "key": "services/positionReadingService.ts#formatReadingFacts",
-   "name": "formatReadingFacts (prompt block of reading facts)",
-   "file": "services/positionReadingService.ts",
-   "fn": "formatReadingFacts",
-   "says": "A grounded 'READING FACTS' prompt block: SEE material at risk, pawn breaks, piece quality",
-   "origin": "map",
-   "learn": "no",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": false,
-   "other": [],
-   "where": "dead (no production caller)"
-  },
-  {
    "key": "services/positionReadingService.ts#kingActivation",
    "name": "endgame helper reads in positionReadingService (king activation, rook behind passer, opposition)",
    "file": "services/positionReadingService.ts",
@@ -4945,10 +4820,9 @@
    "lesson": "no",
    "chat": "no",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
-   "other": [],
-   "where": "record path only (services/autoImportScheduler.ts#runAutoImportIfDue)"
+   "other": []
   },
   {
    "key": "services/positionTrapScan.ts#scanPositionForTrap",
@@ -4965,8 +4839,7 @@
    "tactics": "no",
    "app": true,
    "other": [
-    "kid",
-    "playSilent"
+    "kid"
    ]
   },
   {
@@ -5235,15 +5108,21 @@
    "fn": "queenVsSeventh",
    "says": "In K+Q vs K+P on the seventh, whether the rule says win (centre/knight pawn) or usual draw (rook/bishop pawn) unless the king is close",
    "origin": "map",
-   "learn": "no",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": false,
-   "other": [],
-   "where": "dead (no production caller)"
+   "learn": "yes",
+   "review": "yes",
+   "lesson": "yes",
+   "chat": "yes",
+   "tapped": "yes",
+   "tactics": "yes",
+   "app": true,
+   "other": [
+    "openingsPage",
+    "kid",
+    "campaign",
+    "playSilent",
+    "insights",
+    "endgame"
+   ]
   },
   {
    "key": "services/recaptureChoice.ts#(module)",
@@ -7087,23 +6966,6 @@
     "kid",
     "campaign"
    ]
-  },
-  {
-   "key": "services/zugzwang.ts#findTriangulation",
-   "name": "findTriangulation + triangulationSentence (losing a tempo on purpose)",
-   "file": "services/zugzwang.ts",
-   "fn": "findTriangulation",
-   "says": "A best line in which only kings move and the same placement returns with the other side to move (a tempo handed over)",
-   "origin": "map",
-   "learn": "no",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": false,
-   "other": [],
-   "where": "dead (no production caller)"
   },
   {
    "key": "services/zugzwang.ts#readZugzwang",

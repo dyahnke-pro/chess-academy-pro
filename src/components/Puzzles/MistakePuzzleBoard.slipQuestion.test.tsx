@@ -42,7 +42,7 @@ function puzzle(): ReturnType<typeof buildMistakePuzzle> {
   return buildMistakePuzzle({
     fen: FEN, playerMove: 'e1d2', playerMoveSan: 'Kd2', bestMove: 'h1h8', bestMoveSan: 'Rh8+', moves: 'h1h8',
     playerColor: 'white', sourceGameId: 'g-slip',
-    narration: { intro: INTRO, moveNarrations: [], outro: '', conceptHint: '' },
+    narration: { intro: INTRO, moveNarrations: [], conceptHint: '' },
   });
 }
 

@@ -100,7 +100,7 @@ describe('genuine tactics are still named (no over-correction)', () => {
     // Real knight fork of king + bishop, knight safe.
     ['5rk1/3R1pbp/4p1p1/4P3/2p2B2/P6P/1P3PP1/1Nn3K1 b - - 0 26', 'Ne2+', 'black', /forks the king on g1 and the bishop on f4/],
     // Clean knight win (audit fixture): Nxe5, not recapturable.
-    ['r1bqkbnr/pppp1ppp/8/4n3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1', 'Nxe5', 'white', /wins the knight on e5/],
+    ['r1bqkbnr/pppp1ppp/8/4n3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1', 'Nxe5', 'white', /^wins a knight$/],
     // Real pin: Bg4 pins the f5 queen to the c8 king.
     ['2k1r2r/ppn4p/2pp2p1/4pq2/PPP5/3P3P/2Q1BP2/R3K2R w - - 0 21', 'Bg4', 'white', /pins the queen on f5 to the king on c8/],
     // Mate.

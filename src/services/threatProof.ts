@@ -19,6 +19,8 @@ import { PIECE_NAMES } from '../types/tacticTypes';
 import { looseKey, plyOfFen } from './conceptKey';
 import { unmarked } from '../utils/sanMark';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { afterCaptureSan } from '../utils/captureWords';
+import { withArticle } from '../utils/andList';
 
 const COUNT = ['no', 'once', 'twice', 'three times', 'four times', 'five times'];
 const times = (n: number): string => COUNT[n] ?? `${n} times`;
@@ -63,20 +65,23 @@ export function threatProof(fen: string, student: 'w' | 'b', squares: readonly s
   const targetName = PIECE_NAMES[named.piece] ?? 'piece';
   const targetValue = CAPTURE_VALUE[named.piece] ?? 0;
   const cheaper = named.defenders > 0 && (CAPTURE_VALUE[cap.piece] ?? 0) < targetValue;
+  const netsTarget = (gave: string | null): string => afterCaptureSan({ kind: 'nets', captured: named.piece, free: false, gave }, 'verb');
   const net = !result && named.defenders > 0 && named.value > 0
     ? (cheaper
       // ROTATED on the threat itself (Learn tape 2026-10-28: four threats in a
       // game, one sentence each time). The same threat says the same words.
       ? rotateStem([
-        `${cap.san} wins your ${targetName} for their ${attackerName}, even after you take back`,
+        `${cap.san} ${netsTarget(attackerName)}, even after you take back`,
         `${cap.san} trades their ${attackerName} for your ${targetName}, and you come out behind even after you take back`,
         // Never "<capture> takes your X": the capture is already a verb, and
         // "hxg4 takes your bishop" was heard "H-pawn takes g4 takes your
-        // bishop" (prod Learn walk 2026-10-29).
-        `Taking back after ${cap.san} only wins their ${attackerName} — you lose your ${targetName}`,
+        // bishop" (prod Learn walk 2026-10-29) — nor "wins your X" after it
+        // (David 2026-10-30: "queen takes d8, takes the queen"). The SAN says
+        // the capture; what it nets follows (`captureWords`).
+        `After ${cap.san}, taking back only gets you ${withArticle(attackerName)} — you lose your ${targetName}`,
       ], stemKeyOf(`${them}|${cap.san}`))
       : named.value >= targetValue
-        ? `${cap.san} wins your ${targetName} outright — you cannot take back enough`
+        ? `${cap.san} ${netsTarget(null)} outright — you cannot take back enough`
         : `${cap.san} still wins material after you take back`)
     : null;
   // No second "cheaper piece" clause: "wins your bishop for their pawn, even

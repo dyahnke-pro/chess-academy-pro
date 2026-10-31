@@ -145,7 +145,6 @@ describe('mistake narration is true of the board', () => {
       // Pre-attempt lines describe the starting position.
       check(fens.intro, n.intro, p.id, 'intro');
       check(fens.intro, n.conceptHint, p.id, 'hint');
-      check(fens.intro, n.outro, p.id, 'outro');
       // Each played beat describes the board it was played from.
       n.moveNarrations.forEach((line, k) => {
         const fen = fens.perMove[k];
@@ -176,7 +175,7 @@ describe('mistake narration is true of the board', () => {
 
     for (const { p, params } of cases) {
       const n = narrated(params);
-      for (const line of [n.intro, ...n.moveNarrations, n.outro, n.conceptHint]) {
+      for (const line of [n.intro, ...n.moveNarrations, n.conceptHint]) {
         if (!line?.trim()) continue;
         for (const pool of POOLS) {
           if (pool.test(line)) violations.push(`${p.id}: ${pool} matched "${line}"`);
@@ -186,13 +185,5 @@ describe('mistake narration is true of the board', () => {
 
     expect(violations.slice(0, 10).join('\n')).toBe('');
     expect(violations).toHaveLength(0);
-  }, 300_000);
-
-  it('silence is reached, not papered over', () => {
-    // Proof the empty-beats-generic rule is live: across a corpus this wide,
-    // some positions must genuinely produce no outro. If EVERY case has one,
-    // a fallback pool has crept back in.
-    const emptyOutros = cases.filter(({ params }) => !narrated(params).outro.trim());
-    expect(emptyOutros.length).toBeGreaterThan(0);
   }, 300_000);
 });

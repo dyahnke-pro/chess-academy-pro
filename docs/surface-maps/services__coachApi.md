@@ -219,7 +219,7 @@
 - `src/components/Openings/MiddlegamePractice.tsx:267`
 - `src/hooks/useLiveCoach.needWire.test.tsx:15`
 - `src/hooks/useLiveCoach.test.tsx:13`
-- `src/hooks/useLiveCoach.ts:317`
+- `src/hooks/useLiveCoach.ts:322`
 - `src/hooks/usePhaseNarration.door.test.ts:36`
 - `src/services/coachApi.computedOnly.test.ts:10`
 - `src/services/groundedComputedOnly.test.ts:25`
@@ -229,7 +229,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:583`
-- `src/components/Coach/CoachTeachPage.tsx:4421`
+- `src/components/Coach/CoachTeachPage.tsx:4408`
 - `src/services/coachSessionRouter.ts:119`
 - `src/services/coachSettingsAction.ts:262`
 
@@ -278,9 +278,9 @@
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachApi.computedOnly.test.ts:20`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:373`
-- `src/services/coachFeatureService.ts:5918`
-- `src/services/coachFeatureService.ts:6077`
+- `src/services/coachFeatureService.ts:374`
+- `src/services/coachFeatureService.ts:5952`
+- `src/services/coachFeatureService.ts:6111`
 - `src/services/coachLaneWiring.test.ts:158`
 - `src/services/gameReviewService.ts:58`
 - `src/services/kidGameCoach.ts:220`

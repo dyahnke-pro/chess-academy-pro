@@ -106,7 +106,7 @@ describe('pickKeyTactic', () => {
     const line: PvPly[] = [{
       san: 'Nxe3', uci: 'g4e3', moverColor: 'black',
       fenBefore: '', fenAfter,
-      facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
+      facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, gaveBack: null, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
     }];
     const key = pickKeyTactic(line);
     expect(key?.type).toBe('fork');
@@ -122,7 +122,7 @@ describe('namedTacticClause', () => {
     const fenAfter = '1r2qb1k/3b2p1/3p1r2/ppp1nP1p/4P2P/P1P1nNQ1/1PBN3K/3R2R1 w - - 0 29';
     const clause = namedTacticClause([{
       san: 'Nxe3', uci: 'g4e3', moverColor: 'black', fenBefore: '', fenAfter,
-      facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
+      facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, gaveBack: null, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
     }]);
     expect(clause).toMatch(/^The point — knight on e3 forks/);
     expect(clause).toContain('d1');
@@ -131,7 +131,7 @@ describe('namedTacticClause', () => {
   it('returns null when the line lands no named tactic', () => {
     expect(namedTacticClause([{
       san: 'Be2', uci: 'f1e2', moverColor: 'white', fenBefore: '', fenAfter: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPBPPP/RNBQK1NR b KQkq - 0 1',
-      facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
+      facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, gaveBack: null, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
     }])).toBeNull();
   });
 });
@@ -173,7 +173,7 @@ describe('pickKeyTactic mate_threat downgrade (false-claim audit)', () => {
     const fenAfter = 'r5r1/8/8/2k5/8/7p/2P4P/7K w - - 0 1';
     const ply: PvPly = {
       san: 'Rga8', uci: 'g8a8', moverColor: 'black', fenBefore: '', fenAfter,
-      facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: 'mate_threat', materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
+      facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: 'mate_threat', materialGained: 0, gaveBack: null, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
     };
     const key = pickKeyTactic([ply]);
     expect(key?.type).toBe('mate_threat');
@@ -331,7 +331,7 @@ describe('a spoken move never reads as a clause where a noun belongs', () => {
   // for it would couple this gate to an unrelated test's shape.
   const quietPly = (san: string, mover: 'white' | 'black'): PvPly => ({
     san, uci: 'e5g4', moverColor: mover, fenBefore: '', fenAfter: '',
-    facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
+    facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, gaveBack: null, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
   });
   const base = {
     fen: 'x', studentColor: 'black' as const, bestMoveSan: 'Ng4+', bestMoveUci: 'e5g4',

@@ -3,7 +3,7 @@
 // names the records it cares about; the kind comes from `kind` or the text's
 // own `[tag]`, as Review's facets carry it — a fact with neither is a broken
 // fixture, never a guess.
-import { toCoachFact } from '../services/coachFact';
+import { LOCAL_THREAD, toCoachFact } from '../services/coachFact';
 import { facetTag, type FactKind } from '../services/reviewFacetRank';
 import { NO_PROOF } from '../services/proof';
 import type { DoorFact } from '../services/coachDecider';
@@ -19,7 +19,7 @@ export function doorFact(text: string, r: Records = {}): DoorFact {
   return toCoachFact({
     id: r.id ?? `test:${next++}`, kind, text, fen: r.fen ?? FEN,
     squares: r.squares ?? [], claims: r.claims ?? [], stakes: r.stakes ?? null,
-    proof: r.proof ?? NO_PROOF.description, seat: r.seat ?? 'student', namesStudentMove: false,
+    proof: r.proof ?? NO_PROOF.description, seat: r.seat ?? 'student', namesStudentMove: false, thread: LOCAL_THREAD,
     ...(r.skill ? { skill: r.skill } : {}), ...(r.hole !== undefined ? { hole: r.hole } : {}),
   });
 }
