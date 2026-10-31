@@ -16,7 +16,6 @@ import { lossBeyondBestAlternative } from './voluntaryLoss';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatPrevention } from './groundedAnswer';
 import { selectTeaching } from './teachingSelector';
 import { coldStudent, computeNeed, fenKey, type StudentNeedContext, type NeedVerdict } from './needScore';
-import type { StoryBeat } from './openingStory';
 import { loadStudentNeedContext } from './studentNeedLoader';
 import { layerStandings } from './teachingLayers';
 import { readConversion, type ConversionStep } from './conversionMethod';
@@ -59,7 +58,7 @@ import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
-import { readBoard, readBoardAll } from './boardComputers';
+import { BOARD_COMPUTERS, readBoard, readBoardAll } from './boardComputers';
 import { stripThink } from '../utils/thinkPause';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
@@ -108,7 +107,8 @@ import { mateDescription } from './matePatterns';
 import { isMinorAtHome } from './development';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
-import { facetTag, FACET_ROLE, FACET_STEP, type FacetTag } from './reviewFacetRank';
+import { facetTag, FACET_ROLE, type FacetTag } from './reviewFacetRank';
+import { stepOf } from './coachFact';
 import type { FactProof, Proof } from './proof';
 import { newPhraseMemory } from '../utils/phraseMemory';
 import { whyItEnded, idlePiece, quietDecider, exploreInvite, murkyRead, type EndRead, type GamePly } from './gameEndReads';
@@ -1304,23 +1304,12 @@ const REVIEW_OWNS_IDEA: ReadonlySet<IdeaKind> = new Set<IdeaKind>(['threat', 'ma
 const BOOK_JOB_MIN_GAMES = 20;
 /** A book move is main line at this share of its position's master games. */
 const MAIN_LINE_SHARE = 0.15;
-/** Every beat of the opening story is opening theory taught at its move —
- *  the `[opening]` facet (a TEACH role, deduped by its own claim key). Not
- *  `[plan-opening]`: that tag is a once-a-review development nag, and it would
- *  silence the key break after the character was said. A new beat fails to
- *  compile until it is placed here. */
 /** The description and teaching lanes whose reason formula speaks once a game
  *  (`reasonFormula`); the verdict lanes are per-move facts and repeat. */
 const FORMULA_ONCE: ReadonlySet<string> = new Set<FacetTag>([
   'point', 'judgement', 'delta', 'does', 'opp-target', 'defence-idea', 'trade-idea',
   'their-cost', 'their-read', 'rule', 'nugget', 'loose', 'bluff', 'plan-arc', 'timing',
 ]);
-
-const STORY_TAG: Record<StoryBeat, FacetTag> = {
-  fork: 'opening', identity: 'opening', 'branch-choice': 'opening', 'their-setup': 'opening',
-  'structure-cost': 'opening', 'structure-paid': 'opening', consequence: 'opening',
-  character: 'opening', 'key-break': 'opening', 'horizon-plan': 'opening',
-};
 
 /** The rule a `[rule]` facet states, from its say-once identity (`rule:<line
  *  id>` the first time, `rule-stem:<ply>:<line id>` after). Null for any other
@@ -2347,7 +2336,9 @@ function* reviewSegmentSteps(
           if (!storyAll && r.storyBeat !== 'identity') continue;
           const id = `hint:${r.key}`;
           if (hintsSaid.has(id) || facets.some((x) => facetIdentity.get(x) === id)) continue;
-          const raw = `[${r.storyBeat ? STORY_TAG[r.storyBeat] : 'opening'}] ${r.text}`;
+          // Each beat under its own kind (`openingStory.STORY_KIND`), placed by
+          // the one group table — no longer every beat filed as the name.
+          const raw = `[${r.kind ?? BOARD_COMPUTERS.openingStory.kind}] ${r.text}`;
           facets.push(raw);
           facetIdentity.set(raw, id);
           facetProofs.set(raw, r.proof);
@@ -2499,7 +2490,7 @@ function* reviewSegmentSteps(
         // weight to f4" was trivia behind it).
         const stepLeads = facets.filter((f) => {
           const tag = facetTag(f);
-          return !!tag && FACET_ROLE[tag] === 'teach' && (FACET_STEP[tag] === 'yours' || FACET_STEP[tag] === 'theirs');
+          return !!tag && FACET_ROLE[tag] === 'teach' && (stepOf(tag, 'student') === 'yours' || stepOf(tag, 'student') === 'theirs');
         });
         const leadSquares = new Set(stepLeads.flatMap((f) => [...(facetSquares.get(f) ?? [])]));
         const phrasesHere = new Map(thoughtPhrases);
@@ -2619,7 +2610,7 @@ function* reviewSegmentSteps(
         const prevStudent = i > 0 && moves[i - 1] ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null;
         for (const r of readBoardAll('planThread', { thread: planTrial, ply: m.ply, fenBefore: fenPair.fenBefore, fenAfter: fenPair.fenAfter, student: studentColorWB, studentPovCp: povCp, studentMove: prevStudent, holdPlayable: false })) {
           // Review has no think pause: the question and its answer run on.
-          const raw = `[plan-now] ${stripThink(r.text)}`;
+          const raw = `[${BOARD_COMPUTERS.planThread.kind}] ${stripThink(r.text)}`;
           facets.push(raw);
           facetIdentity.set(raw, r.key.startsWith('plan:stopped:') ? 'plan-thread:stop' : r.key.startsWith('plan:step:') ? 'plan-thread:step' : 'plan-thread:plan');
           facetProofs.set(raw, r.proof);
@@ -3084,7 +3075,7 @@ function* reviewSegmentSteps(
       // facts (the fundamental's how, the method beat, their habit and yours)
       // are held as the segment's tail and said once the line is in. A ply
       // whose only words are the habit says it now — nothing comes before.
-      const isHabit = (part: string): boolean => { const tag = facetTag(part); return tag !== null && FACET_STEP[tag] === 'habit'; };
+      const isHabit = (part: string): boolean => { const tag = facetTag(part); return tag !== null && stepOf(tag, 'student') === 'habit'; };
       const bodyNarration = speakDoor(doorFacts.filter((_, k) => !isHabit(uncappedParts[k])));
       const habitNarration = speakDoor(doorFacts.filter((_, k) => isHabit(uncappedParts[k])));
       const doorNarration = bodyNarration ?? habitNarration;

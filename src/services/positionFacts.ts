@@ -60,7 +60,7 @@ import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDan
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
 import { planAimKey, structurePlanFact } from './nextPlans';
-import { readBoard, type BoardRead } from './boardComputers';
+import { BOARD_COMPUTERS, readBoard, type BoardRead, type LiveComputer } from './boardComputers';
 import { detectTactics } from './tacticsDetector';
 import { stepPlan, EMPTY_PLAN_STATE, planChangeSentence } from './planMemory';
 import { matchClauseKind, matchTacticPattern, matchTag, boostFor, type WeaknessSignal } from './weaknessSignal';
@@ -354,7 +354,11 @@ export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-c
   | 'equivalence' | 'capture-choice' | 'kick' | 'plan-race' | 'timing'
   // Computers batch 2, from the same one producer: reading their move, testing
   // their prevention, a known attacking structure.
-  | 'their-read' | 'prevent-test' | 'attack-pattern';
+  | 'their-read' | 'prevent-test' | 'attack-pattern'
+  // The registry's own kinds for the book move, the position's memory and the
+  // priority (WO-STORY-MATRIX-01 P1-4): the live read no longer relabels a
+  // registry read — it speaks the computer's kind (`BOARD_COMPUTERS[id].kind`).
+  | 'opening' | 'last-here' | 'priority';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -1231,8 +1235,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // move speaks it only where the move is earned (as the depth does).
   const registryClauses: ClauseItem[] = [];
   if (input.boardComputers === 'composer' && studentIsMoving) {
-    const push = (kind: ClauseKind, rank: number, r: BoardRead | null): void => {
+    // Each read under its computer's own kind (`BOARD_COMPUTERS[id].kind`),
+    // the kind Review and Learn speak it under too (WO-STORY-MATRIX-01 P1-4).
+    const push = (id: LiveComputer, rank: number, r: BoardRead | null): void => {
       if (!r || said?.has(r.key)) return;
+      const kind: ClauseKind = BOARD_COMPUTERS[id].kind;
       if (r.namesMove && !input.namesBestMove) {
         // The held idea keeps its own proof, squares and line (OS-1 root cause
         // 1) — and IS the read's claim, the move withheld: one key.
@@ -1242,27 +1249,27 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind, rank, text: r.text, squares: [...r.squares], proof: r.proof, claim: r.key, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.lines ? { lines: r.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });
     };
     try {
-      push('tactic', 84, readBoard('trapped', { fen, student: studentColor }));
-      push('tactic', 82, readBoard('queenGrabTrap', { fen }));
-      push('tactic', 80, readBoard('pinBreakOwn', { fen, student: studentColor }));
+      push('trapped', 84, readBoard('trapped', { fen, student: studentColor }));
+      push('queenGrabTrap', 82, readBoard('queenGrabTrap', { fen }));
+      push('pinBreakOwn', 80, readBoard('pinBreakOwn', { fen, student: studentColor }));
       for (const t of detectTactics(fen).tactics) {
-        if (t.type === 'pin' && t.beneficiary === studentColor && t.involvedSquares[1]) push('tactic', 80, readBoard('pinBreakTheirs', { fen, student: studentColor, pinned: t.involvedSquares[1] }));
+        if (t.type === 'pin' && t.beneficiary === studentColor && t.involvedSquares[1]) push('pinBreakTheirs', 80, readBoard('pinBreakTheirs', { fen, student: studentColor, pinned: t.involvedSquares[1] }));
       }
       const first = input.analysis.topLines.map((l) => l.moves[0]).filter((m): m is string => !!m);
-      push('timing', 55, readBoard('prophylaxis', { fen, engineFirstMoves: first }));
+      push('prophylaxis', 55, readBoard('prophylaxis', { fen, engineFirstMoves: first }));
       // The priority (unified with Learn, 2026-10-17).
       const bestHere = input.analysis.topLines[0]?.moves?.[0];
-      if (bestHere) push('method', 28, readBoard('priorityFirst', { fen, student: studentColor, bestUci: bestHere }));
+      if (bestHere) push('priorityFirst', 28, readBoard('priorityFirst', { fen, student: studentColor, bestUci: bestHere }));
       const order = readBoard('moveOrder', { fen, pv: input.analysis.topLines[0]?.moves ?? [] });
-      if (order && input.namesBestMove) push('timing', 55, order);
-      if (input.opponentLastMove) push('their-read', 75, readBoard('obligationLifted', { fenBefore: input.opponentLastMove.fenBefore, fenAfter: fen, student: studentColor }));
-      if (input.history?.length) push('rule', 40, readBoard('bookMove', { history: input.history, student: studentColor }));
+      if (order && input.namesBestMove) push('moveOrder', 55, order);
+      if (input.opponentLastMove) push('obligationLifted', 75, readBoard('obligationLifted', { fenBefore: input.opponentLastMove.fenBefore, fenAfter: fen, student: studentColor }));
+      if (input.history?.length) push('bookMove', 40, readBoard('bookMove', { history: input.history, student: studentColor }));
       const own = input.lastMove;
       // The count, only when the student's last move lost it.
-      if (own) push('method', 30, readBoard('countMethod', { fenBefore: own.fenBefore, playedSan: own.san, student: studentColor, costCp: own.cpLoss }));
-      if (own && input.opponentLastMove) push('their-read', 60, readBoard('tiedDefender', { fenBefore: own.fenBefore, fenAfterMove: input.opponentLastMove.fenBefore, fenAfterReply: fen, student: studentColor }));
+      if (own) push('countMethod', 30, readBoard('countMethod', { fenBefore: own.fenBefore, playedSan: own.san, student: studentColor, costCp: own.cpLoss }));
+      if (own && input.opponentLastMove) push('tiedDefender', 60, readBoard('tiedDefender', { fenBefore: own.fenBefore, fenAfterMove: input.opponentLastMove.fenBefore, fenAfterReply: fen, student: studentColor }));
       const rows = input.studentNeedContext?.bookDepartures ?? [];
-      if (own && rows.length) push('rule', 70, readBoard('lastTimeHere', { fenBefore: own.fenBefore, playedSan: own.san, rows, currentGameId: null }));
+      if (own && rows.length) push('lastTimeHere', 70, readBoard('lastTimeHere', { fenBefore: own.fenBefore, playedSan: own.san, rows, currentGameId: null }));
     } catch { /* a read is a bonus, never a blocker */ }
   }
   const composed = [...composedBase, ...depth, ...ideaClauses, ...registryClauses, ...askedPlanClauses];

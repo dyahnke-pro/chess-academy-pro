@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2081 lines · 15 exports · 39 importers · 44 tests · 3 audits**
+**2088 lines · 15 exports · 40 importers · 44 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,6 +23,7 @@
 - `src/hooks/useLiveCoach.ts`
 - `src/hooks/usePhaseNarration.door.test.ts`
 - `src/hooks/usePhaseNarration.ts`
+- `src/services/boardComputers.ts`
 - `src/services/chatBoardRead.test.ts`
 - `src/services/chatBoardRead.ts`
 - `src/services/claimChecker.measure.test.ts`
@@ -126,7 +127,7 @@
 - `src/services/computerAccuracy.audit.test.ts:112`
 - `src/services/criticalMoment.frame.test.ts:24`
 - `src/services/criticalMoment.oneCount.test.ts:25`
-- `src/services/danyaBench.measure.test.ts:411`
+- `src/services/danyaBench.measure.test.ts:412`
 - `src/services/deliberation.ruleOutOnce.test.ts:86`
 - `src/services/deliberation.ruleOutOnce.test.ts:89`
 - `src/services/deliberation.ruleOutOnce.test.ts:98`

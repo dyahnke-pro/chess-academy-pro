@@ -51,7 +51,18 @@ import type { IdeaKind } from './ideaKind';
 /** The piece a SAN names by its first letter (a pawn move names none). */
 const SAN_PIECE: Record<string, string> = { N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king' };
 
+/** WHICH ASPECT IT IS — one kind per aspect `moveAspects` reads, named by the
+ *  computer that reads it, so the one fact shape knows a fact's kind from its
+ *  producer, never from its words (WO-STORY-MATRIX-01 P1-3, `coachFact.ts`). */
+export type AspectKind =
+  | 'aspect-threat' | 'aspect-wins' | 'aspect-trade' | 'aspect-least-loss' | 'aspect-tactic-lands'
+  | 'aspect-tactic-set-up' | 'aspect-check' | 'aspect-promotes' | 'aspect-opens-king' | 'aspect-outpost'
+  | 'aspect-passer' | 'aspect-passer-handed' | 'aspect-opens-file' | 'aspect-their-weakness'
+  | 'aspect-own-weakness' | 'aspect-own-king-cover';
+
 export interface Aspect {
+  /** Which aspect it is (REQUIRED: a new aspect fails to compile until named). */
+  kind: AspectKind;
   /** Seat-agnostic clause fragment ("winning the knight", "threatening Nxc7 — a fork"). */
   text: string;
   /** The same fact led by a verb, for a line of its own ("trades the bishop for the knight") —
@@ -295,7 +306,7 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
   const threat = facts.isCheck ? null : detectNewThreat(fenBefore, fenAfter, moverWB);
   if (threat) {
     const kw = threat.kind === 'mate' ? 96 : 88;
-    aspects.push({ text: `threatening ${cleanSan(threat.san)} — ${threat.detail}`, verb: `threatens ${cleanSan(threat.san)} — ${threat.detail}`, idea: threat.kind === 'mate' ? 'mate' : 'threat', squares: [threatSquare(threat.san)].filter((x): x is string => !!x), weight: kw, keystone: true });
+    aspects.push({ kind: 'aspect-threat', text: `threatening ${cleanSan(threat.san)} — ${threat.detail}`, verb: `threatens ${cleanSan(threat.san)} — ${threat.detail}`, idea: threat.kind === 'mate' ? 'mate' : 'threat', squares: [threatSquare(threat.san)].filter((x): x is string => !!x), weight: kw, keystone: true });
   }
 
   const recapture = !!mv.captured && prev.square === mv.to && prev.capturedValue > 0;
@@ -318,6 +329,7 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
     const nets = { kind: 'nets' as const, captured: mv.captured, free, gave };
     const trade = back ? ` — if ${back.reply}, ${back.again}` : '';
     aspects.push({
+      kind: 'aspect-wins',
       text: `${afterCaptureSan(nets, 'participle')}${trade}`,
       verb: `${afterCaptureSan(nets, 'verb')}${trade}`,
       idea: 'win-material', squares: [mv.to], weight: 90, keystone: true,
@@ -340,7 +352,7 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
     // 2026-10-28: "you recapture with the b-pawn … for the bishop pair"). A
     // plain trade or take-back only restates the capture.
     const pair = !again && gainedBishopPair(fenBefore, san);
-    aspects.push({ text: pair ? `${text} and winning the bishop pair` : text, verb: pair ? `${verb} and wins the bishop pair` : verb, idea: recapture ? 'recapture' : 'trade', squares: [mv.to], weight: 60, keystone: true, restates: !again && !pair });
+    aspects.push({ kind: 'aspect-trade', text: pair ? `${text} and winning the bishop pair` : text, verb: pair ? `${verb} and wins the bishop pair` : verb, idea: recapture ? 'recapture' : 'trade', squares: [mv.to], weight: 60, keystone: true, restates: !again && !pair });
   }
 
   // 2c. A capture that LOSES material and is not a take-back: when every
@@ -351,35 +363,35 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
   //     or the costly move's own reason), never here.
   if (mv.captured && facts.materialGained <= -1 && !recapture && (lossBeyondBestAlternative(fenBefore, san) ?? 1) < 1) {
     const gives = { kind: 'gives-up' as const, piece: mv.piece, captured: mv.captured };
-    aspects.push({ text: `${afterCaptureSan(gives, 'participle')} — every other move loses more`, verb: `${afterCaptureSan(gives, 'verb')} — every other move loses more`, idea: 'trade', squares: [mv.to], weight: 80, keystone: true });
+    aspects.push({ kind: 'aspect-least-loss', text: `${afterCaptureSan(gives, 'participle')} — every other move loses more`, verb: `${afterCaptureSan(gives, 'verb')} — every other move loses more`, idea: 'trade', squares: [mv.to], weight: 80, keystone: true });
   }
 
   // 3. A tactic LANDED (fork / pin / skewer) — when it isn't already the threat.
   if (facts.tacticLanded && !threat) {
-    aspects.push({ text: `landing ${withArticle(tacticWord(facts.tacticLanded))}`, verb: `lands ${withArticle(tacticWord(facts.tacticLanded))}`, idea: 'tactic', squares: [], weight: 84, keystone: true });
+    aspects.push({ kind: 'aspect-tactic-lands', text: `landing ${withArticle(tacticWord(facts.tacticLanded))}`, verb: `lands ${withArticle(tacticWord(facts.tacticLanded))}`, idea: 'tactic', squares: [], weight: 84, keystone: true });
   }
   // 3b. Battery / discovery / overload the fork/pin/skewer set doesn't carry.
   const namedTactic = newNamedTactic(fenBefore, fenAfter, toSquare, ['battery', 'discovery', 'overload']);
-  if (namedTactic) aspects.push({ text: `setting up ${withArticle(namedTactic)}`, verb: `sets up ${withArticle(namedTactic)}`, idea: 'tactic', squares: [], weight: 66 });
+  if (namedTactic) aspects.push({ kind: 'aspect-tactic-set-up', text: `setting up ${withArticle(namedTactic)}`, verb: `sets up ${withArticle(namedTactic)}`, idea: 'tactic', squares: [], weight: 66 });
 
   // 4. Check (a beat of its own when not mate/threat-carried).
-  if (facts.isCheck) aspects.push({ text: 'checking the king, forcing a reply', verb: 'checks the king, forcing a reply', idea: 'check', squares: [], weight: 72, keystone: true, restates: true });
+  if (facts.isCheck) aspects.push({ kind: 'aspect-check', text: 'checking the king, forcing a reply', verb: 'checks the king, forcing a reply', idea: 'check', squares: [], weight: 72, keystone: true, restates: true });
 
   // 5. Promotion.
-  if (facts.promotion) aspects.push({ text: `promoting to ${withArticle(facts.promotion)}`, verb: `promotes to ${withArticle(facts.promotion)}`, idea: 'promote', squares: [mv.to], weight: 86, keystone: true });
+  if (facts.promotion) aspects.push({ kind: 'aspect-promotes', text: `promoting to ${withArticle(facts.promotion)}`, verb: `promotes to ${withArticle(facts.promotion)}`, idea: 'promote', squares: [mv.to], weight: 86, keystone: true });
 
   // 6. Prising open the enemy king's cover (an attacking ramification).
-  if (facts.shieldLost > 0) aspects.push({ text: `prising open ${enemyPoss} king's cover`, verb: `prises open ${enemyPoss} king's cover`, idea: 'attack-king', squares: [], weight: 68 });
+  if (facts.shieldLost > 0) aspects.push({ kind: 'aspect-opens-king', text: `prising open ${enemyPoss} king's cover`, verb: `prises open ${enemyPoss} king's cover`, idea: 'attack-king', squares: [], weight: 68 });
 
   // 7. Structure the move MAKES for the mover.
-  if (facts.outpostGained) aspects.push({ text: facts.outpostPiece && facts.outpostLanded === false
+  if (facts.outpostGained) aspects.push({ kind: 'aspect-outpost', text: facts.outpostPiece && facts.outpostLanded === false
     ? `making ${facts.outpostGained} an outpost for the ${facts.outpostPiece} that no pawn can challenge`
     : `planting an outpost on ${facts.outpostGained} that no pawn can challenge`, verb: facts.outpostPiece && facts.outpostLanded === false
     ? `makes ${facts.outpostGained} an outpost for the ${facts.outpostPiece} that no pawn can challenge`
     : `plants an outpost on ${facts.outpostGained} that no pawn can challenge`, idea: 'outpost', squares: [facts.outpostGained], weight: 52 });
-  if (facts.newPassedPawns.length > 0) aspects.push({ text: `creating a passed pawn on ${facts.newPassedPawns[0]}`, verb: `creates a passed pawn on ${facts.newPassedPawns[0]}`, idea: 'passed-pawn', squares: [facts.newPassedPawns[0]], weight: 54 });
-  if (facts.passedPawnsHanded.length > 0) aspects.push({ text: `handing ${moverIsStudent === undefined ? 'the other side' : enemyObj} a passed pawn on ${facts.passedPawnsHanded[0]}`, verb: `hands ${moverIsStudent === undefined ? 'the other side' : enemyObj} a passed pawn on ${facts.passedPawnsHanded[0]}`, idea: 'weakness', squares: [facts.passedPawnsHanded[0]], weight: 54 });
-  if (facts.newOpenFiles.length > 0) aspects.push({ text: `opening the ${facts.newOpenFiles[0]}-file`, verb: `opens the ${facts.newOpenFiles[0]}-file`, idea: 'file', squares: [], weight: 44 });
+  if (facts.newPassedPawns.length > 0) aspects.push({ kind: 'aspect-passer', text: `creating a passed pawn on ${facts.newPassedPawns[0]}`, verb: `creates a passed pawn on ${facts.newPassedPawns[0]}`, idea: 'passed-pawn', squares: [facts.newPassedPawns[0]], weight: 54 });
+  if (facts.passedPawnsHanded.length > 0) aspects.push({ kind: 'aspect-passer-handed', text: `handing ${moverIsStudent === undefined ? 'the other side' : enemyObj} a passed pawn on ${facts.passedPawnsHanded[0]}`, verb: `hands ${moverIsStudent === undefined ? 'the other side' : enemyObj} a passed pawn on ${facts.passedPawnsHanded[0]}`, idea: 'weakness', squares: [facts.passedPawnsHanded[0]], weight: 54 });
+  if (facts.newOpenFiles.length > 0) aspects.push({ kind: 'aspect-opens-file', text: `opening the ${facts.newOpenFiles[0]}-file`, verb: `opens the ${facts.newOpenFiles[0]}-file`, idea: 'file', squares: [], weight: 44 });
 
   // 8. Structural damage the move INFLICTS on the opponent vs CONCEDES in its own
   //    camp — both are real ramifications; the self-inflicted one is a downside.
@@ -393,13 +405,13 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
     try { return new Chess(fenAfter).attackers(captureSquare, moverWB === 'w' ? 'b' : 'w').length > 0; } catch { return false; }
   })();
   const enemyWeak = midExchange ? null : newPawnWeakness(before, after, moverWB === 'w' ? 'b' : 'w');
-  if (enemyWeak) aspects.push({ text: `leaving ${enemyObj} with ${enemyWeak}`, verb: `leaves ${enemyObj} with ${enemyWeak}`, idea: 'weakness', squares: [], weight: 50 });
+  if (enemyWeak) aspects.push({ kind: 'aspect-their-weakness', text: `leaving ${enemyObj} with ${enemyWeak}`, verb: `leaves ${enemyObj} with ${enemyWeak}`, idea: 'weakness', squares: [], weight: 50 });
   const ownWeak = midExchange ? null : newPawnWeakness(before, after, moverWB);
-  if (ownWeak) aspects.push({ text: `but conceding ${ownWeak} of ${ownPoss} own`, verb: `concedes ${ownWeak} of ${ownPoss} own`, idea: 'weakness', squares: [], weight: 47 });
+  if (ownWeak) aspects.push({ kind: 'aspect-own-weakness', text: `but conceding ${ownWeak} of ${ownPoss} own`, verb: `concedes ${ownWeak} of ${ownPoss} own`, idea: 'weakness', squares: [], weight: 47 });
 
   // 9. Loosening the mover's OWN king cover (a downside worth flagging).
   const ownShieldLoss = shieldLoss(fenBefore, fenAfter, moverWB);
-  if (ownShieldLoss > 0) aspects.push({ text: `loosening ${ownPoss} own king's cover`, verb: `loosens ${ownPoss} own king's cover`, idea: 'king-safety', squares: [], weight: 58 });
+  if (ownShieldLoss > 0) aspects.push({ kind: 'aspect-own-king-cover', text: `loosening ${ownPoss} own king's cover`, verb: `loosens ${ownPoss} own king's cover`, idea: 'king-safety', squares: [], weight: 58 });
   return { mate: false, aspects, threat };
 }
 
@@ -422,7 +434,10 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
     const subj = moverIsStudent === true ? 'You deliver' : moverIsStudent === false ? 'They deliver' : 'This delivers';
     return `${subj} checkmate — the king has no reply. Game over.`;
   }
-  const aspects: Aspect[] = [...read.aspects];
+  // The briefing's own additions below (the deep fact, the trip, the
+  // positional fallback) are not aspects `moveAspects` reads, so they carry
+  // no aspect kind.
+  const aspects: Array<Omit<Aspect, 'kind'>> = [...read.aspects];
   const threat = read.threat;
 
   // 9b. THE DEEP FACT (the three facts, WO-DECIDER-02): what this move made
