@@ -4,20 +4,20 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3199 lines · 15 exports · 110 importers · 109 tests · 31 audits**
+**3194 lines · 15 exports · 110 importers · 109 tests · 30 audits**
 
 ## Locked rules that govern this surface
 
-- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:735) — names `CLOUD_VOICES`, `voiceService`
-- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:1200) — names `voiceService`
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1575) — names `voiceService`
-- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1998) — names `sanitizeForTTS`
-- **Golden rules (the most important — read these every time)** (CLAUDE.md:2654) — names `voiceService`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3762) — names `voiceService`
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3939) — names `voiceService`
-- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:4244) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:5918) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6783) — names `voiceService`
+- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:736) — names `CLOUD_VOICES`, `voiceService`
+- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:1201) — names `voiceService`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1592) — names `voiceService`
+- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:2015) — names `sanitizeForTTS`
+- **Golden rules (the most important — read these every time)** (CLAUDE.md:2671) — names `voiceService`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3788) — names `voiceService`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3965) — names `voiceService`
+- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:4270) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:5949) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6823) — names `voiceService`
 
 ## Who calls in
 
@@ -169,8 +169,8 @@
 - `src/services/voiceService.test.ts:327`
 - `src/services/voiceService.test.ts:332`
 
-### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3658`
+### `resolvePollyVoice` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getTtsUrl` (function) — 4 call sites
 - `src/components/Settings/VoiceSettingsPanel.tsx:120`
@@ -219,7 +219,7 @@
 - `src/utils/descriptiveNotation.test.ts:32`
 
 ### `sanitizeForTTS` (function) — 64 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:770`
+- `src/components/Openings/OpeningDetailPage.tsx:697`
 - `src/components/Settings/VoiceSettingsPanel.tsx:119`
 - `src/components/Settings/VoiceSettingsPanel.tsx:161`
 - `src/hooks/useProseReader.ts:66`
@@ -438,7 +438,6 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-read-position-prod.mjs`
 - `scripts/audit-review-noise-walk.mjs`
 - `scripts/audit-review-overhaul-prod.mjs`
-- `scripts/audit-rolodex-deep-links.mjs`
 - `scripts/audit-settings-behavior.mjs`
 - `scripts/audit-teach-corpus-spoken-prod.mjs`
 - `scripts/audit-teach-on-topic-prod.mjs`

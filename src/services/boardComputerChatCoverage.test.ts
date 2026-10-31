@@ -72,7 +72,7 @@ const NOT_A_CHAT_LANE = new Set<string>([
   // consumed through an existing lane, not a Q&A lane of its own.
   'bishopBlockingPawns', 'bishopHemmedByOwnPawns',
   // narration / reading-drill renderers + graders (not typed Q&A)
-  'formatReadingFacts', 'samplePositionsFromGame', 'findMistakePositions',
+  'samplePositionsFromGame', 'findMistakePositions',
   'buildReadingQuestions', 'readingHint', 'gradeReadingAnswerDeterministic',
   // the reading drill's answer-SHAPE check (2026-10-03): says what form an
   // answer to this question takes ("White by 2"), states no board fact

@@ -16,7 +16,7 @@
 import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
-import { conceptForSolution } from './conceptEngine';
+import { conceptForLine } from './conceptEngine';
 
 const RUN = process.env.RUN_CONCEPT_COVERAGE === '1';
 
@@ -54,7 +54,9 @@ describe('concept coverage report (env-gated)', () => {
 
     for (const p of sample) {
       if (p.themes.some((t) => oldThemeMap.has(t))) oldCovered += 1;
-      const concepts = conceptForSolution(p.fen, p.moves.trim().split(/\s+/));
+      // The solver is opposite the FEN's turn (Lichess: the first move is the
+      // opponent's setup move).
+      const concepts = conceptForLine({ fen: p.fen, uci: p.moves.trim().split(/\s+/), studentColor: p.fen.split(' ')[1] === 'w' ? 'b' : 'w' });
       if (concepts.length === 0) { silent += 1; continue; }
       leadDist[concepts[0].name] = (leadDist[concepts[0].name] ?? 0) + 1;
       const tset = new Set(p.themes);

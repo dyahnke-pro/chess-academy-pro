@@ -2906,9 +2906,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           // play_move / take_back_move / set_board_position — the
           // timeline is the source of truth." But the surface used to
           // expose those callbacks anyway, wired to handleBoardMove +
-          // navigateMove + setWhatIfFen, each of which can fire
-          // Stockfish (5s timeout) and generateMoveCommentary
-          // (maxTokens=1500). At maxToolRoundTrips=6 a single chat
+          // navigateMove + setWhatIfFen, each of which could fire
+          // Stockfish (5s timeout) and the LLM move commentary since
+          // deleted (maxTokens=1500). At maxToolRoundTrips=6 a single chat
           // reply could chain up to ~12 Stockfish + 6 LLM calls. If
           // the brain ever forgets the directive (or a future prompt
           // regresses), the surface itself enforces the rule. The

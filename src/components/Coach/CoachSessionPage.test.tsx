@@ -199,6 +199,17 @@ describe('CoachSessionPage — explain-position', () => {
   });
 });
 
+describe('CoachSessionPage — narrate (legacy link)', () => {
+  // The badge-labelled replay is deleted (WO-STORY-MATRIX-01 P1-1,
+  // 2026-10-30): an old /coach/session/narrate link opens the Review walk.
+  it('redirects to the Review walk for that game', async () => {
+    renderAt('/coach/session/narrate?gameId=game-123');
+    await waitFor(() => {
+      expect(screen.getByTestId('coach-play-redirect-path').textContent).toBe('/coach/play?review=game-123');
+    });
+  });
+});
+
 describe('CoachSessionPage — play-against', () => {
   beforeEach(() => {
     vi.spyOn(voiceService, 'speak').mockResolvedValue(undefined);

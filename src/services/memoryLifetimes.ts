@@ -66,7 +66,6 @@ export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   'src/components/Coach/CoachTeachPage.tsx::announcedPliesRef': { lifetime: 'per-game', what: 'say-once ledger' },
   'src/components/Coach/CoachTeachPage.tsx::announcedBoardsRef': { lifetime: 'per-game', what: 'say-once ledger' },
   'src/components/Coach/CoachTeachPage.tsx::planToldBoardsRef': { lifetime: 'per-game', what: 'say-once ledger' },
-  'src/components/Coach/CoachTeachPage.tsx::drilledMotifsRef': { lifetime: 'persisted', what: 'motifs drilled shut, read from it', via: 'mistakePuzzles' },
   'src/components/Coach/CoachTeachPage.tsx::liveGradesRef': { lifetime: 'per-game', what: 'grades, saved on db.games at game end' },
   'src/components/Coach/CoachTeachPage.tsx::steeredPliesRef': { lifetime: 'per-game', what: 'plies the coach steered a focus question into, saved on db.games (steeredPlies) at game end' },
   'src/components/Coach/CoachTeachPage.tsx::serialAtPlyRef': { lifetime: 'per-game', what: 'the graded student move at each ply (its serial, board and move), so a takeback marks the exact move' },

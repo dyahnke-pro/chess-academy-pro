@@ -25,16 +25,6 @@ export function sideToMove(fen: string): Side {
   return fen.split(' ')[1] === 'b' ? 'black' : 'white';
 }
 
-/**
- * The side that SOLVES a Lichess-style puzzle. Lichess FENs sit one ply before
- * the opponent's setup move (`solutionUci[0]`), so the solver is the side OPPOSITE
- * the FEN's side-to-move. This is the side the puzzle's resource belongs to — the
- * one whose concept we teach and frame as "you".
- */
-export function solvingSide(fen: string): Side {
-  return sideToMove(fen) === 'white' ? 'black' : 'white';
-}
-
 export type ConceptSource = 'tactic' | 'matchup' | 'technique' | 'positional' | 'mate';
 
 export interface ComputedConcept {
@@ -78,35 +68,6 @@ export interface ComputedConcept {
 
 /** Non-king material balance, white minus black, in pawns — the shared reader. */
 export { materialBalance };
-
-/**
- * The stronger side by raw material, or 'balanced' within ~1 pawn. Used to frame
- * an endgame-technique concept toward the side trying to convert. A tie in
- * material (opposition, zugzwang, fortress) returns 'balanced' — those concepts
- * are framed by side-to-move / the solution instead.
- */
-export function strongerSide(fen: string): Side | 'balanced' {
-  const bal = materialBalance(fen);
-  if (bal >= 1) return 'white';
-  if (bal <= -1) return 'black';
-  return 'balanced';
-}
-
-/**
- * The side a concept should be FRAMED for ("you" in narration). On a puzzle it's
- * the solver; when a solution is absent (live board) it's the stronger side, and
- * when material is level it's the side to move (whoever is about to act on the
- * idea). Callers on the student's own board pass `studentSide` to override.
- */
-export function framingSide(
-  fen: string,
-  opts: { hasSolution?: boolean; studentSide?: Side } = {},
-): Side {
-  if (opts.studentSide) return opts.studentSide;
-  if (opts.hasSolution) return solvingSide(fen);
-  const stronger = strongerSide(fen);
-  return stronger === 'balanced' ? sideToMove(fen) : stronger;
-}
 
 // ─── CONCEPT RENDERER ───────────────────────────────────────────────────────
 //
@@ -810,21 +771,6 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
 
   out.sort((a, b) => b.importance - a.importance);
   return dropGenericLead(out).slice(0, input.max ?? 3);
-}
-
-interface ConceptForSolutionOptions { studentSide?: Side; max?: number; }
-
-/** The concept behind a PUZZLE solution — `conceptForLine` over the verified
- *  solution (the solver is the side opposite the FEN's turn: Lichess convention). */
-export function conceptForSolution(
-  fen: string,
-  solutionUci: string[],
-  opts: ConceptForSolutionOptions = {},
-): ComputedConcept[] {
-  const studentColor: 'w' | 'b' = opts.studentSide
-    ? (opts.studentSide === 'white' ? 'w' : 'b')
-    : (fen.split(' ')[1] === 'w' ? 'b' : 'w');
-  return conceptForLine({ fen, uci: solutionUci, studentColor, max: opts.max });
 }
 
 // ─── POSITIONAL concept source (§E) ──────────────────────────────────────────

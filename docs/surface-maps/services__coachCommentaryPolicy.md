@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**84 lines · 2 exports · 2 importers · 1 tests · 0 audits**
+**33 lines · 1 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,29 +18,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `resolveVerbosity` (function) — 11 call sites
-- `src/components/Coach/CoachGamePage.tsx:2909`
-- `src/components/Coach/CoachGamePage.tsx:3353`
-- `src/components/Settings/SettingsPage.tsx:948`
-- `src/services/coachCommentaryPolicy.test.ts:10`
+- `src/components/Coach/CoachGamePage.tsx:2791`
+- `src/components/Coach/CoachGamePage.tsx:3233`
+- `src/components/Settings/SettingsPage.tsx:994`
+- `src/services/coachCommentaryPolicy.test.ts:9`
+- `src/services/coachCommentaryPolicy.test.ts:13`
 - `src/services/coachCommentaryPolicy.test.ts:14`
-- `src/services/coachCommentaryPolicy.test.ts:15`
-- `src/services/coachCommentaryPolicy.test.ts:21`
-- `src/services/coachCommentaryPolicy.test.ts:25`
-- `src/services/coachCommentaryPolicy.test.ts:32`
-- `src/services/coachCommentaryPolicy.test.ts:37`
-- `src/services/coachCommentaryPolicy.test.ts:42`
-
-### `shouldCallLlmForMove` (function) — 10 call sites
-- `src/components/Coach/CoachGamePage.tsx:3460`
-- `src/services/coachCommentaryPolicy.test.ts:59`
-- `src/services/coachCommentaryPolicy.test.ts:65`
-- `src/services/coachCommentaryPolicy.test.ts:70`
-- `src/services/coachCommentaryPolicy.test.ts:71`
-- `src/services/coachCommentaryPolicy.test.ts:72`
-- `src/services/coachCommentaryPolicy.test.ts:73`
-- `src/services/coachCommentaryPolicy.test.ts:77`
-- `src/services/coachCommentaryPolicy.test.ts:78`
-- `src/services/coachCommentaryPolicy.test.ts:79`
+- `src/services/coachCommentaryPolicy.test.ts:20`
+- `src/services/coachCommentaryPolicy.test.ts:24`
+- `src/services/coachCommentaryPolicy.test.ts:31`
+- `src/services/coachCommentaryPolicy.test.ts:36`
+- `src/services/coachCommentaryPolicy.test.ts:41`
 
 ## Tests
 

@@ -18,7 +18,6 @@ import { loadFullCorpus } from '../test/loadFullCorpus';
 import { loadSpokenBake } from '../test/loadSpokenBake';
 import { teachingSourceForBoard, spokenBeatText, generalizedTeaching, tacticNoteForPuzzleThemes } from './danyaTeachingService';
 import { buildPlayCommentary } from './playCommentary';
-import { formatReadingFacts } from './positionReadingService';
 import { gradeNarrationText } from './coachAnswerGates';
 import { falseConfigurationClaim } from './configurationClaims';
 import { buildVoicePackage } from './voicePackage';
@@ -88,8 +87,6 @@ describe('coach surface scorecard', () => {
 
   it('scores narration quality, speed and accuracy across every surface', () => {
     const lines: Line[] = [];
-    let readingBlockLeaks = 0;
-    const readingBlockMs: number[] = [];
     const push = (surface: string, text: string | null | undefined, fen: string, ms: number): void => {
       if (text && text.trim()) lines.push({ surface, text: text.trim(), fen, ms });
     };
@@ -138,19 +135,6 @@ describe('coach surface scorecard', () => {
           push('play:commentary', pc ? buildVoicePackage([{ kind: 'computed', text: pc.spoken, fen }]).spoken : '', fen, performance.now() - t0);
         }
 
-        // ── READ THIS POSITION / the computed board read ──
-        // `formatReadingFacts` is a PROMPT BLOCK, not narration — it opens
-        // "READING FACTS (GROUND TRUTH …)" and is model input. Scoring it as
-        // speech marked all 61 lines as quality failures and told us nothing.
-        // What it IS worth asserting is the speakable-facts law: this string
-        // must never reach the voice. Measured as a leak check, not as prose.
-        t0 = performance.now();
-        const readBlock = formatReadingFacts(fen, game.student);
-        readingBlockLeaks += /READING FACTS|GROUND TRUTH|VOICE th/i.test(buildVoicePackage(
-          readBlock ? [{ kind: 'computed', text: readBlock, fen }] : [],
-        ).spoken) ? 1 : 0;
-        readingBlockMs.push(performance.now() - t0);
-
         // ── TACTICS / the drill's post-solve note ──
         t0 = performance.now();
         const tn = tacticNoteForPuzzleThemes({ themes: ['fork', 'pin'], seenIds: new Set(), fen });
@@ -185,9 +169,6 @@ describe('coach surface scorecard', () => {
       for (const w of r.worstAccuracy) console.log(`    ACC  ${w}`);
       for (const w of r.worstQuality) console.log(`    QUAL ${w}`);
     }
-
-    console.log(`read-position:prompt-block  n=${readingBlockMs.length}  LEAKS-TO-VOICE=${readingBlockLeaks}  median=${(readingBlockMs.sort((a,b)=>a-b)[Math.floor(readingBlockMs.length/2)] ?? 0).toFixed(2)}ms`);
-    expect(readingBlockLeaks).toBe(0);
 
     mkdirSync('audit-reports', { recursive: true });
     writeFileSync('audit-reports/coach-surface-scorecard.json', JSON.stringify({ rows, totalLines: lines.length }, null, 2));

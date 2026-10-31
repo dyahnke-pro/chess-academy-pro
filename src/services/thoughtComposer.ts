@@ -118,13 +118,14 @@ export interface ThoughtRegister {
   depth: 'one' | 'thread';
 }
 
-export type ThoughtSurface = 'lesson' | 'review' | 'learn' | 'chat';
+/** The surfaces that compose through here. Learn and chat had rows and no
+ *  caller (deleted, WO-STORY-MATRIX-01 P1-1, 2026-10-30): a surface that comes
+ *  to the composer answers its register here first. */
+export type ThoughtSurface = 'lesson' | 'review';
 const ALL_STEPS: ReadonlySet<ThoughtStep> = new Set(Object.keys(THOUGHT_ORDER) as ThoughtStep[]);
 export const THOUGHT_REGISTER: Record<ThoughtSurface, ThoughtRegister> = {
   lesson: { steps: ALL_STEPS, depth: 'thread' },
   review: { steps: ALL_STEPS, depth: 'thread' },
-  learn: { steps: ALL_STEPS, depth: 'thread' },
-  chat: { steps: ALL_STEPS, depth: 'thread' },
 };
 
 /** The say-once memory a lesson, a review or a game keeps across its moves:

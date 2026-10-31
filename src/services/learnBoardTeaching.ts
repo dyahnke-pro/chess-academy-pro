@@ -71,9 +71,6 @@ import { fileClaimed, oppositeWingsRace } from './planRace';
 import { conceptInstanceKey, tacticGeometryKey } from './conceptKey';
 import { sayMoveNoun, sayYourMove } from './spokenMove';
 import { deepFact, theirTarget, binding, moveHit } from './threeFacts';
-import { detectTacticType } from './missedTacticService';
-import { tacticTypeLabel } from './tacticAlertService';
-import type { TacticType } from '../types';
 import { countWarning } from './countMethod';
 import { planChoice, type PlanChoiceLine } from './planChooser';
 import { planFor } from './openingIdentity';
@@ -801,25 +798,6 @@ export function openingSummaryLine(brk: { san: string; square: string }, student
   return legalNow
     ? `The opening is over and its break, ${say}, has not come yet — it is still there to play when it is prepared.`
     : `The opening is over without its break, ${say} — the position has moved past it, so the plan now comes from the middlegame.`;
-}
-
-/** POSITIVE TRANSFER (census: "transfer — slips only"): the student played the
- *  engine's move and it lands a tactic whose motif they have DRILLED from their
- *  own mistakes. The loop closing in the green direction, said once per motif. */
-export function drilledTransferLine(
-  fenBefore: string,
-  playedUci: string,
-  bestUci: string | null,
-  drilled: ReadonlyMap<TacticType, { opponentName: string | null }>,
-): { text: string; motif: TacticType } | null {
-  if (!bestUci || bestUci.slice(0, 4) !== playedUci.slice(0, 4) || drilled.size === 0) return null;
-  let motif: TacticType;
-  try { motif = detectTacticType(fenBefore, playedUci); } catch { return null; }
-  const d = drilled.get(motif);
-  if (!d || motif === 'tactical_sequence') return null;
-  const name = tacticTypeLabel(motif);
-  const from = d.opponentName ? ` from your game against ${d.opponentName}` : ' from your own games';
-  return { motif, text: `That is the ${name} you drilled${from} — this time you found it at the board.` };
 }
 
 /** THE VERDICT ON A FOUND MOVE (P2 #2): at a real decision moment on the board

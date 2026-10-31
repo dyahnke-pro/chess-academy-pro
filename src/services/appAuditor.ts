@@ -404,10 +404,10 @@ export type AuditKind =
   // MEASURED number (the knee at posedImportance 80), so which side of it
   // the tags fall on is the thing that has to be trendable when it moves.
   | 'capability-heat-map'
-  // Rolodex entry beat (WO-ROLODEX-PLUMBING-01 item 1). Fires once per
-  // session per opening when /coach/play (or another coach surface in
-  // future) is loaded with `?opening=<name>` and the captured intent
-  // produces the rolodex's signature entry-narration line.
+  // Rolodex deep link (WO-ROLODEX-PLUMBING-01). Fires when /coach/play,
+  // loaded with `?opening=<name>&mode=middlegame`, finishes walking the
+  // book line onto the board. (The spoken entry beat that also used this
+  // kind is deleted: Play volunteers nothing, WO-STORY-MATRIX-01 P1-1.)
   | 'rolodex-entry-beat'
   // Training Plan rolodex active-card pointer changes (WO-ROLODEX-UI-01
   // PR-1). Fires when a card becomes the front of its color's stack,
@@ -638,15 +638,11 @@ export type AuditKind =
   | 'coach-play-mounted'
   // Opening auto-detection trail (WO-CONVERSATIONAL-OPENING-COACH).
   // Fires once per move from CoachGamePage when detectOpening() runs
-  // against the SAN history. Captures: detected eco/name/plyCount,
-  // resolution source (URL subject vs committed intent vs auto-detect
-  // vs nothing), and the resulting `inOpeningTeaching` decision. Use
-  // these to debug "why didn't the coach name my opening?" reports —
-  // either the detection trie missed the line (opening-auto-detected
-  // absent) or teaching mode didn't activate (opening-teaching-active
-  // absent).
+  // against the SAN history. Captures: detected eco/name/plyCount and the
+  // resolution source (URL subject vs committed intent vs auto-detect vs
+  // nothing). The full-game audit asserts its games' openings are distinct
+  // off these names.
   | 'coach-opening-auto-detected'
-  | 'coach-opening-teaching-active'
   // Find-the-Square drill (David's 2026-05-19 spec). Fires once per
   // round start with the target list — pair with downstream
   // findSquareAttempts rows in Dexie to reconstruct per-round timing.
@@ -674,12 +670,6 @@ export type AuditKind =
   // toggle. Diagnoses "showing lines shrinks the board" reports by
   // making the dimension diff measurable instead of subjective.
   | 'engine-lines-layout-state'
-  // Verbosity resolution trail. Fires inside coachMoveCommentary when
-  // the LLM call is dispatched — captures what verbosity value was
-  // received vs the user's profile preference. Diagnoses "Settings
-  // verbosity dial doesn't work" reports by making the propagation
-  // path visible (settings → preference → arg → LLM).
-  | 'verbosity-resolved'
   // TTS overlap detection. Fires from voiceService.speakInternal when
   // a new speak() arrives while a previous utterance is still playing.
   // Captures the new utterance preview, the previous-tier (polly /
@@ -693,31 +683,6 @@ export type AuditKind =
   // "aiColor must be 'white' or 'black'" we saw on local_opening_book
   // by surfacing the exact arg that failed.
   | 'tool-call-error'
-  // Move-commentary skip reasons. Fires from every early-return in
-  // generateMoveCommentary so the previously-silent paths
-  // (`offline`, `verbosity===none`, empty history, ⚠️ banner, LLM
-  // exception, empty-after-trim) leave a record. Evidence-driven —
-  // saves a debug round-trip the next time `coach-move-narration-skipped
-  // reason=empty-commentary` shows up: the new audit names exactly
-  // which path returned empty. Joins with the existing
-  // `coach-move-narration-skipped` on timestamp + fen.
-  | 'commentary-skipped'
-  // LLM response trail (move commentary). Fires inside
-  // coachMoveCommentary.getLlmCommentary right after
-  // getCoachChatResponse returns. Captures length, preview, latency,
-  // and the personality+dial values that were sent in the prompt.
-  // Closes the observability gap between `verbosity-resolved` (LLM
-  // dispatched) and `commentary-skipped` (we returned empty) — if
-  // the LLM is returning short / generic / non-personality output
-  // despite the dials being set, this audit shows it directly
-  // instead of forcing inference from "voice was bland."
-  | 'llm-response'
-  // Personality dials reaching the move-commentary prompt
-  // (WO-PERSONALITY-IN-COMMENTARY). Mirrors coach-narration-spoken at
-  // the prompt-assembly side so we can confirm in production logs that
-  // profanity=hard / mockery=hard actually flowed into the LLM call —
-  // not just into the TTS layer.
-  | 'coach-move-personality-applied'
   // WO-PLAN-B coach-move fast path. Fires when the coach-turn skips
   // the LLM spine entirely and uses opening book / Stockfish bestmove
   // directly. Replaces 8s of multi-trip LLM tool dance with ~250ms of

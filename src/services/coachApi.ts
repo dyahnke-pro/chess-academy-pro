@@ -6940,7 +6940,7 @@ export async function getCoachChatResponse(
         // the bookGrounding loader detects opening via concept scan
         // on askText, and the annotation/plan/game loaders skip
         // gracefully when nothing resolves. Bypass paths that DO have
-        // moveHistory (e.g. coachMoveCommentary, walkthroughLlmNarrator)
+        // moveHistory (e.g. walkthroughLlmNarrator)
         // already route via coachService.ask so the unified path handles
         // them with full context.
         moveHistory: [],

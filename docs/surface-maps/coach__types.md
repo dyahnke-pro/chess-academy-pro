@@ -4,22 +4,22 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1012 lines · 32 exports · 1015 importers · 267 tests · 38 audits**
+**1012 lines · 32 exports · 1027 importers · 272 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
-- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:839) — names `types`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3682) — names `Provider`, `ProviderName`, `types`
-- **TypeScript** (CLAUDE.md:4133) — names `types`
-- **React** (CLAUDE.md:4143) — names `types`
-- **File Organization** (CLAUDE.md:4154) — names `types`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4647) — names `types`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4686) — names `CoachSurface`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5153) — names `types`
-- **Naming** (CLAUDE.md:5795) — names `CoachPersonality`
-- **Testing Best Practices** (CLAUDE.md:5840) — names `Provider`
-- **Shared types / services** (CLAUDE.md:5907) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:6766) — names `TacticsLiveContext`
+- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:840) — names `types`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3708) — names `Provider`, `ProviderName`, `types`
+- **TypeScript** (CLAUDE.md:4159) — names `types`
+- **React** (CLAUDE.md:4169) — names `types`
+- **File Organization** (CLAUDE.md:4180) — names `types`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4673) — names `types`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4712) — names `CoachSurface`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5179) — names `types`
+- **Naming** (CLAUDE.md:5826) — names `CoachPersonality`
+- **Testing Best Practices** (CLAUDE.md:5871) — names `Provider`
+- **Shared types / services** (CLAUDE.md:5938) — names `types`
+- **The standard post-deploy ritual** (CLAUDE.md:6805) — names `TacticsLiveContext`
 
 ## Who calls in
 
@@ -32,6 +32,7 @@
 - `scripts/_gen-najdorf.mjs`
 - `scripts/_gen-scotch.mjs`
 - `scripts/_gen-svesh.mjs`
+- `scripts/course-replies/clubRepliesShown.measure.test.ts`
 - `scripts/scaffold-opening.mjs`
 - `src/coach/__tests__/coachService.test.ts`
 - `src/coach/__tests__/multiTurnLoop.test.ts`
@@ -198,6 +199,8 @@
 - `src/components/Openings/EndgamePlansSection.test.tsx`
 - `src/components/Openings/EndgamePlansSection.tsx`
 - `src/components/Openings/GambitsTab.tsx`
+- `src/components/Openings/GeneratedLinePlayer.tsx`
+- `src/components/Openings/GeneratedReplyPlayer.tsx`
 - `src/components/Openings/GeneratedWatch.tsx`
 - `src/components/Openings/LessonPlayer.resume.test.tsx`
 - `src/components/Openings/LessonPlayer.test.tsx`
@@ -667,6 +670,9 @@
 - `src/services/bookDepartureWeakness.ts`
 - `src/services/bucketPipelineAudit.test.ts`
 - `src/services/bucketPipelineAudit.ts`
+- `src/services/builtReplies.gems.test.ts`
+- `src/services/builtReplies.storedOnly.test.ts`
+- `src/services/builtReplies.ts`
 - `src/services/calculationSkillMatch.ts`
 - `src/services/capabilityDateRepair.test.ts`
 - `src/services/capabilityDateRepair.ts`
@@ -675,13 +681,13 @@
 - `src/services/chesscomService.ts`
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/classroomOpener.ts`
+- `src/services/clubGems.ts`
 - `src/services/coachAgent.ts`
 - `src/services/coachAnswerGates.test.ts`
 - `src/services/coachAnswerGates.ts`
 - `src/services/coachApi.ts`
 - `src/services/coachBookMove.test.ts`
 - `src/services/coachBookMove.ts`
-- `src/services/coachCommentaryPolicy.test.ts`
 - `src/services/coachCommentaryPolicy.ts`
 - `src/services/coachDrillService.mistakes.test.ts`
 - `src/services/coachDrillService.test.ts`
@@ -693,7 +699,6 @@
 - `src/services/coachGameEngine.test.ts`
 - `src/services/coachGameEngine.ts`
 - `src/services/coachMemoryService.test.ts`
-- `src/services/coachMoveCommentary.ts`
 - `src/services/coachMoveExtractor.ts`
 - `src/services/coachPlayPersistence.test.ts`
 - `src/services/coachPlayPersistence.ts`
@@ -702,11 +707,11 @@
 - `src/services/coachPrompts.verbosity.test.ts`
 - `src/services/coachSessionRouter.ts`
 - `src/services/coachSettingsAction.ts`
-- `src/services/coachTemplates.test.ts`
-- `src/services/coachTemplates.ts`
 - `src/services/coachTrainingService.test.ts`
 - `src/services/coachTrainingService.ts`
 - `src/services/coachsCall.ts`
+- `src/services/computedPlan.test.ts`
+- `src/services/computedPlan.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/conceptEngine.ts`
 - `src/services/conceptSchedule.test.ts`
@@ -723,11 +728,14 @@
 - `src/services/criticalMoment.oneCount.test.ts`
 - `src/services/criticalMoment.ts`
 - `src/services/criticality.ts`
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/dataLoader.ts`
 - `src/services/dbService.ts`
 - `src/services/decisiveReason.recapture.test.ts`
 - `src/services/decisiveReason.ts`
 - `src/services/decisiveReason.turnDepth.test.ts`
+- `src/services/deepTree.test.ts`
+- `src/services/deepTree.ts`
 - `src/services/deliberation.ts`
 - `src/services/demotedRows.ts`
 - `src/services/discussionPractice.ts`
@@ -742,6 +750,7 @@
 - `src/services/exploredMoveGrade.ts`
 - `src/services/explorerTeachLine.test.ts`
 - `src/services/explorerTeachLine.ts`
+- `src/services/facedReplies.ts`
 - `src/services/falseAlarm.test.ts`
 - `src/services/falseAlarm.ts`
 - `src/services/findSquareService.ts`
@@ -761,8 +770,6 @@
 - `src/services/gameInsightsService.statsCache.test.ts`
 - `src/services/gameInsightsService.test.ts`
 - `src/services/gameInsightsService.ts`
-- `src/services/gameNarrationBuilder.test.ts`
-- `src/services/gameNarrationBuilder.ts`
 - `src/services/gamePhaseService.test.ts`
 - `src/services/gamePhaseService.ts`
 - `src/services/gameReviewService.test.ts`
@@ -771,7 +778,8 @@
 - `src/services/gamesCourse.ts`
 - `src/services/gamesCourseRecord.test.ts`
 - `src/services/gamesCourseRecord.ts`
-- `src/services/gemCrushLines.ts`
+- `src/services/generatedLesson.test.ts`
+- `src/services/generatedLesson.ts`
 - `src/services/groundedAnswer.engineReasoning.test.ts`
 - `src/services/groundedAnswer.teaching.test.ts`
 - `src/services/groundedAnswer.test.ts`
@@ -837,6 +845,7 @@
 - `src/services/mistakeProvenance.test.ts`
 - `src/services/mistakePuzzleService.test.ts`
 - `src/services/mistakePuzzleService.ts`
+- `src/services/modelGameIndex.ts`
 - `src/services/modelGameService.ts`
 - `src/services/moveCost.keyMoments.test.ts`
 - `src/services/moveCost.ts`
@@ -963,6 +972,9 @@
 - `src/services/sweepPassesEngineLines.test.ts`
 - `src/services/syncService.test.ts`
 - `src/services/syncService.ts`
+- `src/services/tabLine.ts`
+- `src/services/tabPlans.test.ts`
+- `src/services/tabPlans.ts`
 - `src/services/tacticAlertService.test.ts`
 - `src/services/tacticAlertService.ts`
 - `src/services/tacticClaimValidator.test.ts`
@@ -1139,6 +1151,7 @@
 
 ## Tests
 
+- `scripts/course-replies/clubRepliesShown.measure.test.ts`
 - `src/coach/__tests__/coachService.test.ts`
 - `src/coach/__tests__/multiTurnLoop.test.ts`
 - `src/coach/__tests__/ping.integration.test.ts`
@@ -1243,11 +1256,12 @@
 - `src/services/autoAnalyzeGame.reason.test.ts`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts`
 - `src/services/bucketPipelineAudit.test.ts`
+- `src/services/builtReplies.gems.test.ts`
+- `src/services/builtReplies.storedOnly.test.ts`
 - `src/services/capabilityDateRepair.test.ts`
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/coachAnswerGates.test.ts`
 - `src/services/coachBookMove.test.ts`
-- `src/services/coachCommentaryPolicy.test.ts`
 - `src/services/coachDrillService.mistakes.test.ts`
 - `src/services/coachDrillService.test.ts`
 - `src/services/coachFeatureService.test.ts`
@@ -1256,8 +1270,8 @@
 - `src/services/coachMemoryService.test.ts`
 - `src/services/coachPlayPersistence.test.ts`
 - `src/services/coachPrompts.verbosity.test.ts`
-- `src/services/coachTemplates.test.ts`
 - `src/services/coachTrainingService.test.ts`
+- `src/services/computedPlan.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/conceptEngine.test.ts`
 - `src/services/conceptSchedule.test.ts`
@@ -1266,8 +1280,10 @@
 - `src/services/courseMoves.test.ts`
 - `src/services/criticalMoment.frame.test.ts`
 - `src/services/criticalMoment.oneCount.test.ts`
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/decisiveReason.recapture.test.ts`
 - `src/services/decisiveReason.turnDepth.test.ts`
+- `src/services/deepTree.test.ts`
 - `src/services/drillVocabulary.test.ts`
 - `src/services/endgameProfileService.test.ts`
 - `src/services/engineDeltaLines.test.ts`
@@ -1284,11 +1300,11 @@
 - `src/services/gameAnalysisService.test.ts`
 - `src/services/gameInsightsService.statsCache.test.ts`
 - `src/services/gameInsightsService.test.ts`
-- `src/services/gameNarrationBuilder.test.ts`
 - `src/services/gamePhaseService.test.ts`
 - `src/services/gameReviewService.test.ts`
 - `src/services/gamesCourse.test.ts`
 - `src/services/gamesCourseRecord.test.ts`
+- `src/services/generatedLesson.test.ts`
 - `src/services/groundedAnswer.engineReasoning.test.ts`
 - `src/services/groundedAnswer.teaching.test.ts`
 - `src/services/groundedAnswer.test.ts`
@@ -1371,6 +1387,7 @@
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
 - `src/services/syncService.test.ts`
+- `src/services/tabPlans.test.ts`
 - `src/services/tacticAlertService.test.ts`
 - `src/services/tacticClaimValidator.test.ts`
 - `src/services/tacticClassifierService.fill.test.ts`

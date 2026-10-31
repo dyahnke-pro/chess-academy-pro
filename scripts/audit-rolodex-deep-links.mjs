@@ -2,8 +2,11 @@
 //
 // Drives all 7 rolodex deep-link URLs from acceptance criterion 1 of
 // the WO and asserts that each one (a) loads, (b) shows the filter
-// visually applied, and (c) for coach surfaces, fires the entry beat
-// (speak + chat-mirrored line).
+// visually applied, and (c) on /coach/play, volunteers NO entry beat.
+// Play volunteers nothing (David 2026-09-23), and the entry-beat
+// producer (`buildPlayEntryNarration`) is deleted, not switched off
+// (WO-STORY-MATRIX-01 P1-1, 2026-10-30) — so the old "the chat mirror
+// says 'Italian Game as White'" check is now its negation.
 //
 // Pattern follows `docs/sandbox-playwright-setup.md` voice-intercept.
 // Each scenario:
@@ -35,25 +38,19 @@ const SCENARIOS = [
     settleMs: 7000,
     assert: async ({ page }) => {
       const checks = [];
-      // E2E trigger signal: chat mirror appended with the opening
-      // name + side. The `gameChatRef.injectAssistantMessage` path
-      // always fires when the entry beat useEffect runs, regardless
-      // of voice routing.
-      //
-      // Voice-side wiring ("trigger fires but voice path is wired
-      // wrong") is verified separately at the unit-test level in
-      // CoachGamePage.test.tsx — that test mocks voiceService and
-      // asserts `useNarration` receives the entry-beat text. Headless
-      // Chromium's voice stack is too fragile (no Polly creds, no
-      // audio context) to gate on at the e2e tier.
+      // Play volunteers nothing: the deleted entry beat ("Italian Game as
+      // White. …") must not reach the chat. The voice half is the unit test
+      // in CoachGamePage.test.tsx ("does NOT speak the entry beat"); the
+      // board check below proves the page loaded, so this absence is not
+      // vacuous.
       const bodyText = await page.evaluate(() => document.body.innerText);
       const chatMirror = /italian game as (white|black)/i.test(bodyText);
       checks.push({
-        name: 'entry-beat-chat-mirror',
-        pass: chatMirror,
+        name: 'no-entry-beat',
+        pass: !chatMirror,
         detail: chatMirror
-          ? 'chat mirror present (matched "Italian Game as White|Black")'
-          : `chat mirror NOT found in body (last 200 chars: "${bodyText.slice(-200)}")`,
+          ? `entry beat volunteered (body last 200 chars: "${bodyText.slice(-200)}")`
+          : 'no entry beat in the chat (Play volunteers nothing)',
       });
       // Board stayed at start (from-start mode = no auto-play)
       const moveList = await page.evaluate(() => {
@@ -80,9 +77,9 @@ const SCENARIOS = [
       const bodyText = await page.evaluate(() => document.body.innerText);
       const chatMirror = /italian game as (white|black)/i.test(bodyText);
       checks.push({
-        name: 'entry-beat-chat-mirror',
-        pass: chatMirror,
-        detail: chatMirror ? 'chat mirror present' : `body (last 200): "${bodyText.slice(-200)}"`,
+        name: 'no-entry-beat',
+        pass: !chatMirror,
+        detail: chatMirror ? `entry beat volunteered (body last 200): "${bodyText.slice(-200)}"` : 'no entry beat in the chat',
       });
       // Board moved off starting position — probe Chess instance via
       // chess.js global or move-list panel. Most reliable: count

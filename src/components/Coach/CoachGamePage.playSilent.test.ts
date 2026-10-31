@@ -1,18 +1,24 @@
 // PLAY IS SILENT UNLESS THE STUDENT ASKS (David 2026-09-23).
 //
-// Two halves, because either alone is a false green:
+// Three halves, because any one alone is a false green:
 //   1. every UNPROMPTED speak site on /coach/play sits behind the one switch,
 //      and the switch is OFF — a new automatic line fails here until someone
 //      decides whether Play may volunteer it;
-//   2. the RECORD survived — slips are still filed (`raiseWhyForSlip`) and the
+//   2. the producers that only fed speech Play never says are DELETED, not
+//      switched off (G8.5 rule 4, WO-STORY-MATRIX-01 P1-1, David 2026-10-30):
+//      the deep-link entry beat, the LLM per-move commentary and the slip
+//      verdict ran every game and were never heard;
+//   3. the RECORD survived — slips are still filed (`raiseWhyForSlip`) and the
 //      buttons the student taps (Read this position, Why?) still answer.
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { PLAY_VOLUNTEERS_COACHING } from './CoachGamePage';
 
 const SRC = readFileSync(resolve(__dirname, 'CoachGamePage.tsx'), 'utf8');
 const LINES = SRC.split('\n');
+/** The page with comments stripped — a deletion note may name what it deleted. */
+const CODE = SRC.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 
 /** Speak calls the student asked for — exempt from the switch. */
 const ON_REQUEST = [/speakReadAloud\(/, /positionNarration\.narrate\(/];
@@ -48,21 +54,27 @@ describe('Play volunteers nothing', () => {
     const offenders: string[] = [];
     LINES.forEach((line, i) => {
       if (/^\s*(\/\/|\*)/.test(line)) return;
-      if (!/voiceService\.speak|phaseNarration\.narrate\(|useNarration\(/.test(line)) return;
+      if (!/voiceService\.speak|phaseNarration\.narrate\(|useNarration\(|createStreamingSpeaker/.test(line)) return;
       if (ON_REQUEST.some((re) => re.test(line))) return;
-      // Dead LLM commentary path — unreachable while USE_LLM_MOVE_COMMENTARY is false.
-      if (/createStreamingSpeaker/.test(line)) return;
-      if (/useNarration\(/.test(line)) {
-        // Fed by the entry-beat effect, whose first line is the switch.
-        if (!/if \(!PLAY_VOLUNTEERS_COACHING\) return;\n\s*if \(entryBeatFiredRef\.current\) return;/.test(SRC)) offenders.push(`${i + 1}: ${line.trim()}`);
-        return;
-      }
       // Phase narration is guarded by an early `return` (named 'play-silent'),
       // asserted separately below.
       if (/phaseNarration\.narrate\(/.test(line)) return;
       if (!guarded(i)) offenders.push(`${i + 1}: ${line.trim()}`);
     });
     expect(offenders).toEqual([]);
+  });
+
+  it('the producers behind the switch that only fed unheard speech are gone', () => {
+    // The page no longer imports or calls them …
+    expect(CODE).not.toMatch(/playEntryNarration|buildPlayEntryNarration/);
+    expect(CODE).not.toMatch(/coachMoveCommentary|generateMoveCommentary/);
+    expect(CODE).not.toMatch(/assembleSlipNarration/);
+    expect(CODE).not.toMatch(/USE_LLM_MOVE_COMMENTARY|BLUNDER_ALERT_ADDITION/);
+    // … and they are deleted, not parked for another caller.
+    for (const f of ['../../services/playEntryNarration.ts', '../../services/coachMoveCommentary.ts']) {
+      expect(existsSync(resolve(__dirname, f)), f).toBe(false);
+    }
+    expect(readFileSync(resolve(__dirname, '../../services/groundedAnswer.ts'), 'utf8')).not.toMatch(/export function assembleSlipNarration\b/);
   });
 
   // The voice was silent while the TEXT channel volunteered: unasked tips in

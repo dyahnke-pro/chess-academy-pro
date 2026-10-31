@@ -3,7 +3,7 @@
  * "Play Game" surface (`/kid/play-games/:gameId`, GuidedGamePage).
  *
  * This is the kid-mode equivalent of the adult Play/Learn-with-Coach voice
- * (coachMoveCommentary / useLiveCoach), built to the LOCKED kid contract:
+ * (useLiveCoach), built to the LOCKED kid contract:
  *
  *   • The move narration, the instruction and the wrong-move nudge are
  *     COMPUTED (the authored note, else chess.js words) — no model call. The

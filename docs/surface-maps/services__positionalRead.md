@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**670 lines · 8 exports · 19 importers · 13 tests · 1 audits**
+**669 lines · 8 exports · 19 importers · 13 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,22 +35,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `rookReachesFile` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12072`
+- `src/components/Coach/CoachTeachPage.tsx:12707`
 - `src/services/danyaBehaviors.ts:720`
 - `src/services/recaptureChoice.ts:62`
 
 ### `castleIsOneMoveAway` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:299`
+- `src/services/danyaBehaviors.ts:298`
 - `src/services/replayFence.modern1690.test.ts:134`
 - `src/services/replayFence.modern1690.test.ts:135`
 - `src/services/replayFence.modern1690.test.ts:136`
 
 ### `readPosition` (function) — 48 call sites
-- `src/coach/chatTurnAnswers.ts:232`
-- `src/services/groundedAnswer.ts:1619`
-- `src/services/lookaheadPlan.ts:1181`
-- `src/services/lookaheadPlan.ts:1450`
-- `src/services/lookaheadPlan.ts:1527`
+- `src/coach/chatTurnAnswers.ts:233`
+- `src/services/groundedAnswer.ts:1623`
+- `src/services/lookaheadPlan.ts:1182`
+- `src/services/lookaheadPlan.ts:1451`
+- `src/services/lookaheadPlan.ts:1528`
 - `src/services/narrationAdversarial.test.ts:85`
 - `src/services/narrationAdversarial.test.ts:176`
 - `src/services/nextPlans.structureIdeaKey.test.ts:13`
@@ -96,9 +96,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9443`
+- `src/components/Coach/CoachTeachPage.tsx:9940`
 - `src/services/claimChecker.measure.test.ts:134`
-- `src/services/learnWalkBlumenfeld.test.ts:123`
+- `src/services/learnWalkBlumenfeld.test.ts:127`
 - `src/services/learnWalkNimzo.test.ts:35`
 - `src/services/narrationAdversarial.test.ts:104`
 - `src/services/narrationAdversarial.test.ts:177`
@@ -115,10 +115,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.modern1690.test.ts:202`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:272`
+- `src/services/danyaBehaviors.ts:271`
 
 ### `heavyPieceToFile` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:279`
+- `src/services/danyaBehaviors.ts:278`
 - `src/services/positionalRead.fileStep.test.ts:10`
 - `src/services/positionalRead.fileStep.test.ts:16`
 - `src/services/positionalRead.fileStep.test.ts:20`

@@ -13,9 +13,8 @@
 // A quiet position is not an empty one. It has a king that has or has not
 // castled, a development count, a weak pawn, an outpost, a lever available. All
 // of that is already computed, board-true, in `positionReadingService` — and
-// was reachable only through `formatReadingFacts`, a prompt block that opens
-// "READING FACTS (GROUND TRUTH …)" and can never be spoken. So the facts
-// existed and the voice could not use them.
+// was reachable only through a model prompt block (deleted 2026-10-30) that
+// could never be spoken. So the facts existed and the voice could not use them.
 //
 // This turns the same computation into ONE spoken sentence. Ranked, so the
 // student hears the most useful observation rather than the first one found,

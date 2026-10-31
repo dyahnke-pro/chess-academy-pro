@@ -73,7 +73,7 @@ import { buildPositionalRead, rookReachesFile } from '../../services/positionalR
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -203,7 +203,7 @@ import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';
 import { seedMasterPuzzles } from '../../services/puzzleService';
 import { explainDrillConcept } from '../../services/puzzleConceptExplanation';
-import { gradeMistakePuzzle, loadDrilledMotifs } from '../../services/mistakePuzzleService';
+import { gradeMistakePuzzle } from '../../services/mistakePuzzleService';
 import { reportCoachReask, isMoveReport } from '../../services/coachNonAnswer';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
@@ -1978,10 +1978,6 @@ export function CoachTeachPage({ mode }: {
    *  ply it was named at — the opening summary reads it when the middlegame
    *  begins (census #52). `said` keeps it once per game. */
   const openingBreakRef = useRef<{ san: string; square: string; atPly: number; said: boolean } | null>(null);
-  /** Motifs the student has solved from their own mistakes (positive transfer);
-   *  the ones already tied back this game are the story's (`drilled-transfer:`). */
-  const drilledMotifsRef = useRef<Awaited<ReturnType<typeof loadDrilledMotifs>>>(new Map());
-  useEffect(() => { void loadDrilledMotifs().then((m) => { drilledMotifsRef.current = m; }); }, []);
   // THE LIVE PER-MOVE EVALUATIONS (C7, 2026-09-22). Every student ply is
   // graded off the paid-for pre-move read (`gradePlayedMove`, below) and the
   // saved record used to carry `annotations: null` regardless. Keyed by ply so
@@ -12386,17 +12382,6 @@ export function CoachTeachPage({ mode }: {
                       const bind = bindingTeaching({ fenBefore, san: move.san, history: move.history });
                       if (bind) queueHint(fenAfterReply, bind, move.fen);
                     }
-                    // POSITIVE TRANSFER: the engine's move, landing a tactic the
-                    // student drilled from their own mistakes — said once a motif.
-                    try {
-                      const playedUci = `${move.from}${move.to}${move.promotion ?? ''}`;
-                      const tr = drilledTransferLine(fenBefore, playedUci, preStudentRead.bestMove || null, drilledMotifsRef.current);
-                      // Once a motif: its claim is the game's when the door keeps the line.
-                      if (tr && !learnMemRef.current.story.current().said.has(`drilled-transfer:${tr.motif}`)) {
-                        queueSpokenHint(fenAfterReply, tr.text, 'foundMove', legalLineProof(fenBefore, [move.san], lineSeatAt(fenBefore, playerColor === 'white' ? 'w' : 'b'), true) ?? NO_PROOF.description, NAMES_NO_MOVE, [move.to], [`drilled-transfer:${tr.motif}`]);
-                        captureEvent('coach_drilled_transfer', { surface: 'coach-teach', motif: tr.motif });
-                      }
-                    } catch { /* the transfer is a bonus, never a blocker */ }
                     // THE OPENING SUMMARY (census #52): the first move out of the
                     // opening says whether the break it is played for came.
                     try {

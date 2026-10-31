@@ -1,8 +1,9 @@
 /**
  * stockfish_classify_move — classify a single move as
  * blunder/mistake/inaccuracy/great given the position before and the
- * move played. Wraps the existing `classifyEvalSwing` from
- * coachMoveCommentary.
+ * move played, by `classifyEvalSwing` below (its home since the Play LLM
+ * commentary module it lived in was deleted, WO-STORY-MATRIX-01 P1-1,
+ * 2026-10-30 — this tool was its one production caller).
  *
  * The tool does its own Stockfish analysis on both positions so the
  * caller doesn't have to pre-compute evals. Two queueAnalysis calls
@@ -10,8 +11,28 @@
  */
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../../../services/stockfishEngine';
-import { classifyEvalSwing } from '../../../services/coachMoveCommentary';
+import { gradeMove } from '../../../services/accuracyService';
 import type { Tool } from '../../types';
+
+type MoveVerdict = 'excellent' | 'good' | 'book' | 'inaccuracy' | 'mistake' | 'blunder' | 'neutral';
+
+/**
+ * Classify an eval swing into a rough verdict from the MOVER's perspective.
+ * Centipawn thresholds mirror gameImportUtils so review + play agree.
+ */
+export function classifyEvalSwing(
+  evalBefore: number | null,
+  evalAfter: number | null,
+  mover: 'w' | 'b',
+): MoveVerdict {
+  if (evalBefore === null || evalAfter === null) return 'neutral';
+  const sign = mover === 'w' ? 1 : -1;
+  const swing = (evalAfter - evalBefore) * sign;
+  if (swing >= 80) return 'excellent';
+  if (swing >= 20) return 'good';
+  // A loss is graded by the ONE grader (accuracyService.gradeMove).
+  return gradeMove({ beforeCp: evalBefore * sign, afterCp: evalAfter * sign }) ?? 'book';
+}
 
 export const stockfishClassifyMoveTool: Tool = {
   name: 'stockfish_classify_move',
