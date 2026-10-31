@@ -59,7 +59,7 @@ import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
-import { BOARD_COMPUTERS, readBoard, readBoardAll } from './boardComputers';
+import { readBoard, readBoardAll, readKey } from './boardComputers';
 import { stripThink } from '../utils/thinkPause';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
@@ -68,7 +68,7 @@ import { mateStakes, isSacrifice, type FactStakes } from './factStakes';
 import { sacrificeLedger, type BestAmong, type SacrificeLedgerRead } from './sacrificeLedger';
 import { threatPurpose, lineRestatesClaim } from './threatPurpose';
 import type { BestOfEngine, DeepReadEngine } from './gameAnalysisService';
-import { costReason as readCostReason, costReasonRow, type CostReason, type CostReasonRow, type BoardRead } from './costReason';
+import { costReason as readCostReason, costReasonRow, type CostReason, type CostReasonRow, type LineRead } from './costReason';
 import { lineTrust, NAME_NEAR_PLIES } from './lineTrust';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
 import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
@@ -2165,8 +2165,9 @@ function* reviewSegmentSteps(
       // repeat is the departure line's job ("You left book … again").
       if (moverColor === playerColor && studentNeed?.bookDepartures.length) {
         const here = readBoard('lastTimeHere', { fenBefore: fenPair.fenBefore, playedSan: m.san, rows: studentNeed.bookDepartures, currentGameId: currentGameId ?? null });
-        if (here && here.key.startsWith('last-here:other:') && !lastHereSaid.has(here.key)) {
-          lastHereSaid.add(here.key);
+        const hereKey = here ? readKey(here) : null;
+        if (here && hereKey && hereKey.startsWith('last-here:other:') && !lastHereSaid.has(hereKey)) {
+          lastHereSaid.add(hereKey);
           facets.push(`[last-here] ${here.text}`);
         }
       }
@@ -2310,7 +2311,7 @@ function* reviewSegmentSteps(
           const namedByStory = !!label && reads.some((r) => r.storyBeat !== 'identity' && r.text.includes(label));
           if (det && announce && namedByStory) storyNames = det.name;
           if (det && announce && !namedByStory) {
-            const idRead = reads.find((r) => r.storyBeat === 'identity' && !hintsSaid.has(`hint:${r.key}`)) ?? null;
+            const idRead = reads.find((r) => r.storyBeat === 'identity' && !hintsSaid.has(`hint:${readKey(r)}`)) ?? null;
             // THE FIRST NAME IS SAID WITH WHAT IT TEACHES (lead 2026-10-20:
             // "This game is the Sicilian Defense." alone is a name with no
             // teaching): the identity when it is ready, else the masters' plan
@@ -2333,7 +2334,7 @@ function* reviewSegmentSteps(
             if ((teaching || spokenOpening) && !theirBareDeparture) {
               const raw = `[opening] ${announce}${teaching ? ` ${teaching}` : ''}`;
               facets.push(raw);
-              facetIdentity.set(raw, idRead ? `hint:${idRead.key}` : `hint:opening-name:${det.name}`);
+              facetIdentity.set(raw, idRead ? `hint:${readKey(idRead)}` : `hint:opening-name:${det.name}`);
               if (idRead?.squares.length) facetSquares.set(raw, idRead.squares);
               const said = det.name;
               facetCommits.set(raw, () => { spokenOpening = said; if (planText) hintsSaid.add(`once:plan:${planText}`); });
@@ -2342,11 +2343,12 @@ function* reviewSegmentSteps(
         } catch { /* naming is a bonus, never a blocker */ }
         for (const r of reads) {
           if (!storyAll && r.storyBeat !== 'identity') continue;
-          const id = `hint:${r.key}`;
+          const id = `hint:${readKey(r)}`;
           if (hintsSaid.has(id) || facets.some((x) => facetIdentity.get(x) === id)) continue;
-          // Each beat under its own kind (`openingStory.STORY_KIND`), placed by
-          // the one group table — no longer every beat filed as the name.
-          const raw = `[${r.kind ?? BOARD_COMPUTERS.openingStory.kind}] ${r.text}`;
+          // Each beat under its own kind (`openingStory.STORY_KIND`, on the
+          // fact), placed by the one group table — no longer every beat filed
+          // as the name.
+          const raw = `[${r.kind}] ${r.text}`;
           facets.push(raw);
           facetIdentity.set(raw, id);
           facetProofs.set(raw, r.proof);
@@ -2623,7 +2625,7 @@ function* reviewSegmentSteps(
       // thread once one of its lines is spoken (commit after the door).
       const planTrial = story.plans().thread;
       // The plan's routes, hop by hop, drawn when its line speaks.
-      const planRouteByRaw = new Map<string, Array<{ from: string; to: string; fen: string }>>();
+      const planRouteByRaw = new Map<string, ReadonlyArray<{ from: string; to: string; fen: string }>>();
       if (studentColorWB && !isStudentForAttr) {
         const povCp = m.evaluation != null ? (studentColorWB === 'w' ? m.evaluation : -m.evaluation) : null;
         // Their move follows the student's: the ply before is the student's own
@@ -2631,12 +2633,13 @@ function* reviewSegmentSteps(
         const prevStudent = i > 0 && moves[i - 1] ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null;
         for (const r of readBoardAll('planThread', { thread: planTrial, ply: m.ply, fenBefore: fenPair.fenBefore, fenAfter: fenPair.fenAfter, student: studentColorWB, studentPovCp: povCp, studentMove: prevStudent, holdPlayable: false })) {
           // Review has no think pause: the question and its answer run on.
-          const raw = `[${BOARD_COMPUTERS.planThread.kind}] ${stripThink(r.text)}`;
+          const raw = `[${r.kind}] ${stripThink(r.text)}`;
           facets.push(raw);
-          facetIdentity.set(raw, r.key.startsWith('plan:stopped:') ? 'plan-thread:stop' : r.key.startsWith('plan:step:') ? 'plan-thread:step' : 'plan-thread:plan');
+          const key = readKey(r);
+          facetIdentity.set(raw, key.startsWith('plan:stopped:') ? 'plan-thread:stop' : key.startsWith('plan:step:') ? 'plan-thread:step' : 'plan-thread:plan');
           facetProofs.set(raw, r.proof);
           if (r.squares.length) facetSquares.set(raw, r.squares);
-          if (r.routeArrows?.length) planRouteByRaw.set(raw, r.routeArrows);
+          if (r.marks?.route?.length) planRouteByRaw.set(raw, r.marks.route);
         }
       }
       const newPlan = planTrial.stated && planTrial.stated.ply === m.ply ? planTrial.stated.fact : null;
@@ -4516,7 +4519,7 @@ async function augmentWithProjections(
   const reasonFor = (
     s: ReviewMoveSegment, after: StockfishAnalysis | null, before: StockfishAnalysis | null, mode: 'full' | 'after-only' | 'before-only',
   ): CostReason | null => {
-    const boardRead = (deep: StockfishAnalysis | null, record: string[] | undefined, recordEarlier: string[] | undefined): BoardRead | null => {
+    const boardRead = (deep: StockfishAnalysis | null, record: string[] | undefined, recordEarlier: string[] | undefined): LineRead | null => {
       const line = deep?.topLines?.[0];
       if (line?.moves?.length) return { uci: line.moves, source: 'deep', seconds: [line.earlier?.moves ?? null, record ?? null, recordEarlier ?? null] };
       return record?.length ? { uci: record, source: 'record', seconds: [recordEarlier ?? null] } : null;

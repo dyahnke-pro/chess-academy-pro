@@ -249,6 +249,12 @@ Each commit converts one producer family, deletes the adapter it emptied, and re
 
 **Measurement:** the decision baseline and spoken output are identical after each commit; bench identical.
 
+**What 6a shipped** (so 6b–6e start from it):
+- A registry read is a `CoachFact` made by the registry's one maker: its id is `<computer id>:<key>` (`readKey` gives the key back), its kind is its row's (the story's beats name theirs), and each row names its catalog computer (18 new `COMPUTER_CATALOG` rows). Every read answers its seat, the student move it names, its thread (the plan thread and the story's aims are the student's plan threads) and its stakes.
+- `HeldRead` became `CoachFact.heldForm`; the read's board marks became `CoachFact.marks` (`play`, `theirs`, `route`); `role`, `motif` and `storyBeat` joined the fact. The book move now carries its own role, skill and board, so Learn no longer adds them.
+- Review files a registry fact as a facet through one `facetOf`, and the live read through one `speak`, each typed on the fact's own kind (`BoardFact<K>`): a computer whose kind is no facet tag or clause kind fails to compile, as the relabel used to guarantee. The live read's `rank` stays as the clause's hand weight until 6c deletes `ClauseItem.rank`; Learn's lanes stay its speaking slots until 6e.
+- The gate's baseline at 6a: 38 clauses, 42 hints, 3 phase facts, 11 story beats, 92 facet strings, no `BoardRead`. `costReason`'s engine-line read, also called `BoardRead`, is `LineRead` now.
+
 ### P1-7 Relations: one reader each, the snapshot, and its first readers
 
 **7a: one definition per relation** (relations.md §2, rot rule). These change output where the readers disagree, so each is measured.

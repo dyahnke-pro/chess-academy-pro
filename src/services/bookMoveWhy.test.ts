@@ -84,7 +84,7 @@ describe('the book-move why routes through the door on the DNA "but" beat (David
       expect(readBoard('bookMove', { history, student: 'b' })).toBeNull();
       const fen = c.fen();
       const out = decideTurn([
-        { lane: 'bookMove', text: read!.text, fen, squares: read!.squares, claims: [read!.key], role: 'teach', namesStudentMove: NAMES_NO_MOVE, proof: read!.proof },
+        { lane: 'bookMove', text: read!.text, fen, squares: read!.squares, claims: read!.claims, role: 'teach', namesStudentMove: NAMES_NO_MOVE, proof: read!.proof },
         { lane: 'opening', text: 'You left the book with the knight to f3.', fen, namesStudentMove: NAMES_NO_MOVE, proof: { kind: 'name' } as never },
       ]);
       expect(out.spoke).toContain('bookMove');
@@ -118,10 +118,10 @@ describe('the book-move line is graded on the board it speaks of (prod Learn aud
       const read = readBoard('bookMove', { history: [...played, 'hxg4'], student: 'b' });
       expect(read?.fen).toBe(spokenOn);
       const turn = (fen: string) => decideTurn([
-        { lane: 'bookMove', text: read!.text, fen, squares: read!.squares, claims: [read!.key], role: 'teach', namesStudentMove: NAMES_NO_MOVE, proof: read!.proof },
+        { lane: 'bookMove', text: read!.text, fen, squares: read!.squares, claims: read!.claims, role: 'teach', namesStudentMove: NAMES_NO_MOVE, proof: read!.proof },
         { lane: 'opening', text: 'You left the book with the knight to c6.', fen: afterReply, namesStudentMove: NAMES_NO_MOVE, proof: { kind: 'name' } as never },
       ]);
-      expect(turn(read!.fen!).spoke).toContain('bookMove');
+      expect(turn(read!.fen).spoke).toContain('bookMove');
       // The old wiring graded it on the board after the reply, and it fell.
       expect(turn(afterReply).spoke).not.toContain('bookMove');
     } finally {

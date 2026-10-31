@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1901 lines · 11 exports · 18 importers · 23 tests · 0 audits**
+**1903 lines · 11 exports · 19 importers · 24 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,6 +29,7 @@
 - `src/services/slipAnswer.test.ts`
 - `src/services/tacticGeometry.test.ts`
 - `src/services/unifiedBetterMoveReason.test.ts`
+- `src/test/captureSaidOnce.gate.test.ts`
 - `src/test/teach02Wired.test.ts`
 
 ## Exports and every call site
@@ -52,8 +53,8 @@
 - `src/services/batch2Wiring.test.ts:54`
 - `src/services/boardDelta.test.ts:14`
 - `src/services/boardDelta.test.ts:67`
-- `src/services/coachFeatureService.ts:2124`
-- `src/services/danyaBench.measure.test.ts:396`
+- `src/services/coachFeatureService.ts:2109`
+- `src/services/danyaBench.measure.test.ts:397`
 - `src/services/exchangeIdeas.test.ts:251`
 - `src/services/forkTrick.test.ts:61`
 - `src/services/hangingVsUndefended.test.ts:12`
@@ -103,7 +104,7 @@
 - `src/test/teach02Wired.test.ts:67`
 
 ### `computeThroughLine` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:6145`
+- `src/services/coachFeatureService.ts:6141`
 - `src/services/reviewFullData.test.ts:206`
 - `src/services/reviewFullData.test.ts:209`
 - `src/services/reviewFullData.test.ts:217`
@@ -127,8 +128,9 @@
 - `src/services/reviewHeardCorrection.test.ts:17`
 - `src/services/reviewHeardCorrection.test.ts:18`
 
-### `seatMoveSubject` (function) — 1 call site
+### `seatMoveSubject` (function) — 2 call sites
 - `src/services/reviewVerdictSentence.test.ts:15`
+- `src/test/captureSaidOnce.gate.test.ts:206`
 
 ### `describeMoveInfluence` (function) — 5 call sites
 - `src/services/reviewFullData.test.ts:671`
@@ -167,6 +169,7 @@
 - `src/services/slipAnswer.test.ts`
 - `src/services/tacticGeometry.test.ts`
 - `src/services/unifiedBetterMoveReason.test.ts`
+- `src/test/captureSaidOnce.gate.test.ts`
 - `src/test/oneErrorComputer.gate.test.ts`
 - `src/test/teach02Wired.test.ts`
 

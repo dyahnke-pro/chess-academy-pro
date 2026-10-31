@@ -45,7 +45,9 @@ import { trickSidestepped } from './forkTrick';
 import { findProphylaxis, prophylaxisProof } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { lineProof, lineProofFromUci, legalLineProof, proofForStudent, squaresProof, isProof, type FactProof, type Proof } from './proof';
-import { BOARD_COMPUTERS, readBoardAll, type BoardRead, type ReviewComputer } from './boardComputers';
+import { readBoardAll, readKey } from './boardComputers';
+import type { CoachFact } from './coachFact';
+import type { FacetTag } from './reviewFacetRank';
 import { tradeLedger } from './tempoCount';
 import { notYetPlayed } from './notYetPlayed';
 import { heldResource } from './holdResource';
@@ -1471,18 +1473,26 @@ export function computeMoveFacets(
   // and the false-mate / discovery audit of the move that WAS played. A read
   // naming the best move never speaks when the student played it (G4.5.2,
   // matched by coordinates, never SAN).
+  // A REGISTRY FACT AS A FACET (WO-STORY-MATRIX-01 P1-6a): `[kind] text`
+  // under the fact's own kind — a computer whose kind is no facet tag fails to
+  // compile here — with its proof, squares and stakes filed under the facet,
+  // and the identity it is said once under. The string form and its out-maps
+  // go with the facets (P1-6d).
+  const facetOf = (f: CoachFact & { kind: FacetTag }, identity: string): void => {
+    const raw = `[${f.kind}] ${f.text}`;
+    facets.push(raw);
+    recProof(raw, isProof(f.proof) ? f.proof : null);
+    recSquares(raw, f.squares);
+    recStakes(raw, f.stakes);
+    outIdentity?.set(raw, identity);
+  };
   if (isStudent && studentColorWB) {
     const playedUci = ((): string | null => { try { const m = new Chess(fenBefore).move(san); return m ? `${m.from}${m.to}` : null; } catch { return null; } })();
     const playedBest = !!ctx.bestLineUci[0] && ctx.bestLineUci[0].slice(0, 4) === playedUci;
     const lom = ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : undefined;
     for (const g of readBoardAll('tacticGeometry', { fen: fenBefore, me: studentColorWB, pv: ctx.bestLineUci, register: 'review', played: san, ...(lom ? { lastOpponentMove: lom } : {}) })) {
-      if (g.namesMove && playedBest) continue;
-      const f = `[${BOARD_COMPUTERS.tacticGeometry.kind}] ${g.text}`;
-      facets.push(f);
-      recProof(f, isProof(g.proof) ? g.proof : null);
-      recSquares(f, g.squares);
-      recStakes(f, g.stakes);
-      outIdentity?.set(f, g.key);
+      if (g.namesStudentMove && playedBest) continue;
+      facetOf(g, readKey(g));
     }
   }
 
@@ -1492,40 +1502,32 @@ export function computeMoveFacets(
   // their move, with the student to move; or on the student's own move — and
   // each said once a game through the `hint:` ledger.
   if (studentColorWB) {
-    // Each read under its computer's own kind (`BOARD_COMPUTERS[id].kind`) —
-    // never a tag picked here: the same read used to be a habit on Review, a
-    // choice on Learn and a rule on the live read (WO-STORY-MATRIX-01 P1-4).
-    const add = (id: ReviewComputer, r: BoardRead | null): void => {
-      if (!r) return;
-      const f = `[${BOARD_COMPUTERS[id].kind}] ${r.text}`;
-      facets.push(f);
-      recProof(f, isProof(r.proof) ? r.proof : null);
-      recSquares(f, r.squares);
-      recStakes(f, r.stakes);
-      outIdentity?.set(f, `hint:${r.key}`);
-    };
+    // Each fact under its own kind — never a tag picked here: the same read
+    // used to be a habit on Review, a choice on Learn and a rule on the live
+    // read (WO-STORY-MATRIX-01 P1-4) — said once through the `hint:` ledger.
+    const add = (f: (CoachFact & { kind: FacetTag }) | undefined): void => { if (f) facetOf(f, `hint:${readKey(f)}`); };
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.
-      add('obligationLifted', readBoardAll('obligationLifted', { fenBefore, fenAfter, student: studentColorWB })[0] ?? null);
+      add(readBoardAll('obligationLifted', { fenBefore, fenAfter, student: studentColorWB })[0]);
       // Your pinned piece walks out with tempo — the pin is not what it looks.
-      add('pinBreakOwn', readBoardAll('pinBreakOwn', { fen: fenAfter, student: studentColorWB })[0] ?? null);
+      add(readBoardAll('pinBreakOwn', { fen: fenAfter, student: studentColorWB })[0]);
       // Their piece you pin can walk out the same way.
       try {
         for (const t of detectTactics(fenAfter).tactics) {
           if (t.type !== 'pin' || t.beneficiary !== studentColorWB || !t.involvedSquares[1]) continue;
-          add('pinBreakTheirs', readBoardAll('pinBreakTheirs', { fen: fenAfter, student: studentColorWB, pinned: t.involvedSquares[1] })[0] ?? null);
+          add(readBoardAll('pinBreakTheirs', { fen: fenAfter, student: studentColorWB, pinned: t.involvedSquares[1] })[0]);
         }
       } catch { /* no tactic read, no pin break */ }
       // A capture that looks free and leaves your queen with no way out.
-      add('queenGrabTrap', readBoardAll('queenGrabTrap', { fen: fenAfter })[0] ?? null);
+      add(readBoardAll('queenGrabTrap', { fen: fenAfter })[0]);
     } else {
       // The engine's line plays A first because A clears the road B needs.
-      if (ctx.bestLineUci.length >= 2) add('moveOrder', readBoardAll('moveOrder', { fen: fenBefore, pv: ctx.bestLineUci })[0] ?? null);
+      if (ctx.bestLineUci.length >= 2) add(readBoardAll('moveOrder', { fen: fenBefore, pv: ctx.bestLineUci })[0]);
       // The book move the student just left, with its job on the board.
-      add('bookMove', readBoardAll('bookMove', { history: ctx.allSans.slice(0, ply), student: studentColorWB })[0] ?? null);
+      add(readBoardAll('bookMove', { history: ctx.allSans.slice(0, ply), student: studentColorWB })[0]);
       // The count, only when the student's move lost it; the priority they faced.
-      add('countMethod', readBoardAll('countMethod', { fenBefore, playedSan: san, student: studentColorWB, costCp: swing })[0] ?? null);
-      if (ctx.bestLineUci[0]) add('priorityFirst', readBoardAll('priorityFirst', { fen: fenBefore, student: studentColorWB, bestUci: ctx.bestLineUci[0] })[0] ?? null);
+      add(readBoardAll('countMethod', { fenBefore, playedSan: san, student: studentColorWB, costCp: swing })[0]);
+      if (ctx.bestLineUci[0]) add(readBoardAll('priorityFirst', { fen: fenBefore, student: studentColorWB, bestUci: ctx.bestLineUci[0] })[0]);
     }
   }
 

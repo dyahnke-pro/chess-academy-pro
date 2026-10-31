@@ -92,13 +92,13 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
     expect(ph?.intent.to).toBe('g4');
     expect(flaw?.threatTo).toBe('g4');
     const read = readBoard('prophylaxis', { fen: MOVE8, engineFirstMoves: [`${ph!.prevention.from}${ph!.prevention.to}`] });
-    expect(read?.key).toBe(prophylaxisKey('g4'));
+    expect(read?.claims).toEqual([prophylaxisKey('g4')]);
     const holds = new Set<string>();
     listen();
     // The late wave: a danger on the same squares leads, so the idea is held.
     const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: [
       { lane: 'threat', text: 'Their bishop can come to g4 and pin your knight on f3 to your queen.', fen: MOVE8, squares: ph!.squares, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE },
-      { lane: 'prophylaxis', text: prophylaxisIdea(ph!).text, fen: MOVE8, squares: ph!.squares, claims: [read!.key], proof: NO_PROOF.withheld, namesStudentMove: NAMES_NO_MOVE },
+      { lane: 'prophylaxis', text: prophylaxisIdea(ph!).text, fen: MOVE8, squares: ph!.squares, claims: read!.claims, proof: NO_PROOF.withheld, namesStudentMove: NAMES_NO_MOVE },
     ], priorLead: null, green: null, beginner: false, turnHolds: holds, owner: 'open' });
     expect(late.spoke).not.toContain('prophylaxis');
     expect(holds.has(prophylaxisKey('g4'))).toBe(true);

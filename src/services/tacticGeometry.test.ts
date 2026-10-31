@@ -15,7 +15,7 @@ import { isProof } from './proof';
 import { isPinnedPiece } from './nextPlans';
 import { detectTacticType } from './missedTacticService';
 import { depthClauses } from './thinkAloud';
-import { readBoardAll } from './boardComputers';
+import { readBoardAll, readKey } from './boardComputers';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { FACT_ROLE, FACT_PROOF } from './reviewFacetRank';
 import { NO_SECOND_READ } from './inaccuracyCall';
@@ -232,7 +232,7 @@ describe('DIAGNOSE — the one tactic classifier names what these reads teach', 
 describe('WIRED — a real read comes out of every surface', () => {
   it('the registry hands it over with its proof and motif', () => {
     const reads = readBoardAll('tacticGeometry', live(INTERFERE, ['b4d5', 'g7g6', 'b2d4', 'h7h6']));
-    const r = reads.find((x) => x.key.startsWith('geo:interference'));
+    const r = reads.find((x) => readKey(x).startsWith('geo:interference'));
     expect(r && isProof(r.proof)).toBe(true);
     expect(r?.motif).toBe('interference');
   });

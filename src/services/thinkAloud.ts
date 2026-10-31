@@ -31,7 +31,7 @@ import type { FactStakes } from './factStakes';
 import type { GamePromise } from './learnBoardTeaching';
 import { speedRunReads } from './speedRunReads';
 import { namesMoves, type NamesStudentMove } from './studentMoveNaming';
-import { readBoardAll } from './boardComputers';
+import { readBoardAll, readKey } from './boardComputers';
 import type { TacticType } from '../types';
 import { orderReads } from './orderReads';
 import { inBetweenMove } from './inBetweenMove';
@@ -391,11 +391,11 @@ export function depthClauses(args: {
     if (toMove === args.studentColor) {
       const geo = readBoardAll('tacticGeometry', { fen: args.fen, me: args.studentColor, pv: args.topLines[0]?.moves ?? [], register: 'live', ...(args.lastOpponentMove ? { lastOpponentMove: args.lastOpponentMove } : {}) });
       for (const g of geo) {
-        if (g.namesMove && !args.nameMove) {
-          if (g.idea) out.push({ kind: 'speedrun-read', text: g.idea.text, proof: g.idea.proof, ...(g.idea.squares.length ? { squares: [...g.idea.squares] } : {}), claim: g.key });
+        if (g.namesStudentMove && !args.nameMove) {
+          if (g.heldForm) out.push({ kind: 'speedrun-read', text: g.heldForm.text, proof: g.heldForm.proof, ...(g.heldForm.squares.length ? { squares: [...g.heldForm.squares] } : {}), claim: readKey(g) });
           continue;
         }
-        out.push({ kind: 'tactic', text: g.text, squares: g.squares, claim: g.key, ...('kind' in g.proof ? { proof: g.proof } : {}), ...(g.stakes ? { stakes: g.stakes } : {}), ...(g.motif ? { motif: g.motif } : {}), ...(g.lines ? { lines: g.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });
+        out.push({ kind: 'tactic', text: g.text, squares: [...g.squares], claim: readKey(g), ...('kind' in g.proof ? { proof: g.proof } : {}), ...(g.stakes ? { stakes: g.stakes } : {}), ...(g.motif ? { motif: g.motif } : {}), ...(g.lines ? { lines: g.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });
       }
     }
     // BATCH 1 — opening equivalence, order and timing (`orderReads`), each

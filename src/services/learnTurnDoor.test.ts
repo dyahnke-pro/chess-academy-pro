@@ -752,7 +752,7 @@ describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-1
   const lead = { lane: 'movePoint' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'That gets your last piece into the game, so your rooks can connect.', fen: FEN, squares: ['c1', 'd2'] };
   it('count-before-you-take carries the exchange net and speaks beside an unrelated lead', () => {
     const read = readBoard('countMethod', { fenBefore: '4k3/8/2p1p3/3p4/8/2N5/8/4K3 w - - 0 1', playedSan: 'Nxd5', student: 'w', costCp: 200 });
-    const cnt = read ? { lane: 'countMethod' as const, namesStudentMove: NAMES_NO_MOVE, proof: read.proof, text: read.text, fen: FEN, squares: read.squares, stakes: read.stakes } : null;
+    const cnt = read ? { lane: 'countMethod' as const, namesStudentMove: NAMES_NO_MOVE, proof: read.proof, text: read.text, fen: FEN, squares: read.squares, stakes: read.stakes ?? undefined } : null;
     expect(cnt?.stakes?.points).toBeGreaterThanOrEqual(1);
     expect(decideTurn([lead, cnt!]).spoke).toContain('countMethod');
   });
@@ -771,7 +771,7 @@ describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-1
   it('Learn hands both to the door with their stake and role', () => {
     // The count reads the student's own move, priced by the turn's slip (2026-10-28).
     expect(TEACH_CODE).toMatch(/readBoard\('countMethod', \{ fenBefore: b\.fen\(\), playedSan: h\[h\.length - 2\], student: studentCC, costCp: args\.slipCp \}\)/);
-    expect(TEACH_CODE).toMatch(/lane: 'countMethod' as const, text: countRead\.text, fen: args\.fenAfterReply, squares: countRead\.squares, claims: \[countRead\.key\], stakes: countRead\.stakes, role: countRead\.role/);
+    expect(TEACH_CODE).toMatch(/lane: 'countMethod' as const, text: countRead\.text, fen: args\.fenAfterReply, squares: countRead\.squares, claims: countRead\.claims, stakes: countRead\.stakes \?\? undefined, role: countRead\.role/);
     expect(TEACH_CODE).not.toMatch(/readBoard\('countMethod', \{ fen: probe\.fen\(\)/);
     // One forwarder for every computed hint — arrows, stakes and role ride.
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, hint\.text, hint\.lane, hint\.proof, hint\.namesStudentMove, hint\.squares, hint\.claims, gradeFen, hint\.arrows, undefined, hint\.stakes, hint\.role, undefined, undefined, hint\.ownMoveReason\)/);
@@ -814,7 +814,7 @@ describe('a structure judgement is a reason, never an aside (A-plan P3, prod Lea
     // other squares waits behind the one that leads.
     const other = { ...sj, text: 'The bishop on g2 is your best piece.', squares: ['g2'], role: 'teach' as const };
     expect(decideTurn([lead, sj, other]).spoke.filter((l) => l === 'structureJudgement')).toHaveLength(1);
-    expect((TEACH_CODE.match(/'structureJudgement', st\.proof, NAMES_NO_MOVE, st\.squares, \[st\.key\], undefined, undefined, undefined, st\.stakes, st\.role\)/g) ?? []).length).toBe(2);
+    expect((TEACH_CODE.match(/'structureJudgement', st\.proof, NAMES_NO_MOVE, st\.squares, st\.claims, undefined, undefined, undefined, st\.stakes \?\? undefined, st\.role\)/g) ?? []).length).toBe(2);
   });
 });
 
@@ -858,7 +858,10 @@ describe('rules and theory fade per skill (item 8, 2026-10-17)', () => {
     expect(pf).toMatch(/\.\.\.\(ruleSkill\(a\.rule\.id\) \? \{ skill: ruleSkill\(a\.rule\.id\) \} : \{\}\)/);
     expect(TEACH_CODE).toMatch(/FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
     expect(TEACH_CODE).toMatch(/FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined\)/);
-    expect(TEACH_CODE).toMatch(/skill: FUNDAMENTAL_TAG\['left-book-early'\]/);
+    // The book move's skill rides on its fact, from the computer (P1-6a), and
+    // Learn hands the fact's own skill to the door.
+    expect(readFileSync('src/services/boardComputers.ts', 'utf8')).toMatch(/skill: FUNDAMENTAL_TAG\['left-book-early'\]/);
+    expect(TEACH_CODE).toMatch(/\.\.\.\(bookMoveRead\.skill \? \{ skill: bookMoveRead\.skill \} : \{\}\)/);
   });
 });
 

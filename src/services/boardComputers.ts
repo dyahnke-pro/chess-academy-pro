@@ -3,9 +3,13 @@
 // We are not duplicating").
 //
 // A surface never hand-calls one of these computers: it asks the registry for
-// a computer by id with that computer's context, and gets back ONE shape — the
-// sentence, the PROOF it rests on (required, G0: the fact is computed and the
-// proof comes from the same computation), the squares and a say-once key.
+// a computer by id with that computer's context, and gets back THE ONE FACT
+// (`CoachFact`, WO-STORY-MATRIX-01 P1-6a) — the sentence, the PROOF it rests on
+// (required, G0: the fact is computed and the proof comes from the same
+// computation), the squares, its claims, its kind and its place. The fact
+// carries everything a surface used to relabel at its call site (its kind, its
+// role, the skill it teaches, the board it is about, the moves it draws and
+// the form it takes without the move), so no surface re-derives any of it.
 //
 // Every entry answers EVERY coach surface (`Record<CoachSurface, …>`), wired or
 // a reason it is not, so a new computer does not compile until someone has
@@ -16,8 +20,8 @@
 // PURE: every computer here is pure; this module adds no chess of its own.
 import { Chess, type Color } from 'chess.js';
 import { NO_PROOF, squaresProof, type FactProof } from './proof';
-import type { FactStakes } from './factStakes';
-import type { SpokenLine } from './voicePackage';
+import { LOCAL_THREAD, placeFact, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat } from './coachFact';
+import { threadKey } from './gameStory';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from './pinBreak';
 import { findProphylaxis, prophylaxisKey, prophylaxisLine, prophylaxisIdea, prophylaxisProof } from './prophylaxis';
 import { findEnablingMove, enablingMoveLine, enablingMoveProof } from './enablingMove';
@@ -33,80 +37,47 @@ import type { BookDepartureRow } from './bookDepartureWeakness';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { planThreadTurn, type PlanThread } from './planThread';
 import { geometryReads, type GeometryContext } from './tacticGeometry';
-import type { TacticType } from '../types';
 import { studentMoveStructure, theirMoveStructure, boardStructure, linesStructure, type StructureRead } from './structureReads';
 import { STRUCTURE_ROLE } from './structureJudgementKit';
 import { countMethod } from './countMethod';
 import { countKey } from './conceptKey';
 import { buildPriorityFirst } from './playCommentary';
-import { openingStoryAt, heldWhilePlayable, STORY_KIND, type StoryBeat } from './openingStory';
+import { openingStoryAt, heldWhilePlayable, STORY_KIND } from './openingStory';
 import { isEndgameByMaterial } from './gamePhaseService';
-import type { FacetTag, FactKind } from './reviewFacetRank';
-import type { ClauseKind } from './positionFacts';
+import type { FactKind } from './reviewFacetRank';
 import type { GamePhase } from '../types';
 import { packageForRegister } from './hintRegister';
+import { FUNDAMENTAL_TAG } from './principleAttribution';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
 /** Where a computer reaches a surface — the FILE that calls it — or why not. */
 type SurfaceAnswer = { wired: string } | { not: string };
 
-export interface BoardRead {
-  text: string;
-  /** REQUIRED — the computed proof, or a named reason there is none. */
-  proof: FactProof;
-  squares: string[];
-  /** Say-once key: the same fact on a later turn is the same key. */
+/** WHAT A READ SAYS, before the registry places it — every field of the one
+ *  fact except those its computer's row answers (its kind, group, step and
+ *  computer) and its id. Each producer answers its seat, the student move it
+ *  names, its thread and its stakes: nothing defaults (WO-STORY-MATRIX-01 P1-6). */
+type ReadParts = Omit<CoachFact, 'id' | 'kind' | 'group' | 'step' | 'computer'> & {
+  /** Its say-once key — the tail of its id (`readKey`). Every read but the
+   *  threat's cost is said under it, so it is also its first claim. */
   key: string;
-  /** A second key the claim shares with ANOTHER computer saying the same
-   *  thing (the student's plan goal, said by the plan thread and the plan
-   *  arc) — so whichever speaks second is dropped as already said. */
-  sharedKey?: string;
-  /** What the claim puts at stake, for the door's stakes-first order. */
-  stakes?: FactStakes;
-  /** Further claim keys the sentence states (a loose piece it names), so
-   *  another computer saying that piece is loose is dropped as already said. */
-  claims?: string[];
-  /** A route the sentence names, one arrow per step, each on its own board
-   *  (the plan's piece walked hop by hop) — drawn as `line` arrows. */
-  routeArrows?: Array<{ from: string; to: string; fen: string }>;
-  /** THEIR intended move the sentence warns about (drawn as theirs). */
-  theirs?: { from: string; to: string };
-  /** A move the sentence asks the student to play (arrowed, engine-vouched). */
-  play?: { from: string; to: string };
-  /** Lines the proof plays out, for the Show-the-line button. */
-  lines?: SpokenLine[];
-  /** The board the sentence speaks of, when it is not the surface's current
-   *  one — the book move is about the position the student just left, so it is
-   *  graded there, never on the board after the reply (prod Learn audit
-   *  2026-10-14: graded after hxg4, "your bishop on g4" read as false). */
-  fen?: string;
-  /** The motif the read names, in the ONE tactic vocabulary — the weakness join. */
-  motif?: TacticType;
-  /** The sentence names the engine's move: spoken only where a move is earned;
-   *  elsewhere `idea`, the habit without the answer — a typed read, so the
-   *  held path keeps its own proof, squares and line (OS-1 root cause 1). */
-  namesMove?: boolean;
-  idea?: HeldRead;
-  /** Teach or describe — the door holds a description as an aside, never a
-   *  reason (`LaneFact.role`). Set where the computer knows. */
-  role?: 'teach' | 'describe';
-  /** Which beat of the opening's story the read is (`openingStory` only) — the
-   *  surface places it by `STORY_LANE`. */
-  storyBeat?: StoryBeat;
-  /** The read's own kind, where its computer states more than one (the
-   *  opening's story: `STORY_KIND`); else the computer's `kind`. */
-  kind?: FacetTag;
-}
+  /** A computer that states more than one kind (the opening's story names
+   *  each beat's, `STORY_KIND`); else the kind on its row. */
+  kind?: CoachFactKind;
+};
 
-/** The held form of a read that names the move: its words, and the proof,
- *  squares and lines that stay true without the move. */
-export interface HeldRead {
-  text: string;
-  proof: FactProof;
-  squares: string[];
-  lines?: SpokenLine[];
-  motif?: TacticType;
+/** The one fact a read becomes: its id is its computer's and its key, its
+ *  place comes from its kind (`placeFact`) like every producer's, and its
+ *  computer is the catalog row on the registry entry. */
+type MakeFact = (parts: ReadParts) => CoachFact;
+
+/** THE KEY A READ WAS MADE UNDER — its say-once key, the tail of the id
+ *  `boardFact` gave it (`<computer>:<key>`). A surface that keeps one key for
+ *  a read (Review's `hint:` ledger, Learn's threat and tactic keys, the plan
+ *  thread's offered claims) reads it here, never off the words. */
+export function readKey(f: CoachFact): string {
+  return f.id.slice(f.id.indexOf(':') + 1);
 }
 
 /** Each computer's own context — what it needs from the surface, no more. */
@@ -166,8 +137,12 @@ export interface BoardContexts {
 export type ComputerId = keyof BoardContexts;
 
 interface ComputerSpec<C> {
-  /** One read, or several in speaking order (the plan thread: stop, then plan). */
-  read(ctx: C): BoardRead | BoardRead[] | null;
+  /** One fact, or several in speaking order (the plan thread: stop, then
+   *  plan), each made by `fact` from what the read says. */
+  read(ctx: C, fact: MakeFact): CoachFact | CoachFact[] | null;
+  /** THE COMPUTER THAT MAKES ITS FACTS — its catalog row (`COMPUTER_CATALOG`,
+   *  keyed by the function's own name), so the fact names its producer. */
+  computer: ComputerName;
   /** THE KIND OF FACT ITS READS STATE (WO-STORY-MATRIX-01 P1-4) — the one
    *  label every surface speaks it under, so its group (`FACT_GROUP[kind]`)
    *  and its step are the same on Learn, Review and the live read. Never a
@@ -201,11 +176,17 @@ const LESSON_OWED = { not: 'owed — WO-STORY-MATRIX-01 P1-9/P1-12: a lesson com
 /** A taught line is a model line: no student move of theirs to judge. */
 const LESSON_NO_STUDENT_MOVE = { not: 'it reads the student\'s own move; a lesson\'s line is a model line with no move of theirs to judge' } as const;
 
-/** A structure read in the registry's one shape. */
-function structureRead(r: StructureRead): BoardRead {
-  // A judgement that names the move carries its held form as the `idea`
-  // (Learn names no move unasked, David 2026-10-10).
-  return { text: r.text, proof: r.proof, squares: r.squares, key: r.key, role: STRUCTURE_ROLE[r.act], ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.proof.line ? { lines: [r.proof.line] } : {}), ...(r.heldForm ? { namesMove: true, idea: { text: r.heldForm.text, proof: r.heldForm.proof, squares: [...r.heldForm.squares] } } : {}) };
+/** A structure read as the one fact, on the board it judged, from the seat
+ *  whose move or position it judges. */
+function structureFact(r: StructureRead, fact: MakeFact, fen: string, seat: FactSeat): CoachFact {
+  // A judgement that names the move carries its held form (Learn names no
+  // move unasked, David 2026-10-10).
+  return fact({
+    key: r.key, claims: [r.key], text: r.text, proof: r.proof, squares: r.squares, stakes: r.stakes ?? null,
+    seat, namesStudentMove: !!r.heldForm, thread: LOCAL_THREAD, fen, role: STRUCTURE_ROLE[r.act],
+    ...(r.proof.line ? { lines: [r.proof.line] } : {}),
+    ...(r.heldForm ? { heldForm: { text: r.heldForm.text, proof: r.heldForm.proof, squares: [...r.heldForm.squares] } } : {}),
+  });
 }
 const STRUCT_TACTICS = { not: 'a structural judgement is about a game\'s plan; a puzzle poses one tactic' } as const;
 const STRUCT_WEAK = { not: 'owed — the weakness record keeps tags, not the structure read; the held rows ride recordTeachingEvidence' } as const;
@@ -214,70 +195,94 @@ function safe<T>(f: () => T | null): T | null {
   try { return f(); } catch { return null; }
 }
 
+/** The board after one move, or null when it does not play there. */
+function boardAfter(fen: string, san: string): string | null {
+  try { const b = new Chess(fen); b.move(san); return b.fen(); } catch { return null; }
+}
+
 export const BOARD_COMPUTERS = {
   pinBreakOwn: {
-    read: ({ fen, student }) => safe(() => {
+    // The student's own pinned piece that walks out with tempo: their resource.
+    read: ({ fen, student }, fact) => safe(() => {
       const own = findPinBreaks(fen, student)[0];
       if (!own) return null;
       const proof = pinBreakProof(own, student);
-      return { text: pinBreakLine(own, student), proof, squares: [own.pinned, own.to, own.pinner], key: `pinbreak:${own.pinned}${own.to}`, lines: proof.line ? [proof.line] : undefined };
+      const key = `pinbreak:${own.pinned}${own.to}`;
+      return fact({ key, claims: [key], text: pinBreakLine(own, student), proof, squares: [own.pinned, own.to, own.pinner], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen, ...(proof.line ? { lines: [proof.line] } : {}) });
     }),
+    computer: 'findPinBreaks',
     kind: 'tactic',
     phase: ANY,
     surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   pinBreakTheirs: {
-    read: ({ fen, student, pinned }) => safe(() => {
+    // Their piece the student pins can walk out the same way.
+    read: ({ fen, student, pinned }, fact) => safe(() => {
       const brk = findPinBreaks(fen, student === 'w' ? 'b' : 'w').find((b) => b.pinned === pinned);
       if (!brk) return null;
       const proof = pinBreakProof(brk, student);
-      return { text: pinBreakLine(brk, student), proof, squares: [brk.pinned, brk.to, brk.pinner], key: `pinbreak:${brk.pinned}${brk.to}`, lines: proof.line ? [proof.line] : undefined };
+      const key = `pinbreak:${brk.pinned}${brk.to}`;
+      return fact({ key, claims: [key], text: pinBreakLine(brk, student), proof, squares: [brk.pinned, brk.to, brk.pinner], stakes: null, seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen, ...(proof.line ? { lines: [proof.line] } : {}) });
     }),
+    computer: 'findPinBreaks',
     kind: 'tactic',
     phase: ANY,
     surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: { not: 'owed — a pin puzzle could say the pin is illusory' }, weaknesses: WEAK_OWED },
   },
   prophylaxis: {
-    read: ({ fen, engineFirstMoves }) => safe(() => {
+    read: ({ fen, engineFirstMoves }, fact) => safe(() => {
       const ph = findProphylaxis(fen);
       if (!ph || !engineFirstMoves.includes(`${ph.prevention.from}${ph.prevention.to}`)) return null;
-      return { text: prophylaxisLine(ph), proof: prophylaxisProof(ph), squares: ph.squares, key: prophylaxisKey(ph.intent.to), play: { from: ph.prevention.from, to: ph.prevention.to }, theirs: { from: ph.intent.from, to: ph.intent.to },
-        // Held: their idea and that one move stops it — never which move
-        // (easy walk 2026-10-11: "h3 first — it stops the pin" unasked).
-        namesMove: true, idea: prophylaxisIdea(ph) };
+      const key = prophylaxisKey(ph.intent.to);
+      // Held: their idea and that one move stops it — never which move
+      // (easy walk 2026-10-11: "h3 first — it stops the pin" unasked).
+      return fact({ key, claims: [key], text: prophylaxisLine(ph), proof: prophylaxisProof(ph), squares: ph.squares, stakes: null, seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen,
+        marks: { play: { from: ph.prevention.from, to: ph.prevention.to }, theirs: { from: ph.intent.from, to: ph.intent.to } },
+        heldForm: prophylaxisIdea(ph) });
     }),
+    computer: 'findProphylaxis',
     kind: 'timing',
     phase: ANY,
     surfaces: { lesson: { not: 'a lesson says the stop as the move that made it (moveThoughtFacts: findProphylaxis, kind stop); this is the stop still to play, which a model line plays' }, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   moveOrder: {
-    read: ({ fen, pv }) => safe(() => {
+    // "A first": names the student's first move (the live read speaks it only
+    // where the move is earned; Learn draws it as the move to play).
+    read: ({ fen, pv }, fact) => safe(() => {
       const o = findEnablingMove(fen, pv);
       if (!o) return null;
-      return { text: enablingMoveLine(o), proof: enablingMoveProof(o), squares: [o.opened, o.then.from, o.then.to], key: `order:${o.first.san}>${o.then.san}`, play: { from: o.first.from, to: o.first.to } };
+      const key = `order:${o.first.san}>${o.then.san}`;
+      return fact({ key, claims: [key], text: enablingMoveLine(o), proof: enablingMoveProof(o), squares: [o.opened, o.then.from, o.then.to], stakes: null, seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen, marks: { play: { from: o.first.from, to: o.first.to } } });
     }),
+    computer: 'findEnablingMove',
     kind: 'timing',
     phase: ANY,
     surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   tiedDefender: {
-    read: ({ fenBefore, fenAfterMove, fenAfterReply, student }) => safe(() => {
+    // Their guard the student's move tied down.
+    read: ({ fenBefore, fenAfterMove, fenAfterReply, student }, fact) => safe(() => {
       const tie = newTiedDefender(fenBefore, fenAfterMove, student);
       if (!tie) return null;
       const holds = findTiedDefenders(fenAfterReply, student).some((t) => t.defender.square === tie.defender.square && t.target.square === tie.target.square);
       if (!holds) return null;
-      return { text: tiedDefenderLine(tie), proof: tiedDefenderProof(tie), squares: [tie.defender.square, tie.target.square], key: countKey(tie.target.square) };
+      const key = countKey(tie.target.square);
+      return fact({ key, claims: [key], text: tiedDefenderLine(tie), proof: tiedDefenderProof(tie), squares: [tie.defender.square, tie.target.square], stakes: null, seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfterReply });
     }),
+    computer: 'newTiedDefender',
     kind: 'their-read',
     phase: ANY,
     surfaces: { lesson: LESSON_NO_STUDENT_MOVE, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   obligationLifted: {
-    read: ({ fenBefore, fenAfter, student }) => safe(() => {
+    // What their move gave up: an attacker off a piece the student guarded.
+    read: ({ fenBefore, fenAfter, student }, fact) => safe(() => {
       const o = obligationLifted(fenBefore, fenAfter, student);
       if (!o) return null;
-      return { text: obligationLiftedLine(o), proof: NO_PROOF.description, squares: [o.square, o.from, o.to], key: `lifted:${o.square}` };
+      const key = `lifted:${o.square}`;
+      return fact({ key, claims: [key], text: obligationLiftedLine(o), proof: NO_PROOF.description, squares: [o.square, o.from, o.to], stakes: null, seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
     }),
+    computer: 'obligationLifted',
     kind: 'their-read',
     phase: ANY,
     surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
@@ -285,14 +290,22 @@ export const BOARD_COMPUTERS = {
   openingStory: {
     // HOW A STRONG COACH EXPLAINS AN OPENING (OS-3): the fork, what it is, the
     // choice and its price, their setup, the coming game and its key idea —
-    // each a computed fact, in the speed runs' order.
-    read: ({ history, fen, student, namesStudentMoves }) => safe(() => openingStoryAt({ history, student, namesStudentMoves })
-      .filter((f) => namesStudentMoves || !heldWhilePlayable(f, fen, student))
-      .map((f) => ({
-        text: f.text, proof: f.proof, squares: [...f.squares], key: f.claimKey, role: 'teach' as const, storyBeat: f.beat, kind: STORY_KIND[f.beat],
-        // A plan aim is shared with the plan thread, so one plan is said once.
-        ...(f.aim ? { sharedKey: f.aim } : {}),
-      }))),
+    // each a computed fact, in the speed runs' order. Each beat under its own
+    // kind (`STORY_KIND`); a plan aim is a claim shared with the plan thread,
+    // so one plan is said once, and the student's plan thread it is on.
+    read: ({ history, fen, student, namesStudentMoves }, fact) => safe(() => openingStoryAt({ history, student, namesStudentMoves })
+      .flatMap((f) => {
+        const playable = heldWhilePlayable(f, fen, student);
+        if (playable && !namesStudentMoves) return [];
+        return [fact({
+          key: f.claimKey, claims: [f.claimKey, ...(f.aim ? [f.aim] : [])], kind: STORY_KIND[f.beat], storyBeat: f.beat,
+          text: f.text, proof: f.proof, squares: [...f.squares], stakes: null, role: 'teach',
+          // Their system and what it gave away are their side's; the rest is the student's story.
+          seat: f.beat === 'their-setup' || f.beat === 'consequence' ? 'opponent' : 'student',
+          namesStudentMove: playable, thread: f.aim ? threadKey('student', f.aim) : LOCAL_THREAD, fen,
+        })];
+      })),
+    computer: 'openingStoryAt',
     kind: 'opening',
     phase: NOT_ENDING,
     surfaces: {
@@ -308,16 +321,21 @@ export const BOARD_COMPUTERS = {
   bookMove: {
     // THEORY IS KNOWLEDGE, NOT A FIND (David 2026-10-14): once the student has
     // left the book, the book move is named with its job on the board
-    // (`bookMoveWhy`) and what their move left undone. No job → no line.
-    read: ({ history, student }) => safe(() => {
+    // (`bookMoveWhy`) and what their move left undone. No job → no line. It
+    // teaches (never a description) the left-book skill, on the board the
+    // student left — graded there, never after the reply (prod Learn audit
+    // 2026-10-14: graded after hxg4, "your bishop on g4" read as false).
+    read: ({ history, student }, fact) => safe(() => {
       const dep = bookDeparture(history);
       if (!dep || dep.mover !== student || !dep.mainSan || history.length - dep.ply > 1) return null;
       const w = bookMoveWhy(dep.fen, dep.mainSan, dep.san, student);
       if (!w) return null;
-      let spokenOn: string | undefined;
-      try { const b = new Chess(dep.fen); b.move(dep.san); spokenOn = b.fen(); } catch { spokenOn = undefined; }
-      return { text: w.text, proof: squaresProof(w.text, w.squares) ?? NO_PROOF.stated, squares: [...w.squares], key: `book-move:${dep.ply}:${dep.san}`, ...(spokenOn ? { fen: spokenOn } : {}) };
+      const spokenOn = boardAfter(dep.fen, dep.san);
+      if (!spokenOn) return null;
+      const key = `book-move:${dep.ply}:${dep.san}`;
+      return fact({ key, claims: [key], text: w.text, proof: squaresProof(w.text, w.squares) ?? NO_PROOF.stated, squares: [...w.squares], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: spokenOn, role: 'teach', skill: FUNDAMENTAL_TAG['left-book-early'] });
     }),
+    computer: 'bookMoveWhy',
     kind: 'opening',
     phase: NOT_ENDING,
     surfaces: {
@@ -334,26 +352,32 @@ export const BOARD_COMPUTERS = {
   // read by Review and the live composer through the same registry. The count
   // reads the student's own move, and only a move that lost it (2026-10-28).
   countMethod: {
-    read: ({ fenBefore, playedSan, student, costCp }) => safe(() => {
+    read: ({ fenBefore, playedSan, student, costCp }, fact) => safe(() => {
       const m = countMethod(fenBefore, playedSan, student, costCp);
       if (!m) return null;
-      return { text: m.text, proof: NO_PROOF.method, squares: [m.square], key: countKey(m.square), stakes: { points: Math.abs(m.net), plies: 0 }, role: 'teach' as const };
+      const key = countKey(m.square);
+      return fact({ key, claims: [key], text: m.text, proof: NO_PROOF.method, squares: [m.square], stakes: { points: Math.abs(m.net), plies: 0 }, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore, role: 'teach' });
     }),
+    computer: 'countMethod',
     kind: 'method',
     phase: ANY,
     surfaces: { lesson: LESSON_NO_STUDENT_MOVE, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   priorityFirst: {
-    read: ({ fen, student, bestUci }) => safe(() => {
+    read: ({ fen, student, bestUci }, fact) => safe(() => {
       const pf = buildPriorityFirst({ fen, studentColor: student === 'w' ? 'white' : 'black', bestUci });
       if (!pf) return null;
-      // The spoken package names the move; the idea is the priority without it
-      // (Learn names no move unasked).
-      // The question and its answer as ONE closed span — the stakes are part
-      // of the answer, so they wait with it.
+      // The spoken package names the move; the held form is the priority
+      // without it (Learn names no move unasked). The question and its answer
+      // as ONE closed span — the stakes are part of the answer, so they wait
+      // with it.
       const idea = packageForRegister({ ...pf.hint, detail: undefined }, 'obvious');
-      return { text: pf.spoken, proof: squaresProof(pf.spoken, [pf.targetSquare]) ?? NO_PROOF.method, squares: [pf.targetSquare], key: `priority:${pf.targetSquare}`, namesMove: true, idea: { text: idea, proof: squaresProof(idea, [pf.targetSquare]) ?? NO_PROOF.method, squares: [pf.targetSquare] }, role: 'teach' as const, play: pf.arrow };
+      const key = `priority:${pf.targetSquare}`;
+      return fact({ key, claims: [key], text: pf.spoken, proof: squaresProof(pf.spoken, [pf.targetSquare]) ?? NO_PROOF.method, squares: [pf.targetSquare], stakes: null, seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen, role: 'teach',
+        heldForm: { text: idea, proof: squaresProof(idea, [pf.targetSquare]) ?? NO_PROOF.method, squares: [pf.targetSquare] },
+        ...(pf.arrow ? { marks: { play: pf.arrow } } : {}) });
     }),
+    computer: 'buildPriorityFirst',
     kind: 'priority',
     phase: ANY,
     surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
@@ -362,16 +386,17 @@ export const BOARD_COMPUTERS = {
     // MEMORY BY POSITION (David 2026-10-15): the book-departure rows already
     // hold every position the student left theory from, the move and its
     // cost. Their own move, already played, is named; the book move never is.
-    read: ({ fenBefore, playedSan, rows, currentGameId }) => safe(() => {
+    read: ({ fenBefore, playedSan, rows, currentGameId }, fact) => safe(() => {
       const r = lastTimeHere(fenBefore, playedSan, rows, currentGameId);
       if (!r) return null;
-      let after: string | undefined;
-      try { const b = new Chess(fenBefore); b.move(playedSan); after = b.fen(); } catch { after = undefined; }
+      const after = boardAfter(fenBefore, playedSan);
+      if (!after) return null;
       // The proof is the move itself, from the board it was played on then.
       const line = { fen: r.departure.fen, sans: [r.departure.san] };
       const proof: FactProof = { kind: 'line', exact: true, short: `The move then was ${r.departure.san}`, full: `The move then was ${r.departure.san}`, line };
-      return { text: r.text, proof, squares: [], key: r.key, ...(after ? { fen: after } : {}) };
+      return fact({ key: r.key, claims: [r.key], text: r.text, proof, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: after });
     }),
+    computer: 'lastTimeHere',
     kind: 'last-here',
     phase: NOT_ENDING,
     surfaces: {
@@ -385,77 +410,98 @@ export const BOARD_COMPUTERS = {
     },
   },
   queenGrabTrap: {
-    read: ({ fen }) => safe(() => {
+    // A capture that looks free and leaves the student's queen with no way out.
+    read: ({ fen }, fact) => safe(() => {
       const t = findQueenGrabTraps(fen)[0];
       if (!t) return null;
       const proof = queenGrabTrapProof(t);
-      return { text: queenGrabTrapLine(t), proof, squares: [t.from, t.to, t.replyFrom, t.replyTo, ...(proof.squares ?? [])], key: `grab:${t.to}` };
+      const key = `grab:${t.to}`;
+      return fact({ key, claims: [key], text: queenGrabTrapLine(t), proof, squares: [t.from, t.to, t.replyFrom, t.replyTo, ...(proof.squares ?? [])], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
     }),
+    computer: 'findQueenGrabTraps',
     kind: 'tactic',
     phase: ANY,
     surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   trapped: {
-    read: ({ fen, student }) => safe(() => {
+    read: ({ fen, student }, fact) => safe(() => {
       const t = trappedOnBoard(fen, student);
       if (!t) return null;
       const squares = [t.square, t.attackerSquare];
       const line = `Careful — your ${PIECE_NAMES[t.piece] ?? 'piece'} on ${t.square} is attacked and has no safe square.`;
       const { text, proof } = provenThreatLine(line, fen, student, squares);
-      return { text, proof: proof ?? squaresProof(text, squares) ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], key: `trapped:${t.square}`, stakes: threatStakes(fen, student, squares) ?? undefined };
+      const key = `trapped:${t.square}`;
+      return fact({ key, claims: [key], text, proof: proof ?? squaresProof(text, squares) ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], stakes: threatStakes(fen, student, squares), seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
     }),
+    computer: 'trappedOnBoard',
     kind: 'tactic',
     phase: ANY,
     surfaces: { lesson: LESSON_NO_STUDENT_MOVE, learn: LEARN, review: { wired: 'services/reviewTeachingPoints.ts' }, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   threatCost: {
-    read: ({ line, fen, student, squares }) => safe(() => {
+    // A warning the surface wrote, with the cost it claims proven on the
+    // board. Its claims are the loose pieces it names; the warning's own say-once
+    // key is the surface's (the threat lane's), never this read's.
+    read: ({ line, fen, student, squares }, fact) => safe(() => {
       const { text, proof } = provenThreatLine(line, fen, student, squares);
-      return { text, proof: proof ?? squaresProof(text, squares) ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], key: `threat:${squares.join('')}`, stakes: threatStakes(fen, student, squares) ?? undefined, claims: looseClaims(fen, student, squares) };
+      return fact({ key: `threat:${squares.join('')}`, claims: looseClaims(fen, student, squares), text, proof: proof ?? squaresProof(text, squares) ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], stakes: threatStakes(fen, student, squares), seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
     }),
+    computer: 'provenThreatLine',
     kind: 'threat',
     phase: ANY,
     surfaces: { lesson: LESSON_NO_STUDENT_MOVE, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   structureMove: {
     // Learn's reader: the better move is held (David 2026-10-10).
-    read: (ctx) => safe(() => studentMoveStructure({ ...ctx, namesBetterMove: false }).map(structureRead)),
+    read: (ctx, fact) => safe(() => studentMoveStructure({ ...ctx, namesBetterMove: false }).map((r) => structureFact(r, fact, ctx.fenBefore, 'student'))),
+    computer: 'studentMoveStructure',
     kind: 'judgement',
     phase: ANY,
     surfaces: { lesson: LESSON_NO_STUDENT_MOVE, learn: { wired: 'services/learnBoardTeaching.ts' }, review: REVIEW, play: PLAY_ASK, chat: { not: 'a move judgement answers "why was my move bad"; chat reads the board judgements (structureBoard)' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
   },
   structureTheirMove: {
-    read: ({ fenBefore, san, student }) => safe(() => theirMoveStructure(fenBefore, san, student).map(structureRead)),
+    read: ({ fenBefore, san, student }, fact) => safe(() => theirMoveStructure(fenBefore, san, student).map((r) => structureFact(r, fact, fenBefore, 'opponent'))),
+    computer: 'theirMoveStructure',
     kind: 'judgement',
     phase: ANY,
     surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { not: 'about the opponent\'s last move; chat reads the board judgements (structureBoard)' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
   },
   structureBoard: {
-    read: ({ fen, student }) => safe(() => boardStructure(fen, student).map(structureRead)),
+    read: ({ fen, student }, fact) => safe(() => boardStructure(fen, student).map((r) => structureFact(r, fact, fen, 'student'))),
+    computer: 'boardStructure',
     kind: 'judgement',
     phase: ANY,
     surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { wired: 'services/groundedAnswer.ts' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
   },
   structureLines: {
-    read: ({ fen, student, lines }) => safe(() => linesStructure(fen, student, lines, false).map(structureRead)),
+    read: ({ fen, student, lines }, fact) => safe(() => linesStructure(fen, student, lines, false).map((r) => structureFact(r, fact, fen, 'student'))),
+    computer: 'linesStructure',
     kind: 'judgement',
     phase: ANY,
     surfaces: { lesson: { not: 'owed — P1-12: lessons hold a MultiPV (openingGenerator) and the structural choice reads it' }, learn: LEARN, review: { not: 'Review stores one engine line per ply, not the MultiPV the fighting line compares' }, play: PLAY_ASK, chat: { not: 'chat\'s assessment has no MultiPV in hand' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
   },
   planThread: {
-    read: ({ thread, ...args }) => safe(() => planThreadTurn(thread, args).map((l) => ({ text: l.text, proof: l.proof, squares: l.squares, key: l.claim, ...(l.aim ? { sharedKey: l.aim } : {}), ...(l.arrows ? { routeArrows: l.arrows } : {}) }))),
+    // A plan aim is a claim the plan arc shares, and the student's plan thread.
+    read: ({ thread, ...args }, fact) => safe(() => planThreadTurn(thread, args).map((l) => fact({
+      key: l.claim, claims: [l.claim, ...(l.aim ? [l.aim] : [])], text: l.text, proof: l.proof, squares: l.squares, stakes: null,
+      seat: l.seat, namesStudentMove: false, thread: l.aim ? threadKey('student', l.aim) : LOCAL_THREAD, fen: args.fenAfter,
+      ...(l.arrows ? { marks: { route: l.arrows } } : {}),
+    }))),
+    computer: 'planThreadTurn',
     kind: 'plan-now',
     phase: ANY,
     surfaces: { lesson: LESSON_OWED, learn: LEARN, review: { wired: 'services/coachFeatureService.ts' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   tacticGeometry: {
-    read: (ctx) => safe(() => geometryReads(ctx).map((r) => ({
-      text: r.text, proof: r.proof, squares: r.squares, key: r.claim,
-      ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.motif ? { motif: r.motif } : {}),
+    read: (ctx, fact) => safe(() => geometryReads(ctx).map((r) => fact({
+      key: r.claim, claims: [r.claim], text: r.text, proof: r.proof, squares: r.squares, stakes: r.stakes ?? null,
+      seat: 'student', namesStudentMove: r.namesMove, thread: LOCAL_THREAD, fen: ctx.fen,
+      ...(r.motif ? { motif: r.motif } : {}),
       // A geometry idea is a habit of thought with no board claim of its own.
-      namesMove: r.namesMove, ...(r.idea ? { idea: { text: r.idea, proof: NO_PROOF.method, squares: [] } } : {}),
+      ...(r.idea ? { heldForm: { text: r.idea, proof: NO_PROOF.method, squares: [] } } : {}),
       ...(r.proof.line ? { lines: [r.proof.line] } : {}),
     }))),
+    computer: 'geometryReads',
     kind: 'tactic',
     phase: ANY,
     surfaces: {
@@ -474,11 +520,6 @@ export const BOARD_COMPUTERS = {
 
 /** The registry, read uniformly by id. */
 const SPECS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]> } = BOARD_COMPUTERS;
-
-/** The computers Review speaks as a `[kind]` facet: their kind is a facet tag. */
-export type ReviewComputer = { [K in ComputerId]: (typeof BOARD_COMPUTERS)[K]['kind'] extends FacetTag ? K : never }[ComputerId];
-/** The computers the live read speaks as a clause: their kind is a clause kind. */
-export type LiveComputer = { [K in ComputerId]: (typeof BOARD_COMPUTERS)[K]['kind'] extends ClauseKind ? K : never }[ComputerId];
 
 /** The board a computer's context reads, when it names one. */
 function boardOf(ctx: object): string | null {
@@ -501,15 +542,26 @@ function outOfPhase(phase: ReadonlySet<GamePhase | 'any'>, ctx: object): boolean
 /** The plan thread's adopt step (its state is the game's story's). */
 export { adoptPlanTrial, type PlanThread } from './planThread';
 
-/** Every read, in speaking order. */
-export function readBoardAll<K extends ComputerId>(id: K, ctx: BoardContexts[K]): BoardRead[] {
-  const spec = SPECS[id];
+/** THE KIND A COMPUTER'S FACTS CARRY: its row's, or — the one computer that
+ *  states several — the opening story's beats' (`STORY_KIND`). Typed per
+ *  computer, so a surface that speaks a computer under its own vocabulary
+ *  (Review's facets, the live clauses) fails to compile on a kind it has no
+ *  name for, as the per-surface relabel used to guarantee. */
+type KindOf<K extends ComputerId> = K extends 'openingStory' ? (typeof STORY_KIND)[keyof typeof STORY_KIND] : (typeof BOARD_COMPUTERS)[K]['kind'];
+export type BoardFact<K extends ComputerId> = CoachFact & { kind: KindOf<K> };
+
+/** Every fact, in speaking order. */
+export function readBoardAll<K extends ComputerId>(id: K, ctx: BoardContexts[K]): BoardFact<K>[] {
+  const spec: ComputerSpec<BoardContexts[K]> = SPECS[id];
   if (outOfPhase(spec.phase, ctx)) return [];
-  const r = spec.read(ctx);
-  return r === null ? [] : Array.isArray(r) ? r : [r];
+  const fact: MakeFact = ({ key, kind, ...p }) => ({ ...p, id: `${id}:${key}`, ...placeFact(kind ?? spec.kind, p.seat), computer: spec.computer });
+  const r = spec.read(ctx, fact);
+  // The kind is the row's or the story's by construction (`fact` above is the
+  // only maker, and only the story overrides its kind, with STORY_KIND).
+  return (r === null ? [] : Array.isArray(r) ? r : [r]) as BoardFact<K>[];
 }
 
-/** The one call a surface makes — the first read, or null. */
-export function readBoard<K extends ComputerId>(id: K, ctx: BoardContexts[K]): BoardRead | null {
+/** The one call a surface makes — the first fact, or null. */
+export function readBoard<K extends ComputerId>(id: K, ctx: BoardContexts[K]): BoardFact<K> | null {
   return readBoardAll(id, ctx)[0] ?? null;
 }
