@@ -61,7 +61,7 @@ import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDan
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
 import { planAimKey, structurePlanFact } from './nextPlans';
-import { BOARD_COMPUTERS, readBoard, type BoardRead, type LiveComputer } from './boardComputers';
+import { readBoard, readKey } from './boardComputers';
 import { detectTactics } from './tacticsDetector';
 import { structurePlanEvent, planChangeSentence } from './planThread';
 import type { ThreadLine } from './gameStory';
@@ -1264,45 +1264,49 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   } catch { /* a read is a bonus, never a blocker */ }
   // THE BOARD COMPUTERS Learn speaks, through the one registry, for every
   // surface that does not read them itself — the student to move, each said
-  // once through the `alreadySaid` claims. A read that names the student's
-  // move speaks it only where the move is earned (as the depth does).
+  // once through the `alreadySaid` claims. A fact that names the student's
+  // move speaks it only where the move is earned (as the depth does);
+  // elsewhere its held form, under the same key.
   const registryClauses: ClauseItem[] = [];
   if (input.boardComputers === 'composer' && studentIsMoving) {
-    // Each read under its computer's own kind (`BOARD_COMPUTERS[id].kind`),
-    // the kind Review and Learn speak it under too (WO-STORY-MATRIX-01 P1-4).
-    const push = (id: LiveComputer, rank: number, r: BoardRead | null): void => {
-      if (!r || said?.has(r.key)) return;
-      const kind: ClauseKind = BOARD_COMPUTERS[id].kind;
-      if (r.namesMove && !input.namesBestMove) {
-        // The held idea keeps its own proof, squares and line (OS-1 root cause
-        // 1) — and IS the read's claim, the move withheld: one key.
-        if (r.idea) registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'speedrun-read', rank: 45, text: r.idea.text, proof: r.idea.proof, ...(r.idea.squares.length ? { squares: [...r.idea.squares] } : {}), ...(r.idea.lines ? { lines: r.idea.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}), ...(r.idea.motif ? { motif: r.idea.motif } : {}), claim: r.key });
+    // Each fact speaks under its own kind — the kind Review and Learn speak it
+    // under too (WO-STORY-MATRIX-01 P1-4), carried on the fact since P1-6a, so
+    // a computer whose kind is no clause kind fails to compile here. `rank` is
+    // the clause's hand weight, deleted with ClauseItem (P1-6c).
+    const speak = (f: (CoachFact & { kind: ClauseKind }) | null, rank: number): void => {
+      if (!f || f.claims.some((c) => said?.has(c))) return;
+      const claim = readKey(f);
+      if (f.namesStudentMove && !input.namesBestMove) {
+        // The held form keeps its own proof, squares and line (OS-1 root cause
+        // 1) — and IS the fact's claim, the move withheld: one key.
+        const h = f.heldForm;
+        if (h) registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'speedrun-read', rank: 45, text: h.text, proof: h.proof, ...(h.squares.length ? { squares: [...h.squares] } : {}), ...(h.lines ? { lines: h.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}), ...(h.motif ? { motif: h.motif } : {}), claim });
         return;
       }
-      registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind, rank, text: r.text, squares: [...r.squares], proof: r.proof, claim: r.key, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.lines ? { lines: r.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });
+      registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: f.kind, rank, text: f.text, squares: [...f.squares], proof: f.proof, claim, ...(f.stakes ? { stakes: f.stakes } : {}), ...(f.lines ? { lines: f.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });
     };
     try {
-      push('trapped', 84, readBoard('trapped', { fen, student: studentColor }));
-      push('queenGrabTrap', 82, readBoard('queenGrabTrap', { fen }));
-      push('pinBreakOwn', 80, readBoard('pinBreakOwn', { fen, student: studentColor }));
+      speak(readBoard('trapped', { fen, student: studentColor }), 84);
+      speak(readBoard('queenGrabTrap', { fen }), 82);
+      speak(readBoard('pinBreakOwn', { fen, student: studentColor }), 80);
       for (const t of detectTactics(fen).tactics) {
-        if (t.type === 'pin' && t.beneficiary === studentColor && t.involvedSquares[1]) push('pinBreakTheirs', 80, readBoard('pinBreakTheirs', { fen, student: studentColor, pinned: t.involvedSquares[1] }));
+        if (t.type === 'pin' && t.beneficiary === studentColor && t.involvedSquares[1]) speak(readBoard('pinBreakTheirs', { fen, student: studentColor, pinned: t.involvedSquares[1] }), 80);
       }
       const first = input.analysis.topLines.map((l) => l.moves[0]).filter((m): m is string => !!m);
-      push('prophylaxis', 55, readBoard('prophylaxis', { fen, engineFirstMoves: first }));
+      speak(readBoard('prophylaxis', { fen, engineFirstMoves: first }), 55);
       // The priority (unified with Learn, 2026-10-17).
       const bestHere = input.analysis.topLines[0]?.moves?.[0];
-      if (bestHere) push('priorityFirst', 28, readBoard('priorityFirst', { fen, student: studentColor, bestUci: bestHere }));
+      if (bestHere) speak(readBoard('priorityFirst', { fen, student: studentColor, bestUci: bestHere }), 28);
       const order = readBoard('moveOrder', { fen, pv: input.analysis.topLines[0]?.moves ?? [] });
-      if (order && input.namesBestMove) push('moveOrder', 55, order);
-      if (input.opponentLastMove) push('obligationLifted', 75, readBoard('obligationLifted', { fenBefore: input.opponentLastMove.fenBefore, fenAfter: fen, student: studentColor }));
-      if (input.history?.length) push('bookMove', 40, readBoard('bookMove', { history: input.history, student: studentColor }));
+      if (order && input.namesBestMove) speak(order, 55);
+      if (input.opponentLastMove) speak(readBoard('obligationLifted', { fenBefore: input.opponentLastMove.fenBefore, fenAfter: fen, student: studentColor }), 75);
+      if (input.history?.length) speak(readBoard('bookMove', { history: input.history, student: studentColor }), 40);
       const own = input.lastMove;
       // The count, only when the student's last move lost it.
-      if (own) push('countMethod', 30, readBoard('countMethod', { fenBefore: own.fenBefore, playedSan: own.san, student: studentColor, costCp: own.cpLoss }));
-      if (own && input.opponentLastMove) push('tiedDefender', 60, readBoard('tiedDefender', { fenBefore: own.fenBefore, fenAfterMove: input.opponentLastMove.fenBefore, fenAfterReply: fen, student: studentColor }));
+      if (own) speak(readBoard('countMethod', { fenBefore: own.fenBefore, playedSan: own.san, student: studentColor, costCp: own.cpLoss }), 30);
+      if (own && input.opponentLastMove) speak(readBoard('tiedDefender', { fenBefore: own.fenBefore, fenAfterMove: input.opponentLastMove.fenBefore, fenAfterReply: fen, student: studentColor }), 60);
       const rows = input.studentNeedContext?.bookDepartures ?? [];
-      if (own && rows.length) push('lastTimeHere', 70, readBoard('lastTimeHere', { fenBefore: own.fenBefore, playedSan: own.san, rows, currentGameId: null }));
+      if (own && rows.length) speak(readBoard('lastTimeHere', { fenBefore: own.fenBefore, playedSan: own.san, rows, currentGameId: null }), 70);
     } catch { /* a read is a bonus, never a blocker */ }
   }
   const composed = [...composedBase, ...depth, ...ideaClauses, ...registryClauses, ...askedPlanClauses];

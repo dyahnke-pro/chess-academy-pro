@@ -27,8 +27,9 @@ import { MATERIAL_VALUE } from './pieceValues';
 import type { TacticType } from '../types';
 
 /** A read of one board: its principal line, where it came from, and the other
- *  reads of the SAME board that may vouch for it. */
-export interface BoardRead {
+ *  reads of the SAME board that may vouch for it. (Named `LineRead`: the board
+ *  registry's reads used to be called `BoardRead` too — one name, two things.) */
+export interface LineRead {
   uci: readonly string[];
   source: 'deep' | 'record';
   /** REQUIRED: other reads of this board (`[]` = none), or `VERIFIED_LINE`. */
@@ -95,7 +96,7 @@ function lead(fen: string, winner: 'w' | 'b'): number {
 }
 
 function walk(
-  fen: string, read: BoardRead, winner: 'w' | 'b', student: 'w' | 'b', need: number,
+  fen: string, read: LineRead, winner: 'w' | 'b', student: 'w' | 'b', need: number,
   prior: { fenBefore: string; san: string } | null,
   /** A PUNISHMENT IS COUNTED FROM BEFORE THE MOVE IT PUNISHES (clean-pass
    *  review walk 2026-10-04, 41.Qxe5+: the queen it took counts — over the line
@@ -180,9 +181,9 @@ export function costReason(args: {
   /** What the move cost, centipawns, from the mover's side. */
   costCp: number;
   /** The board after the move (their reply first), or null. */
-  after: BoardRead | null;
+  after: LineRead | null;
   /** The best line from before the move (the mover's best move first), or null. */
-  before: BoardRead | null;
+  before: LineRead | null;
   /** The move that led to `fenBefore`, so a recapture is half a trade. */
   priorMove: { fenBefore: string; san: string } | null;
 }): CostReason | null {

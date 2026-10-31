@@ -21,6 +21,7 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { deriveNextPlanFacts, planAimKey, type PlanFact, type PlanKind, type StructurePlanFact } from './nextPlans';
 import { planStoppedProof, planStoppedLine } from './planStopped';
 import { NO_PROOF, type FactProof } from './proof';
+import type { FactSeat } from './coachFact';
 import { methodRead, methodPlanSentence, whyThisPlan, planWorth, type RouteArrow } from './planChoice';
 import { planStepLine } from './planStep';
 import { askThenAnswer } from '../utils/thinkPause';
@@ -129,6 +130,9 @@ interface PlanThreadLine {
   proof: FactProof;
   /** Each step of the plan's routes, hop by hop, on its own board (planChoice). */
   arrows?: RouteArrow[];
+  /** WHOSE PLAN THE LINE IS ABOUT — REQUIRED (the one fact's seat): the
+   *  student's plan, its step and its stop, or their plan's step. */
+  seat: FactSeat;
 }
 
 const cap = (s: string): string => openSentence(s);
@@ -162,7 +166,7 @@ export function planThreadTurn(
   if (t.stated && args.studentMove && !stopProof) {
     const step = planStepLine(t.stated.fact, args.studentMove.fenBefore, args.studentMove.san, args.student, 'you', args.fenAfter);
     // Its proof is the board: the squares the step landed on and the target it serves.
-    if (step) out.push({ text: step.text, squares: step.squares, claim: `plan:step:${t.stated.fact.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: step.text, full: step.text, squares: step.squares } });
+    if (step) out.push({ text: step.text, squares: step.squares, claim: `plan:step:${t.stated.fact.id}:${args.ply}`, seat: 'student', proof: { kind: 'squares', exact: true, short: step.text, full: step.text, squares: step.squares } });
   }
   // THEIR MOVE AS A STEP OF THEIR PLAN (WO-DECIDER-02): the same reader, the
   // other seat — the board's top plan for them on the board they moved from,
@@ -173,7 +177,7 @@ export function planThreadTurn(
     const theirSan = moveBetween(args.fenBefore, args.fenAfter);
     const theirPlan = theirSan ? deriveNextPlanFacts(args.fenBefore, enemy, { namesStudentMoves: true, studentPovCp: null })[0] : undefined;
     const theirStep = theirPlan && theirSan && THEIR_STEP_KINDS.has(theirPlan.kind) ? planStepLine(theirPlan, args.fenBefore, theirSan, enemy, 'them', args.fenAfter) : null;
-    if (theirStep) out.push({ text: theirStep.text, squares: theirStep.squares, claim: `plan:their-step:${theirPlan?.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: theirStep.text, full: theirStep.text, squares: theirStep.squares } });
+    if (theirStep) out.push({ text: theirStep.text, squares: theirStep.squares, claim: `plan:their-step:${theirPlan?.id}:${args.ply}`, seat: 'opponent', proof: { kind: 'squares', exact: true, short: theirStep.text, full: theirStep.text, squares: theirStep.squares } });
   }
   // A plan that held long enough means they were not shutting plans down.
   if (t.stated && args.ply - t.stated.ply >= PLAN_THREAD_HOLD_PLIES * 2) t.stoppedInRow = 0;
@@ -181,7 +185,7 @@ export function planThreadTurn(
     const proof = stopProof;
     if (proof) {
       t.stoppedInRow += 1;
-      out.push({ text: planStoppedLine(proof, t.stoppedInRow, args.fenAfter, args.student), squares: t.stated.fact.squares, claim: `plan:stopped:${t.stated.fact.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: proof, full: proof, squares: t.stated.fact.squares } });
+      out.push({ text: planStoppedLine(proof, t.stoppedInRow, args.fenAfter, args.student), squares: t.stated.fact.squares, claim: `plan:stopped:${t.stated.fact.id}:${args.ply}`, seat: 'student', proof: { kind: 'squares', exact: true, short: proof, full: proof, squares: t.stated.fact.squares } });
       t.stated = null;
       t.lastStatedPly = null;   // a proven stop is not a wobble: the next plan follows at once
       t.wasStopped = true;
@@ -253,7 +257,7 @@ export function planThreadTurn(
   else t.howSaid.add(top.id);
   const squares = read && mp ? mp.squares : top.squares;
   const aim = planAimKey(top.kind, top.squares[0] ?? top.file ?? null);
-  out.push({ text, squares, claim: `plan:student:struct:${top.id}:${args.ply}`, proof: NO_PROOF.description, ...(aim ? { aim } : {}), ...(read && mp?.arrows.length ? { arrows: mp.arrows } : {}) });
+  out.push({ text, squares, claim: `plan:student:struct:${top.id}:${args.ply}`, seat: 'student', proof: NO_PROOF.description, ...(aim ? { aim } : {}), ...(read && mp?.arrows.length ? { arrows: mp.arrows } : {}) });
   t.stated = { fact: top, ply: args.ply };
   t.lastStatedPly = args.ply;
   t.wasStopped = false;

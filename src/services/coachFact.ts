@@ -25,6 +25,9 @@ import type { FactProof } from './proof';
 import type { SpokenLine } from './voicePackage';
 import type { WeaknessSignal } from './weaknessSignal';
 import type { ThreadKey } from './gameStory';
+import type { TacticType } from '../types';
+import type { FacetRole } from './reviewFacetRank';
+import type { StoryBeat } from './openingStory';
 
 /** THE FOURTEEN GROUPS (PLAN WO-STORY-MATRIX-01, the regions table): the
  *  story (plans, the opening's story, the cause chain), the name (the opening,
@@ -167,8 +170,9 @@ interface CatalogRow {
 /** THE CATALOG OF COMPUTERS (PLAN item 2): one row per computer that emits a
  *  `CoachFact`, keyed by the function's own name. A new computer fails to
  *  compile until it has a row; `coachFact.test.ts` holds every row to an
- *  export of that name in that file. Today the lesson composer's nine; the
- *  rest join as their producers emit `CoachFact` (P1-6). */
+ *  export of that name in that file. Today the lesson composer's nine and
+ *  the board registry's (P1-6a); the rest join as their producers emit
+ *  `CoachFact` (P1-6b–e). */
 export const COMPUTER_CATALOG = {
   moveAspects: { file: 'services/reviewMoveBriefing.ts', says: 'what a move does on the board: the threat, the material, the trade, the tactic, the check, the promotion, the king cover, the structure made or conceded' },
   moveJob: { file: 'services/bookMoveWhy.ts', says: 'the job a move does against the board before it, from the speaker\'s seat' },
@@ -182,6 +186,26 @@ export const COMPUTER_CATALOG = {
   // The weighing as a choices fact — handed to the composer by the Danya
   // bench's `thought` variant today; the lesson reads it in P1-9.
   deliberationAlternativesFacts: { file: 'services/deliberation.ts', says: 'the moves you would weigh here and why each falls short' },
+  // THE BOARD REGISTRY'S COMPUTERS (P1-6a): every `BOARD_COMPUTERS` read is a
+  // fact made by one of these, named on its registry row.
+  findPinBreaks: { file: 'services/pinBreak.ts', says: 'a pinned piece that walks out of the pin with tempo — the student\'s resource, or their piece the student pins' },
+  findEnablingMove: { file: 'services/enablingMove.ts', says: 'why the engine\'s line plays A first: A clears the road its next piece move needs' },
+  newTiedDefender: { file: 'services/tiedDefender.ts', says: 'their guard the student\'s move tied down, still tied after their reply' },
+  obligationLifted: { file: 'services/obligationLifted.ts', says: 'their move took an attacker off a piece the student had to look after' },
+  openingStoryAt: { file: 'services/openingStory.ts', says: 'the opening\'s story from master games: the fork, what it is, the choice and its price, their setup, the coming game and its key break' },
+  bookMoveWhy: { file: 'services/bookMoveWhy.ts', says: 'the book move the student left, with the job it does on the board' },
+  countMethod: { file: 'services/countMethod.ts', says: 'count before you take: the student\'s move took or stood on a square their pieces outnumber' },
+  buildPriorityFirst: { file: 'services/playCommentary.ts', says: 'the priority before the move: the engine\'s best move aims at a weak pawn' },
+  lastTimeHere: { file: 'services/lastTimeHere.ts', says: 'the student\'s own costly departure from this position in another game' },
+  findQueenGrabTraps: { file: 'services/queenGrabTrap.ts', says: 'a capture that looks free and leaves the queen with no safe square' },
+  trappedOnBoard: { file: 'services/reviewTeachingPoints.ts', says: 'the student\'s queen or rook attacked with no safe square' },
+  provenThreatLine: { file: 'services/threatProof.ts', says: 'a threat warning with the cost it claims proven on the board' },
+  studentMoveStructure: { file: 'services/structureReads.ts', says: 'the structural judgements of the student\'s move' },
+  theirMoveStructure: { file: 'services/structureReads.ts', says: 'what their move did to the student\'s structure and squares' },
+  boardStructure: { file: 'services/structureReads.ts', says: 'the standing structural facts, the student to move' },
+  linesStructure: { file: 'services/structureReads.ts', says: 'the plan choices off the student\'s MultiPV' },
+  planThreadTurn: { file: 'services/planThread.ts', says: 'the student\'s plan carried across moves: its stop proven off their move, then the next plan' },
+  geometryReads: { file: 'services/tacticGeometry.ts', says: 'the line tactics: interference, clearance, decoy and deflection, discoveries, in-between moves, interposition, the loaded line' },
   // THE DOORS' ADAPTER (P1-5): every fact a door is handed in its producer's
   // old shape is made here. Its row goes with the last old shape (P1-6), when
   // each of those producers emits CoachFact under its own name.
@@ -252,6 +276,38 @@ export interface CoachFact {
    *  joins the fact's kind to the record. Null: the student has no record of
    *  it — grey, never a hole borrowed from a coarser bucket. */
   hole?: WeaknessSignal | null;
+  /** The motif it names, in the one tactic vocabulary (tacticVocabulary.ts) —
+   *  the weakness join, where its computer names one. */
+  motif?: TacticType;
+  /** Teach or describe, where its computer knows (a structural judgement can
+   *  be either; the book move always teaches) — else `FACT_ROLE` over its
+   *  kind. The door values a reason over a description. */
+  role?: FacetRole;
+  /** THE FACT WITHOUT THE MOVE (LEARN NAMES NO MOVE UNASKED, David
+   *  2026-10-10): for a fact that names the student's move, the same idea
+   *  said without it — its own words, proof, squares and line, so a surface
+   *  that holds the move back still says what stays true. */
+  heldForm?: HeldForm;
+  /** The moves it draws, each only when the fact is said: their move it
+   *  warns about, the move it asks the student to play (engine-vouched), a
+   *  route walked hop by hop on its own boards. */
+  marks?: FactMarks;
+  /** Which beat of the opening's story it is (`openingStory` only) — Learn
+   *  speaks each beat in its own lane (`STORY_LANE`). */
+  storyBeat?: StoryBeat;
+}
+
+/** A fact said without the move it names — see `CoachFact.heldForm`. */
+export type HeldForm = Pick<CoachFact, 'text' | 'proof' | 'squares' | 'lines' | 'motif'>;
+
+/** One move drawn on the board. */
+interface MarkMove { from: string; to: string }
+
+/** The moves a fact draws — see `CoachFact.marks`. */
+export interface FactMarks {
+  theirs?: MarkMove;
+  play?: MarkMove;
+  route?: ReadonlyArray<MarkMove & { fen: string }>;
 }
 
 /** A fact about the move alone — on no plan thread (`CoachFact.thread`). The

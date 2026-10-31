@@ -34,12 +34,12 @@ describe('their wanted …Bg4 pin, owned by one computer (OS-1 root cause 1)', (
 
   it('the held idea keeps that proof, squares and line — never the stopping square', () => {
     const r = readBoard('prophylaxis', { fen: FEN, engineFirstMoves: ['h2h3', 'e4e5'] })!;
-    expect(r.idea?.text).toMatch(/^Watch Bg4 — it would pin your knight on f3/);
-    expect(r.idea?.proof).toMatchObject({ kind: 'line', exact: true });
-    expect(r.idea?.squares).toEqual(['g4', 'f3', 'd1']);
-    expect(r.idea?.lines?.[0].sans).toEqual(['Bg4']);
-    expect(r.idea?.squares).not.toContain('h3');
-    expect(prophylaxisIdea(findProphylaxis(FEN)!).text).toBe(r.idea?.text);
+    expect(r.heldForm?.text).toMatch(/^Watch Bg4 — it would pin your knight on f3/);
+    expect(r.heldForm?.proof).toMatchObject({ kind: 'line', exact: true });
+    expect(r.heldForm?.squares).toEqual(['g4', 'f3', 'd1']);
+    expect(r.heldForm?.lines?.[0].sans).toEqual(['Bg4']);
+    expect(r.heldForm?.squares).not.toContain('h3');
+    expect(prophylaxisIdea(findProphylaxis(FEN)!).text).toBe(r.heldForm?.text);
   });
 
   it('the engine does not refute h3 here, so "find another way" is never said beside "one move stops it"', () => {

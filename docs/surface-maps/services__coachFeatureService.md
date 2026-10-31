@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6245 lines · 31 exports · 66 importers · 80 tests · 4 audits**
+**6260 lines · 31 exports · 67 importers · 81 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -54,6 +54,7 @@
 - `src/services/reviewCorpusNote.test.ts`
 - `src/services/reviewCorpusSweep.test.ts`
 - `src/services/reviewDeepIdeaStake.test.ts`
+- `src/services/reviewDeepIdeaStem.test.ts`
 - `src/services/reviewDeepThreat.test.ts`
 - `src/services/reviewForesight.test.ts`
 - `src/services/reviewHabitClosesTurn.test.ts`
@@ -322,10 +323,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8778`
-- `src/components/Coach/CoachTeachPage.tsx:8876`
-- `src/components/Coach/CoachTeachPage.tsx:11727`
-- `src/components/Coach/CoachTeachPage.tsx:12118`
+- `src/components/Coach/CoachTeachPage.tsx:8779`
+- `src/components/Coach/CoachTeachPage.tsx:8877`
+- `src/components/Coach/CoachTeachPage.tsx:11730`
+- `src/components/Coach/CoachTeachPage.tsx:12121`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/utils/justCaptured.test.ts:20`
@@ -345,13 +346,14 @@
 - `src/components/Coach/CoachGameReview.tsx:253`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:42`
 
-### `generateReviewNarration` (function) — 17 call sites
+### `generateReviewNarration` (function) — 18 call sites
 - `src/services/proofBacklog.report.test.ts:104`
 - `src/services/reviewBetterLineWhy.test.ts:58`
 - `src/services/reviewBetterLineWhy.test.ts:74`
 - `src/services/reviewBetterLineWhy.test.ts:84`
 - `src/services/reviewCorpusSweep.test.ts:148`
 - `src/services/reviewDeepIdeaStake.test.ts:31`
+- `src/services/reviewDeepIdeaStem.test.ts:42`
 - `src/services/reviewDeepThreat.test.ts:36`
 - `src/services/reviewDeepThreat.test.ts:62`
 - `src/services/reviewDeepThreat.test.ts:114`
@@ -384,7 +386,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:642`
+- `src/services/reviewFullData.ts:644`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites
@@ -444,6 +446,7 @@
 - `src/services/reviewCorpusNote.test.ts`
 - `src/services/reviewCorpusSweep.test.ts`
 - `src/services/reviewDeepIdeaStake.test.ts`
+- `src/services/reviewDeepIdeaStem.test.ts`
 - `src/services/reviewDeepThreat.test.ts`
 - `src/services/reviewDepth.eval.measure.test.ts`
 - `src/services/reviewForesight.test.ts`

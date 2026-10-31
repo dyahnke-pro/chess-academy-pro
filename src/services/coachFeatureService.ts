@@ -59,7 +59,7 @@ import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
-import { BOARD_COMPUTERS, readBoard, readBoardAll } from './boardComputers';
+import { readBoard, readBoardAll, readKey } from './boardComputers';
 import { stripThink } from '../utils/thinkPause';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
@@ -68,7 +68,7 @@ import { mateStakes, isSacrifice, type FactStakes } from './factStakes';
 import { sacrificeLedger, type BestAmong, type SacrificeLedgerRead } from './sacrificeLedger';
 import { threatPurpose, lineRestatesClaim } from './threatPurpose';
 import type { BestOfEngine, DeepReadEngine } from './gameAnalysisService';
-import { costReason as readCostReason, costReasonRow, type CostReason, type CostReasonRow, type BoardRead } from './costReason';
+import { costReason as readCostReason, costReasonRow, type CostReason, type CostReasonRow, type LineRead } from './costReason';
 import { lineTrust, NAME_NEAR_PLIES } from './lineTrust';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
 import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
@@ -2131,8 +2131,9 @@ function* reviewSegmentSteps(
       // repeat is the departure line's job ("You left book … again").
       if (moverColor === playerColor && studentNeed?.bookDepartures.length) {
         const here = readBoard('lastTimeHere', { fenBefore: fenPair.fenBefore, playedSan: m.san, rows: studentNeed.bookDepartures, currentGameId: currentGameId ?? null });
-        if (here && here.key.startsWith('last-here:other:') && !lastHereSaid.has(here.key)) {
-          lastHereSaid.add(here.key);
+        const hereKey = here ? readKey(here) : null;
+        if (here && hereKey && hereKey.startsWith('last-here:other:') && !lastHereSaid.has(hereKey)) {
+          lastHereSaid.add(hereKey);
           facets.push(`[last-here] ${here.text}`);
         }
       }
@@ -2277,7 +2278,7 @@ function* reviewSegmentSteps(
           const namedByStory = !!label && reads.some((r) => r.storyBeat !== 'identity' && r.text.includes(label));
           if (det && announce && namedByStory) storyNames = det.name;
           if (det && announce && !namedByStory) {
-            const idRead = reads.find((r) => r.storyBeat === 'identity' && !hintsSaid.has(`hint:${r.key}`)) ?? null;
+            const idRead = reads.find((r) => r.storyBeat === 'identity' && !hintsSaid.has(`hint:${readKey(r)}`)) ?? null;
             // THE FIRST NAME IS SAID WITH WHAT IT TEACHES (lead 2026-10-20:
             // "This game is the Sicilian Defense." alone is a name with no
             // teaching): the identity when it is ready, else the masters' plan
@@ -2300,7 +2301,7 @@ function* reviewSegmentSteps(
             if ((teaching || namedOpening) && !theirBareDeparture) {
               const raw = `[opening] ${announce}${teaching ? ` ${teaching}` : ''}`;
               facets.push(raw);
-              facetIdentity.set(raw, idRead ? `hint:${idRead.key}` : `hint:opening-name:${det.name}`);
+              facetIdentity.set(raw, idRead ? `hint:${readKey(idRead)}` : `hint:opening-name:${det.name}`);
               if (idRead?.squares.length) facetSquares.set(raw, idRead.squares);
               const said = det.name;
               facetCommits.set(raw, () => { noteOpening(story, m.ply, 'named', said); if (planText) hintsSaid.add(`once:plan:${planText}`); });
@@ -2309,11 +2310,12 @@ function* reviewSegmentSteps(
         } catch { /* naming is a bonus, never a blocker */ }
         for (const r of reads) {
           if (!storyAll && r.storyBeat !== 'identity') continue;
-          const id = `hint:${r.key}`;
+          const id = `hint:${readKey(r)}`;
           if (hintsSaid.has(id) || facets.some((x) => facetIdentity.get(x) === id)) continue;
-          // Each beat under its own kind (`openingStory.STORY_KIND`), placed by
-          // the one group table — no longer every beat filed as the name.
-          const raw = `[${r.kind ?? BOARD_COMPUTERS.openingStory.kind}] ${r.text}`;
+          // Each beat under its own kind (`openingStory.STORY_KIND`, on the
+          // fact), placed by the one group table — no longer every beat filed
+          // as the name.
+          const raw = `[${r.kind}] ${r.text}`;
           facets.push(raw);
           facetIdentity.set(raw, id);
           facetProofs.set(raw, r.proof);
@@ -2591,7 +2593,7 @@ function* reviewSegmentSteps(
       // thread once one of its lines is spoken (commit after the door).
       const planTrial = story.plans().thread;
       // The plan's routes, hop by hop, drawn when its line speaks.
-      const planRouteByRaw = new Map<string, Array<{ from: string; to: string; fen: string }>>();
+      const planRouteByRaw = new Map<string, ReadonlyArray<{ from: string; to: string; fen: string }>>();
       if (studentColorWB && !isStudentForAttr) {
         const povCp = m.evaluation != null ? (studentColorWB === 'w' ? m.evaluation : -m.evaluation) : null;
         // Their move follows the student's: the ply before is the student's own
@@ -2599,12 +2601,13 @@ function* reviewSegmentSteps(
         const prevStudent = i > 0 && moves[i - 1] ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null;
         for (const r of readBoardAll('planThread', { thread: planTrial, ply: m.ply, fenBefore: fenPair.fenBefore, fenAfter: fenPair.fenAfter, student: studentColorWB, studentPovCp: povCp, studentMove: prevStudent, holdPlayable: false })) {
           // Review has no think pause: the question and its answer run on.
-          const raw = `[${BOARD_COMPUTERS.planThread.kind}] ${stripThink(r.text)}`;
+          const raw = `[${r.kind}] ${stripThink(r.text)}`;
           facets.push(raw);
-          facetIdentity.set(raw, r.key.startsWith('plan:stopped:') ? 'plan-thread:stop' : r.key.startsWith('plan:step:') ? 'plan-thread:step' : 'plan-thread:plan');
+          const key = readKey(r);
+          facetIdentity.set(raw, key.startsWith('plan:stopped:') ? 'plan-thread:stop' : key.startsWith('plan:step:') ? 'plan-thread:step' : 'plan-thread:plan');
           facetProofs.set(raw, r.proof);
           if (r.squares.length) facetSquares.set(raw, r.squares);
-          if (r.routeArrows?.length) planRouteByRaw.set(raw, r.routeArrows);
+          if (r.marks?.route?.length) planRouteByRaw.set(raw, r.marks.route);
         }
       }
       const newPlan = planTrial.stated && planTrial.stated.ply === m.ply ? planTrial.stated.fact : null;
@@ -4507,7 +4510,7 @@ async function augmentWithProjections(
   const reasonFor = (
     s: ReviewMoveSegment, after: StockfishAnalysis | null, before: StockfishAnalysis | null, mode: 'full' | 'after-only' | 'before-only',
   ): CostReason | null => {
-    const boardRead = (deep: StockfishAnalysis | null, record: string[] | undefined, recordEarlier: string[] | undefined): BoardRead | null => {
+    const boardRead = (deep: StockfishAnalysis | null, record: string[] | undefined, recordEarlier: string[] | undefined): LineRead | null => {
       const line = deep?.topLines?.[0];
       if (line?.moves?.length) return { uci: line.moves, source: 'deep', seconds: [line.earlier?.moves ?? null, record ?? null, recordEarlier ?? null] };
       return record?.length ? { uci: record, source: 'record', seconds: [recordEarlier ?? null] } : null;
@@ -5158,6 +5161,12 @@ async function augmentWithProjections(
   for (const nf of deepOppFens.values()) deepOppPv.set(nf, await poolLine(nf, deepThreatPlies));
   // Said once per line, as on the student's side (review walk 2026-10-01).
   const deepOppSaid = new Set<string>();
+  // ONE STEM, ROTATED ON HOW MANY IDEAS THE GAME HAS TOLD (prod Review
+  // 2026-10-31: "Watch what they're building — left alone, their idea goes:
+  // they play … takes … — they win a …" three times in one game, a formula).
+  // Every stem carries a projection marker the board checkers cut at
+  // ("watch what they're building", "played out from here", "it runs").
+  let oppIdeasTold = 0;
   for (let i = 0; i < segments.length; i++) {
     const s = segments[i];
     if (deepOppBudget <= 0) break;
@@ -5206,12 +5215,18 @@ async function augmentWithProjections(
       // A proof when the line settles something; otherwise the IDEA is still
       // the teaching (what they want) — named by its first move, not recited.
       const oppRun = render(line, 'opponent');
+      const stem = ([
+        { goes: `Watch what they're building — left alone, their ${oppDeepKind} goes:`, starts: `Watch what they're building — left alone, their ${oppDeepKind} starts with` },
+        { goes: `Their next ${oppDeepKind}, played out from here:`, starts: `Their next ${oppDeepKind}, played out from here, starts with` },
+        { goes: `Another ${oppDeepKind} of theirs, if nothing stops it — it runs:`, starts: `Another ${oppDeepKind} of theirs, if nothing stops it — it runs from` },
+      ] as const)[oppIdeasTold % 3];
+      oppIdeasTold += 1;
       let callOut = oppRun
-        ? `Watch what they're building — left alone, their ${oppDeepKind} goes: ${oppRun}.`
+        ? `${stem.goes} ${oppRun}.`
         // THE STAKE IS ITS WHY (review audit 2026-10-14: "their idea starts
         // with d5." and nothing more). The line was kept BECAUSE it mates or
         // swings the game, so that is said with it.
-        : `Watch what they're building — left alone, their ${oppDeepKind} starts with ${line.plies[0].san}${matesOut ? ', and it ends in mate' : oppPovNow !== null && oppPovTerminal !== null ? `, and it swings the game by ${costWords(oppPovTerminal - oppPovNow)}` : ''}.`;
+        : `${stem.starts} ${line.plies[0].san}${matesOut ? ', and it ends in mate' : oppPovNow !== null && oppPovTerminal !== null ? `, and it swings the game by ${costWords(oppPovTerminal - oppPovNow)}` : ''}.`;
       // Its REAL purpose — what the line wins, when that is not what their
       // first move looks aimed at (missed computers, 2026-10-08).
       const purpose = (() => { try { return threatPurpose(line, studentColorWB); } catch { return null; } })();
@@ -5620,7 +5635,7 @@ const SERIES_VERB = new RegExp(`, ${V_ALT}\\b`, 'g');
 // …and a method list or a conditional race is advice, not history (amateur
 // review walk 2026-09-27: "Checks, captured, threats"; a passer race "you got
 // there first once the queens came off" while the queens were still on).
-const PRESCRIPTIVE = /(the plan (?:from here|is|changes)|so the plan is|here's (?:exactly )?how|your defense starts with|watch what they|follow it up|don't play|spend two or three tempi|that's your cue|is your cue|your whole job|wants to run|checks, captures|pushes from queening|once the queens come off)/i;
+const PRESCRIPTIVE = /(the plan (?:from here|is|changes)|so the plan is|here's (?:exactly )?how|your defense starts with|watch what they|played out from here|if nothing stops it|follow it up|don't play|spend two or three tempi|that's your cue|is your cue|your whole job|wants to run|checks, captures|pushes from queening|once the queens come off)/i;
 /** Case-preserving contraction rewrite: "You're" → "You were", never "you were"
  *  mid-narration with a lowercase head (the `/gi` replacement used to lowercase
  *  every sentence it opened). */
