@@ -7,7 +7,9 @@ import type { BoardHighlight } from '../types';
 import type { TacticPattern, HangingPiece } from '../types/tacticTypes';
 import { findHangingPieces } from './tacticClassifier';
 import { capturesWinMaterial } from './positionReadingService';
-import { isRealPin, isRealSkewer } from './pinGeometry';
+// THE ONE teaching-pin reader (WO-STORY-MATRIX-01 P1-7, 2026-10-30) — four
+// pin readers became two named concepts in `pinGeometry`.
+import { findPins, isRealSkewer } from './pinGeometry';
 import { BISHOP_DIRS, ROOK_DIRS, squareToCoords, coordsToSquare, traceRay } from './lineGeometry';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
@@ -151,68 +153,6 @@ function findForks(chess: Chess): TacticPattern[] {
   }
 
   return forks;
-}
-
-/**
- * Find all active pins: a sliding piece pinning an enemy piece against a
- * more valuable enemy piece behind it.
- */
-function findPins(chess: Chess): TacticPattern[] {
-  const pins: TacticPattern[] = [];
-  const board = chess.board();
-
-  for (let r = 0; r < 8; r++) {
-    for (let c = 0; c < 8; c++) {
-      const piece = board[r][c];
-      if (!piece) continue;
-      if (piece.type !== 'b' && piece.type !== 'r' && piece.type !== 'q') continue;
-
-      const sq = coordsToSquare(c, 7 - r);
-      if (!sq) continue;
-
-      const enemyColor: Color = piece.color === 'w' ? 'b' : 'w';
-      const dirs =
-        piece.type === 'b' ? BISHOP_DIRS
-        : piece.type === 'r' ? ROOK_DIRS
-        : [...BISHOP_DIRS, ...ROOK_DIRS];
-
-      for (const dir of dirs) {
-        const piecesOnRay = traceRay(chess, sq, dir);
-        if (piecesOnRay.length < 2) continue;
-
-        const first = piecesOnRay[0];
-        const second = piecesOnRay[1];
-
-        // A PIN THE FRONT PIECE CANNOT LEAVE IS NOT A PIN (2026-09-17). Prod
-        // spoke "rook on h1 pins pawn on h7 against rook on h8" — the pawn's
-        // pushes stay on the h-file, so nothing was ever exposed. The escape
-        // test IS the concept engine's own invariant; `pinGeometry` holds it
-        // once so the two detectors cannot drift apart again.
-        if (
-          first.color === enemyColor &&
-          second.color === enemyColor &&
-          isRealPin({
-            chess,
-            dir,
-            attacker: sq,
-            pinned: first.square,
-            behind: second.square,
-            frontValue: PIECE_VALUE[first.type] ?? 0,
-            behindValue: PIECE_VALUE[second.type] ?? 0,
-          })
-        ) {
-          pins.push({
-            type: 'pin',
-            beneficiary: piece.color,
-            involvedSquares: [sq, first.square, second.square],
-            description: `${capitalize(PIECE_NAMES[piece.type] ?? piece.type)} on ${sq} pins ${PIECE_NAMES[first.type] ?? first.type} on ${first.square} against ${PIECE_NAMES[second.type] ?? second.type} on ${second.square}`,
-          });
-        }
-      }
-    }
-  }
-
-  return pins;
 }
 
 /**

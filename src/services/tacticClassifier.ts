@@ -8,7 +8,7 @@ import type {
   UpcomingTactic,
 } from '../types/tacticTypes';
 import { PIECE_NAMES } from '../types/tacticTypes';
-import { isRealPin, isRealSkewer } from './pinGeometry';
+import { findPins, isRealSkewer } from './pinGeometry';
 import { cpBand } from './accuracyService';
 import { findHangingBySee } from './positionReadingService';
 import { verifyForkOnBoard } from './tacticVerification';
@@ -177,53 +177,19 @@ function detectFork(
 
 /**
  * Detect pin: a sliding piece pins an enemy piece against a more valuable piece behind it.
+ *
+ * The pin the moved piece makes, read off the ONE teaching-pin reader
+ * (`pinGeometry.findPins`, scanning only `toSquare`) — this file used to walk
+ * its own copy of the rays (WO-STORY-MATRIX-01 P1-7, 2026-10-30).
  */
 export function detectPin(
   chessAfter: Chess,
   toSquare: Square,
   movingColor: Color,
 ): TacticPattern | null {
-  const piece = chessAfter.get(toSquare);
-  if (!piece) return null;
-  if (piece.type !== 'b' && piece.type !== 'r' && piece.type !== 'q') return null;
-
-  const dirs =
-    piece.type === 'b' ? BISHOP_DIRS
-    : piece.type === 'r' ? ROOK_DIRS
-    : [...BISHOP_DIRS, ...ROOK_DIRS];
-
-  for (const dir of dirs) {
-    const piecesOnRay = traceRay(chessAfter, toSquare, dir);
-    if (piecesOnRay.length < 2) continue;
-
-    const first = piecesOnRay[0];
-    const second = piecesOnRay[1];
-
-    // Same escape test as `tacticsDetector.findPins`, from the same helper —
-    // see `pinGeometry.ts`. Value and geometry alone called a pawn pinned
-    // along its own file a pin.
-    if (
-      first.color === oppositeColor(movingColor) &&
-      second.color === oppositeColor(movingColor) &&
-      isRealPin({
-        chess: chessAfter,
-        dir,
-        attacker: toSquare,
-        pinned: first.square,
-        behind: second.square,
-        frontValue: pieceValue(first.type),
-        behindValue: pieceValue(second.type),
-      })
-    ) {
-      return {
-        type: 'pin',
-        involvedSquares: [toSquare, first.square, second.square],
-        description: `${capitalize(pieceName(piece.type))} on ${squareLabel(toSquare)} pins ${pieceName(first.type)} on ${squareLabel(first.square)} against ${pieceName(second.type)} on ${squareLabel(second.square)}`,
-      };
-    }
-  }
-
-  return null;
+  const pin = findPins(chessAfter, toSquare).find((p) => p.beneficiary === movingColor);
+  if (!pin) return null;
+  return { type: 'pin', involvedSquares: pin.involvedSquares, description: pin.description };
 }
 
 /**

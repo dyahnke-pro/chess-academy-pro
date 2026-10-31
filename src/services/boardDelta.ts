@@ -1,5 +1,6 @@
 import { Chess } from 'chess.js';
 import type { Square, Color, PieceSymbol } from 'chess.js';
+import { kingNeighbourhood } from './kingSafety';
 
 /**
  * THE BOARD-DELTA COMPUTER (David 2026-07-22: "We need the package to contain
@@ -52,12 +53,13 @@ function chebyshev(a: string, b: string): number {
   return Math.max(Math.abs(a.charCodeAt(0) - b.charCodeAt(0)), Math.abs(Number(a[1]) - Number(b[1])));
 }
 
+/** The squares near `color`'s king — `kingSafety.kingNeighbourhood`, the one
+ *  radius-2 zone (WO-STORY-MATRIX-01 P1-7, 2026-10-30: this file kept its own
+ *  copy, and called it "the king zone" beside the radius-1 ring). */
 function kingZone(c: Chess, color: Color): Set<string> {
   for (const sq of SQUARES) {
     const p = c.get(sq);
-    if (p && p.type === 'k' && p.color === color) {
-      return new Set(SQUARES.filter((s) => chebyshev(s, sq) <= 2));
-    }
+    if (p && p.type === 'k' && p.color === color) return new Set(kingNeighbourhood(sq));
   }
   return new Set();
 }

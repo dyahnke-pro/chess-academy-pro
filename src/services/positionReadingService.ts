@@ -29,7 +29,7 @@ import { developedMinorCount, totalMinorCount } from './development';
 import { isOutpost, noPawnCanChallenge } from './outpost';
 import { MATERIAL_VALUE, materialBalance } from './pieceValues';
 import { describeStructure } from './boardStructure';
-import { shieldCount } from './kingSafety';
+import { kingCover } from './kingSafety';
 import { worstPieceNote } from './nextPlans';
 import { unmarked } from '../utils/sanMark';
 import { liteMoves, makeLite, undoLite } from './liteMoves';
@@ -1607,23 +1607,12 @@ interface OpenFilesInfo {
  *  geometry (G3); independent of whether a rook currently sits there (that
  *  reactive read lives in `findPieceQuality`). */
 export function findOpenFiles(fen: string): OpenFilesInfo {
-  let chess: Chess;
-  try { chess = new Chess(fen); } catch { return { open: [], whiteSemiOpen: [], blackSemiOpen: [] }; }
-  const counts: { w: number; b: number }[] = Array.from({ length: 8 }, () => ({ w: 0, b: 0 }));
-  for (const row of chess.board()) for (const cell of row) {
-    if (cell && cell.type === 'p') counts[cell.square.charCodeAt(0) - 97][cell.color] += 1;
-  }
-  const open: string[] = [];
-  const whiteSemiOpen: string[] = [];
-  const blackSemiOpen: string[] = [];
-  for (let f = 0; f < 8; f += 1) {
-    const letter = String.fromCharCode(97 + f);
-    const { w, b } = counts[f];
-    if (w === 0 && b === 0) { open.push(letter); continue; }
-    if (w === 0) whiteSemiOpen.push(letter);
-    if (b === 0) blackSemiOpen.push(letter);
-  }
-  return { open, whiteSemiOpen, blackSemiOpen };
+  // ONE OPEN-FILE READER (WO-STORY-MATRIX-01 P1-7, 2026-10-30): this file kept
+  // its own pawn count beside `describeStructure`'s; the structure read is the
+  // one, and this is its rook-facing view.
+  const s = describeStructure(fen);
+  if (!s) return { open: [], whiteSemiOpen: [], blackSemiOpen: [] };
+  return { open: [...s.pawns.openFiles], whiteSemiOpen: [...s.pawns.halfOpenFiles.w], blackSemiOpen: [...s.pawns.halfOpenFiles.b] };
 }
 
 interface SpaceInfo { white: number; black: number }
@@ -1745,27 +1734,22 @@ export function kingSafetyRead(fen: string, color: Color): KingSafetyNote | null
   const homeRank = color === 'w' ? 1 : 8;
   const inCenter = (file === 3 || file === 4) && Number(ksq[1]) === homeRank; // d/e on home rank
   const castled = (file >= 6 || file <= 2) && Number(ksq[1]) === homeRank; // king-/queen-side corner-ish
-  // Pawn shield: friendly pawns on the king's file ± adjacent, one rank ahead.
-  const ahead = color === 'w' ? 1 : -1;
-  let shieldPawns = 0;
   const openFilesNearKing: string[] = [];
   for (const df of [-1, 0, 1]) {
     const f = file + df;
     if (f < 0 || f > 7) continue;
     const fileLetter = String.fromCharCode(97 + f);
-    const shieldSq = `${fileLetter}${homeRank + ahead}` as Square;
-    const occ = chess.get(shieldSq);
-    if (occ && occ.type === 'p' && occ.color === color) shieldPawns += 1;
     // Open toward king: no friendly pawn anywhere on this file.
     let hasOwnPawn = false;
     for (let r = 1; r <= 8; r += 1) { const o = chess.get(`${fileLetter}${r}` as Square); if (o && o.type === 'p' && o.color === color) { hasOwnPawn = true; break; } }
     if (!hasOwnPawn) openFilesNearKing.push(fileLetter);
   }
-  // A CASTLED king's shield is the ONE count (`kingSafety.shieldCount`): a
-  // pawn one step ahead still shelters. This file counted only the second
-  // rank, so the 09-30 fix for a g6 fianchetto never reached chat (census 12).
-  const shield = castled ? shieldCount(fen, color) : null;
-  if (shield) shieldPawns = shield.present;
+  // THE ONE KING-COVER RULE (`kingSafety.kingCover`, WO-STORY-MATRIX-01 P1-7,
+  // 2026-10-30), castled or not: per file, an own pawn on the king's rank or
+  // one or two ranks in front. This file counted the second rank for an
+  // uncastled king wherever it stood — a king on g3 was "covered" by the
+  // pawns behind it.
+  const shieldPawns = kingCover(chess, color)?.present ?? 0;
   const exposed = inCenter || shieldPawns <= 1 || openFilesNearKing.length >= 2;
   return { square: ksq, castled, inCenter, openFilesNearKing, shieldPawns, exposed };
 }

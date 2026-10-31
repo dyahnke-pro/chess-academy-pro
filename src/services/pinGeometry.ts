@@ -47,7 +47,10 @@
  * has no LEGAL move off the ray, and asking chess.js for legal moves would
  * therefore report every king-pin as "cannot leave" — exactly backwards.
  */
-import { Chess, type Square, type PieceSymbol } from 'chess.js';
+import { Chess, type Square, type PieceSymbol, type Color } from 'chess.js';
+import type { TacticPattern } from '../types/tacticTypes';
+import { BISHOP_DIRS, ROOK_DIRS, traceRay } from './lineGeometry';
+import { openSentence } from '../utils/openSentence';
 
 type Vec = readonly [number, number];
 
@@ -238,4 +241,129 @@ export function isRealSkewer(chess: Chess, attacker: Square, front: Square, behi
     && chess.attackers(attacker, f.color).includes(front)
     && chess.attackers(attacker, att.color).length === 0) return false;
   return true;
+}
+
+/*
+ * 🔒 TWO PIN CONCEPTS, ONE MODULE (WO-STORY-MATRIX-01 P1-7, 2026-10-30). The
+ * app had four pin readers — `tacticsDetector.findPins`,
+ * `tacticClassifier.detectPin`, `nextPlans.isPinnedPiece` and a private
+ * `kingSafety.absolutePinRay` — and they answered two different questions:
+ *
+ *  - THE TEACHING PIN (`findPins`): a pin a coach would NAME — relative or
+ *    absolute, the front piece can leave the line, and the pin bites
+ *    (`isRealPin`). A pawn pinned along its own file to the king is not one.
+ *  - THE LEGAL PIN (`absolutePinRay`): what a piece may legally do — it stands
+ *    between its own king and an enemy slider with nothing else on the line, so
+ *    every move it makes must stay on that line. That same file-pinned pawn IS
+ *    one: its diagonal capture is illegal.
+ *
+ * Every teaching pin against the king is a legal pin (`pinReaders.test.ts`
+ * holds it); the reverse is not true and must not be. The two private walks
+ * that disagreed — `kingSafety`'s read a piece standing BEYOND an enemy slider
+ * that gives check as "pinned" — are one walk now.
+ */
+
+const PIECE_NAMES: Record<PieceSymbol, string> = {
+  p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
+};
+
+/**
+ * THE TEACHING PIN — every pin on the board a coach would name: a bishop, rook
+ * or queen with two enemy pieces on its ray that pass `isRealPin`. `attacker`
+ * restricts the scan to one pinning square (the move a classifier just made),
+ * so a one-square question costs a one-square scan. Board order (rank 8 → 1,
+ * file a → h), then bishop rays before rook rays.
+ */
+export function findPins(chess: Chess, attacker?: Square): TacticPattern[] {
+  const pins: TacticPattern[] = [];
+  type Placed = { square: Square; type: PieceSymbol; color: Color };
+  const at = attacker ? chess.get(attacker) : undefined;
+  const sliders: Placed[] = attacker
+    ? (at ? [{ square: attacker, type: at.type, color: at.color }] : [])
+    : chess.board().flat().filter((p): p is Placed => p !== null);
+
+  for (const piece of sliders) {
+    if (piece.type !== 'b' && piece.type !== 'r' && piece.type !== 'q') continue;
+    const sq = piece.square;
+    const enemyColor: Color = piece.color === 'w' ? 'b' : 'w';
+    const dirs =
+      piece.type === 'b' ? BISHOP_DIRS
+      : piece.type === 'r' ? ROOK_DIRS
+      : [...BISHOP_DIRS, ...ROOK_DIRS];
+
+    for (const dir of dirs) {
+      const piecesOnRay = traceRay(chess, sq, dir);
+      if (piecesOnRay.length < 2) continue;
+
+      const first = piecesOnRay[0];
+      const second = piecesOnRay[1];
+
+      // A PIN THE FRONT PIECE CANNOT LEAVE IS NOT A PIN (2026-09-17). Prod
+      // spoke "rook on h1 pins pawn on h7 against rook on h8" — the pawn's
+      // pushes stay on the h-file, so nothing was ever exposed. The escape
+      // test IS the concept engine's own invariant, held once above.
+      if (
+        first.color === enemyColor &&
+        second.color === enemyColor &&
+        isRealPin({
+          chess,
+          dir,
+          attacker: sq,
+          pinned: first.square,
+          behind: second.square,
+          frontValue: CAPTURE_VALUE[first.type],
+          behindValue: CAPTURE_VALUE[second.type],
+        })
+      ) {
+        pins.push({
+          type: 'pin',
+          beneficiary: piece.color,
+          involvedSquares: [sq, first.square, second.square],
+          description: `${openSentence(PIECE_NAMES[piece.type])} on ${sq} pins ${PIECE_NAMES[first.type]} on ${first.square} against ${PIECE_NAMES[second.type]} on ${second.square}`,
+        });
+      }
+    }
+  }
+
+  return pins;
+}
+
+/**
+ * THE LEGAL PIN — the unit direction [df, dr] from a piece's OWN king through
+ * the piece when it is absolutely pinned: nothing stands between the king and
+ * the piece, and the first piece past it on that line is an enemy slider that
+ * moves along it. Null otherwise (and for a king or an empty square). Every
+ * move the piece makes must stay on this line, so it cannot guard or attack
+ * anything off it.
+ */
+export function absolutePinRay(chess: Chess, sq: Square): [number, number] | null {
+  const p = chess.get(sq);
+  if (!p || p.type === 'k') return null;
+  let king: Square | null = null;
+  for (const row of chess.board()) for (const cell of row) if (cell && cell.type === 'k' && cell.color === p.color) king = cell.square;
+  if (!king) return null;
+  const [kf, kr] = coords(king);
+  const [sf, sr] = coords(sq);
+  const df = sf - kf;
+  const dr = sr - kr;
+  // On a king line at all — a piece off the king's file, rank and diagonals is
+  // never pinned to it.
+  if (df !== 0 && dr !== 0 && Math.abs(df) !== Math.abs(dr)) return null;
+  const ud: [number, number] = [Math.sign(df), Math.sign(dr)];
+  // Nothing between the king and the piece: a piece standing BEYOND a checking
+  // slider is not pinned, the checker is in the way.
+  for (let f = kf + ud[0], r = kr + ud[1]; f !== sf || r !== sr; f += ud[0], r += ud[1]) {
+    const at = square(f, r);
+    if (!at || chess.get(at)) return null;
+  }
+  // The first piece past it is an enemy slider that moves along this line.
+  for (let f = sf + ud[0], r = sr + ud[1]; ; f += ud[0], r += ud[1]) {
+    const at = square(f, r);
+    if (!at) return null;
+    const hit = chess.get(at);
+    if (!hit) continue;
+    if (hit.color === p.color) return null;
+    const diagonal = ud[0] !== 0 && ud[1] !== 0;
+    return hit.type === 'q' || (diagonal ? hit.type === 'b' : hit.type === 'r') ? ud : null;
+  }
 }

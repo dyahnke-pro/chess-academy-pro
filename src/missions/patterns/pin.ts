@@ -28,7 +28,7 @@
  * `no-cannot-take`, `no-not-hanging`, `no-bites`).
  */
 import type { Chess, Color, PieceSymbol, Square } from 'chess.js';
-import { canLeaveLine, isRealPin, pinBites } from '../../services/pinGeometry';
+import { canLeaveLine, findPins, isRealPin, pinBites } from '../../services/pinGeometry';
 import { BISHOP_DIRS, ROOK_DIRS, traceRay } from '../../services/lineGeometry';
 import { codes, load, other, pieces, VALUE, type PatternProbe } from './board';
 
@@ -91,8 +91,12 @@ export function pinClauses(r: PinRay): Record<'worth-more' | 'can-leave' | 'cann
   };
 }
 
+/** PRESENT is the app's ONE teaching-pin reader (`pinGeometry.findPins`,
+ *  WO-STORY-MATRIX-01 P1-7, 2026-10-30); the rays above stay for the near-miss
+ *  decomposition, which needs every ray, not only the real pins. */
 function present(fen: string, side: Color): boolean {
-  return candidateRays(fen, side).some((r) => isRealPin(r));
+  const chess = load(fen);
+  return !!chess && findPins(chess).some((p) => p.beneficiary === side);
 }
 
 function nearMisses(fen: string, side: Color): readonly string[] {

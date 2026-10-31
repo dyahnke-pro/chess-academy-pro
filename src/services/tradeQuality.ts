@@ -95,9 +95,10 @@ export function recaptureDamage(after: Chess, sq: Square): 'doubled' | 'isolated
   const side = after.turn();
   const other: Color = side === 'w' ? 'b' : 'w';
   const queensOn = after.board().flat().some((c) => c && c.type === 'q' && c.color === other);
-  // KING COVER is the app's ONE shield rule (`boardStructure.shieldPawns`:
-  // within a file of the king, up to two ranks in front) — this read used to
-  // keep a private one that counted a pawn on any rank.
+  // KING COVER is the app's ONE shield rule (`kingSafety.kingCover`, read here
+  // through `boardStructure.shieldPawns`: per file within one of the king, an
+  // own pawn on its rank or up to two ranks in front) — this read used to keep
+  // a private one that counted a pawn on any rank.
   const shieldBefore = describeStructure(after.fen())?.kings.shieldPawns[side] ?? 0;
   let kingCover = queensOn; let doubled = true; let isolated = true;
   for (const m of caps) {

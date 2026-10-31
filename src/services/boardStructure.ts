@@ -12,6 +12,7 @@
  */
 import { Chess } from 'chess.js';
 import { isOutpost } from './outpost';
+import { kingCover } from './kingSafety';
 
 type Color = 'w' | 'b';
 
@@ -48,8 +49,9 @@ interface KingFacts {
   kingWing: Record<Color, 'kingside' | 'queenside' | 'center'>;
   /** True when the kings sit on opposite wings (both off-center). */
   oppositeWings: boolean;
-  /** Pawns still shielding the king (own pawns on the 3 files around the
-   *  king, on the king's side of the board). 0-3+; low = airy king. */
+  /** Files of cover around the king — `kingSafety.kingCover`, the one rule:
+   *  the king's file ±1, an own pawn on the king's rank or one or two ranks in
+   *  front. 0-3; low = airy king. */
   shieldPawns: Record<Color, number>;
 }
 
@@ -160,7 +162,7 @@ function computeOutposts(chess: Chess, all: Located[]): OutpostFacts['outposts']
     .map((p) => ({ color: p.color, piece: p.type, square: p.square }));
 }
 
-function computeKingFacts(all: Located[]): KingFacts {
+function computeKingFacts(all: Located[], chess: Chess): KingFacts {
   const kingSquare: Record<Color, string> = { w: 'e1', b: 'e8' };
   for (const p of all) if (p.type === 'k') kingSquare[p.color] = p.square;
 
@@ -177,19 +179,13 @@ function computeKingFacts(all: Located[]): KingFacts {
   const oppositeWings =
     kingWing.w !== 'center' && kingWing.b !== 'center' && kingWing.w !== kingWing.b;
 
-  const shieldPawns: Record<Color, number> = { w: 0, b: 0 };
-  for (const c of ['w', 'b'] as const) {
-    const kfi = fileIndex(fileOf(kingSquare[c]));
-    const kr = rankOf(kingSquare[c]);
-    shieldPawns[c] = all.filter((p) => {
-      if (p.type !== 'p' || p.color !== c) return false;
-      const pfi = fileIndex(fileOf(p.square));
-      const pr = rankOf(p.square);
-      if (Math.abs(pfi - kfi) > 1) return false;
-      // In front of the king, within two ranks.
-      return c === 'w' ? pr > kr && pr <= kr + 2 : pr < kr && pr >= kr - 2;
-    }).length;
-  }
+  // THE ONE KING-COVER RULE lives in `kingSafety.kingCover` (WO-STORY-MATRIX-01
+  // P1-7, 2026-10-30): this read kept its own count of pawns, so doubled pawns
+  // in front of the king counted as two files of cover.
+  const shieldPawns: Record<Color, number> = {
+    w: kingCover(chess, 'w')?.present ?? 0,
+    b: kingCover(chess, 'b')?.present ?? 0,
+  };
 
   return { kingSquare, kingWing, oppositeWings, shieldPawns };
 }
@@ -249,7 +245,7 @@ export function describeStructure(fen: string): StructureFacts | null {
   return {
     pawns: computePawnFacts(all),
     outposts: computeOutposts(chess, all),
-    kings: computeKingFacts(all),
+    kings: computeKingFacts(all, chess),
     material: computeMaterialFacts(all),
   };
 }

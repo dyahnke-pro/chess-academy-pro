@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**736 lines · 6 exports · 16 importers · 8 tests · 0 audits**
+**702 lines · 6 exports · 17 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6630) — names `tacticClassifier`
+- **The standard post-deploy ritual** (CLAUDE.md:6817) — names `tacticClassifier`
 
 ## Who calls in
 
@@ -21,6 +21,7 @@
 - `src/services/moveReason.ts`
 - `src/services/oneHanging.test.ts`
 - `src/services/oneSkewerRule.test.ts`
+- `src/services/pinReaders.test.ts`
 - `src/services/playedMoveGrade.ts`
 - `src/services/pvPlayback.ts`
 - `src/services/searchDepth.ts`
@@ -31,19 +32,20 @@
 
 ## Exports and every call site
 
-### `detectPin` (function) — 1 call site
-- `src/services/missedTacticService.ts:841`
+### `detectPin` (function) — 2 call sites
+- `src/services/missedTacticService.ts:896`
+- `src/services/pinReaders.test.ts:83`
 
 ### `detectSkewer` (function) — 1 call site
-- `src/services/missedTacticService.ts:846`
+- `src/services/missedTacticService.ts:901`
 
 ### `detectDiscovery` (function) — 1 call site
-- `src/services/missedTacticService.ts:851`
+- `src/services/missedTacticService.ts:906`
 
 ### `findHangingPieces` (function) — 14 call sites
 - `src/data/patternRegistry.ts:113`
-- `src/services/coachGameEngine.ts:322`
-- `src/services/deliberation.ts:152`
+- `src/services/coachGameEngine.ts:264`
+- `src/services/deliberation.ts:153`
 - `src/services/hangingIgnoresCheck.test.ts:10`
 - `src/services/hangingIgnoresCheck.test.ts:11`
 - `src/services/liveTacticsContext.ts:379`
@@ -53,14 +55,14 @@
 - `src/services/oneHanging.test.ts:20`
 - `src/services/playedMoveGrade.ts:151`
 - `src/services/searchDepth.ts:69`
-- `src/services/tacticsDetector.ts:721`
+- `src/services/tacticsDetector.ts:661`
 - `src/test/kingIsNeverHanging.test.ts:56`
 
 ### `classifyPosition` (function) — 34 call sites
-- `src/components/Coach/CoachGamePage.tsx:3310`
+- `src/components/Coach/CoachGamePage.tsx:3306`
 - `src/services/missedTacticService.ts:546`
 - `src/services/oneSkewerRule.test.ts:16`
-- `src/services/pvPlayback.ts:438`
+- `src/services/pvPlayback.ts:451`
 - `src/services/tacticClassifier.test.ts:32`
 - `src/services/tacticClassifier.test.ts:40`
 - `src/services/tacticClassifier.test.ts:47`
@@ -93,7 +95,7 @@
 - `src/services/tacticClassifier.test.ts:357`
 
 ### `scanUpcomingTactics` (function) — 5 call sites
-- `src/components/Coach/CoachGamePage.tsx:2837`
+- `src/components/Coach/CoachGamePage.tsx:2828`
 - `src/services/liveTacticsContext.ts:99`
 - `src/services/tacticClassifier.skewer.test.ts:13`
 - `src/services/tacticClassifier.skewer.test.ts:15`
@@ -104,6 +106,7 @@
 - `src/services/hangingIgnoresCheck.test.ts`
 - `src/services/oneHanging.test.ts`
 - `src/services/oneSkewerRule.test.ts`
+- `src/services/pinReaders.test.ts`
 - `src/services/tacticClassifier.skewer.test.ts`
 - `src/services/tacticClassifier.test.ts`
 - `src/services/tacticClassifierService.fill.test.ts`

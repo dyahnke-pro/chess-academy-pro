@@ -7,6 +7,9 @@
 // king) is read straight off the board.
 import { Chess, type Square } from 'chess.js';
 import { countWord } from '../utils/andList';
+// THE LEGAL PIN, one walk (WO-STORY-MATRIX-01 P1-7, 2026-10-30): this file's
+// private copy read a piece standing beyond a checking slider as pinned.
+import { absolutePinRay } from './pinGeometry';
 
 type Sq = string;
 const FILES = 'abcdefgh';
@@ -49,25 +52,57 @@ export function shelterSquares(kingSq: Sq, color: 'w' | 'b'): Sq[] | null {
   return out;
 }
 
-/** How many of the shelter pawns in front of `color`'s king stand guard — a
- *  pawn on its shelter square OR one step ahead of it (g6 / h6 still shelter;
- *  claim check 2026-09-30, item 95). The ONE shield count (one-coach P2,
- *  census group 12): `detectKingExposure` and `kingSafetyRead` both read it.
- *  Null when the king is not on a castled square. */
-export function shieldCount(fen: string, color: 'w' | 'b'): { kingSquare: Sq; present: number; of: number } | null {
+/** THE ONE KING-COVER RULE (WO-STORY-MATRIX-01 P1-7, 2026-10-30). Two
+ *  readers each called themselves "the ONE shield rule": this file's castled
+ *  shelter (a pawn on the shelter square or one step ahead) and
+ *  `boardStructure`'s `shieldPawns` (own pawns on the king's file ±1, one or
+ *  two ranks in front, any king) — and `kingSafetyRead` counted a third (the
+ *  second rank, wherever the king stood: a king that had walked up to g3 was
+ *  "covered" by the f2, g2 and h2 pawns behind it). They are one rule: for
+ *  each file around the king, is there an own pawn on the king's rank or one
+ *  or two ranks in front of it? The king's own rank counts so a king that has
+ *  stepped up (Kh2 with g2 and h3) keeps the pawn beside it; for a king on
+ *  its back rank it changes nothing, so the castled shelter is this rule
+ *  exactly. Counted per FILE, so doubled pawns in front of the king are one
+ *  file of cover, not two (the pawn count read fxg3 with the king on g1 as no
+ *  loss of cover — the f-file in front of the king had just opened).
+ *  `castled` is the castled-shelter view `shieldCount` keeps. Null when there
+ *  is no king. */
+export function kingCover(position: string | Chess, color: 'w' | 'b'): { kingSquare: Sq; present: number; of: number; castled: boolean } | null {
   let game: Chess;
-  try { game = new Chess(fen); } catch { return null; }
+  if (typeof position === 'string') {
+    try { game = new Chess(position); } catch { return null; }
+  } else game = position;
   const kingSq = kingSquareOf(game, color);
   if (!kingSq) return null;
-  const shelter = shelterSquares(kingSq, color);
-  if (!shelter) return null;
+  const f = FILES.indexOf(kingSq[0]);
+  const kr = Number(kingSq[1]);
   const step = color === 'w' ? 1 : -1;
-  const own = (sq: string): boolean => {
-    const p = game.get(sq as Parameters<Chess['get']>[0]);
+  const own = (file: number, rank: number): boolean => {
+    if (rank < 1 || rank > 8) return false;
+    const p = game.get(`${FILES[file]}${rank}` as Square);
     return !!p && p.type === 'p' && p.color === color;
   };
-  const present = shelter.filter((s) => own(s) || own(`${s[0]}${Number(s[1]) + step}`)).length;
-  return { kingSquare: kingSq, present, of: shelter.length };
+  let present = 0;
+  let of = 0;
+  for (const df of [-1, 0, 1]) {
+    const nf = f + df;
+    if (nf < 0 || nf > 7) continue;
+    of += 1;
+    if (own(nf, kr) || own(nf, kr + step) || own(nf, kr + 2 * step)) present += 1;
+  }
+  return { kingSquare: kingSq, present, of, castled: shelterSquares(kingSq, color) !== null };
+}
+
+/** How many of the shelter pawns in front of a CASTLED king stand guard — a
+ *  pawn on its shelter square OR one step ahead of it (g6 / h6 still shelter;
+ *  claim check 2026-09-30, item 95). The castled view of `kingCover`, the one
+ *  rule (one-coach P2, census group 12; P1-7 2026-10-30). Null when the king
+ *  is not on a castled square. */
+export function shieldCount(fen: string, color: 'w' | 'b'): { kingSquare: Sq; present: number; of: number } | null {
+  const cover = kingCover(fen, color);
+  if (!cover || !cover.castled) return null;
+  return { kingSquare: cover.kingSquare, present: cover.present, of: cover.of };
 }
 
 /** Shelter pawns `color` lost on one move — the ONE count behind "prising
@@ -106,11 +141,13 @@ export function detectKingExposure(fen: string, studentColor: 'w' | 'b'): KingEx
   if (missing < 2) return null; // shelter still largely intact — no alarm
 
   const enemy: 'w' | 'b' = studentColor === 'w' ? 'b' : 'w';
-  const zone = [kingSq, ...shelter];
+  // The king ring, the one zone where an attack lands (P1-7 2026-10-30: this
+  // read kept a third zone, the king and its three shelter squares only).
+  const zone = kingRing(kingSq);
   const attackers = new Set<Sq>();
   for (const sq of zone) {
     let from: Sq[] = [];
-    try { from = game.attackers(sq as Parameters<Chess['attackers']>[0], enemy); } catch { from = []; }
+    try { from = game.attackers(sq, enemy); } catch { from = []; }
     for (const a of from) {
       const p = game.get(a as Parameters<Chess['get']>[0]);
       if (p && (p.type === 'q' || p.type === 'r' || p.type === 'b')) attackers.add(a);
@@ -252,13 +289,22 @@ export function kingExposureClause(k: KingExposure): string {
   return `Your king's cover is thin — ${n} of the pawns in front of it are gone and they already have pieces aimed at it. Look after the king before you throw more forces forward.`;
 }
 
-/** The enemy king's square + its on-board neighbours — where an attack lands. */
-function kingZoneSquares(kingSq: string): Square[] {
+/*
+ * TWO KING ZONES, NAMED (WO-STORY-MATRIX-01 P1-7, 2026-10-30). `boardDelta`
+ * kept a private radius-2 zone and this file a private radius-1 one, and both
+ * were called "the king zone". They are different jobs:
+ *  - `kingRing` (radius 1): the king's square and its neighbours — where an
+ *    attack on the king LANDS (the attack count, the exposure alarm).
+ *  - `kingNeighbourhood` (radius 2): the squares near enough that a pawn which
+ *    gives one up leaves a hole by the king (g2–g3 gives up f3 and h3 with the
+ *    king on g1, two files and two ranks away).
+ */
+function kingSquaresWithin(kingSq: string, radius: number): Square[] {
   const f = kingSq.charCodeAt(0) - 97;
   const r = Number(kingSq[1]);
   const out: Square[] = [];
-  for (let df = -1; df <= 1; df += 1) {
-    for (let dr = -1; dr <= 1; dr += 1) {
+  for (let df = -radius; df <= radius; df += 1) {
+    for (let dr = -radius; dr <= radius; dr += 1) {
       const nf = f + df;
       const nr = r + dr;
       if (nf < 0 || nf > 7 || nr < 1 || nr > 8) continue;
@@ -268,42 +314,15 @@ function kingZoneSquares(kingSq: string): Square[] {
   return out;
 }
 
-/** The unit direction [df,dr] from a piece's OWN king through the piece, when the
- *  piece is ABSOLUTELY pinned (removing it exposes the king to an enemy slider
- *  along that exact line); null when the piece is not absolutely pinned. Used to
- *  refuse counting a pinned piece as an attacker/defender on a king-zone square
- *  it cannot legally act toward — the pin-blind `attackers()` count would flip
- *  "you have a real attack, press it" on a losing attack (deep-dive A#7). */
-function absolutePinRay(c: Chess, sq: Square): [number, number] | null {
-  const p = c.get(sq);
-  if (!p || p.type === 'k') return null;
-  const me = p.color;
-  const them = me === 'w' ? 'b' : 'w';
-  let king: Square | null = null;
-  for (const row of c.board()) for (const cell of row) if (cell && cell.type === 'k' && cell.color === me) king = cell.square;
-  if (!king) return null;
-  const kf = king.charCodeAt(0) - 97, kr = Number(king[1]);
-  const sf = sq.charCodeAt(0) - 97, sr = Number(sq[1]);
-  const df = sf - kf, dr = sr - kr;
-  const collinear = (df === 0 && dr !== 0) || (dr === 0 && df !== 0) || (Math.abs(df) === Math.abs(dr) && df !== 0);
-  if (!collinear) return null;
-  const ud: [number, number] = [Math.sign(df), Math.sign(dr)];
-  let test: Chess;
-  try { test = new Chess(c.fen()); test.remove(sq); } catch { return null; }
-  let f = kf + ud[0], r = kr + ud[1];
-  while (f >= 0 && f <= 7 && r >= 1 && r <= 8) {
-    const s = `${String.fromCharCode(97 + f)}${r}` as Square;
-    const hit = test.get(s);
-    if (hit) {
-      if (hit.color !== them) return null; // first piece past the pinned one is friendly → no pin
-      const diagonal = Math.abs(ud[0]) === 1 && Math.abs(ud[1]) === 1;
-      const straight = ud[0] === 0 || ud[1] === 0;
-      if ((diagonal && (hit.type === 'b' || hit.type === 'q')) || (straight && (hit.type === 'r' || hit.type === 'q'))) return ud;
-      return null; // an enemy piece, but not one that pins along this line
-    }
-    f += ud[0]; r += ud[1];
-  }
-  return null;
+/** The king's square + its on-board neighbours — where an attack lands. */
+export function kingRing(kingSq: string): Square[] {
+  return kingSquaresWithin(kingSq, 1);
+}
+
+/** Every square within two files and two ranks of the king — where a pawn
+ *  that gives a square up leaves a hole by the king. */
+export function kingNeighbourhood(kingSq: string): Square[] {
+  return kingSquaresWithin(kingSq, 2);
 }
 
 /** Does the piece on `pieceSq` genuinely bear on `targetSq` — i.e. it attacks it
@@ -332,7 +351,7 @@ export function countKingAttack(c: Chess, me: 'w' | 'b'): { attackers: Set<strin
   if (!ek) return null;
   const attackers = new Set<string>();
   const defenders = new Set<string>();
-  for (const sq of kingZoneSquares(ek)) {
+  for (const sq of kingRing(ek)) {
     try {
       for (const a of c.attackers(sq, me)) { const p = c.get(a); if (p && p.type !== 'k' && bearsOnSquare(c, a, sq)) attackers.add(a); }
       for (const d of c.attackers(sq, them)) { const p = c.get(d); if (p && p.type !== 'k' && bearsOnSquare(c, d, sq)) defenders.add(d); }
