@@ -6,6 +6,7 @@ const FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 
 
 function fact(over: Partial<ThoughtFact> & Pick<ThoughtFact, 'text' | 'idea'>): ThoughtFact {
   return {
+    id: `t:${over.text}`, namesStudentMove: false,
     kind: 'move-job', group: 'move', computer: 'moveJob', step: 'yours', source: 'moveJob', squares: [], weight: 60, stakes: null, proof: NO_PROOF.stated, thread: { none: 'local' },
     seat: 'student', fen: FEN, claims: [`t:${over.text}`], ...over,
   };

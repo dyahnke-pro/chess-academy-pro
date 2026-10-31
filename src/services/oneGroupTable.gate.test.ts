@@ -12,6 +12,7 @@ import { CALM_BOARD } from './boardState';
 import { ALL_GREY } from './teachingLayers';
 import { NO_BOOST } from './studentMomentBoost';
 import type { ImportanceSignals } from './narrationImportance';
+import { doorFact } from '../test/doorFact';
 
 function sources(dir: string): string[] {
   const out: string[] = [];
@@ -69,10 +70,7 @@ describe('[timing] is one step everywhere (WO-STORY-MATRIX-01 P1-4)', () => {
   const student = { rating: 1500, weaknesses: [], need: null, moveAdvice: null, momentBoost: NO_BOOST, layers: ALL_GREY, fade: new Map() };
   const blunder: ImportanceSignals = { decision: null, cpLossCp: 300, threatNet: 0, teachingBeat: false, evalCpWhitePov: 20, wdl: null };
   it('the door says "not yet, first this" after the choices — the step Review\'s walk gives it', () => {
-    const bundle = {
-      board: CALM_BOARD, proofs: new Map(), facts: [TIMING, REFUTED], incoming: new Set<string>(),
-      squares: new Map<string, readonly string[]>([[TIMING, ['f3', 'g1']], [REFUTED, ['c4', 'e4']]]),
-    };
+    const bundle = { board: CALM_BOARD, facts: [doorFact(TIMING, { squares: ['f3', 'g1'] }), doorFact(REFUTED, { squares: ['c4', 'e4'] })] };
     const d = decide(blunder, student, bundle, 'walk');
     expect(d.spoken).toContain(TIMING);
     expect(d.spoken).toContain(REFUTED);

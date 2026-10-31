@@ -24,6 +24,7 @@ import { describe, it, expect } from 'vitest';
 import { decide } from './coachDecider';
 import type { ImportanceSignals } from './narrationImportance';
 import { NO_BOOST } from './studentMomentBoost';
+import { doorFact } from '../test/doorFact';
 
 // A moment that comfortably earns voice, so the ONLY thing under test below is
 // the need gate — not importance. It is a CRITICAL decision plus a teaching
@@ -40,11 +41,8 @@ const LOUD: ImportanceSignals = {
 };
 
 const bundle = {
-  board: CALM_BOARD, proofs: new Map(),
-  facts: ['Your knight on f3 is hanging.'],
-  squares: new Map<string, readonly string[]>([['Your knight on f3 is hanging.', ['f3']]]),
-  incoming: new Set<string>(),
-  order: { rank: new Map([['Your knight on f3 is hanging.', 1]]), bar: 0 },
+  board: CALM_BOARD,
+  facts: [doorFact('Your knight on f3 is hanging.', { kind: 'must-defend', squares: ['f3'] })],
 };
 
 describe('the live need gate', () => {

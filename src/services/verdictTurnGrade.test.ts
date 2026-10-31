@@ -8,7 +8,7 @@
  */
 import { describe, it, expect, afterEach } from 'vitest';
 import { Chess } from 'chess.js';
-import { decideTurn, type LaneFact } from './learnTurnDoor';
+import { decideTurn, type LaneInput } from './learnTurnDoor';
 import { onLearnTurn, type LearnTurnRow } from './coachDecisionEvents';
 import { saidSlipCp } from './backwardLook';
 import { costStakes } from './factStakes';
@@ -22,9 +22,9 @@ const BEFORE_BB3 = at(22);
 const TURN_BOARD = at(24); // after 12.Bb3 Nxb3
 const ctx = { studentColor: 'white' as const, fenBefore: BEFORE_BB3, playedSan: 'Bb3', bestSan: 'Nxe7+', historySans: GAME.slice(0, 23) };
 
-const plan: LaneFact = { lane: 'planArc', text: 'Your plan is the f-file: the pawn on f2 goes to f4 to open it for your rook.', fen: TURN_BOARD, squares: ['f2', 'f4', 'f1'], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };
-const character: LaneFact = { lane: 'character', text: 'The centre is closed, so the game is about the wings.', fen: TURN_BOARD, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };
-const verdict = (cp: number): LaneFact => ({ lane: 'mistake', text: 'Bishop to b3 was a mistake: it lets their knight take it and wreck your pawns.', fen: TURN_BOARD, squares: ['b3', 'd4'], stakes: costStakes(cp) ?? undefined, proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE });
+const plan: LaneInput = { lane: 'planArc', text: 'Your plan is the f-file: the pawn on f2 goes to f4 to open it for your rook.', fen: TURN_BOARD, squares: ['f2', 'f4', 'f1'], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };
+const character: LaneInput = { lane: 'character', text: 'The centre is closed, so the game is about the wings.', fen: TURN_BOARD, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };
+const verdict = (cp: number): LaneInput => ({ lane: 'mistake', text: 'Bishop to b3 was a mistake: it lets their knight take it and wreck your pawns.', fen: TURN_BOARD, squares: ['b3', 'd4'], stakes: costStakes(cp) ?? undefined, proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE });
 
 const rows: LearnTurnRow[] = [];
 let off: (() => void) | null = null;

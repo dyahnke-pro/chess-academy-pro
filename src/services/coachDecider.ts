@@ -33,13 +33,12 @@ import { boardVeto, type BoardState } from './boardState';
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, supportedFacts, barForTier, type QuietFact } from './factSelector';
 import { fadeLevelOf, type FadeLevel, type FadeLevels } from './fadeText';
-import { factKind, factValue, FACT_ROLE, FACT_LAYER, FACT_PROOF, type FactKind, type FacetRole } from './reviewFacetRank';
-import { stepOf as stepOfKind } from './coachFact';
-import { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
-import { isProof, type FactProof, type Proof } from './proof';
+import { factValue, FACT_ROLE, FACT_LAYER, FACT_PROOF, type FactKind, type FacetRole } from './reviewFacetRank';
+import type { CoachFact } from './coachFact';
+import { THOUGHT_ORDER } from './thoughtComposer';
+import { isProof, type Proof } from './proof';
 import { layerBonus, type LayerStandings } from './teachingLayers';
 import { STAKED_FLOOR } from './factStakes';
-import type { FactStakes } from './factStakes';
 import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, type MethodHabit } from './methodBeat';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { habitForTag, TAG_STEP } from './thinkingSteps';
@@ -47,13 +46,13 @@ import type { WeaknessSignal } from './weaknessSignal';
 import { emitCoachDecision, type LearnTurnTag } from './coachDecisionEvents';
 import type { MoveAdviceVerdict } from './nextMoveAdvice';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
-import { decideTurn, VERDICT_TURN_CP, type LaneFact, type LearnLane, type TurnDecision } from './learnTurnDoor';
+import { decideTurn, VERDICT_TURN_CP, type LaneInput, type LearnLane, type TurnDecision } from './learnTurnDoor';
 import { Chess } from 'chess.js';
 import { threatStakes } from './threatProof';
 // The Learn turn's vocabulary travels through the door, so a surface imports
 // ONE deciding module (one coach P1).
 export { buildVoicePackage, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP } from './learnTurnDoor';
-export type { FactStakes, LaneFact, LearnLane, SpokenLine, TurnDecision, VoicePackage, VoiceFactKind } from './learnTurnDoor';
+export type { FactStakes, LaneFact, LaneInput, LearnLane, SpokenLine, TurnDecision, VoicePackage, VoiceFactKind } from './learnTurnDoor';
 // The phase report's wave of a turn — the same door, one call per report.
 export { decidePhaseWave } from './learnTurnDoor';
 export type { LiveTurn, PhaseFact } from './learnTurnDoor';
@@ -100,7 +99,7 @@ interface MomentRequest {
 }
 interface LearnTurnRequest {
   posture: 'learn';
-  facts: readonly LaneFact[];
+  facts: readonly LaneInput[];
   alreadySaid?: string;
   priorKeys?: ReadonlySet<string>;
   priorLead?: { lane: LearnLane; squares: readonly string[] } | null;
@@ -152,11 +151,11 @@ interface StudentContext {
    *  for the best-matching fact here, computed by the SURFACE with the existing
    *  fine-grained join (`matchTacticPattern(conceptId) ?? matchClauseKind(kind)`).
    *
-   *  It arrives pre-matched because `FactBundle.facts` is `string[]` — by the
-   *  time facts reach this door they are PROSE, and joining prose to a weakness
-   *  would mean scraping a concept back out of a sentence. The surface still
-   *  holds the structured clauses, so the match belongs there; only its RESULT
-   *  travels. (The first design had the decider do its own
+   *  It arrives pre-matched because the fine-grained join reads what only the
+   *  surface still holds — a clause's concept id, a tactic's motif — and the
+   *  door's facts carry their kind alone. The match belongs where the
+   *  structured reads are; only its RESULT travels. (The first design had the
+   *  decider do its own
    *  `Record<ImportanceTier, cluster>` lookup — a fourth, coarser join beside
    *  three existing ones, on a lossy key. See narrationImportance.)
    *
@@ -201,60 +200,31 @@ interface StudentContext {
  *  hung queen is not a lesson a strong player has outgrown. */
 export const GREEN_QUIET_BELOW = STAKED_FLOOR + 150;
 
-/** The facts a surface computed at this moment, with the geometry coupled from
- *  the computers that produced them (never scraped from the prose). */
+/** A FACT AT THE DECIDING DOOR — the one fact shape (`coachFact`), of a kind
+ *  the door's tables answer (role, layer, proof, tie order: `FactKind`). The
+ *  lesson composer's own kinds join those tables when a lesson fact first
+ *  reaches this door. */
+export type DoorFact = CoachFact & { kind: FactKind };
+
+/** The facts a surface computed at this moment — OBJECTS, each carrying the
+ *  records its computer coupled to it at emission (WO-STORY-MATRIX-01 P1-5):
+ *  its squares, what it is worth (`stakes`), its proof, what it claims beyond
+ *  its squares, whose it is (`seat`), the skill it teaches, the student's hole
+ *  on it. They used to travel as sentences beside eight maps keyed by the
+ *  sentence — so a fact reworded on its way here arrived with none of them,
+ *  and two facts in the same words shared one record. */
 interface FactBundle {
-  facts: readonly string[];
+  facts: readonly DoorFact[];
   /** THE BOARD THE FACTS ARE ABOUT — required, so no surface can forget it
    *  (David 2026-09-25: "Root cause fixes this time"). A standing claim on a
    *  board in flux, and anything beside a mate but the mate, never speak.
    *  `CALM_BOARD` is an explicit answer, not a default. */
   board: BoardState;
-  squares: ReadonlyMap<string, readonly string[]>;
-  /** Facts describing what the OPPONENT is doing TO the student. */
-  incoming?: ReadonlySet<string>;
   /** SENTENCES THIS SURFACE HAS ALREADY SPOKEN — see `selectFacts`. A standing
    *  fact is true for as long as its geometry stands, so it re-earns its place
    *  on every ply and the student hears it again and again. The surface decides
    *  what is eligible; the door enforces it. */
   alreadySaid?: ReadonlySet<string>;
-  /** WHAT EACH FACT IS WORTH ON THIS BOARD — coupled at emission by the
-   *  computer that produced it (`factStakes.ts`). The door orders every surface
-   *  by these: centipawns at stake, discounted by how soon they land, plus this
-   *  student's own hole on the fact. A fact absent here has no stakes and ranks
-   *  below every fact that has them, on the one tie order (David 2026-09-23:
-   *  "Decision computer should compute that!!"). This replaced the per-surface
-   *  `order` scale — two hand tables that disagreed about what leads. */
-  stakes?: ReadonlyMap<string, FactStakes>;
-  /** HOLES THE SURFACE ALREADY MATCHED, per fact — the student term of each
-   *  fact's value (`factValue`'s `matched`).
-   *
-   *  It exists so a fact whose hole the surface knows EXACTLY is not re-joined
-   *  here by its coarse tag. Review's `[principle]` facet is the case: the
-   *  attributor proved which fundamental the move broke, and the tag route
-   *  answers with the leader of the whole positional bucket instead. Same
-   *  reasoning as `StudentContext.momentBoost` — the facts are prose by the
-   *  time they arrive, so the match belongs upstream and only its result
-   *  travels. */
-  holeByFact?: ReadonlyMap<string, WeaknessSignal | null>;
-  /** WHAT EACH FACT CLAIMS beyond the relation its squares draw, coupled at
-   *  emission like `squares` — see `supportedFacts`. Absent: no fact claims
-   *  more than its squares. */
-  claims?: ReadonlyMap<string, readonly string[]>;
-  /** THE CLAIM FAMILY per fact — see `FactSelectOptions.family`. The live
-   *  composer passes each clause's `kind`; review's facets carry theirs in the
-   *  `[tag]` prefix and may omit this. */
-  family?: ReadonlyMap<string, string>;
-  /** THE PROOF EACH FACT RESTS ON (one-coach P3, 2026-10-07) — coupled at
-   *  emission by the computer that found it, like `squares` and `stakes`.
-   *  REQUIRED: a surface must answer, even with an empty map. A conclusion
-   *  kind (`FACT_PROOF[kind] === 'proven'`) that arrives without one is
-   *  counted on the row (`unproven`) — the backlog the door will refuse once
-   *  it reaches zero. */
-  proofs: ReadonlyMap<string, FactProof>;
-  /** The skill each fact teaches (a MisconceptionTagId), when its computer
-   *  knows it — the fade reads it per skill; absent, the fact's layer decides. */
-  skillOf?: ReadonlyMap<string, string>;
 }
 
 /** What the student should have DONE differently in their head. Optional: a
@@ -343,15 +313,13 @@ interface CoachDecision {
  *  this exists (David 2026-09-20: "I want audit tools on all algo based
  *  builds"). Gate: `coachDecisionEmits.test.ts`. */
 /** What the spoken facts carry as proof, and how many conclusions carried none. */
-function proofLedger(spoken: readonly string[], bundle: FactBundle): Pick<CoachDecision, 'proofOf' | 'unproven' | 'unprovenKinds'> {
+function proofLedger(spoken: readonly DoorFact[]): Pick<CoachDecision, 'proofOf' | 'unproven' | 'unprovenKinds'> {
   const proofOf = new Map<string, Proof>();
   let unproven = 0;
   const unprovenKinds: string[] = [];
-  for (const t of spoken) {
-    const p = bundle.proofs.get(t);
-    if (isProof(p)) { proofOf.set(t, p); continue; }
-    const k = factKind(t, bundle.family);
-    if (k !== null && FACT_PROOF[k] === 'proven') { unproven += 1; unprovenKinds.push(k); }
+  for (const f of spoken) {
+    if (isProof(f.proof)) { proofOf.set(f.text, f.proof); continue; }
+    if (FACT_PROOF[f.kind] === 'proven') { unproven += 1; unprovenKinds.push(f.kind); }
   }
   return { proofOf, unproven, unprovenKinds };
 }
@@ -361,7 +329,10 @@ function emit(
   d: CoachDecision,
   student: StudentContext,
   method: boolean,
-  stakes: ReadonlyMap<string, FactStakes> | undefined,
+  /** Every fact the surface handed in, and the one that leads what spoke —
+   *  read for the staked counts. */
+  facts: readonly DoorFact[],
+  lead: DoorFact | null,
 ): CoachDecision {
   emitCoachDecision({
     posture,
@@ -382,10 +353,10 @@ function emit(
       .filter((q) => q.why === 'subsumed' && q.by)
       .map((q) => [q.text.slice(0, 80), (q.by ?? '').slice(0, 80)] as [string, string]),
     method,
-    stakedCount: stakes?.size ?? 0,
+    stakedCount: facts.filter((f) => f.stakes !== null).length,
     unproven: d.unproven,
     unprovenKinds: d.unprovenKinds,
-    leadStaked: d.spoken.length > 0 ? (stakes?.has(d.spoken[0]) ?? false) : null,
+    leadStaked: d.spoken.length > 0 ? (lead?.stakes ?? null) !== null : null,
   });
   return d;
 }
@@ -429,7 +400,7 @@ export function decide(
   // emitted `quietBy` used to file both closes as `'below-bar'`, so the row
   // could name the gate in `reason` and then contradict itself per fact.
   if (!speaks) {
-    return emit(posture, { ...base, speak: false, reason: 'importance', teaches: false, spoken: [], ...proofLedger([], bundle), quiet: bundle.facts.map((text) => ({ text, why: 'importance' as const })) }, student, false, bundle.stakes);
+    return emit(posture, { ...base, speak: false, reason: 'importance', teaches: false, spoken: [], ...proofLedger([]), quiet: bundle.facts.map((f) => ({ text: f.text, why: 'importance' as const })) }, student, false, bundle.facts, null);
   }
   // 2 — THE STUDENT. Absent need data reads as speak: a fresh install must meet
   // a teaching coach, not a mute one (the cold-start rule).
@@ -445,70 +416,61 @@ export function decide(
   // moment. The teaching / critical / swing / convert / none tiers stay
   // need-gated, which is where a familiar line SHOULD go quiet.
   if (posture !== 'asked' && student.need && !student.need.speak && !SPEAKS_ON_IMPORTANCE.has(importance.tier)) {
-    return emit(posture, { ...base, speak: false, reason: 'need', teaches: false, spoken: [], ...proofLedger([], bundle), quiet: bundle.facts.map((text) => ({ text, why: 'need' as const })) }, student, false, bundle.stakes);
+    return emit(posture, { ...base, speak: false, reason: 'need', teaches: false, spoken: [], ...proofLedger([]), quiet: bundle.facts.map((f) => ({ text: f.text, why: 'need' as const })) }, student, false, bundle.facts, null);
   }
   // 3 + 4 — WHICH FACTS. Subsumption collapses one-claim duplicates; the floor
   // sweeps trivia. The floor may never mute a ply — that was step 2's job and
   // it has already run (see `factSelector`'s BAR_BY_TIER note).
-  const family = bundle.family;
-  const kindOf = (t: string): FactKind | null => factKind(t, family);
   // THE VALUE OF EVERY FACT — stakes, discounted by distance, plus the
   // student's hole on it. One number drives subsumption, the floor and the
-  // order, on every surface.
+  // order, on every surface. Kept by the fact's id: every record the door
+  // reads rides on the fact itself (WO-STORY-MATRIX-01 P1-5).
   const value = new Map<string, number>();
-  for (const t of bundle.facts) {
-    const k = kindOf(t);
-    value.set(t, factValue(k, bundle.stakes?.get(t), student.weaknesses,
-      bundle.holeByFact?.has(t) ? bundle.holeByFact.get(t) : undefined)
-      + (k === null ? 0 : layerBonus(FACT_LAYER[k], student.layers)));
+  for (const f of bundle.facts) {
+    value.set(f.id, factValue(f.kind, f.stakes, student.weaknesses, f.hole) + layerBonus(FACT_LAYER[f.kind], student.layers));
   }
+  const valueOf = (f: DoorFact): number => value.get(f.id) ?? 0;
   // 2b — THE LAYERS (WO-LAYERS-01). A fact in a layer this student has PROVEN
   // goes quiet unless the stakes are big. The method beat is exempt: whether a
   // habit is still owed is the habit's own standing, read below.
   const provenQuiet: QuietFact[] = [];
-  const faded = new Map<string, FadeLevel>();
-  const live = bundle.facts.filter((t) => {
-    const k = kindOf(t);
+  const faded = new Map<DoorFact, FadeLevel>();
+  const live = bundle.facts.filter((f) => {
     // 2a — THE BOARD (`boardState`), before anything is weighed: a claim the
     // board forbids here is not a candidate at all.
-    const veto = boardVeto(k, bundle.board, bundle.squares.get(t));
-    if (veto) { provenQuiet.push({ text: t, why: veto }); return false; }
-    if (k === null || k === 'method') return true;
+    const veto = boardVeto(f.kind, bundle.board, f.squares);
+    if (veto) { provenQuiet.push({ text: f.text, why: veto }); return false; }
+    if (f.kind === 'method') return true;
     // SHORTEN, NEVER SILENCE A REASON (David 2026-10-17: "Agreed" — one rule
     // with Learn). A teaching fact on a skill the student has shown speaks its
     // short form; only a DESCRIPTION in a proven layer still goes quiet.
-    const level = fadeLevelOf(student.fade, bundle.skillOf?.get(t))
-      ?? (student.layers[FACT_LAYER[k]] === 'green' ? 'short' as const : null);
-    if (FACT_ROLE[k] === 'teach') { if (level) faded.set(t, level); return true; }
-    if (student.layers[FACT_LAYER[k]] !== 'green') return true;
-    if ((value.get(t) ?? 0) >= GREEN_QUIET_BELOW) return true;
-    provenQuiet.push({ text: t, why: 'proven' });
+    const level = fadeLevelOf(student.fade, f.skill)
+      ?? (student.layers[FACT_LAYER[f.kind]] === 'green' ? 'short' as const : null);
+    if (FACT_ROLE[f.kind] === 'teach') { if (level) faded.set(f, level); return true; }
+    if (student.layers[FACT_LAYER[f.kind]] !== 'green') return true;
+    if (valueOf(f) >= GREEN_QUIET_BELOW) return true;
+    provenQuiet.push({ text: f.text, why: 'proven' });
     return false;
   });
-  const roleOf = (t: string): FacetRole => { const k = kindOf(t); return k === null ? 'teach' : FACT_ROLE[k]; };
+  const roleOf = (f: DoorFact): FacetRole => FACT_ROLE[f.kind];
   const selection = selectFacts(
     live,
-    bundle.squares,
     importance.tier,
     student.weaknesses,
     {
-      incoming: bundle.incoming,
       alreadySaid: bundle.alreadySaid,
       order: { rank: value, bar: barForTier(importance.tier) },
-      family,
       // The floor sweeps trivia — a DESCRIPTION not worth its breath. A
       // teaching point is never trivia; whether it speaks is steps 1–2's call.
-      exemptFromBar: new Set(live.filter((t) => roleOf(t) === 'teach')),
+      exemptFromBar: new Set(live.filter((f) => roleOf(f) === 'teach').map((f) => f.id)),
     },
   );
-  selection.quiet = [...provenQuiet, ...selection.quiet];
   // 4b — TEACHING POINTS FIRST (2026-09-23). A description speaks only where it
   // supports a teaching point on this ply. One role table (`FACT_ROLE`) over
   // both vocabularies. Only review has a move-reason line (`[does]`) to keep on
   // a ply with no teaching point.
-  const support = supportedFacts(selection.spoken, bundle.squares, roleOf, bundle.claims);
-  selection.spoken = support.spoken;
-  selection.quiet = [...selection.quiet, ...support.quiet];
+  const support = supportedFacts(selection.spoken, roleOf);
+  const quietAll: QuietFact[] = [...provenQuiet, ...selection.quiet, ...support.quiet];
   // 5 — THE ORDER: the same values, highest first — and SUPPORT FOLLOWS WHAT
   // IT SUPPORTS. A description speaks only because a teaching point names its
   // squares, so it is heard after that point, never ahead of it (Learn +
@@ -519,25 +481,24 @@ export function decide(
   // "not yet", the line, the idea on the board, the verdict, the habit — and
   // inside a step, the same values. Review used to say the cost first and the
   // line it played out after the habit; every surface through this door now
-  // speaks the order Learn and the lessons do. Untagged prose (the causal
-  // lead) is what the move changed.
-  const stepOf = (t: string): ThoughtStep => { const k = kindOf(t); return k === null ? 'yours' : stepOfKind(k, 'student'); };
+  // speaks the order Learn and the lessons do. A fact's step is its own,
+  // derived from its kind (`coachFact.placeFact`).
   const order = new Map(value);
   const stepOrder = new Map<string, number>();
-  for (const t of selection.spoken) stepOrder.set(t, THOUGHT_ORDER[stepOf(t)]);
-  for (const t of selection.spoken) {
-    if (roleOf(t) !== 'describe') continue;
-    const sqs = bundle.squares.get(t) ?? [];
-    const supportedBy = selection.spoken
-      .filter((u) => roleOf(u) === 'teach' && (bundle.squares.get(u) ?? []).some((sq) => sqs.includes(sq)));
-    const supported = supportedBy.map((u) => value.get(u) ?? 0);
+  for (const f of support.spoken) stepOrder.set(f.id, THOUGHT_ORDER[f.step]);
+  for (const f of support.spoken) {
+    if (roleOf(f) !== 'describe') continue;
+    const supportedBy = support.spoken
+      .filter((u) => roleOf(u) === 'teach' && u.squares.some((sq) => f.squares.includes(sq)));
+    const supported = supportedBy.map(valueOf);
     if (supported.length) {
-      order.set(t, Math.min(value.get(t) ?? 0, Math.max(...supported) - 0.5));
+      order.set(f.id, Math.min(valueOf(f), Math.max(...supported) - 0.5));
       // A description is heard in the step of the point it supports.
-      stepOrder.set(t, Math.max(...supportedBy.map((u) => stepOrder.get(u) ?? 0)));
+      stepOrder.set(f.id, Math.max(...supportedBy.map((u) => stepOrder.get(u.id) ?? 0)));
     }
   }
-  const spoken = [...selection.spoken].sort((x, y) => ((stepOrder.get(x) ?? 0) - (stepOrder.get(y) ?? 0)) || ((order.get(y) ?? 0) - (order.get(x) ?? 0)));
+  const spokenFacts = [...support.spoken].sort((x, y) => ((stepOrder.get(x.id) ?? 0) - (stepOrder.get(y.id) ?? 0)) || ((order.get(y.id) ?? 0) - (order.get(x.id) ?? 0)));
+  const spoken = spokenFacts.map((f) => f.text);
   let methodSpoke = false;
   // 6 — THE METHOD, last. Ranked lowest so it CLOSES the beat: the board fact,
   // then the principle it broke, then the habit that finds it next time.
@@ -564,7 +525,7 @@ export function decide(
     // selection (in-flux, beside-mate, proven) was never a candidate, so it
     // cannot make a said-already row read as unsupported (prod Learn audit
     // 2026-10-14: one fact said already, one in flux, filed "unsupported").
-    const liveQuiet = selection.quiet.slice(provenQuiet.length);
+    const liveQuiet = quietAll.slice(provenQuiet.length);
     const allSaid = liveQuiet.length > 0 && liveQuiet.every((q) => q.why === 'said-already');
     const reason = bundle.facts.length === 0 ? 'empty'
       : live.length === 0 ? (boardQuiet === provenQuiet.length ? 'board' : 'proven')
@@ -579,13 +540,16 @@ export function decide(
     // the fact itself (the student owns the layer / already heard it), and keep
     // their own names.
     const quiet = reason === 'unsupported'
-      ? selection.quiet.map((q) => (q.why === 'subsumed' ? { ...q, why: 'unsupported' as const } : q))
-      : selection.quiet;
-    return emit(posture, { ...base, speak: false, reason, teaches: false, spoken, quiet, ...proofLedger([], bundle) }, student, false, bundle.stakes);
+      ? quietAll.map((q) => (q.why === 'subsumed' ? { ...q, why: 'unsupported' as const } : q))
+      : quietAll;
+    return emit(posture, { ...base, speak: false, reason, teaches: false, spoken, quiet, ...proofLedger([]) }, student, false, bundle.facts, null);
   }
-  const teaches = spoken.some((t) => roleOf(t) === 'teach');
-  const fadedSpoken = new Map([...faded].filter(([t]) => spoken.includes(t)));
-  return emit(posture, { ...base, speak: true, reason: 'spoken', teaches, spoken, quiet: selection.quiet, faded: fadedSpoken, ...proofLedger(spoken, bundle) }, student, methodSpoke, bundle.stakes);
+  // The habit's own kind teaches (`FACT_ROLE.method`), so a ply where only the
+  // method spoke still taught.
+  const teaches = methodSpoke || spokenFacts.some((f) => roleOf(f) === 'teach');
+  // Said shorter — keyed by the words the surface renders.
+  const fadedSpoken = new Map([...faded].filter(([f]) => spokenFacts.includes(f)).map(([f, l]) => [f.text, l] as const));
+  return emit(posture, { ...base, speak: true, reason: 'spoken', teaches, spoken, quiet: quietAll, faded: fadedSpoken, ...proofLedger(spokenFacts) }, student, methodSpoke, bundle.facts, spokenFacts[0] ?? null);
 }
 
 /** WHICH HABITS THIS STUDENT KEEPS BREAKING, read off the weakness spine.

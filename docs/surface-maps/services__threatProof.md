@@ -25,7 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `threatProof` (function) — 10 call sites
-- `src/services/positionFacts.ts:1769`
+- `src/services/positionFacts.ts:1782`
 - `src/services/reviewFullData.ts:822`
 - `src/services/threatProof.test.ts:8`
 - `src/services/threatProof.test.ts:17`
@@ -44,7 +44,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `threatStakes` (function) — 4 call sites
 - `src/services/boardComputers.ts:405`
 - `src/services/boardComputers.ts:414`
-- `src/services/coachDecider.ts:698`
+- `src/services/coachDecider.ts:662`
 - `src/services/learnBoardTeaching.ts:474`
 
 ### `looseClaims` (function) — 4 call sites

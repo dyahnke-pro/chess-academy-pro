@@ -47,7 +47,7 @@
 ### `moveAspects` (function) — 4 call sites
 - `src/services/captureLeadsTo.test.ts:26`
 - `src/services/midExchangeStructure.test.ts:13`
-- `src/services/moveThoughtFacts.ts:132`
+- `src/services/moveThoughtFacts.ts:133`
 - `src/test/captureSaidOnce.gate.test.ts:190`
 
 ### `buildReviewMoveBriefing` (function) — 23 call sites
@@ -76,10 +76,10 @@
 - `src/test/captureSaidOnce.gate.test.ts:186`
 
 ### `toClause` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:186`
+- `src/services/moveThoughtFacts.ts:187`
 
 ### `joinReview` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:186`
+- `src/services/moveThoughtFacts.ts:187`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -87,7 +87,7 @@
 ### `newLessonVoice` (function) — 20 call sites
 - `src/hooks/useTeachWalkthrough.ts:890`
 - `src/hooks/useTeachWalkthrough.ts:891`
-- `src/services/danyaBench.measure.test.ts:428`
+- `src/services/danyaBench.measure.test.ts:429`
 - `src/services/gamesCourse.ts:281`
 - `src/services/moveThoughtFacts.test.ts:19`
 - `src/services/moveThoughtFacts.test.ts:58`
@@ -113,7 +113,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `prevCaptureOf` (re-export) — 3 call sites
-- `src/services/pvPlayback.ts:231`
+- `src/services/pvPlayback.ts:234`
 - `src/services/reviewMoveBriefing.test.ts:101`
 - `src/services/reviewMoveBriefing.test.ts:139`
 

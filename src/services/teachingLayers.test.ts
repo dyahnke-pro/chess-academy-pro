@@ -9,6 +9,7 @@ import type { CapabilityProfile } from './capabilityEvidence';
 import type { ImportanceSignals } from './narrationImportance';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { costStakes } from './factStakes';
+import { doorFact } from '../test/doorFact';
 
 const hole = (clusterId: string, openCount = 2): WeaknessSignal => ({
   clusterId, bucket: 'tactical', label: clusterId, openCount, severity: 60, puzzleThemes: [], total: openCount,
@@ -58,7 +59,7 @@ const quiet: ImportanceSignals = { decision: null, cpLossCp: null, threatNet: 0,
 const PLAN = '[plan-now] Your plan is to push the queenside majority.';
 const LOOSE = '[loose] Your knight on c6 is loose.';
 const PRINCIPLE = '[principle] You developed a knight before the bishop.';
-const bundle = { board: CALM_BOARD, proofs: new Map(), facts: [PLAN, PRINCIPLE, LOOSE], squares: new Map<string, readonly string[]>() };
+const bundle = { board: CALM_BOARD, facts: [doorFact(PLAN), doorFact(PRINCIPLE), doorFact(LOOSE)] };
 const student = (layers = ALL_GREY) => ({ rating: 400, weaknesses: [], need: null, moveAdvice: null, momentBoost: NO_BOOST, layers, fade: new Map() as ReadonlyMap<string, 'lighter' | 'short'> });
 
 describe('the door teaches by layer', () => {
@@ -75,7 +76,7 @@ describe('the door teaches by layer', () => {
   it('a RED plan layer lifts the plan over the other ideas on the board; the name still comes first', () => {
     const OPENING = '[opening] This is the Caro-Kann.';
     const TECHNIQUE = '[technique] Rooks belong behind passed pawns.';
-    const b = { board: CALM_BOARD, proofs: new Map(), facts: [PLAN, TECHNIQUE, OPENING], squares: new Map<string, readonly string[]>() };
+    const b = { board: CALM_BOARD, facts: [doorFact(PLAN), doorFact(TECHNIQUE), doorFact(OPENING)] };
     const grey = decide(quiet, student(), b, 'walk');
     expect(grey.spoken[0]).toBe(OPENING);
     expect(grey.spoken.indexOf(TECHNIQUE)).toBeLessThan(grey.spoken.indexOf(PLAN));
@@ -89,7 +90,7 @@ describe('the door teaches by layer', () => {
   const PRAISE = '[praise] That knight move looks natural.';
   it('a GREEN layer shortens its teaching facts and quiets its descriptions', () => {
     const layers = { safety: 'green', principle: 'green', plan: 'grey' } as const;
-    const d = decide(quiet, student(layers), { ...bundle, facts: [...bundle.facts, PRAISE] }, 'walk');
+    const d = decide(quiet, student(layers), { ...bundle, facts: [...bundle.facts, doorFact(PRAISE)] }, 'walk');
     expect(d.spoken).toContain(PRINCIPLE);
     expect(d.faded.get(PRINCIPLE)).toBe('short');
     expect(d.spoken).not.toContain(PRAISE);
@@ -100,25 +101,23 @@ describe('the door teaches by layer', () => {
 
   it('a skill shown at the record fades per skill, before its layer is green', () => {
     const fadeStudent = { ...student(), fade: new Map([['neglected-development', 'lighter' as const]]) };
-    const d = decide(quiet, fadeStudent, { ...bundle, skillOf: new Map([[PRINCIPLE, 'neglected-development']]) }, 'walk');
+    const d = decide(quiet, fadeStudent, { ...bundle, facts: [doorFact(PLAN), doorFact(PRINCIPLE, { skill: 'neglected-development' }), doorFact(LOOSE)] }, 'walk');
     expect(d.faded.get(PRINCIPLE)).toBe('lighter');
     expect(d.faded.has(PLAN)).toBe(false);
   });
 
   it('big stakes speak even in a proven layer — a hung queen is never outgrown', () => {
     const layers = { safety: 'green', principle: 'grey', plan: 'grey' } as const;
-    const stakes = new Map([[PRAISE, costStakes(900)!]]);
-    const d = decide(quiet, student(layers), { ...bundle, facts: [PRAISE], stakes }, 'walk');
+    const d = decide(quiet, student(layers), { ...bundle, facts: [doorFact(PRAISE, { stakes: costStakes(900) })] }, 'walk');
     expect(d.quiet.find((q) => q.text === PRAISE)?.why).not.toBe('proven');
-    const small = new Map([[PRAISE, costStakes(40)!]]);
-    const d2 = decide(quiet, student(layers), { ...bundle, facts: [PRAISE], stakes: small }, 'walk');
+    const d2 = decide(quiet, student(layers), { ...bundle, facts: [doorFact(PRAISE, { stakes: costStakes(40) })] }, 'walk');
     expect(d2.quiet.find((q) => q.text === PRAISE)?.why).toBe('proven');
     expect(GREEN_QUIET_BELOW).toBeGreaterThan(1000);
   });
 
   it('a ply whose every fact is a description in a proven layer closes as "proven"', () => {
     const allGreen = { safety: 'green', principle: 'green', plan: 'green' } as const;
-    const d = decide(quiet, student(allGreen), { ...bundle, facts: [PRAISE] }, 'walk');
+    const d = decide(quiet, student(allGreen), { ...bundle, facts: [doorFact(PRAISE)] }, 'walk');
     expect(d.speak).toBe(false);
     expect(d.reason).toBe('proven');
   });

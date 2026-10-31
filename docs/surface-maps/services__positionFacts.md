@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2091 lines · 15 exports · 41 importers · 45 tests · 3 audits**
+**2104 lines · 15 exports · 41 importers · 45 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -97,7 +97,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11306`
+- `src/components/Coach/CoachTeachPage.tsx:11312`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:468`
 - `src/services/raceAimOneVoice.test.ts:19`
@@ -117,7 +117,7 @@
 
 ### `computePositionFacts` (function) — 108 call sites
 - `src/coach/boardTurnAnswer.ts:136`
-- `src/components/Coach/CoachTeachPage.tsx:11163`
+- `src/components/Coach/CoachTeachPage.tsx:11169`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:271`
 - `src/hooks/usePhaseNarration.ts:430`
@@ -128,7 +128,7 @@
 - `src/services/computerAccuracy.audit.test.ts:112`
 - `src/services/criticalMoment.frame.test.ts:24`
 - `src/services/criticalMoment.oneCount.test.ts:25`
-- `src/services/danyaBench.measure.test.ts:412`
+- `src/services/danyaBench.measure.test.ts:413`
 - `src/services/deliberation.ruleOutOnce.test.ts:86`
 - `src/services/deliberation.ruleOutOnce.test.ts:89`
 - `src/services/deliberation.ruleOutOnce.test.ts:98`
@@ -137,10 +137,10 @@
 - `src/services/forkTrick.test.ts:49`
 - `src/services/latentFork.test.ts:151`
 - `src/services/learnNamesNoMove.os10.test.ts:50`
-- `src/services/liveNeedGate.test.ts:132`
-- `src/services/liveNeedGate.test.ts:137`
-- `src/services/liveNeedGate.test.ts:151`
-- `src/services/liveNeedGate.test.ts:157`
+- `src/services/liveNeedGate.test.ts:130`
+- `src/services/liveNeedGate.test.ts:135`
+- `src/services/liveNeedGate.test.ts:149`
+- `src/services/liveNeedGate.test.ts:155`
 - `src/services/liveNeedWire.test.ts:22`
 - `src/services/liveNeedWire.test.ts:31`
 - `src/services/loopCloses.test.ts:112`
@@ -226,7 +226,7 @@
 - `src/test/teach02Wired.test.ts:139`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11462`
+- `src/components/Coach/CoachTeachPage.tsx:11468`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -241,8 +241,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `conceptInstanceKey` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9292`
-- `src/components/Coach/CoachTeachPage.tsx:9426`
+- `src/components/Coach/CoachTeachPage.tsx:9294`
+- `src/components/Coach/CoachTeachPage.tsx:9428`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:30`

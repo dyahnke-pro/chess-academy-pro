@@ -138,15 +138,18 @@ function seatProof(fen: string, sans: readonly string[], mover: 'w' | 'b', stude
 
 const LATER_WORDS: Record<number, string> = { 1: 'a move', 2: 'two moves', 3: 'three moves', 4: 'four moves', 5: 'five moves', 6: 'six moves' };
 /** "lands three moves later with Bxg4" — where a forced line pays off, said
- *  after the result so the move it starts from is never named twice. */
-function landsWith(line: readonly string[], mover: 'w' | 'b', namesMove: boolean): string {
+ *  after the result so the move it starts from is never named twice. Null when
+ *  it pays off on the move itself: the sentence already named it (prod Learn
+ *  2026-10-31: "Their g-pawn takes f6 wins by force: they win a knight — it is
+ *  g-pawn takes f6 itself"). */
+function landsWith(line: readonly string[], mover: 'w' | 'b', namesMove: boolean): string | null {
   // The mover's own last capture is where it pays off — not the recapture
   // that follows it ("lands with Bxg4", never "…Bxg4" taking back).
   const own = line.map((san, i) => ({ san, i })).filter((x) => x.i % 2 === 0);
   const pay = [...own].reverse().find((x) => /x|#/.test(x.san)) ?? own[own.length - 1];
   const at = pay?.i ?? 0;
   const later = Math.ceil(at / 2);
-  if (later === 0) return `it is ${dot(line[0], mover)} itself`;
+  if (later === 0) return null;
   // A later move of the mover's is theirs to find when the student is the
   // mover in Learn (OS-11 g1 21.Rg5: "lands two moves later with knight takes
   // f6"): the count is said, the move is on the board's drawn line.
@@ -154,6 +157,7 @@ function landsWith(line: readonly string[], mover: 'w' | 'b', namesMove: boolean
 }
 
 const dot = (san: string, side: 'w' | 'b'): string => (side === 'b' ? `…${san}` : san);
+const withLanding = (head: string, lands: string | null): string => (lands ? `${head} — ${lands}.` : `${head}.`);
 const movesWord = (n: number): string => `${n} move${n === 1 ? '' : 's'}`;
 
 export function decisiveReason(input: {
@@ -262,7 +266,7 @@ export function decisiveReason(input: {
     } else if (matStake > 0) {
       const win = matOwn > 0 ? seatProof(fenBefore, sansOf(fenBefore, own.moves), mover, studentWB, 'for') : null;
       const loss = !win && matNext < 0 && altTrusted ? seatProof(fenBefore, sansOf(fenBefore, next.moves), mover, studentWB, 'against') : null;
-      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${openSentence(win.text)}.` : win.end === "and it's mate" ? `${mateReason('forced')} — ${landsWith(win.sans, mover, input.namesPreparedMove)}.` : `${played} wins by force: ${win.end} — ${landsWith(win.sans, mover, input.namesPreparedMove)}.`, line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
+      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${openSentence(win.text)}.` : withLanding(win.end === "and it's mate" ? mateReason('forced') : `${played} wins by force: ${win.end}`, landsWith(win.sans, mover, input.namesPreparedMove)), line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
       else if (loss && nextBestSan) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, fails: ${loss.text}.`, line: { fen: fenBefore, sans: loss.sans }, squares: [], alt: true });
       // No short proof, but the count is the reason: say the count, never let a
       // smaller reason stand in for it.

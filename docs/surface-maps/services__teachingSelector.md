@@ -64,7 +64,7 @@
 - `src/services/teachingSelector.test.ts:115`
 
 ### `turnThesis` (function) — 1 call site
-- `src/services/coachFeatureService.ts:4046`
+- `src/services/coachFeatureService.ts:4039`
 
 ### `ThesisRegister` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

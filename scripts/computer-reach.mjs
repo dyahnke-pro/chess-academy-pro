@@ -450,10 +450,13 @@ const report = {
 };
 const text = `${JSON.stringify(report, null, 1)}\n`;
 if (process.argv.includes('--verify')) {
+  // The graph's size moves with any file added anywhere; only REACH is
+  // gated, so a new file elsewhere never fails a push here.
+  const reachOnly = (t) => (t ? JSON.stringify({ ...JSON.parse(t), graph: null }) : '');
   const committed = fs.existsSync(OUT) ? fs.readFileSync(OUT, 'utf8') : '';
   const problems = [];
   if (missing.length) problems.push(`${missing.length} catalog row(s) name a computer the code no longer has: ${missing.join(', ')} — drop them from scripts/computer-reach/computers.json`);
-  if (committed !== text) {
+  if (reachOnly(committed) !== reachOnly(text)) {
     const was = committed ? JSON.parse(committed) : { computers: [] };
     const old = new Map(was.computers.map((c) => [c.key, c]));
     const moved = [];

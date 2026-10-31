@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**944 lines · 5 exports · 22 importers · 12 tests · 0 audits**
+**948 lines · 5 exports · 23 importers · 13 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,6 +32,7 @@
 - `src/services/reviewOpeningTheory.ts`
 - `src/services/reviewWalkOct1.test.ts`
 - `src/services/squareRole.test.ts`
+- `src/services/tapeKc7Skewer.test.ts`
 - `src/services/teachMistakeWhy.test.ts`
 - `src/services/walkOct1Learn.test.ts`
 
@@ -48,8 +49,8 @@
 
 ### `buildReviewMoveTeaching` (function) — 52 call sites
 - `src/services/coachFeatureService.ts:1132`
-- `src/services/coachFeatureService.ts:3974`
-- `src/services/danyaBench.measure.test.ts:449`
+- `src/services/coachFeatureService.ts:3967`
+- `src/services/danyaBench.measure.test.ts:450`
 - `src/services/discussionPractice.ts:173`
 - `src/services/guardPressure.test.ts:20`
 - `src/services/guardPressure.test.ts:24`
@@ -100,16 +101,17 @@
 - `src/services/squareRole.test.ts:29`
 - `src/services/squareRole.test.ts:44`
 
-### `buildReviewMoveTeachingFact` (function) — 6 call sites
+### `buildReviewMoveTeachingFact` (function) — 7 call sites
 - `src/services/learnBoardTeaching.ts:1262`
-- `src/services/moveThoughtFacts.ts:181`
+- `src/services/moveThoughtFacts.ts:182`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
 - `src/services/reviewMoveTeaching.test.ts:216`
 - `src/services/reviewMoveTeaching.test.ts:230`
+- `src/services/tapeKc7Skewer.test.ts:29`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3882`
+- `src/services/coachFeatureService.ts:3875`
 - `src/services/reviewFullData.ts:1624`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
@@ -118,7 +120,7 @@
 - `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3877`
+- `src/services/coachFeatureService.ts:3870`
 - `src/services/reviewMoveTeaching.test.ts:121`
 - `src/services/reviewMoveTeaching.test.ts:124`
 - `src/services/reviewMoveTeaching.test.ts:130`
@@ -138,6 +140,7 @@
 - `src/services/reviewNarrationDefects.test.ts`
 - `src/services/reviewWalkOct1.test.ts`
 - `src/services/squareRole.test.ts`
+- `src/services/tapeKc7Skewer.test.ts`
 - `src/services/teachMistakeWhy.test.ts`
 - `src/services/walkOct1Learn.test.ts`
 

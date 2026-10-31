@@ -10,7 +10,7 @@ import { describe, it, expect } from 'vitest';
 import { buildTacticsLiveContext } from './liveTacticsContext';
 import { computePositionFacts } from './positionFacts';
 import { conceptInstanceKey, looseClaim, nextLooseSpells, plyOfFen, type LooseSpells } from './conceptKey';
-import { decideTurn, spokenSentenceKeys, type LaneFact } from './learnTurnDoor';
+import { decideTurn, spokenSentenceKeys, type LaneInput } from './learnTurnDoor';
 import { hangingPieceLine } from './learnBoardTeaching';
 import { NO_PROOF } from './proof';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
@@ -19,7 +19,7 @@ const G1_14 = 'r1b1kr2/pp2p1bp/2np2p1/q5N1/4PBn1/1QN5/PP3PPP/3RR1K1 w - - 10 14'
 const G1_15 = 'r1b1kr2/pp2p1bp/2np2p1/3R2N1/1q2PBn1/1QN5/PP3PPP/4R1K1 w - - 12 15';
 const mine = (fen: string): Array<{ square: string; piece: string }> =>
   buildTacticsLiveContext(fen, null, 'w', 1500).hanging.filter((h) => h.color === 'w').map((h) => ({ square: h.square, piece: h.piece }));
-const threat = (fen: string, spells: LooseSpells): LaneFact => {
+const threat = (fen: string, spells: LooseSpells): LaneInput => {
   const c = looseClaim('f4', plyOfFen(fen), spells);
   return { lane: 'threat', text: hangingPieceLine('b', 'f4', 0, c.still), fen, squares: ['f4'], claims: [c.key], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };
 };
@@ -33,7 +33,7 @@ describe('g1 14/15 — the bishop on f4', () => {
   it('14: the tactic says it; the threat line on the same turn is the same claim', () => {
     const c = looseClaim('f4', plyOfFen(G1_14), s14);
     expect(c.still).toBe(false);
-    const tactic: LaneFact = { lane: 'tactic', text: 'Danger — a whole piece is at stake: your bishop on f4 is the only defender of your knight on g5 — and it can be taken.', fen: G1_14, squares: ['f4', 'g5'], claims: [conceptInstanceKey('removal_of_guard', ['f4', 'g5']), c.key], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };
+    const tactic: LaneInput = { lane: 'tactic', text: 'Danger — a whole piece is at stake: your bishop on f4 is the only defender of your knight on g5 — and it can be taken.', fen: G1_14, squares: ['f4', 'g5'], claims: [conceptInstanceKey('removal_of_guard', ['f4', 'g5']), c.key], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };
     const d = decideTurn([tactic, threat(G1_14, s14)]);
     // One warning: whichever the door ranks first, the other is the same claim.
     expect(d.spoke.filter((l) => l === 'tactic' || l === 'threat')).toHaveLength(1);
