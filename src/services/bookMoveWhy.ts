@@ -632,7 +632,7 @@ function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, move
   // you can take back" and "the material is level again" are the board.
   const back = mv.board.attackers(mv.to, mover === 'w' ? 'b' : 'w').length > 0;
   if (!back) {
-    const nets = { kind: 'nets' as const, captured: took.type, free: true };
+    const nets = { kind: 'nets' as const, captured: took.type, free: true, gave: null };
     const forms = afterCaptureSanForms(nets, w.you === 'you' ? 'you' : 'they').map((f) => `it ${f}`);
     return { kind: 'capture', squares: [mv.to], clause: forms[0], forms };
   }

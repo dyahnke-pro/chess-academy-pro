@@ -32,7 +32,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/drillReasons.test.ts:56`
 - `src/services/drillReasons.test.ts:57`
 - `src/services/drillReasons.test.ts:61`
-- `src/test/captureSaidOnce.gate.test.ts:226`
+- `src/test/captureSaidOnce.gate.test.ts:230`
 
 ### `judgeAlternative` (function) — 9 call sites
 - `src/services/drillJudge.ts:63`

@@ -69,7 +69,7 @@
 - `src/services/lessonVoiceIdeas.test.ts:63`
 - `src/services/lessonVoiceIdeas.test.ts:70`
 - `src/services/projectedLineVoice.ts:144`
-- `src/services/reviewMoveBriefing.ts:441`
+- `src/services/reviewMoveBriefing.ts:446`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`

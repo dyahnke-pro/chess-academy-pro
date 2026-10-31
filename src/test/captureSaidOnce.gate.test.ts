@@ -166,10 +166,14 @@ const lineSan = (p: Ply): string => `${p.mover === 'b' ? '…' : ''}${p.san}`;
 /** Which plies a producer runs on: every capture, or every ply of the first
  *  N games and of one named game (a producer that speaks about a threat or a
  *  pin, not the move's own capture). */
-type Plies = 'captures' | { games: number; also?: string };
+type Plies = 'captures' | { games: number; also?: readonly string[] };
 /** The one game among the first 24 where a pin breaks with a capture (…Bb5,
  *  the rook on e5 walks out with a discovered attack). */
 const PIN_BREAK_GAME = 'mg-lichess-aZ6oVKX6';
+/** Two games among the first 24 where a move threatens a capture that wins
+ *  material ("threatening Bxe5 — it …") — the first six hold only one such
+ *  threat, so without these the threat test passed on the old wording. */
+const THREAT_GAMES = ['mg-lichess-BfvmTiCI', 'mg-caro-tartakower'];
 const PRODUCERS: Record<string, { plies: Plies; run: Producer }> = {
   // The one composer's facts — every lesson, Learn and Review line.
   moveThoughtFacts: {
@@ -218,7 +222,7 @@ const PRODUCERS: Record<string, { plies: Plies; run: Producer }> = {
   },
   // The threat a move makes, said "threatening <SAN> — <detail>" everywhere.
   threat: {
-    plies: { games: 6 },
+    plies: { games: 6, also: THREAT_GAMES },
     run: (p) => { const t = detectNewThreat(p.fenBefore, p.fenAfter, p.mover); return t ? [`You're now threatening ${t.san} — it ${t.detail}.`] : []; },
   },
   drillReasons: {
@@ -230,7 +234,7 @@ const PRODUCERS: Record<string, { plies: Plies; run: Producer }> = {
     run: (p) => { const c = counterThreat(p.fenBefore, p.san); return c ? [counterThreatLine(c, true), counterThreatLine(c, false)] : []; },
   },
   pinBreak: {
-    plies: { games: 6, also: PIN_BREAK_GAME },
+    plies: { games: 6, also: [PIN_BREAK_GAME] },
     run: (p) => findPinBreaks(p.fenAfter).flatMap((b) => [pinBreakLine(b, 'w'), pinBreakLine(b, 'b')]),
   },
   // The threat against the student after their opponent's move.
@@ -251,7 +255,8 @@ const PRODUCERS: Record<string, { plies: Plies; run: Producer }> = {
 };
 
 // Every capture of 12 games, some 200 (CAPTURE_GATE_GAMES widens it).
-const PLIES = realPlies(Number(process.env.CAPTURE_GATE_GAMES ?? 12), [PIN_BREAK_GAME]);
+const CAPTURE_GAMES = Number(process.env.CAPTURE_GATE_GAMES ?? 12);
+const PLIES = realPlies(CAPTURE_GAMES, [PIN_BREAK_GAME, ...THREAT_GAMES]);
 
 describe('every producer says a capture once, on every capture of real games', () => {
   it('the corpus is real and holds captures', () => {
@@ -262,11 +267,16 @@ describe('every producer says a capture once, on every capture of real games', (
       const scanned: string[] = [];
       let saysCapture = 0;
       const bad: string[] = [];
+      // A producer that throws says nothing, and nothing said cannot be
+      // doubled: a throw is a failure here, never a silent pass.
+      const threw: string[] = [];
       for (const p of PLIES) {
         const pl = producer.plies;
-        if (pl === 'captures' ? !p.captured : p.game >= pl.games && p.gameId !== pl.also) continue;
+        if (pl === 'captures'
+          ? !p.captured || (p.game >= CAPTURE_GAMES && p.gameId !== PIN_BREAK_GAME)
+          : p.game >= pl.games && !(pl.also ?? []).includes(p.gameId)) continue;
         let lines: Array<string | null | undefined> = [];
-        try { lines = producer.run(p); } catch { lines = []; }
+        try { lines = producer.run(p); } catch (e) { threw.push(`${p.fenBefore} ${p.san}: ${String(e)}`); }
         for (const l of lines) {
           if (!l) continue;
           scanned.push(l);
@@ -278,6 +288,7 @@ describe('every producer says a capture once, on every capture of real games', (
       expect(scanned.length, `${name} produced no lines`).toBeGreaterThan(0);
       expect(saysCapture, `${name} said no capture`).toBeGreaterThan(0);
       if (process.env.CAPTURE_GATE_REPORT) console.log(`${name}: ${scanned.length} lines scanned, ${saysCapture} say a capture, ${bad.length} doubled\n${bad.slice(0, 25).join('\n')}`);
+      expect(threw, `${name} threw`).toEqual([]);
       expect(bad, `${name}: ${bad.length} lines say a capture twice`).toEqual([]);
     }, 300_000);
   }

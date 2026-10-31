@@ -310,7 +310,12 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
   //    if axb4, …Nxb4" (2026-10-28).
   if (mv.captured && facts.materialGained >= 1) {
     const back = recapture ? null : exchangeOn(fenAfter, mv.to);
-    const nets = { kind: 'nets' as const, captured: mv.captured, free: !back && !takenBackOn(fenAfter, mv.to) };
+    const free = !back && !takenBackOn(fenAfter, mv.to);
+    // Ahead, but the take-back costs the capturer (no answer to it on the
+    // square): the exchange — "winning a rook for a knight", never "winning a
+    // rook" (`captureWords`).
+    const gave = !free && !back && !recapture ? facts.gaveBack : null;
+    const nets = { kind: 'nets' as const, captured: mv.captured, free, gave };
     const trade = back ? ` — if ${back.reply}, ${back.again}` : '';
     aspects.push({
       text: `${afterCaptureSan(nets, 'participle')}${trade}`,

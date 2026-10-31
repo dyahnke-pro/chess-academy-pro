@@ -33,8 +33,12 @@ export function capturePieceName(p: string | null | undefined): string {
 /** WHAT A CAPTURE LEADS TO, said after its SAN. */
 export type CaptureLeadsTo =
   /** It nets material: the count of what it took, and — `free` — that
-   *  nothing can take back. */
-  | { kind: 'nets'; captured: string; free: boolean }
+   *  nothing can take back; `gave` is the piece the take-back costs the
+   *  capturer when it nets less than what it took ("wins a rook for a
+   *  knight" — never "wins a rook" for the exchange, Learn walk 2026-10-10:
+   *  "Bxa5 Nxa5 is a queen for a bishop, said as 'winning your queen'").
+   *  REQUIRED: every caller says whether the capturer is given back. */
+  | { kind: 'nets'; captured: string; free: boolean; gave: string | null }
   /** A take-back that ends the trade, or — `next` set — the trade goes on
    *  with that capture ("…Ncxd4"). */
   | { kind: 'take-back'; next: string | null }
@@ -61,9 +65,9 @@ export function afterCaptureSan(leadsTo: CaptureLeadsTo, form: CaptureForm): str
   switch (leadsTo.kind) {
     case 'nets': {
       const count = withArticle(capturePieceName(leadsTo.captured));
-      return leadsTo.free
-        ? v(`wins ${count}, and nothing can take back`, `winning ${count}, with nothing to take back`)
-        : v(`wins ${count}`, `winning ${count}`);
+      if (leadsTo.free) return v(`wins ${count}, and nothing can take back`, `winning ${count}, with nothing to take back`);
+      const what = leadsTo.gave ? `${count} for ${withArticle(capturePieceName(leadsTo.gave))}` : count;
+      return v(`wins ${what}`, `winning ${what}`);
     }
     case 'take-back':
       return leadsTo.next

@@ -96,7 +96,7 @@ export function goodButWeakerBeat(args: {
   // The move is said in words that carry its capture ("the bishop takes
   // e5"): what it wins is the count, never the capture again (David
   // 2026-10-30; `captureWords`).
-  const wins = captured && captured !== 'k' ? ` — it ${afterCaptureSan({ kind: 'nets', captured, free: false }, 'verb')}` : ' — it keeps your edge';
+  const wins = captured && captured !== 'k' ? ` — it ${afterCaptureSan({ kind: 'nets', captured, free: false, gave: null }, 'verb')}` : ' — it keeps your edge';
   const head = `${cap(sayMoveClause(args.wrongSan, args.fenBefore))} is a good move${wins}.`;
   // withTail false: the caller follows with the position's own direction
   // (moveInsight.positionAsk), which says WHERE to look.

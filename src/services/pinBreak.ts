@@ -250,7 +250,7 @@ export function pinBreakProof(b: PinBreak, student: Color): Proof {
   // 2026-10-30: "queen takes d8, takes the queen"; `captureWords`).
   const evenBack = !!reply?.captured && !!cap && VALUE[cap.captured] <= VALUE[reply.captured];
   const win = cap
-    ? evenBack ? `${taker} ${cap.san}, ${afterCaptureSan({ kind: 'take-back', next: null }, 'participle')}` : `${taker} ${cap.san}, ${afterCaptureSan({ kind: 'nets', captured: cap.captured, free: false }, 'participle')}`
+    ? evenBack ? `${taker} ${cap.san}, ${afterCaptureSan({ kind: 'take-back', next: null }, 'participle')}` : `${taker} ${cap.san}, ${afterCaptureSan({ kind: 'nets', captured: cap.captured, free: false, gave: null }, 'participle')}`
     : 'the pin is gone';
   const full = reply ? `After ${b.san}, ${replyOwner} best is ${reply.san}, and ${win}` : `After ${b.san}, ${win}`;
   const short = cap ? `Then ${win}` : '';

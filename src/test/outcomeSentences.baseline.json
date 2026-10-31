@@ -18,7 +18,7 @@
   "src/services/openingGenerator.ts": 3,
   "src/services/playCommentary.ts": 2,
   "src/services/positionReadingService.ts": 2,
-  "src/services/principleVoice.ts": 10,
+  "src/services/principleVoice.ts": 9,
   "src/services/reviewTeachingPoints.ts": 1,
   "src/services/tacticAlertService.ts": 2,
   "src/services/tacticalRead.ts": 2,

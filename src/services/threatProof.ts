@@ -65,13 +65,13 @@ export function threatProof(fen: string, student: 'w' | 'b', squares: readonly s
   const targetName = PIECE_NAMES[named.piece] ?? 'piece';
   const targetValue = CAPTURE_VALUE[named.piece] ?? 0;
   const cheaper = named.defenders > 0 && (CAPTURE_VALUE[cap.piece] ?? 0) < targetValue;
-  const netsTarget = afterCaptureSan({ kind: 'nets', captured: named.piece, free: false }, 'verb');
+  const netsTarget = (gave: string | null): string => afterCaptureSan({ kind: 'nets', captured: named.piece, free: false, gave }, 'verb');
   const net = !result && named.defenders > 0 && named.value > 0
     ? (cheaper
       // ROTATED on the threat itself (Learn tape 2026-10-28: four threats in a
       // game, one sentence each time). The same threat says the same words.
       ? rotateStem([
-        `${cap.san} ${netsTarget} for ${withArticle(attackerName)}, even after you take back`,
+        `${cap.san} ${netsTarget(attackerName)}, even after you take back`,
         `${cap.san} trades their ${attackerName} for your ${targetName}, and you come out behind even after you take back`,
         // Never "<capture> takes your X": the capture is already a verb, and
         // "hxg4 takes your bishop" was heard "H-pawn takes g4 takes your
@@ -81,7 +81,7 @@ export function threatProof(fen: string, student: 'w' | 'b', squares: readonly s
         `After ${cap.san}, taking back only gets you ${withArticle(attackerName)} — you lose your ${targetName}`,
       ], stemKeyOf(`${them}|${cap.san}`))
       : named.value >= targetValue
-        ? `${cap.san} ${netsTarget} outright — you cannot take back enough`
+        ? `${cap.san} ${netsTarget(null)} outright — you cannot take back enough`
         : `${cap.san} still wins material after you take back`)
     : null;
   // No second "cheaper piece" clause: "wins your bishop for their pawn, even

@@ -407,7 +407,7 @@ export function buildRejectedTempting(args: {
       const why = tempting.captured !== undefined
         // Said after its SAN ("Bxg5 would not have worked: it …"), which
         // already says the capture: the count, never the capture again.
-        ? `it ${afterCaptureSan({ kind: 'nets', captured: tempting.captured, free: false }, 'verb')}`
+        ? `it ${afterCaptureSan({ kind: 'nets', captured: tempting.captured, free: false, gave: null }, 'verb')}`
         : 'it comes with check';
       // Tiered so the REGISTER decides how much of this is handed over
       // (hintRegister.packageForRegister). The anchor carries both moves

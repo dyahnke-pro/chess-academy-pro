@@ -397,7 +397,7 @@
 - `src/services/whyBestMove.ts:98`
 
 ### `captureHasCounterTactic` (function) — 2 call sites
-- `src/services/inaccuracyCall.ts:1055`
+- `src/services/inaccuracyCall.ts:1059`
 - `src/services/reviewTeachingPoints.ts:105`
 
 ### `describeMoveGeometry` (function) — 21 call sites
@@ -407,7 +407,7 @@
 - `src/hooks/useHintSystem.ts:357`
 - `src/services/computedVoiceGrounding.test.ts:53`
 - `src/services/computedVoiceGrounding.test.ts:111`
-- `src/services/deliberation.ts:503`
+- `src/services/deliberation.ts:508`
 - `src/services/groundedAnswer.test.ts:1119`
 - `src/services/groundedAnswer.test.ts:1126`
 - `src/services/groundedAnswer.test.ts:1134`
@@ -419,12 +419,12 @@
 - `src/services/groundedMoveWhy.ts:89`
 - `src/services/guidedFindTheMove.ts:91`
 - `src/services/mistakeNarration.ts:663`
-- `src/services/moveAllowed.ts:31`
+- `src/services/moveAllowed.ts:30`
 - `src/services/reviewBoardAwareness.test.ts:14`
 - `src/services/reviewBoardAwareness.test.ts:23`
 
 ### `quietPurposePhrase` (function) — 1 call site
-- `src/services/deliberation.ts:509`
+- `src/services/deliberation.ts:514`
 
 ### `describeMoveMerit` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1087`
@@ -1068,7 +1068,7 @@
 - `src/services/reviewNarrationFidelity.test.ts:164`
 - `src/services/reviewNarrationFidelity.test.ts:178`
 - `src/services/reviewTeachingPoints.ts:346`
-- `src/test/captureSaidOnce.gate.test.ts:222`
+- `src/test/captureSaidOnce.gate.test.ts:226`
 
 ### `captureThreatIsAnswerable` (function) — 2 call sites
 - `src/services/captureThreatAnswerable.test.ts:12`

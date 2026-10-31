@@ -293,6 +293,10 @@ export interface PlyFacts {
   tacticLanded: string | null;
   /** Material swing this ply in points, mover's perspective (>0 = mover gained). */
   materialGained: number;
+  /** The mover's piece (letter) the take-back costs when a fresh capture
+   *  still comes out ahead — the exchange, said "wins a rook for a knight",
+   *  never "wins a rook" (`captureWords`); null otherwise. */
+  gaveBack: string | null;
   /** Files newly opened by this ply. */
   newOpenFiles: string[];
   /** The MOVER's passed pawns newly created by this ply (squares). Mover-only
@@ -503,6 +507,7 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
   //     trade nets ~0, a hanging piece nets its value, a SACRIFICE nets NEGATIVE
   //     (so it never reads as "wins material" — the sacrifice register handles it).
   let materialGained = 0;
+  let gaveBack: string | null = null;
   if (mv.captured && toSquare) {
     const capturedVal = PIECE_POINTS[mv.captured] ?? 0;
     // A RECAPTURE only when the previous ply actually CAPTURED there. A piece
@@ -525,8 +530,14 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
       // pinned recapturer no longer distorts the swap (2026-09-13 sweep).
       // Through the safety door: a check that stops the take-back for one move
       // proves no gain (null → claim nothing).
-      try { const r = captureRead(fenAfter, toSquare as Square, fenAfter.split(' ')[1] as 'w' | 'b'); materialGained = r === null ? 0 : capturedVal - r; }
-      catch { materialGained = 0; }
+      try {
+        const r = captureRead(fenAfter, toSquare as Square, fenAfter.split(' ')[1] as 'w' | 'b');
+        materialGained = r === null ? 0 : capturedVal - r;
+        // Ahead, but the take-back wins the capturer back: the exchange. The
+        // capturer is the SAN's piece letter (a pawn has none).
+        const capturer = /^[KQRBN]/.test(mv.san) ? mv.san[0].toLowerCase() : 'p';
+        if (r !== null && r > 0 && materialGained >= 1 && capturer !== 'k' && r >= (PIECE_POINTS[capturer] ?? 0)) gaveBack = capturer;
+      } catch { materialGained = 0; }
     }
   }
 
@@ -560,6 +571,7 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
     promotion: mv.promotion ? PIECE_WORD[mv.promotion] ?? null : null,
     tacticLanded,
     materialGained,
+    gaveBack,
     newOpenFiles,
     newPassedPawns,
     passedPawnsHanded,
@@ -775,7 +787,7 @@ export function plyFactsClause(
     // a second clause that restates it.
     const wonByCapture = !!f.captured && f.materialGained >= 1;
     if (f.captured && opts.sanSaid) {
-      if (wonByCapture) parts.push(afterCaptureSan({ kind: 'nets', captured: mv.captured ?? 'p', free: false }, 'verb'));
+      if (wonByCapture) parts.push(afterCaptureSan({ kind: 'nets', captured: mv.captured ?? 'p', free: false, gave: f.gaveBack }, 'verb'));
     } else if (f.captured) parts.push(`${wonByCapture ? 'wins' : 'captures'} ${victimOwner ?? 'the'} ${f.captured} on ${mv.to}`);
     if (f.isMate) parts.push('delivers checkmate');
     else if (f.isCheck) parts.push('gives check');
@@ -927,7 +939,7 @@ export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent?: bool
     const sanLed = !isYou && !isThem;
     const wonByCapture = !!f.captured && f.materialGained >= 1;
     if (f.captured && sanLed) {
-      if (wonByCapture) parts.push(afterCaptureSan({ kind: 'nets', captured: f.captured, free: false }, 'verb'));
+      if (wonByCapture) parts.push(afterCaptureSan({ kind: 'nets', captured: f.captured, free: false, gave: f.gaveBack }, 'verb'));
     } else if (f.captured) parts.push(vb(`take ${victim} ${f.captured}`, `captures the ${f.captured}`));
     if (f.isMate) parts.push(vb('deliver checkmate', 'delivers checkmate'));
     else if (f.isCheck) parts.push(vb('give check', 'gives check'));

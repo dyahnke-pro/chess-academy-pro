@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**570 lines · 11 exports · 18 importers · 12 tests · 0 audits**
+**575 lines · 11 exports · 19 importers · 13 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@
 ## Who calls in
 
 - `src/hooks/useTeachWalkthrough.ts`
+- `src/services/captureLeadsTo.test.ts`
 - `src/services/captureRun.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/danyaBench.measure.test.ts`
@@ -37,10 +38,11 @@
 ### `Aspect` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `moveAspects` (function) — 3 call sites
+### `moveAspects` (function) — 4 call sites
+- `src/services/captureLeadsTo.test.ts:26`
 - `src/services/midExchangeStructure.test.ts:13`
 - `src/services/moveThoughtFacts.ts:104`
-- `src/test/captureSaidOnce.gate.test.ts:186`
+- `src/test/captureSaidOnce.gate.test.ts:190`
 
 ### `buildReviewMoveBriefing` (function) — 23 call sites
 - `src/services/captureRun.test.ts:45`
@@ -65,7 +67,7 @@
 - `src/services/reviewMoveBriefing.test.ts:156`
 - `src/services/threeFacts.briefing.test.ts:17`
 - `src/services/threeFacts.briefing.test.ts:43`
-- `src/test/captureSaidOnce.gate.test.ts:182`
+- `src/test/captureSaidOnce.gate.test.ts:186`
 
 ### `toClause` (function) — 1 call site
 - `src/services/moveThoughtFacts.ts:158`
@@ -113,6 +115,7 @@
 
 ## Tests
 
+- `src/services/captureLeadsTo.test.ts`
 - `src/services/captureRun.test.ts`
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/guardPressure.test.ts`

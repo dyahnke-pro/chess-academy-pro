@@ -15,7 +15,7 @@ describe('danger levels — answering a threat with a bigger one', () => {
     const line = counterThreatLine(c!, false);
     expect(line).toMatch(/^They left their knight on f6 and hit your queen on d1 instead/);
     expect(line).toMatch(/danger levels/);
-    expect(line).toMatch(/exf6 wins a knight, but Rxd1 wins a queen\./);
+    expect(line).toMatch(/exf6 wins a knight, but Rxd1 costs you your queen\./);
   });
   it('NEGATIVE CONTROL: saving the knight is not a counter-threat', () => {
     expect(counterThreat(BEFORE_RD8, 'Nd5')).toBeNull();

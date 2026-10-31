@@ -52,8 +52,13 @@ function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentL
     if (opponentLastSan && new RegExp(`x${m.to}(?![1-8])`).test(opponentLastSan)) return afterCaptureSan({ kind: 'take-back', next: null }, 'verb');
     // SEE counts the recaptures: a positive net is material won, not a trade.
     if (legalSeeGainFor(fenBefore, m.to, mover) <= 0) return null;
+    // What THIS capture nets, read by the one board read: a take-back that
+    // costs the capturer is said ("wins a rook for a knight", never "wins a
+    // rook" for the exchange).
+    const leadsTo = captureLeadsTo(fenBefore, san);
+    if (leadsTo?.kind === 'nets') return afterCaptureSan(leadsTo, 'verb');
     const free = !c.moves({ verbose: true }).some((x) => x.to === m.to && !!x.captured);
-    return afterCaptureSan({ kind: 'nets', captured: m.captured, free }, 'verb');
+    return afterCaptureSan({ kind: 'nets', captured: m.captured, free, gave: null }, 'verb');
   } catch {
     return null;
   }

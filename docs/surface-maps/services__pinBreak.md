@@ -36,7 +36,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.ts:1016`
 - `src/services/principleAttribution.ts:1036`
 - `src/services/principleAttribution.ts:1038`
-- `src/test/captureSaidOnce.gate.test.ts:234`
+- `src/test/captureSaidOnce.gate.test.ts:238`
 
 ### `pinBreakLine` (function) — 9 call sites
 - `src/services/boardComputers.ts:196`
@@ -47,7 +47,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinBreak.test.ts:38`
 - `src/services/pinBreak.test.ts:39`
 - `src/services/pinBreak.test.ts:41`
-- `src/test/captureSaidOnce.gate.test.ts:234`
+- `src/test/captureSaidOnce.gate.test.ts:238`
 
 ### `pinBreakProof` (function) — 3 call sites
 - `src/services/boardComputers.ts:195`

@@ -26,10 +26,14 @@ export function captureLeadsTo(fenBefore: string, san: string): CaptureLeadsTo |
   // "Nothing can take back" is a fact about this board: no legal capture on
   // the square, whatever the reason (a check counts — it is this move's).
   const canTakeBack = c.moves({ verbose: true }).some((x) => x.to === m.to && !!x.captured);
-  if (!canTakeBack) return { kind: 'nets', captured: m.captured, free: true };
+  if (!canTakeBack) return { kind: 'nets', captured: m.captured, free: true, gave: null };
   const back = captureRead(c.fen(), m.to, them) ?? legalSeeGainFor(c.fen(), m.to, them);
   const net = (MATERIAL_VALUE[m.captured] ?? 0) - back;
-  if (net >= 1) return { kind: 'nets', captured: m.captured, free: false };
+  // A take-back that wins the capturer back is the exchange ("Nxa8 wins a
+  // rook for a knight" — never "wins a rook"). A longer swap that also wins
+  // something back for the capturer is left as the count of what it took.
+  const capturer = MATERIAL_VALUE[m.piece] ?? 0;
+  if (net >= 1) return { kind: 'nets', captured: m.captured, free: false, gave: m.piece !== 'k' && back > 0 && back >= capturer ? m.piece : null };
   if (net > -1) return { kind: 'trade', piece: m.piece, captured: m.captured };
   return { kind: 'gives-up', piece: m.piece, captured: m.captured };
 }

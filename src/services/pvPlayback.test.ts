@@ -187,7 +187,7 @@ describe('plyFactsForMove — no phantom tactics (David 2026-07-20)', () => {
 });
 
 describe('one renderer for a move in a line (review audit 2026-10-14)', () => {
-  const quiet = { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 };
+  const quiet = { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, gaveBack: null, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 };
   it('names its mover and speaks in sentences — never "The move e6 outpost established on d5"', async () => {
     const { plyFactsSentence } = await import('./pvPlayback');
     expect(plyFactsSentence({ ...quiet, outpostGained: 'd5' }, 'e6', true)).toBe('You plant an outpost on d5, where no pawn of theirs can chase it.');
@@ -428,7 +428,7 @@ describe('a pin already on the board does not "land" when its maker slides along
 // Review audit on prod (2026-10-13): "The move Nh4+ check." was spoken
 // "knight to h4, check check" — the SAN's mark and the fact both said it.
 describe('a check is said once', () => {
-  const quiet = { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 };
+  const quiet = { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, gaveBack: null, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 };
   it('check: the mark comes off the SAN, the verb carries it', async () => {
     const { plyFactsSentence } = await import('./pvPlayback');
     expect(plyFactsSentence({ ...quiet, isCheck: true }, 'Nh4+')).toMatch(/^The move Nh4 checks the king/);

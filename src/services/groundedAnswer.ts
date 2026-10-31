@@ -847,7 +847,7 @@ export function assembleOpponentMoveAnswer(opts: {
   // same fact twice (pass 1: "captured your pawn on c4 and wins the pawn on
   // c4"; "it wins a pawn, and nothing can take back and wins a pawn").
   const geomIsTheCapture = !!geom && !!played.captured
-    && (geom.includes(played.to) || geom === afterCaptureSan({ kind: 'nets', captured: played.captured, free: false }, 'verb'));
+    && (geom.includes(played.to) || geom === afterCaptureSan({ kind: 'nets', captured: played.captured, free: false, gave: null }, 'verb'));
   if (geomIsTheCapture) { /* said */ }
   else if (geom) clauses.push(geom.replace(/^attacks\b/, 'attacks').replace(/\byour king\b/, 'your king'));
   else {
@@ -3029,7 +3029,7 @@ export function describeMoveGeometry(
     && !captureHasCounterTactic(fenBefore, mv.san, mcb, REVIEW_PIECE_VALUE[mv.captured] ?? 0)) {
     // Read after the move's SAN, which already says the capture: the count of
     // what it wins, never the capture again (David 2026-10-30).
-    return afterCaptureSan({ kind: 'nets', captured: mv.captured, free: false }, 'verb');
+    return afterCaptureSan({ kind: 'nets', captured: mv.captured, free: false, gave: null }, 'verb');
   }
 
   // Single ATTACK (tempo) on a non-king piece — ONLY when the attacking piece is
@@ -3191,7 +3191,7 @@ export function describeMoveMerit(
   // wording (`captureWords`), never by reading "wins the" back out of the
   // words (they say "wins a queen" now — the SAN already says the capture).
   const mv = ((): Move | null => { try { return new Chess(fenBefore).move(san); } catch { return null; } })();
-  const winsMaterial = !!geo && !!mv?.captured && geo === afterCaptureSan({ kind: 'nets', captured: mv.captured, free: false }, 'verb');
+  const winsMaterial = !!geo && !!mv?.captured && geo === afterCaptureSan({ kind: 'nets', captured: mv.captured, free: false, gave: null }, 'verb');
   if (winsMaterial && mv?.captured && prevCapture?.square) {
     const got = REVIEW_PIECE_VALUE[mv.captured] ?? 0;
     // Taking back on the square the opponent just captured on, for no more
@@ -3609,7 +3609,7 @@ export function explainMoveOrder(opts: {
       const attack = bestAttackFrom(c, to, moverColor);
       if (captured && oppRecapGain <= 0) {
         mechanism = 'material';
-        whyBetter = `playing ${betterSan} first ${afterCaptureSan({ kind: 'nets', captured, free: false }, 'verb')}`;
+        whyBetter = `playing ${betterSan} first ${afterCaptureSan({ kind: 'nets', captured, free: false, gave: null }, 'verb')}`;
       } else if (attack) {
         mechanism = 'tempo';
         whyBetter = `playing ${betterSan} first develops with a threat — it attacks the ${REVIEW_PIECE_NAME[attack.piece]} on ${attack.square}, so the opponent must respond instead of freeing their game`;
@@ -6864,7 +6864,7 @@ export function assemblePositionalAnswer(
       // Each line opens with the capture's SAN, which already says the
       // capture: after it only what it leads to (David 2026-10-30: "queen takes
       // d8, takes the queen"; `captureWords`).
-      const nets = afterCaptureSan({ kind: 'nets', captured: m.captured ?? 'p', free: false }, 'verb');
+      const nets = afterCaptureSan({ kind: 'nets', captured: m.captured ?? 'p', free: false, gave: net > 0 && (REVIEW_PIECE_VALUE[m.captured ?? 'p'] ?? 0) - net >= (REVIEW_PIECE_VALUE[m.piece] ?? 99) ? m.piece : null }, 'verb');
       if (trap) return `${m.san} ${nets}, but your queen is trapped after it — ${queenGrabTrapLine(trap, 'short')}`;
       if (net > 0) return `${m.san} ${nets} — they cannot win back as much.`;
       if (net === 0) return `${m.san} is an even trade on ${m.to} — they take back, and nothing is won.`;
@@ -7352,7 +7352,7 @@ export function detectNewThreat(
             // Every reader says the detail after the threat's SAN ("threatening
             // Nxf7 — …"), which already says the capture: what it nets, never
             // the capture again (David 2026-10-30; `captureWords`).
-            const capBit = played.captured ? `${afterCaptureSan({ kind: 'nets', captured: played.captured, free: false }, 'verb')} and ` : '';
+            const capBit = played.captured ? `${afterCaptureSan({ kind: 'nets', captured: played.captured, free: false, gave: null }, 'verb')} and ` : '';
             // SEAT-NEUTRAL victims ("the king", "the queen on d1") — this
             // detector is side-agnostic (called for BOTH the student's threats
             // AND the opponent's). Baking "their king" made "their move
@@ -7376,7 +7376,7 @@ export function detectNewThreat(
           const net = legalSeeGain(c.fen(), mv.to); // mover to move — legal winning capture (pin-aware)
           if (net >= 3 && (!best || net > best.rank)
             && !captureHasCounterTactic(fen, mv.san, moverWB === 'w' ? 'b' : 'w', net)) {
-            best = { san: mv.san, detail: afterCaptureSan({ kind: 'nets', captured: played.captured, free: false }, 'verb'), kind: 'capture', from: mv.from, landing: mv.to, targets: [], targetSquares: [], guards: guardsOf(sim, mv.to), rank: net };
+            best = { san: mv.san, detail: afterCaptureSan({ kind: 'nets', captured: played.captured, free: false, gave: (REVIEW_PIECE_VALUE[played.captured] ?? 0) - net >= (REVIEW_PIECE_VALUE[played.piece] ?? 99) ? played.piece : null }, 'verb'), kind: 'capture', from: mv.from, landing: mv.to, targets: [], targetSquares: [], guards: guardsOf(sim, mv.to), rank: net };
           }
         }
       }
@@ -7592,7 +7592,7 @@ export function describeThreatPrevention(
     // "defend" it (audit 2026-07-24: Qb3 / Nf6 / Re8 / Bxe6 were each wrongly
     // said to "add a defender" to the very square they FLED). Describe the escape.
     if (def.from === threat.landing) {
-      const cap = def.captured ? `, ${afterCaptureSan({ kind: 'nets', captured: def.captured, free: false }, 'participle')} on the way` : '';
+      const cap = def.captured ? `, ${afterCaptureSan({ kind: 'nets', captured: def.captured, free: false, gave: null }, 'participle')} on the way` : '';
       return `${defenseSan} gets the ${REVIEW_PIECE_NAME[def.piece]} out of the fire${cap}`;
     }
     // (1) Undermine the guard: the defense attacks a guard of the landing sq.
@@ -7753,7 +7753,7 @@ export function assembleCaptureOnAnswer(opts: { fen: string; square: string; cap
   const notTheirTurn = new Chess(opts.fen).turn() !== side;
   // The SAN says the capture once ("Rxc5 wins your pawn on c5" and "can take
   // with Rxc5" each said it twice, David 2026-10-30): after it, what it nets.
-  const nets = afterCaptureSan({ kind: 'nets', captured: target.type, free: false }, 'verb');
+  const nets = afterCaptureSan({ kind: 'nets', captured: target.type, free: false, gave: null }, 'verb');
   const facts = gain > 0
     ? `Yes — ${sans} ${nets}, about ${gain} point${gain === 1 ? '' : 's'}${notTheirTurn && opts.capturer === 'opponent' ? ' if you leave it' : ''}.`
     : read === null

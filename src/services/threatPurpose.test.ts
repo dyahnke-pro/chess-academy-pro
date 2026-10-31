@@ -12,7 +12,7 @@ function lineOf(fen: string, sans: string[]): PvLine {
     return {
       san: m.san, uci: `${m.from}${m.to}${m.promotion ?? ''}`, moverColor: m.color === 'w' ? 'white' : 'black',
       fenBefore, fenAfter: c.fen(),
-      facts: { captured: null, isCheck: c.inCheck(), isMate: c.isCheckmate(), promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
+      facts: { captured: null, isCheck: c.inCheck(), isMate: c.isCheckmate(), promotion: null, tacticLanded: null, materialGained: 0, gaveBack: null, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
     };
   });
   return { plies, rootEvalCp: 0, terminalEvalCp: null } as unknown as PvLine;

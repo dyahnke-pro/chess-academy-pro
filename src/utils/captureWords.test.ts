@@ -6,9 +6,13 @@ import { afterCaptureSan, afterCaptureSanForms, captureInWords, capturePieceName
 // no SAN — never the capture twice.
 describe('after the SAN: what the capture leads to, never the capture again', () => {
   it('material is a count, and "nothing can take back" only when true', () => {
-    expect(afterCaptureSan({ kind: 'nets', captured: 'q', free: true }, 'verb')).toBe('wins a queen, and nothing can take back');
-    expect(afterCaptureSan({ kind: 'nets', captured: 'p', free: false }, 'participle')).toBe('winning a pawn');
-    expect(afterCaptureSan({ kind: 'nets', captured: 'knight', free: false }, 'verb')).toBe('wins a knight');
+    expect(afterCaptureSan({ kind: 'nets', captured: 'q', free: true, gave: null }, 'verb')).toBe('wins a queen, and nothing can take back');
+    expect(afterCaptureSan({ kind: 'nets', captured: 'p', free: false, gave: null }, 'participle')).toBe('winning a pawn');
+    expect(afterCaptureSan({ kind: 'nets', captured: 'knight', free: false, gave: null }, 'verb')).toBe('wins a knight');
+  });
+  it('a take-back that costs the capturer says what it gave: the exchange is never a whole rook', () => {
+    expect(afterCaptureSan({ kind: 'nets', captured: 'r', free: false, gave: 'n' }, 'verb')).toBe('wins a rook for a knight');
+    expect(afterCaptureSan({ kind: 'nets', captured: 'q', free: false, gave: 'bishop' }, 'participle')).toBe('winning a queen for a bishop');
   });
   it('a take-back completes the trade, or names the capture that keeps it going', () => {
     expect(afterCaptureSan({ kind: 'take-back', next: null }, 'verb')).toBe('completes the trade');
@@ -22,8 +26,8 @@ describe('after the SAN: what the capture leads to, never the capture again', ()
     expect(afterCaptureSan({ kind: 'gives-up', piece: 'r', captured: 'n' }, 'verb')).toBe('gives up the rook for the knight');
   });
   it('rotation forms say the same outcome in other words, from the seat', () => {
-    expect(afterCaptureSanForms({ kind: 'nets', captured: 'p', free: true }, 'you')).toEqual(['wins a pawn, and nothing can take back', 'costs them a pawn — nothing can take back', 'is a free pawn: nothing can take back']);
-    expect(afterCaptureSanForms({ kind: 'nets', captured: 'p', free: true }, 'they')[1]).toBe('costs you a pawn — nothing can take back');
+    expect(afterCaptureSanForms({ kind: 'nets', captured: 'p', free: true, gave: null }, 'you')).toEqual(['wins a pawn, and nothing can take back', 'costs them a pawn — nothing can take back', 'is a free pawn: nothing can take back']);
+    expect(afterCaptureSanForms({ kind: 'nets', captured: 'p', free: true, gave: null }, 'they')[1]).toBe('costs you a pawn — nothing can take back');
     expect(afterCaptureSanForms({ kind: 'take-back', next: null }, 'you')).toEqual(['completes the trade']);
   });
 });

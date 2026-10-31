@@ -4,7 +4,6 @@ import { describeMoveGeometry } from './groundedAnswer';
 import { legalSeeGain } from './positionReadingService';
 import { CAPTURE_VALUE } from './pieceValues';
 import { afterCaptureSan } from '../utils/captureWords';
-import { withArticle } from '../utils/andList';
 
 
 /** The concrete punishment ONE reply inflicts after `playedSan`, read by the
@@ -61,10 +60,7 @@ function materialWon(afterPlayed: string, replySan: string): { gerund: string; p
     // WHAT THEY NET, NOT WHAT THEY TOUCH (Learn walk 2026-10-10: Bxa5 Nxa5 is
     // a queen for a bishop, said as "winning your queen"). When the exchange
     // gives the capturer back, the trade is named.
-    const nets = afterCaptureSan({ kind: 'nets', captured: mv.captured, free: false }, 'participle');
-    const gerund = gain >= CAPTURE_VALUE[mv.captured]
-      ? nets
-      : `${nets} for ${withArticle(PIECE_NAME[mv.piece])}`;
+    const gerund = afterCaptureSan({ kind: 'nets', captured: mv.captured, free: false, gave: gain >= CAPTURE_VALUE[mv.captured] ? null : mv.piece }, 'participle');
     return { gerund, piece: PIECE_NAME[mv.captured], square: capturedSquare(mv) };
   } catch {
     return null;

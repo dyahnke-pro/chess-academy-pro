@@ -33,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatProof.test.ts:31`
 - `src/services/threatProof.test.ts:51`
 - `src/services/threatProof.test.ts:55`
-- `src/test/captureSaidOnce.gate.test.ts:242`
+- `src/test/captureSaidOnce.gate.test.ts:246`
 - `src/test/mateSaidOnce.gate.test.ts:30`
 
 ### `provenThreatLine` (function) — 3 call sites

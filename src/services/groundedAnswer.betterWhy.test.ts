@@ -10,8 +10,10 @@ describe('a named move that is not the best comes with WHY the best is better (2
     const a = assembleCandidateMoveAnswer({ fen: FEN, candidateSan: 'h3', bestMoveUci: 'e5f6', bestEvalCp: 300, candidateEvalCp: 0, candidateLineUci: [], candidateSettled: true, studentColor: 'white' });
     const facts = a?.facts ?? '';
     console.log(facts);
-    // The capture said once: its SAN, then what it nets (David 2026-10-30).
-    expect(facts).toMatch(/exf6 wins a knight\./);
+    // The capture said once: its SAN, then what it nets — the queen or the
+    // g-pawn takes the pawn back, so it is a knight for a pawn (David
+    // 2026-10-30; `captureWords`).
+    expect(facts).toMatch(/exf6 wins a knight for a pawn\./);
     expect(facts.match(/exf6/g)?.length).toBe(2);
   });
   it('a move close to the best does not lecture about the alternative', () => {

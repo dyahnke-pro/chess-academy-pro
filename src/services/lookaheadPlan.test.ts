@@ -26,7 +26,7 @@ import { buildSidePlan } from '../test/factories';
 
 const EMPTY: PlyFacts = {
   captured: null, isCheck: false, isMate: false, promotion: null,
-  tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [],
+  tacticLanded: null, materialGained: 0, gaveBack: null, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [],
   outpostGained: null, shieldLost: 0,
 };
 
