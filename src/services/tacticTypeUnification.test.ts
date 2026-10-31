@@ -39,7 +39,11 @@ const ENGINE_FIXTURES: Array<{ tactic: TacticType; fen: string; uci: string; not
   { tactic: 'fork', fen: '7k/5q2/2r5/8/8/3N4/8/K7 w - - 0 1', uci: 'd3e5', note: 'Ne5 forks Qf7 + Rc6, no check' },
   { tactic: 'pin', fen: 'k7/8/8/8/n7/8/8/1R5K w - - 0 1', uci: 'b1a1', note: 'Ra1 pins Na4 to Ka8 (Rb1 was off the file — a rook already on it pins nothing new)' },
   { tactic: 'skewer', fen: 'r6k/8/8/8/q7/8/1K6/1R6 w - - 0 1', uci: 'b1a1', note: 'Ra1 (guarded by the king — an unguarded rook would just be taken) skewers Qa4 to Ra8' },
-  { tactic: 'discovered_attack', fen: 'k7/4q3/8/8/4B3/8/8/K3R3 w - - 0 1', uci: 'e4f5', note: 'Bf5 unveils Re1 on Qe7 (move-based motif)' },
+  // The king on f1 guards the rook: with it on a1, …Qxe1+ took the revealer
+  // for nothing and the "discovery" won nothing (prod Learn 2026-10-31, the
+  // same shape as …Ra8+ Kc7 — a discovery whose revealer is simply taken is
+  // not one; pvPlayback.agentSurvives).
+  { tactic: 'discovered_attack', fen: 'k7/4q3/8/8/4B3/8/8/4RK2 w - - 0 1', uci: 'e4f5', note: 'Bf5 unveils Re1 on Qe7, the rook guarded (move-based motif)' },
   { tactic: 'double_check', fen: '8/8/5k2/4N3/8/8/8/B5K1 w - - 0 1', uci: 'e5d7', note: 'Nd7+ with Ba1 unveiled (move-based motif)' },
   { tactic: 'removing_the_guard', fen: 'k7/8/2n5/3bN3/8/8/8/3R3K w - - 0 1', uci: 'd1d5', note: 'Rxd5 wins the bishop AND unguards Nc6 under Ne5 (move-based motif)' },
   { tactic: 'overloaded_piece', fen: 'k7/8/2q5/1n1b4/P7/8/8/4R1K1 w - - 0 1', uci: 'e1d1', note: 'Rd1 adds the 2nd attack: Qc6 is the sole guard of Nb5 and Bd5 (victim-first motif)' },

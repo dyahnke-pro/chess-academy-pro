@@ -369,9 +369,13 @@ function guardPoint(fenBefore: string, after: Chess, mv: Move, moverIsStudent: b
 }
 
 /** A KING STEPS OFF A SQUARE ITS OWN ROOK CAN NOW USE (9.Kh2: the rook on f1
- *  can come to g1). Not castling. */
+ *  can come to g1). Not castling, and never a king in check: its move was
+ *  forced, so making room is not what it was FOR (prod Learn 2026-10-31,
+ *  …Ra8+ Kc7: "steps off c8 so the rook can come to c8" of a king driven out
+ *  of check by a skewer that won the rook). */
 function kingAsidePoint(after: Chess, mv: Move): { text: string; squares: string[] } | null {
   if (mv.piece !== 'k' || mv.isKingsideCastle() || mv.isQueensideCastle()) return null;
+  if (new Chess(mv.before).inCheck()) return null;
   const rook = after.attackers(mv.from, mv.color).find((s) => after.get(s)?.type === 'r');
   if (!rook) return null;
   return { text: `Steps off ${mv.from} so the rook can come to ${mv.from}.`, squares: [mv.from, rook] };
