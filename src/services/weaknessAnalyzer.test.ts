@@ -593,7 +593,7 @@ describe('weaknessAnalyzer', () => {
         sourceMode: 'lichess',
         playerColor: 'white',
         promptText: 'Find the best move.',
-        narration: { intro: '', moveNarrations: [], outro: '', conceptHint: '' },
+        narration: { intro: '', moveNarrations: [], conceptHint: '' },
         createdAt: new Date().toISOString(),
         opponentName: null,
         gameDate: null,

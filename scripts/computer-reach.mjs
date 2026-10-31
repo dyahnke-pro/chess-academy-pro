@@ -251,8 +251,11 @@ function buildGraph() {
     if (file === REG && node === `${REG}#BOARD_COMPUTERS`) {
       // One node per registry id, so a read of one id never reaches the rest.
       for (const decl of list) {
-        const obj = decl.initializer;
-        if (!obj || !ts.isObjectLiteralExpression(obj)) continue;
+        // `{ … } satisfies T` / `as T` / parentheses wrap the literal (P1-4
+        // made it a `satisfies`, and every registry id read as unreached).
+        let obj = decl.initializer;
+        while (obj && (ts.isSatisfiesExpression(obj) || ts.isAsExpression(obj) || ts.isParenthesizedExpression(obj))) obj = obj.expression;
+        if (!obj || !ts.isObjectLiteralExpression(obj)) throw new Error('BOARD_COMPUTERS is not an object literal — teach computer-reach its new shape');
         for (const prop of obj.properties) {
           if (!prop.name) continue;
           const idNode = `${REG}#id:${prop.name.text}`;

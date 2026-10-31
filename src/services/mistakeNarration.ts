@@ -14,6 +14,7 @@ import { replyPunishment } from './moveAllowed';
 import { consequenceIn, errorWhy, failedIn, NO_SECOND_READ } from './inaccuracyCall';
 import { captureRead } from './positionReadingService';
 import { costWords } from './engineConstants';
+import { missedTradeReason } from './positionTransformation';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -139,10 +140,17 @@ function uciToSan(fen: string, uci: string): string {
   }
 }
 
+function sanToUci(fen: string, san: string): string {
+  try {
+    const m = new Chess(fen).move(san);
+    return `${m.from}${m.to}${m.promotion ?? ''}`;
+  } catch {
+    return '';
+  }
+}
+
 // ─── Position-Aware Move Analysis ──────────────────────────────────────────
 
-const CENTER_SQUARES = new Set(['d4', 'd5', 'e4', 'e5']);
-const EXTENDED_CENTER = new Set(['c3', 'c4', 'c5', 'c6', 'd3', 'd4', 'd5', 'd6', 'e3', 'e4', 'e5', 'e6', 'f3', 'f4', 'f5', 'f6']);
 const DEVELOPMENT_RANK_WHITE = new Set(['1']); // pieces starting on rank 1
 const DEVELOPMENT_RANK_BLACK = new Set(['8']);
 
@@ -151,10 +159,7 @@ interface MoveIdea {
   isCheck: boolean;
   isCastle: boolean;
   isPromotion: boolean;
-  movesToCenter: boolean;
   developsPiece: boolean;
-  createsPin: boolean;
-  attacksKing: boolean;
   pieceMoved: string; // 'pawn', 'knight', 'bishop', 'rook', 'queen', 'king'
   conceptHints: string[];
 }
@@ -165,10 +170,7 @@ function analyzeMoveIdea(fen: string, bestMoveSan: string, gamePhase: MistakeGam
     isCheck: false,
     isCastle: false,
     isPromotion: false,
-    movesToCenter: false,
     developsPiece: false,
-    createsPin: false,
-    attacksKing: false,
     pieceMoved: 'pawn',
     conceptHints: [],
   };
@@ -182,7 +184,6 @@ function analyzeMoveIdea(fen: string, bestMoveSan: string, gamePhase: MistakeGam
     idea.isCheck = chess.isCheck();
     idea.isCastle = move.san === 'O-O' || move.san === 'O-O-O';
     idea.isPromotion = move.promotion !== undefined;
-    idea.movesToCenter = CENTER_SQUARES.has(move.to) || EXTENDED_CENTER.has(move.to);
 
     // Determine piece type
     const pieceMap: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -440,50 +441,6 @@ function opponentReplyText(fenBefore: string, san: string, prevStudentTo: string
   return opponentReplySentence(fenBefore, san, prevStudentTo) ?? `They answer ${san}.`;
 }
 
-// ─── Outro Templates (position-aware) ──────────────────────────────────────
-
-function buildOutro(params: NarrationParams, idea: MoveIdea): string {
-  const { classification, gamePhase } = params;
-
-  // Build a position-specific outro based on what the best move was about
-  const outroVariants: string[] = [];
-
-  if (idea.isCastle) {
-    outroVariants.push('Remember — king safety is never optional. Castle early when you can.');
-    outroVariants.push('Getting your king safe early frees you to attack without worrying about back-rank issues.');
-  }
-  if (idea.isCapture) {
-    outroVariants.push('Always check if something is undefended before committing to your plan.');
-    outroVariants.push('Hanging pieces are free points. Make it a habit to scan for captures first.');
-  }
-  if (idea.isCheck) {
-    outroVariants.push('Checks are forcing — they limit your opponent\'s options. Always consider them.');
-    outroVariants.push('When you have a forcing check that also improves your position, it\'s usually the right call.');
-  }
-  if (idea.developsPiece) {
-    outroVariants.push('Developing with purpose is the hallmark of strong opening play. Get those pieces working.');
-    outroVariants.push('Every move in the opening should either develop a piece, control the center, or prepare castling.');
-  }
-  if (idea.movesToCenter && idea.pieceMoved === 'pawn') {
-    outroVariants.push('Central pawns control key squares. Reinforcing the center is almost always a solid plan.');
-  }
-
-  // NO PHASE FALLBACK. The pool that used to sit here ("Tactical awareness in
-  // the middlegame comes from pattern recognition…" and its two siblings per
-  // phase) named nothing on the board and fired whenever the move had no
-  // computed signal — i.e. precisely when we had nothing to say. Rule #4: an
-  // empty outro is a valid outro. Every branch above is tied to something
-  // `analyzeMoveIdea` actually proved about the move.
-  void gamePhase;
-
-  // The classification "closers" are gone too — "These moments are painful but
-  // they teach the most lasting lessons", "Stay hungry for your opponent's
-  // errors" and the rest were motivational filler bolted onto every outro
-  // regardless of the position (rules #1 and #5).
-  void classification;
-
-  return outroVariants.length > 0 ? pick(outroVariants, params.fen) : '';
-}
 
 /** "R2b3 lets them play Qxd6, winning your pawn on d6." — WHAT THE MOVE
  *  ALLOWED, from the ONE error computer every surface uses (David
@@ -558,9 +515,13 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
   // d6 protected" — instead of a description of where the queen went.
   const kept = keepsWhatWasDropped(fen, playerMoveSan, params.allowedReplySan, bestMoveSan);
   if (kept && beats.length > 0) beats[0].move = kept;
+  // THE TRADE THEY SKIPPED, in the trade vocabulary Learn and Review teach
+  // with: when the answer is an even exchange the player declined, the
+  // solving move says what that trade wins ("You give your bishop for their
+  // knight on f3, and the only way back is with the g-pawn …").
+  const trade = kept ? null : missedTradeReason(fen, sanToUci(fen, playerMoveSan), sanToUci(fen, bestMoveSan));
+  if (trade && beats.length > 0) beats[0].move = trade.text;
   const moveNarrations = beats.map((b) => [b.move, b.reply].filter(Boolean).join(' '));
-
-  const outro = buildOutro(params, idea);
 
   // The wrong-attempt hint fires AFTER the student has already heard the intro,
   // so repeating the same board read would be the coach saying one thing twice.
@@ -568,7 +529,7 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
   // fact — or to the concept advice — instead.
   const conceptHint = buildConceptHint(fen, idea, spoilers, introClauses);
 
-  return { intro, moveNarrations, outro, conceptHint };
+  return { intro, moveNarrations, conceptHint };
 }
 
 /** "Qc5 keeps your pawn on d6 protected." when the played move let them win

@@ -78,7 +78,7 @@ function makeBlackToMoveMistake(): MistakePuzzle {
   // drifted off it in two places the compiler never saw, because the whole
   // object was cast: a `sourceMode: 'review'` that is not in the union, and a
   // narration `{ intro, success, failure }` where the real type has
-  // `moveNarrations`, `outro` and `conceptHint`. Only the orientation matters
+  // `moveNarrations` and `conceptHint`. Only the orientation matters
   // here, so only the board is stated.
   return buildMistakePuzzle({
     id: 'drill-orient-black-1',
