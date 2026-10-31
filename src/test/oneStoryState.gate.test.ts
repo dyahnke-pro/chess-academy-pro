@@ -114,6 +114,22 @@ describe('the say-once family lives in GameStory', () => {
     const marks = threatBlock.match(/markThreatSaid = \(\) => \{\s*learnMemRef\.current\.story\.commit\(/g) ?? [];
     expect(commits.length).toBeGreaterThan(0);
     expect(marks.length, 'every threat write is the door-run mark, never the compute').toBe(commits.length);
+    // …and so is its "spoken" event: fired at compute, a threat the door held
+    // was counted as spoken on every turn it came back (it is no longer marked
+    // said, so it comes back).
+    let outsideMarks = threatBlock;
+    for (let at = outsideMarks.indexOf('markThreatSaid = () => {'); at >= 0; at = outsideMarks.indexOf('markThreatSaid = () => {', at + 1)) {
+      const open = outsideMarks.indexOf('{', at);
+      let depth = 0;
+      let close = open;
+      for (; close < outsideMarks.length; close++) {
+        if (outsideMarks[close] === '{') depth++;
+        else if (outsideMarks[close] === '}' && --depth === 0) break;
+      }
+      outsideMarks = outsideMarks.slice(0, open + 1) + outsideMarks.slice(close);
+    }
+    expect((threatBlock.match(/captureEvent\('tactics_alert_spoken'/g) ?? []).length, 'the event rides the mark').toBeGreaterThan(0);
+    expect(outsideMarks, 'the threat alert\'s spoken event fires only where the door spoke it').not.toMatch(/captureEvent\('tactics_alert_spoken'/);
     expect(page).toMatch(/if \(instantDecision\.spoke\.includes\('threat'\)\) \{\s*markThreatSaid\?\.\(\);/);
     // :9880 — the bishop pair is OFFERED with the point that says it.
     expect(page).toMatch(/if \(pairJustWon\) learnMemRef\.current\.story\.offer\(args\.fenAfterReply, \{ text: BISHOP_PAIR_POINT, claims: \[\.\.\.BISHOP_PAIR_CLAIMS\] \}\);/);

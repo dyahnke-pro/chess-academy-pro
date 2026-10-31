@@ -9481,8 +9481,11 @@ export function CoachTeachPage({ mode }: {
         threatSquares = [];
       } else if (threatLine) {
         const saidKey = threatKey; const saidLine = threatLine; const loudLine = isLoudAlarm(threatLine);
+        // Its event fires here too, when the door spoke it: fired at compute, a
+        // threat the door held was counted as spoken on every turn it came back.
         markThreatSaid = () => {
           learnMemRef.current.story.commit(gameRef.current.plies, { claims: [ALERT_KEY.threat(saidKey), ALERT_KEY.threatLine(saidLine), ...(loudLine ? [ALERT_KEY.loudAlarm(saidKey)] : [])] });
+          captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: saidKey });
         };
         // THE RECORD DECIDES HOW LOUD (OS-4): red or grey speaks in full; green
         // + simple is SILENT — no voice and no arrow (David 2026-10-20: "if it's
@@ -9501,7 +9504,6 @@ export function CoachTeachPage({ mode }: {
           // Always the deciding tag: a red motif under a green general skill
           // must not borrow the general skill's fade (the lane's default tag).
           if (loud) threatSkill = loud.skill;
-          captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: threatKey });
         }
       }
       // A threat that was only a REPEAT must not hide a fresh danger to the king
@@ -9511,8 +9513,10 @@ export function CoachTeachPage({ mode }: {
         const fresh = threatLine as string | null;
         if (fresh && !threatsSaid.has(ALERT_KEY.threat(threatKey))) {
           const saidKey = threatKey;
-          markThreatSaid = () => { learnMemRef.current.story.commit(gameRef.current.plies, { claims: [ALERT_KEY.threat(saidKey)] }); };
-          captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: threatKey });
+          markThreatSaid = () => {
+            learnMemRef.current.story.commit(gameRef.current.plies, { claims: [ALERT_KEY.threat(saidKey)] });
+            captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: saidKey });
+          };
         } else {
           threatLine = null;
           threatSquares = [];
