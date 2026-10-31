@@ -60,7 +60,6 @@ export type MistakeGamePhase = 'opening' | 'middlegame' | 'endgame';
 export interface MistakeNarration {
   intro: string;
   moveNarrations: string[];
-  outro: string;
   conceptHint: string; // Conceptual hint when player makes wrong move (e.g. "Think about reinforcing the center")
 }
 

@@ -818,6 +818,12 @@ runStep('context gate', 'node', ['scripts/surface-map.mjs', '--verify']);
 // the code now says. Nothing in it is typed by hand, so it cannot be
 // hand-waved, and a state written before the change cannot survive it.
 runStep('state gate  ', 'node', ['scripts/state-of-build.mjs', '--verify']);
+// THE REACH REPORT, FRESH (WO-STORY-MATRIX-01 P1-13) — the same shape once
+// more: docs/computer-reach.json is derived from the code, and `--verify`
+// fails the push when the committed copy disagrees, or a catalog row names a
+// computer the code no longer has. On 2026-10-31 a stale copy said 12 wired
+// computers were unreached for a day; nobody would have trusted the number.
+runStep('reach gate  ', 'node', ['scripts/computer-reach.mjs', '--verify']);
 // Lanes are declared as thunks and started together below.
 // TEST-FILE TYPECHECK — a SHRINK-ONLY CEILING, not a hard zero (#61).
 //

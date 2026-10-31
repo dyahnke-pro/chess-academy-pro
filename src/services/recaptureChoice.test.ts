@@ -14,7 +14,7 @@ describe('recaptureChoice — which piece takes back, and why', () => {
   it('knight, not queen: "a queen on d4 would be vulnerable to …c5"', () => {
     const p = at('IMBSR0A9nJs:11');
     const out = recaptureChoice(p.fen, p.san, null);
-    expect(out).toMatch(/Nxd4, taking back with the knight — the knight lands in the centre on d4/);
+    expect(out).toMatch(/Nxd4 — the knight lands in the centre on d4/);
     expect(out).toMatch(/Qxd4 would put the queen on d4, where …c5 hits it/);
   });
 

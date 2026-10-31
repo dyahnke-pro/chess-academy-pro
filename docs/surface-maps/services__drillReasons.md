@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**164 lines · 4 exports · 2 importers · 1 tests · 0 audits**
+**168 lines · 4 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,26 +13,30 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/coachDrillService.ts`
+- `src/services/drillJudge.ts`
 - `src/services/drillReasons.test.ts`
+- `src/test/captureSaidOnce.gate.test.ts`
 
 ## Exports and every call site
 
 ### `wrongMoveReason` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3112`
+- `src/components/Coach/CoachTeachPage.tsx:3612`
 - `src/services/drillReasons.test.ts:11`
 - `src/services/drillReasons.test.ts:19`
 - `src/services/drillReasons.test.ts:26`
 - `src/services/drillReasons.test.ts:29`
 
-### `goodButWeakerBeat` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3110`
+### `goodButWeakerBeat` (function) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:3610`
 - `src/services/drillReasons.test.ts:50`
 - `src/services/drillReasons.test.ts:56`
 - `src/services/drillReasons.test.ts:57`
 - `src/services/drillReasons.test.ts:61`
+- `src/test/captureSaidOnce.gate.test.ts:230`
 
-### `judgeAlternative` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3069`
+### `judgeAlternative` (function) — 9 call sites
+- `src/services/drillJudge.ts:63`
+- `src/services/drillJudge.ts:75`
 - `src/services/drillReasons.test.ts:72`
 - `src/services/drillReasons.test.ts:73`
 - `src/services/drillReasons.test.ts:76`
@@ -42,7 +46,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/drillReasons.test.ts:84`
 
 ### `hintBeat` (function) — 6 call sites
-- `src/services/coachDrillService.ts:781`
+- `src/services/coachDrillService.ts:785`
 - `src/services/drillReasons.test.ts:36`
 - `src/services/drillReasons.test.ts:37`
 - `src/services/drillReasons.test.ts:38`
@@ -52,6 +56,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/drillReasons.test.ts`
+- `src/test/captureSaidOnce.gate.test.ts`
 
 ## Audits that reach it
 

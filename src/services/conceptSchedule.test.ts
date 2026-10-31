@@ -9,7 +9,7 @@ function card(id: string, over: Partial<MistakePuzzle>): MistakePuzzle {
   return {
     id, fen: FEN, playerMove: 'a2a3', playerMoveSan: 'a3', bestMove: 'f3e5', bestMoveSan: 'Nxe5', moves: 'f3e5',
     cpLoss: 150, classification: 'mistake', gamePhase: 'middlegame', moveNumber: 3, sourceGameId: 'g1', sourceMode: 'coach',
-    playerColor: 'white', promptText: '', narration: { intro: '', moveNarrations: [], outro: '', conceptHint: '' },
+    playerColor: 'white', promptText: '', narration: { intro: '', moveNarrations: [], conceptHint: '' },
     createdAt: '2026-09-01', opponentName: null, gameDate: null, openingName: null, evalBefore: null,
     srsInterval: 6, srsEaseFactor: 2.5, srsRepetitions: 2, srsDueDate: '2026-12-01', srsLastReview: null,
     status: 'solved', attempts: 1, successes: 1, tacticType: 'fork', ...over,

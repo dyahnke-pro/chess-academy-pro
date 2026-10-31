@@ -13,7 +13,8 @@
 // invented — the deliberation is SPOKEN, not manufactured.
 //
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0.
-import { capturedSquare } from '../utils/capturedSquare';
+import { afterCaptureSan } from '../utils/captureWords';
+import { captureLeadsTo } from './captureLeadsTo';
 import { openSentence } from '../utils/openSentence';
 import { affirmMove } from './dnaRules';
 import { sayYourMove } from './spokenMove';
@@ -30,13 +31,15 @@ import { andList, lineAfterFirst, lineShape, orList, seatedLine } from '../utils
 import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { describeMoveGeometry, quietPurposePhrase } from './groundedAnswer';
 import { kickBreaksPin, pawnKickNext } from './pawnKickNext';
-
-const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+import { seatCp } from './winChance';
 
 /** A capture that WINS material, the exchange counted out — that is the move's
  *  reason, ahead of any positional gloss. Hand walk 2340: dxe5 "stakes out the
  *  center" when his line was "that's a free pawn" (…Nxe5 loses the knight to
- *  Nxe5). Null for a trade or a sacrifice. */
+ *  Nxe5). Null for a trade or a sacrifice. Every reason here is said after
+ *  the move's SAN ("The move is Qxe8 — it …"), which already says the capture,
+ *  so it says what the capture leads to and never the capture again (David
+ *  2026-10-30: "queen takes d8, takes the queen"; `captureWords`). */
 function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentLastSan: string | null): string | null {
   try {
     const c = new Chess(fenBefore);
@@ -47,10 +50,16 @@ function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentL
     if (!m?.captured) return null;
     // A recapture is the trade finishing, never material won — and taking back
     // IS the reason ("The move is Rexd8 — it takes the open d-file" after Qxd8).
-    if (opponentLastSan && new RegExp(`x${m.to}(?![1-8])`).test(opponentLastSan)) return `takes back the ${PIECE_NOUN[m.captured] ?? 'piece'}`;
+    if (opponentLastSan && new RegExp(`x${m.to}(?![1-8])`).test(opponentLastSan)) return afterCaptureSan({ kind: 'take-back', next: null }, 'verb');
     // SEE counts the recaptures: a positive net is material won, not a trade.
     if (legalSeeGainFor(fenBefore, m.to, mover) <= 0) return null;
-    return `wins the ${PIECE_NOUN[m.captured] ?? 'piece'} on ${capturedSquare(m)}`;
+    // What THIS capture nets, read by the one board read: a take-back that
+    // costs the capturer is said ("wins a rook for a knight", never "wins a
+    // rook" for the exchange).
+    const leadsTo = captureLeadsTo(fenBefore, san);
+    if (leadsTo?.kind === 'nets') return afterCaptureSan(leadsTo, 'verb');
+    const free = !c.moves({ verbose: true }).some((x) => x.to === m.to && !!x.captured);
+    return afterCaptureSan({ kind: 'nets', captured: m.captured, free, gave: null }, 'verb');
   } catch {
     return null;
   }
@@ -58,7 +67,6 @@ function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentL
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const MATE_CP = 100000;
 /** Default candidates to weigh — David's call: "the first 3, maybe 4." */
 const DEFAULT_MAX = 3;
 /** A gap (cp, mover POV) past which an alternative is "clearly worse", not just
@@ -194,7 +202,6 @@ export function buildDeliberation(input: {
   named?: { lineUci: string[]; evaluation: number; mate: number | null };
 }): Deliberation | null {
   const { fenBefore, moverColor, excludeSan } = input;
-  const sign = moverColor === 'w' ? 1 : -1;
   const max = input.maxCandidates ?? DEFAULT_MAX;
 
   const lines = [...(input.analysis.topLines ?? [])]
@@ -202,27 +209,24 @@ export function buildDeliberation(input: {
     .filter((l) => l.moves.length > 0);
   if (lines.length === 0) return null;
 
-  const moverEval = (l: { evaluation: number; mate: number | null }): number =>
-    (l.mate != null ? (l.mate > 0 ? MATE_CP : -MATE_CP) : l.evaluation) * sign;
-
   const bestLine = lines[0];
   const bestSan = uciToSan(fenBefore, bestLine.moves[0]);
   if (!bestSan) return null;
-  const bestEval = moverEval(bestLine);
+  const bestEval = seatCp(bestLine, moverColor);
   const best: Candidate = { san: bestSan, evalCp: bestEval, deltaCp: 0 };
 
   const alternatives: Candidate[] = [];
   for (const l of lines.slice(1, max)) {
     const san = uciToSan(fenBefore, l.moves[0]);
     if (!san || san === bestSan || san === excludeSan) continue;
-    const evalCp = moverEval(l);
+    const evalCp = seatCp(l, moverColor);
     const deltaCp = Math.max(0, bestEval - evalCp);
     // A DROP THE ENGINE DOES NOT PUNISH IS NOT A DROP (Damiano walk 2026-09-27:
     // "Bh6 was cleaner" then "Bh6? That drops the knight on a7" — the knight is
     // loose, but taking it walks into something worse, so the line holds). A
     // piece left en prise only counts when the eval says it costs.
     const loose = dropsAfter(fenBefore, l.moves[0], moverColor);
-    const drop = loose && Math.max(0, bestEval - moverEval(l)) >= CLEARLY_WORSE_CP ? loose : null;
+    const drop = loose && Math.max(0, bestEval - seatCp(l, moverColor)) >= CLEARLY_WORSE_CP ? loose : null;
     // THE QUEEN TRADE THAT THROWS AWAY SPACE (game 1: "we have more space, and
     // the effect of a space advantage is greatly diminished if the queens are
     // off — fewer pieces to attack with"). Only where the engine agrees it is worse.
@@ -256,7 +260,7 @@ export function buildDeliberation(input: {
       if (existing) {
         namedCandidate = existing;
       } else {
-        const evalCp = moverEval(line);
+        const evalCp = seatCp(line, moverColor);
         const deltaCp = Math.max(0, bestEval - evalCp);
         const loose = dropsAfter(fenBefore, line.moves[0], moverColor);
         const drop = loose && deltaCp >= CLEARLY_WORSE_CP ? loose : null;
@@ -329,8 +333,10 @@ function shortfallText(c: Candidate): string {
   if (c.shortfall === 'trades-queens') {
     // THE TRADE IS A LINE, NOT A PROPERTY OF THE MOVE (hard walk 2026-10-10:
     // "Ne5 trades the queens" — Ne5 trades nothing; the queens come off later).
-    // One ply long means the move itself took the last queen off.
-    const rest = c.tradeSans && c.tradeSans.length > 1 ? `Then ${seatedLine(c.tradeSans.slice(1), 'they')} — the queens come off` : `${c.san} takes the last queen off`;
+    // One ply long means the move itself took the last queen off — said once,
+    // by its SAN at the head of the line (2026-10-30: "Qxd8? Qxd8 takes the
+    // last queen off" said the move and its capture twice).
+    const rest = c.tradeSans && c.tradeSans.length > 1 ? `Then ${seatedLine(c.tradeSans.slice(1), 'they')} — the queens come off` : 'The queens come off';
     return `${c.san}? ${rest} — with more space or an attack going, you want them on; every piece that comes off shrinks the edge.`;
   }
   if (c.shortfall === 'drops-material' && c.drops) {
@@ -550,7 +556,7 @@ export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', oppone
   // A CAPTURE SAYS WHAT IT TAKES (walk 4: "Bxc6+ — it lines up an x-ray at
   // their rook on a8", the knight it takes and the check never named). An even
   // trade is still the move's first job.
-  const took = captureLead(fenBefore, san);
+  const took = bareCaptureLead(fenBefore, san);
   if (took) {
     const extras = extraJobs(fenBefore, san);
     return extras.length ? `${took}; it also ${andList(extras)}` : took;
@@ -565,13 +571,19 @@ export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', oppone
   return strategic ?? checkWhy(fenBefore, san);
 }
 
-/** "takes their knight on c6, with check" — the capture a move makes. */
-function captureLead(fen: string, san: string): string | null {
+/** "trades the bishop for the knight, with check" — what the capture a move
+ *  makes leads to. Said after the move's SAN, which already says the capture
+ *  ("The move is Bxc6+ — it took their knight on c6" was "bishop takes c6 — it
+ *  takes their knight", David 2026-10-30), so it is the trade, the material it
+ *  nets or the piece it gives (`captureLeadsTo`), never the capture again. */
+export function bareCaptureLead(fen: string, san: string): string | null {
   let m;
   try { m = new Chess(fen).move(san); } catch { return null; }
   if (!m?.captured) return null;
+  const leadsTo = captureLeadsTo(fen, san);
+  if (!leadsTo) return null;
   const check = /[+#]$/.test(m.san) ? (m.san.endsWith('#') ? ', and it is mate' : ', with check') : '';
-  return `takes their ${PIECE_WORD[m.captured] ?? 'piece'} on ${capturedSquare(m)}${m.isEnPassant() ? ' en passant' : ''}${check}`;
+  return `${afterCaptureSan(leadsTo, 'verb')}${m.isEnPassant() ? ', en passant' : ''}${check}`;
 }
 
 /**
@@ -665,8 +677,11 @@ export function threatAnswerWhy(fenBefore: string, san: string, mover: 'w' | 'b'
       if (legalSeeGainFor(after.fen(), c.square, opp) > 0) continue;
       // TAKING THE ATTACKER IS NOT GUARDING (hand walk 1690, 2026-09-27:
       // 18.Nxf7 "guards the queen on h6" — it removed the knight that forked it).
+      // Said after the move's SAN, which already says the capture: the reason
+      // is what the taken piece was doing, never the capture again ("Nxf7 —
+      // it takes the knight that was hitting…" was said twice, 2026-10-30).
       if (m.captured && board0.attackers(c.square, opp).includes(m.to)) {
-        return `takes the ${PNAME[m.captured]} that was hitting the ${PNAME[c.type]} on ${c.square}`;
+        return `removes the ${PNAME[m.captured]} that was hitting the ${PNAME[c.type]} on ${c.square}`;
       }
       // A CHECK IS NOT A GUARD (clean-pass walk 13, SI5q0VJz 31.Rc7+: "guards
       // the knight on f3"). In check, the capture is illegal for one move only

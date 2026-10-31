@@ -87,7 +87,9 @@ describe('computePunishFacts is board-true', () => {
     // on h6 so the capture is check, not mate.
     const fen = '3r2k1/5pp1/7p/8/8/8/5PPP/3Q2K1 w - - 0 1';
     const facts = computePunishFacts(fen, 'Qxd8+', [], [{ san: 'Qd2' }]);
-    expect(facts).toContain('captures the rook on d8');
+    // The capture said once — after its SAN only what it leads to (David 2026-10-30).
+    expect(facts).toContain('the punishing move Qxd8+ gives check');
+    expect(facts).not.toContain('captures the rook');
     expect(facts).toContain('gives check');
     expect(facts).toContain('5 points');
   });

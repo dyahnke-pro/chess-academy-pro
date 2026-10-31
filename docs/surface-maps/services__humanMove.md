@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**221 lines · 11 exports · 3 importers · 2 tests · 0 audits**
+**216 lines · 10 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:408) — names `humanMove`
-- **The standard post-deploy ritual** (CLAUDE.md:6657) — names `humanMove`
+- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:495) — names `humanMove`
+- **The standard post-deploy ritual** (CLAUDE.md:6784) — names `humanMove`
 
 ## Who calls in
 
@@ -31,38 +31,35 @@
 ### `ScoredMove` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `winningChances` (function) — 1 call site
-- `src/services/humanMove.test.ts:57`
-
 ### `moveFeatures` (function) — 7 call sites
-- `src/services/humanMove.test.ts:23`
-- `src/services/humanMove.test.ts:30`
-- `src/services/humanMove.test.ts:34`
-- `src/services/humanMove.test.ts:43`
+- `src/services/humanMove.test.ts:24`
+- `src/services/humanMove.test.ts:31`
+- `src/services/humanMove.test.ts:35`
 - `src/services/humanMove.test.ts:44`
 - `src/services/humanMove.test.ts:45`
-- `src/services/humanMove.test.ts:47`
+- `src/services/humanMove.test.ts:46`
+- `src/services/humanMove.test.ts:48`
 
 ### `featureRows` (function) — 4 call sites
 - `src/services/humanMove.measure.test.ts:50`
-- `src/services/humanMove.test.ts:54`
 - `src/services/humanMove.test.ts:55`
-- `src/services/humanMove.test.ts:61`
+- `src/services/humanMove.test.ts:56`
+- `src/services/humanMove.test.ts:62`
 
 ### `weightsAt` (function) — 2 call sites
-- `src/services/humanMove.test.ts:88`
 - `src/services/humanMove.test.ts:89`
+- `src/services/humanMove.test.ts:90`
 
 ### `humanMoveProbabilities` (function) — 3 call sites
-- `src/services/humanMove.test.ts:82`
 - `src/services/humanMove.test.ts:83`
-- `src/services/humanMove.test.ts:113`
+- `src/services/humanMove.test.ts:84`
+- `src/services/humanMove.test.ts:114`
 
 ### `HumanPick` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pickHumanMove` (function) — 2 call sites
-- `src/services/humanMove.test.ts:93`
+- `src/services/humanMove.test.ts:94`
 - `src/services/humanReply.ts:86`
 
 ## Tests

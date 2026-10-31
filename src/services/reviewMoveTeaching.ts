@@ -706,7 +706,9 @@ export function buildReviewMoveTeachingFact(
     const file = mv.to[0];
     const struct = describeStructure(chess.fen());
     if (struct?.pawns.openFiles.includes(file)) {
-      return out('file', `The ${PIECE_NOUN[mv.piece]} takes the open ${file}-file — a highway straight into ${moverIsStudent ? 'their' : 'your'} position.`);
+      // A capture's SAN already says "takes" (David 2026-10-30: "Rxf5 — it
+      // takes the open f-file"), so a capture seizes the file.
+      return out('file', `The ${PIECE_NOUN[mv.piece]} ${mv.captured ? 'seizes' : 'takes'} the open ${file}-file — a highway straight into ${moverIsStudent ? 'their' : 'your'} position.`);
     }
     if (struct?.pawns.halfOpenFiles[mv.color].includes(file)) {
       // WHAT IS LEFT THERE, named (12.Rg1: the rook aims at g7, before the king).

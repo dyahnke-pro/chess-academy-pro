@@ -21,7 +21,7 @@ function mk(over: Partial<MistakePuzzle> & { id: string; fen: string; moves: str
     sourceMode: 'coach',
     playerColor: 'white',
     promptText: '',
-    narration: { intro: '', moveNarrations: [], outro: '', conceptHint: '' },
+    narration: { intro: '', moveNarrations: [], conceptHint: '' },
     createdAt: new Date(0).toISOString(),
     opponentName: null,
     gameDate: null,

@@ -43,4 +43,7 @@
 // 2026-10-30-build-5b: every fundamental and the king's march said in full
 // once a lesson, then referred to; a stop-a-push names no square its piece
 // left; no structure claim in the middle of an exchange.
-export const WALKTHROUGH_GEN_REV = '2026-10-30-build-5b';
+// 2026-10-30-capture-once: a capture is said once (WO-STORY-MATRIX-01 Phase 1
+// step 4, `captureWords`) — after its SAN only what it leads to ("You play
+// Bxc5 — it wins a pawn, and nothing can take back", never "it wins the pawn").
+export const WALKTHROUGH_GEN_REV = '2026-10-30-capture-once';

@@ -15,7 +15,7 @@ describe('a check is not a guard', () => {
   });
 
   it('a real guard is still named (Qxe4+ removes the attacker)', () => {
-    expect(threatAnswerWhy(AFTER_KE7, 'Qxe4+', 'w') ?? '').toMatch(/takes the pawn that was hitting the knight on f3/);
+    expect(threatAnswerWhy(AFTER_KE7, 'Qxe4+', 'w') ?? '').toMatch(/removes the pawn that was hitting the knight on f3/);
   });
 });
 

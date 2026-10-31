@@ -1,7 +1,7 @@
 {
-  "rev": "2026-10-30-build-5b",
+  "rev": "2026-10-30-capture-once",
   "parts": {
-    "Scandinavian Defense: Panov Transfer": "3c55bb761d2851be",
+    "Scandinavian Defense: Panov Transfer": "bdd344d072aceab7",
     "Ponziani Opening": "846eed0fb0777807"
   }
 }

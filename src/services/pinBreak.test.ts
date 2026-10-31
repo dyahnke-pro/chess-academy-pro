@@ -34,9 +34,9 @@ describe('pinBreak — the pinned piece walks out with tempo', () => {
     expect(pinBreakLine(b, 'b')).toMatch(/^Their knight on e4 looks pinned, but it can leave with check — Nf6\+ — so the pin does not hold/);
     // THE PROOF IS SAID (proof.ts), from the right seat: the holder's reply is
     // "their" for the pinned side and "your" for the holder.
-    expect(pinBreakLine(b, 'w')).toContain('After Nf6+, their best is Kh8, and you play Nxe8, winning their rook on e8.');
-    expect(pinBreakLine(b, 'b')).toContain('After Nf6+, your best is Kh8, and they play Nxe8, winning your rook on e8.');
-    expect(pinBreakLine(b, 'w', 'short')).toContain('Then you play Nxe8, winning their rook on e8.');
+    expect(pinBreakLine(b, 'w')).toContain('After Nf6+, their best is Kh8, and you play Nxe8, winning a rook.');
+    expect(pinBreakLine(b, 'b')).toContain('After Nf6+, your best is Kh8, and they play Nxe8, winning a rook.');
+    expect(pinBreakLine(b, 'w', 'short')).toContain('Then you play Nxe8, winning a rook.');
     expect(pinBreakProof(b, 'w').line?.sans).toEqual(['Nf6+', 'Kh8', 'Nxe8']);
     expect(pinBreakLine(b, 'b')).not.toMatch(/\b(we|our|us)\b/i);
   });

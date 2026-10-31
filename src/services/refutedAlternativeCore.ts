@@ -15,6 +15,7 @@ import { seatedLine, withArticle } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { costWords } from './engineConstants';
 import { lineProof, type Proof } from './proof';
+import { seatCp } from './winChance';
 
 function stripGlyphs(s: string): string { return s.replace(/[+#!?]+$/, ''); }
 
@@ -176,8 +177,6 @@ export interface FanLine {
   earlier?: { moves: readonly string[] } | null;
 }
 
-const MATE_CP = 100_000;
-
 /** THE ALTERNATIVE'S PROOF IS THE ONE REASON (WO-DECIDER-02, David
  *  2026-10-28: the openings tab is "the voice for those opening lessons" and
  *  the coach is one coach). The alternative is read like any costly move: the
@@ -228,9 +227,7 @@ export function alternativeCostCp(
   const altLine = fan.find((l) => l.moves[0] === altUci);
   const playedLine = fan.find((l) => l.moves[0] === playedUci);
   if (!altLine || !playedLine) return null;
-  const sign = moverWB === 'w' ? 1 : -1;
-  const cp = (l: FanLine): number => (l.mate != null ? (l.mate > 0 ? MATE_CP : -MATE_CP) : l.evaluation) * sign;
-  return Math.round(cp(playedLine) - cp(altLine));
+  return Math.round(seatCp(playedLine, moverWB) - seatCp(altLine, moverWB));
 }
 
 export function refutedFromFan(input: {

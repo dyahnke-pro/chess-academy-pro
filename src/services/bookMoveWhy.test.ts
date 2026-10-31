@@ -194,7 +194,7 @@ describe('taking back a piece that just promoted wins a pawn, not a queen', () =
   });
   it('NEGATIVE CONTROL: the same take-back of a queen that did not just promote does', () => {
     const j = moveJob(AFTER_PROMO, 'Kxd8', 'b', MINE, { to: 'd8', captured: 'r', promoted: false });
-    expect(j?.clause ?? '').toMatch(/you get a queen for the rook they took/);
+    expect(j?.clause ?? '').toMatch(/gets you a queen for the rook they took/);
   });
 });
 

@@ -13,6 +13,7 @@ import { MATERIAL_VALUE, sideMaterial } from './pieceValues';
 import { lineProofFromUci, type Proof } from './proof';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { countWords } from '../utils/countWords';
+import { withArticle } from '../utils/andList';
 
 type Line = { moves: readonly string[]; evaluation: number; mate: number | null };
 
@@ -141,8 +142,10 @@ export function patternFails(fen: string, lines: readonly Line[], playedSan: str
         `${san.replace(/[+#]$/, '')} with check and the grab on ${pat.target} is the pattern your eye goes to, ${cost}.`,
       ], stemKeyOf(fen))
       : rotateStem([
-        `Grabbing the ${tName} on ${pat.target} with ${san} looks free, ${cost}.`,
-        `The ${tName} on ${pat.target} only looks loose: ${san} takes it, ${cost}.`,
+        // The SAN says the capture once ("Bxe5 takes it" was "bishop takes
+        // e5 takes it", David 2026-10-30).
+        `${san} looks like ${withArticle(`free ${tName}`)}, ${cost}.`,
+        `The ${tName} on ${pat.target} only looks loose: ${san}, ${cost}.`,
       ], stemKeyOf(fen));
     let from = '';
     try { from = new Chess(fen).move(san.replace(/^…/, '')).from; } catch { /* checked above */ }

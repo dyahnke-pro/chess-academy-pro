@@ -37,6 +37,7 @@ import { legalLineProof, squaresProof, type Proof } from './proof';
 import { sayMoveClause, sayMoveNoun } from './spokenMove';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { lineSeatAt } from '../utils/andList';
+import { seatCp } from './winChance';
 import { unmarked } from '../utils/sanMark';
 
 export type ReadKind =
@@ -60,16 +61,9 @@ export interface Read {
 export interface EngineLine { moves: readonly string[]; evaluation: number; mate: number | null }
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const MATE_CP = 100000;
 
 function other(c: 'w' | 'b'): 'w' | 'b' { return c === 'w' ? 'b' : 'w'; }
 function theirSan(m: Move): string { return m.color === 'b' ? `…${m.san}` : m.san; }
-
-/** A line's value from `seat`'s side, in centipawns. */
-export function seatCp(l: EngineLine, seat: 'w' | 'b'): number {
-  const sign = seat === 'w' ? 1 : -1;
-  return (l.mate != null ? (l.mate > 0 ? MATE_CP : -MATE_CP) : l.evaluation) * sign;
-}
 
 /** The first move of an engine line as SAN on `fen`, or null. */
 export function uciToSan(fen: string, uci: string | undefined): string | null {

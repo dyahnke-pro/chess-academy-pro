@@ -455,7 +455,7 @@
 - `src/services/looseStill.test.ts:69`
 - `src/services/misconceptionService.ts:105`
 - `src/services/positionFacts.ts:1734`
-- `src/services/threatProof.ts:119`
+- `src/services/threatProof.ts:124`
 - `src/utils/plyOfFen.ts:3`
 
 ## Tests

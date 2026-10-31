@@ -22,7 +22,7 @@ import { findProphylaxis } from './prophylaxis';
 import { kickOn } from './kickMap';
 import { findEnablingMove } from './enablingMove';
 import { masterMovesCachedSync } from './masterPlayLookup';
-import { withArticle } from '../utils/andList';
+import { afterCaptureSan, afterCaptureSanForms } from '../utils/captureWords';
 import type { MoveFundamentalId } from './moveFundamentals';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -603,10 +603,14 @@ function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, move
   try { before = new Chess(fen); } catch { return null; }
   const took = before.get(mv.to);
   if (!took || took.color === mover) return null;
+  // EVERY CLAUSE HERE FOLLOWS THE MOVE'S SAN, which already says the capture
+  // ("Bxe7" is spoken "bishop takes e7"), so it says what the capture leads to
+  // and never the capture again (David 2026-10-30: "queen takes d8, takes the
+  // queen"; `captureWords`).
   const forks = hitTargets(mv.board, mv.to, mover);
   if (forks.length >= 2) {
     const named = forks.slice(0, 2).map((f) => `${w.other} ${NAME[f.piece]} on ${f.square}`).join(' and ');
-    return { kind: 'fork', squares: [mv.to, ...forks.map((f) => f.square)], clause: `it takes on ${mv.to} and hits ${named} at once` };
+    return { kind: 'fork', squares: [mv.to, ...forks.map((f) => f.square)], clause: `it hits ${named} at once` };
   }
   if (prior && prior.to === mv.to) {
     const gain = (prior.promoted ? CAPTURE_VALUE.p : CAPTURE_VALUE[took.type]) - CAPTURE_VALUE[prior.captured];
@@ -616,18 +620,21 @@ function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, move
     // rank — that is what the sacrifice was for, and it is the point.
     const kingOut = mv.piece === 'k' && mv.to[1] !== (mover === 'w' ? '1' : '8');
     if (gain <= 0) return null;
+    const seat = w.you === 'you' ? 'you' : 'they';
+    const gets = afterCaptureSan({ kind: 'take-back-gain', got: took.type, gave: prior.captured, seat }, 'verb');
     return {
       kind: 'recapture',
       squares: [mv.to],
-      clause: `it takes back on ${mv.to}: ${w.you} get ${withArticle(NAME[took.type])} for the ${NAME[prior.captured]} ${giver} took${kingOut ? `, but ${w.own} king has left its back rank to do it, out in the open — that is what ${giver} gave the ${NAME[took.type]} for` : ''}`,
+      clause: `it ${gets}${kingOut ? `, but ${w.own} king has left its back rank to do it, out in the open — that is what ${giver} gave the ${NAME[took.type]} for` : ''}`,
     };
   }
   // A PLAIN TRADE RESTATES THE MOVE (lead 2026-10-20): "takes your pawn, and
   // you can take back" and "the material is level again" are the board.
   const back = mv.board.attackers(mv.to, mover === 'w' ? 'b' : 'w').length > 0;
   if (!back) {
-    const what = `${w.other} ${NAME[took.type]} on ${mv.to}`;
-    return { kind: 'capture', squares: [mv.to], clause: `it wins ${what}, and nothing can take back`, forms: [`it wins ${what}, and nothing can take back`, `it takes ${what} — nothing can take back`, `it captures ${what} — nothing can take back`] };
+    const nets = { kind: 'nets' as const, captured: took.type, free: true, gave: null };
+    const forms = afterCaptureSanForms(nets, w.you === 'you' ? 'you' : 'they').map((f) => `it ${f}`);
+    return { kind: 'capture', squares: [mv.to], clause: forms[0], forms };
   }
   return null;
 }

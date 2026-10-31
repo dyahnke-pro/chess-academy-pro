@@ -3510,11 +3510,13 @@ export function computePunishFacts(
     const first = seq.move(punishment);
     if (first) {
       const mech: string[] = [];
-      if (first.captured) mech.push(`captures the ${PUNISH_PIECE_WORD[first.captured]} on ${first.to}`);
+      // Its SAN already says a capture ("Nxe5" is spoken "knight takes e5"),
+      // so a capture is never said again after it (David 2026-10-30: "queen
+      // takes d8, takes the queen") — what the sequence wins follows below.
       if (first.san.includes('#')) mech.push('is checkmate');
       else if (first.san.includes('+')) mech.push('gives check');
-      if (mech.length === 0) mech.push('is a quiet move');
-      lines.push(`the punishing move ${first.san} ${mech.join(' and ')}`);
+      if (mech.length === 0 && !first.captured) mech.push('is a quiet move');
+      lines.push(mech.length ? `the punishing move ${first.san} ${mech.join(' and ')}` : `the punishing move is ${first.san}`);
       // What the sequence wins is the ONE ledger rule (WO-OUTCOME-01): its
       // settled net where it ends — never a raw sum of captures.
       const proof = proofCut(postInaccuracyFen, [first.san, ...followup.map((f) => f.san)], student);

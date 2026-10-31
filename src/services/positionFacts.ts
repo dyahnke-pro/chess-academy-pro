@@ -2047,7 +2047,9 @@ function guardRemovalConcept(fen: string, student: 'w' | 'b'): NonNullable<Param
   const move = gr.moves[0];
   const full = mine
     ? `Their ${piece} on ${gr.target} has one guard, the ${guard} on ${gr.guard}. ${rotateStem(GUARD_REMOVAL_PRINCIPLE, key)}`
-    : `Your ${piece} on ${gr.target} has one guard, the ${guard} on ${gr.guard}, and ${move.san} ${move.kind === 'chase' ? 'chases it off' : 'takes it'}. ${rotateStem(GUARD_REMOVAL_WARNING, key)}`;
+    // "Bxf3 takes it" was "bishop takes f3 takes it" (David 2026-10-30): the
+    // SAN says the capture, and the idea is the guard's removal.
+    : `Your ${piece} on ${gr.target} has one guard, the ${guard} on ${gr.guard}, and ${move.san} ${move.kind === 'chase' ? 'chases it off' : 'removes it'}. ${rotateStem(GUARD_REMOVAL_WARNING, key)}`;
   return {
     id: 'removal_of_guard', source: 'tactic', full, short: full,
     squares: [gr.target, gr.guard],

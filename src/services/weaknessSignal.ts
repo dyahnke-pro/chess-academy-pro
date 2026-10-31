@@ -17,6 +17,7 @@ import type { UnifiedWeakness } from './weaknessSpine';
 import type { WeaknessLifecycle, LifecycleStatus, LifecycleTrend } from './weaknessLifecycle';
 import type { MisconceptionBucket, MisconceptionTagId } from '../data/misconceptionTags';
 import type { TacticPatternType } from '../types/tacticTypes';
+import type { ClauseKind } from './positionFacts';
 import { weaknessClusterForPattern } from './tacticVocabulary';
 
 /** A precomputed, narration-ready view of ONE student weakness: the durable
@@ -165,50 +166,65 @@ export function clauseKindBucket(kind: string | null | undefined): Misconception
   }
 }
 
-/** Match a positionFacts clause KIND to the student's holes it teaches to. Only
- *  the clear semantic links are mapped — never a forced match (G3): a clause
- *  whose kind has no honest weakness counterpart returns null. `kind` is a
- *  string (not the ClauseKind type) to keep this leaf decoupled from
- *  positionFacts and avoid a circular import. */
+/** Which of the student's holes a clause of each KIND joins. */
+type Join = ((s: WeaknessSignal) => boolean) | null;
+const PIN_OR_SKEWER: Join = (s) => s.clusterId === 'analysis:tactic:pin' || s.clusterId === 'analysis:tactic:skewer';
+const OPENING_HOLES: Join = (s) => s.clusterId === 'left-book-early' || s.bucket === 'opening';
+// `fundamental:<id>` rows (weaknessSpine.aggregateFundamentals, 2026-09-19)
+// are the attributed fundamentals the batch sweep proved on the student's
+// own games — the finest positional hole the profile carries, so they join
+// the positional clauses beside the coarser bucket/structure rows.
+const POSITIONAL_HOLES: Join = (s) => s.bucket === 'positional' || s.clusterId.startsWith('fundamental:') || s.clusterId.startsWith('analysis:structure') || s.clusterId.startsWith('analysis:phase:');
+
+/** EVERY CLAUSE KIND ANSWERS (WO-STORY-MATRIX-01, 2026-10-31). This was a
+ *  switch whose `default` returned null, so a kind added to the live read
+ *  silently joined no hole: P1-4 gave the book move and the position's memory
+ *  their own kinds (`opening`, `last-here`) and both lost the weakness join
+ *  with every test green. A new kind now fails to compile until it is placed.
+ *  Only the clear semantic links join — never a forced match (G3); `null` is
+ *  a kind with no honest single hole. */
+const KIND_JOIN: Record<ClauseKind, Join> = {
+  // about to drop a piece / miss an incoming threat
+  'must-defend': (s) => s.clusterId === 'analysis:tactic:hanging_piece' || s.clusterId === 'analysis:missed-threat',
+  // A live `tactic` clause with no motif of its own (review's `[tactic]` facet
+  // bridges here too) keeps the pin/skewer join it always had.
+  tactic: PIN_OR_SKEWER,
+  'latent-danger': PIN_OR_SKEWER, // walking your own king/queen into a pin or skewer
+  // A tactic the student can SET UP — the dual-use rule at its sharpest: the
+  // computer that shows you a fork two moves out is the one that catches you
+  // missing them, so it joins the FORK hole. Until 2026-09-21 this clause was
+  // emitted as `latent-danger` for both seats, so a fork the student could
+  // PLAY was matched against a "you get pinned" hole.
+  'latent-chance': (s) => s.clusterId === 'analysis:tactic:fork',
+  // The popular mistake at their level (WO-TEACH-02 S2), the book move the
+  // student just left and the position's memory are opening lessons: they
+  // join the student's opening holes — leaving book early, the opening bucket.
+  refuted: OPENING_HOLES,
+  opening: OPENING_HOLES,
+  'last-here': OPENING_HOLES,
+  // The king reads (mate over material, the checks a king walks into, the
+  // castling squares) join the holes about kings: missed mates and threats.
+  'king-read': (s) => s.clusterId === 'analysis:tactic:checkmate' || s.clusterId === 'analysis:tactic:back_rank' || s.clusterId === 'analysis:missed-threat',
+  convert: (s) => s.clusterId.startsWith('analysis:conversion-endgame:') || s.bucket === 'endgame', // failing to convert a won position
+  fundamental: POSITIONAL_HOLES,
+  rule: POSITIONAL_HOLES, // a principle kept — the same holes as a principle broken
+  'structure-plan': POSITIONAL_HOLES, // positional understanding
+  // No honest single-hole mapping.
+  status: null, deliberation: null, 'key-moment': null, 'opponent-intent': null, 'student-leans': null, 'opponent-leans': null,
+  concept: null, method: null, bluff: null, stopped: null, stock: null, trade: null,
+  'not-yet': null, line: null, 'their-habit': null, 'your-habit': null, 'stop-flaw': null, 'hole-access': null, 'speedrun-read': null,
+  'trade-idea': null, 'defence-idea': null, nugget: null,
+  equivalence: null, 'capture-choice': null, kick: null, 'plan-race': null, timing: null,
+  'their-read': null, 'prevent-test': null, 'attack-pattern': null,
+  priority: null,
+};
+
+/** Match a positionFacts clause KIND to the student's holes it teaches to.
+ *  `kind` is a string (callers bridge review's facet tags through
+ *  `clauseKindForTag`); a string that is no clause kind joins nothing. */
 export function matchClauseKind(kind: string, signals: readonly WeaknessSignal[]): WeaknessSignal | null {
-  switch (kind) {
-    case 'must-defend': // about to drop a piece / miss an incoming threat
-      return bestMatch(signals, (s) => s.clusterId === 'analysis:tactic:hanging_piece' || s.clusterId === 'analysis:missed-threat');
-    // A live `tactic` clause with no motif of its own (review's `[tactic]` facet
-    // bridges here too) keeps the pin/skewer join it always had.
-    case 'tactic':
-    case 'latent-danger': // walking your own king/queen into a pin or skewer
-      return bestMatch(signals, (s) => s.clusterId === 'analysis:tactic:pin' || s.clusterId === 'analysis:tactic:skewer');
-    // A tactic the student can SET UP — the dual-use rule at its sharpest: the
-    // computer that shows you a fork two moves out is the one that catches you
-    // missing them, so it joins the FORK hole. Until 2026-09-21 this clause was
-    // emitted as `latent-danger` for both seats, so a fork the student could
-    // PLAY was matched against a "you get pinned" hole — the right computer
-    // joined to the wrong weakness, silently, for every student who had one.
-    case 'latent-chance':
-      return bestMatch(signals, (s) => s.clusterId === 'analysis:tactic:fork');
-    // The popular mistake at their level (WO-TEACH-02 S2) — an opening lesson,
-    // so it joins the student's opening holes: leaving book early, the opening
-    // bucket.
-    case 'refuted':
-      return bestMatch(signals, (s) => s.clusterId === 'left-book-early' || s.bucket === 'opening');
-    // The king reads (mate over material, the checks a king walks into, the
-    // castling squares) join the holes about kings: missed mates and threats.
-    case 'king-read':
-      return bestMatch(signals, (s) => s.clusterId === 'analysis:tactic:checkmate' || s.clusterId === 'analysis:tactic:back_rank' || s.clusterId === 'analysis:missed-threat');
-    case 'convert': // failing to convert a won position
-      return bestMatch(signals, (s) => s.clusterId.startsWith('analysis:conversion-endgame:') || s.bucket === 'endgame');
-    case 'fundamental':
-    case 'rule': // a principle kept — the same holes as a principle broken
-    case 'structure-plan': // positional understanding
-      // `fundamental:<id>` rows (weaknessSpine.aggregateFundamentals, 2026-09-19)
-      // are the attributed fundamentals the batch sweep proved on the student's
-      // own games — the finest positional hole the profile carries, so they join
-      // the positional clauses beside the coarser bucket/structure rows.
-      return bestMatch(signals, (s) => s.bucket === 'positional' || s.clusterId.startsWith('fundamental:') || s.clusterId.startsWith('analysis:structure') || s.clusterId.startsWith('analysis:phase:'));
-    default:
-      return null; // status / deliberation / key-moment / *-leans / opponent-intent / stopped / stock: no honest single-hole mapping
-  }
+  const join = (KIND_JOIN as Partial<Record<string, Join>>)[kind];
+  return join ? bestMatch(signals, join) : null;
 }
 
 /** Match a LIVE tactic motif (TacticPatternType) to a tactic weakness, via the

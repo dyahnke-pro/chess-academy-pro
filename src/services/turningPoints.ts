@@ -27,6 +27,7 @@ import { betterMoveReason, errorWhy, type SecondReads } from './inaccuracyCall';
 // page already reads.
 export { recordSecondReads, NO_SECOND_READ } from './inaccuracyCall';
 import { isMateEval } from './engineConstants';
+import { winChancePercent } from './winChance';
 import { positionOf } from '../utils/samePosition';
 import { withArticle } from '../utils/andList';
 
@@ -108,11 +109,6 @@ export interface TurningPoint {
 }
 
 const PIECE_NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-
-/** Winning chance (0–100) for the side the eval is from — lichess's curve. */
-export function winChance(cp: number): number {
-  return 50 + 50 * (2 / (1 + Math.exp(-0.00368208 * cp)) - 1);
-}
 
 function moverPiece(fen: string, san: string): { piece: PieceSymbol; fenAfter: string } | null {
   try {
@@ -255,8 +251,8 @@ export interface RankedTurn {
 function turnSkip(seg: RankableSegment): { before?: number; after?: number; skip: TurningTrace['skip'] } {
   if (seg.evalBefore == null || seg.evalAfter == null) return { skip: 'no-eval-or-best' };
   const sign = seg.playerColor === 'white' ? 1 : -1;
-  const before = winChance(seg.evalBefore * sign);
-  const after = winChance(seg.evalAfter * sign);
+  const before = winChancePercent(seg.evalBefore * sign);
+  const after = winChancePercent(seg.evalAfter * sign);
   const swing = before - after;
   // The classifier's own word decides eligibility: a mistake or a blunder is a
   // moment worth asking about (KID audit 2026-10-06: Qh4 over Nxf1, a free

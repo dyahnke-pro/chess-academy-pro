@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2089 lines · 15 exports · 40 importers · 45 tests · 3 audits**
+**2091 lines · 15 exports · 41 importers · 45 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -52,6 +52,7 @@
 - `src/services/raceAimOneVoice.test.ts`
 - `src/services/reviewFacetRank.ts`
 - `src/services/speedRunReads.scale.test.ts`
+- `src/services/weaknessSignal.ts`
 - `src/services/whyBestMove.ts`
 - `src/test/computedOrderWired.test.ts`
 - `src/test/decisionRows.baseline.test.ts`
@@ -249,7 +250,7 @@
 - `src/services/conceptKey.test.ts:9`
 - `src/services/conceptKey.ts:11`
 - `src/services/danyaBehaviors.ts:526`
-- `src/services/kingAttackReads.ts:660`
+- `src/services/kingAttackReads.ts:661`
 - `src/services/learnBoardTeaching.ts:511`
 - `src/services/looseStill.test.ts:36`
 - `src/services/replayFence.alekhine1500.test.ts:25`

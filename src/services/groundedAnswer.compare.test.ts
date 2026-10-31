@@ -19,7 +19,9 @@ describe('two moves compared', () => {
       b: { san: 'Qb6', evalCp: -400, mateIn: null, lineUci: ['e5f7'] },
     });
     expect(a?.facts).toMatch(/^dxe5 is better\./);
-    expect(a?.facts).toMatch(/Qb6\? Then Nxf7 — it takes your pawn on f7/);
+    // The reply said once, in piece words (David 2026-10-30: "queen takes
+    // d8, takes the queen").
+    expect(a?.facts).toMatch(/Qb6\? Then their knight takes your pawn on f7/);
   });
   it('near-equal moves are said to be equal (no invented winner)', () => {
     const a = assembleCompareMovesAnswer({ studentColor: null,
@@ -46,7 +48,8 @@ describe('can they take on a square', async () => {
   it('the doubled rooks win the c5 pawn', () => {
     expect(captureOnAsk('Can they take on c5?')).toEqual({ capturer: 'opponent', square: 'c5' });
     const a = assembleCaptureOnAnswer({ fen: g.fen(), square: 'c5', capturer: 'opponent', studentColor: 'black' });
-    expect(a?.facts).toMatch(/^Yes — Rxc5 wins your pawn on c5, about 1 point/);
+    // The capture said once: its SAN, then what it nets (David 2026-10-30).
+    expect(a?.facts).toMatch(/^Yes — Rxc5 wins a pawn, about 1 point/);
   });
   it('a square nothing reaches is a plain no (negative control)', () => {
     const a = assembleCaptureOnAnswer({ fen: g.fen(), square: 'h7', capturer: 'opponent', studentColor: 'black' });

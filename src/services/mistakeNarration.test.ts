@@ -28,10 +28,8 @@ describe('generateMistakeNarration', () => {
     const result = generateMistakeNarration(buildParams());
     expect(result.intro).toBeTruthy();
     expect(Array.isArray(result.moveNarrations)).toBe(true);
-    // `outro` is deliberately NOT asserted truthy — see the block below. It is
-    // computed from the move, and an empty one is the correct answer when the
-    // move proves nothing worth a closing line.
-    expect(typeof result.outro).toBe('string');
+    // The outro is gone: it was computed and never said or shown (G8.5).
+    expect('outro' in result).toBe(false);
   });
 
   it('intro contains the player move', () => {
@@ -181,7 +179,7 @@ describe('narration voice rules', () => {
   /** Every line the student can hear, from one generated narration. */
   function allLines(p: NarrationParams): string[] {
     const n = generateMistakeNarration(p);
-    return [n.intro, ...n.moveNarrations, n.outro, n.conceptHint].filter((s) => s.trim().length > 0);
+    return [n.intro, ...n.moveNarrations, n.conceptHint].filter((s) => s.trim().length > 0);
   }
 
   // A spread of real positions so a rule can't pass by luck on one fixture.

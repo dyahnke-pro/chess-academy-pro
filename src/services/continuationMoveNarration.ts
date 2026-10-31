@@ -163,9 +163,13 @@ export function narrateContinuationMove(
   // everything working." If brevity is wanted back, cap the CLAUSES and drop
   // their arrows with them — never the two separately.
   const body = clauses.join(', ');
+  // The cue leads with the SAN, which already says a capture: its capture
+  // clause is not said again after it ("Nxe5 — taking the pawn on e5" was
+  // "knight takes e5, taking the pawn", David 2026-10-30).
+  const cueClause = (captured ? clauses.slice(1) : clauses).at(0);
   return {
     say: `${who}'s ${pieceWord} to ${to}, ${body}.`,
-    short: `${san} — ${clauses[0].split(',')[0]}`.slice(0, 60),
+    short: cueClause ? `${san} — ${cueClause.split(',')[0]}`.slice(0, 60) : san,
     arrows,
   };
 }

@@ -17,6 +17,7 @@ import { isOutpost } from './outpost';
 import { findLoosePieces } from './loosePieces';
 import { computeBoardDelta } from './boardDelta';
 import { costStakes, piecePoints, type FactStakes } from './factStakes';
+import { moverCp } from './winChance';
 import { findPawnBreaks, findWeakPawns } from './positionReadingService';
 import { computeMustDefend, flipSideToMove } from './threatOut';
 import { computePieceRoute } from './forwardTeaching';
@@ -39,13 +40,9 @@ const sanOf = (fen: string, uci: string | undefined): string | null => {
 
 interface Read { text: string; squares?: string[]; /** It names the engine's move — speaks only where the move may be named. */ namesMove?: boolean; /** What rides on it (factStakes) — the ranker orders by this. */ stakes?: FactStakes; /** The IDEA without the move — spoken when the move is held back (named only where earned). */ idea?: string; /** REQUIRED: the once-per-game claim, keyed by the fact and its square (the voice package drops a repeat under any stem — Black walk 2026-10-19, "overprotect d5" said on two moves). */ claim: string; /** What would pay this idea off, and the line that closes the loop (the thread across moves). */ promise?: GamePromise; /** The student's move the IDEA points at by its piece ("your knight has a forcing move" with one knight move that forces it) — the door holds the idea while that move is theirs to play (OS-10). */ ideaNames?: NamedMove }
 type Lines = ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>;
-const seatCp = (fen: string, l: { evaluation: number; mate: number | null }): number => {
-  const white = l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation;
-  return fen.split(' ')[1] === 'w' ? white : -white;
-};
 
 /** The cost of NOT playing line one: centipawns between it and line two. */
-const choiceGap = (fen: string, lines: Lines): number | null => (lines.length >= 2 ? seatCp(fen, lines[0]) - seatCp(fen, lines[1]) : null);
+const choiceGap = (fen: string, lines: Lines): number | null => (lines.length >= 2 ? moverCp(fen, lines[0]) - moverCp(fen, lines[1]) : null);
 const pieceStakes = (type: string, plies: number): FactStakes | undefined => (piecePoints(type) > 0 ? { points: piecePoints(type), plies } : undefined);
 
 /** #23 WHO RELEASES THE TENSION: you can capture into the tension, the engine
@@ -72,7 +69,7 @@ export function keepTension(fen: string, me: 'w' | 'b', bestSan: string | null):
 export function anyMoveFine(fen: string, lines: Lines): Read | null {
   // Out of the opening only: "several moves are equal" on move one is true and teaches nothing.
   if (lines.length < 3 || Number(fen.split(' ')[5] ?? 1) < 8) return null;
-  const cps = lines.slice(0, 3).map((l) => seatCp(fen, l));
+  const cps = lines.slice(0, 3).map((l) => moverCp(fen, l));
   // The SAME bar the one criticality read uses (`criticalityThresholds`): all
   // three inside an inaccuracy of each other is "no real decision here".
   if (Math.max(...cps) - Math.min(...cps) >= criticalityThresholds().notable || Math.abs(cps[0]) > 300) return null;
@@ -163,7 +160,7 @@ export function threatStronger(fen: string, me: 'w' | 'b', lines: Lines): Read |
   const grab = b.moves({ verbose: true }).find((m) => m.captured && legalSeeGainFor(fen, m.to, me) > 0);
   if (!grab) return null;
   const grabLine = lines.find((l) => sanOf(fen, l.moves[0]) === grab.san);
-  if (grabLine && seatCp(fen, best) - seatCp(fen, grabLine) < criticalityThresholds().notable) return null;
+  if (grabLine && moverCp(fen, best) - moverCp(fen, grabLine) < criticalityThresholds().notable) return null;
   // "THE MATERIAL WILL KEEP" MUST BE TRUE (walk 2026-10-07, 10.Bb5: said while
   // the engine's move was a kick that won a piece for another reason). After the
   // engine's move AND their best reply, the same capture must still win —
@@ -172,7 +169,7 @@ export function threatStronger(fen: string, me: 'w' | 'b', lines: Lines): Read |
   const replySan = afterBest ? sanOf(afterBest.board.fen(), best.moves[1]) : null;
   const afterReply = afterBest && replySan ? play(afterBest.board.fen(), replySan) : null;
   if (!afterReply || afterReply.board.turn() !== me || legalSeeGainFor(afterReply.board.fen(), grab.to, me) <= 0) return null;
-  const gap = grabLine ? seatCp(fen, best) - seatCp(fen, grabLine) : null;
+  const gap = grabLine ? moverCp(fen, best) - moverCp(fen, grabLine) : null;
   // ONCE A GAME (claim): two consecutive moves heard it in the Learn tape.
   return { claim: 'srr:threat-stronger', promise: { key: `grab:${grab.to}`, piece: grab.piece, square: grab.to, takes: true, say: `Now you collect on ${grab.to} — the threat did its work first.` }, stakes: costStakes(gap) ?? { points: legalSeeGainFor(fen, grab.to, me), plies: 1 }, text: rot(fen, `You could take on ${grab.to} right now, but the threat is stronger than carrying it out — the material will keep, so keep it hanging over them and improve first.`, `The capture on ${grab.to} isn't going anywhere — leave it hanging over them and make the useful move first; the threat is the stronger weapon.`, `Don't cash in on ${grab.to} yet — while the capture hangs over them they are tied up; improve, and take it when it suits you.`), squares: [grab.to] };
 }
@@ -305,7 +302,7 @@ export function playAnyway(fen: string, lines: Lines): Read | null {
   if (!a || !bestSan) return null;
   const replySan = sanOf(a.board.fen(), l.moves[1]);
   if (!replySan || !/[+x]/.test(replySan)) return null;
-  if (seatCp(fen, l) < 0) return null;
+  if (moverCp(fen, l) < 0) return null;
   // SCARY means it looks like it wins something: a check, or a capture that
   // nets them material on the count. A plain recapture is not scary.
   if (!replySan.includes('+')) {
@@ -492,8 +489,8 @@ export function bestCasePlan(fen: string, lines: Lines): Read | null {
   };
   const [one, two] = lines;
   if (!quiet(two)) return null;
-  const gap = seatCp(fen, one) - seatCp(fen, two);
-  if (gap < criticalityThresholds().notable || seatCp(fen, two) > 50) return null;
+  const gap = moverCp(fen, one) - moverCp(fen, two);
+  if (gap < criticalityThresholds().notable || moverCp(fen, two) > 50) return null;
   const a = sanOf(fen, one.moves[0]); const b2 = sanOf(fen, two.moves[0]);
   if (!a || !b2) return null;
   return { claim: 'srr:best-case', stakes: costStakes(gap) ?? undefined, idea: `Test the slow plan with ${b2} by its best case: even if everything goes right, it only gets you level — something sharper is there.`, namesMove: true, text: `Test the slow plan with ${b2} by its best case: even when everything goes right for you, you end up no better than level. ${a} gets more.` };
@@ -531,7 +528,7 @@ export function rejectedMoveLater(fen: string, lines: Lines): Read | null {
   if (lines.length < 2) return null;
   const main = lines[0].moves;
   for (const l of lines.slice(1)) {
-    if (seatCp(fen, lines[0]) - seatCp(fen, l) < criticalityThresholds().notable) continue;
+    if (moverCp(fen, lines[0]) - moverCp(fen, l) < criticalityThresholds().notable) continue;
     const u = l.moves[0];
     const at = main.findIndex((m, i) => i > 0 && i % 2 === 0 && m === u);
     if (at < 0) continue;
@@ -546,7 +543,7 @@ export function rejectedMoveLater(fen: string, lines: Lines): Read | null {
     // before and after the engine's moves up to the capture; nothing nameable
     // changed → the held form says nothing.
     const prep = preparationOf(fen, san, main.slice(0, at));
-    return { stakes: costStakes(seatCp(fen, lines[0]) - seatCp(fen, l)) ?? undefined, claim: `srr:rejected:${san}`, ...(prep ? { idea: `The ${san.includes('+') && !san.includes('x') ? 'check' : 'capture'} you may be eyeing doesn't work yet — ${prep}, and then it does.` } : {}), namesMove: true, text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
+    return { stakes: costStakes(moverCp(fen, lines[0]) - moverCp(fen, l)) ?? undefined, claim: `srr:rejected:${san}`, ...(prep ? { idea: `The ${san.includes('+') && !san.includes('x') ? 'check' : 'capture'} you may be eyeing doesn't work yet — ${prep}, and then it does.` } : {}), namesMove: true, text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
   }
   return null;
 }
@@ -596,7 +593,7 @@ export function flexibleFirst(fen: string, lines: Lines): Read | null {
   const pa = a ? play(fen, a) : null;
   if (!pa || !a || pa.move.piece === 'p' || pa.move.captured || a.includes('+')) return null;
   for (const l of lines.slice(1)) {
-    if (seatCp(fen, lines[0]) - seatCp(fen, l) >= criticalityThresholds().notable) continue;
+    if (moverCp(fen, lines[0]) - moverCp(fen, l) >= criticalityThresholds().notable) continue;
     const s2 = sanOf(fen, l.moves[0]);
     const p2 = s2 ? play(fen, s2) : null;
     if (!p2 || !s2 || p2.move.piece !== 'p' || p2.move.captured) continue;

@@ -43,12 +43,11 @@ import { gainedBishopPair } from './bishopPair';
 import { lossBeyondBestAlternative } from './voluntaryLoss';
 import { deepFact, theirTarget, binding, moveHit } from './threeFacts';
 import { pieceRoute } from './pieceRoute';
-import { PIECE_NAMES } from '../types/tacticTypes';
 import type { PhraseMemory } from '../utils/phraseMemory';
 import { withArticle } from '../utils/andList';
+import { afterCaptureSan } from '../utils/captureWords';
 import type { IdeaKind } from './ideaKind';
 
-const PIECE_WORD = PIECE_NAMES;
 /** The piece a SAN names by its first letter (a pawn move names none). */
 const SAN_PIECE: Record<string, string> = { N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king' };
 
@@ -243,6 +242,12 @@ function cheapestCaptureOn(fen: string, sq: string): string | null {
   } catch { return null; }
 }
 
+/** Any legal capture on `sq` for the side to move — "nothing can take back"
+ *  is said only when this is false. */
+function takenBackOn(fen: string, sq: string): boolean {
+  return cheapestCaptureOn(fen, sq) !== null;
+}
+
 /** The trade a capture starts on its square: their cheapest take-back and the
  *  mover's cheapest answer to it — or null when either is missing. */
 function exchangeOn(fenAfter: string, sq: string): { reply: string; again: string } | null {
@@ -306,18 +311,27 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
 
   const recapture = !!mv.captured && prev.square === mv.to && prev.capturedValue > 0;
 
-  // 2. Material won — name the piece (never a bare "wins material"). When it
+  // 2. Material won — the count of it (never a bare "wins material"). Every
+  //    clause here follows the move's SAN, which already says the capture
+  //    ("Qxd8" is spoken "queen takes d 8"), so it says what the capture leads
+  //    to and never the capture again — "Qxd8 — it wins the queen" was "queen
+  //    takes d8, takes the queen" (David 2026-10-30; `captureWords`). When it
   //    is won only through the trade on the square (they can take back, and
   //    taking back loses it again), the trade is said: "cxb4, winning a pawn —
-  //    if axb4, …Nxb4", never "winning the pawn" with axb4 coming next
-  //    (2026-10-28).
+  //    if axb4, …Nxb4" (2026-10-28).
   if (mv.captured && facts.materialGained >= 1) {
-    const took = PIECE_WORD[mv.captured] ?? 'piece';
     const back = recapture ? null : exchangeOn(fenAfter, mv.to);
+    const free = !back && !takenBackOn(fenAfter, mv.to);
+    // Ahead, but the take-back costs the capturer (no answer to it on the
+    // square): the exchange — "winning a rook for a knight", never "winning a
+    // rook" (`captureWords`).
+    const gave = !free && !back && !recapture ? facts.gaveBack : null;
+    const nets = { kind: 'nets' as const, captured: mv.captured, free, gave };
+    const trade = back ? ` — if ${back.reply}, ${back.again}` : '';
     aspects.push({
       kind: 'aspect-wins',
-      text: back ? `winning ${withArticle(took)} — if ${back.reply}, ${back.again}` : `winning the ${took}`,
-      verb: back ? `wins ${withArticle(took)} — if ${back.reply}, ${back.again}` : `wins the ${took}`,
+      text: `${afterCaptureSan(nets, 'participle')}${trade}`,
+      verb: `${afterCaptureSan(nets, 'verb')}${trade}`,
       idea: 'win-material', squares: [mv.to], weight: 90, keystone: true,
     });
   }
@@ -325,16 +339,14 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
   // 2b. A capture that wins nothing is a TRADE or a TAKE-BACK, and says so —
   //     with no words of its own it fell through to "the bishop rakes toward
   //     c5, d4, f2" on Bxe3 (census group 6, 2026-10-07). A take-back that
-  //     walks into a second capture says so (axb4 after cxb4: …Nxb4 takes again).
+  //     walks into a second capture says so (axb4 after cxb4: …Nxb4 is next).
   if (mv.captured && facts.materialGained <= 0 && (facts.materialGained > -1 || recapture)) {
-    const took = PIECE_WORD[mv.captured] ?? 'piece';
     const again = recapture && facts.materialGained < 0 ? cheapestCaptureOn(fenAfter, mv.to) : null;
-    const text = recapture ? `taking back the ${took}${again ? `, but ${again} takes again` : ''}`
-      : mv.piece === mv.captured ? `trading ${took}s`
-        : `trading the ${PIECE_WORD[mv.piece] ?? 'piece'} for the ${took}`;
-    const verb = recapture ? `takes back the ${took}${again ? `, but ${again} takes again` : ''}`
-      : mv.piece === mv.captured ? `trades ${took}s`
-        : `trades the ${PIECE_WORD[mv.piece] ?? 'piece'} for the ${took}`;
+    const leadsTo = recapture
+      ? { kind: 'take-back' as const, next: again }
+      : { kind: 'trade' as const, piece: mv.piece, captured: mv.captured };
+    const text = afterCaptureSan(leadsTo, 'participle');
+    const verb = afterCaptureSan(leadsTo, 'verb');
     // A take-back that walks into a second capture says a consequence; so
     // does one that wins the bishop pair (Danya's take-backs, measured
     // 2026-10-28: "you recapture with the b-pawn … for the bishop pair"). A
@@ -350,9 +362,8 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
   //     after Be5+). A loss the mover CHOSE is graded elsewhere (a sacrifice,
   //     or the costly move's own reason), never here.
   if (mv.captured && facts.materialGained <= -1 && !recapture && (lossBeyondBestAlternative(fenBefore, san) ?? 1) < 1) {
-    const took = PIECE_WORD[mv.captured] ?? 'piece';
-    const gave = PIECE_WORD[mv.piece] ?? 'piece';
-    aspects.push({ kind: 'aspect-least-loss', text: `giving up the ${gave} for the ${took} — every other move loses more`, verb: `gives up the ${gave} for the ${took} — every other move loses more`, idea: 'trade', squares: [mv.to], weight: 80, keystone: true });
+    const gives = { kind: 'gives-up' as const, piece: mv.piece, captured: mv.captured };
+    aspects.push({ kind: 'aspect-least-loss', text: `${afterCaptureSan(gives, 'participle')} — every other move loses more`, verb: `${afterCaptureSan(gives, 'verb')} — every other move loses more`, idea: 'trade', squares: [mv.to], weight: 80, keystone: true });
   }
 
   // 3. A tactic LANDED (fork / pin / skewer) — when it isn't already the threat.

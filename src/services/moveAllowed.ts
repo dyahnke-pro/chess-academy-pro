@@ -3,6 +3,7 @@ import { capturedSquare } from '../utils/capturedSquare';
 import { describeMoveGeometry } from './groundedAnswer';
 import { legalSeeGain } from './positionReadingService';
 import { CAPTURE_VALUE } from './pieceValues';
+import { afterCaptureSan } from '../utils/captureWords';
 
 
 /** The concrete punishment ONE reply inflicts after `playedSan`, read by the
@@ -14,7 +15,7 @@ export function replyPunishment(
   fen: string,
   playedSan: string,
   replySan: string | null,
-): { replySan: string; gerund: string } | null {
+): { replySan: string; gerund: string; won: { piece: string; square: string } | null } | null {
   if (!replySan) return null;
   let afterPlayed: string;
   let opponent: 'white' | 'black';
@@ -32,18 +33,24 @@ export function replyPunishment(
   // capture CREATES above the material it TAKES ("Qxd6 pins your e-pawn to
   // your bishop") — true, and not the point of R2b3.
   const won = materialWon(afterPlayed, replySan);
-  const gerund = geometry === 'delivers checkmate' || geometry?.startsWith('forks ')
+  const byGeometry = geometry === 'delivers checkmate' || geometry?.startsWith('forks ');
+  const gerund = byGeometry && geometry
     ? punishmentGerund(geometry)
-    : won ?? (geometry ? punishmentGerund(geometry) : null);
+    : won?.gerund ?? (geometry ? punishmentGerund(geometry) : null);
   if (!gerund) return null;
-  return { replySan, gerund };
+  // What the reply won, as DATA — a reader that needs the piece and its
+  // square reads this, never the words back (they no longer carry them).
+  return { replySan, gerund, won: !byGeometry && won ? { piece: won.piece, square: won.square } : null };
 }
 
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-/** "winning your pawn on d6" when the reply captures and the exchange on that
- *  square nets material (pin-aware SEE from the opponent's seat); else null. */
-function materialWon(afterPlayed: string, replySan: string): string | null {
+/** "winning a pawn" when the reply captures and the exchange on that square
+ *  nets material (pin-aware SEE from the opponent's seat); else null. Said
+ *  after the reply's SAN ("lets them play Qxd6, …"), which already says the
+ *  capture, so it is the count — "winning your pawn on d6" was "queen takes
+ *  d6, winning your pawn on d6" (David 2026-10-30; `captureWords`). */
+function materialWon(afterPlayed: string, replySan: string): { gerund: string; piece: string; square: string } | null {
   try {
     const c = new Chess(afterPlayed);
     const mv = c.move(replySan);
@@ -53,9 +60,8 @@ function materialWon(afterPlayed: string, replySan: string): string | null {
     // WHAT THEY NET, NOT WHAT THEY TOUCH (Learn walk 2026-10-10: Bxa5 Nxa5 is
     // a queen for a bishop, said as "winning your queen"). When the exchange
     // gives the capturer back, the trade is named.
-    return gain >= CAPTURE_VALUE[mv.captured]
-      ? `winning your ${PIECE_NAME[mv.captured]} on ${capturedSquare(mv)}`
-      : `winning your ${PIECE_NAME[mv.captured]} on ${capturedSquare(mv)} for their ${PIECE_NAME[mv.piece]}`;
+    const gerund = afterCaptureSan({ kind: 'nets', captured: mv.captured, free: false, gave: gain >= CAPTURE_VALUE[mv.captured] ? null : mv.piece }, 'participle');
+    return { gerund, piece: PIECE_NAME[mv.captured], square: capturedSquare(mv) };
   } catch {
     return null;
   }
