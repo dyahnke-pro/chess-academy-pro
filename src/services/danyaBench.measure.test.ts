@@ -57,6 +57,7 @@ import { classifyCpLoss } from './gameAnalysisService';
 /** The bench's own variant: the weighing as a choices-step fact. */
 function choiceFact(text: string, fen: string): ThoughtFact {
   return {
+    id: 'deliberationAlternativesFacts:0', namesStudentMove: false,
     ...placeFact('deliberation', 'student'), computer: 'deliberationAlternativesFacts', source: 'alternatives', idea: 'choice', thread: { none: 'local' }, text: /[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`, squares: [], weight: 50, stakes: null,
     proof: NO_PROOF.description, seat: 'student', fen, claims: [`choice:${fen}`],
   };
@@ -563,17 +564,18 @@ const FACT_COMPUTER: Record<FactKind, string> = {
   structure: 'services/boardStructure.ts#describeStructure',
   verdict: 'services/reviewPositionalAssessment.ts#assessPositionalEdge',
   opening: 'services/mastersPlanRead.ts#mastersPlanLine',
+  // The opening's story names each beat's kind (P1-4); the priority before
+  // the move is one kind on every surface.
+  'opening-cost': 'services/openingStory.ts#openingStoryAt',
+  'opening-theirs': 'services/openingStory.ts#openingStoryAt',
+  'opening-story': 'services/openingStory.ts#openingStoryAt',
+  'opening-fork': 'services/openingStory.ts#openingStoryAt',
+  priority: 'services/playCommentary.ts#buildPriorityFirst',
   'opp-dev': 'services/reviewOpponentCommentary.ts#(module)',
   'their-habit': 'services/thinkAloud.ts#opponentHabits',
   'your-habit': 'services/thinkAloud.ts#habitsOf',
   held: 'services/coachFeatureService.ts#generateReviewNarration',
   'last-here': 'services/lastTimeHere.ts#lastTimeHere',
-  // P1-4's kinds: the registry's priority read and the opening story's beats.
-  priority: 'services/playCommentary.ts#buildPriorityFirst',
-  'opening-story': 'services/openingStory.ts#openingStoryAt',
-  'opening-cost': 'services/openingStory.ts#openingStoryAt',
-  'opening-theirs': 'services/openingStory.ts#openingStoryAt',
-  'opening-fork': 'services/openingStory.ts#openingStoryAt',
   'opp-target': 'services/reviewOpponentCommentary.ts#(module)',
   endgame: 'services/reviewMoveTeaching.ts#nameEndgamePhase',
   'plan-now': 'services/nextPlans.ts#deriveNextPlans',

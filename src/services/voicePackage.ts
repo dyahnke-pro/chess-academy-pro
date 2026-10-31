@@ -97,6 +97,12 @@ export type VoiceFactKind =
 
 export interface VoiceFact {
   kind: VoiceFactKind;
+  /** THE FACT IT CAME FROM (`CoachFact.id`, WO-STORY-MATRIX-01 P1-5), when it
+   *  came from one — carried through `kept` and `dropped` untouched, so a door
+   *  knows what the package kept by its id, never by its words: the package
+   *  trims sentences, and two facts may share words. A line spoken straight
+   *  from a sentence (a read-aloud, a review card) has none. */
+  factId?: string;
   /** The proof that rides with this fact (proof.ts) — set by the Learn door
    *  from the producer's REQUIRED answer; the Why button reads it. */
   proof?: FactProof;

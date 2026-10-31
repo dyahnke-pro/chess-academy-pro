@@ -13,7 +13,8 @@
 //  • `computeCriticality` is the sharpness SCORE (from the same analysis);
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
-import { NAMES_NO_MOVE, namesMoves, namedSan, type NamesStudentMove } from './studentMoveNaming';
+import { NAMES_NO_MOVE, namesMoves, namedSan, namesPlayableStudentMove, type NamesStudentMove } from './studentMoveNaming';
+import { LOCAL_THREAD, toCoachFact, type CoachFact } from './coachFact';
 import { fadeLevelsFrom, fadeText } from './fadeText';
 import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
@@ -128,7 +129,7 @@ export interface LastMoveInput {
 }
 import type { TacticPatternType } from '../types/tacticTypes';
 import { conceptForBoard, definitionKey } from './conceptEngine';
-import { lineProof, type FactProof, type Proof } from './proof';
+import { lineProof, NO_PROOF, type FactProof, type Proof } from './proof';
 import { lineSeatAt } from '../utils/andList';
 import { threatProof } from './threatProof';
 import { refutedAltProof } from './refutedAlternativeCore';
@@ -478,6 +479,36 @@ const SAY_ONCE_KINDS: ReadonlySet<ClauseKind> = new Set<ClauseKind>(['their-habi
  *  does not play there (never a guess). */
 function moveSquares(fen: string, san: string): string[] {
   try { const m = new Chess(fen).move(san); return [m.from, m.to]; } catch { return []; }
+}
+
+/** Clause kinds that say what the OPPONENT is doing TO the student — their
+ *  threat, their idea, their best piece, a pin waiting for them: questions the
+ *  student has to answer, where their own assets are not. Read off the clause
+ *  KIND (which computer produced it), never guessed from the prose; it is the
+ *  tie-break inside a same-claim group at the door (`selectFacts`). */
+const INCOMING_KINDS: ReadonlySet<ClauseKind> = new Set<ClauseKind>(['must-defend', 'opponent-intent', 'opponent-leans', 'latent-danger']);
+
+/** A LIVE CLAUSE AS THE ONE FACT — the door's adapter for this composer
+ *  (WO-STORY-MATRIX-01 P1-5), deleted when each clause's computer emits
+ *  `CoachFact` itself (P1-6c). Every record rides on the fact: its kind is its
+ *  claim family (B12 — two clauses over one geometry collapse only when one
+ *  computer produced both: a must-defend and a pin-in-waiting on the same
+ *  three squares are two claims, now and next move, and both speak), what it
+ *  is worth (`stakes`, coupled at emission — the door orders by it), and the
+ *  hole it meets in this student's record is
+ *  the SAME join the need score reads (`clauseHole`), so relevance and need
+ *  cannot disagree. A clause that brought no proof is counted unproven by its
+ *  kind at the door, as before. The door is handed none of a clause's claim
+ *  keys (it never was: this surface keeps its own say-once memory below). */
+function clauseFact(c: ClauseItem, i: number, fen: string, weaknesses: readonly WeaknessSignal[]): CoachFact & { kind: ClauseKind } {
+  return toCoachFact({
+    id: `clause:${i}`, kind: c.kind, text: c.text, fen: c.gradeFen ?? fen, squares: c.squares ?? [], claims: [],
+    stakes: c.stakes ?? null, proof: c.proof ?? NO_PROOF.description,
+    seat: INCOMING_KINDS.has(c.kind) ? 'opponent' : 'student',
+    namesStudentMove: namesPlayableStudentMove(c.namesStudentMove), thread: LOCAL_THREAD,
+    hole: clauseHole(c, weaknesses),
+    ...(c.lines ? { lines: c.lines } : {}), ...(c.skill ? { skill: c.skill } : {}),
+  });
 }
 
 /** A phase fact that names no student move — the same constant the clauses
@@ -1329,25 +1360,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       layers: layerStandings(input.studentWeaknesses ?? [], input.studentNeedContext?.capabilities),
       fade: fadeLevelsFrom(input.studentNeedContext?.heat),
     }, bundle: {
-      facts: composed.map((c) => c.text),
-      skillOf: new Map(composed.flatMap((c) => (c.skill ? [[c.text, c.skill] as const] : []))),
-      proofs: new Map(composed.flatMap((c) => (c.proof ? [[c.text, c.proof] as const] : []))),
-      squares: new Map(composed.flatMap((c) => (c.squares && c.squares.length ? [[c.text, c.squares] as const] : []))),
-      // WHAT THEY ARE DOING TO YOU — the tie-break inside a same-claim group,
-      // taken from the clause KIND (which computer produced it), never guessed
-      // from the prose. Their threat, their idea and their best piece are all
-      // questions you have to answer; your own assets are not.
-      incoming: new Set(composed.filter((c) => c.kind === 'must-defend' || c.kind === 'opponent-intent' || c.kind === 'opponent-leans' || c.kind === 'latent-danger').map((c) => c.text)),
-      // WHAT EACH CLAUSE IS WORTH — coupled at emission; the door orders by it.
-      stakes: new Map(composed.flatMap((c) => (c.stakes ? [[c.text, c.stakes] as const] : []))),
-      // The hole each clause meets in this student's record — the SAME join the
-      // need score reads (`clauseHole`), so relevance and need cannot disagree.
-      holeByFact: new Map(composed.map((c) => [c.text, clauseHole(c, input.studentWeaknesses ?? [])] as const)),
-      // THE CLAIM FAMILY — the clause's own kind, coupled at emission (B12).
-      // Two clauses over one geometry collapse only when the same computer
-      // produced them; a must-defend and a pin-in-waiting on the same three
-      // squares are two claims (now / next move) and both speak.
-      family: new Map(composed.map((c) => [c.text, c.kind] as const)),
+      facts: composed.map((c, i) => clauseFact(c, i, fen, input.studentWeaknesses ?? [])),
       // THE BOARD (`boardState`) — the move that produced it is the opponent's
       // when the student is to move, the student's otherwise.
       board: boardHere,

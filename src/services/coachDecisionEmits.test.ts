@@ -20,6 +20,7 @@ import { CALM_BOARD } from './boardState';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { decide } from './coachDecider';
+import { doorFact } from '../test/doorFact';
 import { onCoachDecision, onNeedScore, resetCoachDecisionListeners, type CoachDecisionRow, type NeedScoreRow } from './coachDecisionEvents';
 import { computeNeed, coldStudent } from './needScore';
 
@@ -40,7 +41,7 @@ const quietSignals = { cpLoss: 0, gapCp: 0, contested: false } as never;
 const loudSignals = { cpLoss: 400, gapCp: 400, contested: true } as never;
 const student = (need: { speak: boolean } | null) =>
   ({ rating: 1500, weaknesses: [], need, layers: { safety: 'grey', principle: 'grey', plan: 'grey' } } as never);
-const bundle = (facts: string[]) => ({ board: CALM_BOARD, facts, squares: new Map(), proofs: new Map(), alreadySaid: new Set<string>() } as never);
+const bundle = (facts: string[]) => ({ board: CALM_BOARD, facts: facts.map((t) => doorFact(t)), alreadySaid: new Set<string>() } as never);
 
 describe('every decision path is observable', () => {
   it('emits when IMPORTANCE closes the door', () => {

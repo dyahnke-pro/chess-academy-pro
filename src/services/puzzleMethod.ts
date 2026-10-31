@@ -47,7 +47,7 @@ export function puzzleMethodLine(
       momentBoost: NO_BOOST,
       layers: layerStandings(record.weaknesses, record.capabilities),
       fade: fadeLevelsFrom(record.heat),
-    }, bundle: { facts: [], board: CALM_BOARD, squares: new Map(), proofs: new Map() }, posture: 'walk', method: { bestSan, cpLossCp: stakesCp, ignoredThreat: false, isStudentMove: true, saidHabits: said, ply: variety } });
+    }, bundle: { facts: [], board: CALM_BOARD }, posture: 'walk', method: { bestSan, cpLossCp: stakesCp, ignoredThreat: false, isStudentMove: true, saidHabits: said, ply: variety } });
   const beat = d.spoken.find((t) => t.startsWith('[method] '));
   return beat ? beat.slice('[method] '.length) : null;
 }

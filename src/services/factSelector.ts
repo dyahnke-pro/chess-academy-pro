@@ -35,6 +35,7 @@
 import type { ImportanceTier } from './narrationImportance';
 import { facetRank } from './reviewFacetRank';
 import type { WeaknessSignal } from './weaknessSignal';
+import type { CoachFact } from './coachFact';
 
 /** Why a fact did not speak. Kept for the audit trail — silence is a computed
  *  verdict, so it has to be explainable, never just absent.
@@ -62,8 +63,12 @@ export interface QuietFact {
   by?: string;
 }
 
-interface FactSelection {
-  spoken: string[];
+/** The facts that speak, as the objects they came in as — a surface reads
+ *  every record off the fact itself, never re-joins it by its words
+ *  (WO-STORY-MATRIX-01 P1-5) — and every fact that did not, by its words,
+ *  for the decision row. */
+interface FactSelection<F extends CoachFact> {
+  spoken: F[];
   quiet: QuietFact[];
 }
 
@@ -127,9 +132,9 @@ function jaccard(a: readonly string[], b: readonly string[]): number {
 /**
  * Decide which of a ply's computed facts speak.
  *
- * @param facets   the computed facts, in authoring order
- * @param squares  facet text → the squares that fact NAMED, coupled from the
- *                 computer that produced it (never scraped from the prose)
+ * @param facts    the computed facts, in authoring order — each carries the
+ *                 squares it NAMED, coupled from the computer that produced
+ *                 it (never scraped from the prose), its kind and its seat
  * @param tier     the moment's importance tier, from `computeImportance`
  * @param signals  this student's weakness spine — raises facts about their holes
  */
@@ -141,10 +146,6 @@ function jaccard(a: readonly string[], b: readonly string[]): number {
  *  positional tail is a trap that springs on the NEXT person; the options
  *  object cannot mis-bind. */
 interface FactSelectOptions {
-  /** Facts that describe something the OPPONENT is doing TO the student —
-   *  coupled from the detector's `beneficiary`, never inferred from the prose.
-   *  Used ONLY to break a tie inside a same-claim group (see below). */
-  incoming?: ReadonlySet<string>;
   /** SENTENCES THIS SURFACE HAS ALREADY SPOKEN — suppressed, with a reason.
    *
    *  Subsumption collapses two facts that are one claim about one board.
@@ -159,32 +160,14 @@ interface FactSelectOptions {
    *  is STILL hanging must say so again. This set holds only the sentences it
    *  has judged safe to say once. */
   alreadySaid?: ReadonlySet<string>;
-  /** A surface's OWN ranking scale. `rank` and `bar` travel together on
-   *  purpose: a bar is meaningless in a scale it did not come from, and
-   *  splitting them is how they end up disagreeing. Omitted → facts are ranked
-   *  by their `[tag]` and swept by `barForTier`. */
+  /** A surface's OWN ranking scale, keyed by FACT ID. `rank` and `bar` travel
+   *  together on purpose: a bar is meaningless in a scale it did not come
+   *  from, and splitting them is how they end up disagreeing. Omitted → facts
+   *  are ranked by their `[tag]` and swept by `barForTier`. */
   order?: { rank: ReadonlyMap<string, number>; bar: number };
-  /** Facts the floor never sweeps — the door exempts every TEACHING point; the
-   *  floor is for descriptions not worth their breath. */
+  /** The ids of facts the floor never sweeps — the door exempts every
+   *  TEACHING point; the floor is for descriptions not worth their breath. */
   exemptFromBar?: ReadonlySet<string>;
-  /** THE CLAIM FAMILY of each fact — the KIND of computer that produced it
-   *  (`ClauseKind` on the live lane), coupled at emission. Two facts are ONE
-   *  claim only when their squares coincide AND they are the same kind of
-   *  claim: a pin and a battery over one diagonal are both `[tactic]`, so the
-   *  battery eats the pin; the loose piece on that diagonal is `[loose]`, a
-   *  different teaching, and it keeps its voice even though its two squares
-   *  are a subset of the pin's three (Jaccard 0.67 — see B12 below). Review's
-   *  facets carry their family in the `[tag]` prefix, so a surface that omits
-   *  this map still gets it; a fact with no family in either place is never
-   *  collapsed against a fact of a known family. */
-  family?: ReadonlyMap<string, string>;
-}
-
-/** The family a fact declares in its own text — review's `[tag]` prefix. */
-const FAMILY_PREFIX = /^\[([a-z0-9-]+)\]/i;
-function declaredFamily(text: string): string | null {
-  const m = FAMILY_PREFIX.exec(text);
-  return m ? m[1].toLowerCase() : null;
 }
 
 /** ONE CLAIM = same geometry AND same claim family (B12, 2026-09-22).
@@ -192,10 +175,13 @@ function declaredFamily(text: string): string | null {
  *  Jaccard alone ate a two-square fact whenever a three-square fact of a
  *  DIFFERENT kind happened to contain it (2/3 = 0.67 ≥ 0.6): the loose piece on
  *  e2 vanished under the pin through e2, and the student lost a teaching that
- *  was not a duplicate. Silence must never be a guess, so a fact whose family
- *  is unknown on BOTH sides still collapses on geometry alone (today's
- *  behaviour for a caller that supplies neither a map nor a prefix), while a
- *  fact with a known family collapses only into its own. */
+ *  was not a duplicate. A fact's family is its KIND — the computer's own name
+ *  for what it claims, coupled at emission: a pin and a battery over one
+ *  diagonal are both `tactic`, so the battery eats the pin; the loose piece on
+ *  that diagonal is `loose`, a different teaching, and keeps its voice. Silence
+ *  must never be a guess, so a caller with no kind on BOTH sides (the Learn
+ *  door, which reads one geometry from two seats) collapses on geometry alone,
+ *  while a fact with a known family collapses only into its own. */
 export function sameClaim(
   a: { sq: readonly string[]; family: string | null },
   b: { sq: readonly string[]; family: string | null },
@@ -206,19 +192,17 @@ export function sameClaim(
   return a.family === b.family;
 }
 
-export function selectFacts(
-  facets: readonly string[],
-  squares: ReadonlyMap<string, readonly string[]>,
+export function selectFacts<F extends CoachFact>(
+  facts: readonly F[],
   tier: ImportanceTier,
   signals: readonly WeaknessSignal[] = [],
   opts: FactSelectOptions = {},
-): FactSelection {
-  const { incoming = new Set<string>(), alreadySaid, order, family, exemptFromBar } = opts;
+): FactSelection<F> {
+  const { alreadySaid, order, exemptFromBar } = opts;
   const said = alreadySaid ?? new Set<string>();
   const bar = order ? order.bar : barForTier(tier);
-  const rankOf = (text: string): number => (order ? (order.rank.get(text) ?? 0) : facetRank(text, signals));
-  const familyOf = (text: string): string | null => family?.get(text) ?? declaredFamily(text);
-  const scored = facets.map((text, i) => ({ text, i, rank: rankOf(text), sq: squares.get(text) ?? [], family: familyOf(text) }));
+  const rankOf = (f: F): number => (order ? (order.rank.get(f.id) ?? 0) : facetRank(f.text, signals));
+  const scored = facts.map((f, i) => ({ f, text: f.text, i, rank: rankOf(f), sq: f.squares, family: f.kind as string }));
   // Highest rank first; authoring order breaks ties so the result is stable.
   const byRank = [...scored].sort((a, b) => (b.rank - a.rank) || (a.i - b.i));
 
@@ -248,9 +232,12 @@ export function selectFacts(
     // bishop is a question you have to answer. Deliberately scoped to INSIDE a
     // same-claim group: the rank table's bands sit 1–4 apart, so expressing this
     // as a global bonus would vault a tactic over the move's own verdict.
+    // Whose it is rides on the fact (`seat`, from the detector's own
+    // `beneficiary`), never inferred from the prose.
+    const theirs = (x: (typeof grp)[number]): number => Number(x.f.seat === 'opponent');
     const ranked = [...grp].sort((a, b) =>
       (b.rank - a.rank)
-      || (Number(incoming.has(b.text)) - Number(incoming.has(a.text)))
+      || (theirs(b) - theirs(a))
       || (a.i - b.i));
     const [win, ...rest] = ranked;
     winners.push(win);
@@ -263,10 +250,10 @@ export function selectFacts(
   const spoken: typeof winners = [];
   for (const w of winners) {
     if (said.has(w.text)) { quiet.push({ text: w.text, why: 'said-already' }); continue; }
-    if (w.rank < bar && !exemptFromBar?.has(w.text)) { quiet.push({ text: w.text, why: 'below-bar' }); continue; }
+    if (w.rank < bar && !exemptFromBar?.has(w.f.id)) { quiet.push({ text: w.text, why: 'below-bar' }); continue; }
     spoken.push(w);
   }
-  return { spoken: spoken.map((x) => x.text), quiet };
+  return { spoken: spoken.map((x) => x.f), quiet };
 }
 
 /**
@@ -305,38 +292,32 @@ export function selectFacts(
  * speaks however many there are, and every description that supports one
  * speaks with it.
  */
-export function supportedFacts(
-  spoken: readonly string[],
-  squares: ReadonlyMap<string, readonly string[]>,
-  roleOf: (text: string) => 'teach' | 'describe',
-  /** What each fact claims beyond the relation its squares draw (the loose
-   *  piece a board line ends on). A description that claims something its
-   *  teaching point does not is not a restatement of it. */
-  claims?: ReadonlyMap<string, readonly string[]>,
-): FactSelection {
-  const teach = spoken.filter((t) => roleOf(t) === 'teach');
+export function supportedFacts<F extends CoachFact>(
+  spoken: readonly F[],
+  roleOf: (f: F) => 'teach' | 'describe',
+): FactSelection<F> {
+  const teach = spoken.filter((f) => roleOf(f) === 'teach');
   const quiet: QuietFact[] = [];
   if (teach.length === 0) {
-    for (const t of spoken) quiet.push({ text: t, why: 'unsupported' });
+    for (const f of spoken) quiet.push({ text: f.text, why: 'unsupported' });
     return { spoken: [], quiet };
   }
   const taught = new Set<string>();
-  for (const t of teach) for (const sq of squares.get(t) ?? []) taught.add(sq);
-  const out: string[] = [];
-  for (const t of spoken) {
-    if (roleOf(t) === 'teach') { out.push(t); continue; }
-    const sq = squares.get(t) ?? [];
-    const own = claims?.get(t) ?? [];
+  for (const t of teach) for (const sq of t.squares) taught.add(sq);
+  const out: F[] = [];
+  for (const f of spoken) {
+    if (roleOf(f) === 'teach') { out.push(f); continue; }
+    const sq = f.squares;
+    // What it claims beyond the relation its squares draw (the loose piece a
+    // board line ends on) rides on the fact: a description that claims
+    // something its teaching point does not is not a restatement of it.
+    const own = f.claims;
     const restated = sq.length >= 2
-      ? teach.find((k) => {
-        const ks = squares.get(k) ?? [];
-        const kc = claims?.get(k) ?? [];
-        return sq.every((s) => ks.includes(s)) && own.every((c) => kc.includes(c));
-      })
+      ? teach.find((k) => sq.every((s) => k.squares.includes(s)) && own.every((c) => k.claims.includes(c)))
       : undefined;
-    if (restated) quiet.push({ text: t, why: 'subsumed', by: restated });
-    else if (sq.some((s) => taught.has(s))) out.push(t);
-    else quiet.push({ text: t, why: 'unsupported' });
+    if (restated) quiet.push({ text: f.text, why: 'subsumed', by: restated.text });
+    else if (sq.some((s) => taught.has(s))) out.push(f);
+    else quiet.push({ text: f.text, why: 'unsupported' });
   }
   return { spoken: out, quiet };
 }

@@ -16,6 +16,8 @@ import {
   STAKED_FLOOR, MATE_POINTS, type FactStakes,
 } from './factStakes';
 import { decide } from './coachDecider';
+import { doorFact } from '../test/doorFact';
+import type { FactKind } from './reviewFacetRank';
 import { NO_BOOST } from './studentMomentBoost';
 import type { ImportanceSignals } from './narrationImportance';
 
@@ -67,12 +69,9 @@ describe('factStakes — what a fact is worth, from the board', () => {
 describe('the door orders every surface by computed value', () => {
   const student = { rating: 1500, weaknesses: [], need: null, moveAdvice: null, momentBoost: NO_BOOST, layers: ALL_GREY, fade: new Map() };
   const blunder: ImportanceSignals = { decision: null, cpLossCp: 300, threatNet: 0, teachingBeat: false, evalCpWhitePov: 20, wdl: null };
-  const run = (facts: Array<[string, string, FactStakes | null]>) => decide(blunder, student, {
-    board: CALM_BOARD, proofs: new Map(),
-    facts: facts.map(([t]) => t),
-    squares: new Map(),
-    family: new Map(facts.map(([t, k]) => [t, k] as const)),
-    stakes: new Map(facts.flatMap(([t, , st]) => (st ? [[t, st] as const] : []))),
+  const run = (facts: Array<[string, FactKind, FactStakes | null]>) => decide(blunder, student, {
+    board: CALM_BOARD,
+    facts: facts.map(([t, kind, stakes]) => doorFact(t, { kind, stakes })),
   }, 'interrupt');
 
   const HANG = 'They are threatening to win the knight on f3.';

@@ -3,42 +3,41 @@
 // guard as four separate findings about ONE diagonal.
 import { describe, it, expect } from 'vitest';
 import { selectFacts, barForTier, SAME_CLAIM_JACCARD } from './factSelector';
+import { doorFact } from '../test/doorFact';
+import type { DoorFact } from './coachDecider';
 
 // Verbatim from the shipped ply-23 narration.
-const PIN = '[tactic] Your bishop on g4 pins their bishop on e2 against their queen on d1.';
-const LONE = '[tactic] Your queen on d7 is the only defender of your bishop on g4 — and it can be taken.';
-const BATTERY = '[tactic] Their queen on d1 and their bishop on e2 form a battery on the diagonal, bearing down on your bishop on g4.';
-const ROYAL = '[royal] Their bishop on e2 is guarded only by the king and queen — and the king and queen are the worst defenders.';
-const TRIVIA = '[consequence] It nudged the balance your way.';
-
-const SQ = new Map<string, readonly string[]>([
-  [PIN, ['g4', 'e2', 'd1']],
-  [LONE, ['d7', 'g4']],
-  [BATTERY, ['d1', 'e2', 'g4']],
-  [ROYAL, ['e2']],
-]);
+const PIN = doorFact('[tactic] Your bishop on g4 pins their bishop on e2 against their queen on d1.', { squares: ['g4', 'e2', 'd1'] });
+const LONE = doorFact('[tactic] Your queen on d7 is the only defender of your bishop on g4 — and it can be taken.', { squares: ['d7', 'g4'] });
+const BATTERY = doorFact('[tactic] Their queen on d1 and their bishop on e2 form a battery on the diagonal, bearing down on your bishop on g4.', { squares: ['d1', 'e2', 'g4'] });
+const ROYAL = doorFact('[royal] Their bishop on e2 is guarded only by the king and queen — and the king and queen are the worst defenders.', { squares: ['e2'] });
+const TRIVIA = doorFact('[consequence] It nudged the balance your way.');
+/** Their battery — what the opponent is doing TO the student (`seat`). */
+const THEIR_BATTERY: DoorFact = { ...BATTERY, seat: 'opponent' };
+/** The same facts with no coupled squares. */
+const bare = (f: DoorFact): DoorFact => ({ ...f, squares: [] });
+const texts = (fs: readonly DoorFact[]): string[] => fs.map((f) => f.text);
 
 describe('factSelector — one claim per geometry', () => {
   it('the pin and the battery are ONE claim; only one speaks', () => {
-    const r = selectFacts([PIN, LONE, BATTERY, ROYAL], SQ, 'blunder');
+    const r = selectFacts([PIN, LONE, BATTERY, ROYAL], 'blunder');
     const bothSpoke = r.spoken.includes(PIN) && r.spoken.includes(BATTERY);
     expect(bothSpoke).toBe(false);
     const sub = r.quiet.find((q) => q.why === 'subsumed');
     expect(sub).toBeDefined();
     // …and the silence is explainable: it names the fact that won the geometry.
-    expect([PIN, BATTERY]).toContain(sub?.by);
+    expect([PIN.text, BATTERY.text]).toContain(sub?.by);
   });
 
   it('keeps the genuinely different teachings about the same pieces', () => {
-    const r = selectFacts([PIN, LONE, BATTERY, ROYAL], SQ, 'blunder');
+    const r = selectFacts([PIN, LONE, BATTERY, ROYAL], 'blunder');
     // {d7,g4} and {e2} do not coincide with {g4,e2,d1} — different claims.
     expect(r.spoken).toContain(LONE);
     expect(r.spoken).toContain(ROYAL);
   });
 
   it('a fact with no coupled squares is never collapsed — silence is never a guess', () => {
-    const noSq = new Map<string, readonly string[]>();
-    const r = selectFacts([PIN, BATTERY], noSq, 'blunder');
+    const r = selectFacts([bare(PIN), bare(BATTERY)], 'blunder');
     expect(r.spoken).toHaveLength(2);
     expect(r.quiet).toHaveLength(0);
   });
@@ -50,31 +49,30 @@ describe('factSelector — the tie-break is a chess judgement', () => {
     // pin stays quiet and the battery wins." Pin and battery carry the same tag
     // and therefore the same rank, so without this the winner was whichever the
     // authoring order emitted first — which was the pin.
-    const incoming = new Set([BATTERY]); // beneficiary = the opponent
-    const r = selectFacts([PIN, LONE, BATTERY, ROYAL], SQ, 'blunder', [], { incoming });
-    expect(r.spoken).toContain(BATTERY);
+    const r = selectFacts([PIN, LONE, THEIR_BATTERY, ROYAL], 'blunder');
+    expect(r.spoken).toContain(THEIR_BATTERY);
     expect(r.spoken).not.toContain(PIN);
-    expect(r.quiet.find((q) => q.text === PIN)?.by).toBe(BATTERY);
+    expect(r.quiet.find((q) => q.text === PIN.text)?.by).toBe(BATTERY.text);
   });
 
-  it('with no incoming flag it still collapses — it just falls back to authoring order', () => {
-    const r = selectFacts([PIN, BATTERY], SQ, 'blunder');
+  it('with neither seat theirs it still collapses — it just falls back to authoring order', () => {
+    const r = selectFacts([PIN, BATTERY], 'blunder');
     expect(r.spoken).toHaveLength(1);
   });
 });
 
 describe('factSelector — a BAR, not a cap (G4.5)', () => {
   it('a critical moment speaks every computed fact, however many', () => {
-    const many = Array.from({ length: 12 }, (_, i) => `[structure] fact ${i}`);
-    const r = selectFacts(many, new Map(), 'blunder');
+    const many = Array.from({ length: 12 }, (_, i) => doorFact(`[structure] fact ${i}`));
+    const r = selectFacts(many, 'blunder');
     expect(r.spoken).toHaveLength(12); // no count ever truncates
   });
 
   it('a quiet taught moment drops the low-value tail, not a fixed number', () => {
-    const r = selectFacts([PIN, TRIVIA], SQ, 'teaching');
+    const r = selectFacts([PIN, TRIVIA], 'teaching');
     expect(r.spoken).toContain(PIN);
     expect(r.spoken).not.toContain(TRIVIA);
-    expect(r.quiet.find((q) => q.text === TRIVIA)?.why).toBe('below-bar');
+    expect(r.quiet.find((q) => q.text === TRIVIA.text)?.why).toBe('below-bar');
   });
 
   it('the bar rises as the moment gets quieter, and never gates a critical one', () => {
@@ -89,17 +87,16 @@ describe('factSelector — a BAR, not a cap (G4.5)', () => {
 
   it('every fact is accounted for — spoken or explainably quiet', () => {
     const all = [PIN, LONE, BATTERY, ROYAL, TRIVIA];
-    const r = selectFacts(all, SQ, 'teaching');
+    const r = selectFacts(all, 'teaching');
     expect(r.spoken.length + r.quiet.length).toBe(all.length);
   });
 
   // B12 (2026-09-22). Negative control: drop the family test in `sameClaim`
   // (return true whenever Jaccard clears) → the first two `it`s fail.
   it('a two-square fact is NOT eaten by a three-square superset of a DIFFERENT claim family', () => {
-    const PIN3 = '[tactic] Your bishop on g4 pins their bishop on e2 against their queen on d1.';
-    const LOOSE2 = '[loose] Their bishop on e2 is attacked by your bishop on g4 and guarded only by the queen.';
-    const sq = new Map<string, readonly string[]>([[PIN3, ['g4', 'e2', 'd1']], [LOOSE2, ['e2', 'g4']]]);
-    const r = selectFacts([PIN3, LOOSE2], sq, 'blunder');
+    const PIN3 = doorFact('[tactic] Your bishop on g4 pins their bishop on e2 against their queen on d1.', { squares: ['g4', 'e2', 'd1'] });
+    const LOOSE2 = doorFact('[loose] Their bishop on e2 is attacked by your bishop on g4 and guarded only by the queen.', { squares: ['e2', 'g4'] });
+    const r = selectFacts([PIN3, LOOSE2], 'blunder');
     expect(r.spoken).toEqual(expect.arrayContaining([PIN3, LOOSE2]));
     expect(r.quiet).toHaveLength(0);
   });
@@ -107,20 +104,20 @@ describe('factSelector — a BAR, not a cap (G4.5)', () => {
   it('the live lane supplies the family as the clause KIND — same squares, different kinds, both speak', () => {
     const HANG = 'Your knight on e2 is hanging to the bishop on g4.';
     const PINNED = 'Your knight on e2 is pinned to your king on d1 by the bishop on g4.';
-    const sq = new Map<string, readonly string[]>([[HANG, ['e2', 'g4', 'd1']], [PINNED, ['g4', 'e2', 'd1']]]);
-    const order = { rank: new Map([[HANG, 75], [PINNED, 70]]), bar: 0 };
-    const r = selectFacts([HANG, PINNED], sq, 'must-defend', [], { order, family: new Map([[HANG, 'must-defend'], [PINNED, 'latent-danger']]) });
-    expect(r.spoken).toEqual(expect.arrayContaining([HANG, PINNED]));
+    const hang = doorFact(HANG, { id: 'hang', kind: 'must-defend', squares: ['e2', 'g4', 'd1'] });
+    const order = { rank: new Map([['hang', 75], ['pinned', 70]]), bar: 0 };
+    const r = selectFacts([hang, doorFact(PINNED, { id: 'pinned', kind: 'latent-danger', squares: ['g4', 'e2', 'd1'] })], 'must-defend', [], { order });
+    expect(texts(r.spoken)).toEqual(expect.arrayContaining([HANG, PINNED]));
     // …and with ONE family they are one claim and the higher rank wins.
-    const one = selectFacts([HANG, PINNED], sq, 'must-defend', [], { order, family: new Map([[HANG, 'must-defend'], [PINNED, 'must-defend']]) });
-    expect(one.spoken).toEqual([HANG]);
+    const one = selectFacts([hang, doorFact(PINNED, { id: 'pinned', kind: 'must-defend', squares: ['g4', 'e2', 'd1'] })], 'must-defend', [], { order });
+    expect(texts(one.spoken)).toEqual([HANG]);
     expect(one.quiet[0]).toMatchObject({ text: PINNED, why: 'subsumed', by: HANG });
   });
 
   it('the same-claim threshold is Jaccard, so containment alone never collapses', () => {
     expect(SAME_CLAIM_JACCARD).toBeGreaterThan(0.5);
     // {e2} ⊂ {g4,e2,d1} — containment is 1.0, Jaccard is 0.33. Must NOT collapse.
-    const r = selectFacts([PIN, ROYAL], SQ, 'blunder');
+    const r = selectFacts([PIN, { ...ROYAL, kind: 'tactic' }], 'blunder');
     expect(r.spoken).toHaveLength(2);
   });
 });
@@ -129,35 +126,50 @@ describe("a surface's own scale — rank and bar travel together", () => {
   it('orders and floors by the SUPPLIED scale, not by the facet tags', () => {
     // Untagged text: `facetRank` knows none of it, so without `order` these
     // would all score the same and the authoring order would decide.
-    const facts = ['they are threatening the knight on e5', 'the plan here: take the centre', 'a habit to run next time'];
-    const rank = new Map([[facts[0], 75], [facts[1], 38], [facts[2], 10]]);
-    const out = selectFacts(facts, new Map(), 'none', [], { order: { rank, bar: 0 } });
+    const facts = [
+      doorFact('they are threatening the knight on e5', { id: 'a', kind: 'threat' }),
+      doorFact('the plan here: take the centre', { id: 'b', kind: 'plan-now' }),
+      doorFact('a habit to run next time', { id: 'c', kind: 'method' }),
+    ];
+    const rank = new Map([['a', 75], ['b', 38], ['c', 10]]);
+    const out = selectFacts(facts, 'none', [], { order: { rank, bar: 0 } });
     expect(out.spoken).toEqual(facts);      // 75 > 38 > 10
     expect(out.quiet).toEqual([]);          // bar 0 floors nothing
   });
 
   it('a bar in the supplied scale sweeps by THAT scale', () => {
-    const facts = ['high', 'low'];
+    const facts = [doorFact('high', { id: 'high', kind: 'threat' }), doorFact('low', { id: 'low', kind: 'threat' })];
     const rank = new Map([['high', 75], ['low', 10]]);
-    const out = selectFacts(facts, new Map(), 'none', [], { order: { rank, bar: 20 } });
-    expect(out.spoken).toEqual(['high']);
+    const out = selectFacts(facts, 'none', [], { order: { rank, bar: 20 } });
+    expect(texts(out.spoken)).toEqual(['high']);
     expect(out.quiet).toEqual([{ text: 'low', why: 'below-bar' }]);
   });
 
   it('subsumption still runs under a supplied scale — the winner is the higher rank', () => {
-    const facts = ['the pin on the e-file', 'the battery on the e-file'];
-    const squares = new Map([[facts[0], ['e1', 'e2', 'e8']], [facts[1], ['e1', 'e2', 'e8']]]);
-    const rank = new Map([[facts[0], 40], [facts[1], 70]]);
-    const out = selectFacts(facts, squares, 'none', [], { order: { rank, bar: 0 } });
-    expect(out.spoken).toEqual([facts[1]]);
-    expect(out.quiet).toEqual([{ text: facts[0], why: 'subsumed', by: facts[1] }]);
+    const facts = [
+      doorFact('the pin on the e-file', { id: 'pin', kind: 'tactic', squares: ['e1', 'e2', 'e8'] }),
+      doorFact('the battery on the e-file', { id: 'battery', kind: 'tactic', squares: ['e1', 'e2', 'e8'] }),
+    ];
+    const rank = new Map([['pin', 40], ['battery', 70]]);
+    const out = selectFacts(facts, 'none', [], { order: { rank, bar: 0 } });
+    expect(texts(out.spoken)).toEqual(['the battery on the e-file']);
+    expect(out.quiet).toEqual([{ text: 'the pin on the e-file', why: 'subsumed', by: 'the battery on the e-file' }]);
   });
 
   it('a fact with no squares is never collapsed, whatever its rank', () => {
-    const facts = ['the pin on the e-file', 'a habit with no geometry'];
-    const squares = new Map([[facts[0], ['e1', 'e2', 'e8']]]);
-    const rank = new Map([[facts[0], 70], [facts[1], 10]]);
-    const out = selectFacts(facts, squares, 'none', [], { order: { rank, bar: 0 } });
+    const facts = [
+      doorFact('the pin on the e-file', { id: 'pin', kind: 'tactic', squares: ['e1', 'e2', 'e8'] }),
+      doorFact('a habit with no geometry', { id: 'habit', kind: 'tactic' }),
+    ];
+    const rank = new Map([['pin', 70], ['habit', 10]]);
+    const out = selectFacts(facts, 'none', [], { order: { rank, bar: 0 } });
     expect(out.spoken).toEqual(facts);
+  });
+
+  it('the floor never sweeps a fact the surface exempts, by its id', () => {
+    const facts = [doorFact('high', { id: 'high', kind: 'threat' }), doorFact('low', { id: 'low', kind: 'threat' })];
+    const rank = new Map([['high', 75], ['low', 10]]);
+    const out = selectFacts(facts, 'none', [], { order: { rank, bar: 20 }, exemptFromBar: new Set(['low']) });
+    expect(texts(out.spoken)).toEqual(['high', 'low']);
   });
 });

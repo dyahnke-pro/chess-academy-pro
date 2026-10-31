@@ -5,13 +5,13 @@
  */
 import { describe, expect, it } from 'vitest';
 import { coachTurn } from './coachDecider';
-import { decidePhaseWave, type LaneFact } from './learnTurnDoor';
+import { decidePhaseWave, type LaneInput } from './learnTurnDoor';
 import { onLearnTurn, type LearnTurnRow } from './coachDecisionEvents';
 import { NO_PROOF } from './proof';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
-const FACTS: LaneFact[] = [
+const FACTS: LaneInput[] = [
   { lane: 'threat', text: 'Watch e4 — their knight could take it.', fen: FEN, squares: ['e4'], stakes: { points: 1, plies: 1 }, proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE },
   { lane: 'openingIdea', text: 'Both sides aim for the d-pawn break in this opening.', fen: FEN, squares: ['d4'], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE },
 ];

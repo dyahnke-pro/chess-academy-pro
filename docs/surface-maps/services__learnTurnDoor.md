@@ -4,13 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1001 lines · 21 exports · 17 importers · 19 tests · 1 audits**
+**1229 lines · 26 exports · 22 importers · 23 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1482) — names `LEARN_LANES`, `learnTurnDoor`
-- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2379) — names `DNA_BEAT`
-- **🔒🔒 EVERY SPOKEN CONCLUSION CARRIES ITS PROOF — the proof is the thinking out loud (David 2026-10-07: "Anything that gets proven is stated out loud?" → "Yes. I have a feeling it will backfire but I think a decent starting spot.")** (CLAUDE.md:2421) — names `LaneFact`
+- **❤️ THE HEART OF THE APP — the coach THINKS OUT LOUD FOR the student (David 2026-10-07: "THIS IS THE HEART AND SOUL OF THE APP! THIS IS THE BEHAVIOR THAT TEACHES. THIS IS WHAT ALL THE COMPUTERS ARE BUILT FOR! SO WE CAN THINK OUT LOUD FOR THE USER!")** (CLAUDE.md:31) — names `learnTurnDoor`
+- **🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)** (CLAUDE.md:96) — names `learnTurnDoor`
+- **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1829) — names `LEARN_LANES`, `learnTurnDoor`
+- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2728) — names `DNA_BEAT`
+- **🔒🔒 EVERY SPOKEN CONCLUSION CARRIES ITS PROOF — the proof is the thinking out loud (David 2026-10-07: "Anything that gets proven is stated out loud?" → "Yes. I have a feeling it will backfire but I think a decent starting spot.")** (CLAUDE.md:2774) — names `LaneFact`
+- **The standard post-deploy ritual** (CLAUDE.md:6802) — names `learnTurnDoor`
 
 ## Who calls in
 
@@ -22,8 +25,13 @@
 - `src/services/learnBoardTeaching.ts`
 - `src/services/learnNamesNoMove.os10.test.ts`
 - `src/services/learnPhaseFocus.test.ts`
+- `src/services/learnTurnDoor.factId.test.ts`
+- `src/services/learnTurnDoor.mission.test.ts`
 - `src/services/learnTurnDoor.story.test.ts`
 - `src/services/learnTurnDoor.test.ts`
+- `src/services/learnTurnDoor.thought.test.ts`
+- `src/services/learnVoice.test.ts`
+- `src/services/learnVoice.ts`
 - `src/services/looseStill.test.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/os11RootCauses5And6.replay.test.ts`
@@ -34,11 +42,36 @@
 
 ## Exports and every call site
 
+### `VoiceOwner` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `LearnLane` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `DNA_BEAT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
+
+### `CORE_STEPS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `thoughtStepOf` (function) — 17 call sites
+- `src/services/learnTurnDoor.thought.test.ts:121`
+- `src/services/learnTurnDoor.thought.test.ts:122`
+- `src/services/learnTurnDoor.thought.test.ts:123`
+- `src/services/learnTurnDoor.thought.test.ts:124`
+- `src/services/learnTurnDoor.thought.test.ts:125`
+- `src/services/learnTurnDoor.thought.test.ts:126`
+- `src/services/learnTurnDoor.thought.test.ts:127`
+- `src/services/learnTurnDoor.thought.test.ts:145`
+- `src/services/learnTurnDoor.thought.test.ts:146`
+- `src/services/learnTurnDoor.thought.test.ts:147`
+- `src/services/learnTurnDoor.thought.test.ts:148`
+- `src/services/learnTurnDoor.thought.test.ts:149`
+- `src/services/learnTurnDoor.thought.test.ts:150`
+- `src/services/learnTurnDoor.thought.test.ts:151`
+- `src/services/learnTurnDoor.thought.test.ts:152`
+- `src/services/learnTurnDoor.thought.test.ts:156`
+- `src/services/learnTurnDoor.thought.test.ts:157`
 
 ### `STORY_LANE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -53,7 +86,10 @@
 ### `LEARN_LANES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `LaneFact` (interface) — 0 call sites
+### `LaneInput` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `LaneFact` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `DANGER_LANES` (const) — 0 call sites
@@ -72,28 +108,28 @@
 - `src/services/fadeText.test.ts:18`
 - `src/services/fadeText.test.ts:19`
 - `src/services/fadeText.test.ts:20`
-- `src/services/learnTurnDoor.test.ts:308`
-- `src/services/learnTurnDoor.test.ts:312`
-- `src/services/learnTurnDoor.test.ts:313`
+- `src/services/learnTurnDoor.test.ts:310`
 - `src/services/learnTurnDoor.test.ts:314`
-- `src/services/learnTurnDoor.test.ts:319`
-- `src/services/learnTurnDoor.test.ts:324`
-- `src/services/learnTurnDoor.test.ts:325`
-- `src/services/learnTurnDoor.test.ts:772`
-- `src/services/learnTurnDoor.test.ts:776`
-- `src/services/learnTurnDoor.test.ts:777`
-- `src/services/learnTurnDoor.test.ts:798`
-- `src/services/learnTurnDoor.test.ts:799`
-- `src/services/learnTurnDoor.test.ts:801`
+- `src/services/learnTurnDoor.test.ts:315`
+- `src/services/learnTurnDoor.test.ts:316`
+- `src/services/learnTurnDoor.test.ts:321`
+- `src/services/learnTurnDoor.test.ts:326`
+- `src/services/learnTurnDoor.test.ts:327`
+- `src/services/learnTurnDoor.test.ts:822`
+- `src/services/learnTurnDoor.test.ts:826`
+- `src/services/learnTurnDoor.test.ts:827`
+- `src/services/learnTurnDoor.test.ts:848`
+- `src/services/learnTurnDoor.test.ts:849`
+- `src/services/learnTurnDoor.test.ts:851`
 
-### `decideTurn` (function) — 107 call sites
+### `decideTurn` (function) — 124 call sites
 - `src/services/bookMoveWhy.test.ts:86`
 - `src/services/bookMoveWhy.test.ts:120`
 - `src/services/claimKeysLooseCount.test.ts:31`
 - `src/services/claimKeysLooseCount.test.ts:35`
-- `src/services/claimKeysLooseCount.test.ts:61`
-- `src/services/coachDecider.test.ts:147`
-- `src/services/coachDecider.ts:119`
+- `src/services/claimKeysLooseCount.test.ts:63`
+- `src/services/coachDecider.test.ts:148`
+- `src/services/coachDecider.ts:124`
 - `src/services/dnaDoor.test.ts:28`
 - `src/services/learnNamesNoMove.os10.test.ts:30`
 - `src/services/learnNamesNoMove.os10.test.ts:35`
@@ -112,6 +148,8 @@
 - `src/services/learnPhaseFocus.test.ts:104`
 - `src/services/learnPhaseFocus.test.ts:111`
 - `src/services/learnPhaseFocus.test.ts:122`
+- `src/services/learnTurnDoor.factId.test.ts:25`
+- `src/services/learnTurnDoor.factId.test.ts:35`
 - `src/services/learnTurnDoor.story.test.ts:27`
 - `src/services/learnTurnDoor.story.test.ts:34`
 - `src/services/learnTurnDoor.story.test.ts:43`
@@ -123,62 +161,77 @@
 - `src/services/learnTurnDoor.test.ts:138`
 - `src/services/learnTurnDoor.test.ts:149`
 - `src/services/learnTurnDoor.test.ts:158`
-- `src/services/learnTurnDoor.test.ts:209`
-- `src/services/learnTurnDoor.test.ts:228`
-- `src/services/learnTurnDoor.test.ts:251`
-- `src/services/learnTurnDoor.test.ts:272`
-- `src/services/learnTurnDoor.test.ts:280`
-- `src/services/learnTurnDoor.test.ts:328`
+- `src/services/learnTurnDoor.test.ts:211`
+- `src/services/learnTurnDoor.test.ts:230`
+- `src/services/learnTurnDoor.test.ts:253`
+- `src/services/learnTurnDoor.test.ts:274`
+- `src/services/learnTurnDoor.test.ts:282`
 - `src/services/learnTurnDoor.test.ts:330`
-- `src/services/learnTurnDoor.test.ts:338`
-- `src/services/learnTurnDoor.test.ts:356`
-- `src/services/learnTurnDoor.test.ts:362`
-- `src/services/learnTurnDoor.test.ts:372`
-- `src/services/learnTurnDoor.test.ts:381`
-- `src/services/learnTurnDoor.test.ts:391`
-- `src/services/learnTurnDoor.test.ts:405`
-- `src/services/learnTurnDoor.test.ts:420`
-- `src/services/learnTurnDoor.test.ts:428`
-- `src/services/learnTurnDoor.test.ts:448`
-- `src/services/learnTurnDoor.test.ts:454`
-- `src/services/learnTurnDoor.test.ts:466`
-- `src/services/learnTurnDoor.test.ts:478`
-- `src/services/learnTurnDoor.test.ts:494`
-- `src/services/learnTurnDoor.test.ts:500`
-- `src/services/learnTurnDoor.test.ts:509`
-- `src/services/learnTurnDoor.test.ts:514`
-- `src/services/learnTurnDoor.test.ts:525`
-- `src/services/learnTurnDoor.test.ts:538`
-- `src/services/learnTurnDoor.test.ts:552`
-- `src/services/learnTurnDoor.test.ts:565`
-- `src/services/learnTurnDoor.test.ts:579`
-- `src/services/learnTurnDoor.test.ts:580`
+- `src/services/learnTurnDoor.test.ts:332`
+- `src/services/learnTurnDoor.test.ts:340`
+- `src/services/learnTurnDoor.test.ts:358`
+- `src/services/learnTurnDoor.test.ts:364`
+- `src/services/learnTurnDoor.test.ts:374`
+- `src/services/learnTurnDoor.test.ts:383`
+- `src/services/learnTurnDoor.test.ts:393`
+- `src/services/learnTurnDoor.test.ts:407`
+- `src/services/learnTurnDoor.test.ts:422`
+- `src/services/learnTurnDoor.test.ts:430`
+- `src/services/learnTurnDoor.test.ts:450`
+- `src/services/learnTurnDoor.test.ts:456`
+- `src/services/learnTurnDoor.test.ts:468`
+- `src/services/learnTurnDoor.test.ts:480`
+- `src/services/learnTurnDoor.test.ts:496`
+- `src/services/learnTurnDoor.test.ts:502`
+- `src/services/learnTurnDoor.test.ts:511`
+- `src/services/learnTurnDoor.test.ts:516`
+- `src/services/learnTurnDoor.test.ts:527`
+- `src/services/learnTurnDoor.test.ts:540`
+- `src/services/learnTurnDoor.test.ts:554`
+- `src/services/learnTurnDoor.test.ts:567`
 - `src/services/learnTurnDoor.test.ts:581`
-- `src/services/learnTurnDoor.test.ts:592`
-- `src/services/learnTurnDoor.test.ts:604`
-- `src/services/learnTurnDoor.test.ts:616`
-- `src/services/learnTurnDoor.test.ts:620`
-- `src/services/learnTurnDoor.test.ts:630`
-- `src/services/learnTurnDoor.test.ts:641`
-- `src/services/learnTurnDoor.test.ts:652`
-- `src/services/learnTurnDoor.test.ts:665`
-- `src/services/learnTurnDoor.test.ts:686`
-- `src/services/learnTurnDoor.test.ts:690`
-- `src/services/learnTurnDoor.test.ts:693`
-- `src/services/learnTurnDoor.test.ts:714`
-- `src/services/learnTurnDoor.test.ts:720`
-- `src/services/learnTurnDoor.test.ts:721`
-- `src/services/learnTurnDoor.test.ts:746`
-- `src/services/learnTurnDoor.test.ts:762`
-- `src/services/learnTurnDoor.test.ts:763`
-- `src/services/learnTurnDoor.test.ts:815`
-- `src/services/learnTurnDoor.test.ts:823`
-- `src/services/learnTurnDoor.test.ts:834`
-- `src/services/learnTurnDoor.test.ts:838`
-- `src/services/learnTurnDoor.test.ts:847`
-- `src/services/learnTurnDoor.test.ts:857`
+- `src/services/learnTurnDoor.test.ts:582`
+- `src/services/learnTurnDoor.test.ts:583`
+- `src/services/learnTurnDoor.test.ts:594`
+- `src/services/learnTurnDoor.test.ts:606`
+- `src/services/learnTurnDoor.test.ts:618`
+- `src/services/learnTurnDoor.test.ts:622`
+- `src/services/learnTurnDoor.test.ts:634`
+- `src/services/learnTurnDoor.test.ts:644`
+- `src/services/learnTurnDoor.test.ts:651`
+- `src/services/learnTurnDoor.test.ts:662`
+- `src/services/learnTurnDoor.test.ts:673`
+- `src/services/learnTurnDoor.test.ts:689`
+- `src/services/learnTurnDoor.test.ts:702`
+- `src/services/learnTurnDoor.test.ts:723`
+- `src/services/learnTurnDoor.test.ts:727`
+- `src/services/learnTurnDoor.test.ts:733`
+- `src/services/learnTurnDoor.test.ts:754`
+- `src/services/learnTurnDoor.test.ts:760`
+- `src/services/learnTurnDoor.test.ts:764`
+- `src/services/learnTurnDoor.test.ts:793`
+- `src/services/learnTurnDoor.test.ts:809`
+- `src/services/learnTurnDoor.test.ts:813`
 - `src/services/learnTurnDoor.test.ts:865`
-- `src/services/learnTurnDoor.test.ts:867`
+- `src/services/learnTurnDoor.test.ts:873`
+- `src/services/learnTurnDoor.test.ts:884`
+- `src/services/learnTurnDoor.test.ts:888`
+- `src/services/learnTurnDoor.test.ts:897`
+- `src/services/learnTurnDoor.test.ts:907`
+- `src/services/learnTurnDoor.test.ts:915`
+- `src/services/learnTurnDoor.test.ts:917`
+- `src/services/learnTurnDoor.thought.test.ts:26`
+- `src/services/learnTurnDoor.thought.test.ts:37`
+- `src/services/learnTurnDoor.thought.test.ts:46`
+- `src/services/learnTurnDoor.thought.test.ts:55`
+- `src/services/learnTurnDoor.thought.test.ts:59`
+- `src/services/learnTurnDoor.thought.test.ts:69`
+- `src/services/learnTurnDoor.thought.test.ts:78`
+- `src/services/learnTurnDoor.thought.test.ts:88`
+- `src/services/learnTurnDoor.thought.test.ts:99`
+- `src/services/learnTurnDoor.thought.test.ts:111`
+- `src/services/learnTurnDoor.thought.test.ts:163`
+- `src/services/learnTurnDoor.thought.test.ts:176`
 - `src/services/looseStill.test.ts:37`
 - `src/services/looseStill.test.ts:43`
 - `src/services/looseStill.test.ts:45`
@@ -198,8 +251,10 @@
 ### `LiveTurn` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `decidePhaseWave` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8273`
+### `decidePhaseWave` (function) — 14 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8727`
+- `src/services/learnTurnDoor.mission.test.ts:43`
+- `src/services/learnTurnDoor.mission.test.ts:44`
 - `src/services/learnTurnDoor.phaseWave.test.ts:45`
 - `src/services/learnTurnDoor.phaseWave.test.ts:55`
 - `src/services/learnTurnDoor.phaseWave.test.ts:61`
@@ -213,35 +268,34 @@
 - `src/services/os11RootCauses5And6.replay.test.ts:64`
 
 ### `describeTurnDecision` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8290`
-- `src/components/Coach/CoachTeachPage.tsx:8297`
-- `src/components/Coach/CoachTeachPage.tsx:9670`
-- `src/components/Coach/CoachTeachPage.tsx:11578`
-- `src/components/Coach/CoachTeachPage.tsx:11664`
+- `src/components/Coach/CoachTeachPage.tsx:8744`
+- `src/components/Coach/CoachTeachPage.tsx:8751`
+- `src/components/Coach/CoachTeachPage.tsx:10163`
+- `src/components/Coach/CoachTeachPage.tsx:12151`
+- `src/components/Coach/CoachTeachPage.tsx:12238`
 
-### `buildVoicePackage` (re-export) — 85 call sites
-- `src/components/Coach/CoachGameReview.tsx:1922`
-- `src/components/Coach/CoachTeachPage.tsx:8454`
+### `buildVoicePackage` (re-export) — 83 call sites
+- `src/components/Coach/CoachGameReview.tsx:1926`
+- `src/components/Coach/CoachTeachPage.tsx:8914`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:2942`
-- `src/services/coachSurfaceScorecard.report.test.ts:116`
-- `src/services/coachSurfaceScorecard.report.test.ts:138`
-- `src/services/coachSurfaceScorecard.report.test.ts:149`
-- `src/services/computedVoiceAudit.report.test.ts:320`
-- `src/services/computedVoiceAudit.report.test.ts:327`
+- `src/services/coachFeatureService.ts:3054`
+- `src/services/coachSurfaceScorecard.report.test.ts:113`
+- `src/services/coachSurfaceScorecard.report.test.ts:135`
+- `src/services/computedVoiceAudit.report.test.ts:310`
+- `src/services/computedVoiceAudit.report.test.ts:317`
 - `src/services/dnaDoor.test.ts:16`
 - `src/services/dnaDoor.test.ts:43`
 - `src/services/dnaDoor.test.ts:50`
 - `src/services/holeOneKey.test.ts:26`
-- `src/services/laneReachability.test.ts:137`
+- `src/services/laneReachability.test.ts:128`
 - `src/services/openingStoryWholeBeat.test.ts:65`
 - `src/services/openingStoryWholeBeat.test.ts:70`
 - `src/services/outpostOneKey.test.ts:22`
 - `src/services/replayFence.najdorf1500.test.ts:52`
-- `src/services/reviewMoveBriefing.ts:406`
 - `src/services/ruleGradeFen.test.ts:9`
 - `src/services/ruleGradeFen.test.ts:12`
 - `src/services/speedRunReads.scale.test.ts:41`
+- `src/services/thoughtComposer.ts:234`
 - `src/services/voicePackage.orphanTail.test.ts:23`
 - `src/services/voicePackage.orphanTail.test.ts:30`
 - `src/services/voicePackage.orphanTail.test.ts:36`
@@ -258,101 +312,105 @@
 - `src/services/voicePackage.test.ts:131`
 - `src/services/voicePackage.test.ts:141`
 - `src/services/voicePackage.test.ts:157`
-- `src/services/voicePackage.test.ts:176`
-- `src/services/voicePackage.test.ts:182`
-- `src/services/voicePackage.test.ts:208`
-- `src/services/voicePackage.test.ts:217`
-- `src/services/voicePackage.test.ts:228`
-- `src/services/voicePackage.test.ts:236`
+- `src/services/voicePackage.test.ts:167`
+- `src/services/voicePackage.test.ts:192`
+- `src/services/voicePackage.test.ts:201`
+- `src/services/voicePackage.test.ts:212`
+- `src/services/voicePackage.test.ts:220`
+- `src/services/voicePackage.test.ts:234`
 - `src/services/voicePackage.test.ts:250`
-- `src/services/voicePackage.test.ts:266`
-- `src/services/voicePackage.test.ts:276`
-- `src/services/voicePackage.test.ts:285`
-- `src/services/voicePackage.test.ts:305`
-- `src/services/voicePackage.test.ts:315`
-- `src/services/voicePackage.test.ts:324`
-- `src/services/voicePackage.test.ts:332`
-- `src/services/voicePackage.test.ts:339`
+- `src/services/voicePackage.test.ts:260`
+- `src/services/voicePackage.test.ts:269`
+- `src/services/voicePackage.test.ts:289`
+- `src/services/voicePackage.test.ts:299`
+- `src/services/voicePackage.test.ts:308`
+- `src/services/voicePackage.test.ts:316`
+- `src/services/voicePackage.test.ts:323`
+- `src/services/voicePackage.test.ts:343`
+- `src/services/voicePackage.test.ts:353`
 - `src/services/voicePackage.test.ts:359`
-- `src/services/voicePackage.test.ts:369`
+- `src/services/voicePackage.test.ts:367`
 - `src/services/voicePackage.test.ts:375`
-- `src/services/voicePackage.test.ts:383`
-- `src/services/voicePackage.test.ts:391`
-- `src/services/voicePackage.test.ts:397`
-- `src/services/voicePackage.test.ts:416`
-- `src/services/voicePackage.test.ts:427`
+- `src/services/voicePackage.test.ts:381`
+- `src/services/voicePackage.test.ts:400`
+- `src/services/voicePackage.test.ts:411`
+- `src/services/voicePackage.test.ts:419`
+- `src/services/voicePackage.test.ts:423`
+- `src/services/voicePackage.test.ts:428`
 - `src/services/voicePackage.test.ts:435`
-- `src/services/voicePackage.test.ts:439`
-- `src/services/voicePackage.test.ts:444`
-- `src/services/voicePackage.test.ts:451`
-- `src/services/voicePackage.test.ts:462`
-- `src/services/voicePackage.test.ts:473`
-- `src/services/voicePackage.test.ts:480`
+- `src/services/voicePackage.test.ts:446`
+- `src/services/voicePackage.test.ts:457`
+- `src/services/voicePackage.test.ts:464`
+- `src/services/voicePackage.test.ts:472`
+- `src/services/voicePackage.test.ts:483`
 - `src/services/voicePackage.test.ts:488`
+- `src/services/voicePackage.test.ts:495`
 - `src/services/voicePackage.test.ts:499`
-- `src/services/voicePackage.test.ts:504`
-- `src/services/voicePackage.test.ts:511`
-- `src/services/voicePackage.test.ts:515`
-- `src/services/voicePackage.test.ts:529`
-- `src/services/voicePackage.test.ts:542`
-- `src/services/voicePackage.test.ts:543`
-- `src/services/voicePackage.test.ts:549`
-- `src/services/voicePackage.test.ts:550`
-- `src/services/voicePackage.test.ts:557`
-- `src/services/voicePackage.test.ts:560`
-- `src/services/voicePackage.test.ts:568`
-- `src/services/voicePackage.test.ts:569`
-- `src/services/voicePackage.test.ts:575`
-- `src/services/voicePackage.test.ts:582`
-- `src/services/voicePackage.ts:438`
+- `src/services/voicePackage.test.ts:513`
+- `src/services/voicePackage.test.ts:526`
+- `src/services/voicePackage.test.ts:527`
+- `src/services/voicePackage.test.ts:533`
+- `src/services/voicePackage.test.ts:534`
+- `src/services/voicePackage.test.ts:541`
+- `src/services/voicePackage.test.ts:544`
+- `src/services/voicePackage.test.ts:552`
+- `src/services/voicePackage.test.ts:553`
+- `src/services/voicePackage.test.ts:559`
+- `src/services/voicePackage.test.ts:566`
+- `src/services/voicePackage.ts:421`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11396`
-- `src/components/Coach/CoachTeachPage.tsx:11664`
+- `src/components/Coach/CoachTeachPage.tsx:11969`
+- `src/components/Coach/CoachTeachPage.tsx:12238`
 - `src/services/voicePackage.test.ts:38`
-- `src/services/voicePackage.ts:620`
+- `src/services/voicePackage.ts:603`
 
 ### `keptLines` (re-export) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8306`
-- `src/components/Coach/CoachTeachPage.tsx:11425`
-- `src/components/Coach/CoachTeachPage.tsx:11651`
-- `src/services/learnTurnDoor.test.ts:211`
-- `src/services/learnTurnDoor.test.ts:217`
-- `src/services/learnTurnDoor.test.ts:223`
-- `src/services/voicePackage.ts:663`
+- `src/components/Coach/CoachTeachPage.tsx:8764`
+- `src/components/Coach/CoachTeachPage.tsx:11998`
+- `src/components/Coach/CoachTeachPage.tsx:12225`
+- `src/services/learnTurnDoor.test.ts:213`
+- `src/services/learnTurnDoor.test.ts:219`
+- `src/services/learnTurnDoor.test.ts:225`
+- `src/services/voicePackage.ts:646`
 
 ### `markableSquares` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11611`
-- `src/services/voicePackage.test.ts:309`
-- `src/services/voicePackage.test.ts:318`
-- `src/services/voicePackage.test.ts:328`
-- `src/services/voicePackage.test.ts:335`
-- `src/services/voicePackage.test.ts:342`
-- `src/services/voicePackage.test.ts:401`
-- `src/services/voicePackage.ts:172`
+- `src/components/Coach/CoachTeachPage.tsx:12185`
+- `src/services/voicePackage.test.ts:293`
+- `src/services/voicePackage.test.ts:302`
+- `src/services/voicePackage.test.ts:312`
+- `src/services/voicePackage.test.ts:319`
+- `src/services/voicePackage.test.ts:326`
+- `src/services/voicePackage.test.ts:385`
+- `src/services/voicePackage.ts:176`
 
-### `spokenSentenceKeys` (re-export) — 21 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8302`
-- `src/components/Coach/CoachTeachPage.tsx:10102`
-- `src/components/Coach/CoachTeachPage.tsx:10122`
-- `src/components/Coach/CoachTeachPage.tsx:11409`
-- `src/components/Coach/CoachTeachPage.tsx:11585`
+### `spokenSentenceKeys` (re-export) — 23 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8760`
+- `src/components/Coach/CoachTeachPage.tsx:10624`
+- `src/components/Coach/CoachTeachPage.tsx:10648`
+- `src/components/Coach/CoachTeachPage.tsx:11982`
+- `src/components/Coach/CoachTeachPage.tsx:12164`
 - `src/services/claimKeysLooseCount.test.ts:33`
-- `src/services/coachFeatureService.ts:2949`
+- `src/services/coachFeatureService.ts:3055`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/learnTurnDoor.phaseWave.test.ts:133`
-- `src/services/learnTurnDoor.test.ts:619`
+- `src/services/learnTurnDoor.test.ts:621`
+- `src/services/learnTurnDoor.test.ts:643`
 - `src/services/looseStill.test.ts:44`
 - `src/services/looseStill.test.ts:47`
 - `src/services/os11RootCauses5And6.replay.test.ts:33`
 - `src/services/os11RootCauses5And6.replay.test.ts:46`
 - `src/services/outpostOneKey.test.ts:20`
-- `src/services/reviewMoveBriefing.ts:407`
-- `src/services/voicePackage.test.ts:415`
-- `src/services/voicePackage.test.ts:424`
-- `src/services/voicePackage.test.ts:436`
-- `src/services/voicePackage.test.ts:514`
-- `src/services/voicePackage.ts:609`
+- `src/services/thoughtComposer.ts:241`
+- `src/services/thoughtComposer.ts:245`
+- `src/services/voicePackage.test.ts:399`
+- `src/services/voicePackage.test.ts:408`
+- `src/services/voicePackage.test.ts:420`
+- `src/services/voicePackage.test.ts:498`
+- `src/services/voicePackage.ts:592`
+
+### `THOUGHT_ORDER` (re-export) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
@@ -364,9 +422,13 @@
 - `src/services/fadeText.test.ts`
 - `src/services/learnNamesNoMove.os10.test.ts`
 - `src/services/learnPhaseFocus.test.ts`
+- `src/services/learnTurnDoor.factId.test.ts`
+- `src/services/learnTurnDoor.mission.test.ts`
 - `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.story.test.ts`
 - `src/services/learnTurnDoor.test.ts`
+- `src/services/learnTurnDoor.thought.test.ts`
+- `src/services/learnVoice.test.ts`
 - `src/services/looseStill.test.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/os11RootCauses5And6.replay.test.ts`

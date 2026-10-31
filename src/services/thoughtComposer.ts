@@ -25,7 +25,7 @@
 import { stakeValue } from './factStakes';
 import type { CoachFact } from './coachFact';
 import thoughtPolicy from '../data/thought-policy.json';
-import { sameIdea } from './ideaKind';
+import { sameIdea, type IdeaKind } from './ideaKind';
 import { buildVoicePackage, claimKey, joinSpoken, spokenSentenceKeys, type VoiceFact } from './voicePackage';
 
 /** THE STEPS OF ONE THOUGHT, in the order they are said (WO-THINK-01):
@@ -70,8 +70,25 @@ export const SOURCE_RANK: Record<ThoughtSource, number> = {
 };
 
 /** ONE FACT, the composer's only input — the one fact shape (`coachFact.ts`),
- *  its step derived from its kind. */
-export type ThoughtFact = CoachFact;
+ *  its step derived from its kind, with what this composer ranks by: the
+ *  computer's source, the idea it states and its weight. Only the lesson
+ *  composer's producers answer those today; they join the one fact when
+ *  every producer emits it (WO-STORY-MATRIX-01 P1-6). */
+export interface ThoughtFact extends CoachFact {
+  source: ThoughtSource;
+  /** The words when it speaks BEHIND its step's lead ("It also makes luft"),
+   *  where the lead already named the move. Absent: `text` serves both. */
+  alsoText?: string;
+  /** Which idea it states (ONE vocabulary). Two facts of one idea on the same
+   *  squares are one idea: the step keeps the one that leads. */
+  idea: IdeaKind;
+  /** The producer's own importance on this board, 0–100 (the briefing's
+   *  aspect weight, the fundamental's weight) — the order after the stakes. */
+  weight: number;
+  /** It only restates what the board shows (the capture, the check, a bare
+   *  develop) — THE QUIET-MOVE RULE: a step of nothing else is not said. */
+  restates?: boolean;
+}
 
 /** HOW DEEP A SURFACE GOES. Every surface says the same steps in the same
  *  order; Review may let a step carry its further facts, the live surfaces

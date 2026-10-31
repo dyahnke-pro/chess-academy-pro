@@ -4,16 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**343 lines · 7 exports · 5 importers · 2 tests · 1 audits**
+**324 lines · 7 exports · 5 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:922) — names `factSelector`
-- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1003) — names `factSelector`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1073) — names `factSelector`, `selectFacts`, `supportedFacts`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4215) — names `factSelector`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6322) — names `factSelector`
-- **The standard post-deploy ritual** (CLAUDE.md:6420) — names `factSelector`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1250) — names `factSelector`
+- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1343) — names `factSelector`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1413) — names `factSelector`, `selectFacts`, `supportedFacts`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4582) — names `factSelector`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6700) — names `factSelector`
+- **The standard post-deploy ritual** (CLAUDE.md:6804) — names `factSelector`
 
 ## Who calls in
 
@@ -35,46 +35,47 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `barForTier` (function) — 5 call sites
-- `src/services/coachDecider.ts:491`
+- `src/services/coachDecider.ts:462`
+- `src/services/factSelector.test.ts:79`
+- `src/services/factSelector.test.ts:80`
 - `src/services/factSelector.test.ts:81`
-- `src/services/factSelector.test.ts:82`
-- `src/services/factSelector.test.ts:83`
-- `src/services/factSelector.test.ts:87`
+- `src/services/factSelector.test.ts:85`
 
-### `sameClaim` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:630`
+### `sameClaim` (function) — 2 call sites
+- `src/services/coachFeatureService.ts:2385`
+- `src/services/learnTurnDoor.ts:788`
 
-### `selectFacts` (function) — 17 call sites
-- `src/services/coachDecider.ts:483`
+### `selectFacts` (function) — 18 call sites
+- `src/services/coachDecider.ts:456`
 - `src/services/factSelector.test.ts:23`
 - `src/services/factSelector.test.ts:33`
-- `src/services/factSelector.test.ts:41`
-- `src/services/factSelector.test.ts:54`
-- `src/services/factSelector.test.ts:61`
-- `src/services/factSelector.test.ts:69`
-- `src/services/factSelector.test.ts:74`
-- `src/services/factSelector.test.ts:92`
-- `src/services/factSelector.test.ts:102`
+- `src/services/factSelector.test.ts:40`
+- `src/services/factSelector.test.ts:52`
+- `src/services/factSelector.test.ts:59`
+- `src/services/factSelector.test.ts:67`
+- `src/services/factSelector.test.ts:72`
+- `src/services/factSelector.test.ts:90`
+- `src/services/factSelector.test.ts:99`
+- `src/services/factSelector.test.ts:109`
 - `src/services/factSelector.test.ts:112`
-- `src/services/factSelector.test.ts:115`
-- `src/services/factSelector.test.ts:123`
-- `src/services/factSelector.test.ts:134`
-- `src/services/factSelector.test.ts:142`
-- `src/services/factSelector.test.ts:151`
-- `src/services/factSelector.test.ts:160`
+- `src/services/factSelector.test.ts:120`
+- `src/services/factSelector.test.ts:135`
+- `src/services/factSelector.test.ts:143`
+- `src/services/factSelector.test.ts:154`
+- `src/services/factSelector.test.ts:165`
+- `src/services/factSelector.test.ts:172`
 
-### `supportedFacts` (function) — 11 call sites
-- `src/services/coachDecider.ts:503`
-- `src/services/supportedFacts.test.ts:22`
-- `src/services/supportedFacts.test.ts:28`
-- `src/services/supportedFacts.test.ts:35`
-- `src/services/supportedFacts.test.ts:42`
-- `src/services/supportedFacts.test.ts:49`
-- `src/services/supportedFacts.test.ts:59`
-- `src/services/supportedFacts.test.ts:72`
-- `src/services/supportedFacts.test.ts:73`
-- `src/services/supportedFacts.test.ts:80`
-- `src/services/supportedFacts.test.ts:85`
+### `supportedFacts` (function) — 10 call sites
+- `src/services/coachDecider.ts:472`
+- `src/services/supportedFacts.test.ts:20`
+- `src/services/supportedFacts.test.ts:26`
+- `src/services/supportedFacts.test.ts:33`
+- `src/services/supportedFacts.test.ts:40`
+- `src/services/supportedFacts.test.ts:47`
+- `src/services/supportedFacts.test.ts:56`
+- `src/services/supportedFacts.test.ts:69`
+- `src/services/supportedFacts.test.ts:70`
+- `src/services/supportedFacts.test.ts:76`
 
 ## Tests
 
