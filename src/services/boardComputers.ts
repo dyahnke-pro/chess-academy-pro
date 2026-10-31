@@ -72,10 +72,11 @@ type ReadParts = Omit<CoachFact, 'id' | 'kind' | 'group' | 'step' | 'computer'> 
  *  computer is the catalog row on the registry entry. */
 type MakeFact = (parts: ReadParts) => CoachFact;
 
-/** THE KEY A READ WAS MADE UNDER — its say-once key, the tail of the id
- *  `boardFact` gave it (`<computer>:<key>`). A surface that keeps one key for
- *  a read (Review's `hint:` ledger, Learn's threat and tactic keys, the plan
- *  thread's offered claims) reads it here, never off the words. */
+/** THE KEY A READ WAS MADE UNDER — its say-once key, the tail of the id the
+ *  registry's one maker gave it (`readBoardAll`: `<computer id>:<key>`). A
+ *  surface that keeps one key for a read (Review's `hint:` ledger, Learn's
+ *  threat and tactic keys, the plan thread's offered claims) reads it here,
+ *  never off the words. */
 export function readKey(f: CoachFact): string {
   return f.id.slice(f.id.indexOf(':') + 1);
 }
@@ -260,14 +261,16 @@ export const BOARD_COMPUTERS = {
     surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   tiedDefender: {
-    // Their guard the student's move tied down.
+    // Their guard the student's move tied down — a fact about the student's
+    // own move (its pressure bought it), so the student's seat: every door
+    // seats it there today (Learn's move point, the live clause, Review).
     read: ({ fenBefore, fenAfterMove, fenAfterReply, student }, fact) => safe(() => {
       const tie = newTiedDefender(fenBefore, fenAfterMove, student);
       if (!tie) return null;
       const holds = findTiedDefenders(fenAfterReply, student).some((t) => t.defender.square === tie.defender.square && t.target.square === tie.target.square);
       if (!holds) return null;
       const key = countKey(tie.target.square);
-      return fact({ key, claims: [key], text: tiedDefenderLine(tie), proof: tiedDefenderProof(tie), squares: [tie.defender.square, tie.target.square], stakes: null, seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfterReply });
+      return fact({ key, claims: [key], text: tiedDefenderLine(tie), proof: tiedDefenderProof(tie), squares: [tie.defender.square, tie.target.square], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfterReply });
     }),
     computer: 'newTiedDefender',
     kind: 'their-read',
@@ -375,7 +378,7 @@ export const BOARD_COMPUTERS = {
       const key = `priority:${pf.targetSquare}`;
       return fact({ key, claims: [key], text: pf.spoken, proof: squaresProof(pf.spoken, [pf.targetSquare]) ?? NO_PROOF.method, squares: [pf.targetSquare], stakes: null, seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen, role: 'teach',
         heldForm: { text: idea, proof: squaresProof(idea, [pf.targetSquare]) ?? NO_PROOF.method, squares: [pf.targetSquare] },
-        ...(pf.arrow ? { marks: { play: pf.arrow } } : {}) });
+        marks: { play: pf.arrow } });
     }),
     computer: 'buildPriorityFirst',
     kind: 'priority',

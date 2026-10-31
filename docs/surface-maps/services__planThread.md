@@ -48,7 +48,7 @@
 - `src/services/planThread.test.ts:113`
 
 ### `planThreadTurn` (function) — 24 call sites
-- `src/services/boardComputers.ts:485`
+- `src/services/boardComputers.ts:488`
 - `src/services/gameStory.rewind.test.ts:25`
 - `src/services/planArcFade.test.ts:30`
 - `src/services/planChoice.test.ts:78`

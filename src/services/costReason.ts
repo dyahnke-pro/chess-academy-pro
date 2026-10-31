@@ -28,7 +28,7 @@ import type { TacticType } from '../types';
 
 /** A read of one board: its principal line, where it came from, and the other
  *  reads of the SAME board that may vouch for it. (Named `LineRead`: the board
- *  registry's facts used to be called `LineRead` too — one name, two things.) */
+ *  registry's reads used to be called `BoardRead` too — one name, two things.) */
 export interface LineRead {
   uci: readonly string[];
   source: 'deep' | 'record';

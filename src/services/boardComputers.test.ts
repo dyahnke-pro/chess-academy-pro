@@ -80,6 +80,17 @@ describe('boardComputers — the one registry', () => {
     }
   });
 
+  it('a fact is seated by whose move it is about: the guard the student\'s move tied down is the student\'s', () => {
+    // Their knight is tied down by the student's Re1 (pressure bought it):
+    // every door seats it as the student's (Learn's move point, the live
+    // clause), so the producer's answer is the same — never the opponent's,
+    // which the door reads as something done TO the student.
+    const tie = readBoard('tiedDefender', { fenBefore: '4k3/3n4/8/4p3/8/8/8/R5NK w - - 0 1', fenAfterMove: '4k3/3n4/8/4p3/8/8/8/4R1NK b - - 1 1', fenAfterReply: '4k3/3n4/8/4p3/8/8/8/4R1NK b - - 1 1', student: 'w' });
+    expect(tie?.seat).toBe('student');
+    // Its place is still their side's step: the kind decides it, not the seat.
+    expect(tie?.step).toBe('theirs');
+  });
+
   it('the stop still to play carries its held form and the moves it draws', () => {
     const fen = after(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Nf6', 'Nc3', 'Nc6']);
     const ph = readBoard('prophylaxis', { fen, engineFirstMoves: ['h2h3'] });

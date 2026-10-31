@@ -74,7 +74,7 @@
 - `src/services/learnTurnDoor.ts:1138`
 
 ### `placeFact` (function) — 4 call sites
-- `src/services/boardComputers.ts:557`
+- `src/services/boardComputers.ts:560`
 - `src/services/danyaBench.measure.test.ts:61`
 - `src/services/moveThoughtFacts.ts:125`
 - `src/services/moveThoughtFacts.ts:227`
