@@ -30,6 +30,7 @@ import { andList, lineAfterFirst, lineShape, orList, seatedLine } from '../utils
 import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { describeMoveGeometry, quietPurposePhrase } from './groundedAnswer';
 import { kickBreaksPin, pawnKickNext } from './pawnKickNext';
+import { seatCp } from './winChance';
 
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
@@ -58,7 +59,6 @@ function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentL
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const MATE_CP = 100000;
 /** Default candidates to weigh — David's call: "the first 3, maybe 4." */
 const DEFAULT_MAX = 3;
 /** A gap (cp, mover POV) past which an alternative is "clearly worse", not just
@@ -194,7 +194,6 @@ export function buildDeliberation(input: {
   named?: { lineUci: string[]; evaluation: number; mate: number | null };
 }): Deliberation | null {
   const { fenBefore, moverColor, excludeSan } = input;
-  const sign = moverColor === 'w' ? 1 : -1;
   const max = input.maxCandidates ?? DEFAULT_MAX;
 
   const lines = [...(input.analysis.topLines ?? [])]
@@ -202,27 +201,24 @@ export function buildDeliberation(input: {
     .filter((l) => l.moves.length > 0);
   if (lines.length === 0) return null;
 
-  const moverEval = (l: { evaluation: number; mate: number | null }): number =>
-    (l.mate != null ? (l.mate > 0 ? MATE_CP : -MATE_CP) : l.evaluation) * sign;
-
   const bestLine = lines[0];
   const bestSan = uciToSan(fenBefore, bestLine.moves[0]);
   if (!bestSan) return null;
-  const bestEval = moverEval(bestLine);
+  const bestEval = seatCp(bestLine, moverColor);
   const best: Candidate = { san: bestSan, evalCp: bestEval, deltaCp: 0 };
 
   const alternatives: Candidate[] = [];
   for (const l of lines.slice(1, max)) {
     const san = uciToSan(fenBefore, l.moves[0]);
     if (!san || san === bestSan || san === excludeSan) continue;
-    const evalCp = moverEval(l);
+    const evalCp = seatCp(l, moverColor);
     const deltaCp = Math.max(0, bestEval - evalCp);
     // A DROP THE ENGINE DOES NOT PUNISH IS NOT A DROP (Damiano walk 2026-09-27:
     // "Bh6 was cleaner" then "Bh6? That drops the knight on a7" — the knight is
     // loose, but taking it walks into something worse, so the line holds). A
     // piece left en prise only counts when the eval says it costs.
     const loose = dropsAfter(fenBefore, l.moves[0], moverColor);
-    const drop = loose && Math.max(0, bestEval - moverEval(l)) >= CLEARLY_WORSE_CP ? loose : null;
+    const drop = loose && Math.max(0, bestEval - seatCp(l, moverColor)) >= CLEARLY_WORSE_CP ? loose : null;
     // THE QUEEN TRADE THAT THROWS AWAY SPACE (game 1: "we have more space, and
     // the effect of a space advantage is greatly diminished if the queens are
     // off — fewer pieces to attack with"). Only where the engine agrees it is worse.
@@ -256,7 +252,7 @@ export function buildDeliberation(input: {
       if (existing) {
         namedCandidate = existing;
       } else {
-        const evalCp = moverEval(line);
+        const evalCp = seatCp(line, moverColor);
         const deltaCp = Math.max(0, bestEval - evalCp);
         const loose = dropsAfter(fenBefore, line.moves[0], moverColor);
         const drop = loose && deltaCp >= CLEARLY_WORSE_CP ? loose : null;

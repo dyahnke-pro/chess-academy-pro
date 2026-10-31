@@ -21,7 +21,8 @@ import { takingTheAttackerAnswers } from './positionReadingService';
 import { isSacrifice } from './factStakes';
 import { legalLineProof, type Proof } from './proof';
 import type { EngineLine } from './opponentMoveReads';
-import { seatCp, uciToSan } from './opponentMoveReads';
+import { uciToSan } from './opponentMoveReads';
+import { seatCp } from './winChance';
 import { lineSeatAt } from '../utils/andList';
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };

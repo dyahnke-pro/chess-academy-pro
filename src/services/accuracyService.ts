@@ -1,5 +1,6 @@
 import type { CoachGameMove, GameAccuracy, MoveClassificationCounts } from '../types';
 import { ONLY_MOVE_CP } from './criticalityScan';
+import { winChancePercent } from './winChance';
 import { INACCURACY_WIN_PCT, MISTAKE_WIN_PCT, BLUNDER_WIN_PCT, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP, SHORT_MATE_MOVES, MATE_HORIZON_CP } from './engineConstants';
 
 /** Threshold above which Stockfish encodes checkmate. */
@@ -21,13 +22,13 @@ export function capEval(evalCp: number): number {
  * percentage in [0, 100]. Sigmoid coefficients match the published
  * lichess / chess.com models so a 200cp advantage maps to ~67%, a
  * 500cp advantage to ~85%, and a mate-by-threshold saturates near
- * 100%. Same constant lichess uses (0.00368208).
+ * 100%. The curve is the app's one (`winChance.ts`); the ±1500 mate
+ * fold is accuracy's own and stays here, as the argument it hands in.
  *
  * Reference: https://lichess.org/page/accuracy
  */
 export function winPercent(evalCp: number): number {
-  const capped = capEval(evalCp);
-  return 50 + 50 * (2 / (1 + Math.exp(-0.00368208 * capped)) - 1);
+  return winChancePercent(capEval(evalCp));
 }
 
 /**

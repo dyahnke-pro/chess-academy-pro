@@ -2,9 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import model from '../data/human-move-model.json';
 import {
-  HUMAN_FEATURES, featureRows, humanMoveProbabilities, moveFeatures, pickHumanMove, weightsAt, winningChances,
+  HUMAN_FEATURES, featureRows, humanMoveProbabilities, moveFeatures, pickHumanMove, weightsAt,
   type HumanMoveModel, type ScoredMove,
 } from './humanMove';
+import { winningChances } from './winChance';
 
 const at = (x: number[], f: typeof HUMAN_FEATURES[number]): number => x[HUMAN_FEATURES.indexOf(f)];
 
