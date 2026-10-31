@@ -22,6 +22,10 @@
 // Optional: DANYA_BENCH_READS=<dir> (default audit-reports/.fixtures/danya-bench),
 // DANYA_BENCH_LIMIT=<n> (first n notes with reads), DANYA_BENCH_SOURCES=a,b.
 // Writes audit-reports/danya-bench/report.json and prints the tables.
+//
+// REACH (WO-STORY-MATRIX-01 P1-0): per computer and per surface, how many
+// notes it BUILT a fact on, how many of those facts REACHED that surface's
+// composer, and how many the composer SAID. DANYA_BENCH_REACH=0 skips it.
 import { it, expect } from 'vitest';
 import { existsSync, readFileSync, readdirSync, mkdirSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
@@ -29,7 +33,7 @@ import type { AnalysisLine, StockfishAnalysis } from '../types';
 import { mateEvalFor } from './engineConstants';
 import { newLessonVoice, BRIEFING_LINE_PLIES } from './reviewMoveBriefing';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
-import { computePositionFacts } from './positionFacts';
+import { computePositionFacts, type PositionFactsResult } from './positionFacts';
 import { studentMoveTeaching } from './learnBoardTeaching';
 import { buildDeliberation, deliberationFacts, deliberationAlternativesFacts, moveWhy, bestMoveReason } from './deliberation';
 import { moveJob, bookMoveWhy, MINE, THEIRS } from './bookMoveWhy';
@@ -43,7 +47,8 @@ import { notYetPlayed } from './notYetPlayed';
 import { moveIntent } from './moveIntent';
 import { afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
 import { NO_SECOND_READ } from './inaccuracyCall';
-import { composeThought, type ThoughtFact } from './thoughtComposer';
+import { composeThought, type ComposedThought, type ThoughtFact, type ThoughtSource } from './thoughtComposer';
+import type { FactKind } from './reviewFacetRank';
 import { moveThoughtFacts, lessonThought } from './moveThoughtFacts';
 import { NO_PROOF } from './proof';
 import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
@@ -339,84 +344,106 @@ const COMPOSER: Partial<Record<SourceId, string>> = {
   liveCandidates: 'Live composer (every clause before the door)',
 };
 
+/** One computation per note, read by both a source and REACH: each composer's
+ *  input and output, kept with their labels (REACH reads the labels, a
+ *  source the words). */
+function once<T>(fn: (p: Position) => T): (p: Position) => T {
+  const memo = new WeakMap<Position, T>();
+  return (p) => {
+    if (!memo.has(p)) memo.set(p, fn(p));
+    return memo.get(p) as T;
+  };
+}
+
+/** THE ONE COMPOSER on the lesson's inputs: the move's facts, plus the
+ *  weighing the lesson computes for the student's own moves. */
+const lessonPick = once((p: Position): { facts: ThoughtFact[]; composed: ComposedThought } => {
+  const facts = moveThoughtFacts({
+    fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
+    line: lineAhead(p), theirLast: p.theirLast, phrases: null,
+  });
+  if (p.own) {
+    const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, excludeSan: p.san, opponentLastSan: p.theirLast?.san ?? null });
+    const alt = d ? deliberationAlternativesFacts(d) : '';
+    if (alt) facts.push(choiceFact(alt, p.fenBefore));
+  }
+  return { facts, composed: composeThought(facts, 'lesson', { keys: new Set<string>() }) };
+});
+
+/** Review's own line for the move, with its `[tag]`s: the walk's segment
+ *  builder over the note's line (the one door, the habit closing the turn),
+ *  graded from the two cached reads; the earlier moves carry no reads and
+ *  speak by need. The whole known game is walked (Review reads the game's own
+ *  moves ahead of a ply); the note's move carries the two cached reads. */
+const reviewNarration = once((p: Position): string | null => {
+  const noteIdx = p.note.lineSan.length - 1;
+  const sans: string[] = [];
+  const legal = new Chess();
+  for (const san of [...p.note.lineSan, ...p.ahead]) {
+    try { sans.push(legal.move(san).san); } catch { break; }
+  }
+  const board = new Chess();
+  const cost = costCp(p);
+  const inputs: ReviewMoveInput[] = sans.map((san, k) => {
+    const mv = board.move(san);
+    const last = k === noteIdx;
+    return {
+      ply: k + 1, san: mv.san, isCoachMove: false,
+      classification: last && cost !== null ? classifyCpLoss(cost, p.best ? evalOf(p.best) : null, p.reply ? evalOf(p.reply) : null, p.mover === 'w', false, p.fenBefore, p.san) : null,
+      evaluation: last && p.reply ? evalOf(p.reply) : null,
+      preMoveEval: last && p.best ? evalOf(p.best) : null,
+      bestMove: last ? p.best?.uci ?? null : null,
+      fenAfter: board.fen(),
+      ...(last && cost !== null ? { costCp: cost } : {}),
+    };
+  });
+  const segs = buildReviewSegmentsForTests(inputs, p.student === 'w' ? 'white' : 'black', null, true, 1500);
+  return segs.find((seg) => seg.ply === noteIdx + 1)?.narration ?? null;
+});
+
+/** Every facet Review computes for the move, `[tag]` first. */
+const reviewFacets = once((p: Position): string[] => {
+  const best = p.best;
+  const bestSan = best ? sansOf(p.fenBefore, [best.uci], 1).at(0) ?? null : null;
+  const replySan = p.reply ? sansOf(p.fenAfter, [p.reply.uci], 1).at(0) ?? null : null;
+  const playedUci = uciOf(p.fenBefore, p.san);
+  return computeMoveFacets({
+    fenBefore: p.fenBefore, fenAfter: p.fenAfter, san: p.san, ply: p.history.length,
+    moverColor: p.mover === 'w' ? 'white' : 'black', playerColor: p.student === 'w' ? 'white' : 'black',
+    studentColorWB: p.student, evaluation: p.reply ? evalOf(p.reply) : null,
+    preMoveEval: best ? evalOf(best) : null, costCp: costCp(p), heardVerdict: null, classification: null,
+    bestMoveSan: bestSan, bestLineUci: best?.pv ?? [], playedLineUci: playedUci ? [playedUci, ...(p.reply?.pv ?? [])] : [],
+    secondReads: NO_SECOND_READ, replyBestSan: replySan, replyEvaluation: p.reply ? evalOf(p.reply) : null,
+    prevCap: p.prev, allSans: [...p.note.lineSan, ...p.ahead], forcedRunStartPly: null, seenFundamentals: new Set(),
+    teaching: NO_TEACHING_CONTEXT,
+  });
+});
+
+/** The live composer on the board after the move, asked (chat's posture):
+ *  its candidates are every clause before the door, its clauses what spoke. */
+const liveRead = once((p: Position): Promise<PositionFactsResult> => {
+  const cost = costCp(p);
+  return computePositionFacts({
+    boardComputers: 'composer', posture: 'asked', fen: p.fenAfter, history: [...p.note.lineSan],
+    moverColor: p.mover === 'w' ? 'b' : 'w', studentColor: p.student, analysis: analysisOf(p.after),
+    cpLossCp: p.own ? cost : null,
+    lastMove: p.own ? { fenBefore: p.fenBefore, san: p.san, cpLoss: cost, historySans: p.history, reads: null } : undefined,
+    opponentLastMove: p.own ? undefined : { fenBefore: p.fenBefore, san: p.san },
+  });
+});
+
+const TAG = /\[([a-z0-9-]+)\]/gi;
+const tagsOf = (text: string | null): string[] => [...(text ?? '').matchAll(TAG)].map((m) => m[1].toLowerCase());
+
 const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Promise<string | string[] | null>> = {
   lesson: (p) => lessonThought({
     fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own,
     line: lineAhead(p), theirLast: p.theirLast,
   }, newLessonVoice()),
-  // THE ONE COMPOSER on the lesson's inputs: the move's facts, plus the
-  // weighing the lesson computes for the student's own moves.
-  thought: (p) => {
-    const facts = moveThoughtFacts({
-      fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
-      line: lineAhead(p), theirLast: p.theirLast, phrases: null,
-    });
-    if (p.own) {
-      const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, excludeSan: p.san, opponentLastSan: p.theirLast?.san ?? null });
-      const alt = d ? deliberationAlternativesFacts(d) : '';
-      if (alt) facts.push(choiceFact(alt, p.fenBefore));
-    }
-    return composeThought(facts, 'lesson', { keys: new Set<string>() }).spoken;
-  },
-  // Review's own line for the move: the walk's segment builder over the
-  // note's line (the one door, the habit closing the turn), graded from the
-  // two cached reads; the earlier moves carry no reads and speak by need.
-  // The whole known game is walked (Review reads the game's own moves ahead
-  // of a ply); the note's move carries the two cached reads.
-  review: (p) => {
-    const noteIdx = p.note.lineSan.length - 1;
-    const sans: string[] = [];
-    const legal = new Chess();
-    for (const san of [...p.note.lineSan, ...p.ahead]) {
-      try { sans.push(legal.move(san).san); } catch { break; }
-    }
-    const board = new Chess();
-    const cost = costCp(p);
-    const inputs: ReviewMoveInput[] = sans.map((san, k) => {
-      const mv = board.move(san);
-      const last = k === noteIdx;
-      return {
-        ply: k + 1, san: mv.san, isCoachMove: false,
-        classification: last && cost !== null ? classifyCpLoss(cost, p.best ? evalOf(p.best) : null, p.reply ? evalOf(p.reply) : null, p.mover === 'w', false, p.fenBefore, p.san) : null,
-        evaluation: last && p.reply ? evalOf(p.reply) : null,
-        preMoveEval: last && p.best ? evalOf(p.best) : null,
-        bestMove: last ? p.best?.uci ?? null : null,
-        fenAfter: board.fen(),
-        ...(last && cost !== null ? { costCp: cost } : {}),
-      };
-    });
-    const segs = buildReviewSegmentsForTests(inputs, p.student === 'w' ? 'white' : 'black', null, true, 1500);
-    const said = segs.find((seg) => seg.ply === noteIdx + 1)?.narration;
-    return said ? said.replace(/\[[a-z0-9-]+\]\s*/gi, '') : null;
-  },
-  reviewInventory: (p) => {
-    const best = p.best;
-    const bestSan = best ? sansOf(p.fenBefore, [best.uci], 1).at(0) ?? null : null;
-    const replySan = p.reply ? sansOf(p.fenAfter, [p.reply.uci], 1).at(0) ?? null : null;
-    const playedUci = uciOf(p.fenBefore, p.san);
-    const facets = computeMoveFacets({
-      fenBefore: p.fenBefore, fenAfter: p.fenAfter, san: p.san, ply: p.history.length,
-      moverColor: p.mover === 'w' ? 'white' : 'black', playerColor: p.student === 'w' ? 'white' : 'black',
-      studentColorWB: p.student, evaluation: p.reply ? evalOf(p.reply) : null,
-      preMoveEval: best ? evalOf(best) : null, costCp: costCp(p), heardVerdict: null, classification: null,
-      bestMoveSan: bestSan, bestLineUci: best?.pv ?? [], playedLineUci: playedUci ? [playedUci, ...(p.reply?.pv ?? [])] : [],
-      secondReads: NO_SECOND_READ, replyBestSan: replySan, replyEvaluation: p.reply ? evalOf(p.reply) : null,
-      prevCap: p.prev, allSans: [...p.note.lineSan, ...p.ahead], forcedRunStartPly: null, seenFundamentals: new Set(),
-      teaching: NO_TEACHING_CONTEXT,
-    });
-    return facets.map((f) => f.replace(/^\[[^\]]+\]\s*/, ''));
-  },
-  liveCandidates: async (p) => {
-    const cost = costCp(p);
-    const pf = await computePositionFacts({
-      boardComputers: 'composer', posture: 'asked', fen: p.fenAfter, history: [...p.note.lineSan],
-      moverColor: p.mover === 'w' ? 'b' : 'w', studentColor: p.student, analysis: analysisOf(p.after),
-      cpLossCp: p.own ? cost : null,
-      lastMove: p.own ? { fenBefore: p.fenBefore, san: p.san, cpLoss: cost, historySans: p.history, reads: null } : undefined,
-      opponentLastMove: p.own ? undefined : { fenBefore: p.fenBefore, san: p.san },
-    });
-    return pf.candidates.map((c) => c.text);
-  },
+  thought: (p) => lessonPick(p).composed.spoken,
+  review: (p) => reviewNarration(p)?.replace(/\[[a-z0-9-]+\]\s*/gi, '') || null,
+  reviewInventory: (p) => reviewFacets(p).map((f) => f.replace(/^\[[^\]]+\]\s*/, '')),
+  liveCandidates: async (p) => (await liveRead(p)).candidates.map((c) => c.text),
   studentMove: (p) => {
     if (!p.own) return null;
     const best = p.best;
@@ -484,6 +511,193 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
     lastOpponentMove: p.own ? undefined : { fenBefore: p.fenBefore, san: p.san },
   }).map((c) => c.text),
 };
+
+// ── REACH: which computer's fact reached which composer ─────────────────────
+//
+// WO-STORY-MATRIX-01 P1-0 (David 2026-10-30: "All of this is built! Why is it
+// not wired in?"). The static map (scripts/computer-reach.mjs) says which
+// computer CAN reach a surface; this says which DID, note by note:
+//   BUILT   — the computer produced a fact on the note;
+//   REACHED — that fact is in the surface's composer input (lesson: the one
+//             composer's facts; review: the facets the walk computes, and what
+//             it said; chat: the live composer's candidates);
+//   SAID    — the composer kept it.
+// Facts do not yet say which computer made them, so THE PROVENANCE MAP below
+// reads it off the label each surface tags a fact with — temporary: P1-3 puts
+// a `computer` on every fact and this map is deleted. The keys are the reach
+// inventory's (`file#fn`, scripts/computer-reach/computers.json) wherever the
+// producer has a row there; a producer the inventory never listed is named
+// by its own function, and the table marks it (†) — the inventory's gap.
+// Learn's door is assembled in CoachTeachPage, out of the bench's reach: its
+// reach is read off the `learn-turn-decision` rows of the Learn audit.
+
+/** The ThoughtFact sources (lesson, and Review's move line) → computer. */
+const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
+  moveWhy: 'services/deliberation.ts#moveWhy',
+  briefing: 'services/reviewMoveBriefing.ts#buildReviewMoveBriefing',
+  boardTeacher: 'services/reviewMoveTeaching.ts#buildReviewMoveTeachingFact',
+  moveJob: 'services/bookMoveWhy.ts#moveJob',
+  fundamental: 'services/moveFundamentals.ts#computeMoveFundamentals',
+  deepFact: 'services/threeFacts.ts#deepFact',
+  binding: 'services/threeFacts.ts#binding',
+  pieceRoute: 'services/pieceRoute.ts#pieceRoute',
+  refuted: 'services/refutedAlternative.ts#refutedAlternative',
+  alternatives: 'services/deliberation.ts#buildDeliberation',
+  prophylaxis: 'services/prophylaxis.ts#findProphylaxis',
+  notYet: 'services/inBetweenMove.ts#inBetweenMove',
+};
+
+/** Review's facet tags and the live composer's clause kinds (ONE vocabulary,
+ *  `FactKind`) → the computer that writes them. Where one label has two
+ *  producers, the one that writes it most is named. */
+const FACT_COMPUTER: Record<FactKind, string> = {
+  move: 'services/pvPlayback.ts#computePlyFacts',
+  quality: 'services/reviewFullData.ts#correctionAgainstHeard',
+  principle: 'services/principleVoice.ts#(module)',
+  how: 'services/principleVoice.ts#(module)',
+  eval: 'services/reviewFullData.ts#computeMoveFacets',
+  delta: 'services/boardDelta.ts#(module)',
+  does: 'services/reviewFullData.ts#describeMoveInfluence',
+  tactic: 'services/tacticsDetector.ts#detectTactics',
+  threat: 'services/groundedAnswer.ts#detectNewThreat',
+  loose: 'services/threatProof.ts#provenThreatLine',
+  count: 'services/reviewTeachingPoints.ts#attackerDefenderCount',
+  royal: 'services/reviewTeachingPoints.ts#royalDefenderTarget',
+  trapped: 'services/reviewTeachingPoints.ts#trappedOnBoard',
+  sac: 'services/reviewSacrifice.ts#(module)',
+  'sac-why': 'services/reviewForcedSequence.ts#(module)',
+  forced: 'services/reviewForcedSequence.ts#(module)',
+  king: 'services/reviewSacrifice.ts#(module)',
+  rook7: 'services/reviewTeachingPoints.ts#rookOnSeventh',
+  passer: 'services/reviewTeachingPoints.ts#passedPawnPush',
+  badbishop: 'services/reviewTeachingPoints.ts#badEnemyBishop',
+  worst: 'services/reviewTeachingPoints.ts#worstPlacedFriendlyPiece',
+  minority: 'services/positionReadingService.ts#findMinorityAttack',
+  complex: 'services/positionReadingService.ts#findColorComplexWeakness',
+  structure: 'services/boardStructure.ts#describeStructure',
+  verdict: 'services/reviewPositionalAssessment.ts#assessPositionalEdge',
+  opening: 'services/mastersPlanRead.ts#mastersPlanLine',
+  'opp-dev': 'services/reviewOpponentCommentary.ts#(module)',
+  'their-habit': 'services/thinkAloud.ts#opponentHabits',
+  'your-habit': 'services/thinkAloud.ts#habitsOf',
+  held: 'services/coachFeatureService.ts#generateReviewNarration',
+  'last-here': 'services/lastTimeHere.ts#lastTimeHere',
+  'opp-target': 'services/reviewOpponentCommentary.ts#(module)',
+  endgame: 'services/reviewMoveTeaching.ts#nameEndgamePhase',
+  'plan-now': 'services/nextPlans.ts#deriveNextPlans',
+  'plan-race': 'services/planRace.ts#detectPlanRace',
+  'plan-arc': 'services/lookaheadPlan.ts#gameArcs',
+  'plan-opening': 'services/reviewStrategicOrientation.ts#buildOpeningDevelopmentPlan',
+  'plan-middlegame': 'services/reviewStrategicOrientation.ts#buildMiddlegameOrientation',
+  'plan-line': 'services/pvPlayback.ts#computePvLine',
+  consequence: 'services/pvPlayback.ts#computePvLine',
+  note: 'services/coachFeatureService.ts#generateReviewNarration',
+  method: 'services/methodBeat.ts#methodBeatFor',
+  refuted: 'services/refutedAlternative.ts#refutedAlternative',
+  bluff: 'services/bluffDetector.ts#detectBluff',
+  technique: 'services/conversionMethod.ts#readConversion',
+  contrast: 'services/moveContrast.ts#(module)',
+  timing: 'services/moveTiming.ts#readTiming',
+  praise: 'services/coachFeatureService.ts#generateReviewNarration',
+  rule: 'services/moveFundamentals.ts#principleLine',
+  stopped: 'services/opponentMovePurpose.ts#threatStoppedBy',
+  stock: 'services/reviewPositionalAssessment.ts#phaseVerdictLine',
+  trade: 'services/tradeQuality.ts#(module)',
+  point: 'services/playCommentary.ts#studentMovePoint',
+  'their-cost': 'services/theirMoveCost.ts#theirMoveCost',
+  'king-read': 'services/kingAttackReads.ts#kingAttackReads',
+  'trade-idea': 'services/exchangeIdeas.ts#(module)',
+  'defence-idea': 'services/exchangeIdeas.ts#(module)',
+  nugget: 'services/exchangeIdeas.ts#(module)',
+  equivalence: 'services/openingEquivalence.ts#openingEquivalence',
+  'capture-choice': 'services/captureChoice.ts#(module)',
+  kick: 'services/kickMap.ts#kickOn',
+  'their-read': 'services/opponentMoveReads.ts#readTheirMove',
+  'prevent-test': 'services/opponentMovePurpose.ts#playItAnyway',
+  'game-end': 'services/gameEndReads.ts#(module)',
+  murky: 'services/reviewPositionalAssessment.ts#assessPositionalEdge',
+  'attack-pattern': 'services/attackLibrary.ts#knownAttack',
+  judgement: 'services/structureReads.ts#studentMoveStructure',
+  // Review's move line is the one composer over the move's facts: which of
+  // them spoke is not on the facet (P1-3 puts it there).
+  'move-job': 'services/thoughtComposer.ts#composeThought',
+  status: 'services/positionFacts.ts#computePositionFacts',
+  deliberation: 'services/deliberation.ts#deliberationFacts',
+  'latent-danger': 'services/latentDanger.ts#detectLatentDanger',
+  'latent-chance': 'services/latentDanger.ts#detectLatentDanger',
+  'must-defend': 'services/threatOut.ts#computeMustDefend',
+  'key-moment': 'services/criticalMoment.ts#readCriticalMoment',
+  'opponent-intent': 'services/opponentIntent.ts#buildOpponentIntent',
+  'student-leans': 'services/opponentIntent.ts#buildOpponentIntent',
+  'opponent-leans': 'services/opponentIntent.ts#buildOpponentIntent',
+  fundamental: 'services/moveFundamentals.ts#strategicReason',
+  'structure-plan': 'services/boardPlanFacts.ts#boardPlanFacts',
+  convert: 'services/conversionMethod.ts#readConversion',
+  concept: 'services/conceptEngine.ts#conceptForBoard',
+  'not-yet': 'services/thinkAloud.ts#notYet',
+  line: 'services/thinkAloud.ts#lineAchieves',
+  'stop-flaw': 'services/thinkAloud.ts#obviousStopFlaw',
+  'hole-access': 'services/moveInsight.ts#holeAccess',
+  'speedrun-read': 'services/thinkAloud.ts#depthClauses',
+};
+
+/** The bench's own computer sources → the computer each one runs (the
+ *  composer sources are surfaces, not computers). */
+type ComputerSourceId = Exclude<SourceId, 'lesson' | 'thought' | 'review' | 'reviewInventory' | 'liveCandidates'>;
+const SOURCE_COMPUTER: Record<ComputerSourceId, string> = {
+  studentMove: 'services/learnBoardTeaching.ts#studentMoveTeaching',
+  deliberation: 'services/deliberation.ts#buildDeliberation',
+  moveJob: 'services/bookMoveWhy.ts#moveJob',
+  fundamentals: 'services/moveFundamentals.ts#computeMoveFundamentals',
+  boardTeacher: 'services/reviewMoveTeaching.ts#buildReviewMoveTeachingFact',
+  moveWhy: 'services/deliberation.ts#moveWhy',
+  bestMoveReason: 'services/deliberation.ts#bestMoveReason',
+  moveIntent: 'services/moveIntent.ts#moveIntent',
+  deepFact: 'services/threeFacts.ts#deepFact',
+  theirTarget: 'services/threeFacts.ts#theirTarget',
+  prophylaxis: 'services/prophylaxis.ts#findProphylaxis',
+  notYet: 'services/thinkAloud.ts#notYet',
+  notYetPlayed: 'services/notYetPlayed.ts#notYetPlayed',
+  speedRun: 'services/thinkAloud.ts#depthClauses',
+  alternatives: 'services/deliberation.ts#buildDeliberation',
+  bookDeparture: 'services/bookMoveWhy.ts#bookMoveWhy',
+};
+const isComputerSource = (id: SourceId): id is ComputerSourceId => id in SOURCE_COMPUTER;
+
+type ReachSurface = 'lesson' | 'review' | 'chat';
+const REACH_SURFACES: readonly ReachSurface[] = ['lesson', 'review', 'chat'];
+interface ReachTally { built: number; reached: Record<ReachSurface, number>; said: Record<ReachSurface, number> }
+/** A fact label a surface never declared — counted, so a new label is seen. */
+const unmapped = (label: string): string => `(unmapped label: ${label})`;
+const factComputer = (label: string): string => (label in FACT_COMPUTER ? FACT_COMPUTER[label as FactKind] : unmapped(label));
+
+/** One note's reach: per surface, the computers whose facts reached the
+ *  composer and the ones it said. */
+async function reachOf(p: Position): Promise<Record<ReachSurface, { reached: Set<string>; said: Set<string> }>> {
+  const lesson = lessonPick(p);
+  const narration = reviewNarration(p);
+  const said = new Set(tagsOf(narration).map(factComputer));
+  const live = await liveRead(p);
+  return {
+    lesson: {
+      reached: new Set(lesson.facts.map((f) => THOUGHT_COMPUTER[f.source])),
+      said: new Set(lesson.composed.kept.map((f) => THOUGHT_COMPUTER[f.source])),
+    },
+    // A facet the walk said reached it, even where the standalone facet read
+    // (which lacks the walk's game context) did not compute it.
+    review: { reached: new Set([...reviewFacets(p).flatMap((f) => tagsOf(f.slice(0, f.indexOf(']') + 1))).map(factComputer), ...said]), said },
+    chat: {
+      reached: new Set([...live.candidates, ...live.clauses].map((c) => factComputer(c.kind))),
+      said: new Set(live.clauses.map((c) => factComputer(c.kind))),
+    },
+  };
+}
+
+/** The reach inventory's computer keys, to mark a producer it never listed. */
+function inventoryKeys(): Set<string> {
+  const rows = JSON.parse(readFileSync('scripts/computer-reach/computers.json', 'utf8')) as Array<{ file: string; fn: string }>;
+  return new Set(rows.map((r) => `${r.file}#${r.fn}`));
+}
 
 // ── scoring ─────────────────────────────────────────────────────────────────
 
@@ -618,6 +832,13 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
   const kept: KeptNote[] = [];
   const factValues = new Map<string, { n: number; hits: number; lead: number }>();
   const dump: string[] | null = process.env.DANYA_BENCH_DUMP ? [] : null;
+  const reachOn = process.env.DANYA_BENCH_REACH !== '0';
+  const reach = new Map<string, ReachTally>();
+  const tally = (c: string): ReachTally => {
+    let t = reach.get(c);
+    if (!t) { t = { built: 0, reached: { lesson: 0, review: 0, chat: 0 }, said: { lesson: 0, review: 0, chat: 0 } }; reach.set(c, t); }
+    return t;
+  };
   let danyaWords = 0;
   const started = Date.now();
 
@@ -691,13 +912,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
       if (dump) {
         // The one composer's own pick on this move (the `thought` source's
         // inputs): what it kept, in spoken order, and why each other fact held.
-        const pickFacts = [...facts];
-        if (p.own) {
-          const dl = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, excludeSan: p.san, opponentLastSan: p.theirLast?.san ?? null });
-          const alt = dl ? deliberationAlternativesFacts(dl) : '';
-          if (alt) pickFacts.push(choiceFact(alt, p.fenBefore));
-        }
-        const pick = composeThought(pickFacts, 'lesson', { keys: new Set<string>() });
+        const pick = lessonPick(p).composed;
         dump.push(JSON.stringify({
           id: p.note.id, video: videoOf(p.note.id), own: p.own, to: p.to, san: p.san, fenBefore: p.fenBefore,
           danyaText, lesson: said.lesson, sources: said,
@@ -725,6 +940,19 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
         if (hit) t.hits += 1;
         if (d[0] && covers(ideas, d[0])) t.lead += 1;
         factValues.set(key, t);
+      }
+    }
+    if (reachOn) {
+      const r = await reachOf(p);
+      // BUILT: a computer source spoke on the note, or the computer's fact
+      // reached any composer (it was made to get there).
+      const built = new Set<string>();
+      for (const id of ids) if (isComputerSource(id) && (said[id] ?? '').trim()) built.add(SOURCE_COMPUTER[id]);
+      for (const s of REACH_SURFACES) for (const c of r[s].reached) built.add(c);
+      for (const c of built) tally(c).built += 1;
+      for (const s of REACH_SURFACES) {
+        for (const c of r[s].reached) tally(c).reached[s] += 1;
+        for (const c of r[s].said) tally(c).said[s] += 1;
       }
     }
     kept.push({
@@ -766,6 +994,16 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
   for (const v of variants) vLines.push([v.name, v.any, v.lead, String(v.words), ...THOUGHT_STEPS.map((st) => v.steps[st] ?? '–')].join(' | '));
   console.log(vLines.join('\n'));
 
+  // REACH, most-built first: BUILT, then reached/said on each surface.
+  if (reachOn) {
+    const inInventory = inventoryKeys();
+    const rLines = ['', `REACH (${positions.length} notes) | BUILT | ${REACH_SURFACES.map((s) => `${s} reached/said`).join(' | ')}   († not in the reach inventory)`];
+    for (const [c, t] of [...reach.entries()].sort((a, b) => b[1].built - a[1].built || a[0].localeCompare(b[0]))) {
+      rLines.push([`${c}${inInventory.has(c) ? '' : ' †'}`, String(t.built), ...REACH_SURFACES.map((s) => `${t.reached[s]}/${t.said[s]}`)].join(' | '));
+    }
+    console.log(rLines.join('\n'));
+  }
+
   // The learned values, per source and idea, most-said first.
   const fv = [...factValues.entries()].sort((a, b) => b[1].n - a[1].n);
   console.log('\nfact values (source|idea: said, Danya says it too, his lead):\n' + fv.map(([k, v]) => `${k}: ${v.n}, ${Math.round((100 * v.hits) / v.n)}%, lead ${Math.round((100 * v.lead) / v.n)}%`).join('\n'));
@@ -780,5 +1018,6 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
     notes: positions.length, own: positions.filter((p) => p.own).length, danyaWordsPerNote: danyaWords / positions.length,
     composers: COMPOSER, byKind: toObj(byKind), byStep: toObj(byStep),
     anyIdea: Object.fromEntries(noteHit), leadIdea: Object.fromEntries(lead), words: Object.fromEntries(wordStats), examples, variants,
+    ...(reachOn ? { reach: Object.fromEntries(reach) } : {}),
   }, null, 1));
 }, 6 * 3600_000);
