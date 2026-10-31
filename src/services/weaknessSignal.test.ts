@@ -85,6 +85,15 @@ describe('matchClauseKind — only honest links', () => {
   it('fundamental/structure-plan ↔ positional', () => {
     expect(matchClauseKind('structure-plan', signals)?.clusterId).toBe('analysis:structure-damage');
   });
+  // The book move and the position's memory got their own kinds in P1-4 and
+  // silently lost the opening join (2026-10-31): every kind now answers.
+  it('the book move and the position memory join the opening holes', () => {
+    const opening: WeaknessSignal = { clusterId: 'left-book-early', capabilityTag: null, proven: false, bucket: 'opening' as MisconceptionBucket, label: 'leaves book early', openCount: 4, total: 4, severity: 50, lifecycleStatus: 'persistent', trend: 'flat', puzzleThemes: [] };
+    for (const k of ['opening', 'last-here', 'refuted']) expect(matchClauseKind(k, [...signals, opening])?.clusterId, k).toBe('left-book-early');
+  });
+  it('a string that is no clause kind joins nothing', () => {
+    expect(matchClauseKind('not-a-kind', signals)).toBeNull();
+  });
   it('unmapped kinds return null (no forced match)', () => {
     for (const k of ['status', 'deliberation', 'key-moment', 'opponent-intent', 'student-leans', 'opponent-leans']) {
       expect(matchClauseKind(k, signals)).toBeNull();
