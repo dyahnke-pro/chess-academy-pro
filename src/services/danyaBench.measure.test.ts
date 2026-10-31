@@ -568,6 +568,12 @@ const FACT_COMPUTER: Record<FactKind, string> = {
   'your-habit': 'services/thinkAloud.ts#habitsOf',
   held: 'services/coachFeatureService.ts#generateReviewNarration',
   'last-here': 'services/lastTimeHere.ts#lastTimeHere',
+  // P1-4's kinds: the registry's priority read and the opening story's beats.
+  priority: 'services/playCommentary.ts#buildPriorityFirst',
+  'opening-story': 'services/openingStory.ts#openingStoryAt',
+  'opening-cost': 'services/openingStory.ts#openingStoryAt',
+  'opening-theirs': 'services/openingStory.ts#openingStoryAt',
+  'opening-fork': 'services/openingStory.ts#openingStoryAt',
   'opp-target': 'services/reviewOpponentCommentary.ts#(module)',
   endgame: 'services/reviewMoveTeaching.ts#nameEndgamePhase',
   'plan-now': 'services/nextPlans.ts#deriveNextPlans',
