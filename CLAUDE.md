@@ -5610,10 +5610,12 @@ tab!!! That is a pure playing surface").**
 - **Play (`/coach/play`) — PURE PLAYING SURFACE. THE COACH VOLUNTEERS
   NOTHING (David 2026-09-23: "Coach play shouldn't talk at all").** No
   phase-transition narration, no blunder verdict, no per-move slip line, no
-  "Watch out" threat alert, no deep-link entry beat — voice OR chat text.
+  "Watch out" threat alert — voice OR chat text.
   One switch, `PLAY_VOLUNTEERS_COACHING = false` in `CoachGamePage.tsx`,
   gated by `CoachGamePage.playSilent.test.ts` (every unprompted speak site
-  must sit inside it). What the student TAPS still answers (Read this
+  must sit inside it). The deep-link entry beat, the LLM per-move commentary
+  and the slip verdict are deleted, not switched (WO-STORY-MATRIX-01 P1-1,
+  G8.5 rule 4); the same gate fails if they come back. What the student TAPS still answers (Read this
   position, Why?, Hint, typed chat, mic). Slips are still RECORDED
   (`raiseWhyForSlip`) and taught in post-game review, which keeps its voice.
   Why: the first new App Store user after the D4 build heard 24 volunteered

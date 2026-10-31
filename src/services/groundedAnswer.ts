@@ -3231,133 +3231,6 @@ export function describeSacrifice(
   }
 }
 
-function lowerFirst(s: string): string {
-  return s ? continueSentence(s) : s;
-}
-function upperFirst(s: string): string {
-  return s ? openSentence(s) : s;
-}
-
-interface MovePurpose extends GroundedAnswer {
-  /** The purpose broken into ORDERED clauses, most-important-first, so the
-   *  caller can voice the top-N by the student's verbosity (full = all,
-   *  brief = 1-2, silent = none). `facts` is the chosen clauses joined. */
-  clauses: string[];
-}
-
-/**
- * assembleMovePurpose — the RICH, multi-clause "the ENTIRE purpose of this move"
- * fact bundle for the teaching voice (David 2026-07-09: "Naroditsky explains the
- * entire purpose behind a move — we can account for that with deterministic data
- * can't we?"). YES: every clause here is computed from the board + engine, never
- * invented (G0):
- *   1. WHAT IT DOES   — concrete geometry (fork/pin/check/wins/attacks) or, for a
- *                       quiet move, the development + the central squares it eyes.
- *   2. OUTPOST        — a minor piece on a square no enemy pawn can ever attack.
- *   3. THE POINT      — the threat/opportunity it creates (from detectTactics).
- *   4. THE PLAN       — the mover's follow-up in the engine PV.
- *   5. THE ASSESSMENT — the eval, in words, from the student's POV.
- * The clauses are ordered so the caller slices the top-N by verbosity. voiceFacts
- * then phrases the bundle in the house teaching voice. Returns null only when the
- * move is illegal (otherwise clause 1 is always available).
- */
-export function assembleMovePurpose(opts: {
-  fenBefore: string;
-  san: string;
-  moverColor: 'white' | 'black';
-  /** Engine PV in SAN from the position AFTER the move (index 0 = the opponent's
-   *  reply, index 1 = the mover's follow-up). */
-  pvSan?: ReadonlyArray<string>;
-  /** White-perspective eval AFTER the move. */
-  evalCp?: number | null;
-  mateIn?: number | null;
-  /** detectTactics on the position AFTER the move (opportunities = the mover's). */
-  tactics?: TacticsLiveContext | null;
-  studentSide?: 'white' | 'black';
-  /** Verbosity cap on the number of clauses (full = undefined/all, brief = 2). */
-  maxClauses?: number;
-}): MovePurpose | null {
-  let before: Chess;
-  let mv;
-  try {
-    before = new Chess(opts.fenBefore);
-    mv = before.move(opts.san);
-  } catch {
-    return null;
-  }
-  if (!mv) return null;
-  const afterBoard = before; // `before` now reflects the position AFTER the move
-  const clauses: string[] = [];
-  const pieceName = REVIEW_PIECE_NAME[mv.piece];
-
-  // 1) WHAT IT DOES.
-  const geo = describeMoveGeometry(opts.fenBefore, opts.san, opts.moverColor);
-  if (geo) {
-    clauses.push(`The ${pieceName} ${geo}.`);
-  } else if (mv.piece === 'p') {
-    // "staking out space in the center" is FALSE for a wing pawn (h4, a3, g3…).
-    // Only a genuinely central destination earns the centre claim; otherwise
-    // speak the space-grab plainly (board-awareness sweep, 2026-07-22).
-    const central = CENTRAL_SQUARES.includes(mv.to) || 'cdef'.includes(mv.to[0]);
-    clauses.push(central
-      ? `The pawn goes to ${mv.to}, staking out space in the center.`
-      : `The pawn advances to ${mv.to}, grabbing space on the ${'abc'.includes(mv.to[0]) ? 'queenside' : 'kingside'}.`);
-  } else {
-    const mc = opts.moverColor === 'white' ? 'w' : 'b';
-    const eyes = keyTargetSquares(afterBoard, opts.moverColor).filter((s) => {
-      try {
-        const occ = afterBoard.get(s as Square);
-        if (occ && occ.color === mc) return false; // own piece there = defended, not eyed
-        return afterBoard.attackers(s as Square, mc).includes(mv.to);
-      } catch {
-        return false;
-      }
-    });
-    if (eyes.length > 0) {
-      clauses.push(`The ${pieceName} develops to ${mv.to}, eyeing ${andList(eyes)}`
-        + `${kingZoneClause(kingZoneAmong(eyes, afterBoard, opts.moverColor), opts.studentSide && opts.studentSide !== opts.moverColor ? 'your' : 'their')}.`);
-    } else {
-      clauses.push(`The ${pieceName} develops to ${mv.to}.`);
-    }
-  }
-
-  // 2) OUTPOST — a minor piece planted where no pawn can chase it.
-  if ((mv.piece === 'n' || mv.piece === 'b') && isOutpost(afterBoard, mv.to, opts.moverColor === 'white' ? 'w' : 'b', false)) {
-    const rank = parseInt(mv.to[1], 10);
-    const advanced = opts.moverColor === 'white' ? rank >= 5 : rank <= 4;
-    if (advanced) clauses.push(`It's an outpost on ${mv.to} — no enemy pawn covers the square, so it sits there unchallenged.`);
-  }
-
-  // 3) THE POINT — the threat/opportunity the move creates (computed tactics).
-  // A future shot is said with the moves that build it (`spoken`); a tactic
-  // already on the board is said as it stands (F9).
-  const nextShot = opts.tactics?.opportunities?.[0];
-  const point = nextShot ? nextShot.spoken : (opts.tactics?.immediate?.[0]?.description ?? null);
-  if (point) clauses.push(`The point: ${lowerFirst(point)}.`);
-
-  // 4) THE PLAN — the mover's follow-up in the engine PV (index 1; index 0 is
-  //    the opponent's reply).
-  const followUp = opts.pvSan?.[1];
-  if (followUp) clauses.push(`The plan is to follow with ${followUp}.`);
-
-  // 5) THE ASSESSMENT — eval in words, student POV.
-  const ss = opts.studentSide ?? opts.moverColor;
-  const studentEvalCp = opts.evalCp == null ? null : (ss === 'white' ? opts.evalCp : -opts.evalCp);
-  const studentMate = opts.mateIn == null ? null : (ss === 'white' ? opts.mateIn : -opts.mateIn);
-  const ev = evalPhrase(studentEvalCp, studentMate, ss, opts.studentSide ?? null);
-  if (ev) clauses.push(`${upperFirst(ev)}.`);
-
-  if (clauses.length === 0) return null;
-  const chosen = typeof opts.maxClauses === 'number' ? clauses.slice(0, Math.max(1, opts.maxClauses)) : clauses;
-  return {
-    facts: chosen.join(' '),
-    clauses,
-    bestMoveSan: mv.san,
-    bestMoveFromTo: { from: mv.from, to: mv.to },
-    sources: ['board:chess.js', 'engine:stockfish'],
-  };
-}
-
 const ESCAPE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
 /**
@@ -3404,9 +3277,8 @@ export function describeEscape(fenBefore: string, san: string): string | null {
  * moves achieves, ending on the eval verdict. Every clause is computed from the
  * board (`describeMoveGeometry`) + the engine (PV + eval) — the LLM decides
  * nothing (G0). Unlike `assembleMoveEvalAnswer` (names the move + eval only)
- * this explains the WHY; unlike `assembleMovePurpose` (the purpose of a move the
- * student just PLAYED, one follow-up) this walks the forced line move-by-move so
- * the student sees the engine's proof, not just its verdict.
+ * this explains the WHY: it walks the forced line move-by-move so the student
+ * sees the engine's proof, not just its verdict.
  *
  * `pvSan` is the PV from the CURRENT position: index 0 = the engine's move,
  * 1 = the opponent's reply, 2 = the engine's follow-up, 3 = reply, … Returns
@@ -6194,65 +6066,6 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
     bestMoveFromTo: r.bestMoveUci && bestSan ? { from: r.bestMoveUci.slice(0, 2), to: r.bestMoveUci.slice(2, 4) } : null,
     sources: ['engine:stockfish', 'board:chess.js'],
   };
-}
-
-/**
- * assembleSlipNarration — the FULL-STRENGTH, IMMEDIATE "why that was a slip"
- * narration for the live play surface (David 2026-09-08, emphatic: the coach
- * flagged every slip with a canned "A small slip — there was better" and never
- * said WHAT was better or WHY, even though these grounded computers already
- * existed. "narrations better be AT FULL STRENGTH … I spent weeks building the
- * coach narration strengths and it's not using them").
- *
- * Composes the move-rating VERDICT (played move + eval swing) with the DEEP
- * board REASON from `explainBestMoveGrounded` — what the better move does AND
- * what the played move allowed — every clause chess.js-computed (G0/G3). It is
- * SYNCHRONOUS and makes NO engine call: the caller hands over the engine best
- * move it already computed for the classification, so this adds zero latency to
- * the fast per-move narration path.
- *
- * There is no vague fallback: the worst case still names the played move and its
- * cost ("Nf6 is a mistake — about 2.5 points."), never "there was better". The
- * canned strings are gone.
- */
-export function assembleSlipNarration(input: {
-  playedSan: string;
-  quality: 'inaccuracy' | 'mistake' | 'blunder';
-  cpLoss: number;
-  betterSan: string | null;
-  betterFromTo: { from: string; to: string } | null;
-  fenBefore: string;
-  bestMoveUci: string | null;
-  moverColor: 'white' | 'black';
-}): GroundedAnswer | null {
-  const { playedSan, quality, cpLoss, betterSan, betterFromTo, fenBefore, bestMoveUci, moverColor } = input;
-  if (!playedSan) return null;
-
-  const verdictWord = quality === 'blunder' ? 'a blunder' : quality === 'mistake' ? 'a mistake' : 'a slight inaccuracy';
-  const swing = cpLoss >= 20 ? ` — it gives up ${costWords(cpLoss)}.` : '.';
-  const verdict = `${playedSan} is ${verdictWord}${swing}`;
-
-  // The deep grounded reason (sync, chess.js only): the better move's point +
-  // what the played move let the opponent do. Null on a genuinely quiet slip.
-  const reason = explainBestMoveGrounded(fenBefore, playedSan, bestMoveUci, moverColor, null, null, 'mover');
-
-  let facts: string;
-  if (betterSan && reason) {
-    // "Nd5 was stronger — it takes the outpost on d5, while your move let Black
-    //  play Nxe5, winning the pawn."
-    facts = `${verdict} ${betterSan} was stronger — ${continueSentence(reason)}`;
-  } else if (betterSan) {
-    facts = `${verdict} ${betterSan} was the stronger move here.`;
-  } else if (reason) {
-    facts = `${verdict} ${reason}`;
-  } else {
-    facts = verdict;
-  }
-
-  const arrow = betterSan && betterFromTo
-    ? { bestMoveSan: betterSan, bestMoveFromTo: betterFromTo }
-    : { bestMoveSan: null, bestMoveFromTo: null };
-  return { facts, ...arrow, sources: ['engine:stockfish'] };
 }
 
 /** Puzzle rating + solve stats. */

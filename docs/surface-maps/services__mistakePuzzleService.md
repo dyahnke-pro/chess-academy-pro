@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1640 lines · 25 exports · 36 importers · 25 tests · 5 audits**
+**1622 lines · 24 exports · 36 importers · 25 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6778) — names `gradeMistakePuzzle`
+- **The standard post-deploy ritual** (CLAUDE.md:6817) — names `gradeMistakePuzzle`
 
 ## Who calls in
 
@@ -103,8 +103,8 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:8731`
-- `src/components/Coach/CoachTeachPage.tsx:8756`
+- `src/components/Coach/CoachTeachPage.tsx:8585`
+- `src/components/Coach/CoachTeachPage.tsx:8609`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -114,12 +114,12 @@
 - `src/services/autoAnalyzeGame.ts:456`
 - `src/services/autoAnalyzeGame.ts:609`
 - `src/services/computerAccuracy.audit.test.ts:107`
-- `src/services/deliberation.ts:128`
-- `src/services/deliberation.ts:208`
-- `src/services/deliberation.ts:215`
-- `src/services/deliberation.ts:247`
-- `src/services/deliberation.ts:249`
-- `src/services/deliberation.ts:297`
+- `src/services/deliberation.ts:129`
+- `src/services/deliberation.ts:209`
+- `src/services/deliberation.ts:216`
+- `src/services/deliberation.ts:248`
+- `src/services/deliberation.ts:250`
+- `src/services/deliberation.ts:298`
 - `src/services/endgameDrillService.ts:103`
 - `src/services/endgameDrillService.ts:139`
 - `src/services/endgameDrillService.ts:144`
@@ -131,10 +131,10 @@
 - `src/services/methodSignals.ts:89`
 - `src/services/mistakeNarration.ts:129`
 - `src/services/mistakeNarration.ts:637`
-- `src/services/openingGenerator.ts:3440`
-- `src/services/openingGenerator.ts:3626`
-- `src/services/openingGenerator.ts:3630`
-- `src/services/openingGenerator.ts:3635`
+- `src/services/openingGenerator.ts:3410`
+- `src/services/openingGenerator.ts:3596`
+- `src/services/openingGenerator.ts:3600`
+- `src/services/openingGenerator.ts:3605`
 - `src/services/opponentIntent.ts:39`
 - `src/services/opponentIntent.ts:70`
 - `src/services/opponentIntent.ts:77`
@@ -239,7 +239,7 @@
 - `src/services/autoAnalyzeGame.ts:1031`
 
 ### `attachCalcLines` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:5877`
+- `src/services/coachFeatureService.ts:5994`
 - `src/services/gameCalculationPuzzleService.test.ts:126`
 - `src/services/gameCalculationPuzzleService.test.ts:144`
 
@@ -288,7 +288,7 @@
 - `src/services/recordReprice.test.ts:123`
 
 ### `gradeMistakePuzzle` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3287`
+- `src/components/Coach/CoachTeachPage.tsx:3235`
 - `src/components/Puzzles/MyMistakesPage.tsx:289`
 - `src/components/Tactics/TacticCreatePage.tsx:199`
 - `src/services/conceptSchedule.test.ts:41`
@@ -302,10 +302,6 @@
 - `src/services/mistakePuzzleService.test.ts:554`
 - `src/services/mistakePuzzleService.test.ts:555`
 - `src/services/mistakePuzzleService.test.ts:561`
-
-### `loadDrilledMotifs` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2026`
-- `src/services/conceptSchedule.test.ts:58`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites
 - `src/components/Puzzles/MyMistakesPage.tsx:278`

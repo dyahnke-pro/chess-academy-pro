@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { resolveVerbosity, shouldCallLlmForMove } from './coachCommentaryPolicy';
+import { resolveVerbosity } from './coachCommentaryPolicy';
 import { buildUserProfile } from '../test/factories';
-import type { MoveClassification } from '../types';
 
 describe('resolveVerbosity', () => {
   it('defaults to key-moments when the preference is unset', () => {
@@ -40,42 +39,5 @@ describe('resolveVerbosity', () => {
     full.preferences.coachNarration = 'full';
     full.preferences.coachCommentaryVerbosity = 'off';
     expect(resolveVerbosity(full)).toBe('every-move');
-  });
-});
-
-describe('shouldCallLlmForMove', () => {
-  const everything: MoveClassification[] = [
-    'brilliant',
-    'great',
-    'good',
-    'book',
-    'inaccuracy',
-    'mistake',
-    'blunder',
-  ];
-
-  it('off mode never calls the LLM', () => {
-    for (const c of everything) {
-      expect(shouldCallLlmForMove('off', c)).toBe(false);
-    }
-  });
-
-  it('every-move mode always calls the LLM', () => {
-    for (const c of everything) {
-      expect(shouldCallLlmForMove('every-move', c)).toBe(true);
-    }
-  });
-
-  it('key-moments mode fires only on blunder / mistake / brilliant / great', () => {
-    expect(shouldCallLlmForMove('key-moments', 'blunder')).toBe(true);
-    expect(shouldCallLlmForMove('key-moments', 'mistake')).toBe(true);
-    expect(shouldCallLlmForMove('key-moments', 'brilliant')).toBe(true);
-    expect(shouldCallLlmForMove('key-moments', 'great')).toBe(true);
-  });
-
-  it('key-moments mode skips routine classifications', () => {
-    expect(shouldCallLlmForMove('key-moments', 'good')).toBe(false);
-    expect(shouldCallLlmForMove('key-moments', 'book')).toBe(false);
-    expect(shouldCallLlmForMove('key-moments', 'inaccuracy')).toBe(false);
   });
 });

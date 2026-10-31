@@ -1,23 +1,22 @@
 import { describe, it, expect } from 'vitest';
 import {
-  sideToMove, solvingSide, materialBalance, strongerSide, framingSide,
-  renderTacticConcept, renderMatchupConcept, conceptForBoard, conceptForSolution, positionalConcepts,
+  sideToMove, materialBalance,
+  renderTacticConcept, renderMatchupConcept, conceptForBoard, positionalConcepts,
   conceptForLine,
 } from './conceptEngine';
 import { classifyMatchup } from './endgameMatchup';
 import type { TacticPattern } from '../types/tacticTypes';
 
+/** A Lichess puzzle's concept: `conceptForLine` over its solution, the solver
+ *  opposite the FEN's turn (the first move is the opponent's setup move). */
+function solutionConcepts(fen: string, uci: string[], max?: number): ReturnType<typeof conceptForLine> {
+  return conceptForLine({ fen, uci, studentColor: fen.split(' ')[1] === 'w' ? 'b' : 'w', max });
+}
+
 describe('conceptEngine — side calculators', () => {
   it('sideToMove reads the FEN turn field', () => {
     expect(sideToMove('8/8/8/8/8/8/8/K6k w - - 0 1')).toBe('white');
     expect(sideToMove('8/8/8/8/8/8/8/K6k b - - 0 1')).toBe('black');
-  });
-
-  it('solvingSide is opposite the FEN turn (Lichess setup-move convention)', () => {
-    // Puzzle FEN with white to move → the opponent (white) plays the setup move,
-    // black solves.
-    expect(solvingSide('8/8/8/8/8/8/8/K6k w - - 0 1')).toBe('black');
-    expect(solvingSide('8/8/8/8/8/8/8/K6k b - - 0 1')).toBe('white');
   });
 
   it('materialBalance is white-minus-black in pawns', () => {
@@ -26,21 +25,6 @@ describe('conceptEngine — side calculators', () => {
     expect(materialBalance('8/8/8/8/8/8/8/R2K3k w - - 0 1')).toBe(5);
     // Black an extra queen.
     expect(materialBalance('7k/6q1/8/8/8/8/8/4K3 w - - 0 1')).toBe(-9);
-  });
-
-  it('strongerSide names the up-material side, balanced within a pawn', () => {
-    expect(strongerSide('8/8/8/8/8/8/8/R2K3k w - - 0 1')).toBe('white');
-    expect(strongerSide('7k/6q1/8/8/8/8/8/4K3 w - - 0 1')).toBe('black');
-    expect(strongerSide('8/5p2/8/4k3/8/4P3/4K3/8 w - - 0 1')).toBe('balanced');
-  });
-
-  it('framingSide prefers studentSide, then solver, then stronger, then mover', () => {
-    const fen = '8/8/8/8/8/8/8/R2K3k w - - 0 1';
-    expect(framingSide(fen, { studentSide: 'black' })).toBe('black'); // override
-    expect(framingSide(fen, { hasSolution: true })).toBe('black');    // solver
-    expect(framingSide(fen)).toBe('white');                            // stronger
-    // Level material, no solution → side to move.
-    expect(framingSide('8/5p2/8/4k3/8/4P3/4K3/8 b - - 0 1')).toBe('black');
   });
 });
 
@@ -149,18 +133,18 @@ describe('conceptForBoard — the ranked multi-concept router', () => {
   });
 });
 
-describe('conceptForSolution — the puzzle / solution path', () => {
+describe('the puzzle / solution path (conceptForLine)', () => {
   it('teaches the named technique (Lucena) from the start position of a rook ending', () => {
-    const cs = conceptForSolution('1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1', ['c1c2']);
+    const cs = solutionConcepts('1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1', ['c1c2']);
     expect(cs.some((c) => c.id === 'lucena')).toBe(true);
   });
 
   it('returns an array and never throws on a benign line', () => {
-    expect(Array.isArray(conceptForSolution('8/8/8/8/8/8/8/K6k w - - 0 1', ['a1a2']))).toBe(true);
+    expect(Array.isArray(solutionConcepts('8/8/8/8/8/8/8/K6k w - - 0 1', ['a1a2']))).toBe(true);
   });
 
   it('respects the max cap', () => {
-    expect(conceptForSolution('1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1', ['c1c2'], { max: 1 }).length).toBeLessThanOrEqual(1);
+    expect(solutionConcepts('1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1', ['c1c2'], 1).length).toBeLessThanOrEqual(1);
   });
 });
 
@@ -174,12 +158,12 @@ describe('conceptEngine — named technique preferred over generic principle', (
   });
 });
 
-describe('conceptForSolution — technique reached along the solution', () => {
+describe('technique reached along a puzzle solution (conceptForLine)', () => {
   it('surfaces THE OPPOSITION when the K+P solution reaches it', () => {
     // Black to move (opponent) must give way; White (student) then takes the
     // opposition with Kd4. After that move the kings are aligned d4/d6, one square
     // between, Black to move → White holds the opposition.
-    const cs = conceptForSolution('8/8/8/3k4/8/3K4/4P3/8 b - - 0 1', ['d5d6', 'd3d4']);
+    const cs = solutionConcepts('8/8/8/3k4/8/3K4/4P3/8 b - - 0 1', ['d5d6', 'd3d4']);
     // After …Kd6 Kd4 the kings are in opposition AND Kd4 stands on a key square
     // of the e2 pawn — the more specific theorem (key square → promotes by
     // force) leads; either is the named K+P technique, never the generic beat.
@@ -250,7 +234,7 @@ describe('conceptEngine — a delivered mate is NAMED by its pattern (P2b)', () 
   it('a back-rank mate solution teaches "Back-Rank Mate", not a generic mate register', () => {
     // Lichess shape: the FEN is BEFORE the opponent's setup move (…Kh8), then
     // the solver's Re8# — the textbook back-rank mate.
-    const cs = conceptForSolution('6k1/5ppp/8/8/8/8/4RPPP/6K1 b - - 0 1', ['g8h8', 'e2e8']);
+    const cs = solutionConcepts('6k1/5ppp/8/8/8/8/4RPPP/6K1 b - - 0 1', ['g8h8', 'e2e8']);
     const lead = cs[0];
     expect(lead.id).toBe('back-rank-mate');
     expect(lead.source).toBe('mate');
@@ -262,7 +246,7 @@ describe('conceptEngine — a delivered mate is NAMED by its pattern (P2b)', () 
 
   it('a smothered mate along the solution names the pattern at the mating ply', () => {
     // …Rg8 (the opponent's setup move) then Nf7# — smothered.
-    const cs = conceptForSolution('5r1k/6pp/8/6N1/8/8/8/7K b - - 0 1', ['f8g8', 'g5f7']);
+    const cs = solutionConcepts('5r1k/6pp/8/6N1/8/8/8/7K b - - 0 1', ['f8g8', 'g5f7']);
     expect(cs.some((c) => c.id === 'smothered-mate' && c.source === 'mate')).toBe(true);
   });
 });

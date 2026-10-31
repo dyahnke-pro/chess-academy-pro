@@ -48,8 +48,6 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { useWalkthroughRunner } from '../../hooks/useWalkthroughRunner';
 import { resolveMiddlegameSessionWithFallback } from '../../services/middlegamePlanner';
-import { buildNarrationSession } from '../../services/gameNarrationBuilder';
-import { db } from '../../db/schema';
 import { ExplainPositionSessionView } from './ExplainPositionSessionView';
 import { CoachPracticeSessionView } from './CoachPracticeSessionView';
 import { DynamicCoachSession } from './DynamicCoachSession';
@@ -184,12 +182,12 @@ export function CoachSessionPage(): JSX.Element {
   }
 
   if (kind === 'narrate') {
-    const gameId = searchParams.get('gameId') ?? undefined;
-    return (
-      <DynamicCoachSession title="Narration" onExit={goBack}>
-        <NarrateGameSessionBody gameId={gameId} orientation={orientation} onExit={goBack} />
-      </DynamicCoachSession>
-    );
+    // Legacy route. "Narrate my game" opens the ONE Review walk; the
+    // badge-labelled replay that lived here (`gameNarrationBuilder`) is
+    // deleted (WO-STORY-MATRIX-01 P1-1, David 2026-10-30). This redirect
+    // catches bookmarks and old links.
+    const gameId = searchParams.get('gameId');
+    return <Navigate to={gameId ? `/coach/play?review=${encodeURIComponent(gameId)}` : '/coach/review'} replace />;
   }
 
   return <Navigate to="/coach/chat" replace />;
@@ -261,59 +259,6 @@ function MiddlegameSessionBody({
 // move classification, hints, post-game review. The PlayAgainstBody
 // wrapper that used to live here is retired along with its use of
 // CoachPlaySessionView.
-
-// ─── Narrate game ────────────────────────────────────────────────────
-
-interface NarrateGameSessionBodyProps {
-  gameId?: string;
-  orientation: 'white' | 'black';
-  onExit: () => void;
-}
-
-function NarrateGameSessionBody({
-  gameId,
-  orientation,
-  onExit,
-}: NarrateGameSessionBodyProps): JSX.Element {
-  const [session, setSession] = useState<WalkthroughSession | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!gameId) {
-      setError('No game specified.');
-      setLoading(false);
-      return;
-    }
-    let cancelled = false;
-    setLoading(true);
-    void db.games
-      .get(gameId)
-      .then((game) => {
-        if (cancelled) return;
-        if (!game) {
-          setError("That game isn't in your history.");
-          return;
-        }
-        setSession(buildNarrationSession(game, orientation));
-      })
-      .catch((err: unknown) => {
-        if (cancelled) return;
-        console.warn('[CoachSessionPage] narrate load failed:', err);
-        setError('Could not load that game.');
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [gameId, orientation]);
-
-  if (loading) return <LessonLoadingState label="Loading game…" onExit={onExit} />;
-  if (error || !session) return <LessonErrorState message={error ?? 'Game unavailable.'} onExit={onExit} />;
-  return <WalkthroughRunnerBody session={session} onExit={onExit} />;
-}
 
 // ─── Shared runner body ─────────────────────────────────────────────
 

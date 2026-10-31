@@ -25,7 +25,7 @@ import { vi } from 'vitest';
  *  here is caught by `voiceServiceMock.test.ts`, which diffs the two. */
 const VOID_METHODS = [
   'stop', 'clearCache', 'setSpeed', 'lockKidVoice', 'unlockKidVoice',
-  'resetSpokenMemory', 'installStreamingAudioUnlock',
+  'installStreamingAudioUnlock',
 ] as const;
 
 const ASYNC_METHODS = [

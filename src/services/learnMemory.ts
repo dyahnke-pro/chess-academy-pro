@@ -104,9 +104,6 @@ export interface LearnMemory {
   readonly loudAlarms: Set<string>;
   readonly spokenTacticLines: Set<string>;
   readonly spokenThreatLines: Set<string>;
-  /** Threat answers said this game — rotates their question stem by
-   *  occurrence, so consecutive answers never open with the same words. */
-  readonly questionsAnswered: Set<string>;
   /** Pieces already called out this game by `pieceQualityLines`. */
   readonly pieceQualitySaid: Set<string>;
   /** EVERY phrase the coach has spoken this game, across every lane and both
@@ -282,7 +279,6 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
   const spokenTacticLines = new Set<string>();
   const spokenThreatLines = new Set<string>();
   const loudAlarms = new Set<string>();
-  const questionsAnswered = new Set<string>();
   let lastPlies = 0;
   const mem: LearnMemory = {
     gameId: mintGameId(),
@@ -299,7 +295,6 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
     lastThreatKey: '',
     looseSpells: new Map(),
     loudAlarms,
-    questionsAnswered,
     spokenTacticLines,
     spokenThreatLines,
     heldMove: null,
@@ -341,7 +336,6 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
       mem.lastThreatKey = '';
       mem.looseSpells = new Map();
       loudAlarms.clear();
-      questionsAnswered.clear();
       mem.heldMove = null;
       mem.theirPrep = null;
       mem.slipAnswer = null;

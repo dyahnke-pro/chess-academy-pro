@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1105 lines · 7 exports · 16 importers · 11 tests · 4 audits**
+**1100 lines · 7 exports · 16 importers · 11 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6800) — names `coachSessionRouter`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6823) — names `coachSessionRouter`
+- **The standard post-deploy ritual** (CLAUDE.md:6845) — names `coachSessionRouter`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6870) — names `coachSessionRouter`
 
 ## Who calls in
 
@@ -32,7 +32,7 @@
 
 ## Exports and every call site
 
-### `routeChatIntent` (function) — 45 call sites
+### `routeChatIntent` (function) — 46 call sites
 - `src/coach/dispatchCoachTurn.test.ts:8`
 - `src/coach/dispatchCoachTurn.ts:676`
 - `src/coach/questionMatrix.audit.test.ts:107`
@@ -72,8 +72,9 @@
 - `src/services/coachSessionRouter.test.ts:316`
 - `src/services/coachSessionRouter.test.ts:401`
 - `src/services/coachSessionRouter.test.ts:411`
-- `src/services/coachSessionRouter.test.ts:431`
-- `src/services/coachSessionRouter.test.ts:437`
+- `src/services/coachSessionRouter.test.ts:433`
+- `src/services/coachSessionRouter.test.ts:439`
+- `src/services/coachSessionRouter.test.ts:445`
 - `src/services/spokenLanguage.live.test.ts:45`
 - `src/services/spokenLanguage.live.test.ts:51`
 - `src/services/spokenLanguage.live.test.ts:58`
@@ -104,8 +105,8 @@
 - `src/services/coachSessionRouter.test.ts:395`
 
 ### `ownTakebackPlies` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2978`
-- `src/components/Coach/CoachTeachPage.tsx:15233`
+- `src/components/Coach/CoachTeachPage.tsx:2930`
+- `src/components/Coach/CoachTeachPage.tsx:14936`
 - `src/services/coachSessionRouter.ownTakeback.test.ts:6`
 - `src/services/coachSessionRouter.ownTakeback.test.ts:7`
 - `src/services/coachSessionRouter.ownTakeback.test.ts:10`
@@ -117,8 +118,8 @@
 
 ### `tryRouteIntent` (function) — 47 call sites
 - `src/components/Board/VoiceChatMic.tsx:239`
-- `src/components/Coach/CoachGameReview.tsx:2608`
-- `src/components/Coach/CoachTeachPage.tsx:4221`
+- `src/components/Coach/CoachGameReview.tsx:2612`
+- `src/components/Coach/CoachTeachPage.tsx:4176`
 - `src/components/Coach/GameChatPanel.tsx:556`
 - `src/services/coachHands.test.ts:35`
 - `src/services/coachHands.test.ts:141`

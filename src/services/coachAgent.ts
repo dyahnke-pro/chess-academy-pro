@@ -45,10 +45,6 @@ export interface CoachIntent {
   side?: 'white' | 'black';
   /** For review-game: which import source to filter by. */
   source?: GameSourceFilter;
-  /** For review-game: 'narrate' wants a move-by-move auto-playing
-   *  session with voice; 'review' (default) opens the interactive
-   *  review view. */
-  mode?: 'narrate' | 'review';
   /** Original raw user query. */
   raw: string;
 }
@@ -195,10 +191,8 @@ export function parseCoachIntent(query: string): CoachIntent {
   //     fast across the phrasings people actually use).
   const REVIEW_VERBS_RE =
     /\b(?:review|run\s+(?:me\s+)?through|walk\s+(?:me\s+)?through|show\s+me|look\s+at|go\s+(?:over|through)|narrate|recap|replay|analy[sz]e|insights?\s+(?:from|on|about))\b/;
-  const NARRATE_VERBS_RE = /\b(?:narrate|recap|replay)\b/;
   const LAST_MARKER_RE = /\b(?:last|most\s+recent|latest|previous)\b/;
   if (REVIEW_VERBS_RE.test(lower) && LAST_MARKER_RE.test(lower)) {
-    const mode: 'narrate' | 'review' = NARRATE_VERBS_RE.test(lower) ? 'narrate' : 'review';
     // Source — "on chess.com" / "on lichess". Handle the optional dot.
     let source: GameSourceFilter | undefined;
     const sourceMatch = lower.match(/\bon\s+(chess\.?com|lichess)\b/);
@@ -223,7 +217,6 @@ export function parseCoachIntent(query: string): CoachIntent {
       kind: 'review-game',
       subject: cleanedSubject ? expandOpeningAlias(cleanedSubject) : undefined,
       source,
-      mode,
       raw,
     };
   }

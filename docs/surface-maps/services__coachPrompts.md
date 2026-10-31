@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**403 lines · 7 exports · 6 importers · 5 tests · 1 audits**
+**375 lines · 6 exports · 6 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1271) — names `coachPrompts`
-- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3989) — names `coachPrompts`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1618) — names `coachPrompts`
+- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:4356) — names `coachPrompts`
 
 ## Who calls in
 
@@ -23,7 +23,7 @@
 ## Exports and every call site
 
 ### `getVerbosityInstruction` (function) — 7 call sites
-- `src/services/coachApi.ts:961`
+- `src/services/coachApi.ts:968`
 - `src/services/coachPrompts.verbosity.test.ts:23`
 - `src/services/coachPrompts.verbosity.test.ts:24`
 - `src/services/coachPrompts.verbosity.test.ts:26`
@@ -35,9 +35,6 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `WALKTHROUGH_PROMISE_CONTRACT` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `BLUNDER_ALERT_ADDITION` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `PHASE_NARRATION_ADDITION` (const) — 0 call sites

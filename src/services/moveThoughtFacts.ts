@@ -215,15 +215,14 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   return facts;
 }
 
-/** A LESSON'S LINE FOR ONE MOVE (WO-ONE-COACH-01): the move's facts, and any
- *  computed line about the move to come, through the one composer with the
- *  lesson's say-once memory and phrase memory. Replaces the briefing's
+/** A LESSON'S LINE FOR ONE MOVE (WO-ONE-COACH-01): the move's facts through
+ *  the one composer with the lesson's say-once memory and phrase memory.
+ *  Replaces the briefing's
  *  top-three clause list (`lessonBeat`), which picked by aspect weight alone,
  *  cut at three and never heard the move's job or its fundamentals. '' when
  *  nothing earned a word: silence beats a repeat. */
-export function lessonThought(input: Omit<MoveThoughtInput, 'phrases'>, voice: LessonVoice, extra: readonly ThoughtFact[] = []): string {
-  const facts = [...moveThoughtFacts({ ...input, phrases: voice.phrases }), ...extra];
-  return composeThought(facts, 'lesson', voice).spoken;
+export function lessonThought(input: Omit<MoveThoughtInput, 'phrases'>, voice: LessonVoice): string {
+  return composeThought(moveThoughtFacts({ ...input, phrases: voice.phrases }), 'lesson', voice).spoken;
 }
 
 function sideOf(fen: string): 'w' | 'b' {

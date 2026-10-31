@@ -427,10 +427,18 @@ describe('narrate vs review routing', () => {
     } as never);
   });
 
-  it('routes "Narrate my last game" to /coach/session/narrate', async () => {
+  // One review (WO-STORY-MATRIX-01 P1-1, 2026-10-30): "narrate" used to open
+  // a second, badge-labelled replay at /coach/session/narrate.
+  it('routes "Narrate my last game" to the one Review walk', async () => {
     const routed = await routeChatIntent('Narrate my last game');
-    expect(routed!.path).toMatch(/^\/coach\/session\/narrate/);
-    expect(routed!.path).toContain('gameId=game-123');
+    expect(routed!.path).toMatch(/^\/coach\/play\?review=game-123$/);
+  });
+
+  it('routes "Recap my last game" and "replay my last game" to the same Review walk', async () => {
+    for (const ask of ['Recap my last game', 'replay my last game']) {
+      const routed = await routeChatIntent(ask);
+      expect(routed!.path, ask).toMatch(/^\/coach\/play\?review=game-123$/);
+    }
   });
 
   it('keeps "Review my last game" on /coach/play?review=', async () => {

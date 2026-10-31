@@ -337,16 +337,11 @@ export async function routeChatIntent(
           intent,
         };
       }
-      // "Narrate" / "recap" / "replay" → dedicated narration-playback
-      // session (auto-advancing, voice-gated). "Review" / "walk through"
-      // → interactive review view.
-      if (intent.mode === 'narrate') {
-        return {
-          path: `/coach/session/narrate?gameId=${encodeURIComponent(game.id)}`,
-          ackMessage: buildReviewAckMessage(game, intent),
-          intent,
-        };
-      }
+      // Every ask to go over a past game — "review", "walk through",
+      // "narrate", "recap", "replay" — opens the ONE Review walk. The
+      // second, badge-labelled replay that "narrate" used to open
+      // (`gameNarrationBuilder`) is deleted (WO-STORY-MATRIX-01 P1-1, David
+      // 2026-10-30): one coach, one review.
       return {
         path: `/coach/play?review=${encodeURIComponent(game.id)}`,
         ackMessage: buildReviewAckMessage(game, intent),

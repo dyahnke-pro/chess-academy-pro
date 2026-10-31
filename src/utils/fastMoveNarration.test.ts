@@ -95,8 +95,7 @@ describe('buildFastMoveLine', () => {
     it('does NOT volunteer a hanging piece and NEVER dictates the move (silent with volunteering off)', () => {
       const hanging: HangingPiece[] = [{ square: 'd4', piece: 'n', color: 'w' }];
       // No dictation of the student's own move (David 2026-09-08); with volunteering
-      // off there is nothing grounded to volunteer, so it is silent. The grounded
-      // slip "why" comes from the call site (assembleSlipNarration).
+      // off there is nothing grounded to volunteer, so it is silent.
       expect(
         buildFastMoveLine({ san: 'Nd4', moverIsWhite: true, density: 'unlimited', classification: 'inaccuracy', hangingPieces: hanging }),
       ).toBe('');
@@ -108,11 +107,10 @@ describe('buildFastMoveLine', () => {
       ).toBe('');
     });
 
-    it('no longer emits a canned slip flag — the grounded slip narration owns the "why"', () => {
+    it('no longer emits a canned slip flag — the slip is recorded and taught in Review', () => {
       // David 2026-09-08 ("remove that string"): buildFastMoveLine never speaks
       // "That drops material." again. On fast density with volunteering off it is
-      // silent; the call site voices the grounded slip (played move + stronger
-      // move + reason) via assembleSlipNarration instead.
+      // silent; the slip is filed by the record path and taught in Review.
       expect(
         buildFastMoveLine({ san: 'Qh5', moverIsWhite: true, density: 'fast', classification: 'blunder', tactics: [fork] }),
       ).toBe('');

@@ -2162,16 +2162,11 @@ class VoiceService {
    *  A real user never has this key. Nothing in the app writes it. */
   private auditMutedCache: boolean | null = null;
 
-  /** Recently-spoken utterance keys, for the repeat guard in `speakPackage`.
-   *  Reset by `resetSpokenMemory()` when a new game/lesson starts. */
+  /** Recently-spoken utterance keys, for the repeat guard in `speakPackage` —
+   *  a rolling window of the last few packages. Per-game say-once lives with
+   *  the game (WO-STORY-MATRIX-01 P1-8); the reset that was meant for it had
+   *  no caller and is deleted (P1-1, 2026-10-30). */
   private recentlySpoken: string[] = [];
-
-  /** Forget what has been said. Call when a NEW game or lesson begins — the
-   *  repeat guard must not silence a line in this game because the last game
-   *  happened to use it. */
-  resetSpokenMemory(): void {
-    this.recentlySpoken = [];
-  }
 
   private isAuditMuted(): boolean {
     // The in-memory flag the audit's init script ALSO sets. Storage can throw

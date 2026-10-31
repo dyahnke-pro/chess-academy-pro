@@ -44,10 +44,6 @@ vi.mock('../../services/coachGameEngine', () => ({
   }),
 }));
 
-vi.mock('../../services/coachTemplates', () => ({
-  getMoveCommentaryTemplate: vi.fn().mockReturnValue('Solid choice.'),
-}));
-
 vi.mock('../../services/stockfishEngine', () => ({
   stockfishEngine: {
     analyzePosition: vi.fn().mockResolvedValue({

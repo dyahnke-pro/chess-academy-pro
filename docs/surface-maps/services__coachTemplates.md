@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**178 lines · 3 exports · 2 importers · 3 tests · 0 audits**
+**24 lines · 1 exports · 2 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,32 +17,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `getMoveCommentaryTemplate` (function) — 5 call sites
-- `src/services/coachTemplates.test.ts:11`
-- `src/services/coachTemplates.test.ts:22`
-- `src/services/coachTemplates.test.ts:32`
-- `src/services/coachTemplates.test.ts:85`
-- `src/services/coachTemplates.test.ts:94`
-
-### `getScenarioTemplate` (function) — 9 call sites
-- `src/components/Coach/CoachGamePage.tsx:4561`
-- `src/services/coachTemplates.test.ts:47`
-- `src/services/coachTemplates.test.ts:54`
-- `src/services/coachTemplates.test.ts:103`
-- `src/services/coachTemplates.test.ts:118`
-- `src/services/coachTemplates.test.ts:121`
-- `src/services/coachTemplates.test.ts:128`
-- `src/services/coachTemplates.test.ts:135`
-- `src/services/coachTemplates.test.ts:142`
-
-### `getAllTemplates` (function) — 2 call sites
-- `src/services/coachTemplates.test.ts:64`
-- `src/services/coachTemplates.test.ts:76`
+### `getScenarioTemplate` (function) — 4 call sites
+- `src/components/Coach/CoachGamePage.tsx:3869`
+- `src/services/coachTemplates.test.ts:6`
+- `src/services/coachTemplates.test.ts:16`
+- `src/services/coachTemplates.test.ts:19`
 
 ## Tests
 
+- `src/components/Coach/CoachGamePage.abandon.test.tsx`
 - `src/components/Coach/CoachGamePage.test.tsx`
-- `src/components/Coach/CoachGameReview.test.tsx`
 - `src/services/coachTemplates.test.ts`
 
 ## Audits that reach it

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**495 lines · 1 exports · 1 importers · 1 tests · 1 audits**
+**440 lines · 1 exports · 1 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **Routing** (CLAUDE.md:5463) — names `CoachSessionPage`
+- **Routing** (CLAUDE.md:5964) — names `CoachSessionPage`
 
 ## Who calls in
 

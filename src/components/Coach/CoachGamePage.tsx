@@ -7,7 +7,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, MessageCircle, Timer } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Chess, type Color } from 'chess.js';
-import { safeChessFromFen } from '../../services/chessSafe';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { CoachBoardBar } from '../Board/CoachBoardBar';
@@ -33,8 +32,6 @@ import { ResignButton } from './ResignButton';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { useStudentNeed } from '../../hooks/useStudentNeed';
 import { useWeaknessSignals } from '../../hooks/useWeaknessSignals';
-import { useNarration } from '../../hooks/useNarration';
-import { buildPlayEntryNarration } from '../../services/playEntryNarration';
 import {
   createPhaseTransitionState,
   detectPhaseTransition,
@@ -43,8 +40,7 @@ import {
   type PhaseTransitionState,
 } from '../../services/phaseTransitionDetector';
 import { logAppAudit } from '../../services/appAuditor';
-import { unwrapSpineError, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
-import { createStreamingSpeaker } from '../../services/streamingSpeaker';
+import { unwrapSpineError } from '../../services/sanitizeCoachText';
 import type { MoveClassification, WalkableLine } from '../../types';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -65,12 +61,10 @@ import { withTimeout } from '../../coach/withTimeout';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
 import { buildTacticVisuals } from '../../services/tacticVisuals';
 import { isCriticalThreat } from '../../services/tacticAlertService';
-import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
+import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { getScenarioTemplate } from '../../services/coachTemplates';
-import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import { isSpokenSentenceGrounded } from '../../services/coachAnswerGates';
-import { validateBoardClaims } from '../../services/boardClaimValidator';
 import {
   loadCoachPlayState,
   saveCoachPlayState,
@@ -78,53 +72,18 @@ import {
   loadCoachPlayChat,
   saveCoachPlayChat,
 } from '../../services/coachPlayPersistence';
-import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { addAddressedConversion } from '../../services/conversionProgress';
 import { recordPositiveMoment } from '../../services/reviewPromptService';
-import { formatTrapForPrompt } from '../../services/openingTrapDetector';
-import { scanPositionForTrap } from '../../services/positionTrapScan';
 import { buildFastMoveLine } from '../../utils/fastMoveNarration';
 import { dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 
-/** Max wall-clock for any Lichess lookup during opening teaching.
- *  Matches coachContextEnricher's FETCH_TIMEOUT_MS so the whole
- *  coach-narration path shares a budget. Past this, narration
- *  degrades to ungrounded prose rather than stalling the turn. */
-const LICHESS_FETCH_TIMEOUT_MS = 2500;
 /** The depth Play reads a move's position at (the coach's fan and the
  *  student's pre-move read) — and so the depth its ONE price is asked at. */
 const PLAY_MOVE_DEPTH = 10;
 
-/** Per-move spoken narration source on /coach/play (David 2026-05-31:
- *  "i want the tts speech back. voice narration and thinking time
- *  between coach moves are too slow").
- *
- *  When FALSE, the per-move LLM commentary path (`generateMoveCommentary`)
- *  is skipped and a fast DETERMINISTIC template line is spoken instead
- *  (see `buildFastMoveLine`). The prod audit (2026-05-31) measured the
- *  LLM call at 4–15s PER MOVE — and because the coach's reply is gated
- *  behind it, every move stalled — while its streamed sentences flooded
- *  Polly until it dropped to the robotic Web Speech voice. The template
- *  is instant and fires exactly one short utterance per move, so the
- *  coach replies immediately and Polly never chokes. The LLM machinery
- *  below is kept intact (dead while this is false) for an easy revert.
- *  Flip back to TRUE to restore LLM per-move commentary. */
-const USE_LLM_MOVE_COMMENTARY: boolean = false;
-
-/** Race a fetch-style promise against a timeout, throwing 'timeout'
- *  on expiry. Distinct from `../../coach/withTimeout` (which returns
- *  a discriminated `{ ok }` result for the resilience chain) — this
- *  one is used by Lichess cloud-eval / explorer fetches that already
- *  use try / catch and want a thrown error on timeout. */
-function withFetchTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<T>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)),
-  ]);
-}
-import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachCommentaryPolicy';
+import { resolveVerbosity } from '../../services/coachCommentaryPolicy';
 import { resolveLlmNarrationDensity } from '../../utils/coachNarration';
-import { BLUNDER_ALERT_ADDITION, EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
+import { EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { limitStrengthElo } from '../../services/engineConstants';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
@@ -141,7 +100,7 @@ import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import { recordFinishedGame } from '../../services/autoAnalyzeGame';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
-import { voiceService, resolvePollyVoice, CLOUD_VOICES } from '../../services/voiceService';
+import { voiceService } from '../../services/voiceService';
 import { computeWhyBestMoveDetail } from '../../services/whyBestMove';
 import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
@@ -151,9 +110,8 @@ import type {
   ChatMessage,
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
-import type { TacticsLiveContext } from '../../coach/types';
 import { classifyMoveFull, priceAndClassifyLiveMove, findKeyMoments, type MovePrice } from '../../services/moveRating';
-import { assembleSlipNarration, ownHangingLine as hangingLineFor } from '../../services/groundedAnswer';
+import { ownHangingLine as hangingLineFor } from '../../services/groundedAnswer';
 import { LocalizedCoachText } from './ChatMessage';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
@@ -235,8 +193,11 @@ export const BLUNDER_CARD_ENABLED = false;
  *  blunder verdicts, threat alerts, phase summaries — and never came back.
  *
  *  OFF silences EVERY unprompted line on /coach/play, voice AND chat text:
- *  the deep-link entry beat, the per-move slip line, the blunder verdict, the
- *  "Watch out" threat alert and phase-transition narration. What the student
+ *  the per-move line, the blunder verdict, the "Watch out" threat alert, the
+ *  discussion prompt's voice and the proactive tips. Phase transitions are
+ *  recorded, never narrated. The deep-link entry beat, the LLM per-move
+ *  commentary and the slip verdict are DELETED, not switched off
+ *  (WO-STORY-MATRIX-01 P1-1, David 2026-10-30). What the student
  *  TAPS still answers (Read this position, Why?, Hint, typed chat, mic), and
  *  post-game review keeps its voice — that is where the diagnosis lives.
  *
@@ -525,23 +486,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     gameId: '',
     squares: new Set<string>(),
   });
-  // Track which openings we've already introduced this game so the
-  // long teaching narration only fires ONCE per opening, not on
-  // every move in book. Routine book moves stay silent until a key
-  // moment (blunder / mistake / brilliant) or a phase transition
-  // (handled by usePhaseNarration). Reset on game restart below
-  // so a fresh game can re-introduce the opening.
-  //
-  // NB (WO-NARR-POLICY-01): collapsed from a Set<openingName> to a
-  // single boolean. The auto-detector refines the opening name as more
-  // moves are played ("Italian Game" → "King's Pawn Game" → "Damiano
-  // Defense"), so the per-name set was firing the long intro three
-  // times in a row for what the user perceives as one opening. One
-  // intro per GAME aligns with what was asked for. Only fires under
-  // verbosity='every-move' — under 'key-moments' the user explicitly
-  // asked for silence except on actual events.
-  const openingIntroSpokenRef = useRef<boolean>(false);
-
   // Requested opening — read live from the memory store. Post-tightening
   // (WO-BRAIN-04) the move-selector no longer derives a parallel SAN
   // array here; the brain consults `local_opening_book` itself when it
@@ -602,51 +546,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     subjectAppliedRef.current = true;
     handleOpeningRequest(seed);
   }, [subjectParam, handleOpeningRequest, initialGameFen, searchParams]);
-
-  // Rolodex entry beat. When the student arrived via a rolodex-style
-  // deep link (URL carries `?opening=<name>` → `setIntendedOpening`
-  // fires with `capturedFromSurface: 'url-or-resume'`), fire ONE
-  // coach line acknowledging the captured intent. Without this beat
-  // the cold-load experience is indistinguishable from a generic
-  // `/coach/play` — board at starting position, "vs Stockfish Bot",
-  // no felt cue the rolodex link worked. This is the rolodex's
-  // signature.
-  //
-  // Voice routing matches CoachEndgamePage / EndgameLessonTab — the
-  // user opted into the lesson (tapped a rolodex card), so narration
-  // IS the lesson. `useNarration` calls `voiceService.speakForced`
-  // (bypasses voiceEnabled pref, see hook header at
-  // `src/hooks/useNarration.ts:19-23`).
-  //
-  // Always mirrored to chat via injectAssistantMessage so voice-off
-  // users still see the line. Same dual-path shape as the plan
-  // tracker (CoachGamePage:923).
-  //
-  // Fires once per session per opening via entryBeatFiredRef (same
-  // guard pattern as offBookFiredRef below).
-  const [entryBeatText, setEntryBeatText] = useState<string>('');
-  const entryBeatFiredRef = useRef(false);
-  useNarration({ text: entryBeatText });
-  useEffect(() => {
-    if (!PLAY_VOLUNTEERS_COACHING) return;
-    if (entryBeatFiredRef.current) return;
-    if (!intendedOpening) return;
-    if (intendedOpening.capturedFromSurface !== 'url-or-resume') return;
-    entryBeatFiredRef.current = true;
-    const text = buildPlayEntryNarration({
-      openingName: intendedOpening.name,
-      studentSide: intendedOpening.color,
-    });
-    setEntryBeatText(text);
-    gameChatRef.current?.injectAssistantMessage(text);
-    void logAppAudit({
-      kind: 'rolodex-entry-beat',
-      category: 'subsystem',
-      source: 'CoachGamePage.rolodexEntryBeat',
-      summary: `entry beat fired for "${intendedOpening.name}" (${intendedOpening.color})`,
-      details: text,
-    });
-  }, [intendedOpening]);
 
   // Middlegame mode auto-play (WO-ROLODEX-PLUMBING-01 item 2). When the
   // student arrived with `?opening=<name>&mode=middlegame`, walk through
@@ -1614,9 +1513,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // transitions fresh (WO-PHASE-NARRATION-01).
     phaseStateRef.current = createPhaseTransitionState();
     phaseNoFireSigRef.current = null;
-    // Reset the introduced-openings tracker so the next opening gets
-    // its long teaching intro again.
-    openingIntroSpokenRef.current = false;
     // Cancel any pending coach quiz — its expectedSan refers to the
     // old position and won't match anything in the fresh game.
     cancelActiveQuizRef.current('game-restart');
@@ -2291,9 +2187,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // rating-matched Stockfish (fast-path below) → `getAdaptiveMove`
         // (masters/lichess/Stockfish) fallback. The mate/quality floor
         // double-checks it. The pre-move Stockfish eval below is purely
-        // informational (eval bar, classification, threat scan). The LLM's
-        // ONLY job is per-move NARRATION, generated AFTER the move lands and
-        // grounded on the ACTUAL move (`generateMoveCommentary`).
+        // informational (eval bar, classification, threat scan).
         const coachFenBefore = game.fen;
         const preAnalysisPromise: Promise<StockfishAnalysis> = stockfishEngine
           .analyzePosition(game.fen, PLAY_MOVE_DEPTH)
@@ -2323,10 +2217,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // or plays a move — LLMs can't play chess. The opponent reply comes
         // from the DB/engine ONLY. `seededAnalysis` (above) feeds the
         // mate/quality floor; the fast-path below (book -> Stockfish) picks
-        // the move; `getAdaptiveMove` is the robust fallback. Per-move
-        // narration runs AFTER the move lands (`generateMoveCommentary`,
-        // grounded on the actual move), so it always describes what the
-        // engine played, never an LLM "intended" move.
+        // the move; `getAdaptiveMove` is the robust fallback.
         void logAppAudit({
           kind: 'coach-surface-migrated',
           category: 'subsystem',
@@ -3327,55 +3218,29 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       }
     }
 
-    // LLM commentary is gated on the user's coachCommentaryVerbosity
-    // preference (default 'key-moments'). On non-key moves we skip the
-    // LLM entirely and fall back to the deterministic tacticSuffix,
-    // which cuts per-game LLM spend ~60% without losing the
-    // pedagogically important commentary on blunders/brilliants.
-    //
-    // EXCEPTION: when a subject is set AND we're still in opening
-    // theory (book depth OR configured book length), fire the LLM on
-    // every move so the coach can teach the opening ideas in real
-    // time. "Key moments only" would skip most opening book moves
-    // because they classify as 'book' / 'best', killing the feature.
+    // The move row keeps the classifier's tactic note (`tacticSuffix`); the
+    // one spoken line per move is built below and said only behind
+    // PLAY_VOLUNTEERS_COACHING. The LLM per-move commentary that used to sit
+    // here (`generateMoveCommentary`, behind USE_LLM_MOVE_COMMENTARY) is
+    // DELETED rather than switched off (G8.5 rule 4, WO-STORY-MATRIX-01 P1-1,
+    // David 2026-10-30): Play volunteers nothing, and an LLM producer is G0's
+    // disease besides.
     let commentary = '';
-    // Tracks whether the LLM produced speech-worthy content for this
-    // move. The deterministic tactic suffix ("Hanging: Black rook on
-    // h8 ...") is fine in the move-list display but NEVER gets spoken
-    // — it's a robotic readout that breaks the personality voice and
-    // fires on every player move regardless of verbosity setting.
-    // Bug observed in production audit ac8088d. WO-NARR-POLICY-03.
-    let llmProducedSpeech = false;
+    // Whether the move line below is speech-worthy. The deterministic tactic
+    // suffix ("Hanging: Black rook on h8, ...") is for the move list, never
+    // read aloud (WO-NARR-POLICY-03).
+    let moveLineSpeech = false;
     const verbosity = resolveVerbosity(useAppStore.getState().activeProfile);
-    // Narration density — drives the LLM-output-length knob in the
-    // per-move commentary prompt. Tied to the unified Coach Narration
-    // setting via `resolveLlmNarrationDensity`:
-    //   - Silent → 'none' (short-circuits the LLM call entirely)
-    //   - Brief  → 'fast' (LLM gets the brief-length cap)
-    //   - Full   → legacy coachVerbosity (default 'unlimited')
-    // Pre-fix the density was read straight from coachVerbosity which
-    // defaulted to 'unlimited' on every profile that never touched
-    // the legacy dial — so Brief produced full-length narrations.
+    // Narration density — the unified Coach Narration setting
+    // (`resolveLlmNarrationDensity`): Silent → 'none', Brief → 'fast',
+    // Full → the legacy coachVerbosity. Sizes the move line below.
     const narrationDensity = resolveLlmNarrationDensity(
       useAppStore.getState().activeProfile?.preferences,
     );
-    // Auto-detect the opening from the SAN move history so opening
-    // teaching mode activates whenever the position matches a known
-    // book line — even if the student didn't pick a subject from the
-    // dropdown. Detection is fast (trie lookup over the bundled
-    // Lichess openings DB) and safe to run every move. Resolution
-    // precedence: explicit URL subject > committed intent > auto-detect.
+    // Auto-detect the opening from the SAN move history (a trie lookup over
+    // the bundled Lichess openings DB, safe every move). The full-game audit
+    // asserts its games' openings are distinct off this row's names.
     const detectedOpening = detectOpening(game.history);
-    // Resolution precedence: URL > auto-detect > intent. Auto-detect
-    // is always accurate to the actual moves on the board, so it wins
-    // over a (potentially stale) committed intent. Production audit
-    // build cb018c0 caught the bug: a sticky `intendedOpening =
-    // "Italian Game"` from a prior session was overriding the
-    // auto-detected "Scandinavian Defense" on a fresh 1.e4 d5 game,
-    // and the LLM was being told "Italian Game" while narrating
-    // moves that weren't Italian. Auto-detect-first eliminates the
-    // mismatch — intent only fires when the position is too generic
-    // for the trie to name (rare, very early game).
     const resolutionSource: 'url' | 'auto-detect' | 'intent' | 'none' = subjectParam
       ? 'url'
       : detectedOpening
@@ -3383,13 +3248,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         : intendedOpening
           ? 'intent'
           : 'none';
-    const resolvedSubject =
-      subjectParam ?? detectedOpening?.name ?? intendedOpening?.name ?? null;
-    const bookDepth = resolvedSubject
-      ? (getOpeningMoves(resolvedSubject)?.length ?? 0)
-      : 0;
-    const inOpeningTeaching =
-      !!resolvedSubject && game.history.length <= Math.max(bookDepth, 12);
     if (detectedOpening) {
       void logAppAudit({
         kind: 'coach-opening-auto-detected',
@@ -3399,417 +3257,21 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         fen: moveResult.fen,
       });
     }
-    if (inOpeningTeaching && resolvedSubject) {
-      void logAppAudit({
-        kind: 'coach-opening-teaching-active',
-        category: 'subsystem',
-        source: 'CoachGamePage.move',
-        summary: `subject="${resolvedSubject}" resolution=${resolutionSource} ply=${game.history.length}/${Math.max(bookDepth, 12)}`,
-        fen: moveResult.fen,
-      });
-    }
-    // Sparse-cadence narration (WO-NARRATION-CADENCE).
-    //
-    // The previous behavior fired the LLM on every move while in
-    // opening teaching mode, which made the game feel like waiting
-    // for the coach to monologue between every move (5-7s latency
-    // per call, ~1700-char response). Player flow died.
-    //
-    // New cadence:
-    //   1. ONCE per opening — fire the long teaching narration the
-    //      first time we see a recognizable opening name. Subsequent
-    //      moves in the same opening stay silent unless a key moment
-    //      fires.
-    //   2. KEY MOMENTS — blunders / mistakes / inaccuracies /
-    //      brilliants / greats trigger a short personality-laden
-    //      zinger (briefMode below). Latency budget: ~2s for a
-    //      1-2 sentence response with mockery / critique.
-    //   3. PHASE TRANSITIONS — handled by usePhaseNarration. Fires
-    //      automatically at opening→middlegame and
-    //      middlegame→endgame, giving the next teaching beat.
-    //   4. EXPLICIT every-move setting — power users who set
-    //      `coachCommentaryVerbosity = 'every-move'` still get the
-    //      old per-move running commentary.
-    //
-    // Settings → Coach → Commentary Frequency drives this:
-    //   'off'         → all three triggers gated off (silent except
-    //                   for deterministic tactic suffix)
-    //   'key-moments' → blunder/mistake/brilliant/great only. NO
-    //                   opening intro, NO phase transition prose.
-    //                   Tactic alerts still speak from the post-coach
-    //                   scan — those are Stockfish-driven, no LLM
-    //                   latency, and the user wants them as soon as
-    //                   the threat lands on the board.
-    //   'every-move'  → opening intro once per game + every player
-    //                   move + key moments + tactic alerts.
-    //
-    // WO-NARR-POLICY-01: opening intro gated to 'every-move' only.
-    // Under 'key-moments' the user explicitly asked for silence except
-    // on actual events. The intro flag is also collapsed from per-name
-    // to per-game so a refining auto-detect doesn't trigger three
-    // intros for one opening.
-    const isFirstSeeingOpening =
-      verbosity === 'every-move' &&
-      inOpeningTeaching &&
-      !!resolvedSubject &&
-      !openingIntroSpokenRef.current;
-    const isKeyMoment = shouldCallLlmForMove(verbosity, classification);
-    const userWantsEveryMove = verbosity === 'every-move';
-    // briefMode: short personality-laden response. Skipped for the
-    // big opening intro (wants long prose) and for explicit
-    // every-move (user wants normal length).
-    const briefMode = isKeyMoment && !isFirstSeeingOpening && !userWantsEveryMove;
-    const shouldFire =
-      USE_LLM_MOVE_COMMENTARY &&
-      narrationDensity !== 'none' &&
-      (isFirstSeeingOpening || isKeyMoment || userWantsEveryMove);
-    if (shouldFire) {
-      try {
-        // Build a probe Chess instance that carries the FULL move
-        // history. The LLM commentary path uses
-        // `gameAfter.history({ verbose: true })` to extract the last
-        // move's SAN + flags + recent SAN list. A FEN-only probe
-        // (`new Chess(fen)`) has empty history, so
-        // generateMoveCommentary returned '' immediately at its
-        // history.length===0 guard — every move silently skipped the
-        // LLM. Audit-log evidence for the bug: zero `verbosity-resolved`
-        // audits despite `coach-opening-teaching-active` firing on
-        // every move (so shouldFire was true and generateMoveCommentary
-        // WAS being called — just bailing before the LLM call).
-        // Replay from the starting position so chess.js generates a
-        // real verbose history; fall back to the FEN-only probe if
-        // any SAN doesn't validate (rare — chess.js produced these
-        // SANs in the first place, but defensive in case the URL
-        // import path ever feeds in a non-replayable history).
-        let probe: Chess | null;
-        try {
-          const replay = new Chess();
-          for (const san of game.history) replay.move(san);
-          replay.move(moveResult.san);
-          probe = replay;
-        } catch (err: unknown) {
-          void logAppAudit({
-            kind: 'bad-fen',
-            category: 'subsystem',
-            source: 'CoachGamePage.move.probe-replay',
-            summary: `replay failed; falling back to FEN probe — ${err instanceof Error ? err.message : String(err)}`,
-            fen: moveResult.fen,
-          });
-          probe = safeChessFromFen(moveResult.fen);
-        }
-        if (!probe) {
-          console.warn('[CoachGame] bad FEN for narration probe:', moveResult.fen);
-          return;
-        }
-        const mover: 'w' | 'b' = probe.turn() === 'w' ? 'b' : 'w';
-        // Pull recent chat from the shared session store so narration
-        // stays consistent with what was just said in chat.
-        const sessionMessages = useCoachSessionStore.getState().messages;
-
-        // In opening-teaching mode, ground the commentary in REAL
-        // Lichess + engine data: pull the Opening Explorer for the
-        // current position, cloud-eval each popular candidate on its
-        // RESULTING position, and run the trap detector on the
-        // combined result. The fetch is best-effort — wrapped in
-        // withTimeout so a slow Lichess response never stalls
-        // narration; failures fall through to prose without the
-        // numbers.
-        const groundedNotes: string[] = [];
-        if (inOpeningTeaching) {
-          try {
-            const explorer = await withFetchTimeout(
-              fetchLichessExplorer(probe.fen(), 'lichess'),
-              LICHESS_FETCH_TIMEOUT_MS,
-            );
-            if (explorer.moves && explorer.moves.length > 0) {
-              const topMoves = explorer.moves
-                .slice(0, 5)
-                .map((m) => {
-                  const total = m.white + m.draws + m.black;
-                  const whitePct = total ? Math.round((m.white + m.draws * 0.5) / total * 100) : 0;
-                  return `- ${m.san}: ${total.toLocaleString()} games, ${whitePct}% for White`;
-                })
-                .join('\n');
-              const openingLabel = explorer.opening
-                ? ` (${explorer.opening.eco} ${explorer.opening.name})`
-                : '';
-              groundedNotes.push(
-                `[Lichess Opening Explorer at current position${openingLabel}]\n${topMoves}`,
-              );
-
-              // Trap detection — the SHARED `scanPositionForTrap` (the same
-              // tool /coach/teach uses): cloud-eval each top explorer move on
-              // its RESULTING position and flag a popular-but-losing one. Pass
-              // the already-fetched `explorer` so we don't double-fetch.
-              const trap = await scanPositionForTrap({
-                fen: probe.fen(),
-                mover,
-                explorer,
-                engineBestSan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
-                // Gate against the CURRENT legal-move set so an explorer/FEN
-                // mismatch can't surface a trap for an unplayable move.
-                legalSan: probe.moves(),
-              });
-              if (trap) {
-                groundedNotes.push(formatTrapForPrompt(trap));
-              }
-            }
-          } catch (err: unknown) {
-            console.warn('[CoachGame] Lichess explorer fetch failed:', err);
-          }
-        }
-
-        // Recent move classifications — feeds the [StudentState] block
-        // so the coach can read the rhythm (just blundered? on a
-        // streak?) and adapt tone. Take the newest 5.
-        const recentMoveClassifications = gameState.moves
-          .slice(-5)
-          .map((m) => m.classification);
-        // Tempo signal: time of the PREVIOUS user interaction (chat
-        // message or board move), not "now". The builder treats <2s
-        // as no-signal, so passing Date.now() always flagged FAST
-        // and forced the LLM into "keep replies tight" mode — that
-        // cancelled out Unlimited verbosity. Use the newest user
-        // chat message timestamp (the student's last typed/spoken
-        // turn); undefined when there is none so the block skips
-        // tempo entirely.
-        const lastUserChatMs = [...sessionMessages]
-          .reverse()
-          .find((m) => m.role === 'user')?.timestamp;
-
-        // Personality dials — picked up at narration time (not at
-        // session start) so a mid-session settings change takes
-        // effect on the next move. Mirrors how the brain (chat) path
-        // reads dials in coach/envelope.ts.
-        const activePrefs = useAppStore.getState().activeProfile?.preferences;
-        // Track whether streaming actually dispatched a sentence to TTS.
-        // If yes, the post-LLM speak path below skips (the streamed
-        // sentences ARE the narration; speaking again would double up).
-        let streamedAnything = false;
-        // FED tactics for the post-move position so the auto-narration is
-        // tactic-grounded (David 2026-06-16). generateMoveCommentary is a
-        // legacy brain that isn't centrally fed, and its voice streams
-        // sentence-by-sentence BEFORE any final-text gate — so a hallucinated
-        // "knight fork" would otherwise be SPOKEN. moveTactics gates the
-        // spoken sentences (the gate below) and the displayed prose. Fed so
-        // it carries real PV tactics, not just FEN-only; degrades cleanly.
-        let moveTactics: TacticsLiveContext | null = null;
-        try {
-          moveTactics = await buildFedTacticsContext(
-            probe.fen(),
-            playerColor === 'white' ? 'w' : 'b',
-            useAppStore.getState().activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING,
-          );
-        } catch { moveTactics = null; }
-        const llm = await generateMoveCommentary({
-          gameAfter: probe,
-          mover,
-          evalBefore: preMoveEval,
-          evalAfter: analysis?.evaluation ?? null,
-          bestReplySan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
-          // Engine best move (UCI) at the PRE-move position → lets the grounded
-          // move-commentary path compute the move's real tactical effect in
-          // code and voice it via voiceFacts (G0), instead of the LLM inventing.
-          bestMoveUci: engineBestMoveUci ?? undefined,
-          // Board-verified tactics at the POST-move position (already computed
-          // above for the spoken-sentence gate) — so the grounded position read
-          // names the REAL threats/hanging pieces, not an invented tactic (G0).
-          tactics: moveTactics,
-          chatHistory: sessionMessages,
-          // Threading the resolved subject (URL > committed intent >
-          // auto-detected) activates the OPENING TEACHING MODE branch
-          // of PLAY_SYSTEM_PROMPT whenever the student is playing a
-          // recognizable book line — no dropdown pick required.
-          subject: resolvedSubject ?? undefined,
-          verbosity: narrationDensity,
-          groundedNotes,
-          recentMoveClassifications,
-          lastUserInteractionMs: lastUserChatMs,
-          personality: activePrefs?.coachPersonality,
-          profanity: activePrefs?.coachProfanity,
-          mockery: activePrefs?.coachMockery,
-          flirt: activePrefs?.coachFlirt,
-          // Explicit perspective: the student plays `playerColor`; the
-          // coach plays the opposite. Without this, the LLM was
-          // inferring (audit log build ac20cc5 caught it narrating
-          // the student's e4 as "Alright, I'm playing e4...").
-          studentColor: playerColor === 'white' ? 'w' : 'b',
-          // Brief mode for key-moment zingers (blunders, mistakes,
-          // brilliants etc.) — short personality-laden 1-2 sentence
-          // response (~2s latency). Long-form prose only fires for
-          // the once-per-opening intro and explicit every-move mode.
-          briefMode,
-          // WO-VOICE-LAYER-02: tell the LLM which Polly engine will
-          // speak its output so it embeds emotional cues for
-          // Generative voices (Ruth/Matthew/Danielle/Gregory) that
-          // ignore SSML prosody. Neural voices skip the cue block.
-          voiceEngine: (() => {
-            const activeVoice = resolvePollyVoice(
-              activePrefs?.coachPersonality,
-              activePrefs?.coachPersonalityVoices,
-              activePrefs?.pollyVoice ?? 'ruth',
-            );
-            return CLOUD_VOICES.find((v) => v.id === activeVoice)?.engine;
-          })(),
-          // Stream the LLM and ship each completed sentence to Polly
-          // the moment it lands. `createStreamingSpeaker()` encapsulates
-          // the chain semantics: first sentence drops politely via
-          // speakIfFree if Polly is busy, and when that drop happens
-          // every subsequent sentence in the batch also drops so the
-          // in-flight narration plays through cleanly. See
-          // streamingSpeaker.ts for the production-audit history.
-          onStream: (() => {
-            let buffer = '';
-            const speaker = createStreamingSpeaker();
-            return (chunk: string): void => {
-              buffer += chunk;
-              let match: RegExpExecArray | null;
-              while ((match = SENTENCE_END_RE.exec(buffer)) !== null) {
-                // Take the whole prefix from buffer[0] up to the end of
-                // the match — any content before match.index is unmatched
-                // prose that belongs to THIS sentence (the regex skipped
-                // it because of an earlier digit-period). Slicing only
-                // from match.index would drop it silently.
-                const endIdx = match.index + match[1].length;
-                const sentence = buffer.slice(0, endIdx).trim();
-                // Per-sentence spoken gate: move commentary streams to Polly
-                // before the spine's final-text gate runs, so a board-false
-                // sentence must be dropped HERE against the post-move FEN.
-                if (sentence && isSpokenSentenceGrounded(sentence, probe.fen(), 'coachGamePage.moveCommentary', moveTactics)) {
-                  streamedAnything = true;
-                  speaker.add(sentence);
-                }
-                buffer = buffer.slice(endIdx);
-              }
-            };
-          })(),
-        });
-        // Mark this opening as introduced so subsequent moves in the
-        // same line stay silent (until a key moment or phase transition).
-        // Only mark on success — if the LLM returned empty / errored,
-        // we'll retry on the next move.
-        if (llm && resolvedSubject && isFirstSeeingOpening) {
-          openingIntroSpokenRef.current = true;
-        }
-        // Tactic-ground the DISPLAYED LLM prose (the code-grounded
-        // tacticSuffix is already real, so strip only the `llm` portion):
-        // drop any sentence claiming a tactic absent from the fed context so
-        // the false claim isn't read either (David 2026-06-16).
-        let llmGrounded = llm;
-        if (moveTactics && llmGrounded.trim()) {
-          try {
-            const t = stripUngroundedTacticSentences(llmGrounded, moveTactics);
-            if (t.dropped.length > 0) llmGrounded = t.clean;
-          } catch { /* keep the prose as-is on a validator fault */ }
-        }
-        commentary = llmGrounded ? llmGrounded + tacticSuffix : tacticSuffix.trim();
-        // Audit-only board-claim check on the DISPLAYED commentary. The
-        // spoken sentences are board-grounded above (isSpokenSentenceGrounded),
-        // but the displayed `commentary` text is NOT — so a board-false
-        // sentence the LLM wrote still shows in the chat bubble (David
-        // 2026-06-15: "the bishop you just captured is attacking you"). This
-        // path had ZERO board-claim validation; surface it as a defect so the
-        // prose hallucination is finally visible (the fix is the G0 inversion).
-        if (llm.trim()) {
-          const boardCheck = validateBoardClaims(llm, probe.fen());
-          if (boardCheck.violations.length > 0) {
-            void logAppAudit({
-              kind: 'coach-board-claim-blocked',
-              category: 'subsystem',
-              source: 'CoachGamePage.moveCommentary.boardClaimValidator',
-              summary: `board-false claim in displayed commentary: ${boardCheck.violations.map((v) => v.kind).join(', ')}`,
-              details: JSON.stringify({
-                violations: boardCheck.violations.map((v) => ({ kind: v.kind, claim: v.claim.slice(0, 60), reason: v.reason.slice(0, 80) })),
-                surface: 'game-commentary-display',
-              }),
-              fen: probe.fen(),
-            });
-          }
-        }
-        // Only the LLM portion is speech-worthy. tacticSuffix is a
-        // deterministic readout meant for the move list display, NOT
-        // for TTS.
-        // If we already streamed sentences to TTS during generation,
-        // mark llmProducedSpeech=false so the post-LLM speakIfFree
-        // below DOESN'T fire — the streamed sentences ARE the
-        // narration; speaking the full string again would double up.
-        // WO-PLAN-B.
-        llmProducedSpeech = Boolean(llm.trim()) && !streamedAnything;
-        // Mirror the commentary into the shared session so the next
-        // chat turn (or the next move's narration) sees what we just
-        // said. Skip empties and pure tactic suffixes — we only record
-        // real narration. The spine's conversation memory ALSO gets
-        // a copy so the brain's next envelope reflects the running
-        // narration (audit finding 2026-05-14: the play coach's
-        // move-narration was visible in the chat UI but invisible
-        // to the brain, so the LLM forgot its own observations).
-        if (llm) {
-          useCoachSessionStore.getState().appendMessage({
-            id: uid('narr'),
-            role: 'assistant',
-            content: llm,
-            timestamp: Date.now(),
-          });
-          useCoachMemoryStore.getState().appendConversationMessage({
-            surface: 'chat-in-game',
-            role: 'coach',
-            text: llm,
-            fen: game.fen,
-            trigger: null,
-          });
-          // MIRROR the spoken narration into the VISIBLE chat transcript
-          // (David 2026-07-06: "have every spoken phrase be mirrored in the
-          // chat so I can go back and reread it"). The session/memory stores
-          // above feed the brain; only injectAssistantMessage reaches the
-          // GameChatPanel the student actually reads (+ persists via
-          // saveCoachPlayChat). Every spoken narration site must do this.
-          gameChatRef.current?.injectAssistantMessage(llm);
-        }
-      } catch {
-        commentary = tacticSuffix.trim();
-      }
-    } else {
-      // Non-key move — skip the LLM. The tactic classifier may still
-      // have found something worth noting (hanging piece, fork motif);
-      // keep that so the user isn't staring at a blank row.
-      commentary = tacticSuffix.trim();
-    }
 
     // ── Fast deterministic move narration (David 2026-05-31) ──────────
-    // When USE_LLM_MOVE_COMMENTARY is false, the LLM block above is dead
-    // and we speak ONE instant template line per move. This is what
-    // makes the coach reply immediately (no 4–15s LLM gate) and keeps
-    // Polly fed a single short utterance per move instead of a flood of
-    // streamed sentences (which is what was dropping it to Web Speech).
-    if (!USE_LLM_MOVE_COMMENTARY) {
+    // ONE instant template line per move, so the coach replies immediately
+    // and the voice gets a single short utterance. Said only behind
+    // PLAY_VOLUNTEERS_COACHING. The full-strength slip verdict that used to
+    // lead it (`assembleSlipNarration`) is DELETED (WO-STORY-MATRIX-01 P1-1):
+    // computed every Play move and never heard, while the record path
+    // (`raiseWhyForSlip`, below) files the slip and Review teaches it.
+    {
       const narrationTactics = (tacticResult?.tactics ?? []).filter((t) => t.type !== 'none');
       // Reset the once-per-game hanging ledger when the game changes.
       if (announcedHangingRef.current.gameId !== gameState.gameId) {
         announcedHangingRef.current = { gameId: gameState.gameId, squares: new Set<string>() };
       }
-      // 🔒 FULL-STRENGTH SLIP NARRATION (David 2026-09-08, emphatic: "narrations
-      // better be AT FULL STRENGTH … remove that string"). On a mistake /
-      // inaccuracy, state the concrete WHY immediately — the played move, its
-      // cost, the stronger move, and the grounded reason (what it does + what the
-      // slip allowed) — via the same computers the review uses, instead of the
-      // canned "A small slip — there was better". All chess.js-computed from data
-      // already in hand (engine best move + eval swing), so no added latency.
-      // (Blunders take their own grounded path in the blunder-pause branch above.)
-      let fastLine = '';
-      if ((classification === 'mistake' || classification === 'inaccuracy') && engineBestMoveUci) {
-        const slip = assembleSlipNarration({
-          playedSan: moveResult.san,
-          quality: classification,
-          cpLoss: evalLoss,
-          betterSan: engineBestMoveSan !== '?' ? engineBestMoveSan : null,
-          betterFromTo: { from: engineBestMoveUci.slice(0, 2), to: engineBestMoveUci.slice(2, 4) },
-          fenBefore: preFen,
-          bestMoveUci: engineBestMoveUci,
-          moverColor: playerColor === 'white' ? 'white' : 'black',
-        });
-        if (slip?.facts.trim()) fastLine = slip.facts.trim();
-      }
-      if (!fastLine) fastLine = buildFastMoveLine({
+      const fastLine = buildFastMoveLine({
         san: moveResult.san,
         moverIsWhite: playerColor === 'white',
         classification,
@@ -3822,7 +3284,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         commentary = fastLine;
         // The downstream speak path (WO-NARR-POLICY-05) fires
         // voiceService.speakIfFree(commentary) only when this is true.
-        llmProducedSpeech = true;
+        moveLineSpeech = true;
         // Mirror into the shared session + brain memory so the next
         // chat turn / move stays consistent with what was just spoken.
         useCoachSessionStore.getState().appendMessage({
@@ -3838,13 +3300,12 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           fen: game.fen,
           trigger: null,
         });
-        // Mirror the spoken line into the VISIBLE chat transcript (see the
-        // llm-path note above — the stores feed the brain, injectAssistantMessage
-        // feeds the chat the student reads).
+        // Mirror the spoken line into the VISIBLE chat transcript — the
+        // stores feed the brain, injectAssistantMessage feeds the chat the
+        // student reads (David 2026-07-06).
         gameChatRef.current?.injectAssistantMessage(fastLine);
       } else {
         commentary = tacticSuffix.trim();
-        llmProducedSpeech = false;
       }
     }
     // Keep evalLoss referenced even when we drop the template so it's
@@ -3940,161 +3401,22 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       // so the coach-move useEffect never sees 'playing' + coach's turn.
       game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
 
-      // WO-POLISH-02: build a clean coach-voice fallback for the blunder
-      // popup. Used verbatim if the LLM call below times out or errors.
-      // NEVER falls back to tacticSuffix — that's template prose with
-      // "Hanging: White pawn on d2" shape Dave wants gone.
-      // The blunder explanation must describe why the STUDENT's move was bad,
+      // The blunder explanation, for the card (off) and the voice (behind
+      // PLAY_VOLUNTEERS_COACHING). It describes why the STUDENT's move was bad,
       // so only THEIR OWN hanging piece counts (David 2026-07-07: "not all
-      // accurate"). An OPPONENT's hanging pawn is an opportunity, not the reason
-      // this move blundered.
+      // accurate") — an opponent's hanging pawn is an opportunity, not the
+      // reason this move blundered. NEVER the tacticSuffix ("Hanging: White
+      // pawn on d2", WO-POLISH-02). The slip verdict that led it
+      // (`assembleSlipNarration`) and the LLM alert behind
+      // USE_LLM_MOVE_COMMENTARY are DELETED (WO-STORY-MATRIX-01 P1-1, David
+      // 2026-10-30): both were computed on Play and never heard.
       const studentChar = playerColor === 'white' ? 'w' : 'b';
       const ownHanging = (tacticResult?.hangingPieces ?? []).find(
         (h) => h.color === studentChar && h.piece.toLowerCase() !== 'k',
       );
-      const ownHangingLine = ownHanging
+      const explanation = ownHanging
         ? hangingLineFor(({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[ownHanging.piece.toLowerCase()] ?? ownHanging.piece, ownHanging.square)
-        : null;
-      // 🔒 FULL-STRENGTH BLUNDER NARRATION (David 2026-09-08, "narrations better
-      // be AT FULL STRENGTH … remove that string"). State the concrete WHY — the
-      // stronger move + what this move let the opponent do — grounded (chess.js)
-      // from the engine best move already computed for the classification. Never
-      // the contentless "that gives back a big chunk". Falls back to the specific
-      // hanging-piece line, then a concrete verdict — never a vague flag.
-      let explanation: string;
-      const blunderSlip = engineBestMoveUci
-        ? assembleSlipNarration({
-            playedSan: moveResult.san,
-            quality: 'blunder',
-            cpLoss: evalLoss,
-            betterSan: engineBestMoveSan !== '?' ? engineBestMoveSan : null,
-            betterFromTo: { from: engineBestMoveUci.slice(0, 2), to: engineBestMoveUci.slice(2, 4) },
-            fenBefore: preFen,
-            bestMoveUci: engineBestMoveUci,
-            moverColor: playerColor === 'white' ? 'white' : 'black',
-          })
-        : null;
-      if (blunderSlip?.facts.trim()) {
-        explanation = blunderSlip.facts.trim();
-        // Keep the specific hanging-piece call-out when the grounded reason didn't
-        // already name that square (board-true, extra-concrete).
-        if (ownHanging && ownHangingLine && !explanation.includes(ownHanging.square)) {
-          explanation += ` ${ownHangingLine}`;
-        }
-      } else if (ownHangingLine) {
-        explanation = ownHangingLine;
-      } else {
-        explanation = `${moveResult.san} is a blunder — there was a much stronger move here.`;
-      }
-
-      // WO-POLISH-02: LLM-generated coach-voice alert. Uses the grounded
-      // context (FEN + hanging pieces + best move) so it can describe
-      // what's wrong in plain prose. Falls back to the clean template
-      // above on timeout / error — never to the tacticSuffix template.
-      // David 2026-05-31: gated behind USE_LLM_MOVE_COMMENTARY so the
-      // blunder alert speaks the instant deterministic `explanation`
-      // (computed just above) instead of paying an LLM round-trip.
-      if (USE_LLM_MOVE_COMMENTARY) {
-      try {
-        const alertContext = [
-          `Position after the student's blunder (FEN): ${moveResult.fen}`,
-          `Student color: ${playerColor}.`,
-          `Student just played: ${moveResult.san}.`,
-          `Engine evaluation after the move: ${analysis?.evaluation ?? 0} centipawns (white's perspective).`,
-          engineBestMoveSan && engineBestMoveSan !== '?'
-            ? `What the engine preferred (do NOT quote this to the student): ${engineBestMoveSan}.`
-            : '',
-          tacticResult && tacticResult.hangingPieces.length > 0
-            ? `Hanging pieces detected (coordinates + piece): ${tacticResult.hangingPieces
-                .map((p) => `${p.color === 'w' ? 'white' : 'black'} ${p.piece} on ${p.square}`)
-                .join(', ')}.`
-            : '',
-          tacticResult && tacticResult.tactics.filter((t) => t.type !== 'none').length > 0
-            ? `Tactics detected: ${tacticResult.tactics
-                .filter((t) => t.type !== 'none')
-                .map((t) => t.description)
-                .join('; ')}.`
-            : '',
-        ].filter(Boolean).join('\n');
-
-        // WO-COACH-UNIFY-01 commit 4: route blunder-alert through
-        // coachService.ask. BLUNDER_ALERT_ADDITION threads as
-        // systemPromptAddition; live FEN + just-played move flow into
-        // liveState. task='chat_response' + maxTokens=200 preserves
-        // legacy model + cost. Empty string on provider error keeps
-        // the existing fallback path (clean template above).
-        const fenSideToMove = moveResult.fen.split(' ')[1] === 'b' ? 'black' : 'white';
-        // Tactical context for the blunder alert — the brain gets the
-        // named pattern (fork/pin/etc.) + threats in opponent's PV
-        // alongside the prose ask, so it can articulate WHY the move
-        // was a blunder by tactic name. analysis is already in scope.
-        const blunderStudentColor = playerColor === 'white' ? 'w' : 'b';
-        const blunderStudentRating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
-        const blunderTactics = buildTacticsLiveContext(
-          moveResult.fen,
-          analysis ?? null,
-          blunderStudentColor,
-          blunderStudentRating,
-        );
-        void logAppAudit({
-          kind: 'coach-surface-migrated',
-          category: 'subsystem',
-          source: 'CoachGamePage.blunderAlert.buildLiveTactics',
-          summary: `tactics ctx: immediate=${blunderTactics.immediate.length} hanging=${blunderTactics.hanging.length} threats=${blunderTactics.threats.length} opps=${blunderTactics.opportunities.length} depth=${blunderTactics.lookaheadDepth}`,
-          fen: moveResult.fen,
-        });
-        const spineAlert = await coachService.ask(
-          {
-            surface: 'game-chat',
-            ask: alertContext,
-            liveState: {
-              surface: 'game-chat',
-              fen: moveResult.fen,
-              userJustDid: `Student blundered with ${moveResult.san}`,
-              whoseTurn: fenSideToMove,
-              tactics: blunderTactics,
-            },
-          },
-          {
-            task: 'chat_response',
-            maxTokens: 200,
-            maxToolRoundTrips: 1,
-            systemPromptAddition: BLUNDER_ALERT_ADDITION,
-          },
-        );
-        const alertText = unwrapSpineError(spineAlert.text);
-        const trimmed = alertText.trim();
-        if (trimmed && !trimmed.startsWith('⚠️')) {
-          // G3 ENFORCEMENT: DROP any blunder-alert sentence claiming a tactic
-          // outside the bounded vocabulary the envelope shipped (was audit-only
-          // — a hallucinated fork/pin reached the blunder pause; David
-          // 2026-07-04 PostHog sweep). If the strip empties the LLM prose, keep
-          // the code-computed template `explanation` set above.
-          let alertProse = trimmed;
-          try {
-            const strip = stripUngroundedTacticSentences(alertProse, blunderTactics);
-            if (strip.dropped.length > 0) {
-              alertProse = strip.clean.trim();
-              void logAppAudit({
-                kind: 'claim-validator-trip',
-                category: 'subsystem',
-                source: 'CoachGamePage.blunderAlert.tacticClaimGate',
-                summary: `out-of-vocab tactics · dropped ${strip.dropped.length} sentence(s)`,
-                details: JSON.stringify({
-                  dropped: strip.dropped.slice(0, 3),
-                  surface: 'game-chat',
-                  fen: moveResult.fen,
-                }),
-                fen: moveResult.fen,
-              });
-            }
-          } catch { /* keep prose on a validator fault */ }
-          if (alertProse) explanation = alertProse;
-        }
-      } catch {
-        // fall through with the clean template
-      }
-      }
+        : `${moveResult.san} is a blunder — there was a much stronger move here.`;
 
       if (BLUNDER_CARD_ENABLED) {
         setBlunderPause({
@@ -4172,14 +3494,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       raiseWhyForSlip();
     }
 
-    // Per-move narration. ONLY speak when the LLM actually produced
-    // personality-driven prose. The deterministic tactic suffix
-    // ("Hanging: Black rook on h8, ...") is great for the move-list
-    // display but is robotic and breaks the voice when read aloud —
-    // and it would fire on every move regardless of the
+    // Per-move narration. ONLY speak the move line built above. The
+    // deterministic tactic suffix ("Hanging: Black rook on h8, ...") is
+    // great for the move-list display but is robotic and breaks the voice
+    // when read aloud — and it would fire on every move regardless of the
     // 'key-moments' setting. Audit build ac8088d caught this bug.
     // WO-NARR-POLICY-03.
-    if (llmProducedSpeech && PLAY_VOLUNTEERS_COACHING) {
+    if (moveLineSpeech && PLAY_VOLUNTEERS_COACHING) {
       void logAppAudit({
         kind: 'coach-move-narration-fired',
         category: 'subsystem',
@@ -4447,7 +3768,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // Transition from postgame back to playing mode with chat
     game.resetGame();
     moveCountRef.current = 0;
-    openingIntroSpokenRef.current = false;
     setGameState({
       gameId: `game-${Date.now()}`,
       playerColor,
@@ -4820,7 +4140,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             // (WO-PHASE-NARRATION-01).
             phaseStateRef.current = createPhaseTransitionState();
     phaseNoFireSigRef.current = null;
-            openingIntroSpokenRef.current = false;
             setGameState({
               gameId: `game-${Date.now()}`,
               playerColor,

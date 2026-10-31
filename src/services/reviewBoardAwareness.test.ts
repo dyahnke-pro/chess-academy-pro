@@ -3,8 +3,7 @@
 // EVEN BEING POSSIBLE"). Each test pins one falsity class the full-review audit
 // caught, on a constructed legal board — so the fix can't silently regress.
 import { describe, it, expect } from 'vitest';
-import { Chess } from 'chess.js';
-import { describeMoveGeometry, assembleMovePurpose, seatPieceReferences } from './groundedAnswer';
+import { describeMoveGeometry, seatPieceReferences } from './groundedAnswer';
 
 describe('describeMoveGeometry — a "fork" must win something (F15)', () => {
   it('does not call hitting two DEFENDED pawns a fork', () => {
@@ -23,20 +22,6 @@ describe('describeMoveGeometry — a "fork" must win something (F15)', () => {
     const geo = describeMoveGeometry(fen, 'Nf6+', 'white');
     // Nf6+ checks the king; a real forcing fork/geometry is allowed to speak.
     expect(geo).toBeTruthy();
-  });
-});
-
-describe('assembleMovePurpose — a wing pawn is not a centre move (F1)', () => {
-  it('never claims a rook-file pawn "stakes out space in the center"', () => {
-    const fen = new Chess().fen();
-    const a = assembleMovePurpose({ fenBefore: fen, san: 'h4', moverColor: 'white', tactics: null });
-    expect(a?.facts ?? '').not.toMatch(/center|centre/i);
-  });
-
-  it('keeps the centre claim for a genuine central pawn', () => {
-    const fen = new Chess().fen();
-    const a = assembleMovePurpose({ fenBefore: fen, san: 'e4', moverColor: 'white', tactics: null });
-    expect(a?.facts ?? '').toMatch(/center|centre/i);
   });
 });
 

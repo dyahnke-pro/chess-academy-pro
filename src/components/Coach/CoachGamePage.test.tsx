@@ -94,7 +94,6 @@ vi.mock('../../services/coachApi', () => ({
 
 vi.mock('../../services/coachTemplates', () => ({
   getScenarioTemplate: vi.fn().mockReturnValue('Sure, take it back.'),
-  getMoveCommentaryTemplate: vi.fn().mockReturnValue('Solid choice.'),
 }));
 
 vi.mock('../../services/coachPrompts', () => ({
