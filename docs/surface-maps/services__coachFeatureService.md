@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6250 lines · 31 exports · 66 importers · 80 tests · 4 audits**
+**6260 lines · 31 exports · 67 importers · 81 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -54,6 +54,7 @@
 - `src/services/reviewCorpusNote.test.ts`
 - `src/services/reviewCorpusSweep.test.ts`
 - `src/services/reviewDeepIdeaStake.test.ts`
+- `src/services/reviewDeepIdeaStem.test.ts`
 - `src/services/reviewDeepThreat.test.ts`
 - `src/services/reviewForesight.test.ts`
 - `src/services/reviewHabitClosesTurn.test.ts`
@@ -100,7 +101,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateNarrativeSummary` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:551`
+- `src/components/Coach/CoachGameReview.tsx:558`
 - `src/services/moveCost.keyMoments.test.ts:43`
 - `src/services/moveCost.keyMoments.test.ts:45`
 - `src/services/recapSeat.test.ts:17`
@@ -117,12 +118,12 @@
 - `src/services/coachFeatureService.test.ts:881`
 
 ### `segmentNamedArrows` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:3219`
+- `src/components/Coach/CoachGameReview.tsx:3224`
 - `src/services/namedMoveArrows.test.ts:54`
 - `src/services/namedMoveArrows.test.ts:58`
 
 ### `foldReviewRefrains` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1824`
+- `src/components/Coach/CoachGameReview.tsx:1829`
 - `src/services/reviewLedgerCounters.test.ts:55`
 - `src/services/reviewLedgerCounters.test.ts:61`
 
@@ -142,7 +143,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:611`
+- `src/components/Coach/CoachGameReview.tsx:618`
 - `src/services/coachFeatureService.test.ts:723`
 - `src/services/coachFeatureService.test.ts:731`
 - `src/services/coachFeatureService.test.ts:763`
@@ -274,7 +275,7 @@
 - `src/test/reviewExplore.continuity.test.ts:45`
 
 ### `buildReviewSegmentsYielding` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:1823`
+- `src/components/Coach/CoachGameReview.tsx:1828`
 - `src/services/reviewBuildYields.test.ts:35`
 
 ### `defaultIntroText` (function) — 4 call sites
@@ -296,7 +297,7 @@
 - `src/test/mateSaidOnce.gate.test.ts:69`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4262`
+- `src/components/Coach/CoachGameReview.tsx:4267`
 - `src/services/coachFeatureService.test.ts:793`
 - `src/services/coachFeatureService.test.ts:796`
 - `src/services/coachFeatureService.test.ts:803`
@@ -322,10 +323,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8790`
-- `src/components/Coach/CoachTeachPage.tsx:8888`
-- `src/components/Coach/CoachTeachPage.tsx:11729`
-- `src/components/Coach/CoachTeachPage.tsx:12120`
+- `src/components/Coach/CoachTeachPage.tsx:8779`
+- `src/components/Coach/CoachTeachPage.tsx:8877`
+- `src/components/Coach/CoachTeachPage.tsx:11730`
+- `src/components/Coach/CoachTeachPage.tsx:12121`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/utils/justCaptured.test.ts:20`
@@ -342,16 +343,17 @@
 - `src/services/reviewWalk1500.test.ts:17`
 
 ### `openingNameForKey` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:246`
+- `src/components/Coach/CoachGameReview.tsx:253`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:42`
 
-### `generateReviewNarration` (function) — 17 call sites
+### `generateReviewNarration` (function) — 18 call sites
 - `src/services/proofBacklog.report.test.ts:104`
 - `src/services/reviewBetterLineWhy.test.ts:58`
 - `src/services/reviewBetterLineWhy.test.ts:74`
 - `src/services/reviewBetterLineWhy.test.ts:84`
 - `src/services/reviewCorpusSweep.test.ts:148`
 - `src/services/reviewDeepIdeaStake.test.ts:31`
+- `src/services/reviewDeepIdeaStem.test.ts:42`
 - `src/services/reviewDeepThreat.test.ts:36`
 - `src/services/reviewDeepThreat.test.ts:62`
 - `src/services/reviewDeepThreat.test.ts:114`
@@ -444,6 +446,7 @@
 - `src/services/reviewCorpusNote.test.ts`
 - `src/services/reviewCorpusSweep.test.ts`
 - `src/services/reviewDeepIdeaStake.test.ts`
+- `src/services/reviewDeepIdeaStem.test.ts`
 - `src/services/reviewDeepThreat.test.ts`
 - `src/services/reviewDepth.eval.measure.test.ts`
 - `src/services/reviewForesight.test.ts`
