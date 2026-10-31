@@ -5614,7 +5614,7 @@ tab!!! That is a pure playing surface").**
   One switch, `PLAY_VOLUNTEERS_COACHING = false` in `CoachGamePage.tsx`,
   gated by `CoachGamePage.playSilent.test.ts` (every unprompted speak site
   must sit inside it). The deep-link entry beat, the LLM per-move commentary
-  and the slip verdict are deleted, not switched (WO-STORY-MATRIX-01 P1-1,
+  and the slip verdict are deleted, not switched off (WO-STORY-MATRIX-01 P1-1,
   G8.5 rule 4); the same gate fails if they come back. What the student TAPS still answers (Read this
   position, Why?, Hint, typed chat, mic). Slips are still RECORDED
   (`raiseWhyForSlip`) and taught in post-game review, which keeps its voice.

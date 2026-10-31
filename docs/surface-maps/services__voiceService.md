@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3194 lines · 15 exports · 110 importers · 109 tests · 31 audits**
+**3194 lines · 15 exports · 110 importers · 109 tests · 30 audits**
 
 ## Locked rules that govern this surface
 
@@ -438,7 +438,6 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-read-position-prod.mjs`
 - `scripts/audit-review-noise-walk.mjs`
 - `scripts/audit-review-overhaul-prod.mjs`
-- `scripts/audit-rolodex-deep-links.mjs`
 - `scripts/audit-settings-behavior.mjs`
 - `scripts/audit-teach-corpus-spoken-prod.mjs`
 - `scripts/audit-teach-on-topic-prod.mjs`

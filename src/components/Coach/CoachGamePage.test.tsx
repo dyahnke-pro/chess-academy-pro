@@ -298,13 +298,11 @@ describe('CoachGamePage', () => {
   });
 
   // ─── Rolodex entry beat — WO-ROLODEX-PLUMBING-01 item 1 ─────────────────────
-  // The entry beat is the rolodex's "the coach knows what you tapped" signal.
-  // Wires `intendedOpening` (set by the rolodex URL deep-link) through to
-  // `voiceService.speakForced` AND the chat-mirror inject path. These tests
-  // pin both boundaries so a regression in the voice channel (e.g.
-  // useNarration → speakForced wire-up breaking) is caught at the unit-test
-  // level, since the e2e audit assertion only verifies the chat-mirror
-  // (voice routing in headless Chromium is too fragile to gate on).
+  // The entry beat ("Italian Game as White. …") was the rolodex deep link's
+  // spoken line. Play volunteers nothing (David 2026-09-23), and its producer
+  // is DELETED, not switched off (WO-STORY-MATRIX-01 P1-1, 2026-10-30). These
+  // tests pin that no deep link speaks it; the chat half is
+  // `audit-rolodex-deep-links` (`no-entry-beat`).
   describe('rolodex entry beat', () => {
     beforeEach(() => {
       // Reset between tests so guard refs don't carry over.
