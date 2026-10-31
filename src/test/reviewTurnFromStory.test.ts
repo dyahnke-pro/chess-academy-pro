@@ -6,14 +6,13 @@
  * the walk's closing line then ran the whole selector a SECOND time over the
  * segments, with the turn passed in, to find the same move. Now the build reads
  * the turn once (`turnThesis`: the top of the one turn ranking, either side) and
- * notes it in its story; the closing line reads it off the walk's last
- * checkpoint (`storyTurn`).
+ * notes it in its story; the closing line reads it off the narration's story
+ * (`storyTurn`, the one checkpoint since P1-8d).
  */
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { reviewSegments, type ReplayGame } from './replayGame';
-import { spokenLedgerSeed } from '../services/reviewNarrationBuild';
-import { storyOf, storyTurn } from '../services/gameStory';
+import { createStoryStore, storyTurn } from '../services/gameStory';
 import { gameTurn } from '../services/turningPoints';
 import { renderThesis } from '../services/teachingSelector';
 
@@ -22,8 +21,9 @@ describe('the walk\'s turning point comes from the story the build kept', () => 
 
   for (const g of games) {
     it(`${g.id}: the story's turn is the one ranking's top, said as a thesis`, () => {
-      const segs = reviewSegments(g, g.rating);
-      const turn = storyTurn(storyOf(spokenLedgerSeed({ intro: '', segments: segs, closing: null }, Number.POSITIVE_INFINITY)?.story ?? null));
+      const story = createStoryStore(g.id);
+      const segs = reviewSegments(g, g.rating, story);
+      const turn = storyTurn(story.current());
       const ranked = gameTurn(segs);
       // Non-vacuous: every fixture game turned somewhere.
       expect(ranked, 'the fixture game has a turn').not.toBeNull();

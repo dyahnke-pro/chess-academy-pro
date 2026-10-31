@@ -53,6 +53,20 @@
  * and Review's never carried into a rebuilt or explored line. A cause chain
  * said is a claim in the one claim map (`causalChainKey`), the same key on
  * both surfaces.
+ *
+ * Commit 8d moves REVIEW'S WHOLE BUILD in: the twenty-six say-once ledgers its
+ * walk kept (each a `SaidSet` over the one claim map under its own prefix —
+ * `storyLedger` — and its spoken-sentence keys in `sentences`), the flags it
+ * seeded and the ones it did not (`tradeIdeaSpoken`), the story lines told,
+ * the habits taught and the ply each principle was taught. What it replaced:
+ * a key list stamped on every segment (`ledgerKeys`) beside a checkpoint
+ * stamped on some, a seed rebuilt from both (`spokenLedgerSeed`), the
+ * flags-as-keys round trip (`syncFlags` / `restoreFlags`) — and four memories
+ * no seed carried, so a rebuild of the plies ahead re-told a story line, re-
+ * taught a habit and lost when each principle was said. Now the narration
+ * holds ONE checkpoint (`ReviewNarration.story`), and what a walk had said
+ * through ply k is that checkpoint taken back to k (`storyThrough`) — rewind
+ * is the only way a seed is cut.
  */
 import { positionOf } from '../utils/samePosition';
 import type { PlanThread } from './planThread';
@@ -306,6 +320,40 @@ export function keysUnder(keys: Iterable<string>, prefix: string): Set<string> {
   return out;
 }
 
+/** A SAY-ONCE LEDGER THAT IS THE STORY (P1-8d): read as a set, written by
+ *  `add`. A plain `Set` fits the same shape, so a reader that takes one
+ *  (`renderFundamentalVerdict`'s `seen`, the voice package's prior keys) takes
+ *  either and never learns where the memory lives. */
+export interface SaidSet<K extends string = string> extends ReadonlySet<K> {
+  add(key: K): void;
+}
+
+/** One of a surface's say-once memories, kept in the story's one claim map
+ *  under its own prefix (or its spoken-sentence keys, in `sentences`). `add`
+ *  says the key at the ply the story is at (`reach`), so a takeback, a
+ *  checkpoint and a seed treat it like every other thing said — there is no
+ *  second copy to restore or forget. */
+export function storyLedger<K extends string = string>(store: StoryStore, prefix: string, of: 'claims' | 'sentences' = 'claims'): SaidSet<K> {
+  const map = (): ReadonlyMap<string, number> => (of === 'claims' ? store.current().said : store.current().sentences);
+  const now = (): Set<K> => keysUnder(map().keys(), prefix) as Set<K>;
+  const view: SaidSet<K> = {
+    has: (key: K): boolean => map().has(`${prefix}${key}`),
+    add: (key: K): void => {
+      const at = store.current().ply;
+      store.commit(at, of === 'claims' ? { claims: [`${prefix}${key}`] } : { sentences: [`${prefix}${key}`] });
+    },
+    get size(): number { return now().size; },
+    forEach: (cb: (value: K, key: K, set: ReadonlySet<K>) => void, thisArg?: unknown): void => {
+      for (const k of now()) cb.call(thisArg, k, k, view);
+    },
+    entries: () => now().entries(),
+    keys: () => now().keys(),
+    values: () => now().values(),
+    [Symbol.iterator]: () => now()[Symbol.iterator](),
+  };
+  return view;
+}
+
 // ── THE THREADS, READ ───────────────────────────────────────────────────────
 
 /** The ply a plan was first STATED this game, or null. */
@@ -438,6 +486,83 @@ export function storyOf(checkpoint: string | null): GameStory {
   return s.current();
 }
 
+/** WHAT A WALK HAD SAID THROUGH A PLY (P1-8d): the game's story as it stood
+ *  there — the seed a rebuild of the plies ahead starts from, restored at
+ *  `throughPly + 1`. */
+export interface StorySeed {
+  readonly throughPly: number;
+  readonly checkpoint: string;
+}
+
+/** Has the story said or noted anything at all? */
+function storySaysAnything(c: Checkpoint): boolean {
+  return c.said.length + c.sentences.length + c.threads.length + c.events.length + c.plans.length > 0;
+}
+
+function readCheckpoint(checkpoint: string | null): Checkpoint | null {
+  try {
+    const cp = checkpoint ? JSON.parse(checkpoint) as Checkpoint : null;
+    return cp && cp.v === CHECKPOINT_V ? cp : null;
+  } catch {
+    return null;
+  }
+}
+
+/** One story through `ply`, the other after it: every entry the first said at
+ *  or before `ply`, then every entry the second said after it that the first
+ *  had not. A key keeps the ply it was FIRST said. */
+function spliceCheckpoints(early: Checkpoint | null, late: Checkpoint | null, ply: number): Checkpoint {
+  const by = (list: Array<[string, number]> | undefined, keep: (at: number) => boolean): Array<[string, number]> => (list ?? []).filter(([, at]) => keep(at));
+  const merged = (a: Array<[string, number]> | undefined, b: Array<[string, number]> | undefined): Array<[string, number]> => {
+    const out = new Map(by(a, (at) => at <= ply));
+    for (const [k, at] of by(b, (p) => p > ply)) if (!out.has(k)) out.set(k, at);
+    return [...out];
+  };
+  const threads = new Map<ThreadKey, ThreadSaid[]>();
+  for (const [k, lines] of early?.threads ?? []) {
+    const kept = lines.filter((s) => s.ply <= ply);
+    if (kept.length > 0) threads.set(k, kept);
+  }
+  for (const [k, lines] of late?.threads ?? []) {
+    const after = lines.filter((s) => s.ply > ply);
+    if (after.length > 0) threads.set(k, [...(threads.get(k) ?? []), ...after]);
+  }
+  // THE TURN IS THE NEWEST BUILD'S: it is a read of the whole game, stated
+  // when the walk reaches its end — the ply it carries is where the game
+  // turned, not where it was said — so a later build's turn replaces the
+  // earlier one wherever it falls.
+  const lateTurn = (late?.events ?? []).some((e) => e.kind === 'turn');
+  return {
+    v: CHECKPOINT_V,
+    gameId: late?.gameId ?? early?.gameId ?? 'story',
+    ply: Math.max(Math.min(early?.ply ?? 0, ply), late && late.ply > ply ? late.ply : 0),
+    said: merged(early?.said, late?.said),
+    sentences: merged(early?.sentences, late?.sentences),
+    threads: [...threads],
+    events: [
+      ...(early?.events ?? []).filter((e) => e.ply <= ply && !(lateTurn && e.kind === 'turn')),
+      ...(late?.events ?? []).filter((e) => e.ply > ply || e.kind === 'turn'),
+    ],
+    plans: [...(early?.plans ?? []).filter((p) => p.ply <= ply), ...(late?.plans ?? []).filter((p) => p.ply > ply)],
+  };
+}
+
+/** The story a checkpoint holds as it stood at `ply`: everything said after
+ *  it taken back, as a takeback would (`rewind`). Null when nothing had been
+ *  said by then. */
+export function storyThrough(checkpoint: string | null, ply: number): string | null {
+  const cut = spliceCheckpoints(readCheckpoint(checkpoint), null, ply);
+  return storySaysAnything(cut) ? JSON.stringify(cut) : null;
+}
+
+/** THE WALK'S STORY ACROSS A SWAP: what the walk said through `ply` (the plies
+ *  the student heard), then what the newer build says after it (the plies
+ *  ahead) — the story of the merged narration. Null when neither says anything. */
+export function spliceStory(walked: string | null, rebuilt: string | null, ply: number): string | null {
+  const cut = spliceCheckpoints(readCheckpoint(walked), readCheckpoint(rebuilt), ply);
+  return storySaysAnything(cut) ? JSON.stringify(cut) : null;
+}
+
 /** A fact's thread, when it is on one. */
 function threadOf(f: Pick<CoachFact, 'thread'>): ThreadKey | null {
   return typeof f.thread === 'string' ? f.thread : null;
@@ -482,17 +607,22 @@ const emptyDesk = (): PlanDesk => ({ thread: emptyPlanThread(), arc: { student: 
 const copyDesk = (d: PlanDesk): PlanDesk => ({ thread: copyPlanThread(d.thread), arc: { student: d.arc.student, opponent: d.arc.opponent }, character: d.character });
 
 /** The serialized shape. A PlanThread's Sets travel as arrays. v2 (P1-8c)
- *  carries the events and the character; a v1 checkpoint has neither and is
- *  read as the empty story (the narration cache's rev moved with it). */
+ *  carried the events and the character; v3 (P1-8d) carries the plan state of
+ *  every ply that changed it, not the last one only, so a checkpoint taken
+ *  back to an earlier ply (`storyThrough`) has the plans as they stood there.
+ *  An older checkpoint is read as the empty story (the narration cache's rev
+ *  moved with it). */
+const CHECKPOINT_V = 3;
+interface CheckpointDesk { ply: number; thread: Omit<PlanThread, 'howSaid' | 'whyAsked'> & { howSaid: string[]; whyAsked: string[] }; arc: Record<FactSeat, ArcState>; character: CharacterState }
 interface Checkpoint {
-  v: 2;
+  v: typeof CHECKPOINT_V;
   gameId: string;
   ply: number;
   said: Array<[string, number]>;
   sentences: Array<[string, number]>;
   threads: Array<[ThreadKey, ThreadSaid[]]>;
   events: StoryEvent[];
-  plans: { ply: number; thread: Omit<PlanThread, 'howSaid' | 'whyAsked'> & { howSaid: string[]; whyAsked: string[] }; arc: Record<FactSeat, ArcState>; character: CharacterState } | null;
+  plans: CheckpointDesk[];
 }
 
 export function createStoryStore(gameId: string): StoryStore {
@@ -627,34 +757,32 @@ export function createStoryStore(gameId: string): StoryStore {
       turn = null;
     },
     serialize(): string {
-      const last = plans[plans.length - 1];
       const cp: Checkpoint = {
-        v: 2, gameId: id, ply,
+        v: CHECKPOINT_V, gameId: id, ply,
         said: [...said], sentences: [...sentences], threads: [...threads].map(([k, t]) => [k, t.said]),
         events: [...events],
-        plans: last ? {
-          ply: last.ply,
-          thread: { ...last.desk.thread, howSaid: [...last.desk.thread.howSaid], whyAsked: [...last.desk.thread.whyAsked] },
-          arc: { student: last.desk.arc.student, opponent: last.desk.arc.opponent },
-          character: last.desk.character,
-        } : null,
+        plans: plans.map(({ ply: at, desk }) => ({
+          ply: at,
+          thread: { ...desk.thread, howSaid: [...desk.thread.howSaid], whyAsked: [...desk.thread.whyAsked] },
+          arc: { student: desk.arc.student, opponent: desk.arc.opponent },
+          character: desk.character,
+        })),
       };
       return JSON.stringify(cp);
     },
     restore(checkpoint: string | null): void {
-      let cp: Checkpoint | null = null;
-      try { cp = checkpoint ? JSON.parse(checkpoint) as Checkpoint : null; } catch { cp = null; }
-      if (!cp || cp.v !== 2) { store.newGame(id); return; }
+      const cp = readCheckpoint(checkpoint);
+      if (!cp) { store.newGame(id); return; }
       id = cp.gameId;
       ply = cp.ply;
       said = new Map(cp.said);
       sentences = new Map(cp.sentences);
-      threads = new Map(cp.threads.map(([k, said]) => [k, { said }]));
+      threads = new Map(cp.threads.map(([k, said]) => [k, { said: [...said] }]));
       events = [...cp.events];
-      plans = cp.plans ? [{
-        ply: cp.plans.ply,
-        desk: { thread: { ...cp.plans.thread, howSaid: new Set(cp.plans.thread.howSaid), whyAsked: new Set(cp.plans.thread.whyAsked) }, arc: cp.plans.arc, character: cp.plans.character },
-      }] : [];
+      plans = cp.plans.map((p) => ({
+        ply: p.ply,
+        desk: { thread: { ...p.thread, howSaid: new Set(p.thread.howSaid), whyAsked: new Set(p.thread.whyAsked) }, arc: p.arc, character: p.character },
+      }));
       turn = null;
     },
   };

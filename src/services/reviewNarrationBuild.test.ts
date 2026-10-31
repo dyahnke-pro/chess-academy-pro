@@ -8,9 +8,10 @@ vi.mock('./coachFeatureService', () => ({
 }));
 
 import { db } from '../db/schema';
-import { getOrBuildReviewNarration, spokenLedgerSeed, type ReviewNarrationRequest } from './reviewNarrationBuild';
+import { getOrBuildReviewNarration, storySeed, storyAtMerge, mergeReviewNarration, type ReviewNarrationRequest } from './reviewNarrationBuild';
+import { createStoryStore, storyOf } from './gameStory';
 
-const narration = { intro: 'intro', segments: [{ ply: 1, san: 'e4', narration: 'x' }], closing: null };
+const narration = { intro: 'intro', segments: [{ ply: 1, san: 'e4', narration: 'x' }], closing: null, story: null };
 
 function request(gameId: string): ReviewNarrationRequest {
   return {
@@ -60,14 +61,43 @@ describe('reviewNarrationBuild — one door for a game\'s review narration', () 
   });
 });
 
-describe('the seed carries the story the walk had (WO-STORY-MATRIX-01 P1-8b)', () => {
-  const seg = (ply: number, extra: Record<string, unknown>) => ({ ply, san: 'x', narration: null, ...extra });
-  const walk = { intro: '', closing: null, segments: [seg(5, { ledgerKeys: ['h:a'], storyCheckpoint: 'cp5' }), seg(9, { storyCheckpoint: 'cp9' }), seg(7, { ledgerKeys: ['h:b'] }), seg(12, { storyCheckpoint: 'cp12' })] } as never;
-  it('the last checkpoint at or before the walked ply, in ply order', () => {
-    expect(spokenLedgerSeed(walk, 10)).toEqual({ throughPly: 10, keys: new Set(['h:a', 'h:b']), story: 'cp9' });
-    expect(spokenLedgerSeed(walk, 8)?.story).toBe('cp5');
+describe('the narration holds ONE story; a seed is it taken back to the ply walked (WO-STORY-MATRIX-01 P1-8d)', () => {
+  // A walk whose story said a hint at ply 5, another at 7, a plan at 9 and a
+  // sentence at 12 — the shape a build leaves on the narration.
+  const walkStory = (): string => {
+    const s = createStoryStore('g');
+    s.commit(5, { claims: ['h:a'] });
+    s.commit(7, { claims: ['h:b'] });
+    s.commitThreads(9, [{ key: 'student|plan-aim:passer:c', kind: 'stated' }]);
+    s.commit(12, { sentences: ['said at twelve'] });
+    return s.serialize();
+  };
+  const walk = { intro: '', closing: null, segments: [], story: walkStory() } as never;
+
+  it('everything said through the walked ply, nothing after', () => {
+    const seed = storySeed(walk, 10);
+    expect(seed?.throughPly).toBe(10);
+    const at10 = storyOf(seed?.checkpoint ?? null);
+    expect([...at10.said.keys()]).toEqual(['h:a', 'h:b']);
+    expect([...at10.threads.keys()]).toEqual(['student|plan-aim:passer:c']);
+    expect(at10.sentences.size).toBe(0);
+    expect([...storyOf(storySeed(walk, 8)?.checkpoint ?? null).threads.keys()]).toEqual([]);
   });
-  it('no checkpoint yet: the walk had said no plan', () => {
-    expect(spokenLedgerSeed(walk, 4)?.story).toBeNull();
+
+  it('nothing said yet: no seed', () => {
+    expect(storySeed(walk, 4)).toBeNull();
+    expect(storySeed({ intro: '', closing: null, segments: [], story: null } as never, 40)).toBeNull();
+  });
+
+  it('a swap keeps the walk\'s story through the frozen ply and takes the newer build\'s after it', () => {
+    const next = createStoryStore('g');
+    next.commit(3, { claims: ['h:early-guess'] }); // the newer build's own past: not what the walk said
+    next.commit(14, { claims: ['h:ahead'] });
+    const nextNarration = { intro: 'i2', closing: null, segments: [], story: next.serialize() };
+    const merged = mergeReviewNarration(walk, nextNarration as never, 10, true);
+    expect([...storyOf(merged.story).said.keys()]).toEqual(['h:a', 'h:b', 'h:ahead']);
+    // The instrument reads the same stories: two keys spoken, both unknown to
+    // the newer build by then, none said again after.
+    expect(storyAtMerge(walk, nextNarration as never, 10)).toEqual({ spoken: 2, missing: 2, reSaid: 0, reSaidKeys: [] });
   });
 });

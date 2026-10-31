@@ -52,7 +52,7 @@ import { buildCriticalMomentQuestion, judgeCriticalMomentPick, type CriticalMome
 import { computeTurningPointHinge } from '../../services/reviewHinge';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { renderThesis } from '../../services/teachingSelector';
-import { storyOf, storyTurn, type GameStory } from '../../services/gameStory';
+import { createStoryStore, storyOf, storyTurn, type GameStory } from '../../services/gameStory';
 import { registerFor } from '../../coach/surfaceContract';
 import { buildOpeningTheoryLecture, buildTheoryLectureBeats, lectureSequence, lectureNoteSelector, loadLectureCorpus, resolveCuratedOpeningIdeas, enrichLectureWithEngine, warmLectureSources, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
@@ -96,7 +96,7 @@ import { resolveCoachNarration } from '../../utils/coachNarration';
 import { logAppAudit } from '../../services/appAuditor';
 import { recordReviewedGame } from '../../services/autoAnalyzeGame';
 import { db } from '../../db/schema';
-import { getOrBuildReviewNarration, isReviewUncapped, mergeReviewNarration, reviewMoveInputsFrom, spokenLedgerSeed, ledgerAtMerge } from '../../services/reviewNarrationBuild';
+import { getOrBuildReviewNarration, isReviewUncapped, mergeReviewNarration, reviewMoveInputsFrom, storySeed, storyAtMerge } from '../../services/reviewNarrationBuild';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import { admitArrow } from '../../services/arrowDoor';
@@ -208,10 +208,10 @@ const REVIEW_LOCKED: Record<'play' | 'takeBack' | 'setPosition' | 'reset', strin
   reset: 'reset_board is locked on the review surface — the student can use the Jump-to-Start nav button to rewind.',
 };
 
-/** The game's story as the walk's newest build left it: the last checkpoint on
- *  its segments (WO-STORY-MATRIX-01 P1-8c) — where the build kept the turn. */
+/** The game's story as the walk's newest build left it — the narration's one
+ *  checkpoint (WO-STORY-MATRIX-01 P1-8d), where the build kept the turn. */
 function walkStory(narration: ReviewNarration): GameStory {
-  return storyOf(spokenLedgerSeed(narration, Number.POSITIVE_INFINITY)?.story ?? null);
+  return storyOf(narration.story);
 }
 
 /** One ply of a line walked on the review board, through the arrow door —
@@ -657,7 +657,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // A walk already under way keeps what it said: the build that replaces the
     // plies ahead starts its say-once ledgers from them (review noise walk
     // 2026-10-20: "…is worth more than the pawn" said again after a swap).
-    const spokenBefore = walkStartedRef.current ? spokenLedgerSeed(walkNarration, walkPlyRef.current) : null;
+    const spokenBefore = walkStartedRef.current ? storySeed(walkNarration, walkPlyRef.current) : null;
     void getOrBuildReviewNarration({
       gameId: cacheGameId, moves: reviewMoveInputs.slice(0, target), playerColor, openingName, result, playerRating, coachNarration, uncapped,
       complete: buildComplete, spokenBefore,
@@ -698,7 +698,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       if (narration && narration.segments.length > 0) {
         const frozen = walkStartedRef.current ? walkPlyRef.current : 0;
         if (frozen > 0) {
-          const ledger = ledgerAtMerge(walkNarration, narration, frozen);
+          const ledger = storyAtMerge(walkNarration, narration, frozen);
           void logAppAudit({
             kind: 'review-walk-merged',
             category: 'subsystem',
@@ -1822,11 +1822,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // loose-piece formula or a motif heard on the walk is not said again here.
       let onGame = 0;
       while (onGame < args.history.length && onGame < moves.length && moves[onGame]?.san === args.history[onGame]) onGame += 1;
-      const walked = spokenLedgerSeed(walkNarration, walkPlyRef.current);
-      const seed = walked ? { throughPly: Math.min(walked.throughPly, onGame), keys: walked.keys, story: walked.story } : null;
+      const walked = storySeed(walkNarration, walkPlyRef.current);
+      const seed = walked ? { throughPly: Math.min(walked.throughPly, onGame), checkpoint: walked.checkpoint } : null;
+      // The line's own story, seeded from the walk's — read here only for the
+      // refrain fold; the walk keeps its own.
+      const lineStory = createStoryStore(props.gameId ?? 'review');
       // Stepped, so the screen runs while the whole line is re-read.
-      const segs = await buildReviewSegmentsYielding(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly, seed);
-      foldReviewRefrains(segs, seed);
+      const segs = await buildReviewSegmentsYielding(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly, seed, lineStory);
+      foldReviewRefrains(segs, lineStory, seed);
       text = segs[segs.length - 1]?.narration ?? null;
     } catch { text = null; }
     // A newer move on the free board supersedes this one while it was read.

@@ -67,6 +67,7 @@ import { planRaceClause, planRaceProof, pawnSquareTaken, pawnSquareRaceProof } f
 import { kingReadsForBestLine } from './kingAttackReads';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
+import type { SaidSet } from './gameStory';
 import { renderFundamentalVerdict } from './principleVoice';
 import { errorWhy, priorMoveLeadingTo, replyKeptWin, type SecondReads } from './inaccuracyCall';
 import { toOtherSeat } from '../utils/seatPronouns';
@@ -218,7 +219,7 @@ interface MoveFactContext {
    *  the caller that walks the game: a fresh set per ply (what this facet used
    *  to build) re-taught the same tempo lesson four times in one review
    *  (walk 5, R19). */
-  seenFundamentals: Set<FundamentalId>;
+  seenFundamentals: SaidSet<FundamentalId>;
   /** THE WO-TEACH-02 INPUTS — computed by the caller that walks the game
    *  (engine work happens before this synchronous builder runs). REQUIRED:
    *  `NO_TEACHING_CONTEXT` is the honest answer for a caller that has none,

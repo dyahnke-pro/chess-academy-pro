@@ -18,6 +18,7 @@
 import { costWords } from './engineConstants';
 import { lineShape, withArticle } from '../utils/andList';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
+import type { SaidSet } from './gameStory';
 import { continueSentence } from '../utils/openSentence';
 import { unmarked } from '../utils/sanMark';
 
@@ -774,8 +775,9 @@ function shortVerdict(a: PrincipleAttribution): string {
 interface FundamentalVerdictOptions {
   /** 1-based ply of the move (stem rotation). */
   ply: number;
-  /** Fundamentals already spoken in full this game — mutated as verdicts are issued. */
-  seen: Set<FundamentalId>;
+  /** Fundamentals already spoken in full this game — mutated as verdicts are
+   *  issued (a plain set, or the story's own ledger in Review). */
+  seen: SaidSet<FundamentalId>;
   /** The opponent's reply when the surface knows it (Learn after it lands,
    *  review from the next ply). REQUIRED, `null` when unknown: a hung piece
    *  they did not take is a MISS, never "is free material" (re-walk 1380,

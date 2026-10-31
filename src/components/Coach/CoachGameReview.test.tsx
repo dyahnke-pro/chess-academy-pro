@@ -87,11 +87,13 @@ vi.mock('../../services/coachFeatureService', () => ({
   // this mock was last updated; without it, every test that mounts
   // the component fails at module-eval ("No 'generateReviewNarration'
   // export is defined on the mock"). Returns the same ReviewNarration
-  // shape the production code resolves to: intro + segments[] + closing.
+  // shape the production code resolves to: intro + segments[] + closing +
+  // the game's story (none said here).
   generateReviewNarration: vi.fn().mockResolvedValue({
     intro: 'Let us review this game.',
     segments: [],
     closing: 'That concludes the review.',
+    story: null,
   }),
   // Phase 1c — grounded citation spine. Empty here so the inline previews
   // render nothing in these mount tests (covered by their own unit test).
@@ -315,6 +317,7 @@ async function renderWalk(overrides?: Parameters<typeof renderReview>[0]): Promi
     intro: 'Let us walk this game.',
     segments: makeSegments(moves),
     closing: null,
+    story: null,
   });
   const result = renderReview(overrides);
   // Summary page now persists until the user explicitly taps the
@@ -609,6 +612,7 @@ describe('CoachGameReview', () => {
       intro: 'Walk this game.',
       segments: [],
       closing: null,
+      story: null,
     });
     renderReview();
 

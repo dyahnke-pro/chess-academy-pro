@@ -1,6 +1,7 @@
 // REVIEW_NARRATION_REV moves with the Review walk's words (the rev fingerprint
 // gate — src/test/revFingerprint.ts). Three of David's games, the segment
-// builder's narration, its say-once keys and its story checkpoints, ply by ply.
+// builder's narration ply by ply, and the game's story it keeps (P1-8d: the
+// one checkpoint a seed is cut from, every say-once ledger inside it).
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
@@ -8,6 +9,7 @@ import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatur
 import { REVIEW_NARRATION_REV } from './reviewNarrationCache';
 import { setOpeningIdentity } from './openingIdentity';
 import { setOpeningPositions } from './openingPositions';
+import { createStoryStore } from './gameStory';
 import { checkRevFingerprint, fingerprint } from '../test/revFingerprint';
 
 interface FixtureGame { id: string; side: 'white' | 'black'; pgn: string; ann: [string | null, number | null, number | null, string | null][] }
@@ -29,9 +31,10 @@ describe('REVIEW_NARRATION_REV moves with the narration', () => {
         const [classification, preMoveEval, evaluation, bestMove] = g.ann[i] ?? [null, null, null, null];
         return { ply: i + 1, san, fenAfter: d.fen(), isCoachMove: g.side === 'white' ? i % 2 === 1 : i % 2 === 0, classification: classification ?? 'good', preMoveEval: preMoveEval ?? 0, evaluation: evaluation ?? 0, bestMove } as unknown as ReviewMoveInput;
       });
-      const segs = buildReviewSegmentsForTests(inputs, g.side, null, true, 1400);
+      const story = createStoryStore(g.id);
+      const segs = buildReviewSegmentsForTests(inputs, g.side, null, true, 1400, [], undefined, null, new Map(), new Map(), null, story);
       // …and the story's checkpoint, which a rebuild seeded from the cache reads.
-      parts[g.id] = fingerprint(segs.map((s) => [s.ply, s.narration ?? null, s.ledgerKeys ?? [], s.storyCheckpoint ?? null]));
+      parts[g.id] = fingerprint([segs.map((s) => [s.ply, s.narration ?? null]), story.serialize()]);
     }
     setOpeningIdentity(null);
     expect(checkRevFingerprint('review-narration', REVIEW_NARRATION_REV, parts, 'src/services/reviewNarrationRev.gate.test.ts')).toBeNull();

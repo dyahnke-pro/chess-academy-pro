@@ -202,9 +202,12 @@ export function x() {}`;
     const build = reviewBuild(readFileSync('src/services/coachFeatureService.ts', 'utf8'));
     expect(build.length, 'reviewSegmentSteps found').toBeGreaterThan(1000);
     expect(planMemoryIn(build, REVIEW_PLAN_MEMORY)).toEqual([]);
-    expect(build).toMatch(/const story = createStoryStore\(/);
-    // The seed restores the plans the walk had said.
-    expect(build).toMatch(/story\.restore\(spokenBefore\.story\)/);
+    // The build's story is its caller's (the narration keeps it), renewed for
+    // the game when the build starts.
+    expect(build).toMatch(/story: StoryStore = createStoryStore\(/);
+    expect(build).toMatch(/story\.newGame\(currentGameId \?\? 'review'\)/);
+    // The seed restores everything the walk had said, plans included.
+    expect(build).toMatch(/story\.restore\(spokenBefore\.checkpoint\)/);
   });
 
   it('the positional read reads the structure thread, never a count hidden in the say-once set', () => {
@@ -286,5 +289,66 @@ export function x() {}`;
     expect(page).toMatch(/\[causalChainKey\(chain\)\]/);
     expect(page).not.toMatch(/`causal:/);
     expect(build).toMatch(/causalChainKey\(chain\)/);
+  });
+});
+
+/**
+ * 🔒 REVIEW'S WHOLE BUILD LIVES IN THE STORY (P1-8d). The walk kept twenty-six
+ * say-once Sets and nine flags of its own, stamped the keys each ply added on
+ * its segment (`ledgerKeys`) beside a checkpoint stamped on some
+ * (`storyCheckpoint`), and rebuilt a seed from both — with the flags
+ * round-tripped through `syncFlags` / `restoreFlags` and four memories no seed
+ * carried (the story lines told, the habits taught, the trade idea said, the
+ * ply each principle was taught). One state now: every ledger a `storyLedger`
+ * over the claim map, every flag a key in it, and the narration's one
+ * checkpoint the only thing a seed is cut from.
+ */
+const REVIEW_SAY_ONCE_NAMES = [
+  'hintsSaid', 'formulasSaid', 'refutedSaid', 'principlesTaught', 'reviewSpokenKeys', 'looseSaid', 'motifKeys',
+  'seenFundamentals', 'seenConversionSteps', 'seenDecoys', 'trappedAnnounced', 'threatsAnnounced', 'lastHereSaid',
+  'deepShotAnnounced', 'signalsAnnounced', 'emittedStaticFacets', 'standingSpoken', 'sacSpoken', 'verdictReasonsSeen',
+  'thoughtKeys', 'structAtomsSeen', 'oneShotTags', 'oppTargetsSeen', 'flagsSaid', 'storySaid', 'spokenHabits',
+  'principleTaughtAt', 'openingPlanShown', 'orientationShown', 'assessmentShown', 'psychologyReadDone',
+  'opponentDevReadShown', 'sacCompShown', 'kingCenterTaught', 'tradeIdeaSpoken', 'standingSaid',
+];
+/** A say-once memory the build holds itself: one of the names above made from
+ *  a literal (a new Set or Map, an array, a boolean, null) instead of the story. */
+const REVIEW_OWN_MEMORY = new RegExp(`\\b(?:const|let)\\s+(${REVIEW_SAY_ONCE_NAMES.join('|')})\\b(?:\\s*:[^=;]+)?\\s*=\\s*(?:new\\s+(?:Set|Map)\\b|\\[|false\\b|true\\b|null\\b)`, 'g');
+const REVIEW_SEED_MACHINERY = /\b(ledgerKeys|storyCheckpoint|stampLedgerKeys|syncFlags|restoreFlags|ledgerSizes|spokenLedgerSeed|SpokenLedgerSeed|ledgerAtMerge)\b/g;
+
+describe('Review\'s whole build lives in GameStory', () => {
+  it('the scanners see the shapes they must (negative control: the old code)', () => {
+    const oldReview = `function* reviewSegmentSteps(
+      const hintsSaid = new Set<string>();
+      let openingPlanShown = false;
+      let standingSaid: 'main' | 'side' | null = null;
+      const storySaid: string[] = [];
+      const principleTaughtAt = new Map<string, number>();
+      const stampLedgerKeys = (): void => { last.ledgerKeys = keys; last.storyCheckpoint = cp; };
+    }
+export function x() {}`;
+    expect(planMemoryIn(reviewBuild(oldReview), REVIEW_OWN_MEMORY)).toEqual(['hintsSaid', 'openingPlanShown', 'standingSaid', 'storySaid', 'principleTaughtAt']);
+    expect(planMemoryIn(reviewBuild(oldReview), REVIEW_SEED_MACHINERY)).toEqual(['stampLedgerKeys', 'ledgerKeys', 'storyCheckpoint']);
+  });
+
+  it('the build declares no say-once memory or flag of its own — each is a ledger in its story', () => {
+    const build = reviewBuild(readFileSync('src/services/coachFeatureService.ts', 'utf8'));
+    expect(planMemoryIn(build, REVIEW_OWN_MEMORY)).toEqual([]);
+    expect(build).toMatch(/storyLedger<K>\(story, prefix\)/);
+    expect(build).toMatch(/const flags = ledger<ReviewFlag>\(REVIEW_SAID\.flag\)/);
+  });
+
+  for (const file of ['src/services/coachFeatureService.ts', 'src/services/reviewNarrationBuild.ts', 'src/components/Coach/CoachGameReview.tsx']) {
+    it(`${file}: no key list or per-segment checkpoint beside the story`, () => {
+      expect(planMemoryIn(readFileSync(file, 'utf8'), REVIEW_SEED_MACHINERY)).toEqual([]);
+    });
+  }
+
+  it('the narration keeps one checkpoint, and a seed is it taken back to the ply walked', () => {
+    const svc = stripComments(readFileSync('src/services/coachFeatureService.ts', 'utf8'));
+    expect(svc).toMatch(/\n {2}story: string \| null;\n\}/);
+    const build = stripComments(readFileSync('src/services/reviewNarrationBuild.ts', 'utf8'));
+    expect(build).toMatch(/const checkpoint = storyThrough\(narration\.story, walkedThroughPly\);/);
+    expect(build).toMatch(/story: spliceStory\(prev\.story, next\.story, frozenThroughPly\)/);
   });
 });
