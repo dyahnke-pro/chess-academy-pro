@@ -174,7 +174,7 @@ describe('WO-1b — one lead per turn', () => {
 describe('WO-1b — board descriptions wait for the turn\'s one decision', () => {
   it('the instant wave carries only urgent lanes; descriptions are deferred to the late wave', () => {
     const start = TEACH_CODE.indexOf("const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, slipCp: args.slipCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [");
-    const end = TEACH_CODE.indexOf('priorKeys: learnMemRef.current.spokenKeys, priorLead: null', start);
+    const end = TEACH_CODE.indexOf('priorKeys: turnHeard().sentences, priorLead: null', start);
     const instantCall = TEACH_CODE.slice(start, end);
     for (const lane of ['commentary', 'behavior', 'positional', 'kingSafety']) {
       expect(instantCall, `${lane} speaks instantly again — it will lead the turn by arriving first`).not.toContain(`'${lane}'`);
@@ -196,7 +196,7 @@ describe('WO-2 — a verdict on a good move carries its reason', () => {
     expect(TEACH_CODE).toMatch(/pairHeard \? allHits\.filter\(\(x\) => x\.id !== 'bishop-pair'\)/);
     // …written once the door KEEPS the line (its claim), never when offered.
     expect(TEACH_CODE).toMatch(/hit\.id === 'bishop-pair' \? \['bishop-pair'\] : \[\]/);
-    expect(TEACH_CODE).toMatch(/rememberKeptClaims\(hintPkg\.kept, \(k\) => \{[\s\S]{0,300}positionalSaidRef\.current\.add\(k\); standingRef\.current\.remember\(k\);/);
+    expect(TEACH_CODE).toMatch(/rememberKeptClaims\(hintPkg\.kept, \(k\) => \{ claims\.push\(k\); \}\);\s*learnMemRef\.current\.story\.commit\(gameRef\.current\.plies, \{ sentences: spokenSentenceKeys\(hintPkg\), claims \}\);/);
     // A board move counts as starting, so the welcome greeting never lands mid-game.
     // (The optional second argument is a mission's or a focus's "Play on" —
     // the owner already checked the move, WO-MISSIONS-01 / WO-LEARN-FOCUS-01.)

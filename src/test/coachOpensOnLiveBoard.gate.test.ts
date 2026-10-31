@@ -25,9 +25,13 @@ describe('the coach opens on the live board, never the render-stable history', (
 });
 
 describe('a new game forgets the said-once definitions too (second-game audit 2026-10-14)', () => {
-  it('resetPerGameMemory renews the standing-fact ledger', () => {
+  it('resetPerGameMemory renews the game\'s story through the one door', () => {
     const i = src.indexOf('const resetPerGameMemory = useCallback(');
     const b = src.slice(i, src.indexOf('}, []);', i));
-    expect(b).toMatch(/standingRef\.current = createStandingFactMemory\(\);/);
+    expect(b).toMatch(/learnMemRef\.current\.newGame\(\);/);
+    // The definitions are the story's, and the memory's newGame renews it.
+    const mem = readFileSync('src/services/learnMemory.ts', 'utf8');
+    const ng = mem.indexOf('newGame(): void {');
+    expect(mem.slice(ng, mem.indexOf('\n    },', ng))).toContain('story.newGame(mintGameId())');
   });
 });
