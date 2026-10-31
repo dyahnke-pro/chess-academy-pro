@@ -36,7 +36,7 @@ describe('buildCausalChain — David\'s game (acceptance)', () => {
       'premature-piece', 'displaced-defender', 'loose-piece', 'discovered-attack',
     ]);
     expect(chain!.edges.map((e) => e.relation)).toEqual([
-      'occupies-developing-square', 'removes-defender', 'enables-tactic',
+      'occupies-developing-square', 'guard', 'enables-tactic',
     ]);
   });
 
@@ -210,5 +210,30 @@ describe('buildCausalChain — BOTH WAYS: missed (for you) + allowed (against yo
   it('does not fire missed/allowed out of range', () => {
     expect(findMissedChain(MISSED, 0, 'w')).toBeNull();
     expect(findAllowedChain(ALLOWED, 999, 'b')).toBeNull();
+  });
+});
+
+describe('buildCausalChain — a pinned guard is no guard (WO-STORY-MATRIX-01 P1-7, 2026-10-30)', () => {
+  // 3.Bb5+ Bd7 puts Black's bishop between the king on e8 and the bishop on b5
+  // — pinned. The knight that lands on c8 is "guarded" by that bishop only
+  // geometrically: …Bxc8 back would be illegal. 7…Bc6 slides the bishop along
+  // the pin line, which opens the queen's diagonal from g4 to c8, and Qxc8+
+  // wins the knight. The cause is the line that opened, not a guard that left —
+  // the pin-blind count built "Bc6 moved the bishop off d7; it was defending c8".
+  const PINNED_GUARD = ['e4', 'e5', 'Nc3', 'd6', 'Bb5+', 'Bd7', 'Qg4', 'Qf6', 'a3', 'Ne7', 'b3', 'Nc8', 'h3', 'Bc6', 'Qxc8+'];
+
+  it('the bishop on d7 only covered c8 — the removed-defender pattern stays silent', () => {
+    expect(buildCausalChain({ historySans: PINNED_GUARD })).toBeNull();
+  });
+
+  it('the same game, one ply at a time, gives the same chains as the whole game with a focus', () => {
+    // Review walks a game asking at every ply; the boards are built once and
+    // extended, so the answer may not depend on how the history was sliced.
+    for (const game of [DAVID_GAME, PINNED_GUARD]) {
+      for (let ply = 1; ply <= game.length; ply++) {
+        expect(buildCausalChain({ historySans: game.slice(0, ply) }))
+          .toEqual(buildCausalChain({ historySans: game, focusPly: ply }));
+      }
+    }
   });
 });

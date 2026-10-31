@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**370 lines · 6 exports · 10 importers · 4 tests · 1 audits**
+**370 lines · 6 exports · 11 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,6 +20,7 @@
 - `src/services/oneSkewerRule.test.ts`
 - `src/services/pinGeometry.test.ts`
 - `src/services/pinReaders.test.ts`
+- `src/services/relations.ts`
 - `src/services/tacticClassifier.ts`
 - `src/services/tacticsDetector.ts`
 
@@ -53,22 +54,24 @@
 - `src/services/tacticClassifier.ts:225`
 - `src/services/tacticsDetector.ts:193`
 
-### `findPins` (function) — 7 call sites
+### `findPins` (function) — 8 call sites
 - `src/missions/patterns/pin.ts:99`
 - `src/services/pinReaders.test.ts:51`
 - `src/services/pinReaders.test.ts:59`
 - `src/services/pinReaders.test.ts:80`
 - `src/services/pinReaders.test.ts:112`
+- `src/services/relations.ts:165`
 - `src/services/tacticClassifier.ts:190`
 - `src/services/tacticsDetector.ts:663`
 
-### `absolutePinRay` (function) — 6 call sites
+### `absolutePinRay` (function) — 7 call sites
 - `src/services/kingSafety.ts:332`
 - `src/services/nextPlans.ts:154`
 - `src/services/pinReaders.test.ts:63`
 - `src/services/pinReaders.test.ts:99`
 - `src/services/pinReaders.test.ts:113`
 - `src/services/pinReaders.test.ts:123`
+- `src/services/relations.ts:152`
 
 ## Tests
 

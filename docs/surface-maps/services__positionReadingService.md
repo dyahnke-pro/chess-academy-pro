@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2818 lines · 76 exports · 128 importers · 29 tests · 2 audits**
+**2818 lines · 76 exports · 129 importers · 29 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -103,6 +103,7 @@
 - `src/services/prophylaxis.ts`
 - `src/services/pvPlayback.ts`
 - `src/services/queenGrabTrap.ts`
+- `src/services/relations.ts`
 - `src/services/replayFence.bowdler1000.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
 - `src/services/reviewConcepts.ts`
@@ -265,7 +266,7 @@
 
 ### `standsSafe` (function) — 6 call sites
 - `src/services/bluffDetector.ts:63`
-- `src/services/causalChain.ts:50`
+- `src/services/causalChain.ts:53`
 - `src/services/moveIntent.ts:615`
 - `src/services/perturbation.ts:69`
 - `src/services/reviewTeachingPoints.ts:139`
@@ -306,7 +307,7 @@
 - `src/services/arrowDoor.ts:175`
 - `src/services/bluffDetector.ts:53`
 - `src/services/boardState.ts:42`
-- `src/services/causalChain.ts:42`
+- `src/services/causalChain.ts:45`
 - `src/services/checkIsNotAGuard.test.ts:39`
 - `src/services/computedMaterialTruth.corpus.test.ts:120`
 - `src/services/computedMaterialTruth.corpus.test.ts:145`
@@ -492,7 +493,7 @@
 - `src/services/positionReadingService.test.ts:975`
 - `src/services/theirMoveCost.ts:35`
 
-### `findHangingBySee` (function) — 26 call sites
+### `findHangingBySee` (function) — 27 call sites
 - `src/coach/chatTurnAnswers.ts:173`
 - `src/components/Coach/CoachTeachPage.tsx:9068`
 - `src/components/Coach/CoachTeachPage.tsx:9074`
@@ -508,6 +509,7 @@
 - `src/services/positionReadingService.test.ts:71`
 - `src/services/positionReadingService.test.ts:79`
 - `src/services/positionReadingService.test.ts:83`
+- `src/services/relations.ts:217`
 - `src/services/tacticClassifier.ts:436`
 - `src/services/thinkingForcingStep.ts:37`
 - `src/services/thinkingForcingStep.ts:84`

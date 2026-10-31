@@ -1,6 +1,7 @@
 import { Chess } from 'chess.js';
 import type { Square, Color, PieceSymbol } from 'chess.js';
-import { kingNeighbourhood } from './kingSafety';
+import { snapshot, relationKey, type Relation, type RelationSnapshot } from './relations';
+import { andList } from '../utils/andList';
 
 /**
  * THE BOARD-DELTA COMPUTER (David 2026-07-22: "We need the package to contain
@@ -21,9 +22,10 @@ import { kingNeighbourhood } from './kingSafety';
  *                 the centre. Permanent, so always teachable.
  *   - RIGHTS    — castling rights surrendered by a king/rook move.
  *
- * Everything is pure chess.js (attackers()) — computed, never inferred. Each
- * clause is compact prose ready for the facet package; ownership words are
- * stamped later by seatPieceReferences.
+ * Everything is read off the RELATION SNAPSHOT of the two boards
+ * (`relations.ts`, WO-STORY-MATRIX-01 P1-7) — computed, never inferred: this
+ * file renders the diff. Each clause is compact prose ready for the facet
+ * package; ownership words are stamped later by seatPieceReferences.
  */
 
 const PIECE_WORD: Record<string, string> = {
@@ -32,37 +34,34 @@ const PIECE_WORD: Record<string, string> = {
 const CENTRAL = new Set(['d4', 'e4', 'd5', 'e5']);
 const FILES = 'abcdefgh';
 
-function allSquares(): Square[] {
-  const out: Square[] = [];
-  for (const f of FILES) for (let r = 1; r <= 8; r++) out.push(`${f}${r}` as Square);
-  return out;
+/** File-major board order (a1, a2 … a8, b1 …) — the order this computer has
+ *  always listed squares in, kept so its sentences do not move. */
+function fileMajor(sq: string): number {
+  return (sq.charCodeAt(0) - 97) * 8 + Number(sq[1]) - 1;
 }
-const SQUARES = allSquares();
-
-/** Every square the piece on `sq` attacks — attackers() inverted. */
-function attackSet(c: Chess, sq: Square, color: Color): Set<string> {
-  const out = new Set<string>();
-  for (const target of SQUARES) {
-    if (target === sq) continue;
-    if (c.attackers(target, color).includes(sq)) out.add(target);
-  }
-  return out;
-}
+const byFile = (a: string, b: string): number => fileMajor(a) - fileMajor(b);
 
 function chebyshev(a: string, b: string): number {
   return Math.max(Math.abs(a.charCodeAt(0) - b.charCodeAt(0)), Math.abs(Number(a[1]) - Number(b[1])));
 }
 
-/** The squares near `color`'s king — `kingSafety.kingNeighbourhood`, the one
- *  radius-2 zone (WO-STORY-MATRIX-01 P1-7, 2026-10-30: this file kept its own
- *  copy, and called it "the king zone" beside the radius-1 ring). */
-function kingZone(c: Chess, color: Color): Set<string> {
-  for (const sq of SQUARES) {
-    const p = c.get(sq);
-    if (p && p.type === 'k' && p.color === color) return new Set(kingNeighbourhood(sq));
+/** Every square each slider on the board sees — the snapshot's `reach`
+ *  relations, grouped by the slider (its square + piece), file-major. */
+function reachBySlider(s: RelationSnapshot): Map<string, Set<string>> {
+  const out = new Map<string, Set<string>>();
+  for (const r of s.relations) {
+    if (r.kind !== 'reach') continue;
+    const k = `${r.by}${r.byPiece}`;
+    let set = out.get(k);
+    if (!set) { set = new Set(); out.set(k, set); }
+    set.add(r.square);
   }
-  return new Set();
+  for (const [k, set] of out) out.set(k, new Set([...set].sort(byFile)));
+  return out;
 }
+
+/** Is `relation` held by board `s`? */
+const holds = (s: RelationSnapshot, r: Relation): boolean => s.byKey.has(relationKey(r));
 
 export function computeBoardDelta(
   fenBefore: string,
@@ -76,10 +75,16 @@ export function computeBoardDelta(
   outSquares?: Map<string, readonly string[]>,
 ): string[] {
   try {
-    const before = new Chess(fenBefore);
     const after = new Chess(fenBefore);
     const mv = after.move(san.replace(/[?!]+$/, ''));
     if (!mv) return [];
+    // THE RELATION SNAPSHOT (WO-STORY-MATRIX-01 P1-7, 2026-10-30): this file
+    // used to re-derive every slider's reach by asking `attackers()` of all 64
+    // squares, twice a slider — the relations a move changed, kept only as
+    // prose. It now reads the one snapshot of each board and renders the diff.
+    const before = snapshot(fenBefore);
+    const afterSnap = snapshot(after.fen());
+    if (!before || !afterSnap) return [];
     const clauses: string[] = [];
     const rec = (text: string, squares: ReadonlyArray<string | null | undefined>): string => {
       if (outSquares) {
@@ -91,6 +96,7 @@ export function computeBoardDelta(
     const moverColor: Color = mv.color;
     const from = mv.from;
     const to = mv.to;
+    const occupant = (sq: string): { type: PieceSymbol; color: Color } | undefined => after.get(sq as Square);
 
     // ── UNCOVERS + BLOCKS — sliders whose reach changed because of this move ──
     const uncovered: Array<{ type: PieceSymbol; sq: string; color: Color; text: string; squares: readonly string[] }> = [];
@@ -98,21 +104,22 @@ export function computeBoardDelta(
     // Every mover slider this move UNBLOCKED, ungated — used to spot the
     // free-both-pieces IDEA below even when the diagonals open onto empty space.
     const unblockedMover: Array<{ type: PieceSymbol; sq: string }> = [];
-    for (const sq of SQUARES) {
-      if (sq === from || sq === to) continue;
-      const pb = before.get(sq);
-      const pa = after.get(sq);
-      if (!pb || !pa || pb.type !== pa.type || pb.color !== pa.color) continue;
-      if (pb.type !== 'b' && pb.type !== 'r' && pb.type !== 'q') continue; // only sliders gain/lose reach by blocking
-      const sb = attackSet(before, sq, pb.color);
-      const sa = attackSet(after, sq, pb.color);
+    const reachBefore = reachBySlider(before);
+    const reachAfter = reachBySlider(afterSnap);
+    const sliders = [...reachBefore.keys()]
+      .map((k) => ({ k, sq: k.slice(0, 2), color: k[2] as Color, type: k[3] as PieceSymbol }))
+      .filter((x) => x.sq !== from && x.sq !== to && reachAfter.has(x.k))
+      .sort((a, b) => byFile(a.sq, b.sq));
+    for (const { k, sq, color, type } of sliders) {
+      const sb = reachBefore.get(k) ?? new Set<string>();
+      const sa = reachAfter.get(k) ?? new Set<string>();
       const gained = [...sa].filter((x) => !sb.has(x));
       const lost = [...sb].filter((x) => !sa.has(x));
       // The slider was UNBLOCKED by this move when it bore on the vacated
       // square before (a slider "attacks" its own blocker, so `from` lives in
       // the before-set, not the gained-set) and its reach actually grew.
       const wasUnblocked = sb.has(from) && gained.length > 0;
-      if (wasUnblocked && pb.color === moverColor) unblockedMover.push({ type: pb.type, sq });
+      if (wasUnblocked && color === moverColor) unblockedMover.push({ type, sq });
       // A newly-opened line is only WORTH SAYING when it reaches an ENEMY piece
       // or a central square — "it now reaches h5" onto empty space is mechanics,
       // not teaching (David 2026-07-23: voice the idea, cut the readout). The
@@ -120,40 +127,39 @@ export function computeBoardDelta(
       // 1.e4 "queen's line reaches h5 / bishop's line reaches a6" firehose; the
       // freeing-of-pieces IDEA is voiced once, below, instead.
       const worthSaying = gained.some((g) => {
-        const occ = after.get(g as Square);
+        const occ = occupant(g);
         // Reaching a PIECE is news only if it's an enemy (a fresh target);
         // reaching your OWN piece — even the pawn you just pushed to d4 — is not.
         // Reaching an EMPTY central square is real control worth a word.
-        if (occ) return occ.color !== pb.color;
+        if (occ) return occ.color !== color;
         return CENTRAL.has(g);
       });
       if (wasUnblocked && worthSaying) {
         const far = gained.reduce((m, g) => (chebyshev(g, sq) > chebyshev(m, sq) ? g : m), gained[0]);
         const hitTargets = gained
-          .map((g) => ({ g, p: after.get(g as Square) }))
-          .filter((x) => x.p && x.p.color !== pb.color);
+          .map((g) => ({ g, p: occupant(g) }))
+          .filter((x) => x.p && x.p.color !== color);
         const hits = hitTargets.map((x) => `the ${PIECE_WORD[(x.p as { type: PieceSymbol }).type]} on ${x.g}`);
         // No `.slice(0, 2)` — a cap on computed facts is banned (G4.5); a long
         // list is a PHRASING problem, so it reads as "a, b and c".
-        const hitList = hits.length <= 1 ? hits.join('')
-          : `${hits.slice(0, -1).join(', ')} and ${hits[hits.length - 1]}`;
+        const hitList = andList(hits);
         uncovered.push({
-          type: pb.type, sq, color: pb.color,
+          type, sq, color,
           // THE CLAUSE'S OWN GEOMETRY: the slider and what it now bears on.
           // Deliberately NOT the move's from/to — including those diluted the
           // overlap between "their bishop on e2 now reaches g4" and "your bishop
           // on g4 now reaches e2" from 1.0 to 0.5, so the two halves of ONE
           // opened diagonal stopped reading as one claim (David 2026-09-16).
           squares: [sq, far, ...hitTargets.map((x) => x.g)],
-          text: `the ${PIECE_WORD[pb.type]} on ${sq}'s line just opened — it now reaches ${far}${hits.length ? `, hitting ${hitList}` : ''}`,
+          text: `the ${PIECE_WORD[type]} on ${sq}'s line just opened — it now reaches ${far}${hits.length ? `, hitting ${hitList}` : ''}`,
         });
       }
-      if (lost.length > 0 && !lost.includes(to) && sa.has(to) && pb.color === moverColor) {
+      if (lost.length > 0 && !lost.includes(to) && sa.has(to) && color === moverColor) {
         // The landing square sits on this OWN slider's former line — the move
         // shut it in (losses beyond `to` are the blocked tail).
         const tail = lost.filter((x) => chebyshev(x, sq) > chebyshev(to, sq));
         if (tail.length >= 2) {
-          blocked.push(`the move shuts in the ${PIECE_WORD[pb.type]} on ${sq} — its line past ${to} is closed`);
+          blocked.push(`the move shuts in the ${PIECE_WORD[type]} on ${sq} — its line past ${to} is closed`);
         }
       }
     }
@@ -193,17 +199,21 @@ export function computeBoardDelta(
     clauses.push(...blocked);
 
     // ── ABANDONS — own pieces the mover guarded from `from`, now guarded by nobody ──
-    const dutiesBefore = attackSet(before, from, moverColor);
+    // The guards the moved piece held on the board before (a pinned one too —
+    // it still stood watch), and the pieces left loose after.
+    const enemyColor: Color = moverColor === 'w' ? 'b' : 'w';
+    const homeRank = moverColor === 'w' ? '2' : '7';
     const abandoned: string[] = [];
-    for (const sq of dutiesBefore) {
+    const duties = before.relations
+      .filter((r): r is Extract<Relation, { kind: 'guard' | 'guard-pinned' }> => (r.kind === 'guard' || r.kind === 'guard-pinned') && r.by === from)
+      .sort((a, b) => byFile(a.square, b.square));
+    for (const d of duties) {
       // The landing square is the MOVER itself after the move — "walks away
       // from the knight on d5" when d5 is where it just arrived is incoherent
       // (board-awareness sweep, 2026-07-22). The mover's own safety is the
       // [loose]/hanging detector's job, not an abandonment.
-      if (sq === to) continue;
-      const p = after.get(sq as Square);
-      if (!p || p.color !== moverColor || p.type === 'k') continue;
-      if (after.attackers(sq as Square, moverColor).length !== 0) continue;
+      if (d.square === to) continue;
+      if (!holds(afterSnap, { kind: 'loose', square: d.square, piece: d.piece })) continue;
       // NOT EVERY UNDEFENDED PAWN IS NEWS (David 2026-09-15, reading a real
       // review: "the move walks away from your pawn on h7 — no defender left"
       // fired on a dozen plies, most about a home-rank pawn nothing was near).
@@ -211,13 +221,14 @@ export function computeBoardDelta(
       // standing invitation; it is filler, and the Narration Voice Rules ban
       // filler. Every other abandoned piece — any minor/rook/queen, and any
       // pawn an enemy piece actually eyes — still speaks.
-      const enemyColor: Color = moverColor === 'w' ? 'b' : 'w';
-      const homeRank = moverColor === 'w' ? '2' : '7';
-      if (p.type === 'p' && sq[1] === homeRank && after.attackers(sq as Square, enemyColor).length === 0) continue;
-      abandoned.push(`the ${PIECE_WORD[p.type]} on ${sq}`);
+      const type = d.piece[1] as PieceSymbol;
+      const eyed = afterSnap.relations.some((r) => r.kind === 'attack' && r.square === d.square && r.byPiece[0] === enemyColor);
+      if (type === 'p' && d.square[1] === homeRank && !eyed) continue;
+      abandoned.push(`the ${PIECE_WORD[type]} on ${d.square}`);
     }
     if (abandoned.length) {
-      clauses.push(`the move walks away from ${abandoned.slice(0, 2).join(' and ')} — no defender left, and an undefended piece is a standing invitation`);
+      // Every abandoned piece is named (G4.5: this list was cut to two).
+      clauses.push(`the move walks away from ${andList(abandoned)} — no defender left, and an undefended piece is a standing invitation`);
     }
 
     // ── WEAKENS — pawn moves give up squares FOR GOOD ──
@@ -232,26 +243,25 @@ export function computeBoardDelta(
         if (f < 0 || f > 7 || r < 1 || r > 8) continue;
         gaveUp.push(`${FILES[f]}${r}`);
       }
-      const zone = kingZone(after, moverColor);
       // A square another OWN pawn still covers is not weakened — "needs piece
       // cover" was false for 1.e4's d3/f3 while c2/g2 still guarded them
-      // (board-awareness sweep, 2026-07-22). Only squares with ZERO remaining
-      // own-pawn cover are genuinely given up to piece duty.
-      const meaningful = gaveUp.filter((s) => (zone.has(s) || CENTRAL.has(s))
-        && !after.attackers(s as Square, moverColor).some((att) => after.get(att)?.type === 'p'));
+      // (board-awareness sweep, 2026-07-22). Only squares near the own king or
+      // in the centre with ZERO remaining own-pawn cover are genuinely given up
+      // to piece duty — the snapshot's `uncovered` relation.
+      const meaningful = gaveUp.filter((s) => holds(afterSnap, { kind: 'uncovered', color: moverColor, square: s as Square }));
       if (meaningful.length) {
         clauses.push(`the pawn gives up ${meaningful.join(' and ')} for good — pawns don't move back, so ${meaningful.length > 1 ? 'those squares' : 'that square'} now need${meaningful.length > 1 ? '' : 's'} piece cover`);
       }
     }
 
     // ── RIGHTS — castling surrendered by a non-castling king/rook move ──
-    const cbBefore = fenBefore.split(' ')[2] ?? '-';
-    const cbAfter = after.fen().split(' ')[2] ?? '-';
-    if (cbBefore !== cbAfter && !/^O-O/.test(mv.san)) {
-      const short = moverColor === 'w' ? 'K' : 'k';
-      const long = moverColor === 'w' ? 'Q' : 'q';
-      const lostShort = cbBefore.includes(short) && !cbAfter.includes(short);
-      const lostLong = cbBefore.includes(long) && !cbAfter.includes(long);
+    if (!/^O-O/.test(mv.san)) {
+      const lostSide = (side: 'short' | 'long'): boolean => {
+        const r: Relation = { kind: 'castling', color: moverColor, side };
+        return holds(before, r) && !holds(afterSnap, r);
+      };
+      const lostShort = lostSide('short');
+      const lostLong = lostSide('long');
       if (lostShort && lostLong) {
         clauses.push('that move gives up castling for good — the king settles for the middle');
       } else if (lostShort || lostLong) {
