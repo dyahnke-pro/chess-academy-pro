@@ -11,6 +11,7 @@ import { describe, it, expect } from 'vitest';
 import { decideTurn } from './learnTurnDoor';
 import { NO_PROOF } from './proof';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
+import { claimKey } from './voicePackage';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 /** Two true sentences on this board, the second inside the first. */
@@ -32,12 +33,17 @@ describe('a kept fact is attributed by its id, never by its words', () => {
   });
 
   it('every kept and dropped voice fact names the fact it came from', () => {
+    // A third fact whose claim the game already heard: the package drops it,
+    // so the dropped half is exercised, not vacuous.
+    const SAID = 'already-heard:e5';
     const d = decideTurn([
-      { lane: 'fundamental', role: 'teach', text: LONG, fen: FEN, proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE },
-      { lane: 'theirPurpose', role: 'teach', text: SHORT, fen: FEN, proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE },
-    ]);
+      { id: 'long', lane: 'fundamental', role: 'teach', text: LONG, fen: FEN, proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE },
+      { id: 'short', lane: 'theirPurpose', role: 'teach', text: SHORT, fen: FEN, proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE },
+      { id: 'heard', lane: 'planArc', role: 'teach', text: 'Their pawn on e5 is the target of the whole plan.', fen: FEN, claims: [SAID], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE },
+    ], undefined, new Set([claimKey(SAID)]));
+    expect(d.pkg.kept.map((f) => f.factId)).toEqual(['long', 'short']);
+    expect(d.pkg.dropped.map((x) => x.fact.factId)).toEqual(['heard']);
     const ids = [...d.pkg.kept, ...d.pkg.dropped.map((x) => x.fact)].map((f) => f.factId);
-    expect(ids.every((id) => typeof id === 'string' && id.length > 0)).toBe(true);
     expect(new Set(ids).size).toBe(ids.length);
   });
 });

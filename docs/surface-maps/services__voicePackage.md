@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**664 lines · 12 exports · 23 importers · 14 tests · 2 audits**
+**664 lines · 12 exports · 24 importers · 15 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,6 +22,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dnaDoor.test.ts`
 - `src/services/holeOneKey.test.ts`
 - `src/services/laneReachability.test.ts`
+- `src/services/learnTurnDoor.factId.test.ts`
 - `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.test.ts`
 - `src/services/learnTurnDoor.ts`
@@ -59,7 +60,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `VoicePackage` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `claimKey` (const) — 1 call site
+### `claimKey` (const) — 2 call sites
+- `src/services/learnTurnDoor.factId.test.ts:43`
 - `src/services/thoughtComposer.ts:194`
 
 ### `buildVoicePackage` (function) — 83 call sites
@@ -211,6 +213,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dnaDoor.test.ts`
 - `src/services/holeOneKey.test.ts`
 - `src/services/laneReachability.test.ts`
+- `src/services/learnTurnDoor.factId.test.ts`
 - `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.test.ts`
 - `src/services/openingStoryWholeBeat.test.ts`
