@@ -203,3 +203,32 @@ export function findBreakthrough(fen: string, line: readonly string[]): { sac: s
   }
   return null;
 }
+
+/**
+ * TRIANGULATION — losing a tempo on purpose (n3F 15-19, Fxj 50-61; the
+ * platform's Triangulation lesson). Read off a best line (SAN, from `fen`):
+ * the side to move walks its king and, an odd number of plies later, the SAME
+ * placement of every piece stands on the board with the OTHER side to move —
+ * a tempo handed over. Only king moves on both sides in between, so the line
+ * is the manoeuvre and nothing else. Null when the line shows no such loop.
+ *
+ * It lives with the other pure line reads, not in `zugzwang.ts`: that module
+ * reaches the tablebase, which imports the concept engine — the one reader of
+ * this line — so the cycle had left it with no caller (WO-STORY-MATRIX-01).
+ */
+export function findTriangulation(fen: string, line: readonly string[]): { plies: number; squares: string[] } | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  const start = fen.split(' ')[0];
+  const side = c.turn();
+  const route: string[] = [];
+  for (let i = 0; i < line.length && i < 11; i += 1) {
+    let m;
+    try { m = c.move(line[i]); } catch { return null; }
+    if (m.piece !== 'k') return null;
+    if (m.color === side) route.push(m.to);
+    const n = i + 1;
+    if (n % 2 === 1 && n >= 5 && c.fen().split(' ')[0] === start && c.turn() !== side) return { plies: n, squares: route };
+  }
+  return null;
+}

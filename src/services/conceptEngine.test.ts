@@ -1,8 +1,9 @@
 import { describe, it, expect } from 'vitest';
+import { Chess } from 'chess.js';
 import {
   sideToMove, solvingSide, materialBalance, strongerSide, framingSide,
   renderTacticConcept, renderMatchupConcept, conceptForBoard, conceptForSolution, positionalConcepts,
-  conceptForLine,
+  conceptForLine, endgameConceptFor,
 } from './conceptEngine';
 import { classifyMatchup } from './endgameMatchup';
 import type { TacticPattern } from '../types/tacticTypes';
@@ -302,5 +303,42 @@ describe('conceptForLine — a solution that trades into a pawn race (calc hand 
   it('never describes a piece the line captured', () => {
     const all = conceptForLine({ fen, uci, studentColor: 'b', max: 5 });
     expect(all.some((c) => c.id === 'cut-off-king')).toBe(false);
+  });
+});
+
+describe('the endgame computers that had no reader (WO-STORY-MATRIX-01, 2026-10-30)', () => {
+  const toUci = (fen: string, sans: string[]): string[] => {
+    const c = new Chess(fen);
+    return sans.map((s) => { const m = c.move(s); return `${m.from}${m.to}${m.promotion ?? ''}`; });
+  };
+  it('a line that sacrifices a pawn so another queens is named the breakthrough', () => {
+    const fen = '6k1/ppp5/8/PPP5/8/8/8/6K1 w - - 0 1';
+    const lead = conceptForLine({ fen, uci: toUci(fen, ['b6', 'cxb6', 'a6', 'bxa6', 'c6', 'Kf7', 'c7', 'Ke7', 'c8=Q']), studentColor: 'w' })[0];
+    expect(lead.id).toBe('breakthrough');
+    expect(lead.full).toContain('b6 gives up a pawn');
+    expect(lead.full).toContain('queens on c8');
+    expect(lead.squares).toEqual(['b6', 'c8']);
+  });
+  it('a breakthrough in the OTHER side\'s line is not the student\'s idea', () => {
+    const fen = '6k1/ppp5/8/PPP5/8/8/8/6K1 w - - 0 1';
+    const ids = conceptForLine({ fen, uci: toUci(fen, ['b6', 'cxb6', 'a6', 'bxa6', 'c6', 'Kf7', 'c7', 'Ke7', 'c8=Q']), studentColor: 'b' }).map((c) => c.id);
+    expect(ids).not.toContain('breakthrough');
+  });
+  it('a king loop that hands the move over is named triangulation', () => {
+    const fen = '8/8/4k3/8/4K3/8/8/8 w - - 0 1';
+    const lead = conceptForLine({ fen, uci: toUci(fen, ['Kd4', 'Ke7', 'Kd3', 'Ke6', 'Ke4']), studentColor: 'w' })[0];
+    expect(lead.id).toBe('triangulation');
+    expect(lead.full).toContain('d4, d3, e4');
+  });
+  it('a queen against a centre pawn on the seventh is named, and the rule says it wins', () => {
+    const c = endgameConceptFor('8/8/8/8/8/2Q5/3pk3/7K w - - 0 1');
+    expect(c?.id).toBe('queen-vs-seventh');
+    expect(c?.full).toContain('wins');
+    expect(c?.squares).toEqual(['d2']);
+  });
+  it('a queen against a bishop pawn on the seventh: usually a draw', () => {
+    const c = endgameConceptFor('8/8/8/8/8/4Q3/2pk4/K7 w - - 0 1');
+    expect(c?.id).toBe('queen-vs-seventh');
+    expect(c?.full).toContain('usually a draw');
   });
 });

@@ -405,6 +405,20 @@ function namedTechniqueFor(fen: string, cls: MatchupClass): ComputedConcept | nu
     }
     return null;
   }
+  // QUEEN AGAINST A PAWN ON THE SEVENTH (WO-STORY-MATRIX-01, David 2026-10-30:
+  // "We start by wiring in the computers"): built with its rule and tests and
+  // read by nothing. The rule is the manual's; the detector checks the exact
+  // material (kings, one queen, one pawn on its seventh beside its king).
+  if (cls === 'pieces-vs-pawns') {
+    const qp = queenVsSeventh(fen);
+    if (qp) {
+      return technique(
+        'queen-vs-seventh', 'Queen against a pawn on the seventh', qp.text,
+        qp.expect === 'win' ? 'Queen against the pawn — the queen wins.' : 'Rook or bishop pawn — usually a draw.',
+        [qp.pawn], 0.7,
+      );
+    }
+  }
   // The wrong-bishop draw lives in a K+B+P vs K matchup (classed as a minor
   // ending) — the detector checks the exact material itself.
   const wrong = detectRookPawnCorner(fen);
@@ -537,6 +551,8 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
 import { computePlyFacts, pvDepthForRating, afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
 import { classifyMatePattern } from './matePatterns';
 import { detectPlanRace, planRaceClause } from './planRace';
+import { findBreakthrough, findTriangulation } from './endgamePawnReads';
+import { queenVsSeventh } from './queenVsPawn';
 import { Chess } from 'chess.js';
 
 interface LineInput {
@@ -613,6 +629,37 @@ function pureRace(fen: string, studentColor: 'w' | 'b'): ComputedConcept | null 
     `It comes down to a pawn race — ${clause}.`,
     'Count the race — yours queens first.', [race.yourPawn, race.theirPawn], 0.8,
   );
+}
+
+/** The breakthrough or the triangulation a line shows, when it is the
+ *  student's line from the start (their move first). Null otherwise. */
+function lineEndgameIdea(fen: string, uci: readonly string[], studentColor: 'w' | 'b'): ComputedConcept | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  if (c.turn() !== studentColor) return null;
+  const sans: string[] = [];
+  for (const u of uci) {
+    try { sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }).san); } catch { break; }
+  }
+  const brk = findBreakthrough(fen, sans);
+  if (brk) {
+    let sacSquare: string | null = null;
+    try { sacSquare = new Chess(fen).move(brk.sac).to; } catch { sacSquare = null; }
+    return technique(
+      'breakthrough', 'The breakthrough',
+      `${brk.sac} gives up a pawn to break through: once it is taken a gap opens, and in the line a pawn queens on ${brk.queens}. A pawn majority breaks through by sacrifice, not by pushing one pawn at a time.`,
+      'Breakthrough — give a pawn, queen another.', [...(sacSquare ? [sacSquare] : []), brk.queens], 0.8,
+    );
+  }
+  const tri = findTriangulation(fen, sans);
+  if (tri) {
+    return technique(
+      'triangulation', 'Triangulation',
+      `The king walks ${tri.squares.join(', ')} and comes back: the same position, with the other side to move. That is triangulation — losing a tempo on purpose, because here whoever has to move gives ground.`,
+      'Triangulation — lose a tempo on purpose.', [...tri.squares], 0.8,
+    );
+  }
+  return null;
 }
 
 export function conceptForLine(input: LineInput): ComputedConcept[] {
@@ -724,6 +771,18 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
       }
     }
   } catch { /* unparseable line — teach nothing from it */ }
+
+  // THE LINE'S OWN ENDGAME IDEA (WO-STORY-MATRIX-01, David 2026-10-30: "We
+  // start by wiring in the computers"): a pawn sacrifice that lets another pawn
+  // queen, or a king loop that hands the move over. Both are read off the
+  // whole line from the start, so they name what the line DOES — ahead of a
+  // technique one of its later boards happens to show (a race that only exists
+  // because the breakthrough made it). Both detectors were built, tested and
+  // read by nothing.
+  if (wants('technique')) {
+    const idea = lineEndgameIdea(fen, uci, studentColor);
+    if (idea) techConcept = idea;
+  }
 
   // Endgame teaching beat: the technique reached during the solution (preferred),
   // else the start-position matchup principle.

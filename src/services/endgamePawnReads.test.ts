@@ -90,3 +90,16 @@ describe('findBreakthrough', async () => {
     expect(findBreakthrough('6k1/ppp5/8/PPP5/8/8/8/6K1 w - - 0 1', ['Kf2', 'Kf7'])).toBeNull();
   });
 });
+
+describe('findTriangulation', async () => {
+  const { findTriangulation } = await import('./endgamePawnReads');
+  it('a king loop that hands the move over is found', () => {
+    // White's king walks e4-d4-d3-e4 (three moves), Black's goes e6-e7-e6 (two):
+    // the same placement, with Black to move.
+    expect(findTriangulation('8/8/4k3/8/4K3/8/8/8 w - - 0 1', ['Kd4', 'Ke7', 'Kd3', 'Ke6', 'Ke4'])).toEqual({ plies: 5, squares: ['d4', 'd3', 'e4'] });
+  });
+  it('a line with a pawn move, or that never comes back, is not one', () => {
+    expect(findTriangulation('8/8/4k3/8/4K3/8/4P3/8 w - - 0 1', ['e3', 'Ke7', 'Kd4', 'Ke6', 'Ke4'])).toBeNull();
+    expect(findTriangulation('8/8/4k3/8/4K3/8/8/8 w - - 0 1', ['Kd4', 'Ke7', 'Kd3', 'Ke6', 'Kc3'])).toBeNull();
+  });
+});
