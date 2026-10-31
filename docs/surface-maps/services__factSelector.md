@@ -42,7 +42,7 @@
 - `src/services/factSelector.test.ts:85`
 
 ### `sameClaim` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2385`
+- `src/services/coachFeatureService.ts:2408`
 - `src/services/learnTurnDoor.ts:788`
 
 ### `selectFacts` (function) — 18 call sites

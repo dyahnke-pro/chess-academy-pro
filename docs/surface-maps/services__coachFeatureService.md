@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6254 lines · 31 exports · 66 importers · 80 tests · 4 audits**
+**6247 lines · 31 exports · 66 importers · 80 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -225,7 +225,7 @@
 - `src/services/coachFeatureService.trade.test.ts:19`
 - `src/services/coachNoRecall.test.ts:44`
 - `src/services/coachNoRecall.test.ts:56`
-- `src/services/danyaBench.measure.test.ts:386`
+- `src/services/danyaBench.measure.test.ts:387`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
 - `src/services/habitBothSeats.test.ts:29`
@@ -322,10 +322,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8787`
-- `src/components/Coach/CoachTeachPage.tsx:8885`
-- `src/components/Coach/CoachTeachPage.tsx:11720`
-- `src/components/Coach/CoachTeachPage.tsx:12111`
+- `src/components/Coach/CoachTeachPage.tsx:8789`
+- `src/components/Coach/CoachTeachPage.tsx:8887`
+- `src/components/Coach/CoachTeachPage.tsx:11726`
+- `src/components/Coach/CoachTeachPage.tsx:12117`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/utils/justCaptured.test.ts:20`
