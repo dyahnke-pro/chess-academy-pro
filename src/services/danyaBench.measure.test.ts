@@ -63,7 +63,7 @@ function choiceFact(text: string, fen: string): ThoughtFact {
   };
 }
 import type { IdeaKind } from './ideaKind';
-import { facetLines, facetRecords } from '../test/reviewFacetLines';
+import { facetLines } from '../test/reviewFacetLines';
 
 // ── the corpus and the cached reads ─────────────────────────────────────────
 

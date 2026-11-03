@@ -8,7 +8,7 @@ import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { NO_SECOND_READ } from './inaccuracyCall';
 // @ts-expect-error — plain .mjs audit helper, no types.
 import { isWhy } from '../../scripts/audit-lib/why-count.mjs';
-import { facetLines, facetRecords } from '../test/reviewFacetLines';
+import { facetLines } from '../test/reviewFacetLines';
 
 describe('the review pin facet carries its hold', () => {
   it('Bb5 against Nc6 after …d6: the king pin is said with what it freezes', () => {

@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { forkTrickFor, trickSidestepped } from './forkTrick';
 import { NO_SECOND_READ } from './inaccuracyCall';
-import { facetLines, facetRecords } from '../test/reviewFacetLines';
+import { facetLines } from '../test/reviewFacetLines';
 
 const fenAfter = (sans: string): string => { const c = new Chess(); for (const s of sans.split(' ')) c.move(s); return c.fen(); };
 const PHILIDOR = 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O';

@@ -10,7 +10,7 @@ import { Chess } from 'chess.js';
 import { computeMoveFacets, NO_TEACHING_CONTEXT, type MoveTeachingContext } from '../services/reviewFullData';
 import { computePositionFacts } from '../services/positionFacts';
 import type { RefutedAlternative } from '../services/refutedAlternativeCore';
-import { facetLines, facetRecords } from './reviewFacetLines';
+import { facetLines } from './reviewFacetLines';
 
 function fens(moves: string[]): string[] {
   const c = new Chess();

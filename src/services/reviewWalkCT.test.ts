@@ -43,7 +43,7 @@ describe('"completes your development" is an opening fact', () => {
 
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { NO_SECOND_READ } from './inaccuracyCall';
-import { facetLines, facetRecords } from '../test/reviewFacetLines';
+import { facetLines } from '../test/reviewFacetLines';
 
 describe('"you can take back" only when taking back holds (15.Nxh7)', () => {
   const trade = (sans: string, san: string, line: string[]): string[] => {

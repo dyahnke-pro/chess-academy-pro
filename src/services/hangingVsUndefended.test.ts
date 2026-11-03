@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { NO_SECOND_READ } from './inaccuracyCall';
-import { facetLines, facetRecords } from '../test/reviewFacetLines';
+import { facetLines } from '../test/reviewFacetLines';
 
 // Review walk 2026-10-04, G3 (lichess mZ1GOTOw) 37…Kc7: "Newly undefended:
 // their rook on d1" — nothing had ever defended it; the king step opened the

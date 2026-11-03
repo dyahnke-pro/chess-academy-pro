@@ -6,7 +6,7 @@ import { Chess } from 'chess.js';
 import { computeBoardDelta } from './boardDelta';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { NO_SECOND_READ } from './inaccuracyCall';
-import { facetLines, facetRecords } from '../test/reviewFacetLines';
+import { facetLines } from '../test/reviewFacetLines';
 
 describe('[eval] attribution — the bar never moves unexplained (David 2026-07-22)', () => {
   const base = (over: Partial<Parameters<typeof computeMoveFacets>[0]>): string[] => {
