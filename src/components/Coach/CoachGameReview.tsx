@@ -96,7 +96,7 @@ import { resolveCoachNarration } from '../../utils/coachNarration';
 import { logAppAudit } from '../../services/appAuditor';
 import { recordReviewedGame } from '../../services/autoAnalyzeGame';
 import { db } from '../../db/schema';
-import { getOrBuildReviewNarration, isReviewUncapped, mergeReviewNarration, reviewMoveInputsFrom, storySeed, storyAtMerge } from '../../services/reviewNarrationBuild';
+import { getOrBuildReviewNarration, isReviewUncapped, mergeReviewNarration, reviewMoveInputsFrom, storySeed, exploreSeed, storyAtMerge } from '../../services/reviewNarrationBuild';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import { admitArrow } from '../../services/arrowDoor';
@@ -1816,14 +1816,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         const it = intentWithFallback(args.fenBefore, args.san, { before: before.topLines, after: after.topLines, passBefore: [], passAfter: [] }, 'student', false, true);
         if (it) intentByPly.set(inputs.length, reviewIntentOf(it, false));
       }
-      // WHAT THE WALK ALREADY SAID (review noise, #8): the same seed the
-      // deep-dive swap builds from — every say-once key and counter the walk
-      // spoke — applied from the first ply off the game, so a refrain, a
-      // loose-piece formula or a motif heard on the walk is not said again here.
-      let onGame = 0;
-      while (onGame < args.history.length && onGame < moves.length && moves[onGame]?.san === args.history[onGame]) onGame += 1;
-      const walked = storySeed(walkNarration, walkPlyRef.current);
-      const seed = walked ? { throughPly: Math.min(walked.throughPly, onGame), checkpoint: walked.checkpoint } : null;
+      // WHAT THE WALK ALREADY SAID (review noise, #8): the walk's story — every
+      // say-once key, counter, plan and event it spoke — at the ply this line
+      // leaves the game (`exploreSeed`, never the walk's current ply: what it
+      // said past the branch was about moves this line never played), so a
+      // refrain, a loose-piece formula or a motif heard on the walk is not said
+      // again here.
+      const seed = exploreSeed(walkNarration, walkPlyRef.current, args.history, moves);
       // The line's own story, seeded from the walk's — read here only for the
       // refrain fold; the walk keeps its own.
       const lineStory = createStoryStore(props.gameId ?? 'review');

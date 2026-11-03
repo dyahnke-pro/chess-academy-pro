@@ -174,6 +174,27 @@ export function storySeed(narration: ReviewNarration | null, walkedThroughPly: n
   return checkpoint ? { throughPly: walkedThroughPly, checkpoint } : null;
 }
 
+/** THE SEED OF A LINE EXPLORED OFF THE WALK (P1-8d): the walk's story at the
+ *  ply the line LEAVES the game — never at the walk's current ply. The free
+ *  board's line shares the game's first moves and then branches; past the
+ *  branch the walk spoke about moves this line never played. Cut at the
+ *  walk's ply, a line explored off ply 11 with the walk at 25 counted the
+ *  ply-25 slip ("That's the second time this game") and held every claim,
+ *  plan step and event of plies 12–25 as said (the P1-8c review). So the seed
+ *  is the walk's story through the earlier of the two: what the student heard
+ *  of the moves the line shares with the game. Null when nothing was said by
+ *  then (or the line leaves the game on its first move). */
+export function exploreSeed(
+  narration: ReviewNarration | null,
+  walkedThroughPly: number,
+  line: readonly string[],
+  game: ReadonlyArray<{ readonly san: string }>,
+): StorySeed | null {
+  let onGame = 0;
+  while (onGame < line.length && onGame < game.length && game[onGame].san === line[onGame]) onGame += 1;
+  return storySeed(narration, Math.min(walkedThroughPly, onGame));
+}
+
 /** THE MERGE INSTRUMENT (the lead, 2026-10-20): at a mid-walk swap, what the
  *  walk SPOKE through the swap (claims and sentences), how many of those the
  *  new build's story does not hold by then (`missing` — the stories diverged),

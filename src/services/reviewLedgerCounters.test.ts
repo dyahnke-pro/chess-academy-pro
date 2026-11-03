@@ -64,8 +64,11 @@ describe('the standing refrains ride the seed', () => {
     const walkStory = createStoryStore('g');
     foldReviewRefrains(walk, walkStory, null);
     expect(walk[1].narration).toMatch(/you still own the d-file/);
-    // The full form is in the story, at the ply that said it.
-    expect([...walkStory.current().said].filter(([k]) => k.startsWith('rf:')).map(([, at]) => at)).toEqual([3]);
+    // The full form is in the story (its lesson and this instance), at the
+    // ply that said it.
+    const walkRf = [...walkStory.current().said].filter(([k]) => k.startsWith('rf:'));
+    expect(walkRf.length).toBeGreaterThan(0);
+    expect(walkRf.every(([, at]) => at === 3)).toBe(true);
     // The deeper build no longer says it at ply 3, so its own fold would say it in full at 10.
     const swapped = [seg(3, 'A quiet move.'), seg(10, FULL)];
     const seed = { throughPly: 5, checkpoint: walkStory.serialize() };
@@ -75,12 +78,12 @@ describe('the standing refrains ride the seed', () => {
     expect(swapped[1].narration).toMatch(/you still own the d-file/);
     expect(swapped[1].narration).not.toMatch(/you own the open d-file/);
     // …and the seed's past is the walk's: the rebuild's own early fold wrote nothing into it.
-    expect([...storyOf(rebuilt.serialize()).said.keys()].filter((k) => k.startsWith('rf:'))).toHaveLength(1);
+    expect([...storyOf(rebuilt.serialize()).said].filter(([k]) => k.startsWith('rf:'))).toEqual(walkRf);
   });
   it('a free-board move folds from the same seed (the explored-line rebuild in review)', () => {
     const src = readFileSync('src/components/Coach/CoachGameReview.tsx', 'utf8');
     const body = src.slice(src.indexOf('const narrateExploredMove'), src.indexOf('const narrateExploredMoveRef'));
-    expect(body).toMatch(/storySeed\(walkNarration, walkPlyRef\.current\)/);
+    expect(body).toMatch(/exploreSeed\(walkNarration, walkPlyRef\.current, args\.history, moves\)/);
     expect(body).toMatch(/buildReviewSegmentsYielding\([^;]*, seed, lineStory\)/);
     expect(body).toMatch(/foldReviewRefrains\(segs, lineStory, seed\)/);
   });

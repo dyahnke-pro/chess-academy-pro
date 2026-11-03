@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { readFileSync } from 'node:fs';
 
 // The build is what is under test, not the narration: a stub returns a fixed
 // narration and counts how often the (expensive) generator actually ran.
@@ -8,8 +9,8 @@ vi.mock('./coachFeatureService', () => ({
 }));
 
 import { db } from '../db/schema';
-import { getOrBuildReviewNarration, storySeed, storyAtMerge, mergeReviewNarration, type ReviewNarrationRequest } from './reviewNarrationBuild';
-import { createStoryStore, storyOf } from './gameStory';
+import { getOrBuildReviewNarration, storySeed, exploreSeed, storyAtMerge, mergeReviewNarration, type ReviewNarrationRequest } from './reviewNarrationBuild';
+import { createStoryStore, storyOf, slipCount, threadStated } from './gameStory';
 
 const narration = { intro: 'intro', segments: [{ ply: 1, san: 'e4', narration: 'x' }], closing: null, story: null };
 
@@ -99,5 +100,60 @@ describe('the narration holds ONE story; a seed is it taken back to the ply walk
     // The instrument reads the same stories: two keys spoken, both unknown to
     // the newer build by then, none said again after.
     expect(storyAtMerge(walk, nextNarration as never, 10)).toEqual({ spoken: 2, missing: 2, reSaid: 0, reSaidKeys: [] });
+  });
+});
+
+describe('a line explored off the walk is seeded with the story at the ply it LEAVES the game (P1-8d, the P1-8c review)', () => {
+  // The walk is at ply 25. It stated a plan at 9, said a hint at 5, and on
+  // its ply-25 move the student slipped (`not-developing`, their first slip
+  // was at ply 8) and the coach said "That's the second time this game".
+  const game = Array.from({ length: 30 }, (_, i) => ({ san: `m${i + 1}` }));
+  const walkStory = (): string => {
+    const s = createStoryStore('g');
+    s.commit(5, { claims: ['h:a'] });
+    s.note(8, [{ kind: 'slip', id: 'not-developing' }]);
+    s.commitThreads(9, [{ key: 'student|plan-aim:passer:c', kind: 'stated' }]);
+    s.commit(18, { claims: ['h:said-on-ply-18'], sentences: ['said on ply eighteen'] });
+    s.note(25, [{ kind: 'slip', id: 'not-developing' }]);
+    return s.serialize();
+  };
+  const walk = { intro: '', closing: null, segments: [], story: walkStory() } as never;
+  /** The game's first `k` moves, then a move the game did not play. */
+  const branchAt = (k: number): string[] => [...game.slice(0, k).map((m) => m.san), 'other'];
+
+  it('a line leaving the game at ply 11 with the walk at 25: the plan and every claim said by 11, nothing after', () => {
+    const seed = exploreSeed(walk, 25, branchAt(11), game);
+    expect(seed?.throughPly).toBe(11);
+    const st = storyOf(seed?.checkpoint ?? null);
+    // Kept: what the student heard of the moves the line shares with the game.
+    expect(st.said.get('h:a')).toBe(5);
+    expect(threadStated(st, 'student|plan-aim:passer:c')).toBe(9);
+    expect(slipCount(st, 'not-developing')).toBe(1);
+    // Not carried: what was said about plies 12–25, moves this line never
+    // played — the second slip above all (the line's own slip would have
+    // been called "the third time this game").
+    expect(st.said.has('h:said-on-ply-18')).toBe(false);
+    expect(st.sentences.size).toBe(0);
+    expect([...st.events].every((e) => e.ply <= 11)).toBe(true);
+  });
+
+  it('a line that follows the game past the walk is cut at the walk: the student heard no further', () => {
+    const seed = exploreSeed(walk, 20, branchAt(27), game);
+    expect(seed?.throughPly).toBe(20);
+    const st = storyOf(seed?.checkpoint ?? null);
+    expect(st.said.get('h:said-on-ply-18')).toBe(18);
+    expect(slipCount(st, 'not-developing')).toBe(1);
+  });
+
+  it('a line off the game before anything was said has no seed; one off the first move has none either', () => {
+    expect(exploreSeed(walk, 25, branchAt(3), game)).toBeNull();
+    expect(exploreSeed(walk, 25, ['other'], game)).toBeNull();
+  });
+
+  it('the free board seeds its line this way — through `exploreSeed`, never the walk\'s ply alone', () => {
+    const src = readFileSync('src/components/Coach/CoachGameReview.tsx', 'utf8');
+    const body = src.slice(src.indexOf('const narrateExploredMove'), src.indexOf('const narrateExploredMoveRef'));
+    expect(body).toMatch(/const seed = exploreSeed\(walkNarration, walkPlyRef\.current, args\.history, moves\);/);
+    expect(body).not.toMatch(/storySeed\(/);
   });
 });
