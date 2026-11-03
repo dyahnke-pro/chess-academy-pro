@@ -486,7 +486,14 @@ export function buildVoicePackage(
   // (The `borrowed` corpus tier and the book `fork` offer, and the rule that
   // made borrowed teaching yield to an event on THIS board, went 2026-09-29:
   // no surface produced either kind any more — G8.5.)
+  // Whether the fact before this one spoke: a fact that OPENS with a sentence
+  // explaining the one before it ("Remember — a fork hits two targets…") speaks
+  // only after the fact it explains (P1-6d: Review's `[rule]` tag used to hide
+  // that opening from the check, so the rule rode on a tag).
+  let lastFactKept = false;
   for (const { f } of ordered) {
+    const afterKeptFact = lastFactKept;
+    lastFactKept = false;
     if (f.claims?.some((c) => seen.has(claimKey(c)))) { dropped.push({ fact: f, reason: 'claim already said' }); continue; }
     const result = verify(f);
     if ('reason' in result) { dropped.push({ fact: f, reason: result.reason }); continue; }
@@ -507,9 +514,10 @@ export function buildVoicePackage(
     const mine = new Set<string>();
     for (const s of sentencesOf(result.text)) {
       const k = sayKey(s);
+      const opens = first;
       const afterDrop = !first && !prevKept;
       first = false;
-      if (DEPENDENT.test(s) && !prevKept) { why.add('duplicate'); continue; }
+      if (DEPENDENT.test(s) && !(opens ? afterKeptFact : prevKept)) { why.add('duplicate'); continue; }
       if (afterDrop && ANAPHOR.test(s)) { why.add('duplicate'); continue; }
       prevKept = false;
       if (seen.has(k) || mine.has(k)) { why.add(saidEarlier.has(k) ? 'already said this turn' : 'duplicate'); continue; }
@@ -561,6 +569,7 @@ export function buildVoicePackage(
     // A line rides only when EVERY sentence survived: a trimmed fact may have
     // lost the very sentence that named the moves.
     kept.push({ ...f, text: fresh.join(' '), lines: why.size === 0 ? f.lines : undefined });
+    lastFactKept = true;
   }
 
   // SENTENCE CASE AT THE JOIN. David's 2026-08-08 run: "That takes your pawn.

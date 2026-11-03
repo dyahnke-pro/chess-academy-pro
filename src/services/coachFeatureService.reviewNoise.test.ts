@@ -132,7 +132,7 @@ describe('review noise — one claim, one producer; the need score past the open
   it('David\'s Rossolimo 5…b5: "Your b5 kicks their bishop off a4" — never also "Attacks their bishop on a4"', () => {
     const w = walk('e4 c5 Nf3 Nc6 Bb5 e6 c3 a6 Ba4 b5'.split(' '), 'black');
     expect(w[9]).toMatch(/off a4/);
-    expect(w[9]).not.toMatch(/\[move-job\] (?:Your \S+ )?[Aa]ttacks their bishop on a4/);
+    expect(w[9]).not.toMatch(/(?:^|\. )(?:Your \S+ )?[Aa]ttacks their bishop on a4/);
   }, 60_000);
   it('past the opening a move job speaks only where the need score asked for teaching (SI5q0VJz, no slip graded)', () => {
     // The real masters file: the book's end is where the old story tail began.
@@ -140,7 +140,8 @@ describe('review noise — one claim, one producer; the need score past the open
     const c = new Chess(); c.loadPgn(readFileSync('src/services/__fixtures__/SI5q0VJz.pgn', 'utf8'));
     const d = new Chess();
     const segs = buildReviewSegmentsForTests(c.history().map((san, i) => { d.move(san); return { ply: i + 1, san, fenAfter: d.fen(), isCoachMove: i % 2 === 1, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; }), 'white', null, true, 1400);
-    const late = segs.filter((g) => g.ply > 30 && /\[move-job\]/.test(g.narration ?? ''));
+    // A move's job opens on the move itself ("You play X — it …").
+    const late = segs.filter((g) => g.ply > 30 && /(?:^|\. )(?:You|They) play \S+(?: —|:)/.test(g.narration ?? ''));
     __setLocalDbForTests(null);
     for (const g of late) expect(g.need?.speak).toBe(true);
   }, 120_000);

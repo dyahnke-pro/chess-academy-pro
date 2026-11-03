@@ -1634,10 +1634,9 @@ function* reviewSegmentSteps(
   // supersedes the earlier appear-only pass, which still let a flickering fact
   // ("your pawn on e4 is undefended") restate itself two or three times.
   const STANDING_STATE_TAGS: ReadonlySet<FacetTag> = new Set<FacetTag>(['tactic', 'loose', 'count', 'royal', 'rook7']);
-  // The static reads, said once a game each, under the key the walk's stored
-  // story has always kept them by (its tag and its words).
+  // The static reads, said once a game each, keyed by their tag and words.
   const STATIC_TAGS: ReadonlySet<FacetTag> = new Set<FacetTag>(['opening', 'plan-middlegame', 'passer', 'badbishop', 'worst', 'trapped', 'minority', 'complex', 'endgame']);
-  const staticKey = (f: ReviewFacet): string => `[${f.tag}] ${f.text}`;
+  const staticKey = (f: ReviewFacet): string => `${f.tag}|${f.text}`;
   const standingSpoken = ledger(REVIEW_SAID.standing); // signatures of standing reads spoken
   const sacSpoken = ledger(REVIEW_SAID.sac); // sacrifice-compensation profiles spoken
   // Verdict is ATOM-DIFFED: the verdict WORD (balanced/better/worse) speaks when

@@ -56,7 +56,7 @@ describe('review — the say-once ledgers commit after the door, for spoken fact
 
   it('BLAMES BY STATEMENT: no ledger write inside the candidate loop; the commit reads what spoke', () => {
     const src = readFileSync('src/services/coachFeatureService.ts', 'utf8');
-    const loopStart = src.indexOf('const keptRaw: string[] = [];');
+    const loopStart = src.indexOf('const keptRaw: ReviewFacet[] = [];');
     const loopEnd = src.indexOf('const claimedRefrains = new Set<number>();');
     expect(loopStart).toBeGreaterThan(0);
     expect(loopEnd).toBeGreaterThan(loopStart);

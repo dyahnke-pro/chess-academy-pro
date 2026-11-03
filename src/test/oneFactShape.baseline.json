@@ -5,10 +5,6 @@
     "src/hooks/usePhaseNarration.ts": 3
   },
   "StoryFact": {},
-  "facet": {
-    "src/services/coachDecider.ts": 1,
-    "src/services/coachFeatureService.ts": 19,
-    "src/services/reviewFullData.ts": 72
-  },
+  "facet": {},
   "BoardRead": {}
 }
