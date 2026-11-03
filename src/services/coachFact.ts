@@ -355,7 +355,22 @@ export const COMPUTER_CATALOG = {
   studentMovePointFact: { file: 'services/playCommentary.ts', says: 'what the student\'s move does on the board' },
   moveOrder: { file: 'services/moveOrder.ts', says: 'the move order: the move that had to come first' },
   learnMoveReason: { file: 'services/learnBoardTeaching.ts', says: 'the engine-read reason for a move: what it prepares or stops' },
-  learnFact: { file: 'services/learnTurnDoor.ts', says: 'a Learn line the page reads inline, not yet a computer of its own (named one by one in P1-6f)' },
+  kingPawnUnderFire: { file: 'services/learnBoardTeaching.ts', says: 'a pawn beside the student\'s king the opponent can win' },
+  cheaperAttackerHit: { file: 'services/learnBoardTeaching.ts', says: 'a piece of the student\'s attacked by a cheaper one, with no capture that answers it' },
+  gambitPoint: { file: 'services/learnBoardTeaching.ts', says: 'what a gambit they accepted bought: a passed pawn, a file for a rook, or time' },
+  detectImmediateTactics: { file: 'services/liveTacticsContext.ts', says: 'the tactics standing on the live board for either side, no line needed' },
+  detectHangingPieces: { file: 'services/liveTacticsContext.ts', says: 'the pieces left en prise on the live board' },
+  scanUpcomingTactics: { file: 'services/tacticClassifier.ts', says: 'a tactic that lands later in the engine\'s line' },
+  prizeTeaching: { file: 'services/learnBoardTeaching.ts', says: 'a piece of theirs the student can win, said without naming the move' },
+  temptingTurnClause: { file: 'services/tacticalRead.ts', says: 'the tempting move ruled out, and what refutes it' },
+  uncertaintyClause: { file: 'services/tacticalRead.ts', says: 'the moves that hold equally well, when the read is level' },
+  candidateCompareRead: { file: 'services/tacticalRead.ts', says: 'the candidate moves compared by what each decides' },
+  stepArc: { file: 'services/planArc.ts', says: 'a step of a plan\'s arc: a plan emerging, advancing or arriving' },
+  heldFoundText: { file: 'services/deliberation.ts', says: 'the held move the student found, credited' },
+  slipAnswerText: { file: 'services/playCommentary.ts', says: 'the answer to their slip the student found' },
+  buildPlayCommentary: { file: 'services/playCommentary.ts', says: 'the computed beat on the live board: a tactic, a threat or the move\'s point' },
+  detectBehaviors: { file: 'services/danyaBehaviors.ts', says: 'a board habit worth naming: an outpost, the bishop pair, a pawn break' },
+  buildPositionalRead: { file: 'services/positionalRead.ts', says: 'the positional read of the live board: king, plan, files, outposts' },
 } satisfies Record<string, CatalogRow>;
 
 export type ComputerName = keyof typeof COMPUTER_CATALOG;

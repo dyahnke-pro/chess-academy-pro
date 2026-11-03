@@ -4,8 +4,9 @@
 // to find. A test fixture names only what it is about: these helpers answer
 // the rest the way a producer does — the moves it names are answered on the
 // board (`namesPlayableStudentMove`), a fixture with no computer of its own is
-// one of the page's own reads (`learnFact`), and each fact is numbered for
-// its door call, as the page numbers its waves.
+// the live board's position read (`readPosition` — the door never reads which
+// computer made a fact), and each fact is numbered for its door call, as the
+// page numbers its waves.
 import {
   decidePhaseWave as decidePhaseWaveOf,
   decideTurn as decideTurnOf,
@@ -34,7 +35,7 @@ function made(id: string, x: LaneFixture): LaneFact {
   const { id: _id, computer, namesStudentMove, stakes, ...rest } = x;
   return learnFact(id, {
     ...rest,
-    computer: computer ?? 'learnFact',
+    computer: computer ?? 'readPosition',
     namesStudentMove: typeof namesStudentMove === 'boolean' ? namesStudentMove : namesPlayableStudentMove(namesStudentMove),
     ...(stakes ? { stakes } : {}),
   });

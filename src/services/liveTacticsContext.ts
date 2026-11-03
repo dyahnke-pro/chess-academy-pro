@@ -331,7 +331,7 @@ function pieceInventory(board: ReturnType<Chess['board']>): { whitePieces: strin
  *  pass-through evalBefore/evalAfter so the function falls through
  *  the eval-swing gating and returns whatever its tactic detectors
  *  find. */
-function detectImmediateTactics(
+export function detectImmediateTactics(
   fen: string,
   playerColor: 'w' | 'b',
 ): TacticsLiveContext['immediate'] {
@@ -373,7 +373,7 @@ function detectImmediateTactics(
   }
 }
 
-function detectHangingPieces(fen: string): TacticsLiveContext['hanging'] {
+export function detectHangingPieces(fen: string): TacticsLiveContext['hanging'] {
   try {
     const chess = new Chess(fen);
     const hanging = findHangingPieces(chess);

@@ -59,7 +59,7 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // It carried kind 'plan', which the old DNA kind whitelist never listed, so
     // from 2026-09-27 to 2026-09-29 it was computed every turn and never heard.
     // (OS-10, 2026-10-20: the may-name-the-student's-move field sits before the squares.)
-    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: 'learnFact', text: line, lane: 'planArc', proof: NO_PROOF\.description, namesStudentMove: false, squares: e\.squares[,} ]/);
+    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: 'stepArc', text: line, lane: 'planArc', proof: NO_PROOF\.description, namesStudentMove: false, squares: e\.squares[,} ]/);
   });
 
   it('the coach callout is queued at the rank the model gives it', () => {

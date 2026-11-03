@@ -103,7 +103,12 @@ describe('a won position after the move is not a blunder (ply 91)', () => {
 describe('a gambit file is named as it is (ply 47)', () => {
   it('24.e5 dxe5 — never "the e-file is open" with their pawns on it', async () => {
     const { readFileSync } = await import('node:fs');
-    const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    // The gambit's point is its own computer (`gambitPoint`, P1-6f); the page
+    // speaks it and writes no file sentence of its own.
+    const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    const src = readFileSync('src/services/learnBoardTeaching.ts', 'utf8');
+    expect(page).toMatch(/const gambitLine = gambitPoint\(/);
+    expect(page).not.toMatch(/-file is open for your rook\.`/);
     expect(src).not.toMatch(/-file is open for your rook\.`/);
     expect(src).toMatch(/theirPawnOnFile \? 'half-open' : 'open'/);
   });

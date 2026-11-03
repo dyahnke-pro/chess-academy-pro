@@ -11,12 +11,13 @@
 import { flipSideToMove } from './threatOut';
 import { counterThreat, counterThreatLine } from './counterThreat';
 import { playedConcept, playedConceptLine, type PlayedConcept } from './playedConcept';
-import { CAPTURE_VALUE } from './pieceValues';
+import { CAPTURE_VALUE, MATERIAL_VALUE } from './pieceValues';
 import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof, type Proof } from './proof';
 import { lineShape, lineSeatAt, withArticle } from '../utils/andList';
 import { countWords } from '../utils/countWords';
-import { Chess, type Square } from 'chess.js';
-import { legalSeeGainFor, structureTransfer } from './positionReadingService';
+import { Chess, type Color, type Square } from 'chess.js';
+import { legalSeeGainFor, signedCaptureRead, signedLegalSeeFor, structureTransfer, takingTheAttackerAnswers } from './positionReadingService';
+import { rookReachesFile } from './positionalRead';
 import { namedPawnStructure } from './nextPlans';
 import { moverFault } from './accuracyService';
 import { lineWins, lineArrows, mateLine, type MateLine } from './lineCalc';
@@ -1494,4 +1495,115 @@ export function structureNamingLine(
   if (!struct) return null;
   const transfer = structureTransfer(struct.name, openingName);
   return { text: `${struct.name} — ${struct.plan}.${transfer ? ` ${transfer}` : ''}`, claim: `structure:${struct.name}` };
+}
+
+// ── THREE READS LEARN USED TO COMPUTE INSIDE THE PAGE (WO-STORY-MATRIX-01
+// P1-6f) — moved here unchanged, each a computer the catalog names:
+// `kingPawnUnderFire`, `cheaperAttackerHit`, `gambitPoint`.
+
+/** A pawn touching the student's king that the opponent can win outright. */
+export interface KingPawnHit { pawn: Square; king: Square; attackers: number }
+
+/** A PAWN IN FRONT OF YOUR KING IS NOT "SMALL STUFF" (fresh-game walk
+ *  2026-09-27, 14.Qxh5: queen and knight both hit f7, only the king guarded
+ *  it, and the coach talked about the bishop pair — …Rg7 was the only
+ *  defence). The pawn exception to "pieces only": the first pawn touching the
+ *  king that the opponent wins by force. */
+export function kingPawnUnderFire(fen: string, student: Color): KingPawnHit | null {
+  try {
+    const b = new Chess(fen);
+    const king = b.board().flat().find((c) => c && c.type === 'k' && c.color === student)?.square;
+    if (!king) return null;
+    const foe: Color = student === 'w' ? 'b' : 'w';
+    for (const c of b.board().flat()) {
+      if (!c || c.type !== 'p' || c.color !== student) continue;
+      const near = Math.abs(c.square.charCodeAt(0) - king.charCodeAt(0)) <= 1 && Math.abs(Number(c.square[1]) - Number(king[1])) <= 1;
+      if (!near) continue;
+      if (signedLegalSeeFor(fen, c.square, foe) > 0) return { pawn: c.square, king, attackers: b.attackers(c.square, foe).length };
+    }
+  } catch { /* an unreadable board names no pawn */ }
+  return null;
+}
+
+/** A piece of the student's attacked by a cheaper piece of the opponent's. */
+export interface CheaperHit { sq: Square; piece: string; by: string; bySq: Square }
+
+/** ATTACKED BY A SMALLER PIECE: the most valuable minor or major of the
+ *  student's that a cheaper enemy piece attacks — unless taking the attacker
+ *  loses nothing, when the answer is to take it, not to move away. Not only
+ *  when it is FREE: a defended pawn traded pawn-for-pawn answers the attack
+ *  just the same (hand walk 2026-09-30, Ruy 14.d4 cxd4). SIGNED: a capture
+ *  that loses material is no answer (6.h3 Bxh3 gxh3, both Learn tapes of
+ *  2026-10-07). */
+export function cheaperAttackerHit(fen: string, student: Color): CheaperHit | null {
+  try {
+    const board = new Chess(fen);
+    const foe: Color = student === 'w' ? 'b' : 'w';
+    const value = (t: string): number => MATERIAL_VALUE[t] ?? 0;
+    let hit: CheaperHit | null = null;
+    for (const row of board.board()) for (const cell of row) {
+      if (!cell || cell.color !== student || value(cell.type) < 3) continue;
+      const low = board.attackers(cell.square, foe)
+        .map((a) => ({ a, t: board.get(a)?.type ?? 'k' }))
+        .filter((x) => x.t !== 'k' && value(x.t) < value(cell.type))
+        .sort((x, y) => value(x.t) - value(y.t))[0];
+      const answeredByCapture = !!low && takingTheAttackerAnswers(fen, low.a, student);
+      if (low && !answeredByCapture && (!hit || value(cell.type) > value(hit.piece))) hit = { sq: cell.square, piece: cell.type, by: low.t, bySq: low.a };
+    }
+    return hit;
+  } catch { return null; }
+}
+
+const NAME_OF_PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+
+/** A GAMBIT THEY ACCEPTED (fresh-game walk 2026-09-27, …g5 Nxg5: the pawn
+ *  went and nothing said what it bought). Their reply took the piece the
+ *  student's move put down, and the piece cannot be won straight back — so it
+ *  was an offer, and the teaching is what it opened: a pawn of the student's
+ *  passed now (a breakthrough), or a file a rook of theirs can use, or — when
+ *  nothing opened — the time the engine rates it for. Null for a trade (the
+ *  move captured, or the piece is won back) or when a file opened that no rook
+ *  can use. */
+export function gambitPoint(p: { fenBefore: string; fenAfterMove: string; fenAfterReply: string; san: string; to: string; student: Color }): string | null {
+  const { fenBefore, fenAfterMove, fenAfterReply, san, to, student: me } = p;
+  try {
+    const reply = new Chess(fenAfterMove).moves({ verbose: true })
+      .find((r) => { const c = new Chess(fenAfterMove); c.move(r.san); return c.fen().split(' ')[0] === fenAfterReply.split(' ')[0]; });
+    if (!reply || reply.to !== to || !reply.captured) return null;
+    // A trade is not a gambit: the move itself captured, or the piece can be
+    // won straight back.
+    if (san.includes('x')) return null;
+    const wonBack = signedCaptureRead(fenAfterReply, to, me);
+    if (wonBack === null || wonBack > 0) return null;
+    const pawnFiles = (fen: string): Set<string> => new Set(new Chess(fen).board().flat()
+      .filter((c) => c && c.type === 'p' && c.color === me).map((c) => (c as { square: string }).square[0]));
+    const before = pawnFiles(fenBefore); const after = pawnFiles(fenAfterReply);
+    const opened = [...before].filter((f) => !after.has(f)).sort();
+    const what = NAME_OF_PIECE[reply.captured] ?? 'pawn';
+    // A BREAKTHROUGH, NOT A FILE (hand walk 2026-09-27, a pawn ending: "b6 was
+    // a gambit … the b-file is open for your rook" with no rook on the
+    // board). What the sacrifice bought is whichever of these is TRUE: a pawn
+    // of the student's that is passed now, or a file a rook of theirs can use.
+    const passed = (fen: string): Set<string> => {
+      const cells = new Chess(fen).board().flat().filter((c) => c && c.type === 'p') as Array<{ square: string; color: Color }>;
+      const dir = me === 'w' ? 1 : -1;
+      return new Set(cells.filter((pc) => pc.color === me && !cells.some((e) => e.color !== me
+        && Math.abs(e.square.charCodeAt(0) - pc.square.charCodeAt(0)) <= 1
+        && (Number(e.square[1]) - Number(pc.square[1])) * dir > 0)).map((pc) => pc.square));
+    };
+    const was = passed(fenBefore);
+    const fresh = [...passed(fenAfterReply)].filter((sq) => !was.has(sq) && ![...was].some((w) => w[0] === sq[0]));
+    if (fresh.length > 0) return `${san} was a breakthrough — they took the ${what}, and now your ${fresh[0][0]}-pawn is passed.`;
+    // OPEN ONLY IF IT IS OPEN, AND ONLY FOR A ROOK THAT GETS THERE (hand walk
+    // 1690, 2026-09-27: after 24.e5 dxe5 "the e-file is open for your rook" —
+    // Black's pawns still sat on e7 and e5).
+    const file = opened[0];
+    const theirPawnOnFile = file !== undefined && new Chess(fenAfterReply).board().flat()
+      .some((c) => c?.type === 'p' && c.color !== me && c.square[0] === file);
+    if (file !== undefined && rookReachesFile(fenAfterReply, me, file)) {
+      return `${san} was a gambit — they took the ${what}, and in return the ${file}-file is ${theirPawnOnFile ? 'half-open' : 'open'} for your rook.`;
+    }
+    if (opened.length > 0) return null;
+    return `${san} was a gambit — they took the ${what}, and the engine rates the trade of it for time as sound.`;
+  } catch { return null; }
 }

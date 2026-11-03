@@ -232,7 +232,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     expect(d.pkg.kept[0]?.lines).toBeUndefined();
   });
   it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen lines and never takes the board for an earlier one', () => {
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: 'learnFact', text: registerNow, lane: 'register', .*?, lines: pendingRegisterLines \}\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: [^,]*?pendingRegisterComputers\.full, text: registerNow, lane: 'register', .*?, lines: pendingRegisterLines \}\)/);
     // The student's best move is never drawn before they play it (prod walk 2026-10-19).
     expect(TEACH_CODE).not.toMatch(/sans: \[compareRead\.bestSan\]/);
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: c\.computer, text: c\.text, lane, .*?, namesStudentMove: c\.namesStudentMove, squares: c\.squares, claims: clauseClaims\(pf, ci, probe\.fen\(\)\), gradeFen: c\.fen, lines: c\.lines, stakes: c\.stakes \?\? undefined, role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill \}\)/);
@@ -265,7 +265,11 @@ describe('a smaller attacker you can take back is not "it has to move" (hand wal
     const { legalSeeGainFor } = await import('./positionReadingService');
     const fen = 'r2q1rk1/4bppp/p1npbn2/1p2p3/3pP3/2P1NN2/PPB2PPP/R1BQR1K1 w - - 0 15';
     expect(legalSeeGainFor(fen, 'd4', 'w')).toBeGreaterThanOrEqual(0);
-    expect(TEACH_CODE).toMatch(/takingTheAttackerAnswers\(args\.fenAfterReply, low\.a, studentCC\)/);
+    // The cheaper-attacker alert answers it on the board: cxd4 takes the
+    // attacker back, so the knight on e3 is not "attacked by a pawn".
+    const { cheaperAttackerHit } = await import('./learnBoardTeaching');
+    expect(cheaperAttackerHit(fen, 'w')).toBeNull();
+    expect(TEACH_CODE).toMatch(/cheaperAttackerHit\(args\.fenAfterReply, studentCC\)/);
   });
 });
 
