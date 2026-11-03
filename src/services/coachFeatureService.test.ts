@@ -891,7 +891,7 @@ describe('one claim, spoken once — the opponent\'s reach into the centre (walk
       'black', 'Sicilian Defense', true,
     );
     for (const s of segs.filter((x) => x.ply % 2 === 1)) {
-      expect(s.narration ?? '').not.toMatch(/now fights for[^.]*\.[^[]*\[opp-target\] Your opponent's \w+ steps in eyeing/);
+      expect(s.narration ?? '').not.toMatch(/now fights for[^.]*\.[^.]*Your opponent's \w+ steps in eyeing/);
       expect(s.narration ?? '').not.toMatch(/steps in eyeing/);
     }
   });

@@ -3,7 +3,7 @@
 // a one-move threat he has proven he sees, a reason formula said twice in a
 // game, a structure claim said on three moves, a queen "paying" a pawn's
 // price, a plain trade, a knight's square count.
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
@@ -13,6 +13,21 @@ import { reasonFormula } from '../utils/reasonFormula';
 import { __setLocalDbForTests } from './masterPlayLookup';
 import { setOpeningIdentity } from './openingIdentity';
 import { createStoryStore } from './gameStory';
+
+// Every move job Review makes, as made (WO-STORY-MATRIX-01 P1-6d): Review's
+// facts are the one fact, so a test finds the move's job by its tag on the
+// fact, never by a `[move-job]` prefix in the spoken words (there is none).
+const { madeJobs } = vi.hoisted(() => ({ madeJobs: [] as string[] }));
+vi.mock('./reviewFacet', async (orig) => {
+  const actual = await orig<typeof import('./reviewFacet')>();
+  return {
+    ...actual,
+    reviewFacet: (...a: Parameters<typeof actual.reviewFacet>) => {
+      if (a[1] === 'move-job') madeJobs.push(a[2]);
+      return actual.reviewFacet(...a);
+    },
+  };
+});
 
 // David's Vienna (chesscom 1038626480), White: 11…Bxg2 hits the rook on h1.
 const VIENNA = 'e4 e5 Nc3 Nc6 Bc4 b6 d3 Nf6 f4 Bc5 fxe5 Nxe5 Bb3 Bb7 d4 Bb4 Bd2 Nc6 e5 Nxd4 exf6 Bxg2 Nge2 Qxf6'.split(' ');
@@ -82,6 +97,7 @@ describe('review noise — Carlsen–Grischuk, Norway 2015 (lichess jMVMo1Ua), s
   let segs: ReturnType<typeof buildReviewSegmentsForTests> | null = null;
   const run = (): ReturnType<typeof buildReviewSegmentsForTests> => {
     if (segs) return segs;
+    madeJobs.length = 0;
     const c = new Chess(); c.loadPgn(pgn); const sans = c.history();
     const d = new Chess(); let prev = 20;
     segs = buildReviewSegmentsForTests(sans.map((san, i) => {
@@ -94,16 +110,18 @@ describe('review noise — Carlsen–Grischuk, Norway 2015 (lichess jMVMo1Ua), s
   };
   const text = (): string[] => run().map((s) => s.narration ?? '');
   it('every move job names whose piece it is (no bare "Takes back on c4, and the material is level again")', () => {
-    for (const n of text()) for (const f of n.split(/ (?=\[[a-z-]+\] )/)) if (f.startsWith('[move-job] ')) expect(f).toMatch(/\b(?:your|their|you|they)\b/i);
+    run();
+    expect(madeJobs.length).toBeGreaterThan(0);
+    for (const f of madeJobs) expect(f).toMatch(/\b(?:your|their|you|they)\b/i);
   }, 120_000);
   it('every move job has a subject — the move that does it (prod Review 2026-10-29: "Joins your bishop on g5 against their knight on f4")', () => {
+    run();
     let jobs = 0;
-    for (const n of text()) for (const f of n.split(/ (?=\[[a-z-]+\] )/)) {
-      if (!f.startsWith('[move-job] ')) continue;
+    for (const f of madeJobs) {
       jobs += 1;
       // A standing leads the move's thought ("A rare book move — … here. You
       // play a6 — it …"); the thought names its move, or the move it answers.
-      const body = f.slice('[move-job] '.length).replace(/^(?:The game is on the masters' main line|A rare book move — the game leaves the main line here|The last book move — the masters' file ends here)\. /, '');
+      const body = f.replace(/^(?:The game is on the masters' main line|A rare book move — the game leaves the main line here|The last book move — the masters' file ends here)\. /, '');
       expect(body).toMatch(/^(?:(?:You|They) play \S+|(?:Your|Their) …?[KQRBN]?[a-h]?x?[a-h][1-8]\S* )/);
     }
     expect(jobs).toBeGreaterThan(0);

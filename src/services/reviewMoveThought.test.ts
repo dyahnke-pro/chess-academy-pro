@@ -38,14 +38,14 @@ describe('Review says a move through the one composer', () => {
 
   it("a principle the rule line teaches is not said again by the move (Nf3's development once)", () => {
     const ply3 = walk('e4 e5 Nf3', 'white')[2];
-    expect(ply3).toMatch(/\[rule\]/);
+    expect(ply3).toMatch(/^Nf3 follows a rule worth keeping: /);
     expect(ply3.match(/develops? into the game/g) ?? []).toHaveLength(1);
   }, 60_000);
 
   it("a move another line already teaches adds only a second job (…Nxd5: the rule's take-back, no trivia)", () => {
     const ply10 = walk('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5', 'black')[9];
-    expect(ply10).toMatch(/\[rule\] …Nxd5 — /);
-    expect(ply10).not.toMatch(/\[move-job\]/);
+    expect(ply10).toMatch(/^…Nxd5 — /);
+    expect(ply10).not.toMatch(/(?:You|They) play …?Nxd5/);
   }, 60_000);
 
   it("the move's own head is history, its tag and a present clause beside it (prod audit: \"You play Rxa8: … which is worth more\")", () => {
