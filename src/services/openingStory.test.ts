@@ -3,7 +3,8 @@
 // scripts/build-opening-story-fixture.mjs — never authored).
 import { describe, it, expect, beforeAll } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { openingStoryAt, prefetchOpeningStory, BEAT_ORDER, type StoryFact } from './openingStory';
+import { openingStoryAt, prefetchOpeningStory, BEAT_ORDER, type StoryBeat, type StoryBeatFact } from './openingStory';
+import { threadKey } from './gameStory';
 import { setOpeningIdentity } from './openingIdentity';
 import { oppositeWingsRace } from './planRace';
 import { Chess } from 'chess.js';
@@ -19,8 +20,8 @@ const NAJDORF = 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 
 const SMITH_MORRA = 'e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 d6 Bc4 e6 O-O Nf6 Qe2 Be7 Rd1 e5 Be3'.split(' ');
 const LARSEN = 'b3 e5 Bb2 Nc6 e3 d5 Bb5 Bd6 f4 Qh4+ g3 Qe7 Nf3 f6'.split(' ');
 
-const story = (line: string[], plies: number, student: 'w' | 'b'): StoryFact[] => openingStoryAt({ history: line.slice(0, plies), student, namesStudentMoves: false, movesAt });
-const beat = (facts: StoryFact[], b: StoryFact['beat']): StoryFact | undefined => facts.find((f) => f.beat === b);
+const story = (line: string[], plies: number, student: 'w' | 'b', namesStudentMoves = false): StoryBeatFact[] => openingStoryAt({ history: line.slice(0, plies), student, namesStudentMoves, movesAt });
+const beat = (facts: StoryBeatFact[], b: StoryBeat): StoryBeatFact | undefined => facts.find((f) => f.storyBeat === b);
 
 beforeAll(() => { setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8'))); });
 
@@ -75,10 +76,10 @@ describe('openingStory — Najdorf, English Attack (student Black)', () => {
   it('before the race arrives, master games say their king goes to the other wing', () => {
     const c = beat(story(NAJDORF, 18, 'b'), 'character');
     expect(c?.text).toBe('Master games from here almost always put their king on the other wing — expect opposite-side castling, which makes it a race of pawn storms.');
-    expect(c?.holdWhilePlayable).toBeUndefined();
+    expect(c?.namesStudentMove).toBe(false);
   });
   it('the story is told in the baseline order: identity before cost', () => {
-    const beats = story(NAJDORF, 12, 'b').map((f) => f.beat);
+    const beats = story(NAJDORF, 12, 'b').map((f) => f.storyBeat);
     expect([...beats].sort((a, b) => BEAT_ORDER[a] - BEAT_ORDER[b])).toEqual(beats);
   });
   it('master games race in the English Attack and never agree on …d5 — no key break is invented', () => {
@@ -95,9 +96,13 @@ describe('openingStory — Najdorf, English Attack (student Black)', () => {
 
 describe('openingStory — Smith-Morra (student White)', () => {
   it('a hole their move gives away is a consequence, and the knight jump to it is held', () => {
-    const c = beat(story(SMITH_MORRA, 18, 'w'), 'consequence');
+    // The jump (Nc3–d5) is the student's to play now: a surface that may name
+    // the student's next move gets the beat, marked as naming it…
+    const c = beat(story(SMITH_MORRA, 18, 'w', true), 'consequence');
     expect(c?.text).toBe('…e5 has a cost for them: no pawn of theirs can cover d5 again, and your knight on c3 is one move from it; from there it would hit their bishop on e7 and knight on f6.');
-    expect(c?.holdWhilePlayable).toEqual([{ from: 'c3', to: 'd5' }]);
+    expect(c?.namesStudentMove).toBe(true);
+    // …and Learn's live board, which may not, never receives it (OS-10).
+    expect(beat(story(SMITH_MORRA, 18, 'w'), 'consequence')).toBeUndefined();
   });
 });
 
@@ -108,7 +113,8 @@ describe('openingStory — Smith-Morra key move', () => {
   it('a piece route that still needs preparing is the key idea: the rook to d1, behind the queen', () => {
     const k = beat(story(SMITH_MORRA, 14, 'w'), 'key-break');
     expect(k?.text).toBe('The key piece in this structure is your rook on f1: master games from here almost always bring it to d1.');
-    expect(k?.holdWhilePlayable).toEqual([{ from: 'f1', to: 'd1' }]);
+    // The rook cannot reach d1 yet, so the idea names no move of the student's.
+    expect(k?.namesStudentMove).toBe(false);
   });
 });
 
@@ -116,7 +122,8 @@ describe('openingStory — past the masters horizon', () => {
   it('when master games thin out in the middlegame, the board plan takes over under the plan thread\'s aim key', () => {
     const h = beat(story(SMITH_MORRA, 19, 'w'), 'horizon-plan');
     expect(h?.text).toBe('The master games run out here, so the board sets the plan: seize the open c-file.');
-    expect(h?.aim).toBe('plan-aim:file:c');
+    expect(h?.claims[1]).toBe('plan-aim:file:c');
+    expect(h?.thread).toEqual(threadKey('student', 'plan-aim:file:c'));
     expect(beat(story(SMITH_MORRA, 19, 'w'), 'key-break')).toBeUndefined();
   });
   it('past the horizon in the opening, the plan is development: no structural plan (1.b3 line)', () => {
@@ -148,7 +155,7 @@ describe('openingStory — the branch says YOUR road (lead 2026-10-20, Learn Sca
   const realMoves: MovesAt = (fen) => db.positions[key(fen)] ?? null;
   const SCANDI = 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6'.split(' ');
   const branch = (n: number): string => openingStoryAt({ history: SCANDI.slice(0, n), student: 'b', namesStudentMoves: false, movesAt: realMoves })
-    .filter((f) => f.beat === 'branch-choice').map((f) => f.text).join(' ');
+    .filter((f) => f.storyBeat === 'branch-choice').map((f) => f.text).join(' ');
   it('…Qxd5: what the student\'s road invites, never the other road\'s idea', () => {
     expect(branch(4)).toBe('You chose the Mieses-Kotroc Variation: …Qxd5 invites Nc3, which attacks your queen on d5.');
   }, 60_000);
@@ -158,7 +165,7 @@ describe('openingStory — the branch says YOUR road (lead 2026-10-20, Learn Sca
   it('a move that only falls back to a name the board already had chose nothing (student White)', () => {
     const SICI = 'e4 c5 Nf3 d6 d4'.split(' ');
     for (let n = 3; n <= SICI.length; n += 1) {
-      const t = openingStoryAt({ history: SICI.slice(0, n), student: 'w', namesStudentMoves: false, movesAt: realMoves }).filter((f) => f.beat === 'branch-choice').map((f) => f.text).join(' ');
+      const t = openingStoryAt({ history: SICI.slice(0, n), student: 'w', namesStudentMoves: false, movesAt: realMoves }).filter((f) => f.storyBeat === 'branch-choice').map((f) => f.text).join(' ');
       expect(t).not.toMatch(/You chose the Sicilian Defense\b/);
     }
   }, 60_000);
@@ -167,9 +174,9 @@ describe('openingStory — the branch says YOUR road (lead 2026-10-20, Learn Sca
 describe('openingStory — the OS-11 Learn games (2026-10-20, lead\'s report @learn-audit-black)', () => {
   const db = JSON.parse(readFileSync('public/data/openings-masters-db.json', 'utf8')) as { positions: Record<string, LocalDbMove[]> };
   const realMoves: MovesAt = (fen) => db.positions[key(fen)] ?? null;
-  const beats = (line: string[], student: 'w' | 'b', b: StoryFact['beat']): Array<{ n: number; text: string }> => {
+  const beats = (line: string[], student: 'w' | 'b', b: StoryBeat): Array<{ n: number; text: string }> => {
     const out: Array<{ n: number; text: string }> = [];
-    for (let n = 1; n <= line.length; n += 1) for (const f of openingStoryAt({ history: line.slice(0, n), student, namesStudentMoves: false, movesAt: realMoves })) if (f.beat === b) out.push({ n, text: f.text });
+    for (let n = 1; n <= line.length; n += 1) for (const f of openingStoryAt({ history: line.slice(0, n), student, namesStudentMoves: false, movesAt: realMoves })) if (f.storyBeat === b) out.push({ n, text: f.text });
     return out;
   };
   it('their setup is said without the name the announcement already said (Ruy Lopez 3…Qf6)', () => {
@@ -197,7 +204,7 @@ describe('openingStory — the King\'s Indian crossroads, as said', () => {
     ? [{ san: 'Nf3', games: 9000 }, { san: 'Be2', games: 6000 }, { san: 'f3', games: 4000 }] as LocalDbMove[]
     : null);
   it('roads that share a variation are counted under it', () => {
-    const f = openingStoryAt({ history: KID, student: 'w', namesStudentMoves: false, movesAt: at }).find((x) => x.beat === 'fork');
+    const f = openingStoryAt({ history: KID, student: 'w', namesStudentMoves: false, movesAt: at }).find((x) => x.storyBeat === 'fork');
     expect(f?.text).toBe('A real crossroads: from here master games split into two lines of the Normal Variation and the Sämisch Variation — each its own kind of position.');
   });
 });

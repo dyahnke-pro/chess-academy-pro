@@ -170,9 +170,9 @@ interface CatalogRow {
 /** THE CATALOG OF COMPUTERS (PLAN item 2): one row per computer that emits a
  *  `CoachFact`, keyed by the function's own name. A new computer fails to
  *  compile until it has a row; `coachFact.test.ts` holds every row to an
- *  export of that name in that file. Today the lesson composer's nine and
- *  the board registry's (P1-6a); the rest join as their producers emit
- *  `CoachFact` (P1-6b–e). */
+ *  export of that name in that file. Today the lesson composer's nine, the
+ *  board registry's (P1-6a) and Learn's board teaching (P1-6b); the rest join
+ *  as their producers emit `CoachFact` (P1-6c–e). */
 export const COMPUTER_CATALOG = {
   moveAspects: { file: 'services/reviewMoveBriefing.ts', says: 'what a move does on the board: the threat, the material, the trade, the tactic, the check, the promotion, the king cover, the structure made or conceded' },
   moveJob: { file: 'services/bookMoveWhy.ts', says: 'the job a move does against the board before it, from the speaker\'s seat' },
@@ -206,6 +206,45 @@ export const COMPUTER_CATALOG = {
   linesStructure: { file: 'services/structureReads.ts', says: 'the plan choices off the student\'s MultiPV' },
   planThreadTurn: { file: 'services/planThread.ts', says: 'the student\'s plan carried across moves: its stop proven off their move, then the next plan' },
   geometryReads: { file: 'services/tacticGeometry.ts', says: 'the line tactics: interference, clearance, decoy and deflection, discoveries, in-between moves, interposition, the loaded line' },
+  // LEARN'S BOARD TEACHING (P1-6b): every fact `learnBoardTeaching` and
+  // `orderTeaching` hand the page — and Review the rules among them — made by
+  // one of these, named on the fact.
+  recaptureChoice: { file: 'services/recaptureChoice.ts', says: 'which piece takes back, and why, against the other recapture' },
+  mateLine: { file: 'services/lineCalc.ts', says: 'the mate the move\'s engine line forces, said to the mate' },
+  lineWins: { file: 'services/lineCalc.ts', says: 'the material the move\'s engine line wins, said to where it lands' },
+  kneeJerk: { file: 'services/kneeJerk.ts', says: 'the reflex recapture that cost: something stronger came first' },
+  strongChoice: { file: 'services/strongChoice.ts', says: 'what strong players choose in this exact position, from real games' },
+  fileClaimed: { file: 'services/planRace.ts', says: 'the open file both sides wanted, taken by the student\'s rook' },
+  blunderCheck: { file: 'services/safetyHabits.ts', says: 'the piece the move left that they simply took, and the habit that catches it' },
+  autopilotGuard: { file: 'services/safetyHabits.ts', says: 'the popular move here cost: the moment to stop and check' },
+  keepPressing: { file: 'services/safetyHabits.ts', says: 'winning, and a slow move gave them time: keep forcing' },
+  spareTempoWasted: { file: 'services/endgamePawnReads.ts', says: 'a spare pawn tempo spent before the pawn ending needed it' },
+  pawnEndingTrade: { file: 'services/endgamePawnReads.ts', says: 'the trade into a pawn ending, counted first' },
+  outsidePasserDecoy: { file: 'services/endgamePawnReads.ts', says: 'with only kings and pawns left, the outside passer is a decoy' },
+  kingCourse: { file: 'services/endgamePawnReads.ts', says: 'in a king-and-pawn ending, the king\'s target is the weak pawn, not the centre' },
+  tradeJudgement: { file: 'services/tradeJudgement.ts', says: 'the trade just made: a good or a bad deal, and why' },
+  readTiming: { file: 'services/moveTiming.ts', says: 'why the move works now and did not a move earlier' },
+  kingAttack: { file: 'services/kingAttack.ts', says: 'what the move adds to the attack on their king' },
+  ruleException: { file: 'services/ruleException.ts', says: 'a beginner\'s rule the move breaks, and why it is right here' },
+  falseAlarm: { file: 'services/falseAlarm.ts', says: 'a threat of theirs the student\'s move rightly ignored, and what answers it' },
+  pushOrHold: { file: 'services/pushOrHold.ts', says: 'whether this ending is worth pressing or holding, by its type' },
+  theirMoveCost: { file: 'services/theirMoveCost.ts', says: 'what the opponent\'s move cost them that the student can use' },
+  counterThreat: { file: 'services/counterThreat.ts', says: 'a threat answered with a bigger one: the piece left, the bigger piece hit, the line that punishes taking it' },
+  playedConcept: { file: 'services/playedConcept.ts', says: 'the concept a move just played, for either side: a fork, a pin, a discovered attack' },
+  tempoCount: { file: 'services/tempoCount.ts', says: 'their piece keeps moving in the opening while the student develops, counted' },
+  stalemateWatch: { file: 'services/stalemateWatch.ts', says: 'winning, and one of the student\'s moves would stalemate them' },
+  checkMethod: { file: 'services/checkMethod.ts', says: 'in check, and the king move is not the best answer: the three ways to meet check' },
+  planChoice: { file: 'services/planChooser.ts', says: 'the engine\'s two best lines carry different plans for the student' },
+  criticalMomentFound: { file: 'services/criticalMoment.ts', says: 'at a real decision moment, the student found one of the only moves that held' },
+  readZugzwang: { file: 'services/zugzwang.ts', says: 'zugzwang at the student\'s turn, from the tablebase' },
+  tradeLedger: { file: 'services/tempoCount.ts', says: 'the trade counted in moves: their recapturing piece had already moved, or their much-moved piece went' },
+  notYetPlayed: { file: 'services/notYetPlayed.ts', says: 'development first: the piece that would hit the pawn has not come out yet' },
+  heldResource: { file: 'services/holdResource.ts', says: 'a pin or check kept in hand until their knight develops into it' },
+  captureChoice: { file: 'services/captureChoice.ts', says: 'which pawn capture: the other one hands their knight a square for good' },
+  kickAfterRecapture: { file: 'services/kickMap.ts', says: 'the capture dragged their piece onto a square a pawn kicks it from, and where it can land' },
+  pawnSquareTaken: { file: 'services/planRace.ts', says: 'both sides wanted one square for a pawn, and the student\'s got there first' },
+  patternFails: { file: 'services/patternFails.ts', says: 'a stock shot that looks right and fails on this board, played out' },
+  openingEquivalence: { file: 'services/openingEquivalence.ts', says: 'the named opening this board is, with a move each thrown in or the colours reversed' },
   // THE DOORS' ADAPTER (P1-5): every fact a door is handed in its producer's
   // old shape is made here. Its row goes with the last old shape (P1-6), when
   // each of those producers emits CoachFact under its own name.
@@ -292,7 +331,7 @@ export interface CoachFact {
    *  warns about, the move it asks the student to play (engine-vouched), a
    *  route walked hop by hop on its own boards. */
   marks?: FactMarks;
-  /** Which beat of the opening's story it is (`openingStory` only) — Learn
+  /** Which beat of the opening's story it is (`openingStoryAt` only) — Learn
    *  speaks each beat in its own lane (`STORY_LANE`). */
   storyBeat?: StoryBeat;
 }

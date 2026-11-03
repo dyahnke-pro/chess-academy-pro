@@ -32,8 +32,10 @@ type Counts = Record<string, Record<string, number>>;
 const LITERAL_SHAPES: Record<string, (keys: ReadonlySet<string>) => boolean> = {
   // `kind` + `rank` + `namesStudentMove`: a clause (its rank is its hand weight).
   ClauseItem: (k) => k.has('kind') && k.has('rank') && k.has('namesStudentMove'),
-  // `lane` + `event` + `arrows`: a board-teaching hint.
-  TeachingHint: (k) => k.has('lane') && k.has('event') && k.has('arrows'),
+  // `lane` + `event` + `arrows` with no `id`: a board-teaching hint. The one
+  // maker (`teachingFact`) builds the fact with its id and what rides beside
+  // it; a literal with no id is no fact (P1-6b).
+  TeachingHint: (k) => k.has('lane') && k.has('event') && k.has('arrows') && !k.has('id'),
   // A phase fact: words, claims, proof and the move it names — with no kind,
   // lane, rank, id, seat or key (the shapes that carry those are the others:
   // a registry read hands its maker a key and a seat, never a phase fact).
@@ -114,6 +116,7 @@ describe('one fact shape (WO-STORY-MATRIX-01 P1-6)', () => {
       'const subject = `[${subjectMap[category]}] Chess Academy Pro`;',
       "const fact = { id, kind: 'tactic', text: t, claims: [], proof: p, namesStudentMove: false };",
       "return fact({ key, claims: [key], text: t, proof: p, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });",
+      "return { ...said, id: `${p.computer}:${k}`, seat, namesStudentMove: false, lane, event: ride.event, arrows: ride.arrows };",
     ].join('\n');
     const found = scanShapes(planted);
     expect(Object.fromEntries(Object.entries(found).map(([s, l]) => [s, l.length]))).toEqual({

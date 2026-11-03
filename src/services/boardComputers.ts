@@ -20,7 +20,7 @@
 // PURE: every computer here is pure; this module adds no chess of its own.
 import { Chess, type Color } from 'chess.js';
 import { NO_PROOF, squaresProof, type FactProof } from './proof';
-import { LOCAL_THREAD, placeFact, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat } from './coachFact';
+import { LOCAL_THREAD, placeFact, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
 import { threadKey } from './gameStory';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from './pinBreak';
 import { findProphylaxis, prophylaxisKey, prophylaxisLine, prophylaxisIdea, prophylaxisProof } from './prophylaxis';
@@ -42,7 +42,7 @@ import { STRUCTURE_ROLE } from './structureJudgementKit';
 import { countMethod } from './countMethod';
 import { countKey } from './conceptKey';
 import { buildPriorityFirst } from './playCommentary';
-import { openingStoryAt, heldWhilePlayable, STORY_KIND } from './openingStory';
+import { openingStoryAt, STORY_KIND } from './openingStory';
 import { isEndgameByMaterial } from './gamePhaseService';
 import type { FactKind } from './reviewFacetRank';
 import type { GamePhase } from '../types';
@@ -62,9 +62,6 @@ type ReadParts = Omit<CoachFact, 'id' | 'kind' | 'group' | 'step' | 'computer'> 
   /** Its say-once key — the tail of its id (`readKey`). Every read but the
    *  threat's cost is said under it, so it is also its first claim. */
   key: string;
-  /** A computer that states more than one kind (the opening's story names
-   *  each beat's, `STORY_KIND`); else the kind on its row. */
-  kind?: CoachFactKind;
 };
 
 /** The one fact a read becomes: its id is its computer's and its key, its
@@ -73,7 +70,8 @@ type ReadParts = Omit<CoachFact, 'id' | 'kind' | 'group' | 'step' | 'computer'> 
 type MakeFact = (parts: ReadParts) => CoachFact;
 
 /** THE KEY A READ WAS MADE UNDER — its say-once key, the tail of the id the
- *  registry's one maker gave it (`readBoardAll`: `<computer id>:<key>`). A
+ *  registry's one maker gave it (`readBoardAll`: `<computer id>:<key>`; the
+ *  opening's story makes its own, `openingStoryAt:<key>`). A
  *  surface that keeps one key for a read (Review's `hint:` ledger, Learn's
  *  threat and tactic keys, the plan thread's offered claims) reads it here,
  *  never off the words. */
@@ -293,21 +291,13 @@ export const BOARD_COMPUTERS = {
   openingStory: {
     // HOW A STRONG COACH EXPLAINS AN OPENING (OS-3): the fork, what it is, the
     // choice and its price, their setup, the coming game and its key idea —
-    // each a computed fact, in the speed runs' order. Each beat under its own
-    // kind (`STORY_KIND`); a plan aim is a claim shared with the plan thread,
-    // so one plan is said once, and the student's plan thread it is on.
-    read: ({ history, fen, student, namesStudentMoves }, fact) => safe(() => openingStoryAt({ history, student, namesStudentMoves })
-      .flatMap((f) => {
-        const playable = heldWhilePlayable(f, fen, student);
-        if (playable && !namesStudentMoves) return [];
-        return [fact({
-          key: f.claimKey, claims: [f.claimKey, ...(f.aim ? [f.aim] : [])], kind: STORY_KIND[f.beat], storyBeat: f.beat,
-          text: f.text, proof: f.proof, squares: [...f.squares], stakes: null, role: 'teach',
-          // Their system and what it gave away are their side's; the rest is the student's story.
-          seat: f.beat === 'their-setup' || f.beat === 'consequence' ? 'opponent' : 'student',
-          namesStudentMove: playable, thread: f.aim ? threadKey('student', f.aim) : LOCAL_THREAD, fen,
-        })];
-      })),
+    // each a computed fact, in the speed runs' order. The story makes its own
+    // facts (WO-STORY-MATRIX-01 P1-6b): each beat under its own kind
+    // (`STORY_KIND`), a plan aim a claim shared with the plan thread, and a
+    // beat that would name the student's next move left out where the surface
+    // may not name one (`namesStudentMoves`). `fen` is the board after
+    // `history`, for the phase column.
+    read: ({ history, student, namesStudentMoves }) => safe(() => openingStoryAt({ history, student, namesStudentMoves })),
     computer: 'openingStoryAt',
     kind: 'opening',
     phase: NOT_ENDING,
@@ -557,10 +547,10 @@ export type BoardFact<K extends ComputerId> = CoachFact & { kind: KindOf<K> };
 export function readBoardAll<K extends ComputerId>(id: K, ctx: BoardContexts[K]): BoardFact<K>[] {
   const spec: ComputerSpec<BoardContexts[K]> = SPECS[id];
   if (outOfPhase(spec.phase, ctx)) return [];
-  const fact: MakeFact = ({ key, kind, ...p }) => ({ ...p, id: `${id}:${key}`, ...placeFact(kind ?? spec.kind, p.seat), computer: spec.computer });
+  const fact: MakeFact = ({ key, ...p }) => ({ ...p, id: `${id}:${key}`, ...placeFact(spec.kind, p.seat), computer: spec.computer });
   const r = spec.read(ctx, fact);
-  // The kind is the row's or the story's by construction (`fact` above is the
-  // only maker, and only the story overrides its kind, with STORY_KIND).
+  // The kind is the row's or the story's by construction (`fact` above makes
+  // every read but the story's, which `openingStoryAt` makes under STORY_KIND).
   return (r === null ? [] : Array.isArray(r) ? r : [r]) as BoardFact<K>[];
 }
 

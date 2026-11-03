@@ -124,34 +124,6 @@ import { yieldToScreen } from '../utils/yieldToScreen';
 // Re-exported here so existing consumers (StatsPage, CoachGamePage,
 // gameAnalysisService) keep importing it from this module unchanged.
 
-/** The lanes `studentMoveTeaching` emits — the Learn student-move computer. */
-type StudentMoveLane = 'recapture' | 'movePoint' | 'kneeJerk' | 'strongChoice' | 'fileRace' | 'blunderCheck'
-  | 'autopilot' | 'pawnEnding' | 'keepPressing' | 'trade' | 'timing' | 'kingAttack' | 'ruleException'
-  | 'falseAlarm' | 'pushOrHold';
-
-/** Which review facet each Learn student-move lane speaks as (unify-the-coach
- *  A2). Exhaustive, so a new lane fails to compile until someone decides. NULL
- *  = review already has its own producer for that fact (the winning line, the
- *  pawn-ending reads, the trade read, the timing facet, the plan race, the
- *  opening facets) — merging those is its own step, never a second voice. */
-const REVIEW_TAG_FOR_LANE: Record<StudentMoveLane, FacetTag | null> = {
-  recapture: 'rule',
-  kneeJerk: 'rule',
-  blunderCheck: 'rule',
-  autopilot: 'rule',
-  keepPressing: 'rule',
-  ruleException: 'rule',
-  falseAlarm: 'rule',
-  kingAttack: 'rule',
-  pushOrHold: 'rule',
-  movePoint: null,
-  pawnEnding: null,
-  trade: null,
-  timing: null,
-  fileRace: null,
-  strongChoice: null,
-};
-
 export { advantageWasMissed } from './reviewWithholding';
 
 /** How long a stated plan holds before a different goal may replace it — two
@@ -2186,10 +2158,12 @@ function* reviewSegmentSteps(
       }
       // THE LEARN COMPUTERS, CALLED — not copied (unify-the-coach A2, David
       // 2026-10-01: "one coach, every surface"). The student-move computer Learn
-      // speaks from runs here on the same move; `REVIEW_TAG_FOR_LANE` routes each
-      // lane to a review facet, and a lane review already has its own producer
-      // for maps to null so nothing is said twice. Each hint is said once a
-      // game, keyed on its own claims (committed only when it spoke).
+      // speaks from runs here on the same move, and each of its facts is filed
+      // under its own kind (WO-STORY-MATRIX-01 P1-6b) — the bundle's rules; the
+      // rest Review says through its own producers (the winning line, the
+      // pawn-ending reads, the trade read, the timing facet, the plan race,
+      // the opening facets), never a second voice. Each is said once a game,
+      // keyed on its own claims (committed only when it spoke).
       if (moverColor === playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
         const sign = moverColor === 'white' ? 1 : -1;
         const bothCp = Math.abs(m.preMoveEval) < 5000 && Math.abs(m.evaluation) < 5000;
@@ -2211,11 +2185,10 @@ function* reviewSegmentSteps(
           cpAfter: bothCp ? m.evaluation * sign : null,
         });
         for (const h of hints) {
-          const tag = (REVIEW_TAG_FOR_LANE as Partial<Record<string, FacetTag | null>>)[h.lane] ?? null;
-          if (!tag) continue;
+          if (h.kind !== 'rule') continue;
           const id = `hint:${h.claims.join('|') || h.lane}`;
           if (hintsSaid.has(id)) continue;
-          const raw = `[${tag}] ${h.text}`;
+          const raw = `[${h.kind}] ${h.text}`;
           facets.push(raw);
           facetIdentity.set(raw, id);
           if (h.squares.length) facetSquares.set(raw, h.squares);

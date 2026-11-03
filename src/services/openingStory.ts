@@ -37,6 +37,8 @@ import { andList, countWord } from '../utils/andList';
 import { shareAdverb } from '../utils/shareWords';
 import { positionOf } from '../utils/samePosition';
 import type { FacetTag } from './reviewFacetRank';
+import { LOCAL_THREAD, placeFact, type CoachFact, type FactSeat } from './coachFact';
+import { threadKey } from './gameStory';
 
 export type StoryBeat =
   | 'fork' | 'identity' | 'their-setup' | 'branch-choice' | 'structure-cost' | 'structure-paid'
@@ -61,19 +63,25 @@ export const STORY_KIND: Record<StoryBeat, FacetTag> = {
   character: 'opening-story', 'key-break': 'opening-story', 'horizon-plan': 'opening-story',
 };
 
-export interface StoryFact {
-  beat: StoryBeat;
+/** A BEAT OF THE OPENING'S STORY — the one fact (`CoachFact`), its kind the
+ *  beat's and the beat named on it (Learn speaks each in its own lane,
+ *  `STORY_LANE`). */
+export type StoryBeatFact = CoachFact & { kind: (typeof STORY_KIND)[StoryBeat]; storyBeat: StoryBeat };
+
+/** What a beat says, before it is made the one fact. */
+interface BeatParts {
   text: string;
-  squares: string[];
+  squares: readonly string[];
   proof: FactProof;
-  /** Say-once key for the claim ledger. */
-  claimKey: string;
+  /** Say-once key for the claim ledger — the fact's first claim and its id. */
+  key: string;
   /** The plan arc's aim key, when the fact states a plan (shared with
    *  `planThreadTurn`, so one plan is announced once). */
   aim?: string;
-  /** Moves of the student's that this fact would name: held while any of them
-   *  is legal on the student's turn (LEARN NAMES NO MOVE UNASKED). */
-  holdWhilePlayable?: Array<{ from: string; to: string }>;
+  /** Moves of the student's that this fact would name: it names the student's
+   *  move while any of them is legal on the student's turn (LEARN NAMES NO
+   *  MOVE UNASKED). */
+  names?: ReadonlyArray<{ from: string; to: string }>;
 }
 
 interface OpeningStoryInput {
@@ -292,13 +300,6 @@ function liveBoard(b: Chess): LiveIdentityBoard {
   };
 }
 
-/** HELD ON THE STUDENT'S TURN: the fact would name a move the student can
- *  play right now (LEARN NAMES NO MOVE UNASKED). `fen` is the board the fact is
- *  spoken over. */
-export function heldWhilePlayable(f: Pick<StoryFact, 'holdWhilePlayable'>, fen: string, student: 'w' | 'b'): boolean {
-  return (f.holdWhilePlayable ?? []).some((m) => legalForSide(fen, m, student));
-}
-
 /** Would `m` be legal for `side` on this board, whoever is to move? */
 function legalForSide(fen: string, m: { from: string; to: string }, side: 'w' | 'b'): boolean {
   const parts = fen.split(' ');
@@ -321,7 +322,7 @@ function castledSide(history: readonly string[], side: 'w' | 'b'): 'short' | 'lo
  * setup, a hole a pawn move left, the castling character) until heard.
  * Ordered by the model's beats; the caller's door ranks and says once.
  */
-export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
+export function openingStoryAt(i: OpeningStoryInput): StoryBeatFact[] {
   const { history, student } = i;
   const movesAt = i.movesAt ?? masterMovesCachedSync;
   const now = boardAfter(history);
@@ -346,7 +347,24 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   // checked on the board now (OS-3 review: read only at the last ply, the
   // branch, cost and payment beats could never fire).
   const studentPly = mover === student ? lastPly : lastPly - 1;
-  const out: StoryFact[] = [];
+  const out: StoryBeatFact[] = [];
+  // EACH BEAT IS THE ONE FACT (WO-STORY-MATRIX-01 P1-6b): its kind is the
+  // beat's (`STORY_KIND`), placed by the one group table; its id is its say-once
+  // key; its seat is whose story it tells — their system and what it gave away
+  // are their side's, the rest the student's; a plan aim is a second claim,
+  // shared with the plan thread, and the student's plan thread it is on. A
+  // beat that would name a move the student can play right now names the
+  // student's move (OS-10), and a surface that may not name one never gets it.
+  const say = (beat: StoryBeat, p: BeatParts): void => {
+    const namesStudentMove = (p.names ?? []).some((m) => legalForSide(fen, m, student));
+    if (namesStudentMove && !i.namesStudentMoves) return;
+    const seat: FactSeat = beat === 'their-setup' || beat === 'consequence' ? 'opponent' : 'student';
+    out.push({
+      id: `openingStoryAt:${p.key}`, ...placeFact(STORY_KIND[beat], seat), kind: STORY_KIND[beat], computer: 'openingStoryAt', storyBeat: beat,
+      text: p.text, squares: [...p.squares], proof: p.proof, claims: [p.key, ...(p.aim ? [p.aim] : [])], stakes: null, role: 'teach',
+      seat, namesStudentMove, thread: p.aim ? threadKey('student', p.aim) : LOCAL_THREAD, fen,
+    });
+  };
 
   // 2 — IDENTITY of the opening on the board, offered on every opening move
   // until it is heard. On the live board the line checks each clause: one
@@ -354,7 +372,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   // board has made false is dropped (`openingIdentityLine`).
   if (name && !isWaypointOpening(name) && inOpening) {
     const id = openingIdentityLine(name, student, 'seat', liveBoard(now));
-    if (id) out.push({ beat: 'identity', text: id.text, squares: id.squares, proof: NO_PROOF.name, claimKey: IDENTITY_CLAIM });
+    if (id) say('identity', { text: id.text, squares: id.squares, proof: NO_PROOF.name, key: IDENTITY_CLAIM });
   }
 
   // 4 — THE BRANCH THE STUDENT CHOSE, against the main alternative.
@@ -393,11 +411,10 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
       // speaks alone.
       const road = spokenRoad(sNew, alt.name);
       const aims = mine && theirs && mine !== theirs && road ? ` ${road.replace(/^the/, 'The')} is built around ${mine}.` : '';
-      if (road ? reason || aims : reason) out.push({
-        beat: 'branch-choice',
+      if (road ? reason || aims : reason) say('branch-choice', {
         text: road ? `You chose ${road}${reason ? `: ${reason.text}` : '.'}${aims}` : reason?.text ?? '',
         squares: reason?.squares ?? [], proof: reason?.proof ?? countProof(`masters split between ${andList(spokenRoads([sNew, alt.name]))}`, fork.families),
-        claimKey: `story:branch:${positionOf(fork.fen)}`,
+        key: `story:branch:${positionOf(fork.fen)}`,
       });
     }
   }
@@ -416,14 +433,13 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
       if (castle && castle.share >= MIN_BREAK_SHARE) parts.push(`they ${shareAdverb(Math.round(castle.share * 100))} castle ${castle.side}`);
       if (br) { parts.push(`their break is ${dot(br.san, them)}`); squares.push(br.square); }
       if (parts.length) {
-        out.push({
-          beat: 'their-setup',
+        say('their-setup', {
           // The name is the announcement's ("It's the Ruy Lopez. They've gone
           // for the Ruy Lopez" said it twice in one breath, OS-11): this beat
           // says only what their setup is FOR.
           text: `In master games from here ${andList(parts)}.`,
           squares, proof: squaresProof(`their plan from master games`, squares) ?? NO_PROOF.description,
-          claimKey: `story:setup:${name}`,
+          key: `story:setup:${name}`,
         });
       }
     }
@@ -436,13 +452,12 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
     const san = history[studentPly];
     const h = beforeFen ? holeAt(beforeFen, san, fen) : null;
     if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH && h.hits.length && holes.includes(h.hole)) {
-      out.push({
-        beat: 'structure-cost',
+      say('structure-cost', {
         text: `That's the price of ${dot(san, student)}: no pawn of yours can cover ${h.hole} again, and ${knightDistance('their', h.from, h.moves)}; ${h.moves === 0 ? 'it hits' : 'from there it would hit'} ${hitWords(now, 'your', h.hits)}. Keeping ${h.hole} guarded is part of this structure from here.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
         // ONE HOLE, ONE KEY (dup map #5): every computer that names this hole
         // says it under `hole:<sq>`, so a second reading of it is dropped.
-        claimKey: holeKey(h.hole),
+        key: holeKey(h.hole),
       });
     } else if (beforeFen) {
       // A PRICE IS PAID ONLY WHERE IT WAS NAMED (OS-11: "…pays that price" at
@@ -468,11 +483,10 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
         const guards = now.attackers(hole as Square, student);
         const sits = mv.to === hole;
         if ((guards.length > was && guards.includes(mv.to)) || sits) {
-          out.push({
-            beat: 'structure-paid',
+          say('structure-paid', {
             text: `${dot(san, student)} pays that price: your ${PIECE[mv.piece] ?? 'piece'} ${sits ? 'sits on' : 'now guards'} ${hole}.`,
             squares: [hole, mv.to], proof: squaresProof(`${mv.to} covers ${hole}`, [hole, mv.to]) ?? NO_PROOF.description,
-            claimKey: `story:paid:${hole}:${mv.to}`,
+            key: `story:paid:${hole}:${mv.to}`,
           });
           break;
         }
@@ -488,7 +502,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   // (`planRace.oppositeWingsRace`, claim `race:opposite-wings`), never here.
   if (myCastle && theirCastle) {
     const myWing = myCastle === 'short' ? 'kingside' : 'queenside';
-    if (myCastle === theirCastle) out.push({ beat: 'character', text: `Both kings on the ${myWing}: no pawn race — pushing the pawns in front of your own king only weakens it, so the fight is in the centre and on the other wing.`, squares: [], proof: NO_PROOF.description, claimKey: 'story:character' });
+    if (myCastle === theirCastle) say('character', { text: `Both kings on the ${myWing}: no pawn race — pushing the pawns in front of your own king only weakens it, so the fight is in the centre and on the other wing.`, squares: [], proof: NO_PROOF.description, key: 'story:character' });
   } else if (myCastle || theirCastle) {
     // One side castled: master games say where the other king goes.
     const waiting: 'w' | 'b' = myCastle ? them : student;
@@ -497,10 +511,10 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
     const pred = pl ? (waiting === 'w' ? pl.whiteCastle : pl.blackCastle) : null;
     if (done && pred && pred.side !== done && pred.share >= MIN_BREAK_SHARE) {
       const rank = waiting === 'w' ? '1' : '8';
-      out.push({
-        beat: 'character', text: `Master games from here ${shareAdverb(Math.round(pred.share * 100))} put ${waiting === student ? 'your' : 'their'} king on the other wing — expect opposite-side castling, which makes it a race of pawn storms.`,
-        squares: [], proof: NO_PROOF.description, claimKey: 'story:character-ahead', aim: 'plan-aim:king-attack',
-        ...(waiting === student ? { holdWhilePlayable: [{ from: `e${rank}`, to: `${pred.side === 'short' ? 'g' : 'c'}${rank}` }] } : {}),
+      say('character', {
+        text: `Master games from here ${shareAdverb(Math.round(pred.share * 100))} put ${waiting === student ? 'your' : 'their'} king on the other wing — expect opposite-side castling, which makes it a race of pawn storms.`,
+        squares: [], proof: NO_PROOF.description, key: 'story:character-ahead', aim: 'plan-aim:king-attack',
+        ...(waiting === student ? { names: [{ from: `e${rank}`, to: `${pred.side === 'short' ? 'g' : 'c'}${rank}` }] } : {}),
       });
     }
   }
@@ -509,7 +523,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   // A key move the student can play right now is their next move, not an idea:
   // it is said only while it still needs preparing.
   const brk = mastersBreakIdea(plan(), student, fen, holes);
-  if (brk && !legalForSide(fen, brk.move, student)) out.push({ beat: 'key-break', text: brk.text, squares: brk.squares, proof: squaresProof(brk.text, brk.squares) ?? NO_PROOF.description, claimKey: `story:break:${brk.move.to}`, aim: brk.aim, holdWhilePlayable: [brk.move] });
+  if (brk && !legalForSide(fen, brk.move, student)) say('key-break', { text: brk.text, squares: brk.squares, proof: squaresProof(brk.text, brk.squares) ?? NO_PROOF.description, key: `story:break:${brk.move.to}`, aim: brk.aim, names: [brk.move] });
 
   // 9 — WHAT THEIR PAWN MOVES GAVE AWAY: a hole on their side your knight can
   // reach, offered while it is still a hole and your knight still stands there.
@@ -517,12 +531,11 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
     const beforeFen = fenAfter(history.slice(0, t.ply));
     const h = beforeFen ? holeAt(beforeFen, history[t.ply], fen) : null;
     if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH && h.hits.length) {
-      out.push({
-        beat: 'consequence',
+      say('consequence', {
         text: `${dot(history[t.ply], them)} has a cost for them: no pawn of theirs can cover ${h.hole} again, and ${knightDistance('your', h.from, h.moves)}; ${h.moves === 0 ? 'it hits' : 'from there it would hit'} ${hitWords(now, 'their', h.hits)}.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn of theirs to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
-        claimKey: holeKey(h.hole), aim: `plan-aim:outpost:${h.hole}`,
-        ...(h.moves === 1 ? { holdWhilePlayable: [{ from: h.from, to: h.hole }] } : {}),
+        key: holeKey(h.hole), aim: `plan-aim:outpost:${h.hole}`,
+        ...(h.moves === 1 ? { names: [{ from: h.from, to: h.hole }] } : {}),
       });
     }
   }
@@ -532,9 +545,9 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
     const fork = forkAt(history, movesAt);
     if (fork) {
       const labels = spokenRoads(fork.families.map((f) => f.name));
-      out.push({
-        beat: 'fork', text: `A real crossroads: from here master games split into ${andList(labels)} — each its own kind of position.`,
-        squares: [], proof: countProof(`master games split ${fork.families.length} ways`, fork.families), claimKey: `story:fork:${positionOf(fork.fen)}`,
+      say('fork', {
+        text: `A real crossroads: from here master games split into ${andList(labels)} — each its own kind of position.`,
+        squares: [], proof: countProof(`master games split ${fork.families.length} ways`, fork.families), key: `story:fork:${positionOf(fork.fen)}`,
       });
     }
   }
@@ -554,14 +567,14 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
     const top = wasBook ? deriveNextPlanFacts(fen, student, { namesStudentMoves: i.namesStudentMoves })[0] : undefined;
     if (top) {
       const aim = planAimKey(top.kind, top.squares[0] ?? top.file ?? null);
-      out.push({
-        beat: 'horizon-plan', text: `The master games run out here, so the board sets the plan: ${top.goal}.`,
+      say('horizon-plan', {
+        text: `The master games run out here, so the board sets the plan: ${top.goal}.`,
         squares: top.squares, proof: squaresProof(top.goal, top.squares) ?? NO_PROOF.description,
-        claimKey: `story:horizon:${top.id}`, ...(aim ? { aim } : {}),
+        key: `story:horizon:${top.id}`, ...(aim ? { aim } : {}),
       });
     }
   }
-  return out.sort((x, y) => BEAT_ORDER[x.beat] - BEAT_ORDER[y.beat]);
+  return out.sort((x, y) => BEAT_ORDER[x.storyBeat] - BEAT_ORDER[y.storyBeat]);
 }
 
 /** The order a strong coach tells it (lead's 7-run baseline, 2026-10-19):

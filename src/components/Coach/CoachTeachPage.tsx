@@ -73,7 +73,7 @@ import { buildPositionalRead, rookReachesFile } from '../../services/positionalR
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -1994,7 +1994,7 @@ export function CoachTeachPage({ mode }: {
     fen: string;
     /** `squares` rides along so the board can be drawn from what SURVIVED the
      *  package rather than re-derived from its prose — see `VoiceFact.squares`. */
-    lines: Array<{ id: string; lane: LearnLane; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; namesStudentMove: NamesStudentMove; role?: FacetRole; factKind?: string; skill?: string; ownMoveReason?: boolean }>;
+    lines: Array<{ id: string; lane: LearnLane; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; namesStudentMove: NamesStudentMove | boolean; role?: FacetRole; factKind?: string; skill?: string; ownMoveReason?: boolean }>;
   } | null>(null);
   /** The next queued line's number — its id at the Learn door. */
   const queuedLineSeqRef = useRef(0);
@@ -10172,8 +10172,9 @@ export function CoachTeachPage({ mode }: {
      *  line that cannot answer this does not speak. */
     proof: FactProof,
     /** WHICH OF THE STUDENT'S MOVES IT NAMES — REQUIRED (OS-10, studentMoveNaming):
-     *  the door holds it while one is the student's to play. */
-    namesStudentMove: NamesStudentMove,
+     *  the door holds it while one is the student's to play. A producer that
+     *  emits the one fact hands its answer (`CoachFact.namesStudentMove`). */
+    namesStudentMove: NamesStudentMove | boolean,
     /** The squares this line is about. Handed in with the text so a mark is
      *  drawn because the fact survived, never because the prose contained
      *  something square-shaped. */
@@ -10205,7 +10206,7 @@ export function CoachTeachPage({ mode }: {
     factKind?: string,
     /** The skill the line teaches (a MisconceptionTagId) — the fade reads it. */
     skill?: string,
-    /** A reason for the student's own last move (`TeachingHint.ownMoveReason`). */
+    /** A reason for the student's own last move (`TeachingFact.ownMoveReason`). */
     ownMoveReason?: boolean,
   ): void => {
     const text = line.trim();
@@ -10236,7 +10237,7 @@ export function CoachTeachPage({ mode }: {
     } catch { /* unreadable FEN — the lanes' own board checks still apply */ }
     const pending = pendingVoiceRef.current?.fen === fen
       ? pendingVoiceRef.current
-      : { fen, lines: [] as Array<{ id: string; lane: LearnLane; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; namesStudentMove: NamesStudentMove; role?: FacetRole; factKind?: string; skill?: string; ownMoveReason?: boolean }> };
+      : { fen, lines: [] as Array<{ id: string; lane: LearnLane; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; namesStudentMove: NamesStudentMove | boolean; role?: FacetRole; factKind?: string; skill?: string; ownMoveReason?: boolean }> };
     // EVERY MOVE A LINE NAMES GETS ITS ARROW (G6) — the lane's own arrows
     // AND every other move the sentence names (a lane that drew its line
     // used to leave the rest of the sentence's moves bare). The board before
@@ -10266,8 +10267,8 @@ export function CoachTeachPage({ mode }: {
    *  and its event fires. Call sites used to pick fields one by one and dropped
    *  the arrows on nine of them and the stakes/role on all but one (G6, G8.5:
    *  computed and never drawn, or held as an aside for want of a role). */
-  const queueHint = useCallback((fen: string, hint: TeachingHint, gradeFen?: string): void => {
-    queueSpokenHint(fen, hint.text, hint.lane, hint.proof, hint.namesStudentMove, hint.squares, hint.claims, gradeFen, hint.arrows, undefined, hint.stakes, hint.role, undefined, undefined, hint.ownMoveReason);
+  const queueHint = useCallback((fen: string, hint: TeachingFact, gradeFen?: string): void => {
+    queueSpokenHint(fen, hint.text, hint.lane, hint.proof, hint.namesStudentMove, hint.squares, hint.claims, gradeFen, hint.arrows, undefined, hint.stakes ?? undefined, hint.role, undefined, undefined, hint.ownMoveReason);
     if (hint.event) captureEvent(hint.event.name, hint.event.props);
   }, [queueSpokenHint]);
 
@@ -12388,7 +12389,7 @@ export function CoachTeachPage({ mode }: {
                     })) {
                       // Graded on the board the hint describes — right after the student's move
                       // (replay 2026-10-06: 6 of 239 true lines dropped on the reply's board).
-                      queueSpokenHint(fenAfterReply, h.text, h.lane, h.proof, h.namesStudentMove, h.squares, h.claims, move.fen, h.arrows, undefined, h.stakes);
+                      queueSpokenHint(fenAfterReply, h.text, h.lane, h.proof, h.namesStudentMove, h.squares, h.claims, move.fen, h.arrows, undefined, h.stakes ?? undefined);
                       if (h.event) captureEvent(h.event.name, h.event.props);
                       // DUAL-USE (P4): the lane that teaches it also records it.
                       recordTeachingEvidence(h, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });

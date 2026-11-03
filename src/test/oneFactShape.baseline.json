@@ -2,16 +2,11 @@
   "ClauseItem": {
     "src/services/positionFacts.ts": 38
   },
-  "TeachingHint": {
-    "src/services/learnBoardTeaching.ts": 34,
-    "src/services/orderTeaching.ts": 8
-  },
+  "TeachingHint": {},
   "PhaseFact": {
     "src/hooks/usePhaseNarration.ts": 3
   },
-  "StoryFact": {
-    "src/services/openingStory.ts": 11
-  },
+  "StoryFact": {},
   "facet": {
     "src/services/coachDecider.ts": 1,
     "src/services/coachFeatureService.ts": 19,

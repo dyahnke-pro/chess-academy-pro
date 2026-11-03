@@ -534,8 +534,10 @@ export interface LaneInput {
    *  2026-10-07): a producer that cannot answer this cannot speak. */
   proof: FactProof;
   /** WHICH OF THE STUDENT'S MOVES IT NAMES — REQUIRED (OS-10): held while one
-   *  of them is legal for the student (LEARN NAMES NO MOVE UNASKED). */
-  namesStudentMove: NamesStudentMove;
+   *  of them is legal for the student (LEARN NAMES NO MOVE UNASKED). A
+   *  producer that already emits the one fact hands the fact's own answer
+   *  (`CoachFact.namesStudentMove`, P1-6b), answered where it was made. */
+  namesStudentMove: NamesStudentMove | boolean;
 }
 
 /** A LEARN FACT AT THE DOOR — the one fact shape (`coachFact`) with the lane
@@ -570,7 +572,7 @@ function laneFact(f: LaneInput, i: number): LaneFact {
     ...toCoachFact({
       id: f.id ?? `lane:${i}`, kind, text: f.text, fen: f.fen, squares: f.squares ?? [], claims: f.claims ?? [],
       stakes: f.stakes ?? null, proof: f.proof, seat: step === 'theirs' ? 'opponent' : 'student', step,
-      namesStudentMove: namesPlayableStudentMove(f.namesStudentMove), thread: LOCAL_THREAD,
+      namesStudentMove: typeof f.namesStudentMove === 'boolean' ? f.namesStudentMove : namesPlayableStudentMove(f.namesStudentMove), thread: LOCAL_THREAD,
       ...(f.lines ? { lines: f.lines } : {}), ...(f.skill ? { skill: f.skill } : {}),
     }),
     lane: f.lane,

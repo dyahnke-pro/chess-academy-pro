@@ -193,9 +193,11 @@ describe('every student move of the six games: the engine-backed producers name 
       const leaks: string[] = [];
       let checked = 0;
       /** A line the producer said it names nothing in, that names a student move. */
-      const check = (who: string, ply: number, san: string, text: string, declared: NamesStudentMove, next: string): void => {
+      const check = (who: string, ply: number, san: string, text: string, declared: NamesStudentMove | boolean, next: string): void => {
         checked += 1;
-        if (namesPlayableStudentMove(declared)) return;
+        // A one-fact producer (P1-6b) answers it once, as a boolean, on the
+        // board it was made on; the rest still hand the moves they name.
+        if (typeof declared === 'boolean' ? declared : namesPlayableStudentMove(declared)) return;
         const named = namedMoves(text, next, g.side);
         if (named.length) leaks.push(`${g.name} ${ply}.${san} ${who} [${named.join(',')}]: ${text}`);
       };

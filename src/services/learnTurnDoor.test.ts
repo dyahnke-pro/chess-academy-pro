@@ -93,7 +93,7 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
     for (const lane of Object.keys(LEARN_LANES) as LearnLane[]) {
       if (VIA_BACKWARD_LOOK.has(lane) || viaStory.has(lane) || viaPhaseWave.has(lane)) continue;
       const fed = new RegExp(`queueSpokenHint\\([^;]*'${lane}'|deferIf\\([^;]*'${lane}'|lane: '${lane}'|'${lane}' as const`).test(TEACH_CODE)
-        || (pageCallsBoard && new RegExp(`lane: '${lane}'`).test(BOARD_CODE));
+        || (pageCallsBoard && new RegExp(`lane: '${lane}'|teachingFact\\('${lane}'`).test(BOARD_CODE));
       expect(fed, `lane '${lane}' is in the table and nothing feeds it`).toBe(true);
     }
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind[,)]/);
@@ -774,7 +774,7 @@ describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-1
     expect(TEACH_CODE).toMatch(/lane: 'countMethod' as const, text: countRead\.text, fen: args\.fenAfterReply, squares: countRead\.squares, claims: countRead\.claims, stakes: countRead\.stakes \?\? undefined, role: countRead\.role/);
     expect(TEACH_CODE).not.toMatch(/readBoard\('countMethod', \{ fen: probe\.fen\(\)/);
     // One forwarder for every computed hint — arrows, stakes and role ride.
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, hint\.text, hint\.lane, hint\.proof, hint\.namesStudentMove, hint\.squares, hint\.claims, gradeFen, hint\.arrows, undefined, hint\.stakes, hint\.role, undefined, undefined, hint\.ownMoveReason\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, hint\.text, hint\.lane, hint\.proof, hint\.namesStudentMove, hint\.squares, hint\.claims, gradeFen, hint\.arrows, undefined, hint\.stakes \?\? undefined, hint\.role, undefined, undefined, hint\.ownMoveReason\)/);
     expect(TEACH_CODE).not.toMatch(/queueSpokenHint\([^,\n]*, (\w+)\.text, \1\.lane, \1\.proof, \1\.squares, \1\.claims\)/);
     // Priority-first speaks its reason with NO arrow: the arrow would be the answer.
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), pfLine, 'priorityFirst', [^\n]*, \[pf\.targetSquare\], undefined, undefined, undefined, undefined, undefined, 'teach'\)/);

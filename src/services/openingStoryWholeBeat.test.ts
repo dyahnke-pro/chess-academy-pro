@@ -24,7 +24,7 @@ const movesAt: MovesAt = (fen) => key(fen) === key(forkFen)
   ? [{ san: 'Qxd5', games: 6000 } as LocalDbMove, { san: 'Nf6', games: 4000 } as LocalDbMove]
   : null;
 const choice = (): string | undefined => openingStoryAt({ history: [...SCAN, 'Qxd5'], student: 'b', namesStudentMoves: false, movesAt })
-  .find((f) => f.beat === 'branch-choice')?.text;
+  .find((f) => f.storyBeat === 'branch-choice')?.text;
 const FIANCHETTO = [{ kind: 'fianchetto' }] as unknown as NonNullable<IdentityMap>[string]['aims'];
 const LOCKED = [{ kind: 'locked-centre', advanced: 'w', squares: ['e5', 'e6'] }] as unknown as NonNullable<IdentityMap>[string]['aims'];
 

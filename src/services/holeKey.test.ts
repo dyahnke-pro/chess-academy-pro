@@ -13,8 +13,8 @@ const fenAt = (n: number): string => { const c = new Chess(); for (const m of G3
 describe('one hole claim across producers (g3 d5)', () => {
   it('the story\'s cost beat after 10…c5 keys hole:d5', () => {
     const story = openingStoryAt({ history: G3.slice(0, 20), student: 'w', namesStudentMoves: false, movesAt: () => null });
-    const gift = story.find((f) => f.beat === 'consequence' && f.squares.includes('d5'));
-    expect(gift?.claimKey).toBe(holeKey('d5'));
+    const gift = story.find((f) => f.storyBeat === 'consequence' && f.squares.includes('d5'));
+    expect(gift?.claims[0]).toBe(holeKey('d5'));
   });
   it('the pawn read after 11…Bc7 keys the same hole', () => {
     expect(fenAt(22)).toBe('r1bqr1k1/2bp1ppp/p4n2/npp1p3/2P5/1P1PPN2/PBN1BPPP/R2Q1RK1 w - - 2 12');
