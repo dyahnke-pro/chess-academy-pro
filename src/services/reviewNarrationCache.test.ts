@@ -11,7 +11,7 @@ const moves: ReviewMoveInput[] = [
   { ply: 2, san: 'c6', isCoachMove: true, classification: 'book', evaluation: 25, preMoveEval: 30, bestMove: null, fenAfter: 'f2' },
 ];
 const base = { moves, playerColor: 'black' as const, openingName: 'Caro-Kann', result: '0-1', playerRating: 1200, coachNarration: 'full' as const, uncapped: false };
-const narration: ReviewNarration = { intro: 'hi', segments: [{ ply: 1 } as ReviewNarration['segments'][number]], closing: null };
+const narration: ReviewNarration = { intro: 'hi', segments: [{ ply: 1 } as ReviewNarration['segments'][number]], closing: null, story: null };
 
 beforeEach(async () => { await db.delete(); await db.open(); });
 

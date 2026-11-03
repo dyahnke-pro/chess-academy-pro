@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6233 lines · 31 exports · 67 importers · 81 tests · 4 audits**
+**6231 lines · 30 exports · 67 importers · 81 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -118,17 +118,14 @@
 - `src/services/coachFeatureService.test.ts:881`
 
 ### `segmentNamedArrows` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:3224`
+- `src/components/Coach/CoachGameReview.tsx:3226`
 - `src/services/namedMoveArrows.test.ts:54`
 - `src/services/namedMoveArrows.test.ts:58`
 
 ### `foldReviewRefrains` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1829`
-- `src/services/reviewLedgerCounters.test.ts:55`
-- `src/services/reviewLedgerCounters.test.ts:61`
-
-### `SpokenLedgerSeed` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/components/Coach/CoachGameReview.tsx:1831`
+- `src/services/reviewLedgerCounters.test.ts:65`
+- `src/services/reviewLedgerCounters.test.ts:77`
 
 ### `ReviewMoveSegment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -195,11 +192,11 @@
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
 - `src/services/coachFeatureService.planChange.test.ts:48`
-- `src/services/coachFeatureService.reviewNoise.test.ts:21`
-- `src/services/coachFeatureService.reviewNoise.test.ts:86`
-- `src/services/coachFeatureService.reviewNoise.test.ts:141`
-- `src/services/coachFeatureService.reviewNoise.test.ts:164`
-- `src/services/coachFeatureService.reviewNoise.test.ts:170`
+- `src/services/coachFeatureService.reviewNoise.test.ts:22`
+- `src/services/coachFeatureService.reviewNoise.test.ts:87`
+- `src/services/coachFeatureService.reviewNoise.test.ts:142`
+- `src/services/coachFeatureService.reviewNoise.test.ts:166`
+- `src/services/coachFeatureService.reviewNoise.test.ts:175`
 - `src/services/coachFeatureService.studentJob.test.ts:17`
 - `src/services/coachFeatureService.test.ts:299`
 - `src/services/coachFeatureService.test.ts:315`
@@ -244,11 +241,11 @@
 - `src/services/reviewForesight.test.ts:52`
 - `src/services/reviewLastTimeHere.test.ts:26`
 - `src/services/reviewLastTimeHere.test.ts:31`
-- `src/services/reviewLedgerCounters.test.ts:17`
+- `src/services/reviewLedgerCounters.test.ts:20`
 - `src/services/reviewMatePly.test.ts:19`
 - `src/services/reviewMoveIntent.test.ts:37`
 - `src/services/reviewMoveThought.test.ts:14`
-- `src/services/reviewNarrationRev.gate.test.ts:32`
+- `src/services/reviewNarrationRev.gate.test.ts:35`
 - `src/services/reviewNeedGate.test.ts:30`
 - `src/services/reviewNeedGate.test.ts:46`
 - `src/services/reviewNeedGate.test.ts:47`
@@ -270,12 +267,12 @@
 - `src/services/reviewTheirHabit.test.ts:24`
 - `src/test/computedOrderWired.test.ts:59`
 - `src/test/everySurfaceSpeaks.test.ts:94`
-- `src/test/replayGame.ts:149`
-- `src/test/reviewExplore.continuity.test.ts:35`
-- `src/test/reviewExplore.continuity.test.ts:45`
+- `src/test/replayGame.ts:150`
+- `src/test/reviewExplore.continuity.test.ts:50`
+- `src/test/reviewExplore.continuity.test.ts:62`
 
 ### `buildReviewSegmentsYielding` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:1828`
+- `src/components/Coach/CoachGameReview.tsx:1830`
 - `src/services/reviewBuildYields.test.ts:35`
 
 ### `defaultIntroText` (function) — 4 call sites
@@ -297,7 +294,7 @@
 - `src/test/mateSaidOnce.gate.test.ts:69`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4267`
+- `src/components/Coach/CoachGameReview.tsx:4269`
 - `src/services/coachFeatureService.test.ts:793`
 - `src/services/coachFeatureService.test.ts:796`
 - `src/services/coachFeatureService.test.ts:803`
@@ -361,7 +358,7 @@
 - `src/services/reviewDepth.eval.measure.test.ts:233`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
 - `src/services/reviewHabitClosesTurn.test.ts:53`
-- `src/services/reviewNarrationBuild.ts:101`
+- `src/services/reviewNarrationBuild.ts:103`
 - `src/services/reviewRealSweep.test.ts:187`
 - `src/services/reviewRefuted.test.ts:28`
 - `src/services/reviewRefuted.test.ts:34`
@@ -386,7 +383,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:644`
+- `src/services/reviewFullData.ts:645`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites

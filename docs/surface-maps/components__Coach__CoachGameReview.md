@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4322 lines · 2 exports · 3 importers · 17 tests · 6 audits**
+**4324 lines · 2 exports · 3 importers · 18 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
@@ -37,6 +37,7 @@
 - `src/services/exchangeLedger.test.ts`
 - `src/services/exploredMoveGrade.test.ts`
 - `src/services/reviewLedgerCounters.test.ts`
+- `src/services/reviewNarrationBuild.test.ts`
 - `src/test/algoAuditContract.test.ts`
 - `src/test/corpusScope.test.ts`
 - `src/test/criticalMomentReach.test.ts`

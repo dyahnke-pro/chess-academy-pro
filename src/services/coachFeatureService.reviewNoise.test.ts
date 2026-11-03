@@ -12,6 +12,7 @@ import type { HeatTile } from './heatMap';
 import { reasonFormula } from '../utils/reasonFormula';
 import { __setLocalDbForTests } from './masterPlayLookup';
 import { setOpeningIdentity } from './openingIdentity';
+import { createStoryStore } from './gameStory';
 
 // David's Vienna (chesscom 1038626480), White: 11…Bxg2 hits the rook on h1.
 const VIENNA = 'e4 e5 Nc3 Nc6 Bc4 b6 d3 Nf6 f4 Bc5 fxe5 Nxe5 Bb3 Bb7 d4 Bb4 Bd2 Nc6 e5 Nxd4 exf6 Bxg2 Nge2 Qxf6'.split(' ');
@@ -161,13 +162,18 @@ describe('review noise — a rebuild mid-walk keeps what the walk already said (
     const full = walk(VIENNA, 'white');
     const c = new Chess();
     const inputs = VIENNA.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 1, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
-    const segs = buildReviewSegmentsForTests(inputs, 'white', null, true, 1400);
+    const story = createStoryStore('vienna');
+    buildReviewSegmentsForTests(inputs, 'white', null, true, 1400, [], undefined, null, new Map(), new Map(), null, story);
     expect(full.length).toBeGreaterThan(0);
     // A key the build commits late — as if the walk had already said it early.
-    const late = segs.filter((s) => s.ply > 8).flatMap((s) => (s.ledgerKeys ?? []).map((k) => ({ k, ply: s.ply })));
+    const late = [...story.current().said].filter(([, at]) => at > 8);
     expect(late.length).toBeGreaterThan(0);
-    const { k } = late[0];
-    const seeded = buildReviewSegmentsForTests(inputs, 'white', null, true, 1400, [], undefined, null, new Map(), new Map(), { throughPly: 8, keys: new Set([k]), story: null });
-    expect(seeded.filter((s) => s.ply > 8).flatMap((s) => s.ledgerKeys ?? [])).not.toContain(k);
+    const [k] = late[0];
+    const said = createStoryStore('vienna');
+    said.commit(8, { claims: [k] });
+    const seededStory = createStoryStore('vienna');
+    buildReviewSegmentsForTests(inputs, 'white', null, true, 1400, [], undefined, null, new Map(), new Map(), { throughPly: 8, checkpoint: said.serialize() }, seededStory);
+    // Said once — on the walk, by ply 8 — and never again after the swap.
+    expect(seededStory.current().said.get(k)).toBe(8);
   }, 60_000);
 });

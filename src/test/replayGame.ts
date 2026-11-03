@@ -18,6 +18,7 @@ import { BRIEFING_LINE_PLIES, newLessonVoice } from '../services/reviewMoveBrief
 import { lessonThought } from '../services/moveThoughtFacts';
 import { buildReviewSegmentsForTests, type ReviewMoveInput, type ReviewMoveSegment } from '../services/coachFeatureService';
 import { classifyCpLoss } from '../services/gameAnalysisService';
+import type { StoryStore } from '../services/gameStory';
 
 export interface EngineRead { uci: string; cp: number | null; mate: number | null; pv: string[] }
 /** The two reads of one ply; `after` is empty when the move ended the game. */
@@ -145,6 +146,6 @@ export function reviewInputs(game: ReplayGame): ReviewMoveInput[] {
 /** Review's walk over the whole game, one segment a move — in the walk's
  *  default mode (`isReviewUncapped()` is true unless `?uncapped=0`), before the
  *  engine projections the async build adds. */
-export function reviewSegments(game: ReplayGame, rating = 1500): ReviewMoveSegment[] {
-  return buildReviewSegmentsForTests(reviewInputs(game), game.studentSide, null, true, rating);
+export function reviewSegments(game: ReplayGame, rating = 1500, story?: StoryStore): ReviewMoveSegment[] {
+  return buildReviewSegmentsForTests(reviewInputs(game), game.studentSide, null, true, rating, [], undefined, null, new Map(), new Map(), null, story);
 }

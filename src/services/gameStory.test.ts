@@ -11,6 +11,7 @@ import {
   createStoryStore, keysUnder, STORY_KEY, threadKey, threadStated, threadVariant, toldBoards, PLAN_GOAL,
   phaseCrossed, openingAt, openingsNamed, noteOpening, identityHeard, openingBreak, switchesSaid, lastVerdict,
   promisesOpen, slipCount, modelGameCited, storyTurn, storyOf, EMPTY_CHARACTER_STATE,
+  storyLedger, storyThrough, spliceStory,
 } from './gameStory';
 import { createLearnMemory } from './learnMemory';
 
@@ -342,9 +343,77 @@ describe('the events are the story\'s (P1-8c): what happened, at the ply it happ
     expect(c.plans().character.current).toBe('tactical');
     const v1 = JSON.stringify({ ...JSON.parse(a.serialize()) as object, v: 1 });
     expect(storyOf(v1).events).toEqual([]);
+    const v2 = JSON.stringify({ ...JSON.parse(a.serialize()) as object, v: 2 });
+    expect(storyOf(v2).events).toEqual([]);
     expect(storyOf(null).events).toEqual([]);
     // A new game forgets the character with the plans.
     c.newGame('c2');
     expect(c.plans().character).toEqual(EMPTY_CHARACTER_STATE);
+  });
+});
+
+describe('Review\'s whole build is the story\'s (P1-8d): ledgers in the claim map, one checkpoint, a seed taken back to a ply', () => {
+  const PASSER = threadKey('student', 'plan-aim:passer:d');
+
+  it('a ledger is the claim map under its prefix: said at the ply the story is at, read as a set', () => {
+    const s = createStoryStore('r');
+    const hints = storyLedger(s, 'h:');
+    const sentences = storyLedger(s, '', 'sentences');
+    s.reach(7);
+    hints.add('hint:a');
+    sentences.add('yourknightisloose');
+    s.reach(9);
+    hints.add('hint:b');
+    hints.add('hint:a'); // said once: the first ply stands
+    expect(s.current().said.get('h:hint:a')).toBe(7);
+    expect(s.current().said.get('h:hint:b')).toBe(9);
+    expect(s.current().sentences.get('yourknightisloose')).toBe(7);
+    expect(hints.has('hint:a')).toBe(true);
+    expect(hints.size).toBe(2);
+    expect([...hints]).toEqual(['hint:a', 'hint:b']);
+    // Another prefix is another ledger.
+    expect(storyLedger(s, 'f:').size).toBe(0);
+    // …and a takeback forgets it with everything else said after the board.
+    s.rewind(8);
+    expect([...hints]).toEqual(['hint:a']);
+  });
+
+  it('the checkpoint carries the plan state of every ply, so one taken back to a ply has the plans as they stood there', () => {
+    const s = createStoryStore('r');
+    const d9 = s.plans(); d9.thread.methodSaid = true; s.setPlans(9, d9);
+    const d14 = s.plans(); d14.thread.howSaid.add('passer:c'); s.setPlans(14, d14);
+    s.commit(9, { claims: ['h:a'] });
+    s.commit(14, { claims: ['h:b'] });
+    const at10 = createStoryStore('x');
+    at10.restore(storyThrough(s.serialize(), 10));
+    expect([...at10.current().said.keys()]).toEqual(['h:a']);
+    expect(at10.plans().thread.methodSaid).toBe(true);
+    expect(at10.plans().thread.howSaid.has('passer:c')).toBe(false);
+    // Restoring the whole checkpoint and rewinding is the same cut.
+    const whole = createStoryStore('y');
+    whole.restore(s.serialize());
+    whole.rewind(10);
+    expect(whole.serialize()).toBe(at10.serialize());
+    // Nothing said by then: no seed.
+    expect(storyThrough(s.serialize(), 5)).toBeNull();
+    expect(storyThrough(null, 40)).toBeNull();
+  });
+
+  it('a swap splices the walk\'s story through the frozen ply with the newer build\'s after it; the turn is the newer build\'s', () => {
+    const walk = createStoryStore('g');
+    walk.commit(4, { claims: ['h:said-early'] });
+    walk.commit(12, { claims: ['h:said-late-by-the-walk'] });
+    walk.commitThreads(6, [{ key: PASSER, kind: 'stated' }]);
+    walk.note(20, [{ kind: 'turn', thesis: { kind: 'turned', ply: 20, label: null, swingPawns: 2, tactic: null, plan: null, chainRoot: null } }]);
+    const next = createStoryStore('g');
+    next.commit(3, { claims: ['h:its-own-past'] });
+    next.commit(11, { claims: ['h:ahead', 'h:said-early'] });
+    next.commitThreads(13, [{ key: PASSER, kind: 'step' }]);
+    next.note(8, [{ kind: 'turn', thesis: { kind: 'turned', ply: 8, label: null, swingPawns: 3, tactic: null, plan: null, chainRoot: null } }]);
+    const merged = storyOf(spliceStory(walk.serialize(), next.serialize(), 10));
+    expect([...merged.said]).toEqual([['h:said-early', 4], ['h:ahead', 11]]);
+    expect(merged.threads.get(PASSER)?.said.map((x) => [x.ply, x.kind])).toEqual([[6, 'stated'], [13, 'step']]);
+    expect(storyTurn(merged)?.ply).toBe(8);
+    expect(spliceStory(null, null, 10)).toBeNull();
   });
 });

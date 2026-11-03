@@ -62,6 +62,7 @@ function makeNarration(partial: Partial<ReviewNarration> & { segments: ReviewMov
     intro: partial.intro ?? 'Opening intro.',
     segments: partial.segments,
     closing: partial.closing ?? null,
+    story: partial.story ?? null,
   };
 }
 

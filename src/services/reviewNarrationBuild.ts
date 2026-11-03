@@ -18,7 +18,8 @@ import { resolvePlayerColor } from './playerIdentity';
 import { adaptGameRecordExplained } from './reviewGameAdapter';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import { TRUSTED_LINE_DEPTH, REVIEW_READ_DEPTH } from './engineConstants';
-import { generateReviewNarration, type ReviewMoveInput, type ReviewNarration, type SpokenLedgerSeed } from './coachFeatureService';
+import { generateReviewNarration, type ReviewMoveInput, type ReviewNarration } from './coachFeatureService';
+import { storyOf, storyThrough, spliceStory, type StorySeed } from './gameStory';
 import { getCachedReviewNarration, storeReviewNarration, reviewNarrationCacheKey } from './reviewNarrationCache';
 import { logAppAudit } from './appAuditor';
 import type { CoachGameMove } from '../types';
@@ -70,10 +71,10 @@ export interface ReviewNarrationRequest {
    *  must not hear a part of the game as the whole. */
   complete?: boolean;
   /** What a walk in progress has already said (review noise walk 2026-10-20):
-   *  this build replaces only the plies ahead, so its say-once ledgers start
-   *  from what was spoken. Such a build answers ONE walk — never cached, never
-   *  joined with an unseeded one. */
-  spokenBefore?: SpokenLedgerSeed | null;
+   *  this build replaces only the plies ahead, so its story starts from what
+   *  was spoken (`storySeed`). Such a build answers ONE walk — never cached,
+   *  never joined with an unseeded one. */
+  spokenBefore?: StorySeed | null;
 }
 
 interface ReviewNarrationResult {
@@ -88,9 +89,10 @@ const inflight = new Map<string, Promise<ReviewNarrationResult>>();
  *  produced segments). Concurrent asks for the same game+key share one build. */
 export function getOrBuildReviewNarration(req: ReviewNarrationRequest): Promise<ReviewNarrationResult> {
   const complete = req.complete !== false;
-  const seeded = !!req.spokenBefore && req.spokenBefore.keys.size > 0;
+  const seed = req.spokenBefore ?? null;
+  const seeded = !!seed;
   const key = `${reviewNarrationCacheKey(req)}${complete ? '' : ':partial'}`;
-  const slot = `${req.gameId ?? ''}|${key}${seeded ? `|spoken:${req.spokenBefore?.throughPly}:${req.spokenBefore?.keys.size}` : ''}`;
+  const slot = `${req.gameId ?? ''}|${key}${seed ? `|spoken:${seed.throughPly}:${seed.checkpoint.length}` : ''}`;
   const running = inflight.get(slot);
   if (running) return running;
   const build = (async (): Promise<ReviewNarrationResult> => {
@@ -108,7 +110,7 @@ export function getOrBuildReviewNarration(req: ReviewNarrationRequest): Promise<
       uncapped: req.uncapped,
       gameId: req.gameId,
       complete,
-      spokenBefore: seeded ? req.spokenBefore : null,
+      spokenBefore: seed,
     });
     if (req.gameId && complete && !seeded && narration.segments.length > 0) {
       await storeReviewNarration(req.gameId, key, narration);
@@ -162,33 +164,59 @@ export async function prebuildReviewNarration(gameId: string, reason: string): P
   }
 }
 
+/** WHAT A WALK HAS SPOKEN (WO-STORY-MATRIX-01 P1-8d): the narration's story
+ *  taken back to the ply walked through — every claim, flag, plan and event
+ *  said by then, and nothing after (`storyThrough`, the same cut a takeback
+ *  makes). Null when the walk had said nothing yet. */
+export function storySeed(narration: ReviewNarration | null, walkedThroughPly: number): StorySeed | null {
+  if (!narration || walkedThroughPly <= 0) return null;
+  const checkpoint = storyThrough(narration.story, walkedThroughPly);
+  return checkpoint ? { throughPly: walkedThroughPly, checkpoint } : null;
+}
+
+/** THE SEED OF A LINE EXPLORED OFF THE WALK (P1-8d): the walk's story at the
+ *  ply the line LEAVES the game — never at the walk's current ply. The free
+ *  board's line shares the game's first moves and then branches; past the
+ *  branch the walk spoke about moves this line never played. Cut at the
+ *  walk's ply, a line explored off ply 11 with the walk at 25 counted the
+ *  ply-25 slip ("That's the second time this game") and held every claim,
+ *  plan step and event of plies 12–25 as said (the P1-8c review). So the seed
+ *  is the walk's story through the earlier of the two: what the student heard
+ *  of the moves the line shares with the game. Null when nothing was said by
+ *  then (or the line leaves the game on its first move). */
+export function exploreSeed(
+  narration: ReviewNarration | null,
+  walkedThroughPly: number,
+  line: readonly string[],
+  game: ReadonlyArray<{ readonly san: string }>,
+): StorySeed | null {
+  let onGame = 0;
+  while (onGame < line.length && onGame < game.length && game[onGame].san === line[onGame]) onGame += 1;
+  return storySeed(narration, Math.min(walkedThroughPly, onGame));
+}
+
+/** THE MERGE INSTRUMENT (the lead, 2026-10-20): at a mid-walk swap, what the
+ *  walk SPOKE through the swap (claims and sentences), how many of those the
+ *  new build's story does not hold by then (`missing` — the stories diverged),
+ *  and how many it says only after the swap (`reSaid` — heard twice). */
+export function storyAtMerge(prev: ReviewNarration | null, next: ReviewNarration, walkedThroughPly: number): { spoken: number; missing: number; reSaid: number; reSaidKeys: string[] } {
+  const said = (narration: ReviewNarration | null): Map<string, number> => {
+    const st = storyOf(narration?.story ?? null);
+    return new Map([...[...st.said].map(([k, at]) => [`c|${k}`, at] as const), ...[...st.sentences].map(([k, at]) => [`s|${k}`, at] as const)]);
+  };
+  const walked = [...said(prev)].filter(([, at]) => at <= walkedThroughPly).map(([k]) => k);
+  if (walked.length === 0) return { spoken: 0, missing: 0, reSaid: 0, reSaidKeys: [] };
+  const ahead = said(next);
+  const reSaidKeys = walked.filter((k) => (ahead.get(k) ?? 0) > walkedThroughPly);
+  return { spoken: walked.length, missing: walked.filter((k) => !((ahead.get(k) ?? Number.POSITIVE_INFINITY) <= walkedThroughPly)).length, reSaid: reSaidKeys.length, reSaidKeys: reSaidKeys.slice(0, 8) };
+}
+
 /** A newer build of the walk, merged into the one the student is hearing: the
  *  plies already walked keep the words they were given (and so does the intro,
- *  once spoken), every later ply takes the newer build. A move is never
- *  re-narrated under a student who has heard it. */
-/** The say-once keys a walk has SPOKEN: every ply it has walked through —
- *  and the game's story as it stood there: the last checkpoint at or before
- *  that ply (none: the walk had said no plan yet). */
-export function spokenLedgerSeed(narration: ReviewNarration | null, walkedThroughPly: number): SpokenLedgerSeed | null {
-  if (!narration || walkedThroughPly <= 0) return null;
-  const walked = narration.segments.filter((sg) => sg.ply <= walkedThroughPly).sort((a, b) => a.ply - b.ply);
-  const keys = new Set(walked.flatMap((sg) => sg.ledgerKeys ?? []));
-  const story = walked.reduce<string | null>((at, sg) => sg.storyCheckpoint ?? at, null);
-  return { throughPly: walkedThroughPly, keys, story };
-}
-
-/** THE MERGE INSTRUMENT (the lead, 2026-10-20): at a mid-walk swap, the
- *  say-once keys the walk SPOKE that the new build's own past does not hold
- *  (`missing` — the ledgers diverged), and how many of the spoken ones the new
- *  build commits again on the plies ahead (`reSaid` — heard twice). */
-export function ledgerAtMerge(prev: ReviewNarration | null, next: ReviewNarration, walkedThroughPly: number): { spoken: number; missing: number; reSaid: number; reSaidKeys: string[] } {
-  const seed = spokenLedgerSeed(prev, walkedThroughPly);
-  if (!seed) return { spoken: 0, missing: 0, reSaid: 0, reSaidKeys: [] };
-  const nextPast = new Set(next.segments.filter((sg) => sg.ply <= walkedThroughPly).flatMap((sg) => sg.ledgerKeys ?? []));
-  const reSaidKeys = next.segments.filter((sg) => sg.ply > walkedThroughPly).flatMap((sg) => (sg.ledgerKeys ?? []).filter((k) => seed.keys.has(k)));
-  return { spoken: seed.keys.size, missing: [...seed.keys].filter((k) => !nextPast.has(k)).length, reSaid: reSaidKeys.length, reSaidKeys: reSaidKeys.slice(0, 8) };
-}
-
+ *  once spoken), every later ply takes the newer build — and so does the
+ *  story: what the walk said through the frozen ply, then what the newer build
+ *  says after it (`spliceStory`). A move is never re-narrated under a student
+ *  who has heard it. */
 export function mergeReviewNarration(
   prev: ReviewNarration | null,
   next: ReviewNarration,
@@ -199,5 +227,5 @@ export function mergeReviewNarration(
   const kept = prev.segments.filter((sg) => sg.ply <= frozenThroughPly);
   const keptPlies = new Set(kept.map((sg) => sg.ply));
   const segments = [...kept, ...next.segments.filter((sg) => !keptPlies.has(sg.ply))].sort((a, b) => a.ply - b.ply);
-  return { ...next, intro: introSpoken ? prev.intro : next.intro, segments };
+  return { ...next, intro: introSpoken ? prev.intro : next.intro, segments, story: spliceStory(prev.story, next.story, frozenThroughPly) };
 }

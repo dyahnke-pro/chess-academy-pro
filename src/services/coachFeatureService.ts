@@ -54,7 +54,7 @@ import { renderStructureAtoms } from './structureProse';
 import { coachTurn, habitNeedFrom, type DoorFact } from './coachDecider';
 import { advantageWasMissed } from './reviewWithholding';
 import { PLAN_THREAD_HOLD_PLIES } from './planThread';
-import { createStoryStore, threadKey, threadStated, threadVariant, PLAN_GOAL, phaseCrossed, openingAt, openingsNamed, noteOpening, lastVerdict, modelGameCited, type ThreadKey } from './gameStory';
+import { createStoryStore, storyLedger, storyThrough, threadKey, threadStated, threadVariant, PLAN_GOAL, phaseCrossed, openingAt, openingsNamed, noteOpening, lastVerdict, modelGameCited, storyTurn, type ThreadKey, type StoryStore, type StorySeed, type SaidSet } from './gameStory';
 import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
@@ -419,43 +419,56 @@ export function segmentNamedArrows(
   return admitArrows(claims, { fen: seg.fenAfter, studentColor }).arrows;
 }
 
+/** REVIEW'S SAY-ONCE MEMORIES IN THE STORY (WO-STORY-MATRIX-01 P1-8d): each
+ *  ledger the walk keeps is the game story's one claim map under its own
+ *  prefix (`storyLedger`) — the prefixes the seeded key list used, so one
+ *  vocabulary names a memory in the story, a checkpoint and a test. */
+const REVIEW_SAID = {
+  hint: 'h:', formula: 'f:', refuted: 'r:', principle: 'p:', loose: 'l:', motif: 'm:',
+  fundamental: 'fu:', conversionStep: 'cv:', decoy: 'dc:', trapped: 'tr:', threat: 'th:', lastHere: 'rc:',
+  deepShot: 'ds:', signal: 'sg:', staticFacet: 'sf:', standing: 'ss:', sac: 'sc:', verdictReason: 'vr:',
+  thought: 'tk:', structAtom: 'sa:', oneShot: 'os:', oppTarget: 'ot:', flag: 'g:', refrain: 'rf:',
+  /** The opening story's lines told — a job one of them claimed is not said
+   *  again when the move lands (no seed carried them before 8d). */
+  storyLine: 'st:',
+  /** The method habits taught, once a game each (no seed carried them before 8d). */
+  habit: 'hb:',
+} as const;
+
+/** The walk's once-a-game beats, each a flag in the story (`REVIEW_SAID.flag`).
+ *  The book standing is two flags: entering the main line and leaving it. */
+type ReviewFlag = 'openingPlanShown' | 'orientationShown' | 'assessmentShown' | 'psychologyReadDone' | 'opponentDevReadShown'
+  | 'sacCompShown' | 'kingCenterTaught' | 'tradeIdeaSpoken' | 'standing=main' | 'standing=side';
+
 /** THE STANDING REFRAINS, folded over finished segments IN PLY ORDER (the
  *  first mention in reading order is the full one). Each refrain's full form
- *  is stamped on its segment (`rf:` in `ledgerKeys`), and a seed — what a walk
- *  already SPOKE — starts the ledger at `throughPly + 1`, so a rebuild (the
- *  deep-dive swap, a free-board move) never says a refrain in full twice. */
-export function foldReviewRefrains(segments: ReviewMoveSegment[], spokenBefore: SpokenLedgerSeed | null): void {
-  const ledger = emptyRefrainLedger();
-  let seeded = false;
+ *  said enters the game's story (its `rf:` claim, at the ply that said it), and
+ *  a seed — what a walk already SPOKE — starts the fold at `throughPly + 1`
+ *  from the refrains in the story, so a rebuild (the deep-dive swap, a
+ *  free-board move) never says a refrain in full twice. Before the seed the
+ *  build's own plies fold on a ledger of their own: they are the walk's past,
+ *  which the walk keeps, and nothing they say enters the story. */
+export function foldReviewRefrains(segments: ReviewMoveSegment[], story: StoryStore, seed: StorySeed | null): void {
+  const said = storyLedger(story, REVIEW_SAID.refrain);
+  let ledger = seed ? emptyRefrainLedger() : new Set<string>(said);
+  let onStory = !seed;
   for (const s of [...segments].sort((a, b) => a.ply - b.ply)) {
-    if (spokenBefore && !seeded && s.ply > spokenBefore.throughPly) {
-      seeded = true;
-      ledger.clear();
-      for (const k of spokenBefore.keys) if (k.startsWith('rf:')) ledger.add(k.slice(3));
+    if (seed && !onStory && s.ply > seed.throughPly) {
+      onStory = true;
+      ledger = new Set<string>(said);
     }
     if (!s.narration) continue;
     const before = new Set(ledger);
     s.narration = foldStandingRefrains(s.narration, ledger);
-    const added = [...ledger].filter((x) => !before.has(x)).map((x) => `rf:${x}`);
-    if (added.length > 0) s.ledgerKeys = [...(s.ledgerKeys ?? []), ...added];
+    if (!onStory) continue;
+    const added = [...ledger].filter((x) => !before.has(x)).map((x) => `${REVIEW_SAID.refrain}${x}`);
+    if (added.length > 0) story.commit(s.ply, { claims: added });
   }
 }
-
-/** The say-once keys the student already heard, through `throughPly` — and
- *  the game's story as the walk had it there (`storyCheckpoint`; null: the
- *  walk had said no plan yet). */
-export interface SpokenLedgerSeed { throughPly: number; keys: ReadonlySet<string>; story: string | null }
 
 export interface ReviewMoveSegment {
   /** 1-indexed ply count. Ply 1 = White's first move, ply 2 = Black's first. */
   ply: number;
-  /** The say-once keys this ply COMMITTED (tagged by ledger) — what a walk
-   *  that has spoken this ply has said, so a rebuild can start from it. */
-  ledgerKeys?: string[];
-  /** The game's story after this ply (`StoryStore.serialize`), when this ply
-   *  changed it — its plans as the walk said them, so a rebuild of the plies
-   *  ahead starts from them (`SpokenLedgerSeed.story`). */
-  storyCheckpoint?: string;
   /** Chess "full move number" — Math.ceil(ply / 2). */
   moveNumber: number;
   san: string;
@@ -604,6 +617,12 @@ export interface ReviewNarration {
   segments: ReviewMoveSegment[];
   /** Optional — spoken when the user reaches the last ply. Null by default. */
   closing: string | null;
+  /** THE GAME'S STORY (WO-STORY-MATRIX-01 P1-8d): everything the walk says,
+   *  each at the ply it says it — its claims, sentences, plans, events and
+   *  flags — as one checkpoint (`StoryStore.serialize`). What a walk had said
+   *  through ply k is this taken back to k (`storyThrough`); null when the
+   *  build said nothing. Cached with the narration. */
+  story: string | null;
 }
 
 /** Rich move data that feeds the walk-the-game review. Includes the
@@ -1411,11 +1430,20 @@ function* reviewSegmentSteps(
   intentByPly: ReadonlyMap<number, ReviewIntent> = new Map(),
   /** WHAT THE STUDENT ALREADY HEARD (review noise walk 2026-10-20). When the
    *  walk is partway through and a newer build replaces the plies ahead, the
-   *  say-once ledgers past `throughPly` start from what was SPOKEN on the plies
-   *  walked (their segments' `ledgerKeys`), not from this build's own guess at
-   *  them — or a line said before the swap is said again after it. */
-  spokenBefore: SpokenLedgerSeed | null = null,
+   *  story past `throughPly` starts from what was SPOKEN on the plies walked —
+   *  the walk's own story taken back to them (`storyThrough`), every claim,
+   *  flag, plan and event — not from this build's own guess at them, or a line
+   *  said before the swap is said again after it. */
+  spokenBefore: StorySeed | null = null,
+  /** THE GAME'S STORY (WO-STORY-MATRIX-01 P1-8b–d) — the build's whole memory
+   *  of what it has said, renewed for this game when the build starts. The
+   *  caller that keeps the narration passes its own store and serializes it
+   *  into `ReviewNarration.story` once the walk's last pass (the refrain fold)
+   *  has said its piece; both production callers pass one, so only the unit
+   *  tests rely on the default. */
+  story: StoryStore = createStoryStore(currentGameId ?? 'review'),
 ): Generator<void, ReviewMoveSegment[], void> {
+  story.newGame(currentGameId ?? 'review');
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   // The repertoire's ideas are written for ONE colour — only the student's seat reads them.
   const curatedOpeningIdeas = playerColor ? resolveCuratedOpeningIdeas(openingName ?? null, playerColor) : null;
@@ -1427,8 +1455,8 @@ function* reviewSegmentSteps(
   // The record the threat voice reads (the same shape Learn's door reads).
   const reviewRecord: StudentRecord = { weaknesses: studentWeaknesses ?? [], capabilities: studentNeed?.capabilities ?? null, heat: studentNeed?.heat ?? new Map() };
   // Package-completion once-per-game beats (David 2026-07-24: "complete the
-  // package"): the simplify-when-ahead trade idea fires at most once.
-  let tradeIdeaSpoken = false;
+  // package"): the simplify-when-ahead trade idea fires at most once (the
+  // `tradeIdeaSpoken` flag in the story — no seed carried it before 8d).
   // Per-GAME seed (stable within a game, different across games) — rotates the
   // dev-plan's lead idea + stem so the same opening never reads as the same
   // recording every game (David 2026-07-21: "the same response every time").
@@ -1512,30 +1540,37 @@ function* reviewSegmentSteps(
     : { needByPly: new Map<number, NeedVerdict>(), boostByPly: new Map<number, StudentBoost>() };
   const needByPly = selectorPkg.needByPly;
   const boostByPly = selectorPkg.boostByPly;
+  // THE WALK'S SAY-ONCE MEMORIES ARE THE STORY'S (WO-STORY-MATRIX-01 P1-8d):
+  // each is the one claim map under its own prefix (`REVIEW_SAID`), said at
+  // the ply the story is at — so the checkpoint, a seed and the walk's own
+  // past are one state, never a key list stamped beside it.
+  const ledger = <K extends string = string>(prefix: string): SaidSet<K> => storyLedger<K>(story, prefix);
+  /** The walk's once-a-game beats (`ReviewFlag`). */
+  const flags = ledger<ReviewFlag>(REVIEW_SAID.flag);
   /** Fundamentals already spoken in full this game — repeats get the short stem. */
-  const seenFundamentals = new Set<import('./principleAttribution').FundamentalId>();
-  const seenConversionSteps = new Set<ConversionStep>();
+  const seenFundamentals = ledger<import('./principleAttribution').FundamentalId>(REVIEW_SAID.fundamental);
+  const seenConversionSteps = ledger<ConversionStep>(REVIEW_SAID.conversionStep);
   /** Outside-passer decoys already said this review (one per passer file). */
-  const seenDecoys = new Set<string>();
-  /** S6 transfer: tactic motif → the move it was first SPOKEN this game. */
-  const motifLastSpoken: MotifLedger = new Map();
-  /** The same ledger as keys (`<motif>|<move>|<instance>`), so a seeded
-   *  rebuild can replay it (`motifLastSpoken` is rebuilt from them). */
-  const motifKeys = new Set<string>();
-  /** S2: opening principles SPOKEN this game — committed after the door. */
-  const principlesTaught = new Set<string>();
+  const seenDecoys = ledger(REVIEW_SAID.decoy);
+  /** S6 transfer: tactic motif → the move it was first SPOKEN this game — a
+   *  reading of the motif keys below, rebuilt from them when a seed replaces
+   *  the story (`motifLedgerOf`). */
+  let motifLastSpoken: MotifLedger = new Map();
+  /** The motifs spoken, as keys (`<motif>|<move>|<instance>`). */
+  const motifKeys = ledger(REVIEW_SAID.motif);
+  /** S2: opening principles SPOKEN this game — committed after the door. The
+   *  ply each was first said is the story's (the coverage marker reads it). */
+  const principlesTaught = ledger(REVIEW_SAID.principle);
   // The plies the grader called sound — the habit reader never counts one as
   // "a piece left loose" (a sacrifice that holds).
   const FAULT = new Set(['inaccuracy', 'mistake', 'blunder', 'miss']);
   const soundPlies = new Set<number>(moves.filter((mv) => mv.classification != null && !FAULT.has(mv.classification)).map((mv) => mv.ply));
-  /** The ply each principle was first spoken — read by the coverage marker. */
-  const principleTaughtAt = new Map<string, number>();
   // THE ONE DOOR, REVIEW SIDE (David 2026-09-30: "Review yes, Play no"). Every
   // uncapped ply's lines pass the same package Learn speaks through — board
   // grading (true on the board before OR after the move), the not-speakable
   // screen, and the per-game sentence + claim ledger — so a line said at move
   // 9 is not said again at move 22. Counted for the audit row below.
-  const reviewSpokenKeys = new Set<string>();
+  const reviewSpokenKeys = storyLedger(story, '', 'sentences');
   const reviewPkgTally = { plies: 0, parts: 0, dropped: 0, reasons: {} as Record<string, number>, drops: [] as Array<{ ply: number; reason: string; text: string }> };
   /** S4: the first ply of each phase the game reaches after the opening. */
   const phaseTurnAt = new Map<number, 'middlegame' | 'endgame'>();
@@ -1552,36 +1587,33 @@ function* reviewSegmentSteps(
   // Plan-idea beats, each fired once on an eligible student move: the opening
   // developing plan (when the opening is identified) and the middlegame
   // orientation (structure anchor + both-sides plans).
-  let openingPlanShown = false;
   /** Trapped-piece beats announced, keyed side:square — once per trap, ever. */
-  const trappedAnnounced = new Set<string>();
+  const trappedAnnounced = ledger(REVIEW_SAID.trapped);
   // Same enemy threat announced once — a threat that PERSISTS across the
   // opponent's moves (e.g. Qxb7# standing for two plies) must not re-warn
   // verbatim on each move (David 2026-07-23: the mating-net line repeated
   // word-for-word on consecutive moves). Keyed by the threat's SAN.
-  const threatsAnnounced = new Set<string>();
+  const threatsAnnounced = ledger(REVIEW_SAID.threat);
   /** Say-once for the "last time here" line, per position, this game. */
-  const lastHereSaid = new Set<string>();
+  const lastHereSaid = ledger(REVIEW_SAID.lastHere);
   // Deepest-look-ahead shots announced (David 2026-07-26 — the review-register
   // peer of the live speakDeepestLookahead), keyed by the shot's SAN so the same
   // combination is called out once per game.
-  const deepShotAnnounced = new Set<string>();
+  const deepShotAnnounced = ledger(REVIEW_SAID.deepShot);
   // FORESIGHT-AS-A-SKILL beats, deduped on the geometry they describe. The same
   // alignment can recur for plies; naming it once is teaching, naming it five
   // times is the drumbeat the method layer already learned not to be.
-  const signalsAnnounced = new Set<string>();
-  let orientationShown = false;
+  const signalsAnnounced = ledger(REVIEW_SAID.signal);
   // The enumerated POSITIONAL VERDICT ("you're better here, and here's why:
   // bishop pair, the open file, his weak pawn") — Danya's signature teaching
   // message (David 2026-07-20). Fired ONCE, when there's a real edge with ≥2
-  // concrete board-true assets to name.
-  let assessmentShown = false;
+  // concrete board-true assets to name (the `assessmentShown` flag).
   // Uncapped-mode dedup: STATIC state facets (opening name, opening plan, the
   // majority plan, the opponent-dev read) repeat identically move after move —
   // pure noise. Emit each identical line ONCE; every DYNAMIC per-move facet
   // (move/quality/tactic/loose/verdict/structure/king/sac/consequence) always
   // fires (David 2026-07-20 diagnostic: "Philidor Defense" was said 33 times).
-  const emittedStaticFacets = new Set<string>();
+  const emittedStaticFacets = ledger(REVIEW_SAID.staticFacet);
   // ── SAY-ONCE LEDGER (David 2026-07-23: "Drop repeats, drop repeats, and make
   // every one add something new") ─────────────────────────────────────────────
   // The standing-state family: a live tactic, an undefended piece, an
@@ -1594,19 +1626,17 @@ function* reviewSegmentSteps(
   // supersedes the earlier appear-only pass, which still let a flickering fact
   // ("your pawn on e4 is undefended") restate itself two or three times.
   const STANDING_STATE_RE = /^\[(tactic|loose|count|royal|rook7)\]/;
-  const standingSpoken = new Set<string>(); // signatures of standing reads spoken
-  const sacSpoken = new Set<string>(); // sacrifice-compensation profiles spoken
+  const standingSpoken = ledger(REVIEW_SAID.standing); // signatures of standing reads spoken
+  const sacSpoken = ledger(REVIEW_SAID.sac); // sacrifice-compensation profiles spoken
   // Verdict is ATOM-DIFFED: the verdict WORD (balanced/better/worse) speaks when
   // it changes; each REASON speaks only the first time it is true — so a growing
   // edge adds just the NEW asset ("you now own the open d-file") instead of
   // re-listing the whole pile every ply ("bishop pair; a7 isolated; passer…").
-  const verdictReasonsSeen = new Set<string>();
-  /** THE GAME'S STORY — its plans (WO-STORY-MATRIX-01 P1-8b): the plan the
-   *  student last HEARD with its stops in a row (the same plan thread Learn
-   *  keeps, so both surfaces remember a plan one way), and the threads each
-   *  plan was said on. Checkpointed on the segments (`storyCheckpoint`), so a
-   *  rebuild of the plies ahead starts from what the walk said. */
-  const story = createStoryStore(currentGameId ?? 'review');
+  const verdictReasonsSeen = ledger(REVIEW_SAID.verdictReason);
+  // THE GAME'S PLANS are the story's too (WO-STORY-MATRIX-01 P1-8b): the plan
+  // the student last HEARD with its stops in a row (the same plan thread Learn
+  // keeps, so both surfaces remember a plan one way), and the threads each
+  // plan was said on.
   // ONE CLAIM, MANY LANES (review walk 2026-10-01). "Convert your extra
   // material" (the plan), "trade pieces, not pawns" (the conversion method) and
   // "when you're ahead the plan is to trade" (the concept fill) are one claim;
@@ -1618,11 +1648,10 @@ function* reviewSegmentSteps(
   const passerThread = (file: string): ThreadKey => threadKey('student', planAimKey('passer', file) as string);
   const passerTaught = (file: string): boolean => threadStated(story.current(), passerThread(file)) !== null;
   const convertTaughtAt = (): number | null => threadStated(story.current(), CONVERT_THREAD);
-  const conversionFacets = new Set<string>();
   /** Refuted alternatives already SPOKEN this game, by the move refuted. */
-  const refutedSaid = new Set<string>();
+  const refutedSaid = ledger(REVIEW_SAID.refuted);
   // Learn-computer hints already spoken this game (A2), by claim identity.
-  const hintsSaid = new Set<string>();
+  const hintsSaid = ledger(REVIEW_SAID.hint);
   // HOW MUCH OF THE OPENING'S STORY THIS STUDENT GETS — from their own record
   // (David 2026-10-19: "an opening they keep leaving early gets more; one they
   // play cleanly gets a line"). Full story unless the record PROVES the line:
@@ -1653,21 +1682,20 @@ function* reviewSegmentSteps(
   // reason formula at twice a game). The book standing is said when the walk
   // enters the main line, when it first leaves the most-played line, and on
   // the last book move; a guard's context ("which their bishop on c4 pins")
-  // once per pin.
-  let standingSaid: 'main' | 'side' | null = null;
-  /** The say-once FLAGS above and below, as keys — so the seed carries them. */
-  const flagsSaid = new Set<string>();
+  // once per pin. Once off the main line the game stays on its side road, so
+  // the two flags read as one standing.
+  const standingSaid = (): 'main' | 'side' | null => (flags.has('standing=side') ? 'side' : flags.has('standing=main') ? 'main' : null);
   /** THE ONE COMPOSER'S MEMORY for the move's own thought (WO-ONE-COACH-01
    *  Build 5): the claims and sentences it has said this walk, and how often
    *  each phrase was said (a job's words rotate on it, a guard's context is
    *  said once). Committed only when the line speaks. */
-  const thoughtKeys = new Set<string>();
+  const thoughtKeys = ledger(REVIEW_SAID.thought);
   const thoughtPhrases = newPhraseMemory();
   // The story lines the walk has SPOKEN: a move job one of them already
   // claimed ("it invites Ng5, which joins their bishop on c4 against your
   // pawn on f7") is not said again when the move lands.
-  const storySaid: string[] = [];
-  const formulasSaid = new Set<string>();
+  const storySaid = ledger(REVIEW_SAID.storyLine);
+  const formulasSaid = ledger(REVIEW_SAID.formula);
   const storyAll: boolean | null = ((): boolean | null => {
     if (!studentNeed) return true;
     const keys = studentNeed.lineFenKeys ? new Set(studentNeed.lineFenKeys) : null;
@@ -1681,7 +1709,7 @@ function* reviewSegmentSteps(
   // audit 2026-10-15: "…now eyes the pawn on c5 — nothing guards it" ×3).
   // As keys (`your#1`, `your#2`), so the count rides the say-once ledgers and a
   // rebuild seeded from what the walk spoke carries it (review noise, #8).
-  const looseSaid = new Set<string>();
+  const looseSaid = ledger(REVIEW_SAID.loose);
   const looseCount = (owner: 'your' | 'their'): number => [...looseSaid].filter((k) => k.startsWith(`${owner}#`)).length;
   // The RACE verdict last spoken is the race thread's variant. Keyed on WHO
   // ARRIVES FIRST, not on the counts: the counts change on every push, so keying
@@ -1702,7 +1730,7 @@ function* reviewSegmentSteps(
   // never restated. A genuinely new atom (a file that just opened, a new passed
   // pawn) still speaks; the unchanged ones fall silent — so the [structure]
   // line always ADDS something instead of re-listing the whole pawn skeleton.
-  const structAtomsSeen = new Set<string>();
+  const structAtomsSeen = ledger(REVIEW_SAID.structAtom);
   // PURE since B4 (2026-09-22): it reports which atoms it would CLAIM and the
   // caller writes `structAtomsSeen` only once the facet has actually spoken.
   // `claimedThisPly` keeps the within-ply dedupe the ledger used to give.
@@ -1766,7 +1794,7 @@ function* reviewSegmentSteps(
   // instead of the same lecture. This is what lets the method BAR be need-driven
   // (methodBeat.ts) without the ten-plies-in-a-row drumbeat coming back — a bar
   // tuned to suppress repetition suppresses teaching too.
-  const spokenHabits = new Set<MethodHabit>();
+  const spokenHabits = ledger<MethodHabit>(REVIEW_SAID.habit);
   // WHICH HABITS THIS STUDENT STILL OWES, read off the spine ONCE per game —
   // it is a property of the student, not of the ply, so computing it per move
   // would be the same answer N times.
@@ -1788,22 +1816,23 @@ function* reviewSegmentSteps(
   // developing after the first mention". One-shot by TAG, not by string (the
   // set of undeveloped pieces shrinks, so exact-string dedup let each
   // variant through).
-  const oneShotTags = new Set<string>();
+  const oneShotTags = ledger(REVIEW_SAID.oneShot);
   // Opponent-commentary dedup — name each target square at most once, and cap
   // the total so the lighter developing reads never spam (Danya comments the
   // opponent ~50-60% of moves, not every one).
   // Opponent target-read dedup — name each target square at most once (David
   // 2026-07-20: "always narrate both sides" — no count cap; the dedup is the only
   // throttle, and the PlyFacts fallback narrates every other eventful opp move).
-  const oppTargetsSeen = new Set<string>();
-  // Opponent-psychology read state — was the opponent's LAST move an error, and
-  // have we already noted the snowball once?
+  const oppTargetsSeen = ledger(REVIEW_SAID.oppTarget);
+  // Opponent-psychology read state — was the opponent's LAST move an error (a
+  // reading of the grades, rebuilt by every build from the moves — not a memory
+  // of anything said), and have we already noted the snowball once (the
+  // `psychologyReadDone` flag)?
   let lastOpponentWasError = false;
-  let psychologyReadDone = false;
   // Opponent structure + development read — a once-per-game observation (David
-  // 2026-07-19 live test). Accumulate the opponent's own SANs as we walk.
+  // 2026-07-19 live test; the `opponentDevReadShown` flag). Accumulate the
+  // opponent's own SANs as we walk — the moves, which every build replays.
   const opponentSans: string[] = [];
-  let opponentDevReadShown = false;
   // Variation re-naming inside the walk (A2 — Danya names the line as it takes
   // shape). Accumulate ALL sans; announce each new, more-specific opening name
   // once, in order, on a quiet opening move (grounded via detectOpening).
@@ -1814,11 +1843,10 @@ function* reviewSegmentSteps(
   const storyGame = openingName ? pickStoryGame(openingName) : null;
   // The full sacrifice-compensation profile (king-stuck / dev-lead / verdict)
   // fires ONCE per game — a combination of several sacs shares one compensation,
-  // so re-listing it verbatim on each is robotic. Later sacs are still NAMED.
-  let sacCompShown = false;
-  // The "their king is stuck in the centre" keystone is taught at most ONCE per
-  // game — whether by the sacrifice compensation or the standalone beat below.
-  let kingCenterTaught = false;
+  // so re-listing it verbatim on each is robotic. Later sacs are still NAMED
+  // (the `sacCompShown` flag). The "their king is stuck in the centre" keystone
+  // is taught at most ONCE per game — whether by the sacrifice compensation or
+  // the standalone beat below (`kingCenterTaught`).
   // FORCED-SEQUENCE framing (the forcing-move / "calculate to the end" concept):
   // if the game ends in a forced checking run, frame it at its first move so the
   // student learns to SEE a forced finish, then the walk plays it out. Board-true.
@@ -1860,73 +1888,28 @@ function* reviewSegmentSteps(
       }
     } catch { /* looking back is a bonus, never a blocker */ }
   }
-  // THE SAY-ONCE LEDGERS, as keys: what each ply committed rides on its
-  // segment (`ledgerKeys`), and a seed of them replaces this build's own past.
-  const ledgers: ReadonlyArray<readonly [string, Set<string>]> = [
-    ['h:', hintsSaid], ['f:', formulasSaid], ['r:', refutedSaid], ['p:', principlesTaught], ['s:', reviewSpokenKeys],
-    ['l:', looseSaid], ['m:', motifKeys],
-    // EVERY say-once ledger of the build rides the seed (the swap re-said "A
-    // rare book move" because the book standing was not here). None of these
-    // ever shrinks, so the union of what each walked ply added IS the state.
-    ['fu:', seenFundamentals as Set<string>], ['cv:', seenConversionSteps as Set<string>], ['dc:', seenDecoys],
-    ['tr:', trappedAnnounced], ['th:', threatsAnnounced], ['rc:', lastHereSaid],
-    ['ds:', deepShotAnnounced], ['sg:', signalsAnnounced], ['sf:', emittedStaticFacets], ['ss:', standingSpoken],
-    ['sc:', sacSpoken], ['vr:', verdictReasonsSeen], ['cf:', conversionFacets],
-    ['tk:', thoughtKeys], ['sa:', structAtomsSeen], ['os:', oneShotTags], ['ot:', oppTargetsSeen],
-    ['g:', flagsSaid],
-  ];
-  let ledgerSizes = ledgers.map(([, set]) => set.size);
-  const syncFlags = (): void => {
-    const on: Array<[string, boolean]> = [
-      ['openingPlanShown', openingPlanShown], ['orientationShown', orientationShown],
-      ['assessmentShown', assessmentShown], ['psychologyReadDone', psychologyReadDone], ['opponentDevReadShown', opponentDevReadShown],
-      ['sacCompShown', sacCompShown], ['kingCenterTaught', kingCenterTaught],
-    ];
-    for (const [k, v] of on) if (v) flagsSaid.add(k);
-    if (standingSaid) flagsSaid.add(`standing=${standingSaid}`);
-  };
-  const restoreFlags = (): void => {
-    openingPlanShown = flagsSaid.has('openingPlanShown');
-    orientationShown = flagsSaid.has('orientationShown'); assessmentShown = flagsSaid.has('assessmentShown');
-    psychologyReadDone = flagsSaid.has('psychologyReadDone'); opponentDevReadShown = flagsSaid.has('opponentDevReadShown');
-    sacCompShown = flagsSaid.has('sacCompShown'); kingCenterTaught = flagsSaid.has('kingCenterTaught');
-    standingSaid = flagsSaid.has('standing=side') ? 'side' : flagsSaid.has('standing=main') ? 'main' : null;
-  };
-  // THE STORY'S CHECKPOINT rides the segment whose ply changed it — the whole
-  // story, not a delta (a plan restated or stopped is a new state, not a key
-  // added), so a seed reads the last one at or before the ply it starts from.
-  let lastCheckpoint = story.serialize();
-  const stampLedgerKeys = (): void => {
-    syncFlags();
-    const keys = ledgers.flatMap(([tag, set], k) => [...set].slice(ledgerSizes[k]).map((x) => `${tag}${x}`));
-    ledgerSizes = ledgers.map(([, set]) => set.size);
-    const last = segments[segments.length - 1];
-    if (last && keys.length > 0) last.ledgerKeys = [...(last.ledgerKeys ?? []), ...keys];
-    const checkpoint = story.serialize();
-    if (last && checkpoint !== lastCheckpoint) last.storyCheckpoint = checkpoint;
-    if (last) lastCheckpoint = checkpoint;
+  /** The motif transfer, read off the motif keys in the order they were said
+   *  (by move) — the same replay a seeded story needs. */
+  const motifLedgerOf = (keys: Iterable<string>): MotifLedger => {
+    const out: MotifLedger = new Map();
+    const replay = [...keys].map((k) => {
+      const [motif, move, ...rest] = k.split('|');
+      return { motif, move: Number(move), instance: rest.join('|') };
+    }).sort((x, y) => x.move - y.move);
+    for (const r of replay) recordMotif(r.motif, r.instance, r.move, out);
+    return out;
   };
   for (let i = 0; i < usable; i++) {
     yield;
-    stampLedgerKeys();
     if (spokenBefore && moves[i].ply === spokenBefore.throughPly + 1) {
-      for (const [tag, set] of ledgers) {
-        set.clear();
-        for (const key of spokenBefore.keys) if (key.startsWith(tag)) set.add(key.slice(tag.length));
-      }
-      motifLastSpoken.clear();
-      const replay = [...motifKeys].map((k) => {
-        const [motif, move, ...rest] = k.split('|');
-        return { motif, move: Number(move), instance: rest.join('|') };
-      }).sort((a, b) => a.move - b.move);
-      for (const r of replay) recordMotif(r.motif, r.instance, r.move, motifLastSpoken);
-      restoreFlags();
-      // The plans the walk had said, as it had them (WO-STORY-MATRIX-01
-      // P1-8b): the plan thread and every plan's thread start from the walk's
-      // checkpoint, never this build's own guess at them.
-      story.restore(spokenBefore.story);
-      ledgerSizes = ledgers.map(([, set]) => set.size);
+      // What the walk had said, as it had said it (WO-STORY-MATRIX-01 P1-8d):
+      // the whole story — every ledger, flag, plan and event — starts from the
+      // walk's checkpoint, never this build's own guess at its past.
+      story.restore(spokenBefore.checkpoint);
+      motifLastSpoken = motifLedgerOf(motifKeys);
     }
+    // Everything said on this move is said at its ply.
+    story.reach(moves[i].ply);
     const m0 = moves[i];
     // AN INACCURACY SPEAKS ONLY WHERE THE RECORD EARNS IT (David 2026-10-18):
     // where this student's mistakes and blunders outnumber their inaccuracies
@@ -2056,6 +2039,10 @@ function* reviewSegmentSteps(
       // standing, a pin's context), committed only if the fact SPOKE — after
       // the door, like every ledger (B4: a fact on a silenced ply is not said).
       const facetCommits = new Map<string, () => void>();
+      // The conversion method's own line on this move (the "trade pieces"
+      // step), which the convert plan's thread owns below — a mark on this
+      // move's facets, not a memory of the game (it rode the seed until 8d).
+      const conversionFacets = new Set<string>();
       const verdictReasonOut: { text: string | null; playedLine?: boolean; punishSan?: string } = { text: null };
       const facets = computeMoveFacets({
         fundamentals,
@@ -2307,7 +2294,7 @@ function* reviewSegmentSteps(
           facetProofs.set(raw, r.proof);
           if (r.squares.length) facetSquares.set(raw, r.squares);
           const told = r.text; const named = storyNames;
-          facetCommits.set(raw, () => { storySaid.push(told); if (named) noteOpening(story, m.ply, 'named', named); });
+          facetCommits.set(raw, () => { storySaid.add(told); if (named) noteOpening(story, m.ply, 'named', named); });
         }
       }
       // EACH OPENING MOVE, BOTH SIDES, WITH ITS JOB (BACKLOG §6, David: "the
@@ -2389,7 +2376,7 @@ function* reviewSegmentSteps(
         if (told && sameClaim >= 0) facets.splice(sameClaim, 1);
         // ONE CLAIM, SAID ONCE (lead 2026-10-20): a job a spoken story line
         // already claimed says what the move now ASKS instead, or nothing.
-        const heard = !!job && storySaid.some((t) => t.includes(job.clause.replace(/^it /, '')));
+        const heard = !!job && [...storySaid].some((t) => t.includes(job.clause.replace(/^it /, '')));
         if (job && heard && !told && !hintsSaid.has(id) && moverColor !== playerColor && job.kind === 'attack' && job.squares[1]) {
           const ask = whatItAsks(fenPair.fenAfter, job.squares[1], moverColor === 'white' ? 'w' : 'b', THEIRS);
           if (ask) {
@@ -2412,14 +2399,15 @@ function* reviewSegmentSteps(
         const book = sorted.find((x) => x.san === m.san && x.games >= BOOK_JOB_MIN_GAMES);
         const total = sorted.reduce((n, x) => n + x.games, 0);
         const main = !!book && total > 0 && book.games / total >= MAIN_LINE_SHARE;
+        const standingNow = standingSaid();
         const standing = !book ? null
           : i === lastBookIdx ? "The last book move — the masters' file ends here"
-          : !main ? (standingSaid !== 'side' ? 'A rare book move — the game leaves the main line here' : null)
-          : standingSaid === null ? "The game is on the masters' main line" : null;
+          : !main ? (standingNow !== 'side' ? 'A rare book move — the game leaves the main line here' : null)
+          : standingNow === null ? "The game is on the masters' main line" : null;
         // Once off the main line the game stays on its side road: that change
         // is said once, never once per move. The walk's say-once state commits
         // only if the line SPOKE.
-        const nextStanding = book && i !== lastBookIdx ? (!main || standingSaid === 'side' ? 'side' : 'main') : standingSaid;
+        const nextStanding = book && i !== lastBookIdx ? (!main || standingNow === 'side' ? 'side' : 'main') : standingNow;
         // THEIR ATTACK SAYS WHAT IT ASKS (lead 2026-10-20, Najdorf Zagreb:
         // "Attacks your pawn on e4." is a one-move attack he can see). Their
         // attack on a target that now needs an answer says so; a PLAIN attack
@@ -2486,7 +2474,7 @@ function* reviewSegmentSteps(
           facetIdentity.set(raw, id);
           if (named.size) facetSquares.set(raw, [...named]);
           facetCommits.set(raw, () => {
-            standingSaid = nextStanding;
+            if (nextStanding) flags.add(`standing=${nextStanding}`);
             for (const k of memoryHere.keys) thoughtKeys.add(k);
             for (const [k, n] of phrasesHere) thoughtPhrases.set(k, n);
             // A kept fact on a plan thread (a passer made, an outpost
@@ -2729,8 +2717,8 @@ function* reviewSegmentSteps(
         // "Their king is stuck in the centre" is taught at most ONCE per game —
         // it's a standing observation, robotic to repeat every ply it holds.
         if (/^\[king\]/.test(f)) {
-          if (kingCenterTaught || !claim('king')) continue;
-          keep(f, () => { kingCenterTaught = true; });
+          if (flags.has('kingCenterTaught') || !claim('king')) continue;
+          keep(f, () => { flags.add('kingCenterTaught'); });
           continue;
         }
         // A sacrifice's COMPENSATION profile is shared across a combination —
@@ -3009,7 +2997,7 @@ function* reviewSegmentSteps(
           const at = kept.indexOf(uncappedParts[k]);
           const identity = facetIdentity.get(at >= 0 ? keptKey[at] : uncappedParts[k]);
           if (!identity) continue;
-          if (identity.startsWith('rule:')) { for (const k of identity.slice(5).split('|')) { principlesTaught.add(k); if (!principleTaughtAt.has(k)) principleTaughtAt.set(k, m.ply); } continue; }
+          if (identity.startsWith('rule:')) { for (const k of identity.slice(5).split('|')) principlesTaught.add(k); continue; }
           if (identity.startsWith('refuted:')) { refutedSaid.add(identity); continue; }
           if (identity.startsWith('hint:') || identity.startsWith('once:')) { hintsSaid.add(identity); continue; }
           // ONLY a tactic motif transfers (`transferMotifOf`).
@@ -3368,7 +3356,7 @@ function* reviewSegmentSteps(
       // from the position AFTER the sac + the eval. Only for the STUDENT's sac
       // (the "you get X for it" framing is the student's payoff); the opponent's
       // sac keeps the plain naming.
-      let comp = isStudentSac && !sacCompShown
+      let comp = isStudentSac && !flags.has('sacCompShown')
         ? sacrificeCompensation(
             fenPair.fenAfter,
             moverColor === 'white' ? 'w' : 'b',
@@ -3379,9 +3367,9 @@ function* reviewSegmentSteps(
         : [];
       // If a standalone beat already taught "king stuck in the centre", drop that
       // clause here so the keystone is never stated twice.
-      if (kingCenterTaught) comp = comp.filter((c) => !/stuck in the cent/i.test(c));
-      if (comp.length > 0) sacCompShown = true;
-      if (comp.some((c) => /stuck in the cent/i.test(c))) kingCenterTaught = true;
+      if (flags.has('kingCenterTaught')) comp = comp.filter((c) => !/stuck in the cent/i.test(c));
+      if (comp.length > 0) flags.add('sacCompShown');
+      if (comp.some((c) => /stuck in the cent/i.test(c))) flags.add('kingCenterTaught');
       const payoff = comp.length > 0 ? ` Look what you get for it: ${joinClauses(comp)}.` : '';
       // THE MECHANISM — the deepest "why" (David 2026-07-20: "where is the
       // teaching moment, the WHY? … one sentence per move doesn't cover it").
@@ -3513,12 +3501,12 @@ function* reviewSegmentSteps(
       // GENERAL simplify-when-ahead — a bare even TRADE while winning got only
       // "captures the X" and the warmer padded it; give it the real idea, ONCE
       // per game (David 2026-07-24 "complete the package").
-      if (!tradeIdea && !tradeIdeaSpoken) {
+      if (!tradeIdea && !flags.has('tradeIdeaSpoken')) {
         const tc = describeTradeConsequence(fenPair.fenBefore, m.san, true, studentPovForTrade);
         if (tc) {
           narration = narration ? `${narration} ${tc}.` : `${openSentence(tc)}.`;
           narrationSource = narrationSource ?? 'per-move';
-          tradeIdeaSpoken = true;
+          flags.add('tradeIdeaSpoken');
         }
       }
     }
@@ -3580,9 +3568,9 @@ function* reviewSegmentSteps(
     // flagged moves; the flag narration already exists to append to.
     const thisIsOppError = moverColor !== playerColor
       && (m.classification === 'inaccuracy' || m.classification === 'mistake' || m.classification === 'blunder');
-    if (narration && narrationSource === 'flag' && thisIsOppError && lastOpponentWasError && !psychologyReadDone) {
+    if (narration && narrationSource === 'flag' && thisIsOppError && lastOpponentWasError && !flags.has('psychologyReadDone')) {
       narration = `${narration} And once your opponent started slipping, the mistakes are snowballing.`;
-      psychologyReadDone = true;
+      flags.add('psychologyReadDone');
     }
     if (moverColor !== playerColor) lastOpponentWasError = thisIsOppError;
     // Teach the STUDENT's silent opening moves (R2). Only good/book moves in
@@ -3604,7 +3592,7 @@ function* reviewSegmentSteps(
       narration === null
       && !isConcreteMove
       && studentColorWB !== null
-      && !openingPlanShown
+      && !flags.has('openingPlanShown')
       && !m.isCoachMove
       && moverColor === playerColor
       && m.ply >= OPENING_PLAN_MIN_PLY
@@ -3619,7 +3607,7 @@ function* reviewSegmentSteps(
       const dev = buildHisGroundedPlanBeat(fenPair.fenBefore, studentColorWB, openingName ?? null, gameLine)
         ?? buildMastersGroundedPlanBeat(fenPair.fenBefore, studentColorWB, openingName ?? null)
         ?? buildOpeningDevelopmentPlan(fenPair.fenBefore, studentColorWB, { openingName: openingName ?? null, curatedIdeas: curatedOpeningIdeas, seed: gameSeed });
-      if (dev) { narration = dev.text; planArrows = dev.arrows; openingPlanShown = true; narrationSource = 'opening-plan'; }
+      if (dev) { narration = dev.text; planArrows = dev.arrows; flags.add('openingPlanShown'); narrationSource = 'opening-plan'; }
     }
     // (b) Middlegame orientation (structure anchor + both-sides plans), fired
     // once at/after the middlegame threshold. Takes priority over the per-move
@@ -3628,7 +3616,7 @@ function* reviewSegmentSteps(
       narration === null
       && !isConcreteMove
       && studentColorWB !== null
-      && !orientationShown
+      && !flags.has('orientationShown')
       && !m.isCoachMove
       && moverColor === playerColor
       && m.ply >= MIDDLEGAME_ORIENTATION_MIN_PLY
@@ -3640,7 +3628,7 @@ function* reviewSegmentSteps(
       && !enemyKingStuckInCenter(fenPair.fenBefore, studentColorWB)
     ) {
       const orientation = buildMiddlegameOrientation(fenPair.fenBefore, studentColorWB, m.san);
-      if (orientation) { narration = orientation.text; planArrows = orientation.arrows; orientationShown = true; narrationSource = 'orientation'; }
+      if (orientation) { narration = orientation.text; planArrows = orientation.arrows; flags.add('orientationShown'); narrationSource = 'orientation'; }
     }
     // (b2) ENUMERATED POSITIONAL VERDICT — the "you're better here, and here's
     // WHY: bishop pair, the open file, his weak pawn" message (David 2026-07-20:
@@ -3653,7 +3641,7 @@ function* reviewSegmentSteps(
       narration === null
       && !isConcreteMove
       && studentColorWB !== null
-      && !assessmentShown
+      && !flags.has('assessmentShown')
       && !m.isCoachMove
       && moverColor === playerColor
       && m.ply >= MIDDLEGAME_ORIENTATION_MIN_PLY
@@ -3669,7 +3657,7 @@ function* reviewSegmentSteps(
       const assess = assessPositionalEdge(fenPair.fenAfter, studentColorWB, studentPovCp, lastMoveFromSan(fenPair.fenBefore, m.san));
       if (assess.reasons.length >= 2 && assess.verdict && assess.verdict !== 'balanced') {
         narration = `Step back and take stock — you're ${assess.verdict} here, and it's worth knowing exactly why: ${joinClauses(assess.reasons)}.`;
-        assessmentShown = true;
+        flags.add('assessmentShown');
         narrationSource = 'assessment';
       }
     }
@@ -3681,7 +3669,7 @@ function* reviewSegmentSteps(
     // attack" lesson the coach was missing (David 2026-07-20, narrating→teaching).
     if (
       narration === null
-      && !kingCenterTaught
+      && !flags.has('kingCenterTaught')
       && studentColorWB !== null
       && !m.isCoachMove
       && moverColor === playerColor
@@ -3691,7 +3679,7 @@ function* reviewSegmentSteps(
     ) {
       narration = 'Look at their king — still in the centre, no castling in sight, and the files are opening around it. That is your cue: this is the moment to throw your pieces at it, before they ever wriggle to safety.';
       narrationSource = 'orientation';
-      kingCenterTaught = true;
+      flags.add('kingCenterTaught');
     }
     // VARIATION RE-NAMING (A2) — name the line as it takes shape (Danya: "now
     // we're in the Najdorf"). Announce each newly-reached named opening once, in
@@ -3871,7 +3859,7 @@ function* reviewSegmentSteps(
       && studentColorWB !== null
       && moverColor !== playerColor
       && playerColor !== undefined
-      && !opponentDevReadShown
+      && !flags.has('opponentDevReadShown')
       && m.ply >= 10
       && m.ply <= OPENING_TEACH_MAX_PLY
       // 'great'/'brilliant' included so a STRONG opponent move still narrates
@@ -3884,7 +3872,7 @@ function* reviewSegmentSteps(
       if (devRead) {
         narration = devRead.text;
         narrationSource = 'opponent';
-        opponentDevReadShown = true;
+        flags.add('opponentDevReadShown');
       }
     }
     // OPPONENT-MOVE commentary — what the opponent's move TARGETS in the
@@ -4013,10 +4001,14 @@ function* reviewSegmentSteps(
   if (playerColor) {
     try {
       const turn = turnThesis(selectorPlies, playerColor);
-      if (turn?.ply != null) story.note(turn.ply, [{ kind: 'turn', thesis: turn }]);
+      // A seed may already hold the walk's read of it: the same turn is not
+      // noted twice; a deeper build's different turn is noted after it, and
+      // the last one noted is the story's (`storyTurn`).
+      const was = storyTurn(story.current());
+      const known = !!was && !!turn && was.ply === turn.ply && JSON.stringify(was.thesis) === JSON.stringify(turn);
+      if (turn?.ply != null && !known) story.note(turn.ply, [{ kind: 'turn', thesis: turn }]);
     } catch { /* the turn is read on the walk's last ply — a bonus, never a blocker */ }
   }
-  stampLedgerKeys();
   if (reviewPkgTally.plies > 0) {
     void logAppAudit({
       kind: 'review-voice-package',
@@ -4034,9 +4026,10 @@ function* reviewSegmentSteps(
   // SAY-ONCE, MADE VISIBLE: a quiet student move whose only lesson is a
   // principle already taught this game stays silent on purpose. Mark it, so the
   // coverage instrument tells that silence apart from a ply nothing taught.
+  const principlesSaidAt = [...story.current().said].flatMap(([k, at]) => (k.startsWith(REVIEW_SAID.principle) ? [[k.slice(REVIEW_SAID.principle.length), at] as const] : []));
   for (const sg of segments) {
     if (sg.narration || sg.playerColor !== playerColor) continue;
-    const before = new Set([...principleTaughtAt].filter(([, at]) => at < sg.ply).map(([id]) => id));
+    const before = new Set(principlesSaidAt.filter(([, at]) => at < sg.ply).map(([id]) => id));
     const id = principleAlreadyTaught(sg.fenBefore, sg.san, sg.playerColor, before);
     if (id) sg.principleTaughtEarlier = id;
   }
@@ -5833,9 +5826,10 @@ export async function generateReviewNarration(params: {
    *  far (the read-ahead, 2026-10-13). A partial build says nothing that needs
    *  the whole game: no mistake count in the intro and no closing. */
   complete?: boolean;
-  /** What the walk has already SPOKEN, when this build replaces the plies
-   *  ahead of a walk in progress (`buildReviewSegments`' `spokenBefore`). */
-  spokenBefore?: SpokenLedgerSeed | null;
+  /** What the walk has already SPOKEN — its story through the ply it walked —
+   *  when this build replaces the plies ahead of a walk in progress
+   *  (`buildReviewSegments`' `spokenBefore`). */
+  spokenBefore?: StorySeed | null;
 }): Promise<ReviewNarration> {
   const { moves, playerColor, openingName, result, coachNarration, playerRating, uncapped } = params;
   const complete = params.complete !== false;
@@ -5865,6 +5859,7 @@ export async function generateReviewNarration(params: {
       intro: defaultIntroText({ playerColor, result, openingName, mistakeCount }),
       segments: [],
       closing: null,
+      story: null,
     };
   }
 
@@ -5936,7 +5931,10 @@ export async function generateReviewNarration(params: {
   let phaseStart = Date.now();
   // The student's own record decides which inaccuracies speak; read it first.
   await loadInaccuracyVoice();
-  const segments = await buildReviewSegmentsOpen(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly, intentByPly, params.spokenBefore ?? null);
+  // THE GAME'S STORY (P1-8d): the build's memory of what it says, kept with
+  // the narration once the refrain fold below has said its piece.
+  const story = createStoryStore(params.gameId ?? 'review');
+  const segments = await buildReviewSegmentsOpen(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly, intentByPly, params.spokenBefore ?? null, story);
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +
   // timeout so it never stalls the walk). Runs before the voice pass so the
@@ -6015,7 +6013,7 @@ export async function generateReviewNarration(params: {
   // projection at ply 12 refer back to a full form that is not spoken until ply
   // 20. Walking the finished segments IN PLY ORDER makes the first mention in
   // READING order the full one, by construction.
-  foldReviewRefrains(segments, params.spokenBefore ?? null);
+  foldReviewRefrains(segments, story, params.spokenBefore ?? null);
 
   // BOOK-GROUNDED DEV TARGETS (David 2026-07-21, IMG_4569: the plan arrow said
   // g1→f3 while the theory lecture's masters data plays Ne2 — two "authorities"
@@ -6175,7 +6173,7 @@ export async function generateReviewNarration(params: {
     details: JSON.stringify({ ...timings, plies: segments.length }),
   });
 
-  return { intro, segments, closing };
+  return { intro, segments, closing, story: storyThrough(story.serialize(), Number.POSITIVE_INFINITY) };
 }
 
 /** Does the student's move `san` (played from `fenBefore`) actually meet the

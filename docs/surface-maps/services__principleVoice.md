@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**960 lines · 8 exports · 24 importers · 20 tests · 2 audits**
+**962 lines · 8 exports · 24 importers · 20 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -40,8 +40,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:5650`
-- `src/services/coachFeatureService.ts:5653`
+- `src/services/coachFeatureService.ts:5631`
+- `src/services/coachFeatureService.ts:5634`
 
 ### `fundamentalHow` (function) — 10 call sites
 - `src/services/fundamentalHow.test.ts:26`
@@ -117,7 +117,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `renderFundamentalVerdict` (function) — 55 call sites
 - `src/services/blockedOwnRetreat.test.ts:33`
-- `src/services/coachFeatureService.ts:3169`
+- `src/services/coachFeatureService.ts:3133`
 - `src/services/forcingStemNoDecisive.test.ts:18`
 - `src/services/forcingStemNoDecisive.test.ts:23`
 - `src/services/fundLeadStems.test.ts:60`
@@ -168,17 +168,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.mcconnell1000.test.ts:22`
 - `src/services/replayFence.sicilian1200.test.ts:57`
 - `src/services/replayFence.sicilian1200.test.ts:64`
-- `src/services/reviewFullData.ts:710`
+- `src/services/reviewFullData.ts:713`
 - `src/services/tradedActiveNamesTheirPiece.test.ts:21`
 - `src/services/walkOct2a.test.ts:172`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:3180`
+- `src/services/coachFeatureService.ts:3144`
 - `src/services/principleVoice.test.ts:40`
 - `src/services/principleVoice.test.ts:42`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:6142`
+- `src/services/coachFeatureService.ts:6128`
 - `src/services/principleVoice.test.ts:50`
 - `src/services/principleVoice.test.ts:55`
 - `src/services/principleVoice.test.ts:59`
