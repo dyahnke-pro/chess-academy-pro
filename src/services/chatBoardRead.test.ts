@@ -3,12 +3,12 @@ import { Chess } from 'chess.js';
 import { questionSquares, chatBoardClauses } from './chatBoardRead';
 import { rememberPositionFacts, cachedPositionFacts, clearPositionFactsCache } from './positionFactsCache';
 import type { PositionFactsResult } from './positionFacts';
-import type { ClauseItem } from './positionFacts';
+import type { ClauseFact } from './positionFacts';
 
 const START = new Chess().fen();
-const clause = (text: string, rank: number, squares: string[]): ClauseItem =>
-  ({ kind: 'tactic', rank, text, squares } as unknown as ClauseItem);
-const result = (clauses: ClauseItem[], candidates: ClauseItem[]): PositionFactsResult =>
+const clause = (text: string, squares: string[]): ClauseFact =>
+  ({ kind: 'tactic', text, squares } as unknown as ClauseFact);
+const result = (clauses: ClauseFact[], candidates: ClauseFact[]): PositionFactsResult =>
   ({ clauses, candidates } as unknown as PositionFactsResult);
 
 beforeEach(() => clearPositionFactsCache());
@@ -47,8 +47,8 @@ describe('the position-facts cache', () => {
 });
 
 describe('chat answers from the computed facts', () => {
-  const knight = clause('Your knight on g1 can come to f3.', 40, ['g1', 'f3']);
-  const pawn = clause('The e-pawn wants e4.', 60, ['e2', 'e4']);
+  const knight = clause('Your knight on g1 can come to f3.', ['g1', 'f3']);
+  const pawn = clause('The e-pawn wants e4.', ['e2', 'e4']);
   it('a question about a piece keeps only the facts that touch it', async () => {
     rememberPositionFacts(START, 'w', 'interrupt', result([], [pawn, knight]));
     const got = await chatBoardClauses({ fen: START, studentColor: 'white', history: [], ask: 'what about my knight on g1?' });

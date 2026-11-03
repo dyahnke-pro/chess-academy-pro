@@ -8,7 +8,7 @@
  */
 import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import type { ClauseItem, PositionFactsResult } from '../services/positionFacts';
+import type { ClauseFact, PositionFactsResult } from '../services/positionFacts';
 import type { PhaseFact } from '../services/coachDecider';
 
 const speakPackage = vi.fn((_pkg: unknown) => Promise.resolve());
@@ -38,10 +38,10 @@ vi.mock('../services/liveTacticsContext', () => ({ buildFedTacticsContext: () =>
 vi.mock('../services/coachAnswerGates', () => ({ isSpokenSentenceGrounded: () => true, gradeNarrationText: (t: string) => t }));
 
 /** The replay's report on MOVE8, as the clauses position facts handed over. */
-const CLAUSES: ClauseItem[] = [
-  { kind: 'stop-flaw', rank: 30, text: 'They want the bishop to g4, pinning your knight on f3 to your queen. The obvious stop is h3 — find another way.', squares: ['g4', 'f3', 'd1'], claim: 'prophylaxis:g4:idea' },
-  { kind: 'your-habit', rank: 20, text: 'Missing a pin keeps catching you.' },
-] as ClauseItem[];
+const CLAUSES: ClauseFact[] = [
+  { kind: 'stop-flaw', text: 'They want the bishop to g4, pinning your knight on f3 to your queen. The obvious stop is h3 — find another way.', squares: ['g4', 'f3', 'd1'], claim: 'prophylaxis:g4:idea' },
+  { kind: 'your-habit', text: 'Missing a pin keeps catching you.' },
+] as unknown as ClauseFact[];
 vi.mock('../services/positionFacts', async (orig) => {
   const actual = await orig<typeof import('../services/positionFacts')>();
   return {

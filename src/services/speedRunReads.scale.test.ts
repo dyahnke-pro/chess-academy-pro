@@ -38,7 +38,7 @@ it.skipIf(!process.env.SCALE)('every speed-run read survives the board check acr
           for (const cl of pf?.clauses ?? []) {
             kinds[cl.kind] = (kinds[cl.kind] ?? 0) + 1;
             words += cl.text.split(/\s+/).length;
-            const pkg = buildVoicePackage([{ kind: 'computed', text: cl.text, fen: cl.gradeFen ?? c.fen(), squares: cl.squares, ...(cl.lines ? { lines: cl.lines } : {}) }]);
+            const pkg = buildVoicePackage([{ kind: 'computed', text: cl.text, fen: cl.fen, squares: cl.squares, ...(cl.lines ? { lines: cl.lines } : {}) }]);
             if (!pkg.kept.length || pkg.spoken.length < cl.text.length * 0.6) { const k = `${cl.kind} | ${cl.text.slice(0, 110)} | ${c.fen()}`; drops[k] = (drops[k] ?? 0) + 1; }
           }
         }

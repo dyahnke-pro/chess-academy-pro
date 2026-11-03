@@ -10,7 +10,7 @@
  * True — and then nobody built the producer, so the whole chain never fired
  * once. This repo's own rule: a wire that does not fire is not a wire.
  *
- * 🔒 THE SQUARES ALREADY EXIST AND WERE BEING THROWN AWAY. Every `ClauseItem`
+ * 🔒 THE SQUARES ALREADY EXIST AND WERE BEING THROWN AWAY. Every `ClauseFact`
  * the composer emits carries `squares`, coupled AT EMISSION by the computer
  * that found the fact (`tac.involvedSquares`) — which is why `factSelector` can
  * subsume two clauses that describe one geometry. They survive `decide()`, they

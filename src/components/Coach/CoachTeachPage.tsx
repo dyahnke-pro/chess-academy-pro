@@ -2997,7 +2997,7 @@ export function CoachTeachPage({ mode }: {
    *
    * THE EYES LAND HERE FIRST. `setArrows`/`setHighlights` are called inline in
    * 36 places across the app and nothing could ever invoke them — the spine
-   * computes the squares a fact is about (`ClauseItem.squares`, coupled at
+   * computes the squares a fact is about (`ClauseFact.squares`, coupled at
    * emission) and then could not point at them. This is the hand that closes
    * that, and Learn is where it matters most.
    */
@@ -11313,7 +11313,7 @@ export function CoachTeachPage({ mode }: {
                       // Their move's purpose rides its own lane, above the
                       // board descriptions it used to lose to on offer order.
                       const lane = c.kind === 'stopped' ? 'theirPurpose' as const : 'positionFacts' as const;
-                      queueSpokenHint(probe.fen(), c.text, lane, (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0], lineSeatAt(c.lines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, c.namesStudentMove, c.squares, clauseClaims(pf, ci, probe.fen()), c.gradeFen, undefined, c.lines, c.stakes, FACT_ROLE[c.kind], c.kind, c.skill);
+                      queueSpokenHint(probe.fen(), c.text, lane, (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0], lineSeatAt(c.lines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, c.namesStudentMove, c.squares, clauseClaims(pf, ci, probe.fen()), c.fen, undefined, c.lines, c.stakes ?? undefined, FACT_ROLE[c.kind], c.kind, c.skill);
                     }
                     if (pf.importance.speak) captureEvent('position_facts_spoken', { surface: 'coach-teach', tier: pf.importance.tier, clauses: pf.clauses.length });
                   }

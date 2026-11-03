@@ -1,7 +1,5 @@
 {
-  "ClauseItem": {
-    "src/services/positionFacts.ts": 38
-  },
+  "ClauseItem": {},
   "TeachingHint": {},
   "PhaseFact": {
     "src/hooks/usePhaseNarration.ts": 3

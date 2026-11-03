@@ -24,7 +24,7 @@ import { searchUntilStable } from '../services/searchDepth';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { buildCandidateEval } from '../services/enginePlanContext';
 import type { StockfishAnalysis, WalkableLine } from '../types';
-import { computePositionFacts, type ClauseItem } from '../services/positionFacts';
+import { computePositionFacts, orderByValue, type ClauseFact } from '../services/positionFacts';
 import { FACT_LAYER, type FactKind } from '../services/reviewFacetRank';
 import { lastMoveIfStudent, lastMoveIfOpponent } from '../services/lastMoveOfLine';
 import { computeMustDefend } from '../services/threatOut';
@@ -141,13 +141,13 @@ async function answerFromRead(turn: ResolvedChatTurn, board: BoardTurnInput): Pr
       ...(lm ? { lastMove: lm } : {}), ...(om ? { opponentLastMove: om } : {}), history: sans,
     });
   } catch { return null; }
-  const layer = (c: ClauseItem): string => FACT_LAYER[c.kind as FactKind] ?? 'plan';
+  const layer = (c: ClauseFact): string => FACT_LAYER[c.kind as FactKind] ?? 'plan';
   const pool = read.candidates.filter((c) => !NOT_AN_ANSWER.has(c.kind));
-  const urgent = pool.filter((c) => URGENT_KINDS.has(c.kind)).sort((a, b) => b.rank - a.rank);
+  const urgent = orderByValue(pool.filter((c) => URGENT_KINDS.has(c.kind)), []);
   const rest = turn.kind === 'tactics'
-    ? pool.filter((c) => layer(c) === 'safety' && !URGENT_KINDS.has(c.kind)).sort((a, b) => b.rank - a.rank)
-    : pool.filter((c) => layer(c) === 'plan').sort((a, b) => b.rank - a.rank);
-  const chosen: ClauseItem[] = [];
+    ? orderByValue(pool.filter((c) => layer(c) === 'safety' && !URGENT_KINDS.has(c.kind)), [])
+    : orderByValue(pool.filter((c) => layer(c) === 'plan'), []);
+  const chosen: ClauseFact[] = [];
   const covered = new Set<string>();
   for (const c of [...urgent, ...rest]) {
     const sq = c.squares ?? [];

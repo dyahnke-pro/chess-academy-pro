@@ -50,7 +50,7 @@ describe('the leaks on David\'s record', () => {
     const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: F[8], moverColor: 'w', studentColor: 'w', analysis: flat, lastMove: { fenBefore: F[6], san: 'Nxc3', cpLoss: 0, historySans: null, reads: null, popular, fanBefore: fan } });
     const refuted = r.clauses.find((c) => c.kind === 'refuted');
     expect(refuted?.text).toMatch(/Bc4|Bishop to c4/);
-    expect(refuted && namesPlayableStudentMove(refuted.namesStudentMove)).toBe(true);
+    expect(refuted?.namesStudentMove).toBe(true);
   });
 
   it('a free piece is said without its square, and only the prize is marked (move 28: "Their bishop on g4 has nothing defending it")', () => {

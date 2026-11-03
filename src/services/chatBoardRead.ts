@@ -12,7 +12,7 @@
  * question takes what the door chose to speak, in the student-asked posture.
  */
 import { Chess } from 'chess.js';
-import { computePositionFacts, clauseText, type ClauseItem } from './positionFacts';
+import { computePositionFacts, clauseText, orderByValue, type ClauseFact } from './positionFacts';
 import { cachedPositionFacts } from './positionFactsCache';
 import { getCachedStockfish } from '../hooks/stockfishFenCache';
 import { lastMoveIfStudent, lastMoveIfOpponent } from './lastMoveOfLine';
@@ -65,7 +65,7 @@ function analysisFor(fen: string, plan: ChatBoardInput['enginePlan']): Pick<Stoc
 
 /** The clauses that answer this question on this board, best first — or null
  *  when the computed facts say nothing about what was asked. */
-export async function chatBoardClauses(i: ChatBoardInput): Promise<ClauseItem[] | null> {
+export async function chatBoardClauses(i: ChatBoardInput): Promise<ClauseFact[] | null> {
   const student: 'w' | 'b' = i.studentColor === 'white' ? 'w' : 'b';
   const focus = questionSquares(i.ask, i.fen, student);
   let hit = cachedPositionFacts(i.fen, student);
@@ -99,10 +99,10 @@ export async function chatBoardClauses(i: ChatBoardInput): Promise<ClauseItem[] 
   return select(hit.result.candidates, focus);
 }
 
-function select(candidates: readonly ClauseItem[], focus: readonly string[]): ClauseItem[] | null {
+function select(candidates: readonly ClauseFact[], focus: readonly string[]): ClauseFact[] | null {
   const f = new Set(focus);
   const about = candidates.filter((c) => (c.squares ?? []).some((s) => f.has(s)));
-  return about.length ? [...about].sort((a, b) => b.rank - a.rank) : null;
+  return about.length ? orderByValue(about, []) : null;
 }
 
 /** The answer text: the selected facts, in order. */

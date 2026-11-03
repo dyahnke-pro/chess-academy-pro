@@ -215,7 +215,7 @@ type CoachAction =
   | { hand: 'start-walkthrough'; opening: string; variation?: string; orientation?: 'white' | 'black'; pgn?: string }
   | { hand: 'start-drill'; motif?: string | null }
   | { hand: 'set-view-mode'; mode: string }
-  /** THE EYES. Squares come from `ClauseItem.squares`, coupled at emission by
+  /** THE EYES. Squares come from `ClauseFact.squares`, coupled at emission by
    *  the computer that produced the fact — never scraped back out of prose. */
   | { hand: 'show-squares'; squares: readonly Square[]; arrows?: readonly { from: Square; to: Square }[] }
   /** THE OPPONENT'S STRENGTH. `targetElo` is computed from the board (the same

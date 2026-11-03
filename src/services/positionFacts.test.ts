@@ -380,11 +380,10 @@ describe('positionFacts — the computed CONCEPT joins the spoken briefing (one 
     topLines: [{ rank: 1, moves: ['c1c8'], evaluation: 500, mate: null }, { rank: 2, moves: ['b8a7'], evaluation: 400, mate: null }],
   } as unknown as import('../types').StockfishAnalysis;
 
-  it('adds a ranked "concept" clause for an ending, above the fundamental tier', async () => {
+  it('adds a "concept" clause for an ending', async () => {
     const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: rookEndingFen, moverColor: 'w', studentColor: 'w', analysis, rating: 1500 });
     const concept = r.clauses.find((c) => c.kind === 'concept');
     expect(concept).toBeDefined();
-    expect(concept!.rank).toBeGreaterThanOrEqual(39);
     expect(concept!.text.toLowerCase()).toMatch(/lucena|rook ending/); // the fixture is a Lucena → the named technique leads
   });
 

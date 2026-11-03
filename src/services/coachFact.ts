@@ -248,7 +248,42 @@ export const COMPUTER_CATALOG = {
   // THE DOORS' ADAPTER (P1-5): every fact a door is handed in its producer's
   // old shape is made here. Its row goes with the last old shape (P1-6), when
   // each of those producers emits CoachFact under its own name.
-  toCoachFact: { file: 'services/coachFact.ts', says: 'a fact a door was handed in its producer\'s own shape — a live clause, a Review facet, a Learn lane, a phase report — until that producer emits CoachFact itself' },
+  // THE POSITION COMPOSER'S COMPUTERS (P1-6c): every fact `computePositionFacts`
+  // hands its door is made by one of these, named at the site that makes it.
+  statusBandChange: { file: 'services/positionFacts.ts', says: 'the game\'s standing crossed a band since the last read: better, level, worse, winning, lost' },
+  buildDeliberation: { file: 'services/deliberation.ts', says: 'the moves the student would weigh here and why each falls short, then the move' },
+  detectTradeCreatesPin: { file: 'services/latentDanger.ts', says: 'a trade the student is about to make lines their own pieces up for a pin or skewer' },
+  detectLatentDanger: { file: 'services/latentDanger.ts', says: 'two of the student\'s pieces share a line their piece can reach: a pin in waiting' },
+  pawnHit: { file: 'services/trappedPiece.ts', says: 'a pawn move that leaves one of their pieces no safe square, its line taking that piece' },
+  detectLatentFork: { file: 'services/latentFork.ts', says: 'a fork one move away, for either side' },
+  detectKingExposure: { file: 'services/kingSafety.ts', says: 'a castled king with a broken shelter and real attackers on it' },
+  computeMustDefend: { file: 'services/threatOut.ts', says: 'what the opponent threatens now, read by letting them move twice' },
+  detectBluff: { file: 'services/bluffDetector.ts', says: 'their threat that does not work, and the move that shows it' },
+  refutedFromFan: { file: 'services/refutedAlternativeCore.ts', says: 'the move most players choose here, what it costs and the line that punishes it' },
+  principleLine: { file: 'services/moveFundamentals.ts', says: 'the opening rule the student\'s clean move kept' },
+  principleContrastLine: { file: 'services/moveFundamentals.ts', says: 'the rule the engine\'s move kept where the student\'s clean move kept none' },
+  threatStoppedBy: { file: 'services/opponentMovePurpose.ts', says: 'their reply took the student\'s threat off the board' },
+  trickSidestepped: { file: 'services/forkTrick.ts', says: 'a move that stepped out of the fork trick, either seat' },
+  phaseVerdictLine: { file: 'services/reviewPositionalAssessment.ts', says: 'the balance sheet at a phase change: what each side holds' },
+  detectCentralKingDanger: { file: 'services/kingSafety.ts', says: 'an uncastled king in the centre with tension around it' },
+  readConversion: { file: 'services/conversionMethod.ts', says: 'the next step converting a won position: the passer to escort, the trade to make' },
+  computeImportance: { file: 'services/narrationImportance.ts', says: 'how much this moment earns voice; in a decided game, technique' },
+  conceptForBoard: { file: 'services/conceptEngine.ts', says: 'the named concept this board shows: a tactic, a technique, a matchup' },
+  pinPressureConcept: { file: 'services/positionFacts.ts', says: 'a pin of the student\'s with its principle: pile on the pinned piece' },
+  guardRemovalConcept: { file: 'services/positionFacts.ts', says: 'remove the guard: the student\'s capture of the piece guarding another' },
+  readCriticalMoment: { file: 'services/criticalMoment.ts', says: 'a moment where one move matters most, for whoever is to move' },
+  buildOpponentIntent: { file: 'services/opponentIntent.ts', says: 'what the opponent wants to do next and the squares it aims at' },
+  computeLeansOn: { file: 'services/perturbation.ts', says: 'the piece each side leans on most: take it away and the position falls' },
+  strategicReason: { file: 'services/moveFundamentals.ts', says: 'the fundamental the student\'s best move serves' },
+  structurePlanFact: { file: 'services/nextPlans.ts', says: 'the plan this pawn structure earns, announced or changed' },
+  liveMethodBeat: { file: 'services/methodBeat.ts', says: 'the habit that finds this next time, in the present tense' },
+  readTrade: { file: 'services/tradeQuality.ts', says: 'what a trade just played did: who it favoured and why' },
+  findTradeTarget: { file: 'services/tradeQuality.ts', says: 'the piece of theirs worth trading off now' },
+  boardPlanFacts: { file: 'services/boardPlanFacts.ts', says: 'the plans the board earns: development, breaks, files, outposts, the worst piece' },
+  readPosition: { file: 'services/positionalRead.ts', says: 'the positional read of the board for both sides' },
+  depthClauses: { file: 'services/thinkAloud.ts', says: 'the look ahead: not yet, the tactic, the refutation, the line, the plan race, both seats' },
+  exchangeIdeas: { file: 'services/exchangeIdeas.ts', says: 'the trade, defence and conversion ideas, and the principles behind them' },
+  toCoachFact: { file: 'services/coachFact.ts', says: 'a fact a door was handed in its producer\'s own shape — a Review facet, a Learn lane, a phase report — until that producer emits CoachFact itself' },
 } satisfies Record<string, CatalogRow>;
 
 export type ComputerName = keyof typeof COMPUTER_CATALOG;

@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { computePositionFacts } from './positionFacts';
+import { describe, it, expect, beforeAll } from 'vitest';
+import { computePositionFacts, clauseValue } from './positionFacts';
 import type { WeaknessSignal } from './weaknessSignal';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
 
@@ -9,7 +9,7 @@ import type { MisconceptionBucket } from '../data/misconceptionTags';
 
 const line = (rank: number, evaluation: number) => ({ rank, evaluation, moves: [], mate: null });
 const flat = { topLines: [line(1, 20), line(2, 15), line(3, 10)], evaluation: 20, isMate: false, mateIn: null, seldepth: 20, depth: 18, wdl: { win: 420, draw: 400, loss: 180 } };
-// White Ne5 hangs to …dxe5 → the must-defend clause fires (rank 75) — the same
+// White Ne5 hangs to …dxe5 → the must-defend clause fires — the same
 // board the composer test uses.
 const HANGING_KNIGHT = 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5';
 
@@ -18,30 +18,34 @@ const sig = (clusterId: string, over: Partial<WeaknessSignal> = {}): WeaknessSig
   openCount: 5, total: 5, severity: 70, lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: [], ...over,
 });
 
-async function mustDefendRank(studentWeaknesses?: readonly WeaknessSignal[]): Promise<number> {
+/** The must-defend fact's value to this student — the door's one value
+ *  (`clauseValue`, P1-6c: the composer's hand rank is deleted). */
+async function mustDefendValue(studentWeaknesses?: readonly WeaknessSignal[]): Promise<number> {
   const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: HANGING_KNIGHT, moverColor: 'w', studentColor: 'w', analysis: flat, studentWeaknesses });
   const md = r.clauses.find((c) => c.kind === 'must-defend');
-  return md?.rank ?? -1;
+  return md ? clauseValue(md, studentWeaknesses ?? []) : -1;
 }
+let BASE = 0;
+beforeAll(async () => { BASE = await mustDefendValue(undefined); });
 
 describe('computePositionFacts — studentWeaknesses re-ranks the briefing (Phase 1)', () => {
   it('inert with no weaknesses (identity — unchanged from before the wire)', async () => {
-    expect(await mustDefendRank(undefined)).toBe(75);
-    expect(await mustDefendRank([])).toBe(75);
+    expect(BASE).toBeGreaterThan(0);
+    expect(await mustDefendValue([])).toBe(BASE);
   });
 
   it('BOOSTS the must-defend clause for a student who keeps hanging pieces', async () => {
-    const boosted = await mustDefendRank([sig('analysis:tactic:hanging_piece')]);
-    expect(boosted).toBeGreaterThan(75); // the hole this student keeps falling in leads harder
-    expect(boosted).toBeLessThanOrEqual(75 + 30); // capped so live safety facts still lead
+    const boosted = await mustDefendValue([sig('analysis:tactic:hanging_piece')]);
+    expect(boosted).toBeGreaterThan(BASE); // the hole this student keeps falling in leads harder
+    expect(boosted).toBeLessThanOrEqual(BASE + 30); // capped so live safety facts still lead
   });
 
   it('a self-FIXED hole earns no boost (identity)', async () => {
-    expect(await mustDefendRank([sig('analysis:tactic:hanging_piece', { lifecycleStatus: 'fixed', trend: 'improving' })])).toBe(75);
+    expect(await mustDefendValue([sig('analysis:tactic:hanging_piece', { lifecycleStatus: 'fixed', trend: 'improving' })])).toBe(BASE);
   });
 
   it('a NON-matching weakness never touches this clause (no forced match)', async () => {
-    expect(await mustDefendRank([sig('analysis:tactic:fork')])).toBe(75);
+    expect(await mustDefendValue([sig('analysis:tactic:fork')])).toBe(BASE);
   });
 
   it('the boosted clause still LEADS the briefing (ordering respects the boost)', async () => {
@@ -64,6 +68,6 @@ describe('concept clause ↔ the student\'s specific hole (vocabulary bridge)', 
     const c0 = base.clauses.find((c) => c.kind === 'concept');
     const c1 = boosted.clauses.find((c) => c.kind === 'concept');
     if (!c0 || !c1) return; // the concept only fires when the detector names the fork on this board
-    expect(c1.rank).toBeGreaterThan(c0.rank);
+    expect(clauseValue(c1, [sig('analysis:tactic:fork')])).toBeGreaterThan(clauseValue(c0, []));
   });
 });

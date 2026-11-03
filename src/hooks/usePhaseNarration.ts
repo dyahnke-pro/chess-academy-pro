@@ -468,7 +468,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
                 text: c.text, claims: clauseClaims(pf, i, event.fen), proof: c.proof ?? NO_PROOF.description, namesStudentMove: c.namesStudentMove,
                 ...(c.kind === 'structure-plan' && pf.structurePlanSaid ? { thread: { key: threadKey('student', PLAN_GOAL.structure), kind: 'stated' as const, variant: pf.structurePlanSaid } } : {}),
                 ...(c.squares ? { squares: c.squares } : {}), ...(c.stakes ? { stakes: c.stakes } : {}),
-                ...(c.lines ? { lines: c.lines } : {}), ...(c.gradeFen ? { gradeFen: c.gradeFen } : {}),
+                ...(c.lines ? { lines: c.lines } : {}), gradeFen: c.fen,
                 factKind: c.kind, ...(c.skill ? { skill: c.skill } : {}),
               });
             });
