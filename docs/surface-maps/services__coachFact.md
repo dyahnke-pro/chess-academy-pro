@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**405 lines · 16 exports · 18 importers · 4 tests · 0 audits**
+**460 lines · 16 exports · 19 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,6 +29,7 @@
 - `src/services/openingStory.ts`
 - `src/services/planThread.ts`
 - `src/services/positionFacts.ts`
+- `src/services/reviewFacet.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/teachingFact.ts`
 - `src/services/thoughtComposer.ts`
@@ -61,8 +62,8 @@
 - `src/services/boardComputers.test.ts:76`
 - `src/services/coachFact.test.ts:75`
 - `src/services/coachFact.test.ts:76`
-- `src/services/coachFeatureService.ts:2444`
-- `src/services/coachFeatureService.ts:3041`
+- `src/services/coachFeatureService.ts:2430`
+- `src/services/coachFeatureService.ts:3007`
 - `src/services/learnTurnDoor.ts:246`
 - `src/services/learnTurnDoor.ts:778`
 - `src/services/learnTurnDoor.ts:835`
@@ -75,13 +76,16 @@
 - `src/services/learnTurnDoor.ts:1077`
 - `src/services/learnTurnDoor.ts:1140`
 
-### `placeFact` (function) — 7 call sites
+### `placeFact` (function) — 10 call sites
 - `src/services/boardComputers.ts:550`
 - `src/services/danyaBench.measure.test.ts:61`
 - `src/services/moveThoughtFacts.ts:125`
 - `src/services/moveThoughtFacts.ts:227`
 - `src/services/openingStory.ts:363`
 - `src/services/positionFacts.ts:518`
+- `src/services/reviewFacet.ts:62`
+- `src/services/reviewFacet.ts:89`
+- `src/services/reviewFacet.ts:101`
 - `src/services/teachingFact.ts:89`
 
 ### `COMPUTER_CATALOG` (const) — 0 call sites
@@ -102,8 +106,7 @@
 ### `LOCAL_THREAD` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `toCoachFact` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2771`
+### `toCoachFact` (function) — 2 call sites
 - `src/services/learnTurnDoor.ts:572`
 - `src/test/doorFact.ts:19`
 

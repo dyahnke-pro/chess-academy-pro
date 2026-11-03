@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6231 lines · 30 exports · 67 importers · 81 tests · 4 audits**
+**6197 lines · 30 exports · 67 importers · 81 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -157,7 +157,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewSegmentsForTests` (function) — 113 call sites
-- `src/services/batch2Wiring.test.ts:74`
+- `src/services/batch2Wiring.test.ts:75`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
 - `src/services/coachFeatureService.causalChain.test.ts:50`
@@ -192,11 +192,11 @@
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
 - `src/services/coachFeatureService.planChange.test.ts:48`
-- `src/services/coachFeatureService.reviewNoise.test.ts:22`
-- `src/services/coachFeatureService.reviewNoise.test.ts:87`
-- `src/services/coachFeatureService.reviewNoise.test.ts:142`
-- `src/services/coachFeatureService.reviewNoise.test.ts:166`
-- `src/services/coachFeatureService.reviewNoise.test.ts:175`
+- `src/services/coachFeatureService.reviewNoise.test.ts:37`
+- `src/services/coachFeatureService.reviewNoise.test.ts:103`
+- `src/services/coachFeatureService.reviewNoise.test.ts:160`
+- `src/services/coachFeatureService.reviewNoise.test.ts:185`
+- `src/services/coachFeatureService.reviewNoise.test.ts:194`
 - `src/services/coachFeatureService.studentJob.test.ts:17`
 - `src/services/coachFeatureService.test.ts:299`
 - `src/services/coachFeatureService.test.ts:315`
@@ -223,7 +223,7 @@
 - `src/services/coachFeatureService.trade.test.ts:19`
 - `src/services/coachNoRecall.test.ts:44`
 - `src/services/coachNoRecall.test.ts:56`
-- `src/services/danyaBench.measure.test.ts:387`
+- `src/services/danyaBench.measure.test.ts:388`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
 - `src/services/habitBothSeats.test.ts:29`
@@ -383,7 +383,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:645`
+- `src/services/reviewFullData.ts:629`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites
