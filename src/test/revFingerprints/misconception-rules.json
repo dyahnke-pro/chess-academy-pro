@@ -1,7 +1,7 @@
 {
-  "rev": "2026-10-22-count-both",
+  "rev": "2026-11-03-discovery-lands",
   "parts": {
-    "slips": "0d61d2012068c721",
+    "slips": "1d1df8ebd0fdedb6",
     "lichess": "1eeb941ee0279767"
   }
 }

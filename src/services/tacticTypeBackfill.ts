@@ -47,7 +47,9 @@ import type { ClassifiedTactic, MistakePuzzle, MoveAnnotation } from '../types';
 // 2026-10-22d: COUNT BOTH (M3d) — the set-up a line opens with is stamped
 // beside its name (`setupTacticType`), and the source game's line is read from
 // the best move (it was handed the bare continuation, which never matched).
-export const TACTIC_TYPE_REV = '2026-10-22-count-both';
+// 2026-11-03: a discovery whose revealer they simply take does not land
+// (effbb78), so a line that only was one is named by what does.
+export const TACTIC_TYPE_REV = '2026-11-03-discovery-lands';
 
 interface TacticTypeBackfillResult {
   /** Rows read across both stores. */

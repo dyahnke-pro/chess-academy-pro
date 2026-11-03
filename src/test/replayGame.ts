@@ -146,6 +146,6 @@ export function reviewInputs(game: ReplayGame): ReviewMoveInput[] {
 /** Review's walk over the whole game, one segment a move — in the walk's
  *  default mode (`isReviewUncapped()` is true unless `?uncapped=0`), before the
  *  engine projections the async build adds. */
-export function reviewSegments(game: ReplayGame, rating = 1500, story?: StoryStore): ReviewMoveSegment[] {
+export function reviewSegments(game: ReplayGame, rating: number, story?: StoryStore): ReviewMoveSegment[] {
   return buildReviewSegmentsForTests(reviewInputs(game), game.studentSide, null, true, rating, [], undefined, null, new Map(), new Map(), null, story);
 }

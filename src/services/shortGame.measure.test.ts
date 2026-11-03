@@ -33,7 +33,7 @@ it.runIf(RUN)('the short game: the lesson line and the Review line, ply by ply',
   const game: ReplayGame = JSON.parse(readFileSync(FIXTURE, 'utf8'));
   const plies = replayPlies(game);
   const lesson = lessonLines(game);
-  const review = new Map(reviewSegments(game).map((s) => [s.ply, s.narration]));
+  const review = new Map(reviewSegments(game, 1500).map((s) => [s.ply, s.narration]));
   expect(plies.length).toBe(27);
 
   const out: string[] = ['# The short game, ply by ply', '', `${game.sans.join(' ')} (student ${game.studentSide})`, ''];

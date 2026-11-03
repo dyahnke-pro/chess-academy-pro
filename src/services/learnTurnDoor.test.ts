@@ -234,7 +234,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', .*?, undefined, undefined, undefined, undefined, pendingRegisterLines\)/);
     // The student's best move is never drawn before they play it (prod walk 2026-10-19).
     expect(TEACH_CODE).not.toMatch(/sans: \[compareRead\.bestSan\]/);
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.namesStudentMove, c\.squares, clauseClaims\(pf, ci, probe\.fen\(\)\), c\.gradeFen, undefined, c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.namesStudentMove, c\.squares, clauseClaims\(pf, ci, probe\.fen\(\)\), c\.fen, undefined, c\.lines, c\.stakes \?\? undefined, FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
     expect(TEACH_CODE).toMatch(/(?:fundamental|fund)\?\.lines[,)]/);
     expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamental\.howOnly \? undefined : fundamentalClaims, move\.fen, undefined, fundamental\.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
@@ -518,7 +518,7 @@ describe('a REASON outranks a description (David 2026-10-13: "value why statemen
     expect(d.held).toContain('positionFacts');
   });
   it('the producer passes the role from the ONE table over its clause kind', () => {
-    expect(TEACH_CODE).toMatch(/c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
+    expect(TEACH_CODE).toMatch(/c\.lines, c\.stakes \?\? undefined, FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
   });
 });
 

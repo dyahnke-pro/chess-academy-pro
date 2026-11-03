@@ -524,8 +524,10 @@ export function isMisconceptionTagId(id: string): id is MisconceptionTagId {
  *  2026-10-22c: a missed discovered check and a missed x-ray have their own rows.
  *  2026-10-22e: COUNT BOTH — the slip is named off the best line, and a missed
  *  shot whose line opens with a set-up is filed under the set-up too (a
- *  `setup` row beside it). */
-export const MISCONCEPTION_RULES_REV = '2026-10-22-count-both';
+ *  `setup` row beside it).
+ *  2026-11-03: a discovery whose revealer they simply take does not land
+ *  (effbb78), so a missed shot that only was one is named by what does. */
+export const MISCONCEPTION_RULES_REV = '2026-11-03-discovery-lands';
 
 /** Bump when analysed games must be re-read for the POSITIVE half
  *  (2026-10-20: re-read from the one-price annotations, `RECORD_PRICE_REV`) (the heat

@@ -163,19 +163,16 @@ describe('it reaches the LIVE composer', () => {
     // the default 5s left no room under a loaded pre-commit run.
   }, 20_000);
 
-  it('ranks BELOW must-defend — foresight never speaks over live material', async () => {
-    // The rank trap this build was warned about: `latent-danger` sits at 80–82,
-    // ABOVE must-defend (75), so copying a sibling's number would have put a
-    // fork two moves out over a piece hanging right now.
+  it('is worth less than live material of the same size — foresight is discounted by the plies until it lands', async () => {
+    // The composer's hand ranks are gone (WO-STORY-MATRIX-01 P1-6c): a fact is
+    // worth what the door's one value says, and a fork two moves out is staked
+    // at its distance, so the same material hanging NOW outranks it.
+    const { factValue } = await import('./reviewFacetRank');
+    const live = factValue('must-defend', { points: 3, plies: 1 });
+    expect(factValue('latent-chance', { points: 3, plies: 2 })).toBeLessThan(live);
+    expect(factValue('latent-danger', { points: 3, plies: 2 })).toBeLessThan(live);
     const src = await import('node:fs').then((fs) => fs.readFileSync('src/services/positionFacts.ts', 'utf8'));
-    // The kind is now chosen by the SEAT (2026-09-21), so it spans two lines and
-    // is a ternary — anchor on `latentForkClause`, which is the clause'sidentity,
-    // rather than on a kind literal that legitimately varies.
-    const forkRank = /rank: (\d+), text: latentForkClause/.exec(src);
-    const mustDefend = /kind: 'must-defend',\s*\n\s*rank: (\d+),/.exec(src);
-    expect(forkRank).not.toBeNull();
-    expect(mustDefend).not.toBeNull();
-    expect(Number(forkRank![1])).toBeLessThan(Number(mustDefend![1]));
+    expect(src).toMatch(/text: latentForkClause[\s\S]{0,600}stakes: \{ points: forkPoints\(.*\), plies: 2 \* latentFork\.moves \}/);
   });
 });
 
