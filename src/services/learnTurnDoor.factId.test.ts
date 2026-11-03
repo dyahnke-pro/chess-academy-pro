@@ -8,10 +8,11 @@
 // the first one's lane, took that lane's step, and lost its own. The kept
 // fact now carries the id of the fact it came from (`VoiceFact.factId`).
 import { describe, it, expect } from 'vitest';
-import { decideTurn } from './learnTurnDoor';
+
 import { NO_PROOF } from './proof';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { claimKey } from './voicePackage';
+import { decideTurn } from '../test/learnDoorFixtures';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 /** Two true sentences on this board, the second inside the first. */

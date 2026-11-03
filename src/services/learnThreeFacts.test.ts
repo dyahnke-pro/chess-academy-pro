@@ -8,7 +8,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, notePromise, payoffFor } from './learnBoardTeaching';
-import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { createStoryStore, type StoryStore } from './gameStory';
 
 const fenAfter = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
@@ -20,14 +19,14 @@ describe('their move: what it sets up, said with their move', () => {
     const h = theirDeepFactTeaching(fenAfter(['e4', 'c5', 'a3']), 'g6', ['b4', 'Nc6', 'd3', 'Bg7'], 'w');
     expect(h?.text).toBe('They play g6, making room for their bishop on g7 a move later, where it hits your rook on a1.');
     expect(h?.lane).toBe('theirIntent');
-    expect(h?.namesStudentMove).toEqual(NAMES_NO_MOVE);
+    expect(h?.namesStudentMove).toBe(false);
     expect(h?.claims).toContain('their-prepares:f8g7');
   });
 
   it('a set-up that waits on a move of yours names it, so the door holds it while it is yours to play', () => {
     const h = theirDeepFactTeaching(fenAfter(['e4', 'c5', 'a3']), 'g6', ['b4', 'Bg7'], 'w');
     expect(h?.text).toMatch(/once your b4 opens the diagonal\.$/);
-    expect(h?.namesStudentMove).not.toEqual(NAMES_NO_MOVE);
+    expect(h?.namesStudentMove).toBe(true);
   });
 
   it('nothing without the engine\'s line', () => {

@@ -11,9 +11,10 @@ import { readFileSync } from 'node:fs';
 import { buildTacticsLiveContext } from './liveTacticsContext';
 import { readBoard } from './boardComputers';
 import { conceptInstanceKey, countKey, looseKey, looseStillKey } from './conceptKey';
-import { decideTurn, spokenSentenceKeys, type LaneInput } from './learnTurnDoor';
+import { spokenSentenceKeys } from './learnTurnDoor';
 import { NO_PROOF } from './proof';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
+import { decideTurn, type LaneFixture } from '../test/learnDoorFixtures';
 
 const G1_14 = 'r1b1kr2/pp2p1bp/2np2p1/q5N1/4PBn1/1QN5/PP3PPP/3RR1K1 w - - 10 14';
 const G1_15 = 'r1b1kr2/pp2p1bp/2np2p1/3R2N1/1q2PBn1/1QN5/PP3PPP/4R1K1 w - - 12 15';
@@ -27,11 +28,11 @@ describe('#3 — the loose bishop on f4 is one claim across turns', () => {
   });
 
   it('said by the tactic line on 14, the plain threat line on 15 is dropped as said (the "still" form is looseStill.test)', () => {
-    const tactic: LaneInput = { lane: 'tactic', text: 'Danger — a whole piece is at stake: your bishop on f4 is the only defender of your knight on g5 — and it can be taken.', fen: G1_14, squares: ['f4', 'g5'], claims: [conceptInstanceKey('removal_of_guard', ['f4', 'g5']), looseKey('f4', 26)], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };
+    const tactic: LaneFixture = { lane: 'tactic', text: 'Danger — a whole piece is at stake: your bishop on f4 is the only defender of your knight on g5 — and it can be taken.', fen: G1_14, squares: ['f4', 'g5'], claims: [conceptInstanceKey('removal_of_guard', ['f4', 'g5']), looseKey('f4', 26)], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };
     const first = decideTurn([tactic]);
     expect(first.spoke).toContain('tactic');
     const said = new Set(spokenSentenceKeys(first.pkg));
-    const threat: LaneInput = { lane: 'threat', text: "Careful — your bishop on f4 is attacked and nothing's defending it.", fen: G1_15, squares: ['f4'], claims: [looseKey('f4', 26)], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };
+    const threat: LaneFixture = { lane: 'threat', text: "Careful — your bishop on f4 is attacked and nothing's defending it.", fen: G1_15, squares: ['f4'], claims: [looseKey('f4', 26)], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };
     expect(decideTurn([threat], '', said).spoke).not.toContain('threat');
   });
 

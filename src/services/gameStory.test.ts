@@ -216,7 +216,7 @@ describe('the plans are the story\'s (P1-8b): threads keyed by their goal, the p
   it('a wave that hands its door its lines commits the threads of the ones kept', () => {
     const s = createStoryStore('g1');
     s.commitKeptThreads(20, B10, [
-      { text: 'Your passed pawn on d5 is the trump here.', thread: { key: STRUCTURE, kind: 'stated', variant: 'passer-mine' } },
+      { text: 'Your passed pawn on d5 is the trump here.', statesThread: { key: STRUCTURE, kind: 'stated', variant: 'passer-mine' } },
       { text: 'A line with no thread.' },
     ], [{ text: 'Your passed pawn on d5 is the trump here.' }]);
     expect(threadVariant(s.current(), STRUCTURE)).toBe('passer-mine');

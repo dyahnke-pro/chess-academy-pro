@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**460 lines · 16 exports · 19 importers · 4 tests · 0 audits**
+**463 lines · 15 exports · 20 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,6 +34,7 @@
 - `src/services/teachingFact.ts`
 - `src/services/thoughtComposer.ts`
 - `src/test/doorFact.ts`
+- `src/test/learnDoorFixtures.ts`
 
 ## Exports and every call site
 
@@ -56,7 +57,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCoachFactKind` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:558`
+- `src/services/learnTurnDoor.ts:563`
 
 ### `stepOf` (function) — 16 call sites
 - `src/services/boardComputers.test.ts:76`
@@ -64,29 +65,31 @@
 - `src/services/coachFact.test.ts:76`
 - `src/services/coachFeatureService.ts:2430`
 - `src/services/coachFeatureService.ts:3007`
-- `src/services/learnTurnDoor.ts:246`
-- `src/services/learnTurnDoor.ts:778`
-- `src/services/learnTurnDoor.ts:835`
-- `src/services/learnTurnDoor.ts:856`
-- `src/services/learnTurnDoor.ts:860`
-- `src/services/learnTurnDoor.ts:903`
-- `src/services/learnTurnDoor.ts:929`
-- `src/services/learnTurnDoor.ts:939`
-- `src/services/learnTurnDoor.ts:943`
-- `src/services/learnTurnDoor.ts:1077`
-- `src/services/learnTurnDoor.ts:1140`
+- `src/services/learnTurnDoor.ts:244`
+- `src/services/learnTurnDoor.ts:780`
+- `src/services/learnTurnDoor.ts:837`
+- `src/services/learnTurnDoor.ts:858`
+- `src/services/learnTurnDoor.ts:862`
+- `src/services/learnTurnDoor.ts:905`
+- `src/services/learnTurnDoor.ts:931`
+- `src/services/learnTurnDoor.ts:941`
+- `src/services/learnTurnDoor.ts:945`
+- `src/services/learnTurnDoor.ts:1079`
+- `src/services/learnTurnDoor.ts:1142`
 
-### `placeFact` (function) — 10 call sites
+### `placeFact` (function) — 12 call sites
 - `src/services/boardComputers.ts:550`
 - `src/services/danyaBench.measure.test.ts:61`
+- `src/services/learnTurnDoor.ts:579`
 - `src/services/moveThoughtFacts.ts:125`
 - `src/services/moveThoughtFacts.ts:227`
 - `src/services/openingStory.ts:363`
-- `src/services/positionFacts.ts:518`
+- `src/services/positionFacts.ts:517`
 - `src/services/reviewFacet.ts:62`
 - `src/services/reviewFacet.ts:89`
 - `src/services/reviewFacet.ts:101`
 - `src/services/teachingFact.ts:89`
+- `src/test/doorFact.ts:21`
 
 ### `COMPUTER_CATALOG` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -105,10 +108,6 @@
 
 ### `LOCAL_THREAD` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
-
-### `toCoachFact` (function) — 2 call sites
-- `src/services/learnTurnDoor.ts:572`
-- `src/test/doorFact.ts:19`
 
 ## Tests
 

@@ -34,15 +34,13 @@ import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type Vo
 
 import { costStakes, stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 import { sameClaim } from './factSelector';
-import { FACT_ROLE, type FacetRole, type FactKind } from './reviewFacetRank';
-import { isCoachFactKind, LOCAL_THREAD, stepOf, toCoachFact, type CoachFact, type CoachFactKind } from './coachFact';
+import type { FacetRole, FactKind } from './reviewFacetRank';
+import { isCoachFactKind, LOCAL_THREAD, placeFact, stepOf, type CoachFact, type CoachFactKind, type ComputerName } from './coachFact';
 import { BOARD_COMPUTERS } from './boardComputers';
 import { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
-import type { PhaseFact } from './positionFacts';
-export type { PhaseFact } from './positionFacts';
 import { isEndgameByMaterial } from './gamePhaseService';
 import { STORY_KIND, type StoryBeat } from './openingStory';
-import { namesPlayableStudentMove, type NamesStudentMove } from './studentMoveNaming';
+import type { ThreadLine } from './gameStory';
 import { samePosition } from '../utils/samePosition';
 import { focusTags, type FocusId } from '../coach/focus/focusCard';
 import { isMisconceptionTagId } from '../data/misconceptionTags';
@@ -490,15 +488,14 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   causalChain: { factKind: 'does', kind: 'tactic', why: 'a cross-move cause proven on the board — the earlier move that left the piece loose', lead: 80 },
 };
 
-/** A LEARN FACT AS ITS PRODUCER HANDS IT IN — the lane's own shape, made into
- *  the one fact at the door (`laneFact`) until the producer emits `CoachFact`
- *  itself (WO-STORY-MATRIX-01 P1-6e). */
-export interface LaneInput {
+/** WHAT A LEARN PRODUCER KNOWS ABOUT ITS FACT, before the one maker makes it
+ *  the one fact (`learnFact`, WO-STORY-MATRIX-01 P1-6e). */
+export interface LearnFactParts {
   lane: LearnLane;
-  /** The producer's own name for this fact, when it keeps one to find what
-   *  the door kept (the page's queued lines and their arrows) — a kept fact
-   *  carries it back (`VoiceFact.factId`). Absent: the door numbers it. */
-  id?: string;
+  /** THE COMPUTER THAT MADE IT — REQUIRED: a catalog row (`COMPUTER_CATALOG`),
+   *  so every Learn fact says which computer it came from, like every other
+   *  surface's. A producer that already holds the one fact hands its own. */
+  computer: ComputerName;
   text: string;
   fen: string;
   squares?: readonly string[];
@@ -533,11 +530,15 @@ export interface LaneInput {
   /** ITS PROOF, OR WHY IT NEEDS NONE — REQUIRED (root cause, David
    *  2026-10-07): a producer that cannot answer this cannot speak. */
   proof: FactProof;
-  /** WHICH OF THE STUDENT'S MOVES IT NAMES — REQUIRED (OS-10): held while one
-   *  of them is legal for the student (LEARN NAMES NO MOVE UNASKED). A
-   *  producer that already emits the one fact hands the fact's own answer
-   *  (`CoachFact.namesStudentMove`, P1-6b), answered where it was made. */
-  namesStudentMove: NamesStudentMove | boolean;
+  /** The plan thread the line states, when it states one (the phase report's
+   *  structure plan) — the fact is on that thread, and the game's story
+   *  records the statement when the door keeps the line. */
+  statesThread?: ThreadLine;
+  /** IT NAMES A MOVE THE STUDENT HAS YET TO FIND — REQUIRED (OS-10): held
+   *  while one is legal for the student (LEARN NAMES NO MOVE UNASKED). The
+   *  producer answers it where the fact is made (`namesPlayableStudentMove`
+   *  over the moves it names), never the door. */
+  namesStudentMove: boolean;
 }
 
 /** A LEARN FACT AT THE DOOR — the one fact shape (`coachFact`) with the lane
@@ -549,6 +550,10 @@ export interface LaneInput {
 export type LaneFact = CoachFact & {
   lane: LearnLane;
   factKind?: string;
+  /** The plan thread a line states, written to the game's story when the
+   *  door keeps it (`StoryStore.commitKeptThreads` — the phase report's
+   *  structure plan). */
+  statesThread?: ThreadLine;
 };
 
 /** The kind a Learn fact is placed by: its producer's own kind on the lanes
@@ -558,26 +563,27 @@ function laneKind(lane: LearnLane, factKind: string | undefined): CoachFactKind 
   return (lane === 'positionFacts' || lane === 'phase') && factKind && isCoachFactKind(factKind) ? factKind : LEARN_LANES[lane].factKind;
 }
 
-/** A LANE'S FACT AS THE ONE FACT (the door's adapter, P1-5; deleted when the
- *  producers emit `CoachFact`, P1-6e). It is placed as the door always placed
- *  it — from the student's seat (`thoughtStepOf`), or in the student's own
- *  step when its producer marks it as the reason for their move
- *  (`ownMoveReason`) — and its seat is the side that step is about: theirs in
- *  their step, the student's otherwise. Whether it names a move the student
- *  has yet to find is answered here once, off the producer's own answer. */
-function laneFact(f: LaneInput, i: number): LaneFact {
+/** THE ONE MAKER OF A LEARN FACT (WO-STORY-MATRIX-01 P1-6e), called where
+ *  the fact is made. Its `id` is the producer's name for it, unique among the
+ *  facts handed to one door call: the door finds what it kept by it
+ *  (`VoiceFact.factId`), and the page finds the kept line's marks by it. It is
+ *  placed by its lane — Learn's speaking slot — from the student's seat
+ *  (`thoughtStepOf`), or in the student's own step when its producer marks it
+ *  as the reason for their move (`ownMoveReason`); its seat is the side that
+ *  step is about: theirs in their step, the student's otherwise. */
+export function learnFact(id: string, f: LearnFactParts): LaneFact {
   const kind = laneKind(f.lane, f.factKind);
   const step: ThoughtStep = f.ownMoveReason ? 'yours' : thoughtStepOf(f.lane, f.factKind);
+  const seat = step === 'theirs' ? 'opponent' : 'student';
   return {
-    ...toCoachFact({
-      id: f.id ?? `lane:${i}`, kind, text: f.text, fen: f.fen, squares: f.squares ?? [], claims: f.claims ?? [],
-      stakes: f.stakes ?? null, proof: f.proof, seat: step === 'theirs' ? 'opponent' : 'student', step,
-      namesStudentMove: typeof f.namesStudentMove === 'boolean' ? f.namesStudentMove : namesPlayableStudentMove(f.namesStudentMove), thread: LOCAL_THREAD,
-      ...(f.lines ? { lines: f.lines } : {}), ...(f.skill ? { skill: f.skill } : {}),
-    }),
+    id, kind, group: placeFact(kind, seat).group, step, computer: f.computer, text: f.text, fen: f.fen,
+    squares: f.squares ?? [], claims: f.claims ?? [], stakes: f.stakes ?? null, proof: f.proof, seat,
+    namesStudentMove: f.namesStudentMove, thread: f.statesThread?.key ?? LOCAL_THREAD,
+    ...(f.lines ? { lines: f.lines } : {}), ...(f.skill ? { skill: f.skill } : {}),
     lane: f.lane,
     ...(f.role ? { role: f.role } : {}),
     ...(f.factKind ? { factKind: f.factKind } : {}),
+    ...(f.statesThread ? { statesThread: f.statesThread } : {}),
   };
 }
 
@@ -661,9 +667,8 @@ function ownMoveReasonStep(lane: LearnLane, step: ThoughtStep): boolean { return
 function theirMoveReasonStep(lane: LearnLane, step: ThoughtStep): boolean { return step === 'theirs' && !THEIR_MOVE_VERDICT.has(lane); }
 
 export function decideTurn(
-  /** Each lane's fact as its producer hands it in — made into the one fact
-   *  here (`laneFact`) before anything is weighed. */
-  inputs: readonly LaneInput[],
+  /** Each lane's fact, made by its producer (`learnFact`). */
+  facts: readonly LaneFact[],
   /** What this turn has already said out loud (see `buildVoicePackage`). */
   alreadySaid?: string,
   /** Every phrase already spoken this game. */
@@ -693,9 +698,6 @@ export function decideTurn(
   owner: VoiceOwner = 'open',
 ): TurnDecision {
   const decideStart = Date.now();
-  // THE DOOR'S ADAPTER (WO-STORY-MATRIX-01 P1-5): every lane's fact as the
-  // one fact shape, before anything is weighed.
-  const facts = inputs.map(laneFact);
   if (owner !== 'open') return ownedTurn(facts, turn, decideStart, owner);
   const offered: LearnLane[] = [];
   const faded: LearnLane[] = [];
@@ -1203,19 +1205,16 @@ export interface LiveTurn {
  *  is over (the student has moved on) is not a wave of the live turn, and
  *  returns null — its board is gone. */
 export function decidePhaseWave(
-  facts: readonly PhaseFact[],
+  /** The report's facts, each made by the one maker (`learnFact`, lane
+   *  `phase`) on the board it describes. */
+  facts: readonly LaneFact[],
   readFen: string,
   live: LiveTurn | null,
   ctx: { priorKeys?: ReadonlySet<string>; priorLead?: TurnLead | null; green?: FadeLevels | null; beginner: boolean; owner: VoiceOwner },
 ): TurnDecision | null {
   if (!live || !samePosition(live.fen, readFen)) return null;
   return decideTurn(
-    facts.map((f) => ({
-      lane: 'phase' as const, text: f.text, fen: f.gradeFen ?? readFen, claims: f.claims, proof: f.proof, namesStudentMove: f.namesStudentMove,
-      ...(f.squares ? { squares: f.squares } : {}), ...(f.stakes ? { stakes: f.stakes } : {}), ...(f.lines ? { lines: f.lines } : {}),
-      ...(f.factKind && f.factKind in FACT_ROLE ? { role: FACT_ROLE[f.factKind as keyof typeof FACT_ROLE] } : {}),
-      ...(f.factKind ? { factKind: f.factKind } : {}), ...(f.skill ? { skill: f.skill } : {}),
-    })),
+    facts,
     live.said, ctx.priorKeys, ctx.priorLead ?? null, ctx.green ?? null, ctx.beginner,
     { kind: 'phase', ply: live.ply, slipCp: live.slipCp, priceSettled: live.priceSettled, price: live.price, midExchange: live.midExchange },
     live.holds,

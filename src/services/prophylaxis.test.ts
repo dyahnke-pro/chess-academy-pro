@@ -51,6 +51,6 @@ describe('prevent, one move early, with the move held', () => {
     const { readFileSync } = await import('node:fs');
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src).toMatch(/if \(phRead && !\(moveAdviceHere\?\.speak && !held\) && phRead\.heldForm\) \{/);
-    expect(src).toMatch(/queueSpokenHint\(probe\.fen\(\), phRead\.heldForm\.text, 'prophylaxis', phRead\.heldForm\.proof/);
+    expect(src).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: phRead\.computer, text: phRead\.heldForm\.text, lane: 'prophylaxis', proof: phRead\.heldForm\.proof/);
   });
 });

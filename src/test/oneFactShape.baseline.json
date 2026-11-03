@@ -1,9 +1,7 @@
 {
   "ClauseItem": {},
   "TeachingHint": {},
-  "PhaseFact": {
-    "src/hooks/usePhaseNarration.ts": 3
-  },
+  "PhaseFact": {},
   "StoryFact": {},
   "facet": {},
   "BoardRead": {}

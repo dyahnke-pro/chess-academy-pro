@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2131 lines · 19 exports · 40 importers · 45 tests · 3 audits**
+**2100 lines · 17 exports · 39 importers · 46 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -33,7 +33,6 @@
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/deliberation.ruleOutOnce.test.ts`
 - `src/services/learnNamesNoMove.os10.test.ts`
-- `src/services/learnTurnDoor.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/looseStill.test.ts`
@@ -102,14 +101,11 @@
 - `src/services/positionFacts.weakness.test.ts:26`
 - `src/services/positionFacts.weakness.test.ts:71`
 
-### `PhaseFact` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11316`
+- `src/components/Coach/CoachTeachPage.tsx:11298`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
-- `src/hooks/usePhaseNarration.ts:468`
-- `src/services/raceAimOneVoice.test.ts:19`
+- `src/hooks/usePhaseNarration.ts:471`
+- `src/services/raceAimOneVoice.test.ts:20`
 
 ### `clauseText` (function) — 11 call sites
 - `src/hooks/useLiveCoach.ts:305`
@@ -126,10 +122,10 @@
 
 ### `computePositionFacts` (function) — 108 call sites
 - `src/coach/boardTurnAnswer.ts:136`
-- `src/components/Coach/CoachTeachPage.tsx:11171`
+- `src/components/Coach/CoachTeachPage.tsx:11156`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:271`
-- `src/hooks/usePhaseNarration.ts:430`
+- `src/hooks/usePhaseNarration.ts:433`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
 - `src/services/chatBoardRead.ts:81`
@@ -137,15 +133,15 @@
 - `src/services/computerAccuracy.audit.test.ts:112`
 - `src/services/criticalMoment.frame.test.ts:24`
 - `src/services/criticalMoment.oneCount.test.ts:25`
-- `src/services/danyaBench.measure.test.ts:413`
+- `src/services/danyaBench.measure.test.ts:414`
 - `src/services/deliberation.ruleOutOnce.test.ts:86`
 - `src/services/deliberation.ruleOutOnce.test.ts:89`
 - `src/services/deliberation.ruleOutOnce.test.ts:98`
 - `src/services/deliberation.ruleOutOnce.test.ts:100`
-- `src/services/exchangeIdeas.test.ts:264`
-- `src/services/forkTrick.test.ts:49`
+- `src/services/exchangeIdeas.test.ts:265`
+- `src/services/forkTrick.test.ts:50`
 - `src/services/latentFork.test.ts:151`
-- `src/services/learnNamesNoMove.os10.test.ts:50`
+- `src/services/learnNamesNoMove.os10.test.ts:51`
 - `src/services/liveNeedGate.test.ts:130`
 - `src/services/liveNeedGate.test.ts:135`
 - `src/services/liveNeedGate.test.ts:149`
@@ -153,7 +149,7 @@
 - `src/services/liveNeedWire.test.ts:22`
 - `src/services/liveNeedWire.test.ts:31`
 - `src/services/loopCloses.test.ts:112`
-- `src/services/looseStill.test.ts:58`
+- `src/services/looseStill.test.ts:59`
 - `src/services/positionFacts.convertOnce.test.ts:16`
 - `src/services/positionFacts.convertOnce.test.ts:37`
 - `src/services/positionFacts.depth.test.ts:18`
@@ -216,7 +212,7 @@
 - `src/services/positionFacts.weakness.test.ts:67`
 - `src/services/positionFactsRegistry.test.ts:9`
 - `src/services/positionReadComposer.ts:130`
-- `src/services/raceAimOneVoice.test.ts:16`
+- `src/services/raceAimOneVoice.test.ts:17`
 - `src/services/speedRunReads.scale.test.ts:37`
 - `src/services/whyBestMove.needWire.test.ts:10`
 - `src/services/whyBestMove.ts:128`
@@ -225,17 +221,17 @@
 - `src/test/decisionRows.baseline.test.ts:112`
 - `src/test/everySurfaceSpeaks.test.ts:117`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts:250`
-- `src/test/teach02Wired.test.ts:85`
-- `src/test/teach02Wired.test.ts:94`
-- `src/test/teach02Wired.test.ts:108`
-- `src/test/teach02Wired.test.ts:115`
-- `src/test/teach02Wired.test.ts:120`
-- `src/test/teach02Wired.test.ts:127`
-- `src/test/teach02Wired.test.ts:137`
-- `src/test/teach02Wired.test.ts:139`
+- `src/test/teach02Wired.test.ts:86`
+- `src/test/teach02Wired.test.ts:95`
+- `src/test/teach02Wired.test.ts:109`
+- `src/test/teach02Wired.test.ts:116`
+- `src/test/teach02Wired.test.ts:121`
+- `src/test/teach02Wired.test.ts:128`
+- `src/test/teach02Wired.test.ts:138`
+- `src/test/teach02Wired.test.ts:140`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11472`
+- `src/components/Coach/CoachTeachPage.tsx:11454`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -252,22 +248,19 @@
 - `src/services/positionFacts.afterLine.test.ts:22`
 - `src/services/positionFacts.afterLine.test.ts:25`
 
-### `NAMES_NO_MOVE` (re-export) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `conceptInstanceKey` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9295`
-- `src/components/Coach/CoachTeachPage.tsx:9429`
+- `src/components/Coach/CoachTeachPage.tsx:9302`
+- `src/components/Coach/CoachTeachPage.tsx:9436`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
-- `src/services/claimKeysLooseCount.test.ts:30`
+- `src/services/claimKeysLooseCount.test.ts:31`
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
 - `src/services/conceptKey.ts:11`
 - `src/services/danyaBehaviors.ts:526`
 - `src/services/kingAttackReads.ts:661`
 - `src/services/learnBoardTeaching.ts:499`
-- `src/services/looseStill.test.ts:36`
+- `src/services/looseStill.test.ts:37`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
@@ -316,6 +309,7 @@
 - `src/test/latentForkOpensTheDoor.test.ts`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts`
 - `src/test/learnNamesNoMoveUnasked.gate.test.ts`
+- `src/test/oneFactShape.gate.test.ts`
 - `src/test/onePrice.gate.test.ts`
 - `src/test/oneStoryState.gate.test.ts`
 - `src/test/preGateSeesTheStudent.test.ts`

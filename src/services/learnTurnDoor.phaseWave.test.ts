@@ -9,7 +9,7 @@
  */
 import { describe, it, expect, afterEach } from 'vitest';
 import { Chess } from 'chess.js';
-import { coachTurn, decidePhaseWave, type PhaseFact } from './coachDecider';
+import { coachTurn } from './coachDecider';
 import { onLearnTurn, type LearnTurnRow } from './coachDecisionEvents';
 import { NO_PROOF } from './proof';
 import { phaseVerdictLine, phaseVerdictKeys, phaseStockKey } from './reviewPositionalAssessment';
@@ -18,6 +18,7 @@ import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { findProphylaxis, prophylaxisIdea, prophylaxisKey } from './prophylaxis';
 import { obviousStopFlaw } from './thinkAloud';
 import { readBoard } from './boardComputers';
+import { laneFacts, decidePhaseWave, type PhaseFixture } from '../test/learnDoorFixtures';
 
 /** After 1.e4 c5 2.d4 cxd4 3.c3 dxc3 4.Nxc3 d6 5.Bc4 Nc6 6.Nf3 g6 7.O-O Bg7 —
  *  where the transition fired, White to move. */
@@ -26,7 +27,7 @@ const MOVE8 = 'r1bqk1nr/pp2ppbp/2np2p1/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 2 8'
 const AFTER_BXF7 = ((): string => { const c = new Chess(MOVE8); c.move('Bxf7+'); c.move('Kxf7'); return c.fen(); })();
 
 /** The report's lines on MOVE8, as the replay heard them, typed. */
-const REPORT: PhaseFact[] = [
+const REPORT: PhaseFixture[] = [
   { text: 'They want the bishop to g4, pinning your knight on f3 to your queen. The obvious stop is h3 — find another way.', claims: ['prophylaxis:g4:idea'], squares: ['g4', 'f3', 'd1'], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stop-flaw' },
   { text: 'Watch Bg4 — their bishop would pin your knight on f3 to your queen.', claims: ['pf:latent-pin:d1,f3,g4'], squares: ['d1', 'f3', 'g4'], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stop-flaw' },
   { text: 'Spot it before it lands: ask what their next move would attack.', claims: ['method:threat-scan'], proof: NO_PROOF.method, namesStudentMove: NAMES_NO_MOVE, factKind: 'method' },
@@ -65,7 +66,7 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
   it('a costly turn holds the report behind its verdict (the phase wave sees the cost)', () => {
     listen();
     const d = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 13, slipCp: 350, priceSettled: true, price: null, midExchange: null },
-      facts: REPORT.map((f) => ({ lane: 'phase' as const, text: f.text, fen: MOVE8, claims: f.claims, squares: f.squares, proof: f.proof, namesStudentMove: NAMES_NO_MOVE, role: 'teach' as const })),
+      facts: laneFacts(REPORT.map((f) => ({ lane: 'phase' as const, text: f.text, fen: MOVE8, claims: f.claims, squares: f.squares, proof: f.proof, namesStudentMove: NAMES_NO_MOVE, role: 'teach' as const }))),
       priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'open' });
     expect(d.pkg.spoken).toBe('');
     expect(rows.at(-1)?.heldWhy.phase).toBe('verdict-turn');
@@ -96,10 +97,10 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
     const holds = new Set<string>();
     listen();
     // The late wave: a danger on the same squares leads, so the idea is held.
-    const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: [
+    const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: laneFacts([
       { lane: 'threat', text: 'Their bishop can come to g4 and pin your knight on f3 to your queen.', fen: MOVE8, squares: ph!.squares, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE },
       { lane: 'prophylaxis', text: prophylaxisIdea(ph!).text, fen: MOVE8, squares: ph!.squares, claims: read!.claims, proof: NO_PROOF.withheld, namesStudentMove: NAMES_NO_MOVE },
-    ], priorLead: null, green: null, beginner: false, turnHolds: holds, owner: 'open' });
+    ]), priorLead: null, green: null, beginner: false, turnHolds: holds, owner: 'open' });
     expect(late.spoke).not.toContain('prophylaxis');
     expect(holds.has(prophylaxisKey('g4'))).toBe(true);
     // The phase wave of the same turn offers the stop-flaw clause: held.
@@ -120,14 +121,14 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
     const sheet = phaseVerdictLine(fen, 'w', -500, 'endgame', new Set());
     expect(sheet).toMatch(/endgame/);
     const claims = [...phaseVerdictKeys(fen, 'w', -500, new Set()), phaseStockKey('endgame')];
-    const fact = (text: string): PhaseFact => ({ text, claims, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stock' });
+    const fact = (text: string): PhaseFixture => ({ text, claims, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stock' });
     // Within one report: the sheet offered twice (two emitters) speaks once.
     const once = decidePhaseWave([fact(sheet!), fact(sheet!.replace(/^Taking stock as the endgame begins/, 'The endgame starts here, so take stock'))], fen,
       { fen, ply: 71, slipCp: null, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() }, ctx);
     expect(once!.pkg.kept).toHaveLength(1);
     // Across waves: the turn's late wave already said it — the phase copy drops.
     const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 71, slipCp: null, priceSettled: true, price: null, midExchange: null },
-      facts: [{ lane: 'positionFacts', text: sheet!, fen, claims, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE }],
+      facts: laneFacts([{ lane: 'positionFacts', text: sheet!, fen, claims, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE }]),
       priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'open' });
     expect(late.pkg.spoken).toContain('endgame');
     const prior = new Set(spokenSentenceKeys(late.pkg));

@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
-import { computePositionFacts, clauseClaims, type LastMoveInput, type PhaseFact, NAMES_NO_MOVE } from '../services/positionFacts';
+import { computePositionFacts, clauseClaims, type LastMoveInput } from '../services/positionFacts';
+import { FACT_ROLE, learnFact, type LaneFact, type LearnFactParts } from '../services/coachDecider';
 import { NO_PROOF } from '../services/proof';
 import { useWeaknessSignals } from './useWeaknessSignals';
 import { useStudentNeed } from './useStudentNeed';
@@ -63,7 +64,7 @@ interface UsePhaseNarrationArgs {
    *  thread, REQUIRED for the same reason as `getSaid`: one memory of the plan,
    *  so the phase turn's report never announces a plan the positional read
    *  already said, and says a new one as the change it is. Read only; the
-   *  surface's door writes it when it keeps the line (`PhaseFact.thread`). */
+   *  surface's door writes it when it keeps the line (`LaneFact.statesThread`). */
   getStructurePlan: () => string | null;
   /** The surface's turn door — REQUIRED. The report is handed over ONCE, as
    *  typed facts carrying their claim keys, and decided as one wave of the
@@ -71,7 +72,7 @@ interface UsePhaseNarrationArgs {
    *  Smith-Morra replay 2026-10-19). Resolves with what was actually spoken,
    *  which is what the report keeps. There is no other path: a surface that
    *  narrates a transition does it through its door (G8.5). */
-  speakFacts: (facts: readonly PhaseFact[], fen: string) => Promise<string>;
+  speakFacts: (facts: readonly LaneFact[], fen: string) => Promise<string>;
 }
 
 interface UsePhaseNarrationResult {
@@ -219,11 +220,12 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       /** The report's facts, typed, in the order they were computed. ONE door
        *  call decides them as a wave of the turn they were read on (root
        *  causes 5 and 6, Smith-Morra replay 2026-10-19). */
-      const phaseFacts: PhaseFact[] = [];
-      /** ONE FACT, GRADED WHOLE, for the door. If any sentence of it is
-       *  refused the whole fact is refused, so an answer is never heard
-       *  without the claim it answers. */
-      const offerFact = (f: PhaseFact): void => {
+      const phaseFacts: LaneFact[] = [];
+      /** ONE FACT, GRADED WHOLE, for the door, made by the one maker
+       *  (`learnFact`, lane `phase`) on the board it describes. If any
+       *  sentence of it is refused the whole fact is refused, so an answer is
+       *  never heard without the claim it answers. */
+      const offerFact = (f: Omit<LearnFactParts, 'lane' | 'fen'> & { gradeFen?: string }): void => {
         const text = f.text.trim();
         if (!text || reportOutrun()) return;
         const { sentences, rest } = splitSpeakableSentences(text);
@@ -232,7 +234,8 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         const key = sayKey(text);
         if (key && spokenKeys.has(key)) return;
         if (key) spokenKeys.add(key);
-        phaseFacts.push({ ...f, text });
+        const { gradeFen, ...given } = f;
+        phaseFacts.push(learnFact(`phase:${phaseFacts.length}`, { ...given, lane: 'phase', text, fen: gradeFen ?? event.fen }));
       };
       const noteFirstDispatch = (chars: number): void => {
         sentenceCount += 1;
@@ -347,7 +350,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         // change; a pin that merely "landed" — here a bishop retreat keeping an
         // old pin — is a detector event, not the story of the game.
         const thesis = pkg.thesis.kind === 'turned' ? renderThesis(pkg.thesis, registerFor('phase-narration')) : '';
-        if (thesis) offerFact({ text: thesis, claims: [`thesis:${sayKey(thesis)}`], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE });
+        if (thesis) offerFact({ computer: 'renderThesis', text: thesis, claims: [`thesis:${sayKey(thesis)}`], proof: NO_PROOF.description, namesStudentMove: false });
       } catch { /* the selector is a bonus here, never a blocker */ }
 
       // WO-PHASE-LAG-02: check the shared Stockfish FEN cache first.
@@ -465,8 +468,9 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
               if (c.kind === 'key-moment' || c.kind === 'convert' || !c.text.trim()) return;
               pfConcrete = true;
               offerFact({
-                text: c.text, claims: clauseClaims(pf, i, event.fen), proof: c.proof ?? NO_PROOF.description, namesStudentMove: c.namesStudentMove,
-                ...(c.kind === 'structure-plan' && pf.structurePlanSaid ? { thread: { key: threadKey('student', PLAN_GOAL.structure), kind: 'stated' as const, variant: pf.structurePlanSaid } } : {}),
+                computer: c.computer, text: c.text, claims: clauseClaims(pf, i, event.fen), proof: c.proof ?? NO_PROOF.description, namesStudentMove: c.namesStudentMove,
+                ...(c.kind === 'structure-plan' && pf.structurePlanSaid ? { statesThread: { key: threadKey('student', PLAN_GOAL.structure), kind: 'stated' as const, variant: pf.structurePlanSaid } } : {}),
+                ...(c.kind in FACT_ROLE ? { role: FACT_ROLE[c.kind as keyof typeof FACT_ROLE] } : {}),
                 ...(c.squares ? { squares: c.squares } : {}), ...(c.stakes ? { stakes: c.stakes } : {}),
                 ...(c.lines ? { lines: c.lines } : {}), gradeFen: c.fen,
                 factKind: c.kind, ...(c.skill ? { skill: c.skill } : {}),
@@ -480,7 +484,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // P5 — GUARANTEED deep look-ahead (David 2026-07-26): the deepest
       // foresight, pre-composed in code (G0), offered as a fact of the report.
       const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics, 'student', event.playerColor === 'white' ? 'w' : 'b', false, weaknessRef.current) : null;
-      if (phaseLookahead) offerFact({ text: phaseLookahead, claims: [`phase-lookahead:${sayKey(phaseLookahead)}`], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE });
+      if (phaseLookahead) offerFact({ computer: 'speakDeepestLookahead', text: phaseLookahead, claims: [`phase-lookahead:${sayKey(phaseLookahead)}`], proof: NO_PROOF.description, namesStudentMove: false });
 
       // ── NOTHING CONCRETE, NOTHING SPOKEN ───────────────────────────────────
       // David 2026-08-08: "phase narration stays silent if no notes are

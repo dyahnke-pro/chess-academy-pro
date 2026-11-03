@@ -4,13 +4,14 @@
 // Every leak below is reproduced on a real board and fails on the old code.
 import { describe, it, expect, vi } from 'vitest';
 import { Chess } from 'chess.js';
-import { decideTurn, type LaneInput } from './learnTurnDoor';
+
 import { computePositionFacts } from './positionFacts';
 import { prizeTeaching } from './learnBoardTeaching';
 import { flexibleFirst } from './speedRunReads';
 import { latentForkClause, detectLatentFork, type LatentFork } from './latentFork';
 import { namesMoves, namesPlayableStudentMove, namedSan, studentMovesInLine, NAMES_NO_MOVE } from './studentMoveNaming';
 import { NO_PROOF } from './proof';
+import { decideTurn, type LaneFixture } from '../test/learnDoorFixtures';
 
 const fens = (moves: readonly string[]): string[] => {
   const c = new Chess();
@@ -25,7 +26,7 @@ const GAME = 'e4 c5 d4 cxd4 c3 dxc3 Nxc3 d6 Bc4 Nc6 Nf3 g6 O-O Bg7 Bxf7+ Kxf7 Ng
 const F = fens(GAME);
 
 describe('the door holds a fact that names a move the student can play next', () => {
-  const fact = (namesStudentMove: LaneInput['namesStudentMove']): LaneInput => ({ lane: 'positionFacts', text: 'Bishop to c4 is a common try here.', fen: F[8], proof: NO_PROOF.description, namesStudentMove });
+  const fact = (namesStudentMove: LaneFixture['namesStudentMove']): LaneFixture => ({ lane: 'positionFacts', text: 'Bishop to c4 is a common try here.', fen: F[8], proof: NO_PROOF.description, namesStudentMove });
   it('held while the named move is legal for the student', () => {
     const d = decideTurn([fact(namesMoves('w', F[8], { from: 'f1', to: 'c4' }))], undefined, undefined, null, null, false, null);
     expect(d.held).toContain('positionFacts');

@@ -3,7 +3,7 @@
 // names the records it cares about; the kind comes from `kind` or the text's
 // own `[tag]`, as Review's facets carry it — a fact with neither is a broken
 // fixture, never a guess.
-import { LOCAL_THREAD, toCoachFact } from '../services/coachFact';
+import { LOCAL_THREAD, placeFact } from '../services/coachFact';
 import { facetTag, type FactKind } from '../services/reviewFacetRank';
 import { NO_PROOF } from '../services/proof';
 import type { DoorFact } from '../services/coachDecider';
@@ -16,10 +16,12 @@ type Records = Partial<Pick<DoorFact, 'id' | 'squares' | 'stakes' | 'proof' | 'c
 export function doorFact(text: string, r: Records = {}): DoorFact {
   const kind = r.kind ?? facetTag(text);
   if (kind === null) throw new Error(`doorFact: "${text}" names no kind`);
-  return toCoachFact({
-    id: r.id ?? `test:${next++}`, kind, text, fen: r.fen ?? FEN,
+  const seat = r.seat ?? 'student';
+  return {
+    ...placeFact(kind, seat), kind, computer: 'computeMoveFacets',
+    id: r.id ?? `test:${next++}`, text, fen: r.fen ?? FEN,
     squares: r.squares ?? [], claims: r.claims ?? [], stakes: r.stakes ?? null,
-    proof: r.proof ?? NO_PROOF.description, seat: r.seat ?? 'student', namesStudentMove: false, thread: LOCAL_THREAD,
+    proof: r.proof ?? NO_PROOF.description, seat, namesStudentMove: false, thread: LOCAL_THREAD,
     ...(r.skill ? { skill: r.skill } : {}), ...(r.hole !== undefined ? { hole: r.hole } : {}),
-  });
+  };
 }

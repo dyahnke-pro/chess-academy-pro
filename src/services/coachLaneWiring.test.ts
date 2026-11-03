@@ -59,14 +59,14 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // It carried kind 'plan', which the old DNA kind whitelist never listed, so
     // from 2026-09-27 to 2026-09-29 it was computed every turn and never heard.
     // (OS-10, 2026-10-20: the may-name-the-student's-move field sits before the squares.)
-    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), line, 'planArc', NO_PROOF\.description, NAMES_NO_MOVE, e\.squares[,)]/);
+    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: 'learnFact', text: line, lane: 'planArc', proof: NO_PROOF\.description, namesStudentMove: false, squares: e\.squares[,} ]/);
   });
 
   it('the coach callout is queued at the rank the model gives it', () => {
     // Not a literal 'coachMistake' any more: the coach half runs through
     // `backwardLook`, which returns the lane along with the line, so the rank
     // is decided in ONE place for both sides instead of at each call site.
-    expect(TEACH).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind[,)]/);
+    expect(TEACH).toMatch(/queueSpokenHint\(cm\.fenAfter, \{ computer: 'backwardLook', text: look\.line, lane: look\.kind[,} ]/);
     expect(BACKWARD, "the coach's lane is not the one David ranked second")
       .toMatch(/kind: 'coachMistake'/);
   });
@@ -77,7 +77,7 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // 2026-09-07) LEADS the line with the neglected fundamental when one
     // attributes (`const line = fundamental ? … : look.line`), so the queued
     // text is now `line`, not `look.line` directly — same rank, same square.
-    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, line, look\.kind,/);
+    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, \{ computer: 'backwardLook', text: line, lane: look\.kind,/);
     // …and the fundamental verdict is what leads that line.
     // (WO-LOOP-01 put the recurrence clause between the verdict and the
     // look — the verdict still LEADS, which is what this pins.)
@@ -100,15 +100,15 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     expect(TEACH).toMatch(/const turnLine = mistakeTurnLine\(\{\s*fund, evidence, lostSquare: look\.lostSquare \?\? null, bookSaid,/);
     expect(TEACH).toMatch(/const line = turnLine\.body;/);
     // …and its habit is its own fact in the habit step, said last (WO-ONE-COACH-01).
-    expect(TEACH).toMatch(/if \(turnLine\.teachesMethod\) queueSpokenHint\(fenAfterReply, turnLine\.habit, 'mistakeHabit', NO_PROOF\.method,/);
+    expect(TEACH).toMatch(/if \(turnLine\.teachesMethod\) queueSpokenHint\(fenAfterReply, \{ computer: 'mistakeTurnLine', text: turnLine\.habit, lane: 'mistakeHabit', proof: NO_PROOF\.method,/);
     // (unify-the-coach B3, 2026-10-01: the grade's missed pattern carries its
     // rule once a game, from the one definition ledger.)
     expect(TEACH).toMatch(/const concession = lookConcession\(fenBefore, move\.san, cpLoss, studentEvalAfterCp\);/);
     // A fundamental with NO material drawback still speaks, on its own.
     // (Colle re-walk 2026-09-27: graded on the student-move board, `move.fen`.)
-    expect(TEACH).toMatch(/if \(!bookSaidAlone && fundamental\.diagnosis\) queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current\.story, fundamental\.id, move\.history\.length\)\}\$\{fundamental\.diagnosis\}`, 'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamental\.howOnly \? undefined : fundamentalClaims, move\.fen, undefined, fundamental\.lines[,)]/);
+    expect(TEACH).toMatch(/if \(!bookSaidAlone && fundamental\.diagnosis\) queueSpokenHint\(fenAfterReply, \{ computer: 'learnFundamentalVerdict', text: `\$\{noteSlip\(learnMemRef\.current\.story, fundamental\.id, move\.history\.length\)\}\$\{fundamental\.diagnosis\}`, lane: 'fundamental', proof: NO_PROOF\.method, namesStudentMove: false, squares: \[\], claims: fundamental\.howOnly \? undefined : fundamentalClaims, gradeFen: move\.fen, lines: fundamental\.lines[,} ]/);
     // Its habit closes the turn, in the habit step (WO-ONE-COACH-01).
-    expect(TEACH).toMatch(/if \(fundamental\.howOnly\) queueSpokenHint\(fenAfterReply, `\$\{bookSaidAlone \? noteSlip\(learnMemRef\.current\.story, fundamental\.id, move\.history\.length\) : ''\}\$\{fundamental\.howOnly\}`, 'mistakeHabit', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamentalClaims, move\.fen/);
+    expect(TEACH).toMatch(/if \(fundamental\.howOnly\) queueSpokenHint\(fenAfterReply, \{ computer: 'learnFundamentalVerdict', text: `\$\{bookSaidAlone \? noteSlip\(learnMemRef\.current\.story, fundamental\.id, move\.history\.length\) : ''\}\$\{fundamental\.howOnly\}`, lane: 'mistakeHabit', proof: NO_PROOF\.method, namesStudentMove: false, squares: \[\], claims: fundamentalClaims, gradeFen: move\.fen/);
   });
 
   it('the hint register speaks rather than only prompting', () => {

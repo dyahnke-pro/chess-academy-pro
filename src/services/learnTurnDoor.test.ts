@@ -4,10 +4,11 @@ import type { HeatTile as HeatTileT } from './heatMap';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { decideTurn, LEARN_LANES, STORY_LANE, type LearnLane } from './learnTurnDoor';
+import { LEARN_LANES, STORY_LANE, type LearnLane } from './learnTurnDoor';
 import { costStakes, mateStakes } from './factStakes';
 import { preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA } from './learnBoardTeaching';
 import { readBoard, readBoardAll } from './boardComputers';
+import { laneFacts, decideTurn } from '../test/learnDoorFixtures';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const TEACH = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
@@ -61,7 +62,7 @@ describe('the gate — Learn assembles its voice ONLY through the door', () => {
 
   it('every queued line names a real lane', () => {
     const lanes = new Set(Object.keys(LEARN_LANES) as LearnLane[]);
-    const calls = [...TEACH_CODE.matchAll(/queueSpokenHint\([^;]*?,\s*'([a-zA-Z]+)'/g)].map((m) => m[1]);
+    const calls = [...TEACH_CODE.matchAll(/queueSpokenHint\([^;]*?lane: '([a-zA-Z]+)'/g)].map((m) => m[1]);
     expect(calls.length).toBeGreaterThan(10);
     for (const lane of calls) expect(lanes.has(lane as LearnLane), `unknown lane '${lane}'`).toBe(true);
   });
@@ -86,7 +87,7 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
 
   // The phase report enters through the door's one phase-wave call, which
   // places every fact on the 'phase' lane — it counts while the page calls it.
-  const viaPhaseWave = /decidePhaseWave\(/.test(TEACH_CODE) && /lane: 'phase' as const/.test(readFileSync('src/services/learnTurnDoor.ts', 'utf8'))
+  const viaPhaseWave = /decidePhaseWave\(/.test(TEACH_CODE) && /lane: 'phase'/.test(readFileSync('src/hooks/usePhaseNarration.ts', 'utf8'))
     ? new Set<LearnLane>(['phase']) : new Set<LearnLane>();
 
   it('every lane in the table is fed by live code in CoachTeachPage', () => {
@@ -96,7 +97,7 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
         || (pageCallsBoard && new RegExp(`lane: '${lane}'|teachingFact\\('${lane}'`).test(BOARD_CODE));
       expect(fed, `lane '${lane}' is in the table and nothing feeds it`).toBe(true);
     }
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind[,)]/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(cm\.fenAfter, \{ computer: 'backwardLook', text: look\.line, lane: look\.kind[,} ]/);
   });
 
   it('the producers deleted with their lanes stay deleted', () => {
@@ -231,12 +232,12 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     expect(d.pkg.kept[0]?.lines).toBeUndefined();
   });
   it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen lines and never takes the board for an earlier one', () => {
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', .*?, undefined, undefined, undefined, undefined, pendingRegisterLines\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: 'learnFact', text: registerNow, lane: 'register', .*?, lines: pendingRegisterLines \}\)/);
     // The student's best move is never drawn before they play it (prod walk 2026-10-19).
     expect(TEACH_CODE).not.toMatch(/sans: \[compareRead\.bestSan\]/);
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.namesStudentMove, c\.squares, clauseClaims\(pf, ci, probe\.fen\(\)\), c\.fen, undefined, c\.lines, c\.stakes \?\? undefined, FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: c\.computer, text: c\.text, lane, .*?, namesStudentMove: c\.namesStudentMove, squares: c\.squares, claims: clauseClaims\(pf, ci, probe\.fen\(\)\), gradeFen: c\.fen, lines: c\.lines, stakes: c\.stakes \?\? undefined, role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill \}\)/);
     expect(TEACH_CODE).toMatch(/(?:fundamental|fund)\?\.lines[,)]/);
-    expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamental\.howOnly \? undefined : fundamentalClaims, move\.fen, undefined, fundamental\.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined\)/);
+    expect(TEACH_CODE).toMatch(/lane: 'fundamental', proof: NO_PROOF\.method, namesStudentMove: false, squares: \[\], claims: fundamental\.howOnly \? undefined : fundamentalClaims, gradeFen: move\.fen, lines: fundamental\.lines, skill: FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined \}\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
     // Their move's purpose leads over a board description (hand walk 2026-09-30, …g6).
     expect(TEACH_CODE).toMatch(/c\.kind === 'stopped' \? 'theirPurpose' as const/);
@@ -446,7 +447,7 @@ describe('ONE DOOR — Learn is a posture of coachTurn (one coach P1, 2026-10-07
   it('the door decides exactly what the Learn ranking decided — nothing changed on the way in', async () => {
     const { coachTurn } = await import('./coachDecider');
     for (const beginner of [false, true]) {
-      const viaDoor = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 1, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: facts(), priorLead: null, green: null, beginner, turnHolds: new Set(), owner: 'open' });
+      const viaDoor = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 1, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: laneFacts(facts()), priorLead: null, green: null, beginner, turnHolds: new Set(), owner: 'open' });
       const direct = decideTurn(facts(), undefined, undefined, null, null, beginner);
       expect(viaDoor).toEqual(direct);
     }
@@ -518,7 +519,7 @@ describe('a REASON outranks a description (David 2026-10-13: "value why statemen
     expect(d.held).toContain('positionFacts');
   });
   it('the producer passes the role from the ONE table over its clause kind', () => {
-    expect(TEACH_CODE).toMatch(/c\.lines, c\.stakes \?\? undefined, FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
+    expect(TEACH_CODE).toMatch(/lines: c\.lines, stakes: c\.stakes \?\? undefined, role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill \}/);
   });
 });
 
@@ -771,13 +772,13 @@ describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-1
   it('Learn hands both to the door with their stake and role', () => {
     // The count reads the student's own move, priced by the turn's slip (2026-10-28).
     expect(TEACH_CODE).toMatch(/readBoard\('countMethod', \{ fenBefore: b\.fen\(\), playedSan: h\[h\.length - 2\], student: studentCC, costCp: args\.slipCp \}\)/);
-    expect(TEACH_CODE).toMatch(/lane: 'countMethod' as const, text: countRead\.text, fen: args\.fenAfterReply, squares: countRead\.squares, claims: countRead\.claims, stakes: countRead\.stakes \?\? undefined, role: countRead\.role/);
+    expect(TEACH_CODE).toMatch(/lane: 'countMethod' as const, computer: countRead\.computer, text: countRead\.text, fen: args\.fenAfterReply, squares: countRead\.squares, claims: countRead\.claims, stakes: countRead\.stakes \?\? undefined, role: countRead\.role/);
     expect(TEACH_CODE).not.toMatch(/readBoard\('countMethod', \{ fen: probe\.fen\(\)/);
     // One forwarder for every computed hint — arrows, stakes and role ride.
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, hint\.text, hint\.lane, hint\.proof, hint\.namesStudentMove, hint\.squares, hint\.claims, gradeFen, hint\.arrows, undefined, hint\.stakes \?\? undefined, hint\.role, undefined, undefined, hint\.ownMoveReason\)/);
-    expect(TEACH_CODE).not.toMatch(/queueSpokenHint\([^,\n]*, (\w+)\.text, \1\.lane, \1\.proof, \1\.squares, \1\.claims\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, \{ lane: hint\.lane, computer: hint\.computer, text: hint\.text, proof: hint\.proof, namesStudentMove: hint\.namesStudentMove, squares: hint\.squares, claims: hint\.claims, gradeFen, arrows: hint\.arrows, stakes: hint\.stakes \?\? undefined, role: hint\.role, ownMoveReason: hint\.ownMoveReason \}\)/);
+    expect(TEACH_CODE).not.toMatch(/queueSpokenHint\([^,\n]*, \{ text: (\w+)\.text, lane: \1\.lane, proof: \1\.proof, squares: \1\.squares, claims: \1\.claims \}\)/);
     // Priority-first speaks its reason with NO arrow: the arrow would be the answer.
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), pfLine, 'priorityFirst', [^\n]*, \[pf\.targetSquare\], undefined, undefined, undefined, undefined, undefined, 'teach'\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: 'buildPriorityFirst', text: pfLine, lane: 'priorityFirst', [^\n]*, squares: \[pf\.targetSquare\], role: 'teach' \}\)/);
     expect(TEACH_CODE).not.toMatch(/source: 'learn\.priorityFirst'/);
   });
 });
@@ -797,7 +798,7 @@ describe('prevention closes its loop (A-plan P2, 2026-10-17)', () => {
   });
   it('Learn remembers their prepared move and stakes + tags the stop', () => {
     expect(TEACH_CODE).toMatch(/learnMemRef\.current\.theirPrep = \{ uci: prep\.uci, fen: fenAfterReply \}/);
-    expect(TEACH_CODE).toMatch(/preventStakes\(intent\.prevents\), undefined, intent\.prevents \? 'stopped' : undefined\)/);
+    expect(TEACH_CODE).toMatch(/stakes: preventStakes\(intent\.prevents\), factKind: intent\.prevents \? 'stopped' : undefined \}\)/);
   });
 });
 
@@ -814,7 +815,7 @@ describe('a structure judgement is a reason, never an aside (A-plan P3, prod Lea
     // other squares waits behind the one that leads.
     const other = { ...sj, text: 'The bishop on g2 is your best piece.', squares: ['g2'], role: 'teach' as const };
     expect(decideTurn([lead, sj, other]).spoke.filter((l) => l === 'structureJudgement')).toHaveLength(1);
-    expect((TEACH_CODE.match(/'structureJudgement', st\.proof, NAMES_NO_MOVE, st\.squares, st\.claims, undefined, undefined, undefined, st\.stakes \?\? undefined, st\.role\)/g) ?? []).length).toBe(2);
+    expect((TEACH_CODE.match(/lane: 'structureJudgement', proof: st\.proof, namesStudentMove: false, squares: st\.squares, claims: st\.claims, stakes: st\.stakes \?\? undefined, role: st\.role \}\)/g) ?? []).length).toBe(2);
   });
 });
 
@@ -856,8 +857,8 @@ describe('rules and theory fade per skill (item 8, 2026-10-17)', () => {
   it('the rule, the fundamental and the book move carry their skill to the door', () => {
     const pf = readFileSync('src/services/positionFacts.ts', 'utf8');
     expect(pf).toMatch(/\.\.\.\(ruleSkill\(a\.rule\.id\) \? \{ skill: ruleSkill\(a\.rule\.id\) \} : \{\}\)/);
-    expect(TEACH_CODE).toMatch(/FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
-    expect(TEACH_CODE).toMatch(/FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined\)/);
+    expect(TEACH_CODE).toMatch(/role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill \}/);
+    expect(TEACH_CODE).toMatch(/skill: FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined \}\)/);
     // The book move's skill rides on its fact, from the computer (P1-6a), and
     // Learn hands the fact's own skill to the door.
     expect(readFileSync('src/services/boardComputers.ts', 'utf8')).toMatch(/skill: FUNDAMENTAL_TAG\['left-book-early'\]/);

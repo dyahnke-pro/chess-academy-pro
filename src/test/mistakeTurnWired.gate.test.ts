@@ -11,7 +11,7 @@ describe('Learn: the mistake turn', () => {
     expect(src).toMatch(/const turnLine = mistakeTurnLine\(\{/);
     // …and its habit is its own fact, in the habit step, under the turn's
     // one-habit rule (`method:` claim) — said after the loss (WO-ONE-COACH-01).
-    expect(src).toMatch(/if \(turnLine\.teachesMethod\) queueSpokenHint\(fenAfterReply, turnLine\.habit, 'mistakeHabit', NO_PROOF\.method, NAMES_NO_MOVE, \[\], \['method:mistake-turn'/);
+    expect(src).toMatch(/if \(turnLine\.teachesMethod\) queueSpokenHint\(fenAfterReply, \{ computer: 'mistakeTurnLine', text: turnLine\.habit, lane: 'mistakeHabit', proof: NO_PROOF\.method, namesStudentMove: false, squares: \[\], claims: \['method:mistake-turn'/);
     // The old inline rule recognised only two fundamentals as the grade's loss.
     expect(src).not.toMatch(/lossInGrade/);
   });

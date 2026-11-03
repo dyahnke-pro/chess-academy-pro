@@ -273,7 +273,7 @@ export interface StoryStore {
   commitKept(ply: number, board: string, kept: ReadonlyArray<{ text: string }>): void;
   /** Commit the thread of each line a wave handed its door, when the door kept
    *  the line (a wave that offers nothing ahead of its door: the phase turn). */
-  commitKeptThreads(ply: number, board: string, lines: ReadonlyArray<{ text: string; thread?: ThreadLine }>, kept: ReadonlyArray<{ text: string }>): void;
+  commitKeptThreads(ply: number, board: string, lines: ReadonlyArray<{ text: string; statesThread?: ThreadLine }>, kept: ReadonlyArray<{ text: string }>): void;
   /** The plan computers' state now — a copy, to step and hand back. */
   plans(): PlanDesk;
   /** Hand back the plan computers' state after a step at `ply`. */
@@ -707,8 +707,8 @@ export function createStoryStore(gameId: string): StoryStore {
       // the game's now, so the turn still reads them as heard.
       if (turn && spent.size > 0) turn.offers = turn.offers.filter((o) => !spent.has(o));
     },
-    commitKeptThreads(at: number, board: string, lines: ReadonlyArray<{ text: string; thread?: ThreadLine }>, kept: ReadonlyArray<{ text: string }>): void {
-      for (const l of lines) if (l.thread && keptCarries(kept, l.text)) putThread(l.thread, at, board);
+    commitKeptThreads(at: number, board: string, lines: ReadonlyArray<{ text: string; statesThread?: ThreadLine }>, kept: ReadonlyArray<{ text: string }>): void {
+      for (const l of lines) if (l.statesThread && keptCarries(kept, l.text)) putThread(l.statesThread, at, board);
     },
     plans: (): PlanDesk => copyDesk(latest()),
     setPlans(at: number, desk: PlanDesk): void {

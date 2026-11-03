@@ -53,8 +53,10 @@ describe('ply 27 — Ng5 hangs the knight, and the coach says so', () => {
   it('Learn grades the backward look on the student-move board', async () => {
     const { readFileSync } = await import('node:fs');
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(src).toMatch(/queueSpokenHint\(fenAfterReply, line, look\.kind,[\s\S]{0,420}?\?\? NO_PROOF\.description, NAMES_NO_MOVE, lookSquares, winClaim, move\.fen,/);
-    expect(src).toMatch(/queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current\.story, fundamental\.id, move\.history\.length\)\}\$\{fundamental\.diagnosis\}`, 'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamental\.howOnly \? undefined : fundamentalClaims, move\.fen, undefined, fundamental\.lines[,)]/);
-    expect(src).toMatch(/fen: gradeFen \?\? pending\.fen/);
+    expect(src).toMatch(/queueSpokenHint\(fenAfterReply, \{ computer: 'backwardLook', text: line, lane: look\.kind,[\s\S]{0,420}?\?\? NO_PROOF\.description, namesStudentMove: false, squares: lookSquares, claims: winClaim, gradeFen: move\.fen,/);
+    expect(src).toMatch(/queueSpokenHint\(fenAfterReply, \{ computer: 'learnFundamentalVerdict', text: `\$\{noteSlip\(learnMemRef\.current\.story, fundamental\.id, move\.history\.length\)\}\$\{fundamental\.diagnosis\}`, lane: 'fundamental', proof: NO_PROOF\.method, namesStudentMove: false, squares: \[\], claims: fundamental\.howOnly \? undefined : fundamentalClaims, gradeFen: move\.fen, lines: fundamental\.lines[,} ]/);
+    // The queue makes the fact on the board it names (`gradeFen`), the one
+    // the package grades it on.
+    expect(src).toMatch(/\.\.\.parts, text, fen: gradeFen \?\? fen,/);
   });
 });

@@ -10,13 +10,14 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { heatMap } from './heatMap';
 import { fadeLevelsFrom } from './fadeText';
-import { decideTurn } from './learnTurnDoor';
+
 import { planThreadTurn } from './planThread';
 import { emptyPlanThread } from './gameStory';
 import { NO_PROOF } from './proof';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
 import type { CapabilityEvidenceRecord } from './capabilityEvidence';
 import type { MisconceptionTagRecord } from '../types';
+import { decideTurn } from '../test/learnDoorFixtures';
 
 /** David's no-plan rows from his 2026-10-20 drop (evidence + game slips). */
 const DAVID = JSON.parse(readFileSync('src/test/fixtures/david-no-plan-record.json', 'utf8')) as {

@@ -8,10 +8,11 @@
  */
 import { describe, it, expect } from 'vitest';
 import { anyMoveFine, overprotect } from './speedRunReads';
-import { coachTurn, decidePhaseWave } from './coachDecider';
-import { decideTurn, spokenSentenceKeys } from './learnTurnDoor';
+import { coachTurn } from './coachDecider';
+import { spokenSentenceKeys } from './learnTurnDoor';
 import { NO_PROOF } from './proof';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
+import { laneFacts, decideTurn, decidePhaseWave } from '../test/learnDoorFixtures';
 
 const F8 = 'r1bqk1nr/pp2ppbp/2np2p1/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 2 8';
 const L8 = [{ moves: ['e4e5'], evaluation: -17, mate: null }, { moves: ['c3d5'], evaluation: -28, mate: null }, { moves: ['c4d5'], evaluation: -30, mate: null }];
@@ -52,10 +53,10 @@ describe('root cause 6 — the phase wave is part of its turn', () => {
   it('ply 13: the calm read the late wave held as "contradicts" is not spoken by the phase wave', () => {
     const calm = anyMoveFine(F8, L8)!;
     const holds = new Set<string>();
-    const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: [
+    const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: laneFacts([
       { lane: 'positionFacts', text: 'Ask it of every candidate: after it, can they take anything of yours?', fen: F8, squares: ['c4'], claims: ['srr:every-branch'], stakes: { points: 3, plies: 2 }, proof: NO_PROOF.method, namesStudentMove: NAMES_NO_MOVE },
       { lane: 'positionFacts', text: calm.idea!, fen: F8, claims: [calm.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE },
-    ], priorLead: null, green: null, beginner: false, turnHolds: holds, owner: 'open' });
+    ]), priorLead: null, green: null, beginner: false, turnHolds: holds, owner: 'open' });
     expect(late.pkg.spoken).not.toMatch(/Nothing hinges/);
     const phase = decidePhaseWave([{ text: calm.idea!, claims: [calm.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE, factKind: 'speedrun-read' }],
       F8, { fen: F8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, said: late.pkg.spoken, holds }, ctx)!;

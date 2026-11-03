@@ -4,9 +4,10 @@
 import { describe, it, expect } from 'vitest';
 import { computePositionFacts, clauseClaims } from './positionFacts';
 import { planAimKey } from './nextPlans';
-import { decideTurn } from './learnTurnDoor';
+
 import { NAMES_NO_MOVE } from './learnBoardTeaching';
 import { NO_PROOF } from './proof';
+import { decideTurn } from '../test/learnDoorFixtures';
 
 const G2 = 'rn1q1rk1/1p2bppp/3pbn2/pB2p3/4P3/1NN1BP2/PPPQ2PP/2KR3R b - - 1 11';
 

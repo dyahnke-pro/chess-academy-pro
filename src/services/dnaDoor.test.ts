@@ -1,8 +1,9 @@
 import { NO_PROOF } from './proof';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { describe, expect, it } from 'vitest';
-import { decideTurn } from './learnTurnDoor';
+
 import { buildVoicePackage, stripMoveNumbers } from './voicePackage';
+import { decideTurn } from '../test/learnDoorFixtures';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 

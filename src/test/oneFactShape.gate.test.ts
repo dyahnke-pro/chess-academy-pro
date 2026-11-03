@@ -8,8 +8,8 @@
  * registry's `BoardRead` is gone (P1-6a: every board computer's read is a
  * `CoachFact`). This gate counts every construction of each, file by file,
  * against a SHRINK-ONLY baseline: a new one fails here (emit `CoachFact`), and
- * one deleted must leave the baseline in the same commit. It reaches zero at
- * P1-6e.
+ * one deleted must leave the baseline in the same commit. It reached zero at
+ * P1-6e: every Learn, phase, Review and live fact is made by its one maker.
  *
  * A construction is read by the parser, never off a comment: an object literal
  * carrying the shape's own required keys, a string or template that starts with
@@ -37,9 +37,11 @@ const LITERAL_SHAPES: Record<string, (keys: ReadonlySet<string>) => boolean> = {
   // it; a literal with no id is no fact (P1-6b).
   TeachingHint: (k) => k.has('lane') && k.has('event') && k.has('arrows') && !k.has('id'),
   // A phase fact: words, claims, proof and the move it names — with no kind,
-  // lane, rank, id, seat or key (the shapes that carry those are the others:
-  // a registry read hands its maker a key and a seat, never a phase fact).
-  PhaseFact: (k) => ['text', 'claims', 'proof', 'namesStudentMove'].every((x) => k.has(x)) && !['kind', 'lane', 'rank', 'id', 'seat', 'key'].some((x) => k.has(x)),
+  // lane, rank, id, seat, key or computer (the shapes that carry those are the
+  // others: a registry read hands its maker a key and a seat, and a fact's
+  // parts handed to its one maker name the computer that made them — the
+  // phase report's parts go to `learnFact`, P1-6e — never a phase fact).
+  PhaseFact: (k) => ['text', 'claims', 'proof', 'namesStudentMove'].every((x) => k.has(x)) && !['kind', 'lane', 'rank', 'id', 'seat', 'key', 'computer'].some((x) => k.has(x)),
   // `beat` + `claimKey`: a story beat.
   StoryFact: (k) => k.has('beat') && k.has('claimKey'),
 };
@@ -117,6 +119,7 @@ describe('one fact shape (WO-STORY-MATRIX-01 P1-6)', () => {
       "const fact = { id, kind: 'tactic', text: t, claims: [], proof: p, namesStudentMove: false };",
       "return fact({ key, claims: [key], text: t, proof: p, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });",
       "return { ...said, id: `${p.computer}:${k}`, seat, namesStudentMove: false, lane, event: ride.event, arrows: ride.arrows };",
+      "offerFact({ computer: 'renderThesis', text: t, claims: [k], proof: NO_PROOF.description, namesStudentMove: false });",
     ].join('\n');
     const found = scanShapes(planted);
     expect(Object.fromEntries(Object.entries(found).map(([s, l]) => [s, l.length]))).toEqual({
@@ -128,12 +131,16 @@ describe('one fact shape (WO-STORY-MATRIX-01 P1-6)', () => {
   if (UPDATE) writeFileSync(BASELINE_PATH, `${JSON.stringify(Object.fromEntries(Object.entries(now).map(([k, v]) => [k, Object.fromEntries(Object.entries(v).sort(([a], [b]) => a.localeCompare(b)))])), null, 2)}\n`);
   const BASELINE = JSON.parse(readFileSync(BASELINE_PATH, 'utf8')) as Counts;
 
-  it('not vacuous: the scanner still sees the backlog it was built on', () => {
-    // The adapters' producers are all still here until P1-6e; a scan that finds
-    // none of them has stopped reading the code.
-    const total = (c: Counts): number => Object.values(c).reduce((a, m) => a + Object.values(m).reduce((x, y) => x + y, 0), 0);
-    expect(total(BASELINE)).toBeGreaterThan(0);
-    expect(total(now)).toBeGreaterThan(0);
+  it('not vacuous: the scan reads the producers the old shapes lived in', () => {
+    // The backlog is zero (P1-6e), so a scan that read nothing would pass. It
+    // must still read the whole tree, the files that made every old shape
+    // among it — the planted control above proves it would see one there.
+    const read = sources('src');
+    expect(read.length).toBeGreaterThan(1000);
+    for (const f of ['src/services/positionFacts.ts', 'src/services/learnBoardTeaching.ts', 'src/hooks/usePhaseNarration.ts', 'src/services/openingStory.ts', 'src/services/reviewFullData.ts', 'src/components/Coach/CoachTeachPage.tsx']) {
+      expect(read, f).toContain(f);
+    }
+    expect(Object.values(now).every((m) => Object.values(m).every((n) => n === 0))).toBe(true);
   });
 
   for (const shape of SHAPES) {

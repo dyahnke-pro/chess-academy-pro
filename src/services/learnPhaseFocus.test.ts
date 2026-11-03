@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { NO_PROOF } from './proof';
-import { decideTurn, LANE_PHASE, laneOutOfPhase } from './learnTurnDoor';
+import { LANE_PHASE, laneOutOfPhase } from './learnTurnDoor';
+import { decideTurn } from '../test/learnDoorFixtures';
 
 // David's Smith-Morra, after 34.Kf3 (2026-10-19): a knight-and-rook ending.
 const ENDING = '5r2/pp4k1/3p1R2/2nN2P1/4P3/5K2/8/8 b - - 0 34';

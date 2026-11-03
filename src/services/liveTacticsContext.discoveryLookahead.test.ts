@@ -98,6 +98,6 @@ describe('the spoken look-ahead says which of the student\'s moves it names (OS-
   it('the Learn threat fact carries the entry\'s naming, never a hard-coded "none"', () => {
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src).toMatch(/threatNames = up\.namesStudentMove;/);
-    expect(src).toMatch(/\[\{ namesStudentMove: threatNames, lane: 'threat' as const/);
+    expect(src).toMatch(/\[\{ namesStudentMove: namesPlayableStudentMove\(threatNames\), lane: 'threat' as const/);
   });
 });

@@ -64,7 +64,6 @@ import { planAimKey, structurePlanFact } from './nextPlans';
 import { readBoard, readKey } from './boardComputers';
 import { detectTactics } from './tacticsDetector';
 import { structurePlanEvent, planChangeSentence } from './planThread';
-import type { ThreadLine } from './gameStory';
 import { matchClauseKind, matchTacticPattern, matchTag, boostFor, type WeaknessSignal } from './weaknessSignal';
 import { factValue } from './reviewFacetRank';
 import { studentMomentBoost, isGreyDecision } from './studentMomentBoost';
@@ -565,36 +564,6 @@ function oneEach(facts: readonly ClauseFact[]): ClauseFact[] {
 /** What made a read, carried with it to the fact. */
 function madeBy<T extends object, C extends ComputerName>(x: T | null | undefined, computer: C): (T & { computer: C }) | null {
   return x ? { ...x, computer } : null;
-}
-
-/** A phase fact that names no student move — the same constant the clauses
- *  use, re-exported beside `PhaseFact` so a phase producer answers its
- *  required field from the module that defines it. */
-export { NAMES_NO_MOVE };
-
-/** One fact of a phase report, typed — never a sentence — as a surface hands
- *  it to its turn door (`decidePhaseWave`); the door reads its role off
- *  `factKind`. REQUIRED claims:
- *  without them the claim ledger can only match exact words, and a phase
- *  report that restates the turn's own read gets through (root cause 5). */
-export interface PhaseFact {
-  text: string;
-  claims: readonly string[];
-  proof: FactProof;
-  /** REQUIRED (OS-10): the student move it names, so the door can hold it —
-   *  or, for a fact the position composer made (`ClauseFact`, P1-6c), the
-   *  answer it already gave on its own board. */
-  namesStudentMove: NamesStudentMove | boolean;
-  squares?: readonly string[];
-  stakes?: FactStakes;
-  lines?: ReadonlyArray<{ fen: string; sans: readonly string[] }>;
-  /** The board this fact describes when it is not the report's own. */
-  gradeFen?: string;
-  factKind?: string;
-  skill?: string;
-  /** The plan thread the line states (the structure's plan), written to the
-   *  surface's story when its door keeps the line. */
-  thread?: ThreadLine;
 }
 
 /** THE CLAIM KEYS of the `i`th spoken clause — the ONE answer every lane that

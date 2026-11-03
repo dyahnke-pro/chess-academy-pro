@@ -16,7 +16,7 @@
 // never set by hand — four step tables that disagreed with each other is the
 // drift this file exists to end.
 //
-// A LEAF: types, tables and the doors' adapter (`toCoachFact`) — no chess.
+// A LEAF: types and tables — no chess.
 import type { FactKind } from './reviewFacetRank';
 import type { ThoughtStep } from './thoughtComposer';
 import type { AspectKind } from './reviewMoveBriefing';
@@ -338,7 +338,24 @@ export const COMPUTER_CATALOG = {
   exploreInvite: { file: 'services/gameEndReads.ts', says: 'an invitation to explore the line that would have won' },
   murkyRead: { file: 'services/gameEndReads.ts', says: 'a move where the position was too sharp to read cleanly' },
   gameArcSteps: { file: 'services/lookaheadPlan.ts', says: 'the game\'s plan arc: plans announced, carried and changed' },
-  toCoachFact: { file: 'services/coachFact.ts', says: 'a fact a door was handed in its producer\'s own shape — a Review facet, a Learn lane, a phase report — until that producer emits CoachFact itself' },
+  renderThesis: { file: 'services/teachingSelector.ts', says: 'the game\'s thesis at a phase change: where it turned and why' },
+  speakDeepestLookahead: { file: 'services/liveTacticsContext.ts', says: 'the deepest computed foresight: the line that lands furthest ahead' },
+  structureNamingLine: { file: 'services/learnBoardTeaching.ts', says: 'the pawn structure the game has reached, named with what it asks' },
+  pieceQualityLines: { file: 'services/pieceValueRead.ts', says: 'a piece the engine values far above or below its count — the good and the bad piece' },
+  opponentGapClause: { file: 'services/opponentGap.ts', says: 'the chance their move left open for the student' },
+  buildRejectedTempting: { file: 'services/playCommentary.ts', says: 'the tempting move ruled out, and the reply that refutes it' },
+  stepCharacter: { file: 'services/positionCharacter.ts', says: 'the position\'s character changing — quiet to sharp, sharp to conversion' },
+  buildCausalChain: { file: 'services/causalChain.ts', says: 'a cross-move cause: the earlier move that left the piece loose' },
+  threatAnswerTeaching: { file: 'services/learnBoardTeaching.ts', says: 'the answer to the threat the coach asked about' },
+  payoffFor: { file: 'services/learnBoardTeaching.ts', says: 'the payoff of a plan the game announced, landed by this move' },
+  openingBreak: { file: 'services/gameStory.ts', says: 'the opening\'s key pawn break, from the game\'s story' },
+  backwardLook: { file: 'services/backwardLook.ts', says: 'what the move just played allowed, and the better move that was past' },
+  mistakeTurnLine: { file: 'services/mistakeTurnLine.ts', says: 'the habit that catches the mistake next time' },
+  learnFundamentalVerdict: { file: 'services/learnFundamentalNarration.ts', says: 'the fundamental behind a slip and how to keep it' },
+  studentMovePointFact: { file: 'services/playCommentary.ts', says: 'what the student\'s move does on the board' },
+  moveOrder: { file: 'services/moveOrder.ts', says: 'the move order: the move that had to come first' },
+  learnMoveReason: { file: 'services/learnBoardTeaching.ts', says: 'the engine-read reason for a move: what it prepares or stops' },
+  learnFact: { file: 'services/learnTurnDoor.ts', says: 'a Learn line the page reads inline, not yet a computer of its own (named one by one in P1-6f)' },
 } satisfies Record<string, CatalogRow>;
 
 export type ComputerName = keyof typeof COMPUTER_CATALOG;
@@ -443,17 +460,3 @@ export interface FactMarks {
  *  one constant every producer answers with. */
 export const LOCAL_THREAD = { none: 'local' } as const;
 
-/** THE DOORS' ADAPTER (WO-STORY-MATRIX-01 P1-5) — a fact a door was handed in
- *  its producer's own shape (a live clause, a Review facet, a Learn lane, a
- *  phase report), as the one fact. Its place comes from its kind like every
- *  producer's (`placeFact`); a Learn producer that marks its fact as the
- *  reason for the student's own move places it in that step whatever its kind
- *  (`step`). The old shapes carry no plan thread (P1-8b threads the lesson
- *  composer's facts), so each caller answers `LOCAL_THREAD` until its producer
- *  emits CoachFact and answers its own. Deleted with the last old shape (P1-6). */
-export function toCoachFact<K extends CoachFactKind>(
-  f: Omit<CoachFact, 'kind' | 'group' | 'step' | 'computer'> & { kind: K; step?: ThoughtStep },
-): CoachFact & { kind: K } {
-  const placed = placeFact(f.kind, f.seat);
-  return { ...f, kind: f.kind, group: placed.group, step: f.step ?? placed.step, computer: 'toCoachFact' };
-}

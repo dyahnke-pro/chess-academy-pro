@@ -9,7 +9,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import type { ClauseFact, PositionFactsResult } from '../services/positionFacts';
-import type { PhaseFact } from '../services/coachDecider';
+import type { LaneFact } from '../services/coachDecider';
 
 const speakPackage = vi.fn((_pkg: unknown) => Promise.resolve());
 vi.mock('../services/voiceService', async () => {
@@ -60,7 +60,7 @@ const SANS = 'e4 c5 d4 cxd4 c3 dxc3 Nxc3 d6 Bc4 Nc6 Nf3 g6 O-O Bg7';
 
 describe('usePhaseNarration with a turn door', () => {
   it('hands the move-8 report to the door ONCE, every fact typed with its claim keys', async () => {
-    const door = vi.fn(async (_facts: readonly PhaseFact[], _fen: string) => 'spoken');
+    const door = vi.fn(async (_facts: readonly LaneFact[], _fen: string) => 'spoken');
     const { result } = renderHook(() => usePhaseNarration({
       getPgn: () => SANS, playerColor: 'white', getOpeningName: () => 'Sicilian Defense: Smith-Morra Gambit',
       getLiveFen: () => MOVE8, getSaid: () => new Set<string>(), getStructurePlan: () => null, speakFacts: door,
@@ -86,7 +86,7 @@ describe('usePhaseNarration with a turn door', () => {
 
 /** One mount with its door spy, on `SANS`, the live board read by `live`. */
 const mount = (live: () => string, pgn = SANS, color: 'white' | 'black' = 'white') => {
-  const door = vi.fn(async (_facts: readonly PhaseFact[], _fen: string) => 'spoken');
+  const door = vi.fn(async (_facts: readonly LaneFact[], _fen: string) => 'spoken');
   const { result } = renderHook(() => usePhaseNarration({
     getPgn: () => pgn, playerColor: color, getOpeningName: () => null,
     getLiveFen: live, getSaid: () => new Set<string>(), getStructurePlan: () => null, speakFacts: door,

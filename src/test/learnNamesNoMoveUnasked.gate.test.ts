@@ -49,7 +49,7 @@ describe('Learn names no move unasked', () => {
   });
   it('the priority line keeps the reason and holds the move and its arrow, whatever the dial (prod walk 2026-10-19)', () => {
     const page = read('components/Coach/CoachTeachPage.tsx');
-    const call = page.match(/queueSpokenHint\(probe\.fen\(\), pfLine, 'priorityFirst'[^\n]*/)?.[0] ?? '';
+    const call = page.match(/queueSpokenHint\(probe\.fen\(\), \{ computer: 'buildPriorityFirst', text: pfLine, lane: 'priorityFirst'[^\n]*/)?.[0] ?? '';
     expect(call, 'the priority-first call site moved').not.toBe('');
     expect(page).toMatch(/packageForRegister\(\{ \.\.\.pf\.hint, detail: undefined \}/);
     expect(call).not.toMatch(/pf\.arrow/);

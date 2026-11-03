@@ -46,16 +46,18 @@ import type { WeaknessSignal } from './weaknessSignal';
 import { emitCoachDecision, type LearnTurnTag } from './coachDecisionEvents';
 import type { MoveAdviceVerdict } from './nextMoveAdvice';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
-import { decideTurn, VERDICT_TURN_CP, type LaneInput, type LearnLane, type TurnDecision } from './learnTurnDoor';
+import { decideTurn, VERDICT_TURN_CP, type LaneFact, type LearnLane, type TurnDecision } from './learnTurnDoor';
 import { Chess } from 'chess.js';
 import { threatStakes } from './threatProof';
 // The Learn turn's vocabulary travels through the door, so a surface imports
 // ONE deciding module (one coach P1).
 export { buildVoicePackage, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP } from './learnTurnDoor';
-export type { FactStakes, LaneFact, LaneInput, LearnLane, SpokenLine, TurnDecision, VoicePackage, VoiceFactKind } from './learnTurnDoor';
+export type { FactStakes, LaneFact, LearnFactParts, LearnLane, SpokenLine, TurnDecision, VoicePackage, VoiceFactKind } from './learnTurnDoor';
 // The phase report's wave of a turn — the same door, one call per report.
 export { decidePhaseWave } from './learnTurnDoor';
-export type { LiveTurn, PhaseFact } from './learnTurnDoor';
+// THE ONE MAKER of a Learn fact, called where the fact is made (P1-6e).
+export { learnFact } from './learnTurnDoor';
+export type { LiveTurn } from './learnTurnDoor';
 // A fact's role (teach / describe) — surfaces read it through this door, never reviewFacetRank directly.
 export { FACT_ROLE } from './reviewFacetRank';
 // A claim's key is the door's vocabulary — surfaces attach it through the door.
@@ -99,7 +101,7 @@ interface MomentRequest {
 }
 interface LearnTurnRequest {
   posture: 'learn';
-  facts: readonly LaneInput[];
+  facts: readonly LaneFact[];
   alreadySaid?: string;
   priorKeys?: ReadonlySet<string>;
   priorLead?: { lane: LearnLane; squares: readonly string[] } | null;

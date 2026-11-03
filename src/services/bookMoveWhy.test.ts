@@ -65,7 +65,8 @@ describe('the book-move why routes through the door on the DNA "but" beat (David
     const { __setLocalDbForTests } = await import('./masterPlayLookup');
     const { positionFen } = await import('./masterPlayCache');
     const { readBoard } = await import('./boardComputers');
-    const { decideTurn, DNA_BEAT } = await import('./learnTurnDoor');
+    const { DNA_BEAT } = await import('./learnTurnDoor');
+    const { decideTurn } = await import('../test/learnDoorFixtures');
     expect(DNA_BEAT.bookMove).toBe('but');
     // SYNTHETIC counts — what is tested is the routing, not the theory: every
     // book ply played, then Ne2 the book move where the student plays Nf3.
@@ -101,7 +102,7 @@ describe('the book-move line is graded on the board it speaks of (prod Learn aud
     const { __setLocalDbForTests } = await import('./masterPlayLookup');
     const { positionFen } = await import('./masterPlayCache');
     const { readBoard } = await import('./boardComputers');
-    const { decideTurn } = await import('./learnTurnDoor');
+    const { decideTurn } = await import('../test/learnDoorFixtures');
     // Scandinavian: …Nc6 where Bh5 is the book, then White takes hxg4.
     const played = ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qa5', 'd4', 'Nf6', 'Nf3', 'Bg4', 'h3', 'Nc6'];
     const positions: Record<string, Array<{ san: string; games: number }>> = {};

@@ -160,6 +160,9 @@ describe('ONE door — no surface composes the decision itself', () => {
     for (const p of walk(join(process.cwd(), 'src'))) {
       const rel = p.slice(process.cwd().length + 1);
       if (INNER.has(rel)) continue;
+      // Test support is no surface: the fixtures that make a test's facts the
+      // way a producer does call the door's own functions, as the tests do.
+      if (rel.startsWith('src/test/')) continue;
       const code = readFileSync(p, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n');
       // Only the doors' own functions — a component's local `decide` (the
       // consent modal's yes/no) is not a door.
