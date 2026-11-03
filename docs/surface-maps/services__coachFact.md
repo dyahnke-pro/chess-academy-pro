@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**370 lines · 16 exports · 18 importers · 4 tests · 0 audits**
+**405 lines · 16 exports · 18 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -75,12 +75,13 @@
 - `src/services/learnTurnDoor.ts:1077`
 - `src/services/learnTurnDoor.ts:1140`
 
-### `placeFact` (function) — 6 call sites
+### `placeFact` (function) — 7 call sites
 - `src/services/boardComputers.ts:550`
 - `src/services/danyaBench.measure.test.ts:61`
 - `src/services/moveThoughtFacts.ts:125`
 - `src/services/moveThoughtFacts.ts:227`
 - `src/services/openingStory.ts:363`
+- `src/services/positionFacts.ts:518`
 - `src/services/teachingFact.ts:89`
 
 ### `COMPUTER_CATALOG` (const) — 0 call sites
@@ -101,10 +102,9 @@
 ### `LOCAL_THREAD` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `toCoachFact` (function) — 4 call sites
+### `toCoachFact` (function) — 3 call sites
 - `src/services/coachFeatureService.ts:2771`
 - `src/services/learnTurnDoor.ts:572`
-- `src/services/positionFacts.ts:504`
 - `src/test/doorFact.ts:19`
 
 ## Tests

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**596 lines · 17 exports · 11 importers · 4 tests · 2 audits**
+**596 lines · 17 exports · 12 importers · 4 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,12 +22,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachActuator.test.ts`
 - `src/services/coachActuator.walkthrough.test.ts`
 - `src/services/coachHands.test.ts`
+- `src/services/reviewReminders.ts`
 - `src/services/spokenSquares.test.ts`
 
 ## Exports and every call site
 
 ### `registerStrengthSetter` (function) — 3 call sites
-- `src/App.tsx:165`
+- `src/App.tsx:168`
 - `src/services/coachHands.test.ts:440`
 - `src/services/coachHands.test.ts:450`
 
@@ -44,7 +45,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `registerCoachNavigate` (function) — 12 call sites
-- `src/App.tsx:157`
+- `src/App.tsx:160`
 - `src/services/coachActuator.test.ts:20`
 - `src/services/coachActuator.test.ts:27`
 - `src/services/coachActuator.test.ts:33`
@@ -58,7 +59,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:416`
 
 ### `clearCoachNavigate` (function) — 6 call sites
-- `src/App.tsx:158`
+- `src/App.tsx:161`
 - `src/services/coachActuator.test.ts:11`
 - `src/services/coachActuator.test.ts:57`
 - `src/services/coachActuator.walkthrough.test.ts:18`
@@ -66,8 +67,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:375`
 
 ### `registerCoachHands` (function) — 35 call sites
-- `src/components/Coach/CoachGameReview.tsx:803`
-- `src/components/Coach/CoachTeachPage.tsx:2522`
+- `src/components/Coach/CoachGameReview.tsx:789`
+- `src/components/Coach/CoachTeachPage.tsx:3004`
 - `src/components/Coach/GameChatPanel.tsx:268`
 - `src/services/coachActuator.walkthrough.test.ts:27`
 - `src/services/coachHands.test.ts:47`
@@ -112,13 +113,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/spokenSquares.test.ts:23`
 - `src/services/spokenSquares.test.ts:53`
 
-### `coachNavigate` (function) — 6 call sites
+### `coachNavigate` (function) — 7 call sites
 - `src/coach/coachService.ts:1075`
 - `src/services/coachActuator.test.ts:15`
 - `src/services/coachActuator.test.ts:22`
 - `src/services/coachActuator.test.ts:28`
 - `src/services/coachActuator.test.ts:50`
 - `src/services/coachActuator.test.ts:59`
+- `src/services/reviewReminders.ts:211`
 
 ### `coachSetBoardPosition` (function) — 3 call sites
 - `src/services/coachActuator.test.ts:35`
@@ -147,10 +149,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/coachService.ts:1065`
 - `src/coach/coachService.ts:1085`
 - `src/components/Board/VoiceChatMic.tsx:313`
-- `src/components/Coach/CoachGameReview.tsx:2635`
-- `src/components/Coach/CoachTeachPage.tsx:3826`
+- `src/components/Coach/CoachGameReview.tsx:2628`
+- `src/components/Coach/CoachTeachPage.tsx:4320`
 - `src/components/Coach/GameChatPanel.tsx:700`
-- `src/hooks/useLiveCoach.ts:313`
+- `src/hooks/useLiveCoach.ts:318`
 - `src/services/coachActuator.walkthrough.test.ts:28`
 - `src/services/coachActuator.walkthrough.test.ts:38`
 - `src/services/coachActuator.walkthrough.test.ts:50`
@@ -193,8 +195,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `actionForCommand` (function) — 13 call sites
 - `src/components/Board/VoiceChatMic.tsx:298`
-- `src/components/Coach/CoachGameReview.tsx:2629`
-- `src/components/Coach/CoachTeachPage.tsx:3805`
+- `src/components/Coach/CoachGameReview.tsx:2622`
+- `src/components/Coach/CoachTeachPage.tsx:4299`
 - `src/components/Coach/GameChatPanel.tsx:659`
 - `src/services/coachHands.test.ts:37`
 - `src/services/coachHands.test.ts:251`

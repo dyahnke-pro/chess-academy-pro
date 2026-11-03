@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2108 lines · 15 exports · 40 importers · 45 tests · 3 audits**
+**2131 lines · 19 exports · 40 importers · 45 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -89,14 +89,24 @@
 - `src/services/positionFacts.test.ts:15`
 - `src/services/positionFacts.test.ts:16`
 
-### `ClauseItem` (interface) — 0 call sites
+### `ClauseFact` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
+
+### `orderByValue` (function) — 4 call sites
+- `src/coach/boardTurnAnswer.ts:146`
+- `src/coach/boardTurnAnswer.ts:148`
+- `src/coach/boardTurnAnswer.ts:149`
+- `src/services/chatBoardRead.ts:105`
+
+### `clauseValue` (function) — 2 call sites
+- `src/services/positionFacts.weakness.test.ts:26`
+- `src/services/positionFacts.weakness.test.ts:71`
 
 ### `PhaseFact` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11315`
+- `src/components/Coach/CoachTeachPage.tsx:11316`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:468`
 - `src/services/raceAimOneVoice.test.ts:19`
@@ -116,7 +126,7 @@
 
 ### `computePositionFacts` (function) — 108 call sites
 - `src/coach/boardTurnAnswer.ts:136`
-- `src/components/Coach/CoachTeachPage.tsx:11170`
+- `src/components/Coach/CoachTeachPage.tsx:11171`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:271`
 - `src/hooks/usePhaseNarration.ts:430`
@@ -186,24 +196,24 @@
 - `src/services/positionFacts.test.ts:347`
 - `src/services/positionFacts.test.ts:368`
 - `src/services/positionFacts.test.ts:384`
-- `src/services/positionFacts.test.ts:392`
-- `src/services/positionFacts.test.ts:404`
-- `src/services/positionFacts.test.ts:410`
-- `src/services/positionFacts.test.ts:419`
-- `src/services/positionFacts.test.ts:429`
-- `src/services/positionFacts.test.ts:442`
-- `src/services/positionFacts.test.ts:455`
-- `src/services/positionFacts.test.ts:468`
-- `src/services/positionFacts.test.ts:473`
-- `src/services/positionFacts.test.ts:484`
-- `src/services/positionFacts.test.ts:488`
-- `src/services/positionFacts.test.ts:492`
-- `src/services/positionFacts.test.ts:500`
-- `src/services/positionFacts.test.ts:510`
-- `src/services/positionFacts.weakness.test.ts:22`
-- `src/services/positionFacts.weakness.test.ts:48`
-- `src/services/positionFacts.weakness.test.ts:62`
-- `src/services/positionFacts.weakness.test.ts:63`
+- `src/services/positionFacts.test.ts:391`
+- `src/services/positionFacts.test.ts:403`
+- `src/services/positionFacts.test.ts:409`
+- `src/services/positionFacts.test.ts:418`
+- `src/services/positionFacts.test.ts:428`
+- `src/services/positionFacts.test.ts:441`
+- `src/services/positionFacts.test.ts:454`
+- `src/services/positionFacts.test.ts:467`
+- `src/services/positionFacts.test.ts:472`
+- `src/services/positionFacts.test.ts:483`
+- `src/services/positionFacts.test.ts:487`
+- `src/services/positionFacts.test.ts:491`
+- `src/services/positionFacts.test.ts:499`
+- `src/services/positionFacts.test.ts:509`
+- `src/services/positionFacts.weakness.test.ts:24`
+- `src/services/positionFacts.weakness.test.ts:52`
+- `src/services/positionFacts.weakness.test.ts:66`
+- `src/services/positionFacts.weakness.test.ts:67`
 - `src/services/positionFactsRegistry.test.ts:9`
 - `src/services/positionReadComposer.ts:130`
 - `src/services/raceAimOneVoice.test.ts:16`
@@ -214,7 +224,7 @@
 - `src/test/decisionRows.baseline.test.ts:74`
 - `src/test/decisionRows.baseline.test.ts:112`
 - `src/test/everySurfaceSpeaks.test.ts:117`
-- `src/test/learnNamesNoMoveOs11.gate.test.ts:248`
+- `src/test/learnNamesNoMoveOs11.gate.test.ts:250`
 - `src/test/teach02Wired.test.ts:85`
 - `src/test/teach02Wired.test.ts:94`
 - `src/test/teach02Wired.test.ts:108`
@@ -225,9 +235,15 @@
 - `src/test/teach02Wired.test.ts:139`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11471`
+- `src/components/Coach/CoachTeachPage.tsx:11472`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
+
+### `pinPressureConcept` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `guardRemovalConcept` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `afterLine` (function) — 5 call sites
 - `src/services/positionFacts.afterLine.test.ts:13`
@@ -250,7 +266,7 @@
 - `src/services/conceptKey.ts:11`
 - `src/services/danyaBehaviors.ts:526`
 - `src/services/kingAttackReads.ts:661`
-- `src/services/learnBoardTeaching.ts:511`
+- `src/services/learnBoardTeaching.ts:499`
 - `src/services/looseStill.test.ts:36`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`
