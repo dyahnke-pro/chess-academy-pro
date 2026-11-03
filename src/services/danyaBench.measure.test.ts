@@ -63,6 +63,7 @@ function choiceFact(text: string, fen: string): ThoughtFact {
   };
 }
 import type { IdeaKind } from './ideaKind';
+import { facetLines, facetRecords } from '../test/reviewFacetLines';
 
 // ── the corpus and the cached reads ─────────────────────────────────────────
 
@@ -394,7 +395,7 @@ const reviewFacets = once((p: Position): string[] => {
   const bestSan = best ? sansOf(p.fenBefore, [best.uci], 1).at(0) ?? null : null;
   const replySan = p.reply ? sansOf(p.fenAfter, [p.reply.uci], 1).at(0) ?? null : null;
   const playedUci = uciOf(p.fenBefore, p.san);
-  return computeMoveFacets({
+  return facetLines(computeMoveFacets({
     fenBefore: p.fenBefore, fenAfter: p.fenAfter, san: p.san, ply: p.history.length,
     moverColor: p.mover === 'w' ? 'white' : 'black', playerColor: p.student === 'w' ? 'white' : 'black',
     studentColorWB: p.student, evaluation: p.reply ? evalOf(p.reply) : null,
@@ -403,7 +404,7 @@ const reviewFacets = once((p: Position): string[] => {
     secondReads: NO_SECOND_READ, replyBestSan: replySan, replyEvaluation: p.reply ? evalOf(p.reply) : null,
     prevCap: p.prev, allSans: [...p.note.lineSan, ...p.ahead], forcedRunStartPly: null, seenFundamentals: new Set(),
     teaching: NO_TEACHING_CONTEXT,
-  });
+  }));
 });
 
 /** The live composer on the board after the move, asked (chat's posture):

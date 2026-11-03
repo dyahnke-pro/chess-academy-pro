@@ -280,6 +280,9 @@ interface CoachDecision {
   rank: number;
   /** The facts that speak, most-important-first. Empty when `speak` is false. */
   spoken: string[];
+  /** The method beat among them, closing the turn — the habit that finds this
+   *  next time — or null when none was earned. */
+  method: string | null;
   /** Every fact that did not, and why. */
   quiet: QuietFact[];
   /** Spoken facts said SHORTER because the student has shown the skill
@@ -391,7 +394,7 @@ export function decide(
   method?: MethodContext,
 ): CoachDecision {
   const { importance, speaks } = judgeMoment(signals, posture, student.momentBoost ?? NO_BOOST);
-  const base = { tier: importance.tier, rank: importance.rank, faded: new Map<string, FadeLevel>() as ReadonlyMap<string, FadeLevel> };
+  const base = { tier: importance.tier, rank: importance.rank, faded: new Map<string, FadeLevel>() as ReadonlyMap<string, FadeLevel>, method: null };
 
   // 1 — THE MOMENT, but ONLY where silence is the default. On a 'walk' the
   // student asked for the sequence, so an unimportant moment is a QUIETER beat,
@@ -500,6 +503,7 @@ export function decide(
   const spokenFacts = [...support.spoken].sort((x, y) => ((stepOrder.get(x.id) ?? 0) - (stepOrder.get(y.id) ?? 0)) || ((order.get(y.id) ?? 0) - (order.get(x.id) ?? 0)));
   const spoken = spokenFacts.map((f) => f.text);
   let methodSpoke = false;
+  let methodBeat: string | null = null;
   // 6 — THE METHOD, last. Ranked lowest so it CLOSES the beat: the board fact,
   // then the principle it broke, then the habit that finds it next time.
   if (method) {
@@ -512,7 +516,7 @@ export function decide(
       { ...method, tier: importance.tier, habitNeed: method.habitNeed ?? habitNeedFrom(student.weaknesses), coveredHabits },
       method.ply ?? 0,
     );
-    if (beat) { spoken.push(`[method] ${beat}`); methodSpoke = true; }
+    if (beat) { spoken.push(beat); methodBeat = beat; methodSpoke = true; }
   }
   // A ply whose every fact was a description with no teaching point to
   // support says nothing — and says WHICH gate closed it, rather than
@@ -549,7 +553,7 @@ export function decide(
   const teaches = methodSpoke || spokenFacts.some((f) => roleOf(f) === 'teach');
   // Said shorter — keyed by the words the surface renders.
   const fadedSpoken = new Map([...faded].filter(([f]) => spokenFacts.includes(f)).map(([f, l]) => [f.text, l] as const));
-  return emit(posture, { ...base, speak: true, reason: 'spoken', teaches, spoken, quiet: quietAll, faded: fadedSpoken, ...proofLedger(spokenFacts) }, student, methodSpoke, bundle.facts, spokenFacts[0] ?? null);
+  return emit(posture, { ...base, method: methodBeat, speak: true, reason: 'spoken', teaches, spoken, quiet: quietAll, faded: fadedSpoken, ...proofLedger(spokenFacts) }, student, methodSpoke, bundle.facts, spokenFacts[0] ?? null);
 }
 
 /** WHICH HABITS THIS STUDENT KEEPS BREAKING, read off the weakness spine.

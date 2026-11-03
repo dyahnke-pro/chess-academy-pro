@@ -44,9 +44,10 @@ import { recordedMoveCost } from './moveCost';
 import { trickSidestepped } from './forkTrick';
 import { findProphylaxis, prophylaxisProof } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
-import { lineProof, lineProofFromUci, legalLineProof, proofForStudent, squaresProof, isProof, type FactProof, type Proof } from './proof';
+import { lineProof, lineProofFromUci, legalLineProof, proofForStudent, squaresProof, isProof, NO_PROOF, type Proof } from './proof';
 import { readBoardAll, readKey } from './boardComputers';
-import type { CoachFact } from './coachFact';
+import type { CoachFact, ComputerName } from './coachFact';
+import { reviewFacet, asIncoming, inRuleFamily, type ReviewFacet } from './reviewFacet';
 import type { FacetTag } from './reviewFacetRank';
 import { tradeLedger } from './tempoCount';
 import { notYetPlayed } from './notYetPlayed';
@@ -292,55 +293,39 @@ const EVAL_FACET_MIN_CP = 80;
 
 export function computeMoveFacets(
   ctx: MoveFactContext,
-  outSquares?: Map<string, readonly string[]>,
-  /** Facts describing something the OPPONENT is doing TO the student, taken from
-   *  the detector's own `beneficiary` — the signal `factSelector` uses to decide
-   *  that their battery outranks your pin when both describe one diagonal.
-   *  Coupled here, never inferred from the prose (G0). */
-  outIncoming?: Set<string>,
-  /** WHAT EACH FACET IS WORTH ON THE BOARD — coupled here from the computer
-   *  that produced it (`factStakes.ts`); the door orders by it. */
-  outStakes?: Map<string, FactStakes>,
-  /** A facet's STRUCTURED identity, for the say-once commits after the door:
-   *  `motif:<tactic type>` (the transfer ledger, S6) and `rule:<principle id>`
-   *  (each opening principle once, S2). Coupled here, never read off prose. */
-  outIdentity?: Map<string, string>,
   /** The reason the verdict gave for the better move, exactly as spoken, so a
    *  later pass reading a fresher line of the SAME ply can replace it — one
    *  ply, one line (clean-pass review walk 2026-10-04, G1 15.Ba2). */
   outVerdictReason?: { text: string | null; playedLine?: boolean; punishSan?: string },
-  /** THE PROOF each conclusion rests on, coupled here from the computer that
-   *  found it (one-coach P3) — the door counts a conclusion that arrives
-   *  without one. */
-  outProofs?: Map<string, FactProof>,
-  /** WHAT A FACET CLAIMS beyond the relation its squares draw (the loose piece
-   *  a board line ends on), coupled here so the door never reads it off prose. */
-  outClaims?: Map<string, readonly string[]>,
-): string[] {
-  const facets: string[] = [];
-  // Record the KEY SQUARES a facet named, keyed by the facet text, so the
-  // review can lead the eye with a yellow highlight coupled from the COMPUTER's
-  // own squares — never scraped from the prose (David 2026-09-13 "add highlights
-  // to all spoken key squares"; G0 coupling). Only facets with a clean square
-  // variable in scope record; prose-only facets (badbishop/worst) don't, so a
+): ReviewFacet[] {
+  // EVERY FACT OF THE MOVE IS THE ONE FACT (WO-STORY-MATRIX-01 P1-6d): made by
+  // the computer that found it, with what that computer knows on it — the KEY
+  // SQUARES it names (the yellow highlight leads the eye from the computer's
+  // own squares, never scraped from prose — David 2026-09-13), WHOSE it is
+  // (the detector's own `beneficiary`: their battery outranks your pin on one
+  // diagonal, G0), what it is WORTH (`factStakes.ts`, the door orders by it),
+  // its PROOF (one-coach P3), what it CLAIMS beyond its squares, and its
+  // say-once identity. A fact with no clean square records none, so a
   // highlight never appears without a board-true square behind it.
-  const recIncoming = (facet: string, beneficiary: 'w' | 'b' | undefined): void => {
-    if (!outIncoming || !beneficiary || !ctx.studentColorWB) return;
-    if (beneficiary !== ctx.studentColorWB) outIncoming.add(facet);
+  const facets: ReviewFacet[] = [];
+  const made = (computer: ComputerName, tag: FacetTag, text: string): ReviewFacet => reviewFacet(computer, tag, text, ctx.fenAfter, ctx.fenBefore);
+  const put = (computer: ComputerName, tag: FacetTag, text: string): ReviewFacet => { const f = made(computer, tag, text); facets.push(f); return f; };
+  const recIncoming = (facet: ReviewFacet, beneficiary: 'w' | 'b' | undefined): void => {
+    if (!beneficiary || !ctx.studentColorWB) return;
+    if (beneficiary !== ctx.studentColorWB) asIncoming(facet);
   };
-  const recProof = (facet: string, proof: Proof | null | undefined): void => {
-    if (outProofs && proof) outProofs.set(facet, proof);
+  const recProof = (facet: ReviewFacet, proof: Proof | null | undefined): void => {
+    if (proof) facet.proof = proof;
   };
-  const recStakes = (facet: string, stakes: FactStakes | null | undefined): void => {
-    if (outStakes && stakes && stakes.points > 0) outStakes.set(facet, stakes);
+  const recStakes = (facet: ReviewFacet, stakes: FactStakes | null | undefined): void => {
+    if (stakes && stakes.points > 0) facet.stakes = stakes;
   };
   // …and on WHOSE idea it is: "your rook pins their pawn — you saw this idea on
   // move 15" referred back to THEIR pin of move 15 (hand walk 2000 review).
-  const recMotif = (facet: string, motif: string, squares: readonly string[], side?: 'w' | 'b' | null): void => { outIdentity?.set(facet, `motif:${motif}@${side ?? '-'}:${squares.join('')}`); };
-  const recSquares = (facet: string, squares: ReadonlyArray<string | null | undefined>): void => {
-    if (!outSquares) return;
-    const clean = squares.filter((s): s is string => typeof s === 'string' && /^[a-h][1-8]$/.test(s));
-    if (clean.length) outSquares.set(facet, [...new Set(clean)]);
+  const recMotif = (facet: ReviewFacet, motif: string, squares: readonly string[], side?: 'w' | 'b' | null): void => { facet.identity = `motif:${motif}@${side ?? '-'}:${squares.join('')}`; };
+  const recSquares = (facet: ReviewFacet, squares: ReadonlyArray<string | null | undefined>): void => {
+    const clean = squares.filter((sq): sq is string => typeof sq === 'string' && /^[a-h][1-8]$/.test(sq));
+    if (clean.length) facet.squares = [...new Set(clean)];
   };
   const { fenBefore, fenAfter, san, ply, moverColor, playerColor, studentColorWB } = ctx;
   const isStudent = playerColor ? moverColor === playerColor : false;
@@ -351,7 +336,7 @@ export function computeMoveFacets(
 
   // ── 1. MOVE MECHANICS + MATERIAL + STRUCTURE DELTAS (the rich PlyFacts) ──
   const mech = plyFactsForMove(fenBefore, san, ctx.prevCap);
-  if (mech) facets.push(`[move] ${seatMoveSubject(mech, isStudent)}`);
+  if (mech) put('plyFactsForMove', 'move', seatMoveSubject(mech, isStudent));
 
   // ── 1b. WHAT THE MOVE NOW DOES — the per-move influence delta (David
   // 2026-07-22: "Each move changes the position and provides new threats and
@@ -443,17 +428,17 @@ export function computeMoveFacets(
       const safe = lineRetakes ?? (engineSaysCostly || signedLegalSeeFor(fenAfter, tradeSq as Square, recapturer) >= 0);
       const costlyGrab = lineRetakes === false && engineSaysCostly;
       const lost = NOUN[mv.captured ?? ''] ?? 'piece';
-      const f = !what || costlyGrab
+      const said = !what || costlyGrab
         ? isStudent
-          ? `[trade] You take on ${tradeSq} — that was their ${theirs}.`
-          : `[trade] They take on ${tradeSq} — that was your ${theirs}.`
+          ? `You take on ${tradeSq} — that was their ${theirs}.`
+          : `They take on ${tradeSq} — that was your ${theirs}.`
         : safe
         ? isStudent
-          ? `[trade] You take on ${tradeSq}, and they can take back — ${what}.`
-          : `[trade] They take on ${tradeSq}, and you can take back — ${what}.`
+          ? `You take on ${tradeSq}, and they can take back — ${what}.`
+          : `They take on ${tradeSq}, and you can take back — ${what}.`
         : isStudent
-          ? `[trade] You take on ${tradeSq} — taking back would cost them more than the ${lost}.`
-          : `[trade] They take on ${tradeSq} — taking back would cost you more than the ${lost}.`;
+          ? `You take on ${tradeSq} — taking back would cost them more than the ${lost}.`
+          : `They take on ${tradeSq} — taking back would cost you more than the ${lost}.`;
       // HOW GOOD THE TRADE IS (David 2026-09-27: "how well the trade benefits
       // the user"). The same computer Learn speaks from; the engine has the
       // last word through the mover's own cost on this ply.
@@ -467,8 +452,7 @@ export function computeMoveFacets(
       // least-valuable order — the exchange itself, exact (`seeSequence`).
       const tradeProof = lineProof({ fen: fenBefore, sans: [san, ...seeSequence(fenAfter, tradeSq as Square)] }, lineSeatAt(fenBefore, ctx.studentColorWB), true);
       if (judged) {
-        const jf = `[trade] ${judged.text}`;
-        facets.push(jf);
+        const jf = put('readTrade', 'trade', judged.text);
         recSquares(jf, judged.squares);
         recProof(jf, tradeProof);
       } else if (!what || costlyGrab) {
@@ -476,10 +460,10 @@ export function computeMoveFacets(
         // audit 2026-10-14: "They take on d4 — that was your pawn." spoke bare,
         // restating the board). Filed as one, with its square, so it speaks
         // only beside a teaching point on that square (the decider's support).
-        const df = f.replace(/^\[trade\]/, '[delta]');
-        facets.push(df);
+        // A grab nobody takes back is what the move changed, not a trade.
+        const df = put('settledExchange', 'delta', said);
         recSquares(df, [tradeSq]);
-      } else if (restPart || !safe) { facets.push(f); recProof(f, tradeProof); }
+      } else if (restPart || !safe) { const f = put('settledExchange', 'trade', said); recProof(f, tradeProof); }
       // A PLAIN EVEN TRADE ("They take on e5, and you can take back — a pawn
       // trade") restates the move (lead 2026-10-20, Review noise walk): said
       // only when material changes hands or the take-back costs more.
@@ -488,9 +472,9 @@ export function computeMoveFacets(
     // A PIECE'S NEW REACH THAT HITS NOTHING ("now joins the fight for d4,
     // holding back the enemy d-pawn") describes the board without a why
     // (lead 2026-10-20): only a reach that hits a piece is said.
-    const f = `[does] ${influence}`;
+    const f = made('describeMoveInfluence', 'does', influence);
     facets.push(f); recSquares(f, influenceSquares);
-    if (influenceShape.loose) outClaims?.set(f, [`loose:${influenceShape.loose}`]);
+    if (influenceShape.loose) f.claims = [`loose:${influenceShape.loose}`];
   }
 
   // ── 1c. THE FULL BOARD DELTA — every other relevant change the move caused
@@ -507,7 +491,7 @@ export function computeMoveFacets(
   const deltaSquares = new Map<string, readonly string[]>();
   for (const clause of computeBoardDelta(fenBefore, san, deltaSquares)) {
     const seated = ctx.studentColorWB ? seatPieceReferences(clause, fenAfter, ctx.studentColorWB) : clause;
-    const f = `[delta] ${openSentence(seated)}.`;
+    const f = made('computeBoardDelta', 'delta', `${openSentence(seated)}.`);
     facets.push(f);
     recSquares(f, deltaSquares.get(clause) ?? []);
   }
@@ -542,7 +526,7 @@ export function computeMoveFacets(
   // correction is said, and it rides the verdict when the move is still a
   // fault, or stands alone when the deeper read says it was fine.
   const heardNow = ctx.heardVerdict && isStudent ? correctionAgainstHeard(ctx.heardVerdict, ctx.classification, san) : null;
-  if (heardNow && !heardNow.ridesVerdict) facets.push(`[quality] ${heardNow.text}`);
+  if (heardNow && !heardNow.ridesVerdict) put('correctionAgainstHeard', 'quality', heardNow.text);
   if (ctx.classification && ctx.classification !== 'good' && ctx.classification !== 'book' && !insideStudentForcedMate) {
     // COST IS ONLY A COST ON A MOVE THAT COST SOMETHING (found 2026-09-16 by
     // reading the shipped review of David's Alapin: ply 31 spoke "that was a
@@ -670,8 +654,7 @@ export function computeMoveFacets(
     // — they come out two pawns up"); review dropped it.
     const tailSaid = consequence && ew?.tail ? (opponentMoved ? seatPieces(toOtherSeat(ew.tail)) : seatPieces(ew.tail)) : '';
     const praiseBit = positive ? praiseWhy(ctx.classification, ctx.preMoveEval, ctx.evaluation, ctx.moverColor) : '';
-    const qf = `[${positive ? 'praise' : 'quality'}] ${verdictSentence(ctx.classification, isStudent, san)}${swingBit}${betterBit}${praiseBit}.${heardNow?.ridesVerdict ? ` ${heardNow.text}` : ''}${failedSaid ? ` ${failedSaid}` : ''}${tailSaid}`;
-    facets.push(qf);
+    const qf = put('errorWhy', positive ? 'praise' : 'quality', `${verdictSentence(ctx.classification, isStudent, san)}${swingBit}${betterBit}${praiseBit}.${heardNow?.ridesVerdict ? ` ${heardNow.text}` : ''}${failedSaid ? ` ${failedSaid}` : ''}${tailSaid}`);
     // The verdict's proof is the line its words name: the better move's own
     // line when the reason came from it, the line after the move when the
     // punishment did.
@@ -697,9 +680,10 @@ export function computeMoveFacets(
     const missed = isStudent && bestSan && fellShort ? landedTacticFor(fenBefore, bestSan) : null;
     const inv = missed ? tacticInvariant(missed) : null;
     if (missed && inv && !ctx.teaching.principlesTaught.has(definitionKey(missed))) {
-      const rf = `[rule] Remember — ${inv.full}`;
+      const rf = made('tacticInvariant', 'rule', `Remember — ${inv.full}`);
       facets.push(rf);
-      outIdentity?.set(rf, `rule:${definitionKey(missed)}`);
+      rf.identity = `rule:${definitionKey(missed)}`;
+      inRuleFamily(rf, definitionKey(missed));
       try {
         const bm = new Chess(fenBefore).move(bestSan ?? '');
         if (bm) recSquares(rf, [bm.from, bm.to]);
@@ -711,14 +695,14 @@ export function computeMoveFacets(
   // the uncapped inventory carries it and the capped cascade can lead with it.
   if (ctx.fundamentals && ctx.fundamentals.length > 0) {
     const verdict = renderFundamentalVerdict(ctx.fundamentals, { ply, seen: ctx.seenFundamentals, replySan: ctx.allSans[ply] ?? null });
-    const pf = `[principle] ${verdict.diagnosis}`;
+    const pf = made('renderFundamentalVerdict', 'principle', verdict.diagnosis);
     facets.push(pf);
     // The rule explains the cost the move paid, so it is worth that cost.
     if (negativeClass) recStakes(pf, costStakes(swing));
     // ITS HOW IS THE HABIT STEP (WO-ONE-COACH-01): a fact of its own, so the
     // door says it last — after the line it is about, never inside the
     // diagnosis that leads the beat.
-    if (verdict.how) facets.push(`[how] ${verdict.how}`);
+    if (verdict.how) put('renderFundamentalVerdict', 'how', verdict.how);
   }
 
   // ── 2b. EVAL ATTRIBUTION — when the bar visibly moves on an UNFLAGGED ply,
@@ -757,7 +741,7 @@ export function computeMoveFacets(
       const mag = (Math.abs(d) / 100).toFixed(1);
       const materialExplains = materialStudentPov !== 0 && Math.abs(d - materialStudentPov) < Math.abs(d) / 2;
       if (materialExplains) {
-        facets.push(`[eval] The eval bar moves ${mag} ${dir} — material changed hands, and the count above is the reason.`);
+        put('computeMoveFacets', 'eval', `The eval bar moves ${mag} ${dir} — material changed hands, and the count above is the reason.`);
       } else {
         const fired: string[] = [];
         // A reason must point the SAME WAY as the swing (walk 5, R20). The
@@ -767,9 +751,9 @@ export function computeMoveFacets(
         // move creates". A swing against the mover is explained, if at all, by
         // what the move gave up.
         const towardMover = (moverWB === studentColorWB) === (d > 0);
-        if (towardMover && facets.some((f) => f.startsWith('[does]'))) fired.push('the new pressure the move creates');
-        if (facets.some((f) => f.startsWith('[delta]'))) fired.push('the lines it opened and what it gave up');
-        if (towardMover && facets.some((f) => f.startsWith('[tactic]'))) fired.push('the tactic now sitting on the board');
+        if (towardMover && facets.some((f) => f.tag === 'does')) fired.push('the new pressure the move creates');
+        if (facets.some((f) => f.tag === 'delta')) fired.push('the lines it opened and what it gave up');
+        if (towardMover && facets.some((f) => f.tag === 'tactic')) fired.push('the tactic now sitting on the board');
         // Only speak the eval shift when a CONCRETE change explains it. With no
         // grounded reason, the old fallback ("the activity balance moved with no
         // single tactical event") named nothing — pure filler. Silence teaches
@@ -790,7 +774,7 @@ export function computeMoveFacets(
             `No material changed hands, yet the eval ${verb} ${mag} ${dir} — that is ${fired.join(', and ')} being priced in.`,
             `A positional swing of ${mag} ${dir}: nothing was captured, so the difference is ${fired.join(', and ')}.`,
           ];
-          facets.push(`[eval] ${stems[ctx.ply % stems.length]}`);
+          put('computeMoveFacets', 'eval', stems[ctx.ply % stems.length]);
         }
       }
     }
@@ -840,7 +824,7 @@ export function computeMoveFacets(
         // Subsumption needs the squares, and scraping them back out of the
         // prose is the anti-pattern that caused this session's other bugs.
         if (v.status === 'live') {
-          const f = `[tactic] ${seat(tac.description)} — it's the move, so the material comes off.`;
+          const f = made('detectTactics', 'tactic', `${seat(tac.description)} — it's the move, so the material comes off.`);
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary); recProof(f, tacProof(tac.beneficiary, tac.involvedSquares));
           recStakes(f, { points: v.winsPoints, plies: 1 }); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
         } else if (v.status === 'threat') {
@@ -848,7 +832,7 @@ export function computeMoveFacets(
           // coming, and the side it hits can rescue only one piece.
           const saver = !ctx.studentColorWB || !tac.beneficiary ? null
             : tac.beneficiary === ctx.studentColorWB ? 'they' : 'you';
-          const f = `[tactic] ${seat(tac.description)}${saver ? ` — ${forkConsequence(saver)}` : ''}.`;
+          const f = made('detectTactics', 'tactic', `${seat(tac.description)}${saver ? ` — ${forkConsequence(saver)}` : ''}.`);
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary); recProof(f, tacProof(tac.beneficiary, tac.involvedSquares));
           recStakes(f, { points: v.winsPoints || forkPoints(piecesOn(fenAfter, tac.involvedSquares.slice(1))), plies: 2 }); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
         }
@@ -869,7 +853,7 @@ export function computeMoveFacets(
         const holds = tac.type === 'pin' && ctx.studentColorWB && tac.beneficiary
           ? pinConsequence(fenAfter, tac.involvedSquares, ctx.studentColorWB, tac.beneficiary === ctx.studentColorWB ? 'student' : 'opponent', ply)
           : null;
-        const f = `[tactic] ${seat(tac.description)}.${holds ? ` ${holds}` : ''}`;
+        const f = made('detectTactics', 'tactic', `${seat(tac.description)}.${holds ? ` ${holds}` : ''}`);
         facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary); recProof(f, tacProof(tac.beneficiary, tac.involvedSquares));
         recStakes(f, stakes); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
       }
@@ -935,8 +919,8 @@ export function computeMoveFacets(
         // same proof and stakes (`threatCost`, the one registry).
         const yours = !isStudent && !!studentColorWB && group.every((h) => h.color === studentColorWB);
         const tc = yours && studentColorWB ? readBoardAll('threatCost', { line, fen: fenAfter, student: studentColorWB, squares: sqs })[0] ?? null : null;
-        const f = `[loose] ${tc?.text ?? line}`;
-        facets.push(f); recSquares(f, tc?.squares ?? sqs);
+        const f = put(tc?.computer ?? 'computeMoveFacets', 'loose', tc?.text ?? line);
+        recSquares(f, tc?.squares ?? sqs);
         if (tc && isProof(tc.proof)) recProof(f, tc.proof);
         recStakes(f, tc?.stakes ?? exchangeStakes(fenAfter, sqs));
       }
@@ -950,7 +934,7 @@ export function computeMoveFacets(
     const t = detectNewThreat(ctx.fenBefore, fenAfter, ctx.studentColorWB);
     if (t) {
       const threat = `you're now threatening ${t.san} — it ${t.detail}`;
-      const f = `[threat] ${openSentence(threat)}.`;
+      const f = made('detectNewThreat', 'threat', `${openSentence(threat)}.`);
       facets.push(f);
       // The proof is the geometry: the threatened move's landing square and
       // the squares it hits (marked on Why).
@@ -982,7 +966,7 @@ export function computeMoveFacets(
       && /^balanced$/i.test(assess.verdict ?? '');
     if (assess.verdict && !emptyOpeningVerdict) {
       const why = assess.reasons.length ? `: ${assess.reasons.join('; ')}` : '';
-      facets.push(`[verdict] You're ${assess.verdict}${why}.`);
+      put('assessPositionalEdge', 'verdict', `You're ${assess.verdict}${why}.`);
     }
   }
 
@@ -998,12 +982,12 @@ export function computeMoveFacets(
     if (iso.length) s.push(`isolated pawns ${iso.join(', ')}`);
     const dbl = [...struct.pawns.doubledFiles.w.map((f) => `white ${f}-file`), ...struct.pawns.doubledFiles.b.map((f) => `black ${f}-file`)];
     if (dbl.length) s.push(`doubled pawns ${dbl.join(', ')}`);
-    if (s.length) facets.push(`[structure] ${s.join(' · ')}.`);
+    if (s.length) put('describeStructure', 'structure', `${s.join(' · ')}.`);
   }
 
   // ── 6. KING SAFETY (enemy king exposed in the centre) ──
   if (studentColorWB && enemyKingStuckInCenter(fenAfter, studentColorWB)) {
-    facets.push('[king] Their king is stuck in the centre with a central file open on it.');
+    put('enemyKingStuckInCenter', 'king', 'Their king is stuck in the centre with a central file open on it.');
   }
 
   // ── 6a. TRAPPED PIECE — either side (David 2026-07-21: "the trapped piece
@@ -1011,9 +995,9 @@ export function computeMoveFacets(
   if (studentColorWB) {
     const enemyWB: Color = studentColorWB === 'w' ? 'b' : 'w';
     const trapTheirs = findTrappedPiece(fenAfter, enemyWB, ctx.playedLineUci);
-    if (trapTheirs) { const f = `[trapped] Their ${trapTheirs.piece} on ${trapTheirs.square} is trapped — attacked by the ${trapTheirs.attackerPiece} on ${trapTheirs.attackerSquare}, and every escape square is covered; it's coming off the board.`; facets.push(f); recSquares(f, [trapTheirs.square, trapTheirs.attackerSquare]); recStakes(f, exchangeStakes(fenAfter, [trapTheirs.square])); }
+    if (trapTheirs) { const f = made('findTrappedPiece', 'trapped', `Their ${trapTheirs.piece} on ${trapTheirs.square} is trapped — attacked by the ${trapTheirs.attackerPiece} on ${trapTheirs.attackerSquare}, and every escape square is covered; it's coming off the board.`); facets.push(f); recSquares(f, [trapTheirs.square, trapTheirs.attackerSquare]); recStakes(f, exchangeStakes(fenAfter, [trapTheirs.square])); }
     const trapMine = findTrappedPiece(fenAfter, studentColorWB, ctx.playedLineUci);
-    if (trapMine) { const f = `[trapped] Careful — your ${trapMine.piece} on ${trapMine.square} is trapped: attacked by the ${trapMine.attackerPiece} on ${trapMine.attackerSquare} with no safe square. Look for the cheapest way out.`; facets.push(f); recSquares(f, [trapMine.square, trapMine.attackerSquare]); recStakes(f, exchangeStakes(fenAfter, [trapMine.square])); }
+    if (trapMine) { const f = made('findTrappedPiece', 'trapped', `Careful — your ${trapMine.piece} on ${trapMine.square} is trapped: attacked by the ${trapMine.attackerPiece} on ${trapMine.attackerSquare} with no safe square. Look for the cheapest way out.`); facets.push(f); recSquares(f, [trapMine.square, trapMine.attackerSquare]); recStakes(f, exchangeStakes(fenAfter, [trapMine.square])); }
   }
 
   // ── 6a. TRADES, DEFENCE, NUGGETS (computers batch 5) — the same reads the
@@ -1031,37 +1015,36 @@ export function computeMoveFacets(
       opponentMove: isStudent ? null : { fenBefore, san },
       nameMove: false,
     })) {
-      const f = `[${x.kind}] ${x.text}`;
-      facets.push(f);
+      const f = put('exchangeIdeas', x.kind, x.text);
       recSquares(f, x.squares);
       recProof(f, x.proof);
       recStakes(f, x.stakes);
-      outIdentity?.set(f, `hint:${x.claim}`);
+      f.identity = `hint:${x.claim}`;
     }
   }
 
   // ── 6b. THE MISSING TEACHING POINTS (Naroditsky message catalog) ──
   if (studentColorWB) {
     const count = attackerDefenderCount(fenAfter, studentColorWB);
-    if (count) facets.push(`[count] ${cap(count)}.`);
+    if (count) put('attackerDefenderCount', 'count', `${cap(count)}.`);
     const royal = royalDefenderTarget(fenAfter, studentColorWB);
-    if (royal) facets.push(`[royal] ${cap(royal)}.`);
+    if (royal) put('royalDefenderTarget', 'royal', `${cap(royal)}.`);
     const rook7 = rookOnSeventh(fenAfter, studentColorWB);
-    if (rook7) facets.push(`[rook7] ${cap(rook7)}.`);
+    if (rook7) put('rookOnSeventh', 'rook7', `${cap(rook7)}.`);
     const badB = badEnemyBishop(fenAfter, studentColorWB);
     if (badB) {
       const image = imageryFor('badbishop', stemKeyOf(`${fenAfter}|badbishop`));
-      facets.push(`[badbishop] ${cap(badB)}.${image ? ` ${image}` : ''}`);
+      put('badEnemyBishop', 'badbishop', `${cap(badB)}.${image ? ` ${image}` : ''}`);
     }
     const worst = worstPlacedFriendlyPiece(fenAfter, studentColorWB);
-    if (worst) facets.push(`[worst] ${cap(worst)}.`);
+    if (worst) put('worstPlacedFriendlyPiece', 'worst', `${cap(worst)}.`);
     const passer = struct?.pawns.passedPawns[studentColorWB][0] ?? null; // reuse §5's struct
     // Not on the move that PUSHES it — the move's own point says "pushes your
     // passed pawn" (amateur review walk 2026-09-27: both, one ply).
     let pushedThisPasser = false;
     try { const pm = new Chess(fenBefore).move(san); pushedThisPasser = pm.piece === 'p' && pm.to === passer; } catch { pushedThisPasser = false; }
     const passNote = pushedThisPasser ? null : passedPawnPush(fenAfter, studentColorWB, passer);
-    if (passNote) { const f = `[passer] ${cap(passNote)}.`; facets.push(f); recSquares(f, [passer]); }
+    if (passNote) { const f = made('passedPawnPush', 'passer', `${cap(passNote)}.`); facets.push(f); recSquares(f, [passer]); }
 
     // ── 6c. WIDENED BOARD AWARENESS ON REVIEW (David 2026-09-13: "I also want
     // these changes on review") — the same minority-attack + colour-complex
@@ -1070,16 +1053,16 @@ export function computeMoveFacets(
     // student's own camp is what to shore up. Deduped once per game by the caller.
     const enemyWB2: Color = studentColorWB === 'w' ? 'b' : 'w';
     const myMinority = findMinorityAttack(fenAfter, studentColorWB);
-    if (myMinority) { const f = `[minority] You have a minority attack on the ${myMinority.flank} — ${myMinority.leverSan} makes contact and leaves them a weak pawn on ${myMinority.target}.`; facets.push(f); recSquares(f, [myMinority.target]); }
+    if (myMinority) { const f = made('findMinorityAttack', 'minority', `You have a minority attack on the ${myMinority.flank} — ${myMinority.leverSan} makes contact and leaves them a weak pawn on ${myMinority.target}.`); facets.push(f); recSquares(f, [myMinority.target]); }
     const theirMinority = findMinorityAttack(fenAfter, enemyWB2);
-    if (theirMinority) { const f = `[minority] They have a minority attack on the ${theirMinority.flank} — ${theirMinority.leverSan} is the lever, leaving you a weak pawn on ${theirMinority.target} to watch.`; facets.push(f); recSquares(f, [theirMinority.target]); }
+    if (theirMinority) { const f = made('findMinorityAttack', 'minority', `They have a minority attack on the ${theirMinority.flank} — ${theirMinority.leverSan} is the lever, leaving you a weak pawn on ${theirMinority.target} to watch.`); facets.push(f); recSquares(f, [theirMinority.target]); }
     for (const cc of findColorComplexWeakness(fenAfter)) {
       const sqs = andList([...cc.squares]);
-      if (cc.side === enemyWB2) { const f = `[complex] Their ${cc.complex} squares are weak — ${sqs} ${cc.squares.length === 1 ? 'is a hole' : 'are holes'} no bishop of theirs covers; ${cc.by === 'knight' ? 'a knight belongs on one' : 'your bishop can work on them'}.`; facets.push(f); recSquares(f, cc.squares); break; }
+      if (cc.side === enemyWB2) { const f = made('findColorComplexWeakness', 'complex', `Their ${cc.complex} squares are weak — ${sqs} ${cc.squares.length === 1 ? 'is a hole' : 'are holes'} no bishop of theirs covers; ${cc.by === 'knight' ? 'a knight belongs on one' : 'your bishop can work on them'}.`); facets.push(f); recSquares(f, cc.squares); break; }
     }
     for (const cc of findColorComplexWeakness(fenAfter)) {
       const sqs = andList([...cc.squares]);
-      if (cc.side === studentColorWB) { const f = `[complex] Your ${cc.complex} squares are weak — with no bishop of that colour, no pawn or bishop of yours can cover ${sqs}.`; facets.push(f); recSquares(f, cc.squares); break; }
+      if (cc.side === studentColorWB) { const f = made('findColorComplexWeakness', 'complex', `Your ${cc.complex} squares are weak — with no bishop of that colour, no pawn or bishop of yours can cover ${sqs}.`); facets.push(f); recSquares(f, cc.squares); break; }
     }
     // FORWARD PLANS are not read here: the walk runs the ONE plan thread
     // (`planThreadTurn`, the same as Learn) on each of their moves — the stop
@@ -1091,7 +1074,7 @@ export function computeMoveFacets(
     // of terminal event — a cross-kind tempo number (pawn pushes vs rook moves)
     // is incomparable, and a confidently wrong number is worse than silence.
     const race = planRaceClause(fenAfter, studentColorWB, 'review');
-    if (race) { const f = `[plan-race] ${cap(race)}.`; facets.push(f); recProof(f, planRaceProof(fenAfter, studentColorWB)); }
+    if (race) { const f = made('planRaceClause', 'plan-race', `${cap(race)}.`); facets.push(f); recProof(f, planRaceProof(fenAfter, studentColorWB)); }
   }
 
   // ── 7. SACRIFICE — compensation + mechanism + king-shield removal ──
@@ -1112,7 +1095,7 @@ export function computeMoveFacets(
         // Seated: "It's a sacrifice" on the opponent's move read as the student's
         // own (prod 2026-09-23, QGD c4). The clauses are already seated.
         if (comp.length) {
-          const f = `[sac] ${moverWB === studentColorWB ? 'Your' : 'Their'} move is a sacrifice — compensation: ${comp.join('; ')}.`;
+          const f = made('sacrificeCompensation', 'sac', `${moverWB === studentColorWB ? 'Your' : 'Their'} move is a sacrifice — compensation: ${comp.join('; ')}.`);
           facets.push(f);
           // The compensation is shown by the play that follows: the engine's
           // line after the sacrifice, said only through its first moves (or,
@@ -1125,9 +1108,9 @@ export function computeMoveFacets(
         // costing about 3.3 points"). The grade has already said it did not.
         const sacFailed = ctx.classification === 'mistake' || ctx.classification === 'blunder' || ctx.classification === 'miss';
         const mech = isStudent && !sacFailed ? explainMatingSacMechanism(ctx.allSans, ply - 1) : null;
-        if (mech) facets.push(`[sac-why] ${cap(mech)}.`);
+        if (mech) put('explainMatingSacMechanism', 'sac-why', `${cap(mech)}.`);
         const shield = isStudent && !sacFailed ? describeSacBreaksKingShield(fenBefore, san) : null;
-        if (shield) facets.push(`[sac-why] ${shield}.`);
+        if (shield) put('describeSacBreaksKingShield', 'sac-why', `${shield}.`);
       }
     }
   } catch { /* ignore */ }
@@ -1143,7 +1126,7 @@ export function computeMoveFacets(
     // move played — the other candidate's board is hypothetical.
     const onBoard = c ? (() => { try { const p = new Chess(fenAfter).get(c.square as Square); return !!p && p.type === c.piece && p.color === studentColorWB; } catch { return false; } })() : false;
     if (c && onBoard) {
-      const t = `[contrast] ${contrastClause(c)}.`;
+      const t = made('contrastMoves', 'contrast', `${contrastClause(c)}.`);
       facets.push(t);
       recSquares(t, [c.square]);
     }
@@ -1160,7 +1143,7 @@ export function computeMoveFacets(
       for (const m of ctx.allSans.slice(0, ply - 3)) early.move(m);
       const t = readTiming(early.fen(), fenBefore, san);
       if (t) {
-        const f = `[timing] ${timingClause(t)}.`;
+        const f = made('readTiming', 'timing', `${timingClause(t)}.`);
         facets.push(f);
         recSquares(f, [t.square]);
       }
@@ -1177,7 +1160,7 @@ export function computeMoveFacets(
     try {
       for (const r of kingReadsForBestLine(fenBefore, studentColorWB, ctx.bestLineUci)) {
         if (!r.namesMove || r.id === 'storm-race') continue;
-        const f = `[king-read] Here, ${continueSentence(r.text)}`;
+        const f = made('kingReadsForBestLine', 'king-read', `Here, ${continueSentence(r.text)}`);
         facets.push(f);
         recSquares(f, r.squares);
         recProof(f, r.proof);
@@ -1193,27 +1176,26 @@ export function computeMoveFacets(
     const studentWB = ctx.studentColorWB;
     const reply = ctx.allSans[ply] ?? null;
     if (isStudent && studentWB) {
-      const say = (tag: string, text: string, proof: Proof | null, squares: readonly string[], identity: string): void => {
+      const say = (computer: ComputerName, tag: FacetTag, text: string, proof: Proof | null, squares: readonly string[], identity: string): void => {
         if (!proof) return;
-        const f = `[${tag}] ${text}`;
-        facets.push(f);
+        const f = put(computer, tag, text);
         recProof(f, proof);
         recSquares(f, squares);
-        outIdentity?.set(f, identity);
+        f.identity = identity;
       };
       try {
         const led = reply && cleanCost < 50 ? tradeLedger(ctx.allSans.slice(0, ply + 1), studentWB) : null;
-        if (led) say('timing', led.text, squaresProof(led.text, led.squares), [led.square], `ledger:${led.kind}:${led.square}`);
+        if (led) say('tradeLedger', 'timing', led.text, squaresProof(led.text, led.squares), [led.square], `ledger:${led.kind}:${led.square}`);
         const ny = notYetPlayed(fenBefore, san, ctx.bestMoveSan, cleanCost);
-        if (ny) say('timing', ny.text, squaresProof(ny.text, ny.squares), ny.squares, `once:not-yet-played:${ny.target}`);
+        if (ny) say('notYetPlayed', 'timing', ny.text, squaresProof(ny.text, ny.squares), ny.squares, `once:not-yet-played:${ny.target}`);
         const hold = heldResource(fenBefore, san, ctx.bestMoveSan, cleanCost);
-        if (hold) { const lp = legalLineProof(hold.fen, hold.sans, lineSeatAt(hold.fen, studentWB)); say('timing', hold.text, lp ? { ...lp, squares: hold.squares } : null, hold.squares, `once:hold:${hold.resource}`); }
+        if (hold) { const lp = legalLineProof(hold.fen, hold.sans, lineSeatAt(hold.fen, studentWB)); say('heldResource', 'timing', hold.text, lp ? { ...lp, squares: hold.squares } : null, hold.squares, `once:hold:${hold.resource}`); }
         const cc = captureChoice(fenBefore, san, ctx.bestMoveSan, ctx.costCp ?? cleanCost);
-        if (cc) { const lp = legalLineProof(fenBefore, cc.bad, lineSeatAt(fenBefore, studentWB)); say('capture-choice', cc.text, lp ? { ...lp, squares: [cc.square] } : null, cc.squares, `capture-choice:${cc.square}`); }
+        if (cc) { const lp = legalLineProof(fenBefore, cc.bad, lineSeatAt(fenBefore, studentWB)); say('captureChoice', 'capture-choice', cc.text, lp ? { ...lp, squares: [cc.square] } : null, cc.squares, `capture-choice:${cc.square}`); }
         const kick = cleanCost < 30 ? kickAfterRecapture(fenBefore, san, reply, ctx.bestLineUci) : null;
-        if (kick) { const lp = legalLineProof(fenBefore, kick.sans, lineSeatAt(fenBefore, studentWB)); say('kick', kick.text, lp ? { ...lp, squares: kick.squares } : null, kick.squares, `kick:${kick.kick.square}`); }
+        if (kick) { const lp = legalLineProof(fenBefore, kick.sans, lineSeatAt(fenBefore, studentWB)); say('kickAfterRecapture', 'kick', kick.text, lp ? { ...lp, squares: kick.squares } : null, kick.squares, `kick:${kick.kick.square}`); }
         const won = pawnSquareTaken(fenBefore, san, cleanCost);
-        if (won) say('plan-race', won.text, pawnSquareRaceProof(fenBefore, won.race), won.squares, `pawn-race:${won.race.square}`);
+        if (won) say('pawnSquareTaken', 'plan-race', won.text, pawnSquareRaceProof(fenBefore, won.race), won.squares, `pawn-race:${won.race.square}`);
       } catch { /* a bonus, never a blocker */ }
     }
     // THE OPENING THIS BOARD IS — either seat, once a game (its identity).
@@ -1221,11 +1203,11 @@ export function computeMoveFacets(
       try {
         const eq = openingEquivalence(ctx.allSans.slice(0, ply), studentWB);
         if (eq) {
-          const f = `[equivalence] ${eq.text}`;
+          const f = made('openingEquivalence', 'equivalence', eq.text);
           facets.push(f);
           recProof(f, eq.proof);
           recSquares(f, eq.squares);
-          outIdentity?.set(f, `once:${eq.claim}`);
+          f.identity = `once:${eq.claim}`;
         }
       } catch { /* a bonus, never a blocker */ }
     }
@@ -1237,7 +1219,7 @@ export function computeMoveFacets(
   if (!isStudent && studentColorWB) {
     const bluff = detectBluff(fenBefore, san, ctx.replyBestSan);
     if (bluff) {
-      const t = `[bluff] ${bluffClause(bluff, ply <= 20)}.`;
+      const t = made('detectBluff', 'bluff', `${bluffClause(bluff, ply <= 20)}.`);
       facets.push(t);
       recSquares(t, [bluff.square, ...bluff.targets.map((x) => x.square)]);
     }
@@ -1251,10 +1233,10 @@ export function computeMoveFacets(
   // and are taught on its page only (David 2026-10-29).
   if (isStudent && ctx.teaching.refutedAlt) {
     const r = ctx.teaching.refutedAlt;
-    const f = `[refuted] ${r.text}`;
+    const f = made('refutedFromFan', 'refuted', r.text);
     facets.push(f);
     recProof(f, refutedAltProof(fenBefore, r));
-    outIdentity?.set(f, `refuted:${r.alt.replace(/[+#!?]+$/, '')}`);
+    f.identity = `refuted:${r.alt.replace(/[+#!?]+$/, '')}`;
     recStakes(f, costStakes(r.costCp));
     try {
       const am = new Chess(fenBefore).move(r.alt);
@@ -1277,11 +1259,12 @@ export function computeMoveFacets(
       // on a book move: theory is not corrected.
       ?? (ctx.classification === 'book' ? null : principleContrastLine(fenBefore, san, ctx.bestMoveSan ?? null, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore)));
     if (lead) {
-      const f = `[rule] ${lead.text}`;
+      const f = made('principleLine', 'rule', lead.text);
       facets.push(f);
       // The FIRST statement of a principle carries its say-once identity; a
       // stem is its own move's fact and must not be eaten by that ledger.
-      outIdentity?.set(f, lead.first ? `rule:${lead.id}` : `rule-stem:${ply}:${lead.id}`);
+      f.identity = lead.first ? `rule:${lead.id}` : `rule-stem:${ply}:${lead.id}`;
+      inRuleFamily(f, lead.id);
       recSquares(f, lead.squares);
     } else {
       // WHAT THE MOVE IS FOR, when it kept no rule — Learn's move-point
@@ -1300,9 +1283,9 @@ export function computeMoveFacets(
           ? studentMovePoint(fenBefore, san, ply >= 2 ? ctx.allSans[ply - 2] ?? null : null, null)
           : null;
         if (point && mv) {
-          const f = `[point] ${point}`;
+          const f = made('studentMovePoint', 'point', point);
           facets.push(f);
-          outIdentity?.set(f, `point:${ply}`);
+          f.identity = `point:${ply}`;
           recSquares(f, [mv.to]);
         }
       } catch { /* the point is a bonus, never a blocker */ }
@@ -1315,9 +1298,9 @@ export function computeMoveFacets(
   // Every clean student move, great and brilliant included, so praise has its
   // reason.
   if (isStudent && ctx.teaching.intent && !['inaccuracy', 'mistake', 'blunder', 'miss'].includes(ctx.classification ?? '')) {
-    const f = `[point] ${ctx.teaching.intent.text}`;
+    const f = made('intentWithFallback', 'point', ctx.teaching.intent.text);
     facets.push(f);
-    outIdentity?.set(f, `point:${ply}`);
+    f.identity = `point:${ply}`;
     recSquares(f, ctx.teaching.intent.squares);
   }
 
@@ -1330,9 +1313,9 @@ export function computeMoveFacets(
     const before = new Set(opponentHabits(ctx.allSans.slice(0, ply - 1), opp, ctx.teaching.soundPlies).map((h) => h.kind));
     const fresh = now.find((h) => !before.has(h.kind));
     if (fresh) {
-      const f = `[their-habit] ${fresh.text}`;
+      const f = made('opponentHabits', 'their-habit', fresh.text);
       facets.push(f);
-      outIdentity?.set(f, `their-habit:${fresh.kind}`);
+      f.identity = `their-habit:${fresh.kind}`;
     }
   }
   // …and the student's own, by the same computer (A-plan P4): the move that
@@ -1342,9 +1325,9 @@ export function computeMoveFacets(
     const before = new Set(habitsOf(ctx.allSans.slice(0, ply - 1), studentColorWB, 'your', ctx.teaching.soundPlies).map((h) => h.kind));
     const fresh = now.find((h) => !before.has(h.kind));
     if (fresh) {
-      const f = `[your-habit] ${fresh.text}`;
+      const f = made('habitsOf', 'your-habit', fresh.text);
       facets.push(f);
-      outIdentity?.set(f, `your-habit:${fresh.kind}`);
+      f.identity = `your-habit:${fresh.kind}`;
     }
   }
 
@@ -1354,7 +1337,7 @@ export function computeMoveFacets(
     ? threatStoppedBy(ctx.teaching.prevFenBefore, fenBefore, san, studentColorWB)
     : null;
   if (stop) {
-    const f = `[stopped] ${stop.text}`;
+    const f = made('threatStoppedBy', 'stopped', stop.text);
     facets.push(f);
     recSquares(f, [stop.threat.from, stop.threat.landing]);
   }
@@ -1368,9 +1351,9 @@ export function computeMoveFacets(
     // opening story says it ("…e5 has a cost for them"), and only when a knight
     // is two moves from it and would hit something there.
     if (cost && cost.kind !== 'hole') {
-      const f = `[their-cost] ${cost.text}`;
+      const f = made('theirMoveCost', 'their-cost', cost.text);
       facets.push(f);
-      outIdentity?.set(f, `their-cost:${cost.kind}:${cost.squares[0] ?? ''}`);
+      f.identity = `their-cost:${cost.kind}:${cost.squares[0] ?? ''}`;
       recSquares(f, cost.squares);
     }
   }
@@ -1383,21 +1366,20 @@ export function computeMoveFacets(
     const prev = ply >= 2 && ctx.teaching.prevFenBefore && ctx.allSans[ply - 2]
       ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null;
     for (const r of readTheirMove({ fenBefore, san, student: studentColorWB, topLines: lines, prev, theirMoveFlagged: negativeClass })) {
-      const f = `[${r.kind === 'wedged-pawn' ? 'prevent-test' : 'their-read'}] ${r.text}`;
-      facets.push(f);
+      const f = put('readTheirMove', r.kind === 'wedged-pawn' ? 'prevent-test' : 'their-read', r.text);
       recProof(f, r.proof);
       recStakes(f, r.stakes);
       recSquares(f, r.squares);
-      outIdentity?.set(f, `hint:${r.claim}`);
+      f.identity = `hint:${r.claim}`;
     }
     // "Can you play it anyway?" — their reply stopped your threat on paper.
     const any = stop && lines.length > 0 ? playItAnyway(stop, fenAfter, lines, studentColorWB) : null;
     if (any) {
-      const f = `[prevent-test] ${any.text}`;
+      const f = made('playItAnyway', 'prevent-test', any.text);
       facets.push(f);
       recProof(f, lineProof({ fen: fenAfter, sans: any.line }, lineSeatAt(fenAfter, studentColorWB)));
       recSquares(f, any.squares);
-      outIdentity?.set(f, `hint:anyway:${any.san}`);
+      f.identity = `hint:anyway:${any.san}`;
     }
   }
   // A KNOWN ATTACKING STRUCTURE on the board the student moved from, by its
@@ -1406,11 +1388,11 @@ export function computeMoveFacets(
     const cp = ctx.preMoveEval != null ? ctx.preMoveEval * (studentColorWB === 'w' ? 1 : -1) : null;
     const ka = knownAttack(fenBefore, studentColorWB, cp);
     if (ka) {
-      const f = `[attack-pattern] ${ka.text}`;
+      const f = made('knownAttack', 'attack-pattern', ka.text);
       facets.push(f);
       recProof(f, ka.proof);
       recSquares(f, ka.squares);
-      outIdentity?.set(f, `hint:${ka.claim}`);
+      f.identity = `hint:${ka.claim}`;
     }
   }
   // …and THE STRUCTURE JUDGEMENTS (batch 6, `structureReads`) — the same
@@ -1418,18 +1400,17 @@ export function computeMoveFacets(
   // (and the standing facts of the board it was played on); on theirs what it
   // did to the student's structure and squares. Each carries its proof.
   if (studentColorWB) {
-    const reads: StructureRead[] = isStudent
+    const reads: Array<StructureRead & { computer: ComputerName }> = isStudent
       ? [
-        ...studentMoveStructure({ fenBefore, san, student: studentColorWB, cpLoss: Math.max(0, ctx.costCp ?? 0), bestSan: ctx.bestMoveSan, bestUci: ctx.bestLineUci, reply: ctx.replyBestSan, namesBetterMove: true }),
-        ...boardStructure(fenBefore, studentColorWB),
+        ...studentMoveStructure({ fenBefore, san, student: studentColorWB, cpLoss: Math.max(0, ctx.costCp ?? 0), bestSan: ctx.bestMoveSan, bestUci: ctx.bestLineUci, reply: ctx.replyBestSan, namesBetterMove: true }).map((r) => ({ ...r, computer: 'studentMoveStructure' as const })),
+        ...boardStructure(fenBefore, studentColorWB).map((r) => ({ ...r, computer: 'boardStructure' as const })),
       ]
-      : theirMoveStructure(fenBefore, san, studentColorWB);
+      : theirMoveStructure(fenBefore, san, studentColorWB).map((r) => ({ ...r, computer: 'theirMoveStructure' as const }));
     for (const r of reads) {
-      const f = `[judgement] ${r.text}`;
-      facets.push(f);
+      const f = put(r.computer, 'judgement', r.text);
       // SAID ONCE BY ITS OWN KEY, as Learn's ledger says it ("Their king went
       // kingside … so the plan changes" spoke on three moves of one game).
-      outIdentity?.set(f, `once:${r.key}`);
+      f.identity = `once:${r.key}`;
       recSquares(f, r.squares);
       recProof(f, r.proof);
       recStakes(f, r.stakes);
@@ -1440,7 +1421,7 @@ export function computeMoveFacets(
   if (studentColorWB && !stop) {
     const trick = trickSidestepped(fenBefore, san, moverWB, isStudent ? 'their' : 'your');
     if (trick) {
-      const f = `[stopped] ${trick.text}`;
+      const f = made('trickSidestepped', 'stopped', trick.text);
       facets.push(f);
       recSquares(f, [...trick.squares]);
     }
@@ -1452,7 +1433,7 @@ export function computeMoveFacets(
   if (!isStudent && studentColorWB && ctx.teaching.prevFenBefore && ply >= 2) {
     const ph = findProphylaxis(ctx.teaching.prevFenBefore);
     if (ph && ph.intent.san === san && ctx.allSans[ply - 2] !== ph.prevention.san) {
-      const f = `[timing] That is the ${ph.kind === 'pin' ? 'pin' : 'kick'} a quiet move would have stopped — ${prophylaxisProof(ph).full}.`;
+      const f = made('findProphylaxis', 'timing', `That is the ${ph.kind === 'pin' ? 'pin' : 'kick'} a quiet move would have stopped — ${prophylaxisProof(ph).full}.`);
       facets.push(f);
       recProof(f, prophylaxisProof(ph));
       recSquares(f, [...ph.squares]);
@@ -1462,7 +1443,7 @@ export function computeMoveFacets(
   if (isStudent && studentColorWB) {
     const tie = newTiedDefender(fenBefore, fenAfter, studentColorWB);
     if (tie) {
-      const f = `[point] ${tiedDefenderLine(tie)}`;
+      const f = made('newTiedDefender', 'point', tiedDefenderLine(tie));
       facets.push(f);
       recProof(f, tiedDefenderProof(tie));
       recSquares(f, [tie.defender.square, tie.target.square]);
@@ -1474,18 +1455,15 @@ export function computeMoveFacets(
   // and the false-mate / discovery audit of the move that WAS played. A read
   // naming the best move never speaks when the student played it (G4.5.2,
   // matched by coordinates, never SAN).
-  // A REGISTRY FACT AS A FACET (WO-STORY-MATRIX-01 P1-6a): `[kind] text`
-  // under the fact's own kind — a computer whose kind is no facet tag fails to
-  // compile here — with its proof, squares and stakes filed under the facet,
-  // and the identity it is said once under. The string form and its out-maps
-  // go with the facets (P1-6d).
+  // A REGISTRY FACT AS A FACET (WO-STORY-MATRIX-01 P1-6a): under the fact's
+  // own kind — a computer whose kind is no facet tag fails to compile here —
+  // with its proof, squares and stakes, and the identity it is said once under.
   const facetOf = (f: CoachFact & { kind: FacetTag }, identity: string): void => {
-    const raw = `[${f.kind}] ${f.text}`;
-    facets.push(raw);
+    const raw = put(f.computer, f.kind, f.text);
     recProof(raw, isProof(f.proof) ? f.proof : null);
     recSquares(raw, f.squares);
     recStakes(raw, f.stakes);
-    outIdentity?.set(raw, identity);
+    raw.identity = identity;
   };
   if (isStudent && studentColorWB) {
     const playedUci = ((): string | null => { try { const m = new Chess(fenBefore).move(san); return m ? `${m.from}${m.to}` : null; } catch { return null; } })();
@@ -1537,12 +1515,12 @@ export function computeMoveFacets(
     const cp = ctx.evaluation === null ? null : (studentColorWB === 'w' ? ctx.evaluation : -ctx.evaluation);
     // Review's own say-once ledger decides repeats downstream; nothing heard here.
     const line = phaseVerdictLine(fenAfter, studentColorWB, cp, ctx.teaching.phaseTurn, new Set(), lastMoveFromSan(fenBefore, san));
-    if (line) facets.push(`[stock] ${line}`);
+    if (line) put('phaseVerdictLine', 'stock', line);
   }
 
   // ── 8. FORCED MATING RUN — this ply begins a forced checking finish ──
   if (ctx.forcedRunStartPly != null && ply === ctx.forcedRunStartPly) {
-    const ff = '[forced] From here it is a forced checking run to mate — every move a check, no escape.';
+    const ff = made('detectForcedMatingSequence', 'forced', 'From here it is a forced checking run to mate — every move a check, no escape.');
     facets.push(ff);
     recStakes(ff, mateStakes(matingSideIsStudent(ctx.allSans, studentColorWB) ? 'you' : 'them', 2, true));
   }
@@ -1550,13 +1528,13 @@ export function computeMoveFacets(
   // ── 9. PLANS — opening development + middlegame orientation (both sides) ──
   if (studentColorWB) {
     const dev = buildOpeningDevelopmentPlan(fenAfter, studentColorWB, {});
-    if (dev) facets.push(`[plan-opening] ${dev.text}`);
+    if (dev) put('buildOpeningDevelopmentPlan', 'plan-opening', dev.text);
     // A slow "advance your majority" plan is a NON-APPLICABLE reason while the
     // enemy king is exposed in the centre — that's a king-hunt, not a majority
     // grind (David 2026-07-20 diagnostic: it fired every move of a mating attack).
     if (!enemyKingStuckInCenter(fenAfter, studentColorWB)) {
       const orient = buildMiddlegameOrientation(fenAfter, studentColorWB, undefined, isStudent ? 'student' : 'opponent');
-      if (orient) facets.push(`[plan-middlegame] ${orient.text}`);
+      if (orient) put('buildMiddlegameOrientation', 'plan-middlegame', orient.text);
     }
   }
 
@@ -1589,12 +1567,12 @@ export function computeMoveFacets(
   if (named && named === settled && studentColorWB) {
     const plan = mastersPlanLine(planFor(named), studentColorWB, null)?.text ?? null;
     if (plan) {
-      const f = `[opening] ${plan}`;
+      const f = made('mastersPlanLine', 'opening', plan);
       facets.push(f);
       // ONE CLAIM, ONE IDENTITY: the walk's first name speaks this same plan
       // (`coachFeatureService`, the name said with what it teaches) — whichever
       // speaks first claims it.
-      outIdentity?.set(f, `once:plan:${plan}`);
+      f.identity = `once:plan:${plan}`;
     }
   }
 
@@ -1608,35 +1586,33 @@ export function computeMoveFacets(
     // here, where both are known: the influence line (`[does]`, or `[delta]` when it hits no piece) already carries the reach.
     const restates = opp?.kind === 'influence' && !!influence;
     if (opp && !restates) {
-      const f = `[opp-target] ${opp.text}`;
+      const f = made('buildOpponentMoveTeaching', 'opp-target', opp.text);
       facets.push(f);
       recSquares(f, opp.squares ?? []);
       // The threatened square, coupled for the walk's threat voice (one table
       // with Learn: a simple threat on a skill the student has proven is quiet).
-      if (opp.kind === 'hanging' && opp.squares[1]) outIdentity?.set(f, `opp-threat:hanging:${opp.squares[1]}`);
+      if (opp.kind === 'hanging' && opp.squares[1]) f.identity = `opp-threat:hanging:${opp.squares[1]}`;
     }
     // The opponent's OWN moves so far (parity from the student's colour): white
     // plays odd ply numbers (even index), black plays even ply numbers (odd index).
     const oppIsWhite = studentColorWB === 'b';
     const oppSans = ctx.allSans.slice(0, ply).filter((_, i) => (i % 2 === 0) === oppIsWhite);
     const devRead = buildOpponentDevelopmentRead(oppSans, fenAfter, studentColorWB);
-    if (devRead) facets.push(`[opp-dev] ${devRead.text}`);
+    if (devRead) put('buildOpponentDevelopmentRead', 'opp-dev', devRead.text);
   }
 
   // ── 12. ENDGAME PHASE ──
   const phase = nameEndgamePhase(fenAfter);
-  if (phase) facets.push(`[endgame] You've reached ${phase}.`);
+  if (phase) put('nameEndgamePhase', 'endgame', `You've reached ${phase}.`);
 
   // THE SQUARES ARE THE PROOF of a claim whose computer handed in no line
   // (one-coach P3): the squares it read off the board, marked on Why. Never
   // scraped from the words — only the squares the computer coupled above.
-  if (outProofs && outSquares) {
-    for (const f of facets) {
-      if (outProofs.has(f)) continue;
-      const sq = outSquares.get(f);
-      const p = sq ? squaresProof(f.replace(/^\[[a-z-]+\]\s*/, ''), sq) : null;
-      if (p) outProofs.set(f, p);
-    }
+  // A fact whose computer brought no proof rests on the squares it names.
+  for (const f of facets) {
+    if (f.proof !== NO_PROOF.description || f.squares.length === 0) continue;
+    const p = squaresProof(f.text, f.squares);
+    if (p) f.proof = p;
   }
 
   return facets;

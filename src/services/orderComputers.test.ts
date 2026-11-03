@@ -23,6 +23,7 @@ import { COMPUTER_ROLES } from './computerRoles';
 import { LEARN_LANES } from './learnTurnDoor';
 import { FACT_ROLE, FACT_PROOF } from './reviewFacetRank';
 import { NO_SECOND_READ } from './inaccuracyCall';
+import { facetLines, facetRecords } from '../test/reviewFacetLines';
 
 const fenOf = (line: string): string => {
   const c = new Chess();
@@ -311,14 +312,14 @@ describe('WIRED BOTH WAYS — every lane answers, and each surface carries the f
     const before = fenOf('c4 e5 Nc3');
     const after = fenOf('c4 e5 Nc3 Nf6');
     const proofs = new Map();
-    const facets = computeMoveFacets({ secondReads: NO_SECOND_READ, 
+    const facets = ((m) => { const r = facetRecords(m); for (const [k, v] of r.proofs) (proofs as Map<string, unknown>).set(k, v); return facetLines(m); })(computeMoveFacets({ secondReads: NO_SECOND_READ, 
       seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore: before, fenAfter: after, san: 'Nf6', ply: 4,
       moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
       evaluation: 0, preMoveEval: 0, costCp: 0, heardVerdict: null, classification: 'good', bestMoveSan: 'Nf6',
       prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: 'c4 e5 Nc3 Nf6'.split(' '),
       forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
-    }, undefined, undefined, undefined, undefined, undefined, proofs);
+    }));
     const f = facets.find((x) => x.startsWith('[timing]') && /nothing hits/.test(x));
     expect(f, facets.join('\n')).toBeTruthy();
     expect(isProof(proofs.get(f))).toBe(true);

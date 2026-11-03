@@ -9,7 +9,7 @@ import type { StudentRecord } from './studentRecord';
 import { lastMoveFromSan } from './material';
 import { Chess } from 'chess.js';
 import { gameArcSteps, type ArcEvent } from './lookaheadPlan';
-import { FUNDAMENTAL_CLAIM_FAMILY, fundamentalOfLine, principleAlreadyTaught, type MoveFundamentalId } from './moveFundamentals';
+import { fundamentalOfLine, principleAlreadyTaught, type MoveFundamentalId } from './moveFundamentals';
 import type { Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';
 import { lossBeyondBestAlternative } from './voluntaryLoss';
@@ -51,7 +51,7 @@ import { classifyPhase } from './gamePhaseService';
 import { inaccuracySpeaks, loadInaccuracyVoice } from './inaccuracyVoice';
 import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
-import { coachTurn, habitNeedFrom, type DoorFact } from './coachDecider';
+import { coachTurn, habitNeedFrom } from './coachDecider';
 import { advantageWasMissed } from './reviewWithholding';
 import { PLAN_THREAD_HOLD_PLIES } from './planThread';
 import { createStoryStore, storyLedger, storyThrough, threadKey, threadStated, threadVariant, PLAN_GOAL, phaseCrossed, openingAt, openingsNamed, noteOpening, lastVerdict, modelGameCited, storyTurn, type ThreadKey, type StoryStore, type StorySeed, type SaidSet } from './gameStory';
@@ -64,7 +64,7 @@ import { stripThink } from '../utils/thinkPause';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { flipSideToMove, sideToMoveAs } from './threatOut';
-import { mateStakes, isSacrifice, type FactStakes } from './factStakes';
+import { mateStakes, isSacrifice } from './factStakes';
 import { sacrificeLedger, type BestAmong, type SacrificeLedgerRead } from './sacrificeLedger';
 import { threatPurpose, lineRestatesClaim } from './threatPurpose';
 import type { BestOfEngine, DeepReadEngine } from './gameAnalysisService';
@@ -108,9 +108,10 @@ import { mateDescription } from './matePatterns';
 import { isMinorAtHome } from './development';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
-import { facetTag, factKind, FACET_ROLE, type FacetTag } from './reviewFacetRank';
-import { LOCAL_THREAD, stepOf, toCoachFact } from './coachFact';
-import { NO_PROOF, type FactProof, type Proof } from './proof';
+import { FACET_ROLE, type FacetTag } from './reviewFacetRank';
+import { stepOf, type ComputerName } from './coachFact';
+import { reviewFacet, reworded, type ReviewFacet, type ReviewFacetParts } from './reviewFacet';
+import { type Proof } from './proof';
 import { newPhraseMemory } from '../utils/phraseMemory';
 import { whyItEnded, idlePiece, quietDecider, exploreInvite, murkyRead, type EndRead, type GamePly } from './gameEndReads';
 import { positionOf } from '../utils/samePosition';
@@ -1322,19 +1323,26 @@ function ruleIdOf(identity: string | undefined): MoveFundamentalId | null {
  *  names the square the claim is about. */
 function restatedByRule(
   job: { kind: BookJobKind; squares: readonly string[] },
-  facets: readonly string[],
-  identity: ReadonlyMap<string, string>,
-  squares: ReadonlyMap<string, readonly string[]>,
+  facets: readonly ReviewFacet[],
 ): boolean {
   const join = JOB_RESTATED_BY_RULE[job.kind];
   if (!join) return false;
   const about = join.about === null ? null : job.squares[join.about] ?? null;
   if (join.about !== null && !about) return false;
   return facets.some((f) => {
-    const rule = ruleIdOf(identity.get(f));
-    return !!rule && join.rules.includes(rule) && (about === null || (squares.get(f) ?? []).includes(about));
+    const rule = ruleIdOf(f.identity);
+    return !!rule && join.rules.includes(rule) && (about === null || f.squares.includes(about));
   });
 }
+
+/** Which computer reads each end-of-game fact (`gameEndReads`). */
+const END_READ_COMPUTER: Record<EndRead['kind'], ComputerName> = {
+  'why-it-ended': 'whyItEnded',
+  'idle-piece': 'idlePiece',
+  'quiet-decider': 'quietDecider',
+  explore: 'exploreInvite',
+  murky: 'murkyRead',
+};
 
 /** The loose-piece tail a board-influence line ends on — a claim of its own
  *  (the loose count below reads it), so the line is never stripped as a
@@ -1625,7 +1633,11 @@ function* reviewSegmentSteps(
   // hard "drop repeats, drop repeats … every one adds something new" rule — it
   // supersedes the earlier appear-only pass, which still let a flickering fact
   // ("your pawn on e4 is undefended") restate itself two or three times.
-  const STANDING_STATE_RE = /^\[(tactic|loose|count|royal|rook7)\]/;
+  const STANDING_STATE_TAGS: ReadonlySet<FacetTag> = new Set<FacetTag>(['tactic', 'loose', 'count', 'royal', 'rook7']);
+  // The static reads, said once a game each, under the key the walk's stored
+  // story has always kept them by (its tag and its words).
+  const STATIC_TAGS: ReadonlySet<FacetTag> = new Set<FacetTag>(['opening', 'plan-middlegame', 'passer', 'badbishop', 'worst', 'trapped', 'minority', 'complex', 'endgame']);
+  const staticKey = (f: ReviewFacet): string => `[${f.tag}] ${f.text}`;
   const standingSpoken = ledger(REVIEW_SAID.standing); // signatures of standing reads spoken
   const sacSpoken = ledger(REVIEW_SAID.sac); // sacrifice-compensation profiles spoken
   // Verdict is ATOM-DIFFED: the verdict WORD (balanced/better/worse) speaks when
@@ -1719,8 +1731,8 @@ function* reviewSegmentSteps(
   // A standing TACTIC is keyed by its claim, the first sentence: the hold
   // after it rotates by ply (`pinConsequence`), and a key on the whole line
   // would re-say the same pin every ply in new words.
-  const standingSig = (f: string): string =>
-    (/^\[tactic\]/.test(f) ? f.split(/(?<=\.)\s/)[0] : f).replace(/^\[[a-z0-9-]+\]\s*/, '')
+  const standingSig = (f: ReviewFacet): string =>
+    (f.tag === 'tactic' ? f.text.split(/(?<=\.)\s/)[0] : f.text)
       .toLowerCase()
       .replace(/\b(?:your|their|my|mine|our|white|black)\b/g, '')
       .replace(/[^a-z0-9]+/g, ' ')
@@ -1736,7 +1748,7 @@ function* reviewSegmentSteps(
   // `claimedThisPly` keeps the within-ply dedupe the ledger used to give.
   const freshStructureFacet = (facet: string, outpostSquaresAlreadySaid: ReadonlySet<string> | undefined, claimedThisPly: Set<string>): { text: string; atoms: string[] } | null => {
     const claimed: string[] = [];
-    const inner = facet.replace(/^\[structure\]\s*/, '').replace(/\.\s*$/, '');
+    const inner = facet.replace(/\.\s*$/, '');
     const atoms: string[] = [];
     for (const seg of inner.split(' · ')) {
       const listed = /^(open files|passed pawns|isolated pawns|doubled pawns)\s+(.*)$/.exec(seg);
@@ -1764,7 +1776,7 @@ function* reviewSegmentSteps(
     // structureProse.ts. The dedupe key stays the RAW atom so the
     // once-per-game contract is unaffected by the phrasing.
     return fresh.length
-      ? { text: `[structure] ${renderStructureAtoms(fresh, playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null)}`, atoms: claimed }
+      ? { text: renderStructureAtoms(fresh, playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null), atoms: claimed }
       : null;
   };
   // TEACHING REFRAINS speak ONCE per review (David 2026-07-22: "Once a line
@@ -2020,29 +2032,19 @@ function* reviewSegmentSteps(
     // 2026-07-20: "turn off all narration caps"). Skips the one-beat cascade + the
     // one-shot flags entirely; the aggregator is the full data inventory.
     if (uncapped) {
-      // Key squares each facet NAMED, coupled from the computer (never scraped)
-      // so the review can lead the eye with a yellow highlight per kept facet.
-      const facetSquares = new Map<string, readonly string[]>();
-      // Facts describing what the OPPONENT is doing TO the student, coupled from
-      // the tactic detector's own `beneficiary` — the selector's tie-break.
-      const facetIncoming = new Set<string>();
-      // What each facet is worth on the board — coupled by the computer that
-      // produced it; the door orders by it (factStakes.ts).
-      const facetStakes = new Map<string, FactStakes>();
-      // THE PROOF each conclusion rests on, coupled the same way (one-coach P3).
-      const facetProofs = new Map<string, FactProof>();
-      // What a facet claims beyond the relation its squares draw (the loose
-      // piece a board line ends on) — coupled at emission, read by the door.
-      const facetClaims = new Map<string, readonly string[]>();
-      const facetIdentity = new Map<string, string>();
+      // EVERY FACT OF THE MOVE IS THE ONE FACT (WO-STORY-MATRIX-01 P1-6d): its
+      // squares, whose it is, what it is worth, its proof, its claims and its
+      // say-once identity ride on it, made by the computer that found it.
+      const fact = (computer: ComputerName, tag: FacetTag, text: string, parts: ReviewFacetParts = {}): ReviewFacet =>
+        reviewFacet(computer, tag, text, fenPair.fenAfter, fenPair.fenBefore, parts);
       // The walk's own say-once state for a fact (the opening name, the book
       // standing, a pin's context), committed only if the fact SPOKE — after
       // the door, like every ledger (B4: a fact on a silenced ply is not said).
-      const facetCommits = new Map<string, () => void>();
+      const facetCommits = new Map<ReviewFacet, () => void>();
       // The conversion method's own line on this move (the "trade pieces"
       // step), which the convert plan's thread owns below — a mark on this
       // move's facets, not a memory of the game (it rode the seed until 8d).
-      const conversionFacets = new Set<string>();
+      const conversionFacets = new Set<ReviewFacet>();
       const verdictReasonOut: { text: string | null; playedLine?: boolean; punishSan?: string } = { text: null };
       const facets = computeMoveFacets({
         fundamentals,
@@ -2076,13 +2078,23 @@ function* reviewSegmentSteps(
         prevCap,
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
-      }, facetSquares, facetIncoming, facetStakes, facetIdentity, verdictReasonOut, facetProofs, facetClaims);
+      }, verdictReasonOut);
+      // THE EXACT HOLE FOR THE FACT THAT NAMES IT (2026-09-21). The
+      // `[principle]` fact IS the attributed fundamental, so ranking it by
+      // `clauseKindForTag('principle') → 'structure-plan'` asked the coarse
+      // bucket a question this ply already has an exact answer to. Every other
+      // fact is left to the tag join — only this one carries an id. `null` when
+      // the attributor named a fundamental the student has NO record of: that
+      // is GREY, and grey is not a hole; it must not borrow a bucket's weight.
+      for (const f of facets) {
+        if (f.tag === 'principle') f.hole = fundamentals[0] ? matchFundamental(fundamentals[0].id, studentWeaknesses ?? []) : null;
+      }
       // ONE THREAT VOICE WITH LEARN (David's locked table, 2026-10-19): a
       // simple one-move threat on a skill the student has PROVEN is quiet —
       // "Watch out — that bishop attacks your rook" is said to a student who
       // does not yet see those, and to no one else.
       for (let k = facets.length - 1; k >= 0; k -= 1) {
-        const sq = /^opp-threat:hanging:([a-h][1-8])$/.exec(facetIdentity.get(facets[k]) ?? '')?.[1];
+        const sq = /^opp-threat:hanging:([a-h][1-8])$/.exec(facets[k].identity ?? '')?.[1];
         if (!sq) continue;
         const input = threatInputFor({ kind: 'hanging', square: sq }, { fenBefore: fenPair.fenBefore, opponentSan: m.san });
         const voice = threatVoice(recordTermForThreat(input.pattern, reviewRecord).state, threatVisibility(input.sighting).visibility).voice;
@@ -2091,12 +2103,7 @@ function* reviewSegmentSteps(
       // The game looked back on (batch 2) — each read once a game, through the
       // `hint:` say-once ledger the Learn computers already ride.
       for (const r of endReadsAt.get(i) ?? []) {
-        const raw = `[${r.kind === 'murky' ? 'murky' : 'game-end'}] ${r.text}`;
-        facets.push(raw);
-        facetIdentity.set(raw, `hint:${r.claim}`);
-        facetProofs.set(raw, r.proof);
-        if (r.squares.length) facetSquares.set(raw, r.squares);
-        if (r.stakes) facetStakes.set(raw, r.stakes);
+        facets.push(fact(END_READ_COMPUTER[r.kind], r.kind === 'murky' ? 'murky' : 'game-end', r.text, { identity: `hint:${r.claim}`, proof: r.proof, squares: r.squares, stakes: r.stakes }));
       }
       // MEMORY BY POSITION, the green half: the student left theory from this
       // board in another game at a cost, and this game went another way. The
@@ -2106,7 +2113,7 @@ function* reviewSegmentSteps(
         const hereKey = here ? readKey(here) : null;
         if (here && hereKey && hereKey.startsWith('last-here:other:') && !lastHereSaid.has(hereKey)) {
           lastHereSaid.add(hereKey);
-          facets.push(`[last-here] ${here.text}`);
+          facets.push(fact(here.computer, 'last-here', here.text));
         }
       }
       // THE CONVERSION METHOD (WO-LAYERS-01 step 5), on the student's move when
@@ -2116,7 +2123,7 @@ function* reviewSegmentSteps(
         const conv = readConversion(fenPair.fenAfter, studentColorWB);
         if (conv && !seenConversionSteps.has(conv.step) && !(conv.step === 'trade-pieces' && convertTaughtAt() !== null)) {
           seenConversionSteps.add(conv.step);
-          const raw = `[technique] ${conv.text}`;
+          const raw = fact('readConversion', 'technique', conv.text);
           facets.push(raw);
           if (conv.step === 'trade-pieces') conversionFacets.add(raw);
         }
@@ -2127,20 +2134,18 @@ function* reviewSegmentSteps(
         const sign = moverColor === 'white' ? 1 : -1;
         const moveCost = recordedMoveCost(m, moverColor) ?? 0;
         const pe = pawnEndingTrade(fenPair.fenBefore, m.san, moves[i + 1]?.san ?? null, moveCost, m.evaluation * sign);
-        if (pe) facets.push(`[technique] ${pe.text}`);
+        if (pe) facets.push(fact('pawnEndingTrade', 'technique', pe.text));
         if (m.bestMove) {
           try {
             const bm = new Chess(fenPair.fenBefore).move({ from: m.bestMove.slice(0, 2), to: m.bestMove.slice(2, 4), promotion: m.bestMove[4] });
             const st = spareTempoWasted(fenPair.fenBefore, m.san, bm?.san ?? null, moveCost);
-            if (st) facets.push(`[technique] ${st}`);
+            if (st) facets.push(fact('spareTempoWasted', 'technique', st));
           } catch { /* no best move to compare */ }
         }
         const decoy = outsidePasserDecoy(fenPair.fenAfter, studentColorWB);
         if (decoy && !seenDecoys.has(decoy.passer[0])) {
           seenDecoys.add(decoy.passer[0]);
-          const raw = `[technique] ${decoy.text}`;
-          facets.push(raw);
-          facetSquares.set(raw, decoy.squares);
+          facets.push(fact('outsidePasserDecoy', 'technique', decoy.text, { squares: decoy.squares }));
         }
       }
       // THE LEARN COMPUTERS, CALLED — not copied (unify-the-coach A2, David
@@ -2175,10 +2180,7 @@ function* reviewSegmentSteps(
           if (h.kind !== 'rule') continue;
           const id = `hint:${h.claims.join('|') || h.lane}`;
           if (hintsSaid.has(id)) continue;
-          const raw = `[${h.kind}] ${h.text}`;
-          facets.push(raw);
-          facetIdentity.set(raw, id);
-          if (h.squares.length) facetSquares.set(raw, h.squares);
+          facets.push(fact(h.computer, h.kind, h.text, { identity: id, squares: h.squares }));
         }
       }
       // THE LINE BEHIND A WINNING MOVE — parity with Learn (David 2026-09-30:
@@ -2199,19 +2201,14 @@ function* reviewSegmentSteps(
           // started it) — a material count would undersell it.
           const ml = line ? mateLine(fenPair.fenBefore, line, studentColorWB, m.san) : null;
           if (ml) {
-            const raw = `[tactic] ${ml.text}`;
-            facets.push(raw);
-            facetStakes.set(raw, mateStakes('you', 0, true));
-            if (ml.taken.length) facetSquares.set(raw, ml.taken);
+            facets.push(fact('mateLine', 'tactic', ml.text, { stakes: mateStakes('you', 0, true), squares: ml.taken }));
             if (!causalArrows || causalArrows.length === 0) {
               causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.mateLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
             }
           }
           const won = !ml && line ? lineWins(fenPair.fenBefore, line, studentColorWB, m.san, i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null, [lineSecond]) : null;
           if (won) {
-            const raw = `[tactic] That wins ${won.what}: ${lineShape(won.sans, lineSeatAt(fenPair.fenBefore, studentColorWB))}.`;
-            facets.push(raw);
-            facetStakes.set(raw, { points: won.net, plies: 0 });
+            facets.push(fact('lineWins', 'tactic', `That wins ${won.what}: ${lineShape(won.sans, lineSeatAt(fenPair.fenBefore, studentColorWB))}.`, { stakes: { points: won.net, plies: 0 } }));
             if (!causalArrows || causalArrows.length === 0) {
               causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.winningLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
             }
@@ -2263,7 +2260,7 @@ function* reviewSegmentSteps(
             // said there already, it is not said again with the name.
             const planText = planRaw && !hintsSaid.has(`once:plan:${planRaw}`) ? planRaw : null;
             // On the same move the name carries it: the bare plan facet goes.
-            if (planText) { const dup = facets.findIndex((x) => facetIdentity.get(x) === `once:plan:${planText}`); if (dup >= 0) facets.splice(dup, 1); }
+            if (planText) { const dup = facets.findIndex((x) => x.identity === `once:plan:${planText}`); if (dup >= 0) facets.splice(dup, 1); }
             const teaching = idRead?.text ?? planText;
             // THEIR DEPARTURE WITH NOTHING TO TEACH IS HELD (lead 2026-10-20,
             // Najdorf Zagreb: "They left the book with the bishop to b7." is a
@@ -2272,10 +2269,8 @@ function* reviewSegmentSteps(
             const dep = bookDeparture(history);
             const theirBareDeparture = !teaching && !!dep && dep.mover !== studentColorWB && history.length - dep.ply <= 1;
             if ((teaching || namedOpening) && !theirBareDeparture) {
-              const raw = `[opening] ${announce}${teaching ? ` ${teaching}` : ''}`;
+              const raw = fact(idRead?.computer ?? 'openingAnnouncementForGame', 'opening', `${announce}${teaching ? ` ${teaching}` : ''}`, { identity: idRead ? `hint:${readKey(idRead)}` : `hint:opening-name:${det.name}`, squares: idRead?.squares ?? [] });
               facets.push(raw);
-              facetIdentity.set(raw, idRead ? `hint:${readKey(idRead)}` : `hint:opening-name:${det.name}`);
-              if (idRead?.squares.length) facetSquares.set(raw, idRead.squares);
               const said = det.name;
               facetCommits.set(raw, () => { noteOpening(story, m.ply, 'named', said); if (planText) hintsSaid.add(`once:plan:${planText}`); });
             }
@@ -2284,15 +2279,12 @@ function* reviewSegmentSteps(
         for (const r of reads) {
           if (!storyAll && r.storyBeat !== 'identity') continue;
           const id = `hint:${readKey(r)}`;
-          if (hintsSaid.has(id) || facets.some((x) => facetIdentity.get(x) === id)) continue;
+          if (hintsSaid.has(id) || facets.some((x) => x.identity === id)) continue;
           // Each beat under its own kind (`openingStory.STORY_KIND`, on the
           // fact), placed by the one group table — no longer every beat filed
           // as the name.
-          const raw = `[${r.kind}] ${r.text}`;
+          const raw = fact(r.computer, r.kind, r.text, { identity: id, proof: r.proof, squares: r.squares });
           facets.push(raw);
-          facetIdentity.set(raw, id);
-          facetProofs.set(raw, r.proof);
-          if (r.squares.length) facetSquares.set(raw, r.squares);
           const told = r.text; const named = storyNames;
           facetCommits.set(raw, () => { storySaid.add(told); if (named) noteOpening(story, m.ply, 'named', named); });
         }
@@ -2340,8 +2332,8 @@ function* reviewSegmentSteps(
         // lost the first loose piece, so the habit never came (batch 4 merge,
         // Alapin 11…Nd5: loosePattern.test). In the opening the job keeps the
         // line it always had.
-        const keepLoose = (f: string): boolean => !openingPly && LOOSE_TAIL.test(f);
-        const doesLine = target ? facets.findIndex((f) => f.startsWith('[does] ') && f.includes(` on ${target}`)) : -1;
+        const keepLoose = (f: ReviewFacet): boolean => !openingPly && LOOSE_TAIL.test(f.text);
+        const doesLine = target ? facets.findIndex((f) => f.tag === 'does' && f.text.includes(` on ${target}`)) : -1;
         const sameClaim = doesLine >= 0 && !keepLoose(facets[doesLine]) ? doesLine : -1;
         // …and when it stays for its loose piece, it has said the attack: the
         // job does not say it again (Review prod audit 2026-10-30, Qc3: "Your
@@ -2351,13 +2343,13 @@ function* reviewSegmentSteps(
         // A STORY LINE ON THIS MOVE THAT ALREADY SAYS THE JOB ("You chose the
         // Two Knights Defense: …Nf6 attacks their pawn on e4, where …") carries
         // it with its reason; the bare job would say it twice.
-        const told = !!job && (facets.some((f) => (facetIdentity.get(f) ?? '').startsWith('hint:story:') && f.includes(job.clause.replace(/^it /, '')))
+        const told = !!job && (facets.some((f) => (f.identity ?? '').startsWith('hint:story:') && f.text.includes(job.clause.replace(/^it /, '')))
           // ONE CLAIM, ONE PRODUCER (lead 2026-10-20: "Attacks their bishop on
           // b6." beside "c5 kicks their bishop off b6, gaining time"): an
           // attack another line on this move already names, with its reason,
           // is not said again as a bare job.
-          || (job.kind === 'attack' && job.squares.length === 2 && facets.some((f) => /^\[(?:rule|point|judgement)\] /.test(f)
-            && new RegExp(`\\b(?:kicks?|attacks?|hits?|chases?|goes after)\\b[^.]*\\b(?:on|off) ${job.squares[1]}\\b`).test(f)))
+          || (job.kind === 'attack' && job.squares.length === 2 && facets.some((f) => (f.tag === 'rule' || f.tag === 'point' || f.tag === 'judgement')
+            && new RegExp(`\\b(?:kicks?|attacks?|hits?|chases?|goes after)\\b[^.]*\\b(?:on|off) ${job.squares[1]}\\b`).test(f.text)))
           // ONE CLAIM, ONE PRODUCER (Review tape 2026-10-21: "Brings your bishop
           // out and clears the way to castle next move. Your bishop to d3 clears
           // the way to castle."): the student's move whose engine reason is the
@@ -2367,7 +2359,7 @@ function* reviewSegmentSteps(
           // subject and its reason (same tape, 20.Bd2: "…steps out of the
           // pawn's reach, keeping the bishop…" beside "Takes your bishop out of
           // reach of their pawn on f4."). The join is JOB_RESTATED_BY_RULE.
-          || restatedByRule(job, facets, facetIdentity, facetSquares)
+          || restatedByRule(job, facets)
           // …and a free capture the cause-and-effect line on this move already
           // told as won (v5 re-run 2026-10-29, chesscom-832383758 ply 16: "You
           // won the bishop on f7 — nothing was left guarding it. … Wins their
@@ -2380,10 +2372,7 @@ function* reviewSegmentSteps(
         if (job && heard && !told && !hintsSaid.has(id) && moverColor !== playerColor && job.kind === 'attack' && job.squares[1]) {
           const ask = whatItAsks(fenPair.fenAfter, job.squares[1], moverColor === 'white' ? 'w' : 'b', THEIRS);
           if (ask) {
-            const raw = `[move-job] ${ask}.`;
-            facets.push(raw);
-            facetIdentity.set(raw, id);
-            facetSquares.set(raw, job.squares);
+            facets.push(fact('whatItAsks', 'move-job', `${ask}.`, { identity: id, squares: job.squares }));
           }
         }
         // THE BOOK STANDING — said where the walk enters the main line, first
@@ -2434,16 +2423,13 @@ function* reviewSegmentSteps(
         // (Nf3's "develops into the game, fighting for the center…" was said
         // by both).
         const skipJob = told || heard || plainAttackAsksNothing || doesSaysJob;
-        const ruleIdeas = new Set(facets.map((f) => ruleIdOf(facetIdentity.get(f))).filter((r): r is MoveFundamentalId => r !== null).map((r) => FUNDAMENTAL_IDEA[r]));
+        const ruleIdeas = new Set(facets.map((f) => ruleIdOf(f.identity)).filter((r): r is MoveFundamentalId => r !== null).map((r) => FUNDAMENTAL_IDEA[r]));
         // A line that already teaches this move ([rule], [point]…) leads its
         // step: the composer adds only a second job — a new claim that clears
         // the policy's floor (…Nxd5's rule said the recapture; "adds its
         // weight to f4" was trivia behind it).
-        const stepLeads = facets.filter((f) => {
-          const tag = facetTag(f);
-          return !!tag && FACET_ROLE[tag] === 'teach' && (stepOf(tag, 'student') === 'yours' || stepOf(tag, 'student') === 'theirs');
-        });
-        const leadSquares = new Set(stepLeads.flatMap((f) => [...(facetSquares.get(f) ?? [])]));
+        const stepLeads = facets.filter((f) => FACET_ROLE[f.tag] === 'teach' && (stepOf(f.tag, 'student') === 'yours' || stepOf(f.tag, 'student') === 'theirs'));
+        const leadSquares = new Set(stepLeads.flatMap((f) => [...f.squares]));
         const phrasesHere = new Map(thoughtPhrases);
         const memoryHere = { keys: new Set(thoughtKeys) };
         const thoughtFacts = moveThoughtFacts({
@@ -2469,10 +2455,8 @@ function* reviewSegmentSteps(
           // time, and the say-once ledger drops the second).
           const asked = asks && !!job ? thought.kept.findIndex((f) => f.squares.includes(job.squares[1])) : -1;
           const spoken = thought.kept.map((f, k) => (k === asked ? f.text.replace(/\.$/, ', and it needs an answer this move.') : f.text)).join(' ');
-          const raw = `[move-job] ${standing ? `${standing}. ` : ''}${spoken}`;
+          const raw = fact('moveThoughtFacts', 'move-job', `${standing ? `${standing}. ` : ''}${spoken}`, { identity: id, squares: [...named] });
           facets.push(raw);
-          facetIdentity.set(raw, id);
-          if (named.size) facetSquares.set(raw, [...named]);
           facetCommits.set(raw, () => {
             if (nextStanding) flags.add(`standing=${nextStanding}`);
             for (const k of memoryHere.keys) thoughtKeys.add(k);
@@ -2493,21 +2477,18 @@ function* reviewSegmentSteps(
         const sign = moverColor === 'white' ? 1 : -1;
         const oppLoss = typeof m.costCp === 'number' ? m.costCp : (m.preMoveEval - m.evaluation) * sign;
         const verdict = theirOpeningVerdict(moves.slice(0, i + 1).map((x) => x.san), studentColorWB, oppLoss, false);
-        if (verdict) facets.push(`[opening] ${verdict}`);
+        if (verdict) facets.push(fact('theirOpeningVerdict', 'opening', verdict));
       }
       for (const e of arcByIndex.get(i) ?? []) {
         // Review has no think pause: the question and its answer run on as one
         // line (the arc's "‖" was reaching the review's text).
-        const raw = `[plan-arc] ${stripThink(e.text)}`;
-        facets.push(raw);
-        if (e.squares.length) facetSquares.set(raw, e.squares);
-        if (e.seat === 'opponent') facetIncoming.add(raw);
+        facets.push(fact('gameArcSteps', 'plan-arc', stripThink(e.text), { squares: e.squares, incoming: e.seat === 'opponent' }));
       }
       if (fundamentals.length > 0) {
         if (isStudentForAttr) {
           const again = noteSlip(story, fundamentals[0].id, m.ply);
-          const i = facets.findIndex((f) => f.startsWith('[principle] '));
-          if (again && i >= 0) facets[i] = `[principle] ${again}${facets[i].slice('[principle] '.length)}`;
+          const i = facets.findIndex((f) => f.tag === 'principle');
+          if (again && i >= 0) facets[i] = reworded(facets[i], `${again}${facets[i].text}`);
         }
       }
       // ── NO CORPUS NOTE IN REVIEW (David 2026-09-23) ─────────────────────
@@ -2531,7 +2512,7 @@ function* reviewSegmentSteps(
       // ply 1 was never spoken in the whole review. Now each branch CLAIMS
       // (dedupe within the ply, as before) and registers a COMMIT; the commits
       // run after the door and the quiet-ply gate, for the facts that spoke.
-      const keptRaw: string[] = [];
+      const keptRaw: ReviewFacet[] = [];
       // THE KEY EACH KEPT FACET'S RECORDS ARE FILED UNDER — its producer's own
       // words, before any rewrite on its way here (WO-STORY-MATRIX-01 P1-5). A
       // facet REWRITTEN on its way to the door (the loose tail turned into the
@@ -2540,18 +2521,17 @@ function* reviewSegmentSteps(
       // rewrite cannot drop a record it forgot to copy (the habit lost its
       // claims, and the door then heard it as a restatement and silenced it,
       // 2026-10-21). It replaced a copy of all seven maps under the new words.
-      const keptKey: string[] = [];
+      const keptKey: ReviewFacet[] = [];
       const claimedThisPly = new Set<string>();
-      const commitByRaw = new Map<string, () => void>();
+      const commitByRaw = new Map<ReviewFacet, () => void>();
       const claim = (key: string): boolean => { if (claimedThisPly.has(key)) return false; claimedThisPly.add(key); return true; };
       // A REASON FORMULA IS SAID ONCE A GAME (lead 2026-10-20, Review noise
       // walk): "X is tied down now: you hit …", "Watch out — that … attacks
       // your …", "stand a knight's jump apart" — the second time on a new board
       // is the same lesson again. The verdict lanes (quality, tactic, threat,
       // the principle and its method) are per-move facts and stay.
-      const keep = (raw: string, commit?: () => void, key: string = raw): void => {
-        const tm = /^\[([a-z-]+)\] (.*)$/.exec(raw);
-        const formula = tm && FORMULA_ONCE.has(tm[1]) ? reasonFormula(tm[2]) : null;
+      const keep = (raw: ReviewFacet, commit?: () => void, key: ReviewFacet = raw): void => {
+        const formula = FORMULA_ONCE.has(raw.tag) ? reasonFormula(raw.text) : null;
         if (formula && formulasSaid.has(formula)) return;
         keptRaw.push(raw);
         keptKey.push(key);
@@ -2566,7 +2546,7 @@ function* reviewSegmentSteps(
       // thread once one of its lines is spoken (commit after the door).
       const planTrial = story.plans().thread;
       // The plan's routes, hop by hop, drawn when its line speaks.
-      const planRouteByRaw = new Map<string, ReadonlyArray<{ from: string; to: string; fen: string }>>();
+      const planRouteByRaw = new Map<ReviewFacet, ReadonlyArray<{ from: string; to: string; fen: string }>>();
       if (studentColorWB && !isStudentForAttr) {
         const povCp = m.evaluation != null ? (studentColorWB === 'w' ? m.evaluation : -m.evaluation) : null;
         // Their move follows the student's: the ply before is the student's own
@@ -2574,12 +2554,12 @@ function* reviewSegmentSteps(
         const prevStudent = i > 0 && moves[i - 1] ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null;
         for (const r of readBoardAll('planThread', { thread: planTrial, ply: m.ply, fenBefore: fenPair.fenBefore, fenAfter: fenPair.fenAfter, student: studentColorWB, studentPovCp: povCp, studentMove: prevStudent, holdPlayable: false })) {
           // Review has no think pause: the question and its answer run on.
-          const raw = `[${r.kind}] ${stripThink(r.text)}`;
-          facets.push(raw);
           const key = readKey(r);
-          facetIdentity.set(raw, key.startsWith('plan:stopped:') ? 'plan-thread:stop' : key.startsWith('plan:step:') ? 'plan-thread:step' : 'plan-thread:plan');
-          facetProofs.set(raw, r.proof);
-          if (r.squares.length) facetSquares.set(raw, r.squares);
+          const raw = fact(r.computer, r.kind, stripThink(r.text), {
+            identity: key.startsWith('plan:stopped:') ? 'plan-thread:stop' : key.startsWith('plan:step:') ? 'plan-thread:step' : 'plan-thread:plan',
+            proof: r.proof, squares: r.squares,
+          });
+          facets.push(raw);
           if (r.marks?.route?.length) planRouteByRaw.set(raw, r.marks.route);
         }
       }
@@ -2602,16 +2582,16 @@ function* reviewSegmentSteps(
         // second time you've left a piece with no guard" at ply 52). Once
         // either names it for a side, that side's loose pieces go quiet.
         {
-          const hm = /^\[(your|their)-habit\] /.exec(f0);
-          if (hm && facetIdentity.get(f0) === `${hm[1]}-habit:loose`) {
-            const owner = hm[1] as 'your' | 'their';
+          const owner0 = f0.tag === 'your-habit' ? 'your' : f0.tag === 'their-habit' ? 'their' : null;
+          if (owner0 && f0.identity === `${owner0}-habit:loose`) {
+            const owner = owner0;
             if (looseCount(owner) >= 2) continue;
             keep(f0, () => { looseSaid.add(`${owner}#1`); looseSaid.add(`${owner}#2`); });
             continue;
           }
         }
         {
-          const lm = /^\[(?:does|delta)\] .*?(?: — nothing guards (your|their) (\w+) on [a-h][1-8]| — (your|their) (\w+) on [a-h][1-8] has no guard|, and (your|their) (\w+) on [a-h][1-8] is loose)\.$/.exec(f0);
+          const lm = (f0.tag === 'does' || f0.tag === 'delta') && /^.*?(?: — nothing guards (your|their) (\w+) on [a-h][1-8]| — (your|their) (\w+) on [a-h][1-8] has no guard|, and (your|their) (\w+) on [a-h][1-8] is loose)\.$/.exec(f0.text);
           if (lm) {
             const owner = (lm[1] ?? lm[3] ?? lm[5]) as 'your' | 'their';
             const n = looseCount(owner);
@@ -2620,21 +2600,21 @@ function* reviewSegmentSteps(
               const habit = owner === 'their'
                 ? ` — that's the second time they've left a piece with no guard: after every move of theirs, look first for what it leaves loose`
                 : ` — that's the second time you've left a piece with no guard: before every move, check what it leaves without one`;
-              f = f0.replace(/(?: — nothing guards .*| — .* has no guard|, and .* is loose)\.$/, `${habit}.`);
+              f = reworded(f0, f0.text.replace(/(?: — nothing guards .*| — .* has no guard|, and .* is loose)\.$/, `${habit}.`));
             }
             keep(f, () => { looseSaid.add(`${owner}#${n + 1}`); }, f0);
             continue;
           }
         }
         // A refuted alternative is said once per game (identity `refuted:<move>`).
-        { const id = facetIdentity.get(f); if (id?.startsWith('refuted:') && (refutedSaid.has(id) || !claim(id))) continue; }
+        { const id = f.identity; if (id?.startsWith('refuted:') && (refutedSaid.has(id) || !claim(id))) continue; }
         // `once:` — a batch-1 fact said once per game (the opening this board is).
-        { const id = facetIdentity.get(f); if ((id?.startsWith('hint:') || id?.startsWith('once:')) && (hintsSaid.has(id) || !claim(id))) continue; }
+        { const id = f.identity; if ((id?.startsWith('hint:') || id?.startsWith('once:')) && (hintsSaid.has(id) || !claim(id))) continue; }
         // Positional VERDICT — atom-diffed. Speak the verdict WORD when it
         // changes, and only the REASONS not yet stated, so a growing edge adds
         // the new asset instead of re-reciting the pile every ply.
-        if (/^\[verdict\]/.test(f)) {
-          const vm = /^\[verdict\]\s*You're\s+([^:.]+?)(?::\s*(.*?))?\.?\s*$/.exec(f);
+        if (f.tag === 'verdict') {
+          const vm = /^\s*You're\s+([^:.]+?)(?::\s*(.*?))?\.?\s*$/.exec(f.text);
           if (!vm) { keep(f); continue; }
           const word = vm[1].trim();
           const reasons = vm[2] ? vm[2].split(/;\s*/).map((r) => r.trim()).filter(Boolean) : [];
@@ -2644,15 +2624,15 @@ function* reviewSegmentSteps(
           freshReasons.forEach((r) => claimedThisPly.add(`verdict-reason:${r.toLowerCase()}`));
           verdictWordThisPly = word.toLowerCase();
           const why = freshReasons.length ? `: ${freshReasons.join('; ')}` : '';
-          keep(`[verdict] You're ${word}${why}.`, () => {
+          keep(reworded(f, `You're ${word}${why}.`), () => {
             freshReasons.forEach((r) => verdictReasonsSeen.add(r.toLowerCase()));
             story.note(m.ply, [{ kind: 'verdict', word: word.toLowerCase() }]);
           });
           continue;
         }
         // Plans — the one thread's lines (above).
-        if (/^\[plan-now\]/.test(f)) {
-          const role = facetIdentity.get(f);
+        if (f.tag === 'plan-now') {
+          const role = f.identity;
           if (role === 'plan-thread:plan') {
             if (planLineHeld) continue;
             keep(f, () => {
@@ -2668,8 +2648,8 @@ function* reviewSegmentSteps(
           continue;
         }
         // The RACE — once, then only when the verdict FLIPS (the race thread).
-        if (/^\[plan-race\]/.test(f)) {
-          const verdict = /they get there first|they got there first|they would get there first/i.test(f) ? 'them' : 'you';
+        if (f.tag === 'plan-race') {
+          const verdict = /they get there first|they got there first|they would get there first/i.test(f.text) ? 'them' : 'you';
           if (threadVariant(story.current(), RACE_THREAD) === verdict || !claim(`race:${verdict}`)) continue;
           keep(f, () => { story.commitThreads(m.ply, [{ key: RACE_THREAD, kind: 'stated', variant: verdict }]); });
           continue;
@@ -2682,8 +2662,8 @@ function* reviewSegmentSteps(
           continue;
         }
         {
-          const pf = /^\[passer\]/.test(f) ? (/passed pawn on ([a-h])[1-8]/i.exec(f)?.[1] ?? null)
-            : /^\[plan-arc\] The plan for you here: pushing the passed pawn on the ([a-h])-file/i.exec(f)?.[1] ?? null;
+          const pf = f.tag === 'passer' ? (/passed pawn on ([a-h])[1-8]/i.exec(f.text)?.[1] ?? null)
+            : f.tag === 'plan-arc' ? (/^The plan for you here: pushing the passed pawn on the ([a-h])-file/i.exec(f.text)?.[1] ?? null) : null;
           if (pf) {
             // The full plan outranks the one-line note and the arc for the same
             // pawn: when it is on this ply, they defer to it.
@@ -2692,11 +2672,11 @@ function* reviewSegmentSteps(
             continue;
           }
         }
-        if (STANDING_STATE_RE.test(f)) {
+        if (STANDING_STATE_TAGS.has(f.tag)) {
           const sig = standingSig(f);
           // …and by its GEOMETRY: a battery and a discovery in waiting on the
           // same three squares are one line (`tacticGeometryKey`).
-          const geo = /^\[tactic\]/.test(f) ? tacticGeometryKey(facetSquares.get(f) ?? []) : null;
+          const geo = f.tag === 'tactic' ? tacticGeometryKey(f.squares) : null;
           if (standingSpoken.has(sig) || (geo && standingSpoken.has(geo)) || !claim(`standing:${sig}`) || (geo && !claim(geo))) continue;
           keep(f, () => { standingSpoken.add(sig); if (geo) standingSpoken.add(geo); });
           continue;
@@ -2706,17 +2686,17 @@ function* reviewSegmentSteps(
         // ply (David 2026-09-15, reading the real review: "your knight sits on a
         // protected outpost on d4 … Your knight sits on an outpost at d4"). Two
         // computers, one fact, one sentence.
-        if (/^\[structure\]/.test(f)) {
+        if (f.tag === 'structure') {
           const outpostSquaresAlreadySaid = new Set(
-            keptRaw.filter((k) => /outpost/i.test(k)).flatMap((k) => k.match(/\b[a-h][1-8]\b/g) ?? []),
+            keptRaw.filter((k) => /outpost/i.test(k.text)).flatMap((k) => k.text.match(/\b[a-h][1-8]\b/g) ?? []),
           );
-          const fresh = freshStructureFacet(f, outpostSquaresAlreadySaid, claimedThisPly);
-          if (fresh) keep(fresh.text, () => { for (const a of fresh.atoms) structAtomsSeen.add(a); });
+          const fresh = freshStructureFacet(f.text, outpostSquaresAlreadySaid, claimedThisPly);
+          if (fresh) keep(reworded(f, fresh.text), () => { for (const a of fresh.atoms) structAtomsSeen.add(a); });
           continue;
         }
         // "Their king is stuck in the centre" is taught at most ONCE per game —
         // it's a standing observation, robotic to repeat every ply it holds.
-        if (/^\[king\]/.test(f)) {
+        if (f.tag === 'king') {
           if (flags.has('kingCenterTaught') || !claim('king')) continue;
           keep(f, () => { flags.add('kingCenterTaught'); });
           continue;
@@ -2724,16 +2704,15 @@ function* reviewSegmentSteps(
         // A sacrifice's COMPENSATION profile is shared across a combination —
         // state it once per game (by signature); later sacs are still NAMED via
         // their own [sac-why] mechanism facet, which is dynamic per move.
-        if (/^\[sac\]/.test(f)) {
+        if (f.tag === 'sac') {
           const sig = standingSig(f);
           if (sacSpoken.has(sig) || !claim(`sac:${sig}`)) continue;
           keep(f, () => sacSpoken.add(sig));
           continue;
         }
         // Development nags: once per review by TAG (David 2026-07-22).
-        const oneShot = /^\[(plan-opening|opp-dev)\]/.exec(f);
-        if (oneShot) {
-          const tag = oneShot[1];
+        if (f.tag === 'plan-opening' || f.tag === 'opp-dev') {
+          const tag = f.tag;
           if (oneShotTags.has(tag) || !claim(`oneshot:${tag}`)) continue;
           keep(f, () => oneShotTags.add(tag));
           continue;
@@ -2742,16 +2721,20 @@ function* reviewSegmentSteps(
         // rook endgame…" spoke on all ten plies of the ending. Keyed on the
         // exact string, so the class still speaks again when it CHANGES
         // (rook ending → king-and-pawn ending).
-        if (/^\[(opening|plan-middlegame|passer|badbishop|worst|trapped|minority|complex|endgame)\]/.test(f)) {
-          if (emittedStaticFacets.has(f) || !claim(`static:${f}`)) continue;
-          keep(f, () => emittedStaticFacets.add(f));
+        if (STATIC_TAGS.has(f.tag)) {
+          const key = staticKey(f);
+          if (emittedStaticFacets.has(key) || !claim(`static:${key}`)) continue;
+          keep(f, () => emittedStaticFacets.add(key));
           continue;
         }
         keep(f);
       }
       const claimedRefrains = new Set<number>();
-      const refrained = keptRaw.map((raw) => refrainOnce(raw, claimedRefrains));
-      const kept = refrained.map((r) => r.text);
+      const refrained = keptRaw.map((raw) => refrainOnce(raw.text, claimedRefrains));
+      const kept = keptRaw.map((raw, k) => reworded(raw, refrained[k].text));
+      // A spoken line back to its fact: the door hands back its words.
+      const keptByText = new Map<string, ReviewFacet>();
+      for (const f of kept) if (!keptByText.has(f.text)) keptByText.set(f.text, f);
       // THE DOOR'S FACTS (WO-STORY-MATRIX-01 P1-5): each kept facet as the one
       // fact shape, its records read off the producer's maps by the key it was
       // filed under — the refrain-once pass and the loose rewrite change the
@@ -2761,38 +2744,21 @@ function* reviewSegmentSteps(
       // [passer] read of the same pawn) takes that facet's kind, so the door's
       // subsumption sees ONE claim. The join is FUNDAMENTAL_CLAIM_FAMILY.
       // Review names no move the student has yet to find: the game is over.
-      const facetFacts: DoorFact[] = kept.map((text, i) => {
-        const key = keptKey[i];
-        const ruleId = ruleIdOf(facetIdentity.get(key));
-        const kind = factKind(text, ruleId ? FUNDAMENTAL_CLAIM_FAMILY[ruleId] : null);
-        // Every facet is built from a typed tag; one without is a broken
-        // producer, never a fact to weigh.
-        if (kind === null) throw new Error(`a Review facet reached the door with no kind: ${text}`);
-        return toCoachFact({
-          id: `facet:${i}`, kind, text, fen: fenPair.fenAfter, altFen: fenPair.fenBefore,
-          squares: facetSquares.get(key) ?? [], claims: facetClaims.get(key) ?? [],
-          stakes: facetStakes.get(key) ?? null, proof: facetProofs.get(key) ?? NO_PROOF.description,
-          seat: facetIncoming.has(key) ? 'opponent' : 'student', namesStudentMove: false, thread: LOCAL_THREAD,
-          // THE EXACT HOLE FOR THE FACT THAT NAMES IT (2026-09-21). The
-          // `[principle]` facet IS the attributed fundamental, so ranking it by
-          // `clauseKindForTag('principle') → 'structure-plan'` asked the coarse
-          // bucket a question this ply already has an exact answer to. Every
-          // other facet is left to the tag join, which is the right route for
-          // it — only this one carries an id.
-          //
-          // `null` when the attributor named a fundamental the student has NO
-          // record of: that is GREY, and grey is not a hole. It must not fall
-          // back to the bucket, or "never asked" would borrow an unrelated
-          // weakness's weight.
-          ...(text.startsWith('[principle] ') ? { hole: fundamentals[0] ? matchFundamental(fundamentals[0].id, studentWeaknesses ?? []) : null } : {}),
-        });
-      });
+      const facetFacts: ReviewFacet[] = [];
+      {
+        const seen = new Set<string>();
+        for (const f of kept) {
+          if (seen.has(f.id)) continue;
+          seen.add(f.id);
+          facetFacts.push(f);
+        }
+      }
       // KEY-SQUARE HIGHLIGHTS (David 2026-09-13): every square a KEPT facet
       // named, from the computer's own squares (facetSquares), so the review
       // board leads the eye in yellow exactly where the narration points —
       // matched to the RAW facet strings (the map keys), before refrainOnce
       // rewrites them, so a highlight only rides a facet actually spoken.
-      const segKeySquares = [...new Set(keptKey.flatMap((k) => facetSquares.get(k) ?? []))];
+      const segKeySquares = [...new Set(keptKey.flatMap((k) => [...k.squares]))];
       // FUNDAMENTALS-FIRST on a flagged student ply (David 2026-09-05 overhaul:
       // "narrate the fundamentals FIRST"). computeMoveFacets emits the neglected
       // principle as a [principle] facet, but AFTER the move-mechanics facets —
@@ -2899,8 +2865,8 @@ function* reviewSegmentSteps(
           saidHabits: habitScratch,
           // The leading fundamental that already IS a habit's lesson.
           habitByFact: new Map(kept
-            .filter((f) => f.startsWith('[principle] '))
-            .flatMap((f) => fundamentals.flatMap((fd) => (fd.id in FUNDAMENTAL_HABIT ? [[f, FUNDAMENTAL_HABIT[fd.id]] as const] : [])))),
+            .filter((f) => f.tag === 'principle')
+            .flatMap((f) => fundamentals.flatMap((fd) => (fd.id in FUNDAMENTAL_HABIT ? [[f.text, FUNDAMENTAL_HABIT[fd.id]] as const] : [])))),
         } });
       // SILENCE IS A COMPUTED VERDICT, so it has to be explainable — emit what
       // went quiet and why, or a future session cannot tell a deliberate
@@ -2915,8 +2881,9 @@ function* reviewSegmentSteps(
       }
       let orderedKept = decision.spoken;
       if (fundamentalLed) {
-        const principle = orderedKept.filter((f) => /^\[principle\]/.test(f));
-        if (principle.length > 0) orderedKept = [...principle, ...orderedKept.filter((f) => !/^\[principle\]/.test(f))];
+        const isPrinciple = (t: string): boolean => keptByText.get(t)?.tag === 'principle';
+        const principle = orderedKept.filter(isPrinciple);
+        if (principle.length > 0) orderedKept = [...principle, ...orderedKept.filter((t) => !isPrinciple(t))];
       }
       // The causal chain LEADS the beat when present (it's the cross-move story).
       const rankedParts = causalLead ? [causalLead, ...orderedKept] : orderedKept;
@@ -2978,7 +2945,7 @@ function* reviewSegmentSteps(
         // list — an evicted fact is not said and must stay free to speak later.
         const spokenSet = new Set(uncappedParts);
         keptRaw.forEach((raw, i) => {
-          if (!spokenSet.has(kept[i])) return;
+          if (!spokenSet.has(kept[i].text)) return;
           commitByRaw.get(raw)?.();
           facetCommits.get(keptKey[i])?.();
           // The plan that spoke shows its routes (David 2026-10-15: "Arrows trace its route?").
@@ -2988,14 +2955,14 @@ function* reviewSegmentSteps(
           }
           for (const c of refrained[i].claims) spokenRefrains.add(c);
         });
-        if (uncappedParts.some((f) => f.startsWith('[method] '))) for (const h of habitScratch) spokenHabits.add(h);
+        if (decision.method !== null && uncappedParts.includes(decision.method)) for (const h of habitScratch) spokenHabits.add(h);
         // THE STRUCTURED COMMITS (WO-TEACH-02), for facts that SPOKE:
         //  • rule:<id>  — the principle is now taught; it will not speak again;
         //  • motif:<t>  — S6 transfer: a tactic whose motif was spoken at an
         //    earlier move names that move ("same idea as move 12").
         for (let k = 0; k < uncappedParts.length; k += 1) {
-          const at = kept.indexOf(uncappedParts[k]);
-          const identity = facetIdentity.get(at >= 0 ? keptKey[at] : uncappedParts[k]);
+          const at = kept.findIndex((f) => f.text === uncappedParts[k]);
+          const identity = at >= 0 ? keptKey[at].identity : undefined;
           if (!identity) continue;
           if (identity.startsWith('rule:')) { for (const k of identity.slice(5).split('|')) principlesTaught.add(k); continue; }
           if (identity.startsWith('refuted:')) { refutedSaid.add(identity); continue; }
@@ -3038,7 +3005,7 @@ function* reviewSegmentSteps(
       // facts (the fundamental's how, the method beat, their habit and yours)
       // are held as the segment's tail and said once the line is in. A ply
       // whose only words are the habit says it now — nothing comes before.
-      const isHabit = (part: string): boolean => { const tag = facetTag(part); return tag !== null && stepOf(tag, 'student') === 'habit'; };
+      const isHabit = (part: string): boolean => { const tag = part === decision.method ? 'method' : keptByText.get(part)?.tag; return !!tag && stepOf(tag, 'student') === 'habit'; };
       const bodyNarration = speakDoor(doorFacts.filter((_, k) => !isHabit(uncappedParts[k])));
       const habitNarration = speakDoor(doorFacts.filter((_, k) => isHabit(uncappedParts[k])));
       const doorNarration = bodyNarration ?? habitNarration;

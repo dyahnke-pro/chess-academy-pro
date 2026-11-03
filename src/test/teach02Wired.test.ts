@@ -10,6 +10,7 @@ import { Chess } from 'chess.js';
 import { computeMoveFacets, NO_TEACHING_CONTEXT, type MoveTeachingContext } from '../services/reviewFullData';
 import { computePositionFacts } from '../services/positionFacts';
 import type { RefutedAlternative } from '../services/refutedAlternativeCore';
+import { facetLines, facetRecords } from './reviewFacetLines';
 
 function fens(moves: string[]): string[] {
   const c = new Chess();
@@ -24,13 +25,13 @@ const SCH = ['e4', 'e5', 'Bc4', 'Nc6', 'Qh5', 'g6'];
 const S = fens(SCH);
 
 const facetsAt = (ply: number, sans: string[], f: string[], player: 'white' | 'black', teaching: MoveTeachingContext, evaluation = 20, classification: string | null = 'book'): string[] =>
-  computeMoveFacets({ secondReads: NO_SECOND_READ, 
+  facetLines(computeMoveFacets({ secondReads: NO_SECOND_READ, 
     seenFundamentals: new Set(), teaching,
     fenBefore: f[ply - 1], fenAfter: f[ply], san: sans[ply - 1], ply,
     moverColor: ply % 2 === 1 ? 'white' : 'black', playerColor: player, studentColorWB: player === 'white' ? 'w' : 'b',
     evaluation, preMoveEval: 20, costCp: null, heardVerdict: null, classification, bestMoveSan: null,
     prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: sans, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
-  });
+  }));
 
 describe('review — the four facts are facets, so they go through the door', () => {
   it('[stopped] names the threat the opponent\'s reply took off the board', () => {
@@ -64,11 +65,11 @@ describe('review — the four facts are facets, so they go through the door', ()
     // White castles a piece up; Black's king is still on e8 with queens on.
     const before = 'rnbqk2r/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 8';
     const after = 'rnbqk2r/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 8';
-    const at = (teaching: MoveTeachingContext): string[] => computeMoveFacets({ secondReads: NO_SECOND_READ, 
+    const at = (teaching: MoveTeachingContext): string[] => facetLines(computeMoveFacets({ secondReads: NO_SECOND_READ, 
       seenFundamentals: new Set(), teaching, fenBefore: before, fenAfter: after, san: 'O-O', ply: 15,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w', evaluation: 300, preMoveEval: 300, costCp: null, heardVerdict: null,
       classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
-    });
+    }));
     expect(at({ ...NO_TEACHING_CONTEXT, phaseTurn: 'middlegame' }).find((x) => x.startsWith('[stock]')))
       .toMatch(/^\[stock\] .*middlegame.*: you're winning — you're up a piece/); // +3.0 is winning on the one ladder
     expect(at(NO_TEACHING_CONTEXT).some((x) => x.startsWith('[stock]'))).toBe(false);

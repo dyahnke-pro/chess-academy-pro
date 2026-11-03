@@ -19,6 +19,7 @@ import { readBoardAll, readKey } from './boardComputers';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { FACT_ROLE, FACT_PROOF } from './reviewFacetRank';
 import { NO_SECOND_READ } from './inaccuracyCall';
+import { facetLines, facetRecords } from '../test/reviewFacetLines';
 
 const live = (fen: string, pv: string[], extra: Partial<GeometryContext> = {}): GeometryContext => {
   const c = new Chess(fen);
@@ -262,12 +263,12 @@ describe('WIRED — a real read comes out of every surface', () => {
       };
     };
     const proofs = new Map();
-    const facets = computeMoveFacets(ctx('Bc4'), undefined, undefined, undefined, undefined, undefined, proofs);
+    const facets = ((m) => { const r = facetRecords(m); for (const [k, v] of r.proofs) (proofs as Map<string, unknown>).set(k, v); return facetLines(m); })(computeMoveFacets(ctx('Bc4')));
     const f = facets.find((x) => x.startsWith('[tactic]') && /c-pawn was already on c5/.test(x));
     expect(f).toBeTruthy();
     expect(isProof(proofs.get(f))).toBe(true);
     // The student PLAYED it: no "the check couldn't be blocked" find (G4.5.2).
-    expect(computeMoveFacets(ctx('Bb5+')).some((x) => /c-pawn was already on c5/.test(x))).toBe(false);
+    expect(facetLines(computeMoveFacets(ctx('Bb5+'))).some((x) => /c-pawn was already on c5/.test(x))).toBe(false);
   });
 });
 
