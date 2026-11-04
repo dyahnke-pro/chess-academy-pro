@@ -136,7 +136,7 @@ describe('the DNA template on a whole lesson (David 2026-10-07: "teach me x has 
     const c = new Chess(); const fens: string[] = []; const said: string[] = [];
     line.forEach((san, i) => {
       fens.push(c.fen());
-      said.push(lessonThought({ line: null, theirLast: null, fenBefore: c.fen(), san, prev: i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(fens[i - 1], line[i - 1]), moverIsStudent: i % 2 === 0, reads: null, costCp: null }, voice, null));
+      said.push(lessonThought({ line: null, theirLast: null, history: line.slice(0, i), fenBefore: c.fen(), san, prev: i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(fens[i - 1], line[i - 1]), moverIsStudent: i % 2 === 0, reads: null, costCp: null }, voice, null));
       c.move(san);
     });
     const all = said.join(' ');
@@ -148,7 +148,11 @@ describe('the DNA template on a whole lesson (David 2026-10-07: "teach me x has 
     expect(new Set(spoken).size).toBe(spoken.length);
     // The move names its piece once: never "You play Nf3 — the knight …".
     expect(all).not.toMatch(/play N\w+ — the knight|play B\w+ — the bishop/);
-  });
+    // A whole cold 29-move lesson with its module graph: ~4 s on a desktop
+    // (profiled 2026-11-04 — the move's job, its aspects and the fundamentals
+    // lead; the stop is now read once a board). The 5 s default timed out on
+    // main; the budget is the work, not a hidden slowdown (PLAN P1-13 perf row).
+  }, 20000);
 });
 
 describe('a forced loss says so, never the squares a doomed piece "covers" (review depth eval 2026-10-28)', () => {

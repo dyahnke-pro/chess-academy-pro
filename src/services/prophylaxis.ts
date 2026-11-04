@@ -203,6 +203,23 @@ export function theirWantSentence(w: TheirWant, me: Color): string {
  * PIN (it costs more if it lands); a pawn prevention before a king step.
  */
 export function findProphylaxis(fen: string): Prophylaxis | null {
+  // ONE READ A BOARD (2026-11-04 profile: 2.8 s of a 29-move lesson's 7.1 s,
+  // because the move's job and the stop each read the same board — and Learn,
+  // Review and the registry read it again). Pure in the FEN, so remembered.
+  const hit = PROPHYLAXIS_MEMO.get(fen);
+  if (hit !== undefined) return hit;
+  const out = findProphylaxisUncached(fen);
+  if (PROPHYLAXIS_MEMO.size >= PROPHYLAXIS_MEMO_MAX) {
+    const oldest = PROPHYLAXIS_MEMO.keys().next().value;
+    if (oldest !== undefined) PROPHYLAXIS_MEMO.delete(oldest);
+  }
+  PROPHYLAXIS_MEMO.set(fen, out);
+  return out;
+}
+const PROPHYLAXIS_MEMO = new Map<string, Prophylaxis | null>();
+const PROPHYLAXIS_MEMO_MAX = 512;
+
+function findProphylaxisUncached(fen: string): Prophylaxis | null {
   let board: Chess;
   try { board = new Chess(fen); } catch { return null; }
   if (board.inCheck()) return null;

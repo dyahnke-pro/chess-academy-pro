@@ -106,9 +106,17 @@ describe('audit: skewer', () => {
 // ── Discovered Attack ──────────────────────────────────────────────────────
 describe('audit: discovered_attack', () => {
   it('detects discovered attack when piece uncovers rook attack', () => {
-    // White bishop on e4 blocks white rook on e1 from attacking black queen on e7
-    // Be4-f5 uncovers Re1 → Qe7 along the e-file
-    expect(detectTacticType('k7/4q3/8/8/4B3/8/8/K3R3 w - - 0 1', 'e4f5')).toBe('discovered_attack');
+    // White bishop on e4 blocks white rook on e1 from attacking black queen on
+    // e7; Be4-f5 uncovers Re1 → Qe7 along the e-file. The rook is GUARDED (the
+    // queen on d1), so the queen cannot simply take it — a real discovered attack.
+    expect(detectTacticType('k7/4q3/8/8/4B3/8/8/K2QR3 w - - 0 1', 'e4f5')).toBe('discovered_attack');
+  });
+
+  it('legacy geometry: the unguarded rook — the queen just takes it, Qxe1+, and the unified classifier refuses the label', () => {
+    // The old fixture: geometry says "discovered attack", but …Qxe1+ wins the
+    // rook — not a tactic for White (same refusal as removing the guard below).
+    expect(legacyTacticGeometry('k7/4q3/8/8/4B3/8/8/K3R3 w - - 0 1', 'e4f5')).toBe('discovered_attack');
+    expect(detectTacticType('k7/4q3/8/8/4B3/8/8/K3R3 w - - 0 1', 'e4f5')).not.toBe('discovered_attack');
   });
 
   it('does NOT detect discovered attack when no slider is behind', () => {
