@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**776 lines · 4 exports · 49 importers · 26 tests · 0 audits**
+**776 lines · 4 exports · 48 importers · 26 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,7 +13,6 @@
 
 ## Who calls in
 
-- `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Tactics/PatternSchoolPage.tsx`
 - `src/missions/patterns/agreement.test.ts`
 - `src/services/boardConcepts.ts`
@@ -71,9 +70,8 @@
 ### `guardRemovalLine` (function) — 1 call site
 - `src/services/tacticLineRotation.test.ts:22`
 
-### `tacticDescription` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9181`
-- `src/components/Coach/CoachTeachPage.tsx:9286`
+### `tacticDescription` (function) — 5 call sites
+- `src/services/lookaheadPlan.ts:132`
 - `src/services/reviewFullData.ts:884`
 - `src/services/tacticLineRotation.test.ts:31`
 - `src/services/tacticLineRotation.test.ts:34`
@@ -97,8 +95,8 @@
 - `src/services/liveNoteTruth.test.ts:59`
 - `src/services/liveTacticsContext.ts:362`
 - `src/services/liveTacticsContext.ts:510`
-- `src/services/lookaheadPlan.ts:1398`
-- `src/services/lookaheadPlan.ts:1461`
+- `src/services/lookaheadPlan.ts:1402`
+- `src/services/lookaheadPlan.ts:1465`
 - `src/services/looseClaim.test.ts:18`
 - `src/services/misconceptionClassifier.ts:107`
 - `src/services/misconceptionClassifier.ts:140`
