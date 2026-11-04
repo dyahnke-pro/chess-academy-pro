@@ -89,7 +89,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:37`
 - `src/services/phaseVerdict.test.ts:39`
 - `src/services/positionFacts.ts:1116`
-- `src/services/reviewFullData.ts:1555`
+- `src/services/reviewFullData.ts:1556`
 - `src/services/reviewPositionalAssessment.test.ts:88`
 - `src/services/reviewPositionalAssessment.test.ts:93`
 
