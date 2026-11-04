@@ -263,6 +263,9 @@ export function habitReads(sans: readonly string[], opp: 'w' | 'b', sound: Reado
   return { looseMoves, kingPawnPushes };
 }
 
+/** Every kind of read the speed-run depth hands over. */
+export type DepthClauseKind = DepthClause['kind'];
+
 interface DepthClause {
   kind: 'not-yet' | 'line' | 'their-habit' | 'your-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read' | 'tactic' | 'king-read'
     | 'equivalence' | 'timing' | 'refuted' | 'capture-choice' | 'plan-race' | 'kick'

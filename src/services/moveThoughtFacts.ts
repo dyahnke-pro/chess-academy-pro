@@ -35,6 +35,8 @@ import { refutedAltProof, type RefutedAlternative } from './refutedAlternativeCo
 import { costStakes } from './factStakes';
 import { counterThreatTeaching, planChoiceTeaching, studentMoveTeaching } from './learnBoardTeaching';
 import type { LearnLane } from './learnTurnDoor';
+import { depthClauses, type DepthClauseKind } from './thinkAloud';
+import { NAMES_NO_MOVE, namesPlayableStudentMove } from './studentMoveNaming';
 import { computeMustDefend } from './threatOut';
 import { moveOrder } from './moveOrder';
 import { readBoardAll, readKey } from './boardComputers';
@@ -390,7 +392,7 @@ export function lessonThought(input: Omit<MoveThoughtInput, 'phrases'>, voice: L
   const facts = moveThoughtFacts({ ...input, phrases: voice.phrases });
   const alt = refuted ? refutedFact(refuted, input.fenBefore, input.moverIsStudent !== false ? 'student' : 'opponent') : null;
   const purpose = purposeFact(input, voice);
-  return composeThought([...facts, ...(alt ? [alt] : []), ...(purpose ? [purpose] : []), ...studentMoveFacts(input)], 'lesson', voice).spoken;
+  return composeThought([...facts, ...(alt ? [alt] : []), ...(purpose ? [purpose] : []), ...studentMoveFacts(input), ...depthFacts(input)], 'lesson', voice).spoken;
 }
 
 /** WHAT LEARN'S STUDENT-MOVE LANES MAY SAY IN A LESSON, AND AS WHICH IDEA
@@ -429,6 +431,81 @@ export const LESSON_STUDENT_LANE: Partial<Record<LearnLane, IdeaKind | null>> = 
   autopilot: null,
   keepPressing: null,
 };
+
+/** WHAT THE SPEED-RUN DEPTH MAY SAY IN A LESSON, AND AS WHICH IDEA
+ *  (WO-STORY-MATRIX-01 P1-9c, `depthClauses` — the one producer Learn's
+ *  position read and chat already speak). Exhaustive: a new kind fails to
+ *  compile until it is answered. Null = not said in a lesson, with the
+ *  reason. */
+export const LESSON_DEPTH_KIND: Record<DepthClauseKind, IdeaKind | null> = {
+  // The engine's move named outright: a taught line's move may not be the
+  // engine's (G3), so a lesson never names it over the move it teaches —
+  // and these two only speak where the move is named.
+  'not-yet': null,
+  line: null,
+  'their-habit': 'weakness',
+  'your-habit': 'weakness',
+  'stop-flaw': 'prevent',
+  'hole-access': 'outpost',
+  'speedrun-read': 'plan',
+  tactic: 'tactic',
+  'king-read': 'attack-king',
+  equivalence: 'develop',
+  timing: 'tempo',
+  refuted: 'choice',
+  'capture-choice': 'recapture',
+  'plan-race': 'passed-pawn',
+  kick: 'tempo',
+  'their-read': 'threat',
+  'prevent-test': 'prevent',
+  'attack-pattern': 'attack-king',
+};
+
+/** The speed-run depth on the board the student moved from — the thinking
+ *  behind the lesson's move, read off the lesson's own fan before it. The
+ *  engine's move is held (`nameMove: false`): a read that names it speaks its
+ *  idea instead. Lesson-only: Learn and chat read it through `positionFacts`. */
+function depthFacts(i: Omit<MoveThoughtInput, 'phrases'>): ThoughtFact[] {
+  if (i.moverIsStudent !== true || !i.reads || i.reads.before.length === 0) return [];
+  const me = sideOf(i.fenBefore);
+  // The student's own previous move, replayed from the line's start — only
+  // where the replay reproduces this board.
+  let lastStudentMove: { fenBefore: string; san: string } | undefined;
+  try {
+    if (i.history.length >= 2) {
+      const c = new Chess();
+      let before = '';
+      i.history.forEach((m, k) => { if (k === i.history.length - 2) before = c.fen(); c.move(m); });
+      if (c.fen().split(' ')[0] === i.fenBefore.split(' ')[0]) lastStudentMove = { fenBefore: before, san: i.history[i.history.length - 2] };
+    }
+  } catch { lastStudentMove = undefined; }
+  let clauses: ReturnType<typeof depthClauses>;
+  try {
+    clauses = depthClauses({
+      fen: i.fenBefore, history: i.history,
+      topLines: i.reads.before.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate ?? null })),
+      studentColor: me, nameMove: false,
+      ...(lastStudentMove ? { lastStudentMove } : {}),
+      ...(i.theirLast ? { lastOpponentMove: i.theirLast } : {}),
+    });
+  } catch { return []; }
+  const facts: ThoughtFact[] = [];
+  for (const d of clauses) {
+    const idea = LESSON_DEPTH_KIND[d.kind];
+    if (!idea) continue;
+    facts.push({
+      ...placeFact(d.kind, 'student'),
+      id: `depthClauses:${d.claim ?? d.text}`, computer: 'depthClauses', source: 'depth', idea, weight: 45,
+      text: close(d.text), seat: 'student', fen: i.fenBefore,
+      squares: d.squares ?? [], stakes: stakesOf(d.kind, d.stakes), proof: d.proof ?? NO_PROOF.description,
+      namesStudentMove: namesPlayableStudentMove(d.namesStudentMove ?? NAMES_NO_MOVE), thread: LOCAL_THREAD,
+      claims: d.claim ? [d.claim] : [],
+      ...(d.lines ? { lines: d.lines } : {}), ...(d.claim ? { claim: d.claim } : {}),
+      ...(d.motif ? { motif: d.motif } : {}), ...(d.promise ? { promise: d.promise } : {}),
+    });
+  }
+  return facts;
+}
 
 /** Learn's student-move bundle, read for a lesson's move by the student
  *  (both reads and the move's cost from the lesson's engine pass), each lane
