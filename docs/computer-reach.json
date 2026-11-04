@@ -2,12 +2,12 @@
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.",
  "graph": {
   "files": 1746,
-  "nodes": 16197
+  "nodes": 16202
  },
  "totals": {
   "computers": 347,
-  "wiredNowhere": 39,
-  "heldByLearnOnly": 27,
+  "wiredNowhere": 38,
+  "heldByLearnOnly": 26,
   "otherScreensOnly": 11,
   "dead": 1,
   "missingFromCode": 0,
@@ -18,12 +18,12 @@
     "no": 97
    },
    "review": {
-    "yes": 227,
-    "no": 120
+    "yes": 229,
+    "no": 118
    },
    "lesson": {
-    "yes": 99,
-    "no": 248
+    "yes": 100,
+    "no": 247
    },
    "chat": {
     "yes": 202,
@@ -42,7 +42,6 @@
  "wiredNowhere": {
   "heldByLearnOnly": [
    "services/backwardLook.ts#backwardLook",
-   "services/counterThreat.ts#counterThreat",
    "services/danyaBehaviors.ts#detectBehaviors",
    "services/drillReasons.ts#(module)",
    "services/inaccuracyCall.ts#callInaccuracyDetailed",
@@ -878,14 +877,17 @@
    "says": "A move left the mover's piece attacked but attacked a MORE valuable enemy piece instead",
    "origin": "map",
    "learn": "held",
-   "review": "no",
-   "lesson": "no",
+   "review": "yes",
+   "lesson": "yes",
    "chat": "no",
    "tapped": "no",
    "tactics": "no",
    "app": true,
-   "other": [],
-   "where": "components/Coach/CoachTeachPage.tsx#CoachTeachPage"
+   "other": [
+    "openingsPage",
+    "playSilent",
+    "endgame"
+   ]
   },
   {
    "key": "services/countMethod.ts#countMethod",
@@ -1033,16 +1035,18 @@
    "says": "From the MultiPV fan: the best move and the tempting runners-up with WHY each falls short — drops material (eval-confirmed), trades queens w",
    "origin": "map",
    "learn": "held",
-   "review": "no",
+   "review": "yes",
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -1451,7 +1455,8 @@
     "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -1513,9 +1518,11 @@
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -6622,7 +6629,8 @@
     "kid",
     "campaign",
     "playSilent",
-    "insights"
+    "insights",
+    "endgame"
    ]
   },
   {
