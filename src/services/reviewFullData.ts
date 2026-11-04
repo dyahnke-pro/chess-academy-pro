@@ -30,7 +30,7 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { landedTacticFor, plyFactsForMove, type PrevCaptureContext } from './pvPlayback';
 import { definitionKey, tacticInvariant } from './conceptEngine';
 import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor, seeSequence } from './positionReadingService';
-import { detectTactics } from './tacticsDetector';
+import { detectTactics, tacticDescription } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
 import { costStakes, exchangeStakes, forkPoints, piecesOn, isScenicPawnPin, isSacrifice, mateStakes, isStaked, type Stakes } from './factStakes';
@@ -251,10 +251,15 @@ export interface MoveTeachingContext {
    *  evidence (a sacrifice that holds is not "a piece left loose"). REQUIRED;
    *  an empty set where the grades are not in hand. */
   soundPlies: ReadonlySet<number>;
+  /** How many times each tactic motif has been SPOKEN this game (the walk's
+   *  motif ledger, committed after the door) — a tactic's sentence rotates on
+   *  it, so one pattern is never said in the same words three times (the WHY
+   *  standard's measure 3). REQUIRED; an empty map where nothing was said. */
+  motifSaid: ReadonlyMap<string, number>;
 }
 
 export const NO_TEACHING_CONTEXT: MoveTeachingContext = {
-  refutedAlt: null, prevFenBefore: null, phaseTurn: null, principlesTaught: new Set(), intent: null, soundPlies: new Set(),
+  refutedAlt: null, prevFenBefore: null, phaseTurn: null, principlesTaught: new Set(), intent: null, soundPlies: new Set(), motifSaid: new Map(),
 };
 
 const PIECE_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -812,6 +817,15 @@ export function computeMoveFacets(
       if (!b || !toMove) return null;
       return b === toMove ? moverLineProof(fenAfter, ctx.playedLineUci, b) : threatProof(fenAfter, toMove, squares);
     };
+    // THIS GAME'S OCCURRENCE OF EACH MOTIF — what the walk has said before
+    // this move, plus the ones this move has already built — so a tactic's
+    // sentence rotates by how often the pattern was said, never by the ply.
+    const builtHere = new Map<string, number>();
+    const occurrence = (motif: string): number => {
+      const n = (ctx.teaching.motifSaid.get(motif) ?? 0) + (builtHere.get(motif) ?? 0);
+      builtHere.set(motif, (builtHere.get(motif) ?? 0) + 1);
+      return n;
+    };
     for (const tac of t.tactics) {
       if (tac.type === 'none' || !tac.description) continue;
       // A fork SHAPE is tempo-blind — the static scanner reports it whether or
@@ -854,10 +868,11 @@ export function computeMoveFacets(
         // A PIN SAYS WHAT IT HOLDS (prod Review 2026-10-28: "Your bishop on a4
         // pins their knight on c6 against their king on e8" said with no
         // consequence). The same rotated sentence Learn's pin line speaks.
+        const said = occurrence(tac.type);
         const holds = tac.type === 'pin' && ctx.studentColorWB && tac.beneficiary
-          ? pinConsequence(fenAfter, tac.involvedSquares, ctx.studentColorWB, tac.beneficiary === ctx.studentColorWB ? 'student' : 'opponent', ply)
+          ? pinConsequence(fenAfter, tac.involvedSquares, ctx.studentColorWB, tac.beneficiary === ctx.studentColorWB ? 'student' : 'opponent', said)
           : null;
-        const f = made('detectTactics', 'tactic', `${seat(tac.description)}.${holds ? ` ${holds}` : ''}`);
+        const f = made('detectTactics', 'tactic', `${seat(tacticDescription(tac, fenAfter, said))}.${holds ? ` ${holds}` : ''}`);
         facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary); recProof(f, tacProof(tac.beneficiary, tac.involvedSquares));
         recStakes(f, stakes); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
       }

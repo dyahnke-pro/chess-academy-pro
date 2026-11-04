@@ -43,7 +43,7 @@ import { refutedAlternative, candidatesForPosition, SINGLETON_SCORER, type Refut
 import { recordedMoveCost } from './moveCost';
 import { storedIntentReads } from './moveIntent';
 import { findWorstPlacedPiece, planAimKey } from './nextPlans';
-import { transferClause, transferMotifOf, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
+import { transferClause, transferMotifOf, recordMotif, withTransfer, motifSaidCounts, type MotifLedger } from './motifLedger';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening, detectOpeningByOrder } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
@@ -2107,6 +2107,7 @@ function* reviewSegmentSteps(
           phaseTurn: phaseTurnAt.get(m.ply) ?? null,
           principlesTaught,
           soundPlies,
+          motifSaid: motifSaidCounts(motifKeys),
         },
         fenBefore: fenPair.fenBefore,
         fenAfter: fenPair.fenAfter,

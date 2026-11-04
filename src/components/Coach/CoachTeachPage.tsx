@@ -242,6 +242,7 @@ import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead
 
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { stepBothArcs, withAnnouncement, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence, type ArcEvent } from '../../services/lookaheadPlan';
+import { tacticDescription } from '../../services/tacticsDetector';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, saidSlipCp, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf, secondReadsOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
@@ -9177,7 +9178,7 @@ export function CoachTeachPage({ mode }: {
           tacticLine = word
             // NAMED from the detector's own description (Learn names the
             // move; "have a look" withheld it — walk 1500, 21.Rab1/38.Ne3).
-            ? withTransfer(t.description ? seatedTacticLine(word, t.description, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b') : `You have ${withArticle(word)}: on ${t.squares.join(', ')}.`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifLastSpoken))
+            ? withTransfer(t.description ? seatedTacticLine(word, tacticDescription({ type: t.type, description: t.description, involvedSquares: t.squares }, args.fenAfterReply, nextStem(learnMemRef.current, `tactic:${t.type}`)), args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b') : `You have ${withArticle(word)}: on ${t.squares.join(', ')}.`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifLastSpoken))
             : null;
           // A fork says what it costs them — the same clause review speaks.
           if (tacticLine && t.type === 'fork') tacticLine = `${tacticLine.replace(/\.$/, '')} — ${forkConsequence('they')}.`;

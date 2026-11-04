@@ -169,15 +169,20 @@ export function pinConsequence(fen: string, squares: readonly string[], student:
       `${Whose} ${pinnedNoun} on ${pinned.sq} cannot move at all — the king on ${behind.sq} is behind it.`,
       `The ${pinnedNoun} on ${pinned.sq} is frozen: moving it would leave the king on ${behind.sq} in check, which is illegal.`,
       `${Whose} ${pinnedNoun} on ${pinned.sq} is out of play while it shields the king on ${behind.sq} — it cannot move until the pin is broken.`,
+      `${Whose} ${pinnedNoun} on ${pinned.sq} is pinned to the king on ${behind.sq} — stepping off that line would be illegal.`,
     ];
     return kingStems[((rot % kingStems.length) + kingStems.length) % kingStems.length];
   }
   const by = PIN_NOUN[from.p?.type ?? ''] ?? 'piece';
-  // ROTATED by move (David 2026-10-14: no reason formula more than twice a game).
+  // ROTATED BY OCCURRENCE (David 2026-10-14: no reason formula more than twice
+  // a game). The caller passes how many pins it has said this game — a ply
+  // number repeated a stem whenever three pins fell on the same ply modulo
+  // three (Review prod audit 2026-11-04: "Moving the knight would let …" ×3).
   const stems = [
     `If ${heldWhose} ${pinnedNoun} moves, ${heldWhose} ${behindNoun} on ${behind.sq} is open to ${pinnerWhose} ${by}.`,
     `The ${pinnedNoun} is stuck guarding the ${behindNoun} on ${behind.sq} — step aside and ${pinnerWhose} ${by} takes it.`,
     `Moving the ${pinnedNoun} would let ${pinnerWhose} ${by} take the ${behindNoun} on ${behind.sq}.`,
+    `Behind the ${pinnedNoun} stands ${heldWhose} ${behindNoun} on ${behind.sq}, which ${pinnerWhose} ${by} takes the moment the ${pinnedNoun} steps away.`,
   ];
   return stems[((rot % stems.length) + stems.length) % stems.length];
 }

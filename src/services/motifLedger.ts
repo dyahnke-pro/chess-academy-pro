@@ -88,3 +88,15 @@ export function transferMotifOf(identity: string): { motif: string; instance: st
   const [motif, instance = ''] = identity.slice('motif:'.length).split(':');
   return motif ? { motif, instance } : null;
 }
+
+/** How many times each tactic pattern was SPOKEN this game, either seat, read
+ *  off the walk's motif keys (`<motif>@<side>|<move>|<instance>`) — the count
+ *  a tactic's sentence rotates on (`MoveTeachingContext.motifSaid`). */
+export function motifSaidCounts(keys: Iterable<string>): Map<string, number> {
+  const out = new Map<string, number>();
+  for (const k of keys) {
+    const pattern = (k.split('|')[0] ?? '').split('@')[0];
+    if (pattern) out.set(pattern, (out.get(pattern) ?? 0) + 1);
+  }
+  return out;
+}

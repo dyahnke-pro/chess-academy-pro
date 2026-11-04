@@ -510,12 +510,45 @@ function findRemovableGuards(chess: Chess): TacticPattern[] {
           type: 'removal_of_guard',
           beneficiary: color,
           involvedSquares: [guardSq, targetSq],
-          description: `The ${PIECE_NAMES[chess.get(guardSq)?.type ?? 'p']} on ${guardSq} is the only defender of the ${PIECE_NAMES[t.type]} on ${targetSq} — and it can be taken`,
+          description: guardRemovalLine(PIECE_NAMES[chess.get(guardSq)?.type ?? 'p'], guardSq, PIECE_NAMES[t.type], targetSq, 0),
         });
       }
     }
   }
   return out;
+}
+
+/** THE REMOVAL-OF-THE-GUARD LINE, ROTATED BY OCCURRENCE (Review prod audit
+ *  2026-11-04: "The X on SQ is the only defender of the Y on SQ — and it can
+ *  be taken" said three times in one game — the WHY standard's measure 3, no
+ *  reason formula more than twice). The detector's own description is the
+ *  first stem; a surface that knows how often the pattern has been said this
+ *  game passes that count. Every stem keeps "the <piece> on <square>" so the
+ *  seating computer can say whose each piece is. */
+export function guardRemovalLine(guard: string, guardSq: string, target: string, targetSq: string, rot: number): string {
+  const stems = [
+    `The ${guard} on ${guardSq} is the only defender of the ${target} on ${targetSq} — and it can be taken`,
+    `Take the ${guard} on ${guardSq} and the ${target} on ${targetSq} loses its only guard`,
+    `The ${target} on ${targetSq} hangs on one guard, the ${guard} on ${guardSq} — and that guard can be captured`,
+    `Nothing but the ${guard} on ${guardSq} holds the ${target} on ${targetSq}, and the ${guard} itself can be taken`,
+  ];
+  return stems[((rot % stems.length) + stems.length) % stems.length];
+}
+
+/** A tactic's sentence at its occurrence this game: the rotatable patterns are
+ *  re-said from the board they were found on, every other pattern is its
+ *  description. */
+export function tacticDescription(tac: { type: string; description: string; involvedSquares: readonly string[] }, fen: string, rot: number): string {
+  if (tac.type === 'removal_of_guard' && tac.involvedSquares.length >= 2) {
+    try {
+      const c = new Chess(fen);
+      const [guardSq, targetSq] = tac.involvedSquares;
+      const g = c.get(guardSq as Square);
+      const t = c.get(targetSq as Square);
+      if (g && t) return guardRemovalLine(PIECE_NAMES[g.type], guardSq, PIECE_NAMES[t.type], targetSq, rot);
+    } catch { /* the board does not read — the detector's own words */ }
+  }
+  return tac.description;
 }
 
 function rankOfSquare(sq: string): number {
