@@ -35,7 +35,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1037`
+- `src/services/coachFeatureService.ts:1038`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -53,7 +53,7 @@
 - `src/services/batch2Wiring.test.ts:55`
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
-- `src/services/coachFeatureService.ts:2098`
+- `src/services/coachFeatureService.ts:2095`
 - `src/services/danyaBench.measure.test.ts:390`
 - `src/services/exchangeIdeas.test.ts:252`
 - `src/services/forkTrick.test.ts:62`
@@ -104,7 +104,7 @@
 - `src/test/teach02Wired.test.ts:68`
 
 ### `computeThroughLine` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:6154`
+- `src/services/coachFeatureService.ts:6151`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:210`
 - `src/services/reviewFullData.test.ts:218`

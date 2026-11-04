@@ -77,7 +77,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:10024`
 - `src/components/Coach/CoachTeachPage.tsx:12065`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
-- `src/services/coachFeatureService.ts:2872`
+- `src/services/coachFeatureService.ts:2869`
 - `src/services/learnTurnDoor.mission.test.ts:23`
 - `src/services/learnTurnDoor.mission.test.ts:31`
 - `src/services/learnTurnDoor.mission.test.ts:53`
@@ -190,7 +190,7 @@
 - `src/services/teachingLayers.test.ts:120`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1815`
+- `src/services/coachFeatureService.ts:1812`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`
@@ -235,7 +235,7 @@
 - `src/components/Coach/CoachGameReview.tsx:1936`
 - `src/components/Coach/CoachTeachPage.tsx:8907`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:3056`
+- `src/services/coachFeatureService.ts:3053`
 - `src/services/coachSurfaceScorecard.report.test.ts:113`
 - `src/services/coachSurfaceScorecard.report.test.ts:135`
 - `src/services/computedVoiceAudit.report.test.ts:310`
@@ -363,7 +363,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:11937`
 - `src/components/Coach/CoachTeachPage.tsx:12134`
 - `src/services/claimKeysLooseCount.test.ts:34`
-- `src/services/coachFeatureService.ts:3057`
+- `src/services/coachFeatureService.ts:3054`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/learnTurnDoor.phaseWave.test.ts:134`
 - `src/services/learnTurnDoor.test.ts:626`

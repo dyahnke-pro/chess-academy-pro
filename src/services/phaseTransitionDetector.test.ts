@@ -554,7 +554,7 @@ describe('an opening that ends in an endgame has ONE beat (hand walk 2026-09-27)
 });
 
 describe('phaseTurnsOf — the one phase edge, read over a recorded game (WO-STORY-MATRIX-01 P1-9c)', () => {
-  it('Review turns the phase on the student\'s move, as Learn does — never on the opponent\'s (sicilianClosed1000)', async () => {
+  it('Review reads the edge on Learn\'s board — after the opponent\'s move, the student to move — by Learn\'s rule', async () => {
     const { readFileSync } = await import('node:fs');
     const { resolve } = await import('node:path');
     const { Chess } = await import('chess.js');
@@ -563,9 +563,22 @@ describe('phaseTurnsOf — the one phase edge, read over a recorded game (WO-STO
     const game = games.find((x) => x.id === 'sicilianClosed1000');
     expect(game).toBeDefined();
     const c = new Chess();
-    const plies = (game?.sans ?? []).map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: false }; });
-    // Review's own classifyPhase edge fired on plies 15 and 47 — the
-    // opponent's moves; the student (Black) meets them on 16 and 48.
-    expect([...phaseTurnsOf(plies, 'black')]).toEqual([[16, 'middlegame'], [48, 'endgame']]);
+    const plies = (game?.sans ?? []).map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen() }; });
+    // Stepped the way Learn steps it live: the story-held detector on each
+    // board the student is to move on.
+    const live = new Map<number, 'middlegame' | 'endgame'>();
+    const state = createPhaseTransitionState();
+    const sans: string[] = [];
+    for (const p of plies) {
+      sans.push(p.san);
+      if (p.ply % 2 === 0) continue; // Black is the student: White's moves leave Black to move
+      if ((await import('../utils/justCaptured')).pendingRecapture(sans)) continue;
+      const ev = detectPhaseTransition({ fen: p.fenAfter, san: p.san, moveNumber: p.ply, isCoachMove: false }, state, 'black');
+      if (ev) live.set(p.ply, ev.kind === 'opening-to-middlegame' ? 'middlegame' : 'endgame');
+    }
+    expect(live.size).toBeGreaterThan(0);
+    expect([...phaseTurnsOf(plies, 'black')]).toEqual([...live]);
+    // Every turn is on a board the student is to move on.
+    for (const ply of phaseTurnsOf(plies, 'black').keys()) expect(ply % 2).toBe(1);
   });
 });

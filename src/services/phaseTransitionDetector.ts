@@ -273,13 +273,14 @@ export function phaseTransitionDiagnostic(
 }
 
 /** THE PHASE TURNS OF A WHOLE GAME (WO-STORY-MATRIX-01 P1-9c) — the edge Learn
- *  meets live, read over a recorded game for Review: the student's moves only,
- *  a board still mid-exchange read on the settled board after it (the one
- *  `pendingRecapture` rule Learn applies). Review had its own edge
- *  (`classifyPhase` changing on any ply), so the two surfaces disagreed on the
- *  move the middlegame began. */
+ *  meets live, read over a recorded game for Review. Learn reads it on the
+ *  board after the opponent's reply, the student to move, and a board still
+ *  mid-exchange waits for the settled board after it (the one
+ *  `pendingRecapture` rule); so does this, at the opponent's ply. Review had
+ *  its own edge (`classifyPhase` changing on any ply), so the two surfaces
+ *  disagreed on when the middlegame began. */
 export function phaseTurnsOf(
-  plies: ReadonlyArray<{ ply: number; san: string; fenAfter: string; isCoachMove: boolean }>,
+  plies: ReadonlyArray<{ ply: number; san: string; fenAfter: string }>,
   playerColor: 'white' | 'black',
 ): Map<number, 'middlegame' | 'endgame'> {
   const turns = new Map<number, 'middlegame' | 'endgame'>();
@@ -287,7 +288,8 @@ export function phaseTurnsOf(
   const sans: string[] = [];
   for (const p of plies) {
     sans.push(p.san);
-    if (p.isCoachMove || (p.ply % 2 === 1 ? 'white' : 'black') !== playerColor) continue;
+    // The board the student is to move on: after the opponent's move.
+    if ((p.ply % 2 === 1 ? 'white' : 'black') === playerColor) continue;
     if (pendingRecapture(sans)) continue;
     const ev = detectPhaseTransition({ fen: p.fenAfter, san: p.san, moveNumber: p.ply, isCoachMove: false }, crossed, playerColor);
     if (ev) turns.set(p.ply, ev.kind === 'opening-to-middlegame' ? 'middlegame' : 'endgame');

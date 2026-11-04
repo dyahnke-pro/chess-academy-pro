@@ -1588,7 +1588,7 @@ function* reviewSegmentSteps(
    *  the ONE phase-edge computer Learn reads (`detectPhaseTransition`,
    *  WO-STORY-MATRIX-01 P1-9c) read over the game (`phaseTurnsOf`). */
   const phaseTurnAt = playerColor
-    ? phaseTurnsOf(moves.slice(0, usable).map((mm, k) => ({ ply: mm.ply, san: mm.san, fenAfter: fenChain[k].fenAfter, isCoachMove: mm.isCoachMove })), playerColor)
+    ? phaseTurnsOf(moves.slice(0, usable).map((mm, k) => ({ ply: mm.ply, san: mm.san, fenAfter: fenChain[k].fenAfter })), playerColor)
     : new Map<number, 'middlegame' | 'endgame'>();
 
   const segments: ReviewMoveSegment[] = [];

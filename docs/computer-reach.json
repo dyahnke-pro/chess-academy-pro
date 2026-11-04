@@ -2,12 +2,12 @@
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.",
  "graph": {
   "files": 1746,
-  "nodes": 16210
+  "nodes": 16211
  },
  "totals": {
   "computers": 347,
-  "wiredNowhere": 35,
-  "heldByLearnOnly": 23,
+  "wiredNowhere": 34,
+  "heldByLearnOnly": 22,
   "otherScreensOnly": 11,
   "dead": 1,
   "missingFromCode": 0,
@@ -18,8 +18,8 @@
     "no": 97
    },
    "review": {
-    "yes": 232,
-    "no": 115
+    "yes": 233,
+    "no": 114
    },
    "lesson": {
     "yes": 103,
@@ -55,7 +55,6 @@
    "services/movePlan.ts#(module)",
    "services/moveReason.ts#(module)",
    "services/opponentGap.ts#(module)",
-   "services/phaseTransitionDetector.ts#detectPhaseTransition",
    "services/playCommentary.ts#buildInstantReplyLine",
    "services/playCommentary.ts#buildRejectedTempting",
    "services/playedConcept.ts#(module)",
@@ -4069,7 +4068,7 @@
    "says": "The ply the game crosses into middlegame or endgame (fires once per boundary per game)",
    "origin": "map",
    "learn": "held",
-   "review": "no",
+   "review": "yes",
    "lesson": "no",
    "chat": "no",
    "tapped": "no",
@@ -4077,8 +4076,7 @@
    "app": true,
    "other": [
     "playSilent"
-   ],
-   "where": "components/Coach/CoachGamePage.tsx#CoachGamePage"
+   ]
   },
   {
    "key": "services/pieceOptions.ts#(module)",

@@ -66,7 +66,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `characterTurn` (function) — 2 call sites
 - `src/components/Coach/CoachTeachPage.tsx:11398`
-- `src/services/coachFeatureService.ts:2069`
+- `src/services/coachFeatureService.ts:2066`
 
 ## Tests
 
