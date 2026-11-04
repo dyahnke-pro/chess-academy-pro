@@ -48,8 +48,10 @@ export function puzzleMethodLine(
       layers: layerStandings(record.weaknesses, record.capabilities),
       fade: fadeLevelsFrom(record.heat),
     }, bundle: { facts: [], board: CALM_BOARD }, posture: 'walk', method: { bestSan, cpLossCp: stakesCp, ignoredThreat: false, isStudentMove: true, saidHabits: said, ply: variety } });
-  const beat = d.spoken.find((t) => t.startsWith('[method] '));
-  return beat ? beat.slice('[method] '.length) : null;
+  // The door's own field (`CoachDecision.method`). This read a "[method] "
+  // prefix off the spoken lines, and the "[tag] text" form was deleted
+  // (WO-STORY-MATRIX-01 P1-6d), so every puzzle lost its habit silently.
+  return d.method;
 }
 
 /** A Lichess puzzle carries no cpLoss; its tags say how much the answer wins.

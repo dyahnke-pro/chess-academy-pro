@@ -45,3 +45,11 @@ describe('the threat habit taught live is not asked again after a slip', () => {
     expect(slipQuestion('4k3/8/8/3p4/2B5/8/8/4K3 w - - 0 1', 'Kd1', 'c4', 'w', said, 0, null)).toBeNull();
   });
 });
+
+describe('the habit key is the ledger\'s own key', () => {
+  it('habitSaidKey is claimKey of the habit claim, for every habit', async () => {
+    const { habitSaidKey, liveHabitKey } = await import('./methodBeat');
+    const { claimKey } = await import('./voicePackage');
+    for (const h of ['opponent-threat', 'forcing-scan', 'blunder-check', 'what-it-guarded'] as const) expect(habitSaidKey(h)).toBe(claimKey(liveHabitKey(h)));
+  });
+});
