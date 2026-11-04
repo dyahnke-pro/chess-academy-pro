@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**192 lines · 9 exports · 6 importers · 3 tests · 0 audits**
+**192 lines · 9 exports · 6 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -46,7 +46,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionCharacter.test.ts:22`
 - `src/services/positionCharacter.test.ts:23`
 - `src/services/positionCharacter.test.ts:25`
-- `src/services/walkOct2a.test.ts:135`
+- `src/services/walkOct2a.test.ts:136`
 
 ### `CharacterState` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -64,12 +64,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `CharacterBoardRead` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `characterTurn` (function) — 2 call sites
+### `characterTurn` (function) — 7 call sites
 - `src/components/Coach/CoachTeachPage.tsx:11398`
 - `src/services/coachFeatureService.ts:2066`
+- `src/services/learnTurnDoor.test.ts:303`
+- `src/services/learnTurnDoor.test.ts:309`
+- `src/services/learnTurnDoor.test.ts:310`
+- `src/services/learnTurnDoor.test.ts:321`
+- `src/services/learnTurnDoor.test.ts:325`
 
 ## Tests
 
+- `src/services/learnTurnDoor.test.ts`
 - `src/services/positionCharacter.pin.test.ts`
 - `src/services/positionCharacter.test.ts`
 - `src/services/walkOct2a.test.ts`

@@ -169,14 +169,21 @@ export function readTrade(
   const after = before; // already played
   // It is a TRADE only if taking back wins something back — otherwise the
   // move simply wins material. The retake's own exchange is signed: a retake
-  // that loses is no retake, and one that nets ZERO hands nothing back, its
-  // capturer taken in turn (Review baseline, colle800 28…Bxg5: Bxg5 is met by
-  // …Qxg5, so the knight was won — "Their Bxg5 is a good trade for them"
-  // called winning a piece a trade, 2026-11-04).
+  // that loses is no retake. A capture that STARTS the exchange (the move
+  // before took nothing here) needs a retake that recovers material — one that
+  // nets zero hands nothing back, its capturer taken in turn (Review baseline,
+  // colle800 28…Bxg5: Bxg5 is met by …Qxg5, so the knight was won — "Their
+  // Bxg5 is a good trade for them" called winning a piece a trade,
+  // 2026-11-04). A RECAPTURE (the move before took on this square) closes an
+  // exchange already begun: a zero retake leaves it level (oct2a F13, Nxf6+
+  // Bxf6 Bxf6 Qxf6). With no prior move known it is read as starting one:
+  // a judge that cannot see the exchange's start does not call it a trade.
   {
     const enemyWB: Color = mv.color === 'w' ? 'b' : 'w';
     const canRetake = after.moves({ verbose: true }).some((m) => m.to === mv.to && !!m.captured);
-    if (!canRetake || signedLegalSeeFor(after.fen(), mv.to, enemyWB) <= 0) return null;
+    const startsExchange = !(priorMove?.captured && priorMove.to === mv.to);
+    const retake = signedLegalSeeFor(after.fen(), mv.to, enemyWB);
+    if (!canRetake || retake < 0 || (startsExchange && retake === 0)) return null;
   }
 
   const mover = mv.color;

@@ -46,7 +46,8 @@ describe('Learn walk oct2a', () => {
 
   it('F13: the knight that gave check is a piece bearing down on your king — trading it off is named', () => {
     const c = play('e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 Nf6 Bg5 Be7 Nc3 O-O Nd5 Re8 Nxf6+');
-    const t = tradeJudgement(c.fen(), 'Bxf6', 'Bxf6', 'b', 0);
+    // Nxf6+ took on f6: …Bxf6 recaptures, closing an exchange already begun.
+    const t = tradeJudgement(c.fen(), 'Bxf6', 'Bxf6', 'b', 0, undefined, { to: 'f6', captured: 'n' });
     expect(t?.reason).toBe('good');
     expect(t?.text).toMatch(/their knight that was bearing down on your king/);
   });

@@ -85,8 +85,8 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts:100`
 - `src/services/learnTurnDoor.phaseWave.test.ts:130`
 - `src/services/learnTurnDoor.test.ts:177`
-- `src/services/learnTurnDoor.test.ts:443`
-- `src/services/learnTurnDoor.test.ts:454`
+- `src/services/learnTurnDoor.test.ts:462`
+- `src/services/learnTurnDoor.test.ts:473`
 - `src/services/os11RootCauses5And6.replay.test.ts:56`
 - `src/services/positionFacts.ts:1371`
 - `src/services/puzzleMethod.ts:39`
@@ -170,7 +170,7 @@
 - `src/services/coachDecisionEmits.test.ts:106`
 - `src/services/coachGameEngine.ts:861`
 - `src/services/factStakes.test.ts:72`
-- `src/services/learnTurnDoor.test.ts:756`
+- `src/services/learnTurnDoor.test.ts:775`
 - `src/services/liveNeedGate.test.ts:50`
 - `src/services/liveNeedGate.test.ts:56`
 - `src/services/liveNeedGate.test.ts:65`
@@ -366,8 +366,8 @@
 - `src/services/coachFeatureService.ts:3054`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/learnTurnDoor.phaseWave.test.ts:134`
-- `src/services/learnTurnDoor.test.ts:626`
-- `src/services/learnTurnDoor.test.ts:648`
+- `src/services/learnTurnDoor.test.ts:645`
+- `src/services/learnTurnDoor.test.ts:667`
 - `src/services/looseStill.test.ts:45`
 - `src/services/looseStill.test.ts:48`
 - `src/services/os11RootCauses5And6.replay.test.ts:34`

@@ -80,6 +80,13 @@ describe('readTrade — the count settles through the move that led here (oct3a 
 describe('readTrade — a retake that wins nothing back is no trade (2026-11-04)', () => {
   it('NEGATIVE: …Bxg5 with Bxg5 met by …Qxg5 wins the knight — never "a good trade" (colle800 ply 28)', () => {
     const fen = 'r1bqrnk1/4bppp/p1n1p3/1p1pP1NN/3p4/2PB4/PP3PPP/R1BQR1K1 b - - 1 14';
+    // 14.Ng5 took nothing: …Bxg5 starts the exchange — and with the prior
+    // move unknown, it is read as starting one too.
+    expect(readTrade(fen, 'Bxg5', 'w', null, { to: 'g5', captured: null })).toBeNull();
     expect(readTrade(fen, 'Bxg5', 'w', null, null)).toBeNull();
+  });
+  it('a recapture whose retake nets zero closes an even exchange — still a trade (oct2a F13: Nxf6+ Bxf6 Bxf6 Qxf6)', () => {
+    const fen = 'r1bqr1k1/ppppbppp/5N2/6B1/3QP3/8/PPP2PPP/R3KB1R b KQ - 0 9';
+    expect(readTrade(fen, 'Bxf6', 'b', null, { to: 'f6', captured: 'n' })).not.toBeNull();
   });
 });

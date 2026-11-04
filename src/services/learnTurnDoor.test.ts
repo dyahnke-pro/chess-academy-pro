@@ -293,20 +293,39 @@ describe('a description restating the lead\'s piece is held (hand walk 2026-09-3
 });
 
 describe('the character read counts tactics, not a piece that can step away (hand walk 2026-09-30)', () => {
-  it('a hanging piece alone does not make the position sharp', () => {
-    expect(TEACH_CODE).toMatch(/tacticLive: provenTacticLive\(tctxNow\.immediate\),/);
-    expect(TEACH_CODE).not.toMatch(/tacticLive: tctxNow\.immediate\.length > 0 \|\| tctxNow\.hanging/);
+  // One computer reads it for Learn and Review (`characterTurn`, P1-9c-4).
+  const QUIET = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+  it('a hanging piece alone does not make the position sharp', async () => {
+    const { characterTurn } = await import('./positionCharacter');
+    const read = (wins: 'live' | 'none') => ({ fen: QUIET, studentColor: 'white' as const, immediate: [{ wins }], topLines: [], lastSan: 'Nc6' });
+    let state = { current: 'positional' as const, pending: null } as Parameters<typeof characterTurn>[0];
+    for (let k = 0; k < 2; k += 1) {
+      const step = characterTurn(state, {}, read('none'));
+      expect(step.switched).toBeNull();
+      state = step.next;
+    }
+    expect(state.current).toBe('positional');
+    // A proven tactic, held for two reads, does.
+    const first = characterTurn(state, {}, read('live'));
+    expect(characterTurn(first.next, {}, read('live')).switched?.to).toBe('tactical');
+    // The Learn page reads the detectors' tactics, never the hanging list.
+    expect(TEACH_CODE).toMatch(/characterTurn\(story\.plans\(\)\.character, switchesSaid\(story\.current\(\)\), \{\s*fen: probe\.fen\(\), studentColor: playerColor, immediate: tctxNow\.immediate/);
   });
 });
 
 describe('"the tactics have settled" is never said with material loose (run J, UVJ ply 50)', () => {
   it('the positional switch is held while either side can win a piece by exchange', async () => {
-    const { readFileSync } = await import('node:fs');
-    const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(src).toMatch(/legalSeeGainFor\(probe\.fen\(\), c\.square,[^)]*\) > 0/);
-    expect(src).toMatch(/\|\| looseNow\)/);
+    const { characterTurn } = await import('./positionCharacter');
+    const fromSharp = { current: 'tactical' as const, pending: 'positional' as const } as Parameters<typeof characterTurn>[0];
+    // 1.e4 e5 2.Nf3: the pawn on e5 is loose — the switch is held, the state still steps.
+    const loose = characterTurn(fromSharp, {}, { fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', studentColor: 'white', immediate: [], topLines: [], lastSan: 'Nf3' });
+    expect(loose.switched).toBeNull();
+    expect(loose.next.current).toBe('positional');
+    // …Nc6 guards it: nothing loose, and the switch is said.
+    expect(characterTurn(fromSharp, {}, { fen: QUIET_SETTLED, studentColor: 'white', immediate: [], topLines: [], lastSan: 'Nc6' }).switched?.to).toBe('positional');
   });
 });
+const QUIET_SETTLED = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 
 describe('the fade — short phrasing when the skill is green (David 2026-09-30)', () => {
   const TWO = 'That trade gives up your better minor piece. Keep the bishop that has open diagonals and trade the one blocked by its own pawns.';
