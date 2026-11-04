@@ -74,8 +74,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isStaked` (function) — 18 call sites
-- `src/services/coachDecider.ts:364`
-- `src/services/coachDecider.ts:367`
+- `src/services/coachDecider.ts:369`
+- `src/services/coachDecider.ts:372`
 - `src/services/coachFact.test.ts:102`
 - `src/services/counterThreatStakes.test.ts:15`
 - `src/services/danyaBench.measure.test.ts:927`

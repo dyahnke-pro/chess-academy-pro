@@ -55,7 +55,7 @@
 - `src/services/positionFacts.ts:1176`
 
 ### `methodBeatFor` (function) — 49 call sites
-- `src/services/coachDecider.ts:521`
+- `src/services/coachDecider.ts:526`
 - `src/services/methodBeat.need.test.ts:19`
 - `src/services/methodBeat.need.test.ts:23`
 - `src/services/methodBeat.need.test.ts:29`

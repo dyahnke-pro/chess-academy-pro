@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**272 lines · 12 exports · 16 importers · 13 tests · 1 audits**
+**273 lines · 12 exports · 16 importers · 13 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -44,7 +44,7 @@
 - `src/test/decisionRows.baseline.test.ts:47`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:345`
+- `src/services/coachDecider.ts:350`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

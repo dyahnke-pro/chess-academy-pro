@@ -45,7 +45,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `threatStakes` (function) — 4 call sites
 - `src/services/boardComputers.ts:443`
 - `src/services/boardComputers.ts:456`
-- `src/services/coachDecider.ts:672`
+- `src/services/coachDecider.ts:677`
 - `src/services/learnBoardTeaching.ts:462`
 
 ### `looseClaims` (function) — 4 call sites

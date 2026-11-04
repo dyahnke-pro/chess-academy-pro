@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**119 lines · 4 exports · 5 importers · 2 tests · 0 audits**
+**119 lines · 4 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,7 +15,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachDecider.ts`
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/factRelations.test.ts`
-- `src/services/factSelector.ts`
 - `src/services/thoughtComposer.ts`
 
 ## Exports and every call site
@@ -32,10 +31,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/factRelations.test.ts:25`
 - `src/services/factRelations.test.ts:29`
 
-### `causeEffect` (function) — 4 call sites
-- `src/services/coachDecider.ts:501`
+### `causeEffect` (function) — 3 call sites
+- `src/services/coachDecider.ts:349`
 - `src/services/factRelations.test.ts:26`
-- `src/services/factSelector.ts:330`
 - `src/services/thoughtComposer.ts:236`
 
 ## Tests

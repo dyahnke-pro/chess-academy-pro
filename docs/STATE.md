@@ -46,7 +46,7 @@ fact-computer count (which excludes infrastructure) lives in
 exactly the drifting-constant the rot rule bans.
 
 - **CoachTeachPage.tsx**: 109
-- **CoachGamePage.tsx**: 36
+- **CoachGamePage.tsx**: 38
 - **CoachGameReview.tsx**: 44
 
 Each surface composing its own producer is the tax on the ONE mechanism the app
