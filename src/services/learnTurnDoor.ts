@@ -32,7 +32,10 @@ import { emitLearnTurn, type LearnTurnTag, type PriceSearch } from './coachDecis
 import { COMPUTER_ROLES, saidBeforeTheMove } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
-import { costStakes, stakeValue, STAKED_FLOOR, isStaked, type Stakes } from './factStakes';
+import { costStakes, stakeValue, stakeBar, isStaked, type Stakes } from './factStakes';
+
+/** A pawn at stake, landing now — the door's "important" bar. */
+const PAWN_AT_STAKE = stakeBar(1);
 import { sameClaim } from './factSelector';
 import type { FacetRole, FactKind } from './reviewFacetRank';
 import { isCoachFactKind, LOCAL_THREAD, placeFact, stakesOf, stepOf, type CoachFact, type CoachFactKind, type ComputerName } from './coachFact';
@@ -892,7 +895,7 @@ export function decideTurn(
   // (`factStakes`, discounted by distance), a forced mate, or a beginner's
   // principle speaks in its step whatever else the step holds.
   const important = (x: Survivor): boolean =>
-    stakeOf(x) >= STAKED_FLOOR + 100 || isMateFact(x) || (beginner && BEGINNER_ALWAYS.has(x.lane));
+    stakeOf(x) >= PAWN_AT_STAKE || isMateFact(x) || (beginner && BEGINNER_ALWAYS.has(x.lane));
   // ONE FACT PER STEP (WO-THINK-01): each move keeps one reason, the student's
   // move one cost and their move one verdict, the position one verdict, the
   // turn one habit — the most valuable (an answer the coach owes first, a
@@ -1053,7 +1056,7 @@ export function decideTurn(
   const kept = survivors.filter((x) => keep.includes(x.fact));
   let words = wordsIn(alreadySaid ?? '') + kept.filter(rides).reduce((n, x) => n + wordsIn(x.fact.text), 0);
   for (const x of kept.filter((k) => !rides(k)).sort((a, b) => value(b) - value(a))) {
-    if (words >= TURN_WORD_TARGET && stakeOf(x) < STAKED_FLOOR + 100) {
+    if (words >= TURN_WORD_TARGET && stakeOf(x) < PAWN_AT_STAKE) {
       keep.splice(keep.indexOf(x.fact), 1);
       if (!keep.some((f) => sourceOf(f)?.lane === x.lane)) { const i = spoke.indexOf(x.lane); if (i >= 0) spoke.splice(i, 1); }
       hold(x.lane, 'marginal');

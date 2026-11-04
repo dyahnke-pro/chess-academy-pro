@@ -56,3 +56,17 @@ export function seatCp(line: LineScore, seat: 'w' | 'b'): number {
 export function moverCp(fen: string, line: LineScore): number {
   return seatCp(line, fen.split(' ')[1] === 'w' ? 'w' : 'b');
 }
+
+/** The expected score, 0..1, for the side `cp` is from (a draw is 0.5). */
+export function expectedScore(cp: number): number {
+  return (1 + winningChances(cp)) / 2;
+}
+
+/** WHAT RIDES ON A DECISION, in expected score (WO-STORY-MATRIX-01 P1-10,
+ *  stakes.md §5): the gap between the outcome a fact's line reaches and the
+ *  next-best, from one seat — never negative. +8 → +5 is 0.087, below a level
+ *  game's pawn drop (0.091): the same centipawns weigh less in a decided game. */
+export function wcGap(cpFor: number, cpAgainst: number): number {
+  return Math.max(0, expectedScore(cpFor) - expectedScore(cpAgainst));
+}
+

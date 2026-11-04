@@ -23,7 +23,8 @@
 // Surfaces differ only in which steps they ask for and how many facts a step
 // may carry; the order and the choice are this file's.
 import type { SaidSet } from './gameStory';
-import { stakeValue } from './factStakes';
+import { stakeValue, isStaked, stakeWc } from './factStakes';
+import { causeEffect } from './factRelations';
 import type { CoachFact } from './coachFact';
 import thoughtPolicy from '../data/thought-policy.json';
 import { sameIdea, type IdeaKind } from './ideaKind';
@@ -135,8 +136,19 @@ export interface ComposedThought {
   held: Array<{ fact: ThoughtFact; why: 'step-not-asked' | 'same-idea' | 'not-support-or-news' | 'restates' | 'already-said' | 'refused' }>;
 }
 
-/** A pawn or more at stake: news in its own right. */
-const NEWS_VALUE = stakeValue({ points: 1, plies: 0 }) ?? 1100;
+/** NEWS IS RELATIVE TO THE TURN (WO-STORY-MATRIX-01 P1-10, rule 4): a fact
+ *  speaks behind its step's lead as news only when it answers a different
+ *  decision than the lead, or what rides on it clears the lead's by the
+ *  fitted margin (`POLICY.newsMargin`, expected score). "A pawn or more" was
+ *  any pawn on any turn: threats on pawns joined turns where he says nothing
+ *  about them (Build 4, cause 4). */
+function isNews(f: ThoughtFact, lead: ThoughtFact): boolean {
+  if (!isStaked(f.stakes)) return false;
+  const leadDecision = isStaked(lead.stakes) ? lead.stakes.decision : undefined;
+  if (f.stakes.decision && leadDecision && f.stakes.decision !== leadDecision) return true;
+  const leadWc = isStaked(lead.stakes) ? stakeWc(lead.stakes) : 0;
+  return stakeWc(f.stakes) >= leadWc + POLICY.newsMargin;
+}
 
 /** HOW OFTEN EACH COMPUTER IS CHOSEN, FITTED ON DANYA'S NOTES (WO-ONE-COACH-01
  *  Build 5, David 2026-10-30: "adjust how often they get chosen, to get us as
@@ -147,7 +159,7 @@ const NEWS_VALUE = stakeValue({ points: 1, plies: 0 }) ?? 1100;
  *  what is said matches him (31.0% → 32.8%). Measured with the moves that
  *  really followed each note: the bench first read an engine line there, which
  *  pushed the piece's trip down for a fault of the bench, not of the trip. */
-const POLICY: { floor: number; gap: number; offsets: Partial<Record<ThoughtSource, number>> } = thoughtPolicy;
+const POLICY: { floor: number; gap: number; newsMargin: number; offsets: Partial<Record<ThoughtSource, number>> } = thoughtPolicy;
 
 /** A fact's weight as the composer compares it: the producer's own, with its
  *  computer's fitted offset. */
@@ -209,7 +221,7 @@ export function composeThought(
     if (picked.some((p) => p.step === f.step && sameIdea(p, f))) { held.push({ fact: f, why: 'same-idea' }); continue; }
     const lead = leadOf.get(f.step);
     if (!lead) { leadOf.set(f.step, f); picked.push(f); continue; }
-    const news = (stakeValue(f.stakes) ?? 0) >= NEWS_VALUE;
+    const news = isNews(f, lead);
     if (MOVE_STEPS.has(f.step)) {
       const sameClaim = picked.some((p) => p.step === f.step && f.squares.some((s) => p.squares.includes(s)));
       if (sameClaim) { held.push({ fact: f, why: 'same-idea' }); continue; }
@@ -218,10 +230,11 @@ export function composeThought(
       held.push({ fact: f, why: 'not-support-or-news' });
       continue;
     }
-    // Another fact in a later step speaks as support (it names a square the
-    // step's lead names) or as news (a pawn or more at stake) — one thread,
-    // never a stack.
-    const support = f.squares.some((s) => lead.squares.includes(s));
+    // Another fact in a later step speaks as support — it names a square the
+    // step's lead names, or the lead's line changes a relation it stands on
+    // (cause → effect, `factRelations`, P1-11) — or as news (relative to the
+    // lead, rule 4): one thread, never a stack.
+    const support = f.squares.some((s) => lead.squares.includes(s)) || causeEffect(lead, f);
     if (reg.depth === 'thread' && (support || news)) { picked.push({ ...f, text: f.alsoText ?? f.text }); continue; }
     held.push({ fact: f, why: 'not-support-or-news' });
   }

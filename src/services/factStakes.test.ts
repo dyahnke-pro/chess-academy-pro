@@ -13,7 +13,7 @@ import { ALL_GREY } from './teachingLayers';
 import { describe, it, expect } from 'vitest';
 import {
   exchangeStakes, forkPoints, lineTacticPoints, costStakes, stakeValue,
-  STAKED_FLOOR, MATE_POINTS, type FactStakes,
+  STAKED_FLOOR, MATE_POINTS, mateStakes, type FactStakes,
 } from './factStakes';
 import { decide } from './coachDecider';
 import { doorFact } from '../test/doorFact';
@@ -54,7 +54,11 @@ describe('factStakes — what a fact is worth, from the board', () => {
     const pawnLater = stakeValue({ points: 1, plies: 3 })!;
     expect(queenLater).toBeGreaterThan(knightNow);
     expect(knightNow).toBeGreaterThan(pawnLater);
-    expect(stakeValue({ points: MATE_POINTS, plies: 4 })!).toBeGreaterThan(stakeValue({ points: 9, plies: 0 })!);
+    // A mate is staked through its one maker (it carries its seat); its tier
+    // sits above every material stake (P1-10: material saturates in win chance).
+    expect(stakeValue(mateStakes('them', 4, false))!).toBeGreaterThan(stakeValue({ points: 9, plies: 0 })!);
+    expect(stakeValue(mateStakes('them', 2, false))!).toBeGreaterThan(stakeValue(mateStakes('them', 4, false))!);
+    expect(stakeValue(mateStakes('you', 9, true))!).toBeGreaterThan(stakeValue(mateStakes('them', 0, false))!);
     // Any staked fact outranks the whole tie table (0–100).
     expect(pawnLater).toBeGreaterThan(STAKED_FLOOR);
   });

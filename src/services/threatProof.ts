@@ -108,9 +108,15 @@ export function provenThreatLine(line: string, fen: string, student: 'w' | 'b', 
 export function threatStakes(fen: string, student: 'w' | 'b', squares: readonly string[]): FactStakes | null {
   const them = flipSideToMove(fen);
   if (!them) return null;
-  try { if (new Chess(them).moves().some((m) => m.endsWith('#'))) return mateStakes('them', 1, false); } catch { return null; }
+  // The decision it answers is the threatened side's NEXT one, on this board
+  // (WO-STORY-MATRIX-01 P1-10, stakes.md §6 B5) — never the move that made the
+  // threat: Nc3's reason is a tempo, the queen's points are their problem.
+  const decision = `${fen}|student`;
+  try { if (new Chess(them).moves().some((m) => m.endsWith('#'))) return { ...mateStakes('them', 1, false), decision }; } catch { return null; }
+  // What ignoring it loses: the exchange the threat wins, never the piece's
+  // face value (`computeMustDefend` counts the swap: min(piece, gain)).
   const named = computeMustDefend(fen, student).pieces.find((p) => squares.includes(p.square));
-  return named && named.value > 0 ? { points: named.value, plies: 1 } : null;
+  return named && named.value > 0 ? { points: named.value, plies: 1, decision } : null;
 }
 
 /** THE LOOSE-PIECE CLAIMS a threat on `squares` makes: each of the student's

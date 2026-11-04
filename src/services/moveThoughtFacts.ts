@@ -25,14 +25,15 @@ import { pvSanToUci } from './principleAttribution';
 import { BOOK_JOB_IDEA, FUNDAMENTAL_IDEA, ideaClaim, type IdeaKind } from './ideaKind';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { composeThought, type ThoughtFact, type ThoughtSource } from './thoughtComposer';
-import { placeFact, stakesOf, LOCAL_THREAD, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat } from './coachFact';
+import { placeFact, stakesOf, LOCAL_THREAD, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat, type FactGroup } from './coachFact';
 import type { LessonVoice } from './reviewMoveBriefing';
 import { planAimKey } from './nextPlans';
 import { threadKey, keysUnder, STORY_KEY } from './gameStory';
 import { moveIntent, intentRule, type IntentReads } from './moveIntent';
 import { buildDeliberation, ruleOuts, NOTHING_SAID } from './deliberation';
 import { refutedAltProof, type RefutedAlternative } from './refutedAlternativeCore';
-import { costStakes } from './factStakes';
+import { costStakes, isStaked, stakeWc, NO_STAKES } from './factStakes';
+import { moverCp, wcGap } from './winChance';
 import { counterThreatTeaching, planChoiceTeaching, studentMoveTeaching } from './learnBoardTeaching';
 import type { LearnLane } from './learnTurnDoor';
 import { depthClauses, type DepthClauseKind } from './thinkAloud';
@@ -377,7 +378,53 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       }
     }
   }
-  return facts;
+  return withDecisionGap(facts, i, from, to, seat);
+}
+
+/** THE GROUPS THAT EXPLAIN ONE DECISION (rule 1, stakes.md §5.2): the move's
+ *  facts, their side's answer to it, and the line that proves it. */
+const DECISION_GROUPS: ReadonlySet<FactGroup> = new Set<FactGroup>(['move', 'theirSide', 'line']);
+
+/** WHAT RIDES ON THE MOVE'S DECISION (WO-STORY-MATRIX-01 P1-10, rule 1): the
+ *  gap between the move and the next-best, in expected score, off the
+ *  lesson's or the record's fan before it — the best move against the
+ *  runner-up, or a move worse than the best against the best (paid). Null
+ *  when the fan cannot say (no reads, one line). */
+export function decisionGap(fenBefore: string, uci: string, reads: IntentReads | null, costCp: number | null): number | null {
+  const lines = reads?.before ?? [];
+  if (lines.length === 0) return null;
+  const best = moverCp(fenBefore, lines[0]);
+  if (lines[0].moves[0] === uci) return lines[1] ? wcGap(best, moverCp(fenBefore, lines[1])) : null;
+  const own = lines.find((l) => l.moves[0] === uci);
+  if (own) return wcGap(best, moverCp(fenBefore, own));
+  return costCp !== null ? wcGap(best, best - costCp) : null;
+}
+
+/** RULE 1 — ONE DECISION, ONE GAP: every fact explaining the move shares the
+ *  move's gap, and a fact claims no more than its own proof shows
+ *  (`wc = min(G, own)`): "develops with tempo, hitting the queen" and "attacks
+ *  their queen" tie on Nc3 and the fitted weights decide; the queen's points
+ *  belong to their next decision. With no gap known the whole group is
+ *  `unmeasured` — a partial gap is never written (Build 4: partial coverage
+ *  made stakes a switch). The choices are re-read on the same curve, against
+ *  the best move's own score. */
+function withDecisionGap(facts: ThoughtFact[], i: MoveThoughtInput, from: string, to: string, seat: FactSeat): ThoughtFact[] {
+  const decision = `${i.fenBefore}|${seat}`;
+  const promo = (() => { try { return new Chess(i.fenBefore).move(i.san).promotion ?? ''; } catch { return ''; } })();
+  const g = decisionGap(i.fenBefore, `${from}${to}${promo}`, i.reads, i.costCp);
+  const best = i.reads?.before[0] ? moverCp(i.fenBefore, i.reads.before[0]) : null;
+  return facts.map((f) => {
+    if (DECISION_GROUPS.has(f.group)) {
+      if (g === null) return { ...f, stakes: NO_STAKES.unmeasured };
+      const own = isStaked(f.stakes) ? stakeWc(f.stakes) : g;
+      const wc = Math.min(g, own);
+      return { ...f, stakes: { points: isStaked(f.stakes) ? f.stakes.points : wc, plies: 0, wc, decision, ...(isStaked(f.stakes) && f.stakes.mate ? { mate: f.stakes.mate } : {}) } };
+    }
+    if (f.group === 'choices' && best !== null && isStaked(f.stakes)) {
+      return { ...f, stakes: { ...f.stakes, wc: wcGap(best, best - f.stakes.points * 100), decision } };
+    }
+    return f;
+  });
 }
 
 /** A LESSON'S LINE FOR ONE MOVE (WO-ONE-COACH-01): the move's facts through

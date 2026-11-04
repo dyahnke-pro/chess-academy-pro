@@ -31,14 +31,15 @@
 // verdict with a reason attached — never an absence.
 import { boardVeto, type BoardState } from './boardState';
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
-import { selectFacts, supportedFacts, barForTier, type QuietFact } from './factSelector';
+import { selectFacts, supportedFacts, barForTier, type QuietFact, type SupportLink } from './factSelector';
 import { fadeLevelOf, type FadeLevel, type FadeLevels } from './fadeText';
 import { factValue, FACT_ROLE, FACT_LAYER, FACT_PROOF, type FactKind, type FacetRole } from './reviewFacetRank';
 import type { CoachFact } from './coachFact';
 import { THOUGHT_ORDER } from './thoughtComposer';
 import { isProof, type Proof } from './proof';
 import { layerBonus, type LayerStandings } from './teachingLayers';
-import { STAKED_FLOOR, isStaked } from './factStakes';
+import { stakeBar, isStaked } from './factStakes';
+import { causeEffect } from './factRelations';
 import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, type MethodHabit } from './methodBeat';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { habitForTag, TAG_STEP } from './thinkingSteps';
@@ -200,7 +201,7 @@ interface StudentContext {
  *  "Black defends with the bishop to d7", and nothing more). At or above it —
  *  a pawn and a half at stake, landing now — the board speaks regardless: a
  *  hung queen is not a lesson a strong player has outgrown. */
-export const GREEN_QUIET_BELOW = STAKED_FLOOR + 150;
+export const GREEN_QUIET_BELOW = stakeBar(1.5);
 
 /** A FACT AT THE DECIDING DOOR — the one fact shape (`coachFact`), of a kind
  *  the door's tables answer (role, layer, proof, tie order: `FactKind`). The
@@ -338,6 +339,8 @@ function emit(
    *  read for the staked counts. */
   facts: readonly DoorFact[],
   lead: DoorFact | null,
+  /** How each kept description joined its teaching point (P1-11). */
+  supportLinks: readonly SupportLink[],
 ): CoachDecision {
   emitCoachDecision({
     posture,
@@ -362,6 +365,7 @@ function emit(
     unproven: d.unproven,
     unprovenKinds: d.unprovenKinds,
     leadStaked: d.spoken.length > 0 ? isStaked(lead?.stakes) : null,
+    supportLinks: { square: supportLinks.filter((l) => l === 'square').length, 'cause-effect': supportLinks.filter((l) => l === 'cause-effect').length },
   });
   return d;
 }
@@ -405,7 +409,7 @@ export function decide(
   // emitted `quietBy` used to file both closes as `'below-bar'`, so the row
   // could name the gate in `reason` and then contradict itself per fact.
   if (!speaks) {
-    return emit(posture, { ...base, speak: false, reason: 'importance', teaches: false, spoken: [], ...proofLedger([]), quiet: bundle.facts.map((f) => ({ text: f.text, why: 'importance' as const })) }, student, false, bundle.facts, null);
+    return emit(posture, { ...base, speak: false, reason: 'importance', teaches: false, spoken: [], ...proofLedger([]), quiet: bundle.facts.map((f) => ({ text: f.text, why: 'importance' as const })) }, student, false, bundle.facts, null, []);
   }
   // 2 — THE STUDENT. Absent need data reads as speak: a fresh install must meet
   // a teaching coach, not a mute one (the cold-start rule).
@@ -421,7 +425,7 @@ export function decide(
   // moment. The teaching / critical / swing / convert / none tiers stay
   // need-gated, which is where a familiar line SHOULD go quiet.
   if (posture !== 'asked' && student.need && !student.need.speak && !SPEAKS_ON_IMPORTANCE.has(importance.tier)) {
-    return emit(posture, { ...base, speak: false, reason: 'need', teaches: false, spoken: [], ...proofLedger([]), quiet: bundle.facts.map((f) => ({ text: f.text, why: 'need' as const })) }, student, false, bundle.facts, null);
+    return emit(posture, { ...base, speak: false, reason: 'need', teaches: false, spoken: [], ...proofLedger([]), quiet: bundle.facts.map((f) => ({ text: f.text, why: 'need' as const })) }, student, false, bundle.facts, null, []);
   }
   // 3 + 4 — WHICH FACTS. Subsumption collapses one-claim duplicates; the floor
   // sweeps trivia. The floor may never mute a ply — that was step 2's job and
@@ -494,7 +498,7 @@ export function decide(
   for (const f of support.spoken) {
     if (roleOf(f) !== 'describe') continue;
     const supportedBy = support.spoken
-      .filter((u) => roleOf(u) === 'teach' && u.squares.some((sq) => f.squares.includes(sq)));
+      .filter((u) => roleOf(u) === 'teach' && (u.squares.some((sq) => f.squares.includes(sq)) || causeEffect(u, f)));
     const supported = supportedBy.map(valueOf);
     if (supported.length) {
       order.set(f.id, Math.min(valueOf(f), Math.max(...supported) - 0.5));
@@ -548,14 +552,14 @@ export function decide(
     const quiet = reason === 'unsupported'
       ? quietAll.map((q) => (q.why === 'subsumed' ? { ...q, why: 'unsupported' as const } : q))
       : quietAll;
-    return emit(posture, { ...base, speak: false, reason, teaches: false, spoken, quiet, ...proofLedger([]) }, student, false, bundle.facts, null);
+    return emit(posture, { ...base, speak: false, reason, teaches: false, spoken, quiet, ...proofLedger([]) }, student, false, bundle.facts, null, support.links ?? []);
   }
   // The habit's own kind teaches (`FACT_ROLE.method`), so a ply where only the
   // method spoke still taught.
   const teaches = methodSpoke || spokenFacts.some((f) => roleOf(f) === 'teach');
   // Said shorter — keyed by the words the surface renders.
   const fadedSpoken = new Map([...faded].filter(([f]) => spokenFacts.includes(f)).map(([f, l]) => [f.text, l] as const));
-  return emit(posture, { ...base, method: methodBeat, speak: true, reason: 'spoken', teaches, spoken, quiet: quietAll, faded: fadedSpoken, ...proofLedger(spokenFacts) }, student, methodSpoke, bundle.facts, spokenFacts[0] ?? null);
+  return emit(posture, { ...base, method: methodBeat, speak: true, reason: 'spoken', teaches, spoken, quiet: quietAll, faded: fadedSpoken, ...proofLedger(spokenFacts) }, student, methodSpoke, bundle.facts, spokenFacts[0] ?? null, support.links ?? []);
 }
 
 /** WHICH HABITS THIS STUDENT KEEPS BREAKING, read off the weakness spine.

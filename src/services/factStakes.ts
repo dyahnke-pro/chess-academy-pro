@@ -23,6 +23,7 @@
 // one tie table, teaching before description. Pure: chess.js + seeGain only.
 import { Chess, type Square } from 'chess.js';
 import { seeGain, legalSeeGain } from './positionReadingService';
+import { wcGap } from './winChance';
 
 export interface FactStakes {
   /** Material at stake, in pawns (a knight is 3). A forced mate is `MATE_POINTS`. */
@@ -34,6 +35,14 @@ export interface FactStakes {
    *  from "you have mate" (unity: one stake, two seats). Built only by
    *  `mateStakes`, so a new mate fact cannot forget its seat. */
   mate?: { for: 'you' | 'them'; forced: boolean };
+  /** WHAT RIDES ON THE DECISION, in expected score (WO-STORY-MATRIX-01 P1-10,
+   *  stakes.md §5): the gap the fact's line proves over the next-best, 0..1,
+   *  from `winChance.wcGap`. Absent, the material is read from a level game
+   *  (`points` as centipawns against zero). */
+  wc?: number;
+  /** The choice this fact is about: `${fenBefore}|${seat}`. Facts on one
+   *  decision share its gap (rule 1); a fact on another decision is news. */
+  decision?: string;
 }
 
 /** WHY A FACT CARRIES NO GAP (WO-STORY-MATRIX-01 P1-10, stakes.md §5.1) —
@@ -66,10 +75,12 @@ export const MATE_POINTS = 100;
 export function mateStakes(side: 'you' | 'them', plies: number, forced: boolean): FactStakes {
   return { points: MATE_POINTS, plies, mate: { for: side, forced } };
 }
-/** Each ply of distance keeps 80%: a knight hanging next move (1 ply, 240)
- *  outranks a pawn in two moves, and a queen skewer three plies away (461)
- *  outranks the knight. */
+/** Each ply of distance keeps 80%: a knight hanging next move (1 ply, 3,009)
+ *  outranks a pawn in two moves (1,582), and a queen skewer three plies away
+ *  (3,378) outranks the knight. */
 const STAKE_DISCOUNT = 0.8;
+/** Win chance onto the order's scale (a pawn now ≈ 1,910). */
+const WC_SCALE = 10000;
 /** Staked facts score above this; unstaked ones stay on the tie table's
  *  0–100 scale, so any fact with real stakes outranks any fact without. */
 export const STAKED_FLOOR = 1000;
@@ -84,16 +95,37 @@ export function piecePoints(piece: string): number {
 /** The value a staked fact contributes to the order. Null / non-positive
  *  stakes contribute nothing — the caller falls back to the tie table. */
 export function stakeValue(s: Stakes | null | undefined): number | null {
-  if (!isStaked(s) || !(s.points > 0)) return null;
+  if (!isStaked(s)) return null;
+  const wc = stakeWc(s);
+  if (!(wc > 0)) return null;
   // A FORCED MATE DECIDES THE GAME HOWEVER FAR AWAY IT IS (Learn walk
   // 2026-10-14: "Critical moment — only one move limits the damage. … Bd6 was
   // a blunder — it let them force mate in 12": the mate in 12 was discounted
   // over 23 plies to 1,059 and lost the lead to a 3-point gap). It ranks above
   // every material stake; among mates the nearer one leads. A mate THREAT the
   // other side can still answer keeps the distance discount.
-  if (s.mate?.forced) return STAKED_FLOOR + MATE_POINTS * 100 - Math.max(0, s.plies);
-  return STAKED_FLOOR + s.points * 100 * STAKE_DISCOUNT ** Math.max(0, s.plies);
+  if (s.mate?.forced) return STAKED_FLOOR + 2 * WC_SCALE + MATE_POINTS - Math.max(0, s.plies);
+  // A MATE THE OTHER SIDE CAN STILL ANSWER ends the game if it is missed: it
+  // sits above every material stake (material's gap saturates below half a
+  // point, a queen from a level game is 0.46), the nearer one first.
+  if (s.mate) return STAKED_FLOOR + WC_SCALE * (0.5 + 0.5 * STAKE_DISCOUNT ** Math.max(0, s.plies));
+  return STAKED_FLOOR + WC_SCALE * wc * STAKE_DISCOUNT ** Math.max(0, s.plies);
 }
+
+/** A BAR WRITTEN IN PAWNS, on the order's scale: what `points` of material
+ *  landing now is worth. Every "at least a pawn" bar reads this, so a change of
+ *  scale (P1-10: centipawns → win chance) cannot leave a bar in the old units. */
+export function stakeBar(points: number): number {
+  return stakeValue({ points, plies: 0 }) ?? STAKED_FLOOR;
+}
+
+/** The expected-score gap a staked fact carries: its measured decision gap,
+ *  or its material read from a level game (a pawn now is 0.091, a knight
+ *  0.25, a queen 0.46 — the curve saturates, as winning does). */
+export function stakeWc(s: FactStakes): number {
+  return s.wc ?? wcGap(s.points * 100, 0);
+}
+
 
 /** A cost the move already paid (review's `[quality]`/`[principle]`, the
  *  live critical-moment gap): centipawns in, landed now. */

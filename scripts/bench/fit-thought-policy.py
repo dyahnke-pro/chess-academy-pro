@@ -46,11 +46,12 @@ def objective(P):
 sources = sorted({f['source'] for n in notes for f in n['facts']})
 POLICY_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'src', 'data', 'thought-policy.json')
 shipped = json.load(open(POLICY_PATH))
-P = {**copy.deepcopy(BASE), 'floor': shipped['floor'], 'gap': shipped['gap'], 'woff': dict(shipped['offsets'])}
+P = {**copy.deepcopy(BASE), 'floor': shipped['floor'], 'gap': shipped['gap'], 'newsMargin': shipped.get('newsMargin', 0.09), 'woff': dict(shipped['offsets'])}
 best = objective(P)
 for _ in range(6):
     improved = False
-    for lever, values in (('floor', [10, 20, 30, 40, 50, 60, 70]), ('gap', [5, 10, 15, 20, 30, 40, 60])):
+    for lever, values in (('floor', [10, 20, 30, 40, 50, 60, 70]), ('gap', [5, 10, 15, 20, 30, 40, 60]),
+                          ('newsMargin', [0.02, 0.05, 0.09, 0.15, 0.25, 0.4, 1.0])):
         for v in values:
             Q = copy.deepcopy(P); Q[lever] = v; o = objective(Q)
             if o > best + MIN_GAIN:
@@ -67,11 +68,11 @@ before, after = evaluate(BASE, 'test'), evaluate(P, 'test')
 r = lambda s: {k: round(v, 2) if isinstance(v, float) else v for k, v in s.items()}
 print('held out, before:', r(before))
 print('held out, after: ', r(after))
-print('policy:', json.dumps({'floor': P['floor'], 'gap': P['gap'], 'offsets': P['woff']}))
+print('policy:', json.dumps({'floor': P['floor'], 'gap': P['gap'], 'newsMargin': P['newsMargin'], 'offsets': P['woff']}))
 if '--write' in sys.argv:
     path = POLICY_PATH
     doc = json.load(open(path))
-    doc.update({'floor': P['floor'], 'gap': P['gap'], 'offsets': dict(sorted(P['woff'].items(), key=lambda kv: -kv[1])),
+    doc.update({'floor': P['floor'], 'gap': P['gap'], 'newsMargin': P['newsMargin'], 'offsets': dict(sorted(P['woff'].items(), key=lambda kv: -kv[1])),
                 'heldOut': {'notes': after['notes'],
                             'before': {k: round(before[k], 2) for k in ('any', 'lead', 'words', 'precision')},
                             'after': {k: round(after[k], 2) for k in ('any', 'lead', 'words', 'precision')}}})

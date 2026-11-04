@@ -34,6 +34,7 @@ import { newLessonVoice, BRIEFING_LINE_PLIES } from './reviewMoveBriefing';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { computePositionFacts, type PositionFactsResult } from './positionFacts';
 import { studentMoveTeaching } from './learnBoardTeaching';
+import { stakeValue, isStaked, stakeWc } from './factStakes';
 import { buildDeliberation, deliberationFacts, ruleOuts, NOTHING_SAID, moveWhy, bestMoveReason } from './deliberation';
 import { moveJob, bookMoveWhy, MINE, THEIRS } from './bookMoveWhy';
 import { mastersMovesSync, __setLocalDbForTests } from './masterPlayLookup';
@@ -920,6 +921,9 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
           danya: d.map((x) => ({ kind: x.kind, squares: [...x.squares] })),
           facts: facts.map((f) => ({
             source: f.source, idea: f.idea, step: f.step, weight: f.weight, squares: [...f.squares], restates: f.restates === true,
+            // What rides on it (P1-10): the order's value, the expected-score
+            // gap and the decision it answers — the replay's stakes and news.
+            sv: stakeValue(f.stakes) ?? 0, wc: isStaked(f.stakes) ? stakeWc(f.stakes) : null, decision: isStaked(f.stakes) ? f.stakes.decision ?? null : null,
             text: f.text, alsoText: f.alsoText ?? f.text, words: words(f.text), alsoWords: words(f.alsoText ?? f.text),
             ideas: ideasOf(f.text, p.to).map((x) => ({ kind: x.kind, squares: [...x.squares] })),
             alsoIdeas: ideasOf(f.alsoText ?? f.text, p.to).map((x) => ({ kind: x.kind, squares: [...x.squares] })),

@@ -36,9 +36,11 @@ describe('learnTurnDoor — the lane table decides, not a kind whitelist', () =>
     expect(d.spoke).toEqual(['planArc']);
   });
 
-  it('Learn filters every aim through aimWalkableNow before the arc sees it', () => {
-    expect(TEACH_CODE).toMatch(/aimsOf\(plan\.theirs, 'opponent'\)\.filter\(\(a\) => aimWalkableNow\(/);
-    expect(TEACH_CODE).toMatch(/aimsOf\(plan\.mine, 'student'\)\.filter\(\(a\) => aimWalkableNow\(/);
+  it('Learn filters every aim through aimWalkableNow before the arc sees it (one stepping, `stepBothArcs`, P1-8e-b)', () => {
+    const LOOK = readFileSync('src/services/lookaheadPlan.ts', 'utf8');
+    expect(LOOK).toMatch(/aimsOf\(plan\.theirs, 'opponent'\)\.filter\(\(a\) => aimWalkableNow\(/);
+    expect(LOOK).toMatch(/aimsOf\(plan\.mine, 'student'\)\.filter\(\(a\) => aimWalkableNow\(/);
+    expect(TEACH_CODE).toMatch(/stepBothArcs\(/);
   });
 
   it('a producer-decided kind rides through (the backward look)', () => {
@@ -491,7 +493,7 @@ describe('a mate turn stays on the mate (hard-question walk 2026-10-11, 21.e6)',
     const F = '2r2r1k/pp5p/2q1P3/8/4pN2/4P1Q1/bPP2P2/2KR2N1 w - - 1 22';
     const d = decideTurn([
       { lane: 'register', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'A structural cost: e6 is a weak pawn now.', fen: F, squares: ['e6'], stakes: { points: 1, plies: 2 } },
-      { lane: 'mistake', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'e6 was a blunder — it let them force mate in 6.', fen: F, stakes: { points: 100, plies: 11 } },
+      { lane: 'mistake', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'e6 was a blunder — it let them force mate in 6.', fen: F, stakes: mateStakes('them', 11, true) },
     ]);
     expect(d.spoke).toContain('mistake');
     expect(d.spoke).not.toContain('register');

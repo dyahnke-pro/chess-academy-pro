@@ -160,7 +160,16 @@ def compose(facts, P):
         return f['weight'] + P.get('woff', {}).get(f['source'], 0) + P.get('woff', {}).get(k, 0)
     rank = {**SOURCE_RANK, **P.get('rank', {})}
     idx = list(range(len(facts)))
-    order = sorted(idx, key=lambda i: (STEP_ORDER[facts[i]['step']], int(facts[i]['restates']), -weight(facts[i]), rank[facts[i]['source']], i))
+    # The composer's order: step, what rides on it (P1-10), restates, weight.
+    order = sorted(idx, key=lambda i: (STEP_ORDER[facts[i]['step']], -facts[i].get('sv', 0), int(facts[i]['restates']), -weight(facts[i]), rank[facts[i]['source']], i))
+    margin = P.get('newsMargin', 0.09)
+    def news(f, lead):
+        # Rule 4: a different decision, or a gap that clears the lead's.
+        if f.get('wc') is None:
+            return False
+        if f.get('decision') and lead.get('decision') and f['decision'] != lead['decision']:
+            return True
+        return f['wc'] >= (lead.get('wc') or 0) + margin
     picked = []  # (fact, also)
     lead_of = {}
     for i in order:
@@ -187,11 +196,11 @@ def compose(facts, P):
             floor = P.get('floorTheirs', P['floor']) if f['step'] == 'theirs' else P['floor']
             gap = P.get('gapTheirs', P['gap']) if f['step'] == 'theirs' else P['gap']
             second = (not f['restates']) and weight(f) >= floor and weight(f) >= weight(lead) - gap
-            if second:
+            if second or news(f, lead):
                 picked.append((f, True))
             continue
         support = bool(set(f['squares']) & set(lead['squares']))
-        if support:
+        if support or news(f, lead):
             picked.append((f, True))
     # quiet-move rule
     steps = {}

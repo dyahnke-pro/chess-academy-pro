@@ -17,9 +17,9 @@
  *   Qxd8 moves material from −1 to +8. No tactic detector names that
  *   deflection — the diff does.
  *
- * A line's diff (`lineDiff` in the design) is not built here yet: it ships
- * with its first reader (G8.5 — needs and causes, P1-11). A reader of a line
- * diffs the snapshots of the line's own boards.
+ * A line's diff (`lineDiff`) is every relation the line's own boards lose or
+ * gain along the way — its first reader is a fact's needs and causes
+ * (`factRelations`, WO-STORY-MATRIX-01 P1-11).
  *
  * A LEAF: chess.js and the relation computers (no engine, no Dexie, no I/O).
  * `detectTactics` (21 ms a board, 103 worst) and `findPinBreaks` (24 / 112 ms)
@@ -296,3 +296,39 @@ export function diff(a: RelationSnapshot, b: RelationSnapshot): RelationDiff {
     lost: a.relations.filter((r) => !b.byKey.has(relationKey(r))),
   };
 }
+
+/** WHAT A LINE CHANGES (P1-11): every relation lost or gained on the way, ply
+ *  by ply, from the snapshots of the line's own boards — 13.Bxf7+ Kxf7 loses
+ *  `guard:d8(bq)<e8(bk)`, and Qxd8 cashes it. Null when the line is illegal on
+ *  the board. */
+export function lineDiff(fen: string, sans: readonly string[]): RelationDiff | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  let prev = snapshot(fen);
+  if (!prev) return null;
+  const gained = new Map<string, Relation>();
+  const lost = new Map<string, Relation>();
+  for (const san of sans) {
+    try { board.move(san); } catch { return null; }
+    const next = snapshot(board.fen());
+    if (!next) return null;
+    const d = diff(prev, next);
+    for (const r of d.gained) gained.set(relationKey(r), r);
+    for (const r of d.lost) lost.set(relationKey(r), r);
+    prev = next;
+  }
+  return { gained: [...gained.values()], lost: [...lost.values()] };
+}
+
+/** The square a relation is about, when it has one. */
+export function relationSquare(r: Relation): Square | null {
+  switch (r.kind) {
+    case 'guard': case 'guard-pinned': case 'attack': case 'reach': case 'loose': case 'hanging': case 'passer': case 'uncovered':
+      return r.square;
+    case 'pin':
+      return r.pinned;
+    case 'file': case 'cover': case 'zone': case 'material': case 'check': case 'castling':
+      return null;
+  }
+}
+
