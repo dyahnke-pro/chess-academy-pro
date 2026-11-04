@@ -35,6 +35,17 @@ await ctx.addInitScript(({ url, secret }) => {
 }, { url: listener.url, secret: listener.secret });
 await ctx.addInitScript(autoDismissCalibration);
 await ctx.addInitScript(muteTtsForAudit);
+// EVERYTHING=1: collect every line the deciding places weigh
+// (`src/services/everythingEvents.ts`; dev server only — the page imports the
+// leaf by its source path). Read back with `/js` → `return window.__everything`.
+if (process.env.EVERYTHING === '1') {
+  await ctx.addInitScript(() => {
+    window.__everything = [];
+    import('/src/services/everythingEvents.ts').then((m) => {
+      m.onEverything((r) => { try { window.__everything.push(JSON.parse(JSON.stringify(r))); } catch { /* skip */ } });
+    }).catch((e) => { window.__everythingError = String(e); });
+  });
+}
 await ctx.addInitScript(stampAuditRunId(`hand-${Math.random().toString(36).slice(2, 8)}`));
 // MAIN-THREAD LONG TASKS, per turn (Learn speed, 2026-10-20): what blocked
 // the page, without a full profile on every ply.
