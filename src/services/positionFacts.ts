@@ -1325,7 +1325,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // The priority (unified with Learn, 2026-10-17).
       const bestHere = input.analysis.topLines[0]?.moves?.[0];
       if (bestHere) speak(readBoard('priorityFirst', { fen, student: studentColor, bestUci: bestHere }));
-      const order = readBoard('moveOrder', { fen, pv: input.analysis.topLines[0]?.moves ?? [] });
+      const order = readBoard('enablingMove', { fen, pv: input.analysis.topLines[0]?.moves ?? [] });
       if (order && input.namesBestMove) speak(order);
       if (input.opponentLastMove) speak(readBoard('obligationLifted', { fenBefore: input.opponentLastMove.fenBefore, fenAfter: fen, student: studentColor }));
       if (input.history?.length) speak(readBoard('bookMove', { history: input.history, student: studentColor }));

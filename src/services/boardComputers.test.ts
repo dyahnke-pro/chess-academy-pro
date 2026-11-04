@@ -41,7 +41,7 @@ describe('boardComputers — the one registry', () => {
     // …and silent when the engine does not agree.
     expect(readBoard('prophylaxis', { fen, engineFirstMoves: ['f1e2'] })).toBeNull();
 
-    const order = readBoard('moveOrder', { fen: '4k3/7p/8/8/8/8/4P3/4KB2 w - - 0 1', pv: ['e2e3', 'h7h6', 'f1d3'] });
+    const order = readBoard('enablingMove', { fen: '4k3/7p/8/8/8/8/4P3/4KB2 w - - 0 1', pv: ['e2e3', 'h7h6', 'f1d3'] });
     expect(order?.marks?.play).toEqual({ from: 'e2', to: 'e3' });
 
     const tie = readBoard('tiedDefender', { fenBefore: '4k3/3n4/8/4p3/8/8/8/R5NK w - - 0 1', fenAfterMove: '4k3/3n4/8/4p3/8/8/8/4R1NK b - - 1 1', fenAfterReply: '4k3/3n4/8/4p3/8/8/8/4R1NK b - - 1 1', student: 'w' });
@@ -62,7 +62,7 @@ describe('boardComputers — the one registry', () => {
     const fen = after(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Nf6', 'Nc3', 'Nc6']);
     const reads: Array<[ComputerId, CoachFact | null]> = [
       ['prophylaxis', readBoard('prophylaxis', { fen, engineFirstMoves: ['h2h3'] })],
-      ['moveOrder', readBoard('moveOrder', { fen: '4k3/7p/8/8/8/8/4P3/4KB2 w - - 0 1', pv: ['e2e3', 'h7h6', 'f1d3'] })],
+      ['enablingMove', readBoard('enablingMove', { fen: '4k3/7p/8/8/8/8/4P3/4KB2 w - - 0 1', pv: ['e2e3', 'h7h6', 'f1d3'] })],
       ['tiedDefender', readBoard('tiedDefender', { fenBefore: '4k3/3n4/8/4p3/8/8/8/R5NK w - - 0 1', fenAfterMove: '4k3/3n4/8/4p3/8/8/8/4R1NK b - - 1 1', fenAfterReply: '4k3/3n4/8/4p3/8/8/8/4R1NK b - - 1 1', student: 'w' })],
       ['countMethod', readBoard('countMethod', { fenBefore: '4k3/8/3p1p2/4p3/8/5N2/8/4K3 w - - 0 1', playedSan: 'Nxe5', student: 'w', costCp: 200 })],
       ['queenGrabTrap', readBoard('queenGrabTrap', { fen: 'r2q1r1k/pppnn1p1/3p3p/1P1Qp3/8/P1N2N1P/5PP1/R1B1R1K1 w - - 1 17' })],

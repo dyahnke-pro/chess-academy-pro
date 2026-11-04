@@ -130,7 +130,7 @@ describe('every lane and every clause kind answers which step it says', () => {
 
   it('a lane fed by a registry computer speaks that computer\'s kind (WO-STORY-MATRIX-01 P1-4)', () => {
     const fed: Array<[LearnLane, keyof typeof BOARD_COMPUTERS]> = [
-      ['moveOrder', 'moveOrder'], ['bookMove', 'bookMove'], ['priorityFirst', 'priorityFirst'], ['prophylaxis', 'prophylaxis'],
+      ['moveOrder', 'enablingMove'], ['bookMove', 'bookMove'], ['priorityFirst', 'priorityFirst'], ['prophylaxis', 'prophylaxis'],
       ['countMethod', 'countMethod'], ['lastTimeHere', 'lastTimeHere'], ['sameAsLastTime', 'lastTimeHere'],
     ];
     for (const [lane, id] of fed) expect(LEARN_LANES[lane].factKind, lane).toBe(BOARD_COMPUTERS[id].kind);

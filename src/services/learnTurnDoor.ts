@@ -303,7 +303,7 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   structure: 'not-ending', kingSafety: 'not-ending', kingAttack: 'not-ending',
   pieceQuality: 'any', register: 'any', gap: 'any', positionFacts: 'any', priorityFirst: phaseOfComputer(BOARD_COMPUTERS.priorityFirst.phase), rejectedTempting: 'any',
   planArc: 'any', drawback: 'any', mistake: 'any', coachMistake: 'any', fundamental: 'any', movePoint: 'any',
-  foundMove: 'any', heldMove: 'any', slipAnswer: 'any', moveIntent: 'any', moveOrder: phaseOfComputer(BOARD_COMPUTERS.moveOrder.phase), theirMoveCost: 'any',
+  foundMove: 'any', heldMove: 'any', slipAnswer: 'any', moveIntent: 'any', moveOrder: phaseOfComputer(BOARD_COMPUTERS.enablingMove.phase), theirMoveCost: 'any',
   recapture: 'any', ruleException: 'any', falseAlarm: 'any', threatAnswer: 'any', pushOrHold: 'any', causalChain: 'any',
   phase: 'any', character: 'any', theirPurpose: 'any', theirIntent: 'any', fileRace: 'any', stalemate: 'any',
   countMethod: phaseOfComputer(BOARD_COMPUTERS.countMethod.phase), timing: 'any', checkMethod: 'any', trade: 'any', kneeJerk: 'any', blunderCheck: 'any', mistakeHabit: 'any',
@@ -437,7 +437,7 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   ruleException: { factKind: 'rule', kind: 'computed', why: 'a beginner’s rule the move breaks, and why it is right here', lead: 73 },
   recapture: { factKind: 'trade', kind: 'computed', why: 'which piece takes back and why — compared with the other recapture', lead: 66 },
   theirMoveCost: { factKind: 'their-cost', kind: 'computed', why: 'what the opponent’s move cost them that the student can use', lead: 74 },
-  moveOrder: { factKind: BOARD_COMPUTERS.moveOrder.kind, kind: 'computed', why: 'why the move had to come first — the follow-up played first loses material', lead: 77 },
+  moveOrder: { factKind: BOARD_COMPUTERS.enablingMove.kind, kind: 'computed', why: 'why the move had to come first — the follow-up played first loses material', lead: 77 },
   // ALWAYS rides: a switch is said once, the move it happens — held behind a
   // threat it is lost for good (Fried Liver walk 2026-09-29: the turn to sharp
   // came WITH the threat, lost the lead to it, and was never heard).

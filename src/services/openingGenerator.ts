@@ -1862,10 +1862,27 @@ async function generateOpeningFromDbNarration(
       fanByPly.push(analysis?.topLines?.length ? analysis.topLines : null);
     } catch { fanByPly.push(null); }
   }
+  // THE FOLLOW-UP PLAYED FIRST (`moveOrder`): the mover's next move in the
+  // line, played instead of this one — one more read, made only when that move
+  // is legal before this one (otherwise there is no order to swap).
+  const followFirstByPly: Array<{ uci: string; line: AnalysisLine } | null> = [];
+  for (let i = 0; i < positions.length; i += 1) {
+    const follow = positions[i + 2]?.san;
+    const fen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
+    let swapped: { uci: string; fen: string } | null = null;
+    if (follow) {
+      try { const c = new Chess(fen); const m = c.move(stripSanAnnotations(follow)); swapped = { uci: `${m.from}${m.to}${m.promotion ?? ''}`, fen: c.fen() }; } catch { swapped = null; }
+    }
+    if (!swapped) { followFirstByPly.push(null); continue; }
+    try {
+      const analysis = await stockfishEngine.analyzeWithBudget(swapped.fen, 12, 1200);
+      followFirstByPly.push(analysis?.topLines?.[0] ? { uci: swapped.uci, line: analysis.topLines[0] } : null);
+    } catch { followFirstByPly.push(null); }
+  }
   const readsAt = (i: number): IntentReads | null => {
     const before = fanByPly[i] ?? null;
     const after = fanByPly[i + 1] ?? null;
-    return before || after ? { before: before ?? [], after: after ?? [], passBefore: [], passAfter: [] } : null;
+    return before || after ? { before: before ?? [], after: after ?? [], passBefore: [], passAfter: [], followFirst: followFirstByPly[i] ?? null } : null;
   };
   const costAt = (i: number): number | null => {
     const fen = i === 0 ? new Chess().fen() : positions[i - 1].fen;

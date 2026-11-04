@@ -269,7 +269,7 @@ const IDEA_AS_KINDS: Record<IdeaKind, Kind[]> = {
   'king-safety': ['king-safety', 'castle'], 'attack-king': ['king-safety', 'attack'], center: ['center', 'break'], space: ['space'],
   outpost: ['outpost'], file: ['file'], diagonal: ['diagonal'], 'passed-pawn': ['endgame'], promote: ['endgame'],
   weakness: ['weakness', 'structure'], tempo: ['tempo'], 'king-activity': ['endgame', 'activity'], route: ['activity', 'plan'],
-  'set-up': ['prepare', 'line', 'attack'], choice: ['alternative'], order: ['order'],
+  'set-up': ['prepare', 'line', 'attack'], choice: ['alternative'], order: ['order'], plan: ['plan'],
 };
 const SQUARE = /\b[a-h][1-8]\b/g;
 function sentencesOf(text: string): string[] {
@@ -528,6 +528,8 @@ const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
   bestLine: 'services/deliberation.ts#buildDeliberation',
   counterThreat: 'services/counterThreat.ts#counterThreat',
   theirAim: 'services/threeFacts.ts#theirTarget',
+  planChoice: 'services/planChooser.ts#planChoice',
+  moveOrder: 'services/moveOrder.ts#moveOrder',
 };
 
 /** Review's facet tags and the live composer's clause kinds (ONE vocabulary,

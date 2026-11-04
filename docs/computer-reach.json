@@ -6,8 +6,8 @@
  },
  "totals": {
   "computers": 347,
-  "wiredNowhere": 38,
-  "heldByLearnOnly": 26,
+  "wiredNowhere": 36,
+  "heldByLearnOnly": 24,
   "otherScreensOnly": 11,
   "dead": 1,
   "missingFromCode": 0,
@@ -18,12 +18,12 @@
     "no": 97
    },
    "review": {
-    "yes": 229,
-    "no": 118
+    "yes": 231,
+    "no": 116
    },
    "lesson": {
-    "yes": 100,
-    "no": 247
+    "yes": 103,
+    "no": 244
    },
    "chat": {
     "yes": 202,
@@ -52,12 +52,10 @@
    "services/learnFundamentalNarration.ts#(module)",
    "services/mistakeTurnLine.ts#mistakeTurnLine",
    "services/moveFundamentals.ts#ruleForPurpose",
-   "services/moveOrder.ts#(module)",
    "services/movePlan.ts#(module)",
    "services/moveReason.ts#(module)",
    "services/opponentGap.ts#(module)",
    "services/phaseTransitionDetector.ts#detectPhaseTransition",
-   "services/planChooser.ts#planChoice",
    "services/playCommentary.ts#buildInstantReplyLine",
    "services/playCommentary.ts#buildRejectedTempting",
    "services/playedConcept.ts#(module)",
@@ -3303,14 +3301,17 @@
    "says": "MOVE ORDER — \"X first, because Y right now runs into R\" (census #1, the most frequent thing he teaches that the coach did not: 540 of 11,435",
    "origin": "extra",
    "learn": "held",
-   "review": "no",
-   "lesson": "no",
+   "review": "yes",
+   "lesson": "yes",
    "chat": "no",
    "tapped": "no",
    "tactics": "no",
    "app": true,
-   "other": [],
-   "where": "components/Coach/CoachTeachPage.tsx#CoachTeachPage"
+   "other": [
+    "openingsPage",
+    "playSilent",
+    "endgame"
+   ]
   },
   {
    "key": "services/movePlan.ts#(module)",
@@ -4220,15 +4221,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -4259,14 +4262,17 @@
    "says": "From move 10, when the top two engine lines carry different plans (gap <= 30cp, or 80-150cp), names both plans by their aims (planFromUci x2",
    "origin": "map",
    "learn": "held",
-   "review": "no",
-   "lesson": "no",
+   "review": "yes",
+   "lesson": "yes",
    "chat": "no",
    "tapped": "no",
    "tactics": "no",
    "app": true,
-   "other": [],
-   "where": "components/Coach/CoachTeachPage.tsx#CoachTeachPage"
+   "other": [
+    "openingsPage",
+    "playSilent",
+    "endgame"
+   ]
   },
   {
    "key": "services/planJudgement.ts#(module)",

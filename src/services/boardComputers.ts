@@ -88,8 +88,10 @@ export interface BoardContexts {
   /** The quiet move that stops their next pin, kick or fork — only when the
    *  engine's own top lines start with it. */
   prophylaxis: { fen: string; engineFirstMoves: readonly string[] };
-  /** A first, because it clears the road B needs (engine line from `fen`). */
-  moveOrder: { fen: string; pv: readonly string[] };
+  /** A first, because it clears the road B needs (engine line from `fen`).
+   *  Named for its computer (`findEnablingMove`): the move-order point —
+   *  "X first, because Y right now runs into R" — is `moveOrder`'s own. */
+  enablingMove: { fen: string; pv: readonly string[] };
   /** The guard the student's move tied down, still tied after their reply. */
   tiedDefender: { fenBefore: string; fenAfterMove: string; fenAfterReply: string; student: Color };
   /** Their move took an attacker off a piece the student had to look after. */
@@ -244,7 +246,7 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: { lesson: { not: 'a lesson says the stop as the move that made it (moveThoughtFacts: findProphylaxis, kind stop); this is the stop still to play, which a model line plays' }, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
-  moveOrder: {
+  enablingMove: {
     // "A first": names the student's first move (the live read speaks it only
     // where the move is earned; Learn draws it as the move to play).
     read: ({ fen, pv }, fact) => safe(() => {

@@ -1501,7 +1501,7 @@ export function computeMoveFacets(
       add(readBoardAll('queenGrabTrap', { fen: fenAfter })[0]);
     } else {
       // The engine's line plays A first because A clears the road B needs.
-      if (ctx.bestLineUci.length >= 2) add(readBoardAll('moveOrder', { fen: fenBefore, pv: ctx.bestLineUci })[0]);
+      if (ctx.bestLineUci.length >= 2) add(readBoardAll('enablingMove', { fen: fenBefore, pv: ctx.bestLineUci })[0]);
       // The book move the student just left, with its job on the board.
       add(readBoardAll('bookMove', { history: ctx.allSans.slice(0, ply), student: studentColorWB })[0]);
       // The count, only when the student's move lost it; the priority they faced.

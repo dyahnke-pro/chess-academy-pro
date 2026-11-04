@@ -33,8 +33,9 @@ import type { IntentReads } from './moveIntent';
 import { buildDeliberation, ruleOuts, NOTHING_SAID } from './deliberation';
 import { refutedAltProof, type RefutedAlternative } from './refutedAlternativeCore';
 import { costStakes } from './factStakes';
-import { counterThreatTeaching } from './learnBoardTeaching';
+import { counterThreatTeaching, planChoiceTeaching } from './learnBoardTeaching';
 import { computeMustDefend } from './threatOut';
+import { moveOrder } from './moveOrder';
 
 export interface MoveThoughtInput {
   fenBefore: string;
@@ -265,6 +266,26 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     }
   }
 
+  // THE ORDER MATTERS (`moveOrder`, census #1, WO-STORY-MATRIX-01 P1-9): the
+  // mover's follow-up played first would have run into an answer that costs
+  // material or mates — read off the engine's line after this move and its
+  // line where the follow-up came first. Both seats, the moves named (the
+  // lesson shows its line).
+  const ff = i.reads?.followFirst;
+  const xLine = i.reads?.after[0];
+  if (ff && xLine && i.moverIsStudent !== undefined) {
+    const mo = moveOrder(i.fenBefore, i.san, ff.uci, xLine, ff.line, seat, true);
+    if (mo) {
+      const said = close(mo.text);
+      facts.push({
+        id: `moveOrder:${facts.length}`, namesStudentMove: false,
+        ...placeFact('timing', seat), computer: 'moveOrder', source: 'moveOrder', idea: 'order', text: said, squares: beyond(mo.squares), weight: 70,
+        thread: LOCAL_THREAD, stakes: costStakes(mo.costCp), proof: squaresProof(said, mo.squares) ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
+        claims: [`order:${from}${to}>${mo.followUp.uci}`],
+      });
+    }
+  }
+
   // THE STOP: the other side's wanted pin, kick or fork, and this is the move
   // that stops it ("h3 takes away g4: Bg4 would pin your knight on f3"). BOTH
   // SEATS (the Danya bench, 2026-10-30: "Black plays a6, preventing a bishop to
@@ -287,6 +308,19 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     if (ct) {
       const { lane: _lane, event: _event, arrows: _arrows, evidence: _evidence, ownMoveReason: _own, ...fact } = ct;
       facts.push({ ...fact, id: `counterThreat:${facts.length}`, source: 'counterThreat', idea: 'threat', weight: 72 });
+    }
+  }
+
+  // TWO PLANS ON THE BOARD (`planChoice`, WO-STORY-MATRIX-01 P1-9): after
+  // their move, the engine's two best lines for the student carry different
+  // plans — level ("choose the one you understand") or one clearly stronger.
+  // Read off the fan after the move (the student to move), made by Learn's own
+  // maker; said on their move, before the student's reply plays one of them.
+  if (i.moverIsStudent === false && i.reads && i.reads.after.length >= 2) {
+    const pc = planChoiceTeaching(fenAfter, i.reads.after, sideOf(fenAfter) === 'w' ? 'white' : 'black', { fenBefore: i.fenBefore, san: i.san });
+    if (pc) {
+      const { lane: _lane, event: _event, arrows: _arrows, evidence: _evidence, ownMoveReason: _own, ...fact } = pc;
+      facts.push({ ...fact, id: `planChoice:${facts.length}`, source: 'planChoice', idea: 'plan', weight: 50 });
     }
   }
 

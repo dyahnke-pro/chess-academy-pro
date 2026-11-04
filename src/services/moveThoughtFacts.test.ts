@@ -175,3 +175,40 @@ describe('a threat answered with a bigger one', () => {
   });
 });
 
+
+// TWO PLANS ON THE BOARD IN THE LESSON (WO-STORY-MATRIX-01 P1-9): Learn's plan
+// chooser, read off the fan after their move, now a fact of their move.
+describe('their move leaves two plans', () => {
+  // planChooser.test.ts's board, dated move 12: after …Nf6 the engine's two
+  // best lines for White carry two plans that come out level.
+  const before = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 11';
+  const A = ['d2d3', 'f8c5', 'c2c3', 'd7d6', 'b1d2', 'a7a6', 'd2f1', 'e8g8', 'f1g3'];
+  const B = ['b1c3', 'f8c5', 'd2d3', 'd7d6', 'c1g5', 'h7h6', 'g5h4', 'g7g5', 'h4g3'];
+  const reads = { before: [], after: [{ rank: 1, evaluation: 30, mate: null, moves: A }, { rank: 2, evaluation: 20, mate: null, moves: B }], passBefore: [], passAfter: [] };
+  it('both plans are said on their move', () => {
+    const text = lessonThought({ fenBefore: before, san: 'Nf6', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: null, theirLast: null, reads, costCp: null }, newLessonVoice(), null);
+    expect(text).toMatch(/Two plans hold here — getting the knight to f1, or getting the bishop to h4\./);
+  });
+  it('never on the student\'s own move (the plans are theirs to choose next)', () => {
+    const text = lessonThought({ fenBefore: before, san: 'Nf6', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, theirLast: null, reads, costCp: null }, newLessonVoice(), null);
+    expect(text).not.toMatch(/Two plans/);
+  });
+});
+
+// THE ORDER MATTERS IN THE LESSON (moveOrder, census #1; WO-STORY-MATRIX-01
+// P1-9): the lesson reads the follow-up played first, and the move's facts
+// say why this move had to come first. His own position (moveOrder.test.ts).
+describe('the move that had to come first', () => {
+  it('Be3 first — Nc3 straight away would have run into …Qxd4', async () => {
+    const points = (await import('./__fixtures__/moveOrder-his.json')).default as Array<{ game: string; ply: number; fenBefore: string; x: string; y: string; xLine: { cp: number; pv: string[] }; yFirst: { cp: number; pv: string[] } }>;
+    const p = points.find((q) => q.game === '1rcEbI44WqE' && q.ply === 13)!;
+    const y = new Chess(p.fenBefore).move(p.y);
+    const reads = {
+      before: [], passBefore: [], passAfter: [],
+      after: [{ rank: 1, evaluation: p.xLine.cp, mate: null, moves: p.xLine.pv }],
+      followFirst: { uci: `${y.from}${y.to}`, line: { rank: 1, evaluation: p.yFirst.cp, mate: null, moves: p.yFirst.pv } },
+    };
+    const text = lessonThought({ fenBefore: p.fenBefore, san: p.x, prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, theirLast: null, reads, costCp: null }, newLessonVoice(), null);
+    expect(text).toMatch(/Be3 first — Nc3 straight away would have run into …Qxd4|The order matters: Be3 before Nc3/);
+  });
+});

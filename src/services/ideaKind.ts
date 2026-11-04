@@ -18,7 +18,9 @@ export type IdeaKind =
   /** The moves you'd weigh, and why each falls short (the choices step). */
   | 'choice'
   /** Move order: "not yet — first this, and take after". */
-  | 'order';
+  | 'order'
+  /** A choice between plans: the engine's two best lines carry two. */
+  | 'plan';
 
 export const BOOK_JOB_IDEA: Record<BookJobKind, IdeaKind> = {
   rescue: 'rescue', guard: 'guard', stopsPin: 'prevent', stopsPush: 'prevent', tempo: 'tempo',

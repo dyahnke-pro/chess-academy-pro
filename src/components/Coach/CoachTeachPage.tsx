@@ -11244,7 +11244,7 @@ export function CoachTeachPage({ mode }: {
                       // MOVE ORDER (enablingMove): the engine's own line plays A first
                       // because A clears the road its next piece move needs.
                       const pv = studentBest.topLines[0]?.moves ?? [];
-                      const order = readBoard('moveOrder', { fen: probe.fen(), pv });
+                      const order = readBoard('enablingMove', { fen: probe.fen(), pv });
                       const orderPlay = order?.marks?.play;
                       if (order && orderPlay) {
                         queueSpokenHint(probe.fen(), { computer: order.computer, text: order.text, lane: 'moveOrder', proof: order.proof, namesStudentMove: namesPlayableStudentMove(namesMoves((playerColor === 'white' ? 'w' : 'b'), probe.fen(), orderPlay)), squares: order.squares, claims: order.claims, arrows: [{ from: orderPlay.from, to: orderPlay.to, role: 'play', vouchedBy: 'engine', source: 'learn.moveOrder' }] });

@@ -38,6 +38,11 @@ export interface IntentReads {
   /** Their actual reply to the move, when the surface knows it (Learn does:
    *  the coach's own move). Defaults to the first move of `after[0]`. */
   reply?: string;
+  /** THE FOLLOW-UP PLAYED FIRST (`moveOrder`'s second read): the board where
+   *  the mover's next move in the line was played instead of this one,
+   *  opponent to move — read by a surface that makes the extra search (a
+   *  lesson, when the follow-up is legal before the move). Absent: not read. */
+  followFirst?: { uci: string; line: AnalysisLine } | null;
 }
 
 export interface IntentMove { uci: string; san: string }
