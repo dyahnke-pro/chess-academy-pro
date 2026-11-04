@@ -38,6 +38,8 @@ export type { ThreatProducer } from './learnRecordTerms';
 // direct import per computer — surfaceComposition's ceiling).
 export { mistakeTurnLine } from './mistakeTurnLine';
 export { NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from './studentMoveNaming';
+import { habitSaidKey, liveHabitKey } from './methodBeat';
+export { habitSaidKey } from './methodBeat';
 import { stepForMethodClaim, THINKING_STEPS } from './thinkingSteps';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import type { AnalysisLine } from '../types';
@@ -250,7 +252,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
 
   // THE SAFETY HABITS (P3 method beats) — earned only by what the board did.
   {
-    const again = i.saidClaims?.has('claim:method:blunder-check') ?? false;
+    const again = i.saidClaims?.has(habitSaidKey('blunder-check')) ?? false;
     const bc = blunderCheck(i.fenBefore, i.san, i.reply, faultCp, again);
     if (bc) {
       // ITS STAKE AND ITS SQUARE (Learn audit 2026-10-14: held as an aside on a
@@ -265,7 +267,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
       out.push(teachingFact('blunderCheck', {
         computer: 'blunderCheck', kind: 'rule', ...mine, names: NAMES_NO_MOVE, proof: NO_PROOF.method, text: bc, squares: lost ? [lost.square] : [],
         // The callback carries its own move's claim: said once per blunder.
-        claims: [again ? `method:blunder-check:${i.history.length}` : 'method:blunder-check'],
+        claims: [again ? `${liveHabitKey('blunder-check')}:${i.history.length}` : liveHabitKey('blunder-check')],
         ...(lost ? { stakes: { points: piecePoints(lost.piece), plies: 1 } } : {}),
       }, { event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [] }));
     }
@@ -1185,7 +1187,7 @@ export function slipQuestion(
   // WHAT WAS IT GUARDING? (David's 13.Bc3, 2026-10-20: the bishop left e3 to a
   // knight fork, and the habit that catches it is asked before the piece moves.)
   if (guardLeft && /^[a-h][1-8]$/.test(guardLeft)) {
-    const key = 'claim:method:what-it-guarded';
+    const key = habitSaidKey('what-it-guarded');
     if (said.has(key)) return null;
     said.add(key);
     // The square is the grade's to name ("Your bishop was guarding e3"); the
@@ -1201,10 +1203,11 @@ export function slipQuestion(
   const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
   const there = before.get(lostSquare as Square);
   const standing = !!there && there.color === student && legalSeeGainFor(fenBefore, lostSquare as Square, them) > 0;
-  // ONE SAY-ONCE KEY PER HABIT, shared with the lane that already teaches it:
-  // `claim:method:blunder-check` is what the blunder-check lane writes when it
-  // speaks, so the habit is said once a game whichever path says it first.
-  const key = standing ? 'claim:method:answer-danger' : 'claim:method:blunder-check';
+  // ONE SAY-ONCE KEY PER HABIT, shared with every lane that teaches it: the
+  // blunder-check lane writes `blunder-check`, the live beat and the
+  // fundamental verdict `opponent-threat` — so the habit is said once a game
+  // whichever path says it first (`habitSaidKey`).
+  const key = habitSaidKey(standing ? 'opponent-threat' : 'blunder-check');
   if (said.has(key)) return null;
   said.add(key);
   if (!standing) {
@@ -1222,7 +1225,7 @@ export function slipQuestion(
 
 /** THE ONE ANSWER-THE-DANGER QUESTION — said by whichever line of the turn
  *  names the unanswered threat first (the instant grade or the full verdict),
- *  under one say-once claim, `method:answer-danger`. */
+ *  under one say-once claim, the opponent-threat habit's (`habitSaidKey`). */
 export function answerDangerQuestion(square: string | null, stemKey: number): string {
   return square
     ? rotateStem([

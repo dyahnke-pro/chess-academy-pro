@@ -21,6 +21,7 @@ import { openSentence } from '../utils/openSentence';
 import { isDecidingMoment } from './nextMoveAdvice';
 import type { ImportanceTier } from './narrationImportance';
 import type { Proof } from './proof';
+import { claimKey } from './voicePackage';
 
 export interface MethodSignals {
   /** The moment's importance tier, from the one deciding computer. */
@@ -304,8 +305,17 @@ interface LiveMethodSignals {
 export type LiveHabit = 'opponent-threat' | 'forcing-scan' | 'loose-trigger' | 'candidates' | 'look-again' | 'calc-now' | 'mark-line';
 /** `proof` rides on the habits whose earning fact is a line (batch 2). */
 interface LiveMethodBeat { text: string; key: string; proof?: Proof }
-/** The say-once key a caller carries forward in its `alreadySaid` set. */
-export function liveHabitKey(habit: LiveHabit): string { return `method:${habit}`; }
+/** EVERY HABIT HAS ONE ID (WO-STORY-MATRIX-01 P1-9): the live habits, and the
+ *  two the slip question asks after a move. The slip question asked "what did
+ *  their last move attack?" under its own `answer-danger` key while the live
+ *  beat asked "their threat first, your idea second" under `opponent-threat` —
+ *  one habit, two keys, so a Learn game could teach it twice in two wordings
+ *  (the thinking steps already filed `answer-danger` under `opponent-threat`). */
+export type HabitId = LiveHabit | 'blunder-check' | 'what-it-guarded';
+/** The say-once claim a caller carries forward in its `alreadySaid` set. */
+export function liveHabitKey(habit: HabitId): string { return `method:${habit}`; }
+/** The same claim as the spoken-sentence ledger keys it (`claimKey`). */
+export function habitSaidKey(habit: HabitId): string { return claimKey(liveHabitKey(habit)); }
 
 export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: ReadonlySet<string>): LiveMethodBeat | null {
   if (!s.isStudentMove) return null;

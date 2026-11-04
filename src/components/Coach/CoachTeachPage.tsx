@@ -73,7 +73,7 @@ import { buildPositionalRead } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { cheaperAttackerHit, gambitPoint, kingPawnUnderFire, type CheaperHit, mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { habitSaidKey, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -10554,8 +10554,8 @@ export function CoachTeachPage({ mode }: {
           // when it names an unanswered threat or a hung piece it carries the
           // habit's question, under the claim the verdict's slip question reads —
           // the habit is said once, never twice on one move.
-          const habitKey = grade.reason === 'ignored-threat' ? 'claim:method:answer-danger'
-            : grade.reason === 'hung-piece' ? 'claim:method:blunder-check' : null;
+          const habitKey = grade.reason === 'ignored-threat' ? habitSaidKey('opponent-threat')
+            : grade.reason === 'hung-piece' ? habitSaidKey('blunder-check') : null;
           const habitQ = habitKey && !learnMemRef.current.story.current().sentences.has(habitKey)
             ? grade.reason === 'ignored-threat'
               ? answerDangerQuestion(null, move.history.length)

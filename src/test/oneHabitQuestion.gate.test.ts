@@ -8,11 +8,12 @@ const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
 const teach = readFileSync('src/services/learnBoardTeaching.ts', 'utf8');
 
 describe('one habit question, one say-once claim', () => {
-  it('the instant grade and the slip question share the claims', () => {
-    expect(page).toMatch(/'claim:method:answer-danger'/);
-    expect(page).toMatch(/'claim:method:blunder-check'/);
-    expect(teach).toMatch(/'claim:method:answer-danger'/);
-    expect(teach).toMatch(/'claim:method:blunder-check'/);
+  it('the instant grade and the slip question share the claims — one key per habit (habitSaidKey)', () => {
+    expect(page).toMatch(/habitSaidKey\('opponent-threat'\)/);
+    expect(page).toMatch(/habitSaidKey\('blunder-check'\)/);
+    expect(teach).toMatch(/habitSaidKey\(standing \? 'opponent-threat' : 'blunder-check'\)/);
+    // No habit key spelled by hand: a second spelling is a second key.
+    for (const src of [page, teach]) expect(src).not.toMatch(/'claim:method:/);
   });
   it('one wording per question — never a second literal of the blunder check', () => {
     const literal = /run CCT for them — what checks, captures and threats do they have once it lands\?'/;
