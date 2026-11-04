@@ -51,7 +51,7 @@ describe('a line explored from the walk carries the story it told, through the p
   const narration = { intro: '', closing: null, segments: walk, story: walkStory.serialize() };
   /** The line the free board builds: the game to ply `k`, then `alt` (a move
    *  the game did not play), seeded the way `narrateExploredMove` seeds it. */
-  const exploreLine = (walkedTo: number, k: number, alt: string): { text: string; line: GameStory; lineStory: StoryStore } => {
+  const exploreLine = (walkedTo: number, k: number, alt: string): { text: string; line: GameStory; lineStory: StoryStore; segs: ReturnType<typeof buildReviewSegmentsForTests> } => {
     const c = new Chess();
     for (const m of moves.slice(0, k)) c.move(m.san);
     const played = c.move(alt);
@@ -60,7 +60,7 @@ describe('a line explored from the walk carries the story it told, through the p
     const seed = exploreSeed(narration, walkedTo, line.map((m) => m.san), moves);
     const lineStory = createStoryStore(game.id);
     const segs = buildReviewSegmentsForTests(line, game.studentSide, null, true, game.rating, [], undefined, null, new Map(), new Map(), seed, lineStory);
-    return { text: segs.find((s) => s.ply === k + 1)?.narration ?? '', line: lineStory.current(), lineStory };
+    return { text: segs.find((s) => s.ply === k + 1)?.narration ?? '', line: lineStory.current(), lineStory, segs };
   };
 
   it('the walk asks the method at ply 31 (the fixture)', () => {
@@ -100,5 +100,19 @@ describe('a line explored from the walk carries the story it told, through the p
 
   it('a student who had not reached it (walked to ply 30) hears it there too', () => {
     expect(exploreLine(30, 30, 'Bb5').text).toMatch(/How do you find a plan\?/);
+  }, 300_000);
+
+  it('the free board is the walk\'s coach, paying only for its own moves (P1-8f)', () => {
+    // The plies the walk already said are the seed's: the line does not
+    // narrate them again (it narrated all of them, in the cheaper one-beat
+    // mode, before), and narrates its own move in the walk's mode.
+    // Measured 2026-11-04 on this line: the walk's mode built the whole line
+    // in 5.3 s; built from the seed, 0.8 s — and the move says the same.
+    const { text, segs } = exploreLine(44, 30, 'Bb5');
+    expect(segs.filter((sg) => sg.ply <= 30).every((sg) => sg.narration === null)).toBe(true);
+    expect(segs.filter((sg) => sg.ply <= 30)).toHaveLength(30);
+    expect(text).toMatch(/^Taking on d8 was the plan at work/);
+    const page = readFileSync('src/components/Coach/CoachGameReview.tsx', 'utf8');
+    expect(page).toMatch(/buildReviewSegmentsYielding\(inputs, playerColor, openingName, isReviewUncapped\(\),/);
   }, 300_000);
 });

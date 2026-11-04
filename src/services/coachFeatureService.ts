@@ -1921,6 +1921,33 @@ function* reviewSegmentSteps(
     }
     // Everything said on this move is said at its ply.
     story.reach(moves[i].ply);
+    // THE PLIES THE WALK ALREADY SAID (WO-STORY-MATRIX-01 P1-8f). With a seed,
+    // what was said through `throughPly` is the walk's: the story restores the
+    // walk's checkpoint at the next ply, and the caller keeps the walk's own
+    // segments for these plies (`mergeReviewNarration`; a line off the free
+    // board speaks only its own moves). So they are not narrated again — which
+    // is what lets the free board's line be built by the walk's own coach at
+    // the cost of its new moves. The move is carried (the sans, the capture
+    // run, whether their move was a slip) and its segment stays silent.
+    if (spokenBefore && moves[i].ply <= spokenBefore.throughPly) {
+      const mv = moves[i];
+      const fp = fenChain[i];
+      const mover: 'white' | 'black' = mv.ply % 2 === 1 ? 'white' : 'black';
+      if (mover !== playerColor) {
+        opponentSans.push(mv.san);
+        lastOpponentWasError = mv.classification === 'inaccuracy' || mv.classification === 'mistake' || mv.classification === 'blunder';
+      }
+      allSans.push(mv.san);
+      segments.push({
+        ply: mv.ply, moveNumber: Math.ceil(mv.ply / 2), san: mv.san, playerColor: mover,
+        fenBefore: fp.fenBefore, fenAfter: fp.fenAfter, classification: mv.classification,
+        evalBefore: mv.preMoveEval, evalAfter: mv.evaluation,
+        bestMoveSan: betterMoveSan(mv.bestMove, mv.san, fp.fenBefore), bestMoveUci: mv.bestMove,
+        narration: null, narrationSource: null,
+      });
+      try { prevCap = afterCapture(prevCap, new Chess(fp.fenBefore).move(mv.san)); } catch { prevCap = NO_PREV_CAPTURE; }
+      continue;
+    }
     const m0 = moves[i];
     // AN INACCURACY SPEAKS ONLY WHERE THE RECORD EARNS IT (David 2026-10-18):
     // where this student's mistakes and blunders outnumber their inaccuracies

@@ -1826,8 +1826,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // The line's own story, seeded from the walk's — read here only for the
       // refrain fold; the walk keeps its own.
       const lineStory = createStoryStore(props.gameId ?? 'review');
-      // Stepped, so the screen runs while the whole line is re-read.
-      const segs = await buildReviewSegmentsYielding(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly, seed, lineStory);
+      // THE WALK'S OWN COACH (P1-8f): the line is built in the walk's mode,
+      // and only its own moves are narrated — the plies before the branch are
+      // the seed's (the build skips them), so the free board costs what its
+      // new moves cost. Stepped, so the screen runs while it reads.
+      const segs = await buildReviewSegmentsYielding(inputs, playerColor, openingName, isReviewUncapped(), playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly, seed, lineStory);
       foldReviewRefrains(segs, lineStory, seed);
       text = segs[segs.length - 1]?.narration ?? null;
     } catch { text = null; }

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6197 lines · 30 exports · 67 importers · 81 tests · 4 audits**
+**6224 lines · 30 exports · 67 importers · 81 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -118,12 +118,12 @@
 - `src/services/coachFeatureService.test.ts:881`
 
 ### `segmentNamedArrows` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:3226`
+- `src/components/Coach/CoachGameReview.tsx:3229`
 - `src/services/namedMoveArrows.test.ts:54`
 - `src/services/namedMoveArrows.test.ts:58`
 
 ### `foldReviewRefrains` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1831`
+- `src/components/Coach/CoachGameReview.tsx:1834`
 - `src/services/reviewLedgerCounters.test.ts:65`
 - `src/services/reviewLedgerCounters.test.ts:77`
 
@@ -272,7 +272,7 @@
 - `src/test/reviewExplore.continuity.test.ts:62`
 
 ### `buildReviewSegmentsYielding` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:1830`
+- `src/components/Coach/CoachGameReview.tsx:1833`
 - `src/services/reviewBuildYields.test.ts:35`
 
 ### `defaultIntroText` (function) — 4 call sites
@@ -294,7 +294,7 @@
 - `src/test/mateSaidOnce.gate.test.ts:69`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4269`
+- `src/components/Coach/CoachGameReview.tsx:4272`
 - `src/services/coachFeatureService.test.ts:793`
 - `src/services/coachFeatureService.test.ts:796`
 - `src/services/coachFeatureService.test.ts:803`
@@ -320,10 +320,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8779`
-- `src/components/Coach/CoachTeachPage.tsx:8877`
-- `src/components/Coach/CoachTeachPage.tsx:11731`
-- `src/components/Coach/CoachTeachPage.tsx:12122`
+- `src/components/Coach/CoachTeachPage.tsx:8790`
+- `src/components/Coach/CoachTeachPage.tsx:8888`
+- `src/components/Coach/CoachTeachPage.tsx:11709`
+- `src/components/Coach/CoachTeachPage.tsx:12100`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/utils/justCaptured.test.ts:20`
