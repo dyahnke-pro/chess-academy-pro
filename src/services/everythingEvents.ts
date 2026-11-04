@@ -83,7 +83,7 @@ export function emitEverything(row: { surface: string; door: EverythingDoor; at?
 }
 
 /** Test helper. */
-export function resetEverything(): void {
+export function __resetEverything(): void {
   listeners.clear();
   seq = 0;
 }

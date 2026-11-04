@@ -15,7 +15,7 @@ vi.mock('./stockfishEngine', () => ({
   },
 }));
 
-import { emitEverything, onEverything, resetEverything, everythingListening, type EverythingRow } from './everythingEvents';
+import { emitEverything, onEverything, __resetEverything, everythingListening, type EverythingRow } from './everythingEvents';
 import { NO_PROOF } from './proof';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { claimKey } from './voicePackage';
@@ -31,7 +31,7 @@ function listen(): EverythingRow[] {
   return rows;
 }
 
-beforeEach(() => resetEverything());
+beforeEach(() => __resetEverything());
 
 describe('the leaf', () => {
   it('builds nothing while nobody listens, and numbers rows in arrival order', () => {

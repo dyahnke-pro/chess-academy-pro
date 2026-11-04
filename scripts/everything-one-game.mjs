@@ -24,6 +24,7 @@ import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
+import { until } from './audit-lib/wedge-watch.mjs';
 
 const OUT = process.argv[2];
 if (!OUT) { console.error('usage: node scripts/everything-one-game.mjs <out.json> [game.json]'); process.exit(2); }
@@ -105,18 +106,16 @@ await dismiss();
 
 // The walk, then every background pass: collect until a minute passes with no
 // new row.
-const t0 = Date.now();
 let last = -1;
 let stable = 0;
-while (Date.now() - t0 < 900000) {
-  await page.waitForTimeout(10000);
+await until(async () => {
   const n = await page.evaluate(() => window.__everything.length);
   const ready = await page.locator('[data-testid="start-walk-btn"]:not([disabled])').count();
   log(`rows ${n}, walk ready ${ready > 0}`);
   if (ready > 0 && n === last) stable += 1; else stable = 0;
   last = n;
-  if (stable >= 6) break;
-}
+  return stable >= 6;
+}, 900000, 10000);
 const rows = await page.evaluate(() => window.__everything);
 // The gems the index holds on this game's line (Review does not run them yet).
 const gems = await page.evaluate(async (sans) => {
