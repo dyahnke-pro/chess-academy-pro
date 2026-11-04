@@ -82,8 +82,8 @@
 - `src/services/moveThoughtFacts.ts:140`
 - `src/services/moveThoughtFacts.ts:261`
 - `src/services/moveThoughtFacts.ts:304`
-- `src/services/moveThoughtFacts.ts:317`
-- `src/services/moveThoughtFacts.ts:352`
+- `src/services/moveThoughtFacts.ts:318`
+- `src/services/moveThoughtFacts.ts:353`
 - `src/services/openingStory.ts:363`
 - `src/services/positionFacts.ts:517`
 - `src/services/reviewFacet.ts:62`
