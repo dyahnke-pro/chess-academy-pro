@@ -35,6 +35,8 @@ import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { computePositionFacts, type PositionFactsResult } from './positionFacts';
 import { studentMoveTeaching } from './learnBoardTeaching';
 import { stakeValue, isStaked, stakeWc } from './factStakes';
+import { factRelations } from './factRelations';
+import { isProof } from './proof';
 import { buildDeliberation, deliberationFacts, ruleOuts, NOTHING_SAID, moveWhy, bestMoveReason } from './deliberation';
 import { moveJob, bookMoveWhy, MINE, THEIRS } from './bookMoveWhy';
 import { mastersMovesSync, __setLocalDbForTests } from './masterPlayLookup';
@@ -923,6 +925,11 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
             // What rides on it (P1-10): the order's value, the expected-score
             // gap and the decision it answers — the replay's stakes and news.
             sv: stakeValue(f.stakes) ?? 0, wc: isStaked(f.stakes) ? stakeWc(f.stakes) : null, decision: isStaked(f.stakes) ? f.stakes.decision ?? null : null,
+            // What the matrix reads (Phase 2): the story thread, how strong the
+            // proof is, and the relations the fact needs and causes (links).
+            group: f.group, thread: f.thread, proof: isProof(f.proof) ? (f.proof.exact ? 'exact' : 'engine') : f.proof.none,
+            ...(() => { const r = factRelations(f); return { needs: [...r.needs], causes: [...r.causes] }; })(),
+            line: isProof(f.proof) && f.proof.line ? f.proof.line.sans.join(' ') : (f.lines?.[0]?.sans.join(' ') ?? null),
             text: f.text, alsoText: f.alsoText ?? f.text, words: words(f.text), alsoWords: words(f.alsoText ?? f.text),
             ideas: ideasOf(f.text, p.to).map((x) => ({ kind: x.kind, squares: [...x.squares] })),
             alsoIdeas: ideasOf(f.alsoText ?? f.text, p.to).map((x) => ({ kind: x.kind, squares: [...x.squares] })),
