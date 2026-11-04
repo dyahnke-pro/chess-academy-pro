@@ -36,7 +36,6 @@ import type { ImportanceTier } from './narrationImportance';
 import { facetRank } from './reviewFacetRank';
 import type { WeaknessSignal } from './weaknessSignal';
 import type { CoachFact } from './coachFact';
-import { causeEffect } from './factRelations';
 
 /** Why a fact did not speak. Kept for the audit trail — silence is a computed
  *  verdict, so it has to be explainable, never just absent.
@@ -68,15 +67,9 @@ export interface QuietFact {
  *  every record off the fact itself, never re-joins it by its words
  *  (WO-STORY-MATRIX-01 P1-5) — and every fact that did not, by its words,
  *  for the decision row. */
-/** HOW A DESCRIPTION JOINED A TEACHING POINT (P1-11): it names one of the
- *  point's squares, or the point's line changes a relation it stands on. */
-export type SupportLink = 'square' | 'cause-effect';
-
 interface FactSelection<F extends CoachFact> {
   spoken: F[];
   quiet: QuietFact[];
-  /** For each description the support step kept, the link that kept it. */
-  links?: SupportLink[];
 }
 
 /** How much square overlap counts as "the same claim". Jaccard, not containment:
@@ -312,7 +305,6 @@ export function supportedFacts<F extends CoachFact>(
   const taught = new Set<string>();
   for (const t of teach) for (const sq of t.squares) taught.add(sq);
   const out: F[] = [];
-  const links: SupportLink[] = [];
   for (const f of spoken) {
     if (roleOf(f) === 'teach') { out.push(f); continue; }
     const sq = f.squares;
@@ -324,11 +316,8 @@ export function supportedFacts<F extends CoachFact>(
       ? teach.find((k) => sq.every((s) => k.squares.includes(s)) && own.every((c) => k.claims.includes(c)))
       : undefined;
     if (restated) quiet.push({ text: f.text, why: 'subsumed', by: restated.text });
-    else if (sq.some((s) => taught.has(s))) { out.push(f); links.push('square'); }
-    // CAUSE → EFFECT (P1-11): a teaching point's line changes a relation this
-    // description stands on — "Kxf7 drags the king off e8" and "d8 is loose".
-    else if (teach.some((t) => causeEffect(t, f))) { out.push(f); links.push('cause-effect'); }
+    else if (sq.some((s) => taught.has(s))) out.push(f);
     else quiet.push({ text: f.text, why: 'unsupported' });
   }
-  return { spoken: out, quiet, links };
+  return { spoken: out, quiet };
 }

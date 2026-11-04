@@ -1986,12 +1986,12 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     const unprovenRows = decisions.filter((d) => typeof d.unproven === 'number');
     await add('DECIDER proof-backlog-measured', unprovenRows.length === decisions.length && decisions.length > 0,
       `${decisions.reduce((n, d) => n + (d.unproven ?? 0), 0)} unproven conclusion(s) spoke across ${decisions.length} rows; by kind ${JSON.stringify(decisions.flatMap((d) => d.unprovenKinds ?? []).reduce((m, k) => ({ ...m, [k]: (m[k] ?? 0) + 1 }), {}))}`);
-    // NEEDS AND CAUSES (WO-STORY-MATRIX-01 P1-11): how each description that
-    // spoke joined its teaching point — a shared square, or cause → effect.
-    // Reported, not gated: the row must CARRY it on every spoken row.
+    // NEEDS AND CAUSES (WO-STORY-MATRIX-01 P1-11): how each fact that spoke
+    // after the lead is joined to it — cause → effect, a shared square, or
+    // nothing. Reported, not gated: the row must CARRY it on every spoken row.
     const linkRows = decisions.filter((d) => d.speak && d.supportLinks && typeof d.supportLinks.square === 'number');
     await add('DECIDER support-links-measured', linkRows.length === decisions.filter((d) => d.speak).length,
-      `${linkRows.reduce((n, d) => n + (d.supportLinks['cause-effect'] ?? 0), 0)} cause-effect / ${linkRows.reduce((n, d) => n + (d.supportLinks.square ?? 0), 0)} square links across ${linkRows.length} spoken rows`);
+      `facts after the lead: ${linkRows.reduce((n, d) => n + (d.supportLinks['cause-effect'] ?? 0), 0)} cause-effect / ${linkRows.reduce((n, d) => n + (d.supportLinks.square ?? 0), 0)} square / ${linkRows.reduce((n, d) => n + (d.supportLinks.none ?? 0), 0)} unlinked, across ${linkRows.length} spoken rows`);
     const spoke = decisions.filter((d) => d.speak);
     // SUBSUMPTION — the knob behind "calling out the pins and the batteries was
     // a bit much" (David 2026-09-16). It is the mechanism the rule says to

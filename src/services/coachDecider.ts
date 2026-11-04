@@ -31,7 +31,7 @@
 // verdict with a reason attached — never an absence.
 import { boardVeto, type BoardState } from './boardState';
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
-import { selectFacts, supportedFacts, barForTier, type QuietFact, type SupportLink } from './factSelector';
+import { selectFacts, supportedFacts, barForTier, type QuietFact } from './factSelector';
 import { fadeLevelOf, type FadeLevel, type FadeLevels } from './fadeText';
 import { factValue, FACT_ROLE, FACT_LAYER, FACT_PROOF, type FactKind, type FacetRole } from './reviewFacetRank';
 import type { CoachFact } from './coachFact';
@@ -339,9 +339,14 @@ function emit(
    *  read for the staked counts. */
   facts: readonly DoorFact[],
   lead: DoorFact | null,
-  /** How each kept description joined its teaching point (P1-11). */
-  supportLinks: readonly SupportLink[],
 ): CoachDecision {
+  // HOW EACH FACT AFTER THE LEAD IS JOINED TO IT (P1-11, measured — the door
+  // still keeps a description by its squares): cause → effect (the lead's
+  // line changes a relation it stands on), a shared square, or nothing.
+  const leadSpoken = d.spoken.length > 0 ? lead : null;
+  const after = leadSpoken ? facts.filter((f) => f !== leadSpoken && d.spoken.includes(f.text)) : [];
+  const linkOf = (f: DoorFact): 'cause-effect' | 'square' | 'none' =>
+    (leadSpoken && causeEffect(leadSpoken, f) ? 'cause-effect' : leadSpoken && f.squares.some((s) => leadSpoken.squares.includes(s)) ? 'square' : 'none');
   emitCoachDecision({
     posture,
     tier: d.tier,
@@ -365,7 +370,7 @@ function emit(
     unproven: d.unproven,
     unprovenKinds: d.unprovenKinds,
     leadStaked: d.spoken.length > 0 ? isStaked(lead?.stakes) : null,
-    supportLinks: { square: supportLinks.filter((l) => l === 'square').length, 'cause-effect': supportLinks.filter((l) => l === 'cause-effect').length },
+    supportLinks: after.reduce((acc, f) => { acc[linkOf(f)] += 1; return acc; }, { 'cause-effect': 0, square: 0, none: 0 }),
   });
   return d;
 }
@@ -409,7 +414,7 @@ export function decide(
   // emitted `quietBy` used to file both closes as `'below-bar'`, so the row
   // could name the gate in `reason` and then contradict itself per fact.
   if (!speaks) {
-    return emit(posture, { ...base, speak: false, reason: 'importance', teaches: false, spoken: [], ...proofLedger([]), quiet: bundle.facts.map((f) => ({ text: f.text, why: 'importance' as const })) }, student, false, bundle.facts, null, []);
+    return emit(posture, { ...base, speak: false, reason: 'importance', teaches: false, spoken: [], ...proofLedger([]), quiet: bundle.facts.map((f) => ({ text: f.text, why: 'importance' as const })) }, student, false, bundle.facts, null);
   }
   // 2 — THE STUDENT. Absent need data reads as speak: a fresh install must meet
   // a teaching coach, not a mute one (the cold-start rule).
@@ -425,7 +430,7 @@ export function decide(
   // moment. The teaching / critical / swing / convert / none tiers stay
   // need-gated, which is where a familiar line SHOULD go quiet.
   if (posture !== 'asked' && student.need && !student.need.speak && !SPEAKS_ON_IMPORTANCE.has(importance.tier)) {
-    return emit(posture, { ...base, speak: false, reason: 'need', teaches: false, spoken: [], ...proofLedger([]), quiet: bundle.facts.map((f) => ({ text: f.text, why: 'need' as const })) }, student, false, bundle.facts, null, []);
+    return emit(posture, { ...base, speak: false, reason: 'need', teaches: false, spoken: [], ...proofLedger([]), quiet: bundle.facts.map((f) => ({ text: f.text, why: 'need' as const })) }, student, false, bundle.facts, null);
   }
   // 3 + 4 — WHICH FACTS. Subsumption collapses one-claim duplicates; the floor
   // sweeps trivia. The floor may never mute a ply — that was step 2's job and
@@ -498,7 +503,7 @@ export function decide(
   for (const f of support.spoken) {
     if (roleOf(f) !== 'describe') continue;
     const supportedBy = support.spoken
-      .filter((u) => roleOf(u) === 'teach' && (u.squares.some((sq) => f.squares.includes(sq)) || causeEffect(u, f)));
+      .filter((u) => roleOf(u) === 'teach' && u.squares.some((sq) => f.squares.includes(sq)));
     const supported = supportedBy.map(valueOf);
     if (supported.length) {
       order.set(f.id, Math.min(valueOf(f), Math.max(...supported) - 0.5));
@@ -552,14 +557,14 @@ export function decide(
     const quiet = reason === 'unsupported'
       ? quietAll.map((q) => (q.why === 'subsumed' ? { ...q, why: 'unsupported' as const } : q))
       : quietAll;
-    return emit(posture, { ...base, speak: false, reason, teaches: false, spoken, quiet, ...proofLedger([]) }, student, false, bundle.facts, null, support.links ?? []);
+    return emit(posture, { ...base, speak: false, reason, teaches: false, spoken, quiet, ...proofLedger([]) }, student, false, bundle.facts, null);
   }
   // The habit's own kind teaches (`FACT_ROLE.method`), so a ply where only the
   // method spoke still taught.
   const teaches = methodSpoke || spokenFacts.some((f) => roleOf(f) === 'teach');
   // Said shorter — keyed by the words the surface renders.
   const fadedSpoken = new Map([...faded].filter(([f]) => spokenFacts.includes(f)).map(([f, l]) => [f.text, l] as const));
-  return emit(posture, { ...base, method: methodBeat, speak: true, reason: 'spoken', teaches, spoken, quiet: quietAll, faded: fadedSpoken, ...proofLedger(spokenFacts) }, student, methodSpoke, bundle.facts, spokenFacts[0] ?? null, support.links ?? []);
+  return emit(posture, { ...base, method: methodBeat, speak: true, reason: 'spoken', teaches, spoken, quiet: quietAll, faded: fadedSpoken, ...proofLedger(spokenFacts) }, student, methodSpoke, bundle.facts, spokenFacts[0] ?? null);
 }
 
 /** WHICH HABITS THIS STUDENT KEEPS BREAKING, read off the weakness spine.

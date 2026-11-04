@@ -90,11 +90,12 @@ export interface CoachDecisionRow {
   unproven: number;
   /** Their kinds — which producers owe a proof. */
   unprovenKinds: string[];
-  /** HOW THE DESCRIPTIONS THAT SPOKE JOINED A TEACHING POINT (P1-11): by a
-   *  shared square, or cause → effect (the point's line changes a relation the
-   *  description stands on). A run where cause-effect never fires means the
-   *  needs/causes reader does not reach the door. */
-  supportLinks: { square: number; 'cause-effect': number };
+  /** HOW EACH FACT THAT SPOKE AFTER THE LEAD IS JOINED TO IT (P1-11): cause
+   *  → effect (the lead's line changes a relation it stands on), a shared
+   *  square, or nothing — counted. Phase 2's thread round seats by these
+   *  links; a run where cause-effect never fires means the needs/causes reader
+   *  never meets the door's facts. */
+  supportLinks: { 'cause-effect': number; square: number; none: number };
 }
 
 type Listener = (row: CoachDecisionRow) => void;
