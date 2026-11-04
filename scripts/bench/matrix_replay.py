@@ -108,3 +108,40 @@ if __name__ == '__main__':
     }
     for name, P in variants.items():
         print(f'{name}:', evaluate(notes, compose_matrix, P, 'test'))
+
+def compose_linked(facts, P):
+    """Today's composer, then the thread round alone: a fact after the first
+    speaks only when it links to something already said."""
+    picked = compose(facts, P)
+    out = []
+    for f, also in picked:
+        if out and max(link(f, g, P) for g, _ in out) < P.get('minLink', 1):
+            continue
+        out.append((f, also))
+    return out
+
+def compose_step_lead(facts, P):
+    """The bracket with the lead fixed to the first step's best fact (Danya
+    leads with the move), then region champions seated by link."""
+    picked = compose(facts, P)
+    if not picked:
+        return []
+    lead = picked[0][0]
+    others = [f for f in facts if f is not lead]
+    champs = {}
+    for f in sorted(others, key=lambda f: -score(f, P)):
+        r = GROUP_REGION.get(f.get('group'), 'C')
+        if r not in champs and not same_idea(f, lead):
+            champs[r] = f
+    seated = [lead] + [f for f in sorted(champs.values(), key=lambda f: STEP_ORDER[f['step']]) if link(f, lead, P) >= P.get('minLink', 1)]
+    seated.sort(key=lambda f: STEP_ORDER[f['step']])
+    return [(f, f is not lead) for f in seated]
+
+if __name__ == '__main__' and len(sys.argv) > 2 and sys.argv[2] == 'hybrids':
+    for name, fn, P in [
+        ('composer + link filter (cause/line/decision/thread)', compose_linked, {**P0}),
+        ('composer + link filter (square counts)', compose_linked, {**P0, 'squareLink': 1}),
+        ('step lead + linked champions', compose_step_lead, {**P0}),
+        ('step lead + linked champions (square counts)', compose_step_lead, {**P0, 'squareLink': 1}),
+    ]:
+        print(f'{name}:', evaluate(notes, fn, P, 'test'))
