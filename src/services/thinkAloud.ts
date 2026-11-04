@@ -27,7 +27,7 @@ import { knownAttack } from './attackLibrary';
 import { tempoCount } from './tempoCount';
 import { homeMinorCount } from './development';
 import { legalSeeGainFor } from './positionReadingService';
-import type { FactStakes, Stakes } from './factStakes';
+import type { Stakes } from './factStakes';
 import type { GamePromise } from './learnBoardTeaching';
 import { speedRunReads } from './speedRunReads';
 import { namesMoves, type NamesStudentMove } from './studentMoveNaming';

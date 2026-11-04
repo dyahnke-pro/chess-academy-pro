@@ -139,7 +139,7 @@ import { habitNeedFrom } from './coachDecider';
 import { computeNeed, type StudentNeedContext } from './needScore';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { readCriticalMoment, criticalMomentStatement, opponentOnlyMoveStatement, type CriticalMomentRead } from './criticalMoment';
-import { costStakes, exchangeStakes, forkPoints, lineTacticPoints, type FactStakes, type Stakes } from './factStakes';
+import { costStakes, exchangeStakes, forkPoints, lineTacticPoints, type Stakes } from './factStakes';
 import { nextMoveAdvice, type MoveAdviceVerdict } from './nextMoveAdvice';
 import { depthClauses } from './thinkAloud';
 import { classifyPhase } from './gamePhaseService';

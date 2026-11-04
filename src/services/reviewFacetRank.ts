@@ -18,7 +18,7 @@
 // ranking changes the ORDER, never the SET (CLAUDE.md G4.5).
 import { matchClauseKind, boostFor, type WeaknessSignal } from './weaknessSignal';
 import type { ClauseKind } from './positionFacts';
-import { stakeValue, STAKED_FLOOR, type FactStakes, type Stakes } from './factStakes';
+import { stakeValue, STAKED_FLOOR, type Stakes } from './factStakes';
 import type { TeachingLayer } from './teachingLayers';
 import type { NoProofReason } from './proof';
 

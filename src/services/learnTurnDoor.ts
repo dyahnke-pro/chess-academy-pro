@@ -32,7 +32,7 @@ import { emitLearnTurn, type LearnTurnTag, type PriceSearch } from './coachDecis
 import { COMPUTER_ROLES, saidBeforeTheMove } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
-import { costStakes, stakeValue, STAKED_FLOOR, isStaked, type FactStakes, type Stakes } from './factStakes';
+import { costStakes, stakeValue, STAKED_FLOOR, isStaked, type Stakes } from './factStakes';
 import { sameClaim } from './factSelector';
 import type { FacetRole, FactKind } from './reviewFacetRank';
 import { isCoachFactKind, LOCAL_THREAD, placeFact, stakesOf, stepOf, type CoachFact, type CoachFactKind, type ComputerName } from './coachFact';
