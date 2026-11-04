@@ -10,26 +10,32 @@
 //   node scripts/everything-one-game.mjs <out.json> [game.json]
 //
 // The game file is { sans, studentSide, white?, black?, result? } — default
-// the Gotham–Jelena miniature (src/test/fixtures/gotham-jelena.json). The rows
+// the Gotham–Jelena miniature (src/test/fixtures/gotham-jelena.json).
+// EVERYTHING_GAME_ID=<id> instead opens one of David's own games from his data
+// drop (`node scripts/read-data-drop.mjs --latest`), with his whole record
+// loaded so the computers that read the student's history fire too. The rows
 // come in Review's builds (a first walk on the graded plies, then the full
 // walk, then the deep dive's rebuild): the last block of rows ending in
 // `review-walk` rows is the build the student hears.
 import { chromium } from 'playwright';
+import { Chess } from 'chess.js';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
 
 const OUT = process.argv[2];
 if (!OUT) { console.error('usage: node scripts/everything-one-game.mjs <out.json> [game.json]'); process.exit(2); }
 const BASE = process.env.EVERYTHING_URL ?? 'http://localhost:5173';
-const game = JSON.parse(readFileSync(process.argv[3] ?? 'src/test/fixtures/gotham-jelena.json', 'utf8'));
+const OWN_ID = process.env.EVERYTHING_GAME_ID ?? null;
+const game = OWN_ID ? { sans: [], studentSide: 'white' } : JSON.parse(readFileSync(process.argv[3] ?? 'src/test/fixtures/gotham-jelena.json', 'utf8'));
 const WHITE = game.white ?? 'GothamChess';
 const BLACK = game.black ?? 'JelenaKarleusa';
 const RESULT = game.result ?? '1-0';
 const movetext = game.sans.map((s, i) => (i % 2 === 0 ? `${i / 2 + 1}. ${s}` : s)).join(' ');
 const PGN = `[White "${WHITE}"]\n[Black "${BLACK}"]\n[Result "${RESULT}"]\n\n${movetext} ${RESULT}`;
-const GID = 'everything-one-game';
+const GID = OWN_ID ?? 'everything-one-game';
 const log = (m) => console.log(`[${new Date().toISOString().slice(11, 19)}] ${m}`);
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
@@ -55,7 +61,25 @@ const dismiss = async () => {
   }
 };
 await dismiss();
-const seed = await page.evaluate(async ({ gid, pgn, side, white, black, result }) => {
+if (OWN_ID) {
+  const fx = await loadFixtureIntoIDB(page);
+  log(`[record] ${fx.loaded ? `${fx.wrote} rows / ${fx.stores} stores` : `not loaded (${fx.reason})`}`);
+  const own = await page.evaluate(async (gid) => {
+    const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+    const db = await open();
+    const get = (store, key) => new Promise((res) => { const t = db.transaction(store, 'readonly'); const rq = key === null ? t.objectStore(store).getAll() : t.objectStore(store).get(key); rq.onsuccess = () => res(rq.result ?? null); rq.onerror = () => res(null); });
+    const g = await get('games', gid);
+    const profs = (await get('profiles', null)) ?? [];
+    const handle = String(profs[0]?.preferences?.chessComUsername ?? '').toLowerCase();
+    return g ? { ...g, handle } : null;
+  }, OWN_ID);
+  if (!own) { log(`game ${OWN_ID} is not in the record`); await browser.close(); process.exit(1); }
+  game.pgn = own.pgn; game.white = own.white; game.black = own.black; game.result = own.result;
+  game.studentSide = own.studentSide ?? (String(own.black).toLowerCase() === own.handle ? 'black' : 'white');
+  const c = new Chess(); c.loadPgn(own.pgn); game.sans = c.history();
+  log(`game ${own.white} – ${own.black} ${own.result}, ${game.sans.length} plies, student ${game.studentSide}`);
+}
+const seed = OWN_ID ? { own: true } : await page.evaluate(async ({ gid, pgn, side, white, black, result }) => {
   const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
   const db = await open();
   const put = (store, val) => new Promise((res, rej) => { const t = db.transaction(store, 'readwrite'); t.objectStore(store).put(val); t.oncomplete = () => res(true); t.onerror = () => rej(t.error); });
