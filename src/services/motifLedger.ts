@@ -89,14 +89,22 @@ export function transferMotifOf(identity: string): { motif: string; instance: st
   return motif ? { motif, instance } : null;
 }
 
-/** How many times each tactic pattern was SPOKEN this game, either seat, read
- *  off the walk's motif keys (`<motif>@<side>|<move>|<instance>`) — the count
- *  a tactic's sentence rotates on (`MoveTeachingContext.motifSaid`). */
-export function motifSaidCounts(keys: Iterable<string>): Map<string, number> {
-  const out = new Map<string, number>();
-  for (const k of keys) {
-    const pattern = (k.split('|')[0] ?? '').split('@')[0];
-    if (pattern) out.set(pattern, (out.get(pattern) ?? 0) + 1);
+/** The INSTANCES of each tactic pattern SPOKEN this game, either seat, in the
+ *  order each was first said, read off the walk's motif keys
+ *  (`<motif>@<side>|<move>|<instance>`). A tactic's sentence rotates on its
+ *  instance's place in this list: the same pin keeps its words (so the repeat
+ *  ledger still drops it on a later move), a new pin takes the next stem
+ *  (`MoveTeachingContext.motifSaid`). */
+export function motifSaidInstances(keys: Iterable<string>): Map<string, string[]> {
+  const rows = [...keys].map((k) => {
+    const [motif = '', move = '', ...rest] = k.split('|');
+    return { pattern: motif.split('@')[0], move: Number(move), instance: rest.join('|') };
+  }).filter((r) => r.pattern).sort((a, b) => a.move - b.move);
+  const out = new Map<string, string[]>();
+  for (const r of rows) {
+    const list = out.get(r.pattern) ?? [];
+    if (!list.includes(r.instance)) list.push(r.instance);
+    out.set(r.pattern, list);
   }
   return out;
 }

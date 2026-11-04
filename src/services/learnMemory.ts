@@ -265,6 +265,19 @@ export function nextStem(mem: Pick<LearnMemory, 'stemCounts'>, key: string): num
   return n;
 }
 
+/** A STEM FOR ONE INSTANCE (a pin, a guard to remove): the first time an
+ *  instance is met it takes the family's next stem; met again it keeps its
+ *  words, so the line ledger (keyed by text) still knows it was said — rotated
+ *  words on a standing tactic slipped past it (Review 2026-11-04). */
+export function instanceStem(mem: Pick<LearnMemory, 'stemCounts'>, family: string, instance: string): number {
+  const key = `${family}@${instance}`;
+  const had = mem.stemCounts.get(key);
+  if (had !== undefined) return had;
+  const n = nextStem(mem, family);
+  mem.stemCounts.set(key, n);
+  return n;
+}
+
 /** WRITE WHAT SPOKE, NEVER WHAT WAS OFFERED (prod Learn 2026-10-16: the door
  *  held 19 of 21 behaviours, a habit and the plan method — and each had been
  *  marked said when it was produced, so it never came back). After the door,

@@ -17,7 +17,7 @@ import { useBoardFit } from '../../hooks/useBoardFit';
 import { characterTurn } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { startLearnTranscript, stopLearnTranscript, noteLearnEntry } from '../../services/learnTranscript';
-import { createLearnMemory, markOpeningFactsSpoken, nextStem, rememberKeptClaims, type LearnMemory } from '../../services/learnMemory';
+import { createLearnMemory, markOpeningFactsSpoken, nextStem, instanceStem, rememberKeptClaims, type LearnMemory } from '../../services/learnMemory';
 import { STORY_KEY, PLAN_GOAL, keysUnder, threadKey, threadVariant, toldBoards, identityHeard, noteOpening, openingAt, openingBreak, switchesSaid, type StoryHeard } from '../../services/gameStory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
@@ -9178,13 +9178,13 @@ export function CoachTeachPage({ mode }: {
           tacticLine = word
             // NAMED from the detector's own description (Learn names the
             // move; "have a look" withheld it — walk 1500, 21.Rab1/38.Ne3).
-            ? withTransfer(t.description ? seatedTacticLine(word, tacticDescription({ type: t.type, description: t.description, involvedSquares: t.squares }, args.fenAfterReply, nextStem(learnMemRef.current, `tactic:${t.type}`)), args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b') : `You have ${withArticle(word)}: on ${t.squares.join(', ')}.`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifLastSpoken))
+            ? withTransfer(t.description ? seatedTacticLine(word, tacticDescription({ type: t.type, description: t.description, involvedSquares: t.squares }, args.fenAfterReply, instanceStem(learnMemRef.current, `tactic:${t.type}`, instance)), args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b') : `You have ${withArticle(word)}: on ${t.squares.join(', ')}.`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifLastSpoken))
             : null;
           // A fork says what it costs them — the same clause review speaks.
           if (tacticLine && t.type === 'fork') tacticLine = `${tacticLine.replace(/\.$/, '')} — ${forkConsequence('they')}.`;
           // A pin says what it holds (Learn audit 2026-10-14).
           if (tacticLine && t.type === 'pin') {
-            const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'student', nextStem(learnMemRef.current, 'pin'));
+            const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'student', instanceStem(learnMemRef.current, 'pin', instance));
             if (holds) tacticLine = `${tacticLine} ${holds}`;
           }
           if (word) { pendingMotif = { type: t.type, instance, moveNo }; tacticTailType = t.type; }
@@ -9283,10 +9283,11 @@ export function CoachTeachPage({ mode }: {
         // SEATED: the detector's description names pieces bare ("queen on e1
         // pins bishop on c3 against queen on a5"); whose each piece is, is the
         // board's fact and the whole point of a warning.
-        threatLine = `Watch out — ${seatPieceReferences(`${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}`, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b')}.${conceptTail(t.type)}`;
+        const theirDesc = tacticDescription({ type: t.type, description: t.description, involvedSquares: t.squares }, args.fenAfterReply, instanceStem(learnMemRef.current, `tactic:${t.type}`, t.squares.join('')));
+        threatLine = `Watch out — ${seatPieceReferences(`${theirDesc.charAt(0).toLowerCase()}${theirDesc.slice(1)}`, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b')}.${conceptTail(t.type)}`;
         // A pin on you says what it holds (Learn audit 2026-10-14).
         if (t.type === 'pin') {
-          const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'opponent', nextStem(learnMemRef.current, 'pin'));
+          const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'opponent', instanceStem(learnMemRef.current, 'pin', t.squares.join('')));
           if (holds) threatLine = `${threatLine} ${holds}`;
         }
         // THE DANGER LEVEL, computed (`openThreatLine`): how much it costs if ignored, said first.

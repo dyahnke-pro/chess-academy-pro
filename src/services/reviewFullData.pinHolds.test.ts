@@ -40,8 +40,10 @@ describe('the review pin facet carries its hold', () => {
     const c = new Chess();
     const fens: string[] = [];
     for (const s of sans) { c.move(s); fens.push(c.fen()); }
-    const pinAt = (ply: number, said: number): string | undefined => facetLines(computeMoveFacets({ seenFundamentals: new Set(),
-      teaching: { ...NO_TEACHING_CONTEXT, motifSaid: new Map([['pin', said]]) },
+    // `said` other pins said before this one; this pin (b5c6e8) is new.
+    const others = ['a1a2a3', 'a4a5a6', 'h1h2h3'];
+    const pinAt = (ply: number, said: number, saidThisOne = false): string | undefined => facetLines(computeMoveFacets({ seenFundamentals: new Set(),
+      teaching: { ...NO_TEACHING_CONTEXT, motifSaid: new Map([['pin', [...others.slice(0, said), ...(saidThisOne ? ['b5c6e8'] : [])]]]) },
       fenBefore: fens[4], fenAfter: fens[5], san: 'd6', ply,
       moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
       evaluation: 40, preMoveEval: 35, costCp: null, heardVerdict: null,
@@ -54,5 +56,10 @@ describe('the review pin facet carries its hold', () => {
     expect(new Set(bySaid).size).toBe(4);
     // The same count on another ply says the same words.
     expect(pinAt(9, 1)).toBe(bySaid[1]);
+    // THE SAME PIN SAID AGAIN KEEPS ITS WORDS (Colle baseline 2026-11-04: a
+    // standing guard re-said in rotated words slipped past the repeat ledger
+    // on two moves running). Said first after one other pin, it stays stem 1.
+    expect(pinAt(12, 1, true)).toBe(bySaid[1]);
+    expect(pinAt(14, 1, true)).toBe(bySaid[1]);
   });
 });

@@ -251,11 +251,14 @@ export interface MoveTeachingContext {
    *  evidence (a sacrifice that holds is not "a piece left loose"). REQUIRED;
    *  an empty set where the grades are not in hand. */
   soundPlies: ReadonlySet<number>;
-  /** How many times each tactic motif has been SPOKEN this game (the walk's
-   *  motif ledger, committed after the door) — a tactic's sentence rotates on
-   *  it, so one pattern is never said in the same words three times (the WHY
-   *  standard's measure 3). REQUIRED; an empty map where nothing was said. */
-  motifSaid: ReadonlyMap<string, number>;
+  /** The instances of each tactic motif SPOKEN this game, in the order first
+   *  said (the walk's motif ledger, committed after the door,
+   *  `motifSaidInstances`). A tactic's sentence rotates on its instance's place
+   *  in this list, so one pattern is never said in the same words three times
+   *  (the WHY standard's measure 3) while the same standing pin keeps its words
+   *  and the repeat ledger still drops it. REQUIRED; an empty map where
+   *  nothing was said. */
+  motifSaid: ReadonlyMap<string, readonly string[]>;
 }
 
 export const NO_TEACHING_CONTEXT: MoveTeachingContext = {
@@ -817,14 +820,20 @@ export function computeMoveFacets(
       if (!b || !toMove) return null;
       return b === toMove ? moverLineProof(fenAfter, ctx.playedLineUci, b) : threatProof(fenAfter, toMove, squares);
     };
-    // THIS GAME'S OCCURRENCE OF EACH MOTIF — what the walk has said before
-    // this move, plus the ones this move has already built — so a tactic's
-    // sentence rotates by how often the pattern was said, never by the ply.
-    const builtHere = new Map<string, number>();
-    const occurrence = (motif: string): number => {
-      const n = (ctx.teaching.motifSaid.get(motif) ?? 0) + (builtHere.get(motif) ?? 0);
-      builtHere.set(motif, (builtHere.get(motif) ?? 0) + 1);
-      return n;
+    // THIS INSTANCE'S PLACE AMONG THE GAME'S — the instances the walk has said
+    // before this move, then the new ones this move builds — so a tactic's
+    // sentence rotates by how many patterns of its kind were said, never by
+    // the ply, and a standing pin said again keeps its words (the repeat
+    // ledger drops it; rotated words would have slipped past).
+    const newHere = new Map<string, string[]>();
+    const occurrence = (motif: string, instance: string): number => {
+      const said = ctx.teaching.motifSaid.get(motif) ?? [];
+      const at = said.indexOf(instance);
+      if (at >= 0) return at;
+      const here = newHere.get(motif) ?? [];
+      if (!here.includes(instance)) here.push(instance);
+      newHere.set(motif, here);
+      return said.length + here.indexOf(instance);
     };
     for (const tac of t.tactics) {
       if (tac.type === 'none' || !tac.description) continue;
@@ -868,7 +877,7 @@ export function computeMoveFacets(
         // A PIN SAYS WHAT IT HOLDS (prod Review 2026-10-28: "Your bishop on a4
         // pins their knight on c6 against their king on e8" said with no
         // consequence). The same rotated sentence Learn's pin line speaks.
-        const said = occurrence(tac.type);
+        const said = occurrence(tac.type, tac.involvedSquares.join(''));
         const holds = tac.type === 'pin' && ctx.studentColorWB && tac.beneficiary
           ? pinConsequence(fenAfter, tac.involvedSquares, ctx.studentColorWB, tac.beneficiary === ctx.studentColorWB ? 'student' : 'opponent', said)
           : null;

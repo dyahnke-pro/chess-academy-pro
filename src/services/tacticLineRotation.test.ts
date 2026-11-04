@@ -3,7 +3,8 @@ import { Chess } from 'chess.js';
 import { guardRemovalLine, tacticDescription } from './tacticsDetector';
 import { pinConsequence } from './lookaheadPlan';
 import { reasonFormula } from '../utils/reasonFormula';
-import { motifSaidCounts } from './motifLedger';
+import { motifSaidInstances } from './motifLedger';
+import { instanceStem } from './learnMemory';
 
 // THE WHY STANDARD'S MEASURE 3 (Review prod audit 2026-11-04, game CuQmjkwk):
 // "Moving the knight would let their bishop take your queen on c7" and "Your
@@ -45,9 +46,17 @@ describe('a tactic line rotates by occurrence, never by ply', () => {
     for (const [, n] of formulasOver(byOccurrence)) expect(n).toBeLessThanOrEqual(2);
   });
 
-  it('the count is read off the spoken motif keys, by pattern, either seat', () => {
-    const counts = motifSaidCounts(['pin@w|12|b5c6e8', 'pin@b|15|g4f3d1', 'removal_of_guard@w|20|c7d6', 'pin@w|21|b5c6e8']);
-    expect(counts.get('pin')).toBe(3);
-    expect(counts.get('removal_of_guard')).toBe(1);
+  it('the instances are read off the spoken motif keys, by pattern, either seat, in first-said order', () => {
+    const inst = motifSaidInstances(['pin@w|21|b5c6e8', 'pin@b|15|g4f3d1', 'removal_of_guard@w|20|c7d6', 'pin@w|12|b5c6e8']);
+    expect(inst.get('pin')).toEqual(['b5c6e8', 'g4f3d1']);
+    expect(inst.get('removal_of_guard')).toEqual(['c7d6']);
+  });
+
+  it('Learn: a standing instance keeps its words, a new one takes the next stem', () => {
+    const mem = { stemCounts: new Map<string, number>() };
+    expect(instanceStem(mem, 'pin', 'b5c6e8')).toBe(0);
+    expect(instanceStem(mem, 'pin', 'g4f3d1')).toBe(1);
+    expect(instanceStem(mem, 'pin', 'b5c6e8')).toBe(0);
+    expect(instanceStem(mem, 'pin', 'a4c6e8')).toBe(2);
   });
 });
