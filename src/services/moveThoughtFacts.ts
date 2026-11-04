@@ -9,7 +9,7 @@
 // their bishop off g4") and stacking two that said one thing.
 import { plyOfFen } from '../utils/plyOfFen';
 import { Chess } from 'chess.js';
-import type { PrevCaptureContext } from './captureRun';
+import { NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
 import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
 import { NO_PROOF, squaresProof, lineProof } from './proof';
 import { moveAspects, joinReview, toClause } from './reviewMoveBriefing';
@@ -33,6 +33,8 @@ import type { IntentReads } from './moveIntent';
 import { buildDeliberation, ruleOuts, NOTHING_SAID } from './deliberation';
 import { refutedAltProof, type RefutedAlternative } from './refutedAlternativeCore';
 import { costStakes } from './factStakes';
+import { counterThreatTeaching } from './learnBoardTeaching';
+import { computeMustDefend } from './threatOut';
 
 export interface MoveThoughtInput {
   fenBefore: string;
@@ -213,6 +215,25 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     if (bind) add('binding', 'bindingFact', 'binding', bind.idea, `${openSentence(tgt.text)}, ${bind.text}`, `${openSentence(tgt.text)}, ${bind.text}`, [tgt.square], 62);
   }
 
+  // WHAT THEIR MOVE AIMS AT, on their move (WO-STORY-MATRIX-01 P1-9). It was
+  // said only inside the answer to it, so a target the reply did not answer
+  // was never said at all ("their exd5 is aimed at your bishop on c4" was
+  // dropped while 9…exd5 led with "creates a passed pawn"). When the reply in
+  // the line answers it, the reply says the aim and the answer in one breath
+  // (the binding above), so it is not said twice. It weighs least of the
+  // move's facts: what the piece now eyes is the move's point only when the
+  // move does nothing else (a capture, a file opened, a break say more).
+  if (i.moverIsStudent === false) {
+    const aim = theirTarget({ fenBefore: i.fenBefore, san: i.san }, true);
+    // Only an aim the student has to answer: a piece that really falls
+    // (`computeMustDefend`, SEE-checked) — a capture that is taken straight
+    // back, or a piece eyed behind its guards, aims at nothing.
+    const threatened = aim ? computeMustDefend(fenAfter, sideOf(fenAfter)).pieces.some((p) => p.square === aim.square) : false;
+    if (aim && threatened && !replyAnswers(fenAfter, i.line, aim)) {
+      add('opp-target', 'theirTarget', 'theirAim', 'threat', openSentence(aim.text), openSentence(aim.text), [aim.square, aim.by], 45, false, [`aim:${aim.by}:${aim.square}`]);
+    }
+  }
+
   // THE PIECE'S TRIP down the line that follows.
   const route = pieceRoute(i.fenBefore, i.san, i.line);
   if (route && !(deep && route.path.includes(deep.follow.from))) {
@@ -254,6 +275,19 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     const verb = stop.kind === 'pin' ? 'pin' : stop.kind === 'fork' ? 'fork' : 'hit';
     const why = seated(`${stop.intent.san} would ${verb} your ${PIECE_NAME[stop.victim.piece] ?? 'piece'} on ${stop.victim.square}`);
     add('stop', 'findProphylaxis', 'prophylaxis', 'prevent', lead(`takes away ${stop.intent.to}: ${why}`), `It also takes away ${stop.intent.to}: ${why}`, stop.squares, 72);
+  }
+
+  // DANGER LEVELS — a piece left attacked and a bigger one hit instead
+  // (`counterThreat`, WO-STORY-MATRIX-01 P1-9), the fact Learn's door says,
+  // made by the same maker so the lesson keeps Learn's rule: the student's own
+  // counter-threat is credited only when its cost says it held.
+  if (i.moverIsStudent !== undefined) {
+    const studentWB = mine ? sideOf(i.fenBefore) : sideOf(fenAfter);
+    const ct = counterThreatTeaching(i.fenBefore, i.san, studentWB, i.costCp);
+    if (ct) {
+      const { lane: _lane, event: _event, arrows: _arrows, evidence: _evidence, ownMoveReason: _own, ...fact } = ct;
+      facts.push({ ...fact, id: `counterThreat:${facts.length}`, source: 'counterThreat', idea: 'threat', weight: 72 });
+    }
   }
 
   // THE CHOICES — the moves you'd weigh here and why each falls short, each
@@ -324,3 +358,15 @@ export function refutedFact(r: RefutedAlternative, fenBefore: string, seat: Fact
 function sideOf(fen: string): 'w' | 'b' {
   return fen.split(' ')[1] === 'b' ? 'b' : 'w';
 }
+
+/** Whether the reply that follows in the line answers their aim — the same
+ *  test the reply's own binding makes, from each point the reply may have
+ *  (what it sets up, what it threatens, what the moved piece hits). */
+function replyAnswers(fen: string, line: readonly string[] | null, aim: NonNullable<ReturnType<typeof theirTarget>>): boolean {
+  const reply = line?.[0];
+  if (!reply) return false;
+  const deep = deepFact(fen, reply, line.slice(1), true);
+  const threat = moveAspects({ fenBefore: fen, san: reply, prev: NO_PREV_CAPTURE, moverIsStudent: true })?.threat?.san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?:=[QRBN])?$/)?.[1] ?? null;
+  return [deep?.target ?? null, threat, moveHit(fen, reply)].some((own) => bindingFact(fen, reply, aim, own, true) !== null);
+}
+

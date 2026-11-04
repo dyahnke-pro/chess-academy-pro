@@ -2470,6 +2470,9 @@ function* reviewSegmentSteps(
           costCp: recordedMoveCost(m, moverColor),
         }).filter((f) => (f.step === 'yours' || f.step === 'theirs') && !(skipJob && f.source === 'moveJob')
           && !(f.source === 'briefing' && REVIEW_OWNS_IDEA.has(f.idea)) && !ruleIdeas.has(f.idea)
+          // What their move aims at is a threat Review says through its own
+          // producer ([threat]); the lesson says it as the move's fact.
+          && f.computer !== 'theirTarget'
           // The trip reads the line ahead as a plan; in a game the moves that
           // followed were answers to the board ("Qc3 sends the queen on to e4,
           // by way of b3 and f3" — hindsight), so Review leaves it to lessons.

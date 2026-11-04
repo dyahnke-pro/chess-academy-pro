@@ -180,6 +180,7 @@ export const COMPUTER_CATALOG = {
   buildReviewMoveTeachingFact: { file: 'services/reviewMoveTeaching.ts', says: 'the move\'s idea on the board, the board teacher' },
   deepFact: { file: 'services/threeFacts.ts', says: 'what the move made possible down the line that follows' },
   bindingFact: { file: 'services/threeFacts.ts', says: 'what their last move aimed at, and how this move meets it' },
+  theirTarget: { file: 'services/threeFacts.ts', says: 'what their move newly aims at among your pieces, said on their move when your reply does not answer it' },
   pieceRoute: { file: 'services/pieceRoute.ts', says: 'the trip the moved piece takes down the line that follows' },
   inBetweenMove: { file: 'services/inBetweenMove.ts', says: 'not yet, first this: a forcing move before the capture that is still there after' },
   findProphylaxis: { file: 'services/prophylaxis.ts', says: 'the other side\'s wanted pin, kick or fork, and the move that stops it' },

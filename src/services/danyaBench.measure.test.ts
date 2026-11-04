@@ -526,6 +526,8 @@ const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
   prophylaxis: 'services/prophylaxis.ts#findProphylaxis',
   notYet: 'services/inBetweenMove.ts#inBetweenMove',
   bestLine: 'services/deliberation.ts#buildDeliberation',
+  counterThreat: 'services/counterThreat.ts#counterThreat',
+  theirAim: 'services/threeFacts.ts#theirTarget',
 };
 
 /** Review's facet tags and the live composer's clause kinds (ONE vocabulary,

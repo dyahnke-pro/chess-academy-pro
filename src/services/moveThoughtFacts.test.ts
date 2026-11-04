@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { lessonThought } from './moveThoughtFacts';
+import { lessonThought, moveThoughtFacts } from './moveThoughtFacts';
 import { newLessonVoice, BRIEFING_LINE_PLIES } from './reviewMoveBriefing';
 import { captureContextsAlong } from './pvPlayback';
 import { NO_PREV_CAPTURE } from './captureRun';
@@ -139,3 +139,39 @@ describe('the move\'s choices come from the engine read', () => {
     expect(text).not.toContain('Qh4?');
   });
 });
+
+// WHAT THEIR MOVE AIMS AT IS ITS OWN FACT (WO-STORY-MATRIX-01 P1-9): it was
+// said only inside the reply that answered it, so an aim the reply did not
+// answer was never said.
+describe('their move says what it aims at', () => {
+  // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6 4.Nc3, Black plays …d5: the pawn hits the bishop on c4.
+  const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'Nc3'];
+  const c = new Chess();
+  for (const s of sans) c.move(s);
+  const fen = c.fen();
+  const input = (line: string[]) => ({ fenBefore: fen, san: 'd5', prev: NO_PREV_CAPTURE, moverIsStudent: false, line, theirLast: null, phrases: null, reads: null, costCp: null });
+  it('their move carries the aim as its own fact when the reply does not answer it', () => {
+    const aim = moveThoughtFacts(input(['O-O'])).find((f) => f.computer === 'theirTarget');
+    expect(aim?.text).toBe('Their d5 is aimed at your bishop on c4.');
+    expect(aim?.step).toBe('theirs');
+  });
+  it('the reply that answers it says it instead (said once, with the answer)', () => {
+    expect(moveThoughtFacts(input(['Qe2'])).some((f) => f.computer === 'theirTarget')).toBe(false);
+  });
+  it('the idea is said once on the move, whichever computer leads it', () => {
+    const text = lessonThought({ ...input(['O-O']) }, newLessonVoice(), null);
+    expect(text.match(/bishop on c4/g)?.length).toBe(1);
+  });
+});
+
+// DANGER LEVELS IN THE LESSON (WO-STORY-MATRIX-01 P1-9): the counter-threat
+// Learn's door says, now a fact of the move on every surface that composes it.
+describe('a threat answered with a bigger one', () => {
+  it('their move leaves a piece and hits a bigger one: said from your seat, with the line', () => {
+    // counterThreat.test.ts: …Rd8 leaves the knight on f6 and hits the queen on d1.
+    const BEFORE_RD8 = 'r3k2r/ppq2ppp/2p2n2/4P3/4P3/2P2B2/P1P3PP/R2Q1RK1 b kq - 0 14';
+    const text = lessonThought({ fenBefore: BEFORE_RD8, san: 'Rd8', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: null, theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
+    expect(text).toMatch(/the bigger threat comes first/);
+  });
+});
+
