@@ -27,6 +27,7 @@ import { openingKeyFromSans } from './openingKey';
 import { perspectiveRule } from './perspectiveRule';
 import { buildExplorerBranches, resultsLine } from './explorerTeachLine';
 import { preparesBreakBeat } from './mastersPlanRead';
+import { continueSentence } from '../utils/openSentence';
 import { computedPlanAt } from './computedPlan';
 import { storedTreeAnswer } from './deepTree';
 import puzzleData from '../data/puzzles.json';
@@ -1413,7 +1414,7 @@ async function lessonPlanOutro(sans: readonly string[], side: 'white' | 'black',
     const plan = await computedPlanAt(sans, side, openingName, `lesson-plan-${openingName}`, { lookup: storedTreeAnswer });
     const title = plan?.title.replace(/\.$/, '').trim();
     if (!title) return plain;
-    return `From here, the plan the strongest games show for your side: ${title.charAt(0).toLowerCase()}${title.slice(1)}. ${plain}`;
+    return `From here, the plan the strongest games show for your side: ${continueSentence(title)}. ${plain}`;
   } catch { return plain; }
 }
 

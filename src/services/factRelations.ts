@@ -88,7 +88,7 @@ function needsAt(fen: string, squares: ReadonlySet<string>): Set<string> {
 
 export function factRelations(f: RelationBasisInput): FactRelations {
   const line = lineOf(f);
-  const key = line ? `L|${line.fen}|${line.sans.join(' ')}` : `S|${f.fen}|${[...f.squares].sort().join(',')}`;
+  const key = line ? `L|${line.fen}|${line.sans.join(',')}` : `S|${f.fen}|${[...f.squares].sort().join(',')}`;
   const hit = memo.get(key);
   if (hit) return hit;
   let out: FactRelations = NONE;
