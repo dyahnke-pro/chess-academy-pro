@@ -114,6 +114,8 @@ interface PerMoveContext {
   line: string[];
   /** The move before this one, from its own board (what they aim at). */
   theirLast: { fenBefore: string; san: string } | null;
+  /** The moves played before this one. */
+  history: string[];
 }
 
 function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveContext[] {
@@ -135,7 +137,7 @@ function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveConte
       break;
     }
     const before = i > 0 ? out[i - 1] : null;
-    out.push({ index: i, fenBefore, san: moved.san, mover, prev: run, line: [], theirLast: before && { fenBefore: before.fenBefore, san: before.san } });
+    out.push({ index: i, fenBefore, san: moved.san, mover, prev: run, line: [], theirLast: before && { fenBefore: before.fenBefore, san: before.san }, history: out.map((x) => x.san) });
     run = afterCapture(run, moved);
   }
   for (const c of out) c.line = out.slice(c.index + 1, c.index + 1 + BRIEFING_LINE_PLIES).map((x) => x.san);
@@ -154,6 +156,7 @@ function computeFill(ctx: PerMoveContext, studentSide: 'white' | 'black' | undef
       moverIsStudent: studentSide ? ctx.mover === studentSide : undefined,
       line: ctx.line,
       theirLast: ctx.theirLast,
+      history: ctx.history,
       // The fill is computed from the board alone: no engine read here.
       reads: null, costCp: null,
     }, voice, null);

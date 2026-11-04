@@ -1434,6 +1434,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           moverIsStudent: mover === (treeRef.current?.studentSide ?? 'white'),
           line,
           theirLast,
+          history: pathSans.slice(0, -1),
           // A node the tree carries no beat for, filled on the device: no
           // engine read here, and no games-database alternative.
           reads: null, costCp: null,

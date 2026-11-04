@@ -49,7 +49,7 @@ export const THOUGHT_ORDER: Record<ThoughtStep, number> = {
  *  until it is ranked below. */
 export type ThoughtSource =
   | 'moveWhy' | 'briefing' | 'boardTeacher' | 'moveJob' | 'fundamental' | 'deepFact' | 'binding'
-  | 'pieceRoute' | 'refuted' | 'alternatives' | 'prophylaxis' | 'notYet' | 'bestLine' | 'counterThreat' | 'theirAim' | 'planChoice' | 'moveOrder' | 'structureLines' | 'purpose';
+  | 'pieceRoute' | 'refuted' | 'alternatives' | 'prophylaxis' | 'notYet' | 'bestLine' | 'counterThreat' | 'theirAim' | 'planChoice' | 'moveOrder' | 'structureLines' | 'purpose' | 'studentMove';
 
 /** WHO SPEAKS FIRST IN A STEP when two facts hold the same stake — measured on
  *  the Danya bench (`danyaBench.measure.test.ts`): how often a source's line in
@@ -76,6 +76,7 @@ export const SOURCE_RANK: Record<ThoughtSource, number> = {
   moveOrder: 18,
   structureLines: 19,
   purpose: 20,
+  studentMove: 21,
 };
 
 /** ONE FACT, the composer's only input — the one fact shape (`coachFact.ts`),

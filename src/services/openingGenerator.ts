@@ -1672,6 +1672,8 @@ function computedPlyBeat(
   reads: IntentReads | null,
   costCp: number | null,
   refuted: RefutedAlternative | null,
+  /** The moves played before this one, from the lesson's start. */
+  history: readonly string[],
 ): string {
   try {
     // Through the DNA door, with the lesson's own memory: an idea is taught
@@ -1684,6 +1686,7 @@ function computedPlyBeat(
       moverIsStudent,
       line: line ? line.map(stripSanAnnotations) : null,
       theirLast: theirLast ? { fenBefore: theirLast.fenBefore, san: stripSanAnnotations(theirLast.san) } : null,
+      history: history.map(stripSanAnnotations),
       reads, costCp,
     }, voice, refuted);
   } catch {
@@ -1974,6 +1977,7 @@ async function generateOpeningFromDbNarration(
       positions.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),
       i > 0 ? { fenBefore: i === 1 ? startFenForBeats : positions[i - 2].fen, san: positions[i - 1].san } : null,
       readsAt(i), costAt(i), refutedByPly[i] ?? null,
+      positions.slice(0, i).map((x) => x.san),
     );
     return pace === 'tour' ? firstSentence(beat) : beat;
   });
@@ -2066,7 +2070,7 @@ async function generateOpeningFromDbNarration(
     const spineLast = spineLen > 0 ? { fenBefore: spineLen === 1 ? startFenForBeats : positions[spineLen - 2].fen, san: positions[spineLen - 1].san } : null;
     const branchBeat = branchSeq[0]
       // A branch tile is read from the board alone: the engine pass reads the spine.
-      ? computedPlyBeat(terminusFen, b.san, branchMovedBy === studentSide, terminusPrev, branchVoice, branchSans.slice(1, 1 + BRIEFING_LINE_PLIES), spineLast, null, null, null)
+      ? computedPlyBeat(terminusFen, b.san, branchMovedBy === studentSide, terminusPrev, branchVoice, branchSans.slice(1, 1 + BRIEFING_LINE_PLIES), spineLast, null, null, null, positions.map((x) => x.san))
       : '';
     const extBeats = b.extensionMoves.map((extSan, j) => {
       const extMovedBy: 'white' | 'black' = (positions.length + 1 + j) % 2 === 0 ? 'white' : 'black';
@@ -2076,6 +2080,7 @@ async function generateOpeningFromDbNarration(
           branchSans.slice(j + 2, j + 2 + BRIEFING_LINE_PLIES),
           { fenBefore: j === 0 ? terminusFen : branchSeq[j - 1].fen, san: branchSans[j] },
           null, null, null,
+          [...positions.map((x) => x.san), ...branchSans.slice(0, j + 1)],
         )
         : '';
     });
@@ -2592,6 +2597,7 @@ function buildFallbackTreeFromDb(
     moverIsStudent: (i % 2 === 0 ? 'white' : 'black') === studentSide,
     line: entry.moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map(stripSanAnnotations),
     theirLast: i > 0 ? { fenBefore: fensBefore[i - 1], san: stripSanAnnotations(entry.moves[i - 1]) } : null,
+    history: entry.moves.slice(0, i).map(stripSanAnnotations),
     // The DB-only fallback is built without the engine: no read here.
     reads: null, costCp: null,
   }, dbVoice, null));

@@ -33,7 +33,8 @@ import { moveIntent, intentRule, type IntentReads } from './moveIntent';
 import { buildDeliberation, ruleOuts, NOTHING_SAID } from './deliberation';
 import { refutedAltProof, type RefutedAlternative } from './refutedAlternativeCore';
 import { costStakes } from './factStakes';
-import { counterThreatTeaching, planChoiceTeaching } from './learnBoardTeaching';
+import { counterThreatTeaching, planChoiceTeaching, studentMoveTeaching } from './learnBoardTeaching';
+import type { LearnLane } from './learnTurnDoor';
 import { computeMustDefend } from './threatOut';
 import { moveOrder } from './moveOrder';
 import { readBoardAll, readKey } from './boardComputers';
@@ -52,6 +53,10 @@ export interface MoveThoughtInput {
   line: readonly string[] | null;
   /** The other side's move just before this one, with its board. */
   theirLast: { fenBefore: string; san: string } | null;
+  /** Every SAN played before this move, from the line's start. REQUIRED:
+   *  the student-move lanes read the game behind the move (which piece took
+   *  last, the board a move earlier); a caller with none answers []. */
+  history: readonly string[];
   /** The lesson's phrase memory (an idea said in full once, then referred to). */
   phrases: PhraseMemory | null;
   /** THE ENGINE'S READS AROUND THE MOVE (WO-STORY-MATRIX-01 P1-9): the fan
@@ -385,7 +390,80 @@ export function lessonThought(input: Omit<MoveThoughtInput, 'phrases'>, voice: L
   const facts = moveThoughtFacts({ ...input, phrases: voice.phrases });
   const alt = refuted ? refutedFact(refuted, input.fenBefore, input.moverIsStudent !== false ? 'student' : 'opponent') : null;
   const purpose = purposeFact(input, voice);
-  return composeThought([...facts, ...(alt ? [alt] : []), ...(purpose ? [purpose] : [])], 'lesson', voice).spoken;
+  return composeThought([...facts, ...(alt ? [alt] : []), ...(purpose ? [purpose] : []), ...studentMoveFacts(input)], 'lesson', voice).spoken;
+}
+
+/** WHAT LEARN'S STUDENT-MOVE LANES MAY SAY IN A LESSON, AND AS WHICH IDEA
+ *  (WO-STORY-MATRIX-01 P1-9c): one answer per lane `studentMoveTeaching`
+ *  (and its `orderTeaching`) can emit. Null = not said in a lesson, with the
+ *  reason. A lane missing here is never said in a lesson (gate:
+ *  `moveThoughtFacts.test` — every lane the bundle emits is answered). */
+export const LESSON_STUDENT_LANE: Partial<Record<LearnLane, IdeaKind | null>> = {
+  recapture: 'recapture',
+  fileRace: 'file',
+  trade: 'trade',
+  timing: 'tempo',
+  kingAttack: 'attack-king',
+  ruleException: 'develop',
+  falseAlarm: 'threat',
+  pushOrHold: 'passed-pawn',
+  structureJudgement: 'weakness',
+  pawnEnding: 'king-activity',
+  captureChoice: 'recapture',
+  tradeLedger: 'trade',
+  openingEquivalence: 'develop',
+  breakRace: 'passed-pawn',
+  holdResource: 'prevent',
+  kickMap: 'tempo',
+  patternFails: 'tactic',
+  // The line a winning move wins: the lesson's own played-out line says it
+  // (deliberation, `moverLineProof`) — said twice otherwise.
+  movePoint: null,
+  // "Not yet": the lesson's in-between-move fact owns it (`inBetweenMove`).
+  notYetPlayed: null,
+  // A games-database statistic is not a reason (WO-ONE-COACH-01 map).
+  strongChoice: null,
+  // A slip's habits: a taught line's move is never the student's slip.
+  kneeJerk: null,
+  blunderCheck: null,
+  autopilot: null,
+  keepPressing: null,
+};
+
+/** Learn's student-move bundle, read for a lesson's move by the student
+ *  (both reads and the move's cost from the lesson's engine pass), each lane
+ *  said as the idea the table names. Lesson-only: Review calls the bundle
+ *  through its own producers. */
+function studentMoveFacts(i: Omit<MoveThoughtInput, 'phrases'>): ThoughtFact[] {
+  if (i.moverIsStudent !== true) return [];
+  const me = sideOf(i.fenBefore);
+  const best = i.reads?.before[0];
+  const after = i.reads?.after[0];
+  let bestSan: string | null = null;
+  try {
+    const u = best?.moves[0];
+    if (u) bestSan = new Chess(i.fenBefore).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san;
+  } catch { bestSan = null; }
+  const cpAfter = after && after.mate == null ? after.evaluation * (me === 'w' ? 1 : -1) : null;
+  let out: ReturnType<typeof studentMoveTeaching>;
+  try {
+    out = studentMoveTeaching({
+      fenBefore: i.fenBefore, san: i.san.replace(/[!?]+$/, ''),
+      history: [...i.history, i.san.replace(/[!?]+$/, '')],
+      cpLoss: i.costCp,
+      bothCp: !!best && !!after && best.mate == null && after.mate == null,
+      bestSan, bestLine: best, reply: i.line?.[0] ?? null,
+      cpAfter, ...(i.reads ? { topLines: i.reads.before } : {}),
+    });
+  } catch { return []; }
+  const facts: ThoughtFact[] = [];
+  for (const t of out) {
+    const idea = LESSON_STUDENT_LANE[t.lane];
+    if (!idea) continue;
+    const { lane: _lane, event: _event, arrows: _arrows, evidence: _evidence, ownMoveReason: _own, ...fact } = t;
+    facts.push({ ...fact, id: `studentMove:${t.lane}:${facts.length}`, source: 'studentMove', idea, weight: 50 });
+  }
+  return facts;
 }
 
 /** WHAT THE MOVE PREPARES, PROVEN, WITH THE RULE BEHIND IT (WO-STORY-MATRIX-01

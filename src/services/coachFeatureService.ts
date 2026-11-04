@@ -2508,6 +2508,7 @@ function* reviewSegmentSteps(
           fenBefore: fenPair.fenBefore, san: m.san, moverIsStudent: mine, prev: prevCap,
           line: moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),
           theirLast: i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null,
+          history: moves.slice(0, i).map((x) => x.san),
           phrases: phrasesHere,
           // The record's own lines for this move (the deep read where it ran)
           // and its cost from one search.

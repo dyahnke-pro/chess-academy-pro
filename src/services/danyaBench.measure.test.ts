@@ -345,7 +345,7 @@ const lessonPick = once((p: Position): { facts: ThoughtFact[]; composed: Compose
   // are the move's own facts now — the weighing is no longer spliced here).
   const facts = moveThoughtFacts({
     fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
-    line: lineAhead(p), theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
+    line: lineAhead(p), history: p.history, theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
   });
   return { facts, composed: composeThought(facts, 'lesson', { keys: new Set<string>() }) };
 });
@@ -418,7 +418,7 @@ const tagsOf = (text: string | null): string[] => [...(text ?? '').matchAll(TAG)
 const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Promise<string | string[] | null>> = {
   lesson: (p) => lessonThought({
     fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own,
-    line: lineAhead(p), theirLast: p.theirLast, reads: readsOf(p), costCp: costCp(p),
+    line: lineAhead(p), history: p.history, theirLast: p.theirLast, reads: readsOf(p), costCp: costCp(p),
   }, newLessonVoice(), null),
   thought: (p) => lessonPick(p).composed.spoken,
   review: (p) => reviewNarration(p)?.replace(/\[[a-z0-9-]+\]\s*/gi, '') || null,
@@ -532,6 +532,7 @@ const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
   moveOrder: 'services/moveOrder.ts#moveOrder',
   structureLines: 'services/structureReads.ts#linesStructure',
   purpose: 'services/moveIntent.ts#moveIntent',
+  studentMove: 'services/learnBoardTeaching.ts#studentMoveTeaching',
 };
 
 /** Review's facet tags and the live composer's clause kinds (ONE vocabulary,
@@ -898,7 +899,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
     {
       const facts = moveThoughtFacts({
         fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
-        line: lineAhead(p), theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
+        line: lineAhead(p), history: p.history, theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
       });
       // DANYA_BENCH_DUMP=<file> keeps every fact the composer had on this note,
       // with the ideas its words carry, beside his ideas — the input an offline

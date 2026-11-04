@@ -54,7 +54,7 @@ describe('the lesson beat says the trip', () => {
     const text = lessonThought({
       fenBefore: fens[n - 1], san: ITALIAN[n - 1], prev: runs[n - 1], moverIsStudent: true,
       line: ITALIAN.slice(n, n + BRIEFING_LINE_PLIES),
-      theirLast: { fenBefore: fens[n - 2], san: ITALIAN[n - 2] }, reads: null, costCp: null,
+      history: ITALIAN.slice(0, n - 1), theirLast: { fenBefore: fens[n - 2], san: ITALIAN[n - 2] }, reads: null, costCp: null,
     }, voice, null);
     expect(text).toMatch(/sending the knight on to e3, by way of f1|sends the knight on to e3, by way of f1/);
   });
