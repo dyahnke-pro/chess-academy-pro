@@ -5,7 +5,7 @@ import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { LEARN_LANES, STORY_LANE, type LearnLane } from './learnTurnDoor';
-import { costStakes, mateStakes } from './factStakes';
+import { costStakes, isStaked, mateStakes } from './factStakes';
 import { preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA } from './learnBoardTeaching';
 import { readBoard, readBoardAll } from './boardComputers';
 import { laneFacts, decideTurn } from '../test/learnDoorFixtures';
@@ -757,8 +757,8 @@ describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-1
   const lead = { lane: 'movePoint' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'That gets your last piece into the game, so your rooks can connect.', fen: FEN, squares: ['c1', 'd2'] };
   it('count-before-you-take carries the exchange net and speaks beside an unrelated lead', () => {
     const read = readBoard('countMethod', { fenBefore: '4k3/8/2p1p3/3p4/8/2N5/8/4K3 w - - 0 1', playedSan: 'Nxd5', student: 'w', costCp: 200 });
-    const cnt = read ? { lane: 'countMethod' as const, namesStudentMove: NAMES_NO_MOVE, proof: read.proof, text: read.text, fen: FEN, squares: read.squares, stakes: read.stakes ?? undefined } : null;
-    expect(cnt?.stakes?.points).toBeGreaterThanOrEqual(1);
+    const cnt = read ? { lane: 'countMethod' as const, namesStudentMove: NAMES_NO_MOVE, proof: read.proof, text: read.text, fen: FEN, squares: read.squares, stakes: read.stakes } : null;
+    expect(cnt && isStaked(cnt.stakes) ? cnt.stakes.points : 0).toBeGreaterThanOrEqual(1);
     expect(decideTurn([lead, cnt!]).spoke).toContain('countMethod');
   });
   it('the priority before the move is a reason, never an aside', () => {

@@ -259,7 +259,7 @@
 - `src/services/conceptKey.ts:11`
 - `src/services/danyaBehaviors.ts:526`
 - `src/services/kingAttackReads.ts:661`
-- `src/services/learnBoardTeaching.ts:500`
+- `src/services/learnBoardTeaching.ts:502`
 - `src/services/looseStill.test.ts:37`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`

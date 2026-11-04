@@ -14,7 +14,7 @@
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
 import { NAMES_NO_MOVE, namesMoves, namedSan, namesPlayableStudentMove, type NamesStudentMove } from './studentMoveNaming';
-import { LOCAL_THREAD, placeFact, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
+import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
 import { fadeLevelsFrom, fadeText } from './fadeText';
 import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
@@ -139,7 +139,7 @@ import { habitNeedFrom } from './coachDecider';
 import { computeNeed, type StudentNeedContext } from './needScore';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { readCriticalMoment, criticalMomentStatement, opponentOnlyMoveStatement, type CriticalMomentRead } from './criticalMoment';
-import { costStakes, exchangeStakes, forkPoints, lineTacticPoints, type FactStakes } from './factStakes';
+import { costStakes, exchangeStakes, forkPoints, lineTacticPoints, type FactStakes, type Stakes } from './factStakes';
 import { nextMoveAdvice, type MoveAdviceVerdict } from './nextMoveAdvice';
 import { depthClauses } from './thinkAloud';
 import { classifyPhase } from './gamePhaseService';
@@ -442,7 +442,7 @@ interface ClauseParts {
    *  detector's own numbers (`factStakes.ts`), never inferred from the prose.
    *  The door orders by it. Omitted where the clause carries no material
    *  (a plan, the status band, a habit): those rank below every staked fact. */
-  stakes?: FactStakes;
+  stakes?: Stakes;
   /** THE CLAIM this clause makes, when it makes one another lane can make too
    *  (a tactic concept: `conceptInstanceKey`). The voice package drops a fact
    *  whose claim was already spoken this game — checked at SPEAK time, so a
@@ -522,7 +522,7 @@ function clause(computer: ComputerName, fen: string, p: ClauseParts): ClauseFact
     seat,
     claims: [],
     squares: squares ?? [],
-    stakes: stakes ?? null,
+    stakes: stakesOf(p.kind, stakes),
     proof: proof ?? NO_PROOF.description,
     namesStudentMove: namesPlayableStudentMove(names ?? NAMES_NO_MOVE),
     thread: LOCAL_THREAD,

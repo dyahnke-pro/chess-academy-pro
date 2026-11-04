@@ -62,7 +62,7 @@ describe('#6 — one count on e5, however it is read', () => {
     const cnt = countRead()!;
     const tie = readBoard('tiedDefender', { fenBefore: before, fenAfterMove: afterMove, fenAfterReply: after, student: 'w' })!;
     const d = decideTurn([
-      { lane: 'countMethod', text: cnt.text, fen: after, squares: [...cnt.squares], claims: cnt.claims, stakes: cnt.stakes ?? undefined, proof: cnt.proof, namesStudentMove: NAMES_NO_MOVE },
+      { lane: 'countMethod', text: cnt.text, fen: after, squares: [...cnt.squares], claims: cnt.claims, stakes: cnt.stakes, proof: cnt.proof, namesStudentMove: NAMES_NO_MOVE },
       { lane: 'movePoint', text: tie.text, fen: after, squares: [...tie.squares], claims: tie.claims, proof: tie.proof, namesStudentMove: NAMES_NO_MOVE },
     ]);
     expect(d.pkg.kept.filter((f) => /e5/.test(f.text))).toHaveLength(1);

@@ -25,7 +25,7 @@ import { pvSanToUci } from './principleAttribution';
 import { BOOK_JOB_IDEA, FUNDAMENTAL_IDEA, ideaClaim, type IdeaKind } from './ideaKind';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { composeThought, type ThoughtFact, type ThoughtSource } from './thoughtComposer';
-import { placeFact, LOCAL_THREAD, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat } from './coachFact';
+import { placeFact, stakesOf, LOCAL_THREAD, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat } from './coachFact';
 import type { LessonVoice } from './reviewMoveBriefing';
 import { planAimKey } from './nextPlans';
 import { threadKey } from './gameStory';
@@ -139,7 +139,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     facts.push({
       id: `${computer}:${facts.length}`, namesStudentMove: false,
       ...placeFact(kind, seat), computer, source, idea, text: said, alsoText: alsoText ? close(alsoText) : undefined, squares: sq, weight,
-      thread: threadFor(kind, seat, squares), stakes: null, proof: squaresProof(said, [...new Set([to, ...squares])]) ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
+      thread: threadFor(kind, seat, squares), stakes: stakesOf(kind, null), proof: squaresProof(said, [...new Set([to, ...squares])]) ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
       claims: [`move:${from}${to}:${ideaClaim(idea, sq)}`, ...extraClaims], restates,
     });
   };
@@ -259,7 +259,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       const said = close(text);
       facts.push({
         id: `inBetweenMove:${facts.length}`, namesStudentMove: false,
-        ...placeFact('not-yet', seat), computer: 'inBetweenMove', source: 'notYet', idea: 'order', text: said, squares: [ib.captureSquare], weight: 70, thread: LOCAL_THREAD, stakes: null,
+        ...placeFact('not-yet', seat), computer: 'inBetweenMove', source: 'notYet', idea: 'order', text: said, squares: [ib.captureSquare], weight: 70, thread: LOCAL_THREAD, stakes: stakesOf('not-yet', null),
         proof: lineProof({ fen: i.fenBefore, sans: ib.line }, mine ? 'you' : 'they') ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
         claims: [`not-yet:${from}${to}:${ib.captureSquare}`],
       });
@@ -280,7 +280,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       facts.push({
         id: `moveOrder:${facts.length}`, namesStudentMove: false,
         ...placeFact('timing', seat), computer: 'moveOrder', source: 'moveOrder', idea: 'order', text: said, squares: beyond(mo.squares), weight: 70,
-        thread: LOCAL_THREAD, stakes: costStakes(mo.costCp), proof: squaresProof(said, mo.squares) ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
+        thread: LOCAL_THREAD, stakes: stakesOf('timing', costStakes(mo.costCp)), proof: squaresProof(said, mo.squares) ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
         claims: [`order:${from}${to}>${mo.followUp.uci}`],
       });
     }
@@ -336,7 +336,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
         facts.push({
           id: `buildDeliberation:${facts.length}`, namesStudentMove: false,
           ...placeFact('deliberation', seat), computer: 'buildDeliberation', source: 'alternatives', idea: 'choice', text: close(r.text),
-          squares: r.squares, weight: 50, thread: LOCAL_THREAD, stakes: costStakes(r.deltaCp),
+          squares: r.squares, weight: 50, thread: LOCAL_THREAD, stakes: stakesOf('deliberation', costStakes(r.deltaCp)),
           // A drop the board shows has its square as its proof (marked when asked Why).
           proof: r.proof ?? squaresProof(close(r.text), r.squares) ?? NO_PROOF.description, seat, fen: i.fenBefore, altFen: fenAfter,
           claims: [r.claim ?? `choice:${from}${to}:${r.san}`],
@@ -350,7 +350,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
         facts.push({
           id: `buildDeliberation:${facts.length}`, namesStudentMove: false,
           ...placeFact('line', seat), computer: 'buildDeliberation', source: 'bestLine', idea: /and it's mate$/.test(d.bestLineAfter) ? 'mate' : 'win-material',
-          text: said, squares: [], weight: 60, thread: LOCAL_THREAD, stakes: null, proof: d.bestLineProof, seat, fen: i.fenBefore, altFen: fenAfter,
+          text: said, squares: [], weight: 60, thread: LOCAL_THREAD, stakes: stakesOf('line', null), proof: d.bestLineProof, seat, fen: i.fenBefore, altFen: fenAfter,
           claims: [`line:${from}${to}:${(d.bestLineSans ?? []).join(',')}`],
         });
       }
@@ -385,7 +385,7 @@ export function refutedFact(r: RefutedAlternative, fenBefore: string, seat: Fact
   return {
     id: 'refutedFromFan:0', namesStudentMove: false,
     ...placeFact('refuted', seat), computer: 'refutedFromFan', source: 'refuted', idea: 'choice', text: said, squares, weight: 55,
-    thread: LOCAL_THREAD, stakes: costStakes(r.costCp), proof: refutedAltProof(fenBefore, r) ?? squaresProof(said, squares) ?? NO_PROOF.description, seat, fen: fenBefore,
+    thread: LOCAL_THREAD, stakes: stakesOf('refuted', costStakes(r.costCp)), proof: refutedAltProof(fenBefore, r) ?? squaresProof(said, squares) ?? NO_PROOF.description, seat, fen: fenBefore,
     claims: [`refuted:${r.alt.replace(/[+#!?]+$/, '')}`],
   };
 }

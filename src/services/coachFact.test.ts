@@ -87,3 +87,24 @@ describe('CoachFact — the one fact shape (WO-STORY-MATRIX-01 P1-3)', () => {
     }
   });
 });
+
+// COVERAGE IS TOTAL (WO-STORY-MATRIX-01 P1-10, stakes.md §5.2 rule 2): every
+// fact answers its stakes — a gap, or its group's named reason for none. A
+// bare null made stakes a switch in Build 4 (staked beat unstaked whatever the
+// weights); the type forbids it now, and the reasons follow the design's table.
+describe('every fact answers its stakes', async () => {
+  const { FACT_GROUP, stakesOf } = await import('./coachFact');
+  const { isStaked } = await import('./factStakes');
+  it('a fact with no gap carries its group\'s reason', () => {
+    const want: Record<string, string> = { name: 'identity', habit: 'closes', verdict: 'state' };
+    for (const [kind, group] of Object.entries(FACT_GROUP)) {
+      const s = stakesOf(kind as keyof typeof FACT_GROUP, null);
+      expect(isStaked(s), kind).toBe(false);
+      expect('none' in s ? s.none : null, kind).toBe(want[group] ?? 'unmeasured');
+    }
+  });
+  it('a measured gap, or a reason already recorded, is kept as it is', () => {
+    expect(stakesOf('move-job', { points: 3, plies: 1 })).toEqual({ points: 3, plies: 1 });
+    expect(stakesOf('move-job', { none: 'state' })).toEqual({ none: 'state' });
+  });
+});

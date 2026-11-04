@@ -11,7 +11,7 @@
 // what the page does with it.
 //
 // A LEAF: types, and the one maker over coachFact and studentMoveNaming.
-import { LOCAL_THREAD, placeFact, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat } from './coachFact';
+import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat } from './coachFact';
 import { namesPlayableStudentMove, type NamesStudentMove } from './studentMoveNaming';
 import type { FactProof } from './proof';
 import type { FactStakes } from './factStakes';
@@ -88,7 +88,7 @@ export function teachingFact(lane: LearnLane, p: TeachingParts, ride: TeachingRi
     id: `${p.computer}:${p.claims.join('|')}`,
     ...placeFact(kind, seat),
     seat,
-    stakes: stakes ?? null,
+    stakes: stakesOf(kind, stakes),
     namesStudentMove: namesPlayableStudentMove(names),
     thread: LOCAL_THREAD,
     ...(role ? { role } : {}),

@@ -27,7 +27,7 @@ import { knownAttack } from './attackLibrary';
 import { tempoCount } from './tempoCount';
 import { homeMinorCount } from './development';
 import { legalSeeGainFor } from './positionReadingService';
-import type { FactStakes } from './factStakes';
+import type { FactStakes, Stakes } from './factStakes';
 import type { GamePromise } from './learnBoardTeaching';
 import { speedRunReads } from './speedRunReads';
 import { namesMoves, type NamesStudentMove } from './studentMoveNaming';
@@ -277,7 +277,7 @@ interface DepthClause {
   lines?: Array<{ fen: string; sans: string[] }>;
   squares?: string[];
   /** What rides on it — handed to the ranker (factStakes). */
-  stakes?: FactStakes;
+  stakes?: Stakes;
   /** The student's moves the clause names unasked, for the door's hold (OS-10). */
   namesStudentMove?: NamesStudentMove;
   /** A once-per-game claim. */

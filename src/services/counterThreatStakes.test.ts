@@ -1,5 +1,6 @@
 // Their counter-threat is present danger, staked by the one threat computer,
 // so a verdict turn never holds it as a warning that can wait (OS-15).
+import { isStaked } from './factStakes';
 import { describe, it, expect } from 'vitest';
 import { counterThreatTeaching } from './learnBoardTeaching';
 
@@ -11,6 +12,6 @@ describe('their counter-threat carries its stakes', () => {
   it('…Rd8 hitting the queen on d1 is staked at what ignoring it costs', () => {
     const t = counterThreatTeaching(BEFORE_RD8, 'Rd8', 'w', null);
     expect(t?.lane).toBe('dangerLevels');
-    expect(t?.stakes?.points ?? 0).toBeGreaterThan(0);
+    expect(t && isStaked(t.stakes) ? t.stakes.points : 0).toBeGreaterThan(0);
   });
 });

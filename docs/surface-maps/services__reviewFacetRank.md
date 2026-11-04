@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**654 lines · 15 exports · 18 importers · 8 tests · 0 audits**
+**654 lines · 15 exports · 24 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -28,10 +28,16 @@
 - `src/services/learnTurnDoor.ts`
 - `src/services/openingStory.ts`
 - `src/services/orderComputers.test.ts`
+- `src/services/positionFacts.ts`
+- `src/services/reviewFacet.ts`
 - `src/services/reviewFacetRank.test.ts`
+- `src/services/reviewFullData.ts`
 - `src/services/supportedFacts.test.ts`
 - `src/services/tacticGeometry.test.ts`
+- `src/services/teachingFact.ts`
 - `src/test/doorFact.ts`
+- `src/test/learnDoorFixtures.ts`
+- `src/test/oneFactShape.gate.test.ts`
 
 ## Exports and every call site
 
@@ -65,20 +71,21 @@
 ### `TIE_ORDER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `factKind` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2803`
-- `src/services/exchangeIdeas.test.ts:224`
+### `factKind` (function) — 1 call site
+- `src/services/exchangeIdeas.test.ts:225`
 
-### `factValue` (function) — 1 call site
-- `src/services/coachDecider.ts:430`
+### `factValue` (function) — 5 call sites
+- `src/services/coachDecider.ts:435`
+- `src/services/latentFork.test.ts:171`
+- `src/services/latentFork.test.ts:172`
+- `src/services/latentFork.test.ts:173`
+- `src/services/positionFacts.ts:555`
 
-### `facetTag` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:2480`
-- `src/services/coachFeatureService.ts:3077`
+### `facetTag` (function) — 4 call sites
 - `src/services/reviewFacetRank.test.ts:19`
 - `src/services/reviewFacetRank.test.ts:20`
 - `src/services/reviewFacetRank.test.ts:21`
-- `src/test/doorFact.ts:17`
+- `src/test/doorFact.ts:18`
 
 ### `facetRank` (function) — 4 call sites
 - `src/services/factSelector.ts:204`
@@ -100,10 +107,12 @@
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/factStakes.test.ts`
+- `src/services/latentFork.test.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/reviewFacetRank.test.ts`
 - `src/services/supportedFacts.test.ts`
 - `src/services/tacticGeometry.test.ts`
+- `src/test/oneFactShape.gate.test.ts`
 
 ## Audits that reach it
 

@@ -20,7 +20,8 @@
 // PURE: every computer here is pure; this module adds no chess of its own.
 import { Chess, type Color } from 'chess.js';
 import { NO_PROOF, squaresProof, type FactProof } from './proof';
-import { LOCAL_THREAD, placeFact, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
+import type { FactStakes } from './factStakes';
+import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
 import { threadKey } from './gameStory';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from './pinBreak';
 import { findProphylaxis, prophylaxisKey, prophylaxisLine, prophylaxisIdea, prophylaxisProof } from './prophylaxis';
@@ -58,10 +59,13 @@ type SurfaceAnswer = { wired: string } | { not: string };
  *  fact except those its computer's row answers (its kind, group, step and
  *  computer) and its id. Each producer answers its seat, the student move it
  *  names, its thread and its stakes: nothing defaults (WO-STORY-MATRIX-01 P1-6). */
-type ReadParts = Omit<CoachFact, 'id' | 'kind' | 'group' | 'step' | 'computer'> & {
+type ReadParts = Omit<CoachFact, 'id' | 'kind' | 'group' | 'step' | 'computer' | 'stakes'> & {
   /** Its say-once key — the tail of its id (`readKey`). Every read but the
    *  threat's cost is said under it, so it is also its first claim. */
   key: string;
+  /** The gap its computer measured, or null — the registry answers the
+   *  reason for none from the row's kind (`stakesOf`, P1-10). */
+  stakes: FactStakes | null;
 };
 
 /** The one fact a read becomes: its id is its computer's and its key, its
@@ -549,7 +553,7 @@ export type BoardFact<K extends ComputerId> = CoachFact & { kind: KindOf<K> };
 export function readBoardAll<K extends ComputerId>(id: K, ctx: BoardContexts[K]): BoardFact<K>[] {
   const spec: ComputerSpec<BoardContexts[K]> = SPECS[id];
   if (outOfPhase(spec.phase, ctx)) return [];
-  const fact: MakeFact = ({ key, ...p }) => ({ ...p, id: `${id}:${key}`, ...placeFact(spec.kind, p.seat), computer: spec.computer });
+  const fact: MakeFact = ({ key, stakes, ...p }) => ({ ...p, id: `${id}:${key}`, ...placeFact(spec.kind, p.seat), computer: spec.computer, stakes: stakesOf(spec.kind, stakes) });
   const r = spec.read(ctx, fact);
   // The kind is the row's or the story's by construction (`fact` above makes
   // every read but the story's, which `openingStoryAt` makes under STORY_KIND).

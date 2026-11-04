@@ -17,14 +17,14 @@ import {
 import { namesPlayableStudentMove, type NamesStudentMove } from '../services/studentMoveNaming';
 import { FACT_ROLE } from '../services/reviewFacetRank';
 import type { ComputerName } from '../services/coachFact';
-import type { FactStakes } from '../services/factStakes';
+import type { Stakes } from '../services/factStakes';
 
 /** A Learn fact as a test writes it. */
 export type LaneFixture = Omit<LearnFactParts, 'computer' | 'namesStudentMove' | 'stakes'> & {
   id?: string;
   computer?: ComputerName;
   namesStudentMove: NamesStudentMove | boolean;
-  stakes?: FactStakes | null;
+  stakes?: Stakes | null;
 };
 
 /** A phase report's fact as a test writes it: on the report's board unless

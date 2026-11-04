@@ -3,15 +3,16 @@
 // names the records it cares about; the kind comes from `kind` or the text's
 // own `[tag]`, as Review's facets carry it — a fact with neither is a broken
 // fixture, never a guess.
-import { LOCAL_THREAD, placeFact } from '../services/coachFact';
+import { LOCAL_THREAD, placeFact, stakesOf } from '../services/coachFact';
 import { facetTag, type FactKind } from '../services/reviewFacetRank';
 import { NO_PROOF } from '../services/proof';
+import type { Stakes } from '../services/factStakes';
 import type { DoorFact } from '../services/coachDecider';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 let next = 0;
 
-type Records = Partial<Pick<DoorFact, 'id' | 'squares' | 'stakes' | 'proof' | 'claims' | 'seat' | 'skill' | 'hole' | 'fen'>> & { kind?: FactKind };
+type Records = Partial<Pick<DoorFact, 'id' | 'squares' | 'proof' | 'claims' | 'seat' | 'skill' | 'hole' | 'fen'>> & { kind?: FactKind; stakes?: Stakes | null };
 
 export function doorFact(text: string, r: Records = {}): DoorFact {
   const kind = r.kind ?? facetTag(text);
@@ -20,7 +21,7 @@ export function doorFact(text: string, r: Records = {}): DoorFact {
   return {
     ...placeFact(kind, seat), kind, computer: 'computeMoveFacets',
     id: r.id ?? `test:${next++}`, text, fen: r.fen ?? FEN,
-    squares: r.squares ?? [], claims: r.claims ?? [], stakes: r.stakes ?? null,
+    squares: r.squares ?? [], claims: r.claims ?? [], stakes: stakesOf(kind, r.stakes),
     proof: r.proof ?? NO_PROOF.description, seat, namesStudentMove: false, thread: LOCAL_THREAD,
     ...(r.skill ? { skill: r.skill } : {}), ...(r.hole !== undefined ? { hole: r.hole } : {}),
   };

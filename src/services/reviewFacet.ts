@@ -10,7 +10,7 @@
 //
 // Types and the one maker, over coachFact, reviewFacetRank and the
 // fundamentals' claim families.
-import { LOCAL_THREAD, placeFact, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
+import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
 import { NO_PROOF, type FactProof } from './proof';
 import type { FactStakes } from './factStakes';
 import { TIE_ORDER, type FacetTag, type FactKind } from './reviewFacetRank';
@@ -70,7 +70,7 @@ export function reviewFacet(
     seat,
     squares: [...new Set(parts.squares ?? [])],
     claims: parts.claims ?? [],
-    stakes: parts.stakes && parts.stakes.points > 0 ? parts.stakes : null,
+    stakes: stakesOf(kind, parts.stakes && parts.stakes.points > 0 ? parts.stakes : null),
     proof: parts.proof ?? NO_PROOF.description,
     namesStudentMove: REVIEW_NAMES_NO_MOVE,
     thread: LOCAL_THREAD,

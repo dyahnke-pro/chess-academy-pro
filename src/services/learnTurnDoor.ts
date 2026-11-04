@@ -32,10 +32,10 @@ import { emitLearnTurn, type LearnTurnTag, type PriceSearch } from './coachDecis
 import { COMPUTER_ROLES, saidBeforeTheMove } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
-import { costStakes, stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
+import { costStakes, stakeValue, STAKED_FLOOR, isStaked, type FactStakes, type Stakes } from './factStakes';
 import { sameClaim } from './factSelector';
 import type { FacetRole, FactKind } from './reviewFacetRank';
-import { isCoachFactKind, LOCAL_THREAD, placeFact, stepOf, type CoachFact, type CoachFactKind, type ComputerName } from './coachFact';
+import { isCoachFactKind, LOCAL_THREAD, placeFact, stakesOf, stepOf, type CoachFact, type CoachFactKind, type ComputerName } from './coachFact';
 import { BOARD_COMPUTERS } from './boardComputers';
 import { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
 import { isEndgameByMaterial } from './gamePhaseService';
@@ -505,7 +505,7 @@ export interface LearnFactParts {
    *  claim ledger, `voicePackage`). */
   claims?: readonly string[];
   /** What rides on it (`factStakes`) — the door orders by this first. */
-  stakes?: FactStakes;
+  stakes?: Stakes | null;
   /** TEACH OR DESCRIBE, from the ONE role table (`FACT_ROLE`) over the fact's
    *  own kind, when the producer knows it. A lane can carry both — the
    *  position-facts lane carries rules ("a king left in the middle gets caught
@@ -577,7 +577,7 @@ export function learnFact(id: string, f: LearnFactParts): LaneFact {
   const seat = step === 'theirs' ? 'opponent' : 'student';
   return {
     id, kind, group: placeFact(kind, seat).group, step, computer: f.computer, text: f.text, fen: f.fen,
-    squares: f.squares ?? [], claims: f.claims ?? [], stakes: f.stakes ?? null, proof: f.proof, seat,
+    squares: f.squares ?? [], claims: f.claims ?? [], stakes: stakesOf(kind, f.stakes), proof: f.proof, seat,
     namesStudentMove: f.namesStudentMove, thread: f.statesThread?.key ?? LOCAL_THREAD,
     ...(f.lines ? { lines: f.lines } : {}), ...(f.skill ? { skill: f.skill } : {}),
     lane: f.lane,
@@ -813,7 +813,7 @@ export function decideTurn(
   // (`mateStakes`), never from the prose.
   const ownForcedMate = survivors.some((x) => {
     if (subsumed.has(x)) return false;
-    const m = x.src.stakes?.mate;
+    const m = (isStaked(x.src.stakes) ? x.src.stakes.mate : undefined);
     return m?.for === 'you' && m.forced;
   });
   const dangerWaits = (x: { lane: LearnLane }): boolean => ownForcedMate && DANGER_LANES.has(x.lane);
@@ -822,7 +822,7 @@ export function decideTurn(
   // empty"). A fact staked at a forced mate makes every fact that is neither
   // danger nor itself a mate wait for a calm board.
   // A forced mate, whoever's and however far — read off the stake's own flag.
-  const isMateFact = (x: Survivor): boolean => !!x.src.stakes?.mate?.forced;
+  const isMateFact = (x: Survivor): boolean => !!(isStaked(x.src.stakes) ? x.src.stakes.mate : undefined)?.forced;
   const mateTurn = !!priorLead?.mateTurn || survivors.some((x) => !subsumed.has(x) && isMateFact(x));
   const verdict = survivors.find((x) => x.lane === 'mistake' && !subsumed.has(x)) ?? null;
   // A DANGER THAT COSTS SOMETHING NOW (OS-1 replay 2026-10-19, 22.Rxa5: "No

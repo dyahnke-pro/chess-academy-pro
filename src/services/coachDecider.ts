@@ -38,7 +38,7 @@ import type { CoachFact } from './coachFact';
 import { THOUGHT_ORDER } from './thoughtComposer';
 import { isProof, type Proof } from './proof';
 import { layerBonus, type LayerStandings } from './teachingLayers';
-import { STAKED_FLOOR } from './factStakes';
+import { STAKED_FLOOR, isStaked } from './factStakes';
 import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, type MethodHabit } from './methodBeat';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { habitForTag, TAG_STEP } from './thinkingSteps';
@@ -358,10 +358,10 @@ function emit(
       .filter((q) => q.why === 'subsumed' && q.by)
       .map((q) => [q.text.slice(0, 80), (q.by ?? '').slice(0, 80)] as [string, string]),
     method,
-    stakedCount: facts.filter((f) => f.stakes !== null).length,
+    stakedCount: facts.filter((f) => isStaked(f.stakes)).length,
     unproven: d.unproven,
     unprovenKinds: d.unprovenKinds,
-    leadStaked: d.spoken.length > 0 ? (lead?.stakes ?? null) !== null : null,
+    leadStaked: d.spoken.length > 0 ? isStaked(lead?.stakes) : null,
   });
   return d;
 }

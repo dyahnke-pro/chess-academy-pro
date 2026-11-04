@@ -2,6 +2,7 @@
 // P1-6d). The facts carry their tag, squares, seat, stakes, proof, claims and
 // identity; a test that asserts on what Review says reads them as one line
 // each (`[tag] words`) and looks a fact's records up by that line.
+import { isStaked } from '../services/factStakes';
 import type { ReviewFacet } from '../services/reviewFacet';
 import { NO_PROOF, type FactProof } from '../services/proof';
 import type { FactStakes } from '../services/factStakes';
@@ -34,7 +35,7 @@ export function facetRecords(facts: readonly ReviewFacet[]): {
     const line = facetLine(f);
     if (f.squares.length) squares.set(line, f.squares);
     if (f.seat === 'opponent') incoming.add(line);
-    if (f.stakes) stakes.set(line, f.stakes);
+    if (isStaked(f.stakes)) stakes.set(line, f.stakes);
     if (f.identity) identity.set(line, f.identity);
     if (f.proof !== NO_PROOF.description) proofs.set(line, f.proof);
     if (f.claims.length) claims.set(line, f.claims);

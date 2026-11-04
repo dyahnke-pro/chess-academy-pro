@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**610 lines · 6 exports · 8 importers · 6 tests · 0 audits**
+**610 lines · 6 exports · 8 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -33,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openingStoryAt` (function) — 9 call sites
-- `src/services/boardComputers.ts:300`
+- `src/services/boardComputers.ts:306`
 - `src/services/holeKey.test.ts:15`
 - `src/services/openingStory.test.ts:23`
 - `src/services/openingStory.test.ts:133`
@@ -47,7 +47,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `prefetchOpeningStory` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:91`
+- `src/services/learnBoardTeaching.ts:94`
 - `src/services/openingStory.test.ts:146`
 
 ## Tests
@@ -58,6 +58,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/oneGroupTable.gate.test.ts`
 - `src/services/openingStory.test.ts`
 - `src/services/openingStoryWholeBeat.test.ts`
+- `src/test/oneFactShape.gate.test.ts`
 
 ## Audits that reach it
 

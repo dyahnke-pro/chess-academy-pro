@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**478 lines · 15 exports · 19 importers · 3 tests · 0 audits**
+**501 lines · 17 exports · 19 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -76,21 +76,43 @@
 - `src/services/learnTurnDoor.ts:1079`
 - `src/services/learnTurnDoor.ts:1142`
 
-### `placeFact` (function) — 14 call sites
-- `src/services/boardComputers.ts:550`
+### `placeFact` (function) — 15 call sites
+- `src/services/boardComputers.ts:556`
 - `src/services/learnTurnDoor.ts:579`
-- `src/services/moveThoughtFacts.ts:140`
-- `src/services/moveThoughtFacts.ts:261`
-- `src/services/moveThoughtFacts.ts:304`
-- `src/services/moveThoughtFacts.ts:318`
-- `src/services/moveThoughtFacts.ts:353`
+- `src/services/moveThoughtFacts.ts:141`
+- `src/services/moveThoughtFacts.ts:262`
+- `src/services/moveThoughtFacts.ts:282`
+- `src/services/moveThoughtFacts.ts:338`
+- `src/services/moveThoughtFacts.ts:352`
+- `src/services/moveThoughtFacts.ts:387`
 - `src/services/openingStory.ts:363`
 - `src/services/positionFacts.ts:517`
 - `src/services/reviewFacet.ts:62`
 - `src/services/reviewFacet.ts:89`
 - `src/services/reviewFacet.ts:101`
 - `src/services/teachingFact.ts:89`
-- `src/test/doorFact.ts:21`
+- `src/test/doorFact.ts:22`
+
+### `stakesOf` (function) — 16 call sites
+- `src/services/boardComputers.ts:556`
+- `src/services/coachFact.test.ts:101`
+- `src/services/coachFact.test.ts:107`
+- `src/services/coachFact.test.ts:108`
+- `src/services/learnTurnDoor.ts:580`
+- `src/services/moveThoughtFacts.ts:142`
+- `src/services/moveThoughtFacts.ts:262`
+- `src/services/moveThoughtFacts.ts:283`
+- `src/services/moveThoughtFacts.ts:339`
+- `src/services/moveThoughtFacts.ts:353`
+- `src/services/moveThoughtFacts.ts:388`
+- `src/services/openingStory.ts:364`
+- `src/services/positionFacts.ts:525`
+- `src/services/reviewFacet.ts:73`
+- `src/services/teachingFact.ts:91`
+- `src/test/doorFact.ts:24`
+
+### `gapOf` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `COMPUTER_CATALOG` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

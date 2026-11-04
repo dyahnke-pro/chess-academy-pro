@@ -18,7 +18,7 @@
 // ranking changes the ORDER, never the SET (CLAUDE.md G4.5).
 import { matchClauseKind, boostFor, type WeaknessSignal } from './weaknessSignal';
 import type { ClauseKind } from './positionFacts';
-import { stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
+import { stakeValue, STAKED_FLOOR, type FactStakes, type Stakes } from './factStakes';
 import type { TeachingLayer } from './teachingLayers';
 import type { NoProofReason } from './proof';
 
@@ -556,7 +556,7 @@ export function factKind(text: string, family: string | null = null): FactKind |
  */
 export function factValue(
   kind: FactKind | null,
-  stakes: FactStakes | null | undefined,
+  stakes: Stakes | null | undefined,
   signals: readonly WeaknessSignal[] = [],
   matched?: WeaknessSignal | null,
 ): number {

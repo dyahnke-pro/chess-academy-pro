@@ -33,7 +33,7 @@ import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor, seeSeq
 import { detectTactics } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
-import { costStakes, exchangeStakes, forkPoints, piecesOn, isScenicPawnPin, isSacrifice, mateStakes, type FactStakes } from './factStakes';
+import { costStakes, exchangeStakes, forkPoints, piecesOn, isScenicPawnPin, isSacrifice, mateStakes, isStaked, type FactStakes, type Stakes } from './factStakes';
 import { describeStructure } from './boardStructure';
 import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
 import type { RefutedAlternative } from './refutedAlternative';
@@ -317,8 +317,8 @@ export function computeMoveFacets(
   const recProof = (facet: ReviewFacet, proof: Proof | null | undefined): void => {
     if (proof) facet.proof = proof;
   };
-  const recStakes = (facet: ReviewFacet, stakes: FactStakes | null | undefined): void => {
-    if (stakes && stakes.points > 0) facet.stakes = stakes;
+  const recStakes = (facet: ReviewFacet, stakes: Stakes | null | undefined): void => {
+    if (isStaked(stakes) && stakes.points > 0) facet.stakes = stakes;
   };
   // …and on WHOSE idea it is: "your rook pins their pawn — you saw this idea on
   // move 15" referred back to THEIR pin of move 15 (hand walk 2000 review).

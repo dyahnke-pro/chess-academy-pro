@@ -20,7 +20,7 @@
 import type { FactKind } from './reviewFacetRank';
 import type { ThoughtStep } from './thoughtComposer';
 import type { AspectKind } from './reviewMoveBriefing';
-import type { FactStakes } from './factStakes';
+import { NO_STAKES, isStaked, type FactStakes, type NoStakes, type Stakes } from './factStakes';
 import type { FactProof } from './proof';
 import type { SpokenLine } from './voicePackage';
 import type { WeaknessSignal } from './weaknessSignal';
@@ -156,6 +156,28 @@ export function stepOf(kind: CoachFactKind, seat: FactSeat): ThoughtStep {
 export function placeFact(kind: CoachFactKind, seat: FactSeat): { kind: CoachFactKind; group: FactGroup; step: ThoughtStep } {
   const group = FACT_GROUP[kind];
   return { kind, group, step: GROUP_STEP[group](seat) };
+}
+
+/** WHY A FACT OF THIS GROUP HAS NO GAP when its computer measured none
+ *  (WO-STORY-MATRIX-01 P1-10, stakes.md §6): a name rides on nothing, the habit
+ *  closes the turn, the verdict reports the state, and every other fact is
+ *  unmeasured until its gap is threaded in. One table, so a fact never carries
+ *  a bare null. */
+const GROUP_NO_STAKES: Record<FactGroup, NoStakes> = {
+  name: NO_STAKES.identity, habit: NO_STAKES.closes, verdict: NO_STAKES.state,
+  story: NO_STAKES.unmeasured, structure: NO_STAKES.unmeasured, danger: NO_STAKES.unmeasured, theirSide: NO_STAKES.unmeasured,
+  notYet: NO_STAKES.unmeasured, move: NO_STAKES.unmeasured, choices: NO_STAKES.unmeasured, line: NO_STAKES.unmeasured,
+  tactics: NO_STAKES.unmeasured, technique: NO_STAKES.unmeasured, concepts: NO_STAKES.unmeasured,
+};
+/** A fact's stakes: its computer's gap (or a reason it already recorded), or
+ *  its group's reason for none. */
+export function stakesOf(kind: CoachFactKind, measured: Stakes | null | undefined): Stakes {
+  return measured ?? GROUP_NO_STAKES[FACT_GROUP[kind]];
+}
+/** The gap a fact carries, or null when it carries a reason instead — for a
+ *  reader that weighs gaps. */
+export function gapOf(s: Stakes): FactStakes | null {
+  return isStaked(s) ? s : null;
 }
 
 /** A computer that hands the one composer facts: where it lives and what it
@@ -401,8 +423,9 @@ export interface CoachFact {
   claims: readonly string[];
   /** The squares it is about (the board's half; support is read off these). */
   squares: readonly string[];
-  /** What rides on it — the step's lead is the fact worth most. */
-  stakes: FactStakes | null;
+  /** What rides on it — the step's lead is the fact worth most. REQUIRED: a
+   *  gap, or the named reason it has none (`NO_STAKES`). */
+  stakes: Stakes;
   /** Its proof, or why it needs none (REQUIRED, proof.ts). */
   proof: FactProof;
   /** Whose move or plan it is about. At the deciding door, a fact about what

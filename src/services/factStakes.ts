@@ -36,6 +36,26 @@ export interface FactStakes {
   mate?: { for: 'you' | 'them'; forced: boolean };
 }
 
+/** WHY A FACT CARRIES NO GAP (WO-STORY-MATRIX-01 P1-10, stakes.md §5.1) —
+ *  the `NoProof` pattern for stakes. Every fact answers its stakes: a gap, or
+ *  one of these reasons. "No stakes" is a recorded reason, never a hole in
+ *  coverage — partial coverage is what made stakes a switch in Build 4.
+ *    identity   — it names something (the opening, a transposition): nothing rides on it;
+ *    closes     — it closes the turn (the habit);
+ *    state      — it reports where the game stands, unchanged;
+ *    unmeasured — nothing measured its gap yet (a structure, a plan, a description). */
+export type NoStakesReason = 'identity' | 'closes' | 'state' | 'unmeasured';
+export interface NoStakes { none: NoStakesReason }
+/** What rides on a fact: a gap, or why it has none. REQUIRED on every fact. */
+export type Stakes = FactStakes | NoStakes;
+export const NO_STAKES: Record<NoStakesReason, NoStakes> = {
+  identity: { none: 'identity' }, closes: { none: 'closes' }, state: { none: 'state' }, unmeasured: { none: 'unmeasured' },
+};
+/** A fact with a gap. */
+export function isStaked(s: Stakes | null | undefined): s is FactStakes {
+  return !!s && !('none' in s);
+}
+
 /** A forced mate outweighs any material. */
 export const MATE_POINTS = 100;
 
@@ -63,8 +83,8 @@ export function piecePoints(piece: string): number {
 
 /** The value a staked fact contributes to the order. Null / non-positive
  *  stakes contribute nothing — the caller falls back to the tie table. */
-export function stakeValue(s: FactStakes | null | undefined): number | null {
-  if (!s || !(s.points > 0)) return null;
+export function stakeValue(s: Stakes | null | undefined): number | null {
+  if (!isStaked(s) || !(s.points > 0)) return null;
   // A FORCED MATE DECIDES THE GAME HOWEVER FAR AWAY IT IS (Learn walk
   // 2026-10-14: "Critical moment — only one move limits the damage. … Bd6 was
   // a blunder — it let them force mate in 12": the mate in 12 was discounted

@@ -37,7 +37,7 @@ import { andList, countWord } from '../utils/andList';
 import { shareAdverb } from '../utils/shareWords';
 import { positionOf } from '../utils/samePosition';
 import type { FacetTag } from './reviewFacetRank';
-import { LOCAL_THREAD, placeFact, type CoachFact, type FactSeat } from './coachFact';
+import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type FactSeat } from './coachFact';
 import { threadKey } from './gameStory';
 
 export type StoryBeat =
@@ -361,7 +361,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryBeatFact[] {
     const seat: FactSeat = beat === 'their-setup' || beat === 'consequence' ? 'opponent' : 'student';
     out.push({
       id: `openingStoryAt:${p.key}`, ...placeFact(STORY_KIND[beat], seat), kind: STORY_KIND[beat], computer: 'openingStoryAt', storyBeat: beat,
-      text: p.text, squares: [...p.squares], proof: p.proof, claims: [p.key, ...(p.aim ? [p.aim] : [])], stakes: null, role: 'teach',
+      text: p.text, squares: [...p.squares], proof: p.proof, claims: [p.key, ...(p.aim ? [p.aim] : [])], stakes: stakesOf(STORY_KIND[beat], null), role: 'teach',
       seat, namesStudentMove, thread: p.aim ? threadKey('student', p.aim) : LOCAL_THREAD, fen,
     });
   };
