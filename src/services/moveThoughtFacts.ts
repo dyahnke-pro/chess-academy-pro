@@ -303,7 +303,8 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
           id: `buildDeliberation:${facts.length}`, namesStudentMove: false,
           ...placeFact('deliberation', seat), computer: 'buildDeliberation', source: 'alternatives', idea: 'choice', text: close(r.text),
           squares: r.squares, weight: 50, thread: LOCAL_THREAD, stakes: costStakes(r.deltaCp),
-          proof: r.proof ?? NO_PROOF.stated, seat, fen: i.fenBefore, altFen: fenAfter,
+          // A drop the board shows has its square as its proof (marked when asked Why).
+          proof: r.proof ?? squaresProof(close(r.text), r.squares) ?? NO_PROOF.description, seat, fen: i.fenBefore, altFen: fenAfter,
           claims: [r.claim ?? `choice:${from}${to}:${r.san}`],
         });
       }
@@ -316,7 +317,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
           id: `buildDeliberation:${facts.length}`, namesStudentMove: false,
           ...placeFact('line', seat), computer: 'buildDeliberation', source: 'bestLine', idea: /and it's mate$/.test(d.bestLineAfter) ? 'mate' : 'win-material',
           text: said, squares: [], weight: 60, thread: LOCAL_THREAD, stakes: null, proof: d.bestLineProof, seat, fen: i.fenBefore, altFen: fenAfter,
-          claims: [`line:${from}${to}:${(d.bestLineSans ?? []).join(' ')}`],
+          claims: [`line:${from}${to}:${(d.bestLineSans ?? []).join(',')}`],
         });
       }
     }
@@ -350,7 +351,7 @@ export function refutedFact(r: RefutedAlternative, fenBefore: string, seat: Fact
   return {
     id: 'refutedFromFan:0', namesStudentMove: false,
     ...placeFact('refuted', seat), computer: 'refutedFromFan', source: 'refuted', idea: 'choice', text: said, squares, weight: 55,
-    thread: LOCAL_THREAD, stakes: costStakes(r.costCp), proof: refutedAltProof(fenBefore, r) ?? NO_PROOF.stated, seat, fen: fenBefore,
+    thread: LOCAL_THREAD, stakes: costStakes(r.costCp), proof: refutedAltProof(fenBefore, r) ?? squaresProof(said, squares) ?? NO_PROOF.description, seat, fen: fenBefore,
     claims: [`refuted:${r.alt.replace(/[+#!?]+$/, '')}`],
   };
 }
