@@ -24,7 +24,7 @@ import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
 import { computePlyFacts, afterCapture, NO_PREV_CAPTURE } from './pvPlayback';
 import { describeStructure } from './boardStructure';
-import { detectTactics } from './tacticsDetector';
+import { detectTactics, tacticDescription } from './tacticsDetector';
 import { PATTERN_SPEECH, patternAim, patternClaimsMaterial } from './tacticVocabulary';
 export { forkConsequence } from './tacticVocabulary';
 import type { PvLine, PvPly, PrevCaptureContext } from './pvPlayback';
@@ -125,7 +125,11 @@ export function tacticWord(kind: string | null): string | null {
  * "your king on g1" (run F walk 2026-09-30). When the description already
  * names the motif, it IS the sentence.
  */
-export function seatedTacticLine(word: string, description: string | null | undefined, fen: string, student: 'w' | 'b'): string {
+export function seatedTacticLine(word: string, tac: { type: string; description: string; involvedSquares: readonly string[] } | null, fen: string, student: 'w' | 'b', rot: number): string {
+  // The detector's sentence at this instance's place among the game's
+  // (`tacticDescription`): the same pattern is not said in one formula three
+  // times, the same standing tactic keeps its words.
+  const description = tac ? tacticDescription(tac, fen, rot) : null;
   if (!description) return `You have ${withArticle(word)}.`;
   let d = description.trim().replace(/[.!]$/, '');
   d = continueSentence(d);

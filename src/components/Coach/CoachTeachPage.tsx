@@ -242,7 +242,6 @@ import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead
 
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { stepBothArcs, withAnnouncement, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence, type ArcEvent } from '../../services/lookaheadPlan';
-import { tacticDescription } from '../../services/tacticsDetector';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, saidSlipCp, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf, secondReadsOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
@@ -9178,7 +9177,7 @@ export function CoachTeachPage({ mode }: {
           tacticLine = word
             // NAMED from the detector's own description (Learn names the
             // move; "have a look" withheld it — walk 1500, 21.Rab1/38.Ne3).
-            ? withTransfer(t.description ? seatedTacticLine(word, tacticDescription({ type: t.type, description: t.description, involvedSquares: t.squares }, args.fenAfterReply, instanceStem(learnMemRef.current, `tactic:${t.type}`, instance)), args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b') : `You have ${withArticle(word)}: on ${t.squares.join(', ')}.`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifLastSpoken))
+            ? withTransfer(t.description ? seatedTacticLine(word, { type: t.type, description: t.description, involvedSquares: t.squares }, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b', instanceStem(learnMemRef.current, `tactic:${t.type}`, instance)) : `You have ${withArticle(word)}: on ${t.squares.join(', ')}.`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifLastSpoken))
             : null;
           // A fork says what it costs them — the same clause review speaks.
           if (tacticLine && t.type === 'fork') tacticLine = `${tacticLine.replace(/\.$/, '')} — ${forkConsequence('they')}.`;
@@ -9283,8 +9282,7 @@ export function CoachTeachPage({ mode }: {
         // SEATED: the detector's description names pieces bare ("queen on e1
         // pins bishop on c3 against queen on a5"); whose each piece is, is the
         // board's fact and the whole point of a warning.
-        const theirDesc = tacticDescription({ type: t.type, description: t.description, involvedSquares: t.squares }, args.fenAfterReply, instanceStem(learnMemRef.current, `tactic:${t.type}`, t.squares.join('')));
-        threatLine = `Watch out — ${seatPieceReferences(`${theirDesc.charAt(0).toLowerCase()}${theirDesc.slice(1)}`, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b')}.${conceptTail(t.type)}`;
+        threatLine = `Watch out — ${seatPieceReferences(`${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}`, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b')}.${conceptTail(t.type)}`;
         // A pin on you says what it holds (Learn audit 2026-10-14).
         if (t.type === 'pin') {
           const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'opponent', instanceStem(learnMemRef.current, 'pin', t.squares.join('')));
