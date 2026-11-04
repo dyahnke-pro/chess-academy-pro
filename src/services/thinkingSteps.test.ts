@@ -13,6 +13,12 @@ import type { MethodHabit } from './methodBeat';
 // The coachDecider table as it stood BEFORE the re-key (2026-10-04). Re-keying
 // through ThinkingStep must not change one answer.
 // Frozen: tags added since (the motif rows) are absent and read their parent's answer.
+// Changed ON PURPOSE since the re-key, each with its reason — never by edit
+// of the frozen table: 2026-11-04 "is my move safe?" gained its own habit,
+// the blunder check (the slip's question), so a greedy grab owes that habit.
+const CHANGED_SINCE: Partial<Record<MisconceptionTagId, MethodHabit>> = {
+  'greedy-pawn-grab': 'blunder-check', 'poisoned-pawn': 'blunder-check',
+};
 const OLD_COACH_TAG_HABIT: Partial<Record<MisconceptionTagId, MethodHabit | null>> = {
   'missed-opponents-threat': 'opponent-threat', 'hung-material': 'opponent-threat',
   'greedy-pawn-grab': 'opponent-threat', 'poisoned-pawn': 'opponent-threat',
@@ -38,7 +44,8 @@ describe('re-keying COACH_TAG_HABIT through ThinkingStep changes no habit', () =
       // habit of the skill it refines (your shot → the catch-all, their
       // tactic → their threat).
       const parent = parentSkillTag(id);
-      const want = id in OLD_COACH_TAG_HABIT || !parent ? OLD_COACH_TAG_HABIT[id] : OLD_COACH_TAG_HABIT[parent];
+      const key = id in OLD_COACH_TAG_HABIT || !parent ? id : parent;
+      const want = CHANGED_SINCE[key] ?? OLD_COACH_TAG_HABIT[key];
       expect(habitForTag(id), id).toBe(want);
       expect(habitForCluster(id), id).toBe(want);
     }
@@ -79,8 +86,15 @@ describe('the ten steps', () => {
 });
 
 describe('the older vocabularies map onto the steps', () => {
-  it('each retrospective habit\'s step is taught through that same habit', () => {
-    for (const [habit, step] of Object.entries(METHOD_HABIT_STEP)) expect(STEP_METHOD_HABIT[step], habit).toBe(habit);
+  it('each retrospective habit\'s step is taught through a habit of that same step', () => {
+    // Two slip questions share "is my move safe?" (what the piece guarded, the
+    // blunder check), so the step names one of them — never another step's.
+    for (const [habit, step] of Object.entries(METHOD_HABIT_STEP)) {
+      const taught = STEP_METHOD_HABIT[step];
+      expect(taught, habit).not.toBeNull();
+      expect(METHOD_HABIT_STEP[taught!], habit).toBe(step);
+    }
+    expect(STEP_METHOD_HABIT['is-my-move-safe']).toBe('blunder-check');
   });
   it('live habits and Learn method claims resolve through one reader', () => {
     expect(stepForMethodClaim('method:loose-trigger')).toBe('their-targets');

@@ -1798,6 +1798,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             engineMateIn: resolvedEnginePlan?.mateIn ?? input.liveState.evalMateIn,
             // STEP D Phase 3 — the engine PV backs a PLAN answer (assemblePlanAnswer).
             enginePlan: resolvedEnginePlan,
+            planArc: input.liveState.planArc ?? null,
             tactics: liveTacticsFresh ? input.liveState.tactics : undefined,
             // STEP B — tactics/danger (Phase 2) + student-progress (Phase 6).
             // Both assemblers exist; these flags tell the interception to

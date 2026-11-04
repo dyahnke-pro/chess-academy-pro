@@ -160,7 +160,9 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
   // it there (the blunder check) — the one reading Learn's slip question asks.
   if (s.slip) {
     const q = slipHabit(s.slip, plyForVariety);
-    if (q && habitIsOwed(need, q.habit)) return claim(q.habit, q.text);
+    // Both slip questions are "is my move safe?": the record's standing on
+    // that one step decides whether either is owed.
+    if (q && habitIsOwed(need, 'blunder-check')) return claim(q.habit, q.text);
   }
 
   // 2 — THE FORCING SCAN. The move that was there was a check or a capture, so

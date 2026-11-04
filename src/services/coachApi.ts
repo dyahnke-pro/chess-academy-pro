@@ -3,6 +3,7 @@ import { evalBand, evalBandWords } from './evalBand';
 import { continueSentence } from '../utils/openSentence';
 import { smallTalkKind, smallTalkReply } from '../coach/smallTalk';
 import { lastMoveFromHistory } from './material';
+import { standingPlans, type ArcState } from './planArc';
 import { dangerAnswerLines, planArcAnswerLines, studentMoveAnswerLines, theirMoveAnswerLines, theirMovePoint } from './learnBoardTeaching';
 import OpenAI from 'openai';
 import { detectLanguage } from '../utils/detectLanguage';
@@ -1369,6 +1370,8 @@ export interface MasterGroundingOptions {
    *  voiced by assemblePlanAnswer instead of the LLM free-synthesizing a plan.
    *  Built only when the student is to move (PV[0] is the student's move). */
   enginePlan?: { pvSan: ReadonlyArray<string>; evalCp: number | null; mateIn: number | null; studentSide: 'white' | 'black'; earlierUci?: string[] };
+  /** Each side's plan as the surface's story told it (`LiveState.planArc`). */
+  planArc?: Readonly<Record<'student' | 'opponent', ArcState>> | null;
   /** Pre-computed tactical context for `currentFen` (forks/hanging/threats/
    *  mate-in-one) — the fact source for STEP B's tactics/danger answers. */
   tactics?: TacticsLiveContext;
@@ -6377,9 +6380,14 @@ export async function getCoachChatResponse(
               : '';
             // The plan each side has been BUILDING — the plan-arc computer Learn
             // and Review speak (Play on demand, David 2026-10-02).
-            const arcLines = grounding.moveHistory && grounding.moveHistory.length > 0
-              ? planArcAnswerLines(grounding.moveHistory, grounding.enginePlan.studentSide)
-              : [];
+            // From the game's own story when the surface keeps one (Learn,
+            // Review): the plans as they were told. A surface with no story
+            // reads the game it has (Play keeps none yet).
+            const arcLines = grounding.planArc
+              ? standingPlans(grounding.planArc)
+              : grounding.moveHistory && grounding.moveHistory.length > 0
+                ? planArcAnswerLines(grounding.moveHistory, grounding.enginePlan.studentSide)
+                : [];
             const arcBit = arcLines.length ? ` So far: ${arcLines.join(' ')}` : '';
             const voiced = await voice(`${phaseRead}${answer.facts}${arcBit}`, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'plan', preferRaw: true });
             if (voiced) {

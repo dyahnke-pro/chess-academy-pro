@@ -138,6 +138,23 @@ export interface ArcState {
   emerged: number;
 }
 
+/** EACH SIDE'S PLAN AS THE GAME TOLD IT (WO-STORY-MATRIX-01 P1-8e-b): the
+ *  aims each arc has announced and still follows, the longest-held first, in
+ *  the words the arc announces a plan with — the student's, then theirs. What
+ *  "what's the plan?" answers from the game's own story, never a second read
+ *  of the game with hindsight. Empty when nothing has been announced. */
+export function standingPlans(arc: Readonly<Record<Seat, ArcState>>): string[] {
+  const out: string[] = [];
+  for (const seat of ['student', 'opponent'] as const) {
+    const live = Object.values(arc[seat].entries)
+      .filter((e) => e.announced && !arc[seat].done.includes(e.aim.id))
+      .sort((a, b) => b.streak - a.streak);
+    if (live.length === 0) continue;
+    out.push(EMERGE[seat][0](andList(live.map((e) => e.aim.phrase))));
+  }
+  return out;
+}
+
 /** THE ARC AS IT STANDS UNTIL ITS ANNOUNCEMENT IS SPOKEN (WO-STORY-MATRIX-01
  *  P1-8f). `stepArc` marks an aim announced the moment it emerges. A surface
  *  whose door may hold that line keeps the arc with those aims NOT announced,

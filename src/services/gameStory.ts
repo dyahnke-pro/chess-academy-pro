@@ -486,6 +486,16 @@ export function storyOf(checkpoint: string | null): GameStory {
   return s.current();
 }
 
+/** EACH SIDE'S PLAN AS THE STORY STOOD AT A PLY (WO-STORY-MATRIX-01 P1-8e-b)
+ *  — the plans a walk had told when it reached `ply`, for "what's the plan?"
+ *  asked there. */
+export function planArcAt(checkpoint: string | null, ply: number): PlanDesk['arc'] {
+  const s = createStoryStore('checkpoint');
+  s.restore(checkpoint);
+  s.rewind(ply);
+  return s.plans().arc;
+}
+
 /** WHAT A WALK HAD SAID THROUGH A PLY (P1-8d): the game's story as it stood
  *  there — the seed a rebuild of the plies ahead starts from, restored at
  *  `throughPly + 1`. */

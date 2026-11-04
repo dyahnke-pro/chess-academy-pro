@@ -3,6 +3,7 @@
  * (WO-BRAIN-01). See `docs/COACH-BRAIN-00.md` for the architecture
  * the names below map to.
  */
+import type { ArcState } from '../services/planArc';
 import type { CoachMessage, HintRequestRecord, IntendedOpening } from '../stores/coachMemoryStore';
 import type { TrapSignal } from '../services/openingTrapDetector';
 
@@ -103,6 +104,11 @@ export type CoachSurface =
 export interface LiveState {
   surface: CoachSurface;
   fen?: string;
+  /** THE GAME'S PLANS AS THE SURFACE TOLD THEM (WO-STORY-MATRIX-01 P1-8e-b):
+   *  each side's arc from the surface's own story (Learn's, Review's at the
+   *  walked ply). "What's the plan?" answers from it; a chat with no game, or a
+   *  surface that keeps no story, has none. */
+  planArc?: Readonly<Record<'student' | 'opponent', ArcState>> | null;
   phase?: 'opening' | 'middlegame' | 'endgame';
   /** Stockfish centipawn eval (white-perspective) for the live FEN.
    *  Surfaces that already run a debounced engine analysis for an

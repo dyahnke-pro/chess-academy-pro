@@ -223,7 +223,9 @@ export const STEP_METHOD_HABIT: Record<ThinkingStep, MethodHabit | null> = {
   'hit-two': 'forcing-scan',
   candidates: 'candidates',
   calculate: 'candidates',
-  'is-my-move-safe': 'opponent-threat',
+  // "Is my move safe?" is the blunder check — the slip's own question
+  // (2026-11-04: it was taught through 'opponent-threat', the step before it).
+  'is-my-move-safe': 'blunder-check',
 };
 
 /** The habit a misconception tag is owed through — the old `COACH_TAG_HABIT`,
@@ -241,6 +243,10 @@ export const METHOD_HABIT_STEP: Record<MethodHabit, ThinkingStep> = {
   'forcing-scan': 'forcing-moves',
   'slow-down': 'assess',
   candidates: 'candidates',
+  // A slip's two questions: what the moved piece was guarding, and the
+  // blunder check — both are "is my move safe?" asked before playing.
+  'what-it-guarded': 'is-my-move-safe',
+  'blunder-check': 'is-my-move-safe',
 };
 
 /** The step each live (present-tense) method beat teaches. */

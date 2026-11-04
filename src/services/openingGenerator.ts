@@ -27,6 +27,8 @@ import { openingKeyFromSans } from './openingKey';
 import { perspectiveRule } from './perspectiveRule';
 import { buildExplorerBranches, resultsLine } from './explorerTeachLine';
 import { preparesBreakBeat } from './mastersPlanRead';
+import { computedPlanAt } from './computedPlan';
+import { storedTreeAnswer } from './deepTree';
 import puzzleData from '../data/puzzles.json';
 import { extractMentionedSquares, MAX_CANDIDATE_HIGHLIGHTS, type LineMove } from './arrowEngine';
 import { getCoachChatResponse, getCoachStructuredResponse, voiceFacts } from './coachApi';
@@ -1400,6 +1402,21 @@ export function repairForkLabels(tree: WalkthroughTree): number {
   return filled;
 }
 
+/** WHERE THE LESSON'S LINE LEADS (WO-STORY-MATRIX-01 P1-9c): the plan the
+ *  games played from the middlegame the line reaches (`computedPlanAt`, the
+ *  plan the opening's own page shows for the same line) — its break and its
+ *  piece route, from the student's seat. A line whose games run out before a
+ *  middlegame keeps the plain close. */
+async function lessonPlanOutro(sans: readonly string[], side: 'white' | 'black', openingName: string): Promise<string> {
+  const plain = 'Drill the moves to lock them in.';
+  try {
+    const plan = await computedPlanAt(sans, side, openingName, `lesson-plan-${openingName}`, { lookup: storedTreeAnswer });
+    const title = plan?.title.replace(/\.$/, '').trim();
+    if (!title) return plain;
+    return `From here, the plan the strongest games show for your side: ${title.charAt(0).toLowerCase()}${title.slice(1)}. ${plain}`;
+  } catch { return plain; }
+}
+
 /** Drop leafOutros keys that don't correspond to any actual leaf
  *  path in the tree. Production audit (build 998f5c4) caught
  *  "Pirc Defense: Austrian Attack" failing both gen attempts because
@@ -2503,7 +2520,7 @@ async function generateOpeningFromDbNarration(
       // for is the short version, and the next ask rebuilds it (never cached).
       explorerIncomplete && !explorerBuilt ? "The master games couldn't be reached just now, so this is the short version — ask again in a minute and it goes deeper." : null,
     ].filter(Boolean).join(' '),
-    outro: `Drill the moves to lock them in.`,
+    outro: await lessonPlanOutro(spineMoves.map(stripSanAnnotations), studentSide, entry.canonicalName),
     root: { san: null, movedBy: null, idea: '', children: nextChildren },
     ...(explorerIncomplete ? { explorerIncomplete: true } : {}),
   };

@@ -46,4 +46,8 @@
 // 2026-10-30-capture-once: a capture is said once (WO-STORY-MATRIX-01 Phase 1
 // step 4, `captureWords`) — after its SAN only what it leads to ("You play
 // Bxc5 — it wins a pawn, and nothing can take back", never "it wins the pawn").
-export const WALKTHROUGH_GEN_REV = '2026-10-30-capture-once';
+// 2026-11-04-story-matrix-wires: the lesson pass reads a null move per board
+// and says what a move prepares with the rule behind it, the structural choice
+// after their move (`linesStructure`), and closes on the plan the games show
+// from the line's middlegame (`computedPlanAt`).
+export const WALKTHROUGH_GEN_REV = '2026-11-04-story-matrix-wires';

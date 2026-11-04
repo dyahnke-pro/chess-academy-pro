@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
+import type { ArcState } from '../../services/planArc';
 import { useRememberedThread } from '../../hooks/useRememberedThread';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -80,6 +81,9 @@ interface GameChatPanelProps {
    * gets the CURRENT board. Falls back to `fen` when absent.
    */
   getLiveFen?: () => string;
+  /** Each side's plan as this game's story holds it (Play's silent story,
+   *  WO-STORY-MATRIX-01 P1-8e-b): "what's the plan?" answers from it. */
+  getPlanArc?: () => Readonly<Record<'student' | 'opponent', ArcState>> | null;
   pgn: string;
   moveNumber: number;
   playerColor: 'white' | 'black';
@@ -211,6 +215,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       fen,
       onWalkLine,
       getLiveFen,
+      getPlanArc,
       playerColor,
       isGameOver,
       history,
@@ -486,6 +491,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           fen: getLiveFen?.() ?? fen,
           studentColor: playerColor,
           moveHistory: history,
+          planArc: getPlanArc?.() ?? null,
           currentRoute: '/coach/play',
         },
       });
@@ -981,6 +987,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             whoseTurn: (liveFen.split(' ')[1] ?? 'w') === 'w' ? 'white' : 'black',
             studentColor: playerColor,
             moveHistory: history,
+            planArc: getPlanArc?.() ?? null,
             userJustDid: text,
             currentRoute: '/coach/play',
             tactics: gameChatTactics,
@@ -1618,7 +1625,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setStreamingContent('');
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps -- 'queueSpeak' is intentionally omitted to avoid recreating the callback every render; tracked for dedicated audit.
-    }, [activeProfile, isStreaming, fen, getLiveFen, history, lastMoveBy, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, onQuizUserForMove, onStartWalkthroughForOpening, setMessages, navigate, location, playerColor, opponentElo]);
+    }, [activeProfile, isStreaming, fen, getLiveFen, getPlanArc, history, lastMoveBy, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, onQuizUserForMove, onStartWalkthroughForOpening, setMessages, navigate, location, playerColor, opponentElo]);
 
     // Keep the imperative `ask` routed to the live handleSend.
     useEffect(() => { handleSendRef.current = handleSend; }, [handleSend]);

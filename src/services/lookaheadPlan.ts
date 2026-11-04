@@ -1564,6 +1564,28 @@ function dealOfLedger(won: readonly string[], lost: readonly string[]): { took: 
   return { took: t, gave: dealWords(gave) };
 }
 
+/** BOTH SIDES' PLAN ARCS, ONE STEP (WO-STORY-MATRIX-01 P1-8e-b): on the board
+ *  the student is to move on, after their reply — their arc steps with that
+ *  reply, the student's with the student's move before it, each against the
+ *  plan the engine's read gives on that board (`plan`, from `planFromUci`) and
+ *  only toward aims still walkable from it. ONE stepping for every surface that
+ *  keeps a story: Learn speaks its events, Play keeps them silent. */
+export function stepBothArcs(
+  arc: Readonly<Record<Seat, import('./planArc').ArcState>>,
+  plan: Pick<LookaheadPlan, 'mine' | 'theirs'>,
+  i: { fen: string; playerColor: 'white' | 'black'; history: readonly string[]; theirMove: ArcMove; studentMove: ArcMove | null },
+): { theirs: ReturnType<typeof stepArc>; mine: ReturnType<typeof stepArc> | null } {
+  const oppColor: 'w' | 'b' = i.playerColor === 'white' ? 'b' : 'w';
+  const studColor: 'w' | 'b' = i.playerColor === 'white' ? 'w' : 'b';
+  const theirs = stepArc(arc.opponent, aimsOf(plan.theirs, 'opponent').filter((a) => aimWalkableNow(a, i.fen, oppColor, i.history)),
+    i.theirMove, i.fen, oppColor, 'opponent');
+  const mine = i.studentMove
+    ? stepArc(arc.student, aimsOf(plan.mine, 'student').filter((a) => aimWalkableNow(a, i.fen, studColor, i.history)),
+      i.studentMove, i.fen, studColor, 'student')
+    : null;
+  return { theirs, mine };
+}
+
 /**
  * The plan from a raw engine PV, with no second search and no engine handle.
  *

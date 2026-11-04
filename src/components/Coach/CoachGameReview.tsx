@@ -52,7 +52,7 @@ import { buildCriticalMomentQuestion, judgeCriticalMomentPick, type CriticalMome
 import { computeTurningPointHinge } from '../../services/reviewHinge';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { renderThesis } from '../../services/teachingSelector';
-import { createStoryStore, storyOf, storyTurn, type GameStory } from '../../services/gameStory';
+import { createStoryStore, planArcAt, storyOf, storyTurn, type GameStory } from '../../services/gameStory';
 import { registerFor } from '../../coach/surfaceContract';
 import { buildOpeningTheoryLecture, buildTheoryLectureBeats, lectureSequence, lectureNoteSelector, loadLectureCorpus, resolveCuratedOpeningIdeas, enrichLectureWithEngine, warmLectureSources, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
@@ -2772,6 +2772,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       surface: 'review',
       fen: fenForQ,
       moveHistory: moves.slice(0, Math.max(0, moveIdx + 1)).map((m) => m.san),
+      // The plans the walk had told at this ply (P1-8e-b), from its story.
+      planArc: walkNarration ? planArcAt(walkNarration.story ?? null, moveIdx + 1) : null,
       // THE SEAT — the review always knew the student's colour and never told
       // the chat layer, so a retrospective ask ("why was Ke2 bad?", PLAN §E1)
       // could not say whose move a ply was. `reviewStudentColor` below is the

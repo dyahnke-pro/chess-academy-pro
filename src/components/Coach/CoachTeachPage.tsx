@@ -241,7 +241,7 @@ import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead';
 
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
-import { aimsOf, aimWalkableNow, stepArc, withAnnouncement, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence, type ArcEvent } from '../../services/lookaheadPlan';
+import { stepBothArcs, withAnnouncement, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence, type ArcEvent } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, saidSlipCp, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf, secondReadsOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
@@ -7384,6 +7384,9 @@ export function CoachTeachPage({ mode }: {
       currentRoute: '/coach/teach',
       fen,
       moveHistory: groundingMoveHistory,
+      // The plans as this game told them (P1-8e-b): "what's the plan?" reads
+      // the game's own story.
+      planArc: learnMemRef.current.story.plans().arc,
       // THE SEAT (PLAN §E1, 2026-09-22). Learn threaded the history but never
       // the student's colour, so a "why was Ke2 bad?" mid-game could not tell
       // the student's ply from the coach's reply and graded whatever was
@@ -11453,19 +11456,17 @@ export function CoachTeachPage({ mode }: {
                         // "step toward" beside it would say it twice. Yours
                         // speaks only its landings and its abandonments.
                         try {
-                          const oppColor = playerColor === 'white' ? 'b' : 'w';
-                          const studColor = playerColor === 'white' ? 'w' : 'b';
                           // Each side's arc is the story's (checkpointed by ply,
-                          // so a takeback restores it).
+                          // so a takeback restores it), stepped by the one
+                          // stepping every story-keeping surface uses.
                           const story = learnMemRef.current.story;
                           const desk = story.plans();
-                          const theirStep = stepArc(desk.arc.opponent, aimsOf(plan.theirs, 'opponent').filter((a) => aimWalkableNow(a, probe.fen(), oppColor, [...move.history, m.san])),
-                            { from: m.from, to: m.to, piece: m.piece, promotion: m.promotion }, probe.fen(), oppColor, 'opponent');
                           const studentPiece = new Chess(move.fen).get(move.to as Square)?.type ?? null;
-                          const mineStep = studentPiece
-                            ? stepArc(desk.arc.student, aimsOf(plan.mine, 'student').filter((a) => aimWalkableNow(a, probe.fen(), studColor, [...move.history, m.san])),
-                              { from: move.from, to: move.to, piece: studentPiece, promotion: move.promotion }, probe.fen(), studColor, 'student')
-                            : null;
+                          const { theirs: theirStep, mine: mineStep } = stepBothArcs(desk.arc, plan, {
+                            fen: probe.fen(), playerColor, history: [...move.history, m.san],
+                            theirMove: { from: m.from, to: m.to, piece: m.piece, promotion: m.promotion },
+                            studentMove: studentPiece ? { from: move.from, to: move.to, piece: studentPiece, promotion: move.promotion } : null,
+                          });
                           // AN ANNOUNCEMENT COUNTS WHEN IT IS SPOKEN (P1-8f): the
                           // arc keeps each plan this read announced as not yet
                           // announced until the door keeps its line (adopted in

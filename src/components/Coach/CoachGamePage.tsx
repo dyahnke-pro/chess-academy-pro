@@ -7,6 +7,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, MessageCircle, Timer } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Chess, type Color } from 'chess.js';
+import { createStoryStore } from '../../services/gameStory';
+import { planFromUci, stepBothArcs } from '../../services/lookaheadPlan';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { CoachBoardBar } from '../Board/CoachBoardBar';
@@ -453,6 +455,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
   const [coachLastMove, setCoachLastMove] = useState<{ from: string; to: string } | null>(null);
   const previousFenRef = useRef<string | null>(null);
+  // THE GAME'S STORY, KEPT SILENT (WO-STORY-MATRIX-01 P1-8e-b, David
+  // 2026-10-30: "One voice right now"): Play volunteers nothing, but it keeps
+  // each side's plan arc the way Learn does, so "what's the plan?" in Play's
+  // chat answers from this game's own story.
+  const playStoryRef = useRef(createStoryStore('play'));
   const [isCoachThinking, setIsCoachThinking] = useState(false);
   // Foreground re-kick (David 2026-06-19: "Play with coach is frozen").
   // iOS suspends the engine Web Worker AND `setTimeout` while the PWA is
@@ -1521,6 +1528,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // the finished game don't linger in the (small, iOS) hash. Within a game we
     // deliberately keep it warm; a genuine restart is when we reset it.
     stockfishEngine.newGame();
+    playStoryRef.current.newGame(`play-${Date.now()}`);
     moveCountRef.current = 0;
     setGameState({
       gameId: `game-${Date.now()}`,
@@ -1562,6 +1570,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     setPlayerColor(color);
     game.resetGame();
     stockfishEngine.newGame(); // fresh game → clear the transposition table
+    playStoryRef.current.newGame(`play-${Date.now()}`);
     moveCountRef.current = 0;
     setGameState({
       gameId: `game-${Date.now()}`,
@@ -3020,6 +3029,32 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       if (afterRes.status === 'fulfilled' && afterRes.value.ok) analysis = afterRes.value.value;
       if (beforeRes.status === 'fulfilled' && beforeRes.value.ok) preAnalysis = beforeRes.value.value;
     }
+
+    // THE PLAN ARCS, STEPPED SILENTLY on the board the student moved from —
+    // the board after their reply, read by `preAnalysis` (Learn's board), by
+    // the one stepping every story-keeping surface uses. A takeback is the
+    // story taken back to the board before.
+    try {
+      const pv = preAnalysis?.topLines?.[0]?.moves;
+      const played = (() => { const c = new Chess(); const out = []; for (const san of game.history) { try { out.push(c.move(san)); } catch { break; } } return out; })();
+      const theirMv = played.at(-1);
+      const mineMv = played.at(-2);
+      const studentWB = playerColor === 'white' ? 'w' : 'b';
+      if (pv && theirMv && theirMv.color !== studentWB) {
+        const plan = planFromUci(preFen, pv, playerColor, { fenBefore: theirMv.before, san: theirMv.san });
+        if (plan) {
+          const story = playStoryRef.current;
+          story.rewind(played.length - 1);
+          const desk = story.plans();
+          const { theirs, mine } = stepBothArcs(desk.arc, plan, {
+            fen: preFen, playerColor, history: game.history,
+            theirMove: { from: theirMv.from, to: theirMv.to, piece: theirMv.piece, promotion: theirMv.promotion },
+            studentMove: mineMv ? { from: mineMv.from, to: mineMv.to, piece: mineMv.piece, promotion: mineMv.promotion } : null,
+          });
+          story.setPlans(played.length, { ...desk, arc: { opponent: theirs.next, student: mine?.next ?? desk.arc.student } });
+        }
+      }
+    } catch { /* the story is a bonus for the chat, never a blocker */ }
 
     // Update eval bar + engine lines
     if (analysis) {
@@ -4821,6 +4856,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               lastMove={game.lastMove && game.history.length > 0 ? { ...game.lastMove, san: game.history[game.history.length - 1] } : undefined}
               lastMoveBy={lastMoveBy}
               history={game.history}
+              getPlanArc={() => playStoryRef.current.plans().arc}
               previousFen={previousFenRef.current}
               onBoardAnnotation={handleBoardAnnotation}
               onRestartGame={handleRestart}
