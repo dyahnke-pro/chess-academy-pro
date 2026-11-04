@@ -121,6 +121,7 @@ import { newPhraseMemory } from '../utils/phraseMemory';
 import { whyItEnded, idlePiece, quietDecider, exploreInvite, murkyRead, type EndRead, type GamePly } from './gameEndReads';
 import { positionOf } from '../utils/samePosition';
 import { yieldToScreen } from '../utils/yieldToScreen';
+import { emitEverything, everythingListening } from './everythingEvents';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -6169,6 +6170,22 @@ export async function generateReviewNarration(params: {
   // the warmer can leak a bracket it was told about. A bracket never belongs in a
   // spoken line, so scrub it in both modes — the strip preserves all the prose,
   // it only removes the [token] and its trailing space.
+  // EVERYTHING THE WALK SAYS, line by line with the facet that carried it (the
+  // owner's drawer, `everythingEvents`) — read before the tags are stripped,
+  // so the lines added outside the doors (the opening, the story, the engine's
+  // projected lines) show which producer said them.
+  if (everythingListening()) {
+    for (const s of segments) {
+      if (!s.narration) continue;
+      const parts = s.narration.split(/\[([a-z0-9-]+)\]\s*/i);
+      const lines: Array<{ computer: string; text: string; said: boolean; why: null }> = [];
+      if (parts[0].trim()) lines.push({ computer: 'review walk', text: parts[0].trim(), said: true, why: null });
+      for (let k = 1; k < parts.length; k += 2) {
+        if (parts[k + 1]?.trim()) lines.push({ computer: `review facet [${parts[k]}]`, text: parts[k + 1].trim(), said: true, why: null });
+      }
+      emitEverything({ surface: 'review', door: 'review-walk', at: { fen: s.fenAfter, ply: s.ply, san: s.san }, lines });
+    }
+  }
   for (const s of segments) {
     if (s.narration && s.narration.includes('[')) {
       // Tags can carry DIGITS ([rook7]) — the old [a-z-]+ class missed those

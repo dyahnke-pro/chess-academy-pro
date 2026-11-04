@@ -29,6 +29,7 @@
 import { fadeText, fadeLevelOf, type FadeLevels } from './fadeText';
 import { isProof, type FactProof, type Proof } from './proof';
 import { emitLearnTurn, type LearnTurnTag, type PriceSearch } from './coachDecisionEvents';
+import { emitEverything, everythingListening } from './everythingEvents';
 import { COMPUTER_ROLES, saidBeforeTheMove } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
@@ -1156,7 +1157,26 @@ export function decideTurn(
   // ride the position-facts lane, so a lane count could not see them).
   const spokeKinds = keep.flatMap((f) => { const k = sourceOf(f)?.factKind; return k ? [k] : []; });
   if (offered.length > 0) emitLearnTurn({ spokeKinds, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
+  reportEverything(facts, turn, new Set(pkg.kept.flatMap((k) => (k.factId ? [k.factId] : []))), (f) =>
+    pkg.dropped.find((d) => d.fact.factId === f.id)?.reason ?? heldWhy[f.lane] ?? refusedWhy[f.lane] ?? null);
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
+}
+
+/** EVERYTHING THE TURN WEIGHED (the owner's drawer, `everythingEvents`): each
+ *  offered fact, the computer that made it, and whether it spoke — and if not,
+ *  the door's own reason. Builds nothing unless the drawer listens. */
+function reportEverything(facts: readonly LaneFact[], turn: LearnTurnTag | null, keptIds: ReadonlySet<string>, why: (f: LaneFact) => string | null): void {
+  if (!everythingListening()) return;
+  const offered = facts.filter((f) => f.text.trim());
+  emitEverything({
+    surface: 'learn',
+    door: 'learn-turn',
+    at: offered[0] ? { fen: offered[0].fen, ply: turn?.ply ?? null } : null,
+    lines: offered.map((f) => {
+      const said = keptIds.has(f.id);
+      return { computer: `${f.computer} (${f.lane})`, text: f.text, said, why: said ? null : (why(f) ?? 'not kept'), fen: f.fen };
+    }),
+  });
 }
 
 /** A turn a mission or a focus owns: nothing speaks, every offered lane is
@@ -1177,6 +1197,7 @@ function ownedTurn(facts: readonly LaneFact[], turn: LearnTurnTag | null, decide
     heldWhy[l] = !focus ? 'mission' : facts.some((f) => f.lane === l && f.text.trim() && onFocus(f)) ? 'focus-voice' : 'off-focus';
   }
   if (offered.length > 0) emitLearnTurn({ spokeKinds: [], offered: [...offered], spoke: [], lead: null, held: [...held], faded: [], unproven: 0, unprovenLanes: [], proofUnsaid: [], heldWithProof: [], heldStaked: [], heldWhy, refusedWhy: {}, ownMove: null, ownLanes: [], ownProven: false, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
+  reportEverything(facts, turn, new Set(), (f) => heldWhy[f.lane] ?? null);
   return { pkg: { spoken: '', kept: [], dropped: [] }, offered, spoke: [], lead: null, held, faded: [], proofOf: new Map(), unproven: 0, unprovenLanes: [] };
 }
 

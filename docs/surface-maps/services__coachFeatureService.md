@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6301 lines · 30 exports · 68 importers · 82 tests · 4 audits**
+**6318 lines · 30 exports · 69 importers · 83 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -36,6 +36,7 @@
 - `src/services/coachFeatureService.trade.test.ts`
 - `src/services/coachNoRecall.test.ts`
 - `src/services/danyaBench.measure.test.ts`
+- `src/services/everythingEvents.test.ts`
 - `src/services/gameAnalysisService.ts`
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/gameThemeClassifier.ts`
@@ -347,7 +348,8 @@
 - `src/components/Coach/CoachGameReview.tsx:253`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:42`
 
-### `generateReviewNarration` (function) — 18 call sites
+### `generateReviewNarration` (function) — 19 call sites
+- `src/services/everythingEvents.test.ts:92`
 - `src/services/proofBacklog.report.test.ts:104`
 - `src/services/reviewBetterLineWhy.test.ts:58`
 - `src/services/reviewBetterLineWhy.test.ts:74`
@@ -426,6 +428,7 @@
 - `src/services/coachNoRecall.test.ts`
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/deeperThreatSeat.test.ts`
+- `src/services/everythingEvents.test.ts`
 - `src/services/exchangeLedger.test.ts`
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/gemCrushLines.computed.test.ts`

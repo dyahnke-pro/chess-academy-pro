@@ -23,6 +23,7 @@
 // Surfaces differ only in which steps they ask for and how many facts a step
 // may carry; the order and the choice are this file's.
 import type { SaidSet } from './gameStory';
+import { emitEverything, everythingListening } from './everythingEvents';
 import { stakeValue, isStaked, stakeWc } from './factStakes';
 import { causeEffect } from './factRelations';
 import type { CoachFact } from './coachFact';
@@ -267,5 +268,16 @@ export function composeThought(
     keptVoice.push(k);
   }
   if (memory) for (const key of spokenSentenceKeys({ kept: keptVoice })) memory.keys.add(key);
+  // EVERYTHING THE THOUGHT WEIGHED (the owner's drawer, `everythingEvents`).
+  if (everythingListening()) {
+    emitEverything({
+      surface,
+      door: 'composer',
+      lines: [
+        ...kept.map((f) => ({ computer: `${f.computer} (${f.source})`, text: f.text, said: true, why: null, fen: f.fen })),
+        ...held.map((h) => ({ computer: `${h.fact.computer} (${h.fact.source})`, text: h.fact.text, said: false, why: h.why, fen: h.fact.fen })),
+      ],
+    });
+  }
   return { spoken: joinSpoken(keptVoice), kept, held };
 }

@@ -45,6 +45,7 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { habitForTag, TAG_STEP } from './thinkingSteps';
 import type { WeaknessSignal } from './weaknessSignal';
 import { emitCoachDecision, type LearnTurnTag } from './coachDecisionEvents';
+import { emitEverything, everythingListening } from './everythingEvents';
 import type { MoveAdviceVerdict } from './nextMoveAdvice';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { decideTurn, VERDICT_TURN_CP, type LaneFact, type LearnLane, type TurnDecision } from './learnTurnDoor';
@@ -372,6 +373,22 @@ function emit(
     leadStaked: d.spoken.length > 0 ? isStaked(lead?.stakes) : null,
     supportLinks: after.reduce((acc, f) => { acc[linkOf(f)] += 1; return acc; }, { 'cause-effect': 0, square: 0, none: 0 }),
   });
+  // EVERYTHING THE MOMENT WEIGHED (the owner's drawer, `everythingEvents`):
+  // every fact handed in, by its computer, said or quiet and why.
+  if (everythingListening()) {
+    const quietWhy = new Map(d.quiet.map((q) => [q.text, q.by ? `${q.why} by "${q.by}"` : q.why]));
+    emitEverything({
+      surface: posture,
+      door: 'moment',
+      lines: [
+        ...facts.filter((f) => f.text.trim()).map((f) => {
+          const said = d.spoken.includes(f.text);
+          return { computer: f.computer, text: f.text, said, why: said ? null : (quietWhy.get(f.text) ?? d.reason), fen: f.fen };
+        }),
+        ...(d.method ? [{ computer: 'methodBeat', text: d.method, said: true, why: null }] : []),
+      ],
+    });
+  }
   return d;
 }
 

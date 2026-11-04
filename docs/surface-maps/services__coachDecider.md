@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**681 lines · 25 exports · 25 importers · 20 tests · 31 audits**
+**698 lines · 25 exports · 25 importers · 20 tests · 31 audits**
 
 ## Locked rules that govern this surface
 
@@ -77,7 +77,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:10027`
 - `src/components/Coach/CoachTeachPage.tsx:12066`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
-- `src/services/coachFeatureService.ts:2887`
+- `src/services/coachFeatureService.ts:2889`
 - `src/services/learnTurnDoor.mission.test.ts:23`
 - `src/services/learnTurnDoor.mission.test.ts:31`
 - `src/services/learnTurnDoor.mission.test.ts:53`
@@ -190,7 +190,7 @@
 - `src/services/teachingLayers.test.ts:120`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1817`
+- `src/services/coachFeatureService.ts:1818`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`
@@ -235,7 +235,7 @@
 - `src/components/Coach/CoachGameReview.tsx:1936`
 - `src/components/Coach/CoachTeachPage.tsx:8910`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:3076`
+- `src/services/coachFeatureService.ts:3078`
 - `src/services/coachSurfaceScorecard.report.test.ts:113`
 - `src/services/coachSurfaceScorecard.report.test.ts:135`
 - `src/services/computedVoiceAudit.report.test.ts:310`
@@ -245,7 +245,7 @@
 - `src/services/dnaDoor.test.ts:51`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/laneReachability.test.ts:128`
-- `src/services/learnTurnDoor.ts:747`
+- `src/services/learnTurnDoor.ts:748`
 - `src/services/openingStoryWholeBeat.test.ts:65`
 - `src/services/openingStoryWholeBeat.test.ts:70`
 - `src/services/outpostOneKey.test.ts:22`
@@ -253,7 +253,7 @@
 - `src/services/ruleGradeFen.test.ts:9`
 - `src/services/ruleGradeFen.test.ts:12`
 - `src/services/speedRunReads.scale.test.ts:41`
-- `src/services/thoughtComposer.ts:258`
+- `src/services/thoughtComposer.ts:259`
 - `src/services/voicePackage.dependentFact.test.ts:22`
 - `src/services/voicePackage.dependentFact.test.ts:25`
 - `src/services/voicePackage.dependentFact.test.ts:28`
@@ -329,7 +329,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:10138`
 - `src/components/Coach/CoachTeachPage.tsx:12122`
 - `src/components/Coach/CoachTeachPage.tsx:12209`
-- `src/services/learnTurnDoor.ts:1229`
+- `src/services/learnTurnDoor.ts:1250`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:11925`
@@ -363,7 +363,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:11938`
 - `src/components/Coach/CoachTeachPage.tsx:12135`
 - `src/services/claimKeysLooseCount.test.ts:34`
-- `src/services/coachFeatureService.ts:3077`
+- `src/services/coachFeatureService.ts:3079`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/learnTurnDoor.phaseWave.test.ts:134`
 - `src/services/learnTurnDoor.test.ts:647`
@@ -373,8 +373,8 @@
 - `src/services/os11RootCauses5And6.replay.test.ts:34`
 - `src/services/os11RootCauses5And6.replay.test.ts:47`
 - `src/services/outpostOneKey.test.ts:20`
-- `src/services/thoughtComposer.ts:265`
-- `src/services/thoughtComposer.ts:269`
+- `src/services/thoughtComposer.ts:266`
+- `src/services/thoughtComposer.ts:270`
 - `src/services/voicePackage.test.ts:399`
 - `src/services/voicePackage.test.ts:408`
 - `src/services/voicePackage.test.ts:420`
@@ -402,7 +402,7 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts:112`
 - `src/services/learnTurnDoor.phaseWave.test.ts:126`
 - `src/services/learnTurnDoor.phaseWave.test.ts:135`
-- `src/services/learnTurnDoor.ts:1210`
+- `src/services/learnTurnDoor.ts:1231`
 - `src/services/os11RootCauses5And6.replay.test.ts:31`
 - `src/services/os11RootCauses5And6.replay.test.ts:61`
 - `src/services/os11RootCauses5And6.replay.test.ts:65`
@@ -412,7 +412,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:10070`
 - `src/components/Coach/CoachTeachPage.tsx:10221`
 - `src/hooks/usePhaseNarration.ts:238`
-- `src/services/learnTurnDoor.ts:577`
+- `src/services/learnTurnDoor.ts:578`
 - `src/test/learnDoorFixtures.ts:36`
 
 ### `FACT_ROLE` (re-export) — 0 call sites
