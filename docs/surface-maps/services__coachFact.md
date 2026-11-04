@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**501 lines · 17 exports · 19 importers · 3 tests · 0 audits**
+**496 lines · 16 exports · 19 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -110,9 +110,6 @@
 - `src/services/reviewFacet.ts:73`
 - `src/services/teachingFact.ts:91`
 - `src/test/doorFact.ts:24`
-
-### `gapOf` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `COMPUTER_CATALOG` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

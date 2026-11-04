@@ -71,11 +71,10 @@
 ### `NO_STAKES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `isStaked` (function) — 10 call sites
+### `isStaked` (function) — 9 call sites
 - `src/services/coachDecider.ts:361`
 - `src/services/coachDecider.ts:364`
 - `src/services/coachFact.test.ts:102`
-- `src/services/coachFact.ts:180`
 - `src/services/counterThreatStakes.test.ts:15`
 - `src/services/learnTurnDoor.test.ts:761`
 - `src/services/learnTurnDoor.ts:816`

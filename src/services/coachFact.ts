@@ -20,7 +20,7 @@
 import type { FactKind } from './reviewFacetRank';
 import type { ThoughtStep } from './thoughtComposer';
 import type { AspectKind } from './reviewMoveBriefing';
-import { NO_STAKES, isStaked, type FactStakes, type NoStakes, type Stakes } from './factStakes';
+import { NO_STAKES, type NoStakes, type Stakes } from './factStakes';
 import type { FactProof } from './proof';
 import type { SpokenLine } from './voicePackage';
 import type { WeaknessSignal } from './weaknessSignal';
@@ -173,11 +173,6 @@ const GROUP_NO_STAKES: Record<FactGroup, NoStakes> = {
  *  its group's reason for none. */
 export function stakesOf(kind: CoachFactKind, measured: Stakes | null | undefined): Stakes {
   return measured ?? GROUP_NO_STAKES[FACT_GROUP[kind]];
-}
-/** The gap a fact carries, or null when it carries a reason instead — for a
- *  reader that weighs gaps. */
-export function gapOf(s: Stakes): FactStakes | null {
-  return isStaked(s) ? s : null;
 }
 
 /** A computer that hands the one composer facts: where it lives and what it
