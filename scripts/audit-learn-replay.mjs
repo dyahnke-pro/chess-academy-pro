@@ -100,6 +100,17 @@ for (let i = 0; i < sans.length; i += 1) {
   const movedAt = Date.now();
   if (profiling) await call('/profile?action=start');
   const t = await call(`/turn?san=${encodeURIComponent(sans[i])}`);
+  // A FOCUS OR MISSION PAUSE (Try again / Play on) holds the board until the
+  // student answers; the game as played let the move stand, so press Play on
+  // and give the dictated reply time to land (REPLAY_PLAY_ON=0 leaves it).
+  if (process.env.REPLAY_PLAY_ON !== '0') {
+    for (let k = 0; k < 3; k += 1) {
+      const pressed = await call('/js', "const b = document.querySelector('[data-testid=\"focus-play-on\"],[data-testid=\"mission-play-on\"]'); if (b) { b.click(); return true; } return false;");
+      if (pressed !== true) break;
+      console.log('   ⏯ pressed Play on');
+      await new Promise((r) => setTimeout(r, 4000));
+    }
+  }
   if (profiling) {
     const p = await call(`/profile?action=stop&out=${encodeURIComponent(`audit-reports/learn-replay-${game.id}-move${moveNo}.cpuprofile`)}`);
     console.log(`\n[profile] move ${moveNo} — main thread per 250 ms from the move (raw: ${p.out})`);
