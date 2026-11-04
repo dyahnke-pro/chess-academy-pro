@@ -10024,12 +10024,38 @@ export function CoachTeachPage({ mode }: {
       } catch { return null; }
     })();
     const threatCostRead = threatLine ? readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares }) : null;
+    // THE KING WALKED BY HAND (kingWalk, his Scotch Gambit game 2026-11-04),
+    // on both moves of the turn — the student's and their reply: where the
+    // king goes when it must walk, the castling-by-hand plan and its steps,
+    // the bishop kept home, the rule of thumb. A read that would name the
+    // student's next move speaks its held form (LEARN NAMES NO MOVE UNASKED).
+    const kingWalkFacts = ((): Array<{ namesStudentMove: boolean; lane: 'kingSquares' | 'kingWalk' | 'keptHome' | 'kingRule'; computer: CoachFact['computer']; text: string; fen: string; squares: readonly string[]; claims: readonly string[]; proof: CoachFact['proof'] }> => {
+      const h = args.historyAfterReply;
+      if (h.length < 2) return [];
+      try {
+        const b = new Chess();
+        for (const san of h.slice(0, -2)) b.move(san);
+        const plies = [{ fenBefore: b.fen(), san: h[h.length - 2] }];
+        b.move(h[h.length - 2]);
+        plies.push({ fenBefore: b.fen(), san: h[h.length - 1] });
+        const lane = { kingSquares: 'kingSquares' as const, castleByHand: 'kingWalk' as const, keptHome: 'keptHome' as const, kingFromCentre: 'kingRule' as const };
+        return plies.flatMap(({ fenBefore, san }) => ([
+          ...readBoardAll('kingSquares', { fenBefore, san, student: studentCC, lines: null, bestUci: null }).map((f) => ({ f, id: 'kingSquares' as const })),
+          ...readBoardAll('castleByHand', { fenBefore, san, student: studentCC }).map((f) => ({ f, id: 'castleByHand' as const })),
+          ...readBoardAll('keptHome', { fenBefore, san, student: studentCC }).map((f) => ({ f, id: 'keptHome' as const })),
+          ...readBoardAll('kingFromCentre', { fenBefore, san, student: studentCC }).map((f) => ({ f, id: 'kingFromCentre' as const })),
+        ]).map(({ f, id }) => (f.namesStudentMove && f.heldForm
+          ? { namesStudentMove: false, lane: lane[id], computer: f.computer, text: f.heldForm.text, fen: f.fen, squares: f.heldForm.squares, claims: f.claims, proof: f.heldForm.proof }
+          : { namesStudentMove: f.namesStudentMove, lane: lane[id], computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof })));
+      } catch { return []; }
+    })();
     const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, slipCp: args.slipCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [
       ...(tacticLine ? [{ lane: 'tactic' as const, computer: tacticComputer, namesStudentMove: namesPlayableStudentMove(tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE), text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim || tacticLoose.length ? [...(tacticClaim ? [tacticClaim] : []), ...tacticLoose] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ namesStudentMove: namesPlayableStudentMove(threatNames), lane: 'threat' as const, computer: threatComputer, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), claims: [...new Set([...(threatClaim ? [threatClaim] : []), ...threatClaims, ...(threatCostRead?.claims ?? [])])], stakes: threatCostRead?.stakes ?? undefined, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
       ...(countRead ? [{ namesStudentMove: false, lane: 'countMethod' as const, computer: countRead.computer, text: countRead.text, fen: args.fenAfterReply, squares: countRead.squares, claims: countRead.claims, stakes: countRead.stakes ?? undefined, role: countRead.role, proof: countRead.proof }] : []),
       ...(lastHereRead ? [{ namesStudentMove: false, computer: lastHereRead.computer, lane: readKey(lastHereRead).startsWith('last-here:same:') ? 'sameAsLastTime' as const : 'lastTimeHere' as const, text: lastHereRead.text, fen: lastHereRead.fen, claims: lastHereRead.claims, proof: lastHereRead.proof }] : []),
       ...(bookMoveRead ? [{ namesStudentMove: false, lane: 'bookMove' as const, computer: bookMoveRead.computer, text: bookMoveRead.text, fen: bookMoveRead.fen, squares: bookMoveRead.squares, claims: bookMoveRead.claims, role: bookMoveRead.role, proof: bookMoveRead.proof, ...(bookMoveRead.skill ? { skill: bookMoveRead.skill } : {}) }] : []),
+      ...kingWalkFacts,
       ...(announceLine ? [{ namesStudentMove: false, lane: 'opening' as const, computer: 'openingAnnouncementForGame' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),
       // Rate-matched Danya behavior — board-truth. MERGED with the positional
       // read into ONE board-read lane (David 2026-09-13: "computer and observation

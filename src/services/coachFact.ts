@@ -389,6 +389,10 @@ export const COMPUTER_CATALOG = {
   buildPlayCommentary: { file: 'services/playCommentary.ts', says: 'the computed beat on the live board: a tactic, a threat or the move\'s point' },
   detectBehaviors: { file: 'services/danyaBehaviors.ts', says: 'a board habit worth naming: an outpost, the bishop pair, a pawn break' },
   buildPositionalRead: { file: 'services/positionalRead.ts', says: 'the positional read of the live board: king, plan, files, outposts' },
+  castleByHandMove: { file: 'services/kingWalk.ts', says: 'a king that lost castling walked to safety by hand: the plan, the move that clears its route, each step, and the walk done' },
+  kingFromCentre: { file: 'services/kingWalk.ts', says: 'the rule of thumb on a king walked out of the centre: further from the centre is safer' },
+  keptHome: { file: 'services/kingWalk.ts', says: 'a bishop left at home on purpose while the king walks: it blocks the check they can give' },
+  kingSquares: { file: 'services/kingWalk.ts', says: 'in check with only king moves: the squares that walk into a forced mate, and the square chosen' },
 } satisfies Record<string, CatalogRow>;
 
 export type ComputerName = keyof typeof COMPUTER_CATALOG;

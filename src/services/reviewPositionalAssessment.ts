@@ -25,6 +25,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { isMinorAtHome, developmentScore } from './development';
 import { netPieceWords } from './exchangeLedger';
+import { findFrozenPieces, frozenPieceWords } from './frozenPiece';
 
 interface PositionalAssessment {
   /** Student-perspective verdict word from the eval, or null when unclear. */
@@ -38,6 +39,10 @@ interface PositionalAssessment {
    *  move (Learn walk, fresh Nimzo game, 2026-09-26: said on three moves
    *  running through two lanes). Same order as `reasons`. */
   reasonKeys: Array<string | null>;
+  /** For each reason, the squares it names where it knows them (the frozen
+   *  piece, its line and the push that hits it) — what the verdict points at
+   *  on the board. Same order as `reasons`. */
+  reasonSquares: string[][];
   /** THE OTHER SIDE OF THE SCALE (overall verdict as ONE comparison, census
    *  P3): the assets of the side the verdict does NOT favour, phrased from the
    *  student's seat, with their say-once keys. Absent on older callers. */
@@ -88,7 +93,7 @@ export function assessPositionalEdge(
    *  SETTLED, so a recapture still to come is not an edge (WO-MATERIAL-01). */
   lastMove?: LastMove | null,
 ): PositionalAssessment {
-  const empty: PositionalAssessment = { verdict: null, reasons: [], reasonKeys: [] };
+  const empty: PositionalAssessment = { verdict: null, reasons: [], reasonKeys: [], reasonSquares: [] };
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return empty; }
   const struct = describeStructure(fen);
@@ -118,7 +123,7 @@ export function assessPositionalEdge(
     : assetsFor(chess, struct, all, enemy, me, 'theirs', lm);
 
   return {
-    verdict, reasons: assets.map((a) => a.text), reasonKeys: assets.map((a) => a.key),
+    verdict, reasons: assets.map((a) => a.text), reasonKeys: assets.map((a) => a.key), reasonSquares: assets.map((a) => a.squares ?? []),
     counter: counter.map((a) => a.text), counterKeys: counter.map((a) => a.key),
   };
 }
@@ -156,14 +161,14 @@ function assetsFor(
   other: Color,
   who: 'yours' | 'theirs',
   lastMove: LastMove | null,
-): Array<{ text: string; key: string | null }> {
-  const found: Array<{ text: string; key: string | null }> = [];
+): Array<{ text: string; key: string | null; squares?: string[] }> {
+  const found: Array<{ text: string; key: string | null; squares?: string[] }> = [];
   const own = who === 'yours';
   // The seats as Learn's positional read names them: the side holding the
   // asset, and the side whose weakness it is.
   const holder = own ? 'student' : 'opponent';
   const loser = own ? 'opponent' : 'student';
-  const reasons = { push: (text: string, key: string | null = null): void => { found.push({ text, key }); } };
+  const reasons = { push: (text: string, key: string | null = null, squares?: string[]): void => { found.push({ text, key, ...(squares ? { squares } : {}) }); } };
   const you = own ? 'you' : 'they';
   const your = own ? 'your' : 'their';
   const their = own ? 'their' : 'your';
@@ -197,6 +202,16 @@ function assetsFor(
   const central = (sq: string | undefined): boolean => !!sq && (sq[0] === 'd' || sq[0] === 'e');
   if (queensOn && castled(kingOf(side), side) && central(kingOf(other))) {
     reasons.push(`${your} king is tucked away and ${own ? 'theirs' : 'yours'} is still in the centre`, `${loser}-king-centre`);
+  }
+
+  // 0c. A PIECE FROZEN IN FRONT OF A MATE (Danya, his Scotch Gambit game: "the
+  // main reason you're worse is this battery — a permanent strain that doesn't
+  // let your knight move; if that knight is eliminated, you face very serious
+  // threats along the diagonal"): a line piece of this side looks through one
+  // of the other side's pieces at a mate behind it, with the push that would
+  // hit the frozen piece. A pin no material count shows.
+  for (const fp of findFrozenPieces(chess.fen(), side)) {
+    reasons.push(frozenPieceWords(fp, chess, own ? 'yours' : 'theirs'), `${loser}-frozen-${fp.frozen}`, [fp.line, ...(fp.battery ? [fp.battery] : []), fp.frozen, fp.behind, ...(fp.lever ? [fp.lever] : [])]);
   }
 
   // 1. Bishop pair — two bishops vs one-or-none, on a reasonably open board.
@@ -334,7 +349,7 @@ function freshAssessment(fen: string, studentColorWB: Color, studentPovEvalCp: n
   const keep = a.reasonKeys.map((k) => k === null || !heard.has(k));
   const keepC = (a.counterKeys ?? []).map((k) => k === null || !heard.has(k));
   return {
-    verdict: a.verdict, reasons: a.reasons.filter((_, i) => keep[i]), reasonKeys: a.reasonKeys.filter((_, i) => keep[i]),
+    verdict: a.verdict, reasons: a.reasons.filter((_, i) => keep[i]), reasonKeys: a.reasonKeys.filter((_, i) => keep[i]), reasonSquares: a.reasonSquares.filter((_, i) => keep[i]),
     counter: (a.counter ?? []).filter((_, i) => keepC[i]), counterKeys: (a.counterKeys ?? []).filter((_, i) => keepC[i]),
   };
 }

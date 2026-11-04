@@ -52,6 +52,7 @@ import type { FactKind } from './reviewFacetRank';
 import type { GamePhase } from '../types';
 import { packageForRegister } from './hintRegister';
 import { FUNDAMENTAL_TAG } from './principleAttribution';
+import { castleByHandMove, kingFromCentre, keptHome, kingSquares } from './kingWalk';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -147,6 +148,18 @@ export interface BoardContexts {
    *  `namesStudentMoves`: a live board holds every fact that would name a move
    *  the student can play now. */
   openingStory: { history: readonly string[]; fen: string; student: Color; namesStudentMoves: boolean };
+  /** A king that lost castling, walked by hand: what this move (`san` on
+   *  `fenBefore`, either seat) did for the walk — the plan, the square it took
+   *  from their knight, a step, the walk done. */
+  castleByHand: { fenBefore: string; san: string; student: Color };
+  /** The rule of thumb on a king walked out of the centre (either seat). */
+  kingFromCentre: { fenBefore: string; san: string; student: Color };
+  /** A bishop left home while the king walks: the check it would block. */
+  keptHome: { fenBefore: string; san: string; student: Color };
+  /** In check with only king moves: the squares mated and the square chosen.
+   *  `lines` — the mover's fan before the move where the surface has one;
+   *  `bestUci` — the engine's best move there. */
+  kingSquares: { fenBefore: string; san: string; student: Color; lines: ReadonlyArray<{ moves: readonly string[] }> | null; bestUci: string | null };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -551,6 +564,73 @@ export const BOARD_COMPUTERS = {
       tactics: TACTICS_NA,
       weaknesses: { not: 'the record half is the classifier: missedTacticService.detectTacticType asks geometryMotif' },
     },
+  },
+  castleByHand: {
+    // His Scotch Gambit game, 2026-11-04: "the plan of castling by hand: the
+    // king back up to f7, the rook swung to f8 or e8, and the king tucked back
+    // to g8" · "h6 first". On a live board the route names the student's next
+    // moves, so it is held there in a form that names none (`heldForm`).
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const mover = new Chess(fenBefore).turn();
+      const mine = mover === student;
+      const s = castleByHandMove(fenBefore, san, mine ? 'your' : 'their');
+      if (!s) return null;
+      const fen = boardAfter(fenBefore, san) ?? fenBefore;
+      const held = mine && s.kind !== 'done'
+        ? { text: s.kind === 'prep' ? 'That pawn move takes a square away from their knight, so your king can walk toward safety without a check.' : 'Your king has lost castling — walk it to safety by hand, a rook coming across behind it.', proof: NO_PROOF.method, squares: [] as string[] }
+        : null;
+      return fact({ key: s.key, claims: [s.key], text: s.text, proof: squaresProof(s.text, s.squares) ?? NO_PROOF.description, squares: s.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: !!held, thread: LOCAL_THREAD, fen, ...(held ? { heldForm: held } : {}) });
+    }),
+    computer: 'castleByHandMove',
+    kind: 'plan-now',
+    phase: NOT_ENDING,
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { not: 'owed — chat answers a king question through positionAsk, which reads castleByHand' }, tactics: TACTICS_NA, weaknesses: { not: 'the record half is positionPosed: castleByHand poses king-stuck-center' } },
+  },
+  kingFromCentre: {
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const r = kingFromCentre(fenBefore, san);
+      if (!r) return null;
+      const mine = new Chess(fenBefore).turn() === student;
+      return fact({ key: r.key, claims: [r.key], text: r.text, proof: NO_PROOF.method, squares: r.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'kingFromCentre',
+    kind: 'nugget',
+    phase: NOT_ENDING,
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'a rule of thumb poses no question of its own; the king walk it closes is recorded through castleByHand' } },
+  },
+  keptHome: {
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const mover = new Chess(fenBefore).turn();
+      const mine = mover === student;
+      const r = keptHome(fenBefore, san, mine ? 'your' : 'their');
+      if (!r) return null;
+      // The block is a move the student may play next: held on a live board
+      // in a form that names no square.
+      const held = mine ? { text: 'Your bishop stays home for now — it is there to block a queen check.', proof: NO_PROOF.method, squares: [] as string[] } : null;
+      return fact({ key: r.key, claims: [r.key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: !!held, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore, ...(held ? { heldForm: held } : {}) });
+    }),
+    computer: 'keptHome',
+    kind: 'held',
+    phase: NOT_ENDING,
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'a piece kept home on purpose is a choice, not a skill the board poses' } },
+  },
+  kingSquares: {
+    // His 7…Kf8: "obviously not g6 or f6 — you'd get mated … the king to f8 is
+    // the correct one". The square was chosen already, so nothing is held.
+    read: ({ fenBefore, san, student, lines, bestUci }, fact) => safe(() => {
+      const mine = new Chess(fenBefore).turn() === student;
+      const r = kingSquares(fenBefore, san, mine ? 'your' : 'their', lines, bestUci);
+      if (!r) return null;
+      return fact({ key: r.key, claims: [r.key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'kingSquares',
+    kind: 'contrast',
+    phase: ANY,
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'the record half is capabilitiesPosed: a forced king walk with a mated square poses missed-opponents-threat' } },
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };
 

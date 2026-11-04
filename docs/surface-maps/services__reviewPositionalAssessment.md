@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**341 lines · 6 exports · 12 importers · 10 tests · 0 audits**
+**356 lines · 6 exports · 13 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/coachFeatureService.ts`
+- `src/services/frozenPiece.test.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnWalkNimzo.test.ts`
@@ -28,21 +29,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `verdictBand` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:981`
+- `src/services/coachFeatureService.ts:1057`
 - `src/services/exchangeLedger.test.ts:99`
 - `src/services/exchangeLedger.test.ts:101`
 
-### `assessPositionalEdge` (function) — 28 call sites
-- `src/services/coachFeatureService.ts:3465`
+### `assessPositionalEdge` (function) — 29 call sites
+- `src/services/coachFeatureService.ts:3719`
 - `src/services/exchangeLedger.test.ts:68`
 - `src/services/exchangeLedger.test.ts:69`
 - `src/services/exchangeLedger.test.ts:76`
 - `src/services/exchangeLedger.test.ts:99`
+- `src/services/frozenPiece.test.ts:27`
 - `src/services/materialSites.test.ts:75`
 - `src/services/phaseVerdict.test.ts:10`
 - `src/services/planPrescriptions.test.ts:84`
 - `src/services/planPrescriptions.test.ts:91`
-- `src/services/reviewFullData.ts:933`
+- `src/services/reviewFullData.ts:983`
 - `src/services/reviewPositionalAssessment.test.ts:4`
 - `src/services/reviewPositionalAssessment.test.ts:7`
 - `src/services/reviewPositionalAssessment.test.ts:9`
@@ -60,23 +62,23 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewPositionalAssessment.test.ts:80`
 - `src/services/standingRefrains.test.ts:80`
 - `src/services/standingRefrains.test.ts:110`
-- `src/services/walkOct2a.test.ts:88`
+- `src/services/walkOct2a.test.ts:89`
 
 ### `materialEdgeWords` (function) — 5 call sites
-- `src/services/groundedAnswer.ts:2468`
-- `src/services/groundedAnswer.ts:2469`
+- `src/services/groundedAnswer.ts:2486`
+- `src/services/groundedAnswer.ts:2487`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:31`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:34`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:37`
 
 ### `phaseStockKey` (function) — 4 call sites
-- `src/services/learnTurnDoor.phaseWave.test.ts:122`
+- `src/services/learnTurnDoor.phaseWave.test.ts:123`
 - `src/services/phaseVerdict.test.ts:37`
 - `src/services/phaseVerdict.test.ts:39`
-- `src/services/positionFacts.ts:1054`
+- `src/services/positionFacts.ts:1119`
 
 ### `phaseVerdictLine` (function) — 14 call sites
-- `src/services/learnTurnDoor.phaseWave.test.ts:120`
+- `src/services/learnTurnDoor.phaseWave.test.ts:121`
 - `src/services/learnWalkNimzo.test.ts:21`
 - `src/services/learnWalkNimzo.test.ts:27`
 - `src/services/phaseVerdict.test.ts:16`
@@ -86,20 +88,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:36`
 - `src/services/phaseVerdict.test.ts:37`
 - `src/services/phaseVerdict.test.ts:39`
-- `src/services/positionFacts.ts:1051`
-- `src/services/reviewFullData.ts:1541`
+- `src/services/positionFacts.ts:1116`
+- `src/services/reviewFullData.ts:1555`
 - `src/services/reviewPositionalAssessment.test.ts:88`
 - `src/services/reviewPositionalAssessment.test.ts:93`
 
 ### `phaseVerdictKeys` (function) — 4 call sites
-- `src/services/learnTurnDoor.phaseWave.test.ts:122`
+- `src/services/learnTurnDoor.phaseWave.test.ts:123`
 - `src/services/learnWalkNimzo.test.ts:22`
 - `src/services/learnWalkNimzo.test.ts:31`
-- `src/services/positionFacts.ts:1054`
+- `src/services/positionFacts.ts:1119`
 
 ## Tests
 
 - `src/services/exchangeLedger.test.ts`
+- `src/services/frozenPiece.test.ts`
 - `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/materialSites.test.ts`

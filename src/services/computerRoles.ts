@@ -50,6 +50,11 @@ export function saidBeforeTheMove(role: ComputerRole | undefined): boolean {
 }
 
 export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
+  // ── the king walked by hand (`kingWalk`, 2026-11-04) ──
+  kingSquares: { computer: 'kingWalk.kingSquares', tag: 'missed-opponents-threat', held: { state: 'wired', via: 'recordMoveEvidence (capabilitiesPosed)' }, broken: SLIP, askable: { state: 'na', why: 'said about the king move just played — the check itself asked the question' } },
+  kingWalk: { computer: 'kingWalk.castleByHandMove', tag: 'king-stuck-center', held: { state: 'wired', via: 'recordMoveEvidence (capabilitiesPosed)' }, broken: SLIP, askable: { state: 'wired', via: 'isPositionAssessmentQuestion' } },
+  keptHome: { computer: 'kingWalk.keptHome', tag: null, held: { state: 'na', why: 'a bishop kept home on purpose is a choice the student made, not a question the board posed' }, broken: { state: 'na', why: 'developing that bishop instead is no miss the board can prove' }, askable: { state: 'na', why: 'said about the king move just played' } },
+  kingRule: { computer: 'kingWalk.kingFromCentre', tag: null, held: DESC('a rule of thumb on the king walk just played'), broken: DESC('a rule of thumb'), askable: { state: 'na', why: 'a rule of thumb said after the king walked' } },
   // ── batch 1 (opening equivalence, order and timing) — `orderTeaching` ──
   openingEquivalence: { computer: 'openingEquivalence', tag: null, held: { state: 'na', why: 'a name for the board — the opening it is with moves thrown in — no answer of the student\'s to record' }, broken: { state: 'na', why: 'naming the reference opening poses no question the student can miss' }, askable: { state: 'wired', via: 'orderReads (depthClauses)' } },
   tradeLedger: { computer: 'tempoCount.tradeLedger', tag: 'tempo-handed', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'orderReads (captureTooEarly)' } },

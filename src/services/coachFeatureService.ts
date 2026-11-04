@@ -2521,6 +2521,9 @@ function* reviewSegmentSteps(
           // What their move aims at is a threat Review says through its own
           // producer ([threat]); the lesson says it as the move's fact.
           && f.computer !== 'theirTarget'
+          // The king walked by hand: Review says it through its own facets
+          // (the registry's reads, both seats), so it is not said twice.
+          && f.source !== 'kingWalk'
           // The trip reads the line ahead as a plan; in a game the moves that
           // followed were answers to the board ("Qc3 sends the queen on to e4,
           // by way of b3 and f3" — hindsight), so Review leaves it to lessons.
@@ -2725,6 +2728,11 @@ function* reviewSegmentSteps(
           } else if (role === 'plan-thread:stop') {
             keep(f, adoptPlanThread);
           } else if (role === 'plan-thread:step') {
+            keep(f);
+          } else {
+            // Another plan computer's line through the one registry (the king
+            // walked by hand, 2026-11-04): said once by its own ledger key,
+            // never silently dropped for not being the plan thread's.
             keep(f);
           }
           continue;

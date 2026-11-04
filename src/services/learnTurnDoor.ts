@@ -153,7 +153,12 @@ export type LearnLane =
   | 'structureJudgement'
   // ── memory: this position, from the student's own games ──
   | 'lastTimeHere'
-  | 'sameAsLastTime';
+  | 'sameAsLastTime'
+  // ── the king walked by hand (kingWalk, his Scotch Gambit game 2026-11-04) ──
+  | 'kingSquares'
+  | 'kingWalk'
+  | 'keptHome'
+  | 'kingRule';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
@@ -213,6 +218,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   openingEquivalence: 'name', tradeLedger: 'affirm', notYetPlayed: 'affirm', holdResource: 'affirm', captureChoice: 'affirm',
   breakRace: 'affirm', kickMap: 'point', patternFails: 'refute',
   lastTimeHere: 'affirm', sameAsLastTime: 'but',
+  kingSquares: 'affirm', keptHome: 'affirm', kingWalk: 'point', kingRule: 'point',
 };
 
 
@@ -313,6 +319,8 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   countMethod: phaseOfComputer(BOARD_COMPUTERS.countMethod.phase), timing: 'any', checkMethod: 'any', trade: 'any', kneeJerk: 'any', blunderCheck: 'any', mistakeHabit: 'any',
   autopilot: 'any', keepPressing: 'any', pawnEnding: 'any', strongChoice: 'any', tradeLedger: 'any',
   captureChoice: 'any', kickMap: 'any', breakRace: 'any', patternFails: 'any', structureJudgement: 'any',
+  kingSquares: phaseOfComputer(BOARD_COMPUTERS.kingSquares.phase), kingWalk: phaseOfComputer(BOARD_COMPUTERS.castleByHand.phase),
+  keptHome: phaseOfComputer(BOARD_COMPUTERS.keptHome.phase), kingRule: phaseOfComputer(BOARD_COMPUTERS.kingFromCentre.phase),
 };
 
 /** Is this lane's fact out of place on this board? */
@@ -322,6 +330,11 @@ export function laneOutOfPhase(lane: LearnLane, fen: string): boolean {
 }
 
 export const LEARN_LANES: Record<LearnLane, LaneRule> = {
+  // ── the king walked by hand (kingWalk, his Scotch Gambit game 2026-11-04) ──
+  kingSquares: { factKind: BOARD_COMPUTERS.kingSquares.kind, kind: 'computed', why: 'in check with only king moves: the squares that walk into a forced mate, and the one chosen', lead: 70 },
+  kingWalk: { factKind: BOARD_COMPUTERS.castleByHand.kind, kind: 'plan', why: 'a king that lost castling walked to safety by hand: the plan, the square cleared for it, each step, the walk done', lead: 66 },
+  keptHome: { factKind: BOARD_COMPUTERS.keptHome.kind, kind: 'computed', why: 'a bishop left home on purpose while the king walks: it blocks the check they can give', lead: 62 },
+  kingRule: { factKind: BOARD_COMPUTERS.kingFromCentre.kind, kind: 'computed', why: 'the rule of thumb on a king walked out of the centre: further from the centre is safer', lead: 45 },
   // ── batch 1 (opening equivalence, order and timing) ──
   // The named opening this board is with moves thrown in or the colours
   // reversed — rides with the name, said once a game.

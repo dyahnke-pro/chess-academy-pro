@@ -994,7 +994,10 @@ export function computeMoveFacets(
       && /^balanced$/i.test(assess.verdict ?? '');
     if (assess.verdict && !emptyOpeningVerdict) {
       const why = assess.reasons.length ? `: ${assess.reasons.join('; ')}` : '';
-      put('assessPositionalEdge', 'verdict', `You're ${assess.verdict}${why}.`);
+      const vf = put('assessPositionalEdge', 'verdict', `You're ${assess.verdict}${why}.`);
+      // What the reasons point at on the board (the frozen piece and its line).
+      const named = [...new Set(assess.reasonSquares.flat())];
+      if (named.length) recSquares(vf, named);
     }
   }
 
@@ -1513,6 +1516,14 @@ export function computeMoveFacets(
     // used to be a habit on Review, a choice on Learn and a rule on the live
     // read (WO-STORY-MATRIX-01 P1-4) — said once through the `hint:` ledger.
     const add = (f: (CoachFact & { kind: FacetTag }) | undefined): void => { if (f) facetOf(f, `hint:${readKey(f)}`); };
+    // THE KING WALKED BY HAND, both seats (his Scotch Gambit game, 2026-11-04):
+    // where the king goes when it must walk, the castling-by-hand plan and
+    // each step of it, the bishop kept home to block a check, and the rule of
+    // thumb when the king steps out of the centre.
+    add(readBoardAll('kingSquares', { fenBefore, san, student: studentColorWB, lines: ctx.bestLineUci.length ? [{ moves: ctx.bestLineUci }] : null, bestUci: ctx.bestLineUci[0] ?? null })[0]);
+    add(readBoardAll('castleByHand', { fenBefore, san, student: studentColorWB })[0]);
+    add(readBoardAll('keptHome', { fenBefore, san, student: studentColorWB })[0]);
+    add(readBoardAll('kingFromCentre', { fenBefore, san, student: studentColorWB })[0]);
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.
       add(readBoardAll('obligationLifted', { fenBefore, fenAfter, student: studentColorWB })[0]);

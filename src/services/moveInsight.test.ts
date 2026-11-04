@@ -3,7 +3,8 @@
 // checked the king???").
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, positionPosed, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, pawnHook, hookCreated, castleByHand, fileToOpen, pawnCanGuard, emptyThreat, looseOwnPieces, noRetreat, materialPlan,  heavyTiedDown, skewer,  diagonalContest,
+import { castleByHand } from './kingWalk';
+import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, positionPosed, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, pawnHook, hookCreated, fileToOpen, pawnCanGuard, emptyThreat, looseOwnPieces, noRetreat, materialPlan,  heavyTiedDown, skewer,  diagonalContest,
 } from './moveInsight';
 import { walkableLine } from './proof';
 
@@ -242,7 +243,7 @@ describe('the full speed-run read — new computers, both ways', () => {
   });
   it('castling by hand: rights gone, king in the centre, queens on', () => {
     const fen = 'r1bqk2r/ppp2ppp/8/8/8/8/PPP2PPP/R1BQK2R b - - 0 1';
-    expect(castleByHand(fen, 'b')?.text).toMatch(/walk it to g8/);
+    expect(castleByHand(fen, 'b')?.text).toMatch(/castle it by hand: the king to f8, the pawn to g6, the king to g7, then a rook to e8 or f8/);
     expect(positionPosed(fen, {}).map((p) => p.tag)).toContain('king-stuck-center');
     expect(castleByHand('r1bqk2r/ppp2ppp/8/8/8/8/PPP2PPP/R1BQK2R b kq - 0 1', 'b')).toBeNull();
   });

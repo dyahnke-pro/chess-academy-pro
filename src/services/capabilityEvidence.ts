@@ -58,6 +58,7 @@ import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconcep
 import { positionOf } from '../utils/samePosition';
 import { memoOverTable, type TableMemo } from './tableMemo';
 import { evidenceMirror, slipMirror } from './recordMirror';
+import { kingSquareOutcome } from './kingWalk';
 import {
   holdRecords, holdState, NEVER_POSED, HOLD_WINDOW, HOLD_MIN_POSED, HOLD_GREEN, HOLD_SHORT,
   type HoldRecord,
@@ -467,6 +468,16 @@ export function capabilitiesPosed(
         seen.add('missed-opponents-threat');
         out.push({ tag: 'missed-opponents-threat', posedImportance: MATE_THREAT_POSED });
       }
+    } catch { /* an unreadable board posed nothing */ }
+  }
+  // A KING FORCED TO WALK WITH A MATE ON SOME SQUARES (kingWalk, 2026-11-04,
+  // his 7…Kf8: "obviously not g6 or f6 — you'd get mated"): the board asked
+  // "which square is safe?" — the same mate-threat question, filed under the
+  // tag the quiet-danger read uses. A mated square chosen is broken.
+  if (!seen.has('missed-opponents-threat')) {
+    try {
+      const k = kingSquareOutcome(fenBefore, playedSan);
+      if (k) { seen.add('missed-opponents-threat'); out.push({ tag: 'missed-opponents-threat', posedImportance: MATE_THREAT_POSED, outcome: k }); }
     } catch { /* an unreadable board posed nothing */ }
   }
   // A WON GAME WITH A STALEMATE ON THE BOARD (P3 heat map): the board asked

@@ -48,6 +48,7 @@ import { detectLatentDanger, latentDangerClause } from './latentDanger';
 import { findTrappedPiece } from './reviewTeachingPoints';
 import { detectNewThreat } from './groundedAnswer';
 import { kingReadsForBestLine, type KingReadId } from './kingAttackReads';
+import { castleByHand } from './kingWalk';
 
 /** Which capability each king read POSES — exhaustive over the reads, so a new
  *  read fails to compile until someone decides. Null: a standing fact the
@@ -863,34 +864,6 @@ export function hookCreated(fenBefore: string, san: string): { hook: string; paw
   if (pawnHook(fenBefore, them)) return null;
   const after = pawnHook(r.board.fen(), them);
   return after && after.hook === r.move.to ? { hook: after.hook, pawn: after.pawn } : null;
-}
-
-/**
- * CASTLING BY HAND (catalogue B2 — "…Kf7, …Re8, …Kg8"): the king has lost the
- * right to castle and still stands in the centre of its back rank with queens
- * on — walk it to the g-file shelter, a rook across behind it.
- */
-export function castleByHand(fen: string, me: 'w' | 'b'): { text: string; squares: string[] } | null {
-  let board: Chess;
-  try { board = new Chess(fen); } catch { return null; }
-  const rights = board.getCastlingRights(me);
-  if (rights.k || rights.q) return null;
-  const king = ownKing(board, me);
-  const home = me === 'w' ? 1 : 8;
-  if (!king || Number(king[1]) !== home || !'def'.includes(king[0])) return null;
-  const queens = board.board().flat().filter((c) => c && c.type === 'q').length;
-  if (queens === 0) return null;
-  const pawnRank = me === 'w' ? 2 : 7;
-  const shelter = ['g', 'h'].every((f) => {
-    const p = board.get(`${f}${pawnRank}` as Square);
-    return p && p.type === 'p' && p.color === me;
-  });
-  if (!shelter) return null;
-  const g = `g${home}`;
-  return {
-    text: `Your king has lost the right to castle — walk it to ${g} by hand, a step at a time, with a rook coming across behind it.`,
-    squares: [king, g],
-  };
 }
 
 /**

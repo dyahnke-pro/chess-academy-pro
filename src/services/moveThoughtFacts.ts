@@ -376,6 +376,23 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       }
     }
   }
+  // THE KING WALKED BY HAND (his Scotch Gambit game, 2026-11-04), through the
+  // one registry: where the king goes when it must walk, the castling-by-hand
+  // plan and each step, the bishop kept home to block a check, the rule of
+  // thumb. A lesson shows its line, so every move is named (the full text).
+  if (i.moverIsStudent !== undefined) {
+    const student = mine ? sideOf(i.fenBefore) : sideOf(fenAfter);
+    const kingReads: Array<{ f: CoachFact; idea: IdeaKind }> = [
+      ...readBoardAll('kingSquares', { fenBefore: i.fenBefore, san: i.san, student, lines: i.reads?.before ?? null, bestUci: i.reads?.before[0]?.moves[0] ?? null }).map((f) => ({ f, idea: 'choice' as IdeaKind })),
+      ...readBoardAll('castleByHand', { fenBefore: i.fenBefore, san: i.san, student }).map((f) => ({ f, idea: 'king-safety' as IdeaKind })),
+      ...readBoardAll('keptHome', { fenBefore: i.fenBefore, san: i.san, student }).map((f) => ({ f, idea: 'king-safety' as IdeaKind })),
+      ...readBoardAll('kingFromCentre', { fenBefore: i.fenBefore, san: i.san, student }).map((f) => ({ f, idea: 'king-safety' as IdeaKind })),
+    ];
+    for (const { f, idea } of kingReads) {
+      const { heldForm: _held, ...fact } = f;
+      facts.push({ ...fact, namesStudentMove: false, source: 'kingWalk', idea, weight: 60 });
+    }
+  }
   return withDecisionGap(facts, i, from, to, seat);
 }
 
