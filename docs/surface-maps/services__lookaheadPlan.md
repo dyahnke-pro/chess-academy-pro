@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1706 lines · 27 exports · 20 importers · 16 tests · 0 audits**
+**1706 lines · 28 exports · 21 importers · 17 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@
 - `src/services/lookaheadPlan.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/pinConsequence.test.ts`
+- `src/services/planArc.heldAnnouncement.test.ts`
 - `src/services/planArc.test.ts`
 - `src/services/planArc.ts`
 - `src/services/planChooser.ts`
@@ -52,8 +53,8 @@
 - `src/services/replayFence.modern1690.test.ts:81`
 
 ### `tacticWord` (function) — 23 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9147`
-- `src/services/coachFeatureService.ts:4442`
+- `src/components/Coach/CoachTeachPage.tsx:9166`
+- `src/services/coachFeatureService.ts:4377`
 - `src/services/computedVoiceAudit.report.test.ts:247`
 - `src/services/dnaLineNarrator.ts:59`
 - `src/services/groundedAnswer.ts:6127`
@@ -68,7 +69,7 @@
 - `src/services/pvPlayback.ts:285`
 - `src/services/pvPlayback.ts:799`
 - `src/services/pvPlayback.ts:951`
-- `src/services/reviewMoveBriefing.ts:371`
+- `src/services/reviewMoveBriefing.ts:372`
 - `src/services/tacticVocabulary.ts:96`
 - `src/services/teachingSelector.ts:385`
 - `src/services/turningPoints.ts:175`
@@ -77,22 +78,22 @@
 - `src/services/turningPoints.ts:200`
 
 ### `seatedTacticLine` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9158`
+- `src/components/Coach/CoachTeachPage.tsx:9177`
 - `src/services/seatedTacticLine.test.ts:8`
 - `src/services/seatedTacticLine.test.ts:13`
 - `src/services/seatedTacticLine.test.ts:19`
 - `src/services/seatedTacticLine.test.ts:23`
 
 ### `pinConsequence` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9164`
-- `src/components/Coach/CoachTeachPage.tsx:9301`
+- `src/components/Coach/CoachTeachPage.tsx:9183`
+- `src/components/Coach/CoachTeachPage.tsx:9285`
 - `src/services/pinConsequence.test.ts:8`
 - `src/services/pinConsequence.test.ts:12`
 - `src/services/pinConsequence.test.ts:16`
 - `src/services/pinConsequence.test.ts:21`
 - `src/services/pinConsequence.test.ts:26`
 - `src/services/pinConsequence.test.ts:30`
-- `src/services/reviewFullData.ts:867`
+- `src/services/reviewFullData.ts:854`
 
 ### `PLAN_HORIZON` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -199,8 +200,8 @@
 - `src/services/learnWalkBlumenfeld.test.ts:187`
 - `src/services/learnWalkBlumenfeld.test.ts:188`
 
-### `planFromUci` (function) — 37 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11510`
+### `planFromUci` (function) — 38 call sites
+- `src/components/Coach/CoachTeachPage.tsx:11479`
 - `src/services/claimTruth.manual.test.ts:130`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:209`
@@ -229,6 +230,7 @@
 - `src/services/narrationAdversarial.test.ts:62`
 - `src/services/narrationAdversarial.test.ts:178`
 - `src/services/narrationAdversarial.test.ts:188`
+- `src/services/planArc.heldAnnouncement.test.ts:28`
 - `src/services/planArc.test.ts:27`
 - `src/services/planChooser.ts:54`
 - `src/services/planChooser.ts:55`
@@ -239,17 +241,18 @@
 - `src/test/thinkMarkClosed.gate.test.ts:76`
 
 ### `gameArcs` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:948`
+- `src/services/learnBoardTeaching.ts:946`
 - `src/services/walkOct1Learn.test.ts:115`
 
 ### `forkConsequence` (re-export) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9161`
-- `src/services/reviewFullData.ts:848`
+- `src/components/Coach/CoachTeachPage.tsx:9180`
+- `src/services/reviewFullData.ts:835`
 - `src/services/tacticVocabulary.ts:211`
 
-### `aimsOf` (re-export) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11527`
-- `src/components/Coach/CoachTeachPage.tsx:11531`
+### `aimsOf` (re-export) — 11 call sites
+- `src/components/Coach/CoachTeachPage.tsx:11496`
+- `src/components/Coach/CoachTeachPage.tsx:11500`
+- `src/services/planArc.heldAnnouncement.test.ts:29`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
@@ -260,8 +263,8 @@
 - `src/test/thinkMarkClosed.gate.test.ts:77`
 
 ### `aimWalkableNow` (re-export) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11527`
-- `src/components/Coach/CoachTeachPage.tsx:11531`
+- `src/components/Coach/CoachTeachPage.tsx:11496`
+- `src/components/Coach/CoachTeachPage.tsx:11500`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
 - `src/services/planArc.test.ts:211`
@@ -275,15 +278,16 @@
 - `src/services/planArc.test.ts:263`
 - `src/services/planArc.test.ts:268`
 - `src/services/planArc.test.ts:272`
-- `src/services/planArc.ts:561`
+- `src/services/planArc.ts:580`
 - `src/services/planChoicePasserNow.test.ts:22`
 - `src/services/planChoicePasserNow.test.ts:23`
 - `src/services/planChooser.test.ts:63`
 - `src/services/planChooser.ts:64`
 
-### `stepArc` (re-export) — 34 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11527`
-- `src/components/Coach/CoachTeachPage.tsx:11531`
+### `stepArc` (re-export) — 35 call sites
+- `src/components/Coach/CoachTeachPage.tsx:11496`
+- `src/components/Coach/CoachTeachPage.tsx:11500`
+- `src/services/planArc.heldAnnouncement.test.ts:29`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:97`
 - `src/services/planArc.test.ts:99`
@@ -314,8 +318,15 @@
 - `src/services/planArc.truth.test.ts:22`
 - `src/services/planArc.truth.test.ts:31`
 - `src/services/planArc.truth.test.ts:36`
-- `src/services/planArc.ts:342`
+- `src/services/planArc.ts:361`
 - `src/test/thinkMarkClosed.gate.test.ts:77`
+
+### `withAnnouncement` (re-export) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:11509`
+- `src/components/Coach/CoachTeachPage.tsx:11510`
+- `src/components/Coach/CoachTeachPage.tsx:12139`
+- `src/services/planArc.heldAnnouncement.test.ts:32`
+- `src/services/planArc.ts:146`
 
 ### `EMPTY_ARC` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -330,6 +341,7 @@
 - `src/services/lookaheadPlan.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/pinConsequence.test.ts`
+- `src/services/planArc.heldAnnouncement.test.ts`
 - `src/services/planArc.test.ts`
 - `src/services/replayFence.modern1690.test.ts`
 - `src/services/reviewWalk900.test.ts`

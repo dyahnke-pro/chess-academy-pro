@@ -138,6 +138,21 @@ export interface ArcState {
   emerged: number;
 }
 
+/** THE ARC AS IT STANDS UNTIL ITS ANNOUNCEMENT IS SPOKEN (WO-STORY-MATRIX-01
+ *  P1-8f). `stepArc` marks an aim announced the moment it emerges. A surface
+ *  whose door may hold that line keeps the arc with those aims NOT announced,
+ *  and marks them announced when the door keeps the line — so a plan the door
+ *  held is offered again on its next read, never lost as "already said". */
+export function withAnnouncement(state: ArcState, ids: readonly string[], announced: boolean): ArcState {
+  if (ids.length === 0) return state;
+  const entries = { ...state.entries };
+  for (const id of ids) {
+    const e = entries[id];
+    if (e) entries[id] = { ...e, announced };
+  }
+  return { ...state, entries };
+}
+
 /** An arc that has followed nothing yet — the game's story's own empty value. */
 export const EMPTY_ARC: ArcState = EMPTY_ARC_STATE;
 
@@ -204,6 +219,10 @@ export interface ArcEvent {
   squares: string[];
   /** For an `advance`: which step toward the aim this move is (1 = the first). */
   step?: number;
+  /** For an `emerge`: every aim it announces (two aims read on one move are
+   *  one line) — what a surface marks announced once the line is spoken
+   *  (`withAnnouncement`). */
+  announces?: readonly string[];
 }
 
 /** The side's move this read follows, or null on the first read. */
@@ -524,7 +543,7 @@ export function stepArc(
         : `${e.phrase}${e.why}`);
     });
     events.push({
-      id: emerging[0].aim.id, kind: 'emerge', seat,
+      id: emerging[0].aim.id, kind: 'emerge', seat, announces: emerging.map((e) => e.aim.id),
       squares: [...new Set(emerging.flatMap((e) => e.squares))],
       text: EMERGE[seat][emerged++ % EMERGE[seat].length](parts.join(', then ')),
     });

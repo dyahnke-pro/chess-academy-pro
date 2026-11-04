@@ -241,7 +241,7 @@ import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead';
 
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
-import { aimsOf, aimWalkableNow, stepArc, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence } from '../../services/lookaheadPlan';
+import { aimsOf, aimWalkableNow, stepArc, withAnnouncement, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence, type ArcEvent } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, saidSlipCp, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf, secondReadsOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
@@ -1881,6 +1881,7 @@ export function CoachTeachPage({ mode }: {
     liveGradesRef.current.clear();
     // A turn's plan trial waiting for its door belongs to the game it was tried in.
     planTrialRef.current = null;
+    arcTrialRef.current = null;
     priorityFirstLastPlyRef.current = -999;
     lastBoardMoveRef.current = null;
     setHeldMoveFen(null);
@@ -1996,6 +1997,10 @@ export function CoachTeachPage({ mode }: {
   /** The plan thread's turn, tried on a copy of the story's thread until the
    *  door says whether it spoke. */
   const planTrialRef = useRef<{ fen: string; trial: PlanThread; offered: string[] } | null>(null);
+  /** The plans each side's arc announced on a turn, waiting for the door: an
+   *  aim is marked announced only once its line is kept (`withAnnouncement`),
+   *  so a held announcement is offered again (WO-STORY-MATRIX-01 P1-8f). */
+  const arcTrialRef = useRef<{ fen: string; emerges: Array<{ seat: 'student' | 'opponent'; ids: readonly string[]; claim: string }> } | null>(null);
   const pendingVoiceRef = useRef<{
     fen: string;
     /** `squares` rides along so the board can be drawn from what SURVIVED the
@@ -11495,7 +11500,15 @@ export function CoachTeachPage({ mode }: {
                             ? stepArc(desk.arc.student, aimsOf(plan.mine, 'student').filter((a) => aimWalkableNow(a, probe.fen(), studColor, [...move.history, m.san])),
                               { from: move.from, to: move.to, piece: studentPiece, promotion: move.promotion }, probe.fen(), studColor, 'student')
                             : null;
-                          story.setPlans(gameRef.current.plies, { ...story.plans(), arc: { opponent: theirStep.next, student: mineStep?.next ?? desk.arc.student } });
+                          // AN ANNOUNCEMENT COUNTS WHEN IT IS SPOKEN (P1-8f): the
+                          // arc keeps each plan this read announced as not yet
+                          // announced until the door keeps its line (adopted in
+                          // the late wave), so a held one is offered again.
+                          const heldIds = (events: readonly ArcEvent[]): string[] => events.flatMap((e) => (e.kind === 'emerge' ? [...(e.announces ?? [e.id])] : []));
+                          story.setPlans(gameRef.current.plies, { ...story.plans(), arc: {
+                            opponent: withAnnouncement(theirStep.next, heldIds(theirStep.events), false),
+                            student: mineStep ? withAnnouncement(mineStep.next, heldIds(mineStep.events), false) : desk.arc.student,
+                          } });
                           const arcLines = [
                             // Their ADVANCE speaks now: it is the why of the move they just
                             // made, question first (2026-09-30).
@@ -11521,6 +11534,11 @@ export function CoachTeachPage({ mode }: {
                             // board when the door keeps the line, and a move from
                             // it is prompted for the plan skill (`toldBoards`).
                             if (e.seat === 'student' && e.kind === 'emerge') story.offer(probe.fen(), { text: line, thread: { key: threadKey('student', e.id), kind: 'stated', told: true } });
+                            if (e.kind === 'emerge') {
+                              const trial = arcTrialRef.current && samePosition(arcTrialRef.current.fen, probe.fen()) ? arcTrialRef.current : { fen: probe.fen(), emerges: [] };
+                              trial.emerges.push({ seat: e.seat, ids: e.announces ?? [e.id], claim: `plan:${e.seat}:${e.id}:emerge` });
+                              arcTrialRef.current = trial;
+                            }
                           }
                         } catch { /* the arc is a bonus, never a blocker */ }
                         // The look-ahead PARAGRAPH (key square, board read, line
@@ -12108,6 +12126,20 @@ export function CoachTeachPage({ mode }: {
                     const desk = learnMemRef.current.story.plans();
                     if (adoptPlanTrial(desk.thread, planTry.trial, planTry.offered, hintPkg.kept.flatMap((f) => f.claims ?? []))) learnMemRef.current.story.setPlans(gameRef.current.plies, desk);
                     planTrialRef.current = null;
+                  }
+                  // …and each side's arc marks a plan announced only when its
+                  // announcement was kept (P1-8f).
+                  const arcTry = arcTrialRef.current;
+                  if (arcTry && samePosition(arcTry.fen, pending.fen)) {
+                    const keptClaims = new Set(hintPkg.kept.flatMap((f) => f.claims ?? []));
+                    const spoken = arcTry.emerges.filter((x) => keptClaims.has(x.claim));
+                    if (spoken.length > 0) {
+                      const plans = learnMemRef.current.story.plans();
+                      let arc = plans.arc;
+                      for (const x of spoken) arc = { ...arc, [x.seat]: withAnnouncement(arc[x.seat], x.ids, true) };
+                      learnMemRef.current.story.setPlans(gameRef.current.plies, { ...plans, arc });
+                    }
+                    arcTry.emerges = arcTry.emerges.filter((x) => !keptClaims.has(x.claim));
                   }
                   if (announcesTheMove(lateDecision.spoke)) announcedBoardsRef.current.add(pending.fen.split(' ').slice(0, 2).join(' '));
                   if (lateDecision.lead) turnLeadRef.current = { fen: pending.fen, lead: lateDecision.lead };
