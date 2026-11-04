@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**496 lines · 16 exports · 19 importers · 3 tests · 0 audits**
+**497 lines · 16 exports · 21 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,8 @@
 - `src/services/coachDecider.ts`
 - `src/services/coachFact.test.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/decisionStakes.test.ts`
+- `src/services/factRelations.test.ts`
 - `src/services/factSelector.ts`
 - `src/services/gameStory.ts`
 - `src/services/learnTurnDoor.ts`
@@ -56,35 +58,36 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCoachFactKind` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:563`
+- `src/services/learnTurnDoor.ts:566`
 
 ### `stepOf` (function) — 16 call sites
 - `src/services/boardComputers.test.ts:76`
 - `src/services/coachFact.test.ts:75`
 - `src/services/coachFact.test.ts:76`
-- `src/services/coachFeatureService.ts:2486`
-- `src/services/coachFeatureService.ts:3070`
-- `src/services/learnTurnDoor.ts:244`
-- `src/services/learnTurnDoor.ts:780`
-- `src/services/learnTurnDoor.ts:837`
-- `src/services/learnTurnDoor.ts:858`
-- `src/services/learnTurnDoor.ts:862`
-- `src/services/learnTurnDoor.ts:905`
-- `src/services/learnTurnDoor.ts:931`
-- `src/services/learnTurnDoor.ts:941`
-- `src/services/learnTurnDoor.ts:945`
-- `src/services/learnTurnDoor.ts:1079`
-- `src/services/learnTurnDoor.ts:1142`
+- `src/services/coachFeatureService.ts:2503`
+- `src/services/coachFeatureService.ts:3093`
+- `src/services/learnTurnDoor.ts:247`
+- `src/services/learnTurnDoor.ts:783`
+- `src/services/learnTurnDoor.ts:840`
+- `src/services/learnTurnDoor.ts:861`
+- `src/services/learnTurnDoor.ts:865`
+- `src/services/learnTurnDoor.ts:908`
+- `src/services/learnTurnDoor.ts:934`
+- `src/services/learnTurnDoor.ts:944`
+- `src/services/learnTurnDoor.ts:948`
+- `src/services/learnTurnDoor.ts:1082`
+- `src/services/learnTurnDoor.ts:1145`
 
-### `placeFact` (function) — 15 call sites
-- `src/services/boardComputers.ts:591`
-- `src/services/learnTurnDoor.ts:579`
-- `src/services/moveThoughtFacts.ts:141`
-- `src/services/moveThoughtFacts.ts:262`
-- `src/services/moveThoughtFacts.ts:282`
-- `src/services/moveThoughtFacts.ts:338`
-- `src/services/moveThoughtFacts.ts:352`
-- `src/services/moveThoughtFacts.ts:387`
+### `placeFact` (function) — 16 call sites
+- `src/services/boardComputers.ts:593`
+- `src/services/learnTurnDoor.ts:582`
+- `src/services/moveThoughtFacts.ts:148`
+- `src/services/moveThoughtFacts.ts:269`
+- `src/services/moveThoughtFacts.ts:289`
+- `src/services/moveThoughtFacts.ts:358`
+- `src/services/moveThoughtFacts.ts:372`
+- `src/services/moveThoughtFacts.ts:548`
+- `src/services/moveThoughtFacts.ts:566`
 - `src/services/openingStory.ts:363`
 - `src/services/positionFacts.ts:517`
 - `src/services/reviewFacet.ts:62`
@@ -93,18 +96,19 @@
 - `src/services/teachingFact.ts:89`
 - `src/test/doorFact.ts:22`
 
-### `stakesOf` (function) — 16 call sites
-- `src/services/boardComputers.ts:591`
+### `stakesOf` (function) — 17 call sites
+- `src/services/boardComputers.ts:593`
 - `src/services/coachFact.test.ts:101`
 - `src/services/coachFact.test.ts:107`
 - `src/services/coachFact.test.ts:108`
-- `src/services/learnTurnDoor.ts:580`
-- `src/services/moveThoughtFacts.ts:142`
-- `src/services/moveThoughtFacts.ts:262`
-- `src/services/moveThoughtFacts.ts:283`
-- `src/services/moveThoughtFacts.ts:339`
-- `src/services/moveThoughtFacts.ts:353`
-- `src/services/moveThoughtFacts.ts:388`
+- `src/services/learnTurnDoor.ts:583`
+- `src/services/moveThoughtFacts.ts:149`
+- `src/services/moveThoughtFacts.ts:269`
+- `src/services/moveThoughtFacts.ts:290`
+- `src/services/moveThoughtFacts.ts:359`
+- `src/services/moveThoughtFacts.ts:373`
+- `src/services/moveThoughtFacts.ts:549`
+- `src/services/moveThoughtFacts.ts:567`
 - `src/services/openingStory.ts:364`
 - `src/services/positionFacts.ts:525`
 - `src/services/reviewFacet.ts:73`
@@ -133,6 +137,8 @@
 
 - `src/services/boardComputers.test.ts`
 - `src/services/coachFact.test.ts`
+- `src/services/decisionStakes.test.ts`
+- `src/services/factRelations.test.ts`
 - `src/services/oneGroupTable.gate.test.ts`
 
 ## Audits that reach it

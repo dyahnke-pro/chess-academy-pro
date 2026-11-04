@@ -29,22 +29,22 @@
 
 ### `reviewFacet` (function) — 3 call sites
 - `src/services/coachFeatureService.reviewNoise.test.ts:27`
-- `src/services/coachFeatureService.ts:2085`
+- `src/services/coachFeatureService.ts:2090`
 - `src/services/reviewFullData.ts:311`
 
 ### `reworded` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:2553`
-- `src/services/coachFeatureService.ts:2665`
-- `src/services/coachFeatureService.ts:2689`
-- `src/services/coachFeatureService.ts:2756`
-- `src/services/coachFeatureService.ts:2796`
+- `src/services/coachFeatureService.ts:2571`
+- `src/services/coachFeatureService.ts:2683`
+- `src/services/coachFeatureService.ts:2707`
+- `src/services/coachFeatureService.ts:2774`
+- `src/services/coachFeatureService.ts:2814`
 
 ### `asIncoming` (function) — 1 call site
 - `src/services/reviewFullData.ts:315`
 
 ### `inRuleFamily` (function) — 2 call sites
-- `src/services/reviewFullData.ts:686`
-- `src/services/reviewFullData.ts:1267`
+- `src/services/reviewFullData.ts:690`
+- `src/services/reviewFullData.ts:1271`
 
 ## Tests
 

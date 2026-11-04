@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**324 lines · 7 exports · 5 importers · 2 tests · 1 audits**
+**335 lines · 8 exports · 5 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,22 +31,25 @@
 ### `QuietFact` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `SupportLink` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `SAME_CLAIM_JACCARD` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `barForTier` (function) — 5 call sites
-- `src/services/coachDecider.ts:462`
+- `src/services/coachDecider.ts:471`
 - `src/services/factSelector.test.ts:79`
 - `src/services/factSelector.test.ts:80`
 - `src/services/factSelector.test.ts:81`
 - `src/services/factSelector.test.ts:85`
 
 ### `sameClaim` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2388`
-- `src/services/learnTurnDoor.ts:788`
+- `src/services/coachFeatureService.ts:2414`
+- `src/services/learnTurnDoor.ts:794`
 
 ### `selectFacts` (function) — 18 call sites
-- `src/services/coachDecider.ts:456`
+- `src/services/coachDecider.ts:465`
 - `src/services/factSelector.test.ts:23`
 - `src/services/factSelector.test.ts:33`
 - `src/services/factSelector.test.ts:40`
@@ -66,7 +69,7 @@
 - `src/services/factSelector.test.ts:172`
 
 ### `supportedFacts` (function) — 10 call sites
-- `src/services/coachDecider.ts:472`
+- `src/services/coachDecider.ts:481`
 - `src/services/supportedFacts.test.ts:20`
 - `src/services/supportedFacts.test.ts:26`
 - `src/services/supportedFacts.test.ts:33`

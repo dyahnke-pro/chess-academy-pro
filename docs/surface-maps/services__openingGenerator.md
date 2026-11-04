@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4305 lines · 30 exports · 21 importers · 22 tests · 10 audits**
+**4345 lines · 30 exports · 22 importers · 23 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,6 +39,7 @@
 - `src/services/noteSelectionDeterminism.test.ts`
 - `src/services/openingGenerator.computedBeats.test.ts`
 - `src/services/openingGenerator.explorerBranches.test.ts`
+- `src/services/openingGenerator.planOutro.test.ts`
 - `src/services/openingGenerator.test.ts`
 - `src/services/openingGenerator.twoBeats.test.ts`
 - `src/services/proRepertoireService.test.ts`
@@ -72,8 +73,8 @@
 
 ### `getCachedOpening` (function) — 10 call sites
 - `src/components/Coach/CoachTeachPage.tsx:6704`
-- `src/components/Coach/CoachTeachPage.tsx:7633`
-- `src/hooks/useTeachWalkthrough.ts:2030`
+- `src/components/Coach/CoachTeachPage.tsx:7636`
+- `src/hooks/useTeachWalkthrough.ts:2031`
 - `src/services/lessonCacheKey.test.ts:61`
 - `src/services/lessonCacheKey.test.ts:68`
 - `src/services/lessonCacheKey.test.ts:106`
@@ -88,8 +89,8 @@
 - `src/components/Coach/CoachTeachPage.tsx:6819`
 - `src/components/Coach/CoachTeachPage.tsx:6858`
 - `src/components/Coach/CoachTeachPage.tsx:6932`
-- `src/components/Coach/CoachTeachPage.tsx:7702`
-- `src/components/Coach/CoachTeachPage.tsx:13403`
+- `src/components/Coach/CoachTeachPage.tsx:7705`
+- `src/components/Coach/CoachTeachPage.tsx:13371`
 - `src/services/lessonCacheKey.test.ts:60`
 - `src/services/lessonCacheKey.test.ts:65`
 - `src/services/lessonCacheKey.test.ts:74`
@@ -218,14 +219,14 @@
 - `src/services/proRepertoireService.test.ts:171`
 - `src/services/proRepertoireService.test.ts:197`
 
-### `generateOpening` (function) — 17 call sites
+### `generateOpening` (function) — 19 call sites
 - `scripts/audit-coach-teach-gaps.mjs:384`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:57`
 - `src/components/Coach/CoachTeachPage.tsx:6063`
 - `src/components/Coach/CoachTeachPage.tsx:6813`
 - `src/components/Coach/CoachTeachPage.tsx:6926`
-- `src/components/Coach/CoachTeachPage.tsx:7697`
-- `src/components/Coach/CoachTeachPage.tsx:13397`
+- `src/components/Coach/CoachTeachPage.tsx:7700`
+- `src/components/Coach/CoachTeachPage.tsx:13365`
 - `src/components/Openings/OpeningDetailPage.wiring.test.ts:91`
 - `src/services/generatedLesson.test.ts:5`
 - `src/services/generatedLesson.ts:37`
@@ -233,6 +234,8 @@
 - `src/services/openingGenerator.explorerBranches.test.ts:56`
 - `src/services/openingGenerator.explorerBranches.test.ts:85`
 - `src/services/openingGenerator.explorerBranches.test.ts:142`
+- `src/services/openingGenerator.planOutro.test.ts:22`
+- `src/services/openingGenerator.planOutro.test.ts:33`
 - `src/services/openingGenerator.test.ts:934`
 - `src/services/openingGenerator.test.ts:937`
 - `src/services/walkthroughGenRev.gate.test.ts:33`
@@ -266,7 +269,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:6758`
 - `src/components/Coach/CoachTeachPage.tsx:6885`
 - `src/components/Coach/CoachTeachPage.tsx:6968`
-- `src/components/Coach/CoachTeachPage.tsx:7720`
+- `src/components/Coach/CoachTeachPage.tsx:7723`
 
 ### `WALKTHROUGH_GEN_REV` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -285,6 +288,7 @@
 - `src/services/openingGenerator.computedBeats.test.ts`
 - `src/services/openingGenerator.explorerBranches.test.ts`
 - `src/services/openingGenerator.noModelMoves.test.ts`
+- `src/services/openingGenerator.planOutro.test.ts`
 - `src/services/openingGenerator.test.ts`
 - `src/services/openingGenerator.twoBeats.test.ts`
 - `src/services/perspectiveRule.test.ts`

@@ -1,14 +1,14 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.",
  "graph": {
-  "files": 1746,
-  "nodes": 16211
+  "files": 1747,
+  "nodes": 16240
  },
  "totals": {
   "computers": 347,
-  "wiredNowhere": 34,
-  "heldByLearnOnly": 22,
-  "otherScreensOnly": 11,
+  "wiredNowhere": 30,
+  "heldByLearnOnly": 19,
+  "otherScreensOnly": 10,
   "dead": 1,
   "missingFromCode": 0,
   "surfaces": {
@@ -18,12 +18,12 @@
     "no": 97
    },
    "review": {
-    "yes": 233,
-    "no": 114
+    "yes": 235,
+    "no": 112
    },
    "lesson": {
-    "yes": 103,
-    "no": 244
+    "yes": 141,
+    "no": 206
    },
    "chat": {
     "yes": 202,
@@ -51,25 +51,21 @@
    "services/learnBoardTeaching.ts#theirDeepFactTeaching",
    "services/learnFundamentalNarration.ts#(module)",
    "services/mistakeTurnLine.ts#mistakeTurnLine",
-   "services/moveFundamentals.ts#ruleForPurpose",
    "services/movePlan.ts#(module)",
    "services/moveReason.ts#(module)",
    "services/opponentGap.ts#(module)",
    "services/playCommentary.ts#buildInstantReplyLine",
    "services/playCommentary.ts#buildRejectedTempting",
    "services/playedConcept.ts#(module)",
-   "services/structureReads.ts#linesStructure",
    "services/tacticalRead.ts#tacticalReadFromLines",
    "services/threatAnswer.ts#threatAnswer",
-   "services/weaknessAnalyzer.ts#(module)",
-   "services/zugzwang.ts#readZugzwang"
+   "services/weaknessAnalyzer.ts#(module)"
   ],
   "otherScreensOnly": [
    "missions/patterns/index.ts#(module)",
    "services/bookMoveQuestion.ts#(module)",
    "services/coachTemplates.ts#(module)",
    "services/coachTrainingService.ts#getCoachGreeting",
-   "services/computedPlan.ts#computedPlanAt",
    "services/gemCrushLines.ts#(module)",
    "services/kidBoardAnswers.ts#(module)",
    "services/kidGameCoach.ts#(module)",
@@ -515,15 +511,17 @@
    "origin": "extra",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -749,15 +747,14 @@
    "origin": "map",
    "learn": "no",
    "review": "no",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "no",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage"
-   ],
-   "where": "components/Openings/OpeningDetailPage.tsx#OpeningDetailPage"
+   ]
   },
   {
    "key": "services/conceptEngine.ts#conceptForBoard",
@@ -1229,15 +1226,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -1295,15 +1294,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -1421,7 +1422,7 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
@@ -1430,7 +1431,8 @@
     "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -1568,15 +1570,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -1928,15 +1932,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -2164,15 +2170,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -2241,15 +2249,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -2323,15 +2333,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -2481,15 +2493,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -2553,12 +2567,13 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
     "playSilent",
@@ -2643,7 +2658,8 @@
     "kid",
     "campaign",
     "playSilent",
-    "insights"
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -3083,13 +3099,15 @@
    "origin": "map",
    "learn": "held",
    "review": "no",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "no",
    "tapped": "no",
    "tactics": "no",
    "app": true,
-   "other": [],
-   "where": "components/Coach/CoachTeachPage.tsx#CoachTeachPage"
+   "other": [
+    "openingsPage",
+    "endgame"
+   ]
   },
   {
    "key": "services/moveFundamentals.ts#strategicReason",
@@ -3200,7 +3218,7 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
@@ -3209,7 +3227,8 @@
     "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -3237,7 +3256,7 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
@@ -3246,7 +3265,8 @@
     "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -3258,7 +3278,7 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
@@ -3267,7 +3287,8 @@
     "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -3279,7 +3300,7 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
@@ -3288,7 +3309,8 @@
     "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -3452,15 +3474,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -3611,15 +3635,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -3749,15 +3775,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -3963,15 +3991,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -4006,15 +4036,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -4026,7 +4058,7 @@
    "origin": "extra",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
@@ -4035,7 +4067,8 @@
     "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -4125,15 +4158,17 @@
    "origin": "extra",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -4280,15 +4315,17 @@
    "origin": "extra",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -4323,15 +4360,17 @@
    "origin": "extra",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -4365,15 +4404,17 @@
    "origin": "extra",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -4862,15 +4903,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -4984,15 +5027,17 @@
    "origin": "extra",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -5144,15 +5189,17 @@
    "origin": "extra",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -5669,15 +5716,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -5689,15 +5738,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -5766,7 +5817,7 @@
    "origin": "extra",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
@@ -5775,7 +5826,8 @@
     "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -5846,15 +5898,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -5907,17 +5961,20 @@
    "says": "structureReads — the batch-6 structure computers composed ONCE, by WHEN they apply (surfaceComposition: a surface calls these four, never ea",
    "origin": "registry",
    "learn": "held",
-   "review": "no",
-   "lesson": "no",
+   "review": "yes",
+   "lesson": "yes",
    "chat": "no",
    "tapped": "no",
    "tactics": "no",
    "app": true,
-   "other": [],
+   "other": [
+    "openingsPage",
+    "playSilent",
+    "endgame"
+   ],
    "registry": [
     "structureLines"
-   ],
-   "where": "components/Coach/CoachTeachPage.tsx#CoachTeachPage"
+   ]
   },
   {
    "key": "services/structureReads.ts#studentMoveStructure",
@@ -5928,15 +5985,17 @@
    "origin": "map",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ],
    "registry": [
     "structureMove"
@@ -6830,15 +6889,17 @@
    "origin": "extra",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -6850,15 +6911,17 @@
    "origin": "extra",
    "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -6987,14 +7050,13 @@
    "says": "The side to move is in zugzwang per the tablebase (<= 7 pieces); a triangulation in a line",
    "origin": "map",
    "learn": "held",
-   "review": "no",
+   "review": "yes",
    "lesson": "no",
    "chat": "no",
    "tapped": "no",
    "tactics": "no",
    "app": true,
-   "other": [],
-   "where": "components/Coach/CoachTeachPage.tsx#CoachTeachPage"
+   "other": []
   },
   {
    "key": "utils/andList.ts#lineSeatAt",

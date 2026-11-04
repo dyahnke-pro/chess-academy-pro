@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1012 lines · 32 exports · 1027 importers · 272 tests · 38 audits**
+**1018 lines · 32 exports · 1030 importers · 272 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -692,6 +692,7 @@
 - `src/services/coachDrillService.mistakes.test.ts`
 - `src/services/coachDrillService.test.ts`
 - `src/services/coachDrillService.ts`
+- `src/services/coachFact.ts`
 - `src/services/coachFeatureService.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/coachGameAnnotations.test.ts`
@@ -728,9 +729,9 @@
 - `src/services/criticalMoment.oneCount.test.ts`
 - `src/services/criticalMoment.ts`
 - `src/services/criticality.ts`
-- `src/services/danyaBench.measure.test.ts`
 - `src/services/dataLoader.ts`
 - `src/services/dbService.ts`
+- `src/services/decisionStakes.test.ts`
 - `src/services/decisiveReason.recapture.test.ts`
 - `src/services/decisiveReason.ts`
 - `src/services/decisiveReason.turnDepth.test.ts`
@@ -873,6 +874,7 @@
 - `src/services/openingDatabaseBrief.test.ts`
 - `src/services/openingDatabaseBrief.ts`
 - `src/services/openingDetectionService.ts`
+- `src/services/openingGenerator.ts`
 - `src/services/openingKey.ts`
 - `src/services/openingKeyBackfill.test.ts`
 - `src/services/openingKeyBackfill.ts`
@@ -1041,6 +1043,7 @@
 - `src/test/factories.ts`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts`
 - `src/test/motifReaderCases.ts`
+- `src/test/replayGame.ts`
 - `src/utils/arrowGrounding.ts`
 - `src/utils/coachNarration.ts`
 - `src/utils/commonMistakeLine.test.ts`
@@ -1280,7 +1283,7 @@
 - `src/services/courseMoves.test.ts`
 - `src/services/criticalMoment.frame.test.ts`
 - `src/services/criticalMoment.oneCount.test.ts`
-- `src/services/danyaBench.measure.test.ts`
+- `src/services/decisionStakes.test.ts`
 - `src/services/decisiveReason.recapture.test.ts`
 - `src/services/decisiveReason.turnDepth.test.ts`
 - `src/services/deepTree.test.ts`

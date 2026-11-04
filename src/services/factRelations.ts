@@ -16,7 +16,7 @@
 // and no squares (a name, a method, a story) needs and causes nothing.
 // Pure and memoised by the basis; a LEAF over relations + chess.js.
 import { Chess, type Square } from 'chess.js';
-import { lineDiff, relationKey, relationSquare, snapshot } from './relations';
+import { lineDiff, relationKey, relationSquare, snapshot, type Relation, type RelationKind } from './relations';
 import { isProof, type FactProof } from './proof';
 
 export interface FactRelations {
@@ -31,6 +31,18 @@ export interface RelationBasisInput {
   squares: readonly string[];
   lines?: ReadonlyArray<{ fen: string; sans: readonly string[] }>;
 }
+
+/** THE RELATIONS A CLAIM STANDS ON — the ones a link may run through. Every
+ *  move changes what each slider sees and what each piece attacks, so a link
+ *  through `reach` or `attack` joins almost any two facts (measured on the
+ *  decision baseline 2026-11-04: a minority-attack aside "supported" a missed
+ *  Rxe5 through a queen's sight lines). A `Record`, so a new relation kind
+ *  fails to compile until it says whether a claim can stand on it. */
+const CLAIM_RELATION: Record<RelationKind, boolean> = {
+  guard: true, 'guard-pinned': true, pin: true, loose: true, hanging: true, passer: true, check: true,
+  attack: false, reach: false, file: false, cover: false, zone: false, material: false, castling: false, uncovered: false,
+};
+const claimed = (r: Relation): boolean => CLAIM_RELATION[r.kind];
 
 const NONE: FactRelations = { needs: new Set(), causes: new Set() };
 const memo = new Map<string, FactRelations>();
@@ -67,6 +79,7 @@ function needsAt(fen: string, squares: ReadonlySet<string>): Set<string> {
   const out = new Set<string>();
   if (!snap) return out;
   for (const r of snap.relations) {
+    if (!claimed(r)) continue;
     const sq = relationSquare(r);
     if (sq && squares.has(sq)) out.add(relationKey(r));
   }
@@ -82,7 +95,7 @@ export function factRelations(f: RelationBasisInput): FactRelations {
   if (line) {
     const through = lineSquares(line.fen, line.sans);
     const d = through ? lineDiff(line.fen, line.sans) : null;
-    if (through && d) out = { needs: needsAt(line.fen, through), causes: new Set([...d.lost, ...d.gained].map(relationKey)) };
+    if (through && d) out = { needs: needsAt(line.fen, through), causes: new Set([...d.lost, ...d.gained].filter(claimed).map(relationKey)) };
   } else if (f.squares.length > 0) {
     out = { needs: needsAt(f.fen, new Set(f.squares as readonly Square[])), causes: new Set() };
   }

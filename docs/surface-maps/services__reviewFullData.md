@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1880 lines · 11 exports · 19 importers · 25 tests · 0 audits**
+**1884 lines · 11 exports · 19 importers · 25 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,7 +35,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1038`
+- `src/services/coachFeatureService.ts:1039`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -53,8 +53,8 @@
 - `src/services/batch2Wiring.test.ts:55`
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
-- `src/services/coachFeatureService.ts:2095`
-- `src/services/danyaBench.measure.test.ts:390`
+- `src/services/coachFeatureService.ts:2100`
+- `src/services/danyaBench.measure.test.ts:393`
 - `src/services/exchangeIdeas.test.ts:252`
 - `src/services/forkTrick.test.ts:62`
 - `src/services/hangingVsUndefended.test.ts:13`
@@ -104,7 +104,7 @@
 - `src/test/teach02Wired.test.ts:68`
 
 ### `computeThroughLine` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:6151`
+- `src/services/coachFeatureService.ts:6191`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:210`
 - `src/services/reviewFullData.test.ts:218`

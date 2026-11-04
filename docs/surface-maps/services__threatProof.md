@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**126 lines · 4 exports · 9 importers · 4 tests · 0 audits**
+**132 lines · 4 exports · 9 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,8 +25,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `threatProof` (function) — 10 call sites
-- `src/services/positionFacts.ts:1782`
-- `src/services/reviewFullData.ts:822`
+- `src/services/positionFacts.ts:1780`
+- `src/services/reviewFullData.ts:813`
 - `src/services/threatProof.test.ts:8`
 - `src/services/threatProof.test.ts:17`
 - `src/services/threatProof.test.ts:23`
@@ -36,19 +36,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/captureSaidOnce.gate.test.ts:246`
 - `src/test/mateSaidOnce.gate.test.ts:30`
 
-### `provenThreatLine` (function) — 3 call sites
-- `src/services/boardComputers.ts:404`
-- `src/services/boardComputers.ts:413`
+### `provenThreatLine` (function) — 4 call sites
+- `src/services/boardComputers.ts:441`
+- `src/services/boardComputers.ts:455`
+- `src/services/boardComputers.ts:471`
 - `src/services/threatProof.test.ts:24`
 
 ### `threatStakes` (function) — 4 call sites
-- `src/services/boardComputers.ts:405`
-- `src/services/boardComputers.ts:414`
-- `src/services/coachDecider.ts:662`
-- `src/services/learnBoardTeaching.ts:474`
+- `src/services/boardComputers.ts:443`
+- `src/services/boardComputers.ts:456`
+- `src/services/coachDecider.ts:672`
+- `src/services/learnBoardTeaching.ts:462`
 
 ### `looseClaims` (function) — 4 call sites
-- `src/services/boardComputers.ts:414`
+- `src/services/boardComputers.ts:456`
 - `src/services/looseClaim.test.ts:20`
 - `src/services/looseClaim.test.ts:23`
 - `src/services/looseClaim.test.ts:30`

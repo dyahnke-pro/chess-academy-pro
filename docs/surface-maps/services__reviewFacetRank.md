@@ -75,7 +75,7 @@
 - `src/services/exchangeIdeas.test.ts:225`
 
 ### `factValue` (function) — 5 call sites
-- `src/services/coachDecider.ts:435`
+- `src/services/coachDecider.ts:439`
 - `src/services/latentFork.test.ts:171`
 - `src/services/latentFork.test.ts:172`
 - `src/services/latentFork.test.ts:173`
@@ -88,7 +88,7 @@
 - `src/test/doorFact.ts:18`
 
 ### `facetRank` (function) — 4 call sites
-- `src/services/factSelector.ts:204`
+- `src/services/factSelector.ts:211`
 - `src/services/reviewFacetRank.test.ts:51`
 - `src/services/reviewFacetRank.test.ts:55`
 - `src/services/reviewFacetRank.test.ts:61`

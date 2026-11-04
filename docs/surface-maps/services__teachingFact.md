@@ -54,12 +54,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnBoardTeaching.ts:546`
 - `src/services/learnBoardTeaching.ts:562`
 - `src/services/learnBoardTeaching.ts:803`
+- `src/services/learnBoardTeaching.ts:968`
 - `src/services/learnBoardTeaching.ts:976`
-- `src/services/learnBoardTeaching.ts:984`
-- `src/services/learnBoardTeaching.ts:1045`
-- `src/services/learnBoardTeaching.ts:1078`
-- `src/services/learnBoardTeaching.ts:1276`
-- `src/services/learnBoardTeaching.ts:1301`
+- `src/services/learnBoardTeaching.ts:1037`
+- `src/services/learnBoardTeaching.ts:1070`
+- `src/services/learnBoardTeaching.ts:1228`
+- `src/services/learnBoardTeaching.ts:1253`
 - `src/services/orderTeaching.ts:60`
 - `src/services/orderTeaching.ts:67`
 - `src/services/orderTeaching.ts:80`

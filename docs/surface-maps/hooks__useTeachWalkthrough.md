@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2641 lines · 8 exports · 5 importers · 3 tests · 4 audits**
+**2642 lines · 8 exports · 5 importers · 3 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -65,7 +65,7 @@
 - `src/hooks/useTeachWalkthrough.test.tsx:722`
 
 ### `isStartablePunishLesson` (re-export) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:17011`
+- `src/components/Coach/CoachTeachPage.tsx:16979`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:80`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:84`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:85`
@@ -98,7 +98,7 @@
 - `src/services/stageEntryValidity.ts:96`
 
 ### `isValidDrillLine` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:17117`
+- `src/components/Coach/CoachTeachPage.tsx:17085`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:143`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:162`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:163`

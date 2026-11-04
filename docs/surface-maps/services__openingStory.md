@@ -33,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openingStoryAt` (function) — 9 call sites
-- `src/services/boardComputers.ts:314`
+- `src/services/boardComputers.ts:316`
 - `src/services/holeKey.test.ts:15`
 - `src/services/openingStory.test.ts:23`
 - `src/services/openingStory.test.ts:133`

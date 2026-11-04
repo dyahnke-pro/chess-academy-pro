@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**435 lines · 13 exports · 18 importers · 9 tests · 1 audits**
+**451 lines · 13 exports · 18 importers · 9 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -51,11 +51,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:3228`
+- `src/services/coachFeatureService.ts:3279`
 - `src/services/positionFacts.ts:1176`
 
-### `methodBeatFor` (function) — 45 call sites
-- `src/services/coachDecider.ts:517`
+### `methodBeatFor` (function) — 49 call sites
+- `src/services/coachDecider.ts:521`
 - `src/services/methodBeat.need.test.ts:19`
 - `src/services/methodBeat.need.test.ts:23`
 - `src/services/methodBeat.need.test.ts:29`
@@ -100,6 +100,10 @@
 - `src/services/methodBeat.test.ts:44`
 - `src/services/methodBeat.test.ts:48`
 - `src/services/methodBeat.test.ts:54`
+- `src/services/methodBeat.test.ts:118`
+- `src/services/methodBeat.test.ts:121`
+- `src/services/methodBeat.test.ts:124`
+- `src/services/methodBeat.test.ts:128`
 
 ### `LiveHabit` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -108,7 +112,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `liveHabitKey` (function) — 12 call sites
-- `src/services/learnBoardTeaching.ts:270`
+- `src/services/learnBoardTeaching.ts:269`
 - `src/services/learnFundamentalNarration.ts:114`
 - `src/services/methodBeat.live.test.ts:112`
 - `src/services/methodBeat.live.test.ts:119`
@@ -121,12 +125,11 @@
 - `src/services/slipQuestion.test.ts:44`
 - `src/services/slipQuestion.test.ts:53`
 
-### `habitSaidKey` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10557`
-- `src/components/Coach/CoachTeachPage.tsx:10558`
-- `src/services/learnBoardTeaching.ts:255`
-- `src/services/learnBoardTeaching.ts:1190`
-- `src/services/learnBoardTeaching.ts:1210`
+### `habitSaidKey` (function) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10560`
+- `src/components/Coach/CoachTeachPage.tsx:10561`
+- `src/services/learnBoardTeaching.ts:254`
+- `src/services/learnBoardTeaching.ts:1164`
 - `src/services/slipQuestion.test.ts:53`
 
 ### `liveMethodBeat` (function) — 16 call sites

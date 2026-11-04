@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6260 lines · 30 exports · 67 importers · 81 tests · 4 audits**
+**6300 lines · 30 exports · 68 importers · 82 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -75,6 +75,7 @@
 - `src/services/reviewRegister.test.ts`
 - `src/services/reviewWalk1500.test.ts`
 - `src/services/reviewWalk900.test.ts`
+- `src/services/reviewZugzwang.test.ts`
 - `src/services/whyItFailed.test.ts`
 - `src/test/computedOrderWired.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
@@ -118,7 +119,7 @@
 - `src/services/coachFeatureService.test.ts:881`
 
 ### `segmentNamedArrows` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:3229`
+- `src/components/Coach/CoachGameReview.tsx:3231`
 - `src/services/namedMoveArrows.test.ts:54`
 - `src/services/namedMoveArrows.test.ts:58`
 
@@ -156,7 +157,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegmentsForTests` (function) — 113 call sites
+### `buildReviewSegmentsForTests` (function) — 114 call sites
 - `src/services/batch2Wiring.test.ts:75`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -223,7 +224,7 @@
 - `src/services/coachFeatureService.trade.test.ts:19`
 - `src/services/coachNoRecall.test.ts:44`
 - `src/services/coachNoRecall.test.ts:56`
-- `src/services/danyaBench.measure.test.ts:380`
+- `src/services/danyaBench.measure.test.ts:383`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
 - `src/services/habitBothSeats.test.ts:29`
@@ -265,6 +266,7 @@
 - `src/services/reviewOneFailureSentence.test.ts:16`
 - `src/services/reviewOneLineOnce.test.ts:16`
 - `src/services/reviewTheirHabit.test.ts:24`
+- `src/services/reviewZugzwang.test.ts:22`
 - `src/test/computedOrderWired.test.ts:59`
 - `src/test/everySurfaceSpeaks.test.ts:94`
 - `src/test/replayGame.ts:154`
@@ -294,7 +296,7 @@
 - `src/test/mateSaidOnce.gate.test.ts:69`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4272`
+- `src/components/Coach/CoachGameReview.tsx:4274`
 - `src/services/coachFeatureService.test.ts:793`
 - `src/services/coachFeatureService.test.ts:796`
 - `src/services/coachFeatureService.test.ts:803`
@@ -320,10 +322,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8790`
-- `src/components/Coach/CoachTeachPage.tsx:8888`
-- `src/components/Coach/CoachTeachPage.tsx:11675`
-- `src/components/Coach/CoachTeachPage.tsx:12067`
+- `src/components/Coach/CoachTeachPage.tsx:8793`
+- `src/components/Coach/CoachTeachPage.tsx:8891`
+- `src/components/Coach/CoachTeachPage.tsx:11676`
+- `src/components/Coach/CoachTeachPage.tsx:12068`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/services/phaseTransitionDetector.test.ts:575`
@@ -385,12 +387,12 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:629`
+- `src/services/reviewFullData.ts:633`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:5364`
+- `src/services/coachApi.ts:5367`
 - `src/services/coachFeatureService.test.ts:130`
 - `src/services/coachFeatureService.test.ts:151`
 - `src/services/coachFeatureService.test.ts:170`
@@ -471,6 +473,7 @@
 - `src/services/reviewTurnLength.test.ts`
 - `src/services/reviewWalk1500.test.ts`
 - `src/services/reviewWalk900.test.ts`
+- `src/services/reviewZugzwang.test.ts`
 - `src/services/studentMomentBoost.test.ts`
 - `src/services/whyItFailed.test.ts`
 - `src/test/algoAuditContract.test.ts`

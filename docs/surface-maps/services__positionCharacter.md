@@ -65,13 +65,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `characterTurn` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11398`
-- `src/services/coachFeatureService.ts:2066`
-- `src/services/learnTurnDoor.test.ts:303`
-- `src/services/learnTurnDoor.test.ts:309`
-- `src/services/learnTurnDoor.test.ts:310`
-- `src/services/learnTurnDoor.test.ts:321`
-- `src/services/learnTurnDoor.test.ts:325`
+- `src/components/Coach/CoachTeachPage.tsx:11401`
+- `src/services/coachFeatureService.ts:2071`
+- `src/services/learnTurnDoor.test.ts:305`
+- `src/services/learnTurnDoor.test.ts:311`
+- `src/services/learnTurnDoor.test.ts:312`
+- `src/services/learnTurnDoor.test.ts:323`
+- `src/services/learnTurnDoor.test.ts:327`
 
 ## Tests
 

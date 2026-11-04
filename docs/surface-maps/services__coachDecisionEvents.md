@@ -4,18 +4,19 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**267 lines · 12 exports · 14 importers · 11 tests · 1 audits**
+**272 lines · 12 exports · 16 importers · 13 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4154) — names `coachDecisionEvents`
-- **The standard post-deploy ritual** (CLAUDE.md:6402) — names `coachDecisionEvents`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4521) — names `coachDecisionEvents`
+- **The standard post-deploy ritual** (CLAUDE.md:6801) — names `coachDecisionEvents`
 
 ## Who calls in
 
 - `src/services/appAuditor.ts`
 - `src/services/coachDecider.ts`
 - `src/services/coachDecisionEmits.test.ts`
+- `src/services/learnTurnDoor.mission.test.ts`
 - `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.story.test.ts`
 - `src/services/learnTurnDoor.ts`
@@ -27,40 +28,42 @@
 - `src/services/settledPrice.bf4.test.ts`
 - `src/services/verdictTurnGrade.test.ts`
 - `src/test/computedOrderWired.test.ts`
+- `src/test/decisionRows.baseline.test.ts`
 
 ## Exports and every call site
 
 ### `CoachDecisionRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `onCoachDecision` (function) — 5 call sites
-- `src/services/appAuditor.ts:2268`
-- `src/services/coachDecisionEmits.test.ts:32`
-- `src/services/coachDecisionEmits.test.ts:95`
+### `onCoachDecision` (function) — 6 call sites
+- `src/services/appAuditor.ts:2282`
+- `src/services/coachDecisionEmits.test.ts:33`
+- `src/services/coachDecisionEmits.test.ts:96`
 - `src/services/proofBacklog.report.test.ts:98`
 - `src/test/computedOrderWired.test.ts:26`
+- `src/test/decisionRows.baseline.test.ts:47`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:356`
+- `src/services/coachDecider.ts:345`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onNeedScore` (function) — 4 call sites
-- `src/services/appAuditor.ts:2220`
-- `src/services/coachDecisionEmits.test.ts:120`
-- `src/services/coachDecisionEmits.test.ts:147`
+- `src/services/appAuditor.ts:2234`
+- `src/services/coachDecisionEmits.test.ts:121`
+- `src/services/coachDecisionEmits.test.ts:148`
 - `src/services/positionFacts.liveFundamental.test.ts:50`
 
 ### `emitNeedScore` (function) — 1 call site
 - `src/services/needScore.ts:476`
 
 ### `resetCoachDecisionListeners` (function) — 5 call sites
-- `src/services/coachDecisionEmits.test.ts:31`
-- `src/services/coachDecisionEmits.test.ts:34`
-- `src/services/coachDecisionEmits.test.ts:94`
-- `src/services/coachDecisionEmits.test.ts:120`
+- `src/services/coachDecisionEmits.test.ts:32`
+- `src/services/coachDecisionEmits.test.ts:35`
+- `src/services/coachDecisionEmits.test.ts:95`
 - `src/services/coachDecisionEmits.test.ts:121`
+- `src/services/coachDecisionEmits.test.ts:122`
 
 ### `LearnTurnRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -71,26 +74,30 @@
 ### `LearnTurnTag` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `onLearnTurn` (function) — 11 call sites
-- `src/services/appAuditor.ts:2294`
-- `src/services/learnPhaseFocus.test.ts:97`
-- `src/services/learnPhaseFocus.test.ts:109`
-- `src/services/learnTurnDoor.phaseWave.test.ts:37`
-- `src/services/learnTurnDoor.story.test.ts:41`
-- `src/services/learnTurnDoor.test.ts:578`
-- `src/services/learnTurnDoor.test.ts:591`
-- `src/services/settledPrice.bf4.test.ts:73`
-- `src/services/verdictTurnGrade.test.ts:52`
-- `src/services/verdictTurnGrade.test.ts:59`
-- `src/services/verdictTurnGrade.test.ts:65`
+### `onLearnTurn` (function) — 13 call sites
+- `src/services/appAuditor.ts:2308`
+- `src/services/learnPhaseFocus.test.ts:98`
+- `src/services/learnPhaseFocus.test.ts:110`
+- `src/services/learnTurnDoor.mission.test.ts:30`
+- `src/services/learnTurnDoor.mission.test.ts:52`
+- `src/services/learnTurnDoor.phaseWave.test.ts:38`
+- `src/services/learnTurnDoor.story.test.ts:42`
+- `src/services/learnTurnDoor.test.ts:606`
+- `src/services/learnTurnDoor.test.ts:619`
+- `src/services/settledPrice.bf4.test.ts:74`
+- `src/services/verdictTurnGrade.test.ts:53`
+- `src/services/verdictTurnGrade.test.ts:60`
+- `src/services/verdictTurnGrade.test.ts:66`
 
-### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:946`
+### `emitLearnTurn` (function) — 2 call sites
+- `src/services/learnTurnDoor.ts:1158`
+- `src/services/learnTurnDoor.ts:1179`
 
 ## Tests
 
 - `src/services/coachDecisionEmits.test.ts`
 - `src/services/learnPhaseFocus.test.ts`
+- `src/services/learnTurnDoor.mission.test.ts`
 - `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.story.test.ts`
 - `src/services/learnTurnDoor.test.ts`
@@ -100,6 +107,7 @@
 - `src/services/verdictTurnGrade.test.ts`
 - `src/test/algoAuditContract.test.ts`
 - `src/test/computedOrderWired.test.ts`
+- `src/test/decisionRows.baseline.test.ts`
 
 ## Audits that reach it
 

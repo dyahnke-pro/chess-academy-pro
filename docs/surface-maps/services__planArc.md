@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**707 lines · 14 exports · 11 importers · 11 tests · 5 audits**
+**724 lines · 15 exports · 15 importers · 12 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,10 +12,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/coach/types.ts`
+- `src/components/Coach/GameChatPanel.tsx`
+- `src/services/coachApi.ts`
 - `src/services/gameStory.ts`
 - `src/services/lookaheadPlan.ts`
 - `src/services/planArc.heldAnnouncement.test.ts`
 - `src/services/planArc.phraseFrom.test.ts`
+- `src/services/planArc.standing.test.ts`
 - `src/services/planArc.test.ts`
 - `src/services/planArc.truth.test.ts`
 - `src/services/planArcHeldRoute.test.ts`
@@ -36,9 +40,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `aimsOf` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11496`
-- `src/components/Coach/CoachTeachPage.tsx:11500`
-- `src/services/lookaheadPlan.ts:1694`
+- `src/services/lookaheadPlan.ts:1580`
+- `src/services/lookaheadPlan.ts:1583`
+- `src/services/lookaheadPlan.ts:1716`
 - `src/services/planArc.heldAnnouncement.test.ts:29`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
@@ -59,10 +63,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ArcState` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `standingPlans` (function) — 5 call sites
+- `src/services/coachApi.ts:6387`
+- `src/services/planArc.standing.test.ts:12`
+- `src/services/planArc.standing.test.ts:18`
+- `src/services/planArc.standing.test.ts:26`
+- `src/services/planArc.standing.test.ts:28`
+
 ### `withAnnouncement` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11509`
-- `src/components/Coach/CoachTeachPage.tsx:11510`
-- `src/components/Coach/CoachTeachPage.tsx:12139`
+- `src/components/Coach/CoachTeachPage.tsx:11476`
+- `src/components/Coach/CoachTeachPage.tsx:11477`
+- `src/components/Coach/CoachTeachPage.tsx:12107`
 - `src/services/planArc.heldAnnouncement.test.ts:32`
 
 ### `EMPTY_ARC` (const) — 0 call sites
@@ -78,11 +89,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.test.ts:334`
 - `src/services/planArc.test.ts:339`
 
-### `stepArc` (function) — 35 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11496`
-- `src/components/Coach/CoachTeachPage.tsx:11500`
-- `src/services/lookaheadPlan.ts:1695`
+### `stepArc` (function) — 37 call sites
+- `src/services/lookaheadPlan.ts:1580`
+- `src/services/lookaheadPlan.ts:1583`
+- `src/services/lookaheadPlan.ts:1717`
 - `src/services/planArc.heldAnnouncement.test.ts:29`
+- `src/services/planArc.standing.test.ts:16`
+- `src/services/planArc.standing.test.ts:22`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:97`
 - `src/services/planArc.test.ts:99`
@@ -116,9 +129,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/thinkMarkClosed.gate.test.ts:77`
 
 ### `aimWalkableNow` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11496`
-- `src/components/Coach/CoachTeachPage.tsx:11500`
-- `src/services/lookaheadPlan.ts:1694`
+- `src/services/lookaheadPlan.ts:1580`
+- `src/services/lookaheadPlan.ts:1583`
+- `src/services/lookaheadPlan.ts:1716`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
 - `src/services/planArc.test.ts:211`
@@ -141,6 +154,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/planArc.heldAnnouncement.test.ts`
 - `src/services/planArc.phraseFrom.test.ts`
+- `src/services/planArc.standing.test.ts`
 - `src/services/planArc.test.ts`
 - `src/services/planArc.truth.test.ts`
 - `src/services/planArcFade.test.ts`
