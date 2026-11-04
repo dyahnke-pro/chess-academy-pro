@@ -27,7 +27,7 @@
 // notes it BUILT a fact on, how many of those facts REACHED that surface's
 // composer, and how many the composer SAID. DANYA_BENCH_REACH=0 skips it.
 import { it, expect } from 'vitest';
-import { existsSync, readFileSync, readdirSync, mkdirSync, writeFileSync } from 'node:fs';
+import { appendFileSync, existsSync, readFileSync, readdirSync, mkdirSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { analysisOf, evalOf, linesOf, moverCost, type EngineRead } from '../test/replayGame';
 import { newLessonVoice, BRIEFING_LINE_PLIES } from './reviewMoveBriefing';
@@ -965,7 +965,12 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
       video: videoOf(p.note.id), danya: d,
       sentences: ids.flatMap((id) => sentencesOf(said[id] ?? '').map((text) => ({ source: id, text, ideas: ideasOf(text, p.to) }))),
     });
-    if ((n + 1) % 500 === 0) console.log(`bench: ${n + 1}/${positions.length} notes, ${Math.round((Date.now() - started) / 1000)}s`);
+    // PROGRESS TO A FILE (the console never reaches a backgrounded log): one
+    // line every 100 notes, so a long run can be watched, not guessed at.
+    if ((n + 1) % 100 === 0) {
+      mkdirSync('audit-reports/danya-bench', { recursive: true });
+      appendFileSync(`audit-reports/danya-bench/progress${process.env.DANYA_BENCH_TAG ? `-${process.env.DANYA_BENCH_TAG}` : ''}.log`, `bench: ${n + 1}/${positions.length} notes, ${Math.round((Date.now() - started) / 1000)}s\n`);
+    }
   }
 
   // ── report ──
