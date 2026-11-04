@@ -44,6 +44,7 @@ import { lossBeyondBestAlternative } from './voluntaryLoss';
 import { deepFact, theirTarget, binding, moveHit } from './threeFacts';
 import { pieceRoute } from './pieceRoute';
 import type { PhraseMemory } from '../utils/phraseMemory';
+import { createStoryStore, storyLedger, type SaidSet, type StoryStore } from './gameStory';
 import { withArticle } from '../utils/andList';
 import { afterCaptureSan } from '../utils/captureWords';
 import type { IdeaKind } from './ideaKind';
@@ -575,11 +576,21 @@ export function joinReview(clauses: string[], moverIsStudent: boolean | undefine
 
 
 /** ONE LESSON'S VOICE: the phrase memory (say an idea once, then refer) and
- *  the say-once ledger every DNA door keeps. One per lesson; a branch takes a
- *  copy of the spine's, so each line it continues still remembers the spine. */
-export interface LessonVoice { phrases: PhraseMemory; keys: Set<string> }
-export function newLessonVoice(): LessonVoice { return { phrases: new Map(), keys: new Set() }; }
-export function forkLessonVoice(v: LessonVoice): LessonVoice { return { phrases: new Map(v.phrases), keys: new Set(v.keys) }; }
+ *  the lesson line's STORY — what the line has said, kept in the one per-game
+ *  story every surface keeps (`GameStory`, WO-STORY-MATRIX-01 P1-8e), its
+ *  spoken keys read and written through `keys` at the ply the line is at.
+ *  One per lesson line; a branch takes a copy of the spine's story, so each
+ *  line it continues still remembers the spine. */
+export interface LessonVoice { phrases: PhraseMemory; story: StoryStore; keys: SaidSet }
+function lessonVoiceOn(story: StoryStore, phrases: PhraseMemory): LessonVoice {
+  return { phrases, story, keys: storyLedger(story, '', 'sentences') };
+}
+export function newLessonVoice(): LessonVoice { return lessonVoiceOn(createStoryStore('lesson'), new Map()); }
+export function forkLessonVoice(v: LessonVoice): LessonVoice {
+  const story = createStoryStore('lesson');
+  story.restore(v.story.serialize());
+  return lessonVoiceOn(story, new Map(v.phrases));
+}
 
 /** HOW MUCH OF THE LINE AHEAD A BRIEFING READS: six moves a side — the trip a
  *  piece makes (`pieceRoute`) and the deep fact's proven tier (five of the

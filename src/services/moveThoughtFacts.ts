@@ -7,6 +7,7 @@
 // The Danya bench (2026-10-30) found the lesson picking the wrong one of these
 // (1…h3: "it makes luft" where his note and two other computers said "it keeps
 // their bishop off g4") and stacking two that said one thing.
+import { plyOfFen } from '../utils/plyOfFen';
 import { Chess } from 'chess.js';
 import type { PrevCaptureContext } from './captureRun';
 import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
@@ -252,6 +253,8 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
  *  cut at three and never heard the move's job or its fundamentals. '' when
  *  nothing earned a word: silence beats a repeat. */
 export function lessonThought(input: Omit<MoveThoughtInput, 'phrases'>, voice: LessonVoice): string {
+  // The line's story is at this move's ply: what it says is said here.
+  voice.story.reach(plyOfFen(input.fenBefore));
   return composeThought(moveThoughtFacts({ ...input, phrases: voice.phrases }), 'lesson', voice).spoken;
 }
 

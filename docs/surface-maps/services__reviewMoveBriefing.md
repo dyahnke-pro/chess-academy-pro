@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**590 lines · 12 exports · 22 importers · 14 tests · 0 audits**
+**601 lines · 12 exports · 23 importers · 15 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,6 +22,7 @@
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/gamesCourse.ts`
 - `src/services/guardPressure.test.ts`
+- `src/services/lessonVoice.story.test.ts`
 - `src/services/materialSites.test.ts`
 - `src/services/midExchangeStructure.test.ts`
 - `src/services/moveThoughtFacts.test.ts`
@@ -47,13 +48,13 @@
 ### `moveAspects` (function) — 4 call sites
 - `src/services/captureLeadsTo.test.ts:26`
 - `src/services/midExchangeStructure.test.ts:13`
-- `src/services/moveThoughtFacts.ts:133`
+- `src/services/moveThoughtFacts.ts:134`
 - `src/test/captureSaidOnce.gate.test.ts:190`
 
 ### `buildReviewMoveBriefing` (function) — 23 call sites
 - `src/services/captureRun.test.ts:45`
 - `src/services/captureRun.test.ts:57`
-- `src/services/coachFeatureService.ts:1993`
+- `src/services/coachFeatureService.ts:1959`
 - `src/services/guardPressure.test.ts:42`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
@@ -76,19 +77,21 @@
 - `src/test/captureSaidOnce.gate.test.ts:186`
 
 ### `toClause` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:187`
+- `src/services/moveThoughtFacts.ts:188`
 
 ### `joinReview` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:187`
+- `src/services/moveThoughtFacts.ts:188`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newLessonVoice` (function) — 20 call sites
+### `newLessonVoice` (function) — 22 call sites
 - `src/hooks/useTeachWalkthrough.ts:890`
 - `src/hooks/useTeachWalkthrough.ts:891`
-- `src/services/danyaBench.measure.test.ts:429`
+- `src/services/danyaBench.measure.test.ts:430`
 - `src/services/gamesCourse.ts:281`
+- `src/services/lessonVoice.story.test.ts:29`
+- `src/services/lessonVoice.story.test.ts:41`
 - `src/services/moveThoughtFacts.test.ts:19`
 - `src/services/moveThoughtFacts.test.ts:58`
 - `src/services/moveThoughtFacts.test.ts:70`
@@ -104,15 +107,17 @@
 - `src/services/reviewMoveThought.test.ts:29`
 - `src/services/walkthroughLlmNarrator.ts:96`
 - `src/services/writtenVsComputed.measure.test.ts:43`
-- `src/test/replayGame.ts:116`
+- `src/test/replayGame.ts:117`
 
-### `forkLessonVoice` (function) — 1 call site
+### `forkLessonVoice` (function) — 2 call sites
+- `src/services/lessonVoice.story.test.ts:44`
 - `src/services/openingGenerator.ts:1941`
 
 ### `BRIEFING_LINE_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `prevCaptureOf` (re-export) — 3 call sites
+### `prevCaptureOf` (re-export) — 4 call sites
+- `src/services/lessonVoice.story.test.ts:19`
 - `src/services/pvPlayback.ts:234`
 - `src/services/reviewMoveBriefing.test.ts:101`
 - `src/services/reviewMoveBriefing.test.ts:139`
@@ -127,6 +132,7 @@
 - `src/services/coachFact.test.ts`
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/guardPressure.test.ts`
+- `src/services/lessonVoice.story.test.ts`
 - `src/services/materialSites.test.ts`
 - `src/services/midExchangeStructure.test.ts`
 - `src/services/moveThoughtFacts.test.ts`

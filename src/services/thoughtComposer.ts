@@ -22,6 +22,7 @@
 //      interface talk).
 // Surfaces differ only in which steps they ask for and how many facts a step
 // may carry; the order and the choice are this file's.
+import type { SaidSet } from './gameStory';
 import { stakeValue } from './factStakes';
 import type { CoachFact } from './coachFact';
 import thoughtPolicy from '../data/thought-policy.json';
@@ -111,8 +112,9 @@ export const THOUGHT_REGISTER: Record<ThoughtSurface, ThoughtRegister> = {
 };
 
 /** The say-once memory a lesson, a review or a game keeps across its moves:
- *  sentence and claim keys already spoken. */
-export interface ThoughtMemory { keys: Set<string> }
+ *  sentence and claim keys already spoken — the story's ledger (`SaidSet`,
+ *  a lesson line's or Review's), or a plain set a caller keeps on trial. */
+export interface ThoughtMemory { keys: SaidSet }
 
 export interface ComposedThought {
   /** The thought, ready to speak. '' when nothing earned a word. */
