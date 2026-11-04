@@ -154,9 +154,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getCoachStructuredResponse` (function) — 3 call sites
-- `src/services/openingGenerator.ts:3134`
-- `src/services/openingGenerator.ts:3272`
-- `src/services/openingGenerator.ts:3834`
+- `src/services/openingGenerator.ts:3135`
+- `src/services/openingGenerator.ts:3273`
+- `src/services/openingGenerator.ts:3835`
 
 ### `OpponentHypotheticalGrounding` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -285,7 +285,7 @@
 - `src/services/gameReviewService.ts:58`
 - `src/services/kidGameCoach.ts:220`
 - `src/services/mistakeNarrationVoice.ts:109`
-- `src/services/openingGenerator.ts:2399`
+- `src/services/openingGenerator.ts:2400`
 - `src/services/openingSectionNarrator.ts:84`
 - `src/services/speakComputed.ts:21`
 - `src/services/spokenLanguage.ts:204`
@@ -363,7 +363,7 @@
 - `src/services/coachApi.pieceOptions.test.ts:30`
 - `src/services/coachApi.whyReasoning.integration.test.ts:60`
 - `src/services/coachApi.whyReasoning.integration.test.ts:80`
-- `src/services/openingGenerator.ts:4035`
+- `src/services/openingGenerator.ts:4036`
 - `src/services/smartSearchService.ts:50`
 - `src/test/kidIsolation.gate.test.ts:142`
 
