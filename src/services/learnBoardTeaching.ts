@@ -12,7 +12,7 @@ import { flipSideToMove } from './threatOut';
 import { counterThreat, counterThreatLine } from './counterThreat';
 import { playedConcept, playedConceptLine, type PlayedConcept } from './playedConcept';
 import { CAPTURE_VALUE, MATERIAL_VALUE } from './pieceValues';
-import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof, type Proof } from './proof';
+import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof } from './proof';
 import { lineShape, lineSeatAt, withArticle } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import { Chess, type Color, type Square } from 'chess.js';

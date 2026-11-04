@@ -13,7 +13,7 @@ import { ALL_GREY } from './teachingLayers';
 import { describe, it, expect } from 'vitest';
 import {
   exchangeStakes, forkPoints, lineTacticPoints, costStakes, stakeValue,
-  STAKED_FLOOR, MATE_POINTS, mateStakes, type FactStakes,
+  STAKED_FLOOR, mateStakes, type FactStakes,
 } from './factStakes';
 import { decide } from './coachDecider';
 import { doorFact } from '../test/doorFact';
