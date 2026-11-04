@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**433 lines · 13 exports · 18 importers · 9 tests · 1 audits**
+**435 lines · 13 exports · 18 importers · 9 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -107,7 +107,7 @@
 ### `HabitId` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `liveHabitKey` (function) — 11 call sites
+### `liveHabitKey` (function) — 12 call sites
 - `src/services/learnBoardTeaching.ts:270`
 - `src/services/learnFundamentalNarration.ts:114`
 - `src/services/methodBeat.live.test.ts:112`
@@ -119,13 +119,15 @@
 - `src/services/methodSignals.test.ts:70`
 - `src/services/methodSignals.test.ts:71`
 - `src/services/slipQuestion.test.ts:44`
+- `src/services/slipQuestion.test.ts:53`
 
-### `habitSaidKey` (function) — 5 call sites
+### `habitSaidKey` (function) — 6 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10557`
 - `src/components/Coach/CoachTeachPage.tsx:10558`
 - `src/services/learnBoardTeaching.ts:255`
 - `src/services/learnBoardTeaching.ts:1190`
 - `src/services/learnBoardTeaching.ts:1210`
+- `src/services/slipQuestion.test.ts:53`
 
 ### `liveMethodBeat` (function) — 16 call sites
 - `src/services/looseTrigger.test.ts:17`
