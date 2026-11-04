@@ -1,3 +1,4 @@
+import { pendingRecapture } from '../utils/justCaptured';
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
 import { hasCastled, rooksOnBackRank, countDevelopedMinors, hasMajorPieceCaptured, openingEndRule } from './openingEnd';
 import { phaseCrossed, type StoryEventInput, type StoryStore } from './gameStory';
@@ -269,4 +270,27 @@ export function phaseTransitionDiagnostic(
     openingToMiddlegameFired: state.openingToMiddlegameFired,
     middlegameToEndgameFired: state.middlegameToEndgameFired,
   };
+}
+
+/** THE PHASE TURNS OF A WHOLE GAME (WO-STORY-MATRIX-01 P1-9c) — the edge Learn
+ *  meets live, read over a recorded game for Review: the student's moves only,
+ *  a board still mid-exchange read on the settled board after it (the one
+ *  `pendingRecapture` rule Learn applies). Review had its own edge
+ *  (`classifyPhase` changing on any ply), so the two surfaces disagreed on the
+ *  move the middlegame began. */
+export function phaseTurnsOf(
+  plies: ReadonlyArray<{ ply: number; san: string; fenAfter: string; isCoachMove: boolean }>,
+  playerColor: 'white' | 'black',
+): Map<number, 'middlegame' | 'endgame'> {
+  const turns = new Map<number, 'middlegame' | 'endgame'>();
+  const crossed = createPhaseTransitionState();
+  const sans: string[] = [];
+  for (const p of plies) {
+    sans.push(p.san);
+    if (p.isCoachMove || (p.ply % 2 === 1 ? 'white' : 'black') !== playerColor) continue;
+    if (pendingRecapture(sans)) continue;
+    const ev = detectPhaseTransition({ fen: p.fenAfter, san: p.san, moveNumber: p.ply, isCoachMove: false }, crossed, playerColor);
+    if (ev) turns.set(p.ply, ev.kind === 'opening-to-middlegame' ? 'middlegame' : 'endgame');
+  }
+  return turns;
 }

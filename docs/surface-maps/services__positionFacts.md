@@ -231,7 +231,7 @@
 - `src/test/teach02Wired.test.ts:140`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11437`
+- `src/components/Coach/CoachTeachPage.tsx:11403`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -259,7 +259,7 @@
 - `src/services/conceptKey.ts:11`
 - `src/services/danyaBehaviors.ts:526`
 - `src/services/kingAttackReads.ts:661`
-- `src/services/learnBoardTeaching.ts:502`
+- `src/services/learnBoardTeaching.ts:501`
 - `src/services/looseStill.test.ts:37`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`

@@ -134,3 +134,31 @@ describe('boardComputers — the one registry', () => {
     for (const r of reads) expect(r.proof).toBeDefined();
   });
 });
+
+describe('boardComputers — threatAnswer (WO-STORY-MATRIX-01 P1-9c)', () => {
+  // …Bg4 pins Nf3 to Rd1; the engine's answer is h3, the pawn that kicks it.
+  const fen = 'r3qrk1/ppp1bppp/4n3/4P2n/6b1/1BN1BN2/PPP3PP/3RQRK1 w - - 5 16';
+  const ctx = { fen, squares: ['g4', 'f3', 'd1'], shape: 'line' as const, bestUci: 'h2h3', whiteCp: 223, student: 'w' as const, ply: 0 };
+
+  it('the answer half of the threat is one registry fact, held on a live board', () => {
+    const held = readBoard('threatAnswer', { ...ctx, namesMove: false });
+    expect(held).not.toBeNull();
+    expect(held?.computer).toBe('threatAnswer');
+    expect(held?.namesStudentMove).toBe(true);
+    // The move is held: neither the words nor a mark name h3.
+    expect(held?.text).not.toMatch(/\bh3\b/);
+    expect(held?.marks?.play).toBeUndefined();
+    expect(held?.claims).toEqual(['threat-answer:kick:g4f3d1']);
+  });
+
+  it('named, it marks the move and proves the answer on the board', () => {
+    const named = readBoard('threatAnswer', { ...ctx, namesMove: true });
+    expect(named?.text).toMatch(/Ask the question — h3 hits the bishop at once\./);
+    expect(named?.marks?.play).toEqual({ from: 'h2', to: 'h3' });
+    expect(isProof(named?.proof)).toBe(true);
+  });
+
+  it('no best move, no answer', () => {
+    expect(readBoard('threatAnswer', { ...ctx, bestUci: null, namesMove: false })).toBeNull();
+  });
+});

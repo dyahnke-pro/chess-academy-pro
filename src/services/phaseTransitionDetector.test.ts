@@ -552,3 +552,20 @@ describe('an opening that ends in an endgame has ONE beat (hand walk 2026-09-27)
     expect(fired).toEqual(['18:opening-to-middlegame']);
   });
 });
+
+describe('phaseTurnsOf — the one phase edge, read over a recorded game (WO-STORY-MATRIX-01 P1-9c)', () => {
+  it('Review turns the phase on the student\'s move, as Learn does — never on the opponent\'s (sicilianClosed1000)', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { resolve } = await import('node:path');
+    const { Chess } = await import('chess.js');
+    const { phaseTurnsOf } = await import('./phaseTransitionDetector');
+    const { games } = JSON.parse(readFileSync(resolve(__dirname, '../test/fixtures/learn-replay-games.json'), 'utf8')) as { games: Array<{ id: string; sans: string[]; studentSide: 'white' | 'black' }> };
+    const game = games.find((x) => x.id === 'sicilianClosed1000');
+    expect(game).toBeDefined();
+    const c = new Chess();
+    const plies = (game?.sans ?? []).map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: false }; });
+    // Review's own classifyPhase edge fired on plies 15 and 47 — the
+    // opponent's moves; the student (Black) meets them on 16 and 48.
+    expect([...phaseTurnsOf(plies, 'black')]).toEqual([[16, 'middlegame'], [48, 'endgame']]);
+  });
+});

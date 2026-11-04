@@ -62,8 +62,8 @@
 - `src/services/boardComputers.test.ts:76`
 - `src/services/coachFact.test.ts:75`
 - `src/services/coachFact.test.ts:76`
-- `src/services/coachFeatureService.ts:2458`
-- `src/services/coachFeatureService.ts:3042`
+- `src/services/coachFeatureService.ts:2489`
+- `src/services/coachFeatureService.ts:3073`
 - `src/services/learnTurnDoor.ts:244`
 - `src/services/learnTurnDoor.ts:780`
 - `src/services/learnTurnDoor.ts:837`
@@ -77,7 +77,7 @@
 - `src/services/learnTurnDoor.ts:1142`
 
 ### `placeFact` (function) — 15 call sites
-- `src/services/boardComputers.ts:556`
+- `src/services/boardComputers.ts:591`
 - `src/services/learnTurnDoor.ts:579`
 - `src/services/moveThoughtFacts.ts:141`
 - `src/services/moveThoughtFacts.ts:262`
@@ -94,7 +94,7 @@
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 16 call sites
-- `src/services/boardComputers.ts:556`
+- `src/services/boardComputers.ts:591`
 - `src/services/coachFact.test.ts:101`
 - `src/services/coachFact.test.ts:107`
 - `src/services/coachFact.test.ts:108`

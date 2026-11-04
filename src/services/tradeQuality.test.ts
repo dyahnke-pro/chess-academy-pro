@@ -76,3 +76,10 @@ describe('readTrade — the count settles through the move that led here (oct3a 
     expect(src).toMatch(/'clearly ahead on material'/);
   });
 });
+
+describe('readTrade — a retake that wins nothing back is no trade (2026-11-04)', () => {
+  it('NEGATIVE: …Bxg5 with Bxg5 met by …Qxg5 wins the knight — never "a good trade" (colle800 ply 28)', () => {
+    const fen = 'r1bqrnk1/4bppp/p1n1p3/1p1pP1NN/3p4/2PB4/PP3PPP/R1BQR1K1 b - - 1 14';
+    expect(readTrade(fen, 'Bxg5', 'w', null, null)).toBeNull();
+  });
+});

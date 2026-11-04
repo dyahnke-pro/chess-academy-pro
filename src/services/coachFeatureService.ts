@@ -19,6 +19,9 @@ import { coldStudent, computeNeed, fenKey, type StudentNeedContext, type NeedVer
 import { loadStudentNeedContext } from './studentNeedLoader';
 import { layerStandings } from './teachingLayers';
 import { readConversion, type ConversionStep } from './conversionMethod';
+import { characterTurn } from './positionCharacter';
+import { phaseTurnsOf } from './phaseTransitionDetector';
+import { detectImmediateTactics } from './liveTacticsContext';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsClause, moveOnlyRestates, computePvLine, pvDepthForRating, afterCapture, NO_PREV_CAPTURE, tacticWord, type PvLine, type PvEngine, type PrevCaptureContext } from './pvPlayback';
 import { countWord, lineSeatAt, lineShape, withArticle } from '../utils/andList';
@@ -55,7 +58,7 @@ import { renderStructureAtoms } from './structureProse';
 import { coachTurn, habitNeedFrom } from './coachDecider';
 import { advantageWasMissed } from './reviewWithholding';
 import { PLAN_THREAD_HOLD_PLIES } from './planThread';
-import { createStoryStore, storyLedger, storyThrough, threadKey, threadStated, threadVariant, PLAN_GOAL, phaseCrossed, openingAt, openingsNamed, noteOpening, lastVerdict, modelGameCited, storyTurn, type ThreadKey, type StoryStore, type StorySeed, type SaidSet } from './gameStory';
+import { createStoryStore, switchesSaid, storyLedger, storyThrough, threadKey, threadStated, threadVariant, PLAN_GOAL, phaseCrossed, openingAt, openingsNamed, noteOpening, lastVerdict, modelGameCited, storyTurn, type ThreadKey, type StoryStore, type StorySeed, type SaidSet } from './gameStory';
 import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
@@ -1581,17 +1584,13 @@ function* reviewSegmentSteps(
   // 9 is not said again at move 22. Counted for the audit row below.
   const reviewSpokenKeys = storyLedger(story, '', 'sentences');
   const reviewPkgTally = { plies: 0, parts: 0, dropped: 0, reasons: {} as Record<string, number>, drops: [] as Array<{ ply: number; reason: string; text: string }> };
-  /** S4: the first ply of each phase the game reaches after the opening. */
-  const phaseTurnAt = new Map<number, 'middlegame' | 'endgame'>();
-  {
-    let prevPhase: string | null = null;
-    for (let k = 0; k < usable; k += 1) {
-      const phase = classifyPhase(fenChain[k].fenAfter, { ply: moves[k].ply });
-      if (prevPhase !== null && phase !== prevPhase && (phase === 'middlegame' || phase === 'endgame')
-        && ![...phaseTurnAt.values()].includes(phase)) phaseTurnAt.set(moves[k].ply, phase);
-      prevPhase = phase;
-    }
-  }
+  /** S4: the first ply of each phase the game reaches after the opening —
+   *  the ONE phase-edge computer Learn reads (`detectPhaseTransition`,
+   *  WO-STORY-MATRIX-01 P1-9c) read over the game (`phaseTurnsOf`). */
+  const phaseTurnAt = playerColor
+    ? phaseTurnsOf(moves.slice(0, usable).map((mm, k) => ({ ply: mm.ply, san: mm.san, fenAfter: fenChain[k].fenAfter, isCoachMove: mm.isCoachMove })), playerColor)
+    : new Map<number, 'middlegame' | 'endgame'>();
+
   const segments: ReviewMoveSegment[] = [];
   // Plan-idea beats, each fired once on an eligible student move: the opening
   // developing plan (when the opening is identified) and the middlegame
@@ -2055,6 +2054,26 @@ function* reviewSegmentSteps(
         }
       } catch { causalLead = null; }
     }
+    // WHAT THE POSITION IS ABOUT, AND WHEN THAT CHANGES (WO-STORY-MATRIX-01
+    // P1-9c) — the same computer Learn steps (`characterTurn`), stepped on
+    // every board of the walk in the game's story, so the switch holds for two
+    // reads exactly as it does live. Review keeps one engine line a ply, so the
+    // best-move gap is not read here: the character comes off the material and
+    // the proven tactics on the board.
+    let characterSwitch: { to: import('./positionCharacter').Character; text: string } | null = null;
+    if (studentColorWB) {
+      try {
+        const step = characterTurn(story.plans().character, switchesSaid(story.current()), {
+          fen: fenPair.fenAfter, studentColor: studentColorWB === 'w' ? 'white' : 'black',
+          immediate: detectImmediateTactics(fenPair.fenAfter, studentColorWB), topLines: [], lastSan: m.san,
+        });
+        story.setPlans(m.ply, { ...story.plans(), character: step.next });
+        // Up material, what to do is the conversion method's (`readConversion`,
+        // below): its step can be "attack the king, don't cash in", which the
+        // character's "trade down" would contradict. One idea, one computer.
+        characterSwitch = step.switched && step.switched.to !== 'conversion' ? step.switched : null;
+      } catch { characterSwitch = null; }
+    }
     // UNCAPPED diagnostic branch — emit EVERY computed facet on EVERY move (David
     // 2026-07-20: "turn off all narration caps"). Skips the one-beat cascade + the
     // one-shot flags entirely; the aggregator is the full data inventory.
@@ -2142,6 +2161,15 @@ function* reviewSegmentSteps(
           lastHereSaid.add(hereKey);
           facets.push(fact(here.computer, 'last-here', here.text));
         }
+      }
+      // The position's character switch, said once its new character holds:
+      // stated in the story only when it spoke, so its words rotate on the
+      // switches the student heard (Learn's rule).
+      if (characterSwitch) {
+        const to = characterSwitch.to;
+        const raw = fact('characterTurn', 'judgement', characterSwitch.text, { identity: `character:${m.ply}` });
+        facets.push(raw);
+        facetCommits.set(raw, () => story.note(m.ply, [{ kind: 'character', to }]));
       }
       // THE CONVERSION METHOD (WO-LAYERS-01 step 5), on the student's move when
       // they are a piece or more up — the step the board is on, once per step

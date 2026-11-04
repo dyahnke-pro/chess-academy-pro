@@ -14,7 +14,7 @@ import { legalMoveFor, bookContinuation } from '../../utils/legalMoveFor';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { CoachBoardBar } from '../Board/CoachBoardBar';
 import { useBoardFit } from '../../hooks/useBoardFit';
-import { characterOf, provenTacticLive, sharpGap, stepCharacter, SHARP_GAP_CP } from '../../services/positionCharacter';
+import { characterTurn } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { startLearnTranscript, stopLearnTranscript, noteLearnEntry } from '../../services/learnTranscript';
 import { createLearnMemory, markOpeningFactsSpoken, nextStem, rememberKeptClaims, type LearnMemory } from '../../services/learnMemory';
@@ -73,7 +73,7 @@ import { buildPositionalRead } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { cheaperAttackerHit, gambitPoint, kingPawnUnderFire, type CheaperHit, mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { habitSaidKey, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { habitSaidKey, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -332,7 +332,7 @@ import { admitArrow, admitArrows, keptLineArrows, narrationArrowsThroughDoor, wi
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareRead } from '../../services/tacticalRead';
-import { findHangingBySee, legalSeeGainFor, signedLegalSeeFor, signedCaptureRead } from '../../services/positionReadingService';
+import { findHangingBySee, signedLegalSeeFor, signedCaptureRead } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH, NEXT_BOARD_READ_MS } from '../../services/engineConstants';
@@ -11391,50 +11391,16 @@ export function CoachTeachPage({ mode }: {
                       const cc: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
                       const tctxNow = buildTacticsLiveContext(probe.fen(), studentBest, cc, rating);
                       const tl = studentBest?.topLines ?? [];
-                      const gap = tl.length >= 2 ? sharpGap(tl[0].evaluation, tl[1].evaluation) : null;
-                      const now = characterOf({
-                        fen: probe.fen(),
-                        studentColor: playerColor,
-                        // A detected tactic, not a HANGING piece: a bishop hit by
-                        // a pawn simply steps away (hand walk 2026-09-30, Closed
-                        // Ruy: 3…a6 read as "turned sharp", then three flips in
-                        // 20 plies of a quiet game). And a PROVEN one: a standing pin carries no
-                        // verdict and must not flip the read (walk 3, …Bg4).
-                        tacticLive: provenTacticLive(tctxNow.immediate),
-                        bestGapCp: gap,
-                      });
-                      // The reason the switch names ("there is a tactic") reads the
-                      // same proven set the character did — never a hanging piece.
-                      const tacticLiveNow = provenTacticLive(tctxNow.immediate);
                       // The character is the game's story (P1-8c): stepped on its
-                      // desk, its words rotated on the switches the student heard.
+                      // desk, its words rotated on the switches the student heard
+                      // — one computer for every surface (`characterTurn`).
                       const story = learnMemRef.current.story;
-                      const step = stepCharacter(story.plans().character, now, switchesSaid(story.current()), tacticLiveNow ? 'tactic' : gap !== null && gap >= SHARP_GAP_CP ? 'gap' : undefined);
+                      const step = characterTurn(story.plans().character, switchesSaid(story.current()), {
+                        fen: probe.fen(), studentColor: playerColor, immediate: tctxNow.immediate ?? [], topLines: tl, lastSan: move.san,
+                      });
                       story.setPlans(gameRef.current.plies, { ...story.plans(), character: step.next });
-                      // A forced mate already says what the position is about;
-                      // "it has turned sharp" beside it is the same fact twice
-                      // (run C walk 2026-09-30, the mate-in-4 ply).
-                      const mateOnBoard = typeof tl[0]?.mate === 'number' && tl[0].mate > 0;
-                      // …and "it is a quiet game now" on the move that just gave
-                      // check is the opposite of the truth (run D walk, f6+).
-                      const quietOnCheck = step.switched?.to === 'positional' && /[+#]$/.test(move.san);
-                      // …and "the tactics have settled" while ANY tactic is on
-                      // the board, or one move stands far above the rest, is
-                      // false (manual claim check 2026-09-30, item 65: …Bb4
-                      // pinning Nc3 was the top line).
-                      // …or any piece either side can win by exchange right now (run J,
-                      // UVJ ply 50: "the tactics have settled" with material loose).
-                      const looseNow = ((): boolean => {
-                        try {
-                          const b = new Chess(probe.fen());
-                          return b.board().flat().some((c) => !!c && c.type !== 'k'
-                            && legalSeeGainFor(probe.fen(), c.square, c.color === 'w' ? 'b' : 'w') > 0);
-                        } catch { return false; }
-                      })();
-                      const quietButConcrete = step.switched?.to === 'positional'
-                        && ((tctxNow.immediate?.length ?? 0) > 0 || (gap !== null && gap >= SHARP_GAP_CP) || looseNow);
-                      if (step.switched && !mateOnBoard && !quietOnCheck && !quietButConcrete) {
-                        queueSpokenHint(probe.fen(), { computer: 'stepCharacter', text: step.switched.text, lane: 'character', proof: NO_PROOF.description, namesStudentMove: false, claims: step.switched.to === 'conversion' ? ['convert-method', convertKey('trade-pieces')] : undefined });
+                      if (step.switched) {
+                        queueSpokenHint(probe.fen(), { computer: 'characterTurn', text: step.switched.text, lane: 'character', proof: NO_PROOF.description, namesStudentMove: false, claims: step.switched.to === 'conversion' ? ['convert-method', convertKey('trade-pieces')] : undefined });
                         story.offer(probe.fen(), { text: step.switched.text, events: [{ kind: 'character', to: step.switched.to }] });
                       }
                     } catch { /* the character read is a bonus, never a blocker */ }
@@ -11995,16 +11961,17 @@ export function CoachTeachPage({ mode }: {
                       void factsReady.then(() => {
                         const read = studentBestReadRef.current;
                         if (!read || !samePosition(read.fen, fenNow)) return;
-                        const ans = threatAnswerTeaching({
+                        const studentWB = playerColor === 'white' ? 'w' : 'b';
+                        // Learn names no move unasked: the answer is held (David 2026-10-10).
+                        const ans = readBoard('threatAnswer', {
                           fen: fenNow, squares: asked.squares, shape: asked.shape,
                           bestUci: read.bestUci, whiteCp: read.whiteCp,
-                          student: playerColor === 'white' ? 'w' : 'b', ply: nextStem(learnMemRef.current, 'threat-answer'),
+                          student: studentWB, ply: nextStem(learnMemRef.current, 'threat-answer'), namesMove: false,
                         });
                         if (ans) {
-                          // The move is held, so its proof is too — the threat's
-                          // cost still proves the question.
-                          queueSpokenHint(fenNow, { computer: 'threatAnswerTeaching', text: ans.text, lane: 'threatAnswer', proof: (() => { const tc = readBoard('threatCost', { line: ans.text, fen: fenNow, student: playerColor === 'white' ? 'w' : 'b', squares: asked.squares })?.proof; return (tc && isProof(tc) ? tc : null) ?? (ans.arrow ? legalLineProof(fenNow, [ans.san], lineSeatAt(fenNow, playerColor === 'white' ? 'w' : 'b')) : null) ?? tc ?? NO_PROOF.withheld; })(), namesStudentMove: namesPlayableStudentMove(ans.san ? namesMoves((playerColor === 'white' ? 'w' : 'b'), fenNow, namedSan(fenNow, ans.san)) : NAMES_NO_MOVE), squares: asked.squares, claims: [`threat-answer:${ans.kind}:${asked.squares.join('')}`], arrows: ans.arrow ? [ans.arrow] : undefined });
-                          captureEvent('threat_answer_queued', { surface: 'coach-teach', kind: ans.kind });
+                          const play = ans.marks?.play;
+                          queueSpokenHint(fenNow, { computer: ans.computer, text: ans.text, lane: 'threatAnswer', proof: ans.proof, namesStudentMove: ans.namesStudentMove, squares: ans.squares, claims: ans.claims, arrows: play ? [{ from: play.from, to: play.to, role: 'play', vouchedBy: 'engine', source: 'threatAnswer' }] : undefined });
+                          captureEvent('threat_answer_queued', { surface: 'coach-teach', kind: readKey(ans).split(':')[1] });
                         }
                       });
                     }

@@ -90,14 +90,14 @@
 - `src/services/backwardLook.ts:197`
 - `src/services/backwardLook.ts:378`
 - `src/services/backwardLook.ts:418`
-- `src/services/coachFeatureService.ts:2231`
+- `src/services/coachFeatureService.ts:2262`
 - `src/services/exchangeIdeas.ts:315`
 - `src/services/exchangeIdeas.ts:602`
 - `src/services/gameEndReads.ts:114`
 - `src/services/gameEndReads.ts:282`
 - `src/services/kingAttackReads.ts:155`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:7`
-- `src/services/learnBoardTeaching.ts:1481`
+- `src/services/learnBoardTeaching.ts:1461`
 - `src/services/learnPhaseFocus.test.ts:41`
 - `src/services/learnPhaseFocus.test.ts:60`
 - `src/services/learnTurnDoor.test.ts:498`
@@ -116,7 +116,7 @@
 - `src/services/kingAttackReads.ts:148`
 - `src/services/kingAttackReads.ts:180`
 - `src/services/kingAttackReads.ts:193`
-- `src/services/learnBoardTeaching.ts:271`
+- `src/services/learnBoardTeaching.ts:270`
 - `src/services/speedRunReads.ts:46`
 - `src/services/speedRunReads.ts:221`
 - `src/services/speedRunReads.ts:312`
@@ -190,7 +190,7 @@
 - `src/services/factStakes.test.ts:31`
 - `src/services/factStakes.test.ts:35`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:14`
-- `src/services/learnBoardTeaching.ts:1482`
+- `src/services/learnBoardTeaching.ts:1462`
 - `src/services/positionFacts.ts:1860`
 - `src/services/reviewFullData.ts:844`
 - `src/services/reviewFullData.ts:891`
@@ -202,7 +202,7 @@
 - `src/services/factStakes.test.ts:39`
 - `src/services/factStakes.test.ts:40`
 - `src/services/factStakes.test.ts:41`
-- `src/services/learnBoardTeaching.ts:1485`
+- `src/services/learnBoardTeaching.ts:1465`
 - `src/services/opponentMoveReads.ts:199`
 - `src/services/opponentMoveReads.ts:201`
 - `src/services/positionFacts.ts:1722`
@@ -210,7 +210,7 @@
 - `src/services/reviewFullData.ts:946`
 
 ### `piecesOn` (function) — 3 call sites
-- `src/services/learnBoardTeaching.ts:1485`
+- `src/services/learnBoardTeaching.ts:1465`
 - `src/services/reviewFullData.ts:837`
 - `src/services/reviewFullData.ts:946`
 
@@ -230,7 +230,7 @@
 - `src/services/reviewFullData.ts:849`
 
 ### `isSacrifice` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:4639`
+- `src/services/coachFeatureService.ts:4670`
 - `src/services/factStakes.test.ts:138`
 - `src/services/factStakes.test.ts:140`
 - `src/services/factStakes.test.ts:148`

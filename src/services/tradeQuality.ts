@@ -167,15 +167,16 @@ export function readTrade(
   // Roughly even: minor for minor, rook for rook, queen for queen.
   if (Math.abs(VAL[mv.piece] - VAL[mv.captured]) > 0) return null;
   const after = before; // already played
-  // It is a TRADE only if they can take back — otherwise it simply wins a piece.
-  // A legal retake that does not lose material — an even chain (Bxf6 Bxf6
-  // Qxf6) nets the retaker zero and is still a trade; the floored gain read
-  // called it "no retake" and the judge went silent (found unifying the two
-  // trade judges, 2026-10-07).
+  // It is a TRADE only if taking back wins something back — otherwise the
+  // move simply wins material. The retake's own exchange is signed: a retake
+  // that loses is no retake, and one that nets ZERO hands nothing back, its
+  // capturer taken in turn (Review baseline, colle800 28…Bxg5: Bxg5 is met by
+  // …Qxg5, so the knight was won — "Their Bxg5 is a good trade for them"
+  // called winning a piece a trade, 2026-11-04).
   {
     const enemyWB: Color = mv.color === 'w' ? 'b' : 'w';
     const canRetake = after.moves({ verbose: true }).some((m) => m.to === mv.to && !!m.captured);
-    if (!canRetake || signedLegalSeeFor(after.fen(), mv.to, enemyWB) < 0) return null;
+    if (!canRetake || signedLegalSeeFor(after.fen(), mv.to, enemyWB) <= 0) return null;
   }
 
   const mover = mv.color;

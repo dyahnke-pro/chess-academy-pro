@@ -55,7 +55,6 @@ import { ruleException } from './ruleException';
 import { falseAlarm } from './falseAlarm';
 import { theirMoveCost } from './theirMoveCost';
 import { pushOrHold } from './pushOrHold';
-import { threatAnswer, type ThreatAnswer } from './threatAnswer';
 import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
 import { masterMovesCachedSync } from './masterPlayLookup';
 import { prefetchOpeningStory } from './openingStory';
@@ -671,25 +670,6 @@ export function recordTeachingEvidence(h: Pick<TeachingFact, 'evidence'>, ctx: {
     posedImportance: h.evidence.posedImportance, origin: 'learn', prompted: ctx.prompted,
     ...(ctx.gameId ? { sourceGameId: ctx.gameId } : {}),
   });
-}
-
-/** The answer to a threat the coach just named ("Watch out — their bishop pins
- *  your knight …"): question first, then what the engine's move does about it
- *  (census T4). Appended to the threat line itself, never a lane of its own —
- *  a threat and its answer are one claim. */
-export function threatAnswerTeaching(i: {
-  fen: string;
-  squares: readonly string[];
-  shape: 'line' | 'hit';
-  bestUci: string | null;
-  /** White-POV engine eval at `fen`, or null. */
-  whiteCp: number | null;
-  student: 'w' | 'b';
-  ply: number;
-}): ThreatAnswer | null {
-  const studentCp = i.whiteCp === null ? null : i.student === 'w' ? i.whiteCp : -i.whiteCp;
-  // Learn names no move unasked: the answer is held (David 2026-10-10).
-  return threatAnswer({ fen: i.fen, squares: i.squares, bestUci: i.bestUci, studentCp, student: i.student, ply: i.ply, shape: i.shape, namesMove: false });
 }
 
 /** THE PLAN LEARN READS (2026-10-14). The live walk over the masters file

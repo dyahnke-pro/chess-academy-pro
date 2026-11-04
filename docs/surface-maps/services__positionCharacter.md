@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**137 lines · 7 exports · 5 importers · 3 tests · 0 audits**
+**192 lines · 9 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/coachFeatureService.ts`
 - `src/services/gameStory.ts`
 - `src/services/positionCharacter.pin.test.ts`
 - `src/services/positionCharacter.test.ts`
@@ -26,23 +27,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `SHARP_GAP_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sharpGap` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11428`
+### `sharpGap` (function) — 5 call sites
 - `src/services/positionCharacter.test.ts:90`
 - `src/services/positionCharacter.test.ts:91`
 - `src/services/positionCharacter.test.ts:92`
 - `src/services/positionCharacter.test.ts:93`
 - `src/services/positionCharacter.test.ts:94`
 
-### `provenTacticLive` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11437`
-- `src/components/Coach/CoachTeachPage.tsx:11442`
+### `provenTacticLive` (function) — 3 call sites
 - `src/services/positionCharacter.pin.test.ts:17`
 - `src/services/positionCharacter.pin.test.ts:23`
 - `src/services/positionCharacter.pin.test.ts:27`
 
-### `characterOf` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11429`
+### `characterOf` (function) — 7 call sites
 - `src/services/positionCharacter.test.ts:13`
 - `src/services/positionCharacter.test.ts:17`
 - `src/services/positionCharacter.test.ts:18`
@@ -54,8 +51,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `CharacterState` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `stepCharacter` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11446`
+### `stepCharacter` (function) — 8 call sites
 - `src/services/positionCharacter.test.ts:34`
 - `src/services/positionCharacter.test.ts:60`
 - `src/services/positionCharacter.test.ts:70`
@@ -64,6 +60,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionCharacter.test.ts:81`
 - `src/services/positionCharacter.test.ts:82`
 - `src/services/positionCharacter.test.ts:83`
+
+### `CharacterBoardRead` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `characterTurn` (function) — 2 call sites
+- `src/components/Coach/CoachTeachPage.tsx:11398`
+- `src/services/coachFeatureService.ts:2069`
 
 ## Tests
 

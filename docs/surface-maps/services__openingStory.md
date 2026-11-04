@@ -33,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openingStoryAt` (function) — 9 call sites
-- `src/services/boardComputers.ts:306`
+- `src/services/boardComputers.ts:314`
 - `src/services/holeKey.test.ts:15`
 - `src/services/openingStory.test.ts:23`
 - `src/services/openingStory.test.ts:133`
@@ -47,7 +47,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `prefetchOpeningStory` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:94`
+- `src/services/learnBoardTeaching.ts:93`
 - `src/services/openingStory.test.ts:146`
 
 ## Tests

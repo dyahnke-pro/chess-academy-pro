@@ -2,12 +2,12 @@
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.",
  "graph": {
   "files": 1746,
-  "nodes": 16208
+  "nodes": 16210
  },
  "totals": {
   "computers": 347,
-  "wiredNowhere": 36,
-  "heldByLearnOnly": 24,
+  "wiredNowhere": 35,
+  "heldByLearnOnly": 23,
   "otherScreensOnly": 11,
   "dead": 1,
   "missingFromCode": 0,
@@ -18,8 +18,8 @@
     "no": 97
    },
    "review": {
-    "yes": 231,
-    "no": 116
+    "yes": 232,
+    "no": 115
    },
    "lesson": {
     "yes": 103,
@@ -59,7 +59,6 @@
    "services/playCommentary.ts#buildInstantReplyLine",
    "services/playCommentary.ts#buildRejectedTempting",
    "services/playedConcept.ts#(module)",
-   "services/positionCharacter.ts#characterOf",
    "services/structureReads.ts#linesStructure",
    "services/tacticalRead.ts#tacticalReadFromLines",
    "services/threatAnswer.ts#threatAnswer",
@@ -4601,14 +4600,15 @@
    "says": "Whether the position is tactical, positional, about the king or technique, and the moment it changes",
    "origin": "map",
    "learn": "held",
-   "review": "no",
+   "review": "yes",
    "lesson": "no",
    "chat": "no",
    "tapped": "no",
    "tactics": "no",
    "app": true,
-   "other": [],
-   "where": "components/Coach/CoachTeachPage.tsx#CoachTeachPage"
+   "other": [
+    "playSilent"
+   ]
   },
   {
    "key": "services/positionFacts.ts#computePositionFacts",

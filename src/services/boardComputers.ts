@@ -19,7 +19,7 @@
 //
 // PURE: every computer here is pure; this module adds no chess of its own.
 import { Chess, type Color } from 'chess.js';
-import { NO_PROOF, squaresProof, type FactProof } from './proof';
+import { NO_PROOF, squaresProof, isProof, legalLineProof, type FactProof } from './proof';
 import type { FactStakes } from './factStakes';
 import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
 import { threadKey } from './gameStory';
@@ -30,6 +30,9 @@ import { findTiedDefenders, newTiedDefender, tiedDefenderLine, tiedDefenderProof
 import { obligationLifted, obligationLiftedLine } from './obligationLifted';
 import { findQueenGrabTraps, queenGrabTrapLine, queenGrabTrapProof } from './queenGrabTrap';
 import { looseClaims, provenThreatLine, threatStakes } from './threatProof';
+import { threatAnswer } from './threatAnswer';
+import { namesMoves, namedSan, namesPlayableStudentMove } from './studentMoveNaming';
+import { lineSeatAt } from '../utils/andList';
 import { trappedOnBoard } from './reviewTeachingPoints';
 import { bookDeparture } from './bookDeparture';
 import { bookMoveWhy } from './bookMoveWhy';
@@ -116,6 +119,11 @@ export interface BoardContexts {
   priorityFirst: { fen: string; student: Color; bestUci: string };
   /** A threat warning, with the cost it claims proven on the board. */
   threatCost: { line: string; fen: string; student: Color; squares: readonly string[] };
+  /** What the engine's best move does about a threat just named (`fen`:
+   *  student to move) — the answer half of the threat. REQUIRED `namesMove`:
+   *  a live board holds the move and says the kind of answer (David
+   *  2026-10-10). `ply` keys its rotated question. */
+  threatAnswer: { fen: string; squares: readonly string[]; shape: 'line' | 'hit'; bestUci: string | null; whiteCp: number | null; student: Color; ply: number; namesMove: boolean };
   /** The student's plan, carried across moves: its stop proven off their
    *  move, then the next plan (mutates the thread held in the surface's memory). */
   planThread: { thread: PlanThread; ply: number; fenBefore: string; fenAfter: string; student: Color; studentPovCp?: number | null; studentMove?: { fenBefore: string; san: string } | null; holdPlayable: boolean };
@@ -449,6 +457,33 @@ export const BOARD_COMPUTERS = {
     kind: 'threat',
     phase: ANY,
     surfaces: { lesson: LESSON_NO_STUDENT_MOVE, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+  },
+  threatAnswer: {
+    // The threat and its answer are one claim: the answer is proven by the
+    // threat's own cost on the board, or — when the move is named — by the
+    // move itself, legal on the board.
+    read: (c, fact) => safe(() => {
+      const studentCp = c.whiteCp === null ? null : c.student === 'w' ? c.whiteCp : -c.whiteCp;
+      const ans = threatAnswer({ fen: c.fen, squares: c.squares, bestUci: c.bestUci, studentCp, student: c.student, ply: c.ply, shape: c.shape, namesMove: c.namesMove });
+      if (!ans) return null;
+      const cost = provenThreatLine(ans.text, c.fen, c.student, c.squares).proof ?? squaresProof(ans.text, c.squares) ?? NO_PROOF.stated;
+      const proof = (isProof(cost) ? cost : null) ?? (ans.arrow ? legalLineProof(c.fen, [ans.san], lineSeatAt(c.fen, c.student)) : null) ?? cost;
+      const key = `threat-answer:${ans.kind}:${c.squares.join('')}`;
+      return fact({
+        key, claims: [key], text: ans.text, proof, squares: [...c.squares], stakes: null, seat: 'student',
+        namesStudentMove: namesPlayableStudentMove(namesMoves(c.student, c.fen, namedSan(c.fen, ans.san))), thread: LOCAL_THREAD, fen: c.fen,
+        ...(ans.arrow ? { marks: { play: { from: ans.arrow.from, to: ans.arrow.to } } } : {}),
+      });
+    }),
+    computer: 'threatAnswer',
+    kind: 'must-defend',
+    phase: ANY,
+    surfaces: {
+      lesson: { not: 'the line\'s next move is the answer, said on it as the answer to their last move (moveThoughtFacts: bindingFact) or its job' },
+      learn: LEARN,
+      review: { not: 'the student\'s next ply says the answer: its job when it met the threat, the error and the better move when it did not' },
+      play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED,
+    },
   },
   structureMove: {
     // Learn's reader: the better move is held (David 2026-10-10).
