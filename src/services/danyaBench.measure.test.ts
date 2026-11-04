@@ -530,6 +530,8 @@ const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
   theirAim: 'services/threeFacts.ts#theirTarget',
   planChoice: 'services/planChooser.ts#planChoice',
   moveOrder: 'services/moveOrder.ts#moveOrder',
+  structureLines: 'services/structureReads.ts#linesStructure',
+  purpose: 'services/moveIntent.ts#moveIntent',
 };
 
 /** Review's facet tags and the live composer's clause kinds (ONE vocabulary,

@@ -11,7 +11,9 @@ describe('one habit question, one say-once claim', () => {
   it('the instant grade and the slip question share the claims — one key per habit (habitSaidKey)', () => {
     expect(page).toMatch(/habitSaidKey\('opponent-threat'\)/);
     expect(page).toMatch(/habitSaidKey\('blunder-check'\)/);
-    expect(teach).toMatch(/habitSaidKey\(standing \? 'opponent-threat' : 'blunder-check'\)/);
+    // The slip's habit is read once (`slipHabit`, shared with Review's method
+    // beat) and keyed by its one id.
+    expect(teach).toMatch(/const key = habitSaidKey\(h\.habit\)/);
     // No habit key spelled by hand: a second spelling is a second key.
     for (const src of [page, teach]) expect(src).not.toMatch(/'claim:method:/);
   });

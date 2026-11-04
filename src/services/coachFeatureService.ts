@@ -20,6 +20,7 @@ import { loadStudentNeedContext } from './studentNeedLoader';
 import { layerStandings } from './teachingLayers';
 import { readConversion, type ConversionStep } from './conversionMethod';
 import { characterTurn } from './positionCharacter';
+import { readZugzwang, zugzwangProof, zugzwangSentence, type ZugzwangRead } from './zugzwang';
 import { phaseTurnsOf } from './phaseTransitionDetector';
 import { detectImmediateTactics } from './liveTacticsContext';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
@@ -1454,6 +1455,10 @@ function* reviewSegmentSteps(
    *  has said its piece; both production callers pass one, so only the unit
    *  tests rely on the default. */
   story: StoryStore = createStoryStore(currentGameId ?? 'review'),
+  /** ZUGZWANG on the board after each ply, read off the tablebase by the async
+   *  caller (≤7 pieces; `zugzwangsForGame`) — engine-free and exact. Absent =
+   *  no tablebase read (the free board's rebuild, the unit tests). */
+  zugzwangByPly: ReadonlyMap<number, ZugzwangRead> = new Map(),
 ): Generator<void, ReviewMoveSegment[], void> {
   story.newGame(currentGameId ?? 'review');
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
@@ -2091,7 +2096,7 @@ function* reviewSegmentSteps(
       // step), which the convert plan's thread owns below — a mark on this
       // move's facets, not a memory of the game (it rode the seed until 8d).
       const conversionFacets = new Set<ReviewFacet>();
-      const verdictReasonOut: { text: string | null; playedLine?: boolean; punishSan?: string } = { text: null };
+      const verdictReasonOut: { text: string | null; playedLine?: boolean; punishSan?: string; lostSquare?: string; guardLeft?: string } = { text: null };
       const facets = computeMoveFacets({
         fundamentals,
         seenFundamentals,
@@ -2170,6 +2175,18 @@ function* reviewSegmentSteps(
         const raw = fact('characterTurn', 'judgement', characterSwitch.text, { identity: `character:${m.ply}` });
         facets.push(raw);
         facetCommits.set(raw, () => story.note(m.ply, [{ kind: 'character', to }]));
+      }
+      // ZUGZWANG — whoever has to move here loses ground (the tablebase,
+      // WO-STORY-MATRIX-01 P1-9c): on their move, the student is the one in it;
+      // on the student's, the student put them in it. Said once a position.
+      const zz = zugzwangByPly.get(m.ply);
+      if (zz && studentColorWB) {
+        const studentToMove = moverColor !== playerColor;
+        const zKey = `zugzwang:${fenPair.fenAfter.split(' ').slice(0, 2).join(' ')}`;
+        if (!hintsSaid.has(`once:${zKey}`)) {
+          const raw = fact('readZugzwang', 'technique', zugzwangSentence(zz, studentToMove), { identity: `once:${zKey}`, proof: zugzwangProof(zz, studentToMove) });
+          facets.push(raw);
+        }
       }
       // THE CONVERSION METHOD (WO-LAYERS-01 step 5), on the student's move when
       // they are a piece or more up — the step the board is on, once per step
@@ -2925,6 +2942,11 @@ function* reviewSegmentSteps(
           // A SCRATCH copy (B4): the beat claims its habit here, and the
           // claim reaches the game ledger only if the ply actually speaks.
           saidHabits: habitScratch,
+          // The slip, as the verdict read it (`errorWhy`): the habit beat asks
+          // the thinking step it failed, Learn's own slip question.
+          slip: studentColorWB && (verdictReasonOut.lostSquare || verdictReasonOut.guardLeft)
+            ? { fenBefore: fenPair.fenBefore, san: m.san, lostSquare: verdictReasonOut.lostSquare ?? null, guardLeft: verdictReasonOut.guardLeft ?? null, student: studentColorWB }
+            : null,
           // The leading fundamental that already IS a habit's lesson.
           habitByFact: new Map(kept
             .filter((f) => f.tag === 'principle')
@@ -4247,6 +4269,22 @@ const REFUTED_PREP_MS = 8_000;
  * those are the plies a strong coach teaches with "most players play X here".
  * Candidates: players at the student's level first (cache), masters after.
  */
+/** ZUGZWANG OVER THE GAME (WO-STORY-MATRIX-01 P1-9c) — every board with seven
+ *  pieces or fewer read off the tablebase, one position at a time (the same
+ *  read Learn makes at the student's turn, `readZugzwang`). A game that never
+ *  gets that far makes no request. */
+async function zugzwangsForGame(moves: readonly ReviewMoveInput[]): Promise<Map<number, ZugzwangRead>> {
+  const out = new Map<number, ZugzwangRead>();
+  const chain = buildFenChain([...moves]);
+  for (let k = 0; k < chain.length; k += 1) {
+    const fen = chain[k].fenAfter;
+    if (fen.split(' ')[0].replace(/[^a-zA-Z]/g, '').length > 7) continue;
+    const z = await readZugzwang(fen).catch(() => null);
+    if (z) out.set(moves[k].ply, z);
+  }
+  return out;
+}
+
 async function refutedAlternativesForGame(
   moves: readonly ReviewMoveInput[],
   playerColor: 'white' | 'black' | undefined,
@@ -5939,6 +5977,7 @@ export async function generateReviewNarration(params: {
     .catch(() => new Map<number, RefutedAlternative>());
   const intentByPly = await moveIntentsForGame(moves.slice(0, usableCount), playerColor)
     .catch(() => new Map<number, ReviewIntent>());
+  const zugzwangByPly = await zugzwangsForGame(moves.slice(0, usableCount)).catch(() => new Map<number, ZugzwangRead>());
   timings.refuted = Date.now() - refutedStart;
   const record = reviewOpeningRecord({ openingName, playerColor, studentNeed, gameId: params.gameId ?? null });
   const introMistakes = complete ? mistakeCount : null;
@@ -5963,7 +6002,7 @@ export async function generateReviewNarration(params: {
   // THE GAME'S STORY (P1-8d): the build's memory of what it says, kept with
   // the narration once the refrain fold below has said its piece.
   const story = createStoryStore(params.gameId ?? 'review');
-  const segments = await buildReviewSegmentsOpen(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly, intentByPly, params.spokenBefore ?? null, story);
+  const segments = await buildReviewSegmentsOpen(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly, intentByPly, params.spokenBefore ?? null, story, zugzwangByPly);
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +
   // timeout so it never stalls the walk). Runs before the voice pass so the

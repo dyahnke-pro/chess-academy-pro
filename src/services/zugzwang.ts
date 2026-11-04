@@ -9,6 +9,7 @@
 // already best play, so a "waiting move that fixes it" is never promised — if
 // one existed, the result would not be worse.
 import { Chess } from 'chess.js';
+import type { Proof } from './proof';
 import { tablebaseMoves, type TablebaseMovesResult } from './endgameTablebaseService';
 
 type Lookup = (fen: string) => Promise<TablebaseMovesResult | null>;
@@ -60,4 +61,16 @@ export function zugzwangSentence(z: ZugzwangRead, studentToMove: boolean): strin
     return `Zugzwang: on your move this ${WORD[z.onMove + 1]}; if it were their move, you would ${z.ifPassed === 1 ? 'win' : 'hold the draw'}. In pawn endings, who has to move decides it.`;
   }
   return `You put them in zugzwang: on their move it ${WORD[z.onMove + 1]} for them; if they could pass, they would ${z.ifPassed === 1 ? 'win' : 'hold'}. Every move they make now gives ground.`;
+}
+
+/** The tablebase's two results ARE the proof of zugzwang: what the side to
+ *  move's turn is worth against what passing would be worth — exact, never
+ *  engine. Worded from the student's seat (`studentToMove`: the student is the
+ *  side to move at the read's position). */
+export function zugzwangProof(z: ZugzwangRead, studentToMove: boolean): Proof {
+  const word = (r: number): string => (studentToMove
+    ? (r > 0 ? 'you win' : r < 0 ? 'you lose' : 'it is a draw')
+    : (r > 0 ? 'they win' : r < 0 ? 'they lose' : 'it is a draw'));
+  const body = `with the move ${word(z.onMove)}, but if ${studentToMove ? 'you' : 'they'} could pass ${word(z.ifPassed)}`;
+  return { kind: 'count', exact: true, short: body, full: body };
 }

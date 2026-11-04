@@ -107,3 +107,24 @@ describe('the threat habit never asks and walks away (hand walk 2026-09-27)', ()
     }
   });
 });
+
+describe('the slip\'s own question reaches Review\'s method beat (WO-STORY-MATRIX-01 P1-9c)', () => {
+  // 1.e4 e5 2.Nf3, Black plays …Qg5?? — the knight takes it: this move put the queen en prise.
+  const fenBefore = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
+  const base = { tier: 'blunder' as const, cpLossCp: 900, bestSan: 'Nc6', ignoredThreat: false, isStudentMove: true };
+  it('a piece this move put en prise asks the blunder check, said once a game', () => {
+    const said = new Set<import('./methodBeat').MethodHabit>();
+    const slip = { fenBefore, san: 'Qg5', lostSquare: 'g5', guardLeft: null, student: 'b' as const };
+    const beat = methodBeatFor({ ...base, slip, saidHabits: said }, 0);
+    expect(beat).toMatch(/^Blunder check before you let go of a piece/);
+    expect(beat).toMatch(/queen on g5/);
+    expect(methodBeatFor({ ...base, slip, saidHabits: said }, 1) ?? '').not.toMatch(/Blunder check/);
+  });
+  it('a guard the moved piece left asks what it was guarding', () => {
+    const beat = methodBeatFor({ ...base, slip: { fenBefore, san: 'Qg5', lostSquare: null, guardLeft: 'e5', student: 'b' } }, 0);
+    expect(beat).toBe('The question that catches this: before a piece moves, ask what it is guarding.');
+  });
+  it('no slip read, no slip question', () => {
+    expect(methodBeatFor({ ...base, slip: null }, 0) ?? '').not.toMatch(/Blunder check|what it is guarding/);
+  });
+});

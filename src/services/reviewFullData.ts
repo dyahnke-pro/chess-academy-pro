@@ -296,7 +296,7 @@ export function computeMoveFacets(
   /** The reason the verdict gave for the better move, exactly as spoken, so a
    *  later pass reading a fresher line of the SAME ply can replace it — one
    *  ply, one line (clean-pass review walk 2026-10-04, G1 15.Ba2). */
-  outVerdictReason?: { text: string | null; playedLine?: boolean; punishSan?: string },
+  outVerdictReason?: { text: string | null; playedLine?: boolean; punishSan?: string; lostSquare?: string; guardLeft?: string },
 ): ReviewFacet[] {
   // EVERY FACT OF THE MOVE IS THE ONE FACT (WO-STORY-MATRIX-01 P1-6d): made by
   // the computer that found it, with what that computer knows on it — the KEY
@@ -615,6 +615,10 @@ export function computeMoveFacets(
       // The punishing reply the verdict names, so a later line about the same
       // punishment names the same move.
       if (ew?.consequence && ew.punishFirst) outVerdictReason.punishSan = ew.punishFirst;
+      // What the slip lost and the guard it left — the method beat asks the
+      // thinking step that would have caught it (`slipHabit`).
+      if (ew?.lostSquare) outVerdictReason.lostSquare = ew.lostSquare;
+      if (ew?.guardLeft) outVerdictReason.guardLeft = ew.guardLeft;
     }
     // Their error said to the student flips every pronoun ("it let you take
     // their rook"), not only the possessives `seat` flips.

@@ -61,7 +61,7 @@ import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
 import { stockfishEngine } from './stockfishEngine';
 import { refutedAlternative, candidatesForPosition, type RefutedAlternative } from './refutedAlternative';
-import type { IntentReads } from './moveIntent';
+import { nullMoveFen, type IntentReads } from './moveIntent';
 import type { AnalysisLine } from '../types';
 import { fanCostCp, uciOfSan } from './moveCost';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
@@ -1879,10 +1879,27 @@ async function generateOpeningFromDbNarration(
       followFirstByPly.push(analysis?.topLines?.[0] ? { uci: swapped.uci, line: analysis.topLines[0] } : null);
     } catch { followFirstByPly.push(null); }
   }
+  // THE NULL-MOVE READ OF EVERY BOARD (WO-STORY-MATRIX-01 P1-9c): the side
+  // to move passes — what the other side would do if left alone. One read a
+  // board serves both moves around it: the board before a move is that move's
+  // `passBefore`, the board after it its `passAfter`. What a move prepares or
+  // stops is proven against it (`moveIntent`). A board in check has no pass.
+  const passByPly: Array<readonly AnalysisLine[] | null> = [];
+  for (let i = 0; i <= positions.length; i += 1) {
+    const fen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
+    const pass = nullMoveFen(fen);
+    if (!pass) { passByPly.push(null); continue; }
+    try {
+      const analysis = await stockfishEngine.analyzeWithBudget(pass, 12, 1200);
+      passByPly.push(analysis?.topLines?.length ? analysis.topLines : null);
+    } catch { passByPly.push(null); }
+  }
   const readsAt = (i: number): IntentReads | null => {
     const before = fanByPly[i] ?? null;
     const after = fanByPly[i + 1] ?? null;
-    return before || after ? { before: before ?? [], after: after ?? [], passBefore: [], passAfter: [], followFirst: followFirstByPly[i] ?? null } : null;
+    return before || after
+      ? { before: before ?? [], after: after ?? [], passBefore: passByPly[i] ?? [], passAfter: passByPly[i + 1] ?? [], followFirst: followFirstByPly[i] ?? null }
+      : null;
   };
   const costAt = (i: number): number | null => {
     const fen = i === 0 ? new Chess().fen() : positions[i - 1].fen;

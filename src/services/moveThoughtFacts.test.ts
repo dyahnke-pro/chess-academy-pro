@@ -212,3 +212,41 @@ describe('the move that had to come first', () => {
     expect(text).toMatch(/Be3 first — Nc3 straight away would have run into …Qxd4|The order matters: Be3 before Nc3/);
   });
 });
+
+describe('the structural choice on the board, after their move (linesStructure, P1-9c-5)', () => {
+  // 1.d4 Nf6 2.c4 e6 3.Nc3 Bb4 4.e3 — Black's two best lines differ in kind.
+  const c = new Chess();
+  for (const s of ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4']) c.move(s);
+  const fenBefore = c.fen();
+  const reads = {
+    before: [], passBefore: [], passAfter: [],
+    after: [
+      { rank: 1, evaluation: 20, mate: null, moves: ['b4c3', 'b2c3', 'e8g8'] },
+      { rank: 2, evaluation: 30, mate: null, moves: ['e8g8', 'f1d3'] },
+    ],
+  };
+  const base = { fenBefore, san: 'e3', prev: NO_PREV_CAPTURE, line: null, theirLast: null, reads, costCp: null, phrases: null };
+  it('a lesson names the fighting move and the quiet one, on their move', () => {
+    const f = moveThoughtFacts({ ...base, moverIsStudent: false }).find((x) => x.source === 'structureLines');
+    expect(f?.text).toBe('It\'s level, so make chances: Bxc3 creates the imbalance, bishop for knight and doubled pawns for them. O-O keeps it quiet.');
+    expect(f?.idea).toBe('plan');
+  });
+  it('never on the student\'s own move — the read is the choice after theirs', () => {
+    expect(moveThoughtFacts({ ...base, moverIsStudent: true }).some((x) => x.source === 'structureLines')).toBe(false);
+  });
+});
+
+describe('what the move prepares reaches the lesson, proven against the pass reads (P1-9c-5)', () => {
+  // Naroditsky's speedrun 1PI3xfMiUE4, ply 15: Kh1 so that f4 comes (stored reads).
+  it('Kh1 says it prepares f4, said once', async () => {
+    const fixture = (await import('./__fixtures__/moveIntent-1PI3xfMiUE4.json')).default as Record<string, { fenBefore: string; san: string; before: { cp: number | null; mate: number | null; pv: string[] }[]; after: { cp: number | null; mate: number | null; pv: string[] }[]; passBefore: { cp: number | null; mate: number | null; pv: string[] }[]; passAfter: { cp: number | null; mate: number | null; pv: string[] }[] }>;
+    const m = fixture['15'];
+    const lines = (r: typeof m.before) => r.map((l, k) => ({ rank: k + 1, evaluation: l.cp ?? 0, moves: l.pv, mate: l.mate }));
+    const reads = { before: lines(m.before), after: lines(m.after), passBefore: lines(m.passBefore), passAfter: lines(m.passAfter) };
+    const input = { fenBefore: m.fenBefore, san: m.san, prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, theirLast: null, reads, costCp: 0 };
+    const voice = newLessonVoice();
+    expect(lessonThought(input, voice, null)).toMatch(/so that f4|prepares f4/);
+    // Without the pass reads there is no proof, and no purpose line.
+    expect(lessonThought({ ...input, reads: { ...reads, passBefore: [], passAfter: [] } }, newLessonVoice(), null)).not.toMatch(/so that f4|prepares f4/);
+  });
+});

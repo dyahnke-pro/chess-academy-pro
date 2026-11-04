@@ -21,6 +21,7 @@ import { openSentence } from '../utils/openSentence';
 import { isDecidingMoment } from './nextMoveAdvice';
 import type { ImportanceTier } from './narrationImportance';
 import type { Proof } from './proof';
+import { slipHabit, type SlipRead } from './safetyHabits';
 
 export interface MethodSignals {
   /** The moment's importance tier, from the one deciding computer. */
@@ -55,11 +56,16 @@ export interface MethodSignals {
    *  "Checks, captures, threats — …" IS the forcing scan). Said once, never
    *  twice in one breath (KID review tape 2026-10-06). Counted as said. */
   coveredHabits?: ReadonlySet<MethodHabit>;
+  /** THE SLIP ITSELF (WO-STORY-MATRIX-01 P1-9c): the square the student's move
+   *  lost a piece on and the square its piece stopped guarding, so the beat
+   *  asks the thinking step the slip failed (`slipHabit`, Learn's own slip
+   *  question). Absent = the surface has no read of the slip. */
+  slip?: SlipRead | null;
 }
 
 /** The habit classes the method layer teaches. Named so the say-once ledger and
  *  the need lookup share one vocabulary and cannot drift. */
-export type MethodHabit = 'opponent-threat' | 'forcing-scan' | 'slow-down' | 'candidates';
+export type MethodHabit = 'opponent-threat' | 'forcing-scan' | 'slow-down' | 'candidates' | 'what-it-guarded' | 'blunder-check';
 
 /** The fundamentals that ARE a habit's lesson — when one leads a ply, its
  *  habit's method line would say the same thing again. */
@@ -147,6 +153,14 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
       'Make this the routine — their threat before your plan. Ask what they are trying to do before you ask what you want.',
       'One question would have caught it: what is their move doing? Answer that before choosing your own.',
     ], plyForVariety));
+  }
+
+  // 1b — THE SLIP'S OWN QUESTION. The move lost a piece: what was the moved
+  // piece guarding, was the lost one already in danger, or did this move put
+  // it there (the blunder check) — the one reading Learn's slip question asks.
+  if (s.slip) {
+    const q = slipHabit(s.slip, plyForVariety);
+    if (q && habitIsOwed(need, q.habit)) return claim(q.habit, q.text);
   }
 
   // 2 — THE FORCING SCAN. The move that was there was a check or a capture, so

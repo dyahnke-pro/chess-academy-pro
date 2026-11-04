@@ -65,10 +65,10 @@ import { tradeJudgement } from './tradeJudgement';
 import { lastMoveFromSan } from './material';
 import type { PieceValue } from './pieceValueRead';
 import { kneeJerk } from './kneeJerk';
-import { autopilotGuard, blunderCheck, blunderCheckLine, keepPressing, BLUNDER_CHECK_QUESTION } from './safetyHabits';
+import { autopilotGuard, blunderCheck, keepPressing, slipHabit, BLUNDER_CHECK_QUESTION } from './safetyHabits';
 export { BLUNDER_CHECK_QUESTION };
 import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted, kingCourse } from './endgamePawnReads';
-import { readZugzwang, zugzwangSentence, type ZugzwangRead } from './zugzwang';
+import { readZugzwang, zugzwangProof, zugzwangSentence } from './zugzwang';
 import { strongChoice, warmStrongChoice } from './strongChoice';
 import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
@@ -959,21 +959,13 @@ export function announcesTheMove(spoke: readonly LearnLane[]): boolean {
   return spoke.some((l) => SAID_BEFORE_MOVE.has(l));
 }
 
-/** The tablebase's two results ARE the proof of zugzwang: what the student's
- *  turn is worth, against what passing would be worth. Exact, never engine. */
-function zugzwangProof(z: ZugzwangRead): Proof {
-  const word = (r: number): string => (r > 0 ? 'you win' : r < 0 ? 'you lose' : 'it is a draw');
-  const body = `with the move ${word(z.onMove)}, but if you could pass ${word(z.ifPassed)}`;
-  return { kind: 'count', exact: true, short: body, full: body };
-}
-
 /** ZUGZWANG at the student's turn (tablebase, ≤7 pieces) — the fact that
  *  decides pawn endings, said once per position. Null out of range. */
 export async function zugzwangTeaching(fen: string): Promise<TeachingFact | null> {
   if (fen.split(' ')[0].replace(/[^a-zA-Z]/g, '').length > 7) return null;
   const z = await readZugzwang(fen);
   if (!z) return null;
-  return teachingFact('pawnEnding', { computer: 'readZugzwang', kind: 'method', seat: 'student', fen, names: NAMES_NO_MOVE, proof: zugzwangProof(z), text: zugzwangSentence(z, true), squares: [], claims: [`zugzwang:${fen.split(' ').slice(0, 2).join(' ')}`] }, { event: { name: 'coach_zugzwang_named', props: { surface: 'coach-teach', mutual: z.mutual } }, arrows: [] });
+  return teachingFact('pawnEnding', { computer: 'readZugzwang', kind: 'method', seat: 'student', fen, names: NAMES_NO_MOVE, proof: zugzwangProof(z, true), text: zugzwangSentence(z, true), squares: [], claims: [`zugzwang:${fen.split(' ').slice(0, 2).join(' ')}`] }, { event: { name: 'coach_zugzwang_named', props: { surface: 'coach-teach', mutual: z.mutual } }, arrows: [] });
 }
 
 /** CHART A COURSE at the student's turn (kings and pawns only): the king's
@@ -1164,59 +1156,19 @@ export function slipQuestion(
    *  so every caller answers: a guard left is caught by its own question. */
   guardLeft: string | null,
 ): { text: string; key: string } | null {
-  // WHAT WAS IT GUARDING? (David's 13.Bc3, 2026-10-20: the bishop left e3 to a
-  // knight fork, and the habit that catches it is asked before the piece moves.)
-  if (guardLeft && /^[a-h][1-8]$/.test(guardLeft)) {
-    const key = habitSaidKey('what-it-guarded');
-    if (said.has(key)) return null;
-    said.add(key);
-    // The square is the grade's to name ("Your bishop was guarding e3"); the
-    // habit is the question, said once.
-    return { text: rotateStem([
-      'The question that catches this: before a piece moves, ask what it is guarding.',
-      'Ask it before every move: what does this piece guard right now?',
-    ], stemKey), key };
-  }
-  if (!lostSquare || !/^[a-h][1-8]$/.test(lostSquare)) return null;
-  let before: Chess;
-  try { before = new Chess(fenBefore); } catch { return null; }
-  const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
-  const there = before.get(lostSquare as Square);
-  const standing = !!there && there.color === student && legalSeeGainFor(fenBefore, lostSquare as Square, them) > 0;
-  // ONE SAY-ONCE KEY PER HABIT, shared with every lane that teaches it: the
-  // blunder-check lane writes `blunder-check`, the live beat and the
-  // fundamental verdict `opponent-threat` — so the habit is said once a game
-  // whichever path says it first (`habitSaidKey`).
-  const key = habitSaidKey(standing ? 'opponent-threat' : 'blunder-check');
+  // The one reading (`slipHabit`, shared with Review's method beat); ONE
+  // SAY-ONCE KEY PER HABIT, shared with every lane that teaches it — the habit
+  // is said once a game whichever path says it first (`habitSaidKey`).
+  const h = slipHabit({ fenBefore, san: playedSan, lostSquare: lostSquare ?? null, guardLeft, student }, stemKey);
+  if (!h) return null;
+  const key = habitSaidKey(h.habit);
   if (said.has(key)) return null;
   said.add(key);
-  if (!standing) {
-    // Named off the board AFTER the move — the piece may have just moved there.
-    let name = 'piece';
-    try {
-      const c = new Chess(fenBefore); c.move(playedSan);
-      const lost = c.get(lostSquare as Square);
-      if (lost && lost.color === student) name = ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[lost.type] ?? 'piece';
-    } catch { /* the name is a courtesy */ }
-    return { text: blunderCheckLine(name, lostSquare), key };
-  }
-  return { text: answerDangerQuestion(lostSquare, stemKey), key };
+  return { text: h.text, key };
 }
 
-/** THE ONE ANSWER-THE-DANGER QUESTION — said by whichever line of the turn
- *  names the unanswered threat first (the instant grade or the full verdict),
- *  under one say-once claim, the opponent-threat habit's (`habitSaidKey`). */
-export function answerDangerQuestion(square: string | null, stemKey: number): string {
-  return square
-    ? rotateStem([
-      `The question that catches this: what did their last move attack? Answer it before your own idea — the piece on ${square} was already in danger.`,
-      `Ask it every move: what are they hitting? The piece on ${square} was already under attack, and that question finds it.`,
-    ], stemKey)
-    : rotateStem([
-      'The question that catches this: what did their last move attack? Answer it before your own idea.',
-      'Ask it every move: what are they hitting? Answer that before you play your own idea.',
-    ], stemKey);
-}
+/** The one answer-the-danger question (`safetyHabits`). */
+export { answerDangerQuestion } from './safetyHabits';
 
 const HIT_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 

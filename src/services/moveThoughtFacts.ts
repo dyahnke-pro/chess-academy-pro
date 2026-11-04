@@ -28,14 +28,15 @@ import { composeThought, type ThoughtFact, type ThoughtSource } from './thoughtC
 import { placeFact, stakesOf, LOCAL_THREAD, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat } from './coachFact';
 import type { LessonVoice } from './reviewMoveBriefing';
 import { planAimKey } from './nextPlans';
-import { threadKey } from './gameStory';
-import type { IntentReads } from './moveIntent';
+import { threadKey, keysUnder, STORY_KEY } from './gameStory';
+import { moveIntent, intentRule, type IntentReads } from './moveIntent';
 import { buildDeliberation, ruleOuts, NOTHING_SAID } from './deliberation';
 import { refutedAltProof, type RefutedAlternative } from './refutedAlternativeCore';
 import { costStakes } from './factStakes';
 import { counterThreatTeaching, planChoiceTeaching } from './learnBoardTeaching';
 import { computeMustDefend } from './threatOut';
 import { moveOrder } from './moveOrder';
+import { readBoardAll, readKey } from './boardComputers';
 
 export interface MoveThoughtInput {
   fenBefore: string;
@@ -324,6 +325,19 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     }
   }
 
+  // THE STRUCTURAL CHOICE ON THE BOARD (`linesStructure` through the one
+  // registry, WO-STORY-MATRIX-01 P1-9c): after their move, the student's two
+  // best lines differ in structure — one makes the imbalance, the other keeps
+  // it quiet — or the line opens a bishop that looks dead today. Read off the
+  // fan after the move, said on their move before the reply plays one; a
+  // lesson's line is a model line, so the moves are named.
+  if (i.moverIsStudent === false && i.reads && i.reads.after.length >= 1) {
+    const lines = i.reads.after.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate ?? null }));
+    for (const f of readBoardAll('structureLines', { fen: fenAfter, student: sideOf(fenAfter), lines, namesMoves: true })) {
+      facts.push({ ...f, source: 'structureLines', idea: readKey(f).startsWith('fighting:') ? 'plan' : 'diagonal', weight: 48 });
+    }
+  }
+
   // THE CHOICES — the moves you'd weigh here and why each falls short, each
   // its own fact with the line that proves it (`buildDeliberation`, read off
   // the fan before the move). The played move is never weighed against
@@ -370,7 +384,47 @@ export function lessonThought(input: Omit<MoveThoughtInput, 'phrases'>, voice: L
   voice.story.reach(plyOfFen(input.fenBefore));
   const facts = moveThoughtFacts({ ...input, phrases: voice.phrases });
   const alt = refuted ? refutedFact(refuted, input.fenBefore, input.moverIsStudent !== false ? 'student' : 'opponent') : null;
-  return composeThought(alt ? [...facts, alt] : facts, 'lesson', voice).spoken;
+  const purpose = purposeFact(input, voice);
+  return composeThought([...facts, ...(alt ? [alt] : []), ...(purpose ? [purpose] : [])], 'lesson', voice).spoken;
+}
+
+/** WHAT THE MOVE PREPARES, PROVEN, WITH THE RULE BEHIND IT (WO-STORY-MATRIX-01
+ *  P1-9c): the follow-up the move made possible, read against the null-move
+ *  reads (`moveIntent`), and once a lesson the principle that makes that
+ *  follow-up worth it (`intentRule` → `ruleForPurpose`, "…and castling is
+ *  worth it because …") — Learn's own line. A lesson only: Review says the
+ *  move's purpose through its own intent read. Null without the pass reads,
+ *  which are the proof. */
+function purposeFact(i: Omit<MoveThoughtInput, 'phrases'>, voice: LessonVoice): ThoughtFact | null {
+  if (!i.reads || i.moverIsStudent === undefined) return null;
+  if (i.reads.passBefore.length === 0 && i.reads.passAfter.length === 0) return null;
+  const seat: FactSeat = i.moverIsStudent ? 'student' : 'opponent';
+  const intent = moveIntent(i.fenBefore, i.san, i.reads, seat);
+  if (!intent?.prepares) return null;
+  const mover = sideOf(i.fenBefore);
+  const studentColor: 'white' | 'black' = (mover === 'w') === i.moverIsStudent ? 'white' : 'black';
+  // The rule is said on the board where the prepared move would be played:
+  // after the reply in the line.
+  let rule: { text: string; keys: string[] } | null = null;
+  const reply = i.line?.[0];
+  if (reply) {
+    try {
+      const c = new Chess(i.fenBefore);
+      c.move(i.san);
+      c.move(reply);
+      const taught = keysUnder(voice.story.heard(c.fen()).claims, STORY_KEY.principle(''));
+      rule = intentRule(intent, c.fen(), studentColor, taught);
+    } catch { rule = null; }
+  }
+  const text = rule ? `${intent.text.replace(/\.$/, '')} — ${rule.text}.` : intent.text;
+  const kind: CoachFactKind = i.moverIsStudent ? 'point' : 'opponent-intent';
+  return {
+    id: `moveIntent:${intent.prepares.uci}`, namesStudentMove: false,
+    ...placeFact(kind, seat), computer: 'moveIntent', source: 'purpose', idea: 'prepare', text: close(text),
+    squares: intent.squares, weight: 58, thread: LOCAL_THREAD, stakes: stakesOf(kind, costStakes(intent.prepares.gainCp)),
+    proof: squaresProof(text, intent.squares) ?? NO_PROOF.description, seat, fen: i.fenBefore,
+    claims: [`purpose:prepares:${intent.prepares.uci}`, ...(rule?.keys.map((k) => STORY_KEY.principle(k)) ?? [])],
+  };
 }
 
 /** THE MOVE MOST PLAYERS CHOOSE HERE INSTEAD, AS A CHOICE (WO-STORY-MATRIX-01

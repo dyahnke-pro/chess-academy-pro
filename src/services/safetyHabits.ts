@@ -14,7 +14,7 @@
 // short callback after that; the autopilot guard once (`method:autopilot`).
 //
 // A LEAF: chess.js + the SEE helper.
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -96,4 +96,67 @@ export function keepPressing(fenBefore: string, san: string, bestSan: string | n
   if (bare(san) === bare(bestSan) || forcing(san) || !forcing(bestSan)) return null;
   try { new Chess(fenBefore).move(san); } catch { return null; }
   return 'When they are on the ropes, keep asking questions — a check or a capture first, so they never get a free move to untangle.';
+}
+
+/** A STUDENT'S SLIP AS THE HABIT THAT CATCHES IT (WO-STORY-MATRIX-01 P1-9c) —
+ *  the one reading for every surface: Learn's slip question and Review's
+ *  method beat ask the same thinking step in the same words. Read off the
+ *  board, never guessed:
+ *   · the moved piece stopped guarding something — what was it guarding?
+ *   · the lost piece was ALREADY losable before the move — the danger stood and
+ *     went unanswered (the opponent-threat habit);
+ *   · otherwise THIS move made it losable — the blunder check. */
+export interface SlipRead {
+  fenBefore: string;
+  san: string;
+  /** The square the slip lost a piece on, or null. */
+  lostSquare: string | null;
+  /** The square the moved piece stopped guarding, when that is why it failed. */
+  guardLeft: string | null;
+  student: 'w' | 'b';
+}
+export type SlipHabit = 'what-it-guarded' | 'opponent-threat' | 'blunder-check';
+
+export function slipHabit(slip: SlipRead, stemKey: number): { habit: SlipHabit; text: string } | null {
+  const { fenBefore, san, lostSquare, guardLeft, student } = slip;
+  // WHAT WAS IT GUARDING? (David's 13.Bc3, 2026-10-20: the bishop left e3 to a
+  // knight fork, and the habit that catches it is asked before the piece moves.)
+  // The square is the grade's to name ("Your bishop was guarding e3"); the
+  // habit is the question.
+  if (guardLeft && /^[a-h][1-8]$/.test(guardLeft)) {
+    return { habit: 'what-it-guarded', text: rotateStem([
+      'The question that catches this: before a piece moves, ask what it is guarding.',
+      'Ask it before every move: what does this piece guard right now?',
+    ], stemKey) };
+  }
+  if (!lostSquare || !/^[a-h][1-8]$/.test(lostSquare)) return null;
+  let before: Chess;
+  try { before = new Chess(fenBefore); } catch { return null; }
+  const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+  const there = before.get(lostSquare as Square);
+  const standing = !!there && there.color === student && legalSeeGainFor(fenBefore, lostSquare as Square, them) > 0;
+  if (standing) return { habit: 'opponent-threat', text: answerDangerQuestion(lostSquare, stemKey) };
+  // Named off the board AFTER the move — the piece may have just moved there.
+  let name = 'piece';
+  try {
+    const c = new Chess(fenBefore); c.move(san);
+    const lost = c.get(lostSquare as Square);
+    if (lost && lost.color === student) name = ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[lost.type] ?? 'piece';
+  } catch { /* the name is a courtesy */ }
+  return { habit: 'blunder-check', text: blunderCheckLine(name, lostSquare) };
+}
+
+/** THE ONE ANSWER-THE-DANGER QUESTION — said by whichever line of the turn
+ *  names the unanswered threat first (the instant grade or the full verdict),
+ *  under one say-once claim, the opponent-threat habit's (`habitSaidKey`). */
+export function answerDangerQuestion(square: string | null, stemKey: number): string {
+  return square
+    ? rotateStem([
+      `The question that catches this: what did their last move attack? Answer it before your own idea — the piece on ${square} was already in danger.`,
+      `Ask it every move: what are they hitting? The piece on ${square} was already under attack, and that question finds it.`,
+    ], stemKey)
+    : rotateStem([
+      'The question that catches this: what did their last move attack? Answer it before your own idea.',
+      'Ask it every move: what are they hitting? Answer that before you play your own idea.',
+    ], stemKey);
 }

@@ -333,6 +333,7 @@ export const COMPUTER_CATALOG = {
   kingReadsForBestLine: { file: 'services/kingAttackReads.ts', says: 'the king attack the best line runs' },
   studentMovePoint: { file: 'services/playCommentary.ts', says: 'the point of the student\'s quiet move' },
   intentWithFallback: { file: 'services/movePurpose.ts', says: 'what a move was for: the engine read of its purpose' },
+  moveIntent: { file: 'services/moveIntent.ts', says: 'what a move prepares, proven against the null-move reads — with the rule behind it, once a lesson (`intentRule`)' },
   opponentHabits: { file: 'services/thinkAloud.ts', says: 'a habit the opponent keeps showing this game' },
   habitsOf: { file: 'services/thinkAloud.ts', says: 'a habit the student keeps showing this game' },
   readTheirMove: { file: 'services/opponentMoveReads.ts', says: 'what their move did and what it asks' },

@@ -138,8 +138,10 @@ export interface BoardContexts {
   structureTheirMove: { fenBefore: string; san: string; student: Color };
   /** The standing structural facts, student to move. */
   structureBoard: { fen: string; student: Color };
-  /** Plan choices off the student's MultiPV at `fen` (student to move). */
-  structureLines: { fen: string; student: Color; lines: readonly { moves: readonly string[]; evaluation: number; mate?: number | null }[] };
+  /** Plan choices off the student's MultiPV at `fen` (student to move).
+   *  REQUIRED `namesMoves`: a live board holds the moves (the choice is said
+   *  without them); a lesson's line is a model line and names them. */
+  structureLines: { fen: string; student: Color; lines: readonly { moves: readonly string[]; evaluation: number; mate?: number | null }[]; namesMoves: boolean };
   /** The opening's story at the board after `history` (`fen`, student to
    *  move): masters data read from memory, never fetched here. REQUIRED
    *  `namesStudentMoves`: a live board holds every fact that would name a move
@@ -508,11 +510,11 @@ export const BOARD_COMPUTERS = {
     surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { wired: 'services/groundedAnswer.ts' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
   },
   structureLines: {
-    read: ({ fen, student, lines }, fact) => safe(() => linesStructure(fen, student, lines, false).map((r) => structureFact(r, fact, fen, 'student'))),
+    read: ({ fen, student, lines, namesMoves }, fact) => safe(() => linesStructure(fen, student, lines, namesMoves).map((r) => structureFact(r, fact, fen, 'student'))),
     computer: 'linesStructure',
     kind: 'judgement',
     phase: ANY,
-    surfaces: { lesson: { not: 'owed — P1-12: lessons hold a MultiPV (openingGenerator) and the structural choice reads it' }, learn: LEARN, review: { not: 'Review stores one engine line per ply, not the MultiPV the fighting line compares' }, play: PLAY_ASK, chat: { not: 'chat\'s assessment has no MultiPV in hand' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { not: 'Review stores one engine line per ply, not the MultiPV the fighting line compares' }, play: PLAY_ASK, chat: { not: 'chat\'s assessment has no MultiPV in hand' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
   },
   planThread: {
     // A plan aim is a claim the plan arc shares, and the student's plan thread.

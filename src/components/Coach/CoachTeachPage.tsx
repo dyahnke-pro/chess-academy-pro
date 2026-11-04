@@ -11435,7 +11435,7 @@ export function CoachTeachPage({ mode }: {
                       const tl3 = studentBest?.topLines ?? [];
                       for (const st of [
                         ...readBoardAll('structureBoard', { fen: probe.fen(), student: meS }),
-                        ...readBoardAll('structureLines', { fen: probe.fen(), student: meS, lines: tl3.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })) }),
+                        ...readBoardAll('structureLines', { fen: probe.fen(), student: meS, lines: tl3.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })), namesMoves: false }),
                       ]) queueSpokenHint(probe.fen(), { computer: st.computer, text: st.text, lane: 'structureJudgement', proof: st.proof, namesStudentMove: false, squares: st.squares, claims: st.claims, stakes: st.stakes ?? undefined, role: st.role });
                     } catch { /* the structure read is a bonus, never a blocker */ }
                     if (!(await breathe())) return;
