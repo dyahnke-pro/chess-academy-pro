@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**743 lines · 2 exports · 47 importers · 25 tests · 0 audits**
+**776 lines · 4 exports · 49 importers · 26 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@
 
 ## Who calls in
 
+- `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Tactics/PatternSchoolPage.tsx`
 - `src/missions/patterns/agreement.test.ts`
 - `src/services/boardConcepts.ts`
@@ -50,6 +51,7 @@
 - `src/services/tacticClaimValidator.test.ts`
 - `src/services/tacticClaimValidator.ts`
 - `src/services/tacticLaneVocabulary.test.ts`
+- `src/services/tacticLineRotation.test.ts`
 - `src/services/tacticVisuals.ts`
 - `src/services/tacticalRead.ts`
 - `src/services/tacticsDetector.expansion.test.ts`
@@ -65,6 +67,17 @@
 
 ### `TacticsDetectionResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
+
+### `guardRemovalLine` (function) — 1 call site
+- `src/services/tacticLineRotation.test.ts:22`
+
+### `tacticDescription` (function) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9181`
+- `src/components/Coach/CoachTeachPage.tsx:9286`
+- `src/services/reviewFullData.ts:884`
+- `src/services/tacticLineRotation.test.ts:31`
+- `src/services/tacticLineRotation.test.ts:34`
+- `src/services/tacticLineRotation.test.ts:39`
 
 ### `detectTactics` (function) — 119 call sites
 - `src/components/Tactics/PatternSchoolPage.tsx:68`
@@ -84,18 +97,18 @@
 - `src/services/liveNoteTruth.test.ts:59`
 - `src/services/liveTacticsContext.ts:362`
 - `src/services/liveTacticsContext.ts:510`
-- `src/services/lookaheadPlan.ts:1393`
-- `src/services/lookaheadPlan.ts:1456`
+- `src/services/lookaheadPlan.ts:1398`
+- `src/services/lookaheadPlan.ts:1461`
 - `src/services/looseClaim.test.ts:18`
 - `src/services/misconceptionClassifier.ts:107`
 - `src/services/misconceptionClassifier.ts:140`
 - `src/services/misconceptionClassifier.ts:305`
-- `src/services/mistakeNarration.ts:395`
+- `src/services/mistakeNarration.ts:396`
 - `src/services/moveInsight.ts:116`
 - `src/services/moveInsight.ts:1092`
 - `src/services/oneSkewerRule.test.ts:18`
-- `src/services/openingGenerator.ts:3496`
-- `src/services/pinBreak.ts:174`
+- `src/services/openingGenerator.ts:3558`
+- `src/services/pinBreak.ts:175`
 - `src/services/pinGeometry.test.ts:72`
 - `src/services/pinGeometry.test.ts:74`
 - `src/services/pinGeometry.test.ts:90`
@@ -108,21 +121,21 @@
 - `src/services/pinPressure.ts:108`
 - `src/services/pinPressure.ts:123`
 - `src/services/pinnerPinned.test.ts:6`
-- `src/services/playCommentary.ts:651`
+- `src/services/playCommentary.ts:654`
 - `src/services/playedConcept.ts:59`
 - `src/services/playedConcept.ts:66`
-- `src/services/positionFacts.ts:1257`
-- `src/services/pvPlayback.ts:386`
-- `src/services/pvPlayback.ts:406`
+- `src/services/positionFacts.ts:1320`
+- `src/services/pvPlayback.ts:394`
+- `src/services/pvPlayback.ts:414`
 - `src/services/relationClaimCost.report.test.ts:52`
 - `src/services/replayFence.alekhine1500.test.ts:36`
 - `src/services/replayFence.alekhine1500.test.ts:86`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:61`
 - `src/services/reviewCorpusNote.test.ts:61`
 - `src/services/reviewDepth.eval.measure.test.ts:258`
-- `src/services/reviewFullData.ts:802`
-- `src/services/reviewFullData.ts:882`
-- `src/services/reviewFullData.ts:1514`
+- `src/services/reviewFullData.ts:801`
+- `src/services/reviewFullData.ts:897`
+- `src/services/reviewFullData.ts:1523`
 - `src/services/reviewMoveBriefing.ts:105`
 - `src/services/reviewMoveBriefing.ts:106`
 - `src/services/reviewNarrationFidelity.test.ts:230`
@@ -209,6 +222,7 @@
 - `src/services/tacticClaimOneKey.test.ts`
 - `src/services/tacticClaimValidator.test.ts`
 - `src/services/tacticLaneVocabulary.test.ts`
+- `src/services/tacticLineRotation.test.ts`
 - `src/services/tacticsDetector.expansion.test.ts`
 - `src/services/tacticsDetector.groundTruth.test.ts`
 - `src/services/tacticsDetector.test.ts`

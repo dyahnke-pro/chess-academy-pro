@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1884 lines · 11 exports · 19 importers · 25 tests · 0 audits**
+**1908 lines · 11 exports · 19 importers · 25 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -49,7 +49,7 @@
 ### `NO_TEACHING_CONTEXT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 52 call sites
+### `computeMoveFacets` (function) — 53 call sites
 - `src/services/batch2Wiring.test.ts:55`
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
@@ -60,6 +60,7 @@
 - `src/services/hangingVsUndefended.test.ts:13`
 - `src/services/orderComputers.test.ts:315`
 - `src/services/reviewFullData.pinHolds.test.ts:19`
+- `src/services/reviewFullData.pinHolds.test.ts:45`
 - `src/services/reviewFullData.test.ts:17`
 - `src/services/reviewFullData.test.ts:21`
 - `src/services/reviewFullData.test.ts:56`
@@ -104,7 +105,7 @@
 - `src/test/teach02Wired.test.ts:68`
 
 ### `computeThroughLine` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:6191`
+- `src/services/coachFeatureService.ts:6192`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:210`
 - `src/services/reviewFullData.test.ts:218`
