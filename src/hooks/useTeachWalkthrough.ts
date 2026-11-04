@@ -1434,7 +1434,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           moverIsStudent: mover === (treeRef.current?.studentSide ?? 'white'),
           line,
           theirLast,
-        }, lessonVoiceRef.current.voice);
+          // A node the tree carries no beat for, filled on the device: no
+          // engine read here, and no games-database alternative.
+          reads: null, costCp: null,
+        }, lessonVoiceRef.current.voice, null);
         narrationSquares = squaresNamedIn(idea);
       } else if (idea) {
         narrationSquares = squaresNamedIn(idea);

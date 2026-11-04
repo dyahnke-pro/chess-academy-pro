@@ -17,6 +17,7 @@ import { flipSideToMove } from './threatOut';
 import { ruleForPurpose } from './moveFundamentals';
 import { Chess, type Square } from 'chess.js';
 import type { AnalysisLine } from '../types';
+import { storedMate } from './engineConstants';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { legalSeeGainFor, legalSeeGainOn, standsSafe } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
@@ -40,6 +41,52 @@ export interface IntentReads {
 }
 
 export interface IntentMove { uci: string; san: string }
+
+/** What a recorded move keeps of the engine: one search's best line and the
+ *  played move's line, each with its score (White's view). */
+export interface StoredMoveRead {
+  bestMove: string | null;
+  /** The best move's score from the search that scored the played move. */
+  bestMoveEval?: number | null;
+  /** The score of the board before the move (the best line's), from the
+   *  position read — used when the record kept no `bestMoveEval`. */
+  preMoveEval?: number | null;
+  /** The score after the played move. */
+  evaluation: number | null;
+  pv?: { afterPlayed: readonly string[]; afterBest: readonly string[] };
+}
+
+/** THE STORED FAN BEFORE A RECORDED MOVE (WO-STORY-MATRIX-01 P1-9): the best
+ *  line, then the played move's line when it is another move — the two lines
+ *  one search kept, as the board-before read a computer weighs moves from.
+ *  Empty when the record kept no best move. One builder for every reader of a
+ *  record (Review's move facts, the record's posed reason). */
+export function storedFanBefore(rec: StoredMoveRead, playedUci: string | null): AnalysisLine[] {
+  if (!rec.bestMove) return [];
+  const bestEval = rec.bestMoveEval ?? rec.preMoveEval;
+  if (bestEval == null) return [];
+  const out: AnalysisLine[] = [{ rank: 1, evaluation: bestEval, mate: storedMate(bestEval), moves: [rec.bestMove, ...(rec.pv?.afterBest ?? [])] }];
+  if (playedUci && playedUci !== rec.bestMove && rec.evaluation != null && rec.pv?.afterPlayed.length) {
+    out.push({ rank: 2, evaluation: rec.evaluation, mate: storedMate(rec.evaluation), moves: [playedUci, ...rec.pv.afterPlayed] });
+  }
+  return out;
+}
+
+/** A recorded move's reads as the four a move's computers take: the stored fan
+ *  before it, and the played line as the board-after read. No pass reads are
+ *  stored, so those are empty — never invented. Null when the record kept no
+ *  line at all. */
+export function storedIntentReads(fenBefore: string, san: string, rec: StoredMoveRead): IntentReads | null {
+  let playedUci: string | null = null;
+  try { const m = new Chess(fenBefore).move(san); playedUci = `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; }
+  const before = storedFanBefore(rec, playedUci);
+  const after: AnalysisLine[] = rec.evaluation != null && rec.pv?.afterPlayed.length
+    ? [{ rank: 1, evaluation: rec.evaluation, mate: storedMate(rec.evaluation), moves: [...rec.pv.afterPlayed] }]
+    : [];
+  if (before.length === 0 && after.length === 0) return null;
+  return { before, after, passBefore: [], passAfter: [] };
+}
+
 
 /** How each half reads the engine. Chosen by measurement against his games
  *  (`moveIntent.measure.test.ts`), not by taste. */

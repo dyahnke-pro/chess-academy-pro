@@ -20,7 +20,7 @@ import { affirmMove } from './dnaRules';
 import { sayYourMove } from './spokenMove';
 import { Chess, type Square } from 'chess.js';
 import type { StockfishAnalysis, WalkableLine } from '../types';
-import { walkableLine } from './proof';
+import { walkableLine, type Proof } from './proof';
 import { findHangingPieces } from './tacticClassifier';
 import { refutationProof, moverLineProof } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
@@ -103,6 +103,9 @@ export interface Candidate {
   /** The moves `proof` names, from the position before the candidate — so a
    *  surface that says the proof can also play it on the board. */
   proofSans?: readonly string[];
+  /** The proof itself (`refutationProof`) — the line, its result and whether
+   *  it is exact — for a surface that hands the rule-out on as a fact. */
+  refutation?: Proof;
   /** The moves from the candidate to where both queens are off, for a
    *  'trades-queens' shortfall — the trade said as the line it is. */
   tradeSans?: readonly string[];
@@ -123,6 +126,14 @@ export interface Deliberation {
   bestLine?: string | null;
   /** The moves `bestLine` names, from the position before the move. */
   bestLineSans?: readonly string[] | null;
+  /** The proof `bestLine` says (`moverLineProof`). */
+  bestLineProof?: Proof | null;
+  /** `bestLine` said FROM THE REPLY and anchored on the move, for a surface
+   *  that has already named the move ("You play Bxf7+ — …"): "After Bxf7+,
+   *  they answer Kxf7 and you play Qxd8 — you win a queen and a pawn for a
+   *  bishop." Never "You play Bxf7+" twice, and never a bare "Then …" that a
+   *  rule-out said just before would seem to continue. */
+  bestLineAfter?: string | null;
   /** The engine's reply to the best move (SAN), so "what's their best
    *  defence?" is answered even when the line proves nothing countable. */
   bestReply?: string | null;
@@ -241,7 +252,7 @@ export function buildDeliberation(input: {
     alternatives.push({
       san, evalCp, deltaCp, shortfall,
       drops: drop ? { piece: drop.piece, square: drop.square } : undefined,
-      ...(lossProof ? { proof: lossProof.short, proofSans: lossProof.line?.sans ?? [] } : {}),
+      ...(lossProof ? { proof: lossProof.short, proofSans: lossProof.line?.sans ?? [], refutation: lossProof } : {}),
       ...(tradeLine && !lossProof ? { tradeSans: tradeLine } : {}),
     });
   }
@@ -277,7 +288,7 @@ export function buildDeliberation(input: {
           san: namedSan, evalCp, deltaCp,
           shortfall: drop ? 'drops-material' : deltaCp >= CLEARLY_WORSE_CP ? 'clearly-worse' : 'less-precise',
           drops: drop ? { piece: drop.piece, square: drop.square } : undefined,
-          ...(lossProof ? { proof: lossProof.short, proofSans: lossProof.line?.sans ?? [] } : {}),
+          ...(lossProof ? { proof: lossProof.short, proofSans: lossProof.line?.sans ?? [], refutation: lossProof } : {}),
           ...(leaves ? { leaves } : {}),
         };
       }
@@ -290,6 +301,7 @@ export function buildDeliberation(input: {
   const played = moverLineProof(fenBefore, bestLine.moves, moverColor);
   const playedSans = played?.line?.sans ?? [];
   const bestLineText = played && playedSans.length >= 3 ? played.short : null;
+  const bestLineAfter = bestLineText && played ? `After ${bestSan}, ${lineShape(playedSans.slice(1), 'they')} — ${played.short.slice(played.short.indexOf(' — ') + 3)}` : null;
   // A MOVE THAT STARTS A FORCED MATE IS BEST FOR THAT REASON (hard walk
   // 2026-10-10: "Nh6+ is best — it lands on the h6 outpost", then the mate in
   // four). The mate is the why; a square's geometry beside it teaches nothing.
@@ -301,7 +313,7 @@ export function buildDeliberation(input: {
     // Written as the reply is said: Black's move carries its ellipsis.
     try { const c = new Chess(fenBefore); c.move({ from: bestLine.moves[0].slice(0, 2), to: bestLine.moves[0].slice(2, 4), promotion: bestLine.moves[0][4] }); const r = uciToSan(c.fen(), bestLine.moves[1]); return r ? `${moverColor === 'w' ? '…' : ''}${r}` : null; } catch { return null; }
   })();
-  return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy, bestLine: bestLineText, bestLineSans: bestLineText ? playedSans : null, bestReply, ...(namedCandidate ? { named: namedCandidate, namedWhy } : {}) };
+  return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy, bestLine: bestLineText, bestLineSans: bestLineText ? playedSans : null, bestLineProof: bestLineText ? played : null, bestLineAfter, bestReply, ...(namedCandidate ? { named: namedCandidate, namedWhy } : {}) };
 }
 
 
@@ -458,23 +470,39 @@ function meaningfulAlternatives(d: Deliberation): Candidate[] {
   );
 }
 
+/** ONE MOVE RULED OUT, AS A FACT (WO-STORY-MATRIX-01 P1-9): the candidate,
+ *  why it falls short in words, the square the loss lands on, and the proof
+ *  the line gives. */
+export interface RuleOut {
+  san: string;
+  text: string;
+  /** The square the loss lands on (the piece dropped, the line's last
+   *  capture), or none for a principle (the queen trade). */
+  squares: string[];
+  /** The rule-out's claim (`ruleOutClaim`): one loss is ruled out once. */
+  claim: string | null;
+  /** How much worse than the best move it is, mover's seat (cp). */
+  deltaCp: number;
+  /** The line that proves it, or null when the board states it (a piece
+   *  left hanging, the queens coming off). */
+  proof: Proof | null;
+}
+
 /**
- * The weighing WITHOUT the "the move is X" conclusion. Safe to splice into a
- * TAUGHT line (the Watch walkthrough), where the conclusion is the DB-canonical
- * taught move — NOT necessarily the engine's best. Emitting the tempting
- * alternatives + why each falls short teaches the discussion without ever
- * contradicting the board (which would break G3).
- *
- * Only MEANINGFUL alternatives are spoken (a genuine fork — drops material or a
- * real gap). A quiet position where every move is a coin-flip weighs to '' —
- * silence, which the voice rules allow, instead of "X is playable, but not as
- * precise" filler on every equal opening move.
+ * The moves ruled out WITH a reason, each its own fact — the weighing WITHOUT
+ * the "the move is X" conclusion, so a taught line (whose move may not be the
+ * engine's best, G3) can say it. Only a real fork in the road is weighed: a
+ * coin-flip alternative or one with no reason is not a fact. `said` is the
+ * surface's say-once set (a loss already ruled out is not ruled out again).
  */
-export function deliberationAlternativesFacts(d: Deliberation): string {
-  if (!d.isRealChoice) return '';
-  const meaningful = meaningfulAlternatives(d);
-  if (meaningful.length === 0) return '';
-  return meaningful.map(shortfallText).join(' ');
+export function ruleOuts(d: Deliberation, said: ReadonlySet<string>): RuleOut[] {
+  if (!d.isRealChoice) return [];
+  return reasonedAlternatives(d, said).map((c) => {
+    const last = c.proofSans?.[c.proofSans.length - 1]?.replace(/^…/, '') ?? null;
+    const lineSq = last ? /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(last)?.[1] ?? null : null;
+    const squares = c.drops ? [c.drops.square] : lineSq ? [lineSq] : [];
+    return { san: c.san, text: shortfallText(c), squares, claim: ruleOutClaim(c), deltaCp: c.deltaCp, proof: c.refutation ?? null };
+  });
 }
 
 /** Why `san` is the move, phrased to follow "it" ("…— it wins the pawn on

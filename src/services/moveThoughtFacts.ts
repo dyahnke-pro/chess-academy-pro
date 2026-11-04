@@ -29,6 +29,10 @@ import { placeFact, LOCAL_THREAD, type CoachFact, type CoachFactKind, type Compu
 import type { LessonVoice } from './reviewMoveBriefing';
 import { planAimKey } from './nextPlans';
 import { threadKey } from './gameStory';
+import type { IntentReads } from './moveIntent';
+import { buildDeliberation, ruleOuts, NOTHING_SAID } from './deliberation';
+import { refutedAltProof, type RefutedAlternative } from './refutedAlternativeCore';
+import { costStakes } from './factStakes';
 
 export interface MoveThoughtInput {
   fenBefore: string;
@@ -46,6 +50,14 @@ export interface MoveThoughtInput {
   theirLast: { fenBefore: string; san: string } | null;
   /** The lesson's phrase memory (an idea said in full once, then referred to). */
   phrases: PhraseMemory | null;
+  /** THE ENGINE'S READS AROUND THE MOVE (WO-STORY-MATRIX-01 P1-9): the fan
+   *  before it, the read after it, and the pass reads where the surface has
+   *  them. REQUIRED: a caller with no read answers null, so a computer that
+   *  needs the engine is never silently starved (six were, until this). */
+  reads: IntentReads | null;
+  /** What the move cost its mover against the best move (cp, >= 0), from
+   *  one search; null when the surface does not know. */
+  costCp: number | null;
 }
 
 /** How much a job of each kind weighs on the board when nothing is at stake —
@@ -243,6 +255,38 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     const why = seated(`${stop.intent.san} would ${verb} your ${PIECE_NAME[stop.victim.piece] ?? 'piece'} on ${stop.victim.square}`);
     add('stop', 'findProphylaxis', 'prophylaxis', 'prevent', lead(`takes away ${stop.intent.to}: ${why}`), `It also takes away ${stop.intent.to}: ${why}`, stop.squares, 72);
   }
+
+  // THE CHOICES — the moves you'd weigh here and why each falls short, each
+  // its own fact with the line that proves it (`buildDeliberation`, read off
+  // the fan before the move). The played move is never weighed against
+  // itself, and the engine's best is never named over it: a taught line's
+  // move may not be the engine's (G3), so only the rule-outs are said.
+  if (mine && i.reads && i.reads.before.length >= 2) {
+    const d = buildDeliberation({ analysis: { topLines: [...i.reads.before] }, fenBefore: i.fenBefore, moverColor: sideOf(i.fenBefore), excludeSan: san, opponentLastSan: i.theirLast?.san ?? null });
+    if (d) {
+      for (const r of ruleOuts(d, NOTHING_SAID)) {
+        facts.push({
+          id: `buildDeliberation:${facts.length}`, namesStudentMove: false,
+          ...placeFact('deliberation', seat), computer: 'buildDeliberation', source: 'alternatives', idea: 'choice', text: close(r.text),
+          squares: r.squares, weight: 50, thread: LOCAL_THREAD, stakes: costStakes(r.deltaCp),
+          proof: r.proof ?? NO_PROOF.stated, seat, fen: i.fenBefore, altFen: fenAfter,
+          claims: [r.claim ?? `choice:${from}${to}:${r.san}`],
+        });
+      }
+      // THE LINE PLAYED OUT — the move is the engine's own and its line wins
+      // material or mates within the horizon. When the deep fact already says
+      // what the move sets up, that is this line's point: it is not said twice.
+      if (d.best.san === san && d.bestLineAfter && d.bestLineProof && !deep) {
+        const said = close(d.bestLineAfter);
+        facts.push({
+          id: `buildDeliberation:${facts.length}`, namesStudentMove: false,
+          ...placeFact('line', seat), computer: 'buildDeliberation', source: 'bestLine', idea: /and it's mate$/.test(d.bestLineAfter) ? 'mate' : 'win-material',
+          text: said, squares: [], weight: 60, thread: LOCAL_THREAD, stakes: null, proof: d.bestLineProof, seat, fen: i.fenBefore, altFen: fenAfter,
+          claims: [`line:${from}${to}:${(d.bestLineSans ?? []).join(' ')}`],
+        });
+      }
+    }
+  }
   return facts;
 }
 
@@ -252,10 +296,29 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
  *  top-three clause list (`lessonBeat`), which picked by aspect weight alone,
  *  cut at three and never heard the move's job or its fundamentals. '' when
  *  nothing earned a word: silence beats a repeat. */
-export function lessonThought(input: Omit<MoveThoughtInput, 'phrases'>, voice: LessonVoice): string {
+export function lessonThought(input: Omit<MoveThoughtInput, 'phrases'>, voice: LessonVoice, refuted: RefutedAlternative | null): string {
   // The line's story is at this move's ply: what it says is said here.
   voice.story.reach(plyOfFen(input.fenBefore));
-  return composeThought(moveThoughtFacts({ ...input, phrases: voice.phrases }), 'lesson', voice).spoken;
+  const facts = moveThoughtFacts({ ...input, phrases: voice.phrases });
+  const alt = refuted ? refutedFact(refuted, input.fenBefore, input.moverIsStudent !== false ? 'student' : 'opponent') : null;
+  return composeThought(alt ? [...facts, alt] : facts, 'lesson', voice).spoken;
+}
+
+/** THE MOVE MOST PLAYERS CHOOSE HERE INSTEAD, AS A CHOICE (WO-STORY-MATRIX-01
+ *  P1-9): what it costs and the line that punishes it (`refutedFromFan`), in
+ *  the choices step beside the engine's own rule-outs — so the composer, not a
+ *  splice after it, decides which of them the move's thought says. Lessons
+ *  read it off the games database; null where a surface has none. */
+export function refutedFact(r: RefutedAlternative, fenBefore: string, seat: FactSeat): ThoughtFact {
+  const said = close(r.text);
+  let squares: string[] = [];
+  try { const am = new Chess(fenBefore).move(r.alt); squares = [am.from, am.to]; } catch { squares = []; }
+  return {
+    id: 'refutedFromFan:0', namesStudentMove: false,
+    ...placeFact('refuted', seat), computer: 'refutedFromFan', source: 'refuted', idea: 'choice', text: said, squares, weight: 55,
+    thread: LOCAL_THREAD, stakes: costStakes(r.costCp), proof: refutedAltProof(fenBefore, r) ?? NO_PROOF.stated, seat, fen: fenBefore,
+    claims: [`refuted:${r.alt.replace(/[+#!?]+$/, '')}`],
+  };
 }
 
 function sideOf(fen: string): 'w' | 'b' {

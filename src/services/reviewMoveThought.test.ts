@@ -25,8 +25,8 @@ describe('Review says a move through the one composer', () => {
     c.move('e5');
     const lesson = lessonThought({
       fenBefore: c.fen(), san: 'Nf3', moverIsStudent: false, prev: NO_PREV_CAPTURE,
-      line: ['Nc6', 'Bc4', 'Nf6', 'Ng5'], theirLast,
-    }, newLessonVoice());
+      line: ['Nc6', 'Bc4', 'Nf6', 'Ng5'], theirLast, reads: null, costCp: null,
+    }, newLessonVoice(), null);
     expect(lesson).toMatch(/^They play Nf3 — it develops into the game/);
     expect(walk('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5', 'black')[2]).toContain(lesson.replace(/\.$/, ''));
   }, 60_000);

@@ -99,6 +99,23 @@ export async function moveScoresOneSearch(input: {
 }
 
 
+/** THE PLAYED MOVE'S COST INSIDE A READ THE SURFACE ALREADY HAS (mover's
+ *  seat, >= 0; WO-STORY-MATRIX-01 P1-9): the best line's score minus the
+ *  played move's, when the played move is one of the read's lines and neither
+ *  is a mate. 0 when it is the best move. Null when the read does not hold the
+ *  played move — no second search is made here. */
+export function fanCostCp(fenBefore: string, playedUci: string, lines: CostFan['topLines']): number | null {
+  const fan = (lines ?? []).filter((l) => l.moves.length > 0);
+  const best = fan[0];
+  if (!best) return null;
+  const played = fan.find((l) => l.moves[0] === playedUci);
+  if (!played || best.mate != null || played.mate != null) return null;
+  if (played === best) return 0;
+  const mover: 'w' | 'b' = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
+  const cost = alternativeCostCp(best.moves[0], playedUci, fan, mover);
+  return cost === null ? null : Math.max(0, cost);
+}
+
 /** The UCI of a SAN move on `fen`, or null when it is not legal there. */
 export function uciOfSan(fen: string, san: string): string | null {
   try {

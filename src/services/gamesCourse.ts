@@ -278,7 +278,9 @@ function splitThought(v: CourseLine, side: 'white' | 'black'): string {
       moverIsStudent: (v.from % 2 === 0) === (side === 'white'),
       line: v.sans.slice(v.from + 1, v.from + 1 + BRIEFING_LINE_PLIES),
       theirLast: before ? { fenBefore: before, san: v.sans[v.from - 1] } : null,
-    }, newLessonVoice());
+      // The tab's first move, read from the board alone: no engine read here.
+      reads: null, costCp: null,
+    }, newLessonVoice(), null);
   } catch {
     return '';
   }

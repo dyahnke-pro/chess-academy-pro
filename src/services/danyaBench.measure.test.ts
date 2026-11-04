@@ -34,7 +34,7 @@ import { newLessonVoice, BRIEFING_LINE_PLIES } from './reviewMoveBriefing';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { computePositionFacts, type PositionFactsResult } from './positionFacts';
 import { studentMoveTeaching } from './learnBoardTeaching';
-import { buildDeliberation, deliberationFacts, deliberationAlternativesFacts, moveWhy, bestMoveReason } from './deliberation';
+import { buildDeliberation, deliberationFacts, ruleOuts, NOTHING_SAID, moveWhy, bestMoveReason } from './deliberation';
 import { moveJob, bookMoveWhy, MINE, THEIRS } from './bookMoveWhy';
 import { mastersMovesSync, __setLocalDbForTests } from './masterPlayLookup';
 import { computeMoveFundamentals } from './moveFundamentals';
@@ -43,25 +43,15 @@ import { deepFact, theirTarget } from './threeFacts';
 import { findProphylaxis, prophylaxisLine } from './prophylaxis';
 import { notYet, depthClauses } from './thinkAloud';
 import { notYetPlayed } from './notYetPlayed';
-import { moveIntent } from './moveIntent';
+import { moveIntent, type IntentReads } from './moveIntent';
 import { afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
 import { NO_SECOND_READ } from './inaccuracyCall';
 import { composeThought, type ComposedThought, type ThoughtFact, type ThoughtSource } from './thoughtComposer';
 import type { FactKind } from './reviewFacetRank';
-import { placeFact } from './coachFact';
 import { moveThoughtFacts, lessonThought } from './moveThoughtFacts';
-import { NO_PROOF } from './proof';
 import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 import { classifyCpLoss } from './gameAnalysisService';
 
-/** The bench's own variant: the weighing as a choices-step fact. */
-function choiceFact(text: string, fen: string): ThoughtFact {
-  return {
-    id: 'deliberationAlternativesFacts:0', namesStudentMove: false,
-    ...placeFact('deliberation', 'student'), computer: 'deliberationAlternativesFacts', source: 'alternatives', idea: 'choice', thread: { none: 'local' }, text: /[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`, squares: [], weight: 50, stakes: null,
-    proof: NO_PROOF.description, seat: 'student', fen, claims: [`choice:${fen}`],
-  };
-}
 import type { IdeaKind } from './ideaKind';
 import { facetLines } from '../test/reviewFacetLines';
 
@@ -200,6 +190,11 @@ function uciOf(fen: string, san: string): string | null {
   try { const m = new Chess(fen).move(san); return m.from + m.to + (m.promotion ?? ''); } catch { return null; }
 }
 /** Mover-POV cost of the played move, from the two cached reads. */
+/** The engine's reads around the move, as the lesson generator reads them. */
+function readsOf(p: Position): IntentReads | null {
+  return p.before.length || p.after.length ? { before: linesOf(p.before), after: linesOf(p.after), passBefore: [], passAfter: [] } : null;
+}
+
 function costCp(p: Position): number | null {
   return moverCost(p.mover, p.best, p.reply);
 }
@@ -346,15 +341,12 @@ function once<T>(fn: (p: Position) => T): (p: Position) => T {
 /** THE ONE COMPOSER on the lesson's inputs: the move's facts, plus the
  *  weighing the lesson computes for the student's own moves. */
 const lessonPick = once((p: Position): { facts: ThoughtFact[]; composed: ComposedThought } => {
+  // The lesson's own inputs: the engine's reads around the move (its choices
+  // are the move's own facts now — the weighing is no longer spliced here).
   const facts = moveThoughtFacts({
     fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
-    line: lineAhead(p), theirLast: p.theirLast, phrases: null,
+    line: lineAhead(p), theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
   });
-  if (p.own) {
-    const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, excludeSan: p.san, opponentLastSan: p.theirLast?.san ?? null });
-    const alt = d ? deliberationAlternativesFacts(d) : '';
-    if (alt) facts.push(choiceFact(alt, p.fenBefore));
-  }
   return { facts, composed: composeThought(facts, 'lesson', { keys: new Set<string>() }) };
 });
 
@@ -426,8 +418,8 @@ const tagsOf = (text: string | null): string[] => [...(text ?? '').matchAll(TAG)
 const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Promise<string | string[] | null>> = {
   lesson: (p) => lessonThought({
     fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own,
-    line: lineAhead(p), theirLast: p.theirLast,
-  }, newLessonVoice()),
+    line: lineAhead(p), theirLast: p.theirLast, reads: readsOf(p), costCp: costCp(p),
+  }, newLessonVoice(), null),
   thought: (p) => lessonPick(p).composed.spoken,
   review: (p) => reviewNarration(p)?.replace(/\[[a-z0-9-]+\]\s*/gi, '') || null,
   reviewInventory: (p) => reviewFacets(p).map((f) => f.replace(/^\[[^\]]+\]\s*/, '')),
@@ -476,7 +468,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
   // not the position is a real fork (the composer gates that; BUILT should not).
   alternatives: (p) => {
     const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, opponentLastSan: p.theirLast?.san ?? null });
-    return d ? deliberationAlternativesFacts(d) : null;
+    return d ? ruleOuts(d, NOTHING_SAID).map((r) => r.text) : null;
   },
   // The masters' main move here and what the played move left undone, when
   // the move left the book (bookMoveWhy reads the job of the main move).
@@ -533,6 +525,7 @@ const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
   alternatives: 'services/deliberation.ts#buildDeliberation',
   prophylaxis: 'services/prophylaxis.ts#findProphylaxis',
   notYet: 'services/inBetweenMove.ts#inBetweenMove',
+  bestLine: 'services/deliberation.ts#buildDeliberation',
 };
 
 /** Review's facet tags and the live composer's clause kinds (ONE vocabulary,
@@ -899,7 +892,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
     {
       const facts = moveThoughtFacts({
         fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
-        line: lineAhead(p), theirLast: p.theirLast, phrases: null,
+        line: lineAhead(p), theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
       });
       // DANYA_BENCH_DUMP=<file> keeps every fact the composer had on this note,
       // with the ideas its words carry, beside his ideas — the input an offline

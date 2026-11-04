@@ -154,7 +154,9 @@ function computeFill(ctx: PerMoveContext, studentSide: 'white' | 'black' | undef
       moverIsStudent: studentSide ? ctx.mover === studentSide : undefined,
       line: ctx.line,
       theirLast: ctx.theirLast,
-    }, voice);
+      // The fill is computed from the board alone: no engine read here.
+      reads: null, costCp: null,
+    }, voice, null);
   } catch {
     return '';
   }

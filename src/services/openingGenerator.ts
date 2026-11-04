@@ -60,8 +60,10 @@ import authoredRepertoire from '../data/repertoire.json';
 import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
 import { stockfishEngine } from './stockfishEngine';
-import { buildDeliberation, deliberationAlternativesFacts } from './deliberation';
-import { refutedAlternative, candidatesForPosition } from './refutedAlternative';
+import { refutedAlternative, candidatesForPosition, type RefutedAlternative } from './refutedAlternative';
+import type { IntentReads } from './moveIntent';
+import type { AnalysisLine } from '../types';
+import { fanCostCp, uciOfSan } from './moveCost';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { loadStudentNeedContext } from './studentNeedLoader';
 import { coldStudent } from './needScore';
@@ -1648,6 +1650,11 @@ function computedPlyBeat(
    *  it (what the other side is aiming at) — the three facts. */
   line: readonly string[] | null,
   theirLast: { fenBefore: string; san: string } | null,
+  /** The engine's reads around the move, its cost inside them, and the move
+   *  most players choose here instead — each null where the lesson has none. */
+  reads: IntentReads | null,
+  costCp: number | null,
+  refuted: RefutedAlternative | null,
 ): string {
   try {
     // Through the DNA door, with the lesson's own memory: an idea is taught
@@ -1660,7 +1667,8 @@ function computedPlyBeat(
       moverIsStudent,
       line: line ? line.map(stripSanAnnotations) : null,
       theirLast: theirLast ? { fenBefore: theirLast.fenBefore, san: stripSanAnnotations(theirLast.san) } : null,
-    }, voice);
+      reads, costCp,
+    }, voice, refuted);
   } catch {
     return '';
   }
@@ -1838,6 +1846,69 @@ async function generateOpeningFromDbNarration(
       }))
     : rawBranches;
 
+  // THE ENGINE'S READ AT EVERY PLY (WO-STORY-MATRIX-01 P1-9): one fan on the
+  // board before each spine move, both seats, and one after the last — the
+  // move's choices and every computer that weighs moves read it, and the next
+  // ply's fan is this move's board-after read. Until this the fan was run on
+  // the student's first sixteen plies only and thrown away after its weighing
+  // was spliced on as text; `DELIB_PLY_CAP = 16` was a latency cap on teaching
+  // (G4.5). The generation is cached once per lesson, so the engine time is
+  // paid once. A ply the engine could not read answers null.
+  const fanByPly: Array<readonly AnalysisLine[] | null> = [];
+  for (let i = 0; i <= positions.length; i += 1) {
+    const fen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
+    try {
+      const analysis = await stockfishEngine.analyzeWithBudget(fen, 12, 1200);
+      fanByPly.push(analysis?.topLines?.length ? analysis.topLines : null);
+    } catch { fanByPly.push(null); }
+  }
+  const readsAt = (i: number): IntentReads | null => {
+    const before = fanByPly[i] ?? null;
+    const after = fanByPly[i + 1] ?? null;
+    return before || after ? { before: before ?? [], after: after ?? [], passBefore: [], passAfter: [] } : null;
+  };
+  const costAt = (i: number): number | null => {
+    const fen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
+    const uci = uciOfSan(fen, stripSanAnnotations(positions[i].san));
+    return uci ? fanCostCp(fen, uci, fanByPly[i] ?? []) : null;
+  };
+  // THE REFUTED ALTERNATIVE (unified-coach N3, David 2026-09-15: "this is the
+  // big one"): on the student's own opening plies, the move most people play
+  // instead of the taught one, what it costs (engine, quiet-end graded), the
+  // punishing line and the concept it lands — ONE composed fact, baked at
+  // generation time. Gated by the student's NEED (N2): a ply they have mastered
+  // is not re-taught; a cold student hears every one. NOT bounded by ply (B10,
+  // 2026-09-22): `REFUTED_PLY_CAP = 12` was a latency cap on teaching — past
+  // move 6 the student's own opening plies carried no refuted alternative
+  // however much they needed one. The need gate is the only gate; a one-time
+  // cached generation may spend the engine time.
+  const refutedByPly: Record<number, RefutedAlternative> = {};
+  const refutedFacts: NonNullable<WalkthroughTree['teaching']>['refuted'] = [];
+  try {
+    await ensureMastersDbLoaded().catch(() => undefined);
+    const spineSans = positions.map((q) => q.san);
+    // THE ONE ADAPTIVE ESTIMATE, never a literal (B10): `rating: 1500` here
+    // handed the need loader — and so the departure-cost term — a number that
+    // was nobody's. The ONE opening key (A1) scopes the departure + result terms.
+    const rating = await getPlayerRating().catch(() => DEFAULT_STUDENT_RATING);
+    const student = await loadStudentNeedContext({ rating, sans: spineSans, studentColor: studentSide, openingId: openingKeyFromSans(spineSans), eco: entry.eco ?? null })
+      .catch(() => coldStudent(rating));
+    const needPlies = new Set(teachingForLine(spineSans, studentSide, student)?.needPlies ?? []);
+    for (let i = 0; i < positions.length; i += 1) {
+      if (positions[i].movedBy !== studentSide) continue;
+      if (!needPlies.has(i + 1)) continue;
+      const preFen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
+      const candidates = candidatesForPosition(preFen, mastersMovesSync(preFen));
+      if (candidates.length < 2) continue;
+      try {
+        const r = await refutedAlternative({ fenBefore: preFen, taughtSan: positions[i].san, candidates, studentColor: studentSide, depth: 12, maxPlies: 6 });
+        if (r) {
+          refutedByPly[i] = r;
+          refutedFacts.push({ ply: i + 1, alt: r.alt, pct: r.pct, costCp: r.costCp, concept: r.concept?.id ?? null });
+        }
+      } catch { /* the alternative is a bonus on this ply — never block generation */ }
+    }
+  } catch { /* never block generation */ }
   // THE COMPUTED BEATS (G0 — see `computedPlyBeat`). One per spine ply, from
   // the board, seat-stamped. Tour mode keeps every beat to its first sentence
   // (the student wants a quick playthrough, not a lecture).
@@ -1851,6 +1922,7 @@ async function generateOpeningFromDbNarration(
       i === 0 ? startFenForBeats : positions[i - 1].fen, p.san, p.movedBy === studentSide, prev, spineVoice,
       positions.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),
       i > 0 ? { fenBefore: i === 1 ? startFenForBeats : positions[i - 2].fen, san: positions[i - 1].san } : null,
+      readsAt(i), costAt(i), refutedByPly[i] ?? null,
     );
     return pace === 'tour' ? firstSentence(beat) : beat;
   });
@@ -1942,7 +2014,8 @@ async function generateOpeningFromDbNarration(
     const spineLen = positions.length;
     const spineLast = spineLen > 0 ? { fenBefore: spineLen === 1 ? startFenForBeats : positions[spineLen - 2].fen, san: positions[spineLen - 1].san } : null;
     const branchBeat = branchSeq[0]
-      ? computedPlyBeat(terminusFen, b.san, branchMovedBy === studentSide, terminusPrev, branchVoice, branchSans.slice(1, 1 + BRIEFING_LINE_PLIES), spineLast)
+      // A branch tile is read from the board alone: the engine pass reads the spine.
+      ? computedPlyBeat(terminusFen, b.san, branchMovedBy === studentSide, terminusPrev, branchVoice, branchSans.slice(1, 1 + BRIEFING_LINE_PLIES), spineLast, null, null, null)
       : '';
     const extBeats = b.extensionMoves.map((extSan, j) => {
       const extMovedBy: 'white' | 'black' = (positions.length + 1 + j) % 2 === 0 ? 'white' : 'black';
@@ -1951,6 +2024,7 @@ async function generateOpeningFromDbNarration(
           branchSeq[j].fen, extSan, extMovedBy === studentSide, branchRuns[j + 1], branchVoice,
           branchSans.slice(j + 2, j + 2 + BRIEFING_LINE_PLIES),
           { fenBefore: j === 0 ? terminusFen : branchSeq[j - 1].fen, san: branchSans[j] },
+          null, null, null,
         )
         : '';
     });
@@ -2089,75 +2163,6 @@ async function generateOpeningFromDbNarration(
   // captured BEFORE the house-voice reword so the arrows can never drift with
   // the model's phrasing (G0, see `noteArrowSourceAt`). null = ungrounded ply.
   const plyNoteText: Array<string | null> = positions.map(() => null);
-  // TIER-3 DISCUSSION VOICE — the weighing, for a taught line (David 2026-08-27:
-  // "build it"). On the student's OWN spine moves that fall through to Tier 3 (no
-  // corpus note, no authored prose), splice the tempting-alternatives weighing
-  // ("you'd love Nxe5, but that drops the knight") so the computed narration
-  // reaches his level. CRITICAL: only `deliberationAlternativesFacts` — it DROPS
-  // the "the move is X" conclusion, so it never contradicts the DB-canonical
-  // taught move (which may not be the engine's best) — G3 intact. Computed
-  // board-truth from the fan (G0), so it is NOT re-graded against a single FEN
-  // (the alternatives describe hypothetical lines). Fail-safe: any engine miss →
-  // no splice, generation continues. Bounded: student plies in the first 16 only,
-  // so the added engine time on a (cached, one-time) generation stays modest.
-  const deliberationByPly: Record<number, string> = {};
-  const studentChar: 'w' | 'b' = studentSide === 'white' ? 'w' : 'b';
-  const DELIB_PLY_CAP = 16;
-  // THE REFUTED ALTERNATIVE (unified-coach N3, David 2026-09-15: "this is the
-  // big one"): on the student's own opening plies, the move most people play
-  // instead of the taught one, what it costs (engine, quiet-end graded), the
-  // punishing line and the concept it lands — ONE composed fact, baked at
-  // generation time. Gated by the student's NEED (N2): a ply they have mastered
-  // is not re-taught; a cold student hears every one. NOT bounded by ply (B10,
-  // 2026-09-22): `REFUTED_PLY_CAP = 12` was a latency cap on teaching — past
-  // move 6 the student's own opening plies carried no refuted alternative
-  // however much they needed one. The need gate is the only gate; a one-time
-  // cached generation may spend the engine time.
-  const refutedByPly: Record<number, string> = {};
-  const refutedFacts: NonNullable<WalkthroughTree['teaching']>['refuted'] = [];
-  try {
-    await ensureMastersDbLoaded().catch(() => undefined);
-    const spineSans = positions.map((q) => q.san);
-    // THE ONE ADAPTIVE ESTIMATE, never a literal (B10): `rating: 1500` here
-    // handed the need loader — and so the departure-cost term — a number that
-    // was nobody's. The ONE opening key (A1) scopes the departure + result terms.
-    const rating = await getPlayerRating().catch(() => DEFAULT_STUDENT_RATING);
-    const student = await loadStudentNeedContext({ rating, sans: spineSans, studentColor: studentSide, openingId: openingKeyFromSans(spineSans), eco: entry.eco ?? null })
-      .catch(() => coldStudent(rating));
-    const needPlies = new Set(teachingForLine(spineSans, studentSide, student)?.needPlies ?? []);
-    for (let i = 0; i < positions.length; i += 1) {
-      if (positions[i].movedBy !== studentSide) continue;
-      if (!needPlies.has(i + 1)) continue;
-      const preFen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
-      const candidates = candidatesForPosition(preFen, mastersMovesSync(preFen));
-      if (candidates.length < 2) continue;
-      try {
-        const r = await refutedAlternative({ fenBefore: preFen, taughtSan: positions[i].san, candidates, studentColor: studentSide, depth: 12, maxPlies: 6 });
-        if (r) {
-          refutedByPly[i] = r.text;
-          refutedFacts.push({ ply: i + 1, alt: r.alt, pct: r.pct, costCp: r.costCp, concept: r.concept?.id ?? null });
-        }
-      } catch { /* the alternative is a bonus on this ply — never block generation */ }
-    }
-  } catch { /* never block generation */ }
-  try {
-    for (let i = 0; i < positions.length && i < DELIB_PLY_CAP; i += 1) {
-      if (positions[i].movedBy !== studentSide) continue; // only the student's own choices
-      const preFen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
-      try {
-        const analysis = await stockfishEngine.analyzeWithBudget(preFen, 12, 1200);
-        if (!analysis?.topLines?.length) continue;
-        // excludeSan = the taught move at this ply — never weigh it as a weaker
-        // alternative against itself (self-contradiction on the board, G3).
-        const d = buildDeliberation({ analysis, fenBefore: preFen, moverColor: studentChar, excludeSan: positions[i].san, opponentLastSan: i > 0 ? positions[i - 1].san : null });
-        if (d) {
-          const facts = deliberationAlternativesFacts(d);
-          if (facts) deliberationByPly[i] = facts;
-        }
-      } catch { /* skip this ply — the discussion voice is a bonus */ }
-    }
-  } catch { /* skip the whole pre-pass — never block generation */ }
-
   // PASS 1 — assemble each ply's raw material.
   //
   // THE NOTE LEADS (David 2026-08-04: "corpus notes are primary for teach me x
@@ -2199,7 +2204,7 @@ async function generateOpeningFromDbNarration(
       const preFen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
       const landed = landedTacticTeaching(preFen, p.san);
       const teaching = corpusNotes ? noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName, studentSide) : null;
-      const refuted = refutedByPly[i];
+      const refuted = refutedByPly[i]?.text;
       if (teaching) {
         plyNoteText[i] = teaching;
         if (landed) return `${teaching} ${landed.text}`;
@@ -2259,11 +2264,8 @@ async function generateOpeningFromDbNarration(
       // tactic it lands, or the move most people play instead, or the weighing,
       // follows it: what the move did, then the choices, in his order.
       if (landed) return fallback ? `${fallback} ${landed.text}` : landed.text;
-      // The refuted alternative outranks the plain weighing: same subject (the
-      // tempting move), but with the DB frequency, the line and the concept.
-      if (refuted) return fallback ? `${fallback} ${refuted}` : refuted;
-      const delib = deliberationByPly[i];
-      if (delib) return fallback ? `${fallback} ${delib}` : delib;
+      // The move most players choose here and the engine's own rule-outs are
+      // facts in the beat's choices step: the composer says them, not a splice.
       return fallback;
     } catch {
       /* the corpus is a bonus, never a blocker */
@@ -2539,7 +2541,9 @@ function buildFallbackTreeFromDb(
     moverIsStudent: (i % 2 === 0 ? 'white' : 'black') === studentSide,
     line: entry.moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map(stripSanAnnotations),
     theirLast: i > 0 ? { fenBefore: fensBefore[i - 1], san: stripSanAnnotations(entry.moves[i - 1]) } : null,
-  }, dbVoice));
+    // The DB-only fallback is built without the engine: no read here.
+    reads: null, costCp: null,
+  }, dbVoice, null));
   for (let i = entry.moves.length - 1; i >= 0; i -= 1) {
     const san = entry.moves[i];
     const movedBy: 'white' | 'black' = i % 2 === 0 ? 'white' : 'black';

@@ -33,6 +33,7 @@ import { BOOK_FROM_PLY, OPENING_PLIES, pvUciToSan } from './principleAttribution
 import { findContinuationsAtPly } from './openingDetectionService';
 import { costWords, isMateEval, storedMate } from './engineConstants';
 import { decisiveReason, reasonPosed } from './decisiveReason';
+import { storedFanBefore } from './moveIntent';
 import { capEval } from './accuracyService';
 import { isFixtureGame } from './fixtureGames';
 import { isMisconceptionTagId, MISCONCEPTION_RULES_REV, POSITIVE_HALF_REV, THREAT_HALF_REV, type MisconceptionTagId } from '../data/misconceptionTags';
@@ -374,13 +375,9 @@ function reasonPosedFromAnnotation(fen: string, ann: MoveAnnotation, lastSan: st
     // The record is read in review, where the prepared move is named.
     namesPreparedMove: true,
     fenBefore: fen, san: bestSan, seat: 'student', opponentLastSan: lastSan,
-    reads: {
-      before: [
-        { rank: 1, evaluation: ann.bestMoveEval, mate: storedMate(ann.bestMoveEval), moves: [ann.bestMove, ...ann.pv.afterBest] },
-        { rank: 2, evaluation: ann.evaluation, mate: storedMate(ann.evaluation), moves: [playedUci, ...ann.pv.afterPlayed] },
-      ],
-      after: [], passBefore: [], passAfter: [],
-    },
+    // The reads are the BEST move's: the stored fan before it, and nothing
+    // after it (the record kept the played move's continuation, not its).
+    reads: { before: storedFanBefore(ann, playedUci), after: [], passBefore: [], passAfter: [] },
   });
   return reasonPosed(r);
 }

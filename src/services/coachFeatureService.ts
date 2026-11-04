@@ -37,6 +37,7 @@ import { ensureMastersDbLoaded, mastersMovesSync, masterMovesCachedSync } from '
 import { moveJob, whatItAsks, MINE, THEIRS, JOB_RESTATED_BY_RULE, type BookJobKind, type PriorCapture } from './bookMoveWhy';
 import { refutedAlternative, candidatesForPosition, SINGLETON_SCORER, type RefutedAlternative } from './refutedAlternative';
 import { recordedMoveCost } from './moveCost';
+import { storedIntentReads } from './moveIntent';
 import { findWorstPlacedPiece, planAimKey } from './nextPlans';
 import { transferClause, transferMotifOf, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
@@ -2463,6 +2464,10 @@ function* reviewSegmentSteps(
           line: moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),
           theirLast: i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null,
           phrases: phrasesHere,
+          // The record's own lines for this move (the deep read where it ran)
+          // and its cost from one search.
+          reads: storedIntentReads(fenPair.fenBefore, m.san, m),
+          costCp: recordedMoveCost(m, moverColor),
         }).filter((f) => (f.step === 'yours' || f.step === 'theirs') && !(skipJob && f.source === 'moveJob')
           && !(f.source === 'briefing' && REVIEW_OWNS_IDEA.has(f.idea)) && !ruleIdeas.has(f.idea)
           // The trip reads the line ahead as a plan; in a game the moves that

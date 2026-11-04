@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6224 lines · 30 exports · 67 importers · 81 tests · 4 audits**
+**6229 lines · 30 exports · 67 importers · 81 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -88,7 +88,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/services/autoAnalyzeGame.ts:333`
+- `src/services/autoAnalyzeGame.ts:334`
 - `src/services/coachFeatureService.test.ts:204`
 - `src/services/coachFeatureService.test.ts:219`
 - `src/services/coachFeatureService.test.ts:242`
@@ -223,7 +223,7 @@
 - `src/services/coachFeatureService.trade.test.ts:19`
 - `src/services/coachNoRecall.test.ts:44`
 - `src/services/coachNoRecall.test.ts:56`
-- `src/services/danyaBench.measure.test.ts:388`
+- `src/services/danyaBench.measure.test.ts:382`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
 - `src/services/habitBothSeats.test.ts:29`
@@ -267,7 +267,7 @@
 - `src/services/reviewTheirHabit.test.ts:24`
 - `src/test/computedOrderWired.test.ts:59`
 - `src/test/everySurfaceSpeaks.test.ts:94`
-- `src/test/replayGame.ts:150`
+- `src/test/replayGame.ts:154`
 - `src/test/reviewExplore.continuity.test.ts:50`
 - `src/test/reviewExplore.continuity.test.ts:62`
 

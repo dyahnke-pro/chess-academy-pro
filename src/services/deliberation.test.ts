@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildDeliberation, deliberationFacts, deliberationAlternativesFacts, NOTHING_SAID } from './deliberation';
+import { buildDeliberation, deliberationFacts, ruleOuts, NOTHING_SAID } from './deliberation';
 
 // Italian, White to move after 1.e4 e5 2.Nf3 Nc6 3.Bc4. A real choice: castle
 // (best), Nxe5?? (drops the knight — Nc6xe5), d3 (playable, less precise).
@@ -53,9 +53,9 @@ describe('buildDeliberation — the weighing from the fan', () => {
     expect(d.alternatives.length).toBe(2); // best + 2 alternatives = 3 candidates
   });
 
-  it('alternatives-only facts drop the conclusion AND the coin-flip, keep the real fork', () => {
+  it('the rule-outs drop the conclusion AND the coin-flip, keep the real fork', () => {
     const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', opponentLastSan: null })!;
-    const facts = deliberationAlternativesFacts(d);
+    const facts = ruleOuts(d, NOTHING_SAID).map((r) => r.text).join(' ');
     expect(facts).toMatch(/Nxe5\? Then they answer Nxe5 — you give up a knight for a pawn\./); // the real fork speaks
     expect(facts).not.toMatch(/d3/); // the ~20cp coin-flip is filler — dropped, not weighed
     expect(facts).not.toMatch(/The move is/); // no conclusion — the taught move stands
@@ -66,7 +66,7 @@ describe('buildDeliberation — the weighing from the fan', () => {
     // weaker alternative against itself.
     const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', opponentLastSan: null, excludeSan: 'd3' })!;
     expect(d.alternatives.map((a) => a.san)).not.toContain('d3');
-    expect(deliberationAlternativesFacts(d)).not.toMatch(/d3/);
+    expect(ruleOuts(d, NOTHING_SAID).map((r) => r.text).join(' ')).not.toMatch(/d3/);
   });
 
   it('stays SILENT on a quiet position — coin-flip alternatives are filler, not a fork', () => {
@@ -75,7 +75,7 @@ describe('buildDeliberation — the weighing from the fan', () => {
     const quiet = { topLines: [line(1, 30, 'e1g1'), line(2, 20, 'd2d3'), line(3, 15, 'a2a3')] };
     const d = buildDeliberation({ analysis: quiet, fenBefore: FEN, moverColor: 'w', opponentLastSan: null })!;
     expect(d.isRealChoice).toBe(true); // there ARE alternatives...
-    expect(deliberationAlternativesFacts(d)).toBe(''); // ...but none worth weighing
+    expect(ruleOuts(d, NOTHING_SAID)).toEqual([]); // ...but none worth weighing
   });
 
   it('is NOT a real choice when the fan has one line (forced / only-move)', () => {
@@ -87,7 +87,7 @@ describe('buildDeliberation — the weighing from the fan', () => {
 
 describe('S5 — a candidate is a lesson only with its reason', () => {
   it('a failing candidate carries the line that proves it fails', async () => {
-    const { buildDeliberation, deliberationAlternativesFacts } = await import('./deliberation');
+    const { buildDeliberation, ruleOuts } = await import('./deliberation');
     // 1.e4 e5 2.Nf3 Nc6 3.Bc4, Black to move: 3…Qh4?? 4.Nxh4 drops the queen.
     const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
     const d = buildDeliberation({
@@ -100,7 +100,12 @@ describe('S5 — a candidate is a lesson only with its reason', () => {
     })!;
     const alt = d.alternatives[0];
     expect(alt.proof).toBe('you play Qh4 and they answer Nxh4 — they win a queen');
-    expect(deliberationAlternativesFacts(d)).toContain('Qh4? Then they answer Nxh4 — they win a queen.');
+    const [r] = ruleOuts(d, NOTHING_SAID);
+    expect(r.text).toBe('Qh4? Then they answer Nxh4 — they win a queen.');
+    // As a fact it carries its proof — the line, on the board — and the square
+    // the loss lands on.
+    expect(r.proof?.line?.sans).toEqual(['Qh4', 'Nxh4']);
+    expect(r.squares).toEqual(['h4']);
   });
 
   it('NEGATIVE CONTROL: a line that proves nothing gets no invented reason', async () => {

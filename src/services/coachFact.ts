@@ -185,7 +185,6 @@ export const COMPUTER_CATALOG = {
   findProphylaxis: { file: 'services/prophylaxis.ts', says: 'the other side\'s wanted pin, kick or fork, and the move that stops it' },
   // The weighing as a choices fact — handed to the composer by the Danya
   // bench's `thought` variant today; the lesson reads it in P1-9.
-  deliberationAlternativesFacts: { file: 'services/deliberation.ts', says: 'the moves you would weigh here and why each falls short' },
   // THE BOARD REGISTRY'S COMPUTERS (P1-6a): every `BOARD_COMPUTERS` read is a
   // fact made by one of these, named on its registry row.
   findPinBreaks: { file: 'services/pinBreak.ts', says: 'a pinned piece that walks out of the pin with tempo — the student\'s resource, or their piece the student pins' },
