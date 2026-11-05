@@ -56,6 +56,8 @@ import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatur
 import { classifyCpLoss } from './gameAnalysisService';
 
 import type { IdeaKind } from './ideaKind';
+import { TEACHING_MOVES } from './teachingMoves';
+import { classifyPhase } from './gamePhaseService';
 import { facetLines } from '../test/reviewFacetLines';
 
 // ── the corpus and the cached reads ─────────────────────────────────────────
@@ -1035,3 +1037,53 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
     ...(reachOn ? { reach: Object.fromEntries(reach) } : {}),
   }, null, 1));
 }, 6 * 3600_000);
+
+// ── THE DECIDER'S TRAINING ROWS (2026-11-05, David: "we train it … by feeding
+// these games and positions") ───────────────────────────────────────────────
+//
+//   DANYA_TRAIN=<out.jsonl> npx vitest run src/services/danyaBench.measure.test.ts -t "training rows"
+//
+// One row per position of his with engine reads: the moment (whose move, what
+// kind of move, the phase, what it cost, how forced the position was) and
+// EVERY fact the one composer computed there — its kind, the teaching moves
+// that kind makes (`TEACHING_MOVES`), its stakes and producer weight, and
+// whether the decider as it stands kept it. Joined offline with the teaching
+// moves HE made at the same board (scripts/scoreboard/his-bank-tags.json),
+// these are what the decider's weights are fitted on. No word of his is read
+// or written here.
+const TRAIN_OUT = process.env.DANYA_TRAIN ?? '';
+it.runIf(TRAIN_OUT !== '' && existsSync(READS) && existsSync(NOTES))('training rows: every computed fact at each of his positions', () => {
+  const positions = loadPositions();
+  // Resumable: rows already written (a run cut off by a restart) are kept and
+  // their positions skipped.
+  const done = new Set(existsSync(TRAIN_OUT) ? readFileSync(TRAIN_OUT, 'utf8').split('\n').filter(Boolean).flatMap((l) => { try { return [JSON.parse(l).id as string]; } catch { return []; } }) : []);
+  if (!existsSync(TRAIN_OUT)) writeFileSync(TRAIN_OUT, '');
+  let rows = done.size; let facts = 0;
+  for (const p of positions) {
+    if (done.has(p.note.id)) continue;
+    let pick: { facts: ThoughtFact[]; composed: ComposedThought };
+    try { pick = lessonPick(p); } catch { continue; }
+    const keptIds = new Set(pick.composed.kept.map((f) => f.id));
+    const heldWhy = new Map(pick.composed.held.map((h) => [h.fact.id, h.why]));
+    const top = p.before[0]; const second = p.before[1];
+    const forcedGap = top && second && top.cp !== null && second.cp !== null ? Math.abs(top.cp - second.cp) : (top?.mate != null && second?.mate == null ? 1000 : null);
+    const row = {
+      id: p.note.id, vid: videoOf(p.note.id), ply: p.note.lineSan.length, board: p.fenAfter.split(' ').slice(0, 4).join(' '),
+      // The app's ONE phase classifier, the one the door reads — never the
+      // corpus's ply rule — so training and the coach split phases alike.
+      own: p.own, phase: classifyPhase(p.fenAfter, { ply: p.note.lineSan.length }),
+      capture: p.san.includes('x'), check: /[+#]$/.test(p.san), castle: p.san.startsWith('O-O'),
+      costCp: costCp(p), forcedGap,
+      facts: pick.facts.map((f) => ({
+        kind: f.kind, source: f.source, idea: f.idea, step: f.step, seat: f.seat, weight: f.weight,
+        restates: !!f.restates, names: f.namesStudentMove, stake: stakeValue(f.stakes),
+        codes: TEACHING_MOVES[f.kind] ?? [], kept: keptIds.has(f.id), held: heldWhy.get(f.id) ?? null,
+      })),
+    };
+    appendFileSync(TRAIN_OUT, `${JSON.stringify(row)}\n`);
+    rows += 1; facts += row.facts.length;
+    if (rows % 500 === 0) console.log(`training rows ${rows}/${positions.length}`);
+  }
+  console.log(`training rows: ${rows} positions, ${facts} facts → ${TRAIN_OUT}`);
+  expect(rows).toBeGreaterThan(0);
+}, 3_600_000);
