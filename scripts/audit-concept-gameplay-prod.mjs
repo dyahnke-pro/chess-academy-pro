@@ -763,6 +763,18 @@ async function main() {
         } catch { /* unreadable is not a row */ }
       }
       const fadedTotal = turns.filter((t) => Array.isArray(t.faded) && t.faded.length > 0).length;
+      // THE LEARNED DECIDER (2026-11-05): an unstaked fact is ranked by HIS
+      // measured rate for its kind (`deciderWeights`), its lane's number only
+      // where his positions have not measured the kind. Every row names where
+      // each offered lane's worth came from, and a game ranks some lanes by his
+      // data — a run where nothing is 'learned' means the table never loaded.
+      {
+        const missingWorth = turns.filter((t) => !t.worthFrom || typeof t.worthFrom !== 'object').length;
+        const src = { learned: 0, lane: 0, stake: 0 };
+        for (const t of turns) for (const v of Object.values(t.worthFrom ?? {})) if (v in src) src[v] += 1;
+        record('LW. the door ranks by his measured rates: every row names its worth source, and some lanes are learned', missingWorth === 0 && src.learned > 0,
+          `${missingWorth} row(s) without worthFrom; worth from — learned ${src.learned}, lane ${src.lane}, stake ${src.stake}`);
+      }
       record('LD3. nothing FADES before the student has held anything (grey teaches in full)', fadeBeforeEvidence.length === 0, `${fadeBeforeEvidence.length} of ${turns.length} rows faded with no held evidence or lack the field; ${fadedTotal} faded in all, after ${heldSeen} held answer(s)`);
       // THE WHY THAT WAS COMPUTED AND NOT SAID (David 2026-10-13: "how many of
       // those statements are calculated, just not spoken?"). Reported, not

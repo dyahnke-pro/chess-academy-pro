@@ -45,7 +45,9 @@ import type { FacetRole, FactKind } from './reviewFacetRank';
 import { isCoachFactKind, LOCAL_THREAD, placeFact, stakesOf, stepOf, type CoachFact, type CoachFactKind, type ComputerName } from './coachFact';
 import { BOARD_COMPUTERS } from './boardComputers';
 import { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
-import { isEndgameByMaterial } from './gamePhaseService';
+import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
+import { learnedRate, learnedLead, learnedOutOfPhase, type FactMoment } from './deciderWeights';
+import type { GamePhase } from '../types';
 import { STORY_KIND, type StoryBeat } from './openingStory';
 import type { ThreadLine } from './gameStory';
 import { samePosition } from '../utils/samePosition';
@@ -357,6 +359,45 @@ export function laneOutOfPhase(lane: LearnLane, fen: string): boolean {
   try { return isEndgameByMaterial(fen); } catch { return false; }
 }
 
+/** THE KIND OF MOMENT A FACT IS SAID IN, as he speaks (`deciderWeights`):
+ *  after the student's own move (its step is theirs to make) or after their
+ *  reply, in the phase the ONE classifier reads off the board. */
+const PHASE_OF_BOARD = new Map<string, GamePhase>();
+function phaseOfBoard(fen: string): GamePhase {
+  const known = PHASE_OF_BOARD.get(fen);
+  if (known) return known;
+  let phase: GamePhase = 'middlegame';
+  try { phase = classifyPhase(fen, { fullMove: Number(fen.split(' ')[5]) || 1 }); } catch { /* the middlegame read */ }
+  if (PHASE_OF_BOARD.size > 256) PHASE_OF_BOARD.clear();
+  PHASE_OF_BOARD.set(fen, phase);
+  return phase;
+}
+function momentOf(f: { step: ThoughtStep; fen: string }): FactMoment {
+  return { seat: f.step === 'yours' ? 'own' : 'theirs', phase: phaseOfBoard(f.fen) };
+}
+
+/** A FACT'S LEAD WHEN IT CARRIES NO STAKES (2026-11-05): how often he makes its
+ *  teaching move in this kind of moment, fitted on his games — the lane's own
+ *  number only for a kind that makes no teaching move he is measured on. This
+ *  is what ranks a plan against a structure read against a square choice: the
+ *  turn's lead, a step's one slot and the word budget all read it. */
+export function leadOf(f: LaneFact): number {
+  const r = learnedRate(f.kind, momentOf(f));
+  return r === null ? LEARN_LANES[f.lane].lead : learnedLead(r);
+}
+/** Where a fact's worth came from (the decision row's `worthFrom`). */
+function worthSource(f: LaneFact): 'learned' | 'lane' | 'stake' {
+  if (stakeValue(f.stakes) !== null) return 'stake';
+  return learnedRate(f.kind, momentOf(f)) === null ? 'lane' : 'learned';
+}
+
+/** Out of phase: he essentially never makes this fact's teaching move in this
+ *  phase (`learnedOutOfPhase`); the lane's own phase rule for a kind he is not
+ *  measured on. */
+function factOutOfPhase(f: LaneFact): boolean {
+  return learnedOutOfPhase(f.kind, momentOf(f)) ?? laneOutOfPhase(f.lane, f.fen);
+}
+
 export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // ── the moves a player weighs (weighedMoves, 2026-11-05): said about the
   // move just played — the natural move that fails, with its line; the move
@@ -656,6 +697,9 @@ export const VERDICT_TURN_CP = 100;
 
 export interface TurnLead {
   lane: LearnLane; squares: readonly string[]; mateTurn?: true;
+  /** What the lead was worth when it spoke (its stakes, or its learned lead):
+   *  a later wave of the turn leads only by outranking it on the same scale. */
+  value?: number;
   /** The squares of the idea for the move to come that this turn's waves have
    *  said (the core thread, WO-THINK-01) — a later wave's idea must be its
    *  support or news in its own right. Absent when none was said. */
@@ -775,7 +819,7 @@ export function decideTurn(
   for (const f of facts) {
     if (!f.text.trim()) continue;
     offered.push(f.lane);
-    if (laneOutOfPhase(f.lane, f.fen)) { if (!phaseHeld.includes(f.lane)) phaseHeld.push(f.lane); for (const c of f.claims) heldThisTurn?.add(c); continue; }
+    if (factOutOfPhase(f)) { if (!phaseHeld.includes(f.lane)) phaseHeld.push(f.lane); for (const c of f.claims) heldThisTurn?.add(c); continue; }
     if (heldThisTurn && f.claims.some((c) => heldThisTurn.has(c))) { if (!heldEarlier.includes(f.lane)) heldEarlier.push(f.lane); continue; }
     // LEARN NAMES NO MOVE UNASKED (OS-10): a fact that names a move the
     // student can play next waits — the producer said which (REQUIRED).
@@ -801,7 +845,7 @@ export function decideTurn(
     // A story beat speaks whole or not at all (prod audit 2026-10-20). The
     // fact's id rides into the package, so what it keeps is known by its id.
     open.push({ factId: f.id, lane: f.lane, kind: LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof, whole: STORY_LANES.has(f.lane),
-      offerValue: stakeValue(f.stakes) ?? LEARN_LANES[f.lane].lead,
+      offerValue: stakeValue(f.stakes) ?? leadOf(f),
       offerRank: (OWED_ANSWER.has(f.lane) ? 1 : 0) - (fallbackReason(f.claims) ? 1 : 0) });
   }
   // THE FACTS GO IN BY VALUE, so where two claim one thing the package keeps
@@ -841,7 +885,7 @@ export function decideTurn(
     if (r) return r === 'teach';
     return !(LEARN_LANES[x.lane].lead <= DESCRIPTION_LEAD || x.lane === 'positionFacts');
   };
-  const value = (x: Survivor): number => stakeOf(x) || LEARN_LANES[x.lane].lead;
+  const value = (x: Survivor): number => stakeOf(x) || leadOf(x.src);
   /** Which step of the thought a surviving fact says — its own. */
   const stepOf = (x: Survivor): ThoughtStep => x.src.step;
   /** A reason for the student's own move that teaches (never its verdict). */
@@ -1024,7 +1068,7 @@ export function decideTurn(
     if (slot === 'yours-reason' || slot === 'their-reason') return 'same-step';
     return important(x) || LEARN_LANES[x.lane].always === true ? null : 'same-step';
   };
-  const priorValue = priorLead ? LEARN_LANES[priorLead.lane].lead : -1;
+  const priorValue = priorLead ? priorLead.value ?? LEARN_LANES[priorLead.lane].lead : -1;
   const ownLead = top && (!priorLead || DANGER_LANES.has(top.lane) || value(top) > priorValue) ? top : null;
   const anchor = ownLead ? (ownLead.fact.squares ?? []) : (priorLead?.squares ?? []);
 
@@ -1068,7 +1112,9 @@ export function decideTurn(
       // A must-ride lane still rides — unless it is a board IDEA (the point
       // beat: their plan, the structure), which keeps until the board calms.
       && (LEARN_LANES[x.lane].always !== true || DNA_BEAT[x.lane] === 'point') && !(beginner && BEGINNER_ALWAYS.has(x.lane))
-      && !sq.some((q) => anchor.includes(q)) && value(x) < value(ownLead);
+      // "Bigger news BY STAKE": what is at stake decides, never a fact's lead
+      // (an unstaked plan's learned lead must not outrank a hanging queen).
+      && !sq.some((q) => anchor.includes(q)) && (stakeOf(x) === 0 || stakeOf(x) < stakeOf(ownLead));
     // THE THOUGHT (WO-THINK-01): one fact per step, one thread for the move to
     // come — replacing "a reason is important too", under which every fact a
     // producer marked as teaching spoke, so a turn stacked five reasons about
@@ -1178,7 +1224,7 @@ export function decideTurn(
   // else the one an earlier wave said.
   const threadSaid = thread && keep.includes(thread.fact) ? (thread.fact.squares ?? []) : priorThread;
   const lead: TurnLead | null = spokenLead
-    ? { lane: spokenLead.lane, squares: spokenLead.fact.squares ?? [], ...(mateTurn ? { mateTurn: true as const } : {}), ...(threadSaid ? { thread: threadSaid } : {}) }
+    ? { lane: spokenLead.lane, squares: spokenLead.fact.squares ?? [], value: value(spokenLead), ...(mateTurn ? { mateTurn: true as const } : {}), ...(threadSaid ? { thread: threadSaid } : {}) }
     : null;
   // THE PROOF LEDGER over what spoke — the proof travels with the fact from
   // its producer (`LaneFact.proof`), never re-derived.
@@ -1221,7 +1267,9 @@ export function decideTurn(
   // WHAT spoke inside a many-fact lane (A-plan P0: the weighing and the habit
   // ride the position-facts lane, so a lane count could not see them).
   const spokeKinds = keep.flatMap((f) => { const k = sourceOf(f)?.factKind; return k ? [k] : []; });
-  if (offered.length > 0) emitLearnTurn({ spokeKinds, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
+  const worthFrom: Record<string, 'learned' | 'lane' | 'stake'> = {};
+  for (const f of facts) if (f.text.trim()) worthFrom[f.lane] ??= worthSource(f);
+  if (offered.length > 0) emitLearnTurn({ spokeKinds, worthFrom, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
   reportEverything(facts, turn, new Set(pkg.kept.flatMap((k) => (k.factId ? [k.factId] : []))), (f) =>
     pkg.dropped.find((d) => d.fact.factId === f.id)?.reason ?? heldWhy[f.lane] ?? refusedWhy[f.lane] ?? null);
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
@@ -1251,7 +1299,7 @@ function ownedTurn(facts: readonly LaneFact[], turn: LearnTurnTag | null, decide
   const held = [...new Set(offered)];
   const heldWhy: Partial<Record<LearnLane, HoldReason>> = {};
   for (const l of held) heldWhy[l] = 'mission';
-  if (offered.length > 0) emitLearnTurn({ spokeKinds: [], offered: [...offered], spoke: [], lead: null, held: [...held], faded: [], unproven: 0, unprovenLanes: [], proofUnsaid: [], heldWithProof: [], heldStaked: [], heldWhy, refusedWhy: {}, ownMove: null, ownLanes: [], ownProven: false, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
+  if (offered.length > 0) emitLearnTurn({ spokeKinds: [], worthFrom: {}, offered: [...offered], spoke: [], lead: null, held: [...held], faded: [], unproven: 0, unprovenLanes: [], proofUnsaid: [], heldWithProof: [], heldStaked: [], heldWhy, refusedWhy: {}, ownMove: null, ownLanes: [], ownProven: false, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
   reportEverything(facts, turn, new Set(), (f) => heldWhy[f.lane] ?? null);
   return { pkg: { spoken: '', kept: [], dropped: [] }, offered, spoke: [], lead: null, held, faded: [], proofOf: new Map(), unproven: 0, unprovenLanes: [] };
 }

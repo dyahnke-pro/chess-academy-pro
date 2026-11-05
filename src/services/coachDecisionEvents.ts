@@ -203,6 +203,12 @@ export interface LearnTurnRow {
   /** The kinds of the facts that spoke, where the producer named one (the
    *  position-facts clauses: deliberation, your-habit, …). */
   spokeKinds?: string[];
+  /** WHERE EACH OFFERED LANE'S WORTH CAME FROM (2026-11-05, the learned
+   *  decider): 'learned' — his measured rate for the fact's kind in this kind
+   *  of moment (`deciderWeights`); 'lane' — the lane's own number, its kind not
+   *  yet measured; 'stake' — what is at stake decided. An audit reads how much
+   *  of a turn his data actually ranked. */
+  worthFrom: Record<string, 'learned' | 'lane' | 'stake'>;
   /** THE REASON FOR THE STUDENT'S OWN MOVE (David 2026-10-14: "every student
    *  move gets its own reason"). The DNA beat of the own-move lane that spoke:
    *  'affirm' (what the move did well), 'but' (what it gave up), or null when

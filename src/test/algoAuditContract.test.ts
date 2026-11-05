@@ -276,6 +276,14 @@ describe('every algo emission has an audit contract standing on it', () => {
     }
   });
 
+  it('the learn-turn worth source and its contract read the same field', () => {
+    // Where each lane's worth came from (the learned decider, 2026-11-05).
+    const row = read('src/services/coachDecisionEvents.ts');
+    const audit = read('scripts/audit-concept-gameplay-prod.mjs');
+    expect(row.includes("worthFrom: Record<string, 'learned' | 'lane' | 'stake'>"), 'LearnTurnRow lost its worthFrom field').toBe(true);
+    expect(audit.includes('.worthFrom'), 'the Learn audit no longer reads worthFrom').toBe(true);
+  });
+
   it('the focus rows and their contract read the same fields', () => {
     const runner = read('src/coach/focus/focusRunner.ts');
     const setup = read('src/coach/focus/focusSetup.ts');

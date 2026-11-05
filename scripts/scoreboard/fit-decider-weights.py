@@ -62,6 +62,10 @@ def buckets(r):
     return [f"{seat}|{r['phase']}|{moment_kind(r)}", f"{seat}|{r['phase']}", '*']
 
 avail = collections.Counter(); said = collections.Counter()
+# Per KIND of fact (a computer's idea): how often he makes any of its teaching
+# moves when that computer has it to say. Codes alone take a multi-code kind's
+# best code, which inflates a generic line ("their move is for X" read as a plan).
+kavail = collections.Counter(); ksaid = collections.Counter()
 # Their tags alone: how often he makes a code in a kind of moment.
 moments = collections.Counter(); made = collections.Counter()
 train_rows = 0; test_rows = []
@@ -83,6 +87,17 @@ for path in a.rows:
             moments[bk] += 1
             for c in mine:
                 made[(bk, c)] += 1
+        kseen = set()
+        for fct in r['facts']:
+            k = fct['kind']
+            if not fct['codes'] or k in kseen:
+                continue
+            kseen.add(k)
+            hit = any(c in mine for c in fct['codes'])
+            for bk in buckets(r):
+                kavail[(bk, k)] += 1
+                if hit:
+                    ksaid[(bk, k)] += 1
         seen = set()
         for fct in r['facts']:
             for c in fct['codes']:
@@ -116,11 +131,25 @@ def rate(bk, c):
     return (k + a.alpha * p) / (n + a.alpha)
 
 weights = {bk: {c: round(rate(bk, c), 4) for c in codes} for bk in bucket_names}
+
+kinds = sorted({k for (_, k) in kavail})
+def krate(bk, k):
+    parts = bk.split('|')
+    if bk == '*':
+        n, s_ = kavail[('*', k)], ksaid[('*', k)]
+        return s_ / n if n else 0.0
+    parent = '*' if len(parts) <= 2 else '|'.join(parts[:2])
+    p = krate(parent, k)
+    n, s_ = kavail[(bk, k)], ksaid[(bk, k)]
+    return (s_ + a.alpha * p) / (n + a.alpha)
+kind_weights = {bk: {k: round(krate(bk, k), 4) for k in kinds} for bk in bucket_names}
 out = {
     'about': 'How often Danya makes each teaching move when the coach has it to say, by kind of moment (seat|phase|move). Fitted by scripts/scoreboard/fit-decider-weights.py on his live games; the 54 full games held out.',
     'trainPositions': train_rows,
     'heldOutVideos': len(held),
     'weights': weights,
+    'kindWeights': kind_weights,
+    'kindAvailable': {k: kavail[('*', k)] for k in kinds},
 }
 json.dump(out, open(a.out, 'w'), indent=1, sort_keys=True)
 
@@ -138,9 +167,14 @@ def first_hit(r, order):
     return 1 if any(c in mine for c in best['codes']) else 0
 
 def learned(r, facts):
-    bk = buckets(r)[0]
+    bk = '|'.join(buckets(r)[0].split('|')[:2])
+    kw = kind_weights.get(bk) or kind_weights['*']
     w = weights.get(bk) or weights['*']
-    return max(facts, key=lambda f: (f['stake'] or 0) if (f['stake'] or 0) > 0 and f['step'] == 'danger' else max(w.get(c, 0) for c in f['codes']))
+    def worth(f):
+        if (f['stake'] or 0) > 0 and f['step'] == 'danger':
+            return 10 + f['stake']
+        return kw[f['kind']] if f['kind'] in kw else sum(w.get(c, 0) for c in f['codes']) / len(f['codes'])
+    return max(facts, key=worth)
 
 def current(r, facts):
     kept = [f for f in facts if f['kept']]
@@ -152,3 +186,5 @@ print(f'train positions {train_rows}; held-out positions scored {len(h_l)}')
 print(f'his teaching move said first — current decider {sum(h_c)/max(1,len(h_c)):.1%}, learned weights {sum(h_l)/max(1,len(h_l)):.1%}')
 top = sorted(((weights['*'][c], c) for c in codes), reverse=True)[:12]
 print('highest overall:', ', '.join(f'{c} {w:.2f}' for w, c in top))
+ktop = sorted(((kind_weights['*'][k], k) for k in kinds), reverse=True)
+print('by kind:', ', '.join(f'{k} {w:.2f} (n={kavail[("*", k)]})' for w, k in ktop))

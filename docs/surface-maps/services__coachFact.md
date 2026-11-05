@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**506 lines · 16 exports · 23 importers · 5 tests · 0 audits**
+**506 lines · 16 exports · 25 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,8 @@
 - `src/services/coachDecider.ts`
 - `src/services/coachFact.test.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/deciderWeights.test.ts`
+- `src/services/deciderWeights.ts`
 - `src/services/decisionStakes.test.ts`
 - `src/services/factRelations.test.ts`
 - `src/services/factSelector.ts`
@@ -60,7 +62,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCoachFactKind` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:617`
+- `src/services/learnTurnDoor.ts:658`
 
 ### `stepOf` (function) — 16 call sites
 - `src/services/boardComputers.test.ts:76`
@@ -68,21 +70,21 @@
 - `src/services/coachFact.test.ts:79`
 - `src/services/coachFeatureService.ts:2532`
 - `src/services/coachFeatureService.ts:3133`
-- `src/services/learnTurnDoor.ts:279`
-- `src/services/learnTurnDoor.ts:848`
-- `src/services/learnTurnDoor.ts:905`
-- `src/services/learnTurnDoor.ts:926`
-- `src/services/learnTurnDoor.ts:930`
-- `src/services/learnTurnDoor.ts:973`
-- `src/services/learnTurnDoor.ts:999`
-- `src/services/learnTurnDoor.ts:1009`
-- `src/services/learnTurnDoor.ts:1013`
-- `src/services/learnTurnDoor.ts:1148`
-- `src/services/learnTurnDoor.ts:1211`
+- `src/services/learnTurnDoor.ts:281`
+- `src/services/learnTurnDoor.ts:892`
+- `src/services/learnTurnDoor.ts:949`
+- `src/services/learnTurnDoor.ts:970`
+- `src/services/learnTurnDoor.ts:974`
+- `src/services/learnTurnDoor.ts:1017`
+- `src/services/learnTurnDoor.ts:1043`
+- `src/services/learnTurnDoor.ts:1053`
+- `src/services/learnTurnDoor.ts:1057`
+- `src/services/learnTurnDoor.ts:1194`
+- `src/services/learnTurnDoor.ts:1257`
 
 ### `placeFact` (function) — 16 call sites
 - `src/services/boardComputers.ts:852`
-- `src/services/learnTurnDoor.ts:633`
+- `src/services/learnTurnDoor.ts:674`
 - `src/services/moveThoughtFacts.ts:150`
 - `src/services/moveThoughtFacts.ts:271`
 - `src/services/moveThoughtFacts.ts:291`
@@ -103,7 +105,7 @@
 - `src/services/coachFact.test.ts:104`
 - `src/services/coachFact.test.ts:110`
 - `src/services/coachFact.test.ts:111`
-- `src/services/learnTurnDoor.ts:634`
+- `src/services/learnTurnDoor.ts:675`
 - `src/services/moveThoughtFacts.ts:151`
 - `src/services/moveThoughtFacts.ts:271`
 - `src/services/moveThoughtFacts.ts:292`
@@ -139,6 +141,7 @@
 
 - `src/services/boardComputers.test.ts`
 - `src/services/coachFact.test.ts`
+- `src/services/deciderWeights.test.ts`
 - `src/services/decisionStakes.test.ts`
 - `src/services/factRelations.test.ts`
 - `src/services/oneGroupTable.gate.test.ts`

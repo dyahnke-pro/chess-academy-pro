@@ -247,7 +247,7 @@
 - `src/services/dnaDoor.test.ts:51`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/laneReachability.test.ts:128`
-- `src/services/learnTurnDoor.ts:812`
+- `src/services/learnTurnDoor.ts:856`
 - `src/services/openingStoryWholeBeat.test.ts:65`
 - `src/services/openingStoryWholeBeat.test.ts:70`
 - `src/services/outpostOneKey.test.ts:22`
@@ -331,7 +331,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:10248`
 - `src/components/Coach/CoachTeachPage.tsx:12239`
 - `src/components/Coach/CoachTeachPage.tsx:12326`
-- `src/services/learnTurnDoor.ts:1306`
+- `src/services/learnTurnDoor.ts:1354`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:12041`
@@ -404,7 +404,7 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts:112`
 - `src/services/learnTurnDoor.phaseWave.test.ts:126`
 - `src/services/learnTurnDoor.phaseWave.test.ts:135`
-- `src/services/learnTurnDoor.ts:1286`
+- `src/services/learnTurnDoor.ts:1334`
 - `src/services/os11RootCauses5And6.replay.test.ts:31`
 - `src/services/os11RootCauses5And6.replay.test.ts:61`
 - `src/services/os11RootCauses5And6.replay.test.ts:65`
@@ -414,7 +414,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:10180`
 - `src/components/Coach/CoachTeachPage.tsx:10331`
 - `src/hooks/usePhaseNarration.ts:238`
-- `src/services/learnTurnDoor.ts:628`
+- `src/services/learnTurnDoor.ts:669`
 - `src/test/learnDoorFixtures.ts:36`
 
 ### `FACT_ROLE` (re-export) — 0 call sites

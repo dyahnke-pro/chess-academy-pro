@@ -30,7 +30,11 @@ describe('the thought: one thread for the move to come', () => {
       fact('positionFacts', 'A pawn break is ready now.', ['c5'], { factKind: 'speedrun-read' }),
       fact('structureJudgement', 'That pawn cannot come up to back up the center.', ['c3', 'c2', 'd4']),
     ], undefined, undefined, null, null, false, LATE);
-    expect(d.spoke).toEqual(['notYetPlayed']);
+    // The most valuable is HIS (2026-11-05, `deciderWeights`): of these, he
+    // judges the structure far more often than he says "not yet" when both
+    // are there to say — so the judgement leads the one thread, and the rest
+    // wait. One idea, never four.
+    expect(d.spoke).toEqual(['structureJudgement']);
     expect(d.pkg.kept).toHaveLength(1);
   });
 
