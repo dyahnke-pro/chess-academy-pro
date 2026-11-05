@@ -72,7 +72,7 @@
 - `src/services/pvPlayback.ts:285`
 - `src/services/pvPlayback.ts:799`
 - `src/services/pvPlayback.ts:951`
-- `src/services/reviewMoveBriefing.ts:372`
+- `src/services/reviewMoveBriefing.ts:377`
 - `src/services/tacticVocabulary.ts:96`
 - `src/services/teachingSelector.ts:385`
 - `src/services/turningPoints.ts:175`
@@ -207,11 +207,11 @@
 
 ### `stepBothArcs` (function) — 2 call sites
 - `src/components/Coach/CoachGamePage.tsx:3049`
-- `src/components/Coach/CoachTeachPage.tsx:11604`
+- `src/components/Coach/CoachTeachPage.tsx:11610`
 
 ### `planFromUci` (function) — 39 call sites
 - `src/components/Coach/CoachGamePage.tsx:3044`
-- `src/components/Coach/CoachTeachPage.tsx:11587`
+- `src/components/Coach/CoachTeachPage.tsx:11593`
 - `src/services/claimTruth.manual.test.ts:130`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:209`
@@ -328,9 +328,9 @@
 - `src/test/thinkMarkClosed.gate.test.ts:77`
 
 ### `withAnnouncement` (re-export) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11615`
-- `src/components/Coach/CoachTeachPage.tsx:11616`
-- `src/components/Coach/CoachTeachPage.tsx:12253`
+- `src/components/Coach/CoachTeachPage.tsx:11621`
+- `src/components/Coach/CoachTeachPage.tsx:11622`
+- `src/components/Coach/CoachTeachPage.tsx:12259`
 - `src/services/planArc.heldAnnouncement.test.ts:32`
 - `src/services/planArc.ts:163`
 

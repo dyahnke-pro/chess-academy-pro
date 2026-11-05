@@ -36,12 +36,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `rookReachesFile` (function) — 3 call sites
-- `src/services/danyaBehaviors.ts:737`
+- `src/services/danyaBehaviors.ts:746`
 - `src/services/learnBoardTeaching.ts:1538`
 - `src/services/recaptureChoice.ts:62`
 
 ### `castleIsOneMoveAway` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:315`
+- `src/services/danyaBehaviors.ts:324`
 - `src/services/replayFence.modern1690.test.ts:139`
 - `src/services/replayFence.modern1690.test.ts:140`
 - `src/services/replayFence.modern1690.test.ts:141`
@@ -97,7 +97,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9954`
+- `src/components/Coach/CoachTeachPage.tsx:9958`
 - `src/services/claimChecker.measure.test.ts:134`
 - `src/services/learnWalkBlumenfeld.test.ts:127`
 - `src/services/learnWalkNimzo.test.ts:35`
@@ -116,10 +116,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.modern1690.test.ts:207`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:288`
+- `src/services/danyaBehaviors.ts:297`
 
 ### `heavyPieceToFile` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:295`
+- `src/services/danyaBehaviors.ts:304`
 - `src/services/positionalRead.fileStep.test.ts:10`
 - `src/services/positionalRead.fileStep.test.ts:16`
 - `src/services/positionalRead.fileStep.test.ts:20`

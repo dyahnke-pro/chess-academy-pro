@@ -64,7 +64,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCoachFactKind` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:671`
+- `src/services/learnTurnDoor.ts:673`
 
 ### `stepOf` (function) — 16 call sites
 - `src/services/boardComputers.test.ts:76`
@@ -73,27 +73,28 @@
 - `src/services/coachFeatureService.ts:2556`
 - `src/services/coachFeatureService.ts:3164`
 - `src/services/learnTurnDoor.ts:286`
-- `src/services/learnTurnDoor.ts:905`
-- `src/services/learnTurnDoor.ts:962`
-- `src/services/learnTurnDoor.ts:983`
-- `src/services/learnTurnDoor.ts:987`
-- `src/services/learnTurnDoor.ts:1041`
-- `src/services/learnTurnDoor.ts:1067`
-- `src/services/learnTurnDoor.ts:1077`
-- `src/services/learnTurnDoor.ts:1081`
-- `src/services/learnTurnDoor.ts:1218`
-- `src/services/learnTurnDoor.ts:1281`
+- `src/services/learnTurnDoor.ts:907`
+- `src/services/learnTurnDoor.ts:964`
+- `src/services/learnTurnDoor.ts:985`
+- `src/services/learnTurnDoor.ts:989`
+- `src/services/learnTurnDoor.ts:1043`
+- `src/services/learnTurnDoor.ts:1069`
+- `src/services/learnTurnDoor.ts:1079`
+- `src/services/learnTurnDoor.ts:1083`
+- `src/services/learnTurnDoor.ts:1220`
+- `src/services/learnTurnDoor.ts:1283`
 
-### `placeFact` (function) — 17 call sites
-- `src/services/boardComputers.ts:925`
-- `src/services/learnTurnDoor.ts:687`
-- `src/services/moveThoughtFacts.ts:150`
-- `src/services/moveThoughtFacts.ts:271`
-- `src/services/moveThoughtFacts.ts:291`
-- `src/services/moveThoughtFacts.ts:360`
-- `src/services/moveThoughtFacts.ts:374`
-- `src/services/moveThoughtFacts.ts:617`
-- `src/services/moveThoughtFacts.ts:635`
+### `placeFact` (function) — 18 call sites
+- `src/services/boardComputers.ts:607`
+- `src/services/boardComputers.ts:931`
+- `src/services/learnTurnDoor.ts:689`
+- `src/services/moveThoughtFacts.ts:162`
+- `src/services/moveThoughtFacts.ts:286`
+- `src/services/moveThoughtFacts.ts:306`
+- `src/services/moveThoughtFacts.ts:375`
+- `src/services/moveThoughtFacts.ts:389`
+- `src/services/moveThoughtFacts.ts:632`
+- `src/services/moveThoughtFacts.ts:650`
 - `src/services/openingStory.ts:363`
 - `src/services/positionFacts.ts:534`
 - `src/services/reviewFacet.ts:62`
@@ -103,19 +104,20 @@
 - `src/services/thoughtComposer.ts:168`
 - `src/test/doorFact.ts:22`
 
-### `stakesOf` (function) — 17 call sites
-- `src/services/boardComputers.ts:925`
+### `stakesOf` (function) — 18 call sites
+- `src/services/boardComputers.ts:608`
+- `src/services/boardComputers.ts:931`
 - `src/services/coachFact.test.ts:105`
 - `src/services/coachFact.test.ts:111`
 - `src/services/coachFact.test.ts:112`
-- `src/services/learnTurnDoor.ts:688`
-- `src/services/moveThoughtFacts.ts:151`
-- `src/services/moveThoughtFacts.ts:271`
-- `src/services/moveThoughtFacts.ts:292`
-- `src/services/moveThoughtFacts.ts:361`
-- `src/services/moveThoughtFacts.ts:375`
-- `src/services/moveThoughtFacts.ts:618`
-- `src/services/moveThoughtFacts.ts:636`
+- `src/services/learnTurnDoor.ts:690`
+- `src/services/moveThoughtFacts.ts:163`
+- `src/services/moveThoughtFacts.ts:286`
+- `src/services/moveThoughtFacts.ts:307`
+- `src/services/moveThoughtFacts.ts:376`
+- `src/services/moveThoughtFacts.ts:390`
+- `src/services/moveThoughtFacts.ts:633`
+- `src/services/moveThoughtFacts.ts:651`
 - `src/services/openingStory.ts:364`
 - `src/services/positionFacts.ts:542`
 - `src/services/reviewFacet.ts:73`

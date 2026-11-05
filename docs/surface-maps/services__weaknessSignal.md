@@ -88,8 +88,8 @@
 - `src/services/needScore.ts:310`
 - `src/services/needScore.ts:324`
 - `src/services/positionFacts.ts:1546`
-- `src/services/reviewFacetRank.ts:649`
-- `src/services/reviewFacetRank.ts:697`
+- `src/services/reviewFacetRank.ts:654`
+- `src/services/reviewFacetRank.ts:702`
 - `src/services/studentMomentBoost.ts:128`
 - `src/services/teachingSelector.ts:169`
 - `src/services/weaknessSignal.test.ts:56`
@@ -116,8 +116,8 @@
 - `src/services/fundamentalReachesDecider.test.ts:149`
 - `src/services/needScore.ts:321`
 - `src/services/positionFacts.ts:1512`
-- `src/services/reviewFacetRank.ts:648`
-- `src/services/reviewFacetRank.ts:696`
+- `src/services/reviewFacetRank.ts:653`
+- `src/services/reviewFacetRank.ts:701`
 - `src/services/weaknessSignal.test.ts:77`
 - `src/services/weaknessSignal.test.ts:80`
 - `src/services/weaknessSignal.test.ts:83`

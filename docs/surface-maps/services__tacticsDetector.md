@@ -85,7 +85,7 @@
 - `src/services/computerAccuracy.audit.test.ts:117`
 - `src/services/conceptEngine.ts:476`
 - `src/services/conceptEngine.ts:717`
-- `src/services/danyaBehaviors.ts:504`
+- `src/services/danyaBehaviors.ts:513`
 - `src/services/discussionPractice.ts:59`
 - `src/services/discussionPractice.ts:104`
 - `src/services/discussionPractice.ts:147`
@@ -134,8 +134,8 @@
 - `src/services/reviewFullData.ts:832`
 - `src/services/reviewFullData.ts:928`
 - `src/services/reviewFullData.ts:1594`
-- `src/services/reviewMoveBriefing.ts:105`
-- `src/services/reviewMoveBriefing.ts:106`
+- `src/services/reviewMoveBriefing.ts:110`
+- `src/services/reviewMoveBriefing.ts:111`
 - `src/services/reviewNarrationFidelity.test.ts:230`
 - `src/services/reviewOpponentCommentary.ts:74`
 - `src/services/reviewWalk1500.test.ts:23`

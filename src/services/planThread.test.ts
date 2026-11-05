@@ -206,3 +206,20 @@ describe('structurePlanEvent — a plan is announced once and carried until the 
     expect(structurePlanEvent('iqp-mine', null)).toBe('none');
   });
 });
+
+// THE WORST PIECE'S ROAD IS THE STUDENT'S WISH (round 5): the plan stated is
+// said under its plan's own kind — the worst-piece plan as `plan-worst-piece`
+// (H-WISHLIST), every other plan and every step and stop as the plan now.
+// His m6_i2xT7mgM game: Black after 12.Rfe1, the bishop on e7 his worst piece.
+const WORST = 'r2qr1k1/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/3RR1K1 b - - 6 12';
+describe('a plan line is said under its plan\'s own kind', () => {
+  it('the worst piece\'s plan is the student\'s wish; the next statement of another plan is the plan now', () => {
+    expect(deriveNextPlanFacts(WORST, 'b', { namesStudentMoves: true })[0]?.kind).toBe('worst-piece');
+    const t = emptyPlanThread();
+    const lines = planThreadTurn(t, { ply: 23, fenBefore: 'r2qr1k1/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/3R1RK1 w - - 5 12', fenAfter: WORST, student: 'b', holdPlayable: false });
+    const stated = lines.find((l) => l.claim.startsWith('plan:student:struct:'));
+    expect(stated?.kind).toBe('plan-worst-piece');
+    const other = planThreadTurn(emptyPlanThread(), { ply: 22, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w', holdPlayable: false });
+    expect(other.every((l) => l.kind === 'plan-now')).toBe(true);
+  });
+});

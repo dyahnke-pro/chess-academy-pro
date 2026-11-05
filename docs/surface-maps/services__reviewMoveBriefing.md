@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**606 lines · 12 exports · 24 importers · 16 tests · 0 audits**
+**611 lines · 12 exports · 24 importers · 16 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -49,8 +49,8 @@
 ### `moveAspects` (function) — 7 call sites
 - `src/services/captureLeadsTo.test.ts:26`
 - `src/services/midExchangeStructure.test.ts:13`
-- `src/services/moveThoughtFacts.ts:158`
-- `src/services/moveThoughtFacts.ts:652`
+- `src/services/moveThoughtFacts.ts:170`
+- `src/services/moveThoughtFacts.ts:667`
 - `src/services/reviewMoveBriefing.test.ts:69`
 - `src/services/reviewMoveBriefing.test.ts:71`
 - `src/test/captureSaidOnce.gate.test.ts:190`
@@ -81,10 +81,10 @@
 - `src/test/captureSaidOnce.gate.test.ts:186`
 
 ### `toClause` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:212`
+- `src/services/moveThoughtFacts.ts:227`
 
 ### `joinReview` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:212`
+- `src/services/moveThoughtFacts.ts:227`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

@@ -280,3 +280,17 @@ describe("Learn's student-move lanes reach the lesson (WO-STORY-MATRIX-01 P1-9c)
     expect(text).toMatch(/Qxd5 would just lose the queen to Nxd5/);
   });
 });
+
+// A FIXED PHRASE AT MOST TWICE (the WHY rule, round 5): the long horizon of a
+// file opened rides its first two such moves in a lesson or a game.
+describe('the long horizon is said twice a lesson, then the change alone', () => {
+  it('the third file opened says only that it opens', () => {
+    const fen = 'rnbqkbnr/ppp2ppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3';
+    const phrases = new Map<string, number>();
+    const said = [1, 2, 3].map(() => moveThoughtFacts({ fenBefore: fen, san: 'exd5', moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: [], phrases, reads: null, costCp: null })
+      .find((f) => f.kind === 'aspect-opens-file')?.text ?? '');
+    expect(said[0]).toMatch(/opens the e-file, a road for the rooks from now on\.$/);
+    expect(said[1]).toMatch(/a road for the rooks from now on/);
+    expect(said[2]).toMatch(/opens the e-file\.$/);
+  });
+});

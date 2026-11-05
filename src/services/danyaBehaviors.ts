@@ -81,6 +81,15 @@ const PIECE_NAME: Record<PieceSymbol, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
 };
 
+/** A WISH IS SAID ONCE A SQUARE, AND THE WISH FORMULA AT MOST TWICE A GAME
+ *  (the WHY rule's measure 3): every wish line rides this key, keyed by the
+ *  square wished for, and Learn holds a third (`WISHES_A_GAME`). */
+export const WISH_KEY_PREFIX = 'wishlist:';
+export const WISHES_A_GAME = 2;
+function wishKey(square: string): string {
+  return `${WISH_KEY_PREFIX}${square}`;
+}
+
 /** "Your knight", "Your knight on f3" — the student's piece named the way a
  *  person names it (`pieceRef`), opening a sentence. */
 function pieceWords(fen: string, square: string, student: Color): string {
@@ -254,7 +263,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         const route = wishRoute(fen, bad.square);
         if (route) {
           // The stop on the way is lit, not read out (two squares a sentence).
-          return { kind: 'wishlist', fact: `${pieceWords(fen, bad.square, student)} is ${withArticle(bad.reason)} — it wants ${route.target}: ${route.why}.`, squares: [bad.square, ...(route.via ? [route.via] : []), route.target] };
+          return { kind: 'wishlist', fact: `${pieceWords(fen, bad.square, student)} is ${withArticle(bad.reason)} — it wants ${route.target}: ${route.why}.`, squares: [bad.square, ...(route.via ? [route.via] : []), route.target], keys: [wishKey(route.target)] };
         }
         // No route, no line: "a better square" teaches nothing (census #15).
         return null;
@@ -264,7 +273,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       if (weakest && (weakest.piece === 'n' || weakest.piece === 'b') && weakest.scope <= 1) {
         const route = wishRoute(fen, weakest.square);
         if (route) {
-          return { kind: 'wishlist', fact: `${pieceWords(fen, weakest.square, student)} is doing nothing — it wants ${route.target}: ${route.why}.`, squares: [weakest.square, ...(route.via ? [route.via] : []), route.target] };
+          return { kind: 'wishlist', fact: `${pieceWords(fen, weakest.square, student)} is doing nothing — it wants ${route.target}: ${route.why}.`, squares: [weakest.square, ...(route.via ? [route.via] : []), route.target], keys: [wishKey(route.target)] };
         }
         return { fact: `Your ${PIECE_NAME[weakest.piece]} on ${weakest.square} is doing nothing — find it a better square.`, squares: [weakest.square] };
       }
@@ -813,6 +822,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
           kind: 'wishlist',
           fact: `${pieceWords(fen, route.from, student)} wants ${hole} — a hole in their camp no pawn can ever kick it from — and ${how}.`,
           squares: [route.from, ...(route.via ? [route.via] : []), hole],
+          keys: [wishKey(hole)],
         };
       }
       return null;

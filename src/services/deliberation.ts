@@ -363,7 +363,13 @@ function shortfallText(c: Candidate): string {
  * register turns this into the spoken discussion; this is only the facts.
  * Returns '' when there's nothing to weigh.
  */
-export function deliberationFacts(d: Deliberation, said: ReadonlySet<string>): string {
+export function deliberationFacts(
+  d: Deliberation,
+  said: ReadonlySet<string>,
+  /** REQUIRED: does the weighing say the best line played out? No where the
+   *  walked line owns it (`thinkAloud.walksBestLine`) — said once, by the walk. */
+  saysBestLine: boolean,
+): string {
   // Only a REAL fork is weighed out loud (the 2026-09-24 Learn tape: "h5 is
   // playable, but not as precise. g6 is playable, but not as precise. The move
   // is Rg8." on a quiet endgame move). Coin-flip alternatives are the banned
@@ -381,7 +387,7 @@ export function deliberationFacts(d: Deliberation, said: ReadonlySet<string>): s
   // THE VERDICT CARRIES ITS REASON, or it is not said (David 2026-09-24:
   // "The move is Rxf3" alone is an order, not teaching). The weighing still
   // stands on its own — ruling the bad moves out IS the thinking out loud.
-  const line = d.bestLine ? ` ${openSentence(d.bestLine)}.` : '';
+  const line = d.bestLine && saysBestLine ? ` ${openSentence(d.bestLine)}.` : '';
   const verdict = d.bestWhy ? ` The move is ${d.best.san} — it ${d.bestWhy}.${line}` : '';
   // WEIGH THE CANDIDATES BEFORE NAMING ONE (plan P2 #4): name the moves on the
   // table first, then rule the bad ones out, then conclude. Said only when a

@@ -404,7 +404,7 @@
 - `src/hooks/useHintSystem.ts:357`
 - `src/services/computedVoiceGrounding.test.ts:53`
 - `src/services/computedVoiceGrounding.test.ts:111`
-- `src/services/deliberation.ts:560`
+- `src/services/deliberation.ts:566`
 - `src/services/groundedAnswer.test.ts:1092`
 - `src/services/groundedAnswer.test.ts:1099`
 - `src/services/groundedAnswer.test.ts:1107`
@@ -421,7 +421,7 @@
 - `src/services/reviewBoardAwareness.test.ts:22`
 
 ### `quietPurposePhrase` (function) — 1 call site
-- `src/services/deliberation.ts:566`
+- `src/services/deliberation.ts:572`
 
 ### `describeMoveMerit` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1104`
@@ -1043,7 +1043,7 @@
 - `src/services/moveInsight.ts:770`
 - `src/services/opponentMovePurpose.ts:64`
 - `src/services/reviewFullData.ts:993`
-- `src/services/reviewMoveBriefing.ts:307`
+- `src/services/reviewMoveBriefing.ts:312`
 - `src/services/reviewNarrationFidelity.test.ts:143`
 - `src/services/reviewNarrationFidelity.test.ts:152`
 - `src/services/reviewNarrationFidelity.test.ts:164`

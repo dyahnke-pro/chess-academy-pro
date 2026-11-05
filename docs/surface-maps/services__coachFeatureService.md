@@ -325,8 +325,8 @@
 ### `pendingRecapture` (function) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8824`
 - `src/components/Coach/CoachTeachPage.tsx:8927`
-- `src/components/Coach/CoachTeachPage.tsx:11815`
-- `src/components/Coach/CoachTeachPage.tsx:12213`
+- `src/components/Coach/CoachTeachPage.tsx:11821`
+- `src/components/Coach/CoachTeachPage.tsx:12219`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/services/phaseTransitionDetector.test.ts:575`

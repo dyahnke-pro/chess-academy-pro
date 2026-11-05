@@ -668,7 +668,9 @@ export type LaneFact = CoachFact & {
  *  lane's — the one group table places both (`FACT_GROUP`, WO-STORY-MATRIX-01
  *  P1-4). */
 function laneKind(lane: LearnLane, factKind: string | undefined): CoachFactKind {
-  return (lane === 'positionFacts' || lane === 'phase' || lane === 'behavior') && factKind && isCoachFactKind(factKind) ? factKind : LEARN_LANES[lane].factKind;
+  // The plan lane carries the plan thread's own kind where it has one (the
+  // worst piece's road, round 5), like the behaviour lane carries its own.
+  return (lane === 'positionFacts' || lane === 'phase' || lane === 'behavior' || lane === 'planArc') && factKind && isCoachFactKind(factKind) ? factKind : LEARN_LANES[lane].factKind;
 }
 
 /** THE ONE MAKER OF A LEARN FACT (WO-STORY-MATRIX-01 P1-6e), called where

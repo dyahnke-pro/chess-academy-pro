@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2138 lines · 17 exports · 40 importers · 48 tests · 3 audits**
+**2141 lines · 17 exports · 40 importers · 48 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -103,7 +103,7 @@
 - `src/services/positionFacts.weakness.test.ts:71`
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11423`
+- `src/components/Coach/CoachTeachPage.tsx:11429`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:471`
 - `src/services/raceAimOneVoice.test.ts:20`
@@ -123,7 +123,7 @@
 
 ### `computePositionFacts` (function) — 110 call sites
 - `src/coach/boardTurnAnswer.ts:136`
-- `src/components/Coach/CoachTeachPage.tsx:11281`
+- `src/components/Coach/CoachTeachPage.tsx:11287`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:271`
 - `src/hooks/usePhaseNarration.ts:433`
@@ -154,7 +154,7 @@
 - `src/services/positionFacts.convertOnce.test.ts:16`
 - `src/services/positionFacts.convertOnce.test.ts:37`
 - `src/services/positionFacts.depth.test.ts:18`
-- `src/services/positionFacts.depth.test.ts:38`
+- `src/services/positionFacts.depth.test.ts:45`
 - `src/services/positionFacts.futureConcept.test.ts:18`
 - `src/services/positionFacts.liveFundamental.test.ts:52`
 - `src/services/positionFacts.moveWhy.test.ts:21`
@@ -234,7 +234,7 @@
 - `src/test/teach02Wired.test.ts:140`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11545`
+- `src/components/Coach/CoachTeachPage.tsx:11551`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -260,7 +260,7 @@
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
 - `src/services/conceptKey.ts:11`
-- `src/services/danyaBehaviors.ts:543`
+- `src/services/danyaBehaviors.ts:552`
 - `src/services/kingAttackReads.ts:662`
 - `src/services/learnBoardTeaching.ts:501`
 - `src/services/looseStill.test.ts:37`

@@ -114,6 +114,9 @@ export const TEACHING_MOVES: Record<CoachFactKind, readonly TeachingMove[]> = {
   line: ['T-LINE', 'H-CALC'],
   // ── the story ──
   'plan-now': ['S-PLAN'],
+  // The worst piece's road, stated as the plan (round 5): what the student
+  // would do with a free move, a manoeuvre over several moves.
+  'plan-worst-piece': ['S-PLAN', 'H-WISHLIST', 'S-MANEUVER'],
   'plan-race': ['S-PLAN-VS-PLAN', 'T-COUNT'],
   'plan-arc': ['S-PLAN'],
   'plan-opening': ['P-OPENING-IDEA', 'S-PLAN'],

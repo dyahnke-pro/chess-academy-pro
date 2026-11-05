@@ -78,6 +78,11 @@ export interface Aspect {
   /** A hard load-bearing beat (mate/threat) always leads, even if another aspect
    *  edges it on weight after the eval lift. */
   keystone?: boolean;
+  /** THE LONG HORIZON, said after the verb (S-LONG-HORIZON, round 4): what the
+   *  change means for the rest of the game (", and a pawn never moves back").
+   *  A fixed phrase, so a lesson or a game says it at most twice
+   *  (`moveThoughtFacts`, the WHY rule). */
+  horizon?: string;
   /** Says only what the board already shows — the capture or the check, with
    *  no consequence of its own (the quiet-move rule, WO-DECIDER-02). On a
    *  quiet move a line made of these alone is not said. */
@@ -395,7 +400,7 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
   // Said as a move's own fact, the file it opens is a road for the rooks long
   // after this move (S-LONG-HORIZON, round 4: his "we get the g-file" is about
   // the play to come).
-  if (facts.newOpenFiles.length > 0) aspects.push({ kind: 'aspect-opens-file', text: `opening the ${facts.newOpenFiles[0]}-file`, verb: `opens the ${facts.newOpenFiles[0]}-file, a road for the rooks from now on`, idea: 'file', squares: [], weight: 44 });
+  if (facts.newOpenFiles.length > 0) aspects.push({ kind: 'aspect-opens-file', text: `opening the ${facts.newOpenFiles[0]}-file`, verb: `opens the ${facts.newOpenFiles[0]}-file`, horizon: ', a road for the rooks from now on', idea: 'file', squares: [], weight: 44 });
 
   // 8. Structural damage the move INFLICTS on the opponent vs CONCEDES in its own
   //    camp — both are real ramifications; the self-inflicted one is a downside.
@@ -417,7 +422,7 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
   const ownShieldLoss = shieldLoss(fenBefore, fenAfter, moverWB);
   // A pawn never moves back, so the cover it leaves is loosened for the rest
   // of the game (S-LONG-HORIZON, round 4).
-  if (ownShieldLoss > 0) aspects.push({ kind: 'aspect-own-king-cover', text: `loosening ${ownPoss} own king's cover`, verb: `loosens ${ownPoss} own king's cover, and a pawn never moves back`, idea: 'king-safety', squares: [], weight: 58 });
+  if (ownShieldLoss > 0) aspects.push({ kind: 'aspect-own-king-cover', text: `loosening ${ownPoss} own king's cover`, verb: `loosens ${ownPoss} own king's cover`, horizon: ', and a pawn never moves back', idea: 'king-safety', squares: [], weight: 58 });
   return { mate: false, aspects, threat };
 }
 

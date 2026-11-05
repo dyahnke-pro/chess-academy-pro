@@ -33,6 +33,9 @@ export type FacetTag =
   | 'badbishop' | 'worst' | 'minority' | 'complex' | 'structure'
   | 'verdict' | 'opening' | 'opp-dev' | 'their-habit' | 'your-habit' | 'held' | 'last-here' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-arc' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
+  // The plan thread's worst-piece plan, said as the student's wish (round 5):
+  // placed everywhere exactly as the plan now.
+  | 'plan-worst-piece'
   | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing' | 'praise'
   | 'rule' | 'stopped' | 'stock' | 'trade' | 'point' | 'their-cost'
   // Attack, sacrifices and kings (kingAttackReads, batch 4) — one name on
@@ -224,6 +227,7 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // committed to the idea by then.
   'plan-race': 21,
   'plan-now': 20,
+  'plan-worst-piece': 20,
   // A plan FOLLOWED across moves (planArc): it landed, or it was dropped. An
   // event on this move, so it sits with the plans — below the one being
   // proposed now, above the line that illustrates it.
@@ -326,6 +330,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   'plan-race': 'teach',
   'plan-arc': 'teach',
   'plan-now': 'teach',
+  'plan-worst-piece': 'teach',
   'plan-opening': 'teach',
   'plan-middlegame': 'teach',
   'reply-tree': 'teach',
@@ -480,7 +485,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   does: 'principle', point: 'plan', 'their-cost': 'plan', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
   status: 'principle', 'their-habit': 'principle', 'your-habit': 'principle', 'hole-access': 'plan', 'speedrun-read': 'plan',
   // PLAN — structure, targets, the plan and the long read.
-  'plan-now': 'plan', contrast: 'plan', 'capture-choice': 'plan', kick: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
+  'plan-now': 'plan', 'plan-worst-piece': 'plan', contrast: 'plan', 'capture-choice': 'plan', kick: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
   'prevent-test': 'plan', 'game-end': 'plan', murky: 'plan', 'attack-pattern': 'plan',
   judgement: 'plan',
   'plan-line': 'plan', consequence: 'plan', structure: 'plan', passer: 'plan', rook7: 'plan',
@@ -536,7 +541,7 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   // The priority is a method: the habit of asking what to deal with first.
   priority: 'method',
   // THE PLAN AND THE STRUCTURE — a reading of the position, said as one.
-  point: 'description', contrast: 'description', 'plan-arc': 'description', 'plan-now': 'description',
+  point: 'description', contrast: 'description', 'plan-arc': 'description', 'plan-now': 'description', 'plan-worst-piece': 'description',
   'plan-opening': 'description', 'plan-middlegame': 'description', 'plan-line': 'description',
   'structure-plan': 'description', 'opponent-intent': 'description', 'hole-access': 'description',
   'speedrun-read': 'description', status: 'description', consequence: 'description',
@@ -711,7 +716,7 @@ function clauseKindForTag(tag: FacetTag): string {
     case 'their-read': case 'their-trigger': return 'opponent-intent';
     case 'rule': case 'rule-exception': case 'false-alarm': case 'push-or-hold': return 'fundamental';
     case 'principle': case 'structure': case 'complex': case 'minority':
-    case 'badbishop': case 'worst': case 'plan-middlegame': case 'plan-now': case 'castling':
+    case 'badbishop': case 'worst': case 'plan-middlegame': case 'plan-now': case 'plan-worst-piece': case 'castling':
     case 'pawn-break': case 'opposite-bishops': return 'structure-plan';
     default: return 'status';
   }

@@ -70,7 +70,7 @@
 - `src/services/lessonVoiceIdeas.test.ts:63`
 - `src/services/lessonVoiceIdeas.test.ts:70`
 - `src/services/projectedLineVoice.ts:144`
-- `src/services/reviewMoveBriefing.ts:467`
+- `src/services/reviewMoveBriefing.ts:472`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`
@@ -103,7 +103,7 @@
 
 ### `buildReviewMoveTeachingFact` (function) — 7 call sites
 - `src/services/learnBoardTeaching.ts:1199`
-- `src/services/moveThoughtFacts.ts:207`
+- `src/services/moveThoughtFacts.ts:222`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
 - `src/services/reviewMoveTeaching.test.ts:216`

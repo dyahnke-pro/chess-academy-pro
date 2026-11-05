@@ -133,6 +133,33 @@ export function lineAchieves(startFen: string, sans: readonly string[], me: 'w' 
 }
 
 /**
+ * WHEN THE BEST LINE IS WALKED OUT LOUD (H-CALC, round 5) — where the moment
+ * calls for calculation: the best line is forcing (three of its first four
+ * moves check or capture) or the best move stands a pawn or more clear of the
+ * next, and the line ends on something it achieves. Material and mate
+ * included: at such a moment the walk owns the best line, and the weighing
+ * leaves it to the walk (`positionFacts`). Measured on his tagged games
+ * (Stockfish 16, depth 12, MultiPV 3, the board before the move): this fires
+ * on 19.9% of the moves where he calculates out loud and on 6.2% of the
+ * others, on both halves of his videos — the walk it replaces (a file or a
+ * king's cover, any moment) fired on 7.7% and 5.7%.
+ */
+export function walksBestLine(
+  fen: string,
+  topLines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>,
+  me: 'w' | 'b',
+): boolean {
+  const top = topLines[0];
+  if (!top?.moves?.length) return false;
+  const sans = pvSans(fen, [...top.moves], 6);
+  if (lineAchieves(fen, sans.slice(0, 4), me).kind === 'none') return false;
+  const forcing = sans.slice(0, 4).filter((s) => /[x+#]/.test(s)).length >= 3;
+  const second = topLines[1];
+  const clear = !!second && top.mate === null && second.mate === null && Math.abs(top.evaluation - second.evaluation) >= 100;
+  return forcing || clear;
+}
+
+/**
  * THE LINE IN WORDS — "if I check on g4, he takes my knight, and I take back
  * with the pawn, opening the h-file". Each ply spoken as a clause, their reply
  * named as theirs, ending on what the line achieves. The WalkableLine draws
@@ -437,12 +464,10 @@ export function depthClauses(args: {
     // there after the forcing move (an engine line, so never recited as fact).
     if (ny) out.push({ kind: 'not-yet', text: ny.text, lines: [{ fen: args.fen, sans: ny.line }], squares: [ny.captureSquare], proof: lineProof({ fen: args.fen, sans: ny.line }, lineSeatAt(args.fen, args.studentColor)) ?? NO_PROOF.description });
     const sans = pvSans(args.fen, [...best.pv], 6);
-    // Material and mate are THE ledger's to say (`deliberation`'s played-out
-    // line, `moverLineProof`): the line fact speaks only the outcomes the ledger
-    // has no words for — a file opening, the king's cover, a pawn ending, an
-    // investment, a pawn queening.
-    const outcome = lineAchieves(args.fen, sans.slice(0, 4), args.studentColor);
-    const said = outcome.kind !== 'material' && outcome.kind !== 'mate' && outcome.kind !== 'none' ? sayLine(args.fen, sans, args.studentColor) : null;
+    // Walked where the moment calls for calculation (`walksBestLine`); there
+    // the walk owns the best line, material and mate included, and the
+    // weighing leaves its own copy of it out (`positionFacts`).
+    const said = walksBestLine(args.fen, args.topLines, args.studentColor) ? sayLine(args.fen, sans, args.studentColor) : null;
     if (said) {
       out.push({
         kind: 'line',

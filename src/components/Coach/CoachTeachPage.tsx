@@ -339,7 +339,7 @@ import { admitArrow, admitArrows, keptLineArrows, narrationArrowsThroughDoor, wi
 // student must not read the same board at different depths. See the constant.
 import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareRead } from '../../services/tacticalRead';
 import { findHangingBySee, signedLegalSeeFor, signedCaptureRead } from '../../services/positionReadingService';
-import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
+import { BehaviorScheduler, detectBehaviors, WISH_KEY_PREFIX, WISHES_A_GAME } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH, NEXT_BOARD_READ_MS } from '../../services/engineConstants';
 import type { StockfishAnalysis } from '../../types';
@@ -9916,7 +9916,11 @@ export function CoachTeachPage({ mode }: {
         const pairHeard = heardForReads.has('bishop-pair');
         const ideaHeard = (x: { keys: readonly string[] }): boolean =>
           x.keys.some((k) => heardForReads.has(k));
-        const hits = (pairHeard ? allHits.filter((x) => x.id !== 'bishop-pair') : allHits).filter((x) => !breakHeard(x) && !ideaHeard(x));
+        // THE WISH FORMULA AT MOST TWICE A GAME (the WHY rule): once two wish
+        // lines were heard, a third waits for another game.
+        const wishesHeard = [...heardForReads.claims].filter((c) => c.startsWith(WISH_KEY_PREFIX)).length;
+        const hits = (pairHeard ? allHits.filter((x) => x.id !== 'bishop-pair') : allHits)
+          .filter((x) => !breakHeard(x) && !ideaHeard(x) && !(x.kind === 'wishlist' && wishesHeard >= WISHES_A_GAME));
         const eligible = quietTurn ? hits : hits.filter((h) => BEHAVIOR_ALWAYS_RIDE.has(h.id));
         const hit = behaviorSchedulerRef.current.pick(eligible);
         if (hit) {
@@ -11167,7 +11171,9 @@ export function CoachTeachPage({ mode }: {
                         const line = gradeNarrationText(pl.text, probe.fen(), 'CoachTeachPage.structuralPlan')?.trim();
                         // The plan's routes, hop by hop (David 2026-10-15: "Arrows trace its route?").
                         const routeClaims: ArrowClaim[] = (pl.marks?.route ?? []).map((a) => ({ from: a.from, to: a.to, role: 'line', fen: a.fen, source: 'learn.planRoute' }));
-                        if (line) { queueSpokenHint(probe.fen(), { computer: pl.computer, text: line, lane: 'planArc', proof: pl.proof, namesStudentMove: namesPlayableStudentMove(namesFromArrows(routeClaims, (playerColor === 'white' ? 'w' : 'b'), probe.fen())), squares: pl.squares, claims: pl.claims, arrows: routeClaims.length ? routeClaims : undefined }); planOffered.push(readKey(pl)); }
+                        // A plan line said under its own kind (the worst piece's road is
+                        // the student's wish); every other plan line is the lane's.
+                        if (line) { queueSpokenHint(probe.fen(), { computer: pl.computer, text: line, lane: 'planArc', ...(pl.kind !== 'plan-now' ? { factKind: pl.kind } : {}), proof: pl.proof, namesStudentMove: namesPlayableStudentMove(namesFromArrows(routeClaims, (playerColor === 'white' ? 'w' : 'b'), probe.fen())), squares: pl.squares, claims: pl.claims, arrows: routeClaims.length ? routeClaims : undefined }); planOffered.push(readKey(pl)); }
                       }
                       // Nothing produced: the trial's bookkeeping holds. Produced but
                       // every line graded away: nothing was said, so the trial is
