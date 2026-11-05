@@ -14,7 +14,6 @@
 // before a middlegame, a tabia too few games reached, or one where nothing
 // clears the bar, has no plan.
 import { Chess } from 'chess.js';
-import type { Square } from 'chess.js';
 import type {
   AnnotationArrow,
   AnnotationHighlight,
@@ -27,6 +26,7 @@ import { andList } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
 import { tabLineSans } from './tabLine';
 import { walkToMiddlegame } from './gamesCourse';
+import { isPawnBreak } from './pawnBreak';
 
 /** A board's games and whose they are — the words say whose games were
  *  counted (WO-ALL-OPENINGS-01 O9). */
@@ -68,33 +68,9 @@ function fenAfter(sans: readonly string[]): string | null {
   return c.fen();
 }
 
-/** A pawn move that STARTS a fight with an enemy pawn: it takes one that has
- *  stood its ground, attacks one, or lands where one attacks it. Taking what
- *  the opponent's last move put there — a recapture, or the lever they just
- *  pushed, en passant included — answers their break; it is not one
- *  (2026-10-29: "the axb4 break", played in every game, was the recapture of
- *  …cxb4; the Najdorf's "…dxe5 break" took the e5 pawn White had just pushed).
- *  `lastTo` is the square the opponent's last move landed on, null at the
- *  start. Pure. */
-export function isPawnBreak(fenBefore: string, san: string, lastTo: string | null): boolean {
-  const c = new Chess(fenBefore);
-  let mv;
-  try { mv = c.move(san); } catch { return false; }
-  if (mv.piece !== 'p') return false;
-  if (mv.captured && (mv.to === lastTo || mv.isEnPassant())) return false;
-  if (mv.captured === 'p') return true;
-  const them = mv.color === 'w' ? 'b' : 'w';
-  const file = mv.to.charCodeAt(0);
-  const rank = Number(mv.to[1]);
-  const ahead = mv.color === 'w' ? rank + 1 : rank - 1;
-  for (const df of [-1, 1]) {
-    const f = String.fromCharCode(file + df);
-    if (f < 'a' || f > 'h') continue;
-    const hits = c.get(`${f}${ahead}` as Square);
-    if (hits && hits.type === 'p' && hits.color === them) return true;
-  }
-  return c.attackers(mv.to, them).some((sq) => c.get(sq)?.type === 'p');
-}
+/** What a break is — one definition, kept with the computer that says what a
+ *  break opens (`pawnBreak.ts`); re-exported for the plans' callers. */
+export { isPawnBreak };
 
 function label(san: string, side: 'w' | 'b'): string {
   return side === 'b' ? `…${san}` : san;
