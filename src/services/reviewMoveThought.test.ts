@@ -28,7 +28,11 @@ describe('Review says a move through the one composer', () => {
       line: ['Nc6', 'Bc4', 'Nf6', 'Ng5'], history: ['e4', 'e5'], theirLast, reads: null, costCp: null,
     }, newLessonVoice(), null);
     expect(lesson).toMatch(/^They play Nf3 — it develops into the game/);
-    expect(walk('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5', 'black')[2]).toContain(lesson.replace(/\.$/, ''));
+    // Every sentence of the lesson's thought is in Review's: Review may close
+    // the attack's sentence with ", and it needs an answer this move", so the
+    // sentences are matched one by one, each without its full stop.
+    const review = walk('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5', 'black')[2];
+    for (const sentence of lesson.split(/(?<=\.)\s+/)) expect(review).toContain(sentence.replace(/\.$/, ''));
   }, 60_000);
 
   it('a threat Review says in its own line is not said again by the move (…Nb4: Nxc2+ once)', () => {

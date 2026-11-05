@@ -161,14 +161,16 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // directly, so Learn's computed lines never met the one chokepoint.
     const body = TEACH.slice(TEACH.indexOf('const speakTrackA = (line: string'), TEACH.indexOf('instantSpokenText = instantSpokenText'));
     expect(body.length).toBeGreaterThan(0);
-    expect(body).toMatch(/speakLearn\(line, \{ channel: 'free-play', forced: true, intent: 'learn-live' \}\)/);
+    // ONE VOICE (David 2026-10-30): Track A is the turn door's own decision, so it
+    // speaks on the door's channel — in a focus game too, never under a mission.
+    expect(body).toMatch(/speakLearn\(line, \{ channel: 'door', forced: true, intent: 'learn-live' \}\)/);
     // …and a question-then-answer line (the think pause) speaks BOTH halves
     // through the same seam.
-    expect(body).toMatch(/speakLearn\(qa\[0\], \{ channel: 'free-play', forced: true, intent: 'learn-live' \}\)/);
+    expect(body).toMatch(/speakLearn\(qa\[0\], \{ channel: 'door', forced: true, intent: 'learn-live' \}\)/);
     // (2026-10-19: the answer half is OWED — spoken the turn after the
     // student plays, resolved against their move — through the same seam.)
     expect(body).toMatch(/pendingAnswerRef\.current = qa\[1\];/);
-    expect(TEACH).toMatch(/if \(owedSaid\) speechChainRef\.current = speakLearn\(owedSaid, \{ channel: 'free-play', forced: true, intent: 'learn-live' \}\)/);
+    expect(TEACH).toMatch(/if \(owedSaid\) speechChainRef\.current = speakLearn\(owedSaid, \{ channel: 'door', forced: true, intent: 'learn-live' \}\)/);
     expect(body).not.toMatch(/voiceService\.speak/);
   });
 });

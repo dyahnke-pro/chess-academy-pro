@@ -84,7 +84,9 @@ describe('the standing refrains ride the seed', () => {
     const src = readFileSync('src/components/Coach/CoachGameReview.tsx', 'utf8');
     const body = src.slice(src.indexOf('const narrateExploredMove'), src.indexOf('const narrateExploredMoveRef'));
     expect(body).toMatch(/exploreSeed\(walkNarration, walkPlyRef\.current, args\.history, moves\)/);
-    expect(body).toMatch(/buildReviewSegmentsYielding\([^;]*, seed, lineStory\)/);
+    // The seed and the line's story ride in the call; arguments after them (the
+    // known-slip index) do not change what the rebuild folds from.
+    expect(body).toMatch(/buildReviewSegmentsYielding\([^;]*, seed, lineStory[,)]/);
     expect(body).toMatch(/foldReviewRefrains\(segs, lineStory, seed\)/);
   });
 });

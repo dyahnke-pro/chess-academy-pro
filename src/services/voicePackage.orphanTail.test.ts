@@ -39,12 +39,13 @@ describe('a dropped sentence takes the tail that points back at it', () => {
 });
 
 describe('the phase wave never force-cuts the line playing', () => {
+  // The phase wave is the door's own decision: the door's channel (ONE VOICE, 2026-10-30).
   it('its package is spoken on the page speech chain, not straight to the voice', () => {
     const code = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     const start = code.indexOf('speakFacts: async (facts, fen) => {');
     const end = code.indexOf('onReport:', start);
     const door = code.slice(start, end);
-    expect(door).toMatch(/speechChainRef\.current\s*\.then\(\(\) => \(samePosition\([^)]*\) && learnVoiceAllows\('free-play'\) \? voiceService\.speakPackage\(d\.pkg\)/);
+    expect(door).toMatch(/speechChainRef\.current\s*\.then\(\(\) => \(samePosition\([^)]*\) && learnVoiceAllows\('door'\) \? voiceService\.speakPackage\(d\.pkg\)/);
     expect(door).not.toMatch(/await voiceService\.speakPackage\(/);
   });
 });
