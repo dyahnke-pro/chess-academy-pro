@@ -33,7 +33,18 @@ describe('pawnBreak — the break and what it is for', () => {
 
   it('a capture that opens a file beside their castled king says so', () => {
     const r = pawnBreak(KINGSIDE, 'fxe5', 'your', 'e7');
-    expect(r?.text).toBe('fxe5 is a pawn break: it takes their pawn on e5 in the centre, and half-opens the f-file for your rook on f1, toward their king.');
+    // The SAN says the capture; the line says it once (captureSaidOnce.gate).
+    expect(r?.text).toBe('fxe5 is a pawn break in the centre, and it half-opens the f-file for your rook already on it, toward their king.');
+    expect(r?.squares).toContain('e5');
+    // The rook's square is on the board, not read out.
+    expect(r?.squares).toContain('f1');
+  });
+
+  it('a push that strikes a pawn that cannot take back still says what it attacks', () => {
+    // e5 is the base of the e5-f6 chain and pinned to its king by the rook on
+    // e8, so it cannot take …d6: the break takes nothing, it attacks.
+    const r = pawnBreak('4r1k1/3p4/5P2/4P3/8/8/8/4K3 b - - 0 20', 'd6', 'your', null);
+    expect(r?.text).toContain('it attacks their pawn on e5, the base of the pawn chain');
   });
 
   it('their break is said from the student\'s seat', () => {
@@ -60,6 +71,15 @@ describe('pawnBreak — the break and what it is for', () => {
     const { fen, lastTo } = at(['e4', 'e5', 'Nf3', 'Nc6', 'c3', 'Nf6', 'd3', 'd6', 'b4', 'Be7', 'b5', 'O-O']);
     expect(isPawnBreak(fen, 'bxc6', lastTo)).toBe(true);
     expect(pawnBreak(fen, 'bxc6', 'your', lastTo)).toBeNull();
+  });
+
+  it('names a square only when it is the point, and every square it names is on the board', () => {
+    for (const [fen, san, lastTo] of [[at(FRENCH).fen, 'c5', at(FRENCH).lastTo], [KINGSIDE, 'fxe5', 'e7']] as const) {
+      const r = pawnBreak(fen, san, 'your', lastTo)!;
+      const named = r.text.match(/\b[a-h][1-8]\b/g) ?? [];
+      expect(new Set(named).size).toBeLessThanOrEqual(2);
+      for (const sq of named) expect(r.squares).toContain(sq);
+    }
   });
 
   it('is the one definition of a break the games\' plans read', () => {

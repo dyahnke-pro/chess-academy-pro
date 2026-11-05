@@ -24,11 +24,10 @@
 // shape is on the board at 149 of them; the reader fires on 29, in 16 games
 // (said once a game, by its claim). Only 3 of his game moments name the
 // bishops in words, and 1 is on this board — it fires there, on his Ruy
-// Lopez's 13.Bxf6, his dark bishop hitting d8 and e7 beside their king.
+// Lopez's 13.Bxf6, his dark bishop on the dark squares around their king.
 //
 // PURE: chess.js and the proof shape.
 import { Chess, type Color, type Square } from 'chess.js';
-import { andList } from '../utils/andList';
 import { squaresProof, NO_PROOF, type FactProof } from './proof';
 
 export interface OppositeBishopsBoard {
@@ -132,25 +131,34 @@ export function oppositeBishops(fenBefore: string, san: string, student: Color):
       kingZone(after, enemy, shadeOf(bishop)).filter((s) => after.attackers(s, color).includes(bishop));
     const myHits = hits(mine, student, them);
     const theirHits = hits(theirs, them, student);
-    const head = `Opposite-coloured bishops now, with ${what} on: a game for the attacker, not for grinding pawns`;
+    // SQUARES NAMED LIKE A HUMAN (David 2026-11-05): the idea in words — the
+    // dark squares around their king — and the bishop and the squares it hits
+    // there on the board (`squares`), never read out as a list.
+    const head = `Opposite-coloured bishops now, with ${what} on — a game for the attacker, not for grinding pawns`;
+    // The proof is the bishop and the squares it rules there — read off the
+    // board, marked when the student asks Why.
     if (myHits.length > 0 && theirHits.length === 0) {
       const shade = shadeOf(mine);
+      const proof = squaresProof(`Your bishop rules the ${shade} squares around their king`, [mine, ...myHits]);
+      if (!proof) return null;
       return {
-        text: `${head} — your bishop on ${mine} hits ${andList(myHits)} beside their king, and their bishop can never guard a ${shade} square, so aim at their king on the ${shade} squares.`,
-        squares: [mine, theirs, ...myHits], proof: squaresProof(`Your bishop on ${mine} hits ${andList(myHits)}`, [mine, ...myHits]) ?? NO_PROOF.stated,
+        text: `${head}: your bishop rules the ${shade} squares around their king and theirs can never guard them, so attack there.`,
+        squares: [mine, theirs, ...myHits], proof,
         seat: 'student', key: 'opposite-bishops:attack', claims: ['opposite-bishops:attack'],
       };
     }
     if (theirHits.length > 0 && myHits.length === 0) {
       const shade = shadeOf(theirs);
+      const proof = squaresProof(`Their bishop rules the ${shade} squares around your king`, [theirs, ...theirHits]);
+      if (!proof) return null;
       return {
-        text: `${head} — their bishop on ${theirs} hits ${andList(theirHits)} beside your king, and your bishop can never guard a ${shade} square, so cover the ${shade} squares around your king with your other pieces.`,
-        squares: [theirs, mine, ...theirHits], proof: squaresProof(`Their bishop on ${theirs} hits ${andList(theirHits)}`, [theirs, ...theirHits]) ?? NO_PROOF.stated,
+        text: `${head}: their bishop rules the ${shade} squares around your king and yours can never guard them, so cover them with your other pieces.`,
+        squares: [theirs, mine, ...theirHits], proof,
         seat: 'opponent', key: 'opposite-bishops:attack', claims: ['opposite-bishops:attack'],
       };
     }
     return {
-      text: `${head} — each bishop rules squares the other can never contest, so whoever gets at the king first, on their own bishop's colour, gains the most.`,
+      text: `${head}: each bishop rules squares the other can never contest, so whoever gets at the king first, on their own bishop's colour, gains the most.`,
       squares: [mine, theirs], proof: NO_PROOF.method,
       seat: mover === student ? 'student' : 'opponent', key: 'opposite-bishops:attack', claims: ['opposite-bishops:attack'],
     };
