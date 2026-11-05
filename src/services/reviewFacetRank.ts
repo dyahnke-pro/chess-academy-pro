@@ -80,7 +80,10 @@ export type FacetTag =
   // computer made, each with the computer built for it — the pawn break and
   // what it is for (`pawnBreak`); opposite-coloured bishops and what they
   // mean with what is left on the board (`oppositeBishops`).
-  | 'pawn-break' | 'opposite-bishops';
+  | 'pawn-break' | 'opposite-bishops'
+  // Their idea's one condition (`opponentMoveReads.ideaCondition`), said in
+  // Review as their move's read was — under its own kind (S-TRIGGER).
+  | 'their-trigger';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -255,6 +258,8 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // Opposite-coloured bishops: who is better and how the game is played from
   // here, once — beside the turn of the game's read (`stock`).
   'opposite-bishops': 35,
+  // Their idea's one condition: where their move's read sat.
+  'their-trigger': 77,
 };
 
 /**
@@ -333,6 +338,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   'push-or-hold': 'teach',
   'pawn-break': 'teach',
   'opposite-bishops': 'teach',
+  'their-trigger': 'teach',
   // What the move did — descriptions. Each speaks only beside a teaching
   // point on its own squares; a ply of descriptions alone is silent.
   does: 'describe',
@@ -405,6 +411,10 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   'stop-flaw': 'teach',
   'hole-access': 'teach',
   'speedrun-read': 'teach',
+  // The speed-run reads under their own kinds teach as the read did; the
+  // behaviours under theirs describe as the behaviour lane did.
+  provoke: 'teach', tension: 'teach', trigger: 'teach', 'their-trigger': 'teach',
+  space: 'describe', wishlist: 'describe',
   // The line tactics (tacticGeometry) — the same name and role as review's facet.
   tactic: 'teach',
   'king-read': 'teach',
@@ -482,6 +492,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   'opp-think': 'safety', 'forcing-scan': 'safety',
   // The teaching moves' new computers.
   'pawn-break': 'plan', 'opposite-bishops': 'plan',
+  provoke: 'plan', tension: 'plan', trigger: 'plan', 'their-trigger': 'safety', space: 'plan', wishlist: 'plan',
   'structure-plan': 'plan', 'opponent-intent': 'plan', 'student-leans': 'plan', 'opponent-leans': 'plan',
 };
 
@@ -543,6 +554,9 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   'pawn-break': 'proven',
   // The bishops' rule is a rule of the game; the board is its example.
   'opposite-bishops': 'method',
+  // Each owes what the kind it came from owes.
+  provoke: 'description', tension: 'description', trigger: 'description', 'their-trigger': 'proven',
+  space: 'description', wishlist: 'description',
 };
 
 /**
@@ -581,6 +595,8 @@ const CLAUSE_TIE: Record<ClauseKind, number> = {
   'stop-flaw': FACET_RANK['opp-target'],
   'hole-access': FACET_RANK.structure,
   'speedrun-read': FACET_RANK['plan-now'],
+  provoke: FACET_RANK['plan-now'], tension: FACET_RANK['plan-now'], trigger: FACET_RANK['plan-now'],
+  'their-trigger': FACET_RANK['their-trigger'], space: FACET_RANK.worst, wishlist: FACET_RANK.worst,
   tactic: FACET_RANK.tactic,
   'king-read': FACET_RANK['king-read'],
   'trade-idea': FACET_RANK['trade-idea'],
@@ -692,7 +708,7 @@ function clauseKindForTag(tag: FacetTag): string {
     case 'endgame': case 'passer': case 'consequence': case 'plan-race': return 'convert';
     case 'refuted': case 'common-wrong': case 'trap-ahead': case 'equivalence': return 'refuted';
     case 'timing': case 'move-order': case 'capture-choice': case 'kick': return 'structure-plan';
-    case 'their-read': return 'opponent-intent';
+    case 'their-read': case 'their-trigger': return 'opponent-intent';
     case 'rule': case 'rule-exception': case 'false-alarm': case 'push-or-hold': return 'fundamental';
     case 'principle': case 'structure': case 'complex': case 'minority':
     case 'badbishop': case 'worst': case 'plan-middlegame': case 'plan-now': case 'castling':

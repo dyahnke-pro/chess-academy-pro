@@ -120,8 +120,15 @@ interface BehaviorContext {
   history?: readonly string[];
 }
 
+/** The kinds a behaviour is said under: the lane's own (`student-leans`), or
+ *  the teaching move it makes (2026-11-05) — more space and what to do with
+ *  it (S-SPACE), the wish square and the road there (H-WISHLIST). */
+export type BehaviorKind = 'student-leans' | 'space' | 'wishlist';
+
 export interface BehaviorHit {
   id: string;
+  /** The fact kind it is said under — set where the fact is made. */
+  kind: BehaviorKind;
   /** The board-true teaching fact — concrete, names squares/pieces (G0 seam). */
   fact: string;
   /** Squares to lead the eye to (arrows/highlights). */
@@ -152,7 +159,7 @@ interface Behavior {
   id: string;
   /** Corpus note count — the target relative firing rate. */
   weight: number;
-  detect(ctx: NormalizedCtx): { fact: string; squares: Square[]; keys?: string[]; arrows?: ArrowClaim[] } | null;
+  detect(ctx: NormalizedCtx): { fact: string; squares: Square[]; keys?: string[]; arrows?: ArrowClaim[]; kind?: BehaviorKind } | null;
 }
 
 interface NormalizedCtx {
@@ -237,7 +244,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // or say nothing about rerouting — "a better square" teaches nothing.
         const route = wishRoute(fen, bad.square);
         if (route) {
-          return { fact: `Your ${PIECE_NAME[bad.piece]} on ${bad.square} is ${withArticle(bad.reason)} — it wants ${route.target}${routeVia(route.via ? [route.via] : [])}: ${route.why}.`, squares: [bad.square, ...(route.via ? [route.via] : []), route.target] };
+          return { kind: 'wishlist', fact: `Your ${PIECE_NAME[bad.piece]} on ${bad.square} is ${withArticle(bad.reason)} — it wants ${route.target}${routeVia(route.via ? [route.via] : [])}: ${route.why}.`, squares: [bad.square, ...(route.via ? [route.via] : []), route.target] };
         }
         // No route, no line: "a better square" teaches nothing (census #15).
         return null;
@@ -247,7 +254,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       if (weakest && (weakest.piece === 'n' || weakest.piece === 'b') && weakest.scope <= 1) {
         const route = wishRoute(fen, weakest.square);
         if (route) {
-          return { fact: `Your ${PIECE_NAME[weakest.piece]} on ${weakest.square} is doing nothing — it wants ${route.target}${routeVia(route.via ? [route.via] : [])}: ${route.why}.`, squares: [weakest.square, ...(route.via ? [route.via] : []), route.target] };
+          return { kind: 'wishlist', fact: `Your ${PIECE_NAME[weakest.piece]} on ${weakest.square} is doing nothing — it wants ${route.target}${routeVia(route.via ? [route.via] : [])}: ${route.why}.`, squares: [weakest.square, ...(route.via ? [route.via] : []), route.target] };
         }
         return { fact: `Your ${PIECE_NAME[weakest.piece]} on ${weakest.square} is doing nothing — find it a better square.`, squares: [weakest.square] };
       }
@@ -758,7 +765,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // The one "more space" rule (territory behind the pawns), so this claim
       // and the weighing can never disagree.
       if (ownsMoreSpace(fen, student)) {
-        return { fact: `You own more space — keep them cramped, don't rush, improve every piece first.`, squares: [] };
+        return { kind: 'space', fact: `You own more space — keep them cramped, don't rush, improve every piece first.`, squares: [] };
       }
       return null;
     },
@@ -885,9 +892,9 @@ export function detectBehaviors(ctx: BehaviorContext): BehaviorHit[] {
   if (n.chess && n.chess.turn() === n.student && n.chess.inCheck()) return [];
   const hits: BehaviorHit[] = [];
   for (const b of DANYA_BEHAVIORS) {
-    let res: { fact: string; squares: Square[]; keys?: string[]; arrows?: ArrowClaim[] } | null = null;
+    let res: { fact: string; squares: Square[]; keys?: string[]; arrows?: ArrowClaim[]; kind?: BehaviorKind } | null = null;
     try { res = b.detect(n); } catch { res = null; }
-    if (res && res.fact) hits.push({ id: b.id, fact: res.fact, squares: res.squares, weight: b.weight, keys: res.keys ?? [], arrows: res.arrows ?? [] });
+    if (res && res.fact) hits.push({ id: b.id, kind: res.kind ?? 'student-leans', fact: res.fact, squares: res.squares, weight: b.weight, keys: res.keys ?? [], arrows: res.arrows ?? [] });
   }
   return hits;
 }

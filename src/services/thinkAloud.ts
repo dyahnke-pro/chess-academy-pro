@@ -21,7 +21,7 @@ import { findProphylaxis, prophylaxisKey, prophylaxisThreatProof } from './proph
 import { criticalityThresholds } from './criticalityScan';
 import { lineSeatAt } from '../utils/andList';
 import { kingAttackReads, type KingRead } from './kingAttackReads';
-import { readTheirMove } from './opponentMoveReads';
+import { readTheirMove, READ_FACT_KIND } from './opponentMoveReads';
 import { threatStoppedBy, playItAnyway } from './opponentMovePurpose';
 import { knownAttack } from './attackLibrary';
 import { tempoCount } from './tempoCount';
@@ -29,7 +29,7 @@ import { homeMinorCount } from './development';
 import { legalSeeGainFor } from './positionReadingService';
 import type { Stakes } from './factStakes';
 import type { GamePromise } from './learnBoardTeaching';
-import { speedRunReads } from './speedRunReads';
+import { speedRunReads, SPEED_RUN_KIND } from './speedRunReads';
 import { namesMoves, type NamesStudentMove } from './studentMoveNaming';
 import { readBoardAll, readKey } from './boardComputers';
 import type { TacticType } from '../types';
@@ -116,7 +116,18 @@ export function lineAchieves(startFen: string, sans: readonly string[], me: 'w' 
       // OUR pawn left the file — it is now open (or half-open) for our rooks.
       if (pawnOnFile(start, file, me) && !pawnOnFile(end, file, me) && heavyOn(end, file, me)) return { text: `the ${file}-file opens toward their king`, kind: 'file' };
     }
-    if (shield(end, them) < shield(start, them)) return { text: 'their king loses its pawn cover', kind: 'king' };
+    // THE SAME KING, SHELTERED ON A WING, with fewer of its own pawns in front
+    // of it at the end of the line. A king that walked in the line (…Kf8) had
+    // no cover to lose there, and an uncastled king in the middle loses no
+    // cover when its own centre pawn moves out ("…e5, Nf3, …Nc6, then d4, and
+    // their king loses its pawn cover" — measured 2026-11-05: this clause fired
+    // on 26% of his moves where he walks no line). And only with your queen
+    // still on: in an ending the king WANTS to walk out ("…then their pawn to
+    // a3, and their king loses its pawn cover" in a rook ending, measured the
+    // same day) — a bare shelter is nothing to attack.
+    const startKing = kingSq(start, them);
+    const myQueen = end.board().flat().some((x) => x?.type === 'q' && x.color === me);
+    if (myQueen && startKing === theirKing && !'de'.includes(theirKing[0]) && shield(end, them) < shield(start, them)) return { text: 'their king loses its pawn cover', kind: 'king' };
   }
   return { text: '', kind: 'none' };
 }
@@ -266,7 +277,9 @@ export function habitReads(sans: readonly string[], opp: 'w' | 'b', sound: Reado
 interface DepthClause {
   kind: 'not-yet' | 'line' | 'their-habit' | 'your-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read' | 'tactic' | 'king-read'
     | 'equivalence' | 'timing' | 'refuted' | 'capture-choice' | 'plan-race' | 'kick'
-    | 'their-read' | 'prevent-test' | 'attack-pattern';
+    | 'their-read' | 'prevent-test' | 'attack-pattern'
+    // The teaching moves' own kinds, round 2 (`SPEED_RUN_KIND`, `READ_FACT_KIND`).
+    | 'provoke' | 'tension' | 'trigger' | 'their-trigger';
   /** The motif, in the one tactic vocabulary — the weakness join. */
   motif?: TacticType;
   text: string;
@@ -333,7 +346,7 @@ export function depthClauses(args: {
     if (args.lastStudentMove) {
       // Counted on the board as it stands now, after their reply.
       const h = holeAccess(args.lastStudentMove.fenBefore, args.lastStudentMove.san, args.fen);
-      if (h) out.push({ kind: 'hole-access', text: h.text, squares: [h.hole, h.moved, ...(h.from ? [h.from] : [])] });
+      if (h) out.push({ kind: 'hole-access', text: h.text, squares: [h.hole, ...(h.from ? [h.from] : [])] });
     }
     const toMove = new Chess(args.fen).turn();
     const topUci = args.topLines[0]?.moves?.[0];
@@ -354,7 +367,7 @@ export function depthClauses(args: {
       // Learn does not grade their move here: a criticism of it stays silent.
       for (const r of readTheirMove({ fenBefore: args.lastOpponentMove.fenBefore, san: args.lastOpponentMove.san, student: args.studentColor, topLines: args.topLines, prev, theirMoveFlagged: null })) {
         if (r.namesMove && !args.nameMove) continue;
-        out.push({ kind: r.kind === 'wedged-pawn' ? 'prevent-test' : 'their-read', text: r.text, proof: r.proof, squares: r.squares, ...(r.stakes ? { stakes: r.stakes } : {}), claim: r.claim });
+        out.push({ kind: READ_FACT_KIND[r.kind], text: r.text, proof: r.proof, squares: r.squares, ...(r.stakes ? { stakes: r.stakes } : {}), claim: r.claim });
       }
       // "CAN YOU PLAY IT ANYWAY?" — their move stopped your threat on paper;
       // the engine says the move still works.
@@ -379,7 +392,7 @@ export function depthClauses(args: {
     // castle, "any move is fine". The ones that name the engine's move (the
     // ugly move, the provoked commitment) wait for nameMove below.
     const reads = toMove === args.studentColor ? speedRunReads({ fen: args.fen, me: args.studentColor, lines: args.topLines, inTheory: inBookCachedSync(args.fen, MIN_BOOK_GAMES), ...(args.lastOpponentMove ? { lastMove: args.lastOpponentMove } : {}), ...((): { lastOwnMove?: { fenBefore: string; san: string } } => { const o = ownLastMove(args.history, args.fen); return o ? { lastOwnMove: o } : {}; })() }) : [];
-    const push = (r: (typeof reads)[number], text: string): void => { out.push({ kind: 'speedrun-read', text, ...(r.ideaNames && text === r.idea ? { namesStudentMove: namesMoves(args.studentColor, args.fen, r.ideaNames) } : {}), ...(text === r.text ? (r.squares ? { squares: r.squares } : {}) : (r.ideaSquares ? { squares: r.ideaSquares } : {})), ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}), ...(r.promise ? { promise: r.promise } : {}) }); };
+    const push = (r: (typeof reads)[number], text: string): void => { out.push({ kind: SPEED_RUN_KIND[r.id], text, ...(r.ideaNames && text === r.idea ? { namesStudentMove: namesMoves(args.studentColor, args.fen, r.ideaNames) } : {}), ...(text === r.text ? (r.squares ? { squares: r.squares } : {}) : (r.ideaSquares ? { squares: r.ideaSquares } : {})), ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}), ...(r.promise ? { promise: r.promise } : {}) }); };
     // ATTACK, SACRIFICES AND KINGS (batch 4) — each read carries its proof.
     const kings = toMove === args.studentColor ? kingAttackReads({ fen: args.fen, me: args.studentColor, lines: args.topLines }) : [];
     const pushKing = (r: KingRead, text: string): void => { out.push({ kind: 'king-read', text, squares: r.squares, proof: text === r.text ? r.proof : NO_PROOF.withheld, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}), ...(r.lines && text === r.text ? { lines: r.lines } : {}) }); };

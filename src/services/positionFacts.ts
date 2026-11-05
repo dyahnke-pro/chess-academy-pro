@@ -382,7 +382,13 @@ export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-c
   // The habits that are a teaching move of their own (`methodBeat.HABIT_KIND`):
   // what is their move doing (the opponent's shoes), and checks, captures and
   // threats first (the forcing scan).
-  | 'opp-think' | 'forcing-scan';
+  | 'opp-think' | 'forcing-scan'
+  // THE TEACHING MOVES' OWN KINDS, round 2 (2026-11-05): the speed-run reads
+  // that provoke, keep the tension or name the trigger
+  // (`speedRunReads.SPEED_RUN_KIND`); their idea's one condition
+  // (`opponentMoveReads.READ_FACT_KIND`); the behaviours that say space and the
+  // wish square (`danyaBehaviors`). Each placed as the kind it came from.
+  | 'provoke' | 'tension' | 'trigger' | 'their-trigger' | 'space' | 'wishlist';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';

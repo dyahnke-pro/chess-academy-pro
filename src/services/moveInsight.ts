@@ -1137,7 +1137,7 @@ export function holeAccess(
    *  on c6 gets there in three", said after …Nd4). Null when nothing has been
    *  played since the move (a hypothetical). */
   now: string | null,
-): { hole: string; moves: number | null; from: string | null; text: string; hits: string[]; /** The square the move landed on — the sentence names it. */ moved: string } | null {
+): { hole: string; moves: number | null; from: string | null; text: string; hits: string[] } | null {
   let before: Chess; let after: Chess;
   try { before = new Chess(fenBefore); after = new Chess(fenBefore); } catch { return null; }
   let m;
@@ -1158,19 +1158,22 @@ export function holeAccess(
       let board = after;
       if (now) { try { board = new Chess(now); } catch { return null; } }
       if (board !== after && !noPawnCanChallenge(board, hole, them)) continue;
-      const said = sayMoveClause(m.san, fenBefore);
+      // The move by what it was ("your e-pawn push"), never its square: the
+      // sentence is about the hole (David 2026-11-05, squares said like a
+      // person — the square that matters is the one lit).
+      const said = `your ${m.from[0]}-pawn ${m.captured ? 'capture' : 'push'}`;
       const on = board.get(hole as Square);
       const hits = knightHitsFrom(board, hole, me);
       if (on && on.color === them && on.type === 'n') {
-        return { hole, hits, moves: 0, from: hole, moved: m.to, text: `After ${said}, ${hole} is weak for good, and their knight already sits on it — that square is theirs now.` };
+        return { hole, hits, moves: 0, from: hole, text: `${openSentence(said)} left ${hole} weak for good, and their knight already sits on it — that square is theirs now.` };
       }
       if (on) continue;
       const reach = knightReach(board.fen(), hole, them);
       // No knight of theirs at all: the hole is no story (replay, game 2 endgame).
       if (!reach) return null;
       return reach.moves >= 4
-        ? { hole, hits, moves: reach.moves, from: reach.from, moved: m.to, text: `After ${said}, ${hole} is weak for good, but their knight needs ${num(reach.moves)} moves to get there — an eternity, so don't worry about it.` }
-        : { hole, hits, moves: reach.moves, from: reach.from, moved: m.to, text: `After ${said}, ${hole} is weak for good, and their knight on ${reach.from} gets there in ${num(reach.moves)} — that square is theirs now.` };
+        ? { hole, hits, moves: reach.moves, from: reach.from, text: `${openSentence(said)} left ${hole} weak for good, but their knight needs ${num(reach.moves)} moves to get there — an eternity, so don't worry about it.` }
+        : { hole, hits, moves: reach.moves, from: reach.from, text: `${openSentence(said)} left ${hole} weak for good, and their knight on ${reach.from} gets there in ${num(reach.moves)} — that square is theirs now.` };
     }
   }
   return null;

@@ -635,6 +635,34 @@ export function queenGlue(fen: string, me: 'w' | 'b'): Read | null {
   return { claim: `srr:glue:${q.square}`, stakes: most > 0 ? { points: most, plies: 2 } : undefined, text: `Your queen on ${q.square} is the glue — it alone holds ${held[0]} and ${held[1]}. Move it or trade it and both come loose.`, squares: [q.square, ...held] };
 }
 
+/** EVERY READ, BY NAME — and the teaching move it makes (2026-11-05): the
+ *  reads were all said as `speedrun-read` (S-PLAN) while four of them make a
+ *  move of their own — the move that makes them commit or concede (M-PROVOKE),
+ *  keep the tension (S-TENSION), the rejected move that works after the
+ *  preparation (S-TRIGGER). A `Record`, so a new read fails to compile until
+ *  it says which. Each placed where `speedrun-read` is (the group, the role,
+ *  the rank), so nothing said moves. */
+export type SpeedRunId =
+  | 'positionOpened' | 'queenGlue' | 'takeTheSting' | 'finishStarted' | 'goodInEveryBranch' | 'forceConcession'
+  | 'rejectedMoveLater' | 'bestCasePlan' | 'retreatKeepsBreak' | 'flexibleFirst' | 'threatStronger' | 'secureFirst'
+  | 'heldByTactic' | 'mutualPins' | 'keepTension' | 'overprotect' | 'castleSide' | 'uglyButRight' | 'provokes'
+  | 'awkwardBlock' | 'skipMiddleman' | 'playAnyway' | 'keepSquareForKnight' | 'rightPieceForHole' | 'usefulWaiting'
+  | 'anyMoveFine';
+export const SPEED_RUN_KIND: Record<SpeedRunId, 'speedrun-read' | 'provoke' | 'tension' | 'trigger'> = {
+  provokes: 'provoke', forceConcession: 'provoke', awkwardBlock: 'provoke',
+  keepTension: 'tension',
+  rejectedMoveLater: 'trigger',
+  positionOpened: 'speedrun-read', queenGlue: 'speedrun-read', takeTheSting: 'speedrun-read', finishStarted: 'speedrun-read',
+  goodInEveryBranch: 'speedrun-read', bestCasePlan: 'speedrun-read', retreatKeepsBreak: 'speedrun-read', flexibleFirst: 'speedrun-read',
+  threatStronger: 'speedrun-read', secureFirst: 'speedrun-read', heldByTactic: 'speedrun-read', mutualPins: 'speedrun-read',
+  overprotect: 'speedrun-read', castleSide: 'speedrun-read', uglyButRight: 'speedrun-read', skipMiddleman: 'speedrun-read',
+  playAnyway: 'speedrun-read', keepSquareForKnight: 'speedrun-read', rightPieceForHole: 'speedrun-read', usefulWaiting: 'speedrun-read',
+  anyMoveFine: 'speedrun-read',
+};
+/** A read with the name it was made by. */
+export type SpeedRunRead = Read & { id: SpeedRunId };
+const tag = (id: SpeedRunId, r: Read | null): SpeedRunRead | null => (r ? { ...r, id } : null);
+
 /** Every read for the side to move, in his order of thought. */
 export function speedRunReads(args: {
   fen: string; me: 'w' | 'b'; lines: Lines; lastMove?: { fenBefore: string; san: string }; lastOwnMove?: { fenBefore: string; san: string };
@@ -644,7 +672,7 @@ export function speedRunReads(args: {
   /** REQUIRED: in book here — null when unknown, and then the out-of-book
    *  habits stay quiet. */
   inTheory: boolean | null;
-}): Read[] {
+}): SpeedRunRead[] {
   const bestSan = sanOf(args.fen, args.lines[0]?.moves?.[0]);
   // RELEVANCE (David 2026-10-06: "make sure all narrations are relevant"): with
   // a piece of the student's hanging, a quiet-move habit is noise — "leave the
@@ -654,39 +682,39 @@ export function speedRunReads(args: {
   try { onFire = computeMustDefend(args.fen, args.me).net >= 3; } catch { /* calm */ }
   if (onFire) {
     return [
-      secureFirst(args.fen, args.me, args.lines),
-      takeTheSting(args.fen, args.me, bestSan),
-      queenGlue(args.fen, args.me),
-      heldByTactic(args.fen, args.me),
-    ].filter((r): r is Read => !!r);
+      tag('secureFirst', secureFirst(args.fen, args.me, args.lines)),
+      tag('takeTheSting', takeTheSting(args.fen, args.me, bestSan)),
+      tag('queenGlue', queenGlue(args.fen, args.me)),
+      tag('heldByTactic', heldByTactic(args.fen, args.me)),
+    ].filter((r): r is SpeedRunRead => !!r);
   }
   return [
-    positionOpened(args.lastMove, args.me, bestSan),
-    queenGlue(args.fen, args.me),
-    takeTheSting(args.fen, args.me, bestSan),
-    finishStarted(args.lastOwnMove, args.fen, bestSan),
-    goodInEveryBranch(args.fen, args.me, args.lines),
-    forceConcession(args.fen, args.lines),
-    rejectedMoveLater(args.fen, args.lines),
-    bestCasePlan(args.fen, args.lines),
-    retreatKeepsBreak(args.fen, args.me, bestSan),
-    args.inTheory !== false ? null : flexibleFirst(args.fen, args.lines),
-    threatStronger(args.fen, args.me, args.lines),
-    secureFirst(args.fen, args.me, args.lines),
-    heldByTactic(args.fen, args.me),
-    mutualPins(args.fen),
-    keepTension(args.fen, args.me, bestSan),
-    overprotect(args.fen, args.me),
-    castleSide(args.fen, args.me),
-    uglyButRight(args.fen, bestSan),
-    provokes(args.fen, args.lines),
-    awkwardBlock(args.fen, args.lines),
-    skipMiddleman(args.fen, bestSan),
-    playAnyway(args.fen, args.lines),
-    keepSquareForKnight(args.fen, args.me, bestSan),
-    rightPieceForHole(args.fen, args.me),
-    usefulWaiting(args.fen, args.lines) ?? anyMoveFine(args.fen, args.lines),
-  ].filter((r): r is Read => !!r).filter((r) => {
+    tag('positionOpened', positionOpened(args.lastMove, args.me, bestSan)),
+    tag('queenGlue', queenGlue(args.fen, args.me)),
+    tag('takeTheSting', takeTheSting(args.fen, args.me, bestSan)),
+    tag('finishStarted', finishStarted(args.lastOwnMove, args.fen, bestSan)),
+    tag('goodInEveryBranch', goodInEveryBranch(args.fen, args.me, args.lines)),
+    tag('forceConcession', forceConcession(args.fen, args.lines)),
+    tag('rejectedMoveLater', rejectedMoveLater(args.fen, args.lines)),
+    tag('bestCasePlan', bestCasePlan(args.fen, args.lines)),
+    tag('retreatKeepsBreak', retreatKeepsBreak(args.fen, args.me, bestSan)),
+    args.inTheory !== false ? null : tag('flexibleFirst', flexibleFirst(args.fen, args.lines)),
+    tag('threatStronger', threatStronger(args.fen, args.me, args.lines)),
+    tag('secureFirst', secureFirst(args.fen, args.me, args.lines)),
+    tag('heldByTactic', heldByTactic(args.fen, args.me)),
+    tag('mutualPins', mutualPins(args.fen)),
+    tag('keepTension', keepTension(args.fen, args.me, bestSan)),
+    tag('overprotect', overprotect(args.fen, args.me)),
+    tag('castleSide', castleSide(args.fen, args.me)),
+    tag('uglyButRight', uglyButRight(args.fen, bestSan)),
+    tag('provokes', provokes(args.fen, args.lines)),
+    tag('awkwardBlock', awkwardBlock(args.fen, args.lines)),
+    tag('skipMiddleman', skipMiddleman(args.fen, bestSan)),
+    tag('playAnyway', playAnyway(args.fen, args.lines)),
+    tag('keepSquareForKnight', keepSquareForKnight(args.fen, args.me, bestSan)),
+    tag('rightPieceForHole', rightPieceForHole(args.fen, args.me)),
+    tag('usefulWaiting', usefulWaiting(args.fen, args.lines)) ?? tag('anyMoveFine', anyMoveFine(args.fen, args.lines)),
+  ].filter((r): r is SpeedRunRead => !!r).filter((r) => {
     // RELEVANCE (prod tape 2026-10-06, 80 words a move): a read with no stake
     // of its own speaks only where the decision matters — the gap between the
     // engine's top two moves clears the bar the one criticality read uses. The

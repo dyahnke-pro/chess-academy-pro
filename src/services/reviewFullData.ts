@@ -84,7 +84,7 @@ import { exchangeIdeas } from './exchangeIdeas';
 import { minorsAtHome } from './development';
 import { slipAnswerText, studentMovePoint } from './playCommentary';
 import { theirMoveCost } from './theirMoveCost';
-import { readTheirMove } from './opponentMoveReads';
+import { readTheirMove, READ_FACT_KIND } from './opponentMoveReads';
 import { playItAnyway } from './opponentMovePurpose';
 import { knownAttack } from './attackLibrary';
 import { studentMoveStructure, theirMoveStructure, boardStructure, type StructureRead } from './structureReads';
@@ -1420,7 +1420,7 @@ export function computeMoveFacets(
     const prev = ply >= 2 && ctx.teaching.prevFenBefore && ctx.allSans[ply - 2]
       ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null;
     for (const r of readTheirMove({ fenBefore, san, student: studentColorWB, topLines: lines, prev, theirMoveFlagged: negativeClass })) {
-      const f = put('readTheirMove', r.kind === 'wedged-pawn' ? 'prevent-test' : 'their-read', r.text);
+      const f = put('readTheirMove', READ_FACT_KIND[r.kind], r.text);
       recProof(f, r.proof);
       recStakes(f, r.stakes);
       recSquares(f, r.squares);

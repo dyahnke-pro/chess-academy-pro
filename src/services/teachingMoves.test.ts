@@ -31,9 +31,10 @@ describe('one teaching-move vocabulary', () => {
     // Two more the same day: the habit of asking what their move is doing,
     // and checks-captures-threats first, each its own kind (`HABIT_KIND`).
     // The computers built for them, one a move (2026-11-05): the pawn break;
-    // opposite-coloured bishops (H-EVAL and S-PLAN, both made already).
-    for (const m of unbuilt) expect(['M-TWO-JOBS', 'M-PROVOKE',
-      'H-CALC', 'H-WISHLIST',
-      'S-SPACE', 'S-TENSION', 'S-TRIGGER', 'S-LONG-HORIZON']).toContain(m);
+    // opposite-coloured bishops (H-EVAL and S-PLAN, both made already). Then
+    // the computers that already made seven more, each given its own kind:
+    // the line walked out loud (H-CALC), the provoked commitment, the kept
+    // tension, the trigger, more space, the wish square, the "for good".
+    for (const m of unbuilt) expect(['M-TWO-JOBS']).toContain(m);
   });
 });
