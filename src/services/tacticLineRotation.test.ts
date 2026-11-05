@@ -28,15 +28,15 @@ describe('a tactic line rotates by occurrence, never by ply', () => {
     new Chess(fen);
     const tac = { type: 'removal_of_guard', description: 'x', involvedSquares: ['c7', 'd6'] };
     // c7 is empty on this board → the detector's own words.
-    expect(tacticDescription(tac, fen, 1)).toBe('x');
+    expect(tacticDescription(tac, fen, 1, null)).toBe('x');
     const fen2 = '4k3/2q5/3b4/8/8/8/8/4K3 w - - 0 1';
     for (let r = 0; r < 4; r += 1) {
-      const s = tacticDescription(tac, fen2, r);
+      const s = tacticDescription(tac, fen2, r, null);
       expect(s).toMatch(/queen on c7/);
       expect(s).toMatch(/bishop on d6/);
     }
     // Any other pattern is its description.
-    expect(tacticDescription({ type: 'fork', description: 'a fork', involvedSquares: [] }, fen2, 3)).toBe('a fork');
+    expect(tacticDescription({ type: 'fork', description: 'a fork', involvedSquares: [] }, fen2, 3, null)).toBe('a fork');
   });
 
   it('six pins against a piece say no formula more than twice', () => {

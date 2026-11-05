@@ -1,6 +1,7 @@
 import { trappedAt } from './trappedPiece';
 import { sideToMoveAs } from './threatOut';
 import { openSentence } from '../utils/openSentence';
+import { pieceRef } from './pieceRef';
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
 import type { BoardHighlight } from '../types';
@@ -538,7 +539,20 @@ export function guardRemovalLine(guard: string, guardSq: string, target: string,
 /** A tactic's sentence at its occurrence this game: the rotatable patterns are
  *  re-said from the board they were found on, every other pattern is its
  *  description. */
-export function tacticDescription(tac: { type: string; description: string; involvedSquares: readonly string[] }, fen: string, rot: number): string {
+export function tacticDescription(
+  tac: { type: string; description: string; involvedSquares: readonly string[] },
+  fen: string,
+  rot: number,
+  /** REQUIRED — whose seat hears it. A pin, battery or discovery is then said
+   *  with its pieces by what they are ("Your queen pins their g-pawn against
+   *  their king"), the squares lit, not read out (David 2026-11-05: three
+   *  squares in a breath is the robot). Null keeps the detector's words. */
+  viewer: Color | null,
+): string {
+  if (viewer) {
+    const human = seatedLineTactic(tac, fen, viewer);
+    if (human) return human;
+  }
   if (tac.type === 'removal_of_guard' && tac.involvedSquares.length >= 2) {
     try {
       const c = new Chess(fen);
@@ -549,6 +563,34 @@ export function tacticDescription(tac: { type: string; description: string; invo
     } catch { /* the board does not read — the detector's own words */ }
   }
   return tac.description;
+}
+
+/** A pin, battery or discovered attack in waiting, its three pieces named by
+ *  `pieceRef` from `viewer`'s seat. Null when a square is empty or the type is
+ *  not a line tactic — the detector's words stand. */
+function seatedLineTactic(tac: { type: string; involvedSquares: readonly string[] }, fen: string, viewer: Color): string | null {
+  const [a, b, c] = tac.involvedSquares;
+  if (!a || !b || !c) return null;
+  const A = pieceRef(fen, a, viewer);
+  const B = pieceRef(fen, b, viewer);
+  const C = pieceRef(fen, c, viewer);
+  if (!A || !B || !C) return null;
+  if (tac.type === 'pin') return `${openSentence(A.words)} pins ${B.words} against ${C.words}`;
+  if (tac.type === 'discovery') return `${openSentence(A.words)} is a discovered attack in waiting — moving it unveils ${B.words} against ${C.words}`;
+  if (tac.type === 'battery') {
+    let board: Chess;
+    try { board = new Chess(fen); } catch { return null; }
+    const pa = board.get(a as Square);
+    const pb = board.get(b as Square);
+    if (!pa || !pb) return null;
+    const owner = A.words.split(' ')[0];
+    // The pair by what it is ("your rooks", "their queen and bishop"), the
+    // line by its name — the two back squares are lit, not read out.
+    const pair = pa.type === pb.type ? `${owner} ${PIECE_NAMES[pa.type]}s` : `${owner} ${PIECE_NAMES[pa.type]} and ${PIECE_NAMES[pb.type]}`;
+    const line = a[0] === b[0] ? `the ${a[0]}-file` : a[1] === b[1] ? 'the rank' : 'the diagonal';
+    return `${openSentence(pair)} form a battery on ${line}, bearing down on ${C.words}`;
+  }
+  return null;
 }
 
 function rankOfSquare(sq: string): number {

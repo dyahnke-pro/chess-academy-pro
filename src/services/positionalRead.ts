@@ -31,6 +31,7 @@ import { describeStructure } from './boardStructure';
 import { homeMinorCount } from './development';
 import { isolaniStructure, passerTrumpSentence } from './nextPlans';
 import { Chess, type Color, type Square } from 'chess.js';
+import { countWord } from '../utils/andList';
 import {
   kingSafetyRead,
   developmentRead,
@@ -384,10 +385,13 @@ function observationsFor(
   // of it, so no piece naturally covers those squares.
   for (const cc of findColorComplexWeakness(fen)) {
     if (cc.side !== color) continue;
-    const sqs = cc.squares.slice(0, 2).join(' and ');
+    // Every hole is lit; two are named, more are counted (G4.5: no cap on
+    // what the board shows; David 2026-11-05: no list of squares read out).
+    const many = cc.squares.length > 2;
+    const sqs = many ? `${countWord(cc.squares.length)} of them` : cc.squares.join(' and ');
     out.push({
       key: `${side}-complex-${cc.complex}`, side, kind: 'complex', rank: rank('complex'),
-      squares: cc.squares.slice(0, 2),
+      squares: [...cc.squares],
       text: own
         ? `Your ${cc.complex} squares are weak — with no bishop of that colour, no pawn or bishop of yours can cover ${sqs}, and their ${cc.by} can settle there.`
         : `Their ${cc.complex} squares are weak — no bishop of theirs covers ${sqs}; ${cc.by === 'knight' ? 'a knight belongs on one' : 'your bishop can work on them'}.`,

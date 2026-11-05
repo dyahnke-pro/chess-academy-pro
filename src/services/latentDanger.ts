@@ -17,6 +17,7 @@
 
 import { Chess, type Square } from 'chess.js';
 import { legalSeeGain } from './positionReadingService';
+import { pieceRef } from './pieceRef';
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const FILES = 'abcdefgh';
@@ -213,15 +214,25 @@ export function tradeDangerClause(d: TradeDanger): string {
 
 /** The prophylactic warning — guide-don't-tell: name the alignment and the line,
  *  never a move. Terse. */
-export function latentDangerClause(d: LatentDanger): string {
-  const front = `${PNAME[d.frontPiece]} on ${d.frontSquare}`;
+export function latentDangerClause(
+  d: LatentDanger,
+  /** REQUIRED — the board the danger was read on: its pieces are named by
+   *  what they are (`pieceRef`), the squares lit, not read out (David
+   *  2026-11-05: three squares in a breath is the robot). */
+  fen: string,
+): string {
+  let me: 'w' | 'b' | null = null;
+  try { me = new Chess(fen).get(d.frontSquare as Square)?.color ?? null; } catch { me = null; }
+  const ref = (sq: string | undefined, fallback: string): string => (me && sq ? pieceRef(fen, sq, me)?.words ?? fallback : fallback);
+  const front = ref(d.frontSquare, `your ${PNAME[d.frontPiece]} on ${d.frontSquare}`);
   const back = PNAME[d.backPiece];
+  const enemy = ref(d.enemySquare, `their ${PNAME[d.enemyPiece]} on ${d.enemySquare}`);
   // WHICH line, WHOSE piece, and WHAT opens it (Alekhine re-walk ply 19: "your
   // bishop on e2 and your queen share that diagonal — mind it" named no enemy
   // and no move; the student cannot act on a line they cannot find).
   if (d.latent && d.shieldSquare && d.shieldPiece) {
     const shield = PNAME[d.shieldPiece];
-    return `heads up: their ${PNAME[d.enemyPiece]} on ${d.enemySquare} looks through your ${shield} on ${d.shieldSquare} at your ${front} and your ${back} behind it — move the ${shield} and the ${PNAME[d.frontPiece]} is pinned.`;
+    return `heads up: ${enemy} looks through ${ref(d.shieldSquare, `your ${shield} on ${d.shieldSquare}`)} at ${front} and your ${back} behind it — move the ${shield} and the ${PNAME[d.frontPiece]} is pinned.`;
   }
-  return `heads up: your ${front} and your ${back} share that ${d.line} with their ${PNAME[d.enemyPiece]} on ${d.enemySquare} — that ${d.line} is a pin.`;
+  return `heads up: ${front} and your ${back} share that ${d.line} with ${enemy} — that ${d.line} is a pin.`;
 }

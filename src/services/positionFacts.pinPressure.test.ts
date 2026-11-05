@@ -22,7 +22,9 @@ describe('positionFacts — the pin concept carries PP on the PP', () => {
   it('the student holds the pin: the principle, the move and why it works', async () => {
     const { clause } = await conceptOf(PILE_ON, 'w');
     expect(clause, 'a concept clause speaks — even in the opening').toBeDefined();
-    expect(clause!.text).toMatch(/^Your bishop on g5 pins their knight on f6 to their queen on d8\./);
+    // The pieces by what they are; the knight keeps its square (two knights), all three lit.
+    expect(clause!.text).toMatch(/^Your bishop pins their knight on f6 to their queen\./);
+    expect(clause!.squares).toEqual(expect.arrayContaining(['g5', 'f6', 'd8']));
     expect(clause!.text).toMatch(/pinned|attack it again|pressure/i);
     expect(clause!.text).toMatch(/e5 adds a pawn on the knight, and it can't step away\./);
     expect(clause!.text).not.toMatch(/\b(we|our|us)\b/i);
@@ -33,7 +35,7 @@ describe('positionFacts — the pin concept carries PP on the PP', () => {
   it('the opponent holds it: the warning, their move and the way out', async () => {
     const { clause } = await conceptOf(PILE_ON.replace(' w KQkq', ' b KQkq'), 'b');
     expect(clause).toBeDefined();
-    expect(clause!.text).toMatch(/^Their bishop on g5 pins your knight on f6 to your queen on d8\./);
+    expect(clause!.text).toMatch(/^Their bishop pins your knight on f6 to your queen\./);
     expect(clause!.text).toMatch(/e5 is the pile-on\./);
     expect(clause!.text).toMatch(/Break the pin/);
     expect(clause!.text).not.toMatch(/add a defender/); // a pawn pile-on is not met by a defender

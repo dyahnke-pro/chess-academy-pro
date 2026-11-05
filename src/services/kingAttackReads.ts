@@ -603,9 +603,10 @@ export function kingSquareByChecks(fen: string, me: Color, bestSan: string | nul
       // ROTATED on the board (v6 re-run 2026-10-29: one sentence three times
       // a game in four games); the same board keeps its words.
       text: rotateStem([
-        `King to ${bm.to}, not ${alt.to} — on ${alt.to} their ${name(queen.piece)} checks on ${queen.to} and wins time.`,
-        `The king belongs on ${bm.to}, not ${alt.to}: on ${alt.to} their ${name(queen.piece)} checks on ${queen.to} and wins time.`,
-        `On ${alt.to} the king walks into their ${name(queen.piece)}'s check on ${queen.to}, and they win time — ${bm.to} is the square.`,
+        // Two squares said, the check's square lit (David 2026-11-05).
+        `King to ${bm.to}, not ${alt.to} — there their ${name(queen.piece)} checks and wins time.`,
+        `The king belongs on ${bm.to}, not ${alt.to}: there their ${name(queen.piece)} checks and wins time.`,
+        `On ${alt.to} the king walks into a check from their ${name(queen.piece)}, and they win time — ${bm.to} is the square.`,
       ], stemKeyOf(fen)),
       idea: 'Before the king moves, count the checks it walks into on each square.',
       squares: [bm.to, alt.to, queen.to], proof, namesMove: true, lines: [{ fen, sans: [alt.san, queen.san] }],

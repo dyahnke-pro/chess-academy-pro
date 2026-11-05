@@ -145,7 +145,8 @@ export function pieceBlocksOwnPawn(fen: string, student: Color): StructureRead |
       if (!proof) continue;
       return {
         act: 'piece-blocks-own-pawn', squares: [f, w, q], proof, key: `clog:${f}>${q}`,
-        text: `Their ${PIECE_NOUN[blocker.type]} on ${f} sits in front of their own ${w} pawn, so while it stays there no pawn can come up to back up ${q} — and you are already hitting ${q}.`,
+        // The pieces by what they are, one square said (David 2026-11-05).
+        text: `Their ${PIECE_NOUN[blocker.type]} sits in front of their own ${w[0]}-pawn, so while it stays there no pawn can come up to back up ${q} — and you are already hitting it.`,
       };
     }
   }
@@ -289,7 +290,8 @@ export function fileEntryCovered(fen: string, student: Color): StructureRead | n
     if (!proof) continue;
     return {
       act: 'file-entry-covered', squares: [e, ...entries], proof, key: `file-entry:${f}`,
-      text: `Let them open the ${f}-file: every square their rooks could use there, ${andList(entries)}, is covered.`,
+      // The squares are lit, not read out (David 2026-11-05).
+      text: `Let them open the ${f}-file: every square their rooks could use there is covered.`,
     };
   }
   return null;

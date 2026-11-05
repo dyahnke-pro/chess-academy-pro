@@ -111,7 +111,7 @@ describe('courseRecord', () => {
     expect(rec.variations?.[0].name).toMatch(/\(…Nc6\)$/);
     // THE REASON FIRST, the share after (WO-ONE-COACH-01): the tab used to say
     // only how often masters play the move.
-    expect(rec.variations?.[0].explanation).toBe('You play Nc6 — it develops into the game, fighting for the center on d4, holding back the pawn on d2, and e5, holding back the pawn on e4. Masters play it in 20% of the 597 games at that point.');
+    expect(rec.variations?.[0].explanation).toBe('You play Nc6 — it develops into the game, fighting for the center on d4, holding back the d-pawn, and e5, holding back the e-pawn. Masters play it in 20% of the 597 games at that point.');
     expect(rec.variations?.[2].name).toMatch(/\(Nf3\)$/);
   });
 });

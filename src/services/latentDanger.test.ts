@@ -24,9 +24,11 @@ describe('detectLatentDanger — the pin-in-waiting (David\'s heartbreak case)',
 
   it('flags a LATENT pin behind the student\'s own shield', () => {
     // Rook e8, white knight e5 (the shield), white bishop e3, white king e1.
-    const d = detectLatentDanger('4r1k1/8/8/4N3/8/4B3/8/4K3 w - - 0 1', 'w');
+    const fen = '4r1k1/8/8/4N3/8/4B3/8/4K3 w - - 0 1';
+    const d = detectLatentDanger(fen, 'w');
     expect(d).toMatchObject({ frontSquare: 'e3', backSquare: 'e1', latent: true });
-    expect(latentDangerClause(d!)).toMatch(/their rook on e8 looks through your knight on e5 at your bishop on e3 and your king behind it — move the knight and the bishop is pinned/);
+    // The pieces by what they are; the squares are the fact's to light (David 2026-11-05).
+    expect(latentDangerClause(d!, fen)).toMatch(/their rook looks through your knight at your bishop and your king behind it — move the knight and the bishop is pinned/);
   });
 
   it('a pawn shield on a file is not a line the student opens (e4-Be2-Ke1)', () => {
@@ -62,9 +64,10 @@ describe('detectLatentDanger — the pin-in-waiting (David\'s heartbreak case)',
   });
 
   it('renders a guide-don\'t-tell warning naming the alignment, never a move', () => {
-    const d = detectLatentDanger('4r1k1/8/8/4B3/8/8/8/4K3 w - - 0 1', 'w')!;
-    const line = latentDangerClause(d);
-    expect(line).toMatch(/bishop on e5/);
+    const fen = '4r1k1/8/8/4B3/8/8/8/4K3 w - - 0 1';
+    const d = detectLatentDanger(fen, 'w')!;
+    const line = latentDangerClause(d, fen);
+    expect(line).toMatch(/your bishop/);
     expect(line).toMatch(/king/);
     expect(line).toMatch(/file/);
     // Names the square (lead-the-eye) but NEVER a move to play (no capture / no

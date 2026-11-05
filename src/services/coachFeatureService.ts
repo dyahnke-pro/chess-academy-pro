@@ -6438,7 +6438,8 @@ export function replaceVerdictReason(narration: string, oldReason: string, fresh
  *  line it would have used is not one a claim may rest on. */
 export function addVerdictReason(narration: string, bestSan: string, reason: string | null): string {
   if (!reason) return narration;
-  const marker = `the stronger move was ${bestSan}`;
+  // Its own sentence ("The stronger move was X.") or a clause ("— the stronger move was X").
+  const marker = `he stronger move was ${bestSan}`;
   const at = narration.indexOf(marker);
   if (at < 0) return narration;
   const end = at + marker.length;

@@ -163,7 +163,7 @@ export function positionAsk(fen: string, opts: { bestSan?: string; lastMove?: { 
       const me = new Chess(fen).turn();
       const d = detectLatentDanger(fen, me, { latentOnly: true });
       if (!d || core.mode === 'press') return core;
-      return { ...core, text: [core.text, cap(latentDangerClause(d).replace(/\.?$/, '.'))].filter(Boolean).join(' '), squares: [...core.squares, d.frontSquare, d.backSquare] };
+      return { ...core, text: [core.text, cap(latentDangerClause(d, fen).replace(/\.?$/, '.'))].filter(Boolean).join(' '), squares: [...core.squares, d.frontSquare, d.backSquare] };
     } catch { return core; }
   })();
   // WHAT THEIR LAST MOVE CHANGED leads (catalogue §1 — "when a move is made, I

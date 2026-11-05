@@ -77,7 +77,7 @@ import type { SaidSet } from './gameStory';
 import { renderFundamentalVerdict } from './principleVoice';
 import { errorWhy, priorMoveLeadingTo, replyKeptWin, type SecondReads } from './inaccuracyCall';
 import { toOtherSeat } from '../utils/seatPronouns';
-import { andList, lineSeatAt, withArticle } from '../utils/andList';
+import { andList, countWord, lineSeatAt, withArticle } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 import { imageryFor } from './factImagery';
 import { exchangeIdeas } from './exchangeIdeas';
@@ -667,9 +667,18 @@ export function computeMoveFacets(
     // heart of the app's order. A better move with no reason is a bare
     // conclusion (proof rule, 52-errors #47) and is not named.
     const failedSaid = ew?.failed ? (opponentMoved ? seatPieces(toOtherSeat(ew.failed)) : seatPieces(ew.failed)) : null;
+    const strongerClause = reason && ew?.bestSan ? `the stronger move was ${ew.bestSan} — ${reason}` : null;
+    const inline = [whyBad, [consequence, strongerClause, !consequence && !reason && !failedSaid ? answer : null].filter(Boolean).join('; ')].filter(Boolean).join('; ');
+    // The better move is its own sentence when one breath would read three
+    // squares or more out (David 2026-11-05: what it allowed and the better
+    // move at once). Only then: a short verdict keeps it inline, where the
+    // walk's near-twin check cannot mistake "The stronger move was f6 — …" on
+    // one move for the same sentence on another.
+    const splitStronger = !!strongerClause && new Set(`${san} ${inline}`.match(/\b[a-h][1-8]\b/g) ?? []).size >= 3;
+    const stronger = splitStronger && strongerClause ? ` ${openSentence(strongerClause)}.` : '';
     const better = [
       consequence,
-      reason && ew?.bestSan ? `the stronger move was ${ew.bestSan} — ${reason}` : null,
+      splitStronger ? null : strongerClause,
       !consequence && !reason && !failedSaid ? answer : null,
     ].filter(Boolean).join('; ');
     const tail = [whyBad, better].filter(Boolean).join('; ');
@@ -688,7 +697,7 @@ export function computeMoveFacets(
     // — they come out two pawns up"); review dropped it.
     const tailSaid = consequence && ew?.tail ? (opponentMoved ? seatPieces(toOtherSeat(ew.tail)) : seatPieces(ew.tail)) : '';
     const praiseBit = positive ? praiseWhy(ctx.classification, ctx.preMoveEval, ctx.evaluation, ctx.moverColor) : '';
-    const qf = put('errorWhy', positive ? 'praise' : 'quality', `${verdictSentence(ctx.classification, isStudent, san)}${swingBit}${betterBit}${praiseBit}.${heardNow?.ridesVerdict ? ` ${heardNow.text}` : ''}${failedSaid ? ` ${failedSaid}` : ''}${tailSaid}`);
+    const qf = put('errorWhy', positive ? 'praise' : 'quality', `${verdictSentence(ctx.classification, isStudent, san)}${swingBit}${betterBit}${praiseBit}.${stronger}${heardNow?.ridesVerdict ? ` ${heardNow.text}` : ''}${failedSaid ? ` ${failedSaid}` : ''}${tailSaid}`);
     // The verdict's proof is the line its words name: the better move's own
     // line when the reason came from it, the line after the move when the
     // punishment did.
@@ -903,7 +912,7 @@ export function computeMoveFacets(
         const holds = tac.type === 'pin' && ctx.studentColorWB && tac.beneficiary
           ? pinConsequence(fenAfter, tac.involvedSquares, ctx.studentColorWB, tac.beneficiary === ctx.studentColorWB ? 'student' : 'opponent', said)
           : null;
-        const f = made('detectTactics', 'tactic', `${seat(tacticDescription(tac, fenAfter, said))}.${holds ? ` ${holds}` : ''}`);
+        const f = made('detectTactics', 'tactic', `${seat(tacticDescription(tac, fenAfter, said, ctx.studentColorWB ?? null))}.${holds ? ` ${holds}` : ''}`);
         facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary); recProof(f, tacProof(tac.beneficiary, tac.involvedSquares));
         recStakes(f, stakes); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
       }
@@ -1110,12 +1119,16 @@ export function computeMoveFacets(
     const theirMinority = findMinorityAttack(fenAfter, enemyWB2);
     if (theirMinority) { const f = made('findMinorityAttack', 'minority', `They have a minority attack on the ${theirMinority.flank} — ${theirMinority.leverSan} is the lever, leaving you a weak pawn on ${theirMinority.target} to watch.`); facets.push(f); recSquares(f, [theirMinority.target]); }
     for (const cc of findColorComplexWeakness(fenAfter)) {
-      const sqs = andList([...cc.squares]);
+      // Two holes are named; more are counted and lit (David 2026-11-05: a
+      // list of squares read out is the robot).
+      const sqs = cc.squares.length <= 2 ? andList([...cc.squares]) : `${countWord(cc.squares.length)} squares`;
       if (cc.side === enemyWB2) { const f = made('findColorComplexWeakness', 'complex', `Their ${cc.complex} squares are weak — ${sqs} ${cc.squares.length === 1 ? 'is a hole' : 'are holes'} no bishop of theirs covers; ${cc.by === 'knight' ? 'a knight belongs on one' : 'your bishop can work on them'}.`); facets.push(f); recSquares(f, cc.squares); break; }
     }
     for (const cc of findColorComplexWeakness(fenAfter)) {
-      const sqs = andList([...cc.squares]);
-      if (cc.side === studentColorWB) { const f = made('findColorComplexWeakness', 'complex', `Your ${cc.complex} squares are weak — with no bishop of that colour, no pawn or bishop of yours can cover ${sqs}.`); facets.push(f); recSquares(f, cc.squares); break; }
+      const text = cc.squares.length <= 2
+        ? `Your ${cc.complex} squares are weak — with no bishop of that colour, no pawn or bishop of yours can cover ${andList([...cc.squares])}.`
+        : `Your ${cc.complex} squares are weak — with no bishop of that colour, ${countWord(cc.squares.length)} of them have no pawn or bishop of yours to cover them.`;
+      if (cc.side === studentColorWB) { const f = made('findColorComplexWeakness', 'complex', text); facets.push(f); recSquares(f, cc.squares); break; }
     }
     // FORWARD PLANS are not read here: the walk runs the ONE plan thread
     // (`planThreadTurn`, the same as Learn) on each of their moves — the stop

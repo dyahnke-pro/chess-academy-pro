@@ -1,19 +1,11 @@
 {
  "lists": {
-  "chat:concept": 1,
-  "chat:fundamental": 1,
-  "chat:latent-danger": 2,
+  "chat:latent-danger": 1,
   "chat:speedrun-read": 2,
-  "chat:structure-plan": 2,
-  "chat:tactic": 1,
-  "learn:concept": 1,
   "learn:latent-danger": 1,
   "learn:speedrun-read": 2,
-  "learn:tactic": 1,
-  "lesson": 13,
-  "review": 55
+  "lesson": 7,
+  "review": 21
  },
- "unlit": {
-  "chat:fundamental": 1
- }
+ "unlit": {}
 }

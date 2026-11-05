@@ -44,7 +44,9 @@ const CLEARANCE = '3q2kr/7p/4pn2/8/3N4/8/1B3PPP/R5K1 w - - 0 1';
 describe('2. the would-be pinner is itself pinned', () => {
   it('names the square it cannot reach and the pin that stops it', () => {
     const r = proven(pinnerIsPinned(live('4k1n1/ppp1bppp/8/8/8/2N5/PPP1QPPP/4K3 w - - 0 1', [])));
-    expect(r.text).toBe("Their bishop on e7 can't pin your knight from b4: your queen on e2 pins it to their king.");
+    // The pieces by what they are; the square it cannot use said, the rest lit.
+    expect(r.text).toBe("Their bishop can't pin your knight from b4: your queen pins it to their king.");
+    expect(r.squares).toEqual(expect.arrayContaining(['e7', 'b4', 'e2']));
   });
   it('silent when the bishop is free to go there', () => {
     // Same board, the queen off the e-file: the bishop CAN pin from b4.

@@ -373,7 +373,7 @@ describe('[quality] names a "stronger move" only on a move that fell short (walk
   it('a mistake never names a stronger move bare — no reason, no clause (52-errors #47)', () => {
     // This fixture's better move has no computed reason; the board's
     // better-move arrow and Show me carry it instead of a bare conclusion.
-    expect(facetsFor('mistake')).not.toMatch(/the stronger move was d4(?! —)/);
+    expect(facetsFor('mistake')).not.toMatch(/the stronger move was d4(?! —)/i);
   });
 });
 
@@ -473,7 +473,7 @@ describe('a weak colour complex is said as what the computer counted (review wal
     const complex = facets.filter((f) => f.startsWith('[complex] Your'));
     expect(complex.length).toBe(1);
     expect(complex[0]).not.toMatch(/nothing covers/);
-    expect(complex[0]).toMatch(/no pawn or bishop of yours can cover/);
+    expect(complex[0]).toMatch(/no pawn or bishop of yours (can cover|to cover)/);
   });
 });
 
@@ -489,7 +489,8 @@ describe('a clean move with no rule says what it is FOR — Learn\'s move point 
       prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: sans,
       forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     }));
-    expect(facets.some((f) => f === '[point] g4 prepares g5, which would kick their knight off f6.')).toBe(true);
+    // Two black knights: the kicked one keeps its square (David 2026-11-05).
+    expect(facets.some((f) => f === '[point] g4 prepares g5, which would kick their knight on f6.')).toBe(true);
   });
 });
 
@@ -508,7 +509,7 @@ describe('a better move with no reason is not named bare — the grade says what
     const q = facets.find((f) => f.startsWith('[quality]')) ?? '';
     // The why names the lost queen — by its mechanism since 2026-10-10.
     expect(q).toMatch(/queen on g4/);
-    expect(q).not.toMatch(/the stronger move was exd5\./);
+    expect(q).not.toMatch(/the stronger move was exd5\./i);
   });
 });
 

@@ -14,6 +14,9 @@ export interface RouteSpec {
   path: readonly string[];
   /** What it takes on arrival, when the destination holds an enemy piece. */
   takes?: string;
+  /** The only piece of its kind on its side — the verb form names it without
+   *  its start square ("walk the queen round to f6"), which the board lights. */
+  alone?: boolean;
 }
 
 /** The squares between start and the FIRST arrival at the destination, each
@@ -40,12 +43,13 @@ export function routeNoun(r: RouteSpec): string {
 }
 
 /** Verb form, named by its square so two pieces of one kind never blur:
- *  "walk the bishop on f4 round to c7, by way of e5[, and take the pawn there]". */
+ *  "walk the bishop on f4 round to c7, by way of e5[, and take the pawn there]";
+ *  a piece alone of its kind by name only ("walk the queen round to f6"). */
 export function routeVerb(r: RouteSpec): string {
   const dest = r.path[r.path.length - 1];
   // The line reader hands over a path already cut where it arrives; every
   // square it walks through is named (lookaheadPlan.waypointsOf).
-  const base = `walk the ${r.name} on ${r.path[0]} round to ${dest}${routeVia(routeWaypoints(r.path, { cutAtFirstArrival: false }))}`;
+  const base = `walk the ${r.name}${r.alone ? '' : ` on ${r.path[0]}`} round to ${dest}${routeVia(routeWaypoints(r.path, { cutAtFirstArrival: false }))}`;
   return r.takes ? `${base}, ${takeClause(r.takes, 'and')}` : base;
 }
 

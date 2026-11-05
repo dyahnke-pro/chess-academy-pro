@@ -26,6 +26,7 @@ import { legalLineProof, lineProofFromUci, squaresProof, type Proof } from './pr
 import type { FactStakes } from './factStakes';
 import { andList, lineSeatAt } from '../utils/andList';
 import { settledExchange, netPieceWords } from './exchangeLedger';
+import { pieceRef } from './pieceRef';
 
 export type GeometryAct =
   | 'pinner-pinned' | 'false-mate-block' | 'interference' | 'clearance' | 'decoy' | 'deflection'
@@ -193,7 +194,10 @@ export function pinnerIsPinned(ctx: GeometryContext): GeometryRead | null {
           if (!front || front.at === x.square || front.piece.color !== ctx.me || !['n', 'b', 'r'].includes(front.piece.type)) continue;
           const back = rayFirst(c, front.at, pd);
           if (!back || back.piece.color !== ctx.me || !(back.piece.type === 'k' || back.piece.type === 'q') || VAL(back.piece.type) <= VAL(front.piece.type)) continue;
-          const text = `Their ${NAME[x.type]} on ${x.square} can't pin your ${NAME[front.piece.type]} from ${t}: your ${NAME[pinner.piece.type]} on ${pinner.at} pins it to their king.`;
+          // The pieces by what they are, the square it can't use said, the
+          // rest lit (David 2026-11-05: three squares in a breath).
+          const wd = (at: string, fallback: string): string => pieceRef(ctx.fen, at, ctx.me)?.words ?? fallback;
+          const text = `${openSentence(wd(x.square, `their ${NAME[x.type]} on ${x.square}`))} can't pin ${wd(front.at, `your ${NAME[front.piece.type]}`)} from ${t}: ${wd(pinner.at, `your ${NAME[pinner.piece.type]} on ${pinner.at}`)} pins it to their king.`;
           const proof = squaresProof(text, [pinner.at, x.square, theirKing, t, front.at, back.at]);
           if (!proof) return null;
           return { act: 'pinner-pinned', text, namesMove: false, squares: [pinner.at, x.square, theirKing, t, front.at], proof, motif: 'pin', claim: `geo:pinner-pinned:${x.square}${t}` };

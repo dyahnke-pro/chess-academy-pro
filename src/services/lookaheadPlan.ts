@@ -129,7 +129,7 @@ export function seatedTacticLine(word: string, tac: { type: string; description:
   // The detector's sentence at this instance's place among the game's
   // (`tacticDescription`): the same pattern is not said in one formula three
   // times, the same standing tactic keeps its words.
-  const description = tac ? tacticDescription(tac, fen, rot) : null;
+  const description = tac ? tacticDescription(tac, fen, rot, student) : null;
   if (!description) return `You have ${withArticle(word)}.`;
   let d = description.trim().replace(/[.!]$/, '');
   d = continueSentence(d);
@@ -289,7 +289,7 @@ export interface SidePlan {
    *  the journey, so a three-move regrouping read as two unrelated squares. The
    *  chain was already being reconstructed inside `planMarks` to place an
    *  arrow; here it becomes the sentence it always was. */
-  maneuver: { piece: string; path: string[]; takes?: string } | null;
+  maneuver: { piece: string; path: string[]; takes?: string; /** The only piece of its kind on its side: said without its square ("walk the queen round to f6"). */ alone?: boolean } | null;
   /** Checks this side gives inside the horizon. `isCheck` has been computed on
    *  every ply since `pvPlayback` was written and read by nothing. */
   checks: number;
@@ -826,7 +826,18 @@ function planFor(
   // by way of c4 and take the knight there" — d5 was empty; their knight
   // reached it later in the line).
   const takes = takenOnArrival && theirsNow === null ? `${takenOnArrival} that lands` : takenOnArrival;
-  const maneuver = !maneuverPick || targetShifts ? null : takes ? { ...maneuverPick, takes } : maneuverPick;
+  // The only piece of its kind on its side is said by name alone, its start
+  // square lit, not read out (David 2026-11-05: three squares in a breath).
+  const alone = ((): boolean => {
+    if (!maneuverPick || !rootFen) return false;
+    try {
+      const b = new Chess(rootFen);
+      const p = b.get(maneuverPick.path[0] as Square);
+      if (!p) return false;
+      return b.board().flat().filter((c) => c && c.type === p.type && c.color === p.color).length === 1;
+    } catch { return false; }
+  })();
+  const maneuver = !maneuverPick || targetShifts ? null : { ...maneuverPick, ...(takes ? { takes } : {}), ...(alone ? { alone } : {}) };
 
   const headingFor = [...destinations.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
@@ -980,7 +991,7 @@ export function describePlan(
       // 13…Bf5): "the idea is to walk the bishop round to c5, by way of e3"
       // was the OTHER bishop's route — the f4 bishop, in the line — and "the
       // bishop" reads as the one that just moved. The square says which.
-      add(80, routeVerb({ name: piece, path, ...(plan.maneuver.takes ? { takes: plan.maneuver.takes } : {}) }), [path[0], ...via, dest], { piece, from: path[0] });
+      add(80, routeVerb({ name: piece, path, ...(plan.maneuver.takes ? { takes: plan.maneuver.takes } : {}), ...(plan.maneuver.alone ? { alone: true } : {}) }), [path[0], ...via, dest], { piece, from: path[0] });
     }
   }
   // CHECKS ON THE WAY. Low weight on purpose — it is texture, not a plan — but

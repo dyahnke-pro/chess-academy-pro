@@ -1712,7 +1712,7 @@ function buildClauses(a: {
     // knight" followed by "your knight on f3 and your queen share that diagonal
     // — that diagonal is a pin". One fact once.
     ranked.push(clause('detectLatentDanger', a.fen, {
-      kind: 'latent-danger', text: latentDangerClause(latentDanger),
+      kind: 'latent-danger', text: latentDangerClause(latentDanger, a.fen),
       squares: [latentDanger.enemySquare, latentDanger.frontSquare, latentDanger.backSquare, ...(latentDanger.shieldSquare ? [latentDanger.shieldSquare] : [])],
       // A LATENT line needs their piece to arrive first.
       stakes: { points: lineTacticPoints(latentDanger.frontPiece, latentDanger.backPiece), plies: 3 },
@@ -2052,12 +2052,16 @@ export function pinPressureConcept(fen: string, student: 'w' | 'b'): NonNullable
   if (!pp) return null;
   const move = pp.moves[0];
   const piece = pieceName(pp.pinnedPiece);
+  // Each piece by what it is (`pieceRef`, from the student's seat), the three
+  // squares lit, not read out (David 2026-11-05: three squares in a breath).
+  const w = (sq: string, fallback: string): string => pieceRef(fen, sq, student)?.words ?? fallback;
+  const pinLine = `${openSentence(w(pp.pinner, `${mine ? 'your' : 'their'} ${name(pp.pinner)} on ${pp.pinner}`))} pins ${w(pp.pinned, `${mine ? 'their' : 'your'} ${piece} on ${pp.pinned}`)} to ${w(pp.behind, `${mine ? 'their' : 'your'} ${name(pp.behind)} on ${pp.behind}`)}.`;
   const full = mine
-    ? `Your ${name(pp.pinner)} on ${pp.pinner} pins their ${piece} on ${pp.pinned} to their ${name(pp.behind)} on ${pp.behind}. ${rotateStem(PIN_PRESSURE_PRINCIPLE, key)} ${move.san} adds ${move.byPawn ? 'a pawn' : 'a second attacker'} on the ${piece}, and it can't step away.`
+    ? `${pinLine} ${rotateStem(PIN_PRESSURE_PRINCIPLE, key)} ${move.san} adds ${move.byPawn ? 'a pawn' : 'a second attacker'} on the ${piece}, and it can't step away.`
     : (() => {
         const stem = move.byPawn ? PIN_PRESSURE_WARNING[0] : rotateStem(PIN_PRESSURE_WARNING, key);
         const way = stem === PIN_PRESSURE_WARNING[0] ? (move.byPawn ? ' Break the pin before it lands.' : ' Break the pin or add a defender before it lands.') : '';
-        return `Their ${name(pp.pinner)} on ${pp.pinner} pins your ${piece} on ${pp.pinned} to your ${name(pp.behind)} on ${pp.behind}. ${stem} ${move.san} is the pile-on.${way}`;
+        return `${pinLine} ${stem} ${move.san} is the pile-on.${way}`;
       })();
   return {
     computer: 'pinPressureConcept',

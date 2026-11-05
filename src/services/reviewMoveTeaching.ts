@@ -26,6 +26,7 @@ import { outpostKey } from './conceptKey';
 import { kickBreaksPin, pawnKickNext, pinsAgainst } from './pawnKickNext';
 import { computeMoveFundamentals } from './moveFundamentals';
 import { andList } from '../utils/andList';
+import { pieceRef } from './pieceRef';
 
 // Q1 — OCCUPATION. A pawn reaching one of these has staked the centre.
 const CENTER = new Set(CORE_CENTER);
@@ -302,7 +303,10 @@ function pawnKickPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean): st
 function pawnKickNextPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean): string | null {
   const kick = pawnKickNext(chessAfter, mv);
   if (!kick) return null;
-  const base = `Prepares ${kick.next}, which would kick ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[kick.target.type]} off ${kick.target.sq}`;
+  // The kicked piece by what it is; its square said only when two of a kind
+  // need it, lit either way (David 2026-11-05: three squares in a breath).
+  const ref = pieceRef(chessAfter.fen(), kick.target.sq, moverIsStudent ? mv.color : (mv.color === 'w' ? 'b' : 'w'));
+  const base = `Prepares ${kick.next}, which would kick ${ref ? ref.words : `${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[kick.target.type]} off ${kick.target.sq}`}`;
   // THE KICK THAT BREAKS A PIN (David's 13th move, 2026-10-20: a4 prepared
   // a5 against the queen on b6 that pinned his d4 pawn to his king).
   const pin = kickBreaksPin(chessAfter, kick, mv.color);

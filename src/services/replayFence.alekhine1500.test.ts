@@ -72,8 +72,10 @@ describe('one pawn break, one saying (Alekhine ply 75)', () => {
 
 describe('a pin in waiting names the line (Alekhine plies 19 + 33)', () => {
   it('names their bishop, the knight holding the line shut, and what moving it does', () => {
-    const d = detectLatentDanger('2kr1b1r/pppqpppp/1nn5/4P3/2PP2b1/2N1BN2/PP2B1PP/R2QK2R w KQ - 9 11', 'w', { latentOnly: true });
-    expect(latentDangerClause(d!)).toBe('heads up: their bishop on g4 looks through your knight on f3 at your bishop on e2 and your queen behind it — move the knight and the bishop is pinned.');
+    const fen = '2kr1b1r/pppqpppp/1nn5/4P3/2PP2b1/2N1BN2/PP2B1PP/R2QK2R w KQ - 9 11';
+    const d = detectLatentDanger(fen, 'w', { latentOnly: true });
+    // Two knights: the shield keeps its square; the bishops by their colour (David 2026-11-05).
+    expect(latentDangerClause(d!, fen)).toBe('heads up: their light-squared bishop looks through your knight on f3 at your light-squared bishop and your queen behind it — move the knight and the bishop is pinned.');
   });
   it('a pawn pinned in waiting is not an alarm', () => {
     const d = detectLatentDanger('2kr3r/ppp1bppp/2n1p3/2P1Pb2/1P1P4/Q3BN1P/P1q1BKP1/R6R w - - 1 18', 'w', { latentOnly: true });

@@ -123,7 +123,9 @@ describe('the king and its squares', () => {
     // Rotated on the board (v6 re-run): the move, the square it avoids, the check.
     expect(r?.text).toMatch(/\ba2\b/);
     expect(r?.text).toMatch(/\b(a1|c1)\b/);
-    expect(r?.text).toMatch(/checks? on [a-h][1-8]/);
+    // The check's square is lit, not read out (David 2026-11-05).
+    expect(r?.text).toMatch(/check/);
+    expect(r?.squares).toHaveLength(3);
     expect(replays(fen, r?.lines?.[0].sans ?? [])).toBe(true);
   });
   it('silent when the best king square is the one with the most checks', () => {

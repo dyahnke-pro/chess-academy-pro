@@ -302,7 +302,7 @@ describe('the latent-danger prevention clause (fires through positionFacts)', ()
     });
     expect(r.latentDanger).toMatchObject({ frontSquare: 'e3', backPiece: 'k', latent: true });
     const texts = clauseText(r.clauses);
-    expect(texts.some((t) => /rook on e8 looks through your knight on e5 at your bishop on e3 and your king behind it/i.test(t))).toBe(true);
+    expect(texts.some((t) => /their rook looks through your knight at your bishop and your king behind it/i.test(t))).toBe(true);
   });
 
   it('a STANDING pin is not restated as a latent danger (hand walk 2340: said twice)', async () => {

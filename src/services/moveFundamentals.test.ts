@@ -26,10 +26,10 @@ describe('computeMoveFundamentals — development leads a quiet developing move'
     expect(funds[0].id).toBe('development');
     expect(funds[0].squares).toContain('f3');
     expect(strategicWhyLed(START, 'Nf3', 'white')).toBe(
-      'develops into the game, fighting for the center on d4, backing the d-pawn\'s push there, and e5, holding back the pawn on e7',
+      'develops into the game, fighting for the center on d4, backing the d-pawn\'s push there, and e5, holding back the e-pawn',
     );
     expect(strategicWhySelfContained(START, 'Nf3', 'white')).toBe(
-      'develops the knight into the game, fighting for the center on d4, backing the d-pawn\'s push there, and e5, holding back the pawn on e7',
+      'develops the knight into the game, fighting for the center on d4, backing the d-pawn\'s push there, and e5, holding back the e-pawn',
     );
   });
 
@@ -403,7 +403,7 @@ describe('a fundamental marks only the squares it says', () => {
     const c = new Chess();
     for (const s of ['e4', 'e5', 'Nf3']) c.move(s);
     const dev = computeMoveFundamentals(c.fen(), 'Nc6', 'black').find((f) => f.id === 'development');
-    expect(dev?.led).toBe('develops into the game, fighting for the center on d4, holding back the pawn on d2');
+    expect(dev?.led).toBe('develops into the game, fighting for the center on d4, holding back the d-pawn');
     expect(dev?.squares).toEqual(['c6', 'd4']);
   });
 });
