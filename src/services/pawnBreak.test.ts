@@ -33,7 +33,9 @@ describe('pawnBreak — the break and what it is for', () => {
 
   it('a capture that opens a file beside their castled king says so', () => {
     const r = pawnBreak(KINGSIDE, 'fxe5', 'your', 'e7');
-    expect(r?.text).toBe('fxe5 is a pawn break: it takes their pawn on e5 in the centre, and half-opens the f-file for your rook on f1, toward their king.');
+    expect(r?.text).toBe('fxe5 is a pawn break: it takes their pawn on e5 in the centre, and half-opens the f-file for your rook already on it, toward their king.');
+    // The rook's square is on the board, not read out.
+    expect(r?.squares).toContain('f1');
   });
 
   it('their break is said from the student\'s seat', () => {
@@ -60,6 +62,15 @@ describe('pawnBreak — the break and what it is for', () => {
     const { fen, lastTo } = at(['e4', 'e5', 'Nf3', 'Nc6', 'c3', 'Nf6', 'd3', 'd6', 'b4', 'Be7', 'b5', 'O-O']);
     expect(isPawnBreak(fen, 'bxc6', lastTo)).toBe(true);
     expect(pawnBreak(fen, 'bxc6', 'your', lastTo)).toBeNull();
+  });
+
+  it('names a square only when it is the point, and every square it names is on the board', () => {
+    for (const [fen, san, lastTo] of [[at(FRENCH).fen, 'c5', at(FRENCH).lastTo], [KINGSIDE, 'fxe5', 'e7']] as const) {
+      const r = pawnBreak(fen, san, 'your', lastTo)!;
+      const named = r.text.match(/\b[a-h][1-8]\b/g) ?? [];
+      expect(new Set(named).size).toBeLessThanOrEqual(2);
+      for (const sq of named) expect(r.squares).toContain(sq);
+    }
   });
 
   it('is the one definition of a break the games\' plans read', () => {

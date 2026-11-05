@@ -27,12 +27,15 @@ describe('oppositeBishops — one bishop each, opposite colours, whatever else i
 
   it('on the move that settles it: the attacker\'s game, and the bishop that already hits their king', () => {
     const r = oppositeBishops(after(RUY), 'Bxf6', 'w');
-    expect(r?.text).toBe('Opposite-coloured bishops now, with queens and rooks on: a game for the attacker, not for grinding pawns — your bishop on f6 hits d8 and e7 beside their king, and their bishop can never guard a dark square, so aim at their king on the dark squares.');
+    expect(r?.text).toBe('Opposite-coloured bishops now, with queens and rooks on — a game for the attacker, not for grinding pawns: your bishop rules the dark squares around their king and theirs can never guard them, so attack there.');
+    // Squares named like a human: none read out; the bishop and the squares
+    // it hits beside their king are on the board.
+    expect(r?.text).not.toMatch(/\b[a-h][1-8]\b/);
     expect(r?.seat).toBe('student');
     expect(r?.squares).toEqual(expect.arrayContaining(['f6', 'c8', 'd8', 'e7']));
     // From their seat: the bishop that hits your king's squares.
     const theirs = oppositeBishops(after(RUY), 'Bxf6', 'b');
-    expect(theirs?.text).toMatch(/their bishop on f6 hits d8 and e7 beside your king, and your bishop can never guard a dark square, so cover the dark squares around your king/);
+    expect(theirs?.text).toMatch(/their bishop rules the dark squares around your king and yours can never guard them, so cover them with your other pieces/);
     expect(theirs?.seat).toBe('opponent');
   });
 

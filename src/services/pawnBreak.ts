@@ -185,14 +185,18 @@ export function pawnBreak(fenBefore: string, san: string, whose: 'your' | 'their
       const onFile = rooks.filter((r) => r[0] === f);
       const open = pawnsOnFile(traded, f, them) === 0;
       const toKing = kingSettled && Math.abs(theirKing.charCodeAt(0) - f.charCodeAt(0)) <= 1;
-      const forWhom = onFile.length ? `${whose} rook on ${onFile[0]}` : rooks.length === 1 ? `${whose} rook` : `${whose} rooks`;
+      // SQUARES NAMED LIKE A HUMAN (David 2026-11-05): the one square a break
+      // is about is the pawn it strikes; the rook and the bishop are said in
+      // words ("the rook already on that file", "your dark-squared bishop")
+      // and their squares go on the board (`squares`).
+      const forWhom = onFile.length ? `${whose} rook already on it` : rooks.length === 1 ? `${whose} rook` : `${whose} rooks`;
       opens.push({ text: `${open ? 'opens' : 'half-opens'} the ${f}-file for ${forWhom}${toKing ? `, toward ${whose === 'your' ? 'their' : 'your'} king` : ''}`, squares: onFile });
     }
     for (const row of traded.board()) {
       for (const cell of row) {
         if (!cell || cell.color !== me || cell.type !== 'b') continue;
         if (reach(traded, cell.square, me) - reach(standing, cell.square, me) >= FREED_SQUARES) {
-          opens.push({ text: `frees ${whose} ${NAME.b} on ${cell.square}`, squares: [cell.square] });
+          opens.push({ text: `frees ${whose} ${traded.squareColor(cell.square) === 'dark' ? 'dark' : 'light'}-squared ${NAME.b}`, squares: [cell.square] });
         }
       }
     }
