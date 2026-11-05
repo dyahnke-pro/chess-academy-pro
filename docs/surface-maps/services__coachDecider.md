@@ -86,9 +86,9 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts:68`
 - `src/services/learnTurnDoor.phaseWave.test.ts:100`
 - `src/services/learnTurnDoor.phaseWave.test.ts:130`
-- `src/services/learnTurnDoor.test.ts:179`
-- `src/services/learnTurnDoor.test.ts:464`
-- `src/services/learnTurnDoor.test.ts:475`
+- `src/services/learnTurnDoor.test.ts:182`
+- `src/services/learnTurnDoor.test.ts:467`
+- `src/services/learnTurnDoor.test.ts:478`
 - `src/services/os11RootCauses5And6.replay.test.ts:56`
 - `src/services/positionFacts.ts:1371`
 - `src/services/puzzleMethod.ts:39`
@@ -172,7 +172,7 @@
 - `src/services/coachDecisionEmits.test.ts:106`
 - `src/services/coachGameEngine.ts:866`
 - `src/services/factStakes.test.ts:76`
-- `src/services/learnTurnDoor.test.ts:777`
+- `src/services/learnTurnDoor.test.ts:780`
 - `src/services/liveNeedGate.test.ts:50`
 - `src/services/liveNeedGate.test.ts:56`
 - `src/services/liveNeedGate.test.ts:65`
@@ -331,7 +331,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:10248`
 - `src/components/Coach/CoachTeachPage.tsx:12239`
 - `src/components/Coach/CoachTeachPage.tsx:12326`
-- `src/services/learnTurnDoor.ts:1354`
+- `src/services/learnTurnDoor.ts:1365`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:12041`
@@ -343,9 +343,9 @@
 - `src/components/Coach/CoachTeachPage.tsx:8785`
 - `src/components/Coach/CoachTeachPage.tsx:12070`
 - `src/components/Coach/CoachTeachPage.tsx:12313`
-- `src/services/learnTurnDoor.test.ts:216`
-- `src/services/learnTurnDoor.test.ts:222`
-- `src/services/learnTurnDoor.test.ts:228`
+- `src/services/learnTurnDoor.test.ts:219`
+- `src/services/learnTurnDoor.test.ts:225`
+- `src/services/learnTurnDoor.test.ts:231`
 - `src/services/voicePackage.ts:655`
 
 ### `markableSquares` (re-export) — 8 call sites
@@ -368,8 +368,8 @@
 - `src/services/coachFeatureService.ts:3117`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/learnTurnDoor.phaseWave.test.ts:134`
-- `src/services/learnTurnDoor.test.ts:647`
-- `src/services/learnTurnDoor.test.ts:669`
+- `src/services/learnTurnDoor.test.ts:650`
+- `src/services/learnTurnDoor.test.ts:672`
 - `src/services/looseStill.test.ts:45`
 - `src/services/looseStill.test.ts:48`
 - `src/services/os11RootCauses5And6.replay.test.ts:34`
@@ -404,7 +404,7 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts:112`
 - `src/services/learnTurnDoor.phaseWave.test.ts:126`
 - `src/services/learnTurnDoor.phaseWave.test.ts:135`
-- `src/services/learnTurnDoor.ts:1334`
+- `src/services/learnTurnDoor.ts:1345`
 - `src/services/os11RootCauses5And6.replay.test.ts:31`
 - `src/services/os11RootCauses5And6.replay.test.ts:61`
 - `src/services/os11RootCauses5And6.replay.test.ts:65`

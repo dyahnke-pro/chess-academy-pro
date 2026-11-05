@@ -82,16 +82,16 @@
 - `src/services/learnTurnDoor.mission.test.ts:65`
 - `src/services/learnTurnDoor.phaseWave.test.ts:38`
 - `src/services/learnTurnDoor.story.test.ts:42`
-- `src/services/learnTurnDoor.test.ts:606`
-- `src/services/learnTurnDoor.test.ts:619`
+- `src/services/learnTurnDoor.test.ts:609`
+- `src/services/learnTurnDoor.test.ts:622`
 - `src/services/settledPrice.bf4.test.ts:74`
 - `src/services/verdictTurnGrade.test.ts:53`
 - `src/services/verdictTurnGrade.test.ts:60`
 - `src/services/verdictTurnGrade.test.ts:66`
 
 ### `emitLearnTurn` (function) — 2 call sites
-- `src/services/learnTurnDoor.ts:1272`
-- `src/services/learnTurnDoor.ts:1302`
+- `src/services/learnTurnDoor.ts:1283`
+- `src/services/learnTurnDoor.ts:1313`
 
 ## Tests
 

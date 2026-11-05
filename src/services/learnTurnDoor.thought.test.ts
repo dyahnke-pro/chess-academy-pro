@@ -30,11 +30,12 @@ describe('the thought: one thread for the move to come', () => {
       fact('positionFacts', 'A pawn break is ready now.', ['c5'], { factKind: 'speedrun-read' }),
       fact('structureJudgement', 'That pawn cannot come up to back up the center.', ['c3', 'c2', 'd4']),
     ], undefined, undefined, null, null, false, LATE);
-    // The most valuable is HIS (2026-11-05, `deciderWeights`): of these, he
-    // judges the structure far more often than he says "not yet" when both
-    // are there to say — so the judgement leads the one thread, and the rest
-    // wait. One idea, never four.
-    expect(d.spoke).toEqual(['structureJudgement']);
+    // The most valuable is HIS (2026-11-05, `deciderWeights`): of these, the
+    // live read of what the position wants now ("a pawn break is ready") is
+    // what he says most often when the coach has it to say (measured on his
+    // replayed Learn games) — so it leads the one thread, and the rest wait.
+    // One idea, never four.
+    expect(d.spoke).toEqual(['positionFacts']);
     expect(d.pkg.kept).toHaveLength(1);
   });
 
@@ -76,7 +77,9 @@ describe('the thought: one reason for each move, whichever computer gave it', ()
       fact('timing', 'It works now because their bishop has left.', ['f1']),
       fact('recapture', 'Taking back with the knight keeps the file closed.', ['d4']),
     ], undefined, undefined, null, null, false, LATE);
-    expect(d.spoke).toEqual(['timing']);
+    // One reason, the most valuable by his rates: he explains how a piece
+    // takes back far more often than "it works now because…" (2026-11-05).
+    expect(d.spoke).toEqual(['recapture']);
   });
 
   it('their move: one reason and one verdict, never three readings of it', () => {

@@ -982,12 +982,23 @@ export function decideTurn(
     return null;
   };
   const turnHolds = (x: Survivor): boolean => holdWhy(x) !== null;
+  // THE LEAD IS PICKED IN THE THREAD'S OWN ORDER: danger, then stakes, then —
+  // between two unstaked facts — one that teaches over one that describes,
+  // then the more valuable (2026-11-05). With his measured rates an unstaked
+  // description can carry the highest value ("your bishop on f1 can come out
+  // to c4", 76): it led by value, became the anchor every other description is
+  // checked against, was then held as a second thought itself, and took the
+  // real lead's support down with it.
   let top: Survivor | null = null;
   for (const x of survivors) {
     if (subsumed.has(x) || dangerWaits(x) || turnHolds(x)) continue;
     if (!top) { top = x; continue; }
     const xd = DANGER_LANES.has(x.lane); const td = DANGER_LANES.has(top.lane);
     if (xd !== td) { if (xd) top = x; continue; }
+    if (stakeOf(x) === 0 && stakeOf(top) === 0) {
+      const xt = teaches(x); const tt = teaches(top);
+      if (xt !== tt) { if (xt) top = x; continue; }
+    }
     if (value(x) > value(top)) top = x;
   }
   // ONE REASON FOR ONE MOVE (Learn audit 2026-10-18, 121 words: "The queen

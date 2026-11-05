@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**77 lines · 8 exports · 2 importers · 1 tests · 1 audits**
+**79 lines · 8 exports · 2 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,11 +23,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `FactMoment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `learnedRate` (function) — 6 call sites
+### `learnedRate` (function) — 9 call sites
 - `src/services/deciderWeights.test.ts:20`
 - `src/services/deciderWeights.test.ts:24`
 - `src/services/deciderWeights.test.ts:29`
 - `src/services/deciderWeights.test.ts:30`
+- `src/services/deciderWeights.test.ts:41`
+- `src/services/deciderWeights.test.ts:42`
+- `src/services/deciderWeights.test.ts:48`
 - `src/services/learnTurnDoor.ts:385`
 - `src/services/learnTurnDoor.ts:391`
 
@@ -37,18 +40,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LEAD_CEIL` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `learnedLead` (function) — 4 call sites
+### `learnedLead` (function) — 5 call sites
 - `src/services/deciderWeights.test.ts:33`
-- `src/services/deciderWeights.test.ts:37`
-- `src/services/deciderWeights.test.ts:38`
+- `src/services/deciderWeights.test.ts:42`
+- `src/services/deciderWeights.test.ts:53`
+- `src/services/deciderWeights.test.ts:54`
 - `src/services/learnTurnDoor.ts:386`
 
 ### `OUT_OF_PHASE_SHARE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `learnedOutOfPhase` (function) — 3 call sites
-- `src/services/deciderWeights.test.ts:42`
-- `src/services/deciderWeights.test.ts:43`
+### `learnedOutOfPhase` (function) — 4 call sites
+- `src/services/deciderWeights.test.ts:49`
+- `src/services/deciderWeights.test.ts:58`
+- `src/services/deciderWeights.test.ts:59`
 - `src/services/learnTurnDoor.ts:398`
 
 ## Tests

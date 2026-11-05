@@ -75,12 +75,12 @@
 - `src/services/learnTurnDoor.ts:949`
 - `src/services/learnTurnDoor.ts:970`
 - `src/services/learnTurnDoor.ts:974`
-- `src/services/learnTurnDoor.ts:1017`
-- `src/services/learnTurnDoor.ts:1043`
-- `src/services/learnTurnDoor.ts:1053`
-- `src/services/learnTurnDoor.ts:1057`
-- `src/services/learnTurnDoor.ts:1194`
-- `src/services/learnTurnDoor.ts:1257`
+- `src/services/learnTurnDoor.ts:1028`
+- `src/services/learnTurnDoor.ts:1054`
+- `src/services/learnTurnDoor.ts:1064`
+- `src/services/learnTurnDoor.ts:1068`
+- `src/services/learnTurnDoor.ts:1205`
+- `src/services/learnTurnDoor.ts:1268`
 
 ### `placeFact` (function) — 16 call sites
 - `src/services/boardComputers.ts:852`

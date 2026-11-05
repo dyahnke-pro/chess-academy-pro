@@ -64,13 +64,15 @@ export function learnedLead(rate: number): number {
 
 /** He essentially never makes this kind's teaching move in this phase — its
  *  rate here is under a tenth of its rate in the phase where he makes it most
- *  (same seat). Null when the kind is not measured: its lane's own phase rule
- *  stands. */
+ *  (same seat). Null when the kind is not measured phase by phase — not
+ *  measured at all, or measured only over every moment (Learn's own kinds,
+ *  from the replays): its lane's own phase rule stands. */
 export const OUT_OF_PHASE_SHARE = 0.1;
 const PHASES: readonly GamePhase[] = ['opening', 'middlegame', 'endgame'];
 export function learnedOutOfPhase(kind: CoachFactKind, moment: FactMoment): boolean | null {
-  const here = learnedRate(kind, moment);
-  if (here === null) return null;
-  const peak = Math.max(...PHASES.map((phase) => learnedRate(kind, { seat: moment.seat, phase }) ?? 0));
+  const byPhase = PHASES.map((phase) => BY_KIND[`${moment.seat}|${phase}`]?.[kind]);
+  const here = BY_KIND[`${moment.seat}|${moment.phase}`]?.[kind];
+  if (here === undefined || byPhase.some((r) => r === undefined)) return null;
+  const peak = Math.max(...byPhase.map((r) => r ?? 0));
   return peak > 0 && here < OUT_OF_PHASE_SHARE * peak;
 }

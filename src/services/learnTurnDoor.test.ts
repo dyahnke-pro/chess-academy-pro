@@ -125,6 +125,9 @@ describe('WO-1b — one lead per turn', () => {
     expect(d.pkg.spoken.startsWith('Their knight on c6')).toBe(true);
   });
 
+  // Also the guard on the lead's order (2026-11-05): with his rates the
+  // unrelated description carries the highest value, and when it led by value
+  // it became the anchor, was held as a second thought, and took the support down.
   it('a fact that shares a square with the lead supports it; one that shares nothing is held', () => {
     const d = decideTurn([
       { lane: 'register', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: C6, fen: FEN, squares: ['c6', 'e5'] },
