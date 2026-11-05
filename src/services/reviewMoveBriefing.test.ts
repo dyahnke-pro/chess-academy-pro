@@ -61,6 +61,17 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
     expect(out).toMatch(/checkmate/i);
   });
 
+  // THE LONG HORIZON, said as the move's own fact (round 4): a pawn never
+  // moves back, and a file opened stays a road for the rooks.
+  it('a move that loosens its own king\'s cover says it is for good; an opened file says what it is for', async () => {
+    const { moveAspects } = await import('./reviewMoveBriefing');
+    const { NO_PREV_CAPTURE } = await import('./captureRun');
+    const cover = moveAspects({ fenBefore: 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7', san: 'g4', prev: NO_PREV_CAPTURE, moverIsStudent: true })?.aspects.find((a) => a.kind === 'aspect-own-king-cover');
+    expect(cover?.verb).toBe("loosens your own king's cover, and a pawn never moves back");
+    const file = moveAspects({ fenBefore: 'rnbqkbnr/ppp2ppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3', san: 'exd5', prev: NO_PREV_CAPTURE, moverIsStudent: true })?.aspects.find((a) => a.kind === 'aspect-opens-file');
+    expect(file?.verb).toBe('opens the e-file, a road for the rooks from now on');
+  });
+
   it('never throws on a malformed input', () => {
     expect(buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: 'bad', san: 'Nf3' })).toBeNull();
   });

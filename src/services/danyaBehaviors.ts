@@ -65,6 +65,7 @@ import {
   oppositionRead,
 } from './positionReadingService';
 import { worstPieceNote, isolaniStructure, passerTrumpSentence } from './nextPlans';
+import { pieceRef } from './pieceRef';
 
 /** Where a passive piece wants to go and how (census #15): a knight's outpost
  *  route, or a bishop's long diagonal / a rook's pawnless file, at most one
@@ -78,6 +79,13 @@ function wishRoute(fen: string, sq: string): { target: Square; via: Square | nul
 const PIECE_NAME: Record<PieceSymbol, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
 };
+
+/** "Your knight", "Your knight on f3" — the student's piece named the way a
+ *  person names it (`pieceRef`), opening a sentence. */
+function pieceWords(fen: string, square: string, student: Color): string {
+  const words = pieceRef(fen, square, student)?.words ?? `your piece on ${square}`;
+  return `${words.charAt(0).toUpperCase()}${words.slice(1)}`;
+}
 
 const PIECE_VALUE_TABLE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
@@ -244,7 +252,8 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // or say nothing about rerouting — "a better square" teaches nothing.
         const route = wishRoute(fen, bad.square);
         if (route) {
-          return { kind: 'wishlist', fact: `Your ${PIECE_NAME[bad.piece]} on ${bad.square} is ${withArticle(bad.reason)} — it wants ${route.target}${routeVia(route.via ? [route.via] : [])}: ${route.why}.`, squares: [bad.square, ...(route.via ? [route.via] : []), route.target] };
+          // The stop on the way is lit, not read out (two squares a sentence).
+          return { kind: 'wishlist', fact: `${pieceWords(fen, bad.square, student)} is ${withArticle(bad.reason)} — it wants ${route.target}: ${route.why}.`, squares: [bad.square, ...(route.via ? [route.via] : []), route.target] };
         }
         // No route, no line: "a better square" teaches nothing (census #15).
         return null;
@@ -254,7 +263,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       if (weakest && (weakest.piece === 'n' || weakest.piece === 'b') && weakest.scope <= 1) {
         const route = wishRoute(fen, weakest.square);
         if (route) {
-          return { kind: 'wishlist', fact: `Your ${PIECE_NAME[weakest.piece]} on ${weakest.square} is doing nothing — it wants ${route.target}${routeVia(route.via ? [route.via] : [])}: ${route.why}.`, squares: [weakest.square, ...(route.via ? [route.via] : []), route.target] };
+          return { kind: 'wishlist', fact: `${pieceWords(fen, weakest.square, student)} is doing nothing — it wants ${route.target}: ${route.why}.`, squares: [weakest.square, ...(route.via ? [route.via] : []), route.target] };
         }
         return { fact: `Your ${PIECE_NAME[weakest.piece]} on ${weakest.square} is doing nothing — find it a better square.`, squares: [weakest.square] };
       }
@@ -779,16 +788,31 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // (hand walk 1690: the g7 bishop takes whatever lands on h6), and a minor
       // of yours able to get there in ~2 moves (David 2026-08-23) — every hole
       // that clears it, never the first four by centrality.
+      // A MIDDLEGAME WISH, like the reroute above: in the opening a piece's job
+      // is to develop (David 2026-08-23), and he names a piece's dream square
+      // from the middlegame on — the wish fired on none of his wish moments
+      // before move 10 and on 34 other opening boards (round 4).
+      if (Number(fen.split(' ')[5] ?? '0') < 10) return null;
       const hole = holeTargets(fen, opp, student).at(0);
       // SAY WHO GETS THERE, AND HOW (walk 2026-09-30: "d6 is a hole in their
       // camp — a piece planted there can't be kicked" described a square and
       // taught nothing to do with it). The route is the one the reach check
       // proved; no route, no line.
       const route = hole ? minorRouteToSquare(fen, hole, student) : null;
+      // THE WISH (H-WISHLIST, round 4): the square a piece of yours wants and
+      // can hold — what you would do with a free move — said as that piece's
+      // wish, the piece named the way a person names it (`pieceRef`) and the
+      // stop on the way lit, not read out (two squares a sentence at most).
+      // Measured on his tagged games (his game and analysis moves): it fires on
+      // 9 of his 28 wish-list moves and on 16% of the others (it never fired
+      // on them as the reroute alone), on both halves of his videos.
       if (hole && route) {
-        const who = `your ${PIECE_NAME[route.piece]} on ${route.from}`;
-        const how = route.via ? `${who} gets there${routeVia([route.via])}` : `${who} can go straight there`;
-        return { fact: `${hole} is a hole in their camp: ${how}, and no pawn can ever kick it out.`, squares: [route.from, ...(route.via ? [route.via] : []), hole] };
+        const how = route.via ? 'it gets there in two moves' : 'it can go straight there';
+        return {
+          kind: 'wishlist',
+          fact: `${pieceWords(fen, route.from, student)} wants ${hole} — a hole in their camp no pawn can ever kick it from — and ${how}.`,
+          squares: [route.from, ...(route.via ? [route.via] : []), hole],
+        };
       }
       return null;
     },

@@ -705,10 +705,13 @@ export function campHoles(fen: string, owner: Color, user: Color): Square[] {
 /**
  * THE HOLES A PIECE CAN BE PLANTED ON NOW — the camp holes that are empty, that
  * no minor of the owner covers (a bishop or knight simply takes what lands
- * there, hand walk 2026-09-27: the g7 bishop and h6), and that a minor of
- * `user` reaches within two moves (David 2026-08-23: "plant a knight there"
- * with no knight able to arrive is geometry). `only` asks for one kind of
- * minor ("plant a knight on …"). Most central first.
+ * there, hand walk 2026-09-27: the g7 bishop and h6), that a minor of `user`
+ * reaches within two moves (David 2026-08-23: "plant a knight there" with no
+ * knight able to arrive is geometry), and where that minor, once there, is
+ * not simply won (round 4: "f6 is a hole in their camp: your knight on e4 can
+ * go straight there" with their queen on d8 taking it — a heavy piece takes
+ * what lands there too, when nothing guards the square). `only` asks for one
+ * kind of minor ("plant a knight on …"). Most central first.
  */
 export function holeTargets(fen: string, owner: Color, user: Color, only?: 'n' | 'b'): Square[] {
   let chess: Chess;
@@ -716,7 +719,23 @@ export function holeTargets(fen: string, owner: Color, user: Color, only?: 'n' |
   const ownerMinorCovers = (sq: Square): boolean =>
     chess.attackers(sq, owner).some((a) => { const t = chess.get(a)?.type; return t === 'n' || t === 'b'; });
   return campHoles(fen, owner, user)
-    .filter((h) => !chess.get(h) && !ownerMinorCovers(h) && minorRouteToSquare(fen, h, user, 2, only) !== null);
+    .filter((h) => !chess.get(h) && !ownerMinorCovers(h))
+    .filter((h) => {
+      const route = minorRouteToSquare(fen, h, user, 2, only);
+      return route !== null && landsSafely(fen, route.from, h, owner);
+    });
+}
+
+/** The minor on `from` stood on `to`: does it stay there, nothing of `owner`
+ *  winning it (a standing read, `standsSafe`)? */
+function landsSafely(fen: string, from: Square, to: Square, owner: Color): boolean {
+  try {
+    const board = new Chess(fen);
+    const piece = board.remove(from);
+    if (!piece) return false;
+    board.put(piece, to);
+    return standsSafe(board.fen(), to, owner);
+  } catch { return false; }
 }
 
 interface ColorComplexWeakness {

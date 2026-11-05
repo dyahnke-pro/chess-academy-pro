@@ -392,7 +392,10 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
     : `plants an outpost on ${facts.outpostGained} that no pawn can challenge`, idea: 'outpost', squares: [facts.outpostGained], weight: 52 });
   if (facts.newPassedPawns.length > 0) aspects.push({ kind: 'aspect-passer', text: `creating a passed pawn on ${facts.newPassedPawns[0]}`, verb: `creates a passed pawn on ${facts.newPassedPawns[0]}`, idea: 'passed-pawn', squares: [facts.newPassedPawns[0]], weight: 54 });
   if (facts.passedPawnsHanded.length > 0) aspects.push({ kind: 'aspect-passer-handed', text: `handing ${moverIsStudent === undefined ? 'the other side' : enemyObj} a passed pawn on ${facts.passedPawnsHanded[0]}`, verb: `hands ${moverIsStudent === undefined ? 'the other side' : enemyObj} a passed pawn on ${facts.passedPawnsHanded[0]}`, idea: 'weakness', squares: [facts.passedPawnsHanded[0]], weight: 54 });
-  if (facts.newOpenFiles.length > 0) aspects.push({ kind: 'aspect-opens-file', text: `opening the ${facts.newOpenFiles[0]}-file`, verb: `opens the ${facts.newOpenFiles[0]}-file`, idea: 'file', squares: [], weight: 44 });
+  // Said as a move's own fact, the file it opens is a road for the rooks long
+  // after this move (S-LONG-HORIZON, round 4: his "we get the g-file" is about
+  // the play to come).
+  if (facts.newOpenFiles.length > 0) aspects.push({ kind: 'aspect-opens-file', text: `opening the ${facts.newOpenFiles[0]}-file`, verb: `opens the ${facts.newOpenFiles[0]}-file, a road for the rooks from now on`, idea: 'file', squares: [], weight: 44 });
 
   // 8. Structural damage the move INFLICTS on the opponent vs CONCEDES in its own
   //    camp — both are real ramifications; the self-inflicted one is a downside.
@@ -412,7 +415,9 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
 
   // 9. Loosening the mover's OWN king cover (a downside worth flagging).
   const ownShieldLoss = shieldLoss(fenBefore, fenAfter, moverWB);
-  if (ownShieldLoss > 0) aspects.push({ kind: 'aspect-own-king-cover', text: `loosening ${ownPoss} own king's cover`, verb: `loosens ${ownPoss} own king's cover`, idea: 'king-safety', squares: [], weight: 58 });
+  // A pawn never moves back, so the cover it leaves is loosened for the rest
+  // of the game (S-LONG-HORIZON, round 4).
+  if (ownShieldLoss > 0) aspects.push({ kind: 'aspect-own-king-cover', text: `loosening ${ownPoss} own king's cover`, verb: `loosens ${ownPoss} own king's cover, and a pawn never moves back`, idea: 'king-safety', squares: [], weight: 58 });
   return { mate: false, aspects, threat };
 }
 

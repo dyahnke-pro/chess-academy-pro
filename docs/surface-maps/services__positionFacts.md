@@ -260,7 +260,7 @@
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
 - `src/services/conceptKey.ts:11`
-- `src/services/danyaBehaviors.ts:533`
+- `src/services/danyaBehaviors.ts:542`
 - `src/services/kingAttackReads.ts:662`
 - `src/services/learnBoardTeaching.ts:501`
 - `src/services/looseStill.test.ts:37`
