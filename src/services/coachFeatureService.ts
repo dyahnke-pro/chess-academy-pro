@@ -28,7 +28,7 @@ import { plyFactsClause, moveOnlyRestates, computePvLine, pvDepthForRating, afte
 import { countWord, lineSeatAt, lineShape, withArticle } from '../utils/andList';
 import { BRIEFING_LINE_PLIES, buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { moveThoughtFacts } from './moveThoughtFacts';
-import { composeThought, speaksBehindLead } from './thoughtComposer';
+import { composeThought, speaksBehindLead, NOT_LED, type ThoughtStep } from './thoughtComposer';
 import { FUNDAMENTAL_IDEA, type IdeaKind } from './ideaKind';
 import { explainEvalByPieceQuality, lowestMinorMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
@@ -2586,7 +2586,11 @@ function* reviewSegmentSteps(
           // by way of b3 and f3" — hindsight), so Review leaves it to lessons.
           && f.source !== 'pieceRoute'
           && (stepLeads.length === 0 || speaksBehindLead(f, leadSquares)));
-        const thought = composeThought(thoughtFacts, 'review', memoryHere);
+        // Behind a line that already teaches this move, the composer's first
+        // fact is the move's second job and nothing follows it (two jobs a
+        // move at most, M-TWO-JOBS).
+        const led: ReadonlySet<ThoughtStep> = stepLeads.length > 0 ? new Set<ThoughtStep>([mine ? 'yours' : 'theirs']) : NOT_LED;
+        const thought = composeThought(thoughtFacts, 'review', memoryHere, led);
         if (thought.spoken && !hintsSaid.has(id)) {
           const named = new Set(thought.kept.flatMap((f) => [...f.squares]));
           // The job's attack said here is the teaching statement of the

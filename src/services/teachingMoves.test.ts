@@ -35,6 +35,9 @@ describe('one teaching-move vocabulary', () => {
     // the computers that already made seven more, each given its own kind:
     // the line walked out loud (H-CALC), the provoked commitment, the kept
     // tension, the trigger, more space, the wish square, the "for good".
-    for (const m of unbuilt) expect(['M-TWO-JOBS']).toContain(m);
+    // And the last (round 3): one move doing two jobs, the composer's second
+    // job said as its own kind (`two-jobs`). None is left: a move may never
+    // join this list.
+    expect(unbuilt).toEqual([]);
   });
 });

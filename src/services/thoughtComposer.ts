@@ -26,10 +26,11 @@ import type { SaidSet } from './gameStory';
 import { emitEverything, everythingListening } from './everythingEvents';
 import { stakeValue, isStaked, stakeWc } from './factStakes';
 import { causeEffect } from './factRelations';
-import type { CoachFact } from './coachFact';
+import { placeFact, type CoachFact } from './coachFact';
 import thoughtPolicy from '../data/thought-policy.json';
-import { sameIdea, type IdeaKind } from './ideaKind';
+import { sameIdea, isByProduct, type IdeaKind } from './ideaKind';
 import { buildVoicePackage, claimKey, joinSpoken, spokenSentenceKeys, type VoiceFact } from './voicePackage';
+import { TEACHING_MOVES } from './teachingMoves';
 
 /** THE STEPS OF ONE THOUGHT, in the order they are said (WO-THINK-01):
  *    danger  — what is attacked on the board right now (always first);
@@ -147,7 +148,32 @@ export interface ComposedThought {
   /** The facts that spoke, in spoken order. */
   kept: ThoughtFact[];
   /** Facts that did not speak, and why — so a quiet move is diagnosable. */
-  held: Array<{ fact: ThoughtFact; why: 'step-not-asked' | 'same-idea' | 'not-support-or-news' | 'restates' | 'already-said' | 'refused' }>;
+  held: Array<{ fact: ThoughtFact; why: 'step-not-asked' | 'same-idea' | 'not-support-or-news' | 'by-product' | 'third-job' | 'restates' | 'already-said' | 'refused' }>;
+}
+
+/** THE STEPS ANOTHER LINE ON THIS MOVE ALREADY LEADS (Review's rule or point
+ *  on the same move, `speaksBehindLead`): there the composer's first fact is
+ *  the move's second job, and nothing follows it. A surface whose composer
+ *  speaks alone answers `NOT_LED`. */
+export const NOT_LED: ReadonlySet<ThoughtStep> = new Set<ThoughtStep>();
+
+/** A MOVE SAYS AT MOST TWO JOBS (M-TWO-JOBS, round 3): its lead and one more,
+ *  "it does two things at once". A third ("It also … It also …") was a
+ *  stack, never a thought (Bf6: the outpost, Qg7#, and the rook on c3). */
+const MOVE_JOBS = 2;
+
+/** THE MOVE'S SECOND JOB, said as its own kind (`two-jobs`, the teaching move
+ *  M-TWO-JOBS) with the words it speaks. */
+function asSecondJob(f: ThoughtFact, text: string): ThoughtFact {
+  return { ...f, ...placeFact('two-jobs', f.seat), text };
+}
+
+/** WHAT THE MOVE GAVE UP IS NOT ONE OF ITS JOBS: a fact whose kind makes the
+ *  opportunity-cost move (M-OPP-COST, `teachingMoves`) — "it also loosens your
+ *  own king's cover", "concedes an isolated pawn" — is said behind the move as
+ *  before, but never counted as a job nor said as one. */
+function isCost(f: ThoughtFact): boolean {
+  return TEACHING_MOVES[f.kind].includes('M-OPP-COST');
 }
 
 /** NEWS IS RELATIVE TO THE TURN (WO-STORY-MATRIX-01 P1-10, rule 4): a fact
@@ -216,6 +242,7 @@ export function composeThought(
   facts: readonly ThoughtFact[],
   surface: ThoughtSurface,
   memory: ThoughtMemory | null,
+  ledOutside: ReadonlySet<ThoughtStep>,
 ): ComposedThought {
   const reg = THOUGHT_REGISTER[surface];
   const held: ComposedThought['held'] = [];
@@ -234,16 +261,30 @@ export function composeThought(
     // off g4" and "takes the g4 square away from their bishop" are one idea.
     if (picked.some((p) => p.step === f.step && sameIdea(p, f))) { held.push({ fact: f, why: 'same-idea' }); continue; }
     const lead = leadOf.get(f.step);
-    if (!lead) { leadOf.set(f.step, f); picked.push(f); continue; }
-    const news = isNews(f, lead);
     if (MOVE_STEPS.has(f.step)) {
+      const outside = ledOutside.has(f.step);
+      if (!lead && !outside) { leadOf.set(f.step, f); picked.push(f); continue; }
       const sameClaim = picked.some((p) => p.step === f.step && f.squares.some((s) => p.squares.includes(s)));
       if (sameClaim) { held.push({ fact: f, why: 'same-idea' }); continue; }
+      const job = !isCost(f);
+      const jobs = picked.filter((p) => p.step === f.step && !isCost(p));
+      const jobsBefore = jobs.length + (outside ? 1 : 0);
+      if (job && jobsBefore >= MOVE_JOBS) { held.push({ fact: f, why: 'third-job' }); continue; }
+      // A job after another job is the move's second (its own kind); a cost,
+      // or the move's first job, speaks as itself.
+      const said = (text: string): ThoughtFact => (job && jobsBefore >= 1 ? asSecondJob(f, text) : { ...f, text });
+      // Behind another producer's line on this move: the caller kept only
+      // what speaks there (`speaksBehindLead`), in its own words.
+      if (!lead) { leadOf.set(f.step, f); picked.push(said(f.text)); continue; }
+      const firstJob = jobs.at(0) ?? lead;
+      if (job && isByProduct(firstJob.idea, f.idea)) { held.push({ fact: f, why: 'by-product' }); continue; }
       const secondJob = f.restates !== true && weighOf(f) >= POLICY.floor && weighOf(f) >= weighOf(lead) - POLICY.gap;
-      if (reg.depth === 'thread' && (secondJob || news)) { picked.push({ ...f, text: f.alsoText ?? f.text }); continue; }
+      if (reg.depth === 'thread' && (secondJob || isNews(f, lead))) { picked.push(said(f.alsoText ?? f.text)); continue; }
       held.push({ fact: f, why: 'not-support-or-news' });
       continue;
     }
+    if (!lead) { leadOf.set(f.step, f); picked.push(f); continue; }
+    const news = isNews(f, lead);
     // Another fact in a later step speaks as support — it names a square the
     // step's lead names, or the lead's line changes a relation it stands on
     // (cause → effect, `factRelations`, P1-11) — or as news (relative to the

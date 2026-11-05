@@ -266,7 +266,7 @@
     "28: They play Bxg5: it wins a knight — if Bxg5, …Qxg5.",
     "29: You play Qg4 — it joins your bishop on c1 against their bishop on g5. Nxg7? Then they answer Kxg7 — you give up a knight for a pawn.",
     "30: They left their bishop on g5 and hit your queen on g4 instead — the bigger threat comes first. That's danger levels: answer a threat with a threat to something worth more. Bxg5 wins a bishop, but Nxg4 costs you your queen. They play Nxe5 — it hits your queen on g4 and your bishop on d3 at once.",
-    "31: You play Qg3 — it joins your rook on e1 against their knight on e5, and adds one guard to your bishop on d3, which their knight on e5 attacks. Bxh7+? That drops the queen on g4.",
+    "31: You play Qg3 — it saves it from their knight on e5, and attacks that knight from g3. Bxh7+? That drops the queen on g4.",
     "32: They play Nfg6 — it lands a removing-the-guard tactic. It also adds one guard to their knight on e5, which your queen on g3 attacks.",
     "33: You play Bxg5: it wins a bishop — if …Qxg5, Qxg5. After Bxg5, they play Qxg5 and, three moves later, you play Rxe1 — you win a queen, a knight and a pawn for a rook and a bishop.",
     "34: They play Qb6 — it gets their queen off d8 before your bishop on g5 can take it.",
@@ -288,7 +288,7 @@
     "50: They play Rec8 — it lands a battery.",
     "51: You play Qh6: it joins the fight for f8, keeping their rook off it — g7 and f8 sit right beside their king.",
     "52: They play Rxc3 — it wins a pawn, and nothing can take back.",
-    "53: You play Bf6 — it lands on the f6 outpost, a square none of their pawns can attack. It also threatens Qg7# — delivers checkmate. It also attacks their rook on c3. Re4? That drops the rook on e4.",
+    "53: You play Bf6 — it lands on the f6 outpost, a square none of their pawns can attack. It also threatens Qg7# — delivers checkmate. Re4? That drops the rook on e4.",
     "54: "
    ]
   },
@@ -493,7 +493,7 @@
     "32: They play exd4 — it creates a passed pawn on d4. Their exd4 is aimed at your bishop on e3.",
     "33: You play Bxd4 — it opens the d-file. Bxd4, not Rxd4, which would just lose the rook to Nxd4.",
     "34: They play e5 — it kicks your bishop off d4, gaining time.",
-    "35: You play Bc5 — it challenges their bishop on e7, offering to trade bishops. The pin is a one-move idea; the plan is a quiet move that covers d4, keeping their knight off it.",
+    "35: You play Bc5 — it steps out of the pawn's reach, keeping the bishop rather than letting the pawn win it. It also challenges their bishop on e7, offering to trade bishops. The pin is a one-move idea; the plan is a quiet move that covers d4, keeping their knight off it.",
     "36: They play Bxc5 — it covers d4, a square no pawn of yours can cover, and f2, attacking your pawn there.",
     "37: You play Nxc5: it unpins your pawn on f2 — and the knight eyes the pawn on a6."
    ]
@@ -786,7 +786,7 @@
     "11: They play e5 — it kicks your knight off f6, gaining time. It's level, so make chances: Nd7 creates the imbalance, doubled pawns for them. dxe5 keeps it quiet.",
     "12: You play dxe5 — it opens the d-file for the rooks, toward their king.",
     "13: Their fxe5 is aimed at your knight on f6.",
-    "14: You play Ng4 — it joins your knight on c6 against their pawn on e5. Nh5? Then they castle kingside and, two moves later, they play dxc5 — they win a pawn. After Ng4, they play e6 and you answer fxe6 — you win a pawn.",
+    "14: You play Ng4 — it steps out of the pawn's reach, keeping the knight rather than letting the pawn win it. It also joins your knight on c6 against their pawn on e5. Nh5? Then they castle kingside and, two moves later, they play dxc5 — they win a pawn. After Ng4, they play e6 and you answer fxe6 — you win a pawn.",
     "15: They play O-O — it castles their king into safety and swings the rook toward the center.",
     "16: You play Bg7 — it adds a third attacker on their pawn on e5.",
     "17: ",
@@ -809,7 +809,7 @@
     "34: You play Bd4+ — it forces the king to react, seizing the initiative for a move. Bd7 looks natural, but it doesn't work: they play gxf5, you answer gxf5 and they play Nb5 — they win a pawn.",
     "35: They play Kh1 — it steps toward safety; no place for it in the crossfire yet. R1f2 looked natural for them, but it doesn't work: you play fxg4 — you win a pawn.",
     "36: Your pawns form a chain, and its base on a7 is the one pawn no other pawn guards, so that is the pawn to look after.",
-    "37: They play gxf5: it wins a pawn — if …gxf5, Rxf5. gxf5 is a pawn break, and it half-opens the g-file for their rooks, toward your king.",
+    "37: They play gxf5: it wins a pawn — if …gxf5, Rxf5.",
     "38: You play Bb7 — it goes after their rook on f3, the only piece guarding the pawn on f5. It also lands a pin.",
     "39: They play Bxe6+ — it gives check and wins a pawn, and nothing can take back.",
     "40: You play Kh7 — it adds one guard to your pawn on g6, which their pawn on f5 attacks, and gets your king out of the check from their bishop on e6.",
@@ -987,7 +987,7 @@
     "19: You play Qxd5: it threatens Qxf7# — delivers checkmate.",
     "20: They play Qe7 — it takes the half-open e-file.",
     "21: You play Qxb7 — it wins a pawn, and nothing can take back.",
-    "22: They play Bc6 — it goes after your rook on h1, the only piece guarding the pawn on h4. It also lands a fork. It also joins their queen on e7 against your queen on b7. Why that square for their bishop? On e6 it leaves their rook on a8 hanging.",
+    "22: They play Bc6 — it goes after your rook on h1, the only piece guarding the pawn on h4. It also lands a fork. Why that square for their bishop? On e6 it leaves their rook on a8 hanging.",
     "23: You play Qc8+ — it gives check and moves your queen off b7, out of reach of their bishop on c6. Qb3? Then two moves later, they play Bxh1 — they win a rook. The rook on a8 only looks loose: Qxa8, but here it loses a queen and a pawn for a rook. Taking on f7 can wait — it isn't going anywhere. The check comes first, and you take after.",
     "24: They play Qd8: it threatens Qxc8 — wins a queen.",
     "25: You play Bxf7+ — it creates a passed pawn on e5. The check Qxc6+ hitting the rook on a8 looks like a fork, but here it loses a queen for a bishop. After Bxf7+, they play Kxf7 and you answer Qxd8 — you win a queen and a pawn for a bishop.",

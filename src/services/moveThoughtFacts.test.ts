@@ -34,6 +34,12 @@ describe('the lesson says the move\'s real idea (WO-ONE-COACH-01)', () => {
     expect(line).toMatch(/e3/);
   });
 
+  it('Ba4 out of the pawn\'s reach is one rescue — the job and the rule said once', () => {
+    const line = lessonLineFor(['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4'], 'white');
+    expect(line).toMatch(/out of (the pawn's )?reach/);
+    expect(line.match(/out of (the pawn's )?reach/g) ?? []).toHaveLength(1);
+  });
+
   it('…d6 guards e5 once — never "guards e5" and then "supports the center, guarding e5"', () => {
     const line = lessonLineFor(['e4', 'e5', 'Nf3', 'Nf6', 'Nc3', 'Bc5', 'Bc4', 'd6'], 'black');
     expect(line).toMatch(/e5/);

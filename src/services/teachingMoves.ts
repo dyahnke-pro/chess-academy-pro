@@ -238,4 +238,9 @@ export const TEACHING_MOVES: Record<CoachFactKind, readonly TeachingMove[]> = {
   // with it; the piece's wish square and the road there.
   space: ['S-SPACE', 'S-PLAN'],
   wishlist: ['H-WISHLIST', 'S-MANEUVER'],
+  // ── the last one, round 3 (2026-11-05) ──
+  // One move doing two jobs at once (`thoughtComposer`): the second job the
+  // composer says behind the move's lead — "it develops, and it also sets a
+  // trap" — admitted by the test fitted on the moves he calls two jobs.
+  'two-jobs': ['M-TWO-JOBS'],
 };
