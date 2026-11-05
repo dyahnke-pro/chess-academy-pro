@@ -98,6 +98,9 @@ export interface FocusRunner {
   /** May the coach plant a chance before board `ply`, from board `fen`, and
    *  what pattern (`focusPlant`); null = play its own move. */
   plantAsk: (ply: number, fen: string) => FocusPlantAsk | null;
+  /** The student's own chances posed on this board (the exploit seat): what the
+   *  Learn door holds until the student has moved (`ChanceHold`). */
+  studentChances: (fen: string) => FocusChance[];
 }
 
 const waiting = (s: FocusRunState): boolean => !!s.pause && s.pause.retries !== 1;
