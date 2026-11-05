@@ -3,6 +3,7 @@ import { positionOf } from '../../utils/samePosition';
 import { useRememberedThread } from '../../hooks/useRememberedThread';
 import { useRememberedSetting } from '../../hooks/useRememberedSetting';
 import { reviewIntentOf, type ReviewIntent } from '../../services/reviewMoveIntent';
+import { loadKnownSlipIndex } from '../../services/knownSlips';
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { warmOpeningIdentity } from '../../services/openingIdentity';
 import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Target, Crosshair, Play, Pause } from 'lucide-react';
@@ -1830,7 +1831,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // and only its own moves are narrated — the plies before the branch are
       // the seed's (the build skips them), so the free board costs what its
       // new moves cost. Stepped, so the screen runs while it reads.
-      const segs = await buildReviewSegmentsYielding(inputs, playerColor, openingName, isReviewUncapped(), playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly, seed, lineStory);
+      // The known mistakes and traps (David 2026-11-04): an explored slip is
+      // said as the walk says it — the index read before the build.
+      const knownSlipIndex = await loadKnownSlipIndex().catch(() => null);
+      const segs = await buildReviewSegmentsYielding(inputs, playerColor, openingName, isReviewUncapped(), playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly, seed, lineStory, new Map(), knownSlipIndex);
       foldReviewRefrains(segs, lineStory, seed);
       text = segs[segs.length - 1]?.narration ?? null;
     } catch { text = null; }

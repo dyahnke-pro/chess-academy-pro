@@ -11,6 +11,7 @@ import { setOpeningIdentity } from './openingIdentity';
 import { setOpeningPositions } from './openingPositions';
 import { createStoryStore } from './gameStory';
 import { checkRevFingerprint, fingerprint } from '../test/revFingerprint';
+import { knownSlipIndexFromDisk } from '../test/replayGame';
 
 interface FixtureGame { id: string; side: 'white' | 'black'; pgn: string; ann: [string | null, number | null, number | null, string | null][] }
 
@@ -32,7 +33,9 @@ describe('REVIEW_NARRATION_REV moves with the narration', () => {
         return { ply: i + 1, san, fenAfter: d.fen(), isCoachMove: g.side === 'white' ? i % 2 === 1 : i % 2 === 0, classification: classification ?? 'good', preMoveEval: preMoveEval ?? 0, evaluation: evaluation ?? 0, bestMove } as unknown as ReviewMoveInput;
       });
       const story = createStoryStore(g.id);
-      const segs = buildReviewSegmentsForTests(inputs, g.side, null, true, 1400, [], undefined, null, new Map(), new Map(), null, story);
+      // …with the club gem index in hand, as the walk builds (its known
+      // mistakes and traps are Review's words too, 2026-11-04).
+      const segs = buildReviewSegmentsForTests(inputs, g.side, null, true, 1400, [], undefined, null, new Map(), new Map(), null, story, new Map(), knownSlipIndexFromDisk());
       // …and the story's checkpoint, which a rebuild seeded from the cache reads.
       parts[g.id] = fingerprint([segs.map((s) => [s.ply, s.narration ?? null]), story.serialize()]);
     }

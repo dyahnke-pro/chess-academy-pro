@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**501 lines · 16 exports · 21 importers · 5 tests · 0 audits**
+**502 lines · 16 exports · 22 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,6 +25,7 @@
 - `src/services/factRelations.test.ts`
 - `src/services/factSelector.ts`
 - `src/services/gameStory.ts`
+- `src/services/knownSlips.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/moveThoughtFacts.ts`
 - `src/services/openingStory.ts`
@@ -64,8 +65,8 @@
 - `src/services/boardComputers.test.ts:76`
 - `src/services/coachFact.test.ts:75`
 - `src/services/coachFact.test.ts:76`
-- `src/services/coachFeatureService.ts:2505`
-- `src/services/coachFeatureService.ts:3103`
+- `src/services/coachFeatureService.ts:2520`
+- `src/services/coachFeatureService.ts:3118`
 - `src/services/learnTurnDoor.ts:254`
 - `src/services/learnTurnDoor.ts:797`
 - `src/services/learnTurnDoor.ts:854`
@@ -79,7 +80,7 @@
 - `src/services/learnTurnDoor.ts:1159`
 
 ### `placeFact` (function) — 16 call sites
-- `src/services/boardComputers.ts:673`
+- `src/services/boardComputers.ts:703`
 - `src/services/learnTurnDoor.ts:596`
 - `src/services/moveThoughtFacts.ts:148`
 - `src/services/moveThoughtFacts.ts:269`
@@ -97,7 +98,7 @@
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 17 call sites
-- `src/services/boardComputers.ts:673`
+- `src/services/boardComputers.ts:703`
 - `src/services/coachFact.test.ts:101`
 - `src/services/coachFact.test.ts:107`
 - `src/services/coachFact.test.ts:108`

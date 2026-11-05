@@ -112,7 +112,7 @@ export function getOrBuildReviewNarration(req: ReviewNarrationRequest): Promise<
       complete,
       spokenBefore: seed,
     });
-    if (req.gameId && complete && !seeded && narration.segments.length > 0) {
+    if (req.gameId && complete && !seeded && narration.segments.length > 0 && !narration.knownSlipsMissing) {
       await storeReviewNarration(req.gameId, key, narration);
     }
     return { narration, cacheHit: false, key };
