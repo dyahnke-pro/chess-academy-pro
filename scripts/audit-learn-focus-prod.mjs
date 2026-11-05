@@ -32,9 +32,14 @@
  *   F1 the pre-game line is the first thing said;
  *   F2 every spoken line is a focus, castling or tempo-run line (announce /
  *      ask / clue / credit / shown / deciding / end / rung-up / castle-stop /
- *      castle-reminder / tempo-had / tempo-let-off) — a tapped button's
- *      answer is reported apart;
- *   F3 the Learn door spoke nothing — every lane held (counts reported);
+ *      castle-reminder / tempo-had / tempo-let-off) or a line of the Learn
+ *      turn door (its turn waves and phase wave — the app's own
+ *      `CoachTeachPage.trackA` / `CoachTeachPage.phase` rows); a tapped
+ *      button's answer is reported apart. Nothing else leaks;
+ *   F3 THE DOOR IS THE ONE VOICE (David 2026-10-30): it decided every turn
+ *      (a decision row each), none of its lanes was held as the old focus
+ *      silence (`focus-voice` / `off-focus`), and what it held for the
+ *      student's own chance is counted (`names-chance`, David 2026-11-05);
  *   F4 every spoken find answers a question said out loud;
  *   F5 every focus chance was decided on the record, on this game's rung (a
  *      retry may close a chance it left open: outcome 'exempt');
@@ -641,7 +646,13 @@ async function playGame(context, listener, engine, student, phase, index) {
   // A drill move is judged by the engine before it is answered (up to ~14s
   // with the second tap): its answer is still a reply to that tap.
   const tapped = (at) => tape.taps.some((t) => at >= t.at && at <= t.at + (t.what === 'replay-move' ? 16_000 : 6_000));
-  tape.spoken = spoken(events).map((l) => ({ ...l, kind: lineKind(l.text, pickLine) ?? (tapped(l.at) ? 'asked' : null) }));
+  // The door's own lines, as the app logged them before the voice spoke them.
+  const doorTexts = events
+    .filter((e) => e.kind === 'coach-narration-spoken' && /^CoachTeachPage\.trackA$/.test(String(e.source ?? '')) || (e.source === 'CoachTeachPage.phase'))
+    .map((e) => String(e.summary ?? '').replace(/^track A spoke: "/, '').replace(/"$/, '').replace(/^.* — /, '').trim())
+    .filter(Boolean);
+  const fromDoor = (text) => { const head = text.slice(0, 40); return doorTexts.some((d) => d.includes(head) || text.includes(d.slice(0, 40))); };
+  tape.spoken = spoken(events).map((l) => ({ ...l, kind: lineKind(l.text, pickLine) ?? (tapped(l.at) ? 'asked' : fromDoor(l.text) ? 'door' : null) }));
   const results = (await readStore(page, 'learnFocusResults')).filter((r) => r.at >= startedAt);
   tape.resultRows = results;
   const gameId = results[0]?.gameId ?? null;
@@ -768,13 +779,14 @@ async function main() {
     const first = t.spoken[0];
     check(`${g} F1 the pre-game line is said first`, !!first && first.kind === 'announce', first ? `"${first.text}"` : 'nothing spoken');
     const leaks = t.spoken.filter((l) => l.kind === null);
-    check(`${g} F2 every spoken line is a focus or castling line`, leaks.length === 0,
+    check(`${g} F2 every spoken line is a focus, castling or door line`, leaks.length === 0,
       leaks.map((l) => `"${l.text.slice(0, 80)}"`).join(' | ') || `${t.spoken.length} line(s): ${Object.entries(t.spoken.reduce((m, l) => ({ ...m, [l.kind]: (m[l.kind] ?? 0) + 1 }), {})).map(([k, n]) => `${k} ${n}`).join(', ')}`);
     const doorSpoke = t.doorRows.filter((r) => (r.spoke ?? []).length > 0);
     const heldWhy = {};
     for (const r of t.doorRows) for (const l of r.held ?? []) { const w = r.heldWhy?.[l] ?? '?'; heldWhy[w] = (heldWhy[w] ?? 0) + 1; }
-    check(`${g} F3 the Learn door spoke nothing in a focus game`, doorSpoke.length === 0,
-      `${t.doorRows.length} turn row(s); held ${JSON.stringify(heldWhy)}${doorSpoke.length ? `; SPOKE ${doorSpoke.map((r) => (r.spoke ?? []).join('+')).join(', ')}` : ''}; free-play lines dropped by the voice door: ${t.heldFreePlay.length}`);
+    const oldSilence = (heldWhy['focus-voice'] ?? 0) + (heldWhy['off-focus'] ?? 0);
+    check(`${g} F3 the Learn door is the one voice in a focus game`, t.doorRows.length > 0 && oldSilence === 0,
+      `${t.doorRows.length} turn row(s), ${doorSpoke.length} spoke; held ${JSON.stringify(heldWhy)} (names-chance ${heldWhy['names-chance'] ?? 0}); door lines heard ${t.spoken.filter((l) => l.kind === 'door').length}; outside-door lines dropped: ${t.heldFreePlay.length}`);
     const credits = t.turns.filter((r) => r.spoke === 'credit');
     const unasked = credits.filter((r) => !r.prompted);
     check(`${g} F4 every spoken find answers a question said out loud`, unasked.length === 0,

@@ -1,7 +1,9 @@
 /**
  * The Learn door under a mission (WO-MISSIONS-01): while the phase's mission
  * is unresolved the door speaks nothing and holds every lane as `mission`;
- * with the mission open it decides exactly as before.
+ * with the mission open it decides exactly as before. In a Learn focus game
+ * the door is the one voice (David 2026-10-30), holding only what points at
+ * the student's own chance until they have moved.
  */
 import { describe, expect, it } from 'vitest';
 import { coachTurn } from './coachDecider';
@@ -20,7 +22,7 @@ const turn = { kind: 'late' as const, ply: 4, slipCp: null, priceSettled: true, 
 
 describe('the Learn door under a mission', () => {
   it('missions OFF (open): the door speaks as before', () => {
-    const d = coachTurn({ posture: 'learn', turn, facts: laneFacts(FACTS), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'open' });
+    const d = coachTurn({ posture: 'learn', turn, facts: laneFacts(FACTS), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'open', chance: null });
     expect(d.pkg.spoken).toMatch(/Watch e4/);
     expect(d.spoke.length).toBeGreaterThan(0);
   });
@@ -28,7 +30,7 @@ describe('the Learn door under a mission', () => {
   it('an unresolved mission: zero lines, every lane held as `mission`, and the row still emitted', () => {
     const rows: LearnTurnRow[] = [];
     const off = onLearnTurn((r) => rows.push(r));
-    const d = coachTurn({ posture: 'learn', turn, facts: laneFacts(FACTS), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'mission' });
+    const d = coachTurn({ posture: 'learn', turn, facts: laneFacts(FACTS), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'mission', chance: null });
     off();
     expect(d.pkg.spoken).toBe('');
     expect(d.pkg.kept).toEqual([]);
@@ -41,20 +43,36 @@ describe('the Learn door under a mission', () => {
   it('the phase wave is silenced the same way', () => {
     const live = { fen: FEN, ply: 4, slipCp: null, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() };
     const report = [{ text: 'The opening is over: both sides are developed.', claims: ['phase:middlegame'], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'speedrun-read' }];
-    const open = decidePhaseWave(report, FEN, live, { priorKeys: new Set(), priorLead: null, green: null, beginner: false, owner: 'open' });
-    const silent = decidePhaseWave(report, FEN, { ...live, holds: new Set<string>() }, { priorKeys: new Set(), priorLead: null, green: null, beginner: false, owner: 'mission' });
+    const open = decidePhaseWave(report, FEN, live, { priorKeys: new Set(), priorLead: null, green: null, beginner: false, owner: 'open', chance: null });
+    const silent = decidePhaseWave(report, FEN, { ...live, holds: new Set<string>() }, { priorKeys: new Set(), priorLead: null, green: null, beginner: false, owner: 'mission', chance: null });
     expect(open?.pkg.spoken).toMatch(/opening is over/);
     expect(silent?.pkg.spoken).toBe('');
   });
 
-  it('a Learn focus game: zero lines; a lane about the focus is `focus-voice`, the rest `off-focus` (WO-FOCUS-TACTICS-01)', () => {
+  it('a Learn focus game: the door is the one voice (David 2026-10-30) — it decides as when open', () => {
+    const d = coachTurn({ posture: 'learn', turn, facts: laneFacts(FACTS), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: null });
+    expect(d.pkg.spoken).toMatch(/Watch e4/);
+    expect(d.spoke.length).toBeGreaterThan(0);
+  });
+
+  it("a Learn focus game: a fact pointing at the student's own chance waits until they have moved (names-chance)", () => {
+    // The student's chance on this board: their knight on d4 to take (the focus's exploit seat).
+    const facts: LaneFixture[] = [
+      { lane: 'openingIdea', text: 'Their knight on d4 is loose — nothing guards it.', fen: FEN, squares: ['d4'], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE },
+      { lane: 'threat', text: 'Watch e4 — their knight could take it.', fen: FEN, squares: ['e4'], stakes: { points: 1, plies: 1 }, proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE },
+    ];
     const rows: LearnTurnRow[] = [];
     const off = onLearnTurn((r) => rows.push(r));
-    const d = coachTurn({ posture: 'learn', turn, facts: laneFacts(FACTS), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics' });
+    const d = coachTurn({ posture: 'learn', turn, facts: laneFacts(facts), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: { squares: ['d4'], mate: false } });
     off();
-    expect(d.pkg.spoken).toBe('');
-    expect(d.spoke).toEqual([]);
-    // The threat lane teaches missed-opponents-threat — a tactics skill (their side).
-    expect(rows[0].heldWhy).toEqual({ threat: 'focus-voice', openingIdea: 'off-focus' });
+    expect(d.pkg.spoken).not.toMatch(/d4/);
+    // A danger to the student always speaks, even on the chance's board.
+    expect(d.pkg.spoken).toMatch(/Watch e4/);
+    expect(rows[0].heldWhy.openingIdea).toBe('names-chance');
+  });
+
+  it('a danger that shares the chance\'s square still speaks', () => {
+    const d = coachTurn({ posture: 'learn', turn, facts: laneFacts(FACTS), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: { squares: ['e4'], mate: false } });
+    expect(d.pkg.spoken).toMatch(/Watch e4/);
   });
 });

@@ -19,9 +19,12 @@
  * the look-ahead paragraph — while their producers kept computing text nobody
  * heard. Closing a lane means deleting its producer and its row; a lane in
  * this table has a live producer (`learnTurnDoor.test.ts` holds both halves).
- * A MISSION (WO-MISSIONS-01) or a FOCUS (WO-LEARN-FOCUS-01) closes no lane:
- * while it owns a turn the door holds every lane it is offered and says why on
- * the row (`mission`, `focus-voice`, `off-focus`).
+ * A MISSION (WO-MISSIONS-01) closes no lane: while it owns a turn the door
+ * holds every lane it is offered and says why on the row (`mission`). A Learn
+ * FOCUS game is no longer silent here (David 2026-10-30: "Free play also. One
+ * voice"): the door decides its turns, and holds only what points at a chance
+ * the student has on the board they move on next (`names-chance`) — the focus
+ * asks them to find it.
  *
  * Slice 1 (this file): route + record, behaviour-preserving. Ordering and dedupe are still
  * `buildVoicePackage`'s. Picking ONE lead per turn is the next slice.
@@ -46,27 +49,41 @@ import { isEndgameByMaterial } from './gamePhaseService';
 import { STORY_KIND, type StoryBeat } from './openingStory';
 import type { ThreadLine } from './gameStory';
 import { samePosition } from '../utils/samePosition';
-import { focusTags, type FocusId } from '../coach/focus/focusCard';
-import { isMisconceptionTagId } from '../data/misconceptionTags';
+import type { FocusId } from '../coach/focus/focusCard';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-type HoldReason = 'mission' | 'off-focus' | 'focus-voice' | 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'same-step' | 'second-thought' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled' | 'one-method';
+type HoldReason = 'mission' | 'names-chance' | 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'same-step' | 'second-thought' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled' | 'one-method';
 
 /** WHO OWNS THE VOICE OF THIS TURN (WO-MISSIONS-01, WO-LEARN-FOCUS-01).
- *  - `open`: the classic Learn — the door decides as it always has.
+ *  - `open`: no focus, no mission — the door decides.
  *  - `mission`: a Campaign mission owns the game. The door speaks NOTHING and
- *    holds every lane it was offered with reason `mission`.
- *  - `focus:<id>`: a Learn focus game. The door speaks NOTHING; a lane about
- *    the focus is held as `focus-voice` (the focus runner says it), every
- *    other lane as `off-focus`.
- *  Either way the silence is a recorded decision, not a gap; the owner's own
- *  lines go through its runner, never through here. REQUIRED at both
- *  production doors (`coachTurn`, `decidePhaseWave`). */
+ *    holds every lane it was offered with reason `mission` — a recorded
+ *    decision, not a gap; the mission's lines go through its runner.
+ *  - `focus:<id>`: a Learn focus game. The door decides as when open (David
+ *    2026-10-30: the matrix is the one voice; the focus keeps its chances,
+ *    rung, pause and record, and speaks its own clue on a miss), holding what
+ *    points at the student's own chance (`ChanceHold`). Lines OUTSIDE the door
+ *    stay held in a focus game (`learnVoice`, channel `free-play`).
+ *  REQUIRED at both production doors (`coachTurn`, `decidePhaseWave`). */
 export type VoiceOwner = 'open' | 'mission' | `focus:${FocusId}`;
+
+/** THE STUDENT'S OWN CHANCE ON THE BOARD THEY MOVE ON NEXT (a Learn focus
+ *  game, David 2026-11-05: the coach "stays quiet about the student's own
+ *  chances until they've moved, so they still have to find them"). Read off
+ *  the focus's chances in the exploit seat (`FocusChance`, the piece, the
+ *  targets, the answer's squares). A fact that touches them waits until the
+ *  student has moved — unless it is a danger to the student, which always
+ *  speaks; a forced mate for the student waits with it. Null when there is no
+ *  such chance, or no focus. REQUIRED at both production doors. */
+export interface ChanceHold {
+  squares: readonly string[];
+  /** The chance is a forced mate for the student. */
+  mate: boolean;
+}
 
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
  *  the scale of the marginal bar, never a limit. */
@@ -713,14 +730,27 @@ export function decideTurn(
   heldThisTurn: Set<string> | null = null,
   /** Who owns the voice of this turn (`VoiceOwner`). */
   owner: VoiceOwner = 'open',
+  /** The student's own chance on the board they move on next (`ChanceHold`). */
+  chance: ChanceHold | null = null,
 ): TurnDecision {
   const decideStart = Date.now();
-  if (owner !== 'open') return ownedTurn(facts, turn, decideStart, owner);
+  if (owner === 'mission') return ownedTurn(facts, turn, decideStart);
+  const chanceSquares = new Set(chance?.squares ?? []);
+  /** A fact that points at the student's own chance, before they have moved:
+   *  it shares the chance's squares, or it is the student's forced mate. A
+   *  danger to the student always speaks. */
+  const pointsAtChance = (f: LaneFact): boolean => {
+    if (!chance || DANGER_LANES.has(f.lane) || f.step === 'danger') return false;
+    const m = isStaked(f.stakes) ? f.stakes.mate : undefined;
+    if (chance.mate && m?.for === 'you' && m.forced) return true;
+    return f.squares.some((q) => chanceSquares.has(q));
+  };
   const offered: LearnLane[] = [];
   const faded: LearnLane[] = [];
   const open: Array<VoiceFact & { factId: string; lane: LearnLane; offerValue: number; offerRank: number }> = [];
   const phaseHeld: LearnLane[] = [];
   const moveHeld: LearnLane[] = [];
+  const chanceHeld: LearnLane[] = [];
   const heldEarlier: LearnLane[] = [];
   for (const f of facts) {
     if (!f.text.trim()) continue;
@@ -730,6 +760,7 @@ export function decideTurn(
     // LEARN NAMES NO MOVE UNASKED (OS-10): a fact that names a move the
     // student can play next waits — the producer said which (REQUIRED).
     if (f.namesStudentMove) { if (!moveHeld.includes(f.lane)) moveHeld.push(f.lane); for (const c of f.claims) heldThisTurn?.add(c); continue; }
+    if (pointsAtChance(f)) { if (!chanceHeld.includes(f.lane)) chanceHeld.push(f.lane); for (const c of f.claims) heldThisTurn?.add(c); continue; }
     const text = fadeWhenGreen(f.lane, f.text, green ?? null, f.skill);
     if (text !== f.text && !faded.includes(f.lane)) faded.push(f.lane);
     // ONE REASON PER MOVE, ACROSS EVERY WAVE AND BOTH SEATS (Learn tapes
@@ -986,6 +1017,7 @@ export function decideTurn(
   const hold = (lane: LearnLane, why: HoldReason): void => { if (!held.includes(lane)) held.push(lane); heldWhy[lane] ??= why; };
   for (const l of phaseHeld) hold(l, 'out-of-phase');
   for (const l of moveHeld) hold(l, 'names-move');
+  for (const l of chanceHeld) hold(l, 'names-chance');
   for (const l of heldEarlier) hold(l, 'held-this-turn');
   // "NOTHING HINGES ON YOUR NEXT MOVE" NEVER SITS BESIDE A STAKE (Alekhine
   // walk 2026-10-19: "Watch c2 — a knight forks there in 2…" then "Nothing
@@ -1192,23 +1224,13 @@ function reportEverything(facts: readonly LaneFact[], turn: LearnTurnTag | null,
   });
 }
 
-/** A turn a mission or a focus owns: nothing speaks, every offered lane is
- *  held — as `mission`, or in a focus game as `focus-voice` (the fact is about
- *  the focus: the runner says it) or `off-focus` — and the row is emitted
- *  like any other decision. */
-function ownedTurn(facts: readonly LaneFact[], turn: LearnTurnTag | null, decideStart: number, owner: Exclude<VoiceOwner, 'open'>): TurnDecision {
+/** A turn a mission owns: nothing speaks, every offered lane is held as
+ *  `mission`, and the row is emitted like any other decision. */
+function ownedTurn(facts: readonly LaneFact[], turn: LearnTurnTag | null, decideStart: number): TurnDecision {
   const offered = facts.filter((f) => f.text.trim()).map((f) => f.lane);
   const held = [...new Set(offered)];
   const heldWhy: Partial<Record<LearnLane, HoldReason>> = {};
-  const focus = owner === 'mission' ? null : (owner.slice('focus:'.length) as FocusId);
-  const tags = focus ? focusTags(focus) : null;
-  const onFocus = (f: LaneFact): boolean => {
-    const tag = f.skill ?? COMPUTER_ROLES[f.lane]?.tag ?? null;
-    return !!tags && !!tag && isMisconceptionTagId(tag) && tags.has(tag);
-  };
-  for (const l of held) {
-    heldWhy[l] = !focus ? 'mission' : facts.some((f) => f.lane === l && f.text.trim() && onFocus(f)) ? 'focus-voice' : 'off-focus';
-  }
+  for (const l of held) heldWhy[l] = 'mission';
   if (offered.length > 0) emitLearnTurn({ spokeKinds: [], offered: [...offered], spoke: [], lead: null, held: [...held], faded: [], unproven: 0, unprovenLanes: [], proofUnsaid: [], heldWithProof: [], heldStaked: [], heldWhy, refusedWhy: {}, ownMove: null, ownLanes: [], ownProven: false, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
   reportEverything(facts, turn, new Set(), (f) => heldWhy[f.lane] ?? null);
   return { pkg: { spoken: '', kept: [], dropped: [] }, offered, spoke: [], lead: null, held, faded: [], proofOf: new Map(), unproven: 0, unprovenLanes: [] };
@@ -1247,7 +1269,7 @@ export function decidePhaseWave(
   facts: readonly LaneFact[],
   readFen: string,
   live: LiveTurn | null,
-  ctx: { priorKeys?: ReadonlySet<string>; priorLead?: TurnLead | null; green?: FadeLevels | null; beginner: boolean; owner: VoiceOwner },
+  ctx: { priorKeys?: ReadonlySet<string>; priorLead?: TurnLead | null; green?: FadeLevels | null; beginner: boolean; owner: VoiceOwner; chance: ChanceHold | null },
 ): TurnDecision | null {
   if (!live || !samePosition(live.fen, readFen)) return null;
   return decideTurn(
@@ -1256,6 +1278,7 @@ export function decidePhaseWave(
     { kind: 'phase', ply: live.ply, slipCp: live.slipCp, priceSettled: live.priceSettled, price: live.price, midExchange: live.midExchange },
     live.holds,
     ctx.owner,
+    ctx.chance,
   );
 }
 

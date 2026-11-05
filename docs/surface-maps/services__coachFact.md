@@ -9,9 +9,9 @@
 ## Locked rules that govern this surface
 
 - **❤️ THE HEART OF THE APP — the coach THINKS OUT LOUD FOR the student (David 2026-10-07: "THIS IS THE HEART AND SOUL OF THE APP! THIS IS THE BEHAVIOR THAT TEACHES. THIS IS WHAT ALL THE COMPUTERS ARE BUILT FOR! SO WE CAN THINK OUT LOUD FOR THE USER!")** (CLAUDE.md:31) — names `coachFact`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1433) — names `coachFact`
-- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2728) — names `FACT_GROUP`
-- **The standard post-deploy ritual** (CLAUDE.md:6802) — names `coachFact`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1443) — names `coachFact`
+- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2739) — names `FACT_GROUP`
+- **The standard post-deploy ritual** (CLAUDE.md:6813) — names `coachFact`
 
 ## Who calls in
 
@@ -60,7 +60,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCoachFactKind` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:580`
+- `src/services/learnTurnDoor.ts:597`
 
 ### `stepOf` (function) — 16 call sites
 - `src/services/boardComputers.test.ts:76`
@@ -68,21 +68,21 @@
 - `src/services/coachFact.test.ts:76`
 - `src/services/coachFeatureService.ts:2520`
 - `src/services/coachFeatureService.ts:3118`
-- `src/services/learnTurnDoor.ts:254`
-- `src/services/learnTurnDoor.ts:797`
-- `src/services/learnTurnDoor.ts:854`
-- `src/services/learnTurnDoor.ts:875`
-- `src/services/learnTurnDoor.ts:879`
-- `src/services/learnTurnDoor.ts:922`
-- `src/services/learnTurnDoor.ts:948`
-- `src/services/learnTurnDoor.ts:958`
-- `src/services/learnTurnDoor.ts:962`
-- `src/services/learnTurnDoor.ts:1096`
-- `src/services/learnTurnDoor.ts:1159`
+- `src/services/learnTurnDoor.ts:271`
+- `src/services/learnTurnDoor.ts:828`
+- `src/services/learnTurnDoor.ts:885`
+- `src/services/learnTurnDoor.ts:906`
+- `src/services/learnTurnDoor.ts:910`
+- `src/services/learnTurnDoor.ts:953`
+- `src/services/learnTurnDoor.ts:979`
+- `src/services/learnTurnDoor.ts:989`
+- `src/services/learnTurnDoor.ts:993`
+- `src/services/learnTurnDoor.ts:1128`
+- `src/services/learnTurnDoor.ts:1191`
 
 ### `placeFact` (function) — 16 call sites
 - `src/services/boardComputers.ts:703`
-- `src/services/learnTurnDoor.ts:596`
+- `src/services/learnTurnDoor.ts:613`
 - `src/services/moveThoughtFacts.ts:148`
 - `src/services/moveThoughtFacts.ts:269`
 - `src/services/moveThoughtFacts.ts:289`
@@ -103,7 +103,7 @@
 - `src/services/coachFact.test.ts:101`
 - `src/services/coachFact.test.ts:107`
 - `src/services/coachFact.test.ts:108`
-- `src/services/learnTurnDoor.ts:597`
+- `src/services/learnTurnDoor.ts:614`
 - `src/services/moveThoughtFacts.ts:149`
 - `src/services/moveThoughtFacts.ts:269`
 - `src/services/moveThoughtFacts.ts:290`

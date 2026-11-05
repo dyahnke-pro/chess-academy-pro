@@ -10,7 +10,12 @@
  *                   a seat or road button, a command);
  *   - `lesson`    — a walkthrough, drill, stage or play-out (each of those
  *                   ends a mission or focus game when it starts);
- *   - `free-play` — the coach volunteering during a live game.
+ *   - `door`      — the Learn turn door's own decision (its instant, late and
+ *                   phase waves, and the answer it owes): the one voice of a
+ *                   free-play game, focus games included (David 2026-10-30:
+ *                   "One voice"). Dropped only while a mission owns the game;
+ *   - `free-play` — any other line the coach volunteers during a live game
+ *                   (a line outside the door).
  * A `free-play` line is DROPPED while a mission or a focus owns the game. The
  * channel is a required field, so a new speak site does not compile until it
  * says which it is — the leak cannot be written by forgetting.
@@ -23,7 +28,7 @@ import { logAppAudit } from './appAuditor';
 import { emitEverything } from './everythingEvents';
 import type { VoiceOwner } from './learnTurnDoor';
 
-export type LearnVoiceChannel = 'owner' | 'asked' | 'lesson' | 'free-play';
+export type LearnVoiceChannel = 'owner' | 'asked' | 'lesson' | 'door' | 'free-play';
 
 const OPEN = (): VoiceOwner => 'open';
 let ownerOf: () => VoiceOwner = OPEN;
@@ -40,6 +45,7 @@ export function learnVoiceOwner(): VoiceOwner {
 
 /** May a line on this channel speak now? */
 export function learnVoiceAllows(channel: LearnVoiceChannel): boolean {
+  if (channel === 'door') return ownerOf() !== 'mission';
   return channel !== 'free-play' || ownerOf() === 'open';
 }
 
@@ -52,7 +58,7 @@ export function speakLearn(
       kind: 'coach-surface-migrated',
       category: 'subsystem',
       source: 'learnVoice.held',
-      summary: `free-play line held — ${ownerOf()} owns the voice: "${text.slice(0, 80)}"`,
+      summary: `${opts.channel} line held — ${ownerOf()} owns the voice: "${text.slice(0, 80)}"`,
     });
     emitEverything({ surface: 'learn', door: 'voice-owner', lines: [{ computer: opts.intent, kind: null, text, said: false, why: `${ownerOf()} owns the voice` }] });
     return Promise.resolve();

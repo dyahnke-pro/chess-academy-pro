@@ -19,7 +19,8 @@ import { logAppAudit } from '../../services/appAuditor';
 import { FOCUS_IDLE, focusOwnsGame, focusPlantAsk, stepFocus, type FocusEffect, type FocusEvent, type FocusResult, type FocusRunState, type PlantedSeat, type SayLine } from './focusRunner';
 import type { FocusPlantAsk } from './focusPlant';
 import type { CastleProbe } from './castlingWatch';
-import type { FocusMove, ReadLine } from './focusChances';
+import type { FocusChance, FocusMove, ReadLine } from './focusChances';
+import { samePosition } from '../../utils/samePosition';
 import type { RewardKind } from '../../services/rewardEvents';
 import { setUpFocusGame, type FocusSetup } from './focusSetup';
 import type { FocusId } from './focusCard';
@@ -97,6 +98,9 @@ export interface FocusRunner {
   /** May the coach plant a chance before board `ply`, from board `fen`, and
    *  what pattern (`focusPlant`); null = play its own move. */
   plantAsk: (ply: number, fen: string) => FocusPlantAsk | null;
+  /** The student's own chances posed on this board (the exploit seat): what the
+   *  Learn door holds until the student has moved (`ChanceHold`). */
+  studentChances: (fen: string) => FocusChance[];
 }
 
 const waiting = (s: FocusRunState): boolean => !!s.pause && s.pause.retries !== 1;
@@ -216,7 +220,13 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
   const paused = useCallback(() => waiting(stateRef.current), []);
   const rung = useCallback((): TacticsRung | null => stateRef.current.setup?.rung ?? null, []);
   const plantAsk = useCallback((ply: number, fen: string): FocusPlantAsk | null => focusPlantAsk(stateRef.current, ply, fen), []);
+  /** The student's own chances posed on this board (the exploit seat) — what
+   *  the Learn door holds until the student has moved (`ChanceHold`). */
+  const studentChances = useCallback((fen: string): FocusChance[] => {
+    const b = stateRef.current.board;
+    return b && samePosition(b.fen, fen) ? b.chances.filter((c) => c.seat === 'exploit') : [];
+  }, []);
 
-  return useMemo(() => ({ view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk }),
-    [view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk]);
+  return useMemo(() => ({ view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk, studentChances }),
+    [view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk, studentChances]);
 }

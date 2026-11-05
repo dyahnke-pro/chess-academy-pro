@@ -8,9 +8,9 @@
 
 ## Locked rules that govern this surface
 
-- **Why determinism** (CLAUDE.md:346) — names `coachFeatureService`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4707) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6847) — names `coachFeatureService`
+- **Why determinism** (CLAUDE.md:356) — names `coachFeatureService`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4718) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6858) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -323,10 +323,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8793`
-- `src/components/Coach/CoachTeachPage.tsx:8891`
-- `src/components/Coach/CoachTeachPage.tsx:11702`
-- `src/components/Coach/CoachTeachPage.tsx:12094`
+- `src/components/Coach/CoachTeachPage.tsx:8812`
+- `src/components/Coach/CoachTeachPage.tsx:8910`
+- `src/components/Coach/CoachTeachPage.tsx:11721`
+- `src/components/Coach/CoachTeachPage.tsx:12113`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/services/phaseTransitionDetector.test.ts:575`

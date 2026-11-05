@@ -68,7 +68,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
-import { FACT_ROLE, looseClaim, nextLooseSpells, plyOfFen, buildVoicePackage, coachTurn, decidePhaseWave, learnFact, type LaneFact, type LearnFactParts, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, instantWaitsForVerdict, type FactStakes, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind, type VoiceOwner } from '../../services/coachDecider';
+import { FACT_ROLE, looseClaim, nextLooseSpells, plyOfFen, buildVoicePackage, coachTurn, decidePhaseWave, learnFact, type LaneFact, type LearnFactParts, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, instantWaitsForVerdict, type FactStakes, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind, type VoiceOwner, type ChanceHold } from '../../services/coachDecider';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
@@ -2326,6 +2326,25 @@ export function CoachTeachPage({ mode }: {
   });
   const focusRef = useRef(focus);
   focusRef.current = focus;
+  /** THE STUDENT'S OWN CHANCE ON THIS BOARD, for the door (`ChanceHold`): the
+   *  focus's exploit-seat chances — the piece to win, the targets, the
+   *  answer's landing square — so a fact pointing at them waits until the
+   *  student has moved (David 2026-11-05). Null with no such chance. */
+  const chanceHoldAt = useCallback((fen: string): ChanceHold | null => {
+    const cs = focusRef.current.studentChances(fen);
+    if (cs.length === 0) return null;
+    const sq = new Set<string>();
+    let mate = false;
+    for (const c of cs) {
+      const before = sq.size;
+      if (c.piece) sq.add(c.piece.square);
+      for (const t of c.targets ?? []) sq.add(t);
+      if (c.answerUci && c.answerUci.length >= 4) sq.add(c.answerUci.slice(2, 4));
+      if (sq.size === before) for (const q of c.squares) sq.add(q);
+      if (c.kind === 'mate-for-you') mate = true;
+    }
+    return { squares: [...sq], mate };
+  }, []);
   /** The page's takeback, lent to the castling rewind (declared further down). */
   const focusTakeBackRef = useRef<(count: number) => unknown>(() => undefined);
   /** A NEW FOCUS GAME (WO-FOCUS-TACTICS-01) — the classic Learn's free play.
@@ -8718,7 +8737,7 @@ export function CoachTeachPage({ mode }: {
       const live = t && samePosition(t.fen, liveFenRef.current ?? '')
         ? { fen: t.fen, ply: t.ply, slipCp: t.slip(), priceSettled: t.settled(), price: t.price(), midExchange: t.midExchange, said: t.said(), holds: turnHoldsFor(t.fen) }
         : null;
-      const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.story.heard(live?.fen ?? fen).sentences, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), owner: live && t ? t.owner : 'open' });
+      const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.story.heard(live?.fen ?? fen).sentences, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), owner: live && t ? t.owner : 'open', chance: live ? chanceHoldAt(live.fen) : null });
       if (!d) {
         void logAppAudit({
           kind: 'coach-surface-migrated',
@@ -8765,7 +8784,7 @@ export function CoachTeachPage({ mode }: {
       // is not spoken — its board is gone.
       const turnBoard = live?.fen ?? fen;
       const spoken = speechChainRef.current
-        .then(() => (samePosition(liveFenRef.current ?? '', turnBoard) && learnVoiceAllows('free-play') ? voiceService.speakPackage(d.pkg) : undefined))
+        .then(() => (samePosition(liveFenRef.current ?? '', turnBoard) && learnVoiceAllows('door') ? voiceService.speakPackage(d.pkg) : undefined))
         .catch(() => undefined);
       speechChainRef.current = spoken;
       await spoken;
@@ -10093,7 +10112,7 @@ export function CoachTeachPage({ mode }: {
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
       // Each fact made by the one maker, numbered for this wave (P1-6e).
-    ].map((f, i) => learnFact(`instant:${i}`, f)), priorKeys: turnHeard().sentences, priorLead: null, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), turnHolds: turnHoldsFor(args.fenAfterReply), owner: args.owner });
+    ].map((f, i) => learnFact(`instant:${i}`, f)), priorKeys: turnHeard().sentences, priorLead: null, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), turnHolds: turnHoldsFor(args.fenAfterReply), owner: args.owner, chance: chanceHoldAt(args.fenAfterReply) });
     // Every lane's speak/silent answer is the door's lane table now
     // (`learnTurnDoor.LEARN_LANES`), not a kind whitelist applied after the
     // fact. NO COUNT CAP (David 2026-09-13) still holds — repetition is caught
@@ -11786,7 +11805,7 @@ export function CoachTeachPage({ mode }: {
                 // of the last board led the turn and the verdict landed at
                 // +16.7 s). What the move cost is heard first; the answer follows.
                 if (owedSaid && opts?.verdict) owedAfter = owedSaid;
-                else if (owedSaid) speechChainRef.current = speakLearn(owedSaid, { channel: 'free-play', forced: true, intent: 'learn-live' }).catch(() => undefined);
+                else if (owedSaid) speechChainRef.current = speakLearn(owedSaid, { channel: 'door', forced: true, intent: 'learn-live' }).catch(() => undefined);
               }
               const heard = stripThink(line);
               speechChainRef.current = (speechChainRef.current ?? Promise.resolve())
@@ -11827,14 +11846,14 @@ export function CoachTeachPage({ mode }: {
                   // board, so they are not drawn on the next one.
                   const qa = splitThink(line);
                   if (marks) revealMarks(stripThink(qa ? qa[0] : line), marks);
-                  if (!qa) return speakLearn(line, { channel: 'free-play', forced: true, intent: 'learn-live' });
+                  if (!qa) return speakLearn(line, { channel: 'door', forced: true, intent: 'learn-live' });
                   pendingAnswerRef.current = qa[1];
-                  return speakLearn(qa[0], { channel: 'free-play', forced: true, intent: 'learn-live' });
+                  return speakLearn(qa[0], { channel: 'door', forced: true, intent: 'learn-live' });
                 })
                 .catch(() => undefined);
               if (owedAfter) {
                 speechChainRef.current = speechChainRef.current
-                  .then(() => (trackAGenRef.current === myTrackAGen ? speakLearn(owedAfter, { channel: 'free-play', forced: true, intent: 'learn-live' }) : undefined))
+                  .then(() => (trackAGenRef.current === myTrackAGen ? speakLearn(owedAfter, { channel: 'door', forced: true, intent: 'learn-live' }) : undefined))
                   .catch(() => undefined);
               }
               instantSpokenText = instantSpokenText ? `${instantSpokenText} ${heard}` : heard;
@@ -12106,6 +12125,7 @@ export function CoachTeachPage({ mode }: {
                     alreadySaid: instantSpokenText,
                     turnHolds: turnHoldsFor(fenAfterReply),
                     owner: turnOwner,
+                    chance: chanceHoldAt(fenAfterReply),
                     priorKeys: learnMemRef.current.story.heard(pending.fen).sentences,
                     // ONE THOUGHT PER TURN (WO-1b): the late wave leads only
                     // if it outranks what the instant wave led with.
