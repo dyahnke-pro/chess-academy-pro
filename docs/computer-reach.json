@@ -2,40 +2,40 @@
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.",
  "graph": {
   "files": 1755,
-  "nodes": 16376
+  "nodes": 16375
  },
  "totals": {
   "computers": 347,
-  "wiredNowhere": 31,
+  "wiredNowhere": 30,
   "heldByLearnOnly": 19,
   "otherScreensOnly": 10,
-  "dead": 2,
+  "dead": 1,
   "missingFromCode": 0,
   "surfaces": {
    "learn": {
     "yes": 31,
-    "held": 219,
-    "no": 97
+    "held": 220,
+    "no": 96
    },
    "review": {
-    "yes": 234,
-    "no": 113
+    "yes": 235,
+    "no": 112
    },
    "lesson": {
     "yes": 142,
     "no": 205
    },
    "chat": {
-    "yes": 201,
-    "no": 146
+    "yes": 202,
+    "no": 145
    },
    "tapped": {
-    "yes": 158,
-    "no": 189
+    "yes": 159,
+    "no": 188
    },
    "tactics": {
-    "yes": 103,
-    "no": 244
+    "yes": 104,
+    "no": 243
    }
   }
  },
@@ -74,7 +74,6 @@
    "services/tacticAlertService.ts#detectGameplayTactic"
   ],
   "dead": [
-   "services/methodBeat.ts#methodBeatFor",
    "services/missedTacticService.ts#legacyTacticGeometry"
   ]
  },
@@ -2800,21 +2799,24 @@
    ]
   },
   {
-   "key": "services/methodBeat.ts#methodBeatFor",
-   "name": "methodBeatFor (+ FUNDAMENTAL_HABIT, habitIsOwed) — the habit, retrospective",
+   "key": "services/methodBeat.ts#methodBeatRead",
+   "name": "methodBeatRead (+ FUNDAMENTAL_HABIT, habitIsOwed) — the habit, retrospective",
    "file": "services/methodBeat.ts",
-   "fn": "methodBeatFor",
+   "fn": "methodBeatRead",
    "says": "The habit that finds it next time, earned by a computed signal: opponent-intent (ignored threat), the forcing scan (a check/capture was ther",
    "origin": "map",
-   "learn": "no",
-   "review": "no",
+   "learn": "held",
+   "review": "yes",
    "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": false,
-   "other": [],
-   "where": "dead (no production caller)"
+   "chat": "yes",
+   "tapped": "yes",
+   "tactics": "yes",
+   "app": true,
+   "other": [
+    "kid",
+    "campaign",
+    "playSilent"
+   ]
   },
   {
    "key": "services/methodSignals.ts#(module)",

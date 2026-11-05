@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**468 lines · 15 exports · 18 importers · 9 tests · 1 audits**
+**464 lines · 14 exports · 18 importers · 9 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -54,62 +54,14 @@
 - `src/services/coachFeatureService.ts:3330`
 - `src/services/positionFacts.ts:1188`
 
-### `methodBeatFor` (function) — 48 call sites
-- `src/services/methodBeat.need.test.ts:19`
-- `src/services/methodBeat.need.test.ts:23`
-- `src/services/methodBeat.need.test.ts:29`
-- `src/services/methodBeat.need.test.ts:33`
-- `src/services/methodBeat.need.test.ts:34`
-- `src/services/methodBeat.need.test.ts:49`
-- `src/services/methodBeat.need.test.ts:50`
-- `src/services/methodBeat.need.test.ts:54`
-- `src/services/methodBeat.need.test.ts:55`
-- `src/services/methodBeat.need.test.ts:59`
-- `src/services/methodBeat.need.test.ts:63`
-- `src/services/methodBeat.need.test.ts:64`
-- `src/services/methodBeat.need.test.ts:65`
-- `src/services/methodBeat.need.test.ts:69`
-- `src/services/methodBeat.need.test.ts:78`
-- `src/services/methodBeat.need.test.ts:87`
-- `src/services/methodBeat.need.test.ts:88`
-- `src/services/methodBeat.need.test.ts:96`
-- `src/services/methodBeat.need.test.ts:97`
-- `src/services/methodBeat.need.test.ts:103`
-- `src/services/methodBeat.need.test.ts:115`
-- `src/services/methodBeat.need.test.ts:120`
-- `src/services/methodBeat.need.test.ts:131`
-- `src/services/methodBeat.need.test.ts:138`
-- `src/services/methodBeat.need.test.ts:145`
-- `src/services/methodBeat.need.test.ts:151`
-- `src/services/methodBeat.need.test.ts:162`
-- `src/services/methodBeat.need.test.ts:166`
-- `src/services/methodBeat.need.test.ts:173`
-- `src/services/methodBeat.need.test.ts:179`
-- `src/services/methodBeat.need.test.ts:186`
-- `src/services/methodBeat.need.test.ts:187`
-- `src/services/methodBeat.test.ts:8`
-- `src/services/methodBeat.test.ts:13`
-- `src/services/methodBeat.test.ts:19`
-- `src/services/methodBeat.test.ts:22`
-- `src/services/methodBeat.test.ts:26`
-- `src/services/methodBeat.test.ts:30`
-- `src/services/methodBeat.test.ts:34`
-- `src/services/methodBeat.test.ts:39`
-- `src/services/methodBeat.test.ts:43`
-- `src/services/methodBeat.test.ts:44`
-- `src/services/methodBeat.test.ts:48`
-- `src/services/methodBeat.test.ts:54`
-- `src/services/methodBeat.test.ts:118`
-- `src/services/methodBeat.test.ts:121`
-- `src/services/methodBeat.test.ts:124`
-- `src/services/methodBeat.test.ts:128`
-
 ### `HABIT_KIND` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `methodBeatRead` (function) — 2 call sites
+### `methodBeatRead` (function) — 4 call sites
 - `src/services/coachDecider.ts:553`
 - `src/services/methodBeat.live.test.ts:151`
+- `src/services/methodBeat.need.test.ts:4`
+- `src/services/methodBeat.test.ts:4`
 
 ### `LiveHabit` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -147,7 +99,7 @@
 - `src/services/methodBeat.live.test.ts:118`
 - `src/services/methodBeat.live.test.ts:144`
 - `src/services/methodBeat.live.test.ts:147`
-- `src/services/methodBeat.test.ts:105`
+- `src/services/methodBeat.test.ts:107`
 - `src/services/methodSignals.test.ts:57`
 - `src/services/methodSignals.test.ts:61`
 - `src/services/methodSignals.test.ts:64`
@@ -180,9 +132,9 @@
 - `src/services/methodBeat.live.test.ts:103`
 - `src/services/methodBeat.live.test.ts:126`
 - `src/services/methodBeat.live.test.ts:131`
-- `src/services/methodBeat.test.ts:87`
-- `src/services/methodBeat.test.ts:91`
-- `src/services/methodBeat.test.ts:98`
+- `src/services/methodBeat.test.ts:89`
+- `src/services/methodBeat.test.ts:93`
+- `src/services/methodBeat.test.ts:100`
 
 ## Tests
 

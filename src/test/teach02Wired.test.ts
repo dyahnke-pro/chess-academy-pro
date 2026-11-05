@@ -52,13 +52,13 @@ describe('review — the four facts are facets, so they go through the door', ()
     expect(taught.some((x) => x.startsWith('[rule]'))).toBe(false);
   });
 
-  it('[refuted] speaks the engine-computed alternative on the student\'s ply', () => {
+  it('[common-wrong] speaks the engine-computed alternative on the student\'s ply', () => {
     const alt: RefutedAlternative = { alt: 'Qh4', games: 40, pct: 40, costCp: 700, line: null, concept: null, lineSans: [], proofResult: null, source: 'amateur', text: '40% of players at your level play Qh4 here, and it costs about 7.0 points.' };
     const f = facetsAt(4, SCH, S, 'black', { ...NO_TEACHING_CONTEXT, refutedAlt: alt });
-    expect(f).toContain(`[refuted] ${alt.text}`);
+    expect(f).toContain(`[common-wrong] ${alt.text}`);
     // NEGATIVE: never on the opponent's ply.
     const opp = facetsAt(4, SCH, S, 'white', { ...NO_TEACHING_CONTEXT, refutedAlt: alt });
-    expect(opp.some((x) => x.startsWith('[refuted] 40% of players'))).toBe(false);
+    expect(opp.some((x) => x.startsWith('[common-wrong] 40% of players'))).toBe(false);
   });
 
   it('[stock] takes stock at the turn of the game, and only there', () => {
@@ -100,7 +100,7 @@ describe('live — the same four facts are clauses of the composer', () => {
     expect(r.clauses.some((c) => c.kind === 'stopped')).toBe(false);
   });
 
-  it('refuted: costed off the fan already read, proven by its own line', async () => {
+  it('common-wrong: costed off the fan already read, proven by its own line', async () => {
     // Black (the student) played 3…Nf6; players at their level also try 3…Qh4??
     const f3 = fens(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3']);
     const fan = [{ evaluation: 20, mate: null, moves: ['g8f6'] }, { evaluation: 700, mate: null, moves: ['d8h4', 'f3h4'] }];
@@ -109,12 +109,12 @@ describe('live — the same four facts are clauses of the composer', () => {
     const r = await computePositionFacts({ ...base, lastMove: { fenBefore: f3[5], san: 'Nf6', cpLoss: 0, historySans: null, reads: null, popular, fanBefore: fan } });
     // The claim, whichever wrapper the board draws: the share, the move, the
     // proven line and its result.
-    const refuted = r.clauses.find((c) => c.kind === 'refuted')?.text ?? '';
+    const refuted = r.clauses.find((c) => c.kind === 'common-wrong')?.text ?? '';
     expect(refuted).toMatch(/A lot of players at your level play Qh4|Qh4 is a popular choice among players at your level/);
     expect(refuted).toMatch(/you play Qh4 and they answer Nxh4 — they win a queen/);
     // NEGATIVE: the engine never read the popular move → no cost to state.
     const none = await computePositionFacts({ ...base, lastMove: { fenBefore: f3[5], san: 'Nf6', cpLoss: 0, historySans: null, reads: null, popular, fanBefore: [fan[0]] } });
-    expect(none.clauses.some((c) => c.kind === 'refuted')).toBe(false);
+    expect(none.clauses.some((c) => c.kind === 'common-wrong')).toBe(false);
   });
 
   it('rule: the principle is taught once, and the surface is told which', async () => {

@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { methodBeatFor, type MethodSignals, type MethodHabit } from './methodBeat';
+import { methodBeatRead, type MethodSignals, type MethodHabit } from './methodBeat';
+/** The beat's words, as every reader says them. */
+const methodBeatFor = (s: Parameters<typeof methodBeatRead>[0], ply = 0): string | null => methodBeatRead(s, ply)?.text ?? null;
 
 // ── THE METHOD BAR IS THE STUDENT'S RECORD, NOT A FLAT NUMBER ───────────────
 // David 2026-09-16, reading the review of his own Alapin: the method layer was

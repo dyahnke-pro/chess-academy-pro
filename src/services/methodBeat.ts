@@ -122,10 +122,6 @@ function pick(variants: readonly string[], v: number): string {
  * Ordered by teaching value: the habit that would have found the move beats the
  * general "slow down here", because it is specific.
  */
-export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | null {
-  return methodBeatRead(s, plyForVariety)?.text ?? null;
-}
-
 /** THE KIND OF FACT EACH HABIT IS (2026-11-05, `teachingMoves.ts`): the habit
  *  that asks what THEIR move is doing puts the student in the opponent's
  *  shoes; the forcing scan is checks, captures and threats first; every other
@@ -267,7 +263,7 @@ export function methodBeatRead(s: MethodSignals, plyForVariety = 0): { habit: Me
 // ─────────────────────────────────────────────────────────────────────────────
 // THE PRESENT-TENSE REGISTER — the same method, taught on a LIVE board.
 //
-// `methodBeatFor` above is RETROSPECTIVE: it grades a move that was played, so
+// `methodBeatRead` above is RETROSPECTIVE: it grades a move that was played, so
 // it says "the move you wanted was a forcing one". Speaking that on a live board
 // is a register violation (CLAUDE.md: review is retrospective, in-game is
 // present tense) AND a lie — nothing has been played yet.

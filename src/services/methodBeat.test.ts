@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { methodBeatFor, liveMethodBeat } from './methodBeat';
+import { methodBeatRead, liveMethodBeat } from './methodBeat';
+/** The beat's words, as every reader says them. */
+const methodBeatFor = (s: Parameters<typeof methodBeatRead>[0], ply = 0): string | null => methodBeatRead(s, ply)?.text ?? null;
 
 const base = { tier: 'swing' as const, cpLossCp: null, bestSan: null, ignoredThreat: false, isStudentMove: true };
 

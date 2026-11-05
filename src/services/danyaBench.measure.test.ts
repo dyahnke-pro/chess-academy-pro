@@ -595,7 +595,7 @@ const FACT_COMPUTER: Record<FactKind, string> = {
   'plan-line': 'services/pvPlayback.ts#computePvLine',
   consequence: 'services/pvPlayback.ts#computePvLine',
   note: 'services/coachFeatureService.ts#generateReviewNarration',
-  method: 'services/methodBeat.ts#methodBeatFor',
+  method: 'services/methodBeat.ts#methodBeatRead',
   refuted: 'services/refutedAlternative.ts#refutedAlternative',
   bluff: 'services/bluffDetector.ts#detectBluff',
   technique: 'services/conversionMethod.ts#readConversion',

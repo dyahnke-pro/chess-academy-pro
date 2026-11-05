@@ -1332,13 +1332,13 @@
   ]
  },
  {
-  "name": "methodBeatFor (+ FUNDAMENTAL_HABIT, habitIsOwed) — the habit, retrospective",
+  "name": "methodBeatRead (+ FUNDAMENTAL_HABIT, habitIsOwed) — the habit, retrospective",
   "file": "services/methodBeat.ts",
-  "fn": "methodBeatFor",
+  "fn": "methodBeatRead",
   "says": "The habit that finds it next time, earned by a computed signal: opponent-intent (ignored threat), the forcing scan (a check/capture was ther",
   "origin": "map",
   "nodes": [
-   "services/methodBeat.ts#methodBeatFor"
+   "services/methodBeat.ts#methodBeatRead"
   ]
  },
  {

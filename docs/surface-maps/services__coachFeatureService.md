@@ -233,7 +233,7 @@
 - `src/services/habitBothSeats.test.ts:42`
 - `src/services/loopCloses.review.integration.test.ts:90`
 - `src/services/loosePattern.test.ts:15`
-- `src/services/methodBeat.test.ts:78`
+- `src/services/methodBeat.test.ts:80`
 - `src/services/oneCostPerMove.test.ts:34`
 - `src/services/oneCostPerMove.test.ts:38`
 - `src/services/oneCostPerMove.test.ts:47`

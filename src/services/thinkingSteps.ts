@@ -210,7 +210,7 @@ export const TAG_STEP: Record<MisconceptionTagId, ThinkingStep | null> = {
   other: null,
 };
 
-/** The RETROSPECTIVE habit beat (`methodBeatFor`) a step's slips are taught
+/** The RETROSPECTIVE habit beat (`methodBeatRead`) a step's slips are taught
  *  through. Several steps share one habit: "ask what THEY want" closes what
  *  their move changed, am I safe, answering the danger, and the blunder check. */
 export const STEP_METHOD_HABIT: Record<ThinkingStep, MethodHabit | null> = {
