@@ -629,16 +629,16 @@ export interface ReviewNarration {
   segments: ReviewMoveSegment[];
   /** Optional — spoken when the user reaches the last ply. Null by default. */
   closing: string | null;
+  /** The club gem index could not be read for this build, so its known
+   *  mistakes and traps are not in it — never stored: the next open builds
+   *  again with them (a line is never dropped for a file that did not load). */
+  knownSlipsMissing?: boolean;
   /** THE GAME'S STORY (WO-STORY-MATRIX-01 P1-8d): everything the walk says,
    *  each at the ply it says it — its claims, sentences, plans, events and
    *  flags — as one checkpoint (`StoryStore.serialize`). What a walk had said
    *  through ply k is this taken back to k (`storyThrough`); null when the
    *  build said nothing. Cached with the narration. */
   story: string | null;
-  /** The club gem index could not be read for this build, so its known
-   *  mistakes and traps are not in it — never stored: the next open builds
-   *  again with them (a line is never dropped for a file that did not load). */
-  knownSlipsMissing?: boolean;
 }
 
 /** Rich move data that feeds the walk-the-game review. Includes the

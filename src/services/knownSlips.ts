@@ -24,6 +24,7 @@
 //
 // PURE but for `loadKnownSlipIndex`, the one read of the index file.
 import { Chess } from 'chess.js';
+import { unmarked } from '../utils/sanMark';
 import { clubGemBoards, clubGemForIndex, type ClubGem } from './clubGems';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
 import { isWeaponGem } from '../data/lessons/punishGems';
@@ -160,7 +161,7 @@ export function knownSlip(ctx: KnownSlipContext): KnownSlipRead | null {
   const punisher = slipBy === 'student' ? 'they' : 'you';
   const name = isWeaponGem(asGem) ? 'trap' : 'mistake';
   // What it costs: a mate on the board, or the line's own result.
-  const result = exactMate ? `${punishSan} is mate` : `after ${punishSan} ${outcome(gem, fen, sans, punisher, student)}`;
+  const result = exactMate ? `${unmarked(punishSan)} is mate` : `after ${punishSan} ${outcome(gem, fen, sans, punisher, student)}`;
   let afterSlip = '';
   try { const b = new Chess(fen); b.move(slipSan); afterSlip = b.fen(); } catch { return null; }
   const verdictSaidIt = on === 'played' && !!ctx.verdictPunish && sameMove(afterSlip, ctx.verdictPunish, punishSan);

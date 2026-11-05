@@ -47,7 +47,7 @@ describe('Review says the slip that was played, as why it was a mistake', () => 
   const SANS = ['e4', 'e5', 'Qh5', 'Nc6', 'Bc4', 'Nf6', 'Qxf7#'];
   it('the student\'s own slip (Black): a known trap, and the mate — said on the move that played it', () => {
     const walk = said({ sans: SANS, studentSide: 'black', reads: [] });
-    expect(walk.get(6)).toContain('Here, 6.6% of club players under 1600 play Nf6 — a known trap: Qxf7# is mate.');
+    expect(walk.get(6)).toContain('Here, 6.6% of club players under 1600 play Nf6 — a known trap: Qxf7 is mate.');
     expect(walk.get(5)).not.toMatch(/club players/);
     // A trap's material is counted off its line: g6?? Qxe5+ wins a rook, a
     // knight and a pawn — never "the queen" for nine points.
@@ -55,7 +55,7 @@ describe('Review says the slip that was played, as why it was a mistake', () => 
   });
   it('their slip (the student is White): the same trap, said to the student who punishes it', () => {
     const walk = said({ sans: SANS, studentSide: 'white', reads: [] });
-    expect(walk.get(6)).toContain('Here, 6.6% of club players under 1600 play Nf6 — a known trap: Qxf7# is mate.');
+    expect(walk.get(6)).toContain('Here, 6.6% of club players under 1600 play Nf6 — a known trap: Qxf7 is mate.');
     expect(walk.get(3)).toContain('after Qxe5+ you win a rook, a knight and a pawn.');
   });
 });
