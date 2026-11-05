@@ -165,13 +165,13 @@
     {
       "ply": 22,
       "t": 147.5,
-      "fen": "r2q1rk1/ppp1b1pp/1nn1pp2/4Pb2/2PP4/2N1BN2/PP2B1PP/R2Q1RK1 w - - 2 12",
+      "fen": "r2q1rk1/ppp1b1pp/1nn1pp2/4Pb2/2PP4/2N1BN2/PP2B1PP/R2Q1RK1 w - - 0 12",
       "line": [
-        "f6",
         "O-O",
-        "O-O"
+        "O-O",
+        "f6"
       ],
-      "spoken": "Black challenges with ...f6; you castle, and Black castles."
+      "spoken": "Both sides castle, and Black challenges with ...f6."
     },
     {
       "ply": 23,

@@ -691,10 +691,10 @@
   {
    "ply": 65,
    "t": 1849.5,
-   "fen": "2r3k1/1p3q1p/p5p1/8/1P1Q4/7P/2b2PP1/3R2K1 b - - 1 33",
+   "fen": "2r3k1/1p3p1p/p5p1/8/1P1Q4/7P/2q2PP1/3R2K1 b - - 1 33",
    "line": [
-    "Bxf7+",
-    "Qxf7",
+    "Bxc2",
+    "Qxc2",
     "Qd4"
    ],
    "spoken": "g4 was blundered by me — bad — but your opponent missed it, so you keep torturing White.",
@@ -703,7 +703,7 @@
   {
    "ply": 66,
    "t": 1866,
-   "fen": "4r1k1/1p3q1p/p5p1/8/1P1Q4/7P/2b2PP1/3R2K1 w - - 2 34",
+   "fen": "4r1k1/1p3p1p/p5p1/8/1P1Q4/7P/2q2PP1/3R2K1 w - - 2 34",
    "line": [
     "Re8"
    ],

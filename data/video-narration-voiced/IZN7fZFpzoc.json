@@ -208,9 +208,9 @@
       "t": 537.5,
       "fen": "r2qk2r/pp2npbp/2npp1p1/2p3B1/2P1P3/2NP1B2/PP3PPP/R2Q1RK1 b kq - 3 10",
       "line": [
-        "Bg5",
+        "O-O",
         "Nge7",
-        "O-O"
+        "Bg5"
       ],
       "spoken": "I'm not afraid of White taking on e7 — that's what you want: White gives away the dark bishop for your e7-knight, the inferior piece, leaving the other knight to reach d4. So you prod White with h6. I don't love castling kingside first because of the queen to d2, threatening to trade the dark bishops — a serious positional threat you don't want.",
       "reanchor": true

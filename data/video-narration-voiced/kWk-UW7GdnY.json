@@ -826,9 +826,9 @@
    "t": 1220.5,
    "fen": "r1bqkb1r/pp2pppp/2n5/3n4/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 3 7",
    "line": [
-    "Nc3",
+    "Nf3",
     "Nc6",
-    "Nf3"
+    "Nc3"
    ],
    "spoken": "To clarify what I meant after a knight to c3 and a bishop to g4...",
    "reanchor": true

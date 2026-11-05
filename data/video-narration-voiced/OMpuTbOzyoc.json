@@ -147,9 +147,9 @@
    "t": 1089.5,
    "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 1 7",
    "line": [
-    "Bd3",
+    "Nf3",
     "b5",
-    "Nf3"
+    "Bd3"
    ],
    "spoken": "The bishop to d3, supporting the e4-pawn."
   },

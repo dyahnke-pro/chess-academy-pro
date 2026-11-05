@@ -511,16 +511,11 @@
    "reanchor": true
   },
   {
-   "ply": 41,
+   "ply": 34,
    "t": 2389,
-   "fen": "r4rk1/pb2pp1p/n1pq1npQ/1p2N3/2BP2P1/2N2P2/PPP5/2KR3R b - - 10 21",
-   "line": [
-    "Re8",
-    "Nc3",
-    "Rf8",
-    "Qh6"
-   ],
-   "spoken": "A sample continuation: the rook to e8, the knight to c3, the rook back to f8, and the queen to h6 — the mating net keeps reforming no matter how Black shuffles.",
+   "fen": "r4rk1/pb2pp1p/n1pq1npQ/1p2N3/2BP2P1/2N2P2/PPP5/2KR3R w - - 3 18",
+   "line": [],
+   "spoken": "",
    "reanchor": true
   },
   {

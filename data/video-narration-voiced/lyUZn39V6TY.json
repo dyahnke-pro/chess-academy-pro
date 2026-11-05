@@ -196,12 +196,12 @@
   {
    "ply": 20,
    "t": 336.5,
-   "fen": "r3kb1r/1p2pppp/2n2n2/1p3bB1/2pPp3/P1P5/1P1N1PPP/R3KBNR w KQkq - 0 11",
+   "fen": "r3kb1r/1p2pppp/2n2n2/1p3bB1/2pPp3/P1P5/1P1N1PPP/R3KBNR w KQkq - 2 11",
    "line": [
-    "Bg5",
-    "Bf5",
     "e4",
-    "dxe4"
+    "dxe4",
+    "Bg5",
+    "Bf5"
    ],
    "spoken": "The situation has shifted — with the centre changed, the queenside break makes less sense because the advanced pawn is now loose. So refocus on holding the extra central pawn, developing the bishop to f5 to defend it. Re-evaluate what's hanging every time the structure changes.",
    "kind": "plan",
@@ -210,7 +210,7 @@
   {
    "ply": 21,
    "t": 341.5,
-   "fen": "r3kb1r/1p2pppp/2n2n2/1p3bB1/2pPp3/P1P5/1P1NNPPP/R3KB1R b KQkq - 1 11",
+   "fen": "r3kb1r/1p2pppp/2n2n2/1p3bB1/2pPp3/P1P5/1P1NNPPP/R3KB1R b KQkq - 3 11",
    "line": [
     "Ne2"
    ],
@@ -219,7 +219,7 @@
   {
    "ply": 22,
    "t": 353.5,
-   "fen": "r3kb1r/1p2pppp/2n2nb1/1p4B1/2pPp3/P1P5/1P1NNPPP/R3KB1R w KQkq - 2 12",
+   "fen": "r3kb1r/1p2pppp/2n2nb1/1p4B1/2pPp3/P1P5/1P1NNPPP/R3KB1R w KQkq - 4 12",
    "line": [
     "Bg6"
    ],
@@ -228,7 +228,7 @@
   {
    "ply": 23,
    "t": 359.5,
-   "fen": "r3kb1r/1p2pppp/2n2nb1/1p4B1/2pPp3/P1P3N1/1P1N1PPP/R3KB1R b KQkq - 3 12",
+   "fen": "r3kb1r/1p2pppp/2n2nb1/1p4B1/2pPp3/P1P3N1/1P1N1PPP/R3KB1R b KQkq - 5 12",
    "line": [
     "Ng3"
    ],

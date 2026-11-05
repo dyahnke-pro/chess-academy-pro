@@ -337,18 +337,18 @@
   {
    "ply": 45,
    "t": 203,
-   "fen": "r1r3k1/3b1pbn/pp1p2pp/2pPp3/P1P1PP1q/R7/1P1B1PNP/Q2BR1K1 b - - 0 23",
+   "fen": "r1r3k1/3b1pbn/pp1p2pp/2pPp3/P1P1PP1q/R7/1P1B1PNP/Q2BR1K1 b - - 1 23",
    "line": [
-    "Neg2",
+    "gxf4",
     "Qxh4",
-    "gxf4"
+    "Ng2"
    ],
    "spoken": ""
   },
   {
    "ply": 46,
    "t": 207,
-   "fen": "r1r3k1/3bqpbn/pp1p2pp/2pPp3/P1P1PP2/R7/1P1B1PNP/Q2BR1K1 w - - 1 24",
+   "fen": "r1r3k1/3bqpbn/pp1p2pp/2pPp3/P1P1PP2/R7/1P1B1PNP/Q2BR1K1 w - - 2 24",
    "line": [
     "Qe7"
    ],

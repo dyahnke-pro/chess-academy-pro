@@ -434,19 +434,19 @@
   {
    "ply": 52,
    "t": 801,
-   "fen": "r5k1/p3rpb1/2b3p1/3pp1P1/6nP/2P1P1B1/P2QN3/3R1RK1 w - - 0 27",
+   "fen": "r5k1/p3rpb1/2q3p1/3pp1P1/6nP/2P1P1B1/P2QN3/3R1RK1 w - - 0 27",
    "line": [
     "c6",
-    "Qxc6",
     "Bxc6",
-    "Bxc6"
+    "Bxc6",
+    "Qxc6"
    ],
-   "spoken": "White pushes c6, you take with the queen, White takes with the bishop, and you recapture, capturing on c6 with the bishop — and once you collect the c5 pawn you'll have an intact centre, excellent coordination with both bishops fianchettoed, and White's pawns terribly weak."
+   "spoken": "White pushes c6, you take with the bishop, White takes back with the bishop, and you recapture with the queen on c6 — and once you collect the c5 pawn you'll have an intact centre, excellent coordination with both bishops fianchettoed, and White's pawns terribly weak."
   },
   {
    "ply": 53,
    "t": 804.5,
-   "fen": "r5k1/p3rpb1/2b3p1/3pp1P1/6nP/2P1P3/P2QNB2/3R1RK1 b - - 1 27",
+   "fen": "r5k1/p3rpb1/2q3p1/3pp1P1/6nP/2P1P3/P2QNB2/3R1RK1 b - - 1 27",
    "line": [
     "Bf2"
    ],
@@ -455,7 +455,7 @@
   {
    "ply": 54,
    "t": 813.5,
-   "fen": "3r2k1/p3rpb1/2b3p1/3pp1P1/6nP/2P1P3/P2QNB2/3R1RK1 w - - 2 28",
+   "fen": "3r2k1/p3rpb1/2q3p1/3pp1P1/6nP/2P1P3/P2QNB2/3R1RK1 w - - 2 28",
    "line": [
     "Rd8"
    ],
@@ -464,7 +464,7 @@
   {
    "ply": 55,
    "t": 839,
-   "fen": "3r2k1/p3rpb1/2b3p1/3pp1P1/6nP/2P1P1N1/P2Q1B2/3R1RK1 b - - 3 28",
+   "fen": "3r2k1/p3rpb1/2q3p1/3pp1P1/6nP/2P1P1N1/P2Q1B2/3R1RK1 b - - 3 28",
    "line": [
     "Ng3"
    ],
@@ -473,7 +473,7 @@
   {
    "ply": 56,
    "t": 846.5,
-   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p1nP/2P1P1N1/P2Q1B2/3R1RK1 w - - 0 29",
+   "fen": "3r2k1/p3rpb1/2q3p1/3p2P1/4p1nP/2P1P1N1/P2Q1B2/3R1RK1 w - - 0 29",
    "line": [
     "e4"
    ],
@@ -482,7 +482,7 @@
   {
    "ply": 57,
    "t": 856.5,
-   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p1nP/2P1P1N1/P2Q1B2/2R2RK1 b - - 1 29",
+   "fen": "3r2k1/p3rpb1/2q3p1/3p2P1/4p1nP/2P1P1N1/P2Q1B2/2R2RK1 b - - 1 29",
    "line": [
     "Rc1"
    ],
@@ -491,7 +491,7 @@
   {
    "ply": 58,
    "t": 861.5,
-   "fen": "3r2k1/p3rpb1/2b3p1/3pn1P1/4p2P/2P1P1N1/P2Q1B2/2R2RK1 w - - 2 30",
+   "fen": "3r2k1/p3rpb1/2q3p1/3pn1P1/4p2P/2P1P1N1/P2Q1B2/2R2RK1 w - - 2 30",
    "line": [
     "Ne5"
    ],
@@ -500,7 +500,7 @@
   {
    "ply": 60,
    "t": 875.5,
-   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p2P/2P1PnN1/P2Q1BK1/2R2R2 w - - 4 31",
+   "fen": "3r2k1/p3rpb1/2q3p1/3p2P1/4p2P/2P1PnN1/P2Q1BK1/2R2R2 w - - 4 31",
    "line": [
     "Kg2",
     "Nf3"
@@ -510,7 +510,7 @@
   {
    "ply": 61,
    "t": 880,
-   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p2P/2P1PnN1/P3QBK1/2R2R2 b - - 5 31",
+   "fen": "3r2k1/p3rpb1/2q3p1/3p2P1/4p2P/2P1PnN1/P3QBK1/2R2R2 b - - 5 31",
    "line": [
     "Qe2"
    ],
@@ -519,7 +519,7 @@
   {
    "ply": 62,
    "t": 882,
-   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p2n/2P1P1N1/P3QBK1/2R2R2 w - - 0 32",
+   "fen": "3r2k1/p3rpb1/2q3p1/3p2P1/4p2n/2P1P1N1/P3QBK1/2R2R2 w - - 0 32",
    "line": [
     "Nxh4+"
    ],
@@ -528,7 +528,7 @@
   {
    "ply": 63,
    "t": 892,
-   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p2n/2P1P1NK/P3QB2/2R2R2 b - - 1 32",
+   "fen": "3r2k1/p3rpb1/2q3p1/3p2P1/4p2n/2P1P1NK/P3QB2/2R2R2 b - - 1 32",
    "line": [
     "Kh3"
    ],
@@ -537,7 +537,7 @@
   {
    "ply": 64,
    "t": 898,
-   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p3/2P1PnNK/P3QB2/2R2R2 w - - 2 33",
+   "fen": "3r2k1/p3rpb1/2q3p1/3p2P1/4p3/2P1PnNK/P3QB2/2R2R2 w - - 2 33",
    "line": [
     "Nf3"
    ],
@@ -546,7 +546,7 @@
   {
    "ply": 65,
    "t": 901.5,
-   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p3/2P1PnNK/P3QB2/2R4R b - - 3 33",
+   "fen": "3r2k1/p3rpb1/2q3p1/3p2P1/4p3/2P1PnNK/P3QB2/2R4R b - - 3 33",
    "line": [
     "Rh1"
    ],
@@ -555,28 +555,28 @@
   {
    "ply": 68,
    "t": 912,
-   "fen": "3r2k1/p3rpb1/4b1p1/3p2P1/4p3/2P1PnN1/P3QBK1/2R4R w - - 6 35",
+   "fen": "3r2k1/p3rpb1/4q1p1/3p2P1/4p3/2P1PnN1/P3QBK1/2R4R w - - 6 35",
    "line": [
-    "Bd7+",
+    "Qd7+",
     "Kg2",
-    "Be6"
+    "Qe6"
    ],
    "spoken": "You check with the bishop to d7 — the g5 pawn isn't going anywhere, so you go for the kill — the king goes to g2, and the bishop repositions to e6, heading for g4 to set up a discovered attack on White's queen."
   },
   {
    "ply": 70,
    "t": 927.5,
-   "fen": "3r2k1/p3rpb1/6p1/3p2P1/4p1b1/2P1PnN1/P3QB2/2R2K1R w - - 8 36",
+   "fen": "3r2k1/p3rpb1/6p1/3p2P1/4p1q1/2P1PnN1/P3QB2/2R2K1R w - - 8 36",
    "line": [
     "Kf1",
-    "Bg4"
+    "Qg4"
    ],
    "spoken": "The king to f1, and the bishop to g4 — with your other bishop coming to e5 to press the knight, and if needed your king can escape through the centre."
   },
   {
    "ply": 72,
    "t": 940,
-   "fen": "3r2k1/p3rp2/6p1/3pb1P1/4p1b1/2P1PnN1/P3QB2/2R2KR1 w - - 10 37",
+   "fen": "3r2k1/p3rp2/6p1/3pb1P1/4p1q1/2P1PnN1/P3QB2/2R2KR1 w - - 10 37",
    "line": [
     "Rg1",
     "Be5"
@@ -586,17 +586,17 @@
   {
    "ply": 74,
    "t": 946.5,
-   "fen": "3r2k1/p3rp2/6p1/3pb1P1/4p3/2P1PnNb/P3QBR1/2R2K2 w - - 12 38",
+   "fen": "3r2k1/p3rp2/6p1/3pb1P1/4p3/2P1PnNq/P3QBR1/2R2K2 w - - 12 38",
    "line": [
     "Rg2",
-    "Bh3"
+    "Qh3"
    ],
    "spoken": "You give the check, the bishop to h3 — let's be accurate; I see at least two ways to win."
   },
   {
    "ply": 78,
    "t": 963.5,
-   "fen": "3r2k1/p3rp2/6p1/3p2P1/4p3/2P1Pnbb/P3QBR1/2R2K2 w - - 0 40",
+   "fen": "3r2k1/p3rp2/6p1/3p2P1/4p3/2P1Pnbq/P3QBR1/2R2K2 w - - 0 40",
    "line": [
     "Nf5",
     "Bd6",

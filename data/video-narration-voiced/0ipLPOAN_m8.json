@@ -49,12 +49,12 @@
     {
       "ply": 7,
       "t": 107,
-      "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/5NP1/PP2PP1P/RNBQKB1R b KQkq - 2 4",
+      "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/5NP1/PP2PP1P/RNBQKB1R b KQkq - 0 4",
       "line": [
         "g6",
-        "g3",
+        "Nf3",
         "Bg7",
-        "Nf3"
+        "g3"
       ],
       "spoken": "Ever since, the fianchetto has remained hugely popular here.",
       "reanchor": true

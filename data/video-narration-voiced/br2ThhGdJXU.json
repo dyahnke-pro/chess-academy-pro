@@ -700,12 +700,12 @@
   {
    "ply": 10,
    "t": 1884,
-   "fen": "r1bqkb1r/ppp1pppp/1nnp4/4P3/3P4/8/PPP1BPPP/RNBQK1NR w KQkq - 0 6",
+   "fen": "r1bqkb1r/ppp1pppp/1nnp4/4P3/3P4/8/PPP1BPPP/RNBQK1NR w KQkq - 1 6",
    "line": [
     "d3",
-    "Nc6",
+    "d6",
     "d4",
-    "d6"
+    "Nc6"
    ],
    "spoken": "So d6, d4, a knight to c6, a knight to f3...",
    "reanchor": true
@@ -713,7 +713,7 @@
   {
    "ply": 11,
    "t": 1885,
-   "fen": "r1bqkb1r/ppp1pppp/1nnp4/4P3/3P4/5N2/PPP1BPPP/RNBQK2R b KQkq - 1 6",
+   "fen": "r1bqkb1r/ppp1pppp/1nnp4/4P3/3P4/5N2/PPP1BPPP/RNBQK2R b KQkq - 2 6",
    "line": [
     "Nf3"
    ],

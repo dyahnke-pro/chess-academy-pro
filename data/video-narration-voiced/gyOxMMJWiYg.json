@@ -82,11 +82,11 @@
   {
    "ply": 8,
    "t": 153.5,
-   "fen": "rnbqkb1r/pp2ppp1/2p2n2/3p3p/3PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 0 5",
+   "fen": "rnbqkb1r/pp2ppp1/2p2n2/3p3p/3PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 2 5",
    "line": [
-    "Nf6",
+    "h5",
     "Nc3",
-    "h5"
+    "Nf6"
    ],
    "spoken": "— and that's a limited, narrow-minded way to be, because when you do need e5, out of emotional attachment you won't play the moves you need.",
    "reanchor": true

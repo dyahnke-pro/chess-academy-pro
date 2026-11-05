@@ -296,11 +296,11 @@
     {
       "ply": 7,
       "t": 558.5,
-      "fen": "rnb1kbnr/ppp1pppp/8/q7/8/2N3P1/PPPP1P1P/R1BQKBNR b KQkq - 2 4",
+      "fen": "rnb1kbnr/ppp1pppp/8/q7/8/2N3P1/PPPP1P1P/R1BQKBNR b KQkq - 0 4",
       "line": [
-        "g3",
+        "Nc3",
         "Qa5",
-        "Nc3"
+        "g3"
       ],
       "spoken": "— good, underrated systems —",
       "reanchor": true

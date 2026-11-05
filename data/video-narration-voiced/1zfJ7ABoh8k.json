@@ -486,14 +486,14 @@
   {
    "ply": 14,
    "t": 859,
-   "fen": "rn2kb1r/pp2pppp/2p2n2/q6b/8/2N3PP/PPPPNPB1/R1BQK2R w KQkq - 2 8",
+   "fen": "rn2kb1r/pp2pppp/2p2n2/q6b/8/2N3PP/PPPPNPB1/R1BQK2R w KQkq - 1 8",
    "line": [
-    "h3",
-    "c6",
     "Nge2",
+    "c6",
+    "h3",
     "Bh5"
    ],
-   "spoken": "The c6, h3, knight-to-e2, bishop-to-h5 sequence shows up in plenty of database games.",
+   "spoken": "The knight-to-e2, c6, h3, bishop-to-h5 sequence shows up in plenty of database games.",
    "reanchor": true
   },
   {

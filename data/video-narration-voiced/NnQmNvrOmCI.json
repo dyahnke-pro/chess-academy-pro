@@ -1,7 +1,7 @@
 {
  "videoId": "NnQmNvrOmCI",
  "title": "Master Class | 700 Elo | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Queen’s Pawn Game",
+ "openingName": "Center Game",
  "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-26",
@@ -12,9 +12,9 @@
    "t": 549,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
    "line": [
-    "d4",
+    "e4",
     "e5",
-    "e4"
+    "d4"
    ],
    "spoken": ""
   },

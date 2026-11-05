@@ -160,11 +160,11 @@
       "t": 737,
       "fen": "r3kbnr/pp2pppp/2n5/2pq4/3P2b1/2P2N2/PP1N1PPP/R1BQKB1R b KQkq - 4 6",
       "line": [
-        "Nd2",
+        "Nf3",
         "Bg4",
-        "Ngf3"
+        "Nbd2"
       ],
-      "spoken": "The knight to d2, the bishop to g4, the knight to f3.",
+      "spoken": "The knight to f3, the bishop to g4, the knight to d2.",
       "reanchor": true
     },
     {

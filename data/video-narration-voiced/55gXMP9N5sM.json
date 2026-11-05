@@ -10,11 +10,11 @@
   {
    "ply": 3,
    "t": 68,
-   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 2 2",
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 0 2",
    "line": [
-    "d4",
+    "Nf3",
     "Nf6",
-    "Nf3"
+    "d4"
    ],
    "spoken": "Against the knight to f3, play the same setup — it's so likely to transpose into a d4 opening. It could be an independent King's Indian Attack, but here it transposes."
   },

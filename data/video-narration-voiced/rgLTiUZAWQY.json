@@ -1095,10 +1095,10 @@
    "t": 3195,
    "fen": "r2qkb1r/pppb1ppp/4Pn2/8/2P5/5B2/PP3PPP/RNBQK2R b KQkq - 0 10",
    "line": [
-    "e6",
-    "dxe6",
     "Nxf3+",
-    "Bxf3"
+    "Bxf3",
+    "e6",
+    "dxe6"
    ],
    "spoken": "I trusted my intuition: take en passant and grab b7.",
    "reanchor": true
@@ -1318,9 +1318,9 @@
    "t": 3356.5,
    "fen": "r2qkb1r/pppbppp1/5nnp/3P3P/2P5/5N2/PP2BPP1/RNBQK2R b KQkq - 0 10",
    "line": [
-    "h6",
-    "h4",
     "Ng6",
+    "h4",
+    "h6",
     "h5"
    ],
    "spoken": ""

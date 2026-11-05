@@ -1119,9 +1119,9 @@
    "t": 1398.5,
    "fen": "r1bqkb1r/pppp1ppp/5n2/4N3/3nP3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 1 5",
    "line": [
-    "Nf6",
+    "Nd4",
     "Nxe5",
-    "Nd4"
+    "Nf6"
    ],
    "spoken": ""
   },

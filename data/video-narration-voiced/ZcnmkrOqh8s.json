@@ -471,12 +471,12 @@
   {
    "ply": 7,
    "t": 644,
-   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 2 4",
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
    "line": [
     "Nc6",
-    "Nxe5",
+    "Nc3",
     "Bc5",
-    "Nc3"
+    "Nxe5"
    ],
    "spoken": ""
   },

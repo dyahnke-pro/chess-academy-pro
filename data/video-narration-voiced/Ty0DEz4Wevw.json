@@ -124,9 +124,9 @@
    "t": 803.5,
    "fen": "rnbqr1k1/pp3ppp/2pb1n2/3p4/3P4/2N2NP1/PPQ1PPBP/R1B2RK1 b - - 3 9",
    "line": [
-    "Nc3",
+    "Qc2",
     "Re8",
-    "Qc2"
+    "Nc3"
    ],
    "spoken": "Here's the elegant way to get the bishop to its diagonal without the weakening pawn push: develop to g4, then swing it around via h5 toward g6 — no hurry, it's happy where it sits. And a strategic point on the queenside: most players would automatically stop the pawn expansion, but you can allow it and then freeze the pawn in place, which isn't good for the opponent at all. Then a rook-pawn nudge puts the question to the pinning bishop. If it retreats to a square where a pawn is its lone defender, watch for an overload — one pawn guarding two things at once is a defender stretched too thin. And the meta-lesson of the finish: the hallmark of the great attackers is knowing when to just play simple. Don't chase the brilliancy prize and leave points on the table — a clean pawn grab ends it, and even then order of operations matters: the right capture sequence leaves the opponent unable to recapture in any legal way.",
    "kind": "tactic"
@@ -148,11 +148,11 @@
   {
    "ply": 5,
    "t": 1203,
-   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2P5/5NP1/PP1PPP1P/RNBQKB1R b KQkq - 1 3",
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2P5/5NP1/PP1PPP1P/RNBQKB1R b KQkq - 0 3",
    "line": [
-    "g3",
+    "Nf3",
     "d5",
-    "Nf3"
+    "g3"
    ],
    "spoken": ""
   },

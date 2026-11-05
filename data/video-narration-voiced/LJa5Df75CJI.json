@@ -102,19 +102,19 @@
   {
    "ply": 10,
    "t": 310,
-   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/1BN1PN2/PPPP1PPP/R1BQK2R w KQkq - 0 6",
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/1BN1PN2/PPPP1PPP/R1BQK2R w KQkq - 2 6",
    "line": [
     "Nc3",
-    "Bd6",
+    "c6",
     "Nf3",
-    "c6"
+    "Bd6"
    ],
    "spoken": ""
   },
   {
    "ply": 11,
    "t": 312,
-   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp1N1/8/1BN1P3/PPPP1PPP/R1BQK2R b KQkq - 1 6",
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp1N1/8/1BN1P3/PPPP1PPP/R1BQK2R b KQkq - 3 6",
    "line": [
     "Ng5"
    ],
@@ -123,7 +123,7 @@
   {
    "ply": 12,
    "t": 340.5,
-   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp1N1/8/1BN1P3/PPPP1PPP/R1BQK2R w KQ - 2 7",
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp1N1/8/1BN1P3/PPPP1PPP/R1BQK2R w KQ - 4 7",
    "line": [
     "O-O"
    ],

@@ -335,9 +335,9 @@
    "t": 902,
    "fen": "4rrk1/1ppq2pp/5b2/p2npp2/3n3P/P1NP2P1/1PPB1P1K/R2Q1RN1 b - - 2 18",
    "line": [
-    "Ncxe2",
+    "Qxe2",
     "Nd4",
-    "Nc3"
+    "Qd1"
    ],
    "spoken": ""
   },
@@ -421,11 +421,11 @@
   {
    "ply": 46,
    "t": 1152.5,
-   "fen": "4rrk1/1ppq2pp/8/p2np3/7n/P1PP2N1/1P1B1P1K/R2Q1R2 w - - 0 24",
+   "fen": "4rrk1/1ppq2pp/8/p2np3/7b/P1PP2N1/1P1B1P1K/R2Q1R2 w - - 0 24",
    "line": [
-    "Bxh4",
     "Nxh4",
-    "Nxh4"
+    "Nxh4",
+    "Bxh4"
    ],
    "spoken": ""
   }

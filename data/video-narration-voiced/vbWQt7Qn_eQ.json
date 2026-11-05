@@ -158,11 +158,11 @@
   {
    "ply": 13,
    "t": 897,
-   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/4P3/1NN2P2/PPP3PP/R1BQKB1R b KQkq - 0 7",
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/4P3/1NN2P2/PPP3PP/R1BQKB1R b KQkq - 1 7",
    "line": [
-    "Nb3",
+    "f3",
     "e5",
-    "f3"
+    "Nb3"
    ],
    "spoken": ""
   },

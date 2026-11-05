@@ -124,18 +124,18 @@
   {
    "ply": 13,
    "t": 216,
-   "fen": "r1bqkb1r/2p2ppp/p1np1n2/1p2p1N1/3PP3/1B6/PPP2PPP/RNBQK2R b KQkq - 0 7",
+   "fen": "r1bqkb1r/2p2ppp/p1np1n2/1p2p1N1/3PP3/1B6/PPP2PPP/RNBQK2R b KQkq - 1 7",
    "line": [
-    "Ng5",
+    "d4",
     "d6",
-    "d4"
+    "Ng5"
    ],
    "spoken": ""
   },
   {
    "ply": 14,
    "t": 235.5,
-   "fen": "r2qkb1r/2p2ppp/p1np1n2/1p2p1N1/3PP1b1/1B6/PPP2PPP/RNBQK2R w KQkq - 1 8",
+   "fen": "r2qkb1r/2p2ppp/p1np1n2/1p2p1N1/3PP1b1/1B6/PPP2PPP/RNBQK2R w KQkq - 2 8",
    "line": [
     "Bg4"
    ],
@@ -455,18 +455,18 @@
   {
    "ply": 10,
    "t": 1365.5,
-   "fen": "r1bqkb1r/2pp1ppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 0 6",
+   "fen": "r1bqkb1r/2pp1ppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 2 6",
    "line": [
-    "Nf6",
+    "b5",
     "Bb3",
-    "b5"
+    "Nf6"
    ],
    "spoken": ""
   },
   {
    "ply": 11,
    "t": 1425.5,
-   "fen": "r1bqkb1r/2pp1ppp/p1n2n2/1p2p1N1/4P3/1B6/PPPP1PPP/RNBQK2R b KQkq - 1 6",
+   "fen": "r1bqkb1r/2pp1ppp/p1n2n2/1p2p1N1/4P3/1B6/PPPP1PPP/RNBQK2R b KQkq - 3 6",
    "line": [
     "Ng5"
    ],
@@ -475,7 +475,7 @@
   {
    "ply": 12,
    "t": 1431,
-   "fen": "r1bqk2r/2ppbppp/p1n2n2/1p2p1N1/4P3/1B6/PPPP1PPP/RNBQK2R w KQkq - 2 7",
+   "fen": "r1bqk2r/2ppbppp/p1n2n2/1p2p1N1/4P3/1B6/PPPP1PPP/RNBQK2R w KQkq - 4 7",
    "line": [
     "Be7"
    ],
@@ -484,7 +484,7 @@
   {
    "ply": 16,
    "t": 1440,
-   "fen": "r1bqkbnr/2pp1ppp/p1n5/1p2p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 9",
+   "fen": "r1bqkbnr/2pp1ppp/p1n5/1p2p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 8 9",
    "line": [
     "Nf3",
     "Bf8",
@@ -496,7 +496,7 @@
   {
    "ply": 17,
    "t": 1441,
-   "fen": "r1bqkbnr/2pp1ppp/p1n5/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQK2R b KQkq - 7 9",
+   "fen": "r1bqkbnr/2pp1ppp/p1n5/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQK2R b KQkq - 9 9",
    "line": [
     "Bb3"
    ],
@@ -505,7 +505,7 @@
   {
    "ply": 18,
    "t": 1448.5,
-   "fen": "r1bqkbnr/2pp1ppp/p7/np2p3/4P3/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 8 10",
+   "fen": "r1bqkbnr/2pp1ppp/p7/np2p3/4P3/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 10 10",
    "line": [
     "Na5"
    ],

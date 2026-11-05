@@ -959,9 +959,9 @@
    "t": 1108,
    "fen": "r3kb1r/pp2pppp/2n2n2/qBpp4/3P1Bb1/2N1PN2/PPP2PPP/R2QK2R w KQkq - 14 11",
    "line": [
-    "Bg4",
+    "Qa5+",
     "Nc3",
-    "Qa5"
+    "Bg4"
    ],
    "spoken": ""
   },

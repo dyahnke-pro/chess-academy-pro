@@ -712,9 +712,9 @@
    "t": 4668,
    "fen": "r2q1rk1/1pp2ppp/p1nbp3/8/3P4/P2BPbB1/1P1Q1PPP/2R1K2R w K - 0 14",
    "line": [
-    "Bd3",
-    "Bg4",
     "Rc1",
+    "Be4",
+    "Bd3",
     "Bxf3"
    ],
    "spoken": "It felt fine for Black, and then suddenly it got really bad.",

@@ -480,11 +480,11 @@
   {
    "ply": 7,
    "t": 456.5,
-   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 4",
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
    "line": [
-    "e4",
+    "Nc3",
     "Bg7",
-    "Nc3"
+    "e4"
    ],
    "spoken": ""
   },

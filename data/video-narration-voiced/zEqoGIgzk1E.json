@@ -354,9 +354,9 @@
    "t": 758.5,
    "fen": "rq3rk1/1p2bppp/1B2b3/p2np3/B7/1N3P2/PPPQ2PP/1K1R3R w - - 0 17",
    "line": [
-    "exd5",
-    "Ncxd5",
     "Nxd5",
+    "Ncxd5",
+    "exd5",
     "Nxd5"
    ],
    "spoken": ""

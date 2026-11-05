@@ -255,15 +255,10 @@
    "spoken": "White plays the queen to b3, blundering the knight."
   },
   {
-   "ply": 33,
+   "ply": 28,
    "t": 386,
-   "fen": "r2q1rk1/pp3pbp/3p2p1/N2npb2/8/2Q1B3/PP2PPPP/R3KB1R b KQ - 6 17",
-   "line": [
-    "Nc3",
-    "Qb4",
-    "Nd5",
-    "Qc3"
-   ],
+   "fen": "r2q1rk1/pp3pbp/3p2p1/N2npb2/8/2Q1B3/PP2PPPP/R3KB1R w KQ - 1 15",
+   "line": [],
    "spoken": "The point would have been to induce horrific, fatal damage to White's pawn structure.",
    "reanchor": true
   },

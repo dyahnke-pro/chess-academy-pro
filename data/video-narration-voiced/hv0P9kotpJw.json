@@ -268,14 +268,11 @@
       "reanchor": true
     },
     {
-      "ply": 31,
+      "ply": 27,
       "t": 554.5,
-      "fen": "r1b1k2r/p1pp1ppp/1p5n/1B2P3/qB1NP3/8/2P2PPP/1RQ1K2R b Kkq - 7 16",
-      "line": [
-        "Qa4",
-        "Rb1"
-      ],
-      "spoken": "Same story on the other wing — the queen to a4, the rook back to b1, and the queen simply runs out of squares. The hunt is a matter of technique once every escape is covered.",
+      "fen": "r1b1k2r/p1pp1ppp/1p5n/1B2P3/qB1NP3/8/2P2PPP/1RQ1K2R b Kkq - 3 14",
+      "line": [],
+      "spoken": "",
       "reanchor": true
     },
     {

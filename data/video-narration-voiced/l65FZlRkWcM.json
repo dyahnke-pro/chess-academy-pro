@@ -281,11 +281,11 @@
    "fen": "rn1qk1nr/pp2ppbp/2pp2p1/8/3PPPb1/2N2N2/PPP3PP/R1BQKB1R w KQkq - 3 6",
    "line": [
     "f4",
-    "Bg4",
+    "Bg7",
     "Nf3",
-    "Bg7"
+    "Bg4"
    ],
-   "spoken": "f4, the bishop to g4, the knight to f3, the bishop to g7 — a legitimate line Black played, but not a very good one.",
+   "spoken": "f4, the bishop to g7, the knight to f3, the bishop to g4 — a legitimate line Black played, but not a very good one.",
    "reanchor": true
   },
   {
@@ -410,19 +410,19 @@
   {
    "ply": 7,
    "t": 911.5,
-   "fen": "rnbqkbnr/pp2pp1p/2pp2p1/8/3PPP2/2N5/PPP3PP/R1BQKBNR b KQkq - 1 4",
+   "fen": "rnbqkbnr/pp2pp1p/2pp2p1/8/3PPP2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 4",
    "line": [
-    "f4",
+    "Nc3",
     "g6",
-    "Nc3"
+    "f4"
    ],
-   "spoken": "f4, g6, the knight to c3.",
+   "spoken": "The knight to c3, g6, f4.",
    "reanchor": true
   },
   {
    "ply": 8,
    "t": 914,
-   "fen": "rnbqk1nr/pp2ppbp/2pp2p1/8/3PPP2/2N5/PPP3PP/R1BQKBNR w KQkq - 2 5",
+   "fen": "rnbqk1nr/pp2ppbp/2pp2p1/8/3PPP2/2N5/PPP3PP/R1BQKBNR w KQkq - 1 5",
    "line": [
     "Bg7"
    ],
@@ -432,7 +432,7 @@
   {
    "ply": 10,
    "t": 918,
-   "fen": "rnbqk2r/pp2ppbp/2pp1np1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 4 6",
+   "fen": "rnbqk2r/pp2ppbp/2pp1np1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 3 6",
    "line": [
     "Nf3",
     "Nf6"
