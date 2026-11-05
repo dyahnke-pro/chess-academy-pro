@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1748 lines · 29 exports · 23 importers · 19 tests · 0 audits**
+**1752 lines · 29 exports · 23 importers · 19 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -195,11 +195,11 @@
 - `src/services/lookaheadPlan.test.ts:989`
 
 ### `isCostClause` (function) — 9 call sites
-- `src/services/inaccuracyCall.ts:335`
-- `src/services/inaccuracyCall.ts:492`
-- `src/services/inaccuracyCall.ts:499`
-- `src/services/inaccuracyCall.ts:513`
-- `src/services/inaccuracyCall.ts:1801`
+- `src/services/inaccuracyCall.ts:336`
+- `src/services/inaccuracyCall.ts:493`
+- `src/services/inaccuracyCall.ts:500`
+- `src/services/inaccuracyCall.ts:514`
+- `src/services/inaccuracyCall.ts:1811`
 - `src/services/learnWalkBlumenfeld.test.ts:185`
 - `src/services/learnWalkBlumenfeld.test.ts:186`
 - `src/services/learnWalkBlumenfeld.test.ts:187`
@@ -216,9 +216,9 @@
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:209`
 - `src/services/inaccuracyCall.lazyBetter.test.ts:13`
-- `src/services/inaccuracyCall.ts:379`
-- `src/services/inaccuracyCall.ts:440`
-- `src/services/inaccuracyCall.ts:1799`
+- `src/services/inaccuracyCall.ts:380`
+- `src/services/inaccuracyCall.ts:441`
+- `src/services/inaccuracyCall.ts:1809`
 - `src/services/kingSwingCountsPieces.test.ts:14`
 - `src/services/lookaheadPlan.test.ts:234`
 - `src/services/lookaheadPlan.test.ts:239`

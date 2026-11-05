@@ -30,7 +30,7 @@ export { forkConsequence } from './tacticVocabulary';
 import type { PvLine, PvPly, PrevCaptureContext } from './pvPlayback';
 import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove, type Seat } from './planArc';
 import { proofCut } from './exchangeLedger';
-import { routeVerb, routeWaypoints } from '../utils/routeWords';
+import { routeVerb, routeWaypoints, type RouteSpec } from '../utils/routeWords';
 import { positionOf } from '../utils/samePosition';
 import { withArticle } from '../utils/andList';
 // The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
@@ -96,7 +96,10 @@ export function routeDestination(fen: string, dest: string, color: 'white' | 'bl
  *  it is explaining by comparing `from` with that move's own from-square — never
  *  by parsing the sentence (clean-pass walk 2026-10-03: two bishops, one route,
  *  and "the bishop" named the wrong one). */
-export interface ClauseRoute { piece: string; from: string }
+/** A route clause's data: the piece, where it starts, and the whole route as
+ *  rendered (`RouteSpec`), so a reader can re-say it from another square
+ *  without parsing the sentence. */
+export interface ClauseRoute { piece: string; from: string; spec: RouteSpec }
 
 function waypointsOf(path: readonly string[]): string[] {
   return routeWaypoints(path, { cutAtFirstArrival: false });
@@ -991,7 +994,8 @@ export function describePlan(
       // 13…Bf5): "the idea is to walk the bishop round to c5, by way of e3"
       // was the OTHER bishop's route — the f4 bishop, in the line — and "the
       // bishop" reads as the one that just moved. The square says which.
-      add(80, routeVerb({ name: piece, path, ...(plan.maneuver.takes ? { takes: plan.maneuver.takes } : {}), ...(plan.maneuver.alone ? { alone: true } : {}) }), [path[0], ...via, dest], { piece, from: path[0] });
+      const spec: RouteSpec = { name: piece, path, ...(plan.maneuver.takes ? { takes: plan.maneuver.takes } : {}), ...(plan.maneuver.alone ? { alone: true } : {}) };
+      add(80, routeVerb(spec), [path[0], ...via, dest], { piece, from: path[0], spec });
     }
   }
   // CHECKS ON THE WAY. Low weight on purpose — it is texture, not a plan — but

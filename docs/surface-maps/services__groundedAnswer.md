@@ -394,7 +394,7 @@
 - `src/services/whyBestMove.ts:98`
 
 ### `captureHasCounterTactic` (function) — 2 call sites
-- `src/services/inaccuracyCall.ts:1059`
+- `src/services/inaccuracyCall.ts:1069`
 - `src/services/reviewTeachingPoints.ts:105`
 
 ### `describeMoveGeometry` (function) — 21 call sites
@@ -1112,7 +1112,7 @@
 - `src/services/coachFeatureService.ts:6247`
 - `src/services/liveTacticsContext.ts:486`
 - `src/services/liveTacticsContext.ts:495`
-- `src/services/lookaheadPlan.ts:136`
+- `src/services/lookaheadPlan.ts:139`
 - `src/services/playedConcept.ts:78`
 - `src/services/reviewBoardAwareness.test.ts:32`
 - `src/services/reviewBoardAwareness.test.ts:36`

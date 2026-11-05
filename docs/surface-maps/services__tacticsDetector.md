@@ -71,7 +71,7 @@
 - `src/services/tacticLineRotation.test.ts:22`
 
 ### `tacticDescription` (function) — 5 call sites
-- `src/services/lookaheadPlan.ts:132`
+- `src/services/lookaheadPlan.ts:135`
 - `src/services/reviewFullData.ts:915`
 - `src/services/tacticLineRotation.test.ts:31`
 - `src/services/tacticLineRotation.test.ts:34`
@@ -95,8 +95,8 @@
 - `src/services/liveNoteTruth.test.ts:59`
 - `src/services/liveTacticsContext.ts:362`
 - `src/services/liveTacticsContext.ts:510`
-- `src/services/lookaheadPlan.ts:1413`
-- `src/services/lookaheadPlan.ts:1476`
+- `src/services/lookaheadPlan.ts:1417`
+- `src/services/lookaheadPlan.ts:1480`
 - `src/services/looseClaim.test.ts:18`
 - `src/services/misconceptionClassifier.ts:107`
 - `src/services/misconceptionClassifier.ts:140`

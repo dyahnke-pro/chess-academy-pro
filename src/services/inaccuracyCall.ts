@@ -54,6 +54,7 @@ import { lineProofFromUci, walkableLine, type Proof } from './proof';
 import type { WalkableLine } from '../types';
 import { signedLegalSeeFor, legalSeeGain } from './positionReadingService';
 import { positionOf } from '../utils/samePosition';
+import { routeOnward } from '../utils/routeWords';
 
 interface InaccuracyCall {
   /** Straight from `moveRating.classifyMove` — never re-derived here. */
@@ -518,7 +519,16 @@ function whyBetter(
     const otherPieceRoute = routeIsOwn(lead) === false;
     const own = !otherPieceRoute && (costIsOwn || lead.squares.includes(firstFrom) || lead.squares.includes(firstTo));
     if (!survivesForcingCut(fenBefore, bestUci, moverColor, lead.text, priorMove)) return null;
-    return { why: lead.text, square: lead.squares[0] ?? '', own };
+    // The move is already named ("The stronger move was Qg3 — …"): its own
+    // route is said onward from where the move lands — "it would head on to
+    // c3" — never "by way of g3", the square the sentence just named, nor the
+    // piece "on d1" before it stands there (David 2026-11-05, squares said
+    // like a person).
+    const spec = lead.route?.spec;
+    const why = spec && lead.route?.from === firstFrom && spec.path[1] === firstTo && spec.path.length > 2
+      ? routeOnward({ ...spec, path: spec.path.slice(1) })
+      : lead.text;
+    return { why, square: lead.squares[0] ?? '', own };
   }
   // No clause carried a square (anything square-less that outranked the rest)
   // — fall back to the sentence, which in that case IS one clause.

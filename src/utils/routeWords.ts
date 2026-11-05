@@ -53,6 +53,16 @@ export function routeVerb(r: RouteSpec): string {
   return r.takes ? `${base}, ${takeClause(r.takes, 'and')}` : base;
 }
 
+/** After a move that already named its piece and landed it ("The stronger
+ *  move was Qg3 — it would …"): the rest of the route from where it landed,
+ *  no piece and no start square — "head on to c3[, by way of e4][, and take
+ *  the pawn there]". `r.path` starts on the landing square. */
+export function routeOnward(r: RouteSpec): string {
+  const dest = r.path[r.path.length - 1];
+  const base = `head on to ${dest}${routeVia(routeWaypoints(r.path, { cutAtFirstArrival: false }))}`;
+  return r.takes ? `${base}, ${takeClause(r.takes, 'and')}` : base;
+}
+
 /** "to take the pawn there", or — for a piece not there yet ("rook that
  *  lands") — "to take the rook when it arrives there" (hard-question walk
  *  2026-10-11: "take the rook that lands there" did not parse). No seat word:
