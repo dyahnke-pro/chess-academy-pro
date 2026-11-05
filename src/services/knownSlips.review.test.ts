@@ -64,8 +64,10 @@ describe('the computer, through the registry', () => {
   const index = knownSlipIndexFromDisk();
   const board = fenAfter('e4 e5 Nf3 Nc6 d4');
   it('reads the index board by board, and is the one fact with its proof', () => {
-    const f = readBoard('knownSlip', { fen: board, gems: knownSlipsAt(index, board), played: 'exd4', on: 'reached', student: 'b', verdictPunish: null, saidNext: null, told: 0 });
-    expect(f?.kind).toBe('refuted');
+    // The slip ahead on the board the move reached is a trap named before it
+    // lands (its own registry row and kind since 2026-11-05).
+    const f = readBoard('trapAhead', { fen: board, gems: knownSlipsAt(index, board), played: 'exd4', student: 'b', verdictPunish: null, saidNext: null, told: 0 });
+    expect(f?.kind).toBe('trap-ahead');
     expect(f?.seat).toBe('student');
     expect(f?.computer).toBe('knownSlip');
     expect(f && 'line' in f.proof ? f.proof.line?.sans.slice(0, 2) : null).toEqual(['f6', 'Bc4']);

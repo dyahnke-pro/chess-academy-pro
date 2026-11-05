@@ -166,9 +166,12 @@ export interface BoardContexts {
    *  `bestUci` — the engine's best move there. */
   kingSquares: { fenBefore: string; san: string; student: Color; lines: ReadonlyArray<{ moves: readonly string[] }> | null; bestUci: string | null };
   /** A known mistake or trap from the club gem index at `fen` (Review only,
-   *  David 2026-11-04): said on the move that played it, or on the move that
-   *  reached its board when the game went another way. */
-  knownSlip: KnownSlipContext;
+   *  David 2026-11-04), said on the move that PLAYED it: the move club
+   *  players really play here, and its punishment. */
+  knownSlip: Omit<KnownSlipContext, 'on'>;
+  /** The same index's slip at the board a move REACHED, when the game went
+   *  another way: the trap or mistake named before it could land. */
+  trapAhead: Omit<KnownSlipContext, 'on'>;
   /** THE REPLY TREE after a move (`fen`: the board after it, the replier to
    *  move): the replies likely at `rating` (the human model) and the engine's
    *  best, each with the mover's answer from ONE read of every legal reply
@@ -259,6 +262,26 @@ function boardAfter(fen: string, san: string): string | null {
   try { const b = new Chess(fen); b.move(san); return b.fen(); } catch { return null; }
 }
 
+/** Where the known slips reach — Review only (David 2026-10-29: the gems are
+ *  the opening pages' to teach; David 2026-11-04: "it needs to be in review
+ *  for sure"). */
+const KNOWN_SLIP_SURFACES: Record<CoachSurface, SurfaceAnswer> = {
+  lesson: { not: 'the opening pages teach the index as their weapon section and their known mistakes (gemCrushLines); a lesson line is a model line, not a slip' },
+  learn: { not: 'gems stay off Learn (David 2026-10-29: "a reason for ppl to buy the openings"); Learn is not decided (2026-11-04)' },
+  review: REVIEW,
+  play: { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING); the Openings Play rung calls out the live punish itself (findLivePunishment)' },
+  chat: { not: 'the chat\'s trap lane points at the opening\'s page and names no gem (gemCrushLines gate)' },
+  tactics: { not: 'a puzzle poses one tactic; a known slip is about a game move at a board the index holds' },
+  weaknesses: { not: 'the slip played is graded as the move\'s own cost and filed by the record\'s writers; the index adds no skill of its own' },
+};
+
+/** A known slip as the one fact, on the board it is played from. */
+function knownSlipFact(r: ReturnType<typeof knownSlip>, fen: string, fact: MakeFact): CoachFact | null {
+  if (!r) return null;
+  return fact({ key: r.key, claims: [r.key], text: r.text, proof: r.proof, squares: r.squares, stakes: r.stakes, seat: r.seat,
+    namesStudentMove: r.namesStudentMove, thread: LOCAL_THREAD, fen, role: 'teach', ...(r.proof.line ? { lines: [r.proof.line] } : {}) });
+}
+
 export const BOARD_COMPUTERS = {
   pinBreakOwn: {
     // The student's own pinned piece that walks out with tempo: their resource.
@@ -314,7 +337,7 @@ export const BOARD_COMPUTERS = {
       return fact({ key, claims: [key], text: enablingMoveLine(o), proof: enablingMoveProof(o), squares: [o.opened, o.then.from, o.then.to], stakes: null, seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen, marks: { play: { from: o.first.from, to: o.first.to } } });
     }),
     computer: 'findEnablingMove',
-    kind: 'timing',
+    kind: 'move-order',
     phase: ANY,
     surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
@@ -614,7 +637,7 @@ export const BOARD_COMPUTERS = {
         seat: mine ? 'student' : 'opponent', namesStudentMove: !!held, thread: LOCAL_THREAD, fen, ...(held ? { heldForm: held } : {}) });
     }),
     computer: 'castleByHandMove',
-    kind: 'plan-now',
+    kind: 'castling',
     phase: NOT_ENDING,
     surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { not: 'owed — chat answers a king question through positionAsk, which reads castleByHand' }, tactics: TACTICS_NA, weaknesses: { not: 'the record half is positionPosed: castleByHand poses king-stuck-center' } },
   },
@@ -669,24 +692,21 @@ export const BOARD_COMPUTERS = {
     // seats, from the club gem index. Called a trap only when it clears the
     // one trap bar (`isWeaponGem`). Review names moves freely — the game is
     // over; the opening pages teach the same index as their weapon section.
-    read: (ctx, fact) => safe(() => {
-      const r = knownSlip(ctx);
-      if (!r) return null;
-      return fact({ key: r.key, claims: [r.key], text: r.text, proof: r.proof, squares: r.squares, stakes: r.stakes, seat: r.seat,
-        namesStudentMove: r.namesStudentMove, thread: LOCAL_THREAD, fen: ctx.fen, role: 'teach', ...(r.proof.line ? { lines: [r.proof.line] } : {}) });
-    }),
+    read: (ctx, fact) => safe(() => knownSlipFact(knownSlip({ ...ctx, on: 'played' }), ctx.fen, fact)),
     computer: 'knownSlip',
-    kind: 'refuted',
+    kind: 'common-wrong',
     phase: ANY,
-    surfaces: {
-      lesson: { not: 'the opening pages teach the index as their weapon section and their known mistakes (gemCrushLines); a lesson line is a model line, not a slip' },
-      learn: { not: 'gems stay off Learn (David 2026-10-29: "a reason for ppl to buy the openings"); Learn is not decided (2026-11-04)' },
-      review: REVIEW,
-      play: { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING); the Openings Play rung calls out the live punish itself (findLivePunishment)' },
-      chat: { not: 'the chat\'s trap lane points at the opening\'s page and names no gem (gemCrushLines gate)' },
-      tactics: { not: 'a puzzle poses one tactic; a known slip is about a game move at a board the index holds' },
-      weaknesses: { not: 'the slip played is graded as the move\'s own cost and filed by the record\'s writers; the index adds no skill of its own' },
-    },
+    surfaces: KNOWN_SLIP_SURFACES,
+  },
+  trapAhead: {
+    // The index's slip at the board a move reached, the game having gone
+    // another way: "a known trap here: x% of club players play X, and …" —
+    // a trap named before it lands, both seats.
+    read: (ctx, fact) => safe(() => knownSlipFact(knownSlip({ ...ctx, on: 'reached' }), ctx.fen, fact)),
+    computer: 'knownSlip',
+    kind: 'trap-ahead',
+    phase: ANY,
+    surfaces: KNOWN_SLIP_SURFACES,
   },
   ifTheyPlay: {
     // His "if Black plays Qe7, you play d4, cementing the knight" · "if Black
@@ -743,7 +763,7 @@ export const BOARD_COMPUTERS = {
       return out.length ? out : null;
     }),
     computer: 'ifTheyPlay',
-    kind: 'line',
+    kind: 'reply-tree',
     phase: ANY,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' },

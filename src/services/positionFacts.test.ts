@@ -36,11 +36,14 @@ describe('computePositionFacts — the composer', () => {
   // middlegame briefing, it does not add a second sentence to move five.
   it('closes the briefing with the METHOD — the habit, last', async () => {
     const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
-    const method = r.clauses.filter((c) => c.kind === 'method');
+    const method = r.clauses.filter((c) => c.computer === 'liveMethodBeat');
     expect(method).toHaveLength(1);
     expect(method[0].text).toMatch(/their|they/i);
+    // Its kind is its habit (2026-11-05): asking what their move is doing is
+    // the opponent's shoes, a teaching move of its own (`HABIT_KIND`).
+    expect(method[0].kind).toBe('opp-think');
     // LAST — the board fact, then the idea, then the routine.
-    expect(r.clauses[r.clauses.length - 1].kind).toBe('method');
+    expect(r.clauses[r.clauses.length - 1].computer).toBe('liveMethodBeat');
     // It asks the routine's question WITH its answer: the must-defend clause
     // can be held by the door, and a question left bare was heard on OS-1 g3
     // 15.c5 ("what are they threatening?", the threat never named).
@@ -56,7 +59,7 @@ describe('computePositionFacts — the composer', () => {
     // carries none, so the computed order puts the knight first — and every
     // staked clause ahead of every unstaked one.
     const kinds = r.clauses.map((c) => c.kind);
-    expect(kinds.indexOf('must-defend')).toBeLessThan(kinds.indexOf('method'));
+    expect(kinds.indexOf('must-defend')).toBeLessThan(r.clauses.findIndex((c) => c.computer === 'liveMethodBeat'));
     const firstUnstaked = r.clauses.findIndex((c) => !c.stakes);
     const lastStaked = r.clauses.map((c) => !!c.stakes).lastIndexOf(true);
     expect(firstUnstaked === -1 || lastStaked < firstUnstaked).toBe(true);
@@ -70,7 +73,7 @@ describe('computePositionFacts — the composer', () => {
 
   it('the METHOD beat is never subsumed — it carries no squares, and it is not a restatement of a fact', async () => {
     const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
-    expect(r.clauses.some((c) => c.kind === 'method')).toBe(true);
+    expect(r.clauses.some((c) => c.computer === 'liveMethodBeat')).toBe(true);
     expect(r.quiet.some((q) => /habit|order of operations/i.test(q.text))).toBe(false);
   });
 
@@ -118,13 +121,13 @@ describe('computePositionFacts — the composer', () => {
 
   it('teaches no method to a student who is not the one to move', async () => {
     const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'b', analysis: flat });
-    expect(r.clauses.some((c) => c.kind === 'method')).toBe(false);
+    expect(r.clauses.some((c) => c.computer === 'liveMethodBeat')).toBe(false);
   });
 
   it('stays out of the opening — the habit rides a middlegame briefing', async () => {
     const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: flat });
     expect(r.clauses.some((c) => c.kind === 'must-defend')).toBe(true);
-    expect(r.clauses.some((c) => c.kind === 'method')).toBe(false);
+    expect(r.clauses.some((c) => c.computer === 'liveMethodBeat')).toBe(false);
   });
 
   it('names the standing must-defend, board-true', async () => {
@@ -507,7 +510,7 @@ describe('the threat habit names what it asks about (OS-1 g3, 15.c5 Nc6)', () =>
   it('after …Nc6 hits the knight on b4, the habit says "your knight on b4", never the bare question', async () => {
     const fen = 'r2qr1k1/1bb2ppp/p1n2n2/1pPpp3/1N6/3PPN2/PB2BPPP/2RQ1RK1 w - - 1 16';
     const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis: flat });
-    const method = r.clauses.find((c) => c.kind === 'method');
+    const method = r.clauses.find((c) => c.computer === 'liveMethodBeat');
     if (method && /threat|threatening|last move doing/i.test(method.text)) expect(method.text).toMatch(/your knight on b4/);
     expect(r.clauses.map((c) => c.text).join(' ')).not.toMatch(/what are they threatening\? Deal with the answer/);
   });

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**187 lines · 3 exports · 4 importers · 1 tests · 0 audits**
+**213 lines · 3 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,6 +30,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/methodBeat.live.test.ts`
 - `src/services/teachingMoves.test.ts`
 
 ## Audits that reach it

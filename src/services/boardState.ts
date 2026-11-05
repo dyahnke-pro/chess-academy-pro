@@ -79,6 +79,8 @@ const STANDING: ReadonlySet<FactKind> = new Set<FactKind>([
   'rook7', 'plan-now', 'plan-race', 'plan-middlegame', 'plan-opening', 'plan-line',
   'structure-plan', 'student-leans', 'opponent-leans', 'latent-danger', 'latent-chance',
   'opp-dev', 'king', 'endgame',
+  // Castling by hand under its own teaching-move kind: a plan, standing.
+  'castling',
 ]);
 
 /** Beside a mate, what may still speak: the mate itself and the verdict on the
@@ -86,6 +88,8 @@ const STANDING: ReadonlySet<FactKind> = new Set<FactKind>([
 const BESIDE_MATE: ReadonlySet<FactKind> = new Set<FactKind>([
   'tactic', 'forced', 'move', 'quality', 'praise', 'key-moment', 'deliberation', 'concept',
   'refuted', 'sac', 'sac-why',
+  // Refutations under their own teaching-move kinds.
+  'common-wrong', 'trap-ahead',
 ]);
 
 /** What may still be said ABOUT the square in flux: the verdict on the move
@@ -94,7 +98,7 @@ const BESIDE_MATE: ReadonlySet<FactKind> = new Set<FactKind>([
  *  ("their queen on e1 pins your bishop" one move before Rxe1). */
 const ABOUT_THE_FLUX_SQUARE: ReadonlySet<FactKind> = new Set<FactKind>([
   'quality', 'praise', 'move', 'forced', 'refuted', 'deliberation', 'key-moment',
-  'method', 'sac', 'sac-why', 'timing', 'trade',
+  'method', 'opp-think', 'forcing-scan', 'sac', 'sac-why', 'timing', 'trade',
   // The priority before the move, said as a method until it had its own kind
   // (WO-STORY-MATRIX-01 P1-4): the same board answer.
   'priority',
@@ -105,6 +109,9 @@ const ABOUT_THE_FLUX_SQUARE: ReadonlySet<FactKind> = new Set<FactKind>([
   // "it takes on f7 and hits your queen and rook") — the exchange said as it
   // happens, true of the move whatever comes next.
   'move-job',
+  // The teaching moves' own kinds, about the move like the kinds they came
+  // from: refutations, the move order, a rule's exception.
+  'common-wrong', 'trap-ahead', 'move-order', 'rule-exception', 'false-alarm', 'push-or-hold',
 ]);
 
 type BoardVeto = 'in-flux' | 'beside-mate';

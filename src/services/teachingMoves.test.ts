@@ -22,11 +22,16 @@ describe('one teaching-move vocabulary', () => {
   it('the moves no kind of fact makes yet may only shrink', () => {
     const made = new Set(Object.values(TEACHING_MOVES).flat());
     const unbuilt = TEACHING_MOVE_LIST.filter((m) => !made.has(m));
-    // 2026-11-05: the twenty no kind makes on its own. A new computer whose
-    // kind makes one takes it off this list; a move may never join it.
-    for (const m of unbuilt) expect(['M-TWO-JOBS', 'M-COMMON-WRONG', 'M-REPLY-TREE', 'M-PROVOKE', 'M-MOVE-ORDER',
-      'H-CALC', 'H-DONT-PANIC', 'H-OPP-THINK', 'H-WISHLIST', 'T-CHECKFIRST', 'T-TRAP-AHEAD', 'T-FALSE-ALARM',
-      'S-BREAK', 'S-SPACE', 'S-CASTLING', 'S-TENSION', 'S-TRIGGER', 'S-LONG-HORIZON', 'S-PUSH-OR-HOLD',
-      'P-EXCEPTION']).toContain(m);
+    // 2026-11-05: twenty at first. Nine came off the same day when the
+    // computers that make them got kinds of their own (the reply tree, the
+    // common wrong move, castling by hand, the trap ahead, the move order,
+    // the false alarm and its calm, the exception, push-or-hold). A new
+    // computer whose kind makes one takes it off this list; a move may never
+    // join it.
+    // Two more the same day: the habit of asking what their move is doing,
+    // and checks-captures-threats first, each its own kind (`HABIT_KIND`).
+    for (const m of unbuilt) expect(['M-TWO-JOBS', 'M-PROVOKE',
+      'H-CALC', 'H-WISHLIST',
+      'S-BREAK', 'S-SPACE', 'S-TENSION', 'S-TRIGGER', 'S-LONG-HORIZON']).toContain(m);
   });
 });

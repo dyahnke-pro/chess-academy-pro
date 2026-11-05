@@ -343,7 +343,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
       const hitSq = rx.squares[1];
       const live = boardAfter(i.fenBefore, i.san, i.reply);
       const stillThere = !!hitSq && !!live?.get(hitSq as never);
-      out.push(teachingFact('ruleException', { computer: 'ruleException', kind: 'rule', ...mine, names: NAMES_NO_MOVE, proof: squaresProof(rx.text, rx.squares) ?? NO_PROOF.stated, text: rx.text, squares: rx.squares, claims: [`rule-${rx.rule}-${to}`] }, {
+      out.push(teachingFact('ruleException', { computer: 'ruleException', kind: 'rule-exception', ...mine, names: NAMES_NO_MOVE, proof: squaresProof(rx.text, rx.squares) ?? NO_PROOF.stated, text: rx.text, squares: rx.squares, claims: [`rule-${rx.rule}-${to}`] }, {
         event: { name: 'coach_rule_exception_named', props: { surface: 'coach-teach', rule: rx.rule } },
         arrows: stillThere ? [{ from: to, to: hitSq, role: 'vision', source: 'learn.ruleException' }] : [],
       }));
@@ -364,7 +364,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
         if (fa) {
           // Their threat, red — only while it is still coming (not once played).
           const played = i.reply && i.reply.replace(/^…/, '') === fa.threat.san;
-          out.push(teachingFact('falseAlarm', { computer: 'falseAlarm', kind: 'rule', ...mine, names: NAMES_NO_MOVE, proof: squaresProof(fa.text, fa.squares) ?? NO_PROOF.stated, text: fa.text, squares: fa.squares, claims: [`false-alarm-${fa.threat.landing}`] }, {
+          out.push(teachingFact('falseAlarm', { computer: 'falseAlarm', kind: 'false-alarm', ...mine, names: NAMES_NO_MOVE, proof: squaresProof(fa.text, fa.squares) ?? NO_PROOF.stated, text: fa.text, squares: fa.squares, claims: [`false-alarm-${fa.threat.landing}`] }, {
             event: { name: 'coach_false_alarm_named', props: { surface: 'coach-teach', kind: fa.threat.kind } },
             arrows: played ? [] : [{ from: fa.threat.from, to: fa.threat.landing, role: 'threat', source: 'learn.falseAlarm' }],
             // A threat rightly ignored (the engine's move, and not worse) is the
@@ -383,7 +383,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
       const mv = after.move(i.san);
       const ph = pushOrHold(after.fen(), mv.color, i.cpAfter);
       if (ph) {
-        out.push(teachingFact('pushOrHold', { computer: 'pushOrHold', kind: 'rule', ...mine, names: NAMES_NO_MOVE, proof: NO_PROOF.method, text: ph.text, squares: [], claims: [`ending-${ph.cls}-${ph.side}`] }, {
+        out.push(teachingFact('pushOrHold', { computer: 'pushOrHold', kind: 'push-or-hold', ...mine, names: NAMES_NO_MOVE, proof: NO_PROOF.method, text: ph.text, squares: [], claims: [`ending-${ph.cls}-${ph.side}`] }, {
           event: { name: 'coach_push_or_hold_named', props: { surface: 'coach-teach', cls: ph.cls, side: ph.side } },
           arrows: [],
         }));

@@ -638,6 +638,17 @@ const FACT_COMPUTER: Record<FactKind, string> = {
   'not-yet': 'services/thinkAloud.ts#notYet',
   line: 'services/thinkAloud.ts#lineAchieves',
   'stop-flaw': 'services/thinkAloud.ts#obviousStopFlaw',
+  // The teaching moves' own kinds (2026-11-05).
+  'reply-tree': 'services/ifTheyPlay.ts#ifTheyPlay',
+  'move-order': 'services/moveOrder.ts#moveOrder',
+  castling: 'services/kingWalk.ts#castleByHandMove',
+  'common-wrong': 'services/refutedAlternativeCore.ts#refutedFromFan',
+  'trap-ahead': 'services/knownSlips.ts#knownSlip',
+  'false-alarm': 'services/falseAlarm.ts#falseAlarm',
+  'rule-exception': 'services/ruleException.ts#ruleException',
+  'push-or-hold': 'services/pushOrHold.ts#pushOrHold',
+  'opp-think': 'services/methodBeat.ts#liveMethodBeat',
+  'forcing-scan': 'services/methodBeat.ts#liveMethodBeat',
   'hole-access': 'services/moveInsight.ts#holeAccess',
   'speedrun-read': 'services/thinkAloud.ts#depthClauses',
 };

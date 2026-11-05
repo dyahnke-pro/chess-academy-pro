@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**506 lines · 16 exports · 23 importers · 5 tests · 0 audits**
+**515 lines · 16 exports · 23 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -66,8 +66,8 @@
 - `src/services/boardComputers.test.ts:76`
 - `src/services/coachFact.test.ts:78`
 - `src/services/coachFact.test.ts:79`
-- `src/services/coachFeatureService.ts:2532`
-- `src/services/coachFeatureService.ts:3133`
+- `src/services/coachFeatureService.ts:2543`
+- `src/services/coachFeatureService.ts:3144`
 - `src/services/learnTurnDoor.ts:279`
 - `src/services/learnTurnDoor.ts:848`
 - `src/services/learnTurnDoor.ts:905`
@@ -81,7 +81,7 @@
 - `src/services/learnTurnDoor.ts:1211`
 
 ### `placeFact` (function) — 16 call sites
-- `src/services/boardComputers.ts:852`
+- `src/services/boardComputers.ts:872`
 - `src/services/learnTurnDoor.ts:633`
 - `src/services/moveThoughtFacts.ts:150`
 - `src/services/moveThoughtFacts.ts:271`
@@ -91,7 +91,7 @@
 - `src/services/moveThoughtFacts.ts:602`
 - `src/services/moveThoughtFacts.ts:620`
 - `src/services/openingStory.ts:363`
-- `src/services/positionFacts.ts:517`
+- `src/services/positionFacts.ts:527`
 - `src/services/reviewFacet.ts:62`
 - `src/services/reviewFacet.ts:89`
 - `src/services/reviewFacet.ts:101`
@@ -99,7 +99,7 @@
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 17 call sites
-- `src/services/boardComputers.ts:852`
+- `src/services/boardComputers.ts:872`
 - `src/services/coachFact.test.ts:104`
 - `src/services/coachFact.test.ts:110`
 - `src/services/coachFact.test.ts:111`
@@ -112,7 +112,7 @@
 - `src/services/moveThoughtFacts.ts:603`
 - `src/services/moveThoughtFacts.ts:621`
 - `src/services/openingStory.ts:364`
-- `src/services/positionFacts.ts:525`
+- `src/services/positionFacts.ts:535`
 - `src/services/reviewFacet.ts:73`
 - `src/services/teachingFact.ts:91`
 - `src/test/doorFact.ts:24`

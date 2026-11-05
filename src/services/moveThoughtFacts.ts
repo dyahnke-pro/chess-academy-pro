@@ -288,8 +288,8 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       const said = close(mo.text);
       facts.push({
         id: `moveOrder:${facts.length}`, namesStudentMove: false,
-        ...placeFact('timing', seat), computer: 'moveOrder', source: 'moveOrder', idea: 'order', text: said, squares: beyond(mo.squares), weight: 70,
-        thread: LOCAL_THREAD, stakes: stakesOf('timing', costStakes(mo.costCp)), proof: squaresProof(said, mo.squares) ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
+        ...placeFact('move-order', seat), computer: 'moveOrder', source: 'moveOrder', idea: 'order', text: said, squares: beyond(mo.squares), weight: 70,
+        thread: LOCAL_THREAD, stakes: stakesOf('move-order', costStakes(mo.costCp)), proof: squaresProof(said, mo.squares) ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
         claims: [`order:${from}${to}>${mo.followUp.uci}`],
       });
     }
@@ -617,8 +617,8 @@ export function refutedFact(r: RefutedAlternative, fenBefore: string, seat: Fact
   try { const am = new Chess(fenBefore).move(r.alt); squares = [am.from, am.to]; } catch { squares = []; }
   return {
     id: 'refutedFromFan:0', namesStudentMove: false,
-    ...placeFact('refuted', seat), computer: 'refutedFromFan', source: 'refuted', idea: 'choice', text: said, squares, weight: 55,
-    thread: LOCAL_THREAD, stakes: stakesOf('refuted', costStakes(r.costCp)), proof: refutedAltProof(fenBefore, r) ?? squaresProof(said, squares) ?? NO_PROOF.description, seat, fen: fenBefore,
+    ...placeFact('common-wrong', seat), computer: 'refutedFromFan', source: 'refuted', idea: 'choice', text: said, squares, weight: 55,
+    thread: LOCAL_THREAD, stakes: stakesOf('common-wrong', costStakes(r.costCp)), proof: refutedAltProof(fenBefore, r) ?? squaresProof(said, squares) ?? NO_PROOF.description, seat, fen: fenBefore,
     claims: [`refuted:${r.alt.replace(/[+#!?]+$/, '')}`],
   };
 }

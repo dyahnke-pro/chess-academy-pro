@@ -98,11 +98,14 @@ describe('the tree', () => {
 });
 
 describe('the one registry', () => {
-  it('is the one fact: a line, from the mover\'s seat, proven by its own moves', () => {
+  it('is the one fact: a reply tree (said in the line\'s step), from the mover\'s seat, proven by its own moves', () => {
     const r = row('358seoKegqA', 14);
     const student = moverOf(r.fen);
     const [f] = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: null, tense: 'live', liveBoard: null });
-    expect(f.kind).toBe('line');
+    // Its own kind since 2026-11-05 (the reply tree is M-REPLY-TREE, not a
+    // bare line), still said in the line's step.
+    expect(f.kind).toBe('reply-tree');
+    expect(f.group).toBe('line');
     expect(f.computer).toBe('ifTheyPlay');
     expect(f.seat).toBe('student');
     expect(f.namesStudentMove).toBe(false);

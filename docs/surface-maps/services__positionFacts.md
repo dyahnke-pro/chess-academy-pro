@@ -4,17 +4,17 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2100 lines · 17 exports · 39 importers · 46 tests · 3 audits**
+**2114 lines · 17 exports · 39 importers · 47 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:313) — names `positionFacts`
-- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:648) — names `positionFacts`
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1314) — names `positionFacts`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4471) — names `ClauseKind`, `positionFacts`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4623) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6687) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6800) — names `positionFacts`
+- **The tools are COMPUTERS** (CLAUDE.md:323) — names `positionFacts`
+- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:658) — names `positionFacts`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1324) — names `positionFacts`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4482) — names `ClauseKind`, `positionFacts`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4634) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6698) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6811) — names `positionFacts`
 
 ## Who calls in
 
@@ -102,7 +102,7 @@
 - `src/services/positionFacts.weakness.test.ts:71`
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11284`
+- `src/components/Coach/CoachTeachPage.tsx:11394`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:471`
 - `src/services/raceAimOneVoice.test.ts:20`
@@ -111,18 +111,18 @@
 - `src/hooks/useLiveCoach.ts:305`
 - `src/services/chatBoardRead.ts:112`
 - `src/services/computerAccuracy.audit.test.ts:113`
-- `src/services/positionFacts.test.ts:259`
-- `src/services/positionFacts.test.ts:260`
-- `src/services/positionFacts.test.ts:301`
-- `src/services/positionFacts.test.ts:311`
-- `src/services/positionFacts.test.ts:369`
-- `src/services/positionFacts.test.ts:370`
+- `src/services/positionFacts.test.ts:262`
+- `src/services/positionFacts.test.ts:263`
+- `src/services/positionFacts.test.ts:304`
+- `src/services/positionFacts.test.ts:314`
+- `src/services/positionFacts.test.ts:372`
+- `src/services/positionFacts.test.ts:373`
 - `src/services/positionReadComposer.ts:158`
 - `src/services/whyBestMove.ts:151`
 
 ### `computePositionFacts` (function) — 108 call sites
 - `src/coach/boardTurnAnswer.ts:136`
-- `src/components/Coach/CoachTeachPage.tsx:11142`
+- `src/components/Coach/CoachTeachPage.tsx:11252`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:271`
 - `src/hooks/usePhaseNarration.ts:433`
@@ -160,52 +160,52 @@
 - `src/services/positionFacts.pinPressure.test.ts:17`
 - `src/services/positionFacts.test.ts:25`
 - `src/services/positionFacts.test.ts:38`
-- `src/services/positionFacts.test.ts:54`
-- `src/services/positionFacts.test.ts:66`
-- `src/services/positionFacts.test.ts:72`
-- `src/services/positionFacts.test.ts:78`
-- `src/services/positionFacts.test.ts:91`
-- `src/services/positionFacts.test.ts:97`
-- `src/services/positionFacts.test.ts:108`
-- `src/services/positionFacts.test.ts:115`
-- `src/services/positionFacts.test.ts:120`
-- `src/services/positionFacts.test.ts:125`
-- `src/services/positionFacts.test.ts:132`
-- `src/services/positionFacts.test.ts:141`
-- `src/services/positionFacts.test.ts:150`
-- `src/services/positionFacts.test.ts:159`
-- `src/services/positionFacts.test.ts:169`
-- `src/services/positionFacts.test.ts:186`
-- `src/services/positionFacts.test.ts:198`
-- `src/services/positionFacts.test.ts:208`
-- `src/services/positionFacts.test.ts:214`
-- `src/services/positionFacts.test.ts:227`
-- `src/services/positionFacts.test.ts:236`
+- `src/services/positionFacts.test.ts:57`
+- `src/services/positionFacts.test.ts:69`
+- `src/services/positionFacts.test.ts:75`
+- `src/services/positionFacts.test.ts:81`
+- `src/services/positionFacts.test.ts:94`
+- `src/services/positionFacts.test.ts:100`
+- `src/services/positionFacts.test.ts:111`
+- `src/services/positionFacts.test.ts:118`
+- `src/services/positionFacts.test.ts:123`
+- `src/services/positionFacts.test.ts:128`
+- `src/services/positionFacts.test.ts:135`
+- `src/services/positionFacts.test.ts:144`
+- `src/services/positionFacts.test.ts:153`
+- `src/services/positionFacts.test.ts:162`
+- `src/services/positionFacts.test.ts:172`
+- `src/services/positionFacts.test.ts:189`
+- `src/services/positionFacts.test.ts:201`
+- `src/services/positionFacts.test.ts:211`
+- `src/services/positionFacts.test.ts:217`
+- `src/services/positionFacts.test.ts:230`
 - `src/services/positionFacts.test.ts:239`
-- `src/services/positionFacts.test.ts:250`
-- `src/services/positionFacts.test.ts:265`
-- `src/services/positionFacts.test.ts:281`
-- `src/services/positionFacts.test.ts:297`
-- `src/services/positionFacts.test.ts:307`
-- `src/services/positionFacts.test.ts:315`
-- `src/services/positionFacts.test.ts:324`
-- `src/services/positionFacts.test.ts:347`
-- `src/services/positionFacts.test.ts:368`
-- `src/services/positionFacts.test.ts:384`
-- `src/services/positionFacts.test.ts:391`
-- `src/services/positionFacts.test.ts:403`
-- `src/services/positionFacts.test.ts:409`
-- `src/services/positionFacts.test.ts:418`
-- `src/services/positionFacts.test.ts:428`
-- `src/services/positionFacts.test.ts:441`
-- `src/services/positionFacts.test.ts:454`
-- `src/services/positionFacts.test.ts:467`
-- `src/services/positionFacts.test.ts:472`
-- `src/services/positionFacts.test.ts:483`
-- `src/services/positionFacts.test.ts:487`
-- `src/services/positionFacts.test.ts:491`
-- `src/services/positionFacts.test.ts:499`
-- `src/services/positionFacts.test.ts:509`
+- `src/services/positionFacts.test.ts:242`
+- `src/services/positionFacts.test.ts:253`
+- `src/services/positionFacts.test.ts:268`
+- `src/services/positionFacts.test.ts:284`
+- `src/services/positionFacts.test.ts:300`
+- `src/services/positionFacts.test.ts:310`
+- `src/services/positionFacts.test.ts:318`
+- `src/services/positionFacts.test.ts:327`
+- `src/services/positionFacts.test.ts:350`
+- `src/services/positionFacts.test.ts:371`
+- `src/services/positionFacts.test.ts:387`
+- `src/services/positionFacts.test.ts:394`
+- `src/services/positionFacts.test.ts:406`
+- `src/services/positionFacts.test.ts:412`
+- `src/services/positionFacts.test.ts:421`
+- `src/services/positionFacts.test.ts:431`
+- `src/services/positionFacts.test.ts:444`
+- `src/services/positionFacts.test.ts:457`
+- `src/services/positionFacts.test.ts:470`
+- `src/services/positionFacts.test.ts:475`
+- `src/services/positionFacts.test.ts:486`
+- `src/services/positionFacts.test.ts:490`
+- `src/services/positionFacts.test.ts:494`
+- `src/services/positionFacts.test.ts:502`
+- `src/services/positionFacts.test.ts:512`
 - `src/services/positionFacts.weakness.test.ts:24`
 - `src/services/positionFacts.weakness.test.ts:52`
 - `src/services/positionFacts.weakness.test.ts:66`
@@ -231,7 +231,7 @@
 - `src/test/teach02Wired.test.ts:140`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11406`
+- `src/components/Coach/CoachTeachPage.tsx:11516`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -249,8 +249,8 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9281`
-- `src/components/Coach/CoachTeachPage.tsx:9418`
+- `src/components/Coach/CoachTeachPage.tsx:9311`
+- `src/components/Coach/CoachTeachPage.tsx:9448`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:31`
@@ -282,6 +282,7 @@
 - `src/services/deliberation.ruleOutOnce.test.ts`
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/forkTrick.test.ts`
+- `src/services/gemCrushLines.computed.test.ts`
 - `src/services/latentFork.test.ts`
 - `src/services/learnNamesNoMove.os10.test.ts`
 - `src/services/learnTurnDoor.test.ts`

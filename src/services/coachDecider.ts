@@ -40,7 +40,7 @@ import { isProof, type Proof } from './proof';
 import { layerBonus, type LayerStandings } from './teachingLayers';
 import { stakeBar, isStaked } from './factStakes';
 import { causeEffect } from './factRelations';
-import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, type MethodHabit } from './methodBeat';
+import { methodBeatRead, HABIT_KIND, type MethodSignals, type HabitNeed, type HabitStanding, type MethodHabit } from './methodBeat';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { habitForTag, TAG_STEP } from './thinkingSteps';
 import type { WeaknessSignal } from './weaknessSignal';
@@ -339,7 +339,9 @@ function emit(
   posture: SurfacePosture,
   d: CoachDecision,
   student: StudentContext,
-  method: boolean,
+  /** The kind of the method beat that closed the turn (`HABIT_KIND`), or
+   *  null when none spoke. */
+  methodKind: (typeof HABIT_KIND)[MethodHabit] | null,
   /** Every fact the surface handed in, and the one that leads what spoke —
    *  read for the staked counts. */
   facts: readonly DoorFact[],
@@ -370,7 +372,7 @@ function emit(
     subsumed: d.quiet
       .filter((q) => q.why === 'subsumed' && q.by)
       .map((q) => [q.text.slice(0, 80), (q.by ?? '').slice(0, 80)] as [string, string]),
-    method,
+    method: methodKind !== null,
     stakedCount: facts.filter((f) => isStaked(f.stakes)).length,
     unproven: d.unproven,
     unprovenKinds: d.unprovenKinds,
@@ -389,12 +391,16 @@ function emit(
           const said = d.spoken.includes(f.text);
           return { computer: f.computer, kind: f.kind, text: f.text, said, why: said ? null : (quietWhy.get(f.text) ?? d.reason), fen: f.fen };
         }),
-        ...(d.method ? [{ computer: 'methodBeat', kind: 'method', text: d.method, said: true, why: null }] : []),
+        ...(d.method ? [{ computer: 'methodBeat', kind: methodKind ?? 'method', text: d.method, said: true, why: null }] : []),
       ],
     });
   }
   return d;
 }
+
+/** Every kind a habit is said under (`HABIT_KIND`): a habit's standing is its
+ *  own, read by the method beat, never the layer's. */
+const HABIT_KINDS: ReadonlySet<string> = new Set<string>(Object.values(HABIT_KIND));
 
 /** The tiers the student's need may NOT veto — see step 2 of `decide`. A
  *  `Record` over the whole union, so a new tier fails to compile until someone
@@ -435,7 +441,7 @@ export function decide(
   // emitted `quietBy` used to file both closes as `'below-bar'`, so the row
   // could name the gate in `reason` and then contradict itself per fact.
   if (!speaks) {
-    return emit(posture, { ...base, speak: false, reason: 'importance', teaches: false, spoken: [], ...proofLedger([]), quiet: bundle.facts.map((f) => ({ text: f.text, why: 'importance' as const })) }, student, false, bundle.facts, null);
+    return emit(posture, { ...base, speak: false, reason: 'importance', teaches: false, spoken: [], ...proofLedger([]), quiet: bundle.facts.map((f) => ({ text: f.text, why: 'importance' as const })) }, student, null, bundle.facts, null);
   }
   // 2 — THE STUDENT. Absent need data reads as speak: a fresh install must meet
   // a teaching coach, not a mute one (the cold-start rule).
@@ -451,7 +457,7 @@ export function decide(
   // moment. The teaching / critical / swing / convert / none tiers stay
   // need-gated, which is where a familiar line SHOULD go quiet.
   if (posture !== 'asked' && student.need && !student.need.speak && !SPEAKS_ON_IMPORTANCE.has(importance.tier)) {
-    return emit(posture, { ...base, speak: false, reason: 'need', teaches: false, spoken: [], ...proofLedger([]), quiet: bundle.facts.map((f) => ({ text: f.text, why: 'need' as const })) }, student, false, bundle.facts, null);
+    return emit(posture, { ...base, speak: false, reason: 'need', teaches: false, spoken: [], ...proofLedger([]), quiet: bundle.facts.map((f) => ({ text: f.text, why: 'need' as const })) }, student, null, bundle.facts, null);
   }
   // 3 + 4 — WHICH FACTS. Subsumption collapses one-claim duplicates; the floor
   // sweeps trivia. The floor may never mute a ply — that was step 2's job and
@@ -475,7 +481,7 @@ export function decide(
     // board forbids here is not a candidate at all.
     const veto = boardVeto(f.kind, bundle.board, f.squares);
     if (veto) { provenQuiet.push({ text: f.text, why: veto }); return false; }
-    if (f.kind === 'method') return true;
+    if (HABIT_KINDS.has(f.kind)) return true;
     // SHORTEN, NEVER SILENCE A REASON (David 2026-10-17: "Agreed" — one rule
     // with Learn). A teaching fact on a skill the student has shown speaks its
     // short form; only a DESCRIPTION in a proven layer still goes quiet.
@@ -534,7 +540,7 @@ export function decide(
   }
   const spokenFacts = [...support.spoken].sort((x, y) => ((stepOrder.get(x.id) ?? 0) - (stepOrder.get(y.id) ?? 0)) || ((order.get(y.id) ?? 0) - (order.get(x.id) ?? 0)));
   const spoken = spokenFacts.map((f) => f.text);
-  let methodSpoke = false;
+  let methodKind: (typeof HABIT_KIND)[MethodHabit] | null = null;
   let methodBeat: string | null = null;
   // 6 — THE METHOD, last. Ranked lowest so it CLOSES the beat: the board fact,
   // then the principle it broke, then the habit that finds it next time.
@@ -544,11 +550,11 @@ export function decide(
     // spine, so every surface gets the same answer from the same door.
     const coveredHabits = new Set<MethodHabit>();
     for (const [fact, habit] of method.habitByFact ?? []) if (spoken.includes(fact)) coveredHabits.add(habit);
-    const beat = methodBeatFor(
+    const beat = methodBeatRead(
       { ...method, tier: importance.tier, habitNeed: method.habitNeed ?? habitNeedFrom(student.weaknesses), coveredHabits },
       method.ply ?? 0,
     );
-    if (beat) { spoken.push(beat); methodBeat = beat; methodSpoke = true; }
+    if (beat) { spoken.push(beat.text); methodBeat = beat.text; methodKind = HABIT_KIND[beat.habit]; }
   }
   // A ply whose every fact was a description with no teaching point to
   // support says nothing — and says WHICH gate closed it, rather than
@@ -578,14 +584,14 @@ export function decide(
     const quiet = reason === 'unsupported'
       ? quietAll.map((q) => (q.why === 'subsumed' ? { ...q, why: 'unsupported' as const } : q))
       : quietAll;
-    return emit(posture, { ...base, speak: false, reason, teaches: false, spoken, quiet, ...proofLedger([]) }, student, false, bundle.facts, null);
+    return emit(posture, { ...base, speak: false, reason, teaches: false, spoken, quiet, ...proofLedger([]) }, student, null, bundle.facts, null);
   }
   // The habit's own kind teaches (`FACT_ROLE.method`), so a ply where only the
   // method spoke still taught.
-  const teaches = methodSpoke || spokenFacts.some((f) => roleOf(f) === 'teach');
+  const teaches = methodKind !== null || spokenFacts.some((f) => roleOf(f) === 'teach');
   // Said shorter — keyed by the words the surface renders.
   const fadedSpoken = new Map([...faded].filter(([f]) => spokenFacts.includes(f)).map(([f, l]) => [f.text, l] as const));
-  return emit(posture, { ...base, method: methodBeat, speak: true, reason: 'spoken', teaches, spoken, quiet: quietAll, faded: fadedSpoken, ...proofLedger(spokenFacts) }, student, methodSpoke, bundle.facts, spokenFacts[0] ?? null);
+  return emit(posture, { ...base, method: methodBeat, speak: true, reason: 'spoken', teaches, spoken, quiet: quietAll, faded: fadedSpoken, ...proofLedger(spokenFacts) }, student, methodKind, bundle.facts, spokenFacts[0] ?? null);
 }
 
 /** WHICH HABITS THIS STUDENT KEEPS BREAKING, read off the weakness spine.

@@ -133,7 +133,7 @@ import { lineProof, NO_PROOF, type FactProof, type Proof } from './proof';
 import { lineSeatAt } from '../utils/andList';
 import { threatProof } from './threatProof';
 import { refutedAltProof } from './refutedAlternativeCore';
-import { liveMethodBeat, habitIsOwed } from './methodBeat';
+import { liveMethodBeat, habitIsOwed, HABIT_KIND } from './methodBeat';
 import { naturalDefenceFails, forcingLine, markSacrificeLine } from './methodSignals';
 import { habitNeedFrom } from './coachDecider';
 import { computeNeed, type StudentNeedContext } from './needScore';
@@ -371,7 +371,17 @@ export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-c
   // The registry's own kinds for the book move, the position's memory and the
   // priority (WO-STORY-MATRIX-01 P1-4): the live read no longer relabels a
   // registry read — it speaks the computer's kind (`BOARD_COMPUTERS[id].kind`).
-  | 'opening' | 'last-here' | 'priority';
+  | 'opening' | 'last-here' | 'priority'
+  // The move most players at this level play here and what it costs
+  // (`refutedFromFan`) — its own kind, the same name review's facet uses.
+  | 'common-wrong'
+  // "A first, because it clears the road B needs" (`findEnablingMove`) — the
+  // move order, the same name review's facet uses.
+  | 'move-order'
+  // The habits that are a teaching move of their own (`methodBeat.HABIT_KIND`):
+  // what is their move doing (the opponent's shoes), and checks, captures and
+  // threats first (the forcing scan).
+  | 'opp-think' | 'forcing-scan';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -1035,6 +1045,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // repeats one verbatim.
   let methodBeat: string | null = null;
   let methodKey: string | null = null;
+  let methodKind: ClauseKind = 'method';
   let methodProof: Proof | null = null;
   try {
     const halfmove = Number.parseInt(fen.split(' ')[5] ?? '0', 10) || 0;
@@ -1056,6 +1067,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     }, halfmove, said);
     methodBeat = mb?.text ?? null;
     methodKey = mb?.key ?? null;
+    if (mb) methodKind = HABIT_KIND[mb.habit];
     methodProof = mb?.proof ?? null;
   } catch { methodBeat = null; }
 
@@ -1173,7 +1185,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     } catch { /* same */ }
   }
   const composedAll = orderByValue(
-    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { computer: ruleHere.computer, id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, names: ruleHere.names && !input.namesBestMove ? namesMoves(studentColor, input.fen, ruleHere.names) : NAMES_NO_MOVE, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, criticalAnchor: studentToMove && input.opponentLastMove ? input.opponentLastMove : null, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, structureSquares: planFact?.squares, structureClaim: planFact?.ideaKey, fundamentalText, fundamentalNames: fundamentalText && bestSanHere && !input.namesBestMove ? namesMoves(studentColor, fen, namedSan(fen, bestSanHere)) : NAMES_NO_MOVE, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, namesMoves: !!input.namesBestMove, concept, methodBeat, methodProof, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said, looseSpells: input.looseSpells ?? null }), ...tradeClauses],
+    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { computer: ruleHere.computer, id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, names: ruleHere.names && !input.namesBestMove ? namesMoves(studentColor, input.fen, ruleHere.names) : NAMES_NO_MOVE, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, criticalAnchor: studentToMove && input.opponentLastMove ? input.opponentLastMove : null, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, structureSquares: planFact?.squares, structureClaim: planFact?.ideaKey, fundamentalText, fundamentalNames: fundamentalText && bestSanHere && !input.namesBestMove ? namesMoves(studentColor, fen, namedSan(fen, bestSanHere)) : NAMES_NO_MOVE, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, namesMoves: !!input.namesBestMove, concept, methodBeat, methodKind, methodProof, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said, looseSpells: input.looseSpells ?? null }), ...tradeClauses],
     input.studentWeaknesses ?? [],
   );
 
@@ -1409,7 +1421,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // A method habit is keyed on the HABIT (its stems rotate), once per game.
   const rememberFor = (c: (typeof clauses)[number]): string[] => [
     ...(SAY_ONCE_KINDS.has(c.kind) ? [c.text] : []),
-    ...(c.kind === 'method' && methodKey ? [methodKey] : []),
+    ...(c.computer === 'liveMethodBeat' && methodKey ? [methodKey] : []),
     // A rule-out's loss is said once a game (`ruleOutClaims`).
     ...(c.kind === 'deliberation' && deliberation ? ruleOutClaims(deliberation, said ?? NOTHING_SAID) : []),
     // THE RACE IS THE KING-ATTACK PLAN (OS-11 item 6a): the opposite-wings race
@@ -1629,6 +1641,8 @@ function buildClauses(a: {
   concept: { id: string; source: string; full: string; short?: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[]; pinMove?: { fen: string; san: string }; computer: ComputerName } | null;
   /** The habit to run in this position, present tense. Null when none earned. */
   methodBeat: string | null;
+  /** The method beat's kind — the habit's (`methodBeat.HABIT_KIND`). */
+  methodKind: ClauseKind;
   /** The proof a method beat's earning fact carries (batch 2 habits). */
   methodProof?: Proof | null;
 }): ClauseFact[] {
@@ -1798,7 +1812,7 @@ function buildClauses(a: {
   if (a.refuted) {
     // The alternative names a move of the student's: held while it is theirs to play (OS-10,
     // David's record move 4: "Bishop to c4 is a common try here" before his Bc4).
-    ranked.push(clause('refutedFromFan', a.fen, { kind: 'refuted', names: a.refuted.squares.length >= 2 ? namesMoves(studentSeat === 'white' ? 'w' : 'b', a.fen, { from: a.refuted.squares[0], to: a.refuted.squares[1] }) : NAMES_NO_MOVE, text: a.refuted.fact.text, stakes: costStakes(a.refuted.fact.costCp) ?? undefined, squares: [...a.refuted.squares], proof: a.refuted.proof ?? undefined }));
+    ranked.push(clause('refutedFromFan', a.fen, { kind: 'common-wrong', names: a.refuted.squares.length >= 2 ? namesMoves(studentSeat === 'white' ? 'w' : 'b', a.fen, { from: a.refuted.squares[0], to: a.refuted.squares[1] }) : NAMES_NO_MOVE, text: a.refuted.fact.text, stakes: costStakes(a.refuted.fact.costCp) ?? undefined, squares: [...a.refuted.squares], proof: a.refuted.proof ?? undefined }));
   }
   // A rook or queen principle about a FILE claims that file — the key the
   // positional read's "owns the open d-file" writes too, so one file is one
@@ -1981,7 +1995,7 @@ function buildClauses(a: {
   // purpose so it CLOSES the beat — the board fact, then the idea, then the
   // routine that finds it next time. Gated on the same computed signals as the
   // retrospective register, so it is never generic advice on a quiet board.
-  if (a.methodBeat) ranked.push(clause('liveMethodBeat', a.fen, { kind: 'method', text: a.methodBeat, ...(a.methodProof ? { proof: a.methodProof } : {}) }));
+  if (a.methodBeat) ranked.push(clause('liveMethodBeat', a.fen, { kind: a.methodKind, text: a.methodBeat, ...(a.methodProof ? { proof: a.methodProof } : {}) }));
 
   // ONE CLAIM, ONE CLAUSE (one thread per move): two clauses that make the same
   // claim — the plan's "push your d3 pawn" and the conversion's "escort it" —

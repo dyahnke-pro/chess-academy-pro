@@ -1287,7 +1287,7 @@ export function computeMoveFacets(
   // 2026-11-04).
   if (isStudent && ctx.teaching.refutedAlt) {
     const r = ctx.teaching.refutedAlt;
-    const f = made('refutedFromFan', 'refuted', r.text);
+    const f = made('refutedFromFan', 'common-wrong', r.text);
     facets.push(f);
     recProof(f, refutedAltProof(fenBefore, r));
     f.identity = `refuted:${r.alt.replace(/[+#!?]+$/, '')}`;
@@ -1591,8 +1591,8 @@ export function computeMoveFacets(
     const slips = ctx.teaching.knownSlips;
     if (slips.index) {
       const gradedSound = ctx.classification === 'good' || ctx.classification === 'book' || ctx.classification === 'great' || ctx.classification === 'brilliant';
-      const played = gradedSound ? undefined : readBoardAll('knownSlip', { fen: fenBefore, gems: knownSlipsAt(slips.index, fenBefore), played: san, on: 'played', student: studentColorWB, verdictPunish, saidNext: null, told: slips.told })[0];
-      add(played ?? readBoardAll('knownSlip', { fen: fenAfter, gems: knownSlipsAt(slips.index, fenAfter), played: ctx.allSans[ply] ?? null, on: 'reached', student: studentColorWB, verdictPunish: null, saidNext: slips.nextRefutedAlt, told: slips.told })[0]);
+      const played = gradedSound ? undefined : readBoardAll('knownSlip', { fen: fenBefore, gems: knownSlipsAt(slips.index, fenBefore), played: san, student: studentColorWB, verdictPunish, saidNext: null, told: slips.told })[0];
+      add(played ?? readBoardAll('trapAhead', { fen: fenAfter, gems: knownSlipsAt(slips.index, fenAfter), played: ctx.allSans[ply] ?? null, student: studentColorWB, verdictPunish: null, saidNext: slips.nextRefutedAlt, told: slips.told })[0]);
     }
   }
 
