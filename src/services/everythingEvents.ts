@@ -24,6 +24,10 @@ export interface EverythingLine {
   /** The computer that made it (a `COMPUTER_CATALOG` key, a Learn lane, a
    *  Review facet tag). */
   computer: string;
+  /** The fact's kind (`CoachFactKind`, a Review facet tag) — what it says, read
+   *  by the teaching-move table (`teachingMoves.TEACHING_MOVES`). Null for a
+   *  line no kind carries (the walk's lead sentence, a held voice line). */
+  kind: string | null;
   text: string;
   /** It reached the voice (or the walk's text). */
   said: boolean;

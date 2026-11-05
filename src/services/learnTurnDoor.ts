@@ -1187,7 +1187,7 @@ function reportEverything(facts: readonly LaneFact[], turn: LearnTurnTag | null,
     at: offered[0] ? { fen: offered[0].fen, ply: turn?.ply ?? null } : null,
     lines: offered.map((f) => {
       const said = keptIds.has(f.id);
-      return { computer: `${f.computer} (${f.lane})`, text: f.text, said, why: said ? null : (why(f) ?? 'not kept'), fen: f.fen };
+      return { computer: `${f.computer} (${f.lane})`, kind: f.kind, text: f.text, said, why: said ? null : (why(f) ?? 'not kept'), fen: f.fen };
     }),
   });
 }

@@ -7,11 +7,15 @@
 // behind it (`pinGeometry`). Behind this one stands no piece worth more — it is
 // a square their line piece takes with mate. The read: a queen, rook or bishop
 // of theirs looks through one piece of yours at a piece of yours directly
-// behind it; with the front piece gone, taking the one behind is checkmate on
-// the board (chess.js plays it). The push that would hit the frozen piece —
+// behind it, and most moves the front piece has let the capture of the one
+// behind it mate on the board (chess.js plays it); the moves that do not are
+// named with the claim. The push that would hit the frozen piece —
 // their pawn one step from attacking it — is read with it, since a piece that
 // cannot move is the easiest one to win. Pure: chess.js only.
 import { Chess, type Color, type Square } from 'chess.js';
+import { sideToMoveAs } from './threatOut';
+import { unmarked } from '../utils/sanMark';
+import { orList } from '../utils/andList';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const DIRS: Record<string, readonly (readonly [number, number])[]> = {
@@ -29,6 +33,9 @@ export interface FrozenPiece {
   behind: Square;
   /** The capture that mates once the frozen piece moves (SAN). */
   mateSan: string;
+  /** The squares it may still go to without allowing the mate — said with the
+   *  claim, so "if it moves" is never stronger than the board. */
+  escapes: string[];
   /** Their pawn push that would hit the frozen piece (SAN), when one is on. */
   lever: string | null;
   /** How the line is named ("the long diagonal", "the e-file"…). */
@@ -76,20 +83,32 @@ export function findFrozenPieces(fen: string, attacker: Color): FrozenPiece[] {
         break;
       }
       if (!frozen || !behind) continue;
-      // With the front piece gone, does taking the one behind mate?
-      const t = new Chess(fen);
-      t.remove(frozen as Square);
-      const parts = t.fen().split(' ');
-      parts[1] = attacker; parts[3] = '-';
-      let probe: Chess;
-      try { probe = new Chess(parts.join(' ')); } catch { continue; }
-      if (probe.inCheck()) continue;
+      // HELD IN PLACE: read with the defender to move (the one null-move rule).
+      // Not held at all when they can simply take the piece holding it (3...g6
+      // against Qh5: the pawn takes the queen). Otherwise each move the front
+      // piece has either lets the capture behind it mate, or escapes — and an
+      // escape is named, never hidden (14.Bb2 in his Scotch Gambit: the knight
+      // on f6 may still go to h5, where it guards g7). Held when its mating
+      // moves outnumber its escapes.
+      const asDefender = sideToMoveAs(fen, defender);
+      if (!asDefender) continue;
+      const defenderBoard = new Chess(asDefender);
+      if (defenderBoard.moves({ verbose: true }).some((mv) => mv.to === c.square)) continue;
+      const own = defenderBoard.moves({ square: frozen as Square, verbose: true });
       let mateSan: string | null = null;
-      try {
-        const m = probe.move({ from: c.square, to: behind as Square });
-        if (probe.isCheckmate()) mateSan = m.san;
-      } catch { /* an illegal capture mates nothing */ }
-      if (!mateSan) continue;
+      const escapes: string[] = [];
+      let mating = 0;
+      for (const mv of own) {
+        const after = new Chess(asDefender);
+        after.move(mv.san);
+        let mates: string | null = null;
+        try {
+          const m = after.move({ from: c.square, to: behind as Square });
+          if (after.isCheckmate()) mates = m.san;
+        } catch { /* the capture is gone: no mate */ }
+        if (mates) { mating += 1; mateSan ??= mates; } else escapes.push(mv.to);
+      }
+      if (!mateSan || mating <= escapes.length) continue;
       // The battery: their own piece right behind the line piece, on the line.
       let battery: Square | null = null;
       for (let bf = f0 - df, br = r0 - dr, s = sq(bf, br); s; bf -= df, br -= dr, s = sq(bf, br)) {
@@ -98,7 +117,7 @@ export function findFrozenPieces(fen: string, attacker: Color): FrozenPiece[] {
         if (p.color === attacker && (p.type === 'q' || (DIRS[p.type] ?? []).some(([x, y]) => x === df && y === dr))) battery = s as Square;
         break;
       }
-      out.push({ line: c.square, battery, frozen: frozen as Square, behind: behind as Square, mateSan, lever: leverOn(b, attacker, frozen), lineName: lineNameOf(c.square, df, dr) });
+      out.push({ line: c.square, battery, frozen: frozen as Square, behind: behind as Square, mateSan, escapes: [...new Set(escapes)].sort(), lever: leverOn(b, attacker, frozen), lineName: lineNameOf(c.square, df, dr) });
     }
   }
   return out;
@@ -128,5 +147,6 @@ export function frozenPieceWords(fp: FrozenPiece, b: Chess, holder: 'yours' | 't
   const piece = (s: string): string => NAME[b.get(s as Square)?.type ?? 'p'] ?? 'piece';
   const who = fp.battery ? `${their} ${piece(fp.line)} and ${piece(fp.battery)}` : `${their} ${piece(fp.line)}`;
   const lever = fp.lever ? ` — and ${fp.lever} would hit it` : '';
-  return `${who} on ${fp.lineName} ${fp.battery ? 'hold' : 'holds'} ${your} ${piece(fp.frozen)} on ${fp.frozen} in place: if it moves, ${fp.mateSan.replace(/#$/, '')} is mate${lever}`;
+  const where = fp.escapes.length ? `if it moves anywhere but ${orList(fp.escapes)}` : 'if it moves';
+  return `${who} on ${fp.lineName} ${fp.battery ? 'hold' : 'holds'} ${your} ${piece(fp.frozen)} on ${fp.frozen} in place: ${where}, ${unmarked(fp.mateSan)} is mate${lever}`;
 }

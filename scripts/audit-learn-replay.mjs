@@ -70,8 +70,10 @@ const learnGames = drop.stores.games.filter((g) => g.source === 'coach' && Strin
 // Learn game (a hand walk's free-played game), on the same record.
 const sansArg = (() => { const i = args.indexOf('--sans'); return i >= 0 ? args[i + 1] : null; })();
 const seatArg = (() => { const i = args.indexOf('--seat'); return i >= 0 ? args[i + 1] : null; })();
+// `--id <name>` names a `--sans` run (e.g. the video a game of his came from).
+const idArg = (() => { const i = args.indexOf('--id'); return i >= 0 ? args[i + 1] : null; })();
 const game = sansArg
-  ? { id: 'sans', studentSide: seatArg ?? 'white', pgn: sansArg }
+  ? { id: idArg ?? 'sans', studentSide: seatArg ?? 'white', pgn: sansArg }
   : args[0] && !args[0].startsWith('--') ? drop.stores.games.find((g) => g.id === args[0]) : learnGames[0];
 if (!game) { console.error('no Learn game in the drop'); process.exit(1); }
 const seat = game.studentSide ?? 'white';
@@ -117,7 +119,11 @@ for (let i = 0; i < sans.length; i += 1) {
     for (const w of p.windows ?? []) if (w.busyMs >= 60) console.log(`  +${w.at - movedAt}ms busy ${w.busyMs}ms  ${w.top.join(' | ')}`);
   }
   const fens = (() => { const b = new Chess(); for (const s of sans.slice(0, i)) b.move(s); const before = b.fen(); b.move(sans[i]); const after = b.fen(); if (reply) b.move(reply); return { before, after, afterReply: reply ? b.fen() : null }; })();
-  turns.push({ move: `${moveNo}${seat === 'white' ? '.' : '...'}${sans[i]}`, reply: reply ?? null, replyMs: t.replyMs ?? null, words: t.words ?? null, lines: t.lines ?? t.spoken ?? [], timeline: t.timeline ?? [], onAir: t.onAir ?? [], stages: t.stages ? stageSummary(t.stages, fens) : null, error: t.error ?? null });
+  // EVERYTHING THE TURN WEIGHED (`everythingEvents`, dev server only): every
+  // fact each deciding place was handed this turn, with its kind and whether
+  // it spoke — the ceiling a matrix can pick from (PLAN § PHASE 2 REDESIGN L1).
+  const everything = await call('/js', 'const r = window.__everything ?? []; window.__everything = []; return r;').catch(() => []);
+  turns.push({ move: `${moveNo}${seat === 'white' ? '.' : '...'}${sans[i]}`, ply: i + 1, reply: reply ?? null, replyMs: t.replyMs ?? null, words: t.words ?? null, lines: t.lines ?? t.spoken ?? [], timeline: t.timeline ?? [], onAir: t.onAir ?? [], stages: t.stages ? stageSummary(t.stages, fens) : null, everything: Array.isArray(everything) ? everything : [], error: t.error ?? null });
   const last = turns[turns.length - 1];
   console.log(`\n${last.move}${reply ? ` → ${reply}` : ''}  (${last.replyMs ?? '?'}ms, ${last.words ?? '?'} words)`);
   for (const l of last.lines) console.log(`   • ${l}`);

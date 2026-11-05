@@ -36,11 +36,11 @@ beforeEach(() => __resetEverything());
 describe('the leaf', () => {
   it('builds nothing while nobody listens, and numbers rows in arrival order', () => {
     expect(everythingListening()).toBe(false);
-    emitEverything({ surface: 'learn', door: 'moment', lines: [{ computer: 'x', text: 'a', said: true, why: null }] });
+    emitEverything({ surface: 'learn', door: 'moment', lines: [{ computer: 'x', kind: null, text: 'a', said: true, why: null }] });
     const rows = listen();
     expect(everythingListening()).toBe(true);
-    emitEverything({ surface: 'learn', door: 'moment', lines: [{ computer: 'x', text: 'a', said: true, why: null }] });
-    emitEverything({ surface: 'learn', door: 'moment', lines: [{ computer: 'x', text: 'b', said: false, why: 'held' }] });
+    emitEverything({ surface: 'learn', door: 'moment', lines: [{ computer: 'x', kind: null, text: 'a', said: true, why: null }] });
+    emitEverything({ surface: 'learn', door: 'moment', lines: [{ computer: 'x', kind: null, text: 'b', said: false, why: 'held' }] });
     expect(rows.map((r) => r.seq)).toEqual([1, 2]);
   });
 });

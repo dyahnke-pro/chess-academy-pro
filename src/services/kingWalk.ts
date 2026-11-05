@@ -14,6 +14,7 @@
 // surface hands one in, and nothing is claimed without it.
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { isMinorAtHome } from './development';
+import { sideToMoveAs } from './threatOut';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -35,13 +36,6 @@ function homeRank(side: Color): number { return side === 'w' ? 1 : 8; }
 function secondRank(side: Color): number { return side === 'w' ? 2 : 7; }
 const sq = (file: string, rank: number): string => `${file}${rank}`;
 
-/** The board with the other side to move — for "what could they play here". */
-function withTurn(fen: string, side: Color): string {
-  const p = fen.split(' ');
-  p[1] = side;
-  p[3] = '-';
-  return p.join(' ');
-}
 
 // ── CASTLING BY HAND ─────────────────────────────────────────────────────────
 
@@ -214,9 +208,14 @@ export function castleByHandMove(fenBefore: string, san: string, who: 'your' | '
   // covered by a pawn, and a knight of theirs can land there this move.
   if (after.nextKingSquare && m.piece === 'p' && !inCheck) {
     const them: Color = side === 'w' ? 'b' : 'w';
-    const coverBefore = pawnCover(new Chess(withTurn(fenBefore, side)), side);
+    // "What could they play here": the boards with each side to move, through
+    // the one null-move rule (a side in check cannot pass).
+    const asSideBefore = sideToMoveAs(fenBefore, side);
+    const asThemAfter = sideToMoveAs(fenAfter, them);
+    if (!asSideBefore || !asThemAfter) return null;
+    const coverBefore = pawnCover(new Chess(asSideBefore), side);
     const coverAfter = pawnCover(b, side);
-    const theirMoves = new Chess(withTurn(fenAfter, them)).moves({ verbose: true });
+    const theirMoves = new Chess(asThemAfter).moves({ verbose: true });
     for (const x of checkSquares('n', after.nextKingSquare)) {
       if (!coverAfter.has(x) || coverBefore.has(x)) continue;
       const knight = theirMoves.find((mv) => mv.piece === 'n' && mv.to === x);

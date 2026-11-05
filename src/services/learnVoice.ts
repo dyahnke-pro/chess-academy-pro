@@ -54,7 +54,7 @@ export function speakLearn(
       source: 'learnVoice.held',
       summary: `free-play line held — ${ownerOf()} owns the voice: "${text.slice(0, 80)}"`,
     });
-    emitEverything({ surface: 'learn', door: 'voice-owner', lines: [{ computer: opts.intent, text, said: false, why: `${ownerOf()} owns the voice` }] });
+    emitEverything({ surface: 'learn', door: 'voice-owner', lines: [{ computer: opts.intent, kind: null, text, said: false, why: `${ownerOf()} owns the voice` }] });
     return Promise.resolve();
   }
   return speakComputed(text, { forced: opts.forced, intent: opts.intent, ...(opts.repeatOnPurpose ? { repeatOnPurpose: true } : {}) });

@@ -6186,10 +6186,10 @@ export async function generateReviewNarration(params: {
     for (const s of segments) {
       if (!s.narration) continue;
       const parts = s.narration.split(/\[([a-z0-9-]+)\]\s*/i);
-      const lines: Array<{ computer: string; text: string; said: boolean; why: null }> = [];
-      if (parts[0].trim()) lines.push({ computer: 'review walk', text: parts[0].trim(), said: true, why: null });
+      const lines: Array<{ computer: string; kind: string | null; text: string; said: boolean; why: null }> = [];
+      if (parts[0].trim()) lines.push({ computer: 'review walk', kind: null, text: parts[0].trim(), said: true, why: null });
       for (let k = 1; k < parts.length; k += 2) {
-        if (parts[k + 1]?.trim()) lines.push({ computer: `review facet [${parts[k]}]`, text: parts[k + 1].trim(), said: true, why: null });
+        if (parts[k + 1]?.trim()) lines.push({ computer: `review facet [${parts[k]}]`, kind: parts[k], text: parts[k + 1].trim(), said: true, why: null });
       }
       emitEverything({ surface: 'review', door: 'review-walk', at: { fen: s.fenAfter, ply: s.ply, san: s.san }, lines });
     }

@@ -383,9 +383,9 @@ function emit(
       lines: [
         ...facts.filter((f) => f.text.trim()).map((f) => {
           const said = d.spoken.includes(f.text);
-          return { computer: f.computer, text: f.text, said, why: said ? null : (quietWhy.get(f.text) ?? d.reason), fen: f.fen };
+          return { computer: f.computer, kind: f.kind, text: f.text, said, why: said ? null : (quietWhy.get(f.text) ?? d.reason), fen: f.fen };
         }),
-        ...(d.method ? [{ computer: 'methodBeat', text: d.method, said: true, why: null }] : []),
+        ...(d.method ? [{ computer: 'methodBeat', kind: 'method', text: d.method, said: true, why: null }] : []),
       ],
     });
   }

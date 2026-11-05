@@ -17,8 +17,8 @@ describe('the knight on f6 held in place by the battery', () => {
   it('after 14.Bb2: queen and bishop on the long diagonal, Qxg7 mate behind, e5 the push', () => {
     const c = board(27);
     const [fp] = findFrozenPieces(c.fen(), 'w');
-    expect(fp).toMatchObject({ line: 'c3', battery: 'b2', frozen: 'f6', behind: 'g7', mateSan: 'Qxg7#', lever: 'e5', lineName: 'the long diagonal' });
-    expect(frozenPieceWords(fp, c, 'theirs')).toBe('their queen and bishop on the long diagonal hold your knight on f6 in place: if it moves, Qxg7 is mate — and e5 would hit it');
+    expect(fp).toMatchObject({ line: 'c3', battery: 'b2', frozen: 'f6', behind: 'g7', mateSan: 'Qxg7#', escapes: ['h5'], lever: 'e5', lineName: 'the long diagonal' });
+    expect(frozenPieceWords(fp, c, 'theirs')).toBe('their queen and bishop on the long diagonal hold your knight on f6 in place: if it moves anywhere but h5, Qxg7 is mate — and e5 would hit it');
   });
   it('before the bishop came to b2 there is no mate behind the knight', () => {
     expect(findFrozenPieces(board(26).fen(), 'w')).toEqual([]);
@@ -26,6 +26,14 @@ describe('the knight on f6 held in place by the battery', () => {
   it('"you\'re still worse — why" now names it', () => {
     const a = assessPositionalEdge(board(27).fen(), 'b', -70);
     expect(a.verdict).toMatch(/worse/);
-    expect(a.reasons.join(' | ')).toContain('hold your knight on f6 in place: if it moves, Qxg7 is mate — and e5 would hit it');
+    expect(a.reasons.join(' | ')).toContain('hold your knight on f6 in place: if it moves anywhere but h5, Qxg7 is mate — and e5 would hit it');
+  });
+});
+
+describe('a piece they can simply take is holding nothing', () => {
+  it('3...g6 against Qh5: the pawn takes the queen, so it is not "held in place"', () => {
+    const c = new Chess();
+    for (const s of ['e4', 'e5', 'Bc4', 'Nc6', 'Qh5', 'g6']) c.move(s);
+    expect(findFrozenPieces(c.fen(), 'w')).toEqual([]);
   });
 });

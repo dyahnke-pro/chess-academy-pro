@@ -278,8 +278,8 @@ export function composeThought(
       surface,
       door: 'composer',
       lines: [
-        ...kept.map((f) => ({ computer: `${f.computer} (${f.source})`, text: f.text, said: true, why: null, fen: f.fen })),
-        ...held.map((h) => ({ computer: `${h.fact.computer} (${h.fact.source})`, text: h.fact.text, said: false, why: h.why, fen: h.fact.fen })),
+        ...kept.map((f) => ({ computer: `${f.computer} (${f.source})`, kind: f.kind, text: f.text, said: true, why: null, fen: f.fen })),
+        ...held.map((h) => ({ computer: `${h.fact.computer} (${h.fact.source})`, kind: h.fact.kind, text: h.fact.text, said: false, why: h.why, fen: h.fact.fen })),
       ],
     });
   }
