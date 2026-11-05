@@ -66,6 +66,7 @@ import {
 } from './positionReadingService';
 import { worstPieceNote, isolaniStructure, passerTrumpSentence } from './nextPlans';
 import { pieceRef } from './pieceRef';
+import { openSentence } from '../utils/openSentence';
 
 /** Where a passive piece wants to go and how (census #15): a knight's outpost
  *  route, or a bishop's long diagonal / a rook's pawnless file, at most one
@@ -84,7 +85,7 @@ const PIECE_NAME: Record<PieceSymbol, string> = {
  *  person names it (`pieceRef`), opening a sentence. */
 function pieceWords(fen: string, square: string, student: Color): string {
   const words = pieceRef(fen, square, student)?.words ?? `your piece on ${square}`;
-  return `${words.charAt(0).toUpperCase()}${words.slice(1)}`;
+  return openSentence(words);
 }
 
 const PIECE_VALUE_TABLE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
