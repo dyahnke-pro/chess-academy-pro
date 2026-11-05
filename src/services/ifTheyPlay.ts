@@ -32,6 +32,7 @@ import { lineTrust, type LineTrust } from './lineTrust';
 import { moveJob, isBareJob, MINE, THEIRS, type BookJobKind } from './bookMoveWhy';
 import { tacticWord } from './tacticVocabulary';
 import { withArticle } from '../utils/andList';
+import { openSentence } from '../utils/openSentence';
 import type { TacticType } from '../types';
 
 /** One legal reply, scored by the read of the board after the move. */
@@ -289,7 +290,7 @@ export function treeSentence(t: ReplyTree, branches: readonly ReplyBranch[], stu
   const clauses = branches.map((b) => branchClause(t, b, student, tense)).filter((s): s is string => !!s);
   if (clauses.length === 0) return null;
   const body = clauses.join('; ');
-  return `${body[0].toUpperCase()}${body.slice(1)}.`;
+  return `${openSentence(body)}.`;
 }
 
 /** Can this branch be said? A trusted line (the naming rule) with words in

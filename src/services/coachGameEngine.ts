@@ -2,7 +2,7 @@ import { Chess } from 'chess.js';
 import { isHomeSteerWarm, pickHomeSteerMove, warmHomeSteer } from './homeOpeningSteer';
 import { stockfishEngine } from './stockfishEngine';
 import { limitStrengthElo, ENGINE_ELO_MIN } from './engineConstants';
-import { humanReply } from './humanReply';
+import { humanReply, type EveryMoveRead } from './humanReply';
 import { getNextOpeningBookMove } from './openingDetectionService';
 import { findHangingPieces } from './tacticClassifier';
 import { lookupMasterPlay } from './masterPlayLookup';
@@ -561,6 +561,10 @@ interface AdaptiveMoveResult {
   focusPlanted?: FocusSeat;
   /** The plant was armed and looked: why it planted nothing (empty when it did). */
   plantScan?: PlantScan;
+  /** The read of every move on this board that the human model chose from —
+   *  the reply tree's input (`ifTheyPlay`). It stays with the board when a
+   *  dial replaced the move: the read is of the board, not of the move. */
+  everyMove?: EveryMoveRead;
 }
 
 export async function getAdaptiveMove(
@@ -571,7 +575,8 @@ export async function getAdaptiveMove(
   // A card or boss may move the coach's strength (the `strengthOffset` dial).
   const elo = targetElo + (opts.missionDials?.dials.strengthOffset ?? 0);
   const chosen = await chooseAdaptiveMove(fen, elo, opts);
-  const result = opts.missionDials ? await applyMissionDials(fen, elo, opts, opts.missionDials, chosen) : chosen;
+  const dialed = opts.missionDials ? await applyMissionDials(fen, elo, opts, opts.missionDials, chosen) : chosen;
+  const result = chosen.everyMove && !dialed.everyMove ? { ...dialed, everyMove: chosen.everyMove } : dialed;
   if (opts.strength && result.move) emitOpponentStrength(opts.strength, result.source);
   return result;
 }
@@ -1176,7 +1181,7 @@ async function chooseAdaptiveMove(
         summary: `source=human move=${human.uci} elo=${targetElo} p=${human.p.toFixed(2)} cpLoss=${human.cpLoss} of ${human.candidates} moves`,
         fen,
       });
-      return { move: human.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: human.uci }, source: 'human' };
+      return { move: human.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: human.uci }, source: 'human', everyMove: human.read };
     }
     void logAppAudit({
       kind: 'coach-opponent-move-source',

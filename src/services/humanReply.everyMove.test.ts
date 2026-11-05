@@ -1,6 +1,7 @@
 // THE COACH'S OWN READ OF EVERY REPLY IS THE TREE'S READ ON LEARN — the read
-// that chose the opponent's move is kept for the board it was made on, so the
-// reply tree (`ifTheyPlay`) walks the same read and never asks for a second.
+// that chose the opponent's move travels WITH the move, so the reply tree
+// (`ifTheyPlay`) walks the same read and never asks for a second. It is never
+// kept in a module cache (a hidden global the page used to look up by board).
 import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('./stockfishEngine', () => ({
@@ -19,25 +20,25 @@ vi.mock('./stockfishEngine', () => ({
   },
 }));
 
-import { everyMoveReadAt, humanReply, keepEveryMoveRead } from './humanReply';
+import * as humanReplyModule from './humanReply';
+import { humanReply } from './humanReply';
 
 const AFTER_E4 = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
 
-describe('the read of every reply, kept for the tree', () => {
-  it('humanReply keeps its read for the board, at the rating it chose for', async () => {
+describe('the read of every reply travels with the reply', () => {
+  it('humanReply returns the read it chose from, at the rating it chose for', async () => {
     const pick = await humanReply(AFTER_E4, 1400, 100);
     expect(pick).not.toBeNull();
-    const kept = everyMoveReadAt(AFTER_E4.replace(' 0 1', ' 3 7'));
-    expect(kept?.rating).toBe(1400);
-    expect(kept?.scored.map((s) => s.uci).sort()).toEqual(['c7c5', 'e7e5']);
+    const read = pick?.read;
+    expect(read?.rating).toBe(1400);
+    expect(read?.scored.map((s) => s.uci).sort()).toEqual(['c7c5', 'e7e5']);
     // Black to move: the replier's view of a White-POV +20 is −20.
-    expect(kept?.scored.find((s) => s.uci === 'e7e5')?.cp).toBe(-20);
-    expect(kept?.scored.find((s) => s.uci === 'e7e5')?.pv).toEqual(['e7e5', 'g1f3']);
+    expect(read?.scored.find((s) => s.uci === 'e7e5')?.cp).toBe(-20);
+    expect(read?.scored.find((s) => s.uci === 'e7e5')?.pv).toEqual(['e7e5', 'g1f3']);
   });
 
-  it('keeps only the last few boards', () => {
-    for (let i = 0; i < 6; i += 1) keepEveryMoveRead(`8/8/8/8/8/8/8/K${i + 1}k w - - 0 1`, { rating: i, scored: [] });
-    expect(everyMoveReadAt('8/8/8/8/8/8/8/K1k w - - 0 1')).toBeNull();
-    expect(everyMoveReadAt('8/8/8/8/8/8/8/K6k w - - 0 1')?.rating).toBe(5);
+  it('no module cache of reads exists to look up by board', () => {
+    expect(Object.keys(humanReplyModule)).not.toContain('everyMoveReadAt');
+    expect(Object.keys(humanReplyModule)).not.toContain('keepEveryMoveRead');
   });
 });

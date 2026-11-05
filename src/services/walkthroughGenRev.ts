@@ -50,4 +50,8 @@
 // and says what a move prepares with the rule behind it, the structural choice
 // after their move (`linesStructure`), and closes on the plan the games show
 // from the line's middlegame (`computedPlanAt`).
-export const WALKTHROUGH_GEN_REV = '2026-11-04-story-matrix-wires';
+// 2026-11-05-weighed-replies: a lesson move also says the reply tree ("if they
+// take on e5, you take back with the knight"), the tempting move that fails,
+// the move of the same worth, and the piece's other squares (`ifTheyPlay`,
+// `weighedMoves`); the reply tree's sentence opens through `openSentence`.
+export const WALKTHROUGH_GEN_REV = '2026-11-05-weighed-replies';

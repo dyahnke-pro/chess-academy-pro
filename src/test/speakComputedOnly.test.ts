@@ -39,10 +39,13 @@ describe('speakComputed is the only way CoachTeachPage speaks', () => {
     expect(missing).toEqual([]);
   });
 
-  it('the phase wave\'s package speaks only when a volunteered line may', () => {
+  // The phase wave is the turn door's own decision (decidePhaseWave), so it
+  // speaks on the door's channel: in a focus game too, never under a mission
+  // (ONE VOICE, David 2026-10-30).
+  it('the phase wave\'s package speaks only when the door may', () => {
     const pkg = TEACH.split('\n').filter((l) => /voiceService\.speakPackage\(/.test(l));
     expect(pkg.length).toBeGreaterThan(0);
-    for (const l of pkg) expect(l).toMatch(/learnVoiceAllows\('free-play'\)/);
+    for (const l of pkg) expect(l).toMatch(/learnVoiceAllows\('door'\)/);
   });
 
   it('the helper hands every line through voiceFacts, computer-worded (no model)', () => {

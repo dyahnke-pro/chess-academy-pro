@@ -319,7 +319,6 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseClaims, conceptInstanceKey, convertKey } from '../../services/positionFacts';
 import { gradePlayedMove, liveMovePrice, priceLabel, studentMovePrice, uciOfSan, type MovePrice, type PriceSearch } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
-import { everyMoveReadAt } from '../../services/humanReply';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK, upcomingTacticSquares } from '../../services/liveTacticsContext';
 import { buildCausalChain, causalChainHighlights, causalChainKey } from '../../services/causalChain';
@@ -344,8 +343,7 @@ import { gameOpponentStrength } from '../../services/engineStrength';
 import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { lineSeatAt, withArticle } from '../../utils/andList';
-import { readBoard, readBoardAll, readKey, adoptPlanTrial, type PlanThread } from '../../services/boardComputers';
-import type { WeighRead } from '../../services/weighedMoves';
+import { readBoard, readBoardAll, readKey, adoptPlanTrial, type PlanThread, type BoardContexts } from '../../services/boardComputers';
 import type { CoachFact, ComputerName } from '../../services/coachFact';
 import { splitThink, stripThink, resolveOwed, THINK_MARK } from '../../utils/thinkPause';
 import { scheduleMarks } from '../../services/markPacing';
@@ -2091,6 +2089,9 @@ export function CoachTeachPage({ mode }: {
    *  the board it was chosen on, its slip's winning line (§6a), or why none.
    *  Handed to the runner once the reply is on the board. */
   const missionPlantRef = useRef<{ fen: string; planted?: PlantedShot; scan?: PlantScan } | null>(null);
+  /** The read of every move the coach chose its last reply from (`humanReply`),
+   *  with the board it was made on: the reply tree reads it (ifTheyPlay). */
+  const replyReadRef = useRef<{ fen: string; read: NonNullable<Awaited<ReturnType<typeof getAdaptiveMove>>['everyMove']> } | null>(null);
   /** THE CAMPAIGN UI (WO-CAMPAIGN-MASTER, Lane C). A new Campaign game waits
    *  on its missions sheet until the student taps Start. */
   const [pendingCampaign, setPendingCampaign] = useState<{ cards: MissionCard[]; watchers: MissionCard[]; seat: 'white' | 'black'; replayable: MissionCard[]; silent: boolean } | null>(null);
@@ -8583,6 +8584,9 @@ export function CoachTeachPage({ mode }: {
       });
       // The free piece (WO-MISSIONS-02): what this reply did about it, for the
       // runner once the move is on the board.
+      // The read the coach chose its reply from — the reply tree's input on
+      // the turn that follows (ifTheyPlay), kept with the board it was made on.
+      replyReadRef.current = adaptive.everyMove ? { fen, read: adaptive.everyMove } : null;
       missionPlantRef.current = adaptive.plant || adaptive.plantScan
         ? { fen, ...(adaptive.plant ? { planted: adaptive.plant } : {}), ...(adaptive.plantScan ? { scan: adaptive.plantScan } : {}) }
         : null;
@@ -8893,7 +8897,7 @@ export function CoachTeachPage({ mode }: {
      *  eye picks the candidates) and the read of the board before the
      *  student's move — each line a read of its first move — or null when
      *  that board was not read. REQUIRED, so a caller says which. */
-    weigh: { rating: number; reads: readonly WeighRead[] | null };
+    weigh: { rating: number; reads: BoardContexts['temptingRefuted']['reads'] };
   }): {
     /** The utterance AND its provenance, from one object. Callers speak
      *  `pkg.spoken` and log `pkg.kept` — never a separately-assembled string,
@@ -10078,12 +10082,14 @@ export function CoachTeachPage({ mode }: {
     // THE REPLY TREE (ifTheyPlay, his "if Black takes on e5, you take back with
     // the knight"): the replies the coach was likely to play at its level, and
     // the answer each one met, from the coach's own read of every reply on the
-    // board after the student's move (`everyMoveReadAt` — no second search).
+    // board after the student's move (`replyReadRef`, the read the reply came
+    // with — no second search).
     // Their reply came: the branches it did not take are said in the past; the
     // strong answer to the one that came is the student's to find, held in a
     // form that names no move (LEARN NAMES NO MOVE UNASKED).
     const ifTheyPlayFacts = ((): Array<{ namesStudentMove: boolean; lane: 'ifTheyPlay'; computer: CoachFact['computer']; text: string; fen: string; squares: readonly string[]; claims: readonly string[]; proof: CoachFact['proof'] }> => {
-      const read = everyMoveReadAt(args.fenBeforeReply);
+      const kept = replyReadRef.current;
+      const read = kept && samePosition(kept.fen, args.fenBeforeReply) ? kept.read : null;
       const h = args.historyAfterReply;
       if (!read || h.length < 1) return [];
       try {
@@ -10109,7 +10115,7 @@ export function CoachTeachPage({ mode }: {
         const b = new Chess();
         for (const san of h.slice(0, -2)) b.move(san);
         const priorFen = (() => { if (h.length < 3) return null; const p = new Chess(); for (const san of h.slice(0, -3)) p.move(san); return p.fen(); })();
-        const plies: Array<{ fenBefore: string; san: string; reads: readonly WeighRead[] | null; prior: { fenBefore: string; san: string } | null }> = [
+        const plies: Array<{ fenBefore: string; san: string; reads: BoardContexts['temptingRefuted']['reads']; prior: { fenBefore: string; san: string } | null }> = [
           { fenBefore: b.fen(), san: h[h.length - 2], reads: args.weigh.reads, prior: priorFen ? { fenBefore: priorFen, san: h[h.length - 3] } : null },
         ];
         const studentFen = b.fen();
