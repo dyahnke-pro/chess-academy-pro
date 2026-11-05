@@ -38,7 +38,7 @@ let off: (() => void) | null = null;
 const listen = (): void => { off = onLearnTurn((r) => rows.push(r)); };
 afterEach(() => { off?.(); off = null; rows.length = 0; });
 
-const ctx = { priorKeys: new Set<string>(), priorLead: null, green: null, beginner: false, owner: 'open' as const };
+const ctx = { priorKeys: new Set<string>(), priorLead: null, green: null, beginner: false, owner: 'open' as const, chance: null };
 
 describe('decidePhaseWave — one door call per report, inside its turn', () => {
   it('decides the whole report once, as a phase wave of the live turn', () => {

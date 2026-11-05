@@ -84,7 +84,10 @@ for (const file of FILES) {
     const key = `${r.game}:${t.ply}`;
     const his = [words.get(t.ply), words.get(t.ply + 1)].filter(Boolean).join(' … ');
     if (!his || done[key]) continue;
-    const spoken = [...new Set([...(t.lines ?? []), ...(t.everything ?? []).flatMap((row) => row.lines.filter((l) => l.said).map((l) => l.text))])];
+    // The replay DICTATES the coach's moves ("play Bxf7+"): the page's
+    // acknowledgement of that typed line is the harness, not the coach.
+    const harness = (x) => /^Got it — after your move, they play /.test(x);
+    const spoken = [...new Set([...(t.lines ?? []), ...(t.everything ?? []).flatMap((row) => row.lines.filter((l) => l.said).map((l) => l.text))])].filter((x) => !harness(x));
     const said = new Set(spoken);
     const held = [...new Set((t.everything ?? []).flatMap((row) => row.lines.filter((l) => !l.said).map((l) => l.text)))].filter((x) => !said.has(x));
     const move = t.move.replace(/^\d+\.+/, '');
