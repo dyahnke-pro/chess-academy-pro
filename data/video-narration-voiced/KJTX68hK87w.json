@@ -448,15 +448,10 @@
    "kind": "main"
   },
   {
-   "ply": 42,
+   "ply": 37,
    "t": 446.5,
-   "fen": "2kr3r/pp3ppp/2p1p3/2b5/N1BnP3/5P2/PP4PP/2RR3K w - - 6 22",
-   "line": [
-    "Nc5",
-    "Bf8",
-    "Na4",
-    "Bc5"
-   ],
+   "fen": "2kr3r/pp3ppp/2p1p3/2b5/N1BnP3/5P2/PP4PP/2RR3K b - - 1 19",
+   "line": [],
    "spoken": ""
   },
   {
@@ -765,9 +760,9 @@
    "fen": "r2qkbnr/ppp1pppp/2n5/3p4/2PP2b1/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 12 8",
    "line": [
     "Bc8",
-    "Nc3",
+    "Nf3",
     "Bg4",
-    "Nf3"
+    "Nc3"
    ],
    "spoken": ""
   },
@@ -945,7 +940,7 @@
    "t": 969.5,
    "fen": "2kr1bnr/ppp2ppp/4p3/8/2B5/2N1PP2/PP4PP/2R2RK1 b - - 0 16",
    "line": [
-    "Nf5",
+    "Nc2",
     "Rac1",
     "Nxe3",
     "fxe3"

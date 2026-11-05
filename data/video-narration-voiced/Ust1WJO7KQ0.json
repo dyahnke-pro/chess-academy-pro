@@ -22,9 +22,9 @@
    "t": 947.5,
    "fen": "r1bqkbnr/pppp1ppp/8/1B2p3/3nP3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
    "line": [
-    "Bb5",
-    "Nc6",
     "Nf3",
+    "Nc6",
+    "Bb5",
     "Nd4"
    ],
    "spoken": "The Bird's Defense — Nd4 — is a genuinely standalone Ruy Lopez line; the structure it reaches appears in no other variation. It's a country within a country.",

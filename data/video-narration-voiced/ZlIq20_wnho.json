@@ -177,11 +177,11 @@
   {
    "ply": 10,
    "t": 393.5,
-   "fen": "rn2kbnr/ppq2ppp/2pp4/4p3/2BPP1b1/2N2N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
+   "fen": "rn2kbnr/ppq2ppp/2pp4/4p3/2BPP1b1/2N2N2/PPP2PPP/R1BQK2R w KQkq - 2 6",
    "line": [
-    "Bg4",
+    "e5",
     "Bc4",
-    "e5"
+    "Bg4"
    ],
    "spoken": "Could you have captured on f7 a move sooner? Just to clarify, this is a very typical tactic — when the",
    "reanchor": true

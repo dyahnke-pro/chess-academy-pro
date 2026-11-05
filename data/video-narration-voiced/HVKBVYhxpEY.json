@@ -285,10 +285,10 @@
    "t": 1526,
    "fen": "rn1qk2r/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 6 6",
    "line": [
-    "Be7",
-    "Bd3",
     "Nf6",
-    "Nf3"
+    "Nf3",
+    "Be7",
+    "Bd3"
    ],
    "spoken": ""
   },

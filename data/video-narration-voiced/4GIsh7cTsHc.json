@@ -486,14 +486,14 @@
   {
    "ply": 11,
    "t": 1253.5,
-   "fen": "rn1qkb1r/pp3ppp/2p1p2n/3pPb2/3P1P2/3B1N2/PPP3PP/RNBQK2R b KQkq - 1 6",
+   "fen": "rn1qkb1r/pp3ppp/2p1p2n/3pPb2/3P1P2/3B1N2/PPP3PP/RNBQK2R b KQkq - 3 6",
    "line": [
-    "Nh6",
-    "Bd3",
     "e6",
+    "Bd3",
+    "Nh6",
     "Nf3"
    ],
-   "spoken": "So after the knight to h6, the bishop to d3, e6 and the knight to f3, you play c5 — executing the main Caro idea.",
+   "spoken": "So after e6, the bishop to d3, the knight to h6 and the knight to f3, you play c5 — executing the main Caro idea.",
    "reanchor": true
   },
   {
@@ -509,14 +509,14 @@
   {
    "ply": 16,
    "t": 1395.5,
-   "fen": "r2qkb1r/pp3ppp/2n1p3/2ppPn2/3P1P2/5N2/PPP3PP/RNBQ1RK1 w kq - 0 9",
+   "fen": "r2qkb1r/pp3ppp/2n1p3/2ppPn2/3P1P2/5N2/PPP3PP/RNBQ1RK1 w kq - 2 9",
    "line": [
     "Bxf5",
-    "Nc6",
+    "Nxf5",
     "O-O",
-    "Nxf5"
+    "Nc6"
    ],
-   "spoken": "After the trade on f5, you castle, play the knight to c6, and recapture on f5 — pressuring the d4 pawn.",
+   "spoken": "After the trade on f5 and your recapture, White castles and you play the knight to c6 — pressuring the d4 pawn.",
    "reanchor": true
   },
   {

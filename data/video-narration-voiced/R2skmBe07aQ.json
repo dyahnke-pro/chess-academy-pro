@@ -315,11 +315,11 @@
   {
    "ply": 9,
    "t": 637,
-   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p1P3/2B5/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 2 5",
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p1P3/2B5/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 0 5",
    "line": [
-    "e5",
+    "Nc3",
     "Nf6",
-    "Nc3"
+    "e5"
    ],
    "spoken": "That d5 idea shows up most famously in the Scotch Gambit and its Italian cousin, where advancing to d5 is the main theoretical line. It's the same concept reappearing across many openings — worth recognising wherever a bishop lands on c4.",
    "reanchor": true

@@ -392,20 +392,20 @@
     {
       "ply": 15,
       "t": 943.5,
-      "fen": "r1b1k1r1/ppp2ppp/2nppn2/2b5/2B1PB1N/2NP4/PPP2PPP/R2Q1RK1 b q - 1 8",
+      "fen": "r1b1k1r1/ppp2ppp/2nppn2/2b5/2B1PB1N/2NP4/PPP2PPP/R2Q1RK1 b q - 3 8",
       "line": [
-        "Rg8",
-        "Bf4",
         "d6",
-        "O-O"
+        "O-O",
+        "Rg8",
+        "Bf4"
       ],
-      "spoken": "Replaying it: the rook to g8, the bishop to f4, d6, and White castles.",
+      "spoken": "Replaying it: d6, White castles, the rook to g8, the bishop to f4.",
       "reanchor": true
     },
     {
       "ply": 17,
       "t": 946,
-      "fen": "r1b1k2r/ppp2ppp/2nppn2/2b5/2B1P2N/2NP4/PPP2PPP/R1BQ1RK1 b q - 3 9",
+      "fen": "r1b1k2r/ppp2ppp/2nppn2/2b5/2B1P2N/2NP4/PPP2PPP/R1BQ1RK1 b q - 5 9",
       "line": [
         "Rh8",
         "Bc1"
@@ -416,7 +416,7 @@
     {
       "ply": 18,
       "t": 947,
-      "fen": "r1b1k1r1/ppp2ppp/2nppn2/2b5/2B1P2N/2NP4/PPP2PPP/R1BQ1RK1 w q - 4 10",
+      "fen": "r1b1k1r1/ppp2ppp/2nppn2/2b5/2B1P2N/2NP4/PPP2PPP/R1BQ1RK1 w q - 6 10",
       "line": [
         "Rg8"
       ],

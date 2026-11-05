@@ -231,39 +231,37 @@
       "spoken": "because they'd have to sense that the bishop takes g4 meets the queen to h4 with check, and just continue developing as if nothing's the matter. The bishop to c5 is very, very dangerous. Let me spell out why the bishop takes g4 is so unappetising: the bishop takes g4, the queen to h4 with check, g3, the queen takes g4 — the queens are off, but your king is still devastatingly weak, and Black can swing the knight into d4, too many threats, and you don't get to complete your development. So the best move here might be the queen takes d5 — the trickiest move you can play: you take a pawn, attack the bishop, and after the queen takes d5, the knight takes d5, you're also threatening a fork on c7. Black has the knight to f2, but that's bad, because you"
     },
     {
-      "ply": 24,
+      "ply": 22,
       "t": 960.5,
-      "fen": "r1bqk2r/pp3ppp/2n5/3pP3/5Pn1/2N5/PP2BbPP/R1B1K1NR w KQkq - 0 13",
+      "fen": "r1bqk2r/pp3ppp/2n5/3QP3/5Pn1/2N5/PP2BbPP/R1B1K1NR w KQkq - 1 12",
       "line": [
-        "Qd4",
-        "Bb6",
-        "Qf2",
-        "Bxf2+"
+        "Qxd5",
+        "Bf2+"
       ],
       "spoken": "take the bishop and then trap the knight on h1. If Black plays the queen takes d5 first and then the knight to f2, both sides essentially take each other's rooks and then both try to get their knights out of the corner. The bishop to f2 with check — I was not expecting that move."
     },
     {
-      "ply": 25,
+      "ply": 23,
       "t": 969.5,
-      "fen": "r1bqk2r/pp3ppp/2n5/3pP3/5Pn1/2N5/PP2BbPP/R1B2KNR b kq - 1 13",
+      "fen": "r1bqk2r/pp3ppp/2n5/3QP3/5Pn1/2N5/PP2BbPP/R1B2KNR b kq - 2 12",
       "line": [
         "Kf1"
       ],
       "spoken": "The bishop check — okay, I'll bite, the king to f1. You're pretty close to getting mated here, but I think the king is safe for the time being. The bishop to f2 might have been a mistake, unless there's a ridiculous follow-up like the knight to e3 with check — but after g3 with check you can already take on e3 and trade queens, White probably still worse but defensible. The other problem of putting minor pieces so close to the king is the contact, so the bishop takes g4 has become a serious threat; the bishop on f2 is a type-two undefended piece, defended by one piece that's also under fire. The queen to h4 is possible, but then you develop with tempo, the knight to f3. The queen to b6 might be best — it protects the bishop and builds a battery threatening the bishop takes g1 and the queen to f2."
     },
     {
-      "ply": 26,
+      "ply": 24,
       "t": 1088,
-      "fen": "r1b1k2r/pp3ppp/1qn5/3pP3/5Pn1/2N5/PP2BbPP/R1B2KNR w kq - 2 14",
+      "fen": "r1b1k2r/pp3ppp/1qn5/3QP3/5Pn1/2N5/PP2BbPP/R1B2KNR w kq - 3 13",
       "line": [
         "Qb6"
       ],
       "spoken": "After the queen to b6, you'll have to find a way to defend the f2-square with another piece — but let's cross that bridge when you get there. Your opponent's already getting really low on time, which is good."
     },
     {
-      "ply": 27,
+      "ply": 25,
       "t": 1095.5,
-      "fen": "r1b1k2r/pp3ppp/1qn5/3pP3/5Pn1/2N4N/PP2BbPP/R1B2K1R b kq - 3 14",
+      "fen": "r1b1k2r/pp3ppp/1qn5/3QP3/5Pn1/2N4N/PP2BbPP/R1B2K1R b kq - 4 13",
       "line": [
         "Nh3"
       ],
@@ -300,12 +298,12 @@
     {
       "ply": 9,
       "t": 1624,
-      "fen": "rnbqkb1r/pp2pppp/5n2/3p4/3P4/2N2P2/PP2P1PP/R1BQKBNR b KQkq - 1 5",
+      "fen": "rnbqkb1r/pp2pppp/5n2/3p4/3P4/2N2P2/PP2P1PP/R1BQKBNR b KQkq - 0 5",
       "line": [
-        "Nf6",
-        "f3",
         "cxd5",
-        "Nc3"
+        "Nc3",
+        "Nf6",
+        "f3"
       ],
       "spoken": "Now, as far as I know,",
       "reanchor": true
@@ -313,7 +311,7 @@
     {
       "ply": 10,
       "t": 1637,
-      "fen": "rnb1kb1r/pp2pppp/1q3n2/3p4/3P4/2N2P2/PP2P1PP/R1BQKBNR w KQkq - 2 6",
+      "fen": "rnb1kb1r/pp2pppp/1q3n2/3p4/3P4/2N2P2/PP2P1PP/R1BQKBNR w KQkq - 1 6",
       "line": [
         "Qb6"
       ],

@@ -167,12 +167,12 @@
    "t": 178.5,
    "fen": "r1b3nr/pp2kBpp/2pp4/2b3N1/3pP3/3P4/PPP2PPP/R1BR2K1 b - - 0 12",
    "line": [
-    "Ke7",
-    "Bxf7",
     "Qxd1",
+    "Bxf7+",
+    "Ke7",
     "Rxd1"
    ],
-   "spoken": "Black plays the king to e7, and here's the point: you don't take the queen, you have the intermediate move, the bishop takes on f7 — then the queens come off on d1 and you recapture with the rook."
+   "spoken": "Black takes your queen on d1, and here's the point: you don't take back at once, you have the intermediate move, the bishop takes on f7 with check — the king goes to e7, and only then you recapture on d1 with the rook."
   },
   {
    "ply": 24,

@@ -492,9 +492,9 @@
    "t": 833,
    "fen": "r1bq1rk1/pppnbppp/4pn2/3p2B1/2PP4/2N1PN2/PP3PPP/2RQKB1R b K - 4 7",
    "line": [
-    "Rc1",
+    "Nf3",
     "O-O",
-    "Nf3"
+    "Rc1"
    ],
    "spoken": ""
   },

@@ -12,10 +12,10 @@
    "t": 537.5,
    "fen": "rnbqkbnr/pp1p1ppp/2p1p3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
    "line": [
-    "d4",
-    "c6",
     "e4",
-    "e6"
+    "e6",
+    "d4",
+    "c6"
    ],
    "spoken": ""
   },

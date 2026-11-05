@@ -45,15 +45,10 @@
    "spoken": "White plays the bishop to f4 — the main response, keeping the bishop and stepping out of the knight's way."
   },
   {
-   "ply": 9,
+   "ply": 4,
    "t": 65.5,
-   "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn3/8/PPP1PPPP/RN1QKBNR b KQkq - 8 5",
-   "line": [
-    "Ng5",
-    "Be3",
-    "Ne4",
-    "Bg5"
-   ],
+   "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn3/8/PPP1PPPP/RN1QKBNR w KQkq - 3 3",
+   "line": [],
    "spoken": "White has three real tries here: the aggressive pawn to h4 sideline popularized by English players like Hodgson, the retreat to e3, and the main bishop to f4.",
    "reanchor": true
   },

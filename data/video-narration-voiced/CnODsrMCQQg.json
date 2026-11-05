@@ -490,42 +490,36 @@
    "spoken": ""
   },
   {
-   "ply": 53,
+   "ply": 46,
    "t": 723.5,
-   "fen": "2rr2k1/1bp2p1p/p1n1pqpP/1pB3N1/5P2/2P4P/PPB2Q2/R4RK1 b - - 16 27",
-   "line": [
-    "Rd6",
-    "Ng5",
-    "Rdd8",
-    "Ra1"
-   ],
+   "fen": "2rr2k1/1bp2p1p/p1n1pqpP/1pB3N1/5P2/2P4P/PPB2Q2/R4RK1 w - - 9 24",
+   "line": [],
    "spoken": ""
   },
   {
-   "ply": 57,
+   "ply": 49,
    "t": 726,
-   "fen": "2r3k1/1bp2p1p/p1n1pqpP/1pBr4/4NP2/2P4P/PPB2Q2/4RRK1 b - - 20 29",
+   "fen": "2r3k1/1bp2p1p/p1n1pqpP/1pBr4/4NP2/2P4P/PPB2Q2/4RRK1 b - - 12 25",
    "line": [
-    "Rd7",
-    "Ne4",
+    "Rae1",
     "Rd5",
-    "Rae1"
+    "Ne4"
    ],
    "spoken": ""
   },
   {
-   "ply": 58,
+   "ply": 50,
    "t": 733.5,
-   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pBr4/4NP2/2P4P/PPB2Q2/4RRK1 w - - 21 30",
+   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pBr4/4NP2/2P4P/PPB2Q2/4RRK1 w - - 13 26",
    "line": [
     "Qd8"
    ],
    "spoken": ""
   },
   {
-   "ply": 59,
+   "ply": 51,
    "t": 762,
-   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pBr4/4NP2/1BP4P/PP3Q2/4RRK1 b - - 22 30",
+   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pBr4/4NP2/1BP4P/PP3Q2/4RRK1 b - - 14 26",
    "line": [
     "Bb3"
    ],
@@ -534,45 +528,45 @@
    "teaches": "To reach an outpost the queen defends, first deflect the defender guarding the deflecting move."
   },
   {
-   "ply": 60,
+   "ply": 52,
    "t": 769,
-   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pB4r/4NP2/1BP4P/PP3Q2/4RRK1 w - - 23 31",
+   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pB4r/4NP2/1BP4P/PP3Q2/4RRK1 w - - 15 27",
    "line": [
     "Rh5"
    ],
    "spoken": ""
   },
   {
-   "ply": 61,
+   "ply": 53,
    "t": 770.5,
-   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pB4r/4NP2/1BP4P/PP3Q2/3R1RK1 b - - 24 31",
+   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pB4r/4NP2/1BP4P/PP3Q2/3R1RK1 b - - 16 27",
    "line": [
     "Rd1"
    ],
    "spoken": ""
   },
   {
-   "ply": 62,
+   "ply": 54,
    "t": 778.5,
-   "fen": "2r3k1/1bp2p1p/p1n1p1pP/1pB4r/4NP1q/1BP4P/PP3Q2/3R1RK1 w - - 25 32",
+   "fen": "2r3k1/1bp2p1p/p1n1p1pP/1pB4r/4NP1q/1BP4P/PP3Q2/3R1RK1 w - - 17 28",
    "line": [
     "Qh4"
    ],
    "spoken": ""
   },
   {
-   "ply": 63,
+   "ply": 55,
    "t": 798,
-   "fen": "2r3k1/1bp2p1p/p1n1p1pP/1pB4r/4NP1Q/1BP4P/PP6/3R1RK1 b - - 0 32",
+   "fen": "2r3k1/1bp2p1p/p1n1p1pP/1pB4r/4NP1Q/1BP4P/PP6/3R1RK1 b - - 0 28",
    "line": [
     "Qxh4"
    ],
    "spoken": ""
   },
   {
-   "ply": 65,
+   "ply": 57,
    "t": 801,
-   "fen": "2r3k1/1bp2p1p/p1n1pNpP/1pB5/5P1r/1BP4P/PP6/3R1RK1 b - - 1 33",
+   "fen": "2r3k1/1bp2p1p/p1n1pNpP/1pB5/5P1r/1BP4P/PP6/3R1RK1 b - - 1 29",
    "line": [
     "Rxh4",
     "Nf6+"
@@ -582,18 +576,18 @@
    "teaches": "A queen trade is fine — even best — when it speeds up the mate rather than dissolving your attack."
   },
   {
-   "ply": 66,
+   "ply": 58,
    "t": 806,
-   "fen": "2r4k/1bp2p1p/p1n1pNpP/1pB5/5P1r/1BP4P/PP6/3R1RK1 w - - 2 34",
+   "fen": "2r4k/1bp2p1p/p1n1pNpP/1pB5/5P1r/1BP4P/PP6/3R1RK1 w - - 2 30",
    "line": [
     "Kh8"
    ],
    "spoken": ""
   },
   {
-   "ply": 67,
+   "ply": 59,
    "t": 809,
-   "fen": "2r4k/1bpR1p1p/p1n1pNpP/1pB5/5P1r/1BP4P/PP6/5RK1 b - - 3 34",
+   "fen": "2r4k/1bpR1p1p/p1n1pNpP/1pB5/5P1r/1BP4P/PP6/5RK1 b - - 3 30",
    "line": [
     "Rd7"
    ],
@@ -601,9 +595,9 @@
    "kind": "main"
   },
   {
-   "ply": 69,
+   "ply": 61,
    "t": 815.5,
-   "fen": "2r4k/1bp2R1p/p1n1pNpr/1pB5/5P2/1BP4P/PP6/5RK1 b - - 0 35",
+   "fen": "2r4k/1bp2R1p/p1n1pNpr/1pB5/5P2/1BP4P/PP6/5RK1 b - - 0 31",
    "line": [
     "Rxh6",
     "Rxf7"
@@ -611,54 +605,54 @@
    "spoken": ""
   },
   {
-   "ply": 70,
+   "ply": 62,
    "t": 848,
-   "fen": "2r4k/1bp2R1p/p1n1pNp1/1pB5/5P2/1BP4r/PP6/5RK1 w - - 0 36",
+   "fen": "2r4k/1bp2R1p/p1n1pNp1/1pB5/5P2/1BP4r/PP6/5RK1 w - - 0 32",
    "line": [
     "Rxh3"
    ],
    "spoken": ""
   },
   {
-   "ply": 71,
+   "ply": 63,
    "t": 850,
-   "fen": "2r4k/1bp2R1p/p1n1BNp1/1pB5/5P2/2P4r/PP6/5RK1 b - - 0 36",
+   "fen": "2r4k/1bp2R1p/p1n1BNp1/1pB5/5P2/2P4r/PP6/5RK1 b - - 0 32",
    "line": [
     "Bxe6"
    ],
    "spoken": ""
   },
   {
-   "ply": 72,
+   "ply": 64,
    "t": 879,
-   "fen": "2r4k/1bp2R1p/p1n1BNp1/1pB5/5P2/2P3r1/PP6/5RK1 w - - 1 37",
+   "fen": "2r4k/1bp2R1p/p1n1BNp1/1pB5/5P2/2P3r1/PP6/5RK1 w - - 1 33",
    "line": [
     "Rg3+"
    ],
    "spoken": ""
   },
   {
-   "ply": 73,
+   "ply": 65,
    "t": 881,
-   "fen": "2r4k/1bp2R1p/p1n1BNp1/1pB5/5P2/2P3r1/PP3K2/5R2 b - - 2 37",
+   "fen": "2r4k/1bp2R1p/p1n1BNp1/1pB5/5P2/2P3r1/PP3K2/5R2 b - - 2 33",
    "line": [
     "Kf2"
    ],
    "spoken": ""
   },
   {
-   "ply": 74,
+   "ply": 66,
    "t": 883,
-   "fen": "2r4k/1bp2R1p/p3BNp1/1pB1n3/5P2/2P3r1/PP3K2/5R2 w - - 3 38",
+   "fen": "2r4k/1bp2R1p/p3BNp1/1pB1n3/5P2/2P3r1/PP3K2/5R2 w - - 3 34",
    "line": [
     "Ne5"
    ],
    "spoken": ""
   },
   {
-   "ply": 75,
+   "ply": 67,
    "t": 889,
-   "fen": "2r4k/1bp4R/p3BNp1/1pB1n3/5P2/2P3r1/PP3K2/5R2 b - - 0 38",
+   "fen": "2r4k/1bp4R/p3BNp1/1pB1n3/5P2/2P3r1/PP3K2/5R2 b - - 0 34",
    "line": [
     "Rxh7#"
    ],

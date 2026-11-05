@@ -594,15 +594,10 @@
    "spoken": "you go the rook to g3. The one thing I'd recommend is that you don't automatically just trade — sometimes, if you can win a minor piece, that's better."
   },
   {
-   "ply": 65,
+   "ply": 60,
    "t": 1630,
-   "fen": "8/pp2kb2/7R/5r1p/5N2/3BPn2/PPP5/2K3R1 b - - 19 33",
-   "line": [
-    "Ng1",
-    "Rg4",
-    "Nf3",
-    "Rg1"
-   ],
+   "fen": "8/pp2kb2/7R/5r1p/5N2/3BPn2/PPP5/2K3R1 w - - 14 31",
+   "line": [],
    "spoken": "Black has the knight to h4, but then you go the rook to h3. This isn't a trade — I'm saying you could have taken on f5 and traded the rooks, which is a form of trade, but"
   },
   {

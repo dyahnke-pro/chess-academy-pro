@@ -210,8 +210,8 @@
    "t": 374,
    "fen": "r1bq1rk1/pp1pppbp/2n3p1/4P3/5Q2/2P5/PP3PPP/RN2KBNR b KQ - 0 14",
    "line": [
-    "Nh5",
-    "Qb4",
+    "Nd5",
+    "Qe4",
     "Nxf4",
     "Qxf4"
    ],
@@ -414,11 +414,11 @@
   {
    "ply": 46,
    "t": 786,
-   "fen": "r2r2k1/pp2pp1p/6pb/5q2/3N4/1BP3P1/PP1N1P1P/1bKR3R w - - 3 24",
+   "fen": "r2r2k1/pp2pp1p/6pb/5b2/3N4/1BP3P1/PP1N1P1P/1qKR3R w - - 3 24",
    "line": [
-    "Bb1",
+    "Qe4",
     "Nd4",
-    "Qf5"
+    "Qb1#"
    ],
    "spoken": "The takeaway when a combination like this feels invisible: it's usually because the pin is being underestimated and the eye is glued to the free piece. Train the habit — every time a piece hangs, spend an extra fifteen or twenty seconds weighing the quieter candidate moves before grabbing it.",
    "reanchor": true

@@ -288,12 +288,12 @@
   {
    "ply": 33,
    "t": 344,
-   "fen": "r2r2k1/p4p1p/2B1p1p1/8/8/2P5/P1b2PPP/R3R1K1 b - - 1 17",
+   "fen": "r2r2k1/p4p1p/2B1p1p1/8/8/2P5/P1b2PPP/R3R1K1 b - - 0 17",
    "line": [
-    "e6",
-    "Bxc6",
     "Bxc2",
-    "Rfe1"
+    "Rfe1",
+    "e6",
+    "Bxc6"
    ],
    "spoken": "There's no point defending c6 — it's already defended indirectly.",
    "reanchor": true
@@ -301,7 +301,7 @@
   {
    "ply": 34,
    "t": 345.5,
-   "fen": "2rr2k1/p4p1p/2B1p1p1/8/8/2P5/P1b2PPP/R3R1K1 w - - 2 18",
+   "fen": "2rr2k1/p4p1p/2B1p1p1/8/8/2P5/P1b2PPP/R3R1K1 w - - 1 18",
    "line": [
     "Rac8"
    ],
@@ -311,7 +311,7 @@
   {
    "ply": 35,
    "t": 370.5,
-   "fen": "2rr2k1/pB3p1p/4p1p1/8/8/2P5/P1b2PPP/R3R1K1 b - - 3 18",
+   "fen": "2rr2k1/pB3p1p/4p1p1/8/8/2P5/P1b2PPP/R3R1K1 b - - 2 18",
    "line": [
     "Bb7"
    ],

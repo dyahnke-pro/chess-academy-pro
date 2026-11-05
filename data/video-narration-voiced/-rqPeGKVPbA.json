@@ -216,13 +216,10 @@
    "teaches": "A plan formed three moves ago isn't binding; re-evaluate every time the board shifts."
   },
   {
-   "ply": 25,
+   "ply": 21,
    "t": 406.5,
-   "fen": "r1bq1rk1/pp2pp2/3p1bp1/2pN3p/2PnP2P/3P4/PP2BPP1/2RQK1NR b K - 5 13",
-   "line": [
-    "Bf6",
-    "Ng1"
-   ],
+   "fen": "r1bq1rk1/pp2pp2/3p1bp1/2pN3p/2PnP2P/3P4/PP2BPP1/2RQK1NR b K - 1 11",
+   "line": [],
    "spoken": ""
   },
   {

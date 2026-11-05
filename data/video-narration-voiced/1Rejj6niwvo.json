@@ -10,14 +10,14 @@
   {
    "ply": 4,
    "t": 117,
-   "fen": "rnbqkb1r/pp1ppppp/5n2/2p4Q/4P3/8/PPPP1PPP/RNB1KBNR w KQkq - 0 3",
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p4Q/4P3/8/PPPP1PPP/RNB1KBNR w KQkq - 2 3",
    "line": [
     "e4",
-    "Nf6",
+    "c5",
     "Qh5",
-    "c5"
+    "Nf6"
    ],
-   "spoken": "e4, the knight to f6, and White throws the queen out to h5 — a famous early sortie. You answer with c5, striking at the centre and offering the pawn."
+   "spoken": "e4, c5, and White throws the queen out to h5 — a famous early sortie. You answer with the knight to f6, hitting the queen and offering the c5-pawn."
   },
   {
    "ply": 5,

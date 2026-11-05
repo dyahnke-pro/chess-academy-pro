@@ -239,11 +239,11 @@
   {
    "ply": 21,
    "t": 555.5,
-   "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP4PP/RN2Q1K1 b kq - 0 11",
+   "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP4PP/RN2Q1K1 b kq - 2 11",
    "line": [
-    "Bg5",
+    "Rxf3",
     "Bd6",
-    "Rxf3"
+    "Bg5"
    ],
    "spoken": "Too late now. I'm expecting castling kingside or the queen to b6; if h6, you just play the bishop to h4. Next is the knight to d2 to complete development, and it'd be nice to throw in the king to h1 so that if the queen to b6, the d4-pawn isn't pinned. The battle is clear: I complete development and start the kingside attack once they castle, while Kusha tries to hit me before I'm developed.",
    "reanchor": true
@@ -251,7 +251,7 @@
   {
    "ply": 22,
    "t": 629,
-   "fen": "r3k2r/ppqn1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP4PP/RN2Q1K1 w kq - 1 12",
+   "fen": "r3k2r/ppqn1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP4PP/RN2Q1K1 w kq - 3 12",
    "line": [
     "Qc7"
    ],
@@ -260,7 +260,7 @@
   {
    "ply": 23,
    "t": 665.5,
-   "fen": "r3k2r/ppqn1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP1N2PP/R3Q1K1 b kq - 2 12",
+   "fen": "r3k2r/ppqn1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP1N2PP/R3Q1K1 b kq - 4 12",
    "line": [
     "Nd2"
    ],
@@ -269,7 +269,7 @@
   {
    "ply": 24,
    "t": 668.5,
-   "fen": "r3kr2/ppqn1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP1N2PP/R3Q1K1 w q - 3 13",
+   "fen": "r3kr2/ppqn1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP1N2PP/R3Q1K1 w q - 5 13",
    "line": [
     "Rf8"
    ],
@@ -278,7 +278,7 @@
   {
    "ply": 25,
    "t": 719.5,
-   "fen": "r3kr2/ppqn1ppp/2pb1n2/4p1B1/3PP3/2PB1R2/PP1N2PP/R3Q1K1 b q - 4 13",
+   "fen": "r3kr2/ppqn1ppp/2pb1n2/4p1B1/3PP3/2PB1R2/PP1N2PP/R3Q1K1 b q - 6 13",
    "line": [
     "Bd3"
    ],
@@ -287,7 +287,7 @@
   {
    "ply": 26,
    "t": 799,
-   "fen": "2kr1r2/ppqn1ppp/2pb1n2/4p1B1/3PP3/2PB1R2/PP1N2PP/R3Q1K1 w - - 5 14",
+   "fen": "2kr1r2/ppqn1ppp/2pb1n2/4p1B1/3PP3/2PB1R2/PP1N2PP/R3Q1K1 w - - 7 14",
    "line": [
     "O-O-O"
    ],
@@ -296,7 +296,7 @@
   {
    "ply": 27,
    "t": 804,
-   "fen": "2kr1r2/ppqn1ppp/2pb1n2/4p1B1/2NPP3/2PB1R2/PP4PP/R3Q1K1 b - - 6 14",
+   "fen": "2kr1r2/ppqn1ppp/2pb1n2/4p1B1/2NPP3/2PB1R2/PP4PP/R3Q1K1 b - - 8 14",
    "line": [
     "Nc4"
    ],
@@ -305,7 +305,7 @@
   {
    "ply": 28,
    "t": 831.5,
-   "fen": "2k1rr2/ppqn1ppp/2pb1n2/4p1B1/2NPP3/2PB1R2/PP4PP/R3Q1K1 w - - 7 15",
+   "fen": "2k1rr2/ppqn1ppp/2pb1n2/4p1B1/2NPP3/2PB1R2/PP4PP/R3Q1K1 w - - 9 15",
    "line": [
     "Rde8"
    ],
@@ -314,7 +314,7 @@
   {
    "ply": 29,
    "t": 855.5,
-   "fen": "2k1rr2/ppqn1ppp/2pb1n2/4p1B1/2NPP3/2PB1RQ1/PP4PP/R5K1 b - - 8 15",
+   "fen": "2k1rr2/ppqn1ppp/2pb1n2/4p1B1/2NPP3/2PB1RQ1/PP4PP/R5K1 b - - 10 15",
    "line": [
     "Qg3"
    ],
@@ -323,7 +323,7 @@
   {
    "ply": 30,
    "t": 957.5,
-   "fen": "2k1rrn1/ppqn1ppp/2pb4/4p1B1/2NPP3/2PB1RQ1/PP4PP/R5K1 w - - 9 16",
+   "fen": "2k1rrn1/ppqn1ppp/2pb4/4p1B1/2NPP3/2PB1RQ1/PP4PP/R5K1 w - - 11 16",
    "line": [
     "Ng8"
    ],
@@ -332,7 +332,7 @@
   {
    "ply": 31,
    "t": 1002,
-   "fen": "2k1rrn1/ppqn1ppp/2pb4/4p3/2NPP3/2PBBRQ1/PP4PP/R5K1 b - - 10 16",
+   "fen": "2k1rrn1/ppqn1ppp/2pb4/4p3/2NPP3/2PBBRQ1/PP4PP/R5K1 b - - 12 16",
    "line": [
     "Be3"
    ],

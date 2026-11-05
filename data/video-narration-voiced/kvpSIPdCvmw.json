@@ -12,11 +12,11 @@
    "t": 277.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
    "line": [
-    "d4",
+    "e4",
     "e5",
-    "e4"
+    "d4"
    ],
-   "spoken": "The Danish Gambit — d4 and e4, offering pawns to blast the position open for lightning-fast development.",
+   "spoken": "The Danish Gambit — e4 and d4, offering pawns to blast the position open for lightning-fast development.",
    "kind": "main",
    "teaches": [
     "the Danish Gambit idea"

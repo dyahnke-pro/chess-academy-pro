@@ -93,10 +93,10 @@
    "t": 150.5,
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
    "line": [
-    "Nc3",
-    "Nc6",
     "Nf3",
-    "Nf6"
+    "Nf6",
+    "Nc3",
+    "Nc6"
    ],
    "spoken": "There are systems where Black plays d6, usually after developing the bishop outside the pawn chain, which is what your opponent seems to be aiming for. Most books recommend the more principled central strike d5 —",
    "reanchor": true

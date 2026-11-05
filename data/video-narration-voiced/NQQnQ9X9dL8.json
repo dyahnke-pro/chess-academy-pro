@@ -116,13 +116,10 @@
    "kind": "main"
   },
   {
-   "ply": 20,
+   "ply": 16,
    "t": 973.5,
-   "fen": "r1b1k2r/pp2bppp/2n1pn2/2qp4/5B2/P1N1PN2/1PPQ1PPP/R3KB1R w KQkq - 6 11",
-   "line": [
-    "Nc3",
-    "Qc5"
-   ],
+   "fen": "r1b1k2r/pp2bppp/2n1pn2/2qp4/5B2/P1N1PN2/1PPQ1PPP/R3KB1R w KQkq - 2 9",
+   "line": [],
    "spoken": "One general warning this line teaches: never lean on a pin alone to keep your queen safe. If the pinning piece can be distracted, the queen is hanging the instant it happens, and you bleed tempi trying to save it.",
    "teaches": [
     "don’t rely on a pin to shield the queen"

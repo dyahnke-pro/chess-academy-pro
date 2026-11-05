@@ -176,9 +176,9 @@
    "t": 1608,
    "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
    "line": [
-    "Bc4",
+    "Nf3",
     "Nc6",
-    "Nf3"
+    "Bc4"
    ],
    "spoken": ""
   },

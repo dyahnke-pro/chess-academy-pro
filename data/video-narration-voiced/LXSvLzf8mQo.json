@@ -44,9 +44,9 @@
    "t": 974.5,
    "fen": "r1bqkb1r/1ppp1pp1/p1n2n1p/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQ1RK1 w kq - 0 6",
    "line": [
-    "a6",
+    "h6",
     "O-O",
-    "h6"
+    "a6"
    ],
    "spoken": ""
   },

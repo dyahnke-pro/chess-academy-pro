@@ -268,9 +268,9 @@
    "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R b KQkq - 3 5",
    "line": [
     "c5",
-    "Bd3",
+    "Nf3",
     "Nc6",
-    "Nf3"
+    "Bd3"
    ],
    "spoken": "This accelerate-development line, originally Nimzowitsch's, revolves entirely around the e5-pawn. The French's drawback is that it lets that pawn drive to e5, locking in the c8-bishop — the famous French bishop — leaving Black short of space and struggling to develop the kingside.",
    "reanchor": true
@@ -365,9 +365,9 @@
    "t": 767.5,
    "fen": "r1bqkbnr/pp4pp/2n1pp2/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
    "line": [
-    "f6",
+    "cxd4",
     "O-O",
-    "cxd4"
+    "f6"
    ],
    "spoken": "After the pawn to f6 and the rook to e1.",
    "reanchor": true

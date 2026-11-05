@@ -102,10 +102,10 @@
    "t": 141,
    "fen": "rnbqkbnr/pp3ppp/4p3/2pP4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
    "line": [
-    "d5",
-    "exd5",
     "e6",
-    "d4"
+    "d4",
+    "d5",
+    "exd5"
    ],
    "spoken": "— then the knight to f3 reaches the same position as your game. The alternative is recapturing with the e-pawn, which often reaches an isolated-queen-pawn structure where White gets a small but pleasant edge.",
    "reanchor": true

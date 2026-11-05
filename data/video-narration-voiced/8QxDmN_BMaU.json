@@ -117,9 +117,9 @@
    "t": 1511,
    "fen": "rnbqkbnr/ppp2ppp/3p4/8/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 4",
    "line": [
-    "d6",
+    "exf4",
     "Nf3",
-    "exf4"
+    "d6"
    ],
    "spoken": "They take on f4, the knight to f3 — d6 is the second most popular move; I played d4.",
    "reanchor": true

@@ -164,19 +164,19 @@
   {
    "ply": 17,
    "t": 1540,
-   "fen": "r1bq1rk1/pppn1pbp/2np2p1/3Pp3/2P1P3/2NBBP2/PP2N1PP/R2QK2R b KQ - 2 9",
+   "fen": "r1bq1rk1/pppn1pbp/2np2p1/3Pp3/2P1P3/2NBBP2/PP2N1PP/R2QK2R b KQ - 0 9",
    "line": [
-    "e5",
-    "d5",
     "Nd7",
-    "Be3"
+    "Be3",
+    "e5",
+    "d5"
    ],
    "spoken": ""
   },
   {
    "ply": 18,
    "t": 1554.5,
-   "fen": "r1bq1rk1/pppn1pbp/3p2p1/3Pp3/2PnP3/2NBBP2/PP2N1PP/R2QK2R w KQ - 3 10",
+   "fen": "r1bq1rk1/pppn1pbp/3p2p1/3Pp3/2PnP3/2NBBP2/PP2N1PP/R2QK2R w KQ - 1 10",
    "line": [
     "Nd4"
    ],
@@ -187,7 +187,7 @@
   {
    "ply": 19,
    "t": 1557,
-   "fen": "r1bq1rk1/pppn1pbp/3p2p1/3Pp3/2PnP3/2NBBP2/PP1QN1PP/R3K2R b KQ - 4 10",
+   "fen": "r1bq1rk1/pppn1pbp/3p2p1/3Pp3/2PnP3/2NBBP2/PP1QN1PP/R3K2R b KQ - 2 10",
    "line": [
     "Qd2"
    ],
@@ -196,7 +196,7 @@
   {
    "ply": 20,
    "t": 1573.5,
-   "fen": "r1bq1rk1/ppp2pbp/3p2p1/2nPp3/2PnP3/2NBBP2/PP1QN1PP/R3K2R w KQ - 5 11",
+   "fen": "r1bq1rk1/ppp2pbp/3p2p1/2nPp3/2PnP3/2NBBP2/PP1QN1PP/R3K2R w KQ - 3 11",
    "line": [
     "Nc5"
    ],
@@ -206,7 +206,7 @@
   {
    "ply": 21,
    "t": 1583,
-   "fen": "r1bq1rk1/ppp2pbp/3p2p1/2nPp3/2PnP3/2N1BP2/PP1QN1PP/RB2K2R b KQ - 6 11",
+   "fen": "r1bq1rk1/ppp2pbp/3p2p1/2nPp3/2PnP3/2N1BP2/PP1QN1PP/RB2K2R b KQ - 4 11",
    "line": [
     "Bb1"
    ],

@@ -713,11 +713,11 @@
   {
    "ply": 78,
    "t": 1071.5,
-   "fen": "3R4/p4npk/1p4Np/2p2P2/2P3K1/PPr5/8/8 w - - 8 40",
+   "fen": "3R4/p4kpn/1p4Np/2p2P2/2P3K1/PPr5/8/8 w - - 8 40",
    "line": [
-    "Kh7",
+    "Kf7",
     "Ng6",
-    "Nf7"
+    "Nh7"
    ],
    "spoken": ""
   },

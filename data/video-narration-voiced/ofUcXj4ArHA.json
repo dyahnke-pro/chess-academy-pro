@@ -397,11 +397,11 @@
   {
    "ply": 18,
    "t": 1184.5,
-   "fen": "r1bq1rk1/pppnb1pp/2n2p2/1B1pP3/3p4/5N2/PPPN1PPP/R1BQR1K1 w - - 2 10",
+   "fen": "r1bq1rk1/pppnb1pp/2n2p2/1B1pP3/3p4/5N2/PPPN1PPP/R1BQR1K1 w - - 0 10",
    "line": [
-    "f6",
+    "O-O",
     "Re1",
-    "O-O"
+    "f6"
    ],
    "spoken": "Salvaging a worse position calls for the Magnus method — play one move at a time, posing a fresh problem on every single move and surviving just one more, dragging the opponent's clock down until something finally gives. As long as the last fighting pawn survives, there's still breathing room and still a game.",
    "kind": "plan",

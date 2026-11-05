@@ -290,9 +290,9 @@
       "t": 1334,
       "fen": "rnbqkbnr/1p3pp1/p2p3p/2pPp3/4P3/2PB1N2/PP1N1PPP/R1BQK2R b KQkq - 1 7",
       "line": [
-        "Nbd2",
+        "Bd3",
         "h6",
-        "Bd3"
+        "Nbd2"
       ],
       "spoken": ""
     },

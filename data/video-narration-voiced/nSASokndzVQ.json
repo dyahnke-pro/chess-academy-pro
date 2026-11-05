@@ -111,11 +111,11 @@
   {
    "ply": 9,
    "t": 295,
-   "fen": "r1bqkb1r/pp1npppp/5n2/1BpP4/3P4/2P5/PP3PPP/RNBQK1NR b KQkq - 2 5",
+   "fen": "r1bqkb1r/pp1npppp/5n2/1BpP4/3P4/2P5/PP3PPP/RNBQK1NR b KQkq - 0 5",
    "line": [
-    "d4",
+    "Bb5+",
     "Nbd7",
-    "Bb5"
+    "d4"
    ],
    "spoken": "And correspondingly the d4-square becomes a big outpost for Black's knight.",
    "reanchor": true
@@ -865,9 +865,9 @@
    "t": 3497,
    "fen": "r1bqkb1r/1p1npppp/p4n2/1BpP4/3P4/2P5/PP3PPP/RNBQK1NR w KQkq - 0 6",
    "line": [
-    "d4",
+    "Bb5+",
     "Nbd7",
-    "Bb5",
+    "d4",
     "a6"
    ],
    "spoken": "You examined the Benko-like ideas Black must carry out to equalize.",
