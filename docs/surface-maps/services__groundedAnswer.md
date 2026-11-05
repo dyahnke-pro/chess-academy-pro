@@ -115,7 +115,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ownHangingLine` (function) — 1 call site
-- `src/services/groundedAnswer.test.ts:1638`
+- `src/services/groundedAnswer.test.ts:1639`
 
 ### `evalPhrase` (function) — 1 call site
 - `src/coach/boardTurnAnswer.ts:448`
@@ -157,9 +157,9 @@
 - `src/coach/questionWalk.sicilian1200.test.ts:113`
 - `src/services/boardUrgency.test.ts:35`
 - `src/services/boardUrgency.test.ts:47`
-- `src/services/groundedAnswer.test.ts:1574`
-- `src/services/groundedAnswer.test.ts:1585`
-- `src/services/groundedAnswer.test.ts:1592`
+- `src/services/groundedAnswer.test.ts:1575`
+- `src/services/groundedAnswer.test.ts:1586`
+- `src/services/groundedAnswer.test.ts:1593`
 
 ### `assemblePieceSafetyAnswer` (function) — 2 call sites
 - `src/services/checkIsNotAGuard.test.ts:54`
@@ -362,7 +362,7 @@
 - `src/services/groundedAnswer.test.ts:1355`
 - `src/services/groundedAnswer.test.ts:1356`
 - `src/services/groundedAnswer.test.ts:1360`
-- `src/services/groundedAnswer.test.ts:1656`
+- `src/services/groundedAnswer.test.ts:1657`
 
 ### `GroundedLines` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -376,8 +376,8 @@
 - `src/services/coachFeatureService.test.ts:69`
 - `src/services/coachFeatureService.test.ts:84`
 - `src/services/coachFeatureService.test.ts:91`
-- `src/services/coachFeatureService.ts:3290`
-- `src/services/coachFeatureService.ts:3314`
+- `src/services/coachFeatureService.ts:3296`
+- `src/services/coachFeatureService.ts:3320`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:15`
 - `src/services/explainBestMoveLines.test.ts:19`
@@ -389,8 +389,8 @@
 - `src/services/groundedAnswer.test.ts:1032`
 - `src/services/learnMoveTeaching.ts:46`
 - `src/services/mistakeNarration.ts:630`
-- `src/services/reviewNarrationFidelity.test.ts:88`
-- `src/services/reviewNarrationFidelity.test.ts:98`
+- `src/services/reviewNarrationFidelity.test.ts:86`
+- `src/services/reviewNarrationFidelity.test.ts:96`
 - `src/services/whyBestMove.ts:98`
 
 ### `captureHasCounterTactic` (function) — 2 call sites
@@ -672,8 +672,8 @@
 - `src/services/groundedAnswer.test.ts:1486`
 - `src/services/groundedAnswer.test.ts:1488`
 - `src/services/groundedAnswer.test.ts:1489`
-- `src/services/groundedAnswer.test.ts:1629`
-- `src/services/groundedAnswer.test.ts:1632`
+- `src/services/groundedAnswer.test.ts:1630`
+- `src/services/groundedAnswer.test.ts:1633`
 
 ### `explainNotationSymbol` (function) — 3 call sites
 - `src/services/coachApi.ts:3895`
@@ -849,8 +849,8 @@
 - `src/services/groundedAnswer.test.ts:509`
 - `src/services/groundedAnswer.test.ts:525`
 - `src/services/groundedAnswer.test.ts:1410`
-- `src/services/groundedAnswer.test.ts:1600`
-- `src/services/groundedAnswer.test.ts:1610`
+- `src/services/groundedAnswer.test.ts:1601`
+- `src/services/groundedAnswer.test.ts:1611`
 
 ### `assemblePhaseProfileAnswer` (function) — 4 call sites
 - `src/services/coachApi.ts:4925`
@@ -946,7 +946,7 @@
 - `src/services/groundedAnswer.test.ts:730`
 - `src/services/groundedAnswer.test.ts:735`
 - `src/services/groundedAnswer.test.ts:736`
-- `src/services/groundedAnswer.test.ts:1618`
+- `src/services/groundedAnswer.test.ts:1619`
 
 ### `assembleSkillRadarAnswer` (function) — 3 call sites
 - `src/services/coachApi.ts:5257`
@@ -1034,7 +1034,7 @@
 - `src/services/bluffDetector.ts:73`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:3647`
+- `src/services/coachFeatureService.ts:3653`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
@@ -1044,10 +1044,10 @@
 - `src/services/opponentMovePurpose.ts:64`
 - `src/services/reviewFullData.ts:993`
 - `src/services/reviewMoveBriefing.ts:312`
-- `src/services/reviewNarrationFidelity.test.ts:143`
-- `src/services/reviewNarrationFidelity.test.ts:152`
-- `src/services/reviewNarrationFidelity.test.ts:164`
-- `src/services/reviewNarrationFidelity.test.ts:178`
+- `src/services/reviewNarrationFidelity.test.ts:141`
+- `src/services/reviewNarrationFidelity.test.ts:150`
+- `src/services/reviewNarrationFidelity.test.ts:162`
+- `src/services/reviewNarrationFidelity.test.ts:176`
 - `src/services/reviewTeachingPoints.ts:346`
 - `src/test/captureSaidOnce.gate.test.ts:226`
 
@@ -1056,24 +1056,24 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3568`
-- `src/services/reviewNarrationFidelity.test.ts:109`
-- `src/services/reviewNarrationFidelity.test.ts:121`
-- `src/services/reviewNarrationFidelity.test.ts:129`
+- `src/services/coachFeatureService.ts:3574`
+- `src/services/reviewNarrationFidelity.test.ts:107`
+- `src/services/reviewNarrationFidelity.test.ts:119`
+- `src/services/reviewNarrationFidelity.test.ts:127`
 
 ### `forkAlignmentClause` (function) — 1 call site
 - `src/services/reviewTeachingPoints.ts:391`
 
 ### `describeThreatRecognition` (function) — 4 call sites
 - `src/services/learnMoveTeaching.ts:131`
-- `src/services/reviewNarrationFidelity.test.ts:153`
-- `src/services/reviewNarrationFidelity.test.ts:165`
-- `src/services/reviewNarrationFidelity.test.ts:166`
+- `src/services/reviewNarrationFidelity.test.ts:151`
+- `src/services/reviewNarrationFidelity.test.ts:163`
+- `src/services/reviewNarrationFidelity.test.ts:164`
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:3668`
-- `src/services/reviewNarrationFidelity.test.ts:179`
+- `src/services/coachFeatureService.ts:3674`
+- `src/services/reviewNarrationFidelity.test.ts:177`
 
 ### `ComparedMove` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -1105,11 +1105,11 @@
 - `src/services/coachApi.ts:2543`
 - `src/services/coachApi.ts:6327`
 
-### `seatPieceReferences` (re-export) — 36 call sites
+### `seatPieceReferences` (re-export) — 39 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9321`
-- `src/services/coachFeatureService.ts:5074`
-- `src/services/coachFeatureService.ts:5163`
-- `src/services/coachFeatureService.ts:6247`
+- `src/services/coachFeatureService.ts:5080`
+- `src/services/coachFeatureService.ts:5169`
+- `src/services/coachFeatureService.ts:6253`
 - `src/services/liveTacticsContext.ts:486`
 - `src/services/liveTacticsContext.ts:495`
 - `src/services/lookaheadPlan.ts:139`
@@ -1127,21 +1127,24 @@
 - `src/services/reviewFullData.ts:655`
 - `src/services/reviewFullData.ts:841`
 - `src/services/reviewNarrationFidelity.test.ts:22`
-- `src/services/reviewNarrationFidelity.test.ts:32`
-- `src/services/reviewNarrationFidelity.test.ts:38`
-- `src/services/reviewNarrationFidelity.test.ts:197`
-- `src/services/reviewNarrationFidelity.test.ts:204`
-- `src/services/reviewNarrationFidelity.test.ts:210`
-- `src/services/reviewNarrationFidelity.test.ts:211`
-- `src/services/reviewNarrationFidelity.test.ts:218`
-- `src/services/reviewNarrationFidelity.test.ts:232`
-- `src/utils/seatPieces.test.ts:42`
-- `src/utils/seatPieces.test.ts:44`
-- `src/utils/seatPieces.test.ts:54`
-- `src/utils/seatPieces.test.ts:58`
-- `src/utils/seatPieces.test.ts:67`
-- `src/utils/seatPieces.ts:11`
-- `src/utils/seatPieces.ts:18`
+- `src/services/reviewNarrationFidelity.test.ts:30`
+- `src/services/reviewNarrationFidelity.test.ts:36`
+- `src/services/reviewNarrationFidelity.test.ts:195`
+- `src/services/reviewNarrationFidelity.test.ts:202`
+- `src/services/reviewNarrationFidelity.test.ts:208`
+- `src/services/reviewNarrationFidelity.test.ts:209`
+- `src/services/reviewNarrationFidelity.test.ts:216`
+- `src/services/reviewNarrationFidelity.test.ts:229`
+- `src/utils/seatPieces.test.ts:45`
+- `src/utils/seatPieces.test.ts:47`
+- `src/utils/seatPieces.test.ts:57`
+- `src/utils/seatPieces.test.ts:61`
+- `src/utils/seatPieces.test.ts:70`
+- `src/utils/seatPieces.test.ts:77`
+- `src/utils/seatPieces.test.ts:82`
+- `src/utils/seatPieces.test.ts:86`
+- `src/utils/seatPieces.ts:12`
+- `src/utils/seatPieces.ts:31`
 
 ## Tests
 

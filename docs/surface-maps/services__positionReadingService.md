@@ -198,7 +198,7 @@
 - `src/services/bookMoveWhy.ts:349`
 - `src/services/bookMoveWhy.ts:421`
 - `src/services/bookMoveWhy.ts:440`
-- `src/services/coachFeatureService.ts:3458`
+- `src/services/coachFeatureService.ts:3464`
 - `src/services/groundedAnswer.ts:7254`
 - `src/services/moveIntent.ts:373`
 - `src/services/moveIntent.ts:390`
@@ -633,7 +633,7 @@
 - `src/services/computedTruth.fuzz.test.ts:174`
 - `src/services/groundedAnswer.ts:6626`
 - `src/services/groundedAnswer.ts:6628`
-- `src/services/learnWalkBlumenfeld.test.ts:120`
+- `src/services/learnWalkBlumenfeld.test.ts:119`
 - `src/services/minorityLeverCheck.test.ts:9`
 - `src/services/positionReadingService.test.ts:930`
 - `src/services/positionalRead.ts:361`

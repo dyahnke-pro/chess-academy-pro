@@ -7,7 +7,8 @@ describe('enablingMove — A first because it opens the road for B', () => {
     const fen = '4k3/7p/8/8/8/8/4P3/4KB2 w - - 0 1';
     const e = findEnablingMove(fen, ['e2e3', 'h7h6', 'f1d3']);
     expect(e?.opened).toBe('e2');
-    expect(enablingMoveLine(e!)).toBe('e3 first, then Bd3: right now your bishop on f1 cannot reach d3 — your own piece on e2 is in the way, and e3 clears it.');
+    // Each piece by what it is (one bishop, one e-pawn), f1 and e2 lit.
+    expect(enablingMoveLine(e!)).toBe('e3 first, then Bd3: right now your bishop cannot reach d3 — your e-pawn is in the way, and e3 clears it.');
   });
 
   it('silent when B was already playable', () => {

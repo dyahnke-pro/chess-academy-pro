@@ -10,11 +10,11 @@ describe('the concept a move just played, for either side (David 2026-10-18)', (
     const c = playedConcept(FORK_BEFORE, 'Nc7+');
     expect(c?.type).toBe('fork');
     const line = playedConceptLine(c!, 'w');
-    expect(line).toBe('With Nc7+, your knight on c7 forks their rook on a8 and their king on e8.');
+    expect(line).toBe('With Nc7+, your knight forks their rook and their king.');
   });
   it('names it from the student\'s seat when THEY play it', () => {
     const c = playedConcept(FORK_BEFORE, 'Nc7+');
-    expect(playedConceptLine(c!, 'b')).toBe('With their Nc7+, their knight on c7 forks your rook on a8 and your king on e8.');
+    expect(playedConceptLine(c!, 'b')).toBe('With their Nc7+, their knight forks your rook and your king.');
   });
   it('NEGATIVE CONTROL: a quiet move plays no concept', () => {
     expect(playedConcept(FORK_BEFORE, 'Ke2')).toBeNull();

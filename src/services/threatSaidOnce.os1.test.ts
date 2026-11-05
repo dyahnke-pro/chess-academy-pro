@@ -18,7 +18,8 @@ describe('the Bg5 pin, said once (OS-1 g2 ply 12)', () => {
     expect(pin).toBeDefined();
     const said = spokenUpcoming(['Nc6', 'Bg5'], pin!.description, fen, root, 'b') ?? '';
     expect(said).not.toMatch(/if you play/);
-    expect(said).toMatch(/^if they play Bg5, their bishop on g5 pins your knight on f6/);
+    // Two bishops each: theirs on g5 is the dark-squared one; two knights each: f6 kept (pieceRef).
+    expect(said).toMatch(/^if they play Bg5, their dark-squared bishop pins your knight on f6 against your queen/);
   });
   it('the prophylaxis line names the pin once', () => {
     const p = findProphylaxis(root);

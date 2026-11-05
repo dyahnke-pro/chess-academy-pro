@@ -153,7 +153,7 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
 ### `matchFundamental` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:2193`
+- `src/services/coachFeatureService.ts:2197`
 - `src/services/fundamentalReachesDecider.test.ts:80`
 - `src/services/fundamentalReachesDecider.test.ts:91`
 - `src/services/fundamentalReachesDecider.test.ts:121`

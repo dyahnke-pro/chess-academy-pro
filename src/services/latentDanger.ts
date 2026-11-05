@@ -204,12 +204,27 @@ export function detectTradeCreatesPin(fen: string, studentColor: 'w' | 'b'): Tra
 
 /** The v2 warning — a trade that opens a pin. Guide-don't-tell: names the
  *  alignment, never says "don't trade". */
-export function tradeDangerClause(d: TradeDanger): string {
+export function tradeDangerClause(
+  d: TradeDanger,
+  /** REQUIRED — the board before the capture. The pieces are named on the
+   *  board after it (`pieceRef`, the squares lit, not read out). */
+  fen: string,
+): string {
   // WHO PINS, AND ALONG WHAT (prod walk 2026-10-18: "that lines your bishop
   // on a3 up with your queen on the file — a pin" named neither the pinning
   // piece nor the line).
-  const front = `${PNAME[d.frontPiece]} on ${d.frontSquare}`;
-  return `before you take on ${d.tradeTo}, look past the trade: your ${front} would stand between their ${PNAME[d.enemyPiece]} on ${d.enemySquare} and your ${PNAME[d.backPiece]} on ${d.backSquare}, all on one ${d.line} — a pin.`;
+  let after: string | null = null;
+  let me: 'w' | 'b' | null = null;
+  try {
+    const c = new Chess(fen);
+    me = c.turn();
+    after = c.move({ from: d.tradeFrom, to: d.tradeTo, promotion: 'q' }) ? c.fen() : null;
+  } catch { after = null; }
+  const ref = (sq: string, fallback: string): string => (after && me ? pieceRef(after, sq, me)?.words ?? fallback : fallback);
+  const front = ref(d.frontSquare, `your ${PNAME[d.frontPiece]} on ${d.frontSquare}`);
+  const enemy = ref(d.enemySquare, `their ${PNAME[d.enemyPiece]} on ${d.enemySquare}`);
+  const back = ref(d.backSquare, `your ${PNAME[d.backPiece]} on ${d.backSquare}`);
+  return `before you take on ${d.tradeTo}, look past the trade: ${front} would stand between ${enemy} and ${back}, all on one ${d.line} — a pin.`;
 }
 
 /** The prophylactic warning — guide-don't-tell: name the alignment and the line,

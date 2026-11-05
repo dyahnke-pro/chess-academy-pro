@@ -49,7 +49,7 @@
 
 ### `buildReviewMoveTeaching` (function) — 52 call sites
 - `src/services/coachFeatureService.ts:1142`
-- `src/services/coachFeatureService.ts:4054`
+- `src/services/coachFeatureService.ts:4060`
 - `src/services/danyaBench.measure.test.ts:448`
 - `src/services/discussionPractice.ts:173`
 - `src/services/guardPressure.test.ts:20`
@@ -111,7 +111,7 @@
 - `src/services/tapeKc7Skewer.test.ts:29`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3962`
+- `src/services/coachFeatureService.ts:3968`
 - `src/services/reviewFullData.ts:1717`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
@@ -120,7 +120,7 @@
 - `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3957`
+- `src/services/coachFeatureService.ts:3963`
 - `src/services/reviewMoveTeaching.test.ts:121`
 - `src/services/reviewMoveTeaching.test.ts:124`
 - `src/services/reviewMoveTeaching.test.ts:130`

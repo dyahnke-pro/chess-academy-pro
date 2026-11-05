@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**17417 lines · 3 exports · 4 importers · 83 tests · 11 audits**
+**17417 lines · 3 exports · 4 importers · 83 tests · 12 audits**
 
 ## Locked rules that govern this surface
 
@@ -131,6 +131,7 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-learn-comprehensive.mjs`
 - `scripts/audit-learn-focus-prod.mjs`
 - `scripts/audit-learn-full-game.mjs`
+- `scripts/audit-learn-replay.mjs`
 - `scripts/audit-review-overhaul-prod.mjs`
 - `scripts/audit-second-game-memory-prod.mjs`
 - `scripts/audit-teach-forkdive-prod.mjs`

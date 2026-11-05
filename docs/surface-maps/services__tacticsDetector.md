@@ -136,7 +136,7 @@
 - `src/services/reviewFullData.ts:1594`
 - `src/services/reviewMoveBriefing.ts:110`
 - `src/services/reviewMoveBriefing.ts:111`
-- `src/services/reviewNarrationFidelity.test.ts:230`
+- `src/services/reviewNarrationFidelity.test.ts:227`
 - `src/services/reviewOpponentCommentary.ts:74`
 - `src/services/reviewWalk1500.test.ts:23`
 - `src/services/reviewWalk900.test.ts:20`

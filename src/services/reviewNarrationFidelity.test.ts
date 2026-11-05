@@ -20,23 +20,21 @@ describe('seatPieceReferences — the deterministic mine/yours package', () => {
   it('stamps computed owners onto seatless detector descriptions', () => {
     const det = 'Bishop on c5 pins pawn on f2 against king on g1. Bishop on c4 pins pawn on f7 against knight on g8.';
     const seated = seatPieceReferences(det, trapP9, 'w');
-    expect(seated).toContain('Their bishop on c5');
-    expect(seated).toContain('your pawn on f2');
-    expect(seated).toContain('your king on g1');
-    expect(seated).toContain('Your bishop on c4');
-    expect(seated).toContain('their pawn on f7');
+    // Each owned, and named the human way (pieceRef, David 2026-11-05): two
+    // bishops a side by their colour, a pawn by its file, one king.
+    expect(seated).toBe('Their dark-squared bishop pins your f-pawn against your king. Your light-squared bishop pins their f-pawn against their knight on g8.');
   });
 
   it('leaves already-seated and mismatched references untouched', () => {
     const det = 'Their bishop on c5 is active. Plant a knight on d6 to blockade.';
     const seated = seatPieceReferences(det, trapP9, 'w');
-    expect(seated).toContain('Their bishop on c5'); // already seated — unchanged
+    expect(seated).toContain('Their dark-squared bishop'); // seated by its producer — owner kept, named the human way
     expect(seated).toContain('a knight on d6');     // d6 is empty — untouched
   });
 
   it('absorbs a leading "the" instead of doubling articles', () => {
     const seated = seatPieceReferences('the bishop on c5 eyes f2.', trapP9, 'w');
-    expect(seated).toBe('their bishop on c5 eyes f2.');
+    expect(seated).toBe('their dark-squared bishop eyes f2.');
   });
 });
 
@@ -216,8 +214,7 @@ describe('a lowercased colour possessive is a determiner too (hand walk 2340, mo
   it('"white\'s king on g1" becomes "your king on g1", never "white\'s your king"', () => {
     const fen = '4r1k1/5ppp/8/8/8/8/5PPP/6K1 w - - 0 20';
     const out = seatPieceReferences("watch out — white's king on g1 has no escape square", fen, 'w');
-    expect(out).toContain('your king on g1');
-    expect(out).not.toMatch(/white's/i);
+    expect(out).toBe('watch out — your king has no escape square');
   });
 });
 
@@ -229,6 +226,6 @@ describe('a detector description is seat-free at the source (hand walk 2340)', (
     const fen = '4r1k1/5ppp/8/8/8/8/5PPP/3R2K1 b - - 0 20';
     const br = detectTactics(fen).tactics.find((t) => t.type === 'back_rank');
     expect(br?.description).toMatch(/^The king on g1/);
-    expect(seatPieceReferences(br!.description, fen, 'w')).toMatch(/^Your king on g1/);
+    expect(seatPieceReferences(br!.description, fen, 'w')).toMatch(/^Your king has no escape square/);
   });
 });

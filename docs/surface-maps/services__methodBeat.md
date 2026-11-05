@@ -53,7 +53,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:3350`
+- `src/services/coachFeatureService.ts:3356`
 - `src/services/positionFacts.ts:1202`
 
 ### `HABIT_KIND` (const) — 0 call sites

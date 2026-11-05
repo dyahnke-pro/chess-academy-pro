@@ -669,7 +669,12 @@ export function squareChoice(args: { fenBefore: string; san: string; student: Co
   const groups = [...byText.entries()];
   const outLoud = (t: string): number => new Set(t.match(/\b[a-h][1-8]\b/g) ?? []).size;
   const clause = ([t, sqs]: [string, string[]]): string => (sqs.length <= 2 ? `on ${orList(sqs)} it ${t}` : `on its other squares it ${t}`);
-  const said = andList(groups.map(clause));
+  const all = andList(groups.map(clause));
+  // Different faults on different squares stack into a list ("On f4 it is
+  // kicked by their e-pawn, on e3 it is kicked by their d-pawn and on e7 or d8
+  // it hangs"): a person names the most tempting square and its fault, then
+  // sums up the rest (`faults` is in the eye's order, most natural first).
+  const said = outLoud(all) <= 2 ? all : `on ${faults[0].square} it ${faults[0].text}, and its other squares are no better`;
   const text = outLoud(said) <= 1
     ? `${mover === args.student ? `Your ${piece} goes to ${played.to}` : `Their ${piece} went to ${played.to}`} — ${said}.`
     : `Why that square for ${mover === args.student ? 'your' : 'their'} ${piece}? ${openSentence(said)}.`;

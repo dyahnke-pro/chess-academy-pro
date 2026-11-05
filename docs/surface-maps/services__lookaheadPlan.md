@@ -56,7 +56,7 @@
 
 ### `tacticWord` (function) — 24 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9205`
-- `src/services/coachFeatureService.ts:4550`
+- `src/services/coachFeatureService.ts:4556`
 - `src/services/computedVoiceAudit.report.test.ts:247`
 - `src/services/dnaLineNarrator.ts:59`
 - `src/services/groundedAnswer.ts:6127`
@@ -200,10 +200,10 @@
 - `src/services/inaccuracyCall.ts:500`
 - `src/services/inaccuracyCall.ts:514`
 - `src/services/inaccuracyCall.ts:1811`
+- `src/services/learnWalkBlumenfeld.test.ts:184`
 - `src/services/learnWalkBlumenfeld.test.ts:185`
 - `src/services/learnWalkBlumenfeld.test.ts:186`
 - `src/services/learnWalkBlumenfeld.test.ts:187`
-- `src/services/learnWalkBlumenfeld.test.ts:188`
 
 ### `stepBothArcs` (function) — 2 call sites
 - `src/components/Coach/CoachGamePage.tsx:3049`

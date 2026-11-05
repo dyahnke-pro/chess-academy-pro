@@ -148,7 +148,7 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
   plan: { board: 'italian', ask: "what's my plan here?", reading: { kind: 'plan', seat: 'me' },
     must: [/\bb4\b|knight on a5/] },
   tactics: { board: 'italian', ask: 'are there any tactics here?', reading: { kind: 'tactics' },
-    must: [/\bb4\b|knight on a5/, /e4/] },
+    must: [/\bb4\b|knight on a5/, /e4|e-pawn/] },
   hint: { board: 'italian', ask: 'give me a hint', reading: { kind: 'hint' },
     must: [/.{20}/], mustNot: [/\bb4\b/] },
   method: { board: 'italian', ask: 'how should I think about this position?', reading: { kind: 'method' },

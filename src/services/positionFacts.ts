@@ -1698,7 +1698,7 @@ function buildClauses(a: {
   // otherwise the standing-alignment warning. Only one, never both.
   if (tradeDanger) {
     ranked.push(clause('detectTradeCreatesPin', a.fen, {
-      kind: 'latent-danger', text: tradeDangerClause(tradeDanger),
+      kind: 'latent-danger', text: tradeDangerClause(tradeDanger, a.fen),
       // Said about the board AFTER the capture ("before you trade on e4: that
       // lines your bishop on e4 up…") — graded there, or it reads false now
       // (scale replay: the most-dropped line across 3,752 positions).

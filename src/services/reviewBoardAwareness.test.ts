@@ -37,7 +37,7 @@ describe('seatPieceReferences — no double possessive on an adjective-carrying 
       .not.toMatch(/their weak their pawn/);
   });
   it('still stamps a bare "the pawn on e4"', () => {
-    expect(seatPieceReferences('the pawn on e4 is loose', fen, 'w')).toMatch(/your pawn on e4/);
+    expect(seatPieceReferences('the pawn on e4 is loose', fen, 'w')).toMatch(/your e-pawn is loose/);
   });
   it('never turns an indefinite "a passed pawn on c2" into "a your passed pawn" (prod line-read)', () => {
     // c2 is a real white pawn; the phrase is already grammatical and must not
@@ -52,8 +52,8 @@ describe('seatPieceReferences — a colour possessive is replaced, never doubled
   // Student Black; White king on h1.
   const fen = '6k1/5ppp/8/8/8/8/5PPP/7K b - - 0 1';
   it("\"White's king on h1\" becomes \"Their king on h1\" — not \"White's their king\"", () => {
-    expect(seatPieceReferences("White's king on h1 has no escape square.", fen, 'b')).toBe('Their king on h1 has no escape square.');
-    expect(seatPieceReferences("Watch: White's king on h1 is boxed in.", fen, 'b')).toBe('Watch: their king on h1 is boxed in.');
-    expect(seatPieceReferences("Black's king on g8 is safe.", fen, 'b')).toBe('Your king on g8 is safe.');
+    expect(seatPieceReferences("White's king on h1 has no escape square.", fen, 'b')).toBe('Their king has no escape square.');
+    expect(seatPieceReferences("Watch: White's king on h1 is boxed in.", fen, 'b')).toBe('Watch: their king is boxed in.');
+    expect(seatPieceReferences("Black's king on g8 is safe.", fen, 'b')).toBe('Your king is safe.');
   });
 });

@@ -5,13 +5,16 @@ import { seatBare, seatPieceReferences } from './seatPieces';
 const FEN = '2kr4/1r3ppp/Rn1q2b1/1Ppp4/6P1/2NP3P/2P2PB1/Q4RK1 w - - 5 23';
 
 describe('seatBare', () => {
+  // A piece is said the way a person says it (David 2026-11-05): its square
+  // only where two of a kind need telling apart — White has two rooks here,
+  // Black one knight and one queen. The squares stay on the fact, lit.
   it('owns each piece from the board and REPLACES "the" (never "the their")', () => {
     expect(seatBare('Moving the knight on b6 would unveil the rook on a6 against the queen on d6', FEN, 'w'))
-      .toBe('Moving their knight on b6 would unveil your rook on a6 against their queen on d6');
+      .toBe('Moving their knight would unveil your rook on a6 against their queen');
   });
   it('seats a bare description and capitalises the first word', () => {
     expect(seatBare('rook on a6 pins knight on b6 against queen on d6', FEN, 'w'))
-      .toBe('Your rook on a6 pins their knight on b6 against their queen on d6');
+      .toBe('Your rook on a6 pins their knight against their queen');
   });
   it('leaves an already-owned piece alone', () => {
     expect(seatBare('your rook on a6 is active', FEN, 'w')).toBe('Your rook on a6 is active');
@@ -31,8 +34,8 @@ describe('a future fact is seated on its OWN board (hand walk 2026-09-24)', () =
 describe('a colour possessive is replaced, never stacked (hand walk 2340)', () => {
   it('"White\'s king on g1" → "Your king on g1"; "Knight on g3 forks…" is seated', () => {
     const fen = '4r1k1/5ppp/8/8/8/6n1/5PPP/3R1RK1 w - - 0 20';
-    expect(seatBare("White's king on g1 has no escape square", fen, 'w')).toBe('Your king on g1 has no escape square');
-    expect(seatBare('Knight on g3 forks rook on f1 and king on g1', fen, 'b')).toBe('Your knight on g3 forks their rook on f1 and their king on g1');
+    expect(seatBare("White's king on g1 has no escape square", fen, 'w')).toBe('Your king has no escape square');
+    expect(seatBare('Knight on g3 forks rook on f1 and king on g1', fen, 'b')).toBe('Your knight forks their rook on f1 and their king');
   });
 });
 
@@ -52,7 +55,7 @@ describe('a replaced demonstrative keeps its case', () => {
   const QD3 = 'r1bqkbnr/1p1p1ppp/p3p3/2p1P3/2Bn4/1P1Q4/P1PP1PPP/RNB1K1NR b KQkq - 2 6';
   it('capitalises the possessive that replaces a sentence-opening "That"', () => {
     expect(seatPieceReferences("That queen on d3 takes the bishop's retreat.", QD3, 'w'))
-      .toBe("Your queen on d3 takes the bishop's retreat.");
+      .toBe("Your queen takes the bishop's retreat.");
   });
   it('keeps a mid-sentence "that" lowercase', () => {
     expect(seatPieceReferences('Watch that knight on d4.', QD3, 'w')).toBe('Watch their knight on d4.');
@@ -66,5 +69,21 @@ describe('a determiner a word or two back heads the phrase', () => {
     const fen = 'r2k3r/ppp1npp1/2p4p/P3P3/2b1N3/P4N2/5PPP/R1B2RK1 b - - 0 15';
     const out = seatPieceReferences('their pawn structure splinters — a new isolated pawn on a5', fen, 'b');
     expect(out).not.toMatch(/a new their/);
+  });
+});
+
+describe('a piece is named the human way (David 2026-11-05: "We still need to name squares. We just need to do it like a human would")', () => {
+  it('a producer-seated piece drops a square nothing needs', () => {
+    expect(seatPieceReferences('Their queen on d6 eyes your rook on a6 and your pawn on c2.', FEN, 'w'))
+      .toBe('Their queen eyes your rook on a6 and your c-pawn.');
+  });
+  it('two of a kind keep the square that tells them apart', () => {
+    // White rooks on a6 and f1: both said with their squares.
+    expect(seatPieceReferences('the rook on f1 backs up the rook on a6', FEN, 'w'))
+      .toBe('your rook on f1 backs up your rook on a6');
+  });
+  it('an adjective stays after the owner', () => {
+    expect(seatPieceReferences('the passed pawn on b5 is a target', FEN, 'b'))
+      .toBe('their passed b-pawn is a target');
   });
 });
