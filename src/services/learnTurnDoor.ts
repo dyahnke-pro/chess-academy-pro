@@ -181,7 +181,9 @@ export type LearnLane =
   // ── the moves a player weighs (weighedMoves, 2026-11-05) ──
   | 'temptingRefuted'
   | 'alsoGood'
-  | 'squareChoice';
+  | 'squareChoice'
+  // ── the teaching moves' new computers (2026-11-05) ──
+  | 'pawnBreak';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
@@ -244,6 +246,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   kingSquares: 'affirm', keptHome: 'affirm', kingWalk: 'point', kingRule: 'point',
   ifTheyPlay: 'point',
   temptingRefuted: 'refute', alsoGood: 'affirm', squareChoice: 'affirm',
+  pawnBreak: 'point',
 };
 
 
@@ -349,6 +352,7 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   ifTheyPlay: phaseOfComputer(BOARD_COMPUTERS.ifTheyPlay.phase),
   temptingRefuted: phaseOfComputer(BOARD_COMPUTERS.temptingRefuted.phase), alsoGood: phaseOfComputer(BOARD_COMPUTERS.alsoGood.phase),
   squareChoice: phaseOfComputer(BOARD_COMPUTERS.squareChoice.phase),
+  pawnBreak: phaseOfComputer(BOARD_COMPUTERS.pawnBreak.phase),
 };
 
 /** Is this lane's fact out of place on this board? */
@@ -358,6 +362,9 @@ export function laneOutOfPhase(lane: LearnLane, fen: string): boolean {
 }
 
 export const LEARN_LANES: Record<LearnLane, LaneRule> = {
+  // ── the teaching moves' new computers (2026-11-05): said about the move
+  // just played, either seat — the break and what it is for. ──
+  pawnBreak: { factKind: BOARD_COMPUTERS.pawnBreak.kind, kind: 'computed', why: 'the pawn break and what it is for — the pawn it strikes, the file it opens for the rooks, the bishop it frees', lead: 58 },
   // ── the moves a player weighs (weighedMoves, 2026-11-05): said about the
   // move just played — the natural move that fails, with its line; the move
   // of the same worth and the board's difference (held while it may still be

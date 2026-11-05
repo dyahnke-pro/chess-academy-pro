@@ -3462,5 +3462,19 @@
   "nodes": [
    "utils/andList.ts#lineSeatAt"
   ]
+ },
+ {
+  "name": "registry:pawnBreak",
+  "file": "services/pawnBreak.ts",
+  "fn": "pawnBreak",
+  "says": "THE PAWN BREAK AND WHAT IT IS FOR (the teaching move S-BREAK): the pawn it strikes (the base of their chain), the file its trade opens for the rooks, the bishop it frees",
+  "origin": "registry",
+  "nodes": [
+   "services/boardComputers.ts#id:pawnBreak",
+   "services/pawnBreak.ts#pawnBreak"
+  ],
+  "registry": [
+   "pawnBreak"
+  ]
  }
 ]

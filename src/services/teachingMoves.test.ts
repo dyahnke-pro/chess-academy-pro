@@ -30,8 +30,9 @@ describe('one teaching-move vocabulary', () => {
     // join it.
     // Two more the same day: the habit of asking what their move is doing,
     // and checks-captures-threats first, each its own kind (`HABIT_KIND`).
+    // The computers built for them, one a move (2026-11-05): the pawn break.
     for (const m of unbuilt) expect(['M-TWO-JOBS', 'M-PROVOKE',
       'H-CALC', 'H-WISHLIST',
-      'S-BREAK', 'S-SPACE', 'S-TENSION', 'S-TRIGGER', 'S-LONG-HORIZON']).toContain(m);
+      'S-SPACE', 'S-TENSION', 'S-TRIGGER', 'S-LONG-HORIZON']).toContain(m);
   });
 });

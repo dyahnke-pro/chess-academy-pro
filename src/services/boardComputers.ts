@@ -58,6 +58,7 @@ import { ifTheyPlay, treeSentence, sayable, type ReplyRead, type ReplyBranch, ty
 import { mateStakes } from './factStakes';
 import { temptingRefuted, alsoGood, squareChoice, type WeighRead } from './weighedMoves';
 import { costStakes } from './factStakes';
+import { pawnBreak } from './pawnBreak';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -194,6 +195,11 @@ export interface BoardContexts {
   /** Which square for the piece: its other squares and what goes wrong there
    *  (board reads; the engine's line where `reads` has one). */
   squareChoice: { fenBefore: string; san: string; student: Color; rating: number; reads: readonly WeighRead[] | null; priorMove: { fenBefore: string; san: string } | null };
+  /** THE PAWN BREAK (`pawnBreak`, the teaching move S-BREAK): the move `san`
+   *  on `fenBefore` (either seat) read as a break and what it is for.
+   *  `lastTo` — the square the opponent's last move landed on (a recapture is
+   *  no break), null at the start or where the surface has no move before. */
+  pawnBreak: { fenBefore: string; san: string; student: Color; lastTo: string | null };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -830,6 +836,28 @@ export const BOARD_COMPUTERS = {
     kind: 'contrast',
     phase: ANY,
     surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'a square ruled out is a choice explained, not a skill the board poses' } },
+  },
+  pawnBreak: {
+    // His "c5 attacking the base of the pawn chain", "open the d-file", "f4,
+    // opening everything up": the break named as a break with what it is for,
+    // both seats, said about the move just played — so it names no move still
+    // to find.
+    read: ({ fenBefore, san, student, lastTo }, fact) => safe(() => {
+      const mine = new Chess(fenBefore).turn() === student;
+      const r = pawnBreak(fenBefore, san, mine ? 'your' : 'their', lastTo);
+      if (!r) return null;
+      return fact({ key: r.key, claims: [r.key], text: r.text, proof: r.proof ?? squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore,
+        ...(r.proof?.line ? { lines: [r.proof.line] } : {}) });
+    }),
+    computer: 'pawnBreak',
+    kind: 'pawn-break',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED,
+      tactics: { not: 'a puzzle poses one tactic; a break is a plan of the game it is played in' },
+      weaknesses: { not: 'a break named after it is played is graded by the move\'s own cost; its timing is breakRace\'s question (mistimed-pawn-break)' },
+    },
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };
 

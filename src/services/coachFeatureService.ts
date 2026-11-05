@@ -1326,6 +1326,13 @@ export const STORY_PROVEN_GAMES = 5;
  *  2026-10-30: Nd5 "plants an outpost on d5" beside "There it is — your knight
  *  on d5. That was your plan: the outpost on d5"). */
 const REVIEW_OWNS_IDEA: ReadonlySet<IdeaKind> = new Set<IdeaKind>(['threat', 'mate', 'tactic', 'win-material', 'trade', 'recapture', 'outpost', 'passed-pawn']);
+/** The idea a teaching-move facet on this move teaches that the composer's
+ *  briefing also reads — said by the facet with what it is for, so the move's
+ *  composed thought leaves that idea to it, as it leaves a [rule]'s principle
+ *  (`ruleIdeas`): the pawn break says the file its trade opens ("…cxb4 is a
+ *  pawn break: … opens the c-file for your rooks" was followed by "It also
+ *  opens the c-file"). */
+const FACET_TEACHES_IDEA: Partial<Record<FacetTag, IdeaKind>> = { 'pawn-break': 'file' };
 const BOOK_JOB_MIN_GAMES = 20;
 /** A book move is main line at this share of its position's master games. */
 const MAIN_LINE_SHARE = 0.15;
@@ -1336,6 +1343,9 @@ const FORMULA_ONCE: ReadonlySet<string> = new Set<FacetTag>([
   'their-cost', 'their-read', 'rule', 'nugget', 'loose', 'bluff', 'plan-arc', 'timing',
   // The kinds filed under `timing` and `rule` until each had its own.
   'move-order', 'rule-exception', 'false-alarm', 'push-or-hold',
+  // The teaching moves' new computers: one formula, once a game — a second
+  // break with the same reason on a new board is the same lesson again.
+  'pawn-break',
 ]);
 
 /** THE STUDENT-MOVE BUNDLE'S RULES Review says itself: the rule kept or
@@ -2536,6 +2546,7 @@ function* reviewSegmentSteps(
         // by both).
         const skipJob = told || heard || plainAttackAsksNothing || doesSaysJob;
         const ruleIdeas = new Set(facets.map((f) => ruleIdOf(f.identity)).filter((r): r is MoveFundamentalId => r !== null).map((r) => FUNDAMENTAL_IDEA[r]));
+        for (const f of facets) { const idea = FACET_TEACHES_IDEA[f.tag]; if (idea) ruleIdeas.add(idea); }
         // A line that already teaches this move ([rule], [point]…) leads its
         // step: the composer adds only a second job — a new claim that clears
         // the policy's floor (…Nxd5's rule said the recapture; "adds its
@@ -2565,6 +2576,9 @@ function* reviewSegmentSteps(
           // The moves a player weighs: Review says them through its own
           // facets (the registry's reads, both seats).
           && f.source !== 'weighed'
+          // The teaching moves' new computers: Review says them through its
+          // own facets (the registry's reads, both seats).
+          && f.source !== 'teachingMove'
           // The trip reads the line ahead as a plan; in a game the moves that
           // followed were answers to the board ("Qc3 sends the queen on to e4,
           // by way of b3 and f3" — hindsight), so Review leaves it to lessons.

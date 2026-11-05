@@ -1,11 +1,11 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.",
  "graph": {
-  "files": 1754,
-  "nodes": 16359
+  "files": 1755,
+  "nodes": 16372
  },
  "totals": {
-  "computers": 347,
+  "computers": 348,
   "wiredNowhere": 31,
   "heldByLearnOnly": 19,
   "otherScreensOnly": 10,
@@ -14,28 +14,28 @@
   "surfaces": {
    "learn": {
     "yes": 31,
-    "held": 219,
+    "held": 220,
     "no": 97
    },
    "review": {
-    "yes": 234,
+    "yes": 235,
     "no": 113
    },
    "lesson": {
-    "yes": 142,
+    "yes": 143,
     "no": 205
    },
    "chat": {
     "yes": 201,
-    "no": 146
+    "no": 147
    },
    "tapped": {
     "yes": 158,
-    "no": 189
+    "no": 190
    },
    "tactics": {
     "yes": 103,
-    "no": 244
+    "no": 245
    }
   }
  },
@@ -4047,6 +4047,29 @@
     "campaign",
     "playSilent",
     "endgame"
+   ]
+  },
+  {
+   "key": "services/pawnBreak.ts#pawnBreak",
+   "name": "registry:pawnBreak",
+   "file": "services/pawnBreak.ts",
+   "fn": "pawnBreak",
+   "says": "THE PAWN BREAK AND WHAT IT IS FOR (the teaching move S-BREAK): the pawn it strikes (the base of their chain), the file its trade opens for the rooks, the bishop it frees",
+   "origin": "registry",
+   "learn": "held",
+   "review": "yes",
+   "lesson": "yes",
+   "chat": "no",
+   "tapped": "no",
+   "tactics": "no",
+   "app": true,
+   "other": [
+    "openingsPage",
+    "playSilent",
+    "endgame"
+   ],
+   "registry": [
+    "pawnBreak"
    ]
   },
   {

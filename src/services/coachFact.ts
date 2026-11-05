@@ -147,6 +147,9 @@ export const FACT_GROUP: Record<CoachFactKind, FactGroup> = {
   'false-alarm': 'move', 'rule-exception': 'move', 'push-or-hold': 'move',
   // The habits that are teaching moves of their own close the turn like any habit.
   'opp-think': 'habit', 'forcing-scan': 'habit',
+  // ── the teaching moves' new computers (2026-11-05): the break is what the
+  // move changed ──
+  'pawn-break': 'move',
 };
 
 /** Is this string a kind of the one vocabulary? (A Learn fact carries its
@@ -407,6 +410,7 @@ export const COMPUTER_CATALOG = {
   temptingRefuted: { file: 'services/weighedMoves.ts', says: 'the natural move a player weighs here that fails, with the engine line that refutes it' },
   alsoGood: { file: 'services/weighedMoves.ts', says: 'two moves of the same worth and the one thing the board shows between them' },
   squareChoice: { file: 'services/weighedMoves.ts', says: 'which square for the piece: its other squares a player weighs, and what goes wrong on each' },
+  pawnBreak: { file: 'services/pawnBreak.ts', says: 'the pawn break and what it is for: the pawn it strikes (the base of their chain), the file it opens for the rooks, the bishop it frees' },
 } satisfies Record<string, CatalogRow>;
 
 export type ComputerName = keyof typeof COMPUTER_CATALOG;

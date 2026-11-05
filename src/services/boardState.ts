@@ -112,6 +112,9 @@ const ABOUT_THE_FLUX_SQUARE: ReadonlySet<FactKind> = new Set<FactKind>([
   // The teaching moves' own kinds, about the move like the kinds they came
   // from: refutations, the move order, a rule's exception.
   'common-wrong', 'trap-ahead', 'move-order', 'rule-exception', 'false-alarm', 'push-or-hold',
+  // The pawn break is said about the trade it offers: "if they take, it
+  // opens …" — true of the move whatever the square does next.
+  'pawn-break',
 ]);
 
 type BoardVeto = 'in-flux' | 'beside-mate';

@@ -75,7 +75,11 @@ export type FacetTag =
   // play a `refuted`, the false alarm a `point`. Each is worth, and placed,
   // exactly what the kind it came from is, so nothing said moves.
   | 'reply-tree' | 'move-order' | 'castling' | 'common-wrong' | 'trap-ahead'
-  | 'false-alarm' | 'rule-exception' | 'push-or-hold';
+  | 'false-alarm' | 'rule-exception' | 'push-or-hold'
+  // THE TEACHING MOVES' NEW COMPUTERS (2026-11-05): a teaching move no
+  // computer made, each with the computer built for it — the pawn break and
+  // what it is for (`pawnBreak`).
+  | 'pawn-break';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -244,6 +248,9 @@ export const FACET_RANK: Record<FacetTag, number> = {
   'false-alarm': 29,
   'rule-exception': 29,
   'push-or-hold': 29,
+  // The teaching moves' new computers. The break and what it is for: a
+  // structure judgement on the move just played, so beside the judgement.
+  'pawn-break': 47,
 };
 
 /**
@@ -320,6 +327,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   'false-alarm': 'teach',
   'rule-exception': 'teach',
   'push-or-hold': 'teach',
+  'pawn-break': 'teach',
   // What the move did — descriptions. Each speaks only beside a teaching
   // point on its own squares; a ply of descriptions alone is silent.
   does: 'describe',
@@ -467,6 +475,8 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   'reply-tree': 'safety', 'common-wrong': 'safety', 'trap-ahead': 'safety', 'move-order': 'plan', castling: 'plan',
   'false-alarm': 'principle', 'rule-exception': 'principle', 'push-or-hold': 'principle',
   'opp-think': 'safety', 'forcing-scan': 'safety',
+  // The teaching moves' new computers.
+  'pawn-break': 'plan',
   'structure-plan': 'plan', 'opponent-intent': 'plan', 'student-leans': 'plan', 'opponent-leans': 'plan',
 };
 
@@ -524,6 +534,8 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   'reply-tree': 'proven', 'move-order': 'proven', 'common-wrong': 'proven', 'trap-ahead': 'proven',
   castling: 'description', 'false-alarm': 'method', 'rule-exception': 'method', 'push-or-hold': 'method',
   'opp-think': 'method', 'forcing-scan': 'method',
+  // The teaching moves' new computers: the break carries its trade, played.
+  'pawn-break': 'proven',
 };
 
 /**
@@ -676,7 +688,8 @@ function clauseKindForTag(tag: FacetTag): string {
     case 'their-read': return 'opponent-intent';
     case 'rule': case 'rule-exception': case 'false-alarm': case 'push-or-hold': return 'fundamental';
     case 'principle': case 'structure': case 'complex': case 'minority':
-    case 'badbishop': case 'worst': case 'plan-middlegame': case 'plan-now': case 'castling': return 'structure-plan';
+    case 'badbishop': case 'worst': case 'plan-middlegame': case 'plan-now': case 'castling':
+    case 'pawn-break': return 'structure-plan';
     default: return 'status';
   }
 }

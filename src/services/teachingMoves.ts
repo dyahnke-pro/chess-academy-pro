@@ -209,4 +209,8 @@ export const TEACHING_MOVES: Record<CoachFactKind, readonly TeachingMove[]> = {
   'opp-think': ['H-OPP-THINK', 'H-HABIT'],
   // Checks, captures, threats first — the forcing scan (`methodBeat`).
   'forcing-scan': ['T-CHECKFIRST', 'H-HABIT'],
+  // ── the teaching moves' new computers (2026-11-05) ──
+  // The pawn break and what it is for (`pawnBreak`): the pawn it strikes, the
+  // file it opens for the rooks, the bishop it frees.
+  'pawn-break': ['S-BREAK'],
 };
