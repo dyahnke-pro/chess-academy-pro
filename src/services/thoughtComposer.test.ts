@@ -112,10 +112,10 @@ describe('the one composer (WO-ONE-COACH-01)', () => {
   it('what the move gave up is said behind it, but is not one of its jobs', () => {
     const space = fact({ idea: 'space', text: 'You play g5 — it grabs space on the kingside.', squares: ['g5'], weight: 80 });
     const kick = fact({ idea: 'tempo', text: 'You play g5 — it kicks their knight off f4.', alsoText: 'It also kicks their knight off f4.', squares: ['f4'], weight: 75 });
-    const cover = fact({ kind: 'aspect-own-king-cover', idea: 'king-safety', text: "You play g5 — it loosens your own king's cover.", alsoText: "It also loosens your own king's cover.", weight: 70 });
+    const cover = fact({ kind: 'aspect-own-king-cover', idea: 'king-safety', text: "You play g5 — it loosens your own king's cover, and a pawn never moves back.", alsoText: "It also loosens your own king's cover, and a pawn never moves back.", weight: 70 });
     const out = composeThought([space, kick, cover], 'lesson', null, NOT_LED);
     expect(out.kept.map((f) => f.kind)).toEqual(['move-job', 'two-jobs', 'aspect-own-king-cover']);
-    expect(out.spoken).toBe("You play g5 — it grabs space on the kingside. It also kicks their knight off f4. It also loosens your own king's cover.");
+    expect(out.spoken).toBe("You play g5 — it grabs space on the kingside. It also kicks their knight off f4. It also loosens your own king's cover, and a pawn never moves back.");
   });
 
   it('behind another line on the move, the composer says one job — the second — and nothing follows', () => {

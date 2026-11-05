@@ -181,10 +181,12 @@ export const TEACHING_MOVES: Record<CoachFactKind, readonly TeachingMove[]> = {
   'aspect-outpost': ['P-STRUCTURE', 'S-SQUARE-CHOICE'],
   'aspect-passer': ['E-PASSER'],
   'aspect-passer-handed': ['E-PASSER', 'M-OPP-COST'],
-  'aspect-opens-file': ['P-PRINCIPLE'],
+  // The file it opens stays a road for the rooks (round 4).
+  'aspect-opens-file': ['P-PRINCIPLE', 'S-LONG-HORIZON'],
   'aspect-their-weakness': ['P-STRUCTURE'],
   'aspect-own-weakness': ['P-STRUCTURE', 'M-OPP-COST'],
-  'aspect-own-king-cover': ['S-KING-ATTACK', 'M-OPP-COST'],
+  // "…and a pawn never moves back": a cover loosened for good (round 4).
+  'aspect-own-king-cover': ['S-KING-ATTACK', 'M-OPP-COST', 'S-LONG-HORIZON'],
   checkmate: ['T-MATE'],
   'board-teacher': ['M-PURPOSE-QUIET'],
   'deep-fact': ['T-LINE'],
