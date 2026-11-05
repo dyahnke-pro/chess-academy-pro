@@ -19,7 +19,9 @@ import { readCriticalMoment, type CriticalMomentRead } from './criticalMoment';
 import { recordCapabilityEvidence } from './capabilityEvidence';
 import { getHomeOpenings } from './homeOpeningService';
 import { orderGamesForAnalysis } from './homeOpening';
-import type { GameRecord, HeardVerdict, MoveAnnotation, MoveClassification, StockfishAnalysis, UserProfile } from '../types';
+import type { GameRecord, HeardVerdict, MoveAnnotation, MoveClassification, StockfishAnalysis, StoredWeighReads, UserProfile } from '../types';
+import { candidateMoves } from './weighedMoves';
+import { foldScore } from './humanReply';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -514,7 +516,7 @@ class DedicatedWorker {
     depth: number,
     budgetMs: number,
     searchmoves: readonly string[] | null,
-  ): Promise<Array<{ rank: number; evaluation: number; mate: number | null; bound: 'lower' | 'upper' | null; moves: string[] }>> {
+  ): Promise<Array<{ rank: number; evaluation: number; mate: number | null; bound: 'lower' | 'upper' | null; moves: string[]; depth?: number }>> {
     if (finishedBoardEval(fen) !== null) return Promise.resolve([]);
     return this.serial(() => this.analyzeFanNow(fen, lines, depth, budgetMs, searchmoves));
   }
@@ -699,6 +701,7 @@ class DedicatedWorker {
               mate: v.mate == null ? null : v.mate * flip,
               bound: v.bound,
               moves: v.pv,
+              depth: v.depth,
             })));
         }
       };
@@ -1865,6 +1868,48 @@ async function onlyMoveGapCp(
   return gap;
 }
 
+/** THE MOVES A PLAYER WEIGHS, READ (`weighedMoves`, 2026-11-05). One wide
+ *  read scores every legal move (the depth the human model was fitted on),
+ *  the model picks the moves a player weighs there — at a club player's eye,
+ *  a stronger one's and a beginner's, so the record serves any rating — and
+ *  ONE fan at review depth reads each of them, the move played among them.
+ *  Remembered per position for the session, so a regrade never pays twice. */
+const WEIGH_WIDE_DEPTH = 10;
+const WEIGH_RATINGS = [1000, 1500, 2000] as const;
+const _weighCache = new Map<string, StoredWeighReads | null>();
+export async function weighedReads(
+  fen: string,
+  playedSan: string,
+  worker: () => Promise<DedicatedWorker | null>,
+  budgetMs: number,
+): Promise<StoredWeighReads | null> {
+  const key = `${evalCacheKey(fen)}|${playedSan}`;
+  if (_weighCache.has(key)) return _weighCache.get(key) ?? null;
+  let out: StoredWeighReads | null = null;
+  try {
+    const board = new Chess(fen);
+    const legal = board.moves().length;
+    const w = legal > 1 ? await worker() : null;
+    if (w) {
+      const wide = await w.analyzeFan(fen, legal, WEIGH_WIDE_DEPTH, budgetMs, null);
+      // The engine reports White's view; the model reads the mover's.
+      const sign = board.turn() === 'w' ? 1 : -1;
+      const scored = wide.filter((l) => !!l.moves[0]).map((l) => ({ uci: l.moves[0], cp: foldScore(sign * l.evaluation, l.mate === null ? null : sign * l.mate) }));
+      const set = new Set<string>();
+      for (const r of WEIGH_RATINGS) for (const c of candidateMoves(fen, r, { played: playedSan, scored })) set.add(c.uci);
+      if (scored.length >= 2 && set.size >= 2) {
+        const ucis = [...set];
+        const fan = await w.analyzeFan(fen, ucis.length, REVIEW_DEEP_DEPTH, budgetMs, ucis);
+        const reads = fan.filter((l) => l.moves.length > 0 && l.bound === null).map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate }));
+        const depth = Math.min(...fan.map((l) => l.depth ?? 0));
+        if (reads.length >= 2 && depth > 0) out = { depth, reads };
+      }
+    }
+  } catch { out = null; }
+  _weighCache.set(key, out);
+  return out;
+}
+
 /**
  * Fallback: analyze a single game with the singleton engine (no pool).
  */
@@ -1885,6 +1930,10 @@ async function analyzeGamePositions(
      *  (2026-10-13). The deep per-move work on flagged plies (the cost, the
      *  best move, a sacrifice's verify) still runs — it is review-depth already. */
     readsOnly?: boolean;
+    /** Read the moves a player weighs at each move (`weighedReads`): the
+     *  review's full grade does, stored with the game; the read-ahead's grade
+     *  of the first moves does not, so the walk starts as soon as before. */
+    weigh?: boolean;
   } = {},
 ): Promise<{ annotations: MoveAnnotation[]; achievedDepth: number; depthAt: number[]; bookPlies: number } | null> {
   const { fens, moves } = replayPgnToFens(game.pgn);
@@ -2292,6 +2341,13 @@ async function analyzeGamePositions(
         classification = 'book'; // theory move, evals unavailable — still not a mistake
       }
 
+      // THE MOVES A PLAYER WEIGHS (`weighedMoves`): each non-book move of the
+      // review gets one read per candidate a player weighs there, so Review
+      // can say the natural move that fails, the move of the same worth and
+      // which square the piece should not go to — both seats alike.
+      const weighed = opts.readsOnly && opts.weigh && !moveIsBook && evalBefore !== null
+        ? await weighedReads(fens[moveIdx], moves[moveIdx], ensureDeepWorker, deepBudgetMs)
+        : null;
       let heardVerdict: HeardVerdict | undefined;
       // GREAT (G3) — the only good move, PROVEN by the runner-up: the student
       // played the read's best move, the game was still contested, and every
@@ -2364,6 +2420,7 @@ async function analyzeGamePositions(
         classification,
         comment: null,
         ...(costCp !== null ? { costCp } : {}),
+        ...(weighed ? { weighed } : {}),
         // The DEPTH rides with the lines: the review narrates before its deep
         // dive lands, and a depth-12 line is not one a claim may rest on (clean-
         // pass walk 2026-10-04: "axb4 — it would win two pawns" off axb4 Ne7
@@ -3188,7 +3245,7 @@ export async function finishReviewReads(gameId: string): Promise<MoveAnnotation[
   const game = await db.games.get(gameId);
   if (!game) return null;
   await warmBookLine(replayPgnToFens(game.pgn).moves, 'review-grade');
-  const result = await analyzeGamePositions(game, undefined, undefined, { readsOnly: true });
+  const result = await analyzeGamePositions(game, undefined, undefined, { readsOnly: true, weigh: true });
   if (!result) return null;
   await db.games.update(gameId, { annotations: result.annotations, fullyAnalyzed: true, analysisDepth: result.achievedDepth });
   // THE DEPTH EACH POSITION REACHED, observable (2026-10-13: the phone's

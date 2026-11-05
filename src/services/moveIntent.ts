@@ -14,6 +14,7 @@
 // Pure: the four engine reads are handed in (see `IntentReads`). No engine call
 // here, no model — the caller owns the search budget.
 import type { ReplyRead } from './ifTheyPlay';
+import type { WeighRead } from './weighedMoves';
 import { flipSideToMove } from './threatOut';
 import { ruleForPurpose } from './moveFundamentals';
 import { Chess, type Square } from 'chess.js';
@@ -48,6 +49,11 @@ export interface IntentReads {
    *  reply tree's input, `ifTheyPlay`), with the rating the replies are read
    *  at — read by a surface that makes the read (a lesson). Absent: not read. */
   everyAfter?: { replies: readonly ReplyRead[]; rating: number } | null;
+  /** ONE READ PER CANDIDATE A PLAYER WEIGHS (`weighedMoves`), from the board
+   *  before the move, the move played among them — read by a surface that
+   *  makes the search (Review's record). Absent: not read; the fan before the
+   *  move stands in, each line a read of its first move. */
+  weigh?: readonly WeighRead[] | null;
 }
 
 export interface IntentMove { uci: string; san: string }

@@ -47,6 +47,8 @@ import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefe
 import { lineProof, lineProofFromUci, legalLineProof, proofForStudent, squaresProof, isProof, NO_PROOF, type Proof } from './proof';
 import { readBoardAll, readKey } from './boardComputers';
 import { knownSlipsAt, type KnownSlipIndex } from './knownSlips';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
+import type { WeighRead } from './weighedMoves';
 import type { CoachFact, ComputerName } from './coachFact';
 import { reviewFacet, asIncoming, inRuleFamily, type ReviewFacet } from './reviewFacet';
 import type { FacetTag } from './reviewFacetRank';
@@ -267,11 +269,18 @@ export interface MoveTeachingContext {
    *  the same claim itself), and how many the game has said (their words
    *  rotate on it). REQUIRED: a caller with no index says so. */
   knownSlips: { index: KnownSlipIndex | null; nextRefutedAlt: string | null; told: number };
+  /** THE MOVES A PLAYER WEIGHS (`weighedMoves`): the student's rating (whose
+   *  eye picks the candidates) and the record's one read per candidate from
+   *  the board before the move (`MoveAnnotation.weighed`), or null where the
+   *  record has none — then only the board's own square reads speak.
+   *  REQUIRED, so a caller says which. */
+  weigh: { rating: number; reads: readonly WeighRead[] | null };
 }
 
 export const NO_TEACHING_CONTEXT: MoveTeachingContext = {
   refutedAlt: null, prevFenBefore: null, phaseTurn: null, principlesTaught: new Set(), intent: null, soundPlies: new Set(), motifSaid: new Map(),
   knownSlips: { index: null, nextRefutedAlt: null, told: 0 },
+  weigh: { rating: DEFAULT_STUDENT_RATING, reads: null },
 };
 
 const PIECE_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -1538,6 +1547,17 @@ export function computeMoveFacets(
     add(readBoardAll('castleByHand', { fenBefore, san, student: studentColorWB })[0]);
     add(readBoardAll('keptHome', { fenBefore, san, student: studentColorWB })[0]);
     add(readBoardAll('kingFromCentre', { fenBefore, san, student: studentColorWB })[0]);
+    // THE MOVES A PLAYER WEIGHS, both seats (weighedMoves, 2026-11-05): the
+    // natural move that fails and its line, the move of the same worth and
+    // what separates them, the piece's other squares and what goes wrong on
+    // each — read off the record's one read per candidate (`weighReads`).
+    {
+      const w = ctx.teaching.weigh;
+      const prior = ctx.teaching.prevFenBefore && ply >= 2 && ctx.allSans[ply - 2] ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null;
+      add(readBoardAll('temptingRefuted', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior })[0]);
+      add(readBoardAll('alsoGood', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads })[0]);
+      add(readBoardAll('squareChoice', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior })[0]);
+    }
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.
       add(readBoardAll('obligationLifted', { fenBefore, fenAfter, student: studentColorWB })[0]);

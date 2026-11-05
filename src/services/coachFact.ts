@@ -395,6 +395,9 @@ export const COMPUTER_CATALOG = {
   kingSquares: { file: 'services/kingWalk.ts', says: 'in check with only king moves: the squares that walk into a forced mate, and the square chosen' },
   knownSlip: { file: 'services/knownSlips.ts', says: 'a move club players really play at this board that the other side punishes — a known mistake, or a trap when it clears the trap bar — and what the punishment wins' },
   ifTheyPlay: { file: 'services/ifTheyPlay.ts', says: 'if they X, you play Y: the replies likely at this level (the human model) and the engine\'s best, each with the answer its own line proves — a recapture, a block, a job, a win or a mate' },
+  temptingRefuted: { file: 'services/weighedMoves.ts', says: 'the natural move a player weighs here that fails, with the engine line that refutes it' },
+  alsoGood: { file: 'services/weighedMoves.ts', says: 'two moves of the same worth and the one thing the board shows between them' },
+  squareChoice: { file: 'services/weighedMoves.ts', says: 'which square for the piece: its other squares a player weighs, and what goes wrong on each' },
 } satisfies Record<string, CatalogRow>;
 
 export type ComputerName = keyof typeof COMPUTER_CATALOG;

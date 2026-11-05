@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6415 lines · 30 exports · 69 importers · 83 tests · 4 audits**
+**6421 lines · 30 exports · 69 importers · 83 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -97,7 +97,7 @@
 - `src/services/coachFeatureService.test.ts:261`
 - `src/services/coachFeatureService.test.ts:281`
 - `src/services/coachFeatureService.test.ts:293`
-- `src/services/gameAnalysisService.ts:2446`
+- `src/services/gameAnalysisService.ts:2503`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -323,10 +323,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8813`
-- `src/components/Coach/CoachTeachPage.tsx:8911`
-- `src/components/Coach/CoachTeachPage.tsx:11743`
-- `src/components/Coach/CoachTeachPage.tsx:12135`
+- `src/components/Coach/CoachTeachPage.tsx:8814`
+- `src/components/Coach/CoachTeachPage.tsx:8917`
+- `src/components/Coach/CoachTeachPage.tsx:11780`
+- `src/components/Coach/CoachTeachPage.tsx:12178`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/services/phaseTransitionDetector.test.ts:575`
@@ -364,7 +364,7 @@
 - `src/services/reviewDepth.eval.measure.test.ts:233`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
 - `src/services/reviewHabitClosesTurn.test.ts:53`
-- `src/services/reviewNarrationBuild.ts:103`
+- `src/services/reviewNarrationBuild.ts:105`
 - `src/services/reviewRealSweep.test.ts:187`
 - `src/services/reviewRefuted.test.ts:28`
 - `src/services/reviewRefuted.test.ts:34`
@@ -389,7 +389,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:654`
+- `src/services/reviewFullData.ts:663`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites

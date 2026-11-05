@@ -697,6 +697,18 @@ export interface StoredLines {
   earlierBest?: string[];
 }
 
+/** THE MOVES A PLAYER WEIGHS, READ (`weighedMoves`, 2026-11-05): one engine
+ *  read per candidate move from the board before the move — the moves a player
+ *  at the student's rating weighs there (the human model), the move played
+ *  among them — so Review can say which tempting move fails and why, which
+ *  move was worth the same, and which square the piece should not go to. */
+export interface StoredWeighReads {
+  /** The depth the reads were searched to. */
+  depth: number;
+  /** One per candidate: the line (UCI, the candidate first), White's view. */
+  reads: Array<{ moves: string[]; evaluation: number; mate: number | null; earlier?: string[] }>;
+}
+
 export interface MoveAnnotation {
   moveNumber: number;
   color: 'white' | 'black';
@@ -726,6 +738,9 @@ export interface MoveAnnotation {
    *  graded the move differently — Review says the correction out loud.
    *  Absent when they agree or nobody graded the move live (2026-10-13). */
   heardVerdict?: HeardVerdict;
+  /** The candidates' reads (`StoredWeighReads`); absent on records analysed
+   *  before 2026-11-05 or where the review's worker could not read them. */
+  weighed?: StoredWeighReads;
 }
 
 /** A live verdict as the student heard it. */
@@ -1584,6 +1599,8 @@ export interface CoachGameMove {
   costCp?: number;
   /** See MoveAnnotation.heardVerdict. */
   heardVerdict?: HeardVerdict;
+  /** See MoveAnnotation.weighed. */
+  weighed?: StoredWeighReads;
   expanded: boolean;
   bestMove: string | null;
   bestMoveEval: number | null;

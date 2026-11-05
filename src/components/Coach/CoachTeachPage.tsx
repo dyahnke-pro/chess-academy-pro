@@ -345,6 +345,7 @@ import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { lineSeatAt, withArticle } from '../../utils/andList';
 import { readBoard, readBoardAll, readKey, adoptPlanTrial, type PlanThread } from '../../services/boardComputers';
+import type { WeighRead } from '../../services/weighedMoves';
 import type { CoachFact, ComputerName } from '../../services/coachFact';
 import { splitThink, stripThink, resolveOwed, THINK_MARK } from '../../utils/thinkPause';
 import { scheduleMarks } from '../../services/markPacing';
@@ -8888,6 +8889,11 @@ export function CoachTeachPage({ mode }: {
     priceSearch: PriceSearch | null;
     /** Who owns the voice of the turn (`VoiceOwner`): a mission, a focus, or nobody. */
     owner: VoiceOwner;
+    /** THE MOVES A PLAYER WEIGHS (`weighedMoves`): the student's rating (whose
+     *  eye picks the candidates) and the read of the board before the
+     *  student's move — each line a read of its first move — or null when
+     *  that board was not read. REQUIRED, so a caller says which. */
+    weigh: { rating: number; reads: readonly WeighRead[] | null };
   }): {
     /** The utterance AND its provenance, from one object. Callers speak
      *  `pkg.spoken` and log `pkg.kept` — never a separately-assembled string,
@@ -10089,6 +10095,36 @@ export function CoachTeachPage({ mode }: {
             : { namesStudentMove: f.namesStudentMove, lane: 'ifTheyPlay' as const, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof }));
       } catch { return []; }
     })();
+    // THE MOVES A PLAYER WEIGHS (weighedMoves, 2026-11-05), on both moves of
+    // the turn — said about the move just played: the natural move that fails
+    // and its line, the move of the same worth and what separates them, the
+    // piece's other squares and what goes wrong there. The student's move is
+    // weighed off the read of the board before it; their reply off the board
+    // alone (the square reads). A read that would name a move still the
+    // student's to play speaks its held form (LEARN NAMES NO MOVE UNASKED).
+    const weighedFacts = ((): Array<{ namesStudentMove: boolean; lane: 'temptingRefuted' | 'alsoGood' | 'squareChoice'; computer: CoachFact['computer']; text: string; fen: string; squares: readonly string[]; claims: readonly string[]; proof: CoachFact['proof']; stakes?: CoachFact['stakes'] }> => {
+      const h = args.historyAfterReply;
+      if (h.length < 2) return [];
+      try {
+        const b = new Chess();
+        for (const san of h.slice(0, -2)) b.move(san);
+        const priorFen = (() => { if (h.length < 3) return null; const p = new Chess(); for (const san of h.slice(0, -3)) p.move(san); return p.fen(); })();
+        const plies: Array<{ fenBefore: string; san: string; reads: readonly WeighRead[] | null; prior: { fenBefore: string; san: string } | null }> = [
+          { fenBefore: b.fen(), san: h[h.length - 2], reads: args.weigh.reads, prior: priorFen ? { fenBefore: priorFen, san: h[h.length - 3] } : null },
+        ];
+        const studentFen = b.fen();
+        b.move(h[h.length - 2]);
+        plies.push({ fenBefore: b.fen(), san: h[h.length - 1], reads: null, prior: { fenBefore: studentFen, san: h[h.length - 2] } });
+        const rating = args.weigh.rating;
+        return plies.flatMap(({ fenBefore, san, reads, prior }) => ([
+          ...readBoardAll('temptingRefuted', { fenBefore, san, student: studentCC, rating, reads, priorMove: prior }).map((f) => ({ f, lane: 'temptingRefuted' as const })),
+          ...readBoardAll('alsoGood', { fenBefore, san, student: studentCC, rating, reads }).map((f) => ({ f, lane: 'alsoGood' as const })),
+          ...readBoardAll('squareChoice', { fenBefore, san, student: studentCC, rating, reads, priorMove: prior }).map((f) => ({ f, lane: 'squareChoice' as const })),
+        ]).map(({ f, lane }) => (f.namesStudentMove && f.heldForm
+          ? { namesStudentMove: false, lane, computer: f.computer, text: f.heldForm.text, fen: f.fen, squares: f.heldForm.squares, claims: f.claims, proof: f.heldForm.proof }
+          : { namesStudentMove: f.namesStudentMove, lane, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof, ...(f.stakes ? { stakes: f.stakes } : {}) })));
+      } catch { return []; }
+    })();
     const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, slipCp: args.slipCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [
       ...(tacticLine ? [{ lane: 'tactic' as const, computer: tacticComputer, namesStudentMove: namesPlayableStudentMove(tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE), text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim || tacticLoose.length ? [...(tacticClaim ? [tacticClaim] : []), ...tacticLoose] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ namesStudentMove: namesPlayableStudentMove(threatNames), lane: 'threat' as const, computer: threatComputer, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), claims: [...new Set([...(threatClaim ? [threatClaim] : []), ...threatClaims, ...(threatCostRead?.claims ?? [])])], stakes: threatCostRead?.stakes ?? undefined, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
@@ -10097,6 +10133,7 @@ export function CoachTeachPage({ mode }: {
       ...(bookMoveRead ? [{ namesStudentMove: false, lane: 'bookMove' as const, computer: bookMoveRead.computer, text: bookMoveRead.text, fen: bookMoveRead.fen, squares: bookMoveRead.squares, claims: bookMoveRead.claims, role: bookMoveRead.role, proof: bookMoveRead.proof, ...(bookMoveRead.skill ? { skill: bookMoveRead.skill } : {}) }] : []),
       ...kingWalkFacts,
       ...ifTheyPlayFacts,
+      ...weighedFacts,
       ...(announceLine ? [{ namesStudentMove: false, lane: 'opening' as const, computer: 'openingAnnouncementForGame' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),
       // Rate-matched Danya behavior — board-truth. MERGED with the positional
       // read into ONE board-read lane (David 2026-09-13: "computer and observation
@@ -11967,6 +12004,12 @@ export function CoachTeachPage({ mode }: {
                     priceSettled: studentPriceSettled,
                     priceSearch: studentPriceSearch,
                     owner: turnOwner,
+                    weigh: {
+                      rating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
+                      reads: preStudentRead && preStudentRead.topLines.length >= 2
+                        ? preStudentRead.topLines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves, earlier: l.earlier?.moves ?? null }))
+                        : null,
+                    },
                   });
                   instantLead = instant.lead;
                   instantWaits = instantWaitsForVerdict({
