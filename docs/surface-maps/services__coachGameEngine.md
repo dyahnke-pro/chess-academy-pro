@@ -72,7 +72,7 @@
 ### `pickTeachingReply` (function) — 3 call sites
 - `src/components/Coach/CoachGamePage.tsx:2288`
 - `src/services/coachGameEngine.test.ts:490`
-- `src/services/coachLaneWiring.test.ts:376`
+- `src/services/coachLaneWiring.test.ts:378`
 
 ### `MissionDialsOpt` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

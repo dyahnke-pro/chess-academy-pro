@@ -339,7 +339,7 @@
 - `src/utils/justCaptured.ts:24`
 
 ### `pastTenseReviewNarration` (function) — 4 call sites
-- `src/services/reviewMoveThought.test.ts:53`
+- `src/services/reviewMoveThought.test.ts:57`
 - `src/services/reviewRegister.test.ts:32`
 - `src/services/reviewRegister.test.ts:109`
 - `src/services/reviewWalk1500.test.ts:17`
