@@ -106,7 +106,7 @@ export const FACT_GROUP: Record<CoachFactKind, FactGroup> = {
   // ── the line played out ──
   consequence: 'line', line: 'line',
   // ── the story: plans, the opening's story ──
-  'plan-now': 'story', 'plan-race': 'story', 'plan-arc': 'story', 'plan-opening': 'story', 'plan-middlegame': 'story',
+  'plan-now': 'story', 'plan-worst-piece': 'story', 'plan-race': 'story', 'plan-arc': 'story', 'plan-opening': 'story', 'plan-middlegame': 'story',
   'plan-line': 'story', 'structure-plan': 'story', 'student-leans': 'story',
   // The opening's story, each beat by what it is about: the price the
   // student's move paid is the move's (said with its verdict, OS-3

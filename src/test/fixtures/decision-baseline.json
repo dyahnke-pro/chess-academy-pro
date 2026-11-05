@@ -814,7 +814,7 @@
     "39: They play Bxe6+ — it gives check and wins a pawn, and nothing can take back.",
     "40: You play Kh7 — it adds one guard to your pawn on g6, which their pawn on f5 attacks, and gets your king out of the check from their bishop on e6.",
     "41: They play fxg6+ — it creates a passed pawn on g6. It also opens the f-file, a road for the rooks from now on.",
-    "42: You play Kxg6 — it leaves them with an isolated pawn on the h-file. It also opens the g-file, a road for the rooks from now on.",
+    "42: You play Kxg6 — it leaves them with an isolated pawn on the h-file. It also opens the g-file.",
     "43: They play Bf5+ — it lands on the f5 outpost, a square none of your pawns can attack. It also gives check and keeps your bishop off c6, where it would pin their rook on f3.",
     "44: Kf7 is tempting here, but it fails: they play Be4+, you answer Kg8 and they play Bxb7 — they win a bishop. After Kg7, they play Be4 and, two moves later, you play Bxb2 — you win a pawn.",
     "45: They play Be4 — it attacks your bishop on b7. It also plants an outpost on e4 that no pawn can challenge. Their bishop went to e4 — on g4 it runs into …Bxf3+ — you win the exchange.",

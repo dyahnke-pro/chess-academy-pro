@@ -39,7 +39,7 @@ import { bookMoveWhy } from './bookMoveWhy';
 import { lastTimeHere } from './lastTimeHere';
 import type { BookDepartureRow } from './bookDepartureWeakness';
 import { PIECE_NAMES } from '../types/tacticTypes';
-import { planThreadTurn, type PlanThread } from './planThread';
+import { planThreadTurn, type PlanThread, type PlanLineKind } from './planThread';
 import { geometryReads, type GeometryContext } from './tacticGeometry';
 import { studentMoveStructure, theirMoveStructure, boardStructure, linesStructure, type StructureRead } from './structureReads';
 import { STRUCTURE_ROLE } from './structureJudgementKit';
@@ -596,10 +596,16 @@ export const BOARD_COMPUTERS = {
   },
   planThread: {
     // A plan aim is a claim the plan arc shares, and the student's plan thread.
-    read: ({ thread, ...args }, fact) => safe(() => planThreadTurn(thread, args).map((l) => fact({
-      key: l.claim, claims: [l.claim, ...(l.aim ? [l.aim] : [])], text: l.text, proof: l.proof, squares: l.squares, stakes: null,
-      seat: l.seat, namesStudentMove: false, thread: l.aim ? threadKey('student', l.aim) : LOCAL_THREAD, fen: args.fenAfter,
-      ...(l.arrows ? { marks: { route: l.arrows } } : {}),
+    // Each line is said under its own kind (`PLAN_STATED_KIND`: the worst
+    // piece's road is the student's wish), placed by the one group table.
+    read: ({ thread, ...args }, fact) => safe(() => planThreadTurn(thread, args).map((l) => ({
+      ...fact({
+        key: l.claim, claims: [l.claim, ...(l.aim ? [l.aim] : [])], text: l.text, proof: l.proof, squares: l.squares, stakes: null,
+        seat: l.seat, namesStudentMove: false, thread: l.aim ? threadKey('student', l.aim) : LOCAL_THREAD, fen: args.fenAfter,
+        ...(l.arrows ? { marks: { route: l.arrows } } : {}),
+      }),
+      ...placeFact(l.kind, l.seat),
+      stakes: stakesOf(l.kind, null),
     }))),
     computer: 'planThreadTurn',
     kind: 'plan-now',
@@ -915,7 +921,7 @@ export { adoptPlanTrial, type PlanThread } from './planThread';
  *  computer, so a surface that speaks a computer under its own vocabulary
  *  (Review's facets, the live clauses) fails to compile on a kind it has no
  *  name for, as the per-surface relabel used to guarantee. */
-type KindOf<K extends ComputerId> = K extends 'openingStory' ? (typeof STORY_KIND)[keyof typeof STORY_KIND] : (typeof BOARD_COMPUTERS)[K]['kind'];
+type KindOf<K extends ComputerId> = K extends 'openingStory' ? (typeof STORY_KIND)[keyof typeof STORY_KIND] : K extends 'planThread' ? PlanLineKind : (typeof BOARD_COMPUTERS)[K]['kind'];
 export type BoardFact<K extends ComputerId> = CoachFact & { kind: KindOf<K> };
 
 /** Every fact, in speaking order. */

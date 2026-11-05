@@ -34,7 +34,7 @@ describe('buildDeliberation — the weighing from the fan', () => {
 
   it('renders the weighing as ordered board-true facts', () => {
     const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', opponentLastSan: null })!;
-    const facts = deliberationFacts(d, NOTHING_SAID);
+    const facts = deliberationFacts(d, NOTHING_SAID, true);
     expect(facts).toMatch(/Nxe5\? Then they answer Nxe5 — you give up a knight for a pawn\./);
     // d3 sits inside the coin-flip band — weighing it is the banned filler.
     expect(facts).not.toMatch(/d3/);
@@ -43,8 +43,8 @@ describe('buildDeliberation — the weighing from the fan', () => {
 
   it('the verdict carries its reason, or it is not said (David 2026-09-24)', () => {
     const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', opponentLastSan: null })!;
-    expect(deliberationFacts({ ...d, bestWhy: null }, NOTHING_SAID)).not.toMatch(/The move is/);
-    expect(deliberationFacts({ ...d, bestWhy: 'castles your king into safety' }, NOTHING_SAID)).toMatch(/The move is O-O — it castles your king into safety\.$/);
+    expect(deliberationFacts({ ...d, bestWhy: null }, NOTHING_SAID, true)).not.toMatch(/The move is/);
+    expect(deliberationFacts({ ...d, bestWhy: 'castles your king into safety' }, NOTHING_SAID, true)).toMatch(/The move is O-O — it castles your king into safety\.$/);
   });
 
   it('honours the "first 3, maybe 4" cap', () => {
@@ -81,7 +81,7 @@ describe('buildDeliberation — the weighing from the fan', () => {
   it('is NOT a real choice when the fan has one line (forced / only-move)', () => {
     const d = buildDeliberation({ analysis: { topLines: [line(1, 30, 'e1g1')] }, fenBefore: FEN, moverColor: 'w', opponentLastSan: null })!;
     expect(d.isRealChoice).toBe(false);
-    expect(deliberationFacts(d, NOTHING_SAID)).toBe('');
+    expect(deliberationFacts(d, NOTHING_SAID, true)).toBe('');
   });
 });
 
@@ -144,7 +144,7 @@ describe('a less-precise move with a proof speaks the proof, never the filler (h
       isRealChoice: true,
       bestWhy: null,
     };
-    const facts = deliberationFacts(withProof, NOTHING_SAID);
+    const facts = deliberationFacts(withProof, NOTHING_SAID, true);
     expect(facts).not.toMatch(/playable, but not as precise/);
     expect(facts).toMatch(/d3\? Then Nxe4 and the pawn on e4 falls\./);
   });
@@ -216,7 +216,7 @@ describe('weighing the candidates (P2 #4)', () => {
       { rank: 2, evaluation: 50, mate: null, moves: uci(['Nf6', 'O-O']), depth: 16 },
     ] };
     const d = buildDeliberation({ analysis: analysis as never, fenBefore: fen, moverColor: 'b', opponentLastSan: 'Nxe5' })!;
-    const text = deliberationFacts(d, NOTHING_SAID);
+    const text = deliberationFacts(d, NOTHING_SAID, true);
     if (text.includes('The move is')) {
       expect(text).toMatch(/^Candidates: .*Qg5/);
       expect(text.indexOf('Candidates')).toBeLessThan(text.indexOf('The move is'));

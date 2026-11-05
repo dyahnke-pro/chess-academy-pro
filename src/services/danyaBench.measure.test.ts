@@ -441,7 +441,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
   },
   deliberation: (p) => {
     const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, opponentLastSan: p.theirLast?.san ?? null });
-    return d ? deliberationFacts(d, new Set()) : null;
+    return d ? deliberationFacts(d, new Set(), true) : null;
   },
   moveJob: (p) => moveJob(p.fenBefore, p.san, p.mover, p.own ? MINE : THEIRS)?.clause ?? null,
   fundamentals: (p) => computeMoveFundamentals(p.fenBefore, p.san, p.mover === 'w' ? 'white' : 'black').map((f) => f.selfContained),
@@ -589,6 +589,7 @@ const FACT_COMPUTER: Record<FactKind, string> = {
   'opp-target': 'services/reviewOpponentCommentary.ts#(module)',
   endgame: 'services/reviewMoveTeaching.ts#nameEndgamePhase',
   'plan-now': 'services/nextPlans.ts#deriveNextPlans',
+  'plan-worst-piece': 'services/nextPlans.ts#deriveNextPlans',
   'plan-race': 'services/planRace.ts#detectPlanRace',
   'plan-arc': 'services/lookaheadPlan.ts#gameArcs',
   'plan-opening': 'services/reviewStrategicOrientation.ts#buildOpeningDevelopmentPlan',

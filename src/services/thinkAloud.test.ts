@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { lineAchieves, sayLine, notYet, opponentHabits, depthClauses, obviousStopFlaw, NO_SOUND_PLIES } from './thinkAloud';
+import { lineAchieves, sayLine, notYet, opponentHabits, depthClauses, obviousStopFlaw, NO_SOUND_PLIES, walksBestLine } from './thinkAloud';
 import { moveWhy } from './deliberation';
 import { materialPlan, holeAccess } from './moveInsight';
 
@@ -46,12 +46,30 @@ describe('the one producer', () => {
   const topLines = [{ moves: ['e7e8', 'h8h7', 'e8e7', 'h7g6', 'e7a7'], evaluation: 500, mate: null }];
   it('names the line and "not yet" only where the move may be named', () => {
     const named = depthClauses({ fen, history: [], topLines, studentColor: 'w', nameMove: true }).map((d) => d.kind);
-    // the line wins material, so the LEDGER says it (deliberation), not a 'line' fact
+    // One line, and only two of its first four moves force: no moment to
+    // calculate out loud, so no walked line (`walksBestLine`).
     expect(named).toContain('not-yet');
     expect(named).not.toContain('line');
     const held = depthClauses({ fen, history: [], topLines, studentColor: 'w', nameMove: false }).map((d) => d.kind);
     expect(held).not.toContain('line');
     expect(held).not.toContain('not-yet');
+  });
+});
+
+// THE LINE IS WALKED WHERE THE MOMENT CALLS FOR CALCULATION (H-CALC, round 5):
+// the best move a pawn or more clear of the next, or a forcing line — and then
+// the walk owns the best line, material included.
+describe('the walked line, at a moment that calls for calculation', () => {
+  const fen = '7k/p3R3/8/8/8/8/8/6K1 w - - 0 1';
+  const best = { moves: ['e7a7', 'h8g8', 'a7a6', 'g8f7'], evaluation: 500, mate: null };
+  it('the best move clear of the next: the line is walked to what it wins', () => {
+    const lines = [best, { moves: ['g1f2', 'a7a5'], evaluation: 300, mate: null }];
+    expect(walksBestLine(fen, lines, 'w')).toBe(true);
+    const walk = depthClauses({ fen, history: [], topLines: lines, studentColor: 'w', nameMove: true }).find((d) => d.kind === 'line');
+    expect(walk?.text).toMatch(/you come out a pawn up/);
+  });
+  it('two good moves within a pawn, nothing forcing: no walk', () => {
+    expect(walksBestLine(fen, [best, { moves: ['g1f2', 'a7a5'], evaluation: 450, mate: null }], 'w')).toBe(false);
   });
 });
 

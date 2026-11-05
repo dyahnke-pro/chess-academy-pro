@@ -103,6 +103,18 @@ function threadFor(kind: CoachFactKind, seat: FactSeat, squares: readonly string
 }
 const close = (s: string): string => (/[.!?]$/.test(s.trim()) ? s.trim() : `${s.trim()}.`);
 
+/** A FIXED PHRASE AT MOST TWICE (the WHY rule's measure 3): the long horizon
+ *  of an aspect is said with its first two changes of that kind in a lesson
+ *  or a game. With no phrase memory (a one-off read) it is always said. */
+const HORIZON_TIMES = 2;
+function horizonSaid(phrases: PhraseMemory | null, kind: string): boolean {
+  if (!phrases) return true;
+  const key = `horizon:${kind}`;
+  const n = phrases.get(key) ?? 0;
+  phrases.set(key, n + 1);
+  return n < HORIZON_TIMES;
+}
+
 /** Every fact a move earns on its own board. */
 export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   let fenAfter: string;
@@ -161,7 +173,10 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     return facts;
   }
   for (const a of read?.aspects ?? []) {
-    add(a.kind, 'moveAspects', 'briefing', a.idea, lead(a.verb), `It also ${a.verb}`, a.squares, a.weight, a.restates === true);
+    // The long horizon is a fixed phrase: said with its first two changes of
+    // its kind in a lesson or a game (the WHY rule), then the change alone.
+    const verb = a.horizon && horizonSaid(i.phrases, a.kind) ? `${a.verb}${a.horizon}` : a.verb;
+    add(a.kind, 'moveAspects', 'briefing', a.idea, lead(verb), `It also ${verb}`, a.squares, a.weight, a.restates === true);
   }
 
   // THE MOVE'S JOB, from the speaker's seat.

@@ -59,7 +59,7 @@ import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { coachTurn, habitNeedFrom } from './coachDecider';
 import { advantageWasMissed } from './reviewWithholding';
-import { PLAN_THREAD_HOLD_PLIES } from './planThread';
+import { PLAN_THREAD_HOLD_PLIES, PLAN_THREAD_KINDS } from './planThread';
 import { createStoryStore, switchesSaid, storyLedger, storyThrough, threadKey, threadStated, threadVariant, PLAN_GOAL, phaseCrossed, openingAt, openingsNamed, noteOpening, lastVerdict, modelGameCited, storyTurn, type ThreadKey, type StoryStore, type StorySeed, type SaidSet } from './gameStory';
 import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
@@ -2777,7 +2777,7 @@ function* reviewSegmentSteps(
           continue;
         }
         // Plans — the one thread's lines (above).
-        if (f.tag === 'plan-now') {
+        if (PLAN_THREAD_KINDS.has(f.tag)) {
           const role = f.identity;
           if (role === 'plan-thread:plan') {
             if (planLineHeld) continue;

@@ -18,9 +18,16 @@ const history = 'e4 e5 Nf3 Nc6 Bb5 Nd4 Nxd4 exd4 O-O Bc5 d3 Qh4 Nd2 c6 Bc4 d6 Nf
 const run = (namesBestMove: boolean) => computePositionFacts({ posture: 'walk', fen: FEN, moverColor: 'w', studentColor: 'w', analysis, history, namesBestMove } as never);
 
 describe('depth facts come out of the door', () => {
-  it('a material line is the ledger\'s to say — no duplicate line fact, even where the move is named', async () => {
-    const r = await run(true);
-    expect(r.clauses.some((c) => c.kind === 'line')).toBe(false);
+  // THE WALK OWNS THE BEST LINE WHERE THE MOMENT CALLS FOR CALCULATION (H-CALC,
+  // round 5): Bb4+ stands a pawn and more clear of the next move, so the line
+  // is walked to what it wins — once: no other clause plays it out again.
+  it('the skewer line is walked once where the move may be named, and held where it may not', async () => {
+    const named = await run(true);
+    const walks = named.clauses.filter((c) => c.kind === 'line');
+    expect(walks.map((c) => c.text)).toEqual(['The bishop to b4, check, their king to d7, your bishop takes f8, then their rook takes f8, and you come out two pawns up.']);
+    expect(named.clauses.filter((c) => /takes f8/.test(c.text))).toHaveLength(1);
+    const held = await run(false);
+    expect(held.clauses.some((c) => c.kind === 'line')).toBe(false);
   });
 });
 
