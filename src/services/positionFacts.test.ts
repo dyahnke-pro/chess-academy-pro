@@ -330,7 +330,9 @@ describe('the latent-danger prevention clause (fires through positionFacts)', ()
     expect(r.tradeDanger).not.toBeNull();
     expect(r.tradeDanger).toMatchObject({ tradeTo: 'e5', frontPiece: 'b', backPiece: 'k' });
     const clause = r.clauses.find((c) => c.kind === 'latent-danger')!;
-    expect(clause.text).toMatch(/before you take on e5, look past the trade: your \w+ on [a-h][1-8] would stand between their \w+ on [a-h][1-8] and your \w+ on [a-h][1-8], all on one (file|rank|diagonal) — a pin/);
+    // Each piece by what it is, its square lit (pieceRef, David 2026-11-05).
+    expect(clause.text).toMatch(/before you take on e5, look past the trade: your bishop would stand between their rook and your king, all on one file — a pin/);
+    expect(clause.squares).toEqual(expect.arrayContaining(['e5', 'e8', 'e1']));
   });
 });
 

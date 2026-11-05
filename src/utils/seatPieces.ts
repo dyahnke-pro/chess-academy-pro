@@ -3,6 +3,7 @@
 // pins knight on e2 against queen on d1." — nobody's pieces). A leaf: chess.js
 // only, so every lane that speaks a detector description can use it.
 import { Chess, type Color, type Square } from 'chess.js';
+import { pieceRef } from '../services/pieceRef';
 
 /** ONE SEATER (2026-09-25). `seatBare` and `groundedAnswer.seatPieceReferences`
  *  were two copies that drifted — chat kept speaking "Bishop on g4 pins knight
@@ -14,6 +15,18 @@ export function seatBare(text: string, fen: string, student: Color): string {
 
 
 const cap = (s: string): string => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
+
+/** A seated piece said the way a person says it (David 2026-11-05: "We still
+ *  need to name squares. We just need to do it like a human would"): its
+ *  square only where the words alone cannot tell it apart (`pieceRef` — two
+ *  knights, doubled pawns), an adjective after the owner ("your passed
+ *  c-pawn"). The square stays on the fact, so the board still lights it. */
+function spoken(fen: string, sq: string, viewer: Color, owner: string, adj: string | undefined, fallback: string): string {
+  const ref = pieceRef(fen, sq, viewer);
+  if (!ref) return fallback;
+  const rest = ref.words.replace(/^(your|their)\s+/, '');
+  return `${owner} ${adj ? adj.toLowerCase() : ''}${rest}`;
+}
 
 export function seatPieceReferences(
   text: string,
@@ -50,7 +63,18 @@ export function seatPieceReferences(
         const leadLower = (lead ?? '').toLowerCase().trim();
         // Already seated — leave the author's possessive (and any adjective it
         // introduced) alone.
-        if (leadLower.startsWith('your') || leadLower.startsWith('their')) return whole;
+        if (leadLower.startsWith('your') || leadLower.startsWith('their')) {
+          // "your own" / "their own" is the author's emphasis: left as written.
+          if (/\bown$/.test(leadLower)) return whole;
+          // Seated by its producer — said the human way too, when the owner
+          // it wrote is the owner on the board.
+          const cellS = board.get(sq as Square);
+          if (!cellS || cellS.type !== WANT[piece.toLowerCase()]) return whole;
+          const ownerS = cellS.color === studentColorWB ? 'your' : 'their';
+          if (!leadLower.startsWith(ownerS)) return whole;
+          const ownerWord = (lead ?? '').charAt(0) === (lead ?? '').charAt(0).toUpperCase() ? cap(ownerS) : ownerS;
+          return spoken(fen, sq, studentColorWB, ownerWord, adj, whole);
+        }
         // An INDEFINITE article ("creates a passed pawn on c2") is already
         // grammatical — stamping a possessive after it produced "a your passed
         // pawn on c2" (prod line-read, 2026-07-23). Leave indefinite phrases be.
@@ -71,7 +95,7 @@ export function seatPieceReferences(
           const ownerC = cellC.color === studentColorWB ? 'your' : 'their';
           const sentenceStart = /(^|[.!?]\s+)$/.test(all.slice(0, offset));
           const word = sentenceStart ? ownerC[0].toUpperCase() + ownerC.slice(1) : ownerC;
-          return `${word} ${adj ?? ''}${piece} on ${sq}`;
+          return spoken(fen, sq, studentColorWB, word, adj, `${word} ${adj ?? ''}${piece} on ${sq}`);
         }
         if (/^th(at|is|ose|ese)$/.test(leadLower)) {
           const cellD = board.get(sq as Square);
@@ -81,7 +105,7 @@ export function seatPieceReferences(
           // takes…" opening a beat must become "Your queen…", never "your
           // queen…" (review walk oct3g, game 2 ply 11).
           const capD = (lead ?? '').charAt(0) === 'T';
-          return `${capD ? cap(ownerD) : ownerD} ${adj ?? ''}${piece} on ${sq}`;
+          return spoken(fen, sq, studentColorWB, capD ? cap(ownerD) : ownerD, adj, `${capD ? cap(ownerD) : ownerD} ${adj ?? ''}${piece} on ${sq}`);
         }
         // A DETERMINER A WORD OR TWO BACK already heads this noun phrase ("a
         // new isolated pawn on a5" came out "a new their isolated pawn", review
@@ -95,7 +119,7 @@ export function seatPieceReferences(
         const sentenceStart = firstChar === firstChar.toUpperCase();
         const ownerWord = sentenceStart ? cap(owner) : owner;
         // Preserve a bare adjective (rare "the passed pawn" form) after the owner.
-        return `${ownerWord} ${adj ? adj.toLowerCase() : ''}${piece.toLowerCase()} on ${sq}`;
+        return spoken(fen, sq, studentColorWB, ownerWord, adj, `${ownerWord} ${adj ? adj.toLowerCase() : ''}${piece.toLowerCase()} on ${sq}`);
       },
     );
   } catch {

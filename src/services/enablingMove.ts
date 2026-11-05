@@ -14,12 +14,15 @@
 import { Chess, type PieceSymbol, type Square } from 'chess.js';
 import type { Proof } from './proof';
 import { PIECE_NAMES } from '../types/tacticTypes';
+import { pieceRef } from './pieceRef';
 
 interface EnablingMove {
   first: { san: string; from: Square; to: Square };
   then: { san: string; from: Square; to: Square; piece: PieceSymbol };
   /** The square A vacated that B's path runs through. */
   opened: Square;
+  /** The board it was read on: the pieces are named on it (`pieceRef`). */
+  fen: string;
 }
 
 const NAME = PIECE_NAMES as Readonly<Record<PieceSymbol, string>>;
@@ -53,14 +56,20 @@ export function findEnablingMove(fen: string, pvUci: readonly string[]): Enablin
   if (legalNow) return null;
   // …because A stood on its road.
   if (!between(b.from, b.to).includes(a.from)) return null;
-  return { first: { san: a.san, from: a.from, to: a.to }, then: { san: b.san, from: b.from, to: b.to, piece: b.piece }, opened: a.from };
+  return { first: { san: a.san, from: a.from, to: a.to }, then: { san: b.san, from: b.from, to: b.to, piece: b.piece }, opened: a.from, fen };
 }
 
 export function enablingMoveProof(e: EnablingMove): Proof {
+  // The pieces named by what they are, the squares lit (David 2026-11-05:
+  // "your queen on d1 … your own piece on d4" read the board out loud).
+  let me: 'w' | 'b' = 'w';
+  try { me = new Chess(e.fen).turn(); } catch { me = 'w'; }
+  const piece = pieceRef(e.fen, e.then.from, me)?.words ?? `your ${NAME[e.then.piece]} on ${e.then.from}`;
+  const blocker = pieceRef(e.fen, e.opened, me)?.words ?? `your own piece on ${e.opened}`;
   return {
     kind: 'squares', exact: true,
     short: `${e.first.san} clears ${e.opened}`,
-    full: `right now your ${NAME[e.then.piece]} on ${e.then.from} cannot reach ${e.then.to} — your own piece on ${e.opened} is in the way, and ${e.first.san} clears it`,
+    full: `right now ${piece} cannot reach ${e.then.to} — ${blocker} is in the way, and ${e.first.san} clears it`,
     squares: [e.opened, e.then.from, e.then.to],
   };
 }

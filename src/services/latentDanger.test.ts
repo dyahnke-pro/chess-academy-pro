@@ -91,9 +91,9 @@ describe('detectTradeCreatesPin — v2, the trade that CREATES the pin (David\'s
 
   it('renders a warning that names the trade square + alignment, never "don\'t trade"', () => {
     const t = detectTradeCreatesPin(FEN, 'w')!;
-    const line = tradeDangerClause(t);
-    expect(line).toMatch(/before you take on e5, look past the trade: your \w+ on [a-h][1-8] would stand between their \w+ on [a-h][1-8] and your \w+ on [a-h][1-8], all on one (file|rank|diagonal) — a pin/);
-    expect(line).toMatch(/bishop on e5.*king.*file/);
+    const line = tradeDangerClause(t, FEN);
+    // Each piece named by what it is (one of each here), the squares lit.
+    expect(line).toBe('before you take on e5, look past the trade: your bishop would stand between their rook and your king, all on one file — a pin.');
     expect(line).not.toMatch(/don't trade/i);
   });
 

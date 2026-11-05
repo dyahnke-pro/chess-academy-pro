@@ -10,7 +10,8 @@ describe('formationChoice', () => {
   it('names the engine pawn move that builds a formation when the played one built nothing', () => {
     const g = fenAfter(['d3', 'a6', 'f3', 'a5']); // e4 would make the d3-e4-f3 triangle
     const r = formationChoice(g, 'h3', 'w', 'e4', 80);
-    expect(r?.text).toBe('Of the pawn moves, e4 was the one: it makes a triangle of d3, e4 and f3, and h3 builds nothing.');
+    // The pawns it joins by their files; d3, e4 and f3 lit, not read out.
+    expect(r?.text).toBe('Of the pawn moves, e4 was the one: it makes a triangle with your d- and f-pawns, and h3 builds nothing.');
   });
   it('silent when the choice cost nothing', () => {
     expect(formationChoice(fen, 'h3', 'w', 'c4', 0)).toBeNull();

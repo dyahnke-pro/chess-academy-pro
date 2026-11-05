@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { computeMoveFacets, computeThroughLine, NO_TEACHING_CONTEXT } from './reviewFullData';
+import { pieceRef } from './pieceRef';
 import { NO_SECOND_READ } from './inaccuracyCall';
 import { facetLines, facetRecords } from '../test/reviewFacetLines';
 
@@ -195,8 +196,15 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
       expect(facets).toContain(facet);               // never a key nothing spoke
       expect(squares.length).toBeGreaterThan(0);     // never an empty record
       for (const sq of squares) expect(sq).toMatch(/^[a-h][1-8]$/);
-      // …and every square it recorded is one the facet's own text names.
-      for (const sq of squares) expect(facet).toContain(sq);
+      // …and every square it recorded is one the facet's own text names, or
+      // holds a piece the text names the human way (David 2026-11-05: "your
+      // queen", lit on d1, never read out — `pieceRef`).
+      for (const sq of squares) {
+        if (facet.includes(sq)) continue;
+        const ref = pieceRef(fenAfter, sq, 'w');
+        expect(ref, `${sq} in ${facet}`).not.toBeNull();
+        expect(facet.toLowerCase()).toContain(ref!.words.replace(/^(your|their) /, ''));
+      }
     }
     // A prose-only facet still records nothing.
     const opening = facets.find((f) => f.startsWith('[opening]'));
@@ -337,7 +345,8 @@ describe('D-8 (WO-STANDARD-01, 2026-09-22) — the [eval] facet needs a real shi
     const f = loose(A2, c2.fen(), 'd5', 1, 'white');
     expect(f.length).toBe(1);
     expect(f[0]).toMatch(/lost (its|their) last defender/);
-    expect(f[0]).toMatch(/knight on e5/);
+    // One knight on the board: named by what it is, e5 lit (pieceRef).
+    expect(f[0]).toMatch(/Your knight has lost/);
   });
   it('a piece the move ATTACKS is not "newly undefended" — the attack line owns it (review walk 2026-09-27)', () => {
     expect(loose(A, B, 'd4', 1, 'white')).toEqual([]);

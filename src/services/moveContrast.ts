@@ -9,7 +9,8 @@
 //
 // Plan-layer teaching: the door orders it after safety and principle, and a
 // student who has proven the plan layer does not hear it.
-import { Chess, type Square } from 'chess.js';
+import { Chess, type Color, type Square } from 'chess.js';
+import { pieceRef } from './pieceRef';
 import { findLoosePieces } from './loosePieces';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
@@ -73,7 +74,14 @@ export function contrastMoves(fenBefore: string, sanA: string, sanB: string): Mo
 }
 
 /** Spoken from the student's seat. */
-export function contrastClause(c: MoveContrast): string {
+export function contrastClause(
+  c: MoveContrast,
+  /** REQUIRED — the board the piece stands on and the student's colour: the
+   *  piece is named by what it is (`pieceRef`), its square lit, not read out. */
+  fen: string,
+  student: Color,
+): string {
+  const piece = pieceRef(fen, c.square, student)?.words ?? `your ${NAME[c.piece] ?? 'piece'} on ${c.square}`;
   // Led by a word, never the SAN (spoken, a leading SAN opens lowercase).
-  return `The difference between ${c.keeps} and ${c.drops}: ${c.keeps} keeps your ${NAME[c.piece] ?? 'piece'} on ${c.square} defended, and ${c.drops} leaves it with no guard`;
+  return `The difference between ${c.keeps} and ${c.drops}: ${c.keeps} keeps ${piece} defended, and ${c.drops} leaves it with no guard`;
 }

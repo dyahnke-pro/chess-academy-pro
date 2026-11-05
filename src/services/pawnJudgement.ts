@@ -352,9 +352,17 @@ export function formationChoice(
   const kind = built.key.split(':')[1] ?? 'formation';
   const proof = legalLineProof(fenBefore, [bestSan], lineSeatAt(fenBefore, student));
   if (!proof) return null;
+  // The pawns it joins, by their files ("with your f- and h-pawns"), the
+  // squares lit (David 2026-11-05: "a triangle of f2, g3 and h2" read the
+  // board out loud). Two pawns on one file keep their squares.
+  const others = built.squares.filter((s) => s !== best.mv.to);
+  const files = others.map((s) => s[0]);
+  const withPawns = new Set(files).size === files.length && files.length > 0
+    ? `with your ${files.length === 1 ? `${files[0]}-pawn` : `${andList(files.map((f) => `${f}-`))}pawns`}`
+    : `of ${andList(built.squares)}`;
   return {
     act: 'formation', squares: built.squares, proof, key: `formation-choice:${built.key}`, stakes: costStakes(cpLoss) ?? undefined,
-    text: `Of the pawn moves, ${bare(bestSan)} was the one: it makes ${withArticle(kind)} of ${andList(built.squares)}, and ${bare(san)} builds nothing.`,
+    text: `Of the pawn moves, ${bare(bestSan)} was the one: it makes ${withArticle(kind)} ${withPawns}, and ${bare(san)} builds nothing.`,
     ...heldOf(`${bare(san)} builds nothing; another pawn move makes ${withArticle(kind)}.`, [played.mv.to]),
   };
 }
