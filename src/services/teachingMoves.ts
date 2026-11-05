@@ -213,4 +213,7 @@ export const TEACHING_MOVES: Record<CoachFactKind, readonly TeachingMove[]> = {
   // The pawn break and what it is for (`pawnBreak`): the pawn it strikes, the
   // file it opens for the rooks, the bishop it frees.
   'pawn-break': ['S-BREAK'],
+  // Opposite-coloured bishops (`oppositeBishops`): the read of who it favours
+  // and how to play it — the attack on the bishop's colour, or the drawish ending.
+  'opposite-bishops': ['H-EVAL', 'S-PLAN'],
 };

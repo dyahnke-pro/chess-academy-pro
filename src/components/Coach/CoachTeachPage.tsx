@@ -10133,9 +10133,10 @@ export function CoachTeachPage({ mode }: {
     })();
     // THE TEACHING MOVES' NEW COMPUTERS (2026-11-05), on both moves of the
     // turn — said about the move just played, either seat: the pawn break and
-    // what it is for. Each is about a move already on the board, so it names
-    // no move still the student's to find.
-    const teachingMoveFacts = ((): Array<{ namesStudentMove: boolean; lane: 'pawnBreak'; computer: CoachFact['computer']; text: string; fen: string; squares: readonly string[]; claims: readonly string[]; proof: CoachFact['proof'] }> => {
+    // what it is for; opposite-coloured bishops settled on the board. Each is
+    // about a move already on the board, so it names no move still the
+    // student's to find.
+    const teachingMoveFacts = ((): Array<{ namesStudentMove: boolean; lane: 'pawnBreak' | 'oppositeBishops'; computer: CoachFact['computer']; text: string; fen: string; squares: readonly string[]; claims: readonly string[]; proof: CoachFact['proof'] }> => {
       const h = args.historyAfterReply;
       if (h.length < 2) return [];
       try {
@@ -10145,8 +10146,10 @@ export function CoachTeachPage({ mode }: {
         const plies: Array<{ fenBefore: string; san: string; lastTo: string | null }> = [{ fenBefore: b.fen(), san: h[h.length - 2], lastTo }];
         const studentMove = b.move(h[h.length - 2]);
         plies.push({ fenBefore: b.fen(), san: h[h.length - 1], lastTo: studentMove.to });
-        return plies.flatMap((p) => readBoardAll('pawnBreak', { fenBefore: p.fenBefore, san: p.san, student: studentCC, lastTo: p.lastTo })
-          .map((f) => ({ namesStudentMove: f.namesStudentMove, lane: 'pawnBreak' as const, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof })));
+        return plies.flatMap((p) => [
+          ...readBoardAll('pawnBreak', { fenBefore: p.fenBefore, san: p.san, student: studentCC, lastTo: p.lastTo }).map((f) => ({ f, lane: 'pawnBreak' as const })),
+          ...readBoardAll('oppositeBishops', { fenBefore: p.fenBefore, san: p.san, student: studentCC }).map((f) => ({ f, lane: 'oppositeBishops' as const })),
+        ]).map(({ f, lane }) => ({ namesStudentMove: f.namesStudentMove, lane, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof }));
       } catch { return []; }
     })();
     const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, slipCp: args.slipCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [

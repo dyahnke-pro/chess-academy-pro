@@ -1,11 +1,11 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.",
  "graph": {
-  "files": 1755,
-  "nodes": 16372
+  "files": 1756,
+  "nodes": 16378
  },
  "totals": {
-  "computers": 348,
+  "computers": 349,
   "wiredNowhere": 31,
   "heldByLearnOnly": 19,
   "otherScreensOnly": 10,
@@ -14,28 +14,28 @@
   "surfaces": {
    "learn": {
     "yes": 31,
-    "held": 220,
+    "held": 221,
     "no": 97
    },
    "review": {
-    "yes": 235,
+    "yes": 236,
     "no": 113
    },
    "lesson": {
-    "yes": 143,
+    "yes": 144,
     "no": 205
    },
    "chat": {
     "yes": 201,
-    "no": 147
+    "no": 148
    },
    "tapped": {
     "yes": 158,
-    "no": 190
+    "no": 191
    },
    "tactics": {
     "yes": 103,
-    "no": 245
+    "no": 246
    }
   }
  },
@@ -3960,6 +3960,29 @@
     "kid",
     "campaign",
     "playSilent"
+   ]
+  },
+  {
+   "key": "services/oppositeBishops.ts#oppositeBishops",
+   "name": "registry:oppositeBishops",
+   "file": "services/oppositeBishops.ts",
+   "fn": "oppositeBishops",
+   "says": "OPPOSITE-COLOURED BISHOPS, WHATEVER ELSE IS ON: said once where the shape settles — with queens or rooks the attacker's game (the bishop that hits the other king's squares), with bishops and pawns the drawish ending",
+   "origin": "registry",
+   "learn": "held",
+   "review": "yes",
+   "lesson": "yes",
+   "chat": "no",
+   "tapped": "no",
+   "tactics": "no",
+   "app": true,
+   "other": [
+    "openingsPage",
+    "playSilent",
+    "endgame"
+   ],
+   "registry": [
+    "oppositeBishops"
    ]
   },
   {

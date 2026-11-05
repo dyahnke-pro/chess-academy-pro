@@ -1568,6 +1568,8 @@ export function computeMoveFacets(
         try { return new Chess(ctx.teaching.prevFenBefore).move(ctx.allSans[ply - 2]).to; } catch { return null; }
       })();
       add(readBoardAll('pawnBreak', { fenBefore, san, student: studentColorWB, lastTo })[0]);
+      // Opposite-coloured bishops settled by this move, and what they mean.
+      add(readBoardAll('oppositeBishops', { fenBefore, san, student: studentColorWB })[0]);
     }
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.

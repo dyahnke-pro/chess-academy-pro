@@ -132,8 +132,8 @@
 - `src/services/slipQuestion.test.ts:53`
 
 ### `habitSaidKey` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10689`
-- `src/components/Coach/CoachTeachPage.tsx:10690`
+- `src/components/Coach/CoachTeachPage.tsx:10692`
+- `src/components/Coach/CoachTeachPage.tsx:10693`
 - `src/services/learnBoardTeaching.ts:254`
 - `src/services/learnBoardTeaching.ts:1164`
 - `src/services/slipQuestion.test.ts:53`

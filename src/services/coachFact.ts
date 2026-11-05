@@ -150,6 +150,8 @@ export const FACT_GROUP: Record<CoachFactKind, FactGroup> = {
   // ── the teaching moves' new computers (2026-11-05): the break is what the
   // move changed ──
   'pawn-break': 'move',
+  // Opposite-coloured bishops are the structure of the board from here.
+  'opposite-bishops': 'structure',
 };
 
 /** Is this string a kind of the one vocabulary? (A Learn fact carries its
@@ -410,6 +412,7 @@ export const COMPUTER_CATALOG = {
   temptingRefuted: { file: 'services/weighedMoves.ts', says: 'the natural move a player weighs here that fails, with the engine line that refutes it' },
   alsoGood: { file: 'services/weighedMoves.ts', says: 'two moves of the same worth and the one thing the board shows between them' },
   squareChoice: { file: 'services/weighedMoves.ts', says: 'which square for the piece: its other squares a player weighs, and what goes wrong on each' },
+  oppositeBishops: { file: 'services/oppositeBishops.ts', says: 'opposite-coloured bishops whatever else is on: with queens or rooks the attacker\'s game (the bishop that hits the other king\'s squares), bishops and pawns the drawish ending' },
   pawnBreak: { file: 'services/pawnBreak.ts', says: 'the pawn break and what it is for: the pawn it strikes (the base of their chain), the file it opens for the rooks, the bishop it frees' },
 } satisfies Record<string, CatalogRow>;
 

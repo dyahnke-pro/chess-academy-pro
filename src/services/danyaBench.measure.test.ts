@@ -650,6 +650,7 @@ const FACT_COMPUTER: Record<FactKind, string> = {
   'push-or-hold': 'services/pushOrHold.ts#pushOrHold',
   'opp-think': 'services/methodBeat.ts#liveMethodBeat',
   'pawn-break': 'services/pawnBreak.ts#pawnBreak',
+  'opposite-bishops': 'services/oppositeBishops.ts#oppositeBishops',
   'forcing-scan': 'services/methodBeat.ts#liveMethodBeat',
   'hole-access': 'services/moveInsight.ts#holeAccess',
   'speedrun-read': 'services/thinkAloud.ts#depthClauses',

@@ -78,6 +78,8 @@ const STANDING: ReadonlySet<FactKind> = new Set<FactKind>([
   'opp-target', 'worst', 'badbishop', 'complex', 'structure', 'passer', 'minority',
   'rook7', 'plan-now', 'plan-race', 'plan-middlegame', 'plan-opening', 'plan-line',
   'structure-plan', 'student-leans', 'opponent-leans', 'latent-danger', 'latent-chance',
+  // Opposite-coloured bishops: a standing reading of the board.
+  'opposite-bishops',
   'opp-dev', 'king', 'endgame',
   // Castling by hand under its own teaching-move kind: a plan, standing.
   'castling',

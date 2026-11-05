@@ -247,7 +247,7 @@
 - `src/services/reviewMatePly.test.ts:19`
 - `src/services/reviewMoveIntent.test.ts:37`
 - `src/services/reviewMoveThought.test.ts:14`
-- `src/services/reviewNarrationRev.gate.test.ts:38`
+- `src/services/reviewNarrationRev.gate.test.ts:39`
 - `src/services/reviewNeedGate.test.ts:30`
 - `src/services/reviewNeedGate.test.ts:46`
 - `src/services/reviewNeedGate.test.ts:47`
@@ -325,8 +325,8 @@
 ### `pendingRecapture` (function) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8818`
 - `src/components/Coach/CoachTeachPage.tsx:8921`
-- `src/components/Coach/CoachTeachPage.tsx:11805`
-- `src/components/Coach/CoachTeachPage.tsx:12203`
+- `src/components/Coach/CoachTeachPage.tsx:11808`
+- `src/components/Coach/CoachTeachPage.tsx:12206`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/services/phaseTransitionDetector.test.ts:575`

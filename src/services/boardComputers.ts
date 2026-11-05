@@ -59,6 +59,7 @@ import { mateStakes } from './factStakes';
 import { temptingRefuted, alsoGood, squareChoice, type WeighRead } from './weighedMoves';
 import { costStakes } from './factStakes';
 import { pawnBreak } from './pawnBreak';
+import { oppositeBishops } from './oppositeBishops';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -200,6 +201,10 @@ export interface BoardContexts {
    *  `lastTo` — the square the opponent's last move landed on (a recapture is
    *  no break), null at the start or where the surface has no move before. */
   pawnBreak: { fenBefore: string; san: string; student: Color; lastTo: string | null };
+  /** OPPOSITE-COLOURED BISHOPS (`oppositeBishops`): the move `san` on
+   *  `fenBefore` (either seat) after which one bishop each, on opposite
+   *  colours, stands settled with a consequence it did not have before. */
+  oppositeBishops: { fenBefore: string; san: string; student: Color };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -857,6 +862,26 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED,
       tactics: { not: 'a puzzle poses one tactic; a break is a plan of the game it is played in' },
       weaknesses: { not: 'a break named after it is played is graded by the move\'s own cost; its timing is breakRace\'s question (mistimed-pawn-break)' },
+    },
+  },
+  oppositeBishops: {
+    // His Ruy Lopez speedrun (NFUuaZsR2S8), from move 14: his dark bishop
+    // against their light one, rooks on — the bishops were his read of the
+    // whole stretch. Said once, on the move that settles the shape or takes
+    // the heavy pieces off, either seat.
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const r = oppositeBishops(fenBefore, san, student);
+      if (!r) return null;
+      return fact({ key: r.key, claims: r.claims, text: r.text, proof: r.proof, squares: r.squares, stakes: null,
+        seat: r.seat, namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'oppositeBishops',
+    kind: 'opposite-bishops',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED,
+      tactics: { not: 'a puzzle poses one tactic; the bishops are the game\'s structure' },
+      weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
     },
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**217 lines · 3 exports · 5 importers · 3 tests · 0 audits**
+**220 lines · 3 exports · 6 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/scoreboard/judge-ideas.mjs`
 - `scripts/scoreboard/score-learn.mjs`
 - `scripts/scoreboard/tag-bank.mjs`
+- `src/services/oppositeBishops.test.ts`
 - `src/services/pawnBreak.test.ts`
 - `src/services/teachingMoves.test.ts`
 
@@ -32,6 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/methodBeat.live.test.ts`
+- `src/services/oppositeBishops.test.ts`
 - `src/services/pawnBreak.test.ts`
 - `src/services/teachingMoves.test.ts`
 

@@ -3476,5 +3476,19 @@
   "registry": [
    "pawnBreak"
   ]
+ },
+ {
+  "name": "registry:oppositeBishops",
+  "file": "services/oppositeBishops.ts",
+  "fn": "oppositeBishops",
+  "says": "OPPOSITE-COLOURED BISHOPS, WHATEVER ELSE IS ON: said once where the shape settles — with queens or rooks the attacker's game (the bishop that hits the other king's squares), with bishops and pawns the drawish ending",
+  "origin": "registry",
+  "nodes": [
+   "services/boardComputers.ts#id:oppositeBishops",
+   "services/oppositeBishops.ts#oppositeBishops"
+  ],
+  "registry": [
+   "oppositeBishops"
+  ]
  }
 ]
