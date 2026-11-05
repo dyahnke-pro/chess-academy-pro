@@ -5818,6 +5818,20 @@ best move for them on the next board, and whenever the reply is unknown. The
 rule still protects the student's NEXT move; a moment already past is the
 lesson.
 
+🔄 **CARVE-OUT 4 — POINTERS, BY THE RECORD (David 2026-11-05: "keep the point
+at moves without stating them for beginners but not … for players that don't
+need it").** A fact that names the student's next move may speak its HELD FORM —
+the idea in words that name no move ("Their queen on c3 is doing the most work —
+one of your moves challenges it", "The plan here: grab space — …"). A pointer at
+the next decision (`HeldForm.points`, the skill it hints at) speaks only while
+that skill is red or grey in the student's record (`pointerSpeaks`: no fade
+level), ONCE A GAME per skill (its `pointer:<skill>` claim rides the say-once
+ledger, so the skill's other moments stay unprompted and the record keeps
+measuring it), and the move it points at counts as prompted. Amber or green: the
+student finds it alone. A focus chance stays the focus's (`names-chance` holds a
+pointer on its squares). One place decides it: the Learn door (`learnTurnDoor`);
+the arrow door keeps the move off the board.
+
 **Review names the better move** (the game is over); **chat names it** (you
 asked). Gates: `learnNamesNoMoveUnasked.gate.test.ts`,
 `oneErrorComputer.gate.test.ts`, `teachMistakeWhy.test.ts`.

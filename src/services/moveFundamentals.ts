@@ -1299,6 +1299,44 @@ const PRINCIPLE_REASON: Record<MoveFundamental['id'], string | null> = {
   prophylaxis: 'stop what they want before you chase what you want, because a square their piece never reaches is a plan it never starts',
 };
 
+/** THE PLAN WITHOUT ITS MOVE (David 2026-11-05: "Yes it can point without
+ *  saying the move"): what the leading fundamental is FOR, in words that name
+ *  no square the move goes to — Learn's held form of "The plan here: grab
+ *  space on the queenside with a5" (held 14 times in seven replayed games).
+ *  A `Record`, so a new fundamental must say how its plan is pointed at. */
+const PLAN_POINTER: Record<MoveFundamental['id'], string> = {
+  development: 'get another piece into the game',
+  'open-diagonal': 'open a diagonal for your bishop',
+  center: 'build up the centre',
+  'king-safety': 'get your king safe',
+  outpost: 'find a piece an outpost no pawn can chase',
+  'open-file': 'put a rook on the open file',
+  tempo: 'gain time by hitting one of their pieces',
+  'attack-defender': 'go after the piece that holds their position together',
+  'keep-working': 'keep your piece working',
+  'prepare-break': 'prepare a pawn break',
+  'development-complete': 'finish your development',
+  'rook-behind-pawn': 'put a rook behind the passed pawn',
+  'queen-off-file': 'get your queen off the file their rook is on',
+  'pile-on-pin': 'pile up on the pinned piece',
+  'remove-guard': 'take away a guard',
+  'king-activity': 'bring your king into play',
+  promotion: 'push for promotion',
+  'passed-pawn': 'push your passed pawn',
+  luft: 'give your king air',
+  space: 'grab space',
+  prophylaxis: 'stop their idea before you push your own',
+};
+
+/** The plan line in its held form — the pointer and the reason — or null. */
+export function strategicPlanPointer(fenBefore: string, moveSan: string, moverColor: 'white' | 'black'): string | null {
+  if (isForcedReply(fenBefore, moveSan)) return null;
+  const lead = leadingFundamentals(fenBefore, moveSan, moverColor)[0];
+  if (!lead) return null;
+  const why = strategicReason(fenBefore, moveSan, moverColor);
+  return why ? `The plan here: ${PLAN_POINTER[lead.id]} — ${why}.` : `The plan here: ${PLAN_POINTER[lead.id]}.`;
+}
+
 /** WHY THE PLAN — the reason of the plan's leading fundamental, true on this
  *  board, or null (prod Learn audit 2026-10-14: "The plan here: deny their
  *  knight the b5 square." said what to do and never why). */

@@ -424,6 +424,9 @@ export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' |
     // A lasting cost (a hole, a shut bishop, castling gone) is a consequence,
     // the why of their move — never an aside (A-plan P6: held 2 of 4).
     role: 'teach',
+    // The hole without the knight's first hop: a pointer at the student's next
+    // decision, said by the record (`HeldForm.points`).
+    ...(cost.heldText ? { heldForm: { text: cost.heldText, proof: NO_PROOF.description, squares: cost.squares.slice(0, 1), points: 'misplaced-piece' } } : {}),
   }, {
     event: { name: 'coach_their_move_cost_named', props: { surface: 'coach-teach', kind: cost.kind } },
     arrows,

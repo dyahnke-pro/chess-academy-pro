@@ -193,6 +193,10 @@ interface PieceQualityLine {
   squares: string[];
   /** The answer's move, drawn when the answer is spoken. */
   arrows?: ArrowClaim[];
+  /** The line without the move that challenges it, for a surface that holds
+   *  the student's next move (David 2026-11-05: "Yes it can point without
+   *  saying the move") — absent when the line names no move. */
+  heldText?: string;
 }
 
 /**
@@ -346,16 +350,19 @@ export function pieceQualityLines(
       // piece is doing the work, lets you look, then names it — and the move
       // that challenges it, when there is one.
       const ch = challengeMove(opts?.fen, best.v.square, me);
+      const followUp = (m: Parameters<Parameters<typeof askThenAnswer>[2]>[0]): string | null => {
+        const pn = NAME[best.v.piece.toLowerCase()];
+        const mv = playedFrom(m);
+        if (mv && (mv.to === best.v.square || (ch && mv.from === ch.from && mv.to === ch.to))) return `You found it — ${mv.san} went after their ${pn} on ${best.v.square}, the piece doing the most work.`;
+        return stillOn(m.fenNow, best.v.square, best.v.piece, best.v.color) ? `Their ${pn} on ${best.v.square} was doing the most work — trading it off takes the sting out of the position.` : null;
+      };
+      const piece = `The ${NAME[best.v.piece.toLowerCase()]} on ${best.v.square}`;
       out.push({
         kind: 'their-best-piece',
         onceKey: key,
         squares: [best.v.square, ...(ch ? [ch.to] : [])],
-        text: askThenAnswer('Which of their pieces is doing the most work?', `The ${NAME[best.v.piece.toLowerCase()]} on ${best.v.square}${ch ? ` — ${ch.san} challenges it` : ''}, and trading it off takes the sting out of the position.`, (m) => {
-          const pn = NAME[best.v.piece.toLowerCase()];
-          const mv = playedFrom(m);
-          if (mv && (mv.to === best.v.square || (ch && mv.from === ch.from && mv.to === ch.to))) return `You found it — ${mv.san} went after their ${pn} on ${best.v.square}, the piece doing the most work.`;
-          return stillOn(m.fenNow, best.v.square, best.v.piece, best.v.color) ? `Their ${pn} on ${best.v.square} was doing the most work — trading it off takes the sting out of the position.` : null;
-        }),
+        text: askThenAnswer('Which of their pieces is doing the most work?', `${piece}${ch ? ` — ${ch.san} challenges it` : ''}, and trading it off takes the sting out of the position.`, followUp),
+        ...(ch ? { heldText: askThenAnswer('Which of their pieces is doing the most work?', `${piece} — one of your moves challenges it, and trading it off takes the sting out of the position.`, followUp) } : {}),
         arrows: ch ? [{ from: ch.from, to: ch.to, role: 'play', source: 'pieceQuality.challenge' }] : undefined,
       });
     }

@@ -350,7 +350,7 @@ import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { lineSeatAt, withArticle } from '../../utils/andList';
 import { readBoard, readBoardAll, readKey, adoptPlanTrial, type PlanThread, type BoardContexts } from '../../services/boardComputers';
-import type { CoachFact, ComputerName } from '../../services/coachFact';
+import type { CoachFact, ComputerName, HeldForm } from '../../services/coachFact';
 import { splitThink, stripThink, resolveOwed, THINK_MARK } from '../../utils/thinkPause';
 import { scheduleMarks } from '../../services/markPacing';
 import { withTimeout } from '../../coach/withTimeout';
@@ -8735,6 +8735,8 @@ export function CoachTeachPage({ mode }: {
         ? { fen: t.fen, ply: t.ply, slipCp: t.slip(), priceSettled: t.settled(), price: t.price(), midExchange: t.midExchange, said: t.said(), holds: turnHoldsFor(t.fen) }
         : null;
       const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.story.heard(live?.fen ?? fen).sentences, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), owner: live && t ? t.owner : 'open', chance: live ? chanceHoldAt(live.fen) : null });
+      // A pointer said in the phase wave prompts the move it points at.
+      if (d?.pointed && live) announcedBoardsRef.current.add(live.fen.split(' ').slice(0, 2).join(' '));
       if (!d) {
         void logAppAudit({
           kind: 'coach-surface-migrated',
@@ -9821,6 +9823,7 @@ export function CoachTeachPage({ mode }: {
     let behaviorKind: string = 'student-leans';
     let positionalLine: string | null = null;
     let positionalNames: NamesStudentMove = NAMES_NO_MOVE;
+    let positionalHeld: string | null = null;
     let positionalClaims: string[] = [];
     let positionalSquares: readonly string[] = [];
     let positionalIsOwnKing = false;
@@ -9957,6 +9960,7 @@ export function CoachTeachPage({ mode }: {
           positionalSquares = prSquares;
           // "castling is one move away — tuck it in" is the castle: it says so,
           // and the door holds it while it is the student's move (OS-11 item 6 b).
+          positionalHeld = pr.heldText ?? null;
           if (pr.key === 'student-king-centre') {
             const k = studentCC === 'w' ? 'e1' : 'e8';
             const r = studentCC === 'w' ? '1' : '8';
@@ -10021,7 +10025,9 @@ export function CoachTeachPage({ mode }: {
     // A recited line names the student's moves in it (OS-10).
     deferIf(computedLine, computedLine ? { lane: 'commentary', computer: 'buildPlayCommentary', text: computedLine, proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(namesFromArrows(computedLineArrows, studentCC, args.fenAfterReply)), arrows: computedLineArrows } : null);
     deferIf(behaviorLine && !decidedByMaterial, behaviorLine ? { lane: 'behavior', computer: 'detectBehaviors', factKind: behaviorKind, text: behaviorLine, proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(namesFromArrows(behaviorArrows, studentCC, args.fenAfterReply)), squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), claims: behaviorClaims, arrows: behaviorArrows } : null);
-    deferIf(positionalLine && !decidedByMaterial, positionalLine ? { lane: positionalIsOwnKing ? 'kingSafety' : 'positional', computer: 'buildPositionalRead', text: positionalLine, proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(positionalNames), squares: positionalSquares, claims: positionalClaims } : null);
+    deferIf(positionalLine && !decidedByMaterial, positionalLine ? { lane: positionalIsOwnKing ? 'kingSafety' : 'positional', computer: 'buildPositionalRead', text: positionalLine, proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(positionalNames), squares: positionalSquares, claims: positionalClaims,
+      // The king's safety without the castling move: a pointer, by the record.
+      ...(positionalHeld ? { heldForm: { text: positionalHeld, proof: NO_PROOF.description, squares: positionalSquares, points: 'king-stuck-center' as const } } : {}) } : null);
     // THE BOOK MOVE AND ITS JOB — its own lane on the "but" beat, so the door
     // orders it as a teaching fact (David 2026-10-14: "make sure this new
     // computer routes to the dna"), never glued to the opening name.
@@ -10056,7 +10062,7 @@ export function CoachTeachPage({ mode }: {
     // king goes when it must walk, the castling-by-hand plan and its steps,
     // the bishop kept home, the rule of thumb. A read that would name the
     // student's next move speaks its held form (LEARN NAMES NO MOVE UNASKED).
-    const kingWalkFacts = ((): Array<{ namesStudentMove: boolean; lane: 'kingSquares' | 'kingWalk' | 'keptHome' | 'kingRule'; computer: CoachFact['computer']; text: string; fen: string; squares: readonly string[]; claims: readonly string[]; proof: CoachFact['proof'] }> => {
+    const kingWalkFacts = ((): Array<{ namesStudentMove: boolean; lane: 'kingSquares' | 'kingWalk' | 'keptHome' | 'kingRule'; computer: CoachFact['computer']; text: string; fen: string; squares: readonly string[]; claims: readonly string[]; proof: CoachFact['proof']; heldForm?: HeldForm }> => {
       const h = args.historyAfterReply;
       if (h.length < 2) return [];
       try {
@@ -10071,9 +10077,9 @@ export function CoachTeachPage({ mode }: {
           ...readBoardAll('castleByHand', { fenBefore, san, student: studentCC }).map((f) => ({ f, id: 'castleByHand' as const })),
           ...readBoardAll('keptHome', { fenBefore, san, student: studentCC }).map((f) => ({ f, id: 'keptHome' as const })),
           ...readBoardAll('kingFromCentre', { fenBefore, san, student: studentCC }).map((f) => ({ f, id: 'kingFromCentre' as const })),
-        ]).map(({ f, id }) => (f.namesStudentMove && f.heldForm
-          ? { namesStudentMove: false, lane: lane[id], computer: f.computer, text: f.heldForm.text, fen: f.fen, squares: f.heldForm.squares, claims: f.claims, proof: f.heldForm.proof }
-          : { namesStudentMove: f.namesStudentMove, lane: lane[id], computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof })));
+        // A fact naming a move still the student's speaks its held form — the
+        // door's one swap (`learnTurnDoor`), never a copy here.
+        ]).map(({ f, id }) => ({ namesStudentMove: f.namesStudentMove, lane: lane[id], computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof, ...(f.heldForm ? { heldForm: f.heldForm } : {}) })));
       } catch { return []; }
     })();
     // THE REPLY TREE (ifTheyPlay, his "if Black takes on e5, you take back with
@@ -10084,7 +10090,7 @@ export function CoachTeachPage({ mode }: {
     // Their reply came: the branches it did not take are said in the past; the
     // strong answer to the one that came is the student's to find, held in a
     // form that names no move (LEARN NAMES NO MOVE UNASKED).
-    const ifTheyPlayFacts = ((): Array<{ namesStudentMove: boolean; lane: 'ifTheyPlay'; computer: CoachFact['computer']; text: string; fen: string; squares: readonly string[]; claims: readonly string[]; proof: CoachFact['proof'] }> => {
+    const ifTheyPlayFacts = ((): Array<{ namesStudentMove: boolean; lane: 'ifTheyPlay'; computer: CoachFact['computer']; text: string; fen: string; squares: readonly string[]; claims: readonly string[]; proof: CoachFact['proof']; heldForm?: HeldForm }> => {
       const kept = replyReadRef.current;
       const read = kept && samePosition(kept.fen, args.fenBeforeReply) ? kept.read : null;
       const h = args.historyAfterReply;
@@ -10093,9 +10099,7 @@ export function CoachTeachPage({ mode }: {
         const m = new Chess(args.fenBeforeReply).move(h[h.length - 1]);
         const played = m ? `${m.from}${m.to}${m.promotion ?? ''}` : null;
         return readBoardAll('ifTheyPlay', { fen: args.fenBeforeReply, replies: read.scored, rating: read.rating, student: studentCC, seconds: [], played, tense: 'past', liveBoard: args.fenAfterReply })
-          .map((f) => (f.namesStudentMove && f.heldForm
-            ? { namesStudentMove: false, lane: 'ifTheyPlay' as const, computer: f.computer, text: f.heldForm.text, fen: f.fen, squares: f.heldForm.squares, claims: f.claims, proof: f.heldForm.proof }
-            : { namesStudentMove: f.namesStudentMove, lane: 'ifTheyPlay' as const, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof }));
+          .map((f) => ({ namesStudentMove: f.namesStudentMove, lane: 'ifTheyPlay' as const, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof, ...(f.heldForm ? { heldForm: f.heldForm } : {}) }));
       } catch { return []; }
     })();
     // THE MOVES A PLAYER WEIGHS (weighedMoves, 2026-11-05), on both moves of
@@ -10105,7 +10109,7 @@ export function CoachTeachPage({ mode }: {
     // weighed off the read of the board before it; their reply off the board
     // alone (the square reads). A read that would name a move still the
     // student's to play speaks its held form (LEARN NAMES NO MOVE UNASKED).
-    const weighedFacts = ((): Array<{ namesStudentMove: boolean; lane: 'temptingRefuted' | 'alsoGood' | 'squareChoice'; computer: CoachFact['computer']; text: string; fen: string; squares: readonly string[]; claims: readonly string[]; proof: CoachFact['proof']; stakes?: CoachFact['stakes'] }> => {
+    const weighedFacts = ((): Array<{ namesStudentMove: boolean; lane: 'temptingRefuted' | 'alsoGood' | 'squareChoice'; computer: CoachFact['computer']; text: string; fen: string; squares: readonly string[]; claims: readonly string[]; proof: CoachFact['proof']; stakes?: CoachFact['stakes']; heldForm?: HeldForm }> => {
       const h = args.historyAfterReply;
       if (h.length < 2) return [];
       try {
@@ -10123,9 +10127,7 @@ export function CoachTeachPage({ mode }: {
           ...readBoardAll('temptingRefuted', { fenBefore, san, student: studentCC, rating, reads, priorMove: prior }).map((f) => ({ f, lane: 'temptingRefuted' as const })),
           ...readBoardAll('alsoGood', { fenBefore, san, student: studentCC, rating, reads }).map((f) => ({ f, lane: 'alsoGood' as const })),
           ...readBoardAll('squareChoice', { fenBefore, san, student: studentCC, rating, reads, priorMove: prior }).map((f) => ({ f, lane: 'squareChoice' as const })),
-        ]).map(({ f, lane }) => (f.namesStudentMove && f.heldForm
-          ? { namesStudentMove: false, lane, computer: f.computer, text: f.heldForm.text, fen: f.fen, squares: f.heldForm.squares, claims: f.claims, proof: f.heldForm.proof }
-          : { namesStudentMove: f.namesStudentMove, lane, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof, ...(f.stakes ? { stakes: f.stakes } : {}) })));
+        ]).map(({ f, lane }) => ({ namesStudentMove: f.namesStudentMove, lane, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof, ...(f.stakes ? { stakes: f.stakes } : {}), ...(f.heldForm ? { heldForm: f.heldForm } : {}) })));
       } catch { return []; }
     })();
     // THE TEACHING MOVES' NEW COMPUTERS (2026-11-05), on both moves of the
@@ -10212,7 +10214,9 @@ export function CoachTeachPage({ mode }: {
       learnMemRef.current.story.commit(gameRef.current.plies, { claims: threatSquares.map((sq) => ALERT_KEY.threatOn(args.fenAfterReply, sq)) });
     }
     learnMemRef.current.story.commitKept(gameRef.current.plies, args.fenAfterReply, pkg.kept);
-    if (announcesTheMove(instantDecision.spoke)) announcedBoardsRef.current.add(args.fenAfterReply.split(' ').slice(0, 2).join(' '));
+    // A pointer at the next decision prompts the move it points at, like a line
+    // that announces the move (a hinted find is not proof, WO-LEARN-SWING-01).
+    if (announcesTheMove(instantDecision.spoke) || instantDecision.pointed) announcedBoardsRef.current.add(args.fenAfterReply.split(' ').slice(0, 2).join(' '));
 
     // ── LEAD THE EYE ON THE COMPUTED LANES ─────────────────────────────────
     // David 2026-08-10, after a live run in which the coach named d6, b5, c6
@@ -10363,7 +10367,7 @@ export function CoachTeachPage({ mode }: {
    *  the arrows on nine of them and the stakes/role on all but one (G6, G8.5:
    *  computed and never drawn, or held as an aside for want of a role). */
   const queueHint = useCallback((fen: string, hint: TeachingFact, gradeFen?: string): void => {
-    queueSpokenHint(fen, { lane: hint.lane, computer: hint.computer, text: hint.text, proof: hint.proof, namesStudentMove: hint.namesStudentMove, squares: hint.squares, claims: hint.claims, gradeFen, arrows: hint.arrows, stakes: hint.stakes ?? undefined, role: hint.role, ownMoveReason: hint.ownMoveReason });
+    queueSpokenHint(fen, { lane: hint.lane, computer: hint.computer, text: hint.text, proof: hint.proof, namesStudentMove: hint.namesStudentMove, squares: hint.squares, claims: hint.claims, gradeFen, arrows: hint.arrows, stakes: hint.stakes ?? undefined, role: hint.role, ownMoveReason: hint.ownMoveReason, ...(hint.heldForm ? { heldForm: hint.heldForm } : {}) });
     if (hint.event) captureEvent(hint.event.name, hint.event.props);
   }, [queueSpokenHint]);
 
@@ -11245,7 +11249,9 @@ export function CoachTeachPage({ mode }: {
                       // development idea another lane may already have said.
                       if (q.ideaKey && heardHere.has(q.ideaKey)) continue;
                       learnMemRef.current.story.offer(probe.fen(), { text: q.text, claims: [STORY_KEY.pieceQuality(q.onceKey)] });
-                      queueSpokenHint(probe.fen(), { computer: 'pieceQualityLines', text: q.text, lane: 'pieceQuality', proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(namesFromArrows(q.arrows, (playerColor === 'white' ? 'w' : 'b'), probe.fen())), squares: q.squares, claims: [...(q.squares[0] ? [`piece-quality:${q.squares[0]}`] : []), ...(q.ideaKey ? [q.ideaKey] : [])], arrows: q.arrows });
+                      queueSpokenHint(probe.fen(), { computer: 'pieceQualityLines', text: q.text, lane: 'pieceQuality', proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(namesFromArrows(q.arrows, (playerColor === 'white' ? 'w' : 'b'), probe.fen())), squares: q.squares, claims: [...(q.squares[0] ? [`piece-quality:${q.squares[0]}`] : []), ...(q.ideaKey ? [q.ideaKey] : [])], arrows: q.arrows,
+                        // The piece without the move that challenges it: a pointer, by the record.
+                        ...(q.heldText ? { heldForm: { text: q.heldText, proof: NO_PROOF.description, squares: q.squares.slice(0, 1), points: 'misplaced-piece' as const } } : {}) });
                       captureEvent('piece_quality_spoken', { surface: 'coach-teach', kind: q.kind });
                     }
                   }
@@ -11411,7 +11417,7 @@ export function CoachTeachPage({ mode }: {
                       // Their move's purpose rides its own lane, above the
                       // board descriptions it used to lose to on offer order.
                       const lane = c.kind === 'stopped' ? 'theirPurpose' as const : 'positionFacts' as const;
-                      queueSpokenHint(probe.fen(), { computer: c.computer, text: c.text, lane, proof: (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0], lineSeatAt(c.lines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, namesStudentMove: c.namesStudentMove, squares: c.squares, claims: clauseClaims(pf, ci, probe.fen()), gradeFen: c.fen, lines: c.lines, stakes: c.stakes ?? undefined, role: FACT_ROLE[c.kind], factKind: c.kind, skill: c.skill });
+                      queueSpokenHint(probe.fen(), { computer: c.computer, text: c.text, lane, proof: (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0], lineSeatAt(c.lines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, namesStudentMove: c.namesStudentMove, squares: c.squares, claims: clauseClaims(pf, ci, probe.fen()), gradeFen: c.fen, lines: c.lines, stakes: c.stakes ?? undefined, role: FACT_ROLE[c.kind], factKind: c.kind, skill: c.skill, ...(c.heldForm ? { heldForm: c.heldForm } : {}) });
                     }
                     if (pf.importance.speak) captureEvent('position_facts_spoken', { surface: 'coach-teach', tier: pf.importance.tier, clauses: pf.clauses.length });
                   }
@@ -12246,7 +12252,7 @@ export function CoachTeachPage({ mode }: {
                     }
                     arcTry.emerges = arcTry.emerges.filter((x) => !keptClaims.has(x.claim));
                   }
-                  if (announcesTheMove(lateDecision.spoke)) announcedBoardsRef.current.add(pending.fen.split(' ').slice(0, 2).join(' '));
+                  if (announcesTheMove(lateDecision.spoke) || lateDecision.pointed) announcedBoardsRef.current.add(pending.fen.split(' ').slice(0, 2).join(' '));
                   if (lateDecision.lead) turnLeadRef.current = { fen: pending.fen, lead: lateDecision.lead };
                   // A wave that held everything said nothing — but what it held
                   // must still be visible, or a lane that loses every turn looks

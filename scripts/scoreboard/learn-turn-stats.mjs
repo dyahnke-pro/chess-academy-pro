@@ -20,7 +20,7 @@ const report = {};
 for (const f of files) {
   const r = JSON.parse(readFileSync(f, 'utf8'));
   const turns = r.turns.filter((t) => typeof t.ply === 'number');
-  let spokenTurns = 0; let wordSum = 0; let maxLines = 0; let claimSource = 'claims';
+  let spokenTurns = 0; let wordSum = 0; let maxLines = 0; let byText = 0; let lineCount = 0;
   const kinds = {}; const seen = new Map(); const repeats = []; const lines = [];
   for (const t of turns) {
     const said = (t.everything ?? []).filter((e) => e.door === 'learn-turn').flatMap((e) => e.lines.filter((l) => l.said));
@@ -32,7 +32,8 @@ for (const f of files) {
       wordSum += words(l.text);
       kinds[l.kind ?? '?'] = (kinds[l.kind ?? '?'] ?? 0) + 1;
       const claims = l.claims?.length ? l.claims : null;
-      if (!claims) claimSource = 'text';
+      lineCount += 1;
+      if (!claims) byText += 1;
       const keys = (claims ?? [l.text]).map((c) => `${l.kind}|${c}`);
       const hit = keys.find((k) => seen.has(k));
       if (hit) repeats.push(`${hit} (${seen.get(hit)} and ${t.move})`);
@@ -44,9 +45,9 @@ for (const f of files) {
   report[id] = {
     turns: turns.length, turnsSpoken: spokenTurns,
     wordsPerSpokenTurn: spokenTurns ? Math.round(wordSum / spokenTurns) : 0,
-    maxLinesInTurn: maxLines, kinds, repeats, repeatKey: claimSource,
+    maxLinesInTurn: maxLines, kinds, repeats, linesKeyedByText: byText, lines: lineCount,
   };
-  console.log(`${id}: door spoke on ${spokenTurns}/${turns.length} turns · ${report[id].wordsPerSpokenTurn} words a spoken turn · max ${maxLines} lines · ${repeats.length} repeats (by ${claimSource})`);
+  console.log(`${id}: door spoke on ${spokenTurns}/${turns.length} turns · ${report[id].wordsPerSpokenTurn} words a spoken turn · max ${maxLines} lines · ${repeats.length} repeats (${byText} of ${lineCount} lines carry no claim and are keyed by their words)`);
   if (showLines) for (const l of lines) console.log(`   ${l}`);
 }
 if (jsonOut) writeFileSync(jsonOut, `${JSON.stringify(report, null, 1)}\n`);

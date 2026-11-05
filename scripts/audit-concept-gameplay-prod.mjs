@@ -659,6 +659,15 @@ async function main() {
       const shallowDeep = deepened.filter((t) => !(typeof t.turn.price.depthReached === 'number' && t.turn.price.depthReached > t.turn.price.baseDepth));
       const noMs = priced.filter((t) => typeof t.turn.price.searchMs !== 'number');
       const msList = priced.map((t) => t.turn.price.searchMs).filter((n) => typeof n === 'number').sort((a, b) => a - b);
+      // POINTERS BY THE RECORD (WO-LEARN-SWING-01, David 2026-11-05): a pointer
+      // at the next decision is said at most once a game per skill, and a
+      // skill held by the record is never also said on the same turn.
+      const pointerSaid = turns.flatMap((t) => t.pointers?.said ?? []);
+      const pointerTwice = [...new Set(pointerSaid.filter((k, i) => pointerSaid.indexOf(k) !== i))];
+      const pointerBoth = turns.filter((t) => (t.pointers?.said ?? []).some((k) => (t.pointers?.heldByRecord ?? []).includes(k)));
+      record('LD6. POINTERS by the record: once a game per skill, never said and held on one turn',
+        pointerTwice.length === 0 && pointerBoth.length === 0,
+        `${pointerSaid.length} said (${[...new Set(pointerSaid)].join(', ') || 'none'}), ${turns.reduce((n, t) => n + (t.pointers?.heldByRecord?.length ?? 0), 0)} held by the record — twice: ${pointerTwice.join(', ') || 'none'}, said+held: ${pointerBoth.length}`);
       record('LD5. THE PRICE SEARCH reported on the turn row: a deepened price went past its base depth, every price says its ms',
         priced.length > 0 && shallowDeep.length === 0 && noMs.length === 0,
         `${priced.length} priced turns, ${deepened.length} deepened (${shallowDeep.length} not past base) — ms median ${msList[Math.floor(msList.length / 2)] ?? '?'}, max ${msList.at(-1) ?? '?'}`);

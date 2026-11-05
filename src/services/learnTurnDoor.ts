@@ -42,7 +42,7 @@ import { costStakes, stakeValue, stakeBar, isStaked, type Stakes } from './factS
 const PAWN_AT_STAKE = stakeBar(1);
 import { sameClaim } from './factSelector';
 import type { FacetRole, FactKind } from './reviewFacetRank';
-import { isCoachFactKind, LOCAL_THREAD, placeFact, stakesOf, stepOf, type CoachFact, type CoachFactKind, type ComputerName } from './coachFact';
+import { isCoachFactKind, LOCAL_THREAD, placeFact, stakesOf, stepOf, type CoachFact, type CoachFactKind, type ComputerName, type HeldForm } from './coachFact';
 import { BOARD_COMPUTERS } from './boardComputers';
 import { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
@@ -648,6 +648,11 @@ export interface LearnFactParts {
    *  producer answers it where the fact is made (`namesPlayableStudentMove`
    *  over the moves it names), never the door. */
   namesStudentMove: boolean;
+  /** THE SAME IDEA WITHOUT THE MOVE (`CoachFact.heldForm`): what the door
+   *  says in place of a fact that names the student's move. A pointer at the
+   *  next decision (`points`) speaks only by the student's record — see
+   *  `pointerSpeaks`. Absent: the fact waits in silence. */
+  heldForm?: HeldForm;
 }
 
 /** A LEARN FACT AT THE DOOR — the one fact shape (`coachFact`) with the lane
@@ -697,6 +702,7 @@ export function learnFact(id: string, f: LearnFactParts): LaneFact {
     ...(f.role ? { role: f.role } : {}),
     ...(f.factKind ? { factKind: f.factKind } : {}),
     ...(f.statesThread ? { statesThread: f.statesThread } : {}),
+    ...(f.heldForm ? { heldForm: f.heldForm } : {}),
   };
 }
 
@@ -737,6 +743,9 @@ export interface TurnDecision {
    *  thought per turn is the rule. Recorded so the audit can see what the
    *  ranking cost. */
   held: LearnLane[];
+  /** A pointer at the student's next decision spoke this turn: the move it
+   *  points at counts as prompted (a hinted find is not proof). */
+  pointed?: boolean;
   /** Lanes that spoke their SHORT phrasing because the student's own record
    *  proves the skill (David 2026-09-30: "Short phrasing when green"). */
   faded: LearnLane[];
@@ -756,6 +765,15 @@ export interface TurnDecision {
  *  line about a slip just made never fades. */
 /** GRADUAL and per skill — the one rule in `fadeText` (every surface). */
 export type { FadeLevels } from './fadeText';
+/** A POINTER AT THE NEXT DECISION speaks only while its skill is red or grey
+ *  in the student's record — no fade level at all (David 2026-11-05: "keep the
+ *  point at moves without stating them for beginners but not … for players
+ *  that don't need it"). Amber (75–89%) or green (90%+): the student finds it
+ *  alone; that is the practice. */
+export function pointerSpeaks(points: string, green: FadeLevels | null): boolean {
+  return fadeLevelOf(green, points) === null;
+}
+
 export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels | null, skill?: string): string {
   if (!green || green.size === 0) return text;
   const role = COMPUTER_ROLES[lane];
@@ -839,7 +857,24 @@ export function decideTurn(
   const moveHeld: LearnLane[] = [];
   const chanceHeld: LearnLane[] = [];
   const heldEarlier: LearnLane[] = [];
-  for (const f of facts) {
+  // POINTERS (WO-LEARN-SWING-01): a fact that names the student's next move
+  // speaks its held form in its place. A pointer at the decision speaks by the
+  // record (`pointerSpeaks`) and once a game — its `pointer:<skill>` claim rides
+  // the say-once ledger, so the skill's other moments stay unprompted and the
+  // record keeps measuring it.
+  const pointersHeld: string[] = [];
+  const asHeld = (named: LaneFact): LaneFact => {
+    const h = named.heldForm;
+    if (!named.namesStudentMove || !h?.text.trim()) return named;
+    if (h.points && !pointerSpeaks(h.points, green ?? null)) { if (!pointersHeld.includes(h.points)) pointersHeld.push(h.points); return named; }
+    return {
+      ...named, text: h.text, squares: [...h.squares], proof: h.proof, namesStudentMove: false,
+      claims: h.points ? [...named.claims, `pointer:${h.points}`] : named.claims,
+      ...(h.lines ? { lines: h.lines } : {}),
+    };
+  };
+  for (const named of facts) {
+    const f = asHeld(named);
     if (!f.text.trim()) continue;
     offered.push(f.lane);
     if (factOutOfPhase(f)) { if (!phaseHeld.includes(f.lane)) phaseHeld.push(f.lane); for (const c of f.claims) heldThisTurn?.add(c); continue; }
@@ -1303,10 +1338,12 @@ export function decideTurn(
   const spokeKinds = keep.flatMap((f) => { const k = sourceOf(f)?.factKind; return k ? [k] : []; });
   const worthFrom: Record<string, 'learned' | 'lane' | 'stake'> = {};
   for (const f of facts) if (f.text.trim()) worthFrom[f.lane] ??= worthSource(f);
-  if (offered.length > 0) emitLearnTurn({ spokeKinds, worthFrom, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
+  const pointersSaid = [...new Set(keep.flatMap((f) => (f.claims ?? []).filter((c) => c.startsWith('pointer:')).map((c) => c.slice('pointer:'.length))))];
+  const pointers = pointersSaid.length || pointersHeld.length ? { pointers: { said: pointersSaid, heldByRecord: [...pointersHeld] } } : {};
+  if (offered.length > 0) emitLearnTurn({ ...pointers, spokeKinds, worthFrom, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
   reportEverything(facts, turn, new Set(pkg.kept.flatMap((k) => (k.factId ? [k.factId] : []))), (f) =>
     pkg.dropped.find((d) => d.fact.factId === f.id)?.reason ?? heldWhy[f.lane] ?? refusedWhy[f.lane] ?? null);
-  return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
+  return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes, pointed: pointersSaid.length > 0 };
 }
 
 /** EVERYTHING THE TURN WEIGHED (the owner's drawer, `everythingEvents`): each

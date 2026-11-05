@@ -19,6 +19,9 @@ import { describeConcessions } from './reviewTeachingPoints';
 
 interface TheirMoveCost {
   text: string;
+  /** The cost without the student's move it names (a knight's first hop),
+   *  for a surface that holds that move — absent when the text names none. */
+  heldText?: string;
   squares: string[];
   kind: 'hole' | 'bishop-shut' | 'castling' | 'structure';
 }
@@ -85,6 +88,8 @@ export function theirMoveCost(fenBefore: string, san: string, studentColor: 'w' 
         return {
           kind: 'hole',
           text: `Their ${played} costs them ${sq}: no pawn of theirs can ever guard it again, and ${how}.`,
+          // The idea, not the hop (David 2026-11-05: "Yes it can point without saying the move").
+          heldText: `Their ${played} costs them ${sq}: no pawn of theirs can ever guard it again — a square for your knight.`,
           squares: [sq, route.from, ...(route.via ? [route.via] : [])],
         };
       }

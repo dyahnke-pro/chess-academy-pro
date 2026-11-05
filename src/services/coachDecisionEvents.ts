@@ -203,6 +203,10 @@ export interface LearnTurnRow {
   /** The kinds of the facts that spoke, where the producer named one (the
    *  position-facts clauses: deliberation, your-habit, …). */
   spokeKinds?: string[];
+  /** POINTERS (WO-LEARN-SWING-01, David 2026-11-05): the skills a held-form
+   *  pointer was said for this turn (red or grey in the record), and the ones
+   *  held because the record has proven them (amber or green). */
+  pointers?: { said: string[]; heldByRecord: string[] };
   /** WHERE EACH OFFERED LANE'S WORTH CAME FROM (2026-11-05, the learned
    *  decider): 'learned' — his measured rate for the fact's kind in this kind
    *  of moment (`deciderWeights`); 'lane' — the lane's own number, its kind not

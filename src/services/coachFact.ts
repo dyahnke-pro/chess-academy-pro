@@ -28,6 +28,7 @@ import type { ThreadKey } from './gameStory';
 import type { TacticType } from '../types';
 import type { FacetRole } from './reviewFacetRank';
 import type { StoryBeat } from './openingStory';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 
 /** THE FOURTEEN GROUPS (PLAN WO-STORY-MATRIX-01, the regions table): the
  *  story (plans, the opening's story, the cause chain), the name (the opening,
@@ -515,7 +516,15 @@ export interface CoachFact {
 }
 
 /** A fact said without the move it names — see `CoachFact.heldForm`. */
-export type HeldForm = Pick<CoachFact, 'text' | 'proof' | 'squares' | 'lines' | 'motif'>;
+export type HeldForm = Pick<CoachFact, 'text' | 'proof' | 'squares' | 'lines' | 'motif'> & {
+  /** A POINTER AT THE STUDENT'S NEXT DECISION (David 2026-11-05: "keep the
+   *  point at moves without stating them for beginners but not … for players
+   *  that don't need it"): the skill it is a hint for. Learn's door says it
+   *  only while that skill is red or grey in the student's record, once a game,
+   *  and the move it points at counts as prompted. Absent: the same fact about
+   *  the move already played, minus the move's name — said for everyone. */
+  points?: MisconceptionTagId;
+};
 
 /** One move drawn on the board. */
 interface MarkMove { from: string; to: string }

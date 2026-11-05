@@ -10,6 +10,7 @@ import {
   type MoveFundamental,
   principleContrastLine,
   strategicReason,
+  strategicPlanPointer,
 } from './moveFundamentals';
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -382,6 +383,13 @@ describe('the plan carries its why (prod Learn audit 2026-10-14: "The plan here:
     const c = new Chess();
     for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
     expect(strategicReason(c.fen(), 'g3', 'white')).toBe('stop what they want before you chase what you want, because a square their piece never reaches is a plan it never starts');
+  });
+  it('the plan without its move points at the idea and names neither the move nor its square (WO-LEARN-SWING-01)', () => {
+    const c = new Chess();
+    for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
+    const pointer = strategicPlanPointer(c.fen(), 'g3', 'white');
+    expect(pointer).toBe('The plan here: stop their idea before you push your own — stop what they want before you chase what you want, because a square their piece never reaches is a plan it never starts.');
+    expect(pointer).not.toMatch(/g3|\bg-?pawn/);
   });
 });
 

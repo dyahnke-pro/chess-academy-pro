@@ -1,4 +1,4 @@
-import { spokenSentenceKeys } from './voicePackage';
+import { claimKey, spokenSentenceKeys } from './voicePackage';
 import { NO_PROOF } from './proof';
 import type { HeatTile as HeatTileT } from './heatMap';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
@@ -240,7 +240,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: [^,]*?pendingRegisterComputers\.full, text: registerNow, lane: 'register', .*?, lines: pendingRegisterLines \}\)/);
     // The student's best move is never drawn before they play it (prod walk 2026-10-19).
     expect(TEACH_CODE).not.toMatch(/sans: \[compareRead\.bestSan\]/);
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: c\.computer, text: c\.text, lane, .*?, namesStudentMove: c\.namesStudentMove, squares: c\.squares, claims: clauseClaims\(pf, ci, probe\.fen\(\)\), gradeFen: c\.fen, lines: c\.lines, stakes: c\.stakes \?\? undefined, role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill \}\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: c\.computer, text: c\.text, lane, .*?, namesStudentMove: c\.namesStudentMove, squares: c\.squares, claims: clauseClaims\(pf, ci, probe\.fen\(\)\), gradeFen: c\.fen, lines: c\.lines, stakes: c\.stakes \?\? undefined, role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill, \.\.\.\(c\.heldForm \? \{ heldForm: c\.heldForm \} : \{\}\) \}\)/);
     expect(TEACH_CODE).toMatch(/(?:fundamental|fund)\?\.lines[,)]/);
     expect(TEACH_CODE).toMatch(/lane: 'fundamental', proof: NO_PROOF\.method, namesStudentMove: false, squares: \[\], claims: fundamental\.howOnly \? undefined : fundamentalClaims, gradeFen: move\.fen, lines: fundamental\.lines, skill: FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined \}\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
@@ -547,7 +547,7 @@ describe('a REASON outranks a description (David 2026-10-13: "value why statemen
     expect(d.held).toContain('positionFacts');
   });
   it('the producer passes the role from the ONE table over its clause kind', () => {
-    expect(TEACH_CODE).toMatch(/lines: c\.lines, stakes: c\.stakes \?\? undefined, role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill \}/);
+    expect(TEACH_CODE).toMatch(/lines: c\.lines, stakes: c\.stakes \?\? undefined, role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill, \.\.\.\(c\.heldForm \? \{ heldForm: c\.heldForm \} : \{\}\) \}/);
   });
 });
 
@@ -803,7 +803,7 @@ describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-1
     expect(TEACH_CODE).toMatch(/lane: 'countMethod' as const, computer: countRead\.computer, text: countRead\.text, fen: args\.fenAfterReply, squares: countRead\.squares, claims: countRead\.claims, stakes: countRead\.stakes \?\? undefined, role: countRead\.role/);
     expect(TEACH_CODE).not.toMatch(/readBoard\('countMethod', \{ fen: probe\.fen\(\)/);
     // One forwarder for every computed hint — arrows, stakes and role ride.
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, \{ lane: hint\.lane, computer: hint\.computer, text: hint\.text, proof: hint\.proof, namesStudentMove: hint\.namesStudentMove, squares: hint\.squares, claims: hint\.claims, gradeFen, arrows: hint\.arrows, stakes: hint\.stakes \?\? undefined, role: hint\.role, ownMoveReason: hint\.ownMoveReason \}\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, \{ lane: hint\.lane, computer: hint\.computer, text: hint\.text, proof: hint\.proof, namesStudentMove: hint\.namesStudentMove, squares: hint\.squares, claims: hint\.claims, gradeFen, arrows: hint\.arrows, stakes: hint\.stakes \?\? undefined, role: hint\.role, ownMoveReason: hint\.ownMoveReason, \.\.\.\(hint\.heldForm \? \{ heldForm: hint\.heldForm \} : \{\}\) \}\)/);
     expect(TEACH_CODE).not.toMatch(/queueSpokenHint\([^,\n]*, \{ text: (\w+)\.text, lane: \1\.lane, proof: \1\.proof, squares: \1\.squares, claims: \1\.claims \}\)/);
     // Priority-first speaks its reason with NO arrow: the arrow would be the answer.
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: 'buildPriorityFirst', text: pfLine, lane: 'priorityFirst', [^\n]*, squares: \[pf\.targetSquare\], role: 'teach' \}\)/);
@@ -885,7 +885,7 @@ describe('rules and theory fade per skill (item 8, 2026-10-17)', () => {
   it('the rule, the fundamental and the book move carry their skill to the door', () => {
     const pf = readFileSync('src/services/positionFacts.ts', 'utf8');
     expect(pf).toMatch(/\.\.\.\(ruleSkill\(a\.rule\.id\) \? \{ skill: ruleSkill\(a\.rule\.id\) \} : \{\}\)/);
-    expect(TEACH_CODE).toMatch(/role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill \}/);
+    expect(TEACH_CODE).toMatch(/role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill, \.\.\.\(c\.heldForm \? \{ heldForm: c\.heldForm \} : \{\}\) \}/);
     expect(TEACH_CODE).toMatch(/skill: FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined \}\)/);
     // The book move's skill rides on its fact, from the computer (P1-6a), and
     // Learn hands the fact's own skill to the door.
@@ -952,5 +952,40 @@ describe('one habit a turn (prod Learn audit 2026-10-20)', () => {
     const d = decideTurn([{ lane: 'kneeJerk', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.method, text: 'Before you recapture, ask whether you have to: what else does the board offer?', fen: F, claims: ['method:knee-jerk'] }],
       undefined, undefined, null, null, false, null, turnHolds);
     expect(d.spoke).not.toContain('kneeJerk');
+  });
+});
+
+describe('pointers by the record (David 2026-11-05: "keep the point at moves without stating them for beginners but not … for players that don\'t need it")', () => {
+  const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+  const named = (points?: 'misplaced-piece') => ({
+    lane: 'pieceQuality' as const, namesStudentMove: true, proof: NO_PROOF.description, fen: FEN, squares: ['c6'],
+    text: 'Their knight on c6 is doing the most work — Bb5 challenges it.',
+    heldForm: { text: 'Their knight on c6 is doing the most work — one of your moves challenges it.', proof: NO_PROOF.description, squares: ['c6'], ...(points ? { points } : {}) },
+  });
+  it('red or grey (no fade level): the pointer speaks, and the move it points at counts as prompted', () => {
+    const d = decideTurn([named('misplaced-piece')], '', undefined, null, null);
+    expect(d.pkg.spoken).toContain('one of your moves challenges it');
+    expect(d.pkg.spoken).not.toMatch(/Bb5/);
+    expect(d.pointed).toBe(true);
+  });
+  it('amber or green: the student finds it alone — the pointer waits', () => {
+    for (const level of ['lighter', 'short'] as const) {
+      const d = decideTurn([named('misplaced-piece')], '', undefined, null, new Map([['misplaced-piece', level]]));
+      expect(d.pkg.spoken).toBe('');
+      expect(d.pointed).toBe(false);
+    }
+  });
+  it('once a game per skill: a pointer already said for the skill is not said again', () => {
+    const d = decideTurn([named('misplaced-piece')], '', new Set([claimKey('pointer:misplaced-piece')]), null, null);
+    expect(d.pkg.spoken).toBe('');
+  });
+  it('a held form that is no pointer (the fact about the move played, minus the move) speaks for everyone', () => {
+    const d = decideTurn([named()], '', undefined, null, new Map([['misplaced-piece', 'short' as const]]));
+    expect(d.pkg.spoken).toContain('one of your moves challenges it');
+    expect(d.pointed).toBe(false);
+  });
+  it('NEGATIVE CONTROL: no held form, the fact waits in silence', () => {
+    const { heldForm: _h, ...bare } = named('misplaced-piece');
+    expect(decideTurn([bare], '').pkg.spoken).toBe('');
   });
 });
