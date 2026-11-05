@@ -1558,6 +1558,19 @@ export function computeMoveFacets(
       add(readBoardAll('alsoGood', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads })[0]);
       add(readBoardAll('squareChoice', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior })[0]);
     }
+    // THE TEACHING MOVES' NEW COMPUTERS, both seats (2026-11-05): the pawn
+    // break and what it is for — the pawn it strikes, the file it opens for
+    // the rooks, the bishop it frees. `lastTo`: where the move before landed
+    // (a recapture is no break).
+    {
+      const lastTo = ((): string | null => {
+        if (!ctx.teaching.prevFenBefore || ply < 2 || !ctx.allSans[ply - 2]) return null;
+        try { return new Chess(ctx.teaching.prevFenBefore).move(ctx.allSans[ply - 2]).to; } catch { return null; }
+      })();
+      add(readBoardAll('pawnBreak', { fenBefore, san, student: studentColorWB, lastTo })[0]);
+      // Opposite-coloured bishops settled by this move, and what they mean.
+      add(readBoardAll('oppositeBishops', { fenBefore, san, student: studentColorWB })[0]);
+    }
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.
       add(readBoardAll('obligationLifted', { fenBefore, fenAfter, student: studentColorWB })[0]);

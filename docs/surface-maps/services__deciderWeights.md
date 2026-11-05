@@ -31,8 +31,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/deciderWeights.test.ts:41`
 - `src/services/deciderWeights.test.ts:42`
 - `src/services/deciderWeights.test.ts:48`
-- `src/services/learnTurnDoor.ts:385`
-- `src/services/learnTurnDoor.ts:391`
+- `src/services/learnTurnDoor.ts:392`
+- `src/services/learnTurnDoor.ts:398`
 
 ### `LEAD_FLOOR` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -45,7 +45,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/deciderWeights.test.ts:42`
 - `src/services/deciderWeights.test.ts:53`
 - `src/services/deciderWeights.test.ts:54`
-- `src/services/learnTurnDoor.ts:386`
+- `src/services/learnTurnDoor.ts:393`
 
 ### `OUT_OF_PHASE_SHARE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -54,7 +54,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/deciderWeights.test.ts:49`
 - `src/services/deciderWeights.test.ts:58`
 - `src/services/deciderWeights.test.ts:59`
-- `src/services/learnTurnDoor.ts:398`
+- `src/services/learnTurnDoor.ts:405`
 
 ## Tests
 

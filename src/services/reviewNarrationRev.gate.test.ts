@@ -1,5 +1,6 @@
 // REVIEW_NARRATION_REV moves with the Review walk's words (the rev fingerprint
-// gate — src/test/revFingerprint.ts). Three of David's games, the segment
+// gate — src/test/revFingerprint.ts). Three of David's games and the Colle
+// 800 replay game (opposite-coloured bishops at 18…Nxg6, 2026-11-05), the segment
 // builder's narration ply by ply, and the game's story it keeps (P1-8d: the
 // one checkpoint a seed is cut from, every say-once ledger inside it).
 import { describe, it, expect } from 'vitest';

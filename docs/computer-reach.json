@@ -1,11 +1,11 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.",
  "graph": {
-  "files": 1755,
-  "nodes": 16375
+  "files": 1757,
+  "nodes": 16394
  },
  "totals": {
-  "computers": 347,
+  "computers": 349,
   "wiredNowhere": 30,
   "heldByLearnOnly": 19,
   "otherScreensOnly": 10,
@@ -14,28 +14,28 @@
   "surfaces": {
    "learn": {
     "yes": 31,
-    "held": 220,
+    "held": 222,
     "no": 96
    },
    "review": {
-    "yes": 235,
+    "yes": 237,
     "no": 112
    },
    "lesson": {
-    "yes": 142,
+    "yes": 144,
     "no": 205
    },
    "chat": {
     "yes": 202,
-    "no": 145
+    "no": 147
    },
    "tapped": {
     "yes": 159,
-    "no": 188
+    "no": 190
    },
    "tactics": {
     "yes": 104,
-    "no": 243
+    "no": 245
    }
   }
  },
@@ -3965,6 +3965,29 @@
    ]
   },
   {
+   "key": "services/oppositeBishops.ts#oppositeBishops",
+   "name": "registry:oppositeBishops",
+   "file": "services/oppositeBishops.ts",
+   "fn": "oppositeBishops",
+   "says": "OPPOSITE-COLOURED BISHOPS, WHATEVER ELSE IS ON: said once where the shape settles — with queens or rooks the attacker's game (the bishop that hits the other king's squares), with bishops and pawns the drawish ending",
+   "origin": "registry",
+   "learn": "held",
+   "review": "yes",
+   "lesson": "yes",
+   "chat": "no",
+   "tapped": "no",
+   "tactics": "no",
+   "app": true,
+   "other": [
+    "openingsPage",
+    "playSilent",
+    "endgame"
+   ],
+   "registry": [
+    "oppositeBishops"
+   ]
+  },
+  {
    "key": "services/orderReads.ts#orderReads",
    "name": "orderReads — order and timing as position reads",
    "file": "services/orderReads.ts",
@@ -4049,6 +4072,29 @@
     "campaign",
     "playSilent",
     "endgame"
+   ]
+  },
+  {
+   "key": "services/pawnBreak.ts#pawnBreak",
+   "name": "registry:pawnBreak",
+   "file": "services/pawnBreak.ts",
+   "fn": "pawnBreak",
+   "says": "THE PAWN BREAK AND WHAT IT IS FOR (the teaching move S-BREAK): the pawn it strikes (the base of their chain), the file its trade opens for the rooks, the bishop it frees",
+   "origin": "registry",
+   "learn": "held",
+   "review": "yes",
+   "lesson": "yes",
+   "chat": "no",
+   "tapped": "no",
+   "tactics": "no",
+   "app": true,
+   "other": [
+    "openingsPage",
+    "playSilent",
+    "endgame"
+   ],
+   "registry": [
+    "pawnBreak"
    ]
   },
   {

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**515 lines · 16 exports · 25 importers · 6 tests · 0 audits**
+**522 lines · 16 exports · 27 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,6 +31,8 @@
 - `src/services/learnTurnDoor.ts`
 - `src/services/moveThoughtFacts.ts`
 - `src/services/openingStory.ts`
+- `src/services/oppositeBishops.test.ts`
+- `src/services/pawnBreak.test.ts`
 - `src/services/planThread.ts`
 - `src/services/positionFacts.ts`
 - `src/services/reviewFacet.ts`
@@ -62,36 +64,36 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCoachFactKind` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:658`
+- `src/services/learnTurnDoor.ts:669`
 
 ### `stepOf` (function) — 16 call sites
 - `src/services/boardComputers.test.ts:76`
-- `src/services/coachFact.test.ts:78`
 - `src/services/coachFact.test.ts:79`
-- `src/services/coachFeatureService.ts:2543`
-- `src/services/coachFeatureService.ts:3144`
-- `src/services/learnTurnDoor.ts:281`
-- `src/services/learnTurnDoor.ts:892`
-- `src/services/learnTurnDoor.ts:949`
-- `src/services/learnTurnDoor.ts:970`
-- `src/services/learnTurnDoor.ts:974`
-- `src/services/learnTurnDoor.ts:1028`
-- `src/services/learnTurnDoor.ts:1054`
-- `src/services/learnTurnDoor.ts:1064`
-- `src/services/learnTurnDoor.ts:1068`
-- `src/services/learnTurnDoor.ts:1205`
-- `src/services/learnTurnDoor.ts:1268`
+- `src/services/coachFact.test.ts:80`
+- `src/services/coachFeatureService.ts:2554`
+- `src/services/coachFeatureService.ts:3158`
+- `src/services/learnTurnDoor.ts:286`
+- `src/services/learnTurnDoor.ts:903`
+- `src/services/learnTurnDoor.ts:960`
+- `src/services/learnTurnDoor.ts:981`
+- `src/services/learnTurnDoor.ts:985`
+- `src/services/learnTurnDoor.ts:1039`
+- `src/services/learnTurnDoor.ts:1065`
+- `src/services/learnTurnDoor.ts:1075`
+- `src/services/learnTurnDoor.ts:1079`
+- `src/services/learnTurnDoor.ts:1216`
+- `src/services/learnTurnDoor.ts:1279`
 
 ### `placeFact` (function) — 16 call sites
-- `src/services/boardComputers.ts:872`
-- `src/services/learnTurnDoor.ts:674`
+- `src/services/boardComputers.ts:925`
+- `src/services/learnTurnDoor.ts:685`
 - `src/services/moveThoughtFacts.ts:150`
 - `src/services/moveThoughtFacts.ts:271`
 - `src/services/moveThoughtFacts.ts:291`
 - `src/services/moveThoughtFacts.ts:360`
 - `src/services/moveThoughtFacts.ts:374`
-- `src/services/moveThoughtFacts.ts:602`
-- `src/services/moveThoughtFacts.ts:620`
+- `src/services/moveThoughtFacts.ts:617`
+- `src/services/moveThoughtFacts.ts:635`
 - `src/services/openingStory.ts:363`
 - `src/services/positionFacts.ts:527`
 - `src/services/reviewFacet.ts:62`
@@ -101,18 +103,18 @@
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 17 call sites
-- `src/services/boardComputers.ts:872`
-- `src/services/coachFact.test.ts:104`
-- `src/services/coachFact.test.ts:110`
+- `src/services/boardComputers.ts:925`
+- `src/services/coachFact.test.ts:105`
 - `src/services/coachFact.test.ts:111`
-- `src/services/learnTurnDoor.ts:675`
+- `src/services/coachFact.test.ts:112`
+- `src/services/learnTurnDoor.ts:686`
 - `src/services/moveThoughtFacts.ts:151`
 - `src/services/moveThoughtFacts.ts:271`
 - `src/services/moveThoughtFacts.ts:292`
 - `src/services/moveThoughtFacts.ts:361`
 - `src/services/moveThoughtFacts.ts:375`
-- `src/services/moveThoughtFacts.ts:603`
-- `src/services/moveThoughtFacts.ts:621`
+- `src/services/moveThoughtFacts.ts:618`
+- `src/services/moveThoughtFacts.ts:636`
 - `src/services/openingStory.ts:364`
 - `src/services/positionFacts.ts:535`
 - `src/services/reviewFacet.ts:73`
@@ -145,6 +147,8 @@
 - `src/services/decisionStakes.test.ts`
 - `src/services/factRelations.test.ts`
 - `src/services/oneGroupTable.gate.test.ts`
+- `src/services/oppositeBishops.test.ts`
+- `src/services/pawnBreak.test.ts`
 
 ## Audits that reach it
 

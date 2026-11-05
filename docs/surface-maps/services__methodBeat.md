@@ -51,7 +51,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:3330`
+- `src/services/coachFeatureService.ts:3344`
 - `src/services/positionFacts.ts:1188`
 
 ### `HABIT_KIND` (const) — 0 call sites
@@ -84,8 +84,8 @@
 - `src/services/slipQuestion.test.ts:53`
 
 ### `habitSaidKey` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10670`
-- `src/components/Coach/CoachTeachPage.tsx:10671`
+- `src/components/Coach/CoachTeachPage.tsx:10692`
+- `src/components/Coach/CoachTeachPage.tsx:10693`
 - `src/services/learnBoardTeaching.ts:254`
 - `src/services/learnBoardTeaching.ts:1164`
 - `src/services/slipQuestion.test.ts:53`

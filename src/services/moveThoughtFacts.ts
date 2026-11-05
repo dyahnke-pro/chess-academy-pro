@@ -414,6 +414,21 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       const { heldForm: _held, ...fact } = f;
       facts.push({ ...fact, namesStudentMove: false, source: 'weighed', idea: 'choice', weight });
     }
+    // THE TEACHING MOVES' NEW COMPUTERS (2026-11-05), through the one
+    // registry: the pawn break and what it is for. Its idea is the file it
+    // opens, so the briefing's own "opens the c-file" and the break are one
+    // idea in the step (the break, which says what for, leads).
+    const lastTo = ((): string | null => {
+      if (!i.theirLast) return null;
+      try { return new Chess(i.theirLast.fenBefore).move(i.theirLast.san).to; } catch { return null; }
+    })();
+    for (const f of readBoardAll('pawnBreak', { fenBefore: i.fenBefore, san: i.san, student, lastTo })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'file', weight: 55 });
+    }
+    // Opposite-coloured bishops settled by this move — a plan for the game.
+    for (const f of readBoardAll('oppositeBishops', { fenBefore: i.fenBefore, san: i.san, student })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 50 });
+    }
   }
   // THE REPLY TREE (his "if Black plays Qe7, you play d4, cementing the
   // knight"), through the one registry: the replies likely at this level and

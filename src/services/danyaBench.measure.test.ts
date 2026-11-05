@@ -541,6 +541,7 @@ const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
   kingWalk: 'services/kingWalk.ts#castleByHandMove',
   ifTheyPlay: 'services/ifTheyPlay.ts#ifTheyPlay',
   weighed: 'services/weighedMoves.ts#temptingRefuted',
+  teachingMove: 'services/pawnBreak.ts#pawnBreak',
 };
 
 /** Review's facet tags and the live composer's clause kinds (ONE vocabulary,
@@ -650,6 +651,8 @@ const FACT_COMPUTER: Record<FactKind, string> = {
   'rule-exception': 'services/ruleException.ts#ruleException',
   'push-or-hold': 'services/pushOrHold.ts#pushOrHold',
   'opp-think': 'services/methodBeat.ts#liveMethodBeat',
+  'pawn-break': 'services/pawnBreak.ts#pawnBreak',
+  'opposite-bishops': 'services/oppositeBishops.ts#oppositeBishops',
   'forcing-scan': 'services/methodBeat.ts#liveMethodBeat',
   'hole-access': 'services/moveInsight.ts#holeAccess',
   'speedrun-read': 'services/thinkAloud.ts#depthClauses',

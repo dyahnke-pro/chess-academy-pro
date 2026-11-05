@@ -183,7 +183,10 @@ export type LearnLane =
   // ── the moves a player weighs (weighedMoves, 2026-11-05) ──
   | 'temptingRefuted'
   | 'alsoGood'
-  | 'squareChoice';
+  | 'squareChoice'
+  // ── the teaching moves' new computers (2026-11-05) ──
+  | 'pawnBreak'
+  | 'oppositeBishops';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
@@ -246,6 +249,8 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   kingSquares: 'affirm', keptHome: 'affirm', kingWalk: 'point', kingRule: 'point',
   ifTheyPlay: 'point',
   temptingRefuted: 'refute', alsoGood: 'affirm', squareChoice: 'affirm',
+  pawnBreak: 'point',
+  oppositeBishops: 'verdict',
 };
 
 
@@ -351,6 +356,8 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   ifTheyPlay: phaseOfComputer(BOARD_COMPUTERS.ifTheyPlay.phase),
   temptingRefuted: phaseOfComputer(BOARD_COMPUTERS.temptingRefuted.phase), alsoGood: phaseOfComputer(BOARD_COMPUTERS.alsoGood.phase),
   squareChoice: phaseOfComputer(BOARD_COMPUTERS.squareChoice.phase),
+  pawnBreak: phaseOfComputer(BOARD_COMPUTERS.pawnBreak.phase),
+  oppositeBishops: phaseOfComputer(BOARD_COMPUTERS.oppositeBishops.phase),
 };
 
 /** Is this lane's fact out of place on this board? */
@@ -399,6 +406,10 @@ function factOutOfPhase(f: LaneFact): boolean {
 }
 
 export const LEARN_LANES: Record<LearnLane, LaneRule> = {
+  // ── the teaching moves' new computers (2026-11-05): said about the move
+  // just played, either seat — the break and what it is for. ──
+  pawnBreak: { factKind: BOARD_COMPUTERS.pawnBreak.kind, kind: 'computed', why: 'the pawn break and what it is for — the pawn it strikes, the file it opens for the rooks, the bishop it frees', lead: 58 },
+  oppositeBishops: { factKind: BOARD_COMPUTERS.oppositeBishops.kind, kind: 'computed', why: 'opposite-coloured bishops and what they mean with what is left — the attacker\'s game with heavy pieces on, the drawish ending without', lead: 56 },
   // ── the moves a player weighs (weighedMoves, 2026-11-05): said about the
   // move just played — the natural move that fails, with its line; the move
   // of the same worth and the board's difference (held while it may still be

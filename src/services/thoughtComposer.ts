@@ -57,7 +57,9 @@ export type ThoughtSource =
   /** The reply tree (`ifTheyPlay.ts`): if they X, you play Y — the likely replies and their answers. */
   | 'ifTheyPlay'
   /** The moves a player weighs (`weighedMoves.ts`): the tempting move refuted, the move of the same worth, the square. */
-  | 'weighed';
+  | 'weighed'
+  /** The teaching moves' new computers (2026-11-05): the pawn break (`pawnBreak.ts`). */
+  | 'teachingMove';
 
 /** WHO SPEAKS FIRST IN A STEP when two facts hold the same stake — measured on
  *  the Danya bench (`danyaBench.measure.test.ts`): how often a source's line in
@@ -90,6 +92,7 @@ export const SOURCE_RANK: Record<ThoughtSource, number> = {
   // Not measured on the bench yet (2026-11-05): ranked after every measured source.
   ifTheyPlay: 23,
   weighed: 24,
+  teachingMove: 25,
 };
 
 /** ONE FACT, the composer's only input — the one fact shape (`coachFact.ts`),

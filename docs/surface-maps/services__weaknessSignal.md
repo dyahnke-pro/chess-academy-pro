@@ -88,8 +88,8 @@
 - `src/services/needScore.ts:310`
 - `src/services/needScore.ts:324`
 - `src/services/positionFacts.ts:1532`
-- `src/services/reviewFacetRank.ts:614`
-- `src/services/reviewFacetRank.ts:662`
+- `src/services/reviewFacetRank.ts:633`
+- `src/services/reviewFacetRank.ts:681`
 - `src/services/studentMomentBoost.ts:128`
 - `src/services/teachingSelector.ts:169`
 - `src/services/weaknessSignal.test.ts:56`
@@ -116,8 +116,8 @@
 - `src/services/fundamentalReachesDecider.test.ts:149`
 - `src/services/needScore.ts:321`
 - `src/services/positionFacts.ts:1498`
-- `src/services/reviewFacetRank.ts:613`
-- `src/services/reviewFacetRank.ts:661`
+- `src/services/reviewFacetRank.ts:632`
+- `src/services/reviewFacetRank.ts:680`
 - `src/services/weaknessSignal.test.ts:77`
 - `src/services/weaknessSignal.test.ts:80`
 - `src/services/weaknessSignal.test.ts:83`
@@ -153,7 +153,7 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
 ### `matchFundamental` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:2181`
+- `src/services/coachFeatureService.ts:2191`
 - `src/services/fundamentalReachesDecider.test.ts:80`
 - `src/services/fundamentalReachesDecider.test.ts:91`
 - `src/services/fundamentalReachesDecider.test.ts:121`
