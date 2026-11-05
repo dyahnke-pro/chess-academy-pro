@@ -863,6 +863,9 @@ export function decideTurn(
   // the say-once ledger, so the skill's other moments stay unprompted and the
   // record keeps measuring it.
   const pointersHeld: string[] = [];
+  // The fact as it was VOICED, by id — the owner's drawer reports what the
+  // student heard (the pointer and its claim), never the move it held back.
+  const voicedAs = new Map<string, LaneFact>();
   const asHeld = (named: LaneFact): LaneFact => {
     const h = named.heldForm;
     if (!named.namesStudentMove || !h?.text.trim()) return named;
@@ -877,6 +880,7 @@ export function decideTurn(
   };
   for (const named of facts) {
     const f = asHeld(named);
+    if (f !== named) voicedAs.set(named.id, f);
     if (!f.text.trim()) continue;
     offered.push(f.lane);
     if (factOutOfPhase(f)) { if (!phaseHeld.includes(f.lane)) phaseHeld.push(f.lane); for (const c of f.claims) heldThisTurn?.add(c); continue; }
@@ -1343,7 +1347,7 @@ export function decideTurn(
   const pointersSaid = [...new Set(keep.flatMap((f) => (f.claims ?? []).filter((c) => c.startsWith('pointer:')).map((c) => c.slice('pointer:'.length))))];
   const pointers = pointersSaid.length || pointersHeld.length ? { pointers: { said: pointersSaid, heldByRecord: [...pointersHeld] } } : {};
   if (offered.length > 0) emitLearnTurn({ ...pointers, spokeKinds, worthFrom, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
-  reportEverything(facts, turn, new Set(pkg.kept.flatMap((k) => (k.factId ? [k.factId] : []))), (f) =>
+  reportEverything(facts.map((x) => voicedAs.get(x.id) ?? x), turn, new Set(pkg.kept.flatMap((k) => (k.factId ? [k.factId] : []))), (f) =>
     pkg.dropped.find((d) => d.fact.factId === f.id)?.reason ?? heldWhy[f.lane] ?? refusedWhy[f.lane] ?? null);
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes, pointed: pointersSaid.length > 0 };
 }

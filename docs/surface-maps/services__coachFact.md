@@ -74,16 +74,16 @@
 - `src/services/coachFeatureService.ts:2561`
 - `src/services/coachFeatureService.ts:3170`
 - `src/services/learnTurnDoor.ts:289`
-- `src/services/learnTurnDoor.ts:952`
-- `src/services/learnTurnDoor.ts:1009`
-- `src/services/learnTurnDoor.ts:1030`
+- `src/services/learnTurnDoor.ts:956`
+- `src/services/learnTurnDoor.ts:1013`
 - `src/services/learnTurnDoor.ts:1034`
-- `src/services/learnTurnDoor.ts:1088`
-- `src/services/learnTurnDoor.ts:1114`
-- `src/services/learnTurnDoor.ts:1124`
+- `src/services/learnTurnDoor.ts:1038`
+- `src/services/learnTurnDoor.ts:1092`
+- `src/services/learnTurnDoor.ts:1118`
 - `src/services/learnTurnDoor.ts:1128`
-- `src/services/learnTurnDoor.ts:1265`
-- `src/services/learnTurnDoor.ts:1328`
+- `src/services/learnTurnDoor.ts:1132`
+- `src/services/learnTurnDoor.ts:1269`
+- `src/services/learnTurnDoor.ts:1332`
 
 ### `placeFact` (function) — 18 call sites
 - `src/services/boardComputers.ts:607`

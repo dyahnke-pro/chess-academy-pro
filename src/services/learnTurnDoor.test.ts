@@ -9,6 +9,7 @@ import { costStakes, isStaked, mateStakes } from './factStakes';
 import { preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA } from './learnBoardTeaching';
 import { readBoard, readBoardAll } from './boardComputers';
 import { laneFacts, decideTurn } from '../test/learnDoorFixtures';
+import { onEverything, type EverythingRow } from './everythingEvents';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const TEACH = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
@@ -987,5 +988,13 @@ describe('pointers by the record (David 2026-11-05: "keep the point at moves wit
   it('NEGATIVE CONTROL: no held form, the fact waits in silence', () => {
     const { heldForm: _h, ...bare } = named('misplaced-piece');
     expect(decideTurn([bare], '').pkg.spoken).toBe('');
+  });
+  it("the owner's drawer reports the pointer as it was said — never the move it held back", () => {
+    const rows: EverythingRow[] = [];
+    const off = onEverything((r) => rows.push(r));
+    try { decideTurn([named('misplaced-piece')], '', undefined, null, null); } finally { off(); }
+    const said = rows.flatMap((r) => r.lines).filter((l) => l.said);
+    expect(said.map((l) => l.text)).toEqual(['Their knight on c6 is doing the most work — one of your moves challenges it.']);
+    expect(said[0].claims).toContain('pointer:misplaced-piece');
   });
 });

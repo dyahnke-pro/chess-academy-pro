@@ -338,7 +338,7 @@
 - `src/services/kingAttackReads.ts:147`
 - `src/services/kingAttackReads.ts:503`
 - `src/services/learnBoardTeaching.ts:721`
-- `src/services/learnTurnDoor.test.ts:272`
+- `src/services/learnTurnDoor.test.ts:273`
 - `src/services/learnWalkOct3c.test.ts:61`
 - `src/services/material.ts:44`
 - `src/services/material.ts:64`
