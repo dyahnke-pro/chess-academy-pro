@@ -537,6 +537,7 @@ const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
   purpose: 'services/moveIntent.ts#moveIntent',
   studentMove: 'services/learnBoardTeaching.ts#studentMoveTeaching',
   kingWalk: 'services/kingWalk.ts#castleByHandMove',
+  weighed: 'services/weighedMoves.ts#temptingRefuted',
 };
 
 /** Review's facet tags and the live composer's clause kinds (ONE vocabulary,

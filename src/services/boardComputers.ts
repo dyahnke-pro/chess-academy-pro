@@ -53,6 +53,8 @@ import type { GamePhase } from '../types';
 import { packageForRegister } from './hintRegister';
 import { FUNDAMENTAL_TAG } from './principleAttribution';
 import { castleByHandMove, kingFromCentre, keptHome, kingSquares } from './kingWalk';
+import { temptingRefuted, alsoGood, squareChoice, type WeighRead } from './weighedMoves';
+import { costStakes } from './factStakes';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -160,6 +162,18 @@ export interface BoardContexts {
    *  `lines` — the mover's fan before the move where the surface has one;
    *  `bestUci` — the engine's best move there. */
   kingSquares: { fenBefore: string; san: string; student: Color; lines: ReadonlyArray<{ moves: readonly string[] }> | null; bestUci: string | null };
+  /** THE MOVES A PLAYER WEIGHS (`weighedMoves`, 2026-11-05): the move `san`
+   *  played on `fenBefore` (either seat) against the candidates a player at
+   *  `rating` weighs there. `reads` — one engine read per candidate from
+   *  `fenBefore`, the move played among them (`WeighRead`), or null where the
+   *  surface has none; `priorMove` — the move before, so a recapture is half
+   *  a trade. The tempting candidate that fails, with its refutation. */
+  temptingRefuted: { fenBefore: string; san: string; student: Color; rating: number; reads: readonly WeighRead[] | null; priorMove: { fenBefore: string; san: string } | null };
+  /** Two moves of the same worth and the board's difference between them. */
+  alsoGood: { fenBefore: string; san: string; student: Color; rating: number; reads: readonly WeighRead[] | null };
+  /** Which square for the piece: its other squares and what goes wrong there
+   *  (board reads; the engine's line where `reads` has one). */
+  squareChoice: { fenBefore: string; san: string; student: Color; rating: number; reads: readonly WeighRead[] | null; priorMove: { fenBefore: string; san: string } | null };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -631,6 +645,62 @@ export const BOARD_COMPUTERS = {
     kind: 'contrast',
     phase: ANY,
     surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'the record half is capabilitiesPosed: a forced king walk with a mated square poses missed-opponents-threat' } },
+  },
+  temptingRefuted: {
+    // His "the natural doubling with Rg8 and Rg2 fails to Rh4" (8.6% of his
+    // notes): a candidate the eye weighs, a pawn or more worse than the move
+    // played, refuted by the engine's line after it — said only when that
+    // line proves the cost and may be named (`costReason`, `lineTrust`). The
+    // candidate was not played, so its line names no move on the real board.
+    read: ({ fenBefore, san, student, rating, reads, priorMove }, fact) => safe(() => {
+      if (!reads || reads.length < 2) return null;
+      const r = temptingRefuted({ fenBefore, san, student, rating, reads, priorMove });
+      if (!r) return null;
+      const mine = new Chess(fenBefore).turn() === student;
+      return fact({ key: r.key, claims: r.claims, text: r.text, proof: r.proof ?? squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares,
+        stakes: costStakes(r.costCp), seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore,
+        ...(r.proof?.line ? { lines: [r.proof.line] } : {}) });
+    }),
+    computer: 'temptingRefuted',
+    kind: 'refuted',
+    phase: ANY,
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'a move not played poses nothing to record; the move played is graded by its own cost' } },
+  },
+  alsoGood: {
+    // His "Qe7 or Qc6 — Qc6, the bishop is still great" (2.3%): two moves of
+    // one worth and the board's difference between them. On a live board the
+    // other move may still be the student's to play, so it is held there in
+    // a form that names no move (`heldForm`).
+    read: ({ fenBefore, san, student, rating, reads }, fact) => safe(() => {
+      if (!reads || reads.length < 2) return null;
+      const r = alsoGood({ fenBefore, san, student, rating, reads });
+      if (!r) return null;
+      const mine = new Chess(fenBefore).turn() === student;
+      const held = mine ? { text: r.heldText, proof: NO_PROOF.method, squares: [] as string[] } : null;
+      return fact({ key: r.key, claims: [r.key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: !!held, thread: LOCAL_THREAD, fen: fenBefore, ...(held ? { heldForm: held } : {}) });
+    }),
+    computer: 'alsoGood',
+    kind: 'contrast',
+    phase: ANY,
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'two moves of one worth pose no question the student can miss' } },
+  },
+  squareChoice: {
+    // His "Bf4 runs into Nxd4, Bg5 is kicked by h6, Bd2 hangs the knight —
+    // fianchetto instead" (2.9%): the piece's other squares the eye weighs and
+    // what the board shows goes wrong on each. Said about the move played; a
+    // square that fails is no move to find.
+    read: ({ fenBefore, san, student, rating, reads, priorMove }, fact) => safe(() => {
+      const r = squareChoice({ fenBefore, san, student, rating, reads, priorMove });
+      if (!r) return null;
+      const mine = new Chess(fenBefore).turn() === student;
+      return fact({ key: r.key, claims: [r.key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'squareChoice',
+    kind: 'contrast',
+    phase: ANY,
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'a square ruled out is a choice explained, not a skill the board poses' } },
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };
 

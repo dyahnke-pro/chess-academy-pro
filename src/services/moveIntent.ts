@@ -13,6 +13,7 @@
 //
 // Pure: the four engine reads are handed in (see `IntentReads`). No engine call
 // here, no model — the caller owns the search budget.
+import type { WeighRead } from './weighedMoves';
 import { flipSideToMove } from './threatOut';
 import { ruleForPurpose } from './moveFundamentals';
 import { Chess, type Square } from 'chess.js';
@@ -43,6 +44,11 @@ export interface IntentReads {
    *  opponent to move — read by a surface that makes the extra search (a
    *  lesson, when the follow-up is legal before the move). Absent: not read. */
   followFirst?: { uci: string; line: AnalysisLine } | null;
+  /** ONE READ PER CANDIDATE A PLAYER WEIGHS (`weighedMoves`), from the board
+   *  before the move, the move played among them — read by a surface that
+   *  makes the search (Review's record). Absent: not read; the fan before the
+   *  move stands in, each line a read of its first move. */
+  weigh?: readonly WeighRead[] | null;
 }
 
 export interface IntentMove { uci: string; san: string }

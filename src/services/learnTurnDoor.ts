@@ -158,7 +158,11 @@ export type LearnLane =
   | 'kingSquares'
   | 'kingWalk'
   | 'keptHome'
-  | 'kingRule';
+  | 'kingRule'
+  // ── the moves a player weighs (weighedMoves, 2026-11-05) ──
+  | 'temptingRefuted'
+  | 'alsoGood'
+  | 'squareChoice';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
@@ -219,6 +223,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   breakRace: 'affirm', kickMap: 'point', patternFails: 'refute',
   lastTimeHere: 'affirm', sameAsLastTime: 'but',
   kingSquares: 'affirm', keptHome: 'affirm', kingWalk: 'point', kingRule: 'point',
+  temptingRefuted: 'refute', alsoGood: 'affirm', squareChoice: 'affirm',
 };
 
 
@@ -321,6 +326,8 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   captureChoice: 'any', kickMap: 'any', breakRace: 'any', patternFails: 'any', structureJudgement: 'any',
   kingSquares: phaseOfComputer(BOARD_COMPUTERS.kingSquares.phase), kingWalk: phaseOfComputer(BOARD_COMPUTERS.castleByHand.phase),
   keptHome: phaseOfComputer(BOARD_COMPUTERS.keptHome.phase), kingRule: phaseOfComputer(BOARD_COMPUTERS.kingFromCentre.phase),
+  temptingRefuted: phaseOfComputer(BOARD_COMPUTERS.temptingRefuted.phase), alsoGood: phaseOfComputer(BOARD_COMPUTERS.alsoGood.phase),
+  squareChoice: phaseOfComputer(BOARD_COMPUTERS.squareChoice.phase),
 };
 
 /** Is this lane's fact out of place on this board? */
@@ -330,6 +337,13 @@ export function laneOutOfPhase(lane: LearnLane, fen: string): boolean {
 }
 
 export const LEARN_LANES: Record<LearnLane, LaneRule> = {
+  // ── the moves a player weighs (weighedMoves, 2026-11-05): said about the
+  // move just played — the natural move that fails, with its line; the move
+  // of the same worth and the board's difference (held while it may still be
+  // the student's to play); the piece's other squares and what goes wrong. ──
+  temptingRefuted: { factKind: BOARD_COMPUTERS.temptingRefuted.kind, kind: 'computed', why: 'the natural move a player weighs here that fails, with the engine line that refutes it', lead: 68 },
+  alsoGood: { factKind: BOARD_COMPUTERS.alsoGood.kind, kind: 'computed', why: 'two moves of the same worth and the one thing the board shows between them', lead: 52 },
+  squareChoice: { factKind: BOARD_COMPUTERS.squareChoice.kind, kind: 'computed', why: 'which square for the piece: its other squares a player weighs, and what goes wrong on each', lead: 60 },
   // ── the king walked by hand (kingWalk, his Scotch Gambit game 2026-11-04) ──
   kingSquares: { factKind: BOARD_COMPUTERS.kingSquares.kind, kind: 'computed', why: 'in check with only king moves: the squares that walk into a forced mate, and the one chosen', lead: 70 },
   kingWalk: { factKind: BOARD_COMPUTERS.castleByHand.kind, kind: 'plan', why: 'a king that lost castling walked to safety by hand: the plan, the square cleared for it, each step, the walk done', lead: 66 },

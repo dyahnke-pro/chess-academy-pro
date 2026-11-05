@@ -393,6 +393,9 @@ export const COMPUTER_CATALOG = {
   kingFromCentre: { file: 'services/kingWalk.ts', says: 'the rule of thumb on a king walked out of the centre: further from the centre is safer' },
   keptHome: { file: 'services/kingWalk.ts', says: 'a bishop left at home on purpose while the king walks: it blocks the check they can give' },
   kingSquares: { file: 'services/kingWalk.ts', says: 'in check with only king moves: the squares that walk into a forced mate, and the square chosen' },
+  temptingRefuted: { file: 'services/weighedMoves.ts', says: 'the natural move a player weighs here that fails, with the engine line that refutes it' },
+  alsoGood: { file: 'services/weighedMoves.ts', says: 'two moves of the same worth and the one thing the board shows between them' },
+  squareChoice: { file: 'services/weighedMoves.ts', says: 'which square for the piece: its other squares a player weighs, and what goes wrong on each' },
 } satisfies Record<string, CatalogRow>;
 
 export type ComputerName = keyof typeof COMPUTER_CATALOG;

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**501 lines · 16 exports · 21 importers · 5 tests · 0 audits**
+**504 lines · 16 exports · 21 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -58,36 +58,36 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCoachFactKind` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:580`
+- `src/services/learnTurnDoor.ts:594`
 
 ### `stepOf` (function) — 16 call sites
 - `src/services/boardComputers.test.ts:76`
-- `src/services/coachFact.test.ts:75`
-- `src/services/coachFact.test.ts:76`
-- `src/services/coachFeatureService.ts:2505`
-- `src/services/coachFeatureService.ts:3103`
-- `src/services/learnTurnDoor.ts:254`
-- `src/services/learnTurnDoor.ts:797`
-- `src/services/learnTurnDoor.ts:854`
-- `src/services/learnTurnDoor.ts:875`
-- `src/services/learnTurnDoor.ts:879`
-- `src/services/learnTurnDoor.ts:922`
-- `src/services/learnTurnDoor.ts:948`
-- `src/services/learnTurnDoor.ts:958`
+- `src/services/coachFact.test.ts:78`
+- `src/services/coachFact.test.ts:79`
+- `src/services/coachFeatureService.ts:2508`
+- `src/services/coachFeatureService.ts:3109`
+- `src/services/learnTurnDoor.ts:259`
+- `src/services/learnTurnDoor.ts:811`
+- `src/services/learnTurnDoor.ts:868`
+- `src/services/learnTurnDoor.ts:889`
+- `src/services/learnTurnDoor.ts:893`
+- `src/services/learnTurnDoor.ts:936`
 - `src/services/learnTurnDoor.ts:962`
-- `src/services/learnTurnDoor.ts:1096`
-- `src/services/learnTurnDoor.ts:1159`
+- `src/services/learnTurnDoor.ts:972`
+- `src/services/learnTurnDoor.ts:976`
+- `src/services/learnTurnDoor.ts:1110`
+- `src/services/learnTurnDoor.ts:1173`
 
 ### `placeFact` (function) — 16 call sites
-- `src/services/boardComputers.ts:673`
-- `src/services/learnTurnDoor.ts:596`
-- `src/services/moveThoughtFacts.ts:148`
-- `src/services/moveThoughtFacts.ts:269`
-- `src/services/moveThoughtFacts.ts:289`
-- `src/services/moveThoughtFacts.ts:358`
-- `src/services/moveThoughtFacts.ts:372`
-- `src/services/moveThoughtFacts.ts:565`
-- `src/services/moveThoughtFacts.ts:583`
+- `src/services/boardComputers.ts:743`
+- `src/services/learnTurnDoor.ts:610`
+- `src/services/moveThoughtFacts.ts:150`
+- `src/services/moveThoughtFacts.ts:271`
+- `src/services/moveThoughtFacts.ts:291`
+- `src/services/moveThoughtFacts.ts:360`
+- `src/services/moveThoughtFacts.ts:374`
+- `src/services/moveThoughtFacts.ts:587`
+- `src/services/moveThoughtFacts.ts:605`
 - `src/services/openingStory.ts:363`
 - `src/services/positionFacts.ts:517`
 - `src/services/reviewFacet.ts:62`
@@ -97,18 +97,18 @@
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 17 call sites
-- `src/services/boardComputers.ts:673`
-- `src/services/coachFact.test.ts:101`
-- `src/services/coachFact.test.ts:107`
-- `src/services/coachFact.test.ts:108`
-- `src/services/learnTurnDoor.ts:597`
-- `src/services/moveThoughtFacts.ts:149`
-- `src/services/moveThoughtFacts.ts:269`
-- `src/services/moveThoughtFacts.ts:290`
-- `src/services/moveThoughtFacts.ts:359`
-- `src/services/moveThoughtFacts.ts:373`
-- `src/services/moveThoughtFacts.ts:566`
-- `src/services/moveThoughtFacts.ts:584`
+- `src/services/boardComputers.ts:743`
+- `src/services/coachFact.test.ts:104`
+- `src/services/coachFact.test.ts:110`
+- `src/services/coachFact.test.ts:111`
+- `src/services/learnTurnDoor.ts:611`
+- `src/services/moveThoughtFacts.ts:151`
+- `src/services/moveThoughtFacts.ts:271`
+- `src/services/moveThoughtFacts.ts:292`
+- `src/services/moveThoughtFacts.ts:361`
+- `src/services/moveThoughtFacts.ts:375`
+- `src/services/moveThoughtFacts.ts:588`
+- `src/services/moveThoughtFacts.ts:606`
 - `src/services/openingStory.ts:364`
 - `src/services/positionFacts.ts:525`
 - `src/services/reviewFacet.ts:73`

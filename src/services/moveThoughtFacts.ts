@@ -39,6 +39,8 @@ import type { LearnLane } from './learnTurnDoor';
 import { computeMustDefend } from './threatOut';
 import { moveOrder } from './moveOrder';
 import { readBoardAll, readKey } from './boardComputers';
+import type { WeighRead } from './weighedMoves';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 export interface MoveThoughtInput {
   fenBefore: string;
@@ -391,6 +393,26 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     for (const { f, idea } of kingReads) {
       const { heldForm: _held, ...fact } = f;
       facts.push({ ...fact, namesStudentMove: false, source: 'kingWalk', idea, weight: 60 });
+    }
+    // THE MOVES A PLAYER WEIGHS (weighedMoves, 2026-11-05), through the one
+    // registry: the natural move that fails and its line, the move of the
+    // same worth and what separates them, the piece's other squares and what
+    // goes wrong there. Each candidate's read is the surface's (`reads.weigh`)
+    // or, where it read none of its own, the fan before the move — every line
+    // of it is a read of its first move. A lesson has no student's rating in
+    // hand, so the eye is the cold-start one (`DEFAULT_STUDENT_RATING`).
+    const weighReads: readonly WeighRead[] | null = i.reads?.weigh
+      ?? (i.reads && i.reads.before.length >= 2 ? i.reads.before.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves, earlier: l.earlier?.moves ?? null })) : null);
+    const prior = i.theirLast;
+    const weighed: Array<{ f: CoachFact; weight: number }> = [
+      ...readBoardAll('temptingRefuted', { fenBefore: i.fenBefore, san: i.san, student, rating: DEFAULT_STUDENT_RATING, reads: weighReads, priorMove: prior }).map((f) => ({ f, weight: 55 })),
+      ...readBoardAll('alsoGood', { fenBefore: i.fenBefore, san: i.san, student, rating: DEFAULT_STUDENT_RATING, reads: weighReads }).map((f) => ({ f, weight: 45 })),
+      ...readBoardAll('squareChoice', { fenBefore: i.fenBefore, san: i.san, student, rating: DEFAULT_STUDENT_RATING, reads: weighReads, priorMove: prior }).map((f) => ({ f, weight: 50 })),
+    ];
+    for (const { f, weight } of weighed) {
+      // A lesson shows its line, so the move is named (the full text).
+      const { heldForm: _held, ...fact } = f;
+      facts.push({ ...fact, namesStudentMove: false, source: 'weighed', idea: 'choice', weight });
     }
   }
   return withDecisionGap(facts, i, from, to, seat);

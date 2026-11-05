@@ -53,7 +53,9 @@ export type ThoughtSource =
   | 'moveWhy' | 'briefing' | 'boardTeacher' | 'moveJob' | 'fundamental' | 'deepFact' | 'binding'
   | 'pieceRoute' | 'refuted' | 'alternatives' | 'prophylaxis' | 'notYet' | 'bestLine' | 'counterThreat' | 'theirAim' | 'planChoice' | 'moveOrder' | 'structureLines' | 'purpose' | 'studentMove'
   /** The king walked by hand (`kingWalk.ts`): the squares, the route, the bishop kept home, the rule. */
-  | 'kingWalk';
+  | 'kingWalk'
+  /** The moves a player weighs (`weighedMoves.ts`): the tempting move refuted, the move of the same worth, the square. */
+  | 'weighed';
 
 /** WHO SPEAKS FIRST IN A STEP when two facts hold the same stake — measured on
  *  the Danya bench (`danyaBench.measure.test.ts`): how often a source's line in
@@ -83,6 +85,8 @@ export const SOURCE_RANK: Record<ThoughtSource, number> = {
   studentMove: 21,
   // Not measured on the bench yet (2026-11-04): ranked after every measured source.
   kingWalk: 22,
+  // Not measured on the bench yet (2026-11-05): ranked after every measured source.
+  weighed: 23,
 };
 
 /** ONE FACT, the composer's only input — the one fact shape (`coachFact.ts`),

@@ -54,6 +54,8 @@ export function reviewMoveInputsFrom(moves: readonly CoachGameMove[]): ReviewMov
     ...(typeof m.costCp === 'number' ? { costCp: m.costCp } : {}),
     ...(m.heardVerdict ? { heardVerdict: m.heardVerdict } : {}),
     ...(typeof m.bestMoveEval === 'number' ? { bestMoveEval: m.bestMoveEval } : {}),
+    // The candidates' reads ride at the same trust bar as the lines.
+    ...(m.weighed && m.weighed.depth >= TRUSTED_LINE_DEPTH ? { weighed: m.weighed } : {}),
   }));
 }
 

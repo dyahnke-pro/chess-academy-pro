@@ -55,7 +55,10 @@ describe('CoachFact — the one fact shape (WO-STORY-MATRIX-01 P1-3)', () => {
         kinds.add(f.kind);
         expect(f.group).toBe(FACT_GROUP[f.kind]);
         expect(f.step).toBe(GROUP_STEP[f.group](f.seat));
-        expect(f.step).toBe(stepBefore(f));
+        // The moves a player weighs (2026-11-05) came after P1-3: a fact with
+        // no step before it, said in the choices step its kind's group gives
+        // (checked on the line above).
+        if (f.source !== 'weighed') expect(f.step).toBe(stepBefore(f));
         expect(COMPUTER_CATALOG[f.computer]).toBeDefined();
       }
     }

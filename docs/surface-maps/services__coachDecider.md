@@ -74,10 +74,10 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `coachTurn` (function) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10052`
-- `src/components/Coach/CoachTeachPage.tsx:12092`
+- `src/components/Coach/CoachTeachPage.tsx:10088`
+- `src/components/Coach/CoachTeachPage.tsx:12135`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
-- `src/services/coachFeatureService.ts:2897`
+- `src/services/coachFeatureService.ts:2903`
 - `src/services/learnTurnDoor.mission.test.ts:23`
 - `src/services/learnTurnDoor.mission.test.ts:31`
 - `src/services/learnTurnDoor.mission.test.ts:53`
@@ -190,7 +190,7 @@
 - `src/services/teachingLayers.test.ts:120`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1818`
+- `src/services/coachFeatureService.ts:1820`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`
@@ -221,8 +221,8 @@
 - `src/services/thinkingSteps.test.ts:58`
 
 ### `instantWaitsForVerdict` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11898`
-- `src/components/Coach/CoachTeachPage.tsx:11931`
+- `src/components/Coach/CoachTeachPage.tsx:11935`
+- `src/components/Coach/CoachTeachPage.tsx:11974`
 - `src/services/verdictLeads.test.ts:15`
 - `src/services/verdictLeads.test.ts:16`
 - `src/services/verdictLeads.test.ts:19`
@@ -233,9 +233,9 @@
 
 ### `buildVoicePackage` (re-export) — 87 call sites
 - `src/components/Coach/CoachGameReview.tsx:1936`
-- `src/components/Coach/CoachTeachPage.tsx:8910`
+- `src/components/Coach/CoachTeachPage.tsx:8916`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:3086`
+- `src/services/coachFeatureService.ts:3092`
 - `src/services/coachSurfaceScorecard.report.test.ts:113`
 - `src/services/coachSurfaceScorecard.report.test.ts:135`
 - `src/services/computedVoiceAudit.report.test.ts:310`
@@ -245,7 +245,7 @@
 - `src/services/dnaDoor.test.ts:51`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/laneReachability.test.ts:128`
-- `src/services/learnTurnDoor.ts:761`
+- `src/services/learnTurnDoor.ts:775`
 - `src/services/openingStoryWholeBeat.test.ts:65`
 - `src/services/openingStoryWholeBeat.test.ts:70`
 - `src/services/outpostOneKey.test.ts:22`
@@ -253,7 +253,7 @@
 - `src/services/ruleGradeFen.test.ts:9`
 - `src/services/ruleGradeFen.test.ts:12`
 - `src/services/speedRunReads.scale.test.ts:41`
-- `src/services/thoughtComposer.ts:263`
+- `src/services/thoughtComposer.ts:267`
 - `src/services/voicePackage.dependentFact.test.ts:22`
 - `src/services/voicePackage.dependentFact.test.ts:25`
 - `src/services/voicePackage.dependentFact.test.ts:28`
@@ -324,30 +324,30 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describeTurnDecision` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8738`
-- `src/components/Coach/CoachTeachPage.tsx:8745`
-- `src/components/Coach/CoachTeachPage.tsx:10164`
-- `src/components/Coach/CoachTeachPage.tsx:12148`
-- `src/components/Coach/CoachTeachPage.tsx:12235`
-- `src/services/learnTurnDoor.ts:1263`
+- `src/components/Coach/CoachTeachPage.tsx:8739`
+- `src/components/Coach/CoachTeachPage.tsx:8746`
+- `src/components/Coach/CoachTeachPage.tsx:10201`
+- `src/components/Coach/CoachTeachPage.tsx:12191`
+- `src/components/Coach/CoachTeachPage.tsx:12278`
+- `src/services/learnTurnDoor.ts:1277`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11951`
-- `src/components/Coach/CoachTeachPage.tsx:12235`
+- `src/components/Coach/CoachTeachPage.tsx:11994`
+- `src/components/Coach/CoachTeachPage.tsx:12278`
 - `src/services/voicePackage.test.ts:38`
 - `src/services/voicePackage.ts:612`
 
 ### `keptLines` (re-export) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8760`
-- `src/components/Coach/CoachTeachPage.tsx:11980`
-- `src/components/Coach/CoachTeachPage.tsx:12222`
+- `src/components/Coach/CoachTeachPage.tsx:8761`
+- `src/components/Coach/CoachTeachPage.tsx:12023`
+- `src/components/Coach/CoachTeachPage.tsx:12265`
 - `src/services/learnTurnDoor.test.ts:216`
 - `src/services/learnTurnDoor.test.ts:222`
 - `src/services/learnTurnDoor.test.ts:228`
 - `src/services/voicePackage.ts:655`
 
 ### `markableSquares` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12182`
+- `src/components/Coach/CoachTeachPage.tsx:12225`
 - `src/services/voicePackage.test.ts:293`
 - `src/services/voicePackage.test.ts:302`
 - `src/services/voicePackage.test.ts:312`
@@ -357,13 +357,13 @@
 - `src/services/voicePackage.ts:176`
 
 ### `spokenSentenceKeys` (re-export) — 23 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8755`
-- `src/components/Coach/CoachTeachPage.tsx:10603`
-- `src/components/Coach/CoachTeachPage.tsx:10627`
-- `src/components/Coach/CoachTeachPage.tsx:11964`
-- `src/components/Coach/CoachTeachPage.tsx:12161`
+- `src/components/Coach/CoachTeachPage.tsx:8756`
+- `src/components/Coach/CoachTeachPage.tsx:10640`
+- `src/components/Coach/CoachTeachPage.tsx:10664`
+- `src/components/Coach/CoachTeachPage.tsx:12007`
+- `src/components/Coach/CoachTeachPage.tsx:12204`
 - `src/services/claimKeysLooseCount.test.ts:34`
-- `src/services/coachFeatureService.ts:3087`
+- `src/services/coachFeatureService.ts:3093`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/learnTurnDoor.phaseWave.test.ts:134`
 - `src/services/learnTurnDoor.test.ts:647`
@@ -373,8 +373,8 @@
 - `src/services/os11RootCauses5And6.replay.test.ts:34`
 - `src/services/os11RootCauses5And6.replay.test.ts:47`
 - `src/services/outpostOneKey.test.ts:20`
-- `src/services/thoughtComposer.ts:270`
 - `src/services/thoughtComposer.ts:274`
+- `src/services/thoughtComposer.ts:278`
 - `src/services/voicePackage.test.ts:399`
 - `src/services/voicePackage.test.ts:408`
 - `src/services/voicePackage.test.ts:420`
@@ -391,7 +391,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `decidePhaseWave` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8721`
+- `src/components/Coach/CoachTeachPage.tsx:8722`
 - `src/services/learnTurnDoor.mission.test.ts:44`
 - `src/services/learnTurnDoor.mission.test.ts:45`
 - `src/services/learnTurnDoor.phaseWave.test.ts:46`
@@ -402,25 +402,25 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts:112`
 - `src/services/learnTurnDoor.phaseWave.test.ts:126`
 - `src/services/learnTurnDoor.phaseWave.test.ts:135`
-- `src/services/learnTurnDoor.ts:1244`
+- `src/services/learnTurnDoor.ts:1258`
 - `src/services/os11RootCauses5And6.replay.test.ts:31`
 - `src/services/os11RootCauses5And6.replay.test.ts:61`
 - `src/services/os11RootCauses5And6.replay.test.ts:65`
 - `src/test/learnDoorFixtures.ts:72`
 
 ### `learnFact` (re-export) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10096`
-- `src/components/Coach/CoachTeachPage.tsx:10247`
+- `src/components/Coach/CoachTeachPage.tsx:10133`
+- `src/components/Coach/CoachTeachPage.tsx:10284`
 - `src/hooks/usePhaseNarration.ts:238`
-- `src/services/learnTurnDoor.ts:591`
+- `src/services/learnTurnDoor.ts:605`
 - `src/test/learnDoorFixtures.ts:36`
 
 ### `FACT_ROLE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `looseClaim` (re-export) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9358`
-- `src/components/Coach/CoachTeachPage.tsx:9419`
+- `src/components/Coach/CoachTeachPage.tsx:9364`
+- `src/components/Coach/CoachTeachPage.tsx:9425`
 - `src/services/conceptKey.ts:83`
 - `src/services/looseStill.test.ts:24`
 - `src/services/looseStill.test.ts:35`
@@ -433,7 +433,7 @@
 - `src/services/positionFacts.ts:1746`
 
 ### `nextLooseSpells` (re-export) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9076`
+- `src/components/Coach/CoachTeachPage.tsx:9082`
 - `src/services/conceptKey.ts:70`
 - `src/services/looseStill.test.ts:31`
 - `src/services/looseStill.test.ts:32`
@@ -442,11 +442,11 @@
 - `src/services/looseStill.test.ts:67`
 
 ### `plyOfFen` (re-export) — 34 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8542`
-- `src/components/Coach/CoachTeachPage.tsx:8545`
-- `src/components/Coach/CoachTeachPage.tsx:8552`
-- `src/components/Coach/CoachTeachPage.tsx:8571`
-- `src/components/Coach/CoachTeachPage.tsx:8962`
+- `src/components/Coach/CoachTeachPage.tsx:8543`
+- `src/components/Coach/CoachTeachPage.tsx:8546`
+- `src/components/Coach/CoachTeachPage.tsx:8553`
+- `src/components/Coach/CoachTeachPage.tsx:8572`
+- `src/components/Coach/CoachTeachPage.tsx:8968`
 - `src/services/autoAnalyzeGame.ts:192`
 - `src/services/capabilityDateRepair.test.ts:17`
 - `src/services/capabilityDateRepair.test.ts:18`
@@ -472,7 +472,7 @@
 - `src/services/looseStill.test.ts:68`
 - `src/services/looseStill.test.ts:70`
 - `src/services/misconceptionService.ts:105`
-- `src/services/moveThoughtFacts.ts:453`
+- `src/services/moveThoughtFacts.ts:475`
 - `src/services/positionFacts.ts:1746`
 - `src/services/threatProof.ts:130`
 - `src/utils/plyOfFen.ts:3`

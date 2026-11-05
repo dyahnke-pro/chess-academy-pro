@@ -97,7 +97,7 @@ import { matchFundamental, type WeaknessSignal } from './weaknessSignal';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap, isMethodSentence } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
-import type { BadHabit, UserProfile, CoachNarration, OpeningKey, BoardArrow, HeardVerdict, StockfishAnalysis, TacticType, StoredLines } from '../types';
+import type { BadHabit, UserProfile, CoachNarration, OpeningKey, BoardArrow, HeardVerdict, StockfishAnalysis, TacticType, StoredLines, StoredWeighReads } from '../types';
 import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
 import { lineWins, lineArrows, mateLine } from './lineCalc';
 import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted } from './endgamePawnReads';
@@ -653,6 +653,8 @@ export interface ReviewMoveInput {
   /** The best move's eval FROM THE SAME SEARCH as `costCp` (MoveAnnotation.
    *  bestMoveEval) — the pair a cost is measured against. */
   bestMoveEval?: number;
+  /** One read per candidate a player weighs (MoveAnnotation.weighed). */
+  weighed?: StoredWeighReads;
 }
 
 // `parseSegmentsJson` + `buildPerMoveBlock` deleted in ship-3 — both
@@ -2109,6 +2111,7 @@ function* reviewSegmentSteps(
           principlesTaught,
           soundPlies,
           motifSaid: motifSaidInstances(motifKeys),
+          weigh: { rating: rating ?? DEFAULT_STUDENT_RATING, reads: m.weighed?.reads ?? null },
         },
         fenBefore: fenPair.fenBefore,
         fenAfter: fenPair.fenAfter,
@@ -2524,6 +2527,9 @@ function* reviewSegmentSteps(
           // The king walked by hand: Review says it through its own facets
           // (the registry's reads, both seats), so it is not said twice.
           && f.source !== 'kingWalk'
+          // The moves a player weighs: Review says them through its own
+          // facets (the registry's reads, both seats).
+          && f.source !== 'weighed'
           // The trip reads the line ahead as a plan; in a game the moves that
           // followed were answers to the board ("Qc3 sends the queen on to e4,
           // by way of b3 and f3" — hindsight), so Review leaves it to lessons.
