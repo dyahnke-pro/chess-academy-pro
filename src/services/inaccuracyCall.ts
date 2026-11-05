@@ -29,7 +29,7 @@
 // model what it thinks.
 import { capturedSquare } from '../utils/capturedSquare';
 import { evalBand } from './evalBand';
-import { andList, lineShape, seatedLine, lineSeatAt } from '../utils/andList';
+import { andList, lineShape, seatedLine, lineSeatAt, withArticle } from '../utils/andList';
 import { bareCaptureLead, bestMoveReason, moveWhy } from './deliberation';
 import { captureLeadsTo } from './captureLeadsTo';
 import { captureHasCounterTactic } from './groundedAnswer';
@@ -43,7 +43,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { mateLine } from './lineCalc';
 import { costReason, reasonSans, reasonWinWords, type CostReason } from './costReason';
 import { positionalReason } from './positionalReason';
-import { landedTacticFor } from './pvPlayback';
+import { landedTacticFor, tacticWord } from './pvPlayback';
 import { proofCut } from './exchangeLedger';
 import { openSentence } from '../utils/openSentence';
 import { rotateStem } from '../utils/rotateStem';
@@ -760,7 +760,12 @@ export function callInaccuracyDetailed(args: {
     // not have (Learn walk 2026-10-02: "go and take it" at +0.45 with nothing
     // to take). A clear edge is something to find; a small one is to keep.
     if (studentAfter !== null && studentAfter < 100) return ' That tips the game your way — look for the move that keeps it.';
-    return ' There is something here for you now — look for it.';
+    // A CLEAR EDGE SAYS WHAT KIND OF SHOT IT IS, never which move (David
+    // 2026-11-05: "Yes it can point without saying the move"; "There is
+    // something here for you now — look for it" said a chance existed and not
+    // what it was, five times in seven replayed games). The kind is read off
+    // the engine's punishing reply by the one landed-tactic reader.
+    return ` ${slipClue(args.fenBefore, args.playedSan, args.replyLineUci)}`;
   };
   // THE OPPONENT IS "THEY", WHOEVER PLAYS IT (RULEBOOK V1/V2, 2026-10-07:
   // "never 'I'", the coach never talks about itself). A dictated move (David
@@ -1002,6 +1007,28 @@ export function allowedReply(
  *  The proof is the line those words name, drawn on the board, when there is
  *  one. The contract is light (David 2026-10-10: "Not every miss needs the
  *  proof"): with no why at all, the grade says its cost. */
+/** WHAT THEIR SLIP LETS YOU DO, by kind only: the tactic the punishing reply
+ *  lands, or the loose piece it takes — with the habit that finds it (the
+ *  focus clue's shape: the kind of thing, never the piece or the square). */
+export function slipClue(fenBefore: string, playedSan: string, replyLineUci: readonly string[]): string {
+  const habit = 'Checks, captures and threats first.';
+  const first = replyLineUci[0];
+  if (!first) return `Their move hands you a clear edge — look for it. ${habit}`;
+  try {
+    const c = new Chess(fenBefore);
+    if (!c.move(playedSan)) return `Their move hands you a clear edge — look for it. ${habit}`;
+    const fenAfter = c.fen();
+    const reply = c.move({ from: first.slice(0, 2), to: first.slice(2, 4), promotion: first[4] });
+    if (!reply) return `Their move hands you a clear edge — look for it. ${habit}`;
+    const tactic = landedTacticFor(fenAfter, reply.san);
+    if (tactic) return `Their move allows ${withArticle(tacticWord(tactic))} — look for it. ${habit}`;
+    // A capture that wins by the exchange count on its square (a pawn the king
+    // takes back is a sacrifice, not something loose).
+    if (reply.captured && signedLegalSeeFor(fenAfter, reply.to, reply.color) > 0) return 'Their move leaves something of theirs loose — look at what each of their pieces is guarded by.';
+  } catch { /* an unreadable reply says the edge only */ }
+  return `Their move hands you a clear edge — look for it. ${habit}`;
+}
+
 interface ErrorWhy {
   /** "it let them win a piece …" / "it let a forced mate slip" / "it let them
    *  play …d5, which …" — null when nothing it allowed can be said. */

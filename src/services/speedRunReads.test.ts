@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  keepTension, anyMoveFine, uglyButRight, castleSide, provokes, threatStronger, heldByTactic,
+  keepTension, noBigDecision, uglyButRight, castleSide, provokes, threatStronger, heldByTactic,
   secureFirst, mutualPins, overprotect, positionOpened, awkwardBlock, speedRunReads,
   playAnyway, skipMiddleman, usefulWaiting, keepSquareForKnight, rightPieceForHole,
   finishStarted, goodInEveryBranch, takeTheSting, retreatKeepsBreak, bestCasePlan, rejectedMoveLater,
@@ -21,10 +21,10 @@ describe('his habits of thought, computed (each checked against the existing com
     // en passant is not tension
     expect(keepTension('3r1rk1/1pp3pp/p7/4Pp1n/5P2/2N5/PP4PP/2R2R1K w - f6 0 20', 'w', 'Rcd1')).toBeNull();
   });
-  it('any move is fine: three moves inside an inaccuracy of each other', () => {
+  it('no big decision: three moves inside an inaccuracy of each other (a bar, never said)', () => {
     const fen = 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w - - 0 8';
-    expect(anyMoveFine(fen, [line(['c1g5'], 30), line(['b1c3'], 25), line(['c2c3'], 20)])?.text).toMatch(/Several moves are equally good/);
-    expect(anyMoveFine(fen, [line(['c1g5'], 120), line(['b1c3'], 25), line(['c2c3'], 20)])).toBeNull();
+    expect(noBigDecision(fen, [line(['c1g5'], 30), line(['b1c3'], 25), line(['c2c3'], 20)])).toBe(true);
+    expect(noBigDecision(fen, [line(['c1g5'], 120), line(['b1c3'], 25), line(['c2c3'], 20)])).toBe(false);
   });
   it('the ugly move that is correct: the engine doubles your own pawns', () => {
     // bxc3 doubles the c-pawns (c3 and c2)
@@ -130,7 +130,7 @@ describe('his habits of thought, computed (each checked against the existing com
   });
   it('keep a square vacant: the knight on b1 goes through c3, and the c-pawn could block it', () => {
     const fen = '4k3/8/8/2p1p3/3pP3/3P4/2P5/1NB1K3 w - - 0 1';
-    expect(keepSquareForKnight(fen, 'w', 'Ke2')?.text).toMatch(/Keep c3 empty — your knight needs it on the way to d5|Don't park a piece on c3 — it's the first stop for your knight on the way to d5/);
+    expect(keepSquareForKnight(fen, 'w', 'Ke2')?.text).toMatch(/Keep c3 empty — your knight needs it on the way to d5|Your knight is headed for d5 by way of c3 — keep that square clear for it/);
     expect(keepSquareForKnight(fen, 'w', 'c3')).toBeNull();
   });
   it('the right piece for the hole: the bishop on d5 sits where the knight belongs', () => {
@@ -207,14 +207,6 @@ describe('his habits of thought, computed (each checked against the existing com
     const sting = takeTheSting('4r1k1/8/8/8/4B3/5N2/8/6K1 w - - 0 1', 'w', 'Ne5');
     expect(sting?.stakes).toEqual({ points: 3, plies: 1 });
   });
-  it('a move-naming read carries its idea, spoken where the move is held', () => {
-    const r = anyMoveFine('r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w - - 0 8', [line(['c1g5'], 30), line(['b1c3'], 25), line(['c2c3'], 20)]);
-    expect(r?.idea).toMatch(/big decision|not a critical moment|Nothing hinges/);
-    // It names WHICH move it means — it sits beside the verdict on the last one.
-    expect(r?.idea).toMatch(/next move/);
-    expect(r?.idea).not.toMatch(/Bg5|Nc3|c3/);
-    expect(anyMoveFine(fenAt('e4 e5'), [line(['g1f3'], 30), line(['b1c3'], 25), line(['f1c4'], 20)])).toBeNull();
-  });
   it('each idea names the piece, never the square it goes to (the guided-find rule)', () => {
     const fc = forceConcession('rnbqkbnr/pp3ppp/8/2ppp3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1', [line(['f1b5', 'e8e7'], 50)]);
     expect(fc?.idea).toMatch(/Your bishop has a forcing move that costs their king the right to castle/);
@@ -240,10 +232,10 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(forceConcession('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', [line(['d7d5', 'e4d5', 'd8d5'], 30)])).toBeNull();
   });
   it('phrasing rotates on the move number, never at random', () => {
-    const at = (n: number) => `r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w - - 0 ${n}`;
-    const L = [line(['c1g5'], 30), line(['b1c3'], 25), line(['c2c3'], 20)];
-    expect(anyMoveFine(at(9), L)?.idea).toBe(anyMoveFine(at(9), L)?.idea);
-    expect(anyMoveFine(at(9), L)?.idea).not.toBe(anyMoveFine(at(10), L)?.idea);
+    const at = (n: number) => `r1bqk1nr/pp2ppbp/2np2p1/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 2 ${n}`;
+    const L = [line(['c3d5'], -17), line(['e4e5'], -28)];
+    expect(flexibleFirst(at(9), L)?.idea).toBe(flexibleFirst(at(9), L)?.idea);
+    expect(flexibleFirst(at(9), L)?.idea).not.toBe(flexibleFirst(at(10), L)?.idea);
   });
   it('the reads list never throws on any opening position (smoke over a real game)', () => {
     const c = new Chess();
@@ -275,7 +267,7 @@ describe('preparationOf — the held "doesn\'t work yet" says what the preparati
   });
 });
 
-describe('one criticality: "any move is fine" and "good in every branch" never share a board (OS-11 #9)', () => {
+describe('one criticality: a board with no big decision never earns "good in every branch" (OS-11 #9)', () => {
   // g3 after 8…Re8, real depth-16 evals for d3 / a3 / Nh3: three moves inside a
   // hair. Old code said both "no big decision here" and "one pawn move answers
   // no — the next-best leaves your pawn on b3 to be taken".
@@ -285,13 +277,13 @@ describe('one criticality: "any move is fine" and "good in every branch" never s
     { moves: ['a2a3'], evaluation: -20, mate: null },
     { moves: ['g1h3'], evaluation: -30, mate: null },
   ];
-  it('the quiet board says only that nothing hinges on the move', () => {
-    expect(anyMoveFine(FEN, lines)).not.toBeNull();
+  it('the quiet board earns no every-branch read', () => {
+    expect(noBigDecision(FEN, lines)).toBe(true);
     expect(goodInEveryBranch(FEN, 'w', lines)).toBeNull();
   });
   it('a next-best that really costs still earns the every-branch read', () => {
     const costly = [lines[0], { ...lines[1], evaluation: -250 }, { ...lines[2], evaluation: -260 }];
     expect(goodInEveryBranch(FEN, 'w', costly)?.claim).toBe('srr:every-branch');
-    expect(anyMoveFine(FEN, costly)).toBeNull();
+    expect(noBigDecision(FEN, costly)).toBe(false);
   });
 });

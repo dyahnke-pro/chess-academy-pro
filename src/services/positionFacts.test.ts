@@ -436,6 +436,27 @@ describe('the verdict and its plan echo are one fact (hand walk 2340)', () => {
   });
 });
 
+describe('taking back is not a decision (seven replayed Learn games, 2026-11-05)', () => {
+  // NFUuaZsR2S8, 12…Bxf6 13.Bxf6: Bxf6 and Qxd7+ hold within a fifth of a pawn
+  // (depth 16, 242 / 222), so the weighing held Bxf6 — a take-back on the
+  // square their bishop just took on — and then said "You found the move: your
+  // bishop taking on f6 — it completes the trade".
+  const line = (rank: number, evaluation: number, uci: string) => ({ rank, evaluation, moves: [uci], mate: null });
+  const analysis = { evaluation: 242, bestMove: 'e7f6', depth: 16, topLines: [line(1, 242, 'e7f6'), line(2, 222, 'd1d7'), line(3, -474, 'e7a3')] } as never;
+  const fen = 'r1b1k2r/2pqBp1p/p1p2bp1/8/p3P3/8/PPP2PPP/R2QK2R w KQkq - 0 13';
+  const before = 'r1b1k2r/2pqBpbp/p1p2Np1/8/p3P3/8/PPP2PPP/R2QK2R b KQkq - 0 12';
+  const args = { boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [] } as const;
+  it('the recapture is not held, credited or weighed', async () => {
+    const r = await computePositionFacts({ ...args, opponentLastMove: { fenBefore: before, san: 'Bxf6' } });
+    expect(r.heldVerdict).toBeNull();
+    expect(r.clauses.some((c) => c.kind === 'deliberation')).toBe(false);
+  });
+  it('NEGATIVE CONTROL: the same board with no trade behind it holds the move', async () => {
+    const r = await computePositionFacts({ ...args });
+    expect(r.heldVerdict?.san).toBe('Bxf6');
+  });
+});
+
 describe('at a deciding moment the move is HELD for the student to answer (David 2026-10-02)', () => {
   const line = (rank: number, evaluation: number, uci: string) => ({ rank, evaluation, moves: [uci], mate: null });
   const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 3 14';

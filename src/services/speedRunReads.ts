@@ -69,22 +69,18 @@ export function keepTension(fen: string, me: 'w' | 'b', bestSan: string | null):
   };
 }
 
-/** "ANY MOVE IS FINE" (A12, his "know which decisions matter — spend ten
- *  seconds"): the top three moves sit within a hair of each other. */
-export function anyMoveFine(fen: string, lines: Lines): Read | null {
+/** NO BIG DECISION HERE (A12, his "know which decisions matter"): the top
+ *  three moves sit within a hair of each other. A test, never said on its own
+ *  (David 2026-11-05: "nothing hinges on your next move … keep your clock" is
+ *  filler — and Learn has no clock); the useful waiting move reads it. */
+export function noBigDecision(fen: string, lines: Lines): boolean {
   // Out of the opening only: "several moves are equal" on move one is true and teaches nothing.
-  if (lines.length < 3 || Number(fen.split(' ')[5] ?? 1) < 8) return null;
+  if (lines.length < 3 || Number(fen.split(' ')[5] ?? 1) < 8) return false;
   const cps = lines.slice(0, 3).map((l) => moverCp(fen, l));
   // The SAME bar the one criticality read uses (`criticalityThresholds`): all
   // three inside an inaccuracy of each other is "no real decision here".
-  if (Math.max(...cps) - Math.min(...cps) >= criticalityThresholds().notable || Math.abs(cps[0]) > 300) return null;
-  const sans = lines.slice(0, 3).map((l) => sanOf(fen, l.moves[0])).filter((x): x is string => !!x);
-  if (sans.length < 3) return null;
-  // It speaks of the move IN FRONT of the student, and often beside the
-  // verdict on the one they just played (Learn tape 2026-10-15: "This is not a
-  // critical moment…" then "Rook takes d3 was the only move…") — so every stem
-  // says which move it means.
-  return { idea: rot(fen, 'Your next move is not a big decision — several are about equally good, so save your time for the moves that are.', 'For your next move, a few moves do the same job — not a critical moment; bank the time for when it matters.', 'Nothing hinges on your next move — pick a sensible one and keep your clock for the hard decisions.'), claim: 'srr:any-move-fine', namesMove: true, text: `Several moves are equally good for your next move — ${sans[0]}, ${sans[1]} or ${sans[2]}. Not every move is a big decision; save your time for the ones that are.` };
+  if (Math.max(...cps) - Math.min(...cps) >= criticalityThresholds().notable || Math.abs(cps[0]) > 300) return false;
+  return lines.slice(0, 3).map((l) => sanOf(fen, l.moves[0])).filter((x): x is string => !!x).length >= 3;
 }
 
 /** D2 THE UGLY MOVE THAT IS CORRECT ("the hardest move to make"): the engine's
@@ -340,7 +336,7 @@ export function skipMiddleman(fen: string, bestSan: string | null): Read | null 
 /** THE USEFUL WAITING MOVE: no move matters much, and the engine's is a small
  *  rook-pawn step — air for the king while they have to commit first. */
 export function usefulWaiting(fen: string, lines: Lines): Read | null {
-  if (!anyMoveFine(fen, lines)) return null;
+  if (!noBigDecision(fen, lines)) return null;
   const bestSan = sanOf(fen, lines[0]?.moves?.[0]);
   if (!bestSan || !/^[abgh][36]$/.test(bestSan)) return null;
   return { idea: 'Nothing has to happen yet — a useful waiting move is enough, and it makes them commit first.', claim: 'srr:waiting', namesMove: true, text: `Nothing has to happen yet — ${bestSan} is a useful waiting move: it costs nothing, gives your king air, and makes them commit first.`, squares: [bestSan] };
@@ -364,7 +360,7 @@ export function keepSquareForKnight(fen: string, me: 'w' | 'b', bestSan: string 
     // The knight by what it is ("your knight"), its route lit on the board
     // rather than read out (David 2026-11-05: a list of squares is the robot).
     const knight = pieceRef(fen, cell.square, me)?.words ?? `your knight on ${cell.square}`;
-    return { claim: `srr:keep-square:${via}`, promise: { key: `route:${route.target}`, piece: 'n', square: route.target, say: `The knight reaches ${route.target} — that's why ${via} had to stay empty.` }, text: rot(fen, `Keep ${via} empty — ${knight} needs it on the way to ${route.target}.`, `Don't park a piece on ${via} — it's the first stop for ${knight} on the way to ${route.target}.`), squares: [via, route.target, cell.square, ...route.route] };
+    return { claim: `srr:keep-square:${via}`, promise: { key: `route:${route.target}`, piece: 'n', square: route.target, say: `The knight reaches ${route.target} — that's why ${via} had to stay empty.` }, text: rot(fen, `Keep ${via} empty — ${knight} needs it on the way to ${route.target}.`, `${openSentence(knight)} is headed for ${route.target} by way of ${via} — keep that square clear for it.`), squares: [via, route.target, cell.square, ...route.route] };
   }
   return null;
 }
@@ -426,7 +422,7 @@ export function goodInEveryBranch(fen: string, me: 'w' | 'b', lines: Lines): Rea
   if (lines.length < 2) return null;
   // ONE CRITICALITY (OS-11 #9): "the next-best leaves a piece to be taken" is a
   // real decision only where the engine prices the next-best as costing — the
-  // same bar `anyMoveFine` reads for "no big decision here", so the two can
+  // same bar `noBigDecision` reads for "no big decision here", so the two can
   // never both be said of one board (g3 8.Nc2, 6 ms apart).
   const gap = choiceGap(fen, lines);
   if (gap === null || gap < criticalityThresholds().notable) return null;
@@ -611,7 +607,9 @@ export function flexibleFirst(fen: string, lines: Lines): Read | null {
     // THE IDEA NAMES NO PIECE (OS-10, David's record 2026-10-19, ply 13:
     // "Commit the pawn last — a knight move now" said before his move — the
     // piece to move IS the answer). The principle stands alone.
-    return { idea: rot(fen, 'Make the flexible move first — the pawn move can always come later, but a pawn can never go back.', "Keep your options open — the pawn move will still be there later, and a pawn move can't be taken back.", 'Commit the pawn last — a pawn move is the one you can never take back.'), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
+    // Every stem says WHY (David 2026-11-05: "keep your options open" was stock
+    // advice true of any board).
+    return { idea: rot(fen, 'Make the flexible move first — the pawn move can always come later, but a pawn can never go back.', 'Piece first, pawn later — the piece can still change its mind next move, and a pawn never can.', 'Commit the pawn last — a pawn move is the one you can never take back.'), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
   }
   return null;
 }
@@ -646,8 +644,7 @@ export type SpeedRunId =
   | 'positionOpened' | 'queenGlue' | 'takeTheSting' | 'finishStarted' | 'goodInEveryBranch' | 'forceConcession'
   | 'rejectedMoveLater' | 'bestCasePlan' | 'retreatKeepsBreak' | 'flexibleFirst' | 'threatStronger' | 'secureFirst'
   | 'heldByTactic' | 'mutualPins' | 'keepTension' | 'overprotect' | 'castleSide' | 'uglyButRight' | 'provokes'
-  | 'awkwardBlock' | 'skipMiddleman' | 'playAnyway' | 'keepSquareForKnight' | 'rightPieceForHole' | 'usefulWaiting'
-  | 'anyMoveFine';
+  | 'awkwardBlock' | 'skipMiddleman' | 'playAnyway' | 'keepSquareForKnight' | 'rightPieceForHole' | 'usefulWaiting';
 export const SPEED_RUN_KIND: Record<SpeedRunId, 'speedrun-read' | 'provoke' | 'tension' | 'trigger'> = {
   provokes: 'provoke', forceConcession: 'provoke', awkwardBlock: 'provoke',
   keepTension: 'tension',
@@ -657,7 +654,6 @@ export const SPEED_RUN_KIND: Record<SpeedRunId, 'speedrun-read' | 'provoke' | 't
   threatStronger: 'speedrun-read', secureFirst: 'speedrun-read', heldByTactic: 'speedrun-read', mutualPins: 'speedrun-read',
   overprotect: 'speedrun-read', castleSide: 'speedrun-read', uglyButRight: 'speedrun-read', skipMiddleman: 'speedrun-read',
   playAnyway: 'speedrun-read', keepSquareForKnight: 'speedrun-read', rightPieceForHole: 'speedrun-read', usefulWaiting: 'speedrun-read',
-  anyMoveFine: 'speedrun-read',
 };
 /** A read with the name it was made by. */
 export type SpeedRunRead = Read & { id: SpeedRunId };
@@ -713,15 +709,15 @@ export function speedRunReads(args: {
     tag('playAnyway', playAnyway(args.fen, args.lines)),
     tag('keepSquareForKnight', keepSquareForKnight(args.fen, args.me, bestSan)),
     tag('rightPieceForHole', rightPieceForHole(args.fen, args.me)),
-    tag('usefulWaiting', usefulWaiting(args.fen, args.lines)) ?? tag('anyMoveFine', anyMoveFine(args.fen, args.lines)),
+    tag('usefulWaiting', usefulWaiting(args.fen, args.lines)),
   ].filter((r): r is SpeedRunRead => !!r).filter((r) => {
     // RELEVANCE (prod tape 2026-10-06, 80 words a move): a read with no stake
     // of its own speaks only where the decision matters — the gap between the
     // engine's top two moves clears the bar the one criticality read uses. The
-    // reads whose POINT is that nothing hinges on it (any move is fine, the
-    // waiting move, flexible first) are exempt, and say once a game anyway.
+    // reads whose POINT is that nothing hinges on it (the waiting move,
+    // flexible first) are exempt, and say once a game anyway.
     if (r.stakes && r.stakes.points > 0) return true;
-    if (r.claim && /^srr:(any-move-fine|waiting|flexible-first)$/.test(r.claim)) return true;
+    if (r.claim && /^srr:(waiting|flexible-first)$/.test(r.claim)) return true;
     const gap = choiceGap(args.fen, args.lines);
     return gap !== null && gap >= criticalityThresholds().notable;
   }).map((r) => {

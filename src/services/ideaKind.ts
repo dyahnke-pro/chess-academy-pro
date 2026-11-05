@@ -22,6 +22,23 @@ export type IdeaKind =
   /** A choice between plans: the engine's two best lines carry two. */
   | 'plan';
 
+/** DOES THE IDEA TEACH SAID ON ITS OWN (David 2026-11-05: "Do you understand
+ *  the type of words I want to be hearing from coach?" — teaching is what a
+ *  move is FOR: what it wins, threatens, stops or prepares). A move that takes
+ *  part in the centre, develops, castles, steps the king over or sits on a file
+ *  or diagonal says where a piece went; said with nothing else it is a
+ *  description ("Their knight joins the fight for e6", 31 of the 73
+ *  descriptions in seven replayed Learn games), and it speaks only beside a
+ *  point that shares its squares. */
+export const IDEA_TEACHES_ALONE: Record<IdeaKind, boolean> = {
+  mate: true, 'win-material': true, trade: true, recapture: false, rescue: true, guard: true,
+  threat: true, pressure: true, tactic: true, check: true, prevent: true, prepare: true,
+  unpin: true, develop: false, castle: false, 'king-safety': false, 'attack-king': true,
+  center: false, space: false, outpost: true, file: false, diagonal: false,
+  'passed-pawn': true, promote: true, weakness: true, tempo: true, 'king-activity': true,
+  route: true, 'set-up': true, choice: true, order: true, plan: true,
+};
+
 export const BOOK_JOB_IDEA: Record<BookJobKind, IdeaKind> = {
   rescue: 'rescue', guard: 'guard', stopsPin: 'prevent', stopsPush: 'prevent', tempo: 'tempo',
   prepares: 'prepare', castle: 'castle', develop: 'develop', center: 'center', recapture: 'recapture',

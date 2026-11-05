@@ -11,7 +11,7 @@
 // what the page does with it.
 //
 // A LEAF: types, and the one maker over coachFact and studentMoveNaming.
-import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat } from './coachFact';
+import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat, type HeldForm } from './coachFact';
 import { namesPlayableStudentMove, type NamesStudentMove } from './studentMoveNaming';
 import type { FactProof } from './proof';
 import type { FactStakes } from './factStakes';
@@ -66,6 +66,8 @@ interface TeachingParts {
   /** Teach or describe, when the computer knows (`CoachFact.role`): a
    *  consequence with no material number is still a reason, never an aside. */
   role?: FacetRole;
+  /** The fact without the move it names (`CoachFact.heldForm`). */
+  heldForm?: HeldForm;
 }
 
 /** What the page does with the fact. */

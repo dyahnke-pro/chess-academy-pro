@@ -349,9 +349,9 @@ export function criticalMomentStatement(
     const reply = `After their ${sayMoveNoun(after.san, after.fenBefore).replace(/^the /, '')}`;
     return one
       ? pick([
-        `${reply}, only one move ${s}. Slow down.`,
+        `${reply}, only one move ${s} — look at every check, capture and threat before you choose.`,
         `${reply}, you're at a fork in the road: one move ${s}. Take the extra minute.`,
-        `${reply}, exactly one move ${s}. Slow down.`,
+        `${reply}, exactly one move ${s}. Before you choose, look at every check, capture and threat.`,
         `${reply}, one move ${s}, and only one. Worth thinking it through.`,
       ], ply)
       : pick([
@@ -364,7 +364,7 @@ export function criticalMomentStatement(
   return one
     ? pick([
       `Your move now: one move ${s}, and only one. Worth thinking it through.`,
-      `For your next move, exactly one move ${s}. Slow down.`,
+      `For your next move, exactly one move ${s}. Before you choose, look at every check, capture and threat.`,
     ], ply)
     : pick([
       `Your move now: exactly two moves ${s} — the rest concede.`,

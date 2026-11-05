@@ -45,7 +45,7 @@ describe('review — the four facts are facets, so they go through the door', ()
 
   it('[rule] teaches the principle once WITH its reason, then stays silent (David 2026-09-27)', () => {
     const f = facetsAt(4, SCH, S, 'black', NO_TEACHING_CONTEXT);
-    expect(f.find((x) => x.startsWith('[rule]'))).toMatch(/^\[rule\] Nc6 follows a rule worth keeping: .*cannot join the fight/);
+    expect(f.find((x) => x.startsWith('[rule]'))).toMatch(/^\[rule\] Your Nc6 develops into the game.*cannot join the fight/);
     const taught = facetsAt(4, SCH, S, 'black', { ...NO_TEACHING_CONTEXT, principlesTaught: new Set(['development', 'center']) });
     // Taught already: "Nc6 develops into the game…" names what the student
     // can see and teaches nothing — no [rule] facet at all.

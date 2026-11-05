@@ -296,7 +296,9 @@ export function fightingLine(
     act: 'fighting-line', squares: [], proof, key: `fighting:${fen.split(' ')[0]}`,
     text: `It's level, so make chances: ${bare(fight[0])} creates the imbalance, ${andList(labels)}. ${bare(quiet[0])} keeps it quiet.`,
     // Held: the choice, not the move. Its proof is the line, shown only on Why.
-    heldForm: { text: `It's level, so make chances: one move here creates an imbalance — ${andList(labels)} — and the quiet move keeps it level.`, squares: [], proof },
+    // Pointed at by the idea, never the move (David 2026-11-05: "Yes it can
+    // point without saying the move").
+    heldForm: { text: `It's level, so play for an imbalance — there is a move here that gives ${andList(labels)}. Look for it.`, squares: [], proof },
   };
 }
 

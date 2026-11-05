@@ -81,6 +81,7 @@ import { countWarning } from './countMethod';
 import { planChoice, type PlanChoiceLine } from './planChooser';
 import { planFor } from './openingIdentity';
 import { buildReviewMoveTeachingFact } from './reviewMoveTeaching';
+import { IDEA_TEACHES_ALONE } from './ideaKind';
 import { withSubject, openSentence } from '../utils/openSentence';
 // The Learn page reaches the opening facts through this module, never directly
 // (surfaceComposition): the warm-up and the opening's length in plies.
@@ -424,6 +425,7 @@ export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' |
     // A lasting cost (a hole, a shut bishop, castling gone) is a consequence,
     // the why of their move — never an aside (A-plan P6: held 2 of 4).
     role: 'teach',
+    ...(cost.heldText ? { heldForm: { text: cost.heldText, proof: NO_PROOF.description, squares: cost.squares.slice(0, 1) } } : {}),
   }, {
     event: { name: 'coach_their_move_cost_named', props: { surface: 'coach-teach', kind: cost.kind } },
     arrows,
@@ -1227,6 +1229,9 @@ export function boardTeacherPoint(fenBefore: string, san: string, fenNow: string
   // The board teacher reads the move from the board before it.
   return teachingFact('movePoint', {
     computer: 'buildReviewMoveTeachingFact', kind: 'point', seat: 'student', fen: fenBefore, names: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: fact.squares, claims: [`board-teacher:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`, ...(fact.claim ? [fact.claim] : []), ...ideaClaims],
+    // Where the piece went is a description; what it wins, stops or prepares
+    // is the point (one table over every idea, `IDEA_TEACHES_ALONE`).
+    role: IDEA_TEACHES_ALONE[fact.idea] ? 'teach' : 'describe',
   }, {
     event: { name: 'coach_move_point_named', props: { surface: 'coach-teach', source: 'board-teacher' } },
     arrows: [],
@@ -1252,8 +1257,10 @@ export function theirBoardPoint(fenBefore: string, san: string, fenNow: string, 
   const text = withSubject(fact.text.replace(/^The (?=(?:king|queen|rook|bishop|knight|pawn)\b)/, 'Their '), `Their ${san}`);
   return teachingFact('theirPurpose', {
     computer: 'buildReviewMoveTeachingFact', kind: 'opponent-intent', seat: 'opponent', fen: fenBefore, names: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: [to, ...fact.squares], claims: [`their-board:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`, ...ideaClaims],
-    // Their move's job is the why of their move — a consequence, never an aside.
-    role: 'teach',
+    // Their move's job is the why of their move when it wins, threatens, stops
+    // or prepares something; where their piece went is a description, said
+    // only beside a point on its squares (`IDEA_TEACHES_ALONE`).
+    role: IDEA_TEACHES_ALONE[fact.idea] ? 'teach' : 'describe',
   }, {
     event: { name: 'coach_their_point_named', props: { surface: 'coach-teach', source: 'board-teacher' } },
     arrows: [],

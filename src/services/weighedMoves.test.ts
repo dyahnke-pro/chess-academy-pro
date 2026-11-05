@@ -112,6 +112,13 @@ describe('(L) two good moves — on his games', () => {
     // is not "kept guarded" by the other move; the knight's reach is the point.
     const fen = 'r1bq1rk1/pp1pppbp/2n2np1/4P3/Q4B2/2P5/PP3PPP/RN2KBNR b KQ - 0 10';
     expect(moveDifference(fen, 'Nd5', 'Nh5', 'your')?.text).toBe('your knight does more on d5 — 7 squares from there against 3 on h5');
+    // Learn's held forms lead with the student's own move and its reason, and
+    // name neither move (V4, 2026-11-05: "Another move was worth the same
+    // here" said a difference existed and not what it was).
+    const d = moveDifference(fen, 'Nd5', 'Nh5', 'your')!;
+    expect(d.held).toMatch(/^Your move puts the piece on its busier square/);
+    expect(d.heldOther).toMatch(/^Your piece would reach more from another square/);
+    for (const h of [d.held, d.heldOther]) expect(h).not.toMatch(/worth the same|d5|h5|N[dh]5/);
   });
 });
 
@@ -158,8 +165,9 @@ describe('through the one registry, to every surface', () => {
     // a live board it is held in a form that names no move and no square.
     const l = readBoard('alsoGood', { fenBefore: game('SXsVWpN8e1A').fenBefore, san: 'f6+', student: 'w', rating: 1500, reads: game('SXsVWpN8e1A').reads });
     expect(l?.namesStudentMove).toBe(true);
-    expect(l?.heldForm?.text).toBe('Another move kept the win just as well — when you are winning, there is often more than one road.');
-    expect(l?.heldForm?.squares).toEqual([]);
+    // Two roads to a won game separate nothing: a live board holds it silent
+    // ("Another move kept the win just as well" was filler, 2026-11-05).
+    expect(l?.heldForm).toBeUndefined();
     // Their move, the same worth: nothing of the student's is named.
     expect(readBoard('alsoGood', { fenBefore: game('SXsVWpN8e1A').fenBefore, san: 'f6+', student: 'b', rating: 1500, reads: game('SXsVWpN8e1A').reads })?.namesStudentMove).toBe(false);
   });

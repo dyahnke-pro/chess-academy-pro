@@ -5814,6 +5814,15 @@ best move for them on the next board, and whenever the reply is unknown. The
 rule still protects the student's NEXT move; a moment already past is the
 lesson.
 
+🔄 **CARVE-OUT 4 — POINT AT THE IDEA, NEVER THE MOVE (David 2026-11-05: "Yes
+it can point without saying the move").** A fact that names the student's next
+move speaks its HELD FORM — the plan, the target or the habit in words that
+name no move ("Their queen on c3 is doing the most work — one of your moves
+challenges it", "The plan here: grab space — …") — instead of waiting in
+silence. One place decides it: the Learn door speaks `CoachFact.heldForm`
+(`learnTurnDoor`), and the arrow door keeps the move off the board. A fact with
+no held form still waits.
+
 **Review names the better move** (the game is over); **chat names it** (you
 asked). Gates: `learnNamesNoMoveUnasked.gate.test.ts`,
 `oneErrorComputer.gate.test.ts`, `teachMistakeWhy.test.ts`.

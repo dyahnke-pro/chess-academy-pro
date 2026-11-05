@@ -85,6 +85,10 @@ interface PositionalObservation {
   rank: number;
   /** Speakable as-is. Names squares, never a move. */
   text: string;
+  /** The same observation for a surface that holds the student's next move
+   *  (Learn): the idea, not the move it points at (David 2026-11-05: "Yes it
+   *  can point without saying the move"). Absent when `text` names no move. */
+  heldText?: string;
   /** THE KEY SQUARES THIS OBSERVATION NAMES (David 2026-09-13: "add highlights
    *  to all spoken key squares"). Handed over with the fact so the board marks
    *  what the voice named — computed here, never scraped from the prose (the
@@ -200,6 +204,7 @@ function observationsFor(
       text: own
         ? 'Your king is still in the centre and castling is one move away — tuck it in before the centre opens.'
         : 'Their king is still in the centre — every line that opens toward it is worth looking at.',
+      ...(own ? { heldText: 'Your king is still in the centre — get it to safety before the centre opens, because a king in the middle is caught the moment lines open.' } : {}),
     });
   }
   // An open file next to a king is only "the road an attack comes down" if the

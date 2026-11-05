@@ -42,7 +42,7 @@ describe('Review says a move through the one composer', () => {
 
   it("a principle the rule line teaches is not said again by the move (Nf3's development once)", () => {
     const ply3 = walk('e4 e5 Nf3', 'white')[2];
-    expect(ply3).toMatch(/^Nf3 follows a rule worth keeping: /);
+    expect(ply3).toMatch(/^Your Nf3 develops into the game/);
     expect(ply3.match(/develops? into the game/g) ?? []).toHaveLength(1);
   }, 60_000);
 

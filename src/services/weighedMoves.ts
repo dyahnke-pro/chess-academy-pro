@@ -300,8 +300,14 @@ export interface MoveDifference {
   kind: 'loose' | 'activity' | 'structure';
   /** From the seat of the side that moved. */
   text: string;
-  /** The same difference with no move and no square — Learn's held form. */
+  /** The same difference with no move and no square — Learn's held form,
+   *  said only for the student's own move, when the move PLAYED is the one
+   *  it favours: the move's reason, said first (V4, 2026-11-05). */
   held: string;
+  /** The held form when the OTHER move is the one it favours: the idea the
+   *  student can look for, never the move (David 2026-11-05: "Yes it can point
+   *  without saying the move"). */
+  heldOther: string;
   squares: string[];
 }
 
@@ -361,7 +367,8 @@ export function moveDifference(fenBefore: string, sanA: string, sanB: string, ow
   if (cmp && cmp.square !== a.to && cmp.square !== bm.to && hitAfter(fenBefore, cmp.drops, cmp.square)) {
     return { kind: 'loose', favours: cmp.keeps, other: cmp.drops, squares: [cmp.square],
       text: `${cmp.keeps} keeps ${own} ${NAME[cmp.piece] ?? 'piece'} on ${cmp.square} guarded, and ${cmp.drops} leaves it loose`,
-      held: `${own === 'your' ? 'yours' : 'theirs'} keeps every piece guarded, and the other leaves one loose` };
+      held: 'Your move keeps every piece guarded, where the other natural move here would have left one loose',
+      heldOther: 'Your move leaves a piece loose, where another move just as good kept every piece guarded — look for what each move leaves without a guard' };
   }
   // Developing or castling first is the fundamentals' lesson (said by their
   // own computers on the move itself); between two moves of one worth it
@@ -379,7 +386,8 @@ export function moveDifference(fenBefore: string, sanA: string, sanB: string, ow
     const [kind, sq] = faults[0].split(':');
     return { kind: 'structure', favours: f.san, other: o.san, squares: [sq],
       text: `${f.san} keeps ${own} pawns whole, and ${o.san} leaves ${own === 'your' ? 'you' : 'them'} ${kind === 'doubled' ? 'doubled pawns' : 'an isolated pawn'} on ${sq}`,
-      held: `${own === 'your' ? 'yours' : 'theirs'} keeps the pawns whole` };
+      held: 'Your move keeps your pawns whole, where the other natural move here would have damaged them',
+      heldOther: 'Another move just as good kept your pawns whole — count what each move does to the pawns' };
   }
   // Activity compares like with like: the same piece on its two squares — a
   // knight, a bishop or a rook (a queen reaches a dozen squares from almost
@@ -391,7 +399,8 @@ export function moveDifference(fenBefore: string, sanA: string, sanB: string, ow
     if (rh - rl >= 3 && rh >= 1.5 * Math.max(1, rl)) {
       return { kind: 'activity', favours: hi.san, other: lo.san, squares: [hi.to, lo.to],
         text: `${own} ${NAME[hi.piece]} does more on ${hi.to} — ${rh} squares from there against ${rl} on ${lo.to}`,
-        held: `${own === 'your' ? 'yours' : 'theirs'} puts the piece where it does more` };
+        held: 'Your move puts the piece on its busier square — it reaches more from there than from the other',
+        heldOther: 'Your piece would reach more from another square just as good — count the squares it reaches from each' };
     }
   }
   return null;
@@ -407,8 +416,11 @@ export interface AlsoGood {
   difference: (MoveDifference & { favours: string; other: string }) | null;
   text: string;
   /** The form that names no move and no square (Learn, the student's move,
-   *  while the other move may still be theirs to play). */
-  heldText: string;
+   *  while the other move may still be theirs to play); null when nothing on
+   *  the board separates them — then a live board says nothing (David
+   *  2026-11-05: a line that says a difference exists and not what it is is
+   *  not teaching). */
+  heldText: string | null;
   squares: string[];
   key: string;
 }
@@ -443,7 +455,7 @@ export function alsoGood(args: { fenBefore: string; san: string; student: Color;
     }
     const text = `${played.san} or ${c.san} — both hold here, and what separates them is this: ${d.text}.`;
     const heldText = mover === args.student
-      ? `Another move was worth the same here — ${d.favours === played.san ? d.held : 'the other one has a point of its own, so weigh what each leaves behind'}.`
+      ? `${d.favours === played.san ? d.held : d.heldOther}.`
       : text;
     return { san: c.san, uci: c.uci, gapCp, difference: d, text, heldText,
       squares: [...new Set([played.to, c.to, ...d.squares])], key: `also-good:${uciOf(played)}:${c.uci}` };
@@ -454,7 +466,7 @@ export function alsoGood(args: { fenBefore: string; san: string; student: Color;
   if (bothWin) {
     const c = bothWin.c;
     const text = `${played.san} or ${c.san} — both keep the win, so take your pick.`;
-    const heldText = mover === args.student ? 'Another move kept the win just as well — when you are winning, there is often more than one road.' : text;
+    const heldText = mover === args.student ? null : text;
     return { san: c.san, uci: c.uci, gapCp: bothWin.gap, difference: null, text, heldText,
       squares: [played.to, c.to], key: `also-good:${uciOf(played)}:${c.uci}` };
   }

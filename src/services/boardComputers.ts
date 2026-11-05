@@ -822,9 +822,10 @@ export const BOARD_COMPUTERS = {
       const r = alsoGood({ fenBefore, san, student, rating, reads });
       if (!r) return null;
       const mine = new Chess(fenBefore).turn() === student;
-      const held = mine ? { text: r.heldText, proof: NO_PROOF.method, squares: [] as string[] } : null;
+      // No held form when nothing separates them: a live board then holds it.
+      const held = mine && r.heldText ? { text: r.heldText, proof: NO_PROOF.method, squares: [] as string[] } : null;
       return fact({ key: r.key, claims: [r.key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,
-        seat: mine ? 'student' : 'opponent', namesStudentMove: !!held, thread: LOCAL_THREAD, fen: fenBefore, ...(held ? { heldForm: held } : {}) });
+        seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen: fenBefore, ...(held ? { heldForm: held } : {}) });
     }),
     computer: 'alsoGood',
     kind: 'contrast',

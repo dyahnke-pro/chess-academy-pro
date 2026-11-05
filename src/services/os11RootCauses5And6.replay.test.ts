@@ -7,7 +7,7 @@
  * spoke it anyway. Engine lines are #2's Stockfish depth-20 reads.
  */
 import { describe, it, expect } from 'vitest';
-import { anyMoveFine, overprotect } from './speedRunReads';
+import { flexibleFirst, overprotect } from './speedRunReads';
 import { coachTurn } from './coachDecider';
 import { spokenSentenceKeys } from './learnTurnDoor';
 import { NO_PROOF } from './proof';
@@ -20,19 +20,24 @@ const F12 = 'r1b1k2r/pp2p1bp/2np1np1/q5N1/4PB2/2N5/PP3PPP/R2QR1K1 w - - 6 12';
 const L12 = [{ moves: ['a1c1'], evaluation: -286, mate: null }, { moves: ['c3d5'], evaluation: -299, mate: null }, { moves: ['d1b3'], evaluation: -299, mate: null }];
 const F27 = 'r5k1/pp6/2np1p2/3N4/4P1b1/1P4P1/6K1/5R2 w - - 0 27';
 const F34 = 'r7/pp4k1/3p1R2/2nN2P1/4P3/8/6K1/8 w - - 4 34';
+// One read, three rotated wordings under one claim (the calm "nothing hinges"
+// read these tests first used is deleted — David 2026-11-05: filler).
+const F8b = 'r1bqk1nr/pp2ppbp/2np2p1/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 2 8';
+const F9b = 'r1bqk1nr/pp2ppbp/2np2p1/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 2 9';
+const FLEX = [{ moves: ['c3d5'], evaluation: -17, mate: null }, { moves: ['e4e5'], evaluation: -28, mate: null }];
 const ctx = { priorKeys: new Set<string>(), priorLead: null, green: null, beginner: false, owner: 'open' as const, chance: null };
 
 describe('root cause 5 — one claim, whatever wording it rotates to', () => {
-  it('R1: the move-8 phase line ("Nothing hinges…") silences the move-12 door line ("…not a big decision")', () => {
-    const a = anyMoveFine(F8, L8)!;
-    const b = anyMoveFine(F12, L12)!;
-    expect(a.idea).toMatch(/^Nothing hinges/);
-    expect(b.idea).toMatch(/not a big decision/);
+  it('R1: one read said in one wording silences its other wording later in the game', () => {
+    const a = flexibleFirst(F8b, FLEX)!;
+    const b = flexibleFirst(F9b, FLEX)!;
+    expect(a.idea).not.toBe(b.idea);
+    expect(b.claim).toBe(a.claim);
     const phase = decidePhaseWave([{ text: a.idea!, claims: [a.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE, factKind: 'speedrun-read' }],
-      F8, { fen: F8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() }, ctx)!;
-    expect(phase.pkg.spoken).toMatch(/Nothing hinges/);
+      F8b, { fen: F8b, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() }, ctx)!;
+    expect(phase.pkg.spoken).toMatch(/pawn/);
     const ledger = new Set(spokenSentenceKeys(phase.pkg));
-    const later = decideTurn([{ lane: 'positionFacts', text: b.idea!, fen: F12, claims: [b.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE }], '', ledger);
+    const later = decideTurn([{ lane: 'positionFacts', text: b.idea!, fen: F9b, claims: [b.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE }], '', ledger);
     expect(later.pkg.spoken).toBe('');
   });
 
@@ -50,20 +55,20 @@ describe('root cause 5 — one claim, whatever wording it rotates to', () => {
 });
 
 describe('root cause 6 — the phase wave is part of its turn', () => {
-  it('ply 13: the calm read the late wave held as "contradicts" is not spoken by the phase wave', () => {
-    const calm = anyMoveFine(F8, L8)!;
+  it('a read the late wave held is not spoken by the phase wave of the same turn', () => {
+    const flex = flexibleFirst(F8b, FLEX)!;
     const holds = new Set<string>();
     const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: laneFacts([
       { lane: 'positionFacts', text: 'Ask it of every candidate: after it, can they take anything of yours?', fen: F8, squares: ['c4'], claims: ['srr:every-branch'], stakes: { points: 3, plies: 2 }, proof: NO_PROOF.method, namesStudentMove: NAMES_NO_MOVE },
-      { lane: 'positionFacts', text: calm.idea!, fen: F8, claims: [calm.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE },
+      { lane: 'positionFacts', text: flex.idea!, fen: F8, claims: [flex.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE },
     ]), priorLead: null, green: null, beginner: false, turnHolds: holds, owner: 'open', chance: null });
-    expect(late.pkg.spoken).not.toMatch(/Nothing hinges/);
-    const phase = decidePhaseWave([{ text: calm.idea!, claims: [calm.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE, factKind: 'speedrun-read' }],
+    expect(late.pkg.spoken).not.toContain(flex.idea!);
+    const phase = decidePhaseWave([{ text: flex.idea!, claims: [flex.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE, factKind: 'speedrun-read' }],
       F8, { fen: F8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, said: late.pkg.spoken, holds }, ctx)!;
     expect(phase.pkg.spoken).toBe('');
     // NEGATIVE CONTROL: on a turn that held nothing, the same phase fact speaks.
-    const fresh = decidePhaseWave([{ text: calm.idea!, claims: [calm.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE, factKind: 'speedrun-read' }],
+    const fresh = decidePhaseWave([{ text: flex.idea!, claims: [flex.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE, factKind: 'speedrun-read' }],
       F8, { fen: F8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() }, ctx)!;
-    expect(fresh.pkg.spoken).toMatch(/Nothing hinges/);
+    expect(fresh.pkg.spoken).toContain(flex.idea!);
   });
 });

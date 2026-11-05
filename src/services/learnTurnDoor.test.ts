@@ -240,7 +240,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: [^,]*?pendingRegisterComputers\.full, text: registerNow, lane: 'register', .*?, lines: pendingRegisterLines \}\)/);
     // The student's best move is never drawn before they play it (prod walk 2026-10-19).
     expect(TEACH_CODE).not.toMatch(/sans: \[compareRead\.bestSan\]/);
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: c\.computer, text: c\.text, lane, .*?, namesStudentMove: c\.namesStudentMove, squares: c\.squares, claims: clauseClaims\(pf, ci, probe\.fen\(\)\), gradeFen: c\.fen, lines: c\.lines, stakes: c\.stakes \?\? undefined, role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill \}\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: c\.computer, text: c\.text, lane, .*?, namesStudentMove: c\.namesStudentMove, squares: c\.squares, claims: clauseClaims\(pf, ci, probe\.fen\(\)\), gradeFen: c\.fen, lines: c\.lines, stakes: c\.stakes \?\? undefined, role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill, \.\.\.\(c\.heldForm \? \{ heldForm: c\.heldForm \} : \{\}\) \}\)/);
     expect(TEACH_CODE).toMatch(/(?:fundamental|fund)\?\.lines[,)]/);
     expect(TEACH_CODE).toMatch(/lane: 'fundamental', proof: NO_PROOF\.method, namesStudentMove: false, squares: \[\], claims: fundamental\.howOnly \? undefined : fundamentalClaims, gradeFen: move\.fen, lines: fundamental\.lines, skill: FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined \}\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
@@ -547,7 +547,7 @@ describe('a REASON outranks a description (David 2026-10-13: "value why statemen
     expect(d.held).toContain('positionFacts');
   });
   it('the producer passes the role from the ONE table over its clause kind', () => {
-    expect(TEACH_CODE).toMatch(/lines: c\.lines, stakes: c\.stakes \?\? undefined, role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill \}/);
+    expect(TEACH_CODE).toMatch(/lines: c\.lines, stakes: c\.stakes \?\? undefined, role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill, \.\.\.\(c\.heldForm \? \{ heldForm: c\.heldForm \} : \{\}\) \}/);
   });
 });
 
@@ -803,7 +803,7 @@ describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-1
     expect(TEACH_CODE).toMatch(/lane: 'countMethod' as const, computer: countRead\.computer, text: countRead\.text, fen: args\.fenAfterReply, squares: countRead\.squares, claims: countRead\.claims, stakes: countRead\.stakes \?\? undefined, role: countRead\.role/);
     expect(TEACH_CODE).not.toMatch(/readBoard\('countMethod', \{ fen: probe\.fen\(\)/);
     // One forwarder for every computed hint — arrows, stakes and role ride.
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, \{ lane: hint\.lane, computer: hint\.computer, text: hint\.text, proof: hint\.proof, namesStudentMove: hint\.namesStudentMove, squares: hint\.squares, claims: hint\.claims, gradeFen, arrows: hint\.arrows, stakes: hint\.stakes \?\? undefined, role: hint\.role, ownMoveReason: hint\.ownMoveReason \}\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, \{ lane: hint\.lane, computer: hint\.computer, text: hint\.text, proof: hint\.proof, namesStudentMove: hint\.namesStudentMove, squares: hint\.squares, claims: hint\.claims, gradeFen, arrows: hint\.arrows, stakes: hint\.stakes \?\? undefined, role: hint\.role, ownMoveReason: hint\.ownMoveReason, \.\.\.\(hint\.heldForm \? \{ heldForm: hint\.heldForm \} : \{\}\) \}\)/);
     expect(TEACH_CODE).not.toMatch(/queueSpokenHint\([^,\n]*, \{ text: (\w+)\.text, lane: \1\.lane, proof: \1\.proof, squares: \1\.squares, claims: \1\.claims \}\)/);
     // Priority-first speaks its reason with NO arrow: the arrow would be the answer.
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: 'buildPriorityFirst', text: pfLine, lane: 'priorityFirst', [^\n]*, squares: \[pf\.targetSquare\], role: 'teach' \}\)/);
@@ -885,7 +885,7 @@ describe('rules and theory fade per skill (item 8, 2026-10-17)', () => {
   it('the rule, the fundamental and the book move carry their skill to the door', () => {
     const pf = readFileSync('src/services/positionFacts.ts', 'utf8');
     expect(pf).toMatch(/\.\.\.\(ruleSkill\(a\.rule\.id\) \? \{ skill: ruleSkill\(a\.rule\.id\) \} : \{\}\)/);
-    expect(TEACH_CODE).toMatch(/role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill \}/);
+    expect(TEACH_CODE).toMatch(/role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill, \.\.\.\(c\.heldForm \? \{ heldForm: c\.heldForm \} : \{\}\) \}/);
     expect(TEACH_CODE).toMatch(/skill: FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined \}\)/);
     // The book move's skill rides on its fact, from the computer (P1-6a), and
     // Learn hands the fact's own skill to the door.
@@ -909,18 +909,6 @@ describe('one reason for one move (Learn audit 2026-10-18)', () => {
       { lane: 'movePoint', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.description, text: 'The queen bears down on c5, backing your c-pawn\'s push there.', fen: Q, squares: ['c5'], claims: ['board-teacher:Qa5:x'] },
     ]);
     expect(d.pkg.spoken).toContain('bears down');
-  });
-});
-
-describe('"nothing hinges" never sits beside a stake (Alekhine walk 2026-10-19)', () => {
-  const calm = { lane: 'positionFacts' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Nothing hinges on your next move — pick a sensible one and keep your clock for the hard decisions.', fen: FEN, claims: ['srr:any-move-fine'] };
-  const fork = { lane: 'positionFacts' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Watch c2 — a knight lands there in 2 and forks your king on e1 and rook on a1, so take the square away before it arrives.', fen: FEN, squares: ['c2'], stakes: { points: 5, plies: 3 } };
-  it('the calm read stands down when something else is at stake', () => {
-    const d = decideTurn([fork, calm]);
-    expect(d.pkg.kept.map((k) => k.text).join(' ')).not.toMatch(/Nothing hinges/);
-  });
-  it('NEGATIVE CONTROL: alone, it speaks', () => {
-    expect(decideTurn([calm]).pkg.kept.map((k) => k.text).join(' ')).toMatch(/Nothing hinges/);
   });
 });
 
@@ -952,5 +940,43 @@ describe('one habit a turn (prod Learn audit 2026-10-20)', () => {
     const d = decideTurn([{ lane: 'kneeJerk', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.method, text: 'Before you recapture, ask whether you have to: what else does the board offer?', fen: F, claims: ['method:knee-jerk'] }],
       undefined, undefined, null, null, false, null, turnHolds);
     expect(d.spoke).not.toContain('kneeJerk');
+  });
+});
+
+describe('a fact that names the student\'s move speaks its held form (David 2026-11-05: "Yes it can point without saying the move")', () => {
+  const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+  const named = {
+    lane: 'pieceQuality' as const, namesStudentMove: true, proof: NO_PROOF.description, fen: FEN, squares: ['c6'],
+    text: 'Their knight on c6 is doing the most work — Bb5 challenges it.',
+  };
+  it('the idea speaks, never the move', () => {
+    const r = decideTurn([{ ...named, heldForm: { text: 'Their knight on c6 is doing the most work — one of your moves challenges it.', proof: NO_PROOF.description, squares: ['c6'] } }], '');
+    expect(r.pkg.spoken).toContain('one of your moves challenges it');
+    expect(r.pkg.spoken).not.toMatch(/Bb5/);
+  });
+  it('NEGATIVE CONTROL: with no held form the fact waits, said nowhere', () => {
+    const r = decideTurn([named], '');
+    expect(r.pkg.spoken).toBe('');
+  });
+});
+
+describe('one decision per turn: a later wave extends the first thought or brings bigger news (2026-11-05)', () => {
+  const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 1 5';
+  // The earlier wave's lead (about f7), worth more than anything this wave carries.
+  const prior = { lane: 'positionFacts' as const, squares: ['f7'], value: 1e6 };
+  // positionFacts: a lane that does not always ride (planArc does).
+  const idea = (squares: string[], text: string) => ({ lane: 'positionFacts' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text, fen: FEN, squares });
+  it('an unrelated idea in the later wave waits — the turn keeps one thought', () => {
+    const d = decideTurn([idea(['b5'], 'Their plan is the queenside push with b5.')], '', undefined, prior);
+    expect(d.pkg.spoken).toBe('');
+    expect(d.held).toContain('positionFacts');
+  });
+  it('the same idea extended — on the first thought\'s squares — speaks', () => {
+    const d = decideTurn([idea(['c4', 'f7'], 'Your bishop on c4 aims at f7 too.')], '', undefined, prior);
+    expect(d.pkg.spoken).toContain('f7');
+  });
+  it('NEGATIVE CONTROL: with no earlier wave the unrelated idea speaks', () => {
+    const d = decideTurn([idea(['b5'], 'Their plan is the queenside push with b5.')], '');
+    expect(d.pkg.spoken).toContain('b5');
   });
 });

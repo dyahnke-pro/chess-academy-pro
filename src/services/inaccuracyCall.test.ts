@@ -11,7 +11,7 @@
 // "inaccuracy" in review.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { allowedReply, betterMoveReason, callInaccuracy, callInaccuracyDetailed, gambitFile } from './inaccuracyCall';
+import { allowedReply, betterMoveReason, callInaccuracy, callInaccuracyDetailed, gambitFile , slipClue } from './inaccuracyCall';
 import { toOtherSeat as seatTheirErrorForStudent } from '../utils/seatPronouns';
 import { classifyMove } from './moveRating';
 import { MISTAKE_CP } from './engineConstants';
@@ -113,7 +113,7 @@ describe('the coach owns its own mistakes', () => {
     }));
     expect(call?.said).toMatch(/^Their a3 is a /);
     expect(call?.said).not.toMatch(/\bfrom me\b|\bI\b|\bmy\b/);
-    expect(call?.said, 'did not point the student at the punishment').toContain('something here for you');
+    expect(call?.said, 'did not point the student at the punishment').toContain('clear edge — look for it');
     expect(call?.offersStudent, 'the offer travels as data, so Learn can reveal the answer after the move').toBe(true);
   });
 
@@ -136,7 +136,7 @@ describe('the coach owns its own mistakes', () => {
     }));
     expect(mistake?.quality).toBe('mistake');
     expect(mistake?.said, 'a real mistake owes the student the opportunity')
-      .toContain('something here for you');
+      .toContain('clear edge — look for it');
   });
 
   it('names its own move — that one is already on the board', () => {
@@ -568,7 +568,7 @@ describe('their slip is offered as what it really is (Learn walk 2026-10-02, 6.h
   });
   it('clearly better → something to find, never "take" (there may be no capture)', () => {
     const said = callInaccuracy(withOneSearch({ namesBetterMove: true, ...base, moverEvalAfterCp: -120 }))?.said ?? '';
-    expect(said).toMatch(/something here for you now — look for it/);
+    expect(said).toMatch(/clear edge — look for it\. Checks, captures and threats first\./);
     expect(said).not.toMatch(/take it/);
   });
   it('a small edge is not a prize (Learn walk 2026-10-02: "go and take it" at +0.45)', () => {
@@ -647,5 +647,22 @@ describe('their slip says what they let go (Learn audit 2026-10-14: "Their gxf6 
     }));
     expect(call?.said).toMatch(/^Their a6 is a \w+ — they could have won your queen on c6, and it is still hanging — see to it\./);
     expect(call?.said.match(/still hanging/g)).toHaveLength(1);
+  });
+});
+
+describe('their slip is pointed at by KIND, never by move (David 2026-11-05: "Yes it can point without saying the move")', () => {
+  // Their Ke1?: …Nc2+ forks the king and the rook on a1.
+  const FORK = '4k3/8/8/8/3n4/8/8/R4K2 w - - 0 1';
+  // Two Knights, 5…Nxd5?: Nxf7 takes a pawn the king takes back — a sacrifice,
+  // never "something loose".
+  const SAC = 'r1bqkb1r/ppp2ppp/2n2n2/3Pp1N1/2B5/8/PPPP1PPP/RNBQK2R b KQkq - 0 5';
+  it('names the tactic the punishing reply lands, and the habit — never the move or its square', () => {
+    const said = slipClue(FORK, 'Ke1', ['d4c2']);
+    expect(said).toBe('Their move allows a fork — look for it. Checks, captures and threats first.');
+    expect(said).not.toMatch(/Nc2|c2/);
+  });
+  it('a capture the exchange count loses is no loose piece; no line known says the edge only', () => {
+    expect(slipClue(SAC, 'Nxd5', ['g5f7'])).toBe('Their move hands you a clear edge — look for it. Checks, captures and threats first.');
+    expect(slipClue(FORK, 'Ke1', [])).toBe('Their move hands you a clear edge — look for it. Checks, captures and threats first.');
   });
 });

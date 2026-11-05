@@ -351,17 +351,21 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   move: 'describe',
   count: 'describe',
   royal: 'describe',
-  king: 'describe',
+  // THE PLAN READS TEACH (David 2026-11-05: "teaching is … how to plan" — the
+  // king's safety, the structure read, the worst piece and what a move left
+  // behind are the plans he gives; filed as descriptions they spoke only
+  // beside another line's squares, held 147 times in seven replayed games).
+  king: 'teach',
   note: 'describe',
   delta: 'describe',
   eval: 'describe',
   passer: 'describe',
   rook7: 'describe',
-  structure: 'describe',
+  structure: 'teach',
   badbishop: 'describe',
   complex: 'describe',
   minority: 'describe',
-  worst: 'describe',
+  worst: 'teach',
   verdict: 'describe',
   'opp-target': 'describe',
   'opp-dev': 'describe',
@@ -370,7 +374,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   held: 'teach',
   'last-here': 'teach',
   'plan-line': 'describe', // the long engine line — speaks only when it proves a point
-  consequence: 'describe',
+  consequence: 'teach',
 };
 
 /**
@@ -416,10 +420,11 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   'stop-flaw': 'teach',
   'hole-access': 'teach',
   'speedrun-read': 'teach',
-  // The speed-run reads under their own kinds teach as the read did; the
-  // behaviours under theirs describe as the behaviour lane did.
+  // The speed-run reads under their own kinds teach as the read did, and so do
+  // the behaviours: the wish and the space a plan wants are plans (David
+  // 2026-11-05: "how to plan").
   provoke: 'teach', tension: 'teach', trigger: 'teach', 'their-trigger': 'teach',
-  space: 'describe', wishlist: 'describe',
+  space: 'teach', wishlist: 'teach',
   // The line tactics (tacticGeometry) — the same name and role as review's facet.
   tactic: 'teach',
   'king-read': 'teach',
@@ -439,8 +444,8 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   // The habits that are teaching moves of their own (`methodBeat.HABIT_KIND`).
   'opp-think': 'teach',
   'forcing-scan': 'teach',
-  'student-leans': 'describe',
-  'opponent-leans': 'describe',
+  'student-leans': 'teach',
+  'opponent-leans': 'teach',
 };
 
 /**

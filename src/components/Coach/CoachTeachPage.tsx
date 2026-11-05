@@ -9836,6 +9836,7 @@ export function CoachTeachPage({ mode }: {
     let behaviorKind: string = 'student-leans';
     let positionalLine: string | null = null;
     let positionalNames: NamesStudentMove = NAMES_NO_MOVE;
+    let positionalHeld: string | null = null;
     let positionalClaims: string[] = [];
     let positionalSquares: readonly string[] = [];
     let positionalIsOwnKing = false;
@@ -9972,6 +9973,7 @@ export function CoachTeachPage({ mode }: {
           positionalSquares = prSquares;
           // "castling is one move away — tuck it in" is the castle: it says so,
           // and the door holds it while it is the student's move (OS-11 item 6 b).
+          positionalHeld = pr.heldText ?? null;
           if (pr.key === 'student-king-centre') {
             const k = studentCC === 'w' ? 'e1' : 'e8';
             const r = studentCC === 'w' ? '1' : '8';
@@ -10036,7 +10038,7 @@ export function CoachTeachPage({ mode }: {
     // A recited line names the student's moves in it (OS-10).
     deferIf(computedLine, computedLine ? { lane: 'commentary', computer: 'buildPlayCommentary', text: computedLine, proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(namesFromArrows(computedLineArrows, studentCC, args.fenAfterReply)), arrows: computedLineArrows } : null);
     deferIf(behaviorLine && !decidedByMaterial, behaviorLine ? { lane: 'behavior', computer: 'detectBehaviors', factKind: behaviorKind, text: behaviorLine, proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(namesFromArrows(behaviorArrows, studentCC, args.fenAfterReply)), squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), claims: behaviorClaims, arrows: behaviorArrows } : null);
-    deferIf(positionalLine && !decidedByMaterial, positionalLine ? { lane: positionalIsOwnKing ? 'kingSafety' : 'positional', computer: 'buildPositionalRead', text: positionalLine, proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(positionalNames), squares: positionalSquares, claims: positionalClaims } : null);
+    deferIf(positionalLine && !decidedByMaterial, positionalLine ? { lane: positionalIsOwnKing ? 'kingSafety' : 'positional', computer: 'buildPositionalRead', text: positionalLine, proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(positionalNames), squares: positionalSquares, claims: positionalClaims, ...(positionalHeld ? { heldForm: { text: positionalHeld, proof: NO_PROOF.description, squares: positionalSquares } } : {}) } : null);
     // THE BOOK MOVE AND ITS JOB — its own lane on the "but" beat, so the door
     // orders it as a teaching fact (David 2026-10-14: "make sure this new
     // computer routes to the dna"), never glued to the opening name.
@@ -10378,7 +10380,7 @@ export function CoachTeachPage({ mode }: {
    *  the arrows on nine of them and the stakes/role on all but one (G6, G8.5:
    *  computed and never drawn, or held as an aside for want of a role). */
   const queueHint = useCallback((fen: string, hint: TeachingFact, gradeFen?: string): void => {
-    queueSpokenHint(fen, { lane: hint.lane, computer: hint.computer, text: hint.text, proof: hint.proof, namesStudentMove: hint.namesStudentMove, squares: hint.squares, claims: hint.claims, gradeFen, arrows: hint.arrows, stakes: hint.stakes ?? undefined, role: hint.role, ownMoveReason: hint.ownMoveReason });
+    queueSpokenHint(fen, { lane: hint.lane, computer: hint.computer, text: hint.text, proof: hint.proof, namesStudentMove: hint.namesStudentMove, squares: hint.squares, claims: hint.claims, gradeFen, arrows: hint.arrows, stakes: hint.stakes ?? undefined, role: hint.role, ownMoveReason: hint.ownMoveReason, ...(hint.heldForm ? { heldForm: hint.heldForm } : {}) });
     if (hint.event) captureEvent(hint.event.name, hint.event.props);
   }, [queueSpokenHint]);
 
@@ -11260,7 +11262,7 @@ export function CoachTeachPage({ mode }: {
                       // development idea another lane may already have said.
                       if (q.ideaKey && heardHere.has(q.ideaKey)) continue;
                       learnMemRef.current.story.offer(probe.fen(), { text: q.text, claims: [STORY_KEY.pieceQuality(q.onceKey)] });
-                      queueSpokenHint(probe.fen(), { computer: 'pieceQualityLines', text: q.text, lane: 'pieceQuality', proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(namesFromArrows(q.arrows, (playerColor === 'white' ? 'w' : 'b'), probe.fen())), squares: q.squares, claims: [...(q.squares[0] ? [`piece-quality:${q.squares[0]}`] : []), ...(q.ideaKey ? [q.ideaKey] : [])], arrows: q.arrows });
+                      queueSpokenHint(probe.fen(), { computer: 'pieceQualityLines', text: q.text, lane: 'pieceQuality', proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(namesFromArrows(q.arrows, (playerColor === 'white' ? 'w' : 'b'), probe.fen())), squares: q.squares, claims: [...(q.squares[0] ? [`piece-quality:${q.squares[0]}`] : []), ...(q.ideaKey ? [q.ideaKey] : [])], arrows: q.arrows, ...(q.heldText ? { heldForm: { text: q.heldText, proof: NO_PROOF.description, squares: q.squares.slice(0, 1) } } : {}) });
                       captureEvent('piece_quality_spoken', { surface: 'coach-teach', kind: q.kind });
                     }
                   }
@@ -11426,7 +11428,7 @@ export function CoachTeachPage({ mode }: {
                       // Their move's purpose rides its own lane, above the
                       // board descriptions it used to lose to on offer order.
                       const lane = c.kind === 'stopped' ? 'theirPurpose' as const : 'positionFacts' as const;
-                      queueSpokenHint(probe.fen(), { computer: c.computer, text: c.text, lane, proof: (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0], lineSeatAt(c.lines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, namesStudentMove: c.namesStudentMove, squares: c.squares, claims: clauseClaims(pf, ci, probe.fen()), gradeFen: c.fen, lines: c.lines, stakes: c.stakes ?? undefined, role: FACT_ROLE[c.kind], factKind: c.kind, skill: c.skill });
+                      queueSpokenHint(probe.fen(), { computer: c.computer, text: c.text, lane, proof: (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0], lineSeatAt(c.lines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, namesStudentMove: c.namesStudentMove, squares: c.squares, claims: clauseClaims(pf, ci, probe.fen()), gradeFen: c.fen, lines: c.lines, stakes: c.stakes ?? undefined, role: FACT_ROLE[c.kind], factKind: c.kind, skill: c.skill, ...(c.heldForm ? { heldForm: c.heldForm } : {}) });
                     }
                     if (pf.importance.speak) captureEvent('position_facts_spoken', { surface: 'coach-teach', tier: pf.importance.tier, clauses: pf.clauses.length });
                   }
@@ -12981,7 +12983,13 @@ export function CoachTeachPage({ mode }: {
                           const intentArrows: ArrowClaim[] = intent.prepares && !intent.prepares.san.startsWith('O-O')
                             ? [{ from: intent.prepares.uci.slice(0, 2), to: intent.prepares.uci.slice(2, 4), role: 'play', source: 'learn.moveIntent' }]
                             : [];
-                          queueSpokenHint(fenAfterReply, { computer: 'intentWithFallback', text: intentText, lane: 'moveIntent', proof: squaresProof(intentText, intent.squares) ?? NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(namesFromArrows(intentArrows, playerColor === 'white' ? 'w' : 'b', fenAfterReply)), squares: intent.squares, claims: [
+                          // Its words already say the prepared move by its piece, never
+                          // by the move (`holdPrepared`): only the arrow names it, and the
+                          // arrow door holds the student's moves. So the held form is the
+                          // line itself — the reason for the student's own move speaks
+                          // (David 2026-11-05: "Yes it can point without saying the move";
+                          // held 15 times in seven replayed games).
+                          queueSpokenHint(fenAfterReply, { computer: 'intentWithFallback', text: intentText, lane: 'moveIntent', proof: squaresProof(intentText, intent.squares) ?? NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(namesFromArrows(intentArrows, playerColor === 'white' ? 'w' : 'b', fenAfterReply)), heldForm: { text: intentText, squares: [...intent.squares], proof: squaresProof(intentText, intent.squares) ?? NO_PROOF.description }, squares: intent.squares, claims: [
                             ...(intent.prevents ? [`stops:${intent.prevents.uci}`] : []),
                             ...(intent.prepares ? [`prepares:${intent.prepares.uci}`] : []),
                             // "Bc4 clears the way to castle" and "castling is one

@@ -42,7 +42,7 @@ import { costStakes, stakeValue, stakeBar, isStaked, type Stakes } from './factS
 const PAWN_AT_STAKE = stakeBar(1);
 import { sameClaim } from './factSelector';
 import type { FacetRole, FactKind } from './reviewFacetRank';
-import { isCoachFactKind, LOCAL_THREAD, placeFact, stakesOf, stepOf, type CoachFact, type CoachFactKind, type ComputerName } from './coachFact';
+import { isCoachFactKind, LOCAL_THREAD, placeFact, stakesOf, stepOf, type CoachFact, type CoachFactKind, type ComputerName, type HeldForm } from './coachFact';
 import { BOARD_COMPUTERS } from './boardComputers';
 import { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
@@ -58,7 +58,7 @@ export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-type HoldReason = 'mission' | 'names-chance' | 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'same-step' | 'second-thought' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled' | 'one-method';
+type HoldReason = 'mission' | 'names-chance' | 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'same-step' | 'second-thought' | 'marginal' | 'out-of-phase' | 'price-unsettled' | 'one-method';
 
 /** WHO OWNS THE VOICE OF THIS TURN (WO-MISSIONS-01, WO-LEARN-FOCUS-01).
  *  - `open`: no focus, no mission — the door decides.
@@ -645,6 +645,11 @@ export interface LearnFactParts {
    *  producer answers it where the fact is made (`namesPlayableStudentMove`
    *  over the moves it names), never the door. */
   namesStudentMove: boolean;
+  /** THE SAME IDEA WITHOUT THE MOVE (David 2026-11-05: "Yes it can point
+   *  without saying the move"): what the door says in place of a fact that
+   *  names the student's move — the plan, the target, the habit — so a held
+   *  move still teaches its idea. Absent: the fact waits in silence. */
+  heldForm?: HeldForm;
 }
 
 /** A LEARN FACT AT THE DOOR — the one fact shape (`coachFact`) with the lane
@@ -694,6 +699,7 @@ export function learnFact(id: string, f: LearnFactParts): LaneFact {
     ...(f.role ? { role: f.role } : {}),
     ...(f.factKind ? { factKind: f.factKind } : {}),
     ...(f.statesThread ? { statesThread: f.statesThread } : {}),
+    ...(f.heldForm ? { heldForm: f.heldForm } : {}),
   };
 }
 
@@ -831,7 +837,14 @@ export function decideTurn(
   const moveHeld: LearnLane[] = [];
   const chanceHeld: LearnLane[] = [];
   const heldEarlier: LearnLane[] = [];
-  for (const f of facts) {
+  for (const named of facts) {
+    // A fact that names the student's move speaks its held form — the idea,
+    // never the move (David 2026-11-05) — under the same claims; with none it
+    // waits below.
+    const f: typeof named = named.namesStudentMove && named.heldForm?.text.trim()
+      ? { ...named, text: named.heldForm.text, squares: [...named.heldForm.squares], proof: named.heldForm.proof, namesStudentMove: false,
+        ...(named.heldForm.lines ? { lines: named.heldForm.lines } : {}) }
+      : named;
     if (!f.text.trim()) continue;
     offered.push(f.lane);
     if (factOutOfPhase(f)) { if (!phaseHeld.includes(f.lane)) phaseHeld.push(f.lane); for (const c of f.claims) heldThisTurn?.add(c); continue; }
@@ -1109,16 +1122,9 @@ export function decideTurn(
   for (const l of moveHeld) hold(l, 'names-move');
   for (const l of chanceHeld) hold(l, 'names-chance');
   for (const l of heldEarlier) hold(l, 'held-this-turn');
-  // "NOTHING HINGES ON YOUR NEXT MOVE" NEVER SITS BESIDE A STAKE (Alekhine
-  // walk 2026-10-19: "Watch c2 — a knight forks there in 2…" then "Nothing
-  // hinges on your next move"). Both were true — every top move met the fork —
-  // but the calm read only speaks on a turn where nothing else is at stake.
-  const calmRead = (x: { fact: VoiceFact }): boolean => !!x.fact.claims?.includes('srr:any-move-fine');
-  const somethingAtStake = survivors.some((y) => !calmRead(y) && !subsumed.has(y) && stakeOf(y) > 0);
   for (const x of survivors) {
     { const why = holdWhy(x); if (why) { hold(x.lane, why); continue; } }
     if (dangerWaits(x)) { hold(x.lane, 'danger-waits'); continue; }
-    if (somethingAtStake && calmRead(x)) { hold(x.lane, 'contradicts'); continue; }
     // A DESCRIPTION — nothing at stake, from a lane that describes the board
     // (or an unstaked board-read riding position facts) — speaks only as
     // SUPPORT: it must touch the lead's squares AND add one of its own. "Your
@@ -1147,7 +1153,19 @@ export function decideTurn(
     // five different things (prod Learn 2026-10-29, 102 words a move). A reason
     // is still valued over a description: it leads its step.
     const thought = thoughtHold(x);
+    // ONE DECISION PER TURN (David 2026-11-05: "Do you understand the type of
+    // words I want to be hearing from coach?" — seven replayed games spoke two
+    // separate thoughts on 113 of 205 turns, "Opposite-coloured bishops now…"
+    // then, a wave later, an unrelated credit). A later wave of the turn
+    // extends the thought the earlier wave spoke — it shares its squares — or
+    // replaces it with bigger news (danger, a pawn or more at stake, a mate),
+    // or gives the student's own move its reason; anything else is a second
+    // thought, and waits.
+    const priorSquares = [...(priorLead?.squares ?? []), ...(priorLead?.thread ?? [])];
+    const secondThought = !!priorLead && x !== ownLead && x !== ownReason && !DANGER_LANES.has(x.lane) && !important(x)
+      && LEARN_LANES[x.lane].always !== true && !sq.some((q) => priorSquares.includes(q) || anchor.includes(q));
     if (subsumed.has(x)) { hold(x.lane, 'subsumed'); continue; }
+    if (secondThought) { hold(x.lane, 'second-thought'); continue; }
     if (!restates && !offTopic && !thought) {
       keep.push(x.fact);
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
