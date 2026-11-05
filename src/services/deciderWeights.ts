@@ -28,7 +28,9 @@ export interface FactMoment {
   phase: GamePhase;
 }
 
-type Table = Record<string, Record<string, number>>;
+/** A moment's rates by kind. Partial on both levels: a moment or a kind the
+ *  fit never saw is absent, and every read answers for that. */
+type Table = Partial<Record<string, Partial<Record<string, number>>>>;
 const FILE = WEIGHTS as { kindWeights: Table };
 /** Per kind of fact: how often he made any of its teaching moves when that
  *  computer had it to say — read first, so a kind is weighed as itself, never
@@ -43,14 +45,15 @@ const ALL_KINDS = BY_KIND['*'] ?? {};
  *  as a plan), so it is never used in a kind's place. Learn's own kinds are
  *  measured by replaying his training games (scripts/scoreboard). */
 export function learnedRate(kind: CoachFactKind, moment: FactMoment): number | null {
-  if (ALL_KINDS[kind] === undefined) return null;
-  return BY_KIND[`${moment.seat}|${moment.phase}`]?.[kind] ?? ALL_KINDS[kind];
+  const overall = ALL_KINDS[kind];
+  if (overall === undefined) return null;
+  return BY_KIND[`${moment.seat}|${moment.phase}`]?.[kind] ?? overall;
 }
 
 /** The top of the lead scale: the rate at the 90th percentile of the measured
  *  kinds (a rare kind at 0.67 must not squash the rest). */
 const TOP_RATE = ((): number => {
-  const all = Object.values(ALL_KINDS).sort((a, b) => a - b);
+  const all = Object.values(ALL_KINDS).filter((r): r is number => r !== undefined).sort((a, b) => a - b);
   return Math.max(1e-6, all[Math.floor(0.9 * (all.length - 1))] ?? 1e-6);
 })();
 
