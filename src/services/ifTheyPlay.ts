@@ -24,6 +24,7 @@
 // `scoreMoves` over every legal move). No second search here.
 //
 // Pure: chess.js, the human model, the one reason walker, the one job reader.
+import { unmarked } from '../utils/sanMark';
 import { Chess, type Color, type Move } from 'chess.js';
 import { humanMoveProbabilities } from './humanMove';
 import { costReason, reasonWinWords, type CostReason } from './costReason';
@@ -257,7 +258,7 @@ function answerWords(b: ReplyBranch, mover: Color, subject: 'you' | 'they', tens
     case 'wins':
       return tense === 'live' ? `${y} wins ${b.win}${motif}${line}` : `${y} would have won ${b.win}${motif}${line}`;
     case 'mate':
-      if (b.blowPlies <= 1) return tense === 'live' ? `${y} is mate` : `${y} would have been mate`;
+      if (b.blowPlies <= 1) return tense === 'live' ? `${unmarked(y)} is mate` : `${unmarked(y)} would have been mate`;
       return tense === 'live' ? `${y} forces mate${line}` : `${y} would have forced mate${line}`;
     case 'job':
       return tense === 'live' ? `${y} ${b.job}` : null;

@@ -72,12 +72,6 @@ export function openSeatTags(id: FocusId, seat: FocusSeat, open: ReadonlySet<Mot
   return FOCUS_CARDS[id].seats[seat].tags.filter((t) => tagOpenAt(t, open));
 }
 
-/** Every tag a focus owns, both seats. */
-export function focusTags(id: FocusId): ReadonlySet<MisconceptionTagId> {
-  const c = FOCUS_CARDS[id];
-  return new Set([...c.seats.defend.tags, ...c.seats.exploit.tags]);
-}
-
 /** The coach's dials in a focus game (`docs/LEARN-FOCUS.md` §7): its own
  *  level, attacks allowed, no plant (a gift is the Campaign's job); the focus scorer is weighted through `MissionDialsOpt.focus`. */
 export const FOCUS_DIALS: CoachDials = {
