@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { chancesAt, decidingBlunder, judgeChance, lineSans, solvePlies, leftLoose, legalCounts, type FocusMove, type ReadLine } from './focusChances';
+import { chanceHoldOf, chancesAt, decidingBlunder, judgeChance, lineSans, solvePlies, leftLoose, legalCounts, type FocusMove, type ReadLine } from './focusChances';
 import { clueLine, CLUE, creditLine, shownLine } from './focusLines';
 import type { MotifLevel } from '../../data/tacticMotifs';
 
@@ -469,5 +469,25 @@ describe('a clue never names the piece or its square (David 2026-10-23: "Just sa
       }
     }
     expect(said, 'the boards posed chances (not vacuous)').toBeGreaterThan(5);
+  });
+});
+
+describe('chanceHoldOf — what the Learn door holds until the student has moved (EXPLAIN AT THE MISS, WO-LEARN-SWING-01 P1)', () => {
+  it('their fork stands: the door holds its squares — the forker and what it hits', () => {
+    const all = chancesAt({ fen: FRIED, prevFen: null, student: 'b', lines: null }, BEGINNER);
+    const fork = all.find((c) => c.kind === 'motif')!;
+    const hold = chanceHoldOf(all)!;
+    for (const q of [...(fork.targets ?? []), ...(fork.attacker ? [fork.attacker.square] : [])]) expect(hold.squares).toContain(q);
+    // The old hand-over read the exploit seat only: a defend-only board held nothing.
+    const defendOnly = all.filter((c) => c.seat === 'defend');
+    expect(defendOnly.length).toBeGreaterThan(0);
+    expect(chanceHoldOf(defendOnly)?.squares.length).toBeGreaterThan(0);
+  });
+  it('their mate threat: the door holds their mate', () => {
+    const all = chancesAt({ fen: SCHOLAR, prevFen: null, student: 'b', lines: null }, BEGINNER);
+    expect(chanceHoldOf(all)).toMatchObject({ theirMate: true, mate: false });
+  });
+  it('NEGATIVE CONTROL: no chance on the board, nothing held', () => {
+    expect(chanceHoldOf([])).toBeNull();
   });
 });

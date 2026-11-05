@@ -85,6 +85,9 @@ export interface ChanceHold {
   squares: readonly string[];
   /** The chance is a forced mate for the student. */
   mate: boolean;
+  /** They threaten mate (a defend-seat chance): a fact staked on their mate
+   *  waits too (WO-LEARN-SWING-01 P1). */
+  theirMate: boolean;
 }
 
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
@@ -815,13 +818,18 @@ export function decideTurn(
   const decideStart = Date.now();
   if (owner === 'mission') return ownedTurn(facts, turn, decideStart);
   const chanceSquares = new Set(chance?.squares ?? []);
-  /** A fact that points at the student's own chance, before they have moved:
-   *  it shares the chance's squares, or it is the student's forced mate. A
-   *  danger to the student always speaks. */
+  /** A fact that points at a chance the student has yet to answer, before
+   *  they have moved — their own (a piece to win, a shot, a mate) or one
+   *  against them (a piece to save, their fork, their mate threat): it shares
+   *  the chance's squares, or it is that mate. EXPLAIN AT THE MISS (David
+   *  2026-11-05, WO-LEARN-SWING-01 P1): a danger waits like anything else —
+   *  said before the move it is the answer handed over; said once the miss
+   *  stands it is the lesson. */
   const pointsAtChance = (f: LaneFact): boolean => {
-    if (!chance || DANGER_LANES.has(f.lane) || f.step === 'danger') return false;
+    if (!chance) return false;
     const m = isStaked(f.stakes) ? f.stakes.mate : undefined;
     if (chance.mate && m?.for === 'you' && m.forced) return true;
+    if (chance.theirMate && m?.for === 'them') return true;
     return f.squares.some((q) => chanceSquares.has(q));
   };
   const offered: LearnLane[] = [];

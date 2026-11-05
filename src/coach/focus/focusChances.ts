@@ -28,6 +28,7 @@ import { MATERIAL_VALUE } from '../../services/pieceValues';
 import { levelOfTag, MOTIFS, motifOfTag, tagOpenAt, type MotifLevel } from '../../data/tacticMotifs';
 import { namedShotTags } from '../../services/motifNaming';
 import type { FocusSeat } from './focusCard';
+import type { ChanceHold } from '../../services/learnTurnDoor';
 import type { TacticsRung } from './focusRung';
 
 /** One engine line, White's point of view (the `AnalysisLine` shape). */
@@ -118,6 +119,31 @@ export interface FocusChance {
   /** How hard the chance is to find, on the rung scale. Harder means subtler
    *  on the board, never a stronger coach. */
   difficulty: ChanceDifficulty;
+}
+
+/** WHAT THE LEARN DOOR HOLDS ON THIS BOARD (`ChanceHold`): the squares of
+ *  every chance the student has yet to answer, both seats — the piece to win,
+ *  its targets and the answer's landing; the piece to save, what attacks it,
+ *  their motif's targets — so a fact pointing at one waits until the student
+ *  has moved (EXPLAIN AT THE MISS, WO-LEARN-SWING-01 P1). Null with none. */
+export function chanceHoldOf(chances: readonly FocusChance[]): ChanceHold | null {
+  if (chances.length === 0) return null;
+  const sq = new Set<string>();
+  let mate = false;
+  let theirMate = false;
+  for (const c of chances) {
+    const before = sq.size;
+    if (c.piece) sq.add(c.piece.square);
+    for (const t of c.targets ?? []) sq.add(t);
+    // Their attacker is half of the answer to a defend-seat chance ("their
+    // knight on d4 forks…"); the exploit seat's own piece is the student's.
+    if (c.seat === 'defend' && c.attacker) sq.add(c.attacker.square);
+    if (c.answerUci && c.answerUci.length >= 4) sq.add(c.answerUci.slice(2, 4));
+    if (sq.size === before) for (const q of c.squares) sq.add(q);
+    if (c.kind === 'mate-for-you') mate = true;
+    if (c.kind === 'mate-threat') theirMate = true;
+  }
+  return { squares: [...sq], mate, theirMate };
 }
 
 /** A move the user played, with what the engine said about the board it left. */

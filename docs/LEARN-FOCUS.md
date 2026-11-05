@@ -326,9 +326,16 @@ of not castled then it needs to call it out and mark in weaknesses."
 
 ## 8. The voice owner (fail closed)
 
-`VoiceOwner` = `open` | `mission` | `focus`. The door holds every lane in a
-focus game (`off-focus`, or `focus-voice` when the focus runner says it). Every
-line the Learn page speaks names its CHANNEL (`speakLearn`): `owner` (mission /
+`VoiceOwner` = `open` | `mission` | `focus`. The turn door is the one voice in
+a focus game too (David 2026-10-30: "Free play also. One voice"); a mission
+silences it. 🔒 **EXPLAIN AT THE MISS** (David 2026-11-05, WO-LEARN-SWING-01):
+before the student moves, the door holds every fact that points at a chance the
+focus poses on that board, BOTH seats (`chanceHoldOf` → `ChanceHold`, held as
+`names-chance`) — the piece to win, its targets, the answer's square, their
+forced mate; the piece to save, what attacks it, their motif's targets, their
+mate threat. A danger waits like anything else: before the move it is the
+answer handed over; once the miss stands it is the lesson. A danger the focus
+does not pose still speaks. Every line the Learn page speaks names its CHANNEL (`speakLearn`): `owner` (mission /
 focus lines), `asked` (the user asked or tapped), `lesson` (a walkthrough,
 drill or session — those end the focus game), `free-play` (volunteered). A
 `free-play` line is dropped while a mission or focus owns the game. A new

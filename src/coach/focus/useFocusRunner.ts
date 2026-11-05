@@ -100,7 +100,7 @@ export interface FocusRunner {
   plantAsk: (ply: number, fen: string) => FocusPlantAsk | null;
   /** The student's own chances posed on this board (the exploit seat): what the
    *  Learn door holds until the student has moved (`ChanceHold`). */
-  studentChances: (fen: string) => FocusChance[];
+  chancesToFind: (fen: string) => FocusChance[];
 }
 
 const waiting = (s: FocusRunState): boolean => !!s.pause && s.pause.retries !== 1;
@@ -220,13 +220,14 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
   const paused = useCallback(() => waiting(stateRef.current), []);
   const rung = useCallback((): TacticsRung | null => stateRef.current.setup?.rung ?? null, []);
   const plantAsk = useCallback((ply: number, fen: string): FocusPlantAsk | null => focusPlantAsk(stateRef.current, ply, fen), []);
-  /** The student's own chances posed on this board (the exploit seat) — what
-   *  the Learn door holds until the student has moved (`ChanceHold`). */
-  const studentChances = useCallback((fen: string): FocusChance[] => {
+  /** Every chance posed to the student on this board, both seats — what the
+   *  Learn door holds until the student has moved (`chanceHoldOf`, EXPLAIN AT
+   *  THE MISS). */
+  const chancesToFind = useCallback((fen: string): FocusChance[] => {
     const b = stateRef.current.board;
-    return b && samePosition(b.fen, fen) ? b.chances.filter((c) => c.seat === 'exploit') : [];
+    return b && samePosition(b.fen, fen) ? [...b.chances] : [];
   }, []);
 
-  return useMemo(() => ({ view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk, studentChances }),
-    [view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk, studentChances]);
+  return useMemo(() => ({ view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk, chancesToFind }),
+    [view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk, chancesToFind]);
 }

@@ -253,11 +253,15 @@ chance for the user to find the focus."
 - **THE TURN DOOR IS THE ONE VOICE, FOCUS GAMES INCLUDED** (David 2026-10-30:
   "Free play also. One voice"; `learnVoice` channel `door`): the door decides
   every turn of a focus game as it does an open one, and the focus keeps its
-  chances, rung, pause, record and its own lines (`owner`). Before the student
-  moves, the door holds what points at the student's OWN chance on that board
-  (`ChanceHold`, `names-chance` — the piece to win, the targets, the answer's
-  square, their forced mate), so they still have to find it (David
-  2026-11-05); a danger to them always speaks. Lines OUTSIDE the door
+  chances, rung, pause, record and its own lines (`owner`). 🔒 **EXPLAIN AT
+  THE MISS** (David 2026-11-05, WO-LEARN-SWING-01): before the student moves,
+  the door holds what points at ANY chance the focus poses on that board, both
+  seats (`chanceHoldOf` → `ChanceHold`, `names-chance`) — the piece to win, the
+  targets, the answer's square, their forced mate; the piece to save, what
+  attacks it, their motif's targets, their mate threat — so they still have to
+  find it. A danger waits like anything else: said before the move it is the
+  answer handed over; once the miss stands it is the lesson. A danger the
+  focus does not pose still speaks. Lines OUTSIDE the door
   (`free-play`: the grade line, praise, the event line) stay held while a focus
   or a mission owns the game; a mission still silences the door too.
 - **SCORING IS SYMMETRIC.** A prompted chance counts neither way; one move

@@ -38,7 +38,7 @@ import { learnRewardFor, learnPraise, placePraise, savedWhy, tallyMove, fireLear
 import { useMissionRunner } from '../../missions/useMissionRunner';
 import { useFocusRunner } from '../../coach/focus/useFocusRunner';
 import { RETRY_REWARD, type FocusResult, type MissedChance, type PlantedSeat } from '../../coach/focus/focusRunner';
-import { lineSans } from '../../coach/focus/focusChances';
+import { chanceHoldOf, lineSans } from '../../coach/focus/focusChances';
 import { studentCp } from '../../coach/focus/castlingWatch';
 import { playOutPrompt } from '../../coach/focus/focusLines';
 import { FOCUS_DIALS } from '../../coach/focus/focusCard';
@@ -2335,25 +2335,10 @@ export function CoachTeachPage({ mode }: {
   });
   const focusRef = useRef(focus);
   focusRef.current = focus;
-  /** THE STUDENT'S OWN CHANCE ON THIS BOARD, for the door (`ChanceHold`): the
-   *  focus's exploit-seat chances — the piece to win, the targets, the
-   *  answer's landing square — so a fact pointing at them waits until the
-   *  student has moved (David 2026-11-05). Null with no such chance. */
-  const chanceHoldAt = useCallback((fen: string): ChanceHold | null => {
-    const cs = focusRef.current.studentChances(fen);
-    if (cs.length === 0) return null;
-    const sq = new Set<string>();
-    let mate = false;
-    for (const c of cs) {
-      const before = sq.size;
-      if (c.piece) sq.add(c.piece.square);
-      for (const t of c.targets ?? []) sq.add(t);
-      if (c.answerUci && c.answerUci.length >= 4) sq.add(c.answerUci.slice(2, 4));
-      if (sq.size === before) for (const q of c.squares) sq.add(q);
-      if (c.kind === 'mate-for-you') mate = true;
-    }
-    return { squares: [...sq], mate };
-  }, []);
+  /** THE CHANCES ON THIS BOARD THE STUDENT HAS YET TO ANSWER, for the door
+   *  (`chanceHoldOf`): both seats, so a fact pointing at one waits until the
+   *  student has moved (EXPLAIN AT THE MISS, WO-LEARN-SWING-01 P1). */
+  const chanceHoldAt = useCallback((fen: string): ChanceHold | null => chanceHoldOf(focusRef.current.chancesToFind(fen)), []);
   /** The page's takeback, lent to the castling rewind (declared further down). */
   const focusTakeBackRef = useRef<(count: number) => unknown>(() => undefined);
   /** A NEW FOCUS GAME (WO-FOCUS-TACTICS-01) — the classic Learn's free play.

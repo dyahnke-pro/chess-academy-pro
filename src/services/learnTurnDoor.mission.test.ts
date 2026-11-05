@@ -10,6 +10,7 @@ import { coachTurn } from './coachDecider';
 
 import { onLearnTurn, type LearnTurnRow } from './coachDecisionEvents';
 import { NO_PROOF } from './proof';
+import { mateStakes } from './factStakes';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { laneFacts, decidePhaseWave, type LaneFixture } from '../test/learnDoorFixtures';
 
@@ -63,16 +64,27 @@ describe('the Learn door under a mission', () => {
     ];
     const rows: LearnTurnRow[] = [];
     const off = onLearnTurn((r) => rows.push(r));
-    const d = coachTurn({ posture: 'learn', turn, facts: laneFacts(facts), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: { squares: ['d4'], mate: false } });
+    const d = coachTurn({ posture: 'learn', turn, facts: laneFacts(facts), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: { squares: ['d4'], mate: false, theirMate: false } });
     off();
     expect(d.pkg.spoken).not.toMatch(/d4/);
-    // A danger to the student always speaks, even on the chance's board.
+    // A danger on no chance the focus poses still speaks.
     expect(d.pkg.spoken).toMatch(/Watch e4/);
     expect(rows[0].heldWhy.openingIdea).toBe('names-chance');
   });
 
-  it('a danger that shares the chance\'s square still speaks', () => {
-    const d = coachTurn({ posture: 'learn', turn, facts: laneFacts(FACTS), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: { squares: ['e4'], mate: false } });
-    expect(d.pkg.spoken).toMatch(/Watch e4/);
+  // EXPLAIN AT THE MISS (David 2026-11-05, WO-LEARN-SWING-01 P1): a danger on
+  // a chance the student has yet to answer is the answer handed over before
+  // the move. It waits; once the student has moved (no chance held on that
+  // board any more) it speaks. The old door let every danger through.
+  it('a danger on a chance the student has yet to answer waits, and speaks once they have moved', () => {
+    const before = coachTurn({ posture: 'learn', turn, facts: laneFacts(FACTS), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: { squares: ['e4'], mate: false, theirMate: false } });
+    expect(before.pkg.spoken).not.toMatch(/e4/);
+    const after = coachTurn({ posture: 'learn', turn, facts: laneFacts(FACTS), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: null });
+    expect(after.pkg.spoken).toMatch(/Watch e4/);
+  });
+  it('their mate threat waits too', () => {
+    const mate: LaneFixture[] = [{ lane: 'threat', text: 'They threaten mate — cover f7.', fen: FEN, squares: ['h5'], stakes: mateStakes('them', 1, true), proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE }];
+    const held = coachTurn({ posture: 'learn', turn, facts: laneFacts(mate), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: { squares: [], mate: false, theirMate: true } });
+    expect(held.pkg.spoken).toBe('');
   });
 });
