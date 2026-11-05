@@ -124,7 +124,9 @@ describe('squareJudgement', () => {
   it('a piece in front of its own pawn: their c3 knight means nothing backs up d4', () => {
     const fen = legal('6k1/ppp2ppp/3p4/4p3/3PP3/2N5/PPP2PPP/6K1 b - - 0 12');
     const r = voiced(pieceBlocksOwnPawn(fen, 'b'));
-    expect(r.text).toBe('Their knight on c3 sits in front of their own c2 pawn, so while it stays there no pawn can come up to back up d4 — and you are already hitting d4.');
+    // The pieces by what they are; c3 and c2 lit (David 2026-11-05).
+    expect(r.text).toBe('Their knight sits in front of their own c-pawn, so while it stays there no pawn can come up to back up d4 — and you are already hitting it.');
+    expect(r.squares).toEqual(expect.arrayContaining(['c3', 'c2', 'd4']));
     // An e3 pawn can still back it up: silent.
     expect(pieceBlocksOwnPawn(legal('6k1/ppp2ppp/3p4/4p3/3P4/2N1P3/PPP2PPP/6K1 b - - 0 12'), 'b')).toBeNull();
   });
@@ -167,7 +169,9 @@ describe('squareJudgement', () => {
   it('file entry squares: let them open the c-file, c2, c3 and c4 are covered', () => {
     const fen = legal('2r3k1/pp3ppp/8/2p5/3P4/8/PP2BPPP/1N1Q2K1 w - - 0 20');
     const r = voiced(fileEntryCovered(fen, 'w'));
-    expect(r.text).toBe('Let them open the c-file: every square their rooks could use there, c2, c3 and c4, is covered.');
+    // The entry squares are lit, not read out (David 2026-11-05).
+    expect(r.text).toBe('Let them open the c-file: every square their rooks could use there is covered.');
+    expect(r.squares).toEqual(expect.arrayContaining(['c2', 'c3', 'c4']));
     // Without the e2 bishop c4 is uncovered: silent.
     expect(fileEntryCovered(legal('2r3k1/pp3ppp/8/2p5/3P4/8/PP3PPP/1N1Q2K1 w - - 0 20'), 'w')).toBeNull();
   });

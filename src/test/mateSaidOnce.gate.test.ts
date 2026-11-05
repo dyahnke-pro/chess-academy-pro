@@ -72,7 +72,7 @@ describe('a delivered mate is named once, by its head', () => {
     for (const l of lines) {
       expect(l, l).not.toMatch(/\bMate:/);
       expect(l, l).toMatch(/[Cc]heckmate/);
-      expect(l, l).toMatch(/The queen on h7 checks the king on g8/);
+      expect(l, l).toMatch(/The queen on h7 checks the king/);
     }
   });
 });

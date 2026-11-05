@@ -172,6 +172,6 @@ describe('"what is the name of this mating pattern?" (hard walk 2026-10-11)', ()
     );
     // Mate is said once, by the head; the reason follows (prod Learn audit
     // 2026-10-20: "Checkmate. Mate: …").
-    expect(r).toMatch(/^It's checkmate\. The queen on g7 checks the king on h8.*It's a Dovetail Mate\.$/);
+    expect(r).toMatch(/^It's checkmate\. The queen on g7 checks the king.*It's a Dovetail Mate\.$/);
   });
 });

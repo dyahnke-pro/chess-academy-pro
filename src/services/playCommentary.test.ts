@@ -213,7 +213,7 @@ describe('buildInstantReplyLine', () => {
       fenAfter: c.fen(),
     });
     // The mate is named from the board, as Review names it (2026-10-13).
-    expect(line).toMatch(/^Checkmate\. .*queen on f7 checks the king on e8/);
+    expect(line).toMatch(/^Checkmate\. .*queen on f7 checks the king/);
   });
 });
 

@@ -896,7 +896,7 @@
     "24: They play Qd8 — it takes the open d-file. It also attacks your queen on c8, and it needs an answer this move. Watch out — that queen attacks your queen on c8, and nothing defends it.",
     "25: You take on f7, and they can take back — your bishop for their pawn. Your move is a sacrifice — compensation: their king is stuck in the centre with the files opening around it. You give up the bishop, but you tear the pawn away from beside their king and the attack rolls straight on. That wins a queen and a pawn for a bishop: you play Bxf7+, they answer Kxf7 and you play Qxd8.",
     "26: You have mate in one with your queen on c8.",
-    "27: And there it is — checkmate. You finished the game. The pattern is Swallow's Tail Mate. The queen on e6 checks the king on e7; it is protected by the bishop on f7, so the king cannot take it; its own pieces block d8 and f8; d6, d7, e8, f6 and f7 are covered."
+    "27: And there it is — checkmate. You finished the game. The pattern is Swallow's Tail Mate. The queen on e6 checks the king, protected by the bishop on f7, so the king cannot take it. Its own pieces block d8 and f8. The other five squares are covered."
    ]
   },
   "learn:gotham-jelena": {

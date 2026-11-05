@@ -16,7 +16,7 @@
  */
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import matingPatternsData from '../data/mating-patterns.json';
-import { andList } from '../utils/andList';
+import { andList, countWord } from '../utils/andList';
 import type { MatingPattern } from '../types/matingPattern';
 import { openSentence } from '../utils/openSentence';
 
@@ -389,12 +389,14 @@ export function explainMate(fen: string): string | null {
   const checkSq = checkers[0];
   const checker = c.get(checkSq);
   if (!checker) return null;
-  const parts: string[] = [`the ${PIECE_WORD[checker.type]} on ${checkSq} checks the king on ${kingSq}`];
+  // Two squares a sentence at most (David 2026-11-05: a list of squares is
+  // the robot): the checker and its guard first, then the king's squares.
+  let first = `the ${PIECE_WORD[checker.type]} on ${checkSq} checks the king`;
   const adjacent = Math.max(Math.abs(checkSq.charCodeAt(0) - kingSq.charCodeAt(0)), Math.abs(Number(checkSq[1]) - Number(kingSq[1]))) === 1;
   if (adjacent) {
     const guards = c.attackers(checkSq, attacker).filter((s) => s !== checkSq);
     const g = guards[0] ? c.get(guards[0]) : undefined;
-    if (g && guards[0]) parts.push(`it is protected by the ${PIECE_WORD[g.type]} on ${guards[0]}, so the king cannot take it`);
+    if (g && guards[0]) first += `, protected by the ${PIECE_WORD[g.type]} on ${guards[0]}, so the king cannot take it`;
   }
   const blocked: string[] = [];
   const covered: string[] = [];
@@ -410,10 +412,19 @@ export function explainMate(fen: string): string | null {
       else if (sq !== checkSq) covered.push(sq);
     }
   }
-  if (blocked.length) parts.push(`its own ${blocked.length === 1 ? 'piece blocks' : 'pieces block'} ${andList(blocked)}`);
-  if (covered.length) parts.push(`${andList(covered)} ${covered.length === 1 ? 'is' : 'are'} covered`);
-  const text = parts.join('; ');
-  return `${openSentence(text)}.`;
+  const sentences = [`${openSentence(first)}.`];
+  if (blocked.length) {
+    sentences.push(blocked.length <= 2
+      ? `Its own ${blocked.length === 1 ? 'piece blocks' : 'pieces block'} ${andList(blocked)}.`
+      : `Its own pieces block ${countWord(blocked.length)} of its squares.`);
+  }
+  if (covered.length) {
+    const other = blocked.length ? 'other ' : '';
+    sentences.push(covered.length <= 2
+      ? `The ${other}${covered.length === 1 ? 'square' : 'squares'}, ${andList(covered)}, ${covered.length === 1 ? 'is' : 'are'} covered.`
+      : `The ${other}${countWord(covered.length)} squares are covered.`);
+  }
+  return sentences.join(' ');
 }
 
 /** THE MATE, NAMED — its pattern (when it has one) and why the king has no

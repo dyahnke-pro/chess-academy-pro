@@ -27,7 +27,7 @@ describe('the mating ply names its mate (2026-10-13)', () => {
     const { mateDescription } = await import('./matePatterns');
     const d = mateDescription('R5k1/5ppp/8/8/8/8/8/6K1 b - - 1 1');
     expect(d).toMatch(/Back-Rank Mate/);
-    expect(d).toMatch(/rook on a8 checks the king on g8/);
+    expect(d).toMatch(/rook on a8 checks the king/);
   });
   it('a board that is not mate says nothing', async () => {
     const { mateDescription } = await import('./matePatterns');
