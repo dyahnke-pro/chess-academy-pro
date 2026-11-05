@@ -140,7 +140,8 @@ export function trickSidestepped(
   const trick = forkTrickFor(flipped, foe);
   if (!trick) return null;
   const after = new Chess(fenBefore);
-  try { if (!after.move(san)) return null; } catch { return null; }
+  let moved: string;
+  try { moved = after.move(san).to; } catch { return null; }
   if (forkTrickFor(after.fen(), foe)) return null;
   const bare = san.replace(/[+#]+$/, '');
   // Victims by PIECE, never by square: the fork lives in a line that has not
@@ -159,5 +160,6 @@ export function trickSidestepped(
     // this was why the move was played.
     `${bare} also defuses ${trickOwner} fork trick — ${line} would have forked ${victims}.`,
   ], stemKeyOf(fenBefore));
-  return { trick, text, squares: [trick.forkSquare] };
+  // The move the sentence opens on, lit with the fork's square.
+  return { trick, text, squares: [trick.forkSquare, moved] };
 }

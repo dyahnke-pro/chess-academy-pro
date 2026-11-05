@@ -26,6 +26,7 @@
 // anything, which per the measurement is about half the game.
 import { sideToMoveAs } from './threatOut';
 import { openSentence } from '../utils/openSentence';
+import { pieceRef } from './pieceRef';
 import { describeStructure } from './boardStructure';
 import { homeMinorCount } from './development';
 import { isolaniStructure, passerTrumpSentence } from './nextPlans';
@@ -422,6 +423,12 @@ function observationsFor(
   return out;
 }
 
+/** The piece on `square` named from `viewer`'s seat (`pieceRef`), or the
+ *  fallback words when the square is empty. */
+function pieceWords(fen: string, square: string, viewer: Color, fallback: string): string {
+  return pieceRef(fen, square, viewer)?.words ?? fallback;
+}
+
 /**
  * THE JOINS — where teaching actually lives.
  *
@@ -495,10 +502,13 @@ function joinsFor(
         side,
         kind: 'plan',
         rank: RANK.plan - (side === 'opponent' ? OPPONENT_PENALTY : 0),
-        squares: [b.square, mv.to],
+        // The piece and the pawn by what they are, one square said (David
+        // 2026-11-05: three squares in a breath is the robot); the board
+        // lights all three.
+        squares: [b.square, mv.from, mv.to],
         text: side === 'student'
-          ? `Your ${NAME[b.piece] ?? 'piece'} on ${b.square} is your problem piece — ${b.reason} — and your pawn from ${mv.from} to ${mv.to} is what frees it — that pairing is the plan, and the pawn move is not about the pawn.`
-          : `Their ${NAME[b.piece] ?? 'piece'} on ${b.square} is their problem piece — ${b.reason} — and their pawn from ${mv.from} to ${mv.to} would free it, so stopping that pawn is worth more than it looks.`,
+          ? `${openSentence(pieceWords(fen, b.square, color, `your ${NAME[b.piece] ?? 'piece'} on ${b.square}`))} is your problem piece — ${b.reason} — and your ${mv.from[0]}-pawn going to ${mv.to} is what frees it — that pairing is the plan, and the pawn move is not about the pawn.`
+          : `${openSentence(pieceWords(fen, b.square, color === 'w' ? 'b' : 'w', `their ${NAME[b.piece] ?? 'piece'} on ${b.square}`))} is their problem piece — ${b.reason} — and their ${mv.from[0]}-pawn going to ${mv.to} would free it, so stopping that pawn is worth more than it looks.`,
       });
       break; // one join per bad piece; the first proved fix is enough to teach
     }

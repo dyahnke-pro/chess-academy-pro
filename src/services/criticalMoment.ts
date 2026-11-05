@@ -372,6 +372,16 @@ export function criticalMomentStatement(
     ], ply) + lookAt(read.holdingSans);
 }
 
+/** The squares `criticalMomentStatement` names — the reply it opens on, from
+ *  and to — so the board lights them while it is said (David 2026-11-05). */
+export function criticalMomentSquares(after: { san: string; fenBefore: string } | null): string[] {
+  if (!after) return [];
+  try {
+    const m = new Chess(after.fenBefore).move(after.san);
+    return [m.from, m.to];
+  } catch { return []; }
+}
+
 const SAN_PIECE: Record<string, string> = { K: 'king', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight' };
 /** WHAT TO LOOK AT, never the move (52-errors #43: "two moves keep the win"
  *  with nothing to look at): the pieces the holding moves are played with. */

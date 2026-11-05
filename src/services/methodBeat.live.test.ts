@@ -12,7 +12,7 @@ const base = { bestSan: null as string | null, threatStanding: false, isStudentM
 
 describe('liveMethodBeatFor', () => {
   it('teaches the method to the PLAYER only', () => {
-    expect(liveMethodBeatFor({ ...base, threatStanding: true, threatTarget: 'your knight on b4', isStudentMove: false })).toBeNull();
+    expect(liveMethodBeatFor({ ...base, threatStanding: true, threatTarget: { words: 'your knight on b4', square: 'b4' }, isStudentMove: false })).toBeNull();
   });
 
   it('is silent on a quiet position with nothing forcing (empty > generic)', () => {
@@ -21,7 +21,7 @@ describe('liveMethodBeatFor', () => {
   });
 
   it('teaches threat identification as a HABIT when a threat is standing', () => {
-    const beat = liveMethodBeatFor({ ...base, threatStanding: true, threatTarget: 'your knight on b4' });
+    const beat = liveMethodBeatFor({ ...base, threatStanding: true, threatTarget: { words: 'your knight on b4', square: 'b4' } });
     expect(beat).toBeTruthy();
     expect(beat!).toMatch(/their|they/i);
     // The habit, not the threat itself — the briefing already names the threat.
@@ -44,7 +44,7 @@ describe('liveMethodBeatFor', () => {
 
   it('is PRESENT tense — never the review register', () => {
     const beats = [
-      liveMethodBeatFor({ ...base, threatStanding: true, threatTarget: 'your knight on b4' }),
+      liveMethodBeatFor({ ...base, threatStanding: true, threatTarget: { words: 'your knight on b4', square: 'b4' } }),
       liveMethodBeatFor({ ...base, tier: 'critical' as const, bestSan: 'Qxh7+' }),
     ].filter((b): b is string => !!b);
     expect(beats.length).toBe(2);
@@ -64,14 +64,14 @@ describe('liveMethodBeatFor', () => {
   it('rotates stems so a long game never repeats one verbatim', () => {
     const seen = new Set<string>();
     for (let ply = 0; ply < 6; ply += 1) {
-      const b = liveMethodBeatFor({ ...base, threatStanding: true, threatTarget: 'your knight on b4' }, ply);
+      const b = liveMethodBeatFor({ ...base, threatStanding: true, threatTarget: { words: 'your knight on b4', square: 'b4' } }, ply);
       if (b) seen.add(b);
     }
     expect(seen.size).toBeGreaterThanOrEqual(3);
   });
 
   it('the standing threat outranks the forcing scan — their idea comes first', () => {
-    const both = liveMethodBeatFor({ ...base, threatStanding: true, threatTarget: 'your knight on b4', bestSan: 'Qxh7+' });
+    const both = liveMethodBeatFor({ ...base, threatStanding: true, threatTarget: { words: 'your knight on b4', square: 'b4' }, bestSan: 'Qxh7+' });
     expect(both!).toMatch(/their|they/i);
   });
 
@@ -95,12 +95,12 @@ describe('liveMethodBeatFor', () => {
   });
 
   it('a standing threat and a forcing move both outrank the candidate habit', () => {
-    expect(liveMethodBeatFor({ ...base, bestSan: 'Nf3', threatStanding: true, threatTarget: 'your knight on b4', realChoice: true, tier: 'critical' })!).toMatch(/their|they/i);
+    expect(liveMethodBeatFor({ ...base, bestSan: 'Nf3', threatStanding: true, threatTarget: { words: 'your knight on b4', square: 'b4' }, realChoice: true, tier: 'critical' })!).toMatch(/their|they/i);
     expect(liveMethodBeatFor({ ...base, bestSan: 'Qxh7+', realChoice: true, tier: 'critical' })!).toMatch(/check|captur|forcing/i);
   });
 
   it('exactly ONE habit speaks per position — never a stack of advice', () => {
-    const beat = liveMethodBeatFor({ ...base, bestSan: 'Qxh7+', threatStanding: true, threatTarget: 'your knight on b4', realChoice: true });
+    const beat = liveMethodBeatFor({ ...base, bestSan: 'Qxh7+', threatStanding: true, threatTarget: { words: 'your knight on b4', square: 'b4' }, realChoice: true });
     expect(beat).toBeTruthy();
     expect(beat!.split(/(?<=[.!?])\s+/).length).toBeLessThanOrEqual(2);
   });
@@ -108,14 +108,14 @@ describe('liveMethodBeatFor', () => {
   // Hand walk 2026-09-24: "their threat first, your idea second" three times in
   // six moves. The stems rotate, so only a HABIT key can hold it to once.
   it('says each habit once per game, whatever stem it would rotate to', () => {
-    const first = liveMethodBeat({ ...base, threatStanding: true, threatTarget: 'your knight on b4' }, 3);
+    const first = liveMethodBeat({ ...base, threatStanding: true, threatTarget: { words: 'your knight on b4', square: 'b4' } }, 3);
     expect(first?.key).toBe(liveHabitKey('opponent-threat'));
     const said = new Set([first!.key]);
     for (const ply of [4, 5, 6, 7]) {
-      expect(liveMethodBeat({ ...base, threatStanding: true, threatTarget: 'your knight on b4' }, ply, said)).toBeNull();
+      expect(liveMethodBeat({ ...base, threatStanding: true, threatTarget: { words: 'your knight on b4', square: 'b4' } }, ply, said)).toBeNull();
     }
     // A DIFFERENT habit is still owed.
-    const next = liveMethodBeat({ ...base, threatStanding: true, threatTarget: 'your knight on b4', bestSan: 'Qxh7+', tier: 'critical' as const }, 5, said);
+    const next = liveMethodBeat({ ...base, threatStanding: true, threatTarget: { words: 'your knight on b4', square: 'b4' }, bestSan: 'Qxh7+', tier: 'critical' as const }, 5, said);
     expect(next?.key).toBe(liveHabitKey('forcing-scan'));
   });
 });
@@ -128,7 +128,7 @@ describe('the threat question goes out with its answer (OS-1 g3 15.c5)', () => {
   });
   it('with the target, every stem names it', () => {
     for (let ply = 0; ply < 6; ply++) {
-      expect(liveMethodBeatFor({ ...base, threatStanding: true, threatTarget: 'your knight on b4' }, ply)).toMatch(/your knight on b4/);
+      expect(liveMethodBeatFor({ ...base, threatStanding: true, threatTarget: { words: 'your knight on b4', square: 'b4' } }, ply)).toMatch(/your knight on b4/);
     }
   });
 });
@@ -141,7 +141,7 @@ describe('each habit carries the kind of fact it is', () => {
   it('the threat question is the opponent\'s shoes; the forcing scan is checks first', async () => {
     const { HABIT_KIND, methodBeatRead } = await import('./methodBeat');
     const { TEACHING_MOVES } = await import('./teachingMoves');
-    const shoes = liveMethodBeat({ ...base, threatStanding: true, threatTarget: 'your knight on b4' }, 3);
+    const shoes = liveMethodBeat({ ...base, threatStanding: true, threatTarget: { words: 'your knight on b4', square: 'b4' } }, 3);
     expect(shoes?.habit).toBe('opponent-threat');
     expect(TEACHING_MOVES[HABIT_KIND[shoes!.habit]]).toContain('H-OPP-THINK');
     const scan = liveMethodBeat({ ...base, bestSan: 'Qxh7+', tier: 'critical' as const }, 3);

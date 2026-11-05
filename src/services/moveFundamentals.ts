@@ -1223,6 +1223,19 @@ export function strategicClaims(
           : []);
 }
 
+/** The SQUARES a strategic why names — every leading fundamental's own
+ *  squares, so the board lights each one while the plan is said (David
+ *  2026-11-05: "If a single square is being named it must also be
+ *  highlighted"). Computed from the fundamentals, never read off the prose. */
+export function strategicSquares(
+  fenBefore: string,
+  moveSan: string,
+  moverColor: 'white' | 'black',
+): string[] {
+  if (isForcedReply(fenBefore, moveSan)) return [];
+  return [...new Set(leadingFundamentals(fenBefore, moveSan, moverColor).flatMap((f) => f.squares))];
+}
+
 /** The LED positional clause (verb-first) — for a surface that has ALREADY named
  *  the move, e.g. the hint ("Your knight to f3 — {this}"). Null when quiet. */
 export function strategicWhyLed(

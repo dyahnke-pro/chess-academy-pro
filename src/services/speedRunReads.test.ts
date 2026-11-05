@@ -130,7 +130,7 @@ describe('his habits of thought, computed (each checked against the existing com
   });
   it('keep a square vacant: the knight on b1 goes through c3, and the c-pawn could block it', () => {
     const fen = '4k3/8/8/2p1p3/3pP3/3P4/2P5/1NB1K3 w - - 0 1';
-    expect(keepSquareForKnight(fen, 'w', 'Ke2')?.text).toMatch(/Keep c3 empty — your knight on b1 goes b1–c3–d5|Don't park a piece on c3 — it's the first stop for your knight on b1 on the way to d5/);
+    expect(keepSquareForKnight(fen, 'w', 'Ke2')?.text).toMatch(/Keep c3 empty — your knight needs it on the way to d5|Don't park a piece on c3 — it's the first stop for your knight on the way to d5/);
     expect(keepSquareForKnight(fen, 'w', 'c3')).toBeNull();
   });
   it('the right piece for the hole: the bishop on d5 sits where the knight belongs', () => {

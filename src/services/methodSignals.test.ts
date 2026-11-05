@@ -14,7 +14,8 @@ describe('naturalDefenceFails — "the pawn defends, but look again"', () => {
   it('the plain defence c3 the engine rates far below its best is named, with its line', () => {
     const d = naturalDefenceFails(FEN, 'w', [line(['d4f3'], 0), line(['c2c3', 'b6d4', 'c3d4'], -250)]);
     expect(d?.defence).toBe('c3');
-    expect(d?.target).toBe('your knight on d4');
+    expect(d?.target.square).toBe('d4');
+    expect(d?.target.words).toMatch(/^your knight/);
     expect(d?.proof.line?.sans).toEqual(['c3', 'Bxd4', 'cxd4']);
   });
   it('stays silent when the defence holds in the engine\'s eyes', () => {
@@ -54,11 +55,11 @@ describe('markSacrificeLine — forced or speculative', () => {
 describe('liveMethodBeat — the new habits speak once, with their proof', () => {
   const proof = { kind: 'line' as const, exact: false, short: 'x', full: 'x' };
   it('look again: a deciding moment with a failing plain defence', () => {
-    const b = liveMethodBeat({ bestSan: 'Nf3', threatStanding: true, isStudentMove: true, tier: 'critical', defenceFails: { target: 'your knight on d4', proof } }, 0);
+    const b = liveMethodBeat({ bestSan: 'Nf3', threatStanding: true, isStudentMove: true, tier: 'critical', defenceFails: { target: { words: 'your knight on d4', square: 'd4' }, proof } }, 0);
     expect(b?.key).toBe(liveHabitKey('look-again'));
     expect(b?.text).toMatch(/look again/i);
     expect(b?.proof).toBe(proof);
-    expect(liveMethodBeat({ bestSan: 'Nf3', threatStanding: true, isStudentMove: true, tier: 'critical', defenceFails: { target: 'your knight on d4', proof } }, 0, new Set([liveHabitKey('look-again')]))?.key).not.toBe(liveHabitKey('look-again'));
+    expect(liveMethodBeat({ bestSan: 'Nf3', threatStanding: true, isStudentMove: true, tier: 'critical', defenceFails: { target: { words: 'your knight on d4', square: 'd4' }, proof } }, 0, new Set([liveHabitKey('look-again')]))?.key).not.toBe(liveHabitKey('look-again'));
   });
   it('mark the line: a sacrifice at a deciding moment', () => {
     const b = liveMethodBeat({ bestSan: 'Bxh7+', threatStanding: false, isStudentMove: true, tier: 'critical', sacrificeLine: { mark: 'speculative', proof } }, 0, new Set([liveHabitKey('forcing-scan')]));
@@ -71,8 +72,8 @@ describe('liveMethodBeat — the new habits speak once, with their proof', () =>
     expect(liveMethodBeat(s, 0, new Set([liveHabitKey('forcing-scan')]))?.key).toBe(liveHabitKey('calc-now'));
   });
   it('none fires on a quiet moment, and none on the opponent\'s turn', () => {
-    expect(liveMethodBeat({ bestSan: 'Nf3', threatStanding: false, isStudentMove: true, tier: 'none', defenceFails: { target: 'x', proof } }, 0)).toBeNull();
-    expect(liveMethodBeat({ bestSan: 'Nf3', threatStanding: true, isStudentMove: false, tier: 'critical', defenceFails: { target: 'x', proof } }, 0)).toBeNull();
+    expect(liveMethodBeat({ bestSan: 'Nf3', threatStanding: false, isStudentMove: true, tier: 'none', defenceFails: { target: { words: 'x', square: 'a1' }, proof } }, 0)).toBeNull();
+    expect(liveMethodBeat({ bestSan: 'Nf3', threatStanding: true, isStudentMove: false, tier: 'critical', defenceFails: { target: { words: 'x', square: 'a1' }, proof } }, 0)).toBeNull();
   });
   it('every new habit maps to a thinking step', () => {
     expect(LIVE_HABIT_STEP['look-again']).toBe('is-my-move-safe');

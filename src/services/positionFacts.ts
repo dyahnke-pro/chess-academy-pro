@@ -30,7 +30,7 @@ import type { StockfishAnalysis, TacticType } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess, type Square } from 'chess.js';
 import type { GamePromise } from './learnBoardTeaching';
-import { strategicWhyImperative, strategicReason, strategicClaims, principleLine, principleContrastLine, isForcedReply, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
+import { strategicWhyImperative, strategicReason, strategicClaims, strategicSquares, principleLine, principleContrastLine, isForcedReply, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { isTheoryLine } from './bookDeparture';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy } from './opponentMovePurpose';
@@ -52,7 +52,7 @@ import type { QuietFact } from './factSelector';
 import { criticalityThresholds, type Severity } from './criticalityScan';
 import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
-import { buildDeliberation, deliberationFacts, deliberationWeighing, deliberationVerdict, ruleOutClaims, NOTHING_SAID, type Deliberation, type HeldVerdict } from './deliberation';
+import { buildDeliberation, deliberationFacts, deliberationSquares, deliberationWeighing, deliberationVerdict, ruleOutClaims, NOTHING_SAID, type Deliberation, type HeldVerdict } from './deliberation';
 import { detectLatentFork, latentForkClause, type LatentFork } from './latentFork';
 import { lineTakesPiece, pawnHit } from './trappedPiece';
 import { moverLineProof } from './exchangeLedger';
@@ -138,7 +138,8 @@ import { naturalDefenceFails, forcingLine, markSacrificeLine } from './methodSig
 import { habitNeedFrom } from './coachDecider';
 import { computeNeed, type StudentNeedContext } from './needScore';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
-import { readCriticalMoment, criticalMomentStatement, opponentOnlyMoveStatement, type CriticalMomentRead } from './criticalMoment';
+import { readCriticalMoment, criticalMomentStatement, criticalMomentSquares, opponentOnlyMoveStatement, type CriticalMomentRead } from './criticalMoment';
+import { pieceRef } from './pieceRef';
 import { costStakes, exchangeStakes, forkPoints, lineTacticPoints, type Stakes } from './factStakes';
 import { nextMoveAdvice, type MoveAdviceVerdict } from './nextMoveAdvice';
 import { depthClauses } from './thinkAloud';
@@ -956,6 +957,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // notable moments, never every quiet ply.
   let fundamentalText = '';
   let fundamentalClaim: string | null = null;
+  let fundamentalSquares: string[] = [];
   const bestUci = analysis.topLines?.[0]?.moves?.[0] ?? null;
   // The engine's move here as SAN, resolved ONCE. The fundamental clause needs
   // it, and so does the method beat — whose whole gate is "is the move that is
@@ -981,6 +983,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       const why = strategicReason(fen, bestSanHere, moverColor === 'w' ? 'white' : 'black');
       fundamentalText = why ? `The plan here: ${idea} — ${why}.` : `The plan here: ${idea}.`;
       fundamentalClaim = strategicClaims(fen, bestSanHere, moverColor === 'w' ? 'white' : 'black')[0] ?? null;
+      fundamentalSquares = strategicSquares(fen, bestSanHere, moverColor === 'w' ? 'white' : 'black');
     }
   }
 
@@ -1047,6 +1050,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   let methodKey: string | null = null;
   let methodKind: ClauseKind = 'method';
   let methodProof: Proof | null = null;
+  let methodSquares: string[] = [];
   try {
     const halfmove = Number.parseInt(fen.split(' ')[5] ?? '0', 10) || 0;
     const mb = liveMethodBeat({
@@ -1054,7 +1058,10 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       threatStanding: mustDefend.net > 0,
       // Always the piece it hits, whatever its worth: the habit's question is
       // never asked without its answer (OS-1 g3 15.c5).
-      threatTarget: mustDefend.pieces[0] ? `your ${PNAME[mustDefend.pieces[0].piece.toLowerCase()]} on ${mustDefend.pieces[0].square}` : null,
+      threatTarget: mustDefend.pieces[0] ? {
+        words: pieceRef(fen, mustDefend.pieces[0].square, studentColor)?.words ?? `your ${PNAME[mustDefend.pieces[0].piece.toLowerCase()]} on ${mustDefend.pieces[0].square}`,
+        square: mustDefend.pieces[0].square,
+      } : null,
       isStudentMove: studentToMove,
       realChoice: !!deliberation?.isRealChoice,
       tier: importance.tier,
@@ -1069,6 +1076,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     methodKey = mb?.key ?? null;
     if (mb) methodKind = HABIT_KIND[mb.habit];
     methodProof = mb?.proof ?? null;
+    methodSquares = mb?.squares ?? [];
   } catch { methodBeat = null; }
 
   // ── WO-TEACH-02: the four teaching facts review carries as facets ─────────
@@ -1108,7 +1116,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     stoppedHere.push({
       computer: 'threatStoppedBy',
       text: stoppedReply.text,
-      squares: [stoppedReply.threat.from, stoppedReply.threat.landing],
+      squares: [stoppedReply.threat.from, stoppedReply.threat.landing, ...moveSquares(before, stoppedReply.reply).slice(1)],
       lines: [{ fen: before, sans: [stoppedReply.reply] }, { fen: sideToMoveFlipped(before), sans: [stoppedReply.threat.san] }],
     });
   }
@@ -1165,8 +1173,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   if (asked) {
     const pf = boardPlanFacts(fen, studentColor === 'w' ? 'white' : 'black');
     if (pf) {
-      if (pf.trump && !structureText) askedPlanClauses.push(clause('boardPlanFacts', fen, { kind: 'structure-plan', text: pf.trump }));
-      for (const p of pf.plans) askedPlanClauses.push(clause('boardPlanFacts', fen, { kind: 'structure-plan', text: p }));
+      if (pf.trump && !structureText) askedPlanClauses.push(clause('boardPlanFacts', fen, { kind: 'structure-plan', text: pf.trump, squares: pf.trumpSquares }));
+      for (const p of pf.plans) askedPlanClauses.push(clause('boardPlanFacts', fen, { kind: 'structure-plan', text: p.text, squares: p.squares }));
       const levers = leverSentence(pf.levers);
       if (levers) askedPlanClauses.push(clause('boardPlanFacts', fen, { kind: 'structure-plan', text: levers, squares: pf.levers.flatMap((l) => l.squares) }));
     }
@@ -1185,7 +1193,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     } catch { /* same */ }
   }
   const composedAll = orderByValue(
-    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { computer: ruleHere.computer, id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, names: ruleHere.names && !input.namesBestMove ? namesMoves(studentColor, input.fen, ruleHere.names) : NAMES_NO_MOVE, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, criticalAnchor: studentToMove && input.opponentLastMove ? input.opponentLastMove : null, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, structureSquares: planFact?.squares, structureClaim: planFact?.ideaKey, fundamentalText, fundamentalNames: fundamentalText && bestSanHere && !input.namesBestMove ? namesMoves(studentColor, fen, namedSan(fen, bestSanHere)) : NAMES_NO_MOVE, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, namesMoves: !!input.namesBestMove, concept, methodBeat, methodKind, methodProof, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said, looseSpells: input.looseSpells ?? null }), ...tradeClauses],
+    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { computer: ruleHere.computer, id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, names: ruleHere.names && !input.namesBestMove ? namesMoves(studentColor, input.fen, ruleHere.names) : NAMES_NO_MOVE, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, criticalAnchor: studentToMove && input.opponentLastMove ? input.opponentLastMove : null, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, structureSquares: planFact?.squares, structureClaim: planFact?.ideaKey, fundamentalText, fundamentalNames: fundamentalText && bestSanHere && !input.namesBestMove ? namesMoves(studentColor, fen, namedSan(fen, bestSanHere)) : NAMES_NO_MOVE, fundamentalClaim, fundamentalSquares, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, namesMoves: !!input.namesBestMove, concept, methodBeat, methodKind, methodProof, methodSquares, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said, looseSpells: input.looseSpells ?? null }), ...tradeClauses],
     input.studentWeaknesses ?? [],
   );
 
@@ -1629,6 +1637,8 @@ function buildClauses(a: {
   fundamentalNames: NamesStudentMove;
   /** The claim key the fundamental makes (`strategicClaims`), or null. */
   fundamentalClaim?: string | null;
+  /** The squares the fundamental's plan names — lit while it is said. */
+  fundamentalSquares?: string[];
   /** Student-POV eval (cp) at this position. Gates the prophylaxis clause. */
   studentEvalCp: number;
   kingExposure: KingExposure | null;
@@ -1645,6 +1655,8 @@ function buildClauses(a: {
   methodKind: ClauseKind;
   /** The proof a method beat's earning fact carries (batch 2 habits). */
   methodProof?: Proof | null;
+  /** The squares the method beat names — lit while it is said. */
+  methodSquares?: string[];
 }): ClauseFact[] {
   const { importance, speaks, criticalRead, plyNumber, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger, concept } = a;
   // THE WHETHER-QUESTION IS THE DOOR'S. This used to be a private escape hatch
@@ -1665,10 +1677,11 @@ function buildClauses(a: {
   // move, worth what the tempting alternative would cost. Only fires on a genuine
   // student choice out of the opening (gated at computePositionFacts).
   if (deliberation?.isRealChoice) {
-    const text = deliberationFacts(deliberation, a.alreadySaid ?? NOTHING_SAID);
+    const said = a.alreadySaid ?? NOTHING_SAID;
+    const text = deliberationFacts(deliberation, said);
     // The choice is worth what the tempting alternative would cost.
     const worst = Math.max(0, ...deliberation.alternatives.map((c) => c.deltaCp));
-    if (text) ranked.push(clause('buildDeliberation', a.fen, { kind: 'deliberation', text, stakes: costStakes(worst) ?? undefined }));
+    if (text) ranked.push(clause('buildDeliberation', a.fen, { kind: 'deliberation', text, squares: deliberationSquares(deliberation, a.fen, said), stakes: costStakes(worst) ?? undefined }));
   }
 
   // The prevention layer — a pin/skewer on your own king/queen, guide-don't-tell.
@@ -1937,6 +1950,7 @@ function buildClauses(a: {
     ranked.push(clause('readCriticalMoment', a.fen, {
       kind: 'key-moment',
       text: criticalStatement,
+      squares: criticalMomentSquares(a.criticalAnchor),
       // The decision is now; missing it costs the gap the fan measured.
       stakes: costStakes(criticalRead.gapCp) ?? undefined,
     }));
@@ -1984,7 +1998,7 @@ function buildClauses(a: {
   // Built FROM the engine's move for the student (strategicWhyImperative on
   // bestSanHere): "The plan here: kick their knight off a5 with a pawn" is that
   // move (OS-11 g3, before 12.b4), so it says so and the door holds it.
-  if (fundamentalText) ranked.push(clause('strategicReason', a.fen, { names: a.fundamentalNames, kind: 'fundamental', text: fundamentalText, claim: a.fundamentalClaim ?? undefined }));
+  if (fundamentalText) ranked.push(clause('strategicReason', a.fen, { names: a.fundamentalNames, kind: 'fundamental', text: fundamentalText, squares: a.fundamentalSquares, claim: a.fundamentalClaim ?? undefined }));
   // The campaign's structural plan — the textbook idea the pawn structure sets.
   if (structureText) ranked.push(clause('structurePlanFact', a.fen, { kind: 'structure-plan', text: structureText, ...(a.structureSquares?.length ? { squares: a.structureSquares } : {}), ...(a.structureClaim ? { claim: a.structureClaim } : {}) }));
   // Convert-mode — decided game, one beat.
@@ -1995,7 +2009,7 @@ function buildClauses(a: {
   // purpose so it CLOSES the beat — the board fact, then the idea, then the
   // routine that finds it next time. Gated on the same computed signals as the
   // retrospective register, so it is never generic advice on a quiet board.
-  if (a.methodBeat) ranked.push(clause('liveMethodBeat', a.fen, { kind: a.methodKind, text: a.methodBeat, ...(a.methodProof ? { proof: a.methodProof } : {}) }));
+  if (a.methodBeat) ranked.push(clause('liveMethodBeat', a.fen, { kind: a.methodKind, text: a.methodBeat, squares: a.methodSquares, ...(a.methodProof ? { proof: a.methodProof } : {}) }));
 
   // ONE CLAIM, ONE CLAUSE (one thread per move): two clauses that make the same
   // claim — the plan's "push your d3 pawn" and the conversion's "escort it" —

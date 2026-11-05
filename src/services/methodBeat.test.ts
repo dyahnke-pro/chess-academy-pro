@@ -104,7 +104,7 @@ describe('mate answers every threat (hand walk 1200: "their threat first" beside
 describe('the threat habit never asks and walks away (hand walk 2026-09-27)', () => {
   it('names what the threat hits when the probe found it', () => {
     for (const ply of [0, 1, 2]) {
-      const b = liveMethodBeat({ bestSan: 'Bd6', threatStanding: true, threatTarget: 'your pawn on e5', isStudentMove: true }, ply);
+      const b = liveMethodBeat({ bestSan: 'Bd6', threatStanding: true, threatTarget: { words: 'your pawn on e5', square: 'e5' }, isStudentMove: true }, ply);
       expect(b?.text).toMatch(/your pawn on e5/);
     }
   });

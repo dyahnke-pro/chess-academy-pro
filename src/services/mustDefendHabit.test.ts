@@ -15,7 +15,7 @@ describe('a pawn hitting a guarded piece earns "their threat first"', () => {
     const beat = liveMethodBeat({
       bestSan: 'Bxf3',
       threatStanding: md.net > 0,
-      threatTarget: md.net < 3 && md.pieces[0] ? `your ${PNAME[md.pieces[0].piece]} on ${md.pieces[0].square}` : null,
+      threatTarget: md.net < 3 && md.pieces[0] ? { words: `your ${PNAME[md.pieces[0].piece]} on ${md.pieces[0].square}`, square: md.pieces[0].square } : null,
       isStudentMove: true,
       realChoice: false,
       tier: 'swing',

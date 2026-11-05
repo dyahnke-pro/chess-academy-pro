@@ -270,7 +270,7 @@ export function deriveNextPlanFacts(
       : rookCount === 1
         ? `put your rook on the open ${openCentralFile}-file, `
         : '';
-    add('king-attack', `attack their king on ${enemyKing.square} before it gets out`, `attacking their king on ${enemyKing.square}`, `tuck your own king away, ${fileClause}bring pieces in with tempo, and look for a sacrifice on ${softSquares} to strip its cover`, [enemyKing.square], openCentralFile);
+    add('king-attack', `attack their king on ${enemyKing.square} before it gets out`, `attacking their king on ${enemyKing.square}`, `tuck your own king away, ${fileClause}bring pieces in with tempo, and look for a sacrifice on ${softSquares} to strip its cover`, [enemyKing.square, ...softSquares.split(' or ')], openCentralFile);
   }
 
   // 2. Your passed pawn → push it, HOW spelled out. The king joins the escort
@@ -307,7 +307,8 @@ export function deriveNextPlanFacts(
     const escort = queensOn
       ? 'escort it with your pieces — the king joins once the queens come off'
       : 'escort it with your king and pieces';
-    add('passer', `get your passed pawn on ${passer} promoting`, `pushing your passed pawn on ${passer}`, `${passerHow(chess, passer, studentColorWB)}${escort}, and push it one safe square at a time — every push brings it closer to promotion`, [passer]);
+    const how = passerHow(chess, passer, studentColorWB);
+    add('passer', `get your passed pawn on ${passer} promoting`, `pushing your passed pawn on ${passer}`, `${how.text}${escort}, and push it one safe square at a time — every push brings it closer to promotion`, [passer, ...how.squares]);
   }
 
   // 3. An enemy weak (isolated) pawn on the c–f files → besiege it, HOW spelled
@@ -375,14 +376,16 @@ export function deriveNextPlanFacts(
   // 5. You already hold an outpost → dominate from it, HOW spelled out.
   const myOutpost = struct.outposts.find((o) => o.color === studentColorWB);
   if (myOutpost) {
-    add('outpost', `make that ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} on ${myOutpost.square} the boss of the board`, `building around your ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} on ${myOutpost.square}`, `${guardPawnBit(chess, myOutpost.square as Square, studentColorWB)} and refuse trades that give it up — from there it presses on everything around it`, [myOutpost.square]);
+    const guard = guardPawnBit(chess, myOutpost.square as Square, studentColorWB);
+    add('outpost', `make that ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} on ${myOutpost.square} the boss of the board`, `building around your ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} on ${myOutpost.square}`, `${guard.text} and refuse trades that give it up — from there it presses on everything around it`, [myOutpost.square, ...guard.squares]);
   }
 
   // 6. Your worst-placed piece (stuck) → reroute it, HOW spelled out.
   if (fullmove >= 10) {
     const worst = findWorstPlacedPiece(chess, studentColorWB);
     if (worst) {
-      add('worst-piece', `rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}, which ${reachWords(worst.m)}`, `rescuing your ${PIECE_NOUN[worst.type]} on ${worst.sq}`, `${routeBit(fen, worst.sq as Square, opts.namesStudentMoves)}before you attack — a piece doing nothing leaves you a piece down in the fight`, [worst.sq]);
+      const route = routeBit(fen, worst.sq as Square, opts.namesStudentMoves);
+      add('worst-piece', `rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}, which ${reachWords(worst.m)}`, `rescuing your ${PIECE_NOUN[worst.type]} on ${worst.sq}`, `${route.text}before you attack — a piece doing nothing leaves you a piece down in the fight`, [worst.sq, ...route.squares]);
     }
   }
 
@@ -448,17 +451,21 @@ const times = (n: number): string => TIMES[n] ?? `${n} times`;
 
 
 /** The passer's distance to queening, and the enemy piece covering its next square. */
-function passerHow(chess: Chess, passer: string, color: Color): string {
+function passerHow(chess: Chess, passer: string, color: Color): { text: string; squares: string[] } {
   const rank = Number(passer[1]);
   const left = color === 'w' ? 8 - rank : rank - 1;
   const front = `${passer[0]}${rank + (color === 'w' ? 1 : -1)}` as Square;
   const enemy: Color = color === 'w' ? 'b' : 'w';
   let cover = '';
+  const squares: string[] = [];
   try {
     const by = chess.attackers(front, enemy).map((sq) => ({ sq, p: chess.get(sq) })).filter((x) => x.p && x.p.type !== 'k');
-    if (by.length > 0) cover = `, and their ${PIECE_NOUN[by[0].p?.type ?? 'p']} on ${by[0].sq} covers ${front} — drive it off or cover ${front} yourself first`;
+    if (by.length > 0) {
+      cover = `, and their ${PIECE_NOUN[by[0].p?.type ?? 'p']} on ${by[0].sq} covers ${front} — drive it off or cover ${front} yourself first`;
+      squares.push(by[0].sq, front);
+    }
   } catch { cover = ''; }
-  return `it is ${left} square${left === 1 ? '' : 's'} from queening${cover}; `;
+  return { text: `it is ${left} square${left === 1 ? '' : 's'} from queening${cover}; `, squares };
 }
 
 /** The weak pawn counted: how often the student hits it against its guards. */
@@ -490,26 +497,26 @@ function rookReachBit(chess: Chess, rooks: readonly Cell[], file: string): strin
 }
 
 /** The pawn that guards the outpost, named. */
-function guardPawnBit(chess: Chess, sq: Square, color: Color): string {
+function guardPawnBit(chess: Chess, sq: Square, color: Color): { text: string; squares: string[] } {
   const behind = Number(sq[1]) + (color === 'w' ? -1 : 1);
   for (const df of [-1, 1]) {
     const f = String.fromCharCode(sq.charCodeAt(0) + df);
     if (f < 'a' || f > 'h') continue;
     const at = `${f}${behind}` as Square;
     const p = chess.get(at);
-    if (p && p.type === 'p' && p.color === color) return `keep your pawn on ${at} guarding it`;
+    if (p && p.type === 'p' && p.color === color) return { text: `keep your pawn on ${at} guarding it`, squares: [at] };
   }
-  return 'keep a pawn guarding it';
+  return { text: 'keep a pawn guarding it', squares: [] };
 }
 
 /** Where the worst piece wants to go, by its own route computer. */
-function routeBit(fen: string, sq: Square, namesStudentMoves: boolean): string {
+function routeBit(fen: string, sq: Square, namesStudentMoves: boolean): { text: string; squares: string[] } {
   const r = computePieceRoute(fen, sq) ?? computeSliderRoute(fen, sq);
-  if (!r || r.route.length === 0) return 'walk it to a square where it bites ';
+  if (!r || r.route.length === 0) return { text: 'walk it to a square where it bites ', squares: [] };
   // Held: the destination, never the step — a one-hop route IS the move.
-  if (!namesStudentMoves) return r.route.length === 1 ? 'walk it to a square where it bites ' : `walk it toward ${r.target} `;
+  if (!namesStudentMoves) return r.route.length === 1 ? { text: 'walk it to a square where it bites ', squares: [] } : { text: `walk it toward ${r.target} `, squares: [r.target] };
   const via = r.route.slice(0, -1);
-  return `walk it to ${r.target}${routeVia(via)}${via.length ? ',' : ''} `;
+  return { text: `walk it to ${r.target}${routeVia(via)}${via.length ? ',' : ''} `, squares: [r.target, ...via] };
 }
 
 export function mobilityMap(chess: Chess, color: Color): Map<string, number> {

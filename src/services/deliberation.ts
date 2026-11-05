@@ -393,6 +393,34 @@ export function deliberationFacts(d: Deliberation, said: ReadonlySet<string>): s
   return `${opener}${reasoned.map(shortfallText).join(' ')}${verdict}`;
 }
 
+/**
+ * The squares a weighing names — every candidate's square, every move of the
+ * lines it plays out, the pieces it drops or leaves — so the board lights each
+ * one while it is said (David 2026-11-05: "If a single square is being named
+ * it must also be highlighted"). Played on the board from `fen` (the position
+ * the weighing was built on), never read back out of the sentence.
+ */
+export function deliberationSquares(d: Deliberation, fen: string, said: ReadonlySet<string>): string[] {
+  const out = new Set<string>();
+  const play = (sans: readonly string[]): void => {
+    let c: Chess;
+    try { c = new Chess(fen); } catch { return; }
+    for (const san of sans) {
+      try { out.add(c.move(san).to); } catch { return; }
+    }
+  };
+  for (const a of reasonedAlternatives(d, said)) {
+    play([a.san]);
+    if (a.proofSans) play(a.proofSans);
+    if (a.tradeSans) play(a.tradeSans);
+    if (a.drops) out.add(a.drops.square);
+    if (a.leaves) { out.add(a.leaves.square); out.add(a.leaves.attackerSquare); }
+  }
+  play([d.best.san]);
+  if (d.bestLineSans) play(d.bestLineSans);
+  return [...out];
+}
+
 /** The alternatives ruled out WITH a reason — the line that proves it or the
  *  piece it drops. The weighing speaks only these: one per loss, and a loss
  *  the student has already heard ruled out (`said`, the surface's say-once

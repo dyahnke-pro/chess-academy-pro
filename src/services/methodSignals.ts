@@ -24,10 +24,12 @@ import type { EngineLine } from './opponentMoveReads';
 import { uciToSan } from './opponentMoveReads';
 import { seatCp } from './winChance';
 import { lineSeatAt } from '../utils/andList';
+import { pieceRef } from './pieceRef';
+import type { HabitTarget } from './methodBeat';
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-interface NaturalDefence { target: string; defence: string; proof: Proof }
+interface NaturalDefence { target: HabitTarget; defence: string; proof: Proof }
 
 /**
  * The plain defence of your attacked piece that the engine rates far below its
@@ -55,7 +57,8 @@ export function naturalDefenceFails(fen: string, student: 'w' | 'b', topLines: r
     if (computeMustDefend(after.fen(), student).pieces.some((p) => p.square === hit.square)) continue;
     const proof = legalLineProof(fen, l.moves.slice(0, 4), lineSeatAt(fen, student));
     if (!proof) continue;
-    return { target: `your ${PIECE[hit.piece.toLowerCase()] ?? 'piece'} on ${hit.square}`, defence: san, proof };
+    const ref = pieceRef(fen, hit.square, student);
+    return { target: { words: ref ? ref.words : `your ${PIECE[hit.piece.toLowerCase()] ?? 'piece'} on ${hit.square}`, square: hit.square }, defence: san, proof };
   }
   return null;
 }

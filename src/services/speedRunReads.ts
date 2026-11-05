@@ -25,6 +25,7 @@ import { knightReach } from './moveInsight';
 import type { GamePromise } from './learnBoardTeaching';
 import { countWord, withArticle } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
+import { pieceRef } from './pieceRef';
 
 const name = (p: string): string => PIECE_NAMES[p] ?? 'piece';
 /** PHRASING ROTATES, NEVER ROLLS (CLAUDE.md §THE FOUNDATION): keyed on the
@@ -38,8 +39,12 @@ const sanOf = (fen: string, uci: string | undefined): string | null => {
   try { return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return null; }
 };
 
-interface Read { text: string; squares?: string[]; /** It names the engine's move — speaks only where the move may be named. */ namesMove?: boolean; /** What rides on it (factStakes) — the ranker orders by this. */ stakes?: FactStakes; /** The IDEA without the move — spoken when the move is held back (named only where earned). */ idea?: string; /** REQUIRED: the once-per-game claim, keyed by the fact and its square (the voice package drops a repeat under any stem — Black walk 2026-10-19, "overprotect d5" said on two moves). */ claim: string; /** What would pay this idea off, and the line that closes the loop (the thread across moves). */ promise?: GamePromise; /** The student's move the IDEA points at by its piece ("your knight has a forcing move" with one knight move that forces it) — the door holds the idea while that move is theirs to play (OS-10). */ ideaNames?: NamedMove }
+interface Read { text: string; squares?: string[]; /** It names the engine's move — speaks only where the move may be named. */ namesMove?: boolean; /** What rides on it (factStakes) — the ranker orders by this. */ stakes?: FactStakes; /** The IDEA without the move — spoken when the move is held back (named only where earned). */ idea?: string; /** The squares the IDEA names — lit while it is said (never the held move's own). */ ideaSquares?: string[]; /** REQUIRED: the once-per-game claim, keyed by the fact and its square (the voice package drops a repeat under any stem — Black walk 2026-10-19, "overprotect d5" said on two moves). */ claim: string; /** What would pay this idea off, and the line that closes the loop (the thread across moves). */ promise?: GamePromise; /** The student's move the IDEA points at by its piece ("your knight has a forcing move" with one knight move that forces it) — the door holds the idea while that move is theirs to play (OS-10). */ ideaNames?: NamedMove }
 type Lines = ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>;
+
+/** The squares the named moves land on, played from `fen` — lit while the
+ *  sentence that names them is said. A move that does not play is skipped. */
+const toSquares = (fen: string, sans: readonly string[]): string[] => sans.flatMap((san) => { const p = play(fen, san); return p ? [p.move.to] : []; });
 
 /** The cost of NOT playing line one: centipawns between it and line two. */
 const choiceGap = (fen: string, lines: Lines): number | null => (lines.length >= 2 ? moverCp(fen, lines[0]) - moverCp(fen, lines[1]) : null);
@@ -356,7 +361,10 @@ export function keepSquareForKnight(fen: string, me: 'w' | 'b', bestSan: string 
     if (b.get(via) || bestTo === via) continue;
     const blocker = b.moves({ verbose: true }).find((m) => m.to === via && m.piece !== 'n');
     if (!blocker) continue;
-    return { claim: `srr:keep-square:${via}`, promise: { key: `route:${route.target}`, piece: 'n', square: route.target, say: `The knight reaches ${route.target} — that's why ${via} had to stay empty.` }, text: rot(fen, `Keep ${via} empty — your knight on ${cell.square} goes ${[cell.square, ...route.route].join('–')}, and ${via} is the first step.`, `Don't park a piece on ${via} — it's the first stop for your knight on ${cell.square} on the way to ${route.target}.`), squares: [via, route.target] };
+    // The knight by what it is ("your knight"), its route lit on the board
+    // rather than read out (David 2026-11-05: a list of squares is the robot).
+    const knight = pieceRef(fen, cell.square, me)?.words ?? `your knight on ${cell.square}`;
+    return { claim: `srr:keep-square:${via}`, promise: { key: `route:${route.target}`, piece: 'n', square: route.target, say: `The knight reaches ${route.target} — that's why ${via} had to stay empty.` }, text: rot(fen, `Keep ${via} empty — ${knight} needs it on the way to ${route.target}.`, `Don't park a piece on ${via} — it's the first stop for ${knight} on the way to ${route.target}.`), squares: [via, route.target, cell.square, ...route.route] };
   }
   return null;
 }
@@ -409,7 +417,7 @@ export function finishStarted(lastOwn: { fenBefore: string; san: string } | unde
   const best = play(fen, bestSan);
   if (!best || best.move.piece !== 'p') return null;
   if (Math.abs(best.move.from.charCodeAt(0) - last.move.to.charCodeAt(0)) > 1) return null;
-  return { claim: `srr:finish:${last.move.to}`, idea: `You started the break with ${last.move.san} — finish it before they settle.`, namesMove: true, text: `You started something with ${last.move.san} — finish it: ${sayMoveClause(bestSan, fen)} keeps the break going instead of letting them settle.`, squares: [last.move.to, best.move.to] };
+  return { claim: `srr:finish:${last.move.to}`, idea: `You started the break with ${last.move.san} — finish it before they settle.`, ideaSquares: [last.move.to], namesMove: true, text: `You started something with ${last.move.san} — finish it: ${sayMoveClause(bestSan, fen)} keeps the break going instead of letting them settle.`, squares: [last.move.to, best.move.to] };
 }
 
 /** #27 A MOVE GOOD IN EVERY BRANCH: after the engine's move no reply of theirs
@@ -432,7 +440,7 @@ export function goodInEveryBranch(fen: string, me: 'w' | 'b', lines: Lines): Rea
   if (!loose) return null;
   // ONCE A GAME (claim): the idea is the lesson; the third instance in one game
   // was a template, not teaching (Learn tape 2026-10-06, game 2).
-  return { claim: 'srr:every-branch', stakes: costStakes(choiceGap(fen, lines)) ?? pieceStakes(pb.board.get(loose as Square)?.type ?? '', 1), idea: `Ask it of every candidate: after it, can they take anything of yours? One ${name(pa.move.piece)} move here answers no, whatever they reply — the next-best leaves your ${name(pb.board.get(loose as Square)?.type ?? '')} on ${loose} to be taken.`, namesMove: true, text: `${cap(sayMoveClause(a, fen))} works whatever they answer — nothing of yours can be taken after it. After ${b2}, your ${name(pb.board.get(loose as Square)?.type ?? '')} on ${loose} can be collected.`, squares: [loose] };
+  return { claim: 'srr:every-branch', stakes: costStakes(choiceGap(fen, lines)) ?? pieceStakes(pb.board.get(loose as Square)?.type ?? '', 1), ideaSquares: [loose], idea: `Ask it of every candidate: after it, can they take anything of yours? One ${name(pa.move.piece)} move here answers no, whatever they reply — the next-best leaves your ${name(pb.board.get(loose as Square)?.type ?? '')} on ${loose} to be taken.`, namesMove: true, text: `${cap(sayMoveClause(a, fen))} works whatever they answer — nothing of yours can be taken after it. After ${b2}, your ${name(pb.board.get(loose as Square)?.type ?? '')} on ${loose} can be collected.`, squares: [loose] };
 }
 
 /** #31 TAKE THE STING OUT: a piece of yours can be won, and the engine neither
@@ -451,7 +459,7 @@ export function takeTheSting(fen: string, me: 'w' | 'b', bestSan: string | null)
     if (best.move.from === cell.square) continue;
     if (best.board.attackers(cell.square, me).length > b.attackers(cell.square, me).length) continue;
     if (legalSeeGainFor(best.board.fen(), cell.square, them) > 0) continue;
-    return { claim: `srr:sting:${cell.square}`, stakes: { points: legalSeeGainFor(fen, cell.square, them), plies: 1 }, idea: `Your ${name(cell.type)} on ${cell.square} is attacked — but you don't have to move it or guard it; look for the move that makes taking it fail.`, namesMove: true, text: `Your ${name(cell.type)} on ${cell.square} is attacked, but ${sayMoveClause(bestSan, fen)} neither moves it nor guards it — it takes the sting out, so taking it no longer works for them.`, squares: [cell.square] };
+    return { claim: `srr:sting:${cell.square}`, stakes: { points: legalSeeGainFor(fen, cell.square, them), plies: 1 }, ideaSquares: [cell.square], idea: `Your ${name(cell.type)} on ${cell.square} is attacked — but you don't have to move it or guard it; look for the move that makes taking it fail.`, namesMove: true, text: `Your ${name(cell.type)} on ${cell.square} is attacked, but ${sayMoveClause(bestSan, fen)} neither moves it nor guards it — it takes the sting out, so taking it no longer works for them.`, squares: [cell.square] };
   }
   return null;
 }
@@ -493,7 +501,7 @@ export function bestCasePlan(fen: string, lines: Lines): Read | null {
   if (gap < criticalityThresholds().notable || moverCp(fen, two) > 50) return null;
   const a = sanOf(fen, one.moves[0]); const b2 = sanOf(fen, two.moves[0]);
   if (!a || !b2) return null;
-  return { claim: 'srr:best-case', stakes: costStakes(gap) ?? undefined, idea: `Test the slow plan with ${b2} by its best case: even if everything goes right, it only gets you level — something sharper is there.`, namesMove: true, text: `Test the slow plan with ${b2} by its best case: even when everything goes right for you, you end up no better than level. ${a} gets more.` };
+  return { claim: 'srr:best-case', stakes: costStakes(gap) ?? undefined, idea: `Test the slow plan with ${b2} by its best case: even if everything goes right, it only gets you level — something sharper is there.`, ideaSquares: toSquares(fen, [b2]), namesMove: true, text: `Test the slow plan with ${b2} by its best case: even when everything goes right for you, you end up no better than level. ${a} gets more.`, squares: toSquares(fen, [b2, a]) };
 }
 
 /** What the moves before a capture change about its target square, from the
@@ -543,7 +551,7 @@ export function rejectedMoveLater(fen: string, lines: Lines): Read | null {
     // before and after the engine's moves up to the capture; nothing nameable
     // changed → the held form says nothing.
     const prep = preparationOf(fen, san, main.slice(0, at));
-    return { stakes: costStakes(moverCp(fen, lines[0]) - moverCp(fen, l)) ?? undefined, claim: `srr:rejected:${san}`, ...(prep ? { idea: `The ${san.includes('+') && !san.includes('x') ? 'check' : 'capture'} you may be eyeing doesn't work yet — ${prep}, and then it does.` } : {}), namesMove: true, text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
+    return { stakes: costStakes(moverCp(fen, lines[0]) - moverCp(fen, l)) ?? undefined, claim: `srr:rejected:${san}`, ...(prep ? { idea: `The ${san.includes('+') && !san.includes('x') ? 'check' : 'capture'} you may be eyeing doesn't work yet — ${prep}, and then it does.` } : {}), namesMove: true, squares: toSquares(fen, [san, first]), text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
   }
   return null;
 }

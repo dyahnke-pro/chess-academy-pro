@@ -273,10 +273,14 @@ describe('a problem piece is joined to the pawn that BLOCKS it, once (WO-STANDAR
     // White Bd2 behind c3/e3, past the opening. The only pawns that can free
     // it are c3 and e3; a3/h3 "fixes" (the count trick) are gone.
     const fen = '4k3/pppppppp/8/8/8/2P1P3/PP1B1PPP/4K3 w - - 0 20';
-    const joins = readPosition(fen, 'white').filter((o) => /would free it|is what frees it/.test(o.text) && /d2/.test(o.text));
+    // The bishop is said by what it is and lit on d2 (David 2026-11-05).
+    const joins = readPosition(fen, 'white').filter((o) => /would free it|is what frees it/.test(o.text) && (o.squares ?? []).includes('d2'));
     expect(joins.length).toBeLessThanOrEqual(1);
     expect(joins.length).toBe(1);
-    for (const j of joins) expect(j.text).toMatch(/your pawn from (c3|e3) to (c4|e4)/);
+    for (const j of joins) {
+      expect(j.text).toMatch(/^Your bishop is your problem piece .* your (c|e)-pawn going to (c4|e4)/);
+      expect(j.squares ?? []).toEqual(expect.arrayContaining(['d2']));
+    }
   });
 });
 

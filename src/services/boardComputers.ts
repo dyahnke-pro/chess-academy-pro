@@ -612,7 +612,7 @@ export const BOARD_COMPUTERS = {
       seat: 'student', namesStudentMove: r.namesMove, thread: LOCAL_THREAD, fen: ctx.fen,
       ...(r.motif ? { motif: r.motif } : {}),
       // A geometry idea is a habit of thought with no board claim of its own.
-      ...(r.idea ? { heldForm: { text: r.idea, proof: NO_PROOF.method, squares: [] } } : {}),
+      ...(r.idea ? { heldForm: { text: r.idea, proof: NO_PROOF.method, squares: [...(r.ideaSquares ?? [])] } } : {}),
       ...(r.proof.line ? { lines: [r.proof.line] } : {}),
     }))),
     computer: 'geometryReads',

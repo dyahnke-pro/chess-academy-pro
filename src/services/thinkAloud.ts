@@ -333,7 +333,7 @@ export function depthClauses(args: {
     if (args.lastStudentMove) {
       // Counted on the board as it stands now, after their reply.
       const h = holeAccess(args.lastStudentMove.fenBefore, args.lastStudentMove.san, args.fen);
-      if (h) out.push({ kind: 'hole-access', text: h.text, squares: [h.hole, ...(h.from ? [h.from] : [])] });
+      if (h) out.push({ kind: 'hole-access', text: h.text, squares: [h.hole, h.moved, ...(h.from ? [h.from] : [])] });
     }
     const toMove = new Chess(args.fen).turn();
     const topUci = args.topLines[0]?.moves?.[0];
@@ -379,7 +379,7 @@ export function depthClauses(args: {
     // castle, "any move is fine". The ones that name the engine's move (the
     // ugly move, the provoked commitment) wait for nameMove below.
     const reads = toMove === args.studentColor ? speedRunReads({ fen: args.fen, me: args.studentColor, lines: args.topLines, inTheory: inBookCachedSync(args.fen, MIN_BOOK_GAMES), ...(args.lastOpponentMove ? { lastMove: args.lastOpponentMove } : {}), ...((): { lastOwnMove?: { fenBefore: string; san: string } } => { const o = ownLastMove(args.history, args.fen); return o ? { lastOwnMove: o } : {}; })() }) : [];
-    const push = (r: (typeof reads)[number], text: string): void => { out.push({ kind: 'speedrun-read', text, ...(r.ideaNames && text === r.idea ? { namesStudentMove: namesMoves(args.studentColor, args.fen, r.ideaNames) } : {}), ...(r.squares && text === r.text ? { squares: r.squares } : {}), ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}), ...(r.promise ? { promise: r.promise } : {}) }); };
+    const push = (r: (typeof reads)[number], text: string): void => { out.push({ kind: 'speedrun-read', text, ...(r.ideaNames && text === r.idea ? { namesStudentMove: namesMoves(args.studentColor, args.fen, r.ideaNames) } : {}), ...(text === r.text ? (r.squares ? { squares: r.squares } : {}) : (r.ideaSquares ? { squares: r.ideaSquares } : {})), ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}), ...(r.promise ? { promise: r.promise } : {}) }); };
     // ATTACK, SACRIFICES AND KINGS (batch 4) — each read carries its proof.
     const kings = toMove === args.studentColor ? kingAttackReads({ fen: args.fen, me: args.studentColor, lines: args.topLines }) : [];
     const pushKing = (r: KingRead, text: string): void => { out.push({ kind: 'king-read', text, squares: r.squares, proof: text === r.text ? r.proof : NO_PROOF.withheld, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}), ...(r.lines && text === r.text ? { lines: r.lines } : {}) }); };

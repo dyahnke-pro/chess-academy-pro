@@ -7,11 +7,14 @@
 // trigger, never the move. A LEAF: chess.js only.
 import { Chess, type Color } from 'chess.js';
 import { findLoosePieces } from './loosePieces';
+import { pieceRef } from './pieceRef';
+import type { HabitTarget } from './methodBeat';
 
 const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', p: 'pawn' };
 
-/** "their bishop on b5", or null. `bestSan` = the engine's move for the side to move. */
-export function looseTrigger(fen: string, bestSan: string | null): string | null {
+/** The loose piece ("their bishop", its square for the board), or null.
+ *  `bestSan` = the engine's move for the side to move. */
+export function looseTrigger(fen: string, bestSan: string | null): HabitTarget | null {
   if (!bestSan || /[x+#]/.test(bestSan) || bestSan.startsWith('O')) return null;
   let c: Chess;
   try { c = new Chess(fen); } catch { return null; }
@@ -23,7 +26,10 @@ export function looseTrigger(fen: string, bestSan: string | null): string | null
   try { mv = c.move(bestSan); } catch { return null; }
   for (const p of loose) {
     const now = c.attackers(p.square, me);
-    if (now.includes(mv.to)) return `their ${NAME[p.type] ?? 'piece'} on ${p.square}`;
+    if (now.includes(mv.to)) {
+      const ref = pieceRef(fen, p.square, me);
+      return { words: ref ? ref.words : `their ${NAME[p.type] ?? 'piece'} on ${p.square}`, square: p.square };
+    }
   }
   return null;
 }

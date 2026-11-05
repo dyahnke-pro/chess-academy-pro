@@ -281,6 +281,12 @@ export function methodBeatRead(s: MethodSignals, plyForVariety = 0): { habit: Me
 // battery duplication the fact selector exists to collapse. When a beat's claim
 // is already spoken by a fact, the method beat stays quiet.
 
+/** A piece a habit names — its words ("your knight", "their bishop on b5")
+ *  and its square, which the board lights while the habit is said (David
+ *  2026-11-05: "If a single square is being named it must also be
+ *  highlighted"). */
+export interface HabitTarget { words: string; square: string }
+
 interface LiveMethodSignals {
   /** The engine's move here, SAN — what the method would find. */
   bestSan: string | null;
@@ -292,7 +298,7 @@ interface LiveMethodSignals {
    *  2026-09-27: "what is their last move doing?" after f4, with the pawn
    *  threat on e5 said by no other lane — the clause that names a threat
    *  speaks only at a piece's worth). */
-  threatTarget?: string | null;
+  threatTarget?: HabitTarget | null;
   /** Is the student the one to move? You teach the method to the player. */
   isStudentMove: boolean;
   /** Does this position hold a GENUINE choice — several moves worth weighing,
@@ -307,11 +313,11 @@ interface LiveMethodSignals {
   tier?: ImportanceTier;
   /** TRIGGER → SCAN: a loose enemy piece the engine's quiet best move hits
    *  (`looseTrigger`) — "their bishop on b5". The trigger, never the move. */
-  looseTarget?: string | null;
+  looseTarget?: HabitTarget | null;
   /** LOOK AGAIN (batch 2): the plain defence of an attacked piece of yours
    *  that the engine rates far below its best (`methodSignals.naturalDefenceFails`),
    *  with the line that refutes it. */
-  defenceFails?: { target: string; proof: Proof } | null;
+  defenceFails?: { target: HabitTarget; proof: Proof } | null;
   /** CALCULATE ON YOUR TURN (batch 2): the engine's line opens with three
    *  forcing plies (`methodSignals.forcingLine`) — its proof. */
   forcingLine?: Proof | null;
@@ -332,7 +338,7 @@ interface LiveMethodSignals {
  *  the stems rotate, so a text dedupe never matched. Keyed on the HABIT. */
 export type LiveHabit = 'opponent-threat' | 'forcing-scan' | 'loose-trigger' | 'candidates' | 'look-again' | 'calc-now' | 'mark-line';
 /** `proof` rides on the habits whose earning fact is a line (batch 2). */
-interface LiveMethodBeat { text: string; key: string; habit: LiveHabit; proof?: Proof }
+interface LiveMethodBeat { text: string; key: string; habit: LiveHabit; proof?: Proof; /** The squares the habit names — lit while it is said. */ squares: string[] }
 /** EVERY HABIT HAS ONE ID (WO-STORY-MATRIX-01 P1-9): the live habits, and the
  *  two the slip question asks after a move. The slip question asked "what did
  *  their last move attack?" under its own `answer-danger` key while the live
@@ -357,12 +363,12 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
   // engine found. More specific than the threat habit below, so it goes first:
   // the threat is seen; the habit is checking the answer before playing it.
   if (s.defenceFails && isDecidingMoment(s.tier) && !bestIsMate(s.bestSan) && owed('look-again')) {
-    const t = s.defenceFails.target;
+    const t = s.defenceFails.target.words;
     return { ...beat('look-again', [
       `Defending ${t} is the natural move — but look again before you play it: the plain defence here runs into something.`,
       `${cap(t)} needs help, and the first defence that comes to mind fails. Look again: check what their reply does to it.`,
       `Look again before you guard ${t}: the obvious defence loses to a line of theirs. Check the answer before you play it.`,
-    ], plyForVariety), proof: s.defenceFails.proof };
+    ], plyForVariety), proof: s.defenceFails.proof, squares: [s.defenceFails.target.square] };
   }
 
   // 1 — THREAT IDENTIFICATION AS A HABIT. The board already names the threat
@@ -375,12 +381,12 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
   // now — what are they threatening?" and the threat on b4 never named).
   // With no target to name, the habit stays quiet.
   if (s.threatStanding && s.threatTarget && !mateOnBoard && owed('opponent-threat')) {
-    const t = s.threatTarget;
-    return beat('opponent-threat', [
+    const t = s.threatTarget.words;
+    return { ...beat('opponent-threat', [
       `Before you pick a move: what is their last move doing? Here it hits ${t} — answer that first, every time.`,
       `Run the question now — what are they threatening? They're after ${t}. Deal with that before your own plan.`,
       `Order of operations: their threat first — ${t} — your idea second.`,
-    ], plyForVariety);
+    ], plyForVariety), squares: [s.threatTarget.square] };
   }
 
   // 2 — THE FORCING SCAN, prospectively. The move that is there is a check or a
@@ -403,12 +409,12 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
   // theirs with no defender: the loose piece is the trigger that should start
   // the search. Same deciding-moment gate as the forcing scan.
   if (s.looseTarget && isDecidingMoment(s.tier) && owed('loose-trigger')) {
-    const t = s.looseTarget;
-    return beat('loose-trigger', [
+    const t = s.looseTarget.words;
+    return { ...beat('loose-trigger', [
       `Spot the trigger first: ${t} has no defender. A loose piece is where tactics start — look for a move that hits it.`,
       `The trigger here is ${t} — nothing defends it. Loose pieces drop off; scan for a move that attacks it.`,
       `Before anything else, notice ${t}: undefended. That is the trigger — now find the move that goes after it.`,
-    ], plyForVariety);
+    ], plyForVariety), squares: [s.looseTarget.square] };
   }
 
   // 2c — MARK THE LINE FORCED OR SPECULATIVE (batch 2). The move that is
@@ -454,7 +460,7 @@ function bestIsMate(bestSan: string | null): boolean { return (bestSan ?? '').en
 function cap(x: string): string { return openSentence(x); }
 
 function beat(habit: LiveHabit, stems: string[], ply: number): LiveMethodBeat {
-  return { text: pick(stems, ply), key: liveHabitKey(habit), habit };
+  return { text: pick(stems, ply), key: liveHabitKey(habit), habit, squares: [] };
 }
 
 /** Text-only form (no say-once) — kept for callers that do not carry a set. */

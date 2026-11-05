@@ -14,7 +14,7 @@ import { Chess } from 'chess.js';
 import { deriveNextPlanFacts, worstPieceNote } from './nextPlans';
 import { methodRead, methodPlanSentence, whyThisPlan } from './planChoice';
 import { stripThink } from '../utils/thinkPause';
-import { structurePlan } from './nextPlans';
+import { structurePlanFact } from './nextPlans';
 import { findPawnBreaks, findOpenFiles } from './positionReadingService';
 import { holeTargets } from './positionReadingService';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
@@ -35,11 +35,18 @@ interface PlanLever {
   squares: string[];
 }
 
+/** A plan sentence and the squares it is about — the board lights every one
+ *  while it is said (David 2026-11-05: "If a single square is being named it
+ *  must also be highlighted"). */
+interface PlanSentence { text: string; squares: string[] }
+
 interface BoardPlanFacts {
   /** The structural trump (a passed pawn, an isolani), or null. A sentence. */
   trump: string | null;
-  /** Every plan the structure earns, each with its method. Sentences. */
-  plans: string[];
+  /** The squares the trump is about. */
+  trumpSquares: string[];
+  /** Every plan the structure earns, each with its method. */
+  plans: PlanSentence[];
   /** The concrete levers, most to least decisive. */
   levers: PlanLever[];
   /** Why the first plan comes first (planChoice), or null. A clause. */
@@ -68,12 +75,15 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   try { chess = new Chess(fen); } catch { return null; }
   const myC: 'w' | 'b' = side === 'white' ? 'w' : 'b';
   const your = voice === 'you' ? 'your' : 'their';
-  const trump = voice === 'you' ? structurePlan(fen, myC) : null;
+  const trumpFact = voice === 'you' ? structurePlanFact(fen, myC) : null;
+  const trump = trumpFact?.text ?? null;
   // Stacked plans vary the stem after the first (question walk 2026-09-27).
   const facts = voice === 'you' ? deriveNextPlanFacts(fen, myC, { namesStudentMoves: true }) : [];
-  const plans = facts.map((p) => cap(p.text))
-    .map((p, i) => (i === 0 ? p : p.replace(/^The plan from here is to /, STEMS[(i - 1) % STEMS.length])))
-    .map((p) => (/[.!?]$/.test(p.trim()) ? p.trim() : `${p.trim()}.`));
+  const plans: PlanSentence[] = facts.map((f, i) => {
+    const c = cap(f.text);
+    const t = (i === 0 ? c : c.replace(/^The plan from here is to /, STEMS[(i - 1) % STEMS.length])).trim();
+    return { text: /[.!?]$/.test(t) ? t : `${t}.`, squares: [...f.squares] };
+  });
   const levers: PlanLever[] = [];
   // A pawn break to open the position (findPawnBreaks reads the side to move).
   const asSide = chess.turn() === myC ? fen : voice === 'they' ? flipSideToMove(fen) : null;
@@ -126,7 +136,7 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   const read = voice === 'you' && methodOwns ? methodRead(fen, myC) : null;
   const mp = read ? methodPlanSentence(read, fen) : null;
   return {
-    trump, plans, levers,
+    trump, trumpSquares: trumpFact?.squares ?? [], plans, levers,
     why: whyThisPlan(facts),
     ordered: facts.some((p) => p.kind !== facts[0]?.kind),
     methodSquares: mp ? mp.squares : [],

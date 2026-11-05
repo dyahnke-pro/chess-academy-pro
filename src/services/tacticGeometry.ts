@@ -37,6 +37,8 @@ export interface GeometryRead {
   text: string;
   /** The idea without the move, for a surface that holds the move back. */
   idea?: string;
+  /** The squares the IDEA names — lit while it is said (never the held move's own). */
+  ideaSquares?: string[];
   /** The sentence names the engine's move — speaks only where a move is earned. */
   namesMove: boolean;
   squares: string[];
@@ -561,6 +563,7 @@ export function kickFails(ctx: GeometryContext): GeometryRead | null {
     // and did not parse): the board fact is THEIR pawn, which the student can
     // look at; the piece and its square stay held, since they are the move.
     idea: `Their pawn on ${shown.kick.from} looks like it can chase a piece you post here, but the kick costs them ${net}. Before you post a piece, always check that kick.`,
+    ideaSquares: [shown.kick.from],
     squares: [mv.to, shown.kick.to, shown.punish.to], proof, motif: null, claim: `geo:kick-fails:${mv.to}`,
   };
 }

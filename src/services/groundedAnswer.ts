@@ -504,7 +504,7 @@ export function assembleBoardPlanAnswer(
   const pf = boardPlanFacts(fen, studentColor);
   if (!pf) return null;
   const trump = pf.trump;
-  const withMethod = pf.plans;
+  const withMethod = pf.plans.map((p) => p.text);
   // Every lever the board earned — no ceiling (G4.5). They are already ordered
   // most→least decisive, so a long list reads as a ranked plan, not a dump.
   // THE THREAT COMES BEFORE THE PLAN (question run 2026-09-27: "the plan is to
