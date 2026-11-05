@@ -118,18 +118,18 @@ describe('(L) two good moves — on his games', () => {
 describe('(C) which square for the piece — on his games, board reads only', () => {
   it('11.Na3 (25w0mYsx_Lk): Nd2 hangs the bishop on d3', () => {
     expect(squareChoice({ fenBefore: 'r1bq1rk1/ppp2pb1/5npp/4p3/4P2B/2PB4/PP3PPP/RN1Q1RK1 w - - 0 11', san: 'Na3', student: 'w', rating: 1500, reads: null, priorMove: null })?.text)
-      .toBe('Your knight goes to a3 — on d2 it hangs your bishop on d3.');
+      .toBe('Your knight goes to a3 — on d2 it leaves your light-squared bishop hanging.');
   });
   it('11…Nd7 (RehhbTF00qQ): …Nc6 blocks the c-pawn — from both seats', () => {
     const fen = 'rn1q1rk1/ppp1bppp/4b3/3pP3/3P4/P1N2N2/1PPQB1PP/R4RK1 b - - 4 11';
     expect(squareChoice({ fenBefore: fen, san: 'Nd7', student: 'b', rating: 1500, reads: null, priorMove: null })?.text)
-      .toBe('Your knight goes to d7 — on c6 it blocks your pawn on c7.');
+      .toBe('Your knight goes to d7 — on c6 it blocks your c-pawn.');
     expect(squareChoice({ fenBefore: fen, san: 'Nd7', student: 'w', rating: 1500, reads: null, priorMove: null })?.text)
-      .toBe('Their knight went to d7 — on c6 it blocks their pawn on c7.');
+      .toBe('Their knight went to d7 — on c6 it blocks their c-pawn.');
   });
   it('14…Bf6 (WQFcuBCL1F4): …Bd6 hangs the knight on d5', () => {
     expect(squareChoice({ fenBefore: 'r4rk1/1ppqb1pp/2n5/p2npp2/6bP/P1NP1NP1/1PPBBP2/R2Q1RK1 b - - 0 14', san: 'Bf6', student: 'b', rating: 1500, reads: null, priorMove: null })?.text)
-      .toBe('Your bishop goes to f6 — on d6 it hangs your knight on d5.');
+      .toBe('Why that square for your bishop? On d6 it leaves your knight on d5 hanging.');
   });
   it('a kick is a reason only against a square at least as natural as the one chosen; a queen\'s squares are not weighed', () => {
     // 14…Bf6 again: c5 can be kicked by d4, but the eye weighs …Bc5 below
@@ -140,7 +140,7 @@ describe('(C) which square for the piece — on his games, board reads only', ()
   });
   it('11.Bb2 (55gXMP9N5sM): every other square hangs the knight on a3 — said once', () => {
     expect(squareChoice({ fenBefore: 'r1b2rk1/pp2ppbp/2n2np1/q1p5/3P4/N1P2NPP/P3PPB1/R1BQR1K1 w - - 1 11', san: 'Bb2', student: 'w', rating: 1500, reads: null, priorMove: null })?.text)
-      .toBe('Your bishop goes to b2 — on e3, f4, d2 or g5 it hangs your knight on a3.');
+      .toBe('Your bishop goes to b2 — on its other squares it leaves your knight on a3 hanging.');
   });
   it('a pawn move or a capture asks no square question', () => {
     expect(squareChoice({ fenBefore: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', san: 'e4', student: 'w', rating: 1500, reads: null, priorMove: null })).toBeNull();

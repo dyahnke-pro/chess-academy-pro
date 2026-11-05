@@ -18,7 +18,7 @@ describe('a standing claim is not spoken once the reply changed its squares', ()
     // (Not …Nc6: that hits d4 a second time and it can be won — the phalanx
     // line is rightly dropped there.)
     const reads = studentMoveStructure({ ...base, fenBefore: fa('e4 c5'), reply: 'a6' });
-    expect(reads.find((r) => r.act === 'formation')?.text).toMatch(/d4 and e4 stand side by side/);
+    expect(reads.find((r) => r.act === 'formation')?.text).toMatch(/Your d- and e-pawns stand side by side/);
   });
   it('no reply yet keeps it (control)', () => {
     expect(studentMoveStructure({ ...base, fenBefore: fa('e4 c5'), reply: null }).some((r) => r.act === 'formation')).toBe(true);

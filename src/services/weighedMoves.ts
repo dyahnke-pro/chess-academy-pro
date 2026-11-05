@@ -37,6 +37,8 @@ import { legalSeeGainFor } from './positionReadingService';
 import { lineProof, type Proof } from './proof';
 import { seatCp, expectedScore } from './winChance';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { pieceRef } from './pieceRef';
+import { openSentence } from '../utils/openSentence';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -570,17 +572,22 @@ function faultsOn(fenBefore: string, m: Move, own: 'your' | 'their', other: 'you
   const after = boardOf(fenBefore);
   if (!after) return out;
   try { after.move(m.san); } catch { return out; }
+  // A piece is named the way a person names it (`pieceRef`): "your other
+  // knight", "your d-pawn" — its square lit on the board, not read out.
+  const named = (sq: string, piece: string): string => {
+    const ref = pieceRef(after.fen(), sq, own === 'your' ? m.color : (m.color === 'w' ? 'b' : 'w'));
+    return ref ? ref.words : `${own} ${NAME[piece]} on ${sq}`;
+  };
   const h = hangsAfter(fenBefore, m);
   if (h) {
     out.push({ square: m.to, kind: 'hangs', squares: [h.square],
-      text: h.square === m.to ? 'hangs' : `hangs ${own} ${NAME[h.piece]} on ${h.square}` });
+      text: h.square === m.to ? 'hangs' : `leaves ${named(h.square, h.piece)} hanging` });
   }
   const kick = pawnKick(after.fen(), m.to, m.color);
-  if (kick) out.push({ square: m.to, kind: 'kicked', squares: [m.to], text: `is kicked by ${kick}` });
+  if (kick) out.push({ square: m.to, kind: 'kicked', squares: [m.to], text: `is kicked by ${other} ${kick[0]}-pawn` });
   const blk = blocksOwn(fenBefore, m);
   if (blk) {
-    out.push({ square: m.to, kind: 'blocks', squares: [blk.by],
-      text: blk.piece === 'p' ? `blocks ${own} pawn on ${blk.by}` : `blocks ${own} ${NAME[blk.piece]} on ${blk.by}` });
+    out.push({ square: m.to, kind: 'blocks', squares: [blk.by], text: `blocks ${named(blk.by, blk.piece)}` });
   }
   if (reason && out.length === 0) {
     const sans = reasonSans(reason);
@@ -650,13 +657,22 @@ export function squareChoice(args: { fenBefore: string; san: string; student: Co
   }
   if (faults.length === 0) return null;
   const piece = NAME[played.piece];
-  const lead = mover === args.student ? `Your ${piece} goes to ${played.to}` : `Their ${piece} went to ${played.to}`;
-  // One fault, said once, with every square it is true on ("on e3, f4 or d2
-  // it hangs your knight on a3"), in the order first met.
+  // One fault, said once, with every square it is true on, in the order first
+  // met. SAID LIKE A PERSON (David 2026-11-05: "naming a bunch of squares …
+  // sounds too robotic"): at most two squares out loud. One other square:
+  // "Your bishop goes to d3 — on b5 their c-pawn would kick it." More: the
+  // square it went to is on the board already — "Why that square for their
+  // knight? On h5 or g4 their g-pawn kicks it" — and a fault true on three
+  // squares or more is said of "its other squares". Every square stays lit.
   const byText = new Map<string, string[]>();
   for (const f of faults) byText.set(f.text, [...(byText.get(f.text) ?? []), f.square]);
-  const said = [...byText.entries()].map(([t, sqs]) => `on ${orList(sqs)} it ${t}`);
-  const text = `${lead} — ${andList(said)}.`;
+  const groups = [...byText.entries()];
+  const outLoud = (t: string): number => new Set(t.match(/\b[a-h][1-8]\b/g) ?? []).size;
+  const clause = ([t, sqs]: [string, string[]]): string => (sqs.length <= 2 ? `on ${orList(sqs)} it ${t}` : `on its other squares it ${t}`);
+  const said = andList(groups.map(clause));
+  const text = outLoud(said) <= 1
+    ? `${mover === args.student ? `Your ${piece} goes to ${played.to}` : `Their ${piece} went to ${played.to}`} — ${said}.`
+    : `Why that square for ${mover === args.student ? 'your' : 'their'} ${piece}? ${openSentence(said)}.`;
   return { piece: played.piece, to: played.to, faults, text,
     squares: [...new Set([played.to, ...faults.flatMap((f) => [f.square, ...f.squares])])],
     key: `square:${uciOf(played)}` };

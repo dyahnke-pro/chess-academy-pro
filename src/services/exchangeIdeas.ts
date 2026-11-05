@@ -34,6 +34,7 @@ import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { lineSeatAt, withArticle } from '../utils/andList';
 import { imageryFor, type ImageryKey } from './factImagery';
 import { unmarked } from '../utils/sanMark';
+import { pieceRef } from './pieceRef';
 
 export type ExchangeIdeaId =
   | 'only-developed' | 'defender-trade' | 'exchange-for-attacker' | 'deny-exchange'
@@ -446,7 +447,10 @@ export function dutyParity(fen: string, student: Side): ExchangeIdea | null {
       && c.attackers(u.sq as Square, them).length > 0
       && c.attackers(u.sq as Square, student).length === 1 && c.attackers(u.sq as Square, student)[0] === guards[0]);
     if (overloaded) continue;
-    const text = `Your ${NAME[d.type]} on ${guards[0]} is tied to guarding the ${NAME[t.type]} on ${t.sq} — but their ${NAME[a.type]} on ${attackers[0]} is just as tied to attacking it, so the guard costs you nothing.`;
+    // Named the way a person names them (`pieceRef`): "your light-squared
+    // bishop", "your b-pawn", "their queen" — the three squares lit, not read out.
+    const ref = (sq: string, fallback: string): string => pieceRef(fen, sq, student)?.words ?? fallback;
+    const text = `${openSentence(ref(guards[0], `your ${NAME[d.type]} on ${guards[0]}`))} is tied to guarding ${ref(t.sq, `the ${NAME[t.type]} on ${t.sq}`)} — but ${ref(attackers[0], `their ${NAME[a.type]} on ${attackers[0]}`)} is just as tied to attacking it, so the guard costs you nothing.`;
     const sq = [guards[0], t.sq, attackers[0]];
     const proof = squaresProof(text, sq);
     if (!proof) continue;

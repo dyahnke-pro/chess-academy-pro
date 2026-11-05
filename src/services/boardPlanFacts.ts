@@ -20,6 +20,7 @@ import { holeTargets } from './positionReadingService';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { flipSideToMove } from './threatOut';
 import { andList, orList } from '../utils/andList';
+import { pieceRef } from './pieceRef';
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const cap = (s: string): string => openSentence(s);
@@ -90,8 +91,11 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   const theirC = myC === 'w' ? 'b' : 'w';
   const knightHoles = holeTargets(fen, theirC, myC, 'n');
   const bishopHoles = knightHoles.length ? [] : holeTargets(fen, theirC, myC, 'b');
-  if (knightHoles.length) levers.push({ kind: 'outpost', phrase: `plant a knight on ${orList(knightHoles)}`, squares: [...knightHoles] });
-  else if (bishopHoles.length) levers.push({ kind: 'outpost', phrase: `post a bishop on ${orList(bishopHoles)}`, squares: [...bishopHoles] });
+  // One or two holes are named; three or more are "the holes in their camp", lit on the
+  // board (a list of squares read out is the robot, David 2026-11-05).
+  const holeWords = (holes: readonly string[]): string => (holes.length <= 2 ? `on ${orList(holes)}` : 'in one of the holes in their camp');
+  if (knightHoles.length) levers.push({ kind: 'outpost', phrase: `plant a knight ${holeWords(knightHoles)}`, squares: [...knightHoles] });
+  else if (bishopHoles.length) levers.push({ kind: 'outpost', phrase: `post a bishop ${holeWords(bishopHoles)}`, squares: [...bishopHoles] });
   // In the opening the plan IS development: name the minors still home (walk 5,
   // 2026-09-23). Leads the levers.
   const home: Array<{ type: string; square: string }> = [];
@@ -101,7 +105,7 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   if (home.length) {
     levers.unshift({
       kind: 'develop',
-      phrase: `bring ${your} ${andList(home.map((h) => `${PIECE[h.type]} on ${h.square}`))} into the game, since development comes first`,
+      phrase: `bring ${homeWords(chess, home, myC, your)} into the game, since development comes first`,
       squares: home.map((h) => h.square),
     });
   }
@@ -110,7 +114,11 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   const worst = worstPieceNote(fen, myC);
   const homeRank = myC === 'w' ? '1' : '8';
   const pastOpening = (Number.parseInt(fen.split(' ')[5] ?? '1', 10) || 1) >= 10;
-  if (worst && (worst.misplaced || pastOpening || worst.square[1] !== homeRank)) levers.push({ kind: 'worst', phrase: `improve ${your} ${PIECE[worst.piece]} on ${worst.square}`, squares: [worst.square] });
+  const viewer = voice === 'you' ? myC : theirC;
+  if (worst && (worst.misplaced || pastOpening || worst.square[1] !== homeRank)) {
+    const ref = pieceRef(fen, worst.square, viewer);
+    levers.push({ kind: 'worst', phrase: `improve ${ref ? ref.words : `${your} ${PIECE[worst.piece]} on ${worst.square}`}`, squares: [worst.square] });
+  }
   // Chat was ASKED: the method is said as a question and its answers at once.
   // The answers ARE the plan (planChoice.methodPlan) — unless a passed pawn or
   // an extra piece to convert outranks all three questions.
@@ -126,8 +134,41 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   };
 }
 
-/** The levers as one sentence, for the narration's read. Null when none. */
+/** The minors still at home, named as a person names them: "both knights",
+ *  "your dark-squared bishop", "your other knight" — the squares are lit on the
+ *  board, never read out as a list (David 2026-11-05). */
+function homeWords(chess: Chess, home: ReadonlyArray<{ type: string; square: string }>, myC: 'w' | 'b', your: string): string {
+  const total = (t: string): number => chess.board().flat().filter((p) => p && p.color === myC && p.type === t).length;
+  const parts: string[] = [];
+  for (const t of ['n', 'b'] as const) {
+    const at = home.filter((h) => h.type === t);
+    if (at.length === 0) continue;
+    if (at.length >= 2) { parts.push(`${at.length === 2 ? 'both' : 'all your'} ${PIECE[t]}s`); continue; }
+    if (t === 'b' && total('b') === 2) {
+      const sq = at[0].square;
+      const light = (sq.charCodeAt(0) - 97 + Number(sq[1])) % 2 === 0;
+      parts.push(`${your} ${light ? 'light' : 'dark'}-squared bishop`);
+    } else parts.push(`${your} ${total(t) > 1 ? 'other ' : ''}${PIECE[t]}`);
+  }
+  return andList(parts);
+}
+
+/** The squares a phrase says out loud. */
+const saidSquares = (phrase: string): number => (phrase.match(/\b[a-h][1-8]\b/g) ?? []).length;
+
+/** The levers as sentences, for the narration's read. Null when none. A
+ *  sentence says at most two squares — a person names the plan's steps, the
+ *  board shows where (David 2026-11-05) — so the levers run on into a second
+ *  sentence instead of one long list of squares. */
 export function leverSentence(levers: readonly PlanLever[]): string | null {
   if (levers.length === 0) return null;
-  return `The plan is to ${levers.map((l) => l.phrase).join('; ')}.`;
+  const sentences: string[][] = [[]];
+  let squares = 0;
+  for (const l of levers) {
+    const n = saidSquares(l.phrase);
+    if (sentences[sentences.length - 1].length > 0 && squares + n > 2) { sentences.push([]); squares = 0; }
+    sentences[sentences.length - 1].push(l.phrase);
+    squares += n;
+  }
+  return sentences.map((ps, i) => (i === 0 ? `The plan is to ${ps.join('; ')}.` : `${openSentence(ps.join('; '))}.`)).join(' ');
 }

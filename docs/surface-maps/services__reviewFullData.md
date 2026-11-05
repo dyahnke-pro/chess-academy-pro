@@ -56,7 +56,7 @@
 - `src/services/boardDelta.test.ts:68`
 - `src/services/coachFeatureService.ts:2147`
 - `src/services/danyaBench.measure.test.ts:395`
-- `src/services/exchangeIdeas.test.ts:252`
+- `src/services/exchangeIdeas.test.ts:253`
 - `src/services/forkTrick.test.ts:62`
 - `src/services/hangingVsUndefended.test.ts:13`
 - `src/services/orderComputers.test.ts:315`

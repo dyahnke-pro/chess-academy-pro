@@ -275,6 +275,12 @@ const COLOR_FOR: Partial<Record<VoiceFactKind, string>> = {
   observation: '#eab308',
 };
 
+/** THE COLOUR A SPOKEN FACT'S SQUARES LIGHT IN (David 2026-11-05: "If a single
+ *  square is being named it must also be highlighted"): its kind's colour, and
+ *  the lead-the-eye yellow for every other kind — a square named in any line is
+ *  lit, never only the five kinds that had a colour. One rule for every wave. */
+const markColorOf = (kind: VoiceFactKind): string => COLOR_FOR[kind] ?? '#eab308';
+
 const PRIORITY_FIRST_MIN_PLY_GAP = 10;
 import { captureEvent } from '../../services/analytics';
 
@@ -10250,8 +10256,7 @@ export function CoachTeachPage({ mode }: {
       // accidental substring and fails on a square the sentence names in words.
       // Both were re-deriving downstream what the producer already knew.
       for (const f of pkg.kept) {
-        const color = COLOR_FOR[f.kind];
-        if (!color) continue;
+        const color = markColorOf(f.kind);
         // EVERY named square, no cap (David 2026-09-13). A fact names at most a
         // handful; the earlier slice(0,3) could drop a genuinely-named square.
         for (const sq of (f.squares ?? [])) {
@@ -12293,7 +12298,7 @@ export function CoachTeachPage({ mode }: {
                       // A question's marks are its answer: they wait for the move.
                       if (f.text.includes(THINK_MARK)) continue;
                       for (const sq of markableSquares({ kept: [f] })) {
-                        if (!owed.some((h) => h.square === sq)) owed.push({ square: sq, color: COLOR_FOR[f.kind] ?? '#f59e0b' });
+                        if (!owed.some((h) => h.square === sq)) owed.push({ square: sq, color: markColorOf(f.kind) });
                       }
                     }
                     // …AND DRAW ITS ARROWS (David 2026-09-30: "make sure arrows are

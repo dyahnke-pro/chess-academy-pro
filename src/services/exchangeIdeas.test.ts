@@ -83,7 +83,8 @@ describe('trades', () => {
 
   it('duty parity: their attacker is as tied as your guard', () => {
     const r = wellFormed(dutyParity('6k1/5ppp/1q6/8/8/8/1P3PPP/1R4K1 w - - 0 1', 'w'));
-    expect(r.text).toMatch(/your rook on b1 is tied to guarding the pawn on b2 — but their queen on b6 is just as tied/i);
+    expect(r.text).toBe('Your rook is tied to guarding your b-pawn — but their queen is just as tied to attacking it, so the guard costs you nothing.');
+    expect(r.squares).toEqual(expect.arrayContaining(['b1', 'b2', 'b6']));
     // A knight attacking is worth less than the rook guarding: the guard costs.
     expect(dutyParity('6k1/5ppp/8/8/2n5/8/1P3PPP/1R4K1 w - - 0 1', 'w')).toBeNull();
   });

@@ -323,10 +323,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8818`
-- `src/components/Coach/CoachTeachPage.tsx:8921`
-- `src/components/Coach/CoachTeachPage.tsx:11808`
-- `src/components/Coach/CoachTeachPage.tsx:12206`
+- `src/components/Coach/CoachTeachPage.tsx:8824`
+- `src/components/Coach/CoachTeachPage.tsx:8927`
+- `src/components/Coach/CoachTeachPage.tsx:11813`
+- `src/components/Coach/CoachTeachPage.tsx:12211`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/services/phaseTransitionDetector.test.ts:575`

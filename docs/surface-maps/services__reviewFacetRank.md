@@ -72,7 +72,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `factKind` (function) — 1 call site
-- `src/services/exchangeIdeas.test.ts:225`
+- `src/services/exchangeIdeas.test.ts:226`
 
 ### `factValue` (function) — 5 call sites
 - `src/services/coachDecider.ts:471`

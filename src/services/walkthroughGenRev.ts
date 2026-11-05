@@ -54,4 +54,4 @@
 // take on e5, you take back with the knight"), the tempting move that fails,
 // the move of the same worth, and the piece's other squares (`ifTheyPlay`,
 // `weighedMoves`); the reply tree's sentence opens through `openSentence`.
-export const WALKTHROUGH_GEN_REV = '2026-11-05-weighed-replies';
+export const WALKTHROUGH_GEN_REV = '2026-11-05-human-squares';

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2114 lines · 17 exports · 39 importers · 47 tests · 3 audits**
+**2114 lines · 17 exports · 40 importers · 48 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -55,6 +55,7 @@
 - `src/test/computedOrderWired.test.ts`
 - `src/test/decisionRows.baseline.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
+- `src/test/humanSquares.gate.test.ts`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts`
 - `src/test/teach02Wired.test.ts`
 
@@ -102,7 +103,7 @@
 - `src/services/positionFacts.weakness.test.ts:71`
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11416`
+- `src/components/Coach/CoachTeachPage.tsx:11421`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:471`
 - `src/services/raceAimOneVoice.test.ts:20`
@@ -120,9 +121,9 @@
 - `src/services/positionReadComposer.ts:158`
 - `src/services/whyBestMove.ts:151`
 
-### `computePositionFacts` (function) — 108 call sites
+### `computePositionFacts` (function) — 110 call sites
 - `src/coach/boardTurnAnswer.ts:136`
-- `src/components/Coach/CoachTeachPage.tsx:11274`
+- `src/components/Coach/CoachTeachPage.tsx:11279`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:271`
 - `src/hooks/usePhaseNarration.ts:433`
@@ -138,7 +139,7 @@
 - `src/services/deliberation.ruleOutOnce.test.ts:89`
 - `src/services/deliberation.ruleOutOnce.test.ts:98`
 - `src/services/deliberation.ruleOutOnce.test.ts:100`
-- `src/services/exchangeIdeas.test.ts:265`
+- `src/services/exchangeIdeas.test.ts:266`
 - `src/services/forkTrick.test.ts:50`
 - `src/services/latentFork.test.ts:151`
 - `src/services/learnNamesNoMove.os10.test.ts:51`
@@ -220,6 +221,8 @@
 - `src/test/decisionRows.baseline.test.ts:74`
 - `src/test/decisionRows.baseline.test.ts:112`
 - `src/test/everySurfaceSpeaks.test.ts:117`
+- `src/test/humanSquares.gate.test.ts:65`
+- `src/test/humanSquares.gate.test.ts:88`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts:250`
 - `src/test/teach02Wired.test.ts:86`
 - `src/test/teach02Wired.test.ts:95`
@@ -231,7 +234,7 @@
 - `src/test/teach02Wired.test.ts:140`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11538`
+- `src/components/Coach/CoachTeachPage.tsx:11543`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -249,8 +252,8 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9311`
-- `src/components/Coach/CoachTeachPage.tsx:9448`
+- `src/components/Coach/CoachTeachPage.tsx:9317`
+- `src/components/Coach/CoachTeachPage.tsx:9454`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:31`
@@ -307,6 +310,7 @@
 - `src/test/computedOrderWired.test.ts`
 - `src/test/decisionRows.baseline.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
+- `src/test/humanSquares.gate.test.ts`
 - `src/test/latentForkOpensTheDoor.test.ts`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts`
 - `src/test/learnNamesNoMoveUnasked.gate.test.ts`

@@ -79,7 +79,8 @@ describe('pawnJudgement', () => {
   it('formation: a3, b4 and c3 make a triangle', () => {
     const fen = legal('6k1/5ppp/8/8/8/P1P5/1P3PPP/6K1 w - - 0 20');
     const r = voiced(formation(fen, 'b4', 'w'));
-    expect(r.text).toMatch(/^a3, b4 and c3 make a triangle: b4 is backed from both sides/);
+    expect(r.text).toMatch(/^Your pawns make a triangle with the one on b4 at its point: backed from both sides/);
+    expect(r.squares).toEqual(expect.arrayContaining(['a3', 'b4', 'c3']));
     // A lone pawn push builds nothing.
     expect(formation(fen, 'h3', 'w')).toBeNull();
   });

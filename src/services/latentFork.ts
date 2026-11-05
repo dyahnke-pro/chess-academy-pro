@@ -254,10 +254,13 @@ const PIECE_WORD: Record<string, string> = {
  * names the danger so they can prevent it.
  */
 export function latentForkClause(fork: LatentFork, studentSide: 'white' | 'black'): string {
-  const names = fork.targets.map((t) => `${PIECE_WORD[t.piece]} on ${t.square}`);
-  const list = names.length === 2
-    ? `${names[0]} and ${names[1]}`
-    : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+  // The targets by what they are ("their queen and rook", "both rooks"); their
+  // squares ride on the clause and are lit on the board, never read out
+  // (David 2026-11-05: "naming a bunch of squares … sounds too robotic").
+  const byPiece = new Map<string, number>();
+  for (const t of fork.targets) byPiece.set(t.piece, (byPiece.get(t.piece) ?? 0) + 1);
+  const names = [...byPiece.entries()].map(([p, n]) => (n === 1 ? PIECE_WORD[p] : `${n === 2 ? 'both' : 'all three'} ${PIECE_WORD[p]}s`));
+  const list = names.length === 1 ? names[0] : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
   return fork.forker === studentSide
     // THE ROUTE IS WITHHELD (OS-10, David's record 2026-10-19, move 27: "your
     // knight has a fork waiting on c7 — via b5, then c7" named his next move).

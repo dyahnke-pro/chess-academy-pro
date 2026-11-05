@@ -192,7 +192,9 @@ export function formation(fenBefore: string, san: string, student: Color): Struc
     if (!proof) continue;
     return {
       act: 'formation', squares: sqs, proof, key: `formation:triangle:${sqs.join('')}`,
-      text: `${sqs[0]}, ${sqs[1]} and ${sqs[2]} make a triangle: ${a} is backed from both sides, so it can lead the expansion.`,
+      // Said like a person (David 2026-11-05): the shape and its point, the
+      // three squares lit on the board rather than read out.
+      text: `Your pawns make a triangle with the one on ${a} at its point: backed from both sides, it can lead the expansion.`,
     };
   }
 
@@ -210,7 +212,7 @@ export function formation(fenBefore: string, san: string, student: Color): Struc
         act: 'formation', squares: [base, mid, head], proof, key: `formation:chain:${base}${head}`,
         // "The one pawn nothing else guards" was false whenever a piece guards it
         // (Keres 10.d3: the queen on d1 guards c2) — the base is the pawn NO PAWN guards.
-        text: `${base}, ${mid} and ${head} form a chain: ${base} is its base, the one pawn no other pawn guards, so that is the pawn to look after.`,
+        text: `Your pawns form a chain, and its base on ${base} is the one pawn no other pawn guards, so that is the pawn to look after.`,
       };
     }
   }
@@ -227,8 +229,9 @@ export function formation(fenBefore: string, san: string, student: Color): Struc
       const proof = squaresProof(`${pair[0]} and ${pair[1]} cover ${andList(cover)}`, [...pair, ...cover]);
       if (!proof) continue;
       return {
-        act: 'formation', squares: [...pair], proof, key: `formation:phalanx:${pair.join('')}`,
-        text: `${pair[0]} and ${pair[1]} stand side by side: together they cover ${andList(cover)}, and either can advance with the other's support.`,
+        // The squares they cover are lit, not listed.
+        act: 'formation', squares: [...pair, ...cover], proof, key: `formation:phalanx:${pair.join('')}`,
+        text: `Your ${pair[0][0]}- and ${pair[1][0]}-pawns stand side by side: together they cover the ${cover.length === 4 ? 'four ' : ''}squares in front of them, and either can advance with the other's support.`,
       };
     }
   }

@@ -54,7 +54,7 @@
 - `src/components/Coach/CoachGamePage.tsx:2560`
 - `src/components/Coach/CoachGamePage.tsx:2852`
 - `src/components/Coach/CoachGamePage.tsx:2890`
-- `src/components/Coach/CoachTeachPage.tsx:8621`
+- `src/components/Coach/CoachTeachPage.tsx:8627`
 - `src/components/Openings/OpeningPlayMode.tsx:766`
 - `src/components/Openings/OpeningPlayMode.tsx:791`
 
@@ -78,11 +78,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `replyMadeAChance` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8596`
+- `src/components/Coach/CoachTeachPage.tsx:8602`
 
 ### `getAdaptiveMove` (function) — 64 call sites
 - `src/components/Coach/CoachGamePage.tsx:2355`
-- `src/components/Coach/CoachTeachPage.tsx:8517`
+- `src/components/Coach/CoachTeachPage.tsx:8523`
 - `src/components/Openings/OpeningPlayMode.tsx:753`
 - `src/services/coachGameEngine.test.ts:78`
 - `src/services/coachGameEngine.test.ts:88`
@@ -151,7 +151,7 @@
 - `src/components/Coach/CoachGamePage.tsx:401`
 - `src/components/Coach/CoachGamePage.tsx:2290`
 - `src/components/Coach/CoachGamePage.tsx:2355`
-- `src/components/Coach/CoachTeachPage.tsx:8516`
+- `src/components/Coach/CoachTeachPage.tsx:8522`
 - `src/components/Openings/OpeningPlayMode.tsx:90`
 - `src/services/coachGameEngine.test.ts:230`
 - `src/services/coachGameEngine.test.ts:234`
@@ -165,9 +165,9 @@
 ### `studentPlayingRating` (re-export) — 21 call sites
 - `src/App.tsx:170`
 - `src/components/Coach/CoachGamePage.tsx:353`
-- `src/components/Coach/CoachTeachPage.tsx:8515`
-- `src/components/Coach/CoachTeachPage.tsx:10787`
-- `src/components/Coach/CoachTeachPage.tsx:13865`
+- `src/components/Coach/CoachTeachPage.tsx:8521`
+- `src/components/Coach/CoachTeachPage.tsx:10792`
+- `src/components/Coach/CoachTeachPage.tsx:13870`
 - `src/components/Openings/OpeningPlayMode.tsx:66`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:983`
 - `src/hooks/useEndgamePlayout.ts:391`
@@ -196,7 +196,7 @@
 
 ### `gameOpponentStrength` (re-export) — 6 call sites
 - `src/components/Coach/CoachGamePage.tsx:2250`
-- `src/components/Coach/CoachTeachPage.tsx:8515`
+- `src/components/Coach/CoachTeachPage.tsx:8521`
 - `src/components/Openings/OpeningPlayMode.tsx:752`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:983`
 - `src/hooks/useEndgamePlayout.ts:391`
