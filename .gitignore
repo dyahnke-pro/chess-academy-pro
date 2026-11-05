@@ -120,3 +120,9 @@ scripts/.tmp/
 # Raw video transcripts are reference only and never committed (CLAUDE.md G9.1 step 8)
 docs/plans/swarm-inputs/*.vtt
 __pycache__/
+
+# His words and anything trained on them stay off GitHub (David 2026-11-05:
+# "I would prefer them not to be on GitHub, along with any other training
+# data"): the transcript-derived tags, the voice notes, the training rows.
+scripts/scoreboard/his-*.json
+data/sources/*-voice/
