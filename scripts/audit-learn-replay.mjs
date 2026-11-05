@@ -85,7 +85,12 @@ await call('/open');
 const fx = await call('/fixture');
 console.log(`[fixture] ${fx.loaded ? `${fx.wrote} rows / ${fx.stores} stores` : `NOT LOADED (${fx.reason}) — this is not a real-record run`}`);
 await call('/open');
-if (seat === 'black') await call('/type', 'I want to play black');
+// A Black game opens with HIS opponent's first move, dictated: at the start,
+// "play d4" hands White to the coach and plays d4 (CoachTeachPage, the
+// game-start dictation branch). "I want to play black" let the coach open
+// with its own move — 7uxRcomJo7I (1.d4) was replayed after 1.e4 and broke at
+// move 6 on an illegal move, half the game lost (2026-11-05).
+if (seat === 'black') await call('/type', `play ${sans[0]}`);
 
 const turns = [];
 for (let i = 0; i < sans.length; i += 1) {
