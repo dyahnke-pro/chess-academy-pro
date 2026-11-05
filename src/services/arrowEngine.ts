@@ -204,8 +204,12 @@ export function ruledOutSans(text: string): Set<string> {
   const after = new RegExp(String.raw`…?(${SAN})\s+(?:didn't|doesn't|does not|did not|no longer)\s+work`, 'g');
   // "it takes Rxe5 away" and a move the line calls a mistake: said, never arrowed.
   const away = new RegExp(String.raw`\btakes\s+(?:your\s+|their\s+)?…?(${SAN})\s+away`, 'gi');
-  const bad = new RegExp(String.raw`…?(${SAN})\s+(?:was|is)\s+(?:a|an)\s+(?:mistake|blunder|inaccuracy)`, 'g');
-  for (const re of [before, after, away, bad]) {
+  const bad = new RegExp(String.raw`…?(${SAN})\s+(?:was|is)\s+(?:a|an)\s+(?:known\s+)?(?:mistake|blunder|inaccuracy|trap)`, 'g');
+  // …and the move club players walk into, named as a known mistake or trap
+  // ("4.6% of club players under 1600 play f6", Review's `knownSlip`): the
+  // slip is said so it is avoided, never drawn as a move to play.
+  const clubSlip = new RegExp(String.raw`club players under \d+ play\s+…?(${SAN})`, 'g');
+  for (const re of [before, after, away, bad, clubSlip]) {
     let m: RegExpExecArray | null;
     while ((m = re.exec(text)) !== null) out.add(m[1]);
   }

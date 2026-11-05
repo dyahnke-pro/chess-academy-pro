@@ -10,7 +10,10 @@
 // helpers (`danyaBench.measure.test.ts`), so none of them reads an engine read
 // two ways.
 import { Chess } from 'chess.js';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import type { AnalysisLine, StockfishAnalysis } from '../types';
+import type { KnownSlipIndex } from '../services/knownSlips';
 import { mateEvalFor } from '../services/engineConstants';
 import { captureContextsAlong } from '../services/pvPlayback';
 import type { PrevCaptureContext } from '../services/captureRun';
@@ -147,9 +150,17 @@ export function reviewInputs(game: ReplayGame): ReviewMoveInput[] {
   });
 }
 
+let diskSlipIndex: KnownSlipIndex | null = null;
+/** The club gem index the app fetches (`/data/club-gems.json`), read off disk
+ *  once — the walk reads it as the app does, after `loadKnownSlipIndex`. */
+export function knownSlipIndexFromDisk(): KnownSlipIndex {
+  diskSlipIndex ??= (JSON.parse(readFileSync(join(process.cwd(), 'public/data/club-gems.json'), 'utf8')) as { boards: KnownSlipIndex }).boards;
+  return diskSlipIndex;
+}
+
 /** Review's walk over the whole game, one segment a move — in the walk's
  *  default mode (`isReviewUncapped()` is true unless `?uncapped=0`), before the
- *  engine projections the async build adds. */
+ *  engine projections the async build adds, with the club gem index in hand. */
 export function reviewSegments(game: ReplayGame, rating: number, story?: StoryStore): ReviewMoveSegment[] {
-  return buildReviewSegmentsForTests(reviewInputs(game), game.studentSide, null, true, rating, [], undefined, null, new Map(), new Map(), null, story);
+  return buildReviewSegmentsForTests(reviewInputs(game), game.studentSide, null, true, rating, [], undefined, null, new Map(), new Map(), null, story, new Map(), knownSlipIndexFromDisk());
 }

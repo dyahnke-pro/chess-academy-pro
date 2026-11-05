@@ -40,6 +40,7 @@ import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync, masterMovesCachedSync } from './masterPlayLookup';
 import { moveJob, whatItAsks, MINE, THEIRS, JOB_RESTATED_BY_RULE, type BookJobKind, type PriorCapture } from './bookMoveWhy';
 import { refutedAlternative, candidatesForPosition, SINGLETON_SCORER, type RefutedAlternative } from './refutedAlternative';
+import { loadKnownSlipIndex, type KnownSlipIndex } from './knownSlips';
 import { recordedMoveCost } from './moveCost';
 import { storedIntentReads } from './moveIntent';
 import { findWorstPlacedPiece, planAimKey } from './nextPlans';
@@ -426,6 +427,10 @@ export function segmentNamedArrows(
   return admitArrows(claims, { fen: seg.fenAfter, studentColor }).arrows;
 }
 
+/** The say-once keys of the known slips the walk has said (the registry's
+ *  `knownSlip` read, filed under `hint:` by the facet door). */
+const KNOWN_SLIP_HINT = 'hint:known-slip:';
+
 /** REVIEW'S SAY-ONCE MEMORIES IN THE STORY (WO-STORY-MATRIX-01 P1-8d): each
  *  ledger the walk keeps is the game story's one claim map under its own
  *  prefix (`storyLedger`) — the prefixes the seeded key list used, so one
@@ -630,6 +635,10 @@ export interface ReviewNarration {
    *  through ply k is this taken back to k (`storyThrough`); null when the
    *  build said nothing. Cached with the narration. */
   story: string | null;
+  /** The club gem index could not be read for this build, so its known
+   *  mistakes and traps are not in it — never stored: the next open builds
+   *  again with them (a line is never dropped for a file that did not load). */
+  knownSlipsMissing?: boolean;
 }
 
 /** Rich move data that feeds the walk-the-game review. Includes the
@@ -1460,6 +1469,11 @@ function* reviewSegmentSteps(
    *  caller (≤7 pieces; `zugzwangsForGame`) — engine-free and exact. Absent =
    *  no tablebase read (the free board's rebuild, the unit tests). */
   zugzwangByPly: ReadonlyMap<number, ZugzwangRead> = new Map(),
+  /** THE CLUB GEM INDEX (David 2026-11-04: known mistakes and traps "in
+   *  review for sure") — loaded by the async caller before this synchronous
+   *  build (`loadKnownSlipIndex`), so no known slip is dropped for a file still
+   *  loading. Null: no index in hand (the unit tests; offline with no copy). */
+  knownSlipIndex: KnownSlipIndex | null = null,
 ): Generator<void, ReviewMoveSegment[], void> {
   story.newGame(currentGameId ?? 'review');
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
@@ -2109,6 +2123,7 @@ function* reviewSegmentSteps(
           principlesTaught,
           soundPlies,
           motifSaid: motifSaidInstances(motifKeys),
+          knownSlips: { index: knownSlipIndex, nextRefutedAlt: refutedByPly.get(m.ply + 1)?.alt ?? null, told: [...hintsSaid].filter((k) => k.startsWith(KNOWN_SLIP_HINT)).length },
         },
         fenBefore: fenPair.fenBefore,
         fenAfter: fenPair.fenAfter,
@@ -5966,7 +5981,7 @@ export async function generateReviewNarration(params: {
   // collected at the end. Same inputs, same outputs — less waiting.
   const prepStart = Date.now();
   const timings: Record<string, number> = {};
-  const [studentNeed, , studentWeaknesses] = await Promise.all([
+  const [studentNeed, , studentWeaknesses, knownSlipIndex] = await Promise.all([
     loadStudentNeedContext({
       rating: playerRating, sans: moves.slice(0, usableCount).map((m) => m.san), studentColor: playerColor,
       openingId: reviewKey, eco: params.eco ?? (reviewKey ? ecoOfKey(reviewKey) : null),
@@ -5979,6 +5994,9 @@ export async function generateReviewNarration(params: {
     // gets the "this recurs for you, drill it" recap. Memoized once-per-game;
     // degrades to [] (inert) on any failure.
     loadWeaknessSignals().catch(() => []),
+    // The known mistakes and traps (David 2026-11-04), read before the
+    // synchronous build so none is dropped for a file still loading.
+    loadKnownSlipIndex().catch(() => null),
   ]);
   timings.loads = Date.now() - prepStart;
   // After the masters DB is warm (the loads above), so the fallback candidates
@@ -6013,7 +6031,7 @@ export async function generateReviewNarration(params: {
   // THE GAME'S STORY (P1-8d): the build's memory of what it says, kept with
   // the narration once the refrain fold below has said its piece.
   const story = createStoryStore(params.gameId ?? 'review');
-  const segments = await buildReviewSegmentsOpen(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly, intentByPly, params.spokenBefore ?? null, story, zugzwangByPly);
+  const segments = await buildReviewSegmentsOpen(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly, intentByPly, params.spokenBefore ?? null, story, zugzwangByPly, knownSlipIndex);
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +
   // timeout so it never stalls the walk). Runs before the voice pass so the
@@ -6268,7 +6286,10 @@ export async function generateReviewNarration(params: {
     details: JSON.stringify({ ...timings, plies: segments.length }),
   });
 
-  return { intro, segments, closing, story: storyThrough(story.serialize(), Number.POSITIVE_INFINITY) };
+  return {
+    intro, segments, closing, story: storyThrough(story.serialize(), Number.POSITIVE_INFINITY),
+    ...(knownSlipIndex === null ? { knownSlipsMissing: true } : {}),
+  };
 }
 
 /** Does the student's move `san` (played from `fenBefore`) actually meet the

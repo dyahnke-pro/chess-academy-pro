@@ -393,6 +393,7 @@ export const COMPUTER_CATALOG = {
   kingFromCentre: { file: 'services/kingWalk.ts', says: 'the rule of thumb on a king walked out of the centre: further from the centre is safer' },
   keptHome: { file: 'services/kingWalk.ts', says: 'a bishop left at home on purpose while the king walks: it blocks the check they can give' },
   kingSquares: { file: 'services/kingWalk.ts', says: 'in check with only king moves: the squares that walk into a forced mate, and the square chosen' },
+  knownSlip: { file: 'services/knownSlips.ts', says: 'a move club players really play at this board that the other side punishes — a known mistake, or a trap when it clears the trap bar — and what the punishment wins' },
 } satisfies Record<string, CatalogRow>;
 
 export type ComputerName = keyof typeof COMPUTER_CATALOG;

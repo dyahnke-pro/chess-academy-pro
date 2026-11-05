@@ -53,6 +53,7 @@ import type { GamePhase } from '../types';
 import { packageForRegister } from './hintRegister';
 import { FUNDAMENTAL_TAG } from './principleAttribution';
 import { castleByHandMove, kingFromCentre, keptHome, kingSquares } from './kingWalk';
+import { knownSlip, type KnownSlipContext } from './knownSlips';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -160,6 +161,10 @@ export interface BoardContexts {
    *  `lines` — the mover's fan before the move where the surface has one;
    *  `bestUci` — the engine's best move there. */
   kingSquares: { fenBefore: string; san: string; student: Color; lines: ReadonlyArray<{ moves: readonly string[] }> | null; bestUci: string | null };
+  /** A known mistake or trap from the club gem index at `fen` (Review only,
+   *  David 2026-11-04): said on the move that played it, or on the move that
+   *  reached its board when the game went another way. */
+  knownSlip: KnownSlipContext;
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -631,6 +636,31 @@ export const BOARD_COMPUTERS = {
     kind: 'contrast',
     phase: ANY,
     surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'the record half is capabilitiesPosed: a forced king walk with a mated square poses missed-opponents-threat' } },
+  },
+  knownSlip: {
+    // THE KNOWN MISTAKES AND TRAPS (David 2026-11-04: "it needs to be in
+    // review for sure"): "if they play X, that's a mistake because …", both
+    // seats, from the club gem index. Called a trap only when it clears the
+    // one trap bar (`isWeaponGem`). Review names moves freely — the game is
+    // over; the opening pages teach the same index as their weapon section.
+    read: (ctx, fact) => safe(() => {
+      const r = knownSlip(ctx);
+      if (!r) return null;
+      return fact({ key: r.key, claims: [r.key], text: r.text, proof: r.proof, squares: r.squares, stakes: r.stakes, seat: r.seat,
+        namesStudentMove: r.namesStudentMove, thread: LOCAL_THREAD, fen: ctx.fen, role: 'teach', ...(r.proof.line ? { lines: [r.proof.line] } : {}) });
+    }),
+    computer: 'knownSlip',
+    kind: 'refuted',
+    phase: ANY,
+    surfaces: {
+      lesson: { not: 'the opening pages teach the index as their weapon section and their known mistakes (gemCrushLines); a lesson line is a model line, not a slip' },
+      learn: { not: 'gems stay off Learn (David 2026-10-29: "a reason for ppl to buy the openings"); Learn is not decided (2026-11-04)' },
+      review: REVIEW,
+      play: { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING); the Openings Play rung calls out the live punish itself (findLivePunishment)' },
+      chat: { not: 'the chat\'s trap lane points at the opening\'s page and names no gem (gemCrushLines gate)' },
+      tactics: { not: 'a puzzle poses one tactic; a known slip is about a game move at a board the index holds' },
+      weaknesses: { not: 'the slip played is graded as the move\'s own cost and filed by the record\'s writers; the index adds no skill of its own' },
+    },
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };
 

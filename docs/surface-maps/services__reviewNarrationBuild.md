@@ -19,22 +19,23 @@
 
 ## Exports and every call site
 
-### `isReviewUncapped` (function) — 5 call sites
-- `src/components/Coach/CoachGameReview.tsx:648`
-- `src/components/Coach/CoachGameReview.tsx:1359`
-- `src/components/Coach/CoachGameReview.tsx:1686`
-- `src/components/Coach/CoachGameReview.tsx:2216`
+### `isReviewUncapped` (function) — 6 call sites
+- `src/components/Coach/CoachGameReview.tsx:649`
+- `src/components/Coach/CoachGameReview.tsx:1360`
+- `src/components/Coach/CoachGameReview.tsx:1687`
+- `src/components/Coach/CoachGameReview.tsx:1837`
+- `src/components/Coach/CoachGameReview.tsx:2223`
 - `src/services/reviewDepth.eval.measure.test.ts:36`
 
 ### `reviewMoveInputsFrom` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:612`
+- `src/components/Coach/CoachGameReview.tsx:613`
 - `src/services/shallowLinesNotNarrated.test.ts:17`
 
 ### `ReviewNarrationRequest` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getOrBuildReviewNarration` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:661`
+- `src/components/Coach/CoachGameReview.tsx:662`
 - `src/services/reviewNarrationBuild.test.ts:40`
 - `src/services/reviewNarrationBuild.test.ts:47`
 - `src/services/reviewNarrationBuild.test.ts:49`
@@ -45,14 +46,14 @@
 - `src/services/gameAnalysisService.ts:3219`
 
 ### `storySeed` (function) — 5 call sites
-- `src/components/Coach/CoachGameReview.tsx:660`
+- `src/components/Coach/CoachGameReview.tsx:661`
 - `src/services/reviewNarrationBuild.test.ts:79`
 - `src/services/reviewNarrationBuild.test.ts:85`
 - `src/services/reviewNarrationBuild.test.ts:89`
 - `src/services/reviewNarrationBuild.test.ts:90`
 
 ### `exploreSeed` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:1825`
+- `src/components/Coach/CoachGameReview.tsx:1826`
 - `src/services/reviewNarrationBuild.test.ts:125`
 - `src/services/reviewNarrationBuild.test.ts:141`
 - `src/services/reviewNarrationBuild.test.ts:149`
@@ -60,11 +61,11 @@
 - `src/test/reviewExplore.continuity.test.ts:60`
 
 ### `storyAtMerge` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:701`
+- `src/components/Coach/CoachGameReview.tsx:702`
 - `src/services/reviewNarrationBuild.test.ts:102`
 
 ### `mergeReviewNarration` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:710`
+- `src/components/Coach/CoachGameReview.tsx:711`
 - `src/services/reviewNarrationBuild.test.ts:98`
 
 ## Tests

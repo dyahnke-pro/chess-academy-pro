@@ -46,6 +46,7 @@ import { findProphylaxis, prophylaxisProof } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { lineProof, lineProofFromUci, legalLineProof, proofForStudent, squaresProof, isProof, NO_PROOF, type Proof } from './proof';
 import { readBoardAll, readKey } from './boardComputers';
+import { knownSlipsAt, type KnownSlipIndex } from './knownSlips';
 import type { CoachFact, ComputerName } from './coachFact';
 import { reviewFacet, asIncoming, inRuleFamily, type ReviewFacet } from './reviewFacet';
 import type { FacetTag } from './reviewFacetRank';
@@ -259,10 +260,18 @@ export interface MoveTeachingContext {
    *  and the repeat ledger still drops it. REQUIRED; an empty map where
    *  nothing was said. */
   motifSaid: ReadonlyMap<string, readonly string[]>;
+  /** THE KNOWN MISTAKES AND TRAPS (David 2026-11-04: "it needs to be in
+   *  review for sure") — the club gem index, loaded by the caller before the
+   *  walk builds (`loadKnownSlipIndex`; null only when it cannot be had), and
+   *  the alternative the NEXT move's refuted alternative names (that move says
+   *  the same claim itself), and how many the game has said (their words
+   *  rotate on it). REQUIRED: a caller with no index says so. */
+  knownSlips: { index: KnownSlipIndex | null; nextRefutedAlt: string | null; told: number };
 }
 
 export const NO_TEACHING_CONTEXT: MoveTeachingContext = {
   refutedAlt: null, prevFenBefore: null, phaseTurn: null, principlesTaught: new Set(), intent: null, soundPlies: new Set(), motifSaid: new Map(),
+  knownSlips: { index: null, nextRefutedAlt: null, told: 0 },
 };
 
 const PIECE_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -535,6 +544,9 @@ export function computeMoveFacets(
   // fault, or stands alone when the deeper read says it was fine.
   const heardNow = ctx.heardVerdict && isStudent ? correctionAgainstHeard(ctx.heardVerdict, ctx.classification, san) : null;
   if (heardNow && !heardNow.ridesVerdict) put('correctionAgainstHeard', 'quality', heardNow.text);
+  // The punishing reply the verdict names (`errorWhy`'s consequence), so a
+  // known slip on this move names the same punishment once (7d2).
+  let verdictPunish: string | null = null;
   if (ctx.classification && ctx.classification !== 'good' && ctx.classification !== 'book' && !insideStudentForcedMate) {
     // COST IS ONLY A COST ON A MOVE THAT COST SOMETHING (found 2026-09-16 by
     // reading the shipped review of David's Alapin: ply 31 spoke "that was a
@@ -614,6 +626,7 @@ export function computeMoveFacets(
       return ctx.studentColorWB ? seatPieceReferences(t1, fenBefore, ctx.studentColorWB) : t1;
     };
     const reason = seat(ew?.reason ?? null);
+    if (ew?.consequence && ew.punishFirst) verdictPunish = ew.punishFirst;
     if (outVerdictReason) {
       outVerdictReason.text = reason;
       // The verdict already walked the punishing line — no second producer
@@ -1259,9 +1272,10 @@ export function computeMoveFacets(
   // ── 7b. THE REFUTED ALTERNATIVE — "not X, because Y" (WO-LAYERS-01 step 3,
   // WO-TEACH-02 S2). Naroditsky's single most common teaching move at every
   // level: name the move players at the student's level actually reach for,
-  // costed by the engine and proven by its own line. The curated gems are
-  // never taught in Review — they are part of the opening the student buys
-  // and are taught on its page only (David 2026-10-29).
+  // costed by the engine and proven by its own line. The hand-written gems
+  // stay on the opening's page (David 2026-10-29); the club gem index's known
+  // mistakes and traps are said in Review through the registry (7d2, David
+  // 2026-11-04).
   if (isStudent && ctx.teaching.refutedAlt) {
     const r = ctx.teaching.refutedAlt;
     const f = made('refutedFromFan', 'refuted', r.text);
@@ -1546,6 +1560,19 @@ export function computeMoveFacets(
       // The count, only when the student's move lost it; the priority they faced.
       add(readBoardAll('countMethod', { fenBefore, playedSan: san, student: studentColorWB, costCp: swing })[0]);
       if (ctx.bestLineUci[0]) add(readBoardAll('priorityFirst', { fen: fenBefore, student: studentColorWB, bestUci: ctx.bestLineUci[0] })[0]);
+    }
+    // THE KNOWN MISTAKES AND TRAPS, both seats (David 2026-11-04: "it needs
+    // to be in review for sure"), from the club gem index: the slip this move
+    // played, said as why it was a mistake — never against the move's own
+    // grade when that grade called it sound — or else the slip ahead on the
+    // board this move reached, when the game went another way. One a move;
+    // each said once a game per position (its `hint:` key is the board and
+    // the slip).
+    const slips = ctx.teaching.knownSlips;
+    if (slips.index) {
+      const gradedSound = ctx.classification === 'good' || ctx.classification === 'book' || ctx.classification === 'great' || ctx.classification === 'brilliant';
+      const played = gradedSound ? undefined : readBoardAll('knownSlip', { fen: fenBefore, gems: knownSlipsAt(slips.index, fenBefore), played: san, on: 'played', student: studentColorWB, verdictPunish, saidNext: null, told: slips.told })[0];
+      add(played ?? readBoardAll('knownSlip', { fen: fenAfter, gems: knownSlipsAt(slips.index, fenAfter), played: ctx.allSans[ply] ?? null, on: 'reached', student: studentColorWB, verdictPunish: null, saidNext: slips.nextRefutedAlt, told: slips.told })[0]);
     }
   }
 
