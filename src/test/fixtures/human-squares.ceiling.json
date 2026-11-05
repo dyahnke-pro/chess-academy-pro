@@ -1,0 +1,37 @@
+{
+ "lists": {
+  "chat:concept": 1,
+  "chat:fundamental": 1,
+  "chat:latent-chance": 4,
+  "chat:latent-danger": 2,
+  "chat:speedrun-read": 2,
+  "chat:structure-plan": 49,
+  "chat:tactic": 1,
+  "chat:trade-idea": 7,
+  "learn:concept": 1,
+  "learn:hole-access": 2,
+  "learn:latent-chance": 4,
+  "learn:latent-danger": 1,
+  "learn:speedrun-read": 2,
+  "learn:tactic": 1,
+  "learn:trade-idea": 2,
+  "lesson": 37,
+  "review": 79
+ },
+ "unlit": {
+  "chat:deliberation": 6,
+  "chat:fundamental": 12,
+  "chat:key-moment": 7,
+  "chat:opp-think": 16,
+  "chat:speedrun-read": 13,
+  "chat:stopped": 1,
+  "chat:structure-plan": 30,
+  "learn:deliberation": 5,
+  "learn:fundamental": 2,
+  "learn:hole-access": 3,
+  "learn:key-moment": 7,
+  "learn:opp-think": 4,
+  "learn:speedrun-read": 13,
+  "learn:stopped": 2
+ }
+}

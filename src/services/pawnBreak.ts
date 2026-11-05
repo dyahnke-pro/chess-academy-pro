@@ -208,14 +208,20 @@ export function pawnBreak(fenBefore: string, san: string, whose: 'your' | 'their
   const lead = `${me === 'b' ? '…' : ''}${mv.san}`;
   const theirs = whose === 'your' ? 'their' : 'your';
   const target = `${theirs} pawn on ${struck}${base ? ', the base of the pawn chain' : centre ? ' in the centre' : ''}`;
-  // Its verb by what the pawn does: takes it, attacks it, or stands where it
-  // can be taken (an offer — d4 against …c5 strikes nothing, c5 strikes it).
+  // Its verb by what the pawn does: attacks it, or stands where it can be
+  // taken (an offer — d4 against …c5 strikes nothing, c5 strikes it).
   const attacks = pawnHits(mv.to, me).includes(struck as Square);
-  const verb = mv.captured === 'p' ? 'takes' : attacks ? 'attacks' : 'offers a trade to';
+  const verb = attacks ? 'attacks' : 'offers a trade to';
   const what = andList(opens.map((o) => o.text));
+  // A break that takes: the SAN already says the capture ("…dxc4" is "pawn
+  // takes c4"), so the line says only what the pawn it took was and what the
+  // trade opens — a capture is said once (`captureSaidOnce.gate`).
+  const took = base ? ` at the base of ${theirs} pawn chain` : centre ? ' in the centre' : '';
   const text = line.length === 2
     ? `${lead} is a pawn break: it ${verb} ${target}${what ? `, and if ${whose === 'your' ? 'they take' : 'you take'}, it ${what}` : ''}.`
-    : `${lead} is a pawn break: it ${verb} ${target}${what ? `, and ${what}` : ''}.`;
+    : mv.captured === 'p'
+      ? `${lead} is a pawn break${took}${what ? `, and it ${what}` : ''}.`
+      : `${lead} is a pawn break: it ${verb} ${target}${what ? `, and ${what}` : ''}.`;
   return {
     text: openSentence(text),
     squares: [...new Set([mv.from, mv.to, struck, ...opens.flatMap((o) => o.squares)])],

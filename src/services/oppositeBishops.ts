@@ -135,19 +135,25 @@ export function oppositeBishops(fenBefore: string, san: string, student: Color):
     // dark squares around their king — and the bishop and the squares it hits
     // there on the board (`squares`), never read out as a list.
     const head = `Opposite-coloured bishops now, with ${what} on — a game for the attacker, not for grinding pawns`;
+    // The proof is the bishop and the squares it rules there — read off the
+    // board, marked when the student asks Why.
     if (myHits.length > 0 && theirHits.length === 0) {
       const shade = shadeOf(mine);
+      const proof = squaresProof(`Your bishop rules the ${shade} squares around their king`, [mine, ...myHits]);
+      if (!proof) return null;
       return {
         text: `${head}: your bishop rules the ${shade} squares around their king and theirs can never guard them, so attack there.`,
-        squares: [mine, theirs, ...myHits], proof: squaresProof(`Your bishop rules the ${shade} squares around their king`, [mine, ...myHits]) ?? NO_PROOF.stated,
+        squares: [mine, theirs, ...myHits], proof,
         seat: 'student', key: 'opposite-bishops:attack', claims: ['opposite-bishops:attack'],
       };
     }
     if (theirHits.length > 0 && myHits.length === 0) {
       const shade = shadeOf(theirs);
+      const proof = squaresProof(`Their bishop rules the ${shade} squares around your king`, [theirs, ...theirHits]);
+      if (!proof) return null;
       return {
         text: `${head}: their bishop rules the ${shade} squares around your king and yours can never guard them, so cover them with your other pieces.`,
-        squares: [theirs, mine, ...theirHits], proof: squaresProof(`Their bishop rules the ${shade} squares around your king`, [theirs, ...theirHits]) ?? NO_PROOF.stated,
+        squares: [theirs, mine, ...theirHits], proof,
         seat: 'opponent', key: 'opposite-bishops:attack', claims: ['opposite-bishops:attack'],
       };
     }
