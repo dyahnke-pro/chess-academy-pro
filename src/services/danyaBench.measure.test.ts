@@ -49,7 +49,7 @@ import { notYetPlayed } from './notYetPlayed';
 import { moveIntent, type IntentReads } from './moveIntent';
 import { afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
 import { NO_SECOND_READ } from './inaccuracyCall';
-import { composeThought, type ComposedThought, type ThoughtFact, type ThoughtSource } from './thoughtComposer';
+import { composeThought, type ComposedThought, type ThoughtFact, type ThoughtSource, NOT_LED } from './thoughtComposer';
 import type { FactKind } from './reviewFacetRank';
 import { moveThoughtFacts, lessonThought } from './moveThoughtFacts';
 import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
@@ -352,7 +352,7 @@ const lessonPick = once((p: Position): { facts: ThoughtFact[]; composed: Compose
     fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
     line: lineAhead(p), history: p.history, theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
   });
-  return { facts, composed: composeThought(facts, 'lesson', { keys: new Set<string>() }) };
+  return { facts, composed: composeThought(facts, 'lesson', { keys: new Set<string>() }, NOT_LED) };
 });
 
 /** Review's own line for the move, with its `[tag]`s: the walk's segment

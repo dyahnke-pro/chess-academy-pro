@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**761 lines · 20 exports · 4 importers · 1 tests · 0 audits**
+**768 lines · 20 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6732) — names `tacticGeometry`
+- **The standard post-deploy ritual** (CLAUDE.md:6869) — names `tacticGeometry`
 
 ## Who calls in
 
@@ -28,79 +28,83 @@
 ### `GeometryContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `pvGain` (function) — 2 call sites
-- `src/coach/focus/focusChances.ts:468`
-- `src/services/tacticGeometry.test.ts:208`
+### `pvGain` (function) — 4 call sites
+- `src/coach/focus/focusChances.ts:456`
+- `src/coach/focus/focusChances.ts:559`
+- `src/coach/focus/focusChances.ts:575`
+- `src/services/tacticGeometry.test.ts:212`
 
-### `pvGainDepth` (function) — 4 call sites
-- `src/coach/focus/focusChances.ts:477`
-- `src/services/tacticGeometry.test.ts:277`
-- `src/services/tacticGeometry.test.ts:278`
+### `pvGainDepth` (function) — 6 call sites
+- `src/coach/focus/focusChances.ts:568`
+- `src/coach/focus/focusChances.ts:573`
+- `src/coach/focus/focusChances.ts:780`
 - `src/services/tacticGeometry.test.ts:281`
+- `src/services/tacticGeometry.test.ts:282`
+- `src/services/tacticGeometry.test.ts:285`
 
 ### `pinnerIsPinned` (function) — 2 call sites
-- `src/services/tacticGeometry.test.ts:44`
-- `src/services/tacticGeometry.test.ts:49`
+- `src/services/tacticGeometry.test.ts:46`
+- `src/services/tacticGeometry.test.ts:53`
 
 ### `falseMateBlock` (function) — 2 call sites
-- `src/services/tacticGeometry.test.ts:55`
-- `src/services/tacticGeometry.test.ts:60`
+- `src/services/tacticGeometry.test.ts:59`
+- `src/services/tacticGeometry.test.ts:64`
 
 ### `interferenceCut` (function) — 2 call sites
-- `src/services/tacticGeometry.test.ts:63`
-- `src/services/tacticGeometry.test.ts:68`
+- `src/services/tacticGeometry.test.ts:67`
+- `src/services/tacticGeometry.test.ts:72`
 
 ### `clearanceTempo` (function) — 2 call sites
-- `src/services/tacticGeometry.test.ts:74`
-- `src/services/tacticGeometry.test.ts:79`
+- `src/services/tacticGeometry.test.ts:78`
+- `src/services/tacticGeometry.test.ts:83`
 
 ### `decoyDeflection` (function) — 3 call sites
-- `src/services/tacticGeometry.test.ts:85`
-- `src/services/tacticGeometry.test.ts:90`
-- `src/services/tacticGeometry.test.ts:95`
+- `src/services/tacticGeometry.test.ts:89`
+- `src/services/tacticGeometry.test.ts:94`
+- `src/services/tacticGeometry.test.ts:99`
 
 ### `discoveryAudit` (function) — 2 call sites
-- `src/services/tacticGeometry.test.ts:103`
-- `src/services/tacticGeometry.test.ts:108`
+- `src/services/tacticGeometry.test.ts:107`
+- `src/services/tacticGeometry.test.ts:112`
 
 ### `zwischenzugRefuted` (function) — 2 call sites
-- `src/services/tacticGeometry.test.ts:116`
-- `src/services/tacticGeometry.test.ts:123`
+- `src/services/tacticGeometry.test.ts:120`
+- `src/services/tacticGeometry.test.ts:127`
 
 ### `forkForPlan` (function) — 2 call sites
-- `src/services/tacticGeometry.test.ts:130`
 - `src/services/tacticGeometry.test.ts:134`
+- `src/services/tacticGeometry.test.ts:138`
 
 ### `kickFails` (function) — 3 call sites
-- `src/services/tacticGeometry.test.ts:142`
 - `src/services/tacticGeometry.test.ts:146`
-- `src/services/tacticGeometry.test.ts:151`
+- `src/services/tacticGeometry.test.ts:150`
+- `src/services/tacticGeometry.test.ts:155`
 
 ### `counterfactualFork` (function) — 2 call sites
-- `src/services/tacticGeometry.test.ts:157`
 - `src/services/tacticGeometry.test.ts:161`
+- `src/services/tacticGeometry.test.ts:165`
 
 ### `pawnBlockGone` (function) — 2 call sites
-- `src/services/tacticGeometry.test.ts:167`
 - `src/services/tacticGeometry.test.ts:171`
+- `src/services/tacticGeometry.test.ts:175`
 
 ### `interposeFacing` (function) — 2 call sites
-- `src/services/tacticGeometry.test.ts:177`
-- `src/services/tacticGeometry.test.ts:182`
+- `src/services/tacticGeometry.test.ts:181`
+- `src/services/tacticGeometry.test.ts:186`
 
 ### `loadedLine` (function) — 3 call sites
-- `src/services/tacticGeometry.test.ts:188`
 - `src/services/tacticGeometry.test.ts:192`
 - `src/services/tacticGeometry.test.ts:196`
+- `src/services/tacticGeometry.test.ts:200`
 
 ### `geometryReads` (function) — 2 call sites
-- `src/services/boardComputers.ts:382`
-- `src/services/tacticGeometry.test.ts:202`
+- `src/services/boardComputers.ts:610`
+- `src/services/tacticGeometry.test.ts:206`
 
 ### `geometryMotif` (function) — 3 call sites
 - `src/services/missedTacticService.ts:602`
 - `src/services/missedTacticService.ts:672`
-- `src/services/tacticGeometry.test.ts:227`
+- `src/services/tacticGeometry.test.ts:231`
 
 ## Tests
 

@@ -8,7 +8,7 @@ import { newLessonVoice } from './reviewMoveBriefing';
 import { captureContextsAlong } from './pvPlayback';
 import { stakeValue, isStaked, stakeWc } from './factStakes';
 import { wcGap } from './winChance';
-import { composeThought, type ThoughtFact } from './thoughtComposer';
+import { composeThought, type ThoughtFact, NOT_LED } from './thoughtComposer';
 import { NO_PROOF } from './proof';
 import { LOCAL_THREAD } from './coachFact';
 import type { AnalysisLine } from '../types';
@@ -77,13 +77,13 @@ describe('rule 4 — news is relative to the turn', () => {
     const lead = fact('lead', 'The plan is the c-file.', ['c1'], { points: 1, plies: 0, wc: 0.1, decision: D });
     const small = fact('small', 'Their pawn on a7 is weak.', ['a7'], { points: 1, plies: 0, wc: 0.12, decision: D });
     const big = fact('big', 'Their queen on h4 is trapped.', ['h4'], { points: 9, plies: 0, wc: 0.4, decision: D });
-    const said = composeThought([lead, small, big], 'lesson', null).kept.map((f) => f.id);
+    const said = composeThought([lead, small, big], 'lesson', null, NOT_LED).kept.map((f) => f.id);
     expect(said).toContain('big');
     expect(said).not.toContain('small');
   });
   it('a fact on another decision is news', () => {
     const lead = fact('lead', 'The plan is the c-file.', ['c1'], { points: 1, plies: 0, wc: 0.3, decision: D });
     const other = fact('other', 'Their knight on f6 has nowhere to go.', ['f6'], { points: 1, plies: 0, wc: 0.05, decision: 'y|opponent' });
-    expect(composeThought([lead, other], 'lesson', null).kept.map((f) => f.id)).toContain('other');
+    expect(composeThought([lead, other], 'lesson', null, NOT_LED).kept.map((f) => f.id)).toContain('other');
   });
 });

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2114 lines · 17 exports · 40 importers · 48 tests · 3 audits**
+**2138 lines · 17 exports · 40 importers · 48 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -103,7 +103,7 @@
 - `src/services/positionFacts.weakness.test.ts:71`
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11421`
+- `src/components/Coach/CoachTeachPage.tsx:11423`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:471`
 - `src/services/raceAimOneVoice.test.ts:20`
@@ -123,7 +123,7 @@
 
 ### `computePositionFacts` (function) — 110 call sites
 - `src/coach/boardTurnAnswer.ts:136`
-- `src/components/Coach/CoachTeachPage.tsx:11279`
+- `src/components/Coach/CoachTeachPage.tsx:11281`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:271`
 - `src/hooks/usePhaseNarration.ts:433`
@@ -234,7 +234,7 @@
 - `src/test/teach02Wired.test.ts:140`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11543`
+- `src/components/Coach/CoachTeachPage.tsx:11545`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -260,8 +260,8 @@
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
 - `src/services/conceptKey.ts:11`
-- `src/services/danyaBehaviors.ts:526`
-- `src/services/kingAttackReads.ts:661`
+- `src/services/danyaBehaviors.ts:533`
+- `src/services/kingAttackReads.ts:662`
 - `src/services/learnBoardTeaching.ts:501`
 - `src/services/looseStill.test.ts:37`
 - `src/services/replayFence.alekhine1500.test.ts:25`

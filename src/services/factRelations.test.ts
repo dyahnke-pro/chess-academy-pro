@@ -7,7 +7,7 @@ import { Chess } from 'chess.js';
 import { factRelations, causeEffect } from './factRelations';
 import { lineDiff } from './relations';
 import { NO_PROOF, type Proof } from './proof';
-import { composeThought, type ThoughtFact } from './thoughtComposer';
+import { composeThought, type ThoughtFact, NOT_LED } from './thoughtComposer';
 import { LOCAL_THREAD } from './coachFact';
 
 const SANS = ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'h4', 'h6', 'g4', 'Bd7', 'c4', 'dxc4', 'Bxc4', 'e6', 'Nc3', 'c5', 'd5', 'exd5', 'Qxd5', 'Qe7', 'Qxb7', 'Bc6', 'Qc8+', 'Qd8'];
@@ -43,6 +43,6 @@ describe('the composer reads the link as support', () => {
   it('a fact on another square follows its cause', () => {
     const lead = fact('lead', 'line', ['f7'], proofOf(['Bxf7+', 'Kxf7']));
     const queen = fact('queen', 'line', ['d8'], NO_PROOF.description);
-    expect(composeThought([lead, queen], 'lesson', null).kept.map((f) => f.id)).toEqual(['lead', 'queen']);
+    expect(composeThought([lead, queen], 'lesson', null, NOT_LED).kept.map((f) => f.id)).toEqual(['lead', 'queen']);
   });
 });

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**464 lines · 14 exports · 18 importers · 9 tests · 1 audits**
+**470 lines · 15 exports · 20 importers · 9 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,10 +22,12 @@
 - `src/services/learnBoardTeaching.ts`
 - `src/services/learnFundamentalNarration.ts`
 - `src/services/looseTrigger.test.ts`
+- `src/services/looseTrigger.ts`
 - `src/services/methodBeat.live.test.ts`
 - `src/services/methodBeat.need.test.ts`
 - `src/services/methodBeat.test.ts`
 - `src/services/methodSignals.test.ts`
+- `src/services/methodSignals.ts`
 - `src/services/mustDefendHabit.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/puzzleMethod.test.ts`
@@ -51,8 +53,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:3344`
-- `src/services/positionFacts.ts:1188`
+- `src/services/coachFeatureService.ts:3350`
+- `src/services/positionFacts.ts:1202`
 
 ### `HABIT_KIND` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -62,6 +64,9 @@
 - `src/services/methodBeat.live.test.ts:151`
 - `src/services/methodBeat.need.test.ts:4`
 - `src/services/methodBeat.test.ts:4`
+
+### `HabitTarget` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `LiveHabit` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -74,41 +79,41 @@
 - `src/services/learnFundamentalNarration.ts:114`
 - `src/services/methodBeat.live.test.ts:112`
 - `src/services/methodBeat.live.test.ts:119`
-- `src/services/methodSignals.test.ts:58`
-- `src/services/methodSignals.test.ts:61`
-- `src/services/methodSignals.test.ts:64`
+- `src/services/methodSignals.test.ts:59`
+- `src/services/methodSignals.test.ts:62`
 - `src/services/methodSignals.test.ts:65`
-- `src/services/methodSignals.test.ts:70`
+- `src/services/methodSignals.test.ts:66`
 - `src/services/methodSignals.test.ts:71`
+- `src/services/methodSignals.test.ts:72`
 - `src/services/slipQuestion.test.ts:44`
 - `src/services/slipQuestion.test.ts:53`
 
 ### `habitSaidKey` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10697`
-- `src/components/Coach/CoachTeachPage.tsx:10698`
+- `src/components/Coach/CoachTeachPage.tsx:10699`
+- `src/components/Coach/CoachTeachPage.tsx:10700`
 - `src/services/learnBoardTeaching.ts:254`
 - `src/services/learnBoardTeaching.ts:1164`
 - `src/services/slipQuestion.test.ts:53`
 
 ### `liveMethodBeat` (function) — 18 call sites
-- `src/services/looseTrigger.test.ts:17`
 - `src/services/looseTrigger.test.ts:18`
 - `src/services/looseTrigger.test.ts:19`
+- `src/services/looseTrigger.test.ts:20`
 - `src/services/methodBeat.live.test.ts:111`
 - `src/services/methodBeat.live.test.ts:115`
 - `src/services/methodBeat.live.test.ts:118`
 - `src/services/methodBeat.live.test.ts:144`
 - `src/services/methodBeat.live.test.ts:147`
 - `src/services/methodBeat.test.ts:107`
-- `src/services/methodSignals.test.ts:57`
-- `src/services/methodSignals.test.ts:61`
-- `src/services/methodSignals.test.ts:64`
-- `src/services/methodSignals.test.ts:70`
+- `src/services/methodSignals.test.ts:58`
+- `src/services/methodSignals.test.ts:62`
+- `src/services/methodSignals.test.ts:65`
 - `src/services/methodSignals.test.ts:71`
-- `src/services/methodSignals.test.ts:74`
+- `src/services/methodSignals.test.ts:72`
 - `src/services/methodSignals.test.ts:75`
+- `src/services/methodSignals.test.ts:76`
 - `src/services/mustDefendHabit.test.ts:15`
-- `src/services/positionFacts.ts:1052`
+- `src/services/positionFacts.ts:1062`
 
 ### `liveMethodBeatFor` (function) — 24 call sites
 - `src/services/groundedAnswer.ts:3688`

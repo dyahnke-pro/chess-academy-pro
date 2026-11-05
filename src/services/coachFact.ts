@@ -74,7 +74,12 @@ export const GROUP_STEP: Record<FactGroup, (seat: FactSeat) => ThoughtStep> = {
  *  thought facts, P1-6d), with their first reader — never as rows nothing
  *  reads. Until then the door takes only facts of its own vocabulary
  *  (`coachDecider.DoorFact`). */
-export type LessonFactKind = AspectKind | 'checkmate' | 'board-teacher' | 'deep-fact' | 'binding' | 'route' | 'stop';
+export type LessonFactKind = AspectKind | 'checkmate' | 'board-teacher' | 'deep-fact' | 'binding' | 'route' | 'stop'
+  /** THE MOVE'S SECOND JOB (M-TWO-JOBS): a fact the composer says behind its
+   *  step's lead, so the move is heard doing two things at once ("It also
+   *  hits their bishop on b4"). Made by the composer from the fact it admits,
+   *  never by a producer (`thoughtComposer.composeThought`). */
+  | 'two-jobs';
 
 /** The one vocabulary of fact kinds: the door's and the lesson composer's. */
 export type CoachFactKind = FactKind | LessonFactKind;
@@ -138,6 +143,8 @@ export const FACT_GROUP: Record<CoachFactKind, FactGroup> = {
   'aspect-opens-king': 'move', 'aspect-outpost': 'move', 'aspect-passer': 'move', 'aspect-passer-handed': 'move',
   'aspect-opens-file': 'move', 'aspect-their-weakness': 'move', 'aspect-own-weakness': 'move', 'aspect-own-king-cover': 'move',
   checkmate: 'move', 'board-teacher': 'move', 'deep-fact': 'move', binding: 'move', route: 'move', stop: 'move',
+  // The move's second job is what the move changed, said behind the first.
+  'two-jobs': 'move',
   // ── the teaching moves' own kinds (2026-11-05), each in the group of the
   // kind it came from: the reply tree a line played out; the move order "not
   // yet, first this"; castling the story's plan; the move most players play

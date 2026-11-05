@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**948 lines · 5 exports · 23 importers · 13 tests · 0 audits**
+**954 lines · 5 exports · 23 importers · 13 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6803) — names `reviewMoveTeaching`
+- **The standard post-deploy ritual** (CLAUDE.md:6814) — names `reviewMoveTeaching`
 
 ## Who calls in
 
@@ -42,15 +42,15 @@
 - `src/services/playCommentary.ts:914`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
-- `src/services/reviewWalkOct1.test.ts:70`
-- `src/services/reviewWalkOct1.test.ts:76`
-- `src/services/teachMistakeWhy.test.ts:47`
+- `src/services/reviewWalkOct1.test.ts:71`
+- `src/services/reviewWalkOct1.test.ts:77`
+- `src/services/teachMistakeWhy.test.ts:48`
 - `src/services/walkOct1Learn.test.ts:85`
 
 ### `buildReviewMoveTeaching` (function) — 52 call sites
-- `src/services/coachFeatureService.ts:1132`
-- `src/services/coachFeatureService.ts:3970`
-- `src/services/danyaBench.measure.test.ts:450`
+- `src/services/coachFeatureService.ts:1142`
+- `src/services/coachFeatureService.ts:4054`
+- `src/services/danyaBench.measure.test.ts:448`
 - `src/services/discussionPractice.ts:173`
 - `src/services/guardPressure.test.ts:20`
 - `src/services/guardPressure.test.ts:24`
@@ -70,7 +70,7 @@
 - `src/services/lessonVoiceIdeas.test.ts:63`
 - `src/services/lessonVoiceIdeas.test.ts:70`
 - `src/services/projectedLineVoice.ts:144`
-- `src/services/reviewMoveBriefing.ts:461`
+- `src/services/reviewMoveBriefing.ts:462`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`
@@ -95,15 +95,15 @@
 - `src/services/reviewNarrationDefects.test.ts:15`
 - `src/services/reviewNarrationDefects.test.ts:19`
 - `src/services/reviewOpeningTheory.ts:618`
-- `src/services/reviewWalkOct1.test.ts:71`
-- `src/services/reviewWalkOct1.test.ts:83`
-- `src/services/reviewWalkOct1.test.ts:88`
+- `src/services/reviewWalkOct1.test.ts:72`
+- `src/services/reviewWalkOct1.test.ts:84`
+- `src/services/reviewWalkOct1.test.ts:89`
 - `src/services/squareRole.test.ts:29`
 - `src/services/squareRole.test.ts:44`
 
 ### `buildReviewMoveTeachingFact` (function) — 7 call sites
-- `src/services/learnBoardTeaching.ts:1262`
-- `src/services/moveThoughtFacts.ts:182`
+- `src/services/learnBoardTeaching.ts:1199`
+- `src/services/moveThoughtFacts.ts:207`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
 - `src/services/reviewMoveTeaching.test.ts:216`
@@ -111,8 +111,8 @@
 - `src/services/tapeKc7Skewer.test.ts:29`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3878`
-- `src/services/reviewFullData.ts:1626`
+- `src/services/coachFeatureService.ts:3962`
+- `src/services/reviewFullData.ts:1717`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`
@@ -120,7 +120,7 @@
 - `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3873`
+- `src/services/coachFeatureService.ts:3957`
 - `src/services/reviewMoveTeaching.test.ts:121`
 - `src/services/reviewMoveTeaching.test.ts:124`
 - `src/services/reviewMoveTeaching.test.ts:130`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**268 lines · 9 exports · 43 importers · 22 tests · 1 audits**
+**269 lines · 9 exports · 43 importers · 22 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -87,9 +87,9 @@
 - `src/services/loopCloses.review.integration.test.ts:85`
 - `src/services/needScore.ts:310`
 - `src/services/needScore.ts:324`
-- `src/services/positionFacts.ts:1532`
-- `src/services/reviewFacetRank.ts:633`
-- `src/services/reviewFacetRank.ts:681`
+- `src/services/positionFacts.ts:1546`
+- `src/services/reviewFacetRank.ts:649`
+- `src/services/reviewFacetRank.ts:697`
 - `src/services/studentMomentBoost.ts:128`
 - `src/services/teachingSelector.ts:169`
 - `src/services/weaknessSignal.test.ts:56`
@@ -115,9 +115,9 @@
 - `src/services/fundamentalReachesDecider.test.ts:122`
 - `src/services/fundamentalReachesDecider.test.ts:149`
 - `src/services/needScore.ts:321`
-- `src/services/positionFacts.ts:1498`
-- `src/services/reviewFacetRank.ts:632`
-- `src/services/reviewFacetRank.ts:680`
+- `src/services/positionFacts.ts:1512`
+- `src/services/reviewFacetRank.ts:648`
+- `src/services/reviewFacetRank.ts:696`
 - `src/services/weaknessSignal.test.ts:77`
 - `src/services/weaknessSignal.test.ts:80`
 - `src/services/weaknessSignal.test.ts:83`
@@ -131,7 +131,7 @@
 ### `matchTacticPattern` (function) — 11 call sites
 - `src/services/liveTacticsContext.ts:651`
 - `src/services/needScore.ts:319`
-- `src/services/positionFacts.ts:1496`
+- `src/services/positionFacts.ts:1510`
 - `src/services/tacticAlertService.ts:606`
 - `src/services/teachingSelector.ts:168`
 - `src/services/teachingSelector.ts:309`
@@ -145,7 +145,7 @@
 - `src/services/learnRecordTerms.ts:72`
 - `src/services/learnRecordTerms.ts:305`
 - `src/services/needScore.ts:308`
-- `src/services/positionFacts.ts:1498`
+- `src/services/positionFacts.ts:1512`
 - `src/services/teachingSelector.ts:310`
 - `src/services/weaknessSignal.test.ts:128`
 - `src/services/weaknessSignal.test.ts:131`
@@ -153,7 +153,7 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
 ### `matchFundamental` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:2191`
+- `src/services/coachFeatureService.ts:2193`
 - `src/services/fundamentalReachesDecider.test.ts:80`
 - `src/services/fundamentalReachesDecider.test.ts:91`
 - `src/services/fundamentalReachesDecider.test.ts:121`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**109 lines · 3 exports · 2 importers · 1 tests · 0 audits**
+**112 lines · 3 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,19 +19,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `naturalDefenceFails` (function) — 4 call sites
 - `src/services/methodSignals.test.ts:15`
-- `src/services/methodSignals.test.ts:21`
-- `src/services/methodSignals.test.ts:29`
-- `src/services/positionFacts.ts:1026`
+- `src/services/methodSignals.test.ts:22`
+- `src/services/methodSignals.test.ts:30`
+- `src/services/positionFacts.ts:1077`
 
 ### `forcingLine` (function) — 3 call sites
-- `src/services/methodSignals.test.ts:36`
-- `src/services/methodSignals.test.ts:39`
-- `src/services/positionFacts.ts:1027`
+- `src/services/methodSignals.test.ts:37`
+- `src/services/methodSignals.test.ts:40`
+- `src/services/positionFacts.ts:1078`
 
 ### `markSacrificeLine` (function) — 3 call sites
-- `src/services/methodSignals.test.ts:46`
-- `src/services/methodSignals.test.ts:50`
-- `src/services/positionFacts.ts:1028`
+- `src/services/methodSignals.test.ts:47`
+- `src/services/methodSignals.test.ts:51`
+- `src/services/positionFacts.ts:1079`
 
 ## Tests
 

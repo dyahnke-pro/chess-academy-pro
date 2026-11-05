@@ -24,7 +24,7 @@ import { inBetweenMove } from './inBetweenMove';
 import { pvSanToUci } from './principleAttribution';
 import { BOOK_JOB_IDEA, FUNDAMENTAL_IDEA, ideaClaim, type IdeaKind } from './ideaKind';
 import { openSentence, continueSentence } from '../utils/openSentence';
-import { composeThought, type ThoughtFact, type ThoughtSource } from './thoughtComposer';
+import { composeThought, NOT_LED, type ThoughtFact, type ThoughtSource } from './thoughtComposer';
 import { placeFact, stakesOf, LOCAL_THREAD, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat, type FactGroup } from './coachFact';
 import type { LessonVoice } from './reviewMoveBriefing';
 import { planAimKey } from './nextPlans';
@@ -506,7 +506,7 @@ export function lessonThought(input: Omit<MoveThoughtInput, 'phrases'>, voice: L
   const facts = moveThoughtFacts({ ...input, phrases: voice.phrases });
   const alt = refuted ? refutedFact(refuted, input.fenBefore, input.moverIsStudent !== false ? 'student' : 'opponent') : null;
   const purpose = purposeFact(input, voice);
-  return composeThought([...facts, ...(alt ? [alt] : []), ...(purpose ? [purpose] : []), ...studentMoveFacts(input)], 'lesson', voice).spoken;
+  return composeThought([...facts, ...(alt ? [alt] : []), ...(purpose ? [purpose] : []), ...studentMoveFacts(input)], 'lesson', voice, NOT_LED).spoken;
 }
 
 /** WHAT LEARN'S STUDENT-MOVE LANES MAY SAY IN A LESSON, AND AS WHICH IDEA

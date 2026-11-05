@@ -166,8 +166,8 @@
 - `src/App.tsx:170`
 - `src/components/Coach/CoachGamePage.tsx:353`
 - `src/components/Coach/CoachTeachPage.tsx:8521`
-- `src/components/Coach/CoachTeachPage.tsx:10792`
-- `src/components/Coach/CoachTeachPage.tsx:13870`
+- `src/components/Coach/CoachTeachPage.tsx:10794`
+- `src/components/Coach/CoachTeachPage.tsx:13872`
 - `src/components/Openings/OpeningPlayMode.tsx:66`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:983`
 - `src/hooks/useEndgamePlayout.ts:391`
