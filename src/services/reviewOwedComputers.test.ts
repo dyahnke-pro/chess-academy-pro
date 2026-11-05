@@ -72,7 +72,8 @@ describe('review proves a threat to your loose piece the way Learn does (threatC
       evaluation: 0, preMoveEval: 0, costCp: 0, heardVerdict: null, classification: 'good', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: ['c4'], forcedRunStartPly: null,
       playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null }));
-    const loose = f.find((x) => x.startsWith('[loose]') && /knight on a3/.test(x));
+    // One knight: "your knight", a3 lit (pieceRef).
+    const loose = f.find((x) => x.startsWith('[loose]') && /your knight/i.test(x));
     expect(loose).toBeDefined();
     expect(isProof(proofs.get(loose ?? ''))).toBe(true);
   });

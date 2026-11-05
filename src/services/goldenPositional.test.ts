@@ -15,7 +15,7 @@ describe('8…Bh5 keeps the pin on f3', () => {
   it('a pin the move kept is named as kept, from the student seat', () => {
     const c = playedConcept(BH5, 'Bh5');
     expect(c?.kept).toBe(true);
-    expect(playedConceptLine(c!, 'b')).toBe('With Bh5, your bishop on h5 keeps the pin on their knight on f3 against their queen on d1.');
+    expect(playedConceptLine(c!, 'b')).toBe('With Bh5, your light-squared bishop keeps the pin on their knight on f3 against their queen.');
   });
   it('NEGATIVE CONTROL: a retreat off the line keeps nothing', () => {
     expect(playedConcept(BH5, 'Be6')).toBeNull();

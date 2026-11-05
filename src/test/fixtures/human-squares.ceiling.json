@@ -1,11 +1,9 @@
 {
  "lists": {
-  "chat:latent-danger": 1,
   "chat:speedrun-read": 2,
-  "learn:latent-danger": 1,
   "learn:speedrun-read": 2,
-  "lesson": 6,
-  "review": 17
+  "lesson": 5,
+  "review": 11
  },
  "unlit": {}
 }

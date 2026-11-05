@@ -33,8 +33,7 @@ describe('F9 — a future tactic is said with the moves that build it', () => {
     const r = fenAt(27); // after 14.Rc1, Black to move
     const s = spokenUpcoming(['e4'], 'Pawn on e4 forks bishop on d3 and knight on f3', play(r, ['e4']), r, 'b');
     expect(s).toMatch(/^if you play e4, /);
-    expect(s).toMatch(/your pawn on e4/);
-    expect(s).toMatch(/their bishop on d3/);
+    expect(s).toMatch(/your e-pawn forks their light-squared bishop and knight on f3/);
   });
   it('a reply line names both moves, the student first when it is their turn', () => {
     const r = fenAt(27);

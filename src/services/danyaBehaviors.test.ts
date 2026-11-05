@@ -228,7 +228,7 @@ describe('a tactic fact names whose pieces they are (hand walk 2026-09-24)', () 
     // "Rook on a6 pins knight on b6 against queen on d6."
     const fen = '2k4r/3r1ppp/Rn1q4/1Ppp3b/8/3P2PP/2P1NPB1/3Q1RK1 w - - 0 20';
     const tac = detectBehaviors({ fen, studentColor: 'white' }).find((h) => h.id === 'tactics');
-    expect(tac?.fact).toBe('Your rook on a6 pins their knight on b6 against their queen on d6');
+    expect(tac?.fact).toBe('Your rook on a6 pins their knight against their queen');
   });
 });
 

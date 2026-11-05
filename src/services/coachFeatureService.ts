@@ -1393,10 +1393,14 @@ const END_READ_COMPUTER: Record<EndRead['kind'], ComputerName> = {
   murky: 'murkyRead',
 };
 
-/** The loose-piece tail a board-influence line ends on — a claim of its own
- *  (the loose count below reads it), so the line is never stripped as a
- *  restatement of the move's attack. */
-const LOOSE_TAIL = /(?: — nothing guards (?:your|their) \w+ on [a-h][1-8]| — (?:your|their) \w+ on [a-h][1-8] has no guard|, and (?:your|their) \w+ on [a-h][1-8] is loose)\.$/;
+/** The loose piece a board-influence line names — a claim of its own (the
+ *  loose count below reads it), so the line is never stripped as a
+ *  restatement of the move's attack. Read off the claim its producer
+ *  coupled (`loose:<square>`), never off the words: since 2026-11-05 a piece
+ *  is said "their bishop", its square lit and not read out. */
+function looseSquareOf(f: ReviewFacet): string | null {
+  return f.claims?.find((c) => c.startsWith('loose:'))?.slice('loose:'.length) ?? null;
+}
 
 /** The review's per-move segments, built in one pass — the test seam. The
  *  app builds with `buildReviewSegmentsYielding`, which keeps the screen.
@@ -2456,8 +2460,9 @@ function* reviewSegmentSteps(
         // lost the first loose piece, so the habit never came (batch 4 merge,
         // Alapin 11…Nd5: loosePattern.test). In the opening the job keeps the
         // line it always had.
-        const keepLoose = (f: ReviewFacet): boolean => !openingPly && LOOSE_TAIL.test(f.text);
-        const doesLine = target ? facets.findIndex((f) => f.tag === 'does' && f.text.includes(` on ${target}`)) : -1;
+        const keepLoose = (f: ReviewFacet): boolean => !openingPly && looseSquareOf(f) !== null;
+        // The line about the job's target, found by the squares it couples.
+        const doesLine = target ? facets.findIndex((f) => f.tag === 'does' && (f.squares ?? []).includes(target)) : -1;
         const sameClaim = doesLine >= 0 && !keepLoose(facets[doesLine]) ? doesLine : -1;
         // …and when it stays for its loose piece, it has said the attack: the
         // job does not say it again (Review prod audit 2026-10-30, Qc3: "Your
@@ -2737,9 +2742,10 @@ function* reviewSegmentSteps(
           }
         }
         {
-          const lm = (f0.tag === 'does' || f0.tag === 'delta') && /^.*?(?: — nothing guards (your|their) (\w+) on [a-h][1-8]| — (your|their) (\w+) on [a-h][1-8] has no guard|, and (your|their) (\w+) on [a-h][1-8] is loose)\.$/.exec(f0.text);
-          if (lm) {
-            const owner = (lm[1] ?? lm[3] ?? lm[5]) as 'your' | 'their';
+          // The loose piece belongs to the side that did not move.
+          const looseSq = f0.tag === 'does' ? looseSquareOf(f0) : null;
+          if (looseSq) {
+            const owner: 'your' | 'their' = moverColor === playerColor ? 'their' : 'your';
             const n = looseCount(owner);
             if (n >= 2) continue;
             if (n === 1) {

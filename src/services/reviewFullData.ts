@@ -1960,9 +1960,12 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
     if (shapeOut) shapeOut.hitsPiece = pressed;
     // ROTATED with the fight verb (one formula, three times in a review).
     const turnKey = to.charCodeAt(0) + Number(to[1]) + Number(fenAfter.split(' ')[5] ?? 0);
-    const looseWords = [` — nothing guards ${pressReason?.target}`, ` — ${pressReason?.target} has no guard`, `, and ${pressReason?.target} is loose`][turnKey % 3];
+    // The one piece it eyes is "it" in the reason ("now eyes their bishop —
+    // nothing guards it"); named again only beside a second target.
+    const tgt = eyes.length === 1 && pressReason && eyes[0] === pressReason.target ? 'it' : pressReason?.target;
+    const looseWords = [` — nothing guards ${tgt}`, ` — ${tgt} has no guard`, `, and ${tgt} is loose`][turnKey % 3];
     const why = !pressReason ? ''
-      : pressReason.loose ? looseWords : ` — ${pressReason.target} is worth more than the ${pieceWord(pc.type)}`;
+      : pressReason.loose ? looseWords : ` — ${tgt} is worth more than the ${pieceWord(pc.type)}`;
     return `The ${pieceWord(pc.type)} on ${to} now ${andList(bits)}${why}.`;
   } catch {
     return null;

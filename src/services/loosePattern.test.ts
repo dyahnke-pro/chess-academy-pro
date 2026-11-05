@@ -14,8 +14,13 @@ describe('loose pieces across a review', () => {
     const inputs = ALAPIN.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
     const said = buildReviewSegmentsForTests(inputs, 'black', 'Sicilian Defense: Alapin Variation', true, 1500).map((s) => s.narration ?? '').join(' ');
     expect(said).toMatch(/that's the second time they've left a piece with no guard: after every move of theirs, look first for what it leaves loose/);
+    // The loose piece is the one the line eyes ("now eyes their bishop —
+    // nothing guards it"): its owner is that possessive (pieces are named the
+    // human way since 2026-11-05, the square lit, not read out).
+    const tails = [...said.matchAll(/now eyes (your|their) [^—.]*?(?: — nothing guards [^.]*| — [^.]* has no guard|, and [^.]* is loose)\./g)];
+    expect(tails.length).toBeGreaterThan(0);   // the formula is said at all — not a vacuous pass
     for (const owner of ['their', 'your']) {
-      const bare = said.match(new RegExp(`(?: — nothing guards ${owner} \\w+ on [a-h][1-8]| — ${owner} \\w+ on [a-h][1-8] has no guard|, and ${owner} \\w+ on [a-h][1-8] is loose)`, 'g')) ?? [];
+      const bare = tails.filter((m) => m[1] === owner);
       expect(bare.length, owner).toBeLessThanOrEqual(1);
     }
   }, 120000);
