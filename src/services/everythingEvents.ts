@@ -31,6 +31,9 @@ export interface EverythingLine {
   text: string;
   /** It reached the voice (or the walk's text). */
   said: boolean;
+  /** The claims it makes (the say-once keys), where the place has them — so an
+   *  audit can count one idea said twice in a game (WO-LEARN-SWING-01 P0). */
+  claims?: readonly string[];
   /** Why it did not — the place's own reason (held, subsumed, below the bar,
    *  said already, the voice owner…). Null when it was said. */
   why: string | null;

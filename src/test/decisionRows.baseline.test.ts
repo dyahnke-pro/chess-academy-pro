@@ -20,7 +20,7 @@
 // diff is read line by line:
 //   DECISION_BASELINE_UPDATE=1 npx vitest run src/test/decisionRows.baseline.test.ts
 import { describe, it, expect } from 'vitest';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { onCoachDecision, type CoachDecisionRow } from '../services/coachDecisionEvents';
 import { computePositionFacts, type PositionFactsResult } from '../services/positionFacts';
 import { lastMoveIfOpponent, lastMoveIfStudent } from '../services/lastMoveOfLine';
@@ -29,6 +29,39 @@ import { analysisOf, lessonLines, linesOf, replayPlies, reviewSegments, type Rep
 
 const SNAPSHOT = 'src/test/fixtures/decision-baseline.json';
 const UPDATE = process.env.DECISION_BASELINE_UPDATE === '1';
+// THE LEARN LANE IN NUMBERS (WO-LEARN-SWING-01 P0) — reported, never gated:
+//   DECISION_STATS=1 npx vitest run src/test/decisionRows.baseline.test.ts
+// writes audit-reports/learn-lane-stats.json. This lane is what Learn's door
+// is HANDED (`computePositionFacts`); what the door says is read off the
+// browser replays (`scripts/scoreboard/learn-turn-stats.mjs`).
+const STATS = process.env.DECISION_STATS === '1';
+const STATS_FILE = 'audit-reports/learn-lane-stats.json';
+
+/** One game's learn lane: turns that spoke, their words and lines, the kinds
+ *  said, and every idea said twice (same kind + same claim). */
+interface LaneStats { turns: number; turnsSpoken: number; wordsPerSpokenTurn: number; maxLinesInTurn: number; kinds: Record<string, number>; repeats: string[] }
+const laneStats: Record<string, LaneStats> = {};
+
+function statsOf(turns: ReadonlyArray<ReadonlyArray<{ kind: string; text: string; claim: string }>>): LaneStats {
+  const spokenTurns = turns.filter((t) => t.length > 0);
+  const words = spokenTurns.reduce((n, t) => n + t.reduce((m, c) => m + c.text.split(/\s+/).filter(Boolean).length, 0), 0);
+  const kinds: Record<string, number> = {};
+  const seen = new Map<string, number>();
+  const repeats: string[] = [];
+  turns.forEach((t, i) => {
+    for (const c of t) {
+      kinds[c.kind] = (kinds[c.kind] ?? 0) + 1;
+      const key = `${c.kind}|${c.claim}`;
+      if (seen.has(key)) repeats.push(`${key} (turns ${seen.get(key)} and ${i})`);
+      else seen.set(key, i);
+    }
+  });
+  return {
+    turns: turns.length, turnsSpoken: spokenTurns.length,
+    wordsPerSpokenTurn: spokenTurns.length ? Math.round(words / spokenTurns.length) : 0,
+    maxLinesInTurn: Math.max(0, ...turns.map((t) => t.length)), kinds, repeats,
+  };
+}
 
 interface FixtureGame extends ReplayGame { id: string; rating: number }
 
@@ -66,6 +99,7 @@ async function learnSource(g: FixtureGame): Promise<SourceRecord> {
   // The story's structure thread: the plan the student last heard.
   let planHeard: string | null = null;
   const out: SourceRecord = { rows: [], spoken: [] };
+  const turns: Array<Array<{ kind: string; text: string; claim: string }>> = [];
   for (let k = 0; k + 1 < plies.length; k++) {
     const p = plies[k];
     const r = plies[k + 1];
@@ -96,7 +130,9 @@ async function learnSource(g: FixtureGame): Promise<SourceRecord> {
     planHeard = result.structurePlanSaid ?? planHeard;
     out.rows.push(...rows);
     out.spoken.push(`${r.ply}: ${clausesSaid(result)}`);
+    turns.push(result.clauses.map((c) => ({ kind: c.kind, text: c.text, claim: c.claim ?? c.claims[0] ?? c.text })));
   }
+  if (STATS) laneStats[g.id] = statsOf(turns);
   return out;
 }
 
@@ -174,6 +210,15 @@ describe('every decision and every spoken line on the baseline games is unchange
       for (const [key, rec] of Object.entries(mine)) expect(firstDifference(key, snapshot[key], rec)).toBeNull();
     }, 600_000);
   }
+
+  it.runIf(STATS)('reports the learn lane in numbers', () => {
+    mkdirSync('audit-reports', { recursive: true });
+    writeFileSync(STATS_FILE, `${JSON.stringify(laneStats, null, 1)}\n`);
+    for (const [id, st] of Object.entries(laneStats)) {
+      console.log(`${id}: ${st.turnsSpoken}/${st.turns} turns spoke, ${st.wordsPerSpokenTurn} words a spoken turn, max ${st.maxLinesInTurn} lines, ${st.repeats.length} repeats`);
+    }
+    expect(Object.keys(laneStats).length).toBe(GAMES.length);
+  });
 
   it('the snapshot holds these games and no others', () => {
     if (!snapshot) {
