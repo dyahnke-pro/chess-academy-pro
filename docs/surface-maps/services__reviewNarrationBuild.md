@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1347) — names `isReviewUncapped`
+- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1357) — names `isReviewUncapped`
 
 ## Who calls in
 

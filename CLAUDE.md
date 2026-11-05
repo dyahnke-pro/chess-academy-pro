@@ -157,9 +157,11 @@ chance for the user to find the focus."
   focus is tactics, finding and preventing them! You will have at least one
   chance this game for a winning tactic, but your opponent will also be trying
   to set up its own tactics. Stay vigilant!"
-- 🔒 **THE COACH SPEAKS ON A MISS, NEVER ON A FIND NOBODY ASKED ABOUT** (David
-  2026-10-22). A find is silent (it pays its coins and burst); only a find that
-  answers a question said out loud is credited in words. ONE exception, his
+- 🔒 **THE FOCUS SPEAKS ON A MISS, NEVER ON A FIND NOBODY ASKED ABOUT** (David
+  2026-10-22). The focus runner's own lines: a find pays its coins and burst
+  and the focus says nothing; only a find that answers a question said out loud
+  is credited by it in words. (The turn door, the one voice, says what each move
+  did — a find included — once the student has played it.) ONE exception, his
   (2026-10-22): the TEMPO RUN's line, said when the run has ended (below).
 - **THE RUNG — the only thing the record decides** (`focusRung.ts`, one scale
   `TacticsRung` 0–3 read by the chance reader, the plant and the student):
@@ -248,10 +250,16 @@ chance for the user to find the focus."
   `newBest` (moments on top of moves already counted, never a find in the
   tally — `learnReward.COUNTS_AS_FIND`); the page's grade rewards stand
   down while the focus owns the game (`focusPays`); checkmate still pays.
-- **THE VOICE HAS ONE OWNER, FAIL CLOSED** (`learnVoice`): while the focus owns
-  the game only `owner` (focus and castling) and `asked` (a tap) lines speak.
-  The door holds every lane as `focus-voice` or `off-focus` — recorded, never
-  deleted; the producers still run and still record.
+- **THE TURN DOOR IS THE ONE VOICE, FOCUS GAMES INCLUDED** (David 2026-10-30:
+  "Free play also. One voice"; `learnVoice` channel `door`): the door decides
+  every turn of a focus game as it does an open one, and the focus keeps its
+  chances, rung, pause, record and its own lines (`owner`). Before the student
+  moves, the door holds what points at the student's OWN chance on that board
+  (`ChanceHold`, `names-chance` — the piece to win, the targets, the answer's
+  square, their forced mate), so they still have to find it (David
+  2026-11-05); a danger to them always speaks. Lines OUTSIDE the door
+  (`free-play`: the grade line, praise, the event line) stay held while a focus
+  or a mission owns the game; a mission still silences the door too.
 - **SCORING IS SYMMETRIC.** A prompted chance counts neither way; one move
   poses a skill once across every writer; a steered or planted hold counts
   half, a miss there in full.
@@ -298,7 +306,9 @@ board has posed it (`heatMap.listedOnTab`).
 
 **IN A LEARN FREE-PLAY GAME IT SUPERSEDES** the WHY standard's measures 2, 3
 and 4 (a reason for every move, reason variety, words per turn) — those are
-scoped below to Review. Measure 1 still holds for what the focus says. A walk
+scoped below to Review; Learn free play is measured by IDEA against his own
+words (David 2026-11-05: "forget the wording. Let's gage based on idea";
+`scripts/scoreboard/judge-ideas.mjs`). Measure 1 still holds. A walk
 (drill, lesson, named opening) the user asks for stops the focus and speaks as
 before.
 
@@ -2722,8 +2732,9 @@ measures (`scripts/audit-lib/why-count.mjs`):
    regression alarm, not the goal. Greetings, setup, "e4 — your move", tap
    prompts and the game intro are not teaching and are not measured.
 2. **Every student move gets its own reason (≥70% of Review turns; a Campaign
-   game and a Learn free-play FOCUS game are silent by design, § MISSIONS and
-   § LEARN FOCUS — a walk the user asks for in Learn still counts).** Read off
+   game is silent by design, § MISSIONS; a Learn free-play game is measured by
+   idea against his own words, § LEARN FOCUS — a walk the user asks for in
+   Learn still counts).** Read off
    the door's own `learn-turn-decision` row (`ownMove`, read off the facts the
    thought's "yours" step kept — `FACT_GROUP`, with `DNA_BEAT` telling a
    reason from a cost). Good-move reasons
