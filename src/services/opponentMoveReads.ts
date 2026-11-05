@@ -44,6 +44,16 @@ export type ReadKind =
   | 'quiet-danger' | 'idea-condition' | 'obligation-lifts' | 'bishop-off-plan'
   | 'wrongly-expected' | 'helped-you' | 'wedged-pawn';
 
+/** THE FACT KIND EACH READ IS SAID UNDER — one table for every surface (the
+ *  live depth and Review each relabelled it inline, the same ternary twice).
+ *  Their idea's one condition makes the trigger teaching move ("once your rook
+ *  is on e7, the jump works": S-TRIGGER); the wedged pawn tests their
+ *  prevention; the rest read their move. */
+export const READ_FACT_KIND: Record<ReadKind, 'their-read' | 'prevent-test' | 'their-trigger'> = {
+  'quiet-danger': 'their-read', 'idea-condition': 'their-trigger', 'obligation-lifts': 'their-read', 'bishop-off-plan': 'their-read',
+  'wrongly-expected': 'their-read', 'helped-you': 'their-read', 'wedged-pawn': 'prevent-test',
+};
+
 export interface Read {
   kind: ReadKind;
   text: string;

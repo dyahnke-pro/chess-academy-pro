@@ -622,10 +622,12 @@ export type LaneFact = CoachFact & {
 };
 
 /** The kind a Learn fact is placed by: its producer's own kind on the lanes
- *  that carry many (`positionFacts`, `phase`), else its lane's — the one group
- *  table places both (`FACT_GROUP`, WO-STORY-MATRIX-01 P1-4). */
+ *  that carry many (`positionFacts`, `phase`, the behaviours — each said under
+ *  the teaching move it makes, `danyaBehaviors.BehaviorKind`), else its
+ *  lane's — the one group table places both (`FACT_GROUP`, WO-STORY-MATRIX-01
+ *  P1-4). */
 function laneKind(lane: LearnLane, factKind: string | undefined): CoachFactKind {
-  return (lane === 'positionFacts' || lane === 'phase') && factKind && isCoachFactKind(factKind) ? factKind : LEARN_LANES[lane].factKind;
+  return (lane === 'positionFacts' || lane === 'phase' || lane === 'behavior') && factKind && isCoachFactKind(factKind) ? factKind : LEARN_LANES[lane].factKind;
 }
 
 /** THE ONE MAKER OF A LEARN FACT (WO-STORY-MATRIX-01 P1-6e), called where

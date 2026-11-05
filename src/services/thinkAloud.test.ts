@@ -18,6 +18,14 @@ describe('think aloud — the speed-run depth', () => {
   it('no open-file claim without a rook or queen to use it', () => {
     expect(lineAchieves('6k1/8/5p2/6p1/7P/8/8/4K3 w - - 0 1', ['hxg5', 'fxg5'], 'w').kind).toBe('none');
   });
+  it('their king loses its pawn cover only where it sheltered and stayed (his bank, 2026-11-05)', () => {
+    // An uncastled king loses no cover when its own centre pawn moves out.
+    expect(lineAchieves(new Chess().fen().replace(' w ', ' b '), ['e5', 'Nf3', 'Nc6', 'd4'], 'b').kind).toBe('none');
+    // The castled king on g8: the g-pawn traded off by the lever, the king still there.
+    expect(lineAchieves('3q2k1/5pp1/7p/6P1/8/8/5PPP/3Q2K1 w - - 0 1', ['gxh6', 'gxh6'], 'w')).toMatchObject({ kind: 'king', text: 'their king loses its pawn cover' });
+    // The same lever in an ending, queens off: the king has nothing to hide from.
+    expect(lineAchieves('6k1/5pp1/7p/6P1/8/8/5PPP/6K1 w - - 0 1', ['gxh6', 'gxh6'], 'w').kind).toBe('none');
+  });
   it('material is read where the line ends', () => {
     expect(lineAchieves('4k3/8/8/3q4/8/8/8/3QK3 w - - 0 1', ['Qxd5'], 'w').kind).toBe('material');
   });

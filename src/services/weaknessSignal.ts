@@ -219,6 +219,7 @@ const KIND_JOIN: Record<ClauseKind, Join> = {
   'their-read': null, 'prevent-test': null, 'attack-pattern': null,
   priority: null,
   'opp-think': null, 'forcing-scan': null, 'move-order': null,
+  provoke: null, tension: null, trigger: null, 'their-trigger': null, space: null, wishlist: null,
 };
 
 /** Match a positionFacts clause KIND to the student's holes it teaches to.

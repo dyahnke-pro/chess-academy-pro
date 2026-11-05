@@ -152,6 +152,11 @@ export const FACT_GROUP: Record<CoachFactKind, FactGroup> = {
   'pawn-break': 'move',
   // Opposite-coloured bishops are the structure of the board from here.
   'opposite-bishops': 'structure',
+  // ── the teaching moves' own kinds, round 2, each in the group of the kind
+  // it came from: the speed-run reads the concepts, their idea's condition
+  // their side, the behaviours the story ──
+  provoke: 'concepts', tension: 'concepts', trigger: 'concepts', 'their-trigger': 'theirSide',
+  space: 'story', wishlist: 'story',
 };
 
 /** Is this string a kind of the one vocabulary? (A Learn fact carries its

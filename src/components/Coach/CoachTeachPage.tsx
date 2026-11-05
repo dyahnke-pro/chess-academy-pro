@@ -9826,6 +9826,8 @@ export function CoachTeachPage({ mode }: {
     let behaviorClaims: string[] = [];
     let behaviorArrows: ArrowClaim[] = [];
     let behaviorSquares: string[] = [];
+    // The kind the behaviour is said under (`BehaviorHit.kind`).
+    let behaviorKind: string = 'student-leans';
     let positionalLine: string | null = null;
     let positionalNames: NamesStudentMove = NAMES_NO_MOVE;
     let positionalClaims: string[] = [];
@@ -9918,7 +9920,7 @@ export function CoachTeachPage({ mode }: {
           // held on a busy turn is not marked said unheard (A-plan, prod Learn
           // 2026-10-16: 19 of 21 held, every idea lost for the game).
           // A threat (`win-`) is a claim about THIS turn, not an idea said once a game.
-          behaviorLine = hit.fact; behaviorSquares = hit.squares;
+          behaviorLine = hit.fact; behaviorSquares = hit.squares; behaviorKind = hit.kind;
           behaviorClaims = [
             ...hit.keys.filter((k) => !k.startsWith('win-')),
             ...hit.keys.filter((k) => /^win-[a-h][1-8]$/.test(k)),
@@ -10023,7 +10025,7 @@ export function CoachTeachPage({ mode }: {
     deferIf(grab, grab && { lane: 'rejectedTempting', computer: grab.computer, text: grab.text, proof: grab.proof, namesStudentMove: false, squares: grab.squares });
     // A recited line names the student's moves in it (OS-10).
     deferIf(computedLine, computedLine ? { lane: 'commentary', computer: 'buildPlayCommentary', text: computedLine, proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(namesFromArrows(computedLineArrows, studentCC, args.fenAfterReply)), arrows: computedLineArrows } : null);
-    deferIf(behaviorLine && !decidedByMaterial, behaviorLine ? { lane: 'behavior', computer: 'detectBehaviors', text: behaviorLine, proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(namesFromArrows(behaviorArrows, studentCC, args.fenAfterReply)), squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), claims: behaviorClaims, arrows: behaviorArrows } : null);
+    deferIf(behaviorLine && !decidedByMaterial, behaviorLine ? { lane: 'behavior', computer: 'detectBehaviors', factKind: behaviorKind, text: behaviorLine, proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(namesFromArrows(behaviorArrows, studentCC, args.fenAfterReply)), squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), claims: behaviorClaims, arrows: behaviorArrows } : null);
     deferIf(positionalLine && !decidedByMaterial, positionalLine ? { lane: positionalIsOwnKing ? 'kingSafety' : 'positional', computer: 'buildPositionalRead', text: positionalLine, proof: NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(positionalNames), squares: positionalSquares, claims: positionalClaims } : null);
     // THE BOOK MOVE AND ITS JOB — its own lane on the "but" beat, so the door
     // orders it as a teaching fact (David 2026-10-14: "make sure this new

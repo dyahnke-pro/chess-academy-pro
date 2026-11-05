@@ -94,7 +94,9 @@ export const TEACHING_MOVES: Record<CoachFactKind, readonly TeachingMove[]> = {
   // react" (`detectBluff`): the false alarm and its calm, not practical play.
   bluff: ['T-FALSE-ALARM', 'H-DONT-PANIC'],
   contrast: ['H-TWO-GOOD', 'M-REFUTED'],
-  'capture-choice': ['M-RECAPTURE'],
+  // "The other capture hands their knight d5 for good" — which recapture, and
+  // the square it gives away for the rest of the game.
+  'capture-choice': ['M-RECAPTURE', 'S-LONG-HORIZON'],
   kick: ['M-TEMPO'],
   deliberation: ['H-CANDIDATES', 'M-REFUTED'],
   'key-moment': ['H-HABIT'],
@@ -107,7 +109,9 @@ export const TEACHING_MOVES: Record<CoachFactKind, readonly TeachingMove[]> = {
   'not-yet': ['S-TIMING'],
   // ── the line ──
   consequence: ['T-LINE'],
-  line: ['T-LINE'],
+  // The line walked out loud move by move to what it achieves (`sayLine`,
+  // deliberation's line played out): his "I go here, he goes there".
+  line: ['T-LINE', 'H-CALC'],
   // ── the story ──
   'plan-now': ['S-PLAN'],
   'plan-race': ['S-PLAN-VS-PLAN', 'T-COUNT'],
@@ -128,7 +132,9 @@ export const TEACHING_MOVES: Record<CoachFactKind, readonly TeachingMove[]> = {
   king: ['S-KING-ATTACK'],
   rook7: ['P-PIECE-QUALITY'],
   judgement: ['H-EVAL'],
-  'hole-access': ['S-MANEUVER', 'S-SQUARE-CHOICE'],
+  // "After X, d5 is weak for good, and their knight gets there in three" —
+  // the long-term consequence of the move, with the route.
+  'hole-access': ['S-MANEUVER', 'S-SQUARE-CHOICE', 'S-LONG-HORIZON'],
   // ── tactics ──
   tactic: ['T-TACTIC'],
   loose: ['T-HANG'],
@@ -216,4 +222,20 @@ export const TEACHING_MOVES: Record<CoachFactKind, readonly TeachingMove[]> = {
   // Opposite-coloured bishops (`oppositeBishops`): the read of who it favours
   // and how to play it — the attack on the bishop's colour, or the drawish ending.
   'opposite-bishops': ['H-EVAL', 'S-PLAN'],
+  // ── the teaching moves' own kinds, round 2 (2026-11-05): computers that
+  // already made them, filed under a kind that named another move ──
+  // The speed-run reads (`speedRunReads.SPEED_RUN_KIND`): the move that makes
+  // them commit a pawn, concede castling or a weak pawn, or block on an
+  // awkward square; keep the tension; the rejected move that works after the
+  // preparation.
+  provoke: ['M-PROVOKE'],
+  tension: ['S-TENSION'],
+  trigger: ['S-TRIGGER', 'S-TIMING'],
+  // Their idea's one condition (`opponentMoveReads.READ_FACT_KIND`): "Nd5
+  // needs one thing to work: your rook on e7".
+  'their-trigger': ['S-TRIGGER', 'M-OPP-PURPOSE'],
+  // The behaviours' own kinds (`danyaBehaviors`): more space and what to do
+  // with it; the piece's wish square and the road there.
+  space: ['S-SPACE', 'S-PLAN'],
+  wishlist: ['H-WISHLIST', 'S-MANEUVER'],
 };

@@ -1343,6 +1343,8 @@ const FORMULA_ONCE: ReadonlySet<string> = new Set<FacetTag>([
   'their-cost', 'their-read', 'rule', 'nugget', 'loose', 'bluff', 'plan-arc', 'timing',
   // The kinds filed under `timing` and `rule` until each had its own.
   'move-order', 'rule-exception', 'false-alarm', 'push-or-hold',
+  // Their idea's one condition, said once a game as their move's read was.
+  'their-trigger',
   // The teaching moves' new computers: one formula, once a game — a second
   // break with the same reason on a new board is the same lesson again.
   'pawn-break',
