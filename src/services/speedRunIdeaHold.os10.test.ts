@@ -10,7 +10,9 @@ import { namesPlayableStudentMove } from './studentMoveNaming';
 const fenAt = (s: string): string => { const c = new Chess(); s.split(' ').forEach((m) => c.move(m)); return c.fen(); };
 const line = (moves: string[], evaluation: number) => ({ moves, evaluation, mate: null });
 const ideaOf = (fen: string, lines: ReturnType<typeof line>[], re: RegExp) =>
-  depthClauses({ fen, history: [], topLines: lines, studentColor: 'w', nameMove: false }).find((c) => c.kind === 'speedrun-read' && re.test(c.text));
+  // Any kind: the speedrun reads are filed under their teaching move's kind
+  // (provoke, tension, …) since the computers' round 2.
+  depthClauses({ fen, history: [], topLines: lines, studentColor: 'w', nameMove: false }).find((c) => re.test(c.text));
 
 describe('a speedrun idea that names the student\'s piece holds its move (OS-10)', () => {
   const cases: Array<[string, string, ReturnType<typeof line>[], RegExp, string]> = [

@@ -311,9 +311,11 @@ function pawnKickNextPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean)
   // a5 against the queen on b6 that pinned his d4 pawn to his king).
   const pin = kickBreaksPin(chessAfter, kick, mv.color);
   const pinned = pin ? chessAfter.get(pin.pinned as Sq) : null;
-  return pin && pinned
-    ? `${base} — the ${PIECE_NOUN[kick.target.type]} pinning ${moverIsStudent ? 'your' : 'their'} ${PIECE_NOUN[pinned.type]} on ${pin.pinned}.`
-    : `${base}.`;
+  // The pinned piece by what it is too ("your d-pawn"), its square lit.
+  const pinnedWords = pin && pinned
+    ? pieceRef(chessAfter.fen(), pin.pinned, mv.color === 'w' ? (moverIsStudent ? 'w' : 'b') : (moverIsStudent ? 'b' : 'w'))?.words ?? `${moverIsStudent ? 'your' : 'their'} ${PIECE_NOUN[pinned.type]} on ${pin.pinned}`
+    : null;
+  return pinnedWords ? `${base}, the piece pinning ${pinnedWords}.` : `${base}.`;
 }
 
 /** THE QUEEN STOPS GUARDING A PIECE THE ENEMY CAN TAKE, SO A PAWN TAKES BACK

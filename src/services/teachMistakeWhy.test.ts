@@ -44,7 +44,8 @@ describe('a mistake turn says what the move allowed, what the better move did, a
   });
 
   it('the same reader teaches the move when the student plays it', () => {
-    expect(quietMovePoint(BEFORE, 'a4')).toBe('Prepares a5, which would kick their queen off b6 — the queen pinning your pawn on d4.');
+    // The pieces by what they are, their squares lit (David 2026-11-05).
+    expect(quietMovePoint(BEFORE, 'a4')).toBe('Prepares a5, which would kick their queen, the piece pinning your d-pawn.');
   });
 
   it('under a mistake\'s cost the grade speaks only on a mechanism, never on a bare cost', () => {

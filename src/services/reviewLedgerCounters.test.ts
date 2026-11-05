@@ -46,7 +46,9 @@ describe('the motif transfer rides the seed', () => {
 describe('every say-once ledger rides the seed (the swap re-said "A rare book move")', () => {
   it('a standing tactic the walk already read is not read again after a swap', () => {
     expect(at(build(null), 33)).toMatch(/pins your knight on d4/);
-    const seeded = at(build(seedOf(21, ['ss:rook on d1 pins knight on d4 against king on d7'])), 33);
+    // The standing read's signature is its sentence without seats (the king
+    // is said by what it is since 2026-11-05; two rooks keep the d1 square).
+    const seeded = at(build(seedOf(21, ['ss:rook on d1 pins knight on d4 against king'])), 33);
     expect(seeded).not.toMatch(/pins your knight on d4/);
   }, 120000);
   it('the book standing is a flag in the story', () => {

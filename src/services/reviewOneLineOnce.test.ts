@@ -17,7 +17,10 @@ describe('a line is said once, whatever it is called', () => {
       c.move(san);
       return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 1, classification: i < 12 ? 'book' : 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
     }), 'white', null, true, 1500);
-    const naming = segs.filter((s) => /\bg7\b/.test(s.narration ?? '') && /\ba1\b/.test(s.narration ?? '') && /\be5\b/.test(s.narration ?? '')
+    // The pieces are said by what they are (David 2026-11-05): the queen and
+    // bishop on the diagonal, aimed at the rook on a1 (two rooks: its square
+    // is said). The line is the battery or the discovery in waiting.
+    const naming = segs.filter((s) => /\brook on a1\b/.test(s.narration ?? '')
       && /battery|discovered attack in waiting/.test(s.narration ?? '')).map((s) => s.ply);
     expect(naming.length).toBeGreaterThan(0);
     expect(naming).toHaveLength(1);
