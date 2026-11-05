@@ -44,12 +44,12 @@ describe('the door holds a fact that names a move the student can play next', ()
 });
 
 describe('the leaks on David\'s record', () => {
-  it('move 4: "Bishop to c4 is a common try here" names his coming Bc4 — the refuted clause declares it and is held', async () => {
+  it('move 4: "Bishop to c4 is a common try here" names his coming Bc4 — the common-wrong clause declares it and is held', async () => {
     // He played 4.Nxc3 (…d6 came back); players at his level also try 4.Bc4 there.
     const fan = [{ evaluation: 0, mate: null, moves: ['b1c3'] }, { evaluation: -60, mate: null, moves: ['f1c4', 'c3b2'] }];
     const popular = [{ san: 'Nxc3', games: 70, pct: 70 }, { san: 'Bc4', games: 30, pct: 30 }];
     const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: F[8], moverColor: 'w', studentColor: 'w', analysis: flat, lastMove: { fenBefore: F[6], san: 'Nxc3', cpLoss: 0, historySans: null, reads: null, popular, fanBefore: fan } });
-    const refuted = r.clauses.find((c) => c.kind === 'refuted');
+    const refuted = r.clauses.find((c) => c.kind === 'common-wrong');
     expect(refuted?.text).toMatch(/Bc4|Bishop to c4/);
     expect(refuted?.namesStudentMove).toBe(true);
   });
