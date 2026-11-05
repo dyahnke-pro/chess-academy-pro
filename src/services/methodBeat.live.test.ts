@@ -132,3 +132,25 @@ describe('the threat question goes out with its answer (OS-1 g3 15.c5)', () => {
     }
   });
 });
+
+// THE HABIT IS ITS OWN TEACHING MOVE (2026-11-05, `teachingMoves.ts`): asking
+// what their move is doing puts the student in the opponent's shoes; the
+// forcing scan is checks, captures and threats first. Each beat names its
+// habit, and the habit's kind is the teaching move the yardstick counts.
+describe('each habit carries the kind of fact it is', () => {
+  it('the threat question is the opponent\'s shoes; the forcing scan is checks first', async () => {
+    const { HABIT_KIND, methodBeatRead } = await import('./methodBeat');
+    const { TEACHING_MOVES } = await import('./teachingMoves');
+    const shoes = liveMethodBeat({ ...base, threatStanding: true, threatTarget: 'your knight on b4' }, 3);
+    expect(shoes?.habit).toBe('opponent-threat');
+    expect(TEACHING_MOVES[HABIT_KIND[shoes!.habit]]).toContain('H-OPP-THINK');
+    const scan = liveMethodBeat({ ...base, bestSan: 'Qxh7+', tier: 'critical' as const }, 3);
+    expect(scan?.habit).toBe('forcing-scan');
+    expect(TEACHING_MOVES[HABIT_KIND[scan!.habit]]).toContain('T-CHECKFIRST');
+    // The retrospective register names its habit the same way.
+    const review = methodBeatRead({ isStudentMove: true, bestSan: 'Nxe5', cpLossCp: 150, tier: 'blunder', ignoredThreat: false }, 0);
+    expect(review?.habit).toBe('forcing-scan');
+    // A habit with no teaching move of its own stays a method.
+    expect(HABIT_KIND.candidates).toBe('method');
+  });
+});

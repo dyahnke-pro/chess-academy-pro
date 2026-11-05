@@ -90,7 +90,9 @@ export const TEACHING_MOVES: Record<CoachFactKind, readonly TeachingMove[]> = {
   'opening-theirs': ['P-OPENING-IDEA', 'M-OPP-PURPOSE'],
   // ── the choices ──
   refuted: ['M-REFUTED'],
-  bluff: ['H-PRACTICAL'],
+  // The phantom threat — "it looks aggressive but wins nothing, no need to
+  // react" (`detectBluff`): the false alarm and its calm, not practical play.
+  bluff: ['T-FALSE-ALARM', 'H-DONT-PANIC'],
   contrast: ['H-TWO-GOOD', 'M-REFUTED'],
   'capture-choice': ['M-RECAPTURE'],
   kick: ['M-TEMPO'],
@@ -183,4 +185,28 @@ export const TEACHING_MOVES: Record<CoachFactKind, readonly TeachingMove[]> = {
   binding: ['M-PURPOSE-PREVENT'],
   route: ['S-MANEUVER'],
   stop: ['M-PURPOSE-PREVENT'],
+  // ── the teaching moves' own kinds (2026-11-05) ──
+  // "If they X, you play Y" (`ifTheyPlay`), each branch played out.
+  'reply-tree': ['M-REPLY-TREE', 'T-LINE'],
+  // "X first: Y straight away runs into R" (`moveOrder`), "A first, because
+  // it clears the road B needs" (`findEnablingMove`).
+  'move-order': ['M-MOVE-ORDER', 'S-TIMING'],
+  // Castling by hand: the plan, its steps, the walk done (`castleByHandMove`).
+  castling: ['S-CASTLING', 'S-PLAN'],
+  // "Most players at your level play X here" with its cost and line
+  // (`refutedFromFan`); a known club mistake played (`knownSlip`).
+  'common-wrong': ['M-COMMON-WRONG', 'M-REFUTED'],
+  // A known club mistake or trap at the board, named before it is played.
+  'trap-ahead': ['T-TRAP-AHEAD', 'M-COMMON-WRONG'],
+  // Their threat was real and you did not have to react (`falseAlarm`).
+  'false-alarm': ['T-FALSE-ALARM', 'H-DONT-PANIC'],
+  // A beginner's rule the move breaks, and why it is right here (`ruleException`).
+  'rule-exception': ['P-EXCEPTION', 'P-PRINCIPLE'],
+  // Whether this ending is worth pressing or holding, by its type (`pushOrHold`).
+  'push-or-hold': ['S-PUSH-OR-HOLD'],
+  // The habit of asking what their move is doing — the opponent's shoes
+  // (`methodBeat`, the opponent-threat habit).
+  'opp-think': ['H-OPP-THINK', 'H-HABIT'],
+  // Checks, captures, threats first — the forcing scan (`methodBeat`).
+  'forcing-scan': ['T-CHECKFIRST', 'H-HABIT'],
 };

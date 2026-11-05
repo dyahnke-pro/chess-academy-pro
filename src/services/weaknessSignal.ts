@@ -200,6 +200,7 @@ const KIND_JOIN: Record<ClauseKind, Join> = {
   // student just left and the position's memory are opening lessons: they
   // join the student's opening holes — leaving book early, the opening bucket.
   refuted: OPENING_HOLES,
+  'common-wrong': OPENING_HOLES,
   opening: OPENING_HOLES,
   'last-here': OPENING_HOLES,
   // The king reads (mate over material, the checks a king walks into, the
@@ -217,6 +218,7 @@ const KIND_JOIN: Record<ClauseKind, Join> = {
   equivalence: null, 'capture-choice': null, kick: null, 'plan-race': null, timing: null,
   'their-read': null, 'prevent-test': null, 'attack-pattern': null,
   priority: null,
+  'opp-think': null, 'forcing-scan': null, 'move-order': null,
 };
 
 /** Match a positionFacts clause KIND to the student's holes it teaches to.

@@ -67,7 +67,15 @@ export type FacetTag =
   // The priority before the move (`buildPriorityFirst`): Review and the live
   // read filed it as the method, Learn as a choice — one kind now, worth what
   // the method is worth, placed by the group table.
-  | 'priority';
+  | 'priority'
+  // THE TEACHING MOVES' OWN KINDS (2026-11-05, `teachingMoves.ts`): a kind
+  // that says which teaching move its computer makes, where the kind it was
+  // filed under named a different one — the reply tree was a `line`, the move
+  // order a `timing`, castling by hand a `plan-now`, the move most players
+  // play a `refuted`, the false alarm a `point`. Each is worth, and placed,
+  // exactly what the kind it came from is, so nothing said moves.
+  | 'reply-tree' | 'move-order' | 'castling' | 'common-wrong' | 'trap-ahead'
+  | 'false-alarm' | 'rule-exception' | 'push-or-hold';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -224,6 +232,18 @@ export const FACET_RANK: Record<FacetTag, number> = {
   method: 8,
   priority: 8,
   how: 8,
+  // The teaching moves' own kinds, each at the rank of the kind it came from
+  // (the reply tree a line, the move order a timing, castling a plan, the
+  // common wrong move and the trap ahead a refutation; the false alarm, the
+  // exception and push-or-hold were Learn's `rule` facts).
+  'reply-tree': 18,
+  'move-order': 31,
+  castling: 20,
+  'common-wrong': 82,
+  'trap-ahead': 82,
+  'false-alarm': 29,
+  'rule-exception': 29,
+  'push-or-hold': 29,
 };
 
 /**
@@ -292,6 +312,14 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   'plan-now': 'teach',
   'plan-opening': 'teach',
   'plan-middlegame': 'teach',
+  'reply-tree': 'teach',
+  'move-order': 'teach',
+  castling: 'teach',
+  'common-wrong': 'teach',
+  'trap-ahead': 'teach',
+  'false-alarm': 'teach',
+  'rule-exception': 'teach',
+  'push-or-hold': 'teach',
   // What the move did — descriptions. Each speaks only beside a teaching
   // point on its own squares; a ply of descriptions alone is silent.
   does: 'describe',
@@ -378,6 +406,11 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   'their-read': 'teach',
   'prevent-test': 'teach',
   'attack-pattern': 'teach',
+  'common-wrong': 'teach',
+  'move-order': 'teach',
+  // The habits that are teaching moves of their own (`methodBeat.HABIT_KIND`).
+  'opp-think': 'teach',
+  'forcing-scan': 'teach',
   'student-leans': 'describe',
   'opponent-leans': 'describe',
 };
@@ -430,6 +463,10 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   'plan-line': 'plan', consequence: 'plan', structure: 'plan', passer: 'plan', rook7: 'plan',
   badbishop: 'plan', complex: 'plan', minority: 'plan', worst: 'plan', 'opp-target': 'plan',
   verdict: 'plan', eval: 'plan', delta: 'plan', note: 'plan', stock: 'plan',
+  // The teaching moves' own kinds, in the layer of the kind each came from.
+  'reply-tree': 'safety', 'common-wrong': 'safety', 'trap-ahead': 'safety', 'move-order': 'plan', castling: 'plan',
+  'false-alarm': 'principle', 'rule-exception': 'principle', 'push-or-hold': 'principle',
+  'opp-think': 'safety', 'forcing-scan': 'safety',
   'structure-plan': 'plan', 'opponent-intent': 'plan', 'student-leans': 'plan', 'opponent-leans': 'plan',
 };
 
@@ -483,6 +520,10 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   rook7: 'description', badbishop: 'description', complex: 'description', minority: 'description',
   worst: 'description', 'opp-target': 'description', verdict: 'description', structure: 'description',
   'opp-dev': 'description', 'student-leans': 'description', 'opponent-leans': 'description',
+  // The teaching moves' own kinds owe what the kind each came from owes.
+  'reply-tree': 'proven', 'move-order': 'proven', 'common-wrong': 'proven', 'trap-ahead': 'proven',
+  castling: 'description', 'false-alarm': 'method', 'rule-exception': 'method', 'push-or-hold': 'method',
+  'opp-think': 'method', 'forcing-scan': 'method',
 };
 
 /**
@@ -537,6 +578,11 @@ const CLAUSE_TIE: Record<ClauseKind, number> = {
   opening: FACET_RANK.opening,
   'last-here': FACET_RANK['last-here'],
   priority: FACET_RANK.priority,
+  'common-wrong': FACET_RANK['common-wrong'],
+  'move-order': FACET_RANK['move-order'],
+  // A habit closes the beat, whichever habit it is.
+  'opp-think': FACET_RANK.method,
+  'forcing-scan': FACET_RANK.method,
 };
 export const TIE_ORDER: Record<FactKind, number> = { ...FACET_RANK, ...CLAUSE_TIE };
 
@@ -625,12 +671,12 @@ function clauseKindForTag(tag: FacetTag): string {
     case 'loose': case 'threat': case 'count': case 'royal': case 'trapped': return 'must-defend';
     case 'tactic': case 'sac': case 'sac-why': case 'forced': return 'latent-danger';
     case 'endgame': case 'passer': case 'consequence': case 'plan-race': return 'convert';
-    case 'refuted': case 'equivalence': return 'refuted';
-    case 'timing': case 'capture-choice': case 'kick': return 'structure-plan';
+    case 'refuted': case 'common-wrong': case 'trap-ahead': case 'equivalence': return 'refuted';
+    case 'timing': case 'move-order': case 'capture-choice': case 'kick': return 'structure-plan';
     case 'their-read': return 'opponent-intent';
-    case 'rule': return 'fundamental';
+    case 'rule': case 'rule-exception': case 'false-alarm': case 'push-or-hold': return 'fundamental';
     case 'principle': case 'structure': case 'complex': case 'minority':
-    case 'badbishop': case 'worst': case 'plan-middlegame': case 'plan-now': return 'structure-plan';
+    case 'badbishop': case 'worst': case 'plan-middlegame': case 'plan-now': case 'castling': return 'structure-plan';
     default: return 'status';
   }
 }

@@ -523,13 +523,13 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // it, and the student played that move — "you didn't have to react".
   // Push for a win or hold (census #14): what a pawn up or down is worth in
   // THIS ending, while the engine keeps it better-not-won / worse-not-lost.
-  pushOrHold: { factKind: 'convert', kind: 'computed', why: 'whether the ending is worth pressing or holding, by its type', lead: 60 },
+  pushOrHold: { factKind: 'push-or-hold', kind: 'computed', why: 'whether the ending is worth pressing or holding, by its type', lead: 60 },
   // The answer to the threat the instant wave just named (census T4): question
   // first, then what the engine's move does about it. Always rides — a threat
   // said without its answer is the describing he never does.
   threatAnswer: { factKind: 'must-defend', kind: 'computed', why: 'what to do about the threat just named — take, step out, kick, block, guard, or it can wait', lead: 81, always: true },
-  falseAlarm: { factKind: 'point', kind: 'computed', why: 'a threat the student rightly ignored, and what answers it', lead: 72 },
-  ruleException: { factKind: 'rule', kind: 'computed', why: 'a beginner’s rule the move breaks, and why it is right here', lead: 73 },
+  falseAlarm: { factKind: 'false-alarm', kind: 'computed', why: 'a threat the student rightly ignored, and what answers it', lead: 72 },
+  ruleException: { factKind: 'rule-exception', kind: 'computed', why: 'a beginner’s rule the move breaks, and why it is right here', lead: 73 },
   recapture: { factKind: 'trade', kind: 'computed', why: 'which piece takes back and why — compared with the other recapture', lead: 66 },
   theirMoveCost: { factKind: 'their-cost', kind: 'computed', why: 'what the opponent’s move cost them that the student can use', lead: 74 },
   moveOrder: { factKind: BOARD_COMPUTERS.enablingMove.kind, kind: 'computed', why: 'why the move had to come first — the follow-up played first loses material', lead: 77 },

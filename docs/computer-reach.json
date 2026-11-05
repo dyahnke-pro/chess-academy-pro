@@ -2,40 +2,40 @@
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.",
  "graph": {
   "files": 1755,
-  "nodes": 16368
+  "nodes": 16376
  },
  "totals": {
   "computers": 347,
-  "wiredNowhere": 30,
+  "wiredNowhere": 31,
   "heldByLearnOnly": 19,
   "otherScreensOnly": 10,
-  "dead": 1,
+  "dead": 2,
   "missingFromCode": 0,
   "surfaces": {
    "learn": {
     "yes": 31,
-    "held": 220,
-    "no": 96
+    "held": 219,
+    "no": 97
    },
    "review": {
-    "yes": 235,
-    "no": 112
+    "yes": 234,
+    "no": 113
    },
    "lesson": {
     "yes": 142,
     "no": 205
    },
    "chat": {
-    "yes": 202,
-    "no": 145
+    "yes": 201,
+    "no": 146
    },
    "tapped": {
-    "yes": 159,
-    "no": 188
+    "yes": 158,
+    "no": 189
    },
    "tactics": {
-    "yes": 104,
-    "no": 243
+    "yes": 103,
+    "no": 244
    }
   }
  },
@@ -74,6 +74,7 @@
    "services/tacticAlertService.ts#detectGameplayTactic"
   ],
   "dead": [
+   "services/methodBeat.ts#methodBeatFor",
    "services/missedTacticService.ts#legacyTacticGeometry"
   ]
  },
@@ -2805,18 +2806,15 @@
    "fn": "methodBeatFor",
    "says": "The habit that finds it next time, earned by a computed signal: opponent-intent (ignored threat), the forcing scan (a check/capture was ther",
    "origin": "map",
-   "learn": "held",
-   "review": "yes",
+   "learn": "no",
+   "review": "no",
    "lesson": "no",
-   "chat": "yes",
-   "tapped": "yes",
-   "tactics": "yes",
-   "app": true,
-   "other": [
-    "kid",
-    "campaign",
-    "playSilent"
-   ]
+   "chat": "no",
+   "tapped": "no",
+   "tactics": "no",
+   "app": false,
+   "other": [],
+   "where": "dead (no production caller)"
   },
   {
    "key": "services/methodSignals.ts#(module)",

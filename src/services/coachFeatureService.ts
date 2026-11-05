@@ -1334,7 +1334,18 @@ const MAIN_LINE_SHARE = 0.15;
 const FORMULA_ONCE: ReadonlySet<string> = new Set<FacetTag>([
   'point', 'judgement', 'delta', 'does', 'opp-target', 'defence-idea', 'trade-idea',
   'their-cost', 'their-read', 'rule', 'nugget', 'loose', 'bluff', 'plan-arc', 'timing',
+  // The kinds filed under `timing` and `rule` until each had its own.
+  'move-order', 'rule-exception', 'false-alarm', 'push-or-hold',
 ]);
+
+/** THE STUDENT-MOVE BUNDLE'S RULES Review says itself: the rule kept or
+ *  broken for a reason and the false alarm (`studentMoveTeaching`, each under
+ *  its own teaching-move kind since 2026-11-05); the bundle's other lanes
+ *  Review says through its own producers. */
+const BUNDLE_RULE_KINDS = ['rule', 'rule-exception', 'false-alarm', 'push-or-hold'] as const satisfies readonly FacetTag[];
+function isBundleRuleKind(kind: string): kind is (typeof BUNDLE_RULE_KINDS)[number] {
+  return (BUNDLE_RULE_KINDS as readonly string[]).includes(kind);
+}
 
 /** The rule a `[rule]` facet states, from its say-once identity (`rule:<line
  *  id>` the first time, `rule-stem:<ply>:<line id>` after). Null for any other
@@ -2278,7 +2289,7 @@ function* reviewSegmentSteps(
           cpAfter: bothCp ? m.evaluation * sign : null,
         });
         for (const h of hints) {
-          if (h.kind !== 'rule') continue;
+          if (!isBundleRuleKind(h.kind)) continue;
           const id = `hint:${h.claims.join('|') || h.lane}`;
           if (hintsSaid.has(id)) continue;
           facets.push(fact(h.computer, h.kind, h.text, { identity: id, squares: h.squares }));

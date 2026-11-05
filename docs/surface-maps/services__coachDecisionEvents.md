@@ -44,7 +44,7 @@
 - `src/test/decisionRows.baseline.test.ts:47`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:355`
+- `src/services/coachDecider.ts:357`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

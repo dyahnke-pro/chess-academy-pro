@@ -54,7 +54,7 @@
 - `src/services/batch2Wiring.test.ts:55`
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
-- `src/services/coachFeatureService.ts:2126`
+- `src/services/coachFeatureService.ts:2137`
 - `src/services/danyaBench.measure.test.ts:395`
 - `src/services/exchangeIdeas.test.ts:252`
 - `src/services/forkTrick.test.ts:62`
@@ -108,7 +108,7 @@
 - `src/test/teach02Wired.test.ts:68`
 
 ### `computeThroughLine` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:6309`
+- `src/services/coachFeatureService.ts:6320`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:210`
 - `src/services/reviewFullData.test.ts:218`

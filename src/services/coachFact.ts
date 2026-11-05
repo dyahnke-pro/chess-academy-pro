@@ -138,6 +138,15 @@ export const FACT_GROUP: Record<CoachFactKind, FactGroup> = {
   'aspect-opens-king': 'move', 'aspect-outpost': 'move', 'aspect-passer': 'move', 'aspect-passer-handed': 'move',
   'aspect-opens-file': 'move', 'aspect-their-weakness': 'move', 'aspect-own-weakness': 'move', 'aspect-own-king-cover': 'move',
   checkmate: 'move', 'board-teacher': 'move', 'deep-fact': 'move', binding: 'move', route: 'move', stop: 'move',
+  // ── the teaching moves' own kinds (2026-11-05), each in the group of the
+  // kind it came from: the reply tree a line played out; the move order "not
+  // yet, first this"; castling the story's plan; the move most players play
+  // and the trap ahead the choices; the false alarm, the exception and
+  // push-or-hold the move (they were Learn's `rule` facts) ──
+  'reply-tree': 'line', 'move-order': 'notYet', castling: 'story', 'common-wrong': 'choices', 'trap-ahead': 'choices',
+  'false-alarm': 'move', 'rule-exception': 'move', 'push-or-hold': 'move',
+  // The habits that are teaching moves of their own close the turn like any habit.
+  'opp-think': 'habit', 'forcing-scan': 'habit',
 };
 
 /** Is this string a kind of the one vocabulary? (A Learn fact carries its

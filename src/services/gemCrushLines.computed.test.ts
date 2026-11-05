@@ -126,11 +126,14 @@ describe('gems live on the opening pages and in Review, never in Learn (gate)', 
     expect(importers).toEqual(expect.arrayContaining(['src/services/reviewFullData.ts', 'src/services/coachFeatureService.ts', 'src/services/boardComputers.ts']));
     expect(importers.filter((p) => !REVIEW_FILES.includes(p) && p !== 'src/services/boardComputers.ts')).toEqual([]);
     // Only Review's facet builder reads the registry row.
-    const callers = [...src].filter(([, c]) => /readBoard(?:All)?\('knownSlip'/.test(c)).map(([p]) => p);
+    // (Two rows since 2026-11-05: the slip played, and the trap ahead.)
+    const callers = [...src].filter(([, c]) => /readBoard(?:All)?\('(?:knownSlip|trapAhead)'/.test(c)).map(([p]) => p);
     expect(callers).toEqual(['src/services/reviewFullData.ts']);
-    // And the registry row answers Learn with a reason, never a wire.
+    // And each registry row answers Learn with a reason, never a wire.
     const { BOARD_COMPUTERS } = await import('./boardComputers');
-    expect('wired' in BOARD_COMPUTERS.knownSlip.surfaces.learn).toBe(false);
-    expect(BOARD_COMPUTERS.knownSlip.surfaces.review).toEqual({ wired: 'services/reviewFullData.ts' });
+    for (const row of [BOARD_COMPUTERS.knownSlip, BOARD_COMPUTERS.trapAhead]) {
+      expect('wired' in row.surfaces.learn).toBe(false);
+      expect(row.surfaces.review).toEqual({ wired: 'services/reviewFullData.ts' });
+    }
   });
 });

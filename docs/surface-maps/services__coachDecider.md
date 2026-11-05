@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**702 lines · 25 exports · 25 importers · 20 tests · 31 audits**
+**708 lines · 25 exports · 25 importers · 20 tests · 31 audits**
 
 ## Locked rules that govern this surface
 
@@ -77,7 +77,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:10134`
 - `src/components/Coach/CoachTeachPage.tsx:12182`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
-- `src/services/coachFeatureService.ts:2927`
+- `src/services/coachFeatureService.ts:2938`
 - `src/services/learnTurnDoor.mission.test.ts:25`
 - `src/services/learnTurnDoor.mission.test.ts:33`
 - `src/services/learnTurnDoor.mission.test.ts:53`
@@ -90,7 +90,7 @@
 - `src/services/learnTurnDoor.test.ts:467`
 - `src/services/learnTurnDoor.test.ts:478`
 - `src/services/os11RootCauses5And6.replay.test.ts:56`
-- `src/services/positionFacts.ts:1371`
+- `src/services/positionFacts.ts:1383`
 - `src/services/puzzleMethod.ts:39`
 
 ### `GREEN_QUIET_BELOW` (const) — 0 call sites
@@ -100,7 +100,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `judgeMoment` (function) — 12 call sites
-- `src/services/positionFacts.ts:896`
+- `src/services/positionFacts.ts:906`
 - `src/test/latentForkOpensTheDoor.test.ts:47`
 - `src/test/latentForkOpensTheDoor.test.ts:51`
 - `src/test/latentForkOpensTheDoor.test.ts:55`
@@ -192,7 +192,7 @@
 - `src/services/teachingLayers.test.ts:120`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1843`
+- `src/services/coachFeatureService.ts:1854`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`
@@ -202,7 +202,7 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:1176`
+- `src/services/positionFacts.ts:1188`
 
 ### `habitForCluster` (function) — 16 call sites
 - `src/services/habitJoin.test.ts:17`
@@ -237,7 +237,7 @@
 - `src/components/Coach/CoachGameReview.tsx:1940`
 - `src/components/Coach/CoachTeachPage.tsx:8940`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:3116`
+- `src/services/coachFeatureService.ts:3127`
 - `src/services/coachSurfaceScorecard.report.test.ts:113`
 - `src/services/coachSurfaceScorecard.report.test.ts:135`
 - `src/services/computedVoiceAudit.report.test.ts:310`
@@ -365,7 +365,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:12054`
 - `src/components/Coach/CoachTeachPage.tsx:12252`
 - `src/services/claimKeysLooseCount.test.ts:34`
-- `src/services/coachFeatureService.ts:3117`
+- `src/services/coachFeatureService.ts:3128`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/learnTurnDoor.phaseWave.test.ts:134`
 - `src/services/learnTurnDoor.test.ts:650`
@@ -432,7 +432,7 @@
 - `src/services/looseStill.test.ts:61`
 - `src/services/looseStill.test.ts:68`
 - `src/services/looseStill.test.ts:70`
-- `src/services/positionFacts.ts:1746`
+- `src/services/positionFacts.ts:1760`
 
 ### `nextLooseSpells` (re-export) — 7 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9106`
@@ -475,7 +475,7 @@
 - `src/services/looseStill.test.ts:70`
 - `src/services/misconceptionService.ts:105`
 - `src/services/moveThoughtFacts.ts:490`
-- `src/services/positionFacts.ts:1746`
+- `src/services/positionFacts.ts:1760`
 - `src/services/threatProof.ts:130`
 - `src/utils/plyOfFen.ts:3`
 

@@ -123,6 +123,23 @@ function pick(variants: readonly string[], v: number): string {
  * general "slow down here", because it is specific.
  */
 export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | null {
+  return methodBeatRead(s, plyForVariety)?.text ?? null;
+}
+
+/** THE KIND OF FACT EACH HABIT IS (2026-11-05, `teachingMoves.ts`): the habit
+ *  that asks what THEIR move is doing puts the student in the opponent's
+ *  shoes; the forcing scan is checks, captures and threats first; every other
+ *  habit is a method. One table for the retrospective and the live habits, so
+ *  a new habit fails to compile until it says which kind it is. */
+export const HABIT_KIND: Record<MethodHabit | LiveHabit, 'method' | 'opp-think' | 'forcing-scan'> = {
+  'opponent-threat': 'opp-think',
+  'forcing-scan': 'forcing-scan',
+  'slow-down': 'method', candidates: 'method', 'what-it-guarded': 'method', 'blunder-check': 'method',
+  'loose-trigger': 'method', 'look-again': 'method', 'calc-now': 'method', 'mark-line': 'method',
+};
+
+/** The method beat with the habit it teaches (its kind is `HABIT_KIND`). */
+export function methodBeatRead(s: MethodSignals, plyForVariety = 0): { habit: MethodHabit; text: string } | null {
   if (!s.isStudentMove) return null; // you teach the method to the player
   // SAY-ONCE per habit per game. A habit is a routine, not a running total —
   // hearing "ask what THEY want" on every slip is nagging, and nagging is how a
@@ -130,11 +147,11 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
   // beat stays quiet and the board facts carry the ply.
   const said = s.saidHabits;
   const need = s.habitNeed ?? {};
-  const claim = (h: MethodHabit, text: string): string | null => {
+  const claim = (h: MethodHabit, text: string): { habit: MethodHabit; text: string } | null => {
     if (s.coveredHabits?.has(h)) { said?.add(h); return null; }
     if (said?.has(h)) return null;
     said?.add(h);
-    return text;
+    return { habit: h, text };
   };
 
   // EVERY HABIT HONOURS THE STUDENT'S OWN STANDING (B11, 2026-09-22). A habit
@@ -319,7 +336,7 @@ interface LiveMethodSignals {
  *  the stems rotate, so a text dedupe never matched. Keyed on the HABIT. */
 export type LiveHabit = 'opponent-threat' | 'forcing-scan' | 'loose-trigger' | 'candidates' | 'look-again' | 'calc-now' | 'mark-line';
 /** `proof` rides on the habits whose earning fact is a line (batch 2). */
-interface LiveMethodBeat { text: string; key: string; proof?: Proof }
+interface LiveMethodBeat { text: string; key: string; habit: LiveHabit; proof?: Proof }
 /** EVERY HABIT HAS ONE ID (WO-STORY-MATRIX-01 P1-9): the live habits, and the
  *  two the slip question asks after a move. The slip question asked "what did
  *  their last move attack?" under its own `answer-danger` key while the live
@@ -441,7 +458,7 @@ function bestIsMate(bestSan: string | null): boolean { return (bestSan ?? '').en
 function cap(x: string): string { return openSentence(x); }
 
 function beat(habit: LiveHabit, stems: string[], ply: number): LiveMethodBeat {
-  return { text: pick(stems, ply), key: liveHabitKey(habit) };
+  return { text: pick(stems, ply), key: liveHabitKey(habit), habit };
 }
 
 /** Text-only form (no say-once) — kept for callers that do not carry a set. */
