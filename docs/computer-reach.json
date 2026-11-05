@@ -1,8 +1,8 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.",
  "graph": {
-  "files": 1747,
-  "nodes": 16247
+  "files": 1754,
+  "nodes": 16356
  },
  "totals": {
   "computers": 347,
@@ -14,16 +14,16 @@
   "surfaces": {
    "learn": {
     "yes": 31,
-    "held": 219,
-    "no": 97
+    "held": 220,
+    "no": 96
    },
    "review": {
     "yes": 235,
     "no": 112
    },
    "lesson": {
-    "yes": 141,
-    "no": 206
+    "yes": 142,
+    "no": 205
    },
    "chat": {
     "yes": 202,
@@ -3010,15 +3010,17 @@
    "fn": "(module)",
    "says": "moveContrast — \"the f-rook, not the a-rook: a8 stays home to guard a7\" (WO-LAYERS-01 step 6). // Between two good moves a strong coach does",
    "origin": "extra",
-   "learn": "no",
+   "learn": "held",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "no",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
-    "playSilent"
+    "openingsPage",
+    "playSilent",
+    "endgame"
    ]
   },
   {
