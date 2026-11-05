@@ -22,7 +22,7 @@ mkdirSync(OUT, { recursive: true });
 const LONG = 25;
 
 const only = process.argv.slice(2);
-const files = readdirSync(IN).filter((f) => f.endsWith('.json') && !f.startsWith('_') && (only.length === 0 || only.includes(f.replace(/\.json$/, ''))));
+const files = readdirSync(IN).filter((f) => f.endsWith('.json') && f !== '_report.json' && (only.length === 0 || only.includes(f.replace(/\.json$/, ''))));
 
 const SYSTEM = `Each numbered passage is a stretch of a grandmaster's live-stream speech while he plays chess (automatic transcript, often unpunctuated). Some passages carry banter mixed into the chess.
 For each passage, copy out EXACTLY, word for word, every phrase that is banter: greetings and sign-offs, who the opponent is (name, rating, reputation), chat and viewers (thanks, subs, primes, donations, names of viewers being thanked, answering chat about things other than the position), tournament standings, stream logistics, jokes or personal talk unrelated to the position.
