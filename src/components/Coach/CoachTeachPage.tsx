@@ -319,6 +319,7 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseClaims, conceptInstanceKey, convertKey } from '../../services/positionFacts';
 import { gradePlayedMove, liveMovePrice, priceLabel, studentMovePrice, uciOfSan, type MovePrice, type PriceSearch } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
+import { everyMoveReadAt } from '../../services/humanReply';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK, upcomingTacticSquares } from '../../services/liveTacticsContext';
 import { buildCausalChain, causalChainHighlights, causalChainKey } from '../../services/causalChain';
@@ -10068,6 +10069,26 @@ export function CoachTeachPage({ mode }: {
           : { namesStudentMove: f.namesStudentMove, lane: lane[id], computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof })));
       } catch { return []; }
     })();
+    // THE REPLY TREE (ifTheyPlay, his "if Black takes on e5, you take back with
+    // the knight"): the replies the coach was likely to play at its level, and
+    // the answer each one met, from the coach's own read of every reply on the
+    // board after the student's move (`everyMoveReadAt` — no second search).
+    // Their reply came: the branches it did not take are said in the past; the
+    // strong answer to the one that came is the student's to find, held in a
+    // form that names no move (LEARN NAMES NO MOVE UNASKED).
+    const ifTheyPlayFacts = ((): Array<{ namesStudentMove: boolean; lane: 'ifTheyPlay'; computer: CoachFact['computer']; text: string; fen: string; squares: readonly string[]; claims: readonly string[]; proof: CoachFact['proof'] }> => {
+      const read = everyMoveReadAt(args.fenBeforeReply);
+      const h = args.historyAfterReply;
+      if (!read || h.length < 1) return [];
+      try {
+        const m = new Chess(args.fenBeforeReply).move(h[h.length - 1]);
+        const played = m ? `${m.from}${m.to}${m.promotion ?? ''}` : null;
+        return readBoardAll('ifTheyPlay', { fen: args.fenBeforeReply, replies: read.scored, rating: read.rating, student: studentCC, seconds: [], played, tense: 'past', liveBoard: args.fenAfterReply })
+          .map((f) => (f.namesStudentMove && f.heldForm
+            ? { namesStudentMove: false, lane: 'ifTheyPlay' as const, computer: f.computer, text: f.heldForm.text, fen: f.fen, squares: f.heldForm.squares, claims: f.claims, proof: f.heldForm.proof }
+            : { namesStudentMove: f.namesStudentMove, lane: 'ifTheyPlay' as const, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof }));
+      } catch { return []; }
+    })();
     const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, slipCp: args.slipCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [
       ...(tacticLine ? [{ lane: 'tactic' as const, computer: tacticComputer, namesStudentMove: namesPlayableStudentMove(tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE), text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim || tacticLoose.length ? [...(tacticClaim ? [tacticClaim] : []), ...tacticLoose] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ namesStudentMove: namesPlayableStudentMove(threatNames), lane: 'threat' as const, computer: threatComputer, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), claims: [...new Set([...(threatClaim ? [threatClaim] : []), ...threatClaims, ...(threatCostRead?.claims ?? [])])], stakes: threatCostRead?.stakes ?? undefined, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
@@ -10075,6 +10096,7 @@ export function CoachTeachPage({ mode }: {
       ...(lastHereRead ? [{ namesStudentMove: false, computer: lastHereRead.computer, lane: readKey(lastHereRead).startsWith('last-here:same:') ? 'sameAsLastTime' as const : 'lastTimeHere' as const, text: lastHereRead.text, fen: lastHereRead.fen, claims: lastHereRead.claims, proof: lastHereRead.proof }] : []),
       ...(bookMoveRead ? [{ namesStudentMove: false, lane: 'bookMove' as const, computer: bookMoveRead.computer, text: bookMoveRead.text, fen: bookMoveRead.fen, squares: bookMoveRead.squares, claims: bookMoveRead.claims, role: bookMoveRead.role, proof: bookMoveRead.proof, ...(bookMoveRead.skill ? { skill: bookMoveRead.skill } : {}) }] : []),
       ...kingWalkFacts,
+      ...ifTheyPlayFacts,
       ...(announceLine ? [{ namesStudentMove: false, lane: 'opening' as const, computer: 'openingAnnouncementForGame' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),
       // Rate-matched Danya behavior — board-truth. MERGED with the positional
       // read into ONE board-read lane (David 2026-09-13: "computer and observation

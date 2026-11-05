@@ -24,7 +24,7 @@ import { readZugzwang, zugzwangProof, zugzwangSentence, type ZugzwangRead } from
 import { phaseTurnsOf } from './phaseTransitionDetector';
 import { detectImmediateTactics } from './liveTacticsContext';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
-import { plyFactsClause, moveOnlyRestates, computePvLine, pvDepthForRating, afterCapture, NO_PREV_CAPTURE, tacticWord, type PvLine, type PvEngine, type PrevCaptureContext } from './pvPlayback';
+import { plyFactsClause, moveOnlyRestates, computePvLine, pvDepthForRating, afterCapture, NO_PREV_CAPTURE, tacticWord, type PvLine, type PvEngine, type PrevCaptureContext, type MoveScorer } from './pvPlayback';
 import { countWord, lineSeatAt, lineShape, withArticle } from '../utils/andList';
 import { BRIEFING_LINE_PLIES, buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { moveThoughtFacts } from './moveThoughtFacts';
@@ -66,6 +66,7 @@ import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
 import { readBoard, readBoardAll, readKey } from './boardComputers';
+import { replyReadsFromFan, type ReplyRead } from './ifTheyPlay';
 import { stripThink } from '../utils/thinkPause';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
@@ -1248,6 +1249,14 @@ const REVIEW_INTRO_VOICE_TIMEOUT_MS = 18000;
 // 20s sibling constant was deleted with the capped scope it belonged to; do not
 // reintroduce a second, tighter deadline as a back-door cap.
 const REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED = 75000;
+/** The reply tree's reads (`ifTheyPlay`): the depth (the human model was fitted
+ *  on depth-10 reads), the first ply read, the eval past which a board is
+ *  decided and no branch is worth saying, and how long into the augment the
+ *  walk waits for them (the reads are scheduled last on the pool). */
+const REPLY_TREE_DEPTH = 10;
+const REPLY_TREE_FIRST_PLY = 4;
+const REPLY_TREE_DECIDED_CP = 400;
+const REPLY_TREE_WAIT_MS = 30000;
 /** When each singleton-chain composer stops WAITING (ms from the start of the
  *  projection passes) and reads what has landed. The chain runs one 7s search
  *  at a time; on a long game it used to hold the deep-threat passes behind it
@@ -4747,6 +4756,31 @@ async function augmentWithProjections(
         : null);
     });
   });
+  // THE REPLY TREE'S READS (`ifTheyPlay`, his "if Black takes on e5 you take
+  // back with the knight"): every legal reply on the board after each move,
+  // both seats, ONE read a board on the pooled lanes — scheduled LAST, so
+  // every other pass reads first. A board the pool never reached has no tree;
+  // a decided board has none worth saying. No pool, no tree (the singleton is
+  // never loaded with it).
+  const treeReads = new Map<ReviewMoveSegment, ReplyRead[]>();
+  const treeDone = segments.map(() => deferred<true>());
+  segments.forEach((s, i) => {
+    let ucis: string[] = [];
+    try { ucis = new Chess(s.fenAfter).moves({ verbose: true }).map((m) => `${m.from}${m.to}${m.promotion ?? ''}`); } catch { ucis = []; }
+    // Only a ply the walk narrates gets a tree (a silent ply stays silent), so
+    // only those are read.
+    if (!s.narration || s.ply < REPLY_TREE_FIRST_PLY || ucis.length < 2 || s.evalAfter === null || Math.abs(s.evalAfter) >= REPLY_TREE_DECIDED_CP) {
+      treeDone[i].resolve(true);
+      return;
+    }
+    poolTasks.push(async (engine) => {
+      try {
+        if (!engine || !('scoreMoves' in engine)) return;
+        const fan = await raceTimeout((engine as PvEngine & MoveScorer).scoreMoves(s.fenAfter, ucis, REPLY_TREE_DEPTH), PROJ_TIMEOUT_MS, null).catch(() => null);
+        if (fan?.length) treeReads.set(s, replyReadsFromFan(s.fenAfter, fan));
+      } finally { treeDone[i].resolve(true); }
+    });
+  });
   const poolLine = (fen: string, maxPlies: number): Promise<PvLine | null> =>
     poolDone.get(poolKey(fen, maxPlies))?.promise ?? Promise.resolve(null);
   // A pool that cannot be had degrades to the singleton exactly as before:
@@ -4777,6 +4811,7 @@ async function augmentWithProjections(
       for (const d of badPieceResults) d.resolve(null);
       for (const d of sacLedgers) d.resolve(null);
       for (const d of deepDone) d.resolve(true);
+      for (const d of treeDone) d.resolve(true);
     }
   })();
 
@@ -4938,6 +4973,39 @@ async function augmentWithProjections(
     }
   }
   mark('punish');
+  // THE REPLY TREE (`ifTheyPlay`, his "if Black plays Qe7, you play d4,
+  // cementing the knight"), through the one registry: on a move the walk
+  // narrates, the replies a player at this level was likely to play and the
+  // engine's best, each with the answer its own line proves. The game went on
+  // with one reply — the next ply says that one — so the others are said in
+  // the past. A silent ply stays silent: the need gate decided it.
+  {
+    await raceTimeout(Promise.all(treeDone.map((d) => d.promise)), Math.max(0, augStart + REPLY_TREE_WAIT_MS - Date.now()), undefined);
+    segments.forEach((s, k) => {
+      const replies = treeReads.get(s);
+      if (!replies || !s.narration) return;
+      const next = segments[k + 1];
+      let played: string | null = null;
+      try { const m = next ? new Chess(s.fenAfter).move(next.san) : null; played = m ? `${m.from}${m.to}${m.promotion ?? ''}` : null; } catch { played = null; }
+      const f = readBoardAll('ifTheyPlay', {
+        fen: s.fenAfter, replies, rating, student: studentColorWB,
+        seconds: [s.recordReplyLine ?? null, s.recordReplyEarlier ?? null], played, tense: 'past', liveBoard: null,
+      })[0];
+      if (!f) return;
+      s.narration = `${s.narration} ${f.text}`.trim();
+      // The first branch's line on the board, when no other line was drawn.
+      const line = f.lines?.[0];
+      if (line && !s.spokenLineArrows?.length) {
+        try {
+          const c = new Chess(line.fen);
+          const arrows: Array<{ uci: string; fenBefore: string; fenAfter: string }> = [];
+          for (const san of line.sans) { const fenBefore = c.fen(); const m = c.move(san); arrows.push({ uci: `${m.from}${m.to}${m.promotion ?? ''}`, fenBefore, fenAfter: c.fen() }); }
+          if (arrows.length) s.spokenLineArrows = arrows;
+        } catch { /* a line that does not play draws nothing */ }
+      }
+    });
+  }
+  mark('ifTheyPlay');
   // #4 — THE BETTER-LINE WHY (David 2026-07-21, IMG_4577: "Need to know why
   // Bf2 was better. The better lines need the why narrations. A deeper
   // understanding is critical."). On the student's flagged moves that name a

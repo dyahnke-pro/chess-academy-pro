@@ -71,6 +71,8 @@ import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { loadStudentNeedContext } from './studentNeedLoader';
 import { coldStudent } from './needScore';
 import { getPlayerRating } from './playerRatingService';
+import { scoreEveryMove } from './humanReply';
+import type { ReplyRead } from './ifTheyPlay';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { selectTeaching, summarizeTeaching, renderThesis, pliesFromSans, type SelectorPly } from './teachingSelector';
 import { loadOpeningIdentity, openingIdentityLine, planFor } from './openingIdentity';
@@ -1915,11 +1917,26 @@ async function generateOpeningFromDbNarration(
       passByPly.push(analysis?.topLines?.length ? analysis.topLines : null);
     } catch { passByPly.push(null); }
   }
+  // EVERY LEGAL REPLY, ONE READ A BOARD (the reply tree, `ifTheyPlay`: his "if
+  // Black plays Qe7, you play d4"): the board after each spine move, every
+  // legal reply scored with its line, read at the student's rating — the
+  // replies a player at their level plays are the human model's, not the
+  // engine's top three (75% of the replies he names are outside them). The
+  // same read the coach's own move is chosen from (`scoreEveryMove`).
+  const treeRating = await getPlayerRating().catch(() => DEFAULT_STUDENT_RATING);
+  const everyByPly: Array<readonly ReplyRead[] | null> = [];
+  for (let i = 0; i < positions.length; i += 1) {
+    try {
+      const scored = await stockfishEngine.holdForQuestion((engine) => scoreEveryMove(engine, positions[i].fen, 1200));
+      everyByPly.push(scored && scored.length ? scored : null);
+    } catch { everyByPly.push(null); }
+  }
   const readsAt = (i: number): IntentReads | null => {
     const before = fanByPly[i] ?? null;
     const after = fanByPly[i + 1] ?? null;
+    const every = everyByPly[i] ?? null;
     return before || after
-      ? { before: before ?? [], after: after ?? [], passBefore: passByPly[i] ?? [], passAfter: passByPly[i + 1] ?? [], followFirst: followFirstByPly[i] ?? null }
+      ? { before: before ?? [], after: after ?? [], passBefore: passByPly[i] ?? [], passAfter: passByPly[i + 1] ?? [], followFirst: followFirstByPly[i] ?? null, ...(every ? { everyAfter: { replies: every, rating: treeRating } } : {}) }
       : null;
   };
   const costAt = (i: number): number | null => {

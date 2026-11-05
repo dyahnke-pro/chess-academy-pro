@@ -393,6 +393,21 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       facts.push({ ...fact, namesStudentMove: false, source: 'kingWalk', idea, weight: 60 });
     }
   }
+  // THE REPLY TREE (his "if Black plays Qe7, you play d4, cementing the
+  // knight"), through the one registry: the replies likely at this level and
+  // the engine's best, each with the answer its own line proves, off the
+  // lesson's read of every reply. The line's own next move is the line itself,
+  // so its branch is not said again. A lesson shows its line: every move named.
+  const every = i.reads?.everyAfter;
+  if (i.moverIsStudent !== undefined && every && every.replies.length) {
+    const student = mine ? sideOf(i.fenBefore) : sideOf(fenAfter);
+    let next: string | null = null;
+    try { const m = i.line?.[0] ? new Chess(fenAfter).move(i.line[0]) : null; next = m ? `${m.from}${m.to}${m.promotion ?? ''}` : null; } catch { next = null; }
+    for (const f of readBoardAll('ifTheyPlay', { fen: fenAfter, replies: every.replies, rating: every.rating, student, seconds: (i.reads?.after ?? []).map((l) => l.moves), played: next, tense: 'live', liveBoard: null })) {
+      const { heldForm: _held, ...fact } = f;
+      facts.push({ ...fact, namesStudentMove: false, source: 'ifTheyPlay', idea: fact.stakes && 'mate' in fact.stakes && fact.stakes.mate ? 'mate' : 'choice', weight: 60 });
+    }
+  }
   return withDecisionGap(facts, i, from, to, seat);
 }
 

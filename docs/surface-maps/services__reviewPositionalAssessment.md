@@ -29,12 +29,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `verdictBand` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:1066`
+- `src/services/coachFeatureService.ts:1067`
 - `src/services/exchangeLedger.test.ts:99`
 - `src/services/exchangeLedger.test.ts:101`
 
 ### `assessPositionalEdge` (function) — 29 call sites
-- `src/services/coachFeatureService.ts:3734`
+- `src/services/coachFeatureService.ts:3743`
 - `src/services/exchangeLedger.test.ts:68`
 - `src/services/exchangeLedger.test.ts:69`
 - `src/services/exchangeLedger.test.ts:76`

@@ -4,24 +4,26 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**121 lines · 10 exports · 4 importers · 2 tests · 0 audits**
+**150 lines · 13 exports · 6 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:344) — names `RatedMove`, `humanReply`
-- **The standard post-deploy ritual** (CLAUDE.md:6657) — names `humanReply`
+- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:431) — names `RatedMove`, `humanReply`
+- **The standard post-deploy ritual** (CLAUDE.md:6786) — names `humanReply`
 
 ## Who calls in
 
-- `src/components/Coach/CoachGamePage.tsx`
+- `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/coachGameEngine.ts`
 - `src/services/coachPlaySession.ts`
+- `src/services/humanReply.everyMove.test.ts`
 - `src/services/humanReply.test.ts`
+- `src/services/openingGenerator.ts`
 
 ## Exports and every call site
 
 ### `humanReadBudget` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:2428`
+- `src/services/coachPlaySession.ts:186`
 
 ### `foldScore` (function) — 2 call sites
 - `src/services/humanReply.test.ts:28`
@@ -30,15 +32,29 @@
 ### `HeldEngine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `scoreEveryMove` (function) — 2 call sites
+### `scoreEveryMove` (function) — 3 call sites
 - `src/services/humanReply.test.ts:22`
 - `src/services/humanReply.test.ts:35`
+- `src/services/openingGenerator.ts:1930`
 
 ### `HumanReply` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `humanReply` (function) — 2 call sites
-- `src/services/coachGameEngine.ts:1288`
+### `EveryMoveRead` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `keepEveryMoveRead` (function) — 1 call site
+- `src/services/humanReply.everyMove.test.ts:39`
+
+### `everyMoveReadAt` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10061`
+- `src/services/humanReply.everyMove.test.ts:30`
+- `src/services/humanReply.everyMove.test.ts:40`
+- `src/services/humanReply.everyMove.test.ts:41`
+
+### `humanReply` (function) — 3 call sites
+- `src/services/coachGameEngine.ts:1170`
+- `src/services/humanReply.everyMove.test.ts:28`
 - `src/test/oneRatedMoveDoor.gate.test.ts:76`
 
 ### `HUMAN_TOP_RATING` (const) — 0 call sites
@@ -50,13 +66,14 @@
 ### `RatedMove` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `ratedMove` (function) — 3 call sites
-- `src/components/Coach/CoachGamePage.tsx:2427`
-- `src/services/coachPlaySession.ts:236`
+### `ratedMove` (function) — 2 call sites
+- `src/services/coachPlaySession.ts:190`
 - `src/services/humanReply.test.ts:47`
 
 ## Tests
 
+- `src/services/coachTurnTruth.test.ts`
+- `src/services/humanReply.everyMove.test.ts`
 - `src/services/humanReply.test.ts`
 - `src/test/oneRatedMoveDoor.gate.test.ts`
 

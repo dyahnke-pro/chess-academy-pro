@@ -113,7 +113,7 @@ STEP_ORDER = {'danger': 0, 'name': 1, 'yours': 2, 'theirs': 3, 'choices': 4, 'no
 SOURCE_RANK = {'moveWhy': 1, 'briefing': 2, 'fundamental': 3, 'boardTeacher': 4, 'moveJob': 5, 'refuted': 7, 'alternatives': 8,
                'prophylaxis': 10, 'notYet': 9, 'deepFact': 11, 'binding': 12, 'pieceRoute': 13, 'bestLine': 14,
                'counterThreat': 15, 'theirAim': 16, 'planChoice': 17, 'moveOrder': 18, 'structureLines': 19,
-               'purpose': 20, 'studentMove': 21, 'kingWalk': 22}
+               'purpose': 20, 'studentMove': 21, 'kingWalk': 22, 'ifTheyPlay': 23}
 MOVE_STEPS = {'yours', 'theirs'}
 TARGETED = {'break', 'attack', 'defend', 'pin', 'fork', 'skewer', 'discovered', 'capture', 'prevent', 'outpost', 'file', 'diagonal', 'weakness'}
 

@@ -54,6 +54,8 @@ import { packageForRegister } from './hintRegister';
 import { FUNDAMENTAL_TAG } from './principleAttribution';
 import { castleByHandMove, kingFromCentre, keptHome, kingSquares } from './kingWalk';
 import { knownSlip, type KnownSlipContext } from './knownSlips';
+import { ifTheyPlay, treeSentence, sayable, type ReplyRead, type ReplyBranch, type TreeTense } from './ifTheyPlay';
+import { mateStakes } from './factStakes';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -165,6 +167,16 @@ export interface BoardContexts {
    *  David 2026-11-04): said on the move that played it, or on the move that
    *  reached its board when the game went another way. */
   knownSlip: KnownSlipContext;
+  /** THE REPLY TREE after a move (`fen`: the board after it, the replier to
+   *  move): the replies likely at `rating` (the human model) and the engine's
+   *  best, each with the mover's answer from ONE read of every legal reply
+   *  (`replies`; null: no such read here, nothing said). `seconds`: other
+   *  reads of `fen`. `played`: the reply the line goes on with (uci) — its
+   *  branch is the line itself. `tense`: before the reply (a lesson's line)
+   *  or after the game went on. REQUIRED `liveBoard`: the board the student
+   *  moves on now (Learn), where an answer they could play is held in a form
+   *  that names no move; null on a surface with no live board. */
+  ifTheyPlay: { fen: string; replies: readonly ReplyRead[] | null; rating: number; student: Color; seconds: ReadonlyArray<readonly string[] | null>; played: string | null; tense: TreeTense; liveBoard: string | null };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -660,6 +672,73 @@ export const BOARD_COMPUTERS = {
       chat: { not: 'the chat\'s trap lane points at the opening\'s page and names no gem (gemCrushLines gate)' },
       tactics: { not: 'a puzzle poses one tactic; a known slip is about a game move at a board the index holds' },
       weaknesses: { not: 'the slip played is graded as the move\'s own cost and filed by the record\'s writers; the index adds no skill of its own' },
+    },
+  },
+  ifTheyPlay: {
+    // His "if Black plays Qe7, you play d4, cementing the knight" · "if Black
+    // takes on e5 you take back with the knight" · "if Black takes, e5 wins
+    // the pinned knight". The replies are the ones a player at this level
+    // plays (the human model), the answers the read's own line, said only
+    // where the line proves them (`lineTrust`).
+    read: (c, fact) => safe(() => {
+      if (!c.replies || c.replies.length === 0) return null;
+      const t = ifTheyPlay({ fen: c.fen, replies: c.replies, rating: c.rating, student: c.student, seconds: c.seconds, played: c.played });
+      if (!t || t.branches.length === 0) return null;
+      const moverIsStudent = t.replier !== c.student;
+      const seat: FactSeat = moverIsStudent ? 'student' : 'opponent';
+      const first = lineSeatAt(c.fen, c.student);
+      // An answer the student could play on the board in front of them names
+      // their move (LEARN NAMES NO MOVE UNASKED).
+      const playable = (b: ReplyBranch): boolean => !!c.liveBoard && moverIsStudent
+        && namesPlayableStudentMove(namesMoves(c.student, c.liveBoard, namedSan(c.liveBoard, b.answer.san)));
+      const stakesOfBranches = (bs: readonly ReplyBranch[]): FactStakes | null => {
+        const m = bs.find((b) => b.kind === 'mate');
+        if (m) return mateStakes(moverIsStudent ? 'you' : 'them', m.blowPlies + 1, true);
+        const w = bs.filter((b) => b.kind === 'wins' && (b.winPawns ?? 0) > 0).sort((a, b) => (b.winPawns ?? 0) - (a.winPawns ?? 0))[0];
+        return w ? { points: w.winPawns ?? 0, plies: w.blowPlies + 1 } : null;
+      };
+      const out: CoachFact[] = [];
+      const said = t.branches.filter((b) => !b.played && !playable(b) && sayable(t, b, c.student, c.tense));
+      const text = treeSentence(t, said, c.student, c.tense);
+      if (text && said.length) {
+        const key = `reply-tree:${said.map((b) => `${b.reply.uci}>${b.answer.uci}`).join(',')}`;
+        out.push(fact({
+          key, claims: [key, ...said.map((b) => `reply-tree:${b.reply.uci}`)], text,
+          proof: legalLineProof(c.fen, said[0].uci, first) ?? NO_PROOF.description,
+          squares: [...new Set(said.flatMap((b) => [b.reply.to, b.answer.to]))], stakes: stakesOfBranches(said),
+          seat, namesStudentMove: false, thread: LOCAL_THREAD, fen: c.fen,
+          lines: said.map((b) => ({ fen: c.fen, sans: b.sans })),
+        }));
+      }
+      // THE REPLY THAT CAME, ON A LIVE BOARD: the student's strong answer is
+      // their next move to find — said without the move or its square.
+      const came = t.branches.find((b) => b.played && b.trust.name && (b.kind === 'wins' || b.kind === 'mate') && playable(b));
+      if (came) {
+        const live = treeSentence(t, [{ ...came, played: false }], c.student, 'live');
+        const key = `reply-tree:came:${came.reply.uci}>${came.answer.uci}`;
+        const heldText = came.reply.capture ? 'They took — and you have a strong answer here.' : 'After their move you have a strong answer here.';
+        if (live) {
+          out.push(fact({
+            key, claims: [key], text: live, proof: legalLineProof(c.fen, came.uci, first) ?? NO_PROOF.description,
+            squares: [came.reply.to, came.answer.to], stakes: stakesOfBranches([came]),
+            seat, namesStudentMove: true, thread: LOCAL_THREAD, fen: c.fen,
+            heldForm: { text: heldText, proof: NO_PROOF.withheld, squares: [came.reply.to] },
+          }));
+        }
+      }
+      return out.length ? out : null;
+    }),
+    computer: 'ifTheyPlay',
+    kind: 'line',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' },
+      learn: LEARN,
+      review: { wired: 'services/coachFeatureService.ts' },
+      play: PLAY_ASK,
+      chat: CHAT_OWED,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a tree of replies is said beside the move it follows; the answer, when the reply comes, is graded as the mover\'s own next move' },
     },
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };
