@@ -158,7 +158,9 @@ export type LearnLane =
   | 'kingSquares'
   | 'kingWalk'
   | 'keptHome'
-  | 'kingRule';
+  | 'kingRule'
+  // ── the reply tree (ifTheyPlay, his "if they X, you play Y") ──
+  | 'ifTheyPlay';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
@@ -219,6 +221,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   breakRace: 'affirm', kickMap: 'point', patternFails: 'refute',
   lastTimeHere: 'affirm', sameAsLastTime: 'but',
   kingSquares: 'affirm', keptHome: 'affirm', kingWalk: 'point', kingRule: 'point',
+  ifTheyPlay: 'point',
 };
 
 
@@ -321,6 +324,7 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   captureChoice: 'any', kickMap: 'any', breakRace: 'any', patternFails: 'any', structureJudgement: 'any',
   kingSquares: phaseOfComputer(BOARD_COMPUTERS.kingSquares.phase), kingWalk: phaseOfComputer(BOARD_COMPUTERS.castleByHand.phase),
   keptHome: phaseOfComputer(BOARD_COMPUTERS.keptHome.phase), kingRule: phaseOfComputer(BOARD_COMPUTERS.kingFromCentre.phase),
+  ifTheyPlay: phaseOfComputer(BOARD_COMPUTERS.ifTheyPlay.phase),
 };
 
 /** Is this lane's fact out of place on this board? */
@@ -335,6 +339,8 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   kingWalk: { factKind: BOARD_COMPUTERS.castleByHand.kind, kind: 'plan', why: 'a king that lost castling walked to safety by hand: the plan, the square cleared for it, each step, the walk done', lead: 66 },
   keptHome: { factKind: BOARD_COMPUTERS.keptHome.kind, kind: 'computed', why: 'a bishop left home on purpose while the king walks: it blocks the check they can give', lead: 62 },
   kingRule: { factKind: BOARD_COMPUTERS.kingFromCentre.kind, kind: 'computed', why: 'the rule of thumb on a king walked out of the centre: further from the centre is safer', lead: 45 },
+  // ── the reply tree (ifTheyPlay, his "if they X, you play Y") ──
+  ifTheyPlay: { factKind: BOARD_COMPUTERS.ifTheyPlay.kind, kind: 'computed', why: 'the replies they were likely to play at this level and the answer each one met, proven by its own line', lead: 58 },
   // ── batch 1 (opening equivalence, order and timing) ──
   // The named opening this board is with moves thrown in or the colours
   // reversed — rides with the name, said once a game.

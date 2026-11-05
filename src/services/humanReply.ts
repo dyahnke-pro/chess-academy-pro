@@ -77,12 +77,41 @@ export interface HumanReply extends HumanPick {
   source: 'human';
 }
 
+/** THE LAST READS OF EVERY MOVE — the reply tree's input on Learn (`ifTheyPlay`).
+ *  The read that chose the opponent's reply scored every reply it had on the
+ *  board after the student's move, each with its line: exactly what the tree
+ *  walks ("if they take on e5, you take back with the knight"). Kept for the
+ *  few boards just read, keyed by the board (no move clocks), with the rating
+ *  the reply was chosen at — so the tree reads the SAME read, never a second
+ *  search. */
+export interface EveryMoveRead {
+  rating: number;
+  scored: ReadonlyArray<ScoredMove & { mate: number | null; pv: string[] }>;
+}
+const EVERY_MOVE_READS = new Map<string, EveryMoveRead>();
+const EVERY_MOVE_KEEP = 4;
+const boardKey = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
+export function keepEveryMoveRead(fen: string, read: EveryMoveRead): void {
+  EVERY_MOVE_READS.delete(boardKey(fen));
+  EVERY_MOVE_READS.set(boardKey(fen), read);
+  while (EVERY_MOVE_READS.size > EVERY_MOVE_KEEP) {
+    const oldest = EVERY_MOVE_READS.keys().next().value;
+    if (oldest === undefined) break;
+    EVERY_MOVE_READS.delete(oldest);
+  }
+}
+/** The read of every move made on this board, or null when none was. */
+export function everyMoveReadAt(fen: string): EveryMoveRead | null {
+  return EVERY_MOVE_READS.get(boardKey(fen)) ?? null;
+}
+
 /** The human move for this board at `targetElo`, or null when the engine
  *  could not score the moves (the caller falls back to its capped search). */
 export async function humanReply(fen: string, targetElo: number, budgetMs: number = humanReadBudget()): Promise<HumanReply | null> {
   if (targetElo > HUMAN_TOP_RATING) return null;
   const scored = await stockfishEngine.holdForQuestion((engine) => scoreEveryMove(engine, fen, budgetMs)).catch(() => null);
   if (!scored || scored.length === 0) return null;
+  keepEveryMoveRead(fen, { rating: targetElo, scored });
   const pick = pickHumanMove(fen, scored, targetElo);
   return pick ? { ...pick, source: 'human' } : null;
 }

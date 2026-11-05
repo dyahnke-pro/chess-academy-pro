@@ -393,6 +393,7 @@ export const COMPUTER_CATALOG = {
   kingFromCentre: { file: 'services/kingWalk.ts', says: 'the rule of thumb on a king walked out of the centre: further from the centre is safer' },
   keptHome: { file: 'services/kingWalk.ts', says: 'a bishop left at home on purpose while the king walks: it blocks the check they can give' },
   kingSquares: { file: 'services/kingWalk.ts', says: 'in check with only king moves: the squares that walk into a forced mate, and the square chosen' },
+  ifTheyPlay: { file: 'services/ifTheyPlay.ts', says: 'if they X, you play Y: the replies likely at this level (the human model) and the engine\'s best, each with the answer its own line proves — a recapture, a block, a job, a win or a mate' },
 } satisfies Record<string, CatalogRow>;
 
 export type ComputerName = keyof typeof COMPUTER_CATALOG;
