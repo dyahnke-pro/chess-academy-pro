@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4909) — names `PositionRead`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4913) — names `PositionRead`
 
 ## Who calls in
 
@@ -55,7 +55,7 @@
 - `src/services/replayFence.modern1690.test.ts:81`
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9205`
+- `src/components/Coach/CoachTeachPage.tsx:9192`
 - `src/services/coachFeatureService.ts:4556`
 - `src/services/computedVoiceAudit.report.test.ts:247`
 - `src/services/dnaLineNarrator.ts:59`
@@ -81,7 +81,7 @@
 - `src/services/turningPoints.ts:200`
 
 ### `seatedTacticLine` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9216`
+- `src/components/Coach/CoachTeachPage.tsx:9203`
 - `src/services/seatedTacticLine.test.ts:10`
 - `src/services/seatedTacticLine.test.ts:15`
 - `src/services/seatedTacticLine.test.ts:21`
@@ -89,8 +89,8 @@
 - `src/services/seatedTacticLine.test.ts:30`
 
 ### `pinConsequence` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9222`
-- `src/components/Coach/CoachTeachPage.tsx:9324`
+- `src/components/Coach/CoachTeachPage.tsx:9209`
+- `src/components/Coach/CoachTeachPage.tsx:9311`
 - `src/services/pinConsequence.test.ts:8`
 - `src/services/pinConsequence.test.ts:12`
 - `src/services/pinConsequence.test.ts:16`
@@ -207,11 +207,11 @@
 
 ### `stepBothArcs` (function) — 2 call sites
 - `src/components/Coach/CoachGamePage.tsx:3049`
-- `src/components/Coach/CoachTeachPage.tsx:11610`
+- `src/components/Coach/CoachTeachPage.tsx:11601`
 
 ### `planFromUci` (function) — 39 call sites
 - `src/components/Coach/CoachGamePage.tsx:3044`
-- `src/components/Coach/CoachTeachPage.tsx:11593`
+- `src/components/Coach/CoachTeachPage.tsx:11584`
 - `src/services/claimTruth.manual.test.ts:130`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:209`
@@ -251,11 +251,11 @@
 - `src/test/thinkMarkClosed.gate.test.ts:76`
 
 ### `gameArcs` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:928`
+- `src/services/learnBoardTeaching.ts:931`
 - `src/services/walkOct1Learn.test.ts:115`
 
 ### `forkConsequence` (re-export) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9219`
+- `src/components/Coach/CoachTeachPage.tsx:9206`
 - `src/services/reviewFullData.ts:893`
 - `src/services/tacticVocabulary.ts:211`
 
@@ -328,9 +328,9 @@
 - `src/test/thinkMarkClosed.gate.test.ts:77`
 
 ### `withAnnouncement` (re-export) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11621`
-- `src/components/Coach/CoachTeachPage.tsx:11622`
-- `src/components/Coach/CoachTeachPage.tsx:12259`
+- `src/components/Coach/CoachTeachPage.tsx:11612`
+- `src/components/Coach/CoachTeachPage.tsx:11613`
+- `src/components/Coach/CoachTeachPage.tsx:12250`
 - `src/services/planArc.heldAnnouncement.test.ts:32`
 - `src/services/planArc.ts:163`
 

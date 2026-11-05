@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:323) — names `detectTactics`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5651) — names `detectTactics`
+- **The tools are COMPUTERS** (CLAUDE.md:327) — names `detectTactics`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5655) — names `detectTactics`
 
 ## Who calls in
 
@@ -122,7 +122,7 @@
 - `src/services/playCommentary.ts:654`
 - `src/services/playedConcept.ts:59`
 - `src/services/playedConcept.ts:66`
-- `src/services/positionFacts.ts:1346`
+- `src/services/positionFacts.ts:1351`
 - `src/services/pvPlayback.ts:394`
 - `src/services/pvPlayback.ts:414`
 - `src/services/relationClaimCost.report.test.ts:52`

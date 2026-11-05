@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5802) — names `planThread`
-- **The standard post-deploy ritual** (CLAUDE.md:6847) — names `planThread`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5806) — names `planThread`
+- **The standard post-deploy ritual** (CLAUDE.md:6865) — names `planThread`
 
 ## Who calls in
 
@@ -24,7 +24,7 @@
 ## Exports and every call site
 
 ### `planChangeSentence` (function) — 1 call site
-- `src/services/positionFacts.ts:953`
+- `src/services/positionFacts.ts:956`
 
 ### `structurePlanEvent` (function) — 7 call sites
 - `src/services/planThread.test.ts:190`
@@ -33,7 +33,7 @@
 - `src/services/planThread.test.ts:198`
 - `src/services/planThread.test.ts:202`
 - `src/services/planThread.test.ts:206`
-- `src/services/positionFacts.ts:943`
+- `src/services/positionFacts.ts:946`
 
 ### `PLAN_THREAD_HOLD_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -42,7 +42,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12247`
+- `src/components/Coach/CoachTeachPage.tsx:12238`
 - `src/services/gameStory.rewind.test.ts:27`
 - `src/services/planThread.test.ts:106`
 - `src/services/planThread.test.ts:113`

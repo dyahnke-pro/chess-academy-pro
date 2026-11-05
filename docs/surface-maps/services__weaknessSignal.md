@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4482) — names `boostFor`, `matchClauseKind`
-- **The standard post-deploy ritual** (CLAUDE.md:6858) — names `weaknessSignal`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4486) — names `boostFor`, `matchClauseKind`
+- **The standard post-deploy ritual** (CLAUDE.md:6876) — names `weaknessSignal`
 
 ## Who calls in
 
@@ -87,7 +87,7 @@
 - `src/services/loopCloses.review.integration.test.ts:85`
 - `src/services/needScore.ts:310`
 - `src/services/needScore.ts:324`
-- `src/services/positionFacts.ts:1546`
+- `src/services/positionFacts.ts:1551`
 - `src/services/reviewFacetRank.ts:654`
 - `src/services/reviewFacetRank.ts:702`
 - `src/services/studentMomentBoost.ts:128`
@@ -115,7 +115,7 @@
 - `src/services/fundamentalReachesDecider.test.ts:122`
 - `src/services/fundamentalReachesDecider.test.ts:149`
 - `src/services/needScore.ts:321`
-- `src/services/positionFacts.ts:1512`
+- `src/services/positionFacts.ts:1517`
 - `src/services/reviewFacetRank.ts:653`
 - `src/services/reviewFacetRank.ts:701`
 - `src/services/weaknessSignal.test.ts:77`
@@ -131,7 +131,7 @@
 ### `matchTacticPattern` (function) — 11 call sites
 - `src/services/liveTacticsContext.ts:651`
 - `src/services/needScore.ts:319`
-- `src/services/positionFacts.ts:1510`
+- `src/services/positionFacts.ts:1515`
 - `src/services/tacticAlertService.ts:606`
 - `src/services/teachingSelector.ts:168`
 - `src/services/teachingSelector.ts:309`
@@ -145,7 +145,7 @@
 - `src/services/learnRecordTerms.ts:72`
 - `src/services/learnRecordTerms.ts:305`
 - `src/services/needScore.ts:308`
-- `src/services/positionFacts.ts:1512`
+- `src/services/positionFacts.ts:1517`
 - `src/services/teachingSelector.ts:310`
 - `src/services/weaknessSignal.test.ts:128`
 - `src/services/weaknessSignal.test.ts:131`

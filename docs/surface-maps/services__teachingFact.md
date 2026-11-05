@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**102 lines · 2 exports · 4 importers · 2 tests · 0 audits**
+**104 lines · 2 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -47,19 +47,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnBoardTeaching.ts:386`
 - `src/services/learnBoardTeaching.ts:402`
 - `src/services/learnBoardTeaching.ts:421`
-- `src/services/learnBoardTeaching.ts:475`
-- `src/services/learnBoardTeaching.ts:500`
-- `src/services/learnBoardTeaching.ts:519`
-- `src/services/learnBoardTeaching.ts:533`
-- `src/services/learnBoardTeaching.ts:546`
-- `src/services/learnBoardTeaching.ts:562`
-- `src/services/learnBoardTeaching.ts:803`
-- `src/services/learnBoardTeaching.ts:968`
-- `src/services/learnBoardTeaching.ts:976`
-- `src/services/learnBoardTeaching.ts:1037`
-- `src/services/learnBoardTeaching.ts:1070`
-- `src/services/learnBoardTeaching.ts:1228`
-- `src/services/learnBoardTeaching.ts:1253`
+- `src/services/learnBoardTeaching.ts:478`
+- `src/services/learnBoardTeaching.ts:503`
+- `src/services/learnBoardTeaching.ts:522`
+- `src/services/learnBoardTeaching.ts:536`
+- `src/services/learnBoardTeaching.ts:549`
+- `src/services/learnBoardTeaching.ts:565`
+- `src/services/learnBoardTeaching.ts:806`
+- `src/services/learnBoardTeaching.ts:971`
+- `src/services/learnBoardTeaching.ts:979`
+- `src/services/learnBoardTeaching.ts:1040`
+- `src/services/learnBoardTeaching.ts:1073`
+- `src/services/learnBoardTeaching.ts:1231`
+- `src/services/learnBoardTeaching.ts:1256`
 - `src/services/orderTeaching.ts:60`
 - `src/services/orderTeaching.ts:67`
 - `src/services/orderTeaching.ts:80`

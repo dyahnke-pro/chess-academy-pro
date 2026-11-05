@@ -867,8 +867,10 @@ export function decideTurn(
     const h = named.heldForm;
     if (!named.namesStudentMove || !h?.text.trim()) return named;
     if (h.points && !pointerSpeaks(h.points, green ?? null)) { if (!pointersHeld.includes(h.points)) pointersHeld.push(h.points); return named; }
+    // The same fact, said in its held form: it keeps its id (the page finds
+    // the kept line's arrows by it) and its lane.
     return {
-      ...named, text: h.text, squares: [...h.squares], proof: h.proof, namesStudentMove: false,
+      ...named, id: named.id, text: h.text, squares: [...h.squares], proof: h.proof, namesStudentMove: false,
       claims: h.points ? [...named.claims, `pointer:${h.points}`] : named.claims,
       ...(h.lines ? { lines: h.lines } : {}),
     };

@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6869) — names `tacticGeometry`
+- **The standard post-deploy ritual** (CLAUDE.md:6887) — names `tacticGeometry`
 
 ## Who calls in
 
@@ -29,15 +29,15 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pvGain` (function) — 4 call sites
-- `src/coach/focus/focusChances.ts:456`
-- `src/coach/focus/focusChances.ts:559`
-- `src/coach/focus/focusChances.ts:575`
+- `src/coach/focus/focusChances.ts:482`
+- `src/coach/focus/focusChances.ts:585`
+- `src/coach/focus/focusChances.ts:601`
 - `src/services/tacticGeometry.test.ts:212`
 
 ### `pvGainDepth` (function) — 6 call sites
-- `src/coach/focus/focusChances.ts:568`
-- `src/coach/focus/focusChances.ts:573`
-- `src/coach/focus/focusChances.ts:780`
+- `src/coach/focus/focusChances.ts:594`
+- `src/coach/focus/focusChances.ts:599`
+- `src/coach/focus/focusChances.ts:806`
 - `src/services/tacticGeometry.test.ts:281`
 - `src/services/tacticGeometry.test.ts:282`
 - `src/services/tacticGeometry.test.ts:285`

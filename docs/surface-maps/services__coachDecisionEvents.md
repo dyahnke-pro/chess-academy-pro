@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**279 lines · 12 exports · 16 importers · 13 tests · 1 audits**
+**283 lines · 12 exports · 16 importers · 13 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4532) — names `coachDecisionEvents`
-- **The standard post-deploy ritual** (CLAUDE.md:6812) — names `coachDecisionEvents`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4536) — names `coachDecisionEvents`
+- **The standard post-deploy ritual** (CLAUDE.md:6830) — names `coachDecisionEvents`
 
 ## Who calls in
 
@@ -41,7 +41,7 @@
 - `src/services/coachDecisionEmits.test.ts:96`
 - `src/services/proofBacklog.report.test.ts:98`
 - `src/test/computedOrderWired.test.ts:26`
-- `src/test/decisionRows.baseline.test.ts:47`
+- `src/test/decisionRows.baseline.test.ts:80`
 
 ### `emitCoachDecision` (function) — 1 call site
 - `src/services/coachDecider.ts:357`
@@ -78,8 +78,8 @@
 - `src/services/appAuditor.ts:2308`
 - `src/services/learnPhaseFocus.test.ts:98`
 - `src/services/learnPhaseFocus.test.ts:110`
-- `src/services/learnTurnDoor.mission.test.ts:32`
-- `src/services/learnTurnDoor.mission.test.ts:65`
+- `src/services/learnTurnDoor.mission.test.ts:33`
+- `src/services/learnTurnDoor.mission.test.ts:66`
 - `src/services/learnTurnDoor.phaseWave.test.ts:38`
 - `src/services/learnTurnDoor.story.test.ts:42`
 - `src/services/learnTurnDoor.test.ts:609`
@@ -90,8 +90,8 @@
 - `src/services/verdictTurnGrade.test.ts:66`
 
 ### `emitLearnTurn` (function) — 2 call sites
-- `src/services/learnTurnDoor.ts:1298`
-- `src/services/learnTurnDoor.ts:1328`
+- `src/services/learnTurnDoor.ts:1345`
+- `src/services/learnTurnDoor.ts:1375`
 
 ## Tests
 

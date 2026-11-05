@@ -75,7 +75,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnTurnDoor.phaseWave.test.ts:123`
 - `src/services/phaseVerdict.test.ts:37`
 - `src/services/phaseVerdict.test.ts:39`
-- `src/services/positionFacts.ts:1145`
+- `src/services/positionFacts.ts:1150`
 
 ### `phaseVerdictLine` (function) — 14 call sites
 - `src/services/learnTurnDoor.phaseWave.test.ts:121`
@@ -88,7 +88,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:36`
 - `src/services/phaseVerdict.test.ts:37`
 - `src/services/phaseVerdict.test.ts:39`
-- `src/services/positionFacts.ts:1142`
+- `src/services/positionFacts.ts:1147`
 - `src/services/reviewFullData.ts:1629`
 - `src/services/reviewPositionalAssessment.test.ts:88`
 - `src/services/reviewPositionalAssessment.test.ts:93`
@@ -97,7 +97,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnTurnDoor.phaseWave.test.ts:123`
 - `src/services/learnWalkNimzo.test.ts:22`
 - `src/services/learnWalkNimzo.test.ts:31`
-- `src/services/positionFacts.ts:1145`
+- `src/services/positionFacts.ts:1150`
 
 ## Tests
 

@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1335) — names `campHoles`, `findPieceQuality`, `findWeakSquares`, `holeTargets`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1339) — names `campHoles`, `findPieceQuality`, `findWeakSquares`, `holeTargets`
 
 ## Who calls in
 
@@ -226,7 +226,7 @@
 - `src/services/latentFork.ts:146`
 - `src/services/latentFork.ts:218`
 - `src/services/moveFundamentals.ts:358`
-- `src/services/moveFundamentals.ts:1641`
+- `src/services/moveFundamentals.ts:1679`
 - `src/services/practicalReads.ts:146`
 
 ### `seeReadsStanding` (function) — 7 call sites
@@ -276,22 +276,22 @@
 - `src/services/structureReads.ts:132`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12828`
-- `src/services/learnBoardTeaching.ts:1511`
+- `src/components/Coach/CoachTeachPage.tsx:12819`
+- `src/services/learnBoardTeaching.ts:1514`
 - `src/services/principleAttribution.ts:346`
 - `src/services/principleAttribution.ts:809`
 
 ### `legalSeeGainFor` (function) — 112 call sites
 - `src/coach/focus/castlingWatch.ts:159`
 - `src/coach/focus/castlingWatch.ts:161`
-- `src/coach/focus/focusChances.ts:335`
-- `src/coach/focus/focusChances.ts:389`
-- `src/coach/focus/focusChances.ts:439`
-- `src/coach/focus/focusChances.ts:501`
-- `src/coach/focus/focusChances.ts:504`
-- `src/coach/focus/focusChances.ts:539`
-- `src/coach/focus/focusChances.ts:564`
-- `src/coach/focus/focusChances.ts:767`
+- `src/coach/focus/focusChances.ts:361`
+- `src/coach/focus/focusChances.ts:415`
+- `src/coach/focus/focusChances.ts:465`
+- `src/coach/focus/focusChances.ts:527`
+- `src/coach/focus/focusChances.ts:530`
+- `src/coach/focus/focusChances.ts:565`
+- `src/coach/focus/focusChances.ts:590`
+- `src/coach/focus/focusChances.ts:793`
 - `src/missions/checks/freePieceStayAhead.test.ts:96`
 - `src/missions/checks/freePieceStayAhead.test.ts:104`
 - `src/missions/checks/freePieceStayAhead.test.ts:151`
@@ -337,7 +337,7 @@
 - `src/services/kickMap.ts:54`
 - `src/services/kingAttackReads.ts:147`
 - `src/services/kingAttackReads.ts:503`
-- `src/services/learnBoardTeaching.ts:718`
+- `src/services/learnBoardTeaching.ts:721`
 - `src/services/learnTurnDoor.test.ts:272`
 - `src/services/learnWalkOct3c.test.ts:61`
 - `src/services/material.ts:44`
@@ -396,7 +396,7 @@
 - `src/services/weighedMoves.ts:561`
 
 ### `asIfToMove` (function) — 28 call sites
-- `src/coach/focus/focusChances.ts:253`
+- `src/coach/focus/focusChances.ts:279`
 - `src/missions/patterns/back-rank-mate.ts:89`
 - `src/missions/patterns/free-piece.ts:100`
 - `src/missions/patterns/knight-fork.ts:102`
@@ -441,7 +441,7 @@
 - `src/services/inaccuracyCall.ts:238`
 - `src/services/inaccuracyCall.ts:964`
 - `src/services/inaccuracyCall.ts:1956`
-- `src/services/learnBoardTeaching.ts:1457`
+- `src/services/learnBoardTeaching.ts:1460`
 - `src/services/learnWalkOct3c.test.ts:60`
 - `src/services/learnWalkOct3c.test.ts:66`
 - `src/services/liteMoves.test.ts:139`
@@ -462,9 +462,9 @@
 ### `takingTheAttackerAnswers` (function) — 9 call sites
 - `src/services/boardUrgency.ts:62`
 - `src/services/groundedAnswer.ts:651`
-- `src/services/learnBoardTeaching.ts:1485`
+- `src/services/learnBoardTeaching.ts:1488`
 - `src/services/methodSignals.ts:49`
-- `src/services/positionFacts.ts:1792`
+- `src/services/positionFacts.ts:1799`
 - `src/services/takingTheAttacker.test.ts:17`
 - `src/services/takingTheAttacker.test.ts:22`
 - `src/services/takingTheAttacker.test.ts:26`
@@ -497,12 +497,12 @@
 - `src/services/danyaExploitability.test.ts:90`
 - `src/services/groundedAnswer.ts:6583`
 - `src/services/positionReadingService.test.ts:938`
-- `src/services/theirMoveCost.ts:35`
+- `src/services/theirMoveCost.ts:38`
 
 ### `findHangingBySee` (function) — 27 call sites
 - `src/coach/chatTurnAnswers.ts:173`
-- `src/components/Coach/CoachTeachPage.tsx:9108`
-- `src/components/Coach/CoachTeachPage.tsx:9114`
+- `src/components/Coach/CoachTeachPage.tsx:9095`
+- `src/components/Coach/CoachTeachPage.tsx:9101`
 - `src/services/computedMaterialTruth.corpus.test.ts:216`
 - `src/services/computedMaterialTruth.corpus.test.ts:226`
 - `src/services/conversionMethod.ts:64`
@@ -540,7 +540,7 @@
 - `src/services/positionReadingService.test.ts:100`
 - `src/services/positionReadingService.test.ts:908`
 - `src/services/positionReadingService.test.ts:910`
-- `src/services/positionalRead.ts:344`
+- `src/services/positionalRead.ts:349`
 - `src/services/speedRunReads.ts:333`
 - `src/services/speedRunReads.ts:416`
 - `src/services/speedRunReads.ts:478`
@@ -555,7 +555,7 @@
 - `src/services/positionReadingService.test.ts:888`
 - `src/services/positionReadingService.test.ts:893`
 - `src/services/positionReadingService.test.ts:899`
-- `src/services/positionalRead.ts:478`
+- `src/services/positionalRead.ts:483`
 
 ### `bishopHemmedByOwnPawns` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:894`
@@ -570,7 +570,7 @@
 - `src/services/danyaBehaviors.ts:575`
 - `src/services/danyaExploitability.test.ts:100`
 - `src/services/groundedAnswer.ts:6884`
-- `src/services/pieceValueRead.ts:520`
+- `src/services/pieceValueRead.ts:527`
 - `src/services/positionReadingService.test.ts:106`
 - `src/services/positionReadingService.test.ts:114`
 - `src/services/positionReadingService.test.ts:121`
@@ -580,9 +580,9 @@
 - `src/services/positionReadingService.test.ts:147`
 - `src/services/positionReadingService.test.ts:887`
 - `src/services/positionReadingService.test.ts:900`
-- `src/services/positionalRead.ts:273`
-- `src/services/positionalRead.ts:455`
-- `src/services/positionalRead.ts:489`
+- `src/services/positionalRead.ts:278`
+- `src/services/positionalRead.ts:460`
+- `src/services/positionalRead.ts:494`
 - `src/services/positionalTruth.corpus.test.ts:30`
 - `src/services/positionalTruth.corpus.test.ts:36`
 - `src/services/positionalTruth.corpus.test.ts:42`
@@ -622,7 +622,7 @@
 ### `findColorComplexWeakness` (function) — 8 call sites
 - `src/services/computedTruth.fuzz.test.ts:154`
 - `src/services/groundedAnswer.ts:6614`
-- `src/services/positionalRead.ts:386`
+- `src/services/positionalRead.ts:391`
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
 - `src/services/replayFence.najdorf1500.test.ts:26`
@@ -636,7 +636,7 @@
 - `src/services/learnWalkBlumenfeld.test.ts:119`
 - `src/services/minorityLeverCheck.test.ts:9`
 - `src/services/positionReadingService.test.ts:930`
-- `src/services/positionalRead.ts:361`
+- `src/services/positionalRead.ts:366`
 - `src/services/positionalTruth.corpus.test.ts:110`
 - `src/services/positionalTruth.corpus.test.ts:115`
 - `src/services/reviewFullData.ts:1117`
@@ -688,7 +688,7 @@
 
 ### `structureTransfer` (function) — 7 call sites
 - `src/services/groundedAnswer.ts:6806`
-- `src/services/learnBoardTeaching.ts:1431`
+- `src/services/learnBoardTeaching.ts:1434`
 - `src/services/positionReadingService.test.ts:946`
 - `src/services/positionReadingService.test.ts:947`
 - `src/services/positionReadingService.test.ts:948`
@@ -702,8 +702,8 @@
 
 ### `goodPieceClause` (function) — 3 call sites
 - `src/services/danyaBehaviors.ts:246`
-- `src/services/positionalRead.ts:281`
-- `src/services/positionalRead.ts:287`
+- `src/services/positionalRead.ts:286`
+- `src/services/positionalRead.ts:292`
 
 ### `goodPieceReason` (function) — 2 call sites
 - `src/services/danyaBehaviors.ts:246`
@@ -733,7 +733,7 @@
 - `src/services/positionReadingService.test.ts:367`
 - `src/services/positionReadingService.test.ts:917`
 - `src/services/positionReadingService.test.ts:924`
-- `src/services/positionalRead.ts:307`
+- `src/services/positionalRead.ts:312`
 - `src/services/speedRunReads.ts:579`
 
 ### `PressureVerdict` (type) — 0 call sites
@@ -769,8 +769,8 @@
 - `src/services/groundedAnswer.ts:7606`
 - `src/services/positionReadingService.test.ts:750`
 - `src/services/positionReadingService.test.ts:756`
-- `src/services/positionalRead.ts:317`
-- `src/services/positionalRead.ts:373`
+- `src/services/positionalRead.ts:322`
+- `src/services/positionalRead.ts:378`
 - `src/services/positionalReason.ts:119`
 - `src/services/positionalReason.ts:148`
 - `src/services/positionalTruth.corpus.test.ts:121`
@@ -832,7 +832,7 @@
 - `src/services/pinReaders.test.ts:132`
 - `src/services/positionReadingService.test.ts:175`
 - `src/services/positionReadingService.test.ts:185`
-- `src/services/positionalRead.ts:408`
+- `src/services/positionalRead.ts:413`
 - `src/services/positionalReason.ts:64`
 
 ### `ownsMoreSpace` (function) — 3 call sites
@@ -871,7 +871,7 @@
 - `src/services/positionReadingService.test.ts:466`
 - `src/services/positionReadingService.test.ts:473`
 - `src/services/positionReadingService.test.ts:479`
-- `src/services/positionalRead.ts:183`
+- `src/services/positionalRead.ts:187`
 - `src/services/positionalReason.ts:108`
 - `src/services/thinkingAssessStep.ts:29`
 - `src/services/thinkingAssessStep.ts:30`
@@ -894,8 +894,8 @@
 - `src/services/groundedAnswer.ts:6524`
 - `src/services/positionReadingService.test.ts:484`
 - `src/services/positionReadingService.test.ts:491`
-- `src/services/positionalRead.ts:246`
-- `src/services/positionalRead.ts:247`
+- `src/services/positionalRead.ts:251`
+- `src/services/positionalRead.ts:252`
 
 ### `SampledPosition` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -1003,7 +1003,7 @@
 
 ### `goodPieceIdeaKey` (function) — 3 call sites
 - `src/services/danyaBehaviors.ts:248`
-- `src/services/positionalRead.ts:277`
+- `src/services/positionalRead.ts:282`
 - `src/services/reviewPositionalAssessment.ts:229`
 
 ### `movesThatKeep` (function) — 1 call site

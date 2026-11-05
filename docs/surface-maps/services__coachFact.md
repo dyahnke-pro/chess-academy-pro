@@ -4,14 +4,15 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**534 lines · 16 exports · 27 importers · 8 tests · 0 audits**
+**543 lines · 16 exports · 27 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **❤️ THE HEART OF THE APP — the coach THINKS OUT LOUD FOR the student (David 2026-10-07: "THIS IS THE HEART AND SOUL OF THE APP! THIS IS THE BEHAVIOR THAT TEACHES. THIS IS WHAT ALL THE COMPUTERS ARE BUILT FOR! SO WE CAN THINK OUT LOUD FOR THE USER!")** (CLAUDE.md:31) — names `coachFact`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1443) — names `coachFact`
-- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2739) — names `FACT_GROUP`
-- **The standard post-deploy ritual** (CLAUDE.md:6813) — names `coachFact`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1447) — names `coachFact`
+- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2743) — names `FACT_GROUP`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5826) — names `HeldForm`
+- **The standard post-deploy ritual** (CLAUDE.md:6831) — names `coachFact`
 
 ## Who calls in
 
@@ -64,7 +65,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCoachFactKind` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:673`
+- `src/services/learnTurnDoor.ts:681`
 
 ### `stepOf` (function) — 16 call sites
 - `src/services/boardComputers.test.ts:76`
@@ -72,22 +73,22 @@
 - `src/services/coachFact.test.ts:80`
 - `src/services/coachFeatureService.ts:2561`
 - `src/services/coachFeatureService.ts:3170`
-- `src/services/learnTurnDoor.ts:286`
-- `src/services/learnTurnDoor.ts:907`
-- `src/services/learnTurnDoor.ts:964`
-- `src/services/learnTurnDoor.ts:985`
-- `src/services/learnTurnDoor.ts:989`
-- `src/services/learnTurnDoor.ts:1043`
-- `src/services/learnTurnDoor.ts:1069`
-- `src/services/learnTurnDoor.ts:1079`
-- `src/services/learnTurnDoor.ts:1083`
-- `src/services/learnTurnDoor.ts:1220`
-- `src/services/learnTurnDoor.ts:1283`
+- `src/services/learnTurnDoor.ts:289`
+- `src/services/learnTurnDoor.ts:952`
+- `src/services/learnTurnDoor.ts:1009`
+- `src/services/learnTurnDoor.ts:1030`
+- `src/services/learnTurnDoor.ts:1034`
+- `src/services/learnTurnDoor.ts:1088`
+- `src/services/learnTurnDoor.ts:1114`
+- `src/services/learnTurnDoor.ts:1124`
+- `src/services/learnTurnDoor.ts:1128`
+- `src/services/learnTurnDoor.ts:1265`
+- `src/services/learnTurnDoor.ts:1328`
 
 ### `placeFact` (function) — 18 call sites
 - `src/services/boardComputers.ts:607`
 - `src/services/boardComputers.ts:931`
-- `src/services/learnTurnDoor.ts:689`
+- `src/services/learnTurnDoor.ts:697`
 - `src/services/moveThoughtFacts.ts:162`
 - `src/services/moveThoughtFacts.ts:286`
 - `src/services/moveThoughtFacts.ts:306`
@@ -96,11 +97,11 @@
 - `src/services/moveThoughtFacts.ts:632`
 - `src/services/moveThoughtFacts.ts:650`
 - `src/services/openingStory.ts:363`
-- `src/services/positionFacts.ts:534`
+- `src/services/positionFacts.ts:537`
 - `src/services/reviewFacet.ts:62`
 - `src/services/reviewFacet.ts:89`
 - `src/services/reviewFacet.ts:101`
-- `src/services/teachingFact.ts:89`
+- `src/services/teachingFact.ts:91`
 - `src/services/thoughtComposer.ts:168`
 - `src/test/doorFact.ts:22`
 
@@ -110,7 +111,7 @@
 - `src/services/coachFact.test.ts:105`
 - `src/services/coachFact.test.ts:111`
 - `src/services/coachFact.test.ts:112`
-- `src/services/learnTurnDoor.ts:690`
+- `src/services/learnTurnDoor.ts:698`
 - `src/services/moveThoughtFacts.ts:163`
 - `src/services/moveThoughtFacts.ts:286`
 - `src/services/moveThoughtFacts.ts:307`
@@ -119,9 +120,9 @@
 - `src/services/moveThoughtFacts.ts:633`
 - `src/services/moveThoughtFacts.ts:651`
 - `src/services/openingStory.ts:364`
-- `src/services/positionFacts.ts:542`
+- `src/services/positionFacts.ts:545`
 - `src/services/reviewFacet.ts:73`
-- `src/services/teachingFact.ts:91`
+- `src/services/teachingFact.ts:93`
 - `src/test/doorFact.ts:24`
 
 ### `COMPUTER_CATALOG` (const) — 0 call sites
