@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6840) — names `reviewMoveTeaching`
+- **The standard post-deploy ritual** (CLAUDE.md:6841) — names `reviewMoveTeaching`
 
 ## Who calls in
 

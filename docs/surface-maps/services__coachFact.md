@@ -12,7 +12,7 @@
 - **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1447) — names `coachFact`
 - **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2743) — names `FACT_GROUP`
 - **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5834) — names `HeldForm`
-- **The standard post-deploy ritual** (CLAUDE.md:6839) — names `coachFact`
+- **The standard post-deploy ritual** (CLAUDE.md:6840) — names `coachFact`
 
 ## Who calls in
 

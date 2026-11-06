@@ -23,7 +23,7 @@
 - **🔒 WHICH NOTES THE KEPT SURFACES MAY SPEAK — split by anchoring (David 2026-08-26).** (CLAUDE.md:4983) — names `WALKTHROUGH_GEN_REV`, `noteArrowSourceAt`, `openingGenerator`
 - **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:6490) — names `generateOpening`
 - **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6736) — names `openingGenerator`
-- **The standard post-deploy ritual** (CLAUDE.md:6873) — names `WALKTHROUGH_GEN_REV`, `openingGenerator`
+- **The standard post-deploy ritual** (CLAUDE.md:6874) — names `WALKTHROUGH_GEN_REV`, `openingGenerator`
 
 ## Who calls in
 

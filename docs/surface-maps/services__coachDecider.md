@@ -39,7 +39,7 @@
 - **🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")** (CLAUDE.md:6365) — names `decide`
 - **🔒🔒 AUDIT LIKE DAVID — PICTURE FIRST, INSTRUMENT SECOND, ENGINE ON EVERY CLAIM (David 2026-10-19: "learn from this audit … get as good as me. lets see some recursive self improvement")** (CLAUDE.md:6424) — names `decide`
 - **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6723) — names `coachDecider`
-- **The standard post-deploy ritual** (CLAUDE.md:6838) — names `coachDecider`, `decide`
+- **The standard post-deploy ritual** (CLAUDE.md:6839) — names `coachDecider`, `decide`
 
 ## Who calls in
 

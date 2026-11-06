@@ -12,7 +12,7 @@
 - **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:212) — names `replyMadeAChance`
 - **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:440) — names `gameOpponentStrength`, `replyMadeAChance`
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4678) — names `coachGameEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6819) — names `coachGameEngine`, `getAdaptiveMove`
+- **The standard post-deploy ritual** (CLAUDE.md:6820) — names `coachGameEngine`, `getAdaptiveMove`
 
 ## Who calls in
 
