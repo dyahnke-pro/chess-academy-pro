@@ -40,7 +40,7 @@
  *   node scripts/audit-coach-full-games.mjs
  *   AUDIT_SMOKE_URL=http://localhost:5173 GAMES=2 node scripts/audit-coach-full-games.mjs
  */
-import { chromium } from 'playwright';
+import { chromium, webkit, devices } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
@@ -170,14 +170,23 @@ async function main() {
   console.log(`[full-games] games  = ${GAMES} (ply cap ${PLY_CAP})`);
   console.log(`[full-games] outDir = ${OUT_DIR}`);
 
-  const executablePath = await resolveChromiumExecutable(HEADED);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandboxLaunchArgs() });
-  const ctx = await browser.newContext({
-    ...sandboxContextOptions(),
-    viewport: { width: 414, height: 896 },
-    deviceScaleFactor: 2,
-    userAgent: 'AuditCoachPlayBot/full-games (chromium)',
-  });
+  // AUDIT_BROWSER=webkit plays on WebKit at iPhone size with touch — the
+  // engine inside the iPhone app (WKWebView), the closest a Linux runner gets
+  // to the App Store build (David 2026-11-06: "Do a full play audit with the
+  // app simulator/ or whatever the most accurate way is").
+  const onWebkit = process.env.AUDIT_BROWSER === 'webkit';
+  console.log(`[full-games] engine = ${onWebkit ? 'webkit (iPhone 15, touch)' : 'chromium'}`);
+  const browser = onWebkit
+    ? await webkit.launch({ headless: !HEADED })
+    : await chromium.launch({ headless: !HEADED, executablePath: await resolveChromiumExecutable(HEADED), args: sandboxLaunchArgs() });
+  const ctx = await browser.newContext(onWebkit
+    ? { ...devices['iPhone 15'], ...sandboxContextOptions(), userAgent: `${devices['iPhone 15'].userAgent} AuditCoachPlayBot/full-games (webkit)` }
+    : {
+      ...sandboxContextOptions(),
+      viewport: { width: 414, height: 896 },
+      deviceScaleFactor: 2,
+      userAgent: 'AuditCoachPlayBot/full-games (chromium)',
+    });
   // CONTINUOUS overlay handling + the audit-mute law. The point-in-time
   // clearFirstRunOverlays sweeps miss modals that mount MID-TURN: the
   // AI-consent dialog appears at the first coach interaction and ate game 1's

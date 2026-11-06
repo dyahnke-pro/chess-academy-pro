@@ -17,6 +17,10 @@ on:
         description: 'Number of full games to play (default 10)'
         required: false
         default: '10'
+      browser:
+        description: 'chromium | webkit (webkit = the iPhone app engine, iPhone 15 size, touch)'
+        required: false
+        default: 'chromium'
   # SCHEDULE OFF (David 2026-10-18, cost): it failed on every scheduled run
   # while billing runner minutes and prod traffic. Run it by hand.
   # schedule:
@@ -46,12 +50,13 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci --no-audit --no-fund --prefer-offline
-      - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
+      - name: Install the Playwright browser
+        run: npx playwright install --with-deps ${{ github.event.inputs.browser || 'chromium' }}
       - name: Play full games + post-game reviews against prod
         env:
           AUDIT_SMOKE_URL: https://chess-academy-pro.vercel.app
           GAMES: ${{ github.event.inputs.games || '10' }}
+          AUDIT_BROWSER: ${{ github.event.inputs.browser || 'chromium' }}
         run: node scripts/audit-coach-full-games.mjs
       - name: Upload reports
         if: always()
