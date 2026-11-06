@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**833 lines · 28 exports · 26 importers · 19 tests · 6 audits**
+**833 lines · 28 exports · 27 importers · 20 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@
 
 - `src/coach/ask/playName.ts`
 - `src/coach/awaitTurnRead.test.ts`
+- `src/coach/boardTurnAnswer.planOrder.test.ts`
 - `src/coach/boardTurnAnswer.test.ts`
 - `src/coach/boardTurnAnswer.ts`
 - `src/coach/chatComputedQuestions.test.ts`
@@ -194,6 +195,7 @@
 ## Tests
 
 - `src/coach/awaitTurnRead.test.ts`
+- `src/coach/boardTurnAnswer.planOrder.test.ts`
 - `src/coach/boardTurnAnswer.test.ts`
 - `src/coach/chatComputedQuestions.test.ts`
 - `src/coach/chatKindContracts.test.ts`

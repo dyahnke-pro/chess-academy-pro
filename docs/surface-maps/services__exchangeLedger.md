@@ -67,7 +67,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `computeExchangeLedger` (function) — 22 call sites
-- `src/coach/chatTurnAnswers.ts:411`
+- `src/coach/chatTurnAnswers.ts:491`
 - `src/services/exchangeIdeas.ts:667`
 - `src/services/exchangeLedger.test.ts:13`
 - `src/services/exchangeLedger.test.ts:24`
@@ -91,8 +91,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatProof.ts:61`
 
 ### `netPieceWords` (function) — 9 call sites
-- `src/coach/chatTurnAnswers.ts:413`
-- `src/services/decisiveReason.ts:110`
+- `src/coach/chatTurnAnswers.ts:493`
+- `src/services/decisiveReason.ts:116`
 - `src/services/exchangeIdeas.ts:669`
 - `src/services/knownSlips.ts:128`
 - `src/services/patternFails.ts:130`
@@ -126,9 +126,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/punishCountsPlayedMove.test.ts:19`
 
 ### `settledNetForLine` (function) — 8 call sites
-- `src/services/decisiveReason.ts:97`
-- `src/services/decisiveReason.ts:312`
-- `src/services/decisiveReason.ts:313`
+- `src/services/decisiveReason.ts:103`
+- `src/services/decisiveReason.ts:318`
+- `src/services/decisiveReason.ts:319`
 - `src/services/moveComparison.ts:183`
 - `src/services/moveComparison.ts:184`
 - `src/services/moveInsight.lineAudit.test.ts:49`
@@ -197,7 +197,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `describeProofResult` (function) — 8 call sites
 - `src/services/coachFeatureService.ts:4433`
 - `src/services/coachFeatureService.ts:4488`
-- `src/services/decisiveReason.ts:134`
+- `src/services/decisiveReason.ts:140`
 - `src/services/lineProof.test.ts:27`
 - `src/services/pieceOptions.ts:137`
 - `src/services/planChoice.ts:164`
@@ -205,13 +205,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatProof.ts:62`
 
 ### `heardHorizon` (function) — 2 call sites
-- `src/services/decisiveReason.ts:96`
-- `src/services/decisiveReason.ts:116`
+- `src/services/decisiveReason.ts:102`
+- `src/services/decisiveReason.ts:122`
 
 ### `heardProofCut` (function) — 4 call sites
-- `src/services/decisiveReason.ts:107`
-- `src/services/decisiveReason.ts:122`
-- `src/services/decisiveReason.ts:266`
+- `src/services/decisiveReason.ts:113`
+- `src/services/decisiveReason.ts:128`
+- `src/services/decisiveReason.ts:272`
 - `src/services/lineCalc.ts:69`
 
 ### `refutationProof` (function) — 6 call sites
@@ -223,7 +223,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/hardWalk.mates.test.ts:43`
 
 ### `moverLineProof` (function) — 8 call sites
-- `src/coach/boardTurnAnswer.ts:324`
+- `src/coach/boardTurnAnswer.ts:331`
 - `src/services/deliberation.ts:301`
 - `src/services/exchangeLedger.horizon.test.ts:30`
 - `src/services/exchangeLedger.horizon.test.ts:36`
