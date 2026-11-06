@@ -30,11 +30,14 @@ import { identifyingTokens } from './danyaTeachingService';
 import { explainTemptingCapture } from './reviewTeachingPoints';
 import repertoire from '../data/repertoire.json';
 import { bookMoveWhy } from './bookMoveWhy';
+import { openingEquivalence } from './openingEquivalence';
 import { mastersPlanRead, mastersPlanLine, planStillAhead, type MastersPlanRead, type MovesAt } from './mastersPlanRead';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { noteArrowSourceAt } from './openingGenerator';
 import { loadFarmedCorpora } from './farmedCorpusData';
 import { yieldToScreen } from '../utils/yieldToScreen';
+import { classifyPhase } from './gamePhaseService';
+import { sayMoveNoun } from './spokenMove';
 
 /** A candidate move at a branch point, with its master-DB frequency + score. */
 interface TheoryMove {
@@ -146,6 +149,15 @@ interface OpeningTheoryLecture {
    *  position on the game's own path with enough master games: each side's
    *  break, piece home and castling side. Null when the book is too thin. */
   planRead: MastersPlanRead | null;
+  /** THE OPENING SUMMARY (census #52; theory, so the Theory button's — David
+   *  2026-11-06): at the first board out of the opening, did the student get
+   *  the break the opening is played for? Null without a seat, a masters break
+   *  or a game that left the opening. */
+  breakSummary: string | null;
+  /** THE NAMED OPENING THE GAME'S BOARD EQUALS — with a move each thrown in,
+   *  or the colours reversed (`openingEquivalence`), the first one the game
+   *  reached in the opening; theory, so the button's. Null without a seat. */
+  equivalence: string | null;
 }
 
 /** The CURATED, opening-SPECIFIC key ideas — repertoire keyIdeas ONLY, never the
@@ -449,7 +461,56 @@ export async function buildOpeningTheoryLecture(
   const namingBranch = branches.find((b) => b.variationName === openingName);
   const deepestInBook = [...branches].reverse().find((b) => !b.leftBook);
   startGames = (namingBranch ?? deepestInBook ?? branches[0]).totalGames;
-  return { openingName, branches, departurePly, startGames, planRead: await planOnGamePath(fens, departurePly != null ? departurePly - 1 : limit, opts.movesAt) };
+  const planRead = await planOnGamePath(fens, departurePly != null ? departurePly - 1 : limit, opts.movesAt);
+  return { openingName, branches, departurePly, startGames, planRead, breakSummary: breakSummaryOf(fens, sans, planRead, opts.studentColor), equivalence: equivalenceOf(sans, opts.studentColor) };
+}
+
+/** The first named-opening equivalence on the game's own path, in the
+ *  opening's first twelve moves (the walk's old reach). */
+function equivalenceOf(sans: readonly string[], studentColor: 'white' | 'black' | undefined): string | null {
+  if (!studentColor) return null;
+  for (let ply = 2; ply <= Math.min(24, sans.length); ply += 1) {
+    try {
+      const eq = openingEquivalence(sans.slice(0, ply), studentColor === 'white' ? 'w' : 'b');
+      if (eq) return eq.text;
+    } catch { /* a history the reader cannot replay names nothing */ }
+  }
+  return null;
+}
+
+/** The opening summary for the game: the student's masters break, read
+ *  against the first board out of the opening (`openingSummaryLine`). */
+function breakSummaryOf(fens: readonly string[], sans: readonly string[], plan: MastersPlanRead | null, studentColor: 'white' | 'black' | undefined): string | null {
+  if (!studentColor || !plan) return null;
+  const brk = studentColor === 'white' ? plan.white : plan.black;
+  if (!brk) return null;
+  // fens[k] is the board after k plies.
+  for (let k = 1; k < fens.length && k <= sans.length; k += 1) {
+    if (classifyPhase(fens[k], { ply: k }) === 'opening') continue;
+    const mine = sans.slice(0, k).filter((_, i) => (i % 2 === 0) === (studentColor === 'white'));
+    return openingSummaryLine({ san: brk.san, square: brk.square }, mine, fens[k]);
+  }
+  return null;
+}
+
+/** THE OPENING SUMMARY (census #52): the opening is over — did the student get
+ *  the break the opening is played for? Read against the board, never assumed:
+ *  played it; still there to play (legal now); or the position moved past it. */
+export function openingSummaryLine(brk: { san: string; square: string }, studentSans: readonly string[], fenNow: string): string | null {
+  const bare = (x: string): string => x.replace(/[+#!?]+$/, '');
+  // The break was read at an earlier position, so no board: a pawn break needs none.
+  const say = sayMoveNoun(brk.san, null);
+  if (studentSans.some((s) => bare(s) === bare(brk.san))) {
+    return `The opening is over, and you got its break in — ${say}, the move this opening is played for.`;
+  }
+  let legalNow = false;
+  try {
+    const c = new Chess(fenNow);
+    legalNow = c.moves().some((m) => bare(m) === bare(brk.san));
+  } catch { legalNow = false; }
+  return legalNow
+    ? `The opening is over and its break, ${say}, has not come yet — it is still there to play when it is prepared.`
+    : `The opening is over without its break, ${say} — the position has moved past it, so the plan now comes from the middlegame.`;
 }
 
 /** The masters' plan for the opening the game played: read at the deepest
@@ -753,7 +814,7 @@ export function buildTheoryLectureBeats(
   const identity = openingIdentityLine(lecture.openingName, studentColor === 'black' ? 'b' : 'w', studentColor ? 'seat' : 'demo', null);
   // The identity is computed and seat-aware; the key idea waits for the
   // outro, where the masters' plan says it from the game's own position.
-  const ideaClause = identity ? ` ${identity.text}` : '';
+  const ideaClause = `${identity ? ` ${identity.text}` : ''}${lecture.equivalence ? ` ${lecture.equivalence}` : ''}`;
   beats.push({
     fenBefore: first.fenBefore,
     showUci: null,
@@ -1082,7 +1143,8 @@ export function buildTheoryLectureBeats(
   const character = studentColor ? characterLine(lecture.planRead, seat) : null;
   const computed = [planText, character].filter(Boolean).join(' ');
   const curated = ideas[0] ? `The takeaway for this opening: ${ideas[0].replace(/[.!?]?\s*$/, '.')}` : '';
-  const planIdea = computed || curated;
+  // The summary closes it: did the student get the break this opening is for?
+  const planIdea = [computed || curated, lecture.breakSummary ?? ''].filter(Boolean).join(' ');
   if (planIdea) {
     const last = lecture.branches[lecture.branches.length - 1];
     beats.push({

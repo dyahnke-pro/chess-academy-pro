@@ -14,7 +14,7 @@ describe('Learn says the line\'s master plan from the stored read', () => {
   const c = new Chess();
   const history = ['e4', 'e6', 'd4', 'd5', 'e5'];
   for (const m of history) c.move(m);
-  const story = (namesStudentMoves: boolean) => readBoardAll('openingStory', { history, fen: c.fen(), student: 'b', namesStudentMoves });
+  const story = (namesStudentMoves: boolean) => readBoardAll('openingStory', { history, fen: c.fen(), student: 'b', namesStudentMoves, theory: true });
   it('French Advance, Black to play: …c5 is your next move, so the key idea is held (Learn names no move unasked)', () => {
     // The story ran (the identity of the line is there) …
     expect(story(false).some((r) => r.storyBeat === 'identity' && /locks the centre/.test(r.text))).toBe(true);

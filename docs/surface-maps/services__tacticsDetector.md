@@ -71,8 +71,8 @@
 - `src/services/tacticLineRotation.test.ts:22`
 
 ### `tacticDescription` (function) — 5 call sites
-- `src/services/lookaheadPlan.ts:135`
-- `src/services/reviewFullData.ts:915`
+- `src/services/lookaheadPlan.ts:136`
+- `src/services/reviewFullData.ts:927`
 - `src/services/tacticLineRotation.test.ts:31`
 - `src/services/tacticLineRotation.test.ts:34`
 - `src/services/tacticLineRotation.test.ts:39`
@@ -95,8 +95,8 @@
 - `src/services/liveNoteTruth.test.ts:59`
 - `src/services/liveTacticsContext.ts:362`
 - `src/services/liveTacticsContext.ts:510`
-- `src/services/lookaheadPlan.ts:1417`
-- `src/services/lookaheadPlan.ts:1480`
+- `src/services/lookaheadPlan.ts:1429`
+- `src/services/lookaheadPlan.ts:1492`
 - `src/services/looseClaim.test.ts:18`
 - `src/services/misconceptionClassifier.ts:107`
 - `src/services/misconceptionClassifier.ts:140`
@@ -122,7 +122,7 @@
 - `src/services/playCommentary.ts:654`
 - `src/services/playedConcept.ts:59`
 - `src/services/playedConcept.ts:66`
-- `src/services/positionFacts.ts:1351`
+- `src/services/positionFacts.ts:1357`
 - `src/services/pvPlayback.ts:394`
 - `src/services/pvPlayback.ts:414`
 - `src/services/relationClaimCost.report.test.ts:52`
@@ -131,9 +131,9 @@
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:61`
 - `src/services/reviewCorpusNote.test.ts:61`
 - `src/services/reviewDepth.eval.measure.test.ts:258`
-- `src/services/reviewFullData.ts:832`
-- `src/services/reviewFullData.ts:928`
-- `src/services/reviewFullData.ts:1594`
+- `src/services/reviewFullData.ts:844`
+- `src/services/reviewFullData.ts:940`
+- `src/services/reviewFullData.ts:1593`
 - `src/services/reviewMoveBriefing.ts:110`
 - `src/services/reviewMoveBriefing.ts:111`
 - `src/services/reviewNarrationFidelity.test.ts:227`

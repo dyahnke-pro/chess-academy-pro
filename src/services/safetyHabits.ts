@@ -46,7 +46,10 @@ export function blunderCheck(
     // they took, is a TRADE (the Ruy exchange: Bxc6 dxc6), not a blunder.
     const trade = !!mine.captured && r.to === mine.to && (MATERIAL_VALUE[r.captured] ?? 0) <= (MATERIAL_VALUE[mine.captured] ?? 0);
     // The piece was winnable right after the student's move — not a trade.
-    if (!trade && legalSeeGainFor(afterMove, r.to, r.color) > 0) answer = `your ${NAME[r.captured] ?? 'piece'} on ${r.to}`;
+    // THE ANSWER IS THEIR MOVE (Colle replay 2026-11-05, 26.Qh6: "what
+    // checks, captures and threats do they have? Here the answer was your
+    // pawn on c3" — a piece where the question asks for a capture).
+    if (!trade && legalSeeGainFor(afterMove, r.to, r.color) > 0) answer = `${r.color === 'b' ? '…' : ''}${r.san}, taking your ${NAME[r.captured] ?? 'piece'} on ${r.to}`;
   }
   // THE CHECK IS THE FIRST C OF CCT (Learn audit 2026-10-15: "e5 was a
   // blunder — it let them force mate, starting with Qxa7" and no habit,
@@ -63,7 +66,7 @@ export function blunderCheck(
  *  say-once claim (`method:blunder-check`). */
 export const BLUNDER_CHECK_QUESTION = 'Blunder check before you let go of a piece: run CCT for them — what checks, captures and threats do they have once it lands?';
 export function blunderCheckLine(pieceName: string, square: string): string {
-  return blunderCheckAnswer(`your ${pieceName} on ${square}`);
+  return blunderCheckAnswer(`a capture: your ${pieceName} on ${square} was there to take`);
 }
 function blunderCheckAnswer(answer: string): string {
   return `${BLUNDER_CHECK_QUESTION} Here the answer was ${answer}.`;
@@ -71,9 +74,9 @@ function blunderCheckAnswer(answer: string): string {
 /** The short callback once the question has been asked this game. */
 function blunderCheckAgain(answer: string, fen: string): string {
   return rotateStem([
-    `Blunder check again — ${answer} was the answer.`,
+    `Blunder check again — the answer was ${answer}.`,
     `Same question before you let go: what do they have? Here, ${answer}.`,
-    `CCT for them once more — ${answer} was there to see.`,
+    `CCT for them once more — the answer was ${answer}.`,
   ], stemKeyOf(fen));
 }
 

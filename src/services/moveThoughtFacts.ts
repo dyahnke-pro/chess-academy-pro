@@ -70,6 +70,11 @@ export interface MoveThoughtInput {
   /** What the move cost its mover against the best move (cp, >= 0), from
    *  one search; null when the surface does not know. */
   costCp: number | null;
+  /** REQUIRED: may this surface speak opening THEORY (the named opening this
+   *  board equals, the book move)? Only where the student asked for it —
+   *  Review's Theory button, chat, a lesson (David 2026-11-06: "Keep the
+   *  theory part for review only. It belongs in the button"). */
+  theory: boolean;
 }
 
 /** How much a job of each kind weighs on the board when nothing is at stake —
@@ -579,6 +584,7 @@ function studentMoveFacts(i: Omit<MoveThoughtInput, 'phrases'>): ThoughtFact[] {
   let out: ReturnType<typeof studentMoveTeaching>;
   try {
     out = studentMoveTeaching({
+      theory: i.theory,
       fenBefore: i.fenBefore, san: i.san.replace(/[!?]+$/, ''),
       history: [...i.history, i.san.replace(/[!?]+$/, '')],
       cpLoss: i.costCp,

@@ -133,7 +133,7 @@ async function answerFromRead(turn: ResolvedChatTurn, board: BoardTurnInput): Pr
   const om = lastMoveIfOpponent(sans, board.studentColor, board.fen);
   let read;
   try {
-    read = await computePositionFacts({
+    read = await computePositionFacts({ theory: true,
       boardComputers: 'composer',
       posture: 'asked', fen: board.fen,
       moverColor: board.fen.split(' ')[1] === 'b' ? 'b' : 'w', studentColor: student,

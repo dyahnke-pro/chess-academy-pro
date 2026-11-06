@@ -73,7 +73,8 @@ import { buildPositionalRead } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { cheaperAttackerHit, gambitPoint, kingPawnUnderFire, type CheaperHit, mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { habitSaidKey, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { habitSaidKey, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { openingSummaryLine } from '../../services/reviewOpeningTheory';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -9016,7 +9017,7 @@ export function CoachTeachPage({ mode }: {
     // The identity is said ONCE A GAME (OS-3 review: the door path had no
     // per-game gate, so every refined name — Sicilian, Najdorf, English
     // Attack — said its family's identity again under a new claim key).
-    const storyReads = readBoardAll('openingStory', { history, fen: args.fenAfterReply, student: studentCC, namesStudentMoves: false })
+    const storyReads = readBoardAll('openingStory', { history, fen: args.fenAfterReply, student: studentCC, namesStudentMoves: false, theory: true })
       .filter((r) => r.storyBeat !== 'identity' || identityHeard(learnMemRef.current.story.current()) === null);
     // 🔒 A NEW GAME IS DETECTED FROM THE BOARD, NOT FROM A CODE PATH.
     // This runs on every ply, so it is the one place that cannot be bypassed
@@ -11275,7 +11276,7 @@ export function CoachTeachPage({ mode }: {
                     // The move's ONE price (the memoized search the door and the
                     // record read) — the facts' cost and grade, never two reads.
                     const priceForFacts = await priceRead;
-                    const pf = await computePositionFacts({
+                    const pf = await computePositionFacts({ theory: true,
                       // Learn reads the board computers in its own lanes.
                       boardComputers: 'surface',
                       // The student asked for this lesson — every taught position
@@ -12481,7 +12482,7 @@ export function CoachTeachPage({ mode }: {
                       const tie = readBoard('tiedDefender', { fenBefore, fenAfterMove: move.fen, fenAfterReply, student: playerColor === 'white' ? 'w' : 'b' });
                       if (tie) queueSpokenHint(fenAfterReply, { computer: tie.computer, text: tie.text, lane: 'movePoint', proof: tie.proof, namesStudentMove: false, squares: tie.squares, claims: tie.claims });
                     }
-                    for (const h of studentMoveTeaching({
+                    for (const h of studentMoveTeaching({ theory: true,
                       fenBefore, san: move.san, history: move.history, cpLoss, bothCp: bothCp && cpLoss !== null,
                       bestSan: studentBestSan, bestLine: preStudentRead.topLines?.[0], topLines: preStudentRead.topLines, reply: reply ?? null,
                       cpAfter: bothCp ? mid.evaluation * sign : null,
@@ -12720,6 +12721,7 @@ export function CoachTeachPage({ mode }: {
                       // taught — never beside a mate (the mate is the whole story).
                       const turnLine = mistakeTurnLine({
                         fund, evidence, lostSquare: look.lostSquare ?? null, bookSaid,
+                        gradeReply: look.punishLine?.uci[0] ? { fen: look.punishLine.fen, uci: look.punishLine.uci[0] } : null,
                         slipPrefix: () => (fund ? noteSlip(learnMemRef.current.story, fund.id, move.history.length) : ''),
                         plainTail: definitionOn(fenAfterReply)(look.pattern),
                         concession,

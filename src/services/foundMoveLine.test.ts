@@ -31,7 +31,7 @@ describe('studentMoveTeaching — a winning move says its line (David 2026-09-30
   it('the engine move that wins a pawn plays the line out, drawn', async () => {
     const { studentMoveTeaching } = await import('./learnBoardTeaching');
     const fen = 'r1b2rk1/pp2ppbp/2np1np1/q1pP4/2P5/1PNBPN2/PB3PPP/R2QK2R b KQ - 0 9';
-    const hints = studentMoveTeaching({
+    const hints = studentMoveTeaching({ theory: true,
       fenBefore: fen, san: 'Nxd5', history: ['Nxd5'], cpLoss: 0, bothCp: true, bestSan: 'Nxd5',
       // The engine's free second read (the same search two depths shallower)
       // agrees, so the three-move line is named (`lineTrust`).
@@ -45,7 +45,7 @@ describe('studentMoveTeaching — a winning move says its line (David 2026-09-30
   it('on one read the three-move line is held (the naming rule)', async () => {
     const { studentMoveTeaching } = await import('./learnBoardTeaching');
     const fen = 'r1b2rk1/pp2ppbp/2np1np1/q1pP4/2P5/1PNBPN2/PB3PPP/R2QK2R b KQ - 0 9';
-    const hints = studentMoveTeaching({
+    const hints = studentMoveTeaching({ theory: true,
       fenBefore: fen, san: 'Nxd5', history: ['Nxd5'], cpLoss: 0, bothCp: true, bestSan: 'Nxd5',
       bestLine: { rank: 1, evaluation: -270, mate: null, moves: ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'] },
       reply: null, cpAfter: null,
@@ -60,7 +60,7 @@ describe('the mate, played out — found and missed (David 2026-09-30: "take the
   const line = { rank: 1, evaluation: 0, mate: 2, moves: ['c1h6', 'a7a6', 'e1e8'] };
   it('the quiet first move found is said with the escape square it takes', async () => {
     const { studentMoveTeaching } = await import('./learnBoardTeaching');
-    const hints = studentMoveTeaching({ fenBefore: fen, san: 'Bh6', history: ['Bh6'], cpLoss: 0, bothCp: false, bestSan: 'Bh6', bestLine: line, reply: null, cpAfter: null });
+    const hints = studentMoveTeaching({ theory: true, fenBefore: fen, san: 'Bh6', history: ['Bh6'], cpLoss: 0, bothCp: false, bestSan: 'Bh6', bestLine: line, reply: null, cpAfter: null });
     const h = hints.find((x) => x.lane === 'movePoint');
     expect(h?.text).toBe('No check yet — the quiet Bh6 comes first: it takes g7 from their king, and Re8 is mate. You play Bh6, they answer a6 and you play Re8#.');
     expect(h?.arrows).toHaveLength(3);

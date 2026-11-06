@@ -9,7 +9,6 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import type { Color } from 'chess.js';
 import { deriveNextPlans } from './reviewTeachingPoints';
-import { buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
 
 /** Piece-type words a plan may only use prescriptively when the student HAS one. */
@@ -42,39 +41,6 @@ const PROBES: Array<{ name: string; fen: string; student: Color }> = [
   // Material up, no knight/rook — convert plan should still be safe.
   { name: 'material up, minors only', fen: '4k3/5ppp/8/8/8/2B5/BP3PPP/4K3 w - - 0 24', student: 'w' },
 ];
-
-describe('castling and king-state claims match the board (board-awareness sweep)', () => {
-  it('no castling advice when the rights are gone', () => {
-    // King on e1, BOTH white rights stripped (field "kq"); minors undeveloped.
-    // The ungrounded fallback is null now ("empty > generic", David 2026-07-23),
-    // so the plan fires on the CURATED path — and when it does it must give
-    // HONEST king-safety advice, never an illegal "get the king castled".
-    const fen = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w kq - 0 4';
-    const plan = buildOpeningDevelopmentPlan(fen, 'w', { curatedIdeas: ['fight for the centre with your pawns'] });
-    expect(plan?.text ?? '').not.toMatch(/get the king castled|then castle\b/);
-    expect(plan?.text ?? '').toMatch(/castling rights are gone|to safety by hand/);
-  });
-
-  it('the knight-shield clause never claims a castled king that is not castled', () => {
-    const start = new Chess();
-    start.move('e4'); start.move('e5');
-    const plan = buildOpeningDevelopmentPlan(start.fen(), 'w');
-    expect(plan?.text ?? '').not.toMatch(/castled king/);
-    // With kingside rights intact the honest future-tense clause is allowed.
-    if ((plan?.text ?? '').includes('g1 knight')) {
-      expect(plan?.text ?? '').toMatch(/will shield your king once you castle short|fights for e5 and d4/);
-    }
-  });
-
-  it('claims "castled king" only when the king actually is', () => {
-    const c = new Chess();
-    for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'O-O']) c.move(s);
-    // White is castled short. Black is NOT: black's g8-knight job may speak
-    // the future-tense shield clause but never "your castled king".
-    const planB = buildOpeningDevelopmentPlan(c.fen(), 'b');
-    expect(planB?.text ?? '').not.toMatch(/stands guard over your castled king/);
-  });
-});
 
 describe('durability words only on verified-durable facts', () => {
   it('a capturable doubled pawn earns no structural-weakness claim', () => {

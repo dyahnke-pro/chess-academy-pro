@@ -94,7 +94,7 @@ export function aimsOf(side: SidePlan, seat: Seat): Aim[] {
     const name = PIECE[piece] ?? word;
     // Keyed by the PIECE: a knight heading for g3 that then heads on to h5 is
     // one journey, not a dropped plan and a new one (first real game read).
-    const route = { name, path: side.maneuver.path, ...(side.maneuver.takes ? { takes: side.maneuver.takes } : {}) };
+    const route = { name, path: side.maneuver.path, ...(side.maneuver.takes ? { takes: side.maneuver.takes } : {}), ...(side.maneuver.trade ? { trade: true } : {}) };
     out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: routeNoun(route), from: side.maneuver.path[0], route });
   }
   return out;

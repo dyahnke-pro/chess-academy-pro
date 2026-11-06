@@ -167,6 +167,30 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     expect(outro?.fact).toMatch(/takeaway/i);
   });
 
+  it('carries the theory the live boards and the walk no longer say (David 2026-11-06: "It belongs in the button")', async () => {
+    const { fens, sans } = chain(['e4', 'e5', 'Qh5']);
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')) return res(fen, [mv('e4', 600), mv('d4', 400)]);
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b')) return res(fen, [mv('e5', 500), mv('c5', 500)]);
+      if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 800), mv('Bc4', 150)]);
+      return res(fen, []);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup, studentColor: undefined });
+    // No seat: neither is read (a seatless lecture never guesses whose break).
+    expect(lec!.breakSummary).toBeNull();
+    expect(lec!.equivalence).toBeNull();
+    const equivalence = 'With colours reversed, this is the Sicilian Defense.';
+    const breakSummary = 'The opening is over, and you got its break in — d4, the move this opening is played for.';
+    const beats = buildTheoryLectureBeats({ ...lec!, equivalence, breakSummary }, ['fight for the centre']);
+    expect(beats[0].fact).toContain(equivalence);
+    expect(beats.find((b) => b.kind === 'outro')?.fact).toContain(breakSummary);
+  });
+
+  it('the opening summary is read against the first board out of the opening, for the student\'s seat', async () => {
+    const { openingSummaryLine } = await import('./reviewOpeningTheory');
+    expect(openingSummaryLine({ san: 'c5', square: 'c5' }, ['e6', 'd5', 'c5'], '4k3/8/8/8/8/8/8/4K3 w - - 0 1')).toMatch(/you got its break in — the pawn to c5/);
+  });
+
   it('explains WHY the main line is main — grounded in the data (§3)', async () => {
     // A mainline that is both most-played AND best-scoring → "both counts".
     const { fens, sans } = chain(['e4', 'e5', 'Nf3']); // 2.Nf3 IS the main line (played)

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**610 lines · 6 exports · 8 importers · 7 tests · 0 audits**
+**650 lines · 8 exports · 8 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5786) — names `openingStory`
 
 ## Who calls in
 
@@ -29,18 +29,27 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `STORY_KIND` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `BEAT_GROUNDS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `StoryBeatFact` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `openingStoryAt` (function) — 9 call sites
-- `src/services/boardComputers.ts:316`
+### `StoryGround` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `openingStoryAt` (function) — 12 call sites
+- `src/services/boardComputers.ts:398`
 - `src/services/holeKey.test.ts:15`
+- `src/services/learnBoardTeaching.test.ts:216`
 - `src/services/openingStory.test.ts:23`
-- `src/services/openingStory.test.ts:133`
-- `src/services/openingStory.test.ts:157`
-- `src/services/openingStory.test.ts:168`
-- `src/services/openingStory.test.ts:179`
-- `src/services/openingStory.test.ts:207`
+- `src/services/openingStory.test.ts:30`
+- `src/services/openingStory.test.ts:38`
+- `src/services/openingStory.test.ts:145`
+- `src/services/openingStory.test.ts:169`
+- `src/services/openingStory.test.ts:180`
+- `src/services/openingStory.test.ts:191`
+- `src/services/openingStory.test.ts:219`
 - `src/services/openingStoryWholeBeat.test.ts:26`
 
 ### `BEAT_ORDER` (const) — 0 call sites
@@ -48,12 +57,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `prefetchOpeningStory` (function) — 2 call sites
 - `src/services/learnBoardTeaching.ts:93`
-- `src/services/openingStory.test.ts:146`
+- `src/services/openingStory.test.ts:158`
 
 ## Tests
 
 - `src/services/holeKey.test.ts`
 - `src/services/holeOneKey.test.ts`
+- `src/services/learnBoardTeaching.test.ts`
 - `src/services/learnTurnDoor.thought.test.ts`
 - `src/services/oneGroupTable.gate.test.ts`
 - `src/services/openingStory.test.ts`

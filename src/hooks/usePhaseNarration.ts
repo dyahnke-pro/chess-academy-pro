@@ -430,7 +430,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // already read; the importance model gates whether anything speaks.
       try {
         if (stockfishAnalysis?.topLines?.length) {
-          const pf = await computePositionFacts({
+          const pf = await computePositionFacts({ theory: true,
       boardComputers: 'composer',
             // Mid-game, unasked-for. The transition has to earn its sentence.
             posture: 'interrupt',

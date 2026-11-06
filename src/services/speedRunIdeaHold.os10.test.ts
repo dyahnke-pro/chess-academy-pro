@@ -12,7 +12,7 @@ const line = (moves: string[], evaluation: number) => ({ moves, evaluation, mate
 const ideaOf = (fen: string, lines: ReturnType<typeof line>[], re: RegExp) =>
   // Any kind: the speedrun reads are filed under their teaching move's kind
   // (provoke, tension, …) since the computers' round 2.
-  depthClauses({ fen, history: [], topLines: lines, studentColor: 'w', nameMove: false }).find((c) => re.test(c.text));
+  depthClauses({ theory: true, fen, history: [], topLines: lines, studentColor: 'w', nameMove: false }).find((c) => re.test(c.text));
 
 describe('a speedrun idea that names the student\'s piece holds its move (OS-10)', () => {
   const cases: Array<[string, string, ReturnType<typeof line>[], RegExp, string]> = [

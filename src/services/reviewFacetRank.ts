@@ -32,7 +32,7 @@ export type FacetTag =
   | 'sac' | 'sac-why' | 'forced' | 'king' | 'rook7' | 'passer'
   | 'badbishop' | 'worst' | 'minority' | 'complex' | 'structure'
   | 'verdict' | 'opening' | 'opp-dev' | 'their-habit' | 'your-habit' | 'held' | 'last-here' | 'opp-target' | 'endgame'
-  | 'plan-now' | 'plan-race' | 'plan-arc' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
+  | 'plan-now' | 'plan-race' | 'plan-arc' | 'plan-middlegame' | 'plan-line' | 'consequence'
   // The plan thread's worst-piece plan, said as the student's wish (round 5):
   // placed everywhere exactly as the plan now.
   | 'plan-worst-piece'
@@ -234,7 +234,6 @@ export const FACET_RANK: Record<FacetTag, number> = {
   'plan-arc': 19,
   'plan-line': 18,
   'plan-middlegame': 16,
-  'plan-opening': 14,
   consequence: 12,
   // THE METHOD CLOSES THE BEAT (2026-09-16). Ranked last on purpose: the board
   // fact comes first, the principle it broke next, and the habit that finds it
@@ -331,7 +330,6 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   'plan-arc': 'teach',
   'plan-now': 'teach',
   'plan-worst-piece': 'teach',
-  'plan-opening': 'teach',
   'plan-middlegame': 'teach',
   'reply-tree': 'teach',
   'move-order': 'teach',
@@ -485,7 +483,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   does: 'principle', point: 'plan', 'their-cost': 'plan', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
   status: 'principle', 'their-habit': 'principle', 'your-habit': 'principle', 'hole-access': 'plan', 'speedrun-read': 'plan',
   // PLAN — structure, targets, the plan and the long read.
-  'plan-now': 'plan', 'plan-worst-piece': 'plan', contrast: 'plan', 'capture-choice': 'plan', kick: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
+  'plan-now': 'plan', 'plan-worst-piece': 'plan', contrast: 'plan', 'capture-choice': 'plan', kick: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-middlegame': 'plan',
   'prevent-test': 'plan', 'game-end': 'plan', murky: 'plan', 'attack-pattern': 'plan',
   judgement: 'plan',
   'plan-line': 'plan', consequence: 'plan', structure: 'plan', passer: 'plan', rook7: 'plan',
@@ -542,7 +540,7 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   priority: 'method',
   // THE PLAN AND THE STRUCTURE — a reading of the position, said as one.
   point: 'description', contrast: 'description', 'plan-arc': 'description', 'plan-now': 'description', 'plan-worst-piece': 'description',
-  'plan-opening': 'description', 'plan-middlegame': 'description', 'plan-line': 'description',
+  'plan-middlegame': 'description', 'plan-line': 'description',
   'structure-plan': 'description', 'opponent-intent': 'description', 'hole-access': 'description',
   'speedrun-read': 'description', status: 'description', consequence: 'description',
   // DESCRIPTIONS OF THE BOARD.

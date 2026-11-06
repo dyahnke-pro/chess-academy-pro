@@ -115,8 +115,9 @@ export function orderTeaching(i: StudentMoveInput & { cpLoss: number }): Teachin
     if (pf) out.push(teachingFact('patternFails', { computer: 'patternFails', kind: 'refuted', ...mine, text: pf.text, names: NAMES_NO_MOVE, proof: pf.proof, squares: pf.squares, claims: [`pattern-fails:${pf.tempting}`] }, { event: { name: 'coach_pattern_fails', props: { surface: 'coach-teach', pattern: pf.pattern } }, arrows: proofArrows(pf.proof, 'learn.patternFails'), evidence: { tag: 'calculation-depth', posedImportance: 70 } }));
   }
 
-  // THE OPENING THIS BOARD IS, once their reply is on it.
-  if (reply) {
+  // THE OPENING THIS BOARD IS, once their reply is on it — theory, said only
+  // where it was asked for (`StudentMoveInput.theory`).
+  if (reply && i.theory) {
     const eq = openingEquivalence([...i.history, reply], me);
     if (eq) out.push(teachingFact('openingEquivalence', { computer: 'openingEquivalence', kind: 'equivalence', ...mine, text: eq.text, names: NAMES_NO_MOVE, proof: eq.proof, squares: eq.squares, claims: [eq.claim] }, { event: { name: 'coach_opening_equivalence', props: { surface: 'coach-teach', kind: eq.kind } }, // No arrows: an inserted-move proof runs on the REFERENCE board, not
       // the one in front of the student.

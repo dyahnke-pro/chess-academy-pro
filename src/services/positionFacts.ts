@@ -151,6 +151,11 @@ import { positionOf } from '../utils/samePosition';
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
 interface PositionFactsInput {
+  /** REQUIRED: may this surface speak opening THEORY (the named opening this
+   *  board equals, the book move)? Only where the student asked for it —
+   *  Review's Theory button, chat, a lesson (David 2026-11-06: "Keep the
+   *  theory part for review only. It belongs in the button"). */
+  theory: boolean;
   /** HOW THIS SURFACE LISTENS — required, no default (CLAUDE.md §G4.5.15).
    *
    *  `'walk'` = the student asked for this sequence or tapped to hear it
@@ -1294,6 +1299,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // surface names it anyway, and never where the move is held back.
   const depth: ClauseFact[] = depthClauses({
     fen,
+    theory: input.theory,
     history: input.history ?? [],
     topLines: input.analysis?.topLines ?? [],
     studentColor: studentSeat === 'white' ? 'w' : 'b',
@@ -1359,7 +1365,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       const order = readBoard('enablingMove', { fen, pv: input.analysis.topLines[0]?.moves ?? [] });
       if (order && input.namesBestMove) speak(order);
       if (input.opponentLastMove) speak(readBoard('obligationLifted', { fenBefore: input.opponentLastMove.fenBefore, fenAfter: fen, student: studentColor }));
-      if (input.history?.length) speak(readBoard('bookMove', { history: input.history, student: studentColor }));
+      // The book move is theory: said only where it was asked for.
+      if (input.theory && input.history?.length) speak(readBoard('bookMove', { history: input.history, student: studentColor }));
       const own = input.lastMove;
       // The count, only when the student's last move lost it.
       if (own) speak(readBoard('countMethod', { fenBefore: own.fenBefore, playedSan: own.san, student: studentColor, costCp: own.cpLoss }));

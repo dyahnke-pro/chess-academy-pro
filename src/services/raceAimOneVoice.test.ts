@@ -14,7 +14,7 @@ const G2 = 'rn1q1rk1/1p2bppp/3pbn2/pB2p3/4P3/1NN1BP2/PPPQ2PP/2KR3R b - - 1 11';
 describe('the race and the king-attack plan speak once', () => {
   it('the race claims plan-aim:king-attack, and beside the plan only one of them speaks', async () => {
     const analysis = { evaluation: 0, bestMove: 'a6', depth: 12, topLines: [{ rank: 1, moves: ['a8a6'], evaluation: 0, mate: null }], nodesPerSecond: 0 } as unknown as Parameters<typeof computePositionFacts>[0]['analysis'];
-    const pf = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: G2, moverColor: 'b', studentColor: 'b', analysis, teachingBeat: true });
+    const pf = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'walk', fen: G2, moverColor: 'b', studentColor: 'b', analysis, teachingBeat: true });
     const i = pf.clauses.findIndex((c) => c.kind === 'king-read' && /opposite wings/.test(c.text));
     expect(i).toBeGreaterThanOrEqual(0);
     const raceClaims = clauseClaims(pf, i, G2);

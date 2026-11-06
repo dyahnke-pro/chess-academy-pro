@@ -8,9 +8,9 @@
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1675) — names `useLiveCoach`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4557) — names `useLiveCoach`
-- **The standard post-deploy ritual** (CLAUDE.md:6804) — names `useLiveCoach`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1689) — names `useLiveCoach`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4572) — names `useLiveCoach`
+- **The standard post-deploy ritual** (CLAUDE.md:6841) — names `useLiveCoach`
 
 ## Who calls in
 
@@ -24,7 +24,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `useLiveCoach` (function) — 9 call sites
-- `src/components/Coach/CoachGamePage.tsx:923`
+- `src/components/Coach/CoachGamePage.tsx:930`
 - `src/hooks/useLiveCoach.needWire.test.tsx:69`
 - `src/hooks/useLiveCoach.needWire.test.tsx:82`
 - `src/hooks/useLiveCoach.needWire.test.tsx:93`

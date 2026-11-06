@@ -5771,16 +5771,24 @@ Learn free play no producer names the student's move — the better move after
 a mistake, the held move at a key moment, the answer to their slip — unless the
 student ASKED (Show me, Hint, a question).
 
-🔄 **ONE CARVE-OUT — THEORY (David 2026-10-14: "it's ok to name the move if
-it's after it's already been played. How else do we teach the user a wrong
-move?" → "And the WHY behind the move!!").** Once the student has LEFT THE
-BOOK, the book move is named — always WITH its job on the board
-(`bookMoveWhy`: the guard it adds to a piece under pressure, the pin it stops,
-the castling it clears, the piece it develops, the centre it covers) and what
-the student's move left undone. Theory is knowledge, not a find, so withholding
-it teaches nothing; a TACTICAL miss still waits for Show me. No job on the
-board → the book move is not named. The register is his speedruns: the job,
-the tempting alternative and why it falls short, the consequence.
+🔄 **OPENING THEORY: REVIEW'S THEORY BUTTON, AND LEARN FOR NOW (David
+2026-11-05/06: "Keep the theory part for review only. It belongs in the
+button." → "Yes move theory to review button, but keep in learn for now
+also.").** 🔴 This REPLACES the 2026-10-14 "ONE CARVE-OUT — THEORY", which is
+DELETED rather than annotated. The Review WALK says no opening theory: no book
+move, no book standing ("the masters' main line", "the last book move"), no
+masters' plan or opening stat, no "the same opening as", no fork / branch /
+their-setup / key-break / horizon-plan story beat — those are the Theory
+button's (`reviewOpeningTheory`: the identity and equivalence in the intro, the
+student's departure with the book move's job via `bookMoveWhy`, the masters'
+plan and the break in the outro). Learn keeps its theory lanes until David
+says otherwise; chat and the lessons say theory. Every theory producer takes a
+REQUIRED `theory: boolean` (`openingStory`, `positionFacts`, `orderReads`,
+`moveThoughtFacts`, `studentMoveTeaching`), so a new caller decides it; only
+the Review walk passes `false`. Board beats speak everywhere
+(`openingStory.BEAT_GROUNDS`: the structure's cost and payment, what their move
+does, the "both kings" character). Gates: `openingStory.test.ts`,
+`coachFeatureService.openingStory.test.ts`, `bookMoveWhy.test.ts`.
 
 What still speaks:
 1. **The why of every mistake** — yours and theirs at the same detail (David

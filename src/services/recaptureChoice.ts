@@ -95,9 +95,15 @@ function readRecapture(fenBefore: string, m: Move, me: 'w' | 'b', theirReply: st
 /**
  * The student recaptured with `playedSan` on the square their piece was just
  * taken. When another recapture exists and the two differ on a board fact, a
- * line comparing them — the played one first. `bestSan` is the engine's choice
- * among the recaptures, passed ONLY when the played one costs >= 50cp against
- * it (a near-tie is taste, not a lesson); then the line teaches that one.
+ * line comparing them — the played one first.
+ *
+ * NEVER THE BETTER RECAPTURE (Colle replay 2026-11-05, 20.Qxf4: the grade
+ * said "…f6 attacks the bishop on g5 — Bxf4 was the move", and this line
+ * added "Better to take back with the bishop — Bxf4; Qxf4 would put the queen
+ * on f4, where …e5 hits it", a second reason that contradicted the first).
+ * A recapture that is a fault is the one error computer's to explain; the
+ * caller does not ask this one then, and it has no branch that names the
+ * engine's recapture.
  */
 /** A plus that only says where the piece lands — no consequence. */
 const PLACEMENT_ONLY = /^(?:the knight lands in the centre|it takes back toward the centre)/;
@@ -105,7 +111,6 @@ const PLACEMENT_ONLY = /^(?:the knight lands in the centre|it takes back toward 
 export function recaptureChoice(
   fenBefore: string,
   playedSan: string,
-  bestSan: string | null,
   /** Their actual answer to the recapture, SAN without dots, when known. */
   theirReply: string | null = null,
 ): string | null {
@@ -117,7 +122,7 @@ export function recaptureChoice(
   if (!options.length) return null;
   const reply = theirReply ? theirReply.replace(/^…/, '') : null;
   const mineAll = readRecapture(fenBefore, played, me, reply);
-  const pick = options.find((o) => o.san === bestSan) ?? options[0];
+  const pick = options[0];
   const otherAll = readRecapture(fenBefore, pick, me, reply);
   // ONLY A DIFFERENCE IS SPOKEN (walk 2026-09-30: "bxc3 would double your
   // pawns" said for dxc3's sake, when dxc3 doubles them too).
@@ -125,13 +130,6 @@ export function recaptureChoice(
   const other = { ...otherAll, plus: otherAll.plus.filter((x) => !mineAll.plus.includes(x)), minus: otherAll.minus.filter((x) => !mineAll.minus.includes(x)) };
   const dot = me === 'b' ? '…' : '';
   const P = `${dot}${mine.san}`; const O = `${dot}${other.san}`;
-  const what = (x: Move): string => (x.piece === 'p' ? `the ${x.from[0]}-pawn` : `the ${PIECE[x.piece]}`);
-  if (bestSan && bestSan === pick.san) {
-    // The engine preferred the other recapture — teach that one.
-    if (other.plus[0]) return `Better to take back with ${what(pick)} — ${O}: ${other.plus[0]}.`;
-    if (mine.minus[0]) return `Better to take back with ${what(pick)} — ${O}; ${P} ${mine.minus[0]}.`;
-    return null;
-  }
   const good = mine.plus[0]; const bad = other.minus[0];
   // The SAN says which piece takes back ("exd5" is spoken "e-pawn takes
   // d5"); "exd5, taking back with the e-pawn" said the capture twice (David

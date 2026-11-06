@@ -40,9 +40,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `aimsOf` (function) — 11 call sites
-- `src/services/lookaheadPlan.ts:1580`
-- `src/services/lookaheadPlan.ts:1583`
-- `src/services/lookaheadPlan.ts:1716`
+- `src/services/lookaheadPlan.ts:1616`
+- `src/services/lookaheadPlan.ts:1619`
+- `src/services/lookaheadPlan.ts:1752`
 - `src/services/planArc.heldAnnouncement.test.ts:29`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
@@ -71,9 +71,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.standing.test.ts:28`
 
 ### `withAnnouncement` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11476`
-- `src/components/Coach/CoachTeachPage.tsx:11477`
-- `src/components/Coach/CoachTeachPage.tsx:12107`
+- `src/components/Coach/CoachTeachPage.tsx:11613`
+- `src/components/Coach/CoachTeachPage.tsx:11614`
+- `src/components/Coach/CoachTeachPage.tsx:12251`
 - `src/services/planArc.heldAnnouncement.test.ts:32`
 
 ### `EMPTY_ARC` (const) — 0 call sites
@@ -90,9 +90,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.test.ts:339`
 
 ### `stepArc` (function) — 37 call sites
-- `src/services/lookaheadPlan.ts:1580`
-- `src/services/lookaheadPlan.ts:1583`
-- `src/services/lookaheadPlan.ts:1717`
+- `src/services/lookaheadPlan.ts:1616`
+- `src/services/lookaheadPlan.ts:1619`
+- `src/services/lookaheadPlan.ts:1753`
 - `src/services/planArc.heldAnnouncement.test.ts:29`
 - `src/services/planArc.standing.test.ts:16`
 - `src/services/planArc.standing.test.ts:22`
@@ -129,9 +129,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/thinkMarkClosed.gate.test.ts:77`
 
 ### `aimWalkableNow` (function) — 20 call sites
-- `src/services/lookaheadPlan.ts:1580`
-- `src/services/lookaheadPlan.ts:1583`
-- `src/services/lookaheadPlan.ts:1716`
+- `src/services/lookaheadPlan.ts:1616`
+- `src/services/lookaheadPlan.ts:1619`
+- `src/services/lookaheadPlan.ts:1752`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
 - `src/services/planArc.test.ts:211`

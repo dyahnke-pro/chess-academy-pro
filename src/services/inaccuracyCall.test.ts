@@ -573,7 +573,8 @@ describe('their slip is offered as what it really is (Learn walk 2026-10-02, 6.h
   });
   it('a small edge is not a prize (Learn walk 2026-10-02: "go and take it" at +0.45)', () => {
     const said = callInaccuracy(withOneSearch({ namesBetterMove: true, ...base, moverEvalAfterCp: -45 }))?.said ?? '';
-    expect(said).toMatch(/brings you level/);
+    expect(said).toMatch(/a way back to level — look for the move that gets you there/);
+    expect(said).not.toMatch(/brings you level/);
     expect(callInaccuracy(withOneSearch({ namesBetterMove: true, ...base, moverEvalAfterCp: -80 }))?.said ?? '').toMatch(/tips the game your way/);
   });
 });

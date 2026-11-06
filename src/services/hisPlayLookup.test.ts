@@ -4,13 +4,12 @@ import {
   __setHisPlayDbForTests,
   __resetHisPlayDbForTests,
   lookupHisPlaySync,
-  hisGroundedPlanSync,
-  HIS_PLAN_GUIDE_MIN_GAMES,
+  bestPlanMove,
 } from './hisPlayLookup';
 
 // Small fixture keyed by positionFen (first 4 FEN fields), mirroring the real
 // danya-play-db.json shape. Black-to-move after 1.e4 c5 2.Nc3 (his defense) and
-// the follow-ups, so hisGroundedPlanSync can walk a short grounded line.
+// the follow-ups.
 const startFen = (() => { const c = new Chess(); ['e4', 'c5', 'Nc3'].forEach((m) => c.move(m)); return c.fen(); })();
 const key = (fen: string): string => fen.split(/\s+/).slice(0, 4).join(' ');
 const fenAfter = (sans: string[]): string => { const c = new Chess(); sans.forEach((m) => c.move(m)); return c.fen(); };
@@ -28,10 +27,6 @@ const DB = {
   [key(fenAfter(['e4', 'c5', 'Nc3', 'd6', 'Nf3']))]: { total: 480, moves: [
     { san: 'Nc6', games: 300, w: 170, d: 40, l: 90 },
   ] },
-};
-
-const apply = (fen: string, san: string): string | null => {
-  try { const c = new Chess(fen); c.move(san); return c.fen(); } catch { return null; }
 };
 
 afterEach(() => __resetHisPlayDbForTests());
@@ -55,45 +50,13 @@ describe('hisPlayLookup', () => {
     expect(lookupHisPlaySync(startFen)).toBeNull();
   });
 
-  it('builds a grounded plan by following his top move per ply', () => {
-    __setHisPlayDbForTests(DB);
-    const plan = hisGroundedPlanSync(startFen, apply, 6);
-    expect(plan).not.toBeNull();
-    expect(plan!.side).toBe('b');
-    expect(plan!.line[0]).toBe('d6');
-    expect(plan!.sideMoves[0]).toBe('d6');
-    expect(plan!.leadGames).toBe(829);
-    expect(plan!.leadWinPct).toBe(Math.round((100 * 560) / 829));
-    // walks into the follow-up positions present in the fixture
-    expect(plan!.line).toContain('Nf3');
-  });
-
-  it('refuses to call a truly thin position "his plan" (below the guide floor)', () => {
-    // David 2026-07-24: his corpus is now the GUIDE at a lower floor
-    // (HIS_PLAN_GUIDE_MIN_GAMES) — only BELOW that do we fall to the masters DB.
-    __setHisPlayDbForTests({
-      [key(startFen)]: { total: HIS_PLAN_GUIDE_MIN_GAMES - 1, moves: [{ san: 'd6', games: 3, w: 2, d: 0, l: 1 }] },
-    });
-    expect(hisGroundedPlanSync(startFen, apply, 6)).toBeNull();
-  });
-
-  it('USES his corpus as a guide between the guide floor and the old plan bar', () => {
-    // A position with 8 of his games (>= guide floor 5, < old bar 12) now grounds
-    // the plan instead of dropping to masters (David 2026-07-24 "use his corpus
-    // as a guide").
-    __setHisPlayDbForTests({
-      [key(startFen)]: { total: 8, moves: [{ san: 'd6', games: 8, w: 5, d: 1, l: 2 }] },
-    });
-    expect(hisGroundedPlanSync(startFen, apply, 6)).not.toBeNull();
-  });
-
   it('drops a frequent-but-LOSING plan to masters (win-rate gate) — the Barry Attack case', () => {
     // His most-played move here scores badly (18%W, no draws) — teaching it
-    // would teach a losing plan, so hisGroundedPlanSync returns null.
+    // would teach a losing plan, so no plan move is picked.
     __setHisPlayDbForTests({
       [key(startFen)]: { total: 22, moves: [{ san: 'd6', games: 22, w: 4, d: 0, l: 18 }] },
     });
-    expect(hisGroundedPlanSync(startFen, apply, 6)).toBeNull();
+    expect(bestPlanMove(lookupHisPlaySync(startFen)!)).toBeNull();
   });
 
   it('picks his best-scoring FREQUENT move, not merely the most-played', () => {
@@ -104,8 +67,6 @@ describe('hisPlayLookup', () => {
         { san: 'e6', games: 90, w: 55, d: 8, l: 27 },
       ] },
     });
-    const plan = hisGroundedPlanSync(startFen, apply, 2);
-    expect(plan).not.toBeNull();
-    expect(plan!.sideMoves[0]).toBe('e6');
+    expect(bestPlanMove(lookupHisPlaySync(startFen)!)?.san).toBe('e6');
   });
 });

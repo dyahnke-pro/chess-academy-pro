@@ -33,6 +33,7 @@ import { proofCut } from './exchangeLedger';
 import { routeVerb, routeWaypoints, type RouteSpec } from '../utils/routeWords';
 import { positionOf } from '../utils/samePosition';
 import { withArticle } from '../utils/andList';
+import { MATERIAL_VALUE } from './pieceValues';
 // The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
 // from here so a surface composes one plan module, not two.
 export { aimsOf, aimWalkableNow, stepArc, withAnnouncement, EMPTY_ARC, type ArcEvent, type ArcState } from './planArc';
@@ -292,7 +293,7 @@ export interface SidePlan {
    *  the journey, so a three-move regrouping read as two unrelated squares. The
    *  chain was already being reconstructed inside `planMarks` to place an
    *  arrow; here it becomes the sentence it always was. */
-  maneuver: { piece: string; path: string[]; takes?: string; /** The only piece of its kind on its side: said without its square ("walk the queen round to f6"). */ alone?: boolean } | null;
+  maneuver: { piece: string; path: string[]; takes?: string; /** The line takes the arriving piece back for no less: an exchange, said as one. */ trade?: true; /** The only piece of its kind on its side: said without its square ("walk the queen round to f6"). */ alone?: boolean } | null;
   /** Checks this side gives inside the horizon. `isCheck` has been computed on
    *  every ply since `pvPlayback` was written and read by nothing. */
   checks: number;
@@ -802,17 +803,28 @@ function planFor(
   // What it takes is what the LINE's arriving move captures, never what stood
   // there on the root board (walk oct3b, 21…Rac8: "walk the rook round to c1
   // … and take the bishop there" — the bishop had gone to b4 by then).
-  const arrivalCapture = (path: readonly string[]): string | null => {
+  // A CAPTURE THE LINE TAKES BACK FOR NO LESS IS A TRADE (Colle replay
+  // 2026-11-05, 24…Rc7: "Qc7 was their move — it would head on to g3, and
+  // take the queen there", where …Qxg3 is met by hxg3).
+  // Taken back for MORE than it took, it is no capture worth naming at all.
+  const arrivalCapture = (path: readonly string[]): { word: string; retaken: 'even' | 'loses' | null } | null => {
     const dest = path[path.length - 1];
     const from = path[path.length - 2];
     const arrival = mine.find((p) => p.uci.slice(0, 2) === from && p.uci.slice(2, 4) === dest);
     if (!arrival) return null;
     try {
       const mv = new Chess(arrival.fenBefore).move({ from, to: dest, promotion: arrival.uci[4] });
-      return mv?.captured ? PIECE_WORD[mv.captured] ?? 'piece' : null;
+      if (!mv?.captured) return null;
+      const next = plies[plies.indexOf(arrival) + 1];
+      const back = next && next.uci.slice(2, 4) === dest ? new Chess(next.fenBefore).move({ from: next.uci.slice(0, 2), to: dest, promotion: next.uci[4] }) : null;
+      const won = MATERIAL_VALUE[mv.captured] ?? 0;
+      const given = MATERIAL_VALUE[mv.piece] ?? 0;
+      const retaken = !back?.captured || won > given ? null : won === given ? 'even' as const : 'loses' as const;
+      return { word: PIECE_WORD[mv.captured] ?? 'piece', retaken };
     } catch { return null; }
   };
-  const takenOnArrival = maneuverPick ? arrivalCapture(maneuverPick.path) : null;
+  const arrivalRead = maneuverPick ? arrivalCapture(maneuverPick.path) : null;
+  const takenOnArrival = arrivalRead && arrivalRead.retaken !== 'loses' ? arrivalRead.word : null;
   // …and the capture must be the one the CURRENT board shows (clean-pass walk
   // 2026-10-03, G2 ply 30: "getting the bishop to e2, by way of a6, to take
   // the knight there" — e2 held White's queen; a knight only arrived there
@@ -840,7 +852,7 @@ function planFor(
       return b.board().flat().filter((c) => c && c.type === p.type && c.color === p.color).length === 1;
     } catch { return false; }
   })();
-  const maneuver = !maneuverPick || targetShifts ? null : { ...maneuverPick, ...(takes ? { takes } : {}), ...(alone ? { alone } : {}) };
+  const maneuver = !maneuverPick || targetShifts ? null : { ...maneuverPick, ...(takes ? { takes } : {}), ...(takes && arrivalRead?.retaken === 'even' ? { trade: true as const } : {}), ...(alone ? { alone } : {}) };
 
   const headingFor = [...destinations.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
@@ -994,7 +1006,7 @@ export function describePlan(
       // 13…Bf5): "the idea is to walk the bishop round to c5, by way of e3"
       // was the OTHER bishop's route — the f4 bishop, in the line — and "the
       // bishop" reads as the one that just moved. The square says which.
-      const spec: RouteSpec = { name: piece, path, ...(plan.maneuver.takes ? { takes: plan.maneuver.takes } : {}), ...(plan.maneuver.alone ? { alone: true } : {}) };
+      const spec: RouteSpec = { name: piece, path, ...(plan.maneuver.takes ? { takes: plan.maneuver.takes } : {}), ...(plan.maneuver.trade ? { trade: true } : {}), ...(plan.maneuver.alone ? { alone: true } : {}) };
       add(80, routeVerb(spec), [path[0], ...via, dest], { piece, from: path[0], spec });
     }
   }

@@ -16,8 +16,6 @@ import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
 import { settledExchange, moverLineProof } from './exchangeLedger';
 import { threatProof } from './threatProof';
-import { planFor } from './openingIdentity';
-import { mastersPlanLine } from './mastersPlanRead';
 import { inFluxAfter } from './boardState';
 import { readTrade } from './tradeQuality';
 import { readTiming, timingClause } from './moveTiming';
@@ -57,7 +55,6 @@ import { notYetPlayed } from './notYetPlayed';
 import { heldResource } from './holdResource';
 import { captureChoice } from './captureChoice';
 import { kickAfterRecapture } from './kickMap';
-import { openingEquivalence } from './openingEquivalence';
 import { refutedAltProof } from './refutedAlternativeCore';
 import { advantageWasMissed } from './reviewWithholding';
 import { costWords, isMateEval, storedMate, mateDistanceOf, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
@@ -65,16 +62,16 @@ import { ONLY_MOVE_CP } from './criticalityScan';
 import { computeBoardDelta } from './boardDelta';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { explainMatingSacMechanism } from './reviewForcedSequence';
-import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
+import { buildMiddlegameOrientation } from './reviewStrategicOrientation';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { nameEndgamePhase } from './reviewMoveTeaching';
-import { detectOpening } from './openingDetectionService';
 import { planRaceClause, planRaceProof, pawnSquareTaken, pawnSquareRaceProof } from './planRace';
 import { kingReadsForBestLine } from './kingAttackReads';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import type { SaidSet } from './gameStory';
 import { renderFundamentalVerdict } from './principleVoice';
+import { fundamentalReply, sameReplyAsGrade } from './mistakeTurnLine';
 import { errorWhy, priorMoveLeadingTo, replyKeptWin, type SecondReads } from './inaccuracyCall';
 import { toOtherSeat } from '../utils/seatPronouns';
 import { andList, countWord, lineSeatAt, withArticle } from '../utils/andList';
@@ -556,6 +553,9 @@ export function computeMoveFacets(
   // The punishing reply the verdict names (`errorWhy`'s consequence), so a
   // known slip on this move names the same punishment once (7d2).
   let verdictPunish: string | null = null;
+  // The line the verdict's words name, from the board it starts on — so a
+  // fundamental naming the same answer of theirs is one claim (`sameReplyAsGrade`).
+  let verdictLine: { fen: string; uci: string[] } | null = null;
   if (ctx.classification && ctx.classification !== 'good' && ctx.classification !== 'book' && !insideStudentForcedMate) {
     // COST IS ONLY A COST ON A MOVE THAT COST SOMETHING (found 2026-09-16 by
     // reading the shipped review of David's Alapin: ply 31 spoke "that was a
@@ -636,6 +636,7 @@ export function computeMoveFacets(
     };
     const reason = seat(ew?.reason ?? null);
     if (ew?.consequence && ew.punishFirst) verdictPunish = ew.punishFirst;
+    verdictLine = ew?.line ?? null;
     if (outVerdictReason) {
       outVerdictReason.text = reason;
       // The verdict already walked the punishing line — no second producer
@@ -738,10 +739,21 @@ export function computeMoveFacets(
   // the uncapped inventory carries it and the capped cascade can lead with it.
   if (ctx.fundamentals && ctx.fundamentals.length > 0) {
     const verdict = renderFundamentalVerdict(ctx.fundamentals, { ply, seen: ctx.seenFundamentals, replySan: ctx.allSans[ply] ?? null });
-    const pf = made('renderFundamentalVerdict', 'principle', verdict.diagnosis);
-    facets.push(pf);
-    // The rule explains the cost the move paid, so it is worth that cost.
-    if (negativeClass) recStakes(pf, costStakes(swing));
+    // ONE ANSWER, ONE CLAIM (Colle replay 2026-11-05, 20.Qxf4: "Another tempo
+    // on offer: f6 would hit your bishop on g5" beside the verdict's "it let
+    // them play …f6, which attacks your bishop"): a diagnosis naming the
+    // answer the verdict already plays out is the verdict's to say; the rule
+    // keeps only its habit.
+    const sameAnswer = sameReplyAsGrade(
+      fundamentalReply(ctx.fundamentals[0].evidence.moves, fenBefore, san),
+      verdictLine?.uci[0] ? { fen: verdictLine.fen, uci: verdictLine.uci[0] } : null,
+    );
+    if (!sameAnswer) {
+      const pf = made('renderFundamentalVerdict', 'principle', verdict.diagnosis);
+      facets.push(pf);
+      // The rule explains the cost the move paid, so it is worth that cost.
+      if (negativeClass) recStakes(pf, costStakes(swing));
+    }
     // ITS HOW IS THE HABIT STEP (WO-ONE-COACH-01): a fact of its own, so the
     // door says it last — after the line it is about, never inside the
     // diagnosis that leads the beat.
@@ -1264,19 +1276,6 @@ export function computeMoveFacets(
         if (won) say('pawnSquareTaken', 'plan-race', won.text, pawnSquareRaceProof(fenBefore, won.race), won.squares, `pawn-race:${won.race.square}`);
       } catch { /* a bonus, never a blocker */ }
     }
-    // THE OPENING THIS BOARD IS — either seat, once a game (its identity).
-    if (studentWB && ply <= 24) {
-      try {
-        const eq = openingEquivalence(ctx.allSans.slice(0, ply), studentWB);
-        if (eq) {
-          const f = made('openingEquivalence', 'equivalence', eq.text);
-          facets.push(f);
-          recProof(f, eq.proof);
-          recSquares(f, eq.squares);
-          f.identity = `once:${eq.claim}`;
-        }
-      } catch { /* a bonus, never a blocker */ }
-    }
   }
 
   // ── 7a. THE BLUFF — "don't buy it" (WO-LAYERS-01 step 4). On the OPPONENT's
@@ -1601,8 +1600,6 @@ export function computeMoveFacets(
     } else {
       // The engine's line plays A first because A clears the road B needs.
       if (ctx.bestLineUci.length >= 2) add(readBoardAll('enablingMove', { fen: fenBefore, pv: ctx.bestLineUci })[0]);
-      // The book move the student just left, with its job on the board.
-      add(readBoardAll('bookMove', { history: ctx.allSans.slice(0, ply), student: studentColorWB })[0]);
       // The count, only when the student's move lost it; the priority they faced.
       add(readBoardAll('countMethod', { fenBefore, playedSan: san, student: studentColorWB, costCp: swing })[0]);
       if (ctx.bestLineUci[0]) add(readBoardAll('priorityFirst', { fen: fenBefore, student: studentColorWB, bestUci: ctx.bestLineUci[0] })[0]);
@@ -1637,10 +1634,9 @@ export function computeMoveFacets(
     recStakes(ff, mateStakes(matingSideIsStudent(ctx.allSans, studentColorWB) ? 'you' : 'them', 2, true));
   }
 
-  // ── 9. PLANS — opening development + middlegame orientation (both sides) ──
+  // ── 9. PLANS — middlegame orientation (both sides; the opening's plan is the
+  // Theory button's) ──
   if (studentColorWB) {
-    const dev = buildOpeningDevelopmentPlan(fenAfter, studentColorWB, {});
-    if (dev) put('buildOpeningDevelopmentPlan', 'plan-opening', dev.text);
     // A slow "advance your majority" plan is a NON-APPLICABLE reason while the
     // enemy king is exposed in the centre — that's a king-hunt, not a majority
     // grind (David 2026-07-20 diagnostic: it fired every move of a mating attack).
@@ -1650,43 +1646,10 @@ export function computeMoveFacets(
     }
   }
 
-  // ── 10. OPENING IDENTITY (the named line so far) ──
-  // ONCE, at its final name (walk 6, R16: "King's Pawn Game" → "Scandinavian"
-  // → "Mieses-Kotroc" → "Main Line" spoke four times in six plies, because each
-  // refinement is new text). The name spoken is the VARIATION: a bare family
-  // ("King's Pawn Game", "Sicilian Defense") is a waypoint, and a comma
-  // sub-line (", Main Line", ", Smith-Morra Declined") refines a name already
-  // given. So every ply of one variation carries the same text and the say-once
-  // ledger speaks it on the first ply that actually speaks — a need-silenced
-  // ply cannot swallow it.
-  // ONLY THE GAME'S FINAL VARIATION (WO-TEACH-02, prod tape 2026-09-24: "the
-  // Indian Defense: Normal Variation" → "…: West Indian Defense" → "the King's
-  // Indian Defense: Normal Variation" — three names for one opening, each a new
-  // string the say-once ledger could not catch). Review sees the whole game,
-  // so it names the variation the game SETTLED on, at the first ply it holds.
-  const variationOf = (name: string | null): string | null =>
-    name && name.includes(':') ? name.split(',')[0].trim() : null;
-  const named = variationOf(detectOpening(ctx.allSans.slice(0, ply))?.name ?? null);
-  const settled = settledVariation(ctx.allSans, variationOf);
-  // …WITH WHAT IT IS FOR (review audit 2026-10-14: the bare name was the
-  // walk's most common line with no reason): the masters' plan from it. WHAT
-  // IT IS — what it provokes, aims for, who played it — is the walk's
-  // openingStory identity beat (one producer, read against the live board);
-  // saying it here too spoke it twice on one move (2026-10-20, Fried Liver).
-  // THE NAME ITSELF is the walk's announcement (`openingAnnouncementForGame`,
-  // the one Learn speaks), said as the opening is identified; this line keeps
-  // only what the settled line is FOR — the masters' plan from it.
-  if (named && named === settled && studentColorWB) {
-    const plan = mastersPlanLine(planFor(named), studentColorWB, null)?.text ?? null;
-    if (plan) {
-      const f = made('mastersPlanLine', 'opening', plan);
-      facets.push(f);
-      // ONE CLAIM, ONE IDENTITY: the walk's first name speaks this same plan
-      // (`coachFeatureService`, the name said with what it teaches) — whichever
-      // speaks first claims it.
-      f.identity = `once:plan:${plan}`;
-    }
-  }
+  // ── 10. OPENING IDENTITY — the name and what the opening is are the
+  // walk's announcement and its openingStory identity beat; what the line is
+  // FOR from master games (the masters' plan) is opening theory, the Theory
+  // button's (David 2026-11-06), never a walk facet.
 
   // ── 11. OPPONENT READ — what the opponent's move targets + their dev lag ──
   if (!isStudent && studentColorWB) {
@@ -1970,17 +1933,6 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
   } catch {
     return null;
   }
-}
-
-/** The variation a whole game settled on — the detector's name for the full
- *  move list. Memoized per game (the facet builder runs once per ply). */
-const settledCache = new WeakMap<readonly string[], string | null>();
-function settledVariation(allSans: readonly string[], variationOf: (n: string | null) => string | null): string | null {
-  if (settledCache.has(allSans)) return settledCache.get(allSans) ?? null;
-  let v: string | null = null;
-  try { v = variationOf(detectOpening([...allSans])?.name ?? null); } catch { v = null; }
-  settledCache.set(allSans, v);
-  return v;
 }
 
 /** The student's answer to the opponent's slip, in Review's retrospective

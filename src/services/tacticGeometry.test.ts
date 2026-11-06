@@ -241,11 +241,11 @@ describe('WIRED — a real read comes out of every surface', () => {
   });
   it('Learn and read-position: the one producer emits a `tactic` clause, proven; held back it speaks only the idea', () => {
     const topLines = [{ moves: ['b4d5', 'g7g6', 'b2d4', 'h7h6'], evaluation: 600, mate: null }];
-    const named = depthClauses({ fen: INTERFERE, history: [], topLines, studentColor: 'w', nameMove: true });
+    const named = depthClauses({ theory: true, fen: INTERFERE, history: [], topLines, studentColor: 'w', nameMove: true });
     const t = named.find((d) => d.kind === 'tactic' && /cuts the line/.test(d.text));
     expect(t?.proof && isProof(t.proof)).toBe(true);
     expect(t?.motif).toBe('interference');
-    const held = depthClauses({ fen: INTERFERE, history: [], topLines, studentColor: 'w', nameMove: false });
+    const held = depthClauses({ theory: true, fen: INTERFERE, history: [], topLines, studentColor: 'w', nameMove: false });
     expect(held.some((d) => d.kind === 'tactic' && /cuts the line/.test(d.text))).toBe(false);
     expect(held.some((d) => /a piece dropped onto that line cuts it/.test(d.text))).toBe(true);
   });

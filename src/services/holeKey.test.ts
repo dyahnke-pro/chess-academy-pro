@@ -12,7 +12,7 @@ const fenAt = (n: number): string => { const c = new Chess(); for (const m of G3
 
 describe('one hole claim across producers (g3 d5)', () => {
   it('the story\'s cost beat after 10…c5 keys hole:d5', () => {
-    const story = openingStoryAt({ history: G3.slice(0, 20), student: 'w', namesStudentMoves: false, movesAt: () => null });
+    const story = openingStoryAt({ theory: true, history: G3.slice(0, 20), student: 'w', namesStudentMoves: false, movesAt: () => null });
     const gift = story.find((f) => f.storyBeat === 'consequence' && f.squares.includes('d5'));
     expect(gift?.claims[0]).toBe(holeKey('d5'));
   });

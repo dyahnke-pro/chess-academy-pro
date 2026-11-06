@@ -147,7 +147,7 @@ describe('the DNA template on a whole lesson (David 2026-10-07: "teach me x has 
     const c = new Chess(); const fens: string[] = []; const said: string[] = [];
     line.forEach((san, i) => {
       fens.push(c.fen());
-      said.push(lessonThought({ line: null, theirLast: null, history: line.slice(0, i), fenBefore: c.fen(), san, prev: i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(fens[i - 1], line[i - 1]), moverIsStudent: i % 2 === 0, reads: null, costCp: null }, voice, null));
+      said.push(lessonThought({ theory: true, line: null, theirLast: null, history: line.slice(0, i), fenBefore: c.fen(), san, prev: i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(fens[i - 1], line[i - 1]), moverIsStudent: i % 2 === 0, reads: null, costCp: null }, voice, null));
       c.move(san);
     });
     const all = said.join(' ');

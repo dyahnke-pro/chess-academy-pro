@@ -219,7 +219,7 @@ describe('every student move of the six games: the engine-backed producers name 
         const bestSan = ((): string | null => { try { const m = new Chess(before).move({ from: pre.bestMove.slice(0, 2), to: pre.bestMove.slice(2, 4), promotion: pre.bestMove.slice(4, 5) || undefined }); return m.san; } catch { return null; } })();
         const history = g.sans.slice(0, i + 1);
         // The student's move: what it did and cost.
-        for (const h of studentMoveTeaching({ fenBefore: before, san, history, cpLoss, bothCp: cpLoss !== null, bestSan, bestLine: best, topLines: pre.topLines, reply: reply.san, cpAfter: mid.isMate ? null : mid.evaluation * sign, popularTopSan: null, saidClaims: new Set() })) {
+        for (const h of studentMoveTeaching({ theory: true, fenBefore: before, san, history, cpLoss, bothCp: cpLoss !== null, bestSan, bestLine: best, topLines: pre.topLines, reply: reply.san, cpAfter: mid.isMate ? null : mid.evaluation * sign, popularTopSan: null, saidClaims: new Set() })) {
           check(`studentMove/${h.lane}`, i + 1, san, h.text, h.namesStudentMove, next);
         }
         // Their reply's cost.
@@ -247,7 +247,7 @@ describe('every student move of the six games: the engine-backed producers name 
         // The composer on the board the student moves on next.
         const at = readOf(next);
         if (at) {
-          const pf = await computePositionFacts({
+          const pf = await computePositionFacts({ theory: true,
             boardComputers: 'surface', posture: 'walk', fen: next, history: g.sans.slice(0, i + 2), moverColor: g.side, studentColor: g.side,
             rating: 1500, analysis: at, evalBoard: () => Promise.reject(new Error('no eval table in the gate')),
             lastMove: { fenBefore: before, san, cpLoss, historySans: history, reads: { historySans: history, bestMoveUci: pre.bestMove || null, bestPvUci: best?.moves ?? [], playedPvUci: mid.topLines[0]?.moves ?? [], price: null }, popular: null, fanBefore: pre.topLines },

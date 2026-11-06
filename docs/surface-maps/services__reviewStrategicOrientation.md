@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**620 lines · 9 exports · 9 importers · 6 tests · 1 audits**
+**273 lines · 5 exports · 6 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,21 +13,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/coachFeatureService.ts`
-- `src/services/groundedPlanBeat.test.ts`
 - `src/services/planBeatShape.test.ts`
-- `src/services/planPrescriptions.test.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewOpponentCommentary.ts`
-- `src/services/reviewStrategicOrientation.borrowedRecord.test.ts`
 - `src/services/reviewStrategicOrientation.test.ts`
 - `src/services/reviewWalk900.test.ts`
 
 ## Exports and every call site
-
-### `buildOpeningMoveDetail` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:3727`
-- `src/services/reviewStrategicOrientation.borrowedRecord.test.ts:17`
-- `src/services/reviewStrategicOrientation.borrowedRecord.test.ts:24`
 
 ### `PlanArrow` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -43,35 +35,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planBeatShape.test.ts:55`
 - `src/services/planBeatShape.test.ts:78`
 
-### `buildOpeningDevelopmentPlan` (function) — 12 call sites
-- `src/services/coachFeatureService.ts:3561`
-- `src/services/planPrescriptions.test.ts:53`
-- `src/services/planPrescriptions.test.ts:61`
-- `src/services/planPrescriptions.test.ts:74`
-- `src/services/reviewFullData.ts:1541`
-- `src/services/reviewStrategicOrientation.test.ts:58`
-- `src/services/reviewStrategicOrientation.test.ts:75`
-- `src/services/reviewStrategicOrientation.test.ts:76`
-- `src/services/reviewStrategicOrientation.test.ts:84`
-- `src/services/reviewStrategicOrientation.test.ts:95`
-- `src/services/reviewStrategicOrientation.test.ts:106`
-- `src/services/reviewStrategicOrientation.test.ts:120`
-
-### `buildHisGroundedPlanBeat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3559`
-- `src/services/groundedPlanBeat.test.ts:21`
-- `src/services/groundedPlanBeat.test.ts:31`
-- `src/services/groundedPlanBeat.test.ts:55`
-
-### `buildMastersGroundedPlanBeat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3560`
-- `src/services/groundedPlanBeat.test.ts:41`
-- `src/services/groundedPlanBeat.test.ts:49`
-- `src/services/groundedPlanBeat.test.ts:56`
-
 ### `buildMiddlegameOrientation` (function) — 16 call sites
-- `src/services/coachFeatureService.ts:3582`
-- `src/services/reviewFullData.ts:1547`
+- `src/services/coachFeatureService.ts:3696`
+- `src/services/reviewFullData.ts:1644`
 - `src/services/reviewStrategicOrientation.test.ts:4`
 - `src/services/reviewStrategicOrientation.test.ts:8`
 - `src/services/reviewStrategicOrientation.test.ts:18`
@@ -81,18 +47,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewStrategicOrientation.test.ts:45`
 - `src/services/reviewStrategicOrientation.test.ts:49`
 - `src/services/reviewStrategicOrientation.test.ts:54`
-- `src/services/reviewStrategicOrientation.test.ts:136`
-- `src/services/reviewStrategicOrientation.test.ts:137`
-- `src/services/reviewStrategicOrientation.test.ts:144`
-- `src/services/reviewStrategicOrientation.test.ts:146`
+- `src/services/reviewStrategicOrientation.test.ts:66`
+- `src/services/reviewStrategicOrientation.test.ts:67`
+- `src/services/reviewStrategicOrientation.test.ts:74`
+- `src/services/reviewStrategicOrientation.test.ts:76`
 - `src/services/reviewWalk900.test.ts:33`
 
 ## Tests
 
-- `src/services/groundedPlanBeat.test.ts`
 - `src/services/planBeatShape.test.ts`
-- `src/services/planPrescriptions.test.ts`
-- `src/services/reviewStrategicOrientation.borrowedRecord.test.ts`
 - `src/services/reviewStrategicOrientation.test.ts`
 - `src/services/reviewWalk900.test.ts`
 

@@ -43,13 +43,13 @@ describe('their wanted …Bg4 pin, owned by one computer (OS-1 root cause 1)', (
   });
 
   it('the engine does not refute h3 here, so "find another way" is never said beside "one move stops it"', () => {
-    const clauses = depthClauses({ fen: FEN, history: [], topLines: D20, studentColor: 'w', nameMove: false });
+    const clauses = depthClauses({ theory: true, fen: FEN, history: [], topLines: D20, studentColor: 'w', nameMove: false });
     expect(clauses.find((c) => c.kind === 'stop-flaw')).toBeUndefined();
   });
 
   it('where the engine does rank h3 a notable step down, the flaw is one clause carrying the threat and its proof', () => {
     const lines = [{ moves: ['e4e5'], evaluation: -17, mate: null }, { moves: ['h2h3'], evaluation: -140, mate: null }];
-    const f = depthClauses({ fen: FEN, history: [], topLines: lines, studentColor: 'w', nameMove: false }).find((c) => c.kind === "stop-flaw")!;
+    const f = depthClauses({ theory: true, fen: FEN, history: [], topLines: lines, studentColor: 'w', nameMove: false }).find((c) => c.kind === "stop-flaw")!;
     expect(f).toBeDefined();
     expect(f.text).toMatch(/They want the bishop to g4, pinning your knight on f3\. The obvious stop is the pawn to h3/);
     expect(f.proof).toMatchObject({ kind: 'line', exact: true });

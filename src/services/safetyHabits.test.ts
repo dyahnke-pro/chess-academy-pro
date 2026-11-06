@@ -8,7 +8,13 @@ describe('blunder check (P3 method beat)', () => {
   it('fires when the reply simply takes the piece the move left hanging', () => {
     // 2…Qh4?? 3.Nxh4 — the queen simply hangs to the knight.
     const fen = at(['e4', 'e5', 'Nf3']);
-    expect(blunderCheck(fen, 'Qh4', 'Nxh4', 900)).toBe('Blunder check before you let go of a piece: run CCT for them — what checks, captures and threats do they have once it lands? Here the answer was your queen on h4.');
+    expect(blunderCheck(fen, 'Qh4', 'Nxh4', 900)).toBe('Blunder check before you let go of a piece: run CCT for them — what checks, captures and threats do they have once it lands? Here the answer was Nxh4, taking your queen on h4.');
+  });
+  it('the answer is their move, not a piece (Colle replay 2026-11-05, 26.Qh6 …Rxc3)', () => {
+    const sans = 'd4 d5 Nf3 Nf6 e3 e6 Bd3 c5 c3 Nc6 O-O Be7 Nbd2 a6 e4 O-O e5 Nd7 Re1 b5 Nf1 Re8 Ng3 Nf8 Nh5 cxd4 Ng5 Bxg5 Qg4 Nxe5 Qg3 Nfg6 Bxg5 Qb6 Bxg6 Nxg6 Nf4 Nxf4 Qxf4 dxc3 bxc3 Bb7 Qg3 Rac8 Bh6 g6 Bg5 Rc7 Qh3 Rec8'.split(' ');
+    const line = blunderCheck(at(sans), 'Qh6', 'Rxc3', 300) ?? '';
+    expect(line).toMatch(/Here the answer was …Rxc3, taking your pawn on c3\.$/);
+    expect(line).not.toMatch(/answer was your pawn/);
   });
   it('silent on a trade, a cheap slip, or no capture', () => {
     const fen = at(['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6']);

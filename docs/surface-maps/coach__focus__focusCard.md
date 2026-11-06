@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:152) — names `focusCard`
-- **The standard post-deploy ritual** (CLAUDE.md:6812) — names `FOCUS_DIALS`
+- **The standard post-deploy ritual** (CLAUDE.md:6820) — names `FOCUS_DIALS`
 
 ## Who calls in
 

@@ -357,6 +357,11 @@ export function depthClauses(args: {
   lastStudentMove?: { fenBefore: string; san: string };
   /** The opponent's last move — what it opened. */
   lastOpponentMove?: { fenBefore: string; san: string };
+  /** REQUIRED: may this surface speak opening THEORY (the named opening this
+   *  board equals, the book move)? Only where the student asked for it —
+   *  Review's Theory button, chat, a lesson (David 2026-11-06: "Keep the
+   *  theory part for review only. It belongs in the button"). */
+  theory: boolean;
 }): DepthClause[] {
   const out: DepthClause[] = [];
   try {
@@ -440,7 +445,7 @@ export function depthClauses(args: {
     }
     // BATCH 1 — opening equivalence, order and timing (`orderReads`), each
     // with its proof. The ones that name the student's move wait for nameMove.
-    const order = orderReads({ fen: args.fen, history: args.history, student: args.studentColor, topLines: args.topLines, engineBest });
+    const order = orderReads({ fen: args.fen, history: args.history, student: args.studentColor, topLines: args.topLines, engineBest, theory: args.theory });
     const pushOrder = (o: (typeof order)[number]): void => { out.push({ kind: o.kind, text: o.text, proof: o.proof, squares: o.squares, claim: o.claim, ...(o.lines ? { lines: o.lines } : {}), ...(o.stakes ? { stakes: o.stakes } : {}) }); };
     for (const o of order.filter((x) => !x.namesMove)) pushOrder(o);
     // A read that names the move speaks it only where the move is earned;

@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **⏰ Standing notes** (CLAUDE.md:3155) — names `buildReviewMoveBriefing`
-- **The standard post-deploy ritual** (CLAUDE.md:6832) — names `Aspect`
+- **The standard post-deploy ritual** (CLAUDE.md:6840) — names `Aspect`
 
 ## Who calls in
 
@@ -49,8 +49,8 @@
 ### `moveAspects` (function) — 7 call sites
 - `src/services/captureLeadsTo.test.ts:26`
 - `src/services/midExchangeStructure.test.ts:13`
-- `src/services/moveThoughtFacts.ts:170`
-- `src/services/moveThoughtFacts.ts:667`
+- `src/services/moveThoughtFacts.ts:175`
+- `src/services/moveThoughtFacts.ts:673`
 - `src/services/reviewMoveBriefing.test.ts:69`
 - `src/services/reviewMoveBriefing.test.ts:71`
 - `src/test/captureSaidOnce.gate.test.ts:190`
@@ -58,7 +58,7 @@
 ### `buildReviewMoveBriefing` (function) — 23 call sites
 - `src/services/captureRun.test.ts:45`
 - `src/services/captureRun.test.ts:57`
-- `src/services/coachFeatureService.ts:2044`
+- `src/services/coachFeatureService.ts:2024`
 - `src/services/guardPressure.test.ts:42`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
@@ -81,10 +81,10 @@
 - `src/test/captureSaidOnce.gate.test.ts:186`
 
 ### `toClause` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:227`
+- `src/services/moveThoughtFacts.ts:232`
 
 ### `joinReview` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:227`
+- `src/services/moveThoughtFacts.ts:232`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -93,7 +93,7 @@
 - `src/hooks/useTeachWalkthrough.ts:890`
 - `src/hooks/useTeachWalkthrough.ts:891`
 - `src/services/danyaBench.measure.test.ts:427`
-- `src/services/decisionStakes.test.ts:47`
+- `src/services/decisionStakes.test.ts:48`
 - `src/services/gamesCourse.ts:284`
 - `src/services/lessonVoice.story.test.ts:29`
 - `src/services/lessonVoice.story.test.ts:41`

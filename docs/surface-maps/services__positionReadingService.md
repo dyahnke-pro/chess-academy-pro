@@ -182,7 +182,7 @@
 - `src/services/groundedAnswer.ts:2827`
 - `src/services/groundedAnswer.ts:3480`
 - `src/services/groundedAnswer.ts:7189`
-- `src/services/inaccuracyCall.ts:1066`
+- `src/services/inaccuracyCall.ts:1074`
 - `src/services/latentDanger.ts:192`
 - `src/services/liteMoves.test.ts:118`
 - `src/services/liteMoves.test.ts:151`
@@ -198,7 +198,7 @@
 - `src/services/bookMoveWhy.ts:349`
 - `src/services/bookMoveWhy.ts:421`
 - `src/services/bookMoveWhy.ts:440`
-- `src/services/coachFeatureService.ts:3464`
+- `src/services/coachFeatureService.ts:3420`
 - `src/services/groundedAnswer.ts:7254`
 - `src/services/moveIntent.ts:373`
 - `src/services/moveIntent.ts:390`
@@ -226,7 +226,7 @@
 - `src/services/latentFork.ts:146`
 - `src/services/latentFork.ts:218`
 - `src/services/moveFundamentals.ts:358`
-- `src/services/moveFundamentals.ts:1679`
+- `src/services/moveFundamentals.ts:1683`
 - `src/services/practicalReads.ts:146`
 
 ### `seeReadsStanding` (function) — 7 call sites
@@ -276,8 +276,8 @@
 - `src/services/structureReads.ts:132`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12819`
-- `src/services/learnBoardTeaching.ts:1514`
+- `src/components/Coach/CoachTeachPage.tsx:12821`
+- `src/services/learnBoardTeaching.ts:1508`
 - `src/services/principleAttribution.ts:346`
 - `src/services/principleAttribution.ts:809`
 
@@ -337,7 +337,7 @@
 - `src/services/kickMap.ts:54`
 - `src/services/kingAttackReads.ts:147`
 - `src/services/kingAttackReads.ts:503`
-- `src/services/learnBoardTeaching.ts:721`
+- `src/services/learnBoardTeaching.ts:733`
 - `src/services/learnTurnDoor.test.ts:273`
 - `src/services/learnWalkOct3c.test.ts:61`
 - `src/services/material.ts:44`
@@ -366,8 +366,8 @@
 - `src/services/pvPlayback.ts:224`
 - `src/services/queenGrabTrap.ts:49`
 - `src/services/ruleException.ts:46`
-- `src/services/safetyHabits.ts:49`
-- `src/services/safetyHabits.ts:137`
+- `src/services/safetyHabits.ts:52`
+- `src/services/safetyHabits.ts:140`
 - `src/services/speedRunReads.ts:165`
 - `src/services/speedRunReads.ts:176`
 - `src/services/speedRunReads.ts:179`
@@ -426,7 +426,7 @@
 - `src/services/thinkingExchangeChain.ts:59`
 
 ### `signedLegalSeeFor` (function) — 32 call sites
-- `src/components/Coach/CoachTeachPage.tsx:919`
+- `src/components/Coach/CoachTeachPage.tsx:920`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -439,9 +439,9 @@
 - `src/services/groundedAnswer.ts:6675`
 - `src/services/groundedAnswer.ts:7226`
 - `src/services/inaccuracyCall.ts:238`
-- `src/services/inaccuracyCall.ts:964`
-- `src/services/inaccuracyCall.ts:1956`
-- `src/services/learnBoardTeaching.ts:1460`
+- `src/services/inaccuracyCall.ts:972`
+- `src/services/inaccuracyCall.ts:1964`
+- `src/services/learnBoardTeaching.ts:1454`
 - `src/services/learnWalkOct3c.test.ts:60`
 - `src/services/learnWalkOct3c.test.ts:66`
 - `src/services/liteMoves.test.ts:139`
@@ -454,7 +454,7 @@
 - `src/services/principleAttribution.ts:338`
 - `src/services/principleAttribution.ts:843`
 - `src/services/principleAttribution.ts:867`
-- `src/services/reviewFullData.ts:454`
+- `src/services/reviewFullData.ts:451`
 - `src/services/skillQuestions.ts:48`
 - `src/services/threatAnswerEvidence.ts:69`
 - `src/services/tradeQuality.ts:185`
@@ -462,9 +462,9 @@
 ### `takingTheAttackerAnswers` (function) — 9 call sites
 - `src/services/boardUrgency.ts:62`
 - `src/services/groundedAnswer.ts:651`
-- `src/services/learnBoardTeaching.ts:1488`
+- `src/services/learnBoardTeaching.ts:1482`
 - `src/services/methodSignals.ts:49`
-- `src/services/positionFacts.ts:1799`
+- `src/services/positionFacts.ts:1806`
 - `src/services/takingTheAttacker.test.ts:17`
 - `src/services/takingTheAttacker.test.ts:22`
 - `src/services/takingTheAttacker.test.ts:26`
@@ -488,7 +488,7 @@
 - `src/services/planChoice.ts:161`
 - `src/services/positionReadingService.test.ts:553`
 - `src/services/positionReadingService.test.ts:559`
-- `src/services/reviewFullData.ts:479`
+- `src/services/reviewFullData.ts:476`
 
 ### `minorRouteToSquare` (function) — 7 call sites
 - `src/services/danyaBehaviors.ts:811`
@@ -501,8 +501,8 @@
 
 ### `findHangingBySee` (function) — 27 call sites
 - `src/coach/chatTurnAnswers.ts:173`
-- `src/components/Coach/CoachTeachPage.tsx:9095`
-- `src/components/Coach/CoachTeachPage.tsx:9101`
+- `src/components/Coach/CoachTeachPage.tsx:9096`
+- `src/components/Coach/CoachTeachPage.tsx:9102`
 - `src/services/computedMaterialTruth.corpus.test.ts:216`
 - `src/services/computedMaterialTruth.corpus.test.ts:226`
 - `src/services/conversionMethod.ts:64`
@@ -626,8 +626,8 @@
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
 - `src/services/replayFence.najdorf1500.test.ts:26`
-- `src/services/reviewFullData.ts:1121`
-- `src/services/reviewFullData.ts:1127`
+- `src/services/reviewFullData.ts:1133`
+- `src/services/reviewFullData.ts:1139`
 
 ### `findMinorityAttack` (function) — 11 call sites
 - `src/services/computedTruth.fuzz.test.ts:174`
@@ -639,8 +639,8 @@
 - `src/services/positionalRead.ts:366`
 - `src/services/positionalTruth.corpus.test.ts:110`
 - `src/services/positionalTruth.corpus.test.ts:115`
-- `src/services/reviewFullData.ts:1117`
-- `src/services/reviewFullData.ts:1119`
+- `src/services/reviewFullData.ts:1129`
+- `src/services/reviewFullData.ts:1131`
 
 ### `pieceScope` (function) — 2 call sites
 - `src/services/nextPlans.ts:138`
@@ -688,7 +688,7 @@
 
 ### `structureTransfer` (function) — 7 call sites
 - `src/services/groundedAnswer.ts:6806`
-- `src/services/learnBoardTeaching.ts:1434`
+- `src/services/learnBoardTeaching.ts:1428`
 - `src/services/positionReadingService.test.ts:946`
 - `src/services/positionReadingService.test.ts:947`
 - `src/services/positionReadingService.test.ts:948`

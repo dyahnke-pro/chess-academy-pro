@@ -119,7 +119,6 @@ export const TEACHING_MOVES: Record<CoachFactKind, readonly TeachingMove[]> = {
   'plan-worst-piece': ['S-PLAN', 'H-WISHLIST', 'S-MANEUVER'],
   'plan-race': ['S-PLAN-VS-PLAN', 'T-COUNT'],
   'plan-arc': ['S-PLAN'],
-  'plan-opening': ['P-OPENING-IDEA', 'S-PLAN'],
   'plan-middlegame': ['S-PLAN'],
   'plan-line': ['S-PLAN', 'T-LINE'],
   'structure-plan': ['S-PLAN', 'P-STRUCTURE'],

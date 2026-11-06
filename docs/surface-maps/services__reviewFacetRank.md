@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**741 lines · 15 exports · 24 importers · 10 tests · 0 audits**
+**739 lines · 15 exports · 24 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -79,7 +79,7 @@
 - `src/services/latentFork.test.ts:171`
 - `src/services/latentFork.test.ts:172`
 - `src/services/latentFork.test.ts:173`
-- `src/services/positionFacts.ts:575`
+- `src/services/positionFacts.ts:580`
 
 ### `facetTag` (function) — 4 call sites
 - `src/services/reviewFacetRank.test.ts:19`

@@ -53,8 +53,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:3356`
-- `src/services/positionFacts.ts:1207`
+- `src/services/coachFeatureService.ts:3312`
+- `src/services/positionFacts.ts:1212`
 
 ### `HABIT_KIND` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -75,8 +75,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `liveHabitKey` (function) — 12 call sites
-- `src/services/learnBoardTeaching.ts:269`
-- `src/services/learnFundamentalNarration.ts:114`
+- `src/services/learnBoardTeaching.ts:277`
+- `src/services/learnFundamentalNarration.ts:120`
 - `src/services/methodBeat.live.test.ts:112`
 - `src/services/methodBeat.live.test.ts:119`
 - `src/services/methodSignals.test.ts:59`
@@ -89,10 +89,10 @@
 - `src/services/slipQuestion.test.ts:53`
 
 ### `habitSaidKey` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10692`
 - `src/components/Coach/CoachTeachPage.tsx:10693`
-- `src/services/learnBoardTeaching.ts:254`
-- `src/services/learnBoardTeaching.ts:1167`
+- `src/components/Coach/CoachTeachPage.tsx:10694`
+- `src/services/learnBoardTeaching.ts:262`
+- `src/services/learnBoardTeaching.ts:1161`
 - `src/services/slipQuestion.test.ts:53`
 
 ### `liveMethodBeat` (function) — 18 call sites
@@ -113,7 +113,7 @@
 - `src/services/methodSignals.test.ts:75`
 - `src/services/methodSignals.test.ts:76`
 - `src/services/mustDefendHabit.test.ts:15`
-- `src/services/positionFacts.ts:1067`
+- `src/services/positionFacts.ts:1072`
 
 ### `liveMethodBeatFor` (function) — 24 call sites
 - `src/services/groundedAnswer.ts:3688`

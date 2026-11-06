@@ -154,7 +154,7 @@ export interface BoardContexts {
    *  move): masters data read from memory, never fetched here. REQUIRED
    *  `namesStudentMoves`: a live board holds every fact that would name a move
    *  the student can play now. */
-  openingStory: { history: readonly string[]; fen: string; student: Color; namesStudentMoves: boolean };
+  openingStory: { history: readonly string[]; fen: string; student: Color; namesStudentMoves: boolean; theory: boolean };
   /** A king that lost castling, walked by hand: what this move (`san` on
    *  `fenBefore`, either seat) did for the walk — the plan, the square it took
    *  from their knight, a step, the walk done. */
@@ -391,7 +391,11 @@ export const BOARD_COMPUTERS = {
     // beat that would name the student's next move left out where the surface
     // may not name one (`namesStudentMoves`). `fen` is the board after
     // `history`, for the phase column.
-    read: ({ history, student, namesStudentMoves }) => safe(() => openingStoryAt({ history, student, namesStudentMoves })),
+    // THEORY WHERE THE SURFACE SAYS IT (David 2026-11-06: "Yes move theory to
+    // review button, but keep in learn for now also"): `theory` is REQUIRED —
+    // the Review walk speaks the board's and the name's lines only; its
+    // master-games beats are the Theory button's.
+    read: ({ history, student, namesStudentMoves, theory }) => safe(() => openingStoryAt({ history, student, namesStudentMoves, theory })),
     computer: 'openingStoryAt',
     kind: 'opening',
     phase: NOT_ENDING,
@@ -408,7 +412,9 @@ export const BOARD_COMPUTERS = {
   bookMove: {
     // THEORY IS KNOWLEDGE, NOT A FIND (David 2026-10-14): once the student has
     // left the book, the book move is named with its job on the board
-    // (`bookMoveWhy`) and what their move left undone. No job → no line. It
+    // (`bookMoveWhy`) and what their move left undone. Review's walk says
+    // none: the Theory button reads `bookMoveWhy` itself (David 2026-11-06).
+    // No job → no line. It
     // teaches (never a description) the left-book skill, on the board the
     // student left — graded there, never after the reply (prod Learn audit
     // 2026-10-14: graded after hxg4, "your bishop on g4" read as false).
@@ -428,7 +434,7 @@ export const BOARD_COMPUTERS = {
     surfaces: {
       lesson: { not: 'a taught line is the book: there is no departure to name' },
       learn: LEARN,
-      review: REVIEW,
+      review: { not: "the walk speaks none: the Theory button says the book move at the student's departure (reviewOpeningTheory → bookMoveWhy)" },
       play: COMPOSER,
       chat: COMPOSER,
       tactics: { not: 'a puzzle has no book departure' },

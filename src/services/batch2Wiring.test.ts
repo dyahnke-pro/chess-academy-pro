@@ -20,7 +20,7 @@ const quietAfter = (): string => { const c = new Chess(QUIET_BEFORE); c.move('Rd
 
 describe('LEARN — the one live producer speaks the new reads', () => {
   it('their quiet rook move arrives as a their-read clause with its proof', () => {
-    const out = depthClauses({
+    const out = depthClauses({ theory: true,
       fen: quietAfter(), history: [], topLines: [], studentColor: 'w', nameMove: false,
       lastOpponentMove: { fenBefore: QUIET_BEFORE, san: 'Rd8' },
     });
@@ -32,11 +32,11 @@ describe('LEARN — the one live producer speaks the new reads', () => {
     const before = '6k1/pp3ppp/1q6/8/8/2N5/PP3PPP/3R2K1 b - - 0 1';
     const c = new Chess(before); c.move('Qxb2');
     const args = { fen: c.fen(), history: [], topLines: [{ moves: ['d1b1', 'b2a3', 'b1b7'], evaluation: 150, mate: null }], studentColor: 'w' as const, lastOpponentMove: { fenBefore: before, san: 'Qxb2' } };
-    expect(depthClauses({ ...args, nameMove: false }).some((d) => /expecting it to be free|looked free/.test(d.text))).toBe(false);
-    expect(depthClauses({ ...args, nameMove: true }).some((d) => /expecting it to be free|looked free/.test(d.text))).toBe(true);
+    expect(depthClauses({ theory: true, ...args, nameMove: false }).some((d) => /expecting it to be free|looked free/.test(d.text))).toBe(false);
+    expect(depthClauses({ theory: true, ...args, nameMove: true }).some((d) => /expecting it to be free|looked free/.test(d.text))).toBe(true);
   });
   it('a known attacking structure arrives as an attack-pattern clause', () => {
-    const out = depthClauses({ fen: 'r4rk1/ppq2pp1/2n1pn1p/8/3P4/2N1BN2/PPPQ1PPP/2KR3R w - - 0 1', history: [], topLines: [{ moves: ['g2g4'], evaluation: 40, mate: null }], studentColor: 'w', nameMove: false });
+    const out = depthClauses({ theory: true, fen: 'r4rk1/ppq2pp1/2n1pn1p/8/3P4/2N1BN2/PPPQ1PPP/2KR3R w - - 0 1', history: [], topLines: [{ moves: ['g2g4'], evaluation: 40, mate: null }], studentColor: 'w', nameMove: false });
     expect(out.find((d) => d.kind === 'attack-pattern')?.text).toMatch(/opposite wings/);
   });
 });

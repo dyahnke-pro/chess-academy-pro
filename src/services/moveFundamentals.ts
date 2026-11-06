@@ -996,7 +996,11 @@ function openingIdeas(
         out.push({
           id: 'keep-working',
           weight: 58,
-          led: `saves it from ${by}${work}`,
+          // THE PIECE IS NAMED, NOT "it" (Colle replay 2026-11-05: "Neg6 was
+          // their move — it would save it from your rook on e1"): the led
+          // form is said after "Your Ng6" and after "it would", and in the
+          // second the "it" has nothing to point at.
+          led: `saves the ${name} from ${by}${work}`,
           selfContained: `saves the ${name} from ${by}${work}`,
           imperative: `move the ${name} away from ${by} before it is taken for nothing`,
           squares: [mv.from, mv.to, h.sq],

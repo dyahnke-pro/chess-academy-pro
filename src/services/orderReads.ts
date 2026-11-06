@@ -49,6 +49,12 @@ export function orderReads(args: {
   student: 'w' | 'b';
   topLines: readonly Line[];
   engineBest: string | null;
+  /** REQUIRED: may this surface speak opening THEORY — the named opening this
+   *  board equals (`openingEquivalence`), the book move? Only where the student
+   *  asked for it (Review's Theory button, chat, a lesson; David 2026-11-06:
+   *  "Keep the theory part for review only. It belongs in the button"). Learn
+   *  and the Review walk say no. */
+  theory: boolean;
 }): OrderRead[] {
   const out: OrderRead[] = [];
   const { fen, student, engineBest } = args;
@@ -56,8 +62,8 @@ export function orderReads(args: {
   try { toMove = new Chess(fen).turn(); } catch { return out; }
 
   // THE OPENING THIS BOARD IS (any ply): only when the history reaches this
-  // board, so the read is about the game on the board.
-  try {
+  // board, so the read is about the game on the board — and theory was asked.
+  if (args.theory) try {
     const c = new Chess();
     for (const m of args.history) c.move(m);
     if (c.fen().split(' ')[0] === fen.split(' ')[0]) {

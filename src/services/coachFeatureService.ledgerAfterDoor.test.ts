@@ -30,27 +30,34 @@ function inputs(): ReviewMoveInput[] {
 }
 // The walk names the opening with Learn's announcement (one namer).
 const ALAPIN = "It's the Alapin Variation of the Sicilian Defense.";
+const CENTRE_RULE = /pieces behind a strong center reach either wing/;
 
 describe('review — the say-once ledgers commit after the door, for spoken facts only', () => {
   it('a fact computed on a need-silenced ply is NOT ledgered, so its next appearance speaks', async () => {
-    // The walk names only an opening with an idea to teach: the identity file
-    // must be loaded for the name to be said at all.
     const { setOpeningIdentity } = await import('./openingIdentity');
     setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
     // Five clean games down this exact line: plies 1–4 are familiar, 5+ are not.
     const student = { ...coldStudent(1400), gamesPlayed: 5, lineReps: [5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] };
     const segs = buildReviewSegmentsForTests(inputs(), 'white', 'Sicilian Defense: Alapin Variation', true, 1400, [], student, 'g');
-    const ply3 = segs.find((s) => s.ply === 3)!;
-    const ply4 = segs.find((s) => s.ply === 4)!;
-    // The premise: ply 3 really was silenced by need.
-    expect(ply3.need?.speak).toBe(false);
-    expect(ply3.narration).toBeNull();
-    // The contract: the opening's name, first spoken on ply 4, is heard.
-    expect(ply4.narration ?? '').toContain(ALAPIN);
-    // …and ONCE: the same static line is not re-said on the plies that follow
-    // (the ledger still does its job — after the fact spoke).
-    const later = segs.filter((s) => s.ply > 4).map((s) => s.narration ?? '').join(' ');
-    expect(later).not.toContain(ALAPIN);
+    // The premise: ply 1 (1.e4) really was silenced by need — and it computed
+    // the centre rule ("pieces behind a strong center reach either wing").
+    const ply1 = segs.find((s) => s.ply === 1)!;
+    expect(ply1.need?.speak).toBe(false);
+    expect(ply1.narration).toBeNull();
+    // The contract: the rule's next appearance (7.d4) speaks — the silenced
+    // ply did not spend it. (The opening's name was this test's vehicle until
+    // the masters' plan left the walk, David 2026-11-06: the Alapin has no
+    // identity line, so the walk no longer names it at all.)
+    const ply7 = segs.find((s) => s.ply === 7)!;
+    expect(ply7.narration ?? '').toMatch(CENTRE_RULE);
+    // …and ONCE: the same rule is not re-said on the plies that follow (the
+    // ledger still does its job — after the fact spoke).
+    const later = segs.filter((s) => s.ply > 7).map((s) => s.narration ?? '').join(' ');
+    expect(later).not.toMatch(CENTRE_RULE);
+    // A cold student hears it on 1.e4 and not again on 7.d4.
+    const cold = buildReviewSegmentsForTests(inputs(), 'white', 'Sicilian Defense: Alapin Variation', true, 1400, [], coldStudent(1400), 'g');
+    expect(cold.find((s) => s.ply === 1)?.narration ?? '').toMatch(CENTRE_RULE);
+    expect(cold.find((s) => s.ply === 7)?.narration ?? '').not.toMatch(CENTRE_RULE);
     setOpeningIdentity(null);
   }, 60_000);
 
@@ -94,23 +101,23 @@ describe('review — the say-once ledgers commit after the door, for spoken fact
 });
 
 describe('review — the opening is named with what it is (review audit 2026-10-14)', () => {
-  it('the name is said with what the line is for, on the move that identifies it', async () => {
+  it('the name is said with what the opening is, on the move that identifies it — never with the masters\' plan', async () => {
     const { setOpeningIdentity } = await import('./openingIdentity');
     const real = JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')) as Record<string, never>;
     setOpeningIdentity(real);
     try {
+      // The Smith-Morra has an identity: named on 3.d4 with what it is.
+      const chess = new Chess();
+      const smith = ['e4', 'c5', 'd4', 'cxd4', 'c3', 'dxc3', 'Nxc3', 'Nc6'].map((san, i) => { chess.move(san); return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 1, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
+      const sm = buildReviewSegmentsForTests(smith, 'white', 'Sicilian Defense: Smith-Morra Gambit', true, 1400, [], coldStudent(1400), 'g');
+      expect(sm.find((s) => s.ply === 3)?.narration ?? '').toMatch(/This game is the Sicilian Defense: Smith-Morra Gambit\. It offers a pawn/);
+      // The Alapin has none: a bare name is a description, so the walk does
+      // not say it — and what the line is FOR from master games ("your break
+      // is d4") is opening theory, the Theory button's (David 2026-11-06).
       const segs = buildReviewSegmentsForTests(inputs(), 'white', 'Sicilian Defense: Alapin Variation', true, 1400, [], coldStudent(1400), 'g');
       const said = segs.map((s) => s.narration ?? '').join(' ');
-      // Named on the move that identifies it (c3). What the line is FOR — the
-      // masters' plan, "your break is d4" — is ONE claim (review noise walk
-      // 2026-10-20): it rode the first name (…c5, the Sicilian), so the
-      // Alapin's refinement does not say it again.
-      const c3 = segs.find((s) => s.ply === 3)?.narration ?? '';
-      const c5 = segs.find((s) => s.ply === 2)?.narration ?? '';
-      expect(said.indexOf(ALAPIN)).toBeGreaterThanOrEqual(0);
-      expect(c3).toContain(ALAPIN);
-      expect(c5).toMatch(/The plan in this structure: your break is d4/);
-      expect(said.match(/The plan in this structure: your break is d4\b/g) ?? []).toHaveLength(1);
+      expect(said).not.toContain(ALAPIN);
+      expect(said).not.toMatch(/The plan in this structure/);
     } finally {
       setOpeningIdentity(null);
     }

@@ -105,7 +105,7 @@ describe('piece-quality table must describe this board (item 195)', () => {
 describe('a recapture that just loses the piece says so (item 84)', () => {
   it('exd4 vs Qxd4: Qxd4 "would just lose the queen to Nxd4", not "…e5 hits it"', async () => {
     const { recaptureChoice } = await import('./recaptureChoice');
-    const line = recaptureChoice('r1bqkbnr/pp2pppp/2n5/3p4/3p1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 0 5', 'exd4', null, 'Bf5');
+    const line = recaptureChoice('r1bqkbnr/pp2pppp/2n5/3p4/3p1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 0 5', 'exd4', 'Bf5');
     expect(line).toMatch(/Qxd4 would just lose the queen to Nxd4/);
     expect(line).not.toMatch(/hits it/);
   });

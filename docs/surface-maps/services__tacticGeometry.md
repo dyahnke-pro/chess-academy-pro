@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6887) — names `tacticGeometry`
+- **The standard post-deploy ritual** (CLAUDE.md:6895) — names `tacticGeometry`
 
 ## Who calls in
 
@@ -98,7 +98,7 @@
 - `src/services/tacticGeometry.test.ts:200`
 
 ### `geometryReads` (function) — 2 call sites
-- `src/services/boardComputers.ts:616`
+- `src/services/boardComputers.ts:622`
 - `src/services/tacticGeometry.test.ts:206`
 
 ### `geometryMotif` (function) — 3 call sites

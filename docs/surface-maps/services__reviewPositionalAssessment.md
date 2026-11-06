@@ -29,12 +29,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `verdictBand` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:1069`
+- `src/services/coachFeatureService.ts:1064`
 - `src/services/exchangeLedger.test.ts:99`
 - `src/services/exchangeLedger.test.ts:101`
 
 ### `assessPositionalEdge` (function) — 29 call sites
-- `src/services/coachFeatureService.ts:3786`
+- `src/services/coachFeatureService.ts:3723`
 - `src/services/exchangeLedger.test.ts:68`
 - `src/services/exchangeLedger.test.ts:69`
 - `src/services/exchangeLedger.test.ts:76`
@@ -42,9 +42,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/frozenPiece.test.ts:27`
 - `src/services/materialSites.test.ts:75`
 - `src/services/phaseVerdict.test.ts:10`
-- `src/services/planPrescriptions.test.ts:84`
-- `src/services/planPrescriptions.test.ts:91`
-- `src/services/reviewFullData.ts:1014`
+- `src/services/planPrescriptions.test.ts:50`
+- `src/services/planPrescriptions.test.ts:57`
+- `src/services/reviewFullData.ts:1026`
 - `src/services/reviewPositionalAssessment.test.ts:4`
 - `src/services/reviewPositionalAssessment.test.ts:7`
 - `src/services/reviewPositionalAssessment.test.ts:9`
@@ -75,7 +75,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnTurnDoor.phaseWave.test.ts:123`
 - `src/services/phaseVerdict.test.ts:37`
 - `src/services/phaseVerdict.test.ts:39`
-- `src/services/positionFacts.ts:1150`
+- `src/services/positionFacts.ts:1155`
 
 ### `phaseVerdictLine` (function) — 14 call sites
 - `src/services/learnTurnDoor.phaseWave.test.ts:121`
@@ -88,8 +88,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:36`
 - `src/services/phaseVerdict.test.ts:37`
 - `src/services/phaseVerdict.test.ts:39`
-- `src/services/positionFacts.ts:1147`
-- `src/services/reviewFullData.ts:1629`
+- `src/services/positionFacts.ts:1152`
+- `src/services/reviewFullData.ts:1626`
 - `src/services/reviewPositionalAssessment.test.ts:88`
 - `src/services/reviewPositionalAssessment.test.ts:93`
 
@@ -97,7 +97,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnTurnDoor.phaseWave.test.ts:123`
 - `src/services/learnWalkNimzo.test.ts:22`
 - `src/services/learnWalkNimzo.test.ts:31`
-- `src/services/positionFacts.ts:1150`
+- `src/services/positionFacts.ts:1155`
 
 ## Tests
 

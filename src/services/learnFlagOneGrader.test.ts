@@ -77,7 +77,7 @@ describe('the habit lanes speak only of a graded fault', () => {
     const before = 'Q2n1k1r/2R3pp/5q2/3ppb2/8/P4N2/B4PPP/2R3K1 w - - 0 27';
     const hist = game.history().slice(0, 53);
     expect(hist[52]).toBe('Rc8');
-    const hints = studentMoveTeaching({
+    const hints = studentMoveTeaching({ theory: true,
       fenBefore: before, san: 'Rc8', history: hist, cpLoss: 200, bothCp: true,
       bestSan: 'Qxd5', bestLine: undefined, reply: 'Bxc8', cpAfter: 1100,
     });
@@ -86,7 +86,7 @@ describe('the habit lanes speak only of a graded fault', () => {
 
   it('the same board at a real cost (+12 → +6.9, about 6% expected points) still names it', async () => {
     const { studentMoveTeaching } = await import('./learnBoardTeaching');
-    const hints = studentMoveTeaching({
+    const hints = studentMoveTeaching({ theory: true,
       fenBefore: 'Q2n1k1r/2R3pp/5q2/3ppb2/8/P4N2/B4PPP/2R3K1 w - - 0 27', san: 'Rc8', history: game.history().slice(0, 53),
       cpLoss: 520, bothCp: true, bestSan: 'Qxd5', bestLine: undefined, reply: 'Bxc8', cpAfter: 690,
     });

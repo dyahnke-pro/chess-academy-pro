@@ -23,7 +23,7 @@ describe('Review says a move through the one composer', () => {
     c.move('e4');
     const theirLast = { fenBefore: c.fen(), san: 'e5' };
     c.move('e5');
-    const lesson = lessonThought({
+    const lesson = lessonThought({ theory: true,
       fenBefore: c.fen(), san: 'Nf3', moverIsStudent: false, prev: NO_PREV_CAPTURE,
       line: ['Nc6', 'Bc4', 'Nf6', 'Ng5'], history: ['e4', 'e5'], theirLast, reads: null, costCp: null,
     }, newLessonVoice(), null);

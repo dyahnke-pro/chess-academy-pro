@@ -14,6 +14,9 @@ export interface RouteSpec {
   path: readonly string[];
   /** What it takes on arrival, when the destination holds an enemy piece. */
   takes?: string;
+  /** The line takes it straight back for no less — an exchange, said as one
+   *  ("and trade queens there"), never as a piece won. */
+  trade?: boolean;
   /** The only piece of its kind on its side — the verb form names it without
    *  its start square ("walk the queen round to f6"), which the board lights. */
   alone?: boolean;
@@ -39,7 +42,7 @@ export function routeVia(via: readonly string[]): string {
 export function routeNoun(r: RouteSpec): string {
   const dest = r.path[r.path.length - 1];
   const base = `getting the ${r.name} to ${dest}${routeVia(routeWaypoints(r.path))}`;
-  return r.takes ? `${base}, ${takeClause(r.takes, 'to')}` : base;
+  return r.takes ? `${base}, ${takeClause(r, 'to')}` : base;
 }
 
 /** Verb form, named by its square so two pieces of one kind never blur:
@@ -50,7 +53,7 @@ export function routeVerb(r: RouteSpec): string {
   // The line reader hands over a path already cut where it arrives; every
   // square it walks through is named (lookaheadPlan.waypointsOf).
   const base = `walk the ${r.name}${r.alone ? '' : ` on ${r.path[0]}`} round to ${dest}${routeVia(routeWaypoints(r.path, { cutAtFirstArrival: false }))}`;
-  return r.takes ? `${base}, ${takeClause(r.takes, 'and')}` : base;
+  return r.takes ? `${base}, ${takeClause(r, 'and')}` : base;
 }
 
 /** After a move that already named its piece and landed it ("The stronger
@@ -60,7 +63,7 @@ export function routeVerb(r: RouteSpec): string {
 export function routeOnward(r: RouteSpec): string {
   const dest = r.path[r.path.length - 1];
   const base = `head on to ${dest}${routeVia(routeWaypoints(r.path, { cutAtFirstArrival: false }))}`;
-  return r.takes ? `${base}, ${takeClause(r.takes, 'and')}` : base;
+  return r.takes ? `${base}, ${takeClause(r, 'and')}` : base;
 }
 
 /** "to take the pawn there", or — for a piece not there yet ("rook that
@@ -68,7 +71,11 @@ export function routeOnward(r: RouteSpec): string {
  *  2026-10-11: "take the rook that lands there" did not parse). No seat word:
  *  the route is said of either side's plan, and "their" on the opponent's plan
  *  named the student's pawn as theirs (Review noise walk 2026-10-20). */
-function takeClause(takes: string, lead: 'to' | 'and'): string {
+function takeClause(r: RouteSpec, lead: 'to' | 'and'): string {
+  const takes = r.takes ?? '';
   const arriving = takes.match(/^(\w+) that lands$/);
-  return arriving ? `${lead} take the ${arriving[1]} when it arrives there` : `${lead} take the ${takes} there`;
+  const piece = arriving ? arriving[1] : takes;
+  const where = arriving ? 'when it arrives there' : 'there';
+  if (r.trade) return piece === r.name ? `${lead} trade ${piece}s ${where}` : `${lead} trade it for the ${piece} ${where}`;
+  return `${lead} take the ${piece} ${where}`;
 }

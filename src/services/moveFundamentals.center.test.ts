@@ -42,7 +42,9 @@ describe('a saved piece says where it goes to work (Learn audit 2026-10-16)', ()
     // Their pawn on f5 hits the knight on g4; from e5 … use a rescue by a
     // non-pawn attacker: their bishop on d7 hits the knight on g4; Ne5 hits d7.
     const text = computeMoveFundamentals('6k1/3b4/8/8/6N1/8/5PPP/6K1 w - - 0 30', 'Ne5', 'white').map((f) => JSON.stringify(f)).join(' ');
-    expect(text).toMatch(/saves it from their bishop on d7, and attacks that bishop from e5/);
+    // The piece is named, not "it" (Colle replay 2026-11-05: "it would save it
+    // from your rook on e1" when said after "it would").
+    expect(text).toMatch(/saves the knight from their bishop on d7, and attacks that bishop from e5/);
     // One "it" per sentence (Learn tape 2026-10-29: "Your queen to a5 saves it
     // from their knight on c3, and hits it back from a5" — the first "it" is
     // the queen, the second the knight).

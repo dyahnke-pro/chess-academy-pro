@@ -348,7 +348,7 @@ function once<T>(fn: (p: Position) => T): (p: Position) => T {
 const lessonPick = once((p: Position): { facts: ThoughtFact[]; composed: ComposedThought } => {
   // The lesson's own inputs: the engine's reads around the move (its choices
   // are the move's own facts now — the weighing is no longer spliced here).
-  const facts = moveThoughtFacts({
+  const facts = moveThoughtFacts({ theory: true,
     fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
     line: lineAhead(p), history: p.history, theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
   });
@@ -408,7 +408,7 @@ const reviewFacets = once((p: Position): string[] => {
  *  its candidates are every clause before the door, its clauses what spoke. */
 const liveRead = once((p: Position): Promise<PositionFactsResult> => {
   const cost = costCp(p);
-  return computePositionFacts({
+  return computePositionFacts({ theory: true,
     boardComputers: 'composer', posture: 'asked', fen: p.fenAfter, history: [...p.note.lineSan],
     moverColor: p.mover === 'w' ? 'b' : 'w', studentColor: p.student, analysis: analysisOf(p.after),
     cpLossCp: p.own ? cost : null,
@@ -421,7 +421,7 @@ const TAG = /\[([a-z0-9-]+)\]/gi;
 const tagsOf = (text: string | null): string[] => [...(text ?? '').matchAll(TAG)].map((m) => m[1].toLowerCase());
 
 const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Promise<string | string[] | null>> = {
-  lesson: (p) => lessonThought({
+  lesson: (p) => lessonThought({ theory: true,
     fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own,
     line: lineAhead(p), history: p.history, theirLast: p.theirLast, reads: readsOf(p), costCp: costCp(p),
   }, newLessonVoice(), null),
@@ -432,7 +432,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
   studentMove: (p) => {
     if (!p.own) return null;
     const best = p.best;
-    return studentMoveTeaching({
+    return studentMoveTeaching({ theory: true,
       fenBefore: p.fenBefore, san: p.san, history: p.history, cpLoss: costCp(p), bothCp: true,
       bestSan: best ? sansOf(p.fenBefore, [best.uci], 1).at(0) ?? null : null,
       bestLine: linesOf(p.before)[0], reply: p.reply ? sansOf(p.fenAfter, [p.reply.uci], 1).at(0) ?? null : null,
@@ -488,7 +488,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
     const bestSan = best ? sansOf(p.fenBefore, [best.uci], 1).at(0) ?? null : null;
     return notYetPlayed(p.fenBefore, p.san, bestSan, costCp(p) ?? 999)?.text ?? null;
   },
-  speedRun: (p) => depthClauses({
+  speedRun: (p) => depthClauses({ theory: true,
     fen: p.fenAfter, history: [...p.note.lineSan],
     topLines: linesOf(p.after).map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })),
     studentColor: p.student, nameMove: true,
@@ -592,7 +592,6 @@ const FACT_COMPUTER: Record<FactKind, string> = {
   'plan-worst-piece': 'services/nextPlans.ts#deriveNextPlans',
   'plan-race': 'services/planRace.ts#detectPlanRace',
   'plan-arc': 'services/lookaheadPlan.ts#gameArcs',
-  'plan-opening': 'services/reviewStrategicOrientation.ts#buildOpeningDevelopmentPlan',
   'plan-middlegame': 'services/reviewStrategicOrientation.ts#buildMiddlegameOrientation',
   'plan-line': 'services/pvPlayback.ts#computePvLine',
   consequence: 'services/pvPlayback.ts#computePvLine',
@@ -926,7 +925,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
     // EVERY COMPOSER FACT, SCORED BY ITS OWN IDEA: how often Danya says the
     // idea a source states, when that source states it (the learned order).
     {
-      const facts = moveThoughtFacts({
+      const facts = moveThoughtFacts({ theory: true,
         fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
         line: lineAhead(p), history: p.history, theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
       });

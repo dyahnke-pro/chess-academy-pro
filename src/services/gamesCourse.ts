@@ -271,7 +271,7 @@ function splitThought(v: CourseLine, side: 'white' | 'black'): string {
     for (const san of v.sans.slice(0, v.from)) c.move(san);
     const prev = captureContextsAlong(new Chess().fen(), v.sans.slice(0, v.from)).at(-1) ?? NO_PREV_CAPTURE;
     const before = v.from > 0 ? (() => { const b = new Chess(); for (const san of v.sans.slice(0, v.from - 1)) b.move(san); return b.fen(); })() : null;
-    return lessonThought({
+    return lessonThought({ theory: true,
       fenBefore: c.fen(),
       san: v.sans[v.from],
       prev,

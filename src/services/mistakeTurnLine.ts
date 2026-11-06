@@ -10,7 +10,8 @@
 // The grade's line and the fundamental's verdict named one loss (the piece on
 // f7), and only a loose piece or an ignored threat was recognised as the same
 // claim. Now ANY fundamental about the square the grade says was lost is the
-// same loss: the grade speaks it, and the fundamental keeps only its HOW. And
+// same loss: the grade speaks it, and the fundamental keeps only its HOW — and
+// so is a fundamental naming the same answer of theirs the grade plays out. And
 // a turn teaches one habit: the slip question (the generic blunder check) is
 // asked only when the fundamental taught none.
 //
@@ -19,6 +20,8 @@
 // time"; WO-ONE-COACH-01). The fundamental's HOW used to ride inside its
 // verdict, ahead of the grade's line — the habit before the loss it was about.
 
+import { Chess } from 'chess.js';
+
 interface MistakeTurnFundamental {
   /** The diagnosis alone — what the move broke. */
   diagnosis: string;
@@ -26,6 +29,16 @@ interface MistakeTurnFundamental {
   howOnly: string;
   /** The square the fundamental is about, when it names one. */
   square: string | null;
+  /** The opponent's move the diagnosis names ("f6 comes with a threat on your
+   *  bishop"), from the board it is played on — null when it names none. */
+  reply: MoveOnBoard | null;
+}
+
+/** A move and the board it is played from: two readers name the same move
+ *  only when both match (coordinates, never SAN text). */
+export interface MoveOnBoard {
+  fen: string;
+  uci: string;
 }
 
 interface MistakeTurnInput {
@@ -34,6 +47,9 @@ interface MistakeTurnInput {
   evidence: string;
   /** The square the grade says was lost, when it names one. */
   lostSquare: string | null;
+  /** The first move of the line the grade plays out ("it let them play …f6"),
+   *  from the board it starts on — null when the grade plays none. */
+  gradeReply: MoveOnBoard | null;
   /** The opening lane already announced the book departure: the diagnosis is said. */
   bookSaid: boolean;
   /** The per-game slip marker; called only when the full verdict speaks. */
@@ -48,6 +64,33 @@ interface MistakeTurnInput {
 /** True when the fundamental's verdict and the grade name one loss. */
 export function sameLossAsGrade(fund: Pick<MistakeTurnFundamental, 'square'> | null, lostSquare: string | null): boolean {
   return !!fund?.square && !!lostSquare && fund.square === lostSquare;
+}
+
+const boardKey = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
+
+/** True when the fundamental's diagnosis and the grade's line are about the
+ *  same answer of theirs (Colle replay 2026-11-05, 20.Qxf4: "That hands them
+ *  a tempo: f6 comes with a threat on your bishop" and "it let them play
+ *  …f6, which attacks the bishop on g5" in one turn). */
+export function sameReplyAsGrade(fundReply: MoveOnBoard | null, gradeReply: MoveOnBoard | null): boolean {
+  return !!fundReply && !!gradeReply && fundReply.uci.slice(0, 4) === gradeReply.uci.slice(0, 4) && boardKey(fundReply.fen) === boardKey(gradeReply.fen);
+}
+
+/** THE ANSWER OF THEIRS A FUNDAMENTAL NAMES — the first of its punishing
+ *  moves (`PrincipleEvidence.moves`, SAN on the board after the student's
+ *  move), as a move on that board; null when it names none, or names a move
+ *  that is not theirs to play there (the student's own better move). The one
+ *  reader every surface compares against its grade (`sameReplyAsGrade`). */
+export function fundamentalReply(moves: readonly string[], fenBefore: string, playedSan: string): MoveOnBoard | null {
+  const first = moves[0]?.split(' ')[0];
+  if (!first) return null;
+  try {
+    const c = new Chess(fenBefore);
+    c.move(playedSan);
+    const after = c.fen();
+    const m = c.move(first);
+    return m ? { fen: after, uci: `${m.from}${m.to}${m.promotion ?? ''}` } : null;
+  } catch { return null; }
 }
 
 /** The turn's line and its habit, said apart: the body leads the turn, the
@@ -70,8 +113,9 @@ export function mistakeTurnLine(a: MistakeTurnInput): MistakeTurn {
   if (!a.fund) {
     body = join(a.evidence + a.plainTail);
     how = '';
-  } else if (sameLossAsGrade(a.fund, a.lostSquare)) {
-    // The grade says the loss; the fundamental adds the habit that finds it.
+  } else if (sameLossAsGrade(a.fund, a.lostSquare) || sameReplyAsGrade(a.fund.reply, a.gradeReply)) {
+    // The grade says the loss (or the answer it allowed); the fundamental adds
+    // the habit that finds it.
     body = join(a.evidence);
     how = a.fund.howOnly;
   } else {

@@ -105,7 +105,7 @@ async function learnSource(g: FixtureGame): Promise<SourceRecord> {
     const r = plies[k + 1];
     if (!p.own || r.after.length === 0) continue;
     const historySans = g.sans.slice(0, k + 1);
-    const { rows, result } = await withRows(() => computePositionFacts({
+    const { rows, result } = await withRows(() => computePositionFacts({ theory: true,
       boardComputers: 'surface',
       posture: 'walk',
       fen: r.fenAfter,
@@ -145,7 +145,7 @@ async function chatSource(g: FixtureGame): Promise<SourceRecord> {
     const sans = g.sans.slice(0, p.ply);
     const lm = lastMoveIfStudent(sans, g.studentSide, p.fenAfter);
     const om = lastMoveIfOpponent(sans, g.studentSide, p.fenAfter);
-    const { rows, result } = await withRows(() => computePositionFacts({
+    const { rows, result } = await withRows(() => computePositionFacts({ theory: true,
       boardComputers: 'composer', posture: 'asked', fen: p.fenAfter,
       moverColor: p.mover === 'w' ? 'b' : 'w', studentColor: g.studentSide === 'white' ? 'w' : 'b',
       analysis: analysisOf(p.after),

@@ -268,7 +268,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         let liveExtraFacts: string | undefined;
         try {
           if (cached?.topLines?.length && ctx.fenAfter) {
-            const pf = await computePositionFacts({
+            const pf = await computePositionFacts({ theory: true,
       boardComputers: 'composer',
               // A live game. Silence is the default; the coach earns the word.
               posture: 'interrupt',

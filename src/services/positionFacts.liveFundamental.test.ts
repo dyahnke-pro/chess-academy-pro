@@ -49,7 +49,7 @@ async function needRows(withReads: boolean): Promise<NeedScoreRow[]> {
   const rows: NeedScoreRow[] = [];
   const off = onNeedScore((r) => { rows.push(r); });
   try {
-    await computePositionFacts({
+    await computePositionFacts({ theory: true,
       boardComputers: 'surface', posture: 'walk', fen: FEN_NOW, moverColor: 'b', studentColor: 'b', analysis,
       lastMove: { fenBefore: FEN_BEFORE_NB6, san: 'Nb6', cpLoss: 120, historySans: null, reads: withReads ? reads : null },
       studentNeedContext: ctx,

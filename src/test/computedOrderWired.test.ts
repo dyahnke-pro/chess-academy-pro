@@ -29,7 +29,7 @@ afterEach(() => off());
 describe('the computed order is WIRED — both producers hand the door their stakes', () => {
   it('live: a hanging knight reaches the door with its stakes and leads', async () => {
     // White knight on e5 attacked by the d6 pawn; the student is White, to move.
-    const r = await computePositionFacts({
+    const r = await computePositionFacts({ theory: true,
       boardComputers: 'surface', posture: 'walk',
       fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14',
       moverColor: 'w', studentColor: 'w', analysis: flat,

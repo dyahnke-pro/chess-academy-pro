@@ -76,7 +76,7 @@ export function boardStateAfter(fenBefore: string, san: string, fenAfter: string
 const STANDING: ReadonlySet<FactKind> = new Set<FactKind>([
   'loose', 'count', 'technique', 'stock', 'verdict', 'eval', 'status', 'convert',
   'opp-target', 'worst', 'badbishop', 'complex', 'structure', 'passer', 'minority',
-  'rook7', 'plan-now', 'plan-worst-piece', 'plan-race', 'plan-middlegame', 'plan-opening', 'plan-line',
+  'rook7', 'plan-now', 'plan-worst-piece', 'plan-race', 'plan-middlegame', 'plan-line',
   'structure-plan', 'student-leans', 'opponent-leans', 'latent-danger', 'latent-chance',
   // Opposite-coloured bishops: a standing reading of the board.
   'opposite-bishops',

@@ -22,6 +22,7 @@ import { attributeLiveFundamental, LEARN_FUNDAMENTAL_CP_FLOOR, type LiveFundamen
 import { renderFundamentalVerdict, verdictCanDropBetter } from './principleVoice';
 import { habitForCluster } from './coachDecider';
 import { liveHabitKey, type LiveHabit } from './methodBeat';
+import { fundamentalReply } from './mistakeTurnLine';
 
 export { LEARN_FUNDAMENTAL_CP_FLOOR };
 
@@ -68,6 +69,11 @@ interface LearnFundamental {
    *  calculation-depth verdict walks ("after b5, Nb6, Nxb6 breaks it"), from
    *  the board after it — spoken only by the full verdict, so drawn only then. */
   lines: Array<{ fen: string; sans: readonly string[] }>;
+  /** The opponent's answer the diagnosis names ("f6 comes with a threat on
+   *  your bishop"), from the board after the student's move — so the turn can
+   *  tell when the grade plays out the same answer (`sameReplyAsGrade`). Null
+   *  when it names none. */
+  reply: { fen: string; uci: string } | null;
 }
 
 /**
@@ -118,7 +124,7 @@ export function learnFundamentalVerdict(
   const sq = attrs[0].facts.square;
   const a0 = attrs[0];
   const lines = fundamentalLines(a0, input.fenBefore, input.playedSan, firstThisGame);
-  return { id: a0.id, tag: a0.tag, diagnosis, square: typeof sq === 'string' ? sq : null, lines, howOnly };
+  return { id: a0.id, tag: a0.tag, diagnosis, square: typeof sq === 'string' ? sq : null, lines, howOnly, reply: fundamentalReply(a0.evidence.moves, input.fenBefore, input.playedSan) };
 }
 
 /** The lines a fundamental's verdict names, each from the board it starts on.

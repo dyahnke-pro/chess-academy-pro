@@ -127,12 +127,12 @@ const flat = {
 
 describe('the need gate reaches the LIVE composer', () => {
   it('speaks here with no need data — the control, so the silences below mean something', async () => {
-    const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: LOUD_FEN, moverColor: 'w', studentColor: 'w', analysis: flat });
+    const r = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'walk', fen: LOUD_FEN, moverColor: 'w', studentColor: 'w', analysis: flat });
     expect(r.clauses.length).toBeGreaterThan(0);
   });
 
   it('GOES QUIET on the student\'s own ply when need says they do not need it', async () => {
-    const r = await computePositionFacts({
+    const r = await computePositionFacts({ theory: true,
       boardComputers: 'surface', posture: 'walk', fen: LOUD_FEN, moverColor: 'w', studentColor: 'w', analysis: flat,
       studentNeedContext: PLAYED_IT_RIGHT_FIVE_TIMES,
     });
@@ -146,13 +146,13 @@ describe('the need gate reaches the LIVE composer', () => {
     // wrong reason — 0 === 0. This one SPEAKS with White to move and the
     // student on Black, which is what makes the assertion mean something.
     const OPP_FEN = '6kr/6pp/8/8/8/8/6PP/5K1R w - - 0 14';
-    const control = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: OPP_FEN, moverColor: 'w', studentColor: 'b', analysis: flat });
+    const control = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'walk', fen: OPP_FEN, moverColor: 'w', studentColor: 'b', analysis: flat });
     expect(control.clauses.length, 'fixture must speak, or the assertion below is vacuous').toBeGreaterThan(0);
 
     // `computeNeed` returns speak:false for EVERY opponent move by contract
     // (needScore.ts:152). Without the mover guard this verdict would silence
     // the coach on every one of the opponent's plies — half of every game.
-    const gated = await computePositionFacts({
+    const gated = await computePositionFacts({ theory: true,
       boardComputers: 'surface', posture: 'walk', fen: OPP_FEN, moverColor: 'w', studentColor: 'b', analysis: flat,
       studentNeedContext: PLAYED_IT_RIGHT_FIVE_TIMES,
     });

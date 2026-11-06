@@ -51,7 +51,7 @@ describe.skipIf(!RUN)('P4 — written notes vs the computed voice, same move', (
         const moverIsStudent = mover === lesson.orientation;
         let computed = '';
         try {
-          computed = lessonThought({
+          computed = lessonThought({ theory: true,
             fenBefore: fens[n - 1], san, prev: runs[n - 1], moverIsStudent,
             line: line.slice(n, n + BRIEFING_LINE_PLIES),
             history: line.slice(0, n - 1), theirLast: n >= 2 ? { fenBefore: fens[n - 2], san: line[n - 2] } : null, reads: null, costCp: null,

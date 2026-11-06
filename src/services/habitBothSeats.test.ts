@@ -18,7 +18,7 @@ describe('the student\'s habit, from the same computer', () => {
   });
   it('Learn\'s depth read carries it', () => {
     const c = new Chess(); for (const s of G2) c.move(s);
-    const out = depthClauses({ fen: c.fen(), history: G2, topLines: [], studentColor: 'b', nameMove: false });
+    const out = depthClauses({ theory: true, fen: c.fen(), history: G2, topLines: [], studentColor: 'b', nameMove: false });
     expect(out.find((x) => x.kind === 'your-habit')?.text).toMatch(/you've left a piece loose/);
   });
   it('Review names it on the move that made it a habit', () => {

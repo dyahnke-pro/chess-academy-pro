@@ -55,7 +55,7 @@ it.skipIf(!process.env.REPLAY_LINE)('replay a speed-run game through the coach',
       const pv = before.pv;
       const why = bestSan ? moveWhy(fen, bestSan, student, null) : null;
       const critical = !!before.second && Math.abs(score(before) - score(before.second)) >= 80 && Math.abs(score(before)) < 500;
-      const depth = depthClauses({ fen, history: sans.slice(0, i), topLines: [{ moves: pv, evaluation: score(before) * (student === 'w' ? 1 : -1), mate: null }], studentColor: student, nameMove: critical, ...(i >= 2 ? { lastStudentMove: { fenBefore: fenTwoBack ?? fen, san: sans[i - 2] } } : {}) });
+      const depth = depthClauses({ theory: true, fen, history: sans.slice(0, i), topLines: [{ moves: pv, evaluation: score(before) * (student === 'w' ? 1 : -1), mate: null }], studentColor: student, nameMove: critical, ...(i >= 2 ? { lastStudentMove: { fenBefore: fenTwoBack ?? fen, san: sans[i - 2] } } : {}) });
       const said = [why ? `The move is ${bestSan} — it ${why}.` : '', ...depth.map((d) => d.text)].filter(Boolean).join(' ');
       if (said) lines.push(`THINK${critical ? '*' : ''}(${said.split(/\s+/).length}w) ${said}`);
       const after = await e.go(c.fen());

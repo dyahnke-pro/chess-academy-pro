@@ -22,7 +22,7 @@ describe('the opponent\'s only move is counted once', () => {
     // no moves, as the tier-only branch did: no intent to name instead.
     const fan = [{ rank: 1, evaluation: -40, mate: null, moves: [] }, { rank: 2, evaluation: 560, mate: null, moves: [], bound: 'upper' as const }, { rank: 3, evaluation: 600, mate: null, moves: [] }];
     expect(readCriticalMoment({ topLines: fan, moverColor: 'b' })?.resolved).toBe(false);
-    const r = await computePositionFacts({
+    const r = await computePositionFacts({ theory: true,
       boardComputers: 'surface', posture: 'walk', fen: BLACK_TO_MOVE, moverColor: 'b', studentColor: 'w',
       analysis: { evaluation: -40, isMate: false, mateIn: null, depth: 14, topLines: fan },
     });

@@ -165,14 +165,14 @@ describe('review noise — one claim, one producer; the need score past the open
   }, 120_000);
 });
 
-describe('review noise — the masters\' plan is one claim (David\'s Old Sicilian, chesscom 1042725180)', () => {
-  it('"The plan in this structure: their break is d4" is said once, not with the name and again later', () => {
+describe('review noise — the masters\' plan is the Theory button\'s (David\'s Old Sicilian, chesscom 1042725180)', () => {
+  it('"The plan in this structure: their break is d4" is never said in the walk (David 2026-11-06: "Yes move theory to review button")', () => {
     setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
     __setLocalDbForTests(JSON.parse(readFileSync('public/data/openings-masters-db.json', 'utf8')) as never);
     const sans = 'e4 c5 Nf3 Nc6 d3 d6 Be2 g6 c4 Bg7 Nc3 Nf6 h3 O-O O-O a6 Nd5 Nd7 Rb1 e6'.split(' ');
     const w = walk(sans, 'black').join(' ');
     __setLocalDbForTests(null);
-    expect(w.match(/The plan in this structure/g) ?? []).toHaveLength(1);
+    expect(w).not.toMatch(/The plan in this structure/);
   }, 120_000);
 });
 

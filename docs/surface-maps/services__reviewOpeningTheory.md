@@ -4,16 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1168 lines · 11 exports · 4 importers · 4 tests · 0 audits**
+**1230 lines · 12 exports · 4 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5782) — names `reviewOpeningTheory`
 
 ## Who calls in
 
 - `src/components/Coach/CoachGameReview.tsx`
-- `src/services/coachFeatureService.ts`
+- `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewOpeningTheory.test.ts`
 
@@ -22,92 +22,101 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ExploreLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `resolveCuratedOpeningIdeas` (function) — 12 call sites
-- `src/components/Coach/CoachGameReview.tsx:2460`
-- `src/services/coachFeatureService.ts:1443`
+### `resolveCuratedOpeningIdeas` (function) — 11 call sites
+- `src/components/Coach/CoachGameReview.tsx:2474`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/services/reviewOpeningTheory.test.ts:84`
 - `src/services/reviewOpeningTheory.test.ts:85`
 - `src/services/reviewOpeningTheory.test.ts:88`
 - `src/services/reviewOpeningTheory.test.ts:95`
 - `src/services/reviewOpeningTheory.test.ts:101`
-- `src/services/reviewOpeningTheory.test.ts:366`
-- `src/services/reviewOpeningTheory.test.ts:367`
-- `src/services/reviewOpeningTheory.test.ts:368`
-- `src/services/reviewOpeningTheory.test.ts:500`
+- `src/services/reviewOpeningTheory.test.ts:390`
+- `src/services/reviewOpeningTheory.test.ts:391`
+- `src/services/reviewOpeningTheory.test.ts:392`
+- `src/services/reviewOpeningTheory.test.ts:524`
 
 ### `warmLectureSources` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:2443`
+- `src/components/Coach/CoachGameReview.tsx:2457`
 
-### `buildOpeningTheoryLecture` (function) — 21 call sites
-- `src/components/Coach/CoachGameReview.tsx:2451`
+### `buildOpeningTheoryLecture` (function) — 22 call sites
+- `src/components/Coach/CoachGameReview.tsx:2465`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:46`
 - `src/services/reviewOpeningTheory.test.ts:35`
 - `src/services/reviewOpeningTheory.test.ts:64`
 - `src/services/reviewOpeningTheory.test.ts:75`
 - `src/services/reviewOpeningTheory.test.ts:123`
 - `src/services/reviewOpeningTheory.test.ts:145`
-- `src/services/reviewOpeningTheory.test.ts:183`
-- `src/services/reviewOpeningTheory.test.ts:204`
-- `src/services/reviewOpeningTheory.test.ts:230`
-- `src/services/reviewOpeningTheory.test.ts:257`
-- `src/services/reviewOpeningTheory.test.ts:290`
-- `src/services/reviewOpeningTheory.test.ts:325`
-- `src/services/reviewOpeningTheory.test.ts:355`
-- `src/services/reviewOpeningTheory.test.ts:383`
-- `src/services/reviewOpeningTheory.test.ts:409`
-- `src/services/reviewOpeningTheory.test.ts:425`
-- `src/services/reviewOpeningTheory.test.ts:450`
-- `src/services/reviewOpeningTheory.test.ts:478`
-- `src/services/reviewOpeningTheory.test.ts:494`
+- `src/services/reviewOpeningTheory.test.ts:178`
+- `src/services/reviewOpeningTheory.test.ts:207`
+- `src/services/reviewOpeningTheory.test.ts:228`
+- `src/services/reviewOpeningTheory.test.ts:254`
+- `src/services/reviewOpeningTheory.test.ts:281`
+- `src/services/reviewOpeningTheory.test.ts:314`
+- `src/services/reviewOpeningTheory.test.ts:349`
+- `src/services/reviewOpeningTheory.test.ts:379`
+- `src/services/reviewOpeningTheory.test.ts:407`
+- `src/services/reviewOpeningTheory.test.ts:433`
+- `src/services/reviewOpeningTheory.test.ts:449`
+- `src/services/reviewOpeningTheory.test.ts:474`
+- `src/services/reviewOpeningTheory.test.ts:502`
+- `src/services/reviewOpeningTheory.test.ts:518`
 - `src/test/corpusScope.test.ts:94`
 
+### `openingSummaryLine` (function) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:12523`
+- `src/services/learnBoardTeaching.test.ts:98`
+- `src/services/learnBoardTeaching.test.ts:99`
+- `src/services/learnBoardTeaching.test.ts:100`
+- `src/services/reviewOpeningTheory.test.ts:191`
+
 ### `enrichLectureWithEngine` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:2468`
-- `src/services/reviewOpeningTheory.test.ts:260`
+- `src/components/Coach/CoachGameReview.tsx:2482`
+- `src/services/reviewOpeningTheory.test.ts:284`
 
 ### `TheoryLectureBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `familyName` (function) — 3 call sites
-- `src/services/reviewOpeningTheory.test.ts:388`
-- `src/services/reviewOpeningTheory.test.ts:389`
-- `src/services/reviewOpeningTheory.test.ts:392`
+- `src/services/reviewOpeningTheory.test.ts:412`
+- `src/services/reviewOpeningTheory.test.ts:413`
+- `src/services/reviewOpeningTheory.test.ts:416`
 
-### `buildTheoryLectureBeats` (function) — 16 call sites
-- `src/components/Coach/CoachGameReview.tsx:2459`
+### `buildTheoryLectureBeats` (function) — 17 call sites
+- `src/components/Coach/CoachGameReview.tsx:2473`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/services/reviewOpeningTheory.test.ts:129`
 - `src/services/reviewOpeningTheory.test.ts:146`
 - `src/services/reviewOpeningTheory.test.ts:184`
-- `src/services/reviewOpeningTheory.test.ts:206`
-- `src/services/reviewOpeningTheory.test.ts:238`
-- `src/services/reviewOpeningTheory.test.ts:263`
-- `src/services/reviewOpeningTheory.test.ts:300`
-- `src/services/reviewOpeningTheory.test.ts:326`
-- `src/services/reviewOpeningTheory.test.ts:356`
-- `src/services/reviewOpeningTheory.test.ts:384`
-- `src/services/reviewOpeningTheory.test.ts:410`
-- `src/services/reviewOpeningTheory.test.ts:430`
-- `src/services/reviewOpeningTheory.test.ts:451`
+- `src/services/reviewOpeningTheory.test.ts:208`
+- `src/services/reviewOpeningTheory.test.ts:230`
+- `src/services/reviewOpeningTheory.test.ts:262`
+- `src/services/reviewOpeningTheory.test.ts:287`
+- `src/services/reviewOpeningTheory.test.ts:324`
+- `src/services/reviewOpeningTheory.test.ts:350`
+- `src/services/reviewOpeningTheory.test.ts:380`
+- `src/services/reviewOpeningTheory.test.ts:408`
+- `src/services/reviewOpeningTheory.test.ts:434`
+- `src/services/reviewOpeningTheory.test.ts:454`
+- `src/services/reviewOpeningTheory.test.ts:475`
 - `src/test/corpusScope.test.ts:95`
 
 ### `lectureNoteSelector` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:2460`
+- `src/components/Coach/CoachGameReview.tsx:2474`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/test/corpusScope.test.ts:95`
 
 ### `loadLectureCorpus` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:2464`
+- `src/components/Coach/CoachGameReview.tsx:2478`
 
 ### `lectureSequence` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1898`
+- `src/components/Coach/CoachGameReview.tsx:1912`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:52`
-- `src/services/reviewOpeningTheory.test.ts:452`
+- `src/services/reviewOpeningTheory.test.ts:476`
 
 ## Tests
 
 - `src/services/gemCrushLines.computed.test.ts`
+- `src/services/learnBoardTeaching.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewOpeningTheory.test.ts`
 - `src/test/corpusScope.test.ts`

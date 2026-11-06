@@ -21,7 +21,7 @@ const D5 = { san: 'd5', fenBefore: BEFORE_D5 };
 
 describe('the two-moves count after 46...d5 names d5', () => {
   it('the key-moment clause opens on the reply it counted', async () => {
-    const r = await computePositionFacts({
+    const r = await computePositionFacts({ theory: true,
       boardComputers: 'surface', posture: 'walk', fen: AFTER_D5, moverColor: 'w', studentColor: 'w',
       analysis: { evaluation: 584, isMate: false, mateIn: null, depth: 14, topLines: FAN_AFTER_D5 },
       opponentLastMove: D5,

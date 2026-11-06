@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**84 lines · 3 exports · 5 importers · 4 tests · 0 audits**
+**128 lines · 6 exports · 8 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,33 +13,54 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/bxf7LostSquare.test.ts`
+- `src/services/coachFeatureService.ts`
 - `src/services/learnBoardTeaching.ts`
+- `src/services/learnFundamentalNarration.ts`
 - `src/services/mistakeTurnLine.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
+- `src/services/reviewFullData.ts`
 - `src/services/whyItFailed.lostSquare.test.ts`
 
 ## Exports and every call site
 
+### `MoveOnBoard` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `sameLossAsGrade` (function) — 6 call sites
 - `src/services/bxf7LostSquare.test.ts:24`
-- `src/services/mistakeTurnLine.test.ts:74`
 - `src/services/mistakeTurnLine.test.ts:75`
 - `src/services/mistakeTurnLine.test.ts:76`
+- `src/services/mistakeTurnLine.test.ts:77`
 - `src/services/replayFence.najdorf1500.test.ts:79`
 - `src/services/whyItFailed.lostSquare.test.ts:23`
+
+### `sameReplyAsGrade` (function) — 5 call sites
+- `src/services/coachFeatureService.ts:3254`
+- `src/services/mistakeTurnLine.test.ts:155`
+- `src/services/mistakeTurnLine.test.ts:157`
+- `src/services/mistakeTurnLine.test.ts:158`
+- `src/services/reviewFullData.ts:747`
+
+### `fundamentalReply` (function) — 5 call sites
+- `src/services/coachFeatureService.ts:3255`
+- `src/services/learnFundamentalNarration.ts:127`
+- `src/services/mistakeTurnLine.test.ts:153`
+- `src/services/mistakeTurnLine.test.ts:162`
+- `src/services/reviewFullData.ts:748`
 
 ### `MistakeTurn` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `mistakeTurnLine` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12545`
-- `src/services/mistakeTurnLine.test.ts:22`
-- `src/services/mistakeTurnLine.test.ts:35`
-- `src/services/mistakeTurnLine.test.ts:43`
-- `src/services/mistakeTurnLine.test.ts:52`
-- `src/services/mistakeTurnLine.test.ts:60`
-- `src/services/mistakeTurnLine.test.ts:68`
-- `src/services/mistakeTurnLine.test.ts:97`
+### `mistakeTurnLine` (function) — 9 call sites
+- `src/components/Coach/CoachTeachPage.tsx:12722`
+- `src/services/mistakeTurnLine.test.ts:23`
+- `src/services/mistakeTurnLine.test.ts:36`
+- `src/services/mistakeTurnLine.test.ts:44`
+- `src/services/mistakeTurnLine.test.ts:53`
+- `src/services/mistakeTurnLine.test.ts:61`
+- `src/services/mistakeTurnLine.test.ts:69`
+- `src/services/mistakeTurnLine.test.ts:98`
+- `src/services/mistakeTurnLine.test.ts:131`
 
 ## Tests
 

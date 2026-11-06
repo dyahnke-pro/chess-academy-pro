@@ -74,8 +74,8 @@ import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
 import { SAID_BEFORE_MOVE } from './computerRoles';
 import { fileClaimed, oppositeWingsRace } from './planRace';
-import { conceptInstanceKey, tacticGeometryKey } from './conceptKey';
-import { sayMoveNoun, sayYourMove } from './spokenMove';
+import { conceptInstanceKey, holeKey, tacticGeometryKey } from './conceptKey';
+import { sayYourMove } from './spokenMove';
 import { deepFact, theirTarget, binding, moveHit } from './threeFacts';
 import { countWarning } from './countMethod';
 import { planChoice, type PlanChoiceLine } from './planChooser';
@@ -151,6 +151,12 @@ export interface StudentMoveInput {
    *  `learnMemory.story`), so a habit asked in full once is asked again as a
    *  short callback. */
   saidClaims?: ReadonlySet<string>;
+  /** REQUIRED: may this surface speak opening THEORY — the named opening this
+   *  board equals (`openingEquivalence`), the book move? Review's walk says no:
+   *  its theory is the Theory button (David 2026-11-06: "Yes move theory to
+   *  review button, but keep in learn for now also"). Learn, the button, chat
+   *  and the lessons say yes. */
+  theory: boolean;
 }
 
 /** ONE VOCABULARY (plan "methodBeat — the live coach names the lesson STEP"):
@@ -193,17 +199,19 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
   // reading the raw cost — "clean" is a narrower question.
   const faultCp = i.cpLoss !== null && moverFault(i.cpLoss, i.cpAfter) ? i.cpLoss : 0;
 
-  // WHICH PIECE TAKES BACK, AND WHY — the better recapture named only when the
-  // played one cost >= 50cp against it (a near-tie is taste).
+  // WHICH PIECE TAKES BACK, AND WHY — on a recapture the grader does not call
+  // a fault. A faulty recapture is the one error computer's: it names the
+  // better move with its reason, and a second reason here contradicted it
+  // (Colle replay 2026-11-05, 20.Qxf4: "…f6 attacks the bishop" from the
+  // grade, "…e5 hits the queen" from here).
   try {
     const theirLast = i.history.length >= 2 ? i.history[i.history.length - 2] : null;
     const tookOn = theirLast ? /x([a-h][1-8])/.exec(theirLast)?.[1] ?? null : null;
-    if (tookOn && to === tookOn && i.san.includes('x')) {
-      const bestRe = i.bestSan && new RegExp(`x${tookOn}`).test(i.bestSan) && faultCp >= 50 ? i.bestSan : null;
-      const rc = recaptureChoice(i.fenBefore, i.san, bestRe, i.reply);
-      // The right recapture chosen (no better one named) answers the
-      // capture-toward-centre question — held (P4 dual-use).
-      if (rc) out.push(teachingFact('recapture', { computer: 'recaptureChoice', kind: 'rule', ...mine, names: NAMES_NO_MOVE, proof: squaresProof(rc, [to]) ?? NO_PROOF.stated, text: rc, squares: [to], claims: [`recapture-${to}`] }, { event: null, arrows: [], ...(bestRe ? {} : { evidence: { tag: 'capture-toward-centre' as const, posedImportance: 60 } }) }));
+    if (faultCp === 0 && tookOn && to === tookOn && i.san.includes('x')) {
+      const rc = recaptureChoice(i.fenBefore, i.san, i.reply);
+      // The right recapture chosen answers the capture-toward-centre
+      // question — held (P4 dual-use).
+      if (rc) out.push(teachingFact('recapture', { computer: 'recaptureChoice', kind: 'rule', ...mine, names: NAMES_NO_MOVE, proof: squaresProof(rc, [to]) ?? NO_PROOF.stated, text: rc, squares: [to], claims: [`recapture-${to}`] }, { event: null, arrows: [], evidence: { tag: 'capture-toward-centre' as const, posedImportance: 60 } }));
     }
   } catch { /* a bonus, never a blocker */ }
 
@@ -420,7 +428,11 @@ export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' |
   const after = boardAfterMove(fenBefore, san);
   return teachingFact('theirMoveCost', {
     // The hole's first knight hop is the student's move to play (its arrow is 'play').
-    computer: 'theirMoveCost', kind: 'their-cost', seat: 'opponent', fen: after, names: namesMoves(student, after, ...arrows.filter((x) => x.role === 'play').map((x) => ({ from: x.from, to: x.to }))), proof: NO_PROOF.description, text: cost.text, squares: cost.squares, claims: [`cost-${cost.kind}-${cost.squares[0]}`],
+    computer: 'theirMoveCost', kind: 'their-cost', seat: 'opponent', fen: after, names: namesMoves(student, after, ...arrows.filter((x) => x.role === 'play').map((x) => ({ from: x.from, to: x.to }))), proof: NO_PROOF.description, text: cost.text, squares: cost.squares,
+    // ONE HOLE, ONE KEY (dup map #5): a hole is said under `hole:<sq>` by every
+    // computer that names it, so the opening story's "…b5 has a cost for them"
+    // and this line are one claim, said once (Colle replay 2026-11-05, 10.Re1).
+    claims: [cost.kind === 'hole' && cost.squares[0] ? holeKey(cost.squares[0]) : `cost-${cost.kind}-${cost.squares[0]}`],
     // A lasting cost (a hole, a shut bishop, castling gone) is a consequence,
     // the why of their move — never an aside (A-plan P6: held 2 of 4).
     role: 'teach',
@@ -755,31 +767,11 @@ export function prizeTeaching(fen: string, square: string, student: 'w' | 'b',
 }
 
 /** The student's own master-game break at `fen` (the one `openingPlanTeaching`
- *  names), for the opening summary later. */
+ *  names), for the opening summary later (`reviewOpeningTheory.openingSummaryLine`). */
 export function openingBreakFor(fen: string, student: 'w' | 'b', openingName: string | null): { san: string; square: string } | null {
   const read = learnPlanRead(fen, openingName);
   const mine = read ? (student === 'w' ? read.white : read.black) : null;
   return mine ? { san: mine.san, square: mine.square } : null;
-}
-
-/** THE OPENING SUMMARY (census #52): the opening is over — did the student get
- *  the break the opening is played for? Read against the board, never assumed:
- *  played it; still there to play (legal now); or the position moved past it. */
-export function openingSummaryLine(brk: { san: string; square: string }, studentSans: readonly string[], fenNow: string): string | null {
-  const bare = (x: string): string => x.replace(/[+#!?]+$/, '');
-  // The break was read at an earlier position, so no board: a pawn break needs none.
-  const say = sayMoveNoun(brk.san, null);
-  if (studentSans.some((s) => bare(s) === bare(brk.san))) {
-    return `The opening is over, and you got its break in — ${say}, the move this opening is played for.`;
-  }
-  let legalNow = false;
-  try {
-    const c = new Chess(fenNow);
-    legalNow = c.moves().some((m) => bare(m) === bare(brk.san));
-  } catch { legalNow = false; }
-  return legalNow
-    ? `The opening is over and its break, ${say}, has not come yet — it is still there to play when it is prepared.`
-    : `The opening is over without its break, ${say} — the position has moved past it, so the plan now comes from the middlegame.`;
 }
 
 /** THE VERDICT ON A FOUND MOVE (P2 #2): at a real decision moment on the board
@@ -853,7 +845,9 @@ function replayTo(history: readonly string[], ply: number): string | null {
 export function studentMoveAnswerLines(history: readonly string[], ply: number, cpLoss: number, bestSan: string | null): string[] {
   const fenBefore = replayTo(history, ply);
   if (!fenBefore || ply < 0 || ply >= history.length) return [];
+  // The student asked ("was that a good move?"): theory may answer.
   const hints = studentMoveTeaching({
+    theory: true,
     fenBefore, san: history[ply], history: history.slice(0, ply + 1), cpLoss, bothCp: true,
     bestSan, bestLine: undefined, reply: history[ply + 1] ?? null, cpAfter: null,
   });

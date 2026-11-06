@@ -12,6 +12,7 @@ const FUND = {
   diagnosis: 'That pawn was defended: your bishop takes on f7 and is taken on the spot — it cost you far more than a pawn.',
   howOnly: 'Next time: before taking a free pawn, ask why they let you.',
   square: 'f7',
+  reply: null,
 };
 const EVIDENCE = 'Bxf7+ was a mistake. That took the pawn on f7, but the king on e8 takes back — you lose a bishop for a pawn.';
 const BLUNDER_CHECK = 'Blunder check before you let go of a piece: run CCT for them.';
@@ -20,7 +21,7 @@ describe('the mistake turn says one loss and teaches one habit', () => {
   it('8.Bxf7+: the grade says the loss once, the fundamental keeps only its habit', () => {
     let asked = 0;
     const turn = mistakeTurnLine({
-      fund: FUND, evidence: EVIDENCE, lostSquare: 'f7', bookSaid: false,
+      fund: FUND, evidence: EVIDENCE, lostSquare: 'f7', gradeReply: null, bookSaid: false,
       slipPrefix: () => '', plainTail: '', concession: null,
       slipQuestion: () => { asked += 1; return BLUNDER_CHECK; },
     });
@@ -33,7 +34,7 @@ describe('the mistake turn says one loss and teaches one habit', () => {
   });
   it('a fundamental about another square still speaks in full, and its habit replaces the blunder check', () => {
     const turn = mistakeTurnLine({
-      fund: { ...FUND, square: 'd5' }, evidence: EVIDENCE, lostSquare: 'f7', bookSaid: false,
+      fund: { ...FUND, square: 'd5' }, evidence: EVIDENCE, lostSquare: 'f7', gradeReply: null, bookSaid: false,
       slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => BLUNDER_CHECK,
     });
     expect(turn.body.startsWith(FUND.diagnosis)).toBe(true);
@@ -41,7 +42,7 @@ describe('the mistake turn says one loss and teaches one habit', () => {
   });
   it('the habit closes the turn: what the move did, the loss, then the habit (David 2026-10-20)', () => {
     const turn = mistakeTurnLine({
-      fund: { ...FUND, square: 'd5' }, evidence: EVIDENCE, lostSquare: 'f7', bookSaid: false,
+      fund: { ...FUND, square: 'd5' }, evidence: EVIDENCE, lostSquare: 'f7', gradeReply: null, bookSaid: false,
       slipPrefix: () => '', plainTail: '', concession: 'They get the d5 square for good.', slipQuestion: () => BLUNDER_CHECK,
     });
     // The body is the diagnosis, the loss and what lasts; the habit is apart, said last.
@@ -50,7 +51,7 @@ describe('the mistake turn says one loss and teaches one habit', () => {
   });
   it('with no habit taught this turn the blunder check is asked', () => {
     const turn = mistakeTurnLine({
-      fund: { ...FUND, howOnly: '' }, evidence: EVIDENCE, lostSquare: 'f7', bookSaid: false,
+      fund: { ...FUND, howOnly: '' }, evidence: EVIDENCE, lostSquare: 'f7', gradeReply: null, bookSaid: false,
       slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => BLUNDER_CHECK,
     });
     expect(turn.body).toBe(EVIDENCE);
@@ -58,7 +59,7 @@ describe('the mistake turn says one loss and teaches one habit', () => {
   });
   it('a plain mistake: the grade, its tail, then the question', () => {
     const turn = mistakeTurnLine({
-      fund: null, evidence: EVIDENCE, lostSquare: 'f7', bookSaid: false,
+      fund: null, evidence: EVIDENCE, lostSquare: 'f7', gradeReply: null, bookSaid: false,
       slipPrefix: () => '', plainTail: ' A pin is …', concession: null, slipQuestion: () => BLUNDER_CHECK,
     });
     expect(turn.body).toBe(`${EVIDENCE} A pin is …`);
@@ -66,7 +67,7 @@ describe('the mistake turn says one loss and teaches one habit', () => {
   });
   it('a turn with no habit and no question says so (the door may add one)', () => {
     expect(mistakeTurnLine({
-      fund: null, evidence: EVIDENCE, lostSquare: null, bookSaid: false,
+      fund: null, evidence: EVIDENCE, lostSquare: null, gradeReply: null, bookSaid: false,
       slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => null,
     }).teachesMethod).toBe(false);
   });
@@ -94,7 +95,7 @@ describe('8.Bxf7+ on the live producers: one loss, one habit', () => {
     expect(look?.lostSquare).toBe('f7');
     const fund = learnFundamentalVerdict({ fenBefore, betterNamed: look?.namesBetter ?? null, namesBetterMove: false, replySan: 'Kxf7', historySans: [...H, 'Bxf7+'], playedSan: 'Bxf7+', bestSan: 'e5', studentColor: 'white', price: { costCp: 204, scores, settled: true }, bestPvUci: best, playedPvUci: reply }, new Set());
     expect(fund?.square).toBe('f7');
-    const turn = mistakeTurnLine({ fund, evidence: look!.line, lostSquare: look!.lostSquare ?? null, bookSaid: false, slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => BLUNDER_CHECK });
+    const turn = mistakeTurnLine({ fund, evidence: look!.line, lostSquare: look!.lostSquare ?? null, gradeReply: null, bookSaid: false, slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => BLUNDER_CHECK });
     expect(turn.body.startsWith(look!.line)).toBe(true);
     expect(turn.body).not.toContain(fund!.diagnosis.split(/(?<=[.!?])\s+/)[0]);
     expect(turn.teachesMethod).toBe(true);
@@ -104,5 +105,60 @@ describe('8.Bxf7+ on the live producers: one loss, one habit', () => {
     const bc = hints.find((h) => h.lane === 'blunderCheck');
     expect(bc).toBeDefined();
     expect(bc!.claims?.some((c) => c.startsWith('method:'))).toBe(true);
+  });
+});
+
+// David's Colle replay (2026-11-05), 20.Qxf4: one answer of theirs, said three
+// ways — the fundamental ("That hands them a tempo: f6 comes with a threat on
+// your bishop"), the grade ("it let them play …f6, which attacks the bishop on
+// g5 — Bxf4 was the move") and the recapture line ("Better to take back with
+// the bishop — Bxf4; Qxf4 would put the queen on f4, where …e5 hits it", a
+// second reason for the same better move). Real Stockfish lines.
+describe('20.Qxf4 on the live producers: one answer, one reason', () => {
+  const SANS = 'd4 d5 Nf3 Nf6 e3 e6 Bd3 c5 c3 Nc6 O-O Be7 Nbd2 a6 e4 O-O e5 Nd7 Re1 b5 Nf1 Re8 Ng3 Nf8 Nh5 cxd4 Ng5 Bxg5 Qg4 Nxe5 Qg3 Nfg6 Bxg5 Qb6 Bxg6 Nxg6 Nf4 Nxf4'.split(' ');
+  const c = new Chess(); for (const m of SANS.slice(0, -1)) c.move(m);
+  const priorFen = c.fen(); c.move('Nxf4');
+  const fenBefore = c.fen(); c.move('Qxf4'); const fenAfter = c.fen();
+  const best = 'g5f4 f7f6 c3d4 b6d4 a1c1 c8d7 f4h6 e8e7'.split(' ');
+  const reply = 'f7f6 g5f6 g7f6 f4f6 a8a7 c3d4 e8f8 f6g5'.split(' ');
+  const scores = { bestWhiteCp: -117, playedWhiteCp: -292 };
+  const look = backwardLook({ secondReads: NO_SECOND_READ, fenBefore, fenAfter, playedSan: 'Qxf4', priorMove: { fenBefore: priorFen, san: 'Nxf4' }, bestSan: 'Bxf4', bestPvUci: best, replyPvUci: reply, replySan: 'f6', cpLoss: 175, scores, moverEvalAfterCp: -292, studentColor: 'white' });
+  const fund = learnFundamentalVerdict({ fenBefore, betterNamed: look?.namesBetter ?? null, namesBetterMove: false, replySan: 'f6', historySans: [...SANS, 'Qxf4'], playedSan: 'Qxf4', bestSan: 'Bxf4', studentColor: 'white', price: { costCp: 175, scores, settled: true }, bestPvUci: best, playedPvUci: reply }, new Set());
+
+  it('the fundamental and the grade name the same answer, so the grade says it once', () => {
+    expect(look?.line).toMatch(/f6/);
+    expect(fund?.reply?.uci).toBe('f7f6');
+    const turn = mistakeTurnLine({
+      fund, evidence: look!.line, lostSquare: look!.lostSquare ?? null,
+      gradeReply: look!.punishLine?.uci[0] ? { fen: look!.punishLine.fen, uci: look!.punishLine.uci[0] } : null,
+      bookSaid: false, slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => BLUNDER_CHECK,
+    });
+    expect(turn.body.startsWith(look!.line)).toBe(true);
+    expect(turn.body).not.toContain(fund!.diagnosis.split(/(?<=[.!?])\s+/)[0]);
+  });
+
+  it('the recapture line does not give the better recapture a second reason', () => {
+    const hints = studentMoveTeaching({ fenBefore, san: 'Qxf4', reply: 'f6', history: [...SANS, 'Qxf4'], cpLoss: 175, cpAfter: -292, bothCp: true, bestSan: 'Bxf4', bestLine: undefined, studentColor: 'white' } as never);
+    expect(hints.find((h) => h.lane === 'recapture')).toBeUndefined();
+    expect(hints.map((h) => h.text).join(' ')).not.toMatch(/e5 hits it/);
+  });
+});
+
+describe('the one answer reader (fundamentalReply + sameReplyAsGrade), every surface', () => {
+  const SANS = 'd4 d5 Nf3 Nf6 e3 e6 Bd3 c5 c3 Nc6 O-O Be7 Nbd2 a6 e4 O-O e5 Nd7 Re1 b5 Nf1 Re8 Ng3 Nf8 Nh5 cxd4 Ng5 Bxg5 Qg4 Nxe5 Qg3 Nfg6 Bxg5 Qb6 Bxg6 Nxg6 Nf4 Nxf4'.split(' ');
+  const c = new Chess(); for (const m of SANS) c.move(m);
+  const fenBefore = c.fen(); c.move('Qxf4'); const fenAfter = c.fen();
+  it('…f6 named by the tempo verdict and played out by the grade is one answer', async () => {
+    const { fundamentalReply, sameReplyAsGrade } = await import('./mistakeTurnLine');
+    const fund = fundamentalReply(['f6'], fenBefore, 'Qxf4');
+    expect(fund).toEqual({ fen: fenAfter, uci: 'f7f6' });
+    expect(sameReplyAsGrade(fund, { fen: fenAfter, uci: 'f7f6' })).toBe(true);
+    // A different answer, or the same move on another board, is not.
+    expect(sameReplyAsGrade(fund, { fen: fenAfter, uci: 'e6e5' })).toBe(false);
+    expect(sameReplyAsGrade(fund, { fen: fenBefore, uci: 'f7f6' })).toBe(false);
+  });
+  it('a move that is not theirs to play there names no answer', async () => {
+    const { fundamentalReply } = await import('./mistakeTurnLine');
+    expect(fundamentalReply(['Bxf4'], fenBefore, 'Qxf4')).toBeNull();
   });
 });

@@ -4,13 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6459 lines · 30 exports · 69 importers · 83 tests · 4 audits**
+**6310 lines · 30 exports · 69 importers · 83 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:360) — names `coachFeatureService`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4722) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6876) — names `coachFeatureService`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5791) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6884) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -158,7 +159,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegmentsForTests` (function) — 114 call sites
+### `buildReviewSegmentsForTests` (function) — 116 call sites
 - `src/services/batch2Wiring.test.ts:75`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -174,23 +175,25 @@
 - `src/services/coachFeatureService.learnParity.test.ts:57`
 - `src/services/coachFeatureService.learnParity.test.ts:64`
 - `src/services/coachFeatureService.learnParity.test.ts:82`
-- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:42`
-- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:102`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:41`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:58`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:112`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:117`
 - `src/services/coachFeatureService.oneCost.test.ts:28`
 - `src/services/coachFeatureService.oneCost.test.ts:33`
 - `src/services/coachFeatureService.openingStory.test.ts:33`
-- `src/services/coachFeatureService.openingStory.test.ts:50`
-- `src/services/coachFeatureService.openingStory.test.ts:57`
-- `src/services/coachFeatureService.openingStory.test.ts:71`
-- `src/services/coachFeatureService.openingStory.test.ts:84`
-- `src/services/coachFeatureService.openingStory.test.ts:104`
-- `src/services/coachFeatureService.openingStory.test.ts:123`
-- `src/services/coachFeatureService.openingStory.test.ts:131`
-- `src/services/coachFeatureService.openingStory.test.ts:144`
-- `src/services/coachFeatureService.openingStory.test.ts:158`
-- `src/services/coachFeatureService.openingStory.test.ts:183`
-- `src/services/coachFeatureService.openingStory.test.ts:217`
-- `src/services/coachFeatureService.openingStory.test.ts:233`
+- `src/services/coachFeatureService.openingStory.test.ts:49`
+- `src/services/coachFeatureService.openingStory.test.ts:56`
+- `src/services/coachFeatureService.openingStory.test.ts:70`
+- `src/services/coachFeatureService.openingStory.test.ts:83`
+- `src/services/coachFeatureService.openingStory.test.ts:103`
+- `src/services/coachFeatureService.openingStory.test.ts:122`
+- `src/services/coachFeatureService.openingStory.test.ts:128`
+- `src/services/coachFeatureService.openingStory.test.ts:141`
+- `src/services/coachFeatureService.openingStory.test.ts:155`
+- `src/services/coachFeatureService.openingStory.test.ts:180`
+- `src/services/coachFeatureService.openingStory.test.ts:204`
+- `src/services/coachFeatureService.openingStory.test.ts:223`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
 - `src/services/coachFeatureService.planChange.test.ts:48`
@@ -323,10 +326,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8811`
-- `src/components/Coach/CoachTeachPage.tsx:8914`
-- `src/components/Coach/CoachTeachPage.tsx:11812`
-- `src/components/Coach/CoachTeachPage.tsx:12210`
+- `src/components/Coach/CoachTeachPage.tsx:8812`
+- `src/components/Coach/CoachTeachPage.tsx:8915`
+- `src/components/Coach/CoachTeachPage.tsx:11813`
+- `src/components/Coach/CoachTeachPage.tsx:12211`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/services/phaseTransitionDetector.test.ts:575`
@@ -389,7 +392,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:663`
+- `src/services/reviewFullData.ts:664`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites

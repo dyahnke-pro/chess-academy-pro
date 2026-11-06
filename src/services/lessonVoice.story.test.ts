@@ -18,7 +18,7 @@ function sayLine(sans: readonly string[], voice: ReturnType<typeof newLessonVoic
     const fenBefore = c.fen();
     if (last) prev = prevCaptureOf(last.fenBefore, last.san, prev);
     c.move(san);
-    const said = lessonThought({ fenBefore, san, moverIsStudent: i % 2 === 0, prev, line: sans.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES), history: sans.slice(0, i), theirLast: last, reads: null, costCp: null }, voice, null);
+    const said = lessonThought({ theory: true, fenBefore, san, moverIsStudent: i % 2 === 0, prev, line: sans.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES), history: sans.slice(0, i), theirLast: last, reads: null, costCp: null }, voice, null);
     last = { fenBefore, san };
     return said;
   });

@@ -490,8 +490,13 @@ function whyBetter(
   const clauses = (plan?.mine.spokenClauses.filter((c) => !sharedWin(c.text)) ?? [])
     .filter((c) => routeIsOwn(c) !== false || c.squares.includes(firstFrom));
   if (plan && clauses.length === 0) return null;
-  const lead0 = clauses.find((c) => !c.drift && (isCostClause(c.text) || c.squares.includes(firstFrom) || c.squares.includes(firstTo)))
-    ?? clauses[0];
+  // NO FALLBACK TO THE PLAN'S LEADER (Colle replay 2026-11-05: "Neg6 was
+  // their move — the idea is to create a passed pawn on d5", and the same
+  // clause for …Qxg5 a move later). A clause that wins nothing and touches
+  // none of the move's squares is the position's plan, not this move's reason:
+  // with none that qualifies, the move is named with no reason.
+  const lead0 = clauses.find((c) => !c.drift && (isCostClause(c.text) || c.squares.includes(firstFrom) || c.squares.includes(firstTo)));
+  if (!lead0 && clauses.length > 0) return null;
   // A ROUTE THAT COLLECTS MATERIAL ON THE WAY: the material is the reason
   // (review walk 2026-10-01, ply 16: "Bf5 was the move — it would walk the
   // bishop round to a4, by way of f5 and c2", where the bishop's stop on c2
@@ -755,7 +760,10 @@ export function callInaccuracyDetailed(args: {
     const behind = (cp: number): boolean => cp < 0 && evalBand(cp) !== 'level';
     if (studentAfter !== null && studentAfter <= 0 && studentBefore !== null && behind(studentBefore) && evalBand(studentBefore) !== 'slightly') return ' That gives you a way back into the game — look for it.';
     if (studentAfter !== null && behind(studentAfter)) return ' That gives you a way back into the game — look for it.';
-    if (studentAfter !== null && evalBand(studentAfter) === 'level') return ' That brings you level — look for the move that does it.';
+    // "That brings you level — look for the move that does it" said it was
+    // done and still to do (Colle replay 2026-11-05, 24…Rc7): their slip only
+    // OPENS the way back; the student's move takes it.
+    if (studentAfter !== null && evalBand(studentAfter) === 'level') return ' That gives you a way back to level — look for the move that gets you there.';
     // A SMALL EDGE IS NOT A PRIZE, and "take" promises a capture the board may
     // not have (Learn walk 2026-10-02: "go and take it" at +0.45 with nothing
     // to take). A clear edge is something to find; a small one is to keep.

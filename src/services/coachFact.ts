@@ -107,7 +107,7 @@ export const FACT_GROUP: Record<CoachFactKind, FactGroup> = {
   // ── the line played out ──
   consequence: 'line', line: 'line',
   // ── the story: plans, the opening's story ──
-  'plan-now': 'story', 'plan-worst-piece': 'story', 'plan-race': 'story', 'plan-arc': 'story', 'plan-opening': 'story', 'plan-middlegame': 'story',
+  'plan-now': 'story', 'plan-worst-piece': 'story', 'plan-race': 'story', 'plan-arc': 'story', 'plan-middlegame': 'story',
   'plan-line': 'story', 'structure-plan': 'story', 'student-leans': 'story',
   // The opening's story, each beat by what it is about: the price the
   // student's move paid is the move's (said with its verdict, OS-3
@@ -367,7 +367,6 @@ export const COMPUTER_CATALOG = {
   playItAnyway: { file: 'services/opponentMovePurpose.ts', says: 'their threat stopped, and why the student can play the plan anyway' },
   knownAttack: { file: 'services/attackLibrary.ts', says: 'a known attacking pattern on the board' },
   detectForcedMatingSequence: { file: 'services/reviewForcedSequence.ts', says: 'a forced checking run to mate' },
-  buildOpeningDevelopmentPlan: { file: 'services/reviewStrategicOrientation.ts', says: 'the development plan the opening asks for' },
   buildMiddlegameOrientation: { file: 'services/reviewStrategicOrientation.ts', says: 'where the middlegame is going for each side' },
   mastersPlanLine: { file: 'services/mastersPlanRead.ts', says: 'the plan masters played from this opening' },
   buildOpponentMoveTeaching: { file: 'services/reviewOpponentCommentary.ts', says: 'what their move targets' },

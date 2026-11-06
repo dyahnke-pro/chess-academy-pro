@@ -3,7 +3,6 @@ import { moveIntentsForGame, type ReviewIntent } from './reviewMoveIntent';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { tacticGeometryKey } from './conceptKey';
 import { reasonFormula } from '../utils/reasonFormula';
-import { mastersPlanLine } from './mastersPlanRead';
 import { recordTermForThreat, threatInputFor, threatVisibility, threatVoice } from './learnRecordTerms';
 import type { StudentRecord } from './studentRecord';
 import { lastMoveFromSan } from './material';
@@ -35,7 +34,7 @@ import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
 // (removed spokenTacticNote / generalizedTeaching — review no longer voices a
 // floating tactic-pattern note; that teaching lives on the tactics drill.)
-import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
+import { buildMiddlegameOrientation } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync, masterMovesCachedSync } from './masterPlayLookup';
 import { moveJob, whatItAsks, MINE, THEIRS, JOB_RESTATED_BY_RULE, type BookJobKind, type PriorCapture } from './bookMoveWhy';
@@ -47,7 +46,6 @@ import { findWorstPlacedPiece, planAimKey } from './nextPlans';
 import { transferClause, transferMotifOf, recordMotif, withTransfer, motifSaidInstances, type MotifLedger } from './motifLedger';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening, detectOpeningByOrder } from './openingDetectionService';
-import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
 import { detectPieceItineraries } from './reviewPieceItinerary';
 import { pickStoryGame } from './reviewStoryGame';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
@@ -78,8 +76,6 @@ import type { BestOfEngine, DeepReadEngine } from './gameAnalysisService';
 import { costReason as readCostReason, costReasonRow, type CostReason, type CostReasonRow, type LineRead } from './costReason';
 import { lineTrust, NAME_NEAR_PLIES } from './lineTrust';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
-import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
-import { walkBookLine } from './theoryDeparture';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts } from './coachApi';
@@ -98,6 +94,7 @@ import { renderCausalChain } from './causalChainVoice';
 import { matchFundamental, type WeaknessSignal } from './weaknessSignal';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap, isMethodSentence } from './principleVoice';
+import { fundamentalReply, sameReplyAsGrade } from './mistakeTurnLine';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, UserProfile, CoachNarration, OpeningKey, BoardArrow, HeardVerdict, StockfishAnalysis, TacticType, StoredLines, StoredWeighReads } from '../types';
 import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
@@ -112,7 +109,6 @@ import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { costWords, describeEvalCp, isMateEval, storedMate, moverGaveUpMate, COST_REASON_DEPTH } from './engineConstants';
 import { isContested } from './narrationImportance';
 import { mateDescription } from './matePatterns';
-import { isMinorAtHome } from './development';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
 import { FACET_ROLE, type FacetTag } from './reviewFacetRank';
@@ -448,10 +444,9 @@ const REVIEW_SAID = {
   habit: 'hb:',
 } as const;
 
-/** The walk's once-a-game beats, each a flag in the story (`REVIEW_SAID.flag`).
- *  The book standing is two flags: entering the main line and leaving it. */
-type ReviewFlag = 'openingPlanShown' | 'orientationShown' | 'assessmentShown' | 'psychologyReadDone' | 'opponentDevReadShown'
-  | 'sacCompShown' | 'kingCenterTaught' | 'tradeIdeaSpoken' | 'standing=main' | 'standing=side';
+/** The walk's once-a-game beats, each a flag in the story (`REVIEW_SAID.flag`). */
+type ReviewFlag = 'orientationShown' | 'assessmentShown' | 'psychologyReadDone' | 'opponentDevReadShown'
+  | 'sacCompShown' | 'kingCenterTaught' | 'tradeIdeaSpoken';
 
 /** THE STANDING REFRAINS, folded over finished segments IN PLY ORDER (the
  *  first mention in reading order is the full one). Each refrain's full form
@@ -1224,11 +1219,6 @@ function buildDeterministicNarration(params: {
  *  flagged moments. ~move 12 covers the opening + early middlegame. */
 const OPENING_TEACH_MAX_PLY = 24;
 
-/** The opening DEVELOPING-plan beat fires early — once the opening is identified
- *  and enough pieces are out to describe a plan (~move 3), but before the
- *  middlegame orientation takes over. */
-const OPENING_PLAN_MIN_PLY = 6;
-const OPENING_PLAN_MAX_PLY = 14;
 /** §1/§2: the one-shot middlegame orientation (structure anchor + both sides'
  *  plans) fires no earlier than ~move 8, once the pawn structure has taken
  *  shape enough for the majorities to be real. */
@@ -1334,8 +1324,6 @@ const REVIEW_OWNS_IDEA: ReadonlySet<IdeaKind> = new Set<IdeaKind>(['threat', 'ma
  *  opens the c-file"). */
 const FACET_TEACHES_IDEA: Partial<Record<FacetTag, IdeaKind>> = { 'pawn-break': 'file' };
 const BOOK_JOB_MIN_GAMES = 20;
-/** A book move is main line at this share of its position's master games. */
-const MAIN_LINE_SHARE = 0.15;
 /** The description and teaching lanes whose reason formula speaks once a game
  *  (`reasonFormula`); the verdict lanes are per-move facts and repeat. */
 const FORMULA_ONCE: ReadonlySet<string> = new Set<FacetTag>([
@@ -1516,7 +1504,6 @@ function* reviewSegmentSteps(
   story.newGame(currentGameId ?? 'review');
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   // The repertoire's ideas are written for ONE colour — only the student's seat reads them.
-  const curatedOpeningIdeas = playerColor ? resolveCuratedOpeningIdeas(openingName ?? null, playerColor) : null;
   // WHERE THIS STUDENT STANDS PER TEACHING LAYER (WO-LAYERS-01), once per
   // review — the same record every ply of the walk is judged against.
   const layers = layerStandings(studentWeaknesses ?? [], studentNeed?.capabilities);
@@ -1527,10 +1514,6 @@ function* reviewSegmentSteps(
   // Package-completion once-per-game beats (David 2026-07-24: "complete the
   // package"): the simplify-when-ahead trade idea fires at most once (the
   // `tradeIdeaSpoken` flag in the story — no seed carried it before 8d).
-  // Per-GAME seed (stable within a game, different across games) — rotates the
-  // dev-plan's lead idea + stem so the same opening never reads as the same
-  // recording every game (David 2026-07-21: "the same response every time").
-  const gameSeed = moves.reduce((a, m) => (a * 31 + m.san.charCodeAt(0)) >>> 0, moves.length >>> 0);
   // §1 piece-route itineraries — the student's REAL reroutes in this game
   // ("f3–d2–c4"), keyed by the ply the maneuver completes (G3, from the moves).
   const pieceItineraries = playerColor
@@ -1746,14 +1729,11 @@ function* reviewSegmentSteps(
     for (let k = Math.max(0, lastBookIdx + 1); k < moves.length; k += 1) if (isFlagged(moves[k].classification)) return k;
     return moves.length;
   })();
-  // SAID WHEN IT CHANGES (lead 2026-10-20: "The masters' main move here"
-  // opened twelve lines in a row — a formula, and the why standard caps a
-  // reason formula at twice a game). The book standing is said when the walk
-  // enters the main line, when it first leaves the most-played line, and on
-  // the last book move; a guard's context ("which their bishop on c4 pins")
-  // once per pin. Once off the main line the game stays on its side road, so
-  // the two flags read as one standing.
-  const standingSaid = (): 'main' | 'side' | null => (flags.has('standing=side') ? 'side' : flags.has('standing=main') ? 'main' : null);
+  // SAID ONCE (lead 2026-10-20: a formula said every move is the why
+  // standard's measure 3): a guard's context ("which their bishop on c4
+  // pins") once per pin. The book standing (main line / side road / the last
+  // book move) is opening theory — Review's Theory button, never the walk
+  // (David 2026-11-06).
   /** THE ONE COMPOSER'S MEMORY for the move's own thought (WO-ONE-COACH-01
    *  Build 5): the claims and sentences it has said this walk, and how often
    *  each phrase was said (a job's words rotate on it, a guard's context is
@@ -2287,7 +2267,7 @@ function* reviewSegmentSteps(
       if (moverColor === playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
         const sign = moverColor === 'white' ? 1 : -1;
         const bothCp = Math.abs(m.preMoveEval) < 5000 && Math.abs(m.evaluation) < 5000;
-        const hints = studentMoveTeaching({
+        const hints = studentMoveTeaching({ theory: false,
           fenBefore: fenPair.fenBefore,
           san: m.san,
           history: sansForRun.slice(0, m.ply),
@@ -2354,7 +2334,7 @@ function* reviewSegmentSteps(
       // the walk's after-the-door ledger; sized by the student's own record.
       if (studentColorWB && storyAll !== null) {
         let storyNames: string | null = null;
-        const reads = readBoardAll('openingStory', { history: sansForRun.slice(0, m.ply), fen: fenPair.fenAfter, student: studentColorWB, namesStudentMoves: true });
+        const reads = readBoardAll('openingStory', { history: sansForRun.slice(0, m.ply), fen: fenPair.fenAfter, student: studentColorWB, theory: false, namesStudentMoves: true });
         // THE OPENING NAMED AS IT IS IDENTIFIED — the SAME announcement Learn
         // speaks (`openingAnnouncementForGame`: the first name, each
         // refinement while in book, the departure), never a second namer.
@@ -2379,17 +2359,12 @@ function* reviewSegmentSteps(
             const idRead = reads.find((r) => r.storyBeat === 'identity' && !hintsSaid.has(`hint:${readKey(r)}`)) ?? null;
             // THE FIRST NAME IS SAID WITH WHAT IT TEACHES (lead 2026-10-20:
             // "This game is the Sicilian Defense." alone is a name with no
-            // teaching): the identity when it is ready, else the masters' plan
-            // from it, else not yet — the next move that carries one names it.
+            // teaching): the identity when it is ready, else not yet — the next
+            // move that carries one names it. The masters' plan is opening
+            // theory: Review's Theory button says it (David 2026-11-06).
             // A REFINEMENT of a family already taught (the Fried Liver of the
             // Two Knights) names the line the student is now in.
-            const planRaw = idRead ? null : mastersPlanLine(planFor(det.name), studentColorWB, null)?.text ?? null;
-            // The plan is one claim with the settled-line facet (`once:plan:`):
-            // said there already, it is not said again with the name.
-            const planText = planRaw && !hintsSaid.has(`once:plan:${planRaw}`) ? planRaw : null;
-            // On the same move the name carries it: the bare plan facet goes.
-            if (planText) { const dup = facets.findIndex((x) => x.identity === `once:plan:${planText}`); if (dup >= 0) facets.splice(dup, 1); }
-            const teaching = idRead?.text ?? planText;
+            const teaching = idRead?.text ?? null;
             // THEIR DEPARTURE WITH NOTHING TO TEACH IS HELD (lead 2026-10-20,
             // Najdorf Zagreb: "They left the book with the bishop to b7." is a
             // description). The student's own departure carries its book move
@@ -2400,7 +2375,7 @@ function* reviewSegmentSteps(
               const raw = fact(idRead?.computer ?? 'openingAnnouncementForGame', 'opening', `${announce}${teaching ? ` ${teaching}` : ''}`, { identity: idRead ? `hint:${readKey(idRead)}` : `hint:opening-name:${det.name}`, squares: idRead?.squares ?? [] });
               facets.push(raw);
               const said = det.name;
-              facetCommits.set(raw, () => { noteOpening(story, m.ply, 'named', said); if (planText) hintsSaid.add(`once:plan:${planText}`); });
+              facetCommits.set(raw, () => { noteOpening(story, m.ply, 'named', said); });
             }
           }
         } catch { /* naming is a bonus, never a blocker */ }
@@ -2504,28 +2479,6 @@ function* reviewSegmentSteps(
             facets.push(fact('whatItAsks', 'move-job', `${ask}.`, { identity: id, squares: job.squares }));
           }
         }
-        // THE BOOK STANDING — said where the walk enters the main line, first
-        // leaves it, and on the last book move (THE POINT, NEVER THE MOVE —
-        // David 2026-10-20: the move is on the board; the clause's pronouns
-        // say whose it is). THE MAIN LINE IS EVERY MOVE WITH A REAL SHARE of
-        // the masters' games here, not the single top move (1…e5 was called
-        // "less common" because 1…c5 outnumbers it). The bar is read off the
-        // data: the main lines of the openings taught measure 16% (4.Ng5), 20%
-        // (3.Bc4), 25% (1…e5) and 44% (3…Nf6) of their position's games.
-        const masters = masterMovesCachedSync(fenPair.fenBefore);
-        const sorted = masters ? [...masters].sort((x, y) => y.games - x.games) : [];
-        const book = sorted.find((x) => x.san === m.san && x.games >= BOOK_JOB_MIN_GAMES);
-        const total = sorted.reduce((n, x) => n + x.games, 0);
-        const main = !!book && total > 0 && book.games / total >= MAIN_LINE_SHARE;
-        const standingNow = standingSaid();
-        const standing = !book ? null
-          : i === lastBookIdx ? "The last book move — the masters' file ends here"
-          : !main ? (standingNow !== 'side' ? 'A rare book move — the game leaves the main line here' : null)
-          : standingNow === null ? "The game is on the masters' main line" : null;
-        // Once off the main line the game stays on its side road: that change
-        // is said once, never once per move. The walk's say-once state commits
-        // only if the line SPOKE.
-        const nextStanding = book && i !== lastBookIdx ? (!main || standingNow === 'side' ? 'side' : 'main') : standingNow;
         // THEIR ATTACK SAYS WHAT IT ASKS (lead 2026-10-20, Najdorf Zagreb:
         // "Attacks your pawn on e4." is a one-move attack he can see). Their
         // attack on a target that now needs an answer says so; a PLAIN attack
@@ -2562,7 +2515,7 @@ function* reviewSegmentSteps(
         const leadSquares = new Set(stepLeads.flatMap((f) => [...f.squares]));
         const phrasesHere = new Map(thoughtPhrases);
         const memoryHere = { keys: new Set(thoughtKeys) };
-        const thoughtFacts = moveThoughtFacts({
+        const thoughtFacts = moveThoughtFacts({ theory: false,
           fenBefore: fenPair.fenBefore, san: m.san, moverIsStudent: mine, prev: prevCap,
           line: moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),
           theirLast: i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null,
@@ -2606,10 +2559,9 @@ function* reviewSegmentSteps(
           // time, and the say-once ledger drops the second).
           const asked = asks && !!job ? thought.kept.findIndex((f) => f.squares.includes(job.squares[1])) : -1;
           const spoken = thought.kept.map((f, k) => (k === asked ? f.text.replace(/\.$/, ', and it needs an answer this move.') : f.text)).join(' ');
-          const raw = fact('moveThoughtFacts', 'move-job', `${standing ? `${standing}. ` : ''}${spoken}`, { identity: id, squares: [...named] });
+          const raw = fact('moveThoughtFacts', 'move-job', spoken, { identity: id, squares: [...named] });
           facets.push(raw);
           facetCommits.set(raw, () => {
-            if (nextStanding) flags.add(`standing=${nextStanding}`);
             for (const k of memoryHere.keys) thoughtKeys.add(k);
             for (const [k, n] of phrasesHere) thoughtPhrases.set(k, n);
             // A kept fact on a plan thread (a passer made, an outpost
@@ -2617,10 +2569,6 @@ function* reviewSegmentSteps(
             story.commitFacts(m.ply, thought.kept);
           });
         }
-        // A STANDING WITH NO JOB IS HELD (lead 2026-10-20, Najdorf Zagreb: "A
-        // rare book move — the game leaves the main line here." on its own is
-        // a description). The standing rides only as the lead of a move's own
-        // job, where it comes with the reason the move was played.
       }
       // A VERDICT ON THEIR OPENING CHOICE — parity with Learn: their move that
       // left the masters' book, judged by the engine's cost of it.
@@ -2650,7 +2598,7 @@ function* reviewSegmentSteps(
       // corpusScope.test.ts. (This REPLACES the 2026-08-07 "the corpus reaches
       // review" splice, which is deleted rather than annotated.)
       // Drop an identical STATIC state facet already spoken on an earlier ply
-      // (opening / plan-opening / plan-middlegame / opp-dev); keep every dynamic
+      // (opening / plan-middlegame / opp-dev); keep every dynamic
       // per-move fact.
       // Build the kept list; some facets are REWRITTEN (structure → only its new
       // sub-claims) so this is a loop, not a pure filter.
@@ -2868,7 +2816,7 @@ function* reviewSegmentSteps(
           continue;
         }
         // Development nags: once per review by TAG (David 2026-07-22).
-        if (f.tag === 'plan-opening' || f.tag === 'opp-dev') {
+        if (f.tag === 'opp-dev') {
           const tag = f.tag;
           if (oneShotTags.has(tag) || !claim(`oneshot:${tag}`)) continue;
           keep(f, () => oneShotTags.add(tag));
@@ -3299,7 +3247,15 @@ function* reviewSegmentSteps(
       if (isStudentForAttr && (m.classification === 'mistake' || m.classification === 'blunder')) {
         costReason = reasons.length > 0 || failed || pvEvidenceSaid ? 'allowed' : why ? 'missed' : (verdict || concession) ? 'positional' : 'none';
       }
-      narration = [verdict, pvEvidenceSaid, failed?.line ?? null, concession, cost, better]
+      // ONE ANSWER, ONE CLAIM (Colle replay 2026-11-05, 20.Qxf4): a
+      // diagnosis naming the answer of theirs the error line already plays out
+      // ("…f6, which attacks your bishop") is that line's to say; the rule
+      // keeps only its habit (`habitTail`).
+      const verdictSaid = failed?.proofLine?.uci[0] && sameReplyAsGrade(
+        fundamentalReply(spokenFundamentals[0]?.evidence.moves ?? [], fenPair.fenBefore, m.san),
+        { fen: failed.proofLine.fen, uci: failed.proofLine.uci[0] },
+      ) ? null : verdict;
+      narration = [verdictSaid, pvEvidenceSaid, failed?.line ?? null, concession, cost, better]
         .filter((x): x is string => !!x && x.trim().length > 0)
         .join(' ');
     }
@@ -3716,28 +3672,9 @@ function* reviewSegmentSteps(
     const isConcreteMove = /[x+#]/.test(m.san) || m.san.startsWith('O-O');
     let planArrows: ReviewMoveSegment['planArrows'];
     let segmentStoryGame: ReviewMoveSegment['storyGame'];
-    // (a) Opening DEVELOPING plan, fired once when the opening is identified.
-    if (
-      narration === null
-      && !isConcreteMove
-      && studentColorWB !== null
-      && !flags.has('openingPlanShown')
-      && !m.isCoachMove
-      && moverColor === playerColor
-      && m.ply >= OPENING_PLAN_MIN_PLY
-      && m.ply <= OPENING_PLAN_MAX_PLY
-      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
-    ) {
-      // Grounding chain (David 2026-07-23): his games -> masters DB backup ->
-      // curated repertoire -> nothing. The ungrounded generic template is gone.
-      // THIS game's continuation from here — so the plan tracks the game, not
-      // his aggregate line (David 2026-07-24, the …e6 delta-context bug).
-      const gameLine = moves.slice(i).map((x) => x.san);
-      const dev = buildHisGroundedPlanBeat(fenPair.fenBefore, studentColorWB, openingName ?? null, gameLine)
-        ?? buildMastersGroundedPlanBeat(fenPair.fenBefore, studentColorWB, openingName ?? null)
-        ?? buildOpeningDevelopmentPlan(fenPair.fenBefore, studentColorWB, { openingName: openingName ?? null, curatedIdeas: curatedOpeningIdeas, seed: gameSeed });
-      if (dev) { narration = dev.text; planArrows = dev.arrows; flags.add('openingPlanShown'); narrationSource = 'opening-plan'; }
-    }
+    // The opening's developing plan (from the player's games, master games,
+    // the repertoire's key ideas) is opening theory: Review's Theory button
+    // says it (`reviewOpeningTheory`, David 2026-11-06), never the walk.
     // (b) Middlegame orientation (structure anchor + both-sides plans), fired
     // once at/after the middlegame threshold. Takes priority over the per-move
     // opening note in that zone; silent when no clear structural plan exists.
@@ -3903,13 +3840,12 @@ function* reviewSegmentSteps(
       // whole reason opening narration read thin next to the middlegame — same
       // engine, but buildOpeningMoveDetail was tried FIRST and buried it
       // (2026-07-25 hand-audit N1 root cause).
+      // The corpus / masters frequency stat is opening theory — the Theory
+      // button's, never the walk's (David 2026-11-06).
       const openingIdea = moveBriefing(true);
       if (openingIdea) {
         narration = openingIdea;
         narrationSource = 'per-move';
-      } else {
-        const openingStat = buildOpeningMoveDetail(fenPair.fenBefore, m.san, true);
-        if (openingStat) { narration = openingStat; narrationSource = 'opening-plan'; }
       }
     }
     // NOTABLE MOVES — BOTH SIDES, ANY PHASE (David 2026-07-21, IMG_4570: "too
@@ -5511,81 +5447,6 @@ async function augmentWithProjections(
 }
 
 /**
- * Ground the opening-plan beat's development targets in the MASTERS BOOK (G0 —
- * the same source the theory lecture reads, so the two can never contradict;
- * David 2026-07-21 IMG_4569: "the opening theory said the knight goes to e2,
- * but now it says f3??"). Walks the book from the plan beat's position; wherever
- * a home minor's book destination differs from the template arrow, the arrow is
- * rewritten and the book squares are SPOKEN. Silent no-op when the position is
- * out of book — the universal-square template is then the only claim standing.
- */
-async function groundOpeningPlanInBook(segments: ReviewMoveSegment[]): Promise<void> {
-  const seg = segments.find((s) => s.narrationSource === 'opening-plan' && s.planArrows && s.planArrows.length > 0);
-  if (!seg) return;
-  const collect = (steps: Array<{ san: string; fenAfter: string }>): Map<string, { to: string; piece: string }> => {
-    const targets = new Map<string, { to: string; piece: string }>();
-    let fen = seg.fenBefore;
-    for (const p of steps) {
-      try {
-        const c = new Chess(fen);
-        const mv = c.move(p.san);
-        if (!mv) break;
-        fen = p.fenAfter;
-        if (isMinorAtHome(mv.piece, mv.color, mv.from) && !targets.has(mv.from)) {
-          targets.set(mv.from, { to: mv.to, piece: mv.piece === 'n' ? 'knight' : 'bishop' });
-        }
-      } catch { break; }
-    }
-    return targets;
-  };
-  // SOURCE 1 — the masters DB (the same aggregates the theory lecture reads).
-  const line = await raceTimeout(walkBookLine(seg.fenBefore, { maxPlies: 8, minGames: 5 }), 6000, [] as Awaited<ReturnType<typeof walkBookLine>>);
-  let targets = line && line.length >= 2 ? collect(line) : new Map<string, { to: string; piece: string }>();
-  let source: 'book' | 'engine' = 'book';
-  // SOURCE 2 — the ENGINE's PV from this exact position (David 2026-07-21:
-  // "What if we don't have a book?"). Master coverage runs thin past ~move 12
-  // and in offbeat lines; without this fallback the plan silently reverted to
-  // the hardcoded natural-squares template — the exact f3-vs-e2 contradiction
-  // machinery. The engine's line is position-true and always available; the
-  // spoken clause labels it honestly as the engine's scheme, never "the book".
-  if (targets.size === 0) {
-    const pv = await raceTimeout(computePvLine(seg.fenBefore, { maxPlies: 8 }), 7000, null);
-    if (pv && pv.plies.length >= 2) {
-      targets = collect(pv.plies.map((p) => ({ san: p.san, fenAfter: p.fenAfter })));
-      source = 'engine';
-    }
-  }
-  if (targets.size === 0) return;
-  // ONE SOURCE FOR WORDS AND ARROWS (David 2026-07-21, IMG_4575: the narration
-  // said "f1-bishop to d3 and g8-knight to e7" while the board still showed the
-  // TEMPLATE arrows b1→c3 / g1→f3). When data targets resolve, the arrows are
-  // REBUILT from the targets alone — stale template arrows the data didn't
-  // confirm are dropped (empty > wrong), and every spoken target gets its arrow.
-  // Blue = the student's pieces, amber = the opponent's (devArrows' scheme).
-  const studentIsWhite = seg.playerColor === 'white';
-  const sideOf = (home: string): 'student' | 'opponent' => ((home[1] === '1') === studentIsWhite ? 'student' : 'opponent');
-  seg.planArrows = admitArrows(
-    [...targets.entries()].map(([from, t]): ArrowClaim => ({ from, to: t.to, role: sideOf(from) === 'student' ? 'play' : 'theirs', source: 'review.devTargets' })),
-    { fen: seg.fenAfter, studentColor: seg.playerColor },
-  ).arrows;
-  // SPEAK the scheme SEAT-AWARE — "your f1-bishop to d3", "expect their knight
-  // to head for e7" — never a sideless mix of both armies in one clause.
-  const mineT = [...targets.entries()].filter(([f]) => sideOf(f) === 'student');
-  const theirsT = [...targets.entries()].filter(([f]) => sideOf(f) === 'opponent');
-  const list = (xs: Array<[string, { to: string; piece: string }]>, poss: string): string =>
-    xs.map(([from, t]) => `${poss} ${from}-${t.piece} to ${t.to}`).join(' and ');
-  const bits: string[] = [];
-  if (mineT.length) bits.push(`it develops ${list(mineT, 'your')}`);
-  if (theirsT.length) bits.push(`${mineT.length ? 'and expect' : 'expect'} ${list(theirsT, 'their')}`);
-  const spoken = bits.join(', ');
-  if (spoken) {
-    seg.narration = source === 'book'
-      ? `${seg.narration ?? ''} In this exact structure the book's scheme: ${spoken} — that's the path the master games follow here.`.trim()
-      : `${seg.narration ?? ''} You're past the master book here, so trust the engine's scheme: ${spoken}.`.trim();
-  }
-}
-
-/**
  * SEAT-FRAME an opening name for the student (David 2026-07-21, IMG_4572:
  * "Opening says Pirc Defense but I am white and played the Austrian Attack…
  * Should read Austrian Attack Vs the Pirc"). Pure string transform over the
@@ -6223,16 +6084,6 @@ export async function generateReviewNarration(params: {
   // READING order the full one, by construction.
   foldReviewRefrains(segments, story, params.spokenBefore ?? null);
 
-  // BOOK-GROUNDED DEV TARGETS (David 2026-07-21, IMG_4569: the plan arrow said
-  // g1→f3 while the theory lecture's masters data plays Ne2 — two "authorities"
-  // contradicting each other. The plan must read from the SAME masters book as
-  // the lecture (G0): rewrite any template arrow the book disagrees with and
-  // SAY the book's development squares.
-  phaseStart = Date.now();
-  try {
-    await groundOpeningPlanInBook(segments);
-  } catch { /* best-effort; the template arrows stand when the book is silent */ }
-  timings.book = Date.now() - phaseStart;
 
   // HOUSE-VOICE PASS (David 2026-07-19: "does NOT sound like Danya"). The
   // per-move narration above is computed deterministically (the FACTS, G0) but

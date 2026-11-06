@@ -109,7 +109,7 @@ describe.skipIf(!HAS_SF)('COMPUTER ACCURACY + QUALITY AUDIT (end of opening / mi
 
       const why = (await computeWhyBestMoveDetail({ fen, studentColor, analysis, studentNeedContext: null })).text;
       const grounded = explainBestMoveGrounded(fen, null, analysis.bestMove, studentColor, null, null, 'mover');
-      const pf = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen, moverColor: sc, studentColor: sc, analysis, evalBoard: sfEvalBoard });
+      const pf = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'walk', fen, moverColor: sc, studentColor: sc, analysis, evalBoard: sfEvalBoard });
       const briefing = clauseText(pf.clauses, []).join(' ');
       const pvSan = pvToSan(fen, analysis.topLines?.[0]?.moves ?? []);
       const reasoningObj = pvSan.length ? assembleEngineReasoning({ fenBefore: fen, pvSan, moverColor: sc === 'w' ? 'white' : 'black', evalCp: analysis.evaluation, mateIn: analysis.mateIn, studentSide: studentColor }) : null;

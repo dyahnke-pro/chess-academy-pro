@@ -149,7 +149,7 @@ function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveConte
  *  nothing nameable: silence is allowed, filler is not. */
 function computeFill(ctx: PerMoveContext, studentSide: 'white' | 'black' | undefined, voice: LessonVoice): string {
   try {
-    return lessonThought({
+    return lessonThought({ theory: true,
       fenBefore: ctx.fenBefore,
       san: ctx.san,
       prev: ctx.prev,

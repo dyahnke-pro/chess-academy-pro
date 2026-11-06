@@ -204,14 +204,14 @@ describe('the attack race across wings (planRace)', () => {
 describe('wired both ways', () => {
   it('TEACH: the one producer hands a king-read with its proof to the door', () => {
     const fen = '6k1/5ppp/8/8/3r4/5N2/5PPP/4R1K1 w - - 0 30';
-    const out = depthClauses({ fen, history: [], topLines: [line(['e1e8'], 1)], studentColor: 'w', nameMove: true });
+    const out = depthClauses({ theory: true, fen, history: [], topLines: [line(['e1e8'], 1)], studentColor: 'w', nameMove: true });
     const k = out.find((d) => d.kind === 'king-read');
     expect(k?.text).toMatch(/mate beats any material/);
     expect(k?.proof && 'kind' in k.proof).toBe(true);
   });
   it('TEACH, move held back: the idea speaks and the proof waits', () => {
     const fen = '6k1/5ppp/8/8/3r4/5N2/5PPP/4R1K1 w - - 0 30';
-    const out = depthClauses({ fen, history: [], topLines: [line(['e1e8'], 1)], studentColor: 'w', nameMove: false });
+    const out = depthClauses({ theory: true, fen, history: [], topLines: [line(['e1e8'], 1)], studentColor: 'w', nameMove: false });
     const k = out.find((d) => d.kind === 'king-read');
     expect(k?.text).toMatch(/look for it before you take/);
     expect(k?.proof).toEqual({ none: 'withheld' });
