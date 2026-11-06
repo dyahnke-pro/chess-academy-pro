@@ -662,7 +662,13 @@ async function main() {
       // POINTERS BY THE RECORD (WO-LEARN-SWING-01, David 2026-11-05): a pointer
       // at the next decision is said at most once a game per skill, and a
       // skill held by the record is never also said on the same turn.
-      const pointerSaid = turns.flatMap((t) => t.pointers?.said ?? []);
+      // The run plays two games: a turn whose ply goes BACK starts the next
+      // game, and "once a game" is counted inside each one.
+      let gameNo = 0;
+      const pointerSaid = turns.flatMap((t, i) => {
+        if (i > 0 && (t.turn?.ply ?? 0) < (turns[i - 1].turn?.ply ?? 0)) gameNo += 1;
+        return (t.pointers?.said ?? []).map((k) => `${k}@game${gameNo + 1}`);
+      });
       const pointerTwice = [...new Set(pointerSaid.filter((k, i) => pointerSaid.indexOf(k) !== i))];
       const pointerBoth = turns.filter((t) => (t.pointers?.said ?? []).some((k) => (t.pointers?.heldByRecord ?? []).includes(k)));
       record('LD6. POINTERS by the record: once a game per skill, never said and held on one turn',
