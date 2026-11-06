@@ -19,9 +19,11 @@ describe('a piece only its king guards is the target (the Italian\'s f7)', () =>
     expect(squareRole(c, 'f7', 'w', 'their', 'covers')).toBe('attacking their pawn there, which only their king guards');
   });
 
-  it('a pawn with another guard is only attacked (f7 once the rook is on f8)', () => {
+  // A hit is a threat or it is not a reason (David 2026-11-05: "I don't want
+  // 'it attacks x'"): f7 with its rook beside the king is not under pressure.
+  it('a pawn with another guard is not "attacked" (f7 once the rook is on f8)', () => {
     const c = new Chess('r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w - - 4 6');
-    expect(squareRole(c, 'f7', 'w', 'their', 'covers')).toBe('attacking their pawn there');
+    expect(squareRole(c, 'f7', 'w', 'their', 'covers')).toBeNull();
   });
 
   it('the Italian bishop says it', () => {
