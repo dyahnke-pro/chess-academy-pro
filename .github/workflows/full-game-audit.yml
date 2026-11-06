@@ -21,6 +21,10 @@ on:
         description: 'chromium | webkit (webkit = the iPhone app engine, iPhone 15 size, touch)'
         required: false
         default: 'chromium'
+      mode:
+        description: 'games (the full-play audit) | touch-probe (tap a piece and a square on the Coach boards)'
+        required: false
+        default: 'games'
   # SCHEDULE OFF (David 2026-10-18, cost): it failed on every scheduled run
   # while billing runner minutes and prod traffic. Run it by hand.
   # schedule:
@@ -52,7 +56,15 @@ jobs:
         run: npm ci --no-audit --no-fund --prefer-offline
       - name: Install the Playwright browser
         run: npx playwright install --with-deps ${{ github.event.inputs.browser || 'chromium' }}
+      - name: Touch probe on the Coach boards
+        if: ${{ github.event.inputs.mode == 'touch-probe' }}
+        env:
+          AUDIT_SMOKE_URL: https://chess-academy-pro.vercel.app
+          PROBE_BROWSER: ${{ github.event.inputs.browser || 'chromium' }}
+          PROBE_OUT: audit-reports/probe/p
+        run: mkdir -p audit-reports/probe && node scripts/probe-board-touch.mjs
       - name: Play full games + post-game reviews against prod
+        if: ${{ github.event.inputs.mode != 'touch-probe' }}
         env:
           AUDIT_SMOKE_URL: https://chess-academy-pro.vercel.app
           GAMES: ${{ github.event.inputs.games || '10' }}
