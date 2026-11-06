@@ -32,6 +32,7 @@ import { detectMoveFromFen } from '../../utils/boardMoveDetect';
 import { useSettings } from '../../hooks/useSettings';
 import { useBoardReloadHold } from '../../hooks/useBoardReloadHold';
 import { useBoardDomId } from '../Board/boardDomId';
+import { boardTouchStyle } from '../Board/boardTouch';
 
 export type BoardArrow = { startSquare: string; endSquare: string; color: string };
 
@@ -230,11 +231,16 @@ function StaticBoard({
     return base;
   }, [theme.baseGlow, squareStyles, lastMove, checkSquare]);
 
+  // A board that takes a move — a drop while interactive, or any tap handler —
+  // owns the finger on a phone (`boardTouch.ts`).
+  const takesMoves = Boolean(onSquareClick) || (interactive && Boolean(onPieceDrop));
+
   return (
     <div
       className={`relative ${className}`}
       data-testid="consistent-chessboard-static"
-      style={theme.borderWrapperStyle}
+      data-takes-moves={takesMoves ? 'true' : 'false'}
+      style={{ ...theme.borderWrapperStyle, ...boardTouchStyle(takesMoves) }}
     >
       <Chessboard
         options={{

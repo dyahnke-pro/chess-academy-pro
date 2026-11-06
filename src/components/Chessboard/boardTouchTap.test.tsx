@@ -56,3 +56,38 @@ describe('a touch tap lands on the board it was made on', () => {
     expect(new Set(ids).size).toBe(2);
   });
 });
+
+/**
+ * THE BOARD OWNS THE FINGER WHILE IT TAKES A MOVE (David's iPhone, 2026-11-05:
+ * Bird's Opening → Learn — the pawn would not go to f4). The static board that
+ * runs Learn and Practice had no touch rule, so iOS gave the drag to the page
+ * scroll. Real react-chessboard, the props Learn passes.
+ */
+describe('a board that takes a move owns the touch (boardTouch.ts)', () => {
+  const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+  const wrapperOf = (c: HTMLElement): HTMLElement => c.querySelector('[data-testid="consistent-chessboard-static"]') as HTMLElement;
+
+  it('the Learn/Practice board (drop + tap handlers) takes the touch from the page', () => {
+    const { container } = render(
+      <ConsistentChessboard fen={START} interactive onPieceDrop={() => false} onSquareClick={() => {}} />,
+    );
+    const w = wrapperOf(container);
+    expect(w.getAttribute('data-takes-moves')).toBe('true');
+    expect(w.style.touchAction).toBe('none');
+    expect(w.style.userSelect).toBe('none');
+  });
+
+  it('keeps the touch rule while the board pauses on a flash (interactive=false, taps still wired)', () => {
+    const { container } = render(
+      <ConsistentChessboard fen={START} interactive={false} onPieceDrop={() => false} onSquareClick={() => {}} />,
+    );
+    expect(wrapperOf(container).style.touchAction).toBe('none');
+  });
+
+  it('a display-only board leaves the page its scroll', () => {
+    const { container } = render(<ConsistentChessboard fen={START} />);
+    const w = wrapperOf(container);
+    expect(w.getAttribute('data-takes-moves')).toBe('false');
+    expect(w.style.touchAction).toBe('');
+  });
+});

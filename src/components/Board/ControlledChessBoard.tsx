@@ -24,6 +24,7 @@ import type {
 import type { GhostMoveData, PieceAnimationSpeed } from '../../types';
 import type { MoveQuality } from './ChessBoard';
 import { useBoardDomId } from './boardDomId';
+import { boardTouchStyle } from './boardTouch';
 
 /** Maps the user's Piece Animation setting to a millisecond duration
  *  for react-chessboard. The 'none' option fast-forwards animation;
@@ -367,23 +368,27 @@ export function ControlledChessBoard({
           />
         )}
 
-        {/* touch-none while a piece can be dragged: on iOS the page scroll
-            otherwise claims the touch and the drag never starts (David
-            2026-10-02: "Drag a piece doesnt work") — the same rule the
-            walkthrough board has always carried. The board is promoted to its
-            own compositor layer so 32 glow-filtered pieces are not repainted on
+        {/* The board owns the finger while it takes a move: on iOS the page
+            scroll otherwise claims the touch and the drag never starts (David
+            2026-10-02: "Drag a piece doesnt work") — one rule for every board,
+            `boardTouch.ts`. A tap-to-move board needs it too (the image
+            callout swallows the tap). The board is promoted to its own
+            compositor layer so 32 glow-filtered pieces are not repainted on
             every scroll frame ("Board is choppy when scrolling"). */}
         <div
-          className={`relative flex-1 [transform:translateZ(0)] [contain:paint] ${dragAllowed ? 'touch-none select-none [-webkit-touch-callout:none]' : ''}`}
+          className="relative flex-1 [transform:translateZ(0)] [contain:paint]"
           data-testid="board-wrapper"
-          style={boardColorScheme.borderGlow
-            ? {
-                boxShadow: `${boardColorScheme.borderGlow}, inset 0 0 40px 8px rgba(${accent}, 0.06)`,
-                borderRadius: '4px',
-                border: `1px solid rgba(${accent}, 0.15)`,
-              }
-            : undefined
-          }
+          data-takes-moves={interactive ? 'true' : 'false'}
+          style={{
+            ...(boardColorScheme.borderGlow
+              ? {
+                  boxShadow: `${boardColorScheme.borderGlow}, inset 0 0 40px 8px rgba(${accent}, 0.06)`,
+                  borderRadius: '4px',
+                  border: `1px solid rgba(${accent}, 0.15)`,
+                }
+              : {}),
+            ...boardTouchStyle(interactive),
+          }}
         >
           <Chessboard
             options={{
