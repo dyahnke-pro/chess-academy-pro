@@ -41,7 +41,9 @@ describe('review speaks the computers Learn speaks', () => {
     const m = facets({ fenBefore: '4k3/7p/8/8/8/8/4P3/4KB2 w - - 0 1', fenAfter: '4k3/7p/8/8/8/4P3/8/4KB2 b - - 0 1', san: 'e3', student: 'w', mover: 'w', best: ['e2e3', 'h7h6', 'f1d3'] });
     expect(idOf(m, 'hint:order:')).toMatch(/^\[move-order\] e3 first/);
   });
-  it('the book move the student left, with its job', () => {
+  // Opening theory left the Review walk for its Theory button (David
+  // 2026-11-05); Learn still names the book move (learnTurnDoor.thought.test).
+  it('the book move the student left is not the walk\'s to say', () => {
     const history = ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Bb4', 'Nf3'];
     const positions: Record<string, Array<{ san: string; games: number }>> = {};
     const c = new Chess();
@@ -54,7 +56,7 @@ describe('review speaks the computers Learn speaks', () => {
     __setLocalDbForTests({ positions });
     try {
       const m = facets({ fenBefore, fenAfter: c.fen(), san: 'Nf3', student: 'w', mover: 'w', sans: history, ply: history.length });
-      expect(idOf(m, 'hint:book-move:')).toMatch(/^\[opening\] The book move is the knight to e2/);
+      expect(idOf(m, 'hint:book-move:')).toBeUndefined();
     } finally {
       __setLocalDbForTests(null);
     }

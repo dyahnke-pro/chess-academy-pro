@@ -23,6 +23,9 @@ describe('the opponent-side verdict keeps the idea/own split', () => {
     }));
     expect(dictated?.said ?? '').not.toMatch(/a4 was their move, to swing/);
     expect(call?.said ?? '').not.toMatch(/a4 was (?:the|their) move, to swing/);
-    expect(call?.said ?? '').toMatch(/the idea is to swing pieces toward your king/);
+    // The better move's reason is its OWN (David's Colle read 2026-11-05):
+    // the line's plan is never lent to a move that only serves it.
+    expect(call?.said ?? '').not.toMatch(/swing pieces/);
+    expect(call?.said ?? '').toMatch(/a4 was their move — it would grab space on the queenside/);
   });
 });

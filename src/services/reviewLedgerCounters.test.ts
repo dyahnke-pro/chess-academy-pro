@@ -51,9 +51,9 @@ describe('every say-once ledger rides the seed (the swap re-said "A rare book mo
     const seeded = at(build(seedOf(21, ['ss:rook on d1 pins knight on d4 against king'])), 33);
     expect(seeded).not.toMatch(/pins your knight on d4/);
   }, 120000);
-  it('the book standing is a flag in the story', () => {
+  it('the book standing is not the walk\'s (2026-11-06: opening theory went to the Theory button)', () => {
     const src = readFileSync('src/services/coachFeatureService.ts', 'utf8');
-    expect(src).toMatch(/if \(nextStanding\) flags\.add\(`standing=\$\{nextStanding\}`\)/);
+    expect(src).not.toMatch(/flags\.add\(`standing=/);
     expect(src).toMatch(/const flags = ledger<ReviewFlag>\(REVIEW_SAID\.flag\)/);
   });
 });

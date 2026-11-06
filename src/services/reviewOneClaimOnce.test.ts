@@ -39,7 +39,9 @@ describe('the opening this board is, said once a game', () => {
     setOpeningPositions(JSON.parse(readFileSync('public/data/opening-positions.json', 'utf8')) as Record<string, [string, number]>);
     const segs = buildReviewSegmentsForTests(inputs(), 'white', null, true, 1200, [], coldStudent(1200), 'g');
     const named = segs.filter((s) => /King's Indian Attack/.test(s.narration ?? '')).map((s) => s.ply);
-    expect(named).toHaveLength(1);
+    // Opening theory ("the same opening as …") left the Review walk for its
+    // Theory button (David 2026-11-05): never twice, and now not in the walk.
+    expect(named).toHaveLength(0);
   });
 });
 
