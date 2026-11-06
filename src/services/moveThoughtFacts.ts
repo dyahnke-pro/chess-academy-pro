@@ -12,7 +12,9 @@ import { Chess } from 'chess.js';
 import { NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
 import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
 import { NO_PROOF, squaresProof, lineProof } from './proof';
-import { moveAspects, joinReview, toClause } from './reviewMoveBriefing';
+import type { DecisiveReason } from './decisiveReason';
+import { lineSeatAt } from '../utils/andList';
+import { moveAspects, joinReview, toClause, newLessonVoice } from './reviewMoveBriefing';
 import { moveJob, isBareJob, MINE, THEIRS, type BookJobKind } from './bookMoveWhy';
 import { computeMoveFundamentals } from './moveFundamentals';
 import { buildReviewMoveTeachingFact } from './reviewMoveTeaching';
@@ -24,7 +26,7 @@ import { inBetweenMove } from './inBetweenMove';
 import { pvSanToUci } from './principleAttribution';
 import { BOOK_JOB_IDEA, FUNDAMENTAL_IDEA, ideaClaim, type IdeaKind } from './ideaKind';
 import { openSentence, continueSentence } from '../utils/openSentence';
-import { composeThought, NOT_LED, type ThoughtFact, type ThoughtSource } from './thoughtComposer';
+import { composeThought, NOT_LED, type ComposedThought, type ThoughtFact, type ThoughtSource } from './thoughtComposer';
 import { placeFact, stakesOf, LOCAL_THREAD, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat, type FactGroup } from './coachFact';
 import type { LessonVoice } from './reviewMoveBriefing';
 import { planAimKey } from './nextPlans';
@@ -529,6 +531,23 @@ export function lessonThought(input: Omit<MoveThoughtInput, 'phrases'>, voice: L
   return composeThought([...facts, ...(alt ? [alt] : []), ...(purpose ? [purpose] : []), ...studentMoveFacts(input)], 'lesson', voice, NOT_LED).spoken;
 }
 
+/** THE QUESTION PICKS THE IDEAS (the reversed matrix, David 2026-11-06:
+ *  "help answer questions from users"). A question about a move is answered by
+ *  the same facts a lesson says on it, through the same composer, keeping only
+ *  the groups the question asks about ("why did they play that?" — their
+ *  move, their side, the danger, the line; `questionThought.QUESTION_IDEAS`):
+ *  one ordering for every surface, never a lane's own stack of sentences. */
+export function questionThought(input: Omit<MoveThoughtInput, 'phrases'>, groups: ReadonlySet<FactGroup>, refuted: RefutedAlternative | null, reason: DecisiveReason | null): ComposedThought {
+  const voice = newLessonVoice();
+  voice.story.reach(plyOfFen(input.fenBefore));
+  const facts = moveThoughtFacts({ ...input, phrases: voice.phrases });
+  const alt = refuted ? refutedFact(refuted, input.fenBefore, input.moverIsStudent !== false ? 'student' : 'opponent') : null;
+  const purpose = purposeFact(input, voice);
+  const next = reason ? nextBestFact(reason, input.fenBefore, input.moverIsStudent !== false ? 'student' : 'opponent') : null;
+  const all = [...facts, ...(alt ? [alt] : []), ...(next ? [next] : []), ...(purpose ? [purpose] : []), ...studentMoveFacts(input)];
+  return composeThought(all.filter((f) => groups.has(f.group)), 'chat', voice, NOT_LED);
+}
+
 /** WHAT LEARN'S STUDENT-MOVE LANES MAY SAY IN A LESSON, AND AS WHICH IDEA
  *  (WO-STORY-MATRIX-01 P1-9c): one answer per lane `studentMoveTeaching`
  *  (and its `orderTeaching`) can emit. Null = not said in a lesson, with the
@@ -639,6 +658,31 @@ function purposeFact(i: Omit<MoveThoughtInput, 'phrases'>, voice: LessonVoice): 
     squares: intent.squares, weight: 58, thread: LOCAL_THREAD, stakes: stakesOf(kind, costStakes(intent.prepares.gainCp)),
     proof: squaresProof(text, intent.squares) ?? NO_PROOF.description, seat, fen: i.fenBefore,
     claims: [`purpose:prepares:${intent.prepares.uci}`, ...(rule?.keys.map((k) => STORY_KEY.principle(k)) ?? [])],
+  };
+}
+
+/** THE NEXT-BEST MOVE, AS A CHOICE (the reversed matrix, 2026-11-06): "why
+ *  is it best?" asks what the move does AND why the others fall short. The
+ *  decisive reason's other moves (`DecisiveReason.choice`: "Anything else,
+ *  like a3, gives up about half a point", "The other plan is O-O…", "Bxh7+?
+ *  That drops the queen") are the choices step; what the move does is the
+ *  move's own facts. Null when the reason says nothing about the other moves. */
+export function nextBestFact(r: DecisiveReason, fenBefore: string, seat: FactSeat): ThoughtFact | null {
+  const text = r.choice;
+  if (!text) return null;
+  const said = close(text);
+  let squares: string[] = [];
+  try { if (r.nextBestSan) { const m = new Chess(fenBefore).move(r.nextBestSan); squares = [m.from, m.to]; } } catch { squares = []; }
+  const mover = sideOf(fenBefore);
+  const student = seat === 'student' ? mover : mover === 'w' ? 'b' : 'w';
+  const line = r.about === 'alternative' && r.line ? lineProof(r.line, lineSeatAt(r.line.fen, student)) : null;
+  return {
+    id: 'decisiveReason:next-best', namesStudentMove: false,
+    // "About as good" is no cost: it rides on nothing, so a choice the board
+    // proves (the other squares, the other move's refutation) leads the step.
+    ...placeFact('refuted', seat), computer: 'decisiveReason', source: 'alternatives', idea: 'choice', text: said, squares, weight: r.kind === 'close' ? 40 : 52,
+    thread: LOCAL_THREAD, stakes: stakesOf('refuted', r.kind === 'close' ? null : costStakes(r.gapCp)), proof: line ?? squaresProof(said, squares) ?? NO_PROOF.description, seat, fen: fenBefore,
+    claims: [`refuted:${(r.nextBestSan ?? '').replace(/[+#!?]+$/, '')}`],
   };
 }
 

@@ -304,6 +304,7 @@ export const COMPUTER_CATALOG = {
   computeMustDefend: { file: 'services/threatOut.ts', says: 'what the opponent threatens now, read by letting them move twice' },
   detectBluff: { file: 'services/bluffDetector.ts', says: 'their threat that does not work, and the move that shows it' },
   refutedFromFan: { file: 'services/refutedAlternativeCore.ts', says: 'the move most players choose here, what it costs and the line that punishes it' },
+  decisiveReason: { file: 'services/decisiveReason.ts', says: 'THE reason a move is best: what accounts for the gap to the next-best move, and that gap' },
   principleLine: { file: 'services/moveFundamentals.ts', says: 'the opening rule the student\'s clean move kept' },
   principleContrastLine: { file: 'services/moveFundamentals.ts', says: 'the rule the engine\'s move kept where the student\'s clean move kept none' },
   threatStoppedBy: { file: 'services/opponentMovePurpose.ts', says: 'their reply took the student\'s threat off the board' },

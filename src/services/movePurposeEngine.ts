@@ -9,6 +9,7 @@ import { intentWithFallback } from './movePurpose';
 import { stockfishEngine } from './stockfishEngine';
 import { deepFact } from './threeFacts';
 import { uciToSans } from './structureJudgementKit';
+import { answerQuestionThought, type QuestionAnswer, type ThoughtQuestion } from '../coach/questionThought';
 
 const DEPTH = 14;
 const BUDGET_MS = 900;
@@ -91,4 +92,40 @@ export async function askedBestMove(fen: string, opponentLastSan: string | null)
   const asksToSee = await calculationProven();
   const reason = reads ? decisiveReason({ fenBefore: fen, san, reads, seat: 'student', opponentLastSan, asksToSee, namesPreparedMove: true }) : null;
   return { uci: top.moves[0], san, evalCp: typeof top.evaluation === 'number' ? top.evaluation : null, mateIn: top.mate ?? null, pvSan, reason };
+}
+
+/** A MOVE QUESTION ANSWERED BY THE ONE THOUGHT (the reversed matrix, David
+ *  2026-11-06): "why is Rxe5 best?" or "why did they play that?" reads the
+ *  four positions around the move, THE reason for a best move, and hands them
+ *  to the composer, which says the ideas the question asks for in the thought's
+ *  order (`questionThought.QUESTION_IDEAS`). Null on any engine failure or when
+ *  the thought has nothing to say — the asking lane's own answer stands then. */
+export async function askedMoveThought(
+  q: ThoughtQuestion,
+  board: { fen: string; history: readonly string[]; studentColor: 'white' | 'black' },
+  bestSan: string | null,
+): Promise<(QuestionAnswer & { reason: DecisiveReason | null }) | null> {
+  let fenBefore: string;
+  let san: string;
+  if (q === 'opponent-move') {
+    if (board.history.length === 0) return null;
+    const c = new Chess();
+    try { for (const s of board.history.slice(0, -1)) c.move(s); } catch { return null; }
+    fenBefore = c.fen();
+    san = board.history[board.history.length - 1];
+  } else {
+    if (!bestSan) return null;
+    fenBefore = board.fen;
+    san = bestSan;
+  }
+  const reads = await readIntentReads(fenBefore, san);
+  if (!reads) return null;
+  let uci: string;
+  try { const m = new Chess(fenBefore).move(san); uci = `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; }
+  const me = board.studentColor === 'white' ? 'w' : 'b';
+  const seat: 'student' | 'opponent' = (fenBefore.split(' ')[1] === 'b' ? 'b' : 'w') === me ? 'student' : 'opponent';
+  const opponentLastSan = q === 'opponent-move' ? board.history[board.history.length - 2] ?? null : board.history[board.history.length - 1] ?? null;
+  const reason = q === 'opponent-move' ? null : decisiveReason({ fenBefore, san, reads, seat, opponentLastSan, asksToSee: seat === 'student' ? await calculationProven() : false, namesPreparedMove: true });
+  const answer = answerQuestionThought(q, { fen: board.fen, history: board.history, studentColor: board.studentColor, bestUci: uci, reads, reason });
+  return answer ? { ...answer, reason } : null;
 }

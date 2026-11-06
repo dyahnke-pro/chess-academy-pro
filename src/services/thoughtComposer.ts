@@ -127,14 +127,16 @@ export interface ThoughtRegister {
   depth: 'one' | 'thread';
 }
 
-/** The surfaces that compose through here. Learn and chat had rows and no
- *  caller (deleted, WO-STORY-MATRIX-01 P1-1, 2026-10-30): a surface that comes
- *  to the composer answers its register here first. */
-export type ThoughtSurface = 'lesson' | 'review';
+/** The surfaces that compose through here. Learn had a row and no caller
+ *  (deleted, WO-STORY-MATRIX-01 P1-1, 2026-10-30): a surface that comes to the
+ *  composer answers its register here first. Chat composes an answer (the
+ *  question picks the steps, `questionThought`, David 2026-11-06). */
+export type ThoughtSurface = 'lesson' | 'review' | 'chat';
 const ALL_STEPS: ReadonlySet<ThoughtStep> = new Set(Object.keys(THOUGHT_ORDER) as ThoughtStep[]);
 export const THOUGHT_REGISTER: Record<ThoughtSurface, ThoughtRegister> = {
   lesson: { steps: ALL_STEPS, depth: 'thread' },
   review: { steps: ALL_STEPS, depth: 'thread' },
+  chat: { steps: ALL_STEPS, depth: 'thread' },
 };
 
 /** The say-once memory a lesson, a review or a game keeps across its moves:
@@ -252,6 +254,28 @@ export function composeThought(
   // Pick: the step's lead, then its support and news.
   const picked: ThoughtFact[] = [];
   const leadOf = new Map<ThoughtStep, ThoughtFact>();
+  // A FACT THE VOICE WOULD REFUSE NEVER TAKES A PLACE (the reversed matrix,
+  // 2026-11-06: "h4 or dxc5 — both hold here" led the choices step, was then
+  // refused as untrue on the board, and the true "Nh5 is about as good" behind
+  // it was held as not the lead's support — the step said nothing). The one
+  // voice package is asked at pick time, against what is already picked.
+  const pickedSaid = new Set<string>(memory?.keys ?? []);
+  const voiceRefuses = (f: ThoughtFact): ComposedThought['held'][number]['why'] | null => {
+    const pkg = buildVoicePackage([{ kind: 'computed', text: f.text, fen: f.fen, altFen: f.altFen, squares: f.squares, claims: f.claims, lines: f.lines, proof: f.proof }], undefined, pickedSaid);
+    if (pkg.kept.length > 0) return null;
+    const reason = pkg.dropped.length > 0 ? pkg.dropped[0].reason : '';
+    return /already|duplicate|same observation/.test(reason) ? 'already-said' : 'refused';
+  };
+  /** Say `said` (the fact as it will be heard) unless the voice refuses it;
+   *  a refused fact is held and takes no place. */
+  const pick = (f: ThoughtFact, said: ThoughtFact = f): boolean => {
+    const refused = voiceRefuses(said);
+    if (refused) { held.push({ fact: f, why: refused }); return false; }
+    picked.push(said);
+    const pkg = buildVoicePackage([{ kind: 'computed', text: said.text, fen: said.fen, altFen: said.altFen, squares: said.squares, claims: said.claims, lines: said.lines, proof: said.proof }], undefined, pickedSaid);
+    for (const key of spokenSentenceKeys(pkg)) pickedSaid.add(key);
+    return true;
+  };
   for (const f of sorted) {
     if (!reg.steps.has(f.step)) { held.push({ fact: f, why: 'step-not-asked' }); continue; }
     // ALREADY SAID in this lesson, review or game: it never takes a step's
@@ -263,7 +287,7 @@ export function composeThought(
     const lead = leadOf.get(f.step);
     if (MOVE_STEPS.has(f.step)) {
       const outside = ledOutside.has(f.step);
-      if (!lead && !outside) { leadOf.set(f.step, f); picked.push(f); continue; }
+      if (!lead && !outside) { if (pick(f)) leadOf.set(f.step, f); continue; }
       const sameClaim = picked.some((p) => p.step === f.step && f.squares.some((s) => p.squares.includes(s)));
       if (sameClaim) { held.push({ fact: f, why: 'same-idea' }); continue; }
       const job = !isCost(f);
@@ -275,22 +299,22 @@ export function composeThought(
       const said = (text: string): ThoughtFact => (job && jobsBefore >= 1 ? asSecondJob(f, text) : { ...f, text });
       // Behind another producer's line on this move: the caller kept only
       // what speaks there (`speaksBehindLead`), in its own words.
-      if (!lead) { leadOf.set(f.step, f); picked.push(said(f.text)); continue; }
+      if (!lead) { if (pick(f, said(f.text))) leadOf.set(f.step, f); continue; }
       const firstJob = jobs.at(0) ?? lead;
       if (job && isByProduct(firstJob.idea, f.idea)) { held.push({ fact: f, why: 'by-product' }); continue; }
       const secondJob = f.restates !== true && weighOf(f) >= POLICY.floor && weighOf(f) >= weighOf(lead) - POLICY.gap;
-      if (reg.depth === 'thread' && (secondJob || isNews(f, lead))) { picked.push(said(f.alsoText ?? f.text)); continue; }
+      if (reg.depth === 'thread' && (secondJob || isNews(f, lead))) { pick(f, said(f.alsoText ?? f.text)); continue; }
       held.push({ fact: f, why: 'not-support-or-news' });
       continue;
     }
-    if (!lead) { leadOf.set(f.step, f); picked.push(f); continue; }
+    if (!lead) { if (pick(f)) leadOf.set(f.step, f); continue; }
     const news = isNews(f, lead);
     // Another fact in a later step speaks as support — it names a square the
     // step's lead names, or the lead's line changes a relation it stands on
     // (cause → effect, `factRelations`, P1-11) — or as news (relative to the
     // lead, rule 4): one thread, never a stack.
     const support = f.squares.some((s) => lead.squares.includes(s)) || causeEffect(lead, f);
-    if (reg.depth === 'thread' && (support || news)) { picked.push({ ...f, text: f.alsoText ?? f.text }); continue; }
+    if (reg.depth === 'thread' && (support || news)) { pick(f, { ...f, text: f.alsoText ?? f.text }); continue; }
     held.push({ fact: f, why: 'not-support-or-news' });
   }
 

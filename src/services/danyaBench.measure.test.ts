@@ -38,6 +38,8 @@ import { stakeValue, isStaked, stakeWc } from './factStakes';
 import { factRelations } from './factRelations';
 import { isProof } from './proof';
 import { buildDeliberation, deliberationFacts, ruleOuts, NOTHING_SAID, moveWhy, bestMoveReason } from './deliberation';
+import { decisiveReason, type DecisiveReason } from './decisiveReason';
+import { answerQuestionThought } from '../coach/questionThought';
 import { moveJob, bookMoveWhy, MINE, THEIRS } from './bookMoveWhy';
 import { mastersMovesSync, __setLocalDbForTests } from './masterPlayLookup';
 import { computeMoveFundamentals } from './moveFundamentals';
@@ -200,6 +202,15 @@ function readsOf(p: Position): IntentReads | null {
   return p.before.length || p.after.length ? { before: linesOf(p.before), after: linesOf(p.after), passBefore: [], passAfter: [] } : null;
 }
 
+/** THE reason for the move he explains, as the chat reads it. */
+const chatReasonOf = (p: Position): DecisiveReason | null => {
+  const reads = readsOf(p);
+  if (!reads) return null;
+  try {
+    return decisiveReason({ fenBefore: p.fenBefore, san: p.san, reads, seat: p.own ? 'student' : 'opponent', opponentLastSan: p.theirLast?.san ?? null, asksToSee: false, namesPreparedMove: true });
+  } catch { return null; }
+};
+
 function costCp(p: Position): number | null {
   return moverCost(p.mover, p.best, p.reply);
 }
@@ -320,7 +331,7 @@ type SourceId =
   | 'lesson' | 'reviewInventory' | 'liveCandidates' | 'studentMove' | 'deliberation' | 'moveJob'
   | 'fundamentals' | 'boardTeacher' | 'moveWhy' | 'bestMoveReason' | 'moveIntent' | 'deepFact'
   | 'theirTarget' | 'prophylaxis' | 'notYet' | 'notYetPlayed' | 'speedRun' | 'alternatives' | 'bookDeparture' | 'thought'
-  | 'review';
+  | 'review' | 'chatReason' | 'chatThought';
 
 /** Which sources are a SURFACE'S COMPOSER (what the student hears there) —
  *  every other source is a computer whose output only counts toward BUILT. */
@@ -330,6 +341,8 @@ const COMPOSER: Partial<Record<SourceId, string>> = {
   reviewInventory: 'Review (every facet the walk computes for the move)',
   review: 'Review (the walk\'s own line for the move, before the engine projections)',
   liveCandidates: 'Live composer (every clause before the door)',
+  chatReason: 'Chat before the reversal ("why that move?" — THE reason alone)',
+  chatThought: 'Chat after the reversal (the ideas the question asks for, composed)',
 };
 
 /** One computation per note, read by both a source and REACH: each composer's
@@ -426,6 +439,18 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
     line: lineAhead(p), history: p.history, theirLast: p.theirLast, reads: readsOf(p), costCp: costCp(p),
   }, newLessonVoice(), null),
   thought: (p) => lessonPick(p).composed.spoken,
+  // THE REVERSED MATRIX, measured (2026-11-06): "why that move?" asked on the
+  // move he explains — the chat's old answer (THE reason alone) against the
+  // composed one (the ideas the question asks for, `QUESTION_IDEAS`).
+  chatReason: (p) => chatReasonOf(p)?.text ?? null,
+  chatThought: (p) => {
+    const reads = readsOf(p);
+    const studentColor = p.student === 'w' ? 'white' as const : 'black' as const;
+    if (p.own) {
+      return answerQuestionThought('why-best-move', { fen: p.fenBefore, history: p.history, studentColor, bestUci: uciOf(p.fenBefore, p.san), reads, reason: chatReasonOf(p) })?.text ?? null;
+    }
+    return answerQuestionThought('opponent-move', { fen: p.fenAfter, history: [...p.history, p.san], studentColor, bestUci: null, reads, reason: null })?.text ?? null;
+  },
   review: (p) => reviewNarration(p)?.replace(/\[[a-z0-9-]+\]\s*/gi, '') || null,
   reviewInventory: (p) => reviewFacets(p).map((f) => f.replace(/^\[[^\]]+\]\s*/, '')),
   liveCandidates: async (p) => (await liveRead(p)).candidates.map((c) => c.text),
@@ -666,7 +691,7 @@ const FACT_COMPUTER: Record<FactKind, string> = {
 
 /** The bench's own computer sources → the computer each one runs (the
  *  composer sources are surfaces, not computers). */
-type ComputerSourceId = Exclude<SourceId, 'lesson' | 'thought' | 'review' | 'reviewInventory' | 'liveCandidates'>;
+type ComputerSourceId = Exclude<SourceId, 'lesson' | 'thought' | 'review' | 'reviewInventory' | 'liveCandidates' | 'chatReason' | 'chatThought'>;
 const SOURCE_COMPUTER: Record<ComputerSourceId, string> = {
   studentMove: 'services/learnBoardTeaching.ts#studentMoveTeaching',
   deliberation: 'services/deliberation.ts#buildDeliberation',

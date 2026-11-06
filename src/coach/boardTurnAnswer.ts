@@ -35,6 +35,7 @@ import { playNamedLine } from '../services/whyNotLegal';
 import { settledLeadFor, lastMoveOf } from '../services/material';
 import { evalPhrase } from '../services/groundedAnswer';
 import { unmarked } from '../utils/sanMark';
+import { askedRank } from './questionThought';
 
 /** The kinds the board answers directly. Each is served here or falls back. */
 export const BOARD_ANSWERED_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>(['why-best-move', 'candidate-move', 'plan', 'tactics', 'develop-next', 'best-defence', 'faster-win', 'line-outcome']);
@@ -109,7 +110,8 @@ export async function answerBoardTurn(turn: ResolvedChatTurn, board: BoardTurnIn
   return text;
 }
 
-/** Facts the student must answer right now — they lead any board answer. */
+/** Facts the student must answer right now — part of "what's my plan?" from
+ *  any layer; where they are said is the question's order (`askedRank`). */
 const URGENT_KINDS: ReadonlySet<string> = new Set(['must-defend', 'latent-danger', 'tactic', 'trapped', 'loose', 'threat', 'bluff']);
 /** Never part of an answer to a question: the coaching habit and the weighing
  *  (a best-move question gets the weighing through its own path). */
@@ -118,9 +120,10 @@ const NOT_AN_ANSWER: ReadonlySet<string> = new Set(['method', 'deliberation']);
 /**
  * THE QUESTION ANSWERED FROM THE ONE READ — the coach's own board read, run
  * in the `asked` posture so every computer speaks, then selected by what was
- * asked: the safety layer for "any tactics?", what cannot wait and then the
- * plan layer for "what's my plan?". Ordered by the read's own rank; a fact
- * whose squares an earlier one already covers is the same claim and goes.
+ * asked: the safety layer for "any tactics?", what cannot wait and the plan
+ * layer for "what's my plan?". Said in the question's order (the ideas it
+ * asks for first, `QUESTION_IDEAS`), each idea's facts by value; a fact whose
+ * squares an earlier one already covers is the same claim and goes.
  */
 async function answerFromRead(turn: ResolvedChatTurn, board: BoardTurnInput): Promise<string | null> {
   if (turn.seat === 'them') return turn.kind === 'plan' ? theirPlanAnswer(board) : null;
@@ -143,13 +146,17 @@ async function answerFromRead(turn: ResolvedChatTurn, board: BoardTurnInput): Pr
   } catch { return null; }
   const layer = (c: ClauseFact): string => FACT_LAYER[c.kind as FactKind] ?? 'plan';
   const pool = read.candidates.filter((c) => !NOT_AN_ANSWER.has(c.kind));
-  const urgent = orderByValue(pool.filter((c) => URGENT_KINDS.has(c.kind)), []);
-  const rest = turn.kind === 'tactics'
-    ? orderByValue(pool.filter((c) => layer(c) === 'safety' && !URGENT_KINDS.has(c.kind)), [])
-    : orderByValue(pool.filter((c) => layer(c) === 'plan'), []);
+  const asked = turn.kind === 'tactics'
+    ? pool.filter((c) => layer(c) === 'safety')
+    : pool.filter((c) => URGENT_KINDS.has(c.kind) || layer(c) === 'plan');
+  // THE QUESTION ORDERS ITS ANSWER (the reversed matrix): the ideas it asks
+  // for first, in its order, each group's facts by value.
+  const q = turn.kind === 'tactics' ? 'tactics' : 'plan';
+  const ranked = orderByValue(asked, []).map((c, i) => ({ c, i, r: askedRank(q, c.group, c.step) }));
+  ranked.sort((x, y) => (x.r - y.r) || (x.i - y.i));
   const chosen: ClauseFact[] = [];
   const covered = new Set<string>();
-  for (const c of [...urgent, ...rest]) {
+  for (const { c } of ranked) {
     const sq = c.squares ?? [];
     if (sq.length > 0 && sq.every((q) => covered.has(q))) continue;
     chosen.push(c);

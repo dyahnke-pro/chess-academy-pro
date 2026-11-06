@@ -140,7 +140,7 @@ import { askBackAtCatchAll, type ChatKind } from '../coach/chatTurn';
 // the deployed app's services via page.evaluate. No-op for real users.
 // Side-effect import keeps the audit script free of source-path knowledge.
 import './masterPlayAuditBridge';
-import { askedBestMove, moveDeepFact, movePurpose, moveReason } from './movePurposeEngine';
+import { askedBestMove, askedMoveThought, moveDeepFact, movePurpose, moveReason } from './movePurposeEngine';
 import { reasonPosed } from './decisiveReason';
 import { emitDecisiveReason } from './decisiveReasonEvents';
 import { withArticle, orList } from '../utils/andList';
@@ -5913,6 +5913,17 @@ export async function getCoachChatResponse(
             const moverWB = fen.split(' ')[1] === 'b' ? 'black' : 'white';
             const seat = grounding.studentColor && grounding.studentColor !== moverWB ? 'opponent' : 'student';
             const history = grounding.moveHistory ?? [];
+            // THE QUESTION PICKS THE IDEAS (the reversed matrix, 2026-11-06):
+            // what the move does, the moves it beats, the order, the line —
+            // the one thought a lesson says on it, in its order.
+            const thought = await askedMoveThought('why-best-move', { fen, history, studentColor: grounding.studentColor ?? moverWB }, reasonSan).catch(() => null);
+            if (thought) {
+              const r = thought.reason;
+              if (r) emitDecisiveReason({ surface: 'chat', kind: r.kind, source: r.source, about: r.about, gapCp: r.gapCp, stakeCp: r.stakeCp, posedTag: reasonPosed(r)?.tag ?? null, outcome: 'explained' });
+              const walk = r?.line && r.line.fen === fen ? walkableLine(r.line.fen, r.line.sans, reasonSan) : null;
+              if (walk) lastCoachLines = [walk];
+              return `${thought.text} [BOARD: arrow:${thought.move.from}-${thought.move.to}:green]`;
+            }
             const reason = await moveReason(fen, reasonSan, seat, history.length ? history[history.length - 1] : null);
             if (reason) {
               emitDecisiveReason({ surface: 'chat', kind: reason.kind, source: reason.source, about: reason.about, gapCp: reason.gapCp, stakeCp: reason.stakeCp, posedTag: reasonPosed(reason)?.tag ?? null, outcome: 'explained' });
@@ -5985,6 +5996,11 @@ export async function getCoachChatResponse(
           const bestHere = grounding.engineBestMoveUci && typeof grounding.engineEvalCp === 'number'
             ? { rank: 1, evaluation: grounding.engineEvalCp, moves: [grounding.engineBestMoveUci], mate: null }
             : undefined;
+          // THE QUESTION PICKS THE IDEAS (the reversed matrix, 2026-11-06):
+          // their move, what it is after, what it threatens, the line — the
+          // one thought a lesson says on their move, in its order.
+          const thought = await askedMoveThought('opponent-move', { fen: grounding.currentFen, history: grounding.moveHistory, studentColor: sc }, null).catch(() => null);
+          if (thought) return thought.text;
           const theirExtra = theirPly === null ? [] : theirMoveAnswerLines(grounding.moveHistory, theirPly, sc === 'white' ? 'w' : 'b', bestHere);
           // WHAT THEIR MOVE IS FOR — the one purpose computer Learn and the
           // review speak (`movePurpose`), so the chat gives the same reason.

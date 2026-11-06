@@ -52,6 +52,12 @@ export interface DecisiveReason {
   /** The reason alone, without the gap tail — for a surface that states the
    *  gap its own way (the critical-moment count). */
   core: string | null;
+  /** THE OTHER MOVES, said on their own (the reversed matrix, 2026-11-06):
+   *  the equal plan, the gap to the next-best, or the next-best failing — for
+   *  a surface whose own computers already say what the move does (the chat's
+   *  question composer, `moveThoughtFacts.nextBestFact`). Null when the
+   *  reason says nothing about the other moves. */
+  choice: string | null;
   /** Whether the reason is about the move itself, or about the next-best
    *  failing (a surface that already lists failed alternatives skips those). */
   about: 'move' | 'alternative' | null;
@@ -198,7 +204,7 @@ export function decisiveReason(input: {
   if (!own && next) {
     const bestSan = sansOf(fenBefore, [lines[0].moves[0]])[0];
     if (!bestSan) return null;
-    return { kind: 'a', source: null, text: `${dot(san, mover)} isn't one of the engine's choices here — it prefers ${dot(bestSan, mover)}.`, gapCp: 0, gapEarned: false, stakeCp: null, nextBestSan: bestSan, tail: null, core: null, about: null, line: null, squares: [] };
+    return { kind: 'a', source: null, text: `${dot(san, mover)} isn't one of the engine's choices here — it prefers ${dot(bestSan, mover)}.`, gapCp: 0, gapEarned: false, stakeCp: null, nextBestSan: bestSan, tail: null, core: null, choice: `${dot(san, mover)} isn't one of the engine's choices here — it prefers ${dot(bestSan, mover)}.`, about: null, line: null, squares: [] };
   }
   if (!own || !next) return null;
   const nextBestSan = sansOf(fenBefore, [next.moves[0]])[0] ?? null;
@@ -342,7 +348,7 @@ export function decisiveReason(input: {
   // The board description is worded for the MOVER ("pushes your passed pawn"),
   // so it speaks only for the student's own move — never re-pronouned.
   const description = seat === 'student' ? bestMoveReason(fenBefore, san, mover, { mateIn: null, opponentLastSan: input.opponentLastSan }) : null;
-  const base = { gapCp, gapEarned, nextBestSan, tail: null as string | null, core: null as string | null, about: null as DecisiveReason['about'] };
+  const base = { gapCp, gapEarned, nextBestSan, tail: null as string | null, core: null as string | null, choice: null as string | null, about: null as DecisiveReason['about'] };
 
   if (gapCp < CLOSE_GAP_CP) {
     const alt = nextBestSan ? `${dot(nextBestSan, mover)} is about as good` : 'other moves are about as good';
@@ -371,7 +377,8 @@ export function decisiveReason(input: {
       // `core` is the contrast alone — chat leads with its own "X and Y are
       // about equally good", so the core must not say it twice.
       const contrast = `${played} ${description}; ${dot(nextBestSan, mover)} ${altDescription}. The choice is which job you want done.`;
-      return { ...base, kind: 'close', source: 'description', stakeCp: null, core: contrast, text: `Two plans here${gapEarned ? ', about equal' : ''}: ${contrast}`, line: null, squares: [] };
+      const choice = `The other plan is ${dot(nextBestSan, mover)}${gapEarned ? ', about as good' : ''}: it ${altDescription}. The choice is which job you want done.`;
+      return { ...base, kind: 'close', source: 'description', stakeCp: null, core: contrast, choice, text: `Two plans here${gapEarned ? ', about equal' : ''}: ${contrast}`, line: null, squares: [] };
     }
     // A shared reason is still a reason: said first, the equal move after.
     // The reason LEADS; the equal move follows (prod walk 2026-10-19: "why is
@@ -380,7 +387,8 @@ export function decisiveReason(input: {
     const closeText = !gapEarned
       ? [what, weigh].filter(Boolean).join(' ') || 'Other moves are worth weighing here.'
       : stops ? `${what} ${openSentence(alt)}.` : what ? `${what} It isn't the only good move — ${alt}.` : `It isn't the only good move here — ${alt}.`;
-    return { ...base, kind: 'close', source: src, stakeCp: null, core: what, text: closeText, line: useQuiet ? quiet?.line ?? null : null, squares: useQuiet ? quiet?.squares ?? [] : [] };
+    const closeChoice = !gapEarned ? weigh : stops ? `${openSentence(alt)}.` : `It isn't the only good move — ${alt}.`;
+    return { ...base, kind: 'close', source: src, stakeCp: null, core: what, choice: closeChoice, text: closeText, line: useQuiet ? quiet?.line ?? null : null, squares: useQuiet ? quiet?.squares ?? [] : [] };
   }
   if (top && (top.stake >= COVERS_SHARE * gapCp || covering.includes(top))) {
     const asksMate = longMate && covering.includes(top) && !mateText(top) && input.asksToSee && seat === 'student';
@@ -398,12 +406,13 @@ export function decisiveReason(input: {
         : top.text.startsWith(`${san} `) ? `Their ${played}${top.text.slice(san.length)}`
           : top.text;
     const mateLine = asksMate && ownMate !== null ? { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) } : null;
-    return { ...base, kind: 'the', source: top.source, stakeCp: top.stake, text: `${core}${tail}`, tail: tail.trim() || null, core, about: top.alt ? 'alternative' : 'move', line: mateLine && ownMate !== null && mateLine.sans.length >= 2 * ownMate - 1 ? mateLine : top.line, squares: top.squares };
+    return { ...base, kind: 'the', source: top.source, stakeCp: top.stake, text: `${core}${tail}`, tail: tail.trim() || null, core, choice: top.alt ? `${core}${tail}` : tail.trim() || null, about: top.alt ? 'alternative' : 'move', line: mateLine && ownMate !== null && mateLine.sans.length >= 2 * ownMate - 1 ? mateLine : top.line, squares: top.squares };
   }
   // NOTHING ACCOUNTS FOR THE GAP: the engine's edge lies past what forcing play
   // shows. Say so, and give the one true thing the move does — marked as one.
   const one = top?.text ?? (description ? `One thing ${whose} ${played} does: it ${description}.` : null);
-  return { ...base, kind: 'a', source: top?.source ?? (description ? 'description' : null), stakeCp: top?.stake ?? null, text: `No single reason shows in the next few moves${nextBestSan ? ` — anything else, like ${dot(nextBestSan, mover)}, ${givesUp()}, for reasons further down the line` : ''}.${one ? ` ${one}` : ''}`, line: top?.line ?? null, squares: top?.squares ?? [] };
+  const aChoice = nextBestSan ? `Anything else, like ${dot(nextBestSan, mover)}, ${givesUp()} — for reasons further down the line.` : null;
+  return { ...base, kind: 'a', source: top?.source ?? (description ? 'description' : null), stakeCp: top?.stake ?? null, choice: aChoice, text: `No single reason shows in the next few moves${nextBestSan ? ` — anything else, like ${dot(nextBestSan, mover)}, ${givesUp()}, for reasons further down the line` : ''}.${one ? ` ${one}` : ''}`, line: top?.line ?? null, squares: top?.squares ?? [] };
 }
 
 /** TWO DIFFERENT PLANS, not two words for one: the first action differs
