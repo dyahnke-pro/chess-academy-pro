@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**715 lines · 14 exports · 24 importers · 19 tests · 1 audits**
+**721 lines · 14 exports · 24 importers · 19 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -51,10 +51,10 @@
 - `src/coach/dispatchCoachTurn.test.ts:239`
 
 ### `setChatTurnReaderForTests` (function) — 47 call sites
-- `src/coach/chatKindContracts.test.ts:339`
-- `src/coach/chatKindContracts.test.ts:389`
-- `src/coach/chatKindContracts.test.ts:414`
-- `src/coach/chatKindContracts.test.ts:419`
+- `src/coach/chatKindContracts.test.ts:341`
+- `src/coach/chatKindContracts.test.ts:391`
+- `src/coach/chatKindContracts.test.ts:416`
+- `src/coach/chatKindContracts.test.ts:421`
 - `src/coach/chatTurnRow.outcome.test.ts:28`
 - `src/coach/chatTurnRow.outcome.test.ts:37`
 - `src/coach/coachService.askReader.integration.test.ts:31`
@@ -100,7 +100,7 @@
 - `src/components/Coach/GameChatPanel.test.tsx:295`
 
 ### `resetConversations` (function) — 10 call sites
-- `src/coach/chatKindContracts.test.ts:337`
+- `src/coach/chatKindContracts.test.ts:339`
 - `src/coach/dispatchCoachTurn.eachPiece.test.ts:19`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:14`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:21`
@@ -151,9 +151,9 @@
 - `src/components/Coach/CoachTeachPage.tsx:8076`
 
 ### `dispatchCoachTurn` (function) — 50 call sites
-- `src/coach/chatKindContracts.test.ts:391`
-- `src/coach/chatKindContracts.test.ts:415`
-- `src/coach/chatKindContracts.test.ts:420`
+- `src/coach/chatKindContracts.test.ts:393`
+- `src/coach/chatKindContracts.test.ts:417`
+- `src/coach/chatKindContracts.test.ts:422`
 - `src/coach/chatTurnRow.outcome.test.ts:39`
 - `src/coach/coachService.askReader.integration.test.ts:32`
 - `src/coach/coachService.endgameTopic.test.ts:83`

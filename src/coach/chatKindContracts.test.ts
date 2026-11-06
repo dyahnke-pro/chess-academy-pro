@@ -314,8 +314,10 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
     must: [/Naroditsky/, /\d+ reference games/], mustNot: [/Variation \d/] },
   'teaching-method': { board: null, ask: 'how would you teach me the Sicilian?', reading: { kind: 'teaching-method', topic: 'Sicilian' },
     must: [/Watch/, /Learn/, /Practice/, /Play/] },
+  // "Learn how to think" is held from release (heldSurfaces.ts): the ask is
+  // pointed at Learn with Coach, never at the held lesson.
   'start-thinking-lesson': { board: null, ask: 'teach me how to think', reading: { kind: 'start-thinking-lesson' },
-    must: [/Learn how to think/], mustNot: [/can't connect/] },
+    must: [/Learn with Coach/], mustNot: [/can't connect/, /Learn how to think/] },
 };
 
 // The openings database every device seeds at boot (the opening kinds read it).

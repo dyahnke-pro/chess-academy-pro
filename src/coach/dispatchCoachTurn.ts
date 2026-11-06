@@ -504,9 +504,15 @@ async function dispatchCoachTurnOnce(
     // "TEACH ME HOW TO THINK" OPENS THE LESSON on every surface but Learn,
     // which starts it in place before the door (contracts 2026-10-10: the chat
     // fell through to the model and, offline, said it could not connect).
-    // Not while the lesson is held from release (`heldSurfaces.ts`): the ask
-    // then reaches the coach like any other.
-    if (turn?.kind === 'start-thinking-lesson' && isReleased('howToThink')) {
+    // While the lesson is held from release (`heldSurfaces.ts`) the ask is
+    // answered with where the coach teaches it now — never the held lesson,
+    // and never a dead "can't connect".
+    if (turn?.kind === 'start-thinking-lesson' && !isReleased('howToThink')) {
+      const path = '/coach/teach';
+      return serve('Play a game in Learn with Coach — it talks you through what to check before every move: what their move changed, whether your pieces are safe, and where your chances are.', 'request:thinking-lesson', 'command',
+        { actionOffer: [{ type: 'navigate', id: path }] });
+    }
+    if (turn?.kind === 'start-thinking-lesson') {
       const path = '/coach/teach?lesson=think';
       if (options.onNavigate) options.onNavigate(path);
       return serve('Opening "Learn how to think" — a lesson in how to read a position, step by step.', 'request:thinking-lesson', 'command',
