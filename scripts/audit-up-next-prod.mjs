@@ -137,6 +137,9 @@ try {
   await home();
   const chosen = rowsOf('up-next-chosen')[0];
   const kinds = chosen?.details?.ring?.map((r) => r.kind) ?? [];
+  // HELD FROM RELEASE (2026-11-06, src/data/heldSurfaces.ts): no bite opens
+  // "Learn how to think" while it is held.
+  check('A-held no bite opens a held surface ("Learn how to think")', !kinds.includes('thinking'), kinds.join(','));
   check('A UP NEXT fresh-device ring — three bites, Deep Run first', kinds.length === 3 && kinds[0] === 'deep-run', JSON.stringify(kinds));
   // HOME ROTATES A ROW, NOT A BAR (David 2026-10-02): exactly one of the
   // section rows blinks, picked by the record; never the same family twice in

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**712 lines · 14 exports · 22 importers · 17 tests · 1 audits**
+**715 lines · 14 exports · 24 importers · 19 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6440) — names `dispatchCoachTurn`
+- **The standard post-deploy ritual** (CLAUDE.md:6895) — names `dispatchCoachTurn`
 
 ## Who calls in
 
@@ -16,7 +16,9 @@
 - `src/coach/chatKindContracts.test.ts`
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
+- `src/coach/coachService.endgameTopic.test.ts`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
+- `src/coach/dispatchCoachTurn.eachPiece.test.ts`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/dispatchCoachTurn.positional.test.ts`
@@ -48,7 +50,7 @@
 - `src/coach/dispatchCoachTurn.test.ts:231`
 - `src/coach/dispatchCoachTurn.test.ts:239`
 
-### `setChatTurnReaderForTests` (function) — 43 call sites
+### `setChatTurnReaderForTests` (function) — 47 call sites
 - `src/coach/chatKindContracts.test.ts:339`
 - `src/coach/chatKindContracts.test.ts:389`
 - `src/coach/chatKindContracts.test.ts:414`
@@ -57,8 +59,12 @@
 - `src/coach/chatTurnRow.outcome.test.ts:37`
 - `src/coach/coachService.askReader.integration.test.ts:31`
 - `src/coach/coachService.askReader.integration.test.ts:51`
+- `src/coach/coachService.endgameTopic.test.ts:75`
+- `src/coach/coachService.endgameTopic.test.ts:82`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:23`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:32`
+- `src/coach/dispatchCoachTurn.eachPiece.test.ts:21`
+- `src/coach/dispatchCoachTurn.eachPiece.test.ts:24`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:16`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:19`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:20`
@@ -93,8 +99,9 @@
 - `src/components/Coach/GameChatPanel.test.tsx:287`
 - `src/components/Coach/GameChatPanel.test.tsx:295`
 
-### `resetConversations` (function) — 9 call sites
+### `resetConversations` (function) — 10 call sites
 - `src/coach/chatKindContracts.test.ts:337`
+- `src/coach/dispatchCoachTurn.eachPiece.test.ts:19`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:14`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:21`
 - `src/coach/dispatchCoachTurn.positional.test.ts:21`
@@ -109,15 +116,15 @@
 - `src/coach/dispatchCoachTurn.showLine.test.ts:75`
 
 ### `asksBeyondShowMe` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3442`
+- `src/components/Coach/CoachTeachPage.tsx:3956`
 
 ### `showLineAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3470`
+- `src/components/Coach/CoachTeachPage.tsx:3984`
 
 ### `conversationFor` (function) — 3 call sites
 - `src/coach/dispatchCoachTurn.test.ts:167`
 - `src/coach/requestExecutor.test.ts:88`
-- `src/components/Coach/CoachTeachPage.tsx:3433`
+- `src/components/Coach/CoachTeachPage.tsx:3947`
 
 ### `READ_BUDGET_MS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -125,31 +132,33 @@
 ### `awaitTurnRead` (function) — 4 call sites
 - `src/coach/awaitTurnRead.test.ts:13`
 - `src/coach/awaitTurnRead.test.ts:24`
-- `src/components/Coach/CoachTeachPage.tsx:3601`
-- `src/components/Coach/CoachTeachPage.tsx:3903`
+- `src/components/Coach/CoachTeachPage.tsx:4126`
+- `src/components/Coach/CoachTeachPage.tsx:4428`
 
 ### `TurnReadHandle` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `setPendingOffer` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3484`
-- `src/components/Coach/CoachTeachPage.tsx:12875`
-- `src/components/Coach/CoachTeachPage.tsx:14985`
+- `src/components/Coach/CoachTeachPage.tsx:3998`
+- `src/components/Coach/CoachTeachPage.tsx:13599`
+- `src/components/Coach/CoachTeachPage.tsx:15768`
 
 ### `openTurnRead` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3550`
-- `src/components/Coach/GameChatPanel.tsx:480`
+- `src/components/Coach/CoachTeachPage.tsx:4064`
+- `src/components/Coach/GameChatPanel.tsx:485`
 
 ### `isComputedAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7640`
+- `src/components/Coach/CoachTeachPage.tsx:8076`
 
-### `dispatchCoachTurn` (function) — 48 call sites
+### `dispatchCoachTurn` (function) — 50 call sites
 - `src/coach/chatKindContracts.test.ts:391`
 - `src/coach/chatKindContracts.test.ts:415`
 - `src/coach/chatKindContracts.test.ts:420`
 - `src/coach/chatTurnRow.outcome.test.ts:39`
 - `src/coach/coachService.askReader.integration.test.ts:32`
+- `src/coach/coachService.endgameTopic.test.ts:83`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:35`
+- `src/coach/dispatchCoachTurn.eachPiece.test.ts:25`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:20`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:25`
 - `src/coach/dispatchCoachTurn.positional.test.ts:25`
@@ -184,11 +193,11 @@
 - `src/components/Board/VoiceChatMic.tsx:484`
 - `src/components/Coach/CoachAnalysePage.tsx:238`
 - `src/components/Coach/CoachChatPage.tsx:285`
-- `src/components/Coach/CoachGameReview.tsx:2883`
+- `src/components/Coach/CoachGameReview.tsx:2885`
 - `src/components/Coach/ExplainPositionSessionView.tsx:247`
-- `src/components/Coach/GameChatPanel.tsx:1016`
-- `src/components/Coach/GameChatPanel.tsx:1394`
-- `src/components/Coach/GameChatPanel.tsx:1607`
+- `src/components/Coach/GameChatPanel.tsx:1023`
+- `src/components/Coach/GameChatPanel.tsx:1401`
+- `src/components/Coach/GameChatPanel.tsx:1614`
 - `src/components/Openings/MasterclassCoachChat.tsx:91`
 - `src/components/Search/SmartSearchBar.tsx:335`
 - `src/test/kidIsolation.gate.test.ts:131`
@@ -199,7 +208,9 @@
 - `src/coach/chatKindContracts.test.ts`
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
+- `src/coach/coachService.endgameTopic.test.ts`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
+- `src/coach/dispatchCoachTurn.eachPiece.test.ts`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/dispatchCoachTurn.positional.test.ts`

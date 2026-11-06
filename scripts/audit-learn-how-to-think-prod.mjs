@@ -155,14 +155,21 @@ async function main() {
     await page.waitForTimeout(8000);
     record('L8. "teach me the Caro-Kann" does not start the thinking lesson', (await page.locator('[data-testid="thinking-lesson"]').count()) === 0);
 
-    // L1: a bare, off-canonical "teach me".
+    // L1: a bare, off-canonical "teach me". HELD FROM RELEASE (2026-11-06,
+    // src/data/heldSurfaces.ts): the ask opens nothing, and the lesson answers
+    // only its own URL — which is how this audit keeps working on it.
     await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45_000 });
     await dismissGates(page);
     await page.waitForTimeout(4000);
-    const before = prose(listener).length;
     await ask(page, 'can you teach me?');
+    await page.waitForTimeout(8000);
+    const openedByAsk = (await page.locator('[data-testid="thinking-lesson"]').count()) > 0;
+    record('L1a. held from release: a bare "can you teach me?" opens nothing', !openedByAsk);
+    await page.goto(`${BASE_URL}/coach/teach?lesson=think`, { waitUntil: 'domcontentloaded', timeout: 45_000 });
+    await dismissGates(page);
+    const before = prose(listener).length;
     const mounted = await page.locator('[data-testid="thinking-lesson"]').waitFor({ timeout: 60_000 }).then(() => true).catch(() => false);
-    record('L1. a bare "can you teach me?" starts the lesson', mounted);
+    record('L1. the lesson still answers its URL', mounted);
 
     const fen1 = await waitAsking(page);
     const spoken = prose(listener).slice(before);
