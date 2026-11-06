@@ -122,7 +122,11 @@ async function main() {
         const navTop = navTab ? Math.round(navTab.getBoundingClientRect().top) : window.innerHeight;
         const kids = [...scroller.children];
         const last = kids[kids.length - 1];
-        out.lastRowClearsNav = last ? Math.round(last.getBoundingClientRect().bottom) <= navTop + 1 : true;
+        // The last row's CONTENT edge: a block that carries the page's bottom
+        // padding (Weaknesses pads 6.5rem + the home-bar inset inside it) ends
+        // its rows above that padding, not at the box's edge.
+        const padBottom = last ? parseFloat(getComputedStyle(last).paddingBottom) || 0 : 0;
+        out.lastRowClearsNav = last ? Math.round(last.getBoundingClientRect().bottom - padBottom) <= navTop + 1 : true;
         out.lastRowText = last ? (last.textContent || '').trim().slice(0, 28) : '';
       }
       // The document must not scroll AT ALL — that is what drags the header away.
