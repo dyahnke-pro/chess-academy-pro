@@ -981,12 +981,21 @@ async function main() {
     // fresh audit device the record is empty, so every phase must SPEAK (grey
     // teaches) — a quiet phase here would mean the rule fired with no evidence.
     const ivRows = listener.getCapturedEvents().filter((e) => e.source === 'inaccuracyVoice');
+    // The verdict is re-read every minute, and the audit's own games record
+    // slips as they go (2026-11-06: three games filed 5 mistakes against 1
+    // inaccuracy in the middlegame, so the rule went quiet there — correctly).
+    // So the FIRST read is the fresh record, and every later quiet phase must
+    // carry its own evidence: at least 6 slips, mistakes at least as many.
+    const ivPhases = (summary) => [...String(summary ?? '').matchAll(/(\w+)=(speak|quiet)\((\d+)\/(\d+)\)/g)]
+      .map((m) => ({ phase: m[1], quiet: m[2] === 'quiet', big: Number(m[3]), small: Number(m[4]) }));
+    const ivFirst = ivRows.length ? ivPhases(ivRows[0].summary) : [];
+    const ivUnearned = ivRows.flatMap((e) => ivPhases(e.summary)).filter((p) => p.quiet && !(p.big + p.small >= 6 && p.big >= p.small));
     record(
-      'IV1. the inaccuracy-voice verdict was read on mount, and a fresh record speaks in every phase',
+      'IV1. the inaccuracy-voice verdict was read on mount, a fresh record speaks in every phase, and a later quiet is earned by the record',
       // A real record (AUDIT_FIXTURE) may be quiet where it has the evidence;
       // the verdict itself is held by inaccuracyVoice's unit tests.
-      ivRows.length > 0 && (realRecord || ivRows.every((e) => !/quiet/.test(String(e.summary ?? '')))),
-      ivRows.length ? String(ivRows[ivRows.length - 1].summary) : 'no inaccuracyVoice row',
+      ivRows.length > 0 && ivFirst.length > 0 && (realRecord || ivFirst.every((p) => !p.quiet)) && ivUnearned.length === 0,
+      ivRows.length ? `first: ${String(ivRows[0].summary)} · last: ${String(ivRows[ivRows.length - 1].summary)} · unearned quiet: ${ivUnearned.length}` : 'no inaccuracyVoice row',
     );
 
     // ── RW: THE REWARD LAYER (David 2026-10-01) ───────────────────────────
