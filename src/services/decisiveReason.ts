@@ -239,7 +239,11 @@ export function decisiveReason(input: {
     if (!first) return '';
     const replier = mover === studentWB ? 'them' : 'you';
     const winner = mover === studentWB ? 'they' : 'you';
-    if (r.trust.name) return `: it runs into ${first}${r.mate ? ", and it's mate" : ` — ${winner} win ${reasonWinWords(r)}`}`;
+    if (r.trust.name) {
+      // The first move is said; a promotion it makes is not named again.
+      const won = r.mate ? null : reasonWinWords(r, [0]);
+      return `: it runs into ${first}${r.mate ? ", and it's mate" : won ? ` — ${winner} win ${won}` : ''}`;
+    }
     return /x|\+|#/.test(first) ? `: it lets ${replier} play ${first}` : '';
   };
   const played = dot(san, mover);

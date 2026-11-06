@@ -30,7 +30,7 @@
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { humanMoveProbabilities, type ScoredMove } from './humanMove';
 import { costReason, reasonSans, reasonWinWords, type CostReason } from './costReason';
-import { lineShape, orList, andList, type LineSeat } from '../utils/andList';
+import { lineShape, lineShapePlies, orList, andList, type LineSeat } from '../utils/andList';
 import { contrastMoves } from './moveContrast';
 import { findHangingPieces } from './tacticClassifier';
 import { legalSeeGainFor } from './positionReadingService';
@@ -272,11 +272,14 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
     // knight taken for a pawn (…Nxe4 dxe4) is the classic one, and stays.
     if (r.blowPlies === 1 && r.plies[0]?.uci.slice(2, 4) === c.to && r.netForWinner >= 5) continue;
     const sans = reasonSans(r);
-    const result = r.mate ? 'and it\'s mate' : `${w.otherWho} win ${reasonWinWords(r)}`;
+    // What it wins beyond what the line, as said, already names: a line that
+    // ends "they play a1, making a queen" has said its gain.
+    const won = r.mate ? null : reasonWinWords(r, lineShapePlies(sans.length));
+    const result = r.mate ? ' — and it\'s mate' : won ? ` — ${w.otherWho} win ${won}` : '';
     const lead = mover === args.student
       ? rotateStem([`${c.san} is tempting here, but it fails`, `${c.san} looks natural, but it doesn't work`], stemKeyOf(`${args.fenBefore}|${c.uci}`))
       : rotateStem([`${c.san} was tempting for them, but it fails`, `${c.san} looked natural for them, but it doesn't work`], stemKeyOf(`${args.fenBefore}|${c.uci}`));
-    const text = `${lead}: ${lineShape(sans, w.otherLine)} — ${result}.`;
+    const text = `${lead}: ${lineShape(sans, w.otherLine)}${result}.`;
     const sq = blowSquare(sans);
     const key = `tempting:${c.uci}`;
     out.push({
@@ -591,8 +594,10 @@ function faultsOn(fenBefore: string, m: Move, own: 'your' | 'their', other: 'you
   }
   if (reason && out.length === 0) {
     const sans = reasonSans(reason);
+    // The first move is said; a promotion it makes is not named again.
+    const won = reason.mate ? null : reasonWinWords(reason, [0]);
     out.push({ square: m.to, kind: 'refuted', squares: [m.to],
-      text: `runs into ${sans[0]}${reason.mate ? ', and it\'s mate' : ` — ${other === 'your' ? 'you' : 'they'} win ${reasonWinWords(reason)}`}` });
+      text: `runs into ${sans[0]}${reason.mate ? ', and it\'s mate' : won ? ` — ${other === 'your' ? 'you' : 'they'} win ${won}` : ''}` });
   }
   return out;
 }

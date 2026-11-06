@@ -29,7 +29,7 @@
 // model what it thinks.
 import { capturedSquare } from '../utils/capturedSquare';
 import { evalBand } from './evalBand';
-import { andList, lineShape, seatedLine, lineSeatAt } from '../utils/andList';
+import { andList, lineShape, lineShapePlies, seatedLine, lineSeatAt } from '../utils/andList';
 import { bareCaptureLead, bestMoveReason, moveWhy } from './deliberation';
 import { captureLeadsTo } from './captureLeadsTo';
 import { captureHasCounterTactic } from './groundedAnswer';
@@ -495,7 +495,11 @@ function whyBetter(
   // clause for …Qxg5 a move later). A clause that wins nothing and touches
   // none of the move's squares is the position's plan, not this move's reason:
   // with none that qualifies, the move is named with no reason.
-  const lead0 = clauses.find((c) => !c.drift && (isCostClause(c.text) || c.squares.includes(firstFrom) || c.squares.includes(firstTo)));
+  // …and a clause that is SEVERAL pieces' work is never one move's reason,
+  // even when this move is one of them (Learn walk 2026-11-06: "Knight to b4
+  // was the move — it would swing pieces toward their king"): the move is a
+  // step in that plan, and the plan is not lent to it.
+  const lead0 = clauses.find((c) => !c.drift && !c.several && (isCostClause(c.text) || c.squares.includes(firstFrom) || c.squares.includes(firstTo)));
   if (!lead0 && clauses.length > 0) return null;
   // A ROUTE THAT COLLECTS MATERIAL ON THE WAY: the material is the reason
   // (review walk 2026-10-01, ply 16: "Bf5 was the move — it would walk the
@@ -1200,7 +1204,7 @@ export function errorWhy(args: {
               // where the naming rule lets the line be named.
               ?? (() => {
                 const r = missedReason();
-                return r && !r.mate && r.trust.name ? `it would win ${reasonWinWords(r)} — the engine's line gets there in ${Math.ceil(r.blowPlies / 2)} moves` : null;
+                return r && !r.mate && r.trust.name ? `it would win ${reasonWinWords(r, [])} — the engine's line gets there in ${Math.ceil(r.blowPlies / 2)} moves` : null;
               })()
               ?? (args.bestLineUci?.length ? boardHalfReason(args.fenBefore, bestSan, args.moverColor, args.priorMove) : null);
           })();
@@ -1281,7 +1285,7 @@ export function errorWhy(args: {
     ? (() => {
       const r = allowedReason();
       if (!r || r.mate || !r.trust.name) return null;
-      return { said: `it let them win ${reasonWinWords(r)} — the engine's line gets there in ${Math.ceil(r.blowPlies / 2)} moves`, line: { fen: r.fen, uci: r.plies.map((p) => p.uci) } };
+      return { said: `it let them win ${reasonWinWords(r, [])} — the engine's line gets there in ${Math.ceil(r.blowPlies / 2)} moves`, line: { fen: r.fen, uci: r.plies.map((p) => p.uci) } };
     })()
     : null;
   // The square their reply takes on, when the single or allowed reader names
@@ -1337,9 +1341,15 @@ export function errorWhy(args: {
     if (r && !r.mate && r.trust.name && r.plies.length >= 2) {
       const sans = reasonSans(r);
       // The voice says the shape; the board walks the line (proof guard 2).
-      tail = sans.length <= 3
-        ? ` The line: ${lineShape(sans, 'they')} — they win ${reasonWinWords(r)}.`
-        : ` The line starts with ${sans[0]}, and they win ${reasonWinWords(r)}.`;
+      // What it wins beyond the moves said: a line said to "a1, making a
+      // queen" has named its gain (prod Review 2026-11-06).
+      if (sans.length <= 3) {
+        const won = reasonWinWords(r, lineShapePlies(sans.length));
+        tail = ` The line: ${lineShape(sans, 'they')}${won ? ` — they win ${won}` : ''}.`;
+      } else {
+        const won = reasonWinWords(r, [0]);
+        tail = won ? ` The line starts with ${sans[0]}, and they win ${won}.` : ` The line starts with ${sans[0]}.`;
+      }
       line = { fen: r.fen, uci: r.plies.map((p) => p.uci) };
     }
   }

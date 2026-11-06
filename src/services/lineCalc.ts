@@ -5,19 +5,29 @@
 // computer: an engine line, walked, stopped at its LAST capture (the exchanges
 // are over there, so what is left is what was won — never a peak the
 // recaptures hand back). The outcome is the ONE ledger rule (exchangeLedger.proofCut).
-import { seatedLine } from '../utils/andList';
+import { lineShapePlies, seatedLine } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { countWords } from '../utils/countWords';
 import type { ArrowClaim } from './arrowDoor';
-import { heardProofCut, gainWords, type PieceLetter } from './exchangeLedger';
+import { heardProofCut, gainWords, gainAfterLine, promotedIn, type PieceLetter } from './exchangeLedger';
 import { MATERIAL_VALUE } from './pieceValues';
 import { lineTrust, type LineSeconds } from './lineTrust';
 import { unmarked } from '../utils/sanMark';
 
 
 export interface LinePly { from: string; to: string; color: 'w' | 'b'; fen: string; san: string }
-interface LineWin { net: number; what: string; sans: string[]; plies: LinePly[] }
+interface LineWin {
+  net: number;
+  /** What the line wins, said BEFORE the line ("That wins a knight: …"). */
+  what: string;
+  /** What it wins said AFTER the line as `lineShape` says it ("… — they win
+   *  a knight"), leaving out a promotion those moves already say ("a1, making
+   *  a queen"); null when the line's words named the whole gain. */
+  afterLine: string | null;
+  sans: string[];
+  plies: LinePly[];
+}
 
 /**
  * `lineUci` from `fen`; `side` is who the gain is counted for. When `firstSan`
@@ -98,9 +108,13 @@ export function lineWins(
     net -= MATERIAL_VALUE[priorTook] ?? 0;
     if (net < 1) return null;
   }
+  const made = proof.ledger.studentPromoted;
+  const saidMade = promotedIn(lineShapePlies(shown.length).map((i) => shown[i]).filter((p) => p.color === side).map((p) => p.san));
+  const after = gainAfterLine(took, gave, made, saidMade);
   return {
     net,
-    what: materialWords(took, gave, net, proof.ledger.studentPromoted),
+    what: materialWords(took, gave, net, made),
+    afterLine: after.left ? after.words ?? countWords(net, { unit: true }) : null,
     sans: shown.map((p) => `${p.color === 'b' ? '…' : ''}${p.san}`),
     plies: shown,
   };

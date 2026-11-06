@@ -85,7 +85,8 @@ export interface ReplyBranch {
   uci: string[];
   /** Plies after the reply to the blow (1: the answer itself). */
   blowPlies: number;
-  /** What the answer wins ("a knight"), for `wins`. */
+  /** What the answer wins ("a knight"), for `wins` — null there when the
+   *  answer's own promotion is the whole gain (its SAN says the new queen). */
   win: string | null;
   /** Its material, in pawns, for `wins` (a mate is null). */
   winPawns: number | null;
@@ -194,7 +195,9 @@ function branchOf(
       const uci = [read.uci, ...r.plies.map((q) => q.uci)];
       return {
         ...base, kind: r.mate ? 'mate' : 'wins', sans, uci, blowPlies: r.blowPlies,
-        win: r.mate ? null : reasonWinWords(r), winPawns: r.mate ? null : r.netForWinner,
+        // Said after the answer ("…a1=Q wins …"): a promotion the answer
+        // itself makes is not named again (`reasonWinWords`).
+        win: r.mate ? null : reasonWinWords(r, [0]), winPawns: r.mate ? null : r.netForWinner,
         motif: r.motif && SAID_MOTIFS.has(r.motif) ? r.motif : null, job: null, trust: r.trust,
       };
     }
@@ -257,6 +260,9 @@ function answerWords(b: ReplyBranch, mover: Color, subject: 'you' | 'they', tens
     case 'trade':
       return tense === 'live' ? `${y} trades ${NAME[b.answer.piece]}s` : null;
     case 'wins':
+      // The answer's own promotion IS the gain ("…a1=Q", said "a1, making a
+      // queen"): the answer is said, never its queen twice.
+      if (!b.win) return tense === 'live' ? `${subject} answer ${y}${motif}${line}` : `${subject} would have answered ${y}${motif}${line}`;
       return tense === 'live' ? `${y} wins ${b.win}${motif}${line}` : `${y} would have won ${b.win}${motif}${line}`;
     case 'mate':
       if (b.blowPlies <= 1) return tense === 'live' ? `${unmarked(y)} is mate` : `${unmarked(y)} would have been mate`;

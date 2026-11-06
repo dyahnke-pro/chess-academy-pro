@@ -336,8 +336,11 @@ export interface SidePlan {
    *  detect the violation — a validator on prose is the thing G0 says to stop
    *  writing. */
   /** `drift` marks the fallback "bring pieces to X and Y" — where the pieces
-   *  end up, not why a move is good. A reason-seeking caller skips it. */
-  spokenClauses: Array<{ text: string; squares: string[]; drift?: true; route?: ClauseRoute }>;
+   *  end up, not why a move is good. A reason-seeking caller skips it.
+   *  `several` marks a clause that is the work of SEVERAL pieces ("swing
+   *  pieces toward their king" counts two or more): one move is at most a step
+   *  in it, so it is never one move's own reason. */
+  spokenClauses: Array<{ text: string; squares: string[]; drift?: true; several?: true; route?: ClauseRoute }>;
 }
 
 /** What is TRUE OF THE BOARD RIGHT NOW, as opposed to what the line does next.
@@ -971,9 +974,9 @@ export function describePlan(
   // what the sentence describes even when the words name no square — "bring
   // pieces at your king" is a warning with nowhere to look until the marks
   // arrive. Squares are the plan's own computed ones; nothing is inferred.
-  const clauses: Array<{ weight: number; text: string; squares: string[]; route?: ClauseRoute }> = [];
-  const add = (weight: number, text: string, squares: string[] = [], route?: ClauseRoute): void => {
-    clauses.push({ weight, text, squares, ...(route ? { route } : {}) });
+  const clauses: Array<{ weight: number; text: string; squares: string[]; route?: ClauseRoute; several?: true }> = [];
+  const add = (weight: number, text: string, squares: string[] = [], route?: ClauseRoute, several?: true): void => {
+    clauses.push({ weight, text, squares, ...(route ? { route } : {}), ...(several ? { several } : {}) });
   };
 
   // A tactic that actually lands is the single most concrete thing the line
@@ -1042,7 +1045,12 @@ export function describePlan(
     // gesture does not.
     const yields = plan.materialSwing >= 3 || (plan.materialSwing >= 1 && plan.nearEnemyKing < 4);
     const capped = yields ? Math.min(kingWeight, 34 + plan.materialSwing * 10) : kingWeight;
-    add(capped, `swing pieces toward ${theirKing}`, plan.kingAttackSquares);
+    // SEVERAL PIECES' WORK, NEVER ONE MOVE'S (Learn walk 2026-11-06, the
+    // Scandinavian Lasker: "Knight to b4 was the move — it would swing pieces
+    // toward their king" — the knight is one of the two pieces the line
+    // brings over, so its landing square was among the clause's squares and
+    // the plan read as what the knight move itself does).
+    add(capped, `swing pieces toward ${theirKing}`, plan.kingAttackSquares, undefined, true);
   }
   // Shield pawns are worth more per pawn than a piece walking over: a pawn that
   // has gone is not coming back.
@@ -1137,7 +1145,7 @@ export function describePlan(
   const chosen = fresh;
   const shown = chosen.map((c) => c.text);
   if (shown.length === 0) return '';
-  plan.spokenClauses = chosen.filter((c) => c.squares.length > 0).map((c) => ({ text: c.text, squares: c.squares, ...(c.route ? { route: c.route } : {}) }));
+  plan.spokenClauses = chosen.filter((c) => c.squares.length > 0).map((c) => ({ text: c.text, squares: c.squares, ...(c.route ? { route: c.route } : {}), ...(c.several ? { several: c.several } : {}) }));
   for (const t of shown) said?.add(t);
   const list = shown.length === 1
     ? shown[0]

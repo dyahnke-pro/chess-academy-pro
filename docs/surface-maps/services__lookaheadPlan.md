@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1764 lines · 29 exports · 23 importers · 19 tests · 0 audits**
+**1772 lines · 29 exports · 24 importers · 20 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@
 
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/betterMoveSeveralPieces.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/inaccuracyCall.ts`
@@ -60,7 +61,7 @@
 - `src/services/computedVoiceAudit.report.test.ts:247`
 - `src/services/dnaLineNarrator.ts:59`
 - `src/services/groundedAnswer.ts:6127`
-- `src/services/ifTheyPlay.ts:246`
+- `src/services/ifTheyPlay.ts:249`
 - `src/services/pvPlayback.test.ts:273`
 - `src/services/pvPlayback.test.ts:274`
 - `src/services/pvPlayback.test.ts:275`
@@ -196,10 +197,10 @@
 
 ### `isCostClause` (function) — 9 call sites
 - `src/services/inaccuracyCall.ts:336`
-- `src/services/inaccuracyCall.ts:498`
-- `src/services/inaccuracyCall.ts:505`
-- `src/services/inaccuracyCall.ts:519`
-- `src/services/inaccuracyCall.ts:1819`
+- `src/services/inaccuracyCall.ts:502`
+- `src/services/inaccuracyCall.ts:509`
+- `src/services/inaccuracyCall.ts:523`
+- `src/services/inaccuracyCall.ts:1829`
 - `src/services/learnWalkBlumenfeld.test.ts:184`
 - `src/services/learnWalkBlumenfeld.test.ts:185`
 - `src/services/learnWalkBlumenfeld.test.ts:186`
@@ -209,16 +210,17 @@
 - `src/components/Coach/CoachGamePage.tsx:3049`
 - `src/components/Coach/CoachTeachPage.tsx:11601`
 
-### `planFromUci` (function) — 39 call sites
+### `planFromUci` (function) — 40 call sites
 - `src/components/Coach/CoachGamePage.tsx:3044`
 - `src/components/Coach/CoachTeachPage.tsx:11584`
+- `src/services/betterMoveSeveralPieces.test.ts:20`
 - `src/services/claimTruth.manual.test.ts:130`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:209`
 - `src/services/inaccuracyCall.lazyBetter.test.ts:13`
 - `src/services/inaccuracyCall.ts:380`
 - `src/services/inaccuracyCall.ts:441`
-- `src/services/inaccuracyCall.ts:1817`
+- `src/services/inaccuracyCall.ts:1827`
 - `src/services/kingSwingCountsPieces.test.ts:14`
 - `src/services/lookaheadPlan.test.ts:234`
 - `src/services/lookaheadPlan.test.ts:239`
@@ -339,6 +341,7 @@
 
 ## Tests
 
+- `src/services/betterMoveSeveralPieces.test.ts`
 - `src/services/claimTruth.manual.test.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/inaccuracyCall.lazyBetter.test.ts`

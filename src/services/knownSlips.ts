@@ -95,7 +95,8 @@ export interface KnownSlipContext {
 }
 
 export interface KnownSlipRead {
-  /** Its say-once key: one board, one slip — said once a game per position. */
+  /** Its say-once key: the SLIP — who plays it, the move and the punishment —
+   *  never the board, so it is said once a game wherever it stays available. */
   key: string;
   text: string;
   /** The slip and its punishment, played from the board (an engine line,
@@ -198,8 +199,14 @@ export function knownSlip(ctx: KnownSlipContext): KnownSlipRead | null {
   const stakes: FactStakes | null = gem.mate
     ? mateStakes(punisher === 'you' ? 'you' : 'them', lands, on === 'played')
     : gem.endCp > 0 ? { points: gem.endCp / 100, plies: lands } : null;
+  // THE CLAIM IS THE SLIP, NOT THE BOARD (prod Review 2026-11-06, Carlsen–
+  // Caruana Ruy Lopez: "d5 is a known mistake on this board, and after Nxe5
+  // you win a pawn" on 3.Bb5, then "Here, d5 is a known mistake at club level:
+  // after Nxe5 you win a pawn" on 5.d3). The same move, punished the same way,
+  // is one claim on every board it stays available on; a slip punished another
+  // way is another claim.
   return {
-    key: `known-slip:${boardKey(fen)}:${slipSan.replace(/[+#]+$/, '')}`,
+    key: `known-slip:${mover}:${unmarked(slipSan)}>${unmarked(punishSan)}`,
     text,
     proof,
     squares: [...new Set(squares)],

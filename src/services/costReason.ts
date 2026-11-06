@@ -19,7 +19,7 @@
 //
 // Pure: chess.js + the one ledger (`proofCut`) + the one classifier.
 import { Chess } from 'chess.js';
-import { gainWords, proofCut, type ExchangeLedger } from './exchangeLedger';
+import { gainAfterLine, promotedIn, proofCut, type ExchangeLedger } from './exchangeLedger';
 import { countWords } from '../utils/countWords';
 import { lineTrust, type LineSeconds, type LineTrust } from './lineTrust';
 import { detectTacticType } from './missedTacticService';
@@ -207,15 +207,33 @@ export function costReason(args: {
 /** What the side the line wins for nets, in piece words ("a knight for a
  *  pawn"), whoever's seat the ledger was counted from — the one rendering a
  *  surface says after "win". */
-export function reasonWinWords(r: CostReason): string {
-  if (!r.ledger) return countWords(Math.max(1, r.netForWinner), { unit: true });
+/**
+ * `said` is REQUIRED: the plies of `r.plies` (by index) the sentence says
+ * before these words — `lineShapePlies` for a line said by `lineShape`, `[0]`
+ * for "it runs into X", `[]` when no move of the line is said. A promotion
+ * the line says ("a1, making a queen") is not said again after it (prod
+ * Review 2026-11-06); when the line's words named the whole gain the answer
+ * is null and the sentence ends on the line. With nothing said it is always
+ * the words.
+ */
+export function reasonWinWords(r: CostReason, said: readonly []): string;
+export function reasonWinWords(r: CostReason, said: readonly number[]): string | null;
+export function reasonWinWords(r: CostReason, said: readonly number[]): string | null {
+  const count = (): string => countWords(Math.max(1, r.netForWinner), { unit: true });
+  if (!r.ledger) return count();
   // The ledger is counted for the student: the winner is the student exactly
   // when the reason is the student's missed win or their slip's punishment.
   const winnerIsLedgerStudent = (r.kind === 'missed') === (r.seat === 'you');
   const took = winnerIsLedgerStudent ? r.ledger.studentWon : r.ledger.opponentWon;
   const gave = winnerIsLedgerStudent ? r.ledger.opponentWon : r.ledger.studentWon;
   const made = winnerIsLedgerStudent ? r.ledger.studentPromoted : r.ledger.opponentPromoted;
-  return gainWords(took, gave, made) ?? countWords(Math.max(1, r.netForWinner), { unit: true });
+  // The line's first move is the winner's: their reply (allowed) or their
+  // own best move (missed).
+  const winner = r.plies[0]?.moverColor;
+  const saidMade = promotedIn(said.map((i) => r.plies[i]).filter((p): p is ReasonPly => !!p && p.moverColor === winner).map((p) => p.san));
+  const after = gainAfterLine(took, gave, made, saidMade);
+  if (!after.left) return null;
+  return after.words ?? count();
 }
 
 /** The line to the blow, as SAN with the black move marked (…Nxe5). */
