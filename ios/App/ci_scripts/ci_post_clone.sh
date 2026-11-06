@@ -234,7 +234,12 @@ echo "ci_post_clone: verified UIScene lifecycle ($SCENE_CHECK)"
 # BUMP 4.0.6 -> 4.0.7 (2026-10-21): 4.0.6 went LIVE 2026-10-18, and build 206
 # crashes at launch on iOS 27 (no UIScene lifecycle — see the scene check
 # above). 4.0.7 is the scene-lifecycle hotfix on Capacitor 8.5.3.
-PINNED_MARKETING_VERSION="4.0.7"
+# BUMP 4.0.7 -> 4.0.8 (David 2026-11-06: "update the app store build … need a
+# new build number for the update. not just a new version number"): 4.0.7 went
+# LIVE 2026-10-22. 4.0.8 carries the one-thought coach (Learn's door speaking in
+# focus games, Review's reasons, the reversed-matrix chat answers). The build
+# number is Xcode Cloud's run counter, new and higher on every build.
+PINNED_MARKETING_VERSION="4.0.8"
 # DURABLE PREFLIGHT (2026-09-09): the pinned string self-heals. resolve-marketing
 # -version.mjs reads the LIVE App Store version (public iTunes lookup, no ASC
 # keys) and, if the pin isn't already above it, bumps the patch — so a forgotten
