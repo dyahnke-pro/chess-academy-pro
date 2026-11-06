@@ -77,6 +77,19 @@ export function seatedLine(sans: readonly string[], first: LineSeat): string {
   return andList(sans.map((san, i) => seatedPly(san, i % 2 === 0 ? first : OTHER_SEAT[first], i % 2 === 1)));
 }
 
+/** A line this long or shorter is said move by move (`lineShape`). */
+const LINE_SAID_IN_FULL = 3;
+
+/** The moves `lineShape` SAYS, by index into the line: every one up to
+ *  three, otherwise the first and the last — so a result said after the line
+ *  can leave out what those moves already said (a promotion is said "a1,
+ *  making a queen"). One rule with `lineShape`. */
+export function lineShapePlies(n: number): number[] {
+  if (n <= 0) return [];
+  if (n <= LINE_SAID_IN_FULL) return Array.from({ length: n }, (_, i) => i);
+  return [0, n - 1];
+}
+
 /**
  * A LINE AS THE VOICE SAYS IT (proof guard 2: the voice says the shape, the
  * board shows the detail). Up to three moves are said in full, each with its
@@ -86,7 +99,7 @@ export function seatedLine(sans: readonly string[], first: LineSeat): string {
  * Qxd4" read aloud).
  */
 export function lineShape(sans: readonly string[], first: LineSeat): string {
-  if (sans.length <= 3) return seatedLine(sans, first);
+  if (sans.length <= LINE_SAID_IN_FULL) return seatedLine(sans, first);
   // The first move and where the line LANDS — "the moves that follow" named
   // nothing (claim check 2026-10-17: 144 weighings said "e7? Then the moves
   // that follow — …", a line no student can picture). Full moves, not plies.

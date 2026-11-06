@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**614 lines · 16 exports · 45 importers · 11 tests · 0 audits**
+**644 lines · 18 exports · 45 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -85,7 +85,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:267`
 - `src/services/exchangeLedger.test.ts:273`
 - `src/services/gemCrushLines.ts:171`
-- `src/services/knownSlips.ts:122`
+- `src/services/knownSlips.ts:123`
 - `src/services/patternFails.ts:129`
 - `src/services/planChoice.ts:162`
 - `src/services/threatProof.ts:61`
@@ -94,18 +94,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/chatTurnAnswers.ts:413`
 - `src/services/decisiveReason.ts:110`
 - `src/services/exchangeIdeas.ts:669`
-- `src/services/knownSlips.ts:127`
+- `src/services/knownSlips.ts:128`
 - `src/services/patternFails.ts:130`
 - `src/services/principleAttribution.ts:795`
 - `src/services/reviewPositionalAssessment.ts:147`
 - `src/services/tacticGeometry.ts:552`
 - `src/services/whyItFailed.ts:266`
 
-### `gainWords` (function) — 4 call sites
-- `src/services/costReason.ts:218`
+### `gainWords` (function) — 3 call sites
 - `src/services/exchangeLedger.test.ts:269`
 - `src/services/exchangeLedger.test.ts:278`
-- `src/services/lineCalc.ts:217`
+- `src/services/lineCalc.ts:231`
+
+### `promotedIn` (function) — 2 call sites
+- `src/services/costReason.ts:233`
+- `src/services/lineCalc.ts:112`
+
+### `gainAfterLine` (function) — 2 call sites
+- `src/services/costReason.ts:234`
+- `src/services/lineCalc.ts:113`
 
 ### `describeExchange` (function) — 9 call sites
 - `src/services/exchangeLedger.test.ts:19`
@@ -120,8 +127,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `settledNetForLine` (function) — 8 call sites
 - `src/services/decisiveReason.ts:97`
-- `src/services/decisiveReason.ts:308`
-- `src/services/decisiveReason.ts:309`
+- `src/services/decisiveReason.ts:312`
+- `src/services/decisiveReason.ts:313`
 - `src/services/moveComparison.ts:183`
 - `src/services/moveComparison.ts:184`
 - `src/services/moveInsight.lineAudit.test.ts:49`
@@ -150,18 +157,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/giftedMaterialIsNotWon.test.ts:56`
 - `src/services/inaccuracyCall.ts:372`
 - `src/services/inaccuracyCall.ts:430`
-- `src/services/inaccuracyCall.ts:982`
-- `src/services/inaccuracyCall.ts:1665`
-- `src/services/inaccuracyCall.ts:1805`
-- `src/services/inaccuracyCall.ts:1900`
-- `src/services/inaccuracyCall.ts:1951`
+- `src/services/inaccuracyCall.ts:986`
+- `src/services/inaccuracyCall.ts:1675`
+- `src/services/inaccuracyCall.ts:1815`
+- `src/services/inaccuracyCall.ts:1910`
+- `src/services/inaccuracyCall.ts:1961`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
 - `src/services/lineProof.test.ts:37`
 - `src/services/liveTacticsContext.ts:459`
-- `src/services/lookaheadPlan.ts:662`
-- `src/services/lookaheadPlan.ts:724`
+- `src/services/lookaheadPlan.ts:665`
+- `src/services/lookaheadPlan.ts:727`
 - `src/services/moveOrder.ts:133`
 - `src/services/openingGenerator.ts:3601`
 - `src/services/pieceOptions.ts:124`
@@ -204,8 +211,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `heardProofCut` (function) — 4 call sites
 - `src/services/decisiveReason.ts:107`
 - `src/services/decisiveReason.ts:122`
-- `src/services/decisiveReason.ts:262`
-- `src/services/lineCalc.ts:59`
+- `src/services/decisiveReason.ts:266`
+- `src/services/lineCalc.ts:69`
 
 ### `refutationProof` (function) — 6 call sites
 - `src/services/criticalMoment.ts:270`

@@ -97,3 +97,48 @@ describe('the computer, through the registry', () => {
     expect(r?.text).toMatch(/^That was a known mistake\b/);
   });
 });
+
+// Prod Review 2026-11-06 (AUDIT_GAME_ID=jYSkjcuG, Carlsen–Caruana, the Ruy
+// Lopez, student White): the same slip was said on two boards in a row —
+// "d5 is a known mistake on this board, and after Nxe5 you win a pawn." on
+// 3.Bb5, then "Here, d5 is a known mistake at club level: after Nxe5 you win
+// a pawn." on 5.d3. The say-once key was the BOARD, so a second board was a
+// second claim. The claim is the slip: who plays it, the move, the punishment.
+describe('a known slip is said once a game, wherever it stays available', () => {
+  const SANS = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'd3', 'd6', 'c3', 'g6'];
+  const index = knownSlipIndexFromDisk();
+  const reached = (sans: string, played: string, told: number): ReturnType<typeof knownSlip> => {
+    const fen = fenAfter(sans);
+    return knownSlip({ fen, gems: knownSlipsAt(index, fen), played, on: 'reached', student: 'w', verdictPunish: null, saidNext: null, told });
+  };
+
+  it('…d5 / Nxe5 said on 3.Bb5 is not said again on 5.d3', () => {
+    const walk = said({ sans: SANS, studentSide: 'white', reads: [] });
+    expect(walk.get(5)).toContain('d5 is a known mistake on this board, and after Nxe5 you win a pawn.');
+    const again = [...walk].filter(([ply, text]) => ply > 5 && /\bd5\b[^.]*known mistake|known mistake[^.]*\bd5\b/.test(text));
+    expect(again).toEqual([]);
+  });
+
+  it('two boards, one slip, one key', () => {
+    const atBb5 = reached('e4 e5 Nf3 Nc6 Bb5', 'a6', 0);
+    const atD3 = reached('e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 d3', 'd6', 1);
+    expect(atBb5?.text).toMatch(/\bd5\b.*Nxe5/);
+    expect(atD3?.text).toMatch(/\bd5\b.*Nxe5/);
+    expect(atD3?.key).toBe(atBb5?.key);
+  });
+
+  // The same move punished ANOTHER way is another claim, and is still said:
+  // his Scotch Gambit's f6 / Nxe5 on 2.Nf3, then f6 / Bc4 on 3.d4 (the first
+  // describe's "2.Nf3 and 3.d4" case).
+  it('the same move punished another way has another key', () => {
+    const r = (sans: string, played: string): ReturnType<typeof knownSlip> => {
+      const fen = fenAfter(sans);
+      return knownSlip({ fen, gems: knownSlipsAt(index, fen), played, on: 'reached', student: 'b', verdictPunish: null, saidNext: null, told: 0 });
+    };
+    const nxe5 = r('e4 e5 Nf3', 'Nc6');
+    const bc4 = r('e4 e5 Nf3 Nc6 d4', 'exd4');
+    expect(nxe5?.text).toMatch(/f6, and after Nxe5/);
+    expect(bc4?.text).toMatch(/f6, and after Bc4/);
+    expect(bc4?.key).not.toBe(nxe5?.key);
+  });
+});

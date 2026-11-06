@@ -203,6 +203,36 @@ export function gainWords(took: readonly string[], gave: readonly string[], prom
   return caps ? `${caps}, and ${made}` : made;
 }
 
+/** The pieces made by promotion in these moves (SAN: "a1=Q" makes a queen). */
+export function promotedIn(sans: readonly string[]): PieceLetter[] {
+  const out: PieceLetter[] = [];
+  for (const san of sans) {
+    const m = /=([QRBN])/.exec(san);
+    if (m) out.push(m[1].toLowerCase() as PieceLetter);
+  }
+  return out;
+}
+
+/**
+ * WHAT A LINE WINS, SAID AFTER THE LINE — the gain its spoken moves have not
+ * already named. A promotion is SAID "a1, making a queen" (`spokenWords`), so
+ * a result after that line naming the new queen again says one gain twice
+ * (prod Review 2026-11-06: "they play a2, you answer Kh2 and they play a1,
+ * making a queen — they win a new queen"). `said` is the winner's promotions
+ * among the moves the sentence says. `left: false` when the line's own words
+ * named the whole gain (nothing is left to say after it); otherwise the words,
+ * or null when there is nothing to name, exactly as `gainWords`.
+ */
+export function gainAfterLine(
+  took: readonly string[], gave: readonly string[], promoted: readonly PieceLetter[], said: readonly PieceLetter[],
+): { left: false } | { left: true; words: string | null } {
+  const rest = [...promoted];
+  for (const p of said) { const i = rest.indexOf(p); if (i >= 0) rest.splice(i, 1); }
+  const words = gainWords(took, gave, rest);
+  if (!words && rest.length < promoted.length) return { left: false };
+  return { left: true, words };
+}
+
 /**
  * The net of the sequence, from the student's seat — or NULL when saying it
  * would only restate what the line already showed (Narration Voice Rule 3):
