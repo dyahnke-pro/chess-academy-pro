@@ -12,6 +12,8 @@
  * in a row.
  */
 
+import { isReleased, type HeldSurface } from './heldSurfaces';
+
 /** Rotating opening lines. Each invites a question without the stale
  *  "welcome to my classroom" every time. */
 export const COACH_GREETINGS: readonly string[] = [
@@ -48,14 +50,19 @@ export const SUGGESTED_QUESTIONS: readonly string[] = [
  *  coach can do — a different pair each visit (David 2026-10-18: "I want
  *  different functions to rotate through on different visits"). Every one is
  *  a request the coach already routes (`coachGreetings.test` holds that). */
-export const APP_FUNCTION_CHIPS: readonly string[] = [
-  'Watch an opening',
-  'Drill my weaknesses',
-  'Play an opening',
-  'Learn how to think',
-  'Train an endgame',
-  'Import my games',
+const ALL_FUNCTION_CHIPS: readonly { chip: string; surface?: HeldSurface }[] = [
+  { chip: 'Watch an opening' },
+  { chip: 'Drill my weaknesses' },
+  { chip: 'Play an opening' },
+  { chip: 'Learn how to think', surface: 'howToThink' },
+  { chip: 'Train an endgame' },
+  { chip: 'Import my games' },
 ];
+/** The function chips a student may be offered: a surface held from release
+ *  (`heldSurfaces.ts`) is never offered. */
+export const APP_FUNCTION_CHIPS: readonly string[] = ALL_FUNCTION_CHIPS
+  .filter((c) => !c.surface || isReleased(c.surface))
+  .map((c) => c.chip);
 
 /** The picker row for a visit: two of the app's functions, then a question —
  *  each rotating on its own, so the pair and the question both change. */

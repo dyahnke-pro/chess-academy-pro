@@ -7,6 +7,7 @@ import { FIRST_RUN_OPENER } from '../services/firstRunPickers';
 import { matchThinkingLessonRequest } from '../services/customLessonPlan';
 import { bookChipForClaims } from '../data/bookChips';
 import { rankUpNext } from '../services/upNextPicker';
+import { APP_FUNCTION_CHIPS } from '../data/coachGreetings';
 
 /**
  * HELD FROM RELEASE (David 2026-11-06: "I also want learn how to think, the
@@ -82,6 +83,7 @@ describe('while held, nothing opens Campaign, the Library or How to Think', () =
 
   it('no first-run chip, no typed "teach me" door, no book chip', () => {
     expect(FIRST_RUN_OPENER.chips).not.toContain('Learn how to think');
+    expect(APP_FUNCTION_CHIPS).not.toContain('Learn how to think');
     expect(matchThinkingLessonRequest('teach me')).toBe(false);
     expect(matchThinkingLessonRequest('Learn how to think')).toBe(false);
     expect(bookChipForClaims(['concept:passed-pawn:e5'])).toBeNull();
