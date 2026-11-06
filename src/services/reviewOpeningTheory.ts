@@ -37,7 +37,7 @@ import { noteArrowSourceAt } from './openingGenerator';
 import { loadFarmedCorpora } from './farmedCorpusData';
 import { yieldToScreen } from '../utils/yieldToScreen';
 import { classifyPhase } from './gamePhaseService';
-import { sayMoveNoun } from './spokenMove';
+import { openingSummaryLine } from './learnBoardTeaching';
 
 /** A candidate move at a branch point, with its master-DB frequency + score. */
 interface TheoryMove {
@@ -491,26 +491,6 @@ function breakSummaryOf(fens: readonly string[], sans: readonly string[], plan: 
     return openingSummaryLine({ san: brk.san, square: brk.square }, mine, fens[k]);
   }
   return null;
-}
-
-/** THE OPENING SUMMARY (census #52): the opening is over — did the student get
- *  the break the opening is played for? Read against the board, never assumed:
- *  played it; still there to play (legal now); or the position moved past it. */
-export function openingSummaryLine(brk: { san: string; square: string }, studentSans: readonly string[], fenNow: string): string | null {
-  const bare = (x: string): string => x.replace(/[+#!?]+$/, '');
-  // The break was read at an earlier position, so no board: a pawn break needs none.
-  const say = sayMoveNoun(brk.san, null);
-  if (studentSans.some((s) => bare(s) === bare(brk.san))) {
-    return `The opening is over, and you got its break in — ${say}, the move this opening is played for.`;
-  }
-  let legalNow = false;
-  try {
-    const c = new Chess(fenNow);
-    legalNow = c.moves().some((m) => bare(m) === bare(brk.san));
-  } catch { legalNow = false; }
-  return legalNow
-    ? `The opening is over and its break, ${say}, has not come yet — it is still there to play when it is prepared.`
-    : `The opening is over without its break, ${say} — the position has moved past it, so the plan now comes from the middlegame.`;
 }
 
 /** The masters' plan for the opening the game played: read at the deepest

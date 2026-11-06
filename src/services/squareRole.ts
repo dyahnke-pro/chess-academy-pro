@@ -13,6 +13,8 @@ import { noPawnCanChallenge } from './outpost';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const NONE: ReadonlySet<string> = new Set<string>();
+/** Piece worth in pawns, for "is this hit a threat" (a leaf: no import). */
+const WORTH: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
 /** `owner` is how the OTHER side's pieces are said from the speaker's seat:
  *  'their' to the student about the opponent, 'your' about the student, 'the'
@@ -73,6 +75,15 @@ function squareRoleWords(
     // pawn there"). Read on the board: its one guard is the king.
     const guards = chess.attackers(sq, them);
     const kingOnly = guards.length === 1 && chess.get(guards[0])?.type === 'k';
+    // A HIT IS A THREAT, OR IT IS NOT A REASON (David 2026-11-05: "Quiet
+    // moves should get something … I don't want 'it attacks x'"; the Colle
+    // read, 5…Nc6: "attacking your pawn there" of a d4 pawn three pieces
+    // guard). Said only when the attackers outnumber its guards, the cheapest
+    // attacker is worth less than it, or only its king guards it.
+    const hits = chess.attackers(sq, me);
+    const cheapest = Math.min(...hits.map((s) => WORTH[chess.get(s)?.type ?? 'k'] ?? 100));
+    const pressed = guards.length === 0 || hits.length > guards.length || cheapest < (WORTH[on.type] ?? 0);
+    if (!pressed && !kingOnly) return null;
     const only = kingOnly ? `, which only ${owner === 'the' ? 'its' : owner} king guards` : '';
     return { full: `${attacking}${only}`, bare: `${hitting}${only}` };
   }

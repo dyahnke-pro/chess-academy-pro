@@ -2,10 +2,10 @@
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.",
  "graph": {
   "files": 1758,
-  "nodes": 16429
+  "nodes": 16413
  },
  "totals": {
-  "computers": 349,
+  "computers": 346,
   "wiredNowhere": 30,
   "heldByLearnOnly": 19,
   "otherScreensOnly": 10,
@@ -15,27 +15,27 @@
    "learn": {
     "yes": 31,
     "held": 222,
-    "no": 96
+    "no": 93
    },
    "review": {
-    "yes": 237,
+    "yes": 234,
     "no": 112
    },
    "lesson": {
     "yes": 144,
-    "no": 205
+    "no": 202
    },
    "chat": {
     "yes": 202,
-    "no": 147
+    "no": 144
    },
    "tapped": {
     "yes": 158,
-    "no": 191
+    "no": 188
    },
    "tactics": {
     "yes": 104,
-    "no": 245
+    "no": 242
    }
   }
  },
@@ -650,22 +650,6 @@
    "other": [
     "playSilent"
    ]
-  },
-  {
-   "key": "services/coachFeatureService.ts#groundOpeningPlanInBook",
-   "name": "groundOpeningPlanInBook — the opening plan from the book or an engine scheme (Review)",
-   "file": "services/coachFeatureService.ts",
-   "fn": "groundOpeningPlanInBook",
-   "says": "The plan a book move serves, grounded in book data, else an engine scheme (computePvLine maxPlies 8 at :5263)",
-   "origin": "map",
-   "learn": "no",
-   "review": "yes",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": true,
-   "other": []
   },
   {
    "key": "services/coachFeatureService.ts#reviewSegmentSteps",
@@ -5618,42 +5602,6 @@
     "campaign",
     "playSilent",
     "endgame"
-   ]
-  },
-  {
-   "key": "services/reviewStrategicOrientation.ts#buildHisGroundedPlanBeat",
-   "name": "review opening-plan beats (his games / masters main line / curated) + groundOpeningPlanInBook",
-   "file": "services/reviewStrategicOrientation.ts",
-   "fn": "buildHisGroundedPlanBeat",
-   "says": "Once per game in the opening: the student side's plan as a move list from Danya's games, else the masters' best-scoring frequent line, else",
-   "origin": "map",
-   "learn": "no",
-   "review": "yes",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": true,
-   "other": [
-    "playSilent"
-   ]
-  },
-  {
-   "key": "services/reviewStrategicOrientation.ts#buildOpeningMoveDetail",
-   "name": "buildOpeningMoveDetail (review: corpus/masters standing of a move)",
-   "file": "services/reviewStrategicOrientation.ts",
-   "fn": "buildOpeningMoveDetail",
-   "says": "From Danya's games DB ('This is your bread-and-butter … scored well for you at N%' / 'A departure from your usual — here you almost always p",
-   "origin": "map",
-   "learn": "no",
-   "review": "yes",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": true,
-   "other": [
-    "playSilent"
    ]
   },
   {

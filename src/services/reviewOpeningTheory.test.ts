@@ -187,7 +187,7 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
   });
 
   it('the opening summary is read against the first board out of the opening, for the student\'s seat', async () => {
-    const { openingSummaryLine } = await import('./reviewOpeningTheory');
+    const { openingSummaryLine } = await import('./learnBoardTeaching');
     expect(openingSummaryLine({ san: 'c5', square: 'c5' }, ['e6', 'd5', 'c5'], '4k3/8/8/8/8/8/8/4K3 w - - 0 1')).toMatch(/you got its break in — the pawn to c5/);
   });
 

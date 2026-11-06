@@ -75,7 +75,7 @@ import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from '.
 import { SAID_BEFORE_MOVE } from './computerRoles';
 import { fileClaimed, oppositeWingsRace } from './planRace';
 import { conceptInstanceKey, holeKey, tacticGeometryKey } from './conceptKey';
-import { sayYourMove } from './spokenMove';
+import { sayYourMove, sayMoveNoun } from './spokenMove';
 import { deepFact, theirTarget, binding, moveHit } from './threeFacts';
 import { countWarning } from './countMethod';
 import { planChoice, type PlanChoiceLine } from './planChooser';
@@ -766,8 +766,28 @@ export function prizeTeaching(fen: string, square: string, student: 'w' | 'b',
   return { text: `Their ${name} can be won — its guard is not enough. ${caution}`, squares: target };
 }
 
+/** THE OPENING SUMMARY (census #52): the opening is over — did the student get
+ *  the break the opening is played for? Read against the board, never assumed:
+ *  played it; still there to play (legal now); or the position moved past it. */
+export function openingSummaryLine(brk: { san: string; square: string }, studentSans: readonly string[], fenNow: string): string | null {
+  const bare = (x: string): string => x.replace(/[+#!?]+$/, '');
+  // The break was read at an earlier position, so no board: a pawn break needs none.
+  const say = sayMoveNoun(brk.san, null);
+  if (studentSans.some((s) => bare(s) === bare(brk.san))) {
+    return `The opening is over, and you got its break in — ${say}, the move this opening is played for.`;
+  }
+  let legalNow = false;
+  try {
+    const c = new Chess(fenNow);
+    legalNow = c.moves().some((m) => bare(m) === bare(brk.san));
+  } catch { legalNow = false; }
+  return legalNow
+    ? `The opening is over and its break, ${say}, has not come yet — it is still there to play when it is prepared.`
+    : `The opening is over without its break, ${say} — the position has moved past it, so the plan now comes from the middlegame.`;
+}
+
 /** The student's own master-game break at `fen` (the one `openingPlanTeaching`
- *  names), for the opening summary later (`reviewOpeningTheory.openingSummaryLine`). */
+ *  names), for the opening summary later (`openingSummaryLine`). */
 export function openingBreakFor(fen: string, student: 'w' | 'b', openingName: string | null): { san: string; square: string } | null {
   const read = learnPlanRead(fen, openingName);
   const mine = read ? (student === 'w' ? read.white : read.black) : null;

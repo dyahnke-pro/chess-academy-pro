@@ -27,6 +27,7 @@ import { costWords } from './engineConstants';
 import { openSentence } from '../utils/openSentence';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { unmarked } from '../utils/sanMark';
+import { costReason, reasonSans, reasonWinWords } from './costReason';
 
 export type ReasonKind = 'the' | 'a' | 'close';
 export type ReasonSource = 'material' | 'stops' | 'prepares' | 'description';
@@ -209,6 +210,32 @@ export function decisiveReason(input: {
   // alternative is still named, without the amount.
   const gapEarned = !own.searchedShort && !next.searchedShort;
   const givesUp = (): string => (gapEarned ? `gives up ${costWords(gapCp)}` : 'falls short');
+  // WHY THE NEXT-BEST GIVES IT UP (David 2026-11-05, the Colle read: "Anything
+  // else, like …Kf8, gives up three or four points" — "I want it to also say
+  // why"). The one cost computer reads the alternative's own line, from the
+  // seat it costs; its moves are named only on the naming rule, and with no
+  // reason the amount stands alone.
+  // Only the rank-1 line carries the engine's free second read, so a runner-up
+  // line is usually unconfirmed: then its first reply is named when it is a
+  // check or a capture (a fact one move deep), and what the line wins waits
+  // for a confirmed line.
+  const altWhy = (): string => {
+    if (!nextBestSan || gapCp < 100) return '';
+    const earlier = next.earlier?.moves;
+    const seconds = earlier && earlier[0] === next.moves[0] ? [earlier.slice(1)] : [];
+    const r = costReason({
+      fenBefore, playedSan: nextBestSan, mover, student: studentWB, costCp: gapCp,
+      after: { uci: next.moves.slice(1), source: 'deep', seconds }, before: null, priorMove: null,
+    });
+    if (!r || r.kind !== 'allowed') return '';
+    const sans = reasonSans(r);
+    const first = sans[0];
+    if (!first) return '';
+    const replier = mover === studentWB ? 'them' : 'you';
+    const winner = mover === studentWB ? 'they' : 'you';
+    if (r.trust.name) return `: it runs into ${first}${r.mate ? ", and it's mate" : ` — ${winner} win ${reasonWinWords(r)}`}`;
+    return /x|\+|#/.test(first) ? `: it lets ${replier} play ${first}` : '';
+  };
   const played = dot(san, mover);
   // ONE MATE SENTENCE (oneWhyBest gate): the mate reason is bestMoveReason's,
   // not a second copy of its wording here.
@@ -362,7 +389,7 @@ export function decisiveReason(input: {
         ? ` And there's a forced mate in ${movesWord(ownMate)} after it — can you see it? The line is on the board when you want it.`
         : ` And the engine sees a forced mate in ${movesWord(ownMate)} after it.`
       : nextBestSan && !top.alt
-        ? mateText(top) ? ` Anything else, like ${dot(nextBestSan, mover)}, lets the mate go.` : ` Anything else, like ${dot(nextBestSan, mover)}, ${givesUp()}.`
+        ? mateText(top) ? ` Anything else, like ${dot(nextBestSan, mover)}, lets the mate go.` : ` Anything else, like ${dot(nextBestSan, mover)}, ${givesUp()}${altWhy()}.`
         : '';
     // Their move, said as theirs ("Their …Bxf7 wins by force", never a bare
     // "…Bxf7 wins" the student must work out the owner of).

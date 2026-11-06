@@ -227,7 +227,11 @@ export function moveIntent(
       if (threatCp < THREAT_CP || (prevents && prevents.threatCp >= threatCp)) continue;
       const threatSan = sanOf(passFen, threat);
       // Moving the attacked piece away is a rescue, not a purpose worth naming.
-      const rescue = threat.slice(2, 4) === playedUci.slice(0, 2);
+      // A threat that MATES is not about the piece it lands on (David's Colle
+      // read 2026-11-05, 23…g6: Qxg7 was mate, and the skip made the line say
+      // "…g6 stops your Rxe6" instead).
+      const mates = line.mate !== null && line.mate !== undefined && (line.mate > 0) === (opp === 'w');
+      const rescue = threat.slice(2, 4) === playedUci.slice(0, 2) && !mates;
       if (!threatSan || rescue || threat === playedUci) continue;
       if (opts.prevent === 'concrete' && !concreteThreat(passFen, threat, threatSan, line)) continue;
       const stillLegal = sanOf(fenAfter, threat) !== null;
@@ -604,6 +608,25 @@ export function whatItDoes(fenAfter: string, prepUci: string, mover: 'w' | 'b'):
     if (m.piece === 'p' || !guarded || (MATERIAL_VALUE[p.type] ?? 0) > (MATERIAL_VALUE[m.piece] ?? 0)) targets.push({ sq, type: p.type });
   }
   targets.sort((a, b) => (MATERIAL_VALUE[b.type] ?? 0) - (MATERIAL_VALUE[a.type] ?? 0));
+  // A MATE IT SETS UP is the point before any hit (Colle 22.Qg3: Bh6 hits
+  // nothing loose — it threatens Qxg7 mate). Only a mate the prepared move
+  // creates: one already on the board before it is not its doing.
+  const mateOn = (fen: string | null): string | null => {
+    if (!fen) return null;
+    try {
+      const b = new Chess(fen);
+      if (b.turn() !== mover) return null;
+      for (const x of b.moves({ verbose: true })) {
+        b.move(x);
+        const mate = b.isCheckmate();
+        b.undo();
+        if (mate) return x.to;
+      }
+    } catch { /* none */ }
+    return null;
+  };
+  const mateSq = mateOn(nullMoveFen(board.fen()));
+  if (mateSq && !mateOn(again)) return { verb: `threaten mate on ${mateSq}`, castle: false };
   if (targets.length) return { verb: `hit the ${PIECE_NAME[targets[0].type]} on ${targets[0].sq}`, castle: false };
   // DEVELOPMENT IS A JOB (Review audit 2026-10-15: "…e5 prepares …Bd6" was
   // dropped as reasonless 13 student moves out of 13, so a good move's point

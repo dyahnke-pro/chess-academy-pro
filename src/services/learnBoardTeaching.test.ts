@@ -93,7 +93,7 @@ describe('Play asks the same computers (David 2026-09-30)', () => {
 
 describe('the opening summary (census #52)', () => {
   it('played, still there, or moved past — read off the board', async () => {
-    const { openingSummaryLine } = await import('./reviewOpeningTheory');
+    const { openingSummaryLine } = await import('./learnBoardTeaching');
     const brk = { san: 'd4', square: 'd4' };
     expect(openingSummaryLine(brk, ['Nf3', 'd4'], '4k3/8/8/8/3P4/8/8/4K3 b - - 0 1')).toMatch(/you got its break in/);
     expect(openingSummaryLine(brk, ['Nf3'], '4k3/8/8/8/8/8/3P4/4K3 w - - 0 1')).toMatch(/still there to play/);

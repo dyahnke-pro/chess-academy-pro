@@ -3,7 +3,7 @@
 // narrations from running away").
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { squareRole } from './squareRole';
+import { squareRole, namedSquares } from './squareRole';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 
 describe('squareRole', () => {
@@ -54,3 +54,25 @@ describe('a piece standing on its own pawn\'s next square blocks the push (prod 
   });
 });
 
+
+// A HIT IS A THREAT, OR IT IS NOT A REASON (David 2026-11-05: "I don't want
+// 'it attacks x'"). The Colle read, 5…Nc6: "Their knight joins the fight for
+// d4, attacking your pawn there" — the d4 pawn three pieces guard against two.
+describe('an attacked piece is a reason only when the attack is a threat', () => {
+  const colle = (): Chess => {
+    const c = new Chess();
+    for (const m of ['d4', 'd5', 'Nf3', 'Nf6', 'e3', 'e6', 'Bd3', 'c5', 'c3', 'Nc6']) c.move(m);
+    return c;
+  };
+  it('a guarded pawn the move only adds to is not "attacked"', () => {
+    expect(squareRole(colle(), 'd4', 'b', 'your', 'covers')).toBeNull();
+    expect(namedSquares(colle(), ['d4', 'e5'], 'b', 'your')).toBe("e5, backing their e-pawn's push there");
+  });
+  it('an unguarded piece, or one worth more than its attacker, still is', () => {
+    const c = new Chess();
+    for (const m of ['e4', 'e5', 'Nf3']) c.move(m);
+    expect(squareRole(c, 'e5', 'w', 'their', 'covers')).toBe('attacking their pawn there');
+    const k = new Chess('4k3/8/4p3/3r4/8/2N5/8/4K3 b - - 0 1');
+    expect(squareRole(k, 'd5', 'w', 'their', 'covers')).toBe('attacking their rook there');
+  });
+});
