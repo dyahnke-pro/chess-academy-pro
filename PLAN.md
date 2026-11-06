@@ -13,6 +13,47 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🪑 WO-COACH-NEXT-TO-YOU-01 — Learn feels like a coach beside you, inside the focus game (David 2026-11-06: "I want it to feel like a chess coach is sitting next to you walking you through a game. Teaching you how to identify weaknesses, induce mistakes, identify tactics, set up tactics" → "It also needs to adapt to the user. Give more guidance in some areas, but stay silent in others" → "Let's get it to main then start. We can unlock the silent narrations. I really liked the focus games so let's incorporate that into the plan")
+
+**Where it stands (2026-11-06).** Since D1 (on main 6298a31) the Learn turn door speaks every turn of a focus game, holding a fact that touches the student's own chance until they move (`ChanceHold`). What is missing is the coach's four MOMENTS and the record deciding how much each says. This WO grows the Learn matrix (L4 below) along those four moments; it is not a second door.
+
+**The four moments, one skill each, each from computers that exist:**
+
+| Moment | Skill taught | Trigger | What it says | Computers |
+|---|---|---|---|---|
+| 1. Their move lands — read it | identify weaknesses | their move changed a guard, a hole, the king's cover, a loose piece | "…h6 took a guard off g6 — their king is looser" | `theirTarget`, `threeFacts`, holes (`campHoles`), loose pieces, king cover, relation diff |
+| 2. Your turn, at a real decision — the question | identify tactics | criticality says the move matters (a chance or a danger on the board) | the TARGET and the HABIT, never the move: "Something of theirs is loose — check every piece: attacked? guarded?" | `criticalityScan`, `focusChances` (the clue it already has), `focusLines.CLUE` |
+| 3. Nothing tactical yet — the plan that builds one | set up tactics | no chance now, one reachable in a few moves | "Their queen and king share a diagonal — a bishop on b5 makes that a pin" | `deepFact` (sets up, up to 5 moves), `planThread`, geometry reads (`tacticGeometry`) |
+| 4. Their likely reply is a mistake — the bait | induce mistakes | the human model's likely reply at their rating loses, and the student's move is sound if they decline | "Most players at their level answer Ng5 with …d5 exd5 …Nxd5 — and that loses to Nxf7. Give them the chance." | `humanMove` probabilities (computed, never said as numbers), club known-mistakes index (`knownSlips`), engine check of the decline |
+
+After the student's move: one line — the credit or the why (the composer's thought, one reason per move). Quiet moves stay quiet. At most ONE moment speaks a turn, picked by the ranking; silence stays the default.
+
+**Adapts to the student (the hold rate per skill, `holdRate.ts`, the one computer the threat voice already reads):**
+
+| The skill a moment teaches, on their record | The coach |
+|---|---|
+| RED (< 75% held) | full: the question before the move, the why after |
+| AMBER (75–89%) | one short nudge, after the move only |
+| GREEN (≥ 90%) | silent — speaks only on a miss, and the miss counts against the green |
+| GREY (< 8 posed) | teaches in full (absent ≠ mastered) |
+
+Inside one game: two finds of a skill and it stops prompting that skill for the game. Silence on green is how a find stays proof (a prompted find never counts, both ways).
+
+**The focus game stays whole** (`docs/LEARN-FOCUS.md`): the rung, a planted chance every game at a varied point, KEEP MISSING → MORE EASIER CHANCES, the castling watch, the tempo run, the rewards, the record, the recap. The focus clue becomes moment 2 — asked BEFORE the move on a red skill, after it on amber, not at all on green; the tier table (Try again / Show me / punish) stays the rung's. 🔴 This REPLACES the 10-22 rule "the coach speaks on a miss, never on a find nobody asked about" (David 2026-11-06: "We can unlock the silent narrations") — CLAUDE.md § LEARN FOCUS and the focus audit's contracts change with it, in the same build.
+
+**New record row:** "induce mistakes" has none — `bait-set` (the student played the bait move) and `bait-taken` (they fell for it and the student punished it), both seats, through the lane-evidence door; grey until posed, so taught in full.
+
+**Never:** the moment names the student's move before they play it (LEARN NAMES NO MOVE UNASKED); a bait that only works if they blunder and costs the student if they don't (engine-checked both ways); more than one moment a turn.
+
+**Build order (each ends with tests that fail on the old code; one ship-check and push to the branch per step; main on David's go):**
+- C0 Measure today: the head replays + the Danya scoreboard (L5), per moment — how often each moment's skill is posed in a game, how often the door says something there now.
+- C1 The moment reader: one computer, `coachMoment(turn) → { moment, skill, facts }` over the facts the door already has; a `Record<Moment, …>` so a fifth moment fails to compile until it is answered.
+- C2 The record dial: each moment's skill → its hold rate → full / short / silent (`holdRate`), plus the in-game fade.
+- C3 Moment 2 and the focus clue merged (the clue asked before the move on red); focus audit contracts rewritten.
+- C4 Moment 4 (the bait): `humanMove` likely reply × engine check both ways; the `bait-set` / `bait-taken` rows.
+- C5 Moments 1 and 3 through the door with the dial.
+- C6 Prod: the Learn focus audit + the concept-gameplay audit + a hand walk of one of David's games, every line read.
+
 ## 🏀 WO-STORY-MATRIX-01 — one matrix runs every computer and tells the game's story (David 2026-10-30: "We need a matrix that is able to run these all, filter them down, and produce sentences that are meaningful to the game/position and create a story that follows the game" → "a tournament bracket … ties are allowed" → "Write this all up as the plan. We start by wiring in the computers. Then we start the matrix")
 
 **Why (measured 2026-10-30):**
