@@ -80,6 +80,9 @@ function arrowsToBoard(
 // visible during this window as a manual skip/override.
 const CELEBRATE_ADVANCE_MS = 1800;
 
+/** Learn's lit move — the same yellow as a lesson's lead-the-eye highlight. */
+const LEARN_MOVE_COLOR = 'rgba(255, 235, 59, 0.5)';
+
 export function PlayableLinePlayer({
   line,
   boardOrientation,
@@ -674,8 +677,21 @@ export function PlayableLinePlayer({
       }
     }
 
+    // Learn mode: the move being dictated is ALWAYS on the board — its two
+    // squares lit — so "Play the highlighted move" is true on every move, not
+    // only where a lesson beat ends, and the move can still be found when the
+    // voice does not play (David's iPhone, 2026-11-05: Bird's Opening move 3
+    // said "Play the highlighted move" over a board with nothing lit).
+    const dictated = guided ? expectedMoves[memoryMoveIndex] : undefined;
+    if (dictated && memoryFen.split(' ')[1] === studentChar) {
+      for (const sq of [dictated.from, dictated.to]) {
+        if (styles[sq]) continue;
+        styles[sq] = { background: LEARN_MOVE_COLOR, boxShadow: `inset 0 0 0 2px ${LEARN_MOVE_COLOR}` };
+      }
+    }
+
     return styles;
-  }, [phase, selectedSquare, legalMoves, mergeGlow, guided, line.highlights, memoryMoveIndex]);
+  }, [phase, selectedSquare, legalMoves, mergeGlow, guided, line.highlights, memoryMoveIndex, expectedMoves, memoryFen, studentChar]);
 
   // Reset the practice hint each time the move advances — fresh recall.
   useEffect(() => { setShowHint(false); }, [memoryMoveIndex]);

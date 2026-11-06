@@ -15,12 +15,16 @@ vi.mock('react-chessboard', () => ({
       allowDragging?: boolean;
       onPieceDrop?: (args: { sourceSquare: string; targetSquare: string; piece: { pieceType: string } }) => boolean;
       onSquareClick?: (args: { piece: null; square: string }) => void;
+      squareStyles?: Record<string, unknown>;
     };
   }) => (
     <div
       data-testid="mock-chessboard"
       data-position={typeof options.position === 'string' ? options.position : ''}
       data-draggable={String(options.allowDragging ?? true)}
+      data-lit-squares={Object.entries(options.squareStyles ?? {})
+        .filter(([, st]) => { const bg = (st as { background?: unknown }).background; return typeof bg === 'string' && bg.includes('255, 235, 59'); })
+        .map(([sq]) => sq).sort().join(',')}
     >
       {/* Simulate correct drop: d3→d4 */}
       <button
@@ -315,5 +319,21 @@ describe('PlayableLinePlayer', () => {
     expect(screen.getByTestId('memory-move-narration-text')).toHaveTextContent(
       'White strikes in the center with d4.',
     );
+  });
+
+  // David's iPhone, 2026-11-05 (Bird's Opening, move 3): Learn said "Play the
+  // highlighted move" over a board with nothing lit — highlights came only
+  // where a lesson beat ended. The dictated move's squares are lit on every
+  // student move; Practice (recall) stays dark.
+  it('Learn lights the dictated move on a move with no authored highlight; Practice does not', () => {
+    const line: PlayableMiddlegameLine = { ...TEST_LINE, highlights: [[], [], [], []] };
+    const learn = renderPlayer({ line, mode: 'learn' });
+    const lit = screen.getByTestId('mock-chessboard').getAttribute('data-lit-squares') ?? '';
+    expect(lit.split(',')).toEqual(expect.arrayContaining(['d3', 'd4']));
+    learn.unmount();
+    renderPlayer({ line, mode: 'practice' });
+    const dark = screen.getByTestId('mock-chessboard').getAttribute('data-lit-squares') ?? '';
+    expect(dark.split(',')).not.toContain('d3');
+    expect(dark.split(',')).not.toContain('d4');
   });
 });

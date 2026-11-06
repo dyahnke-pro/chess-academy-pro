@@ -25,6 +25,7 @@ import type {
 } from 'react-chessboard';
 import type { GhostMoveData } from '../../types';
 import { useBoardDomId } from './boardDomId';
+import { boardTouchStyle } from './boardTouch';
 
 export type MoveQuality = 'good' | 'inaccuracy' | 'blunder' | null;
 
@@ -352,16 +353,10 @@ export function ChessBoard({
           // Live FEN exposed for audits/tests — the audit scripts assert board
           // state without reaching into React internals (Danya-review Phase 1).
           data-fen={game.fen}
-          // Touch hardening for interactive boards on iOS/WKWebView (David
-          // 2026-06-19: on the kid pawn game a tap wouldn't even SELECT a
-          // pawn, and a drag wouldn't move it):
-          //   • touch-action: none — a drag that starts on a piece must not be
-          //     stolen as a page-scroll gesture (a VERTICAL drag = a forward
-          //     pawn push, inside the `overflow-y-auto` kid page).
-          //   • user-select / -webkit-touch-callout: none — without these, iOS
-          //     treats a tap/press on a piece <img> as image text-selection or
-          //     the image callout menu and swallows the event, so neither
-          //     tap-to-select nor drag-to-move fires.
+          // Touch hardening for iOS/WKWebView (David 2026-06-19: on the kid
+          // pawn game a tap wouldn't even SELECT a pawn, and a drag wouldn't
+          // move it) — the one rule every board reads, `boardTouch.ts`.
+          data-takes-moves="true"
           style={{
             ...(boardColorScheme.borderGlow
               ? {
@@ -370,9 +365,7 @@ export function ChessBoard({
                   border: `1px solid rgba(${accent}, 0.15)`,
                 }
               : {}),
-            touchAction: 'none',
-            WebkitUserSelect: 'none',
-            WebkitTouchCallout: 'none',
+            ...boardTouchStyle(true),
           }}
         >
           <Chessboard
