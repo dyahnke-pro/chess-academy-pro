@@ -229,7 +229,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:583`
-- `src/components/Coach/CoachTeachPage.tsx:4424`
+- `src/components/Coach/CoachTeachPage.tsx:4423`
 - `src/services/coachSessionRouter.ts:119`
 - `src/services/coachSettingsAction.ts:262`
 

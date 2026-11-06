@@ -72,8 +72,8 @@
 - `src/services/sharedOpeningCache.ts:189`
 
 ### `getCachedOpening` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:6718`
-- `src/components/Coach/CoachTeachPage.tsx:7650`
+- `src/components/Coach/CoachTeachPage.tsx:6717`
+- `src/components/Coach/CoachTeachPage.tsx:7649`
 - `src/hooks/useTeachWalkthrough.ts:2031`
 - `src/services/lessonCacheKey.test.ts:61`
 - `src/services/lessonCacheKey.test.ts:68`
@@ -84,13 +84,13 @@
 - `src/services/openingGenerator.test.ts:983`
 
 ### `cacheOpening` (function) — 22 call sites
-- `src/components/Coach/CoachTeachPage.tsx:6083`
-- `src/components/Coach/CoachTeachPage.tsx:6607`
-- `src/components/Coach/CoachTeachPage.tsx:6833`
-- `src/components/Coach/CoachTeachPage.tsx:6872`
-- `src/components/Coach/CoachTeachPage.tsx:6946`
-- `src/components/Coach/CoachTeachPage.tsx:7719`
-- `src/components/Coach/CoachTeachPage.tsx:13516`
+- `src/components/Coach/CoachTeachPage.tsx:6082`
+- `src/components/Coach/CoachTeachPage.tsx:6606`
+- `src/components/Coach/CoachTeachPage.tsx:6832`
+- `src/components/Coach/CoachTeachPage.tsx:6871`
+- `src/components/Coach/CoachTeachPage.tsx:6945`
+- `src/components/Coach/CoachTeachPage.tsx:7718`
+- `src/components/Coach/CoachTeachPage.tsx:13515`
 - `src/services/lessonCacheKey.test.ts:60`
 - `src/services/lessonCacheKey.test.ts:65`
 - `src/services/lessonCacheKey.test.ts:74`
@@ -150,7 +150,7 @@
 
 ### `noteArrowSourceAt` (function) — 3 call sites
 - `src/services/noteSelectionDeterminism.test.ts:124`
-- `src/services/reviewOpeningTheory.ts:1172`
+- `src/services/reviewOpeningTheory.ts:1152`
 - `src/services/teachingCoverage.report.test.ts:165`
 
 ### `MAX_GREEN_ARROWS_PER_PLY` (const) — 0 call sites
@@ -222,11 +222,11 @@
 ### `generateOpening` (function) — 19 call sites
 - `scripts/audit-coach-teach-gaps.mjs:384`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:57`
-- `src/components/Coach/CoachTeachPage.tsx:6077`
-- `src/components/Coach/CoachTeachPage.tsx:6827`
-- `src/components/Coach/CoachTeachPage.tsx:6940`
-- `src/components/Coach/CoachTeachPage.tsx:7714`
-- `src/components/Coach/CoachTeachPage.tsx:13510`
+- `src/components/Coach/CoachTeachPage.tsx:6076`
+- `src/components/Coach/CoachTeachPage.tsx:6826`
+- `src/components/Coach/CoachTeachPage.tsx:6939`
+- `src/components/Coach/CoachTeachPage.tsx:7713`
+- `src/components/Coach/CoachTeachPage.tsx:13509`
 - `src/components/Openings/OpeningDetailPage.wiring.test.ts:91`
 - `src/services/generatedLesson.test.ts:5`
 - `src/services/generatedLesson.ts:37`
@@ -265,11 +265,11 @@
 - `src/services/stageEntryValidity.test.ts:87`
 
 ### `generateMissingStagesInBackground` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:6626`
-- `src/components/Coach/CoachTeachPage.tsx:6772`
-- `src/components/Coach/CoachTeachPage.tsx:6899`
-- `src/components/Coach/CoachTeachPage.tsx:6982`
-- `src/components/Coach/CoachTeachPage.tsx:7737`
+- `src/components/Coach/CoachTeachPage.tsx:6625`
+- `src/components/Coach/CoachTeachPage.tsx:6771`
+- `src/components/Coach/CoachTeachPage.tsx:6898`
+- `src/components/Coach/CoachTeachPage.tsx:6981`
+- `src/components/Coach/CoachTeachPage.tsx:7736`
 
 ### `WALKTHROUGH_GEN_REV` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

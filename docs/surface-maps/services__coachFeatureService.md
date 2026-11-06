@@ -262,11 +262,11 @@
 - `src/services/reviewNeedGate.test.ts:94`
 - `src/services/reviewOneClaimOnce.test.ts:24`
 - `src/services/reviewOneClaimOnce.test.ts:40`
-- `src/services/reviewOneClaimOnce.test.ts:59`
-- `src/services/reviewOneClaimOnce.test.ts:76`
-- `src/services/reviewOneClaimOnce.test.ts:106`
-- `src/services/reviewOneClaimOnce.test.ts:123`
-- `src/services/reviewOneClaimOnce.test.ts:145`
+- `src/services/reviewOneClaimOnce.test.ts:61`
+- `src/services/reviewOneClaimOnce.test.ts:78`
+- `src/services/reviewOneClaimOnce.test.ts:108`
+- `src/services/reviewOneClaimOnce.test.ts:125`
+- `src/services/reviewOneClaimOnce.test.ts:147`
 - `src/services/reviewOneFailureSentence.test.ts:16`
 - `src/services/reviewOneLineOnce.test.ts:16`
 - `src/services/reviewTheirHabit.test.ts:24`
@@ -326,10 +326,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8812`
-- `src/components/Coach/CoachTeachPage.tsx:8915`
-- `src/components/Coach/CoachTeachPage.tsx:11813`
-- `src/components/Coach/CoachTeachPage.tsx:12211`
+- `src/components/Coach/CoachTeachPage.tsx:8811`
+- `src/components/Coach/CoachTeachPage.tsx:8914`
+- `src/components/Coach/CoachTeachPage.tsx:11812`
+- `src/components/Coach/CoachTeachPage.tsx:12210`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/services/phaseTransitionDetector.test.ts:575`

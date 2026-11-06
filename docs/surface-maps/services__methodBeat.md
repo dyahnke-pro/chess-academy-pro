@@ -89,10 +89,10 @@
 - `src/services/slipQuestion.test.ts:53`
 
 ### `habitSaidKey` (function) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10692`
 - `src/components/Coach/CoachTeachPage.tsx:10693`
-- `src/components/Coach/CoachTeachPage.tsx:10694`
 - `src/services/learnBoardTeaching.ts:262`
-- `src/services/learnBoardTeaching.ts:1161`
+- `src/services/learnBoardTeaching.ts:1181`
 - `src/services/slipQuestion.test.ts:53`
 
 ### `liveMethodBeat` (function) — 18 call sites

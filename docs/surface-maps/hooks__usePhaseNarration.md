@@ -21,7 +21,7 @@
 ## Exports and every call site
 
 ### `usePhaseNarration` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8712`
+- `src/components/Coach/CoachTeachPage.tsx:8711`
 - `src/hooks/usePhaseNarration.door.test.ts:64`
 - `src/hooks/usePhaseNarration.door.test.ts:90`
 

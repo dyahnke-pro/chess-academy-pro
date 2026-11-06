@@ -95,7 +95,7 @@
 - `src/services/reviewFullData.test.ts:710`
 - `src/services/reviewFullData.test.ts:735`
 - `src/services/reviewOwedComputers.test.ts:15`
-- `src/services/reviewOwedComputers.test.ts:70`
+- `src/services/reviewOwedComputers.test.ts:72`
 - `src/services/reviewWalkCT.test.ts:51`
 - `src/services/reviewWalkCT.test.ts:74`
 - `src/services/reviewWalkCT.test.ts:91`

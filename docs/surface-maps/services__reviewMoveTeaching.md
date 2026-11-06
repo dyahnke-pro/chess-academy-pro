@@ -94,7 +94,7 @@
 - `src/services/reviewMoveTeaching.test.ts:192`
 - `src/services/reviewNarrationDefects.test.ts:15`
 - `src/services/reviewNarrationDefects.test.ts:19`
-- `src/services/reviewOpeningTheory.ts:679`
+- `src/services/reviewOpeningTheory.ts:659`
 - `src/services/reviewWalkOct1.test.ts:72`
 - `src/services/reviewWalkOct1.test.ts:84`
 - `src/services/reviewWalkOct1.test.ts:89`
@@ -102,7 +102,7 @@
 - `src/services/squareRole.test.ts:44`
 
 ### `buildReviewMoveTeachingFact` (function) — 7 call sites
-- `src/services/learnBoardTeaching.ts:1196`
+- `src/services/learnBoardTeaching.ts:1216`
 - `src/services/moveThoughtFacts.ts:227`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`

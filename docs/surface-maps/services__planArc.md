@@ -71,9 +71,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.standing.test.ts:28`
 
 ### `withAnnouncement` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:11612`
 - `src/components/Coach/CoachTeachPage.tsx:11613`
-- `src/components/Coach/CoachTeachPage.tsx:11614`
-- `src/components/Coach/CoachTeachPage.tsx:12251`
+- `src/components/Coach/CoachTeachPage.tsx:12250`
 - `src/services/planArc.heldAnnouncement.test.ts:32`
 
 ### `EMPTY_ARC` (const) — 0 call sites

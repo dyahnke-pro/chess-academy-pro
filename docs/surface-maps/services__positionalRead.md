@@ -37,7 +37,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `rookReachesFile` (function) — 3 call sites
 - `src/services/danyaBehaviors.ts:746`
-- `src/services/learnBoardTeaching.ts:1535`
+- `src/services/learnBoardTeaching.ts:1555`
 - `src/services/recaptureChoice.ts:62`
 
 ### `castleIsOneMoveAway` (function) — 4 call sites
@@ -97,7 +97,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9947`
+- `src/components/Coach/CoachTeachPage.tsx:9946`
 - `src/services/claimChecker.measure.test.ts:134`
 - `src/services/learnWalkBlumenfeld.test.ts:126`
 - `src/services/learnWalkNimzo.test.ts:35`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1230 lines · 12 exports · 4 importers · 5 tests · 0 audits**
+**1210 lines · 11 exports · 3 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,7 +13,6 @@
 ## Who calls in
 
 - `src/components/Coach/CoachGameReview.tsx`
-- `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewOpeningTheory.test.ts`
 
@@ -62,13 +61,6 @@
 - `src/services/reviewOpeningTheory.test.ts:518`
 - `src/test/corpusScope.test.ts:94`
 
-### `openingSummaryLine` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12523`
-- `src/services/learnBoardTeaching.test.ts:98`
-- `src/services/learnBoardTeaching.test.ts:99`
-- `src/services/learnBoardTeaching.test.ts:100`
-- `src/services/reviewOpeningTheory.test.ts:191`
-
 ### `enrichLectureWithEngine` (function) — 2 call sites
 - `src/components/Coach/CoachGameReview.tsx:2482`
 - `src/services/reviewOpeningTheory.test.ts:284`
@@ -116,7 +108,6 @@
 ## Tests
 
 - `src/services/gemCrushLines.computed.test.ts`
-- `src/services/learnBoardTeaching.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewOpeningTheory.test.ts`
 - `src/test/corpusScope.test.ts`
