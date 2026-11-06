@@ -7,14 +7,13 @@
 //   - a square their piece wants   → "keeping their knight off it"
 //   - your own pawn's next step     → "backing your d-pawn's push there"
 // No role → no clause: a square without a reason is scenery, and is not said.
-// Leaf: chess.js only.
+// Leaf: chess.js and the shared piece values.
 import type { Chess, Color, Square } from 'chess.js';
 import { noPawnCanChallenge } from './outpost';
+import { CAPTURE_VALUE } from './pieceValues';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const NONE: ReadonlySet<string> = new Set<string>();
-/** Piece worth in pawns, for "is this hit a threat" (a leaf: no import). */
-const WORTH: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
 /** `owner` is how the OTHER side's pieces are said from the speaker's seat:
  *  'their' to the student about the opponent, 'your' about the student, 'the'
@@ -81,8 +80,9 @@ function squareRoleWords(
     // guard). Said only when the attackers outnumber its guards, the cheapest
     // attacker is worth less than it, or only its king guards it.
     const hits = chess.attackers(sq, me);
-    const cheapest = Math.min(...hits.map((s) => WORTH[chess.get(s)?.type ?? 'k'] ?? 100));
-    const pressed = guards.length === 0 || hits.length > guards.length || cheapest < (WORTH[on.type] ?? 0);
+    // A king is an attacker that can never be the cheaper one (CAPTURE_VALUE k).
+    const cheapest = Math.min(...hits.map((s) => CAPTURE_VALUE[chess.get(s)?.type ?? 'k']));
+    const pressed = guards.length === 0 || hits.length > guards.length || cheapest < CAPTURE_VALUE[on.type];
     if (!pressed && !kingOnly) return null;
     const only = kingOnly ? `, which only ${owner === 'the' ? 'its' : owner} king guards` : '';
     return { full: `${attacking}${only}`, bare: `${hitting}${only}` };
