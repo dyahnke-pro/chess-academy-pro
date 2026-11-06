@@ -165,25 +165,27 @@ export function knownSlip(ctx: KnownSlipContext): KnownSlipRead | null {
   let afterSlip = '';
   try { const b = new Chess(fen); b.move(slipSan); afterSlip = b.fen(); } catch { return null; }
   const verdictSaidIt = on === 'played' && !!ctx.verdictPunish && sameMove(afterSlip, ctx.verdictPunish, punishSan);
-  const share = `${gem.share}% of club players under 1600`;
+  // A REASON, NOT A STATISTIC (David 2026-10-06; prod Review 2026-11-06:
+  // "2.9% of club players under 1600 play f6"). The share is why the slip is
+  // KNOWN — it chose the slip; it is never said.
   // Rotated on how many the game has said (never rolled): one formula is
   // never said three times a game.
   const text = rotateStem(on === 'reached'
     ? [
-      `A known ${name} here: ${share} play ${slipSan}, and ${result}.`,
-      `${slipSan} is a known ${name} on this board: ${share} play it, and ${result}.`,
-      `Here, ${share} play ${slipSan} — a known ${name}: ${result}.`,
+      `A known ${name} here: ${slipSan}, and ${result}.`,
+      `${slipSan} is a known ${name} on this board, and ${result}.`,
+      `Here, ${slipSan} is a known ${name} at club level: ${result}.`,
     ]
     : verdictSaidIt
       ? [
-        `That was a known ${name}: ${share} play ${slipSan} here.`,
-        `${slipSan} is a known ${name} at club level: ${share} play it here.`,
-        `Here, ${share} play ${slipSan} — a known ${name}.`,
+        `That was a known ${name} at club level.`,
+        `${slipSan} is a known ${name} on this board.`,
+        `Club players go wrong with ${slipSan} here — a known ${name}.`,
       ]
       : [
-        `That was a known ${name}: ${share} play ${slipSan} here, and ${result}.`,
-        `${slipSan} is a known ${name} at club level: ${share} play it here, and ${result}.`,
-        `Here, ${share} play ${slipSan} — a known ${name}: ${result}.`,
+        `That was a known ${name} at club level, and ${result}.`,
+        `${slipSan} is a known ${name} on this board, and ${result}.`,
+        `Club players go wrong with ${slipSan} here — a known ${name}: ${result}.`,
       ], ctx.told);
   const squares: string[] = [];
   try {

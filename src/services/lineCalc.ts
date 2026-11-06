@@ -10,7 +10,7 @@ import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { countWords } from '../utils/countWords';
 import type { ArrowClaim } from './arrowDoor';
-import { heardProofCut, netPieceWords } from './exchangeLedger';
+import { heardProofCut, gainWords, type PieceLetter } from './exchangeLedger';
 import { MATERIAL_VALUE } from './pieceValues';
 import { lineTrust, type LineSeconds } from './lineTrust';
 import { unmarked } from '../utils/sanMark';
@@ -100,7 +100,7 @@ export function lineWins(
   }
   return {
     net,
-    what: materialWords(took, gave, net),
+    what: materialWords(took, gave, net, proof.ledger.studentPromoted),
     sans: shown.map((p) => `${p.color === 'b' ? '…' : ''}${p.san}`),
     plies: shown,
   };
@@ -213,6 +213,6 @@ export function mateLine(fen: string, lineUci: readonly string[], side: 'w' | 'b
 
 /** What the line actually changes hands, by piece (the one ledger namer);
  *  a count only when the pieces cancel out to nothing nameable. */
-function materialWords(took: readonly string[], gave: readonly string[], net: number): string {
-  return netPieceWords(took, gave) ?? countWords(net, { unit: true });
+function materialWords(took: readonly string[], gave: readonly string[], net: number, made: readonly PieceLetter[]): string {
+  return gainWords(took, gave, made) ?? countWords(net, { unit: true });
 }

@@ -19,7 +19,7 @@
 //
 // Pure: chess.js + the one ledger (`proofCut`) + the one classifier.
 import { Chess } from 'chess.js';
-import { netPieceWords, proofCut, type ExchangeLedger } from './exchangeLedger';
+import { gainWords, proofCut, type ExchangeLedger } from './exchangeLedger';
 import { countWords } from '../utils/countWords';
 import { lineTrust, type LineSeconds, type LineTrust } from './lineTrust';
 import { detectTacticType } from './missedTacticService';
@@ -214,7 +214,8 @@ export function reasonWinWords(r: CostReason): string {
   const winnerIsLedgerStudent = (r.kind === 'missed') === (r.seat === 'you');
   const took = winnerIsLedgerStudent ? r.ledger.studentWon : r.ledger.opponentWon;
   const gave = winnerIsLedgerStudent ? r.ledger.opponentWon : r.ledger.studentWon;
-  return netPieceWords(took, gave) ?? countWords(Math.max(1, r.netForWinner), { unit: true });
+  const made = winnerIsLedgerStudent ? r.ledger.studentPromoted : r.ledger.opponentPromoted;
+  return gainWords(took, gave, made) ?? countWords(Math.max(1, r.netForWinner), { unit: true });
 }
 
 /** The line to the blow, as SAN with the black move marked (…Nxe5). */

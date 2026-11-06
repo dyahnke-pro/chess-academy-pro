@@ -37,12 +37,12 @@ describe('exchangeLedger — the net of a forced sequence, from the student\'s s
 
   it('names an even but UNLIKE trade instead of going silent', () => {
     // A bishop for a knight is even in points but not the same piece.
-    const l = { studentWon: ['b' as const], opponentWon: ['n' as const], netPawns: 0, isExchange: true, settled: true };
+    const l = { studentWon: ['b' as const], opponentWon: ['n' as const], studentPromoted: [], opponentPromoted: [], netPawns: 0, isExchange: true, settled: true };
     expect(describeExchange(l)).toBe('that trade is even, a bishop for a knight');
   });
 
   it('groups repeats in piece names, never a point total', () => {
-    const l = { studentWon: ['n' as const, 'n' as const], opponentWon: ['r' as const], netPawns: 1, isExchange: true, settled: true };
+    const l = { studentWon: ['n' as const, 'n' as const], opponentWon: ['r' as const], studentPromoted: [], opponentPromoted: [], netPawns: 1, isExchange: true, settled: true };
     expect(describeExchange(l)).toBe('you win two knights for a rook');
     expect(describeExchange(l)).not.toMatch(/\d/);
   });
@@ -256,5 +256,25 @@ describe('a heard proof says its shape (proof guard 2; Learn audit 2026-10-15)',
     const p = moverLineProof('3rk3/8/5b2/8/3q4/8/1B6/3R2K1 w - - 0 1', ['d1d4', 'f6d4', 'b2d4', 'd8d4'], 'w');
     expect(p?.short).toMatch(/^you play Rxd4 and, \w+ moves? later, (?:you|they) play \S+ — /);
     expect(p?.full).toMatch(/Bxd4/);
+  });
+});
+
+// A LINE THAT QUEENS NAMES THE QUEEN (prod Review 2026-11-06: "they play a1,
+// making a queen — they win 8 points of material").
+describe('a promotion is named by the piece it makes', () => {
+  it('a new queen, not a point count', async () => {
+    const { computeExchangeLedger, gainWords } = await import('./exchangeLedger');
+    const l = computeExchangeLedger('7k/8/8/8/8/8/p5K1/8 b - - 0 1', ['a1=Q'], 'w');
+    expect(l?.opponentPromoted).toEqual(['q']);
+    expect(gainWords(l?.opponentWon ?? [], l?.studentWon ?? [], l?.opponentPromoted ?? [])).toBe('a new queen');
+  });
+  it('a promoted piece taken back is not counted as made', async () => {
+    const { computeExchangeLedger } = await import('./exchangeLedger');
+    const l = computeExchangeLedger('7k/8/8/8/8/8/p7/1R4K1 b - - 0 1', ['a1=Q', 'Rxa1'], 'w');
+    expect(l?.opponentPromoted).toEqual([]);
+  });
+  it('captures and a promotion together', async () => {
+    const { gainWords } = await import('./exchangeLedger');
+    expect(gainWords(['r'], [], ['q'])).toBe('a rook, and a new queen');
   });
 });

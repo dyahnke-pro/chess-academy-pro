@@ -22,7 +22,7 @@ import { Chess, type Square } from 'chess.js';
 import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
 import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 
-type PieceLetter = 'p' | 'n' | 'b' | 'r' | 'q';
+export type PieceLetter = 'p' | 'n' | 'b' | 'r' | 'q';
 
 export interface ExchangeLedger {
   /** Enemy pieces the STUDENT captured, in capture order. */
@@ -31,6 +31,12 @@ export interface ExchangeLedger {
   opponentWon: PieceLetter[];
   /** Net material from the student's seat, in pawns (positive = student up). */
   netPawns: number;
+  /** Pieces each side MADE by promotion and still has at the line's end — in
+   *  `netPawns`, never in the captures, so a line that queens names the queen
+   *  instead of a point count (prod Review 2026-11-06: "making a queen — they
+   *  win 8 points of material"). */
+  studentPromoted: PieceLetter[];
+  opponentPromoted: PieceLetter[];
   /** True when BOTH sides captured — the case a subjectless line garbles. */
   isExchange: boolean;
   /** False when the line stops mid-trade: the side to move at its end can
@@ -58,7 +64,7 @@ interface LedgerWalk {
 function walkLedger(fenBefore: string, sans: readonly string[], studentColorWB: 'w' | 'b'): LedgerWalk | null {
   let chess: Chess;
   try { chess = new Chess(fenBefore); } catch { return null; }
-  interface Step { studentWon: PieceLetter[]; opponentWon: PieceLetter[]; net: number; lastCaptureSq: string | null; fen: string }
+  interface Step { studentWon: PieceLetter[]; opponentWon: PieceLetter[]; studentPromoted: PieceLetter[]; opponentPromoted: PieceLetter[]; net: number; lastCaptureSq: string | null; fen: string }
   const steps: Step[] = [];
   const studentWon: PieceLetter[] = [];
   const opponentWon: PieceLetter[] = [];
@@ -87,13 +93,16 @@ function walkLedger(fenBefore: string, sans: readonly string[], studentColorWB: 
       else opponentWon.push(piece);
     }
     let promotionNet = 0;
+    const studentPromoted: PieceLetter[] = [];
+    const opponentPromoted: PieceLetter[] = [];
     for (const sq of promoted) {
       const pc = chess.get(sq as Square);
       if (!pc || pc.type === 'k') continue;
       promotionNet += (pc.color === studentColorWB ? 1 : -1) * (VALUE[pc.type as PieceLetter] - 1);
+      (pc.color === studentColorWB ? studentPromoted : opponentPromoted).push(pc.type as PieceLetter);
     }
     steps.push({
-      studentWon: [...studentWon], opponentWon: [...opponentWon],
+      studentWon: [...studentWon], opponentWon: [...opponentWon], studentPromoted, opponentPromoted,
       net: sum(studentWon) - sum(opponentWon) + promotionNet, lastCaptureSq, fen: chess.fen(),
     });
   }
@@ -109,6 +118,8 @@ function walkLedger(fenBefore: string, sans: readonly string[], studentColorWB: 
       const ledger: ExchangeLedger = {
         studentWon: st.studentWon,
         opponentWon: st.opponentWon,
+        studentPromoted: st.studentPromoted,
+        opponentPromoted: st.opponentPromoted,
         netPawns: st.net,
         isExchange: st.studentWon.length > 0 && st.opponentWon.length > 0,
         // Settled = the side that lost that square cannot profitably win it
@@ -142,7 +153,7 @@ export function computeExchangeLedger(
   const w = walkLedger(fenBefore, sans, studentColorWB);
   if (!w || w.length < 0) return null;
   if (sans.length === 0) {
-    return { settled: true, studentWon: [], opponentWon: [], netPawns: 0, isExchange: false };
+    return { settled: true, studentWon: [], opponentWon: [], studentPromoted: [], opponentPromoted: [], netPawns: 0, isExchange: false };
   }
   return w.at(sans.length);
 }
@@ -180,6 +191,16 @@ export function netPieceWords(took: readonly string[], gave: readonly string[]):
   const minor = (x: PieceLetter): boolean => x === 'n' || x === 'b';
   if (g.length === 1 && g[0] === 'r' && l.length === 1 && minor(l[0])) return 'the exchange';
   return `${nameSide(g)} for ${nameSide(l)}`;
+}
+
+/** What a side gains, by piece: its net captures and the pieces it made by
+ *  promotion ("a rook, and a new queen" / "a new queen"). Null when there is
+ *  nothing to name. */
+export function gainWords(took: readonly string[], gave: readonly string[], promoted: readonly PieceLetter[]): string | null {
+  const caps = netPieceWords(took, gave);
+  if (promoted.length === 0) return caps;
+  const made = nameSide(promoted).replace(/^(a|an|two|three|four) /, (m) => (m === 'a ' || m === 'an ' ? 'a new ' : `${m}new `));
+  return caps ? `${caps}, and ${made}` : made;
 }
 
 /**

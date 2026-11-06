@@ -129,7 +129,7 @@ describe('(C) which square for the piece — on his games, board reads only', ()
   });
   it('14…Bf6 (WQFcuBCL1F4): …Bd6 hangs the knight on d5', () => {
     expect(squareChoice({ fenBefore: 'r4rk1/1ppqb1pp/2n5/p2npp2/6bP/P1NP1NP1/1PPBBP2/R2Q1RK1 b - - 0 14', san: 'Bf6', student: 'b', rating: 1500, reads: null, priorMove: null })?.text)
-      .toBe('Why that square for your bishop? On d6 it leaves your knight on d5 hanging.');
+      .toBe('Why f6 for your bishop? On d6 it leaves your knight on d5 hanging.');
   });
   it('a kick is a reason only against a square at least as natural as the one chosen; a queen\'s squares are not weighed', () => {
     // 14…Bf6 again: c5 can be kicked by d4, but the eye weighs …Bc5 below

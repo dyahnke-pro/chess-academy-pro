@@ -677,7 +677,16 @@ export function squareChoice(args: { fenBefore: string; san: string; student: Co
   const said = outLoud(all) <= 2 ? all : `on ${faults[0].square} it ${faults[0].text}, and its other squares are no better`;
   const text = outLoud(said) <= 1
     ? `${mover === args.student ? `Your ${piece} goes to ${played.to}` : `Their ${piece} went to ${played.to}`} — ${said}.`
-    : `Why that square for ${mover === args.student ? 'your' : 'their'} ${piece}? ${openSentence(said)}.`;
+    // ROTATED on the board and the move (prod Review 2026-11-06: "Why that
+    // square for …?" said three times in one game).
+    : (() => {
+      const whose = mover === args.student ? 'your' : 'their';
+      return rotateStem([
+        `Why that square for ${whose} ${piece}? ${openSentence(said)}.`,
+        `Why ${played.to} for ${whose} ${piece}? ${openSentence(said)}.`,
+        `The other squares for ${whose} ${piece} are worse: ${said}.`,
+      ], stemKeyOf(`${args.fenBefore}|${uciOf(played)}`));
+    })();
   return { piece: played.piece, to: played.to, faults, text,
     squares: [...new Set([played.to, ...faults.flatMap((f) => [f.square, ...f.squares])])],
     key: `square:${uciOf(played)}` };
