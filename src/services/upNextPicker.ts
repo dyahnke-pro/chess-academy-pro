@@ -24,6 +24,7 @@
 import type { RepCandidate } from './trainingPlanSelector';
 import { resolveRepRoute } from './repRouting';
 import { endgameReviewPath, type DueEndgameReview } from './endgameDueReview';
+import { isHeldRoute } from '../data/heldSurfaces';
 
 /** Every kind of bite, ONE list. The type is derived from it, and the tables
  *  below are `Record`s over it, so a new kind fails to compile until someone
@@ -367,7 +368,8 @@ function collectPicks(i: UpNextInput): UpNextPick[] {
     },
   );
   const seen = new Set<string>();
-  return out.filter((p) => (seen.has(p.key) ? false : (seen.add(p.key), true)));
+  // A bite never opens a surface held from release (`heldSurfaces.ts`).
+  return out.filter((p) => !isHeldRoute(p.path) && (seen.has(p.key) ? false : (seen.add(p.key), true)));
 }
 
 /** Up next = the first pick not done today. */

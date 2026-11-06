@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { parseBookRequest, findPassage, answerFromBooks, topicStems, type TeachableBook } from './bookTeaching';
 import { COACHES_LIBRARY } from '../data/coachesLibrary';
+import { releasedDuring } from '../test/releasedDuring';
 
 const LIB = COACHES_LIBRARY as unknown as TeachableBook[];
 
@@ -23,6 +24,7 @@ describe('parseBookRequest — a request to be taught from the books', () => {
 });
 
 describe('teaching from the real library', () => {
+  releasedDuring('library');
   it('stems the topic so plurals and -ing forms match', () => {
     expect(topicStems('passed pawns')).toEqual(['pass', 'pawn']);
     expect(topicStems('forcing moves')).toEqual(topicStems('forced move'));
@@ -66,6 +68,7 @@ describe('teaching from the real library', () => {
 });
 
 describe('chapters by number — the reader opens there', () => {
+  releasedDuring('library');
   it('reads "chapter 13 of Chess Fundamentals" and "lecture IX from Lasker"', async () => {
     const { parseBookRequest, answerFromBooks } = await import('./bookTeaching');
     const r = parseBookRequest('teach me chapter 13 of Chess Fundamentals');

@@ -10,6 +10,7 @@
 // all. A concept with no good passage has NO chip: wrong is worse than none.
 // Every entry is re-checked against the book text (`bookChips.test.ts`), so a
 // re-ingested book that moves a page fails the build instead of misleading.
+import { isReleased } from './heldSurfaces';
 
 interface BookChip {
   bookId: string;
@@ -36,6 +37,8 @@ export const BOOK_CHIPS: Readonly<Record<string, BookChip>> = {
 /** The chip for a turn, from the claims its computed facts carry (keys, never
  *  prose — G0). The first concept with a book wins; null when none has one. */
 export function bookChipForClaims(claims: readonly string[]): { type: 'read_book'; id: string; label: string } | null {
+  // The chip opens the library: none while it is held from release.
+  if (!isReleased('library')) return null;
   for (const c of claims) {
     const m = /^concept:([^:]+):/.exec(c);
     const chip = m ? BOOK_CHIPS[m[1]] : undefined;

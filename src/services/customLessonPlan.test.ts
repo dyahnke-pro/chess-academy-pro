@@ -14,6 +14,7 @@ import {
 } from './customLessonPlan';
 import type { UnifiedWeakness } from './weaknessSpine';
 import type { CoachCurriculumRecord } from '../db/schema';
+import { releasedDuring } from '../test/releasedDuring';
 
 function w(tag: string, label: string, over: Partial<UnifiedWeakness> = {}): UnifiedWeakness {
   return {
@@ -207,6 +208,7 @@ describe('custom lesson — a lesson on a NAMED subject is not a weakness lesson
 });
 
 describe('matchThinkingLessonRequest — a bare "teach me"', () => {
+  releasedDuring('howToThink');
   it.each([
     'teach me', 'Teach me.', 'teach me something', 'teach me chess', 'teach me how to think',
     'can you teach me?', 'please teach me', 'coach, teach me', 'teach me to read the board',

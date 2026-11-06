@@ -14,8 +14,9 @@
  * Schema lives in `src/coach/types.ts` as `RouteManifestEntry`.
  */
 import type { RouteManifestEntry } from '../coach/types';
+import { isHeldRoute } from './heldSurfaces';
 
-export const APP_ROUTES_MANIFEST: RouteManifestEntry[] = [
+const ALL_ROUTES: RouteManifestEntry[] = [
   // ─── Top level ────────────────────────────────────────────────────
   {
     path: '/',
@@ -304,3 +305,8 @@ export const APP_ROUTES_MANIFEST: RouteManifestEntry[] = [
     featuresAvailable: ['kid-puzzles'],
   },
 ];
+
+/** Every route the coach may name or open. A surface held from release
+ *  (`heldSurfaces.ts`) is left out, so the coach never offers to take the
+ *  student there. */
+export const APP_ROUTES_MANIFEST: RouteManifestEntry[] = ALL_ROUTES.filter((e) => !isHeldRoute(e.path));

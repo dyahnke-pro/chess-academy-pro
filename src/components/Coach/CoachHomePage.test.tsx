@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '../../test/utils';
 import { CoachHomePage } from './CoachHomePage';
+import { releasedDuring } from '../../test/releasedDuring';
 
 const mockNavigate = vi.fn();
 const upNextState = vi.hoisted(() => ({ value: null as unknown }));
@@ -15,6 +16,7 @@ vi.mock('react-router-dom', async () => {
 });
 
 describe('CoachHomePage', () => {
+  releasedDuring('campaign', 'howToThink', 'library');
   beforeEach(() => {
     vi.clearAllMocks();
     upNextState.value = null;

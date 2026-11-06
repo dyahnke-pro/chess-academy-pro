@@ -1,4 +1,5 @@
 import { openSentence } from '../utils/openSentence';
+import { isReleased } from '../data/heldSurfaces';
 // bookTeaching — the coach teaches from the library when the student asks
 // (David 2026-10-05: "Make sure coach can teach from the books if someone asks
 // it to"): "what does Lasker say about the centre?", "teach me the blockade
@@ -226,8 +227,16 @@ const cite = (p: BookPassage): string => `${p.author}, *${p.bookTitle}*${p.headi
 const readerPath = (p: BookPassage): string => `/coach/library?book=${encodeURIComponent(p.bookId)}&page=${p.pageIndex}`;
 const offerFor = (p: BookPassage): BookAnswer['offer'] => ({ type: 'read_book', id: `${p.bookId}@${p.pageIndex}` });
 
-/** Teach from the books: the passage, quoted and cited, or an honest miss. */
+/** Teach from the books: the passage, quoted and cited, or an honest miss.
+ *  While the library is held from release (`heldSurfaces.ts`) the passage is
+ *  still quoted, but nothing opens the reader or says it is open. */
 export function answerFromBooks(req: BookRequest, library: readonly TeachableBook[]): BookAnswer {
+  const answer = answerFromBooksInLibrary(req, library);
+  if (isReleased('library')) return answer;
+  return { text: answer.text.replace(/\n\n(?:The chapter is open|The book is open|The whole page is open) in the library[^\n]*$/, ''), path: null, offer: null };
+}
+
+function answerFromBooksInLibrary(req: BookRequest, library: readonly TeachableBook[]): BookAnswer {
   const named = req.bookIds.length > 0 ? library.filter((b) => req.bookIds.includes(b.id)) : library.filter((b) => !b.house);
   const whose = req.bookIds.length > 0 ? named.map((b) => `*${b.bookTitle}*`).join(' or ') : 'the books';
   if (req.chapter) {

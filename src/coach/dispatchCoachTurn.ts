@@ -56,6 +56,7 @@ import { directAnswer } from './chatTurnAnswers';
 import { executeSteps } from './requestExecutor';
 import { emitCoachStop } from './coachStopEvents';
 import type { ResolvedStep } from './requestSteps';
+import { isReleased } from '../data/heldSurfaces';
 
 interface DispatchCoachTurnOptions extends CoachServiceOptions {
   /** The prior assistant message — lets the action router catch the
@@ -503,7 +504,9 @@ async function dispatchCoachTurnOnce(
     // "TEACH ME HOW TO THINK" OPENS THE LESSON on every surface but Learn,
     // which starts it in place before the door (contracts 2026-10-10: the chat
     // fell through to the model and, offline, said it could not connect).
-    if (turn?.kind === 'start-thinking-lesson') {
+    // Not while the lesson is held from release (`heldSurfaces.ts`): the ask
+    // then reaches the coach like any other.
+    if (turn?.kind === 'start-thinking-lesson' && isReleased('howToThink')) {
       const path = '/coach/teach?lesson=think';
       if (options.onNavigate) options.onNavigate(path);
       return serve('Opening "Learn how to think" — a lesson in how to read a position, step by step.', 'request:thinking-lesson', 'command',

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '../../test/utils';
 import { TableOfContents } from './TableOfContents';
+import { releasedDuring } from '../../test/releasedDuring';
 
 const mockNavigate = vi.fn();
 
@@ -13,6 +14,7 @@ vi.mock('react-router-dom', async () => {
 });
 
 describe('TableOfContents', () => {
+  releasedDuring('library');
   beforeEach(() => {
     vi.clearAllMocks();
   });

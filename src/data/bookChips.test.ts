@@ -1,8 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { BOOK_CHIPS, bookChipForClaims } from './bookChips';
 import { COACHES_LIBRARY } from './coachesLibrary';
+import { releasedDuring } from '../test/releasedDuring';
 
 describe('book chips — the books behind the computed facts', () => {
+  releasedDuring('library');
   it('every chip still points at a page that carries its passage', () => {
     for (const [id, chip] of Object.entries(BOOK_CHIPS)) {
       const book = COACHES_LIBRARY.find((b) => b.id === chip.bookId);

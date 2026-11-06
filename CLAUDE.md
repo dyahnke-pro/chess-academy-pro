@@ -44,6 +44,18 @@ rule by rule.
 **The Campaign (Learn) is specified in docs/CAMPAIGN.md — read it before any
 mission, dial, boss or Learn narration work.**
 
+🔒 **HELD FROM RELEASE (David 2026-11-06: "learn how to think, the campaign, and
+the library tabs removed from next submission. Just remove the UI. We will
+strengthen these before they get released").** The Campaign, the Coaches Library
+and "Learn how to think" keep their code and their routes (a typed URL still
+opens them, so audits run), but nothing in the app opens them: every door reads
+ONE table, `src/data/heldSurfaces.ts` (`HELD_FROM_RELEASE`, `isHeldRoute`) —
+the hub tiles, the contents page, Up next, the first-run and Learn chips, the
+typed and chat "teach me how to think" doors, the book links, and the route list
+the coach navigates by. Releasing one is one value flipped. Gate:
+`src/test/heldSurfaces.gate.test.ts` (a file linking to a held route must read
+the table).
+
 Learn's narration said too much: 74 lanes, ~82 words a turn, ~25 minutes of
 talk a game, producers contradicting each other in one breath — because every
 producer asked "is my fact worth hearing?" on its own and nothing owned the

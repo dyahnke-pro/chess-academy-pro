@@ -12,6 +12,8 @@
  * tap goes through the one door like anything the student types.
  */
 
+import { isReleased } from '../data/heldSurfaces';
+
 const FIRST_RUN_WATCH = 'Watch an opening';
 const FIRST_RUN_PLAY = 'Play an opening';
 const FIRST_RUN_JUST_PLAY = 'Just play';
@@ -21,7 +23,8 @@ interface FirstRunOpener { line: string; chips: string[] }
 /** The opener: three named in the voice, more on the picker row. */
 export const FIRST_RUN_OPENER: FirstRunOpener = {
   line: 'Three ways to start: watch an opening played out, play one move by move, or just make your first move.',
-  chips: [FIRST_RUN_WATCH, FIRST_RUN_PLAY, FIRST_RUN_JUST_PLAY, 'Import my games', 'Learn how to think'],
+  // "Learn how to think" only while that lesson is released (`heldSurfaces.ts`).
+  chips: [FIRST_RUN_WATCH, FIRST_RUN_PLAY, FIRST_RUN_JUST_PLAY, 'Import my games', ...(isReleased('howToThink') ? ['Learn how to think'] : [])],
 };
 
 /** The openings offered on the "which one?" step — the most played lines a

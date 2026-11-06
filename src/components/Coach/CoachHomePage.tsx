@@ -9,6 +9,7 @@ import { scaledShadow } from '../../utils/neonColors';
 import { logAppAudit } from '../../services/appAuditor';
 import { useUpNext } from '../../hooks/useUpNext';
 import { UpNextBar } from '../Dashboard/UpNextBar';
+import { isReleased } from '../../data/heldSurfaces';
 import type { CSSProperties, KeyboardEvent, MouseEvent, ReactNode } from 'react';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -149,7 +150,8 @@ export function CoachHomePage(): JSX.Element {
             WO-MISSIONS-01). The classic Learn below is untouched. FIRST on the
             hub, full width, Learn and Play underneath (David 2026-10-21: "move
             campaign to the top of coach tab. nice and big like it is"). */}
-        <PrimaryTile
+        {isReleased('campaign') && (
+<PrimaryTile
           icon={<Target size={40} className="text-sky-400" />}
           label="Campaign"
           subtitle="A real game, one habit at a time — the coach names your mission, stays quiet while you play, and rewinds the move you miss."
@@ -165,6 +167,7 @@ export function CoachHomePage(): JSX.Element {
           testId="coach-action-campaign"
           wide
         />
+        )}
 
         <PrimaryTile
           icon={<GraduationCap size={40} className="text-cyan-400" />}
@@ -228,7 +231,9 @@ export function CoachHomePage(): JSX.Element {
           label="Custom Lesson"
           subtitle="A lesson built from your own games — the patterns costing you the most, taught and drilled on your real positions."
           info={
-            "Two lessons, both built for you:\n\n• Your weaknesses — the coach picks the patterns costing you the most, teaches the idea, then drills your real positions.\n• Learn how to think — the method strong players run every move (what did their move change, am I safe, where are their targets…), taught on your own boards. You answer by tapping squares.\n\nEvery lesson remembers what you have done and picks up where you left off."
+            isReleased('howToThink')
+              ? "Two lessons, both built for you:\n\n• Your weaknesses — the coach picks the patterns costing you the most, teaches the idea, then drills your real positions.\n• Learn how to think — the method strong players run every move (what did their move change, am I safe, where are their targets…), taught on your own boards. You answer by tapping squares.\n\nEvery lesson remembers what you have done and picks up where you left off."
+              : "A lesson built from your own games: the coach picks the patterns costing you the most, teaches the idea, then drills your real positions.\n\nIt remembers what you have done and picks up where you left off. With no games yet, play one or import yours and the lesson builds itself from your mistakes."
           }
           rgb="129, 140, 248"
           bgClass="bg-indigo-500/10"
@@ -243,7 +248,8 @@ export function CoachHomePage(): JSX.Element {
         {/* How to Think (David 2026-10-05: "You didn't make a tab for this yet
             in coach tab"). Its own door into the same lesson system — straight
             into "Learn how to think" (`?lesson=think`), no picker. */}
-        <PrimaryTile
+        {isReleased('howToThink') && (
+<PrimaryTile
           icon={<Lightbulb size={40} className="text-amber-400" />}
           label="How to Think"
           subtitle="The questions strong players ask every move — learned one at a time, on your own boards."
@@ -259,13 +265,15 @@ export function CoachHomePage(): JSX.Element {
           testId="coach-action-how-to-think"
           wide
         />
+        )}
 
         {/* The Coaches Library — opens straight to the books (David 2026-07-08:
             "change academy to just say library … open directly to the books").
             The old Academy hub was a redundant middle step now that the opening
             courses live in the Openings explorer; this tile goes right to the
             shelf. */}
-        <PrimaryTile
+        {isReleased('library') && (
+<PrimaryTile
           icon={<Library size={40} className="text-rose-400" />}
           label="The Coaches Library"
           subtitle="The masters' own books — plus our own doctrine — read aloud with live playable boards."
@@ -281,6 +289,7 @@ export function CoachHomePage(): JSX.Element {
           testId="coach-action-library"
           wide
         />
+        )}
 
         <SecondaryTile
           icon={<BarChart3 size={28} className="text-violet-400" />}

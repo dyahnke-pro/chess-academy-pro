@@ -19,6 +19,7 @@ import type { MisconceptionBucket } from '../data/misconceptionTags';
 import type { CoachCurriculumRecord } from '../db/schema';
 import type { UnifiedWeakness } from './weaknessSpine';
 import { conceptForCluster, type WeaknessConcept } from './weaknessConceptMap';
+import { isReleased } from '../data/heldSurfaces';
 
 /** One part of a custom lesson: a hole to teach + drill. */
 export interface CustomLessonPart {
@@ -205,8 +206,11 @@ export const THINKING_LESSON_CHIP = 'Learn how to think';
 const THINKING_LESSON_RE =
   /^(?:(?:hey |ok |okay )?coach[,]?\s+)?(?:(?:can|could|would|will) you\s+|please\s+)?(?:teach me|show me how to think|help me (?:learn|think))(?:\s+(?:something|anything|chess|how to think(?: in chess)?|to think|how to see the board|how to read the board|to read the board))?(?:\s+please)?[\s.!?]*$/i;
 
-/** Whether `text` asks for the coach's thinking lesson plan. PURE. */
+/** Whether `text` asks for the coach's thinking lesson plan. PURE. Never
+ *  while the lesson is held from release (`heldSurfaces.ts`): the words then
+ *  reach the coach like any other request. */
 export function matchThinkingLessonRequest(text: string): boolean {
+  if (!isReleased('howToThink')) return false;
   const t = (text ?? '').trim();
   if (t.toLowerCase() === THINKING_LESSON_CHIP.toLowerCase()) return true;
   if (/^learn how to think[.!?]*$/i.test(t)) return true;

@@ -5,6 +5,7 @@ import {
   THINKING_LESSON_PATH, type UpNextInput, type UpNextPick,
 } from './upNextPicker';
 import type { RepCandidate } from './trainingPlanSelector';
+import { releasedDuring } from '../test/releasedDuring';
 
 const weak: RepCandidate = { kind: 'weakness', key: 'weakness:hung-material:Hung a piece', label: 'Hung a piece or pawn', subtitle: '', tag: 'hung-material', puzzleThemes: ['hangingPiece'] };
 const srs: RepCandidate = { kind: 'srs', key: 'srs:italian-game', label: 'Italian Game', subtitle: '', openingId: 'italian-game' };
@@ -55,6 +56,7 @@ describe('upNextPicker', () => {
 });
 
 describe('the thinking lesson bite (learn-how-to-think)', () => {
+  releasedDuring('howToThink');
   const withoutThinking = (r: UpNextPick[]): string[] => r.filter((p) => p.kind !== 'thinking').map((p) => p.key);
   const inputs: UpNextInput[] = [
     base,

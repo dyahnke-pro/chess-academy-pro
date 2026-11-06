@@ -14,6 +14,7 @@ import { legalMoveFor, bookContinuation } from '../../utils/legalMoveFor';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { CoachBoardBar } from '../Board/CoachBoardBar';
 import { useBoardFit } from '../../hooks/useBoardFit';
+import { isReleased } from '../../data/heldSurfaces';
 import { characterTurn } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { startLearnTranscript, stopLearnTranscript, noteLearnEntry } from '../../services/learnTranscript';
@@ -3427,6 +3428,12 @@ export function CoachTeachPage({ mode }: {
       // NO RECORD YET IS NOT "NO LESSON" (plan 2026-10-04: grey means teach).
       // A fresh student gets the method lesson, on real puzzles, instead of a
       // dead end; the weakness lesson builds itself as games come in.
+      // While "Learn how to think" is held from release (`heldSurfaces.ts`),
+      // the student is told how the lesson gets built instead.
+      if (!isReleased('howToThink')) {
+        void coachDrillSay("Your games aren't mapped yet. Play a game here or import yours, and your lesson builds itself from the moves that cost you.");
+        return;
+      }
       void coachDrillSay("Your games aren't mapped yet, so start with how strong players read the board — it pays off in every game.");
       await startThinkingLesson();
       return;
@@ -13755,7 +13762,7 @@ export function CoachTeachPage({ mode }: {
                 // Chips match the words (defect 2): one per hole the picker
                 // named, the full-lesson chip, and "Learn how to think" — the
                 // generic suggestions only fill what is left.
-                setCoachChoices([...new Set([...plan.pickerChips, THINKING_LESSON_CHIP, ...generic])].slice(0, Math.max(3, plan.pickerChips.length + 1)));
+                setCoachChoices([...new Set([...plan.pickerChips, ...(isReleased('howToThink') ? [THINKING_LESSON_CHIP] : []), ...generic])].slice(0, Math.max(3, plan.pickerChips.length + 1)));
                 speechChainRef.current = speechChainRef.current
                   .then(() => kickSpeak(openerLine))
                   .catch(() => undefined);

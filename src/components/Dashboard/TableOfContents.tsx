@@ -16,6 +16,7 @@ import type { ComponentType } from 'react';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
 import { THEME_MAP } from '../../services/puzzleService';
+import { isHeldRoute } from '../../data/heldSurfaces';
 
 // ─── Tree shape ───────────────────────────────────────────────────────────
 
@@ -184,6 +185,22 @@ const SECTIONS: TocSection[] = [
   },
 ];
 
+/** The map as the student sees it: an entry for a surface held from release
+ *  (`heldSurfaces.ts`) is left out, and a section left empty goes with it. */
+function released(items: TocItem[]): TocItem[] {
+  return items.flatMap((it) => {
+    if (it.route && isHeldRoute(it.route)) return [];
+    if (!it.children) return [it];
+    const children = released(it.children);
+    return children.length || it.route ? [{ ...it, children }] : [];
+  });
+}
+function releasedSections(): TocSection[] {
+  return SECTIONS
+    .map((s) => ({ ...s, items: released(s.items) }))
+    .filter((s) => s.items.length > 0);
+}
+
 // ─── Recursive node ─────────────────────────────────────────────────────────
 
 interface NodeProps {
@@ -316,7 +333,7 @@ export function TableOfContents(): JSX.Element {
           }}
           data-testid="toc-panel"
         >
-          {SECTIONS.map((section) => {
+          {releasedSections().map((section) => {
             const Icon = section.icon;
             const sectionKey = section.key;
             const isOpen = expanded.has(sectionKey);
