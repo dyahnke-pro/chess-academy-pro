@@ -109,7 +109,7 @@ try {
   };
   // A side-to-move-white FEN from the rendered pieces, to read which lit square
   // the lit piece can legally reach (a lesson's own highlights light more).
-  const fenFrom = (placement) => {
+  const fenFrom = (placement, side) => {
     const ranks = [];
     for (let r = 8; r >= 1; r--) {
       let line = ''; let empty = 0;
@@ -121,13 +121,18 @@ try {
       }
       ranks.push(line + (empty || ''));
     }
-    return `${ranks.join('/')} w - - 0 1`;
+    return `${ranks.join('/')} ${side} - - 0 1`;
   };
+  // The student's side is whichever colour the lit piece is (a Black opening
+  // flips the board and lights a black piece).
   const litMove = (placement, litSquares) => {
-    const c = new Chess(fenFrom(placement));
-    for (const from of litSquares.filter((sq) => placement[sq]?.startsWith('w'))) {
-      const to = c.moves({ square: from, verbose: true }).map((m) => m.to).find((t) => litSquares.includes(t));
-      if (to) return { from, to };
+    for (const side of ['w', 'b']) {
+      let c;
+      try { c = new Chess(fenFrom(placement, side)); } catch { continue; }
+      for (const from of litSquares.filter((sq) => placement[sq]?.startsWith(side))) {
+        const to = c.moves({ square: from, verbose: true }).map((m) => m.to).find((t) => litSquares.includes(t));
+        if (to) return { from, to };
+      }
     }
     return null;
   };
@@ -144,7 +149,10 @@ try {
     .map((sq) => sq.getAttribute('data-square')));
 
   // Move 1: the dictated move is lit — drag it with a finger.
-  const lit1 = await lit();
+  // On a Black line the opponent's first move auto-plays first (after its
+  // dictation); nothing is lit until it is the student's turn.
+  let lit1 = await lit();
+  for (let i = 0; i < 40 && !litMove(await fenOf(), lit1); i++) { await sleep(250); lit1 = await lit(); }
   const before1 = await fenOf();
   const m1 = litMove(before1, lit1);
   if (!m1) throw new Error(`move 1 not lit (lit=${lit1.join(',')})`);
