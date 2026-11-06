@@ -113,13 +113,18 @@ function ActionButton({ action, onClick }: {
  *  component every coach bubble renders through, so one call covers all six
  *  surfaces and the seventh. See `services/coachChatText.ts`. */
 export function ChatMessage({ message, isStreaming, onPickChoice, onWalkLine }: ChatMessageProps): JSX.Element {
-  const localized = useLocalizedContent(message.content, message.role, { streaming: isStreaming });
   // THE BEGINNER REGISTER (2026-10-02: real users asked what "G" and "bxe7"
   // mean). Below 1000 — and unrated, which defaults there: an empty record
   // teaches — every move in a coach bubble reads in words with its notation
   // after it. Phrasing only; how much the coach says is not the rating's call.
+  // The words are English, so they are written on the English source INSIDE
+  // the translation door, never over a translated bubble (chat-surfaces audit
+  // 2026-11-06: "Su respuesta más fuerte es bishop to b6 (Bb6)").
   const beginner = useAppStore((s) => coreRatingTier(s.activeProfile?.currentRating) === 'beginner');
-  const shownContent = beginner && message.role === 'assistant' ? movesInWords(localized) : localized;
+  const shownContent = useLocalizedContent(message.content, message.role, {
+    streaming: isStreaming,
+    ...(beginner && message.role === 'assistant' ? { renderEnglish: movesInWords } : {}),
+  });
   const navigate = useNavigate();
   const isUser = message.role === 'user';
   const actions = message.metadata?.actions ?? [];

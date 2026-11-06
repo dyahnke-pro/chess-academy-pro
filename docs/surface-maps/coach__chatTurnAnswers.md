@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**668 lines · 11 exports · 4 importers · 3 tests · 0 audits**
+**748 lines · 11 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -59,14 +59,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `answerAttack` (function) — 2 call sites
 - `src/coach/chatTurnAnswers.test.ts:74`
-- `src/coach/handWalk1009.test.ts:237`
+- `src/coach/handWalk1009.test.ts:241`
 
 ### `answerMaterialChange` (function) — 2 call sites
-- `src/coach/handWalk1009.test.ts:291`
 - `src/coach/handWalk1009.test.ts:295`
+- `src/coach/handWalk1009.test.ts:299`
 
 ### `answerExplainLast` (function) — 1 call site
-- `src/coach/handWalk1009.test.ts:311`
+- `src/coach/handWalk1009.test.ts:315`
 
 ### `answerLeftBook` (function) — 2 call sites
 - `src/coach/leftBook.test.ts:19`

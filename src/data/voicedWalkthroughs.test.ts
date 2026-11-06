@@ -7,10 +7,6 @@ const r = (q: string) => resolveVoicedWalkthrough(q, inferStudentSideFromName(q)
 
 describe('resolveVoicedWalkthrough', () => {
   it('resolves a single-opening teach request to a voiced tree', () => {
-    const caro = r('teach me the caro-kann');
-    expect(caro).not.toBeNull();
-    expect(caro?.openingName.toLowerCase()).toContain('caro');
-
     const italian = r('Italian Game');
     expect(italian?.openingName.toLowerCase()).toContain('italian');
 
@@ -105,6 +101,26 @@ describe('resolveVoicedWalkthrough selects by the MOVES a tree teaches, never by
     }
     expect(checked).toBeGreaterThan(5);
   }, 60_000);
+
+  it('a bare family name is never served a sub-line\'s lesson (chat-surfaces audit 2026-11-06)', () => {
+    // "teach me the caro kann" in Learn started "Caro-Kann Defense: Tartakower
+    // (Nf6) Variation" while every other screen offered the Caro-Kann itself:
+    // the Tartakower tree contains the family's moves, tied on name tokens and
+    // won on richness. A family ask gets the family's lesson or none.
+    for (const [ask, side] of [['caro kann', 'black'], ['Caro-Kann Defense', 'black'], ['sicilian', 'black'], ['French Defense', 'white'], ['Ruy Lopez', 'black'], ['Vienna Game', 'black']] as const) {
+      const family = resolveOpeningEntry(ask)?.canonicalName;
+      const tree = resolveVoicedWalkthrough(ask, side);
+      if (tree) expect(resolveOpeningEntry(tree.openingName)?.canonicalName, `"${ask}" → ${tree.openingName}`).toBe(family);
+    }
+    expect(resolveVoicedWalkthrough('teach me the caro kann', 'black')?.openingName ?? null).not.toMatch(/Tartakower/);
+  }, 60_000);
+
+  it('a family lesson still teaches the sub-lines it contains', () => {
+    // The DB's "Sicilian Defense" row is an Open-Sicilian stub, so the Moscow
+    // (…d6 Bb5+) is not on its line — but it IS a Sicilian, and the family
+    // lesson that walks it is the lesson for it.
+    expect(resolveVoicedWalkthrough('Sicilian Defense: Moscow Variation', 'white')?.openingName).toBe('Sicilian Defense');
+  });
 
   it('a voiced-only label still resolves by name when EVERY content token hits', () => {
     const adv = r('Scandinavian Defense (2.e5 Advance)');

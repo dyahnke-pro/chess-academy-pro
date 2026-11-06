@@ -245,32 +245,43 @@ async function modelPhrase(text: string, languageName: string): Promise<string |
  * Student messages are never touched: those are their own words. Neither is a
  * bubble still STREAMING — half a sentence is not a translation unit, and the
  * final text gets its own pass a moment later.
+ *
+ * 🔒 `renderEnglish` RUNS ON THE ENGLISH SOURCE, BEFORE THE TRANSLATION
+ * (chat-surfaces audit 2026-11-06: a Spanish answer read "Su respuesta más
+ * fuerte es bishop to b6 (Bb6)" — the beginner register wrote English move
+ * words into the bubble AFTER this door had translated it). An English
+ * rendering of the app's own text (moves in words) is applied here, to the
+ * text this door shows in English or hands to the translation, so the words
+ * reach the student in their language. Text this door shows untranslated in
+ * another language is never given English words: its moves stay in notation.
  */
 export function useLocalizedContent(
   content: string,
   role: string,
-  opts?: { streaming?: boolean },
+  opts?: { streaming?: boolean; renderEnglish?: (english: string) => string },
 ): string {
   const [done, setDone] = useState<{ key: string; text: string } | null>(null);
 
-  const languageName = role === 'assistant' && !opts?.streaming
-    ? chosenOrTypedLanguageName()
-    : null;
+  // The conversation's language, streaming or not — it decides whether the
+  // text on screen is English; only the TRANSLATION waits for the final text.
+  const conversation = role === 'assistant' ? chosenOrTypedLanguageName() : null;
+  const languageName = opts?.streaming ? null : conversation;
   const langCode = languageName ? codeForLanguageName(languageName) : null;
   const eligible = !!langCode && !!languageName && needsLocalizing(content);
-  const table = eligible && langCode ? phraseFor(content, langCode) : null;
-  const key = `${languageName ?? ''}::${content}`;
+  const source = opts?.renderEnglish && (!conversation || needsLocalizing(content)) ? opts.renderEnglish(content) : content;
+  const table = eligible && langCode ? phraseFor(source, langCode) : null;
+  const key = `${languageName ?? ''}::${source}`;
 
   useEffect(() => {
     if (!eligible || table || !languageName) return;
     let cancelled = false;
-    void modelPhrase(content, languageName).then((said) => {
+    void modelPhrase(source, languageName).then((said) => {
       if (!cancelled && said) setDone({ key, text: said });
     });
     return () => { cancelled = true; };
-  }, [eligible, table, content, languageName, key]);
+  }, [eligible, table, source, languageName, key]);
 
-  if (!eligible) return content;
+  if (!eligible) return source;
   if (table) return table;
-  return done && done.key === key ? done.text : content;
+  return done && done.key === key ? done.text : source;
 }
