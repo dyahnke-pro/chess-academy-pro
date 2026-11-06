@@ -9,7 +9,20 @@ const config: CapacitorConfig = {
     hostname: 'app.chessacademy.pro',
   },
   ios: {
-    contentInset: 'always',
+    // 🔒 'never' — THE WEB VIEW NEVER INSETS ITS CONTENT (David's iPhone,
+    // 2026-11-06: "Tired pressing the knight, but it hit the pawn"). With
+    // 'always' the scroll view inset the page below the status bar, and once
+    // that inset changed in a session (the splash hides the status bar at
+    // launch, then it comes back) WebKit DREW the page lower but still resolved
+    // touches at the un-inset position: every tap landed about a status bar
+    // lower than the finger — the knight on f6 answered as the pawn on f7, on
+    // every board, until the app was backgrounded. The page owns the safe area
+    // itself (viewport-fit=cover + env(safe-area-inset-*), counted once in
+    // index.css), so nothing draws under the status bar or the home indicator.
+    // Measured the same way on a real device by another app:
+    // https://github.com/KyleMit/Splotch/pull/2249. Gate:
+    // src/test/iosContentInset.gate.test.ts.
+    contentInset: 'never',
     // Native WKWebView scrolling. Was `false`, which disabled scrolling
     // entirely on device — content below the fold was unreachable (David's
     // TestFlight report 2026-06-03). The app's pages rely on normal vertical

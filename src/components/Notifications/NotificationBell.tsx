@@ -323,7 +323,7 @@ export function NotificationBell(): JSX.Element {
 
       {open && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 pt-16"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 pt-[calc(4rem+env(safe-area-inset-top,0px))]"
           onClick={closePanel}
           data-testid="notification-overlay"
         >

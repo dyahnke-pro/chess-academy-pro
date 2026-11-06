@@ -47,7 +47,8 @@ const SAT = 59;
 const SAB = 34;
 /** Routes worth checking: the home screen David reported, plus a page whose own
  *  header used to be a separate scroller. */
-const ROUTES = ['/', '/weaknesses'];
+const ROUTES = ['/', '/weaknesses', '/coach/teach', '/coach/play'];
+const OUT_DIR = `audit-reports/safe-area-${new Date().toISOString().replace(/[:.]/g, '-')}`;
 
 async function main() {
   const results = [];
@@ -58,31 +59,38 @@ async function main() {
   });
   const ctx = await browser.newContext({
     ...sandboxContextOptions(),
-    viewport: { width: 393, height: 852 },
+    // iPhone Pro Max portrait (David's phone, 430×932).
+    viewport: { width: 430, height: 932 },
     isMobile: true, hasTouch: true, deviceScaleFactor: 3,
   });
   await ctx.addInitScript(muteTtsForAudit);
   const page = await ctx.newPage();
+  // THE REAL NOTCH, not a variable override: Chromium's safe-area emulation
+  // makes every env(safe-area-inset-*) report the device's insets, so an
+  // element that reads env() directly (a sheet, a side panel) is measured too.
+  // Since 2026-11-06 the iOS web view no longer insets the page (capacitor
+  // contentInset 'never'), so this IS what the phone draws.
+  const cdp = await ctx.newCDPSession(page);
+  await cdp.send('Emulation.setSafeAreaInsetsOverride', { insets: { top: SAT, bottom: SAB, left: 0, right: 0 } });
+  const { mkdirSync } = await import('node:fs');
+  mkdirSync(OUT_DIR, { recursive: true });
 
   for (const route of ROUTES) {
     await page.goto(`${BASE_URL}${route}`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
     await page.waitForSelector('main', { timeout: 45_000 }).catch(() => {});
     await page.waitForTimeout(1_500);
 
-    // Simulate the notch. Injected AFTER mount — see the header note.
     await page.addStyleTag({ content:
-      `:root{--sat:${SAT}px!important;--sab:${SAB}px!important}`
-      + '[data-testid="strength-calibration-bubble"],[data-testid="page-help-modal"],'
-      + '[data-testid="ai-consent-modal"]{display:none!important}' });
+      '[data-testid="strength-calibration-bubble"],[data-testid="page-help-modal"],'
+      + '[data-testid="ai-consent-modal"],[data-testid="first-run-strength"]{display:none!important}' });
     await page.waitForTimeout(400);
 
     // PRECONDITION — refuse to report anything unless the notch really applied.
-    // The app raises the bar by padding only HALF the top inset (index.css
-    // --sat-pad, David 2026-09-07), so the applied padding-top is SAT/2, not
-    // SAT. The reclaimed half is added back to --app-height, so the scroll
-    // invariant below (docOverflow ~0, docScrolled 0) is unchanged — that is
-    // what this audit actually guards.
-    const EXPECT_PAD_TOP = SAT * 0.5;
+    // The page pads the WHOLE top inset (index.css --sat-pad): the iOS web view
+    // no longer insets the page (capacitor contentInset 'never', 2026-11-06 —
+    // the inset made every tap land a status bar low), so the page's padding is
+    // the only thing that keeps the top bar off the status bar.
+    const EXPECT_PAD_TOP = SAT;
     const applied = await page.evaluate(() => {
       const cs = getComputedStyle(document.documentElement);
       return { sat: cs.getPropertyValue('--sat').trim(), padTop: cs.paddingTop };
@@ -128,15 +136,26 @@ async function main() {
         out.overscrollY = ob;
         out.containsOverscroll = ob === 'contain' || ob === 'none';
       }
+      // NOTHING UNDER THE STATUS BAR OR THE HOME INDICATOR: the app's top bar
+      // starts at or below the top inset, and every bottom-nav label ends
+      // above the home indicator.
+      const header = document.querySelector('header');
+      out.headerTop = header ? Math.round(header.getBoundingClientRect().top) : null;
+      const labels = [...document.querySelectorAll('[data-bottom-nav] a, [data-bottom-nav] button')];
+      out.navBottom = labels.length ? Math.round(Math.max(...labels.map((l) => l.getBoundingClientRect().bottom))) : null;
       return out;
     });
+    await page.screenshot({ path: `${OUT_DIR}/${route === '/' ? 'home' : route.slice(1).replace(/\//g, '_')}.png` });
 
+    const clearOfStatusBar = m.headerTop === null || m.headerTop >= SAT - 1;
+    const clearOfHomeBar = m.navBottom === null || m.navBottom <= 932 - SAB + 1;
     const ok = m.docOverflowPx <= 1 && m.docScrolledBy === 0
       && m.overflowing.length === 0 && m.reachedBottom && m.lastRowClearsNav
-      && m.containsOverscroll;
+      && m.containsOverscroll && clearOfStatusBar && clearOfHomeBar;
     results.push({ route, ok, ...m });
     console.log(`${ok ? '✓' : '✗'} ${route}  docOverflow=${m.docOverflowPx}px docScrolled=${m.docScrolledBy}px `
-      + `reachedBottom=${m.reachedBottom} overscrollY=${m.overscrollY} lastRow="${m.lastRowText}" clearsNav=${m.lastRowClearsNav}`);
+      + `reachedBottom=${m.reachedBottom} overscrollY=${m.overscrollY} lastRow="${m.lastRowText}" clearsNav=${m.lastRowClearsNav} `
+      + `headerTop=${m.headerTop} (≥${SAT}) navBottom=${m.navBottom} (≤${932 - SAB})`);
     for (const o of m.overflowing) console.log(`    OVERFLOWS VIEWPORT: ${o}`);
   }
 

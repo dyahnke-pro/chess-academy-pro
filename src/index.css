@@ -73,15 +73,18 @@ main .overflow-y-auto {
   --sar: env(safe-area-inset-right, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
   --sal: env(safe-area-inset-left, 0px);
-  /* Raise the app toward the top (David 2026-09-07: "the top bar sits a little
-     low — raise it"). We consume only HALF the top inset as padding; the top
-     bar moves up by the other half. This is NOT a change to the scroll fix: the
-     insets are STILL counted exactly once — whatever we don't pad at the top is
-     added back to --app-height below (top-pad + app-height + bottom-pad =
-     100dvh always), so the document still never overflows or scrolls. To move
-     the bar further up, lower the 0.5 factor (0 = flush to the very top, under
-     the Dynamic Island); to restore the full inset, set it to 1. */
-  --sat-pad: calc(var(--sat) * 0.5);
+  /* THE TOP INSET, PADDED IN FULL — the app's top bar sits right under the
+     status bar (David 2026-09-07: "the top bar sits a little low — raise it").
+     🔴 This was HALF the inset, and the bar only cleared the clock because the
+     iOS web view ALSO inset the page by the whole status bar (capacitor
+     `contentInset: 'always'`) — the inset counted one and a half times. That
+     native inset is gone (2026-11-06: it made every tap land a status bar low,
+     capacitor.config.ts), so the page is the only thing keeping the bar off the
+     status bar, and it pads by the whole inset: the bar sits 30pt higher than
+     it did, flush under the status bar, which is where the half was trying to
+     put it. Top-pad + app-height + bottom-pad = 100dvh always, so the document
+     still never overflows or scrolls. */
+  --sat-pad: var(--sat);
   /* The viewport MINUS what html's padding below already consumes. */
   --app-height: calc(100dvh - var(--sat-pad) - var(--sab));
 }

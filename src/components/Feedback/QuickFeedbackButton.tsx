@@ -181,6 +181,9 @@ export function QuickFeedbackButton(): JSX.Element {
               maxWidth: '420px',
               marginLeft: 'auto',
               maxHeight: '92vh',
+              // The sheet's send row stays above the home indicator: the page
+              // owns the safe area (capacitor contentInset 'never').
+              paddingBottom: 'env(safe-area-inset-bottom, 0px)',
               borderTopLeftRadius: '16px',
               borderTopRightRadius: '16px',
               boxShadow: '0 -10px 30px rgba(0, 0, 0, 0.25)',

@@ -79,7 +79,7 @@ export function ReferralPanel(): JSX.Element | null {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[110] flex items-start justify-center bg-black/40 p-4 pt-16"
+      className="fixed inset-0 z-[110] flex items-start justify-center bg-black/40 p-4 pt-[calc(4rem+env(safe-area-inset-top,0px))]"
       onClick={() => setOpen(false)}
       data-testid="referral-overlay"
     >

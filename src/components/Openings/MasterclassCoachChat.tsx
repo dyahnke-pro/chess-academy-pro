@@ -148,7 +148,7 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
   }
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 flex flex-col bg-theme-bg border-t-2 border-amber-500/40 max-h-[70vh] md:inset-auto md:bottom-6 md:right-4 md:w-96 md:rounded-2xl md:border-2 md:max-h-[32rem] shadow-2xl" data-testid="masterclass-coach-panel">
+    <div className="fixed inset-x-0 bottom-0 z-40 flex flex-col bg-theme-bg border-t-2 border-amber-500/40 max-h-[70vh] pb-[env(safe-area-inset-bottom,0px)] md:pb-0 md:inset-auto md:bottom-6 md:right-4 md:w-96 md:rounded-2xl md:border-2 md:max-h-[32rem] shadow-2xl" data-testid="masterclass-coach-panel">
       <div className="flex items-center justify-between px-4 py-3 border-b border-theme-border/40">
         <span className="text-sm font-semibold text-amber-300 truncate">{scope.label}</span>
         <button type="button" onClick={() => setOpen(false)} aria-label="Close coach chat" className="p-1.5 rounded-full text-theme-text">

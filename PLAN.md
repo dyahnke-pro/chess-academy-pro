@@ -13,6 +13,23 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 📱 iPHONE TAPS LAND A ROW LOW — the web view's inset (David 2026-11-06, TestFlight 4.0.8 (211): "Tired pressing the knight, but it hit the pawn" → "Coach tab / All surfaces / They don't work on my end")
+
+**What his phone showed.** A "Learn how to think" board, flipped to Black: he tapped the knight on f6, the app marked the pawn on f7, one row lower. His PostHog rows from that session: a cold launch at 4:12 PM, two boards where every tap answered the square below (a bishop and a pawn when he aimed at the knight on e5), and the app read correctly again after it came back from the background at 4:15.
+
+**Cause.** `capacitor.config.ts` had `ios.contentInset: 'always'` since WO-21: the web view's scroll view inset the page below the status bar. When that inset changes inside a session (the splash hides the status bar at launch, then it returns), WebKit draws the page lower but resolves touches at the un-inset position, so a tap lands about one status bar low until the app is backgrounded. The same bug was measured on a real device by another app (KyleMit/Splotch #2249, iPadOS 26.5, after a rotation) and fixed the same way. His own rows show the inset was never stable: `$viewport_height` 898, 873 and 839 on one 932pt-tall phone across launches. The other session's fix the day before (`boardTouch.ts`, e825a58) treated the same symptom as page scroll stealing the finger, and was not the cause.
+
+**Fix.**
+1. `contentInset: 'never'`. The web view never insets; the page owns the safe area (viewport-fit=cover + env()).
+2. `index.css` pads the WHOLE top inset (`--sat-pad: var(--sat)`). The half it padded before only cleared the clock because the native inset added the other 59pt. The top bar now sits flush under the status bar, 30pt higher than in 4.0.8; the bottom nav runs to the screen edge with its labels above the home indicator.
+3. Every element pinned to a screen edge pads that edge, because `fixed` sits outside the page's padding: the side menu, the notification and referral panels, the paywall and review-prompt sheets, the masterclass chat sheet and the feedback sheet.
+
+**Gate:** `src/test/iosContentInset.gate.test.ts`. It pins 'never', checks the full top pad, and checks that every edge-pinned element pads its edge. On the old code it fails and names the five panels.
+
+**Audit:** `scripts/audit-safe-area-layout.mjs` now uses Chromium's real safe-area emulation (`Emulation.setSafeAreaInsetsOverride`) instead of a CSS-variable override, so elements that read env() directly are measured too. It runs at 430×932 on Home, Weaknesses, Learn and Play, checks that the top bar starts at or below the status bar and that the bottom nav ends above the home indicator, and saves screenshots. With the fix, the top bar is at 59pt and the nav ends at 898pt on all four routes. The old CSS with the inset removed puts the top bar at 30pt, under the clock. The Weaknesses last-row check fails the same way on the live build (not this change).
+
+**Still owed:** a TestFlight build with the fix, then David taps pieces on his phone. The hit test itself can only be proven on a device.
+
 ## 🪑 WO-COACH-NEXT-TO-YOU-01 — Learn feels like a coach beside you, inside the focus game (David 2026-11-06: "I want it to feel like a chess coach is sitting next to you walking you through a game. Teaching you how to identify weaknesses, induce mistakes, identify tactics, set up tactics" → "It also needs to adapt to the user. Give more guidance in some areas, but stay silent in others" → "Let's get it to main then start. We can unlock the silent narrations. I really liked the focus games so let's incorporate that into the plan")
 
 **Where it stands (2026-11-06).** Since D1 (on main 6298a31) the Learn turn door speaks every turn of a focus game, holding a fact that touches the student's own chance until they move (`ChanceHold`). What is missing is the coach's four MOMENTS and the record deciding how much each says. This WO grows the Learn matrix (L4 below) along those four moments; it is not a second door.

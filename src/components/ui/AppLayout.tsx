@@ -304,7 +304,7 @@ export function AppLayout(): JSX.Element {
             data-testid="sidebar-overlay"
           />
           <nav
-            className="md:hidden fixed top-0 right-0 bottom-0 w-64 z-50 flex flex-col py-6"
+            className="md:hidden fixed top-0 right-0 bottom-0 w-64 z-50 flex flex-col pt-[calc(1.5rem+env(safe-area-inset-top,0px))] pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))]"
             style={{
               background: 'var(--color-bg-secondary)',
               borderLeft: '2px solid rgba(0, 229, 255, 0.4)',

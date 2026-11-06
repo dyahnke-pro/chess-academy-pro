@@ -38,7 +38,7 @@ export function ReviewPrompt(): JSX.Element | null {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/60 p-4 sm:items-center" data-testid="review-prompt">
+    <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/60 p-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] sm:items-center" data-testid="review-prompt">
       <div className="w-full max-w-sm rounded-2xl border border-zinc-700 bg-[#1a1a1a] p-5 shadow-xl">
         {step === 'ask' ? (
           <>
