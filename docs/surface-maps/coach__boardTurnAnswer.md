@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**453 lines · 6 exports · 8 importers · 8 tests · 0 audits**
+**460 lines · 6 exports · 9 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/coach/boardTurnAnswer.hardWalk.test.ts`
+- `src/coach/boardTurnAnswer.planOrder.test.ts`
 - `src/coach/boardTurnAnswer.test.ts`
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/developNext.test.ts`
@@ -26,9 +27,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `BOARD_ANSWERED_KINDS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setBoardEngineForTests` (function) — 19 call sites
+### `setBoardEngineForTests` (function) — 21 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:13`
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:18`
+- `src/coach/boardTurnAnswer.planOrder.test.ts:18`
+- `src/coach/boardTurnAnswer.planOrder.test.ts:24`
 - `src/coach/boardTurnAnswer.test.ts:18`
 - `src/coach/boardTurnAnswer.test.ts:30`
 - `src/coach/boardTurnAnswer.test.ts:39`
@@ -47,12 +50,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/lineOutcome.test.ts:33`
 - `src/coach/lineOutcome.test.ts:57`
 
-### `answerBoardTurn` (function) — 16 call sites
+### `answerBoardTurn` (function) — 17 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:30`
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:36`
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:44`
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:48`
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:52`
+- `src/coach/boardTurnAnswer.planOrder.test.ts:32`
 - `src/coach/boardTurnAnswer.test.ts:34`
 - `src/coach/boardTurnAnswer.test.ts:43`
 - `src/coach/boardTurnAnswer.test.ts:48`
@@ -82,6 +86,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/coach/boardTurnAnswer.hardWalk.test.ts`
+- `src/coach/boardTurnAnswer.planOrder.test.ts`
 - `src/coach/boardTurnAnswer.test.ts`
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/developNext.test.ts`

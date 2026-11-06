@@ -1,8 +1,8 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.",
  "graph": {
-  "files": 1759,
-  "nodes": 16417
+  "files": 1760,
+  "nodes": 16423
  },
  "totals": {
   "computers": 346,
@@ -26,8 +26,8 @@
     "no": 202
    },
    "chat": {
-    "yes": 202,
-    "no": 144
+    "yes": 216,
+    "no": 130
    },
    "tapped": {
     "yes": 158,
@@ -462,12 +462,14 @@
    "learn": "held",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "endgame"
    ],
@@ -856,12 +858,14 @@
    "learn": "held",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "endgame"
    ]
@@ -2997,12 +3001,14 @@
    "learn": "held",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "endgame"
    ]
@@ -3086,12 +3092,14 @@
    "learn": "held",
    "review": "no",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "endgame"
    ]
   },
@@ -3309,12 +3317,14 @@
    "learn": "held",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "endgame"
    ]
@@ -3441,12 +3451,14 @@
    "learn": "no",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "endgame"
    ]
@@ -3958,12 +3970,14 @@
    "learn": "held",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "endgame"
    ],
@@ -4068,12 +4082,14 @@
    "learn": "held",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "endgame"
    ],
@@ -4171,12 +4187,14 @@
    "learn": "no",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "endgame"
    ]
@@ -4328,12 +4346,14 @@
    "learn": "held",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "endgame"
    ]
@@ -5388,12 +5408,14 @@
    "learn": "held",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "endgame"
    ],
@@ -5959,12 +5981,14 @@
    "learn": "held",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "endgame"
    ],
@@ -6823,12 +6847,14 @@
    "learn": "held",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "endgame"
    ]
@@ -6843,12 +6869,14 @@
    "learn": "held",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "no",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "endgame"
    ]
