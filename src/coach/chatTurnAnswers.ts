@@ -8,7 +8,7 @@
 // square the conversation was last about ("and how many defend it?").
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
-import type { ConversationState, ResolvedChatTurn } from './chatTurn';
+import { answersEachPiece, type ConversationState, type EachPieceKind, type ResolvedChatTurn } from './chatTurn';
 import { findLoosePieces } from '../services/loosePieces';
 import { findHangingBySee, captureRead } from '../services/positionReadingService';
 import { PIECE_NAMES } from '../types/tacticTypes';
@@ -61,6 +61,43 @@ function listOf(chess: Chess, squares: readonly Square[]): string {
 const capFirst = (s: string): string => openSentence(s);
 const count = (n: number): string => ['None', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight'][n] ?? String(n);
 
+/**
+ * THE LINES SEVERAL PIECES SHARE — each answerer says these about one piece,
+ * and the each-piece composer says them ONCE for every piece they fit ("Nothing
+ * of theirs can get at your knights on b1 or g1 next move."). One wording per
+ * line, so the single answer and the shared one cannot drift. `join`: "or"
+ * where nothing reaches any of them, "and" where the fact holds of all.
+ */
+interface SharedLine { join: 'and' | 'or'; say: (subject: string, many: boolean) => string }
+type SharedKey = 'no-attack-theirs' | 'no-attack-yours' | 'no-attackers' | 'no-defenders' | 'guarded'
+  | 'not-a-target' | 'not-attacked' | 'defend-wait' | 'win-their-move' | 'win-none';
+const SHARED: Record<SharedKey, SharedLine> = {
+  'no-attack-theirs': { join: 'or', say: (s) => `Nothing of theirs can get at ${s} next move.` },
+  'no-attack-yours': { join: 'or', say: (s) => `Nothing of yours can get at ${s} in one move.` },
+  'no-attackers': { join: 'or', say: (s) => `Nothing attacks ${s}.` },
+  'no-defenders': { join: 'or', say: (s) => `Nothing defends ${s}.` },
+  guarded: { join: 'and', say: (s, many) => `${capFirst(s)} ${many ? 'are' : 'is'} guarded.` },
+  'not-a-target': { join: 'and', say: (s, many) => (many
+    ? `${capFirst(s)} are not targets right now: nothing attacks them.`
+    : `${capFirst(s)} is not a target right now: nothing attacks it.`) },
+  'not-attacked': { join: 'and', say: (s, many) => `${capFirst(s)} ${many ? 'are not attacked, so they need' : 'is not attacked, so it needs'} no defending yet.` },
+  'defend-wait': { join: 'and', say: (s, many) => `It is their move, so ${s} ${many ? 'have' : 'has'} to wait — see what they play first.` },
+  'win-their-move': { join: 'and', say: (s, many) => `It is their move first, so ${s} can be protected before you can take ${many ? 'them' : 'it'}.` },
+  'win-none': { join: 'or', say: (s) => `Not right now — nothing of yours can win ${s}, and no single move sets it up.` },
+};
+
+/** "your knights on b1 and g1" — several pieces as one subject; mixed kinds
+ *  or owners are listed one by one. */
+function piecesPhrase(chess: Chess, squares: readonly Square[], student: Color, join: 'and' | 'or'): string {
+  const list = join === 'or' ? orList : andList;
+  const ps = squares.map((s) => chess.get(s));
+  const first = ps[0];
+  if (first && ps.every((p) => p && p.color === first.color && p.type === first.type)) {
+    return `${first.color === student ? 'your' : 'their'} ${name(first.type)}s on ${list([...squares])}`;
+  }
+  return list(squares.map((s) => owned(chess, s, student)));
+}
+
 export function answerIsLoose(chess: Chess, sq: Square | null, student: Color, seat: 'me' | 'them' | null = null): string {
   if (sq) {
     const p = chess.get(sq);
@@ -81,7 +118,7 @@ export function answerIsLoose(chess: Chess, sq: Square | null, student: Color, s
       if (gain !== null && gain > 0 && chess.attackers(sq, enemy).length > 0) {
         return `${capFirst(owned(chess, sq, student))} is guarded, but the trade still loses material: the ${listOf(chess, chess.attackers(sq, enemy))} can take it.${after}`;
       }
-      return `${capFirst(owned(chess, sq, student))} is guarded.`;
+      return SHARED.guarded.say(owned(chess, sq, student), false);
     }
     return loose.attacked
       ? `${capFirst(owned(chess, sq, student))} is loose and attacked by the ${listOf(chess, loose.attackers)}.${after}`
@@ -143,7 +180,7 @@ export function answerCount(chess: Chess, sq: Square | null, student: Color, whi
   const by = chess.attackers(sq, which === 'attackers' ? enemy : owner).filter((s) => s !== sq);
   const subject = owned(chess, sq, student);
   const verb = which === 'attackers' ? 'attack' : 'defend';
-  if (by.length === 0) return `Nothing ${verb}s ${subject}.`;
+  if (by.length === 0) return SHARED[which === 'attackers' ? 'no-attackers' : 'no-defenders'].say(subject, false);
   const whose = (which === 'attackers' ? enemy : owner) === student ? 'your' : 'their';
   return `${count(by.length)} ${by.length === 1 ? (which === 'attackers' ? 'attacks' : 'defends') : verb} ${subject}: ${whose} ${listOf(chess, by)}.`;
 }
@@ -169,7 +206,7 @@ export function answerWhyTarget(chess: Chess, sq: Square | null, student: Color)
   const defenders = chess.attackers(sq, owner).filter((s) => s !== sq);
   const subject = capFirst(owned(chess, sq, student));
   if (attackers.length === 0 && defenders.length === 0) return `${subject} is not attacked yet, but nothing guards it — one attack and it is in trouble.`;
-  if (attackers.length === 0) return `${subject} is not a target right now: nothing attacks it.`;
+  if (attackers.length === 0) return SHARED['not-a-target'].say(subject, false);
   const hanging = findHangingBySee(chess.fen()).some((h) => h.square === sq);
   if (defenders.length === 0) return `${subject} is attacked by the ${listOf(chess, attackers)} and nothing guards it.`;
   if (hanging) return `${subject} is attacked ${attackers.length} time${attackers.length === 1 ? '' : 's'} and defended ${defenders.length} — the trade wins material for the attacker.`;
@@ -242,11 +279,54 @@ export function answerAboutPiece(chess: Chess, sq: Square | null, student: Color
   return [...lines, safety, scope].filter(Boolean).join(' ');
 }
 
+/**
+ * EVERY PIECE A NAME MATCHED, ANSWERED (audit 2026-11-06). Each kind's one-
+ * piece answer, and the shared lines it can end in — a `Record` over
+ * `EACH_PIECE_KINDS`, so a kind cannot be listed there without a renderer.
+ */
+const EACH_PIECE: Record<EachPieceKind, {
+  answer: (chess: Chess, sq: Square, student: Color, out?: { lines?: WalkableLine[] }) => string | null;
+  shared: readonly SharedKey[];
+}> = {
+  'attack-piece': { answer: (c, sq, s, out) => answerAttack(c, sq, s, out), shared: ['no-attack-theirs', 'no-attack-yours'] },
+  'win-piece': { answer: (c, sq, s) => answerWin(c, sq, s), shared: ['win-their-move', 'win-none'] },
+  'defend-piece': { answer: (c, sq, s) => answerDefend(c, sq, s), shared: ['defend-wait', 'not-attacked'] },
+  'is-piece-loose': { answer: (c, sq, s) => answerIsLoose(c, sq, s), shared: ['guarded'] },
+  'count-attackers': { answer: (c, sq, s) => answerCount(c, sq, s, 'attackers'), shared: ['no-attackers'] },
+  'count-defenders': { answer: (c, sq, s) => answerCount(c, sq, s, 'defenders'), shared: ['no-defenders'] },
+  'why-is-it-a-target': { answer: (c, sq, s) => answerWhyTarget(c, sq, s), shared: ['not-a-target'] },
+};
+
+/** Each piece's answer; the pieces a shared line fits are named in it ONCE,
+ *  after the pieces that have something of their own. */
+function answerEachPiece(kind: EachPieceKind, chess: Chess, squares: readonly Square[], student: Color, out?: { lines?: WalkableLine[] }): string | null {
+  const spec = EACH_PIECE[kind];
+  const own: string[] = [];
+  const groups = new Map<SharedKey, Square[]>();
+  for (const sq of squares) {
+    const text = spec.answer(chess, sq, student, out);
+    if (!text) continue;
+    const key = spec.shared.find((k) => text === SHARED[k].say(owned(chess, sq, student), false));
+    if (key) groups.set(key, [...(groups.get(key) ?? []), sq]);
+    else if (!own.includes(text)) own.push(text);
+  }
+  for (const [key, sqs] of groups) {
+    own.push(sqs.length === 1
+      ? SHARED[key].say(owned(chess, sqs[0], student), false)
+      : SHARED[key].say(piecesPhrase(chess, sqs, student, SHARED[key].join), true));
+  }
+  return own.length ? own.join(' ') : null;
+}
+
 /** The computed answer for a direct kind; null when the turn names nothing
  *  to answer about (the caller then serves today's route). */
 export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: ConversationState, student: Color, ask?: string, history: readonly string[] = [], lastCoachLine: string | null = null, out?: { lines?: WalkableLine[] }, provedLine: WalkableLine | null = null): string | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
+  // "Can they attack my knight?" with knights on b1 and g1: the validator
+  // resolved every knight, and every one is answered.
+  const pieceSquares = turn.referents.flatMap((r) => (r.type === 'piece' ? [r.square as Square] : []));
+  if (pieceSquares.length > 1 && answersEachPiece(turn.kind)) return answerEachPiece(turn.kind, chess, pieceSquares, student, out);
   const sq = target(turn, memory, ask);
   switch (turn.kind) {
     case 'is-piece-loose': return answerIsLoose(chess, sq, student, turn.seat);
@@ -284,10 +364,10 @@ export function answerDefend(chess: Chess, sq: Square | null, student: Color): s
   const p = chess.get(square);
   if (!p) return `There is no piece on ${square}.`;
   const subject = owned(chess, square, student);
-  if (chess.turn() !== student) return `It is their move, so ${subject} has to wait — see what they play first.`;
+  if (chess.turn() !== student) return SHARED['defend-wait'].say(subject, false);
   let now: number | null = 0;
   try { now = captureRead(chess.fen(), square, enemy); } catch { now = 0; }
-  if (now === 0 && chess.attackers(square, enemy).length === 0) return `${capFirst(subject)} is not attacked, so it needs no defending yet.`;
+  if (now === 0 && chess.attackers(square, enemy).length === 0) return SHARED['not-attacked'].say(subject, false);
   const attackers = new Set<string>(chess.attackers(square, enemy));
   const take: string[] = []; const away: string[] = []; const guard: string[] = []; const block: string[] = []; const other: string[] = [];
   for (const m of chess.moves({ verbose: true })) {
@@ -340,7 +420,7 @@ export function answerWin(chess: Chess, sq: Square | null, student: Color): stri
   const enemy: Color = student === 'w' ? 'b' : 'w';
   if (!p || p.color !== enemy) return null;
   const subject = owned(chess, sq, student);
-  if (chess.turn() !== student) return `It is their move first, so ${subject} can be protected before you can take it.`;
+  if (chess.turn() !== student) return SHARED['win-their-move'].say(subject, false);
   let gain: number | null = 0;
   try { gain = captureRead(chess.fen(), sq, student); } catch { gain = null; }
   const takes = chess.moves({ verbose: true }).filter((m) => m.to === sq && m.captured);
@@ -372,7 +452,7 @@ export function answerWin(chess: Chess, sq: Square | null, student: Color): stri
     // a piece the move uncovers stays where it is.
     for (const a of added) via.add(`${name(b.get(a)?.type ?? 'p')} on ${a === m.to ? m.from : a}`);
   }
-  if (setups.length === 0) return `Not right now — nothing of yours can win ${subject}, and no single move sets it up.`;
+  if (setups.length === 0) return SHARED['win-none'].say(subject, false);
   return `Not this move — nothing of yours takes ${subject} safely yet. ${orList(setups)} brings your ${orList([...via])} onto it, and then it can be taken unless they protect it.`;
 }
 
@@ -501,7 +581,7 @@ function renderAttackMoves(chess: Chess, sq: Square, by: Color, student: Color, 
     if (line && out) out.lines = [...(out.lines ?? []), line];
   }
   if (parts.length === 0) {
-    return lead || (mine ? `Nothing of yours can get at ${subject} in one move.` : `Nothing of theirs can get at ${subject} next move.`);
+    return lead || SHARED[mine ? 'no-attack-yours' : 'no-attack-theirs'].say(subject, false);
   }
   if (mine && chess.turn() !== student && !lead) parts.push('It is their move first.');
   return [lead, ...parts].filter(Boolean).join(' ');

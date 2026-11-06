@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**798 lines · 25 exports · 25 importers · 18 tests · 6 audits**
+**833 lines · 28 exports · 26 importers · 19 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3955) — names `BoardContext`
-- **The standard post-deploy ritual** (CLAUDE.md:6799) — names `chatTurn`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3996) — names `BoardContext`
+- **The standard post-deploy ritual** (CLAUDE.md:6878) — names `chatTurn`
 
 ## Who calls in
 
@@ -28,6 +28,7 @@
 - `src/coach/chatTurnParser.test.ts`
 - `src/coach/chatTurnParser.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
+- `src/coach/dispatchCoachTurn.eachPiece.test.ts`
 - `src/coach/dispatchCoachTurn.ts`
 - `src/coach/handWalk1009.test.ts`
 - `src/coach/hardQuestions.routing.test.ts`
@@ -82,6 +83,15 @@
 ### `ChatKind` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `EACH_PIECE_KINDS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `EachPieceKind` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `answersEachPiece` (function) — 1 call site
+- `src/coach/chatTurnAnswers.ts:329`
+
 ### `Seat` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -120,7 +130,7 @@
 ### `ValidationResult` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `validateChatTurn` (function) — 26 call sites
+### `validateChatTurn` (function) — 29 call sites
 - `src/coach/chatTurn.test.ts:90`
 - `src/coach/chatTurn.test.ts:136`
 - `src/coach/chatTurn.test.ts:141`
@@ -140,6 +150,9 @@
 - `src/coach/chatTurnParser.ts:179`
 - `src/coach/chatTurnParser.ts:187`
 - `src/coach/chatTurnParser.ts:217`
+- `src/coach/dispatchCoachTurn.eachPiece.test.ts:47`
+- `src/coach/dispatchCoachTurn.eachPiece.test.ts:50`
+- `src/coach/dispatchCoachTurn.eachPiece.test.ts:56`
 - `src/coach/handWalk1009.test.ts:87`
 - `src/coach/hardQuestions.routing.test.ts:32`
 - `src/coach/lineOutcome.test.ts:23`
@@ -154,8 +167,9 @@
 ### `EMPTY_CONVERSATION` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `nextConversationState` (function) — 2 call sites
+### `nextConversationState` (function) — 3 call sites
 - `src/coach/chatTurn.test.ts:162`
+- `src/coach/dispatchCoachTurn.eachPiece.test.ts:59`
 - `src/coach/dispatchCoachTurn.ts:203`
 
 ### `canonicalAsk` (function) — 5 call sites
@@ -172,7 +186,7 @@
 - `src/coach/dispatchCoachTurn.ts:625`
 
 ### `askBackAtCatchAll` (function) — 1 call site
-- `src/services/coachApi.ts:755`
+- `src/services/coachApi.ts:760`
 
 ### `NOT_UNDERSTOOD_LINE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -191,6 +205,7 @@
 - `src/coach/chatTurnParser.test.ts`
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
+- `src/coach/dispatchCoachTurn.eachPiece.test.ts`
 - `src/coach/handWalk1009.test.ts`
 - `src/coach/hardQuestions.routing.test.ts`
 - `src/coach/lineOutcome.test.ts`

@@ -172,6 +172,24 @@ export type NewKind = typeof NEW_KINDS[number];
  *  kinds, small talk, and the honest "cannot tell". */
 export type ChatKind = Exclude<FastPathLane, 'none'> | NewKind | 'chat' | 'unclear';
 
+/**
+ * THE KINDS THAT ANSWER EVERY PIECE A NAME MATCHES (audit 2026-11-06: "can
+ * they attack my knight?" on the starting position was asked back "which
+ * knight — b1 or g1?"). Each of these is a check that holds over every piece
+ * of the kind — can it be attacked, is it loose, how many hit it, can it be
+ * won or saved — so with several matching pieces each one is answered
+ * (`chatTurnAnswers.EACH_PIECE` renders them, a `Record` over this list).
+ * Every other kind is about ONE piece (what it does, where it goes, a move it
+ * makes) and still asks which.
+ */
+export const EACH_PIECE_KINDS = [
+  'attack-piece', 'win-piece', 'defend-piece', 'is-piece-loose', 'count-attackers', 'count-defenders', 'why-is-it-a-target',
+] as const satisfies readonly NewKind[];
+export type EachPieceKind = typeof EACH_PIECE_KINDS[number];
+export function answersEachPiece(kind: ChatKind): kind is EachPieceKind {
+  return (EACH_PIECE_KINDS as readonly ChatKind[]).includes(kind);
+}
+
 export type Seat = 'me' | 'them';
 export type PieceLetter = 'p' | 'n' | 'b' | 'r' | 'q' | 'k';
 
@@ -494,9 +512,9 @@ export function validateChatTurn(turn: ChatTurn, board: BoardContext, memory: Co
     }
     if (r.type === 'piece') {
       if (!chess) return { ok: false, reason: 'no-board', clarify: "There's no board to find that piece on." };
-      const resolved = resolvePiece(chess, r, student, memory);
+      const resolved = resolvePiece(chess, r, student, memory, answersEachPiece(turn.kind));
       if (!resolved.ok) return resolved;
-      out.push(resolved.ref);
+      out.push(...resolved.refs);
       continue;
     }
     if (r.type === 'move') {
@@ -535,12 +553,20 @@ export function validateChatTurn(turn: ChatTurn, board: BoardContext, memory: Co
   return { ok: true, turn: { ...rest, referents: out } };
 }
 
+type ResolvedPiece = Extract<ResolvedReferent, { type: 'piece' }>;
+
+/** The piece (or, for a kind that answers every match, the pieces) a turn's
+ *  piece referent names. `each`: the question holds over every matching piece
+ *  (`EACH_PIECE_KINDS`), so a name that still matches several resolves to all
+ *  of them instead of asking which. */
 function resolvePiece(
   chess: Chess,
   r: Extract<Referent, { type: 'piece' }>,
   student: 'white' | 'black',
   memory: ConversationState,
-): { ok: true; ref: Extract<ResolvedReferent, { type: 'piece' }> } | { ok: false; reason: string; clarify: string } {
+  each: boolean,
+): { ok: true; refs: ResolvedPiece[] } | { ok: false; reason: string; clarify: string } {
+  const one = (square: string, seat: Seat): { ok: true; refs: ResolvedPiece[] } => ({ ok: true, refs: [{ type: 'piece', piece: r.piece, square, seat }] });
   const name = PIECE_WORD[r.piece];
   const sideOf = (c: 'w' | 'b'): Seat => ((c === 'w') === (student === 'white') ? 'me' : 'them');
   if (r.square) {
@@ -552,7 +578,7 @@ function resolvePiece(
     if (r.seat && r.seat !== seat) {
       return { ok: false, reason: 'piece-wrong-seat', clarify: `The ${name} on ${r.square} is ${seat === 'me' ? 'yours' : 'theirs'} — did you mean that one?` };
     }
-    return { ok: true, ref: { type: 'piece', piece: r.piece, square: r.square, seat } };
+    return one(r.square, seat);
   }
   const candidates: Array<{ square: string; seat: Seat }> = [];
   for (const row of chess.board()) {
@@ -567,7 +593,7 @@ function resolvePiece(
   const pool = r.other && memory.lastPiece && memory.lastPiece.piece === r.piece
     ? candidates.filter((c) => c.square !== memory.lastPiece?.square)
     : candidates;
-  if (pool.length === 1) return { ok: true, ref: { type: 'piece', piece: r.piece, square: pool[0].square, seat: pool[0].seat } };
+  if (pool.length === 1) return one(pool[0].square, pool[0].seat);
   if (pool.length === 0) {
     const whose = r.seat === 'me' ? 'You have' : r.seat === 'them' ? 'They have' : 'There is';
     return { ok: false, reason: 'piece-absent', clarify: `${whose} no ${name} on the board.` };
@@ -575,7 +601,7 @@ function resolvePiece(
   // Several — the one we were just discussing, if it is among them.
   if (!r.other && memory.lastPiece && pool.some((c) => c.square === memory.lastPiece?.square)) {
     const p = pool.find((c) => c.square === memory.lastPiece?.square);
-    if (p) return { ok: true, ref: { type: 'piece', piece: r.piece, square: p.square, seat: p.seat } };
+    if (p) return one(p.square, p.seat);
   }
   // THE ONE UNDER FIRE (hand walk 2026-10-09: "where should the bishop go?"
   // right after "your bishop on b5 is attacked" was asked back "which bishop —
@@ -593,12 +619,14 @@ function resolvePiece(
   const pick = inDanger.length === 1 ? inDanger[0]
     : !r.seat && pool.filter((c) => c.seat === 'me').length === 1 ? pool.find((c) => c.seat === 'me')
     : r.seat !== 'them' && mineInPlay.length === 1 ? mineInPlay[0] : undefined;
-  if (pick) return { ok: true, ref: { type: 'piece', piece: r.piece, square: pick.square, seat: pick.seat } };
+  if (pick) return one(pick.square, pick.seat);
   // Still several: with no side said, the question is about the student's
   // OWN pieces — "should the knight take?" asked of a White student was
   // answered "which knight — b8, g8, b1 or g1?" (live walk R3).
   const mine = !r.seat ? pool.filter((c) => c.seat === 'me') : [];
   const asked = mine.length > 0 ? mine : pool;
+  // A question that holds over every one of them is answered for every one.
+  if (each) return { ok: true, refs: asked.map((c): ResolvedPiece => ({ type: 'piece', piece: r.piece, square: c.square, seat: c.seat })) };
   return {
     ok: false,
     reason: 'piece-ambiguous',
@@ -737,6 +765,13 @@ export function nextConversationState(prev: ConversationState, turn: ResolvedCha
     if (r.type === 'piece') { lastPiece = { piece: r.piece, square: r.square, seat: r.seat }; lastSquare = r.square; }
     else if (r.type === 'square') lastSquare = r.square;
     else if (r.type === 'move') lastMove = r.san;
+  }
+  // ONE NAME, SEVERAL PIECES ("my knights", answered for each): a follow-up
+  // "it" cannot mean one of them, so none is remembered as the one.
+  const pieces = turn.referents.filter((r): r is ResolvedPiece => r.type === 'piece');
+  if (pieces.length > 1 && pieces.every((p) => p.piece === pieces[0].piece && p.seat === pieces[0].seat)) {
+    lastPiece = null;
+    lastSquare = null;
   }
   return { lastPiece, lastSquare, lastMove, seat: seat ?? prev.seat, lastTurn: turn, pending: prev.pending };
 }

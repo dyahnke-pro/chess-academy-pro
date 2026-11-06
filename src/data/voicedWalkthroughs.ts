@@ -99,6 +99,41 @@ function leadWithLine(root: WalkthroughTreeNode, line: readonly string[]): Walkt
   return walk(root, 0);
 }
 
+/** What a lesson's NAME stands for in the DB — its canonical name and line —
+ *  or null for a voiced-only label the DB has no row for. Cached: the
+ *  catalogue is fixed. */
+interface NamedLine { canonicalName: string; moves: readonly string[] }
+const nameLines = new Map<string, NamedLine | null>();
+function nameLineOf(e: VoicedEntry): NamedLine | null {
+  if (!nameLines.has(e.openingName)) {
+    let hit: NamedLine | null = null;
+    try { hit = resolveOpeningEntry(e.openingName) ?? null; } catch { hit = null; }
+    nameLines.set(e.openingName, hit && hit.moves.length > 0 ? hit : null);
+  }
+  return nameLines.get(e.openingName) ?? null;
+}
+
+/**
+ * IS THIS LESSON NO NARROWER THAN THE ASK? The lesson's name must be the
+ * asked opening or one it belongs to — by line (its name's moves are the
+ * asked line or a step on the way to it) or by name ("Sicilian Defense" over
+ * "Sicilian Defense: Moscow Variation"). A lesson named for a deeper or
+ * different line is that line's lesson. A name the DB cannot place is judged
+ * by its words: it may name nothing the ask does not.
+ */
+function coversAsk(e: VoicedEntry, ask: NamedLine, askTokens: readonly string[]): boolean {
+  const named = nameLineOf(e);
+  if (!named) {
+    const asked = new Set(askTokens);
+    return tokens(e.openingName).every((t) => asked.has(t));
+  }
+  const onTheWay = named.moves.length <= ask.moves.length && named.moves.every((san, i) => ask.moves[i] === san);
+  const parent = ask.canonicalName === named.canonicalName
+    || ask.canonicalName.startsWith(`${named.canonicalName}:`)
+    || ask.canonicalName.startsWith(`${named.canonicalName},`);
+  return onTheWay || parent;
+}
+
 function pickRichest(pool: VoicedEntry[], reqTokens: string[]): VoicedEntry | null {
   let best: VoicedEntry | null = null;
   let bestScore = -1;
@@ -128,11 +163,13 @@ function pickRichest(pool: VoicedEntry[], reqTokens: string[]): VoicedEntry | nu
  * Strategy:
  *  1. Resolve the request to a DB entry (`resolveOpeningEntry` — the ONE
  *     canonical name resolver, aliases and typos included). A voiced tree is
- *     eligible only if the entry's move line is a path through it. Among the
- *     eligible trees, the best name-token match wins, then the richest
- *     lesson (most narrated nodes) — so a family ask ("caro-kann") still gets
- *     the deepest Caro lesson, while a sub-line the corpus never voiced
- *     honestly returns null and the lesson is generated for THAT line.
+ *     eligible only if the entry's move line is a path through it AND the
+ *     tree's own name is no narrower than the ask (`coversAsk`) — a lesson
+ *     named for a sub-line is that sub-line's lesson, never the family's.
+ *     Among the eligible trees, the best name-token match wins,
+ *     then the richest lesson (most narrated nodes). A family or sub-line the
+ *     corpus never voiced honestly returns null and the lesson is resolved
+ *     for THAT name.
  *  2. A request the DB cannot resolve (a voiced-only label such as
  *     "Scandinavian Defense (2.e5 Advance)") falls back to name tokens, but
  *     EVERY content token must hit — a partial overlap never serves a family.
@@ -155,14 +192,23 @@ export function resolveVoicedWalkthrough(
   const reqTokens = tokens(query);
   if (reqTokens.length === 0) return null;
 
-  let entryMoves: string[] | null = null;
+  let entry: NamedLine | null = null;
   try {
-    entryMoves = resolveOpeningEntry(query)?.moves ?? null;
+    entry = resolveOpeningEntry(query);
   } catch {
-    entryMoves = null;
+    entry = null;
   }
-  if (entryMoves && entryMoves.length > 0) {
-    const containing = seated.filter((e) => voicedTreeContainsLine(e.tree, entryMoves));
+  const entryMoves = entry?.moves ?? null;
+  if (entry && entryMoves && entryMoves.length > 0) {
+    const ask = entry;
+    // A LESSON NARROWER THAN THE ASK IS NOT THE LESSON ASKED FOR (chat-surfaces
+    // audit 2026-11-06). "Teach me the caro kann" in Learn started the
+    // Tartakower: that tree contains the family's moves, tied the family on
+    // name tokens and won on richness — but it is the Tartakower's lesson. A
+    // lesson named for a narrower line than the ask is that line's lesson; a
+    // bare family name then finds no voiced lesson and resolves to the family,
+    // as it does on every screen.
+    const containing = seated.filter((e) => voicedTreeContainsLine(e.tree, entryMoves) && coversAsk(e, ask, reqTokens));
     const best = pickRichest(containing, reqTokens);
     if (best) return { ...best.tree, root: leadWithLine(best.tree.root, entryMoves), studentSide: best.studentSide };
     // The corpus voices nothing that teaches this line. Do NOT fall back to
