@@ -133,9 +133,20 @@ const main = async () => {
     // them (2026-10-21: the 4.0.7 hotfix note replaced the subscription/paywall
     // disclosure notes the reviewer had on every version since 3.x). Built from
     // the live version each run, so re-running gives the same text.
-    const added = process.env.REVIEWER_NOTES;
+    // {PRICE_MONTHLY} {PRICE_YEARLY} {PRICE_OPENING} {TRIAL_DAYS} are filled
+    // from src/data/pricing.ts, so the notes never state a price the store
+    // does not charge (2026-11-07: the kept notes still said $7.99 / $79.99).
+    const pricing = readFileSync(new URL('../../src/data/pricing.ts', import.meta.url), 'utf8');
+    const fill = (t) => t.replace(/\{(PRICE_MONTHLY|PRICE_YEARLY|PRICE_OPENING|TRIAL_DAYS)\}/g, (_m, k) => {
+      const v = pricing.match(new RegExp(`export const ${k}\\s*=\\s*'?([^';]+)'?`))?.[1];
+      if (!v) throw new Error(`could not read ${k} from src/data/pricing.ts`);
+      return v;
+    });
+    const added = process.env.REVIEWER_NOTES ? fill(process.env.REVIEWER_NOTES) : undefined;
     let notes = added;
-    if (added) {
+    // NOTES_REPLACE=1: the notes ARE this text — the kept notes had grown stale
+    // (an old hotfix, an old price). Without it the text is added in front.
+    if (added && process.env.NOTES_REPLACE !== '1') {
       const live = (vers.j.data || []).find((v) => v.attributes.appStoreState === 'READY_FOR_SALE');
       if (live) {
         const ld = await api('GET', `/v1/appStoreVersions/${live.id}/appStoreReviewDetail?fields[appStoreReviewDetails]=notes`);

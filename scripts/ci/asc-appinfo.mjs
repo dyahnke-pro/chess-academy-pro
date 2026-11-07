@@ -103,7 +103,9 @@ async function main() {
         sexualContentGraphicAndNudity: 'NONE', sexualContentOrNudity: 'NONE',
         violenceCartoonOrFantasy: 'NONE', violenceRealistic: 'NONE',
         violenceRealisticProlongedGraphicOrSadistic: 'NONE', unrestrictedWebAccess: false,
-        kidsAgeBand: null, seventeenPlus: false,
+        // `seventeenPlus` is gone from Apple's API (409 unknown attribute,
+        // 2026-11-07) and took the whole write down with it.
+        kidsAgeBand: null,
         // Apple's newer questions (blank on 4.0.8, readiness 2026-11-07): no
         // social media in the app.
         socialMedia: false, socialMediaAgeRestricted: false,
