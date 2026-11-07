@@ -187,7 +187,7 @@ export function rememberHeardVerdict(v: {
 
 /** ONE SAVE FOR A LEARN GAME, and the finished game's whole record with it —
  *  the same `recordFinishedGame` Play runs (its puzzles, the weakness profile
- *  they feed, the slip and capability record, a review made ready). Learn used
+ *  they feed, the slip and capability record). Learn used
  *  to write the game and stop, so a mistake the student PLAYED ON with in free
  *  play never became a puzzle: the live capture counts only inside an opening
  *  lesson, and the batch sweep skips a game Learn graded in full. Every Learn
@@ -196,5 +196,10 @@ export async function saveLearnGame(record: GameRecord, profile: UserProfile | n
   await db.games.add(record);
   if (!profile) return;
   const graded = (record.annotations ?? []).map((a) => ({ classification: a.classification, san: a.san }));
-  recordFinishedGame(record.id, profile, { reportEffects: 'game-finished', prepareReview: true }, graded);
+  // No `prepareReview` here, unlike Play: Play's student goes straight to the
+  // review, Learn's stays on the recap card and plays its misses out. The
+  // review's full re-analysis on the engine workers starved that drill's move
+  // judgement (prod focus audit 2026-11-07: an off-key move never landed);
+  // the review prepares itself when it is opened, as it always has for Learn.
+  recordFinishedGame(record.id, profile, { reportEffects: 'game-finished' }, graded);
 }

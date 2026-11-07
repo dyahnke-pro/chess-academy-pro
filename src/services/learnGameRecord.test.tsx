@@ -163,7 +163,10 @@ describe('a finished Learn game runs the finished game\'s whole record (by state
     expect(at).toBeGreaterThan(0);
     const body = door.slice(at);
     expect(body).toMatch(/await db\.games\.add\(record\)/);
-    expect(body).toMatch(/recordFinishedGame\(record\.id, profile, \{ reportEffects: 'game-finished', prepareReview: true \}/);
+    expect(body).toMatch(/recordFinishedGame\(record\.id, profile, \{ reportEffects: 'game-finished' \}/);
+    // The recap's Play it out needs the engine: the review's re-analysis is
+    // never started at a Learn game's end (prod focus audit 2026-11-07).
+    expect(body.slice(0, body.indexOf('\n}'))).not.toMatch(/prepareReview: true/);
   });
 });
 
