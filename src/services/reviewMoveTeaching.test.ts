@@ -256,5 +256,7 @@ describe('a king move is named by where it went (prod audit 2026-11-07)', () => 
     expect(away).toMatch(/toward safety/);
     const toward = buildReviewMoveTeachingFact('r1bq3r/ppp2kpp/2n2n2/3pp3/8/2NP1N2/PPP1PPPP/R1BQKB1R b KQ - 0 8', 'Ke6', true, null)?.text ?? '';
     expect(toward).not.toMatch(/toward safety/);
+    // Kg1-h1 tucks the king into the corner (his Closed Sicilian replay, ply 35).
+    expect(buildReviewMoveTeachingFact('r1br2k1/pp6/4p1pp/2p2p2/2Bb2P1/2NP1R2/PPP4P/5RK1 w - - 1 18', 'Kh1', false, null)?.text ?? '').toMatch(/toward safety/);
   });
 });

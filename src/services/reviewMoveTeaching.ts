@@ -219,7 +219,7 @@ const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop'
 export function kingWay(from: string, to: string, color: 'w' | 'b'): { forward: boolean; central: boolean; awayFromCentre: boolean } {
   const file = (s: string): number => s.charCodeAt(0) - 97;
   const rank = (s: string): number => Number(s[1]) - 1;
-  const centreDist = (s: string): number => Math.max(Math.abs(2 * file(s) - 7), Math.abs(2 * rank(s) - 7));
+  const centreDist = (s: string): number => Math.abs(2 * file(s) - 7) + Math.abs(2 * rank(s) - 7);
   const step = rank(to) - rank(from);
   return {
     forward: color === 'w' ? step > 0 : step < 0,
