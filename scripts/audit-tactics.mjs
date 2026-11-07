@@ -631,7 +631,9 @@ async function main() {
     [
       { label: 'route /tactics/drill', fn: () => page.url().endsWith('/tactics/drill') },
       { label: 'page mount', fn: () => visible('tactic-drill-page') },
-      { label: 'theme label "Mixed"', fn: () => hasText('mixed') },
+      // The drill is titled with the hub card's own name ("Random Mix",
+      // 2026-10-01) — "Mixed" is the fallback for a grouped filter with none.
+      { label: 'theme label names the mix ("Random Mix")', fn: async () => (await hasText('random mix')) || (await hasText('mixed')) },
       { label: 'PuzzleBoard mounted', fn: () => visible('puzzle-board') },
       { label: 'tactic-type-heading visible', fn: () => visible('tactic-type-heading') },
       { label: 'puzzle-nav visible', fn: () => visible('puzzle-nav') },
@@ -713,10 +715,10 @@ async function main() {
       { label: 'player rating header', fn: () => visible('player-rating-header') },
       { label: 'classic + mistakes cross-links',
         fn: async () => (await visible('classic-trainer-link')) && (await visible('my-mistakes-link')) },
-      // Reach ladder (2026-09-14): the badge is now the reach ladder (Level N ·
-      // rating), and the Master Level entry is present.
-      { label: 'reach-ladder badge shows Level',
-        fn: async () => /Level\s+\d+\s+·\s+\d+/.test((await page.locator('[data-testid="player-rating-value"]').textContent().catch(() => '')) || '') },
+      // The badge is the student's ONE rating ("Rating 1406"), and the Master
+      // Level entry is present.
+      { label: 'the rating badge shows the rating',
+        fn: async () => /Rating\s+\d+/.test((await page.locator('[data-testid="player-rating-value"]').textContent().catch(() => '')) || '') },
       { label: 'Master Level entry present', fn: () => visible('master-level-link') },
     ],
   );
@@ -1104,14 +1106,16 @@ async function main() {
       await page.goto(`${BASE_URL}/tactics/create`, { waitUntil: 'domcontentloaded' });
       await waitUntil(async () =>
         (await visible('loading')) || (await visible('session-summary')) ||
-        (await hasText('context depth')), 10_000);
+        (await visible('create-empty')) || (await hasText('context depth')), 10_000);
     },
     SETTLE_SHORT,
     [
       { label: 'route /tactics/create', fn: () => page.url().endsWith('/tactics/create') },
       { label: 'back-btn present', fn: () => visible('back-btn') },
-      { label: 'loading state OR summary state visible (empty queue)',
+      // A device with no games shows the empty state with its import button.
+      { label: 'loading, summary or the empty state with import (empty queue)',
         fn: async () => (await visible('loading')) || (await visible('session-summary'))
+          || ((await visible('create-empty')) && (await visible('create-empty-import')))
           || (await hasText('context depth')) },
     ],
   );
