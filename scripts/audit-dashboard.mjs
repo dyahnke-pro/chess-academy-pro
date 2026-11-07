@@ -269,7 +269,10 @@ async function main() {
   }, SHORT_SETTLE_MS, [
     { kind: 'visible', selector: '[data-testid="toc-toggle"]', label: 'TOC bar present' },
     { kind: 'visible', selector: '[data-testid="toc-panel"]', label: 'TOC panel expands on tap' },
-    { kind: 'count-eq', selector: '[data-testid^="toc-section-"]', value: 7, label: '7 main tabs listed' },
+    // 6, not 7: the Coaches Library section is held from release (2026-11-06,
+    // src/data/heldSurfaces.ts) and must not be listed.
+    { kind: 'count-eq', selector: '[data-testid^="toc-section-"]', value: 6, label: '6 main tabs listed (the Library held)' },
+    { kind: 'count-eq', selector: '[data-testid="toc-section-library"]', value: 0, label: 'the held Library section is not listed' },
     { kind: 'visible', selector: '[data-testid="toc-item-learn-with-coach"]', label: 'Coach tab reveals its capabilities' },
     { kind: 'visible', selector: '[data-testid="toc-item-forks"]', label: 'nested subcategory (Themed Sets) expands' },
   ]);
