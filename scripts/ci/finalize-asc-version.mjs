@@ -84,7 +84,9 @@ async function main() {
     };
     const decl = await readDecl();
     const before = decl.attributes || {};
-    const OPTIONAL = new Set(['kidsAgeBand', 'developerAgeRatingInfoUrl', 'koreaAgeRatingOverride']);
+    // Korea's GRAC number exists only for a game Korea rated; kidsAgeBand only in
+    // the Kids Category; the info URL is the developer's choice.
+    const OPTIONAL = new Set(['kidsAgeBand', 'developerAgeRatingInfoUrl', 'koreaAgeRatingOverride', 'gracRatingClassificationNumber']);
     const HONEST = {
       alcoholTobaccoOrDrugUseOrReferences: 'NONE', contests: 'NONE', gamblingSimulated: 'NONE', gambling: false,
       horrorOrFearThemes: 'NONE', matureOrSuggestiveThemes: 'NONE', medicalOrTreatmentInformation: 'NONE',
@@ -94,6 +96,8 @@ async function main() {
       advertising: false, ageAssurance: false, gunsOrOtherWeapons: 'NONE', healthOrWellnessTopics: false,
       lootBox: false, messagingAndChat: false, parentalControls: false, userGeneratedContent: false,
       ageRatingOverride: 'NONE', ageRatingOverrideV2: 'NONE',
+      // Not a social-media app (no profiles, feeds or user-to-user posting).
+      socialMedia: false, socialMediaAgeRestricted: false,
     };
     console.log(`age rating before: ${JSON.stringify(before)}`);
     const blank = Object.keys(before).filter((k) => (before[k] === null || before[k] === undefined) && !OPTIONAL.has(k));
@@ -101,9 +105,19 @@ async function main() {
     const unknown = blank.filter((k) => !(k in HONEST));
     console.log(`blank: ${blank.join(', ') || 'none'}${unknown.length ? ` · NO ANSWER KNOWN for: ${unknown.join(', ')}` : ''}`);
     if (Object.keys(fill).length) {
-      await api('PATCH', `/v1/ageRatingDeclarations/${decl.id}`, {
-        data: { type: 'ageRatingDeclarations', id: decl.id, attributes: fill },
+      const patch = (attributes) => api('PATCH', `/v1/ageRatingDeclarations/${decl.id}`, {
+        data: { type: 'ageRatingDeclarations', id: decl.id, attributes },
       });
+      try {
+        await patch(fill);
+      } catch (e) {
+        // "Age restricted" is a follow-up to "is it social media": Apple may
+        // refuse it once social media is no. Answer the rest without it.
+        if (!('socialMediaAgeRestricted' in fill)) throw e;
+        console.log(`PATCH refused (${String(e.message).split('\n')[0]}) — retrying without socialMediaAgeRestricted`);
+        delete fill.socialMediaAgeRestricted;
+        await patch(fill);
+      }
       const after = (await readDecl()).attributes || {};
       console.log(`✓ answered ${Object.keys(fill).join(', ')} · after: ${JSON.stringify(after)}`);
     } else {

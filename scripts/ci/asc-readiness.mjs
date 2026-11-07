@@ -69,7 +69,9 @@ async function main() {
     const a = ar.data.attributes || {};
     // EVERY question answered, not any one (submit 2026-11-07: this read went
     // green with a new required question blank, and Apple refused the review).
-    const OPTIONAL = new Set(['kidsAgeBand', 'developerAgeRatingInfoUrl', 'koreaAgeRatingOverride']);
+    // Korea's GRAC number exists only for a game Korea rated; kidsAgeBand only in
+    // the Kids Category; the info URL is the developer's choice.
+    const OPTIONAL = new Set(['kidsAgeBand', 'developerAgeRatingInfoUrl', 'koreaAgeRatingOverride', 'gracRatingClassificationNumber']);
     const blank = Object.keys(a).filter((k) => (a[k] === null || a[k] === undefined) && !OPTIONAL.has(k));
     mark(blank.length === 0, 'Age rating', blank.length ? `BLANK: ${blank.join(', ')}` : 'every question answered');
     console.log(`   ${JSON.stringify(a)}`);
