@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**954 lines · 5 exports · 23 importers · 13 tests · 0 audits**
+**983 lines · 6 exports · 23 importers · 13 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6841) — names `reviewMoveTeaching`
+- **The standard post-deploy ritual** (CLAUDE.md:6872) — names `reviewMoveTeaching`
 
 ## Who calls in
 
@@ -38,6 +38,9 @@
 
 ## Exports and every call site
 
+### `kingWay` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `quietMovePoint` (function) — 7 call sites
 - `src/services/playCommentary.ts:914`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
@@ -50,8 +53,8 @@
 ### `buildReviewMoveTeaching` (function) — 52 call sites
 - `src/services/coachFeatureService.ts:1137`
 - `src/services/coachFeatureService.ts:3996`
-- `src/services/danyaBench.measure.test.ts:448`
-- `src/services/discussionPractice.ts:173`
+- `src/services/danyaBench.measure.test.ts:473`
+- `src/services/discussionPractice.ts:174`
 - `src/services/guardPressure.test.ts:20`
 - `src/services/guardPressure.test.ts:24`
 - `src/services/guardPressure.test.ts:28`
@@ -94,20 +97,27 @@
 - `src/services/reviewMoveTeaching.test.ts:192`
 - `src/services/reviewNarrationDefects.test.ts:15`
 - `src/services/reviewNarrationDefects.test.ts:19`
-- `src/services/reviewOpeningTheory.ts:659`
+- `src/services/reviewOpeningTheory.ts:660`
 - `src/services/reviewWalkOct1.test.ts:72`
 - `src/services/reviewWalkOct1.test.ts:84`
 - `src/services/reviewWalkOct1.test.ts:89`
 - `src/services/squareRole.test.ts:29`
 - `src/services/squareRole.test.ts:44`
 
-### `buildReviewMoveTeachingFact` (function) — 7 call sites
+### `buildReviewMoveTeachingFact` (function) — 14 call sites
 - `src/services/learnBoardTeaching.ts:1216`
-- `src/services/moveThoughtFacts.ts:227`
+- `src/services/moveThoughtFacts.ts:229`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
 - `src/services/reviewMoveTeaching.test.ts:216`
 - `src/services/reviewMoveTeaching.test.ts:230`
+- `src/services/reviewMoveTeaching.test.ts:238`
+- `src/services/reviewMoveTeaching.test.ts:240`
+- `src/services/reviewMoveTeaching.test.ts:245`
+- `src/services/reviewMoveTeaching.test.ts:250`
+- `src/services/reviewMoveTeaching.test.ts:255`
+- `src/services/reviewMoveTeaching.test.ts:257`
+- `src/services/reviewMoveTeaching.test.ts:260`
 - `src/services/tapeKc7Skewer.test.ts:29`
 
 ### `nameEndgamePhase` (function) — 7 call sites
