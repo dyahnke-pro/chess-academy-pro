@@ -119,7 +119,12 @@ async function waitAsking(page, ms = 90_000) {
   const until = Date.now() + ms;
   while (Date.now() < until) {
     const el = page.locator('[data-testid="thinking-lesson"]');
-    if ((await el.count()) > 0 && (await el.getAttribute('data-asking')) === '1') return el.getAttribute('data-fen');
+    // The lesson can close between the count and the read: read without the
+    // 30s auto-wait, and a board that went away is "not asking yet".
+    if ((await el.count()) > 0 && (await el.getAttribute('data-asking', { timeout: 1000 }).catch(() => null)) === '1') {
+      const fen = await el.getAttribute('data-fen', { timeout: 1000 }).catch(() => null);
+      if (fen) return fen;
+    }
     await page.waitForTimeout(500);
   }
   return null;
