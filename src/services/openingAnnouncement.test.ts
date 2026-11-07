@@ -42,6 +42,13 @@ describe('openingAnnouncement — name it once, then once more where theory ends
     expect(openingAnnouncement({ name: "Queen's Gambit Accepted" }, null, "Queen's Gambit", 'w', null)).toBe("It's the Queen's Gambit Accepted.");
     expect(openingAnnouncement({ name: "King's Gambit Declined: Petrov's Defense" }, null, "King's Gambit", 'w', null)).toBe("It's the King's Gambit Declined: Petrov's Defense.");
   });
+  it('a variation that is a label, not a name, goes in front of its family (prod focus audit 2026-11-07)', () => {
+    // "It's the Closed, Traditional of the Sicilian Defense" was said.
+    expect(openingAnnouncement({ name: 'Sicilian Defense: Closed, Traditional' }, null, 'Sicilian Defense', 'w', null))
+      .toBe("It's the Closed Sicilian Defense, Traditional.");
+    expect(openingAnnouncement({ name: 'Sicilian Defense: Open' }, null, 'Sicilian Defense', 'w', null))
+      .toBe("It's the Open Sicilian Defense.");
+  });
   it('a filler part leading the tail does not hide the real variation after it', () => {
     expect(openingAnnouncement({ name: "King's Indian Defense: Normal Variation, Deferred Fianchetto" }, null, "King's Indian Defense", 'b', null))
       .toBe("It's the Deferred Fianchetto of the King's Indian Defense.");

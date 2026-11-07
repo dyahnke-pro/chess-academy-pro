@@ -670,7 +670,7 @@ async function playGame(context, listener, engine, student, phase, index) {
   // ("rook from the seventh rank to b2" for R7b2+, "the c-file rook"): those
   // words are the move's too (focus prod audit 2026-11-07 read a door line as a
   // stray over them).
-  const MOVE_WORDS = new Set(['king', 'queen', 'rook', 'bishop', 'knight', 'pawn', 'takes', 'taking', 'to', 'with', 'check', 'checkmate', 'mate', 'castles', 'kingside', 'queenside', 'on', 'x', 'from', 'the', 'rank', 'file', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'castle', 'castling', 'o']);
+  const MOVE_WORDS = new Set(['king', 'queen', 'rook', 'bishop', 'knight', 'pawn', 'takes', 'taking', 'to', 'with', 'check', 'checkmate', 'mate', 'castles', 'kingside', 'queenside', 'on', 'x', 'from', 'the', 'rank', 'file', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'castle', 'castling', 'o', 'making', 'a']);
   const words = (t) => norm(t).split(' ').filter((w) => w && !MOVE_WORDS.has(w) && !/^[a-h][1-8]$/.test(w) && !/^[kqrbn]?[a-h]?[1-8]?x?[a-h][1-8]/.test(w) && !/^o o( o)?$/.test(w) && !/^[a-h]$/.test(w) && !/^[kqrbn]$/.test(w)).join(' ');
   const doorWords = doorTexts.map(words);
   // A door line can also come back reworded at its front: the answer a

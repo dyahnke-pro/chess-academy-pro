@@ -40,6 +40,19 @@ interface DetectedName {
 // Defense: Modern Variations" → "It's the Modern Variations", 1200 walk
 // 2026-09-27); a singular named variation stays.
 const GENERIC_TAIL = /^(?:main line|normal variation|rare (?:defen[cs]es?|variations?|lines?)|other (?:variations?|lines?)|\w+ variations$)/i;
+/** A tail part that NAMES a line ends on a naming noun ("Alapin Variation",
+ *  "Fried Liver Attack", "Deferred Fianchetto"); one that does not is a LABEL
+ *  ("Closed", "Open") and goes in front of its family. */
+const NAMING_NOUN = /\b(?:variation|attack|defen[cs]e|gambit|countergambit|counterattack|system|line|opening|trap|formation|setup|game|declined|accepted|fianchetto|exchange)$/i;
+
+/** "the Alapin Variation of the Sicilian Defense", but "the Closed Sicilian
+ *  Defense, Traditional" — never "the Closed, Traditional of the Sicilian
+ *  Defense" (prod focus audit 2026-11-07). */
+function tailOfFamily(parts: readonly string[], family: string): string {
+  if (NAMING_NOUN.test(parts[0])) return `the ${parts.join(', ')} of the ${family}`;
+  const rest = parts.slice(1);
+  return `the ${parts[0]} ${family}${rest.length ? `, ${rest.join(', ')}` : ''}`;
+}
 
 /** The name as it is SAID: a filler tail is dropped ("Indian Defense: Normal
  *  Variation" → "Indian Defense"), a real one kept. */
@@ -98,7 +111,7 @@ export function openingAnnouncement(
         let shared = 0;
         while (shared < was.length && shared < now.length && was[shared] === now[shared]) shared += 1;
         const tail = now.slice(shared).filter((x) => x && !GENERIC_TAIL.test(x));
-        if (shared >= 2 && tail.length) return `It's the ${tail.join(', ')} of the ${now[shared - 1]}.`;
+        if (shared >= 2 && tail.length) return `It's ${tailOfFamily(tail, now[shared - 1])}.`;
       }
       if (newFamily === spokenFamily || !newFamily.includes(spokenFamily)) return null;
       return `It's the ${newFamily}.`;
@@ -122,7 +135,8 @@ export function openingAnnouncement(
     const tailParts = /^\s*[:,]/.test(rest)
       ? rest.split(/[:,]/).map((x) => x.trim())
       : spoken(det.name).slice(newFamily.length).split(/[:,]/).map((x) => x.trim());
-    const tail = tailParts.filter((x) => x && !GENERIC_TAIL.test(x)).join(', ');
+    const tailNamed = tailParts.filter((x) => x && !GENERIC_TAIL.test(x));
+    const tail = tailNamed.join(', ');
     // "Main Line" names nothing the student can look up — the family is enough.
     // (nor do the DB's filler labels — "Normal Variation", "Rare Defenses",
     // hand walk 2026-09-25).
@@ -130,7 +144,7 @@ export function openingAnnouncement(
     // WITH ITS FAMILY: a bare tail can name another opening outright — after
     // "This game is the Sicilian Defense", "It's the French Variation" was
     // heard as the French (live walk 2026-10-08).
-    return `It's the ${tail} of the ${spokenFamily}.`;
+    return `It's ${tailOfFamily(tailNamed, spokenFamily)}.`;
   }
   const who = departure.mover === studentColor ? 'You' : 'They';
   // THE LINE IS THE ONE ALREADY NAMED unless the move-order name sharpens it
