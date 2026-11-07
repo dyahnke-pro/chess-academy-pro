@@ -652,7 +652,9 @@ async function playGame(context, listener, engine, student, phase, index) {
   // 2026-11-05) — and its phase wave.
   const doorTexts = events
     .filter((e) => e.kind === 'coach-narration-spoken' && /^CoachTeachPage\.(?:trackA|hintRegister)$/.test(String(e.source ?? '')) || (e.source === 'CoachTeachPage.phase'))
-    .map((e) => String(e.summary ?? '').replace(/^track A spoke: "/, '').replace(/"$/, '').replace(/^.* — /, '').trim())
+    // The row's whole line when it carries one (narrationText); the clipped
+    // summary only for an older build.
+    .map((e) => String(e.narrationText ?? String(e.summary ?? '').replace(/^track A spoke: "/, '').replace(/"$/, '').replace(/^.* — /, '')).trim())
     .filter(Boolean);
   const fromDoor = (text) => { const head = text.slice(0, 40); return doorTexts.some((d) => d.includes(head) || text.includes(d.slice(0, 40))); };
   tape.spoken = spoken(events).map((l) => ({ ...l, kind: lineKind(l.text, pickLine) ?? (tapped(l.at) ? 'asked' : fromDoor(l.text) ? 'door' : null) }));

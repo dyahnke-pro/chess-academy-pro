@@ -11929,6 +11929,10 @@ export function CoachTeachPage({ mode }: {
                     category: 'narration',
                     source: 'CoachTeachPage.trackA',
                     summary: `track A spoke: "${heard.slice(0, 80)}"`,
+                    // The whole line, as the late wave logs it: a long turn is
+                    // voiced in pieces, and an audit matching a piece against an
+                    // 80-character summary read the later pieces as strays.
+                    narrationText: heard,
                     fen: liveFenRef.current,
                   });
                   // THE ONE CHOKEPOINT (G0; David 2026-09-24: "everything built
