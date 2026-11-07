@@ -610,3 +610,14 @@ describe('superseded speak ≠ Polly failure (the phantom voice_fallover flood, 
     expect(voiceService.getCurrentTier()).toBe('web-speech');
   });
 });
+
+describe('a capture named as the sentence subject is said in plain English (David 2026-11-07)', () => {
+  it('"Their exd5 opens the e-file" is "Their e-pawn taking on d5 …", never two verbs', async () => {
+    const { sanitizeForTTS } = await import('./voiceService');
+    expect(sanitizeForTTS('Their exd5 opens the e-file.')).toBe('Their e-pawn taking on d5 opens the e-file.');
+    expect(sanitizeForTTS('Their Nxc5 wins by force.')).toBe('Their knight taking on c5 wins by force.');
+    // A capture that IS the verb stays one.
+    expect(sanitizeForTTS('They take back with Kxd1.')).toBe('They take back with king takes d1.');
+    expect(sanitizeForTTS('Bxh7+ Kxh7.')).toMatch(/^Bishop takes h7/);
+  });
+});

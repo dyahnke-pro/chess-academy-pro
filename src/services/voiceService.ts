@@ -502,14 +502,20 @@ export function sanitizeForTTS(text: string): string {
   out = out.replace(CASTLE_KING_RE, 'castle kingside');
   // Pawn captures: "exd5" → "e-pawn takes d5"
   const pawnExpansions: Array<{ san: string; spoken: string }> = [];
-  out = out.replace(PAWN_CAPTURE_RE, (san: string, file: string, dest: string) => {
-    const spoken = `${file}-pawn takes ${dest}`;
+  // A CAPTURE NAMED AS A THING, NOT DONE (2026-11-07, David: "Speak in plain
+  // English"): after "your"/"their" the move is the sentence's subject —
+  // "Their exd5 opens the e-file" — and "takes" there makes two verbs
+  // ("Their e-pawn takes d5 opens the e-file"). Said as "taking on" it reads
+  // the way a person says it.
+  const asNoun = (offset: number, whole: string): boolean => /\b(?:your|their)\s+$/i.test(whole.slice(0, offset));
+  out = out.replace(PAWN_CAPTURE_RE, (san: string, file: string, dest: string, offset: number, whole: string) => {
+    const spoken = asNoun(offset, whole) ? `${file}-pawn taking on ${dest}` : `${file}-pawn takes ${dest}`;
     pawnExpansions.push({ san, spoken });
     return spoken;
   });
   // Piece SAN: "Nxf7" → "knight takes f7", "Bc4" → "bishop to c4"
   const pieceExpansions: Array<{ san: string; spoken: string }> = [];
-  out = out.replace(SAN_MOVE_RE, (san: string, piece: string, disambig: string, capture: string, dest: string) => {
+  out = out.replace(SAN_MOVE_RE, (san: string, piece: string, disambig: string, capture: string, dest: string, offset: number, whole: string) => {
     const name = PIECE_LETTER_NAMES[piece] ?? piece;
     // Disambiguation reads as a LEADING natural-language qualifier, not a
     // dangling letter after the piece name: "Nbd2" → "b-knight to d2"
@@ -518,7 +524,7 @@ export function sanitizeForTTS(text: string): string {
     // case-insensitive LEAK_DETECTOR_RE false-positive — the old trailing
     // "knight b to d2" had a lone "b to" that the leak auditor flagged as
     // un-expanded piece-letter shorthand (prod sanitizer-leak noise).
-    const verb = capture === 'x' ? 'takes' : 'to';
+    const verb = capture === 'x' ? (asNoun(offset, whole) ? 'taking on' : 'takes') : 'to';
     // A RANK disambiguation reads after the piece: "R2b3" → "rook from the
     // second rank to b3". The leading form ("second-rank rook to b3") is not
     // how anyone says it (hand walk 2026-10-01, V2).
