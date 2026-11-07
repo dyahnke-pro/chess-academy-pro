@@ -116,5 +116,46 @@ async function main() {
     }
   }
   mark(ready === total && total > 0, 'Subscriptions ready', `${ready}/${total} READY_TO_SUBMIT`);
+
+  // PRICES, TRIAL AND THE OPENING PRODUCT AS THE STORE SELLS THEM (read only)
+  // — the description quotes them, so they are read off App Store Connect,
+  // never off memory (2026-11-07: the description said $3.99 / $34.99 while
+  // src/data/pricing.ts said $1.99 / $14.99).
+  const { readFileSync } = await import('node:fs');
+  const pricing = readFileSync('src/data/pricing.ts', 'utf8');
+  const priceOf = (name) => pricing.match(new RegExp(`export const ${name}\\s*=\\s*'\\$(\\d+\\.\\d{2})'`))?.[1] ?? null;
+  const today = new Date().toISOString().slice(0, 10);
+  for (const g of subs) {
+    const ss = (await api(`/v1/subscriptionGroups/${g.id}/subscriptions?limit=20`)).data;
+    for (const s of ss) {
+      const pr = await api(`/v1/subscriptions/${s.id}/prices?filter[territory]=USA&limit=200&include=subscriptionPricePoint`);
+      const points = new Map((pr.included || []).filter((i) => i.type === 'subscriptionPricePoints').map((i) => [i.id, i]));
+      const rows = (pr.data || []).map((d) => ({ start: d.attributes?.startDate ?? null, price: points.get(d.relationships?.subscriptionPricePoint?.data?.id)?.attributes?.customerPrice ?? null }));
+      const live = rows.filter((r) => r.start === null || r.start <= today).sort((a, b) => (a.start ?? '').localeCompare(b.start ?? '')).at(-1)?.price ?? null;
+      const later = rows.filter((r) => r.start !== null && r.start > today).map((r) => `${r.price} from ${r.start}`);
+      const offers = (await api(`/v1/subscriptions/${s.id}/introductoryOffers?limit=200&include=territory`));
+      const usOffer = (offers.data || []).find((o) => o.relationships?.territory?.data?.id === 'USA') ?? (offers.data || [])[0];
+      const trial = usOffer ? `${usOffer.attributes?.offerMode} ${usOffer.attributes?.duration} ×${usOffer.attributes?.numberOfPeriods}` : 'none';
+      const period = s.attributes?.subscriptionPeriod;
+      const expected = period === 'ONE_YEAR' ? priceOf('PRICE_YEARLY') : priceOf('PRICE_MONTHLY');
+      mark(live !== null && expected !== null && Number(live) === Number(expected), `Price ${s.attributes?.productId} (${period})`,
+        `USA ${live ?? 'none'}${later.length ? ` (scheduled: ${later.join(', ')})` : ''}; pricing.ts says ${expected ?? '?'}; intro offer: ${trial}`);
+    }
+  }
+  const openingIaps = await api(`/v1/apps/${app.id}/inAppPurchasesV2?limit=200&fields[inAppPurchases]=productId,name,state`);
+  const states = {};
+  for (const p of openingIaps.data || []) states[p.attributes?.state] = (states[p.attributes?.state] ?? 0) + 1;
+  console.log(`opening products: ${(openingIaps.data || []).length} — ${Object.entries(states).map(([k, v]) => `${k} ${v}`).join(', ')}`);
+  const sample = (openingIaps.data || [])[0];
+  if (sample) {
+    const mp = await api(`/v1/inAppPurchasePriceSchedules/${sample.id}/manualPrices?filter[territory]=USA&include=inAppPurchasePricePoint&limit=50`);
+    const live = (mp.included || []).find((i) => i.type === 'inAppPurchasePricePoints')?.attributes?.customerPrice ?? null;
+    mark(live !== null && Number(live) === Number(priceOf('PRICE_OPENING')), `Opening price (${sample.attributes?.productId})`, `USA ${live ?? 'none'}; pricing.ts says ${priceOf('PRICE_OPENING')}`);
+  }
+  const locs = (await api(`/v1/appStoreVersions/${version.id}/appStoreVersionLocalizations?limit=20`)).data || [];
+  const en = locs.find((l) => l.attributes?.locale === 'en-US') ?? locs[0];
+  const desc = en?.attributes?.description ?? '';
+  const quoted = [...desc.matchAll(/\$\d+\.\d{2}/g)].map((m) => m[0]);
+  console.log(`live description (${en?.attributes?.locale ?? '?'}): ${desc.length} chars; prices quoted: ${quoted.join(', ') || 'none'}; first line: ${desc.split('\n')[0]}`);
 }
 main().catch((e) => { console.error('\n❌ readiness failed:\n', e.message); process.exit(1); });
