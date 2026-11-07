@@ -68,30 +68,48 @@ async function main() {
   }
 
   if (SET_AGE_RATING) {
-    // Honest "all clear" chess-app declaration → 4+. NOT in Kids Category.
-    const decl = (await api('GET', `/v1/appStoreVersions/${version.id}/ageRatingDeclaration`)).data;
-    const attrs = {
-      alcoholTobaccoOrDrugUseOrReferences: 'NONE',
-      contests: 'NONE',
-      gamblingSimulated: 'NONE',
-      gambling: false,
-      horrorOrFearThemes: 'NONE',
-      matureOrSuggestiveThemes: 'NONE',
-      medicalOrTreatmentInformation: 'NONE',
-      profanityOrCrudeHumor: 'NONE',
-      sexualContentGraphicAndNudity: 'NONE',
-      sexualContentOrNudity: 'NONE',
-      violenceCartoonOrFantasy: 'NONE',
-      violenceRealistic: 'NONE',
-      violenceRealisticProlongedGraphicOrSadistic: 'NONE',
-      unrestrictedWebAccess: false,
-      kidsAgeBand: null,
-      seventeenPlus: false,
+    // THE ANSWERS STILL BLANK, AND ONLY THOSE (submit 2026-11-07: Apple added
+    // questions to the age rating — ads, chat, weapons, loot boxes … — and one
+    // left blank refused the review with ATTRIBUTE.REQUIRED). An answer already
+    // given is never overwritten; a blank one gets this app's honest answer: a
+    // chess app with no ads, no user-to-user chat or shared content, nothing
+    // mature → 4+, not in the Kids Category. A blank question this table has no
+    // answer for is printed, never guessed.
+    // The declaration hangs off the version (older API) or the editable appInfo.
+    const readDecl = async () => {
+      try { const d = (await api('GET', `/v1/appStoreVersions/${version.id}/ageRatingDeclaration`)).data; if (d) return d; } catch { /* the newer API */ }
+      const infos = (await api('GET', `/v1/apps/${app.id}/appInfos?limit=10`)).data;
+      const info = infos.find((i) => i.attributes?.appStoreState && i.attributes.appStoreState !== 'READY_FOR_DISTRIBUTION') || infos[0];
+      return (await api('GET', `/v1/appInfos/${info.id}/ageRatingDeclaration`)).data;
     };
-    await api('PATCH', `/v1/ageRatingDeclarations/${decl.id}`, {
-      data: { type: 'ageRatingDeclarations', id: decl.id, attributes: attrs },
-    });
-    console.log('✓ age-rating declaration set (all NONE / not Kids Category → 4+)');
+    const decl = await readDecl();
+    const before = decl.attributes || {};
+    const OPTIONAL = new Set(['kidsAgeBand', 'developerAgeRatingInfoUrl', 'koreaAgeRatingOverride']);
+    const HONEST = {
+      alcoholTobaccoOrDrugUseOrReferences: 'NONE', contests: 'NONE', gamblingSimulated: 'NONE', gambling: false,
+      horrorOrFearThemes: 'NONE', matureOrSuggestiveThemes: 'NONE', medicalOrTreatmentInformation: 'NONE',
+      profanityOrCrudeHumor: 'NONE', sexualContentGraphicAndNudity: 'NONE', sexualContentOrNudity: 'NONE',
+      violenceCartoonOrFantasy: 'NONE', violenceRealistic: 'NONE', violenceRealisticProlongedGraphicOrSadistic: 'NONE',
+      unrestrictedWebAccess: false, seventeenPlus: false,
+      advertising: false, ageAssurance: false, gunsOrOtherWeapons: 'NONE', healthOrWellnessTopics: false,
+      lootBox: false, messagingAndChat: false, parentalControls: false, userGeneratedContent: false,
+      ageRatingOverride: 'NONE', ageRatingOverrideV2: 'NONE',
+    };
+    console.log(`age rating before: ${JSON.stringify(before)}`);
+    const blank = Object.keys(before).filter((k) => (before[k] === null || before[k] === undefined) && !OPTIONAL.has(k));
+    const fill = Object.fromEntries(blank.filter((k) => k in HONEST).map((k) => [k, HONEST[k]]));
+    const unknown = blank.filter((k) => !(k in HONEST));
+    console.log(`blank: ${blank.join(', ') || 'none'}${unknown.length ? ` · NO ANSWER KNOWN for: ${unknown.join(', ')}` : ''}`);
+    if (Object.keys(fill).length) {
+      await api('PATCH', `/v1/ageRatingDeclarations/${decl.id}`, {
+        data: { type: 'ageRatingDeclarations', id: decl.id, attributes: fill },
+      });
+      const after = (await readDecl()).attributes || {};
+      console.log(`✓ answered ${Object.keys(fill).join(', ')} · after: ${JSON.stringify(after)}`);
+    } else {
+      console.log('✓ nothing blank that this table answers');
+    }
+    if (unknown.length) process.exitCode = 1;
   }
 
   console.log('\n✅ finalize-asc-version done (no submit).');
