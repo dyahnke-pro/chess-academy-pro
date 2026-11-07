@@ -50,22 +50,23 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `namedMoveTokens` (function) — 1 call site
 - `src/coach/dispatchCoachTurn.ts:383`
 
-### `readTurnInCode` (function) — 60 call sites
+### `readTurnInCode` (function) — 61 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:63`
 - `src/coach/chatTurnAnswers.test.ts:82`
 - `src/coach/chatTurnAnswers.test.ts:103`
 - `src/coach/chatTurnCodeReader.test.ts:10`
 - `src/coach/chatTurnCodeReader.test.ts:90`
-- `src/coach/chatTurnCodeReader.test.ts:96`
-- `src/coach/chatTurnCodeReader.test.ts:103`
-- `src/coach/chatTurnCodeReader.test.ts:108`
-- `src/coach/chatTurnCodeReader.test.ts:109`
-- `src/coach/chatTurnCodeReader.test.ts:118`
+- `src/coach/chatTurnCodeReader.test.ts:93`
+- `src/coach/chatTurnCodeReader.test.ts:99`
+- `src/coach/chatTurnCodeReader.test.ts:106`
+- `src/coach/chatTurnCodeReader.test.ts:111`
+- `src/coach/chatTurnCodeReader.test.ts:112`
 - `src/coach/chatTurnCodeReader.test.ts:121`
 - `src/coach/chatTurnCodeReader.test.ts:124`
 - `src/coach/chatTurnCodeReader.test.ts:127`
-- `src/coach/chatTurnCodeReader.test.ts:128`
-- `src/coach/chatTurnParser.ts:185`
+- `src/coach/chatTurnCodeReader.test.ts:130`
+- `src/coach/chatTurnCodeReader.test.ts:131`
+- `src/coach/chatTurnParser.ts:195`
 - `src/coach/developNext.test.ts:24`
 - `src/coach/developNext.test.ts:26`
 - `src/coach/developNext.test.ts:27`

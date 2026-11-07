@@ -228,6 +228,19 @@ describe('dispatchCoachTurn — "explain that" on a screen that passes no last l
   });
 });
 
+describe('dispatchCoachTurn — "stop" is served even when the model is slow (hard-chat prod audit 2026-11-07)', () => {
+  beforeEach(() => { ask.mockReset(); resetConversations(); routeChatIntent.mockResolvedValue(null); });
+  it.each(['stop', 'Stop.', 'be quiet', 'okay stop talking'])('%s', async (q) => {
+    setServeParsedRoute(true);
+    setChatTurnReaderForTests(() => new Promise(() => { /* never */ }));
+    const ans = await dispatchCoachTurn(TURN(q), {});
+    setServeParsedRoute(false);
+    expect(ans.servedIntent).toBe('stop');
+    expect(ans.text).toBe('Okay.');
+    expect(ask).not.toHaveBeenCalled();
+  });
+});
+
 describe('dispatchCoachTurn — a direct kind is answered by its computed sentence', () => {
   beforeEach(() => {
     routeChatIntent.mockReset();

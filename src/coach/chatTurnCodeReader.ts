@@ -326,7 +326,7 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     // audit 2026-11-07: read by the model only, it lost the 1.5 s race to the
     // keyword path, which took "explain" for a concept and said "There is no
     // lesson on that idea yet" right after a mate in three).
-    || /^(?:(?:can|could|would) you |please )?(?:explain|go through|walk me through|break down) (?:that|it|this|the line|that line|that move|the move|why)(?: (?:again|more|for me|please|move by move))*\s*[?.!]*$/.test(followUp))) {
+    || /^(?:(?:can|could|would) you |please )?(?:explain|go through|break down) (?:that|it|this|the line|that line|that move|the move|why)(?: (?:again|more|for me|please|move by move))*\s*[?.!]*$/.test(followUp))) {
     return { kind: 'explain-last', referents: [], seat: null, topic: null };
   }
   // "What's the best move here?" / "what should I play?" / "best move?" —

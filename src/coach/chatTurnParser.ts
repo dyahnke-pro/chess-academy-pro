@@ -16,6 +16,7 @@
  */
 import { readChatTurnStructured } from '../services/coachApi';
 import { readTurnInCode } from './chatTurnCodeReader';
+import { isStopCommand } from './questionIntents';
 import { coerceSteps, readAccountName, requestStepsPrompt, REQUEST_STEP_SCHEMA } from './requestSteps';
 import {
   ALL_CHAT_KINDS,
@@ -171,6 +172,15 @@ export async function parseChatTurn(text: string, ctx: ParseContext): Promise<Pa
   const square = readSquareAnswer(text);
   if (square) {
     return done({ turn: square, english: null, language: null, validation: validateChatTurn(square, ctx.board, memory), source: 'square-answer' });
+  }
+
+  // 1a. "Stop" is an action the student needs NOW (hard-chat prod audit
+  // 2026-11-07: read only by the model, it once landed past the 1.5 s read
+  // budget and the student got "That was not clear" while the voice went on).
+  // The same one test the keyword lane uses.
+  if (isStopCommand(text)) {
+    const stop: ChatTurn = { kind: 'stop', referents: [], seat: null, topic: null };
+    return done({ turn: stop, english: null, language: null, validation: validateChatTurn(stop, ctx.board, memory), source: 'code' });
   }
 
   // 1b. A message that is only a username is a request to import its games.

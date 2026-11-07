@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**219 lines · 6 exports · 5 importers · 5 tests · 1 audits**
+**229 lines · 6 exports · 5 importers · 5 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:2824) — names `Reader`
-- **The standard post-deploy ritual** (CLAUDE.md:6438) — names `chatTurnParser`
+- **⏰ Standing notes** (CLAUDE.md:3212) — names `Reader`
+- **The standard post-deploy ritual** (CLAUDE.md:6891) — names `Reader`, `chatTurnParser`
 
 ## Who calls in
 
@@ -38,7 +38,7 @@
 - `src/coach/chatTurnParser.test.ts:23`
 - `src/coach/chatTurnParser.test.ts:28`
 - `src/coach/chatTurnParser.test.ts:29`
-- `src/coach/handWalk1009.test.ts:260`
+- `src/coach/handWalk1009.test.ts:264`
 - `src/coach/requestSteps.test.ts:42`
 - `src/coach/requestSteps.test.ts:48`
 
@@ -50,7 +50,7 @@
 - `src/coach/chatTurnParser.test.ts:72`
 - `src/coach/chatTurnParser.test.ts:78`
 - `src/coach/chatTurnParser.test.ts:84`
-- `src/coach/dispatchCoachTurn.ts:165`
+- `src/coach/dispatchCoachTurn.ts:169`
 
 ## Tests
 
@@ -67,3 +67,6 @@ A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-book-reader-prod.mjs`
+- `scripts/audit-campaign-gate1.mjs`
+- `scripts/audit-campaign-tracks-prod.mjs`
+- `scripts/audit-lib/mission-lines.mjs`
