@@ -98,12 +98,19 @@ export interface StudentNeedContext {
    * whose misses it never saw (OS-1 §C1). Empty = every skill grey.
    */
   heat: ReadonlyMap<MisconceptionTagId, HeatTile>;
+  /**
+   * WHAT THE STUDENT ASKED ABOUT — per skill, how many times they asked a
+   * question on a board that posed it, within their last games
+   * (`askedRecord`, David 2026-11-07). REQUIRED, and empty is a real answer
+   * (no asks). It only RAISES (`askedTerm`): an ask is never a miss.
+   */
+  asked: ReadonlyMap<MisconceptionTagId, number>;
 }
 
 /** The empty context — a brand-new student. Every data term is zero; the
  *  cold-start prior carries the coach. */
 export function coldStudent(rating = DEFAULT_STUDENT_RATING): StudentNeedContext {
-  return { rating, gamesPlayed: 0, signals: [], bookDepartures: [], capabilities: new Map(), heat: new Map() };
+  return { rating, gamesPlayed: 0, signals: [], bookDepartures: [], capabilities: new Map(), heat: new Map(), asked: new Map() };
 }
 
 export interface NeedPlyInput {
@@ -416,6 +423,26 @@ function capabilityTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: numb
   return { score, reason: `proven: ${proven.join(', ')}` };
 }
 
+/**
+ * THE QUESTIONS THEY ASKED (David 2026-11-07: across games). A ply that poses
+ * a skill the student asked about on another board is worth more: one ask
+ * half the bar, a skill asked about twice or more the whole bar — the student
+ * keeps asking, so the coach says it when the board poses it again. Raise
+ * only; the posed tags are the same computer's (`positionPosed` /
+ * `capabilitiesPosed`) the ask was recorded with.
+ */
+const ASKED_ONCE = Math.round(NEED_THRESHOLD / 2);
+function askedTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number; reason: string | null } {
+  if (!p.posedTags?.length || ctx.asked.size === 0) return { score: 0, reason: null };
+  let best: { tag: MisconceptionTagId; n: number } | null = null;
+  for (const tag of p.posedTags) {
+    const n = ctx.asked.get(tag) ?? 0;
+    if (n > (best?.n ?? 0)) best = { tag, n };
+  }
+  if (!best) return { score: 0, reason: null };
+  return { score: best.n >= 2 ? NEED_THRESHOLD : ASKED_ONCE, reason: `asked: ${best.tag} (${best.n} time${best.n === 1 ? '' : 's'} in their last games)` };
+}
+
 function unfamiliarityTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number; reason: string | null } {
   if (!ctx.lineReps) return { score: 0, reason: null };
   const f = familiarity(ctx.lineReps[p.ply - 1]);
@@ -454,6 +481,7 @@ export function computeNeed(p: NeedPlyInput, ctx: StudentNeedContext): NeedVerdi
     ['unfamiliarity', unfamiliarityTerm(p, ctx)],
     ['resultDeficit', resultDeficitTerm(ctx)],
     ['capability', capabilityTerm(p, ctx)],
+    ['asked', askedTerm(p, ctx)],
   ] as const) {
     terms[name] = t.score;
     score += t.score;

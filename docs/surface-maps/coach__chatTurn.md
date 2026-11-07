@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**837 lines · 28 exports · 27 importers · 20 tests · 6 audits**
+**846 lines · 29 exports · 28 importers · 21 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,6 +39,7 @@
 - `src/coach/readingPin.test.ts`
 - `src/coach/readingPin.ts`
 - `src/coach/requestSteps.test.ts`
+- `src/services/askedRecord.test.ts`
 - `src/services/coachApi.ts`
 
 ## Exports and every call site
@@ -63,13 +64,13 @@
 - `src/coach/chatTurn.test.ts:97`
 - `src/coach/chatTurn.test.ts:100`
 - `src/coach/chatTurn.test.ts:107`
-- `src/coach/dispatchCoachTurn.ts:279`
-- `src/coach/dispatchCoachTurn.ts:319`
-- `src/coach/dispatchCoachTurn.ts:332`
-- `src/coach/dispatchCoachTurn.ts:459`
-- `src/coach/dispatchCoachTurn.ts:492`
-- `src/coach/dispatchCoachTurn.ts:649`
-- `src/coach/dispatchCoachTurn.ts:681`
+- `src/coach/dispatchCoachTurn.ts:287`
+- `src/coach/dispatchCoachTurn.ts:327`
+- `src/coach/dispatchCoachTurn.ts:340`
+- `src/coach/dispatchCoachTurn.ts:467`
+- `src/coach/dispatchCoachTurn.ts:500`
+- `src/coach/dispatchCoachTurn.ts:657`
+- `src/coach/dispatchCoachTurn.ts:689`
 - `src/coach/questionRoute.test.ts:20`
 - `src/coach/questionRoute.test.ts:30`
 - `src/coach/questionRoute.test.ts:33`
@@ -131,6 +132,10 @@
 ### `ValidationResult` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `asksAboutTheBoard` (function) — 2 call sites
+- `src/coach/dispatchCoachTurn.ts:225`
+- `src/services/askedRecord.test.ts:42`
+
 ### `validateChatTurn` (function) — 30 call sites
 - `src/coach/chatTurn.test.ts:90`
 - `src/coach/chatTurn.test.ts:136`
@@ -172,20 +177,20 @@
 ### `nextConversationState` (function) — 3 call sites
 - `src/coach/chatTurn.test.ts:162`
 - `src/coach/dispatchCoachTurn.eachPiece.test.ts:59`
-- `src/coach/dispatchCoachTurn.ts:219`
+- `src/coach/dispatchCoachTurn.ts:221`
 
 ### `canonicalAsk` (function) — 5 call sites
 - `src/coach/chatTurn.test.ts:66`
 - `src/coach/chatTurn.test.ts:80`
 - `src/coach/chatTurn.test.ts:83`
 - `src/coach/chatTurn.test.ts:87`
-- `src/coach/dispatchCoachTurn.ts:650`
+- `src/coach/dispatchCoachTurn.ts:658`
 
 ### `kindAgreesWithLane` (function) — 4 call sites
 - `src/coach/chatTurn.test.ts:103`
 - `src/coach/chatTurn.test.ts:104`
-- `src/coach/dispatchCoachTurn.ts:233`
-- `src/coach/dispatchCoachTurn.ts:649`
+- `src/coach/dispatchCoachTurn.ts:241`
+- `src/coach/dispatchCoachTurn.ts:657`
 
 ### `askBackAtCatchAll` (function) — 1 call site
 - `src/services/coachApi.ts:760`
@@ -215,6 +220,7 @@
 - `src/coach/questionRoute.test.ts`
 - `src/coach/readingPin.test.ts`
 - `src/coach/requestSteps.test.ts`
+- `src/services/askedRecord.test.ts`
 
 ## Audits that reach it
 

@@ -49,7 +49,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/coachService.ts:1612`
 
 ### `namedMoveTokens` (function) — 1 call site
-- `src/coach/dispatchCoachTurn.ts:395`
+- `src/coach/dispatchCoachTurn.ts:403`
 
 ### `readTurnInCode` (function) — 67 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:69`

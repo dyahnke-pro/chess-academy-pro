@@ -1952,7 +1952,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       for (const [k, v] of Object.entries(r.totals ?? {})) totals[k] = (totals[k] ?? 0) + v;
       for (const [k, v] of Object.entries(r.fired ?? {})) fired[k] = (fired[k] ?? 0) + v;
     }
-    const WANT = ['departure', 'weakness', 'unfamiliarity', 'resultDeficit', 'capability', 'thread'];
+    const WANT = ['departure', 'weakness', 'unfamiliarity', 'resultDeficit', 'capability', 'asked', 'thread'];
     const missing = WANT.filter((k) => !(k in totals));
     await add('NEED every-term-reported', missing.length === 0, missing.length ? `terms missing from the emission: ${missing.join(',')}` : `terms fired: ${WANT.map((k) => `${k}=${fired[k] ?? 0}`).join(' ')}`);
     await add('NEED capability-term-never-raises', (totals.capability ?? 0) <= 0,

@@ -37,6 +37,7 @@ import { onWeaknessModelChanged } from './weaknessModelEvents';
 import { openingEntryForKey, openingFamily, sameOpeningFamily } from './openingKey';
 import { fenKey } from './needScore';
 import { isFixtureGame } from './fixtureGames';
+import { askedCountsSince, askWindowStart } from './askedRecord';
 
 const TTL_MS = 5 * 60 * 1000;
 
@@ -65,6 +66,8 @@ export interface StudentNeedBase {
   bookDepartures: StudentNeedContext['bookDepartures'];
   capabilities: StudentNeedContext['capabilities'];
   heat: StudentNeedContext['heat'];
+  /** The skills the student asked about, within their last games (`askedRecord`). */
+  asked: StudentNeedContext['asked'];
   /** Every non-master, non-fixture game (scores). */
   games: readonly GameRecord[];
   /** The analysed subset (familiarity needs evaluations). */
@@ -254,6 +257,8 @@ async function readStudentNeedBase(q: BaseQuery, key: string, generation: number
     const evidence = await evidenceMirror.rows().catch((): readonly CapabilityEvidenceRecord[] => []);
     const slips = await slipMirror.rows().catch((): readonly MisconceptionTagRecord[] => []);
     const { heat, capabilities } = studentRecordFrom(signals, evidence, slips);
+    // WHAT THEY ASKED, within their last games (David 2026-11-07: across games).
+    const asked = await askedCountsSince(askWindowStart(games));
     const base: StudentNeedBase = {
       rating: q.rating,
       studentColor: q.studentColor,
@@ -265,6 +270,7 @@ async function readStudentNeedBase(q: BaseQuery, key: string, generation: number
       bookDepartures,
       capabilities: capabilities ?? new Map<MisconceptionTagId, CapabilityProfileEntry>(),
       heat,
+      asked,
       games,
       analysed,
       inOpening,
@@ -299,6 +305,7 @@ export function contextForLine(base: StudentNeedBase | null, sans: readonly stri
     bookDepartures: base.bookDepartures,
     capabilities: base.capabilities,
     heat: base.heat,
+    asked: base.asked,
     openingId: base.openingId,
     openingGames: base.openingGames,
     homeOpening: base.homeOpening,

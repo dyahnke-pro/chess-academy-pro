@@ -106,7 +106,7 @@ describe('one opening key — the reader joins on it', () => {
 
 describe('one opening key — the departure term joins by POSITION, never a null wildcard', () => {
   const warm = (over: Partial<StudentNeedContext>): StudentNeedContext => ({
-    rating: 1500, gamesPlayed: COLD_START_GAMES + 10, signals: [], bookDepartures: [], capabilities: new Map(), heat: new Map(),
+    rating: 1500, gamesPlayed: COLD_START_GAMES + 10, signals: [], bookDepartures: [], capabilities: new Map(), heat: new Map(), asked: new Map(),
     lineReps: new Array(20).fill(FAMILIAR_REPS), ...over,
   });
   const afterPlies = (sans: readonly string[], n: number): string => {

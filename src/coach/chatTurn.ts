@@ -490,6 +490,15 @@ const NEEDS_BOARD: ReadonlySet<ChatKind> = new Set<ChatKind>([
   'best-defence', 'faster-win', 'line-outcome', 'left-book',
 ]);
 
+/** Is this turn a QUESTION about the board in front of the student — what the
+ *  need score remembers across games (`askedRecord`)? The board kinds, less
+ *  the two that ask nothing of the position (whose turn it is; an answer to
+ *  the coach's own question), plus "why did they play that?". */
+export function asksAboutTheBoard(kind: ChatKind): boolean {
+  if (kind === 'whose-turn' || kind === 'answer') return false;
+  return NEEDS_BOARD.has(kind) || kind === 'opponent-move';
+}
+
 /**
  * Check every field of a reading against the board, and resolve what the
  * board can resolve (a piece named without its square, "the other knight").

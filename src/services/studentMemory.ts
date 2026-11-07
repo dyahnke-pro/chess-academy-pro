@@ -62,6 +62,12 @@ export interface MemoryDataByKind {
   'learn-playout-prompted': { at: number };
   /** A Learn game in progress, saved so a killed app keeps it. key = 'current'. */
   'learn-game-snapshot': { snapshot: unknown };
+  // ── chat ──
+  /** The student asked about a board that posed this skill (David 2026-11-07:
+   *  questions feed the need score across games, `askedRecord.ts`). Never
+   *  evidence: an ask is not a miss and never touches the hold rate.
+   *  key = the skill (`MisconceptionTagId`); `at` = when each ask was made. */
+  asked: { at: number[] };
 }
 
 export type MemoryKind = keyof MemoryDataByKind;
@@ -88,6 +94,7 @@ export const MEMORY_KINDS: Record<MemoryKind, { surface: MemorySurface }> = {
   'learn-forks': { surface: 'learn' },
   'learn-playout-prompted': { surface: 'learn' },
   'learn-game-snapshot': { surface: 'learn' },
+  asked: { surface: 'chat' },
 };
 
 export interface StoredChatMessage {

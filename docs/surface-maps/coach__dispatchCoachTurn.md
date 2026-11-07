@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**736 lines · 14 exports · 25 importers · 20 tests · 1 audits**
+**744 lines · 14 exports · 26 importers · 21 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
 - `src/coach/coachService.endgameTopic.test.ts`
+- `src/coach/dispatchCoachTurn.asked.test.ts`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
 - `src/coach/dispatchCoachTurn.eachPiece.test.ts`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts`
@@ -55,7 +56,7 @@
 - `src/coach/dispatchCoachTurn.test.ts:260`
 - `src/coach/dispatchCoachTurn.test.ts:268`
 
-### `setChatTurnReaderForTests` (function) — 52 call sites
+### `setChatTurnReaderForTests` (function) — 54 call sites
 - `src/coach/chatKindContracts.test.ts:341`
 - `src/coach/chatKindContracts.test.ts:391`
 - `src/coach/chatKindContracts.test.ts:416`
@@ -66,6 +67,8 @@
 - `src/coach/coachService.askReader.integration.test.ts:51`
 - `src/coach/coachService.endgameTopic.test.ts:75`
 - `src/coach/coachService.endgameTopic.test.ts:82`
+- `src/coach/dispatchCoachTurn.asked.test.ts:23`
+- `src/coach/dispatchCoachTurn.asked.test.ts:26`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:23`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:32`
 - `src/coach/dispatchCoachTurn.eachPiece.test.ts:21`
@@ -109,8 +112,9 @@
 - `src/components/Coach/GameChatPanel.test.tsx:287`
 - `src/components/Coach/GameChatPanel.test.tsx:295`
 
-### `resetConversations` (function) — 13 call sites
+### `resetConversations` (function) — 14 call sites
 - `src/coach/chatKindContracts.test.ts:339`
+- `src/coach/dispatchCoachTurn.asked.test.ts:24`
 - `src/coach/dispatchCoachTurn.eachPiece.test.ts:19`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:14`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:21`
@@ -163,13 +167,14 @@
 ### `isComputedAnswer` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:8076`
 
-### `dispatchCoachTurn` (function) — 54 call sites
+### `dispatchCoachTurn` (function) — 55 call sites
 - `src/coach/chatKindContracts.test.ts:393`
 - `src/coach/chatKindContracts.test.ts:417`
 - `src/coach/chatKindContracts.test.ts:422`
 - `src/coach/chatTurnRow.outcome.test.ts:39`
 - `src/coach/coachService.askReader.integration.test.ts:32`
 - `src/coach/coachService.endgameTopic.test.ts:83`
+- `src/coach/dispatchCoachTurn.asked.test.ts:28`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:35`
 - `src/coach/dispatchCoachTurn.eachPiece.test.ts:25`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:20`
@@ -226,6 +231,7 @@
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
 - `src/coach/coachService.endgameTopic.test.ts`
+- `src/coach/dispatchCoachTurn.asked.test.ts`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
 - `src/coach/dispatchCoachTurn.eachPiece.test.ts`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts`

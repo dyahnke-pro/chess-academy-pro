@@ -430,7 +430,7 @@ describe('the verdict and its plan echo are one fact (hand walk 2340)', () => {
   it('a record that has PROVEN every question this board asks stays quiet', async () => {
     // Proven under the ONE green (holdRate): ≥ 90% held over at least 8 posed.
     const proven = new Map(MISCONCEPTION_TAGS.map((t) => [t.id, { held: 9, broken: 0, heldStreak: 9, streakGames: 9, hold: { posed: 9, held: 9, missed: 0, rate: 1 } }])) as never;
-    const r = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [], studentNeedContext: { rating: 1200, gamesPlayed: 20, signals: [], bookDepartures: [], capabilities: proven, heat: new Map() } });
+    const r = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [], studentNeedContext: { rating: 1200, gamesPlayed: 20, signals: [], bookDepartures: [], capabilities: proven, heat: new Map(), asked: new Map() } });
     expect(r.clauses.some((c) => c.kind === 'deliberation')).toBe(false);
     expect(r.heldVerdict).toBeNull();
   });

@@ -38,6 +38,7 @@ import { assemblePositionalAnswer, assembleThreatAnswer } from '../services/grou
 import {
   CHAT_KINDS,
   EMPTY_CONVERSATION,
+  asksAboutTheBoard,
   canonicalAsk,
   fastPathLane,
   kindAgreesWithLane,
@@ -58,6 +59,7 @@ import { emitCoachStop } from './coachStopEvents';
 import type { ResolvedStep } from './requestSteps';
 import { isReleased } from '../data/heldSurfaces';
 import { samePosition } from '../utils/samePosition';
+import { askedTagsAt, rememberAsked } from '../services/askedRecord';
 
 interface DispatchCoachTurnOptions extends CoachServiceOptions {
   /** The prior assistant message — lets the action router catch the
@@ -217,6 +219,12 @@ async function settleChatTurnRead(opts: {
   const validation = result?.validation ?? null;
   if (validation?.ok) {
     conversations.set(surface, nextConversationState(conversationFor(surface), validation.turn, input.liveState.studentColor ?? null));
+  }
+  // A QUESTION ABOUT THE BOARD IS REMEMBERED by the skills the board posed
+  // (David 2026-11-07: the need score reads them across games). Never a miss.
+  if (validation?.ok && asksAboutTheBoard(validation.turn.kind) && input.liveState.fen) {
+    const tags = askedTagsAt(input.liveState.fen, input.liveState.moveHistory ?? [], input.liveState.engineBestMoveUci ?? null);
+    if (tags.length) await rememberAsked(tags).catch(() => []);
   }
   const source = askSourceFor(surface, input.origin);
   emitChatTurn({

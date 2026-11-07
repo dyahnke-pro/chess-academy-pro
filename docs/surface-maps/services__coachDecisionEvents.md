@@ -57,7 +57,7 @@
 - `src/services/positionFacts.liveFundamental.test.ts:50`
 
 ### `emitNeedScore` (function) — 1 call site
-- `src/services/needScore.ts:476`
+- `src/services/needScore.ts:504`
 
 ### `resetCoachDecisionListeners` (function) — 5 call sites
 - `src/services/coachDecisionEmits.test.ts:32`

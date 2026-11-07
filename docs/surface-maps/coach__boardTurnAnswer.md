@@ -73,8 +73,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/boardTurnAnswer.test.ts:103`
 - `src/coach/boardTurnAnswer.test.ts:117`
 - `src/coach/boardTurnAnswer.test.ts:121`
-- `src/coach/dispatchCoachTurn.ts:575`
-- `src/coach/dispatchCoachTurn.ts:629`
+- `src/coach/dispatchCoachTurn.ts:583`
+- `src/coach/dispatchCoachTurn.ts:637`
 
 ### `theirPlanAnswer` (function) — 1 call site
 - `src/coach/handWalk1009.test.ts:65`
@@ -85,7 +85,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/developNext.test.ts:68`
 
 ### `lineOutcomeAnswer` (function) — 5 call sites
-- `src/coach/dispatchCoachTurn.ts:399`
+- `src/coach/dispatchCoachTurn.ts:407`
 - `src/coach/lineOutcome.test.ts:43`
 - `src/coach/lineOutcome.test.ts:50`
 - `src/coach/lineOutcome.test.ts:67`

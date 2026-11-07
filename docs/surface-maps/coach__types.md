@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1024 lines · 32 exports · 1037 importers · 276 tests · 38 audits**
+**1024 lines · 32 exports · 1038 importers · 276 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -659,6 +659,7 @@
 - `src/services/annotationService.ts`
 - `src/services/arrowDoor.ts`
 - `src/services/arrowEngine.ts`
+- `src/services/askedRecord.ts`
 - `src/services/autoAnalyzeGame.livePv.test.ts`
 - `src/services/autoAnalyzeGame.reason.test.ts`
 - `src/services/autoAnalyzeGame.ts`
