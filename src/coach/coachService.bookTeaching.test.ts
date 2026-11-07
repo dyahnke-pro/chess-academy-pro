@@ -1,8 +1,10 @@
 // The coach teaches from the books when asked (David 2026-10-05). The REAL
 // coachService.ask path: a typed book request is answered with the book's own
-// passage and a reader chip, and no model is called.
+// passage (and a reader chip while the library is released), and no model is
+// called.
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { coachService } from './coachService';
+import { isReleased } from '../data/heldSurfaces';
 
 const llm = vi.fn();
 function installMocks(): void {
@@ -28,8 +30,16 @@ describe('coachService — teaching from the books', () => {
     expect(a.text).toMatch(/^Emanuel Lasker, \*Common Sense in Chess\*/);
     expect(a.text).toMatch(/the defence is the art of strengthening them/);
     expect(a.servedIntent).toBe('book-teaching');
-    expect(a.actionOffer?.[0]).toMatchObject({ type: 'read_book' });
-    expect(a.actionOffer?.[0].id).toMatch(/^emanuel-lasker-common-sense-in-chess@\d+$/);
+    // The reader chip follows the one hold table: while the library is held
+    // from release (David 2026-11-06) the passage is still quoted, but nothing
+    // opens the reader or says it is open.
+    if (isReleased('library')) {
+      expect(a.actionOffer?.[0]).toMatchObject({ type: 'read_book' });
+      expect(a.actionOffer?.[0].id).toMatch(/^emanuel-lasker-common-sense-in-chess@\d+$/);
+    } else {
+      expect(a.actionOffer).toBeUndefined();
+      expect(a.text).not.toMatch(/open in the library/);
+    }
     expect(llm).not.toHaveBeenCalled();
   });
 
