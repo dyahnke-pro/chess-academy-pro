@@ -56,8 +56,13 @@ async function main() {
   mark(!!il?.attributes?.privacyPolicyUrl, 'Privacy Policy URL', il?.attributes?.privacyPolicyUrl || 'MISSING');
 
   // 3. App price (Free?)
-  const sched = await api(`/v1/apps/${app.id}/appPriceSchedule?include=manualPrices&limit=5`);
-  if (sched.data) {
+  // A to-one relationship takes no `limit`: Apple answers that query 400, and
+  // the check used to read the refusal as "no schedule" (2026-11-07). A failed
+  // read is reported as a failed read, never as missing data.
+  const sched = await api(`/v1/apps/${app.id}/appPriceSchedule?include=manualPrices,baseTerritory`);
+  if (sched.__error) {
+    mark(false, 'App price', `could not read the price schedule (${sched.__error}): ${String(sched.__body).replace(/\s+/g, ' ').slice(0, 300)}`);
+  } else if (sched.data) {
     const prices = (sched.included || []).filter((x) => x.type === 'appPrices');
     let free = false;
     for (const p of prices) {
