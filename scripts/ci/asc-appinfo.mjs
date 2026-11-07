@@ -63,7 +63,11 @@ async function main() {
   // ── appInfo: category + content rights ────────────────────────────────────
   const appInfos = (await api('GET', `/v1/apps/${app.id}/appInfos?limit=10`)).data;
   // The editable appInfo is the one not in a READY_FOR_DISTRIBUTION state.
-  const editable = appInfos.find((i) => i.attributes?.appStoreState && i.attributes.appStoreState !== 'READY_FOR_DISTRIBUTION') || appInfos[0];
+  // READY_FOR_SALE is the live one too (2026-11-07: the age rating was written
+  // to it and refused 409 STATE_ERROR) — the editable one is the version in
+  // progress.
+  const LIVE = new Set(['READY_FOR_DISTRIBUTION', 'READY_FOR_SALE']);
+  const editable = appInfos.find((i) => i.attributes?.appStoreState && !LIVE.has(i.attributes.appStoreState)) || appInfos[0];
   console.log(`appInfo=${editable.id} state=${editable.attributes?.appStoreState}`);
 
   {
