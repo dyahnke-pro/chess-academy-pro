@@ -165,6 +165,15 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
           break;
         case 'show': h.show(e.uci, e.fen); break;
         case 'reply': if (!opts.replyIsInline) h.replyToHeldMove(e.punish); break;
+        case 'question':
+          void logAppAudit({
+            kind: 'learn-focus-question',
+            category: 'subsystem',
+            source: 'useFocusRunner',
+            summary: `ply ${e.row.ply} ${e.row.seat}/${e.row.kind} ${e.row.tag}: ${e.row.state} (found ${e.row.foundThisGame} this game) → ${e.row.dial}${e.row.asked ? ' — asked' : ''}`,
+            details: JSON.stringify(e.row),
+          });
+          break;
         case 'turn':
           void logAppAudit({
             kind: 'learn-focus-turn',

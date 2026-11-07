@@ -51,6 +51,10 @@ export interface FocusSetup {
   line: string;
   /** The longest tempo run before this game — the recap's "new best" bar. */
   tempoBest: number;
+  /** THE RECORD STATE OF EACH SKILL (`holdState`), read once at the start of
+   *  the game: the question before the move and the clue after a miss follow
+   *  it (`coachMoment.momentDial`). A tag absent here is grey — taught. */
+  tagStates: Partial<Record<MisconceptionTagId, HeatState>>;
 }
 
 /** The hold over a set of tags, pooled: one number for the whole set. */
@@ -101,5 +105,6 @@ export function setUpFocusGame(input: FocusSetupInput): FocusSetup {
     targetPly,
     line: PREGAME_LINE,
     tempoBest: input.tempoBest,
+    tagStates: Object.fromEntries([...input.holds].map(([tag, h]) => [tag, holdState(h)])) as Partial<Record<MisconceptionTagId, HeatState>>,
   };
 }

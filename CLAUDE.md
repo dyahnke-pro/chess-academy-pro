@@ -173,12 +173,20 @@ chance for the user to find the focus."
   focus is tactics, finding and preventing them! You will have at least one
   chance this game for a winning tactic, but your opponent will also be trying
   to set up its own tactics. Stay vigilant!"
-- 🔒 **THE FOCUS SPEAKS ON A MISS, NEVER ON A FIND NOBODY ASKED ABOUT** (David
-  2026-10-22). The focus runner's own lines: a find pays its coins and burst
-  and the focus says nothing; only a find that answers a question said out loud
-  is credited by it in words. (The turn door, the one voice, says what each move
-  did — a find included — once the student has played it.) ONE exception, his
-  (2026-10-22): the TEMPO RUN's line, said when the run has ended (below).
+- 🔒 **THE QUESTION BEFORE THE MOVE FOLLOWS THE RECORD** (WO-COACH-NEXT-TO-YOU-01
+  C2/C3, David 2026-11-06: "Give more guidance in some areas, but stay silent
+  in others" → "We can unlock the silent narrations"). 🔴 This REPLACES "the
+  focus speaks on a miss, never on a find nobody asked about" and "rung 0 asks
+  its first chance", both DELETED (the Lake Butler rule). The board's lead
+  chance is asked — the target and the habit, never the move — when its
+  skill is RED or GREY on the student's record (`holdState`; absent is not
+  mastered) and has not been found twice this game; AMBER is not asked and
+  gets the clue after a miss (tier permitting); GREEN gets neither — its miss
+  is explained by the door and counts against the green. One question a board
+  (`coachMoment.MOMENT_DIAL`, `focusRunner.chanceDial`, row
+  `learn-focus-question`). A find pays its coins and burst and is said only
+  when it answers a question said out loud. ONE exception, his (2026-10-22):
+  the TEMPO RUN's line, said when the run has ended (below).
 - **THE RUNG — the only thing the record decides** (`focusRung.ts`, one scale
   `TacticsRung` 0–3 read by the chance reader, the plant and the student):
   0 Beginner (the piece that just moved there) · 1 Intermediate (a two-move
@@ -199,9 +207,9 @@ chance for the user to find the focus."
   fixed line per kind; their motif is named by pattern, "lets them pin a piece
   of yours"). The square is said only once the moment is past (the shown
   answer, the credit, the recap). Audit F19.
-- **THE TIER IS THE RUNG** (`RUNG_TIERS`): rung 0 asks its first chance out
-  loud; a miss holds the board with a clue — Try again / Play on; a second
-  miss offers **Show me** (the student's tap, never automatic). Rung 1: the
+- **THE TIER IS THE RUNG** (`RUNG_TIERS`): at rung 0 a miss holds the board
+  with a clue — Try again / Play on; a second miss offers **Show me** (the
+  student's tap, never automatic). Rung 1: the
   clue and Try again; a second miss plays on. Rungs 2–3: no pause, no clue —
   the coach punishes. 🔒 **THE ANSWER IS NEVER SHOWN UNASKED** (David: "Never
   show the answer!"). Every tier's recap lists the missed chances, each with

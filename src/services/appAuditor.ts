@@ -353,6 +353,9 @@ export type AuditKind =
    *  miss; the coach steering into a defend question. */
   | 'learn-focus-chosen'
   | 'learn-focus-turn'
+  /** The question before the student's move, decided by the record of the
+   *  chance's skill (WO-COACH-NEXT-TO-YOU-01 C2/C3). */
+  | 'learn-focus-question'
   | 'focus-punish'
   /** A technique ending (`bestPlay` on): the coach played its engine-best move. */
   | 'mission-best-play'

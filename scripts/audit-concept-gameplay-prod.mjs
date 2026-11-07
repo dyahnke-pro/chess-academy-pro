@@ -790,6 +790,19 @@ async function main() {
         record('LW. the door ranks by his measured rates: every row names its worth source, and some lanes are learned', missingWorth === 0 && src.learned > 0,
           `${missingWorth} row(s) without worthFrom; worth from — learned ${src.learned}, lane ${src.lane}, stake ${src.stake}`);
       }
+      // THE TURN'S MOMENT (WO-COACH-NEXT-TO-YOU-01 C1): every row names the
+      // moment the move to come got (question / build / bait / none) and
+      // whether their move was read — the field the record dial (C2) reads.
+      // A row without the field means the door never computed it; a game where
+      // no turn named a moment means the label is not reaching the row.
+      {
+        const MOMENTS = new Set(['question', 'build', 'bait', null]);
+        const missing = turns.filter((t) => !('moment' in t) || !MOMENTS.has(t.moment) || typeof t.readTheirMove !== 'boolean').length;
+        const by = {}; let read = 0;
+        for (const t of turns) { by[String(t.moment)] = (by[String(t.moment)] ?? 0) + 1; if (t.readTheirMove) read += 1; }
+        record('LM. every Learn turn names its moment for the move to come, and whether their move was read', missing === 0 && turns.some((t) => t.moment),
+          `${missing} row(s) without a valid moment; moments — ${Object.entries(by).map(([k, v]) => `${k} ${v}`).join(', ')}; their move read on ${read} of ${turns.length}`);
+      }
       record('LD3. nothing FADES before the student has held anything (grey teaches in full)', fadeBeforeEvidence.length === 0, `${fadeBeforeEvidence.length} of ${turns.length} rows faded with no held evidence or lack the field; ${fadedTotal} faded in all, after ${heldSeen} held answer(s)`);
       // THE WHY THAT WAS COMPUTED AND NOT SAID (David 2026-10-13: "how many of
       // those statements are calculated, just not spoken?"). Reported, not

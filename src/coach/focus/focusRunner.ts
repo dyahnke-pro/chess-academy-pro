@@ -7,13 +7,18 @@
  * made here, where a test can hold it.
  *
  * EVERY GAME IS THE TACTICS FOCUS, the same for everyone (David 2026-10-22:
- * "Should be the same as now but tactics added in"): the pre-game line, then
- * the coach speaks on a MISS only — a find is silent (it pays its coins and
- * burst), and only a find that answers a question said out loud is credited
- * in words. What the RUNG decides (`RUNG_TIERS`):
- *   - rung 0: the first chance is asked; a miss holds the board — a clue,
- *     then Try again / Play on; a second miss offers Show me (the student's
- *     tap, never automatic) or Play on;
+ * "Should be the same as now but tactics added in"): the pre-game line. THE
+ * QUESTION BEFORE THE MOVE FOLLOWS THE RECORD (WO-COACH-NEXT-TO-YOU-01 C2/C3,
+ * David 2026-11-06: "We can unlock the silent narrations"): a chance whose
+ * skill is red or grey on the student's record is asked — the target and the
+ * habit, never the move — until it is found twice this game; amber is not
+ * asked and gets the clue after a miss; green gets neither, and its miss is
+ * explained by the door. A find is silent (it pays its coins and burst)
+ * unless it answers a question said out loud. What the RUNG decides
+ * (`RUNG_TIERS`):
+ *   - rung 0: a miss holds the board — a clue, then Try again / Play on; a
+ *     second miss offers Show me (the student's tap, never automatic) or Play
+ *     on;
  *   - rung 1: the same, and a second miss plays on with no answer;
  *   - rungs 2–3: no pause and no clue — the coach punishes, and the recap
  *     shows it.
@@ -35,6 +40,8 @@ import {
 import { askLine, clueLine, creditLine, endLine, recapLabel, shownLine } from './focusLines';
 import { DECIDING_LINE, type FocusId, type FocusSeat } from './focusCard';
 import type { FocusSetup } from './focusSetup';
+import type { HeatState } from '../../services/holdRate';
+import { momentDial, type MomentDial } from '../../services/coachMoment';
 import { NO_PLANTS, plantAsk, presents, type FocusPlantAsk, type PlantState } from './focusPlant';
 import { RUNG_TIERS, rungFrom, rungProgressLine, rungUpLine, type RungGame, type TacticsRung } from './focusRung';
 import {
@@ -150,7 +157,9 @@ export interface MissedChance {
 
 export interface FocusRunState {
   setup: FocusSetup | null;
-  asked: boolean;
+  /** THE SKILLS FOUND THIS GAME, counted per record tag: two finds of a skill
+   *  and the coach asks it no more this game (`coachMoment.momentDial`). */
+  found: Partial<Record<MisconceptionTagId, number>>;
   board: BoardState | null;
   pause: PauseState | null;
   decidingUsed: boolean;
@@ -222,7 +231,7 @@ const EMPTY_TALLY = (): Record<FocusSeat, SeatTally> => ({
 
 const NO_CASTLE: CastleState = { reminded: false, boards: [], probe: null };
 
-export const FOCUS_IDLE: FocusRunState = { setup: null, asked: false, board: null, pause: null, decidingUsed: false, carried: [], tally: EMPTY_TALLY(), atRung: { found: 0, missed: 0 }, missed: [], plant: NO_PLANTS, castle: NO_CASTLE, tempo: NO_RUN, stood: [], lastMove: null, spoke: false };
+export const FOCUS_IDLE: FocusRunState = { setup: null, found: {}, board: null, pause: null, decidingUsed: false, carried: [], tally: EMPTY_TALLY(), atRung: { found: 0, missed: 0 }, missed: [], plant: NO_PLANTS, castle: NO_CASTLE, tempo: NO_RUN, stood: [], lastMove: null, spoke: false };
 
 export type FocusEvent =
   | { kind: 'start'; setup: FocusSetup }
@@ -312,6 +321,9 @@ export type FocusEffect =
   /** Let the coach reply to the move that stands; `punish` = a focus miss stands. */
   | { kind: 'reply'; punish: boolean }
   | { kind: 'turn'; row: FocusTurnRow }
+  /** THE QUESTION BEFORE THE MOVE, decided (C2/C3): one row per board with a
+   *  chance — whether it was asked, and the record that decided it. */
+  | { kind: 'question'; row: FocusQuestionRow }
   /** THE REWARD LAYER, TIED TO THE FOCUS (David 2026-10-22: "make sure the
    *  dopamine tools are working here as well … tie them into the focus"): a
    *  focus find fires its coins and burst; `null` is a miss, which breaks the
@@ -329,6 +341,28 @@ export type FocusEffect =
   | { kind: 'end'; text: string; result: FocusResult };
 
 export interface FocusStep { state: FocusRunState; effects: FocusEffect[] }
+
+/** The question before the student's move, decided by the record of the
+ *  chance's skill (`learn-focus-question`). */
+export interface FocusQuestionRow {
+  ply: number;
+  seat: FocusSeat;
+  kind: FocusChance['kind'];
+  tag: MisconceptionTagId;
+  /** The skill's record state at the start of the game. */
+  state: HeatState;
+  /** Finds of the skill earlier this game. */
+  foundThisGame: number;
+  dial: MomentDial;
+  asked: boolean;
+}
+
+/** The dial for a chance: its skill's record state, then this game's finds. */
+export function chanceDial(setup: FocusSetup, found: FocusRunState['found'], ch: FocusChance): { state: HeatState; foundThisGame: number; dial: MomentDial } {
+  const state = setup.tagStates[ch.tag] ?? 'grey';
+  const foundThisGame = found[ch.tag] ?? 0;
+  return { state, foundThisGame, dial: momentDial(state, foundThisGame) };
+}
 
 function sameBoard(a: string, b: string): boolean {
   return a.split(' ').slice(0, 4).join(' ') === b.split(' ').slice(0, 4).join(' ');
@@ -368,7 +402,6 @@ function onBoard(s: FocusRunState, b: BoardState): FocusStep {
   const shown = s.plant.presented ? null : chances.find((c) => presents(c, setup.rung, b.ply, setup.targetPly)) ?? null;
   if (shown) s = { ...s, plant: { ...s.plant, presented: { ply: b.ply, difficulty: shown.difficulty } } };
   const effects: FocusEffect[] = [];
-  let asked = s.asked;
   let prompted = b.prompted;
   let steered = b.steered;
   let askedChance = b.askedChance;
@@ -378,18 +411,25 @@ function onBoard(s: FocusRunState, b: BoardState): FocusStep {
     if ((steered && chances.some((c) => c.seat === 'defend')) || (b.planted && chances.some((c) => c.seat === b.planted))) effects.push({ kind: 'steered', ply: b.ply });
     if (!prompted && carried.some((c) => c.prompted)) { prompted = true; effects.push({ kind: 'prompt', ply: b.ply }); }
     askedChance = askedChance ?? carried.find((c) => c.asked)?.key ?? null;
-    // RUNG 0: THE FIRST CHANCE IS ASKED, then the coach goes quiet.
-    if (RUNG_TIERS[setup.rung].asksFirst && !asked) {
-      const lead = leadChance(chances);
-      if (lead) {
-        asked = true;
+    // THE QUESTION BEFORE THE MOVE FOLLOWS THE RECORD (WO-COACH-NEXT-TO-YOU-01
+    // C2/C3, replacing "rung 0 asks its first chance, then the coach goes
+    // quiet"): the board's lead chance is asked — the target and the habit,
+    // never the move — when its skill is red or grey on the student's record
+    // and not found twice this game; amber and green are not asked. One
+    // question a board; a question already open (carried) is not asked again.
+    const lead = leadChance(chances);
+    if (lead) {
+      const d = chanceDial(setup, s.found, lead);
+      const ask = d.dial === 'ask-first' && askedChance === null;
+      if (ask) {
         askedChance = lead.key;
         effects.push({ kind: 'say', text: askLine(lead, b.ply), line: 'ask' });
         if (!prompted) { prompted = true; effects.push({ kind: 'prompt', ply: b.ply }); }
       }
+      effects.push({ kind: 'question', row: { ply: b.ply, seat: lead.seat, kind: lead.kind, tag: lead.tag, ...d, asked: ask || askedChance === lead.key } });
     }
   }
-  return { state: { ...s, asked, board: { ...b, chances, prompted, steered, askedChance } }, effects };
+  return { state: { ...s, board: { ...b, chances, prompted, steered, askedChance } }, effects };
 }
 
 /** A decision still open when the game ended STOOD: it is filed as Play on
@@ -714,8 +754,10 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
   // but the move is a miss, and a retry pays.
   const missed = verdicts.filter((x) => x.v === 'missed');
   const paid = missed.length > 0 ? null : verdicts.filter((x) => x.v === 'found').sort((a, c) => FIND_REWARD[c.chance.kind].rank - FIND_REWARD[a.chance.kind].rank)[0]?.chance ?? null;
+  let found = s.found;
   for (const { chance, v } of verdicts) {
     if (v !== 'found') continue;
+    found = { ...found, [chance.tag]: (found[chance.tag] ?? 0) + 1 };
     const chanceSteered = halfOf(chance);
     tally = withTally(tally, chance.seat, 'found', chanceSteered);
     atRung = withRung(atRung, chance, 'found', prompted, setup.rung);
@@ -727,7 +769,7 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
     effects.push({ kind: 'turn', row: row(state, chance, ply, v, say ? 'credit' : 'none', prompted, chanceSteered, plantedOf(chance), false, false, chance === paid ? FIND_REWARD[chance.kind].reward : null) });
   }
   if (paid) effects.push({ kind: 'reward', reward: FIND_REWARD[paid.kind].reward, square: toSquare(m.fenBefore, m.san), ply });
-  state = { ...state, carried, tally, atRung, plant };
+  state = { ...state, carried, tally, atRung, plant, found };
   if (missed.length > 0) {
     for (const { chance } of missed) {
       tally = withTally(tally, chance.seat, 'missed', halfOf(chance));
@@ -735,8 +777,11 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
     }
     effects.push({ kind: 'reward', reward: null, square: null, ply });
     // THE TOP RUNGS PLAY ON: no pause, no clue — every miss recorded, the
-    // coach punishes, and the recap shows it.
-    if (!tier.pauses) {
+    // coach punishes, and the recap shows it. So does a miss on a skill the
+    // record holds GREEN (C2): no clue — the door explains the miss, and it
+    // counts against the green.
+    const leadMiss = missed.find((x) => x.chance.seat === 'exploit') ?? missed[0];
+    if (!tier.pauses || chanceDial(setup, found, leadMiss.chance).dial === 'silent') {
       for (const { chance } of missed) {
         effects.push({ kind: 'record', chance, outcome: 'broken', fen: m.fenBefore, san: m.san, prompted, steered: halfOf(chance), takenBack: false });
         effects.push({ kind: 'turn', row: row(state, chance, ply, 'missed', 'none', prompted, halfOf(chance), plantedOf(chance), false, false, null) });
@@ -746,7 +791,7 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
     }
     // RUNGS 0–1: the miss the game leans on — yours first — is taught on the
     // spot; the rest are recorded.
-    const lead = missed.find((x) => x.chance.seat === 'exploit') ?? missed[0];
+    const lead = leadMiss;
     const others = missed.filter((x) => x !== lead);
     // The others wait with the pause: filed on Play on, judged again on a
     // retry — so the recap never lists a miss on a move that was taken back

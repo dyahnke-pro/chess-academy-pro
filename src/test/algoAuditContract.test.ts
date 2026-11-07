@@ -51,6 +51,7 @@ type AlgoEmissionKind =
   | 'skill-meters-shown'
   | 'learn-focus-chosen'
   | 'learn-focus-turn'
+  | 'learn-focus-question'
   | 'focus-plant'
   | 'castle-watch'
   | 'taken-back-puzzle'
@@ -76,6 +77,11 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     script: 'scripts/audit-learn-focus-prod.mjs',
     contractMarker: 'F5 every focus chance was decided on the record',
     emittedBy: 'src/coach/focus/useFocusRunner.ts (the runner\'s turn effect, one row per focus chance answered)',
+  },
+  'learn-focus-question': {
+    script: 'scripts/audit-learn-focus-prod.mjs',
+    contractMarker: 'F22 the question before the move follows the record',
+    emittedBy: 'src/coach/focus/useFocusRunner.ts (the runner\'s question effect: focusRunner.chanceDial over the setup\'s tagStates and this game\'s finds)',
   },
   'focus-plant': {
     script: 'scripts/audit-learn-focus-prod.mjs',

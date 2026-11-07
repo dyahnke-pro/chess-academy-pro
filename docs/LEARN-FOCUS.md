@@ -34,10 +34,15 @@ Review. Any of those starting ends the focus game.
 
 1. **The hold rate measures UNPROMPTED skill.**
 2. **Every miss gets taught.**
-3. **The coach speaks on a miss, never on a find nobody asked about.** A find
-   is said only when it answers a question said out loud (the opening ask, or
-   a retry after a clue); every other find is silent and counted in the end
-   line. The lines per game track the misses — there is no target.
+3. **The question before the move follows the record** (WO-COACH-NEXT-TO-YOU-01
+   C2/C3, 2026-11-06 — REPLACES "the coach speaks on a miss, never on a find
+   nobody asked about", deleted). The board's lead chance is asked (the target
+   and the habit, never the move) when its skill is red or grey on the
+   student's record and has not been found twice this game; amber is not asked
+   and gets the clue after a miss; green gets neither, and its miss is
+   explained by the door. One question a board (`learn-focus-question`). A
+   find is said only when it answers a question said out loud; every other
+   find is silent and counted in the end line.
 
 ## 3. Scoring — prompted chances are excluded BOTH ways (root fix)
 
@@ -58,12 +63,17 @@ lower the score. Fixed at the root:
 
 ## 4. The tiers — the tier IS the rung (David 2026-10-22: "Finds are silent … advanced players and strong intermediate players the take back should turn off … Never show the answer! Provide a 'show me' button after the second miss for beginners")
 
-| rung | title | the first chance | a miss | a second miss at one decision | chances a game |
-|---|---|---|---|---|---|
-| 0 | Beginner | asked out loud (prompted) | the coach holds its reply, says the clue: Try again / Play on | **Show me** (the student's tap) / Play on | 3 |
-| 1 | Intermediate | quiet | clue, Try again / Play on | plays on, nothing shown | 2 |
-| 2 | Strong intermediate | quiet | no pause, no clue — the coach punishes | — | 1 |
-| 3 | Advanced | quiet | no pause, no clue — the coach punishes | — | 1 |
+Whether a chance is asked before the move is the RECORD's (rule 3), at every
+rung; the rung decides what a miss does:
+
+| rung | title | a miss | a second miss at one decision | chances a game |
+|---|---|---|---|---|
+| 0 | Beginner | the coach holds its reply, says the clue: Try again / Play on | **Show me** (the student's tap) / Play on | 3 |
+| 1 | Intermediate | clue, Try again / Play on | plays on, nothing shown | 2 |
+| 2 | Strong intermediate | no pause, no clue — the coach punishes | — | 1 |
+| 3 | Advanced | no pause, no clue — the coach punishes | — | 1 |
+
+A miss on a skill the record holds GREEN gets no pause and no clue at any rung.
 
 **THE CLUE IS THE HABIT, NEVER THE PIECE** (David 2026-10-23: "Just say 'a
 piece' don't name directly. Switch the alert to the habit."). One fixed line

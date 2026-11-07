@@ -42,18 +42,16 @@ export interface RungTier {
    *  automatic (David: "Never show the answer! Provide a 'show me' button
    *  after the second miss for beginners"). */
   showMe: boolean;
-  /** The game's first chance is asked out loud. */
-  asksFirst: boolean;
   /** Chances on your side the coach makes sure of a game, natural ones
    *  included (David: "Beginners maybe more than once"). */
   chances: number;
 }
 
 export const RUNG_TIERS: Record<TacticsRung, RungTier> = {
-  0: { title: 'Beginner', pauses: true, showMe: true, asksFirst: true, chances: 3 },
-  1: { title: 'Intermediate', pauses: true, showMe: false, asksFirst: false, chances: 2 },
-  2: { title: 'Strong intermediate', pauses: false, showMe: false, asksFirst: false, chances: 1 },
-  3: { title: 'Advanced', pauses: false, showMe: false, asksFirst: false, chances: 1 },
+  0: { title: 'Beginner', pauses: true, showMe: true, chances: 3 },
+  1: { title: 'Intermediate', pauses: true, showMe: false, chances: 2 },
+  2: { title: 'Strong intermediate', pauses: false, showMe: false, chances: 1 },
+  3: { title: 'Advanced', pauses: false, showMe: false, chances: 1 },
 };
 
 export const TOP_RUNG: TacticsRung = 3;

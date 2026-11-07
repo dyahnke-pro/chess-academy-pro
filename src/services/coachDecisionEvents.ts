@@ -176,6 +176,13 @@ export interface LearnTurnRow {
   offered: string[];
   spoke: string[];
   lead: string | null;
+  /** THE TURN'S MOMENT FOR THE MOVE TO COME (WO-COACH-NEXT-TO-YOU-01 C1):
+   *  `question` (the question before the student's move), `build` (the plan
+   *  that builds a chance) or `bait` — null when the move to come got nothing.
+   *  Absent on rows older than this build. */
+  moment?: string | null;
+  /** Their move was read beside it (moment 1, the thought's first step). */
+  readTheirMove?: boolean;
   held: string[];
   /** Lanes that spoke short because the skill is proven (the fade). */
   faded: string[];

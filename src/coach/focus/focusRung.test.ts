@@ -49,7 +49,6 @@ describe('the tiers and the words', () => {
   it('what each rung does on a miss (David 2026-10-22)', () => {
     expect([0, 1, 2, 3].map((r) => RUNG_TIERS[r as TacticsRung].pauses)).toEqual([true, true, false, false]);
     expect([0, 1, 2, 3].map((r) => RUNG_TIERS[r as TacticsRung].showMe)).toEqual([true, false, false, false]);
-    expect([0, 1, 2, 3].map((r) => RUNG_TIERS[r as TacticsRung].asksFirst)).toEqual([true, false, false, false]);
     expect([0, 1, 2, 3].map((r) => RUNG_TIERS[r as TacticsRung].chances)).toEqual([3, 2, 1, 1]);
   });
   it('the progress line counts to the next title; none at the top', () => {

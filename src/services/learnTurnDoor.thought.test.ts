@@ -14,6 +14,7 @@ import { thoughtStepOf, LEARN_LANES, STORY_LANE, type LearnLane } from './learnT
 import { STORY_KIND, type StoryBeat } from './openingStory';
 import { BOARD_COMPUTERS } from './boardComputers';
 import { decideTurn, type LaneFixture } from '../test/learnDoorFixtures';
+import { onLearnTurn } from './coachDecisionEvents';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const LATE = { kind: 'late' as const, ply: 14, slipCp: null, priceSettled: true, price: null, midExchange: null };
@@ -188,5 +189,35 @@ describe('the thought: one habit a turn, and it is the mistake\'s own', () => {
     ], undefined, undefined, null, null, false, { ...LATE, slipCp: 200 });
     expect(d.spoke).toContain('mistakeHabit');
     expect(d.spoke).not.toContain('blunderCheck');
+  });
+});
+
+describe('the turn names its moment (WO-COACH-NEXT-TO-YOU-01 C1)', () => {
+  const rowOf = (facts: LaneFixture[]): import('./coachDecisionEvents').LearnTurnRow => {
+    let row: import('./coachDecisionEvents').LearnTurnRow | null = null;
+    const off = onLearnTurn((r) => { row = r; });
+    try { decideTurn(facts, undefined, undefined, null, null, false, LATE); } finally { off(); }
+    if (!row) throw new Error('no learn-turn row');
+    return row;
+  };
+  it('a danger is the question before the student\'s move', () => {
+    const r = rowOf([
+      fact('movePoint', 'That took their last defender away.', ['g4']),
+      fact('threat', 'Your knight is attacked.', ['c6'], { stakes: { points: 3, plies: 1 } }),
+    ]);
+    expect(r.moment).toBe('question');
+    expect(r.readTheirMove).toBe(false);
+  });
+  it('a plan for the move to come is the build, and their move read beside it is the first step', () => {
+    const r = rowOf([
+      fact('theirPurpose', 'Their move frees their bishop.', ['c1']),
+      fact('planArc', 'The plan is to go after their king.', ['e1'], { stakes: { points: 2, plies: 1 } }),
+    ]);
+    expect(r.moment).toBe('build');
+    expect(r.readTheirMove).toBe(true);
+  });
+  it('the moves weighed for the next decision are the question; nothing forward said is no moment', () => {
+    expect(rowOf([fact('rejectedTempting', 'Taking right away fails: the knight is trapped there.', ['d4', 'b3'])]).moment).toBe('question');
+    expect(rowOf([fact('movePoint', 'That took their last defender away.', ['g4'])]).moment).toBeNull();
   });
 });

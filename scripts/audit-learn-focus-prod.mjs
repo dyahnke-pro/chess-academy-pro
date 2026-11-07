@@ -82,6 +82,11 @@
  *   F20 a plant asked during a miss streak is easier by one rung per miss;
  *   F21 every paid find shows its burst on screen (the reward canvas painted
  *      within seconds of it), and a rung-up its banner;
+ *   F22 the question before the move follows the record (C2/C3): every
+ *      `learn-focus-question` row's dial is its state's (red/grey ask, amber
+ *      after only, green silent) after the in-game fade (two finds), it was
+ *      asked exactly when the dial says ask, one question a board, and every
+ *      'ask' line heard sits on an asked row;
  *   no page errors; muted, every billable request aborted and counted.
  *
  * Usage:
@@ -633,6 +638,7 @@ async function playGame(context, listener, engine, student, phase, index) {
   tape.chosen = events.filter((e) => e.kind === 'learn-focus-chosen').map((e) => parse(e.details)).filter(Boolean);
   tape.paints = await page.evaluate(() => window.__rewardPaints ?? []).catch(() => []);
   tape.banners = await page.evaluate(() => window.__rewardBanners ?? []).catch(() => []);
+  tape.questions = events.filter((e) => e.kind === 'learn-focus-question').map((e) => parse(e.details)).filter(Boolean);
   tape.turns = events.filter((e) => e.kind === 'learn-focus-turn').map((e) => { const r = parse(e.details); return r ? { ...r, at: e.receivedAt ?? e.timestamp ?? 0 } : null; }).filter(Boolean);
   tape.gradeRewards = events.filter((e) => e.kind === 'learn-reward').map((e) => parse(e.details)).filter(Boolean);
   tape.steers = events.filter((e) => e.kind === 'focus-steer').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
@@ -810,6 +816,22 @@ async function main() {
     const unasked = credits.filter((r) => !r.prompted);
     check(`${g} F4 every spoken find answers a question said out loud`, unasked.length === 0,
       `${credits.length} credit(s) spoken, ${unasked.length} on a find nobody asked about${unasked.length ? `: ${unasked.map((r) => `ply ${r.ply} ${r.kind}`).join(', ')}` : ''}; ${t.turns.filter((r) => r.outcome === 'found' && r.spoke === 'none').length} silent find(s)`);
+    // F22 — the question before the move follows the record.
+    {
+      const DIAL = { red: 'ask-first', grey: 'ask-first', short: 'after-only', green: 'silent' };
+      const qs = t.questions ?? [];
+      const wrongDial = qs.filter((q) => (DIAL[q.state] === 'ask-first' && q.foundThisGame >= 2 ? 'after-only' : DIAL[q.state]) !== q.dial);
+      // A row is asked by an open question carried from the board before too
+      // (the same chance, still unanswered): never against a quiet dial.
+      const wrongAsk = qs.filter((q) => q.asked && q.dial !== 'ask-first');
+      const perPly = {}; for (const q of qs) if (q.asked) perPly[q.ply] = (perPly[q.ply] ?? 0) + 1;
+      const twice = Object.entries(perPly).filter(([, n]) => n > 1).map(([p]) => p);
+      const asks = t.spoken.filter((l) => l.kind === 'ask').length;
+      const askedRows = qs.filter((q) => q.asked).length;
+      const by = {}; for (const q of qs) by[`${q.state}→${q.dial}${q.asked ? '+asked' : ''}`] = (by[`${q.state}→${q.dial}${q.asked ? '+asked' : ''}`] ?? 0) + 1;
+      check(`${g} F22 the question before the move follows the record`, wrongDial.length === 0 && wrongAsk.length === 0 && twice.length === 0 && asks <= askedRows,
+        `${qs.length} question row(s): ${Object.entries(by).map(([k, n]) => `${k} ${n}`).join(', ') || '— (no chance on the board)'}; ${asks} ask line(s) heard on ${askedRows} asked row(s)${wrongDial.length ? `; WRONG DIAL ${wrongDial.map((q) => `ply ${q.ply} ${q.state}/${q.foundThisGame}→${q.dial}`).join(', ')}` : ''}${wrongAsk.length ? `; ASKED AGAINST THE DIAL ${wrongAsk.map((q) => `ply ${q.ply}`).join(', ')}` : ''}${twice.length ? `; TWO QUESTIONS ON ONE BOARD ${twice.join(', ')}` : ''}`);
+    }
     // 'exempt' only closes a chance a retry left open (the retry took another piece).
     const badRows = t.turns.filter((r) => r.focus !== 'tactics' || r.rung !== rung || !(['found', 'missed'].includes(r.outcome) || (r.outcome === 'exempt' && r.retry)) || !['defend', 'exploit'].includes(r.seat) || typeof r.kind !== 'string' || typeof r.difficulty !== 'number' || typeof r.held !== 'boolean');
     check(`${g} F5 every focus chance was decided on the record`, badRows.length === 0,

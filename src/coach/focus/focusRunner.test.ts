@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { MISCONCEPTION_TAGS } from '../../data/misconceptionTags';
+import type { HeatState } from '../../services/holdRate';
 import { Chess } from 'chess.js';
 import { FOCUS_IDLE, focusPlantAsk, stepFocus, type FocusEffect, type FocusEvent, type FocusRunState, type PlantedSeat } from './focusRunner';
 import type { FocusSetup } from './focusSetup';
@@ -12,9 +14,16 @@ const play = (fen: string, san: string): string => { const c = new Chess(fen); c
 const move = (fen: string, san: string, cpLoss: number | null = null): FocusMove => ({
   fenBefore: fen, san, fenAfter: play(fen, san), student: fen.split(' ')[1] === 'w' ? 'w' : 'b', cpLoss, lines: null,
 });
+/** Every skill at one record state — the question before the move follows it
+ *  (C2/C3). The runner's other contracts are read on an AMBER record, where
+ *  nothing is asked before the move and a miss gets its clue (the shape these
+ *  tests were written against). */
+const ALL_TAGS = MISCONCEPTION_TAGS.map((t) => t.id);
+const statesAll = (st: HeatState): FocusSetup['tagStates'] => Object.fromEntries(ALL_TAGS.map((t) => [t, st])) as FocusSetup['tagStates'];
 const setup = (over: Partial<FocusSetup> = {}): FocusSetup => ({
   focus: 'tactics', rung: 0, reason: 'seed', window: [],
-  seatStates: { defend: 'red', exploit: 'red' }, levels: ['beginner'], targetPly: 12, line: PREGAME_LINE, tempoBest: 0, ...over,
+  seatStates: { defend: 'red', exploit: 'red' }, levels: ['beginner'], targetPly: 12, line: PREGAME_LINE, tempoBest: 0,
+  tagStates: statesAll('short'), ...over,
 });
 const at = (rung: TacticsRung, over: Partial<FocusSetup> = {}): FocusSetup => setup({ rung, ...over });
 
@@ -25,7 +34,8 @@ function run(events: FocusEvent[], start: FocusRunState = FOCUS_IDLE): { state: 
   return { state, effects };
 }
 // The shape of a step; the reward effect has its own tests below.
-const kinds = (es: FocusEffect[]): string[] => es.filter((e) => e.kind !== 'reward').map((e) => (e.kind === 'say' ? `say:${e.line}` : e.kind));
+const kinds = (es: FocusEffect[]): string[] => es.filter((e) => e.kind !== 'reward' && e.kind !== 'question').map((e) => (e.kind === 'say' ? `say:${e.line}` : e.kind));
+const questionRow = (es: FocusEffect[]) => es.find((e): e is Extract<FocusEffect, { kind: 'question' }> => e.kind === 'question')?.row;
 const board = (fen: string, ply: number, steered = false, planted: PlantedSeat = null, prevFen: string | null = null): FocusEvent => ({ kind: 'board', fen, prevFen, ply, student: fen.split(' ')[1] === 'w' ? 'w' : 'b', lines: null, steered, planted });
 const turnRow = (es: FocusEffect[]) => es.find((e): e is Extract<FocusEffect, { kind: 'turn' }> => e.kind === 'turn')?.row;
 const rewards = (es: FocusEffect[]) => es.filter((e): e is Extract<FocusEffect, { kind: 'reward' }> => e.kind === 'reward');
@@ -46,29 +56,51 @@ describe('every game is the tactics focus: the pre-game line, then quiet unless 
     const { effects } = run([{ kind: 'start', setup: at(2) }]);
     expect(effects[0]).toEqual([{ kind: 'say', text: PREGAME_LINE, line: 'announce' }]);
   });
-  it('rung 0 asks its first chance (prompted); the find that answers it is the one credited out loud', () => {
-    const { effects } = run([{ kind: 'start', setup: at(0) }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') }]);
-    expect(kinds(effects[1])).toEqual(['say:ask', 'prompt']);
-    expect(effects[1].find((e) => e.kind === 'prompt')).toEqual({ kind: 'prompt', ply: 7 });
-    expect(kinds(effects[2])).toEqual(['record', 'say:credit', 'turn', 'reply']);
-    expect(effects[2][0]).toMatchObject({ kind: 'record', outcome: 'held', prompted: true });
-  });
-  it('rung 0 asks THEIR chance when your side has none on the board', () => {
-    const { effects } = run([{ kind: 'start', setup: at(0) }, board(KNIGHT_HIT, 7)]);
-    expect(effects[1][0]).toMatchObject({ kind: 'say', line: 'ask', text: expect.stringMatching(/safe|loose/) });
-  });
-  it('rungs 1–3 never ask', () => {
-    for (const r of [1, 2, 3] as const) {
-      const { effects } = run([{ kind: 'start', setup: at(r) }, board(LOOSE_KNIGHT, 7)]);
-      expect(effects[1].some((e) => e.kind === 'say'), `rung ${r}`).toBe(false);
+  it('a red skill is asked before the move (prompted), at any rung; the find that answers it is credited out loud', () => {
+    for (const r of [0, 1, 2, 3] as const) {
+      const { effects } = run([{ kind: 'start', setup: at(r, { tagStates: statesAll('red') }) }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') }]);
+      expect(kinds(effects[1]), `rung ${r}`).toEqual(['say:ask', 'prompt']);
+      expect(questionRow(effects[1])).toMatchObject({ ply: 7, state: 'red', dial: 'ask-first', asked: true });
+      expect(kinds(effects[2])).toEqual(['record', 'say:credit', 'turn', 'reply']);
+      expect(effects[2][0]).toMatchObject({ kind: 'record', outcome: 'held', prompted: true });
     }
+  });
+  it('a grey skill (never posed enough) is taught the same way — absent is not mastered', () => {
+    const { effects } = run([{ kind: 'start', setup: at(2, { tagStates: {} }) }, board(KNIGHT_HIT, 7)]);
+    expect(effects[1][0]).toMatchObject({ kind: 'say', line: 'ask', text: expect.stringMatching(/safe|loose/) });
+    expect(questionRow(effects[1])).toMatchObject({ state: 'grey', dial: 'ask-first', asked: true });
+  });
+  it('amber and green skills are never asked before the move', () => {
+    for (const st of ['short', 'green'] as const) {
+      const { effects } = run([{ kind: 'start', setup: at(0, { tagStates: statesAll(st) }) }, board(LOOSE_KNIGHT, 7)]);
+      expect(effects[1].some((e) => e.kind === 'say'), st).toBe(false);
+      expect(questionRow(effects[1])).toMatchObject({ state: st, asked: false });
+    }
+  });
+  it('two finds of a skill in one game and it is asked no more that game', () => {
+    const red = at(0, { tagStates: statesAll('red') });
+    const { effects } = run([
+      { kind: 'start', setup: red },
+      board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') },
+      board(LOOSE_KNIGHT, 9), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') },
+      board(LOOSE_KNIGHT, 11),
+    ]);
+    expect(kinds(effects[1])).toEqual(['say:ask', 'prompt']);
+    expect(kinds(effects[3])).toEqual(['say:ask', 'prompt']);
+    expect(effects[5].some((e) => e.kind === 'say')).toBe(false);
+    expect(questionRow(effects[5])).toMatchObject({ state: 'red', foundThisGame: 2, dial: 'after-only', asked: false });
+  });
+  it('a miss on a GREEN skill gets no clue and no pause: recorded, punished, explained by the door', () => {
+    const { effects } = run([{ kind: 'start', setup: at(0, { tagStates: statesAll('green') }) }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'Qd2') }]);
+    expect(kinds(effects[2])).toEqual(['record', 'turn', 'reply']);
+    expect(effects[2].find((e) => e.kind === 'reply')).toEqual({ kind: 'reply', punish: true });
   });
   it('after the ask, finds are silent — recorded, counted, paid, never said', () => {
     const { effects, state } = run([
-      { kind: 'start', setup: at(0) }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') },
+      { kind: 'start', setup: at(0, { tagStates: { ...statesAll('short'), 'missed-your-free-piece': 'red' } }) }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') },
       board(KNIGHT_HIT, 9), { kind: 'moved', move: move(KNIGHT_HIT, 'Nc3') },
     ]);
-    expect(effects[3]).toEqual([]);
+    expect(kinds(effects[3])).toEqual([]);
     expect(kinds(effects[4])).toEqual(['record', 'turn', 'reply']);
     expect(effects[4][0]).toMatchObject({ kind: 'record', outcome: 'held', prompted: false });
     expect(turnRow(effects[4])).toMatchObject({ outcome: 'found', spoke: 'none', rung: 0, held: false });
@@ -219,9 +251,12 @@ describe('the rung moves on unprompted answers at the rung (either seat)', () =>
     return { last, end: last.find((e): e is Extract<FocusEffect, { kind: 'end' }> => e.kind === 'end') };
   };
   const two: RungGame = { rung: 0, found: 2, missed: 0, at: 1 };
+  // Their threat is a red skill (asked, so its find is prompted); the free
+  // piece is amber (not asked, so its find counts).
+  const theirsRed: FocusSetup['tagStates'] = { ...statesAll('short'), 'missed-opponents-threat': 'red' };
   it('the third find in the window steps up: the line, its own reward, the next rung', () => {
     const { last, end } = ended([
-      { kind: 'start', setup: at(0, { window: [two], reason: 'games' }) },
+      { kind: 'start', setup: at(0, { window: [two], reason: 'games', tagStates: theirsRed }) },
       board(KNIGHT_HIT, 7), { kind: 'moved', move: move(KNIGHT_HIT, 'Nc3') },            // asked — does not count
       board(LOOSE_KNIGHT, 9, false, null, KNIGHT_CAME), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') }, // unprompted, rung 0
     ]);
@@ -231,7 +266,7 @@ describe('the rung moves on unprompted answers at the rung (either seat)', () =>
   });
   it('a prompted find never counts — the same game with only the asked find stays', () => {
     const { last, end } = ended([
-      { kind: 'start', setup: at(0, { window: [two], reason: 'games' }) },
+      { kind: 'start', setup: at(0, { window: [two], reason: 'games', tagStates: theirsRed }) },
       board(KNIGHT_HIT, 7), { kind: 'moved', move: move(KNIGHT_HIT, 'Nc3') },
     ]);
     expect(end?.result).toMatchObject({ atRung: { found: 0, missed: 0 }, next: { rung: 0, step: null }, progress: '2 of 3 finds to Intermediate' });
@@ -286,7 +321,7 @@ describe('a question left open is judged on the move that answers it', () => {
   it('a check is not recorded; the next move is judged, still prompted by the question asked', () => {
     const next = play(play(KNIGHT_PAWN, 'Ra8+'), 'Kf7');
     const { effects } = run([
-      { kind: 'start', setup: at(0) }, board(KNIGHT_PAWN, 7), { kind: 'moved', move: move(KNIGHT_PAWN, 'Ra8+') },
+      { kind: 'start', setup: at(0, { tagStates: statesAll('red') }) }, board(KNIGHT_PAWN, 7), { kind: 'moved', move: move(KNIGHT_PAWN, 'Ra8+') },
       board(next, 9), { kind: 'moved', move: move(next, 'Nc3') },
     ]);
     expect(kinds(effects[1])).toEqual(['say:ask', 'prompt']);

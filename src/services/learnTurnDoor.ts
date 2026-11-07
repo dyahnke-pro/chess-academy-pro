@@ -47,6 +47,7 @@ import { BOARD_COMPUTERS } from './boardComputers';
 import { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
 import { learnedRate, learnedLead, learnedOutOfPhase, type FactMoment } from './deciderWeights';
+import { turnPartOf, isMoment, type CoachMoment, type TurnPart } from './coachMoment';
 import type { GamePhase } from '../types';
 import { STORY_KIND, type StoryBeat } from './openingStory';
 import type { ThreadLine } from './gameStory';
@@ -1146,7 +1147,6 @@ export function decideTurn(
   const priorValue = priorLead ? priorLead.value ?? LEARN_LANES[priorLead.lane].lead : -1;
   const ownLead = top && (!priorLead || DANGER_LANES.has(top.lane) || value(top) > priorValue) ? top : null;
   const anchor = ownLead ? (ownLead.fact.squares ?? []) : (priorLead?.squares ?? []);
-
   const keep: VoiceFact[] = [];
   const spoke: LearnLane[] = [];
   const held: LearnLane[] = [];
@@ -1280,6 +1280,20 @@ export function decideTurn(
       for (const c of x.fact.claims ?? []) if (!c.startsWith('own-move-reason:') && !c.startsWith('their-move-reason:')) heldThisTurn.add(c);
     }
   }
+  // THE TURN'S MOMENT, NAMED (WO-COACH-NEXT-TO-YOU-01 C1). The thought keeps
+  // its order (the heart: what their move changed, then ONE idea for the move
+  // to come — the thread above), so the door already says one forward moment
+  // a turn; what it lacked was saying WHICH, so the record can dial it (C2)
+  // and an audit can count it. The moment is the danger's when one spoke (the
+  // question before the student's move), else the thread's, else the first
+  // forward fact said; and whether their move was read beside it.
+  const keptSurvivors = keep.map((f) => survivors.find((x) => x.fact === f)).filter((x): x is Survivor => !!x);
+  const partOf = (x: Survivor): TurnPart => turnPartOf(x.src.group, x.src.seat);
+  const forward = (p: TurnPart): p is CoachMoment => isMoment(p) && p !== 'their-move';
+  const momentSaid: CoachMoment | null = keptSurvivors.some((x) => DANGER_LANES.has(x.lane) || stepOf(x) === 'danger') ? 'question'
+    : thread && keep.includes(thread.fact) && forward(partOf(thread)) ? partOf(thread) as CoachMoment
+      : (keptSurvivors.map(partOf).find(forward) ?? null);
+  const readTheirMove = keptSurvivors.some((x) => partOf(x) === 'their-move');
   const pkg: VoicePackage = {
     spoken: joinSpoken(keep),
     kept: keep,
@@ -1346,7 +1360,7 @@ export function decideTurn(
   for (const f of facts) if (f.text.trim()) worthFrom[f.lane] ??= worthSource(f);
   const pointersSaid = [...new Set(keep.flatMap((f) => (f.claims ?? []).filter((c) => c.startsWith('pointer:')).map((c) => c.slice('pointer:'.length))))];
   const pointers = pointersSaid.length || pointersHeld.length ? { pointers: { said: pointersSaid, heldByRecord: [...pointersHeld] } } : {};
-  if (offered.length > 0) emitLearnTurn({ ...pointers, spokeKinds, worthFrom, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
+  if (offered.length > 0) emitLearnTurn({ ...pointers, spokeKinds, worthFrom, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, moment: momentSaid, readTheirMove, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
   reportEverything(facts.map((x) => voicedAs.get(x.id) ?? x), turn, new Set(pkg.kept.flatMap((k) => (k.factId ? [k.factId] : []))), (f) =>
     pkg.dropped.find((d) => d.fact.factId === f.id)?.reason ?? heldWhy[f.lane] ?? refusedWhy[f.lane] ?? null);
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes, pointed: pointersSaid.length > 0 };
