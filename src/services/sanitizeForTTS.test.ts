@@ -247,7 +247,7 @@ describe('check and mate suffixes are spoken, not punctuated', () => {
 
   it('a mid-clause check is said "with check", never a comma that splits the sentence (Smith-Morra replay 2026-10-19)', () => {
     expect(sanitizeForTTS('Your Ng5+ eyes e6.')).toBe('Your knight to g5 with check eyes e6.');
-    expect(sanitizeForTTS('Your Qxf7# ends it.')).toBe('Your queen takes f7 with checkmate ends it.');
+    expect(sanitizeForTTS('Your Qxf7# ends it.')).toBe('Your queen taking on f7 with checkmate ends it.');
   });
 
   it('a check that closes a clause keeps its own beat', () => {
