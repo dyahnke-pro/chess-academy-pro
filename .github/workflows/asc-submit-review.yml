@@ -11,6 +11,10 @@ on:
         description: 'Read-only: list existing reviewSubmissions + items, no writes'
         required: false
         default: 'false'
+      regroup:
+        description: 'Version already waiting: cancel its submission and resubmit it WITH the ready opening products'
+        required: false
+        default: 'false'
 
 jobs:
   submit:
@@ -28,4 +32,5 @@ jobs:
           APP_BUNDLE_ID: com.chessacademy.pro
           DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '0' }}
           DIAGNOSE: ${{ github.event.inputs.diagnose == 'true' && '1' || '0' }}
+          REGROUP: ${{ github.event.inputs.regroup == 'true' && '1' || '0' }}
         run: node scripts/ci/asc-submit-review.mjs

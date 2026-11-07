@@ -30,6 +30,12 @@ const BUNDLE_ID = process.env.APP_BUNDLE_ID || 'com.chessacademy.pro';
 const VERSION = appVersion();
 const DRY_RUN = process.env.DRY_RUN === '1';
 const DIAGNOSE = process.env.DIAGNOSE === '1';
+// REGROUP — "1": a version already WAITING_FOR_REVIEW while opening products sit
+// ready OUTSIDE its submission is pulled back (the submission cancelled) and
+// resubmitted WITH them. Apple reviews an app's first one-time purchases only
+// alongside an app version (2026-11-07: the 166 opening products' own
+// submission was refused 409 "cannot be reviewed" while 4.0.8 waited alone).
+const REGROUP = process.env.REGROUP === '1';
 
 function req(n) { const v = process.env[n]; if (!v) throw new Error(`Missing env ${n}`); return v; }
 function loadKey() {
@@ -63,6 +69,25 @@ const OPEN_SUB_STATES = new Set([
   'UNRESOLVED_ISSUES', 'COMPLETING',
 ]);
 
+/** Every opening product Apple says is READY_TO_SUBMIT, with the IAP version
+ *  a review item carries. Opening products only (`opening.` ids). */
+async function readyOpeningIaps(appId) {
+  const out = [];
+  let url = `/v1/apps/${appId}/inAppPurchasesV2?limit=200&fields[inAppPurchases]=productId,state`;
+  while (url) {
+    const page = await api('GET', url, null, { soft: true });
+    if (page.__error) { console.log(`inAppPurchasesV2 → ${page.__error} ${String(page.__body).slice(0, 300)}`); break; }
+    for (const p of page.data || []) {
+      if (!String(p.attributes?.productId || '').startsWith('opening.') || p.attributes?.state !== 'READY_TO_SUBMIT') continue;
+      const vs = (await api('GET', `/v2/inAppPurchases/${p.id}/versions?limit=50`, null, { soft: true }))?.data || [];
+      const v = vs.find((x) => x.attributes?.state === 'PREPARE_FOR_SUBMISSION' || x.attributes?.state === 'READY_TO_SUBMIT') || vs[0];
+      out.push({ id: p.id, productId: p.attributes.productId, versionId: v?.id ?? null });
+    }
+    url = page.links?.next || null;
+  }
+  return out;
+}
+
 async function main() {
   const app = (await api('GET', `/v1/apps?filter[bundleId]=${encodeURIComponent(BUNDLE_ID)}&limit=1`)).data[0];
   if (!app) throw new Error(`No app ${BUNDLE_ID}`);
@@ -92,14 +117,39 @@ async function main() {
     return;
   }
 
+  const iaps = await readyOpeningIaps(app.id);
+  console.log(`\nopening products ready to submit: ${iaps.length}${iaps.length ? ` (${iaps.slice(0, 5).map((i) => i.productId).join(', ')}${iaps.length > 5 ? ', …' : ''})` : ''}`);
+
+  // REGROUP: pull a waiting version back so its first one-time purchases ride with it.
+  let state2 = state;
+  let cancelledId = null;
+  if (REGROUP && state === 'WAITING_FOR_REVIEW' && iaps.length && subWithVersion && !DRY_RUN) {
+    console.log(`\n↩︎ cancelling reviewSubmission ${subWithVersion.id} to resubmit v${VERSION} with ${iaps.length} opening products`);
+    const c = await api('PATCH', `/v1/reviewSubmissions/${subWithVersion.id}`, { data: { type: 'reviewSubmissions', id: subWithVersion.id, attributes: { canceled: true } } }, { soft: true });
+    if (c.__error) throw new Error(`cancel ${subWithVersion.id} → ${c.__error} ${String(c.__body).slice(0, 800)}`);
+    // Wait until the version is free AND the old submission has finished
+    // cancelling: the version cannot join a new submission while the old
+    // one still holds it.
+    let oldState = 'CANCELING';
+    for (let i = 0; i < 60; i += 1) {
+      await new Promise((r) => setTimeout(r, 5000));
+      state2 = (await api('GET', `/v1/appStoreVersions/${version.id}`)).data?.attributes?.appStoreState;
+      oldState = (await api('GET', `/v1/reviewSubmissions/${subWithVersion.id}`)).data?.attributes?.state;
+      if (state2 !== 'WAITING_FOR_REVIEW' && oldState !== 'CANCELING') break;
+    }
+    console.log(`after cancel: version ${state2}, old submission ${oldState}`);
+    cancelledId = subWithVersion.id;
+    subWithVersion = null;
+  }
+
   // Guard: only submit a version that ASC itself says is ready.
   const SUBMITTABLE = new Set(['READY_FOR_REVIEW', 'PREPARE_FOR_SUBMISSION', 'DEVELOPER_REJECTED', 'REJECTED', 'METADATA_REJECTED', 'INVALID_BINARY']);
-  if (['WAITING_FOR_REVIEW', 'IN_REVIEW', 'PENDING_DEVELOPER_RELEASE', 'PROCESSING_FOR_APP_STORE', 'READY_FOR_SALE'].includes(state)) {
-    console.log(`\n✅ Nothing to do — version ${VERSION} is already ${state} (already submitted / live).`);
+  if (['WAITING_FOR_REVIEW', 'IN_REVIEW', 'PENDING_DEVELOPER_RELEASE', 'PROCESSING_FOR_APP_STORE', 'READY_FOR_SALE'].includes(state2)) {
+    console.log(`\n✅ Nothing to do — version ${VERSION} is already ${state2} (already submitted / live).${iaps.length ? ` ${iaps.length} opening products are ready OUTSIDE it — run with regroup to send them with it.` : ''}`);
     return;
   }
-  if (!SUBMITTABLE.has(state)) {
-    throw new Error(`Version ${VERSION} is in state ${state}, not a submittable state. Aborting (fix readiness first).`);
+  if (!SUBMITTABLE.has(state2)) {
+    throw new Error(`Version ${VERSION} is in state ${state2}, not a submittable state. Aborting (fix readiness first).`);
   }
 
   // Confirm a build is attached (a submission with no build is rejected).
@@ -110,7 +160,8 @@ async function main() {
 
   // 1. Prefer the submission that already carries v2.8; else an open one; else create.
   let sub = subWithVersion
-    || allSubs.find((s) => OPEN_SUB_STATES.has(s.attributes?.state))
+    || allSubs.find((s) => s.id !== cancelledId && s.attributes?.state === 'READY_FOR_REVIEW')
+    || allSubs.find((s) => s.id !== cancelledId && OPEN_SUB_STATES.has(s.attributes?.state))
     || null;
   if (sub) {
     console.log(`\nreusing reviewSubmission ${sub.id} (state=${sub.attributes?.state}, hasV2.8=${!!subWithVersion})`);
@@ -160,6 +211,19 @@ async function main() {
     }
   }
 
+  // 2a. The ready opening products ride with the version (their first review
+  // must be alongside an app version). Already an item → Apple says 409; read it.
+  for (const p of iaps) {
+    if (!p.versionId) { console.log(`   ${p.productId}: no IAP version — skipped`); continue; }
+    const r = await api('POST', '/v1/reviewSubmissionItems', {
+      data: { type: 'reviewSubmissionItems', relationships: {
+        reviewSubmission: { data: { type: 'reviewSubmissions', id: sub.id } },
+        inAppPurchaseVersion: { data: { type: 'inAppPurchaseVersions', id: p.versionId } },
+      } },
+    }, { soft: true });
+    if (r.__error) console.log(`   ${p.productId}: add → ${r.__error} ${String(r.__body).replace(/\s+/g, ' ').slice(0, 700)}`);
+  }
+
   // 2b. VERIFY the submission really contains this version before submitting.
   // This is the gate the 409-is-benign path skipped. Diagnose on 2026-08-03
   // found three stale READY_FOR_REVIEW shells with items=0 that the reuse
@@ -167,14 +231,15 @@ async function main() {
   {
     const items = (await api(
       'GET',
-      `/v1/reviewSubmissions/${sub.id}/items?include=appStoreVersion&limit=50`,
+      `/v1/reviewSubmissions/${sub.id}/items?include=appStoreVersion,inAppPurchaseVersion&limit=200`,
       null,
       { soft: true },
     ))?.data || [];
     const carries = items.some(
       (it) => it.relationships?.appStoreVersion?.data?.id === version.id,
     );
-    console.log(`submission ${sub.id} now has ${items.length} item(s); carries ${VERSION}: ${carries}`);
+    const iapItems = items.filter((it) => it.relationships?.inAppPurchaseVersion?.data?.id).length;
+    console.log(`submission ${sub.id} now has ${items.length} item(s); carries ${VERSION}: ${carries}; opening products: ${iapItems} of ${iaps.length} ready`);
     if (!carries) {
       throw new Error(
         `reviewSubmission ${sub.id} does NOT contain version ${VERSION} (${items.length} item(s)). ` +
@@ -204,7 +269,8 @@ async function main() {
   console.log(`\n${subState === 'UNRESOLVED_ISSUES' ? 'resubmitting after rejection' : 'submitting'} reviewSubmission ${sub.id} …`);
   const patched = await api('PATCH', `/v1/reviewSubmissions/${sub.id}`, {
     data: { type: 'reviewSubmissions', id: sub.id, attributes: { submitted: true } },
-  });
+  }, { soft: true });
+  if (patched.__error) throw new Error(`submit ${sub.id} → ${patched.__error}\n${String(patched.__body).slice(0, 3000)}`);
   console.log(`submitted=true → reviewSubmission state=${patched.data?.attributes?.state}`);
 
   // 4. Re-read the version state.
