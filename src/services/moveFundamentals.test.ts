@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
   computeMoveFundamentals,
-  strategicPlanPointer,
   principleLine,
   ruleForPurpose,
   pickLeadingFundamentals,
