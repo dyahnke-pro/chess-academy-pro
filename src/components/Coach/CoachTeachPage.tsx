@@ -299,8 +299,7 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { coachService, isProgressQuestion, isImprovementTrendQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
 import { isAuditMarkedPage, logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
-import { buildLearnGameRecord, rememberHeardVerdict, type LearnGameEnding, type LearnLiveGrade } from '../../services/learnGameRecord';
-import { recordFinishedGame } from '../../services/autoAnalyzeGame';
+import { buildLearnGameRecord, rememberHeardVerdict, saveLearnGame as saveLearnGameRecord, type LearnGameEnding, type LearnLiveGrade } from '../../services/learnGameRecord';
 import { uciMoveToSan } from '../../utils/uciToSan';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { recoverCoachMoveFromText } from '../../utils/recoverCoachMove';
@@ -13922,20 +13921,10 @@ export function CoachTeachPage({ mode }: {
     promptedPlies: [...announcedPliesRef.current],
     steeredPlies: [...steeredPliesRef.current],
   }), [playerColor, activeProfile]);
-  /** ONE SAVE FOR A LEARN GAME, and the finished game's whole record with it —
-   *  the same `recordFinishedGame` Play runs (its puzzles, the weakness profile
-   *  they feed, the slip and capability record, a review made ready). Learn
-   *  used to write the game and stop, so a mistake the student PLAYED ON with
-   *  in free play never became a puzzle: the live capture counts only inside an
-   *  opening lesson, and the batch sweep skips a game Learn graded in full. */
-  const saveLearnGame = useCallback(async (record: GameRecord): Promise<void> => {
-    const { db } = await import('../../db/schema');
-    await db.games.add(record);
-    const profile = useAppStore.getState().activeProfile;
-    if (!profile) return;
-    const graded = (record.annotations ?? []).map((a) => ({ classification: a.classification, san: a.san }));
-    recordFinishedGame(record.id, profile, { reportEffects: 'game-finished', prepareReview: true }, graded);
-  }, []);
+  /** Every Learn ending saves through the Learn game door (`saveLearnGame`):
+   *  the row, then the finished game's whole record, as Play does. */
+  const saveLearnGame = useCallback((record: GameRecord): Promise<void> =>
+    saveLearnGameRecord(record, useAppStore.getState().activeProfile), []);
   // ── THE FINISHED BOARD STAYS ON SCREEN ──────────────────────────────────
   //
   // 🔒 IT USED TO NAVIGATE THE INSTANT MATE LANDED, AND THE LAST MOVE WAS

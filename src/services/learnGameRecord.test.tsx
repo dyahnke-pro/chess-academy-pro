@@ -151,15 +151,19 @@ describe('a finished Learn game runs the finished game\'s whole record (by state
   // A mistake played on in Learn free play never became a puzzle: the page
   // wrote the game and stopped, the live capture counts only inside an opening
   // lesson, and the batch sweep skips a game Learn graded in full.
-  it('every save goes through saveLearnGame, and it is the one place the page writes a game and runs recordFinishedGame', () => {
-    const src = readFileSync(resolve(__dirname, '../components/Coach/CoachTeachPage.tsx'), 'utf8');
-    expect((src.match(/db\.games\.add\(/g) ?? []).length).toBe(1);
-    const at = src.indexOf('const saveLearnGame = useCallback(');
+  it('every save goes through the Learn game door, the one place a Learn game is written and its record run', () => {
+    const page = readFileSync(resolve(__dirname, '../components/Coach/CoachTeachPage.tsx'), 'utf8');
+    // The page writes no game itself and runs no record of its own.
+    expect(page).not.toMatch(/db\.games\.add\(/);
+    expect(page).not.toMatch(/recordFinishedGame\(/);
+    expect(page).toMatch(/saveLearnGameRecord\(record, useAppStore\.getState\(\)\.activeProfile\)/);
+    expect((page.match(/await saveLearnGame\(record\)/g) ?? []).length).toBe(3);
+    const door = readFileSync(resolve(__dirname, 'learnGameRecord.ts'), 'utf8');
+    const at = door.indexOf('export async function saveLearnGame(');
     expect(at).toBeGreaterThan(0);
-    const body = src.slice(at, src.indexOf('}, []);', at));
+    const body = door.slice(at);
     expect(body).toMatch(/await db\.games\.add\(record\)/);
     expect(body).toMatch(/recordFinishedGame\(record\.id, profile, \{ reportEffects: 'game-finished', prepareReview: true \}/);
-    expect((src.match(/await saveLearnGame\(record\)/g) ?? []).length).toBe(3);
   });
 });
 

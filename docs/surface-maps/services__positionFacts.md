@@ -102,7 +102,7 @@
 - `src/services/positionFacts.weakness.test.ts:71`
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11454`
+- `src/components/Coach/CoachTeachPage.tsx:11453`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:471`
 - `src/services/raceAimOneVoice.test.ts:20`
@@ -122,7 +122,7 @@
 
 ### `computePositionFacts` (function) — 111 call sites
 - `src/coach/boardTurnAnswer.ts:161`
-- `src/components/Coach/CoachTeachPage.tsx:11312`
+- `src/components/Coach/CoachTeachPage.tsx:11311`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:271`
 - `src/hooks/usePhaseNarration.ts:433`
@@ -234,7 +234,7 @@
 - `src/test/teach02Wired.test.ts:140`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11576`
+- `src/components/Coach/CoachTeachPage.tsx:11575`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -252,8 +252,8 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9318`
-- `src/components/Coach/CoachTeachPage.tsx:9455`
+- `src/components/Coach/CoachTeachPage.tsx:9317`
+- `src/components/Coach/CoachTeachPage.tsx:9454`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:31`

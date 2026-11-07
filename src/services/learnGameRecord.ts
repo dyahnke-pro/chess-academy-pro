@@ -16,8 +16,9 @@
 // is a discriminated union (`LearnGameEnding`) rather than three booleans, so
 // a new way to end a lesson fails to compile until it says what result it is.
 //
-// Zero React, zero Dexie: a pure builder, so the gate can hold the exact row
-// the page writes without rendering twelve thousand lines of page.
+// Zero React: the builder is pure, so the gate can hold the exact row the page
+// writes without rendering twelve thousand lines of page. The ONE save beside
+// it (`saveLearnGame`) writes that row and runs the finished game's record.
 import { shouldPersistFinishedGame } from '../utils/coachGamePersistence';
 import { winPctLost, bandForWinPctLost } from './accuracyService';
 import { LIVE_ANALYSIS_DEPTH } from './coachGameAnnotations';
@@ -25,6 +26,9 @@ import type { GameRecord, GameResult, MoveAnnotation, MoveClassification, Stored
 import { openingKeyFromSans } from './openingKey';
 import { saveVerdict, toVerdictLabel } from './moveVerdictStore';
 import { learnTranscriptFor } from './learnTranscript';
+import { recordFinishedGame } from './autoAnalyzeGame';
+import { db } from '../db/schema';
+import type { UserProfile } from '../types';
 
 /** What Learn knows about one STUDENT ply it graded live: the engine's read of
  *  the position before the move (best move + its eval, White POV) and what the
@@ -179,4 +183,18 @@ export function rememberHeardVerdict(v: {
   const band = toVerdictLabel(v.label as MoveClassification);
   const heard = !v.fault ? 'fine' : band === 'fine' ? 'inaccuracy' : band;
   void saveVerdict({ fenBefore: v.fenBefore, san: v.san, label: heard, cpLoss: v.cpLossCp, bestUci: v.bestUci, depth: v.depth, source: 'learn' });
+}
+
+/** ONE SAVE FOR A LEARN GAME, and the finished game's whole record with it —
+ *  the same `recordFinishedGame` Play runs (its puzzles, the weakness profile
+ *  they feed, the slip and capability record, a review made ready). Learn used
+ *  to write the game and stop, so a mistake the student PLAYED ON with in free
+ *  play never became a puzzle: the live capture counts only inside an opening
+ *  lesson, and the batch sweep skips a game Learn graded in full. Every Learn
+ *  ending (game over, End, a fortress pass) saves here. */
+export async function saveLearnGame(record: GameRecord, profile: UserProfile | null): Promise<void> {
+  await db.games.add(record);
+  if (!profile) return;
+  const graded = (record.annotations ?? []).map((a) => ({ classification: a.classification, san: a.san }));
+  recordFinishedGame(record.id, profile, { reportEffects: 'game-finished', prepareReview: true }, graded);
 }

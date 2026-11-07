@@ -69,7 +69,7 @@
 - `src/components/Coach/CoachAnalysePage.tsx:34`
 - `src/components/Coach/CoachGamePage.tsx:439`
 - `src/components/Coach/CoachPracticeSessionView.tsx:76`
-- `src/components/Coach/CoachTeachPage.tsx:1063`
+- `src/components/Coach/CoachTeachPage.tsx:1062`
 - `src/components/Games/GameViewer.tsx:44`
 - `src/components/Kid/GameChapterPage.tsx:88`
 - `src/components/Kid/GameChapterPage.tsx:92`

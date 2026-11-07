@@ -73,7 +73,7 @@
 - `src/coach/focus/focusRunner.ts:398`
 
 ### `playOutPrompt` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:13979`
+- `src/components/Coach/CoachTeachPage.tsx:13968`
 
 ## Tests
 
