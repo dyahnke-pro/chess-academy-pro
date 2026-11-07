@@ -311,8 +311,8 @@ export function decisiveReason(input: {
       else if (loss && nextBestSan) cands.push({ source: 'material', stake: matStake, text: `${altLead}, ${dot(nextBestSan, mover)}, fails: ${loss.text}.`, line: { fen: fenBefore, sans: loss.sans }, squares: [], alt: true });
       // No short proof, but the count is the reason: say the count, never let a
       // smaller reason stand in for it.
-      else if (matOwn > 0) cands.push({ source: 'material', stake: matStake, text: `${played} comes out of the trades that follow ahead — it wins ${pieceWords(fenBefore, own.moves, mover, true)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, own.moves) }, squares: [], alt: false });
-      else if (nextBestSan && altTrusted) cands.push({ source: 'material', stake: matStake, text: `${altLead}, ${dot(nextBestSan, mover)}, comes out of the trades that follow behind — it loses ${pieceWords(fenBefore, next.moves, mover, false)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [], alt: true });
+      else if (matOwn > 0) cands.push({ source: 'material', stake: matStake, text: `${played} comes out ahead in the trades that follow — it wins ${pieceWords(fenBefore, own.moves, mover, true)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, own.moves) }, squares: [], alt: false });
+      else if (nextBestSan && altTrusted) cands.push({ source: 'material', stake: matStake, text: `${altLead}, ${dot(nextBestSan, mover)}, comes out behind in the trades that follow — it loses ${pieceWords(fenBefore, next.moves, mover, false)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [], alt: true });
     }
     // PAST THE FORCING HORIZON: a big gap the heard line cannot show is read on
     // the engine's whole line — the material it ends on, said as further down

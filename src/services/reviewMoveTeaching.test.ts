@@ -232,3 +232,29 @@ describe("the king-zone tail is said from the speaker's seat", () => {
     expect(text).not.toMatch(/beside their king/);
   });
 });
+
+describe('a king move is named by where it went (prod audit 2026-11-07)', () => {
+  it('a sideways step along the back rank is not a march: …Kc8-b8 and Kd1-e1', () => {
+    const black = buildReviewMoveTeachingFact('2k5/pp4pB/4N3/8/P1p5/8/1PP3P1/3K4 b - - 0 21', 'Kb8', true, null)?.text ?? '';
+    expect(black).not.toMatch(/march|centre|fighting piece/);
+    const white = buildReviewMoveTeachingFact('1k6/pp5B/4N3/8/P1p5/8/1PP3P1/3K4 w - - 3 24', 'Ke1', false, null)?.text ?? '';
+    expect(white).not.toMatch(/march|centre|fighting piece/);
+  });
+
+  it('a king that steps forward in the endgame marches up', () => {
+    const text = buildReviewMoveTeachingFact('1k6/pp5B/4N3/8/P1p5/8/1PP3P1/3K4 w - - 3 24', 'Kd2', true, null)?.text ?? '';
+    expect(text).toMatch(/^The king marches up/);
+  });
+
+  it('a king that steps sideways toward the centre heads for it', () => {
+    const text = buildReviewMoveTeachingFact('1k6/pp6/8/8/P1p4K/8/1PP3P1/8 w - - 0 30', 'Kg4', true, null)?.text ?? '';
+    expect(text).toMatch(/^The king heads for the centre/);
+  });
+
+  it('in the middlegame only a step away from the centre is a step toward safety', () => {
+    const away = buildReviewMoveTeachingFact('r1bq3r/ppp2kpp/2n2n2/3pp3/8/2NP1N2/PPP1PPPP/R1BQKB1R b KQ - 0 8', 'Kg8', true, null)?.text ?? '';
+    expect(away).toMatch(/toward safety/);
+    const toward = buildReviewMoveTeachingFact('r1bq3r/ppp2kpp/2n2n2/3pp3/8/2NP1N2/PPP1PPPP/R1BQKB1R b KQ - 0 8', 'Ke6', true, null)?.text ?? '';
+    expect(toward).not.toMatch(/toward safety/);
+  });
+});

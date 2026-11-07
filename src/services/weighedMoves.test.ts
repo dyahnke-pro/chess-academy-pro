@@ -113,6 +113,19 @@ describe('(L) two good moves — on his games', () => {
     const fen = 'r1bq1rk1/pp1pppbp/2n2np1/4P3/Q4B2/2P5/PP3PPP/RN2KBNR b KQ - 0 10';
     expect(moveDifference(fen, 'Nd5', 'Nh5', 'your')?.text).toBe('your knight does more on d5 — 7 squares from there against 3 on h5');
   });
+
+  it('when the other move has the edge, the held form says the edge without naming it (prod audit 2026-11-07)', () => {
+    // The old held line here was "the other one has a point of its own, so
+    // weigh what each leaves behind" — no fact at all.
+    const fen = 'r1bq1rk1/pp1pppbp/2n2np1/4P3/Q4B2/2P5/PP3PPP/RN2KBNR b KQ - 0 10';
+    expect(moveDifference(fen, 'Nh5', 'Nd5', 'your')?.heldOther).toBe('the other puts the piece where it does more');
+    const reads: WeighRead[] = [
+      { evaluation: -20, mate: null, moves: ['f6d5', 'f4g3'] },
+      { evaluation: -25, mate: null, moves: ['f6h5', 'f4g3'] },
+    ];
+    const r = alsoGood({ fenBefore: fen, san: 'Nh5', student: 'b', rating: 1500, reads });
+    expect(r?.heldText).toBe('Another move was worth the same here — the other puts the piece where it does more.');
+  });
 });
 
 describe('(C) which square for the piece — on his games, board reads only', () => {

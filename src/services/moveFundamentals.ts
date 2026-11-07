@@ -1317,7 +1317,7 @@ const PLAN_POINTER: Record<MoveFundamental['id'], string> = {
   'open-file': 'put a rook on the open file',
   tempo: 'gain time by hitting one of their pieces',
   'attack-defender': 'go after the piece that holds their position together',
-  'keep-working': 'keep your piece working',
+  'keep-working': 'move the piece that is under attack to a square where it still does its job',
   'prepare-break': 'prepare a pawn break',
   'development-complete': 'finish your development',
   'rook-behind-pawn': 'put a rook behind the passed pawn',

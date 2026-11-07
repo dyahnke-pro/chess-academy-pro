@@ -212,6 +212,21 @@ function createdEnemyWeakness(before: Struct, after: Struct, mover: 'w' | 'b', m
 }
 
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** Where a king move went: forward (toward the other side), closer to the
+ *  centre, or further from it — read off the two squares, so the words for a
+ *  king move can never claim a march it did not make. */
+export function kingWay(from: string, to: string, color: 'w' | 'b'): { forward: boolean; central: boolean; awayFromCentre: boolean } {
+  const file = (s: string): number => s.charCodeAt(0) - 97;
+  const rank = (s: string): number => Number(s[1]) - 1;
+  const centreDist = (s: string): number => Math.max(Math.abs(2 * file(s) - 7), Math.abs(2 * rank(s) - 7));
+  const step = rank(to) - rank(from);
+  return {
+    forward: color === 'w' ? step > 0 : step < 0,
+    central: centreDist(to) < centreDist(from),
+    awayFromCentre: centreDist(to) > centreDist(from),
+  };
+}
 const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const STEP_DELTAS: Record<string, number[][]> = {
   n: [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]],
@@ -774,16 +789,30 @@ export function buildReviewMoveTeachingFact(
   //     king turns into a fighting piece; else it's about getting to safety).
   if (mv.piece === 'k') {
     const heavyMinor = chess.board().flat().filter((c) => c && c.type !== 'p' && c.type !== 'k').length;
+    // THE WORDS FOLLOW WHERE THE KING WENT (prod audit 2026-11-07: "The king
+    // marches up" on …Kc8-b8 and "keeps marching up" on Kd1-e1 — sideways moves
+    // along the back rank). Forward is marching up; toward the centre is
+    // heading for the centre; in the middlegame only a step AWAY from the
+    // centre is a step toward safety. Any other king move has none of these
+    // ideas and falls through to what the move does see.
+    const way = kingWay(mv.from, mv.to, mv.color);
     // SAID IN FULL ONCE, THEN REFERRED TO (Review prod audit 2026-10-30: "it
     // marches up — in the endgame it stops hiding and becomes a fighting piece"
     // on three king moves of one game). The refer-back restates; the move says
     // it only beside something new.
-    const key = heavyMinor <= 6 ? 'king-march' : 'king-shelter';
-    const text = heavyMinor <= 6
-      ? sayIdea(phrases, key, ['The king marches up — in the endgame it stops hiding and becomes a fighting piece.', 'The king keeps marching up.'])
-      : sayIdea(phrases, key, ['The king steps toward safety; no place for it in the crossfire yet.', 'The king steps toward safety again.']);
-    const fact = out(heavyMinor <= 6 ? 'king-activity' : 'king-safety', text);
-    return fact && (phrases?.get(key) ?? 0) > 1 ? { ...fact, restates: true } : fact;
+    const said = heavyMinor <= 6
+      ? way.forward
+        ? { key: 'king-march', idea: 'king-activity' as const, lines: ['The king marches up — in the endgame it stops hiding and becomes a fighting piece.', 'The king keeps marching up.'] }
+        : way.central
+          ? { key: 'king-centre', idea: 'king-activity' as const, lines: ['The king heads for the centre — in the endgame it stops hiding and becomes a fighting piece.', 'The king keeps heading for the centre.'] }
+          : null
+      : way.awayFromCentre
+        ? { key: 'king-shelter', idea: 'king-safety' as const, lines: ['The king steps toward safety; no place for it in the crossfire yet.', 'The king steps toward safety again.'] }
+        : null;
+    if (said) {
+      const fact = out(said.idea, sayIdea(phrases, said.key, said.lines));
+      return fact && (phrases?.get(said.key) ?? 0) > 1 ? { ...fact, restates: true } : fact;
+    }
   }
   // (f) Last resort — name a REAL point, never a meaningless empty/own-origin
   //     square (David 2026-09-14: "Be7 covers f8 … f8 is the starting square,

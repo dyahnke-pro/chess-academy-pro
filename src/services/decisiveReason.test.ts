@@ -156,6 +156,13 @@ describe('material is said by piece, never as a point count (Learn audit 2026-10
     expect(src).not.toMatch(/\bpoints\((?:-?mat|-?next|matStake|matOwn)/);
     expect(src).not.toMatch(/\$\{[^}]*\}\s*points? (?:down|up)\b/);
   });
+
+  it('the count is said as coming out ahead or behind in the trades (prod audit 2026-11-07: "comes out of the trades that follow behind")', () => {
+    const src = readFileSync('src/services/decisiveReason.ts', 'utf8');
+    expect(src).not.toMatch(/comes out of the trades/);
+    expect(src).toMatch(/comes out ahead in the trades that follow/);
+    expect(src).toMatch(/comes out behind in the trades that follow/);
+  });
 });
 
 describe('two plans, about equal — the close call (David 2026-10-18)', () => {

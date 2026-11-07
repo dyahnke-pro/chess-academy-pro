@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
   computeMoveFundamentals,
+  strategicPlanPointer,
   principleLine,
   ruleForPurpose,
   pickLeadingFundamentals,
@@ -434,5 +435,14 @@ describe('a developing move with tempo names its target once', () => {
     const dev = computeMoveFundamentals(c.fen(), 'Nc3', 'white').find((f) => f.id === 'development');
     expect(dev?.led).toBe('develops into the game with tempo, hitting the queen on d5');
     expect(dev?.squares).toEqual(['c3', 'd5']);
+  });
+});
+
+describe('the plan pointer says what to do (prod audit 2026-11-07: "The plan here: keep your piece working")', () => {
+  it('a queen hit by a knight: the pointer says to move the attacked piece where it still works, never the move', () => {
+    const fen = '2kr3r/ppp2ppp/4p3/2q5/P3N1n1/3B1N2/1PP2PP1/R2QK2R b KQ - 1 13';
+    const p = strategicPlanPointer(fen, 'Qe7', 'black');
+    expect(p).toBe('The plan here: move the piece that is under attack to a square where it still does its job.');
+    expect(p).not.toMatch(/e7|Qe7/);
   });
 });
