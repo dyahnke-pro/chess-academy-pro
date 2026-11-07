@@ -208,7 +208,9 @@ async function main() {
     if (u === STREAM_URL && req.method() === 'POST') {
       try {
         const body = req.postDataJSON?.();
-        if (body && typeof body === 'object') captured.push(body);
+        // The app BATCHES remote posts (one array per ~1s): each entry is an event.
+        if (Array.isArray(body)) captured.push(...body.filter((e) => e && typeof e === 'object'));
+        else if (body && typeof body === 'object') captured.push(body);
       } catch {
         /* ignore */
       }

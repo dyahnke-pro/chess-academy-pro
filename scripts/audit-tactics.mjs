@@ -120,7 +120,10 @@ async function main() {
     if (u.endsWith('/api/audit-stream') && req.method() === 'POST') {
       try {
         const body = req.postDataJSON?.();
-        if (body && typeof body === 'object') captured.push(body);
+        // The app BATCHES remote posts (one array per ~1s, 2026-09-07): each
+        // entry is an event. Pushing the array as one event hid every kind.
+        if (Array.isArray(body)) captured.push(...body.filter((e) => e && typeof e === 'object'));
+        else if (body && typeof body === 'object') captured.push(body);
       } catch {}
     }
   });
