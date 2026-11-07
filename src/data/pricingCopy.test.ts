@@ -89,3 +89,18 @@ describe('prices live in one file', () => {
     expect(n(PRICE_YEARLY)).toBeLessThan(n(PRICE_MONTHLY) * 12);
   });
 });
+
+describe('the store description quotes the prices the app sells at (2026-11-07: it said $3.99 / $34.99 while the store sold $1.99 / $14.99)', () => {
+  it('every price in fastlane/metadata/en-US/description.txt is one of pricing.ts', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { PRICE_MONTHLY, PRICE_YEARLY, PRICE_OPENING, TRIAL_DAYS } = await import('./pricing');
+    const desc = readFileSync('fastlane/metadata/en-US/description.txt', 'utf8');
+    const quoted = [...desc.matchAll(/\$\d+\.\d{2}/g)].map((m) => m[0]);
+    expect(quoted.length).toBeGreaterThan(0);
+    for (const q of quoted) expect([PRICE_MONTHLY, PRICE_YEARLY, PRICE_OPENING], q).toContain(q);
+    expect(desc).toContain(`${PRICE_MONTHLY}/month or ${PRICE_YEARLY}/year`);
+    expect(desc).toContain(`${TRIAL_DAYS}-day free`);
+    expect(desc).toContain(PRICE_OPENING);
+    expect(desc.length).toBeLessThanOrEqual(4000);
+  });
+});
