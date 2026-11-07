@@ -7,7 +7,8 @@
 import { describe, it, expect } from 'vitest';
 import { spotLine } from './focusLines';
 import type { FocusChance } from './focusChances';
-import { MOTIFS } from '../../data/tacticMotifs';
+import { SPOT_CUES } from '../../data/spotCues';
+import { pickSpotCue } from '../../services/spotCue';
 
 const chance = (c: Partial<FocusChance> & Pick<FocusChance, 'kind' | 'seat'>): FocusChance => ({
   tag: 'hung-material', key: 'k', squares: [], answerUci: null, difficulty: 0, ...c,
@@ -41,21 +42,19 @@ describe('spotLine — the board\'s own trigger, then the habit for that piece',
     expect(line).toBe('Their knight came to e4 with nothing guarding it. Next time, when a piece of theirs lands, ask what guards it.');
   });
 
-  it('a shot says its motif\'s shape', () => {
-    expect(spotLine(chance({ kind: 'shot', seat: 'exploit', tag: 'missed-your-fork' }), { prevFen: null, fen: '4k3/8/8/8/8/8/8/4K3 w - - 0 1' })).toBe(MOTIFS.fork.spot);
+  it('a shot says the way to spot it that its own board shows: a knight forking king and rook', () => {
+    const fen = 'r3k3/8/8/3N4/8/8/8/4K3 w - - 0 1';
+    const line = spotLine(chance({ kind: 'shot', seat: 'exploit', tag: 'missed-your-fork', answerUci: 'd5c7' }), { prevFen: null, fen });
+    expect(line).toBe(SPOT_CUES.fork.find((c) => c.when === 'knight-king-rook')!.line);
   });
 
-  it('twin: nothing specific to say is silence, never a generic line', () => {
+  it('their fork, missed: the defender\'s cue, never the attacker\'s', () => {
+    const line = spotLine(chance({ kind: 'motif', seat: 'defend', tag: 'missed-their-fork' }), { prevFen: null, fen: '4k3/8/8/8/8/8/8/4K3 w - - 0 1' });
+    expect(line).toBe(SPOT_CUES.fork.find((c) => c.when === 'defend')!.line);
+  });
+
+  it('twin: nothing specific to say is silence; a shot with no line gets one of its habits', () => {
     expect(spotLine(chance({ kind: 'save', seat: 'defend' }), { prevFen: null, fen: '4k3/8/8/8/8/8/8/4K3 w - - 0 1' })).toBeNull();
-    expect(spotLine(chance({ kind: 'shot', seat: 'exploit', tag: 'hung-material' as FocusChance['tag'] }), { prevFen: null, fen: '4k3/8/8/8/8/8/8/4K3 w - - 0 1' })).toBe(MOTIFS['free-piece'].spot);
-  });
-});
-
-describe('every motif says how to spot it', () => {
-  it('one sentence each, ending on the habit', () => {
-    for (const m of Object.values(MOTIFS)) {
-      expect(m.spot, m.id).toMatch(/^[A-Z].*\.$/);
-      expect(m.spot.split(/\.\s/).length, m.id).toBe(1);
-    }
+    expect(spotLine(chance({ kind: 'shot', seat: 'exploit', tag: 'hung-material' as FocusChance['tag'] }), { prevFen: null, fen: '4k3/8/8/8/8/8/8/4K3 w - - 0 1' })).toBe(pickSpotCue('free-piece', 'yours', null)!.line);
   });
 });

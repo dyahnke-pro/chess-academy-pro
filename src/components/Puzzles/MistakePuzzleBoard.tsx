@@ -45,7 +45,7 @@ import { withArticle } from '../../utils/andList';
 import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from '../Coach/ThinkingLessonBoard';
 import { shownSolution } from '../../services/proof';
-import { spotForTactic } from '../../data/tacticMotifs';
+import { spotForPuzzle } from '../../services/spotCue';
 
 type PuzzleState = 'loading' | 'replay' | 'playing' | 'correct' | 'incorrect' | 'freeplay';
 
@@ -683,7 +683,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       const why = engineFramed.replace(/^The engine plays (\S+) — it /, '$1 — it ').replace(/^The engine plays (\S+)\./, '$1.');
       // Then how to spot it next time: the live board's own line when the
       // miss filed one, else the motif's (David 2026-11-07).
-      const response = [why, puzzle.spot ?? spotForTactic(puzzle.tacticType)].filter(Boolean).join(' ');
+      const response = [why, puzzle.spot ?? spotForPuzzle(puzzle)].filter(Boolean).join(' ');
       setSubtitle(response);
       setLineArrows(spokenLineArrows(response, puzzle.fen, {
         studentColor: puzzle.playerColor === 'white' ? 'w' : 'b',
@@ -854,7 +854,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         // HOW TO SPOT IT NEXT TIME (David 2026-11-07) follows the move's own
         // reason when it spoke one; otherwise it closes the why below. Only
         // while this puzzle is still on the board.
-        const spot = puzzle.spot ?? spotForTactic(puzzle.tacticType);
+        const spot = puzzle.spot ?? spotForPuzzle(puzzle);
         if (spokeReason && spot) {
           const sameNarration = narrationRef.current;
           void (moveSpeechRef.current ?? Promise.resolve()).then(() => {

@@ -14,6 +14,8 @@ import { PIECE_NAMES } from '../../types/tacticTypes';
 import { countWord } from '../../utils/andList';
 import { MATERIAL_VALUE } from '../../services/pieceValues';
 import { MOTIFS, motifOfTag, type MotifId } from '../../data/tacticMotifs';
+import { spotCueLine } from '../../services/spotCue';
+import type { SpotBoard } from '../../services/spotFacts';
 import { saveAnswer, type ChanceKind, type FocusChance, type FocusMove } from './focusChances';
 import { REVIEW_HAS_THE_REST } from './focusCard';
 import { unmarked } from '../../utils/sanMark';
@@ -237,13 +239,20 @@ function reached(fen: string, from: string, target: string): boolean {
   } catch { return false; }
 }
 
+/** The chance's own shot as the cue picker reads it: the board it stood on
+ *  and its line (the engine's, else the answer alone). */
+function chanceBoard(ch: FocusChance, fen: string): SpotBoard | null {
+  const line = ch.line && ch.line.length > 0 ? ch.line : ch.answerUci ? [ch.answerUci] : [];
+  return line.length > 0 ? { fen, line } : null;
+}
+
 /** HOW TO SPOT IT NEXT TIME (David 2026-11-07: "a sentence as to how to spot
  *  it in the future … something specific, not just 'look for hanging
  *  pieces'"). Said once the moment is past (the credit after a retry, the
  *  shown answer) and filed on the puzzle the miss makes: the board's own
  *  trigger — the move that made the chance, the piece it hit, the guard that
  *  left — and the habit for that piece. A tactic's chance says its motif's
- *  shape (`MOTIFS[…].spot`). Null when nothing specific can be said: empty
+ *  shape (`spotCue`, every way the sources teach, picked by the board). Null when nothing specific can be said: empty
  *  beats generic. `prevFen` is the board before their last move. */
 export function spotLine(ch: FocusChance, ctx: { prevFen: string | null; fen: string; move?: { fenBefore: string; san: string } }): string | null {
   const last = ctx.prevFen ? moveBetween(ctx.prevFen, ctx.fen) : null;
@@ -268,7 +277,7 @@ export function spotLine(ch: FocusChance, ctx: { prevFen: string | null; fen: st
       let moved: { type: PieceSymbol; from: string } | null = null;
       try {
         const mv = new Chess(m.fenBefore).move(m.san);
-        if (mv) moved = { type: mv.piece, from: mv.from };
+        moved = { type: mv.piece, from: mv.from };
       } catch { moved = null; }
       if (moved && moved.from !== p.square && reached(m.fenBefore, moved.from, p.square)) {
         return `Your ${piece(moved.type)} left ${moved.from}, and it was the guard of your ${piece(p.type)} on ${p.square}. Next time, before a piece moves, check what it is guarding.`;
@@ -282,15 +291,19 @@ export function spotLine(ch: FocusChance, ctx: { prevFen: string | null; fen: st
       if (last && ctx.prevFen && reached(ctx.prevFen, last.from, p.square)) {
         return `Their ${piece(last.type)} left ${last.from}, and their ${piece(p.type)} on ${p.square} lost its guard. Next time, after every move of theirs, ask what the piece that moved stopped guarding.`;
       }
-      return MOTIFS['free-piece'].spot;
+      return spotCueLine('free-piece', 'yours', chanceBoard(ch, ctx.fen));
     }
     case 'mate-threat':
+      return spotCueLine('mate', 'theirs', null);
     case 'mate-for-you':
-      return MOTIFS.mate.spot;
-    case 'shot':
+      return spotCueLine('mate', 'yours', chanceBoard(ch, ctx.fen));
+    case 'shot': {
+      const m = motifOfTag(ch.tag);
+      return m ? spotCueLine(m, 'yours', chanceBoard(ch, ctx.fen)) : null;
+    }
     case 'motif': {
       const m = motifOfTag(ch.tag);
-      return m ? MOTIFS[m].spot : null;
+      return m ? spotCueLine(m, 'theirs', null) : null;
     }
   }
 }

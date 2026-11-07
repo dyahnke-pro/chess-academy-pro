@@ -4,7 +4,7 @@ import { render, screen, act } from '../../test/utils';
 import { MistakePuzzleBoard } from './MistakePuzzleBoard';
 import { buildMistakePuzzle, resetFactoryCounter } from '../../test/factories';
 import { voiceService } from '../../services/voiceService';
-import { spotForTactic } from '../../data/tacticMotifs';
+import { spotForPuzzle } from '../../services/spotCue';
 import type { MoveResult } from '../../hooks/useChessGame';
 
 const recordCapabilityEvidence = vi.fn().mockResolvedValue(1);
@@ -58,6 +58,7 @@ const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms
  *  board filed with the miss, else the motif's. */
 describe('MistakePuzzleBoard — the spot line after a solve', () => {
   beforeEach(() => { vi.clearAllMocks(); resetFactoryCounter(); latestOnMove = null; });
+  const PUZZLE_FEN = buildMistakePuzzle().fen;
   const spoken = (): string[] => (voiceService.speak as unknown as { mock: { calls: unknown[][] } }).mock.calls.map((c) => String(c[0]));
 
   async function solve(over: Parameters<typeof buildMistakePuzzle>[0]): Promise<void> {
@@ -73,7 +74,7 @@ describe('MistakePuzzleBoard — the spot line after a solve', () => {
     await solve({ tacticType: 'fork' });
     const said = spoken();
     const reasonAt = said.indexOf('d4 takes the centre with tempo.');
-    const spotAt = said.indexOf(spotForTactic('fork')!);
+    const spotAt = said.indexOf(spotForPuzzle({ tacticType: 'fork', fen: PUZZLE_FEN, moves: 'd2d4 d7d5' })!);
     expect(reasonAt).toBeGreaterThanOrEqual(0);
     expect(spotAt).toBeGreaterThan(reasonAt);
   });
@@ -82,7 +83,7 @@ describe('MistakePuzzleBoard — the spot line after a solve', () => {
     const own = 'Their pawn on d5 was hitting your knight on e4. Next time, check what their last pawn move attacks.';
     await solve({ tacticType: 'fork', spot: own });
     expect(spoken()).toContain(own);
-    expect(spoken()).not.toContain(spotForTactic('fork'));
+    expect(spoken()).not.toContain(spotForPuzzle({ tacticType: 'fork', fen: PUZZLE_FEN, moves: 'd2d4 d7d5' }));
   });
 
   it('no motif and no filed line: nothing extra is said', async () => {

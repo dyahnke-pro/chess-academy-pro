@@ -4,11 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**344 lines · 11 exports · 4 importers · 2 tests · 1 audits**
+**357 lines · 11 exports · 4 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
 - **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:206) — names `focusLines`
+- **The standard post-deploy ritual** (CLAUDE.md:6921) — names `focusLines`
 
 ## Who calls in
 
@@ -53,14 +54,15 @@
 - `src/coach/focus/focusRunner.ts:731`
 - `src/coach/focus/focusRunner.ts:786`
 
-### `spotLine` (function) — 8 call sites
-- `src/coach/focus/focusLines.spot.test.ts:20`
-- `src/coach/focus/focusLines.spot.test.ts:27`
-- `src/coach/focus/focusLines.spot.test.ts:33`
-- `src/coach/focus/focusLines.spot.test.ts:40`
-- `src/coach/focus/focusLines.spot.test.ts:45`
-- `src/coach/focus/focusLines.spot.test.ts:49`
-- `src/coach/focus/focusLines.spot.test.ts:50`
+### `spotLine` (function) — 9 call sites
+- `src/coach/focus/focusLines.spot.test.ts:21`
+- `src/coach/focus/focusLines.spot.test.ts:28`
+- `src/coach/focus/focusLines.spot.test.ts:34`
+- `src/coach/focus/focusLines.spot.test.ts:41`
+- `src/coach/focus/focusLines.spot.test.ts:47`
+- `src/coach/focus/focusLines.spot.test.ts:52`
+- `src/coach/focus/focusLines.spot.test.ts:57`
+- `src/coach/focus/focusLines.spot.test.ts:58`
 - `src/coach/focus/focusRunner.ts:449`
 
 ### `shownLine` (function) — 2 call sites
