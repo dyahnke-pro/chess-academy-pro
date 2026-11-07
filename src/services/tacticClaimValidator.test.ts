@@ -157,31 +157,6 @@ describe('stripUngroundedTacticSentences (the enforcing gate)', () => {
   });
 });
 
-describe('licensedFacts — code-computed facts license their own tactic vocabulary (2026-08-06)', () => {
-  it("keeps the TRUE fork claim David's session lost", () => {
-    // The bounded live context carried no fork, but the reply-fact bundle
-    // (explainBestMoveGrounded — code) DID: b5 really forked a4 and c4.
-    const text = 'It forks the knight on a4 and the bishop on c4. Strong reply.';
-    const facts = "The coach replied b5. Why it's strong: It forks the knight on a4 and the bishop on c4.";
-    const without = stripUngroundedTacticSentences(text, EMPTY_CTX);
-    expect(without.dropped.length).toBe(1);
-    const withFacts = stripUngroundedTacticSentences(text, EMPTY_CTX, facts);
-    expect(withFacts.dropped).toHaveLength(0);
-    expect(withFacts.clean).toContain('forks the knight');
-  });
-
-  it('licenses by TYPE inflection, and never licenses a tactic the facts do not speak', () => {
-    // Facts say "forks"; prose says "forking" — same type, licensed.
-    const inflected = stripUngroundedTacticSentences(
-      'A forking pattern appears on the queenside.', EMPTY_CTX, 'It forks two pieces.');
-    expect(inflected.dropped).toHaveLength(0);
-    // Facts about a fork do NOT license a skewer claim.
-    const skewer = stripUngroundedTacticSentences(
-      'This skewers the king and rook.', EMPTY_CTX, 'It forks two pieces.');
-    expect(skewer.dropped.length).toBe(1);
-  });
-});
-
 describe('board-rescue — a TRUE tactic the thin context missed is kept (PostHog 2026-08 inGameAsk)', () => {
   // Italian after 9.O-O: the Black bishop on c5 pins White's f2 pawn to the
   // g1 king — a real pin ON THE BOARD. In-game chat builds the bounded context
@@ -206,25 +181,25 @@ describe('board-rescue — a TRUE tactic the thin context missed is kept (PostHo
     const text = 'Careful — the bishop on c5 pins your pawn on f2 to the king on g1.';
     const strict = stripUngroundedTacticSentences(text, EMPTY_CTX);
     expect(strict.dropped).toHaveLength(1);
-    const rescued = stripUngroundedTacticSentences(text, EMPTY_CTX, undefined, trapP9);
+    const rescued = stripUngroundedTacticSentences(text, EMPTY_CTX, trapP9);
     expect(rescued.dropped).toHaveLength(0);
     expect(rescued.clean).toContain('pins your pawn on f2');
   });
 
   it('does NOT rescue a fabricated tactic whose named square carries no such tactic', () => {
     // h5 holds no pin on this board — a hallucinated square is still dropped.
-    const rescued = stripUngroundedTacticSentences('There is a pin on h5 winning the rook.', EMPTY_CTX, undefined, trapP9);
+    const rescued = stripUngroundedTacticSentences('There is a pin on h5 winning the rook.', EMPTY_CTX, trapP9);
     expect(rescued.dropped).toHaveLength(1);
   });
 
   it('stays strict when the sentence names no square (no geometry to anchor)', () => {
-    const rescued = stripUngroundedTacticSentences('There is a pin somewhere you can exploit.', EMPTY_CTX, undefined, trapP9);
+    const rescued = stripUngroundedTacticSentences('There is a pin somewhere you can exploit.', EMPTY_CTX, trapP9);
     expect(rescued.dropped).toHaveLength(1);
   });
 
   it('does NOT rescue the WRONG tactic type on a real square (fork claim on a pinned square)', () => {
     // c5 is in a real PIN, but there is no FORK there — a fork claim is dropped.
-    const rescued = stripUngroundedTacticSentences('The bishop on c5 forks the king and rook.', EMPTY_CTX, undefined, trapP9);
+    const rescued = stripUngroundedTacticSentences('The bishop on c5 forks the king and rook.', EMPTY_CTX, trapP9);
     expect(rescued.dropped).toHaveLength(1);
   });
 });

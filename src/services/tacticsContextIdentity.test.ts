@@ -70,13 +70,13 @@ describe('a package whose fen does not match the consumer\'s board cannot produc
   it('POSITIVE CONTROL — against its OWN board the claim is made: the check is real, not vacuous', () => {
     const a = assembleTacticsAnswer(stale, 'white');
     expect(a?.facts).toContain('Your knight on b5 is hanging — they attack it and nothing guards it.');
-    const kept = stripUngroundedTacticSentences('Your knight on b5 is hanging.', stale, undefined, FEN_KNIGHT_ON_B5);
+    const kept = stripUngroundedTacticSentences('Your knight on b5 is hanging.', stale, FEN_KNIGHT_ON_B5);
     expect(kept.staleContext).toBe(false);
     expect(kept.clean).toContain('knight on b5');
   });
 
   it('the spoken gate, handed the LIVE board, refuses the stale vocabulary — the sentence is dropped', () => {
-    const r = stripUngroundedTacticSentences('Your knight on b5 is hanging.', stale, undefined, FEN_FIFTEEN_PLIES_LATER);
+    const r = stripUngroundedTacticSentences('Your knight on b5 is hanging.', stale, FEN_FIFTEEN_PLIES_LATER);
     expect(r.staleContext).toBe(true);
     expect(r.clean).not.toContain('b5');
     expect(r.dropped).toHaveLength(1);
@@ -85,7 +85,7 @@ describe('a package whose fen does not match the consumer\'s board cannot produc
   it('…but a claim that is TRUE on the live board still survives through the board-rescue (stale ≠ silent)', () => {
     // Live board: a white knight on d5 really is hanging to the c6 pawn.
     const live = '4k3/8/2p5/3N4/8/8/8/4K3 w - - 0 1';
-    const r = stripUngroundedTacticSentences('Your knight on d5 is hanging.', stale, undefined, live);
+    const r = stripUngroundedTacticSentences('Your knight on d5 is hanging.', stale, live);
     expect(r.staleContext).toBe(true);
     expect(r.clean).toContain('knight on d5');
     expect(r.dropped).toHaveLength(0);

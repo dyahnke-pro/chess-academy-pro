@@ -186,13 +186,6 @@ function splitProtectingMarkers(text: string): { sentences: string[]; restore: (
 export function stripUngroundedTacticSentences(
   text: string,
   context: TacticsLiveContext | null,
-  /** Code-computed fact text for THIS turn (e.g. the reply-fact bundle built
-   *  by `explainBestMoveGrounded`). Tactic vocabulary it uses is licensed —
-   *  the facts are code, so a claim echoing them is grounded by construction.
-   *  Without this, David's 2026-08-06 session had a TRUE claim stripped:
-   *  "It forks the knight on a4 and the bishop on c4" (his b5 really did)
-   *  because the bounded live context happened not to carry the fork. */
-  licensedFacts?: string,
   /** The live FEN, when the caller has it (streaming spoken gate, in-game
    *  chat final-text gate). Enables the board-rescue in
    *  `tacticTypeVerifiedOnBoard`: an out-of-vocab pin/fork the thin bounded
@@ -215,7 +208,6 @@ export function stripUngroundedTacticSentences(
     ? { ...context, immediate: [], hanging: [], threats: [], opportunities: [] }
     : context;
   const dropped: string[] = [];
-  const licensedLower = (licensedFacts ?? '').toLowerCase();
 
   // Built from a string (not a literal) to dodge the no-control-regex lint;
   // \u0001 is the private sentinel splitProtectingMarkers wraps tags in.
@@ -229,18 +221,8 @@ export function stripUngroundedTacticSentences(
       // tactic scan, and a fabricated tactic can't be hidden behind a tag.
       const prose = protectedSentence.replace(markerToken, ' ').replace(/\s+/g, ' ').trim();
       const { violations } = validateTacticClaims(prose, ctx);
-      // A violation is licensed when the computed facts speak the SAME tactic
-      // type (any inflection — matched via the vocabulary patterns, not a
-      // literal substring, so facts saying "forks" license prose saying
-      // "forking").
-      const typeLicensed = (type: string): boolean => {
-        if (!licensedLower) return false;
-        const entry = TACTIC_VOCABULARY.find((e) => e.type === type);
-        return !!entry && entry.patterns.some((p) => p.test(licensedLower));
-      };
       const outOfVocab = violations.filter((v) =>
         v.reason === 'not-in-vocabulary'
-        && !typeLicensed(v.type)
         // Board-rescue: keep a claim the live board actually proves (G3 — the
         // board outranks the token-budget context summary).
         && !(fen ? tacticTypeVerifiedOnBoard(fen, v.type, prose) : false));

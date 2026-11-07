@@ -1232,19 +1232,6 @@ export interface MasterGroundingOptions {
    *  deep Learn games stocked out ~half their turns on real recaptures the
    *  explorer's top-N for the exact FEN didn't carry.) */
   moveNarration?: boolean;
-  /** The COMPUTED fact bundle for a step-by-step narration turn — the played
-   *  reply, capture truth, why-strong, live tactics, question/fork/chain
-   *  directives, all assembled by the surface in code. When present with
-   *  `moveNarration`, this turn is voiced STRAIGHT through `voiceFacts` — no
-   *  intent detection, no assemblers, no stock fall-through (2026-07-12: the
-   *  injected-block strip left "I played X." matching no assembler, so every
-   *  coach reply spoke the stock "I can't verify that precisely" line). */
-  moveNarrationFacts?: string;
-  /** Instructions for the phrasing model that must NEVER be spoken. Kept out
-   *  of `moveNarrationFacts` because every guard in `voiceFacts` falls back to
-   *  serving that string verbatim — which is how the coach came to read
-   *  "never suggest playing it" aloud on prod (David 2026-08-01). */
-  moveNarrationDirectives?: string;
   /** PLAN / STRATEGY question turn ("give me a plan for the next three
    *  moves", "what are my main ideas here?"). A plan answer names forward
    *  moves 2-3 plies ahead that aren't legal in the current position nor in
@@ -3813,50 +3800,6 @@ export async function getCoachChatResponse(
     const voiced = await voice(grounding.pieceOptions.facts, { studentMessage: askText, providerConfig: config, intent: 'piece-options', preferRaw: true });
     if (voiced) {
       lastCoachLines = grounding.pieceOptions.lines.length > 0 ? grounding.pieceOptions.lines : null;
-      return voiced;
-    }
-  }
-
-  // ── STEP-BY-STEP MOVE NARRATION — computed facts, voiced directly ──
-  // The engine-driven Learn turn is INTERNAL: the surface already played the
-  // coach's reply in code and computed EVERYTHING to say about it (capture
-  // truth, why-strong, live tactics, question/fork/chain directives) into
-  // `moveNarrationFacts`. This turn must never ride intent detection or the
-  // pipeline's fall-throughs: after the injected-block strip (2026-07-11),
-  // the bare "I played X." matched no assembler, the grounded default's
-  // engine cache was one ply stale, and EVERY coach reply spoke the stock
-  // "I can't verify that precisely" line (David 2026-07-12, live Benko
-  // session). voiceFacts phrases the computed facts; the LLM decides
-  // nothing (G0). Falls through to the normal pipeline only on a miss.
-  if (grounding?.moveNarration && grounding.moveNarrationFacts?.trim()) {
-    const studentMsg = (() => {
-      for (let i = messages.length - 1; i >= 0; i -= 1) {
-        // Student words only — the surface-injected [STEP-BY-STEP…] block is
-        // instruction text, not the student's message (language detection etc.
-        // must never see it).
-        if (messages[i].role === 'user') {
-          const raw = messages[i].content;
-          const idx = raw.search(/\n\n\[[A-Z]/);
-          return idx >= 0 ? raw.slice(0, idx).trim() : raw;
-        }
-      }
-      return undefined;
-    })();
-    const voiced = await voice(grounding.moveNarrationFacts, {
-      directives: grounding.moveNarrationDirectives,
-      studentMessage: studentMsg,
-      providerConfig: config,
-      intent: 'move-narration',
-      // BOARD narration = computed DNA, spoken raw, no LLM (David 2026-09-07:
-      // computer + DNA to ALL tier-3 narration pathways). The move-narration
-      // facts are computed (G0/G6); preferRaw ships them verbatim. A non-English
-      // student message still routes through the model to TRANSLATE only
-      // (translation is phrasing, not chess content — voiceFacts gates it).
-      preferRaw: true,
-    });
-    if (voiced) {
-      emitGroundingCoverage('move-narration', grounding.surface ?? 'unknown', grounding.sessionId);
-      if (onStream) onStream(voiced);
       return voiced;
     }
   }

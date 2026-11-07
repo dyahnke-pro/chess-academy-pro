@@ -303,17 +303,6 @@ export interface LiveState {
    *  and the student heard "I can't verify which moves are sound" instead of
    *  the lesson (prod, David's iPhone + deep audit, 2026-06-04). */
   moveNarration?: boolean;
-  /** The COMPUTED fact bundle for a step-by-step narration turn — the coach's
-   *  played reply, capture truth, why-strong, live tactics, and any question /
-   *  fork / chain directives, all assembled by the surface in code. Routed
-   *  straight through `voiceFacts` (the LLM only phrases); see the matching
-   *  field on `MasterGroundingOptions`. */
-  moveNarrationFacts?: string;
-  /** Instructions for the phrasing model that must NEVER be spoken. Separate
-   *  from `moveNarrationFacts` because every guard in `voiceFacts` falls back
-   *  to serving that string verbatim — which is how the coach came to read
-   *  "never suggest playing it" aloud on prod (David 2026-08-01). */
-  moveNarrationDirectives?: string;
   /** The review walk's STORED engine read for the ply the student is asking
    *  about — fenBefore + played SAN + the analysis' best-move UCI. Threaded by
    *  the review Ask so a "why was h3 better" question answers INSTANTLY from

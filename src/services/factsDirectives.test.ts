@@ -10,18 +10,6 @@ import { resolve } from 'node:path';
 const src = (p: string): string => readFileSync(resolve(process.cwd(), p), 'utf8');
 
 describe('facts vs directives', () => {
-  it('the move-narration FACTS string carries no instruction to the model', () => {
-    const page = src('src/components/Coach/CoachTeachPage.tsx');
-    const start = page.indexOf('moveNarrationFacts:');
-    const end = page.indexOf('moveNarrationDirectives:', start);
-    expect(start).toBeGreaterThan(-1);
-    expect(end).toBeGreaterThan(start);
-    const factsBlock = page.slice(start, end);
-    // The two directives that were being spoken.
-    expect(factsBlock).not.toMatch(/never suggest playing it/i);
-    expect(factsBlock).not.toMatch(/Narrate the coach's reply/i);
-  });
-
   it('voiceFacts sends directives to the model but never into `facts`', () => {
     const api = src('src/services/coachApi.ts');
     // Present in the prompt...
@@ -32,8 +20,4 @@ describe('facts vs directives', () => {
     expect(api).not.toMatch(/return [^;]*directives/);
   });
 
-  it('the directives actually reach voiceFacts', () => {
-    const api = src('src/services/coachApi.ts');
-    expect(api).toMatch(/directives: grounding\.moveNarrationDirectives/);
-  });
 });

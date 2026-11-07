@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1323) — names `applyCandidateArrows`, `coachAnswerGates`
-- **🔒🔒 THE THREE NARRATION TIERS — get these the right way round (David 2026-08-01, LOCKED: "Tier 2 is not baked. Tier 1 is baked. Tier 2 is note driven. Tier 3 has neither.")** (CLAUDE.md:4379) — names `gradeNarrationText`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1714) — names `applyCandidateArrows`, `coachAnswerGates`
+- **🔒🔒 THE THREE NARRATION TIERS — get these the right way round (David 2026-08-01, LOCKED: "Tier 2 is not baked. Tier 1 is baked. Tier 2 is note driven. Tier 3 has neither.")** (CLAUDE.md:4791) — names `gradeNarrationText`
 
 ## Who calls in
 
@@ -37,11 +37,10 @@
 
 ## Exports and every call site
 
-### `isSpokenSentenceGrounded` (function) — 7 call sites
+### `isSpokenSentenceGrounded` (function) — 6 call sites
 - `src/components/Board/VoiceChatMic.tsx:445`
-- `src/components/Coach/CoachGamePage.tsx:2886`
-- `src/components/Coach/CoachGamePage.tsx:3682`
-- `src/hooks/usePhaseNarration.ts:232`
+- `src/components/Coach/CoachGamePage.tsx:2777`
+- `src/hooks/usePhaseNarration.ts:233`
 - `src/services/coachAnswerGates.test.ts:26`
 - `src/services/coachAnswerGates.test.ts:30`
 - `src/services/coachAnswerGates.test.ts:34`
@@ -56,70 +55,70 @@
 - `src/services/lineScopedGate.test.ts:54`
 - `src/services/lineScopedGate.test.ts:63`
 - `src/services/lineScopedGate.test.ts:68`
-- `src/services/openingGenerator.ts:798`
-- `src/services/openingGenerator.ts:800`
-- `src/services/openingGenerator.ts:802`
+- `src/services/openingGenerator.ts:808`
+- `src/services/openingGenerator.ts:810`
+- `src/services/openingGenerator.ts:812`
 
 ### `gradeNarrationText` (function) — 43 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10400`
-- `src/components/Coach/CoachTeachPage.tsx:10402`
-- `src/components/Coach/CoachTeachPage.tsx:10408`
-- `src/components/Coach/CoachTeachPage.tsx:10430`
-- `src/components/Coach/CoachTeachPage.tsx:10453`
-- `src/components/Coach/CoachTeachPage.tsx:10488`
-- `src/components/Coach/CoachTeachPage.tsx:10951`
+- `src/components/Coach/CoachTeachPage.tsx:11054`
+- `src/components/Coach/CoachTeachPage.tsx:11057`
+- `src/components/Coach/CoachTeachPage.tsx:11063`
+- `src/components/Coach/CoachTeachPage.tsx:11085`
+- `src/components/Coach/CoachTeachPage.tsx:11108`
+- `src/components/Coach/CoachTeachPage.tsx:11143`
+- `src/components/Coach/CoachTeachPage.tsx:11615`
 - `src/services/authoredOpeningNotes.test.ts:257`
 - `src/services/coachAnswerGates.test.ts:107`
 - `src/services/coachAnswerGates.test.ts:117`
 - `src/services/coachAnswerGates.test.ts:123`
 - `src/services/coachAnswerGates.test.ts:129`
-- `src/services/coachSurfaceScorecard.report.test.ts:45`
-- `src/services/computedVoiceAudit.report.test.ts:219`
+- `src/services/coachSurfaceScorecard.report.test.ts:44`
+- `src/services/computedVoiceAudit.report.test.ts:217`
 - `src/services/deltaProbe.report.test.ts:155`
 - `src/services/flaggedNoteGateAudit.report.test.ts:87`
 - `src/services/flaggedNoteGateAudit.report.test.ts:113`
 - `src/services/lineScopedGate.test.ts:32`
 - `src/services/lineScopedGate.test.ts:55`
-- `src/services/mistakeNarration.ts:369`
+- `src/services/mistakeNarration.ts:370`
 - `src/services/mistakeNarrationVoice.ts:131`
-- `src/services/openingGenerator.ts:877`
-- `src/services/openingGenerator.ts:885`
-- `src/services/openingGenerator.ts:886`
-- `src/services/openingGenerator.ts:1077`
-- `src/services/openingGenerator.ts:1081`
-- `src/services/openingGenerator.ts:1089`
-- `src/services/openingGenerator.ts:1090`
-- `src/services/openingGenerator.ts:1096`
-- `src/services/openingGenerator.ts:1238`
-- `src/services/openingGenerator.ts:2217`
-- `src/services/principleVoice.lineShape.test.ts:47`
-- `src/services/principleVoice.lineShape.test.ts:54`
-- `src/services/replayFence.colle800.rewalk.test.ts:47`
+- `src/services/openingGenerator.ts:887`
+- `src/services/openingGenerator.ts:895`
+- `src/services/openingGenerator.ts:896`
+- `src/services/openingGenerator.ts:1087`
+- `src/services/openingGenerator.ts:1091`
+- `src/services/openingGenerator.ts:1099`
+- `src/services/openingGenerator.ts:1100`
+- `src/services/openingGenerator.ts:1106`
+- `src/services/openingGenerator.ts:1248`
+- `src/services/openingGenerator.ts:2316`
+- `src/services/principleVoice.lineShape.test.ts:48`
+- `src/services/principleVoice.lineShape.test.ts:55`
 - `src/services/replayFence.colle800.rewalk.test.ts:49`
+- `src/services/replayFence.colle800.rewalk.test.ts:51`
 - `src/services/selectedNotes.report.test.ts:92`
 - `src/services/selectedNotes.report.test.ts:200`
 - `src/services/viennaNarrationExample.report.test.ts:107`
-- `src/services/voicePackage.ts:312`
-- `src/services/voicePackage.ts:314`
-- `src/services/voicePackage.ts:328`
-- `src/services/voicePackage.ts:342`
-- `src/services/voicePackage.ts:351`
+- `src/services/voicePackage.ts:294`
+- `src/services/voicePackage.ts:296`
+- `src/services/voicePackage.ts:310`
+- `src/services/voicePackage.ts:324`
+- `src/services/voicePackage.ts:333`
 
 ### `applyCandidateArrows` (function) — 5 call sites
-- `src/coach/coachService.ts:2310`
-- `src/components/Coach/CoachTeachPage.tsx:7719`
+- `src/coach/coachService.ts:2319`
+- `src/components/Coach/CoachTeachPage.tsx:8112`
 - `src/components/Openings/MiddlegamePractice.tsx:282`
-- `src/hooks/useLiveCoach.ts:357`
+- `src/hooks/useLiveCoach.ts:362`
 - `src/services/coachAnswerGates.test.ts:157`
 
 ### `appendKeySquareHighlights` (function) — 4 call sites
-- `src/coach/coachService.ts:2314`
+- `src/coach/coachService.ts:2323`
 - `src/services/coachAnswerGates.test.ts:167`
 - `src/services/coachAnswerGates.test.ts:170`
 - `src/services/coachAnswerGates.test.ts:171`
 
 ### `candidateHighlightMarkers` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7724`
+- `src/components/Coach/CoachTeachPage.tsx:8116`
 
 ## Tests
 

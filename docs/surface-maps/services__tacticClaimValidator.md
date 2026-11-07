@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**338 lines · 2 exports · 7 importers · 2 tests · 0 audits**
+**320 lines · 2 exports · 7 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,15 +22,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `stripUngroundedTacticSentences` (function) — 32 call sites
-- `src/components/Coach/CoachGamePage.tsx:1369`
-- `src/components/Coach/CoachGamePage.tsx:3705`
-- `src/components/Coach/CoachGamePage.tsx:4079`
-- `src/components/Coach/CoachTeachPage.tsx:6773`
-- `src/components/Coach/CoachTeachPage.tsx:7643`
-- `src/components/Coach/CoachTeachPage.tsx:7668`
-- `src/components/Coach/GameChatPanel.tsx:363`
-- `src/components/Coach/GameChatPanel.tsx:1266`
+### `stripUngroundedTacticSentences` (function) — 26 call sites
+- `src/components/Coach/CoachGamePage.tsx:1275`
+- `src/components/Coach/CoachTeachPage.tsx:7204`
+- `src/components/Coach/CoachTeachPage.tsx:8037`
+- `src/components/Coach/CoachTeachPage.tsx:8062`
+- `src/components/Coach/GameChatPanel.tsx:368`
+- `src/components/Coach/GameChatPanel.tsx:1273`
 - `src/services/coachAnswerGates.ts:74`
 - `src/services/streamingSpeaker.ts:97`
 - `src/services/tacticClaimValidator.test.ts:106`
@@ -41,23 +39,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticClaimValidator.test.ts:139`
 - `src/services/tacticClaimValidator.test.ts:146`
 - `src/services/tacticClaimValidator.test.ts:153`
-- `src/services/tacticClaimValidator.test.ts:166`
-- `src/services/tacticClaimValidator.test.ts:168`
-- `src/services/tacticClaimValidator.test.ts:175`
-- `src/services/tacticClaimValidator.test.ts:179`
-- `src/services/tacticClaimValidator.test.ts:207`
-- `src/services/tacticClaimValidator.test.ts:209`
-- `src/services/tacticClaimValidator.test.ts:216`
-- `src/services/tacticClaimValidator.test.ts:221`
-- `src/services/tacticClaimValidator.test.ts:227`
-- `src/services/tacticClaimValidator.test.ts:235`
-- `src/services/tacticClaimValidator.test.ts:239`
+- `src/services/tacticClaimValidator.test.ts:182`
+- `src/services/tacticClaimValidator.test.ts:184`
+- `src/services/tacticClaimValidator.test.ts:191`
+- `src/services/tacticClaimValidator.test.ts:196`
+- `src/services/tacticClaimValidator.test.ts:202`
+- `src/services/tacticClaimValidator.test.ts:210`
+- `src/services/tacticClaimValidator.test.ts:214`
 - `src/services/tacticsContextIdentity.test.ts:73`
 - `src/services/tacticsContextIdentity.test.ts:79`
 - `src/services/tacticsContextIdentity.test.ts:88`
 
 ### `validateTacticClaims` (function) — 11 call sites
-- `src/components/Coach/GameChatPanel.tsx:1272`
+- `src/components/Coach/GameChatPanel.tsx:1279`
 - `src/services/tacticClaimValidator.test.ts:33`
 - `src/services/tacticClaimValidator.test.ts:40`
 - `src/services/tacticClaimValidator.test.ts:49`

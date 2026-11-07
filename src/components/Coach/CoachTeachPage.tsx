@@ -847,20 +847,12 @@ interface TeachSubmitOpts {
    *  FEN and replied "e4 hasn't landed yet" after the student
    *  played e4 (production audit, build cf2fe0b). */
   fenOverride?: string;
-  /** Engine-driven step-by-step turn (GROUNDING TRUTH): the engine/DB
-   *  ALREADY played the coach's reply (this SAN) in code; the brain must
-   *  only NARRATE it. Defined (a SAN, or '' when there was no legal
-   *  reply) means "this is the step-by-step path; play_move is disabled
-   *  so the LLM cannot pick or play a move." Undefined = legacy path. */
-  coachReplyPlayed?: string;
-  /** GROUNDING COMPLETENESS (David 2026-06-15): the captured-piece +
-   *  squares fact for the coach's reply, computed in code (chess.js).
-   *  The SAN alone (e.g. "Qxg5") tells the LLM a capture happened but NOT
-   *  what was taken — and the after-FEN can't tell it either (the victim
-   *  is gone). Without this the LLM fabricates the victim ("queen takes
-   *  queen"). Handed in so the LLM narrates the REAL capture, never an
-   *  invented one. */
-  coachReplyFact?: string;
+  /** The student's move ended the game (no legal coach reply): the turn
+   *  narrates their move only, with play_move disabled so the LLM cannot
+   *  pick or play a move. (It once carried the coach's reply SAN for an
+   *  engine-driven step narration; nothing has passed one since the
+   *  instant voice took that job, and that path is deleted.) */
+  gameOverStep?: true;
   /** Track A (the deterministic instant voice) ALREADY spoke when the
    *  coach's move landed — the ≤1s layer (David 2026-08-06: "Down to one
    *  second after moving"; 2026-08-07: the two-track plan). handleSubmit
@@ -4038,7 +4030,7 @@ export function CoachTeachPage({ mode }: {
       // current position matters); the finally below fires it the moment
       // the pipeline frees. Ordinary typed turns keep the old drop — the
       // input is disabled while busy, so they can't arrive here anyway.
-      if (opts?.coachReplyPlayed !== undefined) {
+      if (opts?.gameOverStep === true) {
         pendingMoveNarrationRef.current = { text, opts };
         void logAppAudit({
           kind: 'coach-surface-migrated',
@@ -4066,7 +4058,7 @@ export function CoachTeachPage({ mode }: {
     // typed or spoke is read into the closed form and compared with today's
     // routing — logged, never served. Learn's own routers still answer.
     turnReadRef.current = null;
-    if (!opts?.kickoff && opts?.coachReplyPlayed === undefined && !opts?.teachIntent) {
+    if (!opts?.kickoff && !opts?.gameOverStep && !opts?.teachIntent) {
       turnReadRef.current = openTurnRead({
         surface: 'teach',
         ask: text,
@@ -4093,12 +4085,12 @@ export function CoachTeachPage({ mode }: {
     // own move-narration are not the student interrupting, so leave those.
     // "stop" / "wait" / "hold on" — a command to be quiet, not a question.
     // Silence IS the reply: stop, and say nothing back.
-    if (!opts?.kickoff && opts?.coachReplyPlayed === undefined && isStopCommand(text)) {
+    if (!opts?.kickoff && !opts?.gameOverStep && isStopCommand(text)) {
       stopCoachNow();
       captureEvent('coach_stop_command', { surface: 'coach-teach' });
       return;
     }
-    if (!opts?.kickoff && opts?.coachReplyPlayed === undefined) {
+    if (!opts?.kickoff && !opts?.gameOverStep) {
       voiceService.stop();
       // …and the live commentary still QUEUED behind it goes too — Track A's
       // generation counter drops every line chained before this question
@@ -4127,7 +4119,7 @@ export function CoachTeachPage({ mode }: {
       startLessonGame();
       return;
     }
-    if (turnReadRef.current && !opts?.teachIntent && !opts?.kickoff && opts?.coachReplyPlayed === undefined) {
+    if (turnReadRef.current && !opts?.teachIntent && !opts?.kickoff && !opts?.gameOverStep) {
       const handle = turnReadRef.current;
       const r = await awaitTurnRead(handle.peek(), text, liveFenRef.current ?? undefined);
       const v = r?.validation ?? null;
@@ -4558,7 +4550,7 @@ export function CoachTeachPage({ mode }: {
     // auto-pause below so walkthrough.phase still reflects reality.
     if (
       !opts?.kickoff &&
-      opts?.coachReplyPlayed === undefined &&
+      !opts?.gameOverStep &&
       walkthrough.isActive
     ) {
       const control = classifyWalkthroughControl(englishText);
@@ -4647,7 +4639,7 @@ export function CoachTeachPage({ mode }: {
     // loop (G0).
     if (
       !opts?.kickoff &&
-      opts?.coachReplyPlayed === undefined &&
+      !opts?.gameOverStep &&
       !walkthrough.isActive
     ) {
       const idleControl = classifyWalkthroughControl(englishText);
@@ -4690,7 +4682,7 @@ export function CoachTeachPage({ mode }: {
     // board can never diverge (G0/G3).
     if (
       !opts?.kickoff &&
-      opts?.coachReplyPlayed === undefined &&
+      !opts?.gameOverStep &&
       !walkthrough.isActive &&
       !activeDrillRef.current
     ) {
@@ -4761,7 +4753,7 @@ export function CoachTeachPage({ mode }: {
     // next reply (resolveCoachReplyMove consumes it first).
     if (
       !opts?.kickoff &&
-      opts?.coachReplyPlayed === undefined &&
+      !opts?.gameOverStep &&
       !walkthrough.isActive
     ) {
       const cmd = parseCoachMoveCommand(trimmedText, liveFenRef.current, playerColor === 'white' ? 'black' : 'white');
@@ -5730,7 +5722,7 @@ export function CoachTeachPage({ mode }: {
       // "Your move.", so "I played e4." fell into the fuzzy router, popped a
       // picker, the narration turn never ran, and the coach went silent).
       const isMoveReport =
-        opts?.coachReplyPlayed !== undefined ||
+        opts?.gameOverStep === true ||
         /^\s*i\s+(?:just\s+)?played\b/i.test(workingInput);
 
       // DETERMINISTIC requested-opening capture (David 2026-06-04 audit: a deep
@@ -7166,7 +7158,7 @@ export function CoachTeachPage({ mode }: {
       // coach had answered his next move. The chat still shows the text;
       // only the voice skips. Chat Q&A answers are conversation, not
       // position-bound, so they still speak.
-      if (opts?.coachReplyPlayed !== undefined && liveFenRef.current !== fen) {
+      if (opts?.gameOverStep === true && liveFenRef.current !== fen) {
         void logAppAudit({
           kind: 'voice-speak-invoked',
           category: 'subsystem',
@@ -7209,7 +7201,7 @@ export function CoachTeachPage({ mode }: {
       // the only gate between the brain and the voice, so it must ENFORCE, not
       // just audit. Guarded so it never silences a turn on a fault.
       try {
-        const tac = stripUngroundedTacticSentences(grounded, fedTacticsRef.current ?? tacticsForAsk, opts?.coachReplyFact);
+        const tac = stripUngroundedTacticSentences(grounded, fedTacticsRef.current ?? tacticsForAsk);
         if (tac.dropped.length > 0) {
           grounded = tac.clean;
           void logAppAudit({
@@ -7250,7 +7242,7 @@ export function CoachTeachPage({ mode }: {
             narrationText: sentence,
             fen: liveFenRef.current,
           });
-          return speakLearn(sentence, { channel: opts?.coachReplyPlayed !== undefined ? 'free-play' : 'asked', forced: true, intent: 'learn' });
+          return speakLearn(sentence, { channel: opts?.gameOverStep === true ? 'free-play' : 'asked', forced: true, intent: 'learn' });
         })
         .catch(() => undefined);
     };
@@ -7437,7 +7429,7 @@ export function CoachTeachPage({ mode }: {
       // grounding even OFF-BOOK positions the master-play DB can't cover. Only
       // when the cached analysis is for THIS exact FEN (same gate as the eval).
       engineBestMoveUci: cachedAnalysis?.bestMove || undefined,
-      // Step-by-step move narration: the engine-driven reply (coachReplyPlayed
+      // Step-by-step move narration: the game-over step (gameOverStep
       // defined) OR a typed "I played X. Your move." report, outside a
       // walkthrough. Tells the grounding pipeline this turn is move discussion
       // (coach narrates the played move + tactical ideas a ply ahead), so the
@@ -7445,44 +7437,8 @@ export function CoachTeachPage({ mode }: {
       // turns otherwise (David 2026-06-04).
       moveNarration:
         !walkthrough.isActive &&
-        (opts?.coachReplyPlayed !== undefined ||
+        (opts?.gameOverStep === true ||
           /\bi\s+(?:just\s+)?played\b[\s\S]*\byour\s+(?:move|turn)\b/i.test(text)),
-      // The COMPUTED narration bundle for the engine-driven step turn. When
-      // present, coachApi voices it straight through voiceFacts — no intent
-      // detection, no assemblers, no "I can't verify" stock-out (2026-07-12:
-      // every coach reply spoke the stock line after the injected-block strip
-      // left this turn matching no assembler). Everything in it is computed:
-      // the played reply, capture truth, why-strong, live tactics, question /
-      // fork / chain directives.
-      moveNarrationFacts:
-        !walkthrough.isActive && opts?.coachReplyPlayed && opts.coachReplyPlayed.length > 0
-          // FACTS ONLY — anything here can be SPOKEN verbatim when a voiceFacts
-          // guard trips and serves the computed prose. Two model instructions
-          // used to sit in this string, and David heard one read aloud on prod
-          // (2026-08-01). They now travel in `moveNarrationDirectives`, which
-          // no fallback path can reach.
-          // SPEAKABLE, second person — on a gate fallback this whole string is
-          // read aloud, and David heard "The student played f4. The coach
-          // replied d5." spoken AT him (2026-08-07).
-          ? `You played ${text.replace(/^i\s+played\s+/i, '').replace(/\.$/, '')}; they answered ${opts.coachReplyPlayed}. ` +
-            (opts?.coachReplyFact ?? '')
-          : undefined,
-      moveNarrationDirectives:
-        !walkthrough.isActive && opts?.coachReplyPlayed && opts.coachReplyPlayed.length > 0
-          ? `${opts.coachReplyPlayed} is already on the board — never suggest playing it. `
-            // David 2026-08-06: "I did not like the narrations speaking the
-            // opponents move, waste of tokens. I want important teaching
-            // moments stated after opponent moves." The student WATCHED the
-            // move land — describing its mechanics is dead air.
-            + 'Do NOT describe the reply\'s mechanics — no from-square, no to-square, no "quiet move", no "no capture"; the student watched it happen. '
-            // STUDENT-FIRST FRAMING (David 2026-08-07: "narrations were
-            // favoring my opponent" — every beat opened praising MY reply).
-            + 'Open with the IMPORTANT TEACHING MOMENT for the STUDENT: what my reply threatens AGAINST them and how to meet it, or the plan THEY should be playing for. NEVER praise my reply or dwell on why my move is strong — the beat is about the student\'s position and their best answer. Then prompt their move. '
-            + 'If the facts name the student\'s strongest reply, recommend ONLY that move — never any other.'
-            + (opts?.instantSpokenText
-              ? ` Already spoken aloud as the move landed: "${opts.instantSpokenText}" — never repeat or rephrase those lines; build PAST them.`
-              : '')
-          : undefined,
       ...(evalForAsk ?? {}),
       ...(lichessForAsk ?? {}),
     };
@@ -7544,21 +7500,17 @@ export function CoachTeachPage({ mode }: {
     // the move. Augment the ask with a focused directive (and trigger
     // the G6 arrow obligation) WITHOUT mutating the displayed message.
     const STEP_BY_STEP_RE = /\bi\s+(?:just\s+)?played\b[\s\S]*\byour\s+(?:move|turn)\b/i;
-    // `coachReplyPlayed` defined = the ENGINE already played the coach's reply
-    // (the grounding-truth path); play_move is disabled below so the LLM
-    // cannot move — it only narrates. A non-empty value is the SAN to narrate.
-    const replyPlayed = opts?.coachReplyPlayed;
-    const engineDrivenStep = replyPlayed !== undefined;
+    // The game-over step: play_move is disabled below so the LLM cannot move —
+    // it only narrates the student's move.
+    const engineDrivenStep = opts?.gameOverStep === true;
     const isStepByStepReport =
       (STEP_BY_STEP_RE.test(text) || engineDrivenStep) && !walkthrough.isActive;
     const effectiveAsk =
-      replyPlayed && replyPlayed.length > 0
-        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. ${opts?.coachReplyFact ?? ''} You do NOT and CANNOT play moves (play_move is disabled). The student WATCHED ${replyPlayed} land — do NOT describe its mechanics (no from-square, no to-square, no "quiet move", no "no capture"). ${opts?.instantSpokenText ? `Already spoken aloud as the move landed: "${opts.instantSpokenText}" — never repeat or rephrase those lines; build PAST them. ` : ''}Open with the IMPORTANT TEACHING MOMENT for the STUDENT — what my reply threatens AGAINST them and how to meet it, or the plan THEY should be playing for; NEVER praise my reply or dwell on why my move is strong — using ONLY the grounded facts above (never invent a captured piece, tactic, or threat not listed there). Draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Do NOT emit a [VOICE: ...] marker — your WHOLE reply is spoken aloud, so write every sentence to be heard. Do NOT summarize or continue any earlier topic; teach this moment, then prompt the student's turn. If you name a move for the student to play, it MUST be the engine move named in the grounded facts above — recommend ONLY that one. If the facts name no engine move, do NOT name any move; just say it's their turn. NEVER invent a move, NEVER tell them to move a piece to a square it already occupies, and NEVER recommend a move that isn't in the facts above.]`
-        : engineDrivenStep
-          ? text // no legal coach reply (game over) — narrate the student's move only
-          : isStepByStepReport
-            ? `${text}\n\n[STEP-BY-STEP: the student reported THEIR move. The coach's reply has NOT been computed by the engine — you do NOT know it. You MUST NOT name, narrate, or invent ANY coach reply move: no "queen takes queen", no fabricated capture, no guessed continuation. Inventing a move that wasn't played is a hallucination and is forbidden. Acknowledge ONLY the student's reported move and its idea, draw an arrow on every SAN you ACTUALLY mention, then prompt for their next move WITHOUT naming a specific move for them to play — you have no engine recommendation here, so just say it's their turn. If you have nothing grounded to say about THEIR move, be brief or stay silent — never fill the gap with an invented reply OR an invented move suggestion.]`
-            : text;
+      engineDrivenStep
+        ? text // no legal coach reply (game over) — narrate the student's move only
+        : isStepByStepReport
+          ? `${text}\n\n[STEP-BY-STEP: the student reported THEIR move. The coach's reply has NOT been computed by the engine — you do NOT know it. You MUST NOT name, narrate, or invent ANY coach reply move: no "queen takes queen", no fabricated capture, no guessed continuation. Inventing a move that wasn't played is a hallucination and is forbidden. Acknowledge ONLY the student's reported move and its idea, draw an arrow on every SAN you ACTUALLY mention, then prompt for their next move WITHOUT naming a specific move for them to play — you have no engine recommendation here, so just say it's their turn. If you have nothing grounded to say about THEIR move, be brief or stay silent — never fill the gap with an invented reply OR an invented move suggestion.]`
+          : text;
     if (isStepByStepReport) {
       void logAppAudit({
         kind: 'coach-surface-migrated',
@@ -8082,7 +8034,7 @@ export function CoachTeachPage({ mode }: {
         const computedAnswer = isComputedAnswer(result.servedIntent ?? null);
         const ft = computedAnswer
           ? { clean: finalText, dropped: [] as string[] }
-          : stripUngroundedTacticSentences(finalText, fedTacticsRef.current ?? tacticsForAsk, opts?.coachReplyFact);
+          : stripUngroundedTacticSentences(finalText, fedTacticsRef.current ?? tacticsForAsk);
         if (ft.dropped.length > 0) {
           finalText = ft.clean;
           void logAppAudit({
@@ -8127,8 +8079,7 @@ export function CoachTeachPage({ mode }: {
         // no arrow; "arrow threats only when the coach calls them out loud" is a
         // pending refinement (needs the spoken-text source + a threat color).
         // Arrows (David 2026-07-13): (1) NEVER arrow the move the coach just
-        // played — it's already on the board (`replyPlayed` is the step-by-step
-        // engine reply; undefined elsewhere). (2) A THREAT gets a red arrow only
+        // played — it's already on the board. (2) A THREAT gets a red arrow only
         // when the coach CALLS IT OUT LOUD, so pass the spoken text — a threat
         // written only in the bubble stays un-arrowed.
         const spokenForArrows = spokenForTurn.join(' ').trim();
@@ -8159,7 +8110,6 @@ export function CoachTeachPage({ mode }: {
         const arrowed = result.lines && result.lines.length > 0
           ? arrowSourceText
           : await applyCandidateArrows(arrowSourceText, fen, 'CoachTeachPage', {
-            excludeSan: replyPlayed,
             spokenText: spokenForArrows || undefined,
             ...(result.endorsedSans?.length ? { endorsedSans: result.endorsedSans } : {}),
           });
@@ -13449,7 +13399,7 @@ export function CoachTeachPage({ mode }: {
         setOpponentThinking(false);
         if (learnVoiceOwner() === 'open') void handleSubmit(`I played ${move.san}. Your move.`, {
           fenOverride: move.fen,
-          coachReplyPlayed: '',
+          gameOverStep: true,
         });
       } finally {
         // Safety net: never leave the board stuck locked if anything threw.

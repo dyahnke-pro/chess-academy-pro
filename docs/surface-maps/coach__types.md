@@ -4,22 +4,22 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1024 lines · 32 exports · 1038 importers · 276 tests · 38 audits**
+**1013 lines · 32 exports · 1043 importers · 279 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
-- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:878) — names `types`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3747) — names `Provider`, `ProviderName`, `types`
-- **TypeScript** (CLAUDE.md:4198) — names `types`
-- **React** (CLAUDE.md:4208) — names `types`
-- **File Organization** (CLAUDE.md:4219) — names `types`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4712) — names `types`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4751) — names `CoachSurface`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5218) — names `types`
-- **Naming** (CLAUDE.md:5887) — names `CoachPersonality`
-- **Testing Best Practices** (CLAUDE.md:5932) — names `Provider`
-- **Shared types / services** (CLAUDE.md:5999) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:6868) — names `TacticsLiveContext`
+- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:884) — names `types`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3753) — names `Provider`, `ProviderName`, `types`
+- **TypeScript** (CLAUDE.md:4204) — names `types`
+- **React** (CLAUDE.md:4214) — names `types`
+- **File Organization** (CLAUDE.md:4225) — names `types`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4718) — names `types`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4757) — names `CoachSurface`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5224) — names `types`
+- **Naming** (CLAUDE.md:5893) — names `CoachPersonality`
+- **Testing Best Practices** (CLAUDE.md:5938) — names `Provider`
+- **Shared types / services** (CLAUDE.md:6005) — names `types`
+- **The standard post-deploy ritual** (CLAUDE.md:6874) — names `TacticsLiveContext`
 
 ## Who calls in
 
@@ -956,6 +956,9 @@
 - `src/services/section14RecordPath.test.ts`
 - `src/services/sessionGenerator.test.ts`
 - `src/services/sessionGenerator.ts`
+- `src/services/setUpChance.measure.test.ts`
+- `src/services/setUpChance.test.ts`
+- `src/services/setUpChance.ts`
 - `src/services/setupTrainerService.test.ts`
 - `src/services/setupTrainerService.ts`
 - `src/services/shallowLinesNotNarrated.test.ts`
@@ -965,6 +968,8 @@
 - `src/services/skillMetersRefit.measure.test.ts`
 - `src/services/slipCause.ts`
 - `src/services/smartSearchService.ts`
+- `src/services/spotCue.measure.test.ts`
+- `src/services/spotCue.ts`
 - `src/services/srsEngine.ts`
 - `src/services/srsOpeningService.test.ts`
 - `src/services/srsOpeningService.ts`
@@ -1390,11 +1395,14 @@
 - `src/services/searchDepth.test.ts`
 - `src/services/section14RecordPath.test.ts`
 - `src/services/sessionGenerator.test.ts`
+- `src/services/setUpChance.measure.test.ts`
+- `src/services/setUpChance.test.ts`
 - `src/services/setupTrainerService.test.ts`
 - `src/services/shallowLinesNotNarrated.test.ts`
 - `src/services/shareableInsightsService.test.ts`
 - `src/services/skillDifficultyCalibrate.measure.test.ts`
 - `src/services/skillMetersRefit.measure.test.ts`
+- `src/services/spotCue.measure.test.ts`
 - `src/services/srsOpeningService.test.ts`
 - `src/services/stockfishCache.test.ts`
 - `src/services/stockfishEngine.test.ts`
