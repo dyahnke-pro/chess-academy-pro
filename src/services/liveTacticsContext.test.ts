@@ -359,7 +359,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     expect(speakDeepestLookahead(ctx, 'student', 'w', true)).toBeNull();
   });
 
-  it('Phase 1b: PREFERS a deep tactic whose motif is a hole the student keeps falling in, and tags it', () => {
+  it('Phase 1b: PREFERS a deep tactic whose motif is a hole the student keeps falling in, and never says so', () => {
     // Two deep opportunities: a fork (first) and a discovery (second). The student
     // keeps missing DISCOVERIES → the discovery is picked over the earlier fork.
     const ctx = ctxWith(
@@ -377,8 +377,9 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     const say = speakDeepestLookahead(ctx, 'student', 'w', true, holeSignals)!;
     expect(say.toLowerCase()).toContain('discovered attack');   // the hole motif won the pick
     expect(say).toContain('your knight to e4');
-    expect(say).toMatch(/tend to miss/i);               // honest recurring-hole tag
-    // With NO profile, the FIRST deep tactic (fork) is picked — prior behavior, no tag.
+    // The record picks the tactic and is never read back (David 2026-10-28).
+    expect(say).not.toMatch(/tend to miss/i);
+    // With NO profile, the FIRST deep tactic (fork) is picked — prior behavior.
     const plain = speakDeepestLookahead(ctx, 'student', 'w', true)!;
     expect(plain.toLowerCase()).toContain('fork');
     expect(plain).not.toMatch(/tend to miss/i);

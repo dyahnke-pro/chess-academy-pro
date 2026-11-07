@@ -16,7 +16,8 @@ import type { WeaknessSignal } from './weaknessSignal';
 // "held it" is whole-word: "held its own pawns" is a board fact, not a recital.
 // `lastTimeHere` ("Last time here you played …") is KEPT on David's call
 // (OUTLINE.md, PLAN.md) and its words are deliberately not matched.
-const RECALL = /keeps recurring|walked into this before|caught you before|held it\b|caught you in your games|against Rossi|against Sam|you drilled|this time you found it/i;
+// "tend to miss" (liveTacticsContext's hole tag, said on prod 2026-11-07).
+const RECALL = /keeps recurring|walked into this before|caught you before|held it\b|caught you in your games|against Rossi|against Sam|you drilled|this time you found it|tend to miss|kind you (?:tend to |keep |usually )?miss/i;
 const SANS = ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'cxd4', 'Nc6', 'Nc3', 'Nb6', 'Nf3'];
 
 function inputs(): ReviewMoveInput[] {

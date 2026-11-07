@@ -62,6 +62,13 @@ describe('outpost outranks bare development', () => {
     expect(funds[0].selfContained).toMatch(/outpost/);
     expect(funds.some((f) => f.id === 'development')).toBe(false);
   });
+
+  it('its held plan reads as an instruction ("find a piece an outpost" was said on prod, 2026-11-07)', () => {
+    const fen = '4k3/pp4pp/8/8/8/5N2/PP4PP/4K3 w - - 0 20';
+    const pointer = strategicPlanPointer(fen, 'Ne5', 'white') ?? '';
+    expect(pointer).toMatch(/^The plan here: put a piece on an outpost no pawn can chase/);
+    expect(pointer).not.toMatch(/e5/);
+  });
 });
 
 describe('central pawn advance stakes out the center', () => {

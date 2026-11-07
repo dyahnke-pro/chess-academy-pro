@@ -1313,7 +1313,7 @@ const PLAN_POINTER: Record<MoveFundamental['id'], string> = {
   'open-diagonal': 'open a diagonal for your bishop',
   center: 'build up the centre',
   'king-safety': 'get your king safe',
-  outpost: 'find a piece an outpost no pawn can chase',
+  outpost: 'put a piece on an outpost no pawn can chase',
   'open-file': 'put a rook on the open file',
   tempo: 'gain time by hitting one of their pieces',
   'attack-defender': 'go after the piece that holds their position together',

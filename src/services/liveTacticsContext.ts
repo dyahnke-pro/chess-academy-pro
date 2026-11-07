@@ -675,11 +675,10 @@ export function speakDeepestLookahead(
     spoken.length === 1
       ? spoken[0]
       : `${spoken[0]}, then ${spoken.slice(1).join(', ')}`;
-  // Honest recurring-hole tag ONLY when this motif is one of the student's holes
-  // (profile-proven) AND the tactic is real (board-proven) — never invented.
-  const holeTag = isOpportunity && isHole(pick, 'finds')
-    ? ` This is exactly the kind you tend to miss — grab it.`
-    : '';
+  // The record picks WHICH tactic is taught (a hole of theirs wins the pick
+  // above); it is never read back to them (David 2026-10-28: the record steers,
+  // it is never recited — "This is exactly the kind you tend to miss" was said
+  // on prod 2026-11-07 and is gone).
   // WHOSE MOVE OPENS THE LINE. The PV starts at `ctx.fen`, so ply 0 belongs to
   // the side to move there. When that is the STUDENT, the threat is what the
   // opponent gets IF the student plays that move — "they're lining up" would
@@ -690,7 +689,7 @@ export function speakDeepestLookahead(
   // away" was two of theirs and two of the student's.
   const when = movesAway(pick.depthAhead, isOpportunity ? 'your' : 'their');
   if (isOpportunity && !namesStudentMoves) {
-    return `Look a couple of moves ahead — there's ${withArticle(pattern)} in it for you, ${when}. Find it.${holeTag}`;
+    return `Look a couple of moves ahead — there's ${withArticle(pattern)} in it for you, ${when}. Find it.`;
   }
   if (isOpportunity) {
     // Every ply names its owner — "the bishop taking on c3, then the pawn to
@@ -698,7 +697,7 @@ export function speakDeepestLookahead(
     const theirs = seat === 'student' ? 'their' : 'my';
     const owned = spoken.map((m, i) => (/^the /.test(m) ? `${(i % 2 === 0) === studentOpens ? 'your' : theirs} ${m.slice(4)}` : m));
     const ownedProse = owned.length === 1 ? owned[0] : `${owned[0]}, then ${owned.slice(1).join(', ')}`;
-    return `Look a couple of moves ahead — you've got ${withArticle(pattern)} coming ${when}: ${ownedProse}.${holeTag}`;
+    return `Look a couple of moves ahead — you've got ${withArticle(pattern)} coming ${when}: ${ownedProse}.`;
   }
   // THE WARNING HOLDS THE STUDENT'S MOVES TOO (David's Smith-Morra replay
   // 2026-10-19, move 8: "Look ahead — if you play the knight to d5 … then your
@@ -709,7 +708,7 @@ export function speakDeepestLookahead(
     const theirPlies = spoken.filter((_, i) => i % 2 === 1).map((m) => (/^the /.test(m) ? `their ${m.slice(4)}` : m));
     if (!theirPlies.length) return null;
     const theirProse = theirPlies.length === 1 ? theirPlies[0] : `${theirPlies.slice(0, -1).join(', ')} and then ${theirPlies[theirPlies.length - 1]}`;
-    return `Look ahead — ${withArticle(pattern)} ${when}: ${theirProse}. Spot it before it lands.${holeTag}`;
+    return `Look ahead — ${withArticle(pattern)} ${when}: ${theirProse}. Spot it before it lands.`;
   }
   if (studentOpens && spoken.length >= 2) {
     // Every ply after the first names its owner too — "they have the knight to
@@ -719,9 +718,9 @@ export function speakDeepestLookahead(
     // The first reply is owned by the stem ("they have …"); every later ply names its owner.
     const reply = spoken.slice(1).map((m, j) => (j > 0 && /^the /.test(m) ? `${j % 2 === 0 ? theirs : 'your'} ${m.slice(4)}` : m));
     const replyProse = reply.length === 1 ? reply[0] : `${reply[0]}, then ${reply.slice(1).join(', ')}`;
-    return `${CONDITIONAL_THREAT_STEM[seat](pattern, when, spoken[0], replyProse)}${holeTag}`;
+    return CONDITIONAL_THREAT_STEM[seat](pattern, when, spoken[0], replyProse);
   }
-  return `${THREAT_STEM[seat](pattern, when, lineProse)}${holeTag}`;
+  return THREAT_STEM[seat](pattern, when, lineProse);
 }
 
 /** The threat when the STUDENT's own move opens the line: their move is the
