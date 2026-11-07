@@ -147,7 +147,7 @@ const fails = (a, r, q) => {
 };
 
 const results = [];
-const log = (sect, q, r, f) => console.log(`${f.length ? '❌' : '✅'} ${sect}/${q.id} (${r.secs}s) ${q.ask}\n   → ${r.answer.slice(0, 600)}${f.length ? `\n   ✗ ${f.join('; ')}` : ''}${r.row ? `\n   row: read=${r.row.parsedKind ?? '—'} (${r.row.parseSource ?? '—'}) served=${r.row.servedIntent ?? '—'} outcome=${r.row.outcome ?? '—'}` : '\n   row: NONE'}`);
+const log = (sect, q, r, f) => console.log(`${f.length ? '❌' : '✅'} ${sect}/${q.id} (${r.secs}s) ${q.ask}\n   → ${r.answer.slice(0, 600)}${f.length ? `\n   ✗ ${f.join('; ')}` : ''}${r.row ? `\n   row: read=${r.row.parsedKind ?? '—'} (${r.row.parseSource ?? '—'}) served=${r.row.servedIntent ?? '—'} outcome=${r.row.outcome ?? '—'}${r.row.valid === false ? ` INVALID=${r.row.invalidReason}` : ''}${r.row.referents ? ` refs=${r.row.referents}` : ''}` : '\n   row: NONE'}`);
 
 await get('/open');
 if (want('positions')) {

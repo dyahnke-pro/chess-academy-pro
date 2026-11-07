@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**655 lines · 5 exports · 18 importers · 12 tests · 0 audits**
+**660 lines · 5 exports · 18 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,28 +38,30 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/chatTurnCodeReader.test.ts:19`
 - `src/coach/chatTurnCodeReader.test.ts:22`
 - `src/coach/chatTurnCodeReader.test.ts:23`
-- `src/services/coachApi.ts:2224`
-- `src/services/whyNotLegal.ts:221`
+- `src/services/coachApi.ts:2239`
+- `src/services/whyNotLegal.ts:220`
 
 ### `pointsAtThisBoard` (function) — 1 call site
-- `src/coach/questionIntents.ts:1668`
+- `src/coach/questionIntents.ts:1691`
 
 ### `legalForOpponent` (function) — 1 call site
-- `src/coach/coachService.ts:1601`
+- `src/coach/coachService.ts:1612`
 
 ### `namedMoveTokens` (function) — 1 call site
-- `src/coach/dispatchCoachTurn.ts:379`
+- `src/coach/dispatchCoachTurn.ts:383`
 
-### `readTurnInCode` (function) — 55 call sites
+### `readTurnInCode` (function) — 57 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:63`
 - `src/coach/chatTurnAnswers.test.ts:82`
 - `src/coach/chatTurnAnswers.test.ts:103`
 - `src/coach/chatTurnCodeReader.test.ts:10`
 - `src/coach/chatTurnCodeReader.test.ts:90`
-- `src/coach/chatTurnCodeReader.test.ts:95`
 - `src/coach/chatTurnCodeReader.test.ts:96`
-- `src/coach/chatTurnCodeReader.test.ts:105`
+- `src/coach/chatTurnCodeReader.test.ts:103`
 - `src/coach/chatTurnCodeReader.test.ts:108`
+- `src/coach/chatTurnCodeReader.test.ts:109`
+- `src/coach/chatTurnCodeReader.test.ts:118`
+- `src/coach/chatTurnCodeReader.test.ts:121`
 - `src/coach/chatTurnParser.ts:185`
 - `src/coach/developNext.test.ts:24`
 - `src/coach/developNext.test.ts:26`
@@ -82,20 +84,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/handWalk1009.test.ts:124`
 - `src/coach/handWalk1009.test.ts:125`
 - `src/coach/handWalk1009.test.ts:192`
-- `src/coach/handWalk1009.test.ts:210`
-- `src/coach/handWalk1009.test.ts:231`
-- `src/coach/handWalk1009.test.ts:240`
-- `src/coach/handWalk1009.test.ts:249`
-- `src/coach/handWalk1009.test.ts:250`
-- `src/coach/handWalk1009.test.ts:270`
-- `src/coach/handWalk1009.test.ts:283`
+- `src/coach/handWalk1009.test.ts:214`
+- `src/coach/handWalk1009.test.ts:235`
+- `src/coach/handWalk1009.test.ts:244`
+- `src/coach/handWalk1009.test.ts:253`
+- `src/coach/handWalk1009.test.ts:254`
+- `src/coach/handWalk1009.test.ts:274`
 - `src/coach/handWalk1009.test.ts:287`
-- `src/coach/handWalk1009.test.ts:304`
-- `src/coach/handWalk1009.test.ts:307`
-- `src/coach/handWalk1009.test.ts:329`
+- `src/coach/handWalk1009.test.ts:291`
+- `src/coach/handWalk1009.test.ts:308`
+- `src/coach/handWalk1009.test.ts:311`
 - `src/coach/handWalk1009.test.ts:333`
-- `src/coach/handWalk1009.test.ts:336`
-- `src/coach/handWalk1009.test.ts:355`
+- `src/coach/handWalk1009.test.ts:337`
+- `src/coach/handWalk1009.test.ts:340`
+- `src/coach/handWalk1009.test.ts:359`
 - `src/coach/hardQuestions.routing.test.ts:29`
 - `src/coach/hardQuestions.routing.test.ts:36`
 - `src/coach/hardQuestions.routing.test.ts:44`

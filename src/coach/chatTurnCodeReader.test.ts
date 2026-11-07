@@ -84,6 +84,19 @@ describe('the best-move question is read in code (all-screens walk 2026-10-09: 1
   });
 });
 
+describe('"explain that" points at the coach\'s last line (hard-chat prod audit 2026-11-07)', () => {
+  const said = "The engine's main line: you play Ng5 and, two moves later, you play Qxg7#. After it, it's mate in 3 moves — you win.";
+  it.each(['explain that', 'Explain that.', 'can you explain that?', 'explain it again', 'walk me through that line', 'explain the move'])('%s', (q) => {
+    expect(readTurnInCode(q, { fen: ITALIAN, history: ITALIAN_HISTORY, studentColor: 'white', lastCoachLine: said })?.kind).toBe('explain-last');
+  });
+  it('with nothing said yet it stays with the model', () => {
+    expect(read('explain that')?.kind).not.toBe('explain-last');
+  });
+  it('a named idea is still a concept question', () => {
+    expect(readTurnInCode('explain the bishop pair', { fen: ITALIAN, history: ITALIAN_HISTORY, studentColor: 'white', lastCoachLine: said })?.kind).not.toBe('explain-last');
+  });
+});
+
 describe('the engine\'s main line, asked for without naming a move (escalating walk 2026-10-17)', () => {
   const board = { fen: '4k3/8/8/3n4/8/8/P7/3QK3 w - - 0 1', history: [], studentColor: 'white' as const };
   it('reads "calculate the main line six moves deep" as the line computer, twelve plies', () => {

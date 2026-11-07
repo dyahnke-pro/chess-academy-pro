@@ -321,7 +321,12 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
   const followUp = text.trim().toLowerCase();
   if (board.lastCoachLine && (/^(?:[a-z']+\s+){0,2}what\s*\?*$/.test(followUp)
     || /^(?:huh|how so|why|meaning)\s*\?*$/.test(followUp)
-    || /\bwhat do you mean\b|\bwhat does that mean\b|\bi don'?t (?:get|understand) (?:it|that)\b/.test(followUp))) {
+    || /\bwhat do you mean\b|\bwhat does that mean\b|\bi don'?t (?:get|understand) (?:it|that)\b/.test(followUp)
+    // "explain that" names nothing but the line just said (hard-chat prod
+    // audit 2026-11-07: read by the model only, it lost the 1.5 s race to the
+    // keyword path, which took "explain" for a concept and said "There is no
+    // lesson on that idea yet" right after a mate in three).
+    || /^(?:(?:can|could|would) you |please )?(?:explain|go through|walk me through|break down) (?:that|it|this|the line|that line|that move|the move|why)(?: (?:again|more|for me|please|move by move))*\s*[?.!]*$/.test(followUp))) {
     return { kind: 'explain-last', referents: [], seat: null, topic: null };
   }
   // "What's the best move here?" / "what should I play?" / "best move?" —

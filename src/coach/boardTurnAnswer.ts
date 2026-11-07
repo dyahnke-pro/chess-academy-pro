@@ -431,7 +431,14 @@ export async function lineOutcomeAnswer(turn: ResolvedChatTurn, board: BoardTurn
     const w = fromHere ? walkableLine(line.startFen, line.sans, line.sans[0]) : null;
     if (w && out) out.lines = [w];
     const winner = end.turn() === me ? 'they' : 'you';
-    return `${lead}, it's mate — ${winner} win.`;
+    // THE ENGINE'S LINE IS FORCED, SO ITS MATE IS COUNTED (hard-chat prod
+    // audit 2026-11-07: "What is the best move? Calculate the main line" said
+    // "you play Ng5 and, two moves later, you play Qxg7#. After it, it's mate"
+    // — the count the question asked for was never said). A line the student
+    // named is theirs, not forced: its mate is said, not counted.
+    const matingMoves = Math.ceil(line.sans.length / 2);
+    const counted = mainLine && line.sans.length % 2 === 1 && matingMoves > 1;
+    return `${lead}, it's mate${counted ? ` in ${matingMoves} moves` : ''} — ${winner} win.`;
   }
   if (end.isStalemate()) return `${lead}, it's stalemate — a draw.`;
   const before = settledLeadFor(line.startFen, me, null);

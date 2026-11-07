@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**721 lines · 14 exports · 24 importers · 19 tests · 1 audits**
+**724 lines · 14 exports · 24 importers · 19 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,18 +39,20 @@
 
 ## Exports and every call site
 
-### `setServeParsedRoute` (function) — 9 call sites
+### `setServeParsedRoute` (function) — 11 call sites
 - `src/coach/dispatchCoachTurn.test.ts:95`
 - `src/coach/dispatchCoachTurn.test.ts:177`
 - `src/coach/dispatchCoachTurn.test.ts:186`
 - `src/coach/dispatchCoachTurn.test.ts:194`
 - `src/coach/dispatchCoachTurn.test.ts:206`
 - `src/coach/dispatchCoachTurn.test.ts:209`
-- `src/coach/dispatchCoachTurn.test.ts:229`
-- `src/coach/dispatchCoachTurn.test.ts:231`
-- `src/coach/dispatchCoachTurn.test.ts:239`
+- `src/coach/dispatchCoachTurn.test.ts:218`
+- `src/coach/dispatchCoachTurn.test.ts:225`
+- `src/coach/dispatchCoachTurn.test.ts:245`
+- `src/coach/dispatchCoachTurn.test.ts:247`
+- `src/coach/dispatchCoachTurn.test.ts:255`
 
-### `setChatTurnReaderForTests` (function) — 47 call sites
+### `setChatTurnReaderForTests` (function) — 49 call sites
 - `src/coach/chatKindContracts.test.ts:341`
 - `src/coach/chatKindContracts.test.ts:391`
 - `src/coach/chatKindContracts.test.ts:416`
@@ -93,13 +95,15 @@
 - `src/coach/dispatchCoachTurn.test.ts:189`
 - `src/coach/dispatchCoachTurn.test.ts:196`
 - `src/coach/dispatchCoachTurn.test.ts:207`
-- `src/coach/dispatchCoachTurn.test.ts:225`
+- `src/coach/dispatchCoachTurn.test.ts:219`
+- `src/coach/dispatchCoachTurn.test.ts:223`
+- `src/coach/dispatchCoachTurn.test.ts:241`
 - `src/coach/requestExecutor.test.ts:56`
 - `src/coach/requestExecutor.test.ts:59`
 - `src/components/Coach/GameChatPanel.test.tsx:287`
 - `src/components/Coach/GameChatPanel.test.tsx:295`
 
-### `resetConversations` (function) — 10 call sites
+### `resetConversations` (function) — 11 call sites
 - `src/coach/chatKindContracts.test.ts:339`
 - `src/coach/dispatchCoachTurn.eachPiece.test.ts:19`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:14`
@@ -108,7 +112,8 @@
 - `src/coach/dispatchCoachTurn.showLine.test.ts:22`
 - `src/coach/dispatchCoachTurn.test.ts:94`
 - `src/coach/dispatchCoachTurn.test.ts:204`
-- `src/coach/dispatchCoachTurn.test.ts:222`
+- `src/coach/dispatchCoachTurn.test.ts:216`
+- `src/coach/dispatchCoachTurn.test.ts:238`
 - `src/coach/requestExecutor.test.ts:53`
 
 ### `lastLineFor` (function) — 2 call sites
@@ -140,8 +145,8 @@
 
 ### `setPendingOffer` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:3998`
-- `src/components/Coach/CoachTeachPage.tsx:13599`
-- `src/components/Coach/CoachTeachPage.tsx:15768`
+- `src/components/Coach/CoachTeachPage.tsx:13603`
+- `src/components/Coach/CoachTeachPage.tsx:15772`
 
 ### `openTurnRead` (function) — 2 call sites
 - `src/components/Coach/CoachTeachPage.tsx:4064`
@@ -150,7 +155,7 @@
 ### `isComputedAnswer` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:8076`
 
-### `dispatchCoachTurn` (function) — 50 call sites
+### `dispatchCoachTurn` (function) — 52 call sites
 - `src/coach/chatKindContracts.test.ts:393`
 - `src/coach/chatKindContracts.test.ts:417`
 - `src/coach/chatKindContracts.test.ts:422`
@@ -186,8 +191,10 @@
 - `src/coach/dispatchCoachTurn.test.ts:190`
 - `src/coach/dispatchCoachTurn.test.ts:197`
 - `src/coach/dispatchCoachTurn.test.ts:208`
-- `src/coach/dispatchCoachTurn.test.ts:230`
-- `src/coach/dispatchCoachTurn.test.ts:240`
+- `src/coach/dispatchCoachTurn.test.ts:220`
+- `src/coach/dispatchCoachTurn.test.ts:224`
+- `src/coach/dispatchCoachTurn.test.ts:246`
+- `src/coach/dispatchCoachTurn.test.ts:256`
 - `src/coach/requestExecutor.test.ts:60`
 - `src/components/Board/BoardQuestionBox.tsx:67`
 - `src/components/Board/VoiceChatMic.tsx:484`

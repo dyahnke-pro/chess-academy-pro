@@ -52,6 +52,23 @@ describe('a named line', () => {
   });
 });
 
+describe("the engine's main line counts its mate (hard-chat prod audit 2026-11-07)", () => {
+  it('"calculate the main line" on a mate in 3 says mate in 3 moves', async () => {
+    // Puzzle 0Cjqs: Ng5 Be8 Nxe6+ Kg8 Qxg7#.
+    const FEN = 'r2q1k1r/1pp1b1p1/p1b1pnQ1/8/3P4/P3PN2/1P4PP/RN3RK1 w - - 1 16';
+    const { Chess } = await import('chess.js');
+    const c = new Chess(FEN);
+    const pv: string[] = [];
+    for (const san of ['Ng5', 'Be8', 'Nxe6+', 'Kg8', 'Qxg7#']) { const m = c.move(san); pv.push(m.from + m.to); }
+    setBoardEngineForTests({
+      analysis: async () => ({ topLines: [{ rank: 1, evaluation: null, mate: 3, moves: pv }], evaluation: null, isMate: false, mateIn: 3, depth: 20, seldepth: 20, wdl: null }) as never,
+      candidate: async () => null,
+    });
+    const text = await lineOutcomeAnswer({ kind: 'line-outcome', referents: [], seat: null, topic: 'main-line:12' }, board(FEN));
+    expect(text).toMatch(/it's mate in 3 moves — you win\.$/);
+  });
+});
+
 describe('the board walks only a line that starts on it (re-walk 2026-10-11)', () => {
   it('"c5 then dxc5" on White\'s turn is said, never handed to the board', async () => {
     setBoardEngineForTests({ analysis: async () => null, candidate: async () => null });

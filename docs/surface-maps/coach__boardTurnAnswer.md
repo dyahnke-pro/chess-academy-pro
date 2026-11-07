@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**460 lines · 6 exports · 9 importers · 9 tests · 0 audits**
+**467 lines · 6 exports · 9 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `BOARD_ANSWERED_KINDS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setBoardEngineForTests` (function) — 21 call sites
+### `setBoardEngineForTests` (function) — 22 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:13`
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:18`
 - `src/coach/boardTurnAnswer.planOrder.test.ts:18`
@@ -48,7 +48,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.showLine.test.ts:105`
 - `src/coach/lineOutcome.test.ts:16`
 - `src/coach/lineOutcome.test.ts:33`
-- `src/coach/lineOutcome.test.ts:57`
+- `src/coach/lineOutcome.test.ts:63`
+- `src/coach/lineOutcome.test.ts:74`
 
 ### `answerBoardTurn` (function) — 17 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:30`
@@ -66,8 +67,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/boardTurnAnswer.test.ts:72`
 - `src/coach/boardTurnAnswer.test.ts:78`
 - `src/coach/boardTurnAnswer.test.ts:82`
-- `src/coach/dispatchCoachTurn.ts:551`
-- `src/coach/dispatchCoachTurn.ts:605`
+- `src/coach/dispatchCoachTurn.ts:563`
+- `src/coach/dispatchCoachTurn.ts:617`
 
 ### `theirPlanAnswer` (function) — 1 call site
 - `src/coach/handWalk1009.test.ts:65`
@@ -77,11 +78,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/developNext.test.ts:57`
 - `src/coach/developNext.test.ts:68`
 
-### `lineOutcomeAnswer` (function) — 4 call sites
-- `src/coach/dispatchCoachTurn.ts:383`
+### `lineOutcomeAnswer` (function) — 5 call sites
+- `src/coach/dispatchCoachTurn.ts:387`
 - `src/coach/lineOutcome.test.ts:43`
 - `src/coach/lineOutcome.test.ts:50`
-- `src/coach/lineOutcome.test.ts:59`
+- `src/coach/lineOutcome.test.ts:67`
+- `src/coach/lineOutcome.test.ts:76`
 
 ## Tests
 

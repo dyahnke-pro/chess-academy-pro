@@ -150,7 +150,10 @@ function boardOf(input: CoachAskInput): BoardContext {
     history: ls.moveHistory,
     studentColor: ls.studentColor,
     lastStudentAttempt: ls.lastStudentAttempt,
-    lastCoachLine: ls.lastCoachLine,
+    // The line "explain that" points at: the surface's own, else what the door
+    // last said here — the explain screen passes none (hard-chat prod audit
+    // 2026-11-07), and the reader read "explain that" without it.
+    lastCoachLine: ls.lastCoachLine ?? lastSaid.get(ls.surface),
   };
 }
 

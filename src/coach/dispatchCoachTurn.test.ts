@@ -212,6 +212,22 @@ describe('dispatchCoachTurn — "explain that" with nothing said yet', () => {
   });
 });
 
+describe('dispatchCoachTurn — "explain that" on a screen that passes no last line (hard-chat prod audit 2026-11-07)', () => {
+  beforeEach(() => { ask.mockReset(); resetConversations(); routeChatIntent.mockResolvedValue(null); });
+  it('is read in code from what the door last said — never the concept lane, never the brain', async () => {
+    setServeParsedRoute(true);
+    setChatTurnReaderForTests(async () => ({ kind: 'count-defenders', referents: [{ type: 'square', square: 'c6' }], seat: 'them', english: 'how many defend c6' }));
+    const first = await dispatchCoachTurn(TURN('how many defend c6'), {});
+    expect(first.servedIntent).toBe('count-defenders');
+    // The model is slow: past the read budget it never lands.
+    setChatTurnReaderForTests(() => new Promise(() => { /* never */ }));
+    const ans = await dispatchCoachTurn(TURN('explain that'), {});
+    setServeParsedRoute(false);
+    expect(ask).not.toHaveBeenCalled();
+    expect(ans.servedIntent).toMatch(/^explain-last/);
+  });
+});
+
 describe('dispatchCoachTurn — a direct kind is answered by its computed sentence', () => {
   beforeEach(() => {
     routeChatIntent.mockReset();
