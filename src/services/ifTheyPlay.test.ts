@@ -125,7 +125,9 @@ describe('the one registry', () => {
     const facts = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'c8e6', tense: 'past', liveBoard: live.fen() });
     const came = facts.find((f) => f.namesStudentMove);
     expect(came?.text).toContain('f5 wins a bishop');
-    expect(came?.heldForm?.text).toBe('After their move you have a strong answer here.');
+    // What the answer does, never the move (prod focus audit 2026-11-07:
+    // "you have a strong answer here" said nothing).
+    expect(came?.heldForm?.text).toBe('After their move, one move of yours wins material here — find it.');
     expect(came?.heldForm?.text).not.toMatch(/[a-h][1-8]/);
   });
 });

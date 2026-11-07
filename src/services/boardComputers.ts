@@ -56,6 +56,7 @@ import { castleByHandMove, kingFromCentre, keptHome, kingSquares } from './kingW
 import { knownSlip, type KnownSlipContext } from './knownSlips';
 import { ifTheyPlay, treeSentence, sayable, baitBranch, baitSentence, type ReplyRead, type ReplyBranch, type TreeTense } from './ifTheyPlay';
 import { mateStakes } from './factStakes';
+import { MOTIF_OF_TACTIC, MOTIFS } from '../data/tacticMotifs';
 import { temptingRefuted, alsoGood, squareChoice, type WeighRead } from './weighedMoves';
 import { costStakes } from './factStakes';
 import { pawnBreak } from './pawnBreak';
@@ -779,13 +780,18 @@ export const BOARD_COMPUTERS = {
       if (came) {
         const live = treeSentence(t, [{ ...came, played: false }], c.student, 'live');
         const key = `reply-tree:came:${came.reply.uci}>${came.answer.uci}`;
-        const heldText = came.reply.capture ? 'They took — and you have a strong answer here.' : 'After their move you have a strong answer here.';
+        // What the answer DOES, never the move or its square, pointing at the
+        // motif's own skill so the record decides whether it is said
+        // (`HeldForm.points`). "You have a strong answer here" said nothing
+        // (prod focus audit 2026-11-07).
+        const answerMotif = came.kind === 'mate' ? 'mate' : came.motif ? MOTIF_OF_TACTIC[came.motif] ?? null : null;
+        const heldText = `${came.reply.capture ? 'They took' : 'After their move'}, one move of yours ${came.kind === 'mate' ? 'starts a mate' : 'wins material'} here — find it.`;
         if (live) {
           out.push(fact({
             key, claims: [key], text: live, proof: legalLineProof(c.fen, came.uci, first) ?? NO_PROOF.description,
             squares: [came.reply.to, came.answer.to], stakes: stakesOfBranches([came]),
             seat, namesStudentMove: true, thread: LOCAL_THREAD, fen: c.fen,
-            heldForm: { text: heldText, proof: NO_PROOF.withheld, squares: [came.reply.to] },
+            heldForm: { text: heldText, proof: NO_PROOF.withheld, squares: [came.reply.to], ...(answerMotif ? { points: MOTIFS[answerMotif].yours } : {}) },
           }));
         }
       }
