@@ -196,6 +196,10 @@ export interface CapabilityEvidenceRecord {
   sourceGameId?: string;
   /** The student took this move back (Learn): still a slip on the record, marked so an exploration reads apart from a move they kept. */
   takenBack?: true;
+  /** See `MisconceptionTagRecord.ownTakeback` / `hinted`: the student's own
+   *  Takeback weighs a miss half, unless they then pressed Hint there. */
+  ownTakeback?: true;
+  hinted?: true;
   /** The coach steered the game into this question (a Learn focus game). A
    *  steered HOLD counts half in the hold rate; a steered miss counts in full. */
   steered?: true;
@@ -614,8 +618,20 @@ export interface CapabilityMoveArgs {
 export async function markEvidenceTakenBack(gameId: string, fen: string, playedSan: string): Promise<number> {
   const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
   const rows = (await db.capabilityEvidence.where('sourceGameId').equals(gameId).toArray())
-    .filter((r) => key(r.fen) === key(fen) && r.playedSan === playedSan && !r.takenBack);
-  for (const r of rows) await db.capabilityEvidence.update(r.id, { takenBack: true });
+    .filter((r) => key(r.fen) === key(fen) && r.playedSan === playedSan && !r.ownTakeback);
+  for (const r of rows) await db.capabilityEvidence.update(r.id, { takenBack: true, ownTakeback: true });
+  if (rows.length > 0) emitWeaknessModelChanged();
+  return rows.length;
+}
+
+/** After their own takeback the student pressed Hint at that board: the
+ *  miss on the record weighs in full again. Returns how many rows. */
+export async function markEvidenceHinted(gameId: string, fen: string, playedSan: string): Promise<number> {
+  const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+  const rows = (await db.capabilityEvidence.where('sourceGameId').equals(gameId).toArray())
+    .filter((r) => key(r.fen) === key(fen) && r.playedSan === playedSan && r.ownTakeback && !r.hinted);
+  for (const r of rows) await db.capabilityEvidence.update(r.id, { hinted: true });
+  if (rows.length > 0) emitWeaknessModelChanged();
   return rows.length;
 }
 
@@ -685,6 +701,8 @@ export async function recordCapabilityEvidence(args: CapabilityMoveArgs & {
   prompted: boolean;
   sourceGameId?: string;
   takenBack?: boolean;
+  /** Taken back by the student's own Takeback (`CapabilityEvidenceRecord.ownTakeback`). */
+  ownTakeback?: boolean;
   /** See `CapabilityEvidenceRecord.steered`. */
   steered?: boolean;
   /** When the move was PLAYED, for evidence read from a past game (its date).
@@ -707,6 +725,7 @@ export async function recordCapabilityEvidence(args: CapabilityMoveArgs & {
       prompted: args.prompted,
       ...(args.sourceGameId ? { sourceGameId: args.sourceGameId } : {}),
       ...(args.takenBack ? { takenBack: true as const } : {}),
+      ...(args.ownTakeback ? { ownTakeback: true as const } : {}),
       ...(args.steered ? { steered: true as const } : {}),
     }));
     await db.capabilityEvidence.bulkAdd(rows);

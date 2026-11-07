@@ -1,10 +1,10 @@
 /**
- * A MISS THE COACH STOPPED, TAKEN BACK, STILL GOES TO THE PUZZLES (David
- * 2026-10-23: "If the user missed it the first time in the game it should go to
- * puzzles" → "Taken back moves should still generate puzzles. But not all undo
- * moves get puzzles. There is a distinction" → the coach flagged it and the
- * student took it back = a puzzle; the student's own Takeback = not; never an
- * inaccuracy).
+ * A MISS TAKEN BACK STILL GOES TO THE PUZZLES (David 2026-10-23: "If the user
+ * missed it the first time in the game it should go to puzzles" → 2026-11-07,
+ * the student's own Takeback too: "A move you took back yourself with the
+ * Takeback button — this one I think should"). The coach's rewind (Try again,
+ * Go back and castle) files through the runners' hooks; the student's own
+ * Takeback through `discussionPractice.takeBackOwnMove`. Never an inaccuracy.
  *
  * Neither puzzle writer could see it. The game record never holds a move that
  * was taken back, so the end-of-game analysis does not; and a move the coach
@@ -74,7 +74,7 @@ function sanLine(fen: string, ucis: readonly string[] | undefined, max: number):
 
 /** THE ONE DOOR the runners' hooks call (`useFocusRunner` on its
  *  `taken-back` effect, `useMissionRunner` on Try again's undo — never a
- *  surface, never the student's own Takeback): the board, the move and the
+ *  surface, or the student's own Takeback): the board, the move and the
  *  game; the phase and the move number are read off the board. */
 export function fileTakenBack(fenBefore: string, playedSan: string, gameId: string | null, spot: string | null): void {
   const fullMove = Number(fenBefore.split(' ')[5]) || 1;

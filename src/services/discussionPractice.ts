@@ -19,12 +19,13 @@ import {
   type ClassifyMisconceptionInput,
   type MisconceptionClassification,
 } from './misconceptionClassifier';
-import { logMisconception, markSlipTakenBack } from './misconceptionService';
+import { logMisconception, markSlipHinted, markSlipTakenBack } from './misconceptionService';
 import { recordMoveQuestionAnswer } from './answerRecord';
-import { addMistakePuzzleFromCapture, provenanceForGameId, withdrawTakenBackPuzzles } from './mistakePuzzleService';
+import { addMistakePuzzleFromCapture, provenanceForGameId } from './mistakePuzzleService';
+import { fileTakenBack } from './takenBackPuzzles';
 import { pvUciToSan } from './principleAttribution';
 import type { MisconceptionSource, MisconceptionTagRecord } from '../types';
-import { markEvidenceTakenBack, recordCapabilityEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
+import { markEvidenceHinted, markEvidenceTakenBack, recordCapabilityEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
 import { positionPosed } from './moveInsight';
 import { withArticle } from '../utils/andList';
 
@@ -332,6 +333,7 @@ export async function captureMisconception(
     sourceGameId: args.context.sourceGameId,
     ...(args.context.playedAt !== undefined ? { playedAt: args.context.playedAt } : {}),
     takenBack: args.context.takenBack || ownTakenBack(args.context.sourceGameId, args.context.fen, args.context.playedSan),
+    ownTakeback: ownTakenBack(args.context.sourceGameId, args.context.fen, args.context.playedSan),
     prompted: args.context.prompted,
     counted: args.shouldCount,
     attributionPending: args.attributionPending,
@@ -385,19 +387,33 @@ function ownTakenBack(gameId: string | undefined, fen: string | undefined, playe
   return !!gameId && !!fen && !!playedSan && OWN_TAKEN_BACK.has(takenBackKey(gameId, fen, playedSan));
 }
 
-/** THE STUDENT TOOK A MOVE BACK THEMSELVES after its live grade (the bar's
- *  Takeback, "take that back" in chat): the same answer as a move taken back
- *  before the grade — the slip and the evidence stay on the record marked
- *  taken back, and its live puzzle is withdrawn (David 2026-10-23: your own
- *  Takeback never makes a puzzle). This game, this board, this move only. */
-export async function withdrawTakenBackSlip(args: { gameId: string; fen: string; playedSan: string }): Promise<{ puzzles: number; slips: number; evidence: number }> {
+/** THE STUDENT TOOK A MOVE BACK THEMSELVES (the bar's Takeback, "take that
+ *  back" in chat), before or after its live grade. The slip and the evidence
+ *  stay on the record marked as their own takeback, which weighs the miss
+ *  half in the hold rate until they press Hint at that board
+ *  (`takebackHinted`); and a mistake or worse still goes to the puzzles,
+ *  graded at the one price through the taken-back door (David 2026-11-07: "A
+ *  move you took back yourself with the Takeback button — this one I think
+ *  should" → "weighted 0.5 if back button is pressed and full weight if back
+ *  and hint are pressed"). This game, this board, this move only. */
+export async function takeBackOwnMove(args: { gameId: string; fen: string; playedSan: string }): Promise<{ slips: number; evidence: number }> {
   OWN_TAKEN_BACK.add(takenBackKey(args.gameId, args.fen, args.playedSan));
-  const [puzzles, slips, evidence] = await Promise.all([
-    withdrawTakenBackPuzzles(args.gameId, args.fen, args.playedSan),
+  fileTakenBack(args.fen, args.playedSan, args.gameId, null);
+  const [slips, evidence] = await Promise.all([
     markSlipTakenBack(args.gameId, args.fen, args.playedSan),
     markEvidenceTakenBack(args.gameId, args.fen, args.playedSan),
   ]);
-  return { puzzles, slips, evidence };
+  return { slips, evidence };
+}
+
+/** After their own takeback the student pressed Hint at that board: the miss
+ *  weighs in full again. */
+export async function takebackHinted(args: { gameId: string; fen: string; playedSan: string }): Promise<{ slips: number; evidence: number }> {
+  const [slips, evidence] = await Promise.all([
+    markSlipHinted(args.gameId, args.fen, args.playedSan),
+    markEvidenceHinted(args.gameId, args.fen, args.playedSan),
+  ]);
+  return { slips, evidence };
 }
 
 /** Where a piece of capability evidence was gathered. Re-exported here so a
@@ -486,6 +502,7 @@ export async function recordMoveEvidence(args: {
   return recordCapabilityEvidence({
     ...rest,
     takenBack: rest.takenBack || ownTakenBack(rest.sourceGameId, rest.fenBefore, rest.playedSan),
+    ownTakeback: ownTakenBack(rest.sourceGameId, rest.fenBefore, rest.playedSan),
     ...(bestSan ? { bestSan } : {}),
     ...(line ? { shotLine: line } : {}),
     alsoPosed: positionPosed(args.fenBefore, { bestSan, ...(line ? { bestLine: line } : {}) }),

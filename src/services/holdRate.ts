@@ -11,7 +11,9 @@
 // row, and a recorded slip. ONE MOVE POSES A SKILL ONCE, whichever writers saw
 // it (WO-LEARN-FOCUS-01): every row and slip of one game + board + skill is ONE
 // event — a miss if any of them missed, steered if any was. An inaccuracy slip
-// is half a miss (`slipWeight`, David's locked rule). Events run in the order
+// is half a miss (`slipWeight`, David's locked rule), and so is a miss the
+// student took back with their own Takeback, unless they then pressed Hint at
+// that board (`takebackWeight`, David 2026-11-07). Events run in the order
 // they were PLAYED: evidence is dated by its game, a slip by its game's
 // `playedAt` (a live slip's `createdAt` is the moment it happened).
 //
@@ -30,7 +32,7 @@
 // `capabilityProven`. There is no second definition.
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
 import type { MisconceptionTagRecord } from '../types';
-import { slipWeight } from './misconceptionService';
+import { slipWeight, takebackWeight } from './misconceptionService';
 import { isFixtureDerived } from './fixtureGames';
 import { plyOfFen } from '../utils/plyOfFen';
 
@@ -78,6 +80,10 @@ interface PosedRow {
   sourceGameId?: string;
   /** The coach steered the game into this question (`CapabilityEvidenceRecord.steered`). */
   steered?: true;
+  /** The student's own takeback, and Hint pressed after it
+   *  (`CapabilityEvidenceRecord.ownTakeback` / `hinted`). */
+  ownTakeback?: true;
+  hinted?: true;
 }
 
 /** Rows that are not a game slip: a lesson tap is the KNOW reading, and a
@@ -137,7 +143,7 @@ export function holdRecords(
   for (const r of rows) {
     if (r.tag === 'other') continue;
     push(r.tag, r.sourceGameId ? moveKey(r.tag, r.sourceGameId, r.fen) : null,
-      { held: r.outcome === 'held', miss: r.outcome === 'held' ? 0 : 1, steered: !!r.steered, time: r.recordedAt, ply: plyOfFen(r.fen) });
+      { held: r.outcome === 'held', miss: r.outcome === 'held' ? 0 : takebackWeight(r), steered: !!r.steered, time: r.recordedAt, ply: plyOfFen(r.fen) });
   }
   for (const r of slips) {
     if (!isGameSlip(r) || r.prompted) continue;

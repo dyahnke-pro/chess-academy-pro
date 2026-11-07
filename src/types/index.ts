@@ -1827,6 +1827,14 @@ export interface MisconceptionTagRecord {
   playedAt?: number;
   /** The student took this move back (Learn): still a slip on the record, marked so an exploration reads apart from a move they kept. */
   takenBack?: true;
+  /** Taken back by the STUDENT'S OWN Takeback (the bar's button, "take that
+   *  back"), never the coach's rewind: the miss weighs half in the hold rate
+   *  unless they then pressed Hint at that board (`hinted`) — David
+   *  2026-11-07: "weighted 0.5 if back button is pressed and full weight if
+   *  back and hint are pressed". */
+  ownTakeback?: true;
+  /** After their own takeback, the student pressed Hint at the same board. */
+  hinted?: true;
   /** The coach told the student this moment before they moved (a Learn
    *  announcement or a focus question — `GameRecord.promptedPlies`). Still a
    *  real mistake for the drill queue; NOT a measurement: the hold rate skips

@@ -291,21 +291,27 @@ chance for the user to find the focus."
 - **SCORING IS SYMMETRIC.** A prompted chance counts neither way; one move
   poses a skill once across every writer; a steered or planted hold counts
   half, a miss there in full.
-- **A MISS THE COACH STOPPED AND YOU TOOK BACK IS STILL A PUZZLE** (David
-  2026-10-23: "If the user missed it the first time in the game it should go to
-  puzzles" → "not all undo moves get puzzles"). Try again, "want it back?", Go
+- **A MISS TAKEN BACK IS STILL A PUZZLE — THE COACH'S REWIND AND YOUR OWN
+  TAKEBACK ALIKE** (David 2026-10-23: "If the user missed it the first time in
+  the game it should go to puzzles" → 2026-11-07: "A move you took back
+  yourself with the Takeback button — this one I think should … weighted 0.5
+  if back button is pressed and full weight if back and hint are pressed").
+  🔴 This REPLACES "never your own Takeback (… a puzzle already filed is
+  withdrawn)", DELETED (the Lake Butler rule). Try again, "want it back?", Go
   back and castle, and the Campaign's Try again hand the move to one door
-  (`takenBackPuzzles.fileTakenBack`, called by the runners' hooks — the page
-  holds no copy): a move the coach stops never reaches
-  Learn's grader, so it is graded there (the one price + `detectSlip`) for the
-  PUZZLE only — nothing else recorded, no skill counted twice — and filed to My
-  Mistakes when it is a mistake or worse. Never an inaccuracy; never your own
-  Takeback (the bar's button, "take that back" in chat — marked exactly by
-  the move's serial, and a puzzle already filed is withdrawn). One puzzle per
-  position per game, the end-of-game analysis included. Every take-back logs
-  its verdict (`taken-back-puzzle`: filed / duplicate / not a mistake / …,
-  with the evals); audit F18 asserts on THAT, never a second engine's cost.
-  Gate: `learnFocusWiring.gate`.
+  (`takenBackPuzzles.fileTakenBack`, called by the runners' hooks); the bar's
+  Takeback and "take that back" in chat hand it to the same door through
+  `discussionPractice.takeBackOwnMove` — the page holds no copy. A taken-back
+  move never reaches the end-of-game analysis, so it is graded there (the one
+  price + `detectSlip`) for the PUZZLE only and filed to My Mistakes when it
+  is a mistake or worse; never an inaccuracy. Your own Takeback marks the
+  move's slip and evidence `ownTakeback`, and the hold rate weighs that miss
+  HALF (`takebackWeight`) until you press Hint at that board (`hinted`, full
+  again); the coach's rewind keeps its full weight. One puzzle per position
+  per game, the end-of-game analysis included. Every take-back logs its
+  verdict (`taken-back-puzzle`: filed / duplicate / not a mistake / …, with
+  the evals); audit F18 asserts on THAT, never a second engine's cost. Gates:
+  `learnFocusWiring.gate`, `ownTakeback.test.ts`.
 - **THE RECORD:** each answer through the lane-evidence door (`lane: 'focus'`);
   a game's `steeredPlies` and `promptedPlies` on the game; one
   `learnFocusResults` row per game (Dexie v45, in the backup and the data

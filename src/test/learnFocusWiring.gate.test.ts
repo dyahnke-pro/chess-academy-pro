@@ -71,7 +71,7 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
     expect(PAGE.match(/learnRecordOf\((game|g), /g)?.length).toBe(3);
   });
 
-  it('a miss the COACH stopped and took back is filed to the puzzles; the student\'s own Takeback never is (David 2026-10-23)', () => {
+  it('a miss taken back is filed to the puzzles through the one door: the coach\'s rewind by the runners\' hooks, the student\'s own Takeback by the own-takeback door (David 2026-10-23 → 2026-11-07)', () => {
     // The runners' hooks file it — the focus on its `taken-back` effect (Try
     // again, "want it back?", Go back and castle), the mission on Try again's
     // undo — through the one door. The page holds no copy, so its Takeback (the
@@ -81,6 +81,9 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
     expect(FOCUS_HOOK).toMatch(/case 'taken-back': fileTakenBack\(e\.fen, e\.san, h\.gameId\(\), e\.spot\); break;/);
     expect(MISSION_HOOK).toMatch(/case 'undo': \{[\s\S]*?if \(held\) fileTakenBack\(held\.fenBefore, held\.san, h\.gameId\(\), null\);[\s\S]*?h\.undo\(\);/);
     expect(PAGE).not.toMatch(/takenBackPuzzles|fileTakenBack/);
+    const DOOR = strip(readFileSync(resolve(__dirname, '../services/discussionPractice.ts'), 'utf8'));
+    const own = DOOR.slice(DOOR.indexOf('export async function takeBackOwnMove'));
+    expect(own.slice(0, own.indexOf('\n}\n'))).toMatch(/fileTakenBack\(args\.fen, args\.playedSan, args\.gameId, null\)/);
   });
 });
 

@@ -1909,7 +1909,7 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   grades it (a stopped move never reaches Learn's grader — the board holds
   before the grade is scheduled) with the one price + `detectSlip`, for the
   puzzle only, and files a mistake or worse to My Mistakes; never an
-  inaccuracy, never your own Takeback; one puzzle per position per game (the
+  inaccuracy (your own Takeback files one too since 2026-11-07, its miss half-weight until Hint); one puzzle per position per game (the
   end-of-game analysis too). Found on the way: the record row's `takenBack`
   flag is a 6-s snapshot (a Try again after 6 s reads false) and NOTHING reads
   it — left as is, reported to David.

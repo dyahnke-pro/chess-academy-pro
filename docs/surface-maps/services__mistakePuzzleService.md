@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1645 lines · 24 exports · 36 importers · 25 tests · 5 audits**
+**1631 lines · 23 exports · 36 importers · 25 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6880) — names `gradeMistakePuzzle`
+- **The standard post-deploy ritual** (CLAUDE.md:6886) — names `gradeMistakePuzzle`
 
 ## Who calls in
 
@@ -81,7 +81,7 @@
 - `src/services/mistakeProvenance.test.ts:87`
 
 ### `provenanceForGameId` (function) — 5 call sites
-- `src/services/discussionPractice.ts:357`
+- `src/services/discussionPractice.ts:359`
 - `src/services/mistakeProvenance.test.ts:97`
 - `src/services/mistakeProvenance.test.ts:103`
 - `src/services/mistakeProvenance.test.ts:106`
@@ -103,14 +103,14 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:8597`
-- `src/components/Coach/CoachTeachPage.tsx:8621`
+- `src/components/Coach/CoachTeachPage.tsx:8603`
+- `src/components/Coach/CoachTeachPage.tsx:8627`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
 - `src/hooks/useAcceptableMoves.ts:88`
-- `src/hooks/useDiscussionPractice.ts:285`
-- `src/hooks/useDiscussionPractice.ts:471`
+- `src/hooks/useDiscussionPractice.ts:288`
+- `src/hooks/useDiscussionPractice.ts:474`
 - `src/services/autoAnalyzeGame.ts:453`
 - `src/services/autoAnalyzeGame.ts:606`
 - `src/services/computerAccuracy.audit.test.ts:107`
@@ -227,7 +227,7 @@
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:503`
 
 ### `addMistakePuzzleFromCapture` (function) — 8 call sites
-- `src/services/discussionPractice.ts:358`
+- `src/services/discussionPractice.ts:360`
 - `src/services/mistakeProvenance.test.ts:116`
 - `src/services/mistakePuzzleCapture.test.ts:21`
 - `src/services/mistakePuzzleCapture.test.ts:34`
@@ -250,9 +250,6 @@
 - `src/services/autoAnalyzeGameMisconceptions.test.ts:62`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts:69`
 - `src/services/takenBackPuzzles.ts:164`
-
-### `withdrawTakenBackPuzzles` (function) — 1 call site
-- `src/services/discussionPractice.ts:396`
 
 ### `ensureSequenceSolution` (function) — 7 call sites
 - `src/components/Puzzles/MyMistakesPage.tsx:311`
@@ -291,7 +288,7 @@
 - `src/services/recordReprice.test.ts:123`
 
 ### `gradeMistakePuzzle` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3235`
+- `src/components/Coach/CoachTeachPage.tsx:3241`
 - `src/components/Puzzles/MyMistakesPage.tsx:289`
 - `src/components/Tactics/TacticCreatePage.tsx:199`
 - `src/services/conceptSchedule.test.ts:41`

@@ -1853,30 +1853,36 @@ export function CoachTeachPage({ mode }: {
   const skillQueueRef = useRef<SkillMove[]>([]);
   const skillRecapRef = useRef<Map<string, SkillRecapRow>>(new Map());
   const [skillRecap, setSkillRecap] = useState<SkillRecapRow[]>([]);
-  /** THE STUDENT'S OWN TAKEBACKS, exact (David 2026-10-23: "not all undo moves
-   *  get puzzles" — your own Takeback never makes one). Each graded student
-   *  move gets a serial at its ply; an own takeback (the bar's Takeback, "take
-   *  that back" in chat) marks the serial it undid. The move's 6-s grade reads
-   *  the mark (`takenBack`, which the puzzle filer reads); a move graded
-   *  before it was taken back has its live puzzle withdrawn and its rows
-   *  marked. The coach's own rewind (Go back and castle) is not the student's.
-   *  This was a snapshot of the board 6 s after the move, which a takeback at
-   *  7 s never reached and nothing read. */
+  /** THE STUDENT'S OWN TAKEBACKS, exact. Each graded student move gets a
+   *  serial at its ply; an own takeback (the bar's Takeback, "take that back"
+   *  in chat) marks the serial it undid. The move's 6-s grade reads the mark,
+   *  and the move goes through the own-takeback door (`takeBackOwnMove`): its
+   *  rows are marked, so the miss weighs half until Hint is pressed at that
+   *  board, and a mistake or worse still goes to the puzzles (David
+   *  2026-11-07, replacing "your own Takeback never makes one"). The coach's
+   *  own rewind (Go back and castle, Try again) is not the student's. */
   const moveSerialRef = useRef(0);
   const serialAtPlyRef = useRef(new Map<number, { serial: number; gameId: string | null; fen: string; playedSan: string }>());
   const ownTakenBackRef = useRef(new Set<number>());
-  const withdrawTakenBackRef = useRef(discussion.withdrawTakenBack);
-  withdrawTakenBackRef.current = discussion.withdrawTakenBack;
-  /** Ply `ply` (1-based) is being undone; `own` when the student did it. A
-   *  grade still to come reads the mark; anything already filed — or still
-   *  being filed — is withdrawn (`withdrawTakenBackSlip`). */
+  /** The last move the student took back themselves: Hint pressed at its
+   *  board makes that miss weigh in full. */
+  const lastOwnTakebackRef = useRef<{ gameId: string; fen: string; playedSan: string } | null>(null);
+  const takeBackOwnRef = useRef(discussion.takeBackOwn);
+  takeBackOwnRef.current = discussion.takeBackOwn;
+  const takebackHintedRef = useRef(discussion.takebackHinted);
+  takebackHintedRef.current = discussion.takebackHinted;
+  /** Ply `ply` (1-based) is being undone; `own` when the student did it. */
   const noteUndonePly = useCallback((ply: number, own: boolean): void => {
     const played = serialAtPlyRef.current.get(ply);
     if (!played) return;
     serialAtPlyRef.current.delete(ply);
     if (!own) return;
     ownTakenBackRef.current.add(played.serial);
-    if (played.gameId) withdrawTakenBackRef.current({ gameId: played.gameId, fen: played.fen, playedSan: played.playedSan });
+    if (played.gameId) {
+      const move = { gameId: played.gameId, fen: played.fen, playedSan: played.playedSan };
+      lastOwnTakebackRef.current = move;
+      takeBackOwnRef.current(move);
+    }
   }, []);
   const forgetPageRefsRef = useRef<() => void>(() => undefined);
   const forgetPageRefs = useCallback((): void => {
@@ -14152,6 +14158,13 @@ export function CoachTeachPage({ mode }: {
     // With the question cards gone (2026-08-05) Hint has ONE job again: the
     // engine's best move on the live board.
     const fen = liveFenRef.current;
+    // Hint after their own takeback, at that board: the miss they took back
+    // weighs in full (David 2026-11-07).
+    const tookBack = lastOwnTakebackRef.current;
+    if (tookBack && positionOf(tookBack.fen) === positionOf(fen)) {
+      lastOwnTakebackRef.current = null;
+      takebackHintedRef.current(tookBack);
+    }
     // SHOW ME (David 2026-10-02): at a deciding moment the move was held back;
     // the button says it now, with its reason, and the reveal after the move
     // stays quiet because it has been said.

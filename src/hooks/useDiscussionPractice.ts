@@ -30,7 +30,7 @@ import { stockfishEngine } from '../services/stockfishEngine';
 import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
 import { startDial, recordAttempt, WINDOW, type HintDial } from '../services/hintRegister';
 import { recallData, remember } from '../services/studentMemory';
-import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, engineLinesForCapture, findMoverTactic, recordMoveEvidence, recordMoveQuizAnswer, withdrawTakenBackSlip, withReasonLead, type CapabilityOrigin } from '../services/discussionPractice';
+import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, engineLinesForCapture, findMoverTactic, recordMoveEvidence, recordMoveQuizAnswer, takeBackOwnMove, takebackHinted, withReasonLead, type CapabilityOrigin } from '../services/discussionPractice';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
 import { voiceService } from '../services/voiceService';
 import { captureEvent } from '../services/analytics';
@@ -192,10 +192,13 @@ interface UseDiscussionPracticeResult {
    * grade must keep using `evaluatePlayerMove`.
    */
   recordGradedMove: (args: GradedMoveArgs) => void;
-  /** The student took a move back THEMSELVES after its grade: its slip and
-   *  evidence are marked taken back and its live puzzle withdrawn
-   *  (`withdrawTakenBackSlip`). */
-  withdrawTakenBack: (args: { gameId: string; fen: string; playedSan: string }) => void;
+  /** The student took a move back THEMSELVES: its slip and evidence are
+   *  marked their own takeback (half a miss) and a mistake or worse goes to
+   *  the puzzles through the taken-back door (`takeBackOwnMove`). */
+  takeBackOwn: (args: { gameId: string; fen: string; playedSan: string }) => void;
+  /** After that takeback they pressed Hint at the same board: the miss weighs
+   *  in full (`takebackHinted`). */
+  takebackHinted: (args: { gameId: string; fen: string; playedSan: string }) => void;
   /** A "find the move" question the coach asked was answered (Play's quiz):
    *  filed through `recordMoveQuestionAnswer`, the one answer door. */
   recordMoveAnswer: (args: Parameters<typeof recordMoveQuizAnswer>[0]) => void;
@@ -907,8 +910,11 @@ export function useDiscussionPractice(
     });
   }, [recording, opts.capabilityOrigin, advanceLive]);
 
-  const withdrawTakenBack = useCallback((args: { gameId: string; fen: string; playedSan: string }): void => {
-    void withdrawTakenBackSlip(args).catch(() => undefined);
+  const takeBackOwn = useCallback((args: { gameId: string; fen: string; playedSan: string }): void => {
+    void takeBackOwnMove(args).catch(() => undefined);
+  }, []);
+  const markTakebackHinted = useCallback((args: { gameId: string; fen: string; playedSan: string }): void => {
+    void takebackHinted(args).catch(() => undefined);
   }, []);
 
   return {
@@ -919,7 +925,8 @@ export function useDiscussionPractice(
     hintDial,
     evaluatePlayerMove,
     recordGradedMove,
-    withdrawTakenBack,
+    takeBackOwn,
+    takebackHinted: markTakebackHinted,
     recordMoveAnswer,
     raiseSlipPrompt,
     submitReason,

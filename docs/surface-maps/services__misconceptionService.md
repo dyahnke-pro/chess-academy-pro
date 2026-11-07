@@ -4,11 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**382 lines · 11 exports · 29 importers · 18 tests · 4 audits**
+**405 lines · 14 exports · 30 importers · 19 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6780) — names `misconceptionService`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:309) — names `takebackWeight`
+- **The standard post-deploy ritual** (CLAUDE.md:6916) — names `misconceptionService`
 
 ## Who calls in
 
@@ -33,6 +34,7 @@
 - `src/services/misconceptionDrill.test.ts`
 - `src/services/misconceptionService.playedAt.test.ts`
 - `src/services/misconceptionService.test.ts`
+- `src/services/ownTakeback.test.ts`
 - `src/services/puzzleMissService.ts`
 - `src/services/thinkingLessonStart.ts`
 - `src/services/trainingPlanSelector.test.ts`
@@ -55,7 +57,7 @@
 - `src/services/weaknessSpine.ts:470`
 
 ### `newMisconceptionId` (function) — 1 call site
-- `src/services/autoAnalyzeGame.ts:984`
+- `src/services/autoAnalyzeGame.ts:981`
 
 ### `logMisconception` (function) — 61 call sites
 - `src/components/Coach/FundamentalsPage.test.tsx:92`
@@ -65,18 +67,18 @@
 - `src/components/Coach/FundamentalsPage.test.tsx:141`
 - `src/services/bucketPipelineAudit.test.ts:64`
 - `src/services/bucketPipelineAudit.test.ts:92`
-- `src/services/discussionPractice.ts:339`
-- `src/services/discussionPractice.ts:342`
+- `src/services/discussionPractice.ts:341`
+- `src/services/discussionPractice.ts:344`
 - `src/services/drillJoinDivergence.test.ts:46`
 - `src/services/drillJoinDivergence.test.ts:55`
 - `src/services/drillJoinDivergence.test.ts:62`
 - `src/services/fixtureGames.test.tsx:115`
 - `src/services/fixtureGames.test.tsx:124`
-- `src/services/fundamentalReachesDecider.test.ts:76`
-- `src/services/fundamentalReachesDecider.test.ts:77`
-- `src/services/fundamentalReachesDecider.test.ts:78`
-- `src/services/fundamentalReachesDecider.test.ts:114`
-- `src/services/fundamentalReachesDecider.test.ts:117`
+- `src/services/fundamentalReachesDecider.test.ts:68`
+- `src/services/fundamentalReachesDecider.test.ts:69`
+- `src/services/fundamentalReachesDecider.test.ts:70`
+- `src/services/fundamentalReachesDecider.test.ts:106`
+- `src/services/fundamentalReachesDecider.test.ts:109`
 - `src/services/fundamentalsCatalog.test.ts:48`
 - `src/services/fundamentalsCatalog.test.ts:49`
 - `src/services/fundamentalsCatalog.test.ts:53`
@@ -121,10 +123,13 @@
 - `src/services/wrongTapTag.ts:86`
 
 ### `markSlipTakenBack` (function) — 1 call site
-- `src/services/discussionPractice.ts:397`
+- `src/services/discussionPractice.ts:403`
+
+### `markSlipHinted` (function) — 1 call site
+- `src/services/discussionPractice.ts:413`
 
 ### `getMisconceptionsForGame` (function) — 1 call site
-- `src/services/thinkingLessonStart.ts:497`
+- `src/services/thinkingLessonStart.ts:687`
 
 ### `hasCountedMisconceptionsForGame` (function) — 1 call site
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:152`
@@ -136,8 +141,8 @@
 - `src/components/Insights/MisconceptionsTab.tsx:77`
 - `src/components/Insights/MisconceptionsTab.tsx:87`
 - `src/services/bucketPipelineAudit.ts:158`
-- `src/services/coachApi.ts:1956`
-- `src/services/coachApi.ts:4868`
+- `src/services/coachApi.ts:1970`
+- `src/services/coachApi.ts:4861`
 - `src/services/fixtureGames.test.tsx:116`
 - `src/services/fixtureGames.test.tsx:125`
 - `src/services/fundamentalsPipeline.realGame.test.ts:228`
@@ -165,11 +170,20 @@
 - `src/services/misconceptionService.test.ts:139`
 - `src/services/misconceptionService.test.ts:143`
 
-### `slipWeight` (function) — 4 call sites
+### `slipWeight` (function) — 7 call sites
 - `src/services/heatMap.ts:75`
-- `src/services/holdRate.ts:145`
+- `src/services/holdRate.ts:151`
+- `src/services/ownTakeback.test.ts:76`
+- `src/services/ownTakeback.test.ts:79`
+- `src/services/ownTakeback.test.ts:82`
 - `src/services/weaknessSpine.ts:472`
 - `src/services/weaknessSpine.ts:483`
+
+### `OWN_TAKEBACK_WEIGHT` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `takebackWeight` (function) — 1 call site
+- `src/services/holdRate.ts:146`
 
 ## Tests
 
@@ -188,6 +202,7 @@
 - `src/services/misconceptionRulesBackfill.test.ts`
 - `src/services/misconceptionService.playedAt.test.ts`
 - `src/services/misconceptionService.test.ts`
+- `src/services/ownTakeback.test.ts`
 - `src/services/trainingPlanSelector.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.test.ts`

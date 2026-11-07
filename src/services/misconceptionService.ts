@@ -90,6 +90,8 @@ interface LogMisconceptionInput {
    *  without a best move, so the tag must be re-attributed when one lands. */
   attributionPending?: boolean;
   takenBack?: boolean;
+  /** Taken back by the student's own Takeback (`MisconceptionTagRecord.ownTakeback`). */
+  ownTakeback?: boolean;
   /** The coach told the student this moment first: filed, never counted by the
    *  hold rate (`MisconceptionTagRecord.prompted`). */
   prompted?: boolean;
@@ -142,6 +144,7 @@ export async function logMisconception(
     sourceGameId: input.sourceGameId,
     ...(playedAt !== undefined ? { playedAt } : {}),
     ...(input.takenBack ? { takenBack: true as const } : {}),
+    ...(input.ownTakeback ? { ownTakeback: true as const } : {}),
     ...(input.prompted ? { prompted: true as const } : {}),
     status: 'open',
     masteryHits: 0,
@@ -192,8 +195,20 @@ export async function logMisconception(
 export async function markSlipTakenBack(gameId: string, fen: string, playedSan: string): Promise<number> {
   const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
   const rows = (await db.misconceptionTags.where('sourceGameId').equals(gameId).toArray())
-    .filter((r) => key(r.fen ?? '') === key(fen) && r.playedSan === playedSan && !r.takenBack);
-  for (const r of rows) await db.misconceptionTags.update(r.id, { takenBack: true });
+    .filter((r) => key(r.fen ?? '') === key(fen) && r.playedSan === playedSan && !r.ownTakeback);
+  for (const r of rows) await db.misconceptionTags.update(r.id, { takenBack: true, ownTakeback: true });
+  if (rows.length > 0) emitWeaknessModelChanged();
+  return rows.length;
+}
+
+/** After their own takeback the student pressed Hint at that board: the slip
+ *  weighs in full again. Returns how many rows. */
+export async function markSlipHinted(gameId: string, fen: string, playedSan: string): Promise<number> {
+  const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+  const rows = (await db.misconceptionTags.where('sourceGameId').equals(gameId).toArray())
+    .filter((r) => key(r.fen ?? '') === key(fen) && r.playedSan === playedSan && r.ownTakeback && !r.hinted);
+  for (const r of rows) await db.misconceptionTags.update(r.id, { hinted: true });
+  if (rows.length > 0) emitWeaknessModelChanged();
   return rows.length;
 }
 
@@ -376,6 +391,14 @@ export async function recordTagDrillResult(tag: string, success: boolean): Promi
  *  inaccuracies"). An inaccuracy is recorded — a strong player loses to a run
  *  of small leaks, never to one blunder — at half weight, so two of them on a
  *  skill count as one mistake. Every reader that sums slips reads this. */
-export function slipWeight(r: Pick<MisconceptionTagRecord, 'grade'>): number {
-  return r.grade === 'inaccuracy' ? 0.5 : 1;
+export function slipWeight(r: Pick<MisconceptionTagRecord, 'grade' | 'ownTakeback' | 'hinted'>): number {
+  return (r.grade === 'inaccuracy' ? 0.5 : 1) * takebackWeight(r);
+}
+
+/** What the student's own takeback leaves of a miss (David 2026-11-07:
+ *  "weighted 0.5 if back button is pressed and full weight if back and hint
+ *  are pressed"): half, unless they pressed Hint at that board after it. */
+export const OWN_TAKEBACK_WEIGHT = 0.5;
+export function takebackWeight(r: { ownTakeback?: true; hinted?: true }): number {
+  return r.ownTakeback && !r.hinted ? OWN_TAKEBACK_WEIGHT : 1;
 }
