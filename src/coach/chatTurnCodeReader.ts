@@ -367,9 +367,18 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
   // asked about without naming it (escalating walk 2026-10-17: sent to the
   // model it came back as the best move). Theirs or the student's own, by the
   // possessive.
-  const lastAsk = /^\s*(?:what\s+(?:does|did)\s+(their|my|the)\s+(?:last|previous)\s+move\s+(?:do|mean|threaten|want|achieve)|why\s+did\s+(they|i)\s+play\s+(?:that|it|their\s+last\s+move|my\s+last\s+move))\b(?![^?]*\binstead\b)/i.exec(text);
+  // The move may be named too ("what did their last move Kg8 threaten?"), and
+  // THEIRS is read with no move list at all — the explain screen has none, and
+  // the door says so (hard-chat prod audit 2026-11-07: only the model read it,
+  // it missed the 1.5 s read budget, and the keyword path served the best-move
+  // list).
+  const lastAsk = /^\s*(?:what\s+(?:does|did)\s+(their|my|the)\s+(?:last|previous)\s+move\s+(?:…?(?:[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?|O-O(?:-O)?)[+#]?\s+)?(?:do|mean|threaten|want|achieve)|why\s+did\s+(they|i)\s+play\s+(?:that|it|their\s+last\s+move|my\s+last\s+move))\b(?![^?]*\binstead\b)/i.exec(text);
+  const lastWho = lastAsk ? (lastAsk[1] ?? lastAsk[2]).toLowerCase() : null;
+  if (lastAsk && !hist.length && (lastWho === 'their' || lastWho === 'they')) {
+    return { kind: 'what-did-their-move-change', referents: [], seat: 'them', topic: null };
+  }
   if (lastAsk && hist.length) {
-    const who = (lastAsk[1] ?? lastAsk[2]).toLowerCase();
+    const who = lastWho ?? '';
     const lastIsTheirs = (hist.length % 2 === 1) !== (board.studentColor === 'white');
     const theirs = who === 'their' || who === 'they' || (who === 'the' && lastIsTheirs);
     if (theirs) return { kind: 'what-did-their-move-change', referents: [], seat: 'them', topic: null };

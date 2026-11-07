@@ -120,4 +120,11 @@ describe('"what did their last move do?" is read in code (escalating walk 2026-1
   it('"what did my last move do?" is the student\'s own move', () => {
     expect(readTurnInCode('What did my last move do?', board)).toMatchObject({ kind: 'retrospective-move', referents: [{ type: 'move', san: 'e4' }] });
   });
+  it('the move may be named, and theirs is read with no move list (hard-chat prod audit 2026-11-07)', () => {
+    expect(readTurnInCode('What did their last move e5 threaten, two moves deep?', board)?.kind).toBe('what-did-their-move-change');
+    // The explain screen: a position, no moves. Puzzle 0GomC.
+    const bare = { fen: '6k1/p1p4p/1p2n1p1/3pQ3/3P1nN1/2PB2qP/PP4P1/6K1 w - - 18 33', history: [], studentColor: 'white' as const };
+    expect(readTurnInCode('What did their last move Kg8 threaten, two moves deep?', bare)?.kind).toBe('what-did-their-move-change');
+    expect(readTurnInCode('What did my last move do?', bare)?.kind).not.toBe('retrospective-move');
+  });
 });
