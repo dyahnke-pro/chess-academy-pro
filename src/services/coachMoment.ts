@@ -27,18 +27,6 @@ export type CoachMoment = 'their-move' | 'question' | 'build' | 'bait';
  *  name). */
 export type TurnPart = 'your-move' | CoachMoment | 'aside';
 
-/** The skill each moment teaches. */
-export type MomentSkill = 'weaknesses' | 'tactics' | 'set-up' | 'induce';
-
-/** 🔒 One skill per moment: a fifth moment fails to compile until it names
- *  the skill it teaches. */
-export const MOMENT_SKILL: Record<CoachMoment, MomentSkill> = {
-  'their-move': 'weaknesses',
-  question: 'tactics',
-  build: 'set-up',
-  bait: 'induce',
-};
-
 /** 🔒 THE PART OF THE TURN EACH GROUP IS SAID IN. A new group fails to compile
  *  until it says where it belongs.
  *  - what is attacked, what is forcing on the board and the moves to weigh

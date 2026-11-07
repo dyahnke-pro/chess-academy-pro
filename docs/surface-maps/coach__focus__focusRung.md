@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**145 lines · 11 exports · 11 importers · 3 tests · 1 audits**
+**143 lines · 11 exports · 11 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:158) — names `RUNG_TIERS`, `TacticsRung`, `focusRung`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:190) — names `RUNG_TIERS`, `TacticsRung`, `focusRung`
 
 ## Who calls in
 
@@ -63,22 +63,22 @@
 - `src/coach/focus/focusRung.test.ts:40`
 - `src/coach/focus/focusRung.test.ts:41`
 - `src/coach/focus/focusRung.test.ts:44`
-- `src/coach/focus/focusRunner.ts:414`
-- `src/coach/focus/focusSetup.ts:91`
+- `src/coach/focus/focusRunner.ts:458`
+- `src/coach/focus/focusSetup.ts:95`
 
 ### `rungProgressLine` (function) — 6 call sites
+- `src/coach/focus/focusRung.test.ts:55`
 - `src/coach/focus/focusRung.test.ts:56`
 - `src/coach/focus/focusRung.test.ts:57`
-- `src/coach/focus/focusRung.test.ts:58`
+- `src/coach/focus/focusRung.test.ts:60`
 - `src/coach/focus/focusRung.test.ts:61`
-- `src/coach/focus/focusRung.test.ts:62`
-- `src/coach/focus/focusRunner.ts:423`
+- `src/coach/focus/focusRunner.ts:467`
 
 ### `rungUpLine` (function) — 4 call sites
+- `src/coach/focus/focusRung.test.ts:64`
 - `src/coach/focus/focusRung.test.ts:65`
-- `src/coach/focus/focusRung.test.ts:66`
-- `src/coach/focus/focusRunner.ts:423`
-- `src/coach/focus/focusRunner.ts:430`
+- `src/coach/focus/focusRunner.ts:467`
+- `src/coach/focus/focusRunner.ts:474`
 
 ## Tests
 

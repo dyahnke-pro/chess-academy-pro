@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**106 lines · 7 exports · 5 importers · 3 tests · 1 audits**
+**111 lines · 7 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:255) — names `focusSetup`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:327) — names `focusSetup`
 
 ## Who calls in
 
@@ -48,7 +48,7 @@
 - `src/coach/focus/focusSetup.test.ts:32`
 - `src/coach/focus/focusSetup.test.ts:33`
 - `src/coach/focus/focusSetup.test.ts:34`
-- `src/coach/focus/useFocusRunner.ts:180`
+- `src/coach/focus/useFocusRunner.ts:195`
 
 ## Tests
 

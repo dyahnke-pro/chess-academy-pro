@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**283 lines · 12 exports · 16 importers · 13 tests · 1 audits**
+**290 lines · 12 exports · 17 importers · 14 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4536) — names `coachDecisionEvents`
-- **The standard post-deploy ritual** (CLAUDE.md:6839) — names `coachDecisionEvents`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4560) — names `coachDecisionEvents`
+- **The standard post-deploy ritual** (CLAUDE.md:6864) — names `coachDecisionEvents`
 
 ## Who calls in
 
@@ -19,6 +19,7 @@
 - `src/services/learnTurnDoor.mission.test.ts`
 - `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.story.test.ts`
+- `src/services/learnTurnDoor.thought.test.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/moveCost.ts`
 - `src/services/needScore.ts`
@@ -36,7 +37,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onCoachDecision` (function) — 6 call sites
-- `src/services/appAuditor.ts:2282`
+- `src/services/appAuditor.ts:2285`
 - `src/services/coachDecisionEmits.test.ts:33`
 - `src/services/coachDecisionEmits.test.ts:96`
 - `src/services/proofBacklog.report.test.ts:98`
@@ -50,7 +51,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onNeedScore` (function) — 4 call sites
-- `src/services/appAuditor.ts:2234`
+- `src/services/appAuditor.ts:2237`
 - `src/services/coachDecisionEmits.test.ts:121`
 - `src/services/coachDecisionEmits.test.ts:148`
 - `src/services/positionFacts.liveFundamental.test.ts:50`
@@ -74,8 +75,8 @@
 ### `LearnTurnTag` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `onLearnTurn` (function) — 13 call sites
-- `src/services/appAuditor.ts:2308`
+### `onLearnTurn` (function) — 14 call sites
+- `src/services/appAuditor.ts:2311`
 - `src/services/learnPhaseFocus.test.ts:98`
 - `src/services/learnPhaseFocus.test.ts:110`
 - `src/services/learnTurnDoor.mission.test.ts:33`
@@ -84,14 +85,15 @@
 - `src/services/learnTurnDoor.story.test.ts:42`
 - `src/services/learnTurnDoor.test.ts:610`
 - `src/services/learnTurnDoor.test.ts:623`
+- `src/services/learnTurnDoor.thought.test.ts:198`
 - `src/services/settledPrice.bf4.test.ts:74`
 - `src/services/verdictTurnGrade.test.ts:53`
 - `src/services/verdictTurnGrade.test.ts:60`
 - `src/services/verdictTurnGrade.test.ts:66`
 
 ### `emitLearnTurn` (function) — 2 call sites
-- `src/services/learnTurnDoor.ts:1349`
-- `src/services/learnTurnDoor.ts:1379`
+- `src/services/learnTurnDoor.ts:1363`
+- `src/services/learnTurnDoor.ts:1393`
 
 ## Tests
 
@@ -101,6 +103,7 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.story.test.ts`
 - `src/services/learnTurnDoor.test.ts`
+- `src/services/learnTurnDoor.thought.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/proofBacklog.report.test.ts`
 - `src/services/settledPrice.bf4.test.ts`

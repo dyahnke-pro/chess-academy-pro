@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**821 lines · 16 exports · 5 importers · 3 tests · 1 audits**
+**866 lines · 18 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:270) — names `FocusResult`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:186) — names `FocusResult`, `focusRunner`
 
 ## Who calls in
 
@@ -59,21 +59,27 @@
 ### `FocusStep` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `FocusQuestionRow` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `chanceDial` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `stepFocus` (function) — 2 call sites
-- `src/coach/focus/focusRunner.test.ts:24`
-- `src/coach/focus/useFocusRunner.ts:125`
+- `src/coach/focus/focusRunner.test.ts:33`
+- `src/coach/focus/useFocusRunner.ts:129`
 
 ### `focusPlantAsk` (function) — 7 call sites
-- `src/coach/focus/focusRunner.test.ts:474`
-- `src/coach/focus/focusRunner.test.ts:475`
-- `src/coach/focus/focusRunner.test.ts:484`
-- `src/coach/focus/focusRunner.test.ts:485`
-- `src/coach/focus/focusRunner.test.ts:498`
+- `src/coach/focus/focusRunner.test.ts:509`
+- `src/coach/focus/focusRunner.test.ts:510`
+- `src/coach/focus/focusRunner.test.ts:519`
 - `src/coach/focus/focusRunner.test.ts:520`
-- `src/coach/focus/useFocusRunner.ts:218`
+- `src/coach/focus/focusRunner.test.ts:533`
+- `src/coach/focus/focusRunner.test.ts:555`
+- `src/coach/focus/useFocusRunner.ts:231`
 
 ### `focusOwnsGame` (function) — 1 call site
-- `src/coach/focus/useFocusRunner.ts:213`
+- `src/coach/focus/useFocusRunner.ts:226`
 
 ## Tests
 

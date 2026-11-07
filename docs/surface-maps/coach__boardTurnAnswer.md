@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**477 lines · 6 exports · 9 importers · 9 tests · 0 audits**
+**499 lines · 6 exports · 9 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `BOARD_ANSWERED_KINDS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setBoardEngineForTests` (function) — 22 call sites
+### `setBoardEngineForTests` (function) — 24 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:13`
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:18`
 - `src/coach/boardTurnAnswer.planOrder.test.ts:18`
@@ -36,6 +36,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/boardTurnAnswer.test.ts:30`
 - `src/coach/boardTurnAnswer.test.ts:39`
 - `src/coach/boardTurnAnswer.test.ts:63`
+- `src/coach/boardTurnAnswer.test.ts:90`
+- `src/coach/boardTurnAnswer.test.ts:110`
 - `src/coach/chatTurnRow.outcome.test.ts:29`
 - `src/coach/chatTurnRow.outcome.test.ts:37`
 - `src/coach/developNext.test.ts:17`
@@ -51,7 +53,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/lineOutcome.test.ts:63`
 - `src/coach/lineOutcome.test.ts:74`
 
-### `answerBoardTurn` (function) — 18 call sites
+### `answerBoardTurn` (function) — 21 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:30`
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:36`
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:44`
@@ -68,6 +70,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/boardTurnAnswer.test.ts:72`
 - `src/coach/boardTurnAnswer.test.ts:78`
 - `src/coach/boardTurnAnswer.test.ts:82`
+- `src/coach/boardTurnAnswer.test.ts:103`
+- `src/coach/boardTurnAnswer.test.ts:117`
+- `src/coach/boardTurnAnswer.test.ts:121`
 - `src/coach/dispatchCoachTurn.ts:563`
 - `src/coach/dispatchCoachTurn.ts:617`
 
