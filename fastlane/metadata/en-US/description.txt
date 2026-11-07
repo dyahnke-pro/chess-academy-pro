@@ -1,61 +1,56 @@
-A chess coach that actually watches your games and tells you what to fix.
+It sees the fork before you do. Then it teaches you to see it first.
 
-Most apps give you puzzles in one tab and opening videos in another, then leave you to figure out what to study. This one watches the games you play, finds the mistakes you keep repeating, and builds your puzzles, openings and lessons around those. Out loud. Move by move. With the board lighting up exactly where to look.
+Chess Academy Pro isn't a puzzle feed. It's a coach with a real chess engine for a brain and a memory for everything you've ever played.
 
-A real coach in your pocket for less than one lesson costs.
+IT THINKS OUT LOUD, WITH YOU
+Every move you consider, your coach weighs too. Ask it: "Take on d4?" It replies: "The knight forks your rook. Here's the move that holds." It rules out the bad move, shows you the good one, and tells you why.
 
-★ FREE OPENING MASTERCLASS ★
-Start with a full masterclass, free. Watch the line, learn it, practice it, then play it against a coach locked to that exact opening. No card needed.
+IT READS BOTH SIDES OF THE BOARD
+Your opponent's move isn't random. Your coach tells you what it's after, what it just gave away, and how to make them pay. Their mistake becomes your winning move.
 
-A GUIDED WALKTHROUGH FOR 3,600+ OPENINGS
-Type any opening and get a real walkthrough, not a video. The coach plays the line out one move at a time, tells you why each move is there, and draws arrows on the exact squares it is talking about while it speaks. Over 3,600 openings, every line engine checked before you hear it. 43 are full hand built masterclasses covering 318 named variations, each one taught the same way: watch it, learn it, drill it, then play it.
+IT KNOWS WHEN IT MATTERS
+It teaches in full what you haven't learned yet, goes quiet on what you've proven, and speaks up at the turning points, the moments where one move decides the game. When it talks, lean in.
 
-Ask by name or by move. "The Vienna Gambit main line with Qf3" gets you the right line, and every variation tile shows the move that makes it that line.
+IT REMEMBERS EVERYTHING
+Every game you play is analyzed and filed. The fork you missed, the piece you hung, the opening you keep losing with: it all shapes what your coach says next. Your next game starts where your last one left off.
 
-344 TRAP LINES THAT ACTUALLY WORK
-Ask for the traps in any opening and the coach walks you through them. 344 curated trap lines across 86 openings. Every one starts from a slip real players at your rating genuinely play, and the punishment is verified by Stockfish before it ships. 238 win material outright. If the engine cannot prove it, it does not make the cut.
+IT SETS UP CHANCES FOR YOU, ON PURPOSE
+Every game, your coach leaves at least one winning tactic on the board for you to find. Until you've proven you spot a pattern, it asks you to look for it. Prove it, game after game, and it goes quiet and lets you find it alone.
 
-WATCH THE WHOLE GAME, NOT JUST THE OPENING
-When the walkthrough ends, tap once and the coach keeps playing. It takes both sides into the middlegame, calls out the turning points, then stops at the endgame and asks if you want to see it through.
+IT TURNS YOUR MISTAKES INTO YOUR TRAINING
+Every blunder from your real games becomes a puzzle built from that exact position. Solve it, and the coach records that you've fixed it. Miss it, and it comes back. "Up next" always picks the one you need most.
 
-ONE CONNECTED LOOP
-Your games get reviewed by full strength Stockfish. Your mistakes get sorted into the patterns you keep missing. Those weaknesses feed straight into your next puzzles and lessons, and spaced repetition brings the hard ones back until they stick. You never have to guess what to study.
+IT MATCHES YOUR STRENGTH FROM MOVE ONE
+Tell it how much you've played, or skip the question. Either way your opponent adjusts game by game: strong enough to push you, never a wall.
 
-YOUR AI COACH
-• Narrates every move and answers questions mid game in plain English
-• Lead the eye arrows and highlights, so you look exactly where it is pointing
-• Tells you WHY a move was wrong and what to play instead
-• Speaks 15 languages while it teaches
+IT REWARDS FINDING THE MOVE
+Every solve lands. Streaks build. Deep Run goes deeper the better you play. Getting better finally feels like getting better.
 
-OPENINGS, PLAYED OUT AND EXPLAINED
-• 43 guided masterclasses using Watch, Learn, Practice, Play
-• 318 named variations, each with its own lesson
-• 8 pro repertoires across 82 openings, built from those players' real games
-• 646 annotated model games
-• 578 middlegame plans that grow out of your own openings
-• Common pitfalls flagged across 130 openings
+IT FINDS THE STORY OF EVERY GAME
+When a game ends, your coach gets to work: the turning point, the chance you missed, and the slip your opponent got away with.
 
-TACTICS AND PUZZLES
-• 15,000 curated puzzles across 72 themes
-• Difficulty adapts to your rating so every puzzle sits in the sweet spot
-• Spaced repetition brings your misses back until they are automatic
+IT SPEAKS YOUR LEVEL
+Brand new? Every move is spoken in plain English, the fundamentals come first, and a Start-here path takes you to your first opening. Experienced? Once your games show what you already know, it skips it and goes straight to what you don't know yet.
 
-ANALYSIS
-• Stockfish 18 runs on your device at full strength
-• Import your Chess.com and Lichess games for instant review
-• Post game review that talks you through the turning points
-• Every mistake becomes a weakness your training targets next
+IT NEVER MAKES THINGS UP
+Every move, line and evaluation comes from a real chess engine and real games. No guesses. No invented lines. Just chess.
 
-ALSO INSIDE
-• Rook, pawn and minor piece endgames, the ones that decide games
-• Kids mode with six piece hubs, no timers and no pressure
+Your coach is ready. Make your first move.
 
-WHY IT IS DIFFERENT
-Every move, line and evaluation you hear comes from Stockfish, chess.js and a real opening database. The AI only puts it into words. It cannot invent a move, a threat or a trap, because it never picks them. That is the whole design.
+— SUBSCRIPTION —
+Chess Academy Pro requires an auto-renewing Pro subscription to unlock its
+features — the AI coach, guided opening masterclasses, tactics training, full
+Stockfish game analysis, and the weaknesses trainer. Start with a 7-day free
+trial, then $1.99/month or $14.99/year.
 
-START FREE, NO CARD
-20 puzzles, a complete opening masterclass, your Weaknesses page, and a week of Kids mode.
+Prefer one opening? Unlock any single opening course for $0.99, a one-time
+purchase that's yours to keep.
 
-Go Pro for the unlimited coach, all 43 masterclasses, the full puzzle bank and complete analysis. 7 day free trial, then $7.99/month or $79.99/year. Cancel anytime.
+Payment is charged to your Apple ID at confirmation of purchase. Your
+subscription automatically renews unless canceled at least 24 hours before the
+end of the current period; manage or cancel anytime in your App Store account
+settings. Any unused portion of a free trial is forfeited when you purchase a
+subscription.
 
-Pick an opening and start improving.
+Privacy Policy: https://chess-academy-pro.vercel.app/privacy
+Terms of Use (EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
