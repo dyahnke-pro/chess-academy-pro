@@ -75,12 +75,16 @@ async function main() {
     // chess app with no ads, no user-to-user chat or shared content, nothing
     // mature → 4+, not in the Kids Category. A blank question this table has no
     // answer for is printed, never guessed.
-    // The declaration hangs off the version (older API) or the editable appInfo.
+    // The EDITABLE declaration hangs off the appInfo being prepared (Apple moved
+    // it there: the version's own copy answered PATCH with "not editable — is
+    // the corresponding AppInfos editable?"). The version's copy is the
+    // fallback for an app with no appInfo in preparation.
     const readDecl = async () => {
-      try { const d = (await api('GET', `/v1/appStoreVersions/${version.id}/ageRatingDeclaration`)).data; if (d) return d; } catch { /* the newer API */ }
       const infos = (await api('GET', `/v1/apps/${app.id}/appInfos?limit=10`)).data;
-      const info = infos.find((i) => i.attributes?.appStoreState && i.attributes.appStoreState !== 'READY_FOR_DISTRIBUTION') || infos[0];
-      return (await api('GET', `/v1/appInfos/${info.id}/ageRatingDeclaration`)).data;
+      const info = infos.find((i) => (i.attributes?.state ?? i.attributes?.appStoreState) && (i.attributes?.state ?? i.attributes?.appStoreState) !== 'READY_FOR_DISTRIBUTION' && (i.attributes?.state ?? i.attributes?.appStoreState) !== 'READY_FOR_SALE');
+      console.log(`appInfos: ${infos.map((i) => `${i.id}:${i.attributes?.state ?? i.attributes?.appStoreState}`).join(', ')} → ${info ? info.id : 'none in preparation'}`);
+      if (info) return (await api('GET', `/v1/appInfos/${info.id}/ageRatingDeclaration`)).data;
+      return (await api('GET', `/v1/appStoreVersions/${version.id}/ageRatingDeclaration`)).data;
     };
     const decl = await readDecl();
     const before = decl.attributes || {};
