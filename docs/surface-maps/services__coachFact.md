@@ -4,15 +4,15 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**549 lines · 16 exports · 30 importers · 9 tests · 0 audits**
+**555 lines · 16 exports · 30 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **❤️ THE HEART OF THE APP — the coach THINKS OUT LOUD FOR the student (David 2026-10-07: "THIS IS THE HEART AND SOUL OF THE APP! THIS IS THE BEHAVIOR THAT TEACHES. THIS IS WHAT ALL THE COMPUTERS ARE BUILT FOR! SO WE CAN THINK OUT LOUD FOR THE USER!")** (CLAUDE.md:31) — names `coachFact`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1471) — names `coachFact`
-- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2767) — names `FACT_GROUP`
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5858) — names `HeldForm`
-- **The standard post-deploy ritual** (CLAUDE.md:6865) — names `coachFact`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1477) — names `coachFact`
+- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2773) — names `FACT_GROUP`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5864) — names `HeldForm`
+- **The standard post-deploy ritual** (CLAUDE.md:6871) — names `coachFact`
 
 ## Who calls in
 
@@ -103,7 +103,7 @@
 - `src/services/moveThoughtFacts.ts:688`
 - `src/services/moveThoughtFacts.ts:705`
 - `src/services/openingStory.ts:395`
-- `src/services/positionFacts.ts:542`
+- `src/services/positionFacts.ts:548`
 - `src/services/reviewFacet.ts:62`
 - `src/services/reviewFacet.ts:89`
 - `src/services/reviewFacet.ts:101`
@@ -127,7 +127,7 @@
 - `src/services/moveThoughtFacts.ts:689`
 - `src/services/moveThoughtFacts.ts:706`
 - `src/services/openingStory.ts:396`
-- `src/services/positionFacts.ts:550`
+- `src/services/positionFacts.ts:556`
 - `src/services/reviewFacet.ts:73`
 - `src/services/teachingFact.ts:93`
 - `src/test/doorFact.ts:24`

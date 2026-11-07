@@ -20,6 +20,7 @@ import { MOTIF_OF_TACTIC, type MotifId } from '../data/tacticMotifs';
 import type { TacticType } from '../types';
 import { SPOT_CUES } from '../data/spotCues';
 import { spotFacts, type SpotBoard, type SpotFacts, type SpotPiece } from './spotFacts';
+import { CAPTURE_VALUE } from './pieceValues';
 
 export type SpotSeat = 'yours' | 'theirs';
 
@@ -32,7 +33,7 @@ const yours = (test: (f: SpotFacts) => boolean): SpotRule => ({ seat: 'yours', t
 const HABIT: SpotRule = { seat: 'yours', habit: true };
 const THEIRS: SpotRule = { seat: 'theirs', habit: true };
 
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+const VALUE = CAPTURE_VALUE;
 const hit = (f: SpotFacts, t: string): boolean => f.hits.some((h) => h.type === t);
 const forks = (f: SpotFacts): boolean => f.hits.length >= 2;
 const pawnEnding = (f: SpotFacts): boolean => f.material.mover.length === 0 && f.material.them.length === 0;

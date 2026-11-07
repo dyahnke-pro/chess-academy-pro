@@ -12,7 +12,8 @@
  * an illegal move ends the read and what was read stands.
  */
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
-import { findPins, absolutePinRay } from './pinGeometry';
+import { findPins, absolutePinRay, isRealSkewer } from './pinGeometry';
+import { CAPTURE_VALUE } from './pieceValues';
 import { classifyMatePattern } from './matePatterns';
 
 export interface SpotBoard {
@@ -85,7 +86,7 @@ export interface SpotFacts {
   plies: number;
 }
 
-const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+const VALUE = CAPTURE_VALUE;
 
 function other(c: Color): Color { return c === 'w' ? 'b' : 'w'; }
 
@@ -99,8 +100,9 @@ function checkersOf(chess: Chess): Square[] {
   return king ? chess.attackers(king.square, other(side)) : [];
 }
 
-/** The skewer the moved piece makes: on one of its lines, their king in front
- *  of anything, or a bigger piece in front of a smaller one. */
+/** The skewer the moved piece makes on one of its lines, decided by the ONE
+ *  skewer rule (`pinGeometry.isRealSkewer`): their king in front of anything,
+ *  or a bigger piece in front of a smaller one worth taking. */
 function skewerOf(chess: Chess, from: Square, by: Color): SpotFacts['skewer'] {
   const p = chess.get(from);
   if (!p || (p.type !== 'b' && p.type !== 'r' && p.type !== 'q')) return null;
@@ -111,15 +113,17 @@ function skewerOf(chess: Chess, from: Square, by: Color): SpotFacts['skewer'] {
   const r0 = Number(from[1]) - 1;
   let found: SpotFacts['skewer'] = null;
   for (const [df, dr] of dirs) {
-    const seen: Array<{ type: PieceSymbol; color: Color }> = [];
+    const seen: Array<{ type: PieceSymbol; color: Color; square: Square }> = [];
     for (let f = f0 + df, r = r0 + dr; f >= 0 && f < 8 && r >= 0 && r < 8 && seen.length < 2; f += df, r += dr) {
-      const q = chess.get(`${String.fromCharCode(97 + f)}${r + 1}` as Square);
-      if (q) seen.push(q);
+      const sq = `${String.fromCharCode(97 + f)}${r + 1}` as Square;
+      const q = chess.get(sq);
+      if (q) seen.push({ type: q.type, color: q.color, square: sq });
     }
-    if (seen.length < 2 || seen[0].color === by || seen[1].color === by || seen[1].type === 'p') continue;
+    if (seen.length < 2 || seen[0].color === by) continue;
+    if (!isRealSkewer(chess, from, seen[0].square, seen[1].square)) continue;
     const straight = df === 0 || dr === 0;
     if (seen[0].type === 'k') return { kind: 'absolute', front: 'k', behind: seen[1].type, straight };
-    if (VALUE[seen[0].type] > VALUE[seen[1].type]) found = { kind: 'relative', front: seen[0].type, behind: seen[1].type, straight };
+    found = { kind: 'relative', front: seen[0].type, behind: seen[1].type, straight };
   }
   return found;
 }

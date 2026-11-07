@@ -23,7 +23,7 @@ describe('Learn: the verdict is not queued behind the next board', () => {
   it('the cost is one search, started at the reply, before the board between the moves is read', () => {
     const cost = at(/const priceRead: Promise<MovePrice \| null> = preStudentRead[\s\S]{0,120}studentMovePrice\(fenBefore/);
     expect(cost).toBeLessThan(at('const midTurnRead = stockfishEngine.analyzeWithBudget(move.fen'));
-    expect(cost).toBeGreaterThan(at('const reply = await resolveCoachReplyMove(move.fen);'));
+    expect(cost).toBeGreaterThan(at('const reply = move.gameOver ? null : await resolveCoachReplyMove(move.fen);'));
   });
 
   it('the instant wave waits a moment for the cost, so a costly move is never praised', () => {
@@ -52,7 +52,7 @@ describe('Learn: the verdict is not queued behind the next board', () => {
   });
 
   it('the held move revealed after the move is the one captured at the move', () => {
-    expect(at('const heldAtMove = learnMemRef.current.heldMove;')).toBeLessThan(at('const reply = await resolveCoachReplyMove(move.fen);'));
+    expect(at('const heldAtMove = learnMemRef.current.heldMove;')).toBeLessThan(at('const reply = move.gameOver ? null : await resolveCoachReplyMove(move.fen);'));
     expect(src).toMatch(/const heldNow = heldAtMove;/);
   });
 });

@@ -114,7 +114,10 @@ function questionsFor(p) {
     check: (a, r) => r?.servedIntent === 'alternatives' ? 'answered with the alternatives list' : namesThreat(a) });
   if (p.wrong) {
     qs.push({ id: 'wrong', ask: `What if I play ${p.wrong.san} instead?`,
-      check: (a) => (sanRe(p.wrong.refutation[0]).test(a) || /mate|loses|drops|bad|blunder|worse/i.test(a)) ? null : `engine refutes with ${p.wrong.refutation.join(' ')}` });
+      // Any reply the engine rates as well as its first refutes the move
+      // (`hard-positions.mjs` → `wrong.refutes`); an older positions file has
+      // only the first.
+      check: (a) => ((p.wrong.refutes ?? [p.wrong.refutation[0]]).some((san) => sanRe(san).test(a)) || /mate|loses|drops|bad|blunder|worse/i.test(a)) ? null : `engine refutes with ${p.wrong.refutation.join(' ')}` });
   }
   qs.push({ id: 'show', ask: 'show me', check: (a, r) => (/Playing the line out/.test(a) || r?.servedIntent === 'request:show-line') ? null : 'did not play the line' });
   qs.push({ id: 'why', ask: `Why does ${p.best.san} work — what's their best defence?`,

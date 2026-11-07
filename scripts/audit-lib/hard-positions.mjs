@@ -49,11 +49,18 @@ for (const id of IDS) {
   for (const m of c.moves({ verbose: true }).filter((m) => (m.captured || m.san.includes('+')) && m.san !== bestSan[0])) {
     const c2 = new Chess(fen); c2.move(m.san);
     if (c2.isGameOver()) continue;
-    const r = (await analyse(c2.fen(), 16))[0];
+    const replies = await analyse(c2.fen(), 16);
+    const r = replies[0];
     if (!r) continue;
     const forMover = r.kind === 'mate' ? (r.val > 0 ? -10000 : 10000) : -r.val;
     const bestFor = best.kind === 'mate' ? (best.val > 0 ? 10000 : -10000) : best.val;
-    if (bestFor - forMover >= 250) { wrong = { san: m.san, refutation: sanLine(c2.fen(), r.pv.slice(0, 5)), evalForMover: forMover }; break; }
+    // EVERY REFUTATION THE ENGINE RATES ALIKE (hard chat 2026-11-07: after
+    // …Rh2+ the coach said "they answer Kxh2", the engine's first line was
+    // Rxh2 — +5.60 against +5.69, the same refutation). A reply within 30cp of
+    // the best one refutes the move as well, so the checker accepts any of them.
+    const score = (l) => (l.kind === 'mate' ? (l.val > 0 ? 10000 : -10000) : l.val);
+    const refutes = replies.filter((l) => l.kind === r.kind && Math.abs(score(l) - score(r)) <= 30).map((l) => sanLine(c2.fen(), [l.pv[0]])[0]);
+    if (bestFor - forMover >= 250) { wrong = { san: m.san, refutation: sanLine(c2.fen(), r.pv.slice(0, 5)), refutes, evalForMover: forMover }; break; }
   }
   out.push({ id, rating: p.rating, themes: p.themes, fen, side: c.turn() === 'w' ? 'white' : 'black', lastMove: last,
     best: { san: bestSan[0], line: bestSan, mate: best.kind === 'mate' ? best.val : null, cp: best.kind === 'cp' ? best.val : null },

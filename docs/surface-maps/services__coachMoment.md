@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**104 lines · 9 exports · 4 importers · 2 tests · 0 audits**
+**107 lines · 9 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -46,7 +46,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `momentDial` (function) — 1 call site
-- `src/coach/focus/focusRunner.ts:364`
+- `src/coach/focus/focusRunner.ts:370`
 
 ## Tests
 

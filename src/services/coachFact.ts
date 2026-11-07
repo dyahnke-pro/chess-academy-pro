@@ -40,7 +40,7 @@ export type FactGroup =
   | 'danger' | 'theirSide' | 'notYet'
   | 'move' | 'choices' | 'line'
   | 'tactics' | 'technique' | 'concepts'
-  | 'habit' | 'bait';
+  | 'habit' | 'bait' | 'setup';
 
 /** Whose move or plan a fact is about. */
 export type FactSeat = 'student' | 'opponent';
@@ -66,6 +66,8 @@ export const GROUP_STEP: Record<FactGroup, (seat: FactSeat) => ThoughtStep> = {
   habit: () => 'habit',
   // The bait is a line the student's move set up: said where a line is.
   bait: () => 'line',
+  // A tactic one quiet move sets up: a board fact about the move to come.
+  setup: () => 'board',
 };
 
 /** THE LESSON COMPOSER'S OWN KINDS — the facts `moveThoughtFacts` hands the
@@ -130,7 +132,9 @@ export const FACT_GROUP: Record<CoachFactKind, FactGroup> = {
   complex: 'structure', king: 'structure', rook7: 'structure', judgement: 'structure', 'hole-access': 'structure',
   // ── tactics on the board ──
   tactic: 'tactics', loose: 'tactics', count: 'tactics', royal: 'tactics', trapped: 'tactics', 'king-read': 'tactics',
-  'latent-danger': 'tactics', 'latent-chance': 'tactics',
+  'latent-danger': 'tactics',
+  // ── a tactic one quiet move sets up (moment 3, WO-COACH-NEXT-TO-YOU-01) ──
+  'latent-chance': 'setup',
   // ── endgame technique ──
   endgame: 'technique', technique: 'technique',
   // ── concepts and nuggets ──
@@ -200,6 +204,7 @@ const GROUP_NO_STAKES: Record<FactGroup, NoStakes> = {
   story: NO_STAKES.unmeasured, structure: NO_STAKES.unmeasured, danger: NO_STAKES.unmeasured, theirSide: NO_STAKES.unmeasured,
   notYet: NO_STAKES.unmeasured, move: NO_STAKES.unmeasured, choices: NO_STAKES.unmeasured, line: NO_STAKES.unmeasured,
   tactics: NO_STAKES.unmeasured, technique: NO_STAKES.unmeasured, concepts: NO_STAKES.unmeasured, bait: NO_STAKES.unmeasured,
+  setup: NO_STAKES.unmeasured,
 };
 /** A fact's stakes: its computer's gap (or a reason it already recorded), or
  *  its group's reason for none. */
@@ -305,6 +310,7 @@ export const COMPUTER_CATALOG = {
   detectLatentDanger: { file: 'services/latentDanger.ts', says: 'two of the student\'s pieces share a line their piece can reach: a pin in waiting' },
   pawnHit: { file: 'services/trappedPiece.ts', says: 'a pawn move that leaves one of their pieces no safe square, its line taking that piece' },
   detectLatentFork: { file: 'services/latentFork.ts', says: 'a fork one move away, for either side' },
+  detectSetUpChance: { file: 'services/setUpChance.ts', says: 'a tactic the student can set up with one quiet move: a sound engine line that wins or mates a move or two later, every motif the one classifier names, or a pin on their king or queen' },
   detectKingExposure: { file: 'services/kingSafety.ts', says: 'a castled king with a broken shelter and real attackers on it' },
   computeMustDefend: { file: 'services/threatOut.ts', says: 'what the opponent threatens now, read by letting them move twice' },
   detectBluff: { file: 'services/bluffDetector.ts', says: 'their threat that does not work, and the move that shows it' },

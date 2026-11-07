@@ -54,6 +54,7 @@ import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
 import { buildDeliberation, deliberationFacts, deliberationSquares, deliberationWeighing, deliberationVerdict, ruleOutClaims, NOTHING_SAID, type Deliberation, type HeldVerdict } from './deliberation';
 import { detectLatentFork, latentForkClause, type LatentFork } from './latentFork';
+import { detectSetUpChance, setUpClause, setUpHeldClause, setUpSkill, type SetUpChance } from './setUpChance';
 import { lineTakesPiece, pawnHit } from './trappedPiece';
 import { moverLineProof } from './exchangeLedger';
 import { MATERIAL_VALUE } from './pieceValues';
@@ -129,7 +130,7 @@ export interface LastMoveInput {
 }
 import type { TacticPatternType } from '../types/tacticTypes';
 import { conceptForBoard, definitionKey } from './conceptEngine';
-import { lineProof, NO_PROOF, type FactProof, type Proof } from './proof';
+import { lineProof, lineProofFromUci, NO_PROOF, type FactProof, type Proof } from './proof';
 import { lineSeatAt } from '../utils/andList';
 import { threatProof } from './threatProof';
 import { refutedAltProof } from './refutedAlternativeCore';
@@ -310,6 +311,11 @@ export interface PositionFactsResult {
    *  foresight sibling of `latentDanger`. Null when nothing survives its four
    *  gates. Exposed like its sibling so audits can read it back. */
   latentFork: LatentFork | null;
+  /** A TACTIC THE STUDENT CAN SET UP (moment 3): a sound engine line from
+   *  this board opens with a quiet move and wins material or mates a move or
+   *  two later, or a quiet move pins a piece of theirs to their king or queen
+   *  (`setUpChance`). Null when it is not the student's move. */
+  setUp: SetUpChance | null;
   /** A TRADE the student could make that would CREATE a pin on their own
    *  king/queen (v2). Null when no capture creates one. */
   tradeDanger: TradeDanger | null;
@@ -731,6 +737,13 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       return { san: mv.san, to: mv.to, square: hit.square, type: hit.type, proof: moverLineProof(fen, line, studentColor)?.short ?? null };
     } catch { return null; }
   })();
+
+  // THE TACTIC YOU CAN SET UP (WO-COACH-NEXT-TO-YOU-01 moment 3, David
+  // 2026-11-07: "More tactics the better"): read down the engine's own sound
+  // lines, every motif the one classifier names. Out of the quiet opening, on
+  // the student's move; the trap above is the same idea when it is one move.
+  const setUpRead = studentToMove && !quietOpening ? detectSetUpChance(fen, analysis.topLines ?? [], studentColor) : null;
+  const setUp = setUpRead && !(trapChance && namedSan(fen, trapChance.san)?.from === setUpRead.uci.slice(0, 2) && trapChance.to === setUpRead.uci.slice(2, 4)) ? setUpRead : null;
 
   // §9 king-safety — a castled king with a broken shelter AND real attackers on
   // it. Both conditions, so it never fires on a harmlessly-nicked shield.
@@ -1209,7 +1222,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     } catch { /* same */ }
   }
   const composedAll = orderByValue(
-    [...buildClauses({ walkOwnsBestLine: !!input.namesBestMove && studentToMove && walksBestLine(fen, analysis.topLines ?? [], studentColor), refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { computer: ruleHere.computer, id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, names: ruleHere.names && !input.namesBestMove ? namesMoves(studentColor, input.fen, ruleHere.names) : NAMES_NO_MOVE, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, criticalAnchor: studentToMove && input.opponentLastMove ? input.opponentLastMove : null, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, structureSquares: planFact?.squares, structureClaim: planFact?.ideaKey, fundamentalText, fundamentalHeld, fundamentalNames: fundamentalText && bestSanHere && !input.namesBestMove ? namesMoves(studentColor, fen, namedSan(fen, bestSanHere)) : NAMES_NO_MOVE, fundamentalClaim, fundamentalSquares, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, namesMoves: !!input.namesBestMove, concept, methodBeat, methodKind, methodProof, methodSquares, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said, looseSpells: input.looseSpells ?? null }), ...tradeClauses],
+    [...buildClauses({ walkOwnsBestLine: !!input.namesBestMove && studentToMove && walksBestLine(fen, analysis.topLines ?? [], studentColor), refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { computer: ruleHere.computer, id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, names: ruleHere.names && !input.namesBestMove ? namesMoves(studentColor, input.fen, ruleHere.names) : NAMES_NO_MOVE, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, criticalAnchor: studentToMove && input.opponentLastMove ? input.opponentLastMove : null, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, setUp, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, structureSquares: planFact?.squares, structureClaim: planFact?.ideaKey, fundamentalText, fundamentalHeld, fundamentalNames: fundamentalText && bestSanHere && !input.namesBestMove ? namesMoves(studentColor, fen, namedSan(fen, bestSanHere)) : NAMES_NO_MOVE, fundamentalClaim, fundamentalSquares, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, namesMoves: !!input.namesBestMove, concept, methodBeat, methodKind, methodProof, methodSquares, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said, looseSpells: input.looseSpells ?? null }), ...tradeClauses],
     input.studentWeaknesses ?? [],
   );
 
@@ -1468,7 +1481,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ...(c.kind === 'concept' && concept?.source === 'technique' ? [definitionKey(concept.id)] : []),
   ];
   const result: PositionFactsResult = {
-    importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, latentFork, tradeDanger, opponentIntent,
+    importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, latentFork, setUp, tradeDanger, opponentIntent,
     // Said SHORTER where the student has shown the skill (one fade rule with
     // Learn); the say-once memory above keeps the full text's key.
     clauses: clauses.map((c) => { const l = decision.faded.get(c.text); return l ? { ...c, text: fadeText(c.text, l) } : c; }),
@@ -1642,6 +1655,7 @@ function buildClauses(a: {
   latentDanger: LatentDanger | null;
   trapChance: { san: string; to: string; square: string; type: string; proof: string | null } | null;
   latentFork: LatentFork | null;
+  setUp: SetUpChance | null;
   /** 🔒 The student's seat — REQUIRED by `latentForkClause`, because the same
    *  fork geometry is an opportunity from one chair and a warning from the
    *  other. Never inferred here. */
@@ -1770,6 +1784,27 @@ function buildClauses(a: {
       claim: forkThreatKey(latentFork.square, latentFork.targets.map((t) => t.square)),
       // The fork wins the lesser target, `moves` moves away.
       stakes: { points: forkPoints(latentFork.targets.map((t) => t.piece)), plies: 2 * latentFork.moves },
+    }));
+  }
+  // THE TACTIC YOU CAN SET UP (moment 3). The full fact names the quiet move
+  // (a surface that may name it says it); the held form names the tactic and
+  // its targets only — a pointer at the student's next decision, said by the
+  // record (`HeldForm.points`, the motif's own skill).
+  if (a.setUp) {
+    const su = a.setUp;
+    const me = studentSeat === 'white' ? 'w' : 'b';
+    ranked.push(clause('detectSetUpChance', a.fen, {
+      kind: 'latent-chance',
+      names: namesMoves(me, a.fen, { from: su.uci.slice(0, 2), to: su.uci.slice(2, 4) }),
+      text: setUpClause(su),
+      // The line names the move, so its square is lit with the targets.
+      squares: [...new Set([su.uci.slice(2, 4), ...su.squares])],
+      claim: `set-up:${su.motif}:${su.squares.join(',')}`,
+      proof: lineProofFromUci(a.fen, su.line.slice(0, 2 * Math.max(1, su.depth)), 'you') ?? undefined,
+      stakes: su.kind === 'pin'
+        ? { points: lineTacticPoints(su.targets[0], su.targets[1]), plies: 3 }
+        : { points: Math.min(su.gain, 10), plies: 2 * su.depth },
+      heldForm: { text: setUpHeldClause(su), proof: NO_PROOF.withheld, squares: su.squares, points: setUpSkill(su) },
     }));
   }
 

@@ -36,8 +36,9 @@ export type TurnPart = 'your-move' | CoachMoment | 'aside';
  *  - what a move changed is the answer to the student's move on their move,
  *    the read of their move on theirs; their side is always their move;
  *  - the line played out and the verdict answer the move just played;
- *  - "not yet, first this", the plan, the structure, the technique and the
- *    concepts are what builds the next chance;
+ *  - "not yet, first this", the plan, the structure, the technique, the
+ *    concepts and the tactic one quiet move sets up are what builds the next
+ *    chance;
  *  - a habit closes whichever move it is about. */
 export const GROUP_PART: Record<FactGroup, (seat: FactSeat) => TurnPart> = {
   danger: () => 'question',
@@ -55,6 +56,8 @@ export const GROUP_PART: Record<FactGroup, (seat: FactSeat) => TurnPart> = {
   concepts: () => 'build',
   name: () => 'aside',
   bait: () => 'bait',
+  // A tactic one quiet move sets up: the plan that builds one (moment 3).
+  setup: () => 'build',
 };
 
 /** The part of the turn a fact of this group and seat belongs to. */
