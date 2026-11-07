@@ -115,6 +115,37 @@ describe('findFocusPlant — a real slip that leaves your side a chance at your 
     expect((await findFocusPlant(FEN, lost, BEGINNER, ask(), read)).pick?.seat, 'the guarantee never flips').toBe('exploit');
   });
 
+  // THE READS GO WHERE THE COACH'S OWN LINE SHOWS A CHANCE (prod rung2 game 2,
+  // 2026-11-07): two student-side reads a move, and the two smallest slips
+  // were quiet moves that posed nothing. Measured on 12 of David's games, a
+  // rung-2 ask from move 7 to 20: this order planted on 73 of 119 boards and
+  // reached 11 of 12 games; smallest drop first, 29 and 8.
+  it('the two reads go to the slip whose own line wins a piece, ahead of smaller quiet slips', async () => {
+    const lines: CoachLine[] = [
+      { uci: 'e8d7', coachCp: 300, pv: ['e8d7', 'e1e2'] },
+      { uci: 'a8b8', coachCp: 100, pv: ['a8b8', 'e1e2'] },
+      { uci: 'a8c8', coachCp: 90, pv: ['a8c8', 'e1e2'] },
+      { uci: 'd5f4', coachCp: 0, pv: ['d5f4', 'f1f4', 'a8a2'] },
+    ];
+    const quiet: SlipRead = (fen) => Promise.resolve(fen.startsWith('r3k3/8/8/8/5n2/')
+      ? { topLines: [{ moves: ['f1f4', 'a8a2'], evaluation: 300, mate: null }, { moves: ['e1e2', 'f4d5'], evaluation: 0, mate: null }] }
+      : { topLines: [{ moves: ['e1e2'], evaluation: 0, mate: null }] });
+    const { pick, scan } = await findFocusPlant(FEN, lines, BEGINNER, ask(), quiet);
+    expect(pick?.uci, `scan ${JSON.stringify(scan)}`).toBe('d5f4');
+    expect(scan['no-chance'] ?? 0, 'the quiet slips were never read').toBe(0);
+  });
+  it('twin: a line that shows nothing keeps the smallest drop first', async () => {
+    const lines: CoachLine[] = [
+      { uci: 'e8d7', coachCp: 300, pv: ['e8d7', 'e1e2'] },
+      { uci: 'a8b8', coachCp: 100, pv: ['a8b8', 'e1e2'] },
+      { uci: 'd5f4', coachCp: 0, pv: ['d5f4', 'e1e2'] },
+    ];
+    const reads: string[] = [];
+    const watch: SlipRead = (fen) => { reads.push(fen.split(' ')[0]); return Promise.resolve({ topLines: [{ moves: ['e1e2'], evaluation: 0, mate: null }] }); };
+    await findFocusPlant(FEN, lines, BEGINNER, ask(), watch);
+    expect(reads[0]).toBe('1r2k3/8/8/3n4/8/8/8/4KR2');
+  });
+
   // …Nf4 drops the knight (rung 0) AND takes the guard off the b6 bishop
   // (rung 1): a rung-1 student would take the knight and never meet the bishop.
   const TWO = 'r3k3/8/1b6/3n4/8/8/8/1R2KR2 b - - 0 30';

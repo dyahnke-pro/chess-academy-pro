@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**825 lines · 21 exports · 15 importers · 6 tests · 0 audits**
+**844 lines · 23 exports · 15 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:259) — names `chanceHoldOf`, `chancesAt`, `focusChances`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:275) — names `chanceHoldOf`, `chancesAt`, `focusChances`
 
 ## Who calls in
 
@@ -53,7 +53,7 @@
 - `src/coach/focus/focusChances.test.ts:484`
 - `src/coach/focus/focusChances.test.ts:488`
 - `src/coach/focus/focusChances.test.ts:491`
-- `src/components/Coach/CoachTeachPage.tsx:2341`
+- `src/components/Coach/CoachTeachPage.tsx:2342`
 
 ### `FocusMove` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -62,6 +62,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `LOOSE_GAIN` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `SHOT_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `motifPatterns` (function) — 1 call site
@@ -125,9 +128,14 @@
 - `src/coach/focus/focusChances.test.ts:464`
 - `src/coach/focus/focusChances.test.ts:477`
 - `src/coach/focus/focusChances.test.ts:487`
-- `src/coach/focus/focusPlant.ts:202`
-- `src/coach/focus/focusPlant.ts:235`
+- `src/coach/focus/focusChances.test.ts:503`
+- `src/coach/focus/focusPlant.ts:291`
 - `src/coach/focus/focusRunner.ts:365`
+
+### `yourChancesAt` (function) — 3 call sites
+- `src/coach/focus/focusChances.test.ts:504`
+- `src/coach/focus/focusPlant.ts:205`
+- `src/coach/focus/focusPlant.ts:258`
 
 ### `judgeChance` (function) — 24 call sites
 - `src/coach/focus/focusChances.test.ts:121`
@@ -175,7 +183,7 @@
 - `src/coach/focus/focusChances.test.ts:442`
 - `src/coach/focus/focusChances.test.ts:452`
 - `src/coach/focus/focusChances.test.ts:453`
-- `src/components/Coach/CoachTeachPage.tsx:13909`
+- `src/components/Coach/CoachTeachPage.tsx:13930`
 
 ## Tests
 

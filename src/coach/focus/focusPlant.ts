@@ -35,15 +35,16 @@
  * The engine half (`coachGameEngine.tryFocusPlant`) reads the coach's
  * candidates and the student's side of each; whether a move poses the focus,
  * and how hard, is decided by the ONE chance reader the lesson asks with
- * (`chancesAt`), never a second definition.
+ * (`chancesAt`, its exploit seat `yourChancesAt`), never a second definition.
  */
 import { Chess, type Color } from 'chess.js';
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
 import type { MotifLevel } from '../../data/tacticMotifs';
 import { DECIDED_EVAL_CP } from '../../services/engineConstants';
 import { isEndgameByMaterial } from '../../services/gamePhaseService';
-import { midExchange, PLANT_VERIFY_MAX, slipCandidates, type CoachLine, type SlipRead } from '../../missions/earnedSlip';
-import { chancesAt, type ChanceDifficulty, type FocusChance, type ReadLine } from './focusChances';
+import { midExchange, PLANT_VERIFY_MAX, slipCandidates, type CoachLine, type SlipCandidate, type SlipRead } from '../../missions/earnedSlip';
+import { chancesAt, SHOT_PLIES, yourChancesAt, type ChanceDifficulty, type FocusChance, type ReadLine } from './focusChances';
+import { pvGain } from '../../services/tacticGeometry';
 import type { FocusSeat } from './focusCard';
 import { RUNG_TIERS, type TacticsRung } from './focusRung';
 
@@ -196,10 +197,12 @@ export async function findFocusPlant(
   }
   const slips = slipCandidates(fen, coachLines, 'allow');
   if (slips.length === 0) { bump('no-slip'); return { pick: null, scan }; }
-  for (const slip of slips.slice(0, PLANT_VERIFY_MAX)) {
+  const pvOf = new Map(coachLines.map((l) => [l.uci, l] as const));
+  const ranked = readOrder(slips, (s) => shownRank(fen, s, pvOf.get(s.uci), open, ask));
+  for (const slip of ranked.slice(0, PLANT_VERIFY_MAX)) {
     const lines = linesOf(await read(slip.fenAfter));
     if (!lines) { bump('no-read'); continue; }
-    const yours = chancesAt({ fen: slip.fenAfter, prevFen: fen, student: studentOf(slip.fenAfter), lines }, open).filter((c) => c.seat === 'exploit');
+    const yours = yourChancesAt({ fen: slip.fenAfter, prevFen: fen, student: studentOf(slip.fenAfter), lines }, open);
     if (yours.length === 0) { bump('no-chance'); continue; }
     const atStep = yours.filter((c) => c.difficulty === ask.difficulty);
     if (atStep.length === 0) { bump('wrong-difficulty'); continue; }
@@ -209,6 +212,59 @@ export async function findFocusPlant(
     return { pick: { uci: slip.uci, chance: fit, seat: 'exploit', dropCp: slip.dropCp }, scan };
   }
   return { pick: null, scan };
+}
+
+/**
+ * WHICH SLIPS THE STUDENT-SIDE READS GO TO — the Campaign's `findEarnedSlip`
+ * order (`shownRank`), smallest drop first within each rank. Ranking stops
+ * once `PLANT_VERIFY_MAX` slips hold the top rank: the rest are never read.
+ */
+function readOrder(slips: readonly SlipCandidate[], rankOf: (s: SlipCandidate) => 0 | 1 | 2): SlipCandidate[] {
+  const byRank: [SlipCandidate[], SlipCandidate[], SlipCandidate[]] = [[], [], []];
+  for (const s of slips) {
+    if (byRank[0].length >= PLANT_VERIFY_MAX) break;
+    byRank[rankOf(s)].push(s);
+  }
+  return [...byRank[0], ...byRank[1], ...byRank[2]];
+}
+
+/**
+ * WHAT THE COACH'S OWN LINE ALREADY SHOWS after a slip, read through the
+ * lesson's own chance reader. The coach's wide read plays every legal move
+ * out, so its line past a slip is the student's best answer as that read sees
+ * it. Read as a one-line read of the board the slip leaves, it ORDERS the
+ * student-side reads: 0 — it already poses your side at the asked rung (and
+ * pattern), with nothing easier beside it; 1 — it poses your side at all;
+ * 2 — nothing. It decides nothing: the student-side read still does.
+ *
+ * Why (prod rung2 game 2, 2026-11-07): two student-side reads a move, in
+ * smallest-drop order, read slips that posed nothing — in a won game a
+ * 200–300 cp slip is a quiet move that slows the win — while a slip further
+ * down hung a piece the coach's own line showed falling. On that game's
+ * twenty boards (Node Stockfish, the app's reads) this order planted on 7
+ * where smallest-drop planted on 4. A line that wins the student nothing
+ * within the reader's shot horizon (`pvGain`, the reader's own computer) poses
+ * nothing, and is ranked without the reader — the reader is too heavy to run
+ * on every slip of a wide read on the move path.
+ */
+export function shownRank(fen: string, slip: SlipCandidate, line: CoachLine | undefined, open: ReadonlySet<MotifLevel>, ask: FocusPlantAsk): 0 | 1 | 2 {
+  if (!line || line.pv.length < 2 || line.pv[0] !== slip.uci) return 2;
+  const student = studentOf(slip.fenAfter);
+  const moves = line.pv.slice(1);
+  const gain = pvGain(slip.fenAfter, moves, student, SHOT_PLIES);
+  if (gain === null ? !capturesFirst(slip.fenAfter, moves[0]) : gain < 1) return 2;
+  const coachWhite = fen.split(' ')[1] === 'w';
+  const shown: ReadLine = { moves, evaluation: line.coachCp * (coachWhite ? 1 : -1), mate: null };
+  const yours = yourChancesAt({ fen: slip.fenAfter, prevFen: fen, student, lines: [shown] }, open);
+  if (yours.length === 0) return 2;
+  const fits = (c: FocusChance): boolean => c.difficulty === ask.difficulty && (!ask.tag || c.tag === ask.tag || c.setupTag === ask.tag);
+  return yours.some(fits) && !yours.some((c) => c.difficulty < ask.difficulty) ? 0 : 1;
+}
+
+/** The line's first move takes something (a one-move line has no `pvGain`). */
+function capturesFirst(fen: string, uci: string | undefined): boolean {
+  if (!uci) return false;
+  try { return !!new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).captured; } catch { return false; }
 }
 
 async function flipPlant(

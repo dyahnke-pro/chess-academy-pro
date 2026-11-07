@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { chanceHoldOf, chancesAt, decidingBlunder, judgeChance, lineSans, solvePlies, leftLoose, legalCounts, type FocusMove, type ReadLine } from './focusChances';
+import { chanceHoldOf, chancesAt, yourChancesAt, decidingBlunder, judgeChance, lineSans, solvePlies, leftLoose, legalCounts, type FocusMove, type ReadLine } from './focusChances';
 import { clueLine, CLUE, creditLine, shownLine } from './focusLines';
 import type { MotifLevel } from '../../data/tacticMotifs';
 
@@ -489,5 +489,18 @@ describe('chanceHoldOf — what the Learn door holds until the student has moved
   });
   it('NEGATIVE CONTROL: no chance on the board, nothing held', () => {
     expect(chanceHoldOf([])).toBeNull();
+  });
+});
+
+describe("yourChancesAt — your side alone, exactly chancesAt's exploit seat (the plant ranks every slip with it)", () => {
+  it.each([
+    ['their loose knight', LOOSE_KNIGHT, 'w' as const, null],
+    ['your knight hit (their side only)', KNIGHT_HIT, 'w' as const, null],
+    ['your fork shot beside a piece to save', FORK_SHOT, 'w' as const, FORK_LINES],
+    ['their fork and the forker to take', FRIED, 'b' as const, null],
+  ])('%s', (_, fen, student, lines) => {
+    const board = { fen, prevFen: null, student, lines };
+    const exploit = chancesAt(board, BEGINNER).filter((c) => c.seat === 'exploit');
+    expect(yourChancesAt(board, BEGINNER)).toEqual(exploit);
   });
 });

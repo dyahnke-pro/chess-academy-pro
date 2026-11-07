@@ -24,7 +24,7 @@ describe('stockfishCache', () => {
 
   it('hit returns the cached analysis', () => {
     const analysis = buildAnalysis('e2e4', 18);
-    stockfishCache.set(STARTING, 18, analysis);
+    stockfishCache.set(STARTING, 18, analysis, 3);
     const hit = stockfishCache.get(STARTING, 18);
     expect(hit).toBe(analysis);
   });
@@ -34,8 +34,8 @@ describe('stockfishCache', () => {
   });
 
   it('keys by depth — same FEN at different depths is two entries', () => {
-    stockfishCache.set(STARTING, 12, buildAnalysis('e2e4', 12));
-    stockfishCache.set(STARTING, 18, buildAnalysis('d2d4', 18));
+    stockfishCache.set(STARTING, 12, buildAnalysis('e2e4', 12), 3);
+    stockfishCache.set(STARTING, 18, buildAnalysis('d2d4', 18), 3);
     expect(stockfishCache.size()).toBe(2);
     // Each depth keeps its OWN result — the deeper-answers-shallower rule
     // added below is a fallback for a MISS, never an overwrite of a hit.
@@ -54,13 +54,13 @@ describe('stockfishCache', () => {
 
   it('LRU evicts the oldest entry when capacity is exceeded', () => {
     for (let i = 0; i < 256; i++) {
-      stockfishCache.set(posAt(i), 18, buildAnalysis(`m${i}`, 18));
+      stockfishCache.set(posAt(i), 18, buildAnalysis(`m${i}`, 18), 3);
     }
     expect(stockfishCache.size()).toBe(256);
 
     // Insert one more — the first inserted should evict. Don't `get` before
     // this point or we'd bump entries to MRU and change which one is oldest.
-    stockfishCache.set(E4, 18, buildAnalysis('e7e5', 18));
+    stockfishCache.set(E4, 18, buildAnalysis('e7e5', 18), 3);
     expect(stockfishCache.size()).toBe(256);
     expect(stockfishCache.get(posAt(0), 18)).toBeUndefined();
     expect(stockfishCache.get(posAt(1), 18)?.bestMove).toBe('m1');
@@ -68,20 +68,20 @@ describe('stockfishCache', () => {
   });
 
   it('access bumps an entry to MRU so it survives eviction', () => {
-    stockfishCache.set(posAt(1), 18, buildAnalysis('m1', 18));
+    stockfishCache.set(posAt(1), 18, buildAnalysis('m1', 18), 3);
     for (let i = 2; i < 257; i++) {
-      stockfishCache.set(posAt(i), 18, buildAnalysis(`m${i}`, 18));
+      stockfishCache.set(posAt(i), 18, buildAnalysis(`m${i}`, 18), 3);
     }
     // Touch the first one right before the eviction wave; it is now MRU.
     stockfishCache.get(posAt(1), 18);
-    stockfishCache.set(E4, 99, buildAnalysis('e7e5', 99));
+    stockfishCache.set(E4, 99, buildAnalysis('e7e5', 99), 3);
     expect(stockfishCache.get(posAt(1), 18)?.bestMove).toBe('m1');
     expect(stockfishCache.get(posAt(2), 18)).toBeUndefined();
   });
 
   it('overwriting an existing key keeps capacity steady and replaces the value', () => {
-    stockfishCache.set(STARTING, 18, buildAnalysis('e2e4', 18));
-    stockfishCache.set(STARTING, 18, buildAnalysis('d2d4', 18));
+    stockfishCache.set(STARTING, 18, buildAnalysis('e2e4', 18), 3);
+    stockfishCache.set(STARTING, 18, buildAnalysis('d2d4', 18), 3);
     expect(stockfishCache.size()).toBe(1);
     expect(stockfishCache.get(STARTING, 18)?.bestMove).toBe('d2d4');
   });
@@ -90,7 +90,7 @@ describe('stockfishCache', () => {
     it('hands a concurrent asker the SAME promise instead of a second search', async () => {
       let resolve!: (a: ReturnType<typeof buildAnalysis>) => void;
       const search = new Promise<ReturnType<typeof buildAnalysis>>((r) => { resolve = r; });
-      const tracked = stockfishCache.trackInflight(STARTING, 18, search);
+      const tracked = stockfishCache.trackInflight(STARTING, 18, search, 3);
 
       // A second asker for the same (fen, depth) sees the running search.
       expect(stockfishCache.inflight(STARTING, 18)).toBe(tracked);
@@ -106,7 +106,7 @@ describe('stockfishCache', () => {
     });
 
     it('deregisters on settle so a later asker is not served a stale promise', async () => {
-      const tracked = stockfishCache.trackInflight(STARTING, 18, Promise.resolve(buildAnalysis('e2e4', 18)));
+      const tracked = stockfishCache.trackInflight(STARTING, 18, Promise.resolve(buildAnalysis('e2e4', 18)), 3);
       await tracked;
       await Promise.resolve();
       expect(stockfishCache.inflight(STARTING, 18)).toBeUndefined();
@@ -114,14 +114,14 @@ describe('stockfishCache', () => {
     });
 
     it('a FAILED search does not poison the key — the next asker starts fresh', async () => {
-      const failing = stockfishCache.trackInflight(STARTING, 18, Promise.reject(new Error('worker died')));
+      const failing = stockfishCache.trackInflight(STARTING, 18, Promise.reject(new Error('worker died')), 3);
       await expect(failing).rejects.toThrow('worker died');
       await Promise.resolve();
       expect(stockfishCache.inflight(STARTING, 18)).toBeUndefined();
     });
 
     it('clear() drops in-flight entries too', () => {
-      void stockfishCache.trackInflight(STARTING, 18, new Promise(() => undefined));
+      void stockfishCache.trackInflight(STARTING, 18, new Promise(() => undefined), 3);
       expect(stockfishCache.inflightSize()).toBe(1);
       stockfishCache.clear();
       expect(stockfishCache.inflightSize()).toBe(0);
@@ -146,25 +146,25 @@ describe('a deeper result serves a shallower ask', () => {
   beforeEach(() => { stockfishCache.clear(); });
 
   it('answers a depth-12 ask from a cached depth-14 search', () => {
-    stockfishCache.set(FEN, 14, analysis(14));
+    stockfishCache.set(FEN, 14, analysis(14), 3);
     expect(stockfishCache.get(FEN, 12)?.depth).toBe(14);
   });
 
   it('never answers a depth-14 ask from a shallower search', () => {
     // The rule is one-directional on purpose: a depth-12 result did not look
     // as far and cannot stand in for the deeper question.
-    stockfishCache.set(FEN, 12, analysis(12));
+    stockfishCache.set(FEN, 12, analysis(12), 3);
     expect(stockfishCache.get(FEN, 14)).toBeUndefined();
   });
 
   it('prefers the exact depth when it has one', () => {
-    stockfishCache.set(FEN, 12, analysis(12));
-    stockfishCache.set(FEN, 18, analysis(18));
+    stockfishCache.set(FEN, 12, analysis(12), 3);
+    stockfishCache.set(FEN, 18, analysis(18), 3);
     expect(stockfishCache.get(FEN, 12)?.depth).toBe(12);
   });
 
   it('does not borrow another position\'s answer', () => {
-    stockfishCache.set(FEN, 20, analysis(20));
+    stockfishCache.set(FEN, 20, analysis(20), 3);
     expect(stockfishCache.get('8/8/8/8/8/8/8/K6k w - - 0 1', 12)).toBeUndefined();
   });
 
@@ -174,9 +174,60 @@ describe('a deeper result serves a shallower ask', () => {
   // both, one behind the other.
   it('waits on a deeper search already running instead of starting a second', async () => {
     const run = Promise.resolve(analysis(14));
-    const tracked = stockfishCache.trackInflight(FEN, 14, run);
+    const tracked = stockfishCache.trackInflight(FEN, 14, run, 3);
     expect(stockfishCache.inflight(FEN, 12)).toBe(tracked);
     expect(stockfishCache.inflight(FEN, 16), 'a deeper ask must not ride a shallower search').toBeUndefined();
     await tracked; // settle so the entry deregisters before the next case
+  });
+});
+
+// 🔒 A NARROWER READ NEVER ANSWERS A WIDER ASK (focus prod audit, 2026-11-07,
+// rung2 game 2). On every Learn turn the board after the student's move is
+// read at depth 14 with three lines; the coach's own reads of that board want
+// every legal move at depth 10 — and were handed the three-line read, so the
+// plant of a chance had at most two slips and a rung-2 game asked twenty
+// times without one. The board is that game's (the coach to move, ply 15).
+describe('a read answers only an ask no wider than it searched', () => {
+  const COACH_BOARD = '2b1kb1r/1pQ1n1pp/pB1ppp2/8/4P3/P2B4/1PP2PPP/RN2K2R w KQ - 1 14';
+  const read = (lines: number, depth: number): StockfishAnalysis => ({
+    ...buildAnalysis('c7c8', depth),
+    topLines: Array.from({ length: lines }, (_, i) => ({ rank: i + 1, evaluation: 900 - i * 50, moves: [`m${i}`], mate: null })),
+  });
+
+  it('the turn\'s three-line depth-14 read does not answer the coach\'s every-move depth-10 ask', () => {
+    stockfishCache.set(COACH_BOARD, 14, read(3, 14), 3);
+    expect(stockfishCache.get(COACH_BOARD, 10, 43), 'a wide ask searches').toBeUndefined();
+    expect(stockfishCache.get(COACH_BOARD, 10, 3)?.topLines, 'twin: a three-line ask is still served').toHaveLength(3);
+    stockfishCache.clear();
+  });
+
+  it('a wider read answers a narrower ask as it always did, untrimmed', () => {
+    stockfishCache.set(COACH_BOARD, 10, read(43, 10), 43);
+    expect(stockfishCache.get(COACH_BOARD, 10, 3)?.topLines).toHaveLength(43);
+    expect(stockfishCache.get(COACH_BOARD, 8, 43)?.topLines).toHaveLength(43);
+    expect(stockfishCache.get(COACH_BOARD, 10)?.topLines, 'no width named: any read').toHaveLength(43);
+    stockfishCache.clear();
+  });
+
+  it('a narrower read never replaces a wider one at the same depth', () => {
+    stockfishCache.set(COACH_BOARD, 10, read(43, 10), 43);
+    stockfishCache.set(COACH_BOARD, 10, read(3, 10), 3);
+    expect(stockfishCache.get(COACH_BOARD, 10, 43)?.topLines).toHaveLength(43);
+    stockfishCache.clear();
+  });
+
+  it('a wide ask never joins a narrower search in flight', async () => {
+    const narrow = stockfishCache.trackInflight(COACH_BOARD, 14, Promise.resolve(read(3, 14)), 3);
+    expect(stockfishCache.inflight(COACH_BOARD, 10, 43)).toBeUndefined();
+    expect(stockfishCache.inflight(COACH_BOARD, 10, 3)).toBe(narrow);
+    await narrow;
+    stockfishCache.clear();
+  });
+
+  it('the width a search ran with travels with its result', () => {
+    const a = read(8, 10);
+    stockfishCache.noteSearched(a, 8);
+    expect(stockfishCache.linesSearched(a)).toBe(8);
+    expect(stockfishCache.linesSearched(read(3, 10)), 'unknown').toBeUndefined();
   });
 });

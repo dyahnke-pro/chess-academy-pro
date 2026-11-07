@@ -16,7 +16,40 @@ import type { StockfishAnalysis } from '../types';
 
 const CAPACITY = 256;
 
-const cache = new Map<string, StockfishAnalysis>();
+/** One finished read and the MultiPV its search ran with. */
+interface Entry {
+  analysis: StockfishAnalysis;
+  lines: number;
+}
+
+const cache = new Map<string, Entry>();
+
+/** The MultiPV the search behind each analysis ran with, so an asker that
+ *  JOINED a running search can tell what it got (`linesSearched`). */
+const searched = new WeakMap<StockfishAnalysis, number>();
+
+/**
+ * 🔒 A NARROWER READ NEVER ANSWERS A WIDER ASK (focus prod audit, 2026-11-07).
+ *
+ * The key is `${fen}::${depth}`, and the width of the read — how many lines
+ * (MultiPV) it searched — was in neither, so a wide ask was served whatever
+ * read of the board came first. On every Learn turn the board after the
+ * student's move is read at depth 14 with the standard three lines BEFORE the
+ * coach moves; the coach's own reads of that same board want every legal move
+ * (the human-move model, the plant of a chance) or eight lines (a dial) at
+ * depth 10, and the deeper-answers-shallower rule handed each of them the
+ * three-line read. The plant then had at most two "slips" — the second- and
+ * third-best moves — and a rung-2 game asked twenty times and never left a
+ * chance: the guarantee broke on a cache hit, not on the board.
+ *
+ * A read answers an ask for `lines` lines only when it searched at least as
+ * many. A WIDER read still answers a narrower ask exactly as before (its top
+ * lines are the narrow read's lines, and every caller sees what it always
+ * saw). An ask that names no width takes any read of the board.
+ */
+function answers(e: Entry, lines: number | undefined): boolean {
+  return lines === undefined || e.lines >= lines;
+}
 
 /** Analyses that have STARTED but not finished, keyed the same way.
  *
@@ -27,7 +60,7 @@ const cache = new Map<string, StockfishAnalysis>();
  *  first's search time over again on the single worker, queued ahead of the
  *  narration's own engine read. His log carries 9 such duplicate pairs
  *  against 43 misses. A second asker now awaits the first's promise. */
-const inflight = new Map<string, Promise<StockfishAnalysis>>();
+const inflight = new Map<string, { run: Promise<StockfishAnalysis>; lines: number }>();
 
 function cacheKey(fen: string, depth: number): string {
   return `${fen}::${depth}`;
@@ -50,14 +83,16 @@ function depthsFor(fen: string): number[] {
 }
 
 export const stockfishCache = {
-  get(fen: string, depth: number): StockfishAnalysis | undefined {
+  /** The finished read for this board at `depth` or deeper, searched with
+   *  at least `lines` lines (MultiPV); omit `lines` for any read of it. */
+  get(fen: string, depth: number, lines?: number): StockfishAnalysis | undefined {
     const key = cacheKey(fen, depth);
     const hit = cache.get(key);
-    if (hit) {
+    if (hit && answers(hit, lines)) {
       // Bump to MRU so the next eviction targets a colder entry.
       cache.delete(key);
       cache.set(key, hit);
-      return hit;
+      return hit.analysis;
     }
     // ── A DEEPER ANSWER ALREADY ANSWERS A SHALLOWER QUESTION ────────────────
     //
@@ -78,27 +113,48 @@ export const stockfishCache = {
     for (const have of depthsFor(fen)) {
       if (have <= depth) break; // sorted deepest-first: nothing left is deeper
       const deeper = cache.get(cacheKey(fen, have));
-      if (deeper) return deeper;
+      if (deeper && answers(deeper, lines)) return deeper.analysis;
     }
     return undefined;
   },
 
-  set(fen: string, depth: number, analysis: StockfishAnalysis): void {
+  /** File a finished read, with the MultiPV its search ran with (`lines`,
+   *  REQUIRED: a read filed without its width is the defect above). A
+   *  narrower read never replaces a wider one at the same depth — the wider
+   *  already answers both. */
+  set(fen: string, depth: number, analysis: StockfishAnalysis, lines: number): void {
     const key = cacheKey(fen, depth);
-    if (cache.has(key)) {
+    searched.set(analysis, lines);
+    const had = cache.get(key);
+    if (had && had.lines > lines) return;
+    if (had) {
       cache.delete(key);
     } else if (cache.size >= CAPACITY) {
       const oldestKey = cache.keys().next().value;
       if (oldestKey !== undefined) cache.delete(oldestKey);
     }
-    cache.set(key, analysis);
+    cache.set(key, { analysis, lines });
+  },
+
+  /** Note the width a finished search ran with, for an asker that joined it
+   *  (`linesSearched`) — set on every read the engine finishes, cached or not. */
+  noteSearched(analysis: StockfishAnalysis, lines: number): void {
+    searched.set(analysis, lines);
+  },
+
+  /** The MultiPV the search behind `analysis` ran with, or undefined when
+   *  unknown. */
+  linesSearched(analysis: StockfishAnalysis): number | undefined {
+    return searched.get(analysis);
   },
 
   /** The promise of an analysis already running for this exact
-   *  `(fen, depth)`, or undefined when nothing is in flight. */
-  inflight(fen: string, depth: number): Promise<StockfishAnalysis> | undefined {
+   *  `(fen, depth)` — asked with at least `lines` lines when given — or
+   *  undefined when nothing is in flight. The width is the one it was ASKED
+   *  with; a joiner checks the width it RAN with (`linesSearched`). */
+  inflight(fen: string, depth: number, lines?: number): Promise<StockfishAnalysis> | undefined {
     const exact = inflight.get(cacheKey(fen, depth));
-    if (exact) return exact;
+    if (exact && (lines === undefined || exact.lines >= lines)) return exact.run;
     // Same rule as `get`: a DEEPER search already running will answer this
     // shallower ask, so wait for it rather than starting a second one beside
     // it on the single worker. This is where the review's paired asks actually
@@ -106,11 +162,12 @@ export const stockfishCache = {
     // is usually still running rather than already cached.
     const prefix = `${fen}::`;
     let best: { d: number; run: Promise<StockfishAnalysis> } | null = null;
-    for (const [key, run] of inflight) {
+    for (const [key, entry] of inflight) {
       if (!key.startsWith(prefix)) continue;
       const d = Number(key.slice(prefix.length));
       if (!Number.isFinite(d) || d <= depth) continue;
-      if (!best || d < best.d) best = { d, run }; // the shallowest that still qualifies = soonest to finish
+      if (lines !== undefined && entry.lines < lines) continue;
+      if (!best || d < best.d) best = { d, run: entry.run }; // the shallowest that still qualifies = soonest to finish
     }
     return best?.run;
   },
@@ -119,15 +176,15 @@ export const stockfishCache = {
    *  deregister it on settle (success OR failure — a failed search must
    *  not leave a poisoned promise that every later asker inherits). The
    *  promise is returned unchanged so callers can `return` it directly. */
-  trackInflight(fen: string, depth: number, run: Promise<StockfishAnalysis>): Promise<StockfishAnalysis> {
+  trackInflight(fen: string, depth: number, run: Promise<StockfishAnalysis>, lines: number): Promise<StockfishAnalysis> {
     const key = cacheKey(fen, depth);
-    inflight.set(key, run);
+    inflight.set(key, { run, lines });
     void run
       .catch(() => undefined)
       .finally(() => {
         // Only clear OUR entry — a later analysis of the same position may
         // already have claimed the key.
-        if (inflight.get(key) === run) inflight.delete(key);
+        if (inflight.get(key)?.run === run) inflight.delete(key);
       });
     return run;
   },
