@@ -31,7 +31,7 @@ on the habit that finds it next time. Never just the answer. The Learn door
 says each turn as this one thought (WO-THINK-01; the step of every fact, lane and beat is the ONE group table `coachFact.FACT_GROUP` → `stepOf`):
 one reason per move, one fact a step, one thread for the move to come.
 
-WHAT TEACHING IS (David 2026-10-07: "teaching is not telling you what to do" → "teaching is showing you how to think. what to recognize, how to plan, how to identify, prevent, strategize"): RECOGNIZE, IDENTIFY, PLAN, PREVENT, STRATEGIZE, and the CONSEQUENCES of a move ("teaching is describing how to think. the consequences of a move") — and the KNOWLEDGE that takes years to find alone: geometry, technique, rules, named patterns, the golden nuggets hidden in chess's arithmetic ("golden nuggets that are hidden in mathematical sequences") ("patterns that take years of playing to figure out if no one tells you about them") — so the student understands why and finds it themselves next time. A line that does none of these is description, and it is cut.
+WHAT TEACHING IS (David 2026-10-07: "teaching is not telling you what to do" → "teaching is showing you how to think. what to recognize, how to plan, how to identify, prevent, strategize"): RECOGNIZE, IDENTIFY, PLAN, PREVENT, STRATEGIZE, and the CONSEQUENCES of a move ("teaching is describing how to think. the consequences of a move") — and the KNOWLEDGE that takes years to find alone: geometry, technique, rules, named patterns, the golden nuggets hidden in chess's arithmetic ("golden nuggets that are hidden in mathematical sequences") ("patterns that take years of playing to figure out if no one tells you about them") — so the student understands why and finds it themselves next time. A line that does none of these is description, and it is cut. And it is SPECIFIC (David 2026-11-07: "I want specificity when we teach. Not a general statement"): the piece, the square, the target, the job — never "keep your piece working" where the board can say which piece, attacked by what, still hitting what.
 
 Every computer below exists to feed this. The student's record decides WHICH
 thoughts this student most needs to hear. ONE COACH (2026-10-07): it runs the
@@ -2766,9 +2766,10 @@ measures (`scripts/audit-lib/why-count.mjs`):
    regression alarm, not the goal. Greetings, setup, "e4 — your move", tap
    prompts and the game intro are not teaching and are not measured.
 2. **Every student move gets its own reason (≥70% of Review turns; a Campaign
-   game is silent by design, § MISSIONS; a Learn free-play game is measured by
-   idea against his own words, § LEARN FOCUS — a walk the user asks for in
-   Learn still counts).** Read off
+   game is silent by design, § MISSIONS; Learn has NO bar on how much it says
+   — it adapts to what the student needs and the audits REPORT the share,
+   David 2026-11-07: "Learn, no hard bar for narrations. Should adapt to what
+   user needs").** Read off
    the door's own `learn-turn-decision` row (`ownMove`, read off the facts the
    thought's "yours" step kept — `FACT_GROUP`, with `DNA_BEAT` telling a
    reason from a cost). Good-move reasons
@@ -2781,10 +2782,9 @@ measures (`scripts/audit-lib/why-count.mjs`):
    § LEARN FOCUS).
 4. **Turn length — an AVERAGE, never a limit (David 2026-10-15: "No hard
    word count caps. Set the cap as an average, not a hard limit").** The
-   average turn is at most 80 spoken words in a Learn walk and 100 in Review
-   (a focus game speaks only on misses instead, § LEARN FOCUS); a
-   critical move may run long. No code cuts a turn for length — the ranking
-   decides what speaks (G4.5).
+   average Review turn is at most 100 spoken words; Learn's length is
+   reported, never a bar (David 2026-11-07). A critical move may run long. No
+   code cuts a turn for length — the ranking decides what speaks (G4.5).
 
 The why is COMPUTED (a consequence, a line, a stake), never a templated
 "because" bolted on to pass the count — a filler why is worse than none. A

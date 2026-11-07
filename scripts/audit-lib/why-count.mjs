@@ -148,8 +148,9 @@ export function formulaRepeats(lines, max = 2) {
 /** TURN LENGTH — an AVERAGE, never a limit (David 2026-10-15: "No hard word
  *  count caps. Set the cap as an average, not a hard limit"). A critical move
  *  may run long; the game as a whole may not — a 100-word turn needs a
- *  60-word one beside it. Counted on the spoken text the listener captured. */
-export const TURN_WORDS_MAX = 80;
+ *  60-word one beside it. Counted on the spoken text the listener captured.
+ *  Review only: Learn has no bar on how much it says, it adapts to the
+ *  student and the audits report its length (David 2026-11-07). */
 export const REVIEW_TURN_WORDS_MAX = 100;
 export function turnLength(lines) {
   // TEACHING turns only — "e4 — your move", greetings and setup are 3–10

@@ -15,6 +15,7 @@
  * tense Watch/Learn teaching voice. It states the idea the move served.
  */
 import type { IdeaKind } from './ideaKind';
+import { centreDistance, centreOffsets } from '../utils/centreDistance';
 import { Chess } from 'chess.js';
 import { pawnHit } from './trappedPiece';
 import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause } from './keySquares';
@@ -217,15 +218,17 @@ const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop'
  *  centre, or further from it — read off the two squares, so the words for a
  *  king move can never claim a march it did not make. */
 export function kingWay(from: string, to: string, color: 'w' | 'b'): { forward: boolean; central: boolean; awayFromCentre: boolean } {
-  const file = (s: string): number => s.charCodeAt(0) - 97;
-  const rank = (s: string): number => Number(s[1]) - 1;
-  const centreDist = (s: string): number => Math.abs(2 * file(s) - 7) + Math.abs(2 * rank(s) - 7);
-  const step = rank(to) - rank(from);
-  return {
-    forward: color === 'w' ? step > 0 : step < 0,
-    central: centreDist(to) < centreDist(from),
-    awayFromCentre: centreDist(to) > centreDist(from),
+  // King steps to the centre first; on a tie, the file and rank steps together
+  // (Kg1-h1 is no further in king steps, but it is into the corner).
+  const outward = (a: string, b: string): number => {
+    const d = centreDistance(b) - centreDistance(a);
+    if (d !== 0) return d;
+    const [af, ar] = centreOffsets(a); const [bf, br] = centreOffsets(b);
+    return (bf + br) - (af + ar);
   };
+  const step = Number(to[1]) - Number(from[1]);
+  const out = outward(from, to);
+  return { forward: color === 'w' ? step > 0 : step < 0, central: out < 0, awayFromCentre: out > 0 };
 }
 const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const STEP_DELTAS: Record<string, number[][]> = {

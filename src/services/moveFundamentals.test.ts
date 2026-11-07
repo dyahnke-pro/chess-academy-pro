@@ -17,7 +17,7 @@ import {
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 function fund(id: MoveFundamental['id'], weight: number): MoveFundamental {
-  return { id, weight, led: id, selfContained: id, imperative: id, squares: [] };
+  return { id, weight, led: id, selfContained: id, imperative: id, pointer: id, squares: [] };
 }
 
 describe('computeMoveFundamentals — development leads a quiet developing move', () => {
@@ -67,7 +67,7 @@ describe('outpost outranks bare development', () => {
   it('its held plan reads as an instruction ("find a piece an outpost" was said on prod, 2026-11-07)', () => {
     const fen = '4k3/pp4pp/8/8/8/5N2/PP4PP/4K3 w - - 0 20';
     const pointer = strategicPlanPointer(fen, 'Ne5', 'white') ?? '';
-    expect(pointer).toMatch(/^The plan here: put a piece on an outpost no pawn can chase/);
+    expect(pointer).toMatch(/^The plan here: plant your knight on a square in their half that no pawn of theirs can attack/);
     expect(pointer).not.toMatch(/e5/);
   });
 });
@@ -396,7 +396,7 @@ describe('the plan carries its why (prod Learn audit 2026-10-14: "The plan here:
     const c = new Chess();
     for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
     const pointer = strategicPlanPointer(c.fen(), 'g3', 'white');
-    expect(pointer).toBe('The plan here: stop their idea before you push your own — stop what they want before you chase what you want, because a square their piece never reaches is a plan it never starts.');
+    expect(pointer).toBe('The plan here: take the f4 square away from their knight — stop what they want before you chase what you want, because a square their piece never reaches is a plan it never starts.');
     expect(pointer).not.toMatch(/g3|\bg-?pawn/);
   });
 });
@@ -439,10 +439,32 @@ describe('a developing move with tempo names its target once', () => {
 });
 
 describe('the plan pointer says what to do (prod audit 2026-11-07: "The plan here: keep your piece working")', () => {
-  it('a queen hit by a knight: the pointer says to move the attacked piece where it still works, never the move', () => {
+  it('a queen hit by a knight: the pointer names the piece, what hits it and the job it keeps — never the move', () => {
     const fen = '2kr3r/ppp2ppp/4p3/2q5/P3N1n1/3B1N2/1PP2PP1/R2QK2R b KQ - 1 13';
-    const p = strategicPlanPointer(fen, 'Qe7', 'black');
-    expect(p).toBe('The plan here: move the piece that is under attack to a square where it still does its job.');
-    expect(p).not.toMatch(/e7|Qe7/);
+    // …Qb6 keeps the queen on the f2 pawn it was hitting from c5.
+    const kept = strategicPlanPointer(fen, 'Qb6', 'black');
+    expect(kept).toBe('The plan here: get your queen on c5 away from their knight on e4, to a square where it still hits their pawn on f2.');
+    expect(kept).not.toMatch(/b6/);
+    // …Qf5 hits the knight that attacked it.
+    expect(strategicPlanPointer(fen, 'Qf5', 'black')).toBe('The plan here: get your queen on c5 away from their knight on e4, to a square where it hits that knight back.');
+  });
+
+  it('every pointer is specific: it names a square or a file, never the square the move goes to', () => {
+    // A spread of real boards and moves across the fundamentals.
+    const cases: [string, string, 'white' | 'black'][] = [
+      ['2kr3r/ppp2ppp/4p3/2q5/P3N1n1/3B1N2/1PP2PP1/R2QK2R b KQ - 1 13', 'a6', 'black'],
+      ['2kr3r/ppp2ppp/4p3/2q5/P3N1n1/3B1N2/1PP2PP1/R2QK2R b KQ - 1 13', 'b6', 'black'],
+      ['2kr3r/ppp2ppp/4p3/2q5/P3N1n1/3B1N2/1PP2PP1/R2QK2R b KQ - 1 13', 'f6', 'black'],
+      ['2kr3r/ppp2ppp/4p3/2q5/P3N1n1/3B1N2/1PP2PP1/R2QK2R b KQ - 1 13', 'e5', 'black'],
+      ['rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', 'Nf3', 'white'],
+      ['rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2', 'c4', 'white'],
+    ];
+    for (const [fen, san, side] of cases) {
+      const p = strategicPlanPointer(fen, san, side);
+      if (!p) continue;
+      const c = new Chess(fen); const to = c.move(san).to;
+      expect(p, `${san}: ${p}`).not.toMatch(new RegExp(`\\b${to}\\b`));
+      expect(p, `${san}: ${p}`).toMatch(/\b[a-h][1-8]\b|[a-h]-(?:file|pawn)/);
+    }
   });
 });

@@ -126,6 +126,13 @@ export interface MoveFundamental {
    *  — for the ranked briefing ("The plan here: …"). Never names the SAN, so it
    *  teaches the idea without handing over the move on a live board. */
   imperative: string;
+  /** The plan in its HELD form (Learn's pointer, before the student moves):
+   *  as specific as the imperative — the piece, what attacks it, what it hits
+   *  or holds — but never the square the move goes to and never the move
+   *  (David 2026-11-07: "I want specificity when we teach. Not a general
+   *  statement" — the old one-phrase-per-idea table said "keep your piece
+   *  working"). Required, so a new fundamental must answer it. */
+  pointer: string;
   /** Board squares the clause references (arrows / highlights). */
   squares: string[];
   /** The opponent must answer it (a developing move that hits their queen or
@@ -214,6 +221,36 @@ export const MOVE_FUNDAMENTAL_TAG: Record<MoveFundamentalId, MisconceptionTagId 
 const PIECE_NAME: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
 };
+
+/** Their pieces the piece on `sq` attacks (kings left out), the most valuable
+ *  first — what a piece is doing from where it stands. */
+function targetsOf(board: Chess, sq: string, mover: 'w' | 'b'): { type: string; square: string }[] {
+  const them = mover === 'w' ? 'b' : 'w';
+  const out: { type: string; square: string }[] = [];
+  for (const c of board.board().flat()) {
+    if (!c || c.color !== them || c.type === 'k') continue;
+    if (board.attackers(c.square, mover).includes(sq as Square)) out.push({ type: c.type, square: c.square });
+  }
+  return out.sort((a, b) => (MATERIAL_VALUE[b.type] ?? 0) - (MATERIAL_VALUE[a.type] ?? 0));
+}
+
+/** The JOB a rescued piece keeps: what it hit before that it still hits after
+ *  the move, else what it hits from where it lands, else only that it is safe
+ *  — said without the square it lands on. */
+function jobTail(before: Chess, after: Chess, from: string, to: string, mover: 'w' | 'b', attacker: string): string {
+  const now = targetsOf(after, to, mover);
+  const kept = targetsOf(before, from, mover).find((t) => now.some((n) => n.square === t.square));
+  if (kept) return `, to a square where it still hits their ${PIECE_NAME[kept.type]} on ${kept.square}`;
+  if (now[0]?.square === attacker) return `, to a square where it hits that ${PIECE_NAME[now[0].type]} back`;
+  if (now[0]) return `, to a square where it hits their ${PIECE_NAME[now[0].type]} on ${now[0].square}`;
+  return ', to a square where it is safe';
+}
+
+/** What a piece hits from its new square, said without that square. */
+function hitsTail(after: Chess, to: string, mover: 'w' | 'b'): string {
+  const t = targetsOf(after, to, mover)[0];
+  return t ? ` — from there it hits their ${PIECE_NAME[t.type]} on ${t.square}` : '';
+}
 /** The squares "fighting for the center" is allowed to name — Q1, occupation.
  *  The Q2 set (what a piece EYES) is `keyTargetSquares`; see keySquares.ts. */
 const CENTER: readonly string[] = [...CENTRAL_SQUARES];
@@ -349,6 +386,7 @@ export function computeMoveFundamentals(
       led: `${how} their ${guard} on ${removal.guard}, the only guard of the ${name} on ${removal.target} — the ${name} falls`,
       selfContained: `${how} the ${guard} on ${removal.guard}, which alone held their ${name} on ${removal.target}`,
       imperative: `remove the guard — the ${guard} on ${removal.guard} is all that holds the ${name} on ${removal.target}`,
+      pointer: `take away the only guard of their ${name} on ${removal.target} — their ${guard} is all that holds it`,
       squares: [mv.to, removal.guard, removal.target],
       forcing: true,
     };
@@ -371,6 +409,7 @@ export function computeMoveFundamentals(
       led: 'castles your king into safety and swings the rook toward the center',
       selfContained: 'castling gets your king to safety and brings the rook toward the center',
       imperative: 'castle your king to safety and bring the rook toward the center',
+      pointer: `get your king off ${mv.from} to safety and bring a rook toward the center`,
       squares: [kingTo, rookTo],
     });
   }
@@ -394,6 +433,7 @@ export function computeMoveFundamentals(
       led: `piles on their pinned ${name} on ${pile.pinned} — pinned to the ${behind}, it can't run`,
       selfContained: `attacks their ${name} on ${pile.pinned} again while it is pinned to the ${behind}, so it can't step away`,
       imperative: `put pressure on the pinned ${name} on ${pile.pinned} — it can't run`,
+      pointer: `pile up on their ${name} on ${pile.pinned} — pinned to the ${behind}, it can't step away`,
       squares: [mv.to, pile.pinned, pile.pinner],
       forcing: true,
     });
@@ -417,6 +457,7 @@ export function computeMoveFundamentals(
           led: `hits their ${name} on ${hit.square}, and it has no safe square to run to`,
           selfContained: `the pawn hits their ${name} on ${hit.square}, and the ${name} has no safe square to run to`,
           imperative: `hit their ${name} on ${hit.square} with a pawn — it has no safe square to run to`,
+          pointer: `hit their ${name} on ${hit.square} with a pawn — it has no safe square to run to`,
           squares: [mv.to, hit.square],
         }
         : {
@@ -425,6 +466,7 @@ export function computeMoveFundamentals(
           led: `kicks their ${name} off ${hit.square}, gaining time`,
           selfContained: `the pawn kicks their ${name} off ${hit.square}, so they spend a move while you gain one`,
           imperative: `kick their ${name} off ${hit.square} with a pawn and gain the time`,
+          pointer: `kick their ${name} off ${hit.square} with a pawn and gain the time`,
           squares: [mv.to, hit.square],
         });
     }
@@ -457,6 +499,7 @@ export function computeMoveFundamentals(
       led: `lands on the ${mv.to} outpost, a square none of their pawns can attack`,
       selfContained: `plants the ${name} on the ${mv.to} outpost, where no pawn can challenge it`,
       imperative: `plant the ${name} on the ${mv.to} outpost, where no pawn can challenge it`,
+      pointer: `plant your ${name} on a square in their half that no pawn of theirs can attack${hitsTail(after, mv.to, mover)}`,
       squares: [mv.to],
     });
   }
@@ -497,6 +540,7 @@ export function computeMoveFundamentals(
         reason: null,
         selfContained: `heads for ${sqs}, ${what}`,
         imperative: `aim the knight at ${sqs}, ${one ? 'a hole' : 'holes'} no pawn of theirs can cover`,
+        pointer: `aim your knight at ${sqs}, ${one ? 'a hole' : 'holes'} no pawn of theirs can cover`,
         squares: [mv.to, ...targets],
       });
     }
@@ -559,6 +603,7 @@ export function computeMoveFundamentals(
       led: `develops into the game${tempo}${centerTail}`,
       selfContained: `develops the ${name} into the game${tempo}${centerTail}`,
       imperative: `develop into the game${tempo}${centerTail}`,
+      pointer: `develop your ${name} from ${mv.from}${tempo}${centerTail}`,
       squares: [mv.to, ...(hit ? [hit.square] : []), ...saidCentral, ...holes, ...nearKing],
       forcing: !!hit,
     });
@@ -579,6 +624,7 @@ export function computeMoveFundamentals(
       led: `takes toward the center`,
       selfContained: `takes toward the center with the ${mv.from[0]}-pawn`,
       imperative: `take toward the center — the ${mv.from[0]}-pawn capture keeps your pawns near the middle`,
+      pointer: `capture toward the center with your ${mv.from[0]}-pawn`,
       squares: [mv.to],
     });
   } else if (mv.piece === 'p' && CENTER.includes(mv.to) && relRank(mv.to, mover) >= 4) {
@@ -602,6 +648,7 @@ export function computeMoveFundamentals(
       // a rule behind c5: open up the center with the pawn to c5" said the move
       // twice and taught nothing (Blumenfeld walk F2).
       imperative: `open up the center — challenge their pawn on ${andList(contactBy)}`,
+      pointer: `open up the center — challenge their pawn on ${andList(contactBy)}`,
       squares: [mv.to],
     } : mv.to[0] !== 'd' && mv.to[0] !== 'e' && coreHitBy(mv.to, mover).length > 0 ? {
       // A FLANK PAWN fights for the center from the side — it does not stake
@@ -612,6 +659,7 @@ export function computeMoveFundamentals(
       led: `fights for ${andList(coreHitBy(mv.to, mover))} from the side`,
       selfContained: `fights for ${andList(coreHitBy(mv.to, mover))} from the side with the pawn to ${mv.to}`,
       imperative: `fight for ${andList(coreHitBy(mv.to, mover))} from the side`,
+      pointer: `fight for ${andList(coreHitBy(mv.to, mover))} from the side with a pawn`,
       reason: 'a flank pawn that trades itself for a center pawn leaves you two center pawns against their one',
       squares: [mv.to, ...coreHitBy(mv.to, mover)],
     } : {
@@ -620,6 +668,7 @@ export function computeMoveFundamentals(
       led: `stakes out the center and grabs space`,
       selfContained: `stakes out the center with the pawn to ${mv.to}`,
       imperative: `stake out the center and grab space with the pawn to ${mv.to}`,
+      pointer: `stake out the center with your ${mv.from[0]}-pawn`,
       squares: [mv.to],
     });
   } else if (mv.piece === 'p' && relRank(mv.to, mover) <= 3) {
@@ -649,6 +698,9 @@ export function computeMoveFundamentals(
         imperative: fianchetto
           ? `fianchetto the bishop to ${fianchetto}`
           : `open the diagonal for the bishop on ${freed}`,
+        pointer: fianchetto
+          ? `make room for your bishop on ${freed} to come out on the long diagonal`
+          : `open the diagonal for your bishop on ${freed}`,
         squares: fianchetto ? [mv.to, fianchetto] : [mv.to, freed],
         ...(fianchetto ? { names: { from: freed, to: fianchetto } } : {}),
       });
@@ -662,6 +714,7 @@ export function computeMoveFundamentals(
         led: `supports the center, guarding ${g}`,
         selfContained: `supports the center with the pawn to ${mv.to}, guarding ${g}`,
         imperative: `support the center — the pawn to ${mv.to} guards ${g}`,
+        pointer: `support the center with a pawn that guards ${g}`,
         squares: [mv.to, ...guards],
       });
     }
@@ -684,6 +737,7 @@ export function computeMoveFundamentals(
         led: `takes aim at the center, hitting ${hit}`,
         selfContained: `repositions the ${PIECE_NAME[mv.piece]} to take aim at ${hit}`,
         imperative: `take aim at the center, hitting ${hit}`,
+        pointer: `bring your ${PIECE_NAME[mv.piece]} round to take aim at ${hit}`,
         squares: [mv.to, ...squaresWithRole(after, eyes, mover, 'the')],
         // The center's REASON is the pawn center's ("pieces behind a strong
         // center reach either wing") — said of Qa4+ and Qg4+ (clean-pass walks
@@ -714,6 +768,7 @@ export function computeMoveFundamentals(
         led: mv.piece === 'r' ? `${take} the ${openness} ${fileName}, where the rook belongs` : `${take} the ${openness} ${fileName}`,
         selfContained: `brings the ${name} to the ${openness} ${fileName}`,
         imperative: mv.piece === 'r' ? `take the ${openness} ${fileName}, where the rook belongs` : `take the ${openness} ${fileName} with the queen`,
+        pointer: `put your ${name} on the ${openness} ${fileName}`,
         squares: [mv.to],
         // The rule's reason is about a ROOK (walk oct3a: "Your Qc8 takes the
         // half-open c-file — a rook needs an open file"); a queen carries none.
@@ -735,6 +790,7 @@ export function computeMoveFundamentals(
         led: `marches your king toward the center, where it fights in the endgame`,
         selfContained: `activates the king toward the center, a fighting piece in the endgame`,
         imperative: `march your king toward the center — in the endgame it is a fighting piece`,
+        pointer: `march your king from ${mv.from} toward the center — in the endgame it is a fighting piece`,
         squares: [mv.to],
       });
     }
@@ -765,6 +821,7 @@ export function computeMoveFundamentals(
         : `promotes to ${withArticle(promotedTo)} — underpromotion, chosen on purpose`,
       selfContained: `promotes on ${mv.to} — the pawn becomes ${withArticle(promotedTo)}`,
       imperative: `push it through and promote`,
+      pointer: `push your ${mv.from[0]}-pawn through to promote`,
       squares: [mv.to],
     });
   }
@@ -780,6 +837,7 @@ export function computeMoveFundamentals(
       led: `pushes your passed pawn — passed pawns must be pushed`,
       selfContained: `pushes the passed pawn to ${mv.to} — passed pawns must be pushed`,
       imperative: `push your passed pawn — passed pawns must be pushed`,
+      pointer: `push your passed ${mv.from[0]}-pawn — passed pawns must be pushed`,
       squares: [mv.to],
     });
   }
@@ -811,6 +869,7 @@ export function computeMoveFundamentals(
           led: `takes the ${s} square away from their ${pieceName}`,
           selfContained: `plays ${mv.to}, denying their ${pieceName} the ${s} square`,
           imperative: `deny their ${pieceName} the ${s} square`,
+          pointer: `take the ${s} square away from their ${pieceName}`,
           squares: [mv.to, s],
         });
         break; // one denial clause is enough
@@ -837,6 +896,7 @@ export function computeMoveFundamentals(
         led: `gives your king luft — a flight square off the back rank`,
         selfContained: `makes luft with ${mv.to}, a flight square for the king off the back rank`,
         imperative: `make luft — give your king a flight square off the back rank`,
+        pointer: `give your king on ${kSq} a flight square off the back rank`,
         squares: [mv.to, kSq],
       });
     }
@@ -859,6 +919,7 @@ export function computeMoveFundamentals(
         led: `grabs space on the ${side}`,
         selfContained: `advances ${mv.to}, grabbing space on the ${side}`,
         imperative: `grab space on the ${side} with ${mv.to}`,
+        pointer: `grab space on the ${side} with your ${file}-pawn`,
         squares: [mv.to],
       });
     }
@@ -923,6 +984,7 @@ function openingIdeas(
               led: `goes after their ${xName} on ${c.square}, the only piece guarding the ${yName}`,
               selfContained: `puts pressure on their ${xName} on ${c.square}, the only guard of the ${yName}`,
               imperative: `go after their ${xName} on ${c.square}, the only guard of the ${yName}`,
+              pointer: `go after their ${xName} on ${c.square}, the only guard of the ${yName}`,
               squares: [mv.to, c.square, y.square],
             });
             done = true;
@@ -960,6 +1022,7 @@ function openingIdeas(
         led: `steps out of the pawn's reach${tail}`,
         selfContained: `steps the ${name} out of the pawn's reach${tail}`,
         imperative: `when a pawn kicks a piece, move it to a square where it still works`,
+        pointer: ((pawnSq: string): string => `get your ${name} on ${mv.from} away from their pawn on ${pawnSq}${jobTail(before, after, mv.from, mv.to, mover, pawnSq)}`)(before.attackers(mv.from as Square, them).find((a) => before.get(a)?.type === 'p') ?? ''),
         squares: kept ? [mv.to, kept.sq] : [mv.to],
       });
     }
@@ -1003,6 +1066,7 @@ function openingIdeas(
           led: `saves the ${name} from ${by}${work}`,
           selfContained: `saves the ${name} from ${by}${work}`,
           imperative: `move the ${name} away from ${by} before it is taken for nothing`,
+          pointer: `get your ${name} on ${mv.from} away from ${by}${jobTail(before, after, mv.from, mv.to, mover, h.sq)}`,
           squares: [mv.from, mv.to, h.sq],
         });
       }
@@ -1053,6 +1117,7 @@ function openingIdeas(
           led: `steps the queen off the ${file}-file, out of line with their queen — when that file opens, the queens stay on`,
           selfContained: `takes the queen off the ${file}-file first, so opening it will not trade the queens`,
           imperative: `before the ${file}-file opens with the queens facing, step your queen off it — unless you want the trade`,
+          pointer: `step your queen off the ${file}-file before it opens with the queens facing — unless you want the trade`,
           squares: [mv.from, mv.to, theirQueen.square],
         });
       }
@@ -1076,6 +1141,7 @@ function openingIdeas(
         led: `prepares ${s[0]}${s[1]} — when the ${s[0]}-pawn goes forward, it will be supported`,
         selfContained: `prepares the push to ${s} with the pawn to ${mv.to}, so the ${s[0]}-pawn arrives supported`,
         imperative: `guard ${s} before the push, so the ${s[0]}-pawn arrives supported`,
+        pointer: `guard ${s} before the ${s[0]}-pawn goes forward, so it arrives supported`,
         squares: [mv.to, s, pusher],
         // "Your d6 prepares e5" names …e5 (OS-11 g2/g3).
         names: { from: pusher, to: s },
@@ -1098,6 +1164,7 @@ function openingIdeas(
       led: rookHome ? 'completes your development — every minor piece is out, so the rooks come next' : 'completes your development — every minor piece is out',
       selfContained: rookHome ? `brings out the last minor piece — development is done, and the rooks come next` : `brings out the last minor piece — development is done`,
       imperative: rookHome ? 'get the last minor piece out, then bring the rooks' : 'get the last minor piece out',
+      pointer: `get your last minor piece, the ${PIECE_NAME[mv.piece]} on ${mv.from}, into the game${rookHome ? ', then bring the rooks' : ''}`,
       squares: [mv.to],
     });
   }
@@ -1125,6 +1192,7 @@ function openingIdeas(
         led: `puts the rook behind your ${pawnSq} pawn — it guards it now, and owns the ${mv.to[0]}-file when it opens`,
         selfContained: `puts the rook behind the ${pawnSq} pawn, guarding it and waiting for the ${mv.to[0]}-file to open`,
         imperative: `put a rook behind your ${mv.to[0]}-pawn, where it guards the pawn and owns the file once it opens`,
+        pointer: `put a rook behind your pawn on ${pawnSq}, where it guards it and owns the ${mv.to[0]}-file once it opens`,
         squares: [mv.to, pawnSq],
       });
     }
@@ -1303,34 +1371,6 @@ const PRINCIPLE_REASON: Record<MoveFundamental['id'], string | null> = {
   prophylaxis: 'stop what they want before you chase what you want, because a square their piece never reaches is a plan it never starts',
 };
 
-/** THE PLAN WITHOUT ITS MOVE (David 2026-11-05: "Yes it can point without
- *  saying the move"): what the leading fundamental is FOR, in words that name
- *  no square the move goes to — Learn's held form of "The plan here: grab
- *  space on the queenside with a5" (held 14 times in seven replayed games).
- *  A `Record`, so a new fundamental must say how its plan is pointed at. */
-const PLAN_POINTER: Record<MoveFundamental['id'], string> = {
-  development: 'get another piece into the game',
-  'open-diagonal': 'open a diagonal for your bishop',
-  center: 'build up the centre',
-  'king-safety': 'get your king safe',
-  outpost: 'put a piece on an outpost no pawn can chase',
-  'open-file': 'put a rook on the open file',
-  tempo: 'gain time by hitting one of their pieces',
-  'attack-defender': 'go after the piece that holds their position together',
-  'keep-working': 'move the piece that is under attack to a square where it still does its job',
-  'prepare-break': 'prepare a pawn break',
-  'development-complete': 'finish your development',
-  'rook-behind-pawn': 'put a rook behind the passed pawn',
-  'queen-off-file': 'get your queen off the file their rook is on',
-  'pile-on-pin': 'pile up on the pinned piece',
-  'remove-guard': 'take away a guard',
-  'king-activity': 'bring your king into play',
-  promotion: 'push for promotion',
-  'passed-pawn': 'push your passed pawn',
-  luft: 'give your king air',
-  space: 'grab space',
-  prophylaxis: 'stop their idea before you push your own',
-};
 
 /** The plan line in its held form — the pointer and the reason — or null. */
 export function strategicPlanPointer(fenBefore: string, moveSan: string, moverColor: 'white' | 'black'): string | null {
@@ -1338,7 +1378,7 @@ export function strategicPlanPointer(fenBefore: string, moveSan: string, moverCo
   const lead = leadingFundamentals(fenBefore, moveSan, moverColor)[0];
   if (!lead) return null;
   const why = strategicReason(fenBefore, moveSan, moverColor);
-  return why ? `The plan here: ${PLAN_POINTER[lead.id]} — ${why}.` : `The plan here: ${PLAN_POINTER[lead.id]}.`;
+  return why ? `The plan here: ${lead.pointer} — ${why}.` : `The plan here: ${lead.pointer}.`;
 }
 
 /** WHY THE PLAN — the reason of the plan's leading fundamental, true on this

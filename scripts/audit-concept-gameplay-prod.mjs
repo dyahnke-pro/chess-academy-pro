@@ -57,7 +57,7 @@
  */
 import { linesWithStats } from './audit-lib/spoken-stats.mjs';
 import { linesWithBuriedMate } from './audit-lib/mate-leads.mjs';
-import { whyTally, formulaRepeats, turnLength, TURN_WORDS_MAX, planTally } from './audit-lib/why-count.mjs';
+import { whyTally, formulaRepeats, turnLength, planTally } from './audit-lib/why-count.mjs';
 import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
@@ -620,7 +620,11 @@ async function main() {
     record('V3. no statistic is spoken — a reason, never a percentage, a point count or "N of M"', statLines.length === 0, `${statLines.length} line(s)${statLines.length ? ` — ${statLines[0].slice(0, 120)}` : ''}`);
     // WHY STATEMENTS ARE PREVALENT AND NUMEROUS (David 2026-10-13).
     const why = whyTally(tape, studentMoves);
-    record('V5. why statements clear the floor (80% of teaching lines give a reason) and are numerous (≥1 per student move)', why.prevalent && why.numerous,
+    // NO HARD BAR ON HOW MUCH LEARN SAYS (David 2026-11-07: "Learn, no hard bar
+    // for narrations. Should adapt to what user needs"): the share of lines that
+    // carry a why stays a bar (a line with no why is a defect); how many there
+    // are per move is reported, never failed.
+    record('V5. why statements clear the floor (80% of teaching lines give a reason); how many per move REPORTED', why.prevalent,
       `${why.withWhy}/${why.lines} teaching lines carry a why (${Math.round(why.share * 100)}%), ${why.whySentences} why sentences over ${studentMoves} student moves = ${why.perMove.toFixed(1)}/move${why.whyless.length ? ` — whyless e.g. "${why.whyless.slice(0, 3).join('" | "').slice(0, 260)}"` : ''}`);
     // PLAN TEACHING (David 2026-10-15): every plan stated says why it was
     // chosen over the next one; the method — their weakness, your worst piece,
@@ -634,7 +638,7 @@ async function main() {
     record('V7. no reason formula is said more than twice in a game', formulas.length === 0, `${formulas.length} formula(s)${formulas.length ? ` — ${formulas.map((f) => `${f.count}× "${f.formula.slice(0, 90)}"`).join(' | ').slice(0, 300)}` : ''}`);
     // TURN LENGTH — the AVERAGE over the game; a single long turn never fails.
     const len = turnLength(tape);
-    record(`V8. average turn at most ${TURN_WORDS_MAX} words (an average, never a limit)`, len.avg <= TURN_WORDS_MAX, `avg ${len.avg.toFixed(1)}w over ${len.turns} turns, longest ${len.longest}w (info)`);
+    record('V8. average turn length REPORTED (Learn adapts to the student; no bar, David 2026-11-07)', true, `avg ${len.avg.toFixed(1)}w over ${len.turns} turns, longest ${len.longest}w`);
     const buried = linesWithBuriedMate(tape);
     record('V4. a forced mate leads its line (never behind a lesson)', buried.length === 0, `${buried.length} line(s)${buried.length ? ` — ${buried[0].slice(0, 160)}` : ''}`);
     record('V2. words per student move REPORTED (his speed runs: ~35–50)', true, `${words} words over ${studentMoves} student moves = ${Math.round(words / studentMoves)}/move; longest line ${Math.max(0, ...tape.map((t) => t.split(/\s+/).length))}w`);
@@ -735,7 +739,7 @@ async function main() {
       const own = ownVals.filter((o) => o === 'affirm' || o === 'but');
       const affirm = ownVals.filter((o) => o === 'affirm').length;
       const ownShare = ownVals.length ? own.length / ownVals.length : 0;
-      record('V6. every student move gets its own reason (≥70% of student moves; good-move reasons reported)', ownShare >= 0.7,
+      record('V6. student moves with their own reason REPORTED (Learn adapts to the student; no bar, David 2026-11-07)', true,
         `${own.length} of ${ownVals.length} student moves (${Math.round(ownShare * 100)}%) — ${affirm} said what the move did well, ${own.length - affirm} what it gave up`);
       // V9 — THE REASON IS PROVEN, NOT A DESCRIPTION (2026-10-15). The why
       // counter reads wording; this reads whether the move's reason carries a
