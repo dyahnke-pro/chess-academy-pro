@@ -104,6 +104,9 @@ async function main() {
         violenceCartoonOrFantasy: 'NONE', violenceRealistic: 'NONE',
         violenceRealisticProlongedGraphicOrSadistic: 'NONE', unrestrictedWebAccess: false,
         kidsAgeBand: null, seventeenPlus: false,
+        // Apple's newer questions (blank on 4.0.8, readiness 2026-11-07): no
+        // social media in the app.
+        socialMedia: false, socialMediaAgeRestricted: false,
       };
       const pr = await api('PATCH', `/v1/ageRatingDeclarations/${id}`, {
         data: { type: 'ageRatingDeclarations', id, attributes: attrs },

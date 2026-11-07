@@ -48,12 +48,12 @@ function livePrices() {
   const trial = readFileSync(new URL('../../src/data/pricing.ts', import.meta.url), 'utf8')
     .match(/export const TRIAL_DAYS\s*=\s*(\d+)/);
   if (!trial) throw new Error('could not parse TRIAL_DAYS from src/data/pricing.ts');
-  return { monthly: grab('PRICE_MONTHLY'), yearly: grab('PRICE_YEARLY'), trialDays: Number(trial[1]) };
+  return { monthly: grab('PRICE_MONTHLY'), yearly: grab('PRICE_YEARLY'), opening: grab('PRICE_OPENING'), trialDays: Number(trial[1]) };
 }
 
 const PRICES = livePrices();
 
-const buildBlock = ({ monthly, yearly, trialDays }) => [
+const buildBlock = ({ monthly, yearly, opening, trialDays }) => [
   '',
   '',
   MARKER,
@@ -61,6 +61,10 @@ const buildBlock = ({ monthly, yearly, trialDays }) => [
   'features — the AI coach, guided opening masterclasses, tactics training, full',
   `Stockfish game analysis, and the weaknesses trainer. Start with a ${trialDays}-day free`,
   `trial, then ${monthly}/month or ${yearly}/year.`,
+  '',
+  // The single opening, sold à la carte (non-consumable, 2026-10-25).
+  `Prefer one opening? Unlock any single opening course for ${opening}, a one-time`,
+  'purchase that\'s yours to keep.',
   '',
   'Payment is charged to your Apple ID at confirmation of purchase. Your',
   'subscription automatically renews unless canceled at least 24 hours before the',
@@ -232,7 +236,12 @@ async function main() {
   // the block below is still rebuilt from pricing.ts, so the Apple-required
   // subscription terms can never be dropped by a copy change.
   if (process.env.MARKETING_FILE) {
-    head = readFileSync(new URL(`../../${process.env.MARKETING_FILE}`, import.meta.url), 'utf8').replace(/\s+$/, '');
+    // The file may be the whole description (fastlane/metadata/en-US/
+    // description.txt): only its copy above the marker is taken — the block is
+    // always rebuilt from pricing.ts.
+    const file = readFileSync(new URL(`../../${process.env.MARKETING_FILE}`, import.meta.url), 'utf8');
+    const cut = file.indexOf(MARKER);
+    head = (cut >= 0 ? file.slice(0, cut) : file).replace(/\s+$/, '');
     console.log(`\nmarketing copy replaced from ${process.env.MARKETING_FILE} (${head.length} chars)`);
   }
   const existingBlock = at >= 0 ? current.slice(at) : null;
