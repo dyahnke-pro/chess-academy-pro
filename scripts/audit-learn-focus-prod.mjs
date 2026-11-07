@@ -656,8 +656,22 @@ async function playGame(context, listener, engine, student, phase, index) {
     // summary only for an older build.
     .map((e) => String(e.narrationText ?? String(e.summary ?? '').replace(/^track A spoke: "/, '').replace(/"$/, '').replace(/^.* — /, '')).trim())
     .filter(Boolean);
-  const fromDoor = (text) => { const head = text.slice(0, 40); return doorTexts.some((d) => d.includes(head) || text.includes(d.slice(0, 40))); };
-  tape.spoken = spoken(events).map((l) => ({ ...l, kind: lineKind(l.text, pickLine) ?? (tapped(l.at) ? 'asked' : fromDoor(l.text) ? 'door' : null) }));
+  // The door logs its line as written ("Bxb2 pays that price"); the voice
+  // speaks it ("Bishop takes b2 pays that price"). Compare the words that are
+  // not a move: the move's two spellings would otherwise make every door line
+  // that opens on a move read as a stray (focus prod audit 2026-11-07).
+  const MOVE_WORDS = new Set(['king', 'queen', 'rook', 'bishop', 'knight', 'pawn', 'takes', 'taking', 'to', 'check', 'checkmate', 'mate', 'castles', 'kingside', 'queenside', 'on', 'x']);
+  const words = (t) => norm(t).split(' ').filter((w) => w && !MOVE_WORDS.has(w) && !/^[a-h][1-8]$/.test(w) && !/^[kqrbn]?[a-h]?[1-8]?x?[a-h][1-8]/.test(w) && !/^o o( o)?$/.test(w) && !/^[a-h]$/.test(w) && !/^[kqrbn]$/.test(w)).join(' ');
+  const doorWords = doorTexts.map(words);
+  const fromDoor = (text) => { const w = words(text); const head = w.slice(0, 40); return head.length > 0 && doorWords.some((d) => d.includes(head) || (d.length > 0 && w.includes(d.slice(0, 40)))); };
+  // A door line that ends on the game's mate ("… let them play Re8, and that is
+  // checkmate") is the door's, not a focus answer shown: the door is read before
+  // the shown-answer shape (F15 counted one as "an answer shown without the tap").
+  tape.spoken = spoken(events).map((l) => {
+    const k = lineKind(l.text, pickLine);
+    if (k === 'shown' && fromDoor(l.text)) return { ...l, kind: 'door' };
+    return { ...l, kind: k ?? (tapped(l.at) ? 'asked' : fromDoor(l.text) ? 'door' : null) };
+  });
   const results = (await readStore(page, 'learnFocusResults')).filter((r) => r.at >= startedAt);
   tape.resultRows = results;
   const gameId = results[0]?.gameId ?? null;
