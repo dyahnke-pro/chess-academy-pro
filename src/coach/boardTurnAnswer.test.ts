@@ -84,3 +84,40 @@ describe('plan and tactics questions are answered from the one read', () => {
     expect(text).not.toMatch(/\byour (?:knight|bishop) on [a-h][1-8] into the game/);
   });
 });
+
+describe('"why is X best?" on the best move is the lesson\'s thought on it (the reversed matrix)', () => {
+  it('the best move named: the thought answers, its line is the one "show me" plays', async () => {
+    setBoardEngineForTests({
+      analysis: async () => ({ topLines: [
+        { rank: 1, evaluation: 40, mate: null, moves: ['e4d5', 'f6d5', 'c3d5', 'd8d5'] },
+        { rank: 2, evaluation: 20, mate: null, moves: ['f3e5', 'd5e4'] },
+      ], evaluation: 0, isMate: false, mateIn: null, depth: 14, seldepth: 14 }),
+      candidate: async () => ({ evalCp: 40, mateIn: null, lineUci: ['f6d5'] }),
+      thought: async (_b, san) => ({
+        text: `You play ${san} — it trades pawns and opens the centre. The other move, Nxe5, gives back the e-pawn.`,
+        move: { san, from: 'e4', to: 'd5' },
+        reason: { line: { fen: FEN, sans: ['exd5', 'Nxd5', 'Nxd5', 'Qxd5'] } } as unknown as import('../services/decisiveReason').DecisiveReason,
+      }),
+    });
+    const out: { lines?: import('../types').WalkableLine[] } = {};
+    const a = await answerBoardTurn(turn('why-best-move', 'exd5'), board, out);
+    expect(a).toBe('You play exd5 — it trades pawns and opens the centre. The other move, Nxe5, gives back the e-pawn.');
+    expect(out.lines?.[0]?.label).toBe('exd5');
+    expect(out.lines?.[0]?.plies.length).toBe(4);
+  });
+  it('a named move that is NOT best keeps the weighing — the premise is what needs correcting', async () => {
+    let asked = false;
+    setBoardEngineForTests({
+      analysis: async () => ({ topLines: [
+        { rank: 1, evaluation: 40, mate: null, moves: ['e4d5', 'f6d5', 'c3d5', 'd8d5'] },
+      ], evaluation: 0, isMate: false, mateIn: null, depth: 14, seldepth: 14 }),
+      candidate: async () => ({ evalCp: -260, mateIn: null, lineUci: ['f6d5', 'e4d5', 'd8d5'] }),
+      thought: async () => { asked = true; return null; },
+    });
+    expect(await answerBoardTurn(turn('why-best-move', 'Nxd5'), board)).toMatch(/^Nxd5 isn't the best move here\./);
+    expect(asked).toBe(false);
+  });
+  it('no thought (engine failed): the weighing still answers', async () => {
+    expect(await answerBoardTurn(turn('why-best-move', 'exd5'), board)).toMatch(/^exd5 is the best move here/);
+  });
+});

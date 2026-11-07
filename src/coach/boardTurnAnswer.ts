@@ -35,7 +35,9 @@ import { playNamedLine } from '../services/whyNotLegal';
 import { settledLeadFor, lastMoveOf } from '../services/material';
 import { evalPhrase } from '../services/groundedAnswer';
 import { unmarked } from '../utils/sanMark';
-import { askedRank } from './questionThought';
+import { askedRank, type QuestionAnswer } from './questionThought';
+import { askedMoveThought } from '../services/movePurposeEngine';
+import type { DecisiveReason } from '../services/decisiveReason';
 
 /** The kinds the board answers directly. Each is served here or falls back. */
 export const BOARD_ANSWERED_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>(['why-best-move', 'candidate-move', 'plan', 'tactics', 'develop-next', 'best-defence', 'faster-win', 'line-outcome']);
@@ -50,6 +52,9 @@ interface BoardTurnInput {
 interface BoardEngine {
   analysis(fen: string): Promise<Pick<StockfishAnalysis, 'topLines' | 'evaluation' | 'isMate' | 'mateIn' | 'seldepth' | 'depth' | 'wdl'> | null>;
   candidate(fen: string, san: string): Promise<{ evalCp: number | null; mateIn: number | null; lineUci: string[] } | null>;
+  /** The one thought a lesson says on the best move (the reversed matrix,
+   *  `askedMoveThought`), read on its own engine reads. */
+  thought(board: BoardTurnInput, san: string): Promise<(QuestionAnswer & { reason: DecisiveReason | null }) | null>;
 }
 
 const defaultEngine: BoardEngine = {
@@ -59,10 +64,14 @@ const defaultEngine: BoardEngine = {
     try { return (await searchUntilStable(fen, 'question', stockfishEngine)).analysis; } catch { return null; }
   },
   candidate: (fen, san) => buildCandidateEval(fen, san),
+  thought: (board, san) => askedMoveThought('why-best-move', board, san).catch(() => null),
 };
 
 let engineOverride: BoardEngine | null = null;
-export function setBoardEngineForTests(e: BoardEngine | null): void { engineOverride = e; }
+/** A stub without a thought read answers named moves with the weighing alone. */
+export function setBoardEngineForTests(e: (Omit<BoardEngine, 'thought'> & Partial<Pick<BoardEngine, 'thought'>>) | null): void {
+  engineOverride = e ? { thought: () => Promise.resolve(null), ...e } : null;
+}
 
 /** The answer to a decoded move question, or null to fall back to the lanes. */
 export async function answerBoardTurn(turn: ResolvedChatTurn, board: BoardTurnInput, out?: { endorsed?: string[]; lines?: WalkableLine[] }): Promise<string | null> {
@@ -102,6 +111,19 @@ export async function answerBoardTurn(turn: ResolvedChatTurn, board: BoardTurnIn
   const opponentLastSan = board.history.length ? board.history[board.history.length - 1] : null;
   const d = buildDeliberation({ analysis, fenBefore: board.fen, moverColor: mover, opponentLastSan, named, maxCandidates: 4 });
   if (!d) return null;
+  // "WHY IS Rxe5 BEST?" ON THE BEST MOVE — the thought a lesson says on it
+  // (the reversed matrix): what it does, the moves it beats, the order, the
+  // line. The weighing stays the answer when the named move is NOT the best,
+  // because the question's premise is what needs correcting there.
+  if (turn.kind === 'why-best-move' && d.named?.san === d.best.san) {
+    const thought = await engine.thought(board, san);
+    if (thought) {
+      const r = thought.reason;
+      const walk = r?.line && r.line.fen === board.fen ? walkableLine(r.line.fen, r.line.sans, san) : null;
+      if (walk && out) out.lines = [walk];
+      return thought.text;
+    }
+  }
   const text = namedMoveAnswer(d, turn.kind === 'why-best-move' ? 'why-best' : 'is-it-good');
   if (text && out) {
     const lines = spokenLines(d, board.fen, text);
