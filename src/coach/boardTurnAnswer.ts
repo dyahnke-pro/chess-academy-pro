@@ -70,7 +70,7 @@ export async function answerBoardTurn(turn: ResolvedChatTurn, board: BoardTurnIn
   if (turn.kind === 'plan' || turn.kind === 'tactics') return answerFromRead(turn, board);
   if (turn.kind === 'develop-next') return developNextAnswer(board, out);
   if (turn.kind === 'best-defence') return bestDefenceAnswer(turn, board, out);
-  if (turn.kind === 'faster-win') return fasterWinAnswer(board);
+  if (turn.kind === 'faster-win') return fasterWinAnswer(board, out);
   if (turn.kind === 'line-outcome') return lineOutcomeAnswer(turn, board, out);
   const moves = turn.referents.filter((r): r is Extract<typeof r, { type: 'move' }> => r.type === 'move');
   // Phase 1: exactly one named move, playable now, on the student's turn.
@@ -352,7 +352,7 @@ async function bestDefenceAnswer(turn: ResolvedChatTurn, board: BoardTurnInput, 
  * the alternatives list). Every engine line that still wins, compared: the
  * shortest mate, or which moves keep the win and which give it back.
  */
-async function fasterWinAnswer(board: BoardTurnInput): Promise<string | null> {
+async function fasterWinAnswer(board: BoardTurnInput, out?: { lines?: WalkableLine[] }): Promise<string | null> {
   let chess: Chess;
   try { chess = new Chess(board.fen); } catch { return null; }
   const me: 'w' | 'b' = board.studentColor === 'white' ? 'w' : 'b';
@@ -365,6 +365,16 @@ async function fasterWinAnswer(board: BoardTurnInput): Promise<string | null> {
     .filter((l): l is { san: string; mate: number | null; cp: number } => !!l.san);
   if (lines.length === 0) return null;
   const best = lines[0];
+  // THE MOVE IT NAMES CARRIES ITS LINE (hard-chat prod audit 2026-11-07, the
+  // Setup Trainer: "Rh1 is the only move that keeps the win", then "show me"
+  // had no line to play). The engine's own line from the move it names.
+  if (out) {
+    const pv = (analysis?.topLines ?? []).find((l) => l.moves?.length)?.moves ?? [];
+    const sans: string[] = [];
+    try { const c = new Chess(board.fen); for (const u of pv) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san); } catch { /* the playable prefix */ }
+    const w = sans.length ? walkableLine(board.fen, sans, sans[0]) : null;
+    if (w) out.lines = [w];
+  }
   const opponentLastSan = board.history.length ? board.history[board.history.length - 1] : null;
   const reason = (san: string, mateIn: number | null): string => {
     const r = bestMoveReason(board.fen, san, me, { mateIn, opponentLastSan });

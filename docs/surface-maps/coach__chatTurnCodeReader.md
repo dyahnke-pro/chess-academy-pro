@@ -51,7 +51,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.ts:383`
 
 ### `readTurnInCode` (function) — 64 call sites
-- `src/coach/boardTurnAnswer.hardWalk.test.ts:63`
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:69`
 - `src/coach/chatTurnAnswers.test.ts:82`
 - `src/coach/chatTurnAnswers.test.ts:103`
 - `src/coach/chatTurnCodeReader.test.ts:10`
