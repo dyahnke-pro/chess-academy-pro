@@ -100,6 +100,20 @@ describe('"explain that" points at the coach\'s last line (hard-chat prod audit 
   });
 });
 
+describe('"what\'s their best defence?" is read in code (hard-chat prod audit 2026-11-07, the Setup Trainer)', () => {
+  // The trainer's position after the solution is shown: White to move.
+  const board = { fen: '5rk1/p4ppp/1p6/4p3/3PQP2/2PKP2q/r7/2R1R3 w - - 0 33', history: [], studentColor: 'white' as const };
+  it.each(["What if they don't take — what's their best defence?", "what's their best defense", 'whats there best reply?', 'How do they defend?', "what is the opponent's best response"])('%s', (q) => {
+    expect(readTurnInCode(q, board)).toMatchObject({ kind: 'best-defence', referents: [] });
+  });
+  it('a move named and legal now is the move it defends against', () => {
+    expect(readTurnInCode('how do they defend against Qxe5?', board)).toMatchObject({ kind: 'best-defence', referents: [{ type: 'move', san: 'Qxe5' }] });
+  });
+  it('a definition question is not this', () => {
+    expect(readTurnInCode("what's a good defence against the Sicilian?", board)?.kind).not.toBe('best-defence');
+  });
+});
+
 describe('the engine\'s main line, asked for without naming a move (escalating walk 2026-10-17)', () => {
   const board = { fen: '4k3/8/8/3n4/8/8/P7/3QK3 w - - 0 1', history: [], studentColor: 'white' as const };
   it('reads "calculate the main line six moves deep" as the line computer, twelve plies', () => {

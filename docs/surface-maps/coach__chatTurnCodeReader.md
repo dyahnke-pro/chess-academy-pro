@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**669 lines · 5 exports · 18 importers · 12 tests · 0 audits**
+**681 lines · 5 exports · 18 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -50,7 +50,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `namedMoveTokens` (function) — 1 call site
 - `src/coach/dispatchCoachTurn.ts:383`
 
-### `readTurnInCode` (function) — 61 call sites
+### `readTurnInCode` (function) — 64 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:63`
 - `src/coach/chatTurnAnswers.test.ts:82`
 - `src/coach/chatTurnAnswers.test.ts:103`
@@ -58,14 +58,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/chatTurnCodeReader.test.ts:90`
 - `src/coach/chatTurnCodeReader.test.ts:93`
 - `src/coach/chatTurnCodeReader.test.ts:99`
-- `src/coach/chatTurnCodeReader.test.ts:106`
-- `src/coach/chatTurnCodeReader.test.ts:111`
-- `src/coach/chatTurnCodeReader.test.ts:112`
-- `src/coach/chatTurnCodeReader.test.ts:121`
-- `src/coach/chatTurnCodeReader.test.ts:124`
-- `src/coach/chatTurnCodeReader.test.ts:127`
-- `src/coach/chatTurnCodeReader.test.ts:130`
-- `src/coach/chatTurnCodeReader.test.ts:131`
+- `src/coach/chatTurnCodeReader.test.ts:107`
+- `src/coach/chatTurnCodeReader.test.ts:110`
+- `src/coach/chatTurnCodeReader.test.ts:113`
+- `src/coach/chatTurnCodeReader.test.ts:120`
+- `src/coach/chatTurnCodeReader.test.ts:125`
+- `src/coach/chatTurnCodeReader.test.ts:126`
+- `src/coach/chatTurnCodeReader.test.ts:135`
+- `src/coach/chatTurnCodeReader.test.ts:138`
+- `src/coach/chatTurnCodeReader.test.ts:141`
+- `src/coach/chatTurnCodeReader.test.ts:144`
+- `src/coach/chatTurnCodeReader.test.ts:145`
 - `src/coach/chatTurnParser.ts:195`
 - `src/coach/developNext.test.ts:24`
 - `src/coach/developNext.test.ts:26`

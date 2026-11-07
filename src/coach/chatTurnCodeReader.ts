@@ -310,6 +310,8 @@ function mainLinePlies(text: string): number {
   return Math.max(2, Math.min(24, /^pl/i.test(m[2]) ? n : n * 2));
 }
 
+const BEST_DEFENCE_RE = /\b(?:what(?:'|’)?s|what\s+is|what\s+would\s+be)\s+(?:their|there|the\s+opponent(?:'|’)?s|black(?:'|’)?s|white(?:'|’)?s)\s+best\s+(?:defen[cs]e|reply|answer|response)\b|\bhow\s+(?:do|does|would|can|could)\s+(?:they|black|white|the\s+opponent)\s+defend\b/i;
+
 export function readTurnInCode(text: string, board: BoardContext): ChatTurn | null {
   if (!board.fen || text.length > 160) return null;
   let chess: Chess;
@@ -399,6 +401,16 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
         return { kind: 'line-outcome', referents: [{ type: 'move', san: mine.san }, { type: 'move', san: take.san }], seat: null, topic: null };
       }
     } catch { /* not a move here */ }
+  }
+  // THEIR BEST DEFENCE — "what's their best defence?", "what if they don't
+  // take — what's their best reply?", "how do they defend against Ng5?" (hard-
+  // chat prod audit 2026-11-07, the Setup Trainer: read only by the model, it
+  // missed the 1.5 s read budget and the keyword path, taking "what's …" for a
+  // concept, served a book passage on doubled pawns). A move named and legal
+  // for the student now is the move it defends against; else the best move.
+  if (BEST_DEFENCE_RE.test(text)) {
+    const named = namedMoveTokens(text).find((san) => { try { return !!new Chess(board.fen).move(san); } catch { return false; } });
+    return { kind: 'best-defence', referents: named ? [{ type: 'move', san: named }] : [], seat: 'them', topic: null };
   }
   // THE ENGINE'S OWN LINE, ASKED FOR WITHOUT NAMING A MOVE ("calculate the
   // main line six moves deep", "how does it go from here?" — escalating walk
