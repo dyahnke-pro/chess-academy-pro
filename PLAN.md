@@ -71,6 +71,15 @@ Inside one game: two finds of a skill and it stops prompting that skill for the 
 - C5 Moments 1 and 3 through the door with the dial.
 - C6 Prod: the Learn focus audit + the concept-gameplay audit + a hand walk of one of David's games, every line read.
 
+**Status (2026-11-07, branch `learn-matrix-p2`):**
+- ✅ C0 measured on five of his games through today's Learn (`coachMoment.measure.test.ts`): spoke on 100 of 105 turns, 57 said more than one moment; their move read on 85, the question 48, the build 29, the bait 0.
+- ✅ C1 one table places every fact in its part of the turn (`coachMoment.GROUP_PART`, derived from group + seat, never per lane); the door's row names the turn's moment and whether their move was read (`learn-turn-decision.moment` / `readTheirMove`, audit row LM). A separate one-moment hold was built, found redundant with the thread rule (the heart's order already keeps one idea for the move to come) and not kept.
+- ✅ C2/C3 the question before the move follows the record (`MOMENT_DIAL` over `holdState`): red/grey asked (target + habit, never the move), amber only after a miss, green neither (the door explains the miss, it counts against the green); two finds of a skill in a game end its asking (`IN_GAME_FINDS_TO_QUIET`). CLAUDE.md § LEARN FOCUS and LEARN-FOCUS.md rewritten (Lake Butler); row `learn-focus-question`, audit F22.
+- ✅ C4 the bait (`ifTheyPlay.baitBranch` → kind `trap-set`, group `bait`): the student's move is sound (their best reply leaves them ≤ +0.5), a reply many players at this level choose (human model ≥ 20%) loses material that holds or walks into mate. Said once (the reply tree no longer repeats that branch); Learn says it past tense with the winning move held while it is still the student's to play; lessons and Review say it live. Proof: his fGBhk9oqdbg@22 "This sets a trap: many players at this level answer …Be6, and f5 wins a bishop"; none on an unsound move.
+- 🟠 the record rows for moments 1, 3 and 4 — none exist, so the dial reads grey (taught in full, the plan's own default). For the bait, "not setting a trap" is not a mistake, so a hold rate over `bait-set` would read nearly every move as a miss; what counts as held is put to David.
+- ✅ the focus fixes (#135) merged: the plant reads every legal move and is read where a chance shows; the trainer's "why does this work?" explains the solution it showed; Learn's reply line follows this move's own lines.
+- ⏳ C6 after main: focus F22, concept-gameplay LM, the Learn/Review standing pair, the hard-chat audit — muted, one at a time.
+
 ## 🏀 WO-STORY-MATRIX-01 — one matrix runs every computer and tells the game's story (David 2026-10-30: "We need a matrix that is able to run these all, filter them down, and produce sentences that are meaningful to the game/position and create a story that follows the game" → "a tournament bracket … ties are allowed" → "Write this all up as the plan. We start by wiring in the computers. Then we start the matrix")
 
 **Why (measured 2026-10-30):**
