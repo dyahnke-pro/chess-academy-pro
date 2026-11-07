@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '../../test/utils';
 import { PatternSchoolPage } from './PatternSchoolPage';
 import { PATTERN_REGISTRY } from '../../data/patternRegistry';
+import { HELD_FROM_RELEASE } from '../../data/heldSurfaces';
 
 vi.mock('../../services/analytics', () => ({ captureEvent: vi.fn() }));
 const navigateMock = vi.fn();
@@ -60,7 +61,21 @@ describe('PatternSchoolPage', () => {
     });
   });
 
+  it('while "Learn how to think" is held there is no question: the arrow shows at once (David 2026-11-07)', async () => {
+    const { getPuzzlesByTheme } = await import('../../services/puzzleService');
+    vi.mocked(getPuzzlesByTheme).mockResolvedValueOnce([
+      { id: 'p3', fen: 'r3k3/7p/8/1N6/8/8/8/4K3 b - - 0 1', moves: 'h7h6 b5c7', rating: 1200, themes: ['fork'], openingTags: null, popularity: 90, nbPlays: 100 },
+    ] as Awaited<ReturnType<typeof getPuzzlesByTheme>>);
+    render(<PatternSchoolPage />);
+    fireEvent.click(screen.getByTestId('pattern-toggle-fork'));
+    await waitFor(() => expect(screen.getByTestId('mock-board').getAttribute('data-arrows')).toBe('b5c7'));
+    expect(screen.queryByTestId('pattern-find-it-fork')).toBeNull();
+    expect(screen.queryByTestId('pattern-show-it-fork')).toBeNull();
+  });
+
   it('IDENTIFY is a question first: no arrow until they find it or ask to be shown', async () => {
+    HELD_FROM_RELEASE.howToThink = false;
+    try {
     const { getPuzzlesByTheme } = await import('../../services/puzzleService');
     // After ...h6, Nc7+ forks the king on e8 and the rook on a8.
     vi.mocked(getPuzzlesByTheme).mockResolvedValueOnce([
@@ -73,5 +88,6 @@ describe('PatternSchoolPage', () => {
     fireEvent.click(screen.getByTestId('pattern-show-it-fork'));
     expect(screen.getByTestId('mock-board').getAttribute('data-arrows')).toBe('b5c7');
     expect(screen.queryByTestId('pattern-find-it-fork')).toBeNull();
+    } finally { HELD_FROM_RELEASE.howToThink = true; }
   });
 });

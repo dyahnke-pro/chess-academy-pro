@@ -52,7 +52,11 @@ opens them, so audits run), but nothing in the app opens them: every door reads
 ONE table, `src/data/heldSurfaces.ts` (`HELD_FROM_RELEASE`, `isHeldRoute`) —
 the hub tiles, the contents page, Up next, the first-run and Learn chips, the
 typed and chat "teach me how to think" doors, the book links, and the route list
-the coach navigates by. Releasing one is one value flipped. Gate:
+the coach navigates by. The step questions are How to Think too (David
+2026-11-07: "Hide that too"): the one place they are asked, the hook's
+`askOnce`, asks nothing while it is held — My Mistakes, the Setup Trainer and
+Pattern School (its "Find it yourself" button) go on without them. Releasing
+one is one value flipped. Gate:
 `src/test/heldSurfaces.gate.test.ts` (a file linking to a held route must read
 the table).
 

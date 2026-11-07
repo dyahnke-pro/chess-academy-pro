@@ -20,8 +20,8 @@
  *   L12 every asked board on a material step passed the ENGINE check first
  *       (`thinking-key-check` rows; a board the engine disagrees with is dropped)
  *   L13 a step whose board can be empty offers "Nothing here"
- *   L14 My Mistakes: before a mistake puzzle's solve, the slip's step question
- *       (when the board poses a fair one) — and the solve begins after it
+ *   L14 HELD (2026-11-07): My Mistakes asks no step question; the solve begins
+ *   L15 HELD (2026-11-07): Pattern School offers no "Find it yourself" 
  *
  * Runs on David's record when the drop is on disk (audit-reports/.fixtures/,
  * `node scripts/read-data-drop.mjs --latest`); a fresh device otherwise, said so.
@@ -308,12 +308,28 @@ async function main() {
         solving = (await page.locator('[data-testid="mistake-slip-question"]').count()) === 0 && (await page.locator('[data-testid="prompt-text"]').count()) > 0;
         await page.waitForTimeout(1000);
       }
-      const leaked = sawQuestion && (await page.locator('[data-testid="mistake-slip-question"]').count()) > 0 && (await page.locator('[data-testid="prompt-text"]').count()) > 0;
       const kitChecks = listener.getCapturedEvents().filter((e) => e.kind === 'thinking-key-check' && /origin=game/.test(String(e.summary))).length;
-      record('L14. My Mistakes: the slip question (when fair) comes before the solve, and the solve follows', solving && !leaked,
-        `question=${sawQuestion ? 'asked' : 'none fair on this board'} solving=${solving} game-board checks=${kitChecks}`);
+      // HELD (David 2026-11-07: "Hide that too"): the step questions are part of
+      // "Learn how to think" — none is asked, the solve begins at once.
+      record('L14. held: My Mistakes asks no step question, and the solve begins', solving && !sawQuestion,
+        `question=${sawQuestion ? 'ASKED' : 'none'} solving=${solving} game-board checks=${kitChecks}`);
     } else {
       record('L14. My Mistakes slip question', true, 'n/a — no mistake puzzles on this device (load the data drop)');
+    }
+
+    // L15: Pattern School — "Find it yourself" is the step question; held, the
+    // example shows with its arrow and there is nothing to find.
+    await page.goto(`${BASE_URL}/tactics/patterns`, { waitUntil: 'domcontentloaded', timeout: 45_000 });
+    await dismissGates(page);
+    const toggle = page.locator('[data-testid^="pattern-toggle-"]').first();
+    if (await toggle.waitFor({ timeout: 30_000 }).then(() => true).catch(() => false)) {
+      await toggle.click({ force: true }).catch(() => {});
+      const example = page.locator('[data-testid^="pattern-example-board-"]').first();
+      const shown = await example.waitFor({ timeout: 30_000 }).then(() => true).catch(() => false);
+      const findIt = await page.locator('[data-testid^="pattern-find-it-"]').count();
+      record('L15. held: Pattern School offers no "Find it yourself"', shown && findIt === 0, shown ? `find-it buttons=${findIt}` : 'n/a — no example position loaded');
+    } else {
+      record('L15. held: Pattern School offers no "Find it yourself"', false, 'Pattern School never rendered');
     }
 
     record('L9a. zero /api/tts requests (muted)', tts === 0, `${tts} requests`);

@@ -11,6 +11,7 @@ import { getPuzzlesByTheme } from '../../services/puzzleService';
 import { PATTERN_DRILL_DEPTH } from '../../services/puzzleDepth';
 import { captureEvent } from '../../services/analytics';
 import { useThinkingLesson } from '../../hooks/useThinkingLesson';
+import { isReleased } from '../../data/heldSurfaces';
 import { voiceService } from '../../services/voiceService';
 import { ThinkingLessonBoard } from '../Coach/ThinkingLessonBoard';
 import type { Square } from 'chess.js';
@@ -97,7 +98,9 @@ function PatternCard({ lesson }: { lesson: TacticPatternLesson }): JSX.Element {
   const { askOnce: readAskOnce, motifKit: readMotifKit, stop: readStop } = reading;
   const [revealed, setRevealed] = useState(false);
   useEffect(() => () => { readStop(); }, [readStop]);
-  const askable = !!example && !!example.san && example.targets.length >= 1 && example.targets.length <= 4;
+  // "Find it yourself" is the step question (Learn how to think): held, the
+  // position shows with its arrows, as it did before the question existed.
+  const askable = isReleased('howToThink') && !!example && !!example.san && example.targets.length >= 1 && example.targets.length <= 4;
   const findIt = useCallback((): void => {
     if (!example || !example.san) return;
     captureEvent('pattern_school_identify_asked', { pattern: lesson.id });

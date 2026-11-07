@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '../../test/utils';
 import { MistakePuzzleBoard } from './MistakePuzzleBoard';
 import { buildMistakePuzzle, resetFactoryCounter } from '../../test/factories';
+import { releasedDuring } from '../../test/releasedDuring';
 
 // THE QUESTION BEFORE A MISTAKE PUZZLE (David 2026-10-23: in-game step
 // questions go in My Mistakes; Review stays question-free). Before the solve
@@ -47,6 +48,7 @@ function puzzle(): ReturnType<typeof buildMistakePuzzle> {
 }
 
 describe('MistakePuzzleBoard — the step question before the solve', () => {
+  releasedDuring('howToThink');
   beforeEach(() => {
     vi.clearAllMocks();
     resetFactoryCounter();
@@ -80,5 +82,20 @@ describe('MistakePuzzleBoard — the step question before the solve', () => {
     render(<MistakePuzzleBoard puzzle={puzzle()} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);
     await waitFor(() => expect(mockSpeak).toHaveBeenCalledWith(INTRO));
     expect(screen.queryByTestId('mistake-slip-question')).not.toBeInTheDocument();
+  });
+});
+
+describe('MistakePuzzleBoard — while "Learn how to think" is held (David 2026-11-07: "Hide that too")', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    resetFactoryCounter();
+  });
+  it('no step question: the solve begins straight away, even with a question to ask', async () => {
+    const { kitForStep } = await import('../../services/thinkingLessonStart');
+    slipKit.mockResolvedValue(kitForStep('their-targets'));
+    render(<MistakePuzzleBoard puzzle={puzzle()} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);
+    await waitFor(() => expect(mockSpeak).toHaveBeenCalledWith(INTRO));
+    expect(screen.queryByTestId('mistake-slip-question')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('thinking-lesson')).not.toBeInTheDocument();
   });
 });

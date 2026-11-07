@@ -4,6 +4,7 @@
 // wires real voice and timers; the plan, the boards and the record come
 // through the one door (services/thinkingLessonStart.ts).
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { isReleased } from '../data/heldSurfaces';
 import type { Square } from 'chess.js';
 import {
   ThinkingLessonSession, IDLE_LESSON_VIEW, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, refillLessonCandidates, planThinkingLesson, recordLessonAnswer, recordLessonChoice, rememberLessonBoardNow, countLessonBoardAsked, isNothingAnswer, saveLessonProgress, slipKitForBoard, firstFairKit, liveBoard, searchKey, motifKit, type MotifBoard, noLessonLine,
@@ -121,6 +122,10 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
   const hold = useCallback((): void => { sessionRef.current?.hold(); }, []);
 
   const askOnce = useCallback(async (kit: StepKit, fen: string, answered?: readonly string[]): Promise<boolean> => {
+    // HELD FROM RELEASE (David 2026-11-07: "Hide that too"): the step questions
+    // ARE "Learn how to think" — in My Mistakes, the Setup Trainer, Pattern
+    // School and its lesson game alike. While it is held, none is asked.
+    if (!isReleased('howToThink')) return false;
     // A QUESTION NEVER FOLLOWS ITS OWN ANSWER (unity U7, Learn walk #27/#28:
     // "Drop everything — your queen on d5 is attacked", then "Which of your
     // pieces could they win right now?"). When this turn already named every
