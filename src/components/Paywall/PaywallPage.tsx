@@ -72,13 +72,16 @@ const FREE_TIER: readonly string[] = [
 /** Which premium surface bounced the user here — drives the contextual line
  *  at the top of the paywall (soft-gate upsell). Mirrors accessPolicy's
  *  GatedFeature. */
-type PaywallFeature = 'opening' | 'puzzles' | 'coach' | 'academy' | 'kid' | 'app' | 'settings';
+type PaywallFeature = 'opening' | 'library' | 'puzzles' | 'coach' | 'academy' | 'kid' | 'app' | 'settings';
 
 const FEATURE_PROMPT: Record<PaywallFeature, string | null> = {
   // Opened on purpose from Settings → Subscription — nothing was walled.
   settings: null,
   puzzles: 'You’ve used all 20 free puzzles. Go Pro for unlimited tactics tuned to your level.',
   opening: 'You’ve used your free opening. Unlock just this one, or go Pro for every opening.',
+  // The All section — every opening in the games database — is for members
+  // only (David 2026-11-07: "Lock out all for monthly members only").
+  library: 'Every opening in the library is for members. Go Pro to open every one, line by line.',
   coach: 'You’ve used up your free coaching. Go Pro for unlimited lessons, chat, and analysis.',
   academy: 'The Academy is a Pro feature — go Pro for the full guided course path.',
   kid: 'Your free week of Kids mode is up. Go Pro to keep playing.',

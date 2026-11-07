@@ -15,9 +15,10 @@ import { ModelGamesSection } from './ModelGamesSection';
 import { ModelGameViewer } from './ModelGameViewer';
 import { useEntitlement } from '../../hooks/useEntitlement';
 import { useFreeTierStore } from '../../stores/freeTierStore';
-import { canViewOpening, isEligibleFreeOpening, hasFreeOpeningRoom } from '../../services/freeTierService';
+import { canViewOpening, isEligibleFreeOpening, hasFreeOpeningRoom, isMembersOnlyOpening } from '../../services/freeTierService';
 import {
   trackFreeOpeningClaimed,
+  trackLibraryWalled,
   trackSecondOpeningWalled,
 } from '../../services/billingAnalytics';
 import { PaywallPage } from '../Paywall/PaywallPage';
@@ -263,6 +264,14 @@ export function OpeningDetailPage(): JSX.Element {
   const { isPro, gateEnabled, ownedOpeningIds } = useEntitlement();
   const freeTierRow = useFreeTierStore((s) => s.row);
   const freeTierHydrated = useFreeTierStore((s) => s.hydrated);
+  // THE LIBRARY IS FOR MEMBERS (David 2026-11-07: "Lock out all for monthly
+  // members only"): an All-section opening — no course of its own, never a
+  // free pick, not sold alone — walls the whole page for a non-member,
+  // browsing and Watch included. Dormant unless the gate is live.
+  const libraryWalled = gateEnabled && !isPro && freeTierHydrated && !!id && isMembersOnlyOpening(id);
+  useEffect(() => {
+    if (libraryWalled && id) trackLibraryWalled(id);
+  }, [libraryWalled, id]);
   const claimFreeOpening = useFreeTierStore((s) => s.claimFreeOpening);
   // Two-tap guard for the expert-pass unlock: spending a 1-of-1 lifetime pass
   // shouldn't die to a misclick, so the first tap arms, the second commits.
@@ -863,6 +872,7 @@ export function OpeningDetailPage(): JSX.Element {
   // Browsing, model games and WATCH stay open on every opening, so a student
   // can sample the whole library and only commits when they drill. Dormant
   // unless the gate is live + non-Pro.
+  if (libraryWalled) return <PaywallPage feature="library" />;
   if (isActiveDrill && gateEnabled && !isPro && freeTierHydrated && id && !canViewOpening(id, freeTierRow, ownedOpeningIds)) {
     return <PaywallPage feature="opening" opening={{ id, name: opening.name }} />;
   }

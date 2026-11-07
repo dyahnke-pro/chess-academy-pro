@@ -59,6 +59,7 @@ export const BILLING_EVENT = {
   freeOpeningClaimed: 'free_opening_claimed',
   /** A deep dive into a SECOND opening was blocked (upgrade-pressure moment). */
   secondOpeningWalled: 'second_opening_walled',
+  libraryWalled: 'library_walled',
   /** The plans page was opened on purpose (props: source — 'settings'), not by
    *  a wall. Kept apart from `paywall_viewed`, which counts walls only. */
   plansOpened: 'plans_opened',
@@ -295,6 +296,12 @@ export function trackSecondOpeningWalled(attemptedId: string, claimedId: string)
     attempted_opening_id: attemptedId,
     claimed_opening_id: claimedId,
   });
+}
+
+/** A non-member opened an All-section opening — the library is for members
+ *  only (David 2026-11-07). Props: `opening_id`. */
+export function trackLibraryWalled(openingId: string): void {
+  captureEvent(BILLING_EVENT.libraryWalled, { opening_id: openingId });
 }
 
 /** What one opening's offer describes in every opening-sale event. */

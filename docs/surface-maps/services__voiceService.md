@@ -220,7 +220,7 @@
 - `src/utils/descriptiveNotation.test.ts:32`
 
 ### `sanitizeForTTS` (function) — 68 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:697`
+- `src/components/Openings/OpeningDetailPage.tsx:706`
 - `src/components/Settings/VoiceSettingsPanel.tsx:119`
 - `src/components/Settings/VoiceSettingsPanel.tsx:161`
 - `src/hooks/useProseReader.ts:66`

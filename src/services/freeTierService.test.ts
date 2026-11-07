@@ -272,3 +272,21 @@ describe('kid window', () => {
     expect(kidDaysLeft({ kidFirstAccessAt: now - (KID_FREE_MS + 1000) }, now)).toBe(0);
   });
 });
+
+describe('the All section is for members only (David 2026-11-07)', () => {
+  it('a database opening is members-only; a course, a gambit, a pro line or a counter is not', async () => {
+    const { isMembersOnlyOpening } = await import('./freeTierService');
+    const { openingKeyFor } = await import('./openingKey');
+    expect(isMembersOnlyOpening(openingKeyFor('A00', 'Amar Opening'))).toBe(true);
+    for (const id of ['ruy-lopez', 'caro-kann']) expect(isMembersOnlyOpening(id), id).toBe(false);
+    const products = (await import('../data/opening-products.json')).default.products as { openingId: string }[];
+    for (const p of products) expect(isMembersOnlyOpening(p.openingId), p.openingId).toBe(false);
+  });
+
+  it('the opening page walls a members-only opening whole, browsing and Watch included', async () => {
+    const { readFileSync } = await import('node:fs');
+    const src = readFileSync('src/components/Openings/OpeningDetailPage.tsx', 'utf8');
+    expect(src).toMatch(/const libraryWalled = gateEnabled && !isPro && freeTierHydrated && !!id && isMembersOnlyOpening\(id\)/);
+    expect(src).toMatch(/if \(libraryWalled\) return <PaywallPage feature="library" \/>;/);
+  });
+});

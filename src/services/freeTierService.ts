@@ -20,6 +20,7 @@ import { db, type FreeTierRecord } from '../db/schema';
 import openingManifests from '../data/opening-manifests.json';
 import gambitsData from '../data/gambits.json';
 import proRepertoireData from '../data/pro-repertoires.json';
+import { openingProductFor } from './openingProducts';
 
 /** Lifetime free puzzle allowance (one-time bucket, not per-day). */
 export const FREE_PUZZLE_LIMIT = 20;
@@ -68,6 +69,14 @@ export const FREE_OPENING_POOL: ReadonlySet<string> = new Set([
 /** True when `openingId` is one of the eligible free-pick openings. */
 export function isEligibleFreeOpening(openingId: string): boolean {
   return FREE_OPENING_POOL.has(openingId);
+}
+
+/** MEMBERS ONLY (David 2026-11-07: "Lock out all for monthly members only"):
+ *  an opening of the All section — one built from the games database, with no
+ *  course of its own — is neither a free pick nor sold on its own, so only a
+ *  Pro member (monthly or yearly) opens it, browsing and Watch included. */
+export function isMembersOnlyOpening(openingId: string): boolean {
+  return !FREE_OPENING_POOL.has(openingId) && openingProductFor(openingId) === null;
 }
 
 const DEFAULT_ROW: FreeTierRecord = {
