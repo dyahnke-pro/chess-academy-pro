@@ -1022,7 +1022,7 @@ function openingIdeas(
         led: `steps out of the pawn's reach${tail}`,
         selfContained: `steps the ${name} out of the pawn's reach${tail}`,
         imperative: `when a pawn kicks a piece, move it to a square where it still works`,
-        pointer: ((pawnSq: string): string => `get your ${name} on ${mv.from} away from their pawn on ${pawnSq}${jobTail(before, after, mv.from, mv.to, mover, pawnSq)}`)(before.attackers(mv.from as Square, them).find((a) => before.get(a)?.type === 'p') ?? ''),
+        pointer: ((pawnSq: string): string => `get your ${name} on ${mv.from} away from their pawn on ${pawnSq}${jobTail(before, after, mv.from, mv.to, mover, pawnSq)}`)(before.attackers(mv.from, them).find((a) => before.get(a)?.type === 'p') ?? ''),
         squares: kept ? [mv.to, kept.sq] : [mv.to],
       });
     }
