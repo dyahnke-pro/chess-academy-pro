@@ -10109,6 +10109,23 @@ export function CoachTeachPage({ mode }: {
           .map((f) => ({ namesStudentMove: f.namesStudentMove, lane: 'ifTheyPlay' as const, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof, ...(f.heldForm ? { heldForm: f.heldForm } : {}) }));
       } catch { return []; }
     })();
+    // THE BAIT (baitSet, WO-COACH-NEXT-TO-YOU-01 C4): the trap the student's
+    // sound move set — the reply many players at this level choose that loses —
+    // read off the same read of every reply as the tree; said in the past once
+    // their reply went another way, the answer held while it is still theirs
+    // to play. The reply that falls for it is the focus's chance.
+    const baitFacts = ((): Array<{ namesStudentMove: boolean; lane: 'baitSet'; computer: CoachFact['computer']; text: string; fen: string; squares: readonly string[]; claims: readonly string[]; proof: CoachFact['proof']; stakes: CoachFact['stakes']; lines?: CoachFact['lines'] }> => {
+      const kept = replyReadRef.current;
+      const read = kept && samePosition(kept.fen, args.fenBeforeReply) ? kept.read : null;
+      const h = args.historyAfterReply;
+      if (!read || h.length < 1) return [];
+      try {
+        const m = new Chess(args.fenBeforeReply).move(h[h.length - 1]);
+        const played = m ? `${m.from}${m.to}${m.promotion ?? ''}` : null;
+        return readBoardAll('baitSet', { fen: args.fenBeforeReply, replies: read.scored, rating: read.rating, student: studentCC, seconds: [], played, tense: 'past', liveBoard: args.fenAfterReply })
+          .map((f) => ({ namesStudentMove: f.namesStudentMove, lane: 'baitSet' as const, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof, stakes: f.stakes, ...(f.lines ? { lines: f.lines } : {}) }));
+      } catch { return []; }
+    })();
     // THE MOVES A PLAYER WEIGHS (weighedMoves, 2026-11-05), on both moves of
     // the turn — said about the move just played: the natural move that fails
     // and its line, the move of the same worth and what separates them, the
@@ -10166,6 +10183,7 @@ export function CoachTeachPage({ mode }: {
       ...(bookMoveRead ? [{ namesStudentMove: false, lane: 'bookMove' as const, computer: bookMoveRead.computer, text: bookMoveRead.text, fen: bookMoveRead.fen, squares: bookMoveRead.squares, claims: bookMoveRead.claims, role: bookMoveRead.role, proof: bookMoveRead.proof, ...(bookMoveRead.skill ? { skill: bookMoveRead.skill } : {}) }] : []),
       ...kingWalkFacts,
       ...ifTheyPlayFacts,
+      ...baitFacts,
       ...weighedFacts,
       ...teachingMoveFacts,
       ...(announceLine ? [{ namesStudentMove: false, lane: 'opening' as const, computer: 'openingAnnouncementForGame' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),

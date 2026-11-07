@@ -77,7 +77,7 @@ export type FacetTag =
   // order a `timing`, castling by hand a `plan-now`, the move most players
   // play a `refuted`, the false alarm a `point`. Each is worth, and placed,
   // exactly what the kind it came from is, so nothing said moves.
-  | 'reply-tree' | 'move-order' | 'castling' | 'common-wrong' | 'trap-ahead'
+  | 'reply-tree' | 'move-order' | 'castling' | 'common-wrong' | 'trap-ahead' | 'trap-set'
   | 'false-alarm' | 'rule-exception' | 'push-or-hold'
   // THE TEACHING MOVES' NEW COMPUTERS (2026-11-05): a teaching move no
   // computer made, each with the computer built for it — the pawn break and
@@ -252,6 +252,7 @@ export const FACET_RANK: Record<FacetTag, number> = {
   castling: 20,
   'common-wrong': 82,
   'trap-ahead': 82,
+  'trap-set': 80,
   'false-alarm': 29,
   'rule-exception': 29,
   'push-or-hold': 29,
@@ -336,6 +337,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   castling: 'teach',
   'common-wrong': 'teach',
   'trap-ahead': 'teach',
+  'trap-set': 'teach',
   'false-alarm': 'teach',
   'rule-exception': 'teach',
   'push-or-hold': 'teach',
@@ -490,7 +492,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   badbishop: 'plan', complex: 'plan', minority: 'plan', worst: 'plan', 'opp-target': 'plan',
   verdict: 'plan', eval: 'plan', delta: 'plan', note: 'plan', stock: 'plan',
   // The teaching moves' own kinds, in the layer of the kind each came from.
-  'reply-tree': 'safety', 'common-wrong': 'safety', 'trap-ahead': 'safety', 'move-order': 'plan', castling: 'plan',
+  'reply-tree': 'safety', 'common-wrong': 'safety', 'trap-ahead': 'safety', 'trap-set': 'safety', 'move-order': 'plan', castling: 'plan',
   'false-alarm': 'principle', 'rule-exception': 'principle', 'push-or-hold': 'principle',
   'opp-think': 'safety', 'forcing-scan': 'safety',
   // The teaching moves' new computers.
@@ -550,7 +552,7 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   worst: 'description', 'opp-target': 'description', verdict: 'description', structure: 'description',
   'opp-dev': 'description', 'student-leans': 'description', 'opponent-leans': 'description',
   // The teaching moves' own kinds owe what the kind each came from owes.
-  'reply-tree': 'proven', 'move-order': 'proven', 'common-wrong': 'proven', 'trap-ahead': 'proven',
+  'reply-tree': 'proven', 'move-order': 'proven', 'common-wrong': 'proven', 'trap-ahead': 'proven', 'trap-set': 'proven',
   castling: 'description', 'false-alarm': 'method', 'rule-exception': 'method', 'push-or-hold': 'method',
   'opp-think': 'method', 'forcing-scan': 'method',
   // The teaching moves' new computers: the break carries its trade, played.
@@ -709,7 +711,7 @@ function clauseKindForTag(tag: FacetTag): string {
     case 'loose': case 'threat': case 'count': case 'royal': case 'trapped': return 'must-defend';
     case 'tactic': case 'sac': case 'sac-why': case 'forced': return 'latent-danger';
     case 'endgame': case 'passer': case 'consequence': case 'plan-race': return 'convert';
-    case 'refuted': case 'common-wrong': case 'trap-ahead': case 'equivalence': return 'refuted';
+    case 'refuted': case 'common-wrong': case 'trap-ahead': case 'trap-set': case 'equivalence': return 'refuted';
     case 'timing': case 'move-order': case 'capture-choice': case 'kick': return 'structure-plan';
     case 'their-read': case 'their-trigger': return 'opponent-intent';
     case 'rule': case 'rule-exception': case 'false-alarm': case 'push-or-hold': return 'fundamental';

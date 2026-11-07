@@ -184,6 +184,8 @@ export type LearnLane =
   | 'kingRule'
   // ── the reply tree (ifTheyPlay, his "if they X, you play Y") ──
   | 'ifTheyPlay'
+  // ── the bait (baitSet, WO-COACH-NEXT-TO-YOU-01 C4: induce mistakes) ──
+  | 'baitSet'
   // ── the moves a player weighs (weighedMoves, 2026-11-05) ──
   | 'temptingRefuted'
   | 'alsoGood'
@@ -252,6 +254,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   lastTimeHere: 'affirm', sameAsLastTime: 'but',
   kingSquares: 'affirm', keptHome: 'affirm', kingWalk: 'point', kingRule: 'point',
   ifTheyPlay: 'point',
+  baitSet: 'point',
   temptingRefuted: 'refute', alsoGood: 'affirm', squareChoice: 'affirm',
   pawnBreak: 'point',
   oppositeBishops: 'verdict',
@@ -358,6 +361,7 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   kingSquares: phaseOfComputer(BOARD_COMPUTERS.kingSquares.phase), kingWalk: phaseOfComputer(BOARD_COMPUTERS.castleByHand.phase),
   keptHome: phaseOfComputer(BOARD_COMPUTERS.keptHome.phase), kingRule: phaseOfComputer(BOARD_COMPUTERS.kingFromCentre.phase),
   ifTheyPlay: phaseOfComputer(BOARD_COMPUTERS.ifTheyPlay.phase),
+  baitSet: phaseOfComputer(BOARD_COMPUTERS.baitSet.phase),
   temptingRefuted: phaseOfComputer(BOARD_COMPUTERS.temptingRefuted.phase), alsoGood: phaseOfComputer(BOARD_COMPUTERS.alsoGood.phase),
   squareChoice: phaseOfComputer(BOARD_COMPUTERS.squareChoice.phase),
   pawnBreak: phaseOfComputer(BOARD_COMPUTERS.pawnBreak.phase),
@@ -428,6 +432,8 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   kingRule: { factKind: BOARD_COMPUTERS.kingFromCentre.kind, kind: 'computed', why: 'the rule of thumb on a king walked out of the centre: further from the centre is safer', lead: 45 },
   // ── the reply tree (ifTheyPlay, his "if they X, you play Y") ──
   ifTheyPlay: { factKind: BOARD_COMPUTERS.ifTheyPlay.kind, kind: 'computed', why: 'the replies they were likely to play at this level and the answer each one met, proven by its own line', lead: 58 },
+  // The bait: the student's sound move set a trap the likely reply walks into.
+  baitSet: { factKind: BOARD_COMPUTERS.baitSet.kind, kind: 'computed', why: 'the trap the student\'s sound move set: the reply many players at this level choose, and what it loses', lead: 64 },
   // ── batch 1 (opening equivalence, order and timing) ──
   // The named opening this board is with moves thrown in or the colours
   // reversed — rides with the name, said once a game.

@@ -4,15 +4,15 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**543 lines · 16 exports · 28 importers · 8 tests · 0 audits**
+**549 lines · 16 exports · 30 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **❤️ THE HEART OF THE APP — the coach THINKS OUT LOUD FOR the student (David 2026-10-07: "THIS IS THE HEART AND SOUL OF THE APP! THIS IS THE BEHAVIOR THAT TEACHES. THIS IS WHAT ALL THE COMPUTERS ARE BUILT FOR! SO WE CAN THINK OUT LOUD FOR THE USER!")** (CLAUDE.md:31) — names `coachFact`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1447) — names `coachFact`
-- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2743) — names `FACT_GROUP`
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5834) — names `HeldForm`
-- **The standard post-deploy ritual** (CLAUDE.md:6840) — names `coachFact`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1471) — names `coachFact`
+- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2767) — names `FACT_GROUP`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5858) — names `HeldForm`
+- **The standard post-deploy ritual** (CLAUDE.md:6865) — names `coachFact`
 
 ## Who calls in
 
@@ -23,6 +23,8 @@
 - `src/services/coachDecider.ts`
 - `src/services/coachFact.test.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/coachMoment.measure.test.ts`
+- `src/services/coachMoment.ts`
 - `src/services/deciderWeights.test.ts`
 - `src/services/deciderWeights.ts`
 - `src/services/decisionStakes.test.ts`
@@ -65,63 +67,65 @@
 ### `FACT_GROUP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `isCoachFactKind` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:681`
+### `isCoachFactKind` (function) — 2 call sites
+- `src/services/coachMoment.measure.test.ts:43`
+- `src/services/learnTurnDoor.ts:688`
 
-### `stepOf` (function) — 16 call sites
+### `stepOf` (function) — 17 call sites
 - `src/services/boardComputers.test.ts:76`
 - `src/services/coachFact.test.ts:79`
 - `src/services/coachFact.test.ts:80`
 - `src/services/coachFeatureService.ts:2514`
 - `src/services/coachFeatureService.ts:3118`
-- `src/services/learnTurnDoor.ts:289`
-- `src/services/learnTurnDoor.ts:956`
-- `src/services/learnTurnDoor.ts:1013`
-- `src/services/learnTurnDoor.ts:1034`
-- `src/services/learnTurnDoor.ts:1038`
-- `src/services/learnTurnDoor.ts:1092`
-- `src/services/learnTurnDoor.ts:1118`
-- `src/services/learnTurnDoor.ts:1128`
-- `src/services/learnTurnDoor.ts:1132`
-- `src/services/learnTurnDoor.ts:1269`
-- `src/services/learnTurnDoor.ts:1332`
+- `src/services/learnTurnDoor.ts:293`
+- `src/services/learnTurnDoor.ts:963`
+- `src/services/learnTurnDoor.ts:1020`
+- `src/services/learnTurnDoor.ts:1041`
+- `src/services/learnTurnDoor.ts:1045`
+- `src/services/learnTurnDoor.ts:1099`
+- `src/services/learnTurnDoor.ts:1125`
+- `src/services/learnTurnDoor.ts:1135`
+- `src/services/learnTurnDoor.ts:1139`
+- `src/services/learnTurnDoor.ts:1275`
+- `src/services/learnTurnDoor.ts:1299`
+- `src/services/learnTurnDoor.ts:1352`
 
 ### `placeFact` (function) — 19 call sites
-- `src/services/boardComputers.ts:613`
-- `src/services/boardComputers.ts:937`
-- `src/services/learnTurnDoor.ts:697`
+- `src/services/boardComputers.ts:616`
+- `src/services/boardComputers.ts:983`
+- `src/services/learnTurnDoor.ts:704`
 - `src/services/moveThoughtFacts.ts:169`
 - `src/services/moveThoughtFacts.ts:293`
 - `src/services/moveThoughtFacts.ts:313`
 - `src/services/moveThoughtFacts.ts:382`
 - `src/services/moveThoughtFacts.ts:396`
-- `src/services/moveThoughtFacts.ts:657`
-- `src/services/moveThoughtFacts.ts:683`
-- `src/services/moveThoughtFacts.ts:700`
+- `src/services/moveThoughtFacts.ts:662`
+- `src/services/moveThoughtFacts.ts:688`
+- `src/services/moveThoughtFacts.ts:705`
 - `src/services/openingStory.ts:395`
 - `src/services/positionFacts.ts:542`
 - `src/services/reviewFacet.ts:62`
 - `src/services/reviewFacet.ts:89`
 - `src/services/reviewFacet.ts:101`
 - `src/services/teachingFact.ts:91`
-- `src/services/thoughtComposer.ts:170`
+- `src/services/thoughtComposer.ts:174`
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 19 call sites
-- `src/services/boardComputers.ts:614`
-- `src/services/boardComputers.ts:937`
+- `src/services/boardComputers.ts:617`
+- `src/services/boardComputers.ts:983`
 - `src/services/coachFact.test.ts:105`
 - `src/services/coachFact.test.ts:111`
 - `src/services/coachFact.test.ts:112`
-- `src/services/learnTurnDoor.ts:698`
+- `src/services/learnTurnDoor.ts:705`
 - `src/services/moveThoughtFacts.ts:170`
 - `src/services/moveThoughtFacts.ts:293`
 - `src/services/moveThoughtFacts.ts:314`
 - `src/services/moveThoughtFacts.ts:383`
 - `src/services/moveThoughtFacts.ts:397`
-- `src/services/moveThoughtFacts.ts:658`
-- `src/services/moveThoughtFacts.ts:684`
-- `src/services/moveThoughtFacts.ts:701`
+- `src/services/moveThoughtFacts.ts:663`
+- `src/services/moveThoughtFacts.ts:689`
+- `src/services/moveThoughtFacts.ts:706`
 - `src/services/openingStory.ts:396`
 - `src/services/positionFacts.ts:550`
 - `src/services/reviewFacet.ts:73`
@@ -150,6 +154,7 @@
 
 - `src/services/boardComputers.test.ts`
 - `src/services/coachFact.test.ts`
+- `src/services/coachMoment.measure.test.ts`
 - `src/services/deciderWeights.test.ts`
 - `src/services/decisionStakes.test.ts`
 - `src/services/factRelations.test.ts`

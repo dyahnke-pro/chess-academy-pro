@@ -54,7 +54,7 @@ import { packageForRegister } from './hintRegister';
 import { FUNDAMENTAL_TAG } from './principleAttribution';
 import { castleByHandMove, kingFromCentre, keptHome, kingSquares } from './kingWalk';
 import { knownSlip, type KnownSlipContext } from './knownSlips';
-import { ifTheyPlay, treeSentence, sayable, type ReplyRead, type ReplyBranch, type TreeTense } from './ifTheyPlay';
+import { ifTheyPlay, treeSentence, sayable, baitBranch, baitSentence, type ReplyRead, type ReplyBranch, type TreeTense } from './ifTheyPlay';
 import { mateStakes } from './factStakes';
 import { temptingRefuted, alsoGood, squareChoice, type WeighRead } from './weighedMoves';
 import { costStakes } from './factStakes';
@@ -184,6 +184,9 @@ export interface BoardContexts {
    *  moves on now (Learn), where an answer they could play is held in a form
    *  that names no move; null on a surface with no live board. */
   ifTheyPlay: { fen: string; replies: readonly ReplyRead[] | null; rating: number; student: Color; seconds: ReadonlyArray<readonly string[] | null>; played: string | null; tense: TreeTense; liveBoard: string | null };
+  /** THE BAIT (WO-COACH-NEXT-TO-YOU-01 C4): the same read of every reply as
+   *  the reply tree — the bait is its likely reply that loses. */
+  baitSet: BoardContexts['ifTheyPlay'];
   /** THE MOVES A PLAYER WEIGHS (`weighedMoves`, 2026-11-05): the move `san`
    *  played on `fenBefore` (either seat) against the candidates a player at
    *  `rating` weighs there. `reads` — one engine read per candidate from
@@ -755,7 +758,10 @@ export const BOARD_COMPUTERS = {
         return w ? { points: w.winPawns ?? 0, plies: w.blowPlies + 1 } : null;
       };
       const out: CoachFact[] = [];
-      const said = t.branches.filter((b) => !b.played && !playable(b) && sayable(t, b, c.student, c.tense));
+      // The bait branch is said once — as the trap the student's move set
+      // (`baitSet`), never again as a branch of the tree.
+      const bait = baitBranch(t, c.student);
+      const said = t.branches.filter((b) => b !== bait && !b.played && !playable(b) && sayable(t, b, c.student, c.tense));
       const text = treeSentence(t, said, c.student, c.tense);
       if (text && said.length) {
         const key = `reply-tree:${said.map((b) => `${b.reply.uci}>${b.answer.uci}`).join(',')}`;
@@ -796,6 +802,46 @@ export const BOARD_COMPUTERS = {
       chat: CHAT_OWED,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a tree of replies is said beside the move it follows; the answer, when the reply comes, is graded as the mover\'s own next move' },
+    },
+  },
+  baitSet: {
+    // THE BAIT (WO-COACH-NEXT-TO-YOU-01 C4, David 2026-11-06: "teaching you
+    // how to … induce mistakes"): the student's sound move left a reply many
+    // players at this level choose that loses — "This sets a trap: many
+    // players at this level answer …d5, and Nxf7 wins a knight." Said once the
+    // game went another way in the past tense, the answer held while the
+    // student could still play it (LEARN NAMES NO MOVE UNASKED). The reply
+    // that falls for it is a chance on the board — the focus's question.
+    read: (c, fact) => safe(() => {
+      if (!c.replies || c.replies.length === 0) return null;
+      const t = ifTheyPlay({ fen: c.fen, replies: c.replies, rating: c.rating, student: c.student, seconds: c.seconds, played: c.played });
+      if (!t) return null;
+      const b = baitBranch(t, c.student);
+      if (!b || b.played) return null;
+      const nameAnswer = !(c.liveBoard && namesPlayableStudentMove(namesMoves(c.student, c.liveBoard, namedSan(c.liveBoard, b.answer.san))));
+      const text = baitSentence(t, b, c.student, c.tense, nameAnswer);
+      if (!text) return null;
+      const key = `bait:${b.reply.uci}>${b.answer.uci}`;
+      return fact({
+        key, claims: [key, `reply-tree:${b.reply.uci}`], text,
+        proof: legalLineProof(c.fen, b.uci, lineSeatAt(c.fen, c.student)) ?? NO_PROOF.description,
+        squares: nameAnswer ? [b.reply.to, b.answer.to] : [b.reply.to],
+        stakes: b.kind === 'mate' ? mateStakes('you', b.blowPlies + 1, true) : { points: b.winPawns ?? 0, plies: b.blowPlies + 1 },
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: c.fen,
+        ...(nameAnswer ? { lines: [{ fen: c.fen, sans: b.sans }] } : {}),
+      });
+    }),
+    computer: 'baitBranch',
+    kind: 'trap-set',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' },
+      learn: LEARN,
+      review: { wired: 'services/coachFeatureService.ts' },
+      play: PLAY_ASK,
+      chat: CHAT_OWED,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'no record row for inducing mistakes yet — grey, taught in full; the reply that falls for it is recorded as the focus chance it leaves' },
     },
   },
   temptingRefuted: {

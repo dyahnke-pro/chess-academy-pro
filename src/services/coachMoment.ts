@@ -54,6 +54,7 @@ export const GROUP_PART: Record<FactGroup, (seat: FactSeat) => TurnPart> = {
   technique: () => 'build',
   concepts: () => 'build',
   name: () => 'aside',
+  bait: () => 'bait',
 };
 
 /** The part of the turn a fact of this group and seat belongs to. */

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**103 lines · 9 exports · 3 importers · 1 tests · 0 audits**
+**104 lines · 9 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@
 
 - `src/coach/focus/focusRunner.ts`
 - `src/services/coachMoment.measure.test.ts`
+- `src/services/ifTheyPlay.test.ts`
 - `src/services/learnTurnDoor.ts`
 
 ## Exports and every call site
@@ -27,12 +28,13 @@
 ### `GROUP_PART` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `turnPartOf` (function) — 2 call sites
+### `turnPartOf` (function) — 3 call sites
 - `src/services/coachMoment.measure.test.ts:45`
-- `src/services/learnTurnDoor.ts:1291`
+- `src/services/ifTheyPlay.test.ts:173`
+- `src/services/learnTurnDoor.ts:1297`
 
 ### `isMoment` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:1292`
+- `src/services/learnTurnDoor.ts:1298`
 
 ### `MomentDial` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -49,6 +51,7 @@
 ## Tests
 
 - `src/services/coachMoment.measure.test.ts`
+- `src/services/ifTheyPlay.test.ts`
 
 ## Audits that reach it
 

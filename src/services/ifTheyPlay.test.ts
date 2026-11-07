@@ -7,7 +7,8 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { ifTheyPlay, treeSentence, sayable, replyReadsFromFan, type ReplyRead } from './ifTheyPlay';
+import { ifTheyPlay, treeSentence, sayable, replyReadsFromFan, baitBranch, baitSentence, type ReplyRead } from './ifTheyPlay';
+import { turnPartOf } from './coachMoment';
 import { readBoardAll } from './boardComputers';
 import { moveThoughtFacts } from './moveThoughtFacts';
 import { NO_PREV_CAPTURE } from './captureRun';
@@ -139,5 +140,37 @@ describe('the lesson composer is handed the tree', () => {
     });
     const tree = facts.filter((f) => f.source === 'ifTheyPlay').map((f) => f.text);
     expect(tree.join(' ')).toContain('If they take on e5, you take back with the knight');
+  });
+});
+
+describe('the bait (WO-COACH-NEXT-TO-YOU-01 C4: induce mistakes)', () => {
+  const treeOf = (r: Row, rating = 1500) => {
+    const student = moverOf(r.fen);
+    return { student, t: ifTheyPlay({ fen: r.fen, replies: r.read, rating, student, seconds: [], played: null })! };
+  };
+  it('a sound move whose likely reply loses is a bait: "many players at this level answer …Be6, and f5 wins a bishop"', () => {
+    const { t, student } = treeOf(row('fGBhk9oqdbg', 22));
+    const b = baitBranch(t, student);
+    expect(b?.reply.san).toBe('Be6');
+    expect(baitSentence(t, b!, student, 'live', true)).toBe('This sets a trap: many players at this level answer …Be6, and f5 wins a bishop — a trapped piece: f5, …O-O, fxe6.');
+    // Once the game went on, with the answer still the student's to play: what
+    // the reply would have lost, never the move that wins it.
+    expect(baitSentence(t, b!, student, 'past', false)).toBe('That set a trap: many players at this level answer …Be6 there, and it would have lost a bishop.');
+  });
+  it('no bait when the move was unsound, or when no likely reply loses', () => {
+    const unsound = treeOf(row('4_Ev1a1_2Mg', 8));
+    expect(unsound.t.bestCp).toBeGreaterThan(50);
+    expect(baitBranch(unsound.t, unsound.student)).toBeNull();
+    const quiet = treeOf(row('1rcEbI44WqE', 47));
+    expect(baitBranch(quiet.t, quiet.student)).toBeNull();
+  });
+  it('is said once: the bait fact carries the trap, and the tree no longer repeats its branch', () => {
+    const r = row('fGBhk9oqdbg', 22);
+    const ctx = { fen: r.fen, replies: r.read, rating: 1500, student: moverOf(r.fen), seconds: [], played: null, tense: 'live' as const, liveBoard: null };
+    const [bait] = readBoardAll('baitSet', ctx);
+    expect(bait).toMatchObject({ kind: 'trap-set', group: 'bait', seat: 'student' });
+    expect(bait.text).toMatch(/^This sets a trap/);
+    expect(turnPartOf(bait.group, bait.seat)).toBe('bait');
+    for (const f of readBoardAll('ifTheyPlay', ctx)) expect(f.text).not.toMatch(/Be6/);
   });
 });

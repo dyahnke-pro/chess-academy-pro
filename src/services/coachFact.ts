@@ -40,7 +40,7 @@ export type FactGroup =
   | 'danger' | 'theirSide' | 'notYet'
   | 'move' | 'choices' | 'line'
   | 'tactics' | 'technique' | 'concepts'
-  | 'habit';
+  | 'habit' | 'bait';
 
 /** Whose move or plan a fact is about. */
 export type FactSeat = 'student' | 'opponent';
@@ -64,6 +64,8 @@ export const GROUP_STEP: Record<FactGroup, (seat: FactSeat) => ThoughtStep> = {
   concepts: () => 'board',
   verdict: () => 'verdict',
   habit: () => 'habit',
+  // The bait is a line the student's move set up: said where a line is.
+  bait: () => 'line',
 };
 
 /** THE LESSON COMPOSER'S OWN KINDS — the facts `moveThoughtFacts` hands the
@@ -152,6 +154,9 @@ export const FACT_GROUP: Record<CoachFactKind, FactGroup> = {
   // and the trap ahead the choices; the false alarm, the exception and
   // push-or-hold the move (they were Learn's `rule` facts) ──
   'reply-tree': 'line', 'move-order': 'notYet', castling: 'story', 'common-wrong': 'choices', 'trap-ahead': 'choices',
+  // The bait (WO-COACH-NEXT-TO-YOU-01 C4): a trap the student's sound move set —
+  // its own group, so its moment is the bait.
+  'trap-set': 'bait',
   'false-alarm': 'move', 'rule-exception': 'move', 'push-or-hold': 'move',
   // The habits that are teaching moves of their own close the turn like any habit.
   'opp-think': 'habit', 'forcing-scan': 'habit',
@@ -194,7 +199,7 @@ const GROUP_NO_STAKES: Record<FactGroup, NoStakes> = {
   name: NO_STAKES.identity, habit: NO_STAKES.closes, verdict: NO_STAKES.state,
   story: NO_STAKES.unmeasured, structure: NO_STAKES.unmeasured, danger: NO_STAKES.unmeasured, theirSide: NO_STAKES.unmeasured,
   notYet: NO_STAKES.unmeasured, move: NO_STAKES.unmeasured, choices: NO_STAKES.unmeasured, line: NO_STAKES.unmeasured,
-  tactics: NO_STAKES.unmeasured, technique: NO_STAKES.unmeasured, concepts: NO_STAKES.unmeasured,
+  tactics: NO_STAKES.unmeasured, technique: NO_STAKES.unmeasured, concepts: NO_STAKES.unmeasured, bait: NO_STAKES.unmeasured,
 };
 /** A fact's stakes: its computer's gap (or a reason it already recorded), or
  *  its group's reason for none. */
@@ -422,6 +427,7 @@ export const COMPUTER_CATALOG = {
   kingSquares: { file: 'services/kingWalk.ts', says: 'in check with only king moves: the squares that walk into a forced mate, and the square chosen' },
   knownSlip: { file: 'services/knownSlips.ts', says: 'a move club players really play at this board that the other side punishes — a known mistake, or a trap when it clears the trap bar — and what the punishment wins' },
   ifTheyPlay: { file: 'services/ifTheyPlay.ts', says: 'if they X, you play Y: the replies likely at this level (the human model) and the engine\'s best, each with the answer its own line proves — a recapture, a block, a job, a win or a mate' },
+  baitBranch: { file: 'services/ifTheyPlay.ts', says: 'the bait: the student\'s sound move left a reply many players at this level choose that loses material or walks into mate (WO-COACH-NEXT-TO-YOU-01 C4)' },
   temptingRefuted: { file: 'services/weighedMoves.ts', says: 'the natural move a player weighs here that fails, with the engine line that refutes it' },
   alsoGood: { file: 'services/weighedMoves.ts', says: 'two moves of the same worth and the one thing the board shows between them' },
   squareChoice: { file: 'services/weighedMoves.ts', says: 'which square for the piece: its other squares a player weighs, and what goes wrong on each' },

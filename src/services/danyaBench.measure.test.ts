@@ -565,6 +565,7 @@ const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
   studentMove: 'services/learnBoardTeaching.ts#studentMoveTeaching',
   kingWalk: 'services/kingWalk.ts#castleByHandMove',
   ifTheyPlay: 'services/ifTheyPlay.ts#ifTheyPlay',
+  baitSet: 'services/ifTheyPlay.ts#baitBranch',
   weighed: 'services/weighedMoves.ts#temptingRefuted',
   teachingMove: 'services/pawnBreak.ts#pawnBreak',
 };
@@ -668,6 +669,7 @@ const FACT_COMPUTER: Record<FactKind, string> = {
   'stop-flaw': 'services/thinkAloud.ts#obviousStopFlaw',
   // The teaching moves' own kinds (2026-11-05).
   'reply-tree': 'services/ifTheyPlay.ts#ifTheyPlay',
+  'trap-set': 'services/ifTheyPlay.ts#baitBranch',
   'move-order': 'services/moveOrder.ts#moveOrder',
   castling: 'services/kingWalk.ts#castleByHandMove',
   'common-wrong': 'services/refutedAlternativeCore.ts#refutedFromFan',

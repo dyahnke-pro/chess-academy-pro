@@ -107,6 +107,9 @@ export interface ReplyTree {
   branches: ReplyBranch[];
   /** The likely replies that are not a branch, and why. */
   held: Array<{ uci: string; why: HeldBranchWhy }>;
+  /** The replier's best score over every legal reply (their view): how sound
+   *  the move that made this board was. */
+  bestCp: number;
 }
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -153,7 +156,7 @@ export function ifTheyPlay(args: {
     if ('why' in b) held.push({ uci: u, why: b.why });
     else branches.push(b);
   }
-  return { fen: args.fen, replier, branches, held };
+  return { fen: args.fen, replier, branches, held, bestCp };
 }
 
 function branchOf(
@@ -287,6 +290,41 @@ export function branchClause(t: ReplyTree, b: ReplyBranch, student: Color, tense
   if (!ans) return null;
   const x = replyWords(b, t.replier, tense, takers);
   return tense === 'live' ? `if ${replierWord} ${x}, ${ans}` : `if ${replierWord} had ${x}, ${ans}`;
+}
+
+/** THE BAIT (WO-COACH-NEXT-TO-YOU-01 C4 — the skill "induce mistakes", David
+ *  2026-11-06: "teaching you how to … induce mistakes"). The student's SOUND
+ *  move left a reply that many players at this level choose (the human model,
+ *  at least `BAIT_P`) and that loses: material that holds, or a mate. Sound:
+ *  the replier's best reply leaves them no better than `BAIT_SOUND_CP` — a
+ *  trap that only works if they blunder and costs the student if they don't
+ *  is not a bait. The most likely such reply; null when there is none. */
+export const BAIT_P = 0.2;
+const BAIT_SOUND_CP = 50;
+export function baitBranch(t: ReplyTree, student: Color): ReplyBranch | null {
+  if (t.replier === student || t.bestCp > BAIT_SOUND_CP) return null;
+  return t.branches
+    .filter((b) => b.p >= BAIT_P && b.trust.name && (b.kind === 'mate' || (b.kind === 'wins' && (b.winPawns ?? 0) >= 1)))
+    .sort((a, b) => b.p - a.p)[0] ?? null;
+}
+
+/** The bait said: what most players here answer, and what it costs them —
+ *  "This sets a trap: many players at this level answer …d5, and Nxf7 wins a
+ *  knight." Past tense once the game went another way. `nameAnswer` false
+ *  when the answer is still the student's to play (Learn names no move
+ *  unasked): what the reply loses is said, never the move that wins it. */
+export function baitSentence(t: ReplyTree, b: ReplyBranch, student: Color, tense: TreeTense, nameAnswer: boolean): string | null {
+  const mover: Color = t.replier === 'w' ? 'b' : 'w';
+  const who = b.p >= 0.5 ? 'most' : 'many';
+  const reply = dots(b.reply.san, t.replier);
+  const lead = tense === 'live' ? `This sets a trap: ${who} players at this level answer ${reply}` : `That set a trap: ${who} players at this level answer ${reply} there`;
+  const loses = b.kind === 'mate' ? 'walks into mate' : b.win ? `loses ${b.win}` : null;
+  if (!nameAnswer) {
+    if (!loses) return null;
+    return `${lead}, and it ${tense === 'live' ? loses : loses.replace(/^loses/, 'would have lost').replace(/^walks/, 'would have walked')}.`;
+  }
+  const ans = answerWords(b, mover, mover === student ? 'you' : 'they', tense);
+  return ans ? `${lead}, and ${ans}.` : null;
 }
 
 /** The branches said, joined: "If they take on e5, you take back with the

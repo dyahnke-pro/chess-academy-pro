@@ -208,6 +208,8 @@ export const TEACHING_MOVES: Record<CoachFactKind, readonly TeachingMove[]> = {
   'common-wrong': ['M-COMMON-WRONG', 'M-REFUTED'],
   // A known club mistake or trap at the board, named before it is played.
   'trap-ahead': ['T-TRAP-AHEAD', 'M-COMMON-WRONG'],
+  // The bait: the student's move set a trap the likely reply walks into.
+  'trap-set': ['M-PROVOKE', 'T-TRAP-AHEAD'],
   // Their threat was real and you did not have to react (`falseAlarm`).
   'false-alarm': ['T-FALSE-ALARM', 'H-DONT-PANIC'],
   // A beginner's rule the move breaks, and why it is right here (`ruleException`).

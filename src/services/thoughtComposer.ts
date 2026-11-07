@@ -57,6 +57,8 @@ export type ThoughtSource =
   | 'kingWalk'
   /** The reply tree (`ifTheyPlay.ts`): if they X, you play Y — the likely replies and their answers. */
   | 'ifTheyPlay'
+  /** The bait (`ifTheyPlay.baitBranch`): the trap the student's move set — the reply many players at this level choose that loses. */
+  | 'baitSet'
   /** The moves a player weighs (`weighedMoves.ts`): the tempting move refuted, the move of the same worth, the square. */
   | 'weighed'
   /** The teaching moves' new computers (2026-11-05): the pawn break (`pawnBreak.ts`). */
@@ -92,6 +94,8 @@ export const SOURCE_RANK: Record<ThoughtSource, number> = {
   kingWalk: 22,
   // Not measured on the bench yet (2026-11-05): ranked after every measured source.
   ifTheyPlay: 23,
+  // The bait sits beside the reply tree it is read from.
+  baitSet: 23,
   weighed: 24,
   teachingMove: 25,
 };

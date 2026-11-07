@@ -4966,10 +4966,15 @@ async function augmentWithProjections(
       const next = segments[k + 1];
       let played: string | null = null;
       try { const m = next ? new Chess(s.fenAfter).move(next.san) : null; played = m ? `${m.from}${m.to}${m.promotion ?? ''}` : null; } catch { played = null; }
-      const f = readBoardAll('ifTheyPlay', {
+      const treeCtx = {
         fen: s.fenAfter, replies, rating, student: studentColorWB,
-        seconds: [s.recordReplyLine ?? null, s.recordReplyEarlier ?? null], played, tense: 'past', liveBoard: null,
-      })[0];
+        seconds: [s.recordReplyLine ?? null, s.recordReplyEarlier ?? null], played, tense: 'past' as const, liveBoard: null,
+      };
+      // THE BAIT (WO-COACH-NEXT-TO-YOU-01 C4): the trap the student's move set,
+      // said before the tree's other branches (the tree no longer repeats it).
+      const bait = readBoardAll('baitSet', treeCtx)[0];
+      if (bait) s.narration = `${s.narration} ${bait.text}`.trim();
+      const f = readBoardAll('ifTheyPlay', treeCtx)[0];
       if (!f) return;
       s.narration = `${s.narration} ${f.text}`.trim();
       // The first branch's line on the board, when no other line was drawn.

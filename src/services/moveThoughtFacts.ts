@@ -466,6 +466,11 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       const { heldForm: _held, ...fact } = f;
       facts.push({ ...fact, namesStudentMove: false, source: 'ifTheyPlay', idea: fact.stakes && 'mate' in fact.stakes && fact.stakes.mate ? 'mate' : 'choice', weight: 60 });
     }
+    // THE BAIT (WO-COACH-NEXT-TO-YOU-01 C4): the trap the student's move set —
+    // the reply many players at this level choose that loses.
+    for (const f of readBoardAll('baitSet', { fen: fenAfter, replies: every.replies, rating: every.rating, student, seconds: (i.reads?.after ?? []).map((l) => l.moves), played: next, tense: 'live', liveBoard: null })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'baitSet', idea: f.stakes && 'mate' in f.stakes && f.stakes.mate ? 'mate' : 'choice', weight: 60 });
+    }
   }
   return withDecisionGap(facts, i, from, to, seat);
 }
