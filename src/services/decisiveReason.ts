@@ -253,6 +253,10 @@ export function decisiveReason(input: {
   const whose = seat === 'student' ? 'your' : 'their';
   // Every line is worded from the STUDENT's seat, whoever moves.
   const studentWB: 'w' | 'b' = seat === 'student' ? mover : mover === 'w' ? 'b' : 'w';
+  // Whose alternative it is leads the sentence: on their move, "The natural
+  // alternative, king to b6" was heard as the student's own option (prod focus
+  // audit 2026-11-07).
+  const altLead = seat === 'student' ? 'The natural alternative' : 'Their natural alternative';
 
   type Cand = { source: ReasonSource; stake: number; text: string; line: DecisiveReason['line']; squares: string[]; /** The reason is about the next-best, which it names. */ alt: boolean };
   const cands: Cand[] = [];
@@ -277,7 +281,7 @@ export function decisiveReason(input: {
     cands.push({ source: 'material', stake: MATE_CP, text: ownMate === 1 ? `${unmarked(played)} is mate.` : asks ? `${mateReason(ownMate)} — can you see how it goes? The line is on the board when you want it.` : `${mateReason(ownMate)}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
   } else if (nextMate !== null && nextMate < 0 && nextBestSan) {
     const n = -nextMate;
-    cands.push({ source: 'material', stake: MATE_CP, text: `The natural alternative, ${dot(nextBestSan, mover)}, walks into a forced mate${n > 1 ? ` in ${movesWord(n)}` : ''}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, next.moves).slice(0, 2 * n) }, squares: [], alt: true });
+    cands.push({ source: 'material', stake: MATE_CP, text: `${altLead}, ${dot(nextBestSan, mover)}, walks into a forced mate${n > 1 ? ` in ${movesWord(n)}` : ''}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, next.moves).slice(0, 2 * n) }, squares: [], alt: true });
   } else {
     // MATERIAL — the difference the two lines settle on, not either alone: a
     // pawn both lines win is not why one beats the other.
@@ -304,11 +308,11 @@ export function decisiveReason(input: {
       const win = matOwn > 0 ? seatProof(fenBefore, sansOf(fenBefore, own.moves), mover, studentWB, 'for') : null;
       const loss = !win && matNext < 0 && altTrusted ? seatProof(fenBefore, sansOf(fenBefore, next.moves), mover, studentWB, 'against') : null;
       if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${openSentence(win.text)}.` : withLanding(win.end === "and it's mate" ? mateReason('forced') : `${played} wins by force: ${win.end}`, landsWith(win.sans, mover, input.namesPreparedMove)), line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
-      else if (loss && nextBestSan) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, fails: ${loss.text}.`, line: { fen: fenBefore, sans: loss.sans }, squares: [], alt: true });
+      else if (loss && nextBestSan) cands.push({ source: 'material', stake: matStake, text: `${altLead}, ${dot(nextBestSan, mover)}, fails: ${loss.text}.`, line: { fen: fenBefore, sans: loss.sans }, squares: [], alt: true });
       // No short proof, but the count is the reason: say the count, never let a
       // smaller reason stand in for it.
       else if (matOwn > 0) cands.push({ source: 'material', stake: matStake, text: `${played} comes out of the trades that follow ahead — it wins ${pieceWords(fenBefore, own.moves, mover, true)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, own.moves) }, squares: [], alt: false });
-      else if (nextBestSan && altTrusted) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, comes out of the trades that follow behind — it loses ${pieceWords(fenBefore, next.moves, mover, false)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [], alt: true });
+      else if (nextBestSan && altTrusted) cands.push({ source: 'material', stake: matStake, text: `${altLead}, ${dot(nextBestSan, mover)}, comes out of the trades that follow behind — it loses ${pieceWords(fenBefore, next.moves, mover, false)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [], alt: true });
     }
     // PAST THE FORCING HORIZON: a big gap the heard line cannot show is read on
     // the engine's whole line — the material it ends on, said as further down
@@ -317,7 +321,7 @@ export function decisiveReason(input: {
       const nextSans = sansOf(fenBefore, next.moves);
       const ownFull = (settledNetForLine(fenBefore, sansOf(fenBefore, own.moves), mover) ?? 0) * 100;
       const nextFull = (settledNetForLine(fenBefore, nextSans, mover) ?? 0) * 100;
-      if (ownFull - nextFull > 0 && nextFull < 0) cands.push({ source: 'material', stake: ownFull - nextFull, text: (() => { const w = pieceWords(fenBefore, next.moves, mover, false); return `The natural alternative, ${dot(nextBestSan, mover)}, loses ${w === 'material' ? 'material further down the line' : `${w} further down the line`}.`; })(), line: { fen: fenBefore, sans: nextSans }, squares: [], alt: true });
+      if (ownFull - nextFull > 0 && nextFull < 0) cands.push({ source: 'material', stake: ownFull - nextFull, text: (() => { const w = pieceWords(fenBefore, next.moves, mover, false); return `${altLead}, ${dot(nextBestSan, mover)}, loses ${w === 'material' ? 'material further down the line' : `${w} further down the line`}.`; })(), line: { fen: fenBefore, sans: nextSans }, squares: [], alt: true });
     }
   }
 

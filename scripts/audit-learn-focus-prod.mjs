@@ -670,10 +670,15 @@ async function playGame(context, listener, engine, student, phase, index) {
   // ("rook from the seventh rank to b2" for R7b2+, "the c-file rook"): those
   // words are the move's too (focus prod audit 2026-11-07 read a door line as a
   // stray over them).
-  const MOVE_WORDS = new Set(['king', 'queen', 'rook', 'bishop', 'knight', 'pawn', 'takes', 'taking', 'to', 'with', 'check', 'checkmate', 'mate', 'castles', 'kingside', 'queenside', 'on', 'x', 'from', 'the', 'rank', 'file', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth']);
+  const MOVE_WORDS = new Set(['king', 'queen', 'rook', 'bishop', 'knight', 'pawn', 'takes', 'taking', 'to', 'with', 'check', 'checkmate', 'mate', 'castles', 'kingside', 'queenside', 'on', 'x', 'from', 'the', 'rank', 'file', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'castle', 'castling', 'o']);
   const words = (t) => norm(t).split(' ').filter((w) => w && !MOVE_WORDS.has(w) && !/^[a-h][1-8]$/.test(w) && !/^[kqrbn]?[a-h]?[1-8]?x?[a-h][1-8]/.test(w) && !/^o o( o)?$/.test(w) && !/^[a-h]$/.test(w) && !/^[kqrbn]$/.test(w)).join(' ');
   const doorWords = doorTexts.map(words);
-  const fromDoor = (text) => { const w = words(text); const head = w.slice(0, 40); return head.length > 0 && doorWords.some((d) => d.includes(head) || (d.length > 0 && w.includes(d.slice(0, 40)))); };
+  // A door line can also come back reworded at its front: the answer a
+  // question owed is resolved against the move then played ("That plan came
+  // before winning their weak pawn because …" for the logged "… because …"),
+  // so eight words in a row shared with a door line make it the door's.
+  const sharesRun = (w, d) => { const t = w.split(' '); for (let i = 0; i + 8 <= t.length; i += 1) if (d.includes(t.slice(i, i + 8).join(' '))) return true; return false; };
+  const fromDoor = (text) => { const w = words(text); const head = w.slice(0, 40); return head.length > 0 && doorWords.some((d) => d.includes(head) || (d.length > 0 && w.includes(d.slice(0, 40))) || sharesRun(w, d)); };
   // A door line that ends on the game's mate ("… let them play Re8, and that is
   // checkmate") is the door's, not a focus answer shown: the door is read before
   // the shown-answer shape (F15 counted one as "an answer shown without the tap").

@@ -186,4 +186,19 @@ describe('an alternative "fails" only when the engine says so (Black walk 2026-1
     const big = decisiveReason({ namesPreparedMove: true, fenBefore: fen, san: 'Bb5', reads: reads(300), seat: 'student', opponentLastSan: null });
     expect(big?.text ?? '').toMatch(/natural alternative, Nxe5/);
   });
+
+  it('their move\'s alternative is theirs: "Their natural alternative", never one the student would read as their own (prod focus audit 2026-11-07)', () => {
+    const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+    const reads: IntentReads = {
+      before: [
+        { rank: 1, evaluation: 40, mate: null, moves: ['f1b5', 'a7a6', 'b5a4', 'g8f6'] },
+        { rank: 2, evaluation: -260, mate: null, moves: ['f3e5', 'c6e5', 'd2d4', 'e5c6', 'd4d5', 'c6e7'] },
+      ] as IntentReads['before'],
+      after: [], passBefore: [], passAfter: [],
+    };
+    const theirs = decisiveReason({ namesPreparedMove: true, fenBefore: fen, san: 'Bb5', reads, seat: 'opponent', opponentLastSan: null });
+    expect(theirs?.text ?? '').toMatch(/^Their natural alternative, Nxe5/);
+    const yours = decisiveReason({ namesPreparedMove: true, fenBefore: fen, san: 'Bb5', reads, seat: 'student', opponentLastSan: null });
+    expect(yours?.text ?? '').toMatch(/^The natural alternative, Nxe5/);
+  });
 });
