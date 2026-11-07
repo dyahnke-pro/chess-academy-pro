@@ -70,6 +70,12 @@ describe('every game is the tactics focus: the pre-game line, then quiet unless 
     expect(effects[1][0]).toMatchObject({ kind: 'say', line: 'ask', text: expect.stringMatching(/safe|loose/) });
     expect(questionRow(effects[1])).toMatchObject({ state: 'grey', dial: 'ask-first', asked: true });
   });
+  it('one question row a board: the engine lines landing re-read the board without writing a second row (prod audit F22, 2026-11-07)', () => {
+    const { effects } = run([{ kind: 'start', setup: at(0, { tagStates: statesAll('red') }) }, board(LOOSE_KNIGHT, 7), { kind: 'read', fen: LOOSE_KNIGHT, lines: [] }]);
+    expect(effects[1].filter((e) => e.kind === 'question')).toHaveLength(1);
+    expect(effects[2].filter((e) => e.kind === 'question')).toHaveLength(0);
+    expect(effects[2].some((e) => e.kind === 'say')).toBe(false);
+  });
   it('amber and green skills are never asked before the move', () => {
     for (const st of ['short', 'green'] as const) {
       const { effects } = run([{ kind: 'start', setup: at(0, { tagStates: statesAll(st) }) }, board(LOOSE_KNIGHT, 7)]);

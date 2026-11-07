@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**461 lines · 3 exports · 40 importers · 30 tests · 0 audits**
+**468 lines · 3 exports · 40 importers · 30 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **Boards and Lesson Layouts (IMPORTANT)** (CLAUDE.md:4036) — names `MoveResult`, `useChessGame`
-- **Shared components** (CLAUDE.md:5719) — names `MoveResult`
+- **Boards and Lesson Layouts (IMPORTANT)** (CLAUDE.md:4276) — names `MoveResult`, `useChessGame`
+- **Shared components** (CLAUDE.md:5988) — names `MoveResult`
 
 ## Who calls in
 
@@ -57,18 +57,18 @@
 ## Exports and every call site
 
 ### `MoveResult` (interface) — 1 call site
-- `src/services/learnTurnDoor.test.ts:203`
+- `src/services/learnTurnDoor.test.ts:210`
 
 ### `UseChessGameReturn` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `useChessGame` (function) — 78 call sites
-- `src/components/Board/ChessBoard.tsx:131`
-- `src/components/Board/ControlledChessBoard.tsx:40`
+### `useChessGame` (function) — 80 call sites
+- `src/components/Board/ChessBoard.tsx:133`
+- `src/components/Board/ControlledChessBoard.tsx:42`
 - `src/components/Coach/CoachAnalysePage.tsx:34`
-- `src/components/Coach/CoachGamePage.tsx:476`
+- `src/components/Coach/CoachGamePage.tsx:439`
 - `src/components/Coach/CoachPracticeSessionView.tsx:76`
-- `src/components/Coach/CoachTeachPage.tsx:1035`
+- `src/components/Coach/CoachTeachPage.tsx:1062`
 - `src/components/Games/GameViewer.tsx:44`
 - `src/components/Kid/GameChapterPage.tsx:88`
 - `src/components/Kid/GameChapterPage.tsx:92`
@@ -76,71 +76,73 @@
 - `src/components/Openings/DrillMode.tsx:170`
 - `src/components/Openings/MiddlegamePlanStudy.tsx:141`
 - `src/components/Openings/MiddlegamePractice.tsx:108`
-- `src/components/Openings/OpeningPlayMode.tsx:101`
+- `src/components/Openings/OpeningPlayMode.tsx:104`
 - `src/components/Openings/PracticeMode.tsx:193`
-- `src/components/Openings/SrsTrainerPage.tsx:194`
+- `src/components/Openings/SrsTrainerPage.tsx:171`
 - `src/components/Openings/TrainMode.tsx:166`
 - `src/components/Openings/WalkthroughMode.tsx:339`
-- `src/components/Puzzles/PuzzleBoard.tsx:265`
-- `src/components/Settings/SettingsPage.tsx:580`
+- `src/components/Puzzles/PuzzleBoard.tsx:269`
+- `src/components/Settings/SettingsPage.tsx:587`
 - `src/hooks/useChessGame.liveFen.test.tsx:22`
 - `src/hooks/useChessGame.test.ts:31`
-- `src/hooks/useChessGame.test.ts:48`
-- `src/hooks/useChessGame.test.ts:55`
-- `src/hooks/useChessGame.test.ts:60`
-- `src/hooks/useChessGame.test.ts:67`
-- `src/hooks/useChessGame.test.ts:78`
-- `src/hooks/useChessGame.test.ts:87`
-- `src/hooks/useChessGame.test.ts:96`
-- `src/hooks/useChessGame.test.ts:105`
-- `src/hooks/useChessGame.test.ts:114`
-- `src/hooks/useChessGame.test.ts:124`
-- `src/hooks/useChessGame.test.ts:136`
-- `src/hooks/useChessGame.test.ts:144`
-- `src/hooks/useChessGame.test.ts:150`
-- `src/hooks/useChessGame.test.ts:159`
-- `src/hooks/useChessGame.test.ts:168`
-- `src/hooks/useChessGame.test.ts:174`
-- `src/hooks/useChessGame.test.ts:182`
-- `src/hooks/useChessGame.test.ts:187`
-- `src/hooks/useChessGame.test.ts:193`
-- `src/hooks/useChessGame.test.ts:200`
-- `src/hooks/useChessGame.test.ts:207`
-- `src/hooks/useChessGame.test.ts:215`
-- `src/hooks/useChessGame.test.ts:232`
-- `src/hooks/useChessGame.test.ts:241`
-- `src/hooks/useChessGame.test.ts:258`
-- `src/hooks/useChessGame.test.ts:268`
-- `src/hooks/useChessGame.test.ts:277`
-- `src/hooks/useChessGame.test.ts:294`
-- `src/hooks/useChessGame.test.ts:309`
-- `src/hooks/useChessGame.test.ts:325`
-- `src/hooks/useChessGame.test.ts:338`
-- `src/hooks/useChessGame.test.ts:353`
-- `src/hooks/useChessGame.test.ts:364`
-- `src/hooks/useChessGame.test.ts:375`
-- `src/hooks/useChessGame.test.ts:386`
-- `src/hooks/useChessGame.test.ts:399`
-- `src/hooks/useChessGame.test.ts:411`
-- `src/hooks/useChessGame.test.ts:427`
-- `src/hooks/useChessGame.test.ts:439`
-- `src/hooks/useChessGame.test.ts:454`
-- `src/hooks/useChessGame.test.ts:480`
-- `src/hooks/useChessGame.test.ts:498`
-- `src/hooks/useChessGame.test.ts:510`
-- `src/hooks/useChessGame.test.ts:521`
-- `src/hooks/useChessGame.test.ts:534`
-- `src/hooks/useChessGame.test.ts:550`
-- `src/hooks/useChessGame.test.ts:562`
+- `src/hooks/useChessGame.test.ts:43`
+- `src/hooks/useChessGame.test.ts:52`
+- `src/hooks/useChessGame.test.ts:69`
+- `src/hooks/useChessGame.test.ts:76`
+- `src/hooks/useChessGame.test.ts:81`
+- `src/hooks/useChessGame.test.ts:88`
+- `src/hooks/useChessGame.test.ts:99`
+- `src/hooks/useChessGame.test.ts:108`
+- `src/hooks/useChessGame.test.ts:117`
+- `src/hooks/useChessGame.test.ts:126`
+- `src/hooks/useChessGame.test.ts:135`
+- `src/hooks/useChessGame.test.ts:145`
+- `src/hooks/useChessGame.test.ts:157`
+- `src/hooks/useChessGame.test.ts:165`
+- `src/hooks/useChessGame.test.ts:171`
+- `src/hooks/useChessGame.test.ts:180`
+- `src/hooks/useChessGame.test.ts:189`
+- `src/hooks/useChessGame.test.ts:195`
+- `src/hooks/useChessGame.test.ts:203`
+- `src/hooks/useChessGame.test.ts:208`
+- `src/hooks/useChessGame.test.ts:214`
+- `src/hooks/useChessGame.test.ts:221`
+- `src/hooks/useChessGame.test.ts:228`
+- `src/hooks/useChessGame.test.ts:236`
+- `src/hooks/useChessGame.test.ts:253`
+- `src/hooks/useChessGame.test.ts:262`
+- `src/hooks/useChessGame.test.ts:279`
+- `src/hooks/useChessGame.test.ts:289`
+- `src/hooks/useChessGame.test.ts:298`
+- `src/hooks/useChessGame.test.ts:315`
+- `src/hooks/useChessGame.test.ts:330`
+- `src/hooks/useChessGame.test.ts:346`
+- `src/hooks/useChessGame.test.ts:359`
+- `src/hooks/useChessGame.test.ts:374`
+- `src/hooks/useChessGame.test.ts:385`
+- `src/hooks/useChessGame.test.ts:396`
+- `src/hooks/useChessGame.test.ts:407`
+- `src/hooks/useChessGame.test.ts:420`
+- `src/hooks/useChessGame.test.ts:432`
+- `src/hooks/useChessGame.test.ts:448`
+- `src/hooks/useChessGame.test.ts:460`
+- `src/hooks/useChessGame.test.ts:475`
+- `src/hooks/useChessGame.test.ts:501`
+- `src/hooks/useChessGame.test.ts:519`
+- `src/hooks/useChessGame.test.ts:531`
+- `src/hooks/useChessGame.test.ts:542`
+- `src/hooks/useChessGame.test.ts:555`
+- `src/hooks/useChessGame.test.ts:571`
 - `src/hooks/useChessGame.test.ts:583`
-- `src/hooks/useChessGame.test.ts:605`
-- `src/hooks/useChessGame.test.ts:624`
-- `src/hooks/useChessGame.test.ts:642`
-- `src/hooks/useChessGame.test.ts:656`
-- `src/hooks/useChessGame.test.ts:680`
-- `src/hooks/useChessGame.test.ts:695`
-- `src/hooks/useChessGame.test.ts:710`
-- `src/hooks/useChessGame.test.ts:720`
+- `src/hooks/useChessGame.test.ts:604`
+- `src/hooks/useChessGame.test.ts:626`
+- `src/hooks/useChessGame.test.ts:645`
+- `src/hooks/useChessGame.test.ts:663`
+- `src/hooks/useChessGame.test.ts:677`
+- `src/hooks/useChessGame.test.ts:701`
+- `src/hooks/useChessGame.test.ts:716`
+- `src/hooks/useChessGame.test.ts:731`
+- `src/hooks/useChessGame.test.ts:741`
 
 ## Tests
 

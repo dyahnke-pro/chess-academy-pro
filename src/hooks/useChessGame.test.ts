@@ -26,6 +26,27 @@ describe('useChessGame', () => {
     vi.useRealTimers();
   });
 
+  describe('a move reports whether it ended the game', () => {
+    it('a draw by threefold repetition is over — the hook holds the history a bare FEN cannot (prod audit 2026-11-07)', () => {
+      const { result } = renderHook(() => useChessGame());
+      const shuffle: Array<[string, string]> = [['g1', 'f3'], ['g8', 'f6'], ['f3', 'g1'], ['f6', 'g8']];
+      let last: MoveResult | null = null;
+      // Twice round the knight shuffle, then Nf3 a third time: the start
+      // position after 1.Nf3 is on the board for the third time.
+      for (const [from, to] of [...shuffle, ...shuffle, shuffle[0]]) {
+        act(() => { last = result.current.makeMove(from, to); });
+      }
+      expect(last).toMatchObject({ san: 'Nf3', gameOver: true });
+    });
+
+    it('twin: an ordinary move is not', () => {
+      const { result } = renderHook(() => useChessGame());
+      let last: MoveResult | null = null;
+      act(() => { last = result.current.makeMove('e2', 'e4'); });
+      expect(last).toMatchObject({ gameOver: false });
+    });
+  });
+
   describe('initial state', () => {
     it('starts with the standard opening position', () => {
       const { result } = renderHook(() => useChessGame());

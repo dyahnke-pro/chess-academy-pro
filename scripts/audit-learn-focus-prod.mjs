@@ -666,7 +666,7 @@ async function playGame(context, listener, engine, student, phase, index) {
   // speaks it ("Bishop takes b2 pays that price"). Compare the words that are
   // not a move: the move's two spellings would otherwise make every door line
   // that opens on a move read as a stray (focus prod audit 2026-11-07).
-  const MOVE_WORDS = new Set(['king', 'queen', 'rook', 'bishop', 'knight', 'pawn', 'takes', 'taking', 'to', 'check', 'checkmate', 'mate', 'castles', 'kingside', 'queenside', 'on', 'x']);
+  const MOVE_WORDS = new Set(['king', 'queen', 'rook', 'bishop', 'knight', 'pawn', 'takes', 'taking', 'to', 'with', 'check', 'checkmate', 'mate', 'castles', 'kingside', 'queenside', 'on', 'x']);
   const words = (t) => norm(t).split(' ').filter((w) => w && !MOVE_WORDS.has(w) && !/^[a-h][1-8]$/.test(w) && !/^[kqrbn]?[a-h]?[1-8]?x?[a-h][1-8]/.test(w) && !/^o o( o)?$/.test(w) && !/^[a-h]$/.test(w) && !/^[kqrbn]$/.test(w)).join(' ');
   const doorWords = doorTexts.map(words);
   const fromDoor = (text) => { const w = words(text); const head = w.slice(0, 40); return head.length > 0 && doorWords.some((d) => d.includes(head) || (d.length > 0 && w.includes(d.slice(0, 40)))); };

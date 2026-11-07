@@ -24,6 +24,12 @@ export interface MoveResult {
   moveNumber: number;
   turn: 'w' | 'b';
   promotion?: string;
+  /** Did this move end the game — mate, stalemate, or a draw only the whole
+   *  game can see (threefold repetition, fifty moves)? Read off the game's own
+   *  instance, which holds the history: a board rebuilt from the FEN alone
+   *  cannot see a repetition (Learn's coach played on past a draw by
+   *  repetition and the game-over card was taken down, prod audit 2026-11-07). */
+  gameOver: boolean;
 }
 
 export interface UseChessGameReturn {
@@ -190,6 +196,7 @@ export function useChessGame(
         moveNumber: Math.floor((hist.length - 1) / 2) + 1,
         turn: chessRef.current.turn() as 'w' | 'b',
         promotion: result.promotion,
+        gameOver: chessRef.current.isGameOver(),
       };
     } catch {
       return null;

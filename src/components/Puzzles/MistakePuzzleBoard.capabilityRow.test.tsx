@@ -72,7 +72,7 @@ describe('a solved drill lands a HELD row in the capability store', () => {
     await act(async () => { await sleep(150); }); // the source-game read before play opens
 
     await act(async () => {
-      latestOnMove!({ from: 'g1', to: 'f3', san: 'Nf3', fen: '', pgn: '', history: [], moveNumber: 2, turn: 'w' });
+      latestOnMove!({ from: 'g1', to: 'f3', san: 'Nf3', fen: '', pgn: '', history: [], moveNumber: 2, turn: 'w', gameOver: false });
     });
     // The write is fire-and-forget; give the microtask + Dexie a beat.
     await act(async () => { await new Promise((r) => setTimeout(r, 200)); });

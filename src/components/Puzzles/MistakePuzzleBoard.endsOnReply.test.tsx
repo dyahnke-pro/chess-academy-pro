@@ -45,7 +45,7 @@ vi.mock('../Board/ChessBoard', () => ({
 }));
 
 function mv(from: string, to: string, san: string): MoveResult {
-  return { from, to, san, fen: '', pgn: '', history: [], moveNumber: 0, turn: 'w' };
+  return { from, to, san, fen: '', pgn: '', history: [], moveNumber: 0, turn: 'w', gameOver: false };
 }
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 

@@ -84,11 +84,11 @@ describe('MistakePuzzleBoard — move-attempt rows', () => {
     await act(async () => { await sleep(150); });
 
     await act(async () => {
-      latestOnMove!({ from: 'd2', to: 'd4', san: 'd4', fen: '', pgn: '', history: [], moveNumber: 2, turn: 'w' });
+      latestOnMove!({ from: 'd2', to: 'd4', san: 'd4', fen: '', pgn: '', history: [], moveNumber: 2, turn: 'w', gameOver: false });
     });
     await act(async () => { await sleep(1700); }); // back to playing after the miss
     await act(async () => {
-      latestOnMove!({ from: 'g1', to: 'f3', san: 'Nf3', fen: '', pgn: '', history: [], moveNumber: 2, turn: 'w' });
+      latestOnMove!({ from: 'g1', to: 'f3', san: 'Nf3', fen: '', pgn: '', history: [], moveNumber: 2, turn: 'w', gameOver: false });
     });
 
     const rows = attempts();

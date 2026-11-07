@@ -10836,7 +10836,9 @@ export function CoachTeachPage({ mode }: {
         // Pad the reply to a randomized 1-2s minimum, MEASURING the resolve time
         // so a genuinely slow engine call doesn't stack an extra wait on top.
         const thinkStart = Date.now();
-        const reply = await resolveCoachReplyMove(move.fen);
+        // The game the student's move ended has no reply: the move carries the
+        // game's own verdict (repetition included), as a mate leaves no move.
+        const reply = move.gameOver ? null : await resolveCoachReplyMove(move.fen);
         // 🔒 THE NEXT BOARD IS READ FIRST (iOS engine reads, 2026-10-20). The
         // position the reply leaves is the one the student moves FROM next, and
         // their next move is judged from this read (`probeRead`) — no read, no

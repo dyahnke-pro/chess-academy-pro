@@ -512,6 +512,7 @@ export function buildMoveResult(overrides: Partial<MoveResult> = {}): MoveResult
     history: [san],
     moveNumber: 1,
     turn: 'b',
+    gameOver: false,
     ...overrides,
   };
 }
