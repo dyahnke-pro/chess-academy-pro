@@ -9,6 +9,10 @@ import { finishedBoardEval } from './finishedBoard';
 import { ledgerAsk, ledgerStart, ledgerDone, type EngineLedgerEntry } from './engineLedger';
 import { earlierLine } from './earlierLine';
 
+/** The line count (MultiPV) the worker is set to at start and narrowed back
+ *  to after every widened read. */
+export const DEFAULT_MULTIPV = 3;
+
 /** THE LINES MEASURED AGAINST THE ASK THEY ANSWER: each line short of
  *  `askedDepth` is marked `searchedShort`. Stamped where a read is handed out —
  *  a fresh search and a cache hit alike — so a deep read serving a shallower
@@ -178,6 +182,10 @@ interface PendingAnalysis {
    *  the call carried per-analysis options (Skill Level, etc.). */
   cacheFen?: string;
   cacheDepth?: number;
+  /** The MultiPV this search runs with, captured at dispatch: the width it
+   *  is filed under (`stockfishCache` — a narrower read never answers a
+   *  wider ask). */
+  multiPv: number;
   /** Hard-timeout handle that recovers this analysis if the worker dies
    *  silently (no bestmove). Cleared when the analysis settles. */
   hardTimeout?: ReturnType<typeof setTimeout>;
@@ -728,6 +736,10 @@ class StockfishEngine {
   /** Bumped by every teardown — a call restarts the engine only if it is unchanged since the call began. */
   private restartGen = 0;
   private pending: PendingAnalysis | null = null;
+  /** The MultiPV the worker is set to (the init sends 3; `setMultiPv`
+   *  changes it). Every read asks the cache for at least this many lines and
+   *  is filed under the width it ran with. */
+  private multiPvLines = DEFAULT_MULTIPV;
   private messageHandlers: Set<StockfishMessageHandler> = new Set();
   private statusHandlers: Set<StatusChangeHandler> = new Set();
   private initPromise: Promise<void> | null = null;
@@ -1306,7 +1318,8 @@ class StockfishEngine {
                   '[Stockfish] single-threaded variant — skipping Threads/Hash setup',
                 );
               }
-              this.send('setoption name MultiPV value 3');
+              this.send(`setoption name MultiPV value ${DEFAULT_MULTIPV}`);
+              this.multiPvLines = DEFAULT_MULTIPV;
               // ── ASK THE ENGINE FOR ITS WIN/DRAW/LOSS READ ────────────────
               //
               // David 2026-08-15: "widen the scope of our computer to capture
@@ -1653,8 +1666,10 @@ class StockfishEngine {
     // intentionally NOT part of the key — those callers should bypass
     // by passing a cache-skip sentinel if needed. Today only the brain
     // and prefetch path call without options.
+    // The width this read asks for: what the worker is set to right now.
+    const wantLines = this.multiPvLines;
     if (!options) {
-      const hit = stockfishCache.get(fen, depth);
+      const hit = stockfishCache.get(fen, depth, wantLines);
       if (hit) {
         void logAppAudit({
           kind: 'stockfish-cache-hit',
@@ -1720,10 +1735,13 @@ class StockfishEngine {
     // move their queen?" after a game timed out at 14s while the next one, on
     // a position nothing else had queued, answered in 366ms.
     if (!options && !bypassQuestionHold) {
-      const shared = stockfishCache.inflight(fen, depth);
+      const shared = stockfishCache.inflight(fen, depth, wantLines);
       if (shared) {
         try {
           const result = await shared;
+          // It was ASKED at this width; a search that RAN narrower (the
+          // worker was narrowed before it dispatched) answers nothing wider.
+          if ((stockfishCache.linesSearched(result) ?? 0) < wantLines) throw new Error('narrower read');
           void logAppAudit({
             kind: 'stockfish-cache-hit',
             category: 'subsystem',
@@ -1800,7 +1818,7 @@ class StockfishEngine {
 
     // Only the cacheable path is shareable — an `options` call carries
     // per-caller engine settings that are deliberately not part of the key.
-    return options ? run() : stockfishCache.trackInflight(fen, depth, run());
+    return options ? run() : stockfishCache.trackInflight(fen, depth, run(), wantLines);
   }
 
   private async _dispatchAnalysis(
@@ -1854,6 +1872,7 @@ class StockfishEngine {
         priority,
         cacheFen: options ? undefined : fen,
         cacheDepth: options ? undefined : depth,
+        multiPv: this.multiPvLines,
         startedAt: Date.now(),
         held: !!read.bypassQuestionHold,
       };
@@ -2367,7 +2386,7 @@ class StockfishEngine {
   ): Promise<StockfishAnalysis> {
     const finished = finishedAnalysis(fen, depth);
     if (finished) return finished;
-    const cached = stockfishCache.get(fen, depth);
+    const cached = stockfishCache.get(fen, depth, this.multiPvLines);
     if (cached) {
       void logAppAudit({
         kind: 'stockfish-cache-hit',
@@ -2476,7 +2495,9 @@ class StockfishEngine {
    *  same leak rule as strength. */
   setMultiPv(lines: number): void {
     if (!this.isReady || !this.worker) return;
-    this.send(`setoption name MultiPV value ${Math.max(1, Math.min(256, Math.round(lines)))}`);
+    const n = Math.max(1, Math.min(256, Math.round(lines)));
+    this.send(`setoption name MultiPV value ${n}`);
+    this.multiPvLines = n;
   }
 
   async evalBoard(fen: string, timeoutMs = 2500): Promise<string> {
@@ -2687,9 +2708,10 @@ class StockfishEngine {
       // at depth 6, and filed as depth 14 that read later answered the record's
       // own depth-14 ask — Kg5's 115 came from two cut-short reads. A shallow
       // read can now only answer asks at or below what it actually searched.
+      stockfishCache.noteSearched(analysis, this.pending.multiPv);
       if (this.pending.cacheFen !== undefined && this.pending.cacheDepth !== undefined) {
         const reached = Math.min(this.pending.cacheDepth, this.pending.depth || 0);
-        if (reached > 0) stockfishCache.set(this.pending.cacheFen, reached, analysis);
+        if (reached > 0) stockfishCache.set(this.pending.cacheFen, reached, analysis, this.pending.multiPv);
         // THE SLOW ENGINE'S CEILING (iOS engine reads, 2026-10-20). A search
         // that ended on the VARIANT's own clock — no shorter caller budget, no
         // `stop` — is as deep as this engine reads in one go: asking again for
@@ -2699,7 +2721,7 @@ class StockfishEngine {
         // read never does (#2 root cause 4 stands: a budget-cut depth 6 is not
         // what a depth-14 ask would get here).
         if (reached > 0 && reached < this.pending.cacheDepth && this.pending.onVariantClock && !this.pending.stopSent) {
-          stockfishCache.set(this.pending.cacheFen, this.pending.cacheDepth, analysis);
+          stockfishCache.set(this.pending.cacheFen, this.pending.cacheDepth, analysis, this.pending.multiPv);
         }
       }
 

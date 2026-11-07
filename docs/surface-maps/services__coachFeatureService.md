@@ -329,7 +329,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:8818`
 - `src/components/Coach/CoachTeachPage.tsx:8921`
 - `src/components/Coach/CoachTeachPage.tsx:11837`
-- `src/components/Coach/CoachTeachPage.tsx:12239`
+- `src/components/Coach/CoachTeachPage.tsx:12249`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/services/phaseTransitionDetector.test.ts:575`

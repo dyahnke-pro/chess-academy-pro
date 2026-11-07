@@ -19,7 +19,7 @@ describe('stockfishEngine.holdForQuestion', () => {
     expect(stockfishEngine.isHeldForQuestion()).toBe(true);
     // A cache hit returns at once, so seed one: what matters is that a MISS
     // waits — prove it with a read that cannot hit the cache.
-    stockfishCache.set(fen, 1, { bestMove: 'e1e2', evaluation: 0, isMate: false, mateIn: null, depth: 1, topLines: [], nodesPerSecond: 0 });
+    stockfishCache.set(fen, 1, { bestMove: 'e1e2', evaluation: 0, isMate: false, mateIn: null, depth: 1, topLines: [], nodesPerSecond: 0 }, 3);
     const hit = await stockfishEngine.analyzePosition(fen, 1);
     order.push(`cache-hit:${hit.bestMove}`);
     // The read stops at the dispatch: this test is about the hold, and a real
@@ -52,7 +52,7 @@ describe('stockfishEngine.holdForQuestion', () => {
 describe('stockfishEngine.holdForQuestion — the question skips the line', () => {
   it('the engine handed to the question bypasses the hold (it does not wait on itself)', async () => {
     const fen = '8/8/8/4k3/8/8/8/3K4 w - - 0 1';
-    stockfishCache.set(fen, 3, { bestMove: 'd1e2', evaluation: 0, isMate: false, mateIn: null, depth: 3, topLines: [], nodesPerSecond: 0 });
+    stockfishCache.set(fen, 3, { bestMove: 'd1e2', evaluation: 0, isMate: false, mateIn: null, depth: 3, topLines: [], nodesPerSecond: 0 }, 3);
     const got = await stockfishEngine.holdForQuestion((engine) => engine.analyzePosition(fen, 3));
     expect(got.bestMove).toBe('d1e2');
     expect(stockfishEngine.isHeldForQuestion()).toBe(false);

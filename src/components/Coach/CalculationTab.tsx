@@ -59,6 +59,7 @@ import { hintSquareStyles } from '../../utils/hintSquareStyles';
 import { useSolvedDrillConcept } from '../../hooks/useWrongTryRefutation';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
 import { useBoardFit } from '../../hooks/useBoardFit';
+import { shownSolution } from '../../services/proof';
 
 const EMPTY_LINE: readonly string[] = [];
 
@@ -541,6 +542,7 @@ function AdaptivePuzzleRunner({
             studentColor={studentSide}
             route="/tactics/calculation"
             onWalkLine={lineWalk.walk}
+            shownLine={shownSolution(drill.fen, drill.solution ?? EMPTY_LINE)}
             testIdPrefix="calc-ask"
             placeholder="Why does it work? What if they play …?"
           />

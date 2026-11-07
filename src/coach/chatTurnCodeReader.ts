@@ -312,6 +312,18 @@ function mainLinePlies(text: string): number {
 
 const BEST_DEFENCE_RE = /\b(?:what(?:'|’)?s|what\s+is|what\s+would\s+be)\s+(?:their|there|the\s+opponent(?:'|’)?s|black(?:'|’)?s|white(?:'|’)?s)\s+best\s+(?:defen[cs]e|reply|answer|response)\b|\bhow\s+(?:do|does|would|can|could)\s+(?:they|black|white|the\s+opponent)\s+defend\b/i;
 
+/** Asks about the line a screen just showed (`BoardContext.shownLine`), read on
+ *  the lower-cased, trimmed words: "why does this work?", "how does that
+ *  win?", "why is that the answer?", "explain the solution", "what's the idea
+ *  behind it?". */
+const SHOWN_THING = String.raw`(?:this|that|it|the\s+(?:solution|line|answer|combination|combo|tactic|idea|sequence|trick|move))`;
+const SHOWN_LINE_ASKS: readonly RegExp[] = [
+  new RegExp(String.raw`^(?:(?:but|so|and|ok(?:ay)?|wait|hmm),?\s+)?(?:why|how)\s+(?:does|did|do|would|will|is|was)\s+${SHOWN_THING}\s+(?:work|works|working|win|wins|winning)\b`),
+  new RegExp(String.raw`^(?:why|how)\s+(?:is|was)\s+(?:this|that|it)\s+(?:the\s+)?(?:solution|answer)\b`),
+  new RegExp(String.raw`^(?:(?:can|could|would)\s+you\s+|please\s+)?(?:explain|go\s+through|walk\s+(?:me\s+)?through)\s+(?:the\s+)?(?:solution|answer|combination|tactic)\b`),
+  new RegExp(String.raw`^what(?:'|’)?s?\s+(?:is\s+)?the\s+(?:idea|point|trick)\s+(?:behind|of)\s+${SHOWN_THING}\b`),
+];
+
 export function readTurnInCode(text: string, board: BoardContext): ChatTurn | null {
   if (!board.fen || text.length > 160) return null;
   let chess: Chess;
@@ -329,6 +341,12 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     // keyword path, which took "explain" for a concept and said "There is no
     // lesson on that idea yet" right after a mate in three).
     || /^(?:(?:can|could|would) you |please )?(?:explain|go through|break down) (?:that|it|this|the line|that line|that move|the move|why)(?: (?:again|more|for me|please|move by move))*\s*[?.!]*$/.test(followUp))) {
+    return { kind: 'explain-last', referents: [], seat: null, topic: null };
+  }
+  // "Why does this work?" with a solution on the screen — "this" is the line
+  // the screen just showed (a trainer's question box, 2026-11-07: nothing told
+  // the door what "this" was, and it answered with the stock line).
+  if (board.shownLine && SHOWN_LINE_ASKS.some((re) => re.test(followUp))) {
     return { kind: 'explain-last', referents: [], seat: null, topic: null };
   }
   // "What's the best move here?" / "what should I play?" / "best move?" —

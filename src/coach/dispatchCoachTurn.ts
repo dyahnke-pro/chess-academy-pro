@@ -57,6 +57,7 @@ import { executeSteps } from './requestExecutor';
 import { emitCoachStop } from './coachStopEvents';
 import type { ResolvedStep } from './requestSteps';
 import { isReleased } from '../data/heldSurfaces';
+import { samePosition } from '../utils/samePosition';
 
 interface DispatchCoachTurnOptions extends CoachServiceOptions {
   /** The prior assistant message — lets the action router catch the
@@ -154,7 +155,18 @@ function boardOf(input: CoachAskInput): BoardContext {
     // last said here — the explain screen passes none (hard-chat prod audit
     // 2026-11-07), and the reader read "explain that" without it.
     lastCoachLine: ls.lastCoachLine ?? lastSaid.get(ls.surface),
+    shownLine: ls.shownLine ?? null,
   };
+}
+
+/** The line a follow-up explains: the one the coach last proved here, when it
+ *  starts on this board ("explain that" after an answer), else the line the
+ *  screen just showed ("why does this work?" after a puzzle's solution). */
+function lineToExplain(ls: CoachAskInput['liveState']): WalkableLine | null {
+  const proved = lastLineFor(ls.surface);
+  const here = (l: WalkableLine | null | undefined): boolean => !!l && !!ls.fen && samePosition(l.startFen, ls.fen);
+  if (here(proved)) return proved;
+  return ls.shownLine ?? proved;
 }
 
 /** Is this turn the student's own words (typed or spoken)? Internal prompts
@@ -600,7 +612,7 @@ async function dispatchCoachTurnOnce(
       // A proof the answer carries (a capture that wins the attacker) comes
       // back as a line the board walks while the words say it.
       const proofOut: { lines?: WalkableLine[] } = {};
-      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? [], input.liveState.lastCoachLine ?? lastSaid.get(input.liveState.surface) ?? null, proofOut, lastLineFor(input.liveState.surface));
+      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? [], input.liveState.lastCoachLine ?? lastSaid.get(input.liveState.surface) ?? null, proofOut, lineToExplain(input.liveState));
       if (text) {
         return serve(text, turn.kind, 'answered', proofOut.lines?.length ? { lines: proofOut.lines } : {});
       }

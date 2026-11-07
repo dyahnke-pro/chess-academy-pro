@@ -2891,3 +2891,44 @@ describe('iOS engine reads: the coach\'s move, the holds, the clock and the boar
     expect(mockWorker.postMessageCalls).not.toContain(`position fen ${AFTER_E4E5}`);
   });
 });
+
+// 🔒 A NARROWER READ NEVER ANSWERS A WIDER ASK (focus prod audit, 2026-11-07,
+// rung2 game 2). The turn reads the coach's board at depth 14 with three
+// lines; the coach's own read of it — every legal move at depth 10, for the
+// human move model and the plant of a chance — was answered from that read, so
+// the plant saw two slips at most and a rung-2 game never got its chance.
+describe('a wider ask searches past a narrower read of the same board', () => {
+  const BOARD = '2b1kb1r/1pQ1n1pp/pB1ppp2/8/4P3/P2B4/1PP2PPP/RN2K2R w KQ - 1 14';
+  it('every legal move at depth 10 is searched after a three-line depth-14 read; a three-line ask still hits', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+    const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+    let width = 3;
+    pmMock.mockImplementation((msg: string) => {
+      mockWorker.postMessageCalls.push(msg);
+      const set = /MultiPV value (\d+)/.exec(msg);
+      if (set) width = Number(set[1]);
+      if (msg === 'isready') queueMicrotask(() => mockWorker.emit('readyok'));
+      if (msg.startsWith('go')) {
+        const depth = Number(/depth (\d+)/.exec(msg)?.[1] ?? 10);
+        const moves = new Chess(BOARD).moves({ verbose: true }).slice(0, width);
+        queueMicrotask(() => {
+          moves.forEach((m, i) => mockWorker.emit(`info depth ${depth} seldepth ${depth} multipv ${i + 1} score cp ${900 - i * 10} nodes 1000 pv ${m.from}${m.to}`));
+          mockWorker.emit(`bestmove ${moves[0].from}${moves[0].to}`);
+        });
+      }
+    });
+    const gos = (): number => mockWorker.postMessageCalls.filter((m) => m.startsWith('go')).length;
+    const turn = await stockfishEngine.analyzePosition(BOARD, 14);
+    expect(turn.topLines).toHaveLength(3);
+    const legal = new Chess(BOARD).moves().length;
+    stockfishEngine.setMultiPv(legal);
+    const wide = await stockfishEngine.analyzePosition(BOARD, 10);
+    stockfishEngine.setMultiPv(3);
+    expect(gos(), 'the wide ask searched').toBe(2);
+    expect(wide.topLines).toHaveLength(legal);
+    const narrow = await stockfishEngine.analyzePosition(BOARD, 10);
+    expect(gos(), 'twin: a three-line ask is answered from the cache').toBe(2);
+    expect(narrow.topLines.length).toBeGreaterThanOrEqual(3);
+  });
+});

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { positionAsk, positionPosed, pvSans } from '../../services/moveInsight';
-import { walkableLine } from '../../services/proof';
+import { shownSolution, walkableLine } from '../../services/proof';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { WalkLineButton } from '../Board/WalkLineButton';
 import { BoardQuestionBox } from '../Board/BoardQuestionBox';
@@ -598,6 +598,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
             studentColor={orientation}
             route="/tactics/setup"
             onWalkLine={lineWalk.walk}
+            shownLine={shownSolution(puzzle.setupFen, line)}
             engineBestMoveUci={line[0]}
             testIdPrefix="setup-chat"
             placeholder="Why does it work? What if they play …?"

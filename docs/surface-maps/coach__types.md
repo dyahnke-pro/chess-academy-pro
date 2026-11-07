@@ -4,22 +4,22 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1018 lines · 32 exports · 1030 importers · 272 tests · 38 audits**
+**1024 lines · 32 exports · 1037 importers · 276 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
-- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:840) — names `types`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3708) — names `Provider`, `ProviderName`, `types`
-- **TypeScript** (CLAUDE.md:4159) — names `types`
-- **React** (CLAUDE.md:4169) — names `types`
-- **File Organization** (CLAUDE.md:4180) — names `types`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4673) — names `types`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4712) — names `CoachSurface`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5179) — names `types`
-- **Naming** (CLAUDE.md:5826) — names `CoachPersonality`
-- **Testing Best Practices** (CLAUDE.md:5871) — names `Provider`
-- **Shared types / services** (CLAUDE.md:5938) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:6805) — names `TacticsLiveContext`
+- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:878) — names `types`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3747) — names `Provider`, `ProviderName`, `types`
+- **TypeScript** (CLAUDE.md:4198) — names `types`
+- **React** (CLAUDE.md:4208) — names `types`
+- **File Organization** (CLAUDE.md:4219) — names `types`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4712) — names `types`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4751) — names `CoachSurface`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5218) — names `types`
+- **Naming** (CLAUDE.md:5887) — names `CoachPersonality`
+- **Testing Best Practices** (CLAUDE.md:5932) — names `Provider`
+- **Shared types / services** (CLAUDE.md:5999) — names `types`
+- **The standard post-deploy ritual** (CLAUDE.md:6868) — names `TacticsLiveContext`
 
 ## Who calls in
 
@@ -39,6 +39,7 @@
 - `src/coach/__tests__/ping.integration.test.ts`
 - `src/coach/__tests__/streaming.test.ts`
 - `src/coach/boardTurnAnswer.ts`
+- `src/coach/chatTurn.ts`
 - `src/coach/chatTurnAnswers.ts`
 - `src/coach/coachService.ts`
 - `src/coach/dispatchCoachTurn.ts`
@@ -47,6 +48,7 @@
 - `src/coach/providers/deepseek.test.ts`
 - `src/coach/providers/deepseek.ts`
 - `src/coach/questionIntents.ts`
+- `src/coach/questionThought.test.ts`
 - `src/coach/sources/annotationContext.ts`
 - `src/coach/sources/bookGrounding.ts`
 - `src/coach/sources/identity.ts`
@@ -731,7 +733,9 @@
 - `src/services/criticality.ts`
 - `src/services/dataLoader.ts`
 - `src/services/dbService.ts`
+- `src/services/deciderWeights.ts`
 - `src/services/decisionStakes.test.ts`
+- `src/services/decisiveReason.colleG6.test.ts`
 - `src/services/decisiveReason.recapture.test.ts`
 - `src/services/decisiveReason.ts`
 - `src/services/decisiveReason.turnDepth.test.ts`
@@ -799,6 +803,7 @@
 - `src/services/homeOpeningSteer.ts`
 - `src/services/humanReply.test.ts`
 - `src/services/humanReply.ts`
+- `src/services/ifTheyPlay.ts`
 - `src/services/inaccuracyCall.ts`
 - `src/services/inaccuracyVoice.ts`
 - `src/services/journeyService.test.ts`
@@ -809,6 +814,7 @@
 - `src/services/learnBoardTeaching.ts`
 - `src/services/learnGameRecord.ts`
 - `src/services/learnRecordTerms.ts`
+- `src/services/learnTurnDoor.ts`
 - `src/services/lichessExplorerService.ts`
 - `src/services/lichessPuzzleService.test.ts`
 - `src/services/lichessPuzzleService.ts`
@@ -853,6 +859,7 @@
 - `src/services/moveInsight.ts`
 - `src/services/moveIntent.castleHeld.test.ts`
 - `src/services/moveIntent.measure.test.ts`
+- `src/services/moveIntent.quietPlan.test.ts`
 - `src/services/moveIntent.takesAway.test.ts`
 - `src/services/moveIntent.test.ts`
 - `src/services/moveIntent.ts`
@@ -1159,8 +1166,10 @@
 - `src/coach/__tests__/multiTurnLoop.test.ts`
 - `src/coach/__tests__/ping.integration.test.ts`
 - `src/coach/__tests__/streaming.test.ts`
+- `src/coach/boardTurnAnswer.test.ts`
 - `src/coach/lineOutcome.test.ts`
 - `src/coach/providers/deepseek.test.ts`
+- `src/coach/questionThought.test.ts`
 - `src/coach/sources/personalities.test.ts`
 - `src/coach/sources/playerGames.test.ts`
 - `src/coach/surfaceContract.scan.test.ts`
@@ -1284,6 +1293,7 @@
 - `src/services/criticalMoment.frame.test.ts`
 - `src/services/criticalMoment.oneCount.test.ts`
 - `src/services/decisionStakes.test.ts`
+- `src/services/decisiveReason.colleG6.test.ts`
 - `src/services/decisiveReason.recapture.test.ts`
 - `src/services/decisiveReason.turnDepth.test.ts`
 - `src/services/deepTree.test.ts`
@@ -1341,6 +1351,7 @@
 - `src/services/moveCost.keyMoments.test.ts`
 - `src/services/moveIntent.castleHeld.test.ts`
 - `src/services/moveIntent.measure.test.ts`
+- `src/services/moveIntent.quietPlan.test.ts`
 - `src/services/moveIntent.takesAway.test.ts`
 - `src/services/moveIntent.test.ts`
 - `src/services/moveIntentLink.test.ts`

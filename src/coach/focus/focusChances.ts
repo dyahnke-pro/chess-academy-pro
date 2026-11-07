@@ -179,7 +179,7 @@ const SHOT_MARGIN_CP = 150;
 const ONE_PAWN = 1;
 const ONE_PAWN_MARGIN_CP = 100;
 /** A shot's line is read this deep: four of your moves (a 3–4 move calculation). */
-const SHOT_PLIES = 8;
+export const SHOT_PLIES = 8;
 /** A forced mate this short (moves) is a question at club level. */
 const MATE_FOR_YOU_MAX = 4;
 /** A deciding blunder: at least a rook lost by force… */
@@ -709,13 +709,32 @@ function mateForYouChances(b: FocusBoard): FocusChance[] {
  *  motif is not asked — it is still recorded by the record's own writers, and
  *  Review still names it. */
 export function chancesAt(b: FocusBoard, open: ReadonlySet<MotifLevel>): FocusChance[] {
-  const c = board(b.fen);
-  if (!c || c.turn() !== b.student || c.isGameOver()) return [];
-  // A check is its own question: answer it first.
-  if (c.inCheck()) return [];
-  const all = [...mateForYouChances(b), ...shotChances(b, c), ...takeChances(b, c), ...motifChances(b, open), ...saveChances(b, c, open)];
+  const c = askable(b);
+  if (!c) return [];
+  const all = [...yourSide(b, c), ...motifChances(b, open), ...saveChances(b, c, open)];
   // A shot is named by its motif: one whose level is locked is not asked.
   return all.filter((ch) => tagOpenAt(ch.tag, open));
+}
+
+/** Your side alone (the exploit seat) — exactly `chancesAt`'s exploit
+ *  chances, without reading their side's motifs and threats. The coach's
+ *  plant asks it of every slip it weighs (`focusPlant`), where the defend
+ *  seat's detectors cost the most and answer nothing. */
+export function yourChancesAt(b: FocusBoard, open: ReadonlySet<MotifLevel>): FocusChance[] {
+  const c = askable(b);
+  return c ? yourSide(b, c).filter((ch) => tagOpenAt(ch.tag, open)) : [];
+}
+
+/** The board, when it asks the user anything: their move, the game on, and
+ *  not in check — a check is its own question: answer it first. */
+function askable(b: FocusBoard): Chess | null {
+  const c = board(b.fen);
+  if (!c || c.turn() !== b.student || c.isGameOver() || c.inCheck()) return null;
+  return c;
+}
+
+function yourSide(b: FocusBoard, c: Chess): FocusChance[] {
+  return [...mateForYouChances(b), ...shotChances(b, c), ...takeChances(b, c)];
 }
 
 /** How the move answered a chance posed on the board it was played from. */

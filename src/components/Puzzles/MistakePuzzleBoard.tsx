@@ -44,6 +44,7 @@ import { useBoardFit } from '../../hooks/useBoardFit';
 import { withArticle } from '../../utils/andList';
 import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from '../Coach/ThinkingLessonBoard';
+import { shownSolution } from '../../services/proof';
 
 type PuzzleState = 'loading' | 'replay' | 'playing' | 'correct' | 'incorrect' | 'freeplay';
 
@@ -1290,6 +1291,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
               studentColor={puzzle.fen.split(' ')[1] === 'b' ? 'black' : 'white'}
               route="/tactics"
               onWalkLine={lineWalk.walk}
+              shownLine={shownSolution(puzzle.fen, movesRef.current.map((m) => `${m.from}${m.to}${m.promotion ?? ''}`))}
               engineBestMoveUci={puzzle.bestMove}
               fallback={explainFallback}
               testIdPrefix="puzzle-chat"

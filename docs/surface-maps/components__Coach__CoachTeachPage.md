@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**17438 lines · 3 exports · 4 importers · 83 tests · 12 audits**
+**17448 lines · 3 exports · 4 importers · 84 tests · 12 audits**
 
 ## Locked rules that govern this surface
 
@@ -100,6 +100,7 @@
 - `src/test/learnSeat.gate.test.ts`
 - `src/test/learnTakeback.gate.test.ts`
 - `src/test/learnThreatVoiceWired.gate.test.ts`
+- `src/test/learnTrackAFollows.gate.test.ts`
 - `src/test/learnTrackAHeard.gate.test.ts`
 - `src/test/learnVerdictWave.gate.test.ts`
 - `src/test/lessonGameChip.gate.test.ts`

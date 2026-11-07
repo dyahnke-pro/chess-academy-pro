@@ -6,6 +6,7 @@
 import type { ArcState } from '../services/planArc';
 import type { CoachMessage, HintRequestRecord, IntendedOpening } from '../stores/coachMemoryStore';
 import type { TrapSignal } from '../services/openingTrapDetector';
+import type { WalkableLine } from '../types';
 
 // ─── Identity ────────────────────────────────────────────────────────────────
 
@@ -184,6 +185,11 @@ export interface LiveState {
   /** The coach's last line on this surface (narration or answer) — what a
    *  follow-up like "stop what?" points back at. */
   lastCoachLine?: string;
+  /** THE LINE THE SCREEN JUST SHOWED, from the board the question is asked
+   *  about: a puzzle's solution, played by the student or shown. What "why
+   *  does this work?" asks about (a trainer's question box, 2026-11-07: with
+   *  nothing to point at, the door answered with the stock line). */
+  shownLine?: WalkableLine | null;
   currentRoute?: string;
   /** Whose turn it is right now in the live position. The /coach/teach
    *  surface threads this through so the brain stops emitting moves

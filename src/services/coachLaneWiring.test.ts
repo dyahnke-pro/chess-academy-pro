@@ -170,7 +170,7 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // (2026-10-19: the answer half is OWED — spoken the turn after the
     // student plays, resolved against their move — through the same seam.)
     expect(body).toMatch(/pendingAnswerRef\.current = qa\[1\];/);
-    expect(TEACH).toMatch(/if \(owedSaid\) speechChainRef\.current = speakLearn\(owedSaid, \{ channel: 'door', forced: true, intent: 'learn-live' \}\)/);
+    expect(TEACH).toMatch(/speakLearn\(owedSaid, \{ channel: 'door', forced: true, intent: 'learn-live' \}\)/);
     expect(body).not.toMatch(/voiceService\.speak/);
   });
 });

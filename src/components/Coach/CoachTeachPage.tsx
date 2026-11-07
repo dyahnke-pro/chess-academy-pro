@@ -11902,12 +11902,18 @@ export function CoachTeachPage({ mode }: {
               let owedAfter = '';
               if (!trackAStarted) {
                 trackAStarted = true;
-                // Abort any straggler links from the previous turn's chain
-                // (same move handleSubmit makes), then make Track A the
-                // head of a fresh chain the warm beat appends to.
+                // Abort the previous turn's question-answer links (the same
+                // move handleSubmit makes). The previous turn's VOICE was
+                // already retired when the student moved (handleStudentMove:
+                // stop + trackAGenRef), so what the chain holds now is this
+                // move's own lines, said before the reply — a focus credit,
+                // clue or castling reminder, a mission's phrase. Track A
+                // FOLLOWS them and never cuts them (focus prod audit
+                // 2026-11-07, record game 3, ply 15: a stop here cut "There it
+                // is — your bishop is safe on e3 now." and pushed the castling
+                // reminder behind the reply's line, where the next move
+                // dropped it — the row said reminder, the voice never did).
                 if (turnAbortRefRef.current) turnAbortRefRef.current.aborted = true;
-                voiceService.stop();
-                speechChainRef.current = Promise.resolve();
                 // The answer the last turn's question never reached leads this one.
                 // RESOLVED AGAINST THE MOVE THEY PLAYED (Black walk 2026-10-19:
                 // the 11…Bh4 answer "nothing of yours can be taken" was heard
@@ -11921,7 +11927,11 @@ export function CoachTeachPage({ mode }: {
                 // of the last board led the turn and the verdict landed at
                 // +16.7 s). What the move cost is heard first; the answer follows.
                 if (owedSaid && opts?.verdict) owedAfter = owedSaid;
-                else if (owedSaid) speechChainRef.current = speakLearn(owedSaid, { channel: 'door', forced: true, intent: 'learn-live' }).catch(() => undefined);
+                else if (owedSaid) {
+                  speechChainRef.current = speechChainRef.current
+                    .then(() => (trackAGenRef.current === myTrackAGen ? speakLearn(owedSaid, { channel: 'door', forced: true, intent: 'learn-live' }) : undefined))
+                    .catch(() => undefined);
+                }
               }
               const heard = stripThink(line);
               speechChainRef.current = (speechChainRef.current ?? Promise.resolve())
