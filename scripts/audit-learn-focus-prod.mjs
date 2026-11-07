@@ -33,8 +33,8 @@
  *   F2 every spoken line is a focus, castling or tempo-run line (announce /
  *      ask / clue / credit / shown / deciding / end / rung-up / castle-stop /
  *      castle-reminder / tempo-had / tempo-let-off) or a line of the Learn
- *      turn door (its turn waves and phase wave — the app's own
- *      `CoachTeachPage.trackA` / `CoachTeachPage.phase` rows); a tapped
+ *      turn door (its turn waves, its late wave and phase wave — the app's own
+ *      `CoachTeachPage.trackA` / `hintRegister` / `phase` rows); a tapped
  *      button's answer is reported apart. Nothing else leaks;
  *   F3 THE DOOR IS THE ONE VOICE (David 2026-10-30): it decided every turn
  *      (a decision row each), none of its lanes was held as the old focus
@@ -646,9 +646,12 @@ async function playGame(context, listener, engine, student, phase, index) {
   // A drill move is judged by the engine before it is answered (up to ~14s
   // with the second tap): its answer is still a reply to that tap.
   const tapped = (at) => tape.taps.some((t) => at >= t.at && at <= t.at + (t.what === 'replay-move' ? 16_000 : 6_000));
-  // The door's own lines, as the app logged them before the voice spoke them.
+  // The door's own lines, as the app logged them before the voice spoke them:
+  // its turn wave (trackA), its LATE wave — the explanation at a miss, said once
+  // the move is priced (hintRegister, a door decision since the swing door,
+  // 2026-11-05) — and its phase wave.
   const doorTexts = events
-    .filter((e) => e.kind === 'coach-narration-spoken' && /^CoachTeachPage\.trackA$/.test(String(e.source ?? '')) || (e.source === 'CoachTeachPage.phase'))
+    .filter((e) => e.kind === 'coach-narration-spoken' && /^CoachTeachPage\.(?:trackA|hintRegister)$/.test(String(e.source ?? '')) || (e.source === 'CoachTeachPage.phase'))
     .map((e) => String(e.summary ?? '').replace(/^track A spoke: "/, '').replace(/"$/, '').replace(/^.* — /, '').trim())
     .filter(Boolean);
   const fromDoor = (text) => { const head = text.slice(0, 40); return doorTexts.some((d) => d.includes(head) || text.includes(d.slice(0, 40))); };
