@@ -163,7 +163,9 @@ describe('a costly move\'s verdict is heard before last turn\'s owed answer (OS-
   it('the turn\'s first line, when it is the verdict, goes on the chain before the owed answer', () => {
     const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     // The owed answer is held back when the first line is the verdict…
-    expect(page).toMatch(/if \(owedSaid && opts\?\.verdict\) owedAfter = owedSaid;\n\s*else if \(owedSaid\) speechChainRef\.current = speakLearn\(owedSaid/);
+    // (2026-11-07: chained behind this move's own lines — a focus or mission
+    // line said before the reply — never raced against them.)
+    expect(page).toMatch(/if \(owedSaid && opts\?\.verdict\) owedAfter = owedSaid;\n\s*else if \(owedSaid\) \{\n\s*speechChainRef\.current = speechChainRef\.current\n\s*\.then\(\(\) => \(trackAGenRef\.current === myTrackAGen \? speakLearn\(owedSaid/);
     // …queued after the line, and dropped if the turn was superseded.
     expect(page).toMatch(/if \(owedAfter\) \{\n\s*speechChainRef\.current = speechChainRef\.current\n\s*\.then\(\(\) => \(trackAGenRef\.current === myTrackAGen \? speakLearn\(owedAfter/);
     // The wave says whether it leads with the verdict: a 'but' beat.

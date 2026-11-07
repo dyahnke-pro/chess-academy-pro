@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**17420 lines · 3 exports · 4 importers · 83 tests · 12 audits**
+**17430 lines · 3 exports · 4 importers · 84 tests · 12 audits**
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1686) — names `CoachTeachPage`
-- **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1831) — names `CoachTeachPage`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3725) — names `CoachTeachPage`
-- **The standard post-deploy ritual** (CLAUDE.md:6829) — names `CoachTeachPage`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1690) — names `CoachTeachPage`
+- **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1835) — names `CoachTeachPage`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3729) — names `CoachTeachPage`
+- **The standard post-deploy ritual** (CLAUDE.md:6833) — names `CoachTeachPage`
 
 ## Who calls in
 
@@ -100,6 +100,7 @@
 - `src/test/learnSeat.gate.test.ts`
 - `src/test/learnTakeback.gate.test.ts`
 - `src/test/learnThreatVoiceWired.gate.test.ts`
+- `src/test/learnTrackAFollows.gate.test.ts`
 - `src/test/learnTrackAHeard.gate.test.ts`
 - `src/test/learnVerdictWave.gate.test.ts`
 - `src/test/lessonGameChip.gate.test.ts`
