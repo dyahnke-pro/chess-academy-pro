@@ -8,6 +8,7 @@ import {
   gradeMistakePuzzle,
   deleteMistakePuzzle,
   getMistakePuzzleStats,
+  puzzlePositionKey,
 } from './mistakePuzzleService';
 import { buildGameRecord, buildMistakePuzzle, resetFactoryCounter } from '../test/factories';
 import type { MoveAnnotation } from '../types';
@@ -425,6 +426,26 @@ describe('mistakePuzzleService', () => {
       const made = await Promise.all([1, 2, 3].map(() => generateMistakePuzzlesFromGame('race-1')));
       expect(made.reduce((a, b) => a + b, 0)).toBe(2);
       expect(await db.mistakePuzzles.where('sourceGameId').equals('race-1').count()).toBe(2);
+    });
+  });
+
+  describe('one puzzle per position per game, the sweep included', () => {
+    it('a slip the game already filed (a live capture, a taken-back miss) is not filed again by the sweep', async () => {
+      await db.games.add(buildGameRecord({ id: 'filed-1', pgn: TEST_PGN, white: 'TestPlayer', black: 'Stockfish Bot', source: 'coach', annotations: buildAnnotations() }));
+      // Sweep once to learn the boards, then put the game back as if only the
+      // live capture had filed the blunder's board.
+      await generateMistakePuzzlesFromGame('filed-1');
+      const swept = await db.mistakePuzzles.where('sourceGameId').equals('filed-1').toArray();
+      expect(swept).toHaveLength(2);
+      const blunder = swept.find((p) => p.classification === 'blunder')!;
+      await db.mistakePuzzles.clear();
+      await db.meta.delete('mistakes_generated_filed-1');
+      await db.mistakePuzzles.add({ ...blunder, id: 'captured-live' });
+      const made = await generateMistakePuzzlesFromGame('filed-1');
+      expect(made).toBe(1);
+      const rows = await db.mistakePuzzles.where('sourceGameId').equals('filed-1').toArray();
+      expect(rows).toHaveLength(2);
+      expect(rows.filter((p) => puzzlePositionKey(p.fen) === puzzlePositionKey(blunder.fen))).toHaveLength(1);
     });
   });
 

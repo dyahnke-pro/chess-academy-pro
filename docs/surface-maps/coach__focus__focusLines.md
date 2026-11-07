@@ -4,25 +4,26 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**250 lines · 10 exports · 3 importers · 1 tests · 1 audits**
+**344 lines · 11 exports · 4 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:174) — names `focusLines`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:206) — names `focusLines`
 
 ## Who calls in
 
 - `src/coach/focus/focusChances.test.ts`
+- `src/coach/focus/focusLines.spot.test.ts`
 - `src/coach/focus/focusRunner.ts`
 - `src/components/Coach/CoachTeachPage.tsx`
 
 ## Exports and every call site
 
 ### `endLine` (function) — 1 call site
-- `src/coach/focus/focusRunner.ts:415`
+- `src/coach/focus/focusRunner.ts:476`
 
 ### `askLine` (function) — 1 call site
-- `src/coach/focus/focusRunner.ts:383`
+- `src/coach/focus/focusRunner.ts:433`
 
 ### `SHOT_CLUE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -38,7 +39,7 @@
 - `src/coach/focus/focusChances.test.ts:276`
 - `src/coach/focus/focusChances.test.ts:364`
 - `src/coach/focus/focusChances.test.ts:465`
-- `src/coach/focus/focusRunner.ts:748`
+- `src/coach/focus/focusRunner.ts:820`
 
 ### `conclusionLine` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -49,22 +50,33 @@
 - `src/coach/focus/focusChances.test.ts:252`
 - `src/coach/focus/focusChances.test.ts:258`
 - `src/coach/focus/focusChances.test.ts:365`
-- `src/coach/focus/focusRunner.ts:667`
-- `src/coach/focus/focusRunner.ts:717`
+- `src/coach/focus/focusRunner.ts:731`
+- `src/coach/focus/focusRunner.ts:786`
+
+### `spotLine` (function) — 8 call sites
+- `src/coach/focus/focusLines.spot.test.ts:20`
+- `src/coach/focus/focusLines.spot.test.ts:27`
+- `src/coach/focus/focusLines.spot.test.ts:33`
+- `src/coach/focus/focusLines.spot.test.ts:40`
+- `src/coach/focus/focusLines.spot.test.ts:45`
+- `src/coach/focus/focusLines.spot.test.ts:49`
+- `src/coach/focus/focusLines.spot.test.ts:50`
+- `src/coach/focus/focusRunner.ts:449`
 
 ### `shownLine` (function) — 2 call sites
 - `src/coach/focus/focusChances.test.ts:253`
-- `src/coach/focus/focusRunner.ts:535`
+- `src/coach/focus/focusRunner.ts:596`
 
 ### `recapLabel` (function) — 1 call site
-- `src/coach/focus/focusRunner.ts:354`
+- `src/coach/focus/focusRunner.ts:398`
 
 ### `playOutPrompt` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:13982`
+- `src/components/Coach/CoachTeachPage.tsx:13973`
 
 ## Tests
 
 - `src/coach/focus/focusChances.test.ts`
+- `src/coach/focus/focusLines.spot.test.ts`
 
 ## Audits that reach it
 

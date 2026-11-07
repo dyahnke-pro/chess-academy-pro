@@ -286,10 +286,10 @@ interface SweepOptions {
    *  (once per game). The batch sweep never passes this: a library import is
    *  not a decision about which lines the student knows. */
   reviewed?: boolean;
-  /** A discrete student event that adds evidence — a Play game finishing or a
+  /** A discrete student event that adds evidence — a game finishing (Play or Learn) or a
    *  Review opening. After the record is written, the teaching-effect door
    *  runs once (`teachingEffectService`). The batch sweep never passes it. */
-  reportEffects?: 'play-finished' | 'review-opened';
+  reportEffects?: 'game-finished' | 'review-opened';
   /** A finished Play game: after the record, deepen its analysis and pre-build
    *  its review narration (`gameAnalysisService.prepareReview`), so opening
    *  the review neither re-searches every ply nor builds the narration twice

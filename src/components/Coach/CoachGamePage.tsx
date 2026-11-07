@@ -1886,7 +1886,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       // The finished game's whole record — its puzzles, the weakness profile
       // they feed, and the slip/capability record — from the module that
       // owns the record (one entry, so this surface composes none of it).
-      recordFinishedGame(gameRecord.id, activeProfile, { reportEffects: 'play-finished', prepareReview: true }, gameState.moves);
+      recordFinishedGame(gameRecord.id, activeProfile, { reportEffects: 'game-finished', prepareReview: true }, gameState.moves);
     });
   }, [gameState.moves, gameState.hintsUsed, gameState.gameId, playerColor, difficulty, game.history, activeProfile, playerRating, targetStrength, detectedOpening, timeControl]);
 

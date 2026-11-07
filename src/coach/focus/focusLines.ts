@@ -9,7 +9,7 @@
  * move. Their threat may be named (it is their move); the move that answers a
  * shot is named only once the moment is past (a find, or the second miss).
  */
-import type { PieceSymbol } from 'chess.js';
+import { Chess, type PieceSymbol, type Square } from 'chess.js';
 import { PIECE_NAMES } from '../../types/tacticTypes';
 import { countWord } from '../../utils/andList';
 import { MATERIAL_VALUE } from '../../services/pieceValues';
@@ -199,6 +199,100 @@ export function conclusionLine(ch: FocusChance, m?: FocusMove): string {
 export function creditLine(ch: FocusChance, ply: number, m?: FocusMove): string {
   const c = conclusionLine(ch, m);
   return `${pick(['There it is', 'Good', 'Yes'], ply)} — ${c}`;
+}
+
+/** WHAT A PIECE OF THEIRS NEWLY REACHES, read the way a coach teaches it:
+ *  one habit per piece, the move it makes being the trigger. A `Record`, so a
+ *  piece with no habit fails to compile. */
+const NEW_REACH: Record<PieceSymbol, string> = {
+  p: 'after every pawn move of theirs, look at the two squares it now attacks',
+  n: 'after every knight move of theirs, look at every square it now jumps to',
+  b: 'after every bishop move of theirs, run your eye down both its diagonals',
+  r: 'after every rook move of theirs, look along its file and its rank',
+  q: 'after every queen move of theirs, look along every line it now reaches',
+  k: 'after every king move of theirs, look at the squares it now touches',
+};
+
+/** The move that turned `prevFen` into `fen`, or null. */
+function moveBetween(prevFen: string, fen: string): { type: PieceSymbol; from: string; to: string } | null {
+  const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+  try {
+    const c = new Chess(prevFen);
+    for (const m of c.moves({ verbose: true })) {
+      c.move(m);
+      const hit = key(c.fen()) === key(fen);
+      c.undo();
+      if (hit) return { type: m.piece, from: m.from, to: m.to };
+    }
+  } catch { /* an unreadable pair names no move */ }
+  return null;
+}
+
+/** Did the piece on `from` guard / attack `target` on this board? */
+function reached(fen: string, from: string, target: string): boolean {
+  try {
+    const c = new Chess(fen);
+    const p = c.get(from as Square);
+    return !!p && c.attackers(target as Square, p.color).includes(from as Square);
+  } catch { return false; }
+}
+
+/** HOW TO SPOT IT NEXT TIME (David 2026-11-07: "a sentence as to how to spot
+ *  it in the future … something specific, not just 'look for hanging
+ *  pieces'"). Said once the moment is past (the credit after a retry, the
+ *  shown answer) and filed on the puzzle the miss makes: the board's own
+ *  trigger — the move that made the chance, the piece it hit, the guard that
+ *  left — and the habit for that piece. A tactic's chance says its motif's
+ *  shape (`MOTIFS[…].spot`). Null when nothing specific can be said: empty
+ *  beats generic. `prevFen` is the board before their last move. */
+export function spotLine(ch: FocusChance, ctx: { prevFen: string | null; fen: string; move?: { fenBefore: string; san: string } }): string | null {
+  const last = ctx.prevFen ? moveBetween(ctx.prevFen, ctx.fen) : null;
+  switch (ch.kind) {
+    case 'save': {
+      const a = ch.attacker;
+      const p = ch.piece;
+      if (!a || !p) return null;
+      const cheap = cheaperAttacker(ch) ? ', and a guard does not save a piece from a cheaper attacker' : '';
+      // Their attacker moved in: its new reach is the habit.
+      if (last && last.to === a.square) return `Their ${piece(a.type)} came to ${a.square} and hit your ${piece(p.type)} on ${p.square}${cheap}. Next time, ${NEW_REACH[a.type]}.`;
+      // Another piece of theirs moved out of the line: a discovered attack.
+      if (last && ctx.prevFen && !reached(ctx.prevFen, a.square, p.square)) {
+        return `Their ${piece(last.type)} moved off the line and opened their ${piece(a.type)} on ${a.square} onto your ${piece(p.type)} on ${p.square}${cheap}. Next time, when a piece of theirs moves, look down the line it opens behind it.`;
+      }
+      return `Their ${piece(a.type)} on ${a.square} was hitting your ${piece(p.type)} on ${p.square}${cheap}. Next time, before every move, check what each of their pieces is hitting.`;
+    }
+    case 'leave': {
+      const p = ch.piece;
+      const m = ctx.move;
+      if (!p || !m) return null;
+      let moved: { type: PieceSymbol; from: string } | null = null;
+      try {
+        const mv = new Chess(m.fenBefore).move(m.san);
+        if (mv) moved = { type: mv.piece, from: mv.from };
+      } catch { moved = null; }
+      if (moved && moved.from !== p.square && reached(m.fenBefore, moved.from, p.square)) {
+        return `Your ${piece(moved.type)} left ${moved.from}, and it was the guard of your ${piece(p.type)} on ${p.square}. Next time, before a piece moves, check what it is guarding.`;
+      }
+      return `That move left your ${piece(p.type)} on ${p.square} with nothing guarding it. Next time, before every move, check that each of your pieces is still guarded after it.`;
+    }
+    case 'take': {
+      const p = ch.piece;
+      if (!p) return null;
+      if (last && last.to === p.square) return `Their ${piece(p.type)} came to ${p.square} with nothing guarding it. Next time, when a piece of theirs lands, ask what guards it.`;
+      if (last && ctx.prevFen && reached(ctx.prevFen, last.from, p.square)) {
+        return `Their ${piece(last.type)} left ${last.from}, and their ${piece(p.type)} on ${p.square} lost its guard. Next time, after every move of theirs, ask what the piece that moved stopped guarding.`;
+      }
+      return MOTIFS['free-piece'].spot;
+    }
+    case 'mate-threat':
+    case 'mate-for-you':
+      return MOTIFS.mate.spot;
+    case 'shot':
+    case 'motif': {
+      const m = motifOfTag(ch.tag);
+      return m ? MOTIFS[m].spot : null;
+    }
+  }
 }
 
 /** SHOW ME — the answer, said only on the student's own tap after a second

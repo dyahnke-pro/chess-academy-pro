@@ -32,31 +32,37 @@ describe('a miss the coach stopped and the student took back is filed to the mis
   beforeEach(async () => { await db.mistakePuzzles.clear(); await db.games.clear(); audit.rows.length = 0; });
 
   it('a blunder taken back: one puzzle with the move, the best and the best line', async () => {
-    const p = await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: GAME }, reads(500));
+    const p = await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: GAME, spot: null }, reads(500));
     expect(p).not.toBeNull();
     const [row] = await puzzles();
     expect([row.fen, row.playerMoveSan, row.bestMoveSan]).toEqual([FEN, 'Qh4', 'Nc6']);
   });
+  it('the puzzle carries how to spot it next time, as the live board read it (David 2026-11-07)', async () => {
+    const spot = 'Their knight came to e5 and hit your queen on d8. Next time, after every knight move of theirs, look at every square it now jumps to.';
+    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: GAME, spot }, reads(500));
+    const [row] = await puzzles();
+    expect(row.spot).toBe(spot);
+  });
   it('one puzzle per position per game: a second miss at the same board files nothing', async () => {
-    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: GAME }, reads(500));
-    expect(await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qg5', gameId: GAME }, reads(500))).toBeNull();
+    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: GAME, spot: null }, reads(500));
+    expect(await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qg5', gameId: GAME, spot: null }, reads(500))).toBeNull();
     expect((await puzzles()).length).toBe(1);
   });
   it('twins: an inaccuracy; the engine\'s own best move; no game; a move the engine could not price', async () => {
-    expect(await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'a6', gameId: GAME }, reads(60)), 'an inaccuracy').toBeNull();
-    expect(await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Nc6', gameId: GAME }, reads(500)), 'the best move').toBeNull();
-    expect(await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: null }, reads(500)), 'no game').toBeNull();
+    expect(await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'a6', gameId: GAME, spot: null }, reads(60)), 'an inaccuracy').toBeNull();
+    expect(await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Nc6', gameId: GAME, spot: null }, reads(500)), 'the best move').toBeNull();
+    expect(await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: null, spot: null }, reads(500)), 'no game').toBeNull();
     const unpriced: TakenBackReads = { ...reads(500), price: async () => null };
-    expect(await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: GAME }, unpriced), 'unpriced is never a guess').toBeNull();
+    expect(await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: GAME, spot: null }, unpriced), 'unpriced is never a guess').toBeNull();
     expect((await puzzles()).length).toBe(0);
   });
 
   it('every call logs the app\'s own verdict with its grade — the row an audit holds the puzzles to', async () => {
-    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: GAME }, reads(500));
-    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qg5', gameId: GAME }, reads(500));
-    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'a6', gameId: GAME }, reads(60));
-    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: GAME }, { ...reads(500), price: async () => null });
-    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: null }, reads(500));
+    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: GAME, spot: null }, reads(500));
+    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qg5', gameId: GAME, spot: null }, reads(500));
+    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'a6', gameId: GAME, spot: null }, reads(60));
+    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: GAME, spot: null }, { ...reads(500), price: async () => null });
+    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: null, spot: null }, reads(500));
     expect(verdicts().map((r) => [r.san, r.verdict, r.severity])).toEqual([
       ['Qh4', 'filed', 'blunder'],
       ['Qg5', 'duplicate', 'blunder'],

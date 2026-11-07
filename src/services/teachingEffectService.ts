@@ -4,7 +4,7 @@
  * Reads the student's mistake record and analysed games, runs the computer,
  * and publishes the verdicts: one `teaching-effect` audit row (the local log)
  * and one PostHog `teaching_effect` event per kind with a direction. Called on
- * the two discrete student events that add evidence — a Play game finishing
+ * the two discrete student events that add evidence — a game finishing (Play or Learn)
  * and a Review being opened — never per game of a backfill sweep.
  */
 import { db } from '../db/schema';
@@ -20,7 +20,7 @@ export function gameTime(date: string | undefined | null): number | null {
   return Number.isFinite(t) ? t : null;
 }
 
-export async function reportTeachingEffects(trigger: 'play-finished' | 'review-opened'): Promise<TeachingEffect[]> {
+export async function reportTeachingEffects(trigger: 'game-finished' | 'review-opened'): Promise<TeachingEffect[]> {
   const [tagRows, gameRows] = await Promise.all([db.misconceptionTags.toArray(), db.games.toArray()]);
   const games: EffectGame[] = [];
   const timeById = new Map<string, number>();

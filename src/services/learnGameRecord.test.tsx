@@ -134,7 +134,7 @@ describe('C7 — the page\'s End Lesson handler is held to the builder (by state
     // The handler is the ~60 lines ABOVE the testid (the onClick precedes it).
     const handler = src.slice(Math.max(0, at - 4000), at);
     expect(handler).toMatch(/learnRecordOf\(game, \{ kind: 'ended' \}\)/);
-    expect(handler).toMatch(/db\.games\.add\(record\)/);
+    expect(handler).toMatch(/saveLearnGame\(record\)/);
     expect(handler).toMatch(/setFinishedGame\(\{ id: record\.id, result: 'ended'/);
     // The pre-fix handler ended in a bare navigate — it must now be the
     // fall-through for "nothing to save", after the save branch.
@@ -144,6 +144,22 @@ describe('C7 — the page\'s End Lesson handler is held to the builder (by state
     // pass — calls it.
     expect((src.match(/buildLearnGameRecord\(\{/g) ?? []).length).toBe(1);
     expect((src.match(/learnRecordOf\((game|g), /g) ?? []).length).toBe(3);
+  });
+});
+
+describe('a finished Learn game runs the finished game\'s whole record (by statement)', () => {
+  // A mistake played on in Learn free play never became a puzzle: the page
+  // wrote the game and stopped, the live capture counts only inside an opening
+  // lesson, and the batch sweep skips a game Learn graded in full.
+  it('every save goes through saveLearnGame, and it is the one place the page writes a game and runs recordFinishedGame', () => {
+    const src = readFileSync(resolve(__dirname, '../components/Coach/CoachTeachPage.tsx'), 'utf8');
+    expect((src.match(/db\.games\.add\(/g) ?? []).length).toBe(1);
+    const at = src.indexOf('const saveLearnGame = useCallback(');
+    expect(at).toBeGreaterThan(0);
+    const body = src.slice(at, src.indexOf('}, []);', at));
+    expect(body).toMatch(/await db\.games\.add\(record\)/);
+    expect(body).toMatch(/recordFinishedGame\(record\.id, profile, \{ reportEffects: 'game-finished', prepareReview: true \}/);
+    expect((src.match(/await saveLearnGame\(record\)/g) ?? []).length).toBe(3);
   });
 });
 

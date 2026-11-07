@@ -51,7 +51,7 @@ describe('useMissionRunner — wiring', () => {
     expect(hands.replyToHeldMove).not.toHaveBeenCalled();
     expect(hands.record).not.toHaveBeenCalled();
     // The miss the mission stopped, taken back: handed to the puzzles (David 2026-10-23).
-    expect(fileTakenBack).toHaveBeenCalledWith(fenOf(sans('e4 e5 Nf3 Nc6')), 'Ng5', 'g-mission');
+    expect(fileTakenBack).toHaveBeenCalledWith(fenOf(sans('e4 e5 Nf3 Nc6')), 'Ng5', 'g-mission', null);
   });
 
   it('"Play on" lets the coach answer the held move', () => {

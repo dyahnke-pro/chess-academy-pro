@@ -739,13 +739,32 @@ async function analyzeGameWithStockfish(
     await db.games.update(gameId, { annotations });
   }
 
-  if (puzzles.length > 0) {
-    await db.mistakePuzzles.bulkAdd(puzzles);
+  const fresh = await notYetFiled(gameId, puzzles);
+  if (fresh.length > 0) {
+    await db.mistakePuzzles.bulkAdd(fresh);
     emitWeaknessModelChanged();
   }
 
   await db.meta.put({ key: metaKey, value: 'true' });
-  return puzzles.length;
+  return fresh.length;
+}
+
+/** ONE PUZZLE PER POSITION PER GAME, THE SWEEP INCLUDED. A slip the game's
+ *  live capture filed (Play's and Learn's `captureMisconception`), and a miss
+ *  the coach stopped and the student took back (`addTakenBackMistakePuzzle`,
+ *  whose retry at the same board can stand in the game), are already this
+ *  game's puzzle at that board — the end-of-game sweep files only the rest. */
+async function notYetFiled(gameId: string, puzzles: readonly MistakePuzzle[]): Promise<MistakePuzzle[]> {
+  if (puzzles.length === 0) return [];
+  const filed = new Set((await db.mistakePuzzles.where('sourceGameId').equals(gameId).toArray()).map((p) => puzzlePositionKey(p.fen)));
+  const out: MistakePuzzle[] = [];
+  for (const p of puzzles) {
+    const key = puzzlePositionKey(p.fen);
+    if (filed.has(key)) continue;
+    filed.add(key);
+    out.push(p);
+  }
+  return out;
 }
 
 /**
@@ -1032,13 +1051,14 @@ async function generateFromAnnotations(
     });
   }
 
-  if (puzzles.length > 0) {
-    await db.mistakePuzzles.bulkAdd(puzzles);
+  const fresh = await notYetFiled(gameId, puzzles);
+  if (fresh.length > 0) {
+    await db.mistakePuzzles.bulkAdd(fresh);
     emitWeaknessModelChanged();
   }
 
   await db.meta.put({ key: metaKey, value: 'true' });
-  return puzzles.length;
+  return fresh.length;
 }
 
 /**
@@ -1114,6 +1134,8 @@ interface CapturePuzzleInput {
   /** The engine line from this position starting with the best move
    *  (`pvAfterBest`), SAN — classifies the tactic on the whole line. */
   bestLineSan?: readonly string[];
+  /** How to spot it next time, from the live miss that filed it (`spotLine`). */
+  spot?: string | null;
 }
 
 /** A stored card's narration, rebuilt from its stored facts plus the move the
@@ -1368,6 +1390,7 @@ export function buildMistakePuzzleFromCapture(
     successes: 0,
     tacticType,
     ...(named.setup ? { setupTacticType: named.setup } : {}),
+    ...(input.spot ? { spot: input.spot } : {}),
   };
 }
 

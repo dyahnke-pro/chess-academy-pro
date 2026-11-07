@@ -140,6 +140,11 @@ export interface MistakePuzzle {
    *  UCI from `fen`, the best move first, to the blow. Calculation serves it
    *  as a long (3–5 moves) or very long (past 5) line. Additive, unindexed. */
   calcLine?: { uci: string; blowPlies: number; why: 'agreed' | 'forcing-agreed' | 'verified' };
+  /** HOW TO SPOT IT NEXT TIME, read off the live board that filed it (the
+   *  focus's miss, `spotLine`): the move that made the chance, what it hit,
+   *  the habit for that piece. Absent on every other puzzle, which reads its
+   *  motif's line from `tacticType` (`spotForTactic`). Said after the solve. */
+  spot?: string;
 }
 
 // ─── Find-the-Square (board-vision drill) ──────────────────────────────────

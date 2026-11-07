@@ -37,7 +37,7 @@ import {
   chancesAt, decidingBlunder, judgeChance, leftLoose, solvePlies,
   type ChanceDifficulty, type ChanceVerdict, type FocusChance, type FocusMove, type ReadLine,
 } from './focusChances';
-import { askLine, clueLine, creditLine, endLine, recapLabel, shownLine } from './focusLines';
+import { askLine, clueLine, creditLine, endLine, recapLabel, shownLine, spotLine } from './focusLines';
 import { DECIDING_LINE, type FocusId, type FocusSeat } from './focusCard';
 import type { FocusSetup } from './focusSetup';
 import type { HeatState } from '../../services/holdRate';
@@ -320,7 +320,9 @@ export type FocusEffect =
    *  to the mistake puzzles when its grade is a mistake or worse (David
    *  2026-10-23: "If the user missed it the first time in the game it should
    *  go to puzzles" — the student's own Takeback is not one). */
-  | { kind: 'taken-back'; fen: string; san: string }
+  /** The miss the student took back, filed as a puzzle with how to spot it
+   *  next time (`spotLine`; null when nothing specific can be said). */
+  | { kind: 'taken-back'; fen: string; san: string; spot: string | null }
   | { kind: 'show'; uci: string; fen: string }
   /** Let the coach reply to the move that stands; `punish` = a focus miss stands. */
   | { kind: 'reply'; punish: boolean }
@@ -440,6 +442,13 @@ function onBoard(s: FocusRunState, b: BoardState): FocusStep {
   return { state: { ...s, board: { ...b, chances, prompted, steered, askedChance, questioned } }, effects };
 }
 
+/** How to spot the chance next time, read off the board it stood on (the
+ *  board's own last move is the trigger) and the move that missed it. */
+function spotOf(s: FocusRunState, chance: FocusChance, fenBefore: string, missSan: string): string | null {
+  const prevFen = s.board && sameBoard(s.board.fen, fenBefore) ? s.board.prevFen : null;
+  return spotLine(chance, { prevFen, fen: fenBefore, move: { fenBefore, san: missSan } });
+}
+
 /** A decision still open when the game ended STOOD: it is filed as Play on
  *  would have filed it, and listed on the card (prod record 2026-10-23: a game
  *  ended with Try again / Play on still up — the miss was in the tally and the
@@ -552,7 +561,7 @@ function stepInner(s: FocusRunState, e: FocusEvent): FocusStep {
       const p = s.pause;
       if (!p || p.retries !== 0) return { state: s, effects: [] };
       if (p.castle) return goBackAndCastle(s, p.castle);
-      const effects: FocusEffect[] = [{ kind: 'undo' }, { kind: 'taken-back', fen: p.fenBefore, san: p.san }];
+      const effects: FocusEffect[] = [{ kind: 'undo' }, { kind: 'taken-back', fen: p.fenBefore, san: p.san, spot: p.chance ? spotOf(s, p.chance, p.fenBefore, p.san) : null }];
       // The miss is the user's, taken back: still on the record, unprompted
       // unless the board was asked.
       if (p.chance) effects.push({ kind: 'record', chance: p.chance, outcome: 'broken', fen: p.fenBefore, san: p.san, prompted: p.prompted, steered: p.steered, takenBack: true });
@@ -584,7 +593,7 @@ function stepInner(s: FocusRunState, e: FocusEvent): FocusStep {
       if (!p || p.retries !== 2 || !p.chance) return { state: s, effects: [] };
       const effects: FocusEffect[] = [];
       if (p.chance.answerUci) effects.push({ kind: 'show', uci: p.chance.answerUci, fen: p.fenBefore });
-      effects.push({ kind: 'say', text: shownLine(p.chance), line: 'shown' });
+      effects.push({ kind: 'say', text: [shownLine(p.chance), spotOf(s, p.chance, p.fenBefore, p.san)].filter(Boolean).join(' '), line: 'shown' });
       effects.push({ kind: 'turn', row: row(s, p.chance, p.ply, 'missed', 'shown', true, p.steered, p.planted, false, true, null) });
       effects.push({ kind: 'reply', punish: true });
       return { state: { ...s, pause: null }, effects };
@@ -656,7 +665,7 @@ function goOn(s: FocusRunState, m: { fenBefore: string; san: string; student: Co
 function goBackAndCastle(s: FocusRunState, target: CastleBoard): FocusStep {
   // The move the STOP was said on is the miss taken back; the earlier moves
   // the rewind takes with it were never flagged.
-  const flagged: FocusEffect[] = s.pause ? [{ kind: 'taken-back', fen: s.pause.fenBefore, san: s.pause.san }] : [];
+  const flagged: FocusEffect[] = s.pause ? [{ kind: 'taken-back', fen: s.pause.fenBefore, san: s.pause.san, spot: s.pause.chance ? spotOf(s, s.pause.chance, s.pause.fenBefore, s.pause.san) : null }] : [];
   // The moves taken back leave the run too.
   const rewound: FocusRunState = { ...s, pause: null, carried: [], tempo: { ...s.tempo, length: 0 }, stood: s.stood.filter((x) => x.ply < target.ply), lastMove: null, castle: { ...s.castle, boards: s.castle.boards.filter((b) => b.ply <= target.ply) } };
   const step = onBoard(rewound, { fen: target.fen, prevFen: target.prevFen, ply: target.ply, student: target.fen.split(' ')[1] === 'b' ? 'b' : 'w', lines: target.lines, chances: [], steered: false, planted: null, prompted: true, askedChance: null, questioned: null });
@@ -718,7 +727,8 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
       }
       if (v === 'found') {
         effects.push({ kind: 'record', chance: p.chance, outcome: 'held', fen: m.fenBefore, san: m.san, prompted: true, steered: p.steered, takenBack: false });
-        effects.push({ kind: 'say', text: creditLine(p.chance, ply, m), line: 'credit' });
+        // The moment is past: the credit, then how to spot it next time.
+        effects.push({ kind: 'say', text: [creditLine(p.chance, ply, m), spotOf(state, p.chance, p.fenBefore, p.san)].filter(Boolean).join(' '), line: 'credit' });
         effects.push({ kind: 'turn', row: row(state, p.chance, ply, v, 'credit', true, p.steered, p.planted, false, true, RETRY_REWARD) });
         effects.push({ kind: 'reward', reward: RETRY_REWARD, square: toSquare(m.fenBefore, m.san), ply });
         effects.push({ kind: 'reply', punish: false });

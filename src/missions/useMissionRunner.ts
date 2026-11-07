@@ -140,7 +140,7 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
           // (`takenBackPuzzles`, David 2026-10-23).
           const held = heldRef.current;
           heldRef.current = null;
-          if (held) fileTakenBack(held.fenBefore, held.san, h.gameId());
+          if (held) fileTakenBack(held.fenBefore, held.san, h.gameId(), null);
           h.undo();
           break;
         }

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1622 lines · 24 exports · 36 importers · 25 tests · 5 audits**
+**1645 lines · 24 exports · 36 importers · 25 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6817) — names `gradeMistakePuzzle`
+- **The standard post-deploy ritual** (CLAUDE.md:6880) — names `gradeMistakePuzzle`
 
 ## Who calls in
 
@@ -76,7 +76,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `mistakeProvenanceFromGame` (function) — 3 call sites
-- `src/services/autoAnalyzeGame.ts:698`
+- `src/services/autoAnalyzeGame.ts:695`
 - `src/services/mistakeProvenance.test.ts:80`
 - `src/services/mistakeProvenance.test.ts:87`
 
@@ -103,47 +103,47 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:8568`
-- `src/components/Coach/CoachTeachPage.tsx:8592`
+- `src/components/Coach/CoachTeachPage.tsx:8597`
+- `src/components/Coach/CoachTeachPage.tsx:8621`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
 - `src/hooks/useAcceptableMoves.ts:88`
 - `src/hooks/useDiscussionPractice.ts:285`
 - `src/hooks/useDiscussionPractice.ts:471`
-- `src/services/autoAnalyzeGame.ts:456`
-- `src/services/autoAnalyzeGame.ts:609`
+- `src/services/autoAnalyzeGame.ts:453`
+- `src/services/autoAnalyzeGame.ts:606`
 - `src/services/computerAccuracy.audit.test.ts:107`
-- `src/services/deliberation.ts:129`
-- `src/services/deliberation.ts:209`
-- `src/services/deliberation.ts:216`
-- `src/services/deliberation.ts:248`
-- `src/services/deliberation.ts:250`
-- `src/services/deliberation.ts:298`
+- `src/services/deliberation.ts:148`
+- `src/services/deliberation.ts:224`
+- `src/services/deliberation.ts:231`
+- `src/services/deliberation.ts:263`
+- `src/services/deliberation.ts:265`
+- `src/services/deliberation.ts:314`
 - `src/services/endgameDrillService.ts:103`
 - `src/services/endgameDrillService.ts:139`
 - `src/services/endgameDrillService.ts:144`
 - `src/services/endgameService.ts:212`
 - `src/services/endgameService.ts:267`
 - `src/services/endgameService.ts:274`
-- `src/services/methodSignals.ts:50`
-- `src/services/methodSignals.ts:86`
-- `src/services/methodSignals.ts:89`
-- `src/services/mistakeNarration.ts:129`
-- `src/services/mistakeNarration.ts:637`
-- `src/services/openingGenerator.ts:3410`
-- `src/services/openingGenerator.ts:3596`
-- `src/services/openingGenerator.ts:3600`
-- `src/services/openingGenerator.ts:3605`
+- `src/services/methodSignals.ts:53`
+- `src/services/methodSignals.ts:90`
+- `src/services/methodSignals.ts:93`
+- `src/services/mistakeNarration.ts:130`
+- `src/services/mistakeNarration.ts:598`
+- `src/services/openingGenerator.ts:3489`
+- `src/services/openingGenerator.ts:3677`
+- `src/services/openingGenerator.ts:3681`
+- `src/services/openingGenerator.ts:3686`
 - `src/services/opponentIntent.ts:39`
 - `src/services/opponentIntent.ts:70`
 - `src/services/opponentIntent.ts:77`
-- `src/services/opponentMoveReads.ts:75`
-- `src/services/opponentMoveReads.ts:190`
-- `src/services/opponentMoveReads.ts:370`
-- `src/services/opponentMoveReads.ts:444`
-- `src/services/opponentMoveReads.ts:482`
-- `src/services/opponentMoveReads.ts:538`
+- `src/services/opponentMoveReads.ts:79`
+- `src/services/opponentMoveReads.ts:194`
+- `src/services/opponentMoveReads.ts:374`
+- `src/services/opponentMoveReads.ts:448`
+- `src/services/opponentMoveReads.ts:486`
+- `src/services/opponentMoveReads.ts:542`
 - `src/services/principleQuiz.ts:47`
 - `src/services/principleQuiz.ts:70`
 - `src/services/principleQuiz.ts:125`
@@ -158,16 +158,16 @@
 ### `replayPgnToFens` (function) — 19 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:47`
 - `src/components/Coach/CoachReviewSessionPage.tsx:129`
-- `src/services/autoAnalyzeGame.ts:548`
-- `src/services/autoAnalyzeGame.ts:580`
-- `src/services/autoAnalyzeGame.ts:851`
-- `src/services/gameAnalysisService.ts:428`
-- `src/services/gameAnalysisService.ts:1569`
-- `src/services/gameAnalysisService.ts:1890`
-- `src/services/gameAnalysisService.ts:2483`
-- `src/services/gameAnalysisService.ts:2553`
-- `src/services/gameAnalysisService.ts:3178`
-- `src/services/gameAnalysisService.ts:3190`
+- `src/services/autoAnalyzeGame.ts:545`
+- `src/services/autoAnalyzeGame.ts:577`
+- `src/services/autoAnalyzeGame.ts:848`
+- `src/services/gameAnalysisService.ts:430`
+- `src/services/gameAnalysisService.ts:1572`
+- `src/services/gameAnalysisService.ts:1939`
+- `src/services/gameAnalysisService.ts:2540`
+- `src/services/gameAnalysisService.ts:2610`
+- `src/services/gameAnalysisService.ts:3235`
+- `src/services/gameAnalysisService.ts:3247`
 - `src/services/recordReprice.measure.test.ts:80`
 - `src/services/recordReprice.ts:76`
 - `src/services/reviewReadAhead.test.ts:43`
@@ -178,8 +178,8 @@
 
 ### `determinePlayerColor` (function) — 11 call sites
 - `src/components/Tactics/AnalysisPracticePage.tsx:117`
-- `src/services/autoAnalyzeGame.ts:578`
-- `src/services/autoAnalyzeGame.ts:849`
+- `src/services/autoAnalyzeGame.ts:575`
+- `src/services/autoAnalyzeGame.ts:846`
 - `src/services/determinePlayerColor.test.ts:15`
 - `src/services/determinePlayerColor.test.ts:18`
 - `src/services/determinePlayerColor.test.ts:21`
@@ -189,11 +189,11 @@
 - `src/services/thinkingLessonSource.ts:104`
 - `src/test/seatResolversReadDeclaredSeat.test.ts:16`
 
-### `generateMistakePuzzlesFromGame` (function) — 18 call sites
-- `src/services/autoAnalyzeGame.ts:334`
-- `src/services/autoAnalyzeGame.ts:351`
-- `src/services/gameAnalysisService.ts:2439`
-- `src/services/mistakePuzzleService.test.ts:110`
+### `generateMistakePuzzlesFromGame` (function) — 20 call sites
+- `src/services/autoAnalyzeGame.ts:335`
+- `src/services/autoAnalyzeGame.ts:352`
+- `src/services/gameAnalysisService.ts:2496`
+- `src/services/mistakePuzzleService.test.ts:111`
 - `src/services/mistakePuzzleService.test.ts:164`
 - `src/services/mistakePuzzleService.test.ts:190`
 - `src/services/mistakePuzzleService.test.ts:212`
@@ -208,21 +208,23 @@
 - `src/services/mistakePuzzleService.test.ts:414`
 - `src/services/mistakePuzzleService.test.ts:415`
 - `src/services/mistakePuzzleService.test.ts:426`
+- `src/services/mistakePuzzleService.test.ts:437`
+- `src/services/mistakePuzzleService.test.ts:444`
 
 ### `generateMistakePuzzlesForBatch` (function) — 3 call sites
 - `src/services/chesscomService.ts:218`
 - `src/services/lichessService.ts:167`
-- `src/services/mistakePuzzleService.test.ts:452`
+- `src/services/mistakePuzzleService.test.ts:472`
 
 ### `getMistakePuzzlesDue` (function) — 5 call sites
-- `src/services/mistakePuzzleService.test.ts:474`
-- `src/services/mistakePuzzleService.test.ts:487`
+- `src/services/mistakePuzzleService.test.ts:494`
+- `src/services/mistakePuzzleService.test.ts:507`
 - `src/services/puzzleService.ts:645`
 - `src/services/recordReprice.test.ts:115`
 - `src/services/recordReprice.test.ts:117`
 
 ### `rerenderMistakeNarration` (function) — 1 call site
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:499`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:503`
 
 ### `addMistakePuzzleFromCapture` (function) — 8 call sites
 - `src/services/discussionPractice.ts:358`
@@ -234,19 +236,20 @@
 - `src/services/mistakePuzzleCapture.test.ts:47`
 - `src/services/mistakePuzzleCapture.test.ts:48`
 
-### `puzzlePositionKey` (function) — 2 call sites
-- `src/services/autoAnalyzeGame.ts:1027`
-- `src/services/autoAnalyzeGame.ts:1031`
+### `puzzlePositionKey` (function) — 3 call sites
+- `src/services/autoAnalyzeGame.ts:1024`
+- `src/services/autoAnalyzeGame.ts:1028`
+- `src/services/mistakePuzzleService.test.ts:448`
 
 ### `attachCalcLines` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:6012`
+- `src/services/coachFeatureService.ts:6063`
 - `src/services/gameCalculationPuzzleService.test.ts:126`
 - `src/services/gameCalculationPuzzleService.test.ts:144`
 
 ### `addTakenBackMistakePuzzle` (function) — 3 call sites
 - `src/services/autoAnalyzeGameMisconceptions.test.ts:62`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts:69`
-- `src/services/takenBackPuzzles.ts:160`
+- `src/services/takenBackPuzzles.ts:164`
 
 ### `withdrawTakenBackPuzzles` (function) — 1 call site
 - `src/services/discussionPractice.ts:396`
@@ -261,7 +264,7 @@
 - `src/services/mistakePuzzleService.sequence.test.ts:72`
 
 ### `buildMistakePuzzleFromCapture` (function) — 4 call sites
-- `src/services/autoAnalyzeGame.ts:1034`
+- `src/services/autoAnalyzeGame.ts:1031`
 - `src/services/misconceptionDrill.test.ts:21`
 - `src/services/misconceptionDrill.test.ts:23`
 - `src/services/misconceptionDrill.test.ts:32`
@@ -284,28 +287,28 @@
 - `src/components/Insights/OpeningDrilldown.tsx:152`
 - `src/components/Puzzles/MyMistakesPage.tsx:177`
 - `src/services/gameCalculationPuzzleService.ts:146`
-- `src/services/mistakePuzzleService.test.ts:613`
+- `src/services/mistakePuzzleService.test.ts:633`
 - `src/services/recordReprice.test.ts:123`
 
 ### `gradeMistakePuzzle` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3218`
+- `src/components/Coach/CoachTeachPage.tsx:3235`
 - `src/components/Puzzles/MyMistakesPage.tsx:289`
 - `src/components/Tactics/TacticCreatePage.tsx:199`
 - `src/services/conceptSchedule.test.ts:41`
 - `src/services/conceptSchedule.test.ts:43`
-- `src/services/mistakePuzzleService.test.ts:497`
-- `src/services/mistakePuzzleService.test.ts:518`
-- `src/services/mistakePuzzleService.test.ts:539`
-- `src/services/mistakePuzzleService.test.ts:551`
-- `src/services/mistakePuzzleService.test.ts:552`
-- `src/services/mistakePuzzleService.test.ts:553`
-- `src/services/mistakePuzzleService.test.ts:554`
-- `src/services/mistakePuzzleService.test.ts:555`
-- `src/services/mistakePuzzleService.test.ts:561`
+- `src/services/mistakePuzzleService.test.ts:517`
+- `src/services/mistakePuzzleService.test.ts:538`
+- `src/services/mistakePuzzleService.test.ts:559`
+- `src/services/mistakePuzzleService.test.ts:571`
+- `src/services/mistakePuzzleService.test.ts:572`
+- `src/services/mistakePuzzleService.test.ts:573`
+- `src/services/mistakePuzzleService.test.ts:574`
+- `src/services/mistakePuzzleService.test.ts:575`
+- `src/services/mistakePuzzleService.test.ts:581`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites
 - `src/components/Puzzles/MyMistakesPage.tsx:278`
-- `src/services/mistakePuzzleService.test.ts:570`
+- `src/services/mistakePuzzleService.test.ts:590`
 
 ### `MistakePuzzleStats` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -313,9 +316,9 @@
 ### `getMistakePuzzleStats` (function) — 7 call sites
 - `src/components/Puzzles/MyMistakesPage.tsx:178`
 - `src/services/gameInsightsService.ts:837`
-- `src/services/mistakePuzzleService.test.ts:556`
-- `src/services/mistakePuzzleService.test.ts:587`
-- `src/services/mistakePuzzleService.test.ts:600`
+- `src/services/mistakePuzzleService.test.ts:576`
+- `src/services/mistakePuzzleService.test.ts:607`
+- `src/services/mistakePuzzleService.test.ts:620`
 - `src/services/recordReprice.test.ts:121`
 - `src/services/recordReprice.test.ts:124`
 

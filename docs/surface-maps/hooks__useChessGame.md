@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**468 lines · 3 exports · 40 importers · 30 tests · 0 audits**
+**468 lines · 3 exports · 41 importers · 31 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -44,6 +44,7 @@
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityRow.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.endsOnReply.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.moveAttempt.test.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.spot.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/components/Tactics/TacticSetupBoard.ladder.test.tsx`
@@ -68,7 +69,7 @@
 - `src/components/Coach/CoachAnalysePage.tsx:34`
 - `src/components/Coach/CoachGamePage.tsx:439`
 - `src/components/Coach/CoachPracticeSessionView.tsx:76`
-- `src/components/Coach/CoachTeachPage.tsx:1062`
+- `src/components/Coach/CoachTeachPage.tsx:1063`
 - `src/components/Games/GameViewer.tsx:44`
 - `src/components/Kid/GameChapterPage.tsx:88`
 - `src/components/Kid/GameChapterPage.tsx:92`
@@ -167,6 +168,7 @@
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityRow.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.endsOnReply.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.moveAttempt.test.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.spot.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.deepRun.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.oneLinePerMiss.test.tsx`

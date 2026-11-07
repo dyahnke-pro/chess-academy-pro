@@ -146,7 +146,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
         case 'hold': break;
         case 'reward': h.reward(e.reward, e.square, e.ply, e.label); break;
         case 'undo': h.undo(); break;
-        case 'taken-back': fileTakenBack(e.fen, e.san, h.gameId()); break;
+        case 'taken-back': fileTakenBack(e.fen, e.san, h.gameId(), e.spot); break;
         case 'rewind': h.rewind(e.ply); break;
         case 'probe': break;
         case 'record-castle':

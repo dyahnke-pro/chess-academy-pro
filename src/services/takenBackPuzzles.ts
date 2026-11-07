@@ -43,6 +43,10 @@ export interface TakenBackMove {
   gameId: string | null;
   gamePhase?: MistakeGamePhase;
   moveNumber?: number;
+  /** How to spot it next time, read off the live board by the runner that
+   *  stopped the move (`focusLines.spotLine`); null when the runner has
+   *  nothing specific (the puzzle then reads its motif's line). */
+  spot: string | null;
 }
 
 export interface TakenBackReads {
@@ -72,9 +76,9 @@ function sanLine(fen: string, ucis: readonly string[] | undefined, max: number):
  *  `taken-back` effect, `useMissionRunner` on Try again's undo — never a
  *  surface, never the student's own Takeback): the board, the move and the
  *  game; the phase and the move number are read off the board. */
-export function fileTakenBack(fenBefore: string, playedSan: string, gameId: string | null): void {
+export function fileTakenBack(fenBefore: string, playedSan: string, gameId: string | null, spot: string | null): void {
   const fullMove = Number(fenBefore.split(' ')[5]) || 1;
-  void fileTakenBackMiss({ fenBefore, playedSan, gameId, gamePhase: classifyPhase(fenBefore, { fullMove }), moveNumber: fullMove }).catch(() => undefined);
+  void fileTakenBackMiss({ fenBefore, playedSan, gameId, gamePhase: classifyPhase(fenBefore, { fullMove }), moveNumber: fullMove, spot }).catch(() => undefined);
 }
 
 /** What the grader decided about one taken-back move — every call ends in
@@ -167,6 +171,7 @@ async function gradeTakenBack(m: TakenBackMove, reads: TakenBackReads): Promise<
     evalBefore: before.isMate ? null : evalBefore,
     allowedReplySan: sanLine(fenAfter, after.topLines?.[0]?.moves ?? (after.bestMove ? [after.bestMove] : []), 1)[0] ?? null,
     bestLineSan: sanLine(m.fenBefore, before.topLines?.[0]?.moves ?? [bestUci], 8),
+    spot: m.spot,
   }, m.gameId);
   return end(puzzle ? 'filed' : 'duplicate', puzzle);
 }

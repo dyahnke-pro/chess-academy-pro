@@ -45,6 +45,7 @@ import { withArticle } from '../../utils/andList';
 import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from '../Coach/ThinkingLessonBoard';
 import { shownSolution } from '../../services/proof';
+import { spotForTactic } from '../../data/tacticMotifs';
 
 type PuzzleState = 'loading' | 'replay' | 'playing' | 'correct' | 'incorrect' | 'freeplay';
 
@@ -184,6 +185,8 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   const wrongTryPendingRef = useRef(false);
   const heldCoachRef = useRef<string | null>(null);
   const narrationRef = useRef(puzzle.narration);
+  /** The move narration being spoken, so the spot line can follow it whole. */
+  const moveSpeechRef = useRef<Promise<void> | null>(null);
   const saidHabitsRef = useRef(new Set<MethodHabit>());
   // The student's WHOLE record (holes + proven), so the method beat is decided
   // from their games and drills together, not from the puzzles alone.
@@ -678,7 +681,9 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       });
       // The student played this move — it is theirs, not "the engine's".
       const why = engineFramed.replace(/^The engine plays (\S+) — it /, '$1 — it ').replace(/^The engine plays (\S+)\./, '$1.');
-      const response = why;
+      // Then how to spot it next time: the live board's own line when the
+      // miss filed one, else the motif's (David 2026-11-07).
+      const response = [why, puzzle.spot ?? spotForTactic(puzzle.tacticType)].filter(Boolean).join(' ');
       setSubtitle(response);
       setLineArrows(spokenLineArrows(response, puzzle.fen, {
         studentColor: puzzle.playerColor === 'white' ? 'w' : 'b',
@@ -785,7 +790,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
           studentColor: puzzle.playerColor === 'white' ? 'w' : 'b',
           exclude: [{ from: move.from, to: move.to }],
         }) : []);
-        void voiceService.speak(moveNarrations[currentPlayerMove]);
+        moveSpeechRef.current = voiceService.speak(moveNarrations[currentPlayerMove]).catch(() => undefined);
       }
 
       const nextIndex = moveIndex + 1;
@@ -846,6 +851,18 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         // computed reason ("Qc5 keeps your pawn on d6 protected"), a second,
         // competing why on top of it is noise; "Explain why" still answers.
         const spokeReason = narrationRef.current.moveNarrations.some((m) => m.trim().length > 0);
+        // HOW TO SPOT IT NEXT TIME (David 2026-11-07) follows the move's own
+        // reason when it spoke one; otherwise it closes the why below. Only
+        // while this puzzle is still on the board.
+        const spot = puzzle.spot ?? spotForTactic(puzzle.tacticType);
+        if (spokeReason && spot) {
+          const sameNarration = narrationRef.current;
+          void (moveSpeechRef.current ?? Promise.resolve()).then(() => {
+            if (narrationRef.current !== sameNarration) return;
+            setSubtitle(spot);
+            void voiceService.speak(spot);
+          });
+        }
         if (!spokeReason) {
           outroTimerRef.current = setTimeout(() => {
             voiceService.stop();

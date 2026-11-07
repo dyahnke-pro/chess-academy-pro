@@ -300,6 +300,7 @@ import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUti
 import { coachService, isProgressQuestion, isImprovementTrendQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
 import { isAuditMarkedPage, logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
 import { buildLearnGameRecord, rememberHeardVerdict, type LearnGameEnding, type LearnLiveGrade } from '../../services/learnGameRecord';
+import { recordFinishedGame } from '../../services/autoAnalyzeGame';
 import { uciMoveToSan } from '../../utils/uciToSan';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { recoverCoachMoveFromText } from '../../utils/recoverCoachMove';
@@ -317,7 +318,7 @@ import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getFavoriteOpenings, getOpeningById, searchOpenings } from '../../services/openingService';
-import type { OpeningRecord, OpeningVariation } from '../../types';
+import type { GameRecord, OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext, AskOrigin } from '../../coach/types';
 import { dispatchCoachTurn, openTurnRead, awaitTurnRead, isComputedAnswer, conversationFor, setPendingOffer, showLineAnswer, asksBeyondShowMe, type TurnReadHandle } from '../../coach/dispatchCoachTurn';
 import type { ResolvedStep } from '../../coach/requestSteps';
@@ -13915,6 +13916,20 @@ export function CoachTeachPage({ mode }: {
     promptedPlies: [...announcedPliesRef.current],
     steeredPlies: [...steeredPliesRef.current],
   }), [playerColor, activeProfile]);
+  /** ONE SAVE FOR A LEARN GAME, and the finished game's whole record with it —
+   *  the same `recordFinishedGame` Play runs (its puzzles, the weakness profile
+   *  they feed, the slip and capability record, a review made ready). Learn
+   *  used to write the game and stop, so a mistake the student PLAYED ON with
+   *  in free play never became a puzzle: the live capture counts only inside an
+   *  opening lesson, and the batch sweep skips a game Learn graded in full. */
+  const saveLearnGame = useCallback(async (record: GameRecord): Promise<void> => {
+    const { db } = await import('../../db/schema');
+    await db.games.add(record);
+    const profile = useAppStore.getState().activeProfile;
+    if (!profile) return;
+    const graded = (record.annotations ?? []).map((a) => ({ classification: a.classification, san: a.san }));
+    recordFinishedGame(record.id, profile, { reportEffects: 'game-finished', prepareReview: true }, graded);
+  }, []);
   // ── THE FINISHED BOARD STAYS ON SCREEN ──────────────────────────────────
   //
   // 🔒 IT USED TO NAVIGATE THE INSTANT MATE LANDED, AND THE LAST MOVE WAS
@@ -14027,10 +14042,7 @@ export function CoachTeachPage({ mode }: {
       : { kind: 'draw' });
     void (async () => {
       try {
-        if (record) {
-          const { db } = await import('../../db/schema');
-          await db.games.add(record);
-        }
+        if (record) await saveLearnGame(record);
       } catch {
         /* save is best-effort; the offer below still stands */
       }
@@ -14041,7 +14053,7 @@ export function CoachTeachPage({ mode }: {
       // until he chooses to leave.
       setFinishedGame({ id: gameId, result, byMate: game.isCheckmate });
     })();
-  }, [game.isGameOver, game.isCheckmate, game.turn, game.fen, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName, learnRecordOf]);
+  }, [game.isGameOver, game.isCheckmate, game.turn, game.fen, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName, learnRecordOf, saveLearnGame]);
   // THE FORTRESS PASS (a card with `passEnds: 'draw'` — the wrong rook pawn's
   // corner): the result is decided, so the game ends there as a draw, saved
   // and offered like a game that ended on the board.
@@ -14056,10 +14068,7 @@ export function CoachTeachPage({ mode }: {
     const record = learnRecordOf(g, { kind: 'draw' });
     void (async () => {
       try {
-        if (record) {
-          const { db } = await import('../../db/schema');
-          await db.games.add(record);
-        }
+        if (record) await saveLearnGame(record);
       } catch { /* save is best-effort; the offer below still stands */ }
       setFinishedGame({ id: gameId, result: 'draw', byMate: false });
     })();
@@ -15152,10 +15161,7 @@ export function CoachTeachPage({ mode }: {
                     endedAtFenRef.current = game.fen;
                     focusRef.current.gameOver();
                     void (async () => {
-                      try {
-                        const { db } = await import('../../db/schema');
-                        await db.games.add(record);
-                      } catch { /* save is best-effort; the offer below still stands */ }
+                      try { await saveLearnGame(record); } catch { /* save is best-effort; the offer below still stands */ }
                       setFinishedGame({ id: record.id, result: 'ended', byMate: false });
                     })();
                     return;

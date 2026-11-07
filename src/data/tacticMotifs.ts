@@ -62,38 +62,44 @@ export interface MotifDef {
   yours: MisconceptionTagId;
   /** Lichess puzzle themes that train it (puzzles.json theme names). */
   themes: readonly string[];
+  /** HOW TO SPOT IT NEXT TIME (David 2026-11-07: "a sentence as to how to spot
+   *  it in the future … something specific, not just 'look for hanging
+   *  pieces'"): the shape on the board that gives this motif away, said once
+   *  the moment is past and on every puzzle filed under it. One sentence,
+   *  ending on the habit. */
+  spot: string;
 }
 
 export const MOTIFS: Record<MotifId, MotifDef> = {
   // ── Beginner ─────────────────────────────────────────────────────────
-  'free-piece': { id: 'free-piece', word: 'free piece', label: 'Free pieces', level: 'beginner', theirs: 'hung-material', yours: 'missed-your-free-piece', themes: ['hangingPiece'] },
-  fork: { id: 'fork', word: 'fork', label: 'Forks', level: 'beginner', theirs: 'missed-their-fork', yours: 'missed-your-fork', themes: ['fork'] },
+  'free-piece': { id: 'free-piece', word: 'free piece', label: 'Free pieces', level: 'beginner', theirs: 'hung-material', yours: 'missed-your-free-piece', themes: ['hangingPiece'], spot: 'After every move, ask what the piece that moved stopped guarding, and whether the piece that landed has a guard.' },
+  fork: { id: 'fork', word: 'fork', label: 'Forks', level: 'beginner', theirs: 'missed-their-fork', yours: 'missed-your-fork', themes: ['fork'], spot: 'Look for one square that hits two pieces at once: a knight a jump from both, a pawn between two, a queen on two lines.' },
   // The data puts pin at 1639; it stays Beginner — a pin is easy to see and
   // hard to use, and puzzle ratings measure the hardest move to find.
-  pin: { id: 'pin', word: 'pin', label: 'Pins', level: 'beginner', theirs: 'missed-their-pin', yours: 'missed-your-pin', themes: ['pin'] },
-  skewer: { id: 'skewer', word: 'skewer', label: 'Skewers', level: 'beginner', theirs: 'missed-their-skewer', yours: 'missed-your-skewer', themes: ['skewer'] },
-  'discovered-attack': { id: 'discovered-attack', word: 'discovered attack', label: 'Discovered attacks', level: 'beginner', theirs: 'missed-their-discovery', yours: 'missed-your-discovery', themes: ['discoveredAttack'] },
-  mate: { id: 'mate', word: 'mate', label: 'Mates', level: 'beginner', theirs: 'missed-their-mate', yours: 'missed-your-mate', themes: ['mateIn1', 'mateIn2', 'backRankMate'] },
-  promotion: { id: 'promotion', word: 'promotion', label: 'Promotions', level: 'beginner', theirs: null, yours: 'missed-your-promotion', themes: ['promotion', 'advancedPawn'] },
+  pin: { id: 'pin', word: 'pin', label: 'Pins', level: 'beginner', theirs: 'missed-their-pin', yours: 'missed-your-pin', themes: ['pin'], spot: 'When a piece stands in front of a bigger one on the same line, a bishop, rook or queen on that line pins it.' },
+  skewer: { id: 'skewer', word: 'skewer', label: 'Skewers', level: 'beginner', theirs: 'missed-their-skewer', yours: 'missed-your-skewer', themes: ['skewer'], spot: 'When a big piece stands in front of another on the same line, attack the front one: it moves, and the one behind falls.' },
+  'discovered-attack': { id: 'discovered-attack', word: 'discovered attack', label: 'Discovered attacks', level: 'beginner', theirs: 'missed-their-discovery', yours: 'missed-your-discovery', themes: ['discoveredAttack'], spot: 'When a piece stands in front of its own bishop, rook or queen, moving it opens that line, so move it with a threat of its own.' },
+  mate: { id: 'mate', word: 'mate', label: 'Mates', level: 'beginner', theirs: 'missed-their-mate', yours: 'missed-your-mate', themes: ['mateIn1', 'mateIn2', 'backRankMate'], spot: 'Look at checks first, every move, and count the squares the king can run to.' },
+  promotion: { id: 'promotion', word: 'promotion', label: 'Promotions', level: 'beginner', theirs: null, yours: 'missed-your-promotion', themes: ['promotion', 'advancedPawn'], spot: 'Count the squares the pawn has left to the last rank against the moves their pieces need to stop it.' },
   // ── Intermediate ─────────────────────────────────────────────────────
   // Their side stays null: the threat reader sees their discovery coming, not
   // whether it will check, so their discovered checks file under discovered
   // attack (the true, coarser name) until it can (M3, 2026-10-22).
-  'discovered-check': { id: 'discovered-check', word: 'discovered check', label: 'Discovered checks', level: 'intermediate', theirs: null, yours: 'missed-your-discovered-check', themes: ['discoveredCheck'] },
+  'discovered-check': { id: 'discovered-check', word: 'discovered check', label: 'Discovered checks', level: 'intermediate', theirs: null, yours: 'missed-your-discovered-check', themes: ['discoveredCheck'], spot: 'When a piece stands between its own line piece and the enemy king, moving it gives check, and that move can take anything.' },
   // The x-ray as the record can see it: the recapture through the piece that
   // screened your line (Rxe1 Qxe1 Qxe1). Their side null for the same reason.
-  'x-ray': { id: 'x-ray', word: 'x-ray', label: 'X-rays', level: 'intermediate', theirs: null, yours: 'missed-your-x-ray', themes: ['xRayAttack'] },
-  'double-check': { id: 'double-check', word: 'double check', label: 'Double checks', level: 'intermediate', theirs: 'missed-their-double-check', yours: 'missed-your-double-check', themes: ['doubleCheck'] },
-  'removing-the-guard': { id: 'removing-the-guard', word: 'removing the guard', label: 'Removing the guard', level: 'intermediate', theirs: 'missed-their-guard-removal', yours: 'missed-your-guard-removal', themes: ['capturingDefender'] },
+  'x-ray': { id: 'x-ray', word: 'x-ray', label: 'X-rays', level: 'intermediate', theirs: null, yours: 'missed-your-x-ray', themes: ['xRayAttack'], spot: 'Count the whole line, not just the square: a piece behind the trade still recaptures through it.' },
+  'double-check': { id: 'double-check', word: 'double check', label: 'Double checks', level: 'intermediate', theirs: 'missed-their-double-check', yours: 'missed-your-double-check', themes: ['doubleCheck'], spot: 'When one move checks from two pieces at once, the king must move: nothing can block or take both.' },
+  'removing-the-guard': { id: 'removing-the-guard', word: 'removing the guard', label: 'Removing the guard', level: 'intermediate', theirs: 'missed-their-guard-removal', yours: 'missed-your-guard-removal', themes: ['capturingDefender'], spot: 'Ask what each defender is guarding: take the guard, and what it guarded falls.' },
   // No overloading theme in our puzzle set; an overloaded defender is the one
   // a deflection pulls away, so its drills share that theme.
-  overload: { id: 'overload', word: 'overloaded defender', label: 'Overloaded defenders', level: 'intermediate', theirs: 'missed-their-overload', yours: 'missed-your-overload', themes: ['deflection'] },
-  deflection: { id: 'deflection', word: 'deflection', label: 'Deflections', level: 'intermediate', theirs: null, yours: 'missed-your-deflection', themes: ['deflection', 'attraction'] },
-  zwischenzug: { id: 'zwischenzug', word: 'in-between move', label: 'In-between moves', level: 'intermediate', theirs: null, yours: 'missed-your-zwischenzug', themes: ['intermezzo'] },
-  'trapped-piece': { id: 'trapped-piece', word: 'trapped piece', label: 'Trapped pieces', level: 'intermediate', theirs: 'missed-their-trap', yours: 'missed-your-trapped-piece', themes: ['trappedPiece'] },
+  overload: { id: 'overload', word: 'overloaded defender', label: 'Overloaded defenders', level: 'intermediate', theirs: 'missed-their-overload', yours: 'missed-your-overload', themes: ['deflection'], spot: 'When one piece guards two things, attack one of them: it can only answer once.' },
+  deflection: { id: 'deflection', word: 'deflection', label: 'Deflections', level: 'intermediate', theirs: null, yours: 'missed-your-deflection', themes: ['deflection', 'attraction'], spot: 'When one piece holds a key square, give it something it must take or chase, and the square opens.' },
+  zwischenzug: { id: 'zwischenzug', word: 'in-between move', label: 'In-between moves', level: 'intermediate', theirs: null, yours: 'missed-your-zwischenzug', themes: ['intermezzo'], spot: 'Before you recapture, look for a check or a bigger threat first: the trade can wait a move.' },
+  'trapped-piece': { id: 'trapped-piece', word: 'trapped piece', label: 'Trapped pieces', level: 'intermediate', theirs: 'missed-their-trap', yours: 'missed-your-trapped-piece', themes: ['trappedPiece'], spot: 'When a piece has few safe squares, take those squares away, then attack it.' },
   // ── Advanced ─────────────────────────────────────────────────────────
-  clearance: { id: 'clearance', word: 'clearance', label: 'Clearances', level: 'advanced', theirs: null, yours: 'missed-your-clearance', themes: ['clearance'] },
-  interference: { id: 'interference', word: 'interference', label: 'Interference', level: 'advanced', theirs: null, yours: 'missed-your-interference', themes: ['interference'] },
+  clearance: { id: 'clearance', word: 'clearance', label: 'Clearances', level: 'advanced', theirs: null, yours: 'missed-your-clearance', themes: ['clearance'], spot: 'When your own piece blocks your best square or line, move it away with tempo to open it.' },
+  interference: { id: 'interference', word: 'interference', label: 'Interference', level: 'advanced', theirs: null, yours: 'missed-your-interference', themes: ['interference'], spot: 'When two pieces guard each other along a line, drop a piece in between them.' },
 };
 
 /** The classifier's name → the motif row it files under. A `Record` over the
@@ -203,4 +209,11 @@ export function openLevels(holds: (level: MotifLevel) => boolean): Set<MotifLeve
 export function tagOpenAt(tag: string, open: ReadonlySet<MotifLevel>): boolean {
   const level = levelOfTag(tag);
   return level === null || open.has(level);
+}
+
+/** How to spot a classified tactic next time — its motif's line, or null for
+ *  a sequence with no named motif (empty beats generic). */
+export function spotForTactic(t: TacticType | null | undefined): string | null {
+  const m = t ? MOTIF_OF_TACTIC[t] : null;
+  return m ? MOTIFS[m].spot : null;
 }
