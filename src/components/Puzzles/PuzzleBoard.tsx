@@ -45,6 +45,7 @@ import { reward } from '../../services/rewardService';
 import { rewardSeed } from '../../services/rewardEvents';
 import { PuzzleHeader } from './PuzzleHeader';
 import { useBoardFit } from '../../hooks/useBoardFit';
+import { shownSolution } from '../../services/proof';
 
 type PuzzleState = 'loading' | 'playing' | 'correct' | 'incorrect';
 
@@ -204,6 +205,12 @@ export function PuzzleBoard({
       return puzzle.fen;
     }
   }, [puzzle.fen, puzzle.moves]);
+  // The solution from the solver's board — what the question box's "why does
+  // this work?" asks about once it is solved or shown.
+  const solutionShown = useMemo(
+    () => shownSolution(solverFen, puzzle.moves.trim().split(/\s+/).filter(Boolean).slice(1)),
+    [solverFen, puzzle.moves],
+  );
   // The solver's first move (a Lichess line opens with the opponent's move).
   const solverFirstSan = useMemo((): string | null => {
     try {
@@ -901,6 +908,7 @@ export function PuzzleBoard({
             studentColor={userColor}
             route="/tactics"
             onWalkLine={lineWalk.walk}
+            shownLine={solutionShown}
             testIdPrefix="puzzle-ask"
             placeholder="Why does it work? What if they play …?"
           />

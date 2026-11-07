@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**681 lines · 5 exports · 18 importers · 12 tests · 0 audits**
+**699 lines · 5 exports · 19 importers · 13 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/dispatchCoachTurn.positional.test.ts`
 - `src/coach/dispatchCoachTurn.showLine.test.ts`
+- `src/coach/dispatchCoachTurn.shownLine.test.ts`
 - `src/coach/dispatchCoachTurn.ts`
 - `src/coach/handWalk1009.test.ts`
 - `src/coach/hardQuestions.routing.test.ts`
@@ -48,9 +49,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/coachService.ts:1612`
 
 ### `namedMoveTokens` (function) — 1 call site
-- `src/coach/dispatchCoachTurn.ts:383`
+- `src/coach/dispatchCoachTurn.ts:395`
 
-### `readTurnInCode` (function) — 64 call sites
+### `readTurnInCode` (function) — 67 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:69`
 - `src/coach/chatTurnAnswers.test.ts:82`
 - `src/coach/chatTurnAnswers.test.ts:103`
@@ -79,6 +80,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.positional.test.ts:49`
 - `src/coach/dispatchCoachTurn.showLine.test.ts:33`
 - `src/coach/dispatchCoachTurn.showLine.test.ts:37`
+- `src/coach/dispatchCoachTurn.shownLine.test.ts:56`
+- `src/coach/dispatchCoachTurn.shownLine.test.ts:61`
+- `src/coach/dispatchCoachTurn.shownLine.test.ts:65`
 - `src/coach/handWalk1009.test.ts:25`
 - `src/coach/handWalk1009.test.ts:30`
 - `src/coach/handWalk1009.test.ts:40`
@@ -125,6 +129,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/dispatchCoachTurn.positional.test.ts`
 - `src/coach/dispatchCoachTurn.showLine.test.ts`
+- `src/coach/dispatchCoachTurn.shownLine.test.ts`
 - `src/coach/handWalk1009.test.ts`
 - `src/coach/hardQuestions.routing.test.ts`
 - `src/coach/leftBook.test.ts`

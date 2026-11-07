@@ -26,6 +26,11 @@ interface BoardQuestionBoxProps {
   route: string;
   /** Plays a line on the screen's board — the walk button and "show me". */
   onWalkLine: (line: WalkableLine) => void;
+  /** The line the screen just showed from `fen` — the puzzle's solution,
+   *  played or revealed — or null when it showed none. REQUIRED: it is what
+   *  "why does this work?" asks about, and a screen that forgets it answers
+   *  that question with the stock line (2026-11-07). */
+  shownLine: WalkableLine | null;
   /** The engine's best move here, when the screen already knows it. */
   engineBestMoveUci?: string;
   moveHistory?: string[];
@@ -37,7 +42,7 @@ interface BoardQuestionBoxProps {
 }
 
 export function BoardQuestionBox({
-  fen, studentColor, route, onWalkLine, engineBestMoveUci, moveHistory, fallback, testIdPrefix, placeholder,
+  fen, studentColor, route, onWalkLine, shownLine, engineBestMoveUci, moveHistory, fallback, testIdPrefix, placeholder,
 }: BoardQuestionBoxProps): JSX.Element {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -59,6 +64,7 @@ export function BoardQuestionBox({
         studentColor,
         currentRoute: route,
         userJustDid: question,
+        shownLine,
         ...(engineBestMoveUci ? { engineBestMoveUci } : {}),
         ...(moveHistory && moveHistory.length > 0 ? { moveHistory } : {}),
       };
@@ -81,7 +87,7 @@ export function BoardQuestionBox({
     } finally {
       setLoading(false);
     }
-  }, [input, loading, fen, studentColor, route, engineBestMoveUci, moveHistory, fallback, onWalkLine]);
+  }, [input, loading, fen, studentColor, route, shownLine, engineBestMoveUci, moveHistory, fallback, onWalkLine]);
 
   return (
     <div className="flex flex-col gap-1.5" data-testid={`${testIdPrefix}-box`}>

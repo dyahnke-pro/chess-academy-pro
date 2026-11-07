@@ -22,6 +22,7 @@
  * routed somewhere that does not answer it.
  */
 import { Chess, type Square } from 'chess.js';
+import type { WalkableLine } from '../types';
 import { whyNotLegal, namedLinePlays } from '../services/whyNotLegal';
 import { captureRead } from '../services/positionReadingService';
 import {
@@ -471,6 +472,9 @@ export interface BoardContext {
   lastStudentAttempt?: { fenBefore: string; san: string };
   /** The coach's last line, for follow-ups that point back at it. */
   lastCoachLine?: string;
+  /** The line the screen just showed (a puzzle's solution), for "why does
+   *  this work?" (`LiveState.shownLine`). */
+  shownLine?: WalkableLine | null;
 }
 
 export type ValidationResult =

@@ -140,3 +140,10 @@ export function walkableLine(startFen: string, sans: readonly string[], label: s
   }
   return plies.length > 0 ? { label, startFen, plies } : null;
 }
+
+/** The line a screen SHOWED — a puzzle's solution, in SAN or UCI — named by
+ *  its first move: what "why does this work?" asks about (`LiveState.shownLine`). */
+export function shownSolution(startFen: string, moves: readonly string[]): WalkableLine | null {
+  const line = walkableLine(startFen, moves, '');
+  return line ? { ...line, label: line.plies[0].san } : null;
+}
