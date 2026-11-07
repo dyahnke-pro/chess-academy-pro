@@ -1875,6 +1875,16 @@ async function main() {
       seenUrls.add(s.url);
     }
   }
+  // Every entry carries the ROUTE it was emitted on. The app batches its
+  // posts (~1 s), so an event fired in a short scenario often lands in the
+  // next one, on another URL: the route, not the arrival time, says which
+  // surface emitted it.
+  const pathOf = (u) => { try { return new URL(u).pathname; } catch { return u; } };
+  for (const e of captured) {
+    if (e?.kind === 'tactics-surface-event' && typeof e.route === 'string') {
+      for (const s of report.scenarios) if (s.url && pathOf(s.url) === e.route) seenUrls.add(s.url);
+    }
+  }
   for (const s of report.scenarios) {
     if (!s.url || !TACTICS_URL_RX.test(s.url)) continue;
     const seenHere = s.kindCounts && s.kindCounts['tactics-surface-event'] >= 1;
