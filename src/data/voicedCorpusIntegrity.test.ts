@@ -92,7 +92,12 @@ describe('the derived voiced files are in sync with their source', () => {
     } finally {
       rmSync(out, { recursive: true, force: true });
     }
-  }, 120_000);
+    // THREE FULL REBUILDS ON A SHARED RUNNER: alone they take seconds, but
+    // inside ship-check's content gates (every gate file at once on four
+    // cores) they ran 133 s on 2026-11-07 and the 120 s budget failed a tree
+    // whose files were byte-identical. The budget fits the measured worst case
+    // with room; the comparison above is what the test is for.
+  }, 300_000);
 });
 
 describe('chatter cannot grow back into the shipped narration', () => {
