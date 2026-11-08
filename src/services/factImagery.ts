@@ -11,7 +11,7 @@ import { rotateStem } from '../utils/rotateStem';
 
 export type ImageryKey =
   | 'only-developed' | 'defender-trade' | 'exchange-for-attacker' | 'deny-exchange'
-  | 'abandoned-duty' | 'trade-choice' | 'duty-parity' | 'maintenance-trade' | 'prepare-recapture'
+  | 'abandoned-duty' | 'trade-choice' | 'maintenance-trade' | 'prepare-recapture'
   | 'threat-cost' | 'simplest-win' | 'safe-because'
   | 'wing-for-centre' | 'material-arithmetic' | 'knight-rim' | 'c-pawn-block'
   | 'badbishop';
@@ -30,7 +30,6 @@ export const IMAGERY: Record<ImageryKey, readonly string[]> = {
   // restates its fact teaches nothing — it is description, and description
   // is cut. An empty bank keeps the key exhaustive. What stays carries a RULE
   // the fact does not say ("a knight on the rim is dim", "count the wood").
-  'duty-parity': [''],
   'maintenance-trade': ['', 'Not a win, just paying the bill before it comes due.'],
   'prepare-recapture': ['', 'Set the table before the guests arrive.'],
   'threat-cost': [''],

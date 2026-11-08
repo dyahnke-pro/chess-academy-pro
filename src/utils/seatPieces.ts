@@ -54,9 +54,13 @@ export function seatPieceReferences(
     // double-possessive — "your passed YOUR pawn on c2" (preview line-read,
     // 2026-07-22).
     const ADJ = 'passed|weak|isolated|doubled|backward|extra|lone|bad|connected|protected|central|advanced|remaining|outside';
+    // The noun is a word of its own, never the tail of a compound: in "your
+    // f-pawn on f5" (pieceRef's words, already seated) the bare "pawn" matched
+    // after the hyphen and came out "your f-your f-pawn on f5" (prod Review
+    // audit 2026-11-08, the move contrast after 21.Re4).
     return text.replace(
       new RegExp(
-        `(\\b(?:[Ww]hite|[Bb]lack)'s\\s+|\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+own\\s+|\\b[Tt]heir\\s+own\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+|\\b[Tt]h(?:at|is|ose|ese)\\s+|\\b[Aa]n?\\s+)?((?:${ADJ})\\s+)?\\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
+        `(\\b(?:[Ww]hite|[Bb]lack)'s\\s+|\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+own\\s+|\\b[Tt]heir\\s+own\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+|\\b[Tt]h(?:at|is|ose|ese)\\s+|\\b[Aa]n?\\s+)?((?:${ADJ})\\s+)?(?<![\\w-])(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
         'g',
       ),
       (whole, lead: string | undefined, adj: string | undefined, piece: string, sq: string, offset: number, all: string) => {

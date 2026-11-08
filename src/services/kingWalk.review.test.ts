@@ -17,7 +17,7 @@ describe('Review says the king walk on his game', () => {
   const said = new Map<number, string>();
   for (const s of reviewSegments(GAME, 1500)) said.set(s.ply, (s as unknown as { narration?: string }).narration ?? '');
   it('7…Kf8: where the king goes', () => {
-    expect(said.get(14)).toContain("Where does your king go? On g6 it's mated at once: Qf5#. On f6 it's mated in three: Bg5+ Kg6 Qf5+ Kh5 g4#.");
+    expect(said.get(14)).toContain("Where does your king go? On g6 it's mated at once: Qf5#. On f6 it's mated in three: Bg5+, Kg6, Qf5+, Kh5, g4#.");
   });
   it('9…Nf6 to 13…Kg8: castling by hand, plan to done', () => {
     expect(said.get(18)).toContain("Your king can't castle any more, so the plan is to castle by hand: the king to f7, a rook to e8 or f8, then the king to g8.");

@@ -65,7 +65,6 @@ import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
 import { readBoard, readBoardAll, readKey } from './boardComputers';
 import { replyReadsFromFan, type ReplyRead } from './ifTheyPlay';
-import { stripThink } from '../utils/thinkPause';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy, INFLUENCE_LOOSE_TAIL_RE } from './reviewFullData';
 import { flipSideToMove, sideToMoveAs } from './threatOut';
@@ -1445,6 +1444,12 @@ const REVIEW_OWNS_IDEA: ReadonlySet<IdeaKind> = new Set<IdeaKind>(['threat', 'ma
  *  pawn break: … opens the c-file for your rooks" was followed by "It also
  *  opens the c-file"). */
 const FACET_TEACHES_IDEA: Partial<Record<FacetTag, IdeaKind>> = { 'pawn-break': 'file' };
+/** …and the readers that reach Review under a generic tag (`rule`) but teach
+ *  one idea of the composer's: the king attack's "one of the pawns in front of
+ *  their king is gone — the cover is coming apart" is the briefing's "prises
+ *  open their king's cover" (prod Review audit 2026-11-08, Carlsen–Caruana
+ *  34.gxf7+: both on one move). */
+const COMPUTER_TEACHES_IDEA: Partial<Record<ComputerName, IdeaKind>> = { kingAttack: 'attack-king' };
 const BOOK_JOB_MIN_GAMES = 20;
 /** The description and teaching lanes whose reason formula speaks once a game
  *  (`reasonFormula`); the verdict lanes are per-move facts and repeat. */
@@ -2636,7 +2641,7 @@ function* reviewSegmentSteps(
         // by both).
         const skipJob = told || heard || plainAttackAsksNothing || doesSaysJob;
         const ruleIdeas = new Set(facets.map((f) => ruleIdOf(f.identity)).filter((r): r is MoveFundamentalId => r !== null).map((r) => FUNDAMENTAL_IDEA[r]));
-        for (const f of facets) { const idea = FACET_TEACHES_IDEA[f.tag]; if (idea) ruleIdeas.add(idea); }
+        for (const f of facets) { const idea = FACET_TEACHES_IDEA[f.tag] ?? COMPUTER_TEACHES_IDEA[f.computer]; if (idea) ruleIdeas.add(idea); }
         // A line that already teaches this move ([rule], [point]…) leads its
         // step: the composer adds only a second job — a new claim that clears
         // the policy's floor (…Nxd5's rule said the recapture; "adds its
@@ -2684,12 +2689,26 @@ function* reviewSegmentSteps(
           // The job's attack said here is the teaching statement of the
           // influence line's: the description steps aside.
           if (!told && target && named.has(target) && sameClaim >= 0) facets.splice(sameClaim, 1);
+          // ONE LOOSE PIECE, ONE LINE, the mover's own attack too (prod Review
+          // audit 2026-11-08, Carlsen–Caruana 21.Bxg5: "it hits their knight
+          // on f4, which has no guard. Your dark-squared bishop now hits their
+          // knight, and nothing guards it"). When the thought's board teacher
+          // says the attack on the influence line's loose piece, the
+          // description steps aside and its loose claim rides the thought, so
+          // the loose count still reads it.
+          const carried = facets.findIndex((f) => {
+            const sq = f.tag === 'does' ? looseSquareOf(f) : null;
+            return sq !== null && thought.kept.some((k) => k.source === 'boardTeacher' && k.squares.includes(sq));
+          });
+          const carriedLoose = carried >= 0 ? looseSquareOf(facets[carried]) : null;
+          if (carried >= 0) facets.splice(carried, 1);
           // Their attack that asks an answer says so in the sentence that
           // names the target (a sentence of its own is the same words every
           // time, and the say-once ledger drops the second).
           const asked = asks && !!job ? thought.kept.findIndex((f) => f.squares.includes(job.squares[1])) : -1;
           const spoken = thought.kept.map((f, k) => (k === asked ? f.text.replace(/\.$/, ', and it needs an answer this move.') : f.text)).join(' ');
           const raw = fact('moveThoughtFacts', 'move-job', spoken, { identity: id, squares: [...named] });
+          if (carriedLoose) raw.claims = [...(raw.claims ?? []), `loose:${carriedLoose}`];
           facets.push(raw);
           facetCommits.set(raw, () => {
             for (const k of memoryHere.keys) thoughtKeys.add(k);
@@ -2711,7 +2730,7 @@ function* reviewSegmentSteps(
       for (const e of arcByIndex.get(i) ?? []) {
         // Review has no think pause: the question and its answer run on as one
         // line (the arc's "‖" was reaching the review's text).
-        facets.push(fact('gameArcSteps', 'plan-arc', stripThink(e.text), { squares: e.squares, incoming: e.seat === 'opponent' }));
+        facets.push(fact('gameArcSteps', 'plan-arc', e.text, { squares: e.squares, incoming: e.seat === 'opponent' }));
       }
       if (fundamentals.length > 0) {
         if (isStudentForAttr) {
@@ -2784,7 +2803,7 @@ function* reviewSegmentSteps(
         for (const r of readBoardAll('planThread', { thread: planTrial, ply: m.ply, fenBefore: fenPair.fenBefore, fenAfter: fenPair.fenAfter, student: studentColorWB, studentPovCp: povCp, studentMove: prevStudent, holdPlayable: false })) {
           // Review has no think pause: the question and its answer run on.
           const key = readKey(r);
-          const raw = fact(r.computer, r.kind, stripThink(r.text), {
+          const raw = fact(r.computer, r.kind, r.text, {
             identity: key.startsWith('plan:stopped:') ? 'plan-thread:stop' : (key.startsWith('plan:step:') || key.startsWith('plan:their-step:')) ? 'plan-thread:step' : 'plan-thread:plan',
             proof: r.proof, squares: r.squares, incoming: r.seat === 'opponent',
           });
@@ -2840,7 +2859,7 @@ function* reviewSegmentSteps(
         }
         {
           // The loose piece belongs to the side that did not move.
-          const looseSq = f0.tag === 'does' ? looseSquareOf(f0) : null;
+          const looseSq = f0.tag === 'does' || f0.tag === 'move-job' ? looseSquareOf(f0) : null;
           if (looseSq) {
             const owner: 'your' | 'their' = moverColor === playerColor ? 'their' : 'your';
             const n = looseCount(owner);

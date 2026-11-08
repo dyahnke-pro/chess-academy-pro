@@ -86,4 +86,10 @@ describe('a piece is named the human way (David 2026-11-05: "We still need to na
     expect(seatPieceReferences('the passed pawn on b5 is a target', FEN, 'b'))
       .toBe('their passed b-pawn is a target');
   });
+  it('a compound noun is never re-seated: "your f-pawn on f2" is left as written', () => {
+    // Prod Review audit 2026-11-08: the move contrast said "keeps your
+    // f-your f-pawn on f5 defended" — the bare "pawn" after the hyphen matched.
+    expect(seatPieceReferences('Red1 keeps your f-pawn on f2 defended, and Re4 leaves it with no guard', FEN, 'w'))
+      .toBe('Red1 keeps your f-pawn on f2 defended, and Re4 leaves it with no guard');
+  });
 });

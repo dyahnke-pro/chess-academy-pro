@@ -16,6 +16,7 @@ import type { FactStakes } from './factStakes';
 import type { SpokenLine } from './voicePackage';
 import { TIE_ORDER, type FacetTag, type FactKind } from './reviewFacetRank';
 import { FUNDAMENTAL_CLAIM_FAMILY, fundamentalOfLine } from './moveFundamentals';
+import { stripThink } from '../utils/thinkPause';
 
 /** A REVIEW FACT — the one fact, with the facet tag it is said under (its
  *  slot in Review's walk: the habit is said last, a structure once, a plan
@@ -61,13 +62,19 @@ export function reviewFacet(
 ): ReviewFacet {
   const kind = parts.kind ?? tag;
   const seat: FactSeat = parts.incoming ? 'opponent' : 'student';
+  // Review has no think pause: Learn's question and its answer run on as one
+  // line here, for every producer (decision baseline 2026-11-08, the priority
+  // read "What's the priority here? ‖ Their pawn on h2 is isolated … ‖" reached
+  // the walk with its marks — two producers stripped them by hand, this one
+  // did not).
+  const said = stripThink(text);
   return {
     ...placeFact(kind, seat),
     kind,
-    id: `${computer}:${tag}:${text}`,
+    id: `${computer}:${tag}:${said}`,
     computer,
     tag,
-    text,
+    text: said,
     fen,
     altFen,
     seat,

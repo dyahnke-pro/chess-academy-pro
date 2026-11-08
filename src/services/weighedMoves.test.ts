@@ -118,13 +118,16 @@ describe('(L) two good moves — on his games', () => {
     // The old held line here was "the other one has a point of its own, so
     // weigh what each leaves behind" — no fact at all.
     const fen = 'r1bq1rk1/pp1pppbp/2n2np1/4P3/Q4B2/2P5/PP3PPP/RN2KBNR b KQ - 0 10';
-    expect(moveDifference(fen, 'Nh5', 'Nd5', 'your')?.heldOther).toBe('the other puts the piece where it does more');
+    // Specific (David 2026-11-07: "Not a general statement"): the piece, its
+    // square and its reach — and never the other move's square (d5).
+    expect(moveDifference(fen, 'Nh5', 'Nd5', 'your')?.heldOther).toBe('your knight reaches only 3 squares from h5, against 7 from the other square it had');
     const reads: WeighRead[] = [
       { evaluation: -20, mate: null, moves: ['f6d5', 'f4g3'] },
       { evaluation: -25, mate: null, moves: ['f6h5', 'f4g3'] },
     ];
     const r = alsoGood({ fenBefore: fen, san: 'Nh5', student: 'b', rating: 1500, reads });
-    expect(r?.heldText).toBe('Another move was worth the same here — the other puts the piece where it does more.');
+    expect(r?.heldText).toBe('Another move was worth the same here — your knight reaches only 3 squares from h5, against 7 from the other square it had.');
+    expect(r?.heldText).not.toMatch(/d5|Nd5/);
   });
 });
 

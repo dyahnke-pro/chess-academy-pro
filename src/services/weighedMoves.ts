@@ -371,8 +371,11 @@ export function moveDifference(fenBefore: string, sanA: string, sanB: string, ow
   if (cmp && cmp.square !== a.to && cmp.square !== bm.to && hitAfter(fenBefore, cmp.drops, cmp.square)) {
     return { kind: 'loose', favours: cmp.keeps, other: cmp.drops, squares: [cmp.square],
       text: `${cmp.keeps} keeps ${own} ${NAME[cmp.piece] ?? 'piece'} on ${cmp.square} guarded, and ${cmp.drops} leaves it loose`,
-      held: `${own === 'your' ? 'yours' : 'theirs'} keeps every piece guarded, and the other leaves one loose`,
-      heldOther: `the other keeps every piece guarded, and ${own === 'your' ? 'yours' : 'theirs'} leaves one loose` };
+      // The held forms name the piece, never the other move (David
+      // 2026-11-07: "I want specificity when we teach. Not a general
+      // statement" — "the other leaves one loose" named nothing).
+      held: `${own === 'your' ? 'yours' : 'theirs'} keeps ${own} ${NAME[cmp.piece] ?? 'piece'} on ${cmp.square} guarded, and the other leaves it loose`,
+      heldOther: `the other keeps ${own} ${NAME[cmp.piece] ?? 'piece'} on ${cmp.square} guarded, and ${own === 'your' ? 'yours' : 'theirs'} leaves it loose` };
   }
   // Developing or castling first is the fundamentals' lesson (said by their
   // own computers on the move itself); between two moves of one worth it
@@ -390,7 +393,7 @@ export function moveDifference(fenBefore: string, sanA: string, sanB: string, ow
     const [kind, sq] = faults[0].split(':');
     return { kind: 'structure', favours: f.san, other: o.san, squares: [sq],
       text: `${f.san} keeps ${own} pawns whole, and ${o.san} leaves ${own === 'your' ? 'you' : 'them'} ${kind === 'doubled' ? 'doubled pawns' : 'an isolated pawn'} on ${sq}`,
-      held: `${own === 'your' ? 'yours' : 'theirs'} keeps the pawns whole`,
+      held: `${own === 'your' ? 'yours' : 'theirs'} keeps ${own} pawns whole, where the other leaves ${own === 'your' ? 'you' : 'them'} ${kind === 'doubled' ? 'doubled pawns' : 'an isolated pawn'}`,
       heldOther: `the other keeps the pawns whole, and ${own === 'your' ? 'yours leaves you' : 'theirs leaves them'} ${kind === 'doubled' ? 'doubled pawns' : 'an isolated pawn'}` };
   }
   // Activity compares like with like: the same piece on its two squares — a
@@ -403,8 +406,9 @@ export function moveDifference(fenBefore: string, sanA: string, sanB: string, ow
     if (rh - rl >= 3 && rh >= 1.5 * Math.max(1, rl)) {
       return { kind: 'activity', favours: hi.san, other: lo.san, squares: [hi.to, lo.to],
         text: `${own} ${NAME[hi.piece]} does more on ${hi.to}, with ${rh} squares from there against ${rl} on ${lo.to}`,
-        held: `${own === 'your' ? 'yours' : 'theirs'} puts the piece where it does more`,
-        heldOther: `the other puts the piece where it does more` };
+        // The played square is on the board; the other move's is never said.
+        held: `${own} ${NAME[hi.piece]} reaches ${rh} squares from ${hi.to}, against ${rl} from the other square it had`,
+        heldOther: `${own} ${NAME[lo.piece]} reaches only ${rl} squares from ${lo.to}, against ${rh} from the other square it had` };
     }
   }
   return null;

@@ -76,7 +76,7 @@ describe('the piece kept at home on purpose (his …Kf7: "you can cover it with 
 describe('where to put the king (his 7…Kf8: "not g6 or f6 — you\'d get mated")', () => {
   it('names the mated squares with their lines, and the square chosen', () => {
     const { fen, san } = before(14);
-    expect(kingSquares(fen, san, 'your', null, 'f7f8')?.text).toBe("Where does your king go? On g6 it's mated at once: Qf5#. On f6 it's mated in three: Bg5+ Kg6 Qf5+ Kh5 g4#. You chose f8, the best of them.");
+    expect(kingSquares(fen, san, 'your', null, 'f7f8')?.text).toBe("Where does your king go? On g6 it's mated at once: Qf5#. On f6 it's mated in three: Bg5+, Kg6, Qf5+, Kh5, g4#. You chose f8, the best of them.");
   });
   it('a king driven back to the chosen square by the engine line is said', () => {
     const { fen, san } = before(14);

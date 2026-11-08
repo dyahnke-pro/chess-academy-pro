@@ -31,6 +31,20 @@ describe('a dropped sentence takes the tail that points back at it', () => {
     expect(pkg.spoken).toBe('');
   });
 
+  it('a pin said before: its hold that names "the bishop" goes with it (prod Learn audit 2026-11-08)', () => {
+    const lead = 'You have a pin: your rook on d8 pins their dark-squared bishop against their queen.';
+    // Their dark-squared bishop on d4 stands between your rook on d8 and their queen on d3.
+    const PIN = '3r2k1/5ppp/8/8/3B4/3Q4/5PPP/6K1 b - - 0 1';
+    const pkg = buildVoicePackage([{ kind: 'computed', text: `${lead} Moving the bishop would let your rook take the queen on d3.`, fen: PIN } as VoiceFact], lead);
+    expect(pkg.spoken).toBe('');
+  });
+
+  it('NEGATIVE CONTROL: the pin\'s hold speaks when its lead is new', () => {
+    const PIN = '3r2k1/5ppp/8/8/3B4/3Q4/5PPP/6K1 b - - 0 1';
+    const text = 'You have a pin: your rook on d8 pins their dark-squared bishop against their queen. Moving the bishop would let your rook take the queen on d3.';
+    expect(buildVoicePackage([{ kind: 'computed', text, fen: PIN } as VoiceFact]).spoken).toMatch(/Moving the bishop would let your rook take the queen on d3\./);
+  });
+
   it('a new sentence that stands alone still speaks after a dropped one', () => {
     const said = 'Their bishop on g7 eyes your knight on c3.';
     const pkg = buildVoicePackage([{ kind: 'computed', text: `${said} Your rook on f1 is ready for the f-file.`, fen: MOVE8 } as VoiceFact], said);

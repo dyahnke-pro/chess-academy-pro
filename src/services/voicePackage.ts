@@ -260,6 +260,17 @@ const DEPENDENT = /^(?:Remember —|Here's how:)/;
  *  repeat, this one has no referent and goes too (OS-11 #7 — the tails spoke
  *  alone and cut the line playing). */
 const ANAPHOR = /\b(?:it|its|them|this|that|these|those)\b/i;
+/** A piece named "the bishop" (no square) points back at the dropped sentence
+ *  when that sentence named a bishop (prod Learn audit 2026-11-08: the pin's
+ *  lead was a repeat and dropped, and "Moving the bishop would let your rook
+ *  take the queen on d3." spoke alone). A "the bishop" with nothing before it
+ *  to point at ("You want to walk the bishop round to d5") stands alone. */
+function pointsBackAt(s: string, dropped: string): boolean {
+  for (const m of s.matchAll(/\bthe (pawn|knight|bishop|rook|queen)\b(?! on [a-h][1-8])/gi)) {
+    if (new RegExp(`\\b${m[1]}\\b`, 'i').test(dropped)) return true;
+  }
+  return false;
+}
 
 const NOT_SPEAKABLE: Array<{ re: RegExp; why: string }> = [
   { re: /\n/, why: 'multi-line block, not an utterance' },
@@ -510,6 +521,7 @@ export function buildVoicePackage(
     // spoken a move after the pin, on its own).
     let prevKept = false;
     let first = true;
+    let prevSentence = '';
     // Added to `seen` only once the fact is kept, so a whole beat that is
     // refused leaves no sentence of its behind.
     const mine = new Set<string>();
@@ -517,9 +529,11 @@ export function buildVoicePackage(
       const k = sayKey(s);
       const opens = first;
       const afterDrop = !first && !prevKept;
+      const before = prevSentence;
+      prevSentence = s;
       first = false;
       if (DEPENDENT.test(s) && !(opens ? afterKeptFact : prevKept)) { why.add('duplicate'); continue; }
-      if (afterDrop && ANAPHOR.test(s)) { why.add('duplicate'); continue; }
+      if (afterDrop && (ANAPHOR.test(s) || pointsBackAt(s, before))) { why.add('duplicate'); continue; }
       prevKept = false;
       if (seen.has(k) || mine.has(k)) { why.add(saidEarlier.has(k) ? 'already said this turn' : 'duplicate'); continue; }
       const near = [...seen].find((prior) => {

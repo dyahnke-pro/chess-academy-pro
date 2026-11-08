@@ -150,4 +150,13 @@ describe('a check that offers nothing invests nothing (review walk oct3b, g2 ply
     const out = attributePrinciples(OVERVALUED).map((x) => x.id);
     expect(out).toContain('overvalued-attack');
   });
+  it('a capture far from their king that loses the capturer is no attack (prod Learn audit 2026-11-08)', () => {
+    // 3…Qc5 4.d3 Qxc4?? 5.dxc4: the queen takes a bishop the d-pawn guards, three
+    // squares from their king, with no check — a miscount, never "you threw
+    // it at the king".
+    const GRAB: AttributionInput = { replySan: null,
+      historySans: ['e4', 'e5', 'Nf3', 'Qe7', 'Bc4', 'Qc5', 'd3', 'Qxc4'],
+      bestSan: 'Nc6', classification: 'blunder', pvAfterPlayed: ['dxc4'], evalBefore: -40, evalAfterPlayed: -650 };
+    expect(attributePrinciples(GRAB).map((x) => x.id)).not.toContain('overvalued-attack');
+  });
 });

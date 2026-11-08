@@ -3,7 +3,7 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  abandonedDuty, cPawnBlock, defenderTrade, denyExchange, dutyParity, exchangeForAttacker, exchangeIdeas,
+  abandonedDuty, cPawnBlock, defenderTrade, denyExchange, exchangeForAttacker, exchangeIdeas,
   IDEA_KIND, knightSquares, maintenanceTrade, materialArithmetic, onlyDevelopedTrade, prepareRecapture,
   previousOwnMove, safeBecause, simplestWin, threatCost, tradeChoice, wingForCentre, type ExchangeIdea,
 } from './exchangeIdeas';
@@ -79,23 +79,6 @@ describe('trades', () => {
     expect(r.text).toMatch(/the choice is theirs: if they take on e3, you must take back with the f-pawn and double your pawns/);
     // Once the queen can take back on e3 too, nothing is forced on you.
     expect(tradeChoice(fa('e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 Qe2 d6'), 'Be3', 'w')).toBeNull();
-  });
-
-  it('duty parity: their attacker is as tied as your guard', () => {
-    const r = wellFormed(dutyParity('6k1/5ppp/1q6/8/8/8/1P3PPP/1R4K1 w - - 0 1', 'w'));
-    expect(r.text).toBe('Your rook is tied to guarding your b-pawn — but their queen is just as tied to attacking it, so the guard costs you nothing.');
-    expect(r.squares).toEqual(expect.arrayContaining(['b1', 'b2', 'b6']));
-    // A knight attacking is worth less than the rook guarding: the guard costs.
-    expect(dutyParity('6k1/5ppp/8/8/2n5/8/1P3PPP/1R4K1 w - - 0 1', 'w')).toBeNull();
-  });
-
-  it('duty parity stays silent when the guard has a problem of its own (claim harvest 2026-10-17)', () => {
-    // The queen on c5 guards a5 against their queen on a3 — but it is itself
-    // attacked by that queen with nothing defending it.
-    expect(dutyParity('6rk/2p4p/5p2/p1qb1N2/4r3/Q7/PPP3PP/2KR3R b - - 3 24', 'b')).toBeNull();
-    // The queen on c5 guards c7, but it is also the only guard of the bishop
-    // on d5 — overloaded, so the guard does cost.
-    expect(dutyParity('r6k/2p4p/5p2/p1qb1N2/4r3/6Q1/PPP3PP/2KR3R b - - 1 23', 'b')).toBeNull();
   });
 
   it('the maintenance trade keeps the pawn count', () => {
@@ -259,24 +242,6 @@ describe('the aggregator and the one door', () => {
     expect(isProof(proofs.get(f))).toBe(true);
   }, 30_000);
 
-  it('Learn composer: duty parity speaks through the door as a trade idea', async () => {
-    const { computePositionFacts } = await import('./positionFacts');
-    const fen = '6k1/5ppp/1q6/8/8/8/1P3PPP/1R4K1 w - - 0 1';
-    const line = (rank: number, evaluation: number): { rank: number; evaluation: number; moves: string[]; mate: null } => ({ rank, evaluation, moves: [], mate: null });
-    const r = await computePositionFacts({ posture: 'walk', fen, moverColor: 'b', studentColor: 'w',
-      analysis: { topLines: [line(1, 0), line(2, -10)], evaluation: 0, isMate: false, mateIn: null, seldepth: 20, depth: 18, wdl: { win: 300, draw: 400, loss: 300 } } } as never);
-    const c = r.clauses.find((x) => x.kind === 'trade-idea');
-    expect(c?.text).toMatch(/just as tied to attacking it/);
-    expect(c && isProof(c.proof)).toBe(true);
-    expect(r.remember).toContain('duty-parity');
-  }, 30_000);
-
-  it('duty parity is one idea a game: a new guard and target share its say-once key', async () => {
-    const { dutyParity } = await import('./exchangeIdeas');
-    // The say-once key names the idea, never the squares it sits on.
-    const a = dutyParity('6k1/5ppp/1q6/8/8/8/1P3PPP/1R4K1 w - - 0 1', 'w');
-    expect(a?.claim).toBe('duty-parity');
-  });
 });
 
 describe('diagnose: a capture that abandons its post is posed to the student model', () => {

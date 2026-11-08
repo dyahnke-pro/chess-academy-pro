@@ -395,7 +395,7 @@ export function kingSquares(
   const COUNT = ['', 'one', 'two', 'three'];
   const mateWords = mated.map((r) => (r.line.length === 1
     ? `On ${r.square} it's mated at once: ${r.line[0]}.`
-    : `On ${r.square} it's mated in ${COUNT[Math.ceil(r.line.length / 2)]}: ${r.line.join(' ')}.`));
+    : `On ${r.square} it's mated in ${COUNT[Math.ceil(r.line.length / 2)]}: ${r.line.join(', ')}.`));
   const bestNote = bestUci && bestUci.slice(2, 4) === played.to && bestUci.slice(0, 2) === played.from;
   const playedWords = who === 'your'
     ? `You chose ${played.to}${bestNote ? ', the best of them' : mated.length ? ', out of the mating net' : ''}`

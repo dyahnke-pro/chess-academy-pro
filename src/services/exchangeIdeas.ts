@@ -6,7 +6,7 @@
 //   trades       — trade off their only developed piece; the defender's trade;
 //                  the exchange for the key attacker; deny the exchange their
 //                  setup relies on; the duty a recapture abandons; they choose
-//                  the trade; duty parity; the maintenance trade; prepare the
+//                  the trade; the maintenance trade; prepare the
 //                  recapture.
 //   defence      — make the threat cost them; the simplest clean win; safe only
 //                  because of an earlier move.
@@ -38,7 +38,7 @@ import { pieceRef } from './pieceRef';
 
 export type ExchangeIdeaId =
   | 'only-developed' | 'defender-trade' | 'exchange-for-attacker' | 'deny-exchange'
-  | 'abandoned-duty' | 'trade-choice' | 'duty-parity' | 'maintenance-trade' | 'prepare-recapture'
+  | 'abandoned-duty' | 'trade-choice' | 'maintenance-trade' | 'prepare-recapture'
   | 'threat-cost' | 'simplest-win' | 'safe-because'
   | 'wing-for-centre' | 'material-arithmetic' | 'knight-squares' | 'c-pawn-block' | 'spoil-their-pawns';
 
@@ -54,7 +54,6 @@ export const IDEA_KIND: Record<ExchangeIdeaId, ExchangeIdeaKind> = {
   'abandoned-duty': 'trade-idea',
   'trade-choice': 'trade-idea',
   'spoil-their-pawns': 'trade-idea',
-  'duty-parity': 'trade-idea',
   'maintenance-trade': 'trade-idea',
   'prepare-recapture': 'trade-idea',
   'threat-cost': 'defence-idea',
@@ -409,59 +408,11 @@ export function spoilTheirPawns(fenBefore: string, san: string, student: Side): 
   return idea('spoil-their-pawns', text, [r.m.to, back.from], proof, `spoil-their-pawns:${r.m.to}`);
 }
 
-/** Duty parity, read on the board with the student to move: one guard of
- *  yours holds a unit that exactly one piece of theirs attacks, and their
- *  attacker is worth at least as much as your guard — both are tied, so the
- *  guard costs nothing. */
-export function dutyParity(fen: string, student: Side): ExchangeIdea | null {
-  const c = load(fen);
-  if (!c || c.turn() !== student || c.inCheck()) return null;
-  const them = other(student);
-  const asThem = asIfToMove(fen, them);
-  if (!asThem) return null;
-  const theirMoves = legalMoves(asThem);
-  for (const t of pieceSquares(c, student, ['p', 'n', 'b', 'r'])) {
-    const attackers = c.attackers(t.sq as Square, them);
-    if (attackers.length !== 1) continue;
-    const a = c.get(attackers[0]);
-    if (!a || a.type === 'p' || a.type === 'k') continue;
-    const take = theirMoves.find((m) => m.from === attackers[0] && m.to === t.sq);
-    if (!take) continue;
-    const guards = c.attackers(t.sq as Square, student);
-    if (guards.length !== 1) continue;
-    const d = c.get(guards[0]);
-    if (!d || d.type === 'p' || d.type === 'k') continue;
-    if (val(a.type) < val(d.type) || val(a.type) <= val(t.type)) continue;
-    // Without the guard it falls: their capture wins it outright.
-    const probe = new Chess(asThem);
-    probe.remove(guards[0]);
-    try { probe.move({ from: attackers[0], to: t.sq }); } catch { continue; }
-    if (probe.attackers(t.sq as Square, student).length > 0) continue;
-    // "THE GUARD COSTS YOU NOTHING" IS FALSE WHEN THE GUARD HAS A PROBLEM OF ITS
-    // OWN (claim harvest 2026-10-17: said beside "their queen attacks your queen
-    // on c5, and nothing defends it", and beside "your queen is the glue — it
-    // alone holds c7 and d5"). Not when the guard itself can be won, and not
-    // when it is also the only guard of another attacked unit.
-    if (legalSeeGainFor(fen, guards[0], them) > 0) continue;
-    const overloaded = pieceSquares(c, student, ['p', 'n', 'b', 'r', 'q']).some((u) => u.sq !== t.sq
-      && c.attackers(u.sq as Square, them).length > 0
-      && c.attackers(u.sq as Square, student).length === 1 && c.attackers(u.sq as Square, student)[0] === guards[0]);
-    if (overloaded) continue;
-    // Named the way a person names them (`pieceRef`): "your light-squared
-    // bishop", "your b-pawn", "their queen" — the three squares lit, not read out.
-    const ref = (sq: string, fallback: string): string => pieceRef(fen, sq, student)?.words ?? fallback;
-    const text = `${openSentence(ref(guards[0], `your ${NAME[d.type]} on ${guards[0]}`))} is tied to guarding ${ref(t.sq, `the ${NAME[t.type]} on ${t.sq}`)} — but ${ref(attackers[0], `their ${NAME[a.type]} on ${attackers[0]}`)} is just as tied to attacking it, so the guard costs you nothing.`;
-    const sq = [guards[0], t.sq, attackers[0]];
-    const proof = squaresProof(text, sq);
-    if (!proof) continue;
-    // Said once a GAME — the idea, not the relation. Keyed on the squares, the
-    // same lesson came back for each new guard and attacker (Learn audits
-    // 2026-10-15: four times in one game, h7 twice and g7 twice); the second
-    // time it teaches nothing the first did not.
-    return idea('duty-parity', text, sq, proof, 'duty-parity');
-  }
-  return null;
-}
+// Duty parity ("your rook is tied to guarding your b-pawn — but their queen is
+// just as tied to attacking it, so the guard costs you nothing") is DELETED
+// (David 2026-11-04, on that exact line: "This is stating the obvious!!"): a
+// guard held in place by an attacker held in place teaches nothing the board
+// does not show, and it still spoke twice a game on the 2026-11-08 prod Review.
 
 /** The maintenance trade: the student's pawn was attacked more often than it
  *  was defended, so it takes a pawn and is taken back — it wins nothing, it
@@ -911,7 +862,6 @@ export function exchangeIdeas(input: ExchangeIdeasInput): ExchangeIdea[] {
   }
   const c = load(input.fen);
   if (c && c.turn() === s) {
-    push(safe(() => dutyParity(input.fen, s)));
     if (input.nameMove) {
       push(safe(() => simplestWin(input.fen, s, input.lines)));
       if (input.lines.length > 0) { const top = input.lines[0]; push(safe(() => wingForCentre(input.fen, top.moves, s))); }

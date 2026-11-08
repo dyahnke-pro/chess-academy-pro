@@ -7,7 +7,7 @@ import { IMAGERY, imageryFor } from './factImagery';
 describe('an image that only restates its fact never speaks', () => {
   it('the restating images are silent on every rotation', () => {
     for (let stem = 0; stem < 20; stem += 1) {
-      for (const k of ['safe-because', 'duty-parity', 'threat-cost', 'deny-exchange', 'exchange-for-attacker', 'c-pawn-block'] as const) {
+      for (const k of ['safe-because', 'threat-cost', 'deny-exchange', 'exchange-for-attacker', 'c-pawn-block'] as const) {
         expect(imageryFor(k, stem)).toBeNull();
       }
       // "The door is still open, but now there is a trap behind it." rode

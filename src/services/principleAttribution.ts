@@ -1650,6 +1650,18 @@ const DETECTORS: Detector[] = [
     // move that puts nothing en prise invests nothing.
     const offered = hangsBy(c.after, last.to) > 0;
     if (!offered) return null;
+    // AN ATTACK GOES AT THE KING (prod Learn audit 2026-11-08: "You threw
+    // queen takes d4 at the king before the attack was real" — the queen took a
+    // rook-defended bishop three squares from their king, gave no check, and
+    // was simply taken back). An investment is in an attack only when it
+    // checks or lands beside their king (two squares or nearer); a capture
+    // elsewhere that loses the capturer is a miscount, which the trade and
+    // loose-piece rules name.
+    const theirKing = kingSquare(c.after, opp);
+    const dist = theirKing
+      ? Math.max(Math.abs(theirKing.charCodeAt(0) - last.to.charCodeAt(0)), Math.abs(Number(theirKing[1]) - Number(last.to[1])))
+      : 99;
+    if (!/[+#]$/.test(last.san) && dist > 2) return null;
     // A piece that can simply be TAKEN on the square it landed on is not an
     // investment, it is a hang — the loose-piece rule names it (walks 2 and 3,
     // 2026-09-23: Bg4?? into Qxg4 and Ng5?? were both "overvalued the attack").
