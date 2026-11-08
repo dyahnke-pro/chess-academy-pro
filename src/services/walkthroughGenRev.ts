@@ -66,5 +66,6 @@
 // them is that their bishop does more on d6, with 8 squares from there against
 // 2 on e7"), the square choice says its square, then the other square's fault
 // ("Their bishop went to e4. On g4 it runs into …Bxf3+ …"); a move that hits a
-// piece "attacks" or "hits" it.
+// piece "attacks" or "hits" it; a move "drops" only the piece their line
+// takes ("Bxh7+? That drops the bishop on h7", never the queen it left loose).
 export const WALKTHROUGH_GEN_REV = '2026-11-08-voice7';

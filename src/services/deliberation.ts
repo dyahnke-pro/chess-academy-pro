@@ -156,7 +156,13 @@ function uciToSan(fen: string, uci: string): string | null {
 /** Material the MOVER leaves hanging after playing `uci` from `fen` (SEE-lite via
  *  findHangingPieces) — the concrete "that drops the …" read. Returns the biggest
  *  hanging piece, or null. */
-function dropsAfter(fen: string, uci: string, moverColor: 'w' | 'b'): { piece: string; square: string; value: number } | null {
+/** The squares their first two answers in a line (UCI, the mover's move
+ *  first) capture on — where a "drop" can be what the line punishes. */
+function takenByLine(moves: readonly string[]): ReadonlySet<string> {
+  return new Set(moves.slice(1).filter((_, k) => k % 2 === 0).slice(0, 2).map((u) => u.slice(2, 4)));
+}
+
+function dropsAfter(fen: string, uci: string, moverColor: 'w' | 'b', takenOn: ReadonlySet<string>): { piece: string; square: string; value: number } | null {
   let after: Chess;
   let captured = 0;
   let landed = '';
@@ -171,6 +177,11 @@ function dropsAfter(fen: string, uci: string, moverColor: 'w' | 'b'): { piece: s
   try {
     for (const h of findHangingPieces(after)) {
       if (h.color !== moverColor) continue;
+      // THE PIECE THE REFUTATION TAKES (Gotham–Jelena, depth 20): "Qf5? That
+      // drops the rook on h1" — taking it walks into Qxf7#, and their best is
+      // …Qd7; "Bg5+? That drops the queen" — the answer is …Kxf7, the bishop.
+      // A loose piece their line never takes is not why the move fails.
+      if (!takenOn.has(h.square)) continue;
       const value = VAL[h.piece.toLowerCase()] ?? 0;
       if (!worst || value > worst.value) worst = { piece: h.piece.toLowerCase(), square: h.square, value };
     }
@@ -236,7 +247,7 @@ export function buildDeliberation(input: {
     // "Bh6 was cleaner" then "Bh6? That drops the knight on a7" — the knight is
     // loose, but taking it walks into something worse, so the line holds). A
     // piece left en prise only counts when the eval says it costs.
-    const loose = dropsAfter(fenBefore, l.moves[0], moverColor);
+    const loose = dropsAfter(fenBefore, l.moves[0], moverColor, takenByLine(l.moves));
     const drop = loose && Math.max(0, bestEval - seatCp(l, moverColor)) >= CLEARLY_WORSE_CP ? loose : null;
     // THE QUEEN TRADE THAT THROWS AWAY SPACE (game 1: "we have more space, and
     // the effect of a space advantage is greatly diminished if the queens are
@@ -273,7 +284,7 @@ export function buildDeliberation(input: {
       } else {
         const evalCp = seatCp(line, moverColor);
         const deltaCp = Math.max(0, bestEval - evalCp);
-        const loose = dropsAfter(fenBefore, line.moves[0], moverColor);
+        const loose = dropsAfter(fenBefore, line.moves[0], moverColor, takenByLine(line.moves));
         const drop = loose && deltaCp >= CLEARLY_WORSE_CP ? loose : null;
         const lossProof = refutationProof(fenBefore, line.moves, bestLine.moves, moverColor);
         let leaves: Candidate['leaves'];

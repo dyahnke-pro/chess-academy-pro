@@ -5,10 +5,12 @@ import { buildDeliberation, deliberationFacts, ruleOuts, NOTHING_SAID } from './
 // Italian, White to move after 1.e4 e5 2.Nf3 Nc6 3.Bc4. A real choice: castle
 // (best), Nxe5?? (drops the knight — Nc6xe5), d3 (playable, less precise).
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 3 3';
-const line = (rank: number, evaluation: number, uci: string) => ({ rank, evaluation, moves: [uci], mate: null });
+const line = (rank: number, evaluation: number, uci: string, ...reply: string[]) => ({ rank, evaluation, moves: [uci, ...reply], mate: null });
 
 describe('buildDeliberation — the weighing from the fan', () => {
-  const analysis = { topLines: [line(1, 30, 'e1g1'), line(2, -250, 'f3e5'), line(3, 10, 'd2d3')] };
+  // Nxe5's line carries their answer, …Nxe5: a drop is the piece their line
+  // takes (Gotham–Jelena 2026-11-08), so the line says which.
+  const analysis = { topLines: [line(1, 30, 'e1g1'), line(2, -250, 'f3e5', 'c6e5'), line(3, 10, 'd2d3')] };
 
   it('names the best move and weighs the alternatives', () => {
     const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', opponentLastSan: null });

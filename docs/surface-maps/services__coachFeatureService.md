@@ -181,8 +181,8 @@
 - `src/services/coachFeatureService.causalChain.test.ts:72`
 - `src/services/coachFeatureService.causalChain.test.ts:81`
 - `src/services/coachFeatureService.causalChain.test.ts:96`
-- `src/services/coachFeatureService.cpLossSign.test.ts:40`
-- `src/services/coachFeatureService.cpLossSign.test.ts:47`
+- `src/services/coachFeatureService.cpLossSign.test.ts:52`
+- `src/services/coachFeatureService.cpLossSign.test.ts:59`
 - `src/services/coachFeatureService.learnLanes.test.ts:25`
 - `src/services/coachFeatureService.learnParity.test.ts:51`
 - `src/services/coachFeatureService.learnParity.test.ts:57`
