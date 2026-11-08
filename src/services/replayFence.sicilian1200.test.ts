@@ -18,7 +18,7 @@ const fenAt = (n: number): string => { const c = new Chess(); for (const m of GA
 
 describe('ply 37 — 19.Nxc5 is a recapture, not a failed sacrifice', () => {
   const input = {
-    historySans: GAME.slice(0, 37),
+    theory: true, historySans: GAME.slice(0, 37),
     bestSan: 'Qxc5',
     classification: 'blunder',
     evalBefore: -87,
@@ -38,7 +38,7 @@ describe('ply 37 — 19.Nxc5 is a recapture, not a failed sacrifice', () => {
 
 describe('ply 33 — 17.Bxd4: the bishop is taken on the spot, not trapped', () => {
   const input = {
-    historySans: GAME.slice(0, 33),
+    theory: true, historySans: GAME.slice(0, 33),
     bestSan: 'Bg5',
     classification: 'mistake',
     evalBefore: -308,

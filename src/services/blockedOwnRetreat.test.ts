@@ -9,6 +9,7 @@ import { renderFundamentalVerdict, verdictAlone } from './principleVoice';
 // e6 covers d5, and e2/f1 lie behind d3), so …b5 traps the bishop. The engine
 // line and best move are the review's own.
 const QD3: AttributionInput = {
+  theory: true,
   replySan: null,
   historySans: ['e4', 'c5', 'Bc4', 'e6', 'e5', 'Nc6', 'Qe2', 'a6', 'b3', 'Nd4', 'Qd3'],
   bestSan: 'Qd1',
@@ -44,6 +45,6 @@ describe('blocked-own-retreat', () => {
   });
 
   it('stays silent when the line never wins the bishop', () => {
-    expect(attributePrinciples({ theory: true, ...QD3, pvAfterPlayed: ['b5'] }).some((x) => x.id === 'blocked-own-retreat')).toBe(false);
+    expect(attributePrinciples({ ...QD3, pvAfterPlayed: ['b5'] }).some((x) => x.id === 'blocked-own-retreat')).toBe(false);
   });
 });

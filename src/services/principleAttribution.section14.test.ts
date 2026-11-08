@@ -122,6 +122,14 @@ describe('section 14 — left-book-early (DB-anchored, G3)', () => {
     expect(hit?.facts.book).toBe(f.bookSan);
     expect(f.book.has(String(hit?.facts.book))).toBe(true);
   });
+  it('theory: false (the Review walk) never names the book move — the departure is the Theory button\'s (David 2026-11-06)', () => {
+    // Prod Review audit 2026-11-08, 6.Bb5??: "That leaves the book — Ruy
+    // Lopez: Morphy Defense, Duras Variation continues c4 here" in the walk.
+    const f = fixture();
+    if (!f) return;
+    const attrs = attributePrinciples({ theory: false, replySan: null, historySans: f.history, bestSan: f.bookSan, classification: 'mistake', evalBefore: 20, evalAfterPlayed: -90 });
+    expect(attrs.find((a) => a.id === 'left-book-early')).toBeUndefined();
+  });
   it('negative control: a BOOK move never files under it, whatever the eval says', () => {
     const f = fixture();
     if (!f) return;

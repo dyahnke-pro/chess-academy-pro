@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**589 lines · 4 exports · 16 importers · 12 tests · 1 audits**
+**591 lines · 4 exports · 16 importers · 12 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6848) — names `misconceptionClassifier`
+- **The standard post-deploy ritual** (CLAUDE.md:6953) — names `misconceptionClassifier`
 
 ## Who calls in
 
@@ -38,8 +38,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `classifyMisconception` (function) — 31 call sites
-- `src/services/autoAnalyzeGame.ts:924`
-- `src/services/discussionPractice.ts:289`
+- `src/services/autoAnalyzeGame.ts:921`
+- `src/services/discussionPractice.ts:290`
 - `src/services/misconceptionClassifier.test.ts:12`
 - `src/services/misconceptionClassifier.test.ts:21`
 - `src/services/misconceptionClassifier.test.ts:39`
@@ -71,7 +71,7 @@
 - `src/services/section14Diagnosis.test.ts:74`
 
 ### `classifyMisconceptionNow` (function) — 13 call sites
-- `src/services/capabilityEvidence.ts:520`
+- `src/services/capabilityEvidence.ts:535`
 - `src/services/classifierCoverage.measure.test.ts:66`
 - `src/services/expertFade.measure.test.ts:102`
 - `src/services/inaccuracyVoice.ts:87`

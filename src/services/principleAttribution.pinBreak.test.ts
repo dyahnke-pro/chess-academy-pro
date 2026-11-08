@@ -16,7 +16,7 @@ const ids = (xs: { id: string }[]) => xs.map((x) => x.id);
 
 describe("ignored-pin-break — the student leaned on a pin that does not hold", () => {
   const input = {
-    historySans: LEAN, bestSan: "Qg3", classification: "blunder", replySan: null,
+    theory: true, historySans: LEAN, bestSan: "Qg3", classification: "blunder", replySan: null,
     pvAfterBest: ["Ba6", "Rfd1", "g5", "e4", "Rf4", "e5", "c5", "Qe3", "cxd4", "Rxd4"],
     pvAfterPlayed: ["Rxf1+", "Rxf1", "Qxh4", "Rf7+", "Kg8", "Rf2", "Ba6", "Bxg6"],
   };
@@ -31,14 +31,14 @@ describe("ignored-pin-break — the student leaned on a pin that does not hold",
     expect(v).toMatch(/check/);
   });
   it("silent on the safe queen move (Qg3 leaves no pin to walk out of)", () => {
-    const out = attributePrinciples({ theory: true, ...input, historySans: [...GAME, "Qg3"] });
+    const out = attributePrinciples({ ...input, historySans: [...GAME, "Qg3"] });
     expect(ids(out)).not.toContain("ignored-pin-break");
   });
 });
 
 describe("missed-pin-break — the student stayed in a pin they could break", () => {
   const input = {
-    historySans: MISS, bestSan: "Rxf1+", classification: "blunder", replySan: null,
+    theory: true, historySans: MISS, bestSan: "Rxf1+", classification: "blunder", replySan: null,
     pvAfterBest: ["Rxf1", "Qxh4", "Bd3", "Nf6", "h3", "Qg5"],
     pvAfterPlayed: ["Qe4", "Ba6", "Qh7+", "Kf8", "Rxf6+", "Qxf6"],
   };
@@ -53,7 +53,7 @@ describe("missed-pin-break — the student stayed in a pin they could break", ()
     expect(v).toMatch(/rook on f6/);
   });
   it("silent when the best move is not the escape", () => {
-    const out = attributePrinciples({ theory: true, ...input, bestSan: "Kh7" });
+    const out = attributePrinciples({ ...input, bestSan: "Kh7" });
     expect(ids(out)).not.toContain("missed-pin-break");
   });
 });

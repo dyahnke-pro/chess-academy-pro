@@ -14,7 +14,7 @@ import { renderFundamentalVerdict, verdictAlone } from './principleVoice';
 // These detectors are SILENT without the eval/PV — that is the contract: they
 // fire on the review path (persisted deep analysis) and stay quiet live.
 
-const OVERVALUED: AttributionInput = { replySan: null,
+const OVERVALUED: AttributionInput = { theory: true, replySan: null,
   historySans: ['c4', 'Nc6', 'b4', 'Nxb4', 'h3', 'g5', 'f4', 'gxf4', 'h4', 'c5', 'Qa4', 'Nd5', 'e4', 'fxe3', 'Qa3', 'exd2+', 'Ke2', 'd1=B+', 'Kxd1', 'Ne3+'],
   bestSan: 'Rb8',
   classification: 'blunder',
@@ -23,7 +23,7 @@ const OVERVALUED: AttributionInput = { replySan: null,
   evalAfterPlayed: -340,
 };
 
-const POISONED: AttributionInput = { replySan: null,
+const POISONED: AttributionInput = { theory: true, replySan: null,
   historySans: ['f3', 'c5', 'b4', 'cxb4', 'Na3', 'bxa3', 'g3', 'Na6', 'Bxa3', 'e5', 'Kf2', 'Bxa3', 'h3', 'e4', 'fxe4', 'Nc7', 'c4', 'Nf6', 'Rh2', 'Nxe4+', 'Ke1', 'Nxg3', 'Qc2', 'Kf8', 'Qxh7'],
   bestSan: 'c5',
   classification: 'blunder',
@@ -32,7 +32,7 @@ const POISONED: AttributionInput = { replySan: null,
   evalAfterPlayed: -550,
 };
 
-const CAPTURE: AttributionInput = { replySan: null,
+const CAPTURE: AttributionInput = { theory: true, replySan: null,
   historySans: ['a3', 'h6', 'g4', 'c6', 'h3', 'g5', 'Bg2', 'Rh7', 'Bxc6', 'bxc6'],
   bestSan: 'dxc6',
   classification: 'mistake',
@@ -43,7 +43,7 @@ const CAPTURE: AttributionInput = { replySan: null,
 // A quiet Italian — the played pawn move is fine on the board (no concrete
 // fundamental fires), but the eval says a clearly-winning position was thrown
 // away. Only botched-conversion should attach.
-const BOTCHED: AttributionInput = { replySan: null,
+const BOTCHED: AttributionInput = { theory: true, replySan: null,
   historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'd6', 'Nc3', 'Nf6', 'O-O', 'O-O', 'h3', 'a6'],
   bestSan: 'Re8',
   classification: 'mistake',
@@ -54,7 +54,7 @@ const BOTCHED: AttributionInput = { replySan: null,
 // A conversion needs something to convert: White is a knight up (…Ng4?? Qxg4)
 // and then lets most of it go. (BOTCHED above is level material — see the
 // negative control below.)
-const BOTCHED_AHEAD: AttributionInput = { replySan: null,
+const BOTCHED_AHEAD: AttributionInput = { theory: true, replySan: null,
   historySans: ['e4', 'Nf6', 'Nc3', 'Ng4', 'Qxg4', 'd6', 'Nf3', 'e5', 'Bc4', 'Nc6', 'O-O', 'Be7', 'd3', 'O-O', 'h3'],
   bestSan: 'Bg5',
   classification: 'mistake',
@@ -107,7 +107,7 @@ describe('eval/PV fundamentals — Wave 3 detectors fire on real legal games', (
     // Black is a PAWN DOWN; the +2.6 is the fork White just allowed (…f6 hits
     // Bg5 while …d5 hits Ne4). Missing it is a missed punishment, not a rushed
     // win, and the grade line already names f6.
-    const walk: AttributionInput = { replySan: null,
+    const walk: AttributionInput = { theory: true, replySan: null,
       historySans: ['Nc3', 'e5', 'Nf3', 'Nc6', 'd4', 'e4', 'Nxe4', 'd5', 'Bg5', 'Be7'],
       bestSan: 'f6', classification: 'blunder', evalBefore: 261, evalAfterPlayed: -157 };
     expect(attributePrinciples(walk).map((x) => x.id)).not.toContain('botched-conversion');
@@ -121,7 +121,7 @@ describe('eval/PV fundamentals — Wave 3 detectors fire on real legal games', (
     // purely board-provable (best is the away-recapture opening a rook lane), so
     // it fires on any path where the move is flagged, live or review.
     const stripped = (i: AttributionInput): AttributionInput =>
-      ({ replySan: null, historySans: i.historySans, bestSan: i.bestSan, classification: i.classification });
+      ({ theory: true, replySan: null, historySans: i.historySans, bestSan: i.bestSan, classification: i.classification });
     for (const { name, input } of cases) {
       if (name === 'capture-toward-centre') continue;
       const out = attributePrinciples(stripped(input));
@@ -135,7 +135,7 @@ describe('a check that offers nothing invests nothing (review walk oct3b, g2 ply
   // a check with nothing en prise. Same shape, minimal real game: 3.Bb5+ puts
   // nothing en prise; the line loses the bishop to …c6 and …cxb5 afterwards.
   // That is a piece walked into a threat, not an investment.
-  const CHECK: AttributionInput = { replySan: null,
+  const CHECK: AttributionInput = { theory: true, replySan: null,
     historySans: ['e4', 'e5', 'Nf3', 'd6', 'Bb5+'],
     bestSan: 'd4',
     classification: 'blunder',
@@ -154,7 +154,7 @@ describe('a check that offers nothing invests nothing (review walk oct3b, g2 ply
     // 3…Qc5 4.d3 Qxc4?? 5.dxc4: the queen takes a bishop the d-pawn guards, three
     // squares from their king, with no check — a miscount, never "you threw
     // it at the king".
-    const GRAB: AttributionInput = { replySan: null,
+    const GRAB: AttributionInput = { theory: true, replySan: null,
       historySans: ['e4', 'e5', 'Nf3', 'Qe7', 'Bc4', 'Qc5', 'd3', 'Qxc4'],
       bestSan: 'Nc6', classification: 'blunder', pvAfterPlayed: ['dxc4'], evalBefore: -40, evalAfterPlayed: -650 };
     expect(attributePrinciples(GRAB).map((x) => x.id)).not.toContain('overvalued-attack');
