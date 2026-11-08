@@ -374,7 +374,7 @@ export function closedTacticalChance(
     const fenAt = c.fen();
     const mv = c.move(pv[i]);
     if (i < 2 || mv.color !== student) continue;
-    if (!isSacrifice(fenAt, pv[i], pv[i + 1])) continue;
+    if (!isSacrifice(fenAt, pv[i], pv[i + 1], pv.slice(i + 1))) continue;
     const proof = legalLineProof(fenBefore, pv.slice(0, i + 2), lineSeatAt(fenBefore, student));
     if (!proof) return null;
     return {

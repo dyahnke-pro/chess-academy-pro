@@ -24,6 +24,7 @@
 import { Chess, type Square } from 'chess.js';
 import { seeGain, legalSeeGain } from './positionReadingService';
 import { wcGap } from './winChance';
+import { heardProofCut } from './exchangeLedger';
 
 export interface FactStakes {
   /** Material at stake, in pawns (a knight is 3). A forced mate is `MATE_POINTS`. */
@@ -231,7 +232,15 @@ export function isScenicPawnPin(
  *  - without it, only a net of two or more (a piece) counts, the conservative
  *    bar chat always used.
  */
-export function isSacrifice(fenBefore: string, san: string, replyBestSan: string | null): boolean {
+export function isSacrifice(
+  fenBefore: string, san: string, replyBestSan: string | null,
+  /** REQUIRED — the engine's continuation after the move, in SAN (their reply
+   *  first), or null with none in hand. A move whose line wins material where
+   *  a listener can follow it is a combination, not a sacrifice (Gotham–Jelena
+   *  13.Bxf7+: "Your move is a sacrifice — compensation …" of a move that wins
+   *  the queen after …Kxf7 Qxd8). A line that mates is still a sacrifice. */
+  lineAfter: readonly string[] | null,
+): boolean {
   let c: Chess;
   try { c = new Chess(fenBefore); } catch { return false; }
   let mv: ReturnType<Chess['move']>;
@@ -244,6 +253,10 @@ export function isSacrifice(fenBefore: string, san: string, replyBestSan: string
   const promoted = mv.promotion ? piecePoints(mv.promotion) - piecePoints('p') : 0;
   const net = legalSeeGain(c.fen(), mv.to) - captured - promoted;
   if (net < 1) return false;
+  if (lineAfter && lineAfter.length > 0) {
+    const cut = heardProofCut(fenBefore, [mv.san, ...lineAfter], mv.color, null);
+    if (cut && !cut.mate && (cut.ledger?.netPawns ?? 0) >= 1) return false;
+  }
   if (replyBestSan === null) return net >= 2;
   try {
     const reply = new Chess(c.fen()).move(replyBestSan);

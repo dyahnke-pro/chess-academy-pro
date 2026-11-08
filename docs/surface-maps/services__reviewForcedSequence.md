@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**143 lines · 2 exports · 3 importers · 1 tests · 0 audits**
+**172 lines · 2 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,22 +18,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `detectForcedMatingSequence` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:1706`
+### `detectForcedMatingSequence` (function) — 8 call sites
+- `src/services/coachFeatureService.ts:2024`
 - `src/services/reviewForcedSequence.test.ts:6`
-- `src/services/reviewForcedSequence.test.ts:9`
-- `src/services/reviewForcedSequence.test.ts:16`
-- `src/services/reviewForcedSequence.test.ts:22`
-- `src/services/reviewForcedSequence.test.ts:26`
+- `src/services/reviewForcedSequence.test.ts:11`
+- `src/services/reviewForcedSequence.test.ts:17`
+- `src/services/reviewForcedSequence.test.ts:27`
+- `src/services/reviewForcedSequence.test.ts:31`
+- `src/services/reviewForcedSequence.test.ts:37`
+- `src/services/reviewForcedSequence.test.ts:41`
 
 ### `explainMatingSacMechanism` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3162`
-- `src/services/reviewForcedSequence.test.ts:30`
-- `src/services/reviewForcedSequence.test.ts:33`
-- `src/services/reviewForcedSequence.test.ts:43`
-- `src/services/reviewForcedSequence.test.ts:47`
-- `src/services/reviewForcedSequence.test.ts:53`
-- `src/services/reviewFullData.ts:1089`
+- `src/services/coachFeatureService.ts:3667`
+- `src/services/reviewForcedSequence.test.ts:45`
+- `src/services/reviewForcedSequence.test.ts:48`
+- `src/services/reviewForcedSequence.test.ts:58`
+- `src/services/reviewForcedSequence.test.ts:62`
+- `src/services/reviewForcedSequence.test.ts:68`
+- `src/services/reviewFullData.ts:1210`
 
 ## Tests
 

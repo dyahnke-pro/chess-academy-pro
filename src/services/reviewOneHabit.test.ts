@@ -50,3 +50,12 @@ describe('a trade that wins a second piece of its kind says "another"', () => {
     expect(turn).toMatch(/They take on f5, and you can take back — a pawn trade, and they win another pawn\./);
   }, 300_000);
 });
+
+describe('a move whose line wins is said as the win (Gotham–Jelena 13.Bxf7+)', () => {
+  it('no sacrifice, no square-only trade count — the line that wins the queen', async () => {
+    const g = { ...(JSON.parse(readFileSync('src/test/fixtures/gotham-jelena.json', 'utf8')) as ReplayGame), id: 'gotham-jelena', rating: 1500 } as FixtureGame;
+    const turn = (await reviewSegments(g, g.rating)).find((s) => s.ply === 25)?.narration ?? '';
+    expect(turn).toMatch(/That wins a queen and a pawn for a bishop/);
+    expect(turn).not.toMatch(/is a sacrifice|You give up the bishop|your bishop for their pawn/);
+  }, 300_000);
+});

@@ -2021,7 +2021,7 @@ function* reviewSegmentSteps(
   // FORCED-SEQUENCE framing (the forcing-move / "calculate to the end" concept):
   // if the game ends in a forced checking run, frame it at its first move so the
   // student learns to SEE a forced finish, then the walk plays it out. Board-true.
-  const forcedRun = detectForcedMatingSequence(sansForRun);
+  const forcedRun = detectForcedMatingSequence(sansForRun, moves.slice(0, usable).map((mm) => (typeof mm.evaluation === 'number' ? mm.evaluation : null)));
   const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
   // Prev-capture context so the PlyFacts material calc can tell a RECAPTURE
   // (even trade → 0) from a genuine win (David 2026-07-20 Opera nitpick). Holds
@@ -2438,6 +2438,14 @@ function* reviewSegmentSteps(
           }
           const won = !ml && line ? lineWins(fenPair.fenBefore, line, studentColorWB, m.san, i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null, [lineSecond]) : null;
           if (won) {
+            // ONE COUNT OF WHAT THE CAPTURE WINS (Gotham–Jelena 13.Bxf7+: "You
+            // take on f7, and they can take back — your bishop for their pawn"
+            // beside "That wins a queen and a pawn for a bishop"): the trade
+            // read counts the capture's own square, the line counts the whole
+            // of it, and the line is the claim. The trade's own judgement
+            // (`readTrade`: "it takes off their bishop that was bearing down on
+            // your king") is another claim and stays.
+            for (let k = facets.length - 1; k >= 0; k -= 1) if (facets[k].tag === 'trade' && facets[k].computer === 'settledExchange') facets.splice(k, 1);
             facets.push(fact('lineWins', 'tactic', `That wins ${won.what}: ${lineShape(won.sans, lineSeatAt(fenPair.fenBefore, studentColorWB))}.`, { stakes: { points: won.net, plies: 0 }, lines: [{ fen: fenPair.fenBefore, sans: won.sans.map((x) => x.replace(/^…/, '')) }] }));
             if (!causalArrows || causalArrows.length === 0) {
               causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.winningLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
@@ -4919,7 +4927,7 @@ async function augmentWithProjections(
   const sacSegments = segments.filter((s) => {
     if (s.playerColor !== studentColorName) return false;
     if (s.classification === 'mistake' || s.classification === 'blunder' || s.classification === 'miss') return false;
-    try { return isSacrifice(s.fenBefore, s.san, null); } catch { return false; }
+    try { return isSacrifice(s.fenBefore, s.san, null, null); } catch { return false; }
   });
   const sacLedgers = sacSegments.map(() => deferred<SacrificeLedgerRead | null>());
   sacSegments.forEach((sg, i) => {

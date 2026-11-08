@@ -91,7 +91,9 @@ export function markSacrificeLine(fen: string, top: EngineLine | undefined): Lin
   if (!bestSan) return null;
   let replySan: string | null = null;
   try { const c = new Chess(fen); c.move(bestSan); replySan = uciToSan(c.fen(), top.moves[1]); } catch { return null; }
-  if (!isSacrifice(fen, bestSan, replySan)) return null;
+  const after: string[] = [];
+  try { const c = new Chess(fen); c.move(bestSan); for (const u of top.moves.slice(1)) { const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); if (!m) break; after.push(m.san); } } catch { /* the line stops where it stops being legal */ }
+  if (!isSacrifice(fen, bestSan, replySan, after)) return null;
   let forced = true;
   const sans: string[] = [];
   try {

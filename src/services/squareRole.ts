@@ -135,17 +135,28 @@ function squareRoleWords(
  *  own comma ("d4, holding back their d-pawn, and e5, …"). Null when none do:
  *  a list of squares without reasons is not said. */
 export function namedSquares(chess: Chess, squares: readonly string[], me: Color, owner: 'their' | 'your' | 'the', named: ReadonlySet<string> = NONE): string | null {
+  const parts = namedSquareParts(chess, squares, me, owner, named);
+  if (!parts) return null;
+  return parts.also.length ? `${parts.lead}, and also ${joinAnd(parts.also)}` : parts.lead;
+}
+
+const joinAnd = (xs: readonly string[]): string => (xs.length === 1 ? xs[0] : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
+
+/** `namedSquares` in two parts, for a caller that can end its sentence after
+ *  the lead and say the rest in one of its own ("…for h2, attacking their pawn
+ *  there, which only their king guards. It is also holding back their d-pawn
+ *  and aiming at …" — one clause ran to 36 words). */
+export function namedSquareParts(chess: Chess, squares: readonly string[], me: Color, owner: 'their' | 'your' | 'the', named: ReadonlySet<string> = NONE): { lead: string; also: string[] } | null {
   const items = squares.flatMap((sq) => { const role = squareRoleWords(chess, sq as Square, me, owner, 'covers', named); return role ? [{ sq, role }] : []; });
   if (!items.length) return null;
   const said = items.map((i) => `${i.sq}, ${i.role.full}`);
-  if (said.length <= 2) return said.length === 1 ? said[0] : `${said[0]}, and ${said[1]}`;
+  if (said.length <= 2) return { lead: said.length === 1 ? said[0] : `${said[0]}, and ${said[1]}`, also: [] };
   // THREE OR MORE: one square read out, the rest by what they do (David
   // 2026-11-05: "We still need to name squares. We just need to do it like a
   // human would") — every one still lit by the fact's squares. The piece it
   // attacks leads, the most concrete of them.
   const lead = items.find((i) => i.role.full.startsWith('attacking')) ?? items[0];
-  const rest = items.filter((i) => i !== lead).map((i) => i.role.bare);
-  return `${lead.sq}, ${lead.role.full}, and also ${rest.length === 1 ? rest[0] : `${rest.slice(0, -1).join(', ')} and ${rest[rest.length - 1]}`}`;
+  return { lead: `${lead.sq}, ${lead.role.full}`, also: items.filter((i) => i !== lead).map((i) => i.role.bare) };
 }
 
 /** The squares `namedSquares` says — the ones with a role, in its order. A

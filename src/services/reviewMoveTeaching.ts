@@ -22,7 +22,7 @@ import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZone
 import type { Move } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
-import { namedSquares } from './squareRole';
+import { namedSquares, namedSquareParts } from './squareRole';
 import { outpostKey } from './conceptKey';
 import { kickBreaksPin, pawnKickNext, pinsAgainst } from './pawnKickNext';
 import { computeMoveFundamentals } from './moveFundamentals';
@@ -450,13 +450,16 @@ function centerFight(phrases: PhraseMemory | null, chess: Chess, color: 'w' | 'b
   // "Start replacing descriptions with teachings"). "The knight bears down on
   // d5" was the most repeated description in the app; the teaching is why d5
   // matters — their pawn's next step, a hole, a square their piece wants.
-  const sqs = namedSquares(chess, squares, color, moverIsStudent ? 'their' : 'your');
-  if (!sqs) return null;
+  const parts = namedSquareParts(chess, squares, color, moverIsStudent ? 'their' : 'your');
+  if (!parts) return null;
+  // The lead square in its sentence, the other squares' jobs in one more.
+  const also = parts.also.length ? ` It is also ${parts.also.length === 1 ? parts.also[0] : `${parts.also.slice(0, -1).join(', ')} and ${parts.also[parts.also.length - 1]}`}.` : '';
+  const sqs = parts.lead;
   return sayIdea(phrases, 'center-fight', [
-    `The ${piece} bears down on ${sqs}${tail}.`,
-    `The ${piece} adds its weight to ${sqs}${tail}.`,
-    `The ${piece} joins the fight for ${sqs}${tail}.`,
-    `The ${piece} covers ${sqs}${tail}.`,
+    `The ${piece} bears down on ${sqs}${tail}.${also}`,
+    `The ${piece} adds its weight to ${sqs}${tail}.${also}`,
+    `The ${piece} joins the fight for ${sqs}${tail}.${also}`,
+    `The ${piece} covers ${sqs}${tail}.${also}`,
   ]);
 }
 

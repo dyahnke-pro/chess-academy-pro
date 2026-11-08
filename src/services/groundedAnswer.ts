@@ -3351,7 +3351,7 @@ export function describeSacrifice(
     if (!mv) return null;
     // ONE RULE (`factStakes.isSacrifice`) — with no engine reply in hand it
     // asks for a piece's worth handed over, as this always did.
-    if (isSacrifice(fenBefore, san, null)) {
+    if (isSacrifice(fenBefore, san, null, null)) {
       return `sacrifices the ${REVIEW_PIECE_NAME[mv.piece]} on ${mv.to}`;
     }
     return null;

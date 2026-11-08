@@ -383,8 +383,8 @@
 - `src/services/coachFeatureService.test.ts:69`
 - `src/services/coachFeatureService.test.ts:84`
 - `src/services/coachFeatureService.test.ts:91`
-- `src/services/coachFeatureService.ts:3386`
-- `src/services/coachFeatureService.ts:3418`
+- `src/services/coachFeatureService.ts:3446`
+- `src/services/coachFeatureService.ts:3478`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:15`
 - `src/services/explainBestMoveLines.test.ts:19`
@@ -411,7 +411,7 @@
 - `src/hooks/useHintSystem.ts:357`
 - `src/services/computedVoiceGrounding.test.ts:53`
 - `src/services/computedVoiceGrounding.test.ts:111`
-- `src/services/deliberation.ts:604`
+- `src/services/deliberation.ts:615`
 - `src/services/groundedAnswer.test.ts:1092`
 - `src/services/groundedAnswer.test.ts:1099`
 - `src/services/groundedAnswer.test.ts:1107`
@@ -428,7 +428,7 @@
 - `src/services/reviewBoardAwareness.test.ts:22`
 
 ### `quietPurposePhrase` (function) — 1 call site
-- `src/services/deliberation.ts:610`
+- `src/services/deliberation.ts:621`
 
 ### `describeMoveMerit` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1221`
@@ -1041,7 +1041,7 @@
 - `src/services/bluffDetector.ts:73`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:3751`
+- `src/services/coachFeatureService.ts:3811`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
@@ -1049,7 +1049,7 @@
 - `src/services/moveInsight.ts:606`
 - `src/services/moveInsight.ts:770`
 - `src/services/opponentMovePurpose.ts:64`
-- `src/services/reviewFullData.ts:1016`
+- `src/services/reviewFullData.ts:1020`
 - `src/services/reviewMoveBriefing.ts:312`
 - `src/services/reviewNarrationFidelity.test.ts:141`
 - `src/services/reviewNarrationFidelity.test.ts:150`
@@ -1063,7 +1063,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3672`
+- `src/services/coachFeatureService.ts:3732`
 - `src/services/reviewNarrationFidelity.test.ts:107`
 - `src/services/reviewNarrationFidelity.test.ts:119`
 - `src/services/reviewNarrationFidelity.test.ts:127`
@@ -1079,7 +1079,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:3772`
+- `src/services/coachFeatureService.ts:3832`
 - `src/services/reviewNarrationFidelity.test.ts:177`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1116,9 +1116,9 @@
 
 ### `seatPieceReferences` (re-export) — 39 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9355`
-- `src/services/coachFeatureService.ts:5163`
-- `src/services/coachFeatureService.ts:5252`
-- `src/services/coachFeatureService.ts:6242`
+- `src/services/coachFeatureService.ts:5232`
+- `src/services/coachFeatureService.ts:5321`
+- `src/services/coachFeatureService.ts:6311`
 - `src/services/liveTacticsContext.ts:486`
 - `src/services/liveTacticsContext.ts:495`
 - `src/services/lookaheadPlan.ts:140`
@@ -1131,10 +1131,10 @@
 - `src/services/reviewBoardAwareness.test.ts:56`
 - `src/services/reviewBoardAwareness.test.ts:57`
 - `src/services/reviewFullData.ts:383`
-- `src/services/reviewFullData.ts:523`
-- `src/services/reviewFullData.ts:642`
-- `src/services/reviewFullData.ts:663`
-- `src/services/reviewFullData.ts:864`
+- `src/services/reviewFullData.ts:527`
+- `src/services/reviewFullData.ts:646`
+- `src/services/reviewFullData.ts:667`
+- `src/services/reviewFullData.ts:868`
 - `src/services/reviewNarrationFidelity.test.ts:22`
 - `src/services/reviewNarrationFidelity.test.ts:30`
 - `src/services/reviewNarrationFidelity.test.ts:36`

@@ -139,9 +139,9 @@ describe('one sacrifice rule (review tape 2026-09-25: KID …e5 was "a sacrifice
     const { Chess } = await import('chess.js');
     const c = new Chess();
     for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2'.split(' ')) c.move(m);
-    expect(isSacrifice(c.fen(), 'e5', 'O-O')).toBe(false);
+    expect(isSacrifice(c.fen(), 'e5', 'O-O', null)).toBe(false);
     // with no engine reply, a pawn's worth is never enough to call it one
-    expect(isSacrifice(c.fen(), 'e5', null)).toBe(false);
+    expect(isSacrifice(c.fen(), 'e5', null, null)).toBe(false);
   });
   it('a piece left where the best reply takes it is a sacrifice', async () => {
     const { isSacrifice } = await import('./factStakes');
@@ -149,13 +149,28 @@ describe('one sacrifice rule (review tape 2026-09-25: KID …e5 was "a sacrifice
     const { Chess } = await import('chess.js');
     const c = new Chess();
     for (const m of 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5'.split(' ')) c.move(m);
-    expect(isSacrifice(c.fen(), 'Nxf7', 'Kxf7')).toBe(true);
-    expect(isSacrifice(c.fen(), 'Nxf7', 'Qe7')).toBe(false);
+    expect(isSacrifice(c.fen(), 'Nxf7', 'Kxf7', null)).toBe(true);
+    expect(isSacrifice(c.fen(), 'Nxf7', 'Qe7', null)).toBe(false);
   });
   // v5 re-run (2026-10-29, chesscom-147974419492 ply 41): cxd8=Q+ Kxd8 — a pawn
   // for a rook — was "Their move is a sacrifice — compensation: …".
   it('a pawn that takes and promotes, and is taken, gave a pawn — not a sacrifice', async () => {
     const { isSacrifice } = await import('./factStakes');
-    expect(isSacrifice('1n1rk3/2P2ppp/b7/2Q1N2q/p3P3/6P1/PPP2P1P/R3K2R w KQ - 1 21', 'cxd8=Q+', 'Kxd8')).toBe(false);
+    expect(isSacrifice('1n1rk3/2P2ppp/b7/2Q1N2q/p3P3/6P1/PPP2P1P/R3K2R w KQ - 1 21', 'cxd8=Q+', 'Kxd8', null)).toBe(false);
+  });
+  // Gotham–Jelena 13.Bxf7+ (2026-11-08, depth 20): "Your move is a sacrifice —
+  // compensation …" of a move whose line wins the queen: …Kxf7 Qxd8.
+  it('a move whose line wins material is a combination, not a sacrifice; one that mates still is', async () => {
+    const { isSacrifice } = await import('./factStakes');
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const m of 'e4 c6 d4 d5 e5 Bf5 h4 h6 g4 Bd7 c4 dxc4 Bxc4 e6 Nc3 c5 d5 exd5 Qxd5 Qe7 Qxb7 Bc6 Qc8+ Qd8'.split(' ')) c.move(m);
+    expect(isSacrifice(c.fen(), 'Bxf7+', 'Kxf7', null)).toBe(true);
+    expect(isSacrifice(c.fen(), 'Bxf7+', 'Kxf7', ['Kxf7', 'Qxd8'])).toBe(false);
+    // The Fried Liver knight's line keeps the attack going without winning
+    // material back at once: still a sacrifice.
+    const f = new Chess();
+    for (const m of 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5'.split(' ')) f.move(m);
+    expect(isSacrifice(f.fen(), 'Nxf7', 'Kxf7', ['Kxf7', 'Qf3+', 'Ke6', 'Nc3'])).toBe(true);
   });
 });

@@ -67,5 +67,6 @@
 // 2 on e7"), the square choice says its square, then the other square's fault
 // ("Their bishop went to e4. On g4 it runs into …Bxf3+ …"); a move that hits a
 // piece "attacks" or "hits" it; a move "drops" only the piece their line
-// takes ("Bxh7+? That drops the bishop on h7", never the queen it left loose).
+// takes ("Bxh7+? That drops the bishop on h7", never the queen it left loose);
+// a move whose line wins is not called a sacrifice.
 export const WALKTHROUGH_GEN_REV = '2026-11-08-voice7';

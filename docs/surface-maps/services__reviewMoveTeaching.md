@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**986 lines · 6 exports · 23 importers · 13 tests · 0 audits**
+**989 lines · 6 exports · 23 importers · 13 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -41,18 +41,19 @@
 ### `kingWay` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `quietMovePoint` (function) — 7 call sites
+### `quietMovePoint` (function) — 8 call sites
 - `src/services/playCommentary.ts:918`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
 - `src/services/reviewWalkOct1.test.ts:71`
-- `src/services/reviewWalkOct1.test.ts:77`
+- `src/services/reviewWalkOct1.test.ts:78`
+- `src/services/reviewWalkOct1.test.ts:84`
 - `src/services/teachMistakeWhy.test.ts:48`
 - `src/services/walkOct1Learn.test.ts:85`
 
-### `buildReviewMoveTeaching` (function) — 52 call sites
+### `buildReviewMoveTeaching` (function) — 53 call sites
 - `src/services/coachFeatureService.ts:1259`
-- `src/services/coachFeatureService.ts:4138`
+- `src/services/coachFeatureService.ts:4198`
 - `src/services/danyaBench.measure.test.ts:473`
 - `src/services/discussionPractice.ts:174`
 - `src/services/guardPressure.test.ts:20`
@@ -99,8 +100,9 @@
 - `src/services/reviewNarrationDefects.test.ts:19`
 - `src/services/reviewOpeningTheory.ts:660`
 - `src/services/reviewWalkOct1.test.ts:72`
-- `src/services/reviewWalkOct1.test.ts:84`
-- `src/services/reviewWalkOct1.test.ts:89`
+- `src/services/reviewWalkOct1.test.ts:79`
+- `src/services/reviewWalkOct1.test.ts:91`
+- `src/services/reviewWalkOct1.test.ts:96`
 - `src/services/squareRole.test.ts:29`
 - `src/services/squareRole.test.ts:44`
 
@@ -121,8 +123,8 @@
 - `src/services/tapeKc7Skewer.test.ts:29`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:4046`
-- `src/services/reviewFullData.ts:1692`
+- `src/services/coachFeatureService.ts:4106`
+- `src/services/reviewFullData.ts:1713`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`
@@ -130,7 +132,7 @@
 - `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:4041`
+- `src/services/coachFeatureService.ts:4101`
 - `src/services/reviewMoveTeaching.test.ts:121`
 - `src/services/reviewMoveTeaching.test.ts:124`
 - `src/services/reviewMoveTeaching.test.ts:130`

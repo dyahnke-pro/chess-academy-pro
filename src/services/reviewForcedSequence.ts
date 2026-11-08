@@ -8,8 +8,16 @@
  * where every attacker move gives check (or mate) and every defender move is made
  * WHILE IN CHECK (a forced response). Pure board-truth (chess.js): we replay the
  * game and read `inCheck()` + the SAN's check marker — nothing inferred.
+ *
+ * …AND THE DEFENDER HAD NO WAY OUT (Gotham–Jelena, depth 20: "From here it is a
+ * forced checking run to mate" on 12.Qc8+, where 13…Kxf7 escapes the mate — the
+ * game's …Ke7 walked into it). A reply to check is not forced because it was
+ * made in check: the run starts at the first checking move after which the
+ * engine already sees mate for the mating side, or, with no evaluation in
+ * hand, where every reply that follows was the only legal move.
  */
 import { Chess } from 'chess.js';
+import { isMateEval } from './engineConstants';
 
 interface ForcedMatingRun {
   /** 1-based ply where the forced run BEGINS (the first attacker check). */
@@ -23,7 +31,12 @@ interface ForcedMatingRun {
  * is the full game in SAN. Only returns a run of >= 3 plies (a one-move mate is
  * not a "sequence" to frame; it's just named as mate by the conversion beat).
  */
-export function detectForcedMatingSequence(sans: string[]): ForcedMatingRun | null {
+export function detectForcedMatingSequence(
+  sans: string[],
+  /** REQUIRED — the evaluation after each ply, White's view, mate-coded
+   *  (`isMateEval`); null where the engine did not read it. */
+  evalsAfter: ReadonlyArray<number | null>,
+): ForcedMatingRun | null {
   if (sans.length === 0) return null;
   const last = sans[sans.length - 1];
   if (!last.trimEnd().endsWith('#')) return null; // game didn't end in mate
@@ -33,10 +46,13 @@ export function detectForcedMatingSequence(sans: string[]): ForcedMatingRun | nu
   const chess = new Chess();
   const inCheckBefore: boolean[] = [];
   const givesCheck: boolean[] = [];
+  /** How many legal moves the side to move had before each ply. */
+  const legalBefore: number[] = [];
   for (const san of sans) {
     let ok = true;
     try {
       inCheckBefore.push(chess.inCheck());
+      legalBefore.push(chess.moves().length);
       const mv = chess.move(san);
       if (!mv) ok = false;
     } catch {
@@ -53,9 +69,22 @@ export function detectForcedMatingSequence(sans: string[]): ForcedMatingRun | nu
     if (givesCheck[i] || inCheckBefore[i]) start = i;
     else break;
   }
-  const length = sans.length - start;
+  // From the mate back, an attacker's check stays in the run only while the
+  // mate after it is proven: the engine's evaluation is mate for the mating
+  // side, or (no evaluation) the reply to it was the only legal move.
+  const mating = sans.length - 1;
+  const materWhite = mating % 2 === 0;
+  let proven = mating;
+  for (let i = mating - 2; i >= start; i -= 2) {
+    const e = evalsAfter[i] ?? null;
+    const mateSeen = e !== null && isMateEval(e) && (materWhite ? e > 0 : e < 0);
+    const onlyReply = e === null && legalBefore[i + 1] === 1;
+    if (!(mateSeen || onlyReply)) break;
+    proven = i;
+  }
+  const length = sans.length - proven;
   if (length < 3) return null;
-  return { startPly: start + 1, length };
+  return { startPly: proven + 1, length };
 }
 
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };

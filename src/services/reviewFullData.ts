@@ -1177,7 +1177,14 @@ export function computeMoveFacets(
     if (smv) {
       // ONE RULE (`isSacrifice`): material handed over AND, when the engine's
       // reply is known, the opponent actually takes it.
-      if (isSacrifice(fenBefore, san, ctx.replyBestSan) && studentColorWB) {
+      // The engine's line after the move, in SAN — a line that wins where a
+      // listener can follow it makes the move a combination, not a sacrifice.
+      const sacLine: string[] = [];
+      try {
+        const lc = new Chess(fenAfter);
+        for (const u of ctx.playedLineUci) { const m = lc.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); if (!m) break; sacLine.push(m.san); }
+      } catch { /* the line stops where it stops being legal */ }
+      if (isSacrifice(fenBefore, san, ctx.replyBestSan, sacLine) && studentColorWB) {
         // MOVER's POV, not the student's — the function judges the SAC from
         // the side that made it. Handing it the student's number flipped the
         // sign on every opponent sacrifice (D-4, 2026-09-22).
