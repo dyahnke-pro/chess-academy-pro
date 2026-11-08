@@ -144,6 +144,7 @@ import { askedBestMove, askedMoveThought, moveDeepFact, movePurpose, moveReason 
 import { reasonPosed } from './decisiveReason';
 import { emitDecisiveReason } from './decisiveReasonEvents';
 import { withArticle, orList } from '../utils/andList';
+import { howItWins } from './howItWins';
 /** The engine's best line as UCI from `fen`, when its first move is `bestUci`;
  *  just that move otherwise (never a line from a different board). */
 function enginePlanUci(fen: string, pvSan: ReadonlyArray<string> | undefined, bestUci: string): string[] {
@@ -2796,7 +2797,7 @@ async function computeLiveBoardVerdict(
       return said;
     }
     if (scMateIn !== null && scMateIn < 0) return voice(`No — you're the one facing mate (in ${Math.abs(scMateIn)}); focus on defending.`, 'mate');
-    if (scEvalCp !== null && scEvalCp >= 300) return voice(`No forced mate yet, but you're clearly winning (about ${pawns} points) — convert the material first and the mate will come.`, 'mate');
+    if (scEvalCp !== null && scEvalCp >= 300) return voice(`No forced mate yet, but you're clearly winning (about ${pawns} points) — ${howItWins(grounding.currentFen, sc ?? 'white')}.`, 'mate');
     if (scEvalCp !== null && scEvalCp <= -300) return voice(`No — you're not mating anyone here; you're worse (about ${pawns} points down).`, 'mate');
     return voice("No forced mate here — it isn't that kind of position yet.", 'mate');
   }

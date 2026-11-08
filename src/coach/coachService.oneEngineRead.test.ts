@@ -51,4 +51,12 @@ describe('one engine read per position', () => {
     expect(why).toMatch(/\be5\b/);
     expect(why).not.toMatch(/Nc3/);
   }, 30_000);
+
+  it('"what do I get if I play e5?" is graded against the same read (hard-chat audit 2026-11-08)', async () => {
+    // The candidate lane read the eval bar's move (Nc3) — or, with none
+    // threaded, no move at all ("essentially equal to the best move").
+    const gets = await ask('What do I get if I play e5?');
+    expect(gets).toMatch(/e5 is the best move/);
+    expect(gets).not.toMatch(/Nc3/);
+  }, 30_000);
 });

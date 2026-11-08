@@ -32,6 +32,9 @@ describe('moveIntent — "takes it away" only when it is gone', () => {
       passAfter: [L(260, ['f3g5', 'h7h6'])],
     }, 'student');
     expect(out2?.prevents?.san).toBe('Re8');
+    // Said as a stop, never "Your Re1 — now …Re8 doesn't work: …" (hard-chat
+    // audit 2026-11-08: the dash form read as a garble).
+    expect(out2?.text).toBe('Your Re1 stops …Re8: the rook would just be taken on e8.');
   });
 
   it('Bg5 does not take …Ne7 away when …Ne7 is an even trade and their best (item 132)', () => {

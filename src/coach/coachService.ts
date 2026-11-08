@@ -1473,6 +1473,11 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
         // when it is deep enough and searches on when it is not. Every move
         // question reads that one result, so two lanes cannot name two moves.
         || bestMoveQuestionEngage || hintRequestEngage
+        // "WHAT IF I PLAY Kd3?" is graded against the same read (hard-chat
+        // audit 2026-11-08: "The best move is Kd3" and, one ask later, "Kd3 is
+        // perfectly fine — essentially equal to the best move", unnamed —
+        // the candidate lane had only the eval bar's number, no move).
+        || isCandidateMoveQuestion(askForIntents)
         // "Can I checkmate them?" is answered with the mating line itself.
         || isMateQuestion(askForIntents)
         // "WHO IS BETTER?" / "HOW DO I WIN THIS ENDING?" are about the engine's

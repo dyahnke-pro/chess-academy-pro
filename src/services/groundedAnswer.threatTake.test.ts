@@ -43,3 +43,17 @@ describe('a threat answer carries its proof (David 2026-11-08: "Do the narration
   });
 });
 
+
+describe('king safety reads who could attack it (hard-chat audit 2026-11-08, Lichess 0Fs8O)', () => {
+  it('a pawn ending: no rook or queen to land on the open file; the king is a fighter', async () => {
+    const { assembleKingSafetyAnswer } = await import('./groundedAnswer');
+    const a = assembleKingSafetyAnswer('8/8/1p4pp/p2k1p2/P2P1P1P/4K1P1/8/8 w - - 0 35', 'white', 'me')!.facts;
+    expect(a).not.toMatch(/rook or queen landing/);
+    expect(a).toMatch(/^Your king is safe — they have no pieces left to attack it\. In a pawn ending the king is a fighting piece/);
+  });
+  it('minor pieces only: the open file is no danger', async () => {
+    const { assembleKingSafetyAnswer } = await import('./groundedAnswer');
+    const a = assembleKingSafetyAnswer('4k3/8/8/2b5/8/8/6P1/6K1 w - - 0 1', 'white', 'me')!.facts;
+    expect(a).toMatch(/they have no rook or queen to use the open/);
+  });
+});

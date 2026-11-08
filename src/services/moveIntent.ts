@@ -490,9 +490,9 @@ function phrase(
     // LEGAL, it just loses (walk 2026-09-30: said five times in one game).
     const wouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^(hit|take) the /, '$1 your ') : null;
     if (prevents?.mate) { const m = unmarked(stop); return rotateStem([`${yours} stops ${m}, which was mate.`, `${pointOf}: ${m} was mate, and now it isn't.`], key); }
-    if (prevents && why) return `${yours} — now ${stop} doesn't work: ${why}.`;
+    if (prevents && why) return `${yours} stops ${stop}: ${why}.`;
     if (prevents && wouldDo) return `${yours} stops ${stop}, which would ${wouldDo}.`;
-    if (prevents) return rotateStem([`${yours} — now ${stop} doesn't work.`, `${pointOf}: it takes ${stop} away.`], key);
+    if (prevents) return rotateStem([`${yours} stops ${stop}.`, `${pointOf}: it takes ${stop} away.`], key);
     // Every stem names the seat (review audit 2026-10-15: "…e5 first, so that
     // …Bd6 can bring the bishop into the game" said whose move to no one).
     if (does?.castle && held) return `Your ${played} clears the last piece from between your king and rook.`;

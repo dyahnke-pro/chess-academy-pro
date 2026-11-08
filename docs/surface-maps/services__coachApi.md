@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7311 lines · 39 exports · 51 importers · 72 tests · 19 audits**
+**7312 lines · 39 exports · 51 importers · 72 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -108,13 +108,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachLines` (function) — 4 call sites
-- `src/coach/coachService.ts:1905`
+- `src/coach/coachService.ts:1910`
 - `src/services/coachApi.pieceOptions.test.ts:42`
 - `src/services/coachApi.pieceOptions.test.ts:44`
 - `src/services/coachApi.pieceOptions.test.ts:49`
 
 ### `consumeServedIntent` (function) — 1 call site
-- `src/coach/coachService.ts:1909`
+- `src/coach/coachService.ts:1914`
 
 ### `answerAttemptComparison` (function) — 4 call sites
 - `src/services/coachApi.attemptComparison.test.ts:30`
@@ -123,10 +123,10 @@
 - `src/services/coachApi.attemptComparison.test.ts:65`
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1899`
+- `src/coach/coachService.ts:1904`
 
 ### `consumeCoachKeySquares` (function) — 6 call sites
-- `src/coach/coachService.ts:1914`
+- `src/coach/coachService.ts:1919`
 - `src/services/coachApi.keySquares.test.ts:10`
 - `src/services/coachApi.keySquares.test.ts:12`
 - `src/services/coachApi.keySquares.test.ts:15`

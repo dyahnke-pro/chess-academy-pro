@@ -793,9 +793,21 @@ export function assembleKingSafetyAnswer(fen: string, studentColor: 'white' | 'b
       }
     } catch { openFiles = []; }
     const Whose = whose === 'your' ? 'Your' : 'Their';
-    const facts = openFiles.length
-      ? `${Whose} king is not under attack right now, and most of its cover is in place — but the ${andList(openFiles)} beside it ${openFiles.length === 1 ? 'is' : 'are'} open, so watch for a rook or queen landing there.`
-      : `${Whose} king looks safe — its pawn cover is in place and nothing is attacking it right now.`;
+    // AN OPEN FILE IS A DANGER ONLY TO A ROOK OR A QUEEN (hard-chat audit
+    // 2026-11-08: "watch for a rook or queen landing there" in a pawn ending
+    // with no rook or queen on the board). With none on the other side, the
+    // king is not a target — and with no pieces at all it is a fighter.
+    const hunter: 'w' | 'b' = target === 'w' ? 'b' : 'w';
+    const hunterPieces = ((): string[] => { try { return new Chess(fen).board().flat().flatMap((x) => (x && x.color === hunter && x.type !== 'k' && x.type !== 'p' ? [x.type] : [])); } catch { return ['q']; } })();
+    const heavy = hunterPieces.some((t) => t === 'q' || t === 'r');
+    const who = whose === 'your' ? 'they have' : 'you have';
+    const facts = !heavy && hunterPieces.length === 0
+      ? `${Whose} king is safe — ${who} no pieces left to attack it. In a pawn ending the king is a fighting piece: bring it toward the pawns.`
+      : !heavy && openFiles.length
+        ? `${Whose} king is safe — ${who} no rook or queen to use the open ${andList(openFiles)} beside it.`
+        : openFiles.length
+          ? `${Whose} king is not under attack right now, and most of its cover is in place — but the ${andList(openFiles)} beside it ${openFiles.length === 1 ? 'is' : 'are'} open, so watch for a rook or queen landing there.`
+          : `${Whose} king looks safe — its pawn cover is in place and nothing is attacking it right now.`;
     return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
   }
   const clause = kingExposureClause(exposure);
