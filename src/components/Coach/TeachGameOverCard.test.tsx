@@ -37,7 +37,7 @@ describe('the finished game keeps the board', () => {
     // before the student could look at the move that ended the game.
     const onReview = vi.fn();
     const onStay = vi.fn();
-    render(<TeachGameOverCard result="loss" byMate onReview={onReview} onStay={onStay} />);
+    render(<TeachGameOverCard endWhy={null} result="loss" byMate onReview={onReview} onStay={onStay} />);
 
     expect(onReview, 'the card left for the review on its own').not.toHaveBeenCalled();
     expect(screen.getByTestId('teach-game-over')).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe('the finished game keeps the board', () => {
   it('lets the student stay on the board', async () => {
     const onReview = vi.fn();
     const onStay = vi.fn();
-    render(<TeachGameOverCard result="win" byMate onReview={onReview} onStay={onStay} />);
+    render(<TeachGameOverCard endWhy={null} result="win" byMate onReview={onReview} onStay={onStay} />);
     await userEvent.click(await screen.findByTestId('teach-stay-on-board'));
     expect(onStay).toHaveBeenCalledTimes(1);
     expect(onReview).not.toHaveBeenCalled();
@@ -70,7 +70,7 @@ describe('the finished game keeps the board', () => {
     ];
     for (const [result, byMate, expected] of cases) {
       const { unmount } = render(
-        <TeachGameOverCard result={result} byMate={byMate} onReview={vi.fn()} onStay={vi.fn()} />,
+        <TeachGameOverCard endWhy={null} result={result} byMate={byMate} onReview={vi.fn()} onStay={vi.fn()} />,
       );
       expect(screen.getByText(expected), `${result}/${byMate}`).toBeInTheDocument();
       unmount();
@@ -80,7 +80,7 @@ describe('the finished game keeps the board', () => {
   it('tells the student the board is still worth looking at', () => {
     // The line that does the actual work of the fix: it points them back at
     // the position they were denied.
-    render(<TeachGameOverCard result="loss" byMate onReview={vi.fn()} onStay={vi.fn()} />);
+    render(<TeachGameOverCard endWhy={null} result="loss" byMate onReview={vi.fn()} onStay={vi.fn()} />);
     expect(screen.getByText(/final position is on the board/i)).toBeInTheDocument();
   });
 });
@@ -92,7 +92,7 @@ describe('the first game ends on Continue', () => {
   });
 
   it('Continue leads on, Review stays a choice, Stay is gone', async () => {
-    render(<TeachGameOverCard result="win" byMate onReview={vi.fn()} onStay={vi.fn()} />);
+    render(<TeachGameOverCard endWhy={null} result="win" byMate onReview={vi.fn()} onStay={vi.fn()} />);
     expect(await screen.findByTestId('first-run-continue')).toBeInTheDocument();
     expect(screen.getByTestId('teach-review-game')).toBeInTheDocument();
     await waitFor(() => expect(screen.queryByTestId('teach-stay-on-board')).toBeNull());
@@ -100,7 +100,7 @@ describe('the first game ends on Continue', () => {
 
   it('a tap ends the level-up fireworks at once', async () => {
     const { container } = render(
-      <TeachGameOverCard result="win" byMate onReview={vi.fn()} onStay={vi.fn()}
+      <TeachGameOverCard endWhy={null} result="win" byMate onReview={vi.fn()} onStay={vi.fn()}
         skills={[{ label: 'Tactics', delta: 30, level: 9, levelChange: 1 }]} />,
     );
     const sparks = (): number => container.querySelectorAll('[data-testid="teach-recap-levelup"] span[aria-hidden]').length;
@@ -127,7 +127,7 @@ describe('the focus recap', () => {
   it('the end line, the rung progress, and every miss with Play it out — never the answer', async () => {
     const onPlayOut = vi.fn();
     const m = missed(9, 'Move 5 — your knight on e4 was loose');
-    render(<TeachGameOverCard result="loss" byMate={false} onReview={vi.fn()} onStay={vi.fn()}
+    render(<TeachGameOverCard endWhy={null} result="loss" byMate={false} onReview={vi.fn()} onStay={vi.fn()}
       focus={{ line: 'Tactics today: you missed your one chance. Review has the rest.', progress: '1 of 3 finds to Intermediate', missed: [m], playedOut: new Set(), onPlayOut }} />);
     expect(screen.getByTestId('teach-recap-focus').textContent).toContain('Tactics today');
     expect(screen.getByTestId('teach-recap-rung').textContent).toBe('1 of 3 finds to Intermediate');
@@ -138,7 +138,7 @@ describe('the focus recap', () => {
   });
 
   it('a miss already played out says Found; the top rung shows no progress', () => {
-    render(<TeachGameOverCard result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()}
+    render(<TeachGameOverCard endWhy={null} result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()}
       focus={{ line: 'Tactics today: you found your one chance. Review has the rest.', progress: null, missed: [missed(9, 'Move 5 — a loose piece of theirs'), missed(21, 'Move 11 — a shot that wins material')], playedOut: new Set([9]), onPlayOut: vi.fn() }} />);
     expect(screen.getAllByTestId('teach-recap-played')).toHaveLength(1);
     expect(screen.getAllByTestId('teach-recap-play-out')).toHaveLength(1);
@@ -147,20 +147,26 @@ describe('the focus recap', () => {
 
   it('the tempo run: the longest, and a new best gets the badge (David 2026-10-22)', () => {
     const base = { line: 'Tactics today: you found your one chance. Review has the rest.', progress: null, missed: [], playedOut: new Set<number>(), onPlayOut: vi.fn() };
-    const { unmount } = render(<TeachGameOverCard result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()} focus={{ ...base, tempo: { longest: 3, best: 2, newBest: true } }} />);
+    const { unmount } = render(<TeachGameOverCard endWhy={null} result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()} focus={{ ...base, tempo: { longest: 3, best: 2, newBest: true } }} />);
     expect(screen.getByTestId('teach-recap-tempo').textContent).toBe('Longest tempo run: 3 — new best!');
     expect(screen.getByTestId('teach-recap-tempo-badge')).toBeTruthy();
     unmount();
-    const { unmount: u2 } = render(<TeachGameOverCard result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()} focus={{ ...base, tempo: { longest: 2, best: 4, newBest: false } }} />);
+    const { unmount: u2 } = render(<TeachGameOverCard endWhy={null} result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()} focus={{ ...base, tempo: { longest: 2, best: 4, newBest: false } }} />);
     expect(screen.getByTestId('teach-recap-tempo').textContent).toBe('Longest tempo run: 2 (best 4)');
     expect(screen.queryByTestId('teach-recap-tempo-badge')).toBeNull();
     u2();
-    render(<TeachGameOverCard result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()} focus={{ ...base, tempo: { longest: 1, best: 0, newBest: false } }} />);
+    render(<TeachGameOverCard endWhy={null} result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()} focus={{ ...base, tempo: { longest: 1, best: 0, newBest: false } }} />);
     expect(screen.queryByTestId('teach-recap-tempo'), 'a single tempo move is no run').toBeNull();
   });
 
   it('no focus, no row', () => {
-    render(<TeachGameOverCard result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()} />);
+    render(<TeachGameOverCard endWhy={null} result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()} />);
     expect(screen.queryByTestId('teach-recap-focus')).toBeNull();
+  });
+
+  it('says why a drawn game ended when the board says (a perpetual check)', () => {
+    const why = 'It ended in a perpetual check: their rook kept checking your king from h3, h4 and h5, and the same position came up three times.';
+    render(<TeachGameOverCard endWhy={why} result="draw" byMate={false} onReview={vi.fn()} onStay={vi.fn()} />);
+    expect(screen.getByTestId('teach-game-over-why').textContent).toBe(why);
   });
 });

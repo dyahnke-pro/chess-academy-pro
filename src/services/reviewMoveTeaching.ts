@@ -53,9 +53,9 @@ function guardPressure(
   const t = `${theirs} ${PIECE_NOUN[target.type]} on ${targetSq}`;
   return {
     text: sayIdea(phrases, `pressure-${guardSq}-${targetSq}`, [
-      `The ${piece} goes after ${g}, the only guard of ${t}.`,
-      `The ${piece} keeps going after ${g}, the guard of ${targetSq}.`,
-      `The ${piece} keeps the pressure on ${g}.`,
+      `${moverIsStudent ? 'Your' : 'Their'} ${piece} goes after ${g}, the only guard of ${t}.`,
+      `${moverIsStudent ? 'Your' : 'Their'} ${piece} keeps going after ${g}, the guard of ${targetSq}.`,
+      `${moverIsStudent ? 'Your' : 'Their'} ${piece} keeps the pressure on ${g}.`,
     ]),
     squares: [guardSq, targetSq],
   };
@@ -456,10 +456,10 @@ function centerFight(phrases: PhraseMemory | null, chess: Chess, color: 'w' | 'b
   const also = parts.also.length ? ` It is also ${parts.also.length === 1 ? parts.also[0] : `${parts.also.slice(0, -1).join(', ')} and ${parts.also[parts.also.length - 1]}`}.` : '';
   const sqs = parts.lead;
   return sayIdea(phrases, 'center-fight', [
-    `The ${piece} bears down on ${sqs}${tail}.${also}`,
-    `The ${piece} adds its weight to ${sqs}${tail}.${also}`,
-    `The ${piece} joins the fight for ${sqs}${tail}.${also}`,
-    `The ${piece} covers ${sqs}${tail}.${also}`,
+    `${moverIsStudent ? 'Your' : 'Their'} ${piece} bears down on ${sqs}${tail}.${also}`,
+    `${moverIsStudent ? 'Your' : 'Their'} ${piece} adds its weight to ${sqs}${tail}.${also}`,
+    `${moverIsStudent ? 'Your' : 'Their'} ${piece} joins the fight for ${sqs}${tail}.${also}`,
+    `${moverIsStudent ? 'Your' : 'Their'} ${piece} covers ${sqs}${tail}.${also}`,
   ]);
 }
 
@@ -728,8 +728,8 @@ export function buildReviewMoveTeachingFact(
     const they = moverIsStudent ? 'they' : 'you';
     const loose = chess.attackers(winnableTarget.sq as Sq, enemyColor).length === 0;
     const forms = loose
-      ? [`The ${p} hits ${t}, and nothing guards it — pressure ${they} have to answer.`, `The ${p} hits ${t}, which has no guard.`, `The ${p} goes after ${t} — nothing guards it.`, `The ${p} attacks ${t}, and it hangs.`]
-      : [`The ${p} trains on ${t}, which is worth more than the ${p} — pressure ${they} have to answer.`, `The ${p} hits ${t}, which is worth more than the ${p}.`, `The ${p} goes after ${t}; trading the ${p} for it wins material.`, `The ${p} attacks ${t}, a bigger piece, so a trade there wins material.`];
+      ? [`${moverIsStudent ? 'Your' : 'Their'} ${p} hits ${t}, and nothing guards it — pressure ${they} have to answer.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} hits ${t}, which has no guard.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} goes after ${t} — nothing guards it.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} attacks ${t}, and it hangs.`]
+      : [`${moverIsStudent ? 'Your' : 'Their'} ${p} trains on ${t}, which is worth more than the ${p} — pressure ${they} have to answer.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} hits ${t}, which is worth more than the ${p}.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} goes after ${t}; trading the ${p} for it wins material.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} attacks ${t}, a bigger piece, so a trade there wins material.`];
     return out('threat', sayIdea(phrases, loose ? 'pressure-loose' : 'pressure-exchange', forms), [mv.to, winnableTarget.sq]);
   }
   // (c) A rook or queen seizing a file.
@@ -739,13 +739,13 @@ export function buildReviewMoveTeachingFact(
     if (struct?.pawns.openFiles.includes(file)) {
       // A capture's SAN already says "takes" (David 2026-10-30: "Rxf5 — it
       // takes the open f-file"), so a capture seizes the file.
-      return out('file', `The ${PIECE_NOUN[mv.piece]} ${mv.captured ? 'seizes' : 'takes'} the open ${file}-file — a highway straight into ${moverIsStudent ? 'their' : 'your'} position.`);
+      return out('file', `${moverIsStudent ? 'Your' : 'Their'} ${PIECE_NOUN[mv.piece]} ${mv.captured ? 'seizes' : 'takes'} the open ${file}-file — a highway straight into ${moverIsStudent ? 'their' : 'your'} position.`);
     }
     if (struct?.pawns.halfOpenFiles[mv.color].includes(file)) {
       // WHAT IS LEFT THERE, named (12.Rg1: the rook aims at g7, before the king).
       const at = firstEnemyUpFile(chess, mv.to, mv.color);
-      if (at) return out('file', `The ${PIECE_NOUN[mv.piece]} presses down the half-open ${file}-file at ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[at.type]} on ${at.sq}.`, [at.sq]);
-      return out('file', `The ${PIECE_NOUN[mv.piece]} presses down the half-open ${file}-file, leaning on what's left there.`);
+      if (at) return out('file', `${moverIsStudent ? 'Your' : 'Their'} ${PIECE_NOUN[mv.piece]} presses down the half-open ${file}-file at ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[at.type]} on ${at.sq}.`, [at.sq]);
+      return out('file', `${moverIsStudent ? 'Your' : 'Their'} ${PIECE_NOUN[mv.piece]} presses down the half-open ${file}-file, leaning on what's left there.`);
     }
   }
   // (d) Controls central squares, or reaches into the opponent's half.
@@ -787,7 +787,7 @@ export function buildReviewMoveTeachingFact(
         const piece = chess.get(from);
         if (!piece || piece.type === 'p' || piece.type === 'k') continue;
         if (mv.piece !== 'p' && guarded && (PIECE_VAL[piece.type] ?? 0) <= attackerVal) continue;
-        return out('prevent', `The ${PIECE_NOUN[mv.piece]} takes ${sq} away from ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[piece.type]} on ${from}.`, [sq, from]);
+        return out('prevent', `${moverIsStudent ? 'Your' : 'Their'} ${PIECE_NOUN[mv.piece]} takes ${sq} away from ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[piece.type]} on ${from}.`, [sq, from]);
       }
     }
   }
@@ -827,12 +827,12 @@ export function buildReviewMoveTeachingFact(
   //     overstated); otherwise state the development plainly without inventing a
   //     covered square.
   const eyedEnemy = eyes.enemies.find((e) => e.type !== 'k');
-  if (eyedEnemy) return out('threat', `The ${PIECE_NOUN[mv.piece]} eyes the ${PIECE_NOUN[eyedEnemy.type]} on ${eyedEnemy.sq}.`, [mv.to, eyedEnemy.sq]);
+  if (eyedEnemy) return out('threat', `${moverIsStudent ? 'Your' : 'Their'} ${PIECE_NOUN[mv.piece]} eyes the ${PIECE_NOUN[eyedEnemy.type]} on ${eyedEnemy.sq}.`, [mv.to, eyedEnemy.sq]);
   // "Develops" is true only of a knight or bishop leaving its home rank; said
   // of d3, Re1, Qb8 or a retreat (Nf1) it was a false claim (census group 6,
   // 2026-10-07). Anything else has nothing true left to say — silence.
   const homeRank = mv.color === 'w' ? '1' : '8';
-  if ((mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === homeRank) return out('develop', `The ${PIECE_NOUN[mv.piece]} develops to ${mv.to}, joining the game.`);
+  if ((mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === homeRank) return out('develop', `${moverIsStudent ? 'Your' : 'Their'} ${PIECE_NOUN[mv.piece]} develops to ${mv.to}, joining the game.`);
   return null;
 }
 

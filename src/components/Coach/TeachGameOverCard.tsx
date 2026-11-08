@@ -44,6 +44,9 @@ interface TeachGameOverCardProps {
   /** Checkmate rather than resignation / flag / agreement. Only changes the
    *  wording — a mate is worth naming, a draw is a draw. */
   byMate: boolean;
+  /** Why it ended, when the board says (`whyItEnded`: a perpetual check, a
+   *  draw by repetition). Null = only the headline. */
+  endWhy: string | null;
   /** Tapped "Review this game". The ONLY route off this screen. */
   onReview: () => void;
   /** Tapped "Stay here" — dismisses the card and leaves the board. */
@@ -179,7 +182,7 @@ function headline(result: TeachGameResult, byMate: boolean): string {
   return "That's a draw.";
 }
 
-export function TeachGameOverCard({ result, byMate, onReview, onStay, tally, skills, focus }: TeachGameOverCardProps): JSX.Element {
+export function TeachGameOverCard({ result, byMate, endWhy, onReview, onStay, tally, skills, focus }: TeachGameOverCardProps): JSX.Element {
   const [skipped, setSkipped] = useState(false);
   // THE FIRST GAME ENDS ON CONTINUE (David 2026-10-18): the recap is read at the
   // student's pace, then Continue leads to bringing in their games. Review stays
@@ -188,6 +191,7 @@ export function TeachGameOverCard({ result, byMate, onReview, onStay, tally, ski
   return (
     <div className="px-3 pb-2 space-y-2" data-testid="teach-game-over" onPointerDown={() => setSkipped(true)}>
       <div className="text-sm font-semibold text-theme-text px-1">{headline(result, byMate)}</div>
+      {endWhy && <div className="text-sm text-theme-text-muted px-1" data-testid="teach-game-over-why">{endWhy}</div>}
       <div className="text-xs text-theme-text-muted px-1">
         The final position is on the board. Take a look before you move on.
       </div>

@@ -25,6 +25,7 @@ import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { uciToSans } from '../../services/structureJudgementKit';
 import { Chess } from 'chess.js';
+import { whyItEnded } from '../../services/gameEndReads';
 import type { Square } from 'chess.js';
 import { registerCoachHands } from '../../services/coachActuator';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
@@ -13955,7 +13956,7 @@ export function CoachTeachPage({ mode }: {
   // So the record is still written immediately — the review, the mistake
   // puzzles and the weakness spine all hang off that write and must not wait
   // for a tap — and only the NAVIGATION is held back behind a button.
-  const [finishedGame, setFinishedGame] = useState<{ id: string; result: TeachGameResult; byMate: boolean } | null>(null);
+  const [finishedGame, setFinishedGame] = useState<{ id: string; result: TeachGameResult; byMate: boolean; endWhy?: string | null } | null>(null);
   /** The board the End card was shown on. An ended lesson is not over by the
    *  rules, so the effect below must not read "not over" as "played on": it
    *  re-runs on any of its inputs (the profile refreshing after the save did
@@ -14059,7 +14060,15 @@ export function CoachTeachPage({ mode }: {
       if (bossGame) void writeBossAttempt({ bossId: bossGame.preset.id, gameId, result, targeted: bossGame.targets.map((t) => t.cardId), at: Date.now() });
       // The offer, NOT the navigation. The board keeps the mating move on it
       // until he chooses to leave.
-      setFinishedGame({ id: gameId, result, byMate: game.isCheckmate });
+      // WHY IT ENDED, the computer Review reads (`whyItEnded`): a perpetual
+      // check or a draw by repetition is named, never only "That's a draw".
+      let endWhy: string | null = null;
+      try {
+        const c = new Chess();
+        const plies = game.history.map((san) => { const fenBefore = c.fen(); c.move(san); return { san, fenBefore, fenAfter: c.fen(), evalAfter: null, bestMoveUci: null, bestMoveEval: null }; });
+        endWhy = whyItEnded(plies, playerColor === 'white' ? 'w' : 'b')?.text ?? null;
+      } catch { endWhy = null; }
+      setFinishedGame({ id: gameId, result, byMate: game.isCheckmate, endWhy });
     })();
   }, [game.isGameOver, game.isCheckmate, game.turn, game.fen, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName, learnRecordOf, saveLearnGame]);
   // THE FORTRESS PASS (a card with `passEnds: 'draw'` — the wrong rook pawn's
@@ -14951,6 +14960,7 @@ export function CoachTeachPage({ mode }: {
           <TeachGameOverCard
             result={finishedGame.result}
             byMate={finishedGame.byMate}
+            endWhy={finishedGame.endWhy ?? null}
             onReview={() => { void navigate(`/coach/review/${finishedGame.id}`); }}
             onStay={() => setFinishedGame(null)}
             tally={learnTally}
