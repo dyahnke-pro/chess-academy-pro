@@ -494,7 +494,7 @@ export function helpedYou(fenBefore: string, san: string, student: 'w' | 'b', to
     const now = new Chess(after.fen()); now.move(bestSan);
     const hits = now.attackers(mv.to, student).length > 0;
     const wins = signedLegalSeeFor(asIfToMove(now.fen(), student) ?? now.fen(), mv.to, student) > 0;
-    if (hits && wins && !best.captured) reason = `${sayMoveNoun(bestSan, after.fen())} now comes with gain of time — it hits the ${PIECE[mv.piece]} they just moved`;
+    if (hits && wins && !best.captured) reason = `${sayMoveNoun(bestSan, after.fen())} now comes with gain of time, hitting the ${PIECE[mv.piece]} they just moved`;
   }
   // (a) not possible before their move.
   const asYou = asIfToMove(fenBefore, student);
@@ -516,7 +516,7 @@ export function helpedYou(fenBefore: string, san: string, student: 'w' | 'b', to
   if (!proof) return null;
   const text = rotateStem([
     `Their ${theirs} helps you: ${reason}.`,
-    `Their ${theirs} does you a favour — ${reason}.`,
+    `Their ${theirs} does you a favour: ${reason}.`,
   ], stemKeyOf(after.fen()));
   const squares = [mv.to, best.from, best.to];
   return { kind: 'helped-you', text, proof: { ...proof, squares }, squares, namesMove: true, claim: `helped-you:${mv.to}:${best.to}` };

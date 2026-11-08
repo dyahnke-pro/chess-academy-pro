@@ -29,7 +29,7 @@ import { detectTactics } from './tacticsDetector';
 import type { PlanBeat } from './reviewStrategicOrientation';
 import type { BoardArrow } from '../types';
 import { admitArrows, type ArrowClaim } from './arrowDoor';
-import { withArticle } from '../utils/andList';
+import { andList, withArticle } from '../utils/andList';
 
 /** Every arrow here goes through the arrow door: their piece's sight lines
  *  read red (coming at you), a threat must actually win something. */
@@ -149,7 +149,10 @@ export function buildOpponentMoveTeaching(
         return {
           id: 'opponent-move',
           kind: 'influence',
-          text: `Your opponent's ${movedLabel} steps in eyeing ${eyed.join(' and ')} — contesting the centre.`,
+          // The human register (David 2026-11-08): their piece by name, one
+          // idea a sentence, players' words; the tail ROTATED on the square it
+          // lands on, never rolled.
+          text: `Their ${movedLabel} comes into the game aiming at ${andList(eyed)}. ${['It fights for the centre.', 'That is a bid for the centre.', 'It stakes a claim in the centre.'][(to.charCodeAt(0) + Number(to[1])) % 3]}`,
           // EVERY square the sentence just named. The text says
           // `eyed.join(' and ')` — all of them — while this drew the first two,
           // so the student heard three squares and found two arrows.

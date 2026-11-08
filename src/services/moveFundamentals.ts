@@ -593,7 +593,7 @@ export function computeMoveFundamentals(
     // the composer judged two facts one claim on a square neither said.
     const saidCentral = centralNamed ? squaresWithRole(after, central, mover, 'the', hitSaid) : [];
     const centerTail = (centralNamed ? `, fighting for the center on ${centralNamed}` : '')
-      + (holes.length ? `, eyeing ${andList(holes)}` : '')
+      + (holes.length ? `, aiming at ${andList(holes)}` : '')
       // From the mover's seat, like every fundamental (turned for the other seat downstream).
       + kingZoneClause(nearKing, 'their');
     const tempo = hit ? ` with tempo, hitting the ${hit.name} on ${hit.square}` : '';
@@ -1449,6 +1449,9 @@ function reasonHolds(f: Pick<MoveFundamental, 'id'>, fenBefore: string, mover: '
  *  move, the rule it follows, and WHY the rule holds. The rule is the board's
  *  own imperative clause (`computeMoveFundamentals`), so nothing here is
  *  asserted without proof. */
+/** A clause said as its own sentence: its first letter capitalised. */
+const capFirst = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+
 export function principleOnceLine(
   san: string,
   f: Pick<MoveFundamental, 'imperative' | 'id'> & Pick<MoveFundamental, 'reason'> & Partial<Pick<MoveFundamental, 'led'>>,
@@ -1464,9 +1467,11 @@ export function principleOnceLine(
   // to its name ("Your Bc5: get the last minor piece out" — Learn audit
   // 2026-10-15).
   if (!reason) return f.led ? `Your ${san} ${f.led}.` : `Your ${san}: ${f.imperative}.`;
+  // One idea a sentence (the human register, David 2026-11-08): the rule,
+  // then why it holds — never one 40-word sentence on a dash.
   return rotateStem([
-    `${san} follows a rule worth keeping: ${f.imperative} — ${reason}.`,
-    `The rule behind ${san}: ${f.imperative}, because ${reason}.`,
+    `${san} follows a rule worth keeping: ${f.imperative}. ${capFirst(reason)}.`,
+    `The rule behind ${san}: ${f.imperative}. It matters because ${reason}.`,
   ], stemKey);
 }
 
@@ -1665,8 +1670,8 @@ export function principleContrastLine(
     return {
       id: lead.id,
       text: rotateStem([
-        `${best} was the opening move here — ${lead.imperative}: ${reason}.`,
-        `The opening rule in this spot: ${lead.imperative} (${best}) — ${reason}.`,
+        `${best} was the opening move here: ${lead.imperative}. ${capFirst(reason)}.`,
+        `The opening rule in this spot is to ${lead.imperative}, with ${best}. ${capFirst(reason)}.`,
       ], stemKey),
       squares: lead.squares, first: true, names: null,
     };

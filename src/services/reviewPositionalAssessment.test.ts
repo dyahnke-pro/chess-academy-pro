@@ -87,7 +87,7 @@ describe('the overall verdict is ONE comparison (census P3)', () => {
   it('names the other side of the scale and what it weighs', () => {
     const line = phaseVerdictLine(FEN, 'w', 80, 'middlegame', new Set()) ?? '';
     expect(line).toMatch(/you have the bishop pair/);
-    expect(line).toMatch(/what they have in return: their knight sits on a protected outpost on d4[^;]*, and it keeps it close\.$/);
+    expect(line).toMatch(/On their side, their knight sits on a protected outpost on d4[^;]*, and that keeps it close\.$/);
   });
   it('a counter asset already heard is not said again', () => {
     const line = phaseVerdictLine(FEN, 'w', 80, 'middlegame', new Set(['opponent-good-n-outpost-d4'])) ?? '';

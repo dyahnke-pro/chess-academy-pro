@@ -177,7 +177,7 @@ const EMERGE: Record<Seat, ReadonlyArray<(p: string) => string>> = {
   opponent: [
     (p) => `Their plan is taking shape: ${p}.`,
     (p) => `Here is what they are after: ${p}.`,
-    (p) => `Watch where their moves are going — ${p}.`,
+    (p) => `Watch where their moves are going: ${p}.`,
   ],
   // PRESCRIPTIVE, not descriptive (WO-TEACH-GAPS P2 #1): the read is the
   // engine's plan FOR the student, which they may not be following yet — "your

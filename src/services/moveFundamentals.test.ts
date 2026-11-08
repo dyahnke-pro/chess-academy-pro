@@ -368,7 +368,7 @@ describe('principleContrastLine — the rule the best move kept, on a move that 
   it('1.h4 (owed, silent before): names the rule e4 kept, says nothing about h4', () => {
     const r = principleContrastLine(START, 'h4', 'e4', 'white', new Set(), 0);
     expect(r?.first).toBe(true);
-    expect(r?.text).toMatch(/^e4 was the opening move here — stake out the center/);
+    expect(r?.text).toMatch(/^e4 was the opening move here: stake out the center/);
     expect(r?.text).not.toMatch(/h4/);
   });
   it('a rule already taught is a stem, not the rule again', () => {

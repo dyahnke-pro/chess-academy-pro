@@ -228,10 +228,10 @@ export function maskedWeakness(fen: string, student: Color): StructureRead | nul
     if (!proof) continue;
     return {
       act: 'masked-weakness', squares: [s, ...holes], proof, key: `masked:${s}`,
-      text: `Their weak ${andList(holes)} hide behind the ${noun} on ${s}; chase it with ${push.san} and those squares open up again.`,
+      text: `Their weak ${andList(holes)} hide behind the ${noun} on ${s}. Chase it with ${push.san}, and those squares open up again.`,
       // Held on Learn's live board: the idea, never the push (LEARN NAMES NO
       // MOVE UNASKED — Black walk 2026-10-19, "chase it with c3").
-      heldForm: { text: `Their weak ${andList(holes)} hide behind the ${noun} on ${s}; a pawn push of yours can chase it, and those squares open up again.`, squares: [s, ...holes], proof: squaresProof('their weak squares hide behind the piece covering them', [s, ...holes]) ?? proof },
+      heldForm: { text: `Their weak ${andList(holes)} hide behind the ${noun} on ${s}. A pawn push of yours can chase it, and those squares open up again.`, squares: [s, ...holes], proof: squaresProof('their weak squares hide behind the piece covering them', [s, ...holes]) ?? proof },
     };
   }
   return null;

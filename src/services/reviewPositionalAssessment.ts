@@ -315,7 +315,11 @@ export function phaseVerdictLine(
   // lesson (a prod review said "you were a bit worse" and nothing else).
   if (!a.verdict || a.reasons.length === 0) return null;
   const standing = a.verdict === 'balanced' ? "it's level" : `you're ${a.verdict}`;
-  const why = a.reasons.length === 0 ? '' : ` — ${andList(a.reasons)}`;
+  // ONE IDEA A SENTENCE (the human register, David 2026-11-08): the verdict,
+  // then its reasons, then the other side of the scale — never one sentence
+  // held together by dashes and a semicolon.
+  const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+  const why = a.reasons.length === 0 ? '' : ` ${cap(andList(a.reasons))}.`;
   // ONE COMPARISON, not a list: the other side of the scale, and what it
   // weighs. Level → the two sides' trumps hold each other; slightly → theirs
   // keeps it close; clearly or decisive → it is not enough.
@@ -323,15 +327,17 @@ export function phaseVerdictLine(
   const inReturn = (() => {
     if (counter.length === 0) return '';
     const worse = a.verdict === 'slightly worse' || a.verdict === 'clearly worse' || a.verdict === 'losing';
-    if (a.verdict === 'balanced') return `; on the other side, ${andList(counter)} — and the two hold each other`;
-    const weight = a.verdict !== 'slightly better' && a.verdict !== 'slightly worse' ? "and it isn't enough" : 'and it keeps it close';
-    return `; what ${worse ? 'you have' : 'they have'} in return: ${andList(counter)}, ${weight}`;
+    if (a.verdict === 'balanced') return ` On the other side, ${andList(counter)}, and the two hold each other.`;
+    // The counter items are clauses ("their knight sits on …"), so they are
+    // said as what is on the other side, never as a thing someone "has".
+    const weight = a.verdict !== 'slightly better' && a.verdict !== 'slightly worse' ? "but it isn't enough" : 'and that keeps it close';
+    return ` On ${worse ? 'your' : 'their'} side, ${andList(counter)}, ${weight}.`;
   })();
   // Rotated on the board — the verdict and its reasons never vary.
   return rotateStem([
-    `Taking stock as the ${phase} begins: ${standing}${why}${inReturn}.`,
-    `The ${phase} starts here, so take stock: ${standing}${why}${inReturn}.`,
-    `Before the ${phase} gets going, the balance sheet: ${standing}${why}${inReturn}.`,
+    `Taking stock as the ${phase} begins: ${standing}.${why}${inReturn}`,
+    `The ${phase} starts here, so take stock: ${standing}.${why}${inReturn}`,
+    `Before the ${phase} gets going, the balance sheet: ${standing}.${why}${inReturn}`,
   ], stemKeyOf(fen));
 }
 

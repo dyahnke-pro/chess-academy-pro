@@ -148,7 +148,7 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
   'left-book-early':
     'Before you leave theory, ask what the new move gains that the book move does not. If you cannot say it out loud, prefer the book move — it is there because thousands of games found it works.',
   'no-plan':
-    'Name the target before you touch a piece. Ask what the position wants — a weak pawn, an open file, a passed pawn — and let the move serve that. If a move serves no plan you can say in one sentence, it is not the move.',
+    'Name the target before you touch a piece. Ask what the position wants: a weak pawn, an open file, a passed pawn. Then let the move serve that. If a move serves no plan you can say in one sentence, it is not the move.',
 };
 
 /** The HOW's lead-in, rotated by how many HOWs this ply has already spoken:
@@ -700,7 +700,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       const s = [
         `What was ${f.played} for? The position had a plan — ${f.plan} — and this move serves none of it; ${f.better} does.`,
         `A move without a purpose: the board wanted you to ${f.plan}, and ${f.played} works on something else entirely. ${f.better} was the plan move.`,
-        `Name the target before you move. Here the target was to ${f.plan}; ${f.better} goes there, ${f.played} does not.`,
+        `Name the target before you move. Here the target was to ${f.plan}. ${f.better} goes there, and ${f.played} does not.`,
       ];
       return s[v % s.length];
     }

@@ -3272,7 +3272,7 @@ function quietPurposeFromMoverSeat(
       // Pressure on the king's own squares is a different kind of fact from
       // central influence, and saying so is the teaching — "eyeing e4 and f7"
       // buries the point of Ng5 in a list.
-      return `${verb} the ${REVIEW_PIECE_NAME[mv.piece]} to ${mv.to}, eyeing ${andList(eyes)}`
+      return `${verb} the ${REVIEW_PIECE_NAME[mv.piece]} to ${mv.to}, aiming at ${andList(eyes)}`
         // The mover's seat; `quietPurposePhrase` turns it for an observer.
         + kingZoneClause(kingZoneAmong(eyes, b, moverColor), 'their');
     }

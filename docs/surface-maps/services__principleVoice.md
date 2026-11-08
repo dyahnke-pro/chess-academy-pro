@@ -40,8 +40,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:5701`
-- `src/services/coachFeatureService.ts:5704`
+- `src/services/coachFeatureService.ts:5822`
+- `src/services/coachFeatureService.ts:5825`
 
 ### `fundamentalHow` (function) — 10 call sites
 - `src/services/fundamentalHow.test.ts:26`
@@ -117,7 +117,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `renderFundamentalVerdict` (function) — 55 call sites
 - `src/services/blockedOwnRetreat.test.ts:33`
-- `src/services/coachFeatureService.ts:3210`
+- `src/services/coachFeatureService.ts:3331`
 - `src/services/forcingStemNoDecisive.test.ts:18`
 - `src/services/forcingStemNoDecisive.test.ts:23`
 - `src/services/fundLeadStems.test.ts:60`
@@ -173,12 +173,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct2a.test.ts:173`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:3221`
+- `src/services/coachFeatureService.ts:3342`
 - `src/services/principleVoice.test.ts:40`
 - `src/services/principleVoice.test.ts:42`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:6208`
+- `src/services/coachFeatureService.ts:6320`
 - `src/services/principleVoice.test.ts:50`
 - `src/services/principleVoice.test.ts:55`
 - `src/services/principleVoice.test.ts:59`

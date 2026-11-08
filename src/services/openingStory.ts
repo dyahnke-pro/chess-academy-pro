@@ -488,7 +488,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryBeatFact[] {
     if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH && h.hits.length && holes.includes(h.hole)) {
       say('structure-cost', {
         rests: 'board',
-        text: `That's the price of ${dot(san, student)}: no pawn of yours can cover ${h.hole} again, and ${knightDistance('their', h.from, h.moves)}; ${h.moves === 0 ? 'it hits' : 'from there it would hit'} ${hitWords(now, 'your', h.hits)}. Keeping ${h.hole} guarded is part of this structure from here.`,
+        text: `That's the price of ${dot(san, student)}: no pawn of yours can cover ${h.hole} again, and ${knightDistance('their', h.from, h.moves)}. ${h.moves === 0 ? 'It hits' : 'From there it would hit'} ${hitWords(now, 'your', h.hits)}. Keeping ${h.hole} guarded is part of this structure from here.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
         // ONE HOLE, ONE KEY (dup map #5): every computer that names this hole
         // says it under `hole:<sq>`, so a second reading of it is dropped.
@@ -570,7 +570,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryBeatFact[] {
     if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH && h.hits.length) {
       say('consequence', {
         rests: 'board',
-        text: `${dot(history[t.ply], them)} has a cost for them: no pawn of theirs can cover ${h.hole} again, and ${knightDistance('your', h.from, h.moves)}; ${h.moves === 0 ? 'it hits' : 'from there it would hit'} ${hitWords(now, 'their', h.hits)}.`,
+        text: `${dot(history[t.ply], them)} has a cost for them: no pawn of theirs can cover ${h.hole} again, and ${knightDistance('your', h.from, h.moves)}. ${h.moves === 0 ? 'It hits' : 'From there it would hit'} ${hitWords(now, 'their', h.hits)}.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn of theirs to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
         key: holeKey(h.hole), aim: `plan-aim:outpost:${h.hole}`,
         ...(h.moves === 1 ? { names: [{ from: h.from, to: h.hole }] } : {}),

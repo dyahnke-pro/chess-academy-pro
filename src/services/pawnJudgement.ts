@@ -363,6 +363,6 @@ export function formationChoice(
   return {
     act: 'formation', squares: built.squares, proof, key: `formation-choice:${built.key}`, stakes: costStakes(cpLoss) ?? undefined,
     text: `Of the pawn moves, ${bare(bestSan)} was the one: it makes ${withArticle(kind)} ${withPawns}, and ${bare(san)} builds nothing.`,
-    ...heldOf(`${bare(san)} builds nothing; another pawn move makes ${withArticle(kind)}.`, [played.mv.to]),
+    ...heldOf(`${bare(san)} builds nothing. Another pawn move makes ${withArticle(kind)}.`, [played.mv.to]),
   };
 }

@@ -82,7 +82,7 @@ describe('openingStory — Najdorf, English Attack (student Black)', () => {
     expect(beat(story(NAJDORF, 15, 'b'), 'structure-paid')?.text).toBe('…Be6 pays that price: your bishop now guards d5.');
   });
   it('…e5 names its built-in cost, and …Be6 pays it', () => {
-    expect(beat(story(NAJDORF, 12, 'b'), 'structure-cost')?.text).toBe("That's the price of …e5: no pawn of yours can cover d5 again, and their knight on c3 is one move from it; from there it would hit your knight on f6. Keeping d5 guarded is part of this structure from here.");
+    expect(beat(story(NAJDORF, 12, 'b'), 'structure-cost')?.text).toBe("That's the price of …e5: no pawn of yours can cover d5 again, and their knight on c3 is one move from it. From there it would hit your knight on f6. Keeping d5 guarded is part of this structure from here.");
     expect(beat(story(NAJDORF, 14, 'b'), 'structure-paid')?.text).toBe('…Be6 pays that price: your bishop now guards d5.');
   });
   it('before the race arrives, master games say their king goes to the other wing', () => {
@@ -111,7 +111,7 @@ describe('openingStory — Smith-Morra (student White)', () => {
     // The jump (Nc3–d5) is the student's to play now: a surface that may name
     // the student's next move gets the beat, marked as naming it…
     const c = beat(story(SMITH_MORRA, 18, 'w', true), 'consequence');
-    expect(c?.text).toBe('…e5 has a cost for them: no pawn of theirs can cover d5 again, and your knight on c3 is one move from it; from there it would hit their bishop on e7 and knight on f6.');
+    expect(c?.text).toBe('…e5 has a cost for them: no pawn of theirs can cover d5 again, and your knight on c3 is one move from it. From there it would hit their bishop on e7 and knight on f6.');
     expect(c?.namesStudentMove).toBe(true);
     // …and Learn's live board, which may not, never receives it (OS-10).
     expect(beat(story(SMITH_MORRA, 18, 'w'), 'consequence')).toBeUndefined();

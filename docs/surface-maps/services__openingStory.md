@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5786) — names `openingStory`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5838) — names `openingStory`
 
 ## Who calls in
 
@@ -39,7 +39,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openingStoryAt` (function) — 12 call sites
-- `src/services/boardComputers.ts:398`
+- `src/services/boardComputers.ts:402`
 - `src/services/holeKey.test.ts:15`
 - `src/services/learnBoardTeaching.test.ts:216`
 - `src/services/openingStory.test.ts:23`

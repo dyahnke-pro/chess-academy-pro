@@ -152,7 +152,7 @@ describe('squareJudgement', () => {
   it('masked weakness: the c6 knight hides their holes; b5 chases it', () => {
     const fen = legal('6k1/pp4pp/2n5/8/1P6/8/P4PPP/6K1 w - - 0 20');
     const r = voiced(maskedWeakness(fen, 'w'));
-    expect(r.text).toMatch(/^Their weak d4 and e5 hide behind the knight on c6; chase it with b5/);
+    expect(r.text).toMatch(/^Their weak d4 and e5 hide behind the knight on c6\. Chase it with b5/);
     // No pawn can chase it: silent.
     expect(maskedWeakness(legal('6k1/pp4pp/2n5/8/8/8/P4PPP/6K1 w - - 0 20'), 'w')).toBeNull();
   });

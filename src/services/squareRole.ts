@@ -117,7 +117,7 @@ function squareRoleWords(
   // A hole has no square to name its owner by, so with no seat it is not said.
   if (!coverable && rank >= 3 && rank <= 6 && owner !== 'the') {
     const hole = `a square no pawn of ${owner === 'your' ? 'yours' : 'theirs'} can cover`;
-    return { full: hole, bare: `eyeing ${hole}` };
+    return { full: hole, bare: `aiming at ${hole}` };
   }
   // A SQUARE THEIR PIECE WANTS: one of their minor or major pieces reaches it.
   const wantsAt = chess.attackers(sq, them).find((s) => { const p = chess.get(s); return !!p && p.type !== 'p' && p.type !== 'k' && !named.has(s); });

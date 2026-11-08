@@ -40,9 +40,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `aimsOf` (function) — 11 call sites
-- `src/services/lookaheadPlan.ts:1616`
-- `src/services/lookaheadPlan.ts:1619`
-- `src/services/lookaheadPlan.ts:1752`
+- `src/services/lookaheadPlan.ts:1624`
+- `src/services/lookaheadPlan.ts:1627`
+- `src/services/lookaheadPlan.ts:1760`
 - `src/services/planArc.heldAnnouncement.test.ts:29`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
@@ -64,16 +64,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `standingPlans` (function) — 5 call sites
-- `src/services/coachApi.ts:6387`
+- `src/services/coachApi.ts:6347`
 - `src/services/planArc.standing.test.ts:12`
 - `src/services/planArc.standing.test.ts:18`
 - `src/services/planArc.standing.test.ts:26`
 - `src/services/planArc.standing.test.ts:28`
 
 ### `withAnnouncement` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11612`
-- `src/components/Coach/CoachTeachPage.tsx:11613`
-- `src/components/Coach/CoachTeachPage.tsx:12250`
+- `src/components/Coach/CoachTeachPage.tsx:11679`
+- `src/components/Coach/CoachTeachPage.tsx:11680`
+- `src/components/Coach/CoachTeachPage.tsx:12307`
 - `src/services/planArc.heldAnnouncement.test.ts:32`
 
 ### `EMPTY_ARC` (const) — 0 call sites
@@ -90,9 +90,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.test.ts:339`
 
 ### `stepArc` (function) — 37 call sites
-- `src/services/lookaheadPlan.ts:1616`
-- `src/services/lookaheadPlan.ts:1619`
-- `src/services/lookaheadPlan.ts:1753`
+- `src/services/lookaheadPlan.ts:1624`
+- `src/services/lookaheadPlan.ts:1627`
+- `src/services/lookaheadPlan.ts:1761`
 - `src/services/planArc.heldAnnouncement.test.ts:29`
 - `src/services/planArc.standing.test.ts:16`
 - `src/services/planArc.standing.test.ts:22`
@@ -129,9 +129,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/thinkMarkClosed.gate.test.ts:77`
 
 ### `aimWalkableNow` (function) — 20 call sites
-- `src/services/lookaheadPlan.ts:1616`
-- `src/services/lookaheadPlan.ts:1619`
-- `src/services/lookaheadPlan.ts:1752`
+- `src/services/lookaheadPlan.ts:1624`
+- `src/services/lookaheadPlan.ts:1627`
+- `src/services/lookaheadPlan.ts:1760`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
 - `src/services/planArc.test.ts:211`
