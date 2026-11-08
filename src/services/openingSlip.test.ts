@@ -5,7 +5,7 @@
 // different line with no tactic in it still spoke.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { openingSlip, bookFromLines, type OpeningBook } from './openingSlip';
+import { openingSlip, bookFromLines, bookMoveRead, type OpeningBook } from './openingSlip';
 import { bookLinesThrough } from './openingDetectionService';
 import { bookMoveWhy } from './bookMoveWhy';
 import { findPins } from './pinGeometry';
@@ -108,5 +108,23 @@ describe('the pro\'s book (Openings Play rung)', () => {
   });
   it('a board his lines do not reach is thin: the caller reads the masters', () => {
     expect(bookFromLines(lines, ['d4'])).toBeNull();
+  });
+});
+
+describe('the Play rung reads the same computer, move by move (bookMoveRead)', () => {
+  const najdorf = [['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6']];
+  it('a move of the pro\'s line is book', () => {
+    expect(bookMoveRead(['e4', 'c5', 'Nf3'], 'w', najdorf)).toEqual({ left: false, text: null, squares: [] });
+  });
+  it('their move off his line: "They left the book with …" — Learn\'s own words', () => {
+    expect(bookMoveRead(['e4', 'c5', 'Nf3', 'Nc6'], 'w', najdorf)?.text).toBe('They left the book with the knight to c6.');
+  });
+  it('the student\'s move off his line says the opening slip — 5.Bd3 hands them the pawn on e4', () => {
+    const r = bookMoveRead(['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Bd3'], 'w', najdorf);
+    expect(r?.left).toBe(true);
+    expect(r?.text ?? 'silent').toMatch(/knight to c3|silent/);
+  });
+  it('a board his lines never reach, with the masters\' moves not in memory: no claim', () => {
+    expect(bookMoveRead(['d4', 'd5', 'c4'], 'w', najdorf)).toBeNull();
   });
 });

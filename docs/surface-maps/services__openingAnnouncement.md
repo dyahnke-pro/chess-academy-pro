@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**309 lines · 10 exports · 7 importers · 6 tests · 1 audits**
+**315 lines · 11 exports · 9 importers · 6 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,18 +13,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/components/Openings/OpeningPlayMode.tsx`
 - `src/services/coachFeatureService.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/openingAnnouncement.test.ts`
 - `src/services/openingPositions.test.ts`
+- `src/services/openingSlip.ts`
 - `src/services/openingStory.ts`
 - `src/services/walkOct2a.test.ts`
 
 ## Exports and every call site
 
 ### `spokenOpeningLabel` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9513`
-- `src/components/Coach/CoachTeachPage.tsx:9524`
+- `src/components/Coach/CoachTeachPage.tsx:9598`
+- `src/components/Coach/CoachTeachPage.tsx:9609`
 - `src/services/openingAnnouncement.test.ts:150`
 - `src/services/openingAnnouncement.test.ts:153`
 
@@ -60,37 +62,41 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingPositions.test.ts:32`
 - `src/services/walkOct2a.test.ts:72`
 
+### `leftBookSentence` (function) — 1 call site
+- `src/services/openingSlip.ts:439`
+
 ### `departureAgainstPlan` (function) — 3 call sites
 - `src/services/openingAnnouncement.test.ts:222`
 - `src/services/openingAnnouncement.test.ts:227`
 - `src/services/openingAnnouncement.test.ts:232`
 
 ### `openingAnnouncementForGame` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9525`
-- `src/services/coachFeatureService.ts:2351`
+- `src/components/Coach/CoachTeachPage.tsx:9610`
+- `src/services/coachFeatureService.ts:2490`
 - `src/services/openingAnnouncement.test.ts:167`
 - `src/services/openingAnnouncement.test.ts:168`
 
-### `warmOpeningBook` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:1069`
+### `warmOpeningBook` (function) — 2 call sites
+- `src/components/Coach/CoachTeachPage.tsx:1082`
+- `src/components/Openings/OpeningPlayMode.tsx:435`
 
 ### `studentJustLeftBook` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12712`
-- `src/components/Coach/CoachTeachPage.tsx:12769`
+- `src/components/Coach/CoachTeachPage.tsx:12776`
+- `src/components/Coach/CoachTeachPage.tsx:12833`
 - `src/services/openingAnnouncement.test.ts:173`
 - `src/services/openingAnnouncement.test.ts:182`
 - `src/services/openingAnnouncement.test.ts:183`
 - `src/services/openingAnnouncement.test.ts:184`
 
 ### `openingNameForBoard` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9502`
-- `src/services/coachFeatureService.ts:2345`
+- `src/components/Coach/CoachTeachPage.tsx:9587`
+- `src/services/coachFeatureService.ts:2484`
 - `src/services/openingPositions.test.ts:30`
-- `src/services/openingStory.ts:186`
+- `src/services/openingStory.ts:187`
 
 ### `theirOpeningVerdict` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:13217`
-- `src/services/coachFeatureService.ts:2578`
+- `src/components/Coach/CoachTeachPage.tsx:13281`
+- `src/services/coachFeatureService.ts:2740`
 - `src/services/openingAnnouncement.test.ts:205`
 - `src/services/openingAnnouncement.test.ts:206`
 - `src/services/openingAnnouncement.test.ts:210`
@@ -98,7 +104,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:212`
 
 ### `learnNameMaySpeak` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9516`
+- `src/components/Coach/CoachTeachPage.tsx:9601`
 - `src/services/openingAnnouncement.test.ts:257`
 - `src/services/openingAnnouncement.test.ts:258`
 - `src/services/openingAnnouncement.test.ts:261`
@@ -110,7 +116,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:285`
 
 ### `openingIdeaCanCome` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9521`
+- `src/components/Coach/CoachTeachPage.tsx:9606`
 - `src/services/openingAnnouncement.test.ts:276`
 - `src/services/openingAnnouncement.test.ts:284`
 - `src/services/openingAnnouncement.test.ts:287`

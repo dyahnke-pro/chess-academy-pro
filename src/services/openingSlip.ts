@@ -37,6 +37,7 @@ import { andList } from '../utils/andList';
 import { masterMovesCachedSync } from './masterPlayLookup';
 import { MIN_BOOK_GAMES } from './bookDeparture';
 import { bookLinesThrough } from './openingDetectionService';
+import { leftBookSentence } from './openingAnnouncement';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -50,7 +51,7 @@ export interface OpeningBook {
   lines: readonly (readonly string[])[];
 }
 
-export type SlipKind = 'order' | 'square' | 'line';
+type SlipKind = 'order' | 'square' | 'line';
 
 /** A tactic one move changes: a shot it hands them, or one it gives up. */
 interface Shot {
@@ -60,7 +61,7 @@ interface Shot {
   squares: string[];
 }
 
-export interface OpeningSlip {
+interface OpeningSlip {
   kind: SlipKind;
   /** The book move the student left. */
   bookSan: string;
@@ -407,4 +408,35 @@ export function mastersBook(history: readonly string[]): OpeningBook | null {
   if (moves.length === 0) return null;
   const inBook = new Set(moves.map(cleanSan));
   return { moves, lines: bookLinesThrough(history).filter((l) => inBook.has(cleanSan(l[0]))) };
+}
+
+/**
+ * THE BOOK READ OF THE MOVE JUST PLAYED on a taught line — the Openings Play
+ * rung, move by move, until the game leaves the book (David 2026-11-08: Learn
+ * and the Play rung say it identically; "say when they leave the book"). The
+ * book is the pro's pet lines, the masters' where those are thin.
+ *  · null — the book at the board before the move is unknown: no claim;
+ *  · `left: false` — the move is book;
+ *  · `left: true` — the move left the book. The student's move says the
+ *    opening slip (null text: it does not matter); theirs says that they left
+ *    (`leftBookSentence`, the words Learn's opening lane says).
+ */
+export function bookMoveRead(history: readonly string[], student: Color, proLines: readonly (readonly string[])[]): { left: boolean; text: string | null; squares: string[] } | null {
+  if (history.length === 0) return null;
+  const before = history.slice(0, -1);
+  let fen: string;
+  let mover: Color;
+  try {
+    const c = new Chess();
+    for (const s of before) c.move(s);
+    fen = c.fen();
+    mover = c.turn();
+  } catch { return null; }
+  const book = bookFromLines(proLines, before) ?? mastersBook(before);
+  if (!book) return null;
+  const san = history[history.length - 1];
+  if (book.moves.some((m) => cleanSan(m) === cleanSan(san))) return { left: false, text: null, squares: [] };
+  if (mover !== student) return { left: true, text: leftBookSentence('They', san, fen), squares: [] };
+  const s = openingSlip({ fen, playedSan: san, book, student });
+  return { left: true, text: s?.text ?? null, squares: s?.squares ?? [] };
 }

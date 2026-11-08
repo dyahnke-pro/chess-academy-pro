@@ -555,7 +555,10 @@ export function toClause(sentence: string): string {
   // A VERB-LED sentence ("Stakes a claim in the center and opens lines") has
   // no subject of its own; after "You play e4," it read "You play e4, stakes
   // a claim…". It gets one: "it stakes a claim", joined with a dash below.
-  return /^(The|A|An|This|That)\b/.test(s) ? clause : `it ${clause}`;
+  // "Your knight …" / "Their knight …" HAVE a subject (the board teacher names
+  // whose piece since 2026-11-08): read as verb-led, they became "it their
+  // knight joins the fight" on every Review and lesson turn.
+  return /^(The|A|An|This|That|Your|Their)\b/.test(s) ? clause : `it ${clause}`;
 }
 
 /** Join the ranked aspect clauses into one review-register sentence, seat-stamped:
@@ -576,7 +579,8 @@ export function joinReview(clauses: string[], moverIsStudent: boolean | undefine
   // The move just named its piece: "You play Nf3 — the knight trains on …"
   // says the knight twice. The piece it names is "it".
   const named = SAN_PIECE[cleanSan(san)[0]] ?? (/^[a-h]/.test(cleanSan(san)) ? 'pawn' : null);
-  const said = named && body.startsWith(`the ${named} `) ? `it ${body.slice(`the ${named} `.length)}` : body;
+  const own = named ? /^(?:the|your|their) /.exec(body) : null;
+  const said = named && own && body.startsWith(`${own[0]}${named} `) ? `it ${body.slice(`${own[0]}${named} `.length)}` : body;
   // A clause that carries its own dash takes a colon, so one sentence never
   // holds two dashes ("Be6 — it unpins … — and the bishop eyes …").
   const joiner = /^\w+ing\b/.test(said) ? ', ' : said.includes(' — ') ? ': ' : ' — ';
