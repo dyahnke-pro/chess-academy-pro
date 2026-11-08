@@ -17,10 +17,20 @@
  * background analysis), and so is every record writer: a computer reached only
  * to WRITE the record reaches no eyes or ears.
  *
- * Learn is yes / held / no. Learn free play is always a tactics-focus game, so
- * its door holds every lane (CLAUDE.md § LEARN FOCUS): "held" = computed in a
- * Learn turn and held by the door; "yes" = reaches the student through the
- * focus runner.
+ * Learn is yes / door / no. "door" = computed in a Learn turn and handed to
+ * Learn's turn door, which decides every turn of a focus game as it does an
+ * open one (CLAUDE.md § LEARN FOCUS, "THE TURN DOOR IS THE ONE VOICE", David
+ * 2026-10-30): it speaks when the door keeps it. "yes" = reaches the student
+ * through the focus runner. (The label read "held" until 2026-11-08 — from
+ * when the focus door held every lane — and the report called those rows
+ * "wired nowhere".)
+ *
+ * A computer whose only surface is Learn's door carries a `door` row in the
+ * catalog saying why: an `adapter` (Learn's wording of a computer the other
+ * surfaces read too — the wrapped computers named in `of`), or `learn-only`
+ * (a live question the student answers before the move, a pacing device, the
+ * record read for the greeting). A row with neither is a computer Review and
+ * the other surfaces have yet to say.
  *
  * Limits, named: static paths only, so runtime switches are not modelled
  * (Play's PLAY_VOLUNTEERS_COACHING=false is handled by leaving Play's live
@@ -393,7 +403,7 @@ for (const c of computers) {
   if (nodes.length === 0 || !nodes.some((n) => known.has(n))) missing.push(`${c.file}#${c.fn}`);
   const any = (set) => nodes.some((n) => set.has(n));
   const st = {
-    learn: any(S.learnWired) ? 'yes' : any(S.learnAll) ? 'held' : 'no',
+    learn: any(S.learnWired) ? 'yes' : any(S.learnAll) ? 'door' : 'no',
     review: any(S.review) ? 'yes' : 'no',
     lesson: any(S.lesson) ? 'yes' : 'no',
     chat: any(S.chat) ? 'yes' : 'no',
@@ -410,6 +420,9 @@ for (const c of computers) {
   if (c.registry) row.registry = c.registry;
   if (c.folded) row.folded = c.folded;
   if (c.learnOverride) row.learnOverride = c.learnOverride.why;
+  // An adapter's wrapped computers, each with where it reaches: an adapter
+  // whose computer Review never reads is a gap, not an adapter.
+  if (c.door) row.door = { ...c.door, ...(c.door.of ? { ofReach: Object.fromEntries(c.door.of.map((k) => [k, known.has(k) ? Object.fromEntries(SURFACES.filter((sf) => sf !== 'learn').map((sf) => [sf, S[sf].has(k) ? 'yes' : 'no'])) : 'not a node'])) } : {}) };
   if (!SURFACES.some((s) => st[s] === 'yes')) {
     const p = app ? firstPath(nodes) : null;
     if (!p) row.where = 'dead (no production caller)';
@@ -425,23 +438,24 @@ rows.sort((a, b) => a.file.localeCompare(b.file) || a.fn.localeCompare(b.fn));
 
 const count = (s, v) => rows.filter((r) => r[s] === v).length;
 const nowhere = rows.filter((r) => SURFACES.every((s) => r[s] !== 'yes'));
-const heldOnly = nowhere.filter((r) => r.learn === 'held');
+const doorOnly = nowhere.filter((r) => r.learn === 'door');
 const dead = nowhere.filter((r) => !r.app);
-const elsewhere = nowhere.filter((r) => r.learn !== 'held' && r.app);
+const elsewhere = nowhere.filter((r) => r.learn !== 'door' && r.app);
 const report = {
-  about: 'Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, held = computed in a Learn turn and held by the door.',
+  about: 'Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, door = computed in a Learn turn and decided by Learn\'s turn door (spoken when the door keeps it); a door-only row says why in `door` (an adapter of computers the other surfaces read, or Learn-only by design).',
   graph: { files: G.fileCount, nodes: NODES.length },
   totals: {
     computers: rows.length,
-    wiredNowhere: nowhere.length,
-    heldByLearnOnly: heldOnly.length,
+    offTheSixSurfaces: nowhere.length,
+    learnDoorOnly: doorOnly.length,
+    learnDoorOnlyUnexplained: doorOnly.filter((r) => !r.door).length,
     otherScreensOnly: elsewhere.length,
     dead: dead.length,
     missingFromCode: missing.length,
-    surfaces: Object.fromEntries(SURFACES.map((s) => [s, { yes: count(s, 'yes'), ...(s === 'learn' ? { held: count(s, 'held') } : {}), no: count(s, 'no') }])),
+    surfaces: Object.fromEntries(SURFACES.map((s) => [s, { yes: count(s, 'yes'), ...(s === 'learn' ? { door: count(s, 'door') } : {}), no: count(s, 'no') }])),
   },
-  wiredNowhere: {
-    heldByLearnOnly: heldOnly.map((r) => r.key),
+  offTheSixSurfaces: {
+    learnDoorOnly: doorOnly.map((r) => r.key),
     otherScreensOnly: elsewhere.map((r) => r.key),
     dead: dead.map((r) => r.key),
   },
@@ -472,11 +486,11 @@ if (process.argv.includes('--verify')) {
     console.error(`computer-reach --verify FAILED:\n  ${problems.join('\n  ')}`);
     process.exit(1);
   }
-  console.log(`computer-reach --verify: fresh (${rows.length} computers, ${nowhere.length} wired nowhere)`);
+  console.log(`computer-reach --verify: fresh (${rows.length} computers, ${nowhere.length} on none of the six surfaces)`);
   process.exit(0);
 }
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, text);
-console.log(`computer-reach: ${rows.length} computers, ${nowhere.length} wired nowhere (${heldOnly.length} held by Learn only, ${elsewhere.length} other screens only, ${dead.length} dead)${missing.length ? `, ${missing.length} MISSING from the code: ${missing.join(', ')}` : ''}`);
-for (const s of SURFACES) console.log(`  ${s.padEnd(8)} yes ${count(s, 'yes')}${s === 'learn' ? ` held ${count(s, 'held')}` : ''} no ${count(s, 'no')}`);
+console.log(`computer-reach: ${rows.length} computers, ${nowhere.length} on none of the six surfaces (${doorOnly.length} only through Learn's turn door — ${doorOnly.filter((r) => !r.door).length} unexplained, ${elsewhere.length} other screens only, ${dead.length} dead)${missing.length ? `, ${missing.length} MISSING from the code: ${missing.join(', ')}` : ''}`);
+for (const s of SURFACES) console.log(`  ${s.padEnd(8)} yes ${count(s, 'yes')}${s === 'learn' ? ` door ${count(s, 'door')}` : ''} no ${count(s, 'no')}`);
 console.log(`→ ${path.relative(ROOT, OUT)}`);

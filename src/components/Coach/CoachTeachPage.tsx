@@ -11582,7 +11582,7 @@ export function CoachTeachPage({ mode }: {
                         : null;
                       if (rt) {
                         captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });
-                        queueSpokenHint(probe.fen(), { computer: 'buildRejectedTempting', text: packageForRegister(rt.hint, discussion.hintDial.register), lane: 'rejectedTempting', proof: legalLineProof(probe.fen(), [rt.temptingSan, rt.refutationSan], lineSeatAt(probe.fen(), playerColor === 'white' ? 'w' : 'b')) ?? squaresProof(packageForRegister(rt.hint, discussion.hintDial.register), [rt.refutation.from, rt.refutation.to]) ?? NO_PROOF.description, namesStudentMove: false, squares: [rt.refutation.from, rt.refutation.to], claims: [`tempting:${rt.temptingSan}:${probe.fen().split(' ').slice(0, 2).join(' ')}`], arrows: [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }] });
+                        queueSpokenHint(probe.fen(), { computer: 'buildRejectedTempting', text: packageForRegister(rt.hint, discussion.hintDial.register), lane: 'rejectedTempting', proof: legalLineProof(probe.fen(), [rt.temptingSan, rt.refutationSan], lineSeatAt(probe.fen(), playerColor === 'white' ? 'w' : 'b')) ?? squaresProof(packageForRegister(rt.hint, discussion.hintDial.register), [rt.refutation.from, rt.refutation.to]) ?? NO_PROOF.description, namesStudentMove: false, squares: [rt.refutation.from, rt.refutation.to], claims: [rt.claim], arrows: [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }] });
                       }
                     }
 

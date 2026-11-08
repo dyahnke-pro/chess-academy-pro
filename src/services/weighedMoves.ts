@@ -39,6 +39,7 @@ import { seatCp, expectedScore } from './winChance';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { pieceRef } from './pieceRef';
 import { openSentence } from '../utils/openSentence';
+import { temptingKey } from './conceptKey';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -283,7 +284,7 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
       : rotateStem([`${c.san} was tempting for them, but it fails`, `${c.san} looked natural for them, but it doesn't work`], stemKeyOf(`${args.fenBefore}|${c.uci}`));
     const text = `${lead}: ${lineShape(sans, w.otherLine)}${result}.`;
     const sq = blowSquare(sans);
-    const key = `tempting:${c.uci}`;
+    const key = temptingKey(c.uci);
     out.push({
       real, san: c.san, uci: c.uci, eye: c.eye, costCp: Math.round(cost), reason: r, text,
       squares: [...new Set([c.from, c.to, ...(sq ? [sq] : [])])],
