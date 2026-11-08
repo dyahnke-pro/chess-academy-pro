@@ -42,7 +42,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `quietMovePoint` (function) — 7 call sites
-- `src/services/playCommentary.ts:920`
+- `src/services/playCommentary.ts:918`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
 - `src/services/reviewWalkOct1.test.ts:71`

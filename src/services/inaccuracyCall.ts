@@ -259,8 +259,8 @@ function boardHalfReason(fenBefore: string, bestSan: string, moverColor: 'white'
 }
 
 const IRREGULAR_BASE: Record<string, string> = { has: 'have', is: 'be', does: 'do', goes: 'go' };
-/** "attacks the rook; it also protects e5" → "attack the rook; it would also
- *  protect e5" — every clause-leading verb of a why-best reason, in the base
+/** "attacks the rook, and it also protects e5" → "attack the rook, and it
+ *  would also protect e5" — every clause-leading verb of a why-best reason, in the base
  *  form a conditional takes. Only a word that opens a clause and reads as a
  *  third-person verb changes; nouns ("the king and rook") are left alone. */
 export function conditionalJobs(reason: string): string {
@@ -268,11 +268,11 @@ export function conditionalJobs(reason: string): string {
     ?? (/(?:ch|sh|ss|x|z)es$/.test(w) ? w.slice(0, -2) : /[^s]s$/.test(w) ? w.slice(0, -1) : w);
   const VERB = /^(takes|wins|attacks|develops|repositions|grabs|protects|saves|forks|opens|pins|stakes|pushes|brings|marches|eyes|steps|lands|completes|castles|swings|prepares|supports|guards|breaks|checks|fights|puts|owns|goes|gives|promotes|plants|keeps|ends|piles|lines|starts|trades|threatens|covers|defends|adds|blocks|frees|clears|creates|removes|traps|skewers|delivers|hits|stops|has|is|does|makes|seizes|doubles|reroutes|retreats|recaptures|unpins|connects|activates|centralizes|improves|walks|kicks|chases)\b/;
   return reason
-    .replace(/; it also /g, '; it would also ')
-    .split(/(; it would also |, and | and |, )/)
+    .replace(/, and it also /g, ', and it would also ')
+    .split(/(, and it would also |, and | and |, )/)
     .map((seg, i, all) => {
       if (i % 2 === 1) return seg;
-      const lead = i === 0 || all[i - 1] === '; it would also ' || VERB.test(seg);
+      const lead = i === 0 || all[i - 1] === ', and it would also ' || VERB.test(seg);
       const m = VERB.exec(seg);
       return lead && m ? base(m[1]) + seg.slice(m[1].length) : seg;
     })

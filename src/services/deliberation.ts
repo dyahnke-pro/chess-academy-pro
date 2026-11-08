@@ -659,14 +659,14 @@ export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', oppone
   const took = bareCaptureLead(fenBefore, san);
   if (took) {
     const extras = extraJobs(fenBefore, san);
-    return extras.length ? `${took}; it also ${andList(extras)}` : took;
+    return extras.length ? `${took}, and it also ${andList(extras)}` : took;
   }
   // SEVERAL JOBS AT ONCE (catalogue §3; game 1, Bf4: "it develops the bishop,
   // protects the pawn and sets up a potential x-ray"): the fundamental, plus
   // the guard it adds and the x-ray it lines up.
   const strategic = strategicWhyLed(fenBefore, san, mover === 'w' ? 'white' : 'black');
   const extras = extraJobs(fenBefore, san);
-  if (strategic && extras.length > 0) return `${strategic}; it also ${andList(extras)}`;
+  if (strategic && extras.length > 0) return `${strategic}, and it also ${andList(extras)}`;
   if (extras.length > 0) return andList(extras);
   return strategic ?? checkWhy(fenBefore, san);
 }

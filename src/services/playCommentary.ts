@@ -515,9 +515,7 @@ export function buildPriorityFirst(args: {
       anchor: `Their pawn on ${target.square} is ${flawWord}. ${flawWhy}`,
       detail: `Aim at it: ${moved.san} does.`,
       // The isolated pawn's why already said no pawn can defend it.
-      stakes: isolated
-        ? `Every piece aimed at ${target.square} keeps working for free.`
-        : `A pawn like that cannot be defended by a pawn, so every piece aimed at ${target.square} keeps working for free.`,
+      stakes: openSentence(`${isolated ? '' : 'A pawn like that cannot be defended by a pawn, so '}every piece aimed at ${target.square} keeps working for free.`),
       resolve: (m) => {
         if (posKey(m.fenBefore) !== posKey(args.fen)) return null;
         if (m.san.replace(/[+#]/g, '') === moved.san.replace(/[+#]/g, '')) return `You found it. ${moved.san} aims at their pawn on ${target.square}, the priority.`;
