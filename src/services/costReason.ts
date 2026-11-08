@@ -95,6 +95,30 @@ function lead(fen: string, winner: 'w' | 'b'): number {
   return winner === 'w' ? w - b : b - w;
 }
 
+/** WHAT THE OTHER MOVE GIVES THE WINNER TOO (Learn replay of his Scotch Gambit,
+ *  2026-11-08, 8…d6: "Nce7 looks natural, but it doesn't work: they play Nxc3 —
+ *  they win a pawn" — and d6 lost the same c3 pawn to the Qxc3 they played).
+ *  A cost is a DIFFERENCE between two moves, so its reason is the material the
+ *  costly line wins beyond what the other move's line also gives the same
+ *  side. What `winner` nets along `line` (UCI from `fenBefore`, its first move
+ *  included), in pawns, a mate 100; 0 when the line is unknown, ends
+ *  unsettled (it proves nothing), or nets the winner nothing. */
+function otherNet(
+  fenBefore: string, line: readonly string[] | null, winner: 'w' | 'b', student: 'w' | 'b',
+  /** Counted the way the walk it is compared with counts (a 'missed' walk
+   *  starts its ledger before the move that led here). */
+  prior: { fenBefore: string; san: string } | null,
+): number {
+  if (!line || line.length === 0) return 0;
+  const { sans, plies } = replay(fenBefore, line);
+  if (sans.length === 0) return 0;
+  const p = proofCut(fenBefore, sans, student, prior);
+  if (!p) return 0;
+  if (p.mate) return plies[Math.min(p.plies, plies.length) - 1]?.moverColor === (winner === 'w' ? 'white' : 'black') ? 100 : 0;
+  if (!p.ledger?.settled) return 0;
+  return Math.max(0, (winner === student ? 1 : -1) * p.ledger.netPawns);
+}
+
 function walk(
   fen: string, read: LineRead, winner: 'w' | 'b', student: 'w' | 'b', need: number,
   prior: { fenBefore: string; san: string } | null,
@@ -103,6 +127,9 @@ function walk(
    *  alone "you give up a rook and a pawn for a rook and a bishop" was false,
    *  White ended a queen up). The played move, when the line follows it. */
   countFrom: { fenBefore: string; san: string } | null,
+  /** What the other move's line gives the winner too (`otherNet`): a blow is
+   *  the reason only past it. */
+  given: number,
 ): Omit<CostReason, 'seat' | 'kind'> | null {
   const { sans, plies } = replay(fen, read.uci);
   if (sans.length === 0) return null;
@@ -123,10 +150,10 @@ function walk(
     if (!p || p.plies < 1) continue;
     if (p.mate) {
       const mater = plies[Math.min(p.plies, plies.length) - 1]?.moverColor;
-      if (mater === (winner === 'w' ? 'white' : 'black')) proof = p;
+      if (mater === (winner === 'w' ? 'white' : 'black') && given < 100) proof = p;
       continue;
     }
-    if (!p.ledger?.settled || sign * p.ledger.netPawns < need) continue;
+    if (!p.ledger?.settled || sign * p.ledger.netPawns - given < need) continue;
     const at = plies[Math.min(p.plies, plies.length) - 1]?.fenAfter;
     if (at && p.sans.length <= plies.length) {
       const blowLead = lead(at, winner);
@@ -186,6 +213,16 @@ export function costReason(args: {
   before: LineRead | null;
   /** The move that led to `fenBefore`, so a recapture is half a trade. */
   priorMove: { fenBefore: string; san: string } | null;
+  /** REQUIRED — the line of the move this cost is MEASURED AGAINST, UCI from
+   *  `fenBefore` with its first move: the better move's line for an
+   *  'allowed' reason (a candidate weighed against the move played, the
+   *  played move against the best), the played move's line for a 'missed'
+   *  one. A reason is what the costly line wins beyond what this line also
+   *  gives the same side (`otherNet`). Null: none is known — then a call
+   *  that carries both reads compares each with the other (the best line for
+   *  'allowed', the played move and its reply line for 'missed'), and a call
+   *  with one reads it alone. */
+  against: readonly string[] | null;
 }): CostReason | null {
   if (!(args.costCp >= 100)) return null;
   const seat: 'you' | 'them' = args.mover === args.student ? 'you' : 'them';
@@ -194,11 +231,14 @@ export function costReason(args: {
   let fenAfter: string | null = null;
   try { const c = new Chess(args.fenBefore); c.move(args.playedSan); fenAfter = c.fen(); } catch { fenAfter = null; }
   if (fenAfter && args.after) {
-    const a = walk(fenAfter, args.after, other, args.student, need, null, { fenBefore: args.fenBefore, san: args.playedSan });
+    const against = args.against ?? args.before?.uci ?? null;
+    const a = walk(fenAfter, args.after, other, args.student, need, null, { fenBefore: args.fenBefore, san: args.playedSan }, otherNet(args.fenBefore, against, other, args.student, null));
     if (a) return { seat, kind: 'allowed', ...a };
   }
   if (args.before) {
-    const b = walk(args.fenBefore, args.before, args.mover, args.student, need, args.priorMove, null);
+    const playedUci = (() => { try { const m = new Chess(args.fenBefore).move(args.playedSan); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; } })();
+    const against = args.against ?? (args.after && playedUci ? [playedUci, ...args.after.uci] : null);
+    const b = walk(args.fenBefore, args.before, args.mover, args.student, need, args.priorMove, null, otherNet(args.fenBefore, against, args.mover, args.student, args.priorMove));
     if (b) return { seat, kind: 'missed', ...b };
   }
   return null;

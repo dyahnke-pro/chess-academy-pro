@@ -4713,13 +4713,22 @@ async function augmentWithProjections(
     };
     const idx = segments.indexOf(s);
     const prev = idx > 0 ? segments[idx - 1] : null;
+    const afterRead = boardRead(after, s.recordReplyLine, s.recordReplyEarlier);
+    const beforeRead = boardRead(before, s.recordBestLine, s.recordBestEarlier);
+    const playedUci = (() => { try { const m = new Chess(s.fenBefore).move(s.san); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; } })();
     return readCostReason({
       fenBefore: s.fenBefore, playedSan: s.san,
       mover: s.playerColor === 'white' ? 'w' : 'b', student: studentColorWB,
       costCp: costOfSeg(s),
-      after: mode === 'before-only' ? null : boardRead(after, s.recordReplyLine, s.recordReplyEarlier),
-      before: mode === 'after-only' ? null : boardRead(before, s.recordBestLine, s.recordBestEarlier),
+      after: mode === 'before-only' ? null : afterRead,
+      before: mode === 'after-only' ? null : beforeRead,
       priorMove: prev ? priorMoveLeadingTo({ fenBefore: prev.fenBefore, san: prev.san }, s.fenBefore) : null,
+      // Measured against the other move's line (`costReason.against`): what it
+      // allowed against the best line, what it missed against the move played
+      // and its reply; a full read compares each with the other itself.
+      against: mode === 'after-only' ? beforeRead?.uci ?? null
+        : mode === 'before-only' ? (playedUci && afterRead ? [playedUci, ...afterRead.uci] : null)
+          : null,
     });
   };
   // #5 deep threat — the student's good moves, null-moved to the student.

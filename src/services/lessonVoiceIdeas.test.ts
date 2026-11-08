@@ -81,6 +81,8 @@ describe('a follow-up capture in the deep fact (P4: the Nimzo\'s …Bb4)', () =>
   });
   it('a capture nobody takes back is said as the capture', () => {
     const fact = deepFact('6k1/8/3r4/8/4p3/8/8/1N4K1 w - - 0 1', 'Nc3', ['Kh8', 'Nxe4'], true);
-    expect(fact?.text).toBe('taking their pawn on e4, where it hits their rook on d6');
+    // …on the next move, said as next: "Nc3, taking their pawn on e4" read as
+    // if Nc3 took it (Learn replay of his Caro, 29.Re7, 2026-11-08).
+    expect(fact?.text).toBe('taking their pawn on e4 next, where it hits their rook on d6');
   });
 });

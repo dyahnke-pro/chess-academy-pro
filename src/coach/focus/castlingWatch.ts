@@ -315,8 +315,31 @@ export function castleLookAhead(m: { fenBefore: string; san: string; fenAfter: s
  *  something else. */
 export const CASTLE_REMINDER_LINE = 'You could have castled there. Get your king safe before the centre opens.';
 
-export function reminderDue(m: { fenBefore: string; san: string; student: Color }, ply: number, reminded: boolean): boolean {
-  return !reminded && ply <= REMINDER_LAST_PLY && !m.san.startsWith('O-O') && castleReady(m.fenBefore, m.student);
+export function reminderDue(
+  m: { fenBefore: string; san: string; student: Color },
+  ply: number,
+  reminded: boolean,
+  /** REQUIRED — the read of the board the student moved from, or null when
+   *  none came back. "You could have castled there" is said only where
+   *  castling was SOUND there, by the rewind's own rule (`castleSound`): on
+   *  the board before his 7.Nf3 (Learn replay 2026-11-08) castling was legal
+   *  and dropped the knight on d4 to …exd4. No read, no reminder. */
+  lines: readonly ReadLine[] | null,
+): boolean {
+  return !reminded && ply <= REMINDER_LAST_PLY && !m.san.startsWith('O-O') && castleSound(m.fenBefore, lines, m.student);
+}
+
+/** Castling was legal AND SOUND on a board: the castling move is in the
+ *  board's own read, costs under `CASTLE_DROP_CP` against its best, and does
+ *  not leave the student losing. The one rule the rewind and the reminder
+ *  read. */
+export function castleSound(fen: string, lines: readonly ReadLine[] | null, student: Color): boolean {
+  if (!castleReady(fen, student) || !lines || lines.length === 0) return false;
+  const best = Math.max(...lines.map((l) => studentCp(l, student)));
+  const castle = lines.find((l) => isCastling(l.moves[0], student));
+  if (!castle) return false;
+  const cp = studentCp(castle, student);
+  return best - cp < CASTLE_DROP_CP && cp > CASTLE_LOSING_CP;
 }
 
 /** A board the student moved from with castling ready — where the rewind
@@ -338,12 +361,7 @@ export interface CastleBoard {
 export function rewindTarget(boards: readonly CastleBoard[], student: Color): CastleBoard | null {
   for (let i = boards.length - 1; i >= 0; i -= 1) {
     const b = boards[i];
-    if (!castleReady(b.fen, student) || !b.lines || b.lines.length === 0) continue;
-    const best = Math.max(...b.lines.map((l) => studentCp(l, student)));
-    const castle = b.lines.find((l) => isCastling(l.moves[0], student));
-    if (!castle) continue;
-    const cp = studentCp(castle, student);
-    if (best - cp < CASTLE_DROP_CP && cp > CASTLE_LOSING_CP) return b;
+    if (castleSound(b.fen, b.lines, student)) return b;
   }
   return null;
 }

@@ -11,7 +11,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { sayMoveClause } from './spokenMove';
 import { criticalityThresholds } from './criticalityScan';
-import { legalSeeGainFor } from './positionReadingService';
+import { captureRead, legalSeeGainFor } from './positionReadingService';
 import { isPinnedPiece } from './nextPlans';
 import { isOutpost } from './outpost';
 import { findLoosePieces } from './loosePieces';
@@ -190,7 +190,12 @@ export function heldByTactic(fen: string, me: 'w' | 'b'): Read | null {
     if (!cell || cell.color !== me || cell.type === 'k' || cell.type === 'p') continue;
     const hits = b.attackers(cell.square, them).length;
     if (hits === 0 || hits <= b.attackers(cell.square, me).length) continue;
-    if (legalSeeGainFor(fen, cell.square, them) > 0) continue;
+    // THROUGH THE SAFETY DOOR (Learn replay of his Scotch Gambit, 2026-11-08,
+    // after 7.Qd5+: "Your bishop on c5 survives on a tactic … recheck it every
+    // move" while the same turn said they win it). In check, a capture read
+    // holds for one move only — the raw read is 0 there, never "safe".
+    const read = captureRead(fen, cell.square, them);
+    if (read === null || read > 0) continue;
     return { claim: `srr:held-by-tactic:${cell.square}`, stakes: pieceStakes(cell.type, 1), text: rot(fen, `Your ${name(cell.type)} on ${cell.square} is outnumbered but safe only because of a tactic — check it again after every move, because the moment the tactic disappears, so does its protection.`, `Your ${name(cell.type)} on ${cell.square} survives on a tactic, not on its guards — recheck it every move; one change and it simply hangs.`, `Count again on ${cell.square}: more of theirs hit your ${name(cell.type)} than yours guard it, and only a tactic holds it — keep checking.`), squares: [cell.square] };
   }
   return null;
@@ -458,7 +463,10 @@ export function takeTheSting(fen: string, me: 'w' | 'b', bestSan: string | null)
     if (!b.attackers(cell.square, them).length || legalSeeGainFor(fen, cell.square, them) <= 0) continue;
     if (best.move.from === cell.square) continue;
     if (best.board.attackers(cell.square, me).length > b.attackers(cell.square, me).length) continue;
-    if (legalSeeGainFor(best.board.fen(), cell.square, them) > 0) continue;
+    // "Taking it no longer works" is a standing fact, read through the door: a
+    // check stops the capture for one move only.
+    const after = captureRead(best.board.fen(), cell.square, them);
+    if (after === null || after > 0) continue;
     return { claim: `srr:sting:${cell.square}`, stakes: { points: legalSeeGainFor(fen, cell.square, them), plies: 1 }, ideaSquares: [cell.square], idea: `Your ${name(cell.type)} on ${cell.square} is attacked, but you don't have to move it or guard it. Look for the move that makes taking it fail.`, namesMove: true, text: `Your ${name(cell.type)} on ${cell.square} is attacked, but ${sayMoveClause(bestSan, fen)} neither moves it nor guards it — it takes the sting out, so taking it no longer works for them.`, squares: [cell.square] };
   }
   return null;
@@ -498,7 +506,10 @@ export function bestCasePlan(fen: string, lines: Lines): Read | null {
   const [one, two] = lines;
   if (!quiet(two)) return null;
   const gap = moverCp(fen, one) - moverCp(fen, two);
-  if (gap < criticalityThresholds().notable || moverCp(fen, two) > 50) return null;
+  // LEVEL IS A CLAIM ABOUT THE SCORE (Learn replay of his Najdorf, 34.Rh5
+  // after …Rh8+: "it only gets you level" said of a block that dropped the
+  // rook, mate in 20): the slow line is within half a pawn of level, either way.
+  if (gap < criticalityThresholds().notable || Math.abs(moverCp(fen, two)) > 50) return null;
   const a = sanOf(fen, one.moves[0]); const b2 = sanOf(fen, two.moves[0]);
   if (!a || !b2) return null;
   return { claim: 'srr:best-case', stakes: costStakes(gap) ?? undefined, idea: `Test the slow plan with ${b2} by its best case: even if everything goes right, it only gets you level — something sharper is there.`, ideaSquares: toSquares(fen, [b2]), namesMove: true, text: `Test the slow plan with ${b2} by its best case: even when everything goes right for you, you end up no better than level. ${a} gets more.`, squares: toSquares(fen, [b2, a]) };

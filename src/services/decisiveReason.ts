@@ -232,6 +232,8 @@ export function decisiveReason(input: {
     const r = costReason({
       fenBefore, playedSan: nextBestSan, mover, student: studentWB, costCp: gapCp,
       after: { uci: next.moves.slice(1), source: 'deep', seconds }, before: null, priorMove: null,
+      // The next-best is measured against the move it is next to.
+      against: own.moves,
     });
     if (!r || r.kind !== 'allowed') return '';
     const sans = reasonSans(r);
@@ -304,7 +306,11 @@ export function decisiveReason(input: {
     // also be the verb.
     if (recapture && matStake > 0 && altTrusted && nextBestSan) {
       cands.push({ source: 'material', stake: matStake, text: `${seat === 'student' ? 'You take' : 'They take'} back with ${played} — anything else, like ${dot(nextBestSan, mover)}, loses ${pieceWords(fenBefore, next.moves, mover, false)} in the line that follows.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [squareOf(san) ?? ''].filter(Boolean), alt: true });
-    } else if (matStake > 0) {
+    } else if (matStake > 0 && !recapture) {
+      // A RECAPTURE IS NEVER A WIN (Learn replay of his Four Knights,
+      // 2026-11-08: "They play dxe5 — they win a bishop" after Bxe5 — the
+      // take-back sentence above was not trusted, and the count from the board
+      // after Bxe5 called taking the bishop back winning one).
       const win = matOwn > 0 ? seatProof(fenBefore, sansOf(fenBefore, own.moves), mover, studentWB, 'for') : null;
       const loss = !win && matNext < 0 && altTrusted ? seatProof(fenBefore, sansOf(fenBefore, next.moves), mover, studentWB, 'against') : null;
       if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${openSentence(win.text)}.` : withLanding(win.end === "and it's mate" ? mateReason('forced') : `${played} wins by force: ${win.end}`, landsWith(win.sans, mover, input.namesPreparedMove)), line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });

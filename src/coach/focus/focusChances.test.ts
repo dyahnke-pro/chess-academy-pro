@@ -184,6 +184,21 @@ describe('loose pieces', () => {
     // A check answered first: the capture is not legal for them, nothing is loose.
     expect(leftLoose(move(QUEEN_GUARDS, 'Qh5'))).toBeNull();
   });
+  it('LEAVE twin: the board\'s read says the move costs nothing — the center fork trick is no loose knight (his Four Knights, 4.Nxe5)', () => {
+    // Learn clued "Hold on — that move leaves a piece of yours loose" on 4.Nxe5
+    // (…Nxe5 d4 forks the bishop and the knight): the page judges with no
+    // price (cpLoss null) and the read before had Nxe5 first (Stockfish d18
+    // Nxe5 +0.68, Na4 +0.16, Bc4 +0.12). The read decides, never the count.
+    const FOUR = after(['e4', 'e5', 'Nf3', 'Nc6', 'Nc3', 'Bc5']);
+    const read: ReadLine[] = [
+      { moves: ['f3e5', 'c6e5', 'd2d4', 'c5d6'], evaluation: 68, mate: null },
+      { moves: ['c3a4', 'c5d6'], evaluation: 16, mate: null },
+      { moves: ['f1c4', 'g8f6'], evaluation: 12, mate: null },
+    ];
+    expect(leftLoose(move(FOUR, 'Nxe5', read))).toBeNull();
+    // With no read at all the count alone still speaks (the old guard).
+    expect(leftLoose(move(FOUR, 'Nxe5'))).not.toBeNull();
+  });
   it('LEAVE twin: a piece no move could keep was not left loose by this one (hand walk 2026-10-23)', () => {
     // 6…Qa5+ forks the king and the f5 knight; every answer to the check drops it.
     const FORKED = after(['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4', 'Bf5', 'Ng3', 'g5', 'Nxf5', 'Qa5+']);

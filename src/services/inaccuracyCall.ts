@@ -1157,6 +1157,7 @@ export function errorWhy(args: {
   // for it; only the words around it differ.
   const moverWB: 'w' | 'b' = args.moverColor === 'white' ? 'w' : 'b';
   const reasonCost = args.costCp ?? (args.quality === 'blunder' ? 300 : args.quality === 'mistake' ? 100 : 0);
+  const playedUci = (() => { try { const m = new Chess(args.fenBefore).move(args.playedSan); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; } })();
   const readReason = (after: boolean): CostReason | null => {
     if (args.quality === 'inaccuracy') return null;
     try {
@@ -1165,6 +1166,9 @@ export function errorWhy(args: {
         after: after && replyLineUci.length ? { uci: replyLineUci, source: 'record', seconds: second.reply } : null,
         before: !after && args.bestLineUci?.length ? { uci: args.bestLineUci, source: 'record', seconds: second.best } : null,
         priorMove: args.priorMove,
+        // What it allowed is measured against the better move's line; what it
+        // missed against the move played and its reply line.
+        against: after ? (args.bestLineUci?.length ? args.bestLineUci : null) : (playedUci ? [playedUci, ...replyLineUci] : null),
       });
     } catch { return null; }
   };

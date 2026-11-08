@@ -80,6 +80,10 @@ export function pawnKickNext(after: Chess, mv: Move): { next: string; target: { 
   const dir = mv.color === 'w' ? 1 : -1;
   const next = `${mv.to[0]}${Number(mv.to[1]) + dir}`;
   if (Number(next[1]) < 2 || Number(next[1]) > 7 || after.get(next as Sq)) return null;
+  // A PUSH THE PAWN COULD ALREADY PLAY IS NOT PREPARED (Learn replay of his
+  // King's Indian, 2026-11-08: "c6 prepares c5, which would kick their
+  // knight on d4" — …c5 was there from c7 in one move).
+  try { if (new Chess(mv.before).moves({ square: mv.from, verbose: true }).some((m) => m.to === next)) return null; } catch { /* the board before is the move's own */ }
   const them = mv.color === 'w' ? 'b' : 'w';
   // Counted with the pawn already on the next square — the file behind it
   // opens (h4-h5 lets the h1 rook defend h5).

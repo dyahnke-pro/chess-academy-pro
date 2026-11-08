@@ -30,6 +30,7 @@ import { namedShotTags } from '../../services/motifNaming';
 import type { FocusSeat } from './focusCard';
 import type { ChanceHold } from '../../services/learnTurnDoor';
 import type { TacticsRung } from './focusRung';
+import { costOf } from './castlingWatch';
 
 /** One engine line, White's point of view (the `AnalysisLine` shape). */
 export interface ReadLine {
@@ -522,10 +523,16 @@ export function leftLoose(m: FocusMove): FocusChance | null {
   let played;
   try { played = new Chess(m.fenBefore).move(m.san); } catch { return null; }
   const foe = other(m.student);
-  if (m.cpLoss !== null && m.cpLoss < MISSED_CP) return null;
+  // THE READ PRICES THE MOVE WHEN THE PAGE HAS NO PRICE (Learn replay of his
+  // Four Knights, 2026-11-08: 4.Nxe5, the center fork trick and the read's own
+  // first line, was clued "that move leaves a piece of yours loose"). The page
+  // judges before the price lands (cpLoss null); the board's read before the
+  // move covers it whenever the move is one of its lines.
+  const cpLoss = m.cpLoss ?? costOf(m.fenBefore, m.san, m.lines, m.student)?.drop ?? null;
+  if (cpLoss !== null && cpLoss < MISSED_CP) return null;
   for (const p of piecesOf(after, m.student)) {
     const gain = legalSeeGainFor(m.fenAfter, p.square, foe);
-    if (gain < (m.cpLoss !== null ? LOOSE_GAIN : LOOSE_GAIN_UNREAD)) continue;
+    if (gain < (cpLoss !== null ? LOOSE_GAIN : LOOSE_GAIN_UNREAD)) continue;
     const was = p.square === played.to ? played.from : p.square;
     if (legalSeeGainFor(m.fenBefore, was, foe) >= LOOSE_GAIN) continue;  // it was already loose: a 'save' question
     // No move could have kept it: lost whatever was played, so not THIS move's
@@ -534,7 +541,7 @@ export function leftLoose(m: FocusMove): FocusChance | null {
     // above flips the turn, which a king in check cannot have, and read 0.
     if (!couldKeep(m.fenBefore, was, m.student)) continue;
     // A capture worth at least as much is a trade, not a piece left loose.
-    if (m.cpLoss === null && played.captured && MATERIAL_VALUE[played.captured] >= MATERIAL_VALUE[p.type]) continue;
+    if (cpLoss === null && played.captured && MATERIAL_VALUE[played.captured] >= MATERIAL_VALUE[p.type]) continue;
     const attacker = cheapestAttacker(after, p.square, foe);
     if (!attacker) continue;
     const best = bestLine(m.lines, m.student);

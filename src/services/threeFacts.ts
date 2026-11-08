@@ -226,12 +226,16 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
     // sits in the briefing's list like every other consequence.
     // A capture is said as one: what it takes, then what it hits from there.
     const taken = n.captured ? `${other} ${PIECE[n.captured]} on ${n.to}` : null;
+    // A capture on the very next move says "next" (Learn replay of his Caro,
+    // 2026-11-08: "They play Re7, taking your pawn on e6" — Re7 took nothing;
+    // Rxe6 was its next move).
+    const takesWhen = later || ' next';
     const goes = samePiece
-      ? (taken ? `taking ${taken}${later}` : via ? `heading on to ${n.to} by way of ${via}` : `heading on to ${n.to}${later}`)
+      ? (taken ? `taking ${taken}${takesWhen}` : via ? `heading on to ${n.to} by way of ${via}` : `heading on to ${n.to}${later}`)
       : n.to === m.from ? `making room for ${own} ${piece} on ${n.to}${later}`
         : taken ? `opening the way for ${own} ${piece} to take ${taken}${later}` : `opening the way for ${own} ${piece} to ${n.to}${later}`;
     const goesVerb = samePiece
-      ? (taken ? `takes ${taken}${later}` : via ? `heads on to ${n.to} by way of ${via}` : `heads on to ${n.to}${later}`)
+      ? (taken ? `takes ${taken}${takesWhen}` : via ? `heads on to ${n.to} by way of ${via}` : `heads on to ${n.to}${later}`)
       : n.to === m.from ? `makes room for ${own} ${piece} on ${n.to}${later}`
         : taken ? `opens the way for ${own} ${piece} to take ${taken}${later}` : `opens the way for ${own} ${piece} to ${n.to}${later}`;
     const where = opener && ray ? `, where it ${verb} ${victim} once ${other} ${opener} opens the ${ray.kind}` : `, where it ${verb} ${victim}`;

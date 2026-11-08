@@ -264,6 +264,8 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
     const r = costReason({
       fenBefore: args.fenBefore, playedSan: c.san, mover, student: args.student, costCp: cost,
       after: { uci: read.moves.slice(1), source: 'deep', seconds }, before: null, priorMove: args.priorMove,
+      // Measured against the move played: a loss its own line shares is no reason.
+      against: playedRead.moves,
     });
     if (!r || r.kind !== 'allowed' || !r.trust.name) continue;
     // A PIECE SIMPLY GIVEN AWAY IS NOT A TEMPTATION: their first reply takes
@@ -657,7 +659,8 @@ export function squareChoice(args: { fenBefore: string; san: string; student: Co
       const cost = playedCp - seatCp(read, mover);
       if (cost >= TEMPTING_COST_CP) {
         const r = costReason({ fenBefore: args.fenBefore, playedSan: c.san, mover, student: args.student, costCp: cost,
-          after: { uci: read.moves.slice(1), source: 'deep', seconds: read.earlier && read.earlier[0] === c.uci ? [read.earlier.slice(1)] : [] }, before: null, priorMove: args.priorMove });
+          after: { uci: read.moves.slice(1), source: 'deep', seconds: read.earlier && read.earlier[0] === c.uci ? [read.earlier.slice(1)] : [] }, before: null, priorMove: args.priorMove,
+          against: playedRead?.moves ?? null });
         reason = r && r.kind === 'allowed' && r.trust.name ? r : null;
       }
     }

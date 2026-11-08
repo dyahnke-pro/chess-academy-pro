@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**274 lines · 13 exports · 8 importers · 2 tests · 0 audits**
+**277 lines · 13 exports · 9 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/moveCost.ts`
+- `src/services/moveThoughtFacts.ts`
 - `src/services/openingRoads.ts`
 - `src/services/openingStory.ts`
 - `src/services/positionFacts.ts`
@@ -30,7 +31,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `droppedJob` (function) — 3 call sites
-- `src/services/refutedAlternative.ts:152`
+- `src/services/refutedAlternative.ts:156`
 - `src/services/refutedAlternativeCore.test.ts:60`
 - `src/services/refutedAlternativeCore.test.ts:66`
 
@@ -52,7 +53,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternative.test.ts:168`
 - `src/services/refutedAlternative.test.ts:175`
 - `src/services/refutedAlternative.test.ts:176`
-- `src/services/refutedAlternative.ts:153`
+- `src/services/refutedAlternative.ts:157`
 - `src/services/refutedAlternativeCore.test.ts:71`
 
 ### `candidatesFromMasters` (function) — 6 call sites
@@ -61,32 +62,34 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternative.test.ts:66`
 - `src/services/refutedAlternative.test.ts:92`
 - `src/services/refutedAlternative.test.ts:139`
-- `src/services/refutedAlternative.ts:168`
+- `src/services/refutedAlternative.ts:172`
 
 ### `candidatesFromAmateur` (function) — 2 call sites
-- `src/services/positionFacts.ts:1040`
-- `src/services/refutedAlternative.ts:167`
+- `src/services/positionFacts.ts:1116`
+- `src/services/refutedAlternative.ts:171`
 
 ### `FanLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `alternativeProof` (function) — 4 call sites
-- `src/services/refutedAlternative.ts:126`
+- `src/services/refutedAlternative.ts:130`
 - `src/services/refutedAlternativeCore.test.ts:35`
 - `src/services/refutedAlternativeCore.test.ts:45`
 - `src/services/refutedAlternativeCore.test.ts:46`
 
-### `alternativeCostCp` (function) — 2 call sites
+### `alternativeCostCp` (function) — 3 call sites
 - `src/services/moveCost.ts:94`
-- `src/services/refutedAlternative.ts:116`
+- `src/services/moveCost.ts:115`
+- `src/services/refutedAlternative.ts:119`
 
 ### `refutedFromFan` (function) — 2 call sites
-- `src/services/positionFacts.ts:1040`
+- `src/services/positionFacts.ts:1116`
 - `src/services/refutedAlternativeCore.test.ts:14`
 
-### `refutedAltProof` (function) — 2 call sites
-- `src/services/positionFacts.ts:1148`
-- `src/services/reviewFullData.ts:1253`
+### `refutedAltProof` (function) — 3 call sites
+- `src/services/moveThoughtFacts.ts:706`
+- `src/services/positionFacts.ts:1225`
+- `src/services/reviewFullData.ts:1301`
 
 ## Tests
 

@@ -42,6 +42,12 @@ describe('deepFact — what the move sets up, down the line', () => {
     // A capture is said as one (the Nimzo's …Bxc3+ read as "heading on to c3").
     expect(f?.text).toBe('taking their pawn on f7 three moves later, where it gives check to their king');
   });
+  it('the capture on the next move is said as next, never as the move itself (his Caro, 29.Re7)', () => {
+    // Learn said "They play Re7, taking your pawn on e6, where it hits your
+    // knight on e5" — Re7 takes nothing; Rxe6 is its next move.
+    const f = deepFact('5rk1/2R3pp/1p2p3/1B2n3/P3pp2/7P/2Pr2P1/5RK1 w - - 0 29', 'Re7', ['h6', 'Rxe6'], false);
+    expect(f?.text).toBe('taking your pawn on e6 next, where it hits your knight on e5');
+  });
   it('the same strike that wins nothing is not the move\'s purpose (Bxf7+ Kxf7: a bishop for a pawn)', () => {
     expect(deepFact(fenAfter(['e4', 'e5', 'Nf3', 'Nc6']), 'Bc4', ['Nf6', 'd3', 'h6', 'O-O', 'a6', 'Bxf7+', 'Kxf7'], true)).toBeNull();
   });

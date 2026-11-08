@@ -192,11 +192,14 @@ export function alternativeProof(
   costCp: number,
   /** REQUIRED — the other reads of the board after the alternative. */
   seconds: LineSeconds,
+  /** REQUIRED — the line of the move the alternative is measured against (the
+   *  move played or taught, UCI with its first move), or null when unknown. */
+  againstUci: readonly string[] | null,
 ): { lineSans: string[]; proofResult: string | null; reason: CostReason | null } {
   const reason = costReason({
     fenBefore, playedSan: altSan, mover: moverWB, student: studentWB, costCp,
     after: altLineUci.length > 1 ? { uci: altLineUci.slice(1), source: 'record', seconds } : null,
-    before: null, priorMove: null,
+    before: null, priorMove: null, against: againstUci,
   });
   if (!reason || reason.kind !== 'allowed' || !reason.trust.name) return { lineSans: [], proofResult: null, reason };
   const proofResult = reason.mate ? "it's mate" : reason.ledger ? describeProofResult(reason.ledger) : null;
@@ -255,7 +258,7 @@ export function refutedFromFan(input: {
   } catch { /* the playable prefix is what we have */ }
   // The fan's line is one read of the board after the alternative; its own
   // shallower pass, when the search kept one, is the second.
-  const { lineSans, proofResult } = alternativeProof(input.fenBefore, alt.san, altLine.moves, input.moverWB, input.moverWB, costCp, [altLine.earlier?.moves.slice(1) ?? null]);
+  const { lineSans, proofResult } = alternativeProof(input.fenBefore, alt.san, altLine.moves, input.moverWB, input.moverWB, costCp, [altLine.earlier?.moves.slice(1) ?? null], input.fan.find((l) => l.moves[0] === playedUci)?.moves ?? null);
   const facts = { alt: alt.san, games: alt.games, pct: alt.pct, costCp, line: null, concept: null, lineSans, proofResult, source: alt.source ?? 'masters' as const, job: droppedJob(input.fenBefore, sans) };
   return { ...facts, text: renderRefutedAlternative(facts, input.playedSan, stemKeyOf(input.fenBefore)) };
 }
