@@ -18,9 +18,9 @@
     "lesson": 0
   },
   "unstated": {
-    "review": 999,
-    "learn": 999,
-    "chat": 999,
-    "lesson": 999
+    "review": 1,
+    "learn": 0,
+    "chat": 0,
+    "lesson": 0
   }
 }

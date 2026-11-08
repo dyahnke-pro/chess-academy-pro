@@ -143,3 +143,25 @@ export function scheduleMarks(text: string, marks: readonly PacedMark[], msPerCh
   }
   return events;
 }
+
+/** Run a schedule: `paint` gets the ids shown so far at each event, while
+ *  `current()` holds (a newer line owns the board otherwise). Returns the
+ *  total time the schedule covers. */
+export function runMarkSchedule(
+  text: string,
+  marks: readonly PacedMark[],
+  paint: (shown: ReadonlySet<string>) => void,
+  current: () => boolean,
+  msPerChar = MS_PER_CHAR,
+): number {
+  const shown = new Set<string>();
+  const events = scheduleMarks(text, marks, msPerChar);
+  for (const ev of events) {
+    setTimeout(() => {
+      if (!current()) return;
+      if (ev.kind === 'clear') shown.clear(); else shown.add(ev.id);
+      paint(shown);
+    }, ev.atMs);
+  }
+  return Math.max(text.length * msPerChar, ...events.map((e) => e.atMs));
+}

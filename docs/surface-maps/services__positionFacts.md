@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2193 lines · 17 exports · 41 importers · 50 tests · 3 audits**
+**2203 lines · 17 exports · 41 importers · 50 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -103,7 +103,7 @@
 - `src/services/positionFacts.weakness.test.ts:71`
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11403`
+- `src/components/Coach/CoachTeachPage.tsx:11486`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:471`
 - `src/services/raceAimOneVoice.test.ts:20`
@@ -123,7 +123,7 @@
 
 ### `computePositionFacts` (function) — 113 call sites
 - `src/coach/boardTurnAnswer.ts:161`
-- `src/components/Coach/CoachTeachPage.tsx:11261`
+- `src/components/Coach/CoachTeachPage.tsx:11344`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:271`
 - `src/hooks/usePhaseNarration.ts:433`
@@ -225,8 +225,8 @@
 - `src/test/humanSquares.gate.test.ts:65`
 - `src/test/humanSquares.gate.test.ts:88`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts:250`
-- `src/test/marksSweep.gate.test.ts:105`
-- `src/test/marksSweep.gate.test.ts:135`
+- `src/test/marksSweep.gate.test.ts:126`
+- `src/test/marksSweep.gate.test.ts:163`
 - `src/test/teach02Wired.test.ts:86`
 - `src/test/teach02Wired.test.ts:95`
 - `src/test/teach02Wired.test.ts:109`
@@ -237,7 +237,7 @@
 - `src/test/teach02Wired.test.ts:140`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11525`
+- `src/components/Coach/CoachTeachPage.tsx:11608`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -255,8 +255,8 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9267`
-- `src/components/Coach/CoachTeachPage.tsx:9404`
+- `src/components/Coach/CoachTeachPage.tsx:9350`
+- `src/components/Coach/CoachTeachPage.tsx:9487`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:31`

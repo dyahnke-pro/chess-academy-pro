@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useLineWalk } from '../../hooks/useLineWalk';
+import { useLiveMarks, type LiveMarks } from '../../hooks/useLiveMarks';
 import { WalkLineButton } from '../Board/WalkLineButton';
 import { BoardQuestionBox } from '../Board/BoardQuestionBox';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { positionAsk, positionPosed } from '../../services/moveInsight';
 import { spokenLineArrows } from '../../services/arrowEngine';
-import type { BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -198,6 +198,9 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   // then the solve begins. Asked once per puzzle, BEFORE the intro speaks —
   // the intro names what the move allowed, which is the question's answer.
   const reading = useThinkingLesson({ say: (t) => voiceService.speak(t).then(() => undefined).catch(() => undefined) });
+  /** The live marks (`useLiveMarks`, declared with the board below), reached
+   *  from the callbacks set up before it. */
+  const liveMarksRef = useRef<LiveMarks | null>(null);
   const { slipKit, askOnce: readAskOnce, stop: readStop } = reading;
   /** The puzzle's question, looked up as it opens (during the replay). */
   const slipKitRef = useRef<{ id: string; kit: Promise<StepKit | null> } | null>(null);
@@ -210,7 +213,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       setState('playing');
       if (narrationRef.current.intro) {
         setSubtitle(narrationRef.current.intro);
-        setLineArrows(spokenLineArrows(narrationRef.current.intro, puzzle.fen, { studentColor: puzzle.playerColor === 'white' ? 'w' : 'b', studentMovesAreBad: true }));
+        liveMarksRef.current?.say(narrationRef.current.intro, puzzle.fen, { arrows: spokenLineArrows(narrationRef.current.intro, puzzle.fen, { studentColor: puzzle.playerColor === 'white' ? 'w' : 'b', studentMovesAreBad: true }) });
         void voiceService.speak(narrationRef.current.intro);
       }
     };
@@ -361,15 +364,17 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   // solve the board plays the rest out: you see how it continues before the
   // puzzle grows to ask you for it.
   const [continuing, setContinuing] = useState(false);
-  /** Arrows for the moves the current spoken line names (`spokenLineArrows`):
-   *  their reply red, your mistake none, your good follow-up green. */
-  const [lineArrows, setLineArrows] = useState<BoardArrow[]>([]);
+  /** The marks of the current spoken line (`useLiveMarks`): every square it
+   *  names lit, the moves it names arrowed — their reply red, your mistake
+   *  none, your good follow-up green — each as the words are said. */
+  const liveMarks = useLiveMarks(puzzle.playerColor);
+  liveMarksRef.current = liveMarks;
   // The last wrong try's line, walkable (David 2026-10-05: "Button tap to
   // play out any lines the user wants").
   const [walkable, setWalkable] = useState<WalkableLine | null>(null);
   const lineWalk = useLineWalk(puzzle.playerColor);
   const clearWalk = lineWalk.clear;
-  useEffect(() => { setLineArrows([]); setWalkable(null); clearWalk(); }, [puzzle.id, clearWalk]);
+  useEffect(() => { liveMarksRef.current?.clear(); setWalkable(null); clearWalk(); }, [puzzle.id, clearWalk]);
   const continuedForRef = useRef<string | null>(null);
   // THE SOLVE'S VOICE OWNS THE MOMENT (David 2026-10-02: "Auto advance needs to
   // not cut off narrations … Instant after last word can sound like cut off").
@@ -685,10 +690,12 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       // miss filed one, else the motif's (David 2026-11-07).
       const response = [why, puzzle.spot ?? spotForPuzzle(puzzle)].filter(Boolean).join(' ');
       setSubtitle(response);
-      setLineArrows(spokenLineArrows(response, puzzle.fen, {
-        studentColor: puzzle.playerColor === 'white' ? 'w' : 'b',
-        exclude: puzzle.bestMove.length >= 4 ? [{ from: puzzle.bestMove.slice(0, 2), to: puzzle.bestMove.slice(2, 4) }] : [],
-      }));
+      liveMarksRef.current?.say(response, puzzle.fen, {
+        arrows: spokenLineArrows(response, puzzle.fen, {
+          studentColor: puzzle.playerColor === 'white' ? 'w' : 'b',
+          exclude: puzzle.bestMove.length >= 4 ? [{ from: puzzle.bestMove.slice(0, 2), to: puzzle.bestMove.slice(2, 4) }] : [],
+        }),
+      });
       await voiceService.speakGrounded(response, puzzle.fen, { bypassBriefCap: true });
     } catch {
       // Fallback to tactic-specific coaching
@@ -736,7 +743,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing') return;
-    setLineArrows([]); // the last line's moves belong to the last position
+    liveMarksRef.current?.clear(); // the last line's moves belong to the last position
     setWalkable(null);
 
     const allMoves = movesRef.current;
@@ -786,10 +793,14 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         voiceService.stop();
         setSubtitle(moveNarrations[currentPlayerMove]);
         const before = chessRef.current.history({ verbose: true }).at(-1)?.before;
-        setLineArrows(before ? spokenLineArrows(moveNarrations[currentPlayerMove], before, {
-          studentColor: puzzle.playerColor === 'white' ? 'w' : 'b',
-          exclude: [{ from: move.from, to: move.to }],
-        }) : []);
+        if (before) {
+          liveMarksRef.current?.say(moveNarrations[currentPlayerMove], before, {
+            arrows: spokenLineArrows(moveNarrations[currentPlayerMove], before, {
+              studentColor: puzzle.playerColor === 'white' ? 'w' : 'b',
+              exclude: [{ from: move.from, to: move.to }],
+            }),
+          });
+        } else liveMarksRef.current?.clear();
         moveSpeechRef.current = voiceService.speak(moveNarrations[currentPlayerMove]).catch(() => undefined);
       }
 
@@ -959,7 +970,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         const line = composeWrongTryLine(read?.text ?? null, ask, held, hint);
         setSubtitle(line);
         setWalkable(read?.kind === 'refuted' ? read.line ?? null : null);
-        setLineArrows(spokenLineArrows(line, prevFen, { studentColor: puzzle.playerColor === 'white' ? 'w' : 'b', studentMovesAreBad: true }));
+        liveMarksRef.current?.say(line, prevFen, { arrows: spokenLineArrows(line, prevFen, { studentColor: puzzle.playerColor === 'white' ? 'w' : 'b', studentMovesAreBad: true }) });
         voiceService.stop();
         void voiceService.speak(line);
       });
@@ -1209,7 +1220,8 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
           showResetButton={false}
           onMove={handleChessBoardMove}
           highlightSquares={lastMoveHighlight}
-          arrows={hintState.arrows.length > 0 ? hintState.arrows : lineArrows.length > 0 ? lineArrows : undefined}
+          arrows={hintState.arrows.length > 0 ? hintState.arrows : liveMarks.arrows.length > 0 ? liveMarks.arrows : undefined}
+          annotationHighlights={hintState.arrows.length === 0 && liveMarks.annotationHighlights.length > 0 ? liveMarks.annotationHighlights : undefined}
           ghostMove={hintState.ghostMove}
         />
         )}

@@ -40,7 +40,9 @@ import { getCachedOpening } from '../services/openingGenerator';
 import { buildDrillWrongTeaching, buildDrillBetterLine, buildDrillThreatSpot, buildDrillCompletionPlan } from '../services/learnMoveTeaching';
 import { playOutPunish, advantageAlreadyShown } from '../services/punishPlayout';
 import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
-import { squaresNamedIn } from '../utils/squaresNamedIn';
+import { marksOfWords } from '../services/wordMarks';
+import { markItems } from '../services/markAnchors';
+import { scheduleMarks } from '../services/markPacing';
 import { BRIEFING_LINE_PLIES, newLessonVoice, type LessonVoice } from '../services/reviewMoveBriefing';
 import { lessonThought } from '../services/moveThoughtFacts';
 import { captureContextAfter } from '../services/pvPlayback';
@@ -404,6 +406,16 @@ function clampBackupMs(text: string): number {
  *              walkthrough's voice-promise-gated advance pacing is
  *              preserved.
  */
+/** What `speakWalkthroughText` will say for this register: the full text,
+ *  the short one in Brief, nothing when silent — the text its marks are paced
+ *  against. */
+function walkthroughSpokenText(text: string, shortText?: string): string {
+  const verbosity = resolveCoachNarration(useAppStore.getState().activeProfile?.preferences);
+  if (verbosity === 'full') return text;
+  if (verbosity === 'brief' && shortText && shortText.trim().length > 0) return shortText;
+  return '';
+}
+
 async function speakWalkthroughText(
   text: string,
   shortText?: string,
@@ -1409,7 +1421,6 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       // For the computed fill we have the exact squares; for a VOICED idea we
       // pull them from the prose. Only when the node has no authored segment
       // markers of its own (Path 1 handles those).
-      let narrationSquares: string[] = [];
       if (!idea && node.san) {
         const pathSans = path.filter((n) => n.san !== null).map((n) => n.san as string);
         const fenBefore = fenForPath(pathSans.slice(0, -1), treeRef.current?.startFen);
@@ -1439,9 +1450,6 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           // engine read here, and no games-database alternative.
           reads: null, costCp: null,
         }, lessonVoiceRef.current.voice, null);
-        narrationSquares = squaresNamedIn(idea);
-      } else if (idea) {
-        narrationSquares = squaresNamedIn(idea);
       }
       if (!idea) {
         // Root / un-narrated node — just transition based on children.
@@ -1516,16 +1524,52 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       }, backupMs);
       advanceTimerRef.current = backupTimer;
 
-      // Lead the eye: highlight the squares the narration names (yellow key
-      // squares) so the student looks where the words point — voiced or computed.
-      if (narrationSquares.length > 0) {
-        setNarrationHighlights(narrationSquares.map((square) => ({ square, color: 'yellow' })));
+      // LEAD THE EYE, AS IT IS STATED (David 2026-11-08: "Key squares get
+      // highlights, moves get arrowed … and they ALL appear AS THEY ARE
+      // STATED"). Every square the idea names is lit and every move it names
+      // arrowed (`marksOfWords`, no cap), each going up at the words that state
+      // it once the voice is on air (`markPacing`, the one schedule). It used
+      // to light at most four squares, all at the start, and arrow nothing.
+      const fullText = pickRegister(idea, node.ideaFlipped);
+      const shortText = pickRegister(node.shortIdea ?? '', node.shortIdeaFlipped) || node.shortIdea;
+      {
+        const sansHere = path.filter((n) => n.san !== null).map((n) => n.san as string);
+        const fenHere = fenForPath(sansHere, treeRef.current?.startFen);
+        const fenPrev = sansHere.length > 0 ? fenForPath(sansHere.slice(0, -1), treeRef.current?.startFen) : null;
+        const side = treeRef.current?.studentSide ?? 'white';
+        const spoken = walkthroughSpokenText(fullText, shortText);
+        const marks = marksOfWords(spoken || fullText, fenHere, side, fenPrev);
+        const lights = marks.highlights.map((square) => ({ square, color: 'yellow' as const }));
+        const arrowsNow = marks.arrows.map((a) => ({ from: a.startSquare, to: a.endSquare }));
+        if (!spoken) {
+          // No voice on this node: the marks go up with the words on screen.
+          setNarrationHighlights(lights);
+          setNarrationArrows(arrowsNow);
+        } else if (lights.length || arrowsNow.length) {
+          const items = markItems({
+            fen: fenHere,
+            viewer: side === 'white' ? 'w' : 'b',
+            highlights: marks.highlights,
+            arrows: arrowsNow,
+          });
+          const shown = new Set<string>();
+          void voiceService.untilOnAir(4000).then(() => {
+            for (const ev of scheduleMarks(spoken, items)) {
+              setTimeout(() => {
+                if (!isCurrent()) return;
+                if (ev.kind === 'clear') shown.clear(); else shown.add(ev.id);
+                setNarrationHighlights(lights.filter((_, i) => shown.has(`h${i}`)));
+                setNarrationArrows(arrowsNow.filter((_, i) => shown.has(`a${i}`)));
+              }, ev.atMs);
+            }
+          });
+        }
       }
 
       // Primary gate: voice completion → then the asides → then advance.
       speakWalkthroughText(
-        pickRegister(idea, node.ideaFlipped),
-        pickRegister(node.shortIdea ?? '', node.shortIdeaFlipped) || node.shortIdea,
+        fullText,
+        shortText,
         isCurrent,
       )
         .then(() => speakAsidesInline())

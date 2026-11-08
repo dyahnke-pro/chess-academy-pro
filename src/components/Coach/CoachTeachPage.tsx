@@ -76,7 +76,6 @@ import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { cheaperAttackerHit, gambitPoint, kingPawnUnderFire, type CheaperHit, mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
 import { habitSaidKey, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
-import { buildNarrationSegments } from '../../services/narrationSegments';
 
 /** A LINE A LEARN PRODUCER QUEUES for the late wave, as it knows it — made
  *  the one fact by `queueSpokenHint` (WO-STORY-MATRIX-01 P1-6e). */
@@ -8291,9 +8290,9 @@ export function CoachTeachPage({ mode }: {
           // arrow/highlight appears ~as its sentence is spoken, revealed
           // on the same ~55ms/char clock LessonPlayer runs, anchored to
           // the moment the beat's speech actually starts (after any Track
-          // A fragments). A square no sentence names lands with the last
-          // segment (buildNarrationSegments' fallback) so nothing is ever
-          // lost. No voice this turn → paint everything at once.
+          // A fragments). A mark no words state lands with the last sentence
+          // (`markPacing`'s tail) so nothing is ever lost. No voice this turn
+          // → paint everything at once.
           const spokenNow = spokenDisplayText.trim();
           if (spokenForTurn.length === 0 || !spokenNow) {
             setArrows(mergedArrows);

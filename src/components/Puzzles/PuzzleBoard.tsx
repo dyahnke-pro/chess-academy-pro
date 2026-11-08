@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback, useRef, useMemo, type ReactNode } from 'react';
 import { useLineWalk } from '../../hooks/useLineWalk';
+import { useLiveMarks } from '../../hooks/useLiveMarks';
 import { WalkLineButton } from '../Board/WalkLineButton';
 import { BoardQuestionBox } from '../Board/BoardQuestionBox';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { autopilotRecapture, lastMoveAlong, positionAsk, positionPosed } from '../../services/moveInsight';
 import { spokenLineArrows } from '../../services/arrowEngine';
-import type { BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { captureEvent } from '../../services/analytics';
 import { Chess } from 'chess.js';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
@@ -173,8 +173,6 @@ export function PuzzleBoard({
   const [terminalId, setTerminalId] = useState<string | null>(null);
   const terminal = terminalId === puzzle.id;
   const conceptSpokenRef = useRef<string | null>(null);
-  /** Arrows for the moves the current spoken line names (`spokenLineArrows`). */
-  const [lineArrows, setLineArrows] = useState<BoardArrow[]>([]);
   // The last wrong try's line, walkable (David 2026-10-05: "Button tap to
   // play out any lines the user wants"). Cleared with the arrows.
   const [walkable, setWalkable] = useState<WalkableLine | null>(null);
@@ -227,6 +225,11 @@ export function PuzzleBoard({
   // Determine which color the user plays (opposite of who moves first in the FEN)
   const fenTurn = puzzle.fen.split(' ')[1];
   const userColor: 'white' | 'black' = fenTurn === 'w' ? 'black' : 'white';
+  /** The marks of what the board says — every square its line names lit, every
+   *  move arrowed — put up as the words are said (`useLiveMarks`). */
+  const liveMarks = useLiveMarks(userColor);
+  const liveMarksRef = useRef(liveMarks);
+  liveMarksRef.current = liveMarks;
   const lineWalk = useLineWalk(userColor);
 
   // GROUNDED solve geometry (David 2026-06-28): replay the puzzle to compute
@@ -381,7 +384,7 @@ export function PuzzleBoard({
     setPipsDone(0);
     setMissedPip(false);
     setLastMoveHighlight(null);
-    setLineArrows([]);
+    liveMarksRef.current.clear();
     setWalkable(null);
     setFlashClass('');
     hasMadeMistakeRef.current = false;
@@ -517,7 +520,7 @@ export function PuzzleBoard({
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing' || disabled) return;
-    setLineArrows([]); // the last line's moves belong to the last position
+    liveMarksRef.current.clear(); // the last line's moves belong to the last position
     setWalkable(null);
     lineWalk.clear();
 
@@ -697,10 +700,13 @@ export function PuzzleBoard({
         setWalkable(read?.kind === 'refuted' ? read.line ?? null : null);
         // Every move the line names, on the board: their punishing reply red,
         // your try none (it was just taken back).
-        setLineArrows(spokenLineArrows(line, fenBeforeAttempt, {
-          studentColor: userColor === 'white' ? 'w' : 'b',
-          studentMovesAreBad: read?.kind !== 'also-good',
-        }));
+        liveMarksRef.current.say(line, fenBeforeAttempt, {
+          arrows: spokenLineArrows(line, fenBeforeAttempt, {
+            studentColor: userColor === 'white' ? 'w' : 'b',
+            studentMovesAreBad: read?.kind !== 'also-good',
+          }),
+          voiced: settings.voiceEnabled,
+        });
         voiceService.stop();
         if (settings.voiceEnabled) void voiceService.speak(line);
       });
@@ -762,10 +768,15 @@ export function PuzzleBoard({
         const clause = speakAlong ? clauseAt(i) : '';
         // The move that just landed keeps its highlight; anything else the
         // clause names gets its arrow.
-        setLineArrows(clause ? spokenLineArrows(clause, fenBefore, {
-          studentColor: userColor === 'white' ? 'w' : 'b',
-          exclude: [{ from: move.from, to: move.to }],
-        }) : []);
+        if (clause) {
+          liveMarksRef.current.say(clause, fenBefore, {
+            arrows: spokenLineArrows(clause, fenBefore, {
+              studentColor: userColor === 'white' ? 'w' : 'b',
+              exclude: [{ from: move.from, to: move.to }],
+            }),
+            voiced: speakAlong,
+          });
+        } else liveMarksRef.current.clear();
         // Never faster than a readable move, never ahead of the voice.
         const say = clause ? await voiceComputed(clause) : '';
         if (stale()) return;
@@ -823,7 +834,8 @@ export function PuzzleBoard({
           showResetButton={false}
           onMove={handleChessBoardMove}
           highlightSquares={lastMoveHighlight}
-          arrows={hintState.arrows.length > 0 ? hintState.arrows : lineArrows.length > 0 ? lineArrows : undefined}
+          arrows={hintState.arrows.length > 0 ? hintState.arrows : liveMarks.arrows.length > 0 ? liveMarks.arrows : undefined}
+          annotationHighlights={hintState.arrows.length === 0 && liveMarks.annotationHighlights.length > 0 ? liveMarks.annotationHighlights : undefined}
           ghostMove={hintState.ghostMove}
         />
         )}

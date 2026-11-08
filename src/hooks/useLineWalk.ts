@@ -7,8 +7,7 @@
 import { useCallback, useRef, useState } from 'react';
 import type { BoardArrow, WalkableLine } from '../types';
 import { admitArrows, lineClaims } from '../services/arrowDoor';
-import { squaresNamedNotMoves } from '../services/arrowEngine';
-import { namedMoveArrows } from '../services/learnBoardTeaching';
+import { marksOfWords } from '../services/wordMarks';
 import { markItems } from '../services/markAnchors';
 import { scheduleMarks } from '../services/markPacing';
 import { voiceService } from '../services/voiceService';
@@ -86,8 +85,7 @@ export function useLineWalk(studentColor: 'white' | 'black', source = 'lineWalk'
     if (!text.trim()) return;
     const walkToken = ++tokenRef.current;
     const viewer: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
-    const highlights = squaresNamedNotMoves(text, [fen]);
-    const arrows = admitArrows(namedMoveArrows(text, fen, viewer), { fen, studentColor }).arrows;
+    const { highlights, arrows } = marksOfWords(text, fen, studentColor);
     // The first line, each ply with the arrow the door drew for it.
     const first = lines[0];
     const plyArrows = first ? arrowsOf(first) : [];

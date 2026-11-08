@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2642 lines · 8 exports · 5 importers · 3 tests · 4 audits**
+**2686 lines · 8 exports · 5 importers · 3 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3712) — names `useTeachWalkthrough`
-- **Deployment Policy** (CLAUDE.md:6266) — names `useTeachWalkthrough`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3764) — names `useTeachWalkthrough`
+- **Deployment Policy** (CLAUDE.md:6318) — names `useTeachWalkthrough`
 
 ## Who calls in
 
@@ -46,7 +46,7 @@
 
 ### `useTeachWalkthrough` (function) — 18 call sites
 - `src/components/Coach/CoachEndgamePage.tsx:118`
-- `src/components/Coach/CoachTeachPage.tsx:1084`
+- `src/components/Coach/CoachTeachPage.tsx:1089`
 - `src/hooks/useTeachWalkthrough.test.tsx:84`
 - `src/hooks/useTeachWalkthrough.test.tsx:93`
 - `src/hooks/useTeachWalkthrough.test.tsx:132`
@@ -65,7 +65,7 @@
 - `src/hooks/useTeachWalkthrough.test.tsx:722`
 
 ### `isStartablePunishLesson` (re-export) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:17123`
+- `src/components/Coach/CoachTeachPage.tsx:17185`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:80`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:84`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:85`
@@ -98,7 +98,7 @@
 - `src/services/stageEntryValidity.ts:96`
 
 ### `isValidDrillLine` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:17229`
+- `src/components/Coach/CoachTeachPage.tsx:17291`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:143`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:162`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:163`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6358 lines · 31 exports · 70 importers · 84 tests · 4 audits**
+**6442 lines · 33 exports · 70 importers · 84 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -105,7 +105,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateNarrativeSummary` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:559`
+- `src/components/Coach/CoachGameReview.tsx:554`
 - `src/services/moveCost.keyMoments.test.ts:43`
 - `src/services/moveCost.keyMoments.test.ts:45`
 - `src/services/recapSeat.test.ts:17`
@@ -121,18 +121,24 @@
 - `src/services/coachFeatureService.test.ts:880`
 - `src/services/coachFeatureService.test.ts:881`
 
-### `segmentLitSquares` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:3518`
-- `src/test/marksSweep.gate.test.ts:160`
+### `segmentLitSquares` (function) — 1 call site
+- `src/test/marksSweep.gate.test.ts:188`
 
-### `segmentNamedArrows` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:3235`
+### `SegmentMarks` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `segmentMarks` (function) — 3 call sites
+- `src/components/Coach/CoachGameReview.tsx:2407`
+- `src/components/Coach/CoachGameReview.tsx:3196`
+- `src/test/marksSweep.gate.test.ts:191`
+
+### `segmentNamedArrows` (function) — 3 call sites
 - `src/services/namedMoveArrows.test.ts:67`
 - `src/services/namedMoveArrows.test.ts:71`
-- `src/test/marksSweep.gate.test.ts:156`
+- `src/test/marksSweep.gate.test.ts:184`
 
 ### `foldReviewRefrains` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1838`
+- `src/components/Coach/CoachGameReview.tsx:1833`
 - `src/services/reviewLedgerCounters.test.ts:67`
 - `src/services/reviewLedgerCounters.test.ts:79`
 
@@ -149,7 +155,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:619`
+- `src/components/Coach/CoachGameReview.tsx:614`
 - `src/services/coachFeatureService.test.ts:723`
 - `src/services/coachFeatureService.test.ts:731`
 - `src/services/coachFeatureService.test.ts:763`
@@ -284,7 +290,7 @@
 - `src/test/reviewExplore.continuity.test.ts:62`
 
 ### `buildReviewSegmentsYielding` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:1837`
+- `src/components/Coach/CoachGameReview.tsx:1832`
 - `src/services/reviewBuildYields.test.ts:35`
 
 ### `defaultIntroText` (function) — 4 call sites
@@ -306,7 +312,7 @@
 - `src/test/mateSaidOnce.gate.test.ts:69`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4279`
+- `src/components/Coach/CoachGameReview.tsx:4247`
 - `src/services/coachFeatureService.test.ts:793`
 - `src/services/coachFeatureService.test.ts:796`
 - `src/services/coachFeatureService.test.ts:803`
@@ -332,10 +338,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8774`
-- `src/components/Coach/CoachTeachPage.tsx:8877`
-- `src/components/Coach/CoachTeachPage.tsx:11795`
-- `src/components/Coach/CoachTeachPage.tsx:12207`
+- `src/components/Coach/CoachTeachPage.tsx:8857`
+- `src/components/Coach/CoachTeachPage.tsx:8960`
+- `src/components/Coach/CoachTeachPage.tsx:11878`
+- `src/components/Coach/CoachTeachPage.tsx:12263`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/services/phaseTransitionDetector.test.ts:575`
@@ -354,7 +360,7 @@
 - `src/services/reviewWalk1500.test.ts:17`
 
 ### `openingNameForKey` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:254`
+- `src/components/Coach/CoachGameReview.tsx:246`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:42`
 
 ### `generateReviewNarration` (function) — 19 call sites
