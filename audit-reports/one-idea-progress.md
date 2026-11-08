@@ -1,0 +1,3 @@
+# one-idea progress (WO-DEPTH-01 + wire-19 leftovers)
+
+- 2026-11-08 item 1 ONE WORST PIECE: findWorstPlacedPiece decides (stuck / rim knight / hemmed bishop, then the rook with no open file; gates + "a guard is not idle"), worstPieceRoute the one route reader, worstReason the one why; pieceWish, planChoice, principle detector #21, Review's ablation, Learn's engine table, chat and the quiz read it. Knight route stops must be safe. David's first 120 games (14,232 boards, both seats): boards where two surfaces named different worst pieces 64 → 0; plan names one 76 → 155, wish 148 → 213, method 5,649 → 5,195. Tests: oneWorstPiece.test, pieceValueRead "THE ONE WORST PIECE", forwardTeaching route safety (red on old).
