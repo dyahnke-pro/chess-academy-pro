@@ -2723,7 +2723,7 @@ function* reviewSegmentSteps(
       // side has heard it, for the rest of the game (`PLAN_GOAL.arc`).
       {
         const moverSeat: 'student' | 'opponent' = moverColor === playerColor ? 'student' : 'opponent';
-        const arcHere = facets.some((f) => f.tag === 'plan-arc' && !!f.incoming === (moverSeat === 'opponent'));
+        const arcHere = facets.some((f) => f.tag === 'plan-arc' && f.seat === moverSeat);
         if (arcHere || threadStated(story.current(), threadKey(moverSeat, PLAN_GOAL.arc)) !== null) {
           for (let k = facets.length - 1; k >= 0; k -= 1) if (facets[k].tag === 'plan-middlegame') facets.splice(k, 1);
         }
@@ -2922,14 +2922,14 @@ function* reviewSegmentSteps(
             // The full plan outranks the one-line note and the arc for the same
             // pawn: when it is on this ply, they defer to it.
             if (passerTaught(pf) || planNowPasserFiles.has(pf) || !claim(`passer:${pf}`)) continue;
-            keep(f, () => story.commitThreads(m.ply, [{ key: passerThread(pf), kind: 'stated' }, { key: threadKey(f.incoming ? 'opponent' : 'student', PLAN_GOAL.arc), kind: 'stated' }]));
+            keep(f, () => story.commitThreads(m.ply, [{ key: passerThread(pf), kind: 'stated' }, { key: threadKey(f.seat === 'opponent' ? 'opponent' : 'student', PLAN_GOAL.arc), kind: 'stated' }]));
             continue;
           }
         }
         // The plan the game follows, once heard, keeps its side's static
         // structure plan quiet (`PLAN_GOAL.arc`, above).
         if (f.tag === 'plan-arc') {
-          const seat: 'student' | 'opponent' = f.incoming ? 'opponent' : 'student';
+          const seat: 'student' | 'opponent' = f.seat === 'opponent' ? 'opponent' : 'student';
           keep(f, () => story.commitThreads(m.ply, [{ key: threadKey(seat, PLAN_GOAL.arc), kind: 'stated' }]));
           continue;
         }
@@ -3158,7 +3158,7 @@ function* reviewSegmentSteps(
       // This game's pattern lines (your-habit, their-habit) say what happened
       // here and stay; two fundamentals the move broke each keep their how
       // (one part, `renderFundamentalVerdict`).
-      const tagOfPart = (part: string): string | undefined => (part === decision.method ? 'method' : keptByText.get(part)?.tag);
+      const tagOfPart = (part: string) => (part === decision.method ? 'method' as const : keptByText.get(part)?.tag);
       const idOfPart = (part: string): string | undefined => { const at = kept.findIndex((f) => f.text === part); return at >= 0 ? keptKey[at].identity : undefined; };
       const teachesHabit = (part: string): boolean => {
         const tag = tagOfPart(part);
