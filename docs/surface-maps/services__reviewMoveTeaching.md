@@ -107,7 +107,7 @@
 - `src/services/squareRole.test.ts:44`
 
 ### `buildReviewMoveTeachingFact` (function) — 14 call sites
-- `src/services/learnBoardTeaching.ts:1222`
+- `src/services/learnBoardTeaching.ts:1223`
 - `src/services/moveThoughtFacts.ts:229`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`

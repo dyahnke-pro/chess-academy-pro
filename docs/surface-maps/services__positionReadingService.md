@@ -280,8 +280,8 @@
 - `src/services/structureReads.ts:132`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12888`
-- `src/services/learnBoardTeaching.ts:1520`
+- `src/components/Coach/CoachTeachPage.tsx:12886`
+- `src/services/learnBoardTeaching.ts:1521`
 - `src/services/principleAttribution.ts:352`
 - `src/services/principleAttribution.ts:817`
 
@@ -340,7 +340,7 @@
 - `src/services/kickMap.ts:54`
 - `src/services/kingAttackReads.ts:147`
 - `src/services/kingAttackReads.ts:503`
-- `src/services/learnBoardTeaching.ts:735`
+- `src/services/learnBoardTeaching.ts:736`
 - `src/services/learnTurnDoor.test.ts:283`
 - `src/services/learnWalkOct3c.test.ts:61`
 - `src/services/material.ts:44`
@@ -429,7 +429,7 @@
 - `src/services/thinkingExchangeChain.ts:59`
 
 ### `signedLegalSeeFor` (function) — 32 call sites
-- `src/components/Coach/CoachTeachPage.tsx:926`
+- `src/components/Coach/CoachTeachPage.tsx:924`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -444,7 +444,7 @@
 - `src/services/inaccuracyCall.ts:238`
 - `src/services/inaccuracyCall.ts:976`
 - `src/services/inaccuracyCall.ts:2003`
-- `src/services/learnBoardTeaching.ts:1466`
+- `src/services/learnBoardTeaching.ts:1467`
 - `src/services/learnWalkOct3c.test.ts:60`
 - `src/services/learnWalkOct3c.test.ts:66`
 - `src/services/liteMoves.test.ts:139`
@@ -465,7 +465,7 @@
 ### `takingTheAttackerAnswers` (function) — 9 call sites
 - `src/services/boardUrgency.ts:62`
 - `src/services/groundedAnswer.ts:650`
-- `src/services/learnBoardTeaching.ts:1494`
+- `src/services/learnBoardTeaching.ts:1495`
 - `src/services/methodSignals.ts:49`
 - `src/services/positionFacts.ts:1859`
 - `src/services/takingTheAttacker.test.ts:17`
@@ -505,8 +505,8 @@
 
 ### `findHangingBySee` (function) — 27 call sites
 - `src/coach/chatTurnAnswers.ts:210`
-- `src/components/Coach/CoachTeachPage.tsx:9144`
-- `src/components/Coach/CoachTeachPage.tsx:9150`
+- `src/components/Coach/CoachTeachPage.tsx:9142`
+- `src/components/Coach/CoachTeachPage.tsx:9148`
 - `src/services/computedMaterialTruth.corpus.test.ts:216`
 - `src/services/computedMaterialTruth.corpus.test.ts:226`
 - `src/services/conversionMethod.ts:64`
@@ -693,7 +693,7 @@
 
 ### `structureTransfer` (function) — 7 call sites
 - `src/services/groundedAnswer.ts:6934`
-- `src/services/learnBoardTeaching.ts:1440`
+- `src/services/learnBoardTeaching.ts:1441`
 - `src/services/positionReadingService.test.ts:946`
 - `src/services/positionReadingService.test.ts:947`
 - `src/services/positionReadingService.test.ts:948`

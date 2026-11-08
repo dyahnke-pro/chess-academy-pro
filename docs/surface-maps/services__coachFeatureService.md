@@ -123,7 +123,7 @@
 - `src/services/coachFeatureService.test.ts:889`
 
 ### `segmentLitSquares` (function) — 1 call site
-- `src/test/marksSweep.gate.test.ts:188`
+- `src/test/marksSweep.gate.test.ts:191`
 
 ### `SegmentMarks` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -132,7 +132,7 @@
 - `src/components/Coach/CoachGameReview.tsx:2407`
 - `src/components/Coach/CoachGameReview.tsx:3196`
 - `src/services/coachFeatureService.segmentMarks.test.ts:19`
-- `src/test/marksSweep.gate.test.ts:183`
+- `src/test/marksSweep.gate.test.ts:186`
 
 ### `segmentNamedArrows` (function) — 2 call sites
 - `src/services/namedMoveArrows.test.ts:67`
@@ -339,10 +339,10 @@
 - `src/services/coachFeatureService.test.ts:626`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8860`
-- `src/components/Coach/CoachTeachPage.tsx:8963`
-- `src/components/Coach/CoachTeachPage.tsx:11887`
-- `src/components/Coach/CoachTeachPage.tsx:12275`
+- `src/components/Coach/CoachTeachPage.tsx:8858`
+- `src/components/Coach/CoachTeachPage.tsx:8961`
+- `src/components/Coach/CoachTeachPage.tsx:11885`
+- `src/components/Coach/CoachTeachPage.tsx:12273`
 - `src/services/coachFeatureService.test.ts:912`
 - `src/services/coachFeatureService.test.ts:913`
 - `src/services/phaseTransitionDetector.test.ts:575`

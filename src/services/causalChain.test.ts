@@ -248,7 +248,7 @@ describe('the removed defender, an earlier move', () => {
     const ch = findAllowedChain(SANS, SANS.length, 'b');
     expect(ch?.nodes[0].kind).toBe('defender-removed');
     expect(ch?.nodes[0].data.movesEarlier).toBe(1);
-    expect(renderCausalChain(ch!, { register: 'review', studentColor: 'b', rating: 1500 })[0]).toBe('A move earlier, your Ra7 pulled the rook off a6 — the only piece guarding c6.');
+    expect(renderCausalChain(ch, { register: 'review', studentColor: 'b', rating: 1500 })[0]).toBe('A move earlier, your Ra7 pulled the rook off a6 — the only piece guarding c6.');
   });
 });
 
