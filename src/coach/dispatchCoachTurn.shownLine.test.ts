@@ -65,3 +65,22 @@ describe('"why does this work?" after a puzzle\'s solution', () => {
     expect(readTurnInCode(q, { fen: SOLVER_FEN, studentColor: 'white', shownLine: SHOWN })?.kind ?? null).not.toBe('explain-last');
   });
 });
+
+describe('the walk says what the line wins, never a capture the line takes back (hard-chat audit 2026-11-08)', () => {
+  // fxg5 takes the queen, …Nxd3+ takes yours back with check, cxd3 and …hxg5:
+  // a knight for a pawn. The master puzzle's walk said "…fxg5 wins a queen for
+  // a pawn" with the queen coming back, and never said the line's net.
+  const FEN = '6k1/8/7p/4n1q1/5P2/3Q4/2P2K2/8 w - - 0 1';
+  const LINE = shownSolution(FEN, ['f4g5', 'e5d3', 'c2d3', 'h6g5']);
+  const askOn = (q: string) => dispatchCoachTurn({
+    surface: 'standalone-chat', ask: q, origin: 'typed',
+    liveState: { surface: 'standalone-chat', fen: FEN, whoseTurn: 'white', studentColor: 'white', currentRoute: '/tactics', userJustDid: q, shownLine: LINE },
+  } as never, { maxToolRoundTrips: 1 });
+  it('no "wins a queen" for a queen the line gives back; the net closes the walk', async () => {
+    const a = await askOn('Why does this work?');
+    expect(a.servedIntent).toBe('explain-last');
+    expect(a.text).not.toMatch(/wins a queen/);
+    expect(a.text).toMatch(/You win a knight for a pawn\.$/);
+  }, 60_000);
+});
+

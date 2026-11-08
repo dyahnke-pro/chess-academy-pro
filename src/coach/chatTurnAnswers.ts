@@ -10,7 +10,7 @@ import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { answersEachPiece, type ConversationState, type EachPieceKind, type ResolvedChatTurn } from './chatTurn';
 import { findLoosePieces } from '../services/loosePieces';
-import { findHangingBySee, captureRead } from '../services/positionReadingService';
+import { findHangingBySee, captureRead, legalSeeGain } from '../services/positionReadingService';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { andList, orList } from '../utils/andList';
 import { computeMustDefend } from '../services/threatOut';
@@ -21,7 +21,7 @@ import { MATERIAL_VALUE } from '../services/pieceValues';
 import { isPinnedPiece } from '../services/nextPlans';
 import { readPosition } from '../services/positionalRead';
 import { walkableLine } from '../services/proof';
-import { computeExchangeLedger, netPieceWords } from '../services/exchangeLedger';
+import { computeExchangeLedger, netPieceWords, describeProofResult } from '../services/exchangeLedger';
 import type { WalkableLine } from '../types';
 import { positionOf } from '../utils/samePosition';
 import { bookDeparture } from '../services/bookDeparture';
@@ -645,6 +645,21 @@ function explainProvedLine(line: WalkableLine, fen: string, student: Color, hist
   const parts: string[] = [];
   const name = (san: string, side: Color): string => `${side === 'b' ? '…' : ''}${san}`;
   let forcedNext = false;
+  // THE LINE DECIDES WHAT A CAPTURE WINS (hard-chat audit 2026-11-08, the
+  // master puzzle: "…fxg5 wins a queen for a pawn", then Nxd6+ took the queen
+  // back and the line netted a knight, never said). A capture inside the line
+  // keeps its own claim only when the line's end backs it, and the walk ends
+  // on what the line comes to.
+  const ledger = mates ? null : computeExchangeLedger(line.startFen, line.plies.map((p) => p.san), student);
+  const endNet = ledger?.settled ? ledger.netPawns : null;
+  const stepGain = (p: { fenBefore: string; fenAfter: string; san: string }): number | null => {
+    try {
+      const m = new Chess(p.fenBefore).move(p.san);
+      if (!m?.captured) return null;
+      return (MATERIAL_VALUE[m.captured] ?? 0) - legalSeeGain(p.fenAfter, m.to);
+    } catch { return null; }
+  };
+  let lastSaidWin: number | null = null;
   line.plies.forEach((p, i) => {
     const side = new Chess(p.fenBefore).turn();
     const said = name(p.san, side);
@@ -668,11 +683,18 @@ function explainProvedLine(line: WalkableLine, fen: string, student: Color, hist
       }
       return;
     }
-    const why = i === 0 && side === mover
+    const raw = i === 0 && side === mover
       ? bestMoveReason(p.fenBefore, p.san, student, { mateIn: mates ? Math.ceil(line.plies.length / 2) : null, opponentLastSan: last })
       : moveWhy(p.fenBefore, p.san, student, i > 0 ? line.plies[i - 1].san : last);
-    parts.push(why ? `${said} ${why}.` : `Then ${said}.`);
+    const gain = stepGain(p);
+    const overstates = raw !== null && gain !== null && endNet !== null && gain > endNet && /\bwins\b/.test(raw);
+    const why = overstates ? null : raw;
+    lastSaidWin = why && gain !== null && /\bwins\b/.test(why) ? gain : null;
+    parts.push(why ? `${said} ${why}.` : i === 0 ? `It starts with ${said}.` : `Then ${said}.`);
   });
+  if (ledger?.settled && (ledger.studentWon.length > 0 || ledger.opponentWon.length > 0) && lastSaidWin !== endNet) {
+    parts.push(`${openSentence(describeProofResult(ledger))}.`);
+  }
   if (out) out.lines = [line];
   return parts.join(' ');
 }

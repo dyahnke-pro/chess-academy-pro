@@ -119,7 +119,7 @@
 - `src/services/groundedAnswer.test.ts:1639`
 
 ### `evalPhrase` (function) — 1 call site
-- `src/coach/boardTurnAnswer.ts:494`
+- `src/coach/boardTurnAnswer.ts:506`
 
 ### `parsePiecePurpose` (function) — 7 call sites
 - `src/services/piecePurpose.test.ts:17`
@@ -405,7 +405,7 @@
 - `src/services/reviewTeachingPoints.ts:105`
 
 ### `describeMoveGeometry` (function) — 21 call sites
-- `src/coach/chatTurnAnswers.ts:717`
+- `src/coach/chatTurnAnswers.ts:739`
 - `src/components/Puzzles/PuzzleBoard.tsx:250`
 - `src/components/Tactics/TacticSetupBoard.tsx:155`
 - `src/hooks/useHintSystem.ts:357`

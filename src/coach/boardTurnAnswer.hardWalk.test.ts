@@ -61,6 +61,22 @@ describe('a faster win', () => {
   });
 });
 
+describe('short of a clear win, the answer says what the line wins (hard-chat audit 2026-11-08)', () => {
+  // fxg5 takes the queen, …Nxd3+ takes yours back, cxd3 and …hxg5: a knight
+  // for a pawn, at +2.5 — not a clear win, but not "it trades" either.
+  const BUILT = '6k1/8/7p/4n1q1/5P2/3Q4/2P2K2/8 w - - 0 1';
+  it('names the line\'s result, one idea a sentence', async () => {
+    engineWith(BUILT, [{ sans: ['fxg5', 'Nxd3+', 'cxd3', 'hxg5'], evaluation: 250, mate: null }]);
+    expect(await answerBoardTurn(turn('faster-win'), { fen: BUILT, history: [], studentColor: 'white' }))
+      .toBe("fxg5 is the best move: by the end of its line, you win a knight for a pawn. It isn't a clear win yet.");
+  });
+  it('a line that wins nothing keeps the move\'s own reason, without a second dash', async () => {
+    engineWith(PAWN, [{ sans: ['Kd3', 'Kd6'], evaluation: 150, mate: null }]);
+    const text = await answerBoardTurn(turn('faster-win'), { fen: PAWN, history: [], studentColor: 'white' });
+    expect(text).toMatch(/^There's no clear win here yet\. Kd3 is the best move/);
+  });
+});
+
 describe('the walk\'s phrasings reach these kinds, not the alternatives', () => {
   it.each([
     'What if they don’t take — what’s their best defence?',

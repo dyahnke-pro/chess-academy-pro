@@ -16,7 +16,7 @@
 import { Chess, type Square } from 'chess.js';
 import type { ResolvedChatTurn, ChatKind } from './chatTurn';
 import { bestMoveReason, buildDeliberation, namedMoveAnswer, spokenLines } from '../services/deliberation';
-import { moverLineProof } from '../services/exchangeLedger';
+import { moverLineProof, computeExchangeLedger, describeProofResult } from '../services/exchangeLedger';
 import { readCriticalMoment } from '../services/criticalMoment';
 import { walkableLine } from '../services/proof';
 import { getCachedStockfish } from '../hooks/stockfishFenCache';
@@ -413,7 +413,19 @@ async function fasterWinAnswer(board: BoardTurnInput, out?: { lines?: WalkableLi
   // "the only one" with a runner-up 20cp under the line, which the count
   // itself refuses to call.
   const read = readCriticalMoment({ topLines: analysis?.topLines ?? [], moverColor: me, fen: board.fen });
-  if (!read || read.stake !== 'win') return `There's no clear win here yet — ${best.san} is the best move${reason(best.san, null)}.`;
+  // WHAT THE LINE WINS, NOT WHAT ITS FIRST MOVE DOES (hard-chat audit
+  // 2026-11-08, the master puzzle: "There's no clear win here yet — Nxc3 is
+  // the best move — it trades knights", with the line winning a knight).
+  if (!read || read.stake !== 'win') {
+    const pv = (analysis?.topLines ?? []).find((l) => l.moves?.length)?.moves ?? [];
+    const sans: string[] = [];
+    try { const c = new Chess(board.fen); for (const u of pv) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san); } catch { /* the playable prefix */ }
+    const ledger = sans.length ? computeExchangeLedger(board.fen, sans, me) : null;
+    const wins = ledger?.settled && ledger.netPawns >= 1 ? describeProofResult(ledger) : null;
+    return wins
+      ? `${best.san} is the best move: by the end of its line, ${wins}. It isn't a clear win yet.`
+      : `There's no clear win here yet. ${best.san} is the best move${reason(best.san, null)}.`;
+  }
   if (read.resolved && read.count === 1) return `${best.san} is the only move that keeps the win${reason(best.san, null)}; every other move gives it back.`;
   const alsoWin = read.holdingSans.filter((san) => san !== best.san);
   if (alsoWin.length === 0) return `${best.san} is the cleanest${reason(best.san, null)}.`;
