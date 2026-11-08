@@ -41,6 +41,19 @@
 - The better move's arrow was drawn on every costly move, said or not (the Rac8 ply drew their Kg8 with no words): now only where the beat names it. "left e5 weak" is a square, not a move.
 - Left: named moves inside hypotheticals ("with it back on f4, gxh6 would cost you a bishop") and a threat a move stopped ("it stops the mate with Qxg7") — moves on a board that is not on screen.
 
+## 🎼 OPENING NARRATION — minimal, and only where the move order or the square goes wrong (David 2026-11-07, NOT BUILT: five behaviour questions open)
+
+David 2026-11-07: "Minimal spoken words, I want the opening and variation named (as it does) but then i want to hear if i make a move order mistake, or put a piece on a square that goes against the pro lines. I want to hear why the move order matters (maybe in some cases it doesn't, so no narration is required) and if placed on a wrong square I want to hear why the other square was best (does it defend the center, attack a weakness, or is the piece hanging where I put it, that sort of thing)."
+
+Asked back the same day, unanswered (his calls, they decide the build):
+1. Where: Learn free play only, or also the Openings Play tab and Review?
+2. "Pro lines": the masters' book for that opening, or the pro's own repertoire when one was picked?
+3. A book departure the engine calls just as good (a transposition, a fine second square): silent? (Proposed: silent; speak only when the book move is concretely better — their reply punishes the order, or the piece hangs or does less on its square.)
+4. Their departures: say nothing, or name the new line?
+5. "Minimal": in the opening does everything else go quiet (plan talk, theory, the coach's own book moves), leaving the name, the variation and the student's departures?
+
+Computers it would read (exist): `detectOpeningByOrder` (name + variation), the masters' tree (`masterTreeAt`), `moveOrder` / `theoryDeparture`, `squareChoice` / `weighedMoves` (which square, and why the other was better), `bookMoveWhy` (the book move's job).
+
 ## 📱 iPHONE TAPS LAND A ROW LOW — the web view's inset (David 2026-11-06, TestFlight 4.0.8 (211): "Tired pressing the knight, but it hit the pawn" → "Coach tab / All surfaces / They don't work on my end")
 
 **What his phone showed.** A "Learn how to think" board, flipped to Black: he tapped the knight on f6, the app marked the pawn on f7, one row lower. His PostHog rows from that session: a cold launch at 4:12 PM, two boards where every tap answered the square below (a bishop and a pawn when he aimed at the knight on e5), and the app read correctly again after it came back from the background at 4:15.
