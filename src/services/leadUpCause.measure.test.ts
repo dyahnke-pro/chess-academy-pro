@@ -18,6 +18,7 @@ it.runIf(RUN && existsSync(DROP))('lead-up causes on David\'s slips', () => {
   const drop = JSON.parse(readFileSync(DROP, 'utf8')) as { stores: { games: Game[]; profiles?: Array<{ name?: string; chessComUsername?: string; lichessUsername?: string }> } };
   const games = drop.stores.games.filter((g) => g.annotations?.length);
   const tally: Record<string, number> = { slips: 0, any: 0, pressure: 0, complication: 0, cramp: 0, mistake: 0, blunder: 0 };
+  const base: Record<string, number> = { moves: 0, pressure: 0, complication: 0, cramp: 0 };
   const samples: Array<{ id: string; ply: number; san: string; fen: string; seat: string; causes: LeadUpCause[]; words: string[] }> = [];
   let n = 0;
   for (const g of games) {
@@ -27,6 +28,15 @@ it.runIf(RUN && existsSync(DROP))('lead-up causes on David\'s slips', () => {
     const slips = (g.annotations ?? []).filter((a) => a.classification === 'mistake' || a.classification === 'blunder');
     if (slips.length === 0) continue;
     const read = readGame(sans);
+    // THE BASE RATE: the same conditions at every ordinary move (not an
+    // inaccuracy or worse) past the opening — a condition that holds as often
+    // there as at slips is no reason for a slip.
+    const flagged = new Set((g.annotations ?? []).filter((a) => a.classification === 'inaccuracy' || a.classification === 'mistake' || a.classification === 'blunder').map((a) => (a.moveNumber - 1) * 2 + (a.color === 'black' ? 1 : 0)));
+    for (let i = 12; i < sans.length; i += 1) {
+      if (flagged.has(i)) continue;
+      base.moves += 1;
+      for (const c of leadUpCauses(read, i)) base[c.kind] += 1;
+    }
     for (const a of slips) {
       const idx = (a.moveNumber - 1) * 2 + (a.color === 'black' ? 1 : 0);
       if (sans[idx] !== a.san) continue;
@@ -38,8 +48,8 @@ it.runIf(RUN && existsSync(DROP))('lead-up causes on David\'s slips', () => {
         samples.push({ id: g.id, ply: idx + 1, san: a.san, fen: read.plies[idx].fen, seat: a.color, causes, words: causes.map((c) => leadUpWords(c, false)) });
       }
     }
-    if (n % 100 === 0) writeFileSync('audit-reports/lead-up-causes.json', JSON.stringify({ games: n, tally, samples }, null, 1));
+    if (n % 100 === 0) writeFileSync('audit-reports/lead-up-causes.json', JSON.stringify({ games: n, tally, base, samples }, null, 1));
   }
-  writeFileSync('audit-reports/lead-up-causes.json', JSON.stringify({ games: n, tally, samples }, null, 1));
-  console.log('LEADUP', JSON.stringify(tally));
+  writeFileSync('audit-reports/lead-up-causes.json', JSON.stringify({ games: n, tally, base, samples }, null, 1));
+  console.log('LEADUP', JSON.stringify(tally), 'BASE', JSON.stringify(base));
 }, 3_600_000);
