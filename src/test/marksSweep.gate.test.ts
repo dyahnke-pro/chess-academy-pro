@@ -37,7 +37,7 @@ vi.mock('../services/explorerTeachLine', () => ({
 }));
 
 const PRINT = process.env.MARKS_SWEEP_PRINT === '1';
-const CEILING = JSON.parse(readFileSync('src/test/fixtures/marks-sweep.ceiling.json', 'utf8')) as Record<'unlit' | 'unarrowed' | 'shortline', Record<string, number>>;
+const CEILING = JSON.parse(readFileSync('src/test/fixtures/marks-sweep.ceiling.json', 'utf8')) as Record<'unlit' | 'unarrowed' | 'shortline' | 'unstated', Record<string, number>>;
 const SQUARE = /\b[a-h][1-8]\b/g;
 const SHORT = /\bmoves? later\b/;
 

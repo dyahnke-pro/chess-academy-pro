@@ -51,7 +51,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `markableSquares` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8816`
-- `src/components/Coach/CoachTeachPage.tsx:12352`
+- `src/components/Coach/CoachTeachPage.tsx:12356`
 - `src/services/voicePackage.test.ts:293`
 - `src/services/voicePackage.test.ts:302`
 - `src/services/voicePackage.test.ts:312`
@@ -72,7 +72,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `buildVoicePackage` (function) — 89 call sites
 - `src/components/Coach/CoachGameReview.tsx:1935`
-- `src/components/Coach/CoachTeachPage.tsx:8979`
+- `src/components/Coach/CoachTeachPage.tsx:8980`
 - `src/hooks/usePositionNarration.ts:323`
 - `src/services/coachFeatureService.ts:3216`
 - `src/services/coachSurfaceScorecard.report.test.ts:113`
@@ -163,10 +163,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `spokenSentenceKeys` (function) — 23 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8805`
-- `src/components/Coach/CoachTeachPage.tsx:10773`
-- `src/components/Coach/CoachTeachPage.tsx:10797`
-- `src/components/Coach/CoachTeachPage.tsx:12132`
-- `src/components/Coach/CoachTeachPage.tsx:12331`
+- `src/components/Coach/CoachTeachPage.tsx:10774`
+- `src/components/Coach/CoachTeachPage.tsx:10798`
+- `src/components/Coach/CoachTeachPage.tsx:12136`
+- `src/components/Coach/CoachTeachPage.tsx:12335`
 - `src/services/claimKeysLooseCount.test.ts:34`
 - `src/services/coachFeatureService.ts:3219`
 - `src/services/holeOneKey.test.ts:26`
@@ -187,8 +187,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:498`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12119`
-- `src/components/Coach/CoachTeachPage.tsx:12408`
+- `src/components/Coach/CoachTeachPage.tsx:12123`
+- `src/components/Coach/CoachTeachPage.tsx:12412`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 4 call sites

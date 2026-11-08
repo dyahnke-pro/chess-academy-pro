@@ -8825,8 +8825,9 @@ export function CoachTeachPage({ mode }: {
       const turnBoard = live?.fen ?? fen;
       const spoken = speechChainRef.current
         .then(() => {
-          if (!(samePosition(liveFenRef.current ?? '', turnBoard) && learnVoiceAllows('door'))) return undefined;
-          const said = voiceService.speakPackage(d.pkg);
+          if (!samePosition(liveFenRef.current ?? '', turnBoard)) return undefined;
+          const said = learnVoiceAllows('door') ? voiceService.speakPackage(d.pkg) : undefined;
+          if (!said) return undefined;
           void voiceService.untilOnAir(ON_AIR_WAIT_MS).then(() => paceBoardMarks(d.pkg.spoken, phaseMarks, () => liveFenRef.current === boardNow));
           return said;
         })
@@ -11988,9 +11989,12 @@ export function CoachTeachPage({ mode }: {
                   // Paced from the moment the line is ON AIR, not when it is
                   // handed over: the fetch used to put every mark ahead of its
                   // word (marks map 2026-11-08).
-                  const said = speakLearn(qa ? qa[0] : line, { channel: 'door', forced: true, intent: 'learn-live' });
-                  if (marks) void voiceService.untilOnAir(ON_AIR_WAIT_MS).then(() => revealMarks(stripThink(qa ? qa[0] : line), marks));
+                  // The answer is owed BEFORE the question speaks.
                   if (qa) pendingAnswerRef.current = qa[1];
+                  const said = qa
+                    ? speakLearn(qa[0], { channel: 'door', forced: true, intent: 'learn-live' })
+                    : speakLearn(line, { channel: 'door', forced: true, intent: 'learn-live' });
+                  if (marks) void voiceService.untilOnAir(ON_AIR_WAIT_MS).then(() => revealMarks(stripThink(qa ? qa[0] : line), marks));
                   return said;
                 })
                 .catch(() => undefined);
@@ -12386,7 +12390,7 @@ export function CoachTeachPage({ mode }: {
                     // Nxb6 breaks it") shows that board while it is spoken,
                     // then the game comes back — the same static line-walk
                     // board a chat answer uses, never played into the game.
-                    // THE SAME DRAWER EVERY WAVE USES (`keptLineArrows`): a line
+                    // THE SAME DRAWER EVERY WAVE USES (`keptLineArrowGroups`): a line
                     // on screen draws there; one from an earlier board draws the
                     // plies still to come; never a line's ply the student may play.
                     // A question's lines are its answer too: they wait for the move.

@@ -9,7 +9,7 @@ const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
 describe('Learn marks are paced with the voice', () => {
   it('both waves speak with their marks', () => {
     expect(src).toMatch(/speakTrackA\(lines\.join\(' '\), instantMarks\)/);
-    expect(src).toMatch(/speakTrackA\(hintPkg\.spoken, [^)]*arrows: uniqueArrows\(turnArrows\), highlights: owed/);
+    expect(src).toMatch(/speakTrackA\(hintPkg\.spoken, [^)]*arrows: turnArrows, highlights: owed, lines: turnLines/);
   });
   it('the reveal runs on the one schedule', () => {
     expect(src).toMatch(/scheduleMarks\(spoken, items\)/);

@@ -7,7 +7,9 @@
  */
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { admitArrows, keptLineArrows, ARROW_COLOR } from './arrowDoor';
+import { admitArrows, keptLineArrowGroups, ARROW_COLOR } from './arrowDoor';
+
+const keptLineArrows = (...a: Parameters<typeof keptLineArrowGroups>): ReturnType<typeof keptLineArrowGroups>[number] => keptLineArrowGroups(...a).flat();
 import { refutedAlternativeClaims } from './learnBoardTeaching';
 import type { DecisiveReason } from './decisiveReason';
 
@@ -44,7 +46,7 @@ describe('a refuted alternative is red, never green', () => {
   });
 });
 
-describe('keptLineArrows — every wave draws its kept lines one way', () => {
+describe('keptLineArrowGroups — every wave draws its kept lines one way', () => {
   it("12.Bb3 Nxb3: their line on screen draws red; the student's next ply in it is held", () => {
     const fen = at(24); // after 12.Bb3 Nxb3, White to move
     const c = new Chess(fen);

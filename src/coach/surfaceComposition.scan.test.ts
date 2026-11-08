@@ -51,6 +51,12 @@ const INFRA = new Set(['learnTranscript',
   // NOT move any ceiling, and adding a real computer here to duck one is the
   // same cheat as raising one.
   'spokenLanguage',
+  // THE MARK SCHEDULE (2026-11-08: "they ALL appear AS THEY ARE STATED"):
+  // `markPacing` decides WHEN a mark goes up, `markAnchors` which words announce
+  // it, `pacedAnnotations` and `wordMarks` hand a chat answer's or a line's
+  // marks to it. They compute no chess or teaching fact — the successors of
+  // `narrationSegments` above, whose reveal they replace.
+  'markPacing', 'markAnchors', 'pacedAnnotations', 'wordMarks',
   // `provenAnnouncements` is a SAY-ONCE MEMORY (2026-10-18: "Fixed" chips
   // re-announced every game): which green skills the student has already been
   // told about. It computes no chess or teaching fact — the bar for green is
@@ -306,7 +312,7 @@ const SURFACES = [
 
 // ── SHRINK-ONLY CEILINGS, measured 2026-09-17. Lower them when you route a
 //    call through the composer. NEVER raise one.
-const TOTAL_CEILING = 244; // 2026-10-20: one price — Play prices and labels through moveRating, the finished-game record is one autoAnalyzeGame entry
+const TOTAL_CEILING = 240; // 2026-11-08: 238 measured once the mark schedule was named infrastructure (it replaced narrationSegments' reveal); 2026-10-20: one price — Play prices and labels through moveRating, the finished-game record is one autoAnalyzeGame entry
 const PER_FILE_CEILING: Record<string, number> = {
   'components/Coach/CoachTeachPage.tsx': 59,
   'components/Coach/CoachGamePage.tsx': 31,

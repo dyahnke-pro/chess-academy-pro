@@ -233,19 +233,12 @@ function isLegalOnScreen(fen: string, from: string, to: string, side: 'w' | 'b')
  *  turns drew an arrow, because only the late wave drew a fact's line). Each
  *  kept fact's own line, replayed from the board it starts on: a line on the
  *  board on screen draws there; one from an earlier board draws the plies the
- *  game has not yet played. Through the door with the student's moves held. */
-export function keptLineArrows(
-  lines: ReadonlyArray<{ fen: string; arrows: ReadonlyArray<{ from: string; to: string }> }>,
-  boardFen: string,
-  studentColor: 'white' | 'black',
-): BoardArrow[] {
-  return keptLineArrowGroups(lines, boardFen, studentColor).flat();
-}
-
-/** The same drawing, one group of arrows per line, its moves in order — the
- *  mark schedule reveals a line's moves as they are said, each after the one
- *  before (`markAnchors`, David 2026-11-08: "lines get multiple arrows … AS
- *  THEY ARE STATED"). */
+ *  game has not yet played. Through the door with the student's moves held.
+ *
+ *  One group of arrows per line, its moves in order — the mark schedule
+ *  reveals a line's moves as they are said, each after the one before
+ *  (`markAnchors`, David 2026-11-08: "lines get multiple arrows … AS THEY ARE
+ *  STATED"). */
 export function keptLineArrowGroups(
   lines: ReadonlyArray<{ fen: string; arrows: ReadonlyArray<{ from: string; to: string }> }>,
   boardFen: string,

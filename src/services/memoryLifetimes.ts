@@ -58,6 +58,8 @@ export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   'src/hooks/useReviewPlayback.ts::declineLoggedRef': { lifetime: 'per-game', what: 'plies whose "no fundamental" audit row was logged' },
 
   // ── Learn (the lead wires these) ──
+  'src/components/Coach/CoachTeachPage.tsx::pacedArrowKeysRef': { lifetime: 'per-board', what: 'the arrows the mark schedule put up for the line being said' },
+  'src/components/Coach/CoachTeachPage.tsx::pacedSquaresRef': { lifetime: 'per-board', what: 'the squares the mark schedule lit for the line being said' },
   'src/components/Coach/CoachTeachPage.tsx::forkLogRef': { lifetime: 'per-board', what: 'roads walked this visit (to persist: learn-forks)' },
   'src/components/Coach/CoachTeachPage.tsx::recentUserInputsRef': { lifetime: 'per-board', what: 'recent typed inputs' },
   'src/components/Coach/CoachTeachPage.tsx::responseLengthsRef': { lifetime: 'per-board', what: 'reply lengths' },

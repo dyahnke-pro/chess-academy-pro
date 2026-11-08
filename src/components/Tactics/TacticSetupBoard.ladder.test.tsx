@@ -41,7 +41,7 @@ let refuteKind: 'material' | 'not-best' | null = 'material';
 const stableRefute = vi.fn(async () => (refuteKind
   ? { kind: refuteKind, text: 'They take back.', fenAfter: '', uci: [], arrows: [] }
   : null));
-const stableWrongTry = { text: null, arrows: [], refute: stableRefute, clearArrows: vi.fn(), clear: vi.fn() };
+const stableWrongTry = { text: null, refute: stableRefute, clear: vi.fn() };
 vi.mock('../../hooks/useWrongTryRefutation', () => ({
   useWrongTryRefutation: () => stableWrongTry,
 }));
