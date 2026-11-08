@@ -29,7 +29,10 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ measured on his 966 games: pressure / complication / cramp, the narrow path and a quiet best move do NOT tell his slips apart (said nowhere); his slips are quiet moves, and 73% of those that lost material took 2+ of their moves (a third began quietly)
 - ✅ the blunder check says how the piece fell (`slipHabit` reads the punishment line, Review + Learn): 72 of his slips now say the threat that started it, 151 false "was there to take" lines gone (rev 60)
 - ✅ Review's main concept (on the branch): the deep reason two or more costly moves share, by how they were punished, or the same shot every time ("Two of your costly moves, h3 and Ne4, allowed the same shot, Nf3+, which wins material"); replaces the presence line (`computeThroughLine` deleted); fires in ~11 of 146 of his games
-- 🔴 the earlier cause (the move that set the slip up — the cause chain proves 9 of 1,134) · 🔴 My Mistakes, puzzles, chat · 🔴 depth count over every surface · 🔵 agent: the 19 Learn-only computers into Review (branch `wire-19`)
+- ✅ My Mistakes says how the piece fell (puzzles keep the engine's answer, `punishUci`; the one habit computer) · ✅ chat already plays out the punishing line, nothing to add
+- ✅ Learn's game-over card and Review name a perpetual / draw by repetition (`whyItEnded`) · ✅ the board teacher says whose piece ("Your queen …") · ✅ one branch one claim (reply tree vs tempting move) · ✅ a promotion said as a queen unless the piece is the point
+- 🔵 agents: the 19 Learn-only computers (branch `wire-19`) · the opening narration, Learn = Play rung (branch `opening-narration`)
+- 🟡 queued for the next agent slot: All-section depth (engine extension past the data floor + club-games variations, a fetched data build) · the set-up record (the one scoring + the skill-table re-measure) · the earlier cause (the move that set the slip up — the cause chain proves 9 of 1,134) · a depth count over every surface
 
 ## 000zd. COMPUTER WIRING AUDIT (David 2026-11-08: "make sure they are all green and the deciding engine is picking the appropriate lines to speak")
 - ✅ static: `computer-reach --verify` fresh, 346 computers; 10 reach other screens only (kids, missions, the opening page's gems — correct); `legacyTacticGeometry` is a deliberate test oracle
