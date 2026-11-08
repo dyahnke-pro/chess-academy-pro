@@ -14063,11 +14063,11 @@ export function CoachTeachPage({ mode }: {
       const result = game.isCheckmate ? (won ? 'win' : 'loss') : 'draw';
       // A boss game's attempt: what decides the rematch and the practice.
       if (bossGame) void writeBossAttempt({ bossId: bossGame.preset.id, gameId, result, targeted: bossGame.targets.map((t) => t.cardId), at: Date.now() });
-      // The offer, NOT the navigation. The board keeps the mating move on it
-      // until he chooses to leave.
       // WHY IT ENDED, the computer Review reads (`whyItEnded`): a perpetual
       // check or a draw by repetition is named, never only "That's a draw".
       const endWhy = learnGameEndWhy(game.history, playerColor === 'white' ? 'w' : 'b');
+      // The offer, NOT the navigation. The board keeps the mating move on it
+      // until he chooses to leave.
       setFinishedGame({ id: gameId, result, byMate: game.isCheckmate, endWhy });
     })();
   }, [game.isGameOver, game.isCheckmate, game.turn, game.fen, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName, learnRecordOf, saveLearnGame]);

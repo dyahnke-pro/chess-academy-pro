@@ -27,6 +27,7 @@ export const PRINCIPLE_DEVICES: Readonly<Partial<Record<MisconceptionTagId, stri
   'hung-material': 'The device: after you choose a move, run every capture the reply can make — every check, every take, before your hand commits.',
   'missed-tactic': 'The device: checks, captures, threats — in that order, every single move. The shot only stays invisible when the list never runs.',
   'calculation-depth': 'The device: calculate to a quiet position, not to a good feeling — follow every forcing reply until the captures and checks run out.',
+  'missed-set-up': "The device: when no check, capture or threat works yet, ask which quiet move would make one work next move — a piece that lines up on two targets, or a guard you can chase away first.",
   'missed-opponents-threat': "The device: their move first — before your plan, ask what the last move wants to do to you, and answer that before anything else.",
   'missed-their-fork': "The device: count what their pieces hit — a piece that touches two of yours is a fork, and the answer is to move one with a threat, guard both, or take the forker.",
   'missed-their-pin': "The device: look down every line through your piece — if what stands behind it is worth more, the piece in front cannot move, so add a guard or break the line before they pile on.",

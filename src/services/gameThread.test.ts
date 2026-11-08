@@ -55,7 +55,9 @@ describe('the thread across moves: an idea said, then paid off', () => {
   it('the knight reaching the square the route aimed at', () => {
     const fen = '4k3/8/8/2p1p3/3pP3/3P4/2P5/1NB1K3 w - - 0 1';
     const r = keepSquareForKnight(fen, 'w', 'Ke2');
-    expect(r?.promise).toMatchObject({ piece: 'n', square: 'd5' });
+    // Every stop safe (WO-DEPTH-01): the old road to d5 went through c3,
+    // where the pawn on d4 takes the knight; the knight goes d2-c4 instead.
+    expect(r?.promise).toMatchObject({ piece: 'n', square: 'c4' });
   });
   it('a promise goes stale after 16 plies', () => {
     const fen = fenAt('d4 d5 Nf3 Nf6 e3 e6 Bd3 c5');

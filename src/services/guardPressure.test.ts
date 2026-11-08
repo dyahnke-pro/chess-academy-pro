@@ -17,15 +17,15 @@ const FOUR_KNIGHTS = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w 
 
 describe('the board teacher says the pressure on the only guard', () => {
   it('the Ruy\'s Bb5 goes after the knight on c6, the only guard of e5', () => {
-    expect(buildReviewMoveTeaching(RUY, 'Bb5', true)).toBe('The bishop goes after their knight on c6, the only guard of their pawn on e5.');
+    expect(buildReviewMoveTeaching(RUY, 'Bb5', true)).toBe('Your bishop goes after their knight on c6, the only guard of their pawn on e5.');
   });
 
   it('said from the other seat the other way round — their Bb5 against your knight', () => {
-    expect(buildReviewMoveTeaching(RUY, 'Bb5', false)).toBe('The bishop goes after your knight on c6, the only guard of your pawn on e5.');
+    expect(buildReviewMoveTeaching(RUY, 'Bb5', false)).toBe('Their bishop goes after your knight on c6, the only guard of your pawn on e5.');
   });
 
   it('the Four Knights\' Bb5 goes after the same guard', () => {
-    expect(buildReviewMoveTeaching(FOUR_KNIGHTS, 'Bb5', true)).toBe('The bishop goes after their knight on c6, the only guard of their pawn on e5.');
+    expect(buildReviewMoveTeaching(FOUR_KNIGHTS, 'Bb5', true)).toBe('Your bishop goes after their knight on c6, the only guard of their pawn on e5.');
   });
 
   it('nothing when the move does not touch the guard (the Italian\'s Bc4)', () => {
@@ -46,10 +46,10 @@ describe('every surface hears the same idea', () => {
 
   it('Learn says it in full once, then refers back', () => {
     const first = boardTeacherPoint(RUY, 'Bb5', AFTER_BB5_A6, new Map());
-    expect(first?.text).toBe('The bishop goes after their knight on c6, the only guard of their pawn on e5.');
+    expect(first?.text).toBe('Your bishop goes after their knight on c6, the only guard of their pawn on e5.');
     expect(first?.squares).toEqual(['c6', 'e5']);
     const said = spokenIdeaCounts(new Set(first?.claims ?? []));
     expect(said.get('pressure-c6-e5')).toBe(1);
-    expect(boardTeacherPoint(RUY, 'Bb5', AFTER_BB5_A6, said)?.text).toBe('The bishop keeps going after their knight on c6, the guard of e5.');
+    expect(boardTeacherPoint(RUY, 'Bb5', AFTER_BB5_A6, said)?.text).toBe('Your bishop keeps going after their knight on c6, the guard of e5.');
   });
 });
