@@ -111,11 +111,15 @@ export async function refutedAlternative(input: RefutedAlternativeInput): Promis
   /** The ONE search's own line for the alternative — a second read of the
    *  board after it, beside the played-out line (`lineTrust`). */
   let fanAltLine: readonly string[] | null = null;
+  /** The same search's line for the taught move — what the alternative is
+   *  measured against. */
+  let fanTaughtLine: readonly string[] | null = null;
   try {
     const fan = await engine.scoreMoves(input.fenBefore, [taughtUci, altUci], depth);
     costCp = alternativeCostCp(taughtUci, altUci, fan, moverIsWhite ? 'w' : 'b');
     if (costCp === null || costCp < criticalityThresholds().notable) return null;
     fanAltLine = fan.find((l) => l.moves[0] === altUci)?.moves ?? null;
+    fanTaughtLine = fan.find((l) => l.moves[0] === taughtUci)?.moves ?? null;
     altLine = await computePvLine(input.fenBefore, { firstUci: altUci, maxPlies, depth, engine });
   } catch { return null; }
   if (!altLine) return null;
@@ -123,7 +127,7 @@ export async function refutedAlternative(input: RefutedAlternativeInput): Promis
   const sans = altLine.plies.map((p) => p.san);
   const studentWB: 'w' | 'b' = input.studentColor === 'white' ? 'w' : 'b';
   // THE PROOF IS THE ONE REASON, named on the one rule (`alternativeProof`).
-  const { lineSans, proofResult, reason } = alternativeProof(input.fenBefore, alt.san, altLine.plies.map((p) => p.uci), moverIsWhite ? 'w' : 'b', studentWB, costCp, seconds);
+  const { lineSans, proofResult, reason } = alternativeProof(input.fenBefore, alt.san, altLine.plies.map((p) => p.uci), moverIsWhite ? 'w' : 'b', studentWB, costCp, seconds, fanTaughtLine);
 
   // The concept the PUNISHMENT lands — the opponent's line after the alt, read
   // from the opponent's seat (they are the one landing the tactic). A motif is

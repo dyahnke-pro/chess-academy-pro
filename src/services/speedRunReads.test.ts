@@ -62,6 +62,12 @@ describe('his habits of thought, computed (each checked against the existing com
     // one attacker, one defender: not outnumbered
     expect(heldByTactic('6k1/4q3/8/4N3/3P4/8/8/6K1 w - - 0 1', 'w')).toBeNull();
   });
+  it('a piece the check leaves hanging is not "held by a tactic" (his Scotch Gambit after 7.Qd5+)', () => {
+    // Black is in check; the queen on d5 hits the bishop on c5, and it falls
+    // to Qxc5+ next move (Stockfish d18). The raw read, taken with Black in
+    // check, was 0 — read as "taking it loses for them".
+    expect(heldByTactic('r1bq2nr/pppp1kpp/2n5/2bQ4/4P3/2p2N2/PP3PPP/RNB1K2R b KQ - 1 7', 'b')).toBeNull();
+  });
   it('secure the loose piece before collecting', () => {
     // Rxa7 is there, but the bishop on c4 is loose and hit by the queen on c8; the engine retreats it first
     const fen = '2q1k3/p7/8/8/2B5/8/8/R3K3 w - - 0 1';
@@ -158,6 +164,11 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(takeTheSting(fen, 'w', 'Ne5')?.text).toMatch(/takes the sting out/);
     expect(takeTheSting(fen, 'w', 'Bd3')).toBeNull();
   });
+  it('a check is not the sting taken out: it stops the capture for one move only', () => {
+    // The bishop on e4 is hit by the rook on e8. Qb3+ neither moves it nor
+    // guards it — it checks, so …Rxe4 waits one move, and then it takes.
+    expect(takeTheSting('4r1k1/8/8/8/4B3/8/8/3Q2K1 w - - 0 1', 'w', 'Qb3+')).toBeNull();
+  });
   it('the retreat that keeps your break: Nf3 clears d4 for the d-pawn', () => {
     const fen = '4k3/8/8/2p5/3N4/3PP3/8/4K3 w - - 0 1';
     expect(retreatKeepsBreak(fen, 'w', 'Nf3')?.text).toMatch(/clears d4 so your pawn on d3/);
@@ -167,6 +178,19 @@ describe('his habits of thought, computed (each checked against the existing com
     const fen = fenAt('e4 e5');
     expect(bestCasePlan(fen, [line(['g1f3'], 200), line(['a2a3', 'a7a6', 'b2b3', 'b7b6', 'c2c3'], 0)])?.text).toMatch(/best case/);
     expect(bestCasePlan(fen, [line(['g1f3'], 200), line(['d2d4', 'e5d4'], 0)])).toBeNull();
+  });
+  it('a move that loses is not a slow plan that "only gets you level" (his Najdorf, 34.Rh5 after …Rh8+)', () => {
+    // Stockfish d16: Kg2 −897; the block Rh5 drops the rook (Rxh5+, mate in
+    // 20). Learn said "Rh5? That drops the rook on h5" and then "Test the slow
+    // plan with Rh5 by its best case: even if everything goes right, it only
+    // gets you level". Level is a claim about the score: the line must be level.
+    const lost = '7r/3r1pk1/1q1p2P1/1p1bpR2/p3P3/2P5/PP1N4/5R1K w - - 1 34';
+    expect(bestCasePlan(lost, [
+      line(['h1g2', 'b6e3', 'f5f7', 'g7g6', 'f7f6', 'g6g7', 'e4d5', 'e3e2'], -897),
+      line(['f5h5', 'h8h5', 'h1g2', 'b6e3', 'd2f3', 'e3e4', 'b2b3', 'e4g4'], -4799),
+    ])).toBeNull();
+    // A slow line that loses a pawn's worth is not "level" either.
+    expect(bestCasePlan(fenAt('e4 e5'), [line(['g1f3'], 200), line(['a2a3', 'a7a6', 'b2b3', 'b7b6', 'c2c3'], -150)])).toBeNull();
   });
   it('the rejected move works later: exd5 now is worse, and it comes back in the main line after Nc3', () => {
     const fen = fenAt('e4 d5');

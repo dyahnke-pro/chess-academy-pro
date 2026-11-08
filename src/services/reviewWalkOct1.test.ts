@@ -71,6 +71,13 @@ describe('Review walk 2026-10-01 — a prepared kick is the point of h4', () => 
     expect(quietMovePoint(pre, 'h4')).toBe('Prepares h5, which would kick their knight on g6.');
     expect(buildReviewMoveTeaching(pre, 'h4', true)).toMatch(/Prepares h5, which would kick their knight on g6/);
   });
+  it('not a push the pawn could already play in one move (his King\'s Indian, 9…c6)', () => {
+    // Learn said "c6 prepares c5, which would kick their knight on d4" — but
+    // …c5 was there from c7 in one move; c6 prepares d5 (his own words).
+    const kid = 'rnbqr1k1/ppp2pbp/3p1np1/8/2PNP3/2N1BP2/PP2B1PP/R2QK2R b KQ - 0 9';
+    expect(quietMovePoint(kid, 'c6') ?? '').not.toMatch(/Prepares c5/);
+    expect(buildReviewMoveTeaching(kid, 'c6', true) ?? '').not.toMatch(/Prepares c5/);
+  });
   it('not when the next square is covered by an enemy pawn', () => {
     // After …h6 the h5 square is not attacked by a pawn, but a black pawn on g6 would cover h5.
     const c = new Chess('rnbqkb1r/pppppp1p/5np1/8/8/7P/PPPPPPP1/RNBQKBNR w KQkq - 0 3');

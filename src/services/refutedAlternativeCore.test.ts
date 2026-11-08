@@ -32,7 +32,7 @@ describe('refuted alternative — the proof is against the mover', () => {
     for (const m of ['e4', 'e5', 'Nf3']) b.move(m);
     // …f6?? is not a loss; …Qg5?? walks into Nxg5. The proof is the one
     // reason (`costReason`): the first blow that covers the cost and holds.
-    const out = alternativeProof(b.fen(), 'Qg5', ['d8g5', 'f3g5'], 'b', 'b', 900, []);
+    const out = alternativeProof(b.fen(), 'Qg5', ['d8g5', 'f3g5'], 'b', 'b', 900, [], null);
     expect(out.proofResult).toBe('they win a queen');
     expect(out.lineSans).toEqual(['Qg5', 'Nxg5']);
   });
@@ -42,8 +42,8 @@ describe('refuted alternative — the proof is against the mover', () => {
     const b = new Chess();
     for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nd4']) b.move(m);
     const line = ['f3e5', 'd8g5', 'e5f7', 'g5g2', 'h1f1', 'g2e4', 'c4e2', 'd4f3'];
-    const one = alternativeProof(b.fen(), 'Nxe5', line, 'w', 'w', 400, []);
-    const two = alternativeProof(b.fen(), 'Nxe5', line, 'w', 'w', 400, [line.slice(1)]);
+    const one = alternativeProof(b.fen(), 'Nxe5', line, 'w', 'w', 400, [], null);
+    const two = alternativeProof(b.fen(), 'Nxe5', line, 'w', 'w', 400, [line.slice(1)], null);
     // The mate lands four moves on: held on one read, named on two.
     expect(one.reason?.blowPlies).toBe(7);
     expect(one.lineSans).toEqual([]);

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6321 lines · 30 exports · 69 importers · 83 tests · 4 audits**
+**6330 lines · 30 exports · 71 importers · 85 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -77,6 +77,8 @@
 - `src/services/reviewRegister.test.ts`
 - `src/services/reviewWalk1500.test.ts`
 - `src/services/reviewWalk900.test.ts`
+- `src/services/reviewWeighed.realGame.measure.test.ts`
+- `src/services/reviewWeighed.walk.test.ts`
 - `src/services/reviewZugzwang.test.ts`
 - `src/services/whyItFailed.test.ts`
 - `src/test/computedOrderWired.test.ts`
@@ -98,7 +100,7 @@
 - `src/services/coachFeatureService.test.ts:261`
 - `src/services/coachFeatureService.test.ts:281`
 - `src/services/coachFeatureService.test.ts:293`
-- `src/services/gameAnalysisService.ts:2503`
+- `src/services/gameAnalysisService.ts:2598`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -121,12 +123,12 @@
 - `src/services/coachFeatureService.test.ts:881`
 
 ### `segmentNamedArrows` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:3235`
+- `src/components/Coach/CoachGameReview.tsx:3243`
 - `src/services/namedMoveArrows.test.ts:54`
 - `src/services/namedMoveArrows.test.ts:58`
 
 ### `foldReviewRefrains` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1838`
+- `src/components/Coach/CoachGameReview.tsx:1846`
 - `src/services/reviewLedgerCounters.test.ts:67`
 - `src/services/reviewLedgerCounters.test.ts:79`
 
@@ -159,7 +161,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegmentsForTests` (function) — 116 call sites
+### `buildReviewSegmentsForTests` (function) — 118 call sites
 - `src/services/batch2Wiring.test.ts:75`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -270,6 +272,8 @@
 - `src/services/reviewOneFailureSentence.test.ts:16`
 - `src/services/reviewOneLineOnce.test.ts:16`
 - `src/services/reviewTheirHabit.test.ts:24`
+- `src/services/reviewWeighed.realGame.measure.test.ts:105`
+- `src/services/reviewWeighed.walk.test.ts:28`
 - `src/services/reviewZugzwang.test.ts:22`
 - `src/test/computedOrderWired.test.ts:59`
 - `src/test/everySurfaceSpeaks.test.ts:94`
@@ -278,7 +282,7 @@
 - `src/test/reviewExplore.continuity.test.ts:62`
 
 ### `buildReviewSegmentsYielding` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:1837`
+- `src/components/Coach/CoachGameReview.tsx:1845`
 - `src/services/reviewBuildYields.test.ts:35`
 
 ### `defaultIntroText` (function) — 4 call sites
@@ -300,7 +304,7 @@
 - `src/test/mateSaidOnce.gate.test.ts:69`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4278`
+- `src/components/Coach/CoachGameReview.tsx:4286`
 - `src/services/coachFeatureService.test.ts:793`
 - `src/services/coachFeatureService.test.ts:796`
 - `src/services/coachFeatureService.test.ts:803`
@@ -479,6 +483,8 @@
 - `src/services/reviewTurnLength.test.ts`
 - `src/services/reviewWalk1500.test.ts`
 - `src/services/reviewWalk900.test.ts`
+- `src/services/reviewWeighed.realGame.measure.test.ts`
+- `src/services/reviewWeighed.walk.test.ts`
 - `src/services/reviewZugzwang.test.ts`
 - `src/services/studentMomentBoost.test.ts`
 - `src/services/whyItFailed.test.ts`

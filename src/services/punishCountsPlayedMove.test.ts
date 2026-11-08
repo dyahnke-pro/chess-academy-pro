@@ -27,7 +27,7 @@ describe('a punishment is counted from before the move it punishes', () => {
     const uci = LINE.map((san) => { const m = c.move(san); return `${m.from}${m.to}${m.promotion ?? ''}`; });
     const r = costReason({
       fenBefore: BEFORE, playedSan: 'Qxe5+', mover: 'w', student: 'w', costCp: 300,
-      after: { uci, source: 'deep', seconds: [uci] }, before: null, priorMove: null,
+      after: { uci, source: 'deep', seconds: [uci] }, before: null, priorMove: null, against: null,
     });
     expect(r).toBeNull();
   });

@@ -611,9 +611,10 @@ function onCastleRead(s: FocusRunState, e: Extract<FocusEvent, { kind: 'castle-r
   const base: CastleRow = { ply: pr.ply, verdict: 'no-read', side: pr.probe.side, bestCp: pr.probe.bestCp, realCp, whatIfCp: e.whatIfCp, drop: null, gain: null, losing: false, attack: false, rewindPly: null, rewindMoves: null, why: null };
   const cleared: FocusRunState = { ...s, castle: { ...s.castle, probe: null } };
   const move = { fenBefore: pr.fenBefore, san: pr.san, student: pr.student };
-  if (realCp === null || e.whatIfCp === null) return goOn(cleared, move, pr.ply, [{ kind: 'castle-row', row: base }]);
+  const movedFrom = s.castle.boards.find((x) => sameBoard(x.fen, pr.fenBefore))?.lines ?? null;
+  if (realCp === null || e.whatIfCp === null) return goOn(cleared, move, pr.ply, [{ kind: 'castle-row', row: base }], movedFrom);
   const v = castleVerdict({ bestCp: pr.probe.bestCp, realCp, whatIfCp: e.whatIfCp });
-  if (!v.stop) return goOn(cleared, move, pr.ply, [{ kind: 'castle-row', row: { ...base, verdict: 'quiet', drop: v.drop, gain: v.gain } }]);
+  if (!v.stop) return goOn(cleared, move, pr.ply, [{ kind: 'castle-row', row: { ...base, verdict: 'quiet', drop: v.drop, gain: v.gain } }], movedFrom);
   // The rewind goes to a board BEFORE this move — never forward — where
   // castling was sound, and only so far back.
   const found = rewindTarget(s.castle.boards.filter((b) => b.ply <= pr.ply), pr.student);
@@ -649,9 +650,9 @@ function castleStop(s: FocusRunState, pr: { fenBefore: string; san: string; ply:
 }
 
 /** No STOP: the early reminder when it is due, then the coach replies. */
-function goOn(s: FocusRunState, m: { fenBefore: string; san: string; student: Color }, ply: number, effects: FocusEffect[]): FocusStep {
+function goOn(s: FocusRunState, m: { fenBefore: string; san: string; student: Color }, ply: number, effects: FocusEffect[], lines: readonly ReadLine[] | null): FocusStep {
   let state = s;
-  if (reminderDue(m, ply, s.castle.reminded)) {
+  if (reminderDue(m, ply, s.castle.reminded, lines)) {
     state = { ...s, castle: { ...s.castle, reminded: true } };
     effects.push({ kind: 'say', text: CASTLE_REMINDER_LINE, line: 'castle-reminder' });
     effects.push({ kind: 'castle-row', row: { ply, verdict: 'reminder', side: null, bestCp: null, realCp: null, whatIfCp: null, drop: null, gain: null, losing: false, attack: false, rewindPly: null, rewindMoves: null, why: null } });
@@ -861,7 +862,7 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
     effects.push({ kind: 'probe', probe });
     return { state: { ...state, castle: { ...state.castle, probe: { fenBefore: m.fenBefore, san: m.san, ply, student: m.student, probe } } }, effects };
   }
-  return b ? goOn(state, m, ply, effects) : { state, effects: [...effects, { kind: 'reply', punish: false }] };
+  return b ? goOn(state, m, ply, effects, m.lines ?? b.lines) : { state, effects: [...effects, { kind: 'reply', punish: false }] };
 }
 
 function row(s: FocusRunState, chance: FocusChance, ply: number, outcome: ChanceVerdict, spoke: FocusTurnRow['spoke'], prompted: boolean, steered: boolean, planted: boolean, held: boolean, retry: boolean, reward: RewardKind | null): FocusTurnRow {

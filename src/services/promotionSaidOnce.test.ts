@@ -31,7 +31,7 @@ describe('the new queen is said once', () => {
   it('a promotion the line does not say is still named after it', () => {
     const r = costReason({
       fenBefore: FEN, playedSan: 'f4', mover: 'w', student: 'w', costCp: 850,
-      after: { uci: ['a3a2', 'g1h2', 'a2a1q'], source: 'deep', seconds: [] }, before: null, priorMove: null,
+      after: { uci: ['a3a2', 'g1h2', 'a2a1q'], source: 'deep', seconds: [] }, before: null, priorMove: null, against: null,
     });
     expect(r?.plies.map((p) => p.san)).toEqual(['a2', 'Kh2', 'a1=Q']);
     if (!r) return;

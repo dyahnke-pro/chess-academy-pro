@@ -152,7 +152,7 @@ export function ifTheyPlay(args: {
   for (const u of walk) {
     const read = byUci.get(u);
     if (!read) continue;
-    const b = branchOf(args, read, mover, bestCp, pOf.get(u) ?? 0, u === best?.uci);
+    const b = branchOf(args, read, mover, bestCp, pOf.get(u) ?? 0, u === best?.uci, best?.pv ?? null);
     if ('why' in b) held.push({ uci: u, why: b.why });
     else branches.push(b);
   }
@@ -162,6 +162,8 @@ export function ifTheyPlay(args: {
 function branchOf(
   args: { fen: string; student: Color; seconds: ReadonlyArray<readonly string[] | null | undefined>; played: string | null },
   read: ReplyRead, mover: Color, bestCp: number, p: number, engineBest: boolean,
+  /** The best reply's line: what a reply gives up is measured against it. */
+  bestLine: readonly string[] | null,
 ): ReplyBranch | { why: HeldBranchWhy } {
   const c = new Chess(args.fen);
   const x = playUci(c, read.uci);
@@ -190,6 +192,7 @@ function branchOf(
       r = costReason({
         fenBefore: args.fen, playedSan: x.san, mover: x.color, student: args.student, costCp: cost,
         after: { uci: read.pv.slice(1), source: 'deep', seconds }, before: null, priorMove: null,
+        against: bestLine,
       });
     } catch { r = null; }
     if (r && r.kind === 'allowed' && r.plies[0]?.uci === yUci) {

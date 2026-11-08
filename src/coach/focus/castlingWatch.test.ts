@@ -117,15 +117,32 @@ describe('the four fixed lines, always true', () => {
 
 describe('the reminder: once, early, when castling was ready and something else was played', () => {
   const m = (san: string) => ({ fenBefore: READY, san, student: 'w' as const });
+  // The board's read: castling among its lines, near its best.
+  const sound: ReadLine[] = [{ moves: ['d2d3'], evaluation: 40, mate: null }, { moves: ['e1g1'], evaluation: 30, mate: null }];
   it('said in the student\'s first twelve moves', () => {
     expect(castleReady(READY, 'w')).toBe(true);
-    expect(reminderDue(m('d3'), 7, false)).toBe(true);
+    expect(reminderDue(m('d3'), 7, false, sound)).toBe(true);
   });
-  it('twins: castling, already reminded, past move 12, castling not ready', () => {
-    expect(reminderDue(m('O-O'), 7, false)).toBe(false);
-    expect(reminderDue(m('d3'), 7, true)).toBe(false);
-    expect(reminderDue(m('d3'), 25, false)).toBe(false);
-    expect(reminderDue({ fenBefore: play(new Chess().fen(), 'e4').replace(' b ', ' w '), san: 'd4', student: 'w' }, 3, false)).toBe(false);
+  it('twins: castling, already reminded, past move 12, castling not ready, no read', () => {
+    expect(reminderDue(m('O-O'), 7, false, sound)).toBe(false);
+    expect(reminderDue(m('d3'), 7, true, sound)).toBe(false);
+    expect(reminderDue(m('d3'), 25, false, sound)).toBe(false);
+    expect(reminderDue({ fenBefore: play(new Chess().fen(), 'e4').replace(' b ', ' w '), san: 'd4', student: 'w' }, 3, false, sound)).toBe(false);
+    expect(reminderDue(m('d3'), 7, false, null)).toBe(false);
+  });
+  it('castling legal but unsound is not "you could have castled there" (his Najdorf, before 7.Nf3)', () => {
+    // 6…e5 hits the knight on d4. O-O is legal and drops it: Stockfish d16
+    // O-O −319 (…exd4 Qxd4 …Nc6) against Nf5 +82. Learn said "You could have
+    // castled there. Get your king safe before the centre opens." here.
+    const c = new Chess();
+    for (const s of ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Bc4', 'e5']) c.move(s);
+    const before = c.fen();
+    expect(castleReady(before, 'w')).toBe(true);
+    const read: ReadLine[] = [
+      { moves: ['d4f5'], evaluation: 82, mate: null }, { moves: ['d4e2'], evaluation: 41, mate: null }, { moves: ['d4f3'], evaluation: 30, mate: null },
+    ];
+    expect(reminderDue({ fenBefore: before, san: 'Nf3', student: 'w' }, 13, false, read)).toBe(false);
+    expect(reminderDue({ fenBefore: before, san: 'Nf3', student: 'w' }, 13, false, [...read, { moves: ['e1g1'], evaluation: -319, mate: null }])).toBe(false);
   });
 });
 
