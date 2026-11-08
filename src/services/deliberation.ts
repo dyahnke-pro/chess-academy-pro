@@ -27,7 +27,7 @@ import { strategicWhyLed } from './moveFundamentals';
 import { ownsMoreSpace, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
 import { isPinnedPiece } from './nextPlans';
 import { countKingAttack } from './kingSafety';
-import { andList, lineAfterFirst, lineShape, orList, seatedLine } from '../utils/andList';
+import { andList, lineAfterFirst, lineShape, lineShapePlies, orList, seatedLine } from '../utils/andList';
 import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { describeMoveGeometry, quietPurposePhrase } from './groundedAnswer';
 import { kickBreaksPin, pawnKickNext } from './pawnKickNext';
@@ -332,7 +332,12 @@ function shortfallText(c: Candidate): string {
     // castles, and the rook on e8 falls", never "Qf5? Qf5, castles…".
     // A long line is shaped AFTER the candidate is taken off the front, so the
     // answer names the reply and where it lands, never "the moves that follow".
-    if (c.proofSans && c.proofSans.length > 4 && c.proofSans[0] === c.san && c.proof.includes(' — ')) {
+    // ONE RULE WITH `lineShape` (hard-chat audit 2026-11-08: a four-move line,
+    // "Nc3 …Rh6 Qxh6 …gxh6", was shortened to its first and last moves and then
+    // lost its first, leaving "Nc3? Then two moves later, they play gxh6" —
+    // the …Rh6 that traps the queen unsaid). Any line the shaper shortens is
+    // shaped again from the reply.
+    if (c.proofSans && lineShapePlies(c.proofSans.length).length < c.proofSans.length && c.proofSans[0] === c.san && c.proof.includes(' — ')) {
       // The reply opens what is left, so it is said as theirs (OS-8 gap 7).
       return `${c.san}? Then ${lineShape(c.proofSans.slice(1), 'they')} — ${c.proof.slice(c.proof.indexOf(' — ') + 3)}.`;
     }
