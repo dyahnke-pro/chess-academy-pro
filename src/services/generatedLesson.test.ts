@@ -6,7 +6,7 @@ vi.mock('./openingGenerator', () => ({ generateOpening: (...a: unknown[]): unkno
 const walkthroughLesson = vi.fn();
 vi.mock('./walkthroughLesson', () => ({ walkthroughLesson: (...a: unknown[]): unknown => walkthroughLesson(...a) }));
 
-const { generatedLessonFor, lessonBeatsOnLine, __resetGeneratedLessons } = await import('./generatedLesson');
+const { generatedLessonFor, lessonBeatsOnLine, withGamesEnd, __resetGeneratedLessons } = await import('./generatedLesson');
 
 const MOVES = ['e4', 'e5', 'Bc4', 'Nc6'];
 const script = (beats: LessonScript['beats']): LessonScript => ({ openingId: 'o', title: 't', minutes: 1, orientation: 'white', beats, kind: 'variation' });
@@ -17,7 +17,7 @@ describe('generatedLessonFor', () => {
   it('builds once per line and walks the line\'s own moves', async () => {
     generateOpening.mockResolvedValue({ ok: true, tree: { root: {} } });
     walkthroughLesson.mockReturnValue(script([{ id: 'a', moves: ['e4'], say: 'x' }]));
-    const args = { name: "Bishop's Opening", eco: 'C23', moves: MOVES, openingId: 'o', color: 'white' as const, corpusNotes: false };
+    const args = { name: "Bishop's Opening", eco: 'C23', moves: MOVES, openingId: 'o', color: 'white' as const, corpusNotes: false, gamesEnd: null };
     const a = await generatedLessonFor(args);
     const b = await generatedLessonFor(args);
     expect(a).toBe(b);
@@ -28,12 +28,36 @@ describe('generatedLessonFor', () => {
 
   it('a failed build is not kept, and never rejects', async () => {
     generateOpening.mockRejectedValueOnce(new Error('boom'));
-    const args = { name: 'X', eco: '', moves: MOVES, openingId: 'o', color: 'black' as const, corpusNotes: true };
+    const args = { name: 'X', eco: '', moves: MOVES, openingId: 'o', color: 'black' as const, corpusNotes: true, gamesEnd: null };
     expect(await generatedLessonFor(args)).toBeNull();
     generateOpening.mockResolvedValue({ ok: true, tree: { root: {} } });
     walkthroughLesson.mockReturnValue(script([{ id: 'a', moves: ['e4'], say: 'x' }]));
     expect(await generatedLessonFor(args)).not.toBeNull();
     expect(generateOpening).toHaveBeenCalledTimes(2);
+  });
+});
+
+// WO-ALL-SECTION-DEPTH: a line the engine carried on past its games says so,
+// on the first move the engine chose — the page's own wording.
+describe('withGamesEnd', () => {
+  it('says where the games run out on the engine\'s first move, before what the move does', () => {
+    const s = withGamesEnd(script([
+      { id: '0', moves: ['e4'], say: 'Takes the centre.' },
+      { id: '1', moves: ['e4', 'e5'], say: 'Mirrors it.' },
+      { id: '2', moves: ['e4', 'e5', 'Bc4'], say: 'Aims at f7.' },
+    ]), MOVES, 2);
+    expect(s.beats.map((b) => b.say)).toEqual([
+      'Takes the centre.',
+      'Mirrors it.',
+      "The games run out here. From this move on, the line is the engine's best play for both sides. Aims at f7.",
+    ]);
+  });
+  it('a lesson built with gamesEnd says it; one without does not', async () => {
+    generateOpening.mockResolvedValue({ ok: true, tree: { root: {} } });
+    walkthroughLesson.mockImplementation(() => script([{ id: '0', moves: ['e4'], say: 'x' }, { id: '1', moves: ['e4', 'e5'], say: 'y' }]));
+    const base = { name: 'X', eco: '', moves: MOVES, openingId: 'o', color: 'white' as const, corpusNotes: true };
+    expect((await generatedLessonFor({ ...base, gamesEnd: 1 }))!.beats[1].say).toMatch(/^The games run out here\./);
+    expect((await generatedLessonFor({ ...base, gamesEnd: null }))!.beats[1].say).toBe('y');
   });
 });
 

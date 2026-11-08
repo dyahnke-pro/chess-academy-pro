@@ -36,12 +36,31 @@ vi.mock('./lichessExplorerService', () => ({
     return Promise.resolve({ white: 240, draws: 180, black: 180, moves, topGames: [] } as unknown as LichessExplorerResult);
   },
 }));
+// WO-ALL-SECTION-DEPTH: the engine's moves past the main line's games, and
+// club games for the variations. Empty unless a test fills them.
+const ENGINE = new Map<string, string[]>();
+vi.mock('./engineLine', () => ({
+  engineLineAt: (sans: readonly string[]): Promise<string[] | null> => Promise.resolve(ENGINE.get(sans.join(' ')) ?? null),
+}));
+const CLUB = new Map<string, Array<[string, number]>>();
+vi.mock('./clubTree', async (orig) => ({
+  ...(await orig<typeof import('./clubTree')>()),
+  clubTreeAt: (sans: readonly string[]): Promise<LichessExplorerResult | null> => {
+    const moves = (CLUB.get(sans.join(' ')) ?? []).map(([s, n]) => row(s, n));
+    const total = moves.reduce((a, m) => a + m.white + m.draws + m.black, 0);
+    return Promise.resolve(moves.length ? { white: moves.reduce((a, m) => a + m.white, 0), draws: moves.reduce((a, m) => a + m.draws, 0), black: total - moves.reduce((a, m) => a + m.white + m.draws, 0), moves, topGames: [] } as unknown as LichessExplorerResult : null);
+  },
+}));
 vi.mock('./stockfishEngine', () => ({
   stockfishEngine: { analyzePosition: (): Promise<{ evaluation: number }> => Promise.resolve({ evaluation: 20 }) },
 }));
 
 describe('gamesCourseRecord — the page view of a database-only opening', () => {
-  beforeEach(() => { lookups.length = 0; liveReads.length = 0; });
+  beforeEach(() => {
+    lookups.length = 0; liveReads.length = 0;
+    ENGINE.clear();
+    CLUB.clear();
+  });
 
   it('runs the main line on from the tree, adds the split as a tab, teaches the seat the name gives', async () => {
     const raw = buildOpeningRecord({ id: 'mengarini', name: 'Sicilian Defense: Mengarini Variation', pgn: 'e4 c5 a3', color: 'white', variations: null });
@@ -75,5 +94,30 @@ describe('gamesCourseRecord — the page view of a database-only opening', () =>
     const meng = (await gamesCourseRecord(buildOpeningRecord({ id: 'mengarini-3', name: 'Sicilian Defense: Mengarini Variation', pgn: 'e4 c5 a3', variations: null })))!;
     expect(meng.pgn).toBe('e4 c5 a3 g6 b4 Bg7');
     expect(liveReads).toEqual([]);
+  });
+
+  // WO-ALL-SECTION-DEPTH (David 2026-11-08: "Stockfish's best moves fill the
+  // main line past the data floor; club games give the variations").
+  it('runs the main line on with the engine past its games, and takes variations from club games past the stored trees', async () => {
+    const terminus = 'e4 c5 a3 g6 b4 Bg7';
+    ENGINE.set(terminus, ['Nf3', 'Nf6', 'Be2', 'O-O', 'O-O', 'd6']);
+    CLUB.set(terminus, [['Nf3', 150], ['Bb2', 60]]);
+    const r = (await gamesCourseRecord(buildOpeningRecord({ id: 'mengarini-4', name: 'Sicilian Defense: Mengarini Variation', pgn: 'e4 c5 a3', variations: null })))!;
+    // The engine plays on from Bg7 until both kings are settled — d6 is past it.
+    expect(r.pgn).toBe(`${terminus} Nf3 Nf6 Be2 O-O O-O`);
+    expect(r.engineFrom).toBe(6);
+    const club = r.variations!.find((v) => v.source === 'club')!;
+    expect(club.pgn).toBe(`${terminus} Bb2`);
+    expect(club.explanation).toMatch(/Club players rated 1200–1999 play it in 29% of the 210 games at that point\.$/);
+    expect(liveReads).toEqual([]);
+  });
+
+  it('a named line no stored tree holds (the Paris Gambit) no longer hands off when the engine and club games carry it', async () => {
+    ENGINE.set('Nh3 d5 g3 e5 f4', ['exf4', 'Nxf4', 'Nf6']);
+    CLUB.set('Nh3 d5 g3 e5 f4', [['exf4', 3000], ['Bxh3', 2500]]);
+    const paris = (await gamesCourseRecord(buildOpeningRecord({ id: 'paris-2', name: 'Amar Opening: Paris Gambit', pgn: 'Nh3 d5 g3 e5 f4', variations: null })))!;
+    expect(paris.pgn).toBe('Nh3 d5 g3 e5 f4 exf4 Nxf4 Nf6');
+    expect(paris.engineFrom).toBe(5);
+    expect(paris.variations!.map((v) => [v.pgn, v.source])).toEqual([['Nh3 d5 g3 e5 f4 Bxh3', 'club']]);
   });
 });

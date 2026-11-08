@@ -51,7 +51,7 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
     };
     for (const [name, pgn, side] of OPENINGS) {
       const sans = pgn.split(' ');
-      const course = await buildGamesCourse(sans, side, { lookup });
+      const course = await buildGamesCourse(sans, side, { lookup, variations: async (s) => { const r = await lookup(s); return r ? { result: r, source: 'masters' as const } : null; }, engine: null });
       if (!course) { console.log(`${name}: (illegal)`); continue; }
       const all = [course.main, ...course.variations];
       for (const l of all) {
@@ -98,7 +98,7 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
     const { replies } = await buildReplies(line, 3, 'white', { lookup: masterTreeAt });
     for (const r of replies.slice(0, 3)) {
       const t0 = Date.now();
-      const script = await generatedLessonFor({ name: r.name || "Bishop's Opening", eco: 'C24', moves: r.moves, openingId: 'bishops-opening', color: 'white', corpusNotes: true });
+      const script = await generatedLessonFor({ name: r.name || "Bishop's Opening", eco: 'C24', moves: r.moves, openingId: 'bishops-opening', color: 'white', corpusNotes: true, gamesEnd: null });
       const beats = script ? lessonBeatsOnLine(script, r.moves) : [];
       console.log(`\n@${r.atPly} ${r.triggerMove} — ${beats.length} spoken beats of ${r.moves.length} moves (${Date.now() - t0} ms)`);
       for (const b of beats) console.log(`  ${b.atMove + 1}. ${r.moves[b.atMove]}: ${b.say}${b.arrows?.length ? ` [${b.arrows.length} arrows]` : ''}`);
@@ -118,7 +118,7 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
     const mastersOnly = async (sans: readonly string[]) => { const r = await masterTreeAt(sans); return r ? { result: r, source: 'masters' as const } : null; };
     let tabs = 0; let before = 0; let after = 0; let online = 0;
     for (const [name, pgn, side] of OPENINGS) {
-      const course = await buildGamesCourse(pgn.split(' '), side, { lookup: async (sans) => (await storedTreeAnswer(sans))?.result ?? null });
+      const course = await buildGamesCourse(pgn.split(' '), side, { lookup: async (sans) => (await storedTreeAnswer(sans))?.result ?? null, variations: storedTreeAnswer, engine: null });
       if (!course) continue;
       for (const [k, l] of [course.main, ...course.variations].entries()) {
         tabs += 1;
@@ -156,7 +156,7 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
       if (base) {
         const { generatedLessonFor, lessonBeatsOnLine, overlayBeats } = await import('./generatedLesson');
         const moves = [...pgn.split(' '), ...base.moves];
-        const script = await generatedLessonFor({ name, eco: '', moves, openingId: 'x', color: side, corpusNotes: true });
+        const script = await generatedLessonFor({ name, eco: '', moves, openingId: 'x', color: side, corpusNotes: true, gamesEnd: null });
         const line = script ? overlayBeats(base, lessonBeatsOnLine(script, moves), pgn.split(' ').length) : base;
         line.moves.forEach((m, i) => { if (line.annotations[i]) console.log(`    ${m}: ${line.annotations[i]}`); });
       }

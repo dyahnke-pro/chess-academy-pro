@@ -16,6 +16,7 @@
 import { Chess } from 'chess.js';
 import type { LichessExplorerResult, LichessExplorerMove } from '../types';
 import { loadDataJson } from './dataFile';
+import { boardHash } from '../utils/boardHash';
 
 interface TreeIndex {
   source: string;
@@ -103,13 +104,9 @@ export function rowsToResult(fen: string, rows: readonly Row[]): LichessExplorer
   return { white, draws, black, moves, topGames: [], opening: null };
 }
 
-/** FNV-1a (32 bits, 8 hex) of a board key — the late-transposition fallback's
- *  hash. The shard script runs the same function and pins this vector. Pure. */
-export function boardHash(key: string): string {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < key.length; i += 1) { h ^= key.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
-  return h.toString(16).padStart(8, '0');
-}
+/** FNV-1a of a board key — the late-transposition fallback's hash (a leaf,
+ *  so the club tree and the engine lines shard by it too). */
+export { boardHash } from '../utils/boardHash';
 
 /** What one tree holds for the board `sans` reaches, in the explorer's shape,
  *  or null when it does not hold the board (too few games, past move 20, a path
