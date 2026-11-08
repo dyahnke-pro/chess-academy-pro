@@ -156,7 +156,7 @@
 ### `lastMoveFromPgn` (re-export) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:14231`
 - `src/services/moveInsight.test.ts:129`
-- `src/services/moveInsight.ts:650`
+- `src/services/moveInsight.ts:651`
 - `src/services/whyBestMove.ts:82`
 
 ### `moveMissed` (re-export) — 14 call sites
@@ -173,7 +173,7 @@
 - `src/services/moveInsight.test.ts:265`
 - `src/services/moveInsight.test.ts:268`
 - `src/services/moveInsight.test.ts:311`
-- `src/services/moveInsight.ts:393`
+- `src/services/moveInsight.ts:394`
 
 ### `positionAsk` (re-export) — 26 call sites
 - `src/components/Coach/CoachTeachPage.tsx:3666`
@@ -199,7 +199,7 @@
 - `src/services/moveInsight.test.ts:298`
 - `src/services/moveInsight.test.ts:318`
 - `src/services/moveInsight.test.ts:321`
-- `src/services/moveInsight.ts:156`
+- `src/services/moveInsight.ts:157`
 - `src/services/thinkingAssessStep.ts:85`
 - `src/services/whyBestMove.ts:87`
 

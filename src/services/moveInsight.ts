@@ -21,6 +21,7 @@
 // puzzle boards, the chat compare, and review (through compareTwoMoves).
 import { openSentence } from '../utils/openSentence';
 import { checkMethod } from './checkMethod';
+import { setUpPosed, SET_UP_POSED } from './setUpChance';
 import { Chess, type Move, type Square } from 'chess.js';
 import { walkableLine } from './proof';
 import type { WalkableLine } from '../types';
@@ -788,6 +789,9 @@ export function positionPosed(
     if (retreatKeepsBreak(fen, me, opts.bestSan ?? null)) add('mistimed-pawn-break', 60);
     // ATTACK, SACRIFICES AND KINGS (batch 4) — the king question the board
     // posed: the same reads that teach it (`kingAttackReads`), both ways.
+    // THE QUIET SET-UP (2026-11-08): the best move takes nothing and gives no
+    // check, and its line wins material or mates a move or two later.
+    if (opts.bestLine && setUpPosed(fen, opts.bestLine)) add('missed-set-up', SET_UP_POSED);
     const line = opts.bestLine && opts.bestLine.length ? opts.bestLine : opts.bestSan ? [opts.bestSan] : [];
     for (const r of line.length ? kingReadsForBestLine(fen, me, line) : []) {
       const posed = KING_READ_POSED[r.id];

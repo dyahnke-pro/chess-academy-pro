@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { detectSetUpChance, setUpHeldClause, setUpClause, setUpSkill } from './setUpChance';
+import { positionPosed } from './moveInsight';
+import { capabilityOutcomes } from './capabilityEvidence';
+import { detectSetUpChance, setUpHeldClause, setUpClause, setUpSkill, setUpPosed } from './setUpChance';
 import type { AnalysisLine } from '../types';
 
 /** One sound engine line from `fen`, in SAN, as an analysis line. */
@@ -102,4 +104,25 @@ describe('the position composer hands moment 3 to the door', () => {
     expect(clause?.heldForm?.points).toBe('missed-your-pin');
     expect(clause?.heldForm?.text).toMatch(/^A quiet move here pins their/);
   }, 30_000);
+});
+
+// THE SET-UP ON THE RECORD (David 2026-11-08: "Repeatedly missing a set-up is
+// noted as a weakness the coach teaches"). Its own row, posed from the board's
+// best line alone — the line the record and the population both carry.
+describe('the set-up row — posed off the best line, scored by the one scoring', () => {
+  const forkLine = line(FORK, ['Nf3', 'Qxf3', 'Qxf3+', 'Kg1', 'c6', 'c5', 'Be5', 'Ne2', 'dxc5', 'Ng3', 'Qxd3'], -715).moves;
+
+  it('a quiet move that sets up a fork is posed; a pin that wins nothing is not', () => {
+    expect(setUpPosed(FORK, forkLine)).toBe(true);
+    expect(setUpPosed(PIN_KING, line(PIN_KING, ['Qa4', 'h5']).moves)).toBe(false);
+    expect(positionPosed(FORK, { bestSan: 'Nf3', bestLine: forkLine }).map((p) => p.tag)).toContain('missed-set-up');
+  });
+
+  it('a costly move breaks it, a clean one holds it', () => {
+    const alsoPosed = positionPosed(FORK, { bestSan: 'Nf3', bestLine: forkLine });
+    const missed = capabilityOutcomes({ fenBefore: FORK, playedSan: 'a6', moverColor: 'black', cpLoss: 400, bestSan: 'Nf3', shotLine: forkLine, alsoPosed });
+    expect(missed.find((o) => o.tag === 'missed-set-up')?.outcome).toBe('broken');
+    const found = capabilityOutcomes({ fenBefore: FORK, playedSan: 'Nf3', moverColor: 'black', cpLoss: 0, shotLine: forkLine, alsoPosed });
+    expect(found.find((o) => o.tag === 'missed-set-up')?.outcome).toBe('held');
+  });
 });

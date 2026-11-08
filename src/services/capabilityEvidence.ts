@@ -689,7 +689,10 @@ export function capabilityOutcomes(args: CapabilityMoveArgs): Array<{ tag: Misco
   // NO SLIP TAG (a puzzle's wrong answer: no best move to classify against)
   // means the move failed the question it was asked, and the board's posed
   // skills ARE that question — they break, as before the rule.
-  const shown = clean || slipTags === null ? posed : posed.filter((s) => s.outcome === 'broken' || slipTags.has(s.tag));
+  // A QUIET SET-UP IS THE SLIP'S OWN QUESTION (2026-11-08): it is posed only
+  // from the board's best line, so a costly move was a move other than the
+  // set-up — the move that missed it.
+  const shown = clean || slipTags === null ? posed : posed.filter((s) => s.outcome === 'broken' || slipTags.has(s.tag) || s.tag === 'missed-set-up');
   // A posed question that carries its own answer (the knight choice) can
   // only make the row BROKEN; held still needs a clean move overall.
   return shown.map((s) => ({ tag: s.tag, outcome: s.outcome === 'broken' ? 'broken' : outcome, posedImportance: s.posedImportance }));

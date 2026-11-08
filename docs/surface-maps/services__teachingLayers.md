@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**161 lines · 7 exports · 12 importers · 6 tests · 0 audits**
+**162 lines · 7 exports · 13 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.ts`
 - `src/services/factStakes.test.ts`
 - `src/services/liveNeedGate.test.ts`
+- `src/services/oneGroupTable.gate.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/puzzleMethod.ts`
 - `src/services/reviewFacetRank.ts`
@@ -43,28 +44,29 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `layerStandings` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:1363`
-- `src/services/positionFacts.ts:1319`
-- `src/services/puzzleMethod.ts:51`
-- `src/services/teachingLayers.test.ts:21`
-- `src/services/teachingLayers.test.ts:28`
-- `src/services/teachingLayers.test.ts:37`
+- `src/services/coachFeatureService.ts:1640`
+- `src/services/positionFacts.ts:1454`
+- `src/services/puzzleMethod.ts:56`
+- `src/services/teachingLayers.test.ts:22`
+- `src/services/teachingLayers.test.ts:29`
 - `src/services/teachingLayers.test.ts:38`
-- `src/services/teachingLayers.test.ts:43`
-- `src/services/teachingLayers.test.ts:49`
+- `src/services/teachingLayers.test.ts:39`
+- `src/services/teachingLayers.test.ts:44`
+- `src/services/teachingLayers.test.ts:50`
 
 ### `layerBonus` (function) — 5 call sites
-- `src/services/coachDecider.ts:461`
-- `src/services/teachingLayers.test.ts:23`
+- `src/services/coachDecider.ts:471`
 - `src/services/teachingLayers.test.ts:24`
-- `src/services/teachingLayers.test.ts:32`
+- `src/services/teachingLayers.test.ts:25`
 - `src/services/teachingLayers.test.ts:33`
+- `src/services/teachingLayers.test.ts:34`
 
 ## Tests
 
 - `src/services/coachDecider.test.ts`
 - `src/services/factStakes.test.ts`
 - `src/services/liveNeedGate.test.ts`
+- `src/services/oneGroupTable.gate.test.ts`
 - `src/services/supportedFacts.test.ts`
 - `src/services/teachingLayers.test.ts`
 - `src/services/thinkingSteps.test.ts`

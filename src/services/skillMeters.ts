@@ -52,6 +52,7 @@ export const METER_OF_TAG: Record<Exclude<MisconceptionTagId, 'other'>, SkillMet
   'king-stuck-center': 'king-safety',
   'weakened-king-safety': 'king-safety',
   'missed-tactic': 'tactics',
+  'missed-set-up': 'tactics',
   'hung-material': 'threats',
   'missed-opponents-threat': 'threats',
   // Their tactic, per motif — the same skill as the threat it refines.

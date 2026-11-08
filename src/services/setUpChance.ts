@@ -301,6 +301,25 @@ export function detectSetUpChance(fen: string, topLines: readonly AnalysisLine[]
   return null;
 }
 
+/** How much the board asked when it posed a set-up (the one scoring's
+ *  importance scale; a shot is 85). */
+export const SET_UP_POSED = 85;
+
+/**
+ * THE SET-UP THE BOARD POSED, for the record (David 2026-11-08: "Repeatedly
+ * missing a set-up is noted as a weakness the coach teaches"): the board's
+ * best line is a strike a quiet move sets up — a piece won or mate, never a
+ * pin that wins nothing (a strike nets a minor or mates by construction).
+ * Read off the best line alone, the one line the record and the population
+ * sample both carry, so the student and the population are scored alike.
+ */
+export function setUpPosed(fen: string, bestLineUci: readonly string[]): boolean {
+  if (bestLineUci.length < 3) return false;
+  let me: Color;
+  try { me = new Chess(fen).turn(); } catch { return false; }
+  return detectSetUpChance(fen, [{ rank: 1, evaluation: 0, mate: null, moves: [...bestLineUci] }], me)?.kind === 'strike';
+}
+
 /** The skill a set-up points at: the motif's own "you missed it" row. */
 export function setUpSkill(c: SetUpChance): MisconceptionTagId {
   return MOTIFS[c.motif].yours;

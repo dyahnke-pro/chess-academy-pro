@@ -70,6 +70,7 @@ export const TAG_LAYER: Record<MisconceptionTagId, TeachingLayer> = {
   'greedy-pawn-grab': 'safety',
   'poisoned-pawn': 'safety',
   'missed-tactic': 'safety',
+  'missed-set-up': 'safety',
   'calculation-depth': 'safety',
   'bad-trade-material': 'safety',
   // — the rules every game rests on —

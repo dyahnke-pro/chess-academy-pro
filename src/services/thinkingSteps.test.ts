@@ -18,6 +18,9 @@ import type { MethodHabit } from './methodBeat';
 // the blunder check (the slip's question), so a greedy grab owes that habit.
 const CHANGED_SINCE: Partial<Record<MisconceptionTagId, MethodHabit>> = {
   'greedy-pawn-grab': 'blunder-check', 'poisoned-pawn': 'blunder-check',
+  // A tag newer than the snapshot (2026-11-08): a quiet set-up is found by
+  // calculating past the first move — the calculate step's habit.
+  'missed-set-up': 'candidates',
 };
 const OLD_COACH_TAG_HABIT: Partial<Record<MisconceptionTagId, MethodHabit | null>> = {
   'missed-opponents-threat': 'opponent-threat', 'hung-material': 'opponent-threat',

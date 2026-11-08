@@ -95,7 +95,7 @@ export const THINKING_STEPS: Record<ThinkingStep, ThinkingStepDef> = {
   },
   calculate: {
     order: 9, name: 'Calculate to the end', shortName: 'calculate', tier: 3, layer: 'safety',
-    tags: ['calculation-depth', 'overvalued-attack', 'bad-trade-material'],
+    tags: ['calculation-depth', 'overvalued-attack', 'bad-trade-material', 'missed-set-up'],
   },
   'is-my-move-safe': {
     order: 10, name: 'Is my move safe?', shortName: 'blunder check', tier: 1, layer: 'safety',
@@ -184,6 +184,8 @@ export const TAG_STEP: Record<MisconceptionTagId, ThinkingStep | null> = {
   'missed-tactic': 'forcing-moves',
   // — you picked before you compared, or stopped calculating too soon —
   'calculation-depth': 'calculate',
+  // A quiet set-up: the tactic was a move or two past the first one.
+  'missed-set-up': 'calculate',
   'overvalued-attack': 'calculate',
   'bad-trade-material': 'calculate',
   'bad-trade': 'candidates',

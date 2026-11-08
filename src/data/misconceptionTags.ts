@@ -111,6 +111,21 @@ export const MISCONCEPTION_TAGS = [
     coachCue: 'A forcing tactic (fork/pin/skewer/discovered attack/mate) was available and clearly best, but the played move was a quiet alternative that throws away the advantage.',
     drill: { kind: 'tactic', puzzleThemes: ['fork', 'pin', 'skewer', 'discoveredAttack', 'doubleCheck'] },
   },
+  // THE SET-UP (David 2026-11-08: "Repeatedly missing a set-up is noted as a
+  // weakness the coach teaches, with set-up positions on the board"). The
+  // best move was QUIET — no capture, no check — and its line won material or
+  // mated two or three moves later (`setUpChance.setUpPosed`, read off the
+  // board's best line). Measured on his record: such a set-up was on the board
+  // at 57 of his slips and played 3 times. Its own row, not the motif's: the
+  // fork you see at once and the fork you must prepare are different skills.
+  {
+    id: 'missed-set-up',
+    label: 'Missed a quiet set-up',
+    bucket: 'tactical',
+    blurb: 'A quiet move set up a tactic that won material, and you played something else.',
+    coachCue: 'The best move took nothing and gave no check, but its line won material or mated a move or two later; the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['quietMove'] },
+  },
   // ── YOUR TACTIC, PER MOTIF (WO-MOTIFS-01, 2026-10-22) ───────────────
   // The shot that was yours, named by the ONE classifier
   // (`missedTacticService.detectTacticType` via `tacticMotifs`) where the move
