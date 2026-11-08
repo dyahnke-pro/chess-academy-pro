@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**168 lines · 4 exports · 4 importers · 2 tests · 0 audits**
+**118 lines · 3 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,39 +19,32 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `wrongMoveReason` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3591`
-- `src/services/drillReasons.test.ts:11`
-- `src/services/drillReasons.test.ts:19`
-- `src/services/drillReasons.test.ts:26`
-- `src/services/drillReasons.test.ts:29`
-
 ### `goodButWeakerBeat` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3589`
-- `src/services/drillReasons.test.ts:50`
-- `src/services/drillReasons.test.ts:56`
-- `src/services/drillReasons.test.ts:57`
-- `src/services/drillReasons.test.ts:61`
+- `src/components/Coach/CoachTeachPage.tsx:3700`
+- `src/services/drillReasons.test.ts:24`
+- `src/services/drillReasons.test.ts:30`
+- `src/services/drillReasons.test.ts:31`
+- `src/services/drillReasons.test.ts:35`
 - `src/test/captureSaidOnce.gate.test.ts:230`
 
 ### `judgeAlternative` (function) — 9 call sites
 - `src/services/drillJudge.ts:63`
 - `src/services/drillJudge.ts:75`
-- `src/services/drillReasons.test.ts:72`
-- `src/services/drillReasons.test.ts:73`
-- `src/services/drillReasons.test.ts:76`
-- `src/services/drillReasons.test.ts:77`
-- `src/services/drillReasons.test.ts:80`
-- `src/services/drillReasons.test.ts:83`
-- `src/services/drillReasons.test.ts:84`
+- `src/services/drillReasons.test.ts:46`
+- `src/services/drillReasons.test.ts:47`
+- `src/services/drillReasons.test.ts:50`
+- `src/services/drillReasons.test.ts:51`
+- `src/services/drillReasons.test.ts:54`
+- `src/services/drillReasons.test.ts:57`
+- `src/services/drillReasons.test.ts:58`
 
 ### `hintBeat` (function) — 6 call sites
-- `src/services/coachDrillService.ts:785`
-- `src/services/drillReasons.test.ts:36`
-- `src/services/drillReasons.test.ts:37`
-- `src/services/drillReasons.test.ts:38`
-- `src/services/drillReasons.test.ts:41`
-- `src/services/drillReasons.test.ts:42`
+- `src/services/coachDrillService.ts:795`
+- `src/services/drillReasons.test.ts:10`
+- `src/services/drillReasons.test.ts:11`
+- `src/services/drillReasons.test.ts:12`
+- `src/services/drillReasons.test.ts:15`
+- `src/services/drillReasons.test.ts:16`
 
 ## Tests
 
