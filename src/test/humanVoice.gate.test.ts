@@ -36,5 +36,9 @@ describe('the robotic patterns only fall', () => {
     expect(roboticMarks('The plan is to break with a4; put a rook on the d file; improve your rook on a1.').map((m) => m.mark)).toContain('semicolon');
     expect(roboticMarks('Their Nxe5 was a mistake — the stronger move was f6 — it would guard e5.').map((m) => m.mark)).toContain('dash-chain');
     expect(roboticMarks('Your bishop on d3 is hanging: their knight and queen both hit it.')).toEqual([]);
+    // A sentence that opens on a pawn move is its own sentence; a genuinely
+    // long one is still caught.
+    expect(roboticMarks('Your e5 was a mistake, costing more than a point. g3 was stronger: it would give your king luft, a flight square off the back rank, before anything else happens on the board.')).toEqual([]);
+    expect(roboticMarks('Your e5 was a mistake costing more than a point because g3 was stronger and it would give your king luft and a flight square off the back rank before anything else happens on the board here.').map((m) => m.mark)).toContain('long-sentence');
   });
 });

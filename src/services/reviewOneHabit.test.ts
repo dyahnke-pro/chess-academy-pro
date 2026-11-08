@@ -41,3 +41,12 @@ describe('a Review turn says one plan for each side', () => {
     expect(later).not.toMatch(/your plan is to advance your queenside pawn majority/i);
   }, 300_000);
 });
+
+describe('a trade that wins a second piece of its kind says "another"', () => {
+  it('the Closed Sicilian 19.gxf5: the rook takes again, so they win another pawn', async () => {
+    const games = (JSON.parse(readFileSync('src/test/fixtures/learn-replay-games.json', 'utf8')) as { games: FixtureGame[] }).games;
+    const g = games.find((x) => x.id.startsWith('sicilianClosed1000')) as FixtureGame;
+    const turn = (await reviewSegments(g, g.rating)).find((s) => s.ply === 37)?.narration ?? '';
+    expect(turn).toMatch(/They take on f5, and you can take back — a pawn trade, and they win another pawn\./);
+  }, 300_000);
+});

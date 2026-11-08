@@ -18,7 +18,10 @@
  */
 export const MARKS = ['dash-chain', 'move-chain', 'square-repeat', 'long-sentence', 'eyeing', 'stock-opener', 'engine-talk', 'semicolon'];
 
-const sentences = (text) => text.split(/(?<=[.!?])\s+(?=[A-Z…"])/).filter((s) => s.trim());
+// A sentence starts on a capital, an ellipsis, a quote — or a pawn move ("g3
+// was stronger", "e5 sidesteps …"): without the last, a line's next sentence
+// was glued to the one before it and read as one 37-word sentence.
+const sentences = (text) => text.split(/(?<=[.!?])\s+(?=[A-Z…"]|[a-h](?:x[a-h])?[1-8]\b)/).filter((s) => s.trim());
 
 /** The marks in one spoken line, each with the bit that tripped it. */
 export function roboticMarks(raw) {

@@ -427,10 +427,14 @@ export function computeMoveFacets(
       }
       const nouns = (xs: string[]): string => andList(xs.map((x) => NOUN[x] ?? 'piece'));
       const tradePart = traded.length ? `${withArticle(nouns([...new Set(traded)]))} trade` : null;
+      // The piece won beside a trade of its kind is ANOTHER one (Review
+      // baseline 2026-11-08, 19.gxf5: "a pawn trade, and they win the pawn"
+      // read as the pawn just traded; the rook took again on f5).
+      const won = (xs: string[]): string => (xs.length === 1 && traded.includes(xs[0]) ? `another ${NOUN[xs[0]] ?? 'piece'}` : `the ${nouns(xs)}`);
       const restPart = studentLost.length && theirLost.length
         ? `your ${nouns(studentLost)} for their ${nouns(theirLost)}`
-        : theirLost.length ? `you win the ${nouns(theirLost)}`
-          : studentLost.length ? `they win the ${nouns(studentLost)}` : null;
+        : theirLost.length ? `you win ${won(theirLost)}`
+          : studentLost.length ? `they win ${won(studentLost)}` : null;
       const what = tradePart && restPart ? `${tradePart}, and ${restPart}` : tradePart ?? restPart;
       // "Can take back" only when taking back does not lose material (review
       // walk 2026-09-27: 15.Nxh7 — …Rxh7 loses the rook to Qxh7).
