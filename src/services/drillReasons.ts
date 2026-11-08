@@ -5,62 +5,21 @@
 // the right move with "Good." — a drill called "missed tactical sequences"
 // that never showed the sequence. Three computed beats, all board-true (G0),
 // no engine, no model:
-//   • wrongMoveReason — WHY the student's move fails, read off the position it
-//     leaves: a piece it leaves loose (SEE), a mate or a winning capture it
-//     walks into (a one-ply scan), else the drill's own concept hint.
+//   • why the student's move fails is the ONE wrong-try computer the puzzles
+//     read (`puzzleTeaching.refuteWrongTry`, through `coachDrillService`); the
+//     one-ply reader that stood here (`wrongMoveReason`) is merged into it
+//     (wire-19, 2026-11-08).
 //   • judgeAlternative — a move off the answer key is judged by the ENGINE:
 //     as good → accepted; only an engine-confirmed loss is called one.
 //   • hintBeat — the hint SAYS the piece, withholds the square (the honesty
 //     contract), so the arrow is no longer silent.
 import { openSentence } from '../utils/openSentence';
-import { Chess, type Square } from 'chess.js';
-import { findHangingBySee } from './positionReadingService';
+import { Chess } from 'chess.js';
 import { sayMoveClause } from './spokenMove';
 import { afterCaptureSan } from '../utils/captureWords';
 import { MATE_EVAL_THRESHOLD } from './engineConstants';
 
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-
-/** The reason the student's WRONG move fails, or null when the board shows
- *  nothing concrete (the caller then falls back to the drill's concept hint or
- *  the plain nudge — never a guessed reason).
- *
- *  It NEVER names the move to play (walk 2026-10-04 defect 7: the first wrong
- *  try was answered "…the queen takes g7 keeps everything protected"). A drill
- *  is a question; the answer comes only when the student asks (Hint) or after
- *  the misses run out. `expectedSan` is kept in the signature for callers that
- *  reveal deliberately. */
-export function wrongMoveReason(fenBefore: string, wrongSan: string, expectedSan: string): string | null {
-  let after: Chess;
-  let mover: 'w' | 'b';
-  try {
-    after = new Chess(fenBefore);
-    mover = after.turn();
-    if (!after.move(wrongSan)) return null;
-  } catch { return null; }
-  const you = sayMoveClause(wrongSan, fenBefore);
-  // 1. Mate in one for the opponent.
-  for (const reply of after.moves({ verbose: true })) {
-    const probe = new Chess(after.fen());
-    probe.move(reply.san);
-    if (probe.isCheckmate()) return `${cap(you)} walks into ${sayMoveClause(reply.san, after.fen())} — mate. Look again.`;
-  }
-  // 2. A piece of yours it leaves HANGING (SEE: loses material — not the same
-  //    as loose = undefended, `findLoosePieces`; value-aware, pin-aware).
-  const loose = findHangingBySee(after.fen()).filter((h) => h.color === mover && h.piece !== 'k').sort((a, b) => b.gain - a.gain)[0];
-  if (loose) {
-    return loose.defended
-      ? `${cap(you)} leaves your ${PIECE_NAME[loose.piece]} on ${loose.square} where it loses the exchange — it is guarded, but they win material there anyway. Find a move that keeps everything safe.`
-      : `${cap(you)} leaves your ${PIECE_NAME[loose.piece]} on ${loose.square} hanging — they win material there. Find a move that keeps everything protected.`;
-  }
-  // 3. A capture that wins material outright for them (their best one-ply grab).
-  const grab = after.moves({ verbose: true }).filter((m) => m.captured && m.captured !== 'k')
-    .map((m) => ({ m, net: pieceValue(m.captured as string) - (isRecapturable(after.fen(), m.to) ? pieceValue(m.piece) : 0) }))
-    .filter((x) => x.net >= 2).sort((a, b) => b.net - a.net)[0];
-  if (grab) return `${cap(you)} lets them play ${sayMoveClause(grab.m.san, after.fen())} and come out ahead. Look again.`;
-  void expectedSan;
-  return null;
-}
 
 /** Clearly better for the student (centipawns, student's view). */
 const STILL_GOOD_CP = 100;
@@ -155,13 +114,4 @@ export function hintBeat(fen: string, expectedSan: string): string | null {
 }
 
 function cap(s: string): string { return openSentence(s); }
-function pieceValue(p: string): number { return ({ p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 } as Record<string, number>)[p] ?? 0; }
-/** Can the side to move (after `fen`) be recaptured on `sq` — i.e. is the square defended? */
-function isRecapturable(fen: string, sq: Square): boolean {
-  try {
-    const c = new Chess(fen);
-    const defender = c.turn() === 'w' ? 'b' : 'w';
-    return c.isAttacked(sq, defender);
-  } catch { return false; }
-}
 

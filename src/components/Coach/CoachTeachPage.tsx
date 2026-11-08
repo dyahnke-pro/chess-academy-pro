@@ -200,7 +200,7 @@ import {
   type CoachDrill,
   type DrillProgress,
   drillHintBeat,
-  customLessonPartLines, goodButWeakerBeat, judgeDrillMove, lastMoveFromPgn, moveMissed, positionAsk, recordDrillEvidence, wrongMoveReason } from '../../services/coachDrillService';
+  customLessonPartLines, goodButWeakerBeat, judgeDrillMove, lastMoveFromPgn, moveMissed, positionAsk, recordDrillEvidence, drillWrongTryReason } from '../../services/coachDrillService';
 import { bookChipForClaims } from '../../data/bookChips';
 import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';
@@ -3699,7 +3699,7 @@ export function CoachTeachPage({ mode }: {
           verdict === 'good-but-weaker' && evals
             ? goodButWeakerBeat({ fenBefore, wrongSan: move.san, evalAfterWrong: evals.wrong, evalAfterBest: evals.best }, { withTail: false })
             : missed?.text
-              ?? (verdict === 'loses' || verdict === null ? wrongMoveReason(fenBefore, move.san, expected) : null);
+              ?? (verdict === 'loses' || verdict === null ? await drillWrongTryReason(fenBefore, move.san, evals?.wrongPv ?? null) : null);
         const parts = [did, ask.text, easeUp ? nudge : null].filter((x): x is string => !!x);
         const line = parts.length > 0 ? parts.join(' ') : nudge;
         void coachDrillSay(line, { lines: missed?.line ? [missed.line] : undefined });

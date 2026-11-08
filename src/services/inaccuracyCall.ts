@@ -1083,6 +1083,24 @@ function boardReplyUci(fenBefore: string, playedSan: string, moverColor: 'white'
   } catch { return []; }
 }
 
+/** NO ENGINE LINE: the board's own answer to a move, said as a line — the
+ *  mate in one it allows first (a capture count cannot see it: "…Nf6?" let
+ *  Qxf7# through and the capture read called it "hits your knight"), else the
+ *  winning capture (`boardReplyUci`). The wrong-try computer reads this when
+ *  the engine gives it nothing (`puzzleTeaching.refuteWrongTry`). */
+export function boardAnswerUci(fenBefore: string, playedSan: string, moverColor: 'white' | 'black'): string[] {
+  try {
+    const c = new Chess(fenBefore);
+    if (!c.move(playedSan)) return [];
+    for (const r of c.moves({ verbose: true })) {
+      const probe = new Chess(c.fen());
+      probe.move(r.san);
+      if (probe.isCheckmate()) return [`${r.from}${r.to}${r.promotion ?? ''}`];
+    }
+  } catch { return []; }
+  return boardReplyUci(fenBefore, playedSan, moverColor);
+}
+
 /** THE OTHER READS OF THE SAME BOARDS a line came from — the same search two
  *  depths shallower (`AnalysisLine.earlier`), the record's own read, a deeper
  *  read. A line past two moves is named only when one of them plays it too

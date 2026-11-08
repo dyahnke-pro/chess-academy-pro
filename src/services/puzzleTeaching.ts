@@ -21,7 +21,7 @@
 import { lineShape } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { lineWins, mateLine, lineArrows } from './lineCalc';
-import { errorWhyFor } from './inaccuracyCall';
+import { boardAnswerUci, errorWhyFor } from './inaccuracyCall';
 import { admitArrows, type ArrowClaim } from './arrowDoor';
 import { explainDrillConcept, type PuzzleConceptExplanation } from './puzzleConceptExplanation';
 import type { BoardArrow } from '../types';
@@ -90,6 +90,11 @@ export async function refuteWrongTry(args: {
     const read = await args.analyse(fenAfter);
     if (read && 'moves' in read) { line = read.moves; cpWhite = read.cpWhite; earlier = read.earlier ?? null; } else line = read;
   } catch { line = null; }
+  // NO ENGINE LINE (the engine down, a drill try the judge could not read):
+  // the board's own answer — a mate in one first — so the try is still
+  // refuted by a move, never by a guess (wire-19: Learn's drill had its own
+  // one-ply reader for this, `drillReasons.wrongMoveReason`, now this one).
+  if (!line || line.length === 0) line = boardAnswerUci(args.fenBefore, args.wrongSan, solver === 'w' ? 'white' : 'black');
 
   if (line && line.length) {
     const ml = mateLine(fenAfter, line, them, undefined, { minPlies: 1 });
