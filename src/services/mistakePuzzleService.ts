@@ -12,6 +12,7 @@ import type { EvaluateMulti } from './criticalityScan';
 import { gameReplyAfter } from './moveAllowed';
 import { generateMistakeNarration } from './mistakeNarration';
 import { voiceMistakeNarration } from './mistakeNarrationVoice';
+import { setUpPosed } from './setUpChance';
 import { detectTacticLine } from './missedTacticService';
 import { tacticTypeLabel } from './tacticAlertService';
 import type { TacticType, MistakeNarration } from '../types';
@@ -637,6 +638,9 @@ async function analyzeGameWithStockfish(
       tacticType = null;
     }
 
+    // THE QUIET SET-UP, read off the whole line before it is cut (a strike on
+    // the student's third move lands past six plies' prize).
+    const quietSetUp = setUpPosed(fen, pvMoves);
     // Cap solution length at 6 ply (3 full moves). Longer sequences
     // are too complex to learn from as a drill.
     if (pvMoves.length > 6) {
@@ -698,6 +702,7 @@ async function analyzeGameWithStockfish(
       bestMove,
       bestMoveSan,
       moves: movesUci,
+      quietSetUp,
       cpLoss: Math.round(cpLoss),
       classification,
       gamePhase,

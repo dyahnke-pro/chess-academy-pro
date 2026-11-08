@@ -25,6 +25,7 @@
 // null; only the rev is stamped.
 import { db } from '../db/schema';
 import { detectTacticLine } from './missedTacticService';
+import { setUpPosed } from './setUpChance';
 import { bestLineOf } from './annotationLine';
 import { classifyPhase } from './gamePhaseService';
 import { logAppAudit } from './appAuditor';
@@ -83,8 +84,16 @@ function retagMistakePuzzle(
    *  the row itself holds only the best move. */
   gameLine?: readonly string[],
 ): MistakePuzzle | null {
-  if (row.tacticTypeRev === TACTIC_TYPE_REV) return null;
+  // THE QUIET SET-UP (2026-11-08): read once per row off its longest best
+  // line (the game's annotation when it starts with the row's best move), so
+  // My Weaknesses can group the student's own missed set-ups without reading
+  // every board on open. A row already at the rev gets only this.
+  const own0 = pvOf(row.moves);
+  const setUpLine = gameLine && gameLine[0] === row.bestMove && gameLine.length > (own0?.length ?? 0) ? gameLine : own0;
+  const quietSetUp = !row.positionalMotif && !!row.fen && !!setUpLine && setUpPosed(row.fen, setUpLine);
+  if (row.tacticTypeRev === TACTIC_TYPE_REV) return row.quietSetUp === undefined ? { ...row, quietSetUp } : null;
   r.recomputed += 1;
+  row = { ...row, quietSetUp };
   // THE PHASE, through the one classifier with its unit named (the row's
   // moveNumber is a FULL move). Re-filed on the same pass that re-tags.
   if (row.fen && row.moveNumber > 0) {
@@ -140,7 +149,7 @@ export async function reconcileTacticTypes(
   r.scanned = puzzles.length + tactics.length;
   // Only the STALE rows are walked — a device whose rows all carry the rev
   // pays two index reads and nothing else.
-  const stalePuzzles = puzzles.filter((row) => row.tacticTypeRev !== TACTIC_TYPE_REV);
+  const stalePuzzles = puzzles.filter((row) => row.tacticTypeRev !== TACTIC_TYPE_REV || row.quietSetUp === undefined);
   const staleTactics = tactics.filter((row) => row.tacticTypeRev !== TACTIC_TYPE_REV);
   if (stalePuzzles.length === 0 && staleTactics.length === 0) return r;
 

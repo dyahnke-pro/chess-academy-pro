@@ -40,7 +40,7 @@ import { useAppStore } from '../stores/appStore';
 import { isFixtureDerived, isFixtureGame } from './fixtureGames';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
 import type { ClassifiedTactic, MistakePuzzle, MistakeGamePhase, OpeningWeakSpot, TacticType, GameRecord } from '../types';
-import { tacticTypesOf } from '../data/tacticMotifs';
+import { MOTIFS, MOTIF_OF_TACTIC, tacticTypesOf } from '../data/tacticMotifs';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { PUZZLE_MISS_SEVERITY, PUZZLE_MISS_SEVERITY_CAP, type PuzzleMissRecord } from './puzzleMissService';
 import { positionOf } from '../utils/samePosition';
@@ -197,6 +197,7 @@ function posKey(fen: string, san?: string): string {
 
 const MISSED_THREAT_TAG = 'analysis:missed-threat';
 const STRUCTURE_DAMAGE_TAG = 'analysis:structure-damage';
+const SET_UP_CLUSTER = 'analysis:set-up';
 /** The opponent's null-move net (points) that marks a REAL standing threat the
  *  student was on move to answer. 3 = a minor piece; below that is noise. */
 const MISSED_THREAT_MIN_NET = 3;
@@ -259,16 +260,29 @@ function mistakeStructureDamage(p: MistakePuzzle): boolean {
  *  threat, or self-inflicted structure damage — instead of the vague "mistakes
  *  in the middlegame". Threat first (more urgent), then structure. Null when
  *  neither fires (keeps the generic phase label). Board-verified, conservative. */
-function refineNonTacticalMistake(p: MistakePuzzle): { bucket: MisconceptionBucket; clusterId: string; label: string; themes: string[] } | null {
-  if (mistakeMissedThreat(p)) return { bucket: 'general', clusterId: MISSED_THREAT_TAG, label: 'Missed opponent threats', themes: [] };
-  if (mistakeStructureDamage(p)) return { bucket: 'positional', clusterId: STRUCTURE_DAMAGE_TAG, label: 'Self-inflicted pawn weaknesses', themes: [] };
+function refineNonTacticalMistake(p: MistakePuzzle): MistakeBucket | null {
+  if (mistakeMissedThreat(p)) return { bucket: 'general', clusterId: MISSED_THREAT_TAG, label: 'Missed opponent threats', themes: [], capability: 'missed-opponents-threat' };
+  if (mistakeStructureDamage(p)) return { bucket: 'positional', clusterId: STRUCTURE_DAMAGE_TAG, label: 'Self-inflicted pawn weaknesses', themes: [], capability: null };
   return null;
+}
+
+/** One bucket of the student's own mistake positions, and the record row it
+ *  answers (`capability`): the heat map's "Practice your positions" opens the
+ *  group whose `capabilityTag` is the row's tag (`HeatMapPanel.ownPositionsHole`).
+ *  Every group used to carry null, so the button never showed for any row. */
+export interface MistakeBucket { bucket: MisconceptionBucket; clusterId: string; label: string; themes: string[]; capability: MisconceptionTagId | null }
+
+/** The record row a tactic motif's miss is filed under — the motif's own
+ *  "you missed it" row (`tacticMotifs`), or null for a type with no motif. */
+function capabilityOfTactic(type: TacticType): MisconceptionTagId | null {
+  const m = MOTIF_OF_TACTIC[type];
+  return m ? MOTIFS[m].yours : null;
 }
 
 /** The spine cluster of one tactic motif — the card's own bucket, and the
  *  set-up's (COUNT BOTH) in the hole list. */
-function tacticBucket(type: TacticType): { bucket: MisconceptionBucket; clusterId: string; label: string; themes: string[] } {
-  return { bucket: 'tactical', clusterId: `analysis:tactic:${type}`, label: `Missed ${tacticLabel(type)}`, themes: themesForTactic(type) };
+function tacticBucket(type: TacticType): MistakeBucket {
+  return { bucket: 'tactical', clusterId: `analysis:tactic:${type}`, label: `Missed ${tacticLabel(type)}`, themes: themesForTactic(type), capability: capabilityOfTactic(type) };
 }
 
 /** Coarse, HONEST mapping from a mistakePuzzle to a weakness bucket. We do
@@ -276,7 +290,7 @@ function tacticBucket(type: TacticType): { bucket: MisconceptionBucket; clusterI
  *  would be guessing which thinking-error caused the slip — see CLAUDE.md
  *  "when unsure, don't guess"). We cluster by tactic motif when the
  *  detector gave one, else by game phase. */
-export function bucketForMistake(p: MistakePuzzle): { bucket: MisconceptionBucket; clusterId: string; label: string; themes: string[] } {
+export function bucketForMistake(p: MistakePuzzle): MistakeBucket {
   // Position-transformation (trade) errors are their own POSITIONAL weakness
   // (Phase 4), not a generic phase cluster.
   if (p.positionalMotif) {
@@ -285,14 +299,20 @@ export function bucketForMistake(p: MistakePuzzle): { bucket: MisconceptionBucke
       clusterId: `analysis:transform:${p.positionalMotif}`,
       label: p.positionalMotif === 'unfavorable-trade' ? 'Unfavorable trades' : 'Missed favorable trades',
       themes: [],
+      capability: p.positionalMotif === 'unfavorable-trade' ? 'bad-trade' : null,
     };
   }
+  // THE QUIET SET-UP MISSED IN YOUR OWN GAME (David 2026-11-08: "Make sure
+  // the quiet move can also teach from misses in own games"): the solution
+  // opens with a quiet move whose line wins material or mates — the record's
+  // `missed-set-up` row, drilled with these positions first.
+  if (p.quietSetUp) return { bucket: 'tactical', clusterId: SET_UP_CLUSTER, label: 'Missed quiet set-ups', themes: ['quietMove'], capability: 'missed-set-up' };
   if (p.tacticType) return tacticBucket(p.tacticType);
   const phase: MistakeGamePhase = p.gamePhase;
   if (phase === 'opening') {
     // Refine before the generic label — a missed threat / structure damage in
     // the opening is still that, and more teachable than "mistakes in the opening".
-    return refineNonTacticalMistake(p) ?? { bucket: 'opening', clusterId: 'analysis:phase:opening', label: 'Mistakes in the opening', themes: [] };
+    return refineNonTacticalMistake(p) ?? { bucket: 'opening', clusterId: 'analysis:phase:opening', label: 'Mistakes in the opening', themes: [], capability: null };
   }
   if (phase === 'endgame') {
     // TYPE the ending (David 2026-09-01: "which endgame the user is weakest at")
@@ -302,13 +322,13 @@ export function bucketForMistake(p: MistakePuzzle): { bucket: MisconceptionBucke
     const type = classifyEndgameType(p.fen);
     if (type !== 'other') {
       const label = endgameTypeInfo(type).label;
-      return { bucket: 'endgame', clusterId: `analysis:endgame-type:${type}`, label: openSentence(label), themes: [] };
+      return { bucket: 'endgame', clusterId: `analysis:endgame-type:${type}`, label: openSentence(label), themes: [], capability: null };
     }
-    return { bucket: 'endgame', clusterId: 'analysis:phase:endgame', label: 'Mistakes in the endgame', themes: [] };
+    return { bucket: 'endgame', clusterId: 'analysis:phase:endgame', label: 'Mistakes in the endgame', themes: [], capability: null };
   }
   // Middlegame — the vaguest, most common bucket. Refine into a missed threat /
   // structure damage when a board probe names one; else the generic label.
-  return refineNonTacticalMistake(p) ?? { bucket: 'general', clusterId: 'analysis:phase:middlegame', label: 'Mistakes in the middlegame', themes: [] };
+  return refineNonTacticalMistake(p) ?? { bucket: 'general', clusterId: 'analysis:phase:middlegame', label: 'Mistakes in the middlegame', themes: [], capability: null };
 }
 
 /** Plain-English plural label for a tactic motif. */
@@ -398,9 +418,9 @@ export function aggregateMistakePuzzles(mistakes: MistakePuzzle[], excludeKeys?:
       total: rows.length,
       severity: Math.min(95, rows.length * 6 + blunders * 8 + Math.round(avgCpLoss / 30)),
       sources: ['analysis'],
-      // An analysis cluster (tactic / transform / phase) has no positive
-      // computer recording it yet — honest null, never a guessed tag.
-      capabilityTag: null,
+      // The record row this group answers (a motif, a missed threat, a bad
+      // trade, the quiet set-up); null for a phase or structure group.
+      capabilityTag: meta.capability,
       puzzleThemes: meta.themes,
       positions: rows.slice(0, 8).map((r) => ({
         fen: r.fen,
@@ -632,7 +652,7 @@ export function aggregateClassifiedTactics(tactics: ClassifiedTactic[]): Unified
       total: rows.length,
       severity: Math.min(95, rows.length * 6),
       sources: ['analysis'],
-      capabilityTag: null, // no positive computer records a TACTIC yet (MOVE_FUNDAMENTAL_TAG is positional)
+      capabilityTag: capabilityOfTactic(type),
       puzzleThemes: themesForTactic(type),
       positions: rows.slice(0, 8).map((r) => ({ fen: r.fen, playedSan: r.playerMoveSan, bestSan: r.bestMoveSan, openingId: r.openingName ?? undefined, from: { origin: 'game' as const, opponentName: r.opponentName, playedAt: playedAtMs(r.gameDate) } })),
       lastSeenAt,

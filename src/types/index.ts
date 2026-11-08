@@ -102,6 +102,12 @@ export interface MistakePuzzle {
    *  filed before 2026-11-08 or from a capture with no line. Additive,
    *  unindexed — no schema bump. */
   punishUci?: string[];
+  /** The solution opens with a QUIET move whose line wins material or mates
+   *  (`setUpChance.setUpPosed`) — the record's `missed-set-up` row; My
+   *  Weaknesses groups these as "Missed quiet set-ups". Computed when the
+   *  puzzle is filed and by the re-tag backfill (absent = not read yet).
+   *  Additive, unindexed — no schema bump. */
+  quietSetUp?: boolean;
   /** The set-up the solution line opens with when it lands `tacticType`
    *  (a deflection before the fork): the puzzle counts under both (COUNT
    *  BOTH, David 2026-10-22). Computed with `tacticType`, same rev. */

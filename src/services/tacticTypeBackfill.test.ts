@@ -154,7 +154,7 @@ describe('tacticTypeBackfill — persisted tags are re-tagged through the ONE un
   //    zero by every force-quit. Three contracts, each one of the three defects.
   it('YIELDS between rows — the thread is handed back once per stale row, never once per boot', async () => {
     for (let i = 0; i < 7; i += 1) await db.mistakePuzzles.put(puzzle({ id: `y${i}`, tacticType: 'skewer' as TacticType }));
-    await db.mistakePuzzles.put(puzzle({ id: 'fresh', tacticType: 'fork', tacticTypeRev: TACTIC_TYPE_REV }));
+    await db.mistakePuzzles.put(puzzle({ id: 'fresh', tacticType: 'fork', tacticTypeRev: TACTIC_TYPE_REV, quietSetUp: false }));
     let yields = 0;
     await reconcileTacticTypes({ startDelayMs: 0, batch: 3, yieldBetweenRows: async () => { yields += 1; } });
     expect(yields).toBe(6); // 7 stale rows → 6 gaps; the fresh row costs nothing
@@ -181,7 +181,7 @@ describe('tacticTypeBackfill — persisted tags are re-tagged through the ONE un
   });
 
   it('a device whose rows all carry the rev reads two tables and touches nothing', async () => {
-    await db.mistakePuzzles.put(puzzle({ id: 'done', tacticType: 'fork', tacticTypeRev: TACTIC_TYPE_REV }));
+    await db.mistakePuzzles.put(puzzle({ id: 'done', tacticType: 'fork', tacticTypeRev: TACTIC_TYPE_REV, quietSetUp: false }));
     let yields = 0;
     const r = await reconcileTacticTypes({ startDelayMs: 0, batch: 10, yieldBetweenRows: async () => { yields += 1; } });
     expect(r).toMatchObject({ scanned: 1, recomputed: 0 });
