@@ -61,7 +61,7 @@ describe('Learn board truth — the real game', () => {
 
   it('20…Nd4: the masked hole and the unmoved pawn hold c3', () => {
     const masked = boardStructure(at(40), 'w').find((r) => r.act === 'masked-weakness');
-    expect(masked?.text).toMatch(/chase it with c3/);
+    expect(masked?.text).toMatch(/Chase it with c3/);
     expect(masked?.heldForm?.text).not.toMatch(/c3/);
     const unmoved = theirMoveStructure(at(39), GAME[39], 'w').find((r) => r.act === 'unmoved-units');
     expect(unmoved?.text).toMatch(/on c3 it would cover/);
