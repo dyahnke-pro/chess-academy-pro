@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1632 lines · 23 exports · 36 importers · 25 tests · 5 audits**
+**1632 lines · 23 exports · 37 importers · 26 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,7 @@
 - `src/services/chesscomService.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/conceptSchedule.test.ts`
+- `src/services/depthCount.measure.test.ts`
 - `src/services/determinePlayerColor.test.ts`
 - `src/services/discussionPractice.ts`
 - `src/services/drillJoinDivergence.test.ts`
@@ -103,8 +104,8 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:8622`
-- `src/components/Coach/CoachTeachPage.tsx:8646`
+- `src/components/Coach/CoachTeachPage.tsx:8623`
+- `src/components/Coach/CoachTeachPage.tsx:8647`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -114,12 +115,12 @@
 - `src/services/autoAnalyzeGame.ts:453`
 - `src/services/autoAnalyzeGame.ts:606`
 - `src/services/computerAccuracy.audit.test.ts:107`
-- `src/services/deliberation.ts:148`
-- `src/services/deliberation.ts:235`
-- `src/services/deliberation.ts:242`
-- `src/services/deliberation.ts:274`
-- `src/services/deliberation.ts:276`
-- `src/services/deliberation.ts:325`
+- `src/services/deliberation.ts:149`
+- `src/services/deliberation.ts:254`
+- `src/services/deliberation.ts:261`
+- `src/services/deliberation.ts:293`
+- `src/services/deliberation.ts:295`
+- `src/services/deliberation.ts:344`
 - `src/services/endgameDrillService.ts:103`
 - `src/services/endgameDrillService.ts:139`
 - `src/services/endgameDrillService.ts:144`
@@ -223,8 +224,9 @@
 - `src/services/recordReprice.test.ts:115`
 - `src/services/recordReprice.test.ts:117`
 
-### `rerenderMistakeNarration` (function) — 1 call site
+### `rerenderMistakeNarration` (function) — 2 call sites
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:508`
+- `src/services/depthCount.measure.test.ts:88`
 
 ### `addMistakePuzzleFromCapture` (function) — 8 call sites
 - `src/services/discussionPractice.ts:360`
@@ -242,7 +244,7 @@
 - `src/services/mistakePuzzleService.test.ts:448`
 
 ### `attachCalcLines` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:6316`
+- `src/services/coachFeatureService.ts:6318`
 - `src/services/gameCalculationPuzzleService.test.ts:126`
 - `src/services/gameCalculationPuzzleService.test.ts:144`
 
@@ -288,7 +290,7 @@
 - `src/services/recordReprice.test.ts:123`
 
 ### `gradeMistakePuzzle` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3314`
+- `src/components/Coach/CoachTeachPage.tsx:3315`
 - `src/components/Puzzles/MyMistakesPage.tsx:289`
 - `src/components/Tactics/TacticCreatePage.tsx:199`
 - `src/services/conceptSchedule.test.ts:41`
@@ -327,6 +329,7 @@
 - `src/services/autoAnalyzeGameMisconceptions.test.ts`
 - `src/services/chesscomService.test.ts`
 - `src/services/conceptSchedule.test.ts`
+- `src/services/depthCount.measure.test.ts`
 - `src/services/determinePlayerColor.test.ts`
 - `src/services/drillJoinDivergence.test.ts`
 - `src/services/gameAnalysisService.poolEngine.test.ts`

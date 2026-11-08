@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**383 lines · 9 exports · 7 importers · 6 tests · 0 audits**
+**377 lines · 9 exports · 8 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,20 +16,23 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/deferredAnswers.realGame.test.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/namesStudentMove.leaks.test.ts`
+- `src/services/oneWorstPiece.test.ts`
 - `src/services/planChoice.test.ts`
 - `src/services/planThread.ts`
 - `src/test/thinkMarkClosed.gate.test.ts`
 
 ## Exports and every call site
 
-### `methodRead` (function) — 15 call sites
-- `src/services/boardPlanFacts.ts:137`
+### `methodRead` (function) — 17 call sites
+- `src/services/boardPlanFacts.ts:139`
 - `src/services/deferredAnswers.realGame.test.ts:12`
 - `src/services/deferredAnswers.realGame.test.ts:26`
-- `src/services/groundedAnswer.ts:3737`
-- `src/services/groundedAnswer.ts:6879`
+- `src/services/groundedAnswer.ts:3744`
+- `src/services/groundedAnswer.ts:6891`
 - `src/services/namesStudentMove.leaks.test.ts:28`
 - `src/services/namesStudentMove.leaks.test.ts:34`
+- `src/services/oneWorstPiece.test.ts:30`
+- `src/services/oneWorstPiece.test.ts:43`
 - `src/services/planChoice.test.ts:32`
 - `src/services/planChoice.test.ts:123`
 - `src/services/planChoice.test.ts:131`
@@ -45,7 +48,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planThread.ts:264`
 
 ### `whyThisPlan` (function) — 4 call sites
-- `src/services/boardPlanFacts.ts:141`
+- `src/services/boardPlanFacts.ts:143`
 - `src/services/planChoice.test.ts:20`
 - `src/services/planChoice.test.ts:26`
 - `src/services/planThread.ts:256`
@@ -60,13 +63,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:167`
 
 ### `methodPlanSentence` (function) — 2 call sites
-- `src/services/boardPlanFacts.ts:138`
+- `src/services/boardPlanFacts.ts:140`
 - `src/services/planThread.ts:253`
 
-### `methodLine` (function) — 8 call sites
+### `methodLine` (function) — 9 call sites
 - `src/services/deferredAnswers.realGame.test.ts:12`
-- `src/services/groundedAnswer.ts:3739`
+- `src/services/groundedAnswer.ts:3746`
 - `src/services/namesStudentMove.leaks.test.ts:29`
+- `src/services/oneWorstPiece.test.ts:32`
 - `src/services/planChoice.test.ts:34`
 - `src/services/planChoice.test.ts:139`
 - `src/services/planChoice.test.ts:164`
@@ -77,12 +81,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:170`
 
 ### `weaknessLine` (function) — 1 call site
-- `src/services/groundedAnswer.ts:6880`
+- `src/services/groundedAnswer.ts:6892`
 
 ## Tests
 
 - `src/services/deferredAnswers.realGame.test.ts`
 - `src/services/namesStudentMove.leaks.test.ts`
+- `src/services/oneWorstPiece.test.ts`
 - `src/services/planChoice.test.ts`
 - `src/services/planChoicePasserNow.test.ts`
 - `src/test/onePlanSentence.gate.test.ts`
