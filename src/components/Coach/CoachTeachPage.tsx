@@ -1710,7 +1710,7 @@ export function CoachTeachPage({ mode }: {
   }, []);
   /** Each kept fact's own lines on the board, its moves in order, with the
    *  fact's sentence (a question's lines are its answer: they wait). */
-  const factLinesOf = useCallback((kept: VoicePackage['kept'], boardFen: string): Array<{ arrows: BoardArrow[]; said: string }> => {
+  const linesOfKept = useCallback((kept: VoicePackage['kept'], boardFen: string): Array<{ arrows: BoardArrow[]; said: string }> => {
     const seat = playerColorRef.current;
     return kept.filter((f) => !f.text.includes(THINK_MARK)).flatMap((f) =>
       keptLineArrowGroups(keptLines({ kept: [f] }, seat === 'white' ? 'w' : 'b'), boardFen, seat).map((arrows) => ({ arrows, said: f.text })));
@@ -8815,7 +8815,7 @@ export function CoachTeachPage({ mode }: {
           .filter((f) => !f.text.includes(THINK_MARK))
           .flatMap((f) => markableSquares({ kept: [f] }).map((square) => ({ square, color: markColorOf(f.kind), said: f.text })))
           .filter((h, i, all) => all.findIndex((x) => x.square === h.square) === i),
-        lines: factLinesOf(d.pkg.kept, boardNow),
+        lines: linesOfKept(d.pkg.kept, boardNow),
       };
       noteSpokenLines(d.pkg.kept);
       // QUEUED ON THE ONE SPEECH CHAIN, never over the line playing (OS-11 #7:
@@ -8823,14 +8823,14 @@ export function CoachTeachPage({ mode }: {
       // line after 0.18 s). A turn that is over by the time the chain reaches it
       // is not spoken — its board is gone.
       const turnBoard = live?.fen ?? fen;
+      const chainBefore = speechChainRef.current;
       const spoken = speechChainRef.current
-        .then(() => {
-          if (!samePosition(liveFenRef.current ?? '', turnBoard)) return undefined;
-          const said = learnVoiceAllows('door') ? voiceService.speakPackage(d.pkg) : undefined;
-          if (!said) return undefined;
-          void voiceService.untilOnAir(ON_AIR_WAIT_MS).then(() => paceBoardMarks(d.pkg.spoken, phaseMarks, () => liveFenRef.current === boardNow));
-          return said;
-        })
+        .then(() => (samePosition(liveFenRef.current ?? '', turnBoard) && learnVoiceAllows('door') ? voiceService.speakPackage(d.pkg) : undefined))
+        .catch(() => undefined);
+      // Its marks go up as it is said: registered after the speak on the same
+      // link, so the on-air wait is for THIS line's audio.
+      void chainBefore
+        .then(() => (samePosition(liveFenRef.current ?? '', turnBoard) && learnVoiceAllows('door') ? voiceService.untilOnAir(ON_AIR_WAIT_MS).then(() => paceBoardMarks(d.pkg.spoken, phaseMarks, () => liveFenRef.current === boardNow)) : undefined))
         .catch(() => undefined);
       speechChainRef.current = spoken;
       await spoken;
@@ -12149,7 +12149,7 @@ export function CoachTeachPage({ mode }: {
                     }
                     // …and every kept fact's own line, the way the late wave draws
                     // them (hand walk 2026-10-19 #12: instant lines never drew).
-                    instantMarks.lines = factLinesOf(instant.pkg.kept, fenAfterReply);
+                    instantMarks.lines = linesOfKept(instant.pkg.kept, fenAfterReply);
                     noteSpokenLines(instant.pkg.kept);
                     // THE THREAT'S ANSWER (census T4, David 2026-09-30: "describing
                     // the board is what we do not want"). The warning speaks now;
@@ -12394,7 +12394,7 @@ export function CoachTeachPage({ mode }: {
                     // on screen draws there; one from an earlier board draws the
                     // plies still to come; never a line's ply the student may play.
                     // A question's lines are its answer too: they wait for the move.
-                    const turnLines = liveFenRef.current === fenAfterReply ? factLinesOf(hintPkg.kept, fenAfterReply) : [];
+                    const turnLines = liveFenRef.current === fenAfterReply ? linesOfKept(hintPkg.kept, fenAfterReply) : [];
                     noteSpokenLines(hintPkg.kept);
                     // Spoken with its marks: each goes up as the voice names it,
                     // and the first replaces the board's old arrows — when it is

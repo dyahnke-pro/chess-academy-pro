@@ -232,10 +232,19 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     const drawn = keptLines({ kept: [{ kind: 'computed', text: 'x', fen: FEN, lines: [{ fen: FEN, sans: ['Nxe5', 'Qh5', 'Nxe5'] }] }] }, 'w');
     expect(drawn[0].arrows).toHaveLength(1);
   });
-  it('a fact that lost a sentence to the novelty set loses its lines with it', () => {
+  // A trimmed fact keeps the marks its kept words still state (marks sweep
+  // 2026-11-08: it used to drop every line of a trimmed fact, so a line the
+  // kept sentence said was never drawn).
+  it('a fact that lost a sentence to the novelty set loses the line that sentence said', () => {
+    const text = "Your knight on f3 attacks the pawn on e5. You'd love to grab the pawn with Nxe5 — but they answer Nxe5 and the knight is gone.";
+    const d = decideTurn([{ lane: 'register', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text, fen: FEN, lines: [{ fen: FEN, sans: ['Nxe5', 'Nxe5'] }] }], "You'd love to grab the pawn with Nxe5 — but they answer Nxe5 and the knight is gone.");
+    expect(d.pkg.kept[0]?.text).toBe('Your knight on f3 attacks the pawn on e5.');
+    expect(d.pkg.kept[0]?.lines).toBeUndefined();
+  });
+  it('a fact that lost a sentence keeps the line its kept sentence says', () => {
     const text = "You'd love to grab the pawn with Nxe5 — but they answer Nxe5 and the knight is gone. Your knight on f3 attacks the pawn on e5.";
     const d = decideTurn([{ lane: 'register', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text, fen: FEN, lines: [{ fen: FEN, sans: ['Nxe5', 'Nxe5'] }] }], 'Your knight on f3 attacks the pawn on e5.');
-    expect(d.pkg.kept[0]?.lines).toBeUndefined();
+    expect(d.pkg.kept[0]?.lines?.[0]?.sans).toEqual(['Nxe5', 'Nxe5']);
   });
   it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen lines and never takes the board for an earlier one', () => {
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: [^,]*?pendingRegisterComputers\.full, text: registerNow, lane: 'register', .*?, lines: pendingRegisterLines \}\)/);
@@ -244,7 +253,8 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: c\.computer, text: c\.text, lane, .*?, namesStudentMove: c\.namesStudentMove, squares: c\.squares, claims: clauseClaims\(pf, ci, probe\.fen\(\)\), gradeFen: c\.fen, lines: c\.lines, stakes: c\.stakes \?\? undefined, role: FACT_ROLE\[c\.kind\], factKind: c\.kind, skill: c\.skill, \.\.\.\(c\.heldForm \? \{ heldForm: c\.heldForm \} : \{\}\) \}\)/);
     expect(TEACH_CODE).toMatch(/(?:fundamental|fund)\?\.lines[,)]/);
     expect(TEACH_CODE).toMatch(/lane: 'fundamental', proof: NO_PROOF\.method, namesStudentMove: false, squares: \[\], claims: fundamental\.howOnly \? undefined : fundamentalClaims, gradeFen: move\.fen, lines: fundamental\.lines, skill: FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined \}\)/);
-    expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
+    // Each kept fact's lines, grouped per line for the mark schedule.
+    expect(TEACH_CODE).toMatch(/linesOfKept\(hintPkg\.kept,/);
     // Their move's purpose leads over a board description (hand walk 2026-09-30, …g6).
     expect(TEACH_CODE).toMatch(/c\.kind === 'stopped' \? 'theirPurpose' as const/);
     // An earlier board is spoken, never shown: showing it took the board from

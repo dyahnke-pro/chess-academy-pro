@@ -574,7 +574,7 @@ export function buildVoicePackage(
     // trimmed fact and keep every square.
     const keptText = fresh.join(' ');
     const cut = why.size === 0 ? null : cutMarksWithWords(f.text, keptText, { squares: f.squares ?? [], lines: f.lines }, f.fen, null);
-    kept.push({ ...f, text: keptText, ...(cut ? { squares: cut.squares, lines: cut.lines } : {}) });
+    kept.push({ ...f, text: keptText, ...(cut ? { squares: cut.squares, lines: cut.lines?.length ? cut.lines : undefined } : {}) });
     lastFactKept = true;
   }
 

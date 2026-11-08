@@ -65,7 +65,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `claimKey` (const) — 6 call sites
 - `src/services/everythingEvents.test.ts:55`
 - `src/services/learnTurnDoor.factId.test.ts:44`
-- `src/services/learnTurnDoor.test.ts:980`
+- `src/services/learnTurnDoor.test.ts:990`
 - `src/services/slipQuestion.test.ts:44`
 - `src/services/slipQuestion.test.ts:53`
 - `src/services/thoughtComposer.ts:287`
@@ -171,8 +171,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.ts:3219`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/learnTurnDoor.phaseWave.test.ts:134`
-- `src/services/learnTurnDoor.test.ts:651`
-- `src/services/learnTurnDoor.test.ts:673`
+- `src/services/learnTurnDoor.test.ts:661`
+- `src/services/learnTurnDoor.test.ts:683`
 - `src/services/looseStill.test.ts:45`
 - `src/services/looseStill.test.ts:48`
 - `src/services/os11RootCauses5And6.replay.test.ts:34`
