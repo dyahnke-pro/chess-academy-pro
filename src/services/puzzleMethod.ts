@@ -5,6 +5,10 @@ import { NO_BOOST } from './studentMomentBoost';
 import { layerStandings } from './teachingLayers';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import type { MethodHabit } from './methodBeat';
+import type { SlipRead } from './safetyHabits';
+import { howItFell } from './slipDepth';
+import { Chess } from 'chess.js';
+import type { MistakePuzzle } from '../types';
 
 /** The student's whole record — ONE shape, defined at its one door
  *  (`studentRecord.loadStudentRecord`). */
@@ -34,6 +38,10 @@ export function puzzleMethodLine(
   stakesCp: number | null,
   said: Set<MethodHabit>,
   record: StudentRecord,
+  /** REQUIRED — the student's own slip this puzzle comes from (My Mistakes),
+   *  so the habit says how the piece fell (`slipHabit`); null for a puzzle
+   *  that is not one of their slips (a Lichess theme puzzle). */
+  slip: SlipRead | null,
   variety = 0,
 ): string | null {
   const d = coachTurn({ signals: { decision: null, cpLossCp: stakesCp, threatNet: 0, teachingBeat: false, evalCpWhitePov: null, wdl: null }, student: {
@@ -47,7 +55,7 @@ export function puzzleMethodLine(
       momentBoost: NO_BOOST,
       layers: layerStandings(record.weaknesses, record.capabilities),
       fade: fadeLevelsFrom(record.heat),
-    }, bundle: { facts: [], board: CALM_BOARD }, posture: 'walk', method: { bestSan, cpLossCp: stakesCp, ignoredThreat: false, isStudentMove: true, saidHabits: said, ply: variety } });
+    }, bundle: { facts: [], board: CALM_BOARD }, posture: 'walk', method: { bestSan, cpLossCp: stakesCp, ignoredThreat: false, isStudentMove: true, saidHabits: said, ply: variety, slip } });
   // The door's own field (`CoachDecision.method`). This read a "[method] "
   // prefix off the spoken lines, and the "[tag] text" form was deleted
   // (WO-STORY-MATRIX-01 P1-6d), so every puzzle lost its habit silently.
@@ -61,4 +69,18 @@ export function cpFromThemes(themes: readonly string[]): number | null {
   if (themes.some((t) => /^mate|crushing/.test(t))) return 300;
   if (themes.includes('advantage')) return 150;
   return null;
+}
+
+/** THE SLIP A MY MISTAKES PUZZLE COMES FROM (WO-DEPTH-01): the move played on
+ *  the puzzle's board and the engine's answer the record kept, so the habit
+ *  says how the piece fell. Null when the puzzle carries no answer line (filed
+ *  before it was kept) — then the habit is the one the solution earns. */
+export function mistakeSlipRead(p: Pick<MistakePuzzle, 'fen' | 'playerMoveSan' | 'playerColor' | 'punishUci'>): SlipRead | null {
+  if (!p.punishUci?.length) return null;
+  let after: string;
+  try { const c = new Chess(p.fen); if (!c.move(p.playerMoveSan)) return null; after = c.fen(); } catch { return null; }
+  const punishLine = { fen: after, uci: p.punishUci };
+  const lostSquare = howItFell(p.fen, p.playerMoveSan, null, punishLine)?.lostSquare ?? null;
+  if (!lostSquare) return null;
+  return { fenBefore: p.fen, san: p.playerMoveSan, lostSquare, guardLeft: null, student: p.playerColor === 'white' ? 'w' : 'b', punishLine };
 }

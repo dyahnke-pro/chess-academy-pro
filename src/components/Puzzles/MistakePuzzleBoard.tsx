@@ -14,7 +14,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { readWrongTry, composeWrongTryLine } from '../../services/wrongTryRefutation';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { rerenderMistakeNarration } from '../../services/mistakePuzzleService';
-import { puzzleMethodLine } from '../../services/puzzleMethod';
+import { puzzleMethodLine, mistakeSlipRead } from '../../services/puzzleMethod';
 import { useStudentRecord } from '../../hooks/useStudentRecord';
 import type { MethodHabit } from '../../services/methodBeat';
 import { voiceService } from '../../services/voiceService';
@@ -348,7 +348,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     active: state === 'playing',
     wrongAttempts: wrongAttemptCount,
     onCoach: handleStruggleCoach,
-    earnedMethod: () => puzzleMethodLine(puzzle.bestMoveSan, puzzle.cpLoss, saidHabitsRef.current, recordRef.current),
+    earnedMethod: () => puzzleMethodLine(puzzle.bestMoveSan, puzzle.cpLoss, saidHabitsRef.current, recordRef.current, mistakeSlipRead(puzzle)),
   });
 
   // Replay state

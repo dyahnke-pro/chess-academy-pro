@@ -96,6 +96,12 @@ export interface MistakePuzzle {
   attempts: number;
   successes: number;
   tacticType?: TacticType | null;
+  /** THE ENGINE'S ANSWER to the played move, UCI from the board after it
+   *  (the game record's `pv.afterPlayed`), so the habit says how the piece
+   *  actually fell (`slipDepth.howItFell`, WO-DEPTH-01). Absent on puzzles
+   *  filed before 2026-11-08 or from a capture with no line. Additive,
+   *  unindexed — no schema bump. */
+  punishUci?: string[];
   /** The set-up the solution line opens with when it lands `tacticType`
    *  (a deflection before the fork): the puzzle counts under both (COUNT
    *  BOTH, David 2026-10-22). Computed with `tacticType`, same rev. */

@@ -328,7 +328,7 @@ export function PuzzleBoard({
     // ladder at rung one. It keeps its stuck-too-long nudge.
     wrongAttempts: hintOnMiss ? 0 : wrongAttemptCount,
     onCoach: handleStruggleCoach,
-    earnedMethod: () => puzzleMethodLine(solverFirstSan, cpFromThemes(puzzle.themes), saidHabitsRef.current, recordRef.current),
+    earnedMethod: () => puzzleMethodLine(solverFirstSan, cpFromThemes(puzzle.themes), saidHabitsRef.current, recordRef.current, null),
   });
 
   // Derive the expected move for the hint system

@@ -1047,6 +1047,7 @@ async function generateFromAnnotations(
       successes: 0,
       tacticType,
       ...(tacticType && named.setup ? { setupTacticType: named.setup } : {}),
+      ...(annotation.pv?.afterPlayed?.length ? { punishUci: [...annotation.pv.afterPlayed] } : {}),
       positionalMotif: transformation ? transformation.kind : null,
     });
   }
