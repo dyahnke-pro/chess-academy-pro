@@ -669,7 +669,7 @@ export function pawnSquareTaken(fenBefore: string, san: string, cpLoss: number):
   if (!race) return null;
   const tp = board.turn() === 'w' ? `…${race.theirPush}` : race.theirPush;
   return {
-    text: `Your pawn reached ${race.square} first — their ${tp} can never come now, so ${race.square} is yours.`,
+    text: `Your pawn got to ${race.square} first, so their ${tp} can never come now: the square is yours.`,
     squares: [race.square],
     race,
   };

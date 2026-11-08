@@ -54,4 +54,9 @@
 // take on e5, you take back with the knight"), the tempting move that fails,
 // the move of the same worth, and the piece's other squares (`ifTheyPlay`,
 // `weighedMoves`); the reply tree's sentence opens through `openSentence`.
-export const WALKTHROUGH_GEN_REV = '2026-11-05-human-squares';
+// 2026-11-08-human-voice: the coach talks like a person at the board (David:
+// "I want all narrations to follow this pattern") — one idea a sentence, no
+// semicolons or dash chains read aloud, "aiming at" for "eyeing", a long move
+// line said as its key moves, the plan one step a sentence, two or three
+// phrasings rotated on the board.
+export const WALKTHROUGH_GEN_REV = '2026-11-08-human-voice';

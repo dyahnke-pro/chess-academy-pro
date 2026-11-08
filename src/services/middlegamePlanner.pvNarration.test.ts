@@ -29,7 +29,7 @@ describe('narratePvLine — computed per replayed ply', () => {
     const out = narratePvLine(START, ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5']);
     expect(out).toHaveLength(5);
     expect(out[0]).toMatch(/^White's pawn to e4, taking central space/);
-    expect(out[2]).toMatch(/^White's knight to f3, .*eyeing the pawn on e5/);
+    expect(out[2]).toMatch(/^White's knight to f3, .*aiming at the pawn on e5/);
     expect(out[4]).toMatch(/^White's bishop to b5, .*knight on c6/);
     for (const s of out) expect(s.trim().length).toBeGreaterThan(0);
   });
@@ -49,7 +49,7 @@ describe('narratePvLine — computed per replayed ply', () => {
     const session = await resolveMiddlegameSessionWithFallback({ subject: 'completely-unknown-opening' });
     expect(session).not.toBeNull();
     expect(session!.steps[0].narration).toMatch(/^White's pawn to e4, taking central space/);
-    expect(session!.steps[2].narration).toMatch(/eyeing the pawn on e5/);
+    expect(session!.steps[2].narration).toMatch(/aiming at the pawn on e5/);
   });
 
   it('never imports the coach LLM path (source pin)', () => {

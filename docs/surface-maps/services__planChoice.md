@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**382 lines · 9 exports · 7 importers · 6 tests · 0 audits**
+**383 lines · 9 exports · 7 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,32 +23,32 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `methodRead` (function) — 15 call sites
-- `src/services/boardPlanFacts.ts:114`
+- `src/services/boardPlanFacts.ts:137`
 - `src/services/deferredAnswers.realGame.test.ts:12`
 - `src/services/deferredAnswers.realGame.test.ts:26`
-- `src/services/groundedAnswer.ts:3733`
-- `src/services/groundedAnswer.ts:6928`
+- `src/services/groundedAnswer.ts:3737`
+- `src/services/groundedAnswer.ts:6879`
 - `src/services/namesStudentMove.leaks.test.ts:28`
 - `src/services/namesStudentMove.leaks.test.ts:34`
-- `src/services/planChoice.test.ts:30`
-- `src/services/planChoice.test.ts:118`
-- `src/services/planChoice.test.ts:126`
-- `src/services/planChoice.test.ts:133`
-- `src/services/planChoice.test.ts:156`
-- `src/services/planChoice.test.ts:168`
-- `src/services/planThread.ts:212`
+- `src/services/planChoice.test.ts:32`
+- `src/services/planChoice.test.ts:123`
+- `src/services/planChoice.test.ts:131`
+- `src/services/planChoice.test.ts:138`
+- `src/services/planChoice.test.ts:162`
+- `src/services/planChoice.test.ts:174`
+- `src/services/planThread.ts:252`
 - `src/test/thinkMarkClosed.gate.test.ts:61`
 
 ### `planWorth` (function) — 3 call sites
-- `src/services/planChoice.test.ts:175`
-- `src/services/planThread.ts:223`
-- `src/services/planThread.ts:224`
+- `src/services/planChoice.test.ts:181`
+- `src/services/planThread.ts:263`
+- `src/services/planThread.ts:264`
 
 ### `whyThisPlan` (function) — 4 call sites
-- `src/services/boardPlanFacts.ts:118`
-- `src/services/planChoice.test.ts:18`
-- `src/services/planChoice.test.ts:24`
-- `src/services/planThread.ts:216`
+- `src/services/boardPlanFacts.ts:141`
+- `src/services/planChoice.test.ts:20`
+- `src/services/planChoice.test.ts:26`
+- `src/services/planThread.ts:256`
 
 ### `RouteArrow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -56,28 +56,28 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `methodPlan` (function) — 4 call sites
 - `src/services/namesStudentMove.leaks.test.ts:29`
 - `src/services/namesStudentMove.leaks.test.ts:35`
-- `src/services/planChoice.test.ts:120`
-- `src/services/planChoice.test.ts:161`
+- `src/services/planChoice.test.ts:125`
+- `src/services/planChoice.test.ts:167`
 
 ### `methodPlanSentence` (function) — 2 call sites
-- `src/services/boardPlanFacts.ts:115`
-- `src/services/planThread.ts:213`
+- `src/services/boardPlanFacts.ts:138`
+- `src/services/planThread.ts:253`
 
 ### `methodLine` (function) — 8 call sites
 - `src/services/deferredAnswers.realGame.test.ts:12`
-- `src/services/groundedAnswer.ts:3735`
+- `src/services/groundedAnswer.ts:3739`
 - `src/services/namesStudentMove.leaks.test.ts:29`
-- `src/services/planChoice.test.ts:32`
-- `src/services/planChoice.test.ts:134`
-- `src/services/planChoice.test.ts:158`
-- `src/services/planChoice.test.ts:168`
+- `src/services/planChoice.test.ts:34`
+- `src/services/planChoice.test.ts:139`
+- `src/services/planChoice.test.ts:164`
+- `src/services/planChoice.test.ts:174`
 - `src/test/thinkMarkClosed.gate.test.ts:63`
 
 ### `methodSquares` (function) — 1 call site
-- `src/services/planChoice.test.ts:164`
+- `src/services/planChoice.test.ts:170`
 
 ### `weaknessLine` (function) — 1 call site
-- `src/services/groundedAnswer.ts:6929`
+- `src/services/groundedAnswer.ts:6880`
 
 ## Tests
 

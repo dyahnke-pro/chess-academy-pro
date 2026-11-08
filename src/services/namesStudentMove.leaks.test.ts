@@ -16,7 +16,7 @@ describe('(b) the break that is ready is announced, not named', () => {
   const FEN = 'rnbqkbnr/pppp1ppp/4p3/8/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 1 2';
   it('the idea names neither the pawn nor its target', () => {
     const r = skipMiddleman(FEN, 'c5');
-    expect(r?.idea).toBe('A pawn break is ready now — find it. No need to prepare it; every preparing move is a move they get too.');
+    expect(r?.idea).toBe('A pawn break is ready now — find it. No need to prepare it: every preparing move is a move they get too.');
     expect(r?.idea).not.toMatch(/c-pawn|d4|c5/);
   });
 });

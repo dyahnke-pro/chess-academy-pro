@@ -508,7 +508,7 @@ export function helpedYou(fenBefore: string, san: string, student: 'w' | 'b', to
       const now = new Chess(after.fen()); now.move(bestSan);
       const lostThen = signedLegalSeeFor(was.fen(), best.to, other(student));
       const lostNow = signedLegalSeeFor(now.fen(), best.to, other(student));
-      if (lostThen > 0 && lostNow <= 0) reason = `before it, ${sayMoveNoun(bestSan, after.fen())} dropped material; now it works`;
+      if (lostThen > 0 && lostNow <= 0) reason = `before it, ${sayMoveNoun(bestSan, after.fen())} dropped material, and now it works`;
     }
   }
   if (!reason) return null;

@@ -1131,12 +1131,12 @@ export function computeMoveFacets(
       // Two holes are named; more are counted and lit (David 2026-11-05: a
       // list of squares read out is the robot).
       const sqs = cc.squares.length <= 2 ? andList([...cc.squares]) : `${countWord(cc.squares.length)} squares`;
-      if (cc.side === enemyWB2) { const f = made('findColorComplexWeakness', 'complex', `Their ${cc.complex} squares are weak — ${sqs} ${cc.squares.length === 1 ? 'is a hole' : 'are holes'} no bishop of theirs covers; ${cc.by === 'knight' ? 'a knight belongs on one' : 'your bishop can work on them'}.`); facets.push(f); recSquares(f, cc.squares); break; }
+      if (cc.side === enemyWB2) { const f = made('findColorComplexWeakness', 'complex', `Their ${cc.complex} squares are weak: ${sqs} ${cc.squares.length === 1 ? 'is a hole' : 'are holes'} no bishop of theirs covers. ${cc.by === 'knight' ? 'A knight belongs on one' : 'Your bishop can work on them'}.`); facets.push(f); recSquares(f, cc.squares); break; }
     }
     for (const cc of findColorComplexWeakness(fenAfter)) {
       const text = cc.squares.length <= 2
-        ? `Your ${cc.complex} squares are weak — with no bishop of that colour, no pawn or bishop of yours can cover ${andList([...cc.squares])}.`
-        : `Your ${cc.complex} squares are weak — with no bishop of that colour, ${countWord(cc.squares.length)} of them have no pawn or bishop of yours to cover them.`;
+        ? `Your ${cc.complex} squares are weak: with no bishop of that colour, no pawn or bishop of yours can cover ${andList([...cc.squares])}.`
+        : `Your ${cc.complex} squares are weak: with no bishop of that colour, ${countWord(cc.squares.length)} of them have no pawn or bishop of yours to cover them.`;
       if (cc.side === studentColorWB) { const f = made('findColorComplexWeakness', 'complex', text); facets.push(f); recSquares(f, cc.squares); break; }
     }
     // FORWARD PLANS are not read here: the walk runs the ONE plan thread

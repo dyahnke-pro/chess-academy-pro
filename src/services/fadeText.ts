@@ -45,12 +45,15 @@ export function fadeLevelOf(levels: FadeLevels | null | undefined, tag: string |
   return (levels as ReadonlySet<string>).has(tag) ? 'short' : null;
 }
 
+const SENTENCE = /(?<=[.!?])\s+(?=[A-Z"“…])/;
+
 /** The line at a level: short keeps the first sentence, lighter the first two.
  *  A QUESTION ("question ‖ answer") is never cut into a question with no
  *  answer: a skill they have PROVEN is not asked at all — the point is said
  *  instead — and a lighter one keeps the question whole. The point is the
  *  CONCLUSION the line draws after its answer when it draws one ("…‖ So the
- *  plan: …"), else the answer's first sentence. */
+ *  plan: …", every step of it, up to its "Why …?"), else the answer's first
+ *  sentence. */
 export function fadeText(text: string, level: FadeLevel | null): string {
   if (!level) return text;
   const qa = splitThink(text);
@@ -58,10 +61,17 @@ export function fadeText(text: string, level: FadeLevel | null): string {
     if (level !== 'short') return text;
     const marks = text.split(THINK_MARK);
     const conclusion = marks.length % 2 === 1 ? stripThink(marks[marks.length - 1]) : '';
-    if (conclusion) return fadeText(cap(conclusion.replace(/^So\s+/, '')), 'short');
+    if (conclusion) {
+      // The conclusion IS the point — every step of the plan, one a sentence
+      // since the human-voice rewrite (2026-11-08) — so it is kept whole up to
+      // its own "Why …?", which is the thinking a proven skill skips.
+      const parts = cap(conclusion.replace(/^So\s+/, '')).split(SENTENCE);
+      const why = parts.findIndex((p) => p.trim().endsWith('?'));
+      return parts.slice(0, why > 0 ? why : parts.length).join(' ');
+    }
     return fadeText(stripThink(qa[1]), 'short');
   }
-  const sentences = text.split(/(?<=[.!?])\s+(?=[A-Z"“…])/);
+  const sentences = text.split(SENTENCE);
   const keep = level === 'short' ? 1 : 2;
   return sentences.length > keep ? sentences.slice(0, keep).join(' ') : text;
 }

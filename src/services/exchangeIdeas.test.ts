@@ -169,7 +169,7 @@ describe('nuggets', () => {
 
   it('a knight is worth its squares', () => {
     const opp = wellFormed(knightSquares(fa('e4 e5 Nf3 Nc6 Bb5'), 'Na5', 'w', null, fa('e4 e5 Nf3 Nc6 Bb5 Na5')));
-    expect(opp.text).toMatch(/^On a5 their knight touches only four squares; in the centre it would touch eight/);
+    expect(opp.text).toMatch(/^On a5 their knight reaches only four squares, against eight in the centre/);
     expect(opp.proof.squares).toHaveLength(5);
     // A knight developed to the centre is a statistic, never said.
     expect(knightSquares(fa('Na3 e5'), 'Nc4', 'w', 0, fa('Na3 e5 Nc4'))).toBeNull();
@@ -180,7 +180,7 @@ describe('nuggets', () => {
   it('a knight that was taken has no squares (Black walk 2026-10-19, 33.Ne8 Kxe8)', () => {
     const before = '5k2/8/5N2/8/8/8/8/4K3 w - - 0 33';
     const standing = knightSquares(before, 'Ne8', 'w', 120, '4Nk2/8/8/8/8/8/8/4K3 b - - 1 33');
-    expect(standing?.text).toMatch(/On e8 your knight touches only four squares/);
+    expect(standing?.text).toMatch(/On e8 your knight reaches only four squares/);
     expect(knightSquares(before, 'Ne8', 'w', 120, '4k3/8/8/8/8/8/8/4K3 w - - 0 34')).toBeNull();
     // Through the composer, on the board after the king took it.
     const ideas = exchangeIdeas({ fen: '4k3/8/8/8/8/8/8/4K3 w - - 0 34', student: 'w', lines: [], studentMove: { fenBefore: before, san: 'Ne8', costCp: 120, bestSan: null, history: null }, nameMove: false });

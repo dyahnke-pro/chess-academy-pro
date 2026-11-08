@@ -46,7 +46,7 @@ describe('Learn board truth — the real game', () => {
   });
 
   it('33.Ne8 Kxe8: the taken knight has no squares', () => {
-    expect(knightSquares(at(64), 'Ne8', 'w', 150, at(65))?.text).toMatch(/On e8 your knight touches only four squares/);
+    expect(knightSquares(at(64), 'Ne8', 'w', 150, at(65))?.text).toMatch(/On e8 your knight reaches only four squares/);
     expect(knightSquares(at(64), 'Ne8', 'w', 150, at(66))).toBeNull();
   });
 

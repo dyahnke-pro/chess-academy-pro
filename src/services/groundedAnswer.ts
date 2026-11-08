@@ -6730,8 +6730,8 @@ export function assemblePositionalAnswer(
     const cc = findColorComplexWeakness(fen);
     const mine = cc.find((c) => c.side === myC);
     const theirs = cc.find((c) => c.side === oppC);
-    const yours = mine ? `Your ${mine.complex} squares are weak — ${mine.squares.join(', ')}; with no ${mine.complex}-squared bishop, no piece naturally covers them.` : '';
-    const opps = theirs ? `Their ${theirs.complex} squares are weak — ${theirs.squares.join(', ')}; a knight or bishop planted there can't be challenged, since they have no ${theirs.complex}-squared bishop.` : '';
+    const yours = mine ? `Your ${mine.complex} squares are weak: with no ${mine.complex}-squared bishop, no pawn or bishop of yours covers ${andList(mine.squares)}.` : '';
+    const opps = theirs ? `Their ${theirs.complex} squares are weak: they have no ${theirs.complex}-squared bishop, so a knight or bishop planted on ${orList(theirs.squares)} can't be challenged.` : '';
     if (!yours && !opps) return { facts: `No colour-complex weakness right now — both sides still hold the bishop that covers those squares.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     return { facts: [opps, yours].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }

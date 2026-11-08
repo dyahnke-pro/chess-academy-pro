@@ -118,5 +118,5 @@ export function notYetIdea(fen: string, student: 'w' | 'b', bestSan: string | nu
   if (!w) return null;
   const theirPiece = NAME[board.get(w.squares[0] as Square)?.type ?? 'n'];
   const what = NAME[board.get(w.target as Square)?.type ?? 'p'];
-  return { ...w, text: `Their ${theirPiece} is still on ${w.squares[0]}, so nothing hits your ${what} on ${w.target} yet — it doesn't need a guard; development comes first.` };
+  return { ...w, text: `Their ${theirPiece} is still on ${w.squares[0]}, so nothing hits your ${what} on ${w.target} yet. It doesn't need a guard, so development comes first.` };
 }

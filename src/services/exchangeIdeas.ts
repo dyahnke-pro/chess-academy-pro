@@ -797,7 +797,7 @@ export function knightSquares(
     // The student's own rim move is taught only when it cost something —
     // never as criticism of a good move.
     if (r.m.color === student && (costCp === null || costCp < 50)) return null;
-    text = `On ${r.m.to} ${mover} knight touches only ${numWord(to)} squares; in the centre it would touch eight.`;
+    text = `On ${r.m.to} ${mover} knight reaches only ${numWord(to)} squares, against eight in the centre.`;
   }
   // A KNIGHT DEVELOPED TO THE CENTRE is not said ("now touches eight squares,
   // up from three" — a statistic on a natural move, lead 2026-10-20 Review

@@ -139,8 +139,8 @@ export function planOverOneMove(fenBefore: string, san: string, bestSan: string 
   return {
     act: 'plan-over-one-move', squares: [r.mv.to, b.mv.to, gained[0]], proof, key: `one-move:${r.mv.to}`,
     stakes: costStakes(cpLoss) ?? undefined,
-    text: `The ${shot} is a one-move idea; ${bare(bestSan)} is the plan: it covers ${gainedNamed}.`,
-    ...heldOf(`The ${shot} is a one-move idea; the plan is a quiet move that covers ${gainedNamed}.`, [r.mv.to, ...gained]),
+    text: `The ${shot} is a one-move idea, while ${bare(bestSan)} is the plan: it covers ${gainedNamed}.`,
+    ...heldOf(`The ${shot} is a one-move idea, while the plan is a quiet move that covers ${gainedNamed}.`, [r.mv.to, ...gained]),
   };
 }
 

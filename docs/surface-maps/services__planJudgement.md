@@ -23,39 +23,39 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `rightIdeaWrongPiece` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:216`
-- `src/services/structureJudgement.test.ts:218`
+- `src/services/structureJudgement.test.ts:221`
+- `src/services/structureJudgement.test.ts:223`
 - `src/services/structureReads.ts:78`
 
 ### `keepPlanChangeRoute` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:223`
-- `src/services/structureJudgement.test.ts:226`
+- `src/services/structureJudgement.test.ts:228`
+- `src/services/structureJudgement.test.ts:231`
 - `src/services/structureReads.ts:79`
 
 ### `planOverOneMove` (function) — 4 call sites
-- `src/services/structureJudgement.test.ts:233`
-- `src/services/structureJudgement.test.ts:235`
-- `src/services/structureJudgement.test.ts:237`
+- `src/services/structureJudgement.test.ts:238`
+- `src/services/structureJudgement.test.ts:240`
+- `src/services/structureJudgement.test.ts:242`
 - `src/services/structureReads.ts:80`
 
 ### `placementFutureLine` (function) — 5 call sites
-- `src/services/structureJudgement.test.ts:242`
 - `src/services/structureJudgement.test.ts:247`
 - `src/services/structureJudgement.test.ts:252`
-- `src/services/structureJudgement.test.ts:255`
+- `src/services/structureJudgement.test.ts:257`
+- `src/services/structureJudgement.test.ts:260`
 - `src/services/structureReads.ts:184`
 
 ### `smallEdges` (function) — 2 call sites
-- `src/services/structureJudgement.test.ts:261`
-- `src/services/structureJudgement.test.ts:265`
+- `src/services/structureJudgement.test.ts:266`
+- `src/services/structureJudgement.test.ts:270`
 
 ### `fightingLine` (function) — 7 call sites
 - `src/services/learnBoardTruth.realGame.test.ts:21`
-- `src/services/structureJudgement.test.ts:270`
-- `src/services/structureJudgement.test.ts:276`
-- `src/services/structureJudgement.test.ts:283`
-- `src/services/structureJudgement.test.ts:289`
-- `src/services/structureJudgement.test.ts:295`
+- `src/services/structureJudgement.test.ts:275`
+- `src/services/structureJudgement.test.ts:281`
+- `src/services/structureJudgement.test.ts:288`
+- `src/services/structureJudgement.test.ts:294`
+- `src/services/structureJudgement.test.ts:300`
 - `src/services/structureReads.ts:183`
 
 ### `wedgePaysLater` (function) — 4 call sites
@@ -72,8 +72,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `heldOf` (function) — 3 call sites
 - `src/services/pawnJudgement.ts:168`
-- `src/services/pawnJudgement.ts:355`
-- `src/services/squareJudgement.ts:327`
+- `src/services/pawnJudgement.ts:366`
+- `src/services/squareJudgement.ts:329`
 
 ## Tests
 

@@ -714,7 +714,7 @@ export function structurePlanFact(fen: string, studentColor: Color): StructurePl
   if (named) return named;
   const theirIso = s.pawns.isolatedPawns[opp].filter(centralFile)[0];
   if (theirIso) {
-    return { id: 'iqp-theirs', squares: [theirIso], text: `They have the isolated pawn on ${theirIso} — trade pieces and pile onto it; the endgame is where it falls.` };
+    return { id: 'iqp-theirs', squares: [theirIso], text: `They have an isolated pawn on ${theirIso}, so trade pieces and pile onto it: in the endgame it falls.` };
   }
 
   return null;

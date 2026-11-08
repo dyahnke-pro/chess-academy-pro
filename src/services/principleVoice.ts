@@ -500,7 +500,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       }
       const s = [
         `Checks, captures, threats — there was a forcing move here: ${f.better} wins by force, and this quiet move lets it go.`,
-        `A forcing win was on the board — ${f.better} — and a quiet move walked past it.`,
+        `A forcing win was on the board with ${f.better}, and a quiet move walked past it.`,
         // "Decisive" claimed a result the detector never measures — it proves a
         // forced material win, nothing more (clean-pass walk 2026-10-03, ply 29:
         // "axb4 was decisive" at +1.76).

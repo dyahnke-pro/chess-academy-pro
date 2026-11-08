@@ -224,7 +224,7 @@ export function mutualPins(fen: string): Read | null {
   const w = pinned('w'); const bl = pinned('b');
   if (!w || !bl) return null;
   const pts = Math.min(piecePoints(b.get(w as Square)?.type ?? ''), piecePoints(b.get(bl as Square)?.type ?? ''));
-  return { claim: `srr:mutual-pins:${w}:${bl}`, stakes: pts > 0 ? { points: pts, plies: 2 } : undefined, text: `Both sides are pinned — your piece and theirs (${w} and ${bl}). Whoever breaks free first wins the fight; kicking the pinner with a pawn costs pawn cover, so weigh it.`, squares: [w, bl] };
+  return { claim: `srr:mutual-pins:${w}:${bl}`, stakes: pts > 0 ? { points: pts, plies: 2 } : undefined, text: `Both sides are pinned — your piece and theirs (${w} and ${bl}). Whoever breaks free first wins the fight, but kicking the pinner with a pawn costs pawn cover, so weigh it.`, squares: [w, bl] };
 }
 
 /** D1 OVERPROTECTION: your best piece sits on an outpost with a single guard —
@@ -334,7 +334,7 @@ export function skipMiddleman(fen: string, bestSan: string | null): Read | null 
   const hit = [-1, 1].map((d) => `${String.fromCharCode(r.move.to.charCodeAt(0) + d)}${Number(r.move.to[1]) + (r.move.color === 'w' ? 1 : -1)}`)
     .find((q) => { const p = r.board.get(q as Square); return p && p.type === 'p' && p.color !== r.move.color; });
   const promise: GamePromise = { key: `break:${r.move.to}`, piece: 'p', square: r.move.to, say: `There's the ${r.move.from[0]}-pawn break we talked about${hit ? ` — it hits their pawn on ${hit}` : ''}.` };
-  return { claim: `srr:break-ready:${r.move.to}`, promise, idea: 'A pawn break is ready now — find it. No need to prepare it; every preparing move is a move they get too.', namesMove: true, text: `The break is ready now — ${sayMoveClause(bestSan, fen)}. No need to prepare it first; every preparing move is a move they get to use too.`, squares: [r.move.to] };
+  return { claim: `srr:break-ready:${r.move.to}`, promise, idea: 'A pawn break is ready now — find it. No need to prepare it: every preparing move is a move they get too.', namesMove: true, text: `The break is ready now — ${sayMoveClause(bestSan, fen)}. No need to prepare it first: every preparing move is a move they get to use too.`, squares: [r.move.to] };
 }
 
 /** THE USEFUL WAITING MOVE: no move matters much, and the engine's is a small
@@ -459,7 +459,7 @@ export function takeTheSting(fen: string, me: 'w' | 'b', bestSan: string | null)
     if (best.move.from === cell.square) continue;
     if (best.board.attackers(cell.square, me).length > b.attackers(cell.square, me).length) continue;
     if (legalSeeGainFor(best.board.fen(), cell.square, them) > 0) continue;
-    return { claim: `srr:sting:${cell.square}`, stakes: { points: legalSeeGainFor(fen, cell.square, them), plies: 1 }, ideaSquares: [cell.square], idea: `Your ${name(cell.type)} on ${cell.square} is attacked — but you don't have to move it or guard it; look for the move that makes taking it fail.`, namesMove: true, text: `Your ${name(cell.type)} on ${cell.square} is attacked, but ${sayMoveClause(bestSan, fen)} neither moves it nor guards it — it takes the sting out, so taking it no longer works for them.`, squares: [cell.square] };
+    return { claim: `srr:sting:${cell.square}`, stakes: { points: legalSeeGainFor(fen, cell.square, them), plies: 1 }, ideaSquares: [cell.square], idea: `Your ${name(cell.type)} on ${cell.square} is attacked, but you don't have to move it or guard it. Look for the move that makes taking it fail.`, namesMove: true, text: `Your ${name(cell.type)} on ${cell.square} is attacked, but ${sayMoveClause(bestSan, fen)} neither moves it nor guards it — it takes the sting out, so taking it no longer works for them.`, squares: [cell.square] };
   }
   return null;
 }

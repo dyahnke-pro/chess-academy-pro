@@ -399,7 +399,7 @@ function observationsFor(
       key: `${side}-complex-${cc.complex}`, side, kind: 'complex', rank: rank('complex'),
       squares: [...cc.squares],
       text: own
-        ? `Your ${cc.complex} squares are weak: with no bishop of that colour, nothing of yours can cover ${sqs}. Their ${cc.by} can settle there.`
+        ? `Your ${cc.complex} squares are weak: with no bishop of that colour, no pawn or bishop of yours can cover ${sqs}. Their ${cc.by} can settle there.`
         : rotateStem([
           `Their ${cc.complex} squares are weak: no bishop of theirs covers ${sqs}. ${cc.by === 'knight' ? 'A knight belongs on one' : 'Your bishop can work on them'}.`,
           `Their ${cc.complex} squares are holes, with no bishop of theirs to cover ${sqs}. ${cc.by === 'knight' ? 'Put a knight on one' : 'Your bishop rules them'}.`,

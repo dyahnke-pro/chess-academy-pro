@@ -5,7 +5,7 @@
  * answer: "I like your wording better than the robotic wording of the app"):
  *
  *  - dash-chain     two or more " — " in one sentence: clauses bolted on;
- *  - move-chain     "you play …, they answer …, you play …" three times or
+ *  - move-chain     "you play …, they answer …, you play …" four times or
  *                   more in a sentence: a line read out like a score sheet;
  *  - square-repeat  the same square named three times in one line;
  *  - long-sentence  more than 32 words in one sentence;
@@ -26,7 +26,7 @@ export function roboticMarks(raw) {
   const out = [];
   for (const s of sentences(text)) {
     if ((s.match(/ — /g) ?? []).length >= 2) out.push({ mark: 'dash-chain', hit: s.slice(0, 90) });
-    if ((s.match(/\b(?:you|they) (?:play|answer|castle)\b/g) ?? []).length >= 3) out.push({ mark: 'move-chain', hit: s.slice(0, 90) });
+    if ((s.match(/\b(?:you|they) (?:play|answer|castle)\b/g) ?? []).length >= 4) out.push({ mark: 'move-chain', hit: s.slice(0, 90) });
     const words = s.split(/\s+/).filter(Boolean).length;
     if (words > 32) out.push({ mark: 'long-sentence', hit: `${words} words: ${s.slice(0, 70)}` });
     if (s.includes(';')) out.push({ mark: 'semicolon', hit: s.slice(Math.max(0, s.indexOf(';') - 40), s.indexOf(';') + 30) });

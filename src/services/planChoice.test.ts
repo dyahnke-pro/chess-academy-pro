@@ -77,13 +77,13 @@ describe('the method\'s answers make the plan', () => {
     const { emptyPlanThread } = await import('./gameStory');
     const line = planThreadTurn(emptyPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b', holdPlayable: false })[0]?.text ?? '';
     expect(line).toMatch(/Your worst piece: your rook on a8, with no open file yet\./);
-    expect(line).toMatch(/So the plan: put a rook on the open c-file; bring your knight on e8 to d4, by way of c7 and e6 — no pawn of theirs can attack it there; then break open with the push to d6 or f6\./);
+    expect(line).toMatch(/So the plan: put a rook on the open c-file\. Bring your knight on e8 to d4, by way of c7 and e6 — no pawn of theirs can attack it there\. Then break open with the push to d6 or f6\./);
     expect(line).toMatch(/Why in that order\? A break opens the position/);
   });
   it('chat answers "how do I find a plan" with the same plan', async () => {
     const { assemblePlanMethodAnswer } = await import('./groundedAnswer');
     const a = assemblePlanMethodAnswer(FEN, 'black').facts;
-    expect(a).toMatch(/So the plan: put a rook on the open c-file; bring your knight on e8 to d4/);
+    expect(a).toMatch(/So the plan: put a rook on the open c-file\. Bring your knight on e8 to d4/);
     expect(a).not.toMatch(/Beyond that: plant a knight/);
   }, 60000);
   it('a passed pawn outranks the three questions: no method before an unrelated plan', async () => {

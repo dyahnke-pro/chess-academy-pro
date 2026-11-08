@@ -32,7 +32,7 @@ describe('hard walk — mates', () => {
       named: { lineUci: toUci(GOMC, MATE), evaluation: 0, mate: 4 },
     })!;
     const text = namedMoveAnswer(d, 'why-best')!;
-    expect(text).toMatch(/^Nh6\+ is the best move here — it starts a forced mate in 4 moves\. Their best defence is …Kf8, and then you play Qf6\+, they answer Ke8, you play Bb5\+, they answer c6 and you play Bxc6# — and it's mate\./);
+    expect(text).toMatch(/^Nh6\+ is the best move here — it starts a forced mate in 4 moves\. Their best defence is …Kf8, and then you play Qf6\+ and, two moves later, you play Bxc6# — and it's mate\./);
     const lines = spokenLines(d, GOMC, text);
     expect(lines).toHaveLength(1);
     expect(lines[0].plies.map((p) => p.san)).toEqual(MATE);

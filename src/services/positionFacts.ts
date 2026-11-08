@@ -1851,7 +1851,7 @@ function buildClauses(a: {
         const hit = `${p.attacker ? `their ${PNAME[p.attacker]}${takeable ? ` on ${p.attackerSquare}` : ''}` : 'they'} ${p.attacker ? 'attacks' : 'attack'} your ${PNAME[p.piece.toLowerCase()]} on ${p.square}${p.defenders === 0 ? ', and nothing defends it' : ''}${takeable ? ' — and you can take the attacker without losing material' : ''}`;
         if (loose.still) return `Still — ${hit}.`;
         return winning
-          ? `You're on top — watch the counterpunch: ${hit}.`
+          ? `You're on top, but watch the counterpunch: ${hit}.`
           : `${openSentence(hit)}.`;
       })(),
       claim: loose.key,

@@ -56,7 +56,7 @@ describe('the plan line reads the one fade', () => {
   it('the same record with the plan skill proven green: the plan alone', () => {
     const r = spoken(provenRecord(), DAVID.slips);
     expect(r.state).toBe('green');
-    expect(r.said).toBe('The plan: put a rook on the open e-file; attack their king on f8 before it gets out.');
+    expect(r.said).toBe('The plan: put a rook on the open e-file. Attack their king on f8 before it gets out.');
   });
   it('a fresh device (grey): the whole method, taught in full', () => {
     const r = spoken([], []);

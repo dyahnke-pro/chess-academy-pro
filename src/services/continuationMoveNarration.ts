@@ -119,7 +119,7 @@ export function narrateContinuationMove(
     clauses.push(`hitting the ${hits[0].piece} on ${hits[0].square} and the ${hits[1].piece} on ${hits[1].square} at once`);
     for (const h of hits.slice(0, 2)) arrows.push({ from: to, to: h.square, color: 'green' });
   } else if (hits.length === 1 && !captured) {
-    clauses.push(`eyeing the ${hits[0].piece} on ${hits[0].square}`);
+    clauses.push(`aiming at the ${hits[0].piece} on ${hits[0].square}`);
     arrows.push({ from: to, to: hits[0].square, color: 'green' });
   }
 

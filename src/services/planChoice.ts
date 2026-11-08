@@ -289,7 +289,8 @@ export function methodPlan(read: MethodRead, fen?: string): { steps: string[]; t
   if (!steps.length) return null;
   const text = steps.length === 1
     ? steps[0]
-    : `${steps.slice(0, -1).join('; ')}; ${steps[steps.length - 1]}`;
+    // One step a sentence (David 2026-11-08, the human voice).
+    : `${steps[0]}. ${steps.slice(1).map((st) => openSentence(st)).join('. ')}`;
   // EVERY PLAN SAYS WHY: the order when there is one; otherwise why that
   // target, or why that piece.
   const why = pieces && read.breaks.length
