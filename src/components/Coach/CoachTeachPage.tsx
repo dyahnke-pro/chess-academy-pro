@@ -12788,7 +12788,7 @@ export function CoachTeachPage({ mode }: {
                         // key with its words, the game's when the door keeps them.
                         slipQuestion: () => {
                           if (fund?.id === 'ignored-threat' || look.stakes?.mate) return null;
-                          const q = slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', new Set(learnMemRef.current.story.heard(fenAfterReply).sentences), move.history.length, look.guardLeft ?? null);
+                          const q = slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', new Set(learnMemRef.current.story.heard(fenAfterReply).sentences), move.history.length, look.guardLeft ?? null, look.punishLine ?? null);
                           if (q) learnMemRef.current.story.offer(fenAfterReply, { text: q.text, sentences: [q.key] });
                           return q?.text ?? null;
                         },

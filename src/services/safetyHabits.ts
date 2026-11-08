@@ -18,6 +18,10 @@ import { Chess, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { refutationOf } from './slipDepth';
+import { NAME_NEAR_PLIES } from './lineTrust';
+import { computeMustDefend } from './threatOut';
+import { andList } from '../utils/andList';
 
 const BLUNDER_CHECK_CP = 150;
 const AUTOPILOT_CP = 100;
@@ -117,6 +121,13 @@ export interface SlipRead {
   /** The square the moved piece stopped guarding, when that is why it failed. */
   guardLeft: string | null;
   student: 'w' | 'b';
+  /** THE PUNISHMENT the engine found, their move first, from the board after
+   *  the slip (WO-DEPTH-01). REQUIRED — `null` when the surface has no line —
+   *  because the blunder check is only the habit that catches a piece left to
+   *  be taken: on David's record 73% of the slips that lost material took two
+   *  or more of their moves, a third began with a quiet move, and "your pawn
+   *  on d6 was there to take" was said of a pawn that fell seven moves later. */
+  punishLine: { fen: string; uci: readonly string[] } | null;
 }
 export type SlipHabit = 'what-it-guarded' | 'opponent-threat' | 'blunder-check';
 
@@ -141,12 +152,70 @@ export function slipHabit(slip: SlipRead, stemKey: number): { habit: SlipHabit; 
   if (standing) return { habit: 'opponent-threat', text: answerDangerQuestion(lostSquare, stemKey) };
   // Named off the board AFTER the move — the piece may have just moved there.
   let name = 'piece';
+  let fenAfter: string | null = null;
   try {
     const c = new Chess(fenBefore); c.move(san);
+    fenAfter = c.fen();
     const lost = c.get(lostSquare as Square);
     if (lost && lost.color === student) name = ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[lost.type] ?? 'piece';
   } catch { /* the name is a courtesy */ }
-  return { habit: 'blunder-check', text: blunderCheckLine(name, lostSquare) };
+  // HOW THE PIECE FELL decides which habit would have caught it (WO-DEPTH-01,
+  // measured on David's 1,134 slips). Left to be taken right after the move →
+  // the blunder check, as before. Not takeable then, but lost within the
+  // distance a line may be named on one read (`NAME_NEAR_PLIES`) → still the
+  // blunder check, answered with HOW it fell: a quiet move, a check or a
+  // capture first. Lost later than that → it was not a blunder-check miss, so
+  // this habit is not the lesson (the positional reason is).
+  const enPrise = !!fenAfter && legalSeeGainFor(fenAfter, lostSquare as Square, them) > 0;
+  const sameBoard = (a: string, b: string): boolean => a.split(' ').slice(0, 2).join(' ') === b.split(' ').slice(0, 2).join(' ');
+  const line = slip.punishLine && fenAfter && sameBoard(slip.punishLine.fen, fenAfter) ? slip.punishLine : null;
+  if (enPrise) return { habit: 'blunder-check', text: blunderCheckLine(name, lostSquare) };
+  // Not takeable right after the move and no line to show how it fell: the
+  // question stands, its answer is not known — never "it was there to take".
+  if (!line) return { habit: 'blunder-check', text: BLUNDER_CHECK_QUESTION };
+  const ref = refutationOf(fenAfter as string, line.uci);
+  if (!ref || ref.plies > NAME_NEAR_PLIES || ref.sans.length === 0) return null;
+  const first = ref.sans[0];
+  // A move that takes nothing and gives no check is still the T in CCT when it
+  // leaves their pieces hitting yours (7.Nc3?! …d4 hits the knight on c3 and
+  // the bishop on e3 at once): name what it hit, off the board.
+  const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+  let hit: string[] = [];
+  if (ref.quietStart) {
+    try {
+      const c = new Chess(fenAfter as string); c.move(first);
+      const before = new Set(computeMustDefend(fenAfter as string, student).pieces.map((p) => p.square));
+      hit = computeMustDefend(c.fen(), student).pieces.filter((p) => !before.has(p.square)).map((p) => `your ${PIECE[p.piece] ?? 'piece'} on ${p.square}`);
+    } catch { hit = []; }
+  }
+  // "left … under attack", never "it hit": the move may only have uncovered
+  // another piece's attack (11…Qd4 Qh3: the queen on h3 does not reach d4).
+  const how = ref.quietStart
+    ? hit.length ? `a threat: ${first} took nothing, but it left ${andList(hit)} under attack` : `a quiet move: ${first} took nothing and gave no check`
+    : /[+#]$/.test(first) ? `a check: ${first}` : `a capture: ${first}`;
+  const whenAt = (k: number): string => (k <= 1 ? 'straight away' : 'on their next move');
+  // The move that TOOK the lost piece, read off the line — never the move the
+  // trade settled on (b3?! Nxe5 Nxe5 Bxe5: the pawn went on their first move).
+  const takenAt = ref.sans.findIndex((x, i) => i % 2 === 0 && /x/.test(x) && x.replace(/[+#]$/, '').replace(/=[QRBN]$/, '').endsWith(lostSquare));
+  // The piece is named as it stood when it was TAKEN: one that walked onto the
+  // square during the line (Bxd4, then …Nxd4) is "your bishop", with no square
+  // it never stood on at the slip.
+  let takenName: string | null = null;
+  if (takenAt >= 0) {
+    try {
+      const b = new Chess(fenAfter as string);
+      for (let i = 0; i < takenAt; i += 1) b.move(ref.sans[i]);
+      const p = b.get(lostSquare as Square);
+      if (p && p.color === student) takenName = PIECE[p.type] ?? null;
+    } catch { takenName = null; }
+  }
+  const stoodThere = takenName !== null && takenName === name;
+  const fell = ref.mate
+    ? `it was mate ${whenAt(ref.moves)}`
+    : takenAt >= 0 && takenName
+      ? stoodThere ? `your ${name} on ${lostSquare} fell ${whenAt(takenAt / 2 + 1)}` : `your ${takenName} fell ${whenAt(takenAt / 2 + 1)}`
+      : `they won material ${whenAt(ref.moves)}`;
+  return { habit: 'blunder-check', text: blunderCheckAnswer(`${how}, and ${fell}`) };
 }
 
 /** THE ONE ANSWER-THE-DANGER QUESTION — said by whichever line of the turn

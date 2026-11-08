@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**142 lines · 11 exports · 3 importers · 2 tests · 1 audits**
+**131 lines · 11 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:225) — names `tempoRun`
-- **The standard post-deploy ritual** (CLAUDE.md:6736) — names `tempoRun`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:278) — names `tempoRun`
+- **The standard post-deploy ritual** (CLAUDE.md:6874) — names `tempoRun`
 
 ## Who calls in
 
@@ -60,7 +60,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `stepRun` (function) — 9 call sites
-- `src/coach/focus/focusRunner.ts:455`
+- `src/coach/focus/focusRunner.ts:516`
 - `src/coach/focus/tempoRun.measure.test.ts:53`
 - `src/coach/focus/tempoRun.test.ts:50`
 - `src/coach/focus/tempoRun.test.ts:51`

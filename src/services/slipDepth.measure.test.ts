@@ -6,9 +6,40 @@
 // Writes audit-reports/slip-depth.json.
 import { it } from 'vitest';
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { slipDepth, type EngineLine } from './slipDepth';
+import { Chess } from 'chess.js';
+import { refutationOf } from './slipDepth';
+import { expectedScore } from './winChance';
+import { newThreat } from './threatOut';
+import { findAllowedChain } from './causalChain';
 
 const RUN = process.env.SLIP_DEPTH_MEASURE === '1';
+
+// The reads that did NOT tell his slips apart live here, with the measure that
+// showed it — they are not reasons the app says.
+interface EngineLine { cp: number | null; mate: number | null; pv: string[] }
+const HOLD_GAP = 0.05; // Lichess's inaccuracy line, in expected score
+const lineCp = (l: EngineLine): number => (l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.cp ?? 0);
+function sanOf(fen: string, uci: string | undefined): { san: string; capture: boolean; check: boolean } | null {
+  if (!uci) return null;
+  try { const m = new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] || undefined }); return m ? { san: m.san, capture: !!m.captured, check: /[+#]$/.test(m.san) } : null; } catch { return null; }
+}
+function slipDepth(fen: string, san: string, lines: EngineLine[], after: EngineLine | null) {
+  if (lines.length === 0) return null;
+  const best = expectedScore(lineCp(lines[0]));
+  const b = sanOf(fen, lines[0].pv[0]);
+  let fenAfter: string | null = null; let bait: string | null = null;
+  try {
+    const c = new Chess(fen); const m = c.move(san); fenAfter = c.fen();
+    bait = m.captured ? 'capture' : /[+#]$/.test(m.san) ? 'check' : newThreat(fen, fenAfter, m.color === 'w' ? 'b' : 'w') ? 'threat' : null;
+  } catch { fenAfter = null; }
+  return {
+    holds: lines.filter((l) => best - expectedScore(lineCp(l)) < HOLD_GAP).length,
+    read: lines.length,
+    bestQuiet: !!b && !b.capture && !b.check,
+    bait,
+    refutation: fenAfter && after ? refutationOf(fenAfter, after.pv) : null,
+  };
+}
 const DIR = 'audit-reports/slip-reads';
 
 interface Row { game: string; ply: number; seat: string; kind: string; san: string; fen: string; lines: EngineLine[]; after?: EngineLine | null }
@@ -18,6 +49,16 @@ it.runIf(RUN && existsSync(DIR))('deep reads: slips against matched ordinary mov
     readFileSync(`${DIR}/${f}`, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l) as Row));
   const groups: Record<string, { n: number; holds: number[]; one: number; two: number; narrow: number; bestQuiet: number; bait: Record<string, number>; ref: number; refMoves: number[]; refQuiet: number; refMate: number }> = {};
   const samples: Array<Record<string, unknown>> = [];
+  // THE EARLIER CAUSE: how often the one causal-chain computer proves the move
+  // that set the slip up (the chain Review and Learn already say).
+  const DROP = 'audit-reports/.fixtures/data-drop-david.json';
+  const sansOf = new Map<string, string[]>();
+  if (existsSync(DROP)) {
+    for (const g of (JSON.parse(readFileSync(DROP, 'utf8')) as { stores: { games: Array<{ id: string; pgn: string }> } }).stores.games) {
+      try { const c = new Chess(); c.loadPgn(g.pgn); sansOf.set(g.id, c.history()); } catch { /* unreadable */ }
+    }
+  }
+  const chain = { slips: 0, fired: 0, firedRefuted: 0, refuted: 0 };
   for (const r of rows) {
     const g = (groups[r.kind === 'ordinary' ? 'ordinary' : 'slip'] ??= { n: 0, holds: [], one: 0, two: 0, narrow: 0, bestQuiet: 0, bait: {}, ref: 0, refMoves: [], refQuiet: 0, refMate: 0 });
     const d = slipDepth(r.fen, r.san, r.lines, r.after ?? null);
@@ -34,6 +75,12 @@ it.runIf(RUN && existsSync(DIR))('deep reads: slips against matched ordinary mov
       if (d.refutation.quietStart) g.refQuiet += 1;
       if (d.refutation.mate) g.refMate += 1;
     }
+    if (r.kind !== 'ordinary') {
+      const sans = sansOf.get(r.game);
+      const ch = sans ? findAllowedChain(sans, r.ply + 1, r.seat === 'white' ? 'w' : 'b') : null;
+      chain.slips += 1; if (ch) chain.fired += 1;
+      if (d.refutation) { chain.refuted += 1; if (ch) chain.firedRefuted += 1; }
+    }
     if (r.kind !== 'ordinary' && samples.length < 40 && (samples.length < 15 || r.ply % 5 === 0)) {
       samples.push({ game: r.game, ply: r.ply + 1, seat: r.seat, san: r.san, fen: r.fen, holds: d.holds, read: d.read, bestQuiet: d.bestQuiet, best: r.lines[0]?.pv[0], bait: d.bait, refutation: d.refutation });
     }
@@ -49,6 +96,7 @@ it.runIf(RUN && existsSync(DIR))('deep reads: slips against matched ordinary mov
     refuted: pct(g.ref, g.n), medianRefMoves: median(g.refMoves), refQuietStart: pct(g.refQuiet, g.ref), refMate: pct(g.refMate, g.ref),
     refMovesHist: g.refMoves.reduce<Record<number, number>>((h, m) => { h[m] = (h[m] ?? 0) + 1; return h; }, {}),
   }]));
-  writeFileSync('audit-reports/slip-depth.json', JSON.stringify({ rows: rows.length, summary, samples }, null, 1));
+  writeFileSync('audit-reports/slip-depth.json', JSON.stringify({ rows: rows.length, summary, chain, samples }, null, 1));
+  console.log('CHAIN', JSON.stringify(chain));
   console.log('SLIP_DEPTH', JSON.stringify(summary));
 }, 600_000);

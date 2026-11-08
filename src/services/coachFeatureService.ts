@@ -3163,7 +3163,7 @@ function* reviewSegmentSteps(
           // The slip, as the verdict read it (`errorWhy`): the habit beat asks
           // the thinking step it failed, Learn's own slip question.
           slip: studentColorWB && (verdictReasonOut.lostSquare || verdictReasonOut.guardLeft)
-            ? { fenBefore: fenPair.fenBefore, san: m.san, lostSquare: verdictReasonOut.lostSquare ?? null, guardLeft: verdictReasonOut.guardLeft ?? null, student: studentColorWB }
+            ? { fenBefore: fenPair.fenBefore, san: m.san, lostSquare: verdictReasonOut.lostSquare ?? null, guardLeft: verdictReasonOut.guardLeft ?? null, student: studentColorWB, punishLine: m.pv?.afterPlayed?.length ? { fen: fenPair.fenAfter, uci: m.pv.afterPlayed } : null }
             : null,
           // The leading fundamental that already IS a habit's lesson.
           habitByFact: new Map(kept

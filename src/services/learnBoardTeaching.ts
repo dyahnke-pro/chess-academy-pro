@@ -1174,11 +1174,15 @@ export function slipQuestion(
    *  move failed (`BackwardLook.guardLeft`). REQUIRED — `null` when it is not —
    *  so every caller answers: a guard left is caught by its own question. */
   guardLeft: string | null,
+  /** The line the grade named, their reply first (`BackwardLook.punishLine`).
+   *  REQUIRED — `null` when there is none — so the habit says how the piece
+   *  actually fell (`slipHabit`, WO-DEPTH-01). */
+  punishLine: { fen: string; uci: readonly string[] } | null,
 ): { text: string; key: string } | null {
   // The one reading (`slipHabit`, shared with Review's method beat); ONE
   // SAY-ONCE KEY PER HABIT, shared with every lane that teaches it — the habit
   // is said once a game whichever path says it first (`habitSaidKey`).
-  const h = slipHabit({ fenBefore, san: playedSan, lostSquare: lostSquare ?? null, guardLeft, student }, stemKey);
+  const h = slipHabit({ fenBefore, san: playedSan, lostSquare: lostSquare ?? null, guardLeft, student, punishLine }, stemKey);
   if (!h) return null;
   const key = habitSaidKey(h.habit);
   if (said.has(key)) return null;

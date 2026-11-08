@@ -74,9 +74,9 @@ describe('a mistake turn says what the move allowed, what the better move did, a
 
   it('the habit: before a piece moves, what is it guarding (said once a game)', () => {
     const said = new Set<string>();
-    const q = slipQuestion(BEFORE, 'Bc3', undefined, 'w', said, 0, 'e3');
+    const q = slipQuestion(BEFORE, 'Bc3', undefined, 'w', said, 0, 'e3', null);
     expect(q?.text).toBe('The question that catches this: before a piece moves, ask what it is guarding.');
-    expect(slipQuestion(BEFORE, 'Bc3', undefined, 'w', said, 1, 'e3')).toBeNull();
+    expect(slipQuestion(BEFORE, 'Bc3', undefined, 'w', said, 1, 'e3', null)).toBeNull();
   });
 
   it('the record files it as their threat, with the same words — not "your pieces reach fewer squares"', () => {
