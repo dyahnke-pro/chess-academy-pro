@@ -116,14 +116,14 @@ describe('the slip\'s own question reaches Review\'s method beat (WO-STORY-MATRI
   const base = { tier: 'blunder' as const, cpLossCp: 900, bestSan: 'Nc6', ignoredThreat: false, isStudentMove: true };
   it('a piece this move put en prise asks the blunder check, said once a game', () => {
     const said = new Set<import('./methodBeat').MethodHabit>();
-    const slip = { fenBefore, san: 'Qg5', lostSquare: 'g5', guardLeft: null, student: 'b' as const };
+    const slip = { fenBefore, san: 'Qg5', lostSquare: 'g5', guardLeft: null, student: 'b' as const, punishLine: null };
     const beat = methodBeatFor({ ...base, slip, saidHabits: said }, 0);
     expect(beat).toMatch(/^Blunder check before you let go of a piece/);
     expect(beat).toMatch(/queen on g5/);
     expect(methodBeatFor({ ...base, slip, saidHabits: said }, 1) ?? '').not.toMatch(/Blunder check/);
   });
   it('a guard the moved piece left asks what it was guarding', () => {
-    const beat = methodBeatFor({ ...base, slip: { fenBefore, san: 'Qg5', lostSquare: null, guardLeft: 'e5', student: 'b' } }, 0);
+    const beat = methodBeatFor({ ...base, slip: { fenBefore, san: 'Qg5', lostSquare: null, guardLeft: 'e5', student: 'b', punishLine: null } }, 0);
     expect(beat).toBe('The question that catches this: before a piece moves, ask what it is guarding.');
   });
   it('no slip read, no slip question', () => {
