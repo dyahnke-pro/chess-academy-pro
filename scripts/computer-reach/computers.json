@@ -1160,13 +1160,13 @@
   ]
  },
  {
-  "name": "Learn's own threat lane (hangingPieceLine / cheaperAttackerLine / openThreatLine / learnThreatVoice)",
-  "file": "services/learnBoardTeaching.ts",
-  "fn": "hangingPieceLine",
+  "name": "The hanging-piece line, Learn's threat lane and Review's loose facet (hangingLine; with cheaperAttackerLine / openThreatLine / learnThreatVoice)",
+  "file": "services/hangingLine.ts",
+  "fn": "hangingLine",
   "says": "Learn's per-reply warning: the student's biggest undefended hanging piece (tctx.hanging), a piece hit by a cheaper attacker, the prize of th",
   "origin": "map",
   "nodes": [
-   "services/learnBoardTeaching.ts#hangingPieceLine"
+   "services/hangingLine.ts#hangingLine"
   ],
   "door": {
    "kind": "adapter",

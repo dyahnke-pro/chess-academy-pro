@@ -1,13 +1,13 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, door = computed in a Learn turn and decided by Learn's turn door (spoken when the door keeps it); a door-only row says why in `door` (an adapter of computers the other surfaces read, or Learn-only by design).",
  "graph": {
-  "files": 1772,
-  "nodes": 16588
+  "files": 1777,
+  "nodes": 16653
  },
  "totals": {
   "computers": 346,
-  "offTheSixSurfaces": 29,
-  "learnDoorOnly": 18,
+  "offTheSixSurfaces": 28,
+  "learnDoorOnly": 17,
   "learnDoorOnlyUnexplained": 0,
   "otherScreensOnly": 10,
   "dead": 1,
@@ -15,8 +15,8 @@
   "surfaces": {
    "learn": {
     "yes": 31,
-    "door": 222,
-    "no": 93
+    "door": 223,
+    "no": 92
    },
    "review": {
     "yes": 236,
@@ -46,7 +46,6 @@
    "services/danyaBehaviors.ts#detectBehaviors",
    "services/drillReasons.ts#(module)",
    "services/inaccuracyCall.ts#callInaccuracyDetailed",
-   "services/learnBoardTeaching.ts#hangingPieceLine",
    "services/learnBoardTeaching.ts#learnMoveReason",
    "services/learnBoardTeaching.ts#slipQuestion",
    "services/learnBoardTeaching.ts#theirDeepFactTeaching",
@@ -463,6 +462,7 @@
    "tactics": "no",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
     "playSilent"
@@ -1688,7 +1688,7 @@
    "fn": "(module)",
    "says": "gameEndReads — what the reference coach says looking BACK over a game (computers batch 2, teach-brief §K): why it ended where it did, the pi",
    "origin": "extra",
-   "learn": "no",
+   "learn": "door",
    "review": "yes",
    "lesson": "no",
    "chat": "no",
@@ -1978,6 +1978,40 @@
    "other": [
     "playSilent"
    ]
+  },
+  {
+   "key": "services/hangingLine.ts#hangingLine",
+   "name": "The hanging-piece line, Learn's threat lane and Review's loose facet (hangingLine; with cheaperAttackerLine / openThreatLine / learnThreatVoice)",
+   "file": "services/hangingLine.ts",
+   "fn": "hangingLine",
+   "says": "Learn's per-reply warning: the student's biggest undefended hanging piece (tctx.hanging), a piece hit by a cheaper attacker, the prize of th",
+   "origin": "map",
+   "learn": "door",
+   "review": "yes",
+   "lesson": "no",
+   "chat": "no",
+   "tapped": "no",
+   "tactics": "no",
+   "app": true,
+   "other": [
+    "playSilent"
+   ],
+   "door": {
+    "kind": "adapter",
+    "of": [
+     "services/loosePieces.ts#findLoosePieces"
+    ],
+    "why": "Learn's warning wording for a piece left hanging after their reply. Review says the same fact on their move (the [loose] facet, with threatCost).",
+    "ofReach": {
+     "services/loosePieces.ts#findLoosePieces": {
+      "review": "yes",
+      "lesson": "yes",
+      "chat": "yes",
+      "tapped": "yes",
+      "tactics": "yes"
+     }
+    }
+   }
   },
   {
    "key": "services/holdResource.ts#heldResource",
@@ -2506,39 +2540,6 @@
    ]
   },
   {
-   "key": "services/learnBoardTeaching.ts#hangingPieceLine",
-   "name": "Learn's own threat lane (hangingPieceLine / cheaperAttackerLine / openThreatLine / learnThreatVoice)",
-   "file": "services/learnBoardTeaching.ts",
-   "fn": "hangingPieceLine",
-   "says": "Learn's per-reply warning: the student's biggest undefended hanging piece (tctx.hanging), a piece hit by a cheaper attacker, the prize of th",
-   "origin": "map",
-   "learn": "door",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": true,
-   "other": [],
-   "door": {
-    "kind": "adapter",
-    "of": [
-     "services/loosePieces.ts#findLoosePieces"
-    ],
-    "why": "Learn's warning wording for a piece left hanging after their reply. Review says the same fact on their move (the [loose] facet, with threatCost).",
-    "ofReach": {
-     "services/loosePieces.ts#findLoosePieces": {
-      "review": "yes",
-      "lesson": "yes",
-      "chat": "yes",
-      "tapped": "yes",
-      "tactics": "yes"
-     }
-    }
-   },
-   "where": "components/Coach/CoachTeachPage.tsx#CoachTeachPage"
-  },
-  {
    "key": "services/learnBoardTeaching.ts#learnMoveReason",
    "name": "learnMoveReason + refutedAlternativeClaims (Learn adapter of decisiveReason)",
    "file": "services/learnBoardTeaching.ts",
@@ -3041,6 +3042,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3775,7 +3777,7 @@
    "says": "Which piece is a side's worst/best and why: mobility (nextPlans), ablation by engine (pieceQuality), Stockfish's per-piece eval table (piece",
    "origin": "map",
    "learn": "door",
-   "review": "yes",
+   "review": "no",
    "lesson": "no",
    "chat": "yes",
    "tapped": "yes",
@@ -5038,6 +5040,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
