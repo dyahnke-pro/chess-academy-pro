@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7739 lines · 123 exports · 92 importers · 67 tests · 8 audits**
+**7811 lines · 123 exports · 92 importers · 67 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -166,12 +166,15 @@
 - `src/services/checkIsNotAGuard.test.ts:54`
 - `src/services/computedVoiceGrounding.test.ts:85`
 
-### `assembleThreatAnswer` (function) — 7 call sites
+### `assembleThreatAnswer` (function) — 10 call sites
 - `src/coach/chatTurnAnswers.ts:344`
 - `src/coach/dispatchCoachTurn.ts:612`
 - `src/coach/handWalk1009.test.ts:324`
 - `src/services/groundedAnswer.threatTake.test.ts:8`
 - `src/services/groundedAnswer.threatTake.test.ts:15`
+- `src/services/groundedAnswer.threatTake.test.ts:27`
+- `src/services/groundedAnswer.threatTake.test.ts:36`
+- `src/services/groundedAnswer.threatTake.test.ts:42`
 - `src/services/hardWalk.mates.test.ts:55`
 - `src/services/hardWalk.mates.test.ts:91`
 

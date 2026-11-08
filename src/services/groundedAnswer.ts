@@ -33,7 +33,7 @@ import { Chess } from 'chess.js';
 import { toOtherSeat } from '../utils/seatPronouns';
 import { NO_PREV_CAPTURE, afterCapture, type PrevCaptureContext } from './captureRun';
 import { moverLineProof, netPieceWords } from './exchangeLedger';
-import { isRealPin } from './pinGeometry';
+import { isRealPin, absolutePinRay } from './pinGeometry';
 import { tacticWord } from './tacticVocabulary';
 import { MOTIFS, type MotifId } from '../data/tacticMotifs';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
@@ -638,7 +638,6 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
       bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
     };
   }
-  const named = andList(wins.map((w) => `the ${REVIEW_PIECE_NAME[w.type]} on ${w.sq}`));
   // ONE COACH (2026-10-07): the same check Learn's warning runs — when taking
   // the cheapest attacker loses nothing, that capture IS the answer, and the
   // chat says so instead of only "cover it".
@@ -653,14 +652,87 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
       : '';
   })();
   const keepWith = isOpp && wins.length > 0 ? keepItClause(fen, wins[0].sq, me) : '';
+  // THE PROOF RIDES WITH THE TARGET (David 2026-11-08, position 2 of the
+  // hard-chat audit: "Do the narrations say this?" — "they're eyeing the
+  // bishop on d3 … the pawn on g2, which is not defended enough" named no
+  // attacker, no guard, and hung the one guard note on the last target). Each
+  // target says what hits it and what guards it, counted on the board.
+  const said = wins.length > 0 ? targetsSaid(chess, wins.map((w) => ({ sq: w.sq, type: w.type })), attacker, isOpp) : '';
   const winPart = wins.length > 0
     ? (isOpp
-        ? `they're eyeing ${named}, which is not defended enough${takeBack || keepWith}`
-        : `you can win ${named}`)
+        ? `they're eyeing ${said}${takeBack || keepWith}`
+        : `you can win ${said}`)
     : '';
   const checkPart = inCheck ? `your king is in check` : '';
   const facts = (matePart ? `${[checkPart, matePart].filter(Boolean).join(', and ')}.${winPart ? ` Beyond that, ${winPart}.` : ''}` : [checkPart, winPart].filter(Boolean).join(', and ') + '.') + ideaPart;
   return { facts: openSentence(facts), bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+}
+
+/** Who can take on `sq` for `color`: every piece that attacks it, less one
+ *  pinned to its own king off the line to `sq` (it cannot leave the pin). The
+ *  pinned ones come back with the piece that pins them, for the proof. */
+function takersOn(chess: Chess, sq: Square, color: 'w' | 'b'): { free: Square[]; pinned: Array<{ sq: Square; by: Square }> } {
+  const free: Square[] = []; const pinned: Array<{ sq: Square; by: Square }> = [];
+  const fr = (x: string): [number, number] => [x.charCodeAt(0) - 97, Number(x[1]) - 1];
+  for (const a of chess.attackers(sq, color)) {
+    const ray = absolutePinRay(chess, a);
+    if (!ray) { free.push(a); continue; }
+    const [af, ar] = fr(a); const [tf, tr] = fr(sq);
+    const df = Math.sign(tf - af); const dr = Math.sign(tr - ar);
+    const onLine = (df === ray[0] && dr === ray[1]) || (df === -ray[0] && dr === -ray[1]);
+    if (onLine && ((tf - af) * ray[1] === (tr - ar) * ray[0])) { free.push(a); continue; }
+    let by: Square | null = null;
+    for (let f = af + ray[0], r = ar + ray[1]; f >= 0 && f < 8 && r >= 0 && r < 8; f += ray[0], r += ray[1]) {
+      const at = `${String.fromCharCode(97 + f)}${r + 1}` as Square;
+      if (chess.get(at)) { by = at; break; }
+    }
+    if (by) pinned.push({ sq: a, by });
+  }
+  return { free, pinned };
+}
+
+/** The targets with their proof, from the student's seat: what hits each and
+ *  what guards it. One target is said once ("the rook on h8: their rook on
+ *  h1 hits it, and nothing guards it"); several share one hit line when the
+ *  same pieces hit them all ("the bishop on d3, the pawn on h3 and the pawn on
+ *  g2. Their knight on f4 and queen on g3 hit all three: nothing guards the
+ *  bishop, your pawn on g2 cannot take back on h3 (their queen on g3 pins it
+ *  to your king), and only your king guards the pawn on g2"). */
+function targetsSaid(chess: Chess, targets: ReadonlyArray<{ sq: Square; type: PieceSymbol }>, attacker: 'w' | 'b', isOpp: boolean): string {
+  const victim: 'w' | 'b' = attacker === 'w' ? 'b' : 'w';
+  const hitter = isOpp ? 'their' : 'your';
+  const owner = isOpp ? 'your' : 'their';
+  const name = (sq: Square): string => REVIEW_PIECE_NAME[chess.get(sq)?.type ?? 'p'];
+  const pieces = (sqs: readonly Square[]): string => andList(sqs.map((x) => `${name(x)} on ${x}`));
+  const full = (t: { sq: Square; type: PieceSymbol }): string => `the ${REVIEW_PIECE_NAME[t.type]} on ${t.sq}`;
+  const one = targets.length === 1;
+  const ref = (t: { sq: Square; type: PieceSymbol }): string => one ? 'it'
+    : targets.filter((x) => x.type === t.type).length === 1 ? `the ${REVIEW_PIECE_NAME[t.type]}` : full(t);
+  const read = targets.map((t) => ({ t, hits: takersOn(chess, t.sq, attacker).free, guards: takersOn(chess, t.sq, victim) }));
+  const guardLine = ({ t, hits, guards }: typeof read[number]): string => {
+    const pinnedNotes = guards.pinned.map((p) => `${owner} ${name(p.sq)} on ${p.sq} cannot take back on ${t.sq} (${hitter} ${name(p.by)} on ${p.by} pins it to ${owner} king)`);
+    if (guards.free.length === 0) return pinnedNotes.length ? andList(pinnedNotes) : `nothing guards ${ref(t)}`;
+    const guardWords = guards.free.length === 1 && chess.get(guards.free[0])?.type === 'k' ? `${owner} king` : `${owner} ${pieces(guards.free)}`;
+    const verb = guards.free.length > 1 ? 'guard' : 'guards';
+    const free = guards.free.length < hits.length
+      ? `only ${guardWords} ${verb} ${ref(t)}`
+      : `${guardWords} ${verb} ${ref(t)}, but taking it still wins material`;
+    return andList([free, ...pinnedNotes]);
+  };
+  if (one) {
+    const r = read[0];
+    const hit = r.hits.length ? `${hitter} ${pieces(r.hits)} ${r.hits.length > 1 ? 'hit' : 'hits'} it, and ` : '';
+    return `${full(r.t)}: ${hit}${guardLine(r)}`;
+  }
+  const groups = new Map<string, typeof read>();
+  for (const r of read) { const k = [...r.hits].sort().join(','); groups.set(k, [...(groups.get(k) ?? []), r]); }
+  const hitLines = [...groups.values()].filter((g) => g[0].hits.length > 0).map((g) => {
+    const what = g.length === targets.length
+      ? (targets.length === 2 ? 'both' : `all ${['', '', 'two', 'three', 'four', 'five', 'six'][targets.length] ?? targets.length}`)
+      : andList(g.map((r) => full(r.t)));
+    return `${hitter} ${pieces(g[0].hits)} ${g[0].hits.length > 1 ? 'hit' : 'hits'} ${what}`;
+  });
+  return `${andList(targets.map(full))}. ${openSentence(`${hitLines.length ? `${hitLines.join('; ')}: ` : ''}${andList(read.map(guardLine))}`)}`;
 }
 
 /** HOW, not just "cover it" (escalating walk 2026-10-17): the moves that keep
