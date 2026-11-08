@@ -851,6 +851,11 @@ export interface GameRecord {
   /** `RECORD_PRICE_REV` the game's annotations were last re-priced under (one
    *  search per move, `annotationReprice`); absent before 2026-10-20. */
   recordPriceRev?: string;
+  /** `WEIGH_READS_REV` the review's candidate reads (`MoveAnnotation.weighed`,
+   *  `weighedReads`) were last taken under. Absent on records graded before
+   *  2026-11-08: a game graded at review depth before the reads existed opens
+   *  whole and is topped up with them (`topUpWeighedReads`), once. */
+  weighedRev?: string;
   /** True when analyzeAllGames has completed full Stockfish per-move
    *  analysis on this game. False / undefined for freshly-imported
    *  games that only have sparse detectBlunders annotations. Every

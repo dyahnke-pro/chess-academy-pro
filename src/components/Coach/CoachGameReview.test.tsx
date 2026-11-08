@@ -606,6 +606,37 @@ describe('CoachGameReview', () => {
     expect(screen.queryByTestId('walk-missed-tactics')).not.toBeInTheDocument();
   });
 
+  it('a complete walk takes a newer build when its moves gain their candidate reads (R1, 2026-11-08)', async () => {
+    // A game graded before the candidate reads existed opens whole; the reads
+    // are topped up behind the walk and arrive as new moves. The complete
+    // build used to stand for good, so the walk never heard them that session.
+    const { generateReviewNarration } = await import('../../services/coachFeatureService');
+    const result = await renderWalk();
+    const before = (generateReviewNarration as ReturnType<typeof vi.fn>).mock.calls.length;
+    expect(before).toBeGreaterThan(0);
+    const reads = { depth: 16, reads: [{ moves: ['g1f3'], evaluation: 20, mate: null }, { moves: ['b1c3'], evaluation: 10, mate: null }] };
+    const topped = mockMoves.map((m, i) => (i === 2 ? { ...m, weighed: reads } : m));
+    result.rerender(
+      <CoachGameReviewComponent
+        moves={topped}
+        keyMoments={mockKeyMoments}
+        playerColor="white"
+        result="win"
+        openingName="Italian Game"
+        playerName="Player"
+        playerRating={1420}
+        opponentRating={1320}
+        onPlayAgain={vi.fn()}
+        onBackToCoach={vi.fn()}
+      />,
+    );
+    await waitFor(() => expect((generateReviewNarration as ReturnType<typeof vi.fn>).mock.calls.length).toBeGreaterThan(before));
+    // The same moves again (a plain re-render) build nothing more.
+    const after = (generateReviewNarration as ReturnType<typeof vi.fn>).mock.calls.length;
+    await act(async () => { await new Promise((r) => { setTimeout(r, 50); }); });
+    expect((generateReviewNarration as ReturnType<typeof vi.fn>).mock.calls.length).toBe(after);
+  });
+
   it('falls back to summary card when generateReviewNarration returns empty segments', async () => {
     const { generateReviewNarration } = await import('../../services/coachFeatureService');
     (generateReviewNarration as ReturnType<typeof vi.fn>).mockResolvedValueOnce({

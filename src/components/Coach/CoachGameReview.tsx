@@ -629,13 +629,21 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
    *  whole game. */
   const [walkBuiltThrough, setWalkBuiltThrough] = useState(0);
   const walkBuiltCompleteRef = useRef(false);
+  /** The moves the complete build was made from: a complete build stands
+   *  only for the moves it read. The candidate reads topped up on a game
+   *  graded before they existed (`topUpWeighedReads`) arrive after the
+   *  complete build; the plies not yet walked take the newer one. */
+  const walkBuiltInputsRef = useRef<ReviewMoveInput[] | null>(null);
   useEffect(() => {
     if (isLoadingWalk) return;
     if (reviewMoveInputs.length === 0) return;
     const target = gradingComplete ? reviewMoveInputs.length : Math.min(gradedThroughPly, reviewMoveInputs.length);
-    if (walkNarration !== null && (walkBuiltCompleteRef.current || (!gradingComplete && target <= walkBuiltThrough))) return;
+    if (walkNarration !== null && ((walkBuiltCompleteRef.current && walkBuiltInputsRef.current === reviewMoveInputs) || (!gradingComplete && target <= walkBuiltThrough))) return;
     if (target <= 0) return;
     setIsLoadingWalk(true);
+    // Marked when the complete build is ASKED, so a build that fails is not
+    // asked again for the same moves.
+    if (gradingComplete) walkBuiltInputsRef.current = reviewMoveInputs;
     // Tied to the unified Settings → Coach → Coach Narration dial.
     // Silent skips the intro LLM call entirely; Brief caps it at
     // ~80 tokens; Full uses the legacy 200-token allowance. Resolved

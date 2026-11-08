@@ -455,6 +455,8 @@ export type AuditKind =
   | 'review-walk-merged'
   | 'review-turning-plan'
   | 'review-reads-depth'
+  // The candidate reads topped up on a game graded before they existed.
+  | 'review-weighed-reads'
   // Biweekly chess.com / lichess auto-import scheduler.
   | 'auto-import-completed'
   | 'auto-import-failed'

@@ -11,10 +11,11 @@ import type { MoveAnnotation } from '../../types';
 
 // A probe for the 235 KB review: it shows what it was handed.
 vi.mock('./CoachGameReview', () => ({
-  CoachGameReview: (props: { moves: Array<{ classification: string | null }>; gradedThroughPly?: number | null; onNeedMoreGraded?: () => void }) => (
+  CoachGameReview: (props: { moves: Array<{ classification: string | null; weighed?: unknown }>; gradedThroughPly?: number | null; onNeedMoreGraded?: () => void }) => (
     <button data-testid="mock-review" onClick={() => props.onNeedMoreGraded?.()}>
       {`graded:${props.gradedThroughPly === null || props.gradedThroughPly === undefined ? 'all' : props.gradedThroughPly}`}
       {` classes:${props.moves.map((m) => m.classification ?? '-').join(',')}`}
+      {` weighed:${props.moves.filter((m) => m.weighed).length}`}
     </button>
   ),
 }));
@@ -41,6 +42,7 @@ const fake = {
 const gradeReviewThrough = vi.fn();
 const finishReviewReads = vi.fn();
 const analyzeSingleGame = vi.fn();
+const topUpWeighedReads = vi.fn();
 vi.mock('../../services/gameAnalysisService', async (importOriginal) => ({
   ...(await importOriginal<typeof import('../../services/gameAnalysisService')>()),
   startReviewReads: (fens: readonly string[]) => {
@@ -60,10 +62,12 @@ vi.mock('../../services/gameAnalysisService', async (importOriginal) => ({
   gradeReviewThrough: (...a: unknown[]) => gradeReviewThrough(...a),
   finishReviewReads: (...a: unknown[]) => finishReviewReads(...a),
   analyzeSingleGame: (...a: unknown[]) => analyzeSingleGame(...a),
+  topUpWeighedReads: (...a: unknown[]) => topUpWeighedReads(...a),
 }));
 vi.mock('../../services/appAuditor', () => ({ logAppAudit: vi.fn(() => Promise.resolve()) }));
 
 import { CoachReviewSessionPage, FIRST_GRADED_PLIES } from './CoachReviewSessionPage';
+import { WEIGH_READS_REV } from '../../services/gameAnalysisService';
 
 // 16 plies, so the first graded stretch (12) is a real prefix.
 const PGN = '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 1-0';
@@ -91,6 +95,8 @@ beforeEach(async () => {
   gradeReviewThrough.mockReset();
   finishReviewReads.mockReset();
   analyzeSingleGame.mockReset();
+  topUpWeighedReads.mockReset();
+  topUpWeighedReads.mockImplementation(async () => null);
   fake.focus.mockReset();
   fake.stop.mockReset();
   gradeReviewThrough.mockImplementation(async (_g: unknown, n: number) => graded(n));
@@ -103,6 +109,26 @@ describe('the review reads ahead of the walk — never the draft', () => {
     renderPage('g-done');
     expect((await screen.findByTestId('mock-review')).textContent).toContain('graded:all');
     expect(gradeReviewThrough).not.toHaveBeenCalled();
+  });
+
+  it('a game graded before the candidate reads existed opens whole and is read for them behind the walk (R1)', async () => {
+    // David's record, 2026-11-08: 0 of 966 games carry the reads; the 167
+    // graded at review depth opened whole and never got them.
+    const reads = { depth: 16, reads: [{ moves: ['f1c4'], evaluation: 20, mate: null }, { moves: ['f1b5'], evaluation: 10, mate: null }] };
+    topUpWeighedReads.mockImplementation(async () => graded(16).map((a, i) => (i >= 6 ? { ...a, weighed: reads } : a)));
+    await db.games.put(buildGameRecord({ id: 'g-old', pgn: PGN, annotations: graded(16), fullyAnalyzed: true, analysisDepth: 16, isMasterGame: false }));
+    renderPage('g-old');
+    expect((await screen.findByTestId('mock-review')).textContent).toContain('graded:all');
+    await waitFor(() => expect(screen.getByTestId('mock-review').textContent).toContain('weighed:10'));
+    expect(topUpWeighedReads).toHaveBeenCalledWith('g-old', expect.anything());
+    expect(gradeReviewThrough).not.toHaveBeenCalled();
+  });
+
+  it('a game whose candidates were read is not read again', async () => {
+    await db.games.put(buildGameRecord({ id: 'g-read', pgn: PGN, annotations: graded(16), fullyAnalyzed: true, analysisDepth: 16, isMasterGame: false, weighedRev: WEIGH_READS_REV }));
+    renderPage('g-read');
+    await screen.findByTestId('mock-review');
+    expect(topUpWeighedReads).not.toHaveBeenCalled();
   });
 
   it('a swept (draft) game waits for its first stretch of reads and never shows the draft grade', async () => {

@@ -1886,10 +1886,16 @@ export async function weighedReads(
   const key = `${evalCacheKey(fen)}|${playedSan}`;
   if (_weighCache.has(key)) return _weighCache.get(key) ?? null;
   let out: StoredWeighReads | null = null;
+  // Remembered only when the position was READ (or had one move): no worker,
+  // or one that died under the read, says nothing about the position, and
+  // caching that null kept the session from ever reading it (a later grade or
+  // top-up hit the cache and read nothing).
+  let answered = false;
   try {
     const board = new Chess(fen);
     const legal = board.moves().length;
     const w = legal > 1 ? await worker() : null;
+    if (legal <= 1) answered = true;
     if (w) {
       const wide = await w.analyzeFan(fen, legal, WEIGH_WIDE_DEPTH, budgetMs, null);
       // The engine reports White's view; the model reads the mover's.
@@ -1904,10 +1910,99 @@ export async function weighedReads(
         const depth = Math.min(...fan.map((l) => l.depth ?? 0));
         if (reads.length >= 2 && depth > 0) out = { depth, reads };
       }
+      answered = !w.dead;
     }
-  } catch { out = null; }
-  _weighCache.set(key, out);
+  } catch { out = null; answered = false; }
+  if (answered) _weighCache.set(key, out);
   return out;
+}
+
+/** The revision of the review's candidate reads a game carries
+ *  (`GameRecord.weighedRev`). */
+export const WEIGH_READS_REV = '2026-11-08';
+
+/** The moves the review reads candidates for: every move past the book. */
+function weighablePlies(annotations: readonly MoveAnnotation[]): number[] {
+  const out: number[] = [];
+  annotations.forEach((a, i) => { if (a.classification !== 'book') out.push(i); });
+  return out;
+}
+
+/** A game graded at review depth BEFORE the candidate reads existed
+ *  (2026-11-05) — or by a grade that could not read them — opens whole with
+ *  none, so Review can never say the tempting move refuted, the move of the
+ *  same worth or the square choice on it. Measured 2026-11-08 on David's
+ *  record: 0 of 966 games carry the reads; 167 are graded at review depth and
+ *  open without a re-read. */
+export function needsWeighedReads(game: GameRecord): boolean {
+  const annotations = game.annotations;
+  if (game.isMasterGame || !annotations?.length) return false;
+  if ((game.analysisDepth ?? 0) < REVIEW_READ_DEPTH) return false;
+  if (game.weighedRev === WEIGH_READS_REV) return false;
+  return weighablePlies(annotations).some((i) => !annotations[i].weighed);
+}
+
+/** THE CANDIDATE READS, TOPPED UP on a game already graded at review depth:
+ *  the same `weighedReads` the full grade takes, on each move past the book
+ *  that has none, on one pool worker, stored with the game. The grade itself
+ *  is not touched. `stop`: the reader left — what was read is kept, the stamp
+ *  is not (the next open goes on from there). Null when there is nothing to
+ *  read or the game is gone. */
+export async function topUpWeighedReads(
+  gameId: string,
+  opts: {
+    stop?: () => boolean;
+    /** The engine to read on, owned by the caller (tests); the default leases
+     *  one pool worker and hands it back. */
+    worker?: () => Promise<DedicatedWorker | null>;
+  } = {},
+): Promise<MoveAnnotation[] | null> {
+  const game = await db.games.get(gameId);
+  if (!game || !needsWeighedReads(game) || !game.annotations) return null;
+  const { fens, moves } = replayPgnToFens(game.pgn);
+  // One worker, leased on the first read and handed back below.
+  const held: { worker: DedicatedWorker | null; tried: boolean; leased: boolean } = { worker: null, tried: false, leased: false };
+  const ensure = async (): Promise<DedicatedWorker | null> => {
+    if (!held.tried) {
+      held.tried = true;
+      if (opts.worker) {
+        held.worker = await opts.worker();
+      } else {
+        try { held.worker = (await acquirePool(1))[0] ?? null; held.leased = held.worker !== null; } catch { held.worker = null; }
+        held.worker?.newGame();
+      }
+    }
+    return held.worker;
+  };
+  const budget = reviewBudget(REVIEW_POSITION_BUDGET_MS);
+  const annotations = [...game.annotations];
+  const startedAt = Date.now();
+  let posed = 0; let read = 0; let stopped = false;
+  try {
+    for (const i of weighablePlies(annotations)) {
+      if (opts.stop?.()) { stopped = true; break; }
+      const a = annotations[i];
+      if (a.weighed || !fens[i] || moves[i] !== a.san) continue;
+      posed += 1;
+      const w = await weighedReads(fens[i], a.san, ensure, budget);
+      if (w) { annotations[i] = { ...a, weighed: w }; read += 1; }
+    }
+  } finally {
+    if (held.worker && held.leased) releasePool([held.worker]);
+  }
+  const worker = held.worker;
+  // Done once every move was tried on a live worker: a move with fewer than
+  // two candidates reads nothing, and reading it again would read nothing.
+  const stamp = !stopped && (posed === 0 || (worker !== null && !worker.dead));
+  if (read > 0 || stamp) await db.games.update(gameId, { annotations, ...(stamp ? { weighedRev: WEIGH_READS_REV } : {}) });
+  void logAppAudit({
+    kind: 'review-weighed-reads',
+    category: 'subsystem',
+    source: 'gameAnalysisService.topUpWeighedReads',
+    summary: `${read} of ${posed} moves read for their candidates in ${((Date.now() - startedAt) / 1000).toFixed(1)}s${stopped ? ' (stopped)' : ''}${worker ? '' : ' (no worker)'}`,
+    details: JSON.stringify({ gameId, posed, read, stopped, worker: worker !== null, stamped: stamp, ms: Date.now() - startedAt }),
+  });
+  return read > 0 ? annotations : null;
 }
 
 /**
@@ -3247,7 +3342,14 @@ export async function finishReviewReads(gameId: string): Promise<MoveAnnotation[
   await warmBookLine(replayPgnToFens(game.pgn).moves, 'review-grade');
   const result = await analyzeGamePositions(game, undefined, undefined, { readsOnly: true, weigh: true });
   if (!result) return null;
-  await db.games.update(gameId, { annotations: result.annotations, fullyAnalyzed: true, analysisDepth: result.achievedDepth });
+  const weighedPlies = result.annotations.filter((a) => a.weighed).length;
+  const weighPosed = weighablePlies(result.annotations).length;
+  await db.games.update(gameId, {
+    annotations: result.annotations, fullyAnalyzed: true, analysisDepth: result.achievedDepth,
+    // Stamped only when the candidates were read (a worker could be had): a
+    // grade with no reads at all is topped up on a later open.
+    ...(weighedPlies > 0 || weighPosed === 0 ? { weighedRev: WEIGH_READS_REV } : {}),
+  });
   // THE DEPTH EACH POSITION REACHED, observable (2026-10-13: the phone's
   // review graded from draft reads and nothing said how deep they were).
   const read = result.depthAt.slice(result.bookPlies).filter((d) => d > 0);
@@ -3257,7 +3359,7 @@ export async function finishReviewReads(gameId: string): Promise<MoveAnnotation[
     category: 'subsystem',
     source: 'gameAnalysisService.finishReviewReads',
     summary: `${read.length} positions read, ${shallow} below depth ${REVIEW_READ_DEPTH}, shallowest ${read.length ? Math.min(...read) : 0}`,
-    details: JSON.stringify({ gameId, target: REVIEW_READ_DEPTH, shallow, depthAt: result.depthAt }),
+    details: JSON.stringify({ gameId, target: REVIEW_READ_DEPTH, shallow, depthAt: result.depthAt, weighPosed, weighedPlies }),
   });
   void generateInsightsForGame(gameId, game.source, result.annotations, { habits: true })
     .catch((err: unknown) => logAppAudit({

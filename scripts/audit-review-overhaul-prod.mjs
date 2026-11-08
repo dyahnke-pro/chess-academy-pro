@@ -1105,6 +1105,19 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     const dm = /(\d+) positions read, (\d+) below depth (\d+)/.exec(depthRow);
     await add('GRID reads-at-review-depth', !!dm && Number(dm[2]) <= Math.ceil(Number(dm[1]) * 0.1),
       dm ? depthRow : 'no review-reads-depth row — the read-ahead never finished');
+    // THE MOVES A PLAYER WEIGHS ARE READ (R1, 2026-11-08): the full grade
+    // reads one fan of candidates per move past the book, so Review can say
+    // the tempting move refuted; a game graded before the reads existed is
+    // topped up on open (`review-weighed-reads`). The app reports both.
+    const depthEv = events().filter((e) => e.kind === 'review-reads-depth').pop();
+    const topUpEv = events().filter((e) => e.kind === 'review-weighed-reads').pop();
+    let wd = {};
+    try { wd = JSON.parse(String((topUpEv ?? depthEv)?.details ?? '{}')); } catch { wd = {}; }
+    const posedW = Number(wd.weighPosed ?? wd.posed ?? NaN);
+    const readW = Number(wd.weighedPlies ?? wd.read ?? NaN);
+    const tempting = lines.filter((t) => /is tempting here, but it fails|was tempting for them, but it fails/.test(t)).length;
+    await add('GRID candidates-read', Number.isFinite(posedW) && (posedW === 0 || readW > 0),
+      Number.isFinite(posedW) ? `${readW} of ${posedW} moves past the book read for their candidates${topUpEv ? ' (topped up on open)' : ''}; tempting moves refuted aloud: ${tempting}` : 'no candidate-read counts on the depth or top-up row — the bundle predates R1');
     await add('GRID mate-named', !endsInMate || !reachedEnd || mateHeard,
       !endsInMate ? 'game did not end in mate' : !reachedEnd ? 'walk did not reach the end' : `checkmate named=${mateHeard}`);
   }

@@ -21,7 +21,7 @@ import { useNavigate, useParams, useSearchParams, useLocation } from 'react-rout
 import { Loader2 } from 'lucide-react';
 import { CoachGameReview } from './CoachGameReview';
 import { db } from '../../db/schema';
-import { gameNeedsAnalysis, replayPgnToFens, startReviewReads, gradeReviewThrough, finishReviewReads, holdBatchAnalysis, REVIEW_READ_DEPTH, type ReviewReads } from '../../services/gameAnalysisService';
+import { gameNeedsAnalysis, replayPgnToFens, startReviewReads, gradeReviewThrough, finishReviewReads, holdBatchAnalysis, needsWeighedReads, topUpWeighedReads, REVIEW_READ_DEPTH, type ReviewReads } from '../../services/gameAnalysisService';
 import { ensureSampleGameSeeded } from '../../services/reviewSampleGames';
 import { useAppStore } from '../../stores/appStore';
 import { resolvePlayerColor } from '../../services/playerIdentity';
@@ -124,6 +124,17 @@ export function CoachReviewSessionPage(): JSX.Element {
         if (!gameNeedsAnalysis(rec) && (rec.analysisDepth ?? 0) >= REVIEW_READ_DEPTH) {
           setGradedThrough(null);
           setGame(rec);
+          // A game graded before the candidate reads existed opens whole and
+          // is read for them behind the walk (`topUpWeighedReads`): the
+          // tempting move refuted, the move of the same worth and the square
+          // choice reach the moves not walked yet (the walk merges a newer
+          // build, never re-narrating a move already heard).
+          if (needsWeighedReads(rec)) {
+            const opened = rec;
+            void topUpWeighedReads(opened.id, { stop: () => cancelled }).then((annotations) => {
+              if (!cancelled && annotations) setGame({ ...opened, annotations });
+            });
+          }
           return;
         }
         const { fens } = replayPgnToFens(rec.pgn);
