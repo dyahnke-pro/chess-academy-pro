@@ -22,8 +22,8 @@
 ## Exports and every call site
 
 ### `leadingDrillPosition` (function) — 2 call sites
-- `src/hooks/useTeachWalkthrough.test.tsx:681`
-- `src/hooks/useTeachWalkthrough.test.tsx:684`
+- `src/hooks/useTeachWalkthrough.test.tsx:683`
+- `src/hooks/useTeachWalkthrough.test.tsx:686`
 
 ### `buildPunishWalkthroughTree` (function) — 8 call sites
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:58`
@@ -31,9 +31,9 @@
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:67`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:186`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:210`
-- `src/hooks/useTeachWalkthrough.test.tsx:521`
-- `src/hooks/useTeachWalkthrough.test.tsx:531`
-- `src/hooks/useTeachWalkthrough.test.tsx:543`
+- `src/hooks/useTeachWalkthrough.test.tsx:523`
+- `src/hooks/useTeachWalkthrough.test.tsx:533`
+- `src/hooks/useTeachWalkthrough.test.tsx:545`
 
 ### `_findMatchingTraps` (function) — 7 call sites
 - `src/hooks/findMatchingTraps.test.ts:18`
@@ -47,22 +47,22 @@
 ### `useTeachWalkthrough` (function) — 18 call sites
 - `src/components/Coach/CoachEndgamePage.tsx:118`
 - `src/components/Coach/CoachTeachPage.tsx:1089`
-- `src/hooks/useTeachWalkthrough.test.tsx:84`
-- `src/hooks/useTeachWalkthrough.test.tsx:93`
-- `src/hooks/useTeachWalkthrough.test.tsx:132`
-- `src/hooks/useTeachWalkthrough.test.tsx:148`
-- `src/hooks/useTeachWalkthrough.test.tsx:187`
-- `src/hooks/useTeachWalkthrough.test.tsx:201`
-- `src/hooks/useTeachWalkthrough.test.tsx:273`
-- `src/hooks/useTeachWalkthrough.test.tsx:360`
-- `src/hooks/useTeachWalkthrough.test.tsx:381`
-- `src/hooks/useTeachWalkthrough.test.tsx:413`
-- `src/hooks/useTeachWalkthrough.test.tsx:468`
-- `src/hooks/useTeachWalkthrough.test.tsx:582`
-- `src/hooks/useTeachWalkthrough.test.tsx:628`
-- `src/hooks/useTeachWalkthrough.test.tsx:690`
-- `src/hooks/useTeachWalkthrough.test.tsx:709`
-- `src/hooks/useTeachWalkthrough.test.tsx:722`
+- `src/hooks/useTeachWalkthrough.test.tsx:86`
+- `src/hooks/useTeachWalkthrough.test.tsx:95`
+- `src/hooks/useTeachWalkthrough.test.tsx:134`
+- `src/hooks/useTeachWalkthrough.test.tsx:150`
+- `src/hooks/useTeachWalkthrough.test.tsx:189`
+- `src/hooks/useTeachWalkthrough.test.tsx:203`
+- `src/hooks/useTeachWalkthrough.test.tsx:275`
+- `src/hooks/useTeachWalkthrough.test.tsx:362`
+- `src/hooks/useTeachWalkthrough.test.tsx:383`
+- `src/hooks/useTeachWalkthrough.test.tsx:415`
+- `src/hooks/useTeachWalkthrough.test.tsx:470`
+- `src/hooks/useTeachWalkthrough.test.tsx:584`
+- `src/hooks/useTeachWalkthrough.test.tsx:630`
+- `src/hooks/useTeachWalkthrough.test.tsx:692`
+- `src/hooks/useTeachWalkthrough.test.tsx:711`
+- `src/hooks/useTeachWalkthrough.test.tsx:724`
 
 ### `isStartablePunishLesson` (re-export) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:17189`
