@@ -239,14 +239,14 @@
 
 ### `pvSanToUci` (function) — 3 call sites
 - `src/services/misconceptionClassifier.ts:565`
-- `src/services/mistakePuzzleService.ts:1166`
+- `src/services/mistakePuzzleService.ts:1171`
 - `src/services/moveThoughtFacts.ts:284`
 
 ### `pvUciToSan` (function) — 14 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:669`
-- `src/services/autoAnalyzeGame.ts:672`
+- `src/services/autoAnalyzeGame.ts:674`
+- `src/services/autoAnalyzeGame.ts:677`
 - `src/services/capabilityEvidence.ts:534`
 - `src/services/coachFeatureService.ts:976`
 - `src/services/coachFeatureService.ts:978`

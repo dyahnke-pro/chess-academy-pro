@@ -1048,8 +1048,8 @@
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
 - `src/services/learnMoveTeaching.ts:128`
-- `src/services/moveInsight.ts:607`
-- `src/services/moveInsight.ts:771`
+- `src/services/moveInsight.ts:606`
+- `src/services/moveInsight.ts:770`
 - `src/services/opponentMovePurpose.ts:64`
 - `src/services/reviewFullData.ts:1013`
 - `src/services/reviewMoveBriefing.ts:312`

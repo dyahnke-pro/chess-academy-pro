@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2782 lines · 75 exports · 131 importers · 28 tests · 2 audits**
+**2782 lines · 75 exports · 132 importers · 28 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -81,6 +81,7 @@
 - `src/services/notYetPlayed.ts`
 - `src/services/oneHanging.test.ts`
 - `src/services/oneKingShield.test.ts`
+- `src/services/openingSlip.ts`
 - `src/services/opponentMovePurpose.ts`
 - `src/services/opponentMoveReads.ts`
 - `src/services/pawnJudgement.ts`
@@ -193,12 +194,12 @@
 - `src/services/reviewConcepts.ts:97`
 
 ### `legalSeeGainOn` (function) — 17 call sites
-- `src/services/bookMoveWhy.ts:198`
-- `src/services/bookMoveWhy.ts:345`
-- `src/services/bookMoveWhy.ts:346`
+- `src/services/bookMoveWhy.ts:201`
+- `src/services/bookMoveWhy.ts:348`
 - `src/services/bookMoveWhy.ts:349`
-- `src/services/bookMoveWhy.ts:421`
-- `src/services/bookMoveWhy.ts:440`
+- `src/services/bookMoveWhy.ts:352`
+- `src/services/bookMoveWhy.ts:424`
+- `src/services/bookMoveWhy.ts:443`
 - `src/services/coachFeatureService.ts:3663`
 - `src/services/groundedAnswer.ts:7382`
 - `src/services/moveIntent.ts:377`
@@ -284,7 +285,7 @@
 - `src/services/principleAttribution.ts:352`
 - `src/services/principleAttribution.ts:817`
 
-### `legalSeeGainFor` (function) — 111 call sites
+### `legalSeeGainFor` (function) — 112 call sites
 - `src/coach/focus/castlingWatch.ts:159`
 - `src/coach/focus/castlingWatch.ts:161`
 - `src/coach/focus/focusChances.ts:362`
@@ -352,6 +353,7 @@
 - `src/services/moveTiming.ts:60`
 - `src/services/nextPlans.ts:55`
 - `src/services/notYetPlayed.ts:66`
+- `src/services/openingSlip.ts:125`
 - `src/services/pawnJudgement.ts:281`
 - `src/services/planRace.ts:574`
 - `src/services/planStep.ts:47`
@@ -501,7 +503,7 @@
 - `src/services/positionReadingService.test.ts:938`
 - `src/services/theirMoveCost.ts:38`
 
-### `findHangingBySee` (function) — 26 call sites
+### `findHangingBySee` (function) — 27 call sites
 - `src/coach/chatTurnAnswers.ts:210`
 - `src/components/Coach/CoachTeachPage.tsx:9144`
 - `src/components/Coach/CoachTeachPage.tsx:9150`
@@ -510,9 +512,10 @@
 - `src/services/conversionMethod.ts:64`
 - `src/services/groundedAnswer.ts:2635`
 - `src/services/groundedAnswer.ts:3763`
-- `src/services/moveInsight.ts:264`
+- `src/services/moveInsight.ts:263`
 - `src/services/oneHanging.test.ts:12`
 - `src/services/oneHanging.test.ts:21`
+- `src/services/openingSlip.ts:139`
 - `src/services/positionReadingService.test.ts:70`
 - `src/services/positionReadingService.test.ts:78`
 - `src/services/positionReadingService.test.ts:82`
@@ -660,7 +663,7 @@
 ### `findKnightReroute` (function) — 7 call sites
 - `src/services/danyaBehaviors.ts:806`
 - `src/services/groundedAnswer.ts:6967`
-- `src/services/moveInsight.ts:345`
+- `src/services/moveInsight.ts:344`
 - `src/services/positionReadingService.test.ts:794`
 - `src/services/positionReadingService.test.ts:810`
 - `src/services/positionReadingService.test.ts:815`
@@ -724,7 +727,7 @@
 - `src/services/groundedAnswer.ts:6940`
 - `src/services/isolatedOneOwner.test.ts:17`
 - `src/services/isolatedOneOwner.test.ts:21`
-- `src/services/moveInsight.ts:339`
+- `src/services/moveInsight.ts:338`
 - `src/services/pawnJudgement.ts:35`
 - `src/services/pawnJudgement.ts:119`
 - `src/services/pawnJudgement.ts:247`

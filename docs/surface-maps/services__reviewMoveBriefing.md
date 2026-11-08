@@ -98,7 +98,7 @@
 - `src/hooks/useTeachWalkthrough.ts:903`
 - `src/services/danyaBench.measure.test.ts:440`
 - `src/services/decisionStakes.test.ts:48`
-- `src/services/gamesCourse.ts:284`
+- `src/services/gamesCourse.ts:367`
 - `src/services/lessonVoice.story.test.ts:29`
 - `src/services/lessonVoice.story.test.ts:41`
 - `src/services/moveThoughtFacts.test.ts:19`

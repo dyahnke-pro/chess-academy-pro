@@ -294,7 +294,7 @@ function unpinPoint(fenBefore: string, chessAfter: Chess, mv: Move, moverIsStude
     const base = `Unpins ${moverIsStudent ? 'your' : 'their'} ${PIECE_NOUN[freed.type]} on ${sq}`;
     const eyed = pieceEyes(chessAfter, mv.to, mv.piece, mv.color).enemies.find((e) => e.type !== 'k');
     return eyed
-      ? `${base} — and the ${PIECE_NOUN[mv.piece]} eyes the ${PIECE_NOUN[eyed.type]} on ${eyed.sq}.`
+      ? `${base} — and the ${PIECE_NOUN[mv.piece]} aims at ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[eyed.type]} on ${eyed.sq}.`
       : `${base}, freeing it to join the game.`;
   }
   return null;
@@ -827,7 +827,9 @@ export function buildReviewMoveTeachingFact(
   //     overstated); otherwise state the development plainly without inventing a
   //     covered square.
   const eyedEnemy = eyes.enemies.find((e) => e.type !== 'k');
-  if (eyedEnemy) return out('threat', `${moverIsStudent ? 'Your' : 'Their'} ${PIECE_NOUN[mv.piece]} eyes the ${PIECE_NOUN[eyedEnemy.type]} on ${eyedEnemy.sq}.`, [mv.to, eyedEnemy.sq]);
+  // "Aims at", with whose piece it is: "eyes the pawn on e7" was the
+  // machine's word and left the owner out (the voice rules ban "eyes").
+  if (eyedEnemy) return out('threat', `${moverIsStudent ? 'Your' : 'Their'} ${PIECE_NOUN[mv.piece]} aims at ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[eyedEnemy.type]} on ${eyedEnemy.sq}.`, [mv.to, eyedEnemy.sq]);
   // "Develops" is true only of a knight or bishop leaving its home rank; said
   // of d3, Re1, Qb8 or a retreat (Nf1) it was a false claim (census group 6,
   // 2026-10-07). Anything else has nothing true left to say — silence.

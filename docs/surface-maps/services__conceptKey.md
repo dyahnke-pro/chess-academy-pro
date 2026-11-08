@@ -115,7 +115,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/boardComputers.test.ts:48`
 - `src/services/boardComputers.test.ts:50`
 - `src/services/boardComputers.ts:368`
-- `src/services/boardComputers.ts:455`
+- `src/services/boardComputers.ts:457`
 - `src/services/claimKeysLooseCount.test.ts:58`
 - `src/services/claimKeysLooseCount.test.ts:59`
 
@@ -147,7 +147,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:8599`
 - `src/components/Coach/CoachTeachPage.tsx:8621`
 - `src/components/Coach/CoachTeachPage.tsx:9034`
-- `src/services/autoAnalyzeGame.ts:192`
+- `src/services/autoAnalyzeGame.ts:193`
 - `src/services/capabilityDateRepair.test.ts:17`
 - `src/services/capabilityDateRepair.test.ts:18`
 - `src/services/capabilityDateRepair.test.ts:19`

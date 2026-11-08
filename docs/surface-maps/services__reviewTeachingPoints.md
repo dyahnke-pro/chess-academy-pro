@@ -144,7 +144,7 @@
 ### `findTrappedPiece` (function) — 12 call sites
 - `src/services/coachFeatureService.ts:4118`
 - `src/services/coachFeatureService.ts:4119`
-- `src/services/moveInsight.ts:410`
+- `src/services/moveInsight.ts:409`
 - `src/services/reviewFullData.ts:1079`
 - `src/services/reviewFullData.ts:1081`
 - `src/services/reviewTeachingPoints.test.ts:256`
@@ -156,7 +156,7 @@
 - `src/services/reviewTeachingPoints.test.ts:291`
 
 ### `trappedOnBoard` (function) — 3 call sites
-- `src/services/boardComputers.ts:525`
+- `src/services/boardComputers.ts:527`
 - `src/services/queenGrabTrap.ts:57`
 - `src/services/reviewTeachingPoints.test.ts:288`
 
@@ -164,7 +164,7 @@
 - `src/services/badPieceOncePerPly.test.ts:15`
 - `src/services/coachFeatureService.ts:5649`
 - `src/services/groundedAnswer.ts:1473`
-- `src/services/moveInsight.ts:350`
+- `src/services/moveInsight.ts:349`
 - `src/services/nextPlans.test.ts:10`
 - `src/services/nextPlans.test.ts:34`
 - `src/services/nextPlans.ts:115`
