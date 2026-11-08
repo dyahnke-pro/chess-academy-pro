@@ -5,6 +5,7 @@ import { detectBadHabits, detectBadHabitsFromGame, buildReviewSegmentsForTests, 
 import { explainBestMoveGrounded, describeSacrifice } from './groundedAnswer';
 import { __setLocalDbForTests, __resetLocalDbForTests } from './masterPlayLookup';
 import type { ReviewMoveInput } from './coachFeatureService';
+import { mateEvalFor } from './engineConstants';
 import { buildUserProfile, buildBadHabit } from '../test/factories';
 import type { UserProfile } from '../types';
 
@@ -629,8 +630,12 @@ describe('coachFeatureService', () => {
       const OPERA = ['e4','e5','Nf3','d6','d4','Bg4','dxe5','Bxf3','Qxf3','dxe5','Bc4','Nf6','Qb3','Qe7','Nc3','c6','Bg5','b5','Nxb5','cxb5','Bxb5+','Nbd7','O-O-O','Rd8','Rxd7','Rxd7','Rd1','Qe6','Bxd7+','Nxd7','Qb8+','Nxb8','Rd8#'];
       const cls = (ply: number): ReviewMoveInput['classification'] =>
         ply === 31 ? 'brilliant' : ply === 19 ? 'great' : 'good';
+      // The engine's own reads at the finish (Stockfish, depth 18): after
+      // 17.Bxd7+ the best defence is 17…Qxd7, still +7 and no mate; after
+      // 17…Nxd7 it is mate in two.
+      const READ: Record<number, number> = { 29: 713, 30: mateEvalFor(2), 31: mateEvalFor(1), 32: mateEvalFor(1), 33: mateEvalFor(1) };
       const segments = buildReviewSegmentsForTests(
-        OPERA.map((san, i) => move({ ply: i + 1, san, classification: cls(i + 1) })),
+        OPERA.map((san, i) => move({ ply: i + 1, san, classification: cls(i + 1), ...(READ[i + 1] !== undefined ? { evaluation: READ[i + 1] } : {}) })),
         'white', 'Philidor Defense',
       );
       const at = (ply: number): string => segments.find((s) => s.ply === ply)?.narration ?? '';
@@ -654,8 +659,11 @@ describe('coachFeatureService', () => {
       expect(at(31)).toMatch(/crashes down to d8/i);
       // The finish names checkmate.
       expect(at(33)).toMatch(/checkmate/i);
-      // The forced finish is FRAMED at its first move (forcing-move concept).
-      expect(at(29)).toMatch(/forced|ends in mate|watch it land/i);
+      // The forced finish is FRAMED at its first move (forcing-move concept) —
+      // 18.Qb8+, where the mate became forced. 17.Bxd7+ is not that move: the
+      // engine's 17…Qxd7 escapes the mate, so it is never called forced.
+      expect(at(31)).toMatch(/forced|ends in mate|watch it land/i);
+      expect(at(29)).not.toMatch(/forced|ends in mate|watch it land/i);
     }, 20000); // full 31-move review analysis (~5s) — headroom for CI parallel load
 
     it('delivers the ENUMERATED positional verdict — "you\'re better, here\'s why: 1, 2" (David 2026-07-20 teaching messages)', () => {

@@ -110,7 +110,7 @@
 - `src/test/teach02Wired.test.ts:68`
 
 ### `computeThroughLine` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:6404`
+- `src/services/coachFeatureService.ts:6413`
 - `src/services/reviewFullData.test.ts:215`
 - `src/services/reviewFullData.test.ts:218`
 - `src/services/reviewFullData.test.ts:226`

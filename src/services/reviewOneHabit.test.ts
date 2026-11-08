@@ -40,6 +40,14 @@ describe('a Review turn says one plan for each side', () => {
     const later = segs.filter((s) => s.ply > 27 && s.ply % 2 === 1).map((s) => s.narration ?? '').join(' ');
     expect(later).not.toMatch(/your plan is to advance your queenside pawn majority/i);
   }, 300_000);
+  it('the Closed Sicilian 29…Rxc2: the plan thread\'s step was heard, so no majority plan after it', async () => {
+    const games = (JSON.parse(readFileSync('src/test/fixtures/learn-replay-games.json', 'utf8')) as { games: FixtureGame[] }).games;
+    const g = games.find((x) => x.id.startsWith('sicilianClosed1000')) as FixtureGame;
+    const segs = reviewSegments(g, g.rating);
+    expect(segs.find((s) => s.ply === 57)?.narration ?? '').toMatch(/Your rook to e2 was a step of the plan/);
+    const later = segs.filter((s) => s.ply > 57).map((s) => s.narration ?? '').join(' ');
+    expect(later).not.toMatch(/your plan is to advance your (queenside|kingside) pawn majority/i);
+  }, 300_000);
 });
 
 describe('a trade that wins a second piece of its kind says "another"', () => {

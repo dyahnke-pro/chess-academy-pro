@@ -2713,21 +2713,6 @@ function* reviewSegmentSteps(
         // line (the arc's "‖" was reaching the review's text).
         facets.push(fact('gameArcSteps', 'plan-arc', stripThink(e.text), { squares: e.squares, incoming: e.seat === 'opponent' }));
       }
-      // ONE PLAN A SIDE (Review baseline 2026-11-08, the Colle 14.Ng5: "Here
-      // is what you build toward: an attack on their king. Your plan is to
-      // advance your queenside pawn majority" — two plans pulling opposite
-      // ways; held for that turn, the majority came back two plies later). The
-      // orientation's plan is the mover's (`buildMiddlegameOrientation` runs
-      // from the mover's seat); the plan the game is following outranks that
-      // static read of the structure — on the turn it speaks and, once that
-      // side has heard it, for the rest of the game (`PLAN_GOAL.arc`).
-      {
-        const moverSeat: 'student' | 'opponent' = moverColor === playerColor ? 'student' : 'opponent';
-        const arcHere = facets.some((f) => f.tag === 'plan-arc' && f.seat === moverSeat);
-        if (arcHere || threadStated(story.current(), threadKey(moverSeat, PLAN_GOAL.arc)) !== null) {
-          for (let k = facets.length - 1; k >= 0; k -= 1) if (facets[k].tag === 'plan-middlegame') facets.splice(k, 1);
-        }
-      }
       if (fundamentals.length > 0) {
         if (isStudentForAttr) {
           const again = noteSlip(story, fundamentals[0].id, m.ply);
@@ -2800,11 +2785,30 @@ function* reviewSegmentSteps(
           // Review has no think pause: the question and its answer run on.
           const key = readKey(r);
           const raw = fact(r.computer, r.kind, stripThink(r.text), {
-            identity: key.startsWith('plan:stopped:') ? 'plan-thread:stop' : key.startsWith('plan:step:') ? 'plan-thread:step' : 'plan-thread:plan',
-            proof: r.proof, squares: r.squares,
+            identity: key.startsWith('plan:stopped:') ? 'plan-thread:stop' : (key.startsWith('plan:step:') || key.startsWith('plan:their-step:')) ? 'plan-thread:step' : 'plan-thread:plan',
+            proof: r.proof, squares: r.squares, incoming: r.seat === 'opponent',
           });
           facets.push(raw);
           if (r.marks?.route?.length) planRouteByRaw.set(raw, r.marks.route);
+        }
+      }
+      // ONE PLAN A SIDE (Review baseline 2026-11-08, the Colle 14.Ng5: "Here
+      // is what you build toward: an attack on their king. Your plan is to
+      // advance your queenside pawn majority" — two plans pulling opposite
+      // ways; held for that turn, the majority came back two plies later; the
+      // Closed Sicilian 29…Rxc2: "your rook to e2 was a step of the plan" on
+      // their weak h2 pawn, then "your plan is to advance your queenside pawn
+      // majority", then "the plan changes here"). The orientation's plan is the
+      // mover's (`buildMiddlegameOrientation` runs from the mover's seat); the
+      // plan the game is following — the arc's and the plan thread's — outranks
+      // that static read of the structure: on the turn it speaks and, once that
+      // side has heard it, for the rest of the game (`PLAN_GOAL.arc`).
+      {
+        const moverSeat: 'student' | 'opponent' = moverColor === playerColor ? 'student' : 'opponent';
+        const followedHere = facets.some((f) => f.seat === moverSeat && (f.tag === 'plan-arc'
+          || (PLAN_THREAD_KINDS.has(f.tag) && (f.identity === 'plan-thread:plan' || f.identity === 'plan-thread:step'))));
+        if (followedHere || threadStated(story.current(), threadKey(moverSeat, PLAN_GOAL.arc)) !== null) {
+          for (let k = facets.length - 1; k >= 0; k -= 1) if (facets[k].tag === 'plan-middlegame') facets.splice(k, 1);
         }
       }
       const newPlan = planTrial.stated && planTrial.stated.ply === m.ply ? planTrial.stated.fact : null;
@@ -2882,17 +2886,22 @@ function* reviewSegmentSteps(
         // Plans — the one thread's lines (above).
         if (PLAN_THREAD_KINDS.has(f.tag)) {
           const role = f.identity;
+          // A spoken plan or step is the plan this side's game follows: the
+          // static structure plan stays quiet for that side from here (ONE PLAN
+          // A SIDE, above).
+          const followed = { key: threadKey(f.seat === 'opponent' ? 'opponent' : 'student', PLAN_GOAL.arc), kind: 'stated' as const };
           if (role === 'plan-thread:plan') {
             if (planLineHeld) continue;
             keep(f, () => {
               adoptPlanThread();
+              story.commitThreads(m.ply, [followed]);
               if (newPlan?.kind === 'convert') story.commitThreads(m.ply, [{ key: CONVERT_THREAD, kind: 'stated' }]);
               if (planPasserFile) story.commitThreads(m.ply, [{ key: passerThread(planPasserFile), kind: 'stated' }]);
             });
           } else if (role === 'plan-thread:stop') {
             keep(f, adoptPlanThread);
           } else if (role === 'plan-thread:step') {
-            keep(f);
+            keep(f, () => story.commitThreads(m.ply, [followed]));
           } else {
             // Another plan computer's line through the one registry (the king
             // walked by hand, 2026-11-04): said once by its own ledger key,

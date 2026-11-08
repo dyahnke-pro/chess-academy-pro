@@ -270,7 +270,7 @@
 - `src/services/reviewFullData.ts:934`
 
 ### `isSacrifice` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:4930`
+- `src/services/coachFeatureService.ts:4939`
 - `src/services/factStakes.test.ts:142`
 - `src/services/factStakes.test.ts:144`
 - `src/services/factStakes.test.ts:152`
