@@ -370,15 +370,20 @@ function splitThought(v: CourseLine, side: 'white' | 'black'): string {
   }
 }
 
-/** Where the ENGINE's moves start on a lesson's line — the page's main line
- *  past its games (`engineFrom`) — when the line runs through the first of
- *  them; else null. Every lesson played on the page asks this, so a line that
- *  runs through the engine's moves says so wherever it is played. Pure. */
+/** Where the ENGINE's moves start on a lesson's line, or null. Said only on a
+ *  line that IS the page's main line (or a stretch of it from the start)
+ *  running past `engineFrom`: there every move from that ply on is the
+ *  engine's, so "from this move on, the line is the engine's best play" is
+ *  true. A line that leaves the main line — a variation, a reply, a plan, a
+ *  trap — gets null: its own moves are games' moves, and the note would call
+ *  them the engine's. Every lesson played on the page asks this one rule.
+ *  Pure. */
 export function engineFromOnLine(opening: Pick<OpeningRecord, 'pgn' | 'engineFrom'>, moves: readonly string[]): number | null {
   const at = opening.engineFrom;
   if (at === undefined || moves.length <= at) return null;
   const main = opening.pgn.trim().split(/\s+/);
-  for (let k = 0; k <= at; k += 1) if (moves[k] !== main[k]) return null;
+  if (moves.length > main.length) return null;
+  for (let k = 0; k < moves.length; k += 1) if (moves[k] !== main[k]) return null;
   return at;
 }
 

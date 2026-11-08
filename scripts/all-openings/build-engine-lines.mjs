@@ -9,7 +9,7 @@
 // both sides, until the board is a middlegame board — both kings settled, no
 // exchange half-played, the SAME test the page's walk stops on
 // (`gamesCourse.isMiddlegameBoard`) — or MAX_EXT engine plies, or TOTAL_MAX
-// plies in all. Every move is legal
+// plies in all, never stopping with an exchange half-played. Every move is legal
 // (chess.js plays it before it is kept). The moves are the ENGINE's, never
 // "a move players played": the page says so where they start.
 //
@@ -59,12 +59,19 @@ const MAX_EXT = 24;
  *  line that has not settled both kings by then ends there. */
 const TOTAL_MAX = 32;
 
-function isMiddlegameBoard(c) {
-  if (c.fen().split(' ')[2] !== '-') return false;
+/** The last move took something the side to move can take back. */
+function halfExchange(c) {
   const last = c.history({ verbose: true }).at(-1);
-  if (!last?.captured) return true;
-  return !c.moves({ verbose: true }).some((m) => m.to === last.to && m.captured);
+  return Boolean(last?.captured) && c.moves({ verbose: true }).some((m) => m.to === last.to && m.captured);
 }
+
+function isMiddlegameBoard(c) {
+  return c.fen().split(' ')[2] === '-' && !halfExchange(c);
+}
+
+/** Past the cap, a line plays on while an exchange is half-played — never
+ *  stopping on …Bxh5 Bxh5 with …Rxh5 to come — for at most this many plies. */
+const FINISH_EXCHANGE = 6;
 
 function engine() {
   const p = spawn('/usr/games/stockfish', [], { stdio: ['pipe', 'pipe', 'ignore'] });
@@ -107,7 +114,8 @@ async function main() {
     for (const s of t.sans) c.move(s);
     await sf.newGame();
     const ext = [];
-    while (ext.length < MAX_EXT && c.history().length < TOTAL_MAX && !c.isGameOver() && !isMiddlegameBoard(c)) {
+    const room = () => ext.length < MAX_EXT && c.history().length < TOTAL_MAX;
+    while (!c.isGameOver() && !isMiddlegameBoard(c) && (room() || (halfExchange(c) && ext.length < MAX_EXT + FINISH_EXCHANGE))) {
       const uci = await sf.best(c.fen(), depth);
       if (!uci || uci === '(none)') break;
       let mv;

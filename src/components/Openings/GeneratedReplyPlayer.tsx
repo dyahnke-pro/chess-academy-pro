@@ -25,8 +25,8 @@ interface GeneratedReplyPlayerProps {
  *  still plays: the computed frequency frame and an arrow-led walk. */
 export function GeneratedReplyPlayer({ opening, subline, mode, onComplete, onContinuePlaying, onAdvanceToLearn, onExit }: GeneratedReplyPlayerProps): JSX.Element {
   const key = subline.moves.join(' ');
-  // Where the engine's moves start on this reply's line (one inside the main
-  // line past its games), said in the lesson on that move.
+  // Where the engine's moves start on this line (only a stretch of the main
+  // line has them — `engineFromOnLine`), said in the lesson on that move.
   const gamesEnd = engineFromOnLine(opening, subline.moves);
   const [built, setBuilt] = useState<{ key: string; input: SublineLessonInput | null } | null>(null);
 

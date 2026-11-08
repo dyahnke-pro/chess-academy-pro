@@ -188,7 +188,11 @@ describe('past the games: the engine fills the main line, club games give the va
     expect(gamesEndLine(line, 5, 'here')).toBe("The games run out here. From this move on, the line is the engine's best play for both sides.");
     const opening = { pgn: line.join(' '), engineFrom: 5 };
     expect(engineFromOnLine(opening, line)).toBe(5);
-    expect(engineFromOnLine(opening, [...line, 'd6'])).toBe(5); // a plan line running on past it
+    expect(engineFromOnLine(opening, line.slice(0, 7))).toBe(5); // a stretch of the main line
+    // A line that leaves the main line — a plan, a reply, a variation split
+    // after the engine took over — is games' moves past it: never the note.
+    expect(engineFromOnLine(opening, [...line, 'd6'])).toBeNull();
+    expect(engineFromOnLine(opening, [...line.slice(0, 7), 'a6'])).toBeNull();
     expect(engineFromOnLine(opening, MAIN)).toBeNull(); // stops before the engine's first move
     expect(engineFromOnLine(opening, ['e4', 'c5', 'a3', 'Nc6', 'b4', 'Bg7'])).toBeNull(); // another line
     expect(engineFromOnLine({ pgn: line.join(' ') }, line)).toBeNull(); // every move from games

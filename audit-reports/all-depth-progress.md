@@ -10,3 +10,10 @@ David 2026-11-08: "Stockfish's best moves fill the main line past the data floor
 
 ## Step 2 — engine lines (running)
 - 2,001 distinct thin boards (`ALL_DEPTH_TERMINI`), `scripts/all-openings/build-engine-lines.mjs`, depth 15, 2 shards, ~2 s/board. Cap: 24 engine plies / 32 plies in all (offbeat lines often keep a king uncastled under best play).
+- DONE: 2,001 boards, 1,915 lines (86 had no room under the cap), 26,545 plies, 251 KB in 16 files (`public/data/engine-lines/`). 1,223 of 1,915 end on a middlegame board; the rest stop at the cap with a king still uncastled under best play. Fixed at the producer on read: 110 capped lines stopped with an exchange half-played (…Bxh5 Bxh5, …Rxh5 to come) — the engine now plays on to finish an exchange (≤ 6 plies); the 110 re-run matched their old prefix exactly (deterministic search) and none ends mid-exchange.
+
+## Step 3 — club index (done)
+- `ALL_DEPTH_CLUB_INDEX` builds every page with the page's options over the raw club tree (four months, 1200–1999) and keeps the boards its variations read: 1,533 boards, 149 KB in 256 shards (`public/data/club-tree/`), each row its totals + the four most played + every move at 8%+ (lossless for the walk and the split bar).
+- The plan's "Paris Gambit: 6,281 club games" does not hold on disk: 'Nh3 d5 g3 e5 f4' has 5 club games a month (below the tree's 20 floor) and the King's Gambit Paris Gambit none. The Paris Gambit now builds an engine main line with no variation (nothing to split on); the Polish Grigorian (b4 Nc6, 994 club games) is the club-variations case.
+- The "engine from here" note is said only on a stretch of the main line (`engineFromOnLine`): a derived line (variation, reply, plan, trap) keeps its board — a fact about a board games reached — but its own moves are games', so the note would lie.
+- Tests: `allSectionDepth.real.test.ts` (8, on the shipped files: Paris Gambit + Grigorian fail on the old builder; every engine move legal from its board and no line runs past a middlegame board; every club row legal, 20+ games, most played first).

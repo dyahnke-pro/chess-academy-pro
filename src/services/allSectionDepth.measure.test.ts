@@ -164,6 +164,8 @@ describe.skipIf(!CLUB_INDEX)('All-section variations: the club boards the pages 
 interface Side {
   main: number; past: number; stop: string; middlegame: boolean;
   engine: number; variations: number; clubVariations: number; longestVariation: number;
+  /** Variations split off the main line at a move the engine chose. */
+  engineSplits: number;
 }
 interface Row { name: string; eco: string; side: 'white' | 'black'; named: number; before: Side; after: Side }
 
@@ -182,12 +184,13 @@ describe.skipIf(!ON)('All-section depth against the curated courses', () => {
       return r ? { result: r, source: 'masters' } : null;
     };
     const sideOf = (named: number, c: Course | null): Side => {
-      if (!c) return { main: named, past: 0, stop: 'none', middlegame: false, engine: 0, variations: 0, clubVariations: 0, longestVariation: 0 };
+      if (!c) return { main: named, past: 0, stop: 'none', middlegame: false, engine: 0, variations: 0, clubVariations: 0, longestVariation: 0, engineSplits: 0 };
       return {
         main: c.main.sans.length, past: c.main.sans.length - named, stop: c.main.stop, middlegame: c.main.stop === 'middlegame',
         engine: c.main.engineFrom === null ? 0 : c.main.sans.length - c.main.engineFrom,
         variations: c.variations.length, clubVariations: c.variations.filter((v) => v.source === 'club').length,
         longestVariation: Math.max(0, ...c.variations.map((v) => v.sans.length)),
+        engineSplits: c.main.engineFrom === null ? 0 : c.variations.filter((v) => v.from >= (c.main.engineFrom ?? Infinity)).length,
       };
     };
     const rows: Row[] = [];
@@ -224,7 +227,7 @@ describe.skipIf(!ON)('All-section depth against the curated courses', () => {
         `  main line plies, median ${median(s.map((x) => x.main))}; past its name, median ${median(s.map((x) => x.past))}`,
         `  reaches a middlegame: ${s.filter((x) => x.middlegame).length} (${pct(s.filter((x) => x.middlegame).length, s.length)})`,
         `  stop: ${[...stops].map(([k, v]) => `${k} ${v}`).join(', ')}`,
-        `  engine plies on ${engined.length} pages, median ${median(engined.map((x) => x.engine))}`,
+        `  engine plies on ${engined.length} pages, median ${median(engined.map((x) => x.engine))}; variations split at an engine move: ${s.reduce((n, x) => n + x.engineSplits, 0)}`,
         `  variations, median ${median(s.map((x) => x.variations))}; none: ${s.filter((x) => x.variations === 0).length}; from club games: ${s.reduce((n, x) => n + x.clubVariations, 0)} on ${s.filter((x) => x.clubVariations > 0).length} pages`,
         `  hands off (nothing past the name, no variation): ${s.filter((x) => x.past <= 0 && x.variations === 0).length}`,
       ];
