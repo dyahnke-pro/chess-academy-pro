@@ -10,6 +10,8 @@ import { HintButton } from '../Coach/HintButton';
 import { motion } from 'framer-motion';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useWrongTryRefutation } from '../../hooks/useWrongTryRefutation';
+import { useLiveMarks } from '../../hooks/useLiveMarks';
+import { refutationArrows } from '../../services/puzzleTeaching';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { useSettings } from '../../hooks/useSettings';
 import { useAppStore } from '../../stores/appStore';
@@ -94,7 +96,14 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
   // touch state once the board is gone.
   const aliveRef = useRef(true);
   useEffect(() => () => { aliveRef.current = false; }, []);
-  const { refute: refuteTry, clearArrows: clearWrongArrows } = wrongTry;
+  const { refute: refuteTry } = wrongTry;
+  /** The wrong try's line, marked as it is said: their reply drawn and every
+   *  square it names lit, each at its words (`useLiveMarks`). The arrows used
+   *  to go up before the voice started. */
+  const liveMarks = useLiveMarks(puzzle.playerColor === 'black' ? 'black' : 'white');
+  const clearWrongArrows = liveMarks.clear;
+  const sayMarksRef = useRef(liveMarks.say);
+  sayMarksRef.current = liveMarks.say;
   const puzzleIdRef = useRef(puzzle.id);
   puzzleIdRef.current = puzzle.id;
   const [moveIndex, setMoveIndex] = useState(0);
@@ -435,6 +444,9 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
       const wrongMsg = [r?.text ?? setupIncorrect(), ask].filter((x): x is string => !!x).join(' ');
       setMessage(wrongMsg);
       setWalkable(r && r.uci.length > 0 ? walkableLine(fenBefore, [move.san, ...pvSans(r.fenAfter, r.uci, 4)], move.san) : null);
+      // The board still shows the wrong move: the line's marks are on it.
+      const boardNow = r?.fenAfter ?? (() => { try { const c = new Chess(fenBefore); c.move(move.san); return c.fen(); } catch { return fenBefore; } })();
+      sayMarksRef.current(wrongMsg, boardNow, r ? { arrows: refutationArrows(r) } : undefined);
       const shownAt = Date.now();
       await voiceService.speak(wrongMsg).catch(() => undefined);
       const left = Math.max(0, (r ? 1800 + wrongMsg.length * 35 : 1500) - (Date.now() - shownAt));
@@ -553,9 +565,9 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
           showUndoButton={false}
           showResetButton={false}
           onMove={handleMove}
-          arrows={wrongTry.arrows.length > 0 ? wrongTry.arrows : hintState.arrows.length > 0 ? hintState.arrows : undefined}
+          arrows={liveMarks.arrows.length > 0 ? liveMarks.arrows : hintState.arrows.length > 0 ? hintState.arrows : undefined}
           ghostMove={hintState.ghostMove}
-          annotationHighlights={ladderSquare ? [{ square: ladderSquare, color: HINT_PIECE_HIGHLIGHT }] : undefined}
+          annotationHighlights={ladderSquare || liveMarks.annotationHighlights.length > 0 ? [...liveMarks.annotationHighlights, ...(ladderSquare ? [{ square: ladderSquare, color: HINT_PIECE_HIGHLIGHT }] : [])] : undefined}
         />
         )}
       </div>

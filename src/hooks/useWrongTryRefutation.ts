@@ -3,11 +3,12 @@
  * (David 2026-10-01: "Refute it, keep the answer").
  *
  * The board calls `refute(fenBefore, wrongSan)` while the wrong move is still
- * on the board. The engine's reply line is computed (`refuteWrongTry`), its
- * arrows go through the arrow door on the board AFTER the wrong move, and the
- * sentence is returned for the board to show and speak. `clear()` drops the
- * arrows when the board takes the move back; the text stays until the next
- * move so a student with voice off still reads it.
+ * on the board. The engine's reply line is computed (`refuteWrongTry`) and the
+ * refutation returned for the board to show and speak; the board marks it as
+ * it is said (`refutationArrows` through `useLiveMarks`, 2026-11-08: the hook
+ * used to put the arrows up the moment the read landed, before the voice).
+ * The text stays until the next move so a student with voice off still reads
+ * it.
  *
  * Engine reads are QUEUED (never cancel the hint or the coach's read) and
  * capped: a slow engine must never freeze the puzzle. No
@@ -15,8 +16,7 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { stockfishEngine } from '../services/stockfishEngine';
-import { refuteWrongTry, refutationArrows, solvedDrillConcept, type WrongTryRefutation, type PuzzleLineAnalyser } from '../services/puzzleTeaching';
-import type { BoardArrow } from '../types';
+import { refuteWrongTry, solvedDrillConcept, type WrongTryRefutation, type PuzzleLineAnalyser } from '../services/puzzleTeaching';
 
 const REFUTE_DEPTH = 12;
 const REFUTE_BUDGET_MS = 3000;
@@ -31,17 +31,13 @@ const engineLineAnalyser: PuzzleLineAnalyser = async (fen) => {
 
 interface WrongTryState {
   text: string | null;
-  arrows: BoardArrow[];
   refute: (fenBefore: string, wrongSan: string) => Promise<WrongTryRefutation | null>;
-  /** Arrows off (the move is taken back). */
-  clearArrows: () => void;
   /** Everything off (the next move, or a new puzzle). */
   clear: () => void;
 }
 
 export function useWrongTryRefutation(analyse: PuzzleLineAnalyser = engineLineAnalyser): WrongTryState {
   const [text, setText] = useState<string | null>(null);
-  const [arrows, setArrows] = useState<BoardArrow[]>([]);
   const token = useRef(0);
   // WARM THE ENGINE ON MOUNT (hand walk 2026-10-01: the FIRST wrong try of a
   // session drew nothing — the engine was still loading and missed the 3s
@@ -60,16 +56,14 @@ export function useWrongTryRefutation(analyse: PuzzleLineAnalyser = engineLineAn
     const mine = ++token.current;
     const r = await refuteWrongTry({ fenBefore, wrongSan, analyse });
     if (mine !== token.current) return null; // superseded by a newer try or a clear
-    if (!r) { setText(null); setArrows([]); return null; }
+    if (!r) { setText(null); return null; }
     setText(r.text);
-    setArrows(refutationArrows(r));
     return r;
   }, [analyse]);
 
-  const clearArrows = useCallback(() => setArrows([]), []);
-  const clear = useCallback(() => { token.current += 1; setText(null); setArrows([]); }, []);
+  const clear = useCallback(() => { token.current += 1; setText(null); }, []);
 
-  return { text, arrows, refute, clearArrows, clear };
+  return { text, refute, clear };
 }
 
 /** The concept behind a solved student-to-move drill, through the same door. */
