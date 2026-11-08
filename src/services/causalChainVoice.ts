@@ -145,15 +145,21 @@ function sentenceFor(node: CausalNode, i: number, register: CausalRegister, stud
       // say "the <tp> on tsq". Name the guard leaving + the square it guarded.
       void tp;
       const guards = Number(node.data.guards ?? 0);
+      // THE GUARD LEFT ON AN EARLIER MOVE (WO-DEPTH-01): said as when it went,
+      // so the cause is heard as the cause, not as the move just played.
+      const earlier = Number(node.data.movesEarlier ?? 0);
+      const EARLIER = ['', 'A move earlier', 'Two moves earlier', 'Three moves earlier'];
+      const when = earlier > 0 ? `${EARLIER[earlier] ?? `${earlier} moves earlier`}, ` : '';
+      const subject = when ? `${when}${poss(node.color, student)}` : P;
       if (guards > 0) {
         const left = guardsLine(Number(node.data.attackers ?? 0), guards, register === 'review');
         return register === 'review'
-          ? `${P} ${node.data.move} pulled the ${gp} off ${from}, one of the guards on ${tsq} — ${left}.`
+          ? `${subject} ${node.data.move} pulled the ${gp} off ${from}, one of the guards on ${tsq} — ${left}.`
           : `${P} ${gp} leaves ${from}, one of the guards on ${tsq} — ${left}.`;
       }
       return register === 'review'
-        ? `${P} ${node.data.move} pulled the ${gp} off ${from} — the only piece guarding ${tsq}.`
-        : `${P} ${gp} leaves ${from}, the only guard on ${tsq}.`;
+        ? `${subject} ${node.data.move} pulled the ${gp} off ${from} — the only piece guarding ${tsq}.`
+        : earlier > 0 ? `${P} ${gp} left ${from} ${earlier === 1 ? 'a move ago' : `${earlier} moves ago`}, and it was the only guard on ${tsq}.` : `${P} ${gp} leaves ${from}, the only guard on ${tsq}.`;
     }
     default:
       void i;

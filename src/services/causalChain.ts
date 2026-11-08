@@ -592,7 +592,6 @@ function buildRemovedDefenderChain(g: GameBoards, focusPly: number): CausalChain
 
   const afterBoard = new Chess(g.fens[focusPly]);
   const beforeBoard = new Chess(g.fens[focusPly - 1]);   // after the opponent's move, before focus
-  const prevBoard = new Chess(g.fens[focusPly - 2]);     // before the opponent's move
   const focus = g.moves[focusPly - 1];
   const oppMove = g.moves[focusPly - 2];
   const mover = focus.color;
@@ -610,42 +609,57 @@ function buildRemovedDefenderChain(g: GameBoards, focusPly: number): CausalChain
   // a won piece (the single-square SEE win must survive the recapture).
   if (!safeOn(afterBoard, s)) return null;
 
-  // It was SAFE before the opponent's move: the SAME enemy piece stood on s and
-  // was not winnable then. (Excludes recaptures — if the opponent had just
-  // captured on s, prev's s held a MOVER piece, not this enemy victim.)
-  const prevPiece = prevBoard.get(s);
-  if (!prevPiece || prevPiece.color !== enemy || prevPiece.type !== victimType) return null;
-  if (winnableGain(prevBoard, s) > 0) return null;     // already hanging before → not the opponent's doing
-
-  // The opponent's move took one of s's REAL guards away: a `guard` relation on
-  // s held by the piece on the move's from-square before, and gone after (the
-  // snapshot diff). A pinned "guard" is a `guard-pinned` relation, so it never
-  // counts — moving a piece that could not recapture is not what left s loose.
-  const prevSnap = snapshot(g.fens[focusPly - 2]);
-  const beforeSnap = snapshot(g.fens[focusPly - 1]);
-  if (!prevSnap || !beforeSnap) return null;
-  const guardLost = diff(prevSnap, beforeSnap).lost.find((r) => r.kind === 'guard' && r.square === s && r.by === oppMove.from);
-  if (!guardLost || guardLost.kind !== 'guard') return null;
-  const guardType = guardLost.byPiece[1];
-
-  // 🔒 IT MUST HAVE BEEN A CHOICE, NOT A FORCED MOVE (David 2026-09-07). The true
-  // counterfactual — the same discipline principleAttribution uses: was there a
-  // legal move that would have kept the piece safe? If yes, abandoning the guard
-  // was a real decision → the lesson stands. If NO move saved it, the loss was
-  // unavoidable and blaming this move overstates the why → silence. This is
-  // stronger than a crude "was in check" proxy (an in-check player with a saving
-  // block still made a choice; a player whose only legal move drops it did not).
-  if (!targetWasSavable(prevBoard, s, enemy, victimType)) return null;
-
+  // THE MOVE THAT TOOK THE GUARD AWAY — the opponent's last move, or one of
+  // their three before it (WO-DEPTH-01, David 2026-11-08: "this game is 100%
+  // deterministic … I want to dive deep!!"). Measured on his slips: of the
+  // pieces lost where they stood, 59 had lost a guard to an EARLIER move of
+  // the same side (8.Qb5 took the queen off e2, and 10.g3 lost the knight on
+  // f3), which a check of the last move alone never sees. Every link is proven
+  // on its own boards: the SAME piece stood on s from before that move to the
+  // capture, it was safe before it, that move removed a real `guard` relation
+  // on s and left it winnable, and a legal move then kept it safe.
+  const beforeSnapNow = snapshot(g.fens[focusPly - 1]);
+  if (!beforeSnapNow) return null;
+  let found: { j: number; move: Move; guardType: PieceSymbol } | null = null;
+  for (let back = 0; back <= 3 && !found; back += 1) {
+    const j = focusPly - 2 - 2 * back;   // 0-based index of the enemy's move
+    if (j < 1) break;
+    const mv = g.moves[j];
+    if (mv.color !== enemy) break;
+    // The same enemy piece stood on s from before this move to the capture.
+    let stood = true;
+    for (let f = j; f <= focusPly - 1; f += 1) {
+      const p = new Chess(g.fens[f]).get(s);
+      if (!p || p.color !== enemy || p.type !== victimType) { stood = false; break; }
+    }
+    if (!stood) break;
+    const boardBefore = new Chess(g.fens[j]);
+    if (winnableGain(boardBefore, s) > 0) continue;              // already hanging before this move
+    if (winnableGain(new Chess(g.fens[j + 1]), s) <= 0) continue; // this move did not leave it hanging
+    const a = snapshot(g.fens[j]);
+    const b = snapshot(g.fens[j + 1]);
+    if (!a || !b) continue;
+    const lost = diff(a, b).lost.find((r) => r.kind === 'guard' && r.square === s && r.by === mv.from);
+    if (!lost || lost.kind !== 'guard') continue;
+    // 🔒 IT MUST HAVE BEEN A CHOICE, NOT A FORCED MOVE (David 2026-09-07): a
+    // legal move then kept the piece safe, or blaming this move overstates it.
+    if (!targetWasSavable(boardBefore, s, enemy, victimType)) continue;
+    found = { j, move: mv, guardType: lost.byPiece[1] as PieceSymbol };
+  }
+  if (!found) return null;
+  const oppAt = found.move;
+  const guardType = found.guardType;
+  const movesEarlier = (focusPly - 2 - found.j) / 2;
+  const beforeSnap = beforeSnapNow;
   const counts = guardCount(beforeSnap, s, mover);
   const causeNode: CausalNode = {
-    kind: 'defender-removed', ply: focusPly - 1, color: enemy,
-    squares: [oppMove.from, s],
-    data: { move: oppMove.san, guardPiece: PIECE_NOUN[guardType], from: oppMove.from, target: s, targetPiece: PIECE_NOUN[victimType], ...counts },
+    kind: 'defender-removed', ply: found.j + 1, color: enemy,
+    squares: [oppAt.from, s],
+    data: { move: oppAt.san, guardPiece: PIECE_NOUN[guardType], from: oppAt.from, target: s, targetPiece: PIECE_NOUN[victimType], movesEarlier, ...counts },
     fundamentalId: 'loose-piece',
     tag: 'hung-material',
     arrows: [],
-    highlights: [{ square: oppMove.from, color: 'yellow' }, { square: s, color: 'red' }],
+    highlights: [{ square: oppAt.from, color: 'yellow' }, { square: s, color: 'red' }],
   };
   const tacticNode: CausalNode = {
     kind: 'won-loose-piece', ply: focusPly, color: mover,
@@ -657,7 +671,7 @@ function buildRemovedDefenderChain(g: GameBoards, focusPly: number): CausalChain
   };
   return {
     nodes: [causeNode, tacticNode],
-    edges: [{ relation: 'guard', proof: `${oppMove.san} moved the ${PIECE_NOUN[guardType]} off ${oppMove.from}; it was defending ${s}, now winnable (SEE ${winnableGain(beforeBoard, s)})` }],
+    edges: [{ relation: 'guard', proof: `${oppAt.san} moved the ${PIECE_NOUN[guardType]} off ${oppAt.from}${movesEarlier ? ` ${movesEarlier} move(s) earlier` : ''}; it was defending ${s}, now winnable (SEE ${winnableGain(beforeBoard, s)})` }],
     beneficiary: mover,
     focusPly,
     stance: 'played',
