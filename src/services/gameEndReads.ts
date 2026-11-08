@@ -84,9 +84,53 @@ function defencesAgainstMate(fen: string): { threat: Move | null; defences: Move
  * one, and the side to move has no defence, or exactly one that then loses at
  * least a piece to a capture the exchange count proves.
  */
+/** The position as repetition counts it: the pieces, the side to move, the
+ *  castling rights and the en-passant square. */
+const repetitionKey = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
+
+/** THE GAME ENDED IN A REPETITION (Learn 2026-11-08: a perpetual played out
+ *  and never named). The final position came up three times; when every move
+ *  one side made since it first appeared was a check, that side gave a
+ *  perpetual check — named with the piece and the squares it checked from. */
+function repetitionEnd(plies: readonly GamePly[], student: 'w' | 'b'): EndRead | null {
+  const last = plies.at(-1);
+  if (!last) return null;
+  const key = repetitionKey(last.fenAfter);
+  const at = plies.flatMap((p, i) => (repetitionKey(p.fenAfter) === key ? [i] : []));
+  if (at.length < 3) return null;
+  const cycle = plies.slice(at[0] + 1);
+  const index = plies.length - 1;
+  // The proof is the repeating moves themselves, played out on the board.
+  const proof = cycle.length ? legalLineProof(cycle[0].fenBefore, cycle.map((p) => p.san), lineSeatAt(cycle[0].fenBefore, student), true) : null;
+  if (!proof) return null;
+  for (const checker of ['w', 'b'] as const) {
+    const moves = cycle.filter((p) => new Chess(p.fenBefore).turn() === checker);
+    if (moves.length === 0 || !moves.every((p) => /[+#]$/.test(p.san))) continue;
+    const pieces = new Set(moves.map((p) => (/^[NBRQK]/.test(p.san) ? p.san[0].toLowerCase() : 'p')));
+    const squares = [...new Set(moves.map((p) => /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(p.san)?.[1] ?? ''))].filter(Boolean);
+    const mine = checker === student;
+    const piece = pieces.size === 1 ? PIECE[[...pieces][0]] : 'pieces';
+    const owner = mine ? 'your' : 'their';
+    const king = mine ? 'their' : 'your';
+    const from = squares.length ? ` from ${squares.length === 1 ? squares[0] : `${squares.slice(0, -1).join(', ')} and ${squares.at(-1)}`}` : '';
+    return {
+      kind: 'why-it-ended', index,
+      text: `It ended in a perpetual check: ${owner} ${piece} kept checking ${king} king${from}, and the same position came up three times.`,
+      proof, squares, claim: 'why-it-ended',
+    };
+  }
+  return {
+    kind: 'why-it-ended', index,
+    text: 'It ended in a draw by repetition: the same position came up three times.',
+    proof, squares: [], claim: 'why-it-ended',
+  };
+}
+
 export function whyItEnded(plies: readonly GamePly[], student: 'w' | 'b'): EndRead | null {
   const last = plies.at(-1);
   if (!last) return null;
+  const repeated = repetitionEnd(plies, student);
+  if (repeated) return repeated;
   let end: Chess;
   try { end = new Chess(last.fenAfter); } catch { return null; }
   if (end.isGameOver()) return null;

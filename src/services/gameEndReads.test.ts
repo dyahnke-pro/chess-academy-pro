@@ -91,3 +91,20 @@ describe('idlePiece — the knight that never played', () => {
     expect(r?.text).toMatch(/c5/);
   });
 });
+
+// A game of David's that ended in a perpetual (chesscom-148572894386, 1/2-1/2):
+// White's rook checks from h3, h4 and h5 until the position comes up three times.
+describe('whyItEnded — a perpetual check is named', () => {
+  const START = '3r4/8/7p/8/1p6/p1k3R1/P1P4P/2K5 b - - 2 41';
+  const SANS = ['Kc4', 'Rg4+', 'Kc3', 'Rg3+', 'Kc4', 'Rh3', 'Rd6', 'Rh4+', 'Kc3', 'Rh3+', 'Kc4', 'Rh4+', 'Kb5', 'Rh5+', 'Kc4', 'Rh4+'];
+  const plies = ((): GamePly[] => {
+    const c = new Chess(START);
+    return SANS.map((san) => { const fenBefore = c.fen(); c.move(san); return { san, fenBefore, fenAfter: c.fen(), evalAfter: 0, bestMoveUci: null, bestMoveEval: null }; });
+  })();
+  it('from the side that was checked', () => {
+    expect(whyItEnded(plies, 'b')?.text).toBe('It ended in a perpetual check: their rook kept checking your king from h3, h4 and h5, and the same position came up three times.');
+  });
+  it('from the side that gave the checks', () => {
+    expect(whyItEnded(plies, 'w')?.text).toBe('It ended in a perpetual check: your rook kept checking their king from h3, h4 and h5, and the same position came up three times.');
+  });
+});
