@@ -5,11 +5,16 @@
 // runs on the stored trees (the master tree, then the strong-online tree past
 // it — `storedTreeAt`, never a live read), the main line runs on to the
 // middlegame and every real split is a variation tab, and Stockfish only
-// vetoes a main line that leaves the student lost. Every move is a move
-// strong players played (G3).
+// vetoes a main line that leaves the student lost. Where the main line's
+// games run thin, Stockfish's best moves carry it on (`engineLineAt`, built
+// offline), and where the stored trees run thin at a split, club games give
+// the variations (`variationTreeAnswer`) — WO-ALL-SECTION-DEPTH, David
+// 2026-11-08. Every move is a move players played (G3), except the engine's,
+// which the page and the lesson call the engine's (`engineFrom`).
 import type { OpeningRecord } from '../types';
 import { buildGamesCourse, courseRecord, type GamesCourse } from './gamesCourse';
-import { storedTreeAt } from './deepTree';
+import { storedTreeAt, variationTreeAnswer } from './deepTree';
+import { engineLineAt } from './engineLine';
 import { inferStudentSideFromName } from './openingDetectionService';
 import { stockfishEngine } from './stockfishEngine';
 
@@ -36,6 +41,8 @@ function courseFor(opening: OpeningRecord, side: 'white' | 'black'): Promise<Gam
   const sans = opening.pgn.trim().split(/\s+/).filter(Boolean);
   const job = buildGamesCourse(sans, side, {
     lookup: storedTreeAt,
+    variations: variationTreeAnswer,
+    engine: engineLineAt,
     veto: (fen) => studentEval(fen, side, VETO_READ_MS),
   }).catch(() => null);
   built.set(opening.id, job);
@@ -46,8 +53,9 @@ function courseFor(opening: OpeningRecord, side: 'white' | 'black'): Promise<Gam
 }
 
 /** A database-only opening's page view, built from the stored trees: the
- *  record with its main line run on to the middlegame and every real split a
- *  variation, in the seat the name teaches. The record's own progress (rungs,
+ *  record with its main line run on to the middlegame (the engine's moves past
+ *  its games, marked `engineFrom`) and every real split a variation, in the
+ *  seat the name teaches. The record's own progress (rungs,
  *  unlocks) is kept as read. Null when the tree holds nothing past the named
  *  line — the page then hands off to Learn with Coach as before. */
 export async function gamesCourseRecord(opening: OpeningRecord): Promise<OpeningRecord | null> {

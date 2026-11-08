@@ -14,7 +14,7 @@ const ANNOTATIONS_SRC = 'src/data/annotations';
 /** Directories whose files share ONE version entry, so the per-session
  *  version file stays small (1,889 annotation files would otherwise add 1,889
  *  entries). A change to any file re-versions the directory. */
-const VERSIONED_AS_DIRECTORY = ['/data/annotations/', '/data/master-tree/', '/data/online-tree/', '/data/model-games/', '/data/club-replies/'];
+const VERSIONED_AS_DIRECTORY = ['/data/annotations/', '/data/master-tree/', '/data/online-tree/', '/data/model-games/', '/data/club-replies/', '/data/club-tree/', '/data/engine-lines/'];
 
 function copyAnnotations(root: string, outDir: string): void {
   const from = join(root, ANNOTATIONS_SRC);
@@ -310,6 +310,30 @@ export default defineConfig(({ mode }) => {
             options: {
               cacheName: 'online-tree-cache',
               expiration: { maxEntries: 300, maxAgeSeconds: 60 * 60 * 24 * 90 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // The club games an All-section page's variations read past the
+            // stored trees (`/data/club-tree/<shard>.json`, WO-ALL-SECTION-DEPTH)
+            // and the engine's moves past a main line's games
+            // (`/data/engine-lines/<shard>.json`): small files read a piece at
+            // a time. Their OWN cache, BEFORE the /data/ rule, for the same
+            // reason as the master tree.
+            urlPattern: /\/data\/club-tree\/.*\.json$/i,
+            handler: 'CacheFirst' as const,
+            options: {
+              cacheName: 'club-tree-cache',
+              expiration: { maxEntries: 300, maxAgeSeconds: 60 * 60 * 24 * 90 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            urlPattern: /\/data\/engine-lines\/.*\.json$/i,
+            handler: 'CacheFirst' as const,
+            options: {
+              cacheName: 'engine-lines-cache',
+              expiration: { maxEntries: 40, maxAgeSeconds: 60 * 60 * 24 * 90 },
               cacheableResponse: { statuses: [0, 200] },
             },
           },

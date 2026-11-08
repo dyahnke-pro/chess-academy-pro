@@ -7,6 +7,7 @@
 // One build per line per session, shared by Watch, Learn and Practice.
 import { generateOpening } from './openingGenerator';
 import { walkthroughLesson } from './walkthroughLesson';
+import { gamesEndLine } from './gamesCourse';
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import type { AnnotationArrow, AnnotationHighlight, LessonScript, PlayableMiddlegameLine } from '../types';
@@ -23,6 +24,11 @@ export interface GeneratedLessonArgs {
   /** Whether the corpus notes lead the beats: yes for an opening's lines and
    *  replies; no for a line built to show one thing (a trap played out). */
   corpusNotes: boolean;
+  /** The index in `moves` of the first move the ENGINE chose, past where the
+   *  games ran out (`gamesCourse.engineFromOnLine`), or null when every move
+   *  came from games. REQUIRED: the lesson says where the games end, on that
+   *  move (WO-ALL-SECTION-DEPTH). */
+  gamesEnd: number | null;
 }
 
 const built = new Map<string, Promise<LessonScript | null>>();
@@ -30,12 +36,13 @@ const built = new Map<string, Promise<LessonScript | null>>();
 /** The lesson for one line. Never rejects; null when it cannot be built (a
  *  failure is not kept, so the next open tries again). */
 export function generatedLessonFor(args: GeneratedLessonArgs): Promise<LessonScript | null> {
-  const key = `${args.openingId}|${args.color}|${args.corpusNotes ? 'notes' : 'board'}|${args.name}|${args.moves.join(' ')}`;
+  const key = `${args.openingId}|${args.color}|${args.corpusNotes ? 'notes' : 'board'}|${args.gamesEnd ?? '-'}|${args.name}|${args.moves.join(' ')}`;
   const hit = built.get(key);
   if (hit) return hit;
   const moves = [...args.moves];
   const job = generateOpening(args.name, { entryOverride: { canonicalName: args.name, eco: args.eco, moves, studentSide: args.color, corpusNotes: args.corpusNotes } })
     .then((r) => (r.ok && r.tree ? walkthroughLesson(r.tree, args.openingId, args.name, args.color, moves) : null))
+    .then((script) => (script && args.gamesEnd !== null ? withGamesEnd(script, moves, args.gamesEnd) : script))
     .catch(() => null)
     .then((script) => {
       if (!script) built.delete(key);
@@ -43,6 +50,17 @@ export function generatedLessonFor(args: GeneratedLessonArgs): Promise<LessonScr
     });
   built.set(key, job);
   return job;
+}
+
+/** The lesson with WHERE THE GAMES RUN OUT said on the first move the engine
+ *  chose, before what the move does (`gamesEndLine`, the page's own wording).
+ *  Pure. */
+export function withGamesEnd(script: LessonScript, moves: readonly string[], gamesEnd: number): LessonScript {
+  const note = gamesEndLine(moves, gamesEnd, 'here');
+  const beats = script.beats.map((b) => (b.moves.length - 1 === gamesEnd && b.moves.every((m, k) => m === moves[k])
+    ? { ...b, say: [note, b.say.trim()].filter(Boolean).join(' ') }
+    : b));
+  return { ...script, beats };
 }
 
 /** A lesson's beats laid on a line's own moves: the beat for move i speaks on

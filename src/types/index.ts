@@ -619,6 +619,11 @@ export interface OpeningRecord {
   traps: string[] | null;
   warnings: string[] | null;
   variations: OpeningVariation[] | null;
+  /** An opening built from the games (`gamesCourse.courseRecord`, never
+   *  stored): the ply in `pgn` from which the moves are the ENGINE's best play,
+   *  past where the games ran out (WO-ALL-SECTION-DEPTH). Absent when every
+   *  move came from games. Never written to the database. */
+  engineFrom?: number;
   // Drillable trap/warning lines for Train mode
   trapLines?: OpeningVariation[] | null;
   warningLines?: OpeningVariation[] | null;

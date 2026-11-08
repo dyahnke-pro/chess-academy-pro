@@ -53,6 +53,7 @@ import { resolveMasterclassRedirect } from '../../services/masterclassRedirect';
 import { LessonPlayer } from './LessonPlayer';
 import { GeneratedWatch } from './GeneratedWatch';
 import { gamesCourseRecord } from '../../services/gamesCourseRecord';
+import { gamesEndLine } from '../../services/gamesCourse';
 import { getLessonScript, getVariationLessonScript, lessonToPlayableLine, hasLessonScript } from '../../data/lessons';
 import {
   RUY_TRAP_LESSONS,
@@ -1858,6 +1859,16 @@ export function OpeningDetailPage(): JSX.Element {
       {firstSentence(selectedVariation?.explanation ?? opening.overview) && (
         <p className="text-sm text-theme-text-muted -mt-3 mb-4 line-clamp-2" data-testid="opening-summary">
           {firstSentence(selectedVariation?.explanation ?? opening.overview)}
+        </p>
+      )}
+
+      {/* WHERE THE GAMES RUN OUT (WO-ALL-SECTION-DEPTH): an opening built
+          from the games whose main line the engine carried on past them says
+          which moves are the engine's — never players' moves (G3). The
+          lesson says the same on that move (`gamesEndLine`, one wording). */}
+      {!isVariation && opening.engineFrom !== undefined && (
+        <p className="text-xs text-theme-text-muted -mt-2 mb-4" data-testid="games-end-note">
+          {gamesEndLine(opening.pgn.trim().split(/\s+/), opening.engineFrom, 'after')}
         </p>
       )}
 

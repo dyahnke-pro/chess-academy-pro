@@ -9,16 +9,22 @@
 //   • the MAIN LINE — the named line, then the masters' most-played move each
 //     ply until the middlegame — both kings settled, no exchange half-played
 //     (`isMiddlegameBoard`) — or the games run thin (the student's move: the
-//     most-played one that does not lose in practice);
-//   • a VARIATION for every real split along it — a move masters play in 8%+
-//     and 10+ of the games at that board — walked the same way;
+//     most-played one that does not lose in practice); and where the games run
+//     thin, STOCKFISH'S BEST MOVES carry it on to the middlegame
+//     (WO-ALL-SECTION-DEPTH, David 2026-11-08: "Stockfish's best moves fill the
+//     main line past the data floor; club games give the variations") —
+//     `engineFrom` marks where they start, and the page says so;
+//   • a VARIATION for every real split along it — a move played in 8%+ and 10+
+//     of the games at that board — walked the same way, on the games alone:
+//     the stored trees, then club games where those run out (`variations`);
 //   • a STOCKFISH VETO, when the caller gives one, on a main line that leaves
 //     the student lost: the most-played line branching on a student move that
 //     does not leave them lost takes its place.
 //
-// Every move is a move masters played (G3); Stockfish only checks a line. The
-// database is injected, so the same builder runs on the deep master tree, the
-// live explorer, or a fixture.
+// Every move is a move players played (G3), except the engine's past
+// `engineFrom`, which are never called players' moves. The database is
+// injected, so the same builder runs on the stored trees, the live explorer,
+// or a fixture.
 import { Chess } from 'chess.js';
 import type { LichessExplorerResult, OpeningRecord, OpeningReply, OpeningVariation } from '../types';
 import { pickWalkMove, repliesOverBar, moverScore } from './explorerTeachLine';
@@ -27,6 +33,9 @@ import { lessonThought } from './moveThoughtFacts';
 import { BRIEFING_LINE_PLIES, newLessonVoice } from './reviewMoveBriefing';
 import { captureContextsAlong } from './pvPlayback';
 import { NO_PREV_CAPTURE } from './captureRun';
+import type { GamesAnswer, GamesSource } from './deepTree';
+import { CLUB_BAND } from './clubTree';
+import { numberedMove } from '../utils/numberedMove';
 
 /** Why a walk stopped. */
 export type CourseStop = 'middlegame' | 'thin' | 'game-over' | 'max' | 'unreachable';
@@ -41,7 +50,13 @@ export interface CourseLine {
   games: number;
   /** The first move's share of those games; null on the main line. */
   share: number | null;
+  /** Where the games at the split board came from — a variation's share is
+   *  "masters play it" or "club players play it"; null on the main line. */
+  source: GamesSource | null;
   stop: CourseStop;
+  /** Index in `sans` of the first move the ENGINE chose (Stockfish's best play
+   *  past where the games ran out), or null when every move came from games. */
+  engineFrom: number | null;
   /** The deepest named line in the opening database the line reaches past
    *  `from`, or null. */
   name: string | null;
@@ -60,8 +75,17 @@ export interface GamesCourse {
 }
 
 export interface GamesCourseOptions {
-  /** The database's answer at the board `sans` reaches, or null (no games). */
+  /** The database's answer at the board `sans` reaches, or null (no games):
+   *  the MAIN LINE's games. */
   lookup: (sans: readonly string[]) => Promise<LichessExplorerResult | null>;
+  /** The VARIATIONS' games at a board, with where they came from (REQUIRED: a
+   *  variation's share is said as masters', strong online players' or club
+   *  players'). */
+  variations: (sans: readonly string[]) => Promise<GamesAnswer | null>;
+  /** Stockfish's best moves (SAN) on from the board the main line's games run
+   *  out on, or null where none were built. REQUIRED: null for a caller with
+   *  no engine tier. A read that fails throws. */
+  engine: ((sans: readonly string[]) => Promise<string[] | null>) | null;
   /** The student's eval (cp) at a board — the veto on a lost main line. */
   veto?: (fen: string) => Promise<number | null>;
 }
@@ -150,6 +174,22 @@ function fenOf(sans: readonly string[]): string {
   return c.fen();
 }
 
+/** A line played on with the ENGINE's moves from where its games ran out:
+ *  legal moves only, stopping on the first middlegame board — the walk's own
+ *  stop. Pure. */
+export function playEngineOn(sans: readonly string[], engine: readonly string[]): { sans: string[]; stop: CourseStop } {
+  const c = new Chess();
+  for (const s of sans) c.move(s);
+  const out = [...sans];
+  for (const san of engine) {
+    if (c.isGameOver()) return { sans: out, stop: 'game-over' };
+    if (isMiddlegameBoard(out)) return { sans: out, stop: 'middlegame' };
+    try { out.push(c.move(san).san); } catch { break; }
+  }
+  if (c.isGameOver()) return { sans: out, stop: 'game-over' };
+  return { sans: out, stop: isMiddlegameBoard(out) ? 'middlegame' : 'max' };
+}
+
 /** Build the course for the named line `lineSans`, the student playing `side`.
  *  Null when the line is not legal. */
 export async function buildGamesCourse(lineSans: readonly string[], side: 'white' | 'black', opts: GamesCourseOptions): Promise<GamesCourse | null> {
@@ -159,19 +199,41 @@ export async function buildGamesCourse(lineSans: readonly string[], side: 'white
   let root: LichessExplorerResult | null = null;
   try { root = await opts.lookup(lineSans); } catch { incomplete = true; }
   const results = root ? { white: root.white, draws: root.draws, black: root.black } : null;
-  if (!root || games(root) < WALK_FLOOR_GAMES) {
-    return { main: { sans: [...lineSans], from: lineSans.length, games: root ? games(root) : 0, share: null, stop: incomplete ? 'unreachable' : 'thin', name: null }, variations: [], results, incomplete };
+  if (incomplete) {
+    return { main: { sans: [...lineSans], from: lineSans.length, games: 0, share: null, source: null, stop: 'unreachable', name: null, engineFrom: null }, variations: [], results, incomplete };
   }
-  const mainWalk = await walkToMiddlegame(lineSans, student, opts);
-  incomplete ||= mainWalk.failed;
-  let main: CourseLine = { sans: mainWalk.sans, from: lineSans.length, games: games(root), share: null, stop: mainWalk.stop, name: nameFor(mainWalk.sans, lineSans.length) };
 
+  /** Past where a line's games run thin, the engine's best moves to the
+   *  middlegame, when they were built for that board. */
+  const engine = opts.engine;
+  const extend = async (line: CourseLine): Promise<CourseLine> => {
+    if (!engine || line.stop !== 'thin') return line;
+    let more: string[] | null = null;
+    try { more = await engine(line.sans); } catch { incomplete = true; return line; }
+    if (!more?.length) return line;
+    const on = playEngineOn(line.sans, more);
+    if (on.sans.length === line.sans.length) return line;
+    return { ...line, sans: on.sans, stop: on.stop, engineFrom: line.sans.length, endCp: undefined };
+  };
+
+  // THE MAIN LINE: the games while they hold (none past the name when its own
+  // board is thin), then the engine's best moves.
+  const mainWalk: MiddlegameWalk = !root || games(root) < WALK_FLOOR_GAMES
+    ? { sans: [...lineSans], stop: 'thin', failed: false }
+    : await walkToMiddlegame(lineSans, student, opts);
+  incomplete ||= mainWalk.failed;
+  let main = await extend({ sans: mainWalk.sans, from: lineSans.length, games: root ? games(root) : 0, share: null, source: null, stop: mainWalk.stop, name: null, engineFrom: null });
+  main.name = nameFor(main.sans, lineSans.length);
+
+  // THE VARIATIONS: every real split along the main line, on the games alone.
+  const variationLookup = async (sans: readonly string[]): Promise<LichessExplorerResult | null> => (await opts.variations(sans))?.result ?? null;
   const variations: CourseLine[] = [];
   for (let i = lineSans.length; i < main.sans.length; i += 1) {
     const prefix = main.sans.slice(0, i);
-    let r: LichessExplorerResult | null;
-    try { r = await opts.lookup(prefix); } catch { incomplete = true; continue; }
-    if (!r) continue;
+    let answer: GamesAnswer | null;
+    try { answer = await opts.variations(prefix); } catch { incomplete = true; continue; }
+    if (!answer) continue;
+    const r = answer.result;
     const mover: 'w' | 'b' = i % 2 === 0 ? 'w' : 'b';
     const total = games(r);
     for (const alt of repliesOverBar(r, 'masters')) {
@@ -181,9 +243,9 @@ export async function buildGamesCourse(lineSans: readonly string[], side: 'white
       if (mover === student && moverScore(alt, mover) < SOUND_PCT) continue;
       let start: string[];
       try { const c = new Chess(fenOf(prefix)); start = [...prefix, c.move(alt.san).san]; } catch { continue; }
-      const w = await walkToMiddlegame(start, student, opts);
+      const w = await walkToMiddlegame(start, student, { lookup: variationLookup });
       incomplete ||= w.failed;
-      variations.push({ sans: w.sans, from: i, games: total, share: total ? (alt.white + alt.draws + alt.black) / total : null, stop: w.stop, name: nameFor(w.sans, i + 1) });
+      variations.push({ sans: w.sans, from: i, games: total, share: total ? (alt.white + alt.draws + alt.black) / total : null, source: answer.source, stop: w.stop, name: nameFor(w.sans, i + 1), engineFrom: null });
     }
   }
 
@@ -198,14 +260,35 @@ export async function buildGamesCourse(lineSans: readonly string[], side: 'white
         v.endCp = await endOf(v);
         if (v.endCp !== null && v.endCp >= VETO_CP) {
           const old = main;
-          main = { ...v, share: null };
-          variations.splice(variations.indexOf(v), 1, { ...old, from: v.from, share: v.share });
+          main = await extend({ ...v, share: null, source: null });
+          // The old main line becomes a variation — of its games' moves only:
+          // a variation is moves players played, so the engine's are dropped,
+          // and a split the engine made is no variation at all.
+          const at = variations.indexOf(v);
+          if (old.engineFrom === null) variations.splice(at, 1, { ...old, from: v.from, share: v.share, source: v.source });
+          else if (old.engineFrom > v.from) {
+            const kept = old.sans.slice(0, old.engineFrom);
+            variations.splice(at, 1, { ...old, sans: kept, from: v.from, share: v.share, source: v.source, stop: 'thin', name: nameFor(kept, v.from + 1), engineFrom: null, endCp: undefined });
+          }
+          else variations.splice(at, 1);
           break;
         }
       }
     }
   }
   return { main, variations, results, incomplete };
+}
+
+/** WHERE THE GAMES RUN OUT, said the same way on the page and in the lesson
+ *  (WO-ALL-SECTION-DEPTH): the moves from `engineFrom` on are the engine's best
+ *  play, never moves players played (G3). `'here'` is spoken on the first
+ *  engine move itself (no move names — it is heard); `'after'` is written
+ *  under the line and names the moves. Pure. */
+export function gamesEndLine(sans: readonly string[], engineFrom: number, form: 'here' | 'after'): string {
+  if (form === 'here') return "The games run out here. From this move on, the line is the engine's best play for both sides.";
+  const last = engineFrom > 0 ? numberedMove(engineFrom - 1, sans[engineFrom - 1]) : null;
+  const first = numberedMove(engineFrom, sans[engineFrom]);
+  return `${last ? `The games run out after ${last}. ` : ''}From ${first} on, the line is the engine's best play for both sides.`;
 }
 
 /**
@@ -218,7 +301,7 @@ export async function buildGamesCourse(lineSans: readonly string[], side: 'white
  * the middlegame the same way as the line. Deeper forks live in the lesson
  * itself, which stops at every split as it is played.
  */
-export async function buildReplies(lineSans: readonly string[], from: number, side: 'white' | 'black', opts: GamesCourseOptions): Promise<{ replies: OpeningReply[]; incomplete: boolean }> {
+export async function buildReplies(lineSans: readonly string[], from: number, side: 'white' | 'black', opts: Pick<GamesCourseOptions, 'lookup'>): Promise<{ replies: OpeningReply[]; incomplete: boolean }> {
   const student: 'w' | 'b' = side === 'white' ? 'w' : 'b';
   const replies: OpeningReply[] = [];
   const trunkName = detectOpening([...lineSans])?.name ?? '';
@@ -287,6 +370,30 @@ function splitThought(v: CourseLine, side: 'white' | 'black'): string {
   }
 }
 
+/** Where the ENGINE's moves start on a lesson's line, or null. Said only on a
+ *  line that IS the page's main line (or a stretch of it from the start)
+ *  running past `engineFrom`: there every move from that ply on is the
+ *  engine's, so "from this move on, the line is the engine's best play" is
+ *  true. A line that leaves the main line — a variation, a reply, a plan, a
+ *  trap — gets null: its own moves are games' moves, and the note would call
+ *  them the engine's. Every lesson played on the page asks this one rule.
+ *  Pure. */
+export function engineFromOnLine(opening: Pick<OpeningRecord, 'pgn' | 'engineFrom'>, moves: readonly string[]): number | null {
+  const at = opening.engineFrom;
+  if (at === undefined || moves.length <= at) return null;
+  const main = opening.pgn.trim().split(/\s+/);
+  if (moves.length > main.length) return null;
+  for (let k = 0; k < moves.length; k += 1) if (moves[k] !== main[k]) return null;
+  return at;
+}
+
+/** Who plays a variation's first move, by where its games come from. */
+const SHARE_WHO: Record<GamesSource, string> = {
+  masters: 'Masters',
+  online: 'Strong online players (2200+)',
+  club: `Club players rated ${CLUB_BAND}`,
+};
+
 /** The course as the opening page reads it: the record with its main line
  *  run on and its variations filled — never written back over the database
  *  row (its pgn is the opening's identity). `side` is the student's seat
@@ -295,16 +402,23 @@ export function courseRecord(opening: OpeningRecord, course: GamesCourse, side: 
   const variations: OpeningVariation[] = course.variations.map((v) => {
     const label = moveLabel(v);
     const pct = v.share !== null ? Math.round(v.share * 100) : null;
-    // The reason first; how often masters meet it is context after it.
+    // The reason first; how often it is met is context after it, said as the
+    // games it comes from — masters', strong online players' or club players'.
     const why = splitThought(v, side);
-    const often = pct !== null ? `Masters play it in ${pct}% of the ${v.games.toLocaleString('en-US')} games at that point.` : '';
+    const often = pct !== null && v.source ? `${SHARE_WHO[v.source]} play it in ${pct}% of the ${v.games.toLocaleString('en-US')} games at that point.` : '';
     return {
       name: `${v.name ?? opening.name} (${label})`,
       pgn: v.sans.join(' '),
       explanation: [why || `${label}.`, often].filter(Boolean).join(' '),
       deviationMove: v.from,
-      source: 'masters',
+      ...(v.source ? { source: v.source } : {}),
     };
   });
-  return { ...opening, pgn: course.main.sans.join(' '), variations: variations.length ? variations : opening.variations };
+  const engineFrom = course.main.engineFrom;
+  return {
+    ...opening,
+    pgn: course.main.sans.join(' '),
+    variations: variations.length ? variations : opening.variations,
+    ...(engineFrom !== null ? { engineFrom } : {}),
+  };
 }

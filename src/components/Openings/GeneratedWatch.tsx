@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { LessonPlayer } from './LessonPlayer';
 import { generatedLessonFor } from '../../services/generatedLesson';
+import { engineFromOnLine } from '../../services/gamesCourse';
 import type { LessonScript, OpeningRecord } from '../../types';
 
 interface GeneratedWatchProps {
@@ -22,15 +23,17 @@ export function GeneratedWatch({ opening, variationIndex, onExit, onComplete, on
   const variation = variationIndex !== null ? opening.variations?.[variationIndex] : undefined;
   const name = variation?.name ?? opening.name;
   const pgn = variation?.pgn ?? opening.pgn;
+  // Where the engine's moves start on this line, said in the lesson on that move.
+  const gamesEnd = engineFromOnLine(opening, pgn.trim().split(/\s+/).filter(Boolean));
   const [state, setState] = useState<{ status: 'loading' } | { status: 'ready'; script: LessonScript } | { status: 'failed' }>({ status: 'loading' });
 
   useEffect(() => {
     let live = true;
     const moves = pgn.trim().split(/\s+/).filter(Boolean);
-    void generatedLessonFor({ name, eco: opening.eco, moves, openingId: opening.id, color: opening.color, corpusNotes: true })
+    void generatedLessonFor({ name, eco: opening.eco, moves, openingId: opening.id, color: opening.color, corpusNotes: true, gamesEnd })
       .then((script) => { if (live) setState(script ? { status: 'ready', script } : { status: 'failed' }); });
     return () => { live = false; };
-  }, [name, pgn, opening.eco, opening.id, opening.color]);
+  }, [name, pgn, gamesEnd, opening.eco, opening.id, opening.color]);
 
   if (state.status === 'failed') {
     const params = new URLSearchParams({ teach: name, auto: '1', oid: opening.id });

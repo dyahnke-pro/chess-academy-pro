@@ -20,7 +20,7 @@ describe.skipIf(!ON)('a computed gem, as Watch says it', () => {
         if (!gem) continue;
         const base = gemToPlayableLine(gem)!;
         const moves = gem.playLine.split(' ');
-        const script = await generatedLessonFor({ name: 'Italian Game', eco: '', moves, openingId: 'x', color: hit.gem.by === 'white' ? 'black' : 'white', corpusNotes: false });
+        const script = await generatedLessonFor({ name: 'Italian Game', eco: '', moves, openingId: 'x', color: hit.gem.by === 'white' ? 'black' : 'white', corpusNotes: false, gamesEnd: null });
         const taught = script ? overlayBeats(base, lessonBeatsOnLine(script, moves), 0) : base;
         console.log(`\n${line} ${gem.inaccuracy}?? — ${gem.why}`);
         taught.moves.forEach((m, i) => { if (taught.annotations[i]) console.log(`  ${i + 1}. ${m}: ${taught.annotations[i]}`); });

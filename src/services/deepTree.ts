@@ -18,6 +18,7 @@
 // (`explorerTeachLine`).
 import { Chess } from 'chess.js';
 import { masterTreeAt, onlineTreeAt } from './masterTree';
+import { clubTreeAt } from './clubTree';
 import { fetchLichessExplorer } from './lichessExplorerService';
 import type { LichessExplorerResult } from '../types';
 
@@ -31,6 +32,12 @@ export const STRONG_ONLINE_RATINGS = '2200,2500';
 
 export type DeepSource = 'masters' | 'online';
 export interface DeepAnswer { result: LichessExplorerResult; source: DeepSource }
+/** Club games are read on a board from this many (WO-ALL-SECTION-DEPTH). */
+export const CLUB_ENOUGH = 20;
+/** Where an All-section page's games come from: the stored trees, or club
+ *  games past them (its variations only). */
+export type GamesSource = DeepSource | 'club';
+export interface GamesAnswer { result: LichessExplorerResult; source: GamesSource }
 
 function total(r: LichessExplorerResult): number {
   return r.white + r.draws + r.black;
@@ -80,4 +87,16 @@ export async function storedTreeAnswer(sans: readonly string[]): Promise<DeepAns
  *  replies, so its plan (`storedTreeAnswer`) reads the games that built them. */
 export async function storedTreeAt(sans: readonly string[]): Promise<LichessExplorerResult | null> {
   return (await storedTreeAnswer(sans))?.result ?? null;
+}
+
+/** THE VARIATIONS' GAMES (WO-ALL-SECTION-DEPTH, David 2026-11-08: "club games
+ *  give the variations"): the stored trees, and where they hold too few games,
+ *  what club players played there (`clubTreeAt`, 1200–1999, 20+ games). An
+ *  All-section page's main line never reads this — past its games the
+ *  engine's best moves carry it (`engineLine`). */
+export async function variationTreeAnswer(sans: readonly string[]): Promise<GamesAnswer | null> {
+  const stored = await storedTreeAnswer(sans);
+  if (stored) return stored;
+  const club = await clubTreeAt(sans);
+  return club && total(club) >= CLUB_ENOUGH ? { result: club, source: 'club' } : null;
 }

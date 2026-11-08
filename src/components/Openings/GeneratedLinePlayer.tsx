@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { PlayableLinePlayer } from './PlayableLinePlayer';
 import { generatedLessonFor, lessonBeatsOnLine, overlayBeats } from '../../services/generatedLesson';
+import { engineFromOnLine } from '../../services/gamesCourse';
 import type { OpeningRecord, PlayableMiddlegameLine } from '../../types';
 
 interface GeneratedLinePlayerProps {
@@ -33,19 +34,21 @@ export function GeneratedLinePlayer({ opening, prefix, line, name, corpusNotes, 
   const key = `${prefix.join(' ')}|${line.moves.join(' ')}`;
   const latest = useRef({ prefix, line });
   latest.current = { prefix, line };
+  // Where the engine's moves start on this line, said in the lesson on that move.
+  const gamesEnd = engineFromOnLine(opening, [...prefix, ...line.moves]);
   const [built, setBuilt] = useState<{ key: string; line: PlayableMiddlegameLine } | null>(null);
 
   useEffect(() => {
     let live = true;
     const { prefix: pre, line: base } = latest.current;
     const moves = [...pre, ...base.moves];
-    void generatedLessonFor({ name, eco: opening.eco, moves, openingId: opening.id, color: opening.color, corpusNotes })
+    void generatedLessonFor({ name, eco: opening.eco, moves, openingId: opening.id, color: opening.color, corpusNotes, gamesEnd })
       .then((script) => {
         const taught = script ? overlayBeats(base, lessonBeatsOnLine(script, moves), pre.length) : base;
         if (live) setBuilt({ key, line: taught });
       });
     return () => { live = false; };
-  }, [key, name, corpusNotes, opening.eco, opening.id, opening.color]);
+  }, [key, name, corpusNotes, gamesEnd, opening.eco, opening.id, opening.color]);
 
   if (!built || built.key !== key) {
     return (

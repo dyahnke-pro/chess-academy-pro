@@ -1,8 +1,9 @@
 // The one opening builder (WO-ALL-OPENINGS-01 P2) on a fixture database: the
 // masters' main line, every real split a variation, the veto, the record view.
 import { describe, it, expect } from 'vitest';
+import { Chess } from 'chess.js';
 import type { LichessExplorerResult, OpeningRecord } from '../types';
-import { buildGamesCourse, buildReplies, courseRecord, isMiddlegameBoard, middlegamePly, walkToMiddlegame } from './gamesCourse';
+import { buildGamesCourse, buildReplies, courseRecord, engineFromOnLine, gamesEndLine, isMiddlegameBoard, middlegamePly, playEngineOn, walkToMiddlegame } from './gamesCourse';
 
 const mv = (san: string, n: number, blackPct = 0.4, white = 0.3) => ({
   uci: '', san, averageRating: 2400, white: Math.round(n * white), draws: n - Math.round(n * white) - Math.round(n * blackPct), black: Math.round(n * blackPct), game: null,
@@ -16,10 +17,13 @@ const DB: Record<string, LichessExplorerResult> = {
   'e4 c5 a3 g6': answer([mv('b4', 200), mv('Nf3', 50)]),
 };
 const lookup = async (sans: readonly string[]) => DB[sans.join(' ')] ?? null;
+/** The fixture as the variations' games, from masters (no club tier). */
+const asMasters = (l: typeof lookup) => async (sans: readonly string[]) => { const r = await l(sans); return r ? { result: r, source: 'masters' as const } : null; };
+const variations = asMasters(lookup);
 
 describe('buildGamesCourse', () => {
   it('walks the masters\' line and makes every real split a variation', async () => {
-    const c = (await buildGamesCourse(['e4', 'c5', 'a3'], 'black', { lookup }))!;
+    const c = (await buildGamesCourse(['e4', 'c5', 'a3'], 'black', { lookup, variations, engine: null }))!;
     expect(c.main.sans).toEqual(['e4', 'c5', 'a3', 'g6', 'b4']);
     expect(c.main.stop).toBe('thin');
     const splits = c.variations.map((v) => v.sans[v.from]);
@@ -30,19 +34,19 @@ describe('buildGamesCourse', () => {
     expect(c.results?.white).toBeGreaterThan(0);
   });
   it('a line the database never reached is the named line alone, said as thin', async () => {
-    const c = (await buildGamesCourse(['e4', 'c5', 'b3'], 'black', { lookup }))!;
+    const c = (await buildGamesCourse(['e4', 'c5', 'b3'], 'black', { lookup, variations, engine: null }))!;
     expect(c.main.sans).toEqual(['e4', 'c5', 'b3']);
     expect(c.main.stop).toBe('thin');
     expect(c.variations).toEqual([]);
   });
   it('the veto: a main line leaving the student lost gives way to a student split that does not', async () => {
     const veto = async (fen: string) => (fen.includes('6p1') ? -300 : 20); // the …g6 line is "lost"
-    const c = (await buildGamesCourse(['e4', 'c5', 'a3'], 'black', { lookup, veto }))!;
+    const c = (await buildGamesCourse(['e4', 'c5', 'a3'], 'black', { lookup, variations, engine: null, veto }))!;
     expect(c.main.sans[3]).toBe('Nc6');
     expect(c.variations.some((v) => v.sans[3] === 'g6')).toBe(true);
   });
   it('an illegal named line builds nothing', async () => {
-    expect(await buildGamesCourse(['e4', 'e4'], 'white', { lookup })).toBeNull();
+    expect(await buildGamesCourse(['e4', 'e4'], 'white', { lookup, variations, engine: null })).toBeNull();
   });
 });
 
@@ -103,9 +107,101 @@ describe('walkToMiddlegame', () => {
   });
 });
 
+// WO-ALL-SECTION-DEPTH (David 2026-11-08: "Stockfish's best moves fill the main
+// line past the data floor; club games give the variations").
+describe('past the games: the engine fills the main line, club games give the variations', () => {
+  const MAIN = ['e4', 'c5', 'a3', 'g6', 'b4'];
+  // Stockfish's line from where the main line's games run out; the last move
+  // is past the middlegame (both castled after O-O O-O) and must not be played.
+  const ENGINE = ['Bg7', 'Bb2', 'Nc6', 'Nf3', 'Nf6', 'Be2', 'O-O', 'O-O', 'd6'];
+  const engine = async (sans: readonly string[]) => (sans.join(' ') === MAIN.join(' ') ? ENGINE : null);
+  const CLUB: Record<string, LichessExplorerResult> = {
+    [MAIN.join(' ')]: answer([mv('Bg7', 300), mv('cxb4', 100)]),
+    'e4 c5 b3': answer([mv('Nc6', 200), mv('d6', 60)]),
+    'e4 c5 b3 Nc6': answer([mv('Bb2', 150)]),
+  };
+  /** The stored trees, then club games where those hold none. */
+  const withClub = async (sans: readonly string[]) => {
+    const stored = await lookup(sans);
+    if (stored) return { result: stored, source: 'masters' as const };
+    const c = CLUB[sans.join(' ')];
+    return c ? { result: c, source: 'club' as const } : null;
+  };
+
+  it('plays the engine on from where the games run out, to the middlegame, and marks where it took over', async () => {
+    const c = (await buildGamesCourse(['e4', 'c5', 'a3'], 'black', { lookup, variations, engine }))!;
+    expect(c.main.sans).toEqual([...MAIN, ...ENGINE.slice(0, 8)]);
+    expect(c.main.engineFrom).toBe(5);
+    expect(c.main.stop).toBe('middlegame');
+    expect(isMiddlegameBoard(c.main.sans)).toBe(true);
+    // The old builder stopped at b4, thin.
+    const old = (await buildGamesCourse(['e4', 'c5', 'a3'], 'black', { lookup, variations, engine: null }))!;
+    expect(old.main.sans).toEqual(MAIN);
+    expect(old.main.engineFrom).toBeNull();
+  });
+  it('variations come from club games where the stored trees hold none, said as club players\' games', async () => {
+    const c = (await buildGamesCourse(['e4', 'c5', 'a3'], 'black', { lookup, variations: withClub, engine }))!;
+    const club = c.variations.filter((v) => v.source === 'club');
+    expect(club.map((v) => v.sans[v.from])).toEqual(['cxb4']);
+    expect(club[0].engineFrom).toBeNull(); // a variation is games' moves only
+    const rec = courseRecord({ id: 'b20-x', name: 'Sicilian Defense: Mengarini Variation', pgn: 'e4 c5 a3', variations: null } as unknown as OpeningRecord, c, 'black');
+    expect(rec.engineFrom).toBe(5);
+    const tab = rec.variations!.find((v) => v.name.endsWith('(…cxb4)'))!;
+    expect(tab.source).toBe('club');
+    expect(tab.explanation).toMatch(/Club players rated 1200–1999 play it in 25% of the 400 games at that point\.$/);
+    // A masters' split still says masters.
+    expect(rec.variations!.find((v) => v.name.endsWith('(…Nc6)'))!.explanation).toMatch(/Masters play it in 20%/);
+  });
+  it('a named line no stored tree reached still builds: the engine carries the main line, club games give its variations (the Paris Gambit shape)', async () => {
+    const lineEngine = async (sans: readonly string[]) => (sans.join(' ') === 'e4 c5 b3' ? ['Nc6', 'Bb2', 'e5'] : null);
+    const c = (await buildGamesCourse(['e4', 'c5', 'b3'], 'black', { lookup, variations: withClub, engine: lineEngine }))!;
+    expect(c.main.sans).toEqual(['e4', 'c5', 'b3', 'Nc6', 'Bb2', 'e5']);
+    expect(c.main.engineFrom).toBe(3);
+    expect(c.main.stop).toBe('max'); // the kings never settled in the moves built
+    expect(c.variations.map((v) => [v.sans[v.from], v.source])).toEqual([['d6', 'club']]);
+    // The old builder handed this page off: the named line alone, no variation.
+    const old = (await buildGamesCourse(['e4', 'c5', 'b3'], 'black', { lookup, variations, engine: null }))!;
+    expect(old.main.sans).toEqual(['e4', 'c5', 'b3']);
+    expect(old.variations).toEqual([]);
+  });
+  it('an engine line read that fails leaves the main line as the games had it, marked incomplete (never cached)', async () => {
+    const c = (await buildGamesCourse(['e4', 'c5', 'a3'], 'black', { lookup, variations, engine: async () => { throw new Error('offline'); } }))!;
+    expect(c.main.sans).toEqual(MAIN);
+    expect(c.main.engineFrom).toBeNull();
+    expect(c.incomplete).toBe(true);
+  });
+  it('the veto: a lost main line becomes a variation of its games\' moves only — the engine\'s are dropped', async () => {
+    const veto = async (fen: string) => (new Chess(fen).get('g6')?.type === 'p' ? -300 : 20); // the …g6 line is "lost"
+    const c = (await buildGamesCourse(['e4', 'c5', 'a3'], 'black', { lookup, variations, engine, veto }))!;
+    expect(c.main.sans[3]).toBe('Nc6');
+    const demoted = c.variations.find((v) => v.sans[3] === 'g6')!;
+    expect(demoted.sans).toEqual(MAIN);
+    expect(demoted.engineFrom).toBeNull();
+  });
+  it('plays only legal engine moves, and stops on the first middlegame board', () => {
+    expect(playEngineOn(MAIN, ['Bg7', 'Bb9', 'Nc6'])).toEqual({ sans: [...MAIN, 'Bg7'], stop: 'max' });
+    expect(playEngineOn(MAIN, ENGINE)).toEqual({ sans: [...MAIN, ...ENGINE.slice(0, 8)], stop: 'middlegame' });
+  });
+  it('says where the games run out, one wording on the page and in the lesson', () => {
+    const line = [...MAIN, ...ENGINE.slice(0, 8)];
+    expect(gamesEndLine(line, 5, 'after')).toBe("The games run out after 3.b4. From 3…Bg7 on, the line is the engine's best play for both sides.");
+    expect(gamesEndLine(line, 5, 'here')).toBe("The games run out here. From this move on, the line is the engine's best play for both sides.");
+    const opening = { pgn: line.join(' '), engineFrom: 5 };
+    expect(engineFromOnLine(opening, line)).toBe(5);
+    expect(engineFromOnLine(opening, line.slice(0, 7))).toBe(5); // a stretch of the main line
+    // A line that leaves the main line — a plan, a reply, a variation split
+    // after the engine took over — is games' moves past it: never the note.
+    expect(engineFromOnLine(opening, [...line, 'd6'])).toBeNull();
+    expect(engineFromOnLine(opening, [...line.slice(0, 7), 'a6'])).toBeNull();
+    expect(engineFromOnLine(opening, MAIN)).toBeNull(); // stops before the engine's first move
+    expect(engineFromOnLine(opening, ['e4', 'c5', 'a3', 'Nc6', 'b4', 'Bg7'])).toBeNull(); // another line
+    expect(engineFromOnLine({ pgn: line.join(' ') }, line)).toBeNull(); // every move from games
+  });
+});
+
 describe('courseRecord', () => {
   it('runs the main line on and fills the variations, named by their move', async () => {
-    const c = (await buildGamesCourse(['e4', 'c5', 'a3'], 'black', { lookup }))!;
+    const c = (await buildGamesCourse(['e4', 'c5', 'a3'], 'black', { lookup, variations, engine: null }))!;
     const rec = courseRecord({ id: 'b20-x', name: 'Sicilian Defense: Mengarini Variation', pgn: 'e4 c5 a3', variations: null } as unknown as OpeningRecord, c, 'black');
     expect(rec.pgn).toBe('e4 c5 a3 g6 b4');
     expect(rec.variations?.[0].name).toMatch(/\(…Nc6\)$/);

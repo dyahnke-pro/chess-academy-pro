@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { PlayableLinePlayer } from './PlayableLinePlayer';
 import { generatedLessonFor, lessonBeatsOnLine } from '../../services/generatedLesson';
+import { engineFromOnLine } from '../../services/gamesCourse';
 import { sublineToPlayableLine } from '../../services/sublineLesson';
 import type { SublineLessonInput } from '../../services/sublineLesson';
 import type { CourseSubline } from '../../services/openingCourse';
@@ -24,17 +25,20 @@ interface GeneratedReplyPlayerProps {
  *  still plays: the computed frequency frame and an arrow-led walk. */
 export function GeneratedReplyPlayer({ opening, subline, mode, onComplete, onContinuePlaying, onAdvanceToLearn, onExit }: GeneratedReplyPlayerProps): JSX.Element {
   const key = subline.moves.join(' ');
+  // Where the engine's moves start on this line (only a stretch of the main
+  // line has them — `engineFromOnLine`), said in the lesson on that move.
+  const gamesEnd = engineFromOnLine(opening, subline.moves);
   const [built, setBuilt] = useState<{ key: string; input: SublineLessonInput | null } | null>(null);
 
   useEffect(() => {
     let live = true;
-    void generatedLessonFor({ name: subline.name || opening.name, eco: opening.eco, moves: subline.moves, openingId: opening.id, color: opening.color, corpusNotes: true })
+    void generatedLessonFor({ name: subline.name || opening.name, eco: opening.eco, moves: subline.moves, openingId: opening.id, color: opening.color, corpusNotes: true, gamesEnd })
       .then((script) => {
         const beats = script ? lessonBeatsOnLine(script, subline.moves) : [];
         if (live) setBuilt({ key, input: beats.length ? { beats } : null });
       });
     return () => { live = false; };
-  }, [key, subline.name, subline.moves, opening.name, opening.eco, opening.id, opening.color]);
+  }, [key, gamesEnd, subline.name, subline.moves, opening.name, opening.eco, opening.id, opening.color]);
 
   const line = built && built.key === key ? sublineToPlayableLine(subline, built.input) : null;
   const failed = built !== null && built.key === key && line === null;
