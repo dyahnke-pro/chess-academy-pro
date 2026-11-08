@@ -377,12 +377,12 @@
 ### `explainBestMoveGrounded` (function) — 24 call sites
 - `src/services/coachApi.ts:3650`
 - `src/services/coachApi.ts:5832`
-- `src/services/coachFeatureService.test.ts:40`
-- `src/services/coachFeatureService.test.ts:48`
-- `src/services/coachFeatureService.test.ts:59`
-- `src/services/coachFeatureService.test.ts:69`
-- `src/services/coachFeatureService.test.ts:84`
-- `src/services/coachFeatureService.test.ts:91`
+- `src/services/coachFeatureService.test.ts:41`
+- `src/services/coachFeatureService.test.ts:49`
+- `src/services/coachFeatureService.test.ts:60`
+- `src/services/coachFeatureService.test.ts:70`
+- `src/services/coachFeatureService.test.ts:85`
+- `src/services/coachFeatureService.test.ts:92`
 - `src/services/coachFeatureService.ts:3455`
 - `src/services/coachFeatureService.ts:3487`
 - `src/services/computerAccuracy.audit.test.ts:111`
@@ -442,8 +442,8 @@
 ### `describeSacrifice` (function) — 5 call sites
 - `src/services/brilliancy.ts:76`
 - `src/services/brilliancy.ts:130`
-- `src/services/coachFeatureService.test.ts:100`
-- `src/services/coachFeatureService.test.ts:106`
+- `src/services/coachFeatureService.test.ts:101`
+- `src/services/coachFeatureService.test.ts:107`
 - `src/services/coachFeatureService.ts:1221`
 
 ### `describeEscape` (function) — 4 call sites
