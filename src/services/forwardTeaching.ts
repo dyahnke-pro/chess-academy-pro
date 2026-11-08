@@ -89,6 +89,9 @@ function bfsRoute(
   fromSquare: Square,
   stop: (chess: Chess, sq: Square, color: Color) => boolean,
   maxHops: number,
+  /** A square the piece may stand on along the way (and at the end); every
+   *  square when absent. */
+  passable?: (chess: Chess, sq: Square, color: Color) => boolean,
 ): { chess: Chess; color: Color; target: Square; route: Square[] } | null {
   let chess: Chess;
   try {
@@ -127,6 +130,7 @@ function bfsRoute(
     for (const next of hops(cur)) {
       if (visited.has(next)) continue;
       visited.add(next);
+      if (passable && !passable(chess, next, color)) continue;
       const nextPath = [...path, next];
       if (stop(chess, next, color)) {
         // BFS → the first square that satisfies the predicate is the shortest route.
@@ -156,7 +160,11 @@ export function movesToReach(
 
 export function computePieceRoute(fen: string, fromSquare: Square): PieceRoute | null {
   try { if (new Chess(fen).get(fromSquare)?.type !== 'n') return null; } catch { return null; }
-  const found = bfsRoute(fen, fromSquare, (c, sq, color) => !c.get(sq) && isOutpost(c, sq, color, true), 4);
+  // EVERY STOP SAFE (WO-DEPTH-01, 2026-11-08): the bishop's and the rook's
+  // route already checked its stops; the knight's walked through squares a
+  // pawn takes on ("walk it to b5, by way of g5, e6 and c7" with g5 hit by
+  // the h6-pawn, David's game chesscom-143015297802).
+  const found = bfsRoute(fen, fromSquare, (c, sq, color) => !c.get(sq) && isOutpost(c, sq, color, true), 4, (c, sq, color) => safeFor(c, sq, color, 3, fromSquare));
   if (!found) return null;
   return {
     piece: 'n',
@@ -185,9 +193,15 @@ function sliderScope(c: Chess, sq: Square, type: 'b' | 'r'): number {
 
 /** A square the piece can stand on: no enemy pawn hits it, and no enemy piece
  *  worth less than it does either. */
-function safeFor(c: Chess, sq: Square, color: Color, value: number): boolean {
+function safeFor(c: Chess, sq: Square, color: Color, value: number, mover: Square): boolean {
   const enemy: Color = color === 'w' ? 'b' : 'w';
-  return !c.attackers(sq, enemy).some((a) => CAPTURE_VALUE[c.get(a)?.type ?? 'k'] < value);
+  const hit = c.attackers(sq, enemy);
+  if (hit.some((a) => CAPTURE_VALUE[c.get(a)?.type ?? 'k'] < value)) return false;
+  // Hit and unguarded is not safe either, whatever hits it: a queen takes a
+  // knight that nothing guards for free (David's game chesscom-143015297802,
+  // "by way of c7" under the queen on d8).
+  // The piece walking there is not its own guard.
+  return hit.length === 0 || c.attackers(sq, color).some((g) => g !== mover);
 }
 
 interface SliderRoute {
@@ -223,7 +237,7 @@ export function computeSliderRoute(fen: string, fromSquare: Square): SliderRoute
     return false;
   };
   const found = bfsRoute(fen, fromSquare, (board, sq) => {
-    if (!safeFor(board, sq, color, value)) return false;
+    if (!safeFor(board, sq, color, value, fromSquare)) return false;
     // Measure from the target with the piece moved there.
     const moved = new Chess(board.fen());
     moved.remove(fromSquare);
@@ -236,7 +250,7 @@ export function computeSliderRoute(fen: string, fromSquare: Square): SliderRoute
   }, 2);
   if (!found) return null;
   // Every stop on the way must be safe too, not only the destination.
-  if (!found.route.every((sq) => safeFor(c, sq, color, value))) return null;
+  if (!found.route.every((sq) => safeFor(c, sq, color, value, fromSquare))) return null;
   const why = type === 'b'
     ? `a long diagonal instead of ${now} squares`
     : `the ${found.target[0]}-file, with no pawn of yours in the way`;

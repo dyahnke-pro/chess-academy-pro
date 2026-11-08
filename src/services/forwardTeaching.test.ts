@@ -52,3 +52,16 @@ describe('computePieceRoute (Phase 1 — knight → supported outpost)', () => {
     expect(route?.route).toEqual(['c6', 'd4']);
   });
 });
+
+describe('a knight route walks only through safe squares (WO-DEPTH-01, 2026-11-08)', () => {
+  // David's game chesscom-143015297802 after 24.Bf3: the knight on h3 was told
+  // "It wants b5 … by way of g5, e6 and c7" — g5 is hit by the h6-pawn, and c7
+  // sits under the queen on d8 with nothing to guard it.
+  const F = '1r1q1rk1/4ppb1/2bp2pp/p1p5/1pP5/3Q1B1N/P2N1PPP/R4K1R b - - 2 24';
+  it('no route that stops where a pawn takes it or a piece takes it for free', () => {
+    expect(computePieceRoute(F, 'h3')).toBeNull();
+  });
+  it('a route with only safe stops still stands (David\'s game chesscom-1002984876, 20…Nh3)', () => {
+    expect(computePieceRoute('r1k5/p1pn3p/8/1pb3p1/8/5PBn/PPP1N2P/2K2R2 w - - 2 21', 'h3')?.route).toEqual(['f4']);
+  });
+});

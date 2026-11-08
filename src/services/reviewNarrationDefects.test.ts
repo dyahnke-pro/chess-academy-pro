@@ -59,10 +59,10 @@ describe('the worst-placed piece — one finder, gated', () => {
     const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 12';
     const c = new Chess(fen);
     const worst = findWorstPlacedPiece(c, 'w');
-    // The wish's idle piece is the one finder's piece (`worstPieceNote`).
+    // The wish's piece is the one finder's piece (WO-DEPTH-01).
     const wish = pieceWish(fen, 'w', null);
     const plan = deriveNextPlans(fen, 'w', { namesStudentMoves: true }).find((p) => /rescue your worst piece/.test(p));
-    if (wish?.kind === 'idle') expect(wish.square).toBe(worst?.sq);
+    if (wish) expect(wish.square).toBe(worst?.sq);
     // A plan names the finder's piece; with no piece, or no road for it
     // (2026-11-08), there is no plan.
     if (plan) expect(plan).toContain(worst?.sq ?? '-');

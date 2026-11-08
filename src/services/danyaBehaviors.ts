@@ -247,7 +247,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const wish = pieceWish(fen, student, studentLastTo);
       if (!wish) return null;
       // The stop on the way is lit, not read out (two squares a sentence).
-      return { kind: 'wishlist', fact: wish.text, squares: [wish.square, ...(wish.via ? [wish.via] : []), wish.target], keys: [wishKey(wish.target)] };
+      return { kind: 'wishlist', fact: wish.text, squares: [wish.square, ...wish.via, wish.target], keys: [wishKey(wish.target)] };
     },
   },
   {

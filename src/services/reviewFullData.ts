@@ -89,8 +89,6 @@ import { knownAttack } from './attackLibrary';
 import { studentMoveStructure, theirMoveStructure, boardStructure, type StructureRead } from './structureReads';
 import type { HeardVerdict } from '../types';
 
-interface Located { type: string; color: Color; square: string; }
-
 /** Has `color`'s king reached a castled square (g/c file on its back rank)? */
 function kingCastled(chess: Chess, color: Color): boolean {
   const back = color === 'w' ? '1' : '8';
@@ -1135,7 +1133,7 @@ export function computeMoveFacets(
     // speaking.
     const movedTo = isStudent ? ((): string | null => { try { return new Chess(fenBefore).move(san).to; } catch { return null; } })() : null;
     const wish = pieceWish(fenAfter, studentColorWB, movedTo);
-    if (wish) { const f = put('pieceWish', 'worst', wish.text); recSquares(f, [wish.square, wish.via, wish.target]); }
+    if (wish) { const f = put('pieceWish', 'worst', wish.text); recSquares(f, [wish.square, ...wish.via, wish.target]); }
     const passer = struct?.pawns.passedPawns[studentColorWB][0] ?? null; // reuse §5's struct
     // Not on the move that PUSHES it — the move's own point says "pushes your
     // passed pawn" (amateur review walk 2026-09-27: both, one ply).

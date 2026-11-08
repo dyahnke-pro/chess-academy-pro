@@ -29,7 +29,7 @@ import { BRIEFING_LINE_PLIES, buildReviewMoveBriefing } from './reviewMoveBriefi
 import { moveThoughtFacts } from './moveThoughtFacts';
 import { composeThought, speaksBehindLead, NOT_LED, type ThoughtStep } from './thoughtComposer';
 import { FUNDAMENTAL_IDEA, type IdeaKind } from './ideaKind';
-import { explainEvalByPieceQuality, lowestMinorMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
+import { explainEvalByPieceQuality, worstPieceMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
 // (removed spokenTacticNote / generalizedTeaching — review no longer voices a
@@ -4948,8 +4948,10 @@ async function augmentWithProjections(
   // lanes; the pass still picks the biggest proven swing in candidate order.
   const badPieceCandidates = segments
     .filter((s) => s.ply >= 14 && !(s.evalAfter !== null && Math.abs(s.evalAfter) >= 5000))
-    .map((s) => ({ s, mob: lowestMinorMobility(s.fenAfter) }))
-    .filter((c) => c.mob <= 2)
+    // THE ONE WORST PIECE targets the probe (WO-DEPTH-01): the ablation proves
+    // the piece the finder names, so a ply is a candidate when it names one.
+    .map((s) => ({ s, mob: worstPieceMobility(s.fenAfter) }))
+    .filter((c) => Number.isFinite(c.mob))
     .sort((a, b) => a.mob - b.mob);
   const badPieceResults: Array<{ promise: Promise<PieceQualityResult | null>; resolve: (v: PieceQualityResult | null) => void }> =
     badPieceCandidates.map(() => deferred<PieceQualityResult | null>());
@@ -6459,7 +6461,7 @@ export async function generateReviewNarration(params: {
   const throughLine = mainConceptLine(
     segments
       .filter((sg) => (sg.classification === 'mistake' || sg.classification === 'blunder') && !!sg.fenBefore)
-      .map((sg) => ({ seat: sg.playerColor === 'white' ? 'w' as const : 'b' as const, san: sg.san, fenBefore: sg.fenBefore as string, replyUci: sg.recordReplyLine ?? null })),
+      .map((sg) => ({ seat: sg.playerColor === 'white' ? 'w' as const : 'b' as const, san: sg.san, fenBefore: sg.fenBefore, replyUci: sg.recordReplyLine ?? null })),
     studentWB,
   );
   // THE FUNDAMENTALS AGGREGATE (G.4) — "three of your five flagged moves handed

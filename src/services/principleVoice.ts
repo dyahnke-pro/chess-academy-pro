@@ -204,14 +204,14 @@ const VERDICT_WITHOUT_BETTER: Partial<Record<FundamentalId, (f: Facts) => string
   'wrong-trade-for-material': (f) => (f.situation === 'ahead'
     ? `You're ahead in material — trade pieces and the win gets simpler.`
     : `You're behind in material — trading pieces takes your chances with them.`),
-  'worst-piece-unimproved': (f) => `Improve your worst piece: the ${f.piece} on ${f.square} is doing the least.`,
+  'worst-piece-unimproved': (f) => `Improve your worst piece: the ${f.piece} on ${f.square} ${f.reason ?? 'is doing the least'}.`,
   'rook-ignored-open-file': (f) => `Rooks belong on open files: the ${f.file}-file was open, and leaving it lets them get there first.`,
   'passive-king-endgame': (f) => `In the endgame the king is a piece: yours on ${f.king} should be walking in.`,
   'rook-in-front-of-passer': (f) => `Rooks belong behind passed pawns: on ${f.rook} yours sits in front of the pawn on ${f.pawn}.`,
   'passed-pawn-neglected': (f) => `Passed pawns must be pushed: your pawn on ${f.pawn} is passed, and every move it waits, they build a blockade in front of it.`,
   'lost-the-opposition': () => `King-and-pawn endings turn on the opposition, and this move hands it to them.`,
   'passive-rook-endgame': (f) => `An active rook is worth a pawn: the seventh was there on ${f.square}, and the played move leaves the rook passive.`,
-  'kept-bad-bishop': (f) => `Your worst piece is the bishop on ${f.bishop}, boxed in by pawns on its colour.`,
+  'kept-bad-bishop': (f) => `Your bishop on ${f.bishop} is boxed in by pawns on its colour.`,
   'capture-toward-centre': (f) => `Taking toward the centre is the usual rule, but here the other capture was better — it opens the ${f.file}-file for your rook.`,
   'no-plan': (f) => `A move without a purpose: the board wanted you to ${f.plan}, and ${f.played} works on something else entirely.`,
   'missed-pin-pressure': (f) => `A pinned piece can't run, so attack it again: the ${f.piece} on ${f.square} was pinned to the ${f.behind} on ${f.behindSq}, and this move let it off.`,
@@ -554,8 +554,8 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     }
     case 'worst-piece-unimproved': {
       const s = [
-        `Improve your worst piece: the ${f.piece} on ${f.square} is doing the least, and ${f.better} gives it a job.`,
-        `The ${f.piece} on ${f.square} is your least active piece — ${f.better} brings it into the game.`,
+        `Improve your worst piece: the ${f.piece} on ${f.square} ${f.reason ?? 'is doing the least'}, and ${f.better} gives it a job.`,
+        `The ${f.piece} on ${f.square} ${f.reason ?? 'is your least active piece'} — ${f.better} brings it into the game.`,
         `Find the piece doing nothing and fix it: the ${f.piece} on ${f.square}, via ${f.better}.`,
       ];
       return s[v % s.length];

@@ -20,12 +20,11 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import type { PlanFact, PlanKind } from './nextPlans';
 import { describeStructure } from './boardStructure';
-import { findWorstPlacedPiece, PIECE_NOUN } from './nextPlans';
+import { findWorstPlacedPiece, worstPieceRoute, PIECE_NOUN } from './nextPlans';
 import { findPawnBreaks, findWeakSquares, seeSequence } from './positionReadingService';
 import { computeExchangeLedger, describeProofResult } from './exchangeLedger';
 import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { orList } from '../utils/andList';
-import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import { readBoardUrgency } from './boardUrgency';
 import { askThenAnswer, type PlayedMove } from '../utils/thinkPause';
 import { openSentence } from '../utils/openSentence';
@@ -96,23 +95,18 @@ export function methodRead(
       }
     }
   }
+  // THE ONE WORST PIECE (`findWorstPlacedPiece`, WO-DEPTH-01): the method's
+  // answer is the plan thread's and Learn's wish's, never a pick of its own. A
+  // ROOK WITH NO FILE is the finder's last answer once a file is open (David
+  // 2026-10-15: "improve the rook by placing it on open file"); the rook that
+  // reaches it in one move carries the arrow.
   const w = findWorstPlacedPiece(chess, student);
   let worst: MethodRead['worst'] = null;
-  if (w) {
-    const r = computePieceRoute(fen, w.sq as Square) ?? computeSliderRoute(fen, w.sq as Square);
-    worst = { phrase: `your ${PIECE_NOUN[w.type]} on ${w.sq}`, square: w.sq, step: r && r.route.length ? `walk your ${PIECE_NOUN[w.type]} to ${r.target}` : null, to: r && !holdPlayable ? [...r.route] : [], ...(r && r.route.length && !holdPlayable ? { route: [w.sq, ...r.route] } : {}) };
-  } else {
-    // A ROOK WITH NO FILE is the worst piece once a file is open (David
-    // 2026-10-15: "improve the rook by placing it on open file"): the plan
-    // computer reads that as its own plan, so the method has to name it too,
-    // or the answers and the plan disagree.
-    const file = struct.pawns.openFiles.find((f) => !chess.board().flat().some((c) => c?.color === student && (c.type === 'r' || c.type === 'q') && c.square[0] === f));
-    // The rook that reaches the file in one move is the one named, and its
-    // move is the arrow; none reaches → the first rook, with no arrow.
-    const asMeFen = flipTo(fen, student);
-    const reach = file && asMeFen ? new Chess(asMeFen).moves({ verbose: true }).find((m) => m.piece === 'r' && m.to[0] === file && m.from[0] !== file && !m.captured) : undefined;
-    const rook = reach ? { square: reach.from } : file ? chess.board().flat().find((c) => c?.color === student && c.type === 'r') ?? null : null;
-    if (file && rook) worst = { phrase: `your rook on ${rook.square}, with no open file yet`, square: rook.square, step: `put a rook on the open ${file}-file`, to: holdPlayable && reach ? [] : [reach ? reach.to : `${file}${student === 'w' ? '1' : '8'}`], ...(reach && !holdPlayable ? { route: [reach.from, reach.to] } : {}) };
+  if (w?.kind === 'no-file-rook' && w.file) {
+    worst = { phrase: `your rook on ${w.sq}, with no open file yet`, square: w.sq, step: `put a rook on the open ${w.file}-file`, to: holdPlayable && w.reach ? [] : [w.reach ?? `${w.file}${student === 'w' ? '1' : '8'}`], ...(w.reach && !holdPlayable ? { route: [w.sq, w.reach] } : {}) };
+  } else if (w) {
+    const r = worstPieceRoute(fen, w.sq);
+    worst = { phrase: `your ${PIECE_NOUN[w.type]} on ${w.sq}`, square: w.sq, step: r ? `walk your ${PIECE_NOUN[w.type]} to ${r.target}` : null, to: r && !holdPlayable ? [...r.route] : [], ...(r && !holdPlayable ? { route: [w.sq, ...r.route] } : {}) };
   }
   const asMe = chess.turn() === student ? fen : flipTo(fen, student);
   const breaks: string[] = asMe ? findPawnBreaks(asMe) : [];
