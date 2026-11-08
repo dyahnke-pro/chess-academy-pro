@@ -63,6 +63,7 @@ Computers it reads (exist): `detectOpeningByOrder` (name + variation), the maste
 - **The bait's record:** the punish half only (they fell for it, did the student cash in). Repeatedly missing a set-up is noted as a weakness the coach teaches, with set-up positions on the board.
 - **The step-3 test-run defects:** fix.
 - **Next audit:** a computer wiring check (`computer-reach.mjs`) — every computer green, and the deciding engine choosing the right lines to speak.
+- **Two fundamentals, two habits (David 2026-11-08: "Both stated is fine for breaking fundamentals"):** a move that breaks two fundamentals closes its Review turn on both habits (`renderFundamentalVerdict`); the one-habit rule covers every other habit source.
 - **Budget (David 2026-11-08):** 25% of the usage limit for two days. Agents approved, used sparingly: at most two at once, small briefs, results saved as they finish.
 
 ## 📱 iPHONE TAPS LAND A ROW LOW — the web view's inset (David 2026-11-06, TestFlight 4.0.8 (211): "Tired pressing the knight, but it hit the pawn" → "Coach tab / All surfaces / They don't work on my end")
