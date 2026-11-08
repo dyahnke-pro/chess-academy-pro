@@ -68,12 +68,32 @@ export function reasonNeed(costCp: number): number {
   return Math.max(1, Math.round((0.6 * costCp) / 100));
 }
 
+/** THE PROMOTION A PERSON PLAYS (Review 2026-11-08: "they play a1, making a
+ *  rook"). An engine picks a rook or bishop when the result is the same either
+ *  way, and its pick is not the point of the line. A queen is said unless it
+ *  stalemates, or loses the check the engine's piece gave — then the engine's
+ *  piece IS the point. A knight is kept: it does what a queen cannot. */
+function promotionToSay(c: Chess, u: string): string {
+  const piece = u[4];
+  if (piece !== 'r' && piece !== 'b') return u;
+  try {
+    const q = new Chess(c.fen());
+    const withQueen = q.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: 'q' });
+    if (!withQueen || q.isStalemate()) return u;
+    const e = new Chess(c.fen());
+    const engine = e.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: piece });
+    if (engine && /[+#]$/.test(engine.san) && !/[+#]$/.test(withQueen.san)) return u;
+    return `${u.slice(0, 4)}q`;
+  } catch { return u; }
+}
+
 function replay(fen: string, uci: readonly string[]): { sans: string[]; plies: ReasonPly[] } {
   const sans: string[] = [];
   const plies: ReasonPly[] = [];
   try {
     const c = new Chess(fen);
-    for (const u of uci) {
+    for (const raw of uci) {
+      const u = promotionToSay(c, raw);
       const fenBefore = c.fen();
       const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
       if (!m) break;

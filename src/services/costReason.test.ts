@@ -88,5 +88,15 @@ describe('costReason — a reason is what the costly line wins BEYOND the move i
     });
     expect(r).toMatchObject({ kind: 'allowed', blowPlies: 1, netForWinner: 2 });
   });
-});
 
+  // Review 2026-11-08 (Carlsen–Caruana, before 35.Bb3): "they play a1, making a
+  // rook … they win a new rook" — the engine picks a rook when the result is
+  // the same, and its pick was read out as the point of the line.
+  it('a promotion is said as a queen unless the engine\'s piece is the point', () => {
+    const r = costReason({
+      fenBefore: 'k7/8/8/8/8/8/p7/4B2K w - - 0 1', playedSan: 'Bf2', mover: 'w', student: 'w', costCp: 900,
+      after: { uci: ['a2a1r'], source: 'record', seconds: [] }, before: null, priorMove: null, against: null,
+    });
+    expect(r?.plies[0].san).toBe('a1=Q+');
+  });
+});

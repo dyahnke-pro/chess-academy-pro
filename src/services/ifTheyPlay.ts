@@ -36,6 +36,16 @@ import { openSentence } from '../utils/openSentence';
 import type { TacticType } from '../types';
 
 /** One legal reply, scored by the read of the board after the move. */
+/** ONE BRANCH, ONE CLAIM (Review 2026-11-08, Carlsen–Caruana: "If you had
+ *  taken on b5, queen takes g5 would have won a bishop" was followed by "A-pawn
+ *  takes b5 looks natural, but it doesn't work: they play queen takes g5"). A
+ *  reply the NEXT turn already weighed as a tempting move (`weighedMoves`,
+ *  claim `tempting:<uci>`, said on that ply) is that turn's to say. */
+export function repliesNotWeighed(replies: readonly ReplyRead[], walkSaid: ReadonlyMap<string, number>, nextPly: number | undefined): ReplyRead[] {
+  if (nextPly === undefined) return [...replies];
+  return replies.filter((r) => walkSaid.get(`tempting:${r.uci}`) !== nextPly);
+}
+
 export interface ReplyRead {
   uci: string;
   /** Its score from the REPLIER's view (the side to move on the board), a mate

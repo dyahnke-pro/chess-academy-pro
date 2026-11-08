@@ -64,7 +64,7 @@ import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
 import { readBoard, readBoardAll, readKey } from './boardComputers';
-import { replyReadsFromFan, type ReplyRead } from './ifTheyPlay';
+import { replyReadsFromFan, repliesNotWeighed, type ReplyRead } from './ifTheyPlay';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, prematureBreakWhy, INFLUENCE_LOOSE_TAIL_RE } from './reviewFullData';
 import { mainConceptLine } from './slipDepth';
@@ -4629,6 +4629,10 @@ export function deliveredMateNarration(fenAfterMate: string, studentMated: boole
 async function augmentWithProjections(
   segments: ReviewMoveSegment[],
   studentColorWB: 'w' | 'b',
+  /** REQUIRED — what the walk already claimed, with the ply it was said on
+   *  (the story's ledger), so a pass never says again a branch a turn already
+   *  said (`tempting:<uci>`). */
+  walkSaid: ReadonlyMap<string, number>,
   /** 'full' (uncapped diagnostic) runs all three passes; 'mistakes' (capped
    *  production) runs ONLY the punishment pass on the student's flagged moves
    *  (David 2026-07-21, IMG_4571: "How does white take advantage of this
@@ -5212,9 +5216,15 @@ async function augmentWithProjections(
   // the past. A silent ply stays silent: the need gate decided it.
   {
     await raceTimeout(Promise.all(treeDone.map((d) => d.promise)), Math.max(0, augStart + REPLY_TREE_WAIT_MS - Date.now()), undefined);
+    // ONE BRANCH, ONE CLAIM (Review 2026-11-08, Carlsen–Caruana: "If you had
+    // taken on b5, queen takes g5 would have won a bishop" was followed by
+    // "A-pawn takes b5 looks natural, but it doesn't work: they play queen
+    // takes g5"): a reply the next turn already weighs as a tempting move
+    // (`weighedMoves`, claim `tempting:<uci>`) is that turn's to say.
     segments.forEach((s, k) => {
-      const replies = treeReads.get(s);
-      if (!replies || !s.narration) return;
+      const all = treeReads.get(s);
+      const replies = all ? repliesNotWeighed(all, walkSaid, segments[k + 1]?.ply) : undefined;
+      if (!replies?.length || !s.narration) return;
       const next = segments[k + 1];
       let played: string | null = null;
       try { const m = next ? new Chess(s.fenAfter).move(next.san) : null; played = m ? `${m.from}${m.to}${m.promotion ?? ''}` : null; } catch { played = null; }
@@ -6284,7 +6294,7 @@ export async function generateReviewNarration(params: {
     phaseStart = Date.now();
     const augTimings: Record<string, number> = {};
     const augWon = await raceTimeout(
-      augmentWithProjections(work, playerColor === 'white' ? 'w' : 'b', 'full', playerRating, augTimings).then(() => true),
+      augmentWithProjections(work, playerColor === 'white' ? 'w' : 'b', story.current().said, 'full', playerRating, augTimings).then(() => true),
       REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED,
       false,
     );

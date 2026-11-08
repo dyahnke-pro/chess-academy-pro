@@ -7,7 +7,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { ifTheyPlay, treeSentence, sayable, replyReadsFromFan, baitBranch, baitSentence, type ReplyRead } from './ifTheyPlay';
+import { ifTheyPlay, treeSentence, sayable, replyReadsFromFan, baitBranch, baitSentence, repliesNotWeighed, type ReplyRead } from './ifTheyPlay';
 import { turnPartOf } from './coachMoment';
 import { readBoardAll } from './boardComputers';
 import { moveThoughtFacts } from './moveThoughtFacts';
@@ -174,5 +174,17 @@ describe('the bait (WO-COACH-NEXT-TO-YOU-01 C4: induce mistakes)', () => {
     expect(bait.text).toMatch(/^This sets a trap/);
     expect(turnPartOf(bait.group, bait.seat)).toBe('bait');
     for (const f of readBoardAll('ifTheyPlay', ctx)) expect(f.text).not.toMatch(/Be6/);
+  });
+});
+
+describe('repliesNotWeighed — one branch, one claim', () => {
+  const r = (uci: string): ReplyRead => ({ uci, cp: 0, mate: null, pv: [uci] });
+  it('drops a reply the next turn weighed as tempting (Carlsen–Caruana …axb5 Qxg5)', () => {
+    const said = new Map([['tempting:a4b5', 57]]);
+    expect(repliesNotWeighed([r('a4b5'), r('d1g4')], said, 57).map((x) => x.uci)).toEqual(['d1g4']);
+  });
+  it('keeps it when that claim was said on another turn', () => {
+    const said = new Map([['tempting:a4b5', 61]]);
+    expect(repliesNotWeighed([r('a4b5')], said, 57).map((x) => x.uci)).toEqual(['a4b5']);
   });
 });
