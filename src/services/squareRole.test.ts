@@ -42,7 +42,7 @@ describe('a role is never claimed for an occupied or back-rank square', () => {
   });
   it('items join with a comma before the last', () => {
     const note = buildReviewMoveTeaching('rnbqkbnr/ppp1pppp/8/3p4/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2', 'Nf3', true) ?? '';
-    expect(note).toBe('The knight bears down on d4, holding back their d-pawn, and e5, holding back their e-pawn.');
+    expect(note).toBe('Your knight bears down on d4, holding back their d-pawn, and e5, holding back their e-pawn.');
   });
 });
 

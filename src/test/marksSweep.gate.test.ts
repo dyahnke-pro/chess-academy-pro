@@ -90,6 +90,10 @@ function check(surface: string, kind: string, text: string, lit: ReadonlySet<str
   const t = tally(surface);
   t.lines += 1;
   const bareSan = (x: string): string => x.replace(/^…/, '').replace(/[+#?!]/g, '');
+  // A move is ruled out by the whole LINE, as the app reads it
+  // (`learnBoardTeaching` passes the full text): "Re4? Then they play dxe4,
+  // and the rook is lost." is two sentences and one refuted line.
+  const ruled = ruledOutSans(text.replace(/\[[a-z][a-z-]*\]\s*/g, ''));
   for (const s of sentencesOf(text.replace(/\[[a-z][a-z-]*\]\s*/g, ''))) {
     const spans = extractMentionedSanSpans(s).map((sp) => sp.san);
     const moves = spans.filter((san) => !/^[a-h][1-8]$/.test(san) || legalOn(boards, san));
@@ -97,7 +101,6 @@ function check(surface: string, kind: string, text: string, lit: ReadonlySet<str
     const named = [...new Set(s.match(SQUARE) ?? [])].filter((q) => !moveSq.has(q));
     const unlit = named.filter((q) => !lit.has(q));
     if (unlit.length) { t.unlit += 1; rows.push({ surface, kind, rule: 'unlit', what: unlit.join(' '), text: s }); }
-    const ruled = ruledOutSans(s);
     const bare = moves.filter((san) => {
       if (ruled.has(san) || bareSan(san) === bareSan(played)) return false;
       const d = destOf(san);

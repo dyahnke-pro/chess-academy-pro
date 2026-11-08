@@ -1516,7 +1516,7 @@ const DETECTORS: Detector[] = [
     if (guardsAttacked) return null;
     if (best.from !== worst.sq || last.from === worst.sq) return null;
     if (pieceMobility(c.after, worst.sq, mover) > 2) return null;
-    return att('worst-piece-unimproved', 1, { squares: [worst.sq], moves: [best.san], pvMoves: [] }, { piece: PNAME[worst.type], square: worst.sq, reason: worstReason(worst), better: best.san });
+    return att('worst-piece-unimproved', 1, { squares: [worst.sq], moves: [best.san], pvMoves: [] }, { piece: PNAME[worst.type], square: worst.sq, worstWhy: worstReason(worst), better: best.san });
   },
   // 22. Rook ignored the open file — the best move puts a rook on an open
   // file; the played move does not, and the opponent can take it first.

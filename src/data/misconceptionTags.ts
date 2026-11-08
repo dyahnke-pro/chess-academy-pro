@@ -568,7 +568,7 @@ export const MISCONCEPTION_RULES_REV = '2026-11-03-discovery-lands';
  *  producers (L5) change what one sample game poses — the castling and
  *  loose-piece reads follow the board (castling that drops a piece, the
  *  centre fork trick and a sound sacrifice are not those questions). */
-export const POSITIVE_HALF_REV = '2026-11-08-l5-claims';
+export const POSITIVE_HALF_REV = '2026-11-08-set-up'; // the quiet set-up (`missed-set-up`) is posed on every analysed move
 // 2026-10-20: the rev fingerprint gate (recordRevs.gate.test.ts) found the
 // recorded held-skill rows of a real game had changed since 10-19 with this rev
 // unmoved, so devices kept the old green rows; then the one-price re-price moved

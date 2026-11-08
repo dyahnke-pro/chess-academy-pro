@@ -7,7 +7,7 @@
 // the one producer. It keeps Review's distinction (a guard just LOST is a
 // different lesson from a piece newly HIT) and Learn's reason (nothing guards
 // it, so taking it costs nothing), and ends on what it means for whoever is to
-// move: the owner can still save it, the other side takes it for nothing.
+// move: the owner can still save it, the other side can take it.
 //
 // PURE: chess.js.
 import { Chess, type Color, type Square } from 'chess.js';
@@ -67,11 +67,15 @@ export function hangingLine(i: HangingLineInput): string | null {
   const ownerToMove = board.turn() === first.color;
   // What it means for whoever is to move.
   const taker = owner === 'your' ? 'them' : owner === 'their' ? 'you' : null;
-  const free = taker ? `Taking ${it} costs ${taker} nothing` : `${openSentence(it)} can be taken for nothing`;
+  // Lower case, so it can follow "so"; `openSentence` capitalises it where it
+  // starts a sentence.
+  // The board fact — it is attacked and nothing guards it — never what the
+  // line nets (only the exchange ledger says that, outcomeSentences gate).
+  const free = taker ? `${taker} can take ${it}` : `${it} can be taken`;
   const save = owner === 'their'
     ? `They have to move ${it} or guard ${it}.`
     : `${many ? 'They are' : 'It is'} lost unless ${it} ${many ? 'move or get' : 'moves or gets'} a guard.`;
-  const after = ownerToMove ? save : `${free}.`;
+  const after = ownerToMove ? save : `${openSentence(free)}.`;
   const key = stemKeyOf(`${i.fen.split(' ')[0]}|${i.squares.join(',')}`);
   const stems = i.lostGuard
     ? [
@@ -80,7 +84,7 @@ export function hangingLine(i: HangingLineInput): string | null {
       `Nothing guards ${andList(names)} any more. ${after}`,
     ]
     : [
-      `${owner === 'your' ? 'Careful — ' : ''}${owner === 'your' ? andList(names) : lead} ${is} hanging. Nothing guards ${it}, so ${free.charAt(0).toLowerCase()}${free.slice(1)}.`,
+      `${owner === 'your' ? 'Careful — ' : ''}${owner === 'your' ? andList(names) : lead} ${is} hanging. Nothing guards ${it}, so ${free}.`,
       `${lead} ${is} hanging: nothing guards ${it}. ${after}`,
       `${lead} ${is} hit, and nothing guards ${it}. ${after}`,
     ];

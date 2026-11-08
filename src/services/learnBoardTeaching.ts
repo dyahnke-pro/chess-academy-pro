@@ -16,6 +16,7 @@ import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof } fro
 import { lineShape, lineSeatAt, withArticle } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import { Chess, type Color, type Square } from 'chess.js';
+import { hangingLine, lostLastGuard } from './hangingLine';
 import { legalSeeGainFor, signedCaptureRead, signedLegalSeeFor, structureTransfer, takingTheAttackerAnswers } from './positionReadingService';
 import { rookReachesFile } from './positionalRead';
 import { namedPawnStructure } from './nextPlans';
@@ -1550,4 +1551,11 @@ export function gambitPoint(p: { fenBefore: string; fenAfterMove: string; fenAft
     if (opened.length > 0) return null;
     return `${san} was a gambit — they took the ${what}, and the engine rates the trade of it for time as sound.`;
   } catch { return null; }
+}
+
+/** LEARN'S HANGING-PIECE WARNING — the one wording (`hangingLine`, shared with
+ *  Review's loose facet), read with whether the reply took the piece's last
+ *  guard. `still` is the second telling, after the student moved and left it. */
+export function learnHangingWarning(i: { fenBefore: string; fenAfter: string; square: string; viewer: Color; still: boolean }): string | null {
+  return hangingLine({ fen: i.fenAfter, squares: [i.square], viewer: i.viewer, lostGuard: lostLastGuard(i.fenBefore, i.square), still: i.still });
 }

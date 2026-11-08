@@ -24,6 +24,8 @@ import { winPctLost, bandForWinPctLost } from './accuracyService';
 import { LIVE_ANALYSIS_DEPTH } from './coachGameAnnotations';
 import type { GameRecord, GameResult, MoveAnnotation, MoveClassification, StoredLines } from '../types';
 import { openingKeyFromSans } from './openingKey';
+import { whyItEnded } from './gameEndReads';
+import { Chess } from 'chess.js';
 import { saveVerdict, toVerdictLabel } from './moveVerdictStore';
 import { learnTranscriptFor } from './learnTranscript';
 import { recordFinishedGame } from './autoAnalyzeGame';
@@ -202,4 +204,15 @@ export async function saveLearnGame(record: GameRecord, profile: UserProfile | n
   // judgement (prod focus audit 2026-11-07: an off-key move never landed);
   // the review prepares itself when it is opened, as it always has for Learn.
   recordFinishedGame(record.id, profile, { reportEffects: 'game-finished' }, graded);
+}
+
+/** WHY A LEARN GAME ENDED, for its game-over card — the computer Review reads
+ *  (`whyItEnded`): a perpetual check or a draw by repetition is named, never
+ *  only "That's a draw". Null when the board says nothing more. */
+export function learnGameEndWhy(history: readonly string[], seat: 'w' | 'b'): string | null {
+  try {
+    const c = new Chess();
+    const plies = history.map((san) => { const fenBefore = c.fen(); c.move(san); return { san, fenBefore, fenAfter: c.fen(), evalAfter: null, bestMoveUci: null, bestMoveEval: null }; });
+    return whyItEnded(plies, seat)?.text ?? null;
+  } catch { return null; }
 }

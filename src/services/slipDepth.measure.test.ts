@@ -7,7 +7,7 @@
 import { it } from 'vitest';
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { refutationOf, mainConceptLine, recurringFalls } from './slipDepth';
+import { refutationOf, mainConceptLine, recurringFalls, type CostlyMove } from './slipDepth';
 import { expectedScore } from './winChance';
 import { newThreat } from './threatOut';
 import { findAllowedChain } from './causalChain';
@@ -113,7 +113,7 @@ it.runIf(RUN && existsSync('audit-reports/slip-replies'))('main concept on whole
   const lines: string[] = [];
   for (const [game, rs] of byGame) {
     tally.games += 1;
-    const moves = rs.sort((a, b) => a.ply - b.ply).map((r) => ({ seat: (r.seat === 'white' ? 'w' : 'b') as 'w' | 'b', san: r.san, fenBefore: r.fenBefore, replyUci: r.replyUci }));
+    const moves = rs.sort((a, b) => a.ply - b.ply).map((r): CostlyMove => ({ seat: r.seat === 'white' ? 'w' : 'b', san: r.san, fenBefore: r.fenBefore, replyUci: r.replyUci }));
     // David's seat: the side his name plays is not in the reads; read both seats as "his" in turn.
     for (const seat of ['w', 'b'] as const) {
       const line = mainConceptLine(moves, seat);

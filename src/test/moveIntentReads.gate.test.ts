@@ -22,7 +22,11 @@ describe('the tempting move that fails is never capped by a count (G4.5, 2026-10
   it('no per-game limit; each warning is said once by its own claim', () => {
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src).not.toMatch(/REJECTED_TEMPTING_MAX_PER_GAME|rejectedTemptingCountRef/);
-    expect(src).toMatch(/\[`tempting:\$\{rt\.temptingSan\}:/);
+    // One claim for the one move ruled out, wherever it is said first
+    // (`conceptKey.temptingKey`, wire-19 2026-11-08): the question before the
+    // move and the weighed moves after it share the key.
+    expect(readFileSync('src/services/playCommentary.ts', 'utf8')).toMatch(/claim: temptingKey\(/);
+    expect(readFileSync('src/services/weighedMoves.ts', 'utf8')).toMatch(/temptingKey\(c\.uci\)/);
   });
 });
 

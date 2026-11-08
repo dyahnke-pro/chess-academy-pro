@@ -187,7 +187,7 @@ function createdShot(book: Chess, played: Chess, playedMove: Move, student: Colo
     const piece = NAME[hang.piece];
     const clause = hang.defended
       ? `Your ${piece} on ${hang.square} can be won${by ? ` by their ${NAME[by.piece]} on ${by.square}` : ''}.`
-      : `Your ${piece} on ${hang.square} is hanging${by ? `: their ${NAME[by.piece]} on ${by.square} can take it` : ''}.`;
+      : `Nothing guards your ${piece} on ${hang.square}${by ? `, and their ${NAME[by.piece]} on ${by.square} can take it` : ''}.`;
     return { kind: 'hangs', clause, squares: [hang.square, ...(by ? [by.square] : [])] };
   }
   return null;

@@ -31,7 +31,7 @@ describe('ORDER — a book move played early', () => {
     const r = slip(['d4', 'd5', 'c4', 'e6'], 'Bg5', ['Nc3', 'Nf3', 'cxd5']);
     expect(r?.kind).toBe('order');
     expect(r?.bookSan).toBe('Nc3');
-    expect(r?.text).toContain('Your bishop on g5 is hanging: their queen on d8 can take it.');
+    expect(r?.text).toContain('Nothing guards your bishop on g5, and their queen on d8 can take it.');
     expect(r?.text).toMatch(/the knight to c3 first/i);
     // The old lane named the knight's job and never the hang.
     expect(bookMoveWhy(board(['d4', 'd5', 'c4', 'e6']), 'Nc3', 'Bg5', 'w')?.text ?? '').not.toMatch(/hanging/);
@@ -45,7 +45,7 @@ describe('ORDER — a book move played early', () => {
   it('Petrov-style 2…Bc5 before 2…Nc6 (1.e4 e5 2.Nf3): the pawn on e5 hangs', () => {
     const r = slip(['e4', 'e5', 'Nf3'], 'Bc5', ['Nc6', 'Nf6', 'd6']);
     expect(r?.kind).toBe('order');
-    expect(r?.text).toContain('Your pawn on e5 is hanging: their knight on f3 can take it.');
+    expect(r?.text).toContain('Nothing guards your pawn on e5, and their knight on f3 can take it.');
   });
 });
 
@@ -53,7 +53,7 @@ describe('SQUARE — the same piece, another square', () => {
   it('Nimzo-Indian, 3…Bc5 for 3…Bb4: the bishop hangs to the pawn on d4', () => {
     const r = slip(['d4', 'Nf6', 'c4', 'e6', 'Nc3'], 'Bc5', ['Bb4', 'd5', 'b6', 'c5']);
     expect(r?.kind).toBe('square');
-    expect(r?.text).toContain('Your bishop on c5 is hanging: their pawn on d4 can take it.');
+    expect(r?.text).toContain('Nothing guards your bishop on c5, and their pawn on d4 can take it.');
     expect(r?.text).toMatch(/b4/);
   });
   it('his chesscom-164463094532, Winawer 4.Nf3 for 4.Ne2: why e2 was the square', () => {
@@ -72,11 +72,11 @@ describe('LINE — another move: said only when the tactics change', () => {
   });
   it('his chesscom-80725453, Alapin 7.Nxd4 for 7.cxd4: the pawn on g2 hangs to the queen on d5', () => {
     const r = slip(['e4', 'c5', 'c3', 'd5', 'exd5', 'Qxd5', 'd4', 'Nf6', 'Nf3', 'Bg4', 'Be2', 'cxd4'], 'Nxd4', ['cxd4']);
-    expect(r?.text).toBe('Your pawn on g2 is hanging: their queen on d5 can take it. The c-pawn taking on d4 was the book move.');
+    expect(r?.text).toBe('Nothing guards your pawn on g2, and their queen on d5 can take it. The c-pawn taking on d4 was the book move.');
   });
   it('his chesscom-822371912, Fried Liver 7…Qf6 for 7…Ke6: the knight on d5 hangs to the bishop', () => {
     const r = slip(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'Ng5', 'd5', 'exd5', 'Nxd5', 'Nxf7', 'Kxf7', 'Qf3+'], 'Qf6', ['Ke6']);
-    expect(r?.text).toContain('Your knight on d5 is hanging: their bishop on c4 can take it.');
+    expect(r?.text).toContain('Nothing guards your knight on d5, and their bishop on c4 can take it.');
   });
   it('his chesscom-148418905981, 5.d3 for 5.Bb5: the pin on the knight on c6 is given up', () => {
     const r = slip(['e4', 'c5', 'f4', 'Nc6', 'Nc3', 'd6', 'Nf3', 'Bg4'], 'd3', ['Bb5']);
@@ -126,7 +126,7 @@ describe('the Play rung reads the same computer, move by move (bookMoveRead)', (
     expect(course?.source).toBe('course');
     // 6.Bc4 leaves the pawn on e4 to their knight on f6 (the line plays Nc3).
     const s = openingSlip({ fen, playedSan: 'Bc4', book: course!, student: 'w' });
-    expect(s?.text).toBe('Your pawn on e4 is hanging: their knight on f6 can take it. This line plays the knight to c3 here.');
+    expect(s?.text).toBe('Nothing guards your pawn on e4, and their knight on f6 can take it. This line plays the knight to c3 here.');
   });
   it('the student\'s move off his line says the opening slip — 5.Bd3 hands them the pawn on e4', () => {
     const r = bookMoveRead(['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Bd3'], 'w', najdorf);

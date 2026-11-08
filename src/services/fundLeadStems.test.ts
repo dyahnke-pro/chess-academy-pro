@@ -41,7 +41,7 @@ const FACTS: Record<string, string | number> = {
   king: 'e1', move: 'Qh5', opening: 'Caro-Kann', pawn: 'd4', pawns: 'c5 and e5',
   blow: 'Nc6', line: 'Nc6, Qe8, Nxb8', mate: 0,
   piece: 'knight', plan: 'seize the d-file', played: 'Nf6', punish: 'Bxf7+', nth: 3,
-  push: 'b5', pinner: 'bishop', pinnerSq: 'g5', how: 'check', hit: 'Nxe5+', reason: 'the centre is open', retreat: 'd3', onIt: 1, rook: 'Rd1', square: 'd5', target: 'f7', trap: 'b5',
+  push: 'b5', pinner: 'bishop', pinnerSq: 'g5', how: 'check', hit: 'Nxe5+', reason: 'the centre is open', worstWhy: 'is stuck on the rim', retreat: 'd3', onIt: 1, rook: 'Rd1', square: 'd5', target: 'f7', trap: 'b5',
 };
 function fundRe(): RegExp {
   const src = readFileSync(join(process.cwd(), 'scripts/audit-review-overhaul-prod.mjs'), 'utf8');

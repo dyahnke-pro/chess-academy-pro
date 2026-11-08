@@ -170,7 +170,7 @@ describe('THE COMPUTER CUTS, NOT A CODE BRANCH (David 2026-09-16)', () => {
     expect(src).not.toMatch(/uncapped \? 'full' : 'mistakes'/);
     // `work` is the copy the pass writes into (walk 5, R5: a timed-out pass
     // wrote raw tags into the returned segments); the scope is what matters.
-    expect(src).toMatch(/augmentWithProjections\((segments|work),[^)]*'full', playerRating[,)]/);
+    expect(src).toMatch(/augmentWithProjections\((segments|work),[^\n]*'full', playerRating[,)]/);
   });
 });
 

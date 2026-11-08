@@ -19,14 +19,12 @@ import { characterTurn } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { startLearnTranscript, stopLearnTranscript, noteLearnEntry } from '../../services/learnTranscript';
 import { createLearnMemory, markOpeningFactsSpoken, nextStem, instanceStem, rememberKeptClaims, type LearnMemory } from '../../services/learnMemory';
-import { hangingLine, lostLastGuard } from '../../services/hangingLine';
 import { STORY_KEY, PLAN_GOAL, keysUnder, threadKey, threadVariant, toldBoards, identityHeard, noteOpening, openingAt, openingBreak, switchesSaid, type StoryHeard } from '../../services/gameStory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { uciToSans } from '../../services/structureJudgementKit';
 import { Chess } from 'chess.js';
-import { whyItEnded } from '../../services/gameEndReads';
 import type { Square } from 'chess.js';
 import { registerCoachHands } from '../../services/coachActuator';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
@@ -76,7 +74,7 @@ import { buildPositionalRead } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { cheaperAttackerHit, gambitPoint, kingPawnUnderFire, type CheaperHit, mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { habitSaidKey, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { habitSaidKey, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, learnHangingWarning, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 
 /** A LINE A LEARN PRODUCER QUEUES for the late wave, as it knows it — made
@@ -300,7 +298,7 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { coachService, isProgressQuestion, isImprovementTrendQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
 import { isAuditMarkedPage, logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
-import { buildLearnGameRecord, rememberHeardVerdict, saveLearnGame as saveLearnGameRecord, type LearnGameEnding, type LearnLiveGrade } from '../../services/learnGameRecord';
+import { buildLearnGameRecord, learnGameEndWhy, rememberHeardVerdict, saveLearnGame as saveLearnGameRecord, type LearnGameEnding, type LearnLiveGrade } from '../../services/learnGameRecord';
 import { uciMoveToSan } from '../../utils/uciToSan';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { recoverCoachMoveFromText } from '../../utils/recoverCoachMove';
@@ -9435,7 +9433,7 @@ export function CoachTeachPage({ mode }: {
         threatSquares = [worst.square];
         // The ONE producer Review's loose facet speaks too (`hangingLine`,
         // WO-DEPTH-01), rotated on the board.
-        threatLine = hangingLine({ fen: args.fenAfterReply, squares: [worst.square], viewer: studentCC, lostGuard: lostLastGuard(args.fenBeforeReply, worst.square), still: loose.still }) ?? '';
+        threatLine = learnHangingWarning({ fenBefore: args.fenBeforeReply, fenAfter: args.fenAfterReply, square: worst.square, viewer: studentCC, still: loose.still }) ?? '';
             threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), loudSaid);
         const flip = args.fenAfterReply.split(' ');
         flip[1] = studentCC === 'w' ? 'b' : 'w';
@@ -14069,12 +14067,7 @@ export function CoachTeachPage({ mode }: {
       // until he chooses to leave.
       // WHY IT ENDED, the computer Review reads (`whyItEnded`): a perpetual
       // check or a draw by repetition is named, never only "That's a draw".
-      let endWhy: string | null = null;
-      try {
-        const c = new Chess();
-        const plies = game.history.map((san) => { const fenBefore = c.fen(); c.move(san); return { san, fenBefore, fenAfter: c.fen(), evalAfter: null, bestMoveUci: null, bestMoveEval: null }; });
-        endWhy = whyItEnded(plies, playerColor === 'white' ? 'w' : 'b')?.text ?? null;
-      } catch { endWhy = null; }
+      const endWhy = learnGameEndWhy(game.history, playerColor === 'white' ? 'w' : 'b');
       setFinishedGame({ id: gameId, result, byMate: game.isCheckmate, endWhy });
     })();
   }, [game.isGameOver, game.isCheckmate, game.turn, game.fen, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName, learnRecordOf, saveLearnGame]);
