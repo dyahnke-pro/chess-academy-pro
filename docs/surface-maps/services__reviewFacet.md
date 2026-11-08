@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**103 lines · 6 exports · 3 importers · 2 tests · 1 audits**
+**107 lines · 6 exports · 3 importers · 2 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1360) — names `reviewFacet`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1442) — names `reviewFacet`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4472) — names `reviewFacet`
-- **🔒 WHICH NOTES THE KEPT SURFACES MAY SPEAK — split by anchoring (David 2026-08-26).** (CLAUDE.md:4948) — names `reworded`
+- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1426) — names `reviewFacet`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1508) — names `reviewFacet`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4539) — names `reviewFacet`
+- **🔒 WHICH NOTES THE KEPT SURFACES MAY SPEAK — split by anchoring (David 2026-08-26).** (CLAUDE.md:5015) — names `reworded`
 
 ## Who calls in
 
@@ -29,22 +29,22 @@
 
 ### `reviewFacet` (function) — 3 call sites
 - `src/services/coachFeatureService.reviewNoise.test.ts:27`
-- `src/services/coachFeatureService.ts:2090`
-- `src/services/reviewFullData.ts:311`
+- `src/services/coachFeatureService.ts:2245`
+- `src/services/reviewFullData.ts:334`
 
 ### `reworded` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:2571`
-- `src/services/coachFeatureService.ts:2683`
-- `src/services/coachFeatureService.ts:2707`
-- `src/services/coachFeatureService.ts:2774`
-- `src/services/coachFeatureService.ts:2814`
+- `src/services/coachFeatureService.ts:2712`
+- `src/services/coachFeatureService.ts:2825`
+- `src/services/coachFeatureService.ts:2849`
+- `src/services/coachFeatureService.ts:2921`
+- `src/services/coachFeatureService.ts:2961`
 
 ### `asIncoming` (function) — 1 call site
-- `src/services/reviewFullData.ts:315`
+- `src/services/reviewFullData.ts:338`
 
 ### `inRuleFamily` (function) — 2 call sites
-- `src/services/reviewFullData.ts:690`
-- `src/services/reviewFullData.ts:1271`
+- `src/services/reviewFullData.ts:734`
+- `src/services/reviewFullData.ts:1344`
 
 ## Tests
 
@@ -57,4 +57,5 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
+- `scripts/audit-learn-focus-prod.mjs`
 - `scripts/audit-review-overhaul-prod.mjs`

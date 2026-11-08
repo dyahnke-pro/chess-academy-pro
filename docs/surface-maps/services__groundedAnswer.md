@@ -383,8 +383,8 @@
 - `src/services/coachFeatureService.test.ts:69`
 - `src/services/coachFeatureService.test.ts:84`
 - `src/services/coachFeatureService.test.ts:91`
-- `src/services/coachFeatureService.ts:3365`
-- `src/services/coachFeatureService.ts:3397`
+- `src/services/coachFeatureService.ts:3386`
+- `src/services/coachFeatureService.ts:3418`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:15`
 - `src/services/explainBestMoveLines.test.ts:19`
@@ -431,7 +431,7 @@
 - `src/services/deliberation.ts:610`
 
 ### `describeMoveMerit` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1200`
+- `src/services/coachFeatureService.ts:1221`
 - `src/services/keySquares.test.ts:85`
 - `src/services/keySquares.test.ts:94`
 - `src/services/keySquares.test.ts:98`
@@ -444,7 +444,7 @@
 - `src/services/brilliancy.ts:130`
 - `src/services/coachFeatureService.test.ts:100`
 - `src/services/coachFeatureService.test.ts:106`
-- `src/services/coachFeatureService.ts:1200`
+- `src/services/coachFeatureService.ts:1221`
 
 ### `describeEscape` (function) — 4 call sites
 - `src/services/describeEscape.test.ts:10`
@@ -473,7 +473,7 @@
 - `src/services/hardWalk.mates.test.ts:84`
 
 ### `explainMoveOrder` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:1062`
+- `src/services/coachFeatureService.ts:1083`
 - `src/services/groundedAnswer.test.ts:1044`
 - `src/services/groundedAnswer.test.ts:1052`
 - `src/services/groundedAnswer.test.ts:1059`
@@ -1041,7 +1041,7 @@
 - `src/services/bluffDetector.ts:73`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:3730`
+- `src/services/coachFeatureService.ts:3751`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
@@ -1049,7 +1049,7 @@
 - `src/services/moveInsight.ts:606`
 - `src/services/moveInsight.ts:770`
 - `src/services/opponentMovePurpose.ts:64`
-- `src/services/reviewFullData.ts:1009`
+- `src/services/reviewFullData.ts:1016`
 - `src/services/reviewMoveBriefing.ts:312`
 - `src/services/reviewNarrationFidelity.test.ts:141`
 - `src/services/reviewNarrationFidelity.test.ts:150`
@@ -1063,7 +1063,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3651`
+- `src/services/coachFeatureService.ts:3672`
 - `src/services/reviewNarrationFidelity.test.ts:107`
 - `src/services/reviewNarrationFidelity.test.ts:119`
 - `src/services/reviewNarrationFidelity.test.ts:127`
@@ -1079,7 +1079,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:3751`
+- `src/services/coachFeatureService.ts:3772`
 - `src/services/reviewNarrationFidelity.test.ts:177`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1116,9 +1116,9 @@
 
 ### `seatPieceReferences` (re-export) — 39 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9355`
-- `src/services/coachFeatureService.ts:5142`
-- `src/services/coachFeatureService.ts:5231`
-- `src/services/coachFeatureService.ts:6221`
+- `src/services/coachFeatureService.ts:5163`
+- `src/services/coachFeatureService.ts:5252`
+- `src/services/coachFeatureService.ts:6242`
 - `src/services/liveTacticsContext.ts:486`
 - `src/services/liveTacticsContext.ts:495`
 - `src/services/lookaheadPlan.ts:140`
@@ -1130,11 +1130,11 @@
 - `src/services/reviewBoardAwareness.test.ts:55`
 - `src/services/reviewBoardAwareness.test.ts:56`
 - `src/services/reviewBoardAwareness.test.ts:57`
-- `src/services/reviewFullData.ts:376`
-- `src/services/reviewFullData.ts:516`
-- `src/services/reviewFullData.ts:635`
-- `src/services/reviewFullData.ts:656`
-- `src/services/reviewFullData.ts:857`
+- `src/services/reviewFullData.ts:383`
+- `src/services/reviewFullData.ts:523`
+- `src/services/reviewFullData.ts:642`
+- `src/services/reviewFullData.ts:663`
+- `src/services/reviewFullData.ts:864`
 - `src/services/reviewNarrationFidelity.test.ts:22`
 - `src/services/reviewNarrationFidelity.test.ts:30`
 - `src/services/reviewNarrationFidelity.test.ts:36`

@@ -810,7 +810,7 @@ export function buildReviewMoveTeachingFact(
           ? { key: 'king-centre', idea: 'king-activity' as const, lines: ['The king heads for the centre — in the endgame it stops hiding and becomes a fighting piece.', 'The king keeps heading for the centre.'] }
           : null
       : way.awayFromCentre
-        ? { key: 'king-shelter', idea: 'king-safety' as const, lines: ['The king steps toward safety; no place for it in the crossfire yet.', 'The king steps toward safety again.'] }
+        ? { key: 'king-shelter', idea: 'king-safety' as const, lines: ['The king steps toward safety, out of the crossfire before it starts.', 'The king steps toward safety again.'] }
         : null;
     if (said) {
       const fact = out(said.idea, sayIdea(phrases, said.key, said.lines));

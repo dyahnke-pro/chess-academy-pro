@@ -337,8 +337,15 @@ export function computeMoveFacets(
     if (!beneficiary || !ctx.studentColorWB) return;
     if (beneficiary !== ctx.studentColorWB) asIncoming(facet);
   };
+  // A LINE A FACT SAYS RIDES WITH IT (marks sweep 2026-11-08): the proof's
+  // line is its board half, played move by move where the words say it. The
+  // facets used to keep the proof and drop the line, so Review never drew a
+  // kept fact's own line ("A known mistake here: e5, and after dxe5 you win a
+  // pawn" lit e5 and drew nothing for dxe5).
   const recProof = (facet: ReviewFacet, proof: Proof | null | undefined): void => {
-    if (proof) facet.proof = proof;
+    if (!proof) return;
+    facet.proof = proof;
+    if (!facet.lines?.length && proof.line && proof.line.sans.length >= 2) facet.lines = [proof.line];
   };
   const recStakes = (facet: ReviewFacet, stakes: Stakes | null | undefined): void => {
     if (isStaked(stakes) && stakes.points > 0) facet.stakes = stakes;
@@ -1530,6 +1537,7 @@ export function computeMoveFacets(
   // with its proof, squares and stakes, and the identity it is said once under.
   const facetOf = (f: CoachFact & { kind: FacetTag }, identity: string): void => {
     const raw = put(f.computer, f.kind, f.text);
+    if (f.lines?.length) raw.lines = [...f.lines];
     recProof(raw, isProof(f.proof) ? f.proof : null);
     recSquares(raw, f.squares);
     recStakes(raw, f.stakes);

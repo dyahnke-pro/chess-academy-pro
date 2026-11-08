@@ -134,7 +134,7 @@ export function oppositeBishops(fenBefore: string, san: string, student: Color):
     // SQUARES NAMED LIKE A HUMAN (David 2026-11-05): the idea in words — the
     // dark squares around their king — and the bishop and the squares it hits
     // there on the board (`squares`), never read out as a list.
-    const head = `Opposite-coloured bishops now, with ${what} on — a game for the attacker, not for grinding pawns`;
+    const head = `Opposite-coloured bishops now, with ${what} still on. That is a game for the attacker, not for grinding pawns`;
     // The proof is the bishop and the squares it rules there — read off the
     // board, marked when the student asks Why.
     if (myHits.length > 0 && theirHits.length === 0) {
@@ -142,7 +142,7 @@ export function oppositeBishops(fenBefore: string, san: string, student: Color):
       const proof = squaresProof(`Your bishop rules the ${shade} squares around their king`, [mine, ...myHits]);
       if (!proof) return null;
       return {
-        text: `${head}: your bishop rules the ${shade} squares around their king and theirs can never guard them, so attack there.`,
+        text: `${head}. Your bishop rules the ${shade} squares around their king, and theirs can never guard them, so attack there.`,
         squares: [mine, theirs, ...myHits], proof,
         seat: 'student', key: 'opposite-bishops:attack', claims: ['opposite-bishops:attack'],
       };
@@ -152,19 +152,19 @@ export function oppositeBishops(fenBefore: string, san: string, student: Color):
       const proof = squaresProof(`Their bishop rules the ${shade} squares around your king`, [theirs, ...theirHits]);
       if (!proof) return null;
       return {
-        text: `${head}: their bishop rules the ${shade} squares around your king and yours can never guard them, so cover them with your other pieces.`,
+        text: `${head}. Their bishop rules the ${shade} squares around your king, and yours can never guard them, so cover them with your other pieces.`,
         squares: [theirs, mine, ...theirHits], proof,
         seat: 'opponent', key: 'opposite-bishops:attack', claims: ['opposite-bishops:attack'],
       };
     }
     return {
-      text: `${head}: each bishop rules squares the other can never contest, so whoever gets at the king first, on their own bishop's colour, gains the most.`,
+      text: `${head}. Each bishop rules squares the other can never contest. Whoever gets at the king first, on their own bishop's colour, gains the most.`,
       squares: [mine, theirs], proof: NO_PROOF.method,
       seat: mover === student ? 'student' : 'opponent', key: 'opposite-bishops:attack', claims: ['opposite-bishops:attack'],
     };
   }
   return {
-    text: 'Opposite-coloured bishops and pawns now: the most drawish ending there is — a pawn up is often not enough, because each bishop can block on squares the other can never touch.',
+    text: 'Opposite-coloured bishops and pawns now, the most drawish ending there is. A pawn up is often not enough, because each bishop can block on squares the other can never touch.',
     squares: [mine, theirs], proof: NO_PROOF.method,
     seat: mover === student ? 'student' : 'opponent', key: 'opposite-bishops:ending',
     // The same idea `pushOrHold` says a pawn up or down in this ending.

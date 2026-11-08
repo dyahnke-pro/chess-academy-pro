@@ -28,6 +28,7 @@ import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { legalLineProof, type Proof } from './proof';
 import { andList } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 /** A pawn move that STARTS a fight with an enemy pawn: it takes one that has
  *  stood its ground, attacks one, or lands where one attacks it. Taking what
@@ -217,11 +218,17 @@ export function pawnBreak(fenBefore: string, san: string, whose: 'your' | 'their
   // takes c4"), so the line says only what the pawn it took was and what the
   // trade opens — a capture is said once (`captureSaidOnce.gate`).
   const took = base ? ` at the base of ${theirs} pawn chain` : centre ? ' in the centre' : '';
+  // One idea a sentence (the human voice, David 2026-11-08): the strike,
+  // then what the trade opens; two phrasings rotated on the board.
+  const strike = rotateStem([
+    `${lead} is a pawn break: it ${verb} ${target}.`,
+    `A pawn break: ${lead} ${verb} ${target}.`,
+  ], stemKeyOf(fenBefore));
   const text = line.length === 2
-    ? `${lead} is a pawn break: it ${verb} ${target}${what ? `, and if ${whose === 'your' ? 'they take' : 'you take'}, it ${what}` : ''}.`
+    ? `${strike}${what ? ` If ${whose === 'your' ? 'they take' : 'you take'}, it ${what}.` : ''}`
     : mv.captured === 'p'
       ? `${lead} is a pawn break${took}${what ? `, and it ${what}` : ''}.`
-      : `${lead} is a pawn break: it ${verb} ${target}${what ? `, and ${what}` : ''}.`;
+      : `${strike}${what ? ` It also ${what}.` : ''}`;
   return {
     text: openSentence(text),
     squares: [...new Set([mv.from, mv.to, struck, ...opens.flatMap((o) => o.squares)])],

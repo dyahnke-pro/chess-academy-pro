@@ -110,7 +110,7 @@ import { costWords, describeEvalCp, isMateEval, storedMate, moverGaveUpMate, COS
 import { isContested } from './narrationImportance';
 import { mateDescription } from './matePatterns';
 import { buildVoicePackage, spokenSentenceKeys, type SpokenLine } from './voicePackage';
-import { squaresNamedNotMoves } from './arrowEngine';
+import { extractMentionedSans, squaresNamedNotMoves } from './arrowEngine';
 import { cutMarksWithWords, markItems } from './markAnchors';
 import type { PacedMark } from './markPacing';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
@@ -458,7 +458,18 @@ export function segmentMarks(
   const better = !seg.planArrows?.length && costly && seg.bestMoveUci && seg.bestMoveUci.length >= 4
     ? admitArrow({ from: seg.bestMoveUci.slice(0, 2), to: seg.bestMoveUci.slice(2, 4), role: 'missed', fen: seg.fenBefore, source: 'review.betterMove' }, { fen: seg.fenAfter, studentColor })
     : null;
-  const base = seg.planArrows?.length ? [...seg.planArrows] : better ? [better] : [];
+  // NO MARKS WITHOUT WORDS (G8.5 rule 3): the better move is drawn only when
+  // the beat says it ("f6 was stronger: …"). A costly move whose words teach
+  // what it allowed and never name the better move drew it anyway, painted at
+  // the turn's end with nothing said (marks sweep, Rac8: their Kg8).
+  const betterSaid = better !== null && !!seg.narration && ((): boolean => {
+    try {
+      const m = new Chess(seg.fenBefore).move({ from: better.startSquare, to: better.endSquare, promotion: seg.bestMoveUci?.[4] as 'q' | undefined });
+      const bare = (x: string): string => x.replace(/^…/, '').replace(/[+#?!]/g, '');
+      return !!m && extractMentionedSans(seg.narration ?? '').some((x) => bare(x) === bare(m.san));
+    } catch { return false; }
+  })();
+  const base = seg.planArrows?.length ? [...seg.planArrows] : better && betterSaid ? [better] : [];
   const arrows = [...base, ...named.filter((n) => !base.some((b) => b.startSquare === n.startSquare && b.endSquare === n.endSquare))];
   // The spoken line, each ply on the board before it.
   const plies = seg.spokenLineArrows ?? [];
@@ -489,10 +500,20 @@ export function segmentMarks(
   return { highlights, arrows, lines, items };
 }
 
-/** The first line a kept fact says, as the walk plays it (`spokenLineArrows`):
- *  every ply from the board it starts on, or nothing when it does not play. */
+/** The line a kept fact says, as the walk plays it (`spokenLineArrows`): every
+ *  ply from the board it starts on, or nothing when it does not play. A line
+ *  whose words name its moves ("you play Bxe4, they answer Nxe4 and you play
+ *  Bxb2") comes before a proof the words only conclude from. */
 function spokenLineOf(kept: readonly { text?: string; lines?: readonly SpokenLine[] }[]): { spokenLineArrows?: Array<{ uci: string; fenBefore: string; fenAfter: string }>; spokenLineSaid?: string } {
-  for (const f of kept) {
+  const unmark = (san: string): string => san.replace(/^…/, '').replace(/[+#?!]/g, '');
+  const named = (f: { text?: string; lines?: readonly SpokenLine[] }): number => {
+    const line = f.lines?.find((l) => l.sans.length >= 2);
+    if (!line || !f.text) return 0;
+    const said = new Set(extractMentionedSans(f.text).map(unmark));
+    return line.sans.filter((san) => said.has(unmark(san))).length;
+  };
+  const ordered = [...kept].sort((a, b) => named(b) - named(a));
+  for (const f of ordered) {
     const line = f.lines?.find((l) => l.sans.length >= 2);
     if (!line) continue;
     try {
@@ -2410,14 +2431,14 @@ function* reviewSegmentSteps(
           // started it) — a material count would undersell it.
           const ml = line ? mateLine(fenPair.fenBefore, line, studentColorWB, m.san) : null;
           if (ml) {
-            facets.push(fact('mateLine', 'tactic', ml.text, { stakes: mateStakes('you', 0, true), squares: ml.taken }));
+            facets.push(fact('mateLine', 'tactic', ml.text, { stakes: mateStakes('you', 0, true), squares: ml.taken, lines: [{ fen: fenPair.fenBefore, sans: ml.sans.map((x) => x.replace(/^…/, '')) }] }));
             if (!causalArrows || causalArrows.length === 0) {
               causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.mateLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
             }
           }
           const won = !ml && line ? lineWins(fenPair.fenBefore, line, studentColorWB, m.san, i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null, [lineSecond]) : null;
           if (won) {
-            facets.push(fact('lineWins', 'tactic', `That wins ${won.what}: ${lineShape(won.sans, lineSeatAt(fenPair.fenBefore, studentColorWB))}.`, { stakes: { points: won.net, plies: 0 } }));
+            facets.push(fact('lineWins', 'tactic', `That wins ${won.what}: ${lineShape(won.sans, lineSeatAt(fenPair.fenBefore, studentColorWB))}.`, { stakes: { points: won.net, plies: 0 }, lines: [{ fen: fenPair.fenBefore, sans: won.sans.map((x) => x.replace(/^…/, '')) }] }));
             if (!causalArrows || causalArrows.length === 0) {
               causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.winningLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
             }

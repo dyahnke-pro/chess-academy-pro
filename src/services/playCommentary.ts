@@ -499,9 +499,12 @@ export function buildPriorityFirst(args: {
     const attacked = new Set(myTurn.moves({ square: moved.to, verbose: true }).map((m) => m.to));
     const target = weakPawns.find((p) => attacked.has(p.square as Square));
     if (!target) return null;
-    const flaw = (weak.isolated as readonly string[]).includes(target.square)
-      ? 'isolated — no pawn beside it can defend it'
-      : 'backward — the pawns beside it have gone past it, and your pawn covers the square in front of it';
+    // One idea a sentence: what the pawn is, then why it cannot be helped.
+    const isolated = (weak.isolated as readonly string[]).includes(target.square);
+    const flawWord = isolated ? 'isolated' : 'backward';
+    const flawWhy = isolated
+      ? 'No pawn beside it can defend it.'
+      : 'The pawns beside it have gone past it, and your pawn covers the square in front of it.';
     // The detail tier deliberately does NOT name the attacking piece: naming
     // it is naming the move on most boards, and the withhold below would then
     // be contradicting the package it ships with.
@@ -509,14 +512,17 @@ export function buildPriorityFirst(args: {
     // the priority always, the move from moderate up, the habit at obvious.
     const hint: HintPackage = {
       ask: `What's the priority here?`,
-      anchor: `Their pawn on ${target.square} — it's ${flaw}.`,
+      anchor: `Their pawn on ${target.square} is ${flawWord}. ${flawWhy}`,
       detail: `Aim at it: ${moved.san} does.`,
-      stakes: `A pawn like that cannot be defended by a pawn, so every piece aimed at ${target.square} keeps working for free.`,
+      // The isolated pawn's why already said no pawn can defend it.
+      stakes: isolated
+        ? `Every piece aimed at ${target.square} keeps working for free.`
+        : `A pawn like that cannot be defended by a pawn, so every piece aimed at ${target.square} keeps working for free.`,
       resolve: (m) => {
         if (posKey(m.fenBefore) !== posKey(args.fen)) return null;
-        if (m.san.replace(/[+#]/g, '') === moved.san.replace(/[+#]/g, '')) return `You found it — ${moved.san} aims at their pawn on ${target.square}, the priority.`;
+        if (m.san.replace(/[+#]/g, '') === moved.san.replace(/[+#]/g, '')) return `You found it. ${moved.san} aims at their pawn on ${target.square}, the priority.`;
         try { const p = new Chess(m.fenNow).get(target.square as Square); if (!p || p.type !== 'p' || p.color !== them) return null; } catch { return null; }
-        return `The priority was their pawn on ${target.square} — it's ${flaw}.`;
+        return `The priority was their pawn on ${target.square}, which is ${flawWord}. ${flawWhy}`;
       },
     };
     return {

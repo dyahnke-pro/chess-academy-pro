@@ -386,7 +386,7 @@ function namedTechniqueFor(fen: string, cls: MatchupClass): ComputedConcept | nu
   if (wrong?.kind === 'wrong-bishop') {
     return technique(
       'wrong-rook-pawn-bishop', 'The wrong-bishop draw',
-      `The ${wrong.pawn} pawn is a rook pawn and the bishop never touches its promotion corner (${wrong.corner}), so with the defending king in that corner nothing can evict it and the pawn cannot be forced through — a wrong-bishop draw.`,
+      `The ${wrong.pawn} pawn is a rook pawn, and the bishop never touches its promotion corner on ${wrong.corner}. With the defending king in that corner nothing can evict it, so the pawn cannot be forced through: a wrong-bishop draw.`,
       'Wrong bishop — the corner holds.', [wrong.pawn, wrong.corner], 0.7,
     );
   }

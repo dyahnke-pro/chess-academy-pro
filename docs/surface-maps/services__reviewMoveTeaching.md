@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6872) — names `reviewMoveTeaching`
+- **The standard post-deploy ritual** (CLAUDE.md:6894) — names `reviewMoveTeaching`
 
 ## Who calls in
 
@@ -42,7 +42,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `quietMovePoint` (function) — 7 call sites
-- `src/services/playCommentary.ts:914`
+- `src/services/playCommentary.ts:920`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
 - `src/services/reviewWalkOct1.test.ts:71`
@@ -51,8 +51,8 @@
 - `src/services/walkOct1Learn.test.ts:85`
 
 ### `buildReviewMoveTeaching` (function) — 52 call sites
-- `src/services/coachFeatureService.ts:1137`
-- `src/services/coachFeatureService.ts:3996`
+- `src/services/coachFeatureService.ts:1259`
+- `src/services/coachFeatureService.ts:4138`
 - `src/services/danyaBench.measure.test.ts:473`
 - `src/services/discussionPractice.ts:174`
 - `src/services/guardPressure.test.ts:20`
@@ -105,7 +105,7 @@
 - `src/services/squareRole.test.ts:44`
 
 ### `buildReviewMoveTeachingFact` (function) — 14 call sites
-- `src/services/learnBoardTeaching.ts:1216`
+- `src/services/learnBoardTeaching.ts:1218`
 - `src/services/moveThoughtFacts.ts:229`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
@@ -121,8 +121,8 @@
 - `src/services/tapeKc7Skewer.test.ts:29`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3904`
-- `src/services/reviewFullData.ts:1680`
+- `src/services/coachFeatureService.ts:4046`
+- `src/services/reviewFullData.ts:1692`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`
@@ -130,7 +130,7 @@
 - `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3899`
+- `src/services/coachFeatureService.ts:4041`
 - `src/services/reviewMoveTeaching.test.ts:121`
 - `src/services/reviewMoveTeaching.test.ts:124`
 - `src/services/reviewMoveTeaching.test.ts:130`

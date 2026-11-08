@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6433 lines · 33 exports · 70 importers · 84 tests · 4 audits**
+**6454 lines · 33 exports · 71 importers · 85 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,6 +32,7 @@
 - `src/services/coachFeatureService.openingStory.test.ts`
 - `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.reviewNoise.test.ts`
+- `src/services/coachFeatureService.segmentMarks.test.ts`
 - `src/services/coachFeatureService.studentJob.test.ts`
 - `src/services/coachFeatureService.test.ts`
 - `src/services/coachFeatureService.trade.test.ts`
@@ -127,15 +128,15 @@
 ### `SegmentMarks` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `segmentMarks` (function) — 3 call sites
+### `segmentMarks` (function) — 4 call sites
 - `src/components/Coach/CoachGameReview.tsx:2407`
 - `src/components/Coach/CoachGameReview.tsx:3196`
-- `src/test/marksSweep.gate.test.ts:191`
+- `src/services/coachFeatureService.segmentMarks.test.ts:19`
+- `src/test/marksSweep.gate.test.ts:183`
 
-### `segmentNamedArrows` (function) — 3 call sites
+### `segmentNamedArrows` (function) — 2 call sites
 - `src/services/namedMoveArrows.test.ts:67`
 - `src/services/namedMoveArrows.test.ts:71`
-- `src/test/marksSweep.gate.test.ts:184`
 
 ### `foldReviewRefrains` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:1833`
@@ -404,7 +405,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:664`
+- `src/services/reviewFullData.ts:671`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites
@@ -437,6 +438,7 @@
 - `src/services/coachFeatureService.openingStory.test.ts`
 - `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.reviewNoise.test.ts`
+- `src/services/coachFeatureService.segmentMarks.test.ts`
 - `src/services/coachFeatureService.studentJob.test.ts`
 - `src/services/coachFeatureService.test.ts`
 - `src/services/coachFeatureService.trade.test.ts`

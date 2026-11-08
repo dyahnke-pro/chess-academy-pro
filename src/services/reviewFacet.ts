@@ -13,6 +13,7 @@
 import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
 import { NO_PROOF, type FactProof } from './proof';
 import type { FactStakes } from './factStakes';
+import type { SpokenLine } from './voicePackage';
 import { TIE_ORDER, type FacetTag, type FactKind } from './reviewFacetRank';
 import { FUNDAMENTAL_CLAIM_FAMILY, fundamentalOfLine } from './moveFundamentals';
 
@@ -40,6 +41,8 @@ export interface ReviewFacetParts {
   identity?: string;
   /** The claim family the door weighs it by, when it is not the tag. */
   kind?: FactKind;
+  /** The line its words say, played on the board where they say it. */
+  lines?: readonly SpokenLine[];
 }
 
 /** Review's facts name no move the student has yet to find: the game is over. */
@@ -75,6 +78,7 @@ export function reviewFacet(
     namesStudentMove: REVIEW_NAMES_NO_MOVE,
     thread: LOCAL_THREAD,
     ...(parts.identity ? { identity: parts.identity } : {}),
+    ...(parts.lines?.length ? { lines: parts.lines } : {}),
   };
 }
 

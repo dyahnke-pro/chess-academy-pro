@@ -25,7 +25,7 @@ describe('pawnBreak — the break and what it is for', () => {
   it('names the base of the chain it strikes and the file the trade opens', () => {
     const { fen, lastTo } = at(FRENCH);
     const r = pawnBreak(fen, 'c5', 'your', lastTo);
-    expect(r?.text).toBe('…c5 is a pawn break: it attacks their pawn on d4, the base of the pawn chain, and if they take, it half-opens the c-file for your rooks.');
+    expect(r?.text).toBe('A pawn break: …c5 attacks their pawn on d4, the base of the pawn chain. If they take, it half-opens the c-file for your rooks.');
     expect(r?.squares).toEqual(expect.arrayContaining(['c7', 'c5', 'd4']));
     // The proof is the break and the capture that trades, played from the board.
     expect(r?.proof?.line?.sans).toEqual(['c5', 'dxc5']);
@@ -49,7 +49,7 @@ describe('pawnBreak — the break and what it is for', () => {
 
   it('their break is said from the student\'s seat', () => {
     const { fen, lastTo } = at(FRENCH);
-    expect(pawnBreak(fen, 'c5', 'their', lastTo)?.text).toBe('…c5 is a pawn break: it attacks your pawn on d4, the base of the pawn chain, and if you take, it half-opens the c-file for their rooks.');
+    expect(pawnBreak(fen, 'c5', 'their', lastTo)?.text).toBe('A pawn break: …c5 attacks your pawn on d4, the base of the pawn chain. If you take, it half-opens the c-file for their rooks.');
   });
 
   it('is silent where there is no break, or nothing it is for', () => {

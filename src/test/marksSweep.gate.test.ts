@@ -19,7 +19,7 @@ import { computePositionFacts } from '../services/positionFacts';
 import { lastMoveIfOpponent, lastMoveIfStudent } from '../services/lastMoveOfLine';
 import { mateContext } from '../utils/mateContext';
 import { analysisOf, linesOf, replayPlies, reviewSegments, type ReplayGame } from './replayGame';
-import { segmentNamedArrows, segmentLitSquares, segmentMarks } from '../services/coachFeatureService';
+import { segmentLitSquares, segmentMarks } from '../services/coachFeatureService';
 import { markItems } from '../services/markAnchors';
 import { placeMarks, type PacedMark } from '../services/markPacing';
 import { namedMoveArrows } from '../services/learnBoardTeaching';
@@ -40,6 +40,7 @@ const PRINT = process.env.MARKS_SWEEP_PRINT === '1';
 const CEILING = JSON.parse(readFileSync('src/test/fixtures/marks-sweep.ceiling.json', 'utf8')) as Record<'unlit' | 'unarrowed' | 'shortline' | 'unstated', Record<string, number>>;
 const SQUARE = /\b[a-h][1-8]\b/g;
 const SHORT = /\bmoves? later\b/;
+const lineUndrawn: string[] = [];
 
 interface FixtureGame extends ReplayGame { id: string; rating: number }
 function loadGames(): FixtureGame[] {
@@ -177,18 +178,21 @@ async function sweepGame(g: FixtureGame): Promise<void> {
   // REVIEW — key squares, the played move, the named moves' arrows, the plan arrows.
   for (const s of reviewSegments(g, g.rating)) {
     if (!s.narration) continue;
-    // The walk's board: plan arrows, or the better-move arrow on a costly move,
-    // plus every move the beat names (CoachGameReview walkArrows).
-    const better = !s.planArrows?.length && (s.classification === 'inaccuracy' || s.classification === 'mistake' || s.classification === 'blunder') && s.bestMoveUci
-      ? [{ startSquare: s.bestMoveUci.slice(0, 2), endSquare: s.bestMoveUci.slice(2, 4) }] : [];
-    const arrows = [...segmentNamedArrows(s, g.studentSide), ...(s.planArrows ?? []), ...better];
+    // The walk's board is the ply's own marks (CoachGameReview walkArrows):
+    // the plan arrows, the better move when the beat names it, every named move.
+    const marks = segmentMarks(s, g.studentSide);
+    const arrows = marks.arrows;
     const arrowTo = new Set(arrows.map((a) => a.endSquare));
     // The walk plays a kept fact's line move by move (`spokenLineArrows`).
     const played = (s.spokenLineArrows ?? []).flatMap((a) => [a.uci.slice(0, 2), a.uci.slice(2, 4)]);
     const lit = new Set([...segmentLitSquares(s), ...moveSquares(s.fenBefore, s.san), ...arrows.flatMap((a) => [a.startSquare, a.endSquare]), ...played]);
     for (const a of s.spokenLineArrows ?? []) arrowTo.add(a.uci.slice(2, 4));
     check('review', 'segment', s.narration, lit, arrowTo, Math.max(arrows.length, s.spokenLineArrows?.length ?? 0), null, [s.fenAfter, s.fenBefore], s.san);
-    statedCheck('review', 'segment', s.narration, segmentMarks(s, g.studentSide).items);
+    statedCheck('review', 'segment', s.narration, marks.items);
+    // A line said out loud is played on the board (the walk's spoken line):
+    // Review's facets once dropped every fact's line, so none was drawn.
+    const said = /you play (\S+?), they answer (\S+?) and you play (\S+?)[.,]/.exec(s.narration);
+    if (said && (s.spokenLineArrows?.length ?? 0) < 3) lineUndrawn.push(`${g.id} ply ${s.ply}: ${said[0]}`);
   }
 }
 
@@ -231,5 +235,6 @@ describe('the marks sweep — squares lit, moves arrowed, lines drawn', () => {
     }
     const examples = rows.filter((x) => over.some((o) => o.startsWith(`${x.rule} ${x.surface}:`))).slice(0, 20).map((x) => `${x.rule} [${x.surface}:${x.kind}] {${x.what}} ${x.text}`);
     expect(over, examples.join('\n')).toEqual([]);
+    expect(lineUndrawn, 'a Review line said out loud with nothing drawn').toEqual([]);
   }, 900_000);
 });

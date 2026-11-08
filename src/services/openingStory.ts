@@ -36,6 +36,7 @@ import { NO_PROOF, squaresProof, type FactProof } from './proof';
 import { andList, countWord } from '../utils/andList';
 import { shareAdverb } from '../utils/shareWords';
 import { positionOf } from '../utils/samePosition';
+import { rotateStem } from '../utils/rotateStem';
 import type { FacetTag } from './reviewFacetRank';
 import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type FactSeat } from './coachFact';
 import { threadKey } from './gameStory';
@@ -538,7 +539,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryBeatFact[] {
   // (`planRace.oppositeWingsRace`, claim `race:opposite-wings`), never here.
   if (myCastle && theirCastle) {
     const myWing = myCastle === 'short' ? 'kingside' : 'queenside';
-    if (myCastle === theirCastle) say('character', { rests: 'board', text: `Both kings on the ${myWing}: no pawn race — pushing the pawns in front of your own king only weakens it, so the fight is in the centre and on the other wing.`, squares: [], proof: NO_PROOF.description, key: 'story:character' });
+    if (myCastle === theirCastle) say('character', { rests: 'board', text: rotateStem([`Both kings are on the ${myWing}, so there is no pawn race. Pushing the pawns in front of your own king only weakens it. The fight is in the centre and on the other wing.`, `Both kings live on the ${myWing}. A pawn storm there would only weaken your own king, so the fight is in the centre and on the other wing.`], history.length), squares: [], proof: NO_PROOF.description, key: 'story:character' });
   } else if (myCastle || theirCastle) {
     // One side castled: master games say where the other king goes.
     const waiting: 'w' | 'b' = myCastle ? them : student;

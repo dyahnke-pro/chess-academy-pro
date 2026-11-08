@@ -46,7 +46,17 @@ import {
   findOpenFiles,
   bishopBlockingPawns,
   goodPieceIdeaKey,
+  type PieceQualityKind,
 } from './positionReadingService';
+
+/** What makes a bad piece bad, said after its name in players' words ("Their
+ *  bishop is their problem piece, hemmed in behind its own pawns") — never the
+ *  note's label with its reason in brackets read aloud. */
+function badPieceWords(note: { kind: PieceQualityKind; reason: string }): string {
+  if (note.kind === 'bad-bishop') return 'hemmed in behind its own pawns';
+  if (note.kind === 'rim-knight') return 'stuck on the rim';
+  return note.reason;
+}
 
 const NAME: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
@@ -305,8 +315,8 @@ function observationsFor(
         // ONE sentence each: the say-once dedupe works per sentence, and a
         // tail left standing alone ("Keeping it bad is worth as much as
         // winning a pawn.", hand walk 2026-09-25) names nothing.
-        ? `Your ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is your problem piece: ${bad.reason}, so improving it is a plan in itself.`
-        : `Their ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is their problem piece: ${bad.reason}, and keeping it bad is worth as much as winning a pawn.`,
+        ? `Your ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is your problem piece, ${badPieceWords(bad)}, so improving it is a plan in itself.`
+        : `Their ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is their problem piece, ${badPieceWords(bad)}, and keeping it bad is worth as much as winning a pawn.`,
     });
   }
 
@@ -520,8 +530,8 @@ function joinsFor(
         // lights all three.
         squares: [b.square, mv.from, mv.to],
         text: side === 'student'
-          ? `${openSentence(pieceWords(fen, b.square, color, `your ${NAME[b.piece] ?? 'piece'} on ${b.square}`))} is your problem piece: ${b.reason}, and your ${mv.from[0]}-pawn going to ${mv.to} is what frees it, so that pawn move is really about the piece.`
-          : `${openSentence(pieceWords(fen, b.square, color === 'w' ? 'b' : 'w', `their ${NAME[b.piece] ?? 'piece'} on ${b.square}`))} is their problem piece: ${b.reason}, and their ${mv.from[0]}-pawn going to ${mv.to} would free it, so stopping that pawn is worth more than it looks.`,
+          ? `${openSentence(pieceWords(fen, b.square, color, `your ${NAME[b.piece] ?? 'piece'} on ${b.square}`))} is your problem piece, ${badPieceWords(b)}, and your ${mv.from[0]}-pawn going to ${mv.to} frees it, so that pawn move is really about the piece.`
+          : `${openSentence(pieceWords(fen, b.square, color === 'w' ? 'b' : 'w', `their ${NAME[b.piece] ?? 'piece'} on ${b.square}`))} is their problem piece, ${badPieceWords(b)}, and their ${mv.from[0]}-pawn going to ${mv.to} would free it, so stopping that pawn matters more than it looks.`,
       });
       break; // one join per bad piece; the first proved fix is enough to teach
     }

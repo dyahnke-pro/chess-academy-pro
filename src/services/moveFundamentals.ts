@@ -893,9 +893,9 @@ export function computeMoveFundamentals(
       out.push({
         id: 'luft',
         weight: 46,
-        led: `gives your king luft — a flight square off the back rank`,
+        led: `gives your king luft, a flight square off the back rank`,
         selfContained: `makes luft with ${mv.to}, a flight square for the king off the back rank`,
-        imperative: `make luft — give your king a flight square off the back rank`,
+        imperative: `make luft, a flight square for your king off the back rank`,
         pointer: `give your king on ${kSq} a flight square off the back rank`,
         squares: [mv.to, kSq],
       });
@@ -1450,7 +1450,6 @@ function reasonHolds(f: Pick<MoveFundamental, 'id'>, fenBefore: string, mover: '
  *  own imperative clause (`computeMoveFundamentals`), so nothing here is
  *  asserted without proof. */
 /** A clause said as its own sentence: its first letter capitalised. */
-const capFirst = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
 
 export function principleOnceLine(
   san: string,
@@ -1470,7 +1469,7 @@ export function principleOnceLine(
   // One idea a sentence (the human register, David 2026-11-08): the rule,
   // then why it holds — never one 40-word sentence on a dash.
   return rotateStem([
-    `${san} follows a rule worth keeping: ${f.imperative}. ${capFirst(reason)}.`,
+    `${san} follows a rule worth keeping: ${f.imperative}. ${openSentence(reason)}.`,
     `The rule behind ${san}: ${f.imperative}. It matters because ${reason}.`,
   ], stemKey);
 }
@@ -1670,8 +1669,8 @@ export function principleContrastLine(
     return {
       id: lead.id,
       text: rotateStem([
-        `${best} was the opening move here: ${lead.imperative}. ${capFirst(reason)}.`,
-        `The opening rule in this spot is to ${lead.imperative}, with ${best}. ${capFirst(reason)}.`,
+        `${best} was the opening move here: ${lead.imperative}. ${openSentence(reason)}.`,
+        `The opening rule in this spot is to ${lead.imperative}, with ${best}. ${openSentence(reason)}.`,
       ], stemKey),
       squares: lead.squares, first: true, names: null,
     };

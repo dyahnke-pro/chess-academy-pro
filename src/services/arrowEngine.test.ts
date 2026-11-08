@@ -306,5 +306,7 @@ describe('a bare square fought for or prepared is a square, never a pawn move (m
   it('"fights for d4" and "prepares e5" name squares', () => {
     expect(extractMentionedSans('They play c5 — it fights for d4 from the side.')).toEqual(['c5']);
     expect(extractMentionedSans('They play d6: it prepares e5.')).toEqual(['d6']);
+    // "left e5 weak" names the square the push left behind (marks sweep 2026-11-08).
+    expect(extractMentionedSans('Your f-pawn push left e5 weak for good.')).toEqual([]);
   });
 });

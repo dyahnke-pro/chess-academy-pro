@@ -164,7 +164,7 @@ export function extractMentionedSans(text: string): string[] {
  *  piece moves ("then Bxf7", "guard it with Nf3"). */
 // "fights for d4", "prepares e5" (marks sweep 2026-11-08: a d2→d4 arrow for
 // "it fights for d4", and their "…d6: it prepares e5" drew White's e4→e5).
-const SQUARE_ONLY_PRECEDERS = new Set(['them', 'us', 'you', 'of', 'guard', 'guards', 'then', 'watch', 'reach', 'reaches', 'over', 'behind', 'beside', 'for', 'prepares', 'prepare', 'preparing']);
+const SQUARE_ONLY_PRECEDERS = new Set(['them', 'us', 'you', 'of', 'guard', 'guards', 'then', 'watch', 'reach', 'reaches', 'over', 'behind', 'beside', 'for', 'prepares', 'prepare', 'preparing', 'left']);
 
 /** The mentioned SANs with where they sit in the (marker-stripped) text, so a
  *  run of moves can be read as one LINE. Same filtering as

@@ -553,7 +553,7 @@ describe('the spoken form is the student\'s, never the prompt package (2026-09-3
   });
   it('the priority is asked, then named with the move that serves it', () => {
     const pf = buildPriorityFirst({ fen: '6k1/pp3ppp/8/3p4/8/8/PP1N1PPP/1N4K1 w - - 0 20', studentColor: 'white', bestUci: 'b1c3' });
-    expect(withoutTags(pf?.spoken ?? '')).toMatch(/^What's the priority here\? ‖ Their pawn on d5 — it's isolated .* Nc3 does\. ‖$/);
+    expect(withoutTags(pf?.spoken ?? '')).toMatch(/^What's the priority here\? ‖ Their pawn on d5 is isolated\. .* Nc3 does\. ‖$/);
     expect(pf?.spoken).not.toMatch(/Do NOT|PRIORITY FIRST/);
   });
 });

@@ -16,6 +16,7 @@
  */
 import { evalBand, evalBandWords } from './evalBand';
 import { settledLeadFor, type LastMove } from './material';
+import { openSentence } from '../utils/openSentence';
 import { andList } from '../utils/andList';
 import { goodPieceIdeaKey } from './positionReadingService';
 import { Chess, type Color } from 'chess.js';
@@ -318,8 +319,7 @@ export function phaseVerdictLine(
   // ONE IDEA A SENTENCE (the human register, David 2026-11-08): the verdict,
   // then its reasons, then the other side of the scale — never one sentence
   // held together by dashes and a semicolon.
-  const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
-  const why = a.reasons.length === 0 ? '' : ` ${cap(andList(a.reasons))}.`;
+  const why = a.reasons.length === 0 ? '' : ` ${openSentence(andList(a.reasons))}.`;
   // ONE COMPARISON, not a list: the other side of the scale, and what it
   // weighs. Level → the two sides' trumps hold each other; slightly → theirs
   // keeps it close; clearly or decisive → it is not enough.
