@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2203 lines · 17 exports · 41 importers · 50 tests · 3 audits**
+**2211 lines · 17 exports · 42 importers · 51 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,6 +24,7 @@
 - `src/hooks/useLiveCoach.ts`
 - `src/hooks/usePhaseNarration.door.test.ts`
 - `src/hooks/usePhaseNarration.ts`
+- `src/services/askedReadOnePawn.test.ts`
 - `src/services/chatBoardRead.test.ts`
 - `src/services/chatBoardRead.ts`
 - `src/services/claimChecker.measure.test.ts`
@@ -121,12 +122,13 @@
 - `src/services/positionReadComposer.ts:158`
 - `src/services/whyBestMove.ts:151`
 
-### `computePositionFacts` (function) — 113 call sites
+### `computePositionFacts` (function) — 114 call sites
 - `src/coach/boardTurnAnswer.ts:161`
 - `src/components/Coach/CoachTeachPage.tsx:11345`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:271`
 - `src/hooks/usePhaseNarration.ts:433`
+- `src/services/askedReadOnePawn.test.ts:24`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
 - `src/services/chatBoardRead.ts:81`
@@ -225,8 +227,8 @@
 - `src/test/humanSquares.gate.test.ts:65`
 - `src/test/humanSquares.gate.test.ts:88`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts:250`
-- `src/test/marksSweep.gate.test.ts:126`
-- `src/test/marksSweep.gate.test.ts:163`
+- `src/test/marksSweep.gate.test.ts:127`
+- `src/test/marksSweep.gate.test.ts:164`
 - `src/test/teach02Wired.test.ts:86`
 - `src/test/teach02Wired.test.ts:95`
 - `src/test/teach02Wired.test.ts:109`
@@ -276,6 +278,7 @@
 
 - `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/hooks/usePhaseNarration.door.test.ts`
+- `src/services/askedReadOnePawn.test.ts`
 - `src/services/bluffDetector.test.ts`
 - `src/services/chatBoardRead.test.ts`
 - `src/services/claimChecker.measure.test.ts`

@@ -1212,7 +1212,15 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // "how do I stand?" answered from, for both sides. Every one goes in; the
     // ranking decides (G4.5 — the old answer stopped after two).
     try {
+      // ONE PAWN, ONE CLAIM (decision baseline 2026-11-08, chat on the Closed
+      // Sicilian's ending: "The plan from here is to win their weak pawn on h2
+      // …" then "Their pawn on h2 is isolated — that is a long-term target
+      // worth playing against"). A plan that goes after a pawn already says
+      // the pawn is weak; the read's own note on it is the same claim, and its
+      // squares sit too few beside the plan's for the door to see it.
+      const planSquares = new Set(askedPlanClauses.flatMap((c) => c.squares ?? []));
       for (const o of readPosition(fen, studentColor === 'w' ? 'white' : 'black')) {
+        if (o.kind === 'structure' && /-iso-/.test(o.key) && (o.squares ?? []).some((sq) => planSquares.has(sq))) continue;
         askedPlanClauses.push(clause('readPosition', fen, { kind: 'structure-plan', text: o.text, squares: [...(o.squares ?? [])] }));
       }
     } catch { /* a read is a bonus, never a blocker */ }
