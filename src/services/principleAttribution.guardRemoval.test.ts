@@ -16,6 +16,7 @@ const fenAt = (sans: readonly string[]): string => { const c = new Chess(); for 
 describe('missed-guard-removal — FOR the student', () => {
   it('names the chase they skipped when Nc3 was the move and they played h3', () => {
     const out = attributePrinciples({
+      theory: true,
       historySans: [...TO_QXD5, 'h3'], bestSan: 'Nc3', classification: 'mistake',
       replySan: null, pvAfterPlayed: ['Nf6'],
     });
@@ -32,6 +33,7 @@ describe('missed-guard-removal — FOR the student', () => {
 
   it('silent when the student PLAYED the removal', () => {
     const out = attributePrinciples({
+      theory: true,
       historySans: [...TO_QXD5, 'Nc3'], bestSan: 'Rxe4', classification: 'inaccuracy', replySan: null,
     });
     expect(out.map((x) => x.id)).not.toContain('missed-guard-removal');
@@ -39,6 +41,7 @@ describe('missed-guard-removal — FOR the student', () => {
 
   it('silent while the chance still stands after their reply (not missed yet)', () => {
     const out = attributePrinciples({
+      theory: true,
       historySans: [...TO_QXD5, 'h3'], bestSan: 'Nc3', classification: 'mistake',
       replySan: null, pvAfterPlayed: ['a6'],
     });
@@ -49,6 +52,7 @@ describe('missed-guard-removal — FOR the student', () => {
 describe('ignored-guard-removal — AGAINST the student', () => {
   it('names their chase when the student left the knight with one guard', () => {
     const out = attributePrinciples({
+      theory: true,
       historySans: TO_QXD5, bestSan: 'Be6', classification: 'mistake', replySan: 'Nc3',
     });
     const a = out.find((x) => x.id === 'ignored-guard-removal');
@@ -62,6 +66,7 @@ describe('ignored-guard-removal — AGAINST the student', () => {
 
   it('silent when the reply is not a removal', () => {
     const out = attributePrinciples({
+      theory: true,
       historySans: TO_QXD5, bestSan: 'Be6', classification: 'mistake', replySan: 'h3',
     });
     expect(out.map((x) => x.id)).not.toContain('ignored-guard-removal');

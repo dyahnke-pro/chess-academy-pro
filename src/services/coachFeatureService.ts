@@ -965,6 +965,9 @@ function attributeGameFundamentals(
     let fundamentals: PrincipleAttribution[] = [];
     try {
       fundamentals = attributePrinciples({
+        // The Review walk says no opening theory (David 2026-11-06): the
+        // departure from the book is the Theory button's.
+        theory: false,
         historySans: sansForRun.slice(0, m.ply),
         bestSan: bestMoveSan,
         replySan: sansForRun[m.ply] ?? null,

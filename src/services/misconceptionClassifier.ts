@@ -275,6 +275,8 @@ function classifyMisconceptionImpl(
   // punishment + counterfactual), when the caller can supply the history.
   if (input.historySans && input.historySans.length > 0 && input.bestSan) {
     const attrs = attributePrinciples({
+      // The record files every skill, the left-book one included.
+      theory: true,
       historySans: input.historySans,
       bestSan: input.bestSan,
       classification: 'mistake',

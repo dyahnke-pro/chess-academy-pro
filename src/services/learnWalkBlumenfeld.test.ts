@@ -65,6 +65,7 @@ describe('F17 — the tempo verdict names the kick they PLAYED', () => {
     const { attributePrinciples } = await import('./principleAttribution');
     const { renderFundamentalVerdict, verdictAlone } = await import('./principleVoice');
     const attrs = attributePrinciples({
+      theory: true,
       historySans: GAME.slice(0, 34), // …Qf5
       bestSan: 'Qe6',
       classification: 'mistake',

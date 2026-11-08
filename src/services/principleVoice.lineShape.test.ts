@@ -29,6 +29,7 @@ const BARE_LIST = /(?:[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?,\s*){2,}
 
 describe('walked into a tactic — said as a shape (14.Rd5)', () => {
   const [a] = attributePrinciples({
+    theory: true,
     classification: 'mistake', bestSan: 'e5', historySans: HISTORY, replySan: 'Qb4',
     pvAfterPlayed: sans(afterRd5(), REPLY_PV),
     pvAfterBest: sans(BEFORE, BEST_PV),

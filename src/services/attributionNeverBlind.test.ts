@@ -10,7 +10,7 @@ describe('attribution is never blind', () => {
   it('names a fundamental or the reason there is none', () => {
     for (const best of ['Nf6', 'Nh6', 'Qb6', 'Qh4']) {
       const why: string[] = [];
-      const r = attributePrinciples({ historySans: N900, bestSan: best, classification: 'inaccuracy', replySan: null }, why);
+      const r = attributePrinciples({ theory: true, historySans: N900, bestSan: best, classification: 'inaccuracy', replySan: null }, why);
       expect(r.length > 0 || why.length > 0, `best=${best}: no fundamental and no reason`).toBe(true);
     }
   });

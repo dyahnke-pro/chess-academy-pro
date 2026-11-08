@@ -14,7 +14,7 @@ const PV_PLAYED = ["Qd7","Rc6","Qd4+","Rf6","b5","Ba5","Qd5","Bb4","Kb3","Bxc5",
 
 describe("wrong-move-order — the student played the engine's second move first", () => {
   it("files it under the opponent's threat, names the order, and says the line wins", () => {
-    const out = attributePrinciples({ historySans: HIST, bestSan: "Nc6", classification: "mistake", replySan: null, pvAfterPlayed: PV_PLAYED, pvAfterBest: PV_BEST });
+    const out = attributePrinciples({ theory: true, historySans: HIST, bestSan: "Nc6", classification: "mistake", replySan: null, pvAfterPlayed: PV_PLAYED, pvAfterBest: PV_BEST });
     const a = out.find((x) => x.id === "wrong-move-order");
     expect(a, JSON.stringify(out.map((x) => x.id))).toBeTruthy();
     expect(a!.tag).toBe(FUNDAMENTAL_TAG["wrong-move-order"]);
@@ -27,11 +27,11 @@ describe("wrong-move-order — the student played the engine's second move first
   });
   it("silent when the played move is not the best line's follow-up (a different mistake)", () => {
     const hist = [...HIST.slice(0, -1), "Bd6"];
-    const out = attributePrinciples({ historySans: hist, bestSan: "Nc6", classification: "mistake", replySan: null, pvAfterPlayed: PV_PLAYED.slice(0, 1).length ? ["Qd7"] : [], pvAfterBest: PV_BEST });
+    const out = attributePrinciples({ theory: true, historySans: hist, bestSan: "Nc6", classification: "mistake", replySan: null, pvAfterPlayed: PV_PLAYED.slice(0, 1).length ? ["Qd7"] : [], pvAfterBest: PV_BEST });
     expect(out.map((x) => x.id)).not.toContain("wrong-move-order");
   });
   it("silent without the persisted engine lines (nothing to prove it with)", () => {
-    const out = attributePrinciples({ historySans: HIST, bestSan: "Nc6", classification: "mistake", replySan: null });
+    const out = attributePrinciples({ theory: true, historySans: HIST, bestSan: "Nc6", classification: "mistake", replySan: null });
     expect(out.map((x) => x.id)).not.toContain("wrong-move-order");
   });
 });

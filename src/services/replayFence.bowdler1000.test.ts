@@ -35,6 +35,7 @@ describe('ply 42 — 21…Nc6 is one development claim, not two', () => {
 describe('ply 54 — Kh8 is not "walking the king in"', () => {
   it('passive-king is not attributed when the better king move goes to the corner', () => {
     const ids = attributePrinciples({
+      theory: true,
       historySans: GAME.slice(0, 54), bestSan: 'Kh8', classification: 'mistake',
       evalBefore: 304, evalAfterPlayed: 183, replySan: 'Kg4',
       pvAfterPlayed: ['Kg4', 'Rf4+', 'Kh5', 'Kf8', 'Rg1', 'f5'],

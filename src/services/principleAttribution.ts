@@ -193,6 +193,12 @@ export interface PrincipleAttribution {
 export interface AttributionInput {
   /** Every SAN of the game up to AND INCLUDING the played move. */
   historySans: readonly string[];
+  /** REQUIRED: may opening theory be said here (David 2026-11-06: "Keep the
+   *  theory part for review only. It belongs in the button")? The Review
+   *  walk passes false, so its fundamentals never name the book move — the
+   *  student's departure from the book is the Theory button's. Learn and the
+   *  record pass true (the record still files the left-book skill). */
+  theory: boolean;
   /** The engine's best move at the position before the played move (SAN). */
   bestSan: string | null;
   /** cpLoss of the played move (mover POV). Attribution requires a flagged move. */
@@ -539,6 +545,8 @@ interface Ctx {
   before: Chess; after: Chess; afterBest: Chess;
   mover: Color; opp: Color; last: Move; best: Move;
   history: Move[]; plyIndex: number; opening: boolean; endgame: boolean;
+  /** `AttributionInput.theory`. */
+  theory: boolean;
   pvP?: readonly string[]; pvB?: readonly string[];
   /** The opponent's actual reply, parsed on `after`, or null. */
   reply: Move | null;
@@ -1855,6 +1863,7 @@ const DETECTORS: Detector[] = [
   // book move NAMED is the engine's best when the book has it, else the book's
   // representative line. Not before ply 4: everyone leaves "book" at 1.e4.
   (c) => {
+    if (!c.theory) return no(c, 'left-book-early', 'opening theory is not said here (the Review walk: the departure is the Theory button\'s)');
     if (!c.opening) return no(c, 'left-book-early', `ply ${c.plyIndex} is past the ${OPENING_PLIES}-ply opening window`);
     if (c.plyIndex < BOOK_FROM_PLY) return no(c, 'left-book-early', `ply ${c.plyIndex} is too early to be "out of book"`);
     const { last, best } = c;
@@ -1972,7 +1981,7 @@ export function attributePrinciples(
   const mover = last.color;
   const ctx: Ctx = {
     before, after, afterBest, mover, opp: other(mover), last, best, history,
-    plyIndex: input.historySans.length, opening: input.historySans.length <= OPENING_PLIES,
+    plyIndex: input.historySans.length, opening: input.historySans.length <= OPENING_PLIES, theory: input.theory,
     endgame: isEndgame(before), pvP: input.pvAfterPlayed, pvB: input.pvAfterBest,
     reply: input.replySan ? tryMove(after, input.replySan) : null,
     evalBefore: input.evalBefore, evalAfterPlayed: input.evalAfterPlayed,

@@ -12,6 +12,7 @@ const HIST = ['e4','c6','Nf3','d5','e5','Bf5','d4','e6','Nc3','c5','Bf4','Nc6','
 describe('traded-active-for-passive names the piece it took', () => {
   it('Bxf6+ took a knight: "for their passive knight"', () => {
     const attrs = attributePrinciples({
+      theory: true,
       replySan: null, historySans: HIST, bestSan: 'Rc7+', classification: 'mistake',
       // The engine's line after 23.Bxf6+ (Stockfish 18, depth 16).
       pvAfterPlayed: ['Kxf6', 'Qh4+', 'Kf7', 'Rc7+', 'Kg8'],
@@ -23,7 +24,7 @@ describe('traded-active-for-passive names the piece it took', () => {
     expect(line).not.toMatch(/passive one/);
   });
   it('no trade when the line does not take back', () => {
-    const attrs = attributePrinciples({ replySan: null, historySans: HIST, bestSan: 'Rc7+', classification: 'mistake', pvAfterPlayed: ['Kf7', 'Qh4'] });
+    const attrs = attributePrinciples({ theory: true, replySan: null, historySans: HIST, bestSan: 'Rc7+', classification: 'mistake', pvAfterPlayed: ['Kf7', 'Qh4'] });
     expect(attrs.some((x) => x.id === 'traded-active-for-passive')).toBe(false);
   });
 });
@@ -33,6 +34,7 @@ describe('traded-active-for-passive names the piece it took', () => {
 describe('a trade whose line wins is not the wrong side of one', () => {
   it('the played line wins the rook → no traded-active-for-passive', () => {
     const attrs = attributePrinciples({
+      theory: true,
       replySan: null, historySans: HIST, bestSan: 'Rc7+', classification: 'inaccuracy',
       pvAfterPlayed: ['Qxf6', 'Rc7+', 'Kf8', 'Qxa8+'],
     });
@@ -45,6 +47,7 @@ describe('a trade whose line wins is not the wrong side of one', () => {
 describe('a blunder-sized swing is never blamed on trade quality', () => {
   it('no lines, a six-point swing → no traded-active-for-passive', () => {
     const attrs = attributePrinciples({
+      theory: true,
       replySan: null, historySans: HIST, bestSan: 'Rc7+', classification: 'mistake',
       evalBefore: 1094, evalAfterPlayed: 474,
     });
@@ -52,6 +55,7 @@ describe('a blunder-sized swing is never blamed on trade quality', () => {
   });
   it('…and a small one still names the trade (non-vacuous)', () => {
     const attrs = attributePrinciples({
+      theory: true,
       replySan: null, historySans: HIST, bestSan: 'Rc7+', classification: 'inaccuracy',
       evalBefore: 300, evalAfterPlayed: 220,
     });

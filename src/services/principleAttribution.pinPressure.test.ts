@@ -14,6 +14,7 @@ const PINNED = ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Nf6', 'Bg5', 'h5'];
 describe('missed-pin-pressure — FOR the student', () => {
   it('names the skipped pile-on when e5 was the move and they played a3', () => {
     const out = attributePrinciples({
+      theory: true,
       historySans: [...PINNED, 'a3'], bestSan: 'e5', classification: 'mistake',
       replySan: null, pvAfterPlayed: ['Be7'],
     });
@@ -33,6 +34,7 @@ describe('missed-pin-pressure — FOR the student', () => {
 
   it('stays silent when the student PLAYED the pile-on (nothing missed)', () => {
     const out = attributePrinciples({
+      theory: true,
       historySans: [...PINNED, 'e5'], bestSan: 'exd5', classification: 'inaccuracy', replySan: null,
     });
     expect(out.map((x) => x.id)).not.toContain('missed-pin-pressure');
@@ -40,6 +42,7 @@ describe('missed-pin-pressure — FOR the student', () => {
 
   it('stays silent when the pile-on is still there after their reply (not missed yet)', () => {
     const out = attributePrinciples({
+      theory: true,
       historySans: [...PINNED, 'a3'], bestSan: 'e5', classification: 'mistake',
       replySan: null, pvAfterPlayed: ['a6'],
     });
@@ -51,6 +54,7 @@ describe('missed-pin-pressure — FOR the student', () => {
 describe('ignored-pin-pressure — AGAINST the student', () => {
   it('names their pile-on when the student left the pinned knight to it', () => {
     const out = attributePrinciples({
+      theory: true,
       historySans: PINNED, bestSan: 'Be7', classification: 'mistake',
       replySan: 'e5',
     });
@@ -65,6 +69,7 @@ describe('ignored-pin-pressure — AGAINST the student', () => {
 
   it('reads the engine reply when the real one is not known yet', () => {
     const out = attributePrinciples({
+      theory: true,
       historySans: PINNED, bestSan: 'Be7', classification: 'mistake',
       replySan: null, pvAfterPlayed: ['e5', 'a6'],
     });
@@ -73,6 +78,7 @@ describe('ignored-pin-pressure — AGAINST the student', () => {
 
   it('stays silent when the reply is not a pile-on', () => {
     const out = attributePrinciples({
+      theory: true,
       historySans: PINNED, bestSan: 'Be7', classification: 'mistake', replySan: 'Nf3',
     });
     expect(out.map((x) => x.id)).not.toContain('ignored-pin-pressure');

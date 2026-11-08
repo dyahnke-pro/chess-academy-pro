@@ -75,7 +75,7 @@ describe('Learn walk oct2a', () => {
 
   it('F16: in check, the king move is an answer — no "walking in" lesson', () => {
     const c = play('e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 Nf6 Bg5 Be7 Nc3 O-O Nd5 Re8 Nxf6+ Bxf6 Bxf6 Qxf6 Qxf6 Rxe4+ Be2 gxf6 f3 Re3 Kd2 Re7 Rad1 d6 g4 Be6 b3 Rd8 h4 f5 Rhg1 fxg4 fxg4 Kf8 h5 h6 g5 hxg5 Rxg5 f6 Rg6 Rf7 Rdg1 Ke7 h6 Rh8 Bd3 f5 Re1 Rf6 Rg7+ Kd8 h7 Rh6 Bxf5 Bxf5 Rg8+ Rxg8');
-    const atts = attributePrinciples({ historySans: c.history(), bestSan: 'Kd7', classification: 'blunder', opponentReply: null } as never);
+    const atts = attributePrinciples({ theory: true, historySans: c.history(), bestSan: 'Kd7', classification: 'blunder', opponentReply: null } as never);
     expect(atts.map((a) => a.id)).not.toContain('passive-king-endgame');
   });
 });

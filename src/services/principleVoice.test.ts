@@ -7,7 +7,7 @@ import { renderFundamentalVerdict, renderFundamentalsRecap, renderPvEvidence, ve
 
 const ALAPIN = '1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. cxd4 Nc6 6. Nc3 Nb6';
 const SANS = (() => { const c = new Chess(); c.loadPgn(ALAPIN); return c.history(); })();
-const attrs = attributePrinciples({ replySan: null, historySans: SANS, bestSan: 'e6', classification: 'mistake' });
+const attrs = attributePrinciples({ theory: true, replySan: null, historySans: SANS, bestSan: 'e6', classification: 'mistake' });
 
 describe('principleVoice — deterministic DNA-register verdicts', () => {
   it('names only squares and moves the attributor proved', () => {
@@ -139,7 +139,7 @@ describe('a verdict beside a line that names the better move leaves it out (Lear
 describe('a pawn trade is not a poisoned grab (Learn walk 2026-10-01, game 1 ply 12)', () => {
   it('…exf3 with exf3 to come is not greedy-pawn-grab', () => {
     const sans = 'h4 Nc6 c3 Nf6 f3 e5 g4 d5 b4 e4 h5 exf3'.split(' ');
-    const a = attributePrinciples({ replySan: 'exf3', historySans: sans, bestSan: 'Bd6', classification: 'inaccuracy' });
+    const a = attributePrinciples({ theory: true, replySan: 'exf3', historySans: sans, bestSan: 'Bd6', classification: 'inaccuracy' });
     expect(a.map((x) => x.id)).not.toContain('greedy-pawn-grab');
   });
 });
@@ -152,15 +152,15 @@ describe('an ignored threat can be a LINE, not only a hanging piece (A3, review 
     // — the old raw capture sum said it did. The engine's own threat before Kh2
     // ran a different line (…Nxe3 g6 …Nxf1), which this detector never sees,
     // so "their threat was already on" cannot be proven and is not said.
-    const a = attributePrinciples({ replySan: 'Nxe3', historySans: G3, bestSan: 'Rfc1', classification: 'blunder', pvAfterPlayed: ['Nxe3', 'fxe3', 'Rxf1', 'Rxf1', 'Rxf1'] });
+    const a = attributePrinciples({ theory: true, replySan: 'Nxe3', historySans: G3, bestSan: 'Rfc1', classification: 'blunder', pvAfterPlayed: ['Nxe3', 'fxe3', 'Rxf1', 'Rxf1', 'Rxf1'] });
     expect(a.some((x) => x.id === 'ignored-threat' && x.facts.line)).toBe(false);
   });
   it('a threat line cut mid-exchange proves nothing (WO-OUTCOME-01)', () => {
-    const a = attributePrinciples({ replySan: 'Nxe3', historySans: G3, bestSan: 'Rfc1', classification: 'blunder', pvAfterPlayed: ['Nxe3', 'fxe3', 'Rxf1'] });
+    const a = attributePrinciples({ theory: true, replySan: 'Nxe3', historySans: G3, bestSan: 'Rfc1', classification: 'blunder', pvAfterPlayed: ['Nxe3', 'fxe3', 'Rxf1'] });
     expect(a.some((x) => x.id === 'ignored-threat' && x.facts.line)).toBe(false);
   });
   it('a trade is not a threat: Be3 with …Bxc3 bxc3 attaches nothing of the kind', () => {
-    const a = attributePrinciples({ replySan: 'Bxc3', historySans: G3.slice(0, 23), bestSan: 'Nxe4', classification: 'inaccuracy', pvAfterPlayed: ['Bxc3', 'bxc3'] });
+    const a = attributePrinciples({ theory: true, replySan: 'Bxc3', historySans: G3.slice(0, 23), bestSan: 'Nxe4', classification: 'inaccuracy', pvAfterPlayed: ['Bxc3', 'bxc3'] });
     expect(a.some((x) => x.id === 'ignored-threat' && x.facts.line)).toBe(false);
   });
 });

@@ -143,6 +143,8 @@ export function attributeLiveFundamental(input: LiveFundamentalReads): Principle
     : undefined;
 
   return attributePrinciples({
+    // Learn keeps its theory (David 2026-11-06: "keep in learn for now also").
+    theory: true,
     historySans: input.historySans,
     bestSan: input.bestSan,
     classification: 'mistake', // flagged is proven above; the attributor names WHY

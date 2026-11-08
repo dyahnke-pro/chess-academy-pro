@@ -31,7 +31,7 @@ describe("ignored-pin-break — the student leaned on a pin that does not hold",
     expect(v).toMatch(/check/);
   });
   it("silent on the safe queen move (Qg3 leaves no pin to walk out of)", () => {
-    const out = attributePrinciples({ ...input, historySans: [...GAME, "Qg3"] });
+    const out = attributePrinciples({ theory: true, ...input, historySans: [...GAME, "Qg3"] });
     expect(ids(out)).not.toContain("ignored-pin-break");
   });
 });
@@ -53,7 +53,7 @@ describe("missed-pin-break — the student stayed in a pin they could break", ()
     expect(v).toMatch(/rook on f6/);
   });
   it("silent when the best move is not the escape", () => {
-    const out = attributePrinciples({ ...input, bestSan: "Kh7" });
+    const out = attributePrinciples({ theory: true, ...input, bestSan: "Kh7" });
     expect(ids(out)).not.toContain("missed-pin-break");
   });
 });

@@ -44,6 +44,6 @@ describe('blocked-own-retreat', () => {
   });
 
   it('stays silent when the line never wins the bishop', () => {
-    expect(attributePrinciples({ ...QD3, pvAfterPlayed: ['b5'] }).some((x) => x.id === 'blocked-own-retreat')).toBe(false);
+    expect(attributePrinciples({ theory: true, ...QD3, pvAfterPlayed: ['b5'] }).some((x) => x.id === 'blocked-own-retreat')).toBe(false);
   });
 });

@@ -28,6 +28,7 @@ describe('walked-into-tactic', () => {
 
   it('names the blow and what it wins, from the student seat', () => {
     const [a] = attributePrinciples({
+      theory: true,
       classification: 'mistake', bestSan: 'Ra8', historySans: HISTORY, replySan: null,
       pvAfterPlayed: ['Nc6', 'Qe8', 'Nxb8', 'Qxb8', 'Re2', 'Rb7'],
       pvAfterBest: ['Nc6', 'Qd7', 'a4', 'Rb6', 'Rf1'],
@@ -43,6 +44,7 @@ describe('walked-into-tactic', () => {
 
   it('NEGATIVE CONTROL: a quiet line that wins nothing is never a tactic walked into', () => {
     const out = attributePrinciples({
+      theory: true,
       classification: 'mistake', bestSan: 'Ra8', historySans: HISTORY, replySan: null,
       pvAfterPlayed: ['h3', 'h6', 'Kh2', 'Kh7'],
       pvAfterBest: ['h3'],

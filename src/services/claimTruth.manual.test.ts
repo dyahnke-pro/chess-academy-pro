@@ -8,19 +8,19 @@ import { NO_SECOND_READ } from './inaccuracyCall';
 
 describe('an even trade is not a loose piece (items 133-135)', () => {
   it('Bxf6 (recaptured) is not flagged loose-piece; Nxg5?? still is', () => {
-    const trade = attributePrinciples({ replySan: null, historySans: ['e4', 'g6', 'd4', 'Bg7', 'Nc3', 'e6', 'h4', 'h5', 'Bg5', 'Bf6', 'Bxf6'], bestSan: 'Qd2', classification: 'inaccuracy', pvAfterPlayed: ['Nxf6', 'e5', 'Ng8', 'Qd2', 'd5', 'Nf3', 'b6', 'Ng5'] });
+    const trade = attributePrinciples({ theory: true, replySan: null, historySans: ['e4', 'g6', 'd4', 'Bg7', 'Nc3', 'e6', 'h4', 'h5', 'Bg5', 'Bf6', 'Bxf6'], bestSan: 'Qd2', classification: 'inaccuracy', pvAfterPlayed: ['Nxf6', 'e5', 'Ng8', 'Qd2', 'd5', 'Nf3', 'b6', 'Ng5'] });
     expect(trade.map((a) => a.id)).not.toContain('loose-piece');
-    const hang = attributePrinciples({ replySan: null, historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5', 'Bg5', 'h6', 'Bh4', 'g5', 'Bg3', 'Nh5', 'Nxg5'], bestSan: 'Nc3', classification: 'blunder', pvAfterPlayed: ['hxg5','Nc3','d6','h4','g4','Nd5','a6','c3'] });
+    const hang = attributePrinciples({ theory: true, replySan: null, historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5', 'Bg5', 'h6', 'Bh4', 'g5', 'Bg3', 'Nh5', 'Nxg5'], bestSan: 'Nc3', classification: 'blunder', pvAfterPlayed: ['hxg5','Nc3','d6','h4','g4','Nd5','a6','c3'] });
     // With the engine's own line the grab is named for what it is — the g5
     // pawn was guarded by h6, so it was poisoned, and that owns the hang.
     expect(hang.map((a) => a.id)[0]).toBe('poisoned-pawn');
   });
   it('no engine line, no "it hangs" — a swap count alone proves nothing (WO-OUTCOME-01)', () => {
-    const noLine = attributePrinciples({ replySan: null, historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5', 'Bg5', 'h6', 'Bh4', 'g5', 'Bg3', 'Nh5', 'Nxg5'], bestSan: 'Nc3', classification: 'blunder' });
+    const noLine = attributePrinciples({ theory: true, replySan: null, historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5', 'Bg5', 'h6', 'Bh4', 'g5', 'Bg3', 'Nh5', 'Nxg5'], bestSan: 'Nc3', classification: 'blunder' });
     expect(noLine.map((a) => a.id)).not.toContain('loose-piece');
   });
   it('a line that never takes the piece proves no hang', () => {
-    const elsewhere = attributePrinciples({ replySan: null, historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5', 'Bg5', 'h6', 'Bh4', 'g5', 'Bg3', 'Nh5', 'Nxg5'], bestSan: 'Nc3', classification: 'blunder', pvAfterPlayed: ['d6'] });
+    const elsewhere = attributePrinciples({ theory: true, replySan: null, historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5', 'Bg5', 'h6', 'Bh4', 'g5', 'Bg3', 'Nh5', 'Nxg5'], bestSan: 'Nc3', classification: 'blunder', pvAfterPlayed: ['d6'] });
     expect(elsewhere.map((a) => a.id)).not.toContain('loose-piece');
   });
 });
@@ -114,7 +114,7 @@ describe('a recapture that just loses the piece says so (item 84)', () => {
 describe('a pawn capture taken straight back is not a doubled-pawn weakness (item 294)', () => {
   it('…bxc3 in the closed Sicilian is not "c5 is a weak pawn"', () => {
     const hist = ['e4', 'c5', 'Nc3', 'a6', 'g3', 'b5', 'a3', 'Bb7', 'Bg2', 'd6', 'd3', 'e6', 'f4', 'Nf6', 'Nf3', 'Be7', 'O-O', 'Nbd7', 'h3', 'Qc7', 'Ne2', 'h5', 'a4', 'b4', 'c3', 'bxc3'];
-    const out = attributePrinciples({ replySan: null, historySans: hist, bestSan: 'b3', classification: 'mistake' });
+    const out = attributePrinciples({ theory: true, replySan: null, historySans: hist, bestSan: 'b3', classification: 'mistake' });
     expect(out.map((a) => a.id)).not.toContain('created-pawn-weakness');
   });
 });
@@ -122,7 +122,7 @@ describe('a pawn capture taken straight back is not a doubled-pawn weakness (ite
 describe('Bc2 in ktoa6lk6qNk: the blow is g4 and it wins a piece (items 189, 190)', () => {
   const hist = ['e4', 'c5', 'Nf3', 'd6', 'c3', 'Nf6', 'h3', 'Nc6', 'Bd3', 'g6', 'Bc2', 'Bg7', 'O-O', 'e5', 'Re1', 'O-O', 'd4', 'cxd4', 'cxd4', 'exd4', 'Nxd4', 'Re8', 'Nf3', 'd5', 'exd5', 'Rxe1+', 'Qxe1', 'Nxd5', 'Bb3', 'Bf5', 'Na3', 'Qd7', 'Qd1', 'Ncb4', 'Qe1', 'Nc6', 'Qd1', 'Ncb4', 'Nd4', 'Bd3', 'Nac2', 'Rc8', 'Nxb4', 'Nxb4', 'a3', 'Bxd4', 'axb4', 'Qf5', 'Qe1', 'a6', 'Be3', 'Bxb2', 'Rd1', 'Bc3', 'Bd2', 'Bd4', 'Be3', 'Bc3', 'Bd2', 'Bxd2', 'Qxd2', 'Bc2'];
   it('a pawn hitting the queen is the immediate blow — no "gxf5 was waiting deeper"', () => {
-    const out = attributePrinciples({ replySan: 'Bxc2', historySans: hist, bestSan: 'Bc4', classification: 'mistake', pvAfterPlayed: ['g4', 'Bxb3', 'gxf5', 'Bxd1', 'Qxd1'], evalBefore: 109, evalAfterPlayed: -171 } as never);
+    const out = attributePrinciples({ theory: true, replySan: 'Bxc2', historySans: hist, bestSan: 'Bc4', classification: 'mistake', pvAfterPlayed: ['g4', 'Bxb3', 'gxf5', 'Bxd1', 'Qxd1'], evalBefore: 109, evalAfterPlayed: -171 } as never);
     expect(out.map((a) => a.id)).not.toContain('calculation-depth');
   });
   it('the plan reader says "a piece for a pawn", not "a pawn"', async () => {
@@ -177,12 +177,12 @@ describe('run I manual check: a recapture is not a win, a pawn recapture is not 
 describe('an even trade is not "waiting deeper" (Learn walk 2026-10-02, plies 26 and 38)', () => {
   const g = ['e4', 'e5', 'c3', 'Be7', 'd4', 'exd4', 'cxd4', 'Nf6', 'Nc3', 'Nc6', 'h3', 'd5', 'e5', 'Ne4', 'Bd3', 'Bb4', 'Bxe4', 'dxe4', 'Ne2', 'Be6', 'O-O', 'Bc4', 'Be3', 'Bxc3', 'bxc3', 'O-O'];
   it('…O-O: exf6 en passant against the student\'s own …f5 is not the blow', () => {
-    const out = attributePrinciples({ replySan: 'Re1', historySans: g, bestSan: 'Ne7', classification: 'mistake', pvAfterPlayed: ['Re1', 'f5', 'exf6', 'Qxf6'], evalBefore: 66, evalAfterPlayed: -31 } as never);
+    const out = attributePrinciples({ theory: true, replySan: 'Re1', historySans: g, bestSan: 'Ne7', classification: 'mistake', pvAfterPlayed: ['Re1', 'f5', 'exf6', 'Qxf6'], evalBefore: 66, evalAfterPlayed: -31 } as never);
     expect(out.find((a) => a.id === 'calculation-depth')?.evidence?.moves?.[0]).not.toBe('exf6');
   });
   it('…a6: axb5 axb5 is a pawn swap, not the blow', () => {
     const h = [...g, 'Re1', 'Bd5', 'Qc2', 'Na5', 'Nf4', 'c6', 'Qa4', 'Nc4', 'Rab1', 'b5', 'Qc2', 'a6'];
-    const out = attributePrinciples({ replySan: 'Nxd5', historySans: h, bestSan: 'Qd7', classification: 'mistake', pvAfterPlayed: ['Qe2', 'f6', 'a4', 'Qd7', 'axb5', 'axb5'], evalBefore: 131, evalAfterPlayed: 40 } as never);
+    const out = attributePrinciples({ theory: true, replySan: 'Nxd5', historySans: h, bestSan: 'Qd7', classification: 'mistake', pvAfterPlayed: ['Qe2', 'f6', 'a4', 'Qd7', 'axb5', 'axb5'], evalBefore: 131, evalAfterPlayed: 40 } as never);
     expect(out.find((a) => a.id === 'calculation-depth')?.evidence?.moves?.[0]).not.toBe('axb5');
   });
 });
@@ -190,7 +190,7 @@ describe('an even trade is not "waiting deeper" (Learn walk 2026-10-02, plies 26
 describe('a guard is not the piece doing nothing (Learn walk 2026-10-02, ply 56)', () => {
   it('…Qg4+ with the knight on h6 guarding the queen: no "improve your worst piece"', () => {
     const h = ['h4', 'Nc6', 'c3', 'Nf6', 'f3', 'e5', 'g4', 'd5', 'b4', 'e4', 'h5', 'exf3', 'exf3', 'Bd6', 'Kf2', 'O-O', 'd4', 'a5', 'b5', 'Ne7', 'a4', 'c5', 'g5', 'Nf5', 'gxf6', 'Qxf6', 'f4', 'cxd4', 'c4', 'dxc4', 'Bxc4', 'Bc5', 'Kf1', 'Be6', 'Bxe6', 'Qxe6', 'Qf3', 'Qc4+', 'Kg2', 'Qxc1', 'Ne2', 'Ne3+', 'Kg3', 'Qb2', 'Nbc3', 'dxc3', 'Rab1', 'Nf5+', 'Kg4', 'Nh6+', 'Kh3', 'Qa2', 'Nxc3', 'Qe6+', 'Kg2', 'Qg4+'];
-    const out = attributePrinciples({ replySan: 'Qxg4', historySans: h, bestSan: 'Nf5', classification: 'blunder' });
+    const out = attributePrinciples({ theory: true, replySan: 'Qxg4', historySans: h, bestSan: 'Nf5', classification: 'blunder' });
     expect(out.map((a) => a.id)).not.toContain('worst-piece-unimproved');
   });
 });

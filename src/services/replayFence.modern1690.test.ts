@@ -31,6 +31,7 @@ describe('an even trade is not an overvalued attack (ply 21)', () => {
   it('11.Bxg7 — bishop for bishop, the knight on c3 was the loss', async () => {
     const { attributePrinciples } = await import('./principleAttribution');
     const ids = attributePrinciples({
+      theory: true,
       historySans: GAME.slice(0, 21), bestSan: 'Nd1', classification: 'blunder',
       evalBefore: 92, evalAfterPlayed: -249,
       pvAfterPlayed: ['bxc3', 'Qh6', 'cxb2', 'Rd1', 'Qa5'], pvAfterBest: ['Ne5', 'Bxg7', 'Kxg7', 'Be2'],

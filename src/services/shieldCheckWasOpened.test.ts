@@ -8,7 +8,7 @@ const HIST = ["e4", "c6", "Nf3", "d5", "e5", "Bf5", "d4", "e6", "Nc3", "c5", "Bf
 
 describe('a weakened shield names only a check the pawn move opened', () => {
   it('h3 opens nothing for Qa1+', () => {
-    const attrs = attributePrinciples({ replySan: null, historySans: HIST, bestSan: 'Qb4+', classification: 'inaccuracy', pvAfterPlayed: ['Qd6'] });
+    const attrs = attributePrinciples({ theory: true, replySan: null, historySans: HIST, bestSan: 'Qb4+', classification: 'inaccuracy', pvAfterPlayed: ['Qd6'] });
     expect(attrs.some((x) => x.id === 'weakened-king-shield')).toBe(false);
   });
 });

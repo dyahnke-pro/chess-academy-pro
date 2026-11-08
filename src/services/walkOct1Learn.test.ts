@@ -91,7 +91,7 @@ describe('Learn walk 2026-10-01 — games 2 and 3', () => {
 
   it('a recapture inside a plain trade is not the "trap" a calculation missed', () => {
     const hist = ['e4', 'c5', 'Nf3', 'Nf6', 'e5', 'Nd5', 'Nc3', 'e6', 'Ne4', 'f5', 'Nc3', 'Nb4', 'g3', 'd5', 'exd6', 'Bxd6', 'Bg2', 'O-O', 'O-O', 'e5', 'd3', 'N8c6', 'a3', 'Na6', 'Re1', 'Nc7', 'Nd2', 'Be6', 'Nc4', 'Bxc4', 'dxc4', 'e4', 'f3', 'Kh8', 'fxe4', 'f4', 'gxf4', 'Bxf4', 'Qxd8', 'Raxd8', 'Bxf4', 'Rxf4', 'Nd5', 'Rf7', 'Rf1', 'Rxf1+', 'Rxf1', 'Ne6', 'c3'];
-    const out = attributePrinciples({ historySans: hist, bestSan: 'e5', classification: 'inaccuracy', pvAfterPlayed: ['Rf8', 'Rxf8+', 'Nxf8', 'h4', 'Kg8'], evalBefore: 139, evalAfterPlayed: 46 } as never);
+    const out = attributePrinciples({ theory: true, historySans: hist, bestSan: 'e5', classification: 'inaccuracy', pvAfterPlayed: ['Rf8', 'Rxf8+', 'Nxf8', 'h4', 'Kg8'], evalBefore: 139, evalAfterPlayed: 46 } as never);
     expect(out.map((a) => a.id)).not.toContain('calculation-depth');
   });
 });
