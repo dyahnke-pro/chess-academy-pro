@@ -402,7 +402,7 @@ export function moveDifference(fenBefore: string, sanA: string, sanB: string, ow
     const [hi, lo, rh, rl] = ra >= rb ? [a, bm, ra, rb] : [bm, a, rb, ra];
     if (rh - rl >= 3 && rh >= 1.5 * Math.max(1, rl)) {
       return { kind: 'activity', favours: hi.san, other: lo.san, squares: [hi.to, lo.to],
-        text: `${own} ${NAME[hi.piece]} does more on ${hi.to} — ${rh} squares from there against ${rl} on ${lo.to}`,
+        text: `${own} ${NAME[hi.piece]} does more on ${hi.to}, with ${rh} squares from there against ${rl} on ${lo.to}`,
         held: `${own === 'your' ? 'yours' : 'theirs'} puts the piece where it does more`,
         heldOther: `the other puts the piece where it does more` };
     }
@@ -454,7 +454,12 @@ export function alsoGood(args: { fenBefore: string; san: string; student: Color;
       if (!bothWin && ce >= BOTH_WIN && playedEs >= BOTH_WIN) bothWin = { c, gap: gapCp };
       continue;
     }
-    const text = `${played.san} or ${c.san} — both hold here, and what separates them is this: ${d.text}.`;
+    // No dash chain (the human voice, 2026-11-08: "Be7 or Bd6 — both hold
+    // here, and what separates them is this: … does more on d6 — 8 squares
+    // from there" ran two dashes and a colon in one breath). The claim and its
+    // difference stay ONE sentence: split, the voice kept "Nxe4 and dxe4 both
+    // hold here." alone where it had refused the whole.
+    const text = `${played.san} and ${c.san} both hold here, and what separates them is that ${d.text}.`;
     const heldText = mover === args.student
       ? `Another move was worth the same here — ${d.favours === played.san ? d.held : d.heldOther}.`
       : text;
@@ -692,7 +697,10 @@ export function squareChoice(args: { fenBefore: string; san: string; student: Co
   // sums up the rest (`faults` is in the eye's order, most natural first).
   const said = outLoud(all) <= 2 ? all : `on ${faults[0].square} it ${faults[0].text}, and its other squares are no better`;
   const text = outLoud(said) <= 1
-    ? `${mover === args.student ? `Your ${piece} goes to ${played.to}` : `Their ${piece} went to ${played.to}`} — ${said}.`
+    // The square, then the fault on the other square its own sentence ("Their
+    // bishop went to e4 — on g4 it runs into …Bxf3+ — you win the exchange"
+    // was a dash chain).
+    ? `${mover === args.student ? `Your ${piece} goes to ${played.to}` : `Their ${piece} went to ${played.to}`}. ${openSentence(said)}.`
     // ROTATED on the board and the move (prod Review 2026-11-06: "Why that
     // square for …?" said three times in one game).
     : (() => {

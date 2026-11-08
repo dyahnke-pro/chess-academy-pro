@@ -61,4 +61,10 @@
 // phrasings rotated on the board.
 // 2026-11-08-marks: a lesson beat lights every square its spoken words name
 // (marks sweep: "your queen on d8" went unlit when the note was the source).
-export const WALKTHROUGH_GEN_REV = '2026-11-08-marks';
+// 2026-11-08-voice7: no dash chains in the moves weighed — the move of the
+// same worth is one sentence ("Be7 and Bd6 both hold here, and what separates
+// them is that their bishop does more on d6, with 8 squares from there against
+// 2 on e7"), the square choice says its square, then the other square's fault
+// ("Their bishop went to e4. On g4 it runs into …Bxf3+ …"); a move that hits a
+// piece "attacks" or "hits" it.
+export const WALKTHROUGH_GEN_REV = '2026-11-08-voice7';
