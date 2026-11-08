@@ -30,7 +30,7 @@
  * stays rare).
  */
 import { Chess, type Color } from 'chess.js';
-import { computeMustDefend, mateThreatsAgainst } from '../../services/threatOut';
+import { newThreat } from '../../services/threatOut';
 import { costOf, studentCp } from './castlingWatch';
 import type { ReadLine } from './focusChances';
 import { positionKey } from '../../services/positionProvenance';
@@ -88,17 +88,6 @@ function costAgainstRead(x: TempoMoveInput): number | null {
   return Math.max(...cps) - Math.min(...cps);
 }
 
-/** Pieces of `foe`'s (not pawns) the other side wins on its next move. */
-const enPrise = (fen: string, foe: Color): Set<string> =>
-  new Set(computeMustDefend(fen, foe).pieces.filter((p) => p.piece !== 'p').map((p) => p.square));
-
-/** After the move, `foe` faces a threat it did not face before: a piece of
- *  theirs newly en prise, or a mate threat. */
-function newThreat(fenBefore: string, fenAfter: string, foe: Color): boolean {
-  const before = enPrise(fenBefore, foe);
-  for (const sq of enPrise(fenAfter, foe)) if (!before.has(sq)) return true;
-  return mateThreatsAgainst(fenAfter, foe).moves.length > 0 && mateThreatsAgainst(fenBefore, foe).moves.length === 0;
-}
 
 const foeOf = (c: Color): Color => (c === 'w' ? 'b' : 'w');
 

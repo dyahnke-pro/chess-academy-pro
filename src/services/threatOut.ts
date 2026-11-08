@@ -137,3 +137,16 @@ export function computeMustDefend(fen: string, subjectColor: 'w' | 'b'): MustDef
     .sort((a, b) => b.value - a.value);
   return { net: mine[0]?.value ?? 0, pieces: mine };
 }
+
+/** Pieces of `foe`'s (not pawns) the other side wins on its next move. */
+const enPrise = (fen: string, foe: 'w' | 'b'): Set<string> =>
+  new Set(computeMustDefend(fen, foe).pieces.filter((p) => p.piece !== 'p').map((p) => p.square));
+
+/** A MOVE THAT FORCES AN ANSWER — the one test (the tempo run's, and the
+ *  lead-up reader's pressure): after the move, `foe` faces a threat it did
+ *  not face before — a piece of theirs newly en prise, or a mate threat. */
+export function newThreat(fenBefore: string, fenAfter: string, foe: 'w' | 'b'): boolean {
+  const before = enPrise(fenBefore, foe);
+  for (const sq of enPrise(fenAfter, foe)) if (!before.has(sq)) return true;
+  return mateThreatsAgainst(fenAfter, foe).moves.length > 0 && mateThreatsAgainst(fenBefore, foe).moves.length === 0;
+}
