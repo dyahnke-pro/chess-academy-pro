@@ -4,6 +4,7 @@ import { Chess } from 'chess.js';
 import { pieceWish } from './pieceWish';
 import { detectBehaviors } from './danyaBehaviors';
 import { NO_SECOND_READ } from './inaccuracyCall';
+import { namesFromArrows, namesPlayableStudentMove } from './studentMoveNaming';
 
 // THE PIECE THAT WANTS A BETTER SQUARE — one computer, Learn and Review
 // (wire-19, 2026-11-08). Review's worst-piece facet said "your worst-placed
@@ -73,5 +74,16 @@ describe('ONE computer: Review\'s worst-piece facet and Learn\'s wish say the sa
     expect(hit?.fact).toBe(pieceWish(fen, 'b', null)?.text);
     expect(hit?.kind).toBe('wishlist');
     expect(hit?.keys).toEqual(['wishlist:g6']);
+  });
+
+  it('Learn: a one-move wish names the student\'s move, so the door holds it; a longer route lights no stop (David\'s game chesscom-1002984876, after 21.Nc3)', () => {
+    const fen = 'r1k5/p1pn3p/8/1pb3p1/8/2N2PBn/PPP4P/2K2R2 b - - 3 21';
+    const hit = detectBehaviors({ fen, studentColor: 'black' }).find((h) => h.kind === 'wishlist');
+    expect(hit?.fact).toMatch(/It wants f4/);
+    expect(namesPlayableStudentMove(namesFromArrows(hit?.arrows, 'b', fen))).toBe(true);
+    const two = '8/pp1b3p/2p1pk2/3pR3/6P1/1P1P3P/1PP5/6K1 b - - 3 31';
+    const route = detectBehaviors({ fen: two, studentColor: 'black' }).find((h) => h.kind === 'wishlist');
+    expect(route?.squares).toEqual(['d7', 'g6']);
+    expect(route?.arrows ?? []).toEqual([]);
   });
 });

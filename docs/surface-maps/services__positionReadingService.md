@@ -218,7 +218,7 @@
 - `src/services/checkIsNotAGuard.test.ts:49`
 - `src/services/computedMaterialTruth.corpus.test.ts:160`
 - `src/services/computedVoiceGrounding.test.ts:75`
-- `src/services/danyaBehaviors.ts:675`
+- `src/services/danyaBehaviors.ts:683`
 - `src/services/forkTrick.ts:71`
 - `src/services/groundedAnswer.ts:2975`
 - `src/services/groundedAnswer.ts:3105`
@@ -495,7 +495,7 @@
 - `src/services/reviewFullData.ts:488`
 
 ### `minorRouteToSquare` (function) — 7 call sites
-- `src/services/danyaBehaviors.ts:781`
+- `src/services/danyaBehaviors.ts:789`
 - `src/services/danyaExploitability.test.ts:51`
 - `src/services/danyaExploitability.test.ts:55`
 - `src/services/danyaExploitability.test.ts:90`
@@ -534,7 +534,7 @@
 
 ### `findPawnBreaks` (function) — 15 call sites
 - `src/services/boardPlanFacts.ts:92`
-- `src/services/danyaBehaviors.ts:663`
+- `src/services/danyaBehaviors.ts:671`
 - `src/services/groundedAnswer.ts:491`
 - `src/services/groundedAnswer.ts:3786`
 - `src/services/groundedAnswer.ts:6926`
@@ -571,7 +571,7 @@
 - `src/services/concessionBeat.ts:316`
 - `src/services/concessionBeat.ts:322`
 - `src/services/danyaBehaviors.ts:229`
-- `src/services/danyaBehaviors.ts:545`
+- `src/services/danyaBehaviors.ts:553`
 - `src/services/danyaExploitability.test.ts:100`
 - `src/services/groundedAnswer.ts:7012`
 - `src/services/nextPlans.ts:125`
@@ -618,7 +618,7 @@
 ### `holeTargets` (function) — 7 call sites
 - `src/services/boardPlanFacts.ts:103`
 - `src/services/boardPlanFacts.ts:104`
-- `src/services/danyaBehaviors.ts:776`
+- `src/services/danyaBehaviors.ts:784`
 - `src/services/danyaExploitability.test.ts:69`
 - `src/services/danyaExploitability.test.ts:70`
 - `src/services/danyaExploitability.test.ts:91`
@@ -652,7 +652,7 @@
 - `src/services/nextPlans.ts:233`
 
 ### `findXrays` (function) — 7 call sites
-- `src/services/danyaBehaviors.ts:818`
+- `src/services/danyaBehaviors.ts:826`
 - `src/services/danyaExploitability.test.ts:24`
 - `src/services/danyaExploitability.test.ts:29`
 - `src/services/danyaExploitability.test.ts:32`
@@ -661,7 +661,7 @@
 - `src/services/positionReadingService.test.ts:805`
 
 ### `findKnightReroute` (function) — 7 call sites
-- `src/services/danyaBehaviors.ts:806`
+- `src/services/danyaBehaviors.ts:814`
 - `src/services/groundedAnswer.ts:6967`
 - `src/services/moveInsight.ts:344`
 - `src/services/positionReadingService.test.ts:794`
@@ -670,13 +670,13 @@
 - `src/services/replayFence.modern1690.test.ts:155`
 
 ### `findFianchetto` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:851`
+- `src/services/danyaBehaviors.ts:859`
 - `src/services/groundedAnswer.ts:6969`
 - `src/services/positionReadingService.test.ts:821`
 - `src/services/positionReadingService.test.ts:824`
 
 ### `findRookLift` (function) — 6 call sites
-- `src/services/danyaBehaviors.ts:837`
+- `src/services/danyaBehaviors.ts:845`
 - `src/services/groundedAnswer.ts:6968`
 - `src/services/positionReadingService.test.ts:827`
 - `src/services/positionReadingService.test.ts:830`
@@ -684,7 +684,7 @@
 - `src/services/walkOct1Learn.test.ts:89`
 
 ### `findBlockade` (function) — 6 call sites
-- `src/services/danyaBehaviors.ts:862`
+- `src/services/danyaBehaviors.ts:870`
 - `src/services/groundedAnswer.ts:6970`
 - `src/services/positionReadingService.test.ts:819`
 - `src/services/positionReadingService.test.ts:833`
@@ -718,8 +718,8 @@
 - `src/services/concessionBeat.ts:245`
 - `src/services/concessionBeat.ts:246`
 - `src/services/concessionBeat.ts:250`
-- `src/services/danyaBehaviors.ts:401`
-- `src/services/danyaBehaviors.ts:433`
+- `src/services/danyaBehaviors.ts:409`
+- `src/services/danyaBehaviors.ts:441`
 - `src/services/groundedAnswer.ts:2637`
 - `src/services/groundedAnswer.ts:6655`
 - `src/services/groundedAnswer.ts:6902`
@@ -756,17 +756,17 @@
 
 ### `pressuredTargets` (function) — 5 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:178`
-- `src/services/danyaBehaviors.ts:731`
+- `src/services/danyaBehaviors.ts:739`
 - `src/services/groundedAnswer.ts:6879`
 - `src/services/groundedAnswer.ts:6880`
 - `src/services/positionReadingService.test.ts:742`
 
 ### `findPassedPawns` (function) — 18 call sites
 - `src/services/computedTruth.fuzz.test.ts:138`
-- `src/services/danyaBehaviors.ts:423`
-- `src/services/danyaBehaviors.ts:436`
-- `src/services/danyaBehaviors.ts:573`
-- `src/services/danyaBehaviors.ts:585`
+- `src/services/danyaBehaviors.ts:431`
+- `src/services/danyaBehaviors.ts:444`
+- `src/services/danyaBehaviors.ts:581`
+- `src/services/danyaBehaviors.ts:593`
 - `src/services/groundedAnswer.ts:2611`
 - `src/services/groundedAnswer.ts:2612`
 - `src/services/groundedAnswer.ts:6767`
@@ -782,7 +782,7 @@
 - `src/services/positionalTruth.corpus.test.ts:127`
 
 ### `kingActivation` (function) — 6 call sites
-- `src/services/danyaBehaviors.ts:616`
+- `src/services/danyaBehaviors.ts:624`
 - `src/services/danyaExploitability.test.ts:183`
 - `src/services/danyaExploitability.test.ts:187`
 - `src/services/danyaExploitability.test.ts:190`
@@ -790,7 +790,7 @@
 - `src/services/replayFence.najdorf1500.test.ts:56`
 
 ### `rookBehindPasser` (function) — 6 call sites
-- `src/services/danyaBehaviors.ts:626`
+- `src/services/danyaBehaviors.ts:634`
 - `src/services/danyaExploitability.test.ts:196`
 - `src/services/danyaExploitability.test.ts:200`
 - `src/services/danyaExploitability.test.ts:203`
@@ -798,7 +798,7 @@
 - `src/services/groundedAnswer.ts:6989`
 
 ### `oppositionRead` (function) — 6 call sites
-- `src/services/danyaBehaviors.ts:641`
+- `src/services/danyaBehaviors.ts:649`
 - `src/services/danyaExploitability.test.ts:209`
 - `src/services/danyaExploitability.test.ts:212`
 - `src/services/danyaExploitability.test.ts:216`
@@ -806,14 +806,14 @@
 - `src/services/groundedAnswer.ts:6988`
 
 ### `bestMinorToKeep` (function) — 5 call sites
-- `src/services/danyaBehaviors.ts:880`
+- `src/services/danyaBehaviors.ts:888`
 - `src/services/groundedAnswer.ts:6990`
 - `src/services/positionReadingService.test.ts:762`
 - `src/services/replayFence.bowdler1000.test.ts:19`
 - `src/services/replayFence.bowdler1000.test.ts:23`
 
 ### `bishopPair` (function) — 7 call sites
-- `src/services/danyaBehaviors.ts:692`
+- `src/services/danyaBehaviors.ts:700`
 - `src/services/groundedAnswer.ts:2618`
 - `src/services/groundedAnswer.ts:2619`
 - `src/services/groundedAnswer.ts:6756`
@@ -822,7 +822,7 @@
 - `src/services/positionReadingService.test.ts:770`
 
 ### `opponentIntentRead` (function) — 6 call sites
-- `src/services/danyaBehaviors.ts:306`
+- `src/services/danyaBehaviors.ts:314`
 - `src/services/groundedAnswer.ts:460`
 - `src/services/positionReadingService.test.ts:777`
 - `src/services/positionReadingService.test.ts:783`
@@ -831,7 +831,7 @@
 
 ### `findOpenFiles` (function) — 9 call sites
 - `src/services/boardPlanFacts.ts:96`
-- `src/services/danyaBehaviors.ts:703`
+- `src/services/danyaBehaviors.ts:711`
 - `src/services/groundedAnswer.ts:485`
 - `src/services/groundedAnswer.ts:6911`
 - `src/services/pinReaders.test.ts:132`
@@ -841,7 +841,7 @@
 - `src/services/positionalReason.ts:64`
 
 ### `ownsMoreSpace` (function) — 3 call sites
-- `src/services/danyaBehaviors.ts:756`
+- `src/services/danyaBehaviors.ts:764`
 - `src/services/deliberation.ts:887`
 - `src/services/groundedAnswer.ts:6727`
 
@@ -864,9 +864,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `kingSafetyRead` (function) — 16 call sites
-- `src/services/danyaBehaviors.ts:266`
-- `src/services/danyaBehaviors.ts:284`
-- `src/services/danyaBehaviors.ts:842`
+- `src/services/danyaBehaviors.ts:274`
+- `src/services/danyaBehaviors.ts:292`
+- `src/services/danyaBehaviors.ts:850`
 - `src/services/groundedAnswer.ts:6676`
 - `src/services/oneKingShield.test.ts:11`
 - `src/services/oneKingShield.test.ts:12`
@@ -893,8 +893,8 @@
 - `src/services/groundedAnswer.ts:6635`
 
 ### `developmentRead` (function) — 8 call sites
-- `src/services/danyaBehaviors.ts:456`
-- `src/services/danyaBehaviors.ts:457`
+- `src/services/danyaBehaviors.ts:464`
+- `src/services/danyaBehaviors.ts:465`
 - `src/services/groundedAnswer.ts:6643`
 - `src/services/groundedAnswer.ts:6646`
 - `src/services/positionReadingService.test.ts:484`

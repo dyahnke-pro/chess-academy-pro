@@ -48,7 +48,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/claimKeysLooseCount.test.ts:31`
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
-- `src/services/danyaBehaviors.ts:522`
+- `src/services/danyaBehaviors.ts:530`
 - `src/services/kingAttackReads.ts:662`
 - `src/services/learnBoardTeaching.ts:516`
 - `src/services/looseStill.test.ts:37`
@@ -62,12 +62,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `tacticGeometryKey` (function) — 4 call sites
 - `src/services/coachFeatureService.ts:2981`
-- `src/services/danyaBehaviors.ts:522`
+- `src/services/danyaBehaviors.ts:530`
 - `src/services/learnBoardTeaching.ts:516`
 - `src/services/positionFacts.ts:1490`
 
 ### `forkThreatKey` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:376`
+- `src/services/danyaBehaviors.ts:384`
 - `src/services/positionFacts.ts:1787`
 - `src/services/positionFacts.ts:1802`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:51`

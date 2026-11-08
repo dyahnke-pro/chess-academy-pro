@@ -246,8 +246,16 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // computer Review's worst-piece facet reads too (`pieceWish`).
       const wish = pieceWish(fen, student, studentLastTo);
       if (!wish) return null;
-      // The stop on the way is lit, not read out (two squares a sentence).
-      return { kind: 'wishlist', fact: wish.text, squares: [wish.square, ...wish.via, wish.target], keys: [wishKey(wish.target)] };
+      // LEARN NAMES NO MOVE UNASKED (2026-11-08: on 80 of David's games, 20
+      // wishes were one move away — "It wants f4" with the knight on h3 is
+      // Nf4). A one-move wish carries that move as a play arrow, so the door
+      // holds it as naming the student's move. A longer route's first stop is
+      // the next move too, so it is not lit here; the piece and its goal are.
+      const oneMove = wish.via.length === 0;
+      return {
+        kind: 'wishlist', fact: wish.text, squares: [wish.square, wish.target], keys: [wishKey(wish.target)],
+        arrows: oneMove ? [{ from: wish.square, to: wish.target, role: 'play' }] : [],
+      };
     },
   },
   {
