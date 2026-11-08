@@ -31,10 +31,11 @@ import { Chess } from 'chess.js';
 import { hintBeat } from './drillReasons';
 import { conceptPassageFor } from './weaknessConceptPassage';
 import { explainDrillConcept } from './puzzleConceptExplanation';
+import { refuteWrongTry } from './puzzleTeaching';
 import { lessonTeachLines, partTransition, type CustomLessonPart } from './customLessonPlan';
 
 // The drill door owns every drill line a surface speaks (one import for Learn).
-export { goodButWeakerBeat, wrongMoveReason } from './drillReasons';
+export { goodButWeakerBeat } from './drillReasons';
 export { judgeDrillMove } from './drillJudge';
 // The insight computer, through the drill door (one more computer on the Learn
 // page would cross its composition ceiling — surfaceComposition.scan).
@@ -778,6 +779,15 @@ function hash(seed: number, id: string): number {
 //    to compose these from three computers; the drill service is the drill's
 //    composer, so the reason, the solved sequence, the hint and the
 //    keep-going line are assembled once, here, and the page only speaks them.
+
+/** WHY A WRONG TRY FAILS, from the ONE wrong-try computer the puzzles read
+ *  (`puzzleTeaching.refuteWrongTry`): the engine's reply line when the judge
+ *  read one, else the board's own answer (a mate in one first). Never the
+ *  answer. Learn's drill had its own one-ply reader for this
+ *  (`wrongMoveReason`), merged here (wire-19, 2026-11-08). */
+export async function drillWrongTryReason(fenBefore: string, wrongSan: string, wrongPv: readonly string[] | null): Promise<string | null> {
+  return (await refuteWrongTry({ fenBefore, wrongSan, analyse: () => Promise.resolve(wrongPv) }))?.text ?? null;
+}
 
 /** The hint: names the piece, withholds the square. Null when the drill's
  *  own solution gives nothing to name. */

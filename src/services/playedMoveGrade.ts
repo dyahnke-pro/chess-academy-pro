@@ -20,7 +20,6 @@ import {
 } from './moveReason';
 import { computeMustDefend } from './threatOut';
 import { findHangingPieces } from './tacticClassifier';
-import { missedPlanClause } from './movePlan';
 import { moveScoresOneSearch, uciOfSan, type CostFan, type MovePrice } from './moveCost';
 import { SINGLETON_SCORER } from './refutedAlternative';
 import { stockfishEngine } from './stockfishEngine';
@@ -169,16 +168,14 @@ export function gradePlayedMove(input: {
     forceNetBest: 0, capture, seeNow, refuteNet: 0,
   });
   const worthSpeaking = gradeWorthSpeaking(reason);
-  let clause = worthSpeaking ? moveReasonClause(reason, { hung }) : '';
-  // §9 missed-PLAN: on a real fault, if the engine's plan and the played move's
-  // plan clearly diverge (castle-the-king / strike-the-centre), name the idea the
-  // position called for — the whole idea was wrong, not just the square. Board-
-  // true; '' unless it's one of the two high-confidence cases.
-  if (worthSpeaking && isFaultReason(reason)) {
-    const bestUci = analysisBefore.bestMove || lines[0].moves[0];
-    const plan = missedPlanClause(fenBefore, playedUci, bestUci);
-    if (plan) clause = clause ? `${clause} ${plan}` : plan;
-  }
+  // The grade says what the move did. What the BETTER move would have done
+  // (castle the king, strike the centre) is the one error computer's to say
+  // (`errorWhy`'s better-move reason, which Review and Learn's look back both
+  // read) and only once that move is past — never glued onto this verdict
+  // (wire-19, 2026-11-08: `movePlan` said "The real priority here was getting
+  // the king to safety" after a hung knight, and named a central break the
+  // student could still play).
+  const clause = worthSpeaking ? moveReasonClause(reason, { hung }) : '';
   return {
     reason,
     clause,

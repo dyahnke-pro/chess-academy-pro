@@ -3,7 +3,7 @@ import { Chess } from 'chess.js';
 import { mateInOneExists } from './nextPlans';
 import {
   attackerDefenderCount, royalDefenderTarget, rookOnSeventh,
-  badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlans,
+  badEnemyBishop, passedPawnPush, deriveNextPlans,
   buildReviewDeepestLookahead,
   buildMissedShotSignal,
   pieceHasSafeEscape,
@@ -71,9 +71,6 @@ describe('reviewTeachingPoints — the missing Naroditsky messages (David 2026-0
     expect(passedPawnPush(new Chess().fen(), 'w', null)).toBeNull();
   });
 
-  it('worstPlacedFriendlyPiece stays quiet in the opening', () => {
-    expect(worstPlacedFriendlyPiece(fenAfter(['e4', 'e5', 'Nf3', 'Nc6']), 'w')).toBeNull();
-  });
 });
 
 describe('deriveNextPlans, the top plan — speak to FUTURE PLANS (David 2026-07-20)', () => {

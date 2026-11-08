@@ -62,7 +62,15 @@
   "origin": "map",
   "nodes": [
    "services/backwardLook.ts#backwardLook"
-  ]
+  ],
+  "door": {
+   "kind": "adapter",
+   "of": [
+    "services/inaccuracyCall.ts#errorWhy",
+    "services/concessionBeat.ts#findConcession"
+   ],
+   "why": "Learn's look back at the move just played: which move, when, and from whose seat. The verdict's why is errorWhy and the concession findConcession, both read by Review's walk."
+  }
  },
  {
   "name": "betterLineClosing",
@@ -459,7 +467,17 @@
   "origin": "map",
   "nodes": [
    "services/danyaBehaviors.ts#detectBehaviors"
-  ]
+  ],
+  "door": {
+   "kind": "learn-only",
+   "of": [
+    "services/pieceWish.ts#pieceWish",
+    "services/positionReadingService.ts#findOpenFiles",
+    "services/positionReadingService.ts#findWeakPawns",
+    "services/positionReadingService.ts#kingSafetyRead"
+   ],
+   "why": "The corpus-rate scheduler that paces the advice for the move to come in a live game. The board reads under it are said by Review's own facets; the wish is one computer with Review's worst-piece facet (pieceWish, wire-19)."
+  }
  },
  {
   "name": "decisiveReason (THE reason vs A reason)",
@@ -555,7 +573,11 @@
   "file": "services/drillReasons.ts",
   "fn": "(module)",
   "says": "drillReasons — DRILLS THAT TEACH (WO-HOME-OPENING-01 A5, David 2026-09-22). // The custom lesson and the mistake drill used to answer a wron",
-  "origin": "extra"
+  "origin": "extra",
+  "door": {
+   "kind": "learn-only",
+   "why": "The drill's own judging and hint (goodButWeakerBeat, judgeAlternative, hintBeat), on the drill that runs inside the Learn page. Why a wrong try fails is the one wrong-try computer the puzzles read (refuteWrongTry, wire-19)."
+  }
  },
  {
   "name": "enablingMove.findEnablingMove (first this, then that)",
@@ -917,7 +939,14 @@
   "origin": "map",
   "nodes": [
    "services/inaccuracyCall.ts#callInaccuracyDetailed"
-  ]
+  ],
+  "door": {
+   "kind": "adapter",
+   "of": [
+    "services/inaccuracyCall.ts#errorWhy"
+   ],
+   "why": "Learn's call of a move: whether it is said (the floor, the decline reasons) and the verdict's seat. The why is errorWhy, read by Review, chat and the puzzles."
+  }
  },
  {
   "name": "causedByTheMove / pastBetterNameable / replyKeptWin",
@@ -1138,7 +1167,14 @@
   "origin": "map",
   "nodes": [
    "services/learnBoardTeaching.ts#hangingPieceLine"
-  ]
+  ],
+  "door": {
+   "kind": "adapter",
+   "of": [
+    "services/loosePieces.ts#findLoosePieces"
+   ],
+   "why": "Learn's warning wording for a piece left hanging after their reply. Review says the same fact on their move (the [loose] facet, with threatCost)."
+  }
  },
  {
   "name": "learnMoveReason + refutedAlternativeClaims (Learn adapter of decisiveReason)",
@@ -1148,7 +1184,14 @@
   "origin": "map",
   "nodes": [
    "services/learnBoardTeaching.ts#learnMoveReason"
-  ]
+  ],
+  "door": {
+   "kind": "adapter",
+   "of": [
+    "services/decisiveReason.ts#decisiveReason"
+   ],
+   "why": "Learn's door for the reason of a move, both seats. The reason is decisiveReason, read by Review."
+  }
  },
  {
   "name": "slipQuestion",
@@ -1158,7 +1201,11 @@
   "origin": "extra",
   "nodes": [
    "services/learnBoardTeaching.ts#slipQuestion"
-  ]
+  ],
+  "door": {
+   "kind": "learn-only",
+   "why": "The blunder-check question asked before the student's move. Its habit (safetyHabits.slipHabit) feeds Review's method beat."
+  }
  },
  {
   "name": "studentMoveTeaching — the Learn student-move aggregator (and the Review lane table that drops part of it)",
@@ -1178,14 +1225,29 @@
   "origin": "map",
   "nodes": [
    "services/learnBoardTeaching.ts#theirDeepFactTeaching"
-  ]
+  ],
+  "door": {
+   "kind": "adapter",
+   "of": [
+    "services/threeFacts.ts#deepFact"
+   ],
+   "why": "Learn's wording and holding rule for their move's deep fact. The fact is threeFacts.deepFact, which Review reads for both seats (moveThoughtFacts)."
+  }
  },
  {
   "name": "learnFundamentalNarration",
   "file": "services/learnFundamentalNarration.ts",
   "fn": "(module)",
   "says": "learnFundamentalNarration — NAME THE FUNDAMENTAL as the student plays, LIVE (David 2026-09-07: \"Learn it needs to be added into the narratio",
-  "origin": "extra"
+  "origin": "extra",
+  "door": {
+   "kind": "adapter",
+   "of": [
+    "services/principleVoice.ts#renderFundamentalVerdict",
+    "services/principleAttribution.ts#attributePrinciples"
+   ],
+   "why": "Learn's adapter of the fundamental a slip broke: the attribution is liveFundamental and the sentence principleVoice.renderFundamentalVerdict, the renderer Review's [principle] facet speaks."
+  }
  },
  {
   "name": "threatVisibility / threatVoice (how visible a threat is)",
@@ -1392,7 +1454,14 @@
   "origin": "map",
   "nodes": [
    "services/mistakeTurnLine.ts#mistakeTurnLine"
-  ]
+  ],
+  "door": {
+   "kind": "adapter",
+   "of": [
+    "services/inaccuracyCall.ts#errorWhy"
+   ],
+   "why": "Learn's composition of a mistake turn (grade, fundamental, habit, one loss once). Its same-loss rules (fundamentalReply, sameReplyAsGrade) are the ones Review's walk reads."
+  }
  },
  {
   "name": "motifNaming (name a shot for the record)",
@@ -1598,13 +1667,6 @@
   "origin": "extra"
  },
  {
-  "name": "movePlan",
-  "file": "services/movePlan.ts",
-  "fn": "(module)",
-  "says": "movePlan — the §9 \"missed PLAN, not just missed move\" signal (David 2026-08-26: \"why the whole idea was wrong, not just the square\"). Compar",
-  "origin": "extra"
- },
- {
   "name": "movePurpose",
   "file": "services/movePurpose.ts",
   "fn": "(module)",
@@ -1636,7 +1698,11 @@
   "file": "services/moveReason.ts",
   "fn": "(module)",
   "says": "moveReason — WHY a move was good or bad, classified from board signals (G0). // The POST-MOVE GRADE (David 2026-08-27: \"safe to always narra",
-  "origin": "extra"
+  "origin": "extra",
+  "door": {
+   "kind": "learn-only",
+   "why": "The class of Learn's post-move grade that drives the reward layer and the game's record. Its spoken clause is a free-play line, held while a focus owns the game; the verdict with its why is errorWhy and praiseWhy in Review. Merging the two verdict wordings is open (wire-19 report)."
+  }
  },
  {
   "name": "moveReasonOptions",
@@ -1887,7 +1953,15 @@
   "file": "services/opponentGap.ts",
   "fn": "(module)",
   "says": "opponentGap — the take-advantage-of-the-gap (G0). When the throttled opponent UNDER-PLAYS its ideal and hands the student something, flag it",
-  "origin": "extra"
+  "origin": "extra",
+  "door": {
+   "kind": "adapter",
+   "of": [
+    "services/inaccuracyCall.ts#errorWhy",
+    "services/deliberation.ts#moveWhy"
+   ],
+   "why": "Learn's nudge when their reply under-played its ideal. Review says their slip and what it allows on their move (errorWhy, both seats)."
+  }
  },
  {
   "name": "buildOpponentIntent (engine 'what do they want')",
@@ -2172,7 +2246,14 @@
   "origin": "map",
   "nodes": [
    "services/playCommentary.ts#buildInstantReplyLine"
-  ]
+  ],
+  "door": {
+   "kind": "adapter",
+   "of": [
+    "services/matePatterns.ts#mateDescription"
+   ],
+   "why": "Learn's instant line on a mate. The mate is named by matePatterns.mateDescription, which Review's mating ply reads (deliveredMateNarration)."
+  }
  },
  {
   "name": "buildPriorityFirst — 'first deal with this' (priority before plan)",
@@ -2196,7 +2277,14 @@
   "origin": "map",
   "nodes": [
    "services/playCommentary.ts#buildRejectedTempting"
-  ]
+  ],
+  "door": {
+   "kind": "learn-only",
+   "of": [
+    "services/weighedMoves.ts#temptingRefuted"
+   ],
+   "why": "The question asked BEFORE the student's move ('Why not Nxe5?'). After the move, the tempting move ruled out is weighedMoves.temptingRefuted, read by Review and Learn alike."
+  }
  },
  {
   "name": "studentMovePoint / studentMovePointFact (the point of the student's sound move)",
@@ -2213,7 +2301,14 @@
   "file": "services/playedConcept.ts",
   "fn": "(module)",
   "says": "playedConcept — THE CONCEPT A MOVE JUST PLAYED, named for either side (David 2026-10-18: \"Make sure all other concepts like danger levels ge",
-  "origin": "extra"
+  "origin": "extra",
+  "door": {
+   "kind": "adapter",
+   "of": [
+    "services/tacticsDetector.ts#detectTactics"
+   ],
+   "why": "The tactic a move just made, either seat, quiet once the student has proven it. Review's [tactic] facet says the new tactics on the board, both seats."
+  }
  },
  {
   "name": "readPosition / buildPositionalRead (the quiet-position observation)",
@@ -2948,7 +3043,11 @@
   "origin": "map",
   "nodes": [
    "services/tacticalRead.ts#tacticalReadFromLines"
-  ]
+  ],
+  "door": {
+   "kind": "learn-only",
+   "why": "Learn's read of the student's options before the move (the key tactic, the tempting move, how many moves hold). In Review the missed tactic is errorWhy's better-move line and the found one the [tactic] facet."
+  }
  },
  {
   "name": "tacticClassifier (move-based pattern detectors + PV scan)",
@@ -3208,7 +3307,11 @@
   "origin": "map",
   "nodes": [
    "services/threatAnswer.ts#threatAnswer"
-  ]
+  ],
+  "door": {
+   "kind": "learn-only",
+   "why": "What to do about a threat, asked live before the student moves. Review says a met threat ([stopped], threatStoppedBy) and an ignored one (errorWhy)."
+  }
  },
  {
   "name": "newThreatsAtTurn / threatAnswerOutcome (standing threats, record half)",
@@ -3376,7 +3479,11 @@
   "file": "services/weaknessAnalyzer.ts",
   "fn": "(module)",
   "says": "",
-  "origin": "extra"
+  "origin": "extra",
+  "door": {
+   "kind": "learn-only",
+   "why": "The stored weakness profile, read for the greeting's fallback when the spine is empty and by the training plan screen. A record, not a teaching voice."
+  }
  },
  {
   "name": "weaknessConceptMap",
@@ -3458,6 +3565,16 @@
   ],
   "registry": [
    "oppositeBishops"
+  ]
+ },
+ {
+  "name": "pieceWish (the bad or idle piece, the square it wants and why)",
+  "file": "services/pieceWish.ts",
+  "fn": "pieceWish",
+  "says": "The student's rim knight, hemmed-in bishop or idle minor, WHERE it wants to go and why (an outpost no pawn can chase, a long diagonal, a pawnless file). One computer: Learn's piece-activity behaviour and Review's worst-piece facet (wire-19).",
+  "origin": "extra",
+  "nodes": [
+   "services/pieceWish.ts#pieceWish"
   ]
  }
 ]

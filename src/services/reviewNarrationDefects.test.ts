@@ -5,7 +5,8 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
-import { worstPlacedFriendlyPiece, findWorstPlacedPiece, deriveNextPlans } from './reviewTeachingPoints';
+import { findWorstPlacedPiece, deriveNextPlans } from './reviewTeachingPoints';
+import { pieceWish } from './pieceWish';
 
 describe('seat — a clause written from the mover\'s seat flips on the opponent\'s move', () => {
   // White's rook takes an open file while the STUDENT is Black: "their position"
@@ -30,7 +31,7 @@ describe('the worst-placed piece — one finder, gated', () => {
     const inCheck = 'r3kb1r/ppNNpppp/2n5/8/3P4/8/PP2nPPP/R3K2R b KQkq - 1 15';
     const c = new Chess(inCheck);
     expect(c.isCheck()).toBe(true);
-    expect(worstPlacedFriendlyPiece(inCheck, 'b')).toBeNull();
+    expect(pieceWish(inCheck, 'b', null)).toBeNull();
     expect(findWorstPlacedPiece(c, 'b')).toBeNull();
     expect(deriveNextPlans(inCheck, 'b', { namesStudentMoves: true }).join(' ')).not.toMatch(/rescue your worst piece/);
   });
@@ -48,13 +49,13 @@ describe('the worst-placed piece — one finder, gated', () => {
     const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 12';
     const c = new Chess(fen);
     const worst = findWorstPlacedPiece(c, 'w');
-    const facet = worstPlacedFriendlyPiece(fen, 'w');
+    // The wish's idle piece is the one finder's piece (`worstPieceNote`).
+    const wish = pieceWish(fen, 'w', null);
     const plan = deriveNextPlans(fen, 'w', { namesStudentMoves: true }).find((p) => /rescue your worst piece/.test(p));
+    if (wish?.kind === 'idle') expect(wish.square).toBe(worst?.sq);
     if (worst) {
-      expect(facet).toContain(worst.sq);
       expect(plan).toContain(worst.sq);
     } else {
-      expect(facet).toBeNull();
       expect(plan).toBeUndefined();
     }
   });

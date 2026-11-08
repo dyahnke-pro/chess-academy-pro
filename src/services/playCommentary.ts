@@ -28,7 +28,7 @@ import { packageForRegister, type HintPackage } from './hintRegister';
 import { CAPTURE_VALUE } from './pieceValues';
 import { quietMovePoint } from './reviewMoveTeaching';
 import { pawnHit } from './trappedPiece';
-import { kickKey } from './conceptKey';
+import { kickKey, temptingKey } from './conceptKey';
 import { settledExchange } from './exchangeLedger';
 import { captureRead, findWeakPawns } from './positionReadingService';
 import { seatBare } from '../utils/seatPieces';
@@ -373,7 +373,7 @@ export function buildRejectedTempting(args: {
   /** Where the opponent's last move landed. A tempting capture ON it is
    *  their BAIT (census #48: "f4 invites exf4, then Bxf4+"). */
   baitSquare?: string | null;
-}): { facts: string; hint: HintPackage; temptingSan: string; refutationSan: string; bait: boolean; spoken: string; refutation: { from: string; to: string; fenBefore: string } } | null {
+}): { facts: string; hint: HintPackage; temptingSan: string; refutationSan: string; bait: boolean; spoken: string; refutation: { from: string; to: string; fenBefore: string }; claim: string } | null {
   if (args.lines.length < 2) return null;
   const me: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
   let base: Chess;
@@ -447,6 +447,9 @@ export function buildRejectedTempting(args: {
         refutation: { from: refutation.from, to: refutation.to, fenBefore: fenBeforeRefutation },
         hint,
         facts: packageForRegister(hint, 'moderate'),
+        // The same claim the weighed moves make of this move after it is
+        // played (`temptingKey`): said once, whichever lane says it first.
+        claim: temptingKey(line.uci),
       };
     } catch { /* malformed line — try the next */ }
   }

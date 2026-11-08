@@ -201,7 +201,7 @@ import {
   type CoachDrill,
   type DrillProgress,
   drillHintBeat,
-  customLessonPartLines, goodButWeakerBeat, judgeDrillMove, lastMoveFromPgn, moveMissed, positionAsk, recordDrillEvidence, wrongMoveReason } from '../../services/coachDrillService';
+  customLessonPartLines, goodButWeakerBeat, judgeDrillMove, lastMoveFromPgn, moveMissed, positionAsk, recordDrillEvidence, drillWrongTryReason } from '../../services/coachDrillService';
 import { bookChipForClaims } from '../../data/bookChips';
 import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';
@@ -3700,7 +3700,7 @@ export function CoachTeachPage({ mode }: {
           verdict === 'good-but-weaker' && evals
             ? goodButWeakerBeat({ fenBefore, wrongSan: move.san, evalAfterWrong: evals.wrong, evalAfterBest: evals.best }, { withTail: false })
             : missed?.text
-              ?? (verdict === 'loses' || verdict === null ? wrongMoveReason(fenBefore, move.san, expected) : null);
+              ?? (verdict === 'loses' || verdict === null ? await drillWrongTryReason(fenBefore, move.san, evals?.wrongPv ?? null) : null);
         const parts = [did, ask.text, easeUp ? nudge : null].filter((x): x is string => !!x);
         const line = parts.length > 0 ? parts.join(' ') : nudge;
         void coachDrillSay(line, { lines: missed?.line ? [missed.line] : undefined });
@@ -11583,7 +11583,7 @@ export function CoachTeachPage({ mode }: {
                         : null;
                       if (rt) {
                         captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });
-                        queueSpokenHint(probe.fen(), { computer: 'buildRejectedTempting', text: packageForRegister(rt.hint, discussion.hintDial.register), lane: 'rejectedTempting', proof: legalLineProof(probe.fen(), [rt.temptingSan, rt.refutationSan], lineSeatAt(probe.fen(), playerColor === 'white' ? 'w' : 'b')) ?? squaresProof(packageForRegister(rt.hint, discussion.hintDial.register), [rt.refutation.from, rt.refutation.to]) ?? NO_PROOF.description, namesStudentMove: false, squares: [rt.refutation.from, rt.refutation.to], claims: [`tempting:${rt.temptingSan}:${probe.fen().split(' ').slice(0, 2).join(' ')}`], arrows: [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }] });
+                        queueSpokenHint(probe.fen(), { computer: 'buildRejectedTempting', text: packageForRegister(rt.hint, discussion.hintDial.register), lane: 'rejectedTempting', proof: legalLineProof(probe.fen(), [rt.temptingSan, rt.refutationSan], lineSeatAt(probe.fen(), playerColor === 'white' ? 'w' : 'b')) ?? squaresProof(packageForRegister(rt.hint, discussion.hintDial.register), [rt.refutation.from, rt.refutation.to]) ?? NO_PROOF.description, namesStudentMove: false, squares: [rt.refutation.from, rt.refutation.to], claims: [rt.claim], arrows: [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }] });
                       }
                     }
 

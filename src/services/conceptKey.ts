@@ -115,3 +115,12 @@ export function holeKey(square: string): string {
 export function kickKey(square: string): string {
   return `kick:${square}`;
 }
+
+/** THE TEMPTING MOVE RULED OUT — one key for one claim (wire-19, 2026-11-08).
+ *  Learn's question before the move (`buildRejectedTempting`: "Why not
+ *  Nxe5?") keyed it by SAN and board, and the weighed moves after it
+ *  (`weighedMoves.temptingRefuted`, Review and Learn) by UCI, so the say-once
+ *  ledger could not see that both rule out the same move. */
+export function temptingKey(uci: string): string {
+  return `tempting:${uci}`;
+}

@@ -68,7 +68,8 @@ import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './revie
 import { nameEndgamePhase } from './reviewMoveTeaching';
 import { planRaceClause, planRaceProof, pawnSquareTaken, pawnSquareRaceProof } from './planRace';
 import { kingReadsForBestLine } from './kingAttackReads';
-import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
+import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
+import { pieceWish } from './pieceWish';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import type { SaidSet } from './gameStory';
 import { renderFundamentalVerdict } from './principleVoice';
@@ -1126,8 +1127,15 @@ export function computeMoveFacets(
       const image = imageryFor('badbishop', stemKeyOf(`${fenAfter}|badbishop`));
       put('badEnemyBishop', 'badbishop', `${cap(badB)}.${image ? ` ${image}` : ''}`);
     }
-    const worst = worstPlacedFriendlyPiece(fenAfter, studentColorWB);
-    if (worst) put('worstPlacedFriendlyPiece', 'worst', `${cap(worst)}.`);
+    // THE PIECE THAT WANTS A BETTER SQUARE — which piece, where it wants to go
+    // and why, read by the ONE wish computer Learn's piece-activity behaviour
+    // reads (`pieceWish`, wire-19 2026-11-08). The old line here named the
+    // piece and "somewhere it actually does a job" — no square, no job. Never
+    // the piece the student's own move just put there: that move's point is
+    // speaking.
+    const movedTo = isStudent ? ((): string | null => { try { return new Chess(fenBefore).move(san).to; } catch { return null; } })() : null;
+    const wish = pieceWish(fenAfter, studentColorWB, movedTo);
+    if (wish) { const f = put('pieceWish', 'worst', wish.text); recSquares(f, [wish.square, wish.via, wish.target]); }
     const passer = struct?.pawns.passedPawns[studentColorWB][0] ?? null; // reuse §5's struct
     // Not on the move that PUSHES it — the move's own point says "pushes your
     // passed pawn" (amateur review walk 2026-09-27: both, one ply).

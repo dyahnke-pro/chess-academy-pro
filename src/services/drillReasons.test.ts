@@ -2,33 +2,7 @@
 // the reason it fails, the solve plays the sequence and names the idea, the
 // hint says the piece and withholds the square.
 import { describe, it, expect } from 'vitest';
-import { goodButWeakerBeat, hintBeat, judgeAlternative, wrongMoveReason } from './drillReasons';
-
-describe('wrongMoveReason — computed off the board the wrong move leaves', () => {
-  it('a move that walks into mate in one says so', () => {
-    // Scholar's mate is on: White threatens Qxf7#. …Nf6?? ignores it.
-    const fen = 'r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3';
-    const r = wrongMoveReason(fen, 'Nf6', 'g6');
-    expect(r).toMatch(/^The knight to f6 walks into the queen takes f7.* — mate\./);
-    expect(r).not.toMatch(/g6/);
-  });
-  it('a move that leaves a piece loose names the piece and the square', () => {
-    // White knight on e5 defended by nothing after Black plays …Nc6?? no — build: White to move, Nd5?? drops the knight? Use a clear case:
-    // Black queen on d8, White plays Qxd5?? where d5 is defended by the e6 pawn... simpler: a knight moved to a square attacked by a pawn.
-    const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 2';
-    const r = wrongMoveReason(fen, 'Ng5', 'Nc3'); // Ng5 is hit by …Qxg5
-    expect(r).toMatch(/leaves your knight on g5 hanging/);
-    // Never the answer on a miss (walk 2026-10-04 defect 7).
-    expect(r).not.toMatch(/c3/);
-  });
-  it('is null when the board shows nothing concrete (the nudge stands alone, never a guess)', () => {
-    const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-    expect(wrongMoveReason(fen, 'a3', 'e4')).toBeNull();
-  });
-  it('is null on an unparseable move', () => {
-    expect(wrongMoveReason('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'Qh9', 'e4')).toBeNull();
-  });
-});
+import { goodButWeakerBeat, hintBeat, judgeAlternative } from './drillReasons';
 
 describe('hintBeat — names the piece, withholds the square', () => {
   it('a capture and a quiet move name the piece and its FROM square only', () => {

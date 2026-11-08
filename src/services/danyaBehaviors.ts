@@ -24,11 +24,10 @@
  */
 import { routeVia } from '../utils/routeWords';
 import { castleRoute } from './kingSafety';
-import { andList, fileList, withArticle } from '../utils/andList';
+import { andList, fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { settledLeadFor, lastMoveFromHistory, type LastMove } from './material';
 import type { ArrowClaim } from './arrowDoor';
-import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import type { Color, PieceSymbol, Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { attackerCanUseFile, castleIsOneMoveAway, heavyPieceToFile, rookReachesFile } from './positionalRead';
@@ -64,18 +63,10 @@ import {
   rookBehindPasser,
   oppositionRead,
 } from './positionReadingService';
-import { worstPieceNote, isolaniStructure, passerTrumpSentence } from './nextPlans';
+import { isolaniStructure, passerTrumpSentence } from './nextPlans';
 import { pieceRef } from './pieceRef';
+import { pieceWish } from './pieceWish';
 import { openSentence } from '../utils/openSentence';
-
-/** Where a passive piece wants to go and how (census #15): a knight's outpost
- *  route, or a bishop's long diagonal / a rook's pawnless file, at most one
- *  stop on the way. */
-function wishRoute(fen: string, sq: string): { target: Square; via: Square | null; why: string } | null {
-  const r = computePieceRoute(fen, sq as Square) ?? computeSliderRoute(fen, sq as Square);
-  if (!r || r.route.length > 2) return null;
-  return { target: r.target, via: r.route.length === 2 ? r.route[0] : null, why: r.why };
-}
 
 const PIECE_NAME: Record<PieceSymbol, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
@@ -249,35 +240,14 @@ export const DANYA_BEHAVIORS: Behavior[] = [
             ...(good.kind === 'open-file' || good.kind === 'semi-open-file' ? [`file-${good.square[0]}`] : [])],
         };
       }
-      // "Reroute your worst piece" is a MIDDLEGAME idea — in the opening a piece
-      // is passive because it isn't developed yet (David 2026-08-23).
-      const isMiddlegame = Number(fen.split(' ')[5] ?? '0') >= 10;
-      if (!isMiddlegame) return null;
-      // Never the piece the student JUST put there: the move's own purpose is
-      // speaking, and "reroute it" beside "Na4 does two jobs" is two coaches
-      // (run C walk 2026-09-30).
-      const bad = notes.find((n) => n.quality === 'bad' && n.square !== studentLastTo);
-      if (bad) {
-        // THE WISHLIST (census #15): name WHERE it wants to be and the path,
-        // or say nothing about rerouting — "a better square" teaches nothing.
-        const route = wishRoute(fen, bad.square);
-        if (route) {
-          // The stop on the way is lit, not read out (two squares a sentence).
-          return { kind: 'wishlist', fact: `${pieceWords(fen, bad.square, student)} is ${withArticle(bad.reason)} — it wants ${route.target}: ${route.why}.`, squares: [bad.square, ...(route.via ? [route.via] : []), route.target], keys: [wishKey(route.target)] };
-        }
-        // No route, no line: "a better square" teaches nothing (census #15).
-        return null;
-      }
-      // Fallback: a genuinely passive MINOR (never the queen/king/rook).
-      const weakest = worstPieceNote(fen, student);
-      if (weakest && (weakest.piece === 'n' || weakest.piece === 'b') && weakest.scope <= 1) {
-        const route = wishRoute(fen, weakest.square);
-        if (route) {
-          return { kind: 'wishlist', fact: `${pieceWords(fen, weakest.square, student)} is doing nothing — it wants ${route.target}: ${route.why}.`, squares: [weakest.square, ...(route.via ? [route.via] : []), route.target], keys: [wishKey(route.target)] };
-        }
-        return { fact: `Your ${PIECE_NAME[weakest.piece]} on ${weakest.square} is doing nothing — find it a better square.`, squares: [weakest.square] };
-      }
-      return null;
+      // THE WISHLIST (census #15): the bad or idle piece, WHERE it wants to be
+      // and why, or nothing — "a better square" teaches nothing. Never the
+      // piece the student just put there (run C walk 2026-09-30). The one
+      // computer Review's worst-piece facet reads too (`pieceWish`).
+      const wish = pieceWish(fen, student, studentLastTo);
+      if (!wish) return null;
+      // The stop on the way is lit, not read out (two squares a sentence).
+      return { kind: 'wishlist', fact: wish.text, squares: [wish.square, ...(wish.via ? [wish.via] : []), wish.target], keys: [wishKey(wish.target)] };
     },
   },
   {

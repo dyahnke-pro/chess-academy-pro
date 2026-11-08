@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**814 lines · 18 exports · 16 importers · 6 tests · 0 audits**
+**800 lines · 17 exports · 16 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5.2 NEVER TELL A STUDENT TO FIND A MOVE THEY PLAYED (found reading the shipped register, 2026-09-16).** (CLAUDE.md:1473) — names `buildReviewDeepestLookahead`
-- **G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).** (CLAUDE.md:1500) — names `deriveNextPlans`
+- **G4.5.2 NEVER TELL A STUDENT TO FIND A MOVE THEY PLAYED (found reading the shipped register, 2026-09-16).** (CLAUDE.md:1556) — names `buildReviewDeepestLookahead`
+- **G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).** (CLAUDE.md:1583) — names `deriveNextPlans`
 
 ## Who calls in
 
@@ -33,99 +33,93 @@
 ## Exports and every call site
 
 ### `attackerDefenderCount` (function) — 7 call sites
-- `src/services/reviewFullData.ts:1024`
-- `src/services/reviewNarrationDefects.test.ts:86`
-- `src/services/reviewNarrationDefects.test.ts:95`
+- `src/services/reviewFullData.ts:1119`
+- `src/services/reviewNarrationDefects.test.ts:87`
+- `src/services/reviewNarrationDefects.test.ts:96`
 - `src/services/reviewTeachingPoints.test.ts:21`
 - `src/services/reviewTeachingPoints.test.ts:31`
-- `src/services/reviewTeachingPoints.test.ts:433`
-- `src/services/reviewTeachingPoints.test.ts:440`
+- `src/services/reviewTeachingPoints.test.ts:430`
+- `src/services/reviewTeachingPoints.test.ts:437`
 
 ### `pieceHasSafeEscape` (function) — 3 call sites
+- `src/services/reviewTeachingPoints.test.ts:442`
 - `src/services/reviewTeachingPoints.test.ts:445`
-- `src/services/reviewTeachingPoints.test.ts:448`
-- `src/services/reviewTeachingPoints.test.ts:458`
+- `src/services/reviewTeachingPoints.test.ts:455`
 
 ### `royalDefenderTarget` (function) — 3 call sites
-- `src/services/reviewFullData.ts:1026`
-- `src/services/reviewNarrationFidelity.test.ts:71`
+- `src/services/reviewFullData.ts:1121`
+- `src/services/reviewNarrationFidelity.test.ts:69`
 - `src/services/reviewTeachingPoints.test.ts:39`
 
 ### `rookOnSeventh` (function) — 2 call sites
-- `src/services/reviewFullData.ts:1028`
+- `src/services/reviewFullData.ts:1123`
 - `src/services/reviewTeachingPoints.test.ts:47`
 
 ### `badEnemyBishop` (function) — 5 call sites
-- `src/services/reviewFullData.ts:1030`
+- `src/services/reviewFullData.ts:1125`
 - `src/services/reviewTeachingPoints.test.ts:52`
 - `src/services/reviewTeachingPoints.test.ts:53`
-- `src/services/reviewTeachingPoints.test.ts:485`
-- `src/services/reviewTeachingPoints.test.ts:489`
-
-### `worstPlacedFriendlyPiece` (function) — 4 call sites
-- `src/services/reviewFullData.ts:1035`
-- `src/services/reviewNarrationDefects.test.ts:33`
-- `src/services/reviewNarrationDefects.test.ts:51`
-- `src/services/reviewTeachingPoints.test.ts:75`
+- `src/services/reviewTeachingPoints.test.ts:482`
+- `src/services/reviewTeachingPoints.test.ts:486`
 
 ### `passedPawnPush` (function) — 5 call sites
-- `src/services/reviewFullData.ts:1042`
+- `src/services/reviewFullData.ts:1144`
 - `src/services/reviewTeachingPoints.test.ts:57`
 - `src/services/reviewTeachingPoints.test.ts:63`
 - `src/services/reviewTeachingPoints.test.ts:66`
 - `src/services/reviewTeachingPoints.test.ts:71`
 
 ### `buildReviewDeepestLookahead` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:3411`
+- `src/services/coachFeatureService.ts:3804`
+- `src/services/reviewTeachingPoints.test.ts:295`
 - `src/services/reviewTeachingPoints.test.ts:298`
-- `src/services/reviewTeachingPoints.test.ts:301`
-- `src/services/reviewTeachingPoints.test.ts:302`
-- `src/services/reviewTeachingPoints.test.ts:303`
-- `src/services/reviewTeachingPoints.test.ts:309`
-- `src/services/reviewTeachingPoints.test.ts:317`
-- `src/services/reviewTeachingPoints.test.ts:327`
-- `src/services/reviewTeachingPoints.test.ts:332`
-- `src/services/reviewTeachingPoints.test.ts:342`
-- `src/services/reviewTeachingPoints.test.ts:351`
-- `src/services/reviewTeachingPoints.test.ts:356`
-- `src/services/reviewTeachingPoints.test.ts:418`
+- `src/services/reviewTeachingPoints.test.ts:299`
+- `src/services/reviewTeachingPoints.test.ts:300`
+- `src/services/reviewTeachingPoints.test.ts:306`
+- `src/services/reviewTeachingPoints.test.ts:314`
+- `src/services/reviewTeachingPoints.test.ts:324`
+- `src/services/reviewTeachingPoints.test.ts:329`
+- `src/services/reviewTeachingPoints.test.ts:339`
+- `src/services/reviewTeachingPoints.test.ts:348`
+- `src/services/reviewTeachingPoints.test.ts:353`
+- `src/services/reviewTeachingPoints.test.ts:415`
 
 ### `buildMissedShotSignal` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:3163`
-- `src/services/reviewTeachingPoints.test.ts:370`
-- `src/services/reviewTeachingPoints.test.ts:383`
-- `src/services/reviewTeachingPoints.test.ts:397`
-- `src/services/reviewTeachingPoints.test.ts:403`
-- `src/services/reviewTeachingPoints.test.ts:409`
-- `src/services/reviewTeachingPoints.test.ts:413`
-- `src/services/reviewTeachingPoints.test.ts:417`
+- `src/services/coachFeatureService.ts:3556`
+- `src/services/reviewTeachingPoints.test.ts:367`
+- `src/services/reviewTeachingPoints.test.ts:380`
+- `src/services/reviewTeachingPoints.test.ts:394`
+- `src/services/reviewTeachingPoints.test.ts:400`
+- `src/services/reviewTeachingPoints.test.ts:406`
+- `src/services/reviewTeachingPoints.test.ts:410`
+- `src/services/reviewTeachingPoints.test.ts:414`
 
 ### `explainTemptingCapture` (function) — 15 call sites
 - `src/services/projectedLineVoice.ts:153`
-- `src/services/reviewOpeningTheory.ts:389`
-- `src/services/reviewOpeningTheory.ts:427`
-- `src/services/reviewTeachingPoints.test.ts:127`
-- `src/services/reviewTeachingPoints.test.ts:139`
-- `src/services/reviewTeachingPoints.test.ts:150`
-- `src/services/reviewTeachingPoints.test.ts:161`
-- `src/services/reviewTeachingPoints.test.ts:173`
-- `src/services/reviewTeachingPoints.test.ts:178`
-- `src/services/reviewTeachingPoints.test.ts:243`
-- `src/services/reviewTeachingPoints.test.ts:251`
-- `src/services/reviewTeachingPoints.test.ts:501`
-- `src/services/reviewTeachingPoints.test.ts:503`
-- `src/services/reviewTeachingPoints.test.ts:505`
-- `src/services/reviewTeachingPoints.test.ts:509`
+- `src/services/reviewOpeningTheory.ts:407`
+- `src/services/reviewOpeningTheory.ts:445`
+- `src/services/reviewTeachingPoints.test.ts:124`
+- `src/services/reviewTeachingPoints.test.ts:136`
+- `src/services/reviewTeachingPoints.test.ts:147`
+- `src/services/reviewTeachingPoints.test.ts:158`
+- `src/services/reviewTeachingPoints.test.ts:170`
+- `src/services/reviewTeachingPoints.test.ts:175`
+- `src/services/reviewTeachingPoints.test.ts:240`
+- `src/services/reviewTeachingPoints.test.ts:248`
+- `src/services/reviewTeachingPoints.test.ts:498`
+- `src/services/reviewTeachingPoints.test.ts:500`
+- `src/services/reviewTeachingPoints.test.ts:502`
+- `src/services/reviewTeachingPoints.test.ts:506`
 
 ### `describeNotableMove` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:3752`
-- `src/services/reviewTeachingPoints.test.ts:182`
-- `src/services/reviewTeachingPoints.test.ts:189`
-- `src/services/reviewTeachingPoints.test.ts:203`
-- `src/services/reviewTeachingPoints.test.ts:213`
+- `src/services/coachFeatureService.ts:4104`
+- `src/services/reviewTeachingPoints.test.ts:179`
+- `src/services/reviewTeachingPoints.test.ts:186`
+- `src/services/reviewTeachingPoints.test.ts:200`
+- `src/services/reviewTeachingPoints.test.ts:210`
 
 ### `describeSimplifyingTrade` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3430`
+- `src/services/coachFeatureService.ts:3823`
 - `src/services/plyFactsDialing.test.ts:75`
 - `src/services/plyFactsDialing.test.ts:81`
 - `src/services/plyFactsDialing.test.ts:82`
@@ -134,53 +128,53 @@
 - `src/services/plyFactsDialing.test.ts:91`
 
 ### `describeTradeConsequence` (function) — 1 call site
-- `src/services/coachFeatureService.ts:3439`
+- `src/services/coachFeatureService.ts:3832`
 
 ### `describeConcessions` (function) — 9 call sites
-- `src/services/backwardLook.ts:457`
-- `src/services/coachFeatureService.ts:3088`
-- `src/services/coachFeatureService.ts:3176`
+- `src/services/backwardLook.ts:466`
+- `src/services/coachFeatureService.ts:3473`
+- `src/services/coachFeatureService.ts:3569`
 - `src/services/concessionInFlux.test.ts:13`
 - `src/services/concessionInFlux.test.ts:18`
-- `src/services/reviewTeachingPoints.test.ts:217`
-- `src/services/reviewTeachingPoints.test.ts:224`
-- `src/services/reviewTeachingPoints.test.ts:233`
-- `src/services/theirMoveCost.ts:142`
+- `src/services/reviewTeachingPoints.test.ts:214`
+- `src/services/reviewTeachingPoints.test.ts:221`
+- `src/services/reviewTeachingPoints.test.ts:230`
+- `src/services/theirMoveCost.ts:147`
 
 ### `findTrappedPiece` (function) — 12 call sites
-- `src/services/coachFeatureService.ts:3765`
-- `src/services/coachFeatureService.ts:3766`
-- `src/services/moveInsight.ts:408`
-- `src/services/reviewFullData.ts:992`
-- `src/services/reviewFullData.ts:994`
-- `src/services/reviewTeachingPoints.test.ts:259`
-- `src/services/reviewTeachingPoints.test.ts:265`
-- `src/services/reviewTeachingPoints.test.ts:276`
-- `src/services/reviewTeachingPoints.test.ts:277`
-- `src/services/reviewTeachingPoints.test.ts:286`
-- `src/services/reviewTeachingPoints.test.ts:292`
-- `src/services/reviewTeachingPoints.test.ts:294`
+- `src/services/coachFeatureService.ts:4117`
+- `src/services/coachFeatureService.ts:4118`
+- `src/services/moveInsight.ts:409`
+- `src/services/reviewFullData.ts:1088`
+- `src/services/reviewFullData.ts:1090`
+- `src/services/reviewTeachingPoints.test.ts:256`
+- `src/services/reviewTeachingPoints.test.ts:262`
+- `src/services/reviewTeachingPoints.test.ts:273`
+- `src/services/reviewTeachingPoints.test.ts:274`
+- `src/services/reviewTeachingPoints.test.ts:283`
+- `src/services/reviewTeachingPoints.test.ts:289`
+- `src/services/reviewTeachingPoints.test.ts:291`
 
 ### `trappedOnBoard` (function) — 3 call sites
-- `src/services/boardComputers.ts:344`
+- `src/services/boardComputers.ts:525`
 - `src/services/queenGrabTrap.ts:57`
-- `src/services/reviewTeachingPoints.test.ts:291`
+- `src/services/reviewTeachingPoints.test.ts:288`
 
 ### `findWorstPlacedPiece` (re-export) — 14 call sites
 - `src/services/badPieceOncePerPly.test.ts:15`
-- `src/services/coachFeatureService.ts:5016`
-- `src/services/moveInsight.ts:348`
+- `src/services/coachFeatureService.ts:5636`
+- `src/services/moveInsight.ts:349`
 - `src/services/nextPlans.test.ts:10`
 - `src/services/nextPlans.test.ts:34`
-- `src/services/nextPlans.ts:86`
-- `src/services/nextPlans.ts:135`
-- `src/services/nextPlans.ts:386`
+- `src/services/nextPlans.ts:89`
+- `src/services/nextPlans.ts:138`
+- `src/services/nextPlans.ts:394`
 - `src/services/outpostOneTest.test.ts:19`
-- `src/services/planChoice.ts:98`
+- `src/services/planChoice.ts:99`
 - `src/services/planStopped.ts:126`
-- `src/services/reviewNarrationDefects.test.ts:34`
-- `src/services/reviewNarrationDefects.test.ts:43`
-- `src/services/reviewNarrationDefects.test.ts:50`
+- `src/services/reviewNarrationDefects.test.ts:35`
+- `src/services/reviewNarrationDefects.test.ts:44`
+- `src/services/reviewNarrationDefects.test.ts:51`
 
 ### `deriveNextPlans` (re-export) — 26 call sites
 - `src/services/learnBoardTruth.realGame.test.ts:45`
@@ -192,23 +186,23 @@
 - `src/services/nextPlans.test.ts:45`
 - `src/services/nextPlans.test.ts:52`
 - `src/services/nextPlans.test.ts:55`
-- `src/services/nextPlans.ts:203`
-- `src/services/planPrescriptions.test.ts:93`
-- `src/services/planPrescriptions.test.ts:102`
-- `src/services/planPrescriptions.test.ts:111`
-- `src/services/planPrescriptions.test.ts:119`
-- `src/services/principleAttribution.section14.test.ts:151`
-- `src/services/reviewNarrationDefects.test.ts:35`
-- `src/services/reviewNarrationDefects.test.ts:45`
-- `src/services/reviewNarrationDefects.test.ts:52`
-- `src/services/reviewTeachingPoints.test.ts:83`
-- `src/services/reviewTeachingPoints.test.ts:91`
-- `src/services/reviewTeachingPoints.test.ts:97`
-- `src/services/reviewTeachingPoints.test.ts:103`
-- `src/services/reviewTeachingPoints.test.ts:108`
-- `src/services/reviewTeachingPoints.test.ts:121`
-- `src/services/reviewTeachingPoints.test.ts:475`
-- `src/services/reviewTeachingPoints.test.ts:476`
+- `src/services/nextPlans.ts:176`
+- `src/services/planPrescriptions.test.ts:59`
+- `src/services/planPrescriptions.test.ts:68`
+- `src/services/planPrescriptions.test.ts:77`
+- `src/services/planPrescriptions.test.ts:85`
+- `src/services/principleAttribution.section14.test.ts:160`
+- `src/services/reviewNarrationDefects.test.ts:36`
+- `src/services/reviewNarrationDefects.test.ts:46`
+- `src/services/reviewNarrationDefects.test.ts:54`
+- `src/services/reviewTeachingPoints.test.ts:80`
+- `src/services/reviewTeachingPoints.test.ts:88`
+- `src/services/reviewTeachingPoints.test.ts:94`
+- `src/services/reviewTeachingPoints.test.ts:100`
+- `src/services/reviewTeachingPoints.test.ts:105`
+- `src/services/reviewTeachingPoints.test.ts:118`
+- `src/services/reviewTeachingPoints.test.ts:472`
+- `src/services/reviewTeachingPoints.test.ts:473`
 
 ## Tests
 

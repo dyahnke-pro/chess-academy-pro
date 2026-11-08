@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**118 lines · 14 exports · 24 importers · 12 tests · 0 audits**
+**127 lines · 15 exports · 25 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -36,52 +36,53 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.ts`
 - `src/services/tacticClaimOneKey.test.ts`
 - `src/services/threatProof.ts`
+- `src/services/weighedMoves.ts`
 
 ## Exports and every call site
 
 ### `conceptInstanceKey` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9302`
-- `src/components/Coach/CoachTeachPage.tsx:9436`
+- `src/components/Coach/CoachTeachPage.tsx:9351`
+- `src/components/Coach/CoachTeachPage.tsx:9488`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
-- `src/services/claimKeysLooseCount.test.ts:30`
+- `src/services/claimKeysLooseCount.test.ts:31`
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
-- `src/services/danyaBehaviors.ts:527`
-- `src/services/kingAttackReads.ts:660`
-- `src/services/learnBoardTeaching.ts:509`
-- `src/services/looseStill.test.ts:36`
-- `src/services/positionFacts.ts:1374`
-- `src/services/positionFacts.ts:1819`
-- `src/services/positionFacts.ts:1841`
+- `src/services/danyaBehaviors.ts:522`
+- `src/services/kingAttackReads.ts:662`
+- `src/services/learnBoardTeaching.ts:516`
+- `src/services/looseStill.test.ts:37`
+- `src/services/positionFacts.ts:1490`
+- `src/services/positionFacts.ts:1943`
+- `src/services/positionFacts.ts:1964`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
 - `src/services/tacticClaimOneKey.test.ts:15`
 
 ### `tacticGeometryKey` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2663`
-- `src/services/danyaBehaviors.ts:527`
-- `src/services/learnBoardTeaching.ts:509`
-- `src/services/positionFacts.ts:1374`
+- `src/services/coachFeatureService.ts:2980`
+- `src/services/danyaBehaviors.ts:522`
+- `src/services/learnBoardTeaching.ts:516`
+- `src/services/positionFacts.ts:1490`
 
 ### `forkThreatKey` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:381`
-- `src/services/positionFacts.ts:1683`
-- `src/services/positionFacts.ts:1698`
+- `src/services/danyaBehaviors.ts:376`
+- `src/services/positionFacts.ts:1787`
+- `src/services/positionFacts.ts:1802`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:51`
 
 ### `looseKey` (function) — 7 call sites
-- `src/services/claimKeysLooseCount.test.ts:30`
-- `src/services/claimKeysLooseCount.test.ts:34`
-- `src/services/claimKeysLooseCount.test.ts:41`
+- `src/services/claimKeysLooseCount.test.ts:31`
+- `src/services/claimKeysLooseCount.test.ts:35`
+- `src/services/claimKeysLooseCount.test.ts:42`
 - `src/services/looseClaim.test.ts:20`
 - `src/services/looseClaim.test.ts:23`
 - `src/services/looseClaim.test.ts:27`
-- `src/services/threatProof.ts:119`
+- `src/services/threatProof.ts:130`
 
 ### `looseStillKey` (function) — 1 call site
-- `src/services/claimKeysLooseCount.test.ts:41`
+- `src/services/claimKeysLooseCount.test.ts:42`
 
 ### `LooseSpell` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -90,84 +91,91 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `nextLooseSpells` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9068`
-- `src/services/looseStill.test.ts:30`
+- `src/components/Coach/CoachTeachPage.tsx:9146`
 - `src/services/looseStill.test.ts:31`
-- `src/services/looseStill.test.ts:50`
-- `src/services/looseStill.test.ts:65`
+- `src/services/looseStill.test.ts:32`
+- `src/services/looseStill.test.ts:51`
 - `src/services/looseStill.test.ts:66`
+- `src/services/looseStill.test.ts:67`
 
 ### `looseClaim` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9378`
-- `src/components/Coach/CoachTeachPage.tsx:9437`
-- `src/services/looseStill.test.ts:23`
-- `src/services/looseStill.test.ts:34`
-- `src/services/looseStill.test.ts:43`
-- `src/services/looseStill.test.ts:51`
+- `src/components/Coach/CoachTeachPage.tsx:9428`
+- `src/components/Coach/CoachTeachPage.tsx:9489`
+- `src/services/looseStill.test.ts:24`
+- `src/services/looseStill.test.ts:35`
+- `src/services/looseStill.test.ts:44`
 - `src/services/looseStill.test.ts:52`
-- `src/services/looseStill.test.ts:60`
-- `src/services/looseStill.test.ts:67`
-- `src/services/looseStill.test.ts:69`
-- `src/services/positionFacts.ts:1724`
+- `src/services/looseStill.test.ts:53`
+- `src/services/looseStill.test.ts:61`
+- `src/services/looseStill.test.ts:68`
+- `src/services/looseStill.test.ts:70`
+- `src/services/positionFacts.ts:1849`
 
 ### `countKey` (function) — 6 call sites
-- `src/services/boardComputers.test.ts:46`
 - `src/services/boardComputers.test.ts:48`
-- `src/services/boardComputers.ts:234`
-- `src/services/boardComputers.ts:295`
-- `src/services/claimKeysLooseCount.test.ts:57`
+- `src/services/boardComputers.test.ts:50`
+- `src/services/boardComputers.ts:368`
+- `src/services/boardComputers.ts:455`
 - `src/services/claimKeysLooseCount.test.ts:58`
+- `src/services/claimKeysLooseCount.test.ts:59`
 
 ### `outpostKey` (function) — 3 call sites
 - `src/services/outpostOneTest.test.ts:33`
-- `src/services/positionFacts.ts:1785`
-- `src/services/reviewMoveTeaching.ts:488`
+- `src/services/positionFacts.ts:1909`
+- `src/services/reviewMoveTeaching.ts:644`
 
-### `holeKey` (function) — 5 call sites
+### `holeKey` (function) — 6 call sites
 - `src/services/holeKey.test.ts:17`
 - `src/services/holeKey.test.ts:21`
-- `src/services/openingStory.ts:425`
-- `src/services/openingStory.ts:504`
-- `src/services/pawnJudgement.ts:326`
+- `src/services/learnBoardTeaching.ts:435`
+- `src/services/openingStory.ts:496`
+- `src/services/openingStory.ts:576`
+- `src/services/pawnJudgement.ts:329`
 
 ### `kickKey` (function) — 3 call sites
 - `src/services/kickKey.test.ts:17`
-- `src/services/playCommentary.ts:908`
-- `src/services/positionFacts.ts:1785`
+- `src/services/playCommentary.ts:925`
+- `src/services/positionFacts.ts:1909`
 
-### `plyOfFen` (re-export) — 33 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8556`
-- `src/components/Coach/CoachTeachPage.tsx:8559`
-- `src/components/Coach/CoachTeachPage.tsx:8566`
-- `src/components/Coach/CoachTeachPage.tsx:8585`
-- `src/components/Coach/CoachTeachPage.tsx:8958`
-- `src/services/autoAnalyzeGame.ts:191`
+### `temptingKey` (function) — 2 call sites
+- `src/services/playCommentary.ts:452`
+- `src/services/weighedMoves.ts:287`
+
+### `plyOfFen` (re-export) — 35 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8587`
+- `src/components/Coach/CoachTeachPage.tsx:8590`
+- `src/components/Coach/CoachTeachPage.tsx:8597`
+- `src/components/Coach/CoachTeachPage.tsx:8619`
+- `src/components/Coach/CoachTeachPage.tsx:9032`
+- `src/services/autoAnalyzeGame.ts:192`
 - `src/services/capabilityDateRepair.test.ts:17`
 - `src/services/capabilityDateRepair.test.ts:18`
 - `src/services/capabilityDateRepair.test.ts:19`
 - `src/services/capabilityDateRepair.ts:27`
 - `src/services/capabilityDateRepair.ts:78`
-- `src/services/holdRate.ts:140`
-- `src/services/holdRate.ts:145`
+- `src/services/holdRate.ts:146`
+- `src/services/holdRate.ts:151`
 - `src/services/liveStrength.ts:139`
 - `src/services/looseClaim.test.ts:20`
 - `src/services/looseClaim.test.ts:23`
 - `src/services/looseClaim.test.ts:27`
-- `src/services/looseStill.test.ts:23`
-- `src/services/looseStill.test.ts:30`
+- `src/services/looseStill.test.ts:24`
 - `src/services/looseStill.test.ts:31`
-- `src/services/looseStill.test.ts:34`
-- `src/services/looseStill.test.ts:43`
-- `src/services/looseStill.test.ts:49`
-- `src/services/looseStill.test.ts:52`
-- `src/services/looseStill.test.ts:60`
-- `src/services/looseStill.test.ts:65`
+- `src/services/looseStill.test.ts:32`
+- `src/services/looseStill.test.ts:35`
+- `src/services/looseStill.test.ts:44`
+- `src/services/looseStill.test.ts:50`
+- `src/services/looseStill.test.ts:53`
+- `src/services/looseStill.test.ts:61`
 - `src/services/looseStill.test.ts:66`
 - `src/services/looseStill.test.ts:67`
-- `src/services/looseStill.test.ts:69`
-- `src/services/misconceptionService.ts:105`
-- `src/services/positionFacts.ts:1724`
-- `src/services/threatProof.ts:119`
+- `src/services/looseStill.test.ts:68`
+- `src/services/looseStill.test.ts:70`
+- `src/services/misconceptionService.ts:107`
+- `src/services/moveThoughtFacts.ts:532`
+- `src/services/moveThoughtFacts.ts:547`
+- `src/services/positionFacts.ts:1849`
+- `src/services/threatProof.ts:130`
 - `src/utils/plyOfFen.ts:3`
 
 ## Tests

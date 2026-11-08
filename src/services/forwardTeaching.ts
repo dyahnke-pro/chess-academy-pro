@@ -41,6 +41,8 @@ interface PieceRoute {
   route: Square[];
   /** Board-true reason the target is strong (the voice layer only rewords it). */
   why: string;
+  /** The own pawn that backs the outpost, or null. */
+  backedBy: Square | null;
 }
 
 /** Which friendly pawn (if any) defends `square` — the outpost's backer. */
@@ -162,6 +164,7 @@ export function computePieceRoute(fen: string, fromSquare: Square): PieceRoute |
     target: found.target,
     route: found.route,
     why: outpostWhy(found.chess, found.target, found.color),
+    backedBy: supportingPawn(found.chess, found.target, found.color),
   };
 }
 
@@ -193,6 +196,8 @@ interface SliderRoute {
   target: Square;
   route: Square[];
   why: string;
+  /** How many squares the piece sweeps where it stands now. */
+  scopeNow: number;
 }
 
 /**
@@ -235,5 +240,5 @@ export function computeSliderRoute(fen: string, fromSquare: Square): SliderRoute
   const why = type === 'b'
     ? `a long diagonal instead of ${now} squares`
     : `the ${found.target[0]}-file, with no pawn of yours in the way`;
-  return { piece: type, from: fromSquare, target: found.target, route: found.route, why };
+  return { piece: type, from: fromSquare, target: found.target, route: found.route, why, scopeNow: now };
 }

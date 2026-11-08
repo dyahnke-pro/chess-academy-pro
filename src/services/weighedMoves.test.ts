@@ -17,6 +17,7 @@ import { NO_PREV_CAPTURE } from './captureRun';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { NO_SECOND_READ } from './inaccuracyCall';
 import { facetLines } from '../test/reviewFacetLines';
+import { buildRejectedTempting } from './playCommentary';
 
 interface Fixture { video: string; ply: number; fenBefore: string; played: string; reads: WeighRead[] }
 const FX = JSON.parse(readFileSync('src/test/fixtures/danya-weighed-reads.json', 'utf8')) as Fixture[];
@@ -48,6 +49,23 @@ describe('the candidate list is the human model\'s, quiet moves included', () =>
     // gives it a small share — the temptation that fails.
     expect(eye.some((x) => x.san === 'Nxe4')).toBe(true);
     expect(nxe4(full)).toBeLessThan(0.02);
+  });
+});
+
+describe('one claim for one ruled-out move (wire-19)', () => {
+  it('7…Ng4 (8urm2D1HhX8): Learn\'s "Why not Nxe4?" before the move and the weighed move after it share one key', () => {
+    // Learn asks before the move (buildRejectedTempting) and weighs the move
+    // after it (temptingRefuted); both rule out …Nxe4. They were keyed
+    // 'tempting:Nxe4:<board>' and 'tempting:f6e4', so the say-once ledger
+    // heard two claims.
+    const g = game('8urm2D1HhX8');
+    const s = seat(g.fenBefore) === 'w' ? 1 : -1;
+    const lines = g.reads.map((r) => ({ uci: r.moves[0], replyUci: r.moves[1] ?? null, evalCp: s * r.evaluation })).sort((a, b) => b.evalCp - a.evalCp);
+    const ask = buildRejectedTempting({ fen: g.fenBefore, studentColor: seat(g.fenBefore) === 'w' ? 'white' : 'black', lines });
+    const weighed = temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: seat(g.fenBefore), rating: 1500, reads: g.reads, priorMove: null });
+    expect(ask?.temptingSan).toBe('Nxe4');
+    expect(ask?.claim).toBe('tempting:f6e4');
+    expect(weighed?.claims).toContain(ask?.claim);
   });
 });
 
