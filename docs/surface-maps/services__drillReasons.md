@@ -20,7 +20,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `goodButWeakerBeat` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3700`
+- `src/components/Coach/CoachTeachPage.tsx:3701`
 - `src/services/drillReasons.test.ts:24`
 - `src/services/drillReasons.test.ts:30`
 - `src/services/drillReasons.test.ts:31`

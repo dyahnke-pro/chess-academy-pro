@@ -34,8 +34,8 @@
 
 ### `attackerDefenderCount` (function) — 7 call sites
 - `src/services/reviewFullData.ts:1119`
-- `src/services/reviewNarrationDefects.test.ts:87`
 - `src/services/reviewNarrationDefects.test.ts:96`
+- `src/services/reviewNarrationDefects.test.ts:105`
 - `src/services/reviewTeachingPoints.test.ts:21`
 - `src/services/reviewTeachingPoints.test.ts:31`
 - `src/services/reviewTeachingPoints.test.ts:430`
@@ -70,7 +70,7 @@
 - `src/services/reviewTeachingPoints.test.ts:71`
 
 ### `buildReviewDeepestLookahead` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:3804`
+- `src/services/coachFeatureService.ts:3805`
 - `src/services/reviewTeachingPoints.test.ts:295`
 - `src/services/reviewTeachingPoints.test.ts:298`
 - `src/services/reviewTeachingPoints.test.ts:299`
@@ -85,7 +85,7 @@
 - `src/services/reviewTeachingPoints.test.ts:415`
 
 ### `buildMissedShotSignal` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:3556`
+- `src/services/coachFeatureService.ts:3557`
 - `src/services/reviewTeachingPoints.test.ts:367`
 - `src/services/reviewTeachingPoints.test.ts:380`
 - `src/services/reviewTeachingPoints.test.ts:394`
@@ -112,14 +112,14 @@
 - `src/services/reviewTeachingPoints.test.ts:506`
 
 ### `describeNotableMove` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:4104`
+- `src/services/coachFeatureService.ts:4105`
 - `src/services/reviewTeachingPoints.test.ts:179`
 - `src/services/reviewTeachingPoints.test.ts:186`
 - `src/services/reviewTeachingPoints.test.ts:200`
 - `src/services/reviewTeachingPoints.test.ts:210`
 
 ### `describeSimplifyingTrade` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3823`
+- `src/services/coachFeatureService.ts:3824`
 - `src/services/plyFactsDialing.test.ts:75`
 - `src/services/plyFactsDialing.test.ts:81`
 - `src/services/plyFactsDialing.test.ts:82`
@@ -128,12 +128,12 @@
 - `src/services/plyFactsDialing.test.ts:91`
 
 ### `describeTradeConsequence` (function) — 1 call site
-- `src/services/coachFeatureService.ts:3832`
+- `src/services/coachFeatureService.ts:3833`
 
 ### `describeConcessions` (function) — 9 call sites
 - `src/services/backwardLook.ts:466`
-- `src/services/coachFeatureService.ts:3473`
-- `src/services/coachFeatureService.ts:3569`
+- `src/services/coachFeatureService.ts:3474`
+- `src/services/coachFeatureService.ts:3570`
 - `src/services/concessionInFlux.test.ts:13`
 - `src/services/concessionInFlux.test.ts:18`
 - `src/services/reviewTeachingPoints.test.ts:214`
@@ -142,8 +142,8 @@
 - `src/services/theirMoveCost.ts:147`
 
 ### `findTrappedPiece` (function) — 12 call sites
-- `src/services/coachFeatureService.ts:4117`
 - `src/services/coachFeatureService.ts:4118`
+- `src/services/coachFeatureService.ts:4119`
 - `src/services/moveInsight.ts:409`
 - `src/services/reviewFullData.ts:1088`
 - `src/services/reviewFullData.ts:1090`
@@ -160,9 +160,9 @@
 - `src/services/queenGrabTrap.ts:57`
 - `src/services/reviewTeachingPoints.test.ts:288`
 
-### `findWorstPlacedPiece` (re-export) — 14 call sites
+### `findWorstPlacedPiece` (re-export) — 15 call sites
 - `src/services/badPieceOncePerPly.test.ts:15`
-- `src/services/coachFeatureService.ts:5636`
+- `src/services/coachFeatureService.ts:5647`
 - `src/services/moveInsight.ts:349`
 - `src/services/nextPlans.test.ts:10`
 - `src/services/nextPlans.test.ts:34`
@@ -172,11 +172,12 @@
 - `src/services/outpostOneTest.test.ts:19`
 - `src/services/planChoice.ts:99`
 - `src/services/planStopped.ts:126`
-- `src/services/reviewNarrationDefects.test.ts:35`
-- `src/services/reviewNarrationDefects.test.ts:44`
-- `src/services/reviewNarrationDefects.test.ts:51`
+- `src/services/reviewNarrationDefects.test.ts:34`
+- `src/services/reviewNarrationDefects.test.ts:45`
+- `src/services/reviewNarrationDefects.test.ts:54`
+- `src/services/reviewNarrationDefects.test.ts:61`
 
-### `deriveNextPlans` (re-export) — 26 call sites
+### `deriveNextPlans` (re-export) — 27 call sites
 - `src/services/learnBoardTruth.realGame.test.ts:45`
 - `src/services/learnBoardTruth.realGame.test.ts:72`
 - `src/services/learnBoardTruth.realGame.test.ts:73`
@@ -194,7 +195,8 @@
 - `src/services/principleAttribution.section14.test.ts:160`
 - `src/services/reviewNarrationDefects.test.ts:36`
 - `src/services/reviewNarrationDefects.test.ts:46`
-- `src/services/reviewNarrationDefects.test.ts:54`
+- `src/services/reviewNarrationDefects.test.ts:56`
+- `src/services/reviewNarrationDefects.test.ts:64`
 - `src/services/reviewTeachingPoints.test.ts:80`
 - `src/services/reviewTeachingPoints.test.ts:88`
 - `src/services/reviewTeachingPoints.test.ts:94`

@@ -26,6 +26,16 @@ describe('seat — a clause written from the mover\'s seat flips on the opponent
 });
 
 describe('the worst-placed piece — one finder, gated', () => {
+  it('no route, no plan: never "walk it to a square where it bites" (David\'s game chesscom-1009117416, after 12.Nd2)', () => {
+    // WO-DEPTH-01 2026-11-08: on his first 120 games 499 of the 575
+    // worst-piece plans said this line — no square, no job — 360 of them as
+    // the lead plan. The bishop on f1 here has no route.
+    const fen = 'r2q1rk1/1pp1ppbp/2npb1p1/8/p2PP3/2P5/P1PNQPPP/R3KBNR b KQ - 1 12';
+    expect(findWorstPlacedPiece(new Chess(fen), 'w')?.sq).toBe('f1');
+    for (const names of [true, false]) {
+      expect(deriveNextPlans(fen, 'w', { namesStudentMoves: names }).join(' ')).not.toMatch(/worst piece|where it bites/);
+    }
+  });
   it('stays silent while a king is in check (the plan IS the check)', () => {
     // Black to move, in check from the c7 knight forking the a8 rook.
     const inCheck = 'r3kb1r/ppNNpppp/2n5/8/3P4/8/PP2nPPP/R3K2R b KQkq - 1 15';
@@ -53,11 +63,10 @@ describe('the worst-placed piece — one finder, gated', () => {
     const wish = pieceWish(fen, 'w', null);
     const plan = deriveNextPlans(fen, 'w', { namesStudentMoves: true }).find((p) => /rescue your worst piece/.test(p));
     if (wish?.kind === 'idle') expect(wish.square).toBe(worst?.sq);
-    if (worst) {
-      expect(plan).toContain(worst.sq);
-    } else {
-      expect(plan).toBeUndefined();
-    }
+    // A plan names the finder's piece; with no piece, or no road for it
+    // (2026-11-08), there is no plan.
+    if (plan) expect(plan).toContain(worst?.sq ?? '-');
+    if (!worst) expect(plan).toBeUndefined();
   });
 });
 

@@ -210,13 +210,16 @@ describe('structurePlanEvent — a plan is announced once and carried until the 
 // THE WORST PIECE'S ROAD IS THE STUDENT'S WISH (round 5): the plan stated is
 // said under its plan's own kind — the worst-piece plan as `plan-worst-piece`
 // (H-WISHLIST), every other plan and every step and stop as the plan now.
-// His m6_i2xT7mgM game: Black after 12.Rfe1, the bishop on e7 his worst piece.
-const WORST = 'r2qr1k1/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/3RR1K1 b - - 6 12';
+// His chesscom-1044361526 game: Black after 11.Nbd2, the bishop on b8 his
+// worst piece, with a road (a7, then b6). (The board this used, his
+// m6_i2xT7mgM after 12.Rfe1, has no road for its bishop: the plan said "walk
+// it to a square where it bites", and since 2026-11-08 no road is no plan.)
+const WORST = 'rbb1k1nr/2qp1ppp/p1n1p3/1p6/4P3/2PQ1N2/PPBN1PPP/R1B1R1K1 b kq - 4 11';
 describe('a plan line is said under its plan\'s own kind', () => {
   it('the worst piece\'s plan is the student\'s wish; the next statement of another plan is the plan now', () => {
     expect(deriveNextPlanFacts(WORST, 'b', { namesStudentMoves: true })[0]?.kind).toBe('worst-piece');
     const t = emptyPlanThread();
-    const lines = planThreadTurn(t, { ply: 23, fenBefore: 'r2qr1k1/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/3R1RK1 w - - 5 12', fenAfter: WORST, student: 'b', holdPlayable: false });
+    const lines = planThreadTurn(t, { ply: 21, fenBefore: 'rbb1k1nr/2qp1ppp/p1n1p3/1p6/4P3/2PQ1N2/PPB2PPP/RNB1R1K1 w kq - 3 11', fenAfter: WORST, student: 'b', holdPlayable: false });
     const stated = lines.find((l) => l.claim.startsWith('plan:student:struct:'));
     expect(stated?.kind).toBe('plan-worst-piece');
     const other = planThreadTurn(emptyPlanThread(), { ply: 22, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w', holdPlayable: false });

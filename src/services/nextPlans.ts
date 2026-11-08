@@ -392,8 +392,12 @@ export function deriveNextPlanFacts(
   // 6. Your worst-placed piece (stuck) → reroute it, HOW spelled out.
   if (fullmove >= 10) {
     const worst = findWorstPlacedPiece(chess, studentColorWB);
-    if (worst) {
-      const route = routeBit(fen, worst.sq as Square, opts.namesStudentMoves);
+    // NO ROUTE, NO PLAN (WO-DEPTH-01, 2026-11-08): on David's 120 games the
+    // route computers found no square for 777 of the 903 worst pieces, and
+    // the plan said "walk it to a square where it bites" — no square, no job,
+    // the line the specificity rule bans. Empty beats generic.
+    const route = worst ? routeBit(fen, worst.sq as Square, opts.namesStudentMoves) : null;
+    if (worst && route) {
       add('worst-piece', `rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}, which ${reachWords(worst.m)}`, `rescuing your ${PIECE_NOUN[worst.type]} on ${worst.sq}`, `${route.text}before you attack — a piece doing nothing leaves you a piece down in the fight`, [worst.sq, ...route.squares]);
     }
   }
@@ -520,11 +524,14 @@ function guardPawnBit(chess: Chess, sq: Square, color: Color): { text: string; s
 }
 
 /** Where the worst piece wants to go, by its own route computer. */
-function routeBit(fen: string, sq: Square, namesStudentMoves: boolean): { text: string; squares: string[] } {
+/** The worst piece's road, or null when the route computers find no square
+ *  for it (then there is no plan to say). Held, a one-hop route IS the move,
+ *  so nothing is left to say but the move: null too. */
+function routeBit(fen: string, sq: Square, namesStudentMoves: boolean): { text: string; squares: string[] } | null {
   const r = computePieceRoute(fen, sq) ?? computeSliderRoute(fen, sq);
-  if (!r || r.route.length === 0) return { text: 'walk it to a square where it bites ', squares: [] };
+  if (!r || r.route.length === 0) return null;
   // Held: the destination, never the step — a one-hop route IS the move.
-  if (!namesStudentMoves) return r.route.length === 1 ? { text: 'walk it to a square where it bites ', squares: [] } : { text: `walk it toward ${r.target} `, squares: [r.target] };
+  if (!namesStudentMoves) return r.route.length === 1 ? null : { text: `walk it toward ${r.target} `, squares: [r.target] };
   const via = r.route.slice(0, -1);
   return { text: `walk it to ${r.target}${routeVia(via)}${via.length ? ',' : ''} `, squares: [r.target, ...via] };
 }

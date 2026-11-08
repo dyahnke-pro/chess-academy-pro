@@ -41,8 +41,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `conceptInstanceKey` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9351`
-- `src/components/Coach/CoachTeachPage.tsx:9488`
+- `src/components/Coach/CoachTeachPage.tsx:9352`
+- `src/components/Coach/CoachTeachPage.tsx:9489`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:31`
@@ -61,7 +61,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticClaimOneKey.test.ts:15`
 
 ### `tacticGeometryKey` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2980`
+- `src/services/coachFeatureService.ts:2981`
 - `src/services/danyaBehaviors.ts:522`
 - `src/services/learnBoardTeaching.ts:516`
 - `src/services/positionFacts.ts:1490`
@@ -91,7 +91,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `nextLooseSpells` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9146`
+- `src/components/Coach/CoachTeachPage.tsx:9147`
 - `src/services/looseStill.test.ts:31`
 - `src/services/looseStill.test.ts:32`
 - `src/services/looseStill.test.ts:51`
@@ -99,8 +99,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/looseStill.test.ts:67`
 
 ### `looseClaim` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9428`
-- `src/components/Coach/CoachTeachPage.tsx:9489`
+- `src/components/Coach/CoachTeachPage.tsx:9429`
+- `src/components/Coach/CoachTeachPage.tsx:9490`
 - `src/services/looseStill.test.ts:24`
 - `src/services/looseStill.test.ts:35`
 - `src/services/looseStill.test.ts:44`
@@ -142,11 +142,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weighedMoves.ts:287`
 
 ### `plyOfFen` (re-export) — 35 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8587`
-- `src/components/Coach/CoachTeachPage.tsx:8590`
-- `src/components/Coach/CoachTeachPage.tsx:8597`
-- `src/components/Coach/CoachTeachPage.tsx:8619`
-- `src/components/Coach/CoachTeachPage.tsx:9032`
+- `src/components/Coach/CoachTeachPage.tsx:8588`
+- `src/components/Coach/CoachTeachPage.tsx:8591`
+- `src/components/Coach/CoachTeachPage.tsx:8598`
+- `src/components/Coach/CoachTeachPage.tsx:8620`
+- `src/components/Coach/CoachTeachPage.tsx:9033`
 - `src/services/autoAnalyzeGame.ts:192`
 - `src/services/capabilityDateRepair.test.ts:17`
 - `src/services/capabilityDateRepair.test.ts:18`

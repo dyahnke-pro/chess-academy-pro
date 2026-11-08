@@ -75,8 +75,8 @@
 - `src/services/boardComputers.test.ts:76`
 - `src/services/coachFact.test.ts:79`
 - `src/services/coachFact.test.ts:80`
-- `src/services/coachFeatureService.ts:2652`
-- `src/services/coachFeatureService.ts:3205`
+- `src/services/coachFeatureService.ts:2653`
+- `src/services/coachFeatureService.ts:3206`
 - `src/services/learnTurnDoor.ts:294`
 - `src/services/learnTurnDoor.ts:966`
 - `src/services/learnTurnDoor.ts:1023`
