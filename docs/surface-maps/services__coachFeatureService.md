@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6464 lines · 33 exports · 71 importers · 85 tests · 4 audits**
+**6515 lines · 33 exports · 71 importers · 85 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -140,8 +140,8 @@
 
 ### `foldReviewRefrains` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:1833`
-- `src/services/reviewLedgerCounters.test.ts:67`
-- `src/services/reviewLedgerCounters.test.ts:79`
+- `src/services/reviewLedgerCounters.test.ts:69`
+- `src/services/reviewLedgerCounters.test.ts:81`
 
 ### `ReviewMoveSegment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -248,7 +248,7 @@
 - `src/services/habitBothSeats.test.ts:35`
 - `src/services/habitBothSeats.test.ts:42`
 - `src/services/loopCloses.review.integration.test.ts:90`
-- `src/services/loosePattern.test.ts:15`
+- `src/services/loosePattern.test.ts:17`
 - `src/services/methodBeat.test.ts:80`
 - `src/services/oneCostPerMove.test.ts:34`
 - `src/services/oneCostPerMove.test.ts:38`
@@ -259,7 +259,7 @@
 - `src/services/reviewForesight.test.ts:52`
 - `src/services/reviewLastTimeHere.test.ts:26`
 - `src/services/reviewLastTimeHere.test.ts:31`
-- `src/services/reviewLedgerCounters.test.ts:20`
+- `src/services/reviewLedgerCounters.test.ts:22`
 - `src/services/reviewMatePly.test.ts:19`
 - `src/services/reviewMoveIntent.test.ts:37`
 - `src/services/reviewMoveThought.test.ts:14`

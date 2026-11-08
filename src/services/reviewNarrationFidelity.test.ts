@@ -47,7 +47,7 @@ describe('describeMoveInfluence — every move gets its own computed beat (David
     c.move('Nf3');
     const out = describeMoveInfluence(before, c.fen(), 'Nf3');
     expect(out ?? '').toMatch(/knight on f3/);
-    expect(out ?? '').toMatch(/eyes the pawn on e5/);
+    expect(out ?? '').toMatch(/(?:attacks|hits) the pawn on e5/);
     expect(out ?? '').toMatch(/(?:fights for|joins the fight for|adds its weight to) d4, backing the d-pawn's push there/);
   });
 

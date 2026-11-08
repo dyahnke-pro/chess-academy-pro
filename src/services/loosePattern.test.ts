@@ -11,13 +11,16 @@ const ALAPIN = 'e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 Nc6 Nc3 Nb6 Nf3 d6 exd6 Qxd6 Be
 describe('loose pieces across a review', () => {
   it('the second loose piece of theirs names the habit, and no owner hears the bare formula a third time', () => {
     const c = new Chess();
-    const inputs = ALAPIN.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
+    // Ungraded: a move the grader called sound is never a habit's evidence
+    // (`soundPlies`), so the board alone reads the loose pieces here.
+    const inputs = ALAPIN.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: null, preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
     const said = buildReviewSegmentsForTests(inputs, 'black', 'Sicilian Defense: Alapin Variation', true, 1500).map((s) => s.narration ?? '').join(' ');
-    expect(said).toMatch(/that's the second time they've left a piece with no guard: after every move of theirs, look first for what it leaves loose/);
-    // The loose piece is the one the line eyes ("now eyes their bishop —
-    // nothing guards it"): its owner is that possessive (pieces are named the
-    // human way since 2026-11-05, the square lit, not read out).
-    const tails = [...said.matchAll(/now eyes (your|their) [^—.]*?(?: — nothing guards [^.]*| — [^.]* has no guard|, and [^.]* is loose)\./g)];
+    expect(said).toMatch(/That's the second piece they've left with no guard this game\. After every move of theirs, look first for what it leaves loose/);
+    // The loose piece is the one the line attacks ("now hits their bishop,
+    // which has no guard"): its owner is that possessive (pieces are named the
+    // human way since 2026-11-05, the square lit, not read out; "attacks" /
+    // "hits" since 2026-11-08).
+    const tails = [...said.matchAll(/now (?:attacks|hits) (your|their) [^.]*?(?:, and nothing guards [^.]*|, which has no guard|, which is loose|, and [^.]* has no guard|, and [^.]* is loose)\./g)];
     expect(tails.length).toBeGreaterThan(0);   // the formula is said at all — not a vacuous pass
     for (const owner of ['their', 'your']) {
       const bare = tails.filter((m) => m[1] === owner);

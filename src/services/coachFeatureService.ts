@@ -2705,6 +2705,21 @@ function* reviewSegmentSteps(
         // line (the arc's "‖" was reaching the review's text).
         facets.push(fact('gameArcSteps', 'plan-arc', stripThink(e.text), { squares: e.squares, incoming: e.seat === 'opponent' }));
       }
+      // ONE PLAN A SIDE (Review baseline 2026-11-08, the Colle 14.Ng5: "Here
+      // is what you build toward: an attack on their king. Your plan is to
+      // advance your queenside pawn majority" — two plans pulling opposite
+      // ways; held for that turn, the majority came back two plies later). The
+      // orientation's plan is the mover's (`buildMiddlegameOrientation` runs
+      // from the mover's seat); the plan the game is following outranks that
+      // static read of the structure — on the turn it speaks and, once that
+      // side has heard it, for the rest of the game (`PLAN_GOAL.arc`).
+      {
+        const moverSeat: 'student' | 'opponent' = moverColor === playerColor ? 'student' : 'opponent';
+        const arcHere = facets.some((f) => f.tag === 'plan-arc' && !!f.incoming === (moverSeat === 'opponent'));
+        if (arcHere || threadStated(story.current(), threadKey(moverSeat, PLAN_GOAL.arc)) !== null) {
+          for (let k = facets.length - 1; k >= 0; k -= 1) if (facets[k].tag === 'plan-middlegame') facets.splice(k, 1);
+        }
+      }
       if (fundamentals.length > 0) {
         if (isStudentForAttr) {
           const again = noteSlip(story, fundamentals[0].id, m.ply);
@@ -2818,7 +2833,10 @@ function* reviewSegmentSteps(
             const owner: 'your' | 'their' = moverColor === playerColor ? 'their' : 'your';
             const n = looseCount(owner);
             if (n >= 2) continue;
-            if (n === 1) {
+            // A move the grader called sound is never a habit's evidence
+            // (`soundPlies`, the habit computer's own rule): a piece left
+            // loose by a sacrifice that holds is a fact, not a habit.
+            if (n === 1 && !soundPlies.has(m.ply - 1)) {
               const habit = owner === 'their'
                 ? "That's the second piece they've left with no guard this game. After every move of theirs, look first for what it leaves loose."
                 : "That's the second piece you've left with no guard this game. Before every move, check what it leaves unguarded.";
@@ -2896,9 +2914,16 @@ function* reviewSegmentSteps(
             // The full plan outranks the one-line note and the arc for the same
             // pawn: when it is on this ply, they defer to it.
             if (passerTaught(pf) || planNowPasserFiles.has(pf) || !claim(`passer:${pf}`)) continue;
-            keep(f, () => story.commitThreads(m.ply, [{ key: passerThread(pf), kind: 'stated' }]));
+            keep(f, () => story.commitThreads(m.ply, [{ key: passerThread(pf), kind: 'stated' }, { key: threadKey(f.incoming ? 'opponent' : 'student', PLAN_GOAL.arc), kind: 'stated' }]));
             continue;
           }
+        }
+        // The plan the game follows, once heard, keeps its side's static
+        // structure plan quiet (`PLAN_GOAL.arc`, above).
+        if (f.tag === 'plan-arc') {
+          const seat: 'student' | 'opponent' = f.incoming ? 'opponent' : 'student';
+          keep(f, () => story.commitThreads(m.ply, [{ key: threadKey(seat, PLAN_GOAL.arc), kind: 'stated' }]));
+          continue;
         }
         if (STANDING_STATE_TAGS.has(f.tag)) {
           const sig = standingSig(f);
@@ -3114,6 +3139,32 @@ function* reviewSegmentSteps(
         const principle = orderedKept.filter(isPrinciple);
         if (principle.length > 0) orderedKept = [...principle, ...orderedKept.filter((t) => !isPrinciple(t))];
       }
+      // ONE HABIT A TURN — Learn's door rule, one coach (Learn 2026-10-20;
+      // Review baseline 2026-11-08: the Ng5 blunder closed on "Blunder check …
+      // run CCT for them" AND "Next time: end every move with a count", each
+      // with its own "Here the answer was …"). A part teaches a habit when its
+      // tag's step is the habit, or it is a board rule carrying a `method:`
+      // claim (the blunder check, the autopilot guard — Review dropped the
+      // claim and spoke them as body). The turn keeps one: the fundamental's
+      // how behind this move, else the slip's own question, else the first.
+      // This game's pattern lines (your-habit, their-habit) say what happened
+      // here and stay; two fundamentals the move broke each keep their how
+      // (one part, `renderFundamentalVerdict`).
+      const tagOfPart = (part: string): string | undefined => (part === decision.method ? 'method' : keptByText.get(part)?.tag);
+      const idOfPart = (part: string): string | undefined => { const at = kept.findIndex((f) => f.text === part); return at >= 0 ? keptKey[at].identity : undefined; };
+      const teachesHabit = (part: string): boolean => {
+        const tag = tagOfPart(part);
+        return (!!tag && stepOf(tag, 'student') === 'habit') || (idOfPart(part)?.startsWith('hint:method:') ?? false);
+      };
+      const GAME_PATTERN_TAGS: ReadonlySet<string> = new Set(['your-habit', 'their-habit']);
+      {
+        const habits = orderedKept.filter((part) => teachesHabit(part) && !GAME_PATTERN_TAGS.has(tagOfPart(part) ?? ''));
+        if (habits.length > 1) {
+          const rank = (part: string): number => (tagOfPart(part) === 'how' ? 0 : idOfPart(part)?.startsWith('hint:method:') ? 1 : 2);
+          const winner = [...habits].sort((a, b) => rank(a) - rank(b))[0];
+          orderedKept = orderedKept.filter((part) => part === winner || !habits.includes(part));
+        }
+      }
       // The causal chain LEADS the beat when present (it's the cross-move story).
       const rankedParts = causalLead ? [causalLead, ...orderedKept] : orderedKept;
       // NO WORD CAP (David 2026-10-15: "No hard word count caps. Set the cap as
@@ -3254,7 +3305,7 @@ function* reviewSegmentSteps(
       // facts (the fundamental's how, the method beat, their habit and yours)
       // are held as the segment's tail and said once the line is in. A ply
       // whose only words are the habit says it now — nothing comes before.
-      const isHabit = (part: string): boolean => { const tag = part === decision.method ? 'method' : keptByText.get(part)?.tag; return !!tag && stepOf(tag, 'student') === 'habit'; };
+      const isHabit = teachesHabit;
       const bodyNarration = speakDoor(doorFacts.filter((_, k) => !isHabit(uncappedParts[k])));
       const habitNarration = speakDoor(doorFacts.filter((_, k) => isHabit(uncappedParts[k])));
       const doorNarration = bodyNarration ?? habitNarration;

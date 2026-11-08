@@ -33,13 +33,13 @@ describe('the student\'s habit, from the same computer', () => {
     const c = new Chess();
     const inputs = G2.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: null, preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
     const said = buildReviewSegmentsForTests(inputs, 'black', null, true, 1500).map((s) => s.narration ?? '').join(' ');
-    const named = (said.match(/you've left a piece loose under their attack|the second time you've left a piece with no guard/g) ?? []).length;
+    const named = (said.match(/you've left a piece loose under their attack|the second piece you've left with no guard/g) ?? []).length;
     expect(named).toBe(1);
   }, 120000);
   it('…and never on moves the grader called sound (a sacrifice that holds is not a loose piece)', () => {
     const c = new Chess();
     const inputs = G2.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
     const said = buildReviewSegmentsForTests(inputs, 'black', null, true, 1500).map((s) => s.narration ?? '').join(' ');
-    expect(said).not.toMatch(/left a piece loose/);
+    expect(said).not.toMatch(/left a piece loose|second piece you've left/);
   }, 120000);
 });

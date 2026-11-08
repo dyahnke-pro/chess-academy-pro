@@ -12,9 +12,11 @@ import { buildReviewSegmentsForTests, foldReviewRefrains, type ReviewMoveInput, 
 import { createStoryStore, storyOf, type StorySeed } from './gameStory';
 
 const ALAPIN = 'e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 Nc6 Nc3 Nb6 Nf3 d6 exd6 Qxd6 Be2 Bg4 Nb5 Qd7 Bf4 Nd5 Ne5 Bxe2 Qxe2 Nxf4 Nxd7 Nxe2 Nc7+ Kxd7 Nxa8 Nexd4 Rd1 e5 a3 Bc5 b4 Nxb4 axb4 Bxb4+ Kf1 Rxa8 Rb1 a5 h4 Rc8'.split(' ');
+// Ungraded: a move the grader called sound is never a habit's evidence
+// (`soundPlies`), so the board alone reads the loose pieces here.
 const inputs = (): ReviewMoveInput[] => {
   const c = new Chess();
-  return ALAPIN.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
+  return ALAPIN.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: null, preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
 };
 const build = (seed: StorySeed | null): ReviewMoveSegment[] =>
   buildReviewSegmentsForTests(inputs(), 'black', 'Sicilian Defense: Alapin Variation', true, 1500, [], undefined, null, new Map(), new Map(), seed);

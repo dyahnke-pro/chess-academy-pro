@@ -94,6 +94,10 @@ export const PLAN_GOAL = {
   structure: 'plan-aim:structure',
   convert: 'plan-aim:convert',
   race: 'plan-aim:race',
+  /** The plan the game is following (`planArc`), once a side has heard it:
+   *  the static read of the structure (`buildMiddlegameOrientation`) must
+   *  not then name another plan for that side. */
+  arc: 'plan-aim:arc',
 } as const;
 
 /** One line of a thread the door kept. */
