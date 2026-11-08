@@ -6,6 +6,8 @@ import type { CoachGameMove, KeyMoment } from '../../types';
 
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
+    // The marks wait for the line to be on air (`markPacing`).
+    untilOnAir: () => Promise.resolve(),
     speak: vi.fn().mockResolvedValue(undefined),
     // useReviewPlayback was rewired to call speakForced (single-engine
     // Polly chain) — without it, every test that triggers narration

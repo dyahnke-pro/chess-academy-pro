@@ -38,6 +38,8 @@ const mockSpeak = vi.fn().mockResolvedValue(undefined);
 
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
+    // The marks wait for the line to be on air (`markPacing`).
+    untilOnAir: () => Promise.resolve(),
     speakForced: (text: string) => mockSpeakForced(text),
     // CoachTeachPage's chain uses the Polly-only variant (no Web
     // Speech fallback). Both spies count as "Polly path" for the

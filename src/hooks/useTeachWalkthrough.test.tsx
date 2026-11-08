@@ -10,6 +10,8 @@ import type { WalkthroughTree } from '../types/walkthroughTree';
 
 vi.mock('../services/voiceService', () => ({
   voiceService: {
+    // The marks wait for the line to be on air (`markPacing`).
+    untilOnAir: () => Promise.resolve(),
     speakForced: vi.fn().mockResolvedValue(undefined),
     stop: vi.fn(),
     isPlaying: vi.fn().mockReturnValue(false),
