@@ -134,3 +134,11 @@ describe('deepFact — two moves ahead, both seats (WO-DECIDER-02)', () => {
     expect(deepFact(fenAfter(['e4', 'c5', 'a3']), 'g6', ['b4', 'Nc6', 'd3', 'e6', 'Nf3', 'Bg7'], true)).toBeNull();
   });
 });
+
+describe('deepFact — a check is not set up by a check (prod audits 2026-11-08)', () => {
+  it('a queen check whose next move is only another check sets nothing up', () => {
+    // Qd8+ Kg7 Qd4+ Kg8 Qd8+: a checking run that wins nothing — it was said
+    // as "heading on to d4, where it gives check to their king".
+    expect(deepFact('6k1/5p2/8/8/8/8/5PPP/3Q2K1 w - - 0 1', 'Qd8+', ['Kg7', 'Qd4+', 'Kg8', 'Qd8+'], true)).toBeNull();
+  });
+});

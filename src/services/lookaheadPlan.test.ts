@@ -13,6 +13,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
+  pinConsequence,
   buildLookaheadPlan, keySquaresOf, describePlan, planFromUci,
   PLAN_HORIZON, mergeTwinDriftForTest } from './lookaheadPlan';
 import type { SidePlan, LookaheadPlan } from './lookaheadPlan';
@@ -1035,5 +1036,17 @@ describe('walk oct3a — a trade near the king is not a king attack', () => {
     const plan = buildLookaheadPlan(line(plies(fen, ['Rc1', 'b5', 'Rdd1', 'Bc7', 'Qxa6', 'Rxa6', 'Bxc7', 'Rxc7'])), 'white', undefined, null);
     expect(plan?.mine.nearEnemyKing ?? 0).toBeLessThan(2);
     expect(plan?.mine.text ?? '').not.toMatch(/swing pieces toward/);
+  });
+});
+
+describe('pinConsequence — the pinned piece shields, it does not guard (prod Review 2026-11-08)', () => {
+  it('no stem says the pinned piece is "guarding" what stands behind it', () => {
+    // Bg5 pins the knight on f6 to the queen on d8.
+    const fen = 'r2qk2r/ppp2ppp/2np1n2/1Bb1p1B1/4P3/2NP1N2/PPP2PPP/R2QK2R b KQkq - 0 1';
+    for (let rot = 0; rot < 4; rot += 1) {
+      const t = pinConsequence(fen, ['g5', 'f6', 'd8'], 'w', 'student', rot);
+      if (t) expect(t).not.toMatch(/stuck guarding/);
+    }
+    expect([0, 1, 2, 3].map((r) => pinConsequence(fen, ['g5', 'f6', 'd8'], 'w', 'student', r)).some((t) => !!t && /stuck shielding/.test(t))).toBe(true);
   });
 });

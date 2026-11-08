@@ -37,6 +37,11 @@ describe('Review says each claim once a move (Carlsen–Caruana)', () => {
     expect(at(52)).not.toMatch(/trains on your weak pawn on d5/);
   });
 
+  it('3…a6: the pawn kicking the bishop is said once — the move\'s own sentence asks the answer, no second "Watch out"', () => {
+    expect(at(6)).toMatch(/kicks your bishop off b5/);
+    expect(at(6)).not.toMatch(/Watch out — that pawn attacks/);
+  });
+
   it('Review has no think pause: no "‖" mark reaches the walk', () => {
     for (const s of segs) expect(s.narration ?? '').not.toMatch(/‖/);
   });

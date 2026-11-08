@@ -211,6 +211,15 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
     if (!enabled) continue;
     const hit = hits(next.board, n.to, n.color).at(0);
     if (!hit) continue;
+    // A CHECK THAT ONLY LEADS TO ANOTHER CHECK is a checking run, not this
+    // move's purpose (prod Review and Learn audits 2026-11-08: Rd6+ "heading
+    // on to d7, where it gives check", Qxc7+ "heading on to c6, where it gives
+    // check" — a perpetual read as a plan). After a check, the next check
+    // counts only when it wins.
+    if (hit.type === 'k' && now.board.inCheck()) {
+      const proof = proofCut(reply.board.fen(), [nextSan, ...line.slice(2 * k, 2 * k + 3)], n.color);
+      if (!(proof && (proof.mate || (!!proof.ledger?.settled && proof.ledger.netPawns >= 1)))) continue;
+    }
     // Was the line to the target opened by the other side — by the move before
     // this one, or by their reply in the line?
     const ray = between(n.to, hit.square);

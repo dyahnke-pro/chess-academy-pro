@@ -188,7 +188,7 @@ export function pinConsequence(fen: string, squares: readonly string[], student:
   // three (Review prod audit 2026-11-04: "Moving the knight would let …" ×3).
   const stems = [
     `If ${heldWhose} ${pinnedNoun} moves, ${heldWhose} ${behindNoun} on ${behind.sq} is open to ${pinnerWhose} ${by}.`,
-    `The ${pinnedNoun} is stuck guarding the ${behindNoun} on ${behind.sq} — step aside and ${pinnerWhose} ${by} takes it.`,
+    `The ${pinnedNoun} is stuck shielding the ${behindNoun} on ${behind.sq} — step aside and ${pinnerWhose} ${by} takes it.`,
     `Moving the ${pinnedNoun} would let ${pinnerWhose} ${by} take the ${behindNoun} on ${behind.sq}.`,
     `Behind the ${pinnedNoun} stands ${heldWhose} ${behindNoun} on ${behind.sq}, which ${pinnerWhose} ${by} takes the moment the ${pinnedNoun} steps away.`,
   ];

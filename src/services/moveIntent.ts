@@ -492,7 +492,7 @@ function phrase(
     if (prevents?.mate) { const m = unmarked(stop); return rotateStem([`${yours} stops ${m}, which was mate.`, `${pointOf}: ${m} was mate, and now it isn't.`], key); }
     if (prevents && why) return `${yours} stops ${stop}: ${why}.`;
     if (prevents && wouldDo) return `${yours} stops ${stop}, which would ${wouldDo}.`;
-    if (prevents) return rotateStem([`${yours} stops ${stop}.`, `${pointOf}: it takes ${stop} away.`], key);
+    if (prevents) return rotateStem([`${yours} stops ${stop}.`, `${pointOf}: it rules out ${stop}.`], key);
     // Every stem names the seat (review audit 2026-10-15: "…e5 first, so that
     // …Bd6 can bring the bishop into the game" said whose move to no one).
     if (does?.castle && held) return `Your ${played} clears the last piece from between your king and rook.`;
@@ -510,7 +510,7 @@ function phrase(
   const theirWouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^(hit|take) the /, '$1 their ') : null;
   if (prevents?.mate) return `Their ${played} stops ${stop.replace(/[+#]$/, '')}, which was mate.`;
   if (prevents && theirWouldDo) return `Their ${played} stops ${stop}, which would ${theirWouldDo}.`;
-  if (prevents) return rotateStem([`Their ${played} stops ${stop}.`, `The point of their ${played}: it takes ${stop} away.`], key);
+  if (prevents) return rotateStem([`Their ${played} stops ${stop}.`, `The point of their ${played}: it rules out ${stop}.`], key);
   if (does?.castle) return rotateStem([`Their ${played} clears the way to castle.`, `${theyPlay} first, so they can castle next.`], key);
   if (does?.develops) return rotateStem([`${theyPlay} first, to free their ${does.develops.piece} on ${does.develops.from} for ${prep}.`, `Their ${played} frees their ${does.develops.piece} on ${does.develops.from} to come out with ${prep}.`], key);
   if (does) return rotateStem([`Their ${played} prepares ${prep}, to ${does.verb}.`, `${theyPlay} first, so that ${prep} can ${does.verb}.`], key);

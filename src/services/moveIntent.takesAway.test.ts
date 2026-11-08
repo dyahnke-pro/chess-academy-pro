@@ -51,3 +51,15 @@ describe('moveIntent — "takes it away" only when it is gone', () => {
     }
   });
 });
+
+describe('a stopped move is "ruled out", never "taken away" (prod Review audit 2026-11-08)', () => {
+  // "The point of your Re4: it takes …axb4 away" was read aloud as "it takes
+  // a-pawn takes b4 away" — a capture cannot sit inside "takes … away".
+  it('no stem wraps the stopped move in "takes … away"', async () => {
+    const { readFileSync } = await import('node:fs');
+    for (const f of ['src/services/moveIntent.ts', 'src/services/coachFeatureService.ts']) {
+      const src = readFileSync(f, 'utf8');
+      expect(src, f).not.toMatch(/takes \$\{stop\} away|takes away their \$\{t\}/);
+    }
+  });
+});

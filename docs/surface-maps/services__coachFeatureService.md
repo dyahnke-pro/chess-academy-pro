@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6551 lines · 33 exports · 71 importers · 85 tests · 4 audits**
+**6560 lines · 33 exports · 71 importers · 86 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -455,6 +455,7 @@
 - `src/services/loosePattern.test.ts`
 - `src/services/methodBeat.test.ts`
 - `src/services/moveCost.keyMoments.test.ts`
+- `src/services/moveIntent.takesAway.test.ts`
 - `src/services/namedMoveArrows.test.ts`
 - `src/services/oneCostPerMove.test.ts`
 - `src/services/oneLinePerPly.test.ts`

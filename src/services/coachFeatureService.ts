@@ -2706,6 +2706,15 @@ function* reviewSegmentSteps(
           // names the target (a sentence of its own is the same words every
           // time, and the say-once ledger drops the second).
           const asked = asks && !!job ? thought.kept.findIndex((f) => f.squares.includes(job.squares[1])) : -1;
+          // ONE ATTACK, ONE LINE (prod Review audit 2026-11-08, …a6: "it kicks
+          // your bishop off b5, gaining time, and it needs an answer this move.
+          // Watch out — that pawn attacks your bishop on b5, and nothing
+          // defends it"). The move's own sentence says the attack and that it
+          // asks an answer; the hanging read on the same square steps aside.
+          if (asked >= 0 && job) {
+            const k = facets.findIndex((f) => f.identity === `opp-threat:hanging:${job.squares[1]}`);
+            if (k >= 0) facets.splice(k, 1);
+          }
           const spoken = thought.kept.map((f, k) => (k === asked ? f.text.replace(/\.$/, ', and it needs an answer this move.') : f.text)).join(' ');
           const raw = fact('moveThoughtFacts', 'move-job', spoken, { identity: id, squares: [...named] });
           if (carriedLoose) raw.claims = [...(raw.claims ?? []), `loose:${carriedLoose}`];
@@ -5335,7 +5344,7 @@ async function augmentWithProjections(
       // is exactly the reply that punishes this").
       const agreesWithVerdict = !s.verdictPunishSan || strip(s.verdictPunishSan) === strip(t ?? '');
       if (t && !namedAsThreat && agreesWithVerdict && punish?.plies[0] && strip(punish.plies[0].san) === strip(t) && strip(line.plies[1].san) !== strip(t)) {
-        s.narration = `${s.narration ?? ''} ${line.plies[0].san} first was the preventive move — it takes away their ${t}, and that is exactly the reply that punishes this.`.trim();
+        s.narration = `${s.narration ?? ''} ${line.plies[0].san} first was the preventive move — it rules out their ${t}, and that is exactly the reply that punishes this.`.trim();
       }
     }
   }
