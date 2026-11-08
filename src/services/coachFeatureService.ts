@@ -66,7 +66,8 @@ import { noteSlip } from './learnBoardTeaching';
 import { readBoard, readBoardAll, readKey } from './boardComputers';
 import { replyReadsFromFan, type ReplyRead } from './ifTheyPlay';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
-import { computeMoveFacets, computeThroughLine, prematureBreakWhy, INFLUENCE_LOOSE_TAIL_RE } from './reviewFullData';
+import { computeMoveFacets, prematureBreakWhy, INFLUENCE_LOOSE_TAIL_RE } from './reviewFullData';
+import { mainConceptLine } from './slipDepth';
 import { flipSideToMove, sideToMoveAs } from './threatOut';
 import { mateStakes, isSacrifice } from './factStakes';
 import { sacrificeLedger, type BestAmong, type SacrificeLedgerRead } from './sacrificeLedger';
@@ -6438,10 +6439,19 @@ export async function generateReviewNarration(params: {
     details: JSON.stringify({ totalSegments: segments.length, narratedCount, source: 'deterministic-ship3' }),
   });
 
-  // THROUGH-LINE (future-analysis teaching #3) — the one theme that ran through
-  // the whole game, named as the closing. Board-true; null when nothing recurs.
-  const throughLineWB: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
-  const throughLine = computeThroughLine(fenChain.map((f) => f.fenAfter), throughLineWB);
+  // THE MAIN CONCEPT (WO-DEPTH-01, David 2026-11-08: "a main concept that
+  // helped a user win or lose … a reoccurring theme throughout the game") —
+  // the deep reason the costly moves share, by how their punishment landed
+  // (`slipDepth.mainConceptLine`). It replaced a theme read off how often a
+  // feature sat on the board ("the middlegame turned on the open file"), which
+  // claimed a cause from presence alone.
+  const studentWB: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+  const throughLine = mainConceptLine(
+    segments
+      .filter((sg) => (sg.classification === 'mistake' || sg.classification === 'blunder') && !!sg.fenBefore)
+      .map((sg) => ({ seat: sg.playerColor === 'white' ? 'w' as const : 'b' as const, san: sg.san, fenBefore: sg.fenBefore as string, replyUci: sg.recordReplyLine ?? null })),
+    studentWB,
+  );
   // THE FUNDAMENTALS AGGREGATE (G.4) — "three of your five flagged moves handed
   // over a tempo": the actual lesson, computed from the per-move attributions,
   // spoken raw at the last ply ahead of the through-line.

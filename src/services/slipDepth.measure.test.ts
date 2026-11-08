@@ -7,7 +7,7 @@
 import { it } from 'vitest';
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { refutationOf } from './slipDepth';
+import { refutationOf, mainConceptLine, recurringFalls } from './slipDepth';
 import { expectedScore } from './winChance';
 import { newThreat } from './threatOut';
 import { findAllowedChain } from './causalChain';
@@ -99,4 +99,32 @@ it.runIf(RUN && existsSync(DIR))('deep reads: slips against matched ordinary mov
   writeFileSync('audit-reports/slip-depth.json', JSON.stringify({ rows: rows.length, summary, chain, samples }, null, 1));
   console.log('CHAIN', JSON.stringify(chain));
   console.log('SLIP_DEPTH', JSON.stringify(summary));
+}, 600_000);
+
+// The main concept on whole games: every costly move's reply, both seats
+// (`scripts/depth/slip-replies.mjs`). How many games get a line, and the lines.
+it.runIf(RUN && existsSync('audit-reports/slip-replies'))('main concept on whole games', () => {
+  const D = 'audit-reports/slip-replies';
+  const rows = readdirSync(D).filter((f) => f.startsWith('replies-')).flatMap((f) =>
+    readFileSync(`${D}/${f}`, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l) as { game: string; ply: number; seat: string; san: string; fenBefore: string; replyUci: string[] }));
+  const byGame = new Map<string, typeof rows>();
+  for (const r of rows) byGame.set(r.game, [...(byGame.get(r.game) ?? []), r]);
+  const tally = { games: 0, line: 0, mine: 0, theirs: 0, families: {} as Record<string, number> };
+  const lines: string[] = [];
+  for (const [game, rs] of byGame) {
+    tally.games += 1;
+    const moves = rs.sort((a, b) => a.ply - b.ply).map((r) => ({ seat: (r.seat === 'white' ? 'w' : 'b') as 'w' | 'b', san: r.san, fenBefore: r.fenBefore, replyUci: r.replyUci }));
+    // David's seat: the side his name plays is not in the reads; read both seats as "his" in turn.
+    for (const seat of ['w', 'b'] as const) {
+      const line = mainConceptLine(moves, seat);
+      if (!line) continue;
+      tally.line += 1;
+      const f = recurringFalls(moves);
+      if (f.some((x) => x.seat === seat)) tally.mine += 1; else tally.theirs += 1;
+      for (const x of f) tally.families[x.family] = (tally.families[x.family] ?? 0) + 1;
+      if (lines.length < 12) lines.push(`${game} [${seat}] ${line}`);
+    }
+  }
+  writeFileSync('audit-reports/main-concept.json', JSON.stringify({ tally, lines }, null, 1));
+  console.log('MAIN_CONCEPT', JSON.stringify(tally));
 }, 600_000);
