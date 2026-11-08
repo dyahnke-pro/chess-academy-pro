@@ -188,11 +188,34 @@ export function extractMentionedSanSpans(text: string): Array<{ san: string; ind
       // …and a square that is the SUBJECT of a sentence ("c5 is a hole in their
       // camp") names the square, never the pawn move (Learn walk 2026-10-01: a
       // c6→c5 arrow grew out of it).
-      if (/^\s+(?:is|was|stays|remains)\b/.test(cleaned.slice(match.index + san.length, match.index + san.length + 12))) continue;
+      // A move judged as a MOVE stays one: "f6 was stronger", "e5 is the best
+      // move", "d4 was the better move" (human voice 2026-11-08 — the better
+      // move leads its own sentence, and a pawn move lost its arrow).
+      const after = cleaned.slice(match.index + san.length, match.index + san.length + 40);
+      const judgedMove = /^\s+(?:is|was)\s+(?:stronger|better|cleaner|best|the\s+(?:better|best|only|right|stronger)\s+move|the\s+move|the\s+one)\b/.test(after);
+      if (!judgedMove && /^\s+(?:is|was|stays|remains)\b/.test(after)) continue;
     }
     out.push({ san, index: match.index, end: match.index + san.length, text: cleaned });
   }
   return out;
+}
+
+/** THE SQUARES A SENTENCE NAMES THAT ARE NOT MOVES — the marks the board
+ *  lights while it is said (David 2026-11-05: "If a single square is being
+ *  named it must also be highlighted"). A move token is the arrows' job; a bare
+ *  square that is no legal pawn move on either board is a square. The words
+ *  are computed (G0), so this lights exactly what was said — a MARK, never a
+ *  fact's squares: subsumption reads the computers' own squares only. */
+export function squaresNamedNotMoves(text: string, boards: readonly string[]): string[] {
+  const legalOn = (san: string): boolean => boards.some((f) => {
+    try { return !!new Chess(f).move(san.replace(/^…/, '')); } catch { return false; }
+  });
+  const moveSquares = new Set(
+    extractMentionedSanSpans(text)
+      .filter((sp) => !/^[a-h][1-8]$/.test(sp.san) || legalOn(sp.san))
+      .flatMap((sp) => sp.san.match(/[a-h][1-8]/g) ?? []),
+  );
+  return [...new Set(stripBoardMarkers(text).match(/\b[a-h][1-8]\b/g) ?? [])].filter((q) => !moveSquares.has(q));
 }
 
 /** SANs the text rules out: the one a move STOPS / prevents / takes away, a

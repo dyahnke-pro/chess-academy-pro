@@ -52,7 +52,7 @@ import type { QuietFact } from './factSelector';
 import { criticalityThresholds, type Severity } from './criticalityScan';
 import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
-import { buildDeliberation, deliberationFacts, deliberationSquares, deliberationWeighing, deliberationVerdict, ruleOutClaims, NOTHING_SAID, type Deliberation, type HeldVerdict } from './deliberation';
+import { buildDeliberation, deliberationFacts, deliberationLines, deliberationSquares, deliberationWeighing, deliberationVerdict, ruleOutClaims, NOTHING_SAID, type Deliberation, type HeldVerdict } from './deliberation';
 import { detectLatentFork, latentForkClause, type LatentFork } from './latentFork';
 import { detectSetUpChance, setUpClause, setUpHeldClause, setUpSkill, type SetUpChance } from './setUpChance';
 import { lineTakesPiece, pawnHit } from './trappedPiece';
@@ -1718,7 +1718,7 @@ function buildClauses(a: {
     const text = deliberationFacts(deliberation, said, !a.walkOwnsBestLine);
     // The choice is worth what the tempting alternative would cost.
     const worst = Math.max(0, ...deliberation.alternatives.map((c) => c.deltaCp));
-    if (text) ranked.push(clause('buildDeliberation', a.fen, { kind: 'deliberation', text, squares: deliberationSquares(deliberation, a.fen, said), stakes: costStakes(worst) ?? undefined }));
+    if (text) ranked.push(clause('buildDeliberation', a.fen, { kind: 'deliberation', text, squares: deliberationSquares(deliberation, a.fen, said), lines: deliberationLines(deliberation, a.fen, said, !a.walkOwnsBestLine), stakes: costStakes(worst) ?? undefined }));
   }
 
   // The prevention layer — a pin/skewer on your own king/queen, guide-don't-tell.

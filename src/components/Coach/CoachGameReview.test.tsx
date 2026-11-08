@@ -82,6 +82,7 @@ vi.mock('../../hooks/useSettings', () => ({
 
 vi.mock('../../services/coachFeatureService', () => ({
   segmentNamedArrows: () => [],
+  segmentLitSquares: () => [],
   generateNarrativeSummary: vi.fn().mockResolvedValue('This was a well-played game with some key moments.'),
   // generateReviewNarration was added to CoachGameReview.tsx after
   // this mock was last updated; without it, every test that mounts

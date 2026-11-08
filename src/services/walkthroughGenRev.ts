@@ -59,4 +59,6 @@
 // semicolons or dash chains read aloud, "aiming at" for "eyeing", a long move
 // line said as its key moves, the plan one step a sentence, two or three
 // phrasings rotated on the board.
-export const WALKTHROUGH_GEN_REV = '2026-11-08-human-voice';
+// 2026-11-08-marks: a lesson beat lights every square its spoken words name
+// (marks sweep: "your queen on d8" went unlit when the note was the source).
+export const WALKTHROUGH_GEN_REV = '2026-11-08-marks';

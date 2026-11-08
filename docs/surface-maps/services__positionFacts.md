@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2193 lines · 17 exports · 40 importers · 49 tests · 3 audits**
+**2193 lines · 17 exports · 41 importers · 50 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -58,6 +58,7 @@
 - `src/test/everySurfaceSpeaks.test.ts`
 - `src/test/humanSquares.gate.test.ts`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts`
+- `src/test/marksSweep.gate.test.ts`
 - `src/test/teach02Wired.test.ts`
 
 ## Exports and every call site
@@ -120,7 +121,7 @@
 - `src/services/positionReadComposer.ts:158`
 - `src/services/whyBestMove.ts:151`
 
-### `computePositionFacts` (function) — 111 call sites
+### `computePositionFacts` (function) — 113 call sites
 - `src/coach/boardTurnAnswer.ts:161`
 - `src/components/Coach/CoachTeachPage.tsx:11261`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
@@ -224,6 +225,8 @@
 - `src/test/humanSquares.gate.test.ts:65`
 - `src/test/humanSquares.gate.test.ts:88`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts:250`
+- `src/test/marksSweep.gate.test.ts:105`
+- `src/test/marksSweep.gate.test.ts:135`
 - `src/test/teach02Wired.test.ts:86`
 - `src/test/teach02Wired.test.ts:95`
 - `src/test/teach02Wired.test.ts:109`
@@ -315,6 +318,7 @@
 - `src/test/latentForkOpensTheDoor.test.ts`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts`
 - `src/test/learnNamesNoMoveUnasked.gate.test.ts`
+- `src/test/marksSweep.gate.test.ts`
 - `src/test/oneFactShape.gate.test.ts`
 - `src/test/onePrice.gate.test.ts`
 - `src/test/oneStoryState.gate.test.ts`

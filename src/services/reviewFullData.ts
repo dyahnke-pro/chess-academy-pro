@@ -748,6 +748,13 @@ export function computeMoveFacets(
     if (!sameAnswer) {
       const pf = made('renderFundamentalVerdict', 'principle', verdict.diagnosis);
       facets.push(pf);
+      // THE LINE IT SAYS IS PLAYED ON THE BOARD (marks sweep 2026-11-08): a
+      // rule that plays the punishing line ("That walks into a tactic: they
+      // play Nxd4 and, two moves later, Rfxc8") says its shape, so the board
+      // walks it in full — the voice says the shape, the board shows the
+      // detail. The line runs from the board after the move.
+      const lined = ctx.fundamentals.find((f) => typeof f.facts.line === 'string' && (f.evidence.moves[0] ?? '').split(' ').length >= 2);
+      if (lined) pf.lines = [{ fen: fenAfter, sans: lined.evidence.moves[0].split(' ') }];
       // The rule explains the cost the move paid, so it is worth that cost.
       if (negativeClass) recStakes(pf, costStakes(swing));
     }

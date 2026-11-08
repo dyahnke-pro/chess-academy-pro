@@ -19,6 +19,19 @@ describe('namedMoveArrows', () => {
     expect(admitArrows(c, { fen: START, studentColor: 'white' }).arrows).toHaveLength(4);
   });
 
+  it('"…e5, and after dxe5" is one line, drawn ply by ply (marks sweep 2026-11-08)', () => {
+    const board = after('d4', 'd6', 'c4');
+    expect(pairs(namedMoveArrows('If they push …e5, and after dxe5 you win a pawn.', board, 'w'))).toEqual(['e7e5', 'd4e5']);
+    // A move the sentence rules out ("a known mistake") is still never arrowed.
+    expect(pairs(namedMoveArrows('A known mistake here: e5, and after dxe5 you win a pawn.', board, 'w'))).toEqual([]);
+  });
+
+  it('"f6 was stronger" arrows the pawn move (the better move leads its sentence)', () => {
+    const board = after('e4', 'e5', 'Nf3', 'Nc6');
+    const c = namedMoveArrows('f6 was stronger: it would guard e5.', after('e4', 'e5', 'Nf3', 'Nc6', 'Bc4'), 'b', board);
+    expect(pairs(c)).toContain('f7f6');
+  });
+
   it('a square is never read as a pawn move (them / guard / of / then / watch)', () => {
     for (const t of ['That costs them d3.', 'Guard e5 before the push.', 'by way of b4 and d5', 'via c4, then d3', 'Watch c7 — a knight lands there.']) {
       expect(pairs(namedMoveArrows(t, START, 'w')), t).toEqual([]);

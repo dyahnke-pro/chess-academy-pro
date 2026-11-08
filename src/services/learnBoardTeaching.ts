@@ -624,7 +624,9 @@ export function namedMoveArrows(text: string, fen: string, student: 'w' | 'b', p
   const runs: string[][] = [];
   for (let i = 0; i < spans.length; i++) {
     const gap = i > 0 ? spans[i].text.slice(spans[i - 1].end, spans[i].index) : null;
-    if (gap !== null && /^[\s,…]*(?:and\s+|then\s+)?…?$/.test(gap) && runs.length > 0) runs[runs.length - 1].push(spans[i].san);
+    // "e5, and after dxe5 you win a pawn" is one line too (marks sweep
+    // 2026-11-08: the known slip and its punishment drew nothing).
+    if (gap !== null && /^[\s,…]*(?:and\s+(?:after\s+)?|then\s+|after\s+)?…?$/.test(gap) && runs.length > 0) runs[runs.length - 1].push(spans[i].san);
     else runs.push([spans[i].san]);
   }
 

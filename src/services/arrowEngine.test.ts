@@ -78,6 +78,12 @@ describe('extractMentionedSans', () => {
 });
 
 describe('a square as the subject of a sentence (Learn walk 2026-10-01, game 2 ply 35)', () => {
+  it('"f6 was stronger" names the move (the better move leads its sentence, 2026-11-08)', () => {
+    expect(extractMentionedSans('f6 was stronger: it would guard e5.')).toContain('f6');
+    expect(extractMentionedSans('d4 was the better move: it would take the centre.')).toContain('d4');
+    expect(extractMentionedSans('e5 is the best move here.')).toContain('e5');
+    expect(extractMentionedSans('c5 was weak all game.')).toEqual([]);
+  });
   it('"c5 is a hole in their camp" names a square, not the pawn move c5', () => {
     expect(extractMentionedSans('Ng5 brings your knight into the attack on their king. c5 is a hole in their camp: your knight on g5 gets there via e4.')).toEqual(['Ng5']);
   });

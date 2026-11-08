@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6321 lines · 30 exports · 69 importers · 83 tests · 4 audits**
+**6358 lines · 31 exports · 70 importers · 84 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -81,6 +81,7 @@
 - `src/services/whyItFailed.test.ts`
 - `src/test/computedOrderWired.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
+- `src/test/marksSweep.gate.test.ts`
 - `src/test/mateSaidOnce.gate.test.ts`
 - `src/test/replayGame.ts`
 - `src/test/reviewExplore.continuity.test.ts`
@@ -120,10 +121,15 @@
 - `src/services/coachFeatureService.test.ts:880`
 - `src/services/coachFeatureService.test.ts:881`
 
-### `segmentNamedArrows` (function) — 3 call sites
+### `segmentLitSquares` (function) — 2 call sites
+- `src/components/Coach/CoachGameReview.tsx:3518`
+- `src/test/marksSweep.gate.test.ts:160`
+
+### `segmentNamedArrows` (function) — 4 call sites
 - `src/components/Coach/CoachGameReview.tsx:3235`
-- `src/services/namedMoveArrows.test.ts:54`
-- `src/services/namedMoveArrows.test.ts:58`
+- `src/services/namedMoveArrows.test.ts:67`
+- `src/services/namedMoveArrows.test.ts:71`
+- `src/test/marksSweep.gate.test.ts:156`
 
 ### `foldReviewRefrains` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:1838`
@@ -300,7 +306,7 @@
 - `src/test/mateSaidOnce.gate.test.ts:69`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4278`
+- `src/components/Coach/CoachGameReview.tsx:4279`
 - `src/services/coachFeatureService.test.ts:793`
 - `src/services/coachFeatureService.test.ts:796`
 - `src/services/coachFeatureService.test.ts:803`
@@ -486,6 +492,7 @@
 - `src/test/computedOrderWired.test.ts`
 - `src/test/corpusScope.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
+- `src/test/marksSweep.gate.test.ts`
 - `src/test/mateSaidOnce.gate.test.ts`
 - `src/test/oneStoryState.gate.test.ts`
 - `src/test/reviewExplore.continuity.test.ts`

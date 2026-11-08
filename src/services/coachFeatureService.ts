@@ -109,7 +109,8 @@ import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { costWords, describeEvalCp, isMateEval, storedMate, moverGaveUpMate, COST_REASON_DEPTH } from './engineConstants';
 import { isContested } from './narrationImportance';
 import { mateDescription } from './matePatterns';
-import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
+import { buildVoicePackage, spokenSentenceKeys, type SpokenLine } from './voicePackage';
+import { squaresNamedNotMoves } from './arrowEngine';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
 import { FACET_ROLE, type FacetTag } from './reviewFacetRank';
 import { stepOf, type ComputerName } from './coachFact';
@@ -415,6 +416,38 @@ export function recapSecondPerson(r: {
  *  "was cleaner" move and a line walked ply by ply — the same resolver Learn
  *  uses, through the arrow door. Computed at display time, so a cached
  *  review gains its arrows without a rebuild. */
+/** THE SQUARES THE REVIEW BOARD LIGHTS ON A PLY: the kept facts' own squares
+ *  (`keySquares`), and every square the narration names that is not a move —
+ *  a move is arrowed (`segmentNamedArrows`). The marks sweep (2026-11-08) found
+ *  24 Review sentences naming a square nothing lit, from nine producers (the
+ *  better move's reason, the route, "it let you play d5, which attacks their
+ *  knight on c6" …); the board reads the words, so no producer can forget. */
+export function segmentLitSquares(seg: Pick<ReviewMoveSegment, 'narration' | 'keySquares' | 'fenAfter' | 'fenBefore'>): string[] {
+  const out = new Set<string>(seg.keySquares ?? []);
+  if (seg.narration) for (const sq of squaresNamedNotMoves(seg.narration, [seg.fenAfter, seg.fenBefore])) out.add(sq);
+  return [...out];
+}
+
+/** The first line a kept fact says, as the walk plays it (`spokenLineArrows`):
+ *  every ply from the board it starts on, or nothing when it does not play. */
+function spokenLineOf(kept: readonly { lines?: readonly SpokenLine[] }[]): { spokenLineArrows?: Array<{ uci: string; fenBefore: string; fenAfter: string }> } {
+  for (const f of kept) {
+    const line = f.lines?.find((l) => l.sans.length >= 2);
+    if (!line) continue;
+    try {
+      const c = new Chess(line.fen);
+      const arrows: Array<{ uci: string; fenBefore: string; fenAfter: string }> = [];
+      for (const san of line.sans) {
+        const fenBefore = c.fen();
+        const m = c.move(san);
+        arrows.push({ uci: `${m.from}${m.to}${m.promotion ?? ''}`, fenBefore, fenAfter: c.fen() });
+      }
+      if (arrows.length >= 2) return { spokenLineArrows: arrows };
+    } catch { /* a line that does not play draws nothing */ }
+  }
+  return {};
+}
+
 export function segmentNamedArrows(
   seg: Pick<ReviewMoveSegment, 'narration' | 'fenAfter' | 'fenBefore'>,
   studentColor: 'white' | 'black',
@@ -3146,6 +3179,10 @@ function* reviewSegmentSteps(
         ...(verdictReasonOut.punishSan ? { verdictPunishSan: verdictReasonOut.punishSan } : {}),
         ...(doorNarration && decision.proofOf.size ? { proofs: [...decision.proofOf.values()] } : {}),
         ...(doorNarration ? { spokenSquares: doorKeys.flatMap((k) => { const sq = spokenSquaresOf.get(k); return sq ? [sq] : []; }) } : {}),
+        // A LINE A KEPT FACT SAYS IS PLAYED ON THE BOARD, as Learn draws a kept
+        // fact's lines (`keptLines`): the voice says its shape, the board
+        // walks every move of it (marks sweep 2026-11-08).
+        ...(doorNarration ? spokenLineOf(keptKey) : {}),
       });
       try {
         prevCap = afterCapture(prevCap, new Chess(fenPair.fenBefore).move(m.san));

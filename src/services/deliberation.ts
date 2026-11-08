@@ -432,6 +432,24 @@ export function deliberationSquares(d: Deliberation, fen: string, said: Readonly
   return [...out];
 }
 
+/**
+ * THE LINES A WEIGHING PLAYS OUT, for the board (David 2026-09-30: "a
+ * punishment, a refutation or a played-out sequence is arrowed ply by ply to
+ * where it lands"). Each ruled-out candidate with the refutation that proves
+ * it, and the best line when the weighing says it — from `fen`, the board it
+ * was built on. The voice says a long line's shape (`lineShape`); the board
+ * walks every move of it. The candidate itself is a ply of the line, never an
+ * arrow of advice.
+ */
+export function deliberationLines(d: Deliberation, fen: string, said: ReadonlySet<string>, saysBestLine: boolean): Array<{ fen: string; sans: readonly string[] }> {
+  const out: Array<{ fen: string; sans: readonly string[] }> = [];
+  for (const a of reasonedAlternatives(d, said)) {
+    if (a.proofSans && a.proofSans.length >= 2 && a.proofSans[0] === a.san) out.push({ fen, sans: [...a.proofSans] });
+  }
+  if (d.bestWhy && d.bestLine && saysBestLine && d.bestLineSans && d.bestLineSans.length >= 2) out.push({ fen, sans: [...d.bestLineSans] });
+  return out;
+}
+
 /** The alternatives ruled out WITH a reason — the line that proves it or the
  *  piece it drops. The weighing speaks only these: one per loss, and a loss
  *  the student has already heard ruled out (`said`, the surface's say-once

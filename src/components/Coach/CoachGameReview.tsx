@@ -67,7 +67,7 @@ import {
   buildReviewSegmentsYielding,
   foldReviewRefrains,
   frameOpeningForStudent,
-  openingNameForKey, segmentNamedArrows } from '../../services/coachFeatureService';
+  openingNameForKey, segmentNamedArrows, segmentLitSquares } from '../../services/coachFeatureService';
 import type { OpeningKey } from '../../types';
 import type {
   NarrativeMoveData,
@@ -3508,14 +3508,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   })()}
                   // KEY-SQUARE HIGHLIGHTS (David 2026-09-13 "add highlights to all
                   // spoken key squares" + "these builds on review"): the squares
-                  // THIS ply's narration named, yellow, coupled from the computer
-                  // (seg.keySquares) — never scraped. They swap per ply as the walk
+                  // THIS ply's narration named, yellow: the kept facts' own squares
+                  // and every square the computed words name (`segmentLitSquares`,
+                  // marks sweep 2026-11-08). They swap per ply as the walk
                   // advances (the review's "next phrase"), and stand down while a
                   // card/walkout/exploration owns the board so nothing double-marks.
                   annotationHighlights={(() => {
                     if (walkExplorationFen || walkShowMeActive || shotState) return undefined;
-                    const ks = seg?.keySquares;
-                    return ks && ks.length ? ks.map((square) => ({ square, color: '#eab308' })) : undefined;
+                    const ks = seg ? segmentLitSquares(seg) : [];
+                    return ks.length ? ks.map((square) => ({ square, color: '#eab308' })) : undefined;
                   })()}
                   onMove={shotState ? (moveResult) => {
                     // FIND-THE-SHOT answer attempt — the board move IS the

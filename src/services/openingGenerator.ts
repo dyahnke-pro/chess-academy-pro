@@ -31,7 +31,7 @@ import { continueSentence } from '../utils/openSentence';
 import { computedPlanAt } from './computedPlan';
 import { storedTreeAnswer } from './deepTree';
 import puzzleData from '../data/puzzles.json';
-import { extractMentionedSquares, MAX_CANDIDATE_HIGHLIGHTS, type LineMove } from './arrowEngine';
+import { extractMentionedSquares, MAX_CANDIDATE_HIGHLIGHTS, squaresNamedNotMoves, type LineMove } from './arrowEngine';
 import { getCoachChatResponse, getCoachStructuredResponse, voiceFacts } from './coachApi';
 import {
   validateMoveLegality,
@@ -2463,9 +2463,15 @@ async function generateOpeningFromDbNarration(
     // letting it come from the prose while the arrows come from the note
     // would put the model back in charge of half the board.
     const arrowSource = grounded.source === 'note' ? (plyNoteText[i] as string) : text;
-    const namedSquares = extractMentionedSquares(arrowSource)
-      .filter((sq) => sq !== p.to && sq !== p.from)
-      .slice(0, MAX_CANDIDATE_HIGHLIGHTS);
+    // …and every square the SPOKEN beat names (marks sweep 2026-11-08: "your
+    // queen on d8" went unlit when the note was the source). The beat is
+    // computed (`preferRaw`), so its squares are the computers' — lit, not
+    // capped: the voice reveals each mark with its sentence (narrationSegments).
+    const prevFen = i > 0 ? positions[i - 1].fen : new Chess().fen();
+    const namedSquares = [...new Set([
+      ...extractMentionedSquares(arrowSource).slice(0, MAX_CANDIDATE_HIGHLIGHTS),
+      ...squaresNamedNotMoves(text, [p.fen, prevFen]),
+    ])].filter((sq) => sq !== p.to && sq !== p.from);
     const segment: NarrationSegmentType = { text, arrows: segmentArrows };
     if (namedSquares.length > 0) {
       segment.highlights = namedSquares.map((square) => ({ square, color: 'yellow' as const }));

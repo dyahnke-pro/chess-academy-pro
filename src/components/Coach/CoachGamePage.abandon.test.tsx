@@ -152,6 +152,7 @@ vi.mock('../../services/missedTacticService', () => ({
 
 vi.mock('../../services/coachFeatureService', () => ({
   segmentNamedArrows: () => [],
+  segmentLitSquares: () => [],
   detectBadHabitsFromGame: vi.fn().mockResolvedValue([]),
 }));
 
