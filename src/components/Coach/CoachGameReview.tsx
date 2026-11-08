@@ -9,6 +9,7 @@ import { warmOpeningIdentity } from '../../services/openingIdentity';
 import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Target, Crosshair, Play, Pause } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
+import { scheduleMarks } from '../../services/markPacing';
 import { buildVoicePackage } from '../../services/voicePackage';
 
 /** Candidate lines the LIVE surfaces run at — the engine's shipped default. */
@@ -67,7 +68,7 @@ import {
   buildReviewSegmentsYielding,
   foldReviewRefrains,
   frameOpeningForStudent,
-  openingNameForKey, segmentNamedArrows, segmentLitSquares } from '../../services/coachFeatureService';
+  openingNameForKey, segmentMarks } from '../../services/coachFeatureService';
 import type { OpeningKey } from '../../types';
 import type {
   NarrativeMoveData,
@@ -215,6 +216,9 @@ function walkStory(narration: ReviewNarration): GameStory {
   return storyOf(narration.story);
 }
 
+/** No mark reached yet. */
+const EMPTY_IDS: ReadonlySet<string> = new Set();
+
 /** One ply of a line walked on the review board, through the arrow door —
  *  checked on the board BEFORE it, coloured by whose move it is. */
 function lineArrow(fenBefore: string, uci: string, studentColor: 'white' | 'black'): BoardArrow[] | null {
@@ -222,18 +226,6 @@ function lineArrow(fenBefore: string, uci: string, studentColor: 'white' | 'blac
   return a ? [a] : null;
 }
 
-/** The board a line's FIRST ply was played on: whichever candidate the move is
- *  legal on. */
-function firstPlyBoard(uci: string, candidates: ReadonlyArray<string | undefined>): string | null {
-  for (const fen of candidates) {
-    if (!fen) continue;
-    try {
-      const c = new Chess(fen);
-      if (c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] ?? 'q' })) return fen;
-    } catch { /* not this board */ }
-  }
-  return null;
-}
 
 /** REVIEW ASKS NO QUESTIONS (David 2026-10-10: "Remove the question from
  *  review for now. I don't like that one."). Both stops are off: the
@@ -423,6 +415,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // restart the stagger.
   const lastArrowPlyRef = useRef(-1);
   const arrowsScheduledForPlyRef = useRef(-1);
+  // THE PLY'S MARKS, AS THEY ARE STATED (David 2026-11-08): which of the ply's
+  // marks (`segmentMarks`) the schedule has reached, for the ply they belong to.
+  const [plyMarksShown, setPlyMarksShown] = useState<{ ply: number; ids: ReadonlySet<string> }>({ ply: -1, ids: new Set() });
   // THE BOARD IS FREE (David 2026-09-05: "I wasn't able to move piece freely.
   // Let's unlock that and remove the 'explore this position' button. If the
   // user chooses to move a piece at any time that is them choosing to explore
@@ -2377,71 +2372,54 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, [walkPlayback, reviewWhyLine, walkSpokenLine]);
   const canPlayReviewLine = !!reviewWhyLine || (walkPlayback.currentSegment?.spokenLineArrows?.length ?? 0) >= 2;
 
-  // AUTO LEAD-THE-EYE ARROWS for a spoken future line (David 2026-09-07: "I just
-  // want the arrows to appear as the moves are spoken" — WITHOUT moving the
-  // pieces). When the walk lands on a segment whose narration talks out a
-  // projected line, reveal a green arrow per move CUMULATIVELY on a cadence, on
-  // the STATIC board — `walkExplorationFen` stays null, so the pieces never
-  // move (the piece-playout is the opt-in "Walk the line" button). Guarded so a
-  // walkout or an open card owns the board instead; ply-token-guarded and torn
-  // down on ply change. The board render already suppresses arrows while a
-  // find-the-shot card is open (honesty), so this never leaks an answer.
-  // (Placed after the card-state declarations so the dependency array is out of
-  // their temporal dead zone.)
+  // EVERY MARK APPEARS AS IT IS STATED (David 2026-09-07 "I just want the
+  // arrows to appear as the moves are spoken" → 2026-11-08 "Key squares get
+  // highlights, moves get arrowed, lines get multiple arrows … ALL appear AS
+  // THEY ARE STATED!"). The ply's marks — lit squares, the moves the words
+  // name, the better move, the spoken line's moves in order (`segmentMarks`) —
+  // go up on the one schedule (`markPacing`), each at the words that state it,
+  // from the moment the narration is ON AIR (voice off: the reading clock from
+  // the ply's landing). It replaces two clocks: every highlight and arrow
+  // painted the moment the ply landed, and a line's arrows spread evenly over a
+  // word-count guess. The pieces never move (the piece-playout is the opt-in
+  // "Walk the line" button). A walkout or an open card owns the board instead;
+  // ply-token-guarded and reset on ply change.
   useEffect(() => {
     if (walkExplorationFen !== null || walkShowMeActive) return; // a walkout owns the board
     if (shotState) return; // a card owns the board
     const seg = walkPlayback.currentSegment;
-    const arrows = seg?.spokenLineArrows;
-    // Clear ONLY when the ply changed — a fresh ply starts with a clean board.
-    // A narrationState change WITHIN a ply must not wipe arrows already painted
-    // (they linger after the statement).
-    const plyChanged = lastArrowPlyRef.current !== walkPlayback.currentPly;
-    if (plyChanged) {
-      lastArrowPlyRef.current = walkPlayback.currentPly;
+    const ply = walkPlayback.currentPly;
+    // A fresh ply starts with a clean board; a narrationState change WITHIN a
+    // ply never wipes what the schedule already showed.
+    if (lastArrowPlyRef.current !== ply) {
+      lastArrowPlyRef.current = ply;
       autoLineArrowTokenRef.current += 1;
       setWalkExplorationArrows(null);
+      setPlyMarksShown({ ply, ids: new Set() });
     }
-    // Only a real multi-move LINE earns the sequence reveal; a single move is
-    // already shown by the best-move arrow.
-    if (!arrows || arrows.length < 2) return;
-    // 🔒 REVEAL EACH ARROW AS THE LINE IS NARRATED — not all at once before the
-    // statement (David 2026-09-14: "they showed all at once before the statement.
-    // I want them to pop up as the move is being named"). With voice ON, wait for
-    // the ply to actually START speaking, then stagger the arrows across the
-    // spoken duration (estimated from the narration length — NOT wired to TTS
-    // word boundaries, per the narration standard). With voice OFF there is no
-    // statement to sync to, so reveal on a reading-time cadence.
+    if (!seg?.narration) return;
     const voiceOn = reviewVoiceRef.current;
     if (voiceOn && walkPlayback.narrationState !== 'speaking') return; // wait for the voice
-    if (arrowsScheduledForPlyRef.current === walkPlayback.currentPly) return; // already scheduled this ply
-    arrowsScheduledForPlyRef.current = walkPlayback.currentPly;
-    const token = ++autoLineArrowTokenRef.current;
-    const anchor = walkPlayback.currentPly;
-    const words = (seg?.narration ?? '').trim().split(/\s+/).filter(Boolean).length;
-    // ~180 wpm, floored, so the reveals span the statement instead of racing it.
-    const spanMs = Math.max(2200, Math.round((words / 180) * 60_000));
-    const step = spanMs / (arrows.length + 1);
-    // No effect-cleanup that clears these timers: the effect re-runs on every
-    // narrationState change (incl. speech-END), and clearing there would truncate
-    // an in-flight reveal. Each timer instead self-guards on the token (bumped on
-    // ply change), mount, and the anchor ply — so a ply change no-ops the stale
-    // ones and the arrows finish painting even after the statement ends.
-    const painted: BoardArrow[] = [];
-    arrows.forEach((a, i) => {
-      if (!a.uci || a.uci.length < 4) return;
-      setTimeout(() => {
-        if (autoLineArrowTokenRef.current !== token
-          || !walkMountedRef.current
-          || walkPlyRef.current !== anchor) return;
-        // Each ply of the spoken line on the board BEFORE it: the previous
-        // ply's frame, or — for the first — whichever of this ply's two boards
-        // the move is legal on.
-        const before = i > 0 ? arrows[i - 1].fenAfter : firstPlyBoard(a.uci, [seg?.fenAfter, seg?.fenBefore]);
-        const drawn = before ? lineArrow(before, a.uci, playerColor) : null;
-        if (drawn) painted.push(...drawn);
-        setWalkExplorationArrows([...painted]);
-      }, Math.round(step * (i + 1)));
+    if (arrowsScheduledForPlyRef.current === ply) return; // already scheduled this ply
+    arrowsScheduledForPlyRef.current = ply;
+    const token = autoLineArrowTokenRef.current;
+    const text = seg.narration;
+    const { items } = segmentMarks(seg, playerColor);
+    if (items.length === 0) return;
+    // No effect-cleanup: the effect re-runs on every narrationState change
+    // (speech END included); each timer self-guards on the token (bumped on
+    // ply change), mount, and the ply instead.
+    const live = (): boolean => autoLineArrowTokenRef.current === token && walkMountedRef.current && walkPlyRef.current === ply;
+    void (voiceOn ? voiceService.untilOnAir(4000) : Promise.resolve()).then(() => {
+      if (!live()) return;
+      const shown = new Set<string>();
+      for (const ev of scheduleMarks(text, items)) {
+        setTimeout(() => {
+          if (!live()) return;
+          if (ev.kind === 'clear') shown.clear(); else shown.add(ev.id);
+          setPlyMarksShown({ ply, ids: new Set(shown) });
+        }, ev.atMs);
+      }
     });
   }, [walkPlayback.currentPly, walkPlayback.currentSegment, walkPlayback.narrationState, walkExplorationFen, walkShowMeActive, shotState]);
 
@@ -3214,6 +3192,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         : walkPlayback.currentPly > 0
           ? moves[Math.min(walkPlayback.currentPly, moves.length) - 1]?.fen ?? STARTING_FEN
           : STARTING_FEN;
+      // The ply's marks (`segmentMarks`) and which of them the schedule reached.
+      const plyMarks = seg ? segmentMarks(seg, playerColor) : null;
+      const plyShownIds: ReadonlySet<string> = plyMarksShown.ply === walkPlayback.currentPly ? plyMarksShown.ids : EMPTY_IDS;
       const walkArrows = (() => {
         // NEVER paint the better-move arrow while a find-the-shot question is
         // open — the arrow IS the answer (honesty contract rule 1). Same for
@@ -3227,27 +3208,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // Hide the arrow once the student has explored — they've seen
         // the suggestion, no need to clutter the post-exploration view.
         if (walkExplorationFen) return undefined;
-        // PLAN-IDEA arrows (opening development / middlegame orientation): the
-        // board stays put and these arrows SHOW the plan instead of moving
-        // pieces (David 2026-07-19). They live on the segment itself.
-        // Every move the beat NAMES is arrowed too (David 2026-10-02), on top
-        // of the plan arrows or the better-move arrow.
-        const named = seg ? segmentNamedArrows(seg, playerColor) : [];
-        const withNamed = (base: BoardArrow[]): BoardArrow[] | undefined => {
-          const all = [...base, ...named.filter((n) => !base.some((b) => b.startSquare === n.startSquare && b.endSquare === n.endSquare))];
-          return all.length ? all : undefined;
-        };
-        if (seg?.planArrows && seg.planArrows.length) return withNamed(seg.planArrows);
-        if (!seg || !hasArrow) return withNamed([]);
-        const uci = seg.bestMoveUci;
-        if (!uci) return withNamed([]);
-        // The better move lives on the board BEFORE the student's move, and
-        // the walk shows the board AFTER it — the door checks both.
-        const missed = admitArrow(
-          { from: uci.slice(0, 2), to: uci.slice(2, 4), role: 'missed', fen: seg.fenBefore, source: 'review.betterMove' },
-          { fen: displayFen, studentColor: playerColor },
-        );
-        return withNamed(missed ? [missed] : []);
+        // The ply's arrows — the plan or the better move, every move the beat
+        // NAMES, the spoken line — each once the schedule reached its words.
+        if (!plyMarks) return undefined;
+        const shownArrows = [
+          ...plyMarks.arrows.filter((_, i) => plyShownIds.has(`a${i}`)),
+          ...plyMarks.lines.flatMap((l, k) => l.filter((_, i) => plyShownIds.has(`l${k}.${i}`))),
+        ];
+        return shownArrows.length ? shownArrows : undefined;
       })();
       // Walk-mode board is interactive only when a green arrow is on
       // screen — the student can grab the suggested piece and play it
@@ -3515,7 +3483,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   // card/walkout/exploration owns the board so nothing double-marks.
                   annotationHighlights={(() => {
                     if (walkExplorationFen || walkShowMeActive || shotState) return undefined;
-                    const ks = seg ? segmentLitSquares(seg) : [];
+                    const ks = plyMarks ? plyMarks.highlights.filter((_, i) => plyShownIds.has(`h${i}`)) : [];
                     return ks.length ? ks.map((square) => ({ square, color: '#eab308' })) : undefined;
                   })()}
                   onMove={shotState ? (moveResult) => {

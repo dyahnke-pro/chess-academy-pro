@@ -16,6 +16,7 @@
 import { NAMES_NO_MOVE, namesMoves, namedSan, namesPlayableStudentMove, type NamesStudentMove } from './studentMoveNaming';
 import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type ComputerName, type FactSeat, type HeldForm } from './coachFact';
 import { fadeLevelsFrom, fadeText } from './fadeText';
+import { cutMarksWithWords } from './markAnchors';
 import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan, lastMoveFromHistory } from './material';
@@ -1484,7 +1485,14 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, latentFork, setUp, tradeDanger, opponentIntent,
     // Said SHORTER where the student has shown the skill (one fade rule with
     // Learn); the say-once memory above keeps the full text's key.
-    clauses: clauses.map((c) => { const l = decision.faded.get(c.text); return l ? { ...c, text: fadeText(c.text, l) } : c; }),
+    // …and its marks with it: a square or line only the cut words stated goes
+    // (`cutMarksWithWords` — marks never outlive their words).
+    clauses: clauses.map((c) => {
+      const l = decision.faded.get(c.text);
+      if (!l) return c;
+      const text = fadeText(c.text, l);
+      return { ...c, text, ...cutMarksWithWords(c.text, text, { squares: c.squares, lines: c.lines }, c.fen, studentColor) };
+    }),
     candidates: [...clauseByText.values()],
     /** Every clause the door silenced, and why — the observability trail. */
     quiet: decision.quiet,

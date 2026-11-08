@@ -37,6 +37,7 @@
 //   4. What is spoken and what is logged are the same object. A package that
 //      reports something other than what the student heard is worse than no
 //      log at all.
+import { cutMarksWithWords } from './markAnchors';
 import { openSentence } from '../utils/openSentence';
 import { closeSentence } from '../utils/thinkPause';
 import type { FactProof } from './proof';
@@ -566,9 +567,14 @@ export function buildVoicePackage(
     // that happen to open "Watch out —".
     seen.add(key);
     for (const c of f.claims ?? []) seen.add(claimKey(c));
-    // A line rides only when EVERY sentence survived: a trimmed fact may have
-    // lost the very sentence that named the moves.
-    kept.push({ ...f, text: fresh.join(' '), lines: why.size === 0 ? f.lines : undefined });
+    // A TRIMMED FACT KEEPS ONLY THE MARKS ITS WORDS STILL STATE (marks sweep
+    // 2026-11-08): a square or a line said only in the sentence that was cut
+    // goes with it; one the kept words state, or one the fact describes without
+    // naming, stays (`cutMarksWithWords`). It used to drop every line of a
+    // trimmed fact and keep every square.
+    const keptText = fresh.join(' ');
+    const cut = why.size === 0 ? null : cutMarksWithWords(f.text, keptText, { squares: f.squares ?? [], lines: f.lines }, f.fen, null);
+    kept.push({ ...f, text: keptText, ...(cut ? { squares: cut.squares, lines: cut.lines } : {}) });
     lastFactKept = true;
   }
 

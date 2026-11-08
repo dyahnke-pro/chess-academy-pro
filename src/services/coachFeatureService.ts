@@ -111,6 +111,8 @@ import { isContested } from './narrationImportance';
 import { mateDescription } from './matePatterns';
 import { buildVoicePackage, spokenSentenceKeys, type SpokenLine } from './voicePackage';
 import { squaresNamedNotMoves } from './arrowEngine';
+import { cutMarksWithWords, markItems } from './markAnchors';
+import type { PacedMark } from './markPacing';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
 import { FACET_ROLE, type FacetTag } from './reviewFacetRank';
 import { stepOf, type ComputerName } from './coachFact';
@@ -428,9 +430,64 @@ export function segmentLitSquares(seg: Pick<ReviewMoveSegment, 'narration' | 'ke
   return [...out];
 }
 
+/** A REVIEW PLY'S MARKS, each anchored to the words that state it (David
+ *  2026-11-08: "Key squares get highlights, moves get arrowed, lines get
+ *  multiple arrows … and they ALL appear AS THEY ARE STATED"). The squares the
+ *  board lights (`segmentLitSquares`); the moves it arrows — the plan arrows,
+ *  else the better move on a costly ply, and every move the words name
+ *  (`segmentNamedArrows`); the spoken line, its moves in order. The walk shows
+ *  each one when the schedule (`markPacing`) reaches its words. */
+export interface SegmentMarks {
+  highlights: string[];
+  arrows: BoardArrow[];
+  /** Each line's arrows, its moves in order. */
+  lines: BoardArrow[][];
+  /** The schedule items (`markItems`), ids `h<i>`, `a<i>`, `l<k>.<i>`. */
+  items: PacedMark[];
+}
+
+export function segmentMarks(
+  seg: Pick<ReviewMoveSegment, 'narration' | 'keySquares' | 'keySquareSaid' | 'fenAfter' | 'fenBefore' | 'planArrows' | 'classification' | 'bestMoveUci' | 'spokenLineArrows' | 'spokenLineSaid'>,
+  studentColor: 'white' | 'black',
+): SegmentMarks {
+  const highlights = segmentLitSquares(seg);
+  const named = segmentNamedArrows(seg, studentColor);
+  const costly = seg.classification === 'inaccuracy' || seg.classification === 'mistake' || seg.classification === 'blunder';
+  // The better move lives on the board BEFORE the move; the walk shows the
+  // board AFTER it — the door checks both.
+  const better = !seg.planArrows?.length && costly && seg.bestMoveUci && seg.bestMoveUci.length >= 4
+    ? admitArrow({ from: seg.bestMoveUci.slice(0, 2), to: seg.bestMoveUci.slice(2, 4), role: 'missed', fen: seg.fenBefore, source: 'review.betterMove' }, { fen: seg.fenAfter, studentColor })
+    : null;
+  const base = seg.planArrows?.length ? [...seg.planArrows] : better ? [better] : [];
+  const arrows = [...base, ...named.filter((n) => !base.some((b) => b.startSquare === n.startSquare && b.endSquare === n.endSquare))];
+  // The spoken line, each ply on the board before it.
+  const plies = seg.spokenLineArrows ?? [];
+  const drawnPlies = plies.length >= 2
+    ? plies.flatMap((a) => {
+      if (!a.uci || a.uci.length < 4) return [];
+      const drawn = admitArrow({ from: a.uci.slice(0, 2), to: a.uci.slice(2, 4), role: 'line', fen: a.fenBefore, source: 'review.line' }, { fen: a.fenBefore, studentColor });
+      return drawn ? [{ ply: a, drawn }] : [];
+    })
+    : [];
+  const lines = drawnPlies.length >= 2 ? [drawnPlies.map((p) => p.drawn)] : [];
+  const viewer: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  // A key square carries the sentence of the fact it belongs to — its anchor
+  // when the words describe it without naming it ("only four squares").
+  const saidOf = new Map<string, string>();
+  (seg.keySquares ?? []).forEach((sq, i) => { const said = seg.keySquareSaid?.[i]; if (said && !saidOf.has(sq)) saidOf.set(sq, said); });
+  const items = markItems({
+    fen: seg.fenAfter,
+    viewer,
+    highlights: highlights.map((sq) => { const said = saidOf.get(sq); return said ? { square: sq, said } : sq; }),
+    arrows: arrows.map((a) => ({ from: a.startSquare, to: a.endSquare })),
+    lines: lines.length ? [{ moves: drawnPlies.map((p) => ({ from: p.ply.uci.slice(0, 2), to: p.ply.uci.slice(2, 4), fen: p.ply.fenBefore })), ...(seg.spokenLineSaid ? { said: seg.spokenLineSaid } : {}) }] : [],
+  });
+  return { highlights, arrows, lines, items };
+}
+
 /** The first line a kept fact says, as the walk plays it (`spokenLineArrows`):
  *  every ply from the board it starts on, or nothing when it does not play. */
-function spokenLineOf(kept: readonly { lines?: readonly SpokenLine[] }[]): { spokenLineArrows?: Array<{ uci: string; fenBefore: string; fenAfter: string }> } {
+function spokenLineOf(kept: readonly { text?: string; lines?: readonly SpokenLine[] }[]): { spokenLineArrows?: Array<{ uci: string; fenBefore: string; fenAfter: string }>; spokenLineSaid?: string } {
   for (const f of kept) {
     const line = f.lines?.find((l) => l.sans.length >= 2);
     if (!line) continue;
@@ -442,7 +499,7 @@ function spokenLineOf(kept: readonly { lines?: readonly SpokenLine[] }[]): { spo
         const m = c.move(san);
         arrows.push({ uci: `${m.from}${m.to}${m.promotion ?? ''}`, fenBefore, fenAfter: c.fen() });
       }
-      if (arrows.length >= 2) return { spokenLineArrows: arrows };
+      if (arrows.length >= 2) return { spokenLineArrows: arrows, ...(f.text ? { spokenLineSaid: f.text } : {}) };
     } catch { /* a line that does not play draws nothing */ }
   }
   return {};
@@ -619,6 +676,8 @@ export interface ReviewMoveSegment {
    *  this carries the OTHER lines the walk only spoke. `fenBefore` lets the
    *  board name the move (SAN) as it draws the arrow. */
   spokenLineArrows?: Array<{ uci: string; fenBefore: string; fenAfter: string }>;
+  /** The sentence that says the spoken line (its anchor on the mark schedule). */
+  spokenLineSaid?: string;
   /** KEY SQUARES this ply's narration NAMED (trapped piece + its attacker, a
    *  passed pawn, a minority-attack target, colour-complex holes) — coupled from
    *  the fact-computer's OWN squares, never scraped from prose (G0). The review
@@ -626,6 +685,9 @@ export interface ReviewMoveSegment {
    *  the square as the coach names it (David 2026-09-13 "add highlights to all
    *  spoken key squares"). Undefined when the ply named no clean square. */
   keySquares?: readonly string[];
+  /** The sentence of the spoken fact each key square belongs to (its anchor
+   *  on the mark schedule), parallel to `keySquares`. */
+  keySquareSaid?: readonly string[];
   /** THE SQUARES OF EACH CLAIM THIS PLY SPOKE — every spoken fact's coupled
    *  squares, from the computers' own squares, never scraped from prose. A
    *  later pass that adds a line (the deep threat) reads these to tell a claim
@@ -2891,12 +2953,8 @@ function* reviewSegmentSteps(
           facetFacts.push(f);
         }
       }
-      // KEY-SQUARE HIGHLIGHTS (David 2026-09-13): every square a KEPT facet
-      // named, from the computer's own squares (facetSquares), so the review
-      // board leads the eye in yellow exactly where the narration points —
-      // matched to the RAW facet strings (the map keys), before refrainOnce
-      // rewrites them, so a highlight only rides a facet actually spoken.
-      const segKeySquares = [...new Set(keptKey.flatMap((k) => [...k.squares]))];
+      // KEY-SQUARE HIGHLIGHTS (David 2026-09-13): the squares the board lights
+      // are the spoken facts' own squares, read after the door (`litSaid`, below).
       // FUNDAMENTALS-FIRST on a flagged student ply (David 2026-09-05 overhaul:
       // "narrate the fundamentals FIRST"). computeMoveFacets emits the neglected
       // principle as a [principle] facet, but AFTER the move-mechanics facets —
@@ -3128,10 +3186,23 @@ function* reviewSegmentSteps(
       if (/#$/.test(m.san)) uncappedParts.splice(0, uncappedParts.length, deliveredMateNarration(fenPair.fenAfter, moverColor === playerColor));
       // Said SHORTER where the student has shown the skill — one fade rule
       // with Learn (David 2026-10-17: shorten, never silence a reason).
-      const doorFacts = uncappedParts.map((text, k) => ({ kind: 'computed' as const, text: fadeText(text, decision.faded.get(doorKeys[k] ?? '') ?? null), fen: fenPair.fenAfter, altFen: fenPair.fenBefore }));
+      // Each spoken fact carries its own squares, cut with its words by the
+      // fade (`cutMarksWithWords`) and again by the package's trim — so the
+      // board lights the squares of what is SAID, never of a fact the door
+      // quieted (the key squares were the facets kept BEFORE the door).
+      const doorFacts = uncappedParts.map((text, k) => {
+        const key = doorKeys[k] ?? '';
+        const said = fadeText(text, decision.faded.get(key) ?? null);
+        const own = spokenSquaresOf.get(key) ?? [];
+        const squares = said === text ? [...own] : cutMarksWithWords(text, said, { squares: own }, fenPair.fenAfter, null).squares;
+        return { kind: 'computed' as const, text: said, fen: fenPair.fenAfter, altFen: fenPair.fenBefore, squares };
+      });
+      // The squares the board lights for this ply, each with its sentence.
+      const litSaid: Array<{ square: string; said: string }> = [];
       const speakDoor = (facts: typeof doorFacts): string | null => {
         if (facts.length === 0) return null;
         const pkg = buildVoicePackage(facts, undefined, reviewSpokenKeys);
+        for (const f of pkg.kept) for (const sq of f.squares ?? []) if (!litSaid.some((x) => x.square === sq)) litSaid.push({ square: sq, said: f.text });
         for (const k of spokenSentenceKeys(pkg)) reviewSpokenKeys.add(k);
         reviewPkgTally.parts += facts.length;
         for (const d of pkg.dropped) {
@@ -3173,7 +3244,7 @@ function* reviewSegmentSteps(
         ...(needHere ? { need: needHere } : {}),
         ...(causalArrows && causalArrows.length ? { planArrows: causalArrows } : {}),
         ...(fundamentals.length ? { fundamentals } : {}),
-        ...(segKeySquares.length ? { keySquares: segKeySquares } : {}),
+        ...(litSaid.length ? { keySquares: litSaid.map((x) => x.square), keySquareSaid: litSaid.map((x) => x.said) } : {}),
         ...(verdictReasonOut.text ? { verdictReason: verdictReasonOut.text } : {}),
         ...(verdictReasonOut.playedLine ? { verdictPlayedLine: true } : {}),
         ...(verdictReasonOut.punishSan ? { verdictPunishSan: verdictReasonOut.punishSan } : {}),
@@ -5021,7 +5092,7 @@ async function augmentWithProjections(
           const c = new Chess(line.fen);
           const arrows: Array<{ uci: string; fenBefore: string; fenAfter: string }> = [];
           for (const san of line.sans) { const fenBefore = c.fen(); const m = c.move(san); arrows.push({ uci: `${m.from}${m.to}${m.promotion ?? ''}`, fenBefore, fenAfter: c.fen() }); }
-          if (arrows.length) s.spokenLineArrows = arrows;
+          if (arrows.length) { s.spokenLineArrows = arrows; s.spokenLineSaid = f.text; }
         } catch { /* a line that does not play draws nothing */ }
       }
     });

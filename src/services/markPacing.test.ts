@@ -30,3 +30,36 @@ describe('marks appear as they are mentioned', () => {
     expect(e.find((v) => v.kind === 'show')?.atMs).toBe('Keep pushing. '.length * MS_PER_CHAR);
   });
 });
+
+// David 2026-11-08: "Make sure ALL stated squares pieces moves are covered …
+// they ALL appear AS THEY ARE STATED!"
+describe('every mark appears at the words that state it', () => {
+  it('a piece named by its words lights its square there, not at the turn end', () => {
+    const text = 'You play Nf3. Their queen has nowhere to go now. Keep the pressure on.';
+    const ev = scheduleMarks(text, [{ id: 'q', squares: ['d8'], words: ['their queen', 'the queen'] }]);
+    expect(ev.find((e) => e.kind === 'show')?.atMs).toBe(text.indexOf('Their queen') * MS_PER_CHAR);
+  });
+  it("a line said by its shape draws its unnamed moves right after the one before, in order", () => {
+    const text = 'That walks into a tactic: they play Nxd4 and, two moves later, they play Rfxc8. They win a bishop.';
+    const marks = [
+      { id: 'p0', squares: ['d4', 'c6'], group: 'l0' },
+      { id: 'p1', squares: ['d4', 'e3'], group: 'l0' },
+      { id: 'p2', squares: ['b5', 'c6'], group: 'l0' },
+      { id: 'p3', squares: ['c8', 'f8'], group: 'l0' },
+    ];
+    const ev = scheduleMarks(text, marks);
+    const at = (id: string): number => (ev.find((e) => e.kind === 'show' && e.id === id)?.atMs ?? -1);
+    expect(at('p0')).toBe(text.indexOf('d4') * MS_PER_CHAR);
+    expect(at('p1')).toBeGreaterThan(at('p0'));
+    expect(at('p1')).toBeLessThan(text.indexOf('They win') * MS_PER_CHAR);
+    expect(at('p3')).toBe(text.indexOf('c8') * MS_PER_CHAR);
+    expect(at('p2')).toBeGreaterThan(at('p1'));
+    // …never at the turn's last sentence, as an unnamed mark used to go.
+    expect(at('p2')).toBeLessThan(text.indexOf('They win') * MS_PER_CHAR);
+  });
+  it('castling is announced by the word', () => {
+    const text = 'Get your king safe first. Then castle, and the rook joins.';
+    const ev = scheduleMarks(text, [{ id: 'k', squares: ['g1', 'e1'], words: ['castles', 'castle'] }]);
+    expect(ev.find((e) => e.kind === 'show')?.atMs).toBe(text.indexOf('castle,') * MS_PER_CHAR);
+  });
+});

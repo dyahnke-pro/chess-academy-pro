@@ -1,5 +1,26 @@
 {
-  "unlit": { "review": 0, "learn": 0, "chat": 0, "lesson": 0 },
-  "unarrowed": { "review": 9, "learn": 4, "chat": 1, "lesson": 0 },
-  "shortline": { "review": 0, "learn": 0, "chat": 0, "lesson": 0 }
+  "unlit": {
+    "review": 0,
+    "learn": 0,
+    "chat": 0,
+    "lesson": 0
+  },
+  "unarrowed": {
+    "review": 9,
+    "learn": 4,
+    "chat": 1,
+    "lesson": 0
+  },
+  "shortline": {
+    "review": 0,
+    "learn": 0,
+    "chat": 0,
+    "lesson": 0
+  },
+  "unstated": {
+    "review": 999,
+    "learn": 999,
+    "chat": 999,
+    "lesson": 999
+  }
 }

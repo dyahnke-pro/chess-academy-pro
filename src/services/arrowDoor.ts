@@ -239,6 +239,18 @@ export function keptLineArrows(
   boardFen: string,
   studentColor: 'white' | 'black',
 ): BoardArrow[] {
+  return keptLineArrowGroups(lines, boardFen, studentColor).flat();
+}
+
+/** The same drawing, one group of arrows per line, its moves in order — the
+ *  mark schedule reveals a line's moves as they are said, each after the one
+ *  before (`markAnchors`, David 2026-11-08: "lines get multiple arrows … AS
+ *  THEY ARE STATED"). */
+export function keptLineArrowGroups(
+  lines: ReadonlyArray<{ fen: string; arrows: ReadonlyArray<{ from: string; to: string }> }>,
+  boardFen: string,
+  studentColor: 'white' | 'black',
+): BoardArrow[][] {
   const placement = (f: string): string => f.split(' ')[0];
   const throughDoor = (l: { fen: string; arrows: ReadonlyArray<{ from: string; to: string }> }): BoardArrow[] => {
     const claims: ArrowClaim[] = [];
@@ -251,15 +263,16 @@ export function keptLineArrows(
     } catch { /* the plies replayed so far still draw */ }
     return admitArrows(claims, { fen: l.fen, studentColor, holdStudentMoves: true }).arrows;
   };
-  const out: BoardArrow[] = [];
+  const out: BoardArrow[][] = [];
+  const push = (g: BoardArrow[]): void => { if (g.length > 0) out.push(g); };
   for (const l of lines) {
-    if (placement(l.fen) === placement(boardFen)) { out.push(...throughDoor(l)); continue; }
+    if (placement(l.fen) === placement(boardFen)) { push(throughDoor(l)); continue; }
     try {
       const c = new Chess(l.fen);
       for (let k = 0; k < l.arrows.length; k++) {
         c.move({ from: l.arrows[k].from, to: l.arrows[k].to, promotion: 'q' });
         if (placement(c.fen()) === placement(boardFen)) {
-          if (k + 1 < l.arrows.length) out.push(...throughDoor({ fen: boardFen, arrows: l.arrows.slice(k + 1) }));
+          if (k + 1 < l.arrows.length) push(throughDoor({ fen: boardFen, arrows: l.arrows.slice(k + 1) }));
           break;
         }
       }

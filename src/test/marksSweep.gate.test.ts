@@ -19,7 +19,9 @@ import { computePositionFacts } from '../services/positionFacts';
 import { lastMoveIfOpponent, lastMoveIfStudent } from '../services/lastMoveOfLine';
 import { mateContext } from '../utils/mateContext';
 import { analysisOf, linesOf, replayPlies, reviewSegments, type ReplayGame } from './replayGame';
-import { segmentNamedArrows, segmentLitSquares } from '../services/coachFeatureService';
+import { segmentNamedArrows, segmentLitSquares, segmentMarks } from '../services/coachFeatureService';
+import { markItems } from '../services/markAnchors';
+import type { PacedMark } from '../services/markPacing';
 import { namedMoveArrows } from '../services/learnBoardTeaching';
 import { extractMentionedSanSpans, ruledOutSans } from '../services/arrowEngine';
 import type { WalkthroughTreeNode } from '../types/walkthroughTree';
@@ -49,10 +51,27 @@ function loadGames(): FixtureGame[] {
 const sentencesOf = (text: string): string[] => text.split(/(?<=[.!?])\s+/).filter((s) => s.trim().length > 0);
 const destOf = (san: string): string | null => (san.replace(/[+#?!]/g, '').match(/([a-h][1-8])(?:=[QRBN])?$/) ?? [])[1] ?? (/^O-O/.test(san) ? 'castle' : null);
 
-interface Row { surface: string; kind: string; rule: 'unlit' | 'unarrowed' | 'shortline'; what: string; text: string }
+interface Row { surface: string; kind: string; rule: 'unlit' | 'unarrowed' | 'shortline' | 'unstated'; what: string; text: string }
 const rows: Row[] = [];
-const tallies: Record<string, { lines: number; unlit: number; unarrowed: number; shortline: number }> = {};
-const tally = (surface: string): { lines: number; unlit: number; unarrowed: number; shortline: number } => (tallies[surface] ??= { lines: 0, unlit: 0, unarrowed: 0, shortline: 0 });
+const tallies: Record<string, { lines: number; unlit: number; unarrowed: number; shortline: number; unstated: number }> = {};
+const tally = (surface: string): { lines: number; unlit: number; unarrowed: number; shortline: number; unstated: number } => (tallies[surface] ??= { lines: 0, unlit: 0, unarrowed: 0, shortline: 0, unstated: 0 });
+
+/** AS IT IS STATED (David 2026-11-08): every mark the board draws for a line is
+ *  named by it — its square, its piece's words, its move — or is a line's move
+ *  following the one before. A mark nothing in the words states goes up at the
+ *  turn's end (`markPacing`'s tail): counted here. */
+function statedCheck(surface: string, kind: string, text: string, items: readonly PacedMark[]): void {
+  const lower = text.toLowerCase();
+  const anchoredGroups = new Set<string>();
+  for (const it of items) {
+    const named = it.squares.some((q) => new RegExp(`(?<![0-9])${q}(?![0-9])`).test(text))
+      || (it.words ?? []).some((w) => lower.includes(w.toLowerCase()));
+    if (named) { if (it.group) anchoredGroups.add(it.group); continue; }
+    if (it.group && anchoredGroups.has(it.group)) continue;
+    tally(surface).unstated += 1;
+    rows.push({ surface, kind, rule: 'unstated', what: `${it.id} [${it.squares.join(' ')}]${process.env.MARKS_SWEEP_PRINT === '1' ? ` all=${JSON.stringify(items.map((x) => x.id + ':' + x.squares.join('')))}` : ''}`, text });
+  }
+}
 
 /** A move token legal on either board — a bare square that is no legal pawn
  *  move there names the square, not a move. */
@@ -124,6 +143,12 @@ async function sweepGame(g: FixtureGame): Promise<void> {
       const lit = new Set([...(c.squares ?? []), ...claims.flatMap((a) => [a.from, a.to]), ...lineSq, ...moveSquares(r.fenBefore, r.san)]);
       const drawn = Math.max(0, ...(c.lines ?? []).map((l) => l.sans.length));
       check('learn', c.kind, c.text, lit, arrowTo, drawn, c.proof && typeof c.proof === 'object' && 'line' in c.proof && c.proof.line ? c.proof.line.sans.length : null, [r.fenAfter, r.fenBefore, p.fenBefore], r.san);
+      statedCheck('learn', c.kind, c.text, markItems({
+        fen: r.fenAfter, viewer: student,
+        highlights: [...(c.squares ?? [])],
+        arrows: claims.map((a) => ({ from: a.from, to: a.to })),
+        lines: (c.lines ?? []).map((l) => { const out: { from: string; to: string; fen: string }[] = []; try { const b = new Chess(l.fen); for (const sn of l.sans) { const f0 = b.fen(); const m = b.move(sn); out.push({ from: m.from, to: m.to, fen: f0 }); } } catch { /* partial */ } return out; }),
+      }));
     }
   }
   // CHAT — the asked read where the student is to move.
@@ -160,6 +185,7 @@ async function sweepGame(g: FixtureGame): Promise<void> {
     const lit = new Set([...segmentLitSquares(s), ...moveSquares(s.fenBefore, s.san), ...arrows.flatMap((a) => [a.startSquare, a.endSquare]), ...played]);
     for (const a of s.spokenLineArrows ?? []) arrowTo.add(a.uci.slice(2, 4));
     check('review', 'segment', s.narration, lit, arrowTo, Math.max(arrows.length, s.spokenLineArrows?.length ?? 0), null, [s.fenAfter, s.fenBefore], s.san);
+    statedCheck('review', 'segment', s.narration, segmentMarks(s, g.studentSide).items);
   }
 }
 
@@ -194,7 +220,7 @@ describe('the marks sweep — squares lit, moves arrowed, lines drawn', () => {
       for (const x of rows) console.log(`  ${x.rule} [${x.surface}:${x.kind}] {${x.what}} ${x.text.slice(0, 200)}`);
     }
     const over: string[] = [];
-    for (const rule of ['unlit', 'unarrowed', 'shortline'] as const) {
+    for (const rule of ['unlit', 'unarrowed', 'shortline', 'unstated'] as const) {
       for (const [surface, t] of Object.entries(tallies)) {
         const cap = CEILING[rule][surface] ?? 0;
         if (t[rule] > cap) over.push(`${rule} ${surface}: ${t[rule]} > ${cap}`);

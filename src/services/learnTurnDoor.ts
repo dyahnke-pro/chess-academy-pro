@@ -29,6 +29,7 @@
  * Slice 1 (this file): route + record, behaviour-preserving. Ordering and dedupe are still
  * `buildVoicePackage`'s. Picking ONE lead per turn is the next slice.
  */
+import { cutMarksWithWords } from './markAnchors';
 import { fadeText, fadeLevelOf, type FadeLevels } from './fadeText';
 import { isProof, type FactProof, type Proof } from './proof';
 import { emitLearnTurn, type LearnTurnTag, type PriceSearch } from './coachDecisionEvents';
@@ -915,7 +916,9 @@ export function decideTurn(
     const claims = moveClaim ? [...f.claims, moveClaim] : f.claims;
     // A story beat speaks whole or not at all (prod audit 2026-10-20). The
     // fact's id rides into the package, so what it keeps is known by its id.
-    open.push({ factId: f.id, lane: f.lane, kind: LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof, whole: STORY_LANES.has(f.lane),
+    // The fade cuts the marks its words took with them (`cutMarksWithWords`).
+    const marks = text === f.text ? { squares: f.squares, lines: f.lines } : cutMarksWithWords(f.text, text, { squares: f.squares, lines: f.lines }, f.fen, null);
+    open.push({ factId: f.id, lane: f.lane, kind: LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: marks.squares, claims, lines: marks.lines, proof: f.proof, whole: STORY_LANES.has(f.lane),
       offerValue: stakeValue(f.stakes) ?? leadOf(f),
       offerRank: (OWED_ANSWER.has(f.lane) ? 1 : 0) - (fallbackReason(f.claims) ? 1 : 0) });
   }

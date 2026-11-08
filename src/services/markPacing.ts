@@ -2,24 +2,39 @@
 // light up at the beginning of the narration, they need to light up AS THEY
 // ARE MENTIONED" … "arrows need to appear as the moves are mentioned").
 //
-// The ONE schedule for every Learn speech path. Given the text the voice is
+// The ONE schedule for every surface that speaks over a board (Learn, Review,
+// chat, lessons, puzzles — David 2026-11-08). Given the text the voice is
 // about to speak and the marks the kept facts carry, it says when each mark
 // goes up: at the character where its square is first named, on the same
 // ~55ms/char clock the paced reveal has always used (never TTS word timing).
 // A sentence that names a mark clears the previous sentence's marks as it
 // starts (David 2026-09-13: "stack until next phrase is spoken"), so a line's
 // moves accumulate inside their sentence and give way to the next idea.
-// A mark no sentence names goes up with the last sentence — never lost.
+// A mark no sentence names goes up with the last sentence — never lost; a
+// line's unnamed ply goes up right after the ply before it.
 // A leaf: no imports.
 
 export const MS_PER_CHAR = 55;
 
-interface PacedMark {
+export interface PacedMark {
   /** Caller's handle for the mark (an arrow or a highlight). */
   id: string;
   /** The squares that announce it: an arrow's destination (then its origin), a
    *  highlight's square. The first one the text names wins. */
   squares: readonly string[];
+  /** Words that announce it too, matched whole and case-blind: a piece by its
+   *  spoken name ("their queen" — `pieceRef`, the one namer), a castling move
+   *  ("castles"). The squares are tried first (David 2026-11-08: "ALL appear
+   *  AS THEY ARE STATED" — "their queen" lit at the turn's end). */
+  words?: readonly string[];
+  /** The moves of ONE line share a group, in order. A ply the words never name
+   *  (a line said by its shape — "Nxd4 and, two moves later, Rfxc8") goes up
+   *  right after the ply before it, never at the turn's end. */
+  group?: string;
+  /** The sentence of the fact it belongs to: a square the words describe
+   *  without naming ("only four squares", "each square") goes up when its own
+   *  fact is said, never at the turn's end. */
+  said?: string;
 }
 
 type MarkEvent =
@@ -43,6 +58,22 @@ function mentionAt(text: string, square: string, from = 0): number {
   return m ? m.index : -1;
 }
 
+/** Where a fact's own sentence starts in what is spoken: its opening words,
+ *  -1 when the fact is not in the text. */
+function saidAt(text: string, said: string): number {
+  const head = said.replace(/\s+/g, ' ').trim().slice(0, 40);
+  return head ? text.indexOf(head) : -1;
+}
+
+/** Where words are first said, whole and case-blind, at or after `from`. */
+function wordsAt(text: string, words: string, from = 0): number {
+  const esc = words.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`(?<![A-Za-z0-9])${esc}(?![A-Za-z0-9])`, 'gi');
+  re.lastIndex = from;
+  const m = re.exec(text);
+  return m ? m.index : -1;
+}
+
 /** The schedule. Marks that share a square are revealed in order of their
  *  ids' position in `marks` at successive mentions — a line's plies landing on
  *  the same square appear one per mention. */
@@ -52,14 +83,32 @@ export function scheduleMarks(text: string, marks: readonly PacedMark[], msPerCh
   const cursor = new Map<string, number>();
   const placed: Array<{ id: string; pos: number }> = [];
   const tail: string[] = [];
+  // The last placed ply of each line, so an unnamed ply follows it.
+  const groupAt = new Map<string, number>();
   for (const mk of marks) {
     let best = -1;
+    // A line's ply is looked for from where the line has reached.
+    const floor = mk.group !== undefined ? (groupAt.get(mk.group) ?? 0) : 0;
     for (const sq of mk.squares) {
-      const at = mentionAt(text, sq, cursor.get(sq) ?? 0);
+      const at = mentionAt(text, sq, Math.max(floor, cursor.get(sq) ?? 0));
       if (at >= 0 && (best < 0 || at < best)) best = at;
     }
+    if (best < 0) {
+      for (const w of mk.words ?? []) {
+        const key = `w:${w.toLowerCase()}`;
+        const at = wordsAt(text, w, Math.max(floor, cursor.get(key) ?? 0));
+        if (at >= 0 && (best < 0 || at < best)) { best = at; cursor.set(key, at + w.length); }
+      }
+    } else {
+      for (const sq of mk.squares) if (mentionAt(text, sq, best) === best) cursor.set(sq, best + sq.length);
+    }
+    if (best < 0 && mk.group !== undefined && groupAt.has(mk.group)) {
+      // Said by its shape: right after the ply before it.
+      best = (groupAt.get(mk.group) as number) + 1;
+    }
+    if (best < 0 && mk.said) best = saidAt(text, mk.said);
     if (best < 0) { tail.push(mk.id); continue; }
-    for (const sq of mk.squares) if (mentionAt(text, sq, best) === best) cursor.set(sq, best + sq.length);
+    if (mk.group !== undefined) groupAt.set(mk.group, best);
     placed.push({ id: mk.id, pos: best });
   }
   const lastStart = starts[starts.length - 1];

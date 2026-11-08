@@ -335,7 +335,7 @@ import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText } from '../../services/coachAnswerGates';
 import { dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
-import { admitArrow, admitArrows, keptLineArrows, narrationArrowsThroughDoor, withAdmitted, type ArrowClaim } from '../../services/arrowDoor';
+import { admitArrow, admitArrows, keptLineArrowGroups, narrationArrowsThroughDoor, withAdmitted, type ArrowClaim } from '../../services/arrowDoor';
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareRead } from '../../services/tacticalRead';
@@ -354,6 +354,7 @@ import { readBoard, readBoardAll, readKey, adoptPlanTrial, type PlanThread, type
 import type { CoachFact, ComputerName, HeldForm } from '../../services/coachFact';
 import { splitThink, stripThink, resolveOwed, THINK_MARK } from '../../utils/thinkPause';
 import { scheduleMarks } from '../../services/markPacing';
+import { markItems } from '../../services/markAnchors';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent, ownTakebackPlies } from '../../services/coachSessionRouter';
 import { actionForCommand, actuate } from '../../services/coachActuator';
@@ -507,7 +508,19 @@ function freshTurnId(topic?: string): string {
 const uniqueArrows = dedupeArrowsBySquarePair;
 
 /** The marks a spoken Learn line carries, revealed as it names them. */
-interface TrackMarks { arrows: BoardArrow[]; highlights: BoardHighlight[] }
+/** A spoken line's marks: single arrows, highlights, and its lines (each its
+ *  moves in order). `replace`: the line's first mark clears the board's arrows
+ *  (a new idea's arrows replace the last one's — said, never before). */
+interface TrackMarks {
+  /** Each with the sentence of the fact it belongs to (its fallback anchor). */
+  arrows: Array<BoardArrow & { said?: string }>;
+  highlights: Array<BoardHighlight & { said?: string }>;
+  lines?: Array<{ arrows: BoardArrow[]; said?: string }>;
+  replace?: boolean;
+}
+/** How long a line's marks wait for its audio to be on air (a wedged voice
+ *  never strands them: they start at the deadline). */
+const ON_AIR_WAIT_MS = 4000;
 
 const SUGGESTIONS = [
   'Walk me through the Vienna opening',
@@ -1685,6 +1698,74 @@ export function CoachTeachPage({ mode }: {
   // Read by the stable queue callback (named-move arrows need the seat).
   const playerColorRef = useRef(playerColor);
   playerColorRef.current = playerColor;
+  /** THE LAST LINE THE COACH SAID, for the board bar's Play line (David
+   *  2026-11-08: "lines get multiple arrows and a play out line button"):
+   *  any kept fact's own line, not only a proof's. */
+  const [lastSpokenLine, setLastSpokenLine] = useState<{ fen: string; sans: readonly string[] } | null>(null);
+  const noteSpokenLines = useCallback((kept: readonly { lines?: readonly { fen: string; sans: readonly string[] }[]; text: string }[]): void => {
+    for (const f of kept) {
+      if (f.text.includes(THINK_MARK)) continue;
+      const line = f.lines?.find((l) => l.sans.length >= 2);
+      if (line) setLastSpokenLine({ fen: line.fen, sans: [...line.sans] });
+    }
+  }, []);
+  /** Each kept fact's own lines on the board, its moves in order, with the
+   *  fact's sentence (a question's lines are its answer: they wait). */
+  const factLinesOf = useCallback((kept: VoicePackage['kept'], boardFen: string): Array<{ arrows: BoardArrow[]; said: string }> => {
+    const seat = playerColorRef.current;
+    return kept.filter((f) => !f.text.includes(THINK_MARK)).flatMap((f) =>
+      keptLineArrowGroups(keptLines({ kept: [f] }, seat === 'white' ? 'w' : 'b'), boardFen, seat).map((arrows) => ({ arrows, said: f.text })));
+  }, []);
+  /** MARKS APPEAR AS THEY ARE STATED (David 2026-10-19 → 2026-11-08: "ALL
+   *  appear AS THEY ARE STATED!"). Every Learn wave reveals its marks on the one
+   *  schedule (`markPacing`), each anchored to the words that name it — a
+   *  square, a piece by its spoken name, a move, a line's moves in order
+   *  (`markAnchors`) — from the moment its audio is on air. Paced marks are
+   *  tracked so a later line's marks give way to an earlier line's, and the
+   *  reply's own mark stays. */
+  const pacedArrowKeysRef = useRef(new Set<string>());
+  const pacedSquaresRef = useRef(new Set<string>());
+  const paceBoardMarks = useCallback((spoken: string, marks: TrackMarks, current: () => boolean): void => {
+    const lines = marks.lines ?? [];
+    const items = markItems({
+      fen: liveFenRef.current,
+      viewer: playerColorRef.current === 'white' ? 'w' : 'b',
+      highlights: marks.highlights.map((h) => ({ square: h.square, said: h.said })),
+      arrows: marks.arrows.map((a) => ({ from: a.startSquare, to: a.endSquare, said: a.said })),
+      lines: lines.map((l) => ({ moves: l.arrows.map((a) => ({ from: a.startSquare, to: a.endSquare })), said: l.said })),
+    });
+    if (items.length === 0) return;
+    const arrowKey = (a: BoardArrow): string => `${a.startSquare}${a.endSquare}`;
+    const shown = new Set<string>();
+    let wipePending = !!marks.replace;
+    const paint = (): void => {
+      if (!current()) return;
+      const arrowsNow = [
+        ...marks.arrows.filter((_, i) => shown.has(`a${i}`)),
+        ...lines.flatMap((l, k) => l.arrows.filter((_, i) => shown.has(`l${k}.${i}`))),
+      ];
+      const lightsNow = marks.highlights.filter((_, i) => shown.has(`h${i}`));
+      const wipe = wipePending && arrowsNow.length > 0;
+      if (wipe) wipePending = false;
+      setArrows((prev) => {
+        const kept = (wipe ? [] : prev).filter((a) => !pacedArrowKeysRef.current.has(arrowKey(a)));
+        pacedArrowKeysRef.current = new Set(arrowsNow.map(arrowKey));
+        return uniqueArrows([...kept, ...arrowsNow]);
+      });
+      setHighlights((prev) => {
+        const kept = prev.filter((h) => !pacedSquaresRef.current.has(h.square));
+        const add = lightsNow.filter((h) => !kept.some((k) => k.square === h.square));
+        pacedSquaresRef.current = new Set(add.map((h) => h.square));
+        return [...kept, ...add];
+      });
+    };
+    for (const ev of scheduleMarks(spoken, items)) {
+      window.setTimeout(() => {
+        if (ev.kind === 'clear') shown.clear(); else shown.add(ev.id);
+        paint();
+      }, ev.atMs);
+    }
+  }, []);
   /**
    * 🔴 FLIPPING THE BOARD IS A VIEW, NOT A SIDE SWAP (fixed 2026-09-21, same
    * defect as CoachGamePage's). The `setOrientation` hand used to call
@@ -1966,6 +2047,7 @@ export function CoachTeachPage({ mode }: {
     // game one's "a pin freezes the piece in front" kept game two's first pin
     // bare).
     learnMemRef.current.newGame();
+    setLastSpokenLine(null);
   }, []);
   /** T3 (2026-09-20): plies where the deciding computer kept a `key-moment`
    *  clause — the coach ANNOUNCED the critical moment before the student moved.
@@ -8736,17 +8818,31 @@ export function CoachTeachPage({ mode }: {
         learnMemRef.current.story.commit(gameRef.current.plies, { sentences: spokenSentenceKeys(d.pkg), claims });
         learnMemRef.current.story.commitKeptThreads(gameRef.current.plies, live?.fen ?? fen, facts, d.pkg.kept);
       }
-      // ITS LINES ON THE BOARD, like every wave's (`keptLineArrows`).
+      // ITS MARKS ON THE BOARD, like every wave's: its squares and its lines,
+      // each as it is said (`paceBoardMarks` — the phase wave drew its lines
+      // the moment it was queued, and lit no squares).
       const boardNow = liveFenRef.current ?? fen;
-      const lineArrows = keptLineArrows(keptLines(d.pkg, playerColor === 'white' ? 'w' : 'b'), boardNow, playerColor);
-      if (lineArrows.length > 0) setArrows((prev) => (liveFenRef.current === boardNow ? uniqueArrows([...prev, ...lineArrows]) : prev));
+      const phaseMarks: TrackMarks = {
+        arrows: [],
+        highlights: d.pkg.kept
+          .filter((f) => !f.text.includes(THINK_MARK))
+          .flatMap((f) => markableSquares({ kept: [f] }).map((square) => ({ square, color: markColorOf(f.kind), said: f.text })))
+          .filter((h, i, all) => all.findIndex((x) => x.square === h.square) === i),
+        lines: factLinesOf(d.pkg.kept, boardNow),
+      };
+      noteSpokenLines(d.pkg.kept);
       // QUEUED ON THE ONE SPEECH CHAIN, never over the line playing (OS-11 #7:
       // the phase wave called the voice directly and `speakForced` cut a 50-word
       // line after 0.18 s). A turn that is over by the time the chain reaches it
       // is not spoken — its board is gone.
       const turnBoard = live?.fen ?? fen;
       const spoken = speechChainRef.current
-        .then(() => (samePosition(liveFenRef.current ?? '', turnBoard) && learnVoiceAllows('door') ? voiceService.speakPackage(d.pkg) : undefined))
+        .then(() => {
+          if (!(samePosition(liveFenRef.current ?? '', turnBoard) && learnVoiceAllows('door'))) return undefined;
+          const said = voiceService.speakPackage(d.pkg);
+          void voiceService.untilOnAir(ON_AIR_WAIT_MS).then(() => paceBoardMarks(d.pkg.spoken, phaseMarks, () => liveFenRef.current === boardNow));
+          return said;
+        })
         .catch(() => undefined);
       speechChainRef.current = spoken;
       await spoken;
@@ -8872,7 +8968,7 @@ export function CoachTeachPage({ mode }: {
     /** Lead-the-eye for the lanes that SPOKE — each kept fact's squares.
      *  Computed from what survived into `pkg.spoken`, so a mark can never
      *  outlive its claim. */
-    keptHighlights: BoardHighlight[];
+    keptHighlights: Array<BoardHighlight & { said?: string }>;
   } => {
     const midExchangeOn = pendingRecapture(args.historyAfterReply);
     // THE GAME IS OVER — SAY NOTHING MORE. David's 2026-08-08 run ended in
@@ -10209,7 +10305,7 @@ export function CoachTeachPage({ mode }: {
     // than from the plan directly, so a claim the package refused takes its
     // marks down with it. That coupling is why these cannot lie: the board can
     // only ever repeat what the student just heard.
-    const keptHighlights: BoardHighlight[] = [];
+    const keptHighlights: Array<BoardHighlight & { said?: string }> = [];
     if (pkg.spoken) {
       // THE PLAN'S MARKS ARE NOT DRAWN HERE EITHER. They are painted where the
       // plan is computed and spoken, for the same reason the text is: two
@@ -10237,7 +10333,7 @@ export function CoachTeachPage({ mode }: {
         // handful; the earlier slice(0,3) could drop a genuinely-named square.
         for (const sq of (f.squares ?? [])) {
           if (!/^[a-h][1-8]$/.test(sq)) continue;
-          if (!keptHighlights.some((h) => h.square === sq)) keptHighlights.push({ square: sq, color });
+          if (!keptHighlights.some((h) => h.square === sq)) keptHighlights.push({ square: sq, color, said: f.text });
         }
       }
       // THE SQUARE THE LAST MOVE GAVE UP is marked in the LATE lane, with the
@@ -11819,41 +11915,10 @@ export function CoachTeachPage({ mode }: {
             // speaking, never all at once when the reply lands. Paced marks
             // are tracked so a clear removes only them — the reply's own mark
             // and anything else on the board stay.
-            const pacedArrowKeys = new Set<string>();
-            const pacedSquares = new Set<string>();
-            const arrowKey = (a: BoardArrow): string => `${a.startSquare}${a.endSquare}`;
+            // The one pacer, guarded to this turn and this board.
             const revealMarks = (spoken: string, marks: TrackMarks): void => {
-              const items: Array<{ id: string; squares: string[] }> = [
-                ...marks.arrows.map((a, i) => ({ id: `a${i}`, squares: [a.endSquare, a.startSquare] })),
-                ...marks.highlights.map((h, i) => ({ id: `h${i}`, squares: [h.square] })),
-              ];
-              if (items.length === 0) return;
               const boardFen = liveFenRef.current;
-              const shown = new Set<string>();
-              const paint = (): void => {
-                if (trackAGenRef.current !== myTrackAGen || liveFenRef.current !== boardFen) return;
-                const arrowsNow = marks.arrows.filter((_, i) => shown.has(`a${i}`));
-                const lightsNow = marks.highlights.filter((_, i) => shown.has(`h${i}`));
-                setArrows((prev) => {
-                  const kept = prev.filter((a) => !pacedArrowKeys.has(arrowKey(a)));
-                  pacedArrowKeys.clear();
-                  for (const a of arrowsNow) pacedArrowKeys.add(arrowKey(a));
-                  return uniqueArrows([...kept, ...arrowsNow]);
-                });
-                setHighlights((prev) => {
-                  const kept = prev.filter((h) => !pacedSquares.has(h.square));
-                  pacedSquares.clear();
-                  const add = lightsNow.filter((h) => !kept.some((k) => k.square === h.square));
-                  for (const h of add) pacedSquares.add(h.square);
-                  return [...kept, ...add];
-                });
-              };
-              for (const ev of scheduleMarks(spoken, items)) {
-                window.setTimeout(() => {
-                  if (ev.kind === 'clear') shown.clear(); else shown.add(ev.id);
-                  paint();
-                }, ev.atMs);
-              }
+              paceBoardMarks(spoken, marks, () => trackAGenRef.current === myTrackAGen && liveFenRef.current === boardFen);
             };
             const speakTrackA = (line: string, marks?: TrackMarks, opts?: { verdict?: boolean }): void => {
               if (trackAGenRef.current !== myTrackAGen) return;
@@ -11933,10 +11998,13 @@ export function CoachTeachPage({ mode }: {
                   // work it out on the board first. Its marks belonged to this
                   // board, so they are not drawn on the next one.
                   const qa = splitThink(line);
-                  if (marks) revealMarks(stripThink(qa ? qa[0] : line), marks);
-                  if (!qa) return speakLearn(line, { channel: 'door', forced: true, intent: 'learn-live' });
-                  pendingAnswerRef.current = qa[1];
-                  return speakLearn(qa[0], { channel: 'door', forced: true, intent: 'learn-live' });
+                  // Paced from the moment the line is ON AIR, not when it is
+                  // handed over: the fetch used to put every mark ahead of its
+                  // word (marks map 2026-11-08).
+                  const said = speakLearn(qa ? qa[0] : line, { channel: 'door', forced: true, intent: 'learn-live' });
+                  if (marks) void voiceService.untilOnAir(ON_AIR_WAIT_MS).then(() => revealMarks(stripThink(qa ? qa[0] : line), marks));
+                  if (qa) pendingAnswerRef.current = qa[1];
+                  return said;
                 })
                 .catch(() => undefined);
               if (owedAfter) {
@@ -12090,7 +12158,8 @@ export function CoachTeachPage({ mode }: {
                     }
                     // …and every kept fact's own line, the way the late wave draws
                     // them (hand walk 2026-10-19 #12: instant lines never drew).
-                    instantMarks.arrows.push(...keptLineArrows(keptLines(instant.pkg, playerColor === 'white' ? 'w' : 'b'), fenAfterReply, playerColor));
+                    instantMarks.lines = factLinesOf(instant.pkg.kept, fenAfterReply);
+                    noteSpokenLines(instant.pkg.kept);
                     // THE THREAT'S ANSWER (census T4, David 2026-09-30: "describing
                     // the board is what we do not want"). The warning speaks now;
                     // what to do about it needs the engine's read of this board, so
@@ -12289,12 +12358,12 @@ export function CoachTeachPage({ mode }: {
                     // instant wave uses, now that board reads ride this wave
                     // too. A kind with no colour of its own is retrospective
                     // (a cost already paid): amber.
-                    const owed: BoardHighlight[] = [];
+                    const owed: Array<BoardHighlight & { said?: string }> = [];
                     for (const f of hintPkg.kept) {
                       // A question's marks are its answer: they wait for the move.
                       if (f.text.includes(THINK_MARK)) continue;
                       for (const sq of markableSquares({ kept: [f] })) {
-                        if (!owed.some((h) => h.square === sq)) owed.push({ square: sq, color: markColorOf(f.kind) });
+                        if (!owed.some((h) => h.square === sq)) owed.push({ square: sq, color: markColorOf(f.kind), said: f.text });
                       }
                     }
                     // …AND DRAW ITS ARROWS (David 2026-09-30: "make sure arrows are
@@ -12304,21 +12373,21 @@ export function CoachTeachPage({ mode }: {
                     // the verdict wave's lines are out of the queue by now, and
                     // looking there drew none of their arrows. The arrows go
                     // through the one door, on the live board.
-                    const owedArrows: ArrowClaim[] = [];
+                    // THE NEW IDEA'S ARROWS REPLACE THE OLD ONES (David 2026-10-18:
+                    // "they just needed to give way to the new moves the coach
+                    // stated"). Appending left the last turn's arrows on the board
+                    // while this turn spoke of other moves, so nothing looked new.
+                    // Each fact's arrows carry its sentence (their fallback anchor).
+                    const turnArrows: Array<BoardArrow & { said?: string }> = [];
                     for (const f of hintPkg.kept) {
                       // A question's arrows are its answer: they wait for the move,
                       // and by then they belong to a board that is gone.
                       if (f.text.includes(THINK_MARK)) continue;
                       const src = lines.find((l) => l.id === f.factId);
-                      if (src?.arrows.length) owedArrows.push(...src.arrows);
-                    }
-                    // THE NEW IDEA'S ARROWS REPLACE THE OLD ONES (David 2026-10-18:
-                    // "they just needed to give way to the new moves the coach
-                    // stated"). Appending left the last turn's arrows on the board
-                    // while this turn spoke of other moves, so nothing looked new.
-                    const turnArrows: BoardArrow[] = [];
-                    if (owedArrows.length > 0 && liveFenRef.current === fenAfterReply) {
-                      turnArrows.push(...admitArrows(owedArrows, { fen: fenAfterReply, studentColor: playerColor, holdStudentMoves: true }).arrows);
+                      if (!src?.arrows.length || liveFenRef.current !== fenAfterReply) continue;
+                      for (const a of admitArrows(src.arrows, { fen: fenAfterReply, studentColor: playerColor, holdStudentMoves: true }).arrows) {
+                        if (!turnArrows.some((t) => t.startSquare === a.startSquare && t.endSquare === a.endSquare)) turnArrows.push({ ...a, said: f.text });
+                      }
                     }
                     // …AND DRAW THE LINES IT SPOKE (David 2026-09-29: "Make sure
                     // arrows populate when talking about multiple move lines").
@@ -12333,10 +12402,13 @@ export function CoachTeachPage({ mode }: {
                     // THE SAME DRAWER EVERY WAVE USES (`keptLineArrows`): a line
                     // on screen draws there; one from an earlier board draws the
                     // plies still to come; never a line's ply the student may play.
-                    if (liveFenRef.current === fenAfterReply) turnArrows.push(...keptLineArrows(keptLines(hintPkg, playerColor === 'white' ? 'w' : 'b'), fenAfterReply, playerColor));
-                    if (turnArrows.length > 0) setArrows([]);
-                    // Spoken with its marks: each goes up as the voice names it.
-                    speakTrackA(hintPkg.spoken, liveFenRef.current === fenAfterReply ? { arrows: uniqueArrows(turnArrows), highlights: owed } : undefined, { verdict: !!lateDecision.lead && DNA_BEAT[lateDecision.lead.lane] === 'but' });
+                    // A question's lines are its answer too: they wait for the move.
+                    const turnLines = liveFenRef.current === fenAfterReply ? factLinesOf(hintPkg.kept, fenAfterReply) : [];
+                    noteSpokenLines(hintPkg.kept);
+                    // Spoken with its marks: each goes up as the voice names it,
+                    // and the first replaces the board's old arrows — when it is
+                    // said, never while the line before it is still talking.
+                    speakTrackA(hintPkg.spoken, liveFenRef.current === fenAfterReply ? { arrows: turnArrows, highlights: owed, lines: turnLines, replace: turnArrows.length + turnLines.length > 0 } : undefined, { verdict: !!lateDecision.lead && DNA_BEAT[lateDecision.lead.lane] === 'but' });
                     // WHAT THIS WAVE SAID IS ALREADY SAID for the next wave of the
                     // turn: the verdict now speaks as its own wave (OS-18), so the
                     // wave after it must see its words, or the door judges the rest
@@ -14062,12 +14134,16 @@ export function CoachTeachPage({ mode }: {
     void coachDrillSay(said, line ? { lines: [line] } : undefined);
   }, [coachDrillSay, lineArrowsOf, setLineWalkArrows]);
   /** PLAY LINE — walks the proof's line on the board, only on this press. */
+  /** The line Play line walks: the last line the coach said — a kept fact's
+   *  own line, or the last proof's (marks map 2026-11-08: a spoken line with no
+   *  proof had no button). */
+  const playableLine = lastSpokenLine ?? (learnMemRef.current.lastProof?.line?.sans.length ? learnMemRef.current.lastProof.line : null);
   const handlePlayProofLine = useCallback((): void => {
-    const proof = learnMemRef.current.lastProof;
-    if (!proof?.line || proof.line.sans.length === 0) return;
-    const line = walkableLine(proof.line.fen, proof.line.sans, proof.line.sans[0]);
+    const src = lastSpokenLine ?? learnMemRef.current.lastProof?.line ?? null;
+    if (!src || src.sans.length === 0) return;
+    const line = walkableLine(src.fen, src.sans, src.sans[0]);
     if (line) walkLine(line);
-  }, [walkLine]);
+  }, [walkLine, lastSpokenLine]);
   const handleReadPosition = useCallback(() => {
     void positionNarration.narrate();
   }, [positionNarration]);
@@ -15067,7 +15143,7 @@ export function CoachTeachPage({ mode }: {
             onRead={handleReadPosition}
             reading={positionNarration.isNarrating}
             onWhy={whyReady && learnMemRef.current.lastProof ? handleWhy : null}
-            onPlayLine={whyReady && learnMemRef.current.lastProof?.line?.sans.length ? handlePlayProofLine : null}
+            onPlayLine={playableLine ? handlePlayProofLine : null}
             testIds={{ back: 'teach-nav-prev', forward: 'teach-nav-next', hint: 'teach-hint-btn', read: 'teach-read-position-btn', why: 'teach-why-btn', line: 'teach-play-line-btn' }}
             extras={<>
               <button onClick={goToFirstMove} disabled={!canStepBack} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="First move" data-testid="teach-nav-first"><ChevronsLeft size={12} /></button>
