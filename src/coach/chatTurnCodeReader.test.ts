@@ -85,7 +85,7 @@ describe('the best-move question is read in code (all-screens walk 2026-10-09: 1
 });
 
 describe('"explain that" points at the coach\'s last line (hard-chat prod audit 2026-11-07)', () => {
-  const said = "The engine's main line: you play Ng5 and, two moves later, you play Qxg7#. After it, it's mate in 3 moves — you win.";
+  const said = "The best line: you play Ng5 and, two moves later, you play Qxg7#. After it, it's mate in 3 moves — you win.";
   it.each(['explain that', 'Explain that.', 'can you explain that?', 'explain it again', 'go through that line again', 'explain the move'])('%s', (q) => {
     expect(readTurnInCode(q, { fen: ITALIAN, history: ITALIAN_HISTORY, studentColor: 'white', lastCoachLine: said })?.kind).toBe('explain-last');
   });

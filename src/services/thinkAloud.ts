@@ -7,6 +7,7 @@
 //   first this" → what they keep doing wrong.
 // Every computer here is a pure board read (G0); the composer only orders and
 // joins. Lines are returned as WalkableLine so every spoken line is arrowed.
+import { rotateStem } from '../utils/rotateStem';
 import { inBookCachedSync } from './masterPlayLookup';
 import { MIN_BOOK_GAMES } from './bookDeparture';
 import { openSentence } from '../utils/openSentence';
@@ -267,7 +268,7 @@ export function habitsOf(
   if (Math.min(sans.length, 24) >= 16 && home >= 2) {
     out.push({ kind: 'undeveloped', text: seat === 'their'
       ? `They still have ${num(home)} minor pieces at home — the more they wait, the more you attack.`
-      : `You still have ${num(home)} minor pieces at home — bring them out before anything else; a piece at home cannot join the fight.` });
+      : rotateStem([`You still have ${num(home)} minor pieces at home. Bring them out before anything else: a piece at home can't join the fight.`, `${openSentence(num(home))} of your minor pieces are still at home. Get them out first — a piece at home can't join the fight.`], sans.length) });
   }
   return out;
 }

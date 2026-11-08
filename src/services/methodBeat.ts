@@ -385,7 +385,7 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
     return { ...beat('opponent-threat', [
       `Before you pick a move: what is their last move doing? Here it hits ${t} — answer that first, every time.`,
       `Run the question now — what are they threatening? They're after ${t}. Deal with that before your own plan.`,
-      `Order of operations: their threat first — ${t} — your idea second.`,
+      `Their threat first, your idea second: right now they're after ${t}.`,
     ], plyForVariety), squares: [s.threatTarget.square] };
   }
 

@@ -24,6 +24,7 @@
 // It is the LOWEST-priority lane by design. It should never displace a tactic,
 // a threat, a gem or a taught note — it is what plays when none of them have
 // anything, which per the measurement is about half the game.
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { sideToMoveAs } from './threatOut';
 import { openSentence } from '../utils/openSentence';
 import { pieceRef } from './pieceRef';
@@ -304,8 +305,8 @@ function observationsFor(
         // ONE sentence each: the say-once dedupe works per sentence, and a
         // tail left standing alone ("Keeping it bad is worth as much as
         // winning a pawn.", hand walk 2026-09-25) names nothing.
-        ? `Your ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is your problem piece — ${bad.reason}, so improving it is a plan in itself.`
-        : `Their ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is their problem piece — ${bad.reason}, and keeping it bad is worth as much as winning a pawn.`,
+        ? `Your ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is your problem piece: ${bad.reason}, so improving it is a plan in itself.`
+        : `Their ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is their problem piece: ${bad.reason}, and keeping it bad is worth as much as winning a pawn.`,
     });
   }
 
@@ -398,8 +399,11 @@ function observationsFor(
       key: `${side}-complex-${cc.complex}`, side, kind: 'complex', rank: rank('complex'),
       squares: [...cc.squares],
       text: own
-        ? `Your ${cc.complex} squares are weak — with no bishop of that colour, no pawn or bishop of yours can cover ${sqs}, and their ${cc.by} can settle there.`
-        : `Their ${cc.complex} squares are weak — no bishop of theirs covers ${sqs}; ${cc.by === 'knight' ? 'a knight belongs on one' : 'your bishop can work on them'}.`,
+        ? `Your ${cc.complex} squares are weak: with no bishop of that colour, nothing of yours can cover ${sqs}. Their ${cc.by} can settle there.`
+        : rotateStem([
+          `Their ${cc.complex} squares are weak: no bishop of theirs covers ${sqs}. ${cc.by === 'knight' ? 'A knight belongs on one' : 'Your bishop can work on them'}.`,
+          `Their ${cc.complex} squares are holes, with no bishop of theirs to cover ${sqs}. ${cc.by === 'knight' ? 'Put a knight on one' : 'Your bishop rules them'}.`,
+        ], stemKeyOf(fen)),
     });
     break; // one complex read is enough — the second is the same lesson
   }
@@ -516,8 +520,8 @@ function joinsFor(
         // lights all three.
         squares: [b.square, mv.from, mv.to],
         text: side === 'student'
-          ? `${openSentence(pieceWords(fen, b.square, color, `your ${NAME[b.piece] ?? 'piece'} on ${b.square}`))} is your problem piece — ${b.reason} — and your ${mv.from[0]}-pawn going to ${mv.to} is what frees it — that pairing is the plan, and the pawn move is not about the pawn.`
-          : `${openSentence(pieceWords(fen, b.square, color === 'w' ? 'b' : 'w', `their ${NAME[b.piece] ?? 'piece'} on ${b.square}`))} is their problem piece — ${b.reason} — and their ${mv.from[0]}-pawn going to ${mv.to} would free it, so stopping that pawn is worth more than it looks.`,
+          ? `${openSentence(pieceWords(fen, b.square, color, `your ${NAME[b.piece] ?? 'piece'} on ${b.square}`))} is your problem piece: ${b.reason}, and your ${mv.from[0]}-pawn going to ${mv.to} is what frees it, so that pawn move is really about the piece.`
+          : `${openSentence(pieceWords(fen, b.square, color === 'w' ? 'b' : 'w', `their ${NAME[b.piece] ?? 'piece'} on ${b.square}`))} is their problem piece: ${b.reason}, and their ${mv.from[0]}-pawn going to ${mv.to} would free it, so stopping that pawn is worth more than it looks.`,
       });
       break; // one join per bad piece; the first proved fix is enough to teach
     }

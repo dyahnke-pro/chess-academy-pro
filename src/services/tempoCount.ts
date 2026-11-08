@@ -219,7 +219,7 @@ export function captureTooEarly(fen: string, student: 'w' | 'b', bestSan: string
     if (MATERIAL_VALUE[m.captured] !== MATERIAL_VALUE[m.piece]) continue;
     const name = NAME[r.piece];
     return {
-      text: `Taking on ${m.to} now lets their ${name} take back straight from ${r.from}, which develops it at the same time. Wait until it has moved; then taking back costs it a second move.`,
+      text: `Taking on ${m.to} now lets their ${name} take back straight from ${r.from}, which develops it at the same time. Wait until it has moved, and taking back will cost it a second move.`,
       squares: [m.from, m.to, r.from],
       capture: m.san,
       recapture: r.san,

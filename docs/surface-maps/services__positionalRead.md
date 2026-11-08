@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**688 lines · 8 exports · 20 importers · 13 tests · 1 audits**
+**692 lines · 8 exports · 20 importers · 13 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -47,15 +47,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.modern1690.test.ts:141`
 
 ### `readPosition` (function) — 48 call sites
-- `src/coach/chatTurnAnswers.ts:233`
-- `src/services/groundedAnswer.ts:1636`
-- `src/services/lookaheadPlan.ts:1218`
-- `src/services/lookaheadPlan.ts:1487`
-- `src/services/lookaheadPlan.ts:1564`
+- `src/coach/chatTurnAnswers.ts:270`
+- `src/services/groundedAnswer.ts:1720`
+- `src/services/lookaheadPlan.ts:1226`
+- `src/services/lookaheadPlan.ts:1495`
+- `src/services/lookaheadPlan.ts:1572`
 - `src/services/narrationAdversarial.test.ts:85`
 - `src/services/narrationAdversarial.test.ts:176`
 - `src/services/nextPlans.structureIdeaKey.test.ts:13`
-- `src/services/positionFacts.ts:1201`
+- `src/services/positionFacts.ts:1214`
 - `src/services/positionReadComposer.ts:177`
 - `src/services/positionalRead.race.test.ts:10`
 - `src/services/positionalRead.test.ts:28`
@@ -97,7 +97,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9946`
+- `src/components/Coach/CoachTeachPage.tsx:9909`
 - `src/services/claimChecker.measure.test.ts:134`
 - `src/services/learnWalkBlumenfeld.test.ts:126`
 - `src/services/learnWalkNimzo.test.ts:35`

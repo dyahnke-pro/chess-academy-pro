@@ -278,7 +278,7 @@ describe('a problem piece is joined to the pawn that BLOCKS it, once (WO-STANDAR
     expect(joins.length).toBeLessThanOrEqual(1);
     expect(joins.length).toBe(1);
     for (const j of joins) {
-      expect(j.text).toMatch(/^Your bishop is your problem piece .* your (c|e)-pawn going to (c4|e4)/);
+      expect(j.text).toMatch(/^Your bishop is your problem piece\b.* your (c|e)-pawn going to (c4|e4)/);
       expect(j.squares ?? []).toEqual(expect.arrayContaining(['d2']));
     }
   });

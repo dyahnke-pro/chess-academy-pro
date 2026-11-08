@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**511 lines · 6 exports · 9 importers · 9 tests · 0 audits**
+**514 lines · 6 exports · 9 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -55,13 +55,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `answerBoardTurn` (function) — 23 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:30`
-- `src/coach/boardTurnAnswer.hardWalk.test.ts:36`
-- `src/coach/boardTurnAnswer.hardWalk.test.ts:44`
-- `src/coach/boardTurnAnswer.hardWalk.test.ts:49`
-- `src/coach/boardTurnAnswer.hardWalk.test.ts:54`
-- `src/coach/boardTurnAnswer.hardWalk.test.ts:58`
-- `src/coach/boardTurnAnswer.hardWalk.test.ts:70`
-- `src/coach/boardTurnAnswer.hardWalk.test.ts:75`
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:37`
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:45`
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:50`
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:55`
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:59`
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:71`
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:76`
 - `src/coach/boardTurnAnswer.planOrder.test.ts:32`
 - `src/coach/boardTurnAnswer.test.ts:34`
 - `src/coach/boardTurnAnswer.test.ts:43`

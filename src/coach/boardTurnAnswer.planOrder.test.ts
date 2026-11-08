@@ -31,7 +31,7 @@ describe('"what\'s the plan?" says the plan first', () => {
     });
     const a = await answerBoardTurn(ask, { fen: FEN, history: HISTORY, studentColor: 'black' });
     expect(a).toBeTruthy();
-    expect(a).toMatch(/^The plan is to bring your other knight and both bishops into the game/);
+    expect(a).toMatch(/^(?:The plan|Here's the plan|The plan from here): bring your other knight and both bishops into the game/);
     // Still said — the question orders its read, it does not cut it.
     expect(a!.search(/looks like it can chase/)).toBeGreaterThan(a!.search(/They have a pawn break available on d4/));
   }, 60_000);

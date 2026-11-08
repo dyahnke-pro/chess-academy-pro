@@ -71,7 +71,7 @@ describe('plan and tactics questions are answered from the one read', () => {
   it('"what\'s my plan?" — what cannot wait leads, then the plan, from the coach\'s own read', async () => {
     const a = await answerBoardTurn(ask('plan'), { fen: COLLE, history: [], studentColor: 'white' });
     expect(a).toMatch(/^Their knight on e5 attacks your queen on g4, and nothing defends it — and you can take the attacker without losing material\./);
-    expect(a).toMatch(/The plan is to break with a4/);
+    expect(a).toMatch(/(?:The plan|Here's the plan|The plan from here): break with a4 to open the position\./);
     expect(a).toMatch(/Your knight on h5 is your problem piece/);
   }, 60_000);
   it('"any tactics?" — only what is forcing on the board', async () => {

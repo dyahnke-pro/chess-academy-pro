@@ -867,7 +867,7 @@ export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good')
     const sans = d.bestLineSans ?? [];
     if (d.bestLine && d.bestReply && sans.length >= 3) {
       const tail = d.bestLine.replace(/^.*? — /, '');
-      return `${n.san} is the best move here${bestReason}. Their best defence is ${d.bestReply}, and then ${seatedLine(sans.slice(2), 'you')} — ${tail}.${others ? ` ${others}` : ''}`;
+      return `${n.san} is the best move here${bestReason}. Their best defence is ${d.bestReply}, and then ${lineShape(sans.slice(2), 'you')} — ${tail}.${others ? ` ${others}` : ''}`;
     }
     // No countable proof: the engine's reply is still the answer to "what's
     // their best defence?" (hard walk 2026-10-10, a pawn ending — Kd3 with

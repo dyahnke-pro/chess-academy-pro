@@ -8,9 +8,9 @@
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:328) — names `methodBeat`
-- **Why determinism** (CLAUDE.md:360) — names `methodBeat`
-- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1481) — names `methodBeat`
+- **The tools are COMPUTERS** (CLAUDE.md:380) — names `methodBeat`
+- **Why determinism** (CLAUDE.md:412) — names `methodBeat`
+- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1533) — names `methodBeat`
 
 ## Who calls in
 
@@ -54,7 +54,7 @@
 
 ### `habitIsOwed` (function) — 2 call sites
 - `src/services/coachFeatureService.ts:3312`
-- `src/services/positionFacts.ts:1212`
+- `src/services/positionFacts.ts:1225`
 
 ### `HABIT_KIND` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -89,8 +89,8 @@
 - `src/services/slipQuestion.test.ts:53`
 
 ### `habitSaidKey` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10692`
-- `src/components/Coach/CoachTeachPage.tsx:10693`
+- `src/components/Coach/CoachTeachPage.tsx:10673`
+- `src/components/Coach/CoachTeachPage.tsx:10674`
 - `src/services/learnBoardTeaching.ts:262`
 - `src/services/learnBoardTeaching.ts:1181`
 - `src/services/slipQuestion.test.ts:53`
@@ -113,10 +113,10 @@
 - `src/services/methodSignals.test.ts:75`
 - `src/services/methodSignals.test.ts:76`
 - `src/services/mustDefendHabit.test.ts:15`
-- `src/services/positionFacts.ts:1072`
+- `src/services/positionFacts.ts:1085`
 
 ### `liveMethodBeatFor` (function) — 24 call sites
-- `src/services/groundedAnswer.ts:3688`
+- `src/services/groundedAnswer.ts:3804`
 - `src/services/methodBeat.live.test.ts:15`
 - `src/services/methodBeat.live.test.ts:19`
 - `src/services/methodBeat.live.test.ts:20`

@@ -21,6 +21,7 @@ import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { flipSideToMove } from './threatOut';
 import { andList, orList } from '../utils/andList';
 import { pieceRef } from './pieceRef';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const cap = (s: string): string => openSentence(s);
@@ -94,7 +95,7 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   // A rook belongs on an open / half-open file.
   const files = findOpenFiles(fen);
   const rookFiles = [...new Set([...files.open, ...(myC === 'w' ? files.whiteSemiOpen : files.blackSemiOpen)])];
-  if (rookFiles.length) levers.push({ kind: 'file', phrase: `put a rook on the ${orList(rookFiles)} file${rookFiles.length > 1 ? 's' : ''}`, squares: [] });
+  if (rookFiles.length) levers.push({ kind: 'file', phrase: `put a rook on the ${orList(rookFiles)} file`, squares: [] });
   // An outpost — a hole in THEIR camp a minor of yours can get to and hold
   // (the one bar, `holeTargets`), named for the piece that gets there: "plant
   // a knight" only where a knight arrives.
@@ -127,7 +128,7 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   const viewer = voice === 'you' ? myC : theirC;
   if (worst && (worst.misplaced || pastOpening || worst.square[1] !== homeRank)) {
     const ref = pieceRef(fen, worst.square, viewer);
-    levers.push({ kind: 'worst', phrase: `improve ${ref ? ref.words : `${your} ${PIECE[worst.piece]} on ${worst.square}`}`, squares: [worst.square] });
+    levers.push({ kind: 'worst', phrase: `find a better square for ${ref ? ref.words : `${your} ${PIECE[worst.piece]} on ${worst.square}`}`, squares: [worst.square] });
   }
   // Chat was ASKED: the method is said as a question and its answers at once.
   // The answers ARE the plan (planChoice.methodPlan) — unless a passed pawn or
@@ -163,22 +164,21 @@ function homeWords(chess: Chess, home: ReadonlyArray<{ type: string; square: str
   return andList(parts);
 }
 
-/** The squares a phrase says out loud. */
-const saidSquares = (phrase: string): number => (phrase.match(/\b[a-h][1-8]\b/g) ?? []).length;
-
-/** The levers as sentences, for the narration's read. Null when none. A
- *  sentence says at most two squares — a person names the plan's steps, the
- *  board shows where (David 2026-11-05) — so the levers run on into a second
- *  sentence instead of one long list of squares. */
+/** The levers as sentences, for the narration's read: one step a sentence,
+ *  so no sentence lists a run of squares (David 2026-11-05) and none chains
+ *  steps with semicolons (2026-11-08). Null when none. */
 export function leverSentence(levers: readonly PlanLever[]): string | null {
   if (levers.length === 0) return null;
-  const sentences: string[][] = [[]];
-  let squares = 0;
-  for (const l of levers) {
-    const n = saidSquares(l.phrase);
-    if (sentences[sentences.length - 1].length > 0 && squares + n > 2) { sentences.push([]); squares = 0; }
-    sentences[sentences.length - 1].push(l.phrase);
-    squares += n;
-  }
-  return sentences.map((ps, i) => (i === 0 ? `The plan is to ${ps.join('; ')}.` : `${openSentence(ps.join('; '))}.`)).join(' ');
+  // ONE STEP A SENTENCE, SAID LIKE A PERSON (David 2026-11-08: "I want all
+  // narrations to follow this pattern" — "The plan is to break with a4 to
+  // open the position; put a rook on the d or e files; improve your rook on
+  // a1" was heard 50 times in the four baseline games). The opener rotates
+  // on the plan itself, so one board always reads the same.
+  const key = stemKeyOf(levers.map((l) => l.phrase).join('|'));
+  const lead = rotateStem(['The plan: ', "Here's the plan: ", 'The plan from here: '], key);
+  return levers.map((l, i) => {
+    if (i === 0) return `${lead}${l.phrase}.`;
+    const join = i === levers.length - 1 && i > 1 ? 'And ' : 'Then ';
+    return `${join}${l.phrase}.`;
+  }).join(' ');
 }

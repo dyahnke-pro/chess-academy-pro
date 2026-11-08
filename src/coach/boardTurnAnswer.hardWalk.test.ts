@@ -28,13 +28,14 @@ describe('their best defence', () => {
     engineWith(GOMC, [{ sans: MATE, evaluation: 100000, mate: 4 }]);
     const out: { lines?: unknown[] } = {};
     const text = await answerBoardTurn(turn('best-defence'), { fen: GOMC, history: [], studentColor: 'white' }, out as never);
-    expect(text).toBe("Against Nh6+, their best defence is …Kf8, and it is not enough: you play Qf6+, they answer Ke8, you play Bb5+, they answer c6 and you play Bxc6# — and it's mate.");
+    // The rest is said by its shape; the board plays every move (out.lines).
+    expect(text).toBe("Against Nh6+, their best defence is …Kf8, and it is not enough: you play Qf6+ and, two moves later, you play Bxc6# — and it's mate.");
     expect(out.lines).toHaveLength(1);
   });
   it('with nothing countable, names the reply and the next move', async () => {
     engineWith(PAWN, [{ sans: ['Kd3', 'Kd6', 'Kc4', 'Kc6'], evaluation: 495, mate: null }]);
     const text = await answerBoardTurn(turn('best-defence'), { fen: PAWN, history: [], studentColor: 'white' }, {});
-    expect(text).toBe("Against Kd3, their best defence is …Kd6. Then the engine's next move for you is Kc4.");
+    expect(text).toBe('Against Kd3, their best defence is …Kd6. Then you play Kc4.');
   });
 });
 

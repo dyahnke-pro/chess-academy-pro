@@ -84,7 +84,7 @@ export function anyMoveFine(fen: string, lines: Lines): Read | null {
   // verdict on the one they just played (Learn tape 2026-10-15: "This is not a
   // critical moment…" then "Rook takes d3 was the only move…") — so every stem
   // says which move it means.
-  return { idea: rot(fen, 'Your next move is not a big decision — several are about equally good, so save your time for the moves that are.', 'For your next move, a few moves do the same job — not a critical moment; bank the time for when it matters.', 'Nothing hinges on your next move — pick a sensible one and keep your clock for the hard decisions.'), claim: 'srr:any-move-fine', namesMove: true, text: `Several moves are equally good for your next move — ${sans[0]}, ${sans[1]} or ${sans[2]}. Not every move is a big decision; save your time for the ones that are.` };
+  return { idea: rot(fen, 'Your next move is not a big decision — several are about equally good, so save your time for the moves that are.', 'A few moves do the same job here. It is not a critical moment, so save your time for one that is.', 'Nothing hinges on your next move — pick a sensible one and keep your clock for the hard decisions.'), claim: 'srr:any-move-fine', namesMove: true, text: `Several moves are equally good for your next move — ${sans[0]}, ${sans[1]} or ${sans[2]}. Not every move is a big decision; save your time for the ones that are.` };
 }
 
 /** D2 THE UGLY MOVE THAT IS CORRECT ("the hardest move to make"): the engine's
@@ -176,7 +176,7 @@ export function threatStronger(fen: string, me: 'w' | 'b', lines: Lines): Read |
   if (!afterReply || afterReply.board.turn() !== me || legalSeeGainFor(afterReply.board.fen(), grab.to, me) <= 0) return null;
   const gap = grabLine ? moverCp(fen, best) - moverCp(fen, grabLine) : null;
   // ONCE A GAME (claim): two consecutive moves heard it in the Learn tape.
-  return { claim: 'srr:threat-stronger', promise: { key: `grab:${grab.to}`, piece: grab.piece, square: grab.to, takes: true, say: `Now you collect on ${grab.to} — the threat did its work first.` }, stakes: costStakes(gap) ?? { points: legalSeeGainFor(fen, grab.to, me), plies: 1 }, text: rot(fen, `You could take on ${grab.to} right now, but the threat is stronger than carrying it out — the material will keep, so keep it hanging over them and improve first.`, `The capture on ${grab.to} isn't going anywhere — leave it hanging over them and make the useful move first; the threat is the stronger weapon.`, `Don't cash in on ${grab.to} yet — while the capture hangs over them they are tied up; improve, and take it when it suits you.`), squares: [grab.to] };
+  return { claim: 'srr:threat-stronger', promise: { key: `grab:${grab.to}`, piece: grab.piece, square: grab.to, takes: true, say: `Now you collect on ${grab.to} — the threat did its work first.` }, stakes: costStakes(gap) ?? { points: legalSeeGainFor(fen, grab.to, me), plies: 1 }, text: rot(fen, `You could take on ${grab.to} right now, but the threat is stronger than carrying it out — the material will keep, so keep it hanging over them and improve first.`, `The capture on ${grab.to} isn't going anywhere. Leave it hanging over them and make the useful move first: the threat is the stronger weapon.`, `Don't cash in on ${grab.to} yet. While the capture hangs over them they are tied up, so improve first and take it when it suits you.`), squares: [grab.to] };
 }
 
 /** A9 A PIECE HELD ONLY BY A TACTIC ("the loose b1 bishop survives tactically —

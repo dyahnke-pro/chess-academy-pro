@@ -8,6 +8,7 @@
 // review, one import away, said "the plan from here is to win their weak pawn
 // on d5. Here's how: …" (PLAN §C 17, #64). Capability parity: one computer,
 // both surfaces. Nothing here imports a surface module; keep it that way.
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { reachWords } from '../utils/reachWords';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
@@ -354,10 +355,13 @@ export function deriveNextPlanFacts(
       : rooks === heavies.length
         ? 'stack your rooks on its file'
         : rooks === 0 ? 'bring your queens to its file' : `stack your ${rooks === 1 ? 'rook' : 'rooks'} and queen on its file`;
+    // One step a sentence (David 2026-11-08, the human voice): "control h3 …;
+    // then stack your rooks … — each one is a piece of theirs tied to it" was
+    // two steps and an aside joined into one breath.
     const pile = heavies.length > 0
-      ? `${heavyNoun} and trade off its defenders — each one is a piece of theirs tied to it`
-      : 'bring your king and pieces to it and trade off its defenders — each one is a piece of theirs tied to it';
-    add('weak-pawn', `win their weak pawn on ${weak}`, `winning their weak pawn on ${weak}`, `${blockBit ? `${blockBit}; then ` : ''}${pile}${countBit(chess, weak as Square, studentColorWB)}`, [weak, block]);
+      ? `${heavyNoun} and trade off its defenders: each one is tied to it`
+      : 'bring your king and pieces to it and trade off its defenders: each one is tied to it';
+    add('weak-pawn', `win their weak pawn on ${weak}`, `winning their weak pawn on ${weak}`, `${blockBit ? `${blockBit}. Then ` : ''}${pile}${countBit(chess, weak as Square, studentColorWB)}`, [weak, block]);
   }
 
   // 4. An open file you don't yet own with a heavy piece → seize it, HOW
@@ -369,8 +373,10 @@ export function deriveNextPlanFacts(
   const theirHeavyFiles = new Set(all.filter((c) => (c.type === 'r' || c.type === 'q') && c.color === enemy).map((c) => c.square[0]));
   const freeOpenFile = struct.pawns.openFiles.find((f) => !myHeavyFiles.has(f) && !theirHeavyFiles.has(f));
   if (freeOpenFile && myRooks.length > 0) {
-    const doubleBit = myRooks.length >= 2 ? 'double the second rook behind the first so nothing can challenge you, and ' : '';
-    add('open-file', `seize the open ${freeOpenFile}-file`, `seizing the open ${freeOpenFile}-file`, `${rookReachBit(chess, myRooks, freeOpenFile)}${doubleBit}aim for the seventh rank, where a rook attacks pawns from behind`, [], freeOpenFile);
+    const then = myRooks.length >= 2
+      ? 'Then double your rooks on it, so nothing can challenge them, and aim for the seventh rank, where a rook attacks pawns from behind'
+      : 'Then aim for the seventh rank, where a rook attacks pawns from behind';
+    add('open-file', `seize the open ${freeOpenFile}-file`, `seizing the open ${freeOpenFile}-file`, `${rookReachBit(chess, myRooks, freeOpenFile)}. ${then}`, [], freeOpenFile);
   }
 
   // 5. You already hold an outpost → dominate from it, HOW spelled out.
@@ -491,9 +497,10 @@ function rookReachBit(chess: Chess, rooks: readonly Cell[], file: string): strin
   const f = me ? withMover(chess.fen(), me) : null;
   const board = f ? new Chess(f) : null;
   const reach = board ? board.moves({ verbose: true }).some((m) => m.piece === 'r' && m.to[0] === file && m.from[0] !== file) : false;
+  const key = stemKeyOf(chess.fen());
   return reach
-    ? 'put a rook on it right away — one of yours gets there in a single move, so do it before they contest it; '
-    : 'clear a path for a rook before they contest it — none of yours reaches it in one move yet; ';
+    ? rotateStem(['put a rook on it now, before they contest it: one of yours gets there in a single move', 'one of your rooks gets there in a single move, so take the file before they contest it'], key)
+    : rotateStem(['clear a path for a rook first: none of yours reaches the file in one move yet', 'none of your rooks reaches it in one move yet, so clear a path for one before they contest it'], key);
 }
 
 /** The pawn that guards the outpost, named. */

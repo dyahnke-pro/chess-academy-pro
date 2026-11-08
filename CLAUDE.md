@@ -39,6 +39,28 @@ same on every surface. The live checklist of the rules is the Rulebook
 artifact (https://claude.ai/artifact/NRthGVKnujdnRxpegdLrxP), built with David
 rule by rule.
 
+## 🗣️ THE COACH TALKS LIKE A PERSON AT THE BOARD — every narration, every surface (David 2026-11-08: "I like your wording better than the robotic wording of the app" → "I want all narrations to follow this pattern" → "Maybe add a couple variations so they don't all sound the same")
+
+The facts are computed (G0); the SENTENCE is written for a person. Every line,
+in Learn, Review, the lessons and chat:
+1. **Lead with the piece, not the machinery:** "Your bishop on d3 is hanging",
+   never "they're eyeing the bishop on d3".
+2. **Players' words:** hanging, loose, pinned, can't take back, a piece up.
+3. **The full name once**, then "it" / "the knight" — never the same square
+   three times in one line.
+4. **One idea a sentence.** No dash chains, no semicolons read aloud, no
+   45-word sentences; a long move line is said as its key moves, never a
+   score sheet of "you play …, they answer …".
+5. **End on what it means for you:** "You can't save all three."
+6. **Two or three phrasings, ROTATED** (`rotateStem`, keyed on the board) so a
+   game never repeats itself; never `Math.random`. Exempt, on purpose: the
+   focus clue and the mission lines stay word-for-word — repetition builds the
+   habit (§ MISSIONS, § LEARN FOCUS).
+Specific is still the rule — human never means vaguer. Measured by
+`node scripts/voice/robotic-count.mjs` over the decision baseline's spoken
+lines; gate `src/test/humanVoice.gate.test.ts` holds the count, which only
+falls.
+
 ## 🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)
 
 **The Campaign (Learn) is specified in docs/CAMPAIGN.md — read it before any
