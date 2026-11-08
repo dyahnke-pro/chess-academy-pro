@@ -16,7 +16,7 @@ import { describeStructure } from './boardStructure';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import { isOutpost } from './outpost';
 import { routeVia } from '../utils/routeWords';
-import { legalSeeGainFor, pieceScope } from './positionReadingService';
+import { findPieceQuality, legalSeeGainFor, pieceScope } from './positionReadingService';
 import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { openSentence } from '../utils/openSentence';
 import { withMover } from '../utils/sideToMove';
@@ -78,49 +78,139 @@ export function mateInOneExists(chess: Chess): boolean {
   return false;
 }
 
+/** WHY the worst piece is the worst — the board's own reason, one per kind. */
+export type WorstKind = 'stuck' | 'rim-knight' | 'bad-bishop' | 'no-file-rook';
+
+export interface WorstPiece {
+  sq: Square;
+  type: 'n' | 'b' | 'r';
+  /** The squares it can go to (`mobilityMap`) — the number every reader says. */
+  m: number;
+  kind: WorstKind;
+  /** 'no-file-rook': the open file it wants, and the square on it one move
+   *  away when it has one. */
+  file?: string;
+  reach?: Square | null;
+}
+
 /**
- * THE ONE worst-placed-piece finder (David 2026-09-15). Two copies of this
- * selection loop existed — M12's facet and `deriveNextPlans`' rescue plan — and
- * only one carried the gates, so the review said "your knight sits on an
- * outpost on d4, make it the boss of the board" and "rescue your worst piece,
- * the knight on d4" in the SAME breath, and offered a slow reroute on the ply a
- * check-fork landed. One finder, one set of gates, no drift.
+ * THE ONE WORST PIECE (David 2026-09-15 → WO-DEPTH-01, 2026-11-08). Every
+ * surface that names "your worst piece" reads this, so one board can never name
+ * two. Five readers each had their own pick — this finder (the least mobile
+ * piece, at most one square), `pieceWish` (the board's 'bad' read first: the
+ * rim knight, the hemmed-in bishop), `planChoice` (a rook with no open file),
+ * the principle detectors (the least mobile of the three, at most two) and
+ * Review's ablation (the least mobile minor, at most three): on David's first
+ * 120 games two of them disagreed on most boards where both spoke.
+ *
+ * The piece: of the pieces that pass the gates, the least mobile of those the
+ * board calls poor — stuck (one square or none), on the rim, or hemmed in
+ * behind its own pawns — the board's 'bad' read winning a tie. With none, once
+ * a file is open and no rook or queen of yours stands on it, the rook that
+ * reaches it (David 2026-10-15: "improve the rook by placing it on open file").
+ * The gates: not while in check, never an undeveloped piece, a rook on its own
+ * back rank, a piece under attack, a pinned one, a minor on an outpost, or a
+ * guard of a piece they attack — each of those has a job, or its own lesson.
  */
 export function findWorstPlacedPiece(
   chess: Chess,
   studentColorWB: Color,
-): { sq: string; type: string; m: number } | null {
+): WorstPiece | null {
   // While a king is in check the plan IS the check; nothing gets repositioned.
   if (chess.isCheck()) return null;
   const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
+  const fen = chess.fen();
   const mob = mobilityMap(chess, studentColorWB); // ONE moves() enumeration
-  let worst: { sq: string; type: string; m: number } | null = null;
-  for (const c of cells(chess)) {
+  const all = cells(chess);
+  const bad = new Map(findPieceQuality(fen)
+    .filter((n) => n.color === studentColorWB && n.quality === 'bad')
+    .map((n) => [n.square, n.kind === 'rim-knight' ? 'rim-knight' as const : 'bad-bishop' as const]));
+  // A GUARD IS NOT IDLE (Learn walk 2026-10-02, ply 56: "the knight on h6 is
+  // doing nothing" while it was the only thing guarding the queen on g4 that
+  // they were about to take): a piece without which a piece they attack would
+  // be guarded no more often than it is hit.
+  const guards = new Set<string>();
+  for (const c of all) {
+    if (c.color !== studentColorWB || c.type === 'k') continue;
+    try {
+      const hit = chess.attackers(c.square as Square, enemy).length;
+      if (hit === 0) continue;
+      const guarded = chess.attackers(c.square as Square, studentColorWB);
+      if (guarded.length <= hit) for (const g of guarded) guards.add(g);
+    } catch { /* an unreadable square proves nothing */ }
+  }
+  let worst: WorstPiece | null = null;
+  for (const c of all) {
     if (c.color !== studentColorWB) continue;
     if (c.type !== 'n' && c.type !== 'b' && c.type !== 'r') continue;
     // An UNDEVELOPED piece is not misplaced — its lesson is development, with
     // its own clause (walk 5: "rescue your worst piece, the bishop on c8" at
     // move 10 of a Najdorf, spoken on the OPPONENT's ply).
-    if (isUndevelopedInOpening(chess.fen(), studentColorWB, c.type, c.square)) continue;
+    if (isUndevelopedInOpening(fen, studentColorWB, c.type, c.square)) continue;
     // A ROOK ON ITS OWN BACK RANK is where rooks live until a file opens —
-    // its low mobility is the closed centre, not a bad square, and its lesson
-    // (take the open file) has its own clause. Walk 6 (R10): "rescue your worst
-    // piece, the rook on f1" the move after castling.
+    // its low mobility is the closed centre, not a bad square (walk 6, R10).
     if (c.type === 'r' && c.square[1] === (studentColorWB === 'w' ? '1' : '8')) continue;
-    // A piece UNDER ATTACK needs saving, not rerouting — and its mobility reads
-    // low precisely because it is boxed in by the attack. Naming it "worst
-    // placed, reroute it" buries the live threat under a positional plan.
+    // A piece UNDER ATTACK needs saving, not rerouting.
     try { if (chess.attackers(c.square as Square, enemy).length > 0) continue; } catch { /* keep the candidate */ }
-    // A minor on a real OUTPOST is doing a job — one board cannot call the same
-    // knight an outpost and the worst piece.
+    // A minor on a real OUTPOST is doing a job.
     if ((c.type === 'n' || c.type === 'b') && isOutpost(chess, c.square, studentColorWB, true)) continue;
-    // A PINNED piece is immobile because of the pin, not because it is badly
-    // placed; the lesson there is the pin, not a reroute.
-    if (mob.get(c.square) === 0 && isPinnedPiece(chess, c.square as Square, studentColorWB)) continue;
+    // A PINNED piece is immobile because of the pin; the lesson is the pin.
+    if (isPinnedPiece(chess, c.square as Square, studentColorWB)) continue;
+    if (guards.has(c.square)) continue;
     const m = mob.get(c.square) ?? 0;
-    if (!worst || m < worst.m) worst = { sq: c.square, type: c.type, m };
+    const poor = bad.get(c.square as Square) ?? (m <= 1 ? 'stuck' as const : null);
+    if (!poor) continue;
+    const better = !worst || m < worst.m || (m === worst.m && poor !== 'stuck' && worst.kind === 'stuck');
+    if (better) worst = { sq: c.square as Square, type: c.type, m, kind: poor };
   }
-  return worst && worst.m <= 1 ? worst : null;
+  if (worst) return worst;
+  // A ROOK WITH NO FILE: an open file no rook or queen of yours stands on. The
+  // rook that reaches it in one move is the one; none reaches → the first.
+  // A rook already on an open or half-open file has its job (decision
+  // baseline 2026-11-08: "find a better square for your rook on d8" beside
+  // "your rook on d8 is your best-placed piece — it has the half-open d-file").
+  const struct = describeStructure(fen);
+  const file = struct?.pawns.openFiles.find((f) => !all.some((c) => c.color === studentColorWB && (c.type === 'r' || c.type === 'q') && c.square[0] === f));
+  if (!file || !struct) return null;
+  const working = new Set([...struct.pawns.openFiles, ...struct.pawns.halfOpenFiles[studentColorWB]]);
+  const idle = (sq: string): boolean => !working.has(sq[0]);
+  const asMe = withMover(fen, studentColorWB);
+  let reach: { from: string; to: string } | undefined;
+  try { reach = asMe ? new Chess(asMe).moves({ verbose: true }).find((m) => m.piece === 'r' && m.to[0] === file && m.from[0] !== file && !m.captured && idle(m.from)) : undefined; } catch { reach = undefined; }
+  const rookSq = reach?.from ?? all.find((c) => c.color === studentColorWB && c.type === 'r' && idle(c.square))?.square;
+  if (!rookSq) return null;
+  return { sq: rookSq as Square, type: 'r', m: mob.get(rookSq) ?? 0, kind: 'no-file-rook', file, reach: (reach?.to as Square | undefined) ?? null };
+}
+
+/** The reason a worst piece is the worst, as a predicate after "the knight on
+ *  a5" — the one wording every reader says it with. */
+export function worstReason(w: Pick<WorstPiece, 'kind' | 'm'>): string {
+  switch (w.kind) {
+    case 'rim-knight': return 'is stuck on the rim';
+    case 'bad-bishop': return 'is hemmed in behind its own pawns';
+    case 'no-file-rook': return 'has no open file yet';
+    default: return reachWords(w.m);
+  }
+}
+
+/** WHERE THE WORST PIECE GOES — the one route reader (WO-DEPTH-01). A knight to
+ *  its outpost (`computePieceRoute`), a bishop to a long diagonal or a rook to a
+ *  file (`computeSliderRoute`), with what the square gives it. Null: no road,
+ *  and then no plan — "a better square" teaches nothing. */
+export function worstPieceRoute(fen: string, sq: Square): { target: Square; route: Square[]; via: Square[]; aim: string } | null {
+  const k = computePieceRoute(fen, sq);
+  if (k && k.route.length) {
+    const back = k.backedBy ? `, and the ${k.backedBy[0]}-pawn backs it up` : '';
+    return { target: k.target, route: k.route, via: k.route.slice(0, -1), aim: `an outpost no pawn can chase it from${back}` };
+  }
+  const s = computeSliderRoute(fen, sq);
+  if (s && s.route.length) {
+    const aim = s.piece === 'b'
+      ? `where it sweeps a long diagonal instead of ${s.scopeNow} square${s.scopeNow === 1 ? '' : 's'}`
+      : `on the ${s.target[0]}-file, with no pawn of its own in the way`;
+    return { target: s.target, route: s.route, via: s.route.slice(0, -1), aim };
+  }
+  return null;
 }
 
 /** THE WORST PIECE, as a note — the one answer to "which of your pieces is
@@ -132,16 +222,16 @@ export function findWorstPlacedPiece(
  *  ASKS always gets an answer (the scope-only reading it replaced answered on
  *  every board — "what is my worst piece?" at move 8 went silent without it).
  *  `scope` is always the squares covered, the number the answer says. */
-export function worstPieceNote(fen: string, color: Color): { square: Square; piece: PieceSymbol; scope: number; misplaced: boolean } | null {
+export function worstPieceNote(fen: string, color: Color): { square: Square; piece: PieceSymbol; scope: number; misplaced: boolean; reason: string; kind: WorstKind | null } | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const w = findWorstPlacedPiece(chess, color);
-  if (w) return { square: w.sq as Square, piece: w.type as PieceSymbol, scope: pieceScope(chess, w.sq as Square), misplaced: true };
-  let least: { square: Square; piece: PieceSymbol; scope: number; misplaced: boolean } | null = null;
+  if (w) return { square: w.sq, piece: w.type, scope: pieceScope(chess, w.sq), misplaced: true, reason: worstReason(w), kind: w.kind };
+  let least: { square: Square; piece: PieceSymbol; scope: number; misplaced: boolean; reason: string; kind: WorstKind | null } | null = null;
   for (const c of cells(chess)) {
     if (c.color !== color || c.type === 'p' || c.type === 'k') continue;
     const scope = pieceScope(chess, c.square as Square);
-    if (!least || scope < least.scope) least = { square: c.square as Square, piece: c.type as PieceSymbol, scope, misplaced: false };
+    if (!least || scope < least.scope) least = { square: c.square as Square, piece: c.type as PieceSymbol, scope, misplaced: false, reason: `covers only ${scope} square${scope === 1 ? '' : 's'}`, kind: null };
   }
   return least;
 }
@@ -391,14 +481,16 @@ export function deriveNextPlanFacts(
 
   // 6. Your worst-placed piece (stuck) → reroute it, HOW spelled out.
   if (fullmove >= 10) {
-    const worst = findWorstPlacedPiece(chess, studentColorWB);
+    // The rook with no file is the open-file plan's job (plan 4), said there.
+    const found = findWorstPlacedPiece(chess, studentColorWB);
+    const worst = found && found.kind !== 'no-file-rook' ? found : null;
     // NO ROUTE, NO PLAN (WO-DEPTH-01, 2026-11-08): on David's 120 games the
     // route computers found no square for 777 of the 903 worst pieces, and
     // the plan said "walk it to a square where it bites" — no square, no job,
     // the line the specificity rule bans. Empty beats generic.
-    const route = worst ? routeBit(fen, worst.sq as Square, opts.namesStudentMoves) : null;
+    const route = worst ? routeBit(fen, worst.sq, opts.namesStudentMoves) : null;
     if (worst && route) {
-      add('worst-piece', `rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}, which ${reachWords(worst.m)}`, `rescuing your ${PIECE_NOUN[worst.type]} on ${worst.sq}`, `${route.text}before you attack — a piece doing nothing leaves you a piece down in the fight`, [worst.sq, ...route.squares]);
+      add('worst-piece', `rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}, which ${worstReason(worst)}`, `rescuing your ${PIECE_NOUN[worst.type]} on ${worst.sq}`, `${route.text}before you attack — a piece doing nothing leaves you a piece down in the fight`, [worst.sq, ...route.squares]);
     }
   }
 
@@ -528,8 +620,8 @@ function guardPawnBit(chess: Chess, sq: Square, color: Color): { text: string; s
  *  for it (then there is no plan to say). Held, a one-hop route IS the move,
  *  so nothing is left to say but the move: null too. */
 function routeBit(fen: string, sq: Square, namesStudentMoves: boolean): { text: string; squares: string[] } | null {
-  const r = computePieceRoute(fen, sq) ?? computeSliderRoute(fen, sq);
-  if (!r || r.route.length === 0) return null;
+  const r = worstPieceRoute(fen, sq);
+  if (!r) return null;
   // Held: the destination, never the step — a one-hop route IS the move.
   if (!namesStudentMoves) return r.route.length === 1 ? null : { text: `walk it toward ${r.target} `, squares: [r.target] };
   const via = r.route.slice(0, -1);

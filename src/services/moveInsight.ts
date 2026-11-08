@@ -43,7 +43,7 @@ import { castleSide, heldByTactic, keepTension, skipMiddleman, rightPieceForHole
 import { findLoosePieces } from './loosePieces';
 import { noPawnCanChallenge } from './outpost';
 import { findHangingBySee, findKnightReroute, findWeakPawns } from './positionReadingService';
-import { findWorstPlacedPiece } from './nextPlans';
+import { findWorstPlacedPiece, worstReason } from './nextPlans';
 import { detectLatentDanger, latentDangerClause } from './latentDanger';
 import { findTrappedPiece } from './reviewTeachingPoints';
 import { detectNewThreat } from './groundedAnswer';
@@ -348,7 +348,7 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
   } else {
     const worst = findWorstPlacedPiece(board, me);
     if (worst) {
-      parts.push(`Your ${name(worst.type)} on ${worst.sq} is your worst-placed piece — give it a better job.`);
+      parts.push(`Your ${name(worst.type)} on ${worst.sq} is your worst piece — it ${worstReason(worst)}. Give it a better job.`);
       sq.push(worst.sq);
     }
   }

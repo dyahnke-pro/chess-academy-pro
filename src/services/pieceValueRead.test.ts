@@ -2,6 +2,17 @@ import { Chess } from 'chess.js';
 import { describe, it, expect } from 'vitest';
 import { withoutTags } from '../utils/thinkPause';
 import { parseEvalTable, pieceQualityLines, type PieceValue } from './pieceValueRead';
+import { findWorstPlacedPiece } from './nextPlans';
+
+// THE WORST PIECE IS READ OFF A BOARD (WO-DEPTH-01, 2026-11-08): the table
+// proves the one finder's piece. David's game chesscom-1015773958 after
+// 15…O-O: White's bishop on d2 is hemmed in behind its own pawns.
+const D2_BOARD = 'r4rk1/pp3pbp/1q1p1np1/2p1p3/4PP2/2PP2P1/PP1BK2P/R4B1R w - - 1 16';
+const BISHOP_D2: PieceValue[] = [
+  { square: 'f6', piece: 'n', color: 'b', value: -4.5 },
+  { square: 'd2', piece: 'B', color: 'w', value: 1.0 },
+  { square: 'g7', piece: 'b', color: 'b', value: -4.5 },
+];
 
 // Real `eval` output from the shipped WASM build, after 1.e4 e5 2.Nf3 Nc6
 // 3.Bc4 Nf6 — trimmed to the board table plus the NNUE table that follows it,
@@ -86,13 +97,13 @@ describe('the engine\'s per-piece table', () => {
 
   it('names only a passive MINOR as the worst piece — never a rook or queen', () => {
     const values = [
-      { square: 'c1', piece: 'B', color: 'w' as const, value: 2 },   // idle bishop
-      { square: 'c8', piece: 'b', color: 'b' as const, value: 4 },   // enemy bishop → white B delta ≈ -1
+      { square: 'd2', piece: 'B', color: 'w' as const, value: 2 },   // the hemmed-in bishop
+      { square: 'g7', piece: 'b', color: 'b' as const, value: 4 },   // enemy bishop → white B delta ≈ -1
       { square: 'a1', piece: 'R', color: 'w' as const, value: 3.4 }, // idle rook — must NOT be chosen
       { square: 'a8', piece: 'r', color: 'b' as const, value: 4.6 },
     ];
-    const worst = pieceQualityLines(values, 'white').find((l) => l.kind === 'your-worst-piece');
-    expect(worst?.text ?? '').toContain('bishop on c1');
+    const worst = pieceQualityLines(values, 'white', undefined, { fen: D2_BOARD }).find((l) => l.kind === 'your-worst-piece');
+    expect(worst?.text ?? '').toContain('bishop on d2');
     expect(worst?.text ?? '').not.toMatch(/rook|queen/);
   });
 
@@ -113,9 +124,9 @@ describe('the engine\'s per-piece table', () => {
     ];
     const lines = pieceQualityLines(values, 'white', undefined, { isMiddlegame: true, fen });
     expect(lines.some((l) => /bishop on f4/.test(l.text))).toBe(false);
-    // NEGATIVE CONTROL: without the board, the table alone still names it.
-    expect(pieceQualityLines(values, 'white', undefined, { isMiddlegame: true })
-      .some((l) => /bishop on f4/.test(l.text))).toBe(true);
+    // …because the one worst-piece finder does not call it worst: the table
+    // proves the finder's piece, never picks its own (WO-DEPTH-01).
+    expect(findWorstPlacedPiece(new Chess(fen), 'w')?.sq).not.toBe('f4');
   });
 
   it('never crowns a knight on the rim their best piece (walk 900, 9…a6: Na3)', () => {
@@ -160,18 +171,18 @@ describe('the engine\'s per-piece table', () => {
   });
 
   const BAD_MINOR = [
-    { square: 'c1', piece: 'B', color: 'w' as const, value: 2 },   // idle bishop → worst
-    { square: 'c8', piece: 'b', color: 'b' as const, value: 4 },
+    { square: 'd2', piece: 'B', color: 'w' as const, value: 2 },   // the hemmed-in bishop → worst
+    { square: 'g7', piece: 'b', color: 'b' as const, value: 4 },
   ];
   it('says each piece once per game', () => {
     const said = new Set<string>();
-    expect(pieceQualityLines(BAD_MINOR, 'white', said).length).toBeGreaterThan(0);
-    expect(pieceQualityLines(BAD_MINOR, 'white', said)).toHaveLength(0);
+    expect(pieceQualityLines(BAD_MINOR, 'white', said, { fen: D2_BOARD }).length).toBeGreaterThan(0);
+    expect(pieceQualityLines(BAD_MINOR, 'white', said, { fen: D2_BOARD })).toHaveLength(0);
   });
 
   it('carries the square it is about, for the board to mark', () => {
-    const l = pieceQualityLines(BAD_MINOR, 'white').find((x) => x.kind === 'your-worst-piece')!;
-    expect(l.squares).toEqual(['c1']);
+    const l = pieceQualityLines(BAD_MINOR, 'white', undefined, { fen: D2_BOARD }).find((x) => x.kind === 'your-worst-piece')!;
+    expect(l.squares[0]).toBe('d2');
   });
 });
 
@@ -294,9 +305,13 @@ describe('an undeveloped minor gets the development rule, not a reroute (hand wa
     expect(line?.text).toMatch(/bishop on c1 hasn't moved yet — in general, finish your development/);
   });
   it('NEGATIVE CONTROL: a developed bishop doing little is still told to find a better square', () => {
-    const moved = values.map((v) => (v.square === 'c1' ? { ...v, square: 'd2' } : v));
-    const line = pieceQualityLines(moved, 'white', new Set(), { isMiddlegame: true }).find((l) => l.kind === 'your-worst-piece');
-    expect(line?.text).toMatch(/finding it a better square/);
+    const onBoard: PieceValue[] = [
+      { square: 'd2', piece: 'B', color: 'w', value: 2.4 },
+      { square: 'g7', piece: 'b', color: 'b', value: -4.0 },
+    ];
+    const line = pieceQualityLines(onBoard, 'white', new Set(), { isMiddlegame: true, fen: D2_BOARD }).find((l) => l.kind === 'your-worst-piece');
+    expect(line?.text).toMatch(/bishop on d2/);
+    expect(line?.text).not.toMatch(/hasn't moved yet/);
   });
 });
 
@@ -340,18 +355,42 @@ describe('one idea, said once a phase — not once per square (re-walk 1380, 202
     { square: myIdle, piece: 'B', color: 'w', value: 1.0 },
     { square: 'd4', piece: 'B', color: 'w', value: 4.5 },
   ];
+  it('their best piece on a new square, the same phase, is not re-spoken', () => {
+    const said = new Set<string>();
+    expect(pieceQualityLines(at('e6', 'b2'), 'white', said, { isMiddlegame: true }).map((l) => l.kind)).toContain('their-best-piece');
+    expect(pieceQualityLines(at('c5', 'a3'), 'white', said, { isMiddlegame: true }).filter((l) => l.kind === 'their-best-piece')).toHaveLength(0);
+  });
   it('a new square on the same phase does not re-speak the advice', () => {
     const said = new Set<string>();
-    const first = pieceQualityLines(at('e6', 'b2'), 'white', said, { isMiddlegame: true });
-    expect(first.map((l) => l.kind).sort()).toEqual(['their-best-piece', 'your-worst-piece']);
-    const next = pieceQualityLines(at('c5', 'a3'), 'white', said, { isMiddlegame: true });
-    expect(next, 'a different piece is not a different idea').toHaveLength(0);
+    const first = pieceQualityLines(BISHOP_D2, 'white', said, { isMiddlegame: true, fen: D2_BOARD });
+    expect(first.map((l) => l.kind)).toContain('your-worst-piece');
+    // David's game chesscom-1001055178 after 12…a6: the knight on a3 is the
+    // worst piece there — another square, the same idea.
+    const next = pieceQualityLines([
+      { square: 'a3', piece: 'N', color: 'w', value: 1.0 },
+      { square: 'c6', piece: 'n', color: 'b', value: -4.0 },
+    ], 'white', said, { isMiddlegame: true, fen: 'r4rk1/1ppq1pp1/p1n1pb1p/3p4/3P1P2/NPP3P1/P4PBP/R2Q1RK1 w - - 0 13' });
+    expect(next.filter((l) => l.kind === 'your-worst-piece'), 'a different piece is not a different idea').toHaveLength(0);
   });
   it('the piece the student just moved is never "doing the least"', () => {
-    const lines = pieceQualityLines(at('e6', 'b2'), 'white', undefined, { isMiddlegame: true, justMovedTo: 'b2' });
+    const lines = pieceQualityLines(BISHOP_D2, 'white', undefined, { isMiddlegame: true, fen: D2_BOARD, justMovedTo: 'd2' });
     expect(lines.find((l) => l.kind === 'your-worst-piece')).toBeUndefined();
     // …and without that, the same board does name it (non-vacuous).
-    expect(pieceQualityLines(at('e6', 'b2'), 'white', undefined, { isMiddlegame: true }).find((l) => l.kind === 'your-worst-piece')?.text).toMatch(/bishop on b2/);
+    expect(pieceQualityLines(BISHOP_D2, 'white', undefined, { isMiddlegame: true, fen: D2_BOARD }).find((l) => l.kind === 'your-worst-piece')?.text).toMatch(/bishop on d2/);
+  });
+  it('THE ONE WORST PIECE: the table never names a minor the finder did not (WO-DEPTH-01)', () => {
+    // On D2_BOARD the table scores the f1 bishop lowest of all, but
+    // the one finder's worst piece is the hemmed-in bishop on d2 — the table
+    // is its proof, never a second opinion. The old reader named f1 here.
+    const values: PieceValue[] = [
+      { square: 'f1', piece: 'B', color: 'w', value: 0.5 },
+      { square: 'd2', piece: 'B', color: 'w', value: 1.5 },
+      { square: 'g7', piece: 'b', color: 'b', value: -4.0 },
+    ];
+    const line = pieceQualityLines(values, 'white', undefined, { fen: D2_BOARD }).find((l) => l.kind === 'your-worst-piece');
+    expect(findWorstPlacedPiece(new Chess(D2_BOARD), 'w')?.sq).toBe('d2');
+    expect(line?.text ?? '').not.toMatch(/f1/);
+    expect(line?.squares[0]).toBe('d2');
   });
 });
 

@@ -16,7 +16,7 @@
 // engine's verdict, not ours (G0/G3). 100% engine + chess.js; zero LLM.
 
 import { isUndevelopedInOpening } from '../utils/undeveloped';
-import { reachWords } from '../utils/reachWords';
+import { findWorstPlacedPiece, worstReason } from './nextPlans';
 import { Chess } from 'chess.js';
 import type { Square, Color, PieceSymbol } from 'chess.js';
 import type { Evaluate } from './moveComparison';
@@ -178,27 +178,20 @@ function worstPieces(fen: string, color: Color, maxMob: number): Array<{ sq: Squ
 
 
 /**
- * Lowest mobility among any minor (knight/bishop) on the board, either colour —
- * a FREE (no-engine) proxy for "is a minor cramped enough here to be worth an
- * ablation probe?". Infinity when there are no minors. Callers use it to TARGET
- * the one position most likely to carry a bad-minor story, so the expensive
- * ablation runs once, where it matters.
+ * The lowest mobility of the two sides' worst pieces (`findWorstPlacedPiece`,
+ * the rook with no file aside) — a FREE (no-engine) read of "is there a worst
+ * piece here to prove?". Infinity when neither side has one. Review uses it to
+ * TARGET the positions the expensive ablation runs on.
  */
-export function lowestMinorMobility(fen: string): number {
-  try {
-    const chess = new Chess(fen);
-    let lo = Infinity;
-    for (const row of chess.board()) {
-      for (const cell of row) {
-        if (!cell || (cell.type !== 'n' && cell.type !== 'b')) continue;
-        const m = pieceMobility(fen, cell.square);
-        if (m < lo) lo = m;
-      }
-    }
-    return lo;
-  } catch {
-    return Infinity;
+export function worstPieceMobility(fen: string): number {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return Infinity; }
+  let lo = Infinity;
+  for (const color of ['w', 'b'] as Color[]) {
+    const w = findWorstPlacedPiece(chess, color);
+    if (w && w.kind !== 'no-file-rook' && w.m < lo) lo = w.m;
   }
+  return lo;
 }
 
 /**
@@ -232,14 +225,23 @@ export async function explainEvalByPieceQuality(
 
   // UNDEVELOPED IS NOT PASSIVE (walk 5, 2026-09-23) — one rule, shared with
   // the worst-placed-piece plan (`utils/undeveloped`).
+  //
+  // THE HYPOTHESIS IS THE ONE WORST PIECE (`findWorstPlacedPiece`, WO-DEPTH-01
+  // 2026-11-08): the ablation is its PROOF, never a second opinion. It used to
+  // pick its own (the least mobile minor, three squares or fewer), so Review
+  // could prove one piece bad while the plan rescued another. The rook with no
+  // file is not a bad square — its lesson is the file.
   for (const color of ['w', 'b'] as Color[]) {
-    const cands = worstPieces(fen, color, maxBadMobility).filter((c) => !isUndevelopedInOpening(fen, color, c.type, c.sq));
-    if (!cands.length) continue;
+    const w = findWorstPlacedPiece(chess, color);
+    if (!w || w.kind === 'no-file-rook') continue;
+    const one = { sq: w.sq, type: w.type as PieceSymbol, mob: w.m };
+    // The second of a pair ("the knight AND the bishop") is the next least
+    // mobile minor, said only beside the worst piece, never in its place.
+    const cands = [one, ...worstPieces(fen, color, maxBadMobility).filter((c) => c.sq !== w.sq && !isUndevelopedInOpening(fen, color, c.type, c.sq))];
     const sign = color === 'w' ? 1 : -1;
     const beforeOwn = sign * evalCp;
 
     // Single worst piece.
-    const one = cands[0];
     const relFen1 = relocateToBest(fen, [one.sq]);
     if (relFen1) {
       const e1 = await evaluate(relFen1);
@@ -252,7 +254,7 @@ export async function explainEvalByPieceQuality(
             color,
             squares: [one.sq],
             pieces: [one.type],
-            text: `the ${PIECE_WORD[one.type]} on ${one.sq} ${reachWords(one.mob)}, so it is doing nothing where it sits`,
+            text: `the ${PIECE_WORD[one.type]} on ${one.sq} ${worstReason(w)}, so it is doing nothing where it sits`,
             proof: 'ablation',
             ablation: { before: beforeOwn, after: afterOwn, swingCp: swing },
           };

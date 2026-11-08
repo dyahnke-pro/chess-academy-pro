@@ -28,7 +28,7 @@ import { Chess, type Square } from 'chess.js';
 import { CAPTURE_VALUE } from './pieceValues';
 import { findPieceQuality } from './positionReadingService';
 import { isOnHomeSquare } from './development';
-import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
+import { findWorstPlacedPiece, worstPieceRoute } from './nextPlans';
 import { askThenAnswer, type PlayedMove } from '../utils/thinkPause';
 import type { ArrowClaim } from './arrowDoor';
 import { withArticle } from '../utils/andList';
@@ -385,9 +385,15 @@ export function pieceQualityLines(
   // doing the least of anything you own" with the f1 bishop not yet moved).
   // Development comes before rerouting.
   const home = opts?.isMiddlegame === true ? minors.find((v) => onHomeSquare(v)) : undefined;
+  // Otherwise THE ONE WORST PIECE (`findWorstPlacedPiece`, WO-DEPTH-01
+  // 2026-11-08), with the engine's table as its PROOF: this reader used to
+  // pick the minor furthest below its kind, so Learn could ask about one
+  // piece while the plan rescued another. The table that disagrees stays quiet.
+  const finder = (() => { try { return opts?.fen ? findWorstPlacedPiece(new Chess(opts.fen), me) : null; } catch { return null; } })();
+  const named = finder ? minors.find((v) => v.square === finder.sq) : undefined;
   const worst = home
     ? { v: home, d: -1 }
-    : minors.map((v) => ({ v, d: delta(v) })).sort((a, b) => a.d - b.d)[0];
+    : named ? { v: named, d: delta(named) } : undefined;
   if (opts?.isMiddlegame !== false && worst && worst.d <= -0.3) {
     const key = `worst:${phase}`;
     if (!said?.has(key)) {
@@ -454,9 +460,8 @@ function challengeMove(fen: string | undefined, square: string, me: 'w' | 'b'): 
  *  computers. Null when neither finds a better square. */
 function betterSquare(fen: string | undefined, square: string): { text: string; arrows: ArrowClaim[] } | null {
   if (!fen) return null;
-  const knight = computePieceRoute(fen, square as Square);
-  const route = knight ? { target: knight.target, route: knight.route } : computeSliderRoute(fen, square as Square);
-  if (!route || route.route.length === 0) return null;
+  const route = worstPieceRoute(fen, square as Square);
+  if (!route) return null;
   const via = route.route.slice(0, -1);
   return {
     text: `it wants ${route.target}${routeVia(via)}.`,

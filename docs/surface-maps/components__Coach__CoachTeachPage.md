@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**17485 lines · 3 exports · 4 importers · 83 tests · 12 audits**
+**17492 lines · 3 exports · 4 importers · 84 tests · 12 audits**
 
 ## Locked rules that govern this surface
 
@@ -59,6 +59,7 @@
 - `src/services/coachTurnTruth.test.ts`
 - `src/services/computerRoles.test.ts`
 - `src/services/gemCrushLines.computed.test.ts`
+- `src/services/hangingLine.test.ts`
 - `src/services/hintLaneCoverage.test.ts`
 - `src/services/learnFundamentalNamesNoMove.test.ts`
 - `src/services/learnGameRecord.test.tsx`

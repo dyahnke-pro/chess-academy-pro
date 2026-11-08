@@ -124,7 +124,7 @@
 
 ### `nameEndgamePhase` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:4147`
-- `src/services/reviewFullData.ts:1739`
+- `src/services/reviewFullData.ts:1730`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`

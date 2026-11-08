@@ -123,15 +123,6 @@ describe('an attack by a cheaper piece says why it matters (Learn audit 2026-10-
   });
 });
 
-describe('a hanging piece is warned in rotated words (David 2026-10-14)', () => {
-  it('three moves, three wordings, each with its reason', async () => {
-    const { hangingPieceLine } = await import('./learnBoardTeaching');
-    const said = [0, 1, 2].map((r) => hangingPieceLine('r', 'h8', r, false));
-    expect(new Set(said).size).toBe(3);
-    for (const s of said) expect(s).toMatch(/rook on h8.*nothing/);
-  });
-});
-
 describe('every student move gets its own reason — the board teacher as fallback (David 2026-10-14)', () => {
   it('says what a quiet developing move did, with the move as its subject', async () => {
     const { boardTeacherPoint } = await import('./learnBoardTeaching');

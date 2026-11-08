@@ -33,7 +33,6 @@ export type MoveReason =
   | 'only-move' | 'clear-best' | 'defends-threat' | 'wins-material' | 'best' | 'solid';
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
-const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 /** Best move by at least this much over the second best is a real decision. */
 const CLEAR_BEST_GAP_CP = 80;
 
@@ -100,7 +99,10 @@ export function classifyMoveReason(i: MoveReasonInputs): MoveReason {
 /** Whether a reason is a fault (a mistake worth drilling) vs a merit. A Learn
  *  game's faults reach the record through its annotations
  *  (`learnGameRecord`), attributed like an import. */
-export function isFaultReason(r: MoveReason): boolean {
+export type FaultReason = 'allows-mate' | 'hung-piece' | 'ignored-threat' | 'walked-into-tactic'
+  | 'missed-forcing-win' | 'lost-the-thread' | 'imprecise-defence' | 'second-best';
+export type MeritReason = Exclude<MoveReason, FaultReason>;
+export function isFaultReason(r: MoveReason): r is FaultReason {
   return r === 'allows-mate' || r === 'hung-piece' || r === 'ignored-threat' || r === 'walked-into-tactic'
     || r === 'missed-forcing-win' || r === 'lost-the-thread' || r === 'imprecise-defence'
     || r === 'second-best';
@@ -143,29 +145,17 @@ export function hangingNetForMover(fenAfter: string, moverColor: 'w' | 'b'): num
 }
 
 /**
- * The post-move grade as a board-true DNA clause — spoken by NAME of the thing,
- * severity implicit in the reason (a blunder's `hung-piece`/`walked-into-tactic`
- * reads sharp; a merit reads light). `named` supplies a named pattern ("the
- * fork", "the pin") so the clause names the PATTERN, not the SAN (Narration Voice
- * Rule). `piece`/`square` name the hung piece when known. Terse — never padded.
+ * The verdict clause for a MERIT, spoken after the move ("Bxe4: the only move
+ * that holds here."). A FAULT has no clause here: why a move was an error is
+ * the one error computer's to say (`errorWhy`, WO-DEPTH-01 2026-11-08 — "that
+ * hung the knight on e5" here and "That left your knight on e5 …" from
+ * `errorWhy` were two verdicts for one move). The type takes merits only, so a
+ * fault can never be worded twice. Terse — never padded.
  */
-export function moveReasonClause(r: MoveReason, ctx?: { named?: string; hung?: { piece: string; square: string }; fundamental?: string }): string {
-  const pattern = ctx?.named;
-  // A positional slip with an ATTRIBUTED fundamental speaks the fundamental —
-  // the same verdict the review gives for the same move (one coach).
-  if (r === 'lost-the-thread' && ctx?.fundamental) return ctx.fundamental;
-  const hung = ctx?.hung ? `${PNAME[ctx.hung.piece.toLowerCase()] ?? 'piece'} on ${ctx.hung.square}` : 'piece';
+export function moveReasonClause(r: MeritReason): string {
   // NO PRAISE WORDS (Narration Voice Rule 5; hand walk 2026-09-30 heard "nice —"
   // twice on routine recaptures). The verdict states what the move did.
   switch (r) {
-    case 'allows-mate': return `that lets them force mate.`;
-    case 'hung-piece': return `careful — that hung the ${hung}.`;
-    case 'ignored-threat': return `that left a standing threat unmet — it had to be answered first.`;
-    case 'walked-into-tactic': return pattern ? `that walked into ${pattern}.` : `that walked into a tactic — the punishment wins material a few moves in.`;
-    case 'missed-forcing-win': return `there was a concrete win here, and that wasn't it.`;
-    case 'lost-the-thread': return `no tactic — but the plan drifted there.`;
-    case 'imprecise-defence': return `it holds, but not the cleanest way.`;
-    case 'second-best': return `playable — not quite the most precise.`;
     case 'only-move': return `the only move that holds here.`;
     // Said ONLY with the move's computed point after it — a verdict with no
     // reason is bare praise (Narration Voice Rule 5). The caller enforces it.

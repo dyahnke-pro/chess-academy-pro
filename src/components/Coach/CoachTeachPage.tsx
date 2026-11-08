@@ -19,6 +19,7 @@ import { characterTurn } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { startLearnTranscript, stopLearnTranscript, noteLearnEntry } from '../../services/learnTranscript';
 import { createLearnMemory, markOpeningFactsSpoken, nextStem, instanceStem, rememberKeptClaims, type LearnMemory } from '../../services/learnMemory';
+import { hangingLine, lostLastGuard } from '../../services/hangingLine';
 import { STORY_KEY, PLAN_GOAL, keysUnder, threadKey, threadVariant, toldBoards, identityHeard, noteOpening, openingAt, openingBreak, switchesSaid, type StoryHeard } from '../../services/gameStory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
@@ -75,7 +76,7 @@ import { buildPositionalRead } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { cheaperAttackerHit, gambitPoint, kingPawnUnderFire, type CheaperHit, mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { habitSaidKey, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { habitSaidKey, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 
 /** A LINE A LEARN PRODUCER QUEUES for the late wave, as it knows it — made
@@ -9432,7 +9433,9 @@ export function CoachTeachPage({ mode }: {
         threatProducer = { kind: 'hanging', square: worst.square };
         threatComputer = 'detectHangingPieces';
         threatSquares = [worst.square];
-        threatLine = hangingPieceLine(worst.piece, worst.square, nextStem(learnMemRef.current, 'hanging'), loose.still);
+        // The ONE producer Review's loose facet speaks too (`hangingLine`,
+        // WO-DEPTH-01), rotated on the board.
+        threatLine = hangingLine({ fen: args.fenAfterReply, squares: [worst.square], viewer: studentCC, lostGuard: lostLastGuard(args.fenBeforeReply, worst.square), still: loose.still }) ?? '';
             threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), loudSaid);
         const flip = args.fenAfterReply.split(' ');
         flip[1] = studentCC === 'w' ? 'b' : 'w';
@@ -10773,6 +10776,10 @@ export function CoachTeachPage({ mode }: {
           learnMemRef.current.story.commit(gameRef.current.plies, {
             sentences: [
               ...spokenSentenceKeys({ kept: [{ kind: 'computed', text: gradeLine, fen: move.fen, claims: [`own-move-reason:${move.history.length}`] }] }),
+              // A fault's clause IS the one error computer's sentence (WO-DEPTH-01):
+              // keyed on its own, so the verdict after the reply drops the twin
+              // and says only what it adds (the line, the better move once past).
+              ...(grade.fault ? spokenSentenceKeys({ kept: [{ kind: 'computed', text: grade.clause, fen: move.fen }] }) : []),
               ...(habitKey && habitQ ? [habitKey] : []),
             ],
             claims: gradeLine.includes(BISHOP_PAIR_POINT) ? BISHOP_PAIR_CLAIMS : [],

@@ -27,7 +27,7 @@ import { settledLeadFor, type LastMove } from './material';
 import { countWords } from '../utils/countWords';
 import { isSacrifice } from './factStakes';
 import { seatPieceReferences } from '../utils/seatPieces';
-import { mobilityMap, worstPieceNote, namedPawnStructure } from './nextPlans';
+import { mobilityMap, worstPieceNote, namedPawnStructure, findWorstPlacedPiece, worstPieceRoute, worstReason } from './nextPlans';
 import { theirWantedMoves, theirWantSentence } from './prophylaxis';
 import { Chess } from 'chess.js';
 import { toOtherSeat } from '../utils/seatPronouns';
@@ -1461,13 +1461,20 @@ export function assemblePieceActivityAnswer(
       ? `— it only covers ${worst.scope} square${worst.scope === 1 ? '' : 's'}, so it wants a more active post`
       : `— it covers just ${worst.scope} squares, the fewest of your pieces`;
   // WHERE IT WANTS TO GO, and why (David 2026-10-15: "replace descriptions
-  // with teachings") — its own route computer, not a count of squares alone.
-  const r = computePieceRoute(fen, worst.sq) ?? computeSliderRoute(fen, worst.sq);
-  const via = r ? r.route.slice(0, -1) : [];
-  const go = r && r.route.length > 0
-    ? ` It wants ${r.target}${via.length ? `, by way of ${andList(via)}` : ''} — ${r.why.replace(/\.$/, '')}.`
-    : '';
-  const facts = `Your least active piece is the ${name} on ${worst.sq} ${tail}.${go}`;
+  // with teachings") — the one route reader, not a count of squares alone.
+  const go = (sq: Square): string => {
+    const r = worstPieceRoute(fen, sq);
+    return r ? ` It wants ${r.target}${r.via.length ? `, by way of ${andList(r.via)}` : ''} — ${r.aim}.` : '';
+  };
+  // THE ONE WORST PIECE (`findWorstPlacedPiece`, WO-DEPTH-01 2026-11-08): when
+  // it names a piece the ask covers, that is the answer, with its reason — the
+  // plan thread and Learn name the same piece on this board. The least active
+  // piece by the squares it covers answers only where it names none.
+  const one = findWorstPlacedPiece(chess, me);
+  if (one && one.kind !== 'no-file-rook' && (!wantType || one.type === wantType)) {
+    return { facts: `Your worst piece is the ${REVIEW_PIECE_NAME[one.type]} on ${one.sq} — it ${worstReason(one)}.${go(one.sq)}`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+  }
+  const facts = `Your least active piece is the ${name} on ${worst.sq} ${tail}.${go(worst.sq)}`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
 
@@ -6535,7 +6542,6 @@ import { findPieceQuality, goodPieceReason, findWeakPawns, findWeakSquares, camp
 import { rotateStem } from '../utils/rotateStem';
 import { isOutpost } from './outpost';
 import { findQueenGrabTraps, queenGrabTrapLine } from './queenGrabTrap';
-import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import { stripThink } from '../utils/thinkPause';
 import { methodRead, methodLine, weaknessLine } from './planChoice';
 import { findTiedDefenders } from './tiedDefender';
@@ -6852,7 +6858,13 @@ export function assemblePositionalAnswer(
     const sw = { strongest: strongestPiece(fen, myC), weakest: worstPieceNote(fen, myC) };
     if (!sw.strongest && !sw.weakest) return null;
     const best = sw.strongest ? `Your most active piece is the ${REVIEW_PIECE_NAME[sw.strongest.piece] ?? sw.strongest.piece} on ${sw.strongest.square}.` : '';
-    const worst = sw.weakest && sw.weakest.square !== sw.strongest?.square ? `Your least active is the ${REVIEW_PIECE_NAME[sw.weakest.piece] ?? sw.weakest.piece} on ${sw.weakest.square} — find it a better square.` : '';
+    // "Worst" only where the one finder named it (WO-DEPTH-01); otherwise it
+    // is the least active piece, and said as that.
+    const worst = sw.weakest && sw.weakest.square !== sw.strongest?.square
+      ? sw.weakest.misplaced
+        ? `Your worst piece is the ${REVIEW_PIECE_NAME[sw.weakest.piece] ?? sw.weakest.piece} on ${sw.weakest.square} — it ${sw.weakest.reason}. Find it a better square.`
+        : `Your least active is the ${REVIEW_PIECE_NAME[sw.weakest.piece] ?? sw.weakest.piece} on ${sw.weakest.square} — find it a better square.`
+      : '';
     // "What is my WORST piece?" leads with the worst one (walk 5).
     const worstFirst = /\b(?:worst|weakest|least\s+active)\b/i.test(ask ?? '');
     return { facts: (worstFirst ? [worst, best] : [best, worst]).filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
@@ -6966,8 +6978,8 @@ export function assemblePositionalAnswer(
     // piece toward an outpost (a hole in their camp) or just to a better square.
     const oppHoles = holeTargets(fen, myC === 'w' ? 'b' : 'w', myC);
     const sw = { weakest: worstPieceNote(fen, myC) };
-    if (sw.weakest && oppHoles.length) return { facts: `No forced maneuver, but your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square} is your worst piece — route it toward the outpost${oppHoles.length > 1 ? 's' : ''} on ${orList(oppHoles)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
-    if (sw.weakest) return { facts: `No forced maneuver here — the improving move is to reroute your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}, your least active piece, to a more useful square.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (sw.weakest && oppHoles.length) return { facts: `No forced maneuver, but your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square} is your ${sw.weakest.misplaced ? 'worst' : 'least active'} piece — route it toward the outpost${oppHoles.length > 1 ? 's' : ''} on ${orList(oppHoles)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (sw.weakest) return { facts: `No forced maneuver here — the improving move is to reroute your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}, your ${sw.weakest.misplaced ? 'worst' : 'least active'} piece: it ${sw.weakest.reason}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     return null;
   }
 

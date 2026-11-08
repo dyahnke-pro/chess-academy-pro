@@ -21,7 +21,7 @@
 // Engine-free and fast, so it can sit in ship-check: every input below is a
 // fixture or a chess.js computation, never a search.
 import { describe, it, expect } from 'vitest';
-import { parseEvalTable, pieceQualityLines } from './pieceValueRead';
+import { pieceQualityLines } from './pieceValueRead';
 import { buildPlayCommentary } from './playCommentary';
 import { buildTacticsLiveContext } from './liveTacticsContext';
 import { backwardLook } from './backwardLook';
@@ -30,49 +30,18 @@ import { buildVoicePackage, type VoiceFactKind } from './voicePackage';
 import { Chess } from 'chess.js';
 import { withOneSearch } from '../test/oneSearchScores';
 
-const EVAL_FIXTURE = `
-+-------+-------+-------+-------+-------+-------+-------+-------+
-|   r   |       |   b   |   q   |   k   |   b   |       |   r   |
-| -4.45 |       | -4.21 | -6.22 | -0.00 | -4.15 |       | -4.40 |
-+-------+-------+-------+-------+-------+-------+-------+-------+
-|   p   |   p   |   p   |   p   |       |   p   |   p   |   p   |
-| -0.71 | -0.95 | -1.13 | -0.61 |       | -0.99 | -1.19 | -0.73 |
-+-------+-------+-------+-------+-------+-------+-------+-------+
-|       |       |   n   |       |       |   n   |       |       |
-|       |       | -3.55 |       |       | -3.72 |       |       |
-+-------+-------+-------+-------+-------+-------+-------+-------+
-|       |       |       |       |   p   |       |       |       |
-|       |       |       |       | -1.05 |       |       |       |
-+-------+-------+-------+-------+-------+-------+-------+-------+
-|       |       |   B   |       |   P   |       |       |       |
-|       |       | +3.99 |       | +1.11 |       |       |       |
-+-------+-------+-------+-------+-------+-------+-------+-------+
-|       |       |       |       |       |   N   |       |       |
-|       |       |       |       |       | +3.80 |       |       |
-+-------+-------+-------+-------+-------+-------+-------+-------+
-|   P   |   P   |   P   |   P   |       |   P   |   P   |   P   |
-| +0.57 | +0.91 | +1.11 | +0.59 |       | +0.97 | +1.21 | +0.71 |
-+-------+-------+-------+-------+-------+-------+-------+-------+
-|   R   |   N   |   B   |   Q   |   K   |       |       |   R   |
-| +3.88 | +2.20 | +3.99 | +5.81 | +0.00 |       |       | +4.05 |
-+-------+-------+-------+-------+-------+-------+-------+-------+
-
- NNUE network contributions (White to move)
-+------------+------------+------------+------------+
-|  7         |  -  2.83   |  -  1.30   |  -  4.13   | <-- this bucket is used
-+------------+------------+------------+------------+
-
-Final evaluation       -0.15 (white side)
-`;
-
 describe('no dead lanes — every lane can fire', () => {
   it('piece quality — their best / your worst', () => {
-    // The b1 knight in EVAL_FIXTURE reads +2.20 (well under its ~3.4 kind) so a
-    // passive MINOR carries this lane. It used to lean on an under-valued ROOK,
-    // but 'improve your worst piece' now names only minors (David 2026-08-23 —
-    // Danya reroutes minors, not rooks), so the fixture must present a minor.
-    const out = pieceQualityLines(parseEvalTable(EVAL_FIXTURE), 'white');
-    expect(out.length, 'piece-quality lane produced nothing on a real eval table').toBeGreaterThan(0);
+    // The worst piece is read off a BOARD — the table proves the one finder's
+    // piece (WO-DEPTH-01, 2026-11-08). David's game chesscom-1015773958 after
+    // 15…O-O: the bishop on d2 is hemmed in behind its own pawns, and the
+    // table scores it well under its kind.
+    const board = 'r4rk1/pp3pbp/1q1p1np1/2p1p3/4PP2/2PP2P1/PP1BK2P/R4B1R w - - 1 16';
+    const out = pieceQualityLines([
+      { square: 'd2', piece: 'B', color: 'w', value: 1.0 },
+      { square: 'g7', piece: 'b', color: 'b', value: -4.5 },
+    ], 'white', undefined, { fen: board });
+    expect(out.length, 'piece-quality lane produced nothing on a real board').toBeGreaterThan(0);
   });
 
   it('play commentary', () => {

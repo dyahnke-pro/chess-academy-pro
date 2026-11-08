@@ -11,7 +11,7 @@ import { buildTacticsLiveContext } from './liveTacticsContext';
 import { computePositionFacts } from './positionFacts';
 import { conceptInstanceKey, looseClaim, nextLooseSpells, plyOfFen, type LooseSpells } from './conceptKey';
 import { spokenSentenceKeys } from './learnTurnDoor';
-import { hangingPieceLine } from './learnBoardTeaching';
+import { hangingLine } from './hangingLine';
 import { NO_PROOF } from './proof';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { decideTurn, type LaneFixture } from '../test/learnDoorFixtures';
@@ -22,7 +22,7 @@ const mine = (fen: string): Array<{ square: string; piece: string }> =>
   buildTacticsLiveContext(fen, null, 'w', 1500).hanging.filter((h) => h.color === 'w').map((h) => ({ square: h.square, piece: h.piece }));
 const threat = (fen: string, spells: LooseSpells): LaneFixture => {
   const c = looseClaim('f4', plyOfFen(fen), spells);
-  return { lane: 'threat', text: hangingPieceLine('b', 'f4', 0, c.still), fen, squares: ['f4'], claims: [c.key], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };
+  return { lane: 'threat', text: hangingLine({ fen, squares: ['f4'], viewer: 'w', lostGuard: false, still: c.still }) ?? '', fen, squares: ['f4'], claims: [c.key], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };
 };
 const line = (rank: number, evaluation: number) => ({ rank, evaluation, moves: [], mate: null });
 const flat = { topLines: [line(1, 20), line(2, 15), line(3, 10)], evaluation: 20, isMate: false, mateIn: null, seldepth: 20, depth: 18, wdl: { win: 420, draw: 400, loss: 180 } };

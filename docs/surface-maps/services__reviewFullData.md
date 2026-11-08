@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1951 lines · 11 exports · 21 importers · 28 tests · 0 audits**
+**1942 lines · 11 exports · 22 importers · 29 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@
 - `src/services/boardDelta.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/danyaBench.measure.test.ts`
+- `src/services/hangingLine.test.ts`
 - `src/services/hangingVsUndefended.test.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/prematureBreak.test.ts`
@@ -51,7 +52,7 @@
 ### `NO_TEACHING_CONTEXT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 57 call sites
+### `computeMoveFacets` (function) — 58 call sites
 - `src/services/batch2Wiring.test.ts:55`
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
@@ -59,6 +60,7 @@
 - `src/services/danyaBench.measure.test.ts:408`
 - `src/services/exchangeIdeas.test.ts:236`
 - `src/services/forkTrick.test.ts:62`
+- `src/services/hangingLine.test.ts:50`
 - `src/services/hangingVsUndefended.test.ts:13`
 - `src/services/orderComputers.test.ts:315`
 - `src/services/pieceWish.test.ts:57`
@@ -79,23 +81,23 @@
 - `src/services/reviewFullData.test.ts:253`
 - `src/services/reviewFullData.test.ts:281`
 - `src/services/reviewFullData.test.ts:309`
-- `src/services/reviewFullData.test.ts:345`
-- `src/services/reviewFullData.test.ts:367`
-- `src/services/reviewFullData.test.ts:389`
-- `src/services/reviewFullData.test.ts:414`
-- `src/services/reviewFullData.test.ts:431`
-- `src/services/reviewFullData.test.ts:448`
-- `src/services/reviewFullData.test.ts:467`
-- `src/services/reviewFullData.test.ts:484`
-- `src/services/reviewFullData.test.ts:515`
-- `src/services/reviewFullData.test.ts:536`
-- `src/services/reviewFullData.test.ts:546`
-- `src/services/reviewFullData.test.ts:561`
-- `src/services/reviewFullData.test.ts:585`
-- `src/services/reviewFullData.test.ts:608`
-- `src/services/reviewFullData.test.ts:631`
-- `src/services/reviewFullData.test.ts:708`
-- `src/services/reviewFullData.test.ts:733`
+- `src/services/reviewFullData.test.ts:346`
+- `src/services/reviewFullData.test.ts:368`
+- `src/services/reviewFullData.test.ts:390`
+- `src/services/reviewFullData.test.ts:415`
+- `src/services/reviewFullData.test.ts:432`
+- `src/services/reviewFullData.test.ts:449`
+- `src/services/reviewFullData.test.ts:468`
+- `src/services/reviewFullData.test.ts:485`
+- `src/services/reviewFullData.test.ts:516`
+- `src/services/reviewFullData.test.ts:537`
+- `src/services/reviewFullData.test.ts:547`
+- `src/services/reviewFullData.test.ts:562`
+- `src/services/reviewFullData.test.ts:586`
+- `src/services/reviewFullData.test.ts:609`
+- `src/services/reviewFullData.test.ts:632`
+- `src/services/reviewFullData.test.ts:709`
+- `src/services/reviewFullData.test.ts:734`
 - `src/services/reviewOneLoosePiece.test.ts:14`
 - `src/services/reviewOwedComputers.test.ts:15`
 - `src/services/reviewOwedComputers.test.ts:72`
@@ -135,18 +137,18 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describeMoveInfluence` (function) — 7 call sites
-- `src/services/reviewFullData.test.ts:655`
-- `src/services/reviewFullData.test.ts:660`
-- `src/services/reviewFullData.test.ts:672`
-- `src/services/reviewFullData.test.ts:683`
-- `src/services/reviewFullData.test.ts:695`
+- `src/services/reviewFullData.test.ts:656`
+- `src/services/reviewFullData.test.ts:661`
+- `src/services/reviewFullData.test.ts:673`
+- `src/services/reviewFullData.test.ts:684`
+- `src/services/reviewFullData.test.ts:696`
 - `src/services/reviewNarrationFidelity.test.ts:48`
 - `src/services/reviewNarrationFidelity.test.ts:60`
 
 ### `studentAnswer` (function) — 5 call sites
-- `src/services/reviewFullData.test.ts:501`
-- `src/services/reviewFullData.test.ts:506`
+- `src/services/reviewFullData.test.ts:502`
 - `src/services/reviewFullData.test.ts:507`
+- `src/services/reviewFullData.test.ts:508`
 - `src/services/slipAnswer.test.ts:16`
 - `src/services/slipAnswer.test.ts:17`
 
@@ -158,6 +160,7 @@
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/forkTrick.test.ts`
 - `src/services/gemCrushLines.computed.test.ts`
+- `src/services/hangingLine.test.ts`
 - `src/services/hangingVsUndefended.test.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/pieceWish.test.ts`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2112 lines · 15 exports · 62 importers · 46 tests · 1 audits**
+**2113 lines · 15 exports · 62 importers · 46 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -129,7 +129,7 @@
 - `src/services/claimTruth.manual.test.ts:180`
 - `src/services/claimTruth.manual.test.ts:185`
 - `src/services/claimTruth.manual.test.ts:193`
-- `src/services/coachFeatureService.ts:967`
+- `src/services/coachFeatureService.ts:968`
 - `src/services/learnWalkBlumenfeld.test.ts:67`
 - `src/services/liveFundamental.ts:145`
 - `src/services/misconceptionClassifier.ts:277`
@@ -239,7 +239,7 @@
 
 ### `pvSanToUci` (function) — 3 call sites
 - `src/services/misconceptionClassifier.ts:565`
-- `src/services/mistakePuzzleService.ts:1165`
+- `src/services/mistakePuzzleService.ts:1166`
 - `src/services/moveThoughtFacts.ts:284`
 
 ### `pvUciToSan` (function) — 14 call sites
@@ -248,8 +248,8 @@
 - `src/services/autoAnalyzeGame.ts:669`
 - `src/services/autoAnalyzeGame.ts:672`
 - `src/services/capabilityEvidence.ts:534`
-- `src/services/coachFeatureService.ts:975`
-- `src/services/coachFeatureService.ts:977`
+- `src/services/coachFeatureService.ts:976`
+- `src/services/coachFeatureService.ts:978`
 - `src/services/discussionPractice.ts:452`
 - `src/services/discussionPractice.ts:460`
 - `src/services/liveFundamental.ts:135`

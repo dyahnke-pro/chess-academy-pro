@@ -34,7 +34,7 @@ import { signedLegalSeeFor, bishopHemmedByOwnPawns, signedCaptureRead } from './
 import { settledLeadFor } from './material';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findContinuationsAtPly } from './openingDetectionService';
-import { deriveNextPlanFacts, type PlanFact } from './nextPlans';
+import { deriveNextPlanFacts, findWorstPlacedPiece, worstReason, type PlanFact } from './nextPlans';
 import { winPercent, bandForWinPctLost } from './accuracyService';
 import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 import { BLUNDER_CP } from './engineConstants';
@@ -1496,26 +1496,27 @@ const DETECTORS: Detector[] = [
     }
     return null;
   },
-  // 21. Worst piece unimproved — the best move improves the mover's least
-  // mobile piece; the played move does not, and that piece stays stuck.
+  // 21. Worst piece unimproved — the best move improves the mover's worst
+  // piece; the played move does not, and that piece stays stuck. THE ONE WORST
+  // PIECE (`findWorstPlacedPiece`, WO-DEPTH-01 2026-11-08): this detector picked
+  // its own (the least mobile of the three, two squares or fewer), so the
+  // record could file one piece while the plan named another. The rook with no
+  // file is rook-ignored-open-file's (#22); the hemmed-in bishop is
+  // kept-bad-bishop's (#29).
   (c) => {
     const { last, best, mover, opp } = c;
     if (c.opening) return null;
-    const cands = pieces(c.before, mover).filter((p) => p.type === 'n' || p.type === 'b' || p.type === 'r');
-    if (cands.length < 2) return null;
-    const worst = cands.map((p) => ({ p, mob: pieceMobility(c.before, p.square, mover) })).sort((a, b) => a.mob - b.mob)[0];
-    if (worst.mob > 2) return null;
-    // A GUARD IS NOT IDLE (Learn walk 2026-10-02, ply 56: "the knight on h6 is
-    // doing nothing" while it was the only thing guarding the queen on g4 that
-    // they were about to take). A piece defending one of the mover's attacked
-    // pieces has a job, however few squares it has.
-    const guardsAttacked = pieces(c.after, mover).some((q) => q.square !== worst.p.square && q.type !== 'k'
+    const worst = findWorstPlacedPiece(c.before, mover);
+    if (!worst || worst.kind === 'no-file-rook' || worst.kind === 'bad-bishop') return null;
+    // A GUARD IS NOT IDLE (Learn walk 2026-10-02, ply 56): after the move too —
+    // a piece defending one of the mover's attacked pieces has a job.
+    const guardsAttacked = pieces(c.after, mover).some((q) => q.square !== worst.sq && q.type !== 'k'
       && c.after.attackers(q.square, opp).length > 0
-      && c.after.attackers(q.square, mover).includes(worst.p.square));
+      && c.after.attackers(q.square, mover).includes(worst.sq));
     if (guardsAttacked) return null;
-    if (best.from !== worst.p.square || last.from === worst.p.square) return null;
-    if (pieceMobility(c.after, worst.p.square, mover) > 2) return null;
-    return att('worst-piece-unimproved', 1, { squares: [worst.p.square], moves: [best.san], pvMoves: [] }, { piece: PNAME[worst.p.type], square: worst.p.square, better: best.san });
+    if (best.from !== worst.sq || last.from === worst.sq) return null;
+    if (pieceMobility(c.after, worst.sq, mover) > 2) return null;
+    return att('worst-piece-unimproved', 1, { squares: [worst.sq], moves: [best.san], pvMoves: [] }, { piece: PNAME[worst.type], square: worst.sq, reason: worstReason(worst), better: best.san });
   },
   // 22. Rook ignored the open file — the best move puts a rook on an open
   // file; the played move does not, and the opponent can take it first.

@@ -14,6 +14,7 @@
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0c.
 import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
+import { errorWhyFor } from './inaccuracyCall';
 import {
   classifyMoveReason, isFaultReason, gradeWorthSpeaking, moveReasonClause,
   hangingNetForMover, type MoveReason, type MoveLabel,
@@ -144,7 +145,7 @@ export function gradePlayedMove(input: {
   } catch { /* board read is a bonus */ }
   if (hangAfter >= 2) {
     try {
-      // Name the biggest piece the move left hanging (for the spoken clause).
+      // The biggest piece the move left hanging, which the line must take.
       const after = new Chess(fenAfter);
       let worst = -1;
       for (const h of findHangingPieces(after)) {
@@ -168,6 +169,17 @@ export function gradePlayedMove(input: {
     forceNetBest: 0, capture, seeNow, refuteNet: 0,
   });
   const worthSpeaking = gradeWorthSpeaking(reason);
+  const faultClause = (): string => {
+    try {
+      const mv = new Chess(fenBefore).move({ from: playedUci.slice(0, 2), to: playedUci.slice(2, 4), promotion: playedUci[4] });
+      const why = errorWhyFor({
+        secondReads: { best: [lines[0].earlier?.moves ?? null], reply: [played.earlier?.moves.slice(1) ?? null] },
+        costCp: cpLossCp, fenBefore, playedSan: mv.san, moverColor: studentColor === 'w' ? 'white' : 'black',
+        replyLineUci: played.moves.length > 1 ? played.moves.slice(1) : null, quality: label,
+      });
+      return why?.line ?? '';
+    } catch { return ''; }
+  };
   // The grade says what the move did. What the BETTER move would have done
   // (castle the king, strike the centre) is the one error computer's to say
   // (`errorWhy`'s better-move reason, which Review and Learn's look back both
@@ -175,7 +187,16 @@ export function gradePlayedMove(input: {
   // (wire-19, 2026-11-08: `movePlan` said "The real priority here was getting
   // the king to safety" after a hung knight, and named a central break the
   // student could still play).
-  const clause = worthSpeaking ? moveReasonClause(reason, { hung }) : '';
+  // A FAULT IS WORDED BY THE ONE ERROR COMPUTER (`errorWhy`, WO-DEPTH-01
+  // 2026-11-08): this grade said "careful — that hung the knight on e5" and
+  // the verdict after it said why through `errorWhy` — two wordings of one
+  // fault. The instant grade keeps its timing and its labels; its words are
+  // the error computer's, read off this fan (the played line is their reply
+  // first). No why → no clause: a fault is never said bare. The better move
+  // is not named — the student's next move is still theirs to find.
+  const clause = !worthSpeaking ? ''
+    : isFaultReason(reason) ? faultClause()
+      : moveReasonClause(reason);
   return {
     reason,
     clause,

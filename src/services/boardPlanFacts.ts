@@ -126,7 +126,9 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   const homeRank = myC === 'w' ? '1' : '8';
   const pastOpening = (Number.parseInt(fen.split(' ')[5] ?? '1', 10) || 1) >= 10;
   const viewer = voice === 'you' ? myC : theirC;
-  if (worst && (worst.misplaced || pastOpening || worst.square[1] !== homeRank)) {
+  // The rook with no file is the open-file lever's (said above), never a
+  // second "better square" for the same rook.
+  if (worst && worst.kind !== 'no-file-rook' && (worst.misplaced || pastOpening || worst.square[1] !== homeRank)) {
     const ref = pieceRef(fen, worst.square, viewer);
     levers.push({ kind: 'worst', phrase: `find a better square for ${ref ? ref.words : `${your} ${PIECE[worst.piece]} on ${worst.square}`}`, squares: [worst.square] });
   }

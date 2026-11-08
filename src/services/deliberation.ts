@@ -89,8 +89,9 @@ export interface Candidate {
   deltaCp: number;
   /** Why it falls short (alternatives only). */
   shortfall?: Shortfall;
-  /** The piece it drops, when `shortfall === 'drops-material'`. */
-  drops?: { piece: string; square: string };
+  /** The piece it drops, when `shortfall === 'drops-material'`, and the
+   *  candidate's own line from their reply to the capture — how it falls. */
+  drops?: { piece: string; square: string; line: string[]; /** The candidate's own piece (it moved there). */ moved: boolean };
   /** A piece of the mover's the move leaves under fire — not loose, but lost
    *  to the exchange (a pawn hit by a knight, guarded by a queen). The BOARD
    *  fact behind "clearly worse" when no line proves more (pass 1: "Bxc4 is
@@ -158,6 +159,24 @@ function uciToSan(fen: string, uci: string): string | null {
  *  hanging piece, or null. */
 /** The squares their first two answers in a line (UCI, the mover's move
  *  first) capture on — where a "drop" can be what the line punishes. */
+/** The candidate's own line, in SAN, from their reply through the move that
+ *  takes on `square` (WO-DEPTH-01, 2026-11-08: "Bxh7+? That drops the bishop
+ *  on h7" said THAT it falls, never how). Empty when the line takes nothing
+ *  there. */
+function dropLineSans(fen: string, moves: readonly string[], square: string): string[] {
+  try {
+    const c = new Chess(fen);
+    const sans: string[] = [];
+    for (let i = 0; i < Math.min(moves.length, 4); i++) {
+      const u = moves[i];
+      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      if (i > 0) sans.push(m.san);
+      if (i % 2 === 1 && m.to === square && m.captured) return sans;
+    }
+  } catch { /* an unreadable line proves nothing */ }
+  return [];
+}
+
 function takenByLine(moves: readonly string[]): ReadonlySet<string> {
   return new Set(moves.slice(1).filter((_, k) => k % 2 === 0).slice(0, 2).map((u) => u.slice(2, 4)));
 }
@@ -262,7 +281,7 @@ export function buildDeliberation(input: {
     const lossProof = refutationProof(fenBefore, l.moves, bestLine.moves, moverColor);
     alternatives.push({
       san, evalCp, deltaCp, shortfall,
-      drops: drop ? { piece: drop.piece, square: drop.square } : undefined,
+      drops: drop ? { piece: drop.piece, square: drop.square, line: dropLineSans(fenBefore, l.moves, drop.square), moved: l.moves[0].slice(2, 4) === drop.square } : undefined,
       ...(lossProof ? { proof: lossProof.short, proofSans: lossProof.line?.sans ?? [], refutation: lossProof } : {}),
       ...(tradeLine && !lossProof ? { tradeSans: tradeLine } : {}),
     });
@@ -298,7 +317,7 @@ export function buildDeliberation(input: {
         namedCandidate = {
           san: namedSan, evalCp, deltaCp,
           shortfall: drop ? 'drops-material' : deltaCp >= CLEARLY_WORSE_CP ? 'clearly-worse' : 'less-precise',
-          drops: drop ? { piece: drop.piece, square: drop.square } : undefined,
+          drops: drop ? { piece: drop.piece, square: drop.square, line: dropLineSans(fenBefore, line.moves, drop.square), moved: line.moves[0].slice(2, 4) === drop.square } : undefined,
           ...(lossProof ? { proof: lossProof.short, proofSans: lossProof.line?.sans ?? [], refutation: lossProof } : {}),
           ...(leaves ? { leaves } : {}),
         };
@@ -368,7 +387,14 @@ function shortfallText(c: Candidate): string {
     return `${c.san}? ${rest} — with more space or an attack going, you want them on; every piece that comes off shrinks the edge.`;
   }
   if (c.shortfall === 'drops-material' && c.drops) {
-    return `${c.san}? That drops the ${PNAME[c.drops.piece] ?? 'piece'} on ${c.drops.square}.`;
+    // HOW IT FALLS, played out: the line from their reply to the capture.
+    // The piece that moved is "the bishop"; another one left behind is named
+    // with its square ("Bg5+? Then they play Kxf7, and the bishop on f7 is
+    // lost" — two bishops in one sentence).
+    const noun = PNAME[c.drops.piece] ?? 'piece';
+    return c.drops.line.length
+      ? `${c.san}? Then ${seatedLine(c.drops.line, 'they')}, and the ${noun}${c.drops.moved ? '' : ` on ${c.drops.square}`} is lost.`
+      : `${c.san}? That drops the ${noun} on ${c.drops.square}.`;
   }
   return `${c.san} is playable, but not as precise.`;
 }

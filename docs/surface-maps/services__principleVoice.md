@@ -40,8 +40,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:5843`
-- `src/services/coachFeatureService.ts:5846`
+- `src/services/coachFeatureService.ts:5965`
+- `src/services/coachFeatureService.ts:5968`
 
 ### `fundamentalHow` (function) — 10 call sites
 - `src/services/fundamentalHow.test.ts:26`
@@ -53,7 +53,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts:73`
 - `src/services/fundamentalHow.test.ts:78`
 - `src/services/fundamentalHow.test.ts:79`
-- `src/services/principleAttribution.section14.test.ts:190`
+- `src/services/principleAttribution.section14.test.ts:198`
 
 ### `verdictCanDropBetter` (function) — 2 call sites
 - `src/services/learnFundamentalNarration.ts:105`
@@ -63,7 +63,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `verdictAlone` (function) — 51 call sites
-- `src/services/blockedOwnRetreat.test.ts:33`
+- `src/services/blockedOwnRetreat.test.ts:34`
 - `src/services/forcingStemNoDecisive.test.ts:18`
 - `src/services/forcingStemNoDecisive.test.ts:23`
 - `src/services/fundLeadStems.test.ts:60`
@@ -71,26 +71,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts:50`
 - `src/services/fundamentalHow.test.ts:56`
 - `src/services/fundamentalHow.test.ts:83`
-- `src/services/learnWalkBlumenfeld.test.ts:77`
+- `src/services/learnWalkBlumenfeld.test.ts:78`
 - `src/services/learnWalkOct3c.test.ts:82`
-- `src/services/misconceptionClassifier.ts:300`
-- `src/services/principleAttribution.guardRemoval.test.ts:27`
-- `src/services/principleAttribution.guardRemoval.test.ts:58`
+- `src/services/misconceptionClassifier.ts:302`
+- `src/services/principleAttribution.guardRemoval.test.ts:28`
+- `src/services/principleAttribution.guardRemoval.test.ts:62`
 - `src/services/principleAttribution.moveOrder.test.ts:23`
 - `src/services/principleAttribution.pinBreak.test.ts:29`
 - `src/services/principleAttribution.pinBreak.test.ts:51`
-- `src/services/principleAttribution.pinPressure.test.ts:26`
-- `src/services/principleAttribution.pinPressure.test.ts:61`
-- `src/services/principleAttribution.section14.test.ts:193`
-- `src/services/principleAttribution.section14.test.ts:196`
-- `src/services/principleAttribution.walkedIntoTactic.test.ts:36`
+- `src/services/principleAttribution.pinPressure.test.ts:27`
+- `src/services/principleAttribution.pinPressure.test.ts:65`
+- `src/services/principleAttribution.section14.test.ts:201`
+- `src/services/principleAttribution.section14.test.ts:204`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts:37`
 - `src/services/principleAttributionEndgame.test.ts:50`
 - `src/services/principleAttributionEvalPv.test.ts:78`
 - `src/services/principleAttributionEvalPv.test.ts:91`
 - `src/services/principleAttributionEvalPv.test.ts:100`
-- `src/services/principleVoice.lineShape.test.ts:44`
-- `src/services/principleVoice.lineShape.test.ts:64`
-- `src/services/principleVoice.lineShape.test.ts:72`
+- `src/services/principleVoice.lineShape.test.ts:45`
+- `src/services/principleVoice.lineShape.test.ts:65`
+- `src/services/principleVoice.lineShape.test.ts:73`
 - `src/services/principleVoice.test.ts:14`
 - `src/services/principleVoice.test.ts:26`
 - `src/services/principleVoice.test.ts:27`
@@ -112,12 +112,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.mcconnell1000.test.ts:22`
 - `src/services/replayFence.sicilian1200.test.ts:57`
 - `src/services/replayFence.sicilian1200.test.ts:64`
-- `src/services/tradedActiveNamesTheirPiece.test.ts:21`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:22`
 - `src/services/walkOct2a.test.ts:173`
 
 ### `renderFundamentalVerdict` (function) — 55 call sites
-- `src/services/blockedOwnRetreat.test.ts:33`
-- `src/services/coachFeatureService.ts:3352`
+- `src/services/blockedOwnRetreat.test.ts:34`
+- `src/services/coachFeatureService.ts:3453`
 - `src/services/forcingStemNoDecisive.test.ts:18`
 - `src/services/forcingStemNoDecisive.test.ts:23`
 - `src/services/fundLeadStems.test.ts:60`
@@ -127,26 +127,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts:83`
 - `src/services/fundamentalHow.test.ts:92`
 - `src/services/learnFundamentalNarration.ts:114`
-- `src/services/learnWalkBlumenfeld.test.ts:77`
+- `src/services/learnWalkBlumenfeld.test.ts:78`
 - `src/services/learnWalkOct3c.test.ts:82`
-- `src/services/misconceptionClassifier.ts:300`
-- `src/services/principleAttribution.guardRemoval.test.ts:27`
-- `src/services/principleAttribution.guardRemoval.test.ts:58`
+- `src/services/misconceptionClassifier.ts:302`
+- `src/services/principleAttribution.guardRemoval.test.ts:28`
+- `src/services/principleAttribution.guardRemoval.test.ts:62`
 - `src/services/principleAttribution.moveOrder.test.ts:23`
 - `src/services/principleAttribution.pinBreak.test.ts:29`
 - `src/services/principleAttribution.pinBreak.test.ts:51`
-- `src/services/principleAttribution.pinPressure.test.ts:26`
-- `src/services/principleAttribution.pinPressure.test.ts:61`
-- `src/services/principleAttribution.section14.test.ts:193`
-- `src/services/principleAttribution.section14.test.ts:196`
-- `src/services/principleAttribution.walkedIntoTactic.test.ts:36`
+- `src/services/principleAttribution.pinPressure.test.ts:27`
+- `src/services/principleAttribution.pinPressure.test.ts:65`
+- `src/services/principleAttribution.section14.test.ts:201`
+- `src/services/principleAttribution.section14.test.ts:204`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts:37`
 - `src/services/principleAttributionEndgame.test.ts:50`
 - `src/services/principleAttributionEvalPv.test.ts:78`
 - `src/services/principleAttributionEvalPv.test.ts:91`
 - `src/services/principleAttributionEvalPv.test.ts:100`
-- `src/services/principleVoice.lineShape.test.ts:44`
-- `src/services/principleVoice.lineShape.test.ts:64`
-- `src/services/principleVoice.lineShape.test.ts:72`
+- `src/services/principleVoice.lineShape.test.ts:45`
+- `src/services/principleVoice.lineShape.test.ts:65`
+- `src/services/principleVoice.lineShape.test.ts:73`
 - `src/services/principleVoice.test.ts:14`
 - `src/services/principleVoice.test.ts:26`
 - `src/services/principleVoice.test.ts:27`
@@ -168,17 +168,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.mcconnell1000.test.ts:22`
 - `src/services/replayFence.sicilian1200.test.ts:57`
 - `src/services/replayFence.sicilian1200.test.ts:64`
-- `src/services/reviewFullData.ts:745`
-- `src/services/tradedActiveNamesTheirPiece.test.ts:21`
+- `src/services/reviewFullData.ts:750`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:22`
 - `src/services/walkOct2a.test.ts:173`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:3363`
+- `src/services/coachFeatureService.ts:3464`
 - `src/services/principleVoice.test.ts:40`
 - `src/services/principleVoice.test.ts:42`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:6341`
+- `src/services/coachFeatureService.ts:6472`
 - `src/services/principleVoice.test.ts:50`
 - `src/services/principleVoice.test.ts:55`
 - `src/services/principleVoice.test.ts:59`

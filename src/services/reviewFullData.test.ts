@@ -317,9 +317,10 @@ describe('D-8 (WO-STANDARD-01, 2026-09-22) — the [eval] facet needs a real shi
     const c2 = new Chess(A2); c2.move('d5');
     const f = loose(A2, c2.fen(), 'd5', 1, 'white');
     expect(f.length).toBe(1);
-    expect(f[0]).toMatch(/lost (its|their) last defender/);
-    // One knight on the board: named by what it is, e5 lit (pieceRef).
-    expect(f[0]).toMatch(/Your knight has lost/);
+    expect(f[0]).toMatch(/lost (its|their) last (guard|defender)|Nothing guards .* any more/);
+    // The one hanging producer names the piece and its square, on every
+    // surface (WO-DEPTH-01): a warning is specific.
+    expect(f[0]).toMatch(/[Yy]our knight on e5/);
   });
   it('a piece the move ATTACKS is not "newly undefended" — the attack line owns it (review walk 2026-09-27)', () => {
     expect(loose(A, B, 'd4', 1, 'white')).toEqual([]);

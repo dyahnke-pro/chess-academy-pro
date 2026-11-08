@@ -24,3 +24,19 @@ describe('a move "drops" only what their line takes', () => {
     });
   }
 });
+
+// HOW IT FALLS, NOT ONLY THAT IT FALLS (WO-DEPTH-01, David 2026-11-08: "Every
+// part of the app needs to have deeper reasoning than a surface evaluation").
+// "Bg5+? That drops the bishop on f7." said that the bishop goes; the line the
+// engine plays says how — their king takes it.
+describe('a dropped piece is said with the move that takes it', () => {
+  it('Bg5+ after ply 26: their king takes the bishop on f7', async () => {
+    const { ruleOuts } = await import('./deliberation');
+    const p = at(26);
+    if (!p) throw new Error('ply 26 missing');
+    const d = buildDeliberation({ analysis: analysisOf(p.after), fenBefore: p.fenAfter, moverColor: 'w', opponentLastSan: p.san, maxCandidates: 6 });
+    const alt = d?.alternatives.find((a) => a.san === 'Bg5+');
+    expect(alt?.drops).toMatchObject({ square: 'f7', line: ['Kxf7'], moved: false });
+    expect(d && ruleOuts(d, new Set()).find((r) => r.san === 'Bg5+')?.text).toBe('Bg5+? Then they play Kxf7, and the bishop on f7 is lost.');
+  });
+});

@@ -70,6 +70,7 @@ import { planRaceClause, planRaceProof, pawnSquareTaken, pawnSquareRaceProof } f
 import { kingReadsForBestLine } from './kingAttackReads';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
 import { pieceWish } from './pieceWish';
+import { hangingLine, lostLastGuard } from './hangingLine';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import type { SaidSet } from './gameStory';
 import { renderFundamentalVerdict } from './principleVoice';
@@ -88,8 +89,6 @@ import { playItAnyway } from './opponentMovePurpose';
 import { knownAttack } from './attackLibrary';
 import { studentMoveStructure, theirMoveStructure, boardStructure, type StructureRead } from './structureReads';
 import type { HeardVerdict } from '../types';
-
-interface Located { type: string; color: Color; square: string; }
 
 /** Has `color`'s king reached a castled square (g/c file on its back rank)? */
 function kingCastled(chess: Chess, color: Color): boolean {
@@ -983,34 +982,26 @@ export function computeMoveFacets(
       // one and is newly hit is "hanging" (review walk 2026-10-04, G3 37…Kc7:
       // "Newly undefended: their rook on d1" — nothing had ever defended it;
       // the king step opened the d-file onto it).
-      const hadDefender = (sq: string, piece: string, color: 'w' | 'b'): boolean => {
-        try {
-          const b = new Chess(fenBefore);
-          const at = b.get(sq as Square);
-          return !!at && at.type === piece.toLowerCase() && at.color === color && b.attackers(sq as Square, color).length > 0;
-        } catch { return false; }
-      };
-      const lostDefender = fresh.filter((h) => hadDefender(h.square, h.piece, h.color));
-      const newlyHit = fresh.filter((h) => !hadDefender(h.square, h.piece, h.color));
-      // Spoken as sentences, never as a label (review tape 2026-10-15: "Now
-      // hanging: your rook on a8, your knight on e2." read like a UI tag).
-      for (const [group, lost] of [[lostDefender, true], [newlyHit, false]] as const) {
-        if (group.length === 0) continue;
-        const many = group.length > 1;
-        const desc = seat(andList(group.map((h) => `${pieceWord(h.piece)} on ${h.square}`)));
-        const said = lost
-          ? `${many ? 'have' : 'has'} lost ${many ? 'their' : 'its'} last defender`
-          : `${many ? 'are' : 'is'} now hanging`;
-        const line = `${openSentence(desc)} ${said}.`;
-        const sqs = group.map((h) => h.square);
-        // YOUR pieces with you to move: the threat Learn warns of, with the
-        // same proof and stakes (`threatCost`, the one registry).
-        const yours = !isStudent && !!studentColorWB && group.every((h) => h.color === studentColorWB);
-        const tc = yours && studentColorWB ? readBoardAll('threatCost', { line, fen: fenAfter, student: studentColorWB, squares: sqs })[0] ?? null : null;
-        const f = put(tc?.computer ?? 'computeMoveFacets', 'loose', tc?.text ?? line);
-        recSquares(f, tc?.squares ?? sqs);
-        if (tc && isProof(tc.proof)) recProof(f, tc.proof);
-        recStakes(f, tc?.stakes ?? exchangeStakes(fenAfter, sqs));
+      const lostDefender = fresh.filter((h) => lostLastGuard(fenBefore, h.square));
+      const newlyHit = fresh.filter((h) => !lostLastGuard(fenBefore, h.square));
+      // Said by the ONE producer Learn's warning speaks too (`hangingLine`,
+      // WO-DEPTH-01): the piece, that nothing guards it, and what it means for
+      // whoever is to move. Grouped by side, so one sentence is one seat.
+      for (const [group0, lost] of [[lostDefender, true], [newlyHit, false]] as const) {
+        for (const group of (['w', 'b'] as const).map((c) => group0.filter((h) => h.color === c))) {
+          if (group.length === 0) continue;
+          const line = hangingLine({ fen: fenAfter, squares: group.map((h) => h.square), viewer: studentColorWB ?? null, lostGuard: lost, still: false });
+          if (!line) continue;
+          const sqs = group.map((h) => h.square);
+          // YOUR pieces with you to move: the threat Learn warns of, with the
+          // same proof and stakes (`threatCost`, the one registry).
+          const yours = !isStudent && !!studentColorWB && group.every((h) => h.color === studentColorWB);
+          const tc = yours && studentColorWB ? readBoardAll('threatCost', { line, fen: fenAfter, student: studentColorWB, squares: sqs })[0] ?? null : null;
+          const f = put(tc?.computer ?? 'computeMoveFacets', 'loose', tc?.text ?? line);
+          recSquares(f, tc?.squares ?? sqs);
+          if (tc && isProof(tc.proof)) recProof(f, tc.proof);
+          recStakes(f, tc?.stakes ?? exchangeStakes(fenAfter, sqs));
+        }
       }
     }
   } catch { /* ignore */ }
@@ -1135,7 +1126,7 @@ export function computeMoveFacets(
     // speaking.
     const movedTo = isStudent ? ((): string | null => { try { return new Chess(fenBefore).move(san).to; } catch { return null; } })() : null;
     const wish = pieceWish(fenAfter, studentColorWB, movedTo);
-    if (wish) { const f = put('pieceWish', 'worst', wish.text); recSquares(f, [wish.square, wish.via, wish.target]); }
+    if (wish) { const f = put('pieceWish', 'worst', wish.text); recSquares(f, [wish.square, ...wish.via, wish.target]); }
     const passer = struct?.pawns.passedPawns[studentColorWB][0] ?? null; // reuse §5's struct
     // Not on the move that PUSHES it — the move's own point says "pushes your
     // passed pawn" (amateur review walk 2026-09-27: both, one ply).
