@@ -44,18 +44,26 @@
 - The better move's arrow was drawn on every costly move, said or not (the Rac8 ply drew their Kg8 with no words): now only where the beat names it. "left e5 weak" is a square, not a move.
 - Left: named moves inside hypotheticals ("with it back on f4, gxh6 would cost you a bishop") and a threat a move stopped ("it stops the mate with Qxg7") — moves on a board that is not on screen.
 
-## 🎼 OPENING NARRATION — minimal, and only where the move order or the square goes wrong (David 2026-11-07, NOT BUILT: five behaviour questions open)
+## 🎼 OPENING NARRATION + REVIEW'S DEEP DIVE (David 2026-11-07 spec; answers 2026-11-08)
 
 David 2026-11-07: "Minimal spoken words, I want the opening and variation named (as it does) but then i want to hear if i make a move order mistake, or put a piece on a square that goes against the pro lines. I want to hear why the move order matters (maybe in some cases it doesn't, so no narration is required) and if placed on a wrong square I want to hear why the other square was best (does it defend the center, attack a weakness, or is the piece hanging where I put it, that sort of thing)."
 
-Asked back the same day, unanswered (his calls, they decide the build):
-1. Where: Learn free play only, or also the Openings Play tab and Review?
-2. "Pro lines": the masters' book for that opening, or the pro's own repertoire when one was picked?
-3. A book departure the engine calls just as good (a transposition, a fine second square): silent? (Proposed: silent; speak only when the book move is concretely better — their reply punishes the order, or the piece hangs or does less on its square.)
-4. Their departures: say nothing, or name the new line?
-5. "Minimal": in the opening does everything else go quiet (plan talk, theory, the coach's own book moves), leaving the name, the variation and the student's departures?
+**Decided 2026-11-08:**
+1. **Where:** Learn and the Openings Play rung say it identically. **Review is the deeper dive**: why the move order matters, the tactics an improper order allows (or the one it takes away), the inaccuracies the opponent can make that hand the student a tactic — in the opening and the same through the middlegame and endgame. Review's teaching dials at 10. ("We can talk about this" — design to David before build.)
+2. **Whose lines:** in a pro opening tab, that pro's pet lines; where the pro's games are too thin, the masters' lines.
+3. **A different line stays silent** when it neither creates a tactical opportunity nor takes one away from the student. It may name "the more flexible" book move, and say the order's reason ("the bishop wants to pin the knight, so wait for their knight to come out before moving it").
+4. **Their departures:** say when they leave the book.
+5. **Everything else stays** for now (the plan talk, the theory, the coach's own book moves). LATER WORK: the theory explanations adapt to the student by algorithm — someone who plays the same opening every game may not want the theory again.
 
-Computers it would read (exist): `detectOpeningByOrder` (name + variation), the masters' tree (`masterTreeAt`), `moveOrder` / `theoryDeparture`, `squareChoice` / `weighedMoves` (which square, and why the other was better), `bookMoveWhy` (the book move's job).
+Computers it reads (exist): `detectOpeningByOrder` (name + variation), the masters' tree (`masterTreeAt`), the pro's tree, `moveOrder` / `theoryDeparture`, `squareChoice` / `weighedMoves`, `bookMoveWhy`, the tactic readers (`detectTactics`, `setUpChance`, `ifTheyPlay`) for "creates or takes away a tactic".
+
+**The other answers, same day:**
+- **All-section depth:** Stockfish's best moves fill the main line past the data floor; club games give the variations.
+- **R1 (Review's candidate reads):** only for new games — no top-up on open. The `phase2-l5-r1` branch's top-up is not merged.
+- **The bait's record:** the punish half only (they fell for it, did the student cash in). Repeatedly missing a set-up is noted as a weakness the coach teaches, with set-up positions on the board.
+- **The step-3 test-run defects:** fix.
+- **Next audit:** a computer wiring check (`computer-reach.mjs`) — every computer green, and the deciding engine choosing the right lines to speak.
+- **Budget (David 2026-11-08):** 25% of the usage limit for two days. Agents approved, used sparingly: at most two at once, small briefs, results saved as they finish.
 
 ## 📱 iPHONE TAPS LAND A ROW LOW — the web view's inset (David 2026-11-06, TestFlight 4.0.8 (211): "Tired pressing the knight, but it hit the pawn" → "Coach tab / All surfaces / They don't work on my end")
 

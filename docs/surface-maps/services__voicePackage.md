@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**679 lines · 12 exports · 25 importers · 18 tests · 2 audits**
+**693 lines · 12 exports · 26 importers · 18 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,6 +31,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/proof.ts`
 - `src/services/prophylaxis.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
+- `src/services/reviewFacet.ts`
 - `src/services/ruleGradeFen.test.ts`
 - `src/services/speedRunReads.scale.test.ts`
 - `src/services/thoughtComposer.ts`
@@ -70,11 +71,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/slipQuestion.test.ts:53`
 - `src/services/thoughtComposer.ts:287`
 
-### `buildVoicePackage` (function) — 89 call sites
+### `buildVoicePackage` (function) — 91 call sites
 - `src/components/Coach/CoachGameReview.tsx:1935`
 - `src/components/Coach/CoachTeachPage.tsx:8980`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:3216`
+- `src/services/coachFeatureService.ts:3325`
 - `src/services/coachSurfaceScorecard.report.test.ts:113`
 - `src/services/coachSurfaceScorecard.report.test.ts:135`
 - `src/services/computedVoiceAudit.report.test.ts:310`
@@ -100,7 +101,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.dependentFact.test.ts:28`
 - `src/services/voicePackage.orphanTail.test.ts:23`
 - `src/services/voicePackage.orphanTail.test.ts:30`
-- `src/services/voicePackage.orphanTail.test.ts:36`
+- `src/services/voicePackage.orphanTail.test.ts:38`
+- `src/services/voicePackage.orphanTail.test.ts:45`
+- `src/services/voicePackage.orphanTail.test.ts:50`
 - `src/services/voicePackage.test.ts:19`
 - `src/services/voicePackage.test.ts:32`
 - `src/services/voicePackage.test.ts:44`
@@ -168,7 +171,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:12136`
 - `src/components/Coach/CoachTeachPage.tsx:12335`
 - `src/services/claimKeysLooseCount.test.ts:34`
-- `src/services/coachFeatureService.ts:3219`
+- `src/services/coachFeatureService.ts:3328`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/learnTurnDoor.phaseWave.test.ts:134`
 - `src/services/learnTurnDoor.test.ts:661`

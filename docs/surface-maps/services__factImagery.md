@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**54 lines · 3 exports · 4 importers · 2 tests · 0 audits**
+**53 lines · 3 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,14 +26,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `imageryFor` (function) — 8 call sites
-- `src/services/exchangeIdeas.test.ts:236`
-- `src/services/exchangeIdeas.test.ts:237`
-- `src/services/exchangeIdeas.test.ts:238`
-- `src/services/exchangeIdeas.ts:916`
+- `src/services/exchangeIdeas.test.ts:225`
+- `src/services/exchangeIdeas.test.ts:226`
+- `src/services/exchangeIdeas.test.ts:227`
+- `src/services/exchangeIdeas.ts:876`
 - `src/services/factImagery.test.ts:11`
 - `src/services/factImagery.test.ts:15`
 - `src/services/factImagery.test.ts:19`
-- `src/services/reviewFullData.ts:1015`
+- `src/services/reviewFullData.ts:1125`
 
 ## Tests
 

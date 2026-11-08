@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**107 lines · 6 exports · 3 importers · 2 tests · 2 audits**
+**114 lines · 6 exports · 3 importers · 2 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,22 +29,22 @@
 
 ### `reviewFacet` (function) — 3 call sites
 - `src/services/coachFeatureService.reviewNoise.test.ts:27`
-- `src/services/coachFeatureService.ts:2245`
+- `src/services/coachFeatureService.ts:2250`
 - `src/services/reviewFullData.ts:334`
 
 ### `reworded` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:2712`
-- `src/services/coachFeatureService.ts:2825`
-- `src/services/coachFeatureService.ts:2849`
-- `src/services/coachFeatureService.ts:2921`
-- `src/services/coachFeatureService.ts:2961`
+- `src/services/coachFeatureService.ts:2739`
+- `src/services/coachFeatureService.ts:2875`
+- `src/services/coachFeatureService.ts:2899`
+- `src/services/coachFeatureService.ts:2983`
+- `src/services/coachFeatureService.ts:3023`
 
 ### `asIncoming` (function) — 1 call site
 - `src/services/reviewFullData.ts:338`
 
 ### `inRuleFamily` (function) — 2 call sites
-- `src/services/reviewFullData.ts:734`
-- `src/services/reviewFullData.ts:1344`
+- `src/services/reviewFullData.ts:738`
+- `src/services/reviewFullData.ts:1355`
 
 ## Tests
 

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2091 lines · 15 exports · 60 importers · 46 tests · 1 audits**
+**2103 lines · 15 exports · 62 importers · 46 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6829) — names `FundamentalId`, `principleAttribution`
+- **The standard post-deploy ritual** (CLAUDE.md:6939) — names `FundamentalId`, `principleAttribution`
 
 ## Who calls in
 
@@ -20,6 +20,7 @@
 - `src/services/attributionNeverBlind.test.ts`
 - `src/services/autoAnalyzeGame.ts`
 - `src/services/blockedOwnRetreat.test.ts`
+- `src/services/boardComputers.ts`
 - `src/services/capabilityEvidence.ts`
 - `src/services/causalChain.ts`
 - `src/services/claimTruth.manual.test.ts`
@@ -43,6 +44,7 @@
 - `src/services/misconceptionClassifier.ts`
 - `src/services/mistakePuzzleService.ts`
 - `src/services/moveFundamentals.pinPressure.test.ts`
+- `src/services/moveThoughtFacts.ts`
 - `src/services/principleAttribution.guardRemoval.test.ts`
 - `src/services/principleAttribution.moveOrder.test.ts`
 - `src/services/principleAttribution.pinBreak.test.ts`
@@ -109,15 +111,15 @@
 - `src/services/misconceptionClassifier.ts:339`
 
 ### `planTargets` (function) — 2 call sites
-- `src/services/principleAttribution.section14.test.ts:141`
-- `src/services/principleAttribution.section14.test.ts:152`
+- `src/services/principleAttribution.section14.test.ts:142`
+- `src/services/principleAttribution.section14.test.ts:153`
 
-### `attributePrinciples` (function) — 119 call sites
+### `attributePrinciples` (function) — 120 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
-- `src/services/blockedOwnRetreat.test.ts:23`
-- `src/services/blockedOwnRetreat.test.ts:32`
-- `src/services/blockedOwnRetreat.test.ts:42`
-- `src/services/blockedOwnRetreat.test.ts:46`
+- `src/services/blockedOwnRetreat.test.ts:24`
+- `src/services/blockedOwnRetreat.test.ts:33`
+- `src/services/blockedOwnRetreat.test.ts:43`
+- `src/services/blockedOwnRetreat.test.ts:47`
 - `src/services/claimTruth.manual.test.ts:11`
 - `src/services/claimTruth.manual.test.ts:13`
 - `src/services/claimTruth.manual.test.ts:19`
@@ -127,48 +129,48 @@
 - `src/services/claimTruth.manual.test.ts:180`
 - `src/services/claimTruth.manual.test.ts:185`
 - `src/services/claimTruth.manual.test.ts:193`
-- `src/services/coachFeatureService.ts:826`
+- `src/services/coachFeatureService.ts:967`
 - `src/services/learnWalkBlumenfeld.test.ts:67`
 - `src/services/liveFundamental.ts:145`
 - `src/services/misconceptionClassifier.ts:277`
-- `src/services/principleAttribution.guardRemoval.test.ts:17`
-- `src/services/principleAttribution.guardRemoval.test.ts:33`
-- `src/services/principleAttribution.guardRemoval.test.ts:40`
-- `src/services/principleAttribution.guardRemoval.test.ts:50`
-- `src/services/principleAttribution.guardRemoval.test.ts:63`
-- `src/services/principleAttribution.moveOrder.test.ts:16`
-- `src/services/principleAttribution.moveOrder.test.ts:29`
-- `src/services/principleAttribution.moveOrder.test.ts:33`
-- `src/services/principleAttribution.pinBreak.test.ts:23`
+- `src/services/principleAttribution.guardRemoval.test.ts:18`
+- `src/services/principleAttribution.guardRemoval.test.ts:34`
+- `src/services/principleAttribution.guardRemoval.test.ts:41`
+- `src/services/principleAttribution.guardRemoval.test.ts:51`
+- `src/services/principleAttribution.guardRemoval.test.ts:64`
+- `src/services/principleAttribution.moveOrder.test.ts:17`
+- `src/services/principleAttribution.moveOrder.test.ts:30`
+- `src/services/principleAttribution.moveOrder.test.ts:34`
 - `src/services/principleAttribution.pinBreak.test.ts:24`
-- `src/services/principleAttribution.pinBreak.test.ts:33`
-- `src/services/principleAttribution.pinBreak.test.ts:45`
+- `src/services/principleAttribution.pinBreak.test.ts:25`
+- `src/services/principleAttribution.pinBreak.test.ts:34`
 - `src/services/principleAttribution.pinBreak.test.ts:46`
-- `src/services/principleAttribution.pinBreak.test.ts:55`
-- `src/services/principleAttribution.pinPressure.test.ts:15`
-- `src/services/principleAttribution.pinPressure.test.ts:34`
-- `src/services/principleAttribution.pinPressure.test.ts:41`
-- `src/services/principleAttribution.pinPressure.test.ts:52`
-- `src/services/principleAttribution.pinPressure.test.ts:66`
-- `src/services/principleAttribution.pinPressure.test.ts:74`
-- `src/services/principleAttribution.section14.test.ts:27`
-- `src/services/principleAttribution.section14.test.ts:37`
-- `src/services/principleAttribution.section14.test.ts:46`
-- `src/services/principleAttribution.section14.test.ts:51`
-- `src/services/principleAttribution.section14.test.ts:68`
-- `src/services/principleAttribution.section14.test.ts:78`
-- `src/services/principleAttribution.section14.test.ts:86`
-- `src/services/principleAttribution.section14.test.ts:89`
-- `src/services/principleAttribution.section14.test.ts:92`
+- `src/services/principleAttribution.pinBreak.test.ts:47`
+- `src/services/principleAttribution.pinBreak.test.ts:56`
+- `src/services/principleAttribution.pinPressure.test.ts:16`
+- `src/services/principleAttribution.pinPressure.test.ts:35`
+- `src/services/principleAttribution.pinPressure.test.ts:42`
+- `src/services/principleAttribution.pinPressure.test.ts:53`
+- `src/services/principleAttribution.pinPressure.test.ts:67`
+- `src/services/principleAttribution.pinPressure.test.ts:75`
+- `src/services/principleAttribution.section14.test.ts:28`
+- `src/services/principleAttribution.section14.test.ts:38`
+- `src/services/principleAttribution.section14.test.ts:47`
+- `src/services/principleAttribution.section14.test.ts:52`
+- `src/services/principleAttribution.section14.test.ts:69`
+- `src/services/principleAttribution.section14.test.ts:79`
+- `src/services/principleAttribution.section14.test.ts:87`
+- `src/services/principleAttribution.section14.test.ts:90`
 - `src/services/principleAttribution.section14.test.ts:93`
-- `src/services/principleAttribution.section14.test.ts:118`
-- `src/services/principleAttribution.section14.test.ts:129`
-- `src/services/principleAttribution.section14.test.ts:133`
-- `src/services/principleAttribution.section14.test.ts:160`
-- `src/services/principleAttribution.section14.test.ts:164`
-- `src/services/principleAttribution.section14.test.ts:173`
-- `src/services/principleAttribution.section14.test.ts:209`
-- `src/services/principleAttribution.section14.test.ts:223`
+- `src/services/principleAttribution.section14.test.ts:94`
+- `src/services/principleAttribution.section14.test.ts:119`
+- `src/services/principleAttribution.section14.test.ts:130`
+- `src/services/principleAttribution.section14.test.ts:134`
+- `src/services/principleAttribution.section14.test.ts:161`
+- `src/services/principleAttribution.section14.test.ts:165`
+- `src/services/principleAttribution.section14.test.ts:174`
+- `src/services/principleAttribution.section14.test.ts:210`
+- `src/services/principleAttribution.section14.test.ts:224`
 - `src/services/principleAttribution.test.ts:20`
 - `src/services/principleAttribution.test.ts:39`
 - `src/services/principleAttribution.test.ts:47`
@@ -186,28 +188,29 @@
 - `src/services/principleAttribution.test.ts:135`
 - `src/services/principleAttribution.test.ts:143`
 - `src/services/principleAttribution.test.ts:152`
-- `src/services/principleAttribution.walkedIntoTactic.test.ts:29`
-- `src/services/principleAttribution.walkedIntoTactic.test.ts:44`
-- `src/services/principleAttributionEndgame.test.ts:43`
-- `src/services/principleAttributionEndgame.test.ts:57`
-- `src/services/principleAttributionEvalPv.test.ts:73`
-- `src/services/principleAttributionEvalPv.test.ts:87`
-- `src/services/principleAttributionEvalPv.test.ts:97`
-- `src/services/principleAttributionEvalPv.test.ts:112`
-- `src/services/principleAttributionEvalPv.test.ts:114`
-- `src/services/principleAttributionEvalPv.test.ts:126`
-- `src/services/principleAttributionEvalPv.test.ts:146`
-- `src/services/principleAttributionEvalPv.test.ts:149`
-- `src/services/principleVoice.lineShape.test.ts:30`
-- `src/services/principleVoice.test.ts:9`
-- `src/services/principleVoice.test.ts:141`
-- `src/services/principleVoice.test.ts:154`
-- `src/services/principleVoice.test.ts:158`
-- `src/services/principleVoice.test.ts:162`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts:30`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts:45`
+- `src/services/principleAttributionEndgame.test.ts:44`
+- `src/services/principleAttributionEndgame.test.ts:58`
+- `src/services/principleAttributionEvalPv.test.ts:74`
+- `src/services/principleAttributionEvalPv.test.ts:88`
+- `src/services/principleAttributionEvalPv.test.ts:98`
+- `src/services/principleAttributionEvalPv.test.ts:113`
+- `src/services/principleAttributionEvalPv.test.ts:115`
+- `src/services/principleAttributionEvalPv.test.ts:127`
+- `src/services/principleAttributionEvalPv.test.ts:147`
+- `src/services/principleAttributionEvalPv.test.ts:150`
+- `src/services/principleAttributionEvalPv.test.ts:160`
+- `src/services/principleVoice.lineShape.test.ts:31`
+- `src/services/principleVoice.test.ts:10`
+- `src/services/principleVoice.test.ts:142`
+- `src/services/principleVoice.test.ts:155`
+- `src/services/principleVoice.test.ts:159`
+- `src/services/principleVoice.test.ts:163`
 - `src/services/replayFence.bowdler1000.test.ts:37`
 - `src/services/replayFence.modern1690.test.ts:33`
-- `src/services/replayFence.sicilian1200.test.ts:30`
-- `src/services/replayFence.sicilian1200.test.ts:50`
+- `src/services/replayFence.sicilian1200.test.ts:31`
+- `src/services/replayFence.sicilian1200.test.ts:51`
 - `src/services/section14Coverage.measure.test.ts:77`
 - `src/services/section14Diagnosis.test.ts:21`
 - `src/services/section14Diagnosis.test.ts:25`
@@ -222,36 +225,37 @@
 - `src/services/sweepCarriesPv.test.ts:145`
 - `src/services/sweepCarriesPv.test.ts:162`
 - `src/services/sweepPassesEngineLines.test.ts:91`
-- `src/services/tradedActiveNamesTheirPiece.test.ts:13`
-- `src/services/tradedActiveNamesTheirPiece.test.ts:25`
-- `src/services/tradedActiveNamesTheirPiece.test.ts:34`
-- `src/services/tradedActiveNamesTheirPiece.test.ts:46`
-- `src/services/tradedActiveNamesTheirPiece.test.ts:53`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:14`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:26`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:35`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:47`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:54`
 - `src/services/walkOct1Learn.test.ts:94`
-- `src/services/walkOct2a.test.ts:77`
+- `src/services/walkOct2a.test.ts:78`
 - `src/services/yieldHonoured.test.ts:33`
 - `src/services/yieldHonoured.test.ts:69`
 - `src/services/yieldHonoured.test.ts:70`
 
-### `pvSanToUci` (function) — 2 call sites
+### `pvSanToUci` (function) — 3 call sites
 - `src/services/misconceptionClassifier.ts:563`
-- `src/services/mistakePuzzleService.ts:1143`
+- `src/services/mistakePuzzleService.ts:1165`
+- `src/services/moveThoughtFacts.ts:284`
 
 ### `pvUciToSan` (function) — 14 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
+- `src/services/autoAnalyzeGame.ts:669`
 - `src/services/autoAnalyzeGame.ts:672`
-- `src/services/autoAnalyzeGame.ts:675`
-- `src/services/capabilityEvidence.ts:519`
-- `src/services/coachFeatureService.ts:831`
-- `src/services/coachFeatureService.ts:833`
-- `src/services/discussionPractice.ts:436`
-- `src/services/discussionPractice.ts:444`
+- `src/services/capabilityEvidence.ts:534`
+- `src/services/coachFeatureService.ts:972`
+- `src/services/coachFeatureService.ts:974`
+- `src/services/discussionPractice.ts:452`
+- `src/services/discussionPractice.ts:460`
 - `src/services/liveFundamental.ts:135`
 - `src/services/liveFundamental.ts:142`
 - `src/services/principleAttribution.test.ts:46`
 - `src/services/recordRevs.gate.test.ts:81`
-- `src/services/teachMistakeWhy.test.ts:83`
+- `src/services/teachMistakeWhy.test.ts:84`
 
 ## Tests
 
