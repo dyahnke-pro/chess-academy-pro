@@ -360,7 +360,7 @@ export const COMPUTER_CATALOG = {
   royalDefenderTarget: { file: 'services/reviewTeachingPoints.ts', says: 'the piece that guards their king, and the way to remove it' },
   rookOnSeventh: { file: 'services/reviewTeachingPoints.ts', says: 'a rook on the seventh rank' },
   badEnemyBishop: { file: 'services/reviewTeachingPoints.ts', says: 'their bishop hemmed in by its own pawns' },
-  worstPlacedFriendlyPiece: { file: 'services/reviewTeachingPoints.ts', says: 'the student\'s worst-placed piece' },
+  pieceWish: { file: 'services/pieceWish.ts', says: 'the student\'s bad or idle piece, the square it wants and why' },
   passedPawnPush: { file: 'services/reviewTeachingPoints.ts', says: 'a passed pawn and its push' },
   findMinorityAttack: { file: 'services/positionReadingService.ts', says: 'a minority attack and the weak pawn it leaves' },
   findColorComplexWeakness: { file: 'services/positionReadingService.ts', says: 'squares of one colour no bishop or pawn can cover' },

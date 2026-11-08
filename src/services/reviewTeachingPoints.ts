@@ -209,20 +209,6 @@ export function badEnemyBishop(fen: string, studentColorWB: Color): string | nul
   return null;
 }
 
-/**
- * M12 — the student's WORST-PLACED piece: the minor or rook with the fewest legal
- * squares. The "what do I do when there's no tactic" lesson — find it a job. Only
- * fires past the opening and only when a piece is genuinely stuck (≤1 square).
- */
-export function worstPlacedFriendlyPiece(fen: string, studentColorWB: Color): string | null {
-  let chess: Chess;
-  try { chess = new Chess(fen); } catch { return null; }
-  const fullmove = Number(fen.split(' ')[5] ?? '0');
-  if (fullmove < 10) return null;
-  const worst = findWorstPlacedPiece(chess, studentColorWB);
-  if (!worst) return null;
-  return `your worst-placed piece is the ${PIECE_NOUN[worst.type]} on ${worst.sq} — it has almost no squares, so the plan is to reroute it somewhere it actually does a job`;
-}
 
 
 /** Is this piece pinned to its own king (so its immobility is the pin's doing)? */

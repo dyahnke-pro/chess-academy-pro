@@ -59,6 +59,16 @@ describe('gradePlayedMove — grade the played move from the paid-for fan', () =
     expect(g.fault).toBe(true);
   });
 
+  it('the grade says what the move did, never the better move\'s plan (wire-19: movePlan merged into errorWhy)', () => {
+    // O-O was best here. The old grade glued "The real priority here was
+    // getting the king to safety — castling first." onto the hung knight: a
+    // second idea, and the better move named on Learn's live board. The better
+    // move's job is the one error computer's (`errorWhy`), said once it is past.
+    const fenAfter = 'r1bqkbnr/pppp1ppp/2n5/4N3/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 3';
+    const g = gradePlayedMove({ fenBefore: FEN, playedUci: 'f3e5', fenAfter, analysisBefore, studentColor: 'w', depth: 14 })!;
+    expect(g.clause).toBe('careful — that hung the knight on e5.');
+  });
+
   it('returns null when the played move is outside the fan (defer to the faucet)', () => {
     expect(gradePlayedMove({ fenBefore: FEN, playedUci: 'h2h3', fenAfter: FEN, analysisBefore, studentColor: 'w', depth: 14 })).toBeNull();
   });
