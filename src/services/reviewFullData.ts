@@ -1699,8 +1699,8 @@ export function computeMoveFacets(
       // queen now hits your d-pawn, which is loose" then "Your opponent's queen
       // trains on your weak pawn on d5"): the reach keeps it, with its loose
       // claim for the count.
-      || (opp?.kind === undefined && !!opp?.squares?.[1]
-        && facets.some((x) => x.computer === 'describeMoveInfluence' && x.squares.includes(opp.squares![1])));
+      || (!!opp && opp.kind === undefined && opp.squares.length > 1
+        && facets.some((x) => x.computer === 'describeMoveInfluence' && x.squares.includes(opp.squares[1])));
     // ONE LOOSE PIECE, ONE LINE (Review baseline 2026-11-08: "Their bishop now
     // attacks your light-squared bishop, which is loose … Watch out — that
     // bishop attacks your bishop on b7, and nothing defends it"). The reach
