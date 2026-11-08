@@ -1430,6 +1430,13 @@ export function errorWhy(args: {
     && !(bestSan && bestWinsOnBoard(args.fenBefore, bestSan))
     ? (() => { try { return positionalReason({ fen: args.fenBefore, playedSan: args.playedSan, bestSan, namesBetterMove: args.namesBetterMove })?.note ?? null; } catch { return null; } })()
     : null;
+  // THE REPLY THE CONSEQUENCE NAMED, whichever reader named it (prod Review
+  // audit 2026-11-08, Carlsen–Caruana 26…Qd4: "it let them play Re4, which
+  // attacks the queen" came from the single-reply reader and was not recorded,
+  // so their favour read said the same Re4 again). Plain SAN, as the
+  // punishment reader gives it.
+  const namedReply = punishment?.first
+    ?? (() => { const l = (single ?? allowed)?.line; if (!l?.uci[0]) return null; try { const c = new Chess(l.fen); const u = l.uci[0]; return c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] })?.san ?? null; } catch { return null; } })();
   // The piece a mechanism left to be taken is the lost square too, so a
   // fundamental naming the same hung piece stays quiet (one fact once).
   const failedLost = failedRead?.lost ?? undefined;
@@ -1448,7 +1455,7 @@ export function errorWhy(args: {
     ...(punishment?.lostSquare ?? failedLost ?? replyTaken ? { lostSquare: punishment?.lostSquare ?? failedLost ?? replyTaken } : {}),
     ...((should || mateSaid) && bestSan ? { namesBetter: bestSan } : {}),
     ...(pattern ? { pattern } : {}),
-    ...(args.allowedMate === null && punishment?.first ? { punishFirst: punishment.first } : {}),
+    ...(args.allowedMate === null && namedReply ? { punishFirst: namedReply } : {}),
     ...(failed && (failedRead?.kind === 'abandoned-square' || failedRead?.kind === 'abandoned-defender') && failedRead.squares[0] ? { guardLeft: failedRead.squares[0] } : {}),
   };
 }

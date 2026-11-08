@@ -22,6 +22,21 @@ describe('Review says each claim once a move (Carlsen–Caruana)', () => {
     expect(at(67)).not.toMatch(/prises open their king's cover/);
   });
 
+  it('26…Qd4: the rook to e4 hitting their queen is said once — by the verdict, not again as their favour', () => {
+    expect(at(52)).toMatch(/It let you play Re4, which attacks the queen on d4/);
+    expect(at(52)).not.toMatch(/gain of time/);
+  });
+
+  it('22…Nh5: the f4 their move allowed is said once — by the verdict, not again as their help', () => {
+    expect(at(44)).toMatch(/It let you play f4/);
+    expect(at(44)).not.toMatch(/helps you|does you a favour/);
+  });
+
+  it('26…Qd4: their queen on the loose d5 pawn is said once — by the reach, not again as a weak-pawn target', () => {
+    expect(at(52)).toMatch(/hits your d-pawn, which is loose/);
+    expect(at(52)).not.toMatch(/trains on your weak pawn on d5/);
+  });
+
   it('Review has no think pause: no "‖" mark reaches the walk', () => {
     for (const s of segs) expect(s.narration ?? '').not.toMatch(/‖/);
   });

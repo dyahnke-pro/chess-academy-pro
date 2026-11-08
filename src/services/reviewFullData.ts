@@ -25,6 +25,7 @@ import { forkConsequence } from './tacticVocabulary';
 import { pinConsequence } from './lookaheadPlan';
 import { squareRole } from './squareRole';
 import { Chess, type Color, type Square } from 'chess.js';
+import { uciToSanAt } from './liveFundamental';
 import { landedTacticFor, plyFactsForMove, type PrevCaptureContext } from './pvPlayback';
 import { definitionKey, tacticInvariant } from './conceptEngine';
 import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor, seeSequence } from './positionReadingService';
@@ -1453,7 +1454,17 @@ export function computeMoveFacets(
       ? [{ moves: ctx.playedLineUci, evaluation: ctx.evaluation, mate: storedMate(ctx.evaluation) }] : [];
     const prev = ply >= 2 && ctx.teaching.prevFenBefore && ctx.allSans[ply - 2]
       ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null;
+    // THE VERDICT ALREADY SAID THIS REPLY (prod Review audit 2026-11-08,
+    // Carlsen–Caruana 26…Qd4: "It let you play Re4, which attacks the queen on
+    // d4", then "Their …Qd4 does you a favour: the rook to e4 now comes with
+    // gain of time"). The favour is the engine's reply to their move; when the
+    // verdict names that reply as what their move allowed, the favour is the
+    // same claim. A verdict that names no reply leaves the favour as the line
+    // that says what their move allowed ("it makes the rook to e2 possible").
+    const replySan = lines[0] ? uciToSanAt(fenAfter, lines[0].moves[0]) : null;
+    const verdictSaidReply = !!verdictPunish && !!replySan && verdictPunish.replace(/^…/, '') === replySan;
     for (const r of readTheirMove({ fenBefore, san, student: studentColorWB, topLines: lines, prev, theirMoveFlagged: negativeClass })) {
+      if (r.kind === 'helped-you' && verdictSaidReply) continue;
       const f = put('readTheirMove', READ_FACT_KIND[r.kind], r.text);
       recProof(f, r.proof);
       recStakes(f, r.stakes);
@@ -1682,7 +1693,14 @@ export function computeMoveFacets(
     // opponent development move (walk 5, 2026-09-23). The selector keeps
     // different families apart on purpose (B12), so the restatement is dropped
     // here, where both are known: the influence line (`[does]`, or `[delta]` when it hits no piece) already carries the reach.
-    const restates = opp?.kind === 'influence' && !!influence;
+    const restates = (opp?.kind === 'influence' && !!influence)
+      // …and the weak pawn it trains on, when the reach already names that
+      // square (prod Review audit 2026-11-08, Carlsen–Caruana 26…Qd4: "Their
+      // queen now hits your d-pawn, which is loose" then "Your opponent's queen
+      // trains on your weak pawn on d5"): the reach keeps it, with its loose
+      // claim for the count.
+      || (opp?.kind === undefined && !!opp?.squares?.[1]
+        && facets.some((x) => x.computer === 'describeMoveInfluence' && x.squares.includes(opp.squares![1])));
     // ONE LOOSE PIECE, ONE LINE (Review baseline 2026-11-08: "Their bishop now
     // attacks your light-squared bishop, which is loose … Watch out — that
     // bishop attacks your bishop on b7, and nothing defends it"). The reach

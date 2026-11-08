@@ -34,7 +34,6 @@ import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { lineSeatAt, withArticle } from '../utils/andList';
 import { imageryFor, type ImageryKey } from './factImagery';
 import { unmarked } from '../utils/sanMark';
-import { pieceRef } from './pieceRef';
 
 export type ExchangeIdeaId =
   | 'only-developed' | 'defender-trade' | 'exchange-for-attacker' | 'deny-exchange'

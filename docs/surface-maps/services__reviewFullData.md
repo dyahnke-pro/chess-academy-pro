@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1997 lines · 12 exports · 21 importers · 27 tests · 0 audits**
+**2015 lines · 12 exports · 21 importers · 27 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -37,7 +37,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1169`
+- `src/services/coachFeatureService.ts:1168`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -55,9 +55,9 @@
 - `src/services/batch2Wiring.test.ts:55`
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
-- `src/services/coachFeatureService.ts:2255`
+- `src/services/coachFeatureService.ts:2260`
 - `src/services/danyaBench.measure.test.ts:408`
-- `src/services/exchangeIdeas.test.ts:253`
+- `src/services/exchangeIdeas.test.ts:236`
 - `src/services/forkTrick.test.ts:62`
 - `src/services/hangingVsUndefended.test.ts:13`
 - `src/services/orderComputers.test.ts:315`
@@ -104,13 +104,13 @@
 - `src/services/tacticGeometry.test.ts:268`
 - `src/services/tacticGeometry.test.ts:273`
 - `src/services/unifiedBetterMoveReason.test.ts:39`
-- `src/services/weighedMoves.test.ts:191`
-- `src/services/weighedMoves.test.ts:204`
+- `src/services/weighedMoves.test.ts:194`
+- `src/services/weighedMoves.test.ts:207`
 - `src/test/teach02Wired.test.ts:28`
 - `src/test/teach02Wired.test.ts:68`
 
 ### `computeThroughLine` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:6413`
+- `src/services/coachFeatureService.ts:6432`
 - `src/services/reviewFullData.test.ts:215`
 - `src/services/reviewFullData.test.ts:218`
 - `src/services/reviewFullData.test.ts:226`
