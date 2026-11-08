@@ -11,12 +11,19 @@
 // Writes audit-reports/all-section-depth.json (checkpointed every 200 openings,
 // so a kill loses minutes, never the run).
 import { describe, it, vi } from 'vitest';
-import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, existsSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ON = process.env.ALL_DEPTH === '1';
 const PUBLIC = join(process.cwd(), 'public');
-const OUT = 'audit-reports/all-section-depth.json';
+/** WHAT IF the walk read club games past the stored trees (ALL_DEPTH_CLUB=1):
+ *  the four club-tree months on disk merged (Lichess, 1200–1999, move order to
+ *  move 9), a board taken from them when the stored trees hold fewer than the
+ *  walk's floor and the club games hold at least CLUB_ENOUGH. A measure for
+ *  David's call, not a build: the page reads only the stored trees. */
+const CLUB = process.env.ALL_DEPTH_CLUB === '1';
+const CLUB_ENOUGH = 20;
+const OUT = CLUB ? 'audit-reports/all-section-depth-club.json' : 'audit-reports/all-section-depth.json';
 
 vi.mock('./dataFile', () => ({
   loadDataJson: (path: string): Promise<unknown> => {
@@ -37,6 +44,38 @@ const pct = (n: number, d: number): string => `${d ? Math.round((100 * n) / d) :
 describe.skipIf(!ON)('All-section depth against the curated courses', () => {
   it('measures every opening', async () => {
     const { storedTreeAt } = await import('./deepTree');
+    type Res = NonNullable<Awaited<ReturnType<typeof storedTreeAt>>>;
+    const club = new Map<string, Map<string, [number, number, number]>>();
+    if (CLUB) {
+      const dir = 'data/sources/club-tree';
+      for (const f of readdirSync(dir).filter((x) => x.endsWith('.json'))) {
+        const nodes = (JSON.parse(readFileSync(join(dir, f), 'utf8')) as { nodes: Record<string, { m: Record<string, number[]> }> }).nodes;
+        for (const [k, node] of Object.entries(nodes)) {
+          const at = club.get(k) ?? new Map<string, [number, number, number]>();
+          for (const [san, a] of Object.entries(node.m)) {
+            const n = a[3] + a[6]; const w = a[4] + a[7]; const d = a[5] + a[8];
+            const was = at.get(san) ?? [0, 0, 0];
+            at.set(san, [was[0] + n, was[1] + w, was[2] + d]);
+          }
+          club.set(k, at);
+        }
+      }
+      console.log(`[all-depth] club boards: ${club.size}`);
+    }
+    const total = (r: Res | null): number => (r ? r.white + r.draws + r.black : 0);
+    const clubAt = (sans: readonly string[]): Res | null => {
+      const at = club.get(sans.join(' '));
+      if (!at) return null;
+      const moves = [...at].map(([san, [n, w, d]]) => ({ uci: '', san, averageRating: 1600, white: w, draws: d, black: n - w - d, game: null, opening: null }));
+      const white = moves.reduce((x, m) => x + m.white, 0); const draws = moves.reduce((x, m) => x + m.draws, 0); const black = moves.reduce((x, m) => x + m.black, 0);
+      return { white, draws, black, moves } as unknown as Res;
+    };
+    const lookup = async (sans: readonly string[]): Promise<Res | null> => {
+      const r = await storedTreeAt(sans);
+      if (!CLUB || total(r) >= 10) return r;
+      const c = clubAt(sans);
+      return c && total(c) >= CLUB_ENOUGH ? c : r;
+    };
     const { buildGamesCourse } = await import('./gamesCourse');
     const { inferStudentSideFromName } = await import('./openingDetectionService');
     const all = JSON.parse(readFileSync('src/data/openings-lichess.json', 'utf8')) as Array<{ eco: string; name: string; pgn: string }>;
@@ -52,7 +91,7 @@ describe.skipIf(!ON)('All-section depth against the curated courses', () => {
       const sans = o.pgn.trim().split(/\s+/).filter(Boolean);
       const side = inferStudentSideFromName(o.name);
       let course: Awaited<ReturnType<typeof buildGamesCourse>> = null;
-      try { course = await buildGamesCourse(sans, side, { lookup: storedTreeAt }); } catch { course = null; }
+      try { course = await buildGamesCourse(sans, side, { lookup }); } catch { course = null; }
       if (!course) { rows.push({ name: o.name, eco: o.eco, side, named: sans.length, main: sans.length, past: 0, stop: 'none', middlegame: false, games: 0, variations: 0, variationsToMiddlegame: 0, longestVariation: 0 }); continue; }
       rows.push({
         name: o.name, eco: o.eco, side, named: sans.length,
