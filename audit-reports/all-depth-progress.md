@@ -17,3 +17,24 @@ David 2026-11-08: "Stockfish's best moves fill the main line past the data floor
 - The plan's "Paris Gambit: 6,281 club games" does not hold on disk: 'Nh3 d5 g3 e5 f4' has 5 club games a month (below the tree's 20 floor) and the King's Gambit Paris Gambit none. The Paris Gambit now builds an engine main line with no variation (nothing to split on); the Polish Grigorian (b4 Nc6, 994 club games) is the club-variations case.
 - The "engine from here" note is said only on a stretch of the main line (`engineFromOnLine`): a derived line (variation, reply, plan, trap) keeps its board — a fact about a board games reached — but its own moves are games', so the note would lie.
 - Tests: `allSectionDepth.real.test.ts` (8, on the shipped files: Paris Gambit + Grigorian fail on the old builder; every engine move legal from its board and no line runs past a middlegame board; every club row legal, 20+ games, most played first).
+
+## Step 4 — measured (done)
+`ALL_DEPTH=1 npx vitest run src/services/allSectionDepth.measure.test.ts` (before and after in one run; before reproduces the 11-08 numbers exactly):
+
+| | before | after | curated |
+|---|---|---|---|
+| main line plies (median) | 16 | 24 | 28 |
+| past its name (median) | 5 | 14 | |
+| reaches a middlegame | 1,313 (36%) | 2,699 (74%) | |
+| stops thin | 2,289 | 114 | |
+| stops at the cap (king uncastled) | 18 | 803 | |
+| variations (median) / pages with none | 1 / 1,594 | 2 / 1,296 | 8 |
+| club variations | 0 | 960 on 298 pages | |
+| hands off to Learn | 1,153 | 314 (248 already at a middlegame, 66 thin with no engine line) | |
+
+Five rebuilt main lines read against their boards (all legal; `[engine]` = where Stockfish took over):
+- Amar Paris Gambit: 1.Nh3 d5 2.g3 e5 3.f4 [engine] 3…h5 4.fxe5 d4 5.d3 Qd5 … 15.Qb3 — cap, uncastled
+- Anderssen's (a3): 1.a3 d5 2.Nf3 Nf6 3.e3 Bf5 4.c4 e6 5.Qb3 [engine] 5…Nbd7 6.d4 Rb8 … 16.Bd2 h5 — cap
+- Clemenz (h3): 1.h3 d5 2.e3 e5 3.d4 Nc6 4.Bb5 [engine] 4…Qg5 5.Kf1 e4 6.c4 dxc4 7.Nc3 Bd7 8.h4 Qe7 9.Bd2 O-O-O — middlegame
+- Grob (g4): 1.g4 d5 2.Bg2 h5 3.gxh5 [engine] 3…c6 4.d4 Bg4 … 14.Bf3 Bxh5 15.Bxh5 Rxh5 — cap, exchange finished
+- Polish Grigorian (b4 Nc6): [engine] 2.b5 Na5 3.Nf3 Nf6 4.d3 g6 5.g3 Bg7 6.a4 d5 7.Bg2 O-O 8.Bb2 b6 9.Nbd2 Bb7 10.O-O — middlegame
