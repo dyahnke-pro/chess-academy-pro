@@ -405,7 +405,7 @@ export function moveIntent(
   // WHAT THE STOPPED MOVE WOULD HAVE DONE (escalating walk 2026-10-17: "Bxd7+
   // — now …g6 doesn't work" never said …g6 was hitting the f5-knight): read
   // on the board before the move, the mover passing.
-  const threatDid = prevents ? whatItDoes(fenBefore, prevents.uci, opp) : null;
+  const threatDid = prevents ? whatTheStopDid(fenBefore, prevents.uci, opp) : null;
   const text = phrase(playedSan, prevents, prepares, seat, mover, fenAfter, prepares ? whatItDoes(fenAfter, prepares.uci, mover) : null, why, threatDid, !!opts.holdPrepared);
   // Nothing worth saying (a held move with no point): no intent at all.
   if (!text) return null;
@@ -488,10 +488,10 @@ function phrase(
     if (prevents && prepares && !held) return `${yours} does two jobs: it stops ${stop}, and it prepares ${prep}${does?.develops ? `, freeing your ${does.develops.piece} on ${does.develops.from}` : does ? `, to ${does.verb}` : ''}.`;
     // "doesn't work", never "isn't possible" — the stopped move is still
     // LEGAL, it just loses (walk 2026-09-30: said five times in one game).
-    const wouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^hit the /, 'hit your ') : null;
+    const wouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^(hit|take) the /, '$1 your ') : null;
     if (prevents?.mate) { const m = unmarked(stop); return rotateStem([`${yours} stops ${m}, which was mate.`, `${pointOf}: ${m} was mate, and now it isn't.`], key); }
     if (prevents && why) return `${yours} — now ${stop} doesn't work: ${why}.`;
-    if (prevents && wouldDo) return `${yours} — ${stop} would ${wouldDo}, and now it doesn't work.`;
+    if (prevents && wouldDo) return `${yours} stops ${stop}, which would ${wouldDo}.`;
     if (prevents) return rotateStem([`${yours} — now ${stop} doesn't work.`, `${pointOf}: it takes ${stop} away.`], key);
     // Every stem names the seat (review audit 2026-10-15: "…e5 first, so that
     // …Bd6 can bring the bishop into the game" said whose move to no one).
@@ -507,7 +507,7 @@ function phrase(
   const stop = prevents ? `your ${dot(prevents.san, opp)}` : '';
   const prep = prepares ? dot(prepares.san, mover) : '';
   if (prevents && prepares) return `Their ${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does?.develops ? `, freeing their ${does.develops.piece} on ${does.develops.from}` : does ? `, to ${does.verb}` : ''}.`;
-  const theirWouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^hit the /, 'hit their ') : null;
+  const theirWouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^(hit|take) the /, '$1 their ') : null;
   if (prevents?.mate) return `Their ${played} stops ${stop.replace(/[+#]$/, '')}, which was mate.`;
   if (prevents && theirWouldDo) return `Their ${played} stops ${stop}, which would ${theirWouldDo}.`;
   if (prevents) return rotateStem([`Their ${played} stops ${stop}.`, `The point of their ${played}: it takes ${stop} away.`], key);
@@ -572,6 +572,27 @@ interface PreparedPoint {
    *  bishop into the game") named the bishop twice (prod walk 2026-10-18). */
   develops?: { piece: string; from: string };
 }
+
+/** What a STOPPED move would have done, read on the board before the move
+ *  (the mover passing): a capture that wins what it takes is that capture —
+ *  "…Bd5+ stops Rxh8, which would take your rook on h8", never what the
+ *  rook would hit from h8 afterwards (hard-chat audit 2026-11-08) — else what
+ *  the move does once played. */
+function whatTheStopDid(fenBefore: string, stopUci: string, side: 'w' | 'b'): PreparedPoint | null {
+  const again = nullMoveFen(fenBefore);
+  if (again) {
+    try {
+      const m = new Chess(again).move({ from: stopUci.slice(0, 2), to: stopUci.slice(2, 4), promotion: stopUci.slice(4, 5) || undefined });
+      if (m?.captured && m.captured !== 'k' && legalSeeGainFor(again, m.to, side) > 0) {
+        return { verb: `take the ${PIECE_NAME[m.captured]} on ${m.to}`, castle: false };
+      }
+    } catch { /* read it as a move */ }
+  }
+  return whatItDoes(fenBefore, stopUci, side);
+}
+
+/** Test seam for the stopped-capture reader. */
+export const whatTheStopDidForTest = whatTheStopDid;
 
 /** What the prepared move DOES once played, read off the board where the mover
  *  moves again (the opponent passes): castle; hit an enemy piece or pawn the

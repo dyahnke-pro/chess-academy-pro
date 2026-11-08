@@ -32,14 +32,14 @@ import { theirWantedMoves, theirWantSentence } from './prophylaxis';
 import { Chess } from 'chess.js';
 import { toOtherSeat } from '../utils/seatPronouns';
 import { NO_PREV_CAPTURE, afterCapture, type PrevCaptureContext } from './captureRun';
-import { moverLineProof } from './exchangeLedger';
+import { moverLineProof, netPieceWords } from './exchangeLedger';
 import { isRealPin } from './pinGeometry';
 import { tacticWord } from './tacticVocabulary';
 import { MOTIFS, type MotifId } from '../data/tacticMotifs';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
-  legalSeeGain, legalSeeGainOn, movesThatKeep, landingIsSafe, capturesWinMaterial, legalSeeGainFor, takingTheAttackerAnswers, seeReadsStanding, captureRead, signedLegalSeeFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
+  legalSeeGain, legalSeeGainOn, seeSequence, movesThatKeep, landingIsSafe, capturesWinMaterial, legalSeeGainFor, takingTheAttackerAnswers, seeReadsStanding, captureRead, signedLegalSeeFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
   strongestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
   structureTransfer, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
@@ -2037,7 +2037,17 @@ export function assembleMoveEvalAnswer(opts: {
  *  the moved piece there for ≥2 points, i.e. it's a sacrifice. Returns the point
  *  value offered, or null when the move loses nothing (not a sac). Pure chess.js
  *  + SEE (`seeGain` > 0 = the enemy wins material by capturing on that square). */
-function sacrificeOffer(fen: string, candSan: string, minGain = 2): number | null {
+interface SacrificeOffer {
+  /** The points the opponent nets on the landing square, after what the move took. */
+  net: number;
+  /** The pieces that change hands, said from the mover's seat ("a bishop for a
+   *  pawn"), read off the capture sequence — never a point total said as pawns
+   *  (hard-chat audit 2026-11-08: "Bd5+ is sound — you give up two pawns" for a
+   *  bishop given and a pawn taken back). */
+  give: string;
+}
+
+function sacrificeOffer(fen: string, candSan: string, minGain = 2): SacrificeOffer | null {
   try {
     const c = new Chess(fen);
     const mv = c.move(candSan);
@@ -2046,12 +2056,34 @@ function sacrificeOffer(fen: string, candSan: string, minGain = 2): number | nul
     // NET of what the move took (escalating walk 2026-10-17: Qxg4 taking a
     // queen, Nxg4 taking one back, was called "sound — you give up 9 points").
     // A capture recaptured is a trade, not an offer.
-    const taken = mv.captured ? ({ p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 } as const)[mv.captured] : 0;
+    const taken = mv.captured ? PIECE_POINTS[mv.captured] : 0;
     const net = gain - taken;
-    return net >= minGain ? net : null;
+    if (net < minGain) return null;
+    return { net, give: offerWords(c.fen(), mv.to, gain, mv.captured ?? null) ?? countWords(net) };
   } catch {
     return null;
   }
+}
+
+const PIECE_POINTS = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 } as const;
+
+/** The pieces the offer gives and takes back, from the mover's seat: the
+ *  shortest run of the capture sequence on `square` that nets the opponent the
+ *  exchange's `gain` (where the exchange stops), plus what the move itself
+ *  took. Null when no run lands on that gain (the count is said instead). */
+function offerWords(fenAfter: string, square: Square, gain: number, movedTook: PieceSymbol | null): string | null {
+  const seq = seeSequence(fenAfter, square);
+  const board = new Chess(fenAfter);
+  const gave: PieceSymbol[] = []; const took: PieceSymbol[] = movedTook ? [movedTook] : [];
+  let theirNet = 0;
+  for (let i = 0; i < seq.length; i += 1) {
+    const m = board.move(seq[i]);
+    if (!m?.captured) return null;
+    const v = PIECE_POINTS[m.captured];
+    if (i % 2 === 0) { gave.push(m.captured); theirNet += v; } else { took.push(m.captured); theirNet -= v; }
+    if (theirNet === gain) return netPieceWords(gave, took);
+  }
+  return null;
 }
 
 /**
@@ -2215,7 +2247,7 @@ export function assembleCandidateMoveAnswer(opts: {
   const sacOffer = sacOfferEarly;
   if (sacOffer !== null) {
     const stmEval = typeof opts.candidateEvalCp === 'number' ? opts.candidateEvalCp : null;
-    const give = countWords(sacOffer);
+    const give = sacOffer.give;
     const after = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover, opts.studentColor);
     let verdict: string | null = null;
     if (typeof opts.candidateMateIn === 'number' && opts.candidateMateIn > 0) {
@@ -7683,7 +7715,7 @@ export function playedSacrificeVerdict(fenBefore: string, san: string, evalAfter
   // ordinary pawn push is never announced as a sacrifice unprompted.)
   const offer = sacrificeOffer(fenBefore, san, 1);
   if (offer === null || evalAfterMoverCp === null) return null;
-  const give = countWords(offer);
+  const give = offer.give;
   // Judged by what the sacrifice COST against best play, not by the eval
   // alone: an opening that is already a touch worse for you does not make the
   // engine's own top move "speculative" (it said both, in one answer).

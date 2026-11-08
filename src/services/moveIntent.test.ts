@@ -182,3 +182,19 @@ describe('a pawn that strikes a pawn is about the strike (Alekhine walk 2026-10-
     expect(out?.prepares?.san).toBe('Nd7');
   });
 });
+
+describe('a stopped capture says what it takes (hard-chat audit 2026-11-08)', () => {
+  // Lichess 0MOZp, Black to move: White's Rh1 takes the loose rook on h8 if
+  // nothing stops it. "…Bd5+ — Rxh8 would hit your knight on f8" named what
+  // the rook hits from h8 and dropped the rook it takes.
+  const FEN = '5n1r/3q4/ppp1b1k1/4PpN1/1PPP1Pp1/1PB1Q3/6K1/7R b - - 2 46';
+  it('the capture is the point: it takes the rook on h8', async () => {
+    const { whatTheStopDidForTest: whatTheStopDid } = await import('./moveIntent');
+    expect(whatTheStopDid(FEN, 'h1h8', 'w')?.verb).toBe('take the rook on h8');
+  });
+  it('a capture that loses what it takes is read as a move, not a win', async () => {
+    const { whatTheStopDidForTest: whatTheStopDid } = await import('./moveIntent');
+    // Qe3xe6+?? — the bishop on e6 is guarded by the queen on d7.
+    expect(whatTheStopDid(FEN, 'e3e6', 'w')?.verb ?? '').not.toMatch(/^take /);
+  });
+});

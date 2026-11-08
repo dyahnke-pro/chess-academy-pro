@@ -146,7 +146,7 @@ describe('decisiveReason — a stop says what it stopped (2026-10-17, real engin
   });
   it('a stopped move says what it would have done (never a bare "doesn\'t work")', () => {
     const r = decisiveReason({ namesPreparedMove: true, fenBefore: 'rn1qkb1r/1p1b1ppp/p2p1n2/1Bp2N2/4P3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 8', san: 'Bxd7+', seat: 'student', opponentLastSan: 'Bd7', reads: R.q4Bxd7 });
-    expect(r?.text).toMatch(/^Your Bxd7\+ — …g6 would hit your knight on f5, and now it doesn't work\./);
+    expect(r?.text).toMatch(/^Your Bxd7\+ stops …g6, which would hit your knight on f5\./);
   });
 });
 
