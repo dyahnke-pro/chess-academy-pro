@@ -1,3 +1,4 @@
+import { SET_UP_POSED } from './setUpChance';
 import { Chess } from 'chess.js';
 // Import-time auto-analysis — the third faucet (David 2026-05-21: "tie
 // game analysis in without needing a full review"). Given the blunders a
@@ -460,7 +461,11 @@ export function capabilityPliesFromAnnotations(
     // "your fork" as held 100% at every rating. Live play has always posed
     // them on every move (`discussionPractice`); the slip still breaks only
     // the skill it is filed under (`capabilityOutcomes`).
-    const alsoPosed = [...(reasonAsked ? [reasonAsked] : []), ...(bookAsked ? [bookAsked] : []), ...positionPosed(fens[fenIndex], {
+    // THE QUIET SET-UP, posed off the flag analysis read on EVERY move (never
+    // off the best line, which only costly moves keep: posed from it, the row
+    // could only ever be missed). A game analysed before the flag poses none.
+    const setUpAsked = ann.quietSetUp ? { tag: 'missed-set-up' as const, posedImportance: SET_UP_POSED } : null;
+    const alsoPosed = [...(reasonAsked ? [reasonAsked] : []), ...(bookAsked ? [bookAsked] : []), ...(setUpAsked ? [setUpAsked] : []), ...positionPosed(fens[fenIndex], {
       bestSan,
       ...(bestLine ? { bestLine } : {}),
       lastMove: fenIndex > 0 && sanAt.has(fenIndex - 1)

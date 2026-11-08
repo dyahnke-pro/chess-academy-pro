@@ -147,7 +147,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:8598`
 - `src/components/Coach/CoachTeachPage.tsx:8620`
 - `src/components/Coach/CoachTeachPage.tsx:9033`
-- `src/services/autoAnalyzeGame.ts:192`
+- `src/services/autoAnalyzeGame.ts:193`
 - `src/services/capabilityDateRepair.test.ts:17`
 - `src/services/capabilityDateRepair.test.ts:18`
 - `src/services/capabilityDateRepair.test.ts:19`

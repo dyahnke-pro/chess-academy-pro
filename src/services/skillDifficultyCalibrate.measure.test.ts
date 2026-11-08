@@ -25,6 +25,7 @@ import { capabilityPliesFromAnnotations, measuredCpLoss, plyScoringArgs } from '
 import { classifyCpLoss } from './gameAnalysisService';
 import { meterOfTag } from './skillMeters';
 import { mateEvalFor } from './engineConstants';
+import { setUpPosed } from './setUpChance';
 import type { MoveAnnotation } from '../types';
 
 const READS = process.env.SKILL_READS ?? '/tmp/claude-0/meter/eng';
@@ -72,6 +73,8 @@ function annotationsOf(sans: readonly string[], fens: readonly string[], reads: 
     const flagged = classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder';
     out.push({
       ...base, classification,
+      // The quiet set-up is read on every move, as analysis reads it.
+      quietSetUp: setUpPosed(fens[p], before.pv),
       // A review keeps the two lines, and the one-search cost, on flagged plies only.
       ...(flagged ? { pv: { afterPlayed: after.pv, afterBest: before.pv.slice(1), depth: 12 }, costCp: cpLoss } : {}),
     });

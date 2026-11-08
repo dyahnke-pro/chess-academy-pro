@@ -727,6 +727,12 @@ export interface StoredWeighReads {
 }
 
 export interface MoveAnnotation {
+  /** This position's best line is a QUIET set-up — a move that takes nothing
+   *  and gives no check, whose line wins material or mates (`setUpChance.
+   *  setUpPosed`). Read on every move at analysis time, so the record's
+   *  `missed-set-up` row is posed on held and missed moves alike; absent on
+   *  games analysed before 2026-11-08 (never posed from those). */
+  quietSetUp?: boolean;
   moveNumber: number;
   color: 'white' | 'black';
   san: string;

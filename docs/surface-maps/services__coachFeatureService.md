@@ -93,14 +93,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/services/autoAnalyzeGame.ts:334`
+- `src/services/autoAnalyzeGame.ts:335`
 - `src/services/coachFeatureService.test.ts:205`
 - `src/services/coachFeatureService.test.ts:220`
 - `src/services/coachFeatureService.test.ts:243`
 - `src/services/coachFeatureService.test.ts:262`
 - `src/services/coachFeatureService.test.ts:282`
 - `src/services/coachFeatureService.test.ts:294`
-- `src/services/gameAnalysisService.ts:2503`
+- `src/services/gameAnalysisService.ts:2509`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

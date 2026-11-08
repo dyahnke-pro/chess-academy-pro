@@ -144,7 +144,7 @@
 ### `findTrappedPiece` (function) — 12 call sites
 - `src/services/coachFeatureService.ts:4118`
 - `src/services/coachFeatureService.ts:4119`
-- `src/services/moveInsight.ts:410`
+- `src/services/moveInsight.ts:409`
 - `src/services/reviewFullData.ts:1088`
 - `src/services/reviewFullData.ts:1090`
 - `src/services/reviewTeachingPoints.test.ts:256`
@@ -163,7 +163,7 @@
 ### `findWorstPlacedPiece` (re-export) — 15 call sites
 - `src/services/badPieceOncePerPly.test.ts:15`
 - `src/services/coachFeatureService.ts:5647`
-- `src/services/moveInsight.ts:350`
+- `src/services/moveInsight.ts:349`
 - `src/services/nextPlans.test.ts:10`
 - `src/services/nextPlans.test.ts:34`
 - `src/services/nextPlans.ts:89`

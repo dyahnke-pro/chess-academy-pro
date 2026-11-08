@@ -1,3 +1,4 @@
+import { setUpPosed } from './setUpChance';
 import { applyVerdict, getVerdicts, saveVerdict, toVerdictLabel, verdictKey, verdictOutranks, VERDICT_TRUST_DEPTH } from './moveVerdictStore';
 import { holdBackground, backgroundHolds } from './foregroundActivity';
 import { finishedBoardEval } from './finishedBoard';
@@ -1738,6 +1739,9 @@ export async function analyzeGameOnWorker(
       moveNumber,
       color,
       san: moves[moveIdx],
+      // THE QUIET SET-UP, read on EVERY move off this position's own line, so
+      // the record poses it whether the move held or missed it (2026-11-08).
+      quietSetUp: setUpPosed(fens[moveIdx], pvs[moveIdx] ?? []),
       // Evals stored in CENTIPAWNS (White POV) — the unit Stockfish
       // returns natively and every downstream threshold (BLUNDER_CP,
       // MISS_EVAL_THRESHOLD, MIN_EVAL_SWING, winPercent's sigmoid
@@ -2408,6 +2412,8 @@ async function analyzeGamePositions(
       annotations.push({
         moveNumber,
         color,
+        // THE QUIET SET-UP, read on EVERY move (the batch path's own field).
+        quietSetUp: setUpPosed(fens[moveIdx], pvAtBefore),
         san: moves[moveIdx],
         // Centipawns, White POV — same contract as analyzeGameOnWorker.
         evaluation: evalAfter !== null ? evalAfter : null,

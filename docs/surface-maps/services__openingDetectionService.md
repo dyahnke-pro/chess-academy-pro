@@ -331,7 +331,7 @@
 - `src/services/mistakePuzzleService.ts:74`
 
 ### `findContinuationsAtPly` (function) — 7 call sites
-- `src/services/autoAnalyzeGame.ts:393`
+- `src/services/autoAnalyzeGame.ts:394`
 - `src/services/openingDetectionService.test.ts:331`
 - `src/services/openingDetectionService.test.ts:340`
 - `src/services/openingDetectionService.test.ts:354`
