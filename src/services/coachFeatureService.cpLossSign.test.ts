@@ -10,6 +10,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
+import { onCoachDecision, type CoachDecisionRow } from './coachDecisionEvents';
 
 // 1.e4 c5 2.c3 Nf6 3.e5 Nd5 4.d4 cxd4 5.cxd4 Nc6 6.Nc3 — Black to move at ply
 // 12. The engine's move is the CAPTURE Nxd4 (c6d4), so the forcing-scan beat is
@@ -35,18 +36,28 @@ function inputs(ply12: { preMoveEval: number; evaluation: number; classification
 const FORCING_BEAT = /\bCCT\b|checks and the captures|checks and captures|every check, every capture|checks, captures and threats/i;
 
 describe('review — the cost handed to the door and the method beat is SIGNED, mover-POV', () => {
+  // EARNED is the door's verdict (`method` on its row — only ply 12 carries a
+  // cost here). Whether the beat is HEARD is the turn's one-habit rule: a
+  // fundamental's own how closes the turn ahead of the generic scan (2026-11-08).
+  const methodRows = (fn: () => unknown): CoachDecisionRow[] => {
+    const rows: CoachDecisionRow[] = [];
+    const off = onCoachDecision((r) => { rows.push(r); });
+    try { fn(); } finally { off(); }
+    return rows.filter((r) => r.method);
+  };
+
   it('a move that GAINED three pawns for the student earns NO forcing-scan correction', () => {
     // White-POV +300 → 0 on BLACK's move: Black gained 300. Cost = 0.
-    const segs = buildReviewSegmentsForTests(inputs({ preMoveEval: 300, evaluation: 0, classification: 'good' }), 'black', null, true, 1400, [], undefined, 'this-game');
-    const text = segs[11].narration ?? '';
+    let text = '';
+    const earned = methodRows(() => { text = buildReviewSegmentsForTests(inputs({ preMoveEval: 300, evaluation: 0, classification: 'good' }), 'black', null, true, 1400, [], undefined, 'this-game')[11].narration ?? ''; });
+    expect(earned).toHaveLength(0);
     expect(text).not.toMatch(FORCING_BEAT);
   });
 
   it('…while the SAME magnitude the other way — a real 300cp loss — still earns it (non-vacuity)', () => {
     // White-POV 0 → +300 on BLACK's move: Black lost 300 with a capture available.
-    const segs = buildReviewSegmentsForTests(inputs({ preMoveEval: 0, evaluation: 300, classification: 'blunder' }), 'black', null, true, 1400, [], undefined, 'this-game');
-    const text = segs[11].narration ?? '';
-    expect(text).toMatch(FORCING_BEAT);
+    const earned = methodRows(() => buildReviewSegmentsForTests(inputs({ preMoveEval: 0, evaluation: 300, classification: 'blunder' }), 'black', null, true, 1400, [], undefined, 'this-game'));
+    expect(earned.length).toBeGreaterThan(0);
   });
 
   it('BLAMES BY STATEMENT: one real cost, no absolute value, no label bucket', async () => {
