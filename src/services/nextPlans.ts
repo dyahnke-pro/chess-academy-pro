@@ -166,13 +166,18 @@ export function findWorstPlacedPiece(
   if (worst) return worst;
   // A ROOK WITH NO FILE: an open file no rook or queen of yours stands on. The
   // rook that reaches it in one move is the one; none reaches → the first.
+  // A rook already on an open or half-open file has its job (decision
+  // baseline 2026-11-08: "find a better square for your rook on d8" beside
+  // "your rook on d8 is your best-placed piece — it has the half-open d-file").
   const struct = describeStructure(fen);
   const file = struct?.pawns.openFiles.find((f) => !all.some((c) => c.color === studentColorWB && (c.type === 'r' || c.type === 'q') && c.square[0] === f));
-  if (!file) return null;
+  if (!file || !struct) return null;
+  const working = new Set([...struct.pawns.openFiles, ...struct.pawns.halfOpenFiles[studentColorWB]]);
+  const idle = (sq: string): boolean => !working.has(sq[0]);
   const asMe = withMover(fen, studentColorWB);
   let reach: { from: string; to: string } | undefined;
-  try { reach = asMe ? new Chess(asMe).moves({ verbose: true }).find((m) => m.piece === 'r' && m.to[0] === file && m.from[0] !== file && !m.captured) : undefined; } catch { reach = undefined; }
-  const rookSq = reach?.from ?? all.find((c) => c.color === studentColorWB && c.type === 'r')?.square;
+  try { reach = asMe ? new Chess(asMe).moves({ verbose: true }).find((m) => m.piece === 'r' && m.to[0] === file && m.from[0] !== file && !m.captured && idle(m.from)) : undefined; } catch { reach = undefined; }
+  const rookSq = reach?.from ?? all.find((c) => c.color === studentColorWB && c.type === 'r' && idle(c.square))?.square;
   if (!rookSq) return null;
   return { sq: rookSq as Square, type: 'r', m: mob.get(rookSq) ?? 0, kind: 'no-file-rook', file, reach: (reach?.to as Square | undefined) ?? null };
 }
@@ -217,16 +222,16 @@ export function worstPieceRoute(fen: string, sq: Square): { target: Square; rout
  *  ASKS always gets an answer (the scope-only reading it replaced answered on
  *  every board — "what is my worst piece?" at move 8 went silent without it).
  *  `scope` is always the squares covered, the number the answer says. */
-export function worstPieceNote(fen: string, color: Color): { square: Square; piece: PieceSymbol; scope: number; misplaced: boolean; reason: string } | null {
+export function worstPieceNote(fen: string, color: Color): { square: Square; piece: PieceSymbol; scope: number; misplaced: boolean; reason: string; kind: WorstKind | null } | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const w = findWorstPlacedPiece(chess, color);
-  if (w) return { square: w.sq, piece: w.type, scope: pieceScope(chess, w.sq), misplaced: true, reason: worstReason(w) };
-  let least: { square: Square; piece: PieceSymbol; scope: number; misplaced: boolean; reason: string } | null = null;
+  if (w) return { square: w.sq, piece: w.type, scope: pieceScope(chess, w.sq), misplaced: true, reason: worstReason(w), kind: w.kind };
+  let least: { square: Square; piece: PieceSymbol; scope: number; misplaced: boolean; reason: string; kind: WorstKind | null } | null = null;
   for (const c of cells(chess)) {
     if (c.color !== color || c.type === 'p' || c.type === 'k') continue;
     const scope = pieceScope(chess, c.square as Square);
-    if (!least || scope < least.scope) least = { square: c.square as Square, piece: c.type as PieceSymbol, scope, misplaced: false, reason: `covers only ${scope} square${scope === 1 ? '' : 's'}` };
+    if (!least || scope < least.scope) least = { square: c.square as Square, piece: c.type as PieceSymbol, scope, misplaced: false, reason: `covers only ${scope} square${scope === 1 ? '' : 's'}`, kind: null };
   }
   return least;
 }

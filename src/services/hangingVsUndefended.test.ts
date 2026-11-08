@@ -18,7 +18,7 @@ describe('"undefended" only for a defender lost', () => {
       forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     }));
     const loose = facets.filter((f) => f.startsWith('[loose]'));
-    expect(loose.join(' ')).not.toMatch(/Their rook( on d1)? has lost its last defender/);
-    expect(loose.join(' ')).toMatch(/Their rook is now hanging/);
+    expect(loose.join(' ')).not.toMatch(/Their rook( on d1)? (has lost its last|just lost its last)|Nothing guards their rook on d1 any more/);
+    expect(loose.join(' ')).toMatch(/Their rook on d1 is (hanging|hit)/);
   });
 });

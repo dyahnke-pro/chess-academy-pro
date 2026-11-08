@@ -1283,20 +1283,6 @@ export function theirBoardPoint(fenBefore: string, san: string, fenNow: string, 
   });
 }
 
-/** A piece of yours under attack with no guard — rotated by move so the
- *  formula is never said three times running (David 2026-10-14). Every stem
- *  carries its reason: nothing guards it, so taking it costs them nothing. */
-export function hangingPieceLine(piece: string, sq: string, rot: number, still: boolean): string {
-  const name = HIT_NAME[piece] ?? 'piece';
-  // Said once more after the student moved and left it (`looseClaim`).
-  if (still) return `Your ${name} on ${sq} is still hanging — nothing guards it yet.`;
-  const stems = [
-    `Careful — your ${name} on ${sq} is attacked and nothing's defending it.`,
-    `Careful — your ${name} on ${sq} hangs: nothing guards it, so taking it costs them nothing.`,
-    `They are hitting your ${name} on ${sq}, and nothing guards it — it is lost unless it moves or gets a guard.`,
-  ];
-  return stems[((rot % stems.length) + stems.length) % stems.length];
-}
 
 /** THE RECORD DECIDES HOW LOUD A THREAT IS (OS-4, David 2026-10-19: "It's
  *  narrating a one move threat to me"). The ONE decider for Learn's threat

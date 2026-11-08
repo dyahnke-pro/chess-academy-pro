@@ -134,10 +134,12 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(usefulWaiting(fen, [line(['h2h3'], 30), line(['b1c3'], 25), line(['c2c3'], 20)])?.text).toMatch(/useful waiting move/);
     expect(usefulWaiting(fen, [line(['b1c3'], 30), line(['h2h3'], 25), line(['c2c3'], 20)])).toBeNull();
   });
-  it('keep a square vacant: the knight on b1 goes through c3, and the c-pawn could block it', () => {
+  it('keep a square vacant: the knight on b1 goes through d2, never through c3 where the d4-pawn takes it', () => {
+    // The route walks only through safe squares (WO-DEPTH-01): c3 is hit by
+    // the pawn on d4, so the knight's road to an outpost runs b1–d2–c4.
     const fen = '4k3/8/8/2p1p3/3pP3/3P4/2P5/1NB1K3 w - - 0 1';
-    expect(keepSquareForKnight(fen, 'w', 'Ke2')?.text).toMatch(/Keep c3 empty — your knight needs it on the way to d5|Don't park a piece on c3 — it's the first stop for your knight on the way to d5/);
-    expect(keepSquareForKnight(fen, 'w', 'c3')).toBeNull();
+    expect(keepSquareForKnight(fen, 'w', 'Ke2')?.text).toMatch(/Keep d2 empty — your knight needs it on the way to c4|Don't park a piece on d2 — it's the first stop for your knight on the way to c4/);
+    expect(keepSquareForKnight(fen, 'w', 'Bd2')).toBeNull();
   });
   it('the right piece for the hole: the bishop on d5 sits where the knight belongs', () => {
     const fen = '4k3/8/3p4/3B4/4P3/8/8/4KN2 w - - 0 1';

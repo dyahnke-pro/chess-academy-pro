@@ -9,7 +9,7 @@ const FEN = 'r1bqrnk1/5ppp/p3p3/1p1pn1bN/3p2Q1/2PB4/PP3PPP/R1B1R1K1 w - - 0 16';
 const d: Deliberation = {
   best: { san: 'Rxe5', evalCp: 250, deltaCp: 0 },
   alternatives: [
-    { san: 'Bxh7+', evalCp: -600, deltaCp: 850, shortfall: 'drops-material', drops: { piece: 'q', square: 'g4' } },
+    { san: 'Bxh7+', evalCp: -600, deltaCp: 850, shortfall: 'drops-material', drops: { piece: 'q', square: 'g4', line: [], moved: false } },
   ],
   isRealChoice: true,
   bestWhy: 'completes the trade',

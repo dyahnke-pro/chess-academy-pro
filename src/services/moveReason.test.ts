@@ -4,7 +4,6 @@ import {
   isFaultReason,
   gradeWorthSpeaking,
   hangingNetForMover,
-  moveReasonClause,
   type MoveReasonInputs,
 } from './moveReason';
 
@@ -53,7 +52,6 @@ describe('classifyMoveReason — faithful to the validated offline classifier', 
     expect(r).toBe('allows-mate');
     expect(isFaultReason(r)).toBe(true);
     expect(gradeWorthSpeaking(r)).toBe(true);
-    expect(moveReasonClause(r)).toBe('that lets them force mate.');
   });
 });
 
@@ -76,10 +74,6 @@ describe('the post-move-grade helpers', () => {
     expect(gradeWorthSpeaking('lost-the-thread')).toBe(false);
     expect(gradeWorthSpeaking('walked-into-tactic')).toBe(true);
   });
-  it('names the pattern (not the SAN) and the hung piece when known', () => {
-    expect(moveReasonClause('walked-into-tactic', { named: 'a knight fork' })).toMatch(/walked into a knight fork/);
-    expect(moveReasonClause('hung-piece', { hung: { piece: 'b', square: 'c5' } })).toMatch(/hung the bishop on c5/);
-  });
 });
 
 describe('hangingNetForMover — board-true SEE-lite', () => {
@@ -90,16 +84,6 @@ describe('hangingNetForMover — board-true SEE-lite', () => {
   });
   it('is 0 when nothing hangs', () => {
     expect(hangingNetForMover('6k1/8/8/8/8/8/8/6K1 w - - 0 1', 'w')).toBe(0);
-  });
-});
-
-describe('moveReasonClause — a positional slip speaks its attributed fundamental', () => {
-  it('lost-the-thread with a fundamental returns the fundamental verdict verbatim', () => {
-    const verdict = 'That hands them a tempo: d5 comes with a threat on your knight on c6.';
-    expect(moveReasonClause('lost-the-thread', { fundamental: verdict })).toBe(verdict);
-    expect(moveReasonClause('lost-the-thread')).toMatch(/plan drifted/);
-    // A tactical reason keeps its own clause — the fundamental only fills the positional gap.
-    expect(moveReasonClause('hung-piece', { fundamental: verdict })).toMatch(/hung/);
   });
 });
 

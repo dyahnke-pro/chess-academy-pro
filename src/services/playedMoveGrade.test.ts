@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { gradePlayedMove } from './playedMoveGrade';
+import { errorWhyFor, NO_SECOND_READ } from './inaccuracyCall';
 
 const line = (rank: number, evaluation: number, uci: string) => ({ rank, evaluation, moves: [uci], mate: null });
 
@@ -19,7 +20,8 @@ describe('a move that lets them force mate (2026-10-21)', () => {
     });
     expect(g?.reason).toBe('allows-mate');
     expect(g?.fault).toBe(true);
-    expect(g?.clause).toBe('that lets them force mate.');
+    // The one error computer's words (WO-DEPTH-01): what it let them do.
+    expect(g?.clause).toBe('It let them play …Qh4#, and that is checkmate.');
   });
   it('a mate that no move avoids is not the move\'s fault', () => {
     const g = gradePlayedMove({
@@ -55,7 +57,7 @@ describe('gradePlayedMove — grade the played move from the paid-for fan', () =
     expect(g.reason).toBe('hung-piece');
     expect(g.cpLossCp).toBe(280);
     expect(g.worthSpeaking).toBe(true);
-    expect(g.clause).toMatch(/hung the knight on e5/);
+    expect(g.clause).toMatch(/knight on c6 takes back — you lose a knight for a pawn/);
     expect(g.fault).toBe(true);
   });
 
@@ -66,7 +68,17 @@ describe('gradePlayedMove — grade the played move from the paid-for fan', () =
     // move's job is the one error computer's (`errorWhy`), said once it is past.
     const fenAfter = 'r1bqkbnr/pppp1ppp/2n5/4N3/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 3';
     const g = gradePlayedMove({ fenBefore: FEN, playedUci: 'f3e5', fenAfter, analysisBefore, studentColor: 'w', depth: 14 })!;
-    expect(g.clause).toBe('careful — that hung the knight on e5.');
+    expect(g.clause).toBe('That took the pawn on e5, but the knight on c6 takes back — you lose a knight for a pawn.');
+  });
+
+  it('ONE VERDICT: a fault is worded by the one error computer, never by the grade (WO-DEPTH-01)', () => {
+    // The grade said "careful — that hung the knight on e5" and `errorWhy`,
+    // a moment later, said why in its own words: two verdicts for one move.
+    const fenAfter = 'r1bqkbnr/pppp1ppp/2n5/4N3/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 3';
+    const g = gradePlayedMove({ fenBefore: FEN, playedUci: 'f3e5', fenAfter, analysisBefore, studentColor: 'w', depth: 14 })!;
+    const why = errorWhyFor({ secondReads: NO_SECOND_READ, costCp: g.cpLossCp, fenBefore: FEN, playedSan: 'Nxe5', moverColor: 'white', replyLineUci: null, quality: g.label });
+    expect(g.clause).toBe(why?.line);
+    expect(g.clause).not.toMatch(/careful — that hung|walked into a tactic|plan drifted/);
   });
 
   it('returns null when the played move is outside the fan (defer to the faucet)', () => {
