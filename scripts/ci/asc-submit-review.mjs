@@ -22,6 +22,7 @@
 
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
 import { appVersion } from './app-version.mjs';
+import { OPEN_SUB_STATES, RESUBMITTABLE_SUB_STATES, pickReviewSubmission } from './review-submission-pick.mjs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
@@ -63,11 +64,6 @@ async function api(method, path, body, { soft = false } = {}) {
   return t ? JSON.parse(t) : {};
 }
 
-// States that mean "this submission is already open / in flight" — reuse it.
-const OPEN_SUB_STATES = new Set([
-  'READY_FOR_REVIEW', 'WAITING_FOR_REVIEW', 'IN_REVIEW',
-  'UNRESOLVED_ISSUES', 'COMPLETING',
-]);
 
 /** Every opening product Apple says is READY_TO_SUBMIT, with the IAP version
  *  a review item carries. Opening products only (`opening.` ids). */
@@ -101,13 +97,17 @@ async function main() {
   // Always print the current review-submission landscape (idempotency needs it).
   const allSubs = (await api('GET', `/v1/apps/${app.id}/reviewSubmissions?filter[platform]=IOS&limit=50`, null, { soft: true }))?.data || [];
   console.log(`\nexisting reviewSubmissions (${allSubs.length}):`);
+  // A closed submission (COMPLETE, CANCELING) keeps its items, so only an
+  // OPEN one that holds the version counts as "the version's submission".
   let subWithVersion = null;
+  const subRows = [];
   for (const s of allSubs) {
     const its = (await api('GET', `/v1/reviewSubmissions/${s.id}/items?include=appStoreVersion&limit=50`, null, { soft: true }))?.data || [];
     const verIds = its.map((it) => it.relationships?.appStoreVersion?.data?.id).filter(Boolean);
     const hasV = verIds.includes(version.id);
-    if (hasV) subWithVersion = subWithVersion || s;
-    console.log(`   • ${s.id} state=${s.attributes?.state} items=${its.length} hasV2.8=${hasV}`);
+    subRows.push({ id: s.id, state: s.attributes?.state, hasVersion: hasV });
+    if (hasV && OPEN_SUB_STATES.has(s.attributes?.state)) subWithVersion = subWithVersion || s;
+    console.log(`   • ${s.id} state=${s.attributes?.state} items=${its.length} holds v${VERSION}=${hasV}`);
   }
 
   if (DIAGNOSE) {
@@ -158,13 +158,11 @@ async function main() {
   const buildNum = (await api('GET', `/v1/builds/${build.id}`)).data?.attributes?.version;
   console.log(`build attached: #${buildNum} (${build.id})`);
 
-  // 1. Prefer the submission that already carries v2.8; else an open one; else create.
-  let sub = subWithVersion
-    || allSubs.find((s) => s.id !== cancelledId && s.attributes?.state === 'READY_FOR_REVIEW')
-    || allSubs.find((s) => s.id !== cancelledId && OPEN_SUB_STATES.has(s.attributes?.state))
-    || null;
+  // 1. The open submission that holds the version; else an open one; else create.
+  const picked = pickReviewSubmission(subRows, cancelledId);
+  let sub = picked ? allSubs.find((s) => s.id === picked.id) : null;
   if (sub) {
-    console.log(`\nreusing reviewSubmission ${sub.id} (state=${sub.attributes?.state}, hasV2.8=${!!subWithVersion})`);
+    console.log(`\nreusing reviewSubmission ${sub.id} (state=${sub.attributes?.state}, holds v${VERSION}=${picked.hasVersion})`);
   } else {
     const created = await api('POST', '/v1/reviewSubmissions', {
       data: {
@@ -261,10 +259,10 @@ async function main() {
   //                       the API equivalent of "Resubmit to App Review".
   //   already in flight  → nothing to do.
   const subState = (await api('GET', `/v1/reviewSubmissions/${sub.id}`)).data?.attributes?.state;
-  const RESUBMITTABLE = new Set(['READY_FOR_REVIEW', 'UNRESOLVED_ISSUES']);
-  if (!RESUBMITTABLE.has(subState)) {
-    console.log(`\n✅ reviewSubmission ${sub.id} is already ${subState} — already submitted / in review. Nothing to do.`);
-    return;
+  // The version is not in review (the guard above returned if it were), so a
+  // submission that cannot be sent is the wrong one — never report it as done.
+  if (!RESUBMITTABLE_SUB_STATES.has(subState)) {
+    throw new Error(`reviewSubmission ${sub.id} is ${subState} while v${VERSION} is ${state2}: it cannot be sent. Nothing was submitted.`);
   }
   console.log(`\n${subState === 'UNRESOLVED_ISSUES' ? 'resubmitting after rejection' : 'submitting'} reviewSubmission ${sub.id} …`);
   const patched = await api('PATCH', `/v1/reviewSubmissions/${sub.id}`, {
