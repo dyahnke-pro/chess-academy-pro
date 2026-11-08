@@ -91,8 +91,8 @@
 - `src/services/learnTurnDoor.ts:1355`
 
 ### `placeFact` (function) — 19 call sites
-- `src/services/boardComputers.ts:617`
-- `src/services/boardComputers.ts:989`
+- `src/services/boardComputers.ts:619`
+- `src/services/boardComputers.ts:991`
 - `src/services/learnTurnDoor.ts:705`
 - `src/services/moveThoughtFacts.ts:169`
 - `src/services/moveThoughtFacts.ts:293`
@@ -112,8 +112,8 @@
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 19 call sites
-- `src/services/boardComputers.ts:618`
-- `src/services/boardComputers.ts:989`
+- `src/services/boardComputers.ts:620`
+- `src/services/boardComputers.ts:991`
 - `src/services/coachFact.test.ts:105`
 - `src/services/coachFact.test.ts:111`
 - `src/services/coachFact.test.ts:112`

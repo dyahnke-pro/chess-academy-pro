@@ -38,6 +38,8 @@ import { computeThreatDelta, detectEnginePunish, type DeltaAside } from '../../s
 import type { NarrationArrow } from '../../types/walkthroughTree';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useMasterPlayWatcher } from '../../hooks/useMasterPlayWatcher';
+import { bookMoveRead } from '../../services/openingSlip';
+import { warmOpeningBook } from '../../services/openingAnnouncement';
 import { useStudentNeed } from '../../hooks/useStudentNeed';
 import { logAppAudit } from '../../services/appAuditor';
 import type { OpeningRecord, OpeningVariation, OpeningPlayResult, AnalysisLine, LichessCloudEval, BoardArrow, BoardHighlight, BoardAnnotationCommand, WalkableLine } from '../../types';
@@ -252,6 +254,20 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
 
   const openingPhaseLength = openingMoves.length;
 
+  // THE BOOK THIS RUNG READS (David 2026-11-08): the pro's pet lines — the
+  // line being played, the opening's main line and its variations — and the
+  // masters' where those are thin (`bookMoveRead`). A line that starts from a
+  // set-up position has no book: nothing is read.
+  const proLines = useMemo((): string[][] => {
+    if (setupFen) return [];
+    const pgns = [activePgn, opening.pgn, ...(opening.variations ?? []).map((v) => v.pgn)];
+    return pgns.map((p) => p.trim().split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t)));
+  }, [setupFen, activePgn, opening.pgn, opening.variations]);
+  // The ply the game left the book on (either side), or null while it is in
+  // book: past it the book has nothing more to say. A takeback past it opens
+  // the book again.
+  const leftBookRef = useRef<number | null>(null);
+
   // Hint system — knownMove during opening phase, Stockfish in middlegame
   const isPlayersTurn =
     (playerColor === 'white' && game.turn === 'w') ||
@@ -412,6 +428,34 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // sync with `/coach/play` so opponent move source decisions stay
   // consistent across the app.
   useMasterPlayWatcher(`/openings/${opening.id}/play`, game.fen);
+
+  // The masters' moves for the board in front of the student, looked up ahead
+  // so the book read answers the moment the next move lands.
+  useEffect(() => {
+    if (!setupFen && leftBookRef.current === null) warmOpeningBook(game.fen, `/openings/${opening.id}/play`);
+  }, [game.fen, setupFen, opening.id]);
+
+  // THE OPENING SLIP AND THEIR DEPARTURE — the same computer Learn's
+  // book-move lane reads (`openingSlip`), said once, on the move that left
+  // the book: the student's move says why its order or square mattered (or
+  // nothing, when it did not); theirs says that they left.
+  useEffect(() => {
+    if (leftBookRef.current !== null && game.history.length < leftBookRef.current) leftBookRef.current = null;
+    if (setupFen || leftBookRef.current !== null || playPhase === 'pregame' || playPhase === 'postgame') return;
+    const read = bookMoveRead(game.history, playerColor === 'white' ? 'w' : 'b', proLines);
+    if (!read || !read.left) return;
+    leftBookRef.current = game.history.length;
+    if (!read.text) return;
+    void logAppAudit({
+      kind: 'coach-narration-spoken',
+      category: 'narration',
+      source: 'OpeningPlayMode.openingSlip',
+      summary: `book read @[${game.history.join(' ')}]: ${read.text.slice(0, 160)}`,
+      fen: game.fen,
+    });
+    say(read.text);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [game.history.length]);
 
   // ─── Live punishment callout + ambient threat (Learn Play rung) ─────────
   // David 2026-07-24: "I want the llm to call out when a punishment line is found
@@ -994,6 +1038,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
                 setCorrectMovesPlayed(0);
                 setFirstDeviation(null);
                 deviatedRef.current = false;
+                leftBookRef.current = null;
                 // A new game: its own id (hints are stamped with it) and its own save.
                 liveSessionRef.current = `opening-play:${Date.now()}`;
                 savedRef.current = false;

@@ -173,3 +173,13 @@ describe('a forced loss says so, never the squares a doomed piece "covers" (revi
     expect(out).not.toMatch(/covers|a square no pawn/);
   });
 });
+
+describe('a teaching sentence that names whose piece keeps its subject (2026-11-08)', () => {
+  it('"Their knight joins the fight" after "They play Nc6" is "it joins", never "it their knight joins"', async () => {
+    const { toClause, joinReview } = await import('./reviewMoveBriefing');
+    const c = toClause('Their knight joins the fight for e5, backing their e-pawn\'s push there.');
+    expect(c).toBe('their knight joins the fight for e5, backing their e-pawn\'s push there');
+    expect(joinReview([c], false, 'Nc6')).toBe('They play Nc6 — it joins the fight for e5, backing their e-pawn\'s push there.');
+    expect(joinReview([toClause('Your pawn joins the fight for d4.')], true, 'c3')).toBe('You play c3 — it joins the fight for d4.');
+  });
+});

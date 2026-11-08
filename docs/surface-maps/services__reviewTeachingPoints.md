@@ -156,7 +156,7 @@
 - `src/services/reviewTeachingPoints.test.ts:291`
 
 ### `trappedOnBoard` (function) — 3 call sites
-- `src/services/boardComputers.ts:525`
+- `src/services/boardComputers.ts:527`
 - `src/services/queenGrabTrap.ts:57`
 - `src/services/reviewTeachingPoints.test.ts:288`
 

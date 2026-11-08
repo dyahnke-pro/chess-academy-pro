@@ -499,7 +499,7 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // RIDES WITH ITS DEPARTURE (Learn audit 2026-10-14, game 1: a threat turn
   // held the reason and "You left the book with …" spoke bare). It is offered
   // only on the departure ply, where the `opening` line (always) names it.
-  bookMove: { factKind: BOARD_COMPUTERS.bookMove.kind, kind: 'computed', why: 'the book move the student left, with the job it does on the board', lead: 64, always: true },
+  bookMove: { factKind: BOARD_COMPUTERS.bookMove.kind, kind: 'computed', why: 'the student left the book: the order, the square or the line, and why it matters', lead: 64, always: true },
   // Behind the walkability check (2026-09-29): walk 2 heard 3 false lines in 4
   // — routes read off one engine line the CURRENT board cannot walk. Learn
   // filters aims through planArc.aimWalkableNow, and a student plan the

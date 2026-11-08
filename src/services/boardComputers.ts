@@ -35,7 +35,7 @@ import { namesMoves, namedSan, namesPlayableStudentMove } from './studentMoveNam
 import { lineSeatAt } from '../utils/andList';
 import { trappedOnBoard } from './reviewTeachingPoints';
 import { bookDeparture } from './bookDeparture';
-import { bookMoveWhy } from './bookMoveWhy';
+import { openingSlip, mastersBook } from './openingSlip';
 import { lastTimeHere } from './lastTimeHere';
 import type { BookDepartureRow } from './bookDepartureWeakness';
 import { PIECE_NAMES } from '../types/tacticTypes';
@@ -414,31 +414,33 @@ export const BOARD_COMPUTERS = {
     },
   },
   bookMove: {
-    // THEORY IS KNOWLEDGE, NOT A FIND (David 2026-10-14): once the student has
-    // left the book, the book move is named with its job on the board
-    // (`bookMoveWhy`) and what their move left undone. Review's walk says
-    // none: the Theory button reads `bookMoveWhy` itself (David 2026-11-06).
-    // No job → no line. It
-    // teaches (never a description) the left-book skill, on the board the
-    // student left — graded there, never after the reply (prod Learn audit
-    // 2026-10-14: graded after hxg4, "your bishop on g4" read as false).
+    // THE OPENING SLIP (David 2026-11-07/08): once the student has left the
+    // book, ONE computer (`openingSlip`) says whether it was the move ORDER,
+    // the wrong SQUARE or a different LINE, and why it matters. The order and
+    // a different line stay silent unless the move hands them a shot or gives
+    // one up; the square says why the book square was better. The Openings
+    // Play rung reads the same computer with the pro's book. Theory is
+    // knowledge, not a find: the book move is named once the student has left
+    // it. Graded on the board the student left (prod Learn audit 2026-10-14).
     read: ({ history, student }, fact) => safe(() => {
       const dep = bookDeparture(history);
-      if (!dep || dep.mover !== student || !dep.mainSan || history.length - dep.ply > 1) return null;
-      const w = bookMoveWhy(dep.fen, dep.mainSan, dep.san, student);
+      if (!dep || dep.mover !== student || history.length - dep.ply > 1) return null;
+      const book = mastersBook(history.slice(0, dep.ply - 1));
+      if (!book) return null;
+      const w = openingSlip({ fen: dep.fen, playedSan: dep.san, book, student });
       if (!w) return null;
       const spokenOn = boardAfter(dep.fen, dep.san);
       if (!spokenOn) return null;
       const key = `book-move:${dep.ply}:${dep.san}`;
       return fact({ key, claims: [key], text: w.text, proof: squaresProof(w.text, w.squares) ?? NO_PROOF.stated, squares: [...w.squares], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: spokenOn, role: 'teach', skill: FUNDAMENTAL_TAG['left-book-early'] });
     }),
-    computer: 'bookMoveWhy',
+    computer: 'openingSlip',
     kind: 'opening',
     phase: NOT_ENDING,
     surfaces: {
       lesson: { not: 'a taught line is the book: there is no departure to name' },
       learn: LEARN,
-      review: { not: "the walk speaks none: the Theory button says the book move at the student's departure (reviewOpeningTheory → bookMoveWhy)" },
+      review: { not: "the walk speaks none: the Theory button says the book move at the student's departure (reviewOpeningTheory → bookMoveWhy); Review's deep dive is designed with David first" },
       play: COMPOSER,
       chat: COMPOSER,
       tactics: { not: 'a puzzle has no book departure' },
