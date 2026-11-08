@@ -46,7 +46,7 @@ describe('one reason for the better move, on every surface', () => {
       playedLineUci: [], bestLineUci: BEST_LINE, replyBestSan: null, replyEvaluation: null,
     }));
     const quality = facets.find((f) => f.startsWith('[quality]')) ?? '';
-    expect(quality).toMatch(/the stronger move was Rxf8\+/i);
+    expect(quality).toMatch(/Rxf8\+ was (?:stronger|the better move)|Better was Rxf8\+/);
     expect(quality).toContain(reason ?? '<no reason>');
   });
 });

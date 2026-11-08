@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1947 lines · 11 exports · 20 importers · 26 tests · 0 audits**
+**1944 lines · 11 exports · 20 importers · 26 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1336) — names `reviewFullData`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1388) — names `reviewFullData`
 
 ## Who calls in
 
@@ -55,7 +55,7 @@
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
 - `src/services/coachFeatureService.ts:2133`
-- `src/services/danyaBench.measure.test.ts:395`
+- `src/services/danyaBench.measure.test.ts:408`
 - `src/services/exchangeIdeas.test.ts:253`
 - `src/services/forkTrick.test.ts:62`
 - `src/services/hangingVsUndefended.test.ts:13`
@@ -102,13 +102,13 @@
 - `src/services/tacticGeometry.test.ts:268`
 - `src/services/tacticGeometry.test.ts:273`
 - `src/services/unifiedBetterMoveReason.test.ts:39`
-- `src/services/weighedMoves.test.ts:178`
 - `src/services/weighedMoves.test.ts:191`
+- `src/services/weighedMoves.test.ts:204`
 - `src/test/teach02Wired.test.ts:28`
 - `src/test/teach02Wired.test.ts:68`
 
 ### `computeThroughLine` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:6197`
+- `src/services/coachFeatureService.ts:6202`
 - `src/services/reviewFullData.test.ts:215`
 - `src/services/reviewFullData.test.ts:218`
 - `src/services/reviewFullData.test.ts:226`

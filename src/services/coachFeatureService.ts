@@ -6293,10 +6293,16 @@ export function moveMeetsThreat(fenBefore: string, san: string, threatSan: strin
  *  off a fresher line of the same ply, or drop it when that line proves none.
  *  The narration is left alone when the old reason is not found as spoken. */
 export function replaceVerdictReason(narration: string, oldReason: string, freshReason: string | null): string {
-  const marker = ` — ${oldReason}`;
-  const at = narration.indexOf(marker);
-  if (at < 0 || freshReason === oldReason) return narration;
-  return `${narration.slice(0, at)}${freshReason ? ` — ${freshReason}` : ''}${narration.slice(at + marker.length)}`;
+  if (freshReason === oldReason) return narration;
+  // The reason follows the better move after a colon ("f6 was stronger: it
+  // would …", 2026-11-08) or, in an older line, a dash.
+  for (const sep of [': ', ' — ']) {
+    const marker = `${sep}${oldReason}`;
+    const at = narration.indexOf(marker);
+    if (at < 0) continue;
+    return `${narration.slice(0, at)}${freshReason ? `${sep}${freshReason}` : ''}${narration.slice(at + marker.length)}`;
+  }
+  return narration;
 }
 
 /** Give a verdict that names the better move with NO reason ("the stronger move

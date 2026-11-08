@@ -549,7 +549,7 @@ describe('the answer to their slip is held when the student then missed it (unit
     return facets.find((f) => f.startsWith('[quality]')) ?? '';
   };
   it('names it when they played it', () => {
-    expect(facetsWithNext('c5')).toMatch(/your answer was c5/);
+    expect(facetsWithNext('c5')).toMatch(/[Yy]our answer was c5/);
   });
   it('holds it when they played something else — that move is the question', () => {
     expect(facetsWithNext('Kf2')).not.toMatch(/c5/);
@@ -741,7 +741,7 @@ describe('"and they missed it" only when their reply let the win go', () => {
 
   it('their …Qg6+ still won, so they missed nothing', () => {
     const said = rb3(-1384).join(' ');
-    expect(said).toMatch(/it let them/);
+    expect(said).toMatch(/[Ii]t let them/);
     expect(said).not.toMatch(/they missed it/);
   });
 

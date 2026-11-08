@@ -75,7 +75,7 @@ import { fundamentalReply, sameReplyAsGrade } from './mistakeTurnLine';
 import { errorWhy, priorMoveLeadingTo, replyKeptWin, type SecondReads } from './inaccuracyCall';
 import { toOtherSeat } from '../utils/seatPronouns';
 import { andList, countWord, lineSeatAt, withArticle } from '../utils/andList';
-import { stemKeyOf } from '../utils/rotateStem';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { imageryFor } from './factImagery';
 import { exchangeIdeas } from './exchangeIdeas';
 import { minorsAtHome } from './development';
@@ -668,22 +668,19 @@ export function computeMoveFacets(
     // heart of the app's order. A better move with no reason is a bare
     // conclusion (proof rule, 52-errors #47) and is not named.
     const failedSaid = ew?.failed ? (opponentMoved ? seatPieces(toOtherSeat(ew.failed)) : seatPieces(ew.failed)) : null;
-    const strongerClause = reason && ew?.bestSan ? `the stronger move was ${ew.bestSan} — ${reason}` : null;
-    const inline = [whyBad, [consequence, strongerClause, !consequence && !reason && !failedSaid ? answer : null].filter(Boolean).join('; ')].filter(Boolean).join('; ');
-    // The better move is its own sentence when one breath would read three
-    // squares or more out (David 2026-11-05: what it allowed and the better
-    // move at once). Only then: a short verdict keeps it inline, where the
-    // walk's near-twin check cannot mistake "The stronger move was f6 — …" on
-    // one move for the same sentence on another.
-    const splitStronger = !!strongerClause && new Set(`${san} ${inline}`.match(/\b[a-h][1-8]\b/g) ?? []).size >= 3;
-    const stronger = splitStronger && strongerClause ? ` ${openSentence(strongerClause)}.` : '';
-    const better = [
-      consequence,
-      splitStronger ? null : strongerClause,
-      !consequence && !reason && !failedSaid ? answer : null,
-    ].filter(Boolean).join('; ');
-    const tail = [whyBad, better].filter(Boolean).join('; ');
-    const betterBit = tail ? ` — ${tail}` : '';
+    // ONE IDEA A SENTENCE (David 2026-11-08, the human voice): "Their Nxe5 was a
+    // mistake, costing more than a point — the stronger move was f6 — it would
+    // guard e5" was three clauses on dashes. The verdict, what it allowed and
+    // the better move with its reason are each a sentence; the better move
+    // leads its own, so the walk's twin check keys it by the move, and its
+    // words rotate on the ply.
+    const strongerSentence = reason && ew?.bestSan
+      ? rotateStem([`${ew.bestSan} was stronger: ${reason}`, `${ew.bestSan} was the better move: ${reason}`, `Better was ${ew.bestSan}: ${reason}`], ply)
+      : null;
+    const after = [whyBad, consequence, strongerSentence, !consequence && !reason && !failedSaid ? answer : null]
+      .filter((t): t is string => !!t)
+      .map((t) => ` ${openSentence(t)}.`)
+      .join('');
     // CARRY THE MOVER'S SUBJECT (David 2026-07-20 opera-ply-14 bug): a quiet move
     // (e.g. …Qe7) yields no [move] mechanics facet, so [quality] was the ONLY
     // clue to whose move it was — and with it subject-less, the LLM voiced Black's
@@ -698,7 +695,7 @@ export function computeMoveFacets(
     // — they come out two pawns up"); review dropped it.
     const tailSaid = consequence && ew?.tail ? (opponentMoved ? seatPieces(toOtherSeat(ew.tail)) : seatPieces(ew.tail)) : '';
     const praiseBit = positive ? praiseWhy(ctx.classification, ctx.preMoveEval, ctx.evaluation, ctx.moverColor) : '';
-    const qf = put('errorWhy', positive ? 'praise' : 'quality', `${verdictSentence(ctx.classification, isStudent, san)}${swingBit}${betterBit}${praiseBit}.${stronger}${heardNow?.ridesVerdict ? ` ${heardNow.text}` : ''}${failedSaid ? ` ${failedSaid}` : ''}${tailSaid}`);
+    const qf = put('errorWhy', positive ? 'praise' : 'quality', `${verdictSentence(ctx.classification, isStudent, san)}${swingBit}${praiseBit}.${after}${heardNow?.ridesVerdict ? ` ${heardNow.text}` : ''}${failedSaid ? ` ${failedSaid}` : ''}${tailSaid}`);
     // The verdict's proof is the line its words name: the better move's own
     // line when the reason came from it, the line after the move when the
     // punishment did.

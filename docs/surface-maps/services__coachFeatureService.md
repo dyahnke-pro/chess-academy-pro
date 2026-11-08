@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6315 lines · 30 exports · 69 importers · 83 tests · 4 audits**
+**6321 lines · 30 exports · 69 importers · 83 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **Why determinism** (CLAUDE.md:384) — names `coachFeatureService`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4746) — names `coachFeatureService`
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5815) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6910) — names `coachFeatureService`
+- **Why determinism** (CLAUDE.md:412) — names `coachFeatureService`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4774) — names `coachFeatureService`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5843) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6938) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -226,8 +226,8 @@
 - `src/services/coachFeatureService.test.ts:833`
 - `src/services/coachFeatureService.test.ts:889`
 - `src/services/coachFeatureService.trade.test.ts:19`
-- `src/services/coachNoRecall.test.ts:44`
-- `src/services/coachNoRecall.test.ts:56`
+- `src/services/coachNoRecall.test.ts:45`
+- `src/services/coachNoRecall.test.ts:57`
 - `src/services/danyaBench.measure.test.ts:398`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
@@ -326,10 +326,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8818`
-- `src/components/Coach/CoachTeachPage.tsx:8921`
-- `src/components/Coach/CoachTeachPage.tsx:11837`
-- `src/components/Coach/CoachTeachPage.tsx:12249`
+- `src/components/Coach/CoachTeachPage.tsx:8774`
+- `src/components/Coach/CoachTeachPage.tsx:8877`
+- `src/components/Coach/CoachTeachPage.tsx:11795`
+- `src/components/Coach/CoachTeachPage.tsx:12207`
 - `src/services/coachFeatureService.test.ts:904`
 - `src/services/coachFeatureService.test.ts:905`
 - `src/services/phaseTransitionDetector.test.ts:575`
@@ -397,7 +397,7 @@
 
 ### `detectBadHabits` (re-export) — 7 call sites
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:5367`
+- `src/services/coachApi.ts:5311`
 - `src/services/coachFeatureService.test.ts:130`
 - `src/services/coachFeatureService.test.ts:151`
 - `src/services/coachFeatureService.test.ts:170`
