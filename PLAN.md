@@ -13,6 +13,23 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🗣️ WO-HUMAN-VOICE + 🎯 WO-MARKS-AS-SAID — the coach talks like a person, and the board shows what it says as it says it (David 2026-11-08: "I want all narrations to follow this pattern" → "Make sure ALL stated squares pieces moves are covered. Key squares get highlights, moves get arrowed, lines get multiple arrows and a play out line button, and the ALL appear AS THEY ARE STATED!")
+
+**The voice (CLAUDE.md § THE COACH TALKS LIKE A PERSON).** Measured by `node scripts/voice/robotic-count.mjs` over the decision baseline's spoken lines; `humanVoice.gate` holds the counts, which only fall.
+- Batches 1–3 (on main): the grade line one idea a sentence, the plan / weak-pawn / open-file how-tos, the colour complex, the problem piece, the rest of the house.
+- Batch 4 (drafted on branch `voice-batch4`, not yet on main): no "eyeing" (aiming at), no spoken semicolons (hidden weak squares, the target habit, a pawn that builds nothing, a hole's knight, the balance sheet), the opponent's development read in their register ("Their knight comes into the game aiming at e5. It fights for the centre.", tail rotated on the square — the rewrite that rotated the old tail is deleted), the opening rule and the opening-move rule in two sentences, three dash chains (their favour, their plan's direction, the target habit).
+- Left: long sentences (~34), one square named 3+ times across a turn (~30): the turn's facts each name their square; needs the "full name once, then it" pass across facts, not inside one.
+
+**The marks (one schedule for every surface).** `markPacing.scheduleMarks` / `placeMarks` / `runMarkSchedule` (55 ms/char, from when the audio is on air); `markAnchors.markItems` (a mark is announced by its square, then its piece's words, then the ply before it in its line, then its fact's sentence); `cutMarksWithWords` (a fade or a trim cuts the marks of the words it cut).
+- Learn: every wave paced; the late wave replaces; the Play-line button plays the last spoken line.
+- Review: key squares come from the facts that SPEAK (after the door, fade and package), each with its sentence; the causal chain's arrows only while its words are kept.
+- Chat: Learn's answers, the game chat panel (Play, Openings Play, middlegame practice, the drawer) and the puzzle question box (which marked nothing before) through the schedule.
+- Lessons: a node's single idea lights every named square (the four-square cap deleted with `squaresNamedIn`) and arrows every named move, as said.
+- Puzzles: the boards' own lines (intro, hint, wrong try, the solution clause by clause) through `useLiveMarks`; the setup trainer's wrong try too (the refutation hook's early arrows deleted). The calculation drill draws no reply arrow on purpose: the wrong move is never put on its board.
+- Found on the way, a real leak: Learn's held weighing ("Bxh7+? That drops the queen on g4.", the move kept back) still lit the held move's square and drew its whole line — the answer handed over on the board. `deliberationMarks` builds the marks from what the words say.
+- Sweep (`marksSweep.gate`, ceilings only fall): unlit 0 everywhere; unstated (a mark with no words) Review 47 → 1, Learn/chat/lesson 0; described (a square the fact describes without naming, at its sentence) reported, not gated.
+- Left: the one Review arrow with no words (a8 rook on Their Rac8's ply); a bare pawn square read as the wrong side's move when the sentence is about the other seat (fixed for "for"/"prepares"; "(d5)" after a rule is still read as a move).
+
 ## 📱 iPHONE TAPS LAND A ROW LOW — the web view's inset (David 2026-11-06, TestFlight 4.0.8 (211): "Tired pressing the knight, but it hit the pawn" → "Coach tab / All surfaces / They don't work on my end")
 
 **What his phone showed.** A "Learn how to think" board, flipped to Black: he tapped the knight on f6, the app marked the pawn on f7, one row lower. His PostHog rows from that session: a cold launch at 4:12 PM, two boards where every tap answered the square below (a bishop and a pawn when he aimed at the knight on e5), and the app read correctly again after it came back from the background at 4:15.
