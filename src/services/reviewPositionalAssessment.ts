@@ -17,7 +17,6 @@
 import { evalBand, evalBandWords } from './evalBand';
 import { settledLeadFor, type LastMove } from './material';
 import { openSentence } from '../utils/openSentence';
-import { andList } from '../utils/andList';
 import { goodPieceIdeaKey } from './positionReadingService';
 import { Chess, type Color } from 'chess.js';
 import { describeStructure } from './boardStructure';
@@ -319,7 +318,11 @@ export function phaseVerdictLine(
   // ONE IDEA A SENTENCE (the human register, David 2026-11-08): the verdict,
   // then its reasons, then the other side of the scale — never one sentence
   // held together by dashes and a semicolon.
-  const why = a.reasons.length === 0 ? '' : ` ${openSentence(andList(a.reasons))}.`;
+  // Each reason has its own subject, so each is its own sentence ("Your d-pawn
+  // is isolated — a target they can pile on and their passed a-pawn on a4 is a
+  // long-term trump" ran two reasons together around a dash).
+  const sentences = (clauses: readonly string[]): string => clauses.map((c) => ` ${openSentence(c)}.`).join('');
+  const why = sentences(a.reasons);
   // ONE COMPARISON, not a list: the other side of the scale, and what it
   // weighs. Level → the two sides' trumps hold each other; slightly → theirs
   // keeps it close; clearly or decisive → it is not enough.
@@ -327,11 +330,14 @@ export function phaseVerdictLine(
   const inReturn = (() => {
     if (counter.length === 0) return '';
     const worse = a.verdict === 'slightly worse' || a.verdict === 'clearly worse' || a.verdict === 'losing';
-    if (a.verdict === 'balanced') return ` On the other side, ${andList(counter)}, and the two hold each other.`;
     // The counter items are clauses ("their knight sits on …"), so they are
-    // said as what is on the other side, never as a thing someone "has".
-    const weight = a.verdict !== 'slightly better' && a.verdict !== 'slightly worse' ? "but it isn't enough" : 'and that keeps it close';
-    return ` On ${worse ? 'your' : 'their'} side, ${andList(counter)}, ${weight}.`;
+    // said as what is on the other side, never as a thing someone "has" — the
+    // first after "On their side,", the rest a sentence each, then the weight.
+    const [first, ...rest] = counter;
+    const weight = a.verdict === 'balanced' ? 'The two hold each other.'
+      : a.verdict !== 'slightly better' && a.verdict !== 'slightly worse' ? "It isn't enough." : 'That keeps it close.';
+    const side = a.verdict === 'balanced' ? 'On the other side' : `On ${worse ? 'your' : 'their'} side`;
+    return ` ${side}, ${first}.${sentences(rest)} ${weight}`;
   })();
   // Rotated on the board — the verdict and its reasons never vary.
   return rotateStem([

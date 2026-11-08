@@ -548,8 +548,12 @@ export const MISCONCEPTION_RULES_REV = '2026-11-03-discovery-lands';
  *  the best move on a costly ply, the game's own on a clean one), and a line
  *  that opens with a set-up is asked, held and missed under both; the king
  *  reads get the line FROM the best move (they were handed the bare
- *  continuation). */
-export const POSITIVE_HALF_REV = '2026-10-22-count-both';
+ *  continuation).
+ *  2026-11-08: the eight false claims read off David's games fixed at their
+ *  producers (L5) change what one sample game poses — the castling and
+ *  loose-piece reads follow the board (castling that drops a piece, the
+ *  centre fork trick and a sound sacrifice are not those questions). */
+export const POSITIVE_HALF_REV = '2026-11-08-l5-claims';
 // 2026-10-20: the rev fingerprint gate (recordRevs.gate.test.ts) found the
 // recorded held-skill rows of a real game had changed since 10-19 with this rev
 // unmoved, so devices kept the old green rows; then the one-price re-price moved

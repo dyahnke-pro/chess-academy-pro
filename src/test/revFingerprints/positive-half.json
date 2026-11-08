@@ -1,8 +1,8 @@
 {
-  "rev": "2026-10-22-count-both",
+  "rev": "2026-11-08-l5-claims",
   "parts": {
     "chesscom-1038626480": "fb2ffeaaf852d3d1",
-    "chesscom-1042725180": "ff05fdf3e5694c2b",
+    "chesscom-1042725180": "f4f7bce5f21eb287",
     "chesscom-1044361526": "f5dca866802baa8a",
     "lichess-motifs": "9b8cdd1de609c525"
   }

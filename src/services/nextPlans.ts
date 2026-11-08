@@ -305,11 +305,14 @@ export function deriveNextPlanFacts(
     .sort((a, b) => pushesLeft(a.sq) - pushesLeft(b.sq) || Number(kingInFront(a.sq)) - Number(kingInFront(b.sq)) || kingReach(b.sq) - kingReach(a.sq) || a.i - b.i)[0]?.sq;
   if (passer) {
     const queensOn = all.some((c) => c.type === 'q');
+    // ONE STEP A SENTENCE (the human register, David 2026-11-08): the count,
+    // the piece in the way, the escort, the pushes — never one breath held
+    // together by a semicolon and two dashes.
     const escort = queensOn
-      ? 'escort it with your pieces — the king joins once the queens come off'
-      : 'escort it with your king and pieces';
+      ? 'Escort it with your pieces, and bring the king in once the queens come off.'
+      : 'Escort it with your king and pieces.';
     const how = passerHow(chess, passer, studentColorWB);
-    add('passer', `get your passed pawn on ${passer} promoting`, `pushing your passed pawn on ${passer}`, `${how.text}${escort}, and push it one safe square at a time — every push brings it closer to promotion`, [passer, ...how.squares]);
+    add('passer', `get your passed pawn on ${passer} promoting`, `pushing your passed pawn on ${passer}`, `${how.text} ${escort} Push it one safe square at a time, and every push brings it closer to promotion`, [passer, ...how.squares]);
   }
 
   // 3. An enemy weak (isolated) pawn on the c–f files → besiege it, HOW spelled
@@ -467,11 +470,11 @@ function passerHow(chess: Chess, passer: string, color: Color): { text: string; 
   try {
     const by = chess.attackers(front, enemy).map((sq) => ({ sq, p: chess.get(sq) })).filter((x) => x.p && x.p.type !== 'k');
     if (by.length > 0) {
-      cover = `, and their ${PIECE_NOUN[by[0].p?.type ?? 'p']} on ${by[0].sq} covers ${front} — drive it off or cover ${front} yourself first`;
+      cover = ` Their ${PIECE_NOUN[by[0].p?.type ?? 'p']} on ${by[0].sq} covers ${front}, so drive it off or cover ${front} yourself first.`;
       squares.push(by[0].sq, front);
     }
   } catch { cover = ''; }
-  return { text: `it is ${left} square${left === 1 ? '' : 's'} from queening${cover}; `, squares };
+  return { text: `it is ${left} square${left === 1 ? '' : 's'} from queening.${cover}`, squares };
 }
 
 /** The weak pawn counted: how often the student hits it against its guards. */
