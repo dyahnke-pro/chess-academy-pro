@@ -134,3 +134,15 @@ Decision baseline regenerated and every changed line read (`src/test/fixtures/de
 
 Behaviour that changes with fix 3 (David's to confirm): "You could have castled there" is now said only where the board's own read (six lines on Learn's board) lists castling within a pawn of its best and not losing — the rewind's rule. Where castling was legal but unsound, or the read had not come back, the reminder waits for a later board.
 
+## 5. R1 on David's own games — does Review now say the tempting move refuted?
+
+Yes. `reviewWeighed.realGame.measure.test.ts` (REVIEW_WEIGHED_REAL=1): three of his chess.com games graded at review depth with no candidate reads (as all 966 are), topped up by the app's own `topUpWeighedReads` on native Stockfish standing in for the pool worker, then Review's walk run on the same record before and after. With the §4 fixes in.
+
+| game | moves read | weighing lines before → after | the tempting move refuted | top-up time |
+|---|---|---|---|---|
+| chesscom-1001055178 | 67 of 67 | 0 → 18 | 15 | 249 s |
+| chesscom-1002984876 | 61 of 62 | 0 → 21 | 19 | 174 s |
+| chesscom-1020779996 | 70 of 72 | 0 → 28 | 25 | 213 s |
+
+Two checked against Stockfish d16 on the board: ply 17 "Nc3 is tempting here, but it fails: they play hxg5 — they win a bishop" (Nc3 −5.50 vs Bxf6 −0.52) and ply 39 "Qd3 is tempting here, but it fails: they play Bxf2+, you answer Rxf2 and they play Qxd3 — they win a queen and a pawn for a bishop" (Qd3 −5.40 vs c5 −1.19) — both true. Volume to watch on the R2 scoreboard: 15–25 refutations a game, both seats, before the door weighs them. The top-up costs 3–4 minutes of a desktop engine a game; on a phone it is several times that, behind the walk.
+
