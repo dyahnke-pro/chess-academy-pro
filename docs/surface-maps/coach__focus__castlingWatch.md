@@ -85,7 +85,7 @@
 - `scripts/scenarios/build-kp-triangulation.mjs:167`
 - `scripts/soundness-sweep-sublines.mjs:83`
 - `src/coach/focus/tempoRun.ts:87`
-- `src/components/Coach/CoachTeachPage.tsx:10438`
+- `src/components/Coach/CoachTeachPage.tsx:10522`
 - `src/missions/earnedSlip.ts:263`
 - `src/services/attackLibrary.ts:47`
 - `src/services/falseAlarm.ts:51`

@@ -54,7 +54,7 @@
 - `src/coach/focus/focusChances.test.ts:499`
 - `src/coach/focus/focusChances.test.ts:503`
 - `src/coach/focus/focusChances.test.ts:506`
-- `src/components/Coach/CoachTeachPage.tsx:2340`
+- `src/components/Coach/CoachTeachPage.tsx:2421`
 
 ### `FocusMove` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -186,7 +186,7 @@
 - `src/coach/focus/focusChances.test.ts:457`
 - `src/coach/focus/focusChances.test.ts:467`
 - `src/coach/focus/focusChances.test.ts:468`
-- `src/components/Coach/CoachTeachPage.tsx:13910`
+- `src/components/Coach/CoachTeachPage.tsx:13973`
 
 ## Tests
 
