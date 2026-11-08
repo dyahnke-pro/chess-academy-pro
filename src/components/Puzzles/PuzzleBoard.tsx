@@ -807,7 +807,8 @@ export function PuzzleBoard({
         {lineWalk.walkFen ? (
           <ConsistentChessboard
             fen={lineWalk.walkFen}
-            arrows={lineWalk.walkArrows}
+            arrows={[...lineWalk.walkArrows, ...lineWalk.markArrows]}
+            squareStyles={lineWalk.markSquareStyles}
             interactive={false}
             boardOrientation={userColor}
             showLastMoveHighlight
@@ -908,6 +909,7 @@ export function PuzzleBoard({
             studentColor={userColor}
             route="/tactics"
             onWalkLine={lineWalk.walk}
+            onAnswerMarks={lineWalk.markAnswer}
             shownLine={solutionShown}
             testIdPrefix="puzzle-ask"
             placeholder="Why does it work? What if they play …?"

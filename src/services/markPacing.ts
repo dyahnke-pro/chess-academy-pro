@@ -74,46 +74,63 @@ function wordsAt(text: string, words: string, from = 0): number {
   return m ? m.index : -1;
 }
 
-/** The schedule. Marks that share a square are revealed in order of their
- *  ids' position in `marks` at successive mentions — a line's plies landing on
- *  the same square appear one per mention. */
-export function scheduleMarks(text: string, marks: readonly PacedMark[], msPerChar = MS_PER_CHAR): MarkEvent[] {
+/** How a mark found its words: its square, its piece's words, the ply before
+ *  it in its line, its fact's sentence — or none, and it goes up with the last
+ *  sentence (`tail`). */
+export type MarkAnchor = 'square' | 'words' | 'follow' | 'said' | 'tail';
+
+/** Where each mark goes up in the text, and what anchored it. */
+export function placeMarks(text: string, marks: readonly PacedMark[]): Array<{ id: string; pos: number; anchor: MarkAnchor }> {
   const starts = sentenceStarts(text);
-  const sentenceOf = (pos: number): number => { let s = 0; for (let i = 0; i < starts.length; i++) if (starts[i] <= pos) s = i; return s; };
   const cursor = new Map<string, number>();
-  const placed: Array<{ id: string; pos: number }> = [];
+  const placed: Array<{ id: string; pos: number; anchor: MarkAnchor }> = [];
   const tail: string[] = [];
   // The last placed ply of each line, so an unnamed ply follows it.
   const groupAt = new Map<string, number>();
   for (const mk of marks) {
     let best = -1;
+    let anchor: MarkAnchor = 'square';
     // A line's ply is looked for from where the line has reached.
     const floor = mk.group !== undefined ? (groupAt.get(mk.group) ?? 0) : 0;
+    // Only a LINE's plies use the mentions up, one ply per mention: a
+    // highlight and an arrow on the same square go up together at its name.
+    const ckey = (k: string): string => `${mk.group ?? ''}|${k}`;
     for (const sq of mk.squares) {
-      const at = mentionAt(text, sq, Math.max(floor, cursor.get(sq) ?? 0));
+      const at = mentionAt(text, sq, Math.max(floor, cursor.get(ckey(sq)) ?? 0));
       if (at >= 0 && (best < 0 || at < best)) best = at;
     }
     if (best < 0) {
+      anchor = 'words';
       for (const w of mk.words ?? []) {
-        const key = `w:${w.toLowerCase()}`;
+        const key = ckey(`w:${w.toLowerCase()}`);
         const at = wordsAt(text, w, Math.max(floor, cursor.get(key) ?? 0));
-        if (at >= 0 && (best < 0 || at < best)) { best = at; cursor.set(key, at + w.length); }
+        if (at >= 0 && (best < 0 || at < best)) { best = at; if (mk.group !== undefined) cursor.set(key, at + w.length); }
       }
-    } else {
-      for (const sq of mk.squares) if (mentionAt(text, sq, best) === best) cursor.set(sq, best + sq.length);
+    } else if (mk.group !== undefined) {
+      for (const sq of mk.squares) if (mentionAt(text, sq, best) === best) cursor.set(ckey(sq), best + sq.length);
     }
     if (best < 0 && mk.group !== undefined && groupAt.has(mk.group)) {
       // Said by its shape: right after the ply before it.
       best = (groupAt.get(mk.group) as number) + 1;
+      anchor = 'follow';
     }
-    if (best < 0 && mk.said) best = saidAt(text, mk.said);
+    if (best < 0 && mk.said) { best = saidAt(text, mk.said); anchor = 'said'; }
     if (best < 0) { tail.push(mk.id); continue; }
     if (mk.group !== undefined) groupAt.set(mk.group, best);
-    placed.push({ id: mk.id, pos: best });
+    placed.push({ id: mk.id, pos: best, anchor });
   }
   const lastStart = starts[starts.length - 1];
-  for (const id of tail) placed.push({ id, pos: lastStart });
-  placed.sort((a, b) => a.pos - b.pos);
+  for (const id of tail) placed.push({ id, pos: lastStart, anchor: 'tail' });
+  return placed.sort((a, b) => a.pos - b.pos);
+}
+
+/** The schedule. A line's plies landing on the same square appear one per
+ *  mention, in order; any other marks that share a square go up together at
+ *  its first mention. */
+export function scheduleMarks(text: string, marks: readonly PacedMark[], msPerChar = MS_PER_CHAR): MarkEvent[] {
+  const starts = sentenceStarts(text);
+  const sentenceOf = (pos: number): number => { let s = 0; for (let i = 0; i < starts.length; i++) if (starts[i] <= pos) s = i; return s; };
+  const placed = placeMarks(text, marks);
   const events: MarkEvent[] = [];
   let shownSentence = -1;
   for (const p of placed) {

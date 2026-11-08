@@ -26,6 +26,11 @@ interface BoardQuestionBoxProps {
   route: string;
   /** Plays a line on the screen's board — the walk button and "show me". */
   onWalkLine: (line: WalkableLine) => void;
+  /** Puts the answer's marks on the screen's board as they are said — every
+   *  square it names lit, every move arrowed, its line drawn ply by ply
+   *  (`useLineWalk.markAnswer`). REQUIRED: an answer that names squares with
+   *  nothing on the board is marks without words' twin (David 2026-11-08). */
+  onAnswerMarks: (text: string, fen: string, lines: readonly WalkableLine[]) => void;
   /** The line the screen just showed from `fen` — the puzzle's solution,
    *  played or revealed — or null when it showed none. REQUIRED: it is what
    *  "why does this work?" asks about, and a screen that forgets it answers
@@ -42,7 +47,7 @@ interface BoardQuestionBoxProps {
 }
 
 export function BoardQuestionBox({
-  fen, studentColor, route, onWalkLine, shownLine, engineBestMoveUci, moveHistory, fallback, testIdPrefix, placeholder,
+  fen, studentColor, route, onWalkLine, onAnswerMarks, shownLine, engineBestMoveUci, moveHistory, fallback, testIdPrefix, placeholder,
 }: BoardQuestionBoxProps): JSX.Element {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -69,25 +74,32 @@ export function BoardQuestionBox({
         ...(moveHistory && moveHistory.length > 0 ? { moveHistory } : {}),
       };
       let text = '';
+      let answerLines: readonly WalkableLine[] = [];
+      let walking = false;
       try {
         const answer = await dispatchCoachTurn(
           { surface: 'standalone-chat', ask: question, liveState },
           { maxToolRoundTrips: 1 },
         );
         text = sanitizeCoachText(answer.text);
+        answerLines = answer.lines ?? [];
         setLine(answer.lines?.[0] ?? null);
-        if (answer.autoWalk) onWalkLine(answer.autoWalk);
+        if (answer.autoWalk) { onWalkLine(answer.autoWalk); walking = true; }
       } catch {
         text = '';
       }
       if (!text && fallback) text = await fallback(question);
       setReply(text || 'The coach could not be reached just now — try again in a moment.');
-      if (text) void voiceService.speakGrounded(text, fen);
+      if (text) {
+        void voiceService.speakGrounded(text, fen);
+        // "Show me" plays the line itself; any other answer marks what it says.
+        if (!walking && (!answerLines.length || answerLines[0].startFen === fen)) onAnswerMarks(text, fen, answerLines);
+      }
       setInput('');
     } finally {
       setLoading(false);
     }
-  }, [input, loading, fen, studentColor, route, shownLine, engineBestMoveUci, moveHistory, fallback, onWalkLine]);
+  }, [input, loading, fen, studentColor, route, shownLine, engineBestMoveUci, moveHistory, fallback, onWalkLine, onAnswerMarks]);
 
   return (
     <div className="flex flex-col gap-1.5" data-testid={`${testIdPrefix}-box`}>

@@ -24,7 +24,8 @@ describe('BoardQuestionBox', () => {
   it('asks through the one door with the board, shows the answer and its proof', async () => {
     dispatch.mockResolvedValue({ text: 'They can attack your bishop with d5.', lines: [LINE] });
     const walk = vi.fn();
-    render(<BoardQuestionBox fen={FEN} studentColor="white" route="/tactics/setup" onWalkLine={walk} shownLine={null} engineBestMoveUci="d7d5" testIdPrefix="t" />);
+    const marks = vi.fn();
+    render(<BoardQuestionBox fen={FEN} studentColor="white" route="/tactics/setup" onWalkLine={walk} onAnswerMarks={marks} shownLine={null} engineBestMoveUci="d7d5" testIdPrefix="t" />);
     ask('can they attack my bishop?');
     await waitFor(() => expect(screen.getByTestId('t-reply').textContent).toBe('They can attack your bishop with d5.'));
     const [input] = dispatch.mock.calls[0] as [{ surface: string; ask: string; liveState: { fen: string; engineBestMoveUci: string; whoseTurn: string } }];
@@ -32,17 +33,22 @@ describe('BoardQuestionBox', () => {
     expect(input.liveState).toMatchObject({ fen: FEN, engineBestMoveUci: 'd7d5', whoseTurn: 'black' });
     fireEvent.click(screen.getByTestId('t-walk-line-btn'));
     expect(walk).toHaveBeenCalledWith(LINE);
+    // The answer's marks go to the screen's board, with the position it is about.
+    expect(marks).toHaveBeenCalledWith('They can attack your bishop with d5.', FEN, [LINE]);
   });
   it('"show me" plays the line straight away', async () => {
     dispatch.mockResolvedValue({ text: 'Playing the line out on the board, from d5 exd5.', lines: [LINE], autoWalk: LINE });
     const walk = vi.fn();
-    render(<BoardQuestionBox fen={FEN} studentColor="white" route="/tactics" onWalkLine={walk} shownLine={null} testIdPrefix="t" />);
+    const marks = vi.fn();
+    render(<BoardQuestionBox fen={FEN} studentColor="white" route="/tactics" onWalkLine={walk} onAnswerMarks={marks} shownLine={null} testIdPrefix="t" />);
     ask('show me');
     await waitFor(() => expect(walk).toHaveBeenCalledWith(LINE));
+    // The walk owns the board: no answer marks over it.
+    expect(marks).not.toHaveBeenCalled();
   });
   it('the line the screen showed rides the turn — what "why does this work?" asks about', async () => {
     dispatch.mockResolvedValue({ text: 'd5 hits the bishop.' });
-    render(<BoardQuestionBox fen={FEN} studentColor="white" route="/tactics" onWalkLine={vi.fn()} shownLine={LINE} testIdPrefix="t" />);
+    render(<BoardQuestionBox fen={FEN} studentColor="white" route="/tactics" onWalkLine={vi.fn()} onAnswerMarks={vi.fn()} shownLine={LINE} testIdPrefix="t" />);
     ask('why does this work?');
     await waitFor(() => expect(dispatch).toHaveBeenCalled());
     const [input] = dispatch.mock.calls[0] as [{ liveState: { shownLine: unknown } }];
@@ -51,7 +57,7 @@ describe('BoardQuestionBox', () => {
   it('falls back to the screen\'s computed answer when the coach has nothing', async () => {
     dispatch.mockRejectedValue(new Error('offline'));
     const fallback = vi.fn(async () => 'Nxe5 wins the pawn.');
-    render(<BoardQuestionBox fen={FEN} studentColor="white" route="/tactics" onWalkLine={vi.fn()} shownLine={null} fallback={fallback} testIdPrefix="t" />);
+    render(<BoardQuestionBox fen={FEN} studentColor="white" route="/tactics" onWalkLine={vi.fn()} onAnswerMarks={vi.fn()} shownLine={null} fallback={fallback} testIdPrefix="t" />);
     ask('why?');
     await waitFor(() => expect(screen.getByTestId('t-reply').textContent).toBe('Nxe5 wins the pawn.'));
   });

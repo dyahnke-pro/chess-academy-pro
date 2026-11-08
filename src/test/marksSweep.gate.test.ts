@@ -21,7 +21,7 @@ import { mateContext } from '../utils/mateContext';
 import { analysisOf, linesOf, replayPlies, reviewSegments, type ReplayGame } from './replayGame';
 import { segmentNamedArrows, segmentLitSquares, segmentMarks } from '../services/coachFeatureService';
 import { markItems } from '../services/markAnchors';
-import type { PacedMark } from '../services/markPacing';
+import { placeMarks, type PacedMark } from '../services/markPacing';
 import { namedMoveArrows } from '../services/learnBoardTeaching';
 import { extractMentionedSanSpans, ruledOutSans } from '../services/arrowEngine';
 import type { WalkthroughTreeNode } from '../types/walkthroughTree';
@@ -51,25 +51,27 @@ function loadGames(): FixtureGame[] {
 const sentencesOf = (text: string): string[] => text.split(/(?<=[.!?])\s+/).filter((s) => s.trim().length > 0);
 const destOf = (san: string): string | null => (san.replace(/[+#?!]/g, '').match(/([a-h][1-8])(?:=[QRBN])?$/) ?? [])[1] ?? (/^O-O/.test(san) ? 'castle' : null);
 
-interface Row { surface: string; kind: string; rule: 'unlit' | 'unarrowed' | 'shortline' | 'unstated'; what: string; text: string }
+interface Row { surface: string; kind: string; rule: 'unlit' | 'unarrowed' | 'shortline' | 'unstated' | 'described'; what: string; text: string }
 const rows: Row[] = [];
-const tallies: Record<string, { lines: number; unlit: number; unarrowed: number; shortline: number; unstated: number }> = {};
-const tally = (surface: string): { lines: number; unlit: number; unarrowed: number; shortline: number; unstated: number } => (tallies[surface] ??= { lines: 0, unlit: 0, unarrowed: 0, shortline: 0, unstated: 0 });
+interface Tally { lines: number; unlit: number; unarrowed: number; shortline: number; unstated: number; described: number }
+const tallies: Record<string, Tally> = {};
+const tally = (surface: string): Tally => (tallies[surface] ??= { lines: 0, unlit: 0, unarrowed: 0, shortline: 0, unstated: 0, described: 0 });
 
-/** AS IT IS STATED (David 2026-11-08): every mark the board draws for a line is
- *  named by it — its square, its piece's words, its move — or is a line's move
- *  following the one before. A mark nothing in the words states goes up at the
- *  turn's end (`markPacing`'s tail): counted here. */
+/** AS IT IS STATED (David 2026-11-08): every mark the board draws for a line
+ *  goes up at the words that state it — its square, its piece's words, its
+ *  move, the ply before it in its line — or, for a square the fact describes
+ *  without naming ("only four squares"), at its fact's sentence (`described`,
+ *  reported and read, not gated). A mark with none goes up at the turn's end
+ *  (`markPacing`'s tail): `unstated`, gated. */
 function statedCheck(surface: string, kind: string, text: string, items: readonly PacedMark[]): void {
-  const lower = text.toLowerCase();
-  const anchoredGroups = new Set<string>();
-  for (const it of items) {
-    const named = it.squares.some((q) => new RegExp(`(?<![0-9])${q}(?![0-9])`).test(text))
-      || (it.words ?? []).some((w) => lower.includes(w.toLowerCase()));
-    if (named) { if (it.group) anchoredGroups.add(it.group); continue; }
-    if (it.group && anchoredGroups.has(it.group)) continue;
-    tally(surface).unstated += 1;
-    rows.push({ surface, kind, rule: 'unstated', what: `${it.id} [${it.squares.join(' ')}]${process.env.MARKS_SWEEP_PRINT === '1' ? ` all=${JSON.stringify(items.map((x) => x.id + ':' + x.squares.join('')))}` : ''}`, text });
+  const byId = new Map(items.map((x) => [x.id, x]));
+  for (const p of placeMarks(text, items)) {
+    if (p.anchor !== 'tail' && p.anchor !== 'said') continue;
+    const it = byId.get(p.id);
+    if (!it) continue;
+    const rule = p.anchor === 'tail' ? 'unstated' : 'described';
+    tally(surface)[rule] += 1;
+    rows.push({ surface, kind, rule, what: `${it.id} [${it.squares.join(' ')}]`, text });
   }
 }
 
@@ -145,9 +147,10 @@ async function sweepGame(g: FixtureGame): Promise<void> {
       check('learn', c.kind, c.text, lit, arrowTo, drawn, c.proof && typeof c.proof === 'object' && 'line' in c.proof && c.proof.line ? c.proof.line.sans.length : null, [r.fenAfter, r.fenBefore, p.fenBefore], r.san);
       statedCheck('learn', c.kind, c.text, markItems({
         fen: r.fenAfter, viewer: student,
-        highlights: [...(c.squares ?? [])],
-        arrows: claims.map((a) => ({ from: a.from, to: a.to })),
-        lines: (c.lines ?? []).map((l) => { const out: { from: string; to: string; fen: string }[] = []; try { const b = new Chess(l.fen); for (const sn of l.sans) { const f0 = b.fen(); const m = b.move(sn); out.push({ from: m.from, to: m.to, fen: f0 }); } } catch { /* partial */ } return out; }),
+        // Each mark carries its fact's sentence, as CoachTeachPage paces them.
+        highlights: (c.squares ?? []).map((square) => ({ square, said: c.text })),
+        arrows: claims.map((a) => ({ from: a.from, to: a.to, said: c.text })),
+        lines: (c.lines ?? []).map((l) => { const out: { from: string; to: string; fen: string }[] = []; try { const b = new Chess(l.fen); for (const sn of l.sans) { const f0 = b.fen(); const m = b.move(sn); out.push({ from: m.from, to: m.to, fen: f0 }); } } catch { /* partial */ } return { moves: out, said: c.text }; }),
       }));
     }
   }

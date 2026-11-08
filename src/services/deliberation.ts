@@ -404,50 +404,65 @@ export function deliberationFacts(
   return `${opener}${reasoned.map(shortfallText).join(' ')}${verdict}`;
 }
 
+/** What a weighing says: the rule-outs always; the verdict ("The move is X —
+ *  it …") and the best line only where the words say them. The held weighing
+ *  (`deliberationWeighing`) says neither. */
+export interface WeighingSays { verdict: boolean; bestLine: boolean }
+
+/** What the full weighing (`deliberationFacts`) says, by the same rules. */
+export function fullWeighingSays(d: Deliberation, saysBestLine: boolean): WeighingSays {
+  return { verdict: !!d.bestWhy, bestLine: !!d.bestWhy && !!d.bestLine && saysBestLine };
+}
+
+/** The held weighing says the rule-outs alone — the move is kept back. */
+export const HELD_WEIGHING_SAYS: WeighingSays = { verdict: false, bestLine: false };
+
 /**
- * The squares a weighing names — every candidate's square, every move of the
- * lines it plays out, the pieces it drops or leaves — so the board lights each
- * one while it is said (David 2026-11-05: "If a single square is being named
- * it must also be highlighted"). Played on the board from `fen` (the position
- * the weighing was built on), never read back out of the sentence.
+ * THE MARKS OF A WEIGHING — the squares it names and the lines it plays out —
+ * from what its words SAY, so the board lights each one while it is said
+ * (David 2026-11-05: "If a single square is being named it must also be
+ * highlighted"; 2026-11-08: "they ALL appear AS THEY ARE STATED"). Each
+ * ruled-out candidate's square, the line that proves it, the piece it drops or
+ * leaves; the best move and its line only where the verdict is said. Played on
+ * the board from `fen` (the position the weighing was built on), never read
+ * back out of the sentence.
+ *
+ * ONE SOURCE FOR THE WORDS AND THE MARKS (marks sweep 2026-11-08): the marks
+ * used to light the best move and draw its line whatever the words said, so
+ * Learn's held weighing — "Bxh7+? That drops the queen on g4.", the move kept
+ * back — lit e5 and drew Rxe5's whole line: the answer handed over on the
+ * board. Each rule-out's line is a ply-by-ply line on the board (David
+ * 2026-09-30); the candidate itself is a ply of it, never an arrow of advice.
  */
-export function deliberationSquares(d: Deliberation, fen: string, said: ReadonlySet<string>): string[] {
-  const out = new Set<string>();
+export function deliberationMarks(
+  d: Deliberation,
+  fen: string,
+  said: ReadonlySet<string>,
+  says: WeighingSays,
+): { squares: string[]; lines: Array<{ fen: string; sans: readonly string[] }> } {
+  const squares = new Set<string>();
+  const lines: Array<{ fen: string; sans: readonly string[] }> = [];
   const play = (sans: readonly string[]): void => {
     let c: Chess;
     try { c = new Chess(fen); } catch { return; }
     for (const san of sans) {
-      try { out.add(c.move(san).to); } catch { return; }
+      try { squares.add(c.move(san).to); } catch { return; }
     }
   };
   for (const a of reasonedAlternatives(d, said)) {
     play([a.san]);
     if (a.proofSans) play(a.proofSans);
     if (a.tradeSans) play(a.tradeSans);
-    if (a.drops) out.add(a.drops.square);
-    if (a.leaves) { out.add(a.leaves.square); out.add(a.leaves.attackerSquare); }
+    if (a.drops) squares.add(a.drops.square);
+    if (a.leaves) { squares.add(a.leaves.square); squares.add(a.leaves.attackerSquare); }
+    if (a.proofSans && a.proofSans.length >= 2 && a.proofSans[0] === a.san) lines.push({ fen, sans: [...a.proofSans] });
   }
-  play([d.best.san]);
-  if (d.bestLineSans) play(d.bestLineSans);
-  return [...out];
-}
-
-/**
- * THE LINES A WEIGHING PLAYS OUT, for the board (David 2026-09-30: "a
- * punishment, a refutation or a played-out sequence is arrowed ply by ply to
- * where it lands"). Each ruled-out candidate with the refutation that proves
- * it, and the best line when the weighing says it — from `fen`, the board it
- * was built on. The voice says a long line's shape (`lineShape`); the board
- * walks every move of it. The candidate itself is a ply of the line, never an
- * arrow of advice.
- */
-export function deliberationLines(d: Deliberation, fen: string, said: ReadonlySet<string>, saysBestLine: boolean): Array<{ fen: string; sans: readonly string[] }> {
-  const out: Array<{ fen: string; sans: readonly string[] }> = [];
-  for (const a of reasonedAlternatives(d, said)) {
-    if (a.proofSans && a.proofSans.length >= 2 && a.proofSans[0] === a.san) out.push({ fen, sans: [...a.proofSans] });
+  if (says.verdict) play([d.best.san]);
+  if (says.bestLine && d.bestLineSans) {
+    play(d.bestLineSans);
+    if (d.bestLineSans.length >= 2) lines.push({ fen, sans: [...d.bestLineSans] });
   }
-  if (d.bestWhy && d.bestLine && saysBestLine && d.bestLineSans && d.bestLineSans.length >= 2) out.push({ fen, sans: [...d.bestLineSans] });
-  return out;
+  return { squares: [...squares], lines };
 }
 
 /** The alternatives ruled out WITH a reason — the line that proves it or the

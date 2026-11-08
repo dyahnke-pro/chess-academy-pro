@@ -30,7 +30,7 @@ const VOID_METHODS = [
 
 const ASYNC_METHODS = [
   'speak', 'speakForced', 'speakIfFree', 'speakWhenIdle', 'untilQuiet', 'speakLecture', 'speakReadAloud',
-  'speakGrounded', 'speakPackage', 'speakVerbatim', 'warmup', 'prefetchAudio',
+  'speakGrounded', 'speakPackage', 'speakVerbatim', 'warmup', 'prefetchAudio', 'untilOnAir',
 ] as const;
 
 const VALUE_METHODS = {

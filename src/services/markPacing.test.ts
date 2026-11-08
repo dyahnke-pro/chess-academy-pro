@@ -6,9 +6,9 @@ describe('marks appear as they are mentioned', () => {
   const text = 'Their bishop on g4 has nothing defending it. That wins a bishop and a pawn for a knight: Nhf6+, exf6 and Nxf6+.';
   const marks = [
     { id: 'hl-g4', squares: ['g4'] },
-    { id: 'a1', squares: ['f6', 'h7'] },
-    { id: 'a2', squares: ['f6', 'e7'] },
-    { id: 'a3', squares: ['f6', 'd5'] },
+    { id: 'a1', squares: ['f6', 'h7'], group: 'l0' },
+    { id: 'a2', squares: ['f6', 'e7'], group: 'l0' },
+    { id: 'a3', squares: ['f6', 'd5'], group: 'l0' },
   ];
   const ev = scheduleMarks(text, marks);
   const at = (id: string): number => (ev.find((e) => e.kind === 'show' && e.id === id)?.atMs ?? -1);
@@ -61,5 +61,14 @@ describe('every mark appears at the words that state it', () => {
     const text = 'Get your king safe first. Then castle, and the rook joins.';
     const ev = scheduleMarks(text, [{ id: 'k', squares: ['g1', 'e1'], words: ['castles', 'castle'] }]);
     expect(ev.find((e) => e.kind === 'show')?.atMs).toBe(text.indexOf('castle,') * MS_PER_CHAR);
+  });
+});
+
+describe('marks that share a square', () => {
+  it('a highlight and an arrow on the same square go up together at its name', () => {
+    const text = 'They play c5 — it fights for d4 from the side.';
+    const ev = scheduleMarks(text, [{ id: 'h0', squares: ['d4'] }, { id: 'a0', squares: ['d4', 'd2'] }]);
+    const at = (id: string): number | undefined => ev.find((e) => e.kind === 'show' && e.id === id)?.atMs;
+    expect(at('h0')).toBe(at('a0'));
   });
 });

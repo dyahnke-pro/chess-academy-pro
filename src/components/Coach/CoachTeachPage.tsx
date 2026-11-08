@@ -8233,7 +8233,14 @@ export function CoachTeachPage({ mode }: {
         // only when it is about the position on it.
         const gameLive = gameRef.current.history.length > 0 && !gameRef.current.isGameOver;
         if (calcLines && gameLive) {
-          if (liveFenRef.current === fen) setArrows(lineArrowsOf(calcLines[0]));
+          // The line's moves go up ply by ply as the answer says them (the
+          // one schedule, `paceBoardMarks`), never the whole line at once.
+          if (liveFenRef.current === fen) {
+            const said = spokenDisplayText.trim() || displayText;
+            setArrows([]);
+            pacedArrowKeysRef.current = new Set();
+            void beatSpeechStarted.then(() => voiceService.untilOnAir(ON_AIR_WAIT_MS)).then(() => paceBoardMarks(said, { arrows: [], highlights: [], lines: [{ arrows: lineArrowsOf(calcLines[0]), said }] }, () => !turnAbortRef.aborted && liveFenRef.current === fen));
+          }
         } else if (calcLines) {
           const token = ++lineWalkTokenRef.current;
           const said = spokenDisplayText.trim() || displayText;
@@ -8292,42 +8299,23 @@ export function CoachTeachPage({ mode }: {
             setArrows(mergedArrows);
             setHighlights(mergedHighlights);
           } else {
+            // AS THEY ARE STATED (David 2026-11-08): the chain marks (the reply
+            // move, G6) stay up; every mark the answer names goes up on the one
+            // schedule (`paceBoardMarks` → `markPacing`) at the words that
+            // state it — its square, its piece, its move — once the voice is on
+            // air. It used to reveal by destination square alone, so a mark
+            // named by its piece ("their queen") waited for the turn's end.
             const chainKeys = new Set(chainArrowsRef.current.map((a) => `${a.startSquare}-${a.endSquare}`));
-            const revealed = new Set<string>();
-            const paintRevealed = (): void => {
-              setArrows(mergedArrows.filter((a) => chainKeys.has(`${a.startSquare}-${a.endSquare}`) || revealed.has(a.endSquare)));
-              setHighlights(mergedHighlights.filter((h) => revealed.has(h.square)));
-            };
-            paintRevealed();
-            const markerSquares = Array.from(new Set([
-              ...mergedArrows.map((a) => a.endSquare),
-              ...mergedHighlights.map((h) => h.square),
-            ]));
-            const segments = buildNarrationSegments(spokenNow, markerSquares);
-            const totalChars = segments.reduce((n, s) => n + s.text.length, 0) || 1;
-            const estMs = Math.max(totalChars * 55, 1200);
-            void beatSpeechStarted.then(() => {
-              let accChars = 0;
-              for (const seg of segments) {
-                const at = (accChars / totalChars) * estMs;
-                accChars += seg.text.length;
-                // SWAP PER PHRASE (David 2026-09-13: "stack until next phrase is
-                // spoken"). Each spoken sentence shows ONLY the squares IT names;
-                // when the next sentence starts its marks REPLACE the last one's,
-                // so the board never accumulates a wall of arrows/highlights over
-                // a long reply. A square-less phrase still fires — it clears the
-                // prior phrase's prose marks back to the persistent chain marks.
-                // Chain marks (the reply move, per G6) survive every swap via
-                // paintRevealed's chain filter and are never taken down here.
-                const squares = seg.revealSquares;
-                window.setTimeout(() => {
-                  if (turnAbortRef.aborted || liveFenRef.current !== fen) return;
-                  revealed.clear();
-                  for (const s of squares) revealed.add(s);
-                  paintRevealed();
-                }, at);
-              }
-            });
+            const answerArrows = mergedArrows.filter((a) => !chainKeys.has(`${a.startSquare}-${a.endSquare}`));
+            setArrows(mergedArrows.filter((a) => chainKeys.has(`${a.startSquare}-${a.endSquare}`)));
+            setHighlights([]);
+            pacedArrowKeysRef.current = new Set();
+            pacedSquaresRef.current = new Set();
+            void beatSpeechStarted.then(() => voiceService.untilOnAir(ON_AIR_WAIT_MS)).then(() => paceBoardMarks(
+              spokenNow,
+              { arrows: answerArrows, highlights: mergedHighlights },
+              () => !turnAbortRef.aborted && liveFenRef.current === fen,
+            ));
           }
         } else {
           void logAppAudit({

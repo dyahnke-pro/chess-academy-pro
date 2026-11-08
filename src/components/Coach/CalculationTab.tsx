@@ -474,7 +474,8 @@ function AdaptivePuzzleRunner({
   const board = lineWalk.walkFen ? (
     <ConsistentChessboard
       fen={lineWalk.walkFen}
-      arrows={lineWalk.walkArrows}
+      arrows={[...lineWalk.walkArrows, ...lineWalk.markArrows]}
+      squareStyles={lineWalk.markSquareStyles}
       interactive={false}
       boardOrientation={studentSide}
       showLastMoveHighlight
@@ -542,6 +543,7 @@ function AdaptivePuzzleRunner({
             studentColor={studentSide}
             route="/tactics/calculation"
             onWalkLine={lineWalk.walk}
+            onAnswerMarks={lineWalk.markAnswer}
             shownLine={shownSolution(drill.fen, drill.solution ?? EMPTY_LINE)}
             testIdPrefix="calc-ask"
             placeholder="Why does it work? What if they play …?"

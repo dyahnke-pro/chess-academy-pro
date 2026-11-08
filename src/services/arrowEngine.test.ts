@@ -301,3 +301,10 @@ describe('a move a computed answer recommends is arrowed (walk 5)', () => {
     expect(endorsed.injected).toEqual([{ san: 'Nc3', color: 'yellow' }]);
   });
 });
+
+describe('a bare square fought for or prepared is a square, never a pawn move (marks sweep 2026-11-08)', () => {
+  it('"fights for d4" and "prepares e5" name squares', () => {
+    expect(extractMentionedSans('They play c5 — it fights for d4 from the side.')).toEqual(['c5']);
+    expect(extractMentionedSans('They play d6: it prepares e5.')).toEqual(['d6']);
+  });
+});

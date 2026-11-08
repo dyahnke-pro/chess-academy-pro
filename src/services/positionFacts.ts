@@ -53,7 +53,7 @@ import type { QuietFact } from './factSelector';
 import { criticalityThresholds, type Severity } from './criticalityScan';
 import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
-import { buildDeliberation, deliberationFacts, deliberationLines, deliberationSquares, deliberationWeighing, deliberationVerdict, ruleOutClaims, NOTHING_SAID, type Deliberation, type HeldVerdict } from './deliberation';
+import { buildDeliberation, deliberationFacts, deliberationMarks, fullWeighingSays, HELD_WEIGHING_SAYS, deliberationWeighing, deliberationVerdict, ruleOutClaims, NOTHING_SAID, type Deliberation, type HeldVerdict } from './deliberation';
 import { detectLatentFork, latentForkClause, type LatentFork } from './latentFork';
 import { detectSetUpChance, setUpClause, setUpHeldClause, setUpSkill, type SetUpChance } from './setUpChance';
 import { lineTakesPiece, pawnHit } from './trappedPiece';
@@ -1300,7 +1300,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const adviceDropped = moveAdvice && !weighEarned
     ? composedAll.filter((c) => c.kind !== 'deliberation')
     : heldVerdict
-      ? composedAll.flatMap((c) => (c.kind !== 'deliberation' ? [c] : heldWeighing ? [{ ...c, text: heldWeighing }] : []))
+      // The held weighing carries the marks of what IT says — the rule-outs,
+      // never the held move's square or line (`deliberationMarks`).
+      ? composedAll.flatMap((c) => (c.kind !== 'deliberation' ? [c] : heldWeighing && deliberation ? [{ ...c, text: heldWeighing, ...deliberationMarks(deliberation, c.fen, said ?? NOTHING_SAID, HELD_WEIGHING_SAYS) }] : []))
       : composedAll;
   // ONE FACT ONCE: the verdict ("The move is Nf3 — it takes aim at the
   // center…") and the fundamental ("The plan here: take aim at the center…")
@@ -1726,7 +1728,7 @@ function buildClauses(a: {
     const text = deliberationFacts(deliberation, said, !a.walkOwnsBestLine);
     // The choice is worth what the tempting alternative would cost.
     const worst = Math.max(0, ...deliberation.alternatives.map((c) => c.deltaCp));
-    if (text) ranked.push(clause('buildDeliberation', a.fen, { kind: 'deliberation', text, squares: deliberationSquares(deliberation, a.fen, said), lines: deliberationLines(deliberation, a.fen, said, !a.walkOwnsBestLine), stakes: costStakes(worst) ?? undefined }));
+    if (text) ranked.push(clause('buildDeliberation', a.fen, { kind: 'deliberation', text, ...deliberationMarks(deliberation, a.fen, said, fullWeighingSays(deliberation, !a.walkOwnsBestLine)), stakes: costStakes(worst) ?? undefined }));
   }
 
   // The prevention layer — a pin/skewer on your own king/queen, guide-don't-tell.

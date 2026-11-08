@@ -537,7 +537,8 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
         {lineWalk.walkFen ? (
           <ConsistentChessboard
             fen={lineWalk.walkFen}
-            arrows={lineWalk.walkArrows}
+            arrows={[...lineWalk.walkArrows, ...lineWalk.markArrows]}
+            squareStyles={lineWalk.markSquareStyles}
             interactive={false}
             boardOrientation={orientation}
             showLastMoveHighlight
@@ -598,6 +599,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
             studentColor={orientation}
             route="/tactics/setup"
             onWalkLine={lineWalk.walk}
+            onAnswerMarks={lineWalk.markAnswer}
             shownLine={shownSolution(puzzle.setupFen, line)}
             engineBestMoveUci={line[0]}
             testIdPrefix="setup-chat"

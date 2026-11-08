@@ -447,7 +447,7 @@ export interface SegmentMarks {
 }
 
 export function segmentMarks(
-  seg: Pick<ReviewMoveSegment, 'narration' | 'keySquares' | 'keySquareSaid' | 'fenAfter' | 'fenBefore' | 'planArrows' | 'classification' | 'bestMoveUci' | 'spokenLineArrows' | 'spokenLineSaid'>,
+  seg: Pick<ReviewMoveSegment, 'narration' | 'keySquares' | 'keySquareSaid' | 'fenAfter' | 'fenBefore' | 'planArrows' | 'planArrowsSaid' | 'classification' | 'bestMoveUci' | 'spokenLineArrows' | 'spokenLineSaid'>,
   studentColor: 'white' | 'black',
 ): SegmentMarks {
   const highlights = segmentLitSquares(seg);
@@ -479,7 +479,11 @@ export function segmentMarks(
     fen: seg.fenAfter,
     viewer,
     highlights: highlights.map((sq) => { const said = saidOf.get(sq); return said ? { square: sq, said } : sq; }),
-    arrows: arrows.map((a) => ({ from: a.startSquare, to: a.endSquare })),
+    // A plan arrow is said with the sentence that shows the plan.
+    arrows: arrows.map((a) => {
+      const plan = seg.planArrows?.some((p) => p.startSquare === a.startSquare && p.endSquare === a.endSquare);
+      return { from: a.startSquare, to: a.endSquare, ...(plan && seg.planArrowsSaid ? { said: seg.planArrowsSaid } : {}) };
+    }),
     lines: lines.length ? [{ moves: drawnPlies.map((p) => ({ from: p.ply.uci.slice(0, 2), to: p.ply.uci.slice(2, 4), fen: p.ply.fenBefore })), ...(seg.spokenLineSaid ? { said: seg.spokenLineSaid } : {}) }] : [],
   });
   return { highlights, arrows, lines, items };
@@ -678,6 +682,8 @@ export interface ReviewMoveSegment {
   spokenLineArrows?: Array<{ uci: string; fenBefore: string; fenAfter: string }>;
   /** The sentence that says the spoken line (its anchor on the mark schedule). */
   spokenLineSaid?: string;
+  /** The sentence that says what the plan arrows show (their anchor). */
+  planArrowsSaid?: string;
   /** KEY SQUARES this ply's narration NAMED (trapped piece + its attacker, a
    *  passed pawn, a minority-attack target, colour-complex holes) — coupled from
    *  the fact-computer's OWN squares, never scraped from prose (G0). The review
@@ -3195,14 +3201,21 @@ function* reviewSegmentSteps(
         const said = fadeText(text, decision.faded.get(key) ?? null);
         const own = spokenSquaresOf.get(key) ?? [];
         const squares = said === text ? [...own] : cutMarksWithWords(text, said, { squares: own }, fenPair.fenAfter, null).squares;
-        return { kind: 'computed' as const, text: said, fen: fenPair.fenAfter, altFen: fenPair.fenBefore, squares };
+        // The causal chain leads (`rankedParts`): its sight-line arrows are
+        // drawn only while its words are kept (`causalSaid`, below).
+        return { kind: 'computed' as const, text: said, fen: fenPair.fenAfter, altFen: fenPair.fenBefore, squares, ...(causalLead && k === 0 ? { causalChain: true as const } : {}) };
       });
       // The squares the board lights for this ply, each with its sentence.
       const litSaid: Array<{ square: string; said: string }> = [];
+      // The causal chain's sentence, when the package kept it — the chain's
+      // arrows are its marks (marks sweep 2026-11-08: a chain the door or the
+      // package dropped still drew every sight line, with no words for them).
+      let causalSaid: string | null = null;
       const speakDoor = (facts: typeof doorFacts): string | null => {
         if (facts.length === 0) return null;
         const pkg = buildVoicePackage(facts, undefined, reviewSpokenKeys);
         for (const f of pkg.kept) for (const sq of f.squares ?? []) if (!litSaid.some((x) => x.square === sq)) litSaid.push({ square: sq, said: f.text });
+        for (const f of pkg.kept) if ('causalChain' in f && f.causalChain === true) causalSaid = f.text;
         for (const k of spokenSentenceKeys(pkg)) reviewSpokenKeys.add(k);
         reviewPkgTally.parts += facts.length;
         for (const d of pkg.dropped) {
@@ -3242,7 +3255,7 @@ function* reviewSegmentSteps(
         ...(m.classification === 'mistake' || m.classification === 'blunder' ? recordLinesOf(m) : {}),
         ...(doorNarration ? { teaches: decision.teaches } : {}),
         ...(needHere ? { need: needHere } : {}),
-        ...(causalArrows && causalArrows.length ? { planArrows: causalArrows } : {}),
+        ...(causalArrows && causalArrows.length && causalSaid ? { planArrows: causalArrows, planArrowsSaid: causalSaid } : {}),
         ...(fundamentals.length ? { fundamentals } : {}),
         ...(litSaid.length ? { keySquares: litSaid.map((x) => x.square), keySquareSaid: litSaid.map((x) => x.said) } : {}),
         ...(verdictReasonOut.text ? { verdictReason: verdictReasonOut.text } : {}),

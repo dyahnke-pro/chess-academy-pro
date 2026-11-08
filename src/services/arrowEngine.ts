@@ -162,7 +162,9 @@ export function extractMentionedSans(text: string): string[] {
  *  then d2", "Watch c7" (Learn walk 2026-10-01: each drew a pawn arrow). Kept
  *  apart from NON_MOVE_PHRASE_PRECEDERS because these words DO precede real
  *  piece moves ("then Bxf7", "guard it with Nf3"). */
-const SQUARE_ONLY_PRECEDERS = new Set(['them', 'us', 'you', 'of', 'guard', 'guards', 'then', 'watch', 'reach', 'reaches', 'over', 'behind', 'beside']);
+// "fights for d4", "prepares e5" (marks sweep 2026-11-08: a d2→d4 arrow for
+// "it fights for d4", and their "…d6: it prepares e5" drew White's e4→e5).
+const SQUARE_ONLY_PRECEDERS = new Set(['them', 'us', 'you', 'of', 'guard', 'guards', 'then', 'watch', 'reach', 'reaches', 'over', 'behind', 'beside', 'for', 'prepares', 'prepare', 'preparing']);
 
 /** The mentioned SANs with where they sit in the (marker-stripped) text, so a
  *  run of moves can be read as one LINE. Same filtering as

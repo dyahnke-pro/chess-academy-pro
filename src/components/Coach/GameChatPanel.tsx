@@ -14,6 +14,7 @@ import { useLineWalk } from '../../hooks/useLineWalk';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
+import { paceAnnotations } from '../../services/pacedAnnotations';
 import { admitArrows, namedMoveClaim } from '../../services/arrowDoor';
 import { detectInGameChatIntent } from '../../services/inGameChatIntent';
 import { tryCaptureForgetIntent, tryCaptureOpeningIntent } from '../../services/openingIntentCapture';
@@ -373,6 +374,8 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         .then(() => {
           if (speechAbortedRef.current) return;
           if (voiceService.currentStopGeneration !== myGen) return;
+          // When this answer went on air: its board marks are paced from here.
+          if (turnOnAirAtRef.current === null) turnOnAirAtRef.current = Date.now();
           // GROUND the spoken coach sentence against the live board (David
           // 2026-06-06: the /coach/play voice must be grounded like the text).
           return voiceService.speakGrounded(spoken, getLiveFen?.() ?? null);
@@ -381,6 +384,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     }, [getLiveFen]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const messagesRef = useRef<ChatMessageType[]>(messages);
+    /** When the answer being given went on air (null until its first spoken
+     *  sentence), and the cancel for its paced board marks. */
+    const turnOnAirAtRef = useRef<number | null>(null);
+    const cancelMarksRef = useRef<() => void>(() => undefined);
 
     // Keep messagesRef in sync
     messagesRef.current = messages;
@@ -463,6 +470,8 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // stop-generation bump keep a queued speak chain from resuming over the
       // answer. The reply's own speak (later, post-compute) starts fresh.
       speechAbortedRef.current = false;
+      turnOnAirAtRef.current = null;
+      cancelMarksRef.current();
       voiceService.stop();
 
       // A new turn invalidates any outstanding [CHOICES:] picker.
@@ -1323,8 +1332,20 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             fen: fen || undefined,
             trigger: null,
           });
-          if (annotations.length > 0) {
-            onBoardAnnotation?.(annotations);
+          // The answer's marks go up as it says them (`paceAnnotations`): a
+          // square or a move the words name lights at its words, on the clock
+          // the voice started when this answer went on air.
+          if (onBoardAnnotation) {
+            cancelMarksRef.current();
+            const voiced = turnOnAirAtRef.current !== null;
+            cancelMarksRef.current = paceAnnotations(
+              annotations,
+              voiced ? assistantText : '',
+              fen,
+              playerColor === 'black' ? 'b' : 'w',
+              onBoardAnnotation,
+              voiced ? Date.now() - (turnOnAirAtRef.current ?? Date.now()) : 0,
+            );
           }
         } catch (err: unknown) {
           console.error('[GameChatPanel] dispatchCoachTurn failed:', err);

@@ -1192,7 +1192,8 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         {lineWalk.walkFen ? (
           <ConsistentChessboard
             fen={lineWalk.walkFen}
-            arrows={lineWalk.walkArrows}
+            arrows={[...lineWalk.walkArrows, ...lineWalk.markArrows]}
+            squareStyles={lineWalk.markSquareStyles}
             interactive={false}
             boardOrientation={puzzle.playerColor}
             showLastMoveHighlight
@@ -1308,6 +1309,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
               studentColor={puzzle.fen.split(' ')[1] === 'b' ? 'black' : 'white'}
               route="/tactics"
               onWalkLine={lineWalk.walk}
+              onAnswerMarks={lineWalk.markAnswer}
               shownLine={shownSolution(puzzle.fen, movesRef.current.map((m) => `${m.from}${m.to}${m.promotion ?? ''}`))}
               engineBestMoveUci={puzzle.bestMove}
               fallback={explainFallback}

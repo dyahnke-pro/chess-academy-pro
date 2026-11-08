@@ -588,3 +588,17 @@ describe('a question line ends its sentence INSIDE its closing mark (". ." at pl
     expect(withoutTags(said)).toBe(`What is their knight doing? ${THINK_MARK} heading for d4. ${THINK_MARK}`);
   });
 });
+
+describe('a trimmed fact keeps only the marks its words still state (marks sweep 2026-11-08)', () => {
+  it('the square said only in the cut sentence goes with it', () => {
+    const c = new Chess(); for (const s of ['e4', 'e5', 'Nf3', 'Nf6', 'Bc4']) c.move(s);
+    const board = c.fen();
+    const pkg = buildVoicePackage([
+      { kind: 'note', text: 'Their knight on f6 is loose.', fen: board, squares: ['f6'] },
+      { kind: 'note', text: 'Your bishop on c4 eyes f7. Their knight on f6 is loose.', fen: board, squares: ['c4', 'f7', 'f6'] },
+    ]);
+    const second = pkg.kept.find((f) => f.text.startsWith('Your bishop'));
+    expect(second?.text).toBe('Your bishop on c4 eyes f7.');
+    expect(second?.squares).toEqual(['c4', 'f7']);
+  });
+});
