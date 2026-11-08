@@ -12,6 +12,7 @@
 //
 // One function, so the two Learn lanes that build this sentence cannot drift.
 
+import type { BookSource } from './openingSlip';
 import { bookDeparture, warmBookPosition, type BookDeparture } from './bookDeparture';
 import { sayMoveNoun } from './spokenMove';
 import { costWords, MISTAKE_CP } from './engineConstants';
@@ -160,13 +161,14 @@ export function openingAnnouncement(
   // beat), not this sentence: the name line names, the door orders the why.
   const why = departure.mover === studentColor ? departureAgainstPlan(departure, plan, studentColor) : null;
   const tail = why ?? '';
-  return `${leftBookSentence(who, departure.san, departure.fen)}${lineTail}${tail ? ` ${tail}` : ''}`;
+  return `${leftBookSentence(who, departure.san, departure.fen, 'theory')}${lineTail}${tail ? ` ${tail}` : ''}`;
 }
 
 /** "You left the book with the knight to f3." / "They left the book with …" —
  *  ONE wording, said by Learn's opening lane and the Openings Play rung. */
-export function leftBookSentence(who: 'You' | 'They', san: string, fen: string): string {
-  return `${who} left the book with ${sayMoveNoun(san, fen)}.`;
+export function leftBookSentence(who: 'You' | 'They', san: string, fen: string, source: BookSource): string {
+  // A course's own line (the Play rung) is "this line", never "the book".
+  return `${who} left ${source === 'course' ? 'this line' : 'the book'} with ${sayMoveNoun(san, fen)}.`;
 }
 
 const PIECE_WORD: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king', p: 'pawn' };

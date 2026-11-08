@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**443 lines · 5 exports · 3 importers · 3 tests · 0 audits**
+**455 lines · 6 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,21 +14,27 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Openings/OpeningPlayMode.tsx`
 - `src/services/boardComputers.ts`
+- `src/services/openingAnnouncement.ts`
 - `src/services/openingSlip.test.ts`
 
 ## Exports and every call site
 
+### `BookSource` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `OpeningBook` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `openingSlip` (function) — 3 call sites
+### `openingSlip` (function) — 4 call sites
 - `src/services/boardComputers.ts:430`
 - `src/services/openingSlip.measure.test.ts:39`
-- `src/services/openingSlip.test.ts:25`
+- `src/services/openingSlip.test.ts:26`
+- `src/services/openingSlip.test.ts:128`
 
-### `bookFromLines` (function) — 2 call sites
-- `src/services/openingSlip.test.ts:107`
-- `src/services/openingSlip.test.ts:110`
+### `bookFromLines` (function) — 3 call sites
+- `src/services/openingSlip.test.ts:108`
+- `src/services/openingSlip.test.ts:111`
+- `src/services/openingSlip.test.ts:125`
 
 ### `mastersBook` (function) — 2 call sites
 - `src/services/boardComputers.ts:428`
@@ -36,10 +42,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `bookMoveRead` (function) — 5 call sites
 - `src/components/Openings/OpeningPlayMode.tsx:445`
-- `src/services/openingSlip.test.ts:117`
-- `src/services/openingSlip.test.ts:120`
-- `src/services/openingSlip.test.ts:123`
-- `src/services/openingSlip.test.ts:128`
+- `src/services/openingSlip.test.ts:118`
+- `src/services/openingSlip.test.ts:121`
+- `src/services/openingSlip.test.ts:132`
+- `src/services/openingSlip.test.ts:137`
 
 ## Tests
 

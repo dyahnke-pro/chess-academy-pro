@@ -44,7 +44,18 @@ const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop',
 /** How far into a book line an early move is still the book's own move. */
 const ORDER_PLIES = 2;
 
+/** WHERE THE BOOK COMES FROM, and so what it is called: the masters' book is
+ *  "the book"; a course's own line (a pro's pet line, a masterclass line on the
+ *  Play rung) is "this line" — a pro line is not the book. REQUIRED, so a new
+ *  book decides its words. */
+export type BookSource = 'theory' | 'course';
+const BOOK_WORDS: Record<BookSource, { The: string; move: string; aMove: string }> = {
+  theory: { The: 'The book', move: 'the book move', aMove: 'a book move' },
+  course: { The: 'This line', move: "this line's move", aMove: "this line's own move" },
+};
+
 export interface OpeningBook {
+  source: BookSource;
   /** The book's moves at this board, most played first (SAN). */
   moves: readonly string[];
   /** Book lines from this board, each starting with one of `moves` (SAN). */
@@ -311,6 +322,7 @@ export function openingSlip(i: { fen: string; playedSan: string; book: OpeningBo
   if (!played || played.mv.color !== student) return null;
   const key = stemKeyOf(`${fen}|${playedSan}`);
   const X = sayMoveNoun(played.mv.san, fen);
+  const W = BOOK_WORDS[book.source];
 
   // SQUARE: the book moves the same piece, to another square.
   const sameSan = book.moves.find((m) => after(fen, m)?.mv.from === played.mv.from);
@@ -323,9 +335,9 @@ export function openingSlip(i: { fen: string; playedSan: string; book: OpeningBo
     const B = sayMoveNoun(sameSan, fen);
     const piece = NAME[played.mv.piece];
     const lead = rotateStem([
-      `The book puts your ${piece} on ${bk.mv.to}, not ${played.mv.to}.`,
+      `${W.The} puts your ${piece} on ${bk.mv.to}, not ${played.mv.to}.`,
       `Your ${piece} belongs on ${bk.mv.to} here.`,
-      `${openSentence(B)} is the book move.`,
+      `${openSentence(B)} is ${W.move}.`,
     ], key);
     const text = [created?.clause, lead, job?.text].filter(Boolean).join(' ');
     return { kind: 'square', bookSan: sameSan, text, squares: [...new Set([played.mv.to, bk.mv.to, ...(created?.squares ?? []), ...(job?.squares ?? [])])], created, lost: null };
@@ -343,11 +355,11 @@ export function openingSlip(i: { fen: string; playedSan: string; book: OpeningBo
     const B = sayMoveNoun(bookSan, fen);
     const early = rotateStem([
       `${openSentence(X)} comes ${order.at === 2 ? 'a move' : 'two moves'} early.`,
-      `${openSentence(X)} is a book move, just not yet.`,
+      `${openSentence(X)} is ${W.aMove}, just not yet.`,
     ], key);
     const first = rotateStem([
       `${openSentence(B)} first is the more flexible order.`,
-      `The book plays ${B} first.`,
+      `${W.The} plays ${B} first.`,
     ], key >>> 1);
     const text = [early, created?.clause ?? lost?.clause, first].filter(Boolean).join(' ');
     return { kind: 'order', bookSan, text, squares: [...new Set([played.mv.to, bk.mv.to, ...(created?.squares ?? lost?.squares ?? [])])], created, lost: created ? null : lost };
@@ -362,10 +374,10 @@ export function openingSlip(i: { fen: string; playedSan: string; book: OpeningBo
   if (!created && !lost) return null;
   const B = sayMoveNoun(bookSan, fen);
   const text = created
-    ? `${created.clause} ${rotateStem([`${openSentence(B)} was the book move.`, `The book plays ${B} here.`], key)}`
+    ? `${created.clause} ${rotateStem([`${openSentence(B)} was ${W.move}.`, `${W.The} plays ${B} here.`], key)}`
     : rotateStem([
-      `The book plays ${B} here. It ${lost?.clause ?? ''}, and your move gives that up.`,
-      `${openSentence(B)} was the book move: it ${lost?.clause ?? ''}. Your move gives that pin up.`,
+      `${W.The} plays ${B} here. It ${lost?.clause ?? ''}, and your move gives that up.`,
+      `${openSentence(B)} was ${W.move}: it ${lost?.clause ?? ''}. Your move gives that pin up.`,
     ], key);
   return { kind: 'line', bookSan, text, squares: [...new Set([played.mv.to, bk.mv.to, ...((created ?? lost)?.squares ?? [])])], created, lost };
 }
@@ -386,7 +398,7 @@ export function bookFromLines(lines: readonly (readonly string[])[], history: re
     if (history.every((s, i) => cleanSan(l[i]) === cleanSan(s))) tails.push(l.slice(history.length));
   }
   if (tails.length === 0) return null;
-  return { moves: [...new Set(tails.map((t) => t[0]))], lines: tails };
+  return { source: 'course', moves: [...new Set(tails.map((t) => t[0]))], lines: tails };
 }
 
 /**
@@ -407,7 +419,7 @@ export function mastersBook(history: readonly string[]): OpeningBook | null {
   const moves = known.filter((m) => m.games >= MIN_BOOK_GAMES).sort((a, b) => b.games - a.games).map((m) => m.san);
   if (moves.length === 0) return null;
   const inBook = new Set(moves.map(cleanSan));
-  return { moves, lines: bookLinesThrough(history).filter((l) => inBook.has(cleanSan(l[0]))) };
+  return { source: 'theory', moves, lines: bookLinesThrough(history).filter((l) => inBook.has(cleanSan(l[0]))) };
 }
 
 /**
@@ -436,7 +448,7 @@ export function bookMoveRead(history: readonly string[], student: Color, proLine
   if (!book) return null;
   const san = history[history.length - 1];
   if (book.moves.some((m) => cleanSan(m) === cleanSan(san))) return { left: false, text: null, squares: [] };
-  if (mover !== student) return { left: true, text: leftBookSentence('They', san, fen), squares: [] };
+  if (mover !== student) return { left: true, text: leftBookSentence('They', san, fen, book.source), squares: [] };
   const s = openingSlip({ fen, playedSan: san, book, student });
   return { left: true, text: s?.text ?? null, squares: s?.squares ?? [] };
 }

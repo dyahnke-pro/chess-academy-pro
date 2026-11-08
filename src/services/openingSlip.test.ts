@@ -17,6 +17,7 @@ const board = (sans: readonly string[]): string => {
 };
 /** The book at `history`: these moves, and the named lines through them. */
 const bookAt = (history: readonly string[], moves: readonly string[]): OpeningBook => ({
+  source: 'theory',
   moves,
   lines: bookLinesThrough(history).filter((l) => moves.includes(l[0])),
 });
@@ -116,8 +117,16 @@ describe('the Play rung reads the same computer, move by move (bookMoveRead)', (
   it('a move of the pro\'s line is book', () => {
     expect(bookMoveRead(['e4', 'c5', 'Nf3'], 'w', najdorf)).toEqual({ left: false, text: null, squares: [] });
   });
-  it('their move off his line: "They left the book with …" — Learn\'s own words', () => {
-    expect(bookMoveRead(['e4', 'c5', 'Nf3', 'Nc6'], 'w', najdorf)?.text).toBe('They left the book with the knight to c6.');
+  it('their move off the course\'s line: "They left this line with …" — a pro\'s line is not the book', () => {
+    expect(bookMoveRead(['e4', 'c5', 'Nf3', 'Nc6'], 'w', najdorf)?.text).toBe('They left this line with the knight to c6.');
+  });
+  it('a slip against a course line names the line, never "the book"', () => {
+    const fen = board(['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6']);
+    const course = bookFromLines(najdorf, ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6']);
+    expect(course?.source).toBe('course');
+    // 6.Bc4 leaves the pawn on e4 to their knight on f6 (the line plays Nc3).
+    const s = openingSlip({ fen, playedSan: 'Bc4', book: course!, student: 'w' });
+    expect(s?.text).toBe('Your pawn on e4 is hanging: their knight on f6 can take it. This line plays the knight to c3 here.');
   });
   it('the student\'s move off his line says the opening slip — 5.Bd3 hands them the pawn on e4', () => {
     const r = bookMoveRead(['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Bd3'], 'w', najdorf);

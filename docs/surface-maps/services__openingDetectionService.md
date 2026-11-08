@@ -288,8 +288,8 @@
 - `src/services/isBookLine.test.ts:25`
 
 ### `bookLinesThrough` (function) — 2 call sites
-- `src/services/openingSlip.test.ts:21`
-- `src/services/openingSlip.ts:410`
+- `src/services/openingSlip.test.ts:22`
+- `src/services/openingSlip.ts:422`
 
 ### `getOpeningMoves` (function) — 27 call sites
 - `src/coach/tools/cerebellum/localOpeningBook.ts:84`

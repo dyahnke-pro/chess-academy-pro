@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**315 lines · 11 exports · 9 importers · 6 tests · 1 audits**
+**317 lines · 11 exports · 9 importers · 6 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -63,7 +63,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct2a.test.ts:72`
 
 ### `leftBookSentence` (function) — 1 call site
-- `src/services/openingSlip.ts:439`
+- `src/services/openingSlip.ts:451`
 
 ### `departureAgainstPlan` (function) — 3 call sites
 - `src/services/openingAnnouncement.test.ts:222`
