@@ -30,7 +30,11 @@ describe('Learn names no move unasked', () => {
     expect(ann).not.toMatch(/The book move is/);
     expect(ann).not.toMatch(/bookMoveWhy/);
     // ONE PRODUCER, ON ITS OWN LANE: the registry reads it, Learn speaks it.
-    expect(read('services/boardComputers.ts')).toMatch(/bookMoveWhy\(dep\.fen, dep\.mainSan, dep\.san, student\)/);
+    expect(read('services/boardComputers.ts')).toMatch(/openingSlip\(\{ fen: dep\.fen, playedSan: dep\.san, book, student \}\)/);
+    // The opening slip names the book move only with its reason: a shot the
+    // student's move hands them or gives up, or the book square's job.
+    const slip = read('services/openingSlip.ts');
+    expect(slip.match(/if \(!created && !(job|lost)\) return null;/g)?.length, 'every slip form is gated on its reason').toBe(3);
     expect(read('components/Coach/CoachTeachPage.tsx')).toMatch(/lane: 'bookMove' as const/);
     const why = read('services/bookMoveWhy.ts');
     // EVERY form of the sentence carries a computed job: the book move's own

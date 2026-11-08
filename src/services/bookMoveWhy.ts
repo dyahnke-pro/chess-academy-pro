@@ -81,6 +81,9 @@ interface BookMoveWhy {
    *  Review says when the student PLAYED the book move. Null when the job is
    *  only the rival's cost (a tempo handed over). */
   job: string | null;
+  /** What the student's move left undone, after its noun ("leaves it guarded
+   *  once", "leaves d5 to them") — the opening slip says it after the job. */
+  left?: string;
   /** The job clears the way to castle — one claim with an engine intent that
    *  prepares castling (Review tape 2026-10-21: "Brings your bishop out and
    *  clears the way to castle next move. Your bishop to d3 clears the way to
@@ -556,6 +559,7 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
     kind: late.kind,
     squares: late.squares,
     job: late.clause || null,
+    left: late.short,
     // A job with no clause of its own (no tempo handed over) is said as the
     // student's move's cost: "The book move is X; Y lets them chase…".
     text: late.clause

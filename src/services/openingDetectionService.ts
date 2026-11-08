@@ -1255,6 +1255,21 @@ export function isBookLine(moves: readonly string[]): boolean {
   return false;
 }
 
+/** THE BOOK'S CONTINUATIONS through `moves`: the tail of every named line
+ *  whose PGN extends them, each starting with the next book move (G3: the
+ *  Lichess DB is the canon). Read by the opening slip's ORDER check — is the
+ *  student's move the book's own, a few moves on? */
+export function bookLinesThrough(moves: readonly string[]): string[][] {
+  const withSpace = moves.length ? `${moves.join(' ')} ` : '';
+  const out: string[][] = [];
+  for (const e of openingsData) {
+    if (withSpace && !e.pgn.startsWith(withSpace)) continue;
+    const tail = e.pgn.slice(withSpace.length).split(' ').filter(Boolean);
+    if (tail.length) out.push(tail);
+  }
+  return out;
+}
+
 /** Backward-compatible thin wrapper. Existing callers want just the
  *  PGN moves; new code should prefer resolveOpeningEntry to also get
  *  the canonical name (so cache + gen key on the canonical entry,

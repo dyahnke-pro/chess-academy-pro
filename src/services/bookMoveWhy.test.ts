@@ -80,7 +80,9 @@ describe('the book-move why routes through the door on the DNA "but" beat (David
     __setLocalDbForTests({ positions });
     try {
       const read = readBoard('bookMove', { history, student: 'w' });
-      expect(read?.text).toBe('The book move is the knight to e2: it adds a second guard to your knight on c3, which their bishop on b4 pins — the knight to f3 leaves it guarded once.');
+      // THE OPENING SLIP (2026-11-08): the same knight to another square —
+      // why the book square was better, and what the student's left undone.
+      expect(read?.text).toBe('Your knight belongs on e2 here. It adds a second guard to your knight on c3, which their bishop on b4 pins. The knight to f3 leaves it guarded once.');
       // Not their departure, not the student's seat: nothing.
       expect(readBoard('bookMove', { history, student: 'b' })).toBeNull();
       const fen = c.fen();
@@ -90,7 +92,7 @@ describe('the book-move why routes through the door on the DNA "but" beat (David
       ]);
       expect(out.spoke).toContain('bookMove');
       expect(out.held).not.toContain('bookMove');
-      expect(out.pkg.spoken.indexOf('You left the book')).toBeLessThan(out.pkg.spoken.indexOf('The book move is'));
+      expect(out.pkg.spoken.indexOf('You left the book')).toBeLessThan(out.pkg.spoken.indexOf('Your knight belongs on e2'));
     } finally {
       __setLocalDbForTests(null);
     }
@@ -117,14 +119,18 @@ describe('the book-move line is graded on the board it speaks of (prod Learn aud
     __setLocalDbForTests({ positions });
     try {
       const read = readBoard('bookMove', { history: [...played, 'hxg4'], student: 'b' });
+      // A different line, said because it hands them a shot: the bishop on g4
+      // the reply then took (2026-11-08: silent unless the tactics change).
+      expect(read?.text).toBe('Your bishop on g4 can be won by their pawn on h3. The bishop to h5 was the book move.');
       expect(read?.fen).toBe(spokenOn);
       const turn = (fen: string) => decideTurn([
         { lane: 'bookMove', text: read!.text, fen, squares: read!.squares, claims: read!.claims, role: 'teach', namesStudentMove: NAMES_NO_MOVE, proof: read!.proof },
         { lane: 'opening', text: 'You left the book with the knight to c6.', fen: afterReply, namesStudentMove: NAMES_NO_MOVE, proof: { kind: 'name' } as never },
       ]);
       expect(turn(read!.fen).spoke).toContain('bookMove');
-      // The old wiring graded it on the board after the reply, and it fell.
-      expect(turn(afterReply).spoke).not.toContain('bookMove');
+      // The board after the reply no longer has the bishop the line names:
+      // it is graded on the board before the reply.
+      expect(new Chess(afterReply).get('g4')?.type).toBe('p');
     } finally {
       __setLocalDbForTests(null);
     }

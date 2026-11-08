@@ -247,7 +247,7 @@ export const COMPUTER_CATALOG = {
   newTiedDefender: { file: 'services/tiedDefender.ts', says: 'their guard the student\'s move tied down, still tied after their reply' },
   obligationLifted: { file: 'services/obligationLifted.ts', says: 'their move took an attacker off a piece the student had to look after' },
   openingStoryAt: { file: 'services/openingStory.ts', says: 'the opening\'s story from master games: the fork, what it is, the choice and its price, their setup, the coming game and its key break' },
-  bookMoveWhy: { file: 'services/bookMoveWhy.ts', says: 'the book move the student left, with the job it does on the board' },
+  openingSlip: { file: 'services/openingSlip.ts', says: 'the student left the book: the move order, the wrong square or a different line, said only when it changes a tactic or the book square has a job' },
   countMethod: { file: 'services/countMethod.ts', says: 'count before you take: the student\'s move took or stood on a square their pieces outnumber' },
   buildPriorityFirst: { file: 'services/playCommentary.ts', says: 'the priority before the move: the engine\'s best move aims at a weak pawn' },
   lastTimeHere: { file: 'services/lastTimeHere.ts', says: 'the student\'s own costly departure from this position in another game' },
