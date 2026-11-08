@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:278) — names `tempoRun`
-- **The standard post-deploy ritual** (CLAUDE.md:6874) — names `tempoRun`
+- **The standard post-deploy ritual** (CLAUDE.md:6876) — names `tempoRun`
 
 ## Who calls in
 

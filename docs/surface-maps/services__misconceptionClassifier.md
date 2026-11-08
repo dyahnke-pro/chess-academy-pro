@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6953) — names `misconceptionClassifier`
+- **The standard post-deploy ritual** (CLAUDE.md:6955) — names `misconceptionClassifier`
 
 ## Who calls in
 

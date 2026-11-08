@@ -6122,6 +6122,8 @@ the log. Don't let it rot.
 
 🔒🔒 **SPEED FIRST (David 2026-10-07: "i hate waiting for checks and audits when we have so much more to build").** Do as much coding at once as possible; multi-step work goes to a branch. Stop for checks and audits only when necessary; the full prod audit runs when the work is sent to `main`, not during the build. Never sit waiting on a check when there is more to build (rulebook B2).
 
+🔒🔒 **FINISH ALL THE CODING, THEN CHECK ONCE, THEN SHIP ONCE (David 2026-11-08: "Why are we shipping when there's more to code and check? … from now on finish all coding and run checks on everything so we don't slow down").** When more agreed work is still to code, do not stop to ship-check, push to `main` or audit a slice. Code every piece, then run the checks over everything together, then ship once. Background agents keep coding while you do.
+
 🔒🔒 **PLAN WAITS FOR GO; A GO RUNS TO THE END (David 2026-10-07).** While planning how to build something, wait for David's go. Once the plan is agreed and he has said go, run every phase to the end — never stop to ask for a go on phase two ("i will get pissed") (rulebook B3).
 
 🔒🔒 **NO BANDAGES ON THE FLY (David 2026-10-07: "YOU SLAP BANDAIDS ON when you fix on the fly. that cannot happen anymore").** A problem found mid-build: small root-cause fix → fix it now; big → the list. Either way it is a root-cause fix (name the cause, fix the producer, a test that fails on the old code). "Quick" never means "patch the symptom" (rulebook B4).

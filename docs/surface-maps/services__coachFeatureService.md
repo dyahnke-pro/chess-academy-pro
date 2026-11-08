@@ -11,7 +11,7 @@
 - **Why determinism** (CLAUDE.md:412) — names `coachFeatureService`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4774) — names `coachFeatureService`
 - **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5843) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6938) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6940) — names `coachFeatureService`
 
 ## Who calls in
 
