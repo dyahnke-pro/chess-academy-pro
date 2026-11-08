@@ -837,7 +837,22 @@ function composerVariants(kept: readonly KeptNote[], ids: readonly SourceId[]): 
   const learned = Object.fromEntries(THOUGHT_STEPS.map((st) => [st, prec(st)])) as Record<ThoughtStep, SourceId[]>;
   const fixed = Object.fromEntries(THOUGHT_STEPS.map((st) => [st, [...ids]])) as Record<ThoughtStep, SourceId[]>;
   const valueOrder: ThoughtStep[] = ['line', 'choices', 'changed', 'notYet', 'plan', 'theory', 'habit'];
+  // Today's one composer as spoken, and the same cut to Learn's length (its
+  // sentences in spoken order until the budget): the held-out numbers the
+  // phase-2 plan compares every new shape against (L5).
+  const spokenUntil = (n: KeptNote, src: SourceId, budget: number): KeptSentence[] => {
+    const out: KeptSentence[] = [];
+    let used = 0;
+    for (const s of n.sentences) {
+      if (s.source !== src || used >= budget) continue;
+      out.push(s);
+      used += words(s.text);
+    }
+    return out;
+  };
   const results: VariantResult[] = [
+    scoreVariant('today: the one composer (thought)', test, (n) => n.sentences.filter((s) => s.source === 'thought')),
+    scoreVariant('today: the one composer · Learn length', test, (n) => spokenUntil(n, 'thought', 30)),
     scoreVariant('today: lesson beat', test, (n) => n.sentences.filter((s) => s.source === 'lesson')),
     scoreVariant('today: Review pool (all of it)', test, (n) => n.sentences.filter((s) => s.source === 'reviewInventory' || s.source === 'moveJob' || s.source === 'studentMove')),
     scoreVariant('everything built (upper bound)', test, (n) => n.sentences),
@@ -873,7 +888,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
   const byStep = new Map<string, Map<string, Tally>>();   // source → step → tally
   const noteHit = new Map<string, Tally>();                // source → notes with ≥1 idea covered
   const lead = new Map<string, Tally>();                   // source → note's FIRST idea covered
-  const wordStats = new Map<string, { n: number; words: number; empty: number; errors: number }>();
+  const wordStats = new Map<string, { n: number; words: number; empty: number; errors: number; ms: number }>();
   const examples: Array<{ id: string; danya: string; said: Record<string, string> }> = [];
   // DANYA_BENCH_MISSES=<kind,…> keeps every note where he states one of those
   // ideas and the lesson does not — the gap read note by note, never guessed.
@@ -899,12 +914,14 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
     const said: Record<string, string> = {};
     const ideasBy = new Map<string, Idea[]>();
     for (const id of ids) {
-      const ws = wordStats.get(id) ?? { n: 0, words: 0, empty: 0, errors: 0 };
+      const ws = wordStats.get(id) ?? { n: 0, words: 0, empty: 0, errors: 0, ms: 0 };
       let text = '';
+      const t0 = Date.now();
       try {
         const r = await SOURCES[id](p);
         text = Array.isArray(r) ? r.filter(Boolean).join(' ') : (r ?? '');
       } catch { ws.errors += 1; }
+      ws.ms += Date.now() - t0;
       ws.n += 1;
       if (text.trim()) ws.words += words(text); else ws.empty += 1;
       wordStats.set(id, ws);
@@ -1048,6 +1065,8 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
   for (const k of kinds) lines.push([`${k} (${byKind.get('BUILT')!.get(k)!.danya})`, ...srcs.map((s) => pct(byKind.get(s)?.get(k)))].join(' | '));
   lines.push('');
   lines.push('by seat (any idea / his lead idea): ' + srcs.map((s) => `${s} own ${pct(noteHit.get(`${s}@own`))}/${pct(lead.get(`${s}@own`))} their ${pct(noteHit.get(`${s}@their`))}/${pct(lead.get(`${s}@their`))}`).join(' · '));
+  // Where the time goes, per source (a run's length is mostly two or three).
+  lines.push('', 'ms a note per source: ' + [...wordStats].sort((a, b) => b[1].ms - a[1].ms).map(([k, v]) => `${k} ${Math.round(v.ms / Math.max(1, v.n))}`).join(' · '));
   console.log(lines.join('\n'));
 
   // ── the composer orders (David: "different computers wired in different
