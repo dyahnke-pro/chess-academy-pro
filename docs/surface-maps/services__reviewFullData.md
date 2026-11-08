@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1959 lines · 11 exports · 20 importers · 26 tests · 0 audits**
+**1986 lines · 12 exports · 21 importers · 27 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,6 +22,7 @@
 - `src/services/reviewFullData.pinHolds.test.ts`
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewHeardCorrection.test.ts`
+- `src/services/reviewOneLoosePiece.test.ts`
 - `src/services/reviewOwedComputers.test.ts`
 - `src/services/reviewVerdictSentence.test.ts`
 - `src/services/reviewWalk2065.test.ts`
@@ -50,7 +51,7 @@
 ### `NO_TEACHING_CONTEXT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 55 call sites
+### `computeMoveFacets` (function) — 56 call sites
 - `src/services/batch2Wiring.test.ts:55`
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
@@ -92,8 +93,9 @@
 - `src/services/reviewFullData.test.ts:612`
 - `src/services/reviewFullData.test.ts:635`
 - `src/services/reviewFullData.test.ts:658`
-- `src/services/reviewFullData.test.ts:710`
 - `src/services/reviewFullData.test.ts:735`
+- `src/services/reviewFullData.test.ts:760`
+- `src/services/reviewOneLoosePiece.test.ts:14`
 - `src/services/reviewOwedComputers.test.ts:15`
 - `src/services/reviewOwedComputers.test.ts:72`
 - `src/services/reviewWalkCT.test.ts:51`
@@ -108,7 +110,7 @@
 - `src/test/teach02Wired.test.ts:68`
 
 ### `computeThroughLine` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:6335`
+- `src/services/coachFeatureService.ts:6345`
 - `src/services/reviewFullData.test.ts:215`
 - `src/services/reviewFullData.test.ts:218`
 - `src/services/reviewFullData.test.ts:226`
@@ -136,10 +138,15 @@
 - `src/services/reviewVerdictSentence.test.ts:15`
 - `src/test/captureSaidOnce.gate.test.ts:206`
 
-### `describeMoveInfluence` (function) — 5 call sites
+### `INFLUENCE_LOOSE_TAIL_RE` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `describeMoveInfluence` (function) — 7 call sites
 - `src/services/reviewFullData.test.ts:682`
 - `src/services/reviewFullData.test.ts:687`
-- `src/services/reviewFullData.test.ts:697`
+- `src/services/reviewFullData.test.ts:699`
+- `src/services/reviewFullData.test.ts:710`
+- `src/services/reviewFullData.test.ts:722`
 - `src/services/reviewNarrationFidelity.test.ts:48`
 - `src/services/reviewNarrationFidelity.test.ts:60`
 
@@ -165,6 +172,7 @@
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewHeardCorrection.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
+- `src/services/reviewOneLoosePiece.test.ts`
 - `src/services/reviewOwedComputers.test.ts`
 - `src/services/reviewTurnLength.test.ts`
 - `src/services/reviewVerdictSentence.test.ts`

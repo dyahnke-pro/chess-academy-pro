@@ -28,10 +28,10 @@ const at = (segs: ReviewMoveSegment[], ply: number): string => segs.find((s) => 
 
 describe('the loose-piece count rides the seed', () => {
   it('a loose piece of theirs the walk already named makes the next one the habit, not the bare formula', () => {
-    expect(at(build(null), 22)).toMatch(/now eyes their dark-squared bishop — nothing guards it/);
+    expect(at(build(null), 22)).toMatch(/now (?:attacks|hits) their dark-squared bishop(?:, and nothing guards it|, which has no guard|, which is loose)/);
     const seeded = at(build(seedOf(21, ['l:their#1'])), 22);
-    expect(seeded).not.toMatch(/nothing guards it/);
-    expect(seeded).toMatch(/that's the second time they've left a piece with no guard/);
+    expect(seeded).not.toMatch(/nothing guards it|which has no guard|which is loose/);
+    expect(seeded).toMatch(/That's the second piece they've left with no guard this game\. After every move of theirs/);
   }, 120000);
 });
 

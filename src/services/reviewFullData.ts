@@ -1672,6 +1672,16 @@ export function computeMoveFacets(
     // different families apart on purpose (B12), so the restatement is dropped
     // here, where both are known: the influence line (`[does]`, or `[delta]` when it hits no piece) already carries the reach.
     const restates = opp?.kind === 'influence' && !!influence;
+    // ONE LOOSE PIECE, ONE LINE (Review baseline 2026-11-08: "Their bishop now
+    // attacks your light-squared bishop, which is loose … Watch out — that
+    // bishop attacks your bishop on b7, and nothing defends it"). The reach
+    // and the hanging read are one claim about one square; the threat read
+    // keeps it, since it carries the threat voice (quiet on a proven skill)
+    // and the threat arrow, and the reach's line goes with it.
+    if (opp?.kind === 'hanging' && influenceShape.loose && opp.squares[1] === influenceShape.loose) {
+      const k = facets.findIndex((x) => x.computer === 'describeMoveInfluence' && x.claims?.includes(`loose:${influenceShape.loose}`));
+      if (k >= 0) facets.splice(k, 1);
+    }
     if (opp && !restates) {
       const f = made('buildOpponentMoveTeaching', 'opp-target', opp.text);
       facets.push(f);
@@ -1858,6 +1868,13 @@ function pieceWord(p: string): string {
   return ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[p.toLowerCase()] ?? 'piece';
 }
 
+/** The loose tail `describeMoveInfluence` closes an attack with, every
+ *  rotation of it. ONE pattern for the producer and the walk's loose-piece
+ *  habit, which swaps the tail for "that's the second piece …" (the habit's
+ *  hand copy of the old "— nothing guards it" wording stopped matching when
+ *  the line was reworded, and the habit went silent with every test green). */
+export const INFLUENCE_LOOSE_TAIL_RE = /, (?:and nothing guards [^.,]+|and [^.,]+ (?:has no guard|is loose)|which (?:has no guard|is loose))(?=\.)/;
+
 /** The moved piece's influence from its NEW square: enemy pieces it now eyes,
  *  central squares it now fights for, own pieces it now guards. Pure chess.js
  *  (attackers()) — the quiet-move beat that gives EVERY ply its own computed
@@ -1924,24 +1941,34 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
     // two lines are ONE claim (walk 5, 2026-09-23: "Their knight on c3 now
     // fights for d5. Your opponent's knight steps in eyeing d5" on every ply).
     squaresOut?.unshift(to);
-    const bits: string[] = [];
-    if (eyes.length) bits.push(`eyes ${andList(eyes)}`);
     // ROTATED, keyed on the square it lands on and the move number (stable,
-    // never Math.random) —
-    // "now fights for d5" was one formula said three times in a review.
-    const fightVerb = ['fights for', 'joins the fight for', 'adds its weight to'][(to.charCodeAt(0) + Number(to[1]) + Number(fenAfter.split(' ')[5] ?? 0)) % 3];
-    if (fights.length) bits.push(`${fightVerb} ${andList(fights)}`);
-    if (!bits.length) return null;
-    if (shapeOut) shapeOut.hitsPiece = pressed;
-    // ROTATED with the fight verb (one formula, three times in a review).
+    // never Math.random): "now fights for d5" was one formula said three
+    // times in a review, and "eyes" was the stock verb (the human voice,
+    // David 2026-11-08: players' words, attacks / hits).
     const turnKey = to.charCodeAt(0) + Number(to[1]) + Number(fenAfter.split(' ')[5] ?? 0);
-    // The one piece it eyes is "it" in the reason ("now eyes their bishop —
-    // nothing guards it"); named again only beside a second target.
-    const tgt = eyes.length === 1 && pressReason && eyes[0] === pressReason.target ? 'it' : pressReason?.target;
-    const looseWords = [` — nothing guards ${tgt}`, ` — ${tgt} has no guard`, `, and ${tgt} is loose`][turnKey % 3];
+    const eyeVerb = ['attacks', 'hits'][turnKey % 2];
+    const fightVerb = ['fights for', 'joins the fight for', 'adds its weight to'][turnKey % 3];
+    const attack = eyes.length ? `${eyeVerb} ${andList(eyes)}` : null;
+    const fight = fights.length ? `${fightVerb} ${andList(fights)}` : null;
+    if (!attack && !fight) return null;
+    if (shapeOut) shapeOut.hitsPiece = pressed;
+    // The one piece it attacks is said once, then carried by the clause
+    // ("now attacks their bishop, which has no guard"); named again only
+    // beside a second target. No dash: one idea, then what it means.
+    const one = eyes.length === 1 && pressReason && eyes[0] === pressReason.target;
+    const tgt = one ? 'it' : pressReason?.target;
+    const looseWords = one
+      ? [', and nothing guards it', ', which has no guard', ', which is loose'][turnKey % 3]
+      : [`, and nothing guards ${tgt}`, `, and ${tgt} has no guard`, `, and ${tgt} is loose`][turnKey % 3];
     const why = !pressReason ? ''
-      : pressReason.loose ? looseWords : ` — ${tgt} is worth more than the ${pieceWord(pc.type)}`;
-    return `The ${pieceWord(pc.type)} on ${to} now ${andList(bits)}${why}.`;
+      : pressReason.loose ? looseWords
+        : one ? `, which is worth more than the ${pieceWord(pc.type)}` : `, and ${tgt} is worth more than the ${pieceWord(pc.type)}`;
+    const lead = `The ${pieceWord(pc.type)} on ${to} now`;
+    // The reason rides its attack, never the clause after it ("adds its
+    // weight to d5, keeping your rook on d8 off it, which is loose" pinned
+    // the loose bishop on the rook): the fight is its own sentence then.
+    if (attack && fight) return why ? `${lead} ${attack}${why}. It also ${fight}.` : `${lead} ${attack} and ${fight}.`;
+    return `${lead} ${attack ?? fight}${why}.`;
   } catch {
     return null;
   }

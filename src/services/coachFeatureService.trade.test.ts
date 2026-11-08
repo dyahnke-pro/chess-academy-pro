@@ -19,6 +19,6 @@ describe('review does not restate a plain trade', () => {
     const segs = buildReviewSegmentsForTests(inputs, 'black', 'Sicilian Defense: Alapin Variation', true, 1200, [], coldStudent(1200), 'g');
     const ply8 = segs.find((s) => s.ply === 8);
     expect(ply8?.narration ?? '').not.toContain('they can take back — a pawn trade');
-    expect(ply8?.narration ?? '').not.toMatch(/pawn on d4 now eyes/);
+    expect(ply8?.narration ?? '').not.toMatch(/pawn on d4 now (?:eyes|attacks|hits)/);
   });
 });

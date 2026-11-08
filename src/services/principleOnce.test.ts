@@ -19,7 +19,7 @@ describe('principle-once line', () => {
       expect(t).toMatch(/cannot join the fight/);
       expect(t).not.toMatch(/does what the opening asks/);
     }
-    expect(line).not.toMatch(/now eyes|newly undefended/i);
+    expect(line).not.toMatch(/now (?:eyes|attacks|hits)|newly undefended/i);
   });
 
   it('NEGATIVE CONTROL: a flank space grab is a fundamental, not a principle to teach', () => {

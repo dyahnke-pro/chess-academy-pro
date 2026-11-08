@@ -67,7 +67,7 @@ import { readBoard, readBoardAll, readKey } from './boardComputers';
 import { replyReadsFromFan, type ReplyRead } from './ifTheyPlay';
 import { stripThink } from '../utils/thinkPause';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
-import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
+import { computeMoveFacets, computeThroughLine, prematureBreakWhy, INFLUENCE_LOOSE_TAIL_RE } from './reviewFullData';
 import { flipSideToMove, sideToMoveAs } from './threatOut';
 import { mateStakes, isSacrifice } from './factStakes';
 import { sacrificeLedger, type BestAmong, type SacrificeLedgerRead } from './sacrificeLedger';
@@ -2820,9 +2820,10 @@ function* reviewSegmentSteps(
             if (n >= 2) continue;
             if (n === 1) {
               const habit = owner === 'their'
-                ? ` — that's the second time they've left a piece with no guard: after every move of theirs, look first for what it leaves loose`
-                : ` — that's the second time you've left a piece with no guard: before every move, check what it leaves without one`;
-              f = reworded(f0, f0.text.replace(/(?: — nothing guards .*| — .* has no guard|, and .* is loose)\.$/, `${habit}.`));
+                ? "That's the second piece they've left with no guard this game. After every move of theirs, look first for what it leaves loose."
+                : "That's the second piece you've left with no guard this game. Before every move, check what it leaves unguarded.";
+              // The producer's own tail pattern, never a copy of its words.
+              f = reworded(f0, `${f0.text.replace(INFLUENCE_LOOSE_TAIL_RE, '')} ${habit}`);
             }
             keep(f, () => { looseSaid.add(`${owner}#${n + 1}`); }, f0);
             continue;

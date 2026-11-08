@@ -679,13 +679,38 @@ describe('an influence line teaches only under real pressure (review audit 2026-
     const c = new Chess(); c.move('e4'); c.move('c6'); c.move('Nc3'); const before = c.fen(); c.move('d5');
     const shape = { hitsPiece: false };
     // Not pressure, so not said (David 2026-10-14: only pressure is named).
-    expect(describeMoveInfluence(before, c.fen(), 'd5', [], shape) ?? '').not.toMatch(/eyes the pawn on e4/);
+    expect(describeMoveInfluence(before, c.fen(), 'd5', [], shape) ?? '').not.toMatch(/(?:attacks|hits) the pawn on e4/);
     expect(shape.hitsPiece).toBe(false);
     // 4.Ng5 h6: the h6 pawn eyes the knight on g5 — worth more than the pawn.
     const d = new Chess(); for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'd6', 'Ng5']) d.move(m); const b2 = d.fen(); d.move('h6');
     const shape2 = { hitsPiece: false };
-    expect(describeMoveInfluence(b2, d.fen(), 'h6', [], shape2)).toMatch(/eyes the knight on g5/);
+    expect(describeMoveInfluence(b2, d.fen(), 'h6', [], shape2)).toMatch(/(?:attacks|hits) the knight on g5/);
     expect(shape2.hitsPiece).toBe(true);
+  });
+});
+
+describe('the loose tail is one pattern for the producer and the habit (2026-11-08)', () => {
+  it('every rotation of the tail matches the pattern the walk strips, and the reason rides its attack', async () => {
+    const { describeMoveInfluence, INFLUENCE_LOOSE_TAIL_RE } = await import('./reviewFullData');
+    const seen = new Set<string>();
+    for (let move = 1; move <= 6; move++) {
+      const before = `4k3/8/8/2p5/8/8/8/N3K3 w - - 0 ${move}`;
+      const after = `4k3/8/8/2p5/8/1N6/8/4K3 b - - 1 ${move}`;
+      const text = describeMoveInfluence(before, after, 'Nb3') ?? '';
+      const tail = INFLUENCE_LOOSE_TAIL_RE.exec(text)?.[0];
+      expect(tail, text).toBeTruthy();
+      seen.add(tail ?? '');
+      expect(text.replace(INFLUENCE_LOOSE_TAIL_RE, '')).toMatch(/^The knight on b3 now (?:attacks|hits) the pawn on c5\.$/);
+    }
+    expect(seen.size).toBe(3);
+    // A fight clause after the attack is its own sentence, so the reason
+    // never lands on the square fought for.
+    const b2 = '4k3/8/8/2p5/8/8/8/1N2K3 w - - 0 1';
+    const a2 = '4k3/8/8/2p5/8/2N5/8/4K3 b - - 1 1';
+    const t2 = describeMoveInfluence(b2, a2, 'Nc3') ?? '';
+    if (/adds its weight|fights for|joins the fight/.test(t2) && /no guard|loose|nothing guards/.test(t2)) {
+      expect(t2).toMatch(/(?:no guard|is loose|guards it)\. It also /);
+    }
   });
 });
 
@@ -694,7 +719,7 @@ describe('pressure says why it is pressure (review audit 2026-10-14)', () => {
     const { describeMoveInfluence } = await import('./reviewFullData');
     const before = '4k3/8/8/2p5/8/8/8/N3K3 w - - 0 1';
     const after = '4k3/8/8/2p5/8/1N6/8/4K3 b - - 1 1';
-    expect(describeMoveInfluence(before, after, 'Nb3')).toBe('The knight on b3 now eyes the pawn on c5 — nothing guards it.');
+    expect(describeMoveInfluence(before, after, 'Nb3')).toBe('The knight on b3 now attacks the pawn on c5, and nothing guards it.');
     // d4 has no role on this board (no pawn of either side steps there, their
     // c5-pawn covers it, nothing of theirs wants it), so it is not named (2026-10-15).
   });
