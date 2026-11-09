@@ -507,6 +507,7 @@ export function computeMoveFacets(
       const tradeProof = lineProof({ fen: fenBefore, sans: [san, ...seeSequence(fenAfter, tradeSq as Square)] }, lineSeatAt(fenBefore, ctx.studentColorWB), true);
       if (judged) {
         const jf = put('readTrade', 'trade', judged.text);
+        if (judged.headsMove) jf.headsMove = true;
         recSquares(jf, judged.squares);
         recProof(jf, tradeProof);
       } else if (!what || costlyGrab) {
@@ -517,7 +518,10 @@ export function computeMoveFacets(
         // A grab nobody takes back is what the move changed, not a trade.
         const df = put('settledExchange', 'delta', said);
         recSquares(df, [tradeSq]);
-      } else if (restPart || !safe) { const f = put('settledExchange', 'trade', said); recProof(f, tradeProof); }
+      } else if (restPart || !safe) {
+        // "You take on d4 — …" opens with the move itself.
+        const f = put('settledExchange', 'trade', said); f.headsMove = true; recProof(f, tradeProof);
+      }
       // A PLAIN EVEN TRADE ("They take on e5, and you can take back — a pawn
       // trade") restates the move (lead 2026-10-20, Review noise walk): said
       // only when material changes hands or the take-back costs more.

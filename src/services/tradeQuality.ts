@@ -38,6 +38,9 @@ interface TradeRead {
   /** Say-once key: the call and the reason, never the squares' prose. */
   key: string;
   moverIsStudent: boolean;
+  /** Its sentence opens with the trade's own move ("Nxe5 is a good trade"):
+   *  a later fact about the move may follow it as "It also …". */
+  headsMove: boolean;
 }
 
 
@@ -261,7 +264,7 @@ export function readTrade(
         // what holds ONCE it lands — never as a standing fact of this board.
         ? `After ${mv.san}, ${dent}, but you're still ${behind} — and trades help the side with more material.`
         : `After their ${mv.san}, ${dent}, but you're still ${ahead} — and every trade brings your ending closer.`,
-      squares: good[0].sq, key: 'trade:behind-structure', moverIsStudent,
+      squares: good[0].sq, key: 'trade:behind-structure', moverIsStudent, headsMove: false,
     };
   }
 
@@ -271,11 +274,11 @@ export function readTrade(
   const costly = cpLoss === null || cpLoss >= 30;
   if (good.length && !bad.length && sound) {
     const g = good[0];
-    return { call: 'good', text: `${subject} is a good trade${forWhom} — ${g.why}.`, squares: g.sq, key: `trade:good:${g.key}`, moverIsStudent };
+    return { call: 'good', text: `${subject} is a good trade${forWhom} — ${g.why}.`, squares: g.sq, key: `trade:good:${g.key}`, moverIsStudent, headsMove: true };
   }
   if (bad.length && !good.length && costly) {
     const b = bad[0];
-    return { call: 'bad', text: `${subject} is a poor trade${forWhom} — ${b.why}.`, squares: b.sq, key: `trade:bad:${b.key}`, moverIsStudent };
+    return { call: 'bad', text: `${subject} is a poor trade${forWhom} — ${b.why}.`, squares: b.sq, key: `trade:bad:${b.key}`, moverIsStudent, headsMove: true };
   }
   if (good.length || bad.length) return null; // mixed — not a lesson
   // Neutral pieces: the material count decides who the trade helps.
@@ -286,7 +289,7 @@ export function readTrade(
       text: you
         ? `${mv.san} trades pieces while you're ahead — every trade brings a won ending closer.`
         : `Their ${mv.san} trades pieces while they're ahead — that helps them.`,
-      squares: [mv.to], key: 'trade:ahead', moverIsStudent,
+      squares: [mv.to], key: 'trade:ahead', moverIsStudent, headsMove: true,
     };
   }
   // "KEEP PIECES ON" IS A VERDICT THE ENGINE MUST AGREE WITH (hand walk 1690,
@@ -300,7 +303,7 @@ export function readTrade(
       text: you
         ? `${mv.san} trades pieces while you're behind — trades help the side with more material, so keep pieces on.`
         : `Their ${mv.san} trades pieces while they're behind — that helps you.`,
-      squares: [mv.to], key: 'trade:behind', moverIsStudent,
+      squares: [mv.to], key: 'trade:behind', moverIsStudent, headsMove: true,
     };
   }
   return null;

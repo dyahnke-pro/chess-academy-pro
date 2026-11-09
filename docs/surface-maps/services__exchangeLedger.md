@@ -151,8 +151,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `proofCut` (function) — 44 call sites
-- `src/services/coachFeatureService.ts:4706`
-- `src/services/coachFeatureService.ts:4709`
+- `src/services/coachFeatureService.ts:4747`
+- `src/services/coachFeatureService.ts:4750`
 - `src/services/costReason.ts:135`
 - `src/services/costReason.ts:166`
 - `src/services/costReason.ts:169`
@@ -205,8 +205,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `describeProofResult` (function) — 10 call sites
 - `src/coach/boardTurnAnswer.ts:429`
 - `src/coach/chatTurnAnswers.ts:705`
-- `src/services/coachFeatureService.ts:4678`
-- `src/services/coachFeatureService.ts:4733`
+- `src/services/coachFeatureService.ts:4719`
+- `src/services/coachFeatureService.ts:4775`
 - `src/services/decisiveReason.ts:141`
 - `src/services/lineProof.test.ts:27`
 - `src/services/pieceOptions.ts:137`
@@ -241,7 +241,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:256`
 - `src/services/groundedAnswer.ts:2093`
 - `src/services/positionFacts.ts:745`
-- `src/services/reviewFullData.ts:899`
+- `src/services/reviewFullData.ts:903`
 
 ## Tests
 
