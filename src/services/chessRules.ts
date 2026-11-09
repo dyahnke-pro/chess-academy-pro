@@ -9,6 +9,7 @@
  * fifty-move count is. Everything after the definition is computed (G0).
  */
 import { andList } from '../utils/andList';
+import { sentenceEach } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 
 type ChessRule =
@@ -117,7 +118,7 @@ export function castlingNow(chess: Chess, side: 'w' | 'b'): string {
     }
     parts.push(`${who} can castle ${w.name}`);
   }
-  return `${parts.join('; ').replace(/; You /g, '; you ')}.`;
+  return sentenceEach(parts);
 }
 
 function promotionNow(chess: Chess): string | null {

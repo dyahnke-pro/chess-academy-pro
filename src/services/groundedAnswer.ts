@@ -16,7 +16,7 @@ import { realMasterMoves } from './realMasterMoves';
 import { purposeFromLine } from './movePurpose';
 import { costWords } from './engineConstants';
 import { evalBand, evalBandWords } from './evalBand';
-import { openSentence, continueSentence } from '../utils/openSentence';
+import { openSentence, continueSentence, sentenceEach } from '../utils/openSentence';
 import { MATERIAL_VALUE } from './pieceValues';
 import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { whyNotLegal } from './whyNotLegal';
@@ -491,7 +491,7 @@ export function assembleBoardPlanAnswer(
     try { theirBreaks = findPawnBreaks(flipped.join(' ')); } catch { theirBreaks = []; }
     if (theirBreaks.length) bits.push(`they can break with ${andList(theirBreaks)}`);
     if (bits.length === 0) return null;
-    return { facts: `Their side of it: ${bits.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: `Their side of it: ${andList(bits)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   // side === 'me' — synthesize a PRIORITIZED plan from the sync board computers
@@ -542,10 +542,10 @@ export function assembleBoardPlanAnswer(
   if (headK && topK.length) {
     // The method opens with the forcing scan itself (planChoice step zero), so
     // its answer is the urgency — never said twice.
-    return { facts: `${pf.method ? '' : urgent}${headK} Beyond that: ${topK.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: `${pf.method ? '' : urgent}${headK} Beyond that: ${andList(topK)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
   if (headK) return { facts: `${pf.method ? '' : urgent}${headK}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
-  if (topK.length) return { facts: `${urgent}${urgent ? 'Then' : 'No single trump yet —'} the plan is to ${topK.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  if (topK.length) return { facts: `${urgent}${urgent ? 'Then' : 'No single trump yet —'} the plan is to ${andList(topK)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   return urgent ? { facts: urgent.trim(), bestMoveSan: null, bestMoveFromTo: null, sources: src } : null;
 }
 
@@ -623,7 +623,7 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
   // set up a pin or a fork, read on the board handed to them — and only where
   // the piece is not simply lost on arrival.
   const ideas = isOpp && !inCheck ? opponentIdeas(fen, me) : [];
-  const ideaPart = ideas.length ? ` Their ideas: ${ideas.join('; ')}.` : '';
+  const ideaPart = ideas.length ? ` Their ideas: ${sentenceEach(ideas)}` : '';
   // A MATE ONE MOVE AWAY LEADS (hard walk 2026-10-10: "what do they
   // threaten?" → "the pawn on g2, which is not defended enough" with …Qxg2#
   // on the board). The same null-move read as the material threats.
@@ -732,7 +732,7 @@ function targetsSaid(chess: Chess, targets: ReadonlyArray<{ sq: Square; type: Pi
       : andList(g.map((r) => full(r.t)));
     return `${hitter} ${pieces(g[0].hits)} ${g[0].hits.length > 1 ? 'hit' : 'hits'} ${what}`;
   });
-  return `${andList(targets.map(full))}. ${openSentence(`${hitLines.length ? `${hitLines.join('; ')}: ` : ''}${andList(read.map(guardLine))}`)}`;
+  return `${andList(targets.map(full))}. ${openSentence(`${hitLines.length ? `${andList(hitLines)}: ` : ''}${andList(read.map(guardLine))}`)}`;
 }
 
 /** HOW, not just "cover it" (escalating walk 2026-10-17): the moves that keep
@@ -1876,7 +1876,7 @@ export function assembleCapabilitiesOverview(
   if (clean.length === 0) return null;
   const lines = clean.map((e) => `${e.title} — ${e.blurb.trim()}`);
   const facts =
-    `Here's what the coach does with you: ${lines.join('; ')}. ` +
+    `Here's what the coach does with you. ${sentenceEach(lines)} ` +
     `Ask anything — where you're going wrong, what to work on, whether a move is sound, how to play an opening or an endgame — and the answer comes from your games and the engine.`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['app:routes'] };
 }
@@ -1919,7 +1919,7 @@ export function assembleTeachingAnswer(opts: {
     const cues = lesson.beats
       .map((b) => b.sayShort)
       .filter((s): s is string => !!s && s.trim().length > 0);
-    if (cues.length > 0) parts.push(`The ideas you'll drill: ${cues.join('; ')}.`);
+    if (cues.length > 0) parts.push(`The ideas you'll drill: ${sentenceEach(cues)}`);
     const extras: string[] = [];
     if (opts.extras?.plans) extras.push(`${opts.extras.plans} middlegame plan${opts.extras.plans === 1 ? '' : 's'}`);
     if (opts.extras?.traps) extras.push(`${opts.extras.traps} trap${opts.extras.traps === 1 ? '' : 's'} to spring or sidestep`);
@@ -2390,7 +2390,7 @@ export function assembleCandidateMoveAnswer(opts: {
         : `${candNorm} is playable, just slightly worse than ${bestSan ?? 'the best move'} — it gives up ${costWords(cpLoss)}.`
       : band === 'inaccuracy'
         ? `${candNorm} is an inaccuracy — it gives up ${costWords(cpLoss)} versus ${bestSan ?? 'the best move'}.`
-        : `${candNorm} is ${withArticle(band)} — it loses ${costWords(cpLoss)}; ${bestSan ?? 'the engine move'} is much better.`;
+        : `${candNorm} is ${withArticle(band)} — it loses ${costWords(cpLoss)}. ${openSentence(bestSan ?? 'the engine move')} is much better.`;
   }
 
   const parts = [verdict];
@@ -3630,7 +3630,7 @@ export function explainMoveOrder(opts: {
     } catch { /* refutation didn't replay — drop the cost clause */ }
   }
 
-  return { text: cost ? `${cap(whyBetter)}; ${cost}.` : `${cap(whyBetter)}.`, mechanism };
+  return { text: cost ? `${cap(whyBetter)}. ${openSentence(cost)}.` : `${cap(whyBetter)}.`, mechanism };
 }
 
 /**
@@ -3769,7 +3769,7 @@ export function assembleMethodAnswer(opts: {
       const bits: string[] = [];
       if (checks.length) bits.push(`checks ${andList(checks)}`);
       if (caps.length) bits.push(`captures ${andList(caps)}`);
-      return `${bits.join('; ')}. Look at each of those, in that order, before any quiet move.`;
+      return `${sentenceEach(bits)} Look at each of those, in that order, before any quiet move.`;
     },
     // Candidates: the levers to compare.
     candidates: () => {
@@ -4470,7 +4470,7 @@ export function assembleProgressAnswer(badHabits: ReadonlyArray<BadHabit>): Grou
   const facts =
     open.length === 1
       ? `The pattern to work on: ${phrase(open[0])}.`
-      : `The patterns to work on, most frequent first: ${open.map(phrase).join('; ')}.`;
+      : `The patterns to work on, most frequent first: ${sentenceEach(open.map(phrase))}`;
 
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
@@ -4753,7 +4753,7 @@ export function assembleWeaknessRecommendation(
   const lead =
     open.length === 1
       ? `The ${topicNoun} to train, from your own games: ${phrase(open[0])}.`
-      : `The ${topicNoun}s to train, most frequent first, from your own games: ${open.map(phrase).join('; ')}.`;
+      : `The ${topicNoun}s to train, most frequent first, from your own games: ${sentenceEach(open.map(phrase))}`;
   // A TRUE capability fact (not invented chess content) so the coach can offer
   // the concrete next step — drilling routes to the real mistake queue.
   const facts = `${lead} You can practice these on the board anytime by asking to drill your mistakes.`;
@@ -4833,13 +4833,13 @@ export function assembleOpeningProfileAnswer(opts: {
   let facts: string;
   if (white.length > 0 && black.length > 0) {
     // both colors requested — one per side
-    facts = `Your ${label} opening as White is ${stat(white[0])}; as Black it's ${stat(black[0])}.`;
+    facts = `Your ${label} opening as White is ${stat(white[0])}, and as Black it's ${stat(black[0])}.`;
   } else {
     const list = rows; // every opening the stats earned, ranked (G4.5)
     facts =
       list.length === 1
         ? `Your ${label} opening is ${stat(list[0])}.`
-        : `Your ${label} openings, ${kind === 'weakest' ? 'weakest' : 'best'} first: ${list.map(stat).join('; ')}.`;
+        : `Your ${label} openings, ${kind === 'weakest' ? 'weakest' : 'best'} first: ${sentenceEach(list.map(stat))}`;
   }
   // True next-step capability facts (no invented chess content).
   const next =
@@ -4909,7 +4909,7 @@ export function assembleStrengthsAnswer(strengths: ReadonlyArray<string>): Groun
   const facts =
     open.length === 1
       ? `What you do well, from your own games: ${open[0]}.`
-      : `What you do well, from your own games: ${open.join('; ')}.`;
+      : `What you do well, from your own games: ${sentenceEach(open)}`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
@@ -5034,8 +5034,8 @@ export function assembleOpeningTrapsAnswer(opts: {
     let line = opts.named
       ? `The ${s.name} (${withArticle(side)} opening) has real, verified traps.`
       : `Your strongest ${side} opening is the ${s.name}.`;
-    if (traps.length) line += ` Trap weapon${traps.length === 1 ? '' : 's'} you can spring: ${traps.join('; ')}.`;
-    if (warns.length) line += ` Watch out for: ${warns.join('; ')}.`;
+    if (traps.length) line += ` Trap weapon${traps.length === 1 ? '' : 's'} you can spring: ${sentenceEach(traps)}`;
+    if (warns.length) line += ` Watch out for: ${sentenceEach(warns)}`;
     parts.push(line);
   }
 
@@ -5931,7 +5931,7 @@ export function assembleRecordsAnswer(r: RecordsLike): GroundedAnswer | null {
   if (r.fastestWin) parts.push(`your fastest win took ${r.fastestWin.moves} moves`);
   if (r.longestGame) parts.push(`your longest game ran ${r.longestGame.moves} moves`);
   if (parts.length === 0) return null;
-  return { facts: `Your records: ${parts.join('; ')}. Want to replay your best game?`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  return { facts: `Your records: ${andList(parts)}. Want to replay your best game?`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
 /** Record vs a specific opening family. */
@@ -6388,7 +6388,7 @@ export function assembleGameReviewAnswer(opts: {
     parts.push(`The engine flagged ${countsFor(sc)} from you, and ${countsFor(sc === 'white' ? 'black' : 'white')} from them.`);
   } else {
     const outcome = opts.result === '1-0' ? `${opts.white} won` : opts.result === '0-1' ? `${opts.black} won` : opts.result === '1/2-1/2' ? 'it was drawn' : 'no result was recorded';
-    parts.push(`${opts.white} had White against ${opts.black}; ${outcome}, ${moves}.`);
+    parts.push(`${opts.white} had White against ${opts.black}. ${openSentence(outcome)}, ${moves}.`);
     parts.push(`The engine flagged ${counted(blunders.length, mistakes.length, inaccuracies.length)} across both players.`);
   }
 
@@ -6896,7 +6896,7 @@ export function assemblePositionalAnswer(
     const weak = [...wp.isolated, ...wp.backward, ...wp.doubled];
     if (weak.length) return { facts: `No loose piece to grab, but their ${andList(weak)} pawn${weak.length > 1 ? 's are' : ' is'} the long-term target — pile up on ${weak.length > 1 ? 'them' : 'it'}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     const oppHoles = campHoles(fen, oppC, myC);
-    if (oppHoles.length) return { facts: `Nothing hanging yet — the target is the weak square${oppHoles.length > 1 ? 's' : ''} on ${andList(oppHoles)}; occupy ${oppHoles.length > 1 ? 'them' : 'it'} and build from there.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (oppHoles.length) return { facts: `Nothing hanging yet — the target is the weak square${oppHoles.length > 1 ? 's' : ''} on ${andList(oppHoles)}. Occupy ${oppHoles.length > 1 ? 'them' : 'it'} and build from there.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     return { facts: `No target yet — the structure is solid, so provoke a weakness with a pawn break before you attack.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
@@ -6941,12 +6941,12 @@ export function assemblePositionalAnswer(
     };
     const mineTxt = faultTxt(mineWp);
     const oppTxt = faultTxt(oppWp);
-    if (!mineTxt && !oppTxt) return { facts: `Not a textbook-named structure — the pawns are still symmetrical and sound on both sides; the game will turn on piece play and the first break.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (!mineTxt && !oppTxt) return { facts: `Not a textbook-named structure — the pawns are still symmetrical and sound on both sides. The game will turn on piece play and the first break.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     const parts = [
       mineTxt ? `yours: ${mineTxt}` : '',
       oppTxt ? `theirs: ${oppTxt}` : '',
     ].filter(Boolean);
-    return { facts: `No textbook name for it, but the pawn features are — ${parts.join('; ')}. Play against the weaker structure.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: `No textbook name for it, but here are the pawn features. ${sentenceEach(parts)} Play against the weaker structure.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'xray') {
@@ -6966,7 +6966,7 @@ export function assemblePositionalAnswer(
     if (rl) bits.push(`lift your rook ${rl.rook}–${rl.to}`);
     if (fi) bits.push(`fianchetto a bishop to ${fi}`);
     if (bl) bits.push(`blockade on ${bl.blocker}`);
-    if (bits.length) return { facts: `Piece ideas: ${bits.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (bits.length) return { facts: `Piece ideas: ${andList(bits)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     // No textbook maneuver fired — still give direction: send the worst-placed
     // piece toward an outpost (a hole in their camp) or just to a better square.
     const oppHoles = holeTargets(fen, myC === 'w' ? 'b' : 'w', myC);
@@ -6997,7 +6997,7 @@ export function assemblePositionalAnswer(
       if (c && c.source === 'technique') rule = c.full;
     } catch { rule = null; }
     if (!rule && bits.length === 0) return null;
-    const steps = bits.length ? `Endgame technique: ${bits.join('; ')}.` : '';
+    const steps = bits.length ? `Endgame technique: ${andList(bits)}.` : '';
     return { facts: [rule, steps].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 

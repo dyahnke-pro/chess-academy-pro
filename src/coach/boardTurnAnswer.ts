@@ -32,6 +32,7 @@ import { boardPlanFacts } from '../services/boardPlanFacts';
 import { moveWhy } from '../services/deliberation';
 import { captureRunOfMoves } from '../services/captureRun';
 import { andList, lineSeatAt, lineShape, seatedLine } from '../utils/andList';
+import { sentenceEach } from '../utils/openSentence';
 import { playNamedLine } from '../services/whyNotLegal';
 import { settledLeadFor, lastMoveOf } from '../services/material';
 import { evalPhrase } from '../services/groundedAnswer';
@@ -199,7 +200,7 @@ async function answerFromRead(turn: ResolvedChatTurn, board: BoardTurnInput): Pr
     }
   }
   if (chosen.length === 0 && theirs.length === 0) return null;
-  const theirLine = theirs.length ? ` On their side, ${theirs.join('; ')}.` : '';
+  const theirLine = theirs.length ? ` ${sentenceEach([`on their side, ${theirs[0]}`, ...theirs.slice(1)])}` : '';
   return `${chosen.map((c) => c.text.trim()).join(' ')}${theirLine}`.trim();
 }
 
@@ -222,7 +223,7 @@ export function theirPlanAnswer(board: BoardTurnInput): string | null {
   }
   const facts = boardPlanFacts(board.fen, them, 'they');
   if (facts && facts.levers.length) {
-    parts.push(`Beyond that, they want to ${facts.levers.map((l) => l.phrase).join('; ')}.`.replace(/^Beyond that, they/, parts.length ? 'Beyond that, they' : 'They'));
+    parts.push(`Beyond that, they want to ${andList(facts.levers.map((l) => l.phrase))}.`.replace(/^Beyond that, they/, parts.length ? 'Beyond that, they' : 'They'));
   }
   return parts.length ? parts.join(' ') : null;
 }

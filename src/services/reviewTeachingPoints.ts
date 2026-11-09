@@ -39,7 +39,7 @@ import { legalSeeGainOn, bishopHemmedByOwnPawns, standsSafe } from './positionRe
 import { captureHasCounterTactic, detectNewThreat, forkAlignmentClause, type DetectedThreat } from './groundedAnswer';
 import { cells, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
 import { trappedAt, lineTakesPiece } from './trappedPiece';
-import { withArticle } from '../utils/andList';
+import { andList, withArticle } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 // Re-exported: eight callers and tests import these from here (2026-09-19 leaf move).
 export { findWorstPlacedPiece, deriveNextPlans };
@@ -482,7 +482,7 @@ function temptingCaptureText(
       const trapped = findTrappedPiece(fen, mover, lineUci);
       if (trapped && trapped.square === t.from) {
         const trapPoss = perspective === 'you' ? 'your' : perspective === 'they' ? 'their' : `${mover === 'w' ? 'White' : 'Black'}'s`;
-        return `The real story: ${trapPoss} ${trapped.piece} on ${trapped.square} is trapped — attacked by the ${trapped.attackerPiece} on ${trapped.attackerSquare}, and every escape square is covered. The line isn't declining the ${victimNoun}; it's picking the cheapest way to let the ${trapped.piece} go.`;
+        return `The real story: ${trapPoss} ${trapped.piece} on ${trapped.square} is trapped — attacked by the ${trapped.attackerPiece} on ${trapped.attackerSquare}, and every escape square is covered. The line isn't declining the ${victimNoun}. It's picking the cheapest way to let the ${trapped.piece} go.`;
       }
       if (trappedOnBoard(fen, mover)?.square === t.from) return null;
     }
@@ -699,6 +699,14 @@ export function describeTradeConsequence(
  * Returns a compact clause or null when no structural concession shows.
  */
 export function describeConcessions(fenBefore: string, san: string, moverIsStudent: boolean): string | null {
+  const parts = concessionParts(fenBefore, san, moverIsStudent);
+  return parts ? `The lasting concession: ${andList(parts)}.` : null;
+}
+
+/** THE CONCESSIONS, one clause each (the king's cover thinned, a passed pawn
+ *  handed over, the structure splintered) — the claims a caller may filter
+ *  before saying them, never re-read off the sentence. Null when none shows. */
+export function concessionParts(fenBefore: string, san: string, moverIsStudent: boolean): string[] | null {
   // NEVER MID-EXCHANGE (Learn walk g9, 2026-09-27): after …cxd5 the new pawn
   // on d5 looked isolated — then exd5 took it and the isolani was White's. A
   // capture they can take back leaves a structure that is still changing, so
@@ -740,8 +748,7 @@ export function describeConcessions(fenBefore: string, san: string, moverIsStude
       const isoB = sB.pawns.isolatedPawns[mover].length; const isoA = sA.pawns.isolatedPawns[mover].length;
       if (isoA > isoB) out.push(`${poss} pawn structure splinters — a new isolated pawn on ${sA.pawns.isolatedPawns[mover].find((p) => !sB.pawns.isolatedPawns[mover].includes(p)) ?? sA.pawns.isolatedPawns[mover][0]}`);
     }
-    if (out.length === 0) return null;
-    return `The lasting concession: ${out.join('; ')}.`;
+    return out.length ? out : null;
   } catch {
     return null;
   }

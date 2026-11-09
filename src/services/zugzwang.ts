@@ -58,7 +58,7 @@ export function zugzwangSentence(z: ZugzwangRead, studentToMove: boolean): strin
       : 'You put them in mutual zugzwang: whoever has to move here loses, and it is their move.';
   }
   if (studentToMove) {
-    return `Zugzwang: on your move this ${WORD[z.onMove + 1]}; if it were their move, you would ${z.ifPassed === 1 ? 'win' : 'hold the draw'}. In pawn endings, who has to move decides it.`;
+    return `Zugzwang: on your move this ${WORD[z.onMove + 1]}. If it were their move, you would ${z.ifPassed === 1 ? 'win' : 'hold the draw'}. In pawn endings, who has to move decides it.`;
   }
   return `You put them in zugzwang: on their move it ${WORD[z.onMove + 1]} for them; if they could pass, they would ${z.ifPassed === 1 ? 'win' : 'hold'}. Every move they make now gives ground.`;
 }

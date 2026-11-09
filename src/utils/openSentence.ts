@@ -38,3 +38,18 @@ export function withSubject(sentence: string, subject: string): string {
   if (/^[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8]|^O-O/.test(s)) return s;
   return `${subject} ${continueSentence(s)}`;
 }
+
+/**
+ * A list of clauses said ONE SENTENCE EACH (the human voice: "One idea a
+ * sentence … no semicolons read aloud"). Where a list's parts are whole
+ * clauses — each with its own subject and verb, often its own commas — an
+ * "a, b and c" list runs them together; each is its own sentence instead.
+ * A trailing full stop on a part is not doubled.
+ */
+export function sentenceEach(parts: readonly string[]): string {
+  return parts
+    .map((p) => p.trim().replace(/[.;]+$/, ''))
+    .filter(Boolean)
+    .map((p) => `${openSentence(p)}.`)
+    .join(' ');
+}

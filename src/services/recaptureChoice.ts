@@ -11,6 +11,7 @@ import { CAPTURE_VALUE } from './pieceValues';
 import { Chess, type Move, type Square } from 'chess.js';
 import { rookReachesFile } from './positionalRead';
 import { pawnsOf } from './boardStructure';
+import { openSentence } from '../utils/openSentence';
 
 interface RecaptureFacts {
   san: string;
@@ -134,7 +135,7 @@ export function recaptureChoice(
   // The SAN says which piece takes back ("exd5" is spoken "e-pawn takes
   // d5"); "exd5, taking back with the e-pawn" said the capture twice (David
   // 2026-10-30).
-  if (good && bad) return `${P} — ${good}; ${O} ${bad}.`;
+  if (good && bad) return `${P} — ${good}. ${openSentence(`${O} ${bad}`)}.`;
   // A PLACEMENT ALONE IS THE BOARD (Review noise walk 2026-10-20: "Nxe5,
   // taking back with the knight: the knight lands in the centre on e5" said
   // with no contrast). Where the piece lands earns a line only against what

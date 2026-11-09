@@ -29,6 +29,11 @@ export type ReviewFacet = CoachFact & {
   /** Its say-once identity in the walk (`hint:…`, `once:…`, `rule:…`,
    *  `motif:…`, `refuted:…`, …), coupled where it was made. */
   identity?: string;
+  /** A positional verdict's word and its reasons, each its own claim, coupled
+   *  where it was made: the walk says only the reasons not yet said, and
+   *  never re-reads them off the words (they were split on a semicolon the
+   *  voice should never have said). */
+  verdict?: { word: string; reasons: readonly string[] };
 };
 
 /** What a facet's computer knows besides its words. */

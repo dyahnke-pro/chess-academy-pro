@@ -187,7 +187,7 @@ export function tradeLedger(history: readonly string[], student: 'w' | 'b'): Tra
     if (victim && victim.piece in NAME && MATERIAL_VALUE[victim.piece] === MATERIAL_VALUE[mine.piece] && spentTheirs >= 3 && spentTheirs >= spentMine + 2) {
       const text = rotateStem([
         `Your ${NAME[mine.piece] ?? 'piece'}, on its ${ORDINAL[spentMine] ?? `${spentMine}th`} move, traded off their ${NAME[victim.piece]} that spent ${WORD[spentTheirs] ?? spentTheirs} moves getting to ${sq} — every one of those moves went off the board with it.`,
-        `Their ${NAME[victim.piece]} took ${WORD[spentTheirs] ?? spentTheirs} moves to reach ${sq}; your ${NAME[mine.piece] ?? 'piece'} needed ${WORD[spentMine] ?? spentMine} to trade it off. That trade is a gift of time.`,
+        `Their ${NAME[victim.piece]} took ${WORD[spentTheirs] ?? spentTheirs} moves to reach ${sq}. Your ${NAME[mine.piece] ?? 'piece'} needed ${WORD[spentMine] ?? spentMine} to trade it off. That trade is a gift of time.`,
       ], stemKeyOf(sq));
       return { kind: 'fresh-for-moved', text, squares: [...pathOf(t.moves, mine.capturedId, t.moves.length - 2)], square: sq, moves: spentTheirs };
     }

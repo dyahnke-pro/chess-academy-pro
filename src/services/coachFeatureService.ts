@@ -66,7 +66,7 @@ import { noteSlip } from './learnBoardTeaching';
 import { readBoard, readBoardAll, readKey } from './boardComputers';
 import { replyReadsFromFan, repliesNotWeighed, type ReplyRead } from './ifTheyPlay';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
-import { computeMoveFacets, prematureBreakWhy, INFLUENCE_LOOSE_TAIL_RE } from './reviewFullData';
+import { computeMoveFacets, prematureBreakWhy, INFLUENCE_LOOSE_TAIL_RE, positionalVerdictLine } from './reviewFullData';
 import { mainConceptLine } from './slipDepth';
 import { flipSideToMove, sideToMoveAs } from './threatOut';
 import { mateStakes, isSacrifice } from './factStakes';
@@ -1924,8 +1924,8 @@ function* reviewSegmentSteps(
         const label = listed[1].replace(/s$/, ''); // "open files" → "open file"
         for (const item of listed[2].split(/,\s*/)) atoms.push(`${label} ${item}`.trim());
       } else {
-        // outposts segment: "White knight outpost e5; Black bishop outpost d4"
-        for (const item of seg.split(/;\s*/)) atoms.push(item.trim());
+        // outposts segment: "White knight outpost e5, Black bishop outpost d4"
+        for (const item of seg.split(/,\s*/)) atoms.push(item.trim());
       }
     }
     const fresh = atoms.filter((a) => {
@@ -2899,17 +2899,15 @@ function* reviewSegmentSteps(
         // changes, and only the REASONS not yet stated, so a growing edge adds
         // the new asset instead of re-reciting the pile every ply.
         if (f.tag === 'verdict') {
-          const vm = /^\s*You're\s+([^:.]+?)(?::\s*(.*?))?\.?\s*$/.exec(f.text);
-          if (!vm) { keep(f); continue; }
-          const word = vm[1].trim();
-          const reasons = vm[2] ? vm[2].split(/;\s*/).map((r) => r.trim()).filter(Boolean) : [];
+          if (!f.verdict) { keep(f); continue; }
+          const word = f.verdict.word.trim();
+          const reasons = f.verdict.reasons.map((r) => r.trim()).filter(Boolean);
           const freshReasons = reasons.filter((r) => !verdictReasonsSeen.has(r.toLowerCase()) && !claimedThisPly.has(`verdict-reason:${r.toLowerCase()}`));
           const wordChanged = word.toLowerCase() !== (verdictWordThisPly ?? lastVerdict(story.current()));
           if (!wordChanged && freshReasons.length === 0) continue; // nothing new
           freshReasons.forEach((r) => claimedThisPly.add(`verdict-reason:${r.toLowerCase()}`));
           verdictWordThisPly = word.toLowerCase();
-          const why = freshReasons.length ? `: ${freshReasons.join('; ')}` : '';
-          keep(reworded(f, `You're ${word}${why}.`), () => {
+          keep(reworded(f, positionalVerdictLine(word, freshReasons)), () => {
             freshReasons.forEach((r) => verdictReasonsSeen.add(r.toLowerCase()));
             story.note(m.ply, [{ kind: 'verdict', word: word.toLowerCase() }]);
           });

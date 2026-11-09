@@ -12,7 +12,7 @@
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
 import { opponentHabits, habitsOf } from './thinkAloud';
-import { openSentence, continueSentence } from '../utils/openSentence';
+import { openSentence, continueSentence, sentenceEach } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
 import { settledExchange, moverLineProof } from './exchangeLedger';
 import { threatProof } from './threatProof';
@@ -128,6 +128,16 @@ function openCentralFiles(chess: Chess): number {
 /** Past this move a central break is judged on the position, not on
  *  development — the opening is over. */
 const OPENING_BREAK_MAX_MOVE = 15;
+/** THE POSITIONAL VERDICT, SAID (the ONE renderer: the facet and the walk's
+ *  atom-diff both say it here). One reason rides the verdict; more are a
+ *  sentence each, never joined on a semicolon read aloud. */
+export function positionalVerdictLine(word: string, reasons: readonly string[]): string {
+  const said = reasons.map((r) => r.trim()).filter(Boolean);
+  if (said.length === 0) return `You're ${word}.`;
+  if (said.length === 1) return `You're ${word}: ${said[0].replace(/\.$/, '')}.`;
+  return `You're ${word}. ${sentenceEach(said)}`;
+}
+
 export function prematureBreakWhy(fenBefore: string, san: string, seat: 'student' | 'opponent'): string | null {
   try {
     const before = new Chess(fenBefore);
@@ -1045,8 +1055,8 @@ export function computeMoveFacets(
       && assess.reasons.length === 0
       && /^balanced$/i.test(assess.verdict ?? '');
     if (assess.verdict && !emptyOpeningVerdict) {
-      const why = assess.reasons.length ? `: ${assess.reasons.join('; ')}` : '';
-      const vf = put('assessPositionalEdge', 'verdict', `You're ${assess.verdict}${why}.`);
+      const vf = put('assessPositionalEdge', 'verdict', positionalVerdictLine(assess.verdict, assess.reasons));
+      vf.verdict = { word: assess.verdict, reasons: [...assess.reasons] };
       // What the reasons point at on the board (the frozen piece and its line).
       const named = [...new Set(assess.reasonSquares.flat())];
       if (named.length) recSquares(vf, named);
@@ -1058,7 +1068,7 @@ export function computeMoveFacets(
   if (struct) {
     const s: string[] = [];
     if (struct.pawns.openFiles.length) s.push(`open files ${struct.pawns.openFiles.join(',')}`);
-    if (struct.outposts.length) s.push(struct.outposts.map((o) => `${o.color === 'w' ? 'White' : 'Black'} ${o.piece === 'n' ? 'knight' : 'bishop'} outpost ${o.square}`).join('; '));
+    if (struct.outposts.length) s.push(struct.outposts.map((o) => `${o.color === 'w' ? 'White' : 'Black'} ${o.piece === 'n' ? 'knight' : 'bishop'} outpost ${o.square}`).join(', '));
     const passed = [...struct.pawns.passedPawns.w.map((p) => `white ${p}`), ...struct.pawns.passedPawns.b.map((p) => `black ${p}`)];
     if (passed.length) s.push(`passed pawns ${passed.join(', ')}`);
     const iso = [...struct.pawns.isolatedPawns.w.map((p) => `white ${p}`), ...struct.pawns.isolatedPawns.b.map((p) => `black ${p}`)];
@@ -1196,7 +1206,7 @@ export function computeMoveFacets(
         // Seated: "It's a sacrifice" on the opponent's move read as the student's
         // own (prod 2026-09-23, QGD c4). The clauses are already seated.
         if (comp.length) {
-          const f = made('sacrificeCompensation', 'sac', `${moverWB === studentColorWB ? 'Your' : 'Their'} move is a sacrifice — compensation: ${comp.join('; ')}.`);
+          const f = made('sacrificeCompensation', 'sac', `${moverWB === studentColorWB ? 'Your' : 'Their'} move is a sacrifice — compensation: ${andList(comp)}.`);
           facets.push(f);
           // The compensation is shown by the play that follows: the engine's
           // line after the sacrifice, said only through its first moves (or,
@@ -1812,7 +1822,7 @@ export function correctionAgainstHeard(
   if (now === heard) return null;
   return now === 'fine'
     ? { text: `During the game your ${san} was called ${HEARD_WORDS[heard]} — the deeper read says it was fine.`, ridesVerdict: false }
-    : { text: `During the game it was called ${HEARD_WORDS[heard]}; the deeper read says it was ${HEARD_WORDS[now]}.`, ridesVerdict: true };
+    : { text: `During the game it was called ${HEARD_WORDS[heard]}. The deeper read says it was ${HEARD_WORDS[now]}.`, ridesVerdict: true };
 }
 
 /** The mechanics line, owned by its mover: "The move axb5 captures …" →

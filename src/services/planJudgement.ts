@@ -90,7 +90,7 @@ export function keepPlanChangeRoute(
   return {
     act: 'keep-plan-change-route', squares: [r.mv.to, firstHop, target], proof, key: `route:${target}`,
     stakes: costStakes(cpLoss) ?? undefined,
-    text: `The knight jump to ${r.mv.to} ${fails}; that rules out the route, not the plan: it reaches ${target} through ${firstHop} instead.`,
+    text: `The knight jump to ${r.mv.to} ${fails}. That rules out the route, not the plan: it reaches ${target} through ${firstHop} instead.`,
   };
 }
 

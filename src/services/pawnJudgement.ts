@@ -70,7 +70,7 @@ export function keyPawn(fen: string, student: Color): StructureRead | null {
       const noP = without(fen, p);
       const asIf = noP ? withTurn(noP, student) : null;
       if (!asIf || !capturesWinMaterial(asIf, q, student)) continue;
-      const proof = squaresProof(`${p} is the only pawn guarding ${q}; with ${p} gone, ${q} falls to your pieces`, [p, q, ...qAttackers]);
+      const proof = squaresProof(`${p} is the only pawn guarding ${q}. With ${p} gone, ${q} falls to your pieces`, [p, q, ...qAttackers]);
       if (!proof) continue;
       return {
         act: 'key-pawn', squares: [p, q], proof, key: `key-pawn:${p}>${q}`,
@@ -323,11 +323,11 @@ export function mirroredAsymmetry(fen: string, student: Color): StructureRead | 
       .sort((a, b) => Math.abs(rankNum(a) - myRank) - Math.abs(rankNum(b) - myRank));
     if (guards.length === 0) continue;
     const guard = guards[0];
-    const proof = squaresProof(`your ${guard} pawn can still guard ${m}; no pawn of theirs can reach a square that guards ${m2}`, [guard, m, m2]);
+    const proof = squaresProof(`your ${guard} pawn can still guard ${m}, but no pawn of theirs can reach a square that guards ${m2}`, [guard, m, m2]);
     if (!proof) continue;
     return {
       act: 'mirrored-asymmetry', squares: [guard, m, m2], proof, key: holeKey(m2),
-      text: `Your ${guard[0]}-pawn can still guard ${m}; they can never guard ${m2} the same way, so that square stays a hole for them.`,
+      text: `Your ${guard[0]}-pawn can still guard ${m}. They can never guard ${m2} the same way, so that square stays a hole for them.`,
     };
   }
   return null;

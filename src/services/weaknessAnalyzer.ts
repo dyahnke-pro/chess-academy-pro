@@ -8,6 +8,7 @@ import { classifyPhase } from './gamePhaseService';
 import { getMisconceptionProfile, type MisconceptionAggregate } from './misconceptionService';
 import { isFixtureDerived, isFixtureGame } from './fixtureGames';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
+import { andList } from '../utils/andList';
 import type {
   WeaknessProfile,
   WeaknessItem,
@@ -631,7 +632,7 @@ function generateOverallAssessment(
   lines.push(`Rating: ~${profile.currentRating} ELO.`);
 
   if (strengthsList.length > 0) {
-    lines.push(`Strengths: ${strengthsList.slice(0, 3).join('; ')}.`);
+    lines.push(`Strengths: ${andList(strengthsList.slice(0, 3))}.`);
   }
 
   if (items.length > 0) {
@@ -645,7 +646,7 @@ function generateOverallAssessment(
 
   const unresolvedHabits = profile.badHabits.filter((h) => !h.isResolved);
   if (unresolvedHabits.length > 0) {
-    lines.push(`Known habits to break: ${unresolvedHabits.map((h) => h.description).join('; ')}.`);
+    lines.push(`Known habits to break: ${andList(unresolvedHabits.map((h) => h.description))}.`);
   }
 
   return lines.join(' ');

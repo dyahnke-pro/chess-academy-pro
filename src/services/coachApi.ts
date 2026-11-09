@@ -6426,7 +6426,7 @@ export async function getCoachChatResponse(
             const facts = hit
               ? `Yes — the ${hit.name} is a real opening in the database. Say "teach me the ${hit.name}" to walk it all the way into the middlegame.`
               : matches.length > 0
-                ? `No — there's no opening called "${q}" among the 3,600+ named openings in the database. The closest real names: ${matches.slice(0, 3).map((m) => m.name).join('; ')}. Name one to learn it into the middlegame.`
+                ? `No — there's no opening called "${q}" among the 3,600+ named openings in the database. The closest real names are ${orList(matches.slice(0, 3).map((m) => m.name))}. Name one to learn it into the middlegame.`
                 : `No — there's no opening called "${q}" in my database of 3,600+ named openings, and nothing close to it either.`;
             const voicedExist = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-existence', preferRaw: true });
             if (hit) lastCoachActionOffer = [{ type: 'teach_opening', id: hit.name }];

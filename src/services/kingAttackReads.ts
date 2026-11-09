@@ -697,7 +697,7 @@ export function kingDiagonalWalk(fen: string, me: Color, bestSan: string | null)
     const proof: Proof = {
       kind: 'count', exact: true,
       short: `from ${mv.from} to ${mv.to}, a step nearer ${t} and ${o} at once`,
-      full: `your king on ${mv.from} is ${word(d0t)} squares from their pawn on ${t} and ${word(d0o)} from yours on ${o}; on ${mv.to} it is ${word(dist(mv.to, t))} and ${word(dist(mv.to, o))}`,
+      full: `your king on ${mv.from} is ${word(d0t)} squares from their pawn on ${t} and ${word(d0o)} from yours on ${o}, and on ${mv.to} it is ${word(dist(mv.to, t))} and ${word(dist(mv.to, o))}`,
       squares: [mv.from, mv.to, t, o],
     };
     return {

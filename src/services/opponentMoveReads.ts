@@ -291,7 +291,7 @@ export function obligationLifts(prevFen: string, studentSan: string, theirSanPla
       `Their ${PIECE[mv.piece]} going to ${mv.to} lifts the pressure: ${name} is safe now, and this move is yours to spend.`,
     ], stemKeyOf(after.fen()));
     const squares = [x.square, mv.from, mv.to];
-    const body = `From ${mv.from} their ${PIECE[mv.piece]} hit ${x.square}; from ${mv.to} it no longer wins it`;
+    const body = `From ${mv.from} their ${PIECE[mv.piece]} hit ${x.square}, but from ${mv.to} it no longer wins it`;
     const proof = squaresProof(body, squares);
     if (!proof) continue;
     return {
@@ -391,7 +391,7 @@ export function bishopOffPlan(fenBefore: string, san: string, student: 'w' | 'b'
     const squares = [mv.to, p.to, aim];
     const proof = legalLineProof(after.fen(), [pSan], lineSeatAt(after.fen(), student), true);
     if (!proof) continue;
-    return { kind: 'bishop-off-plan', text, proof: { ...proof, squares, full: `${pSan} closes the diagonal from ${mv.to} to ${aim}; ${pawnCover(c, p.to, student)}` }, squares, namesMove: true, claim: `bishop-off-plan:${mv.to}` };
+    return { kind: 'bishop-off-plan', text, proof: { ...proof, squares, full: `${pSan} closes the diagonal from ${mv.to} to ${aim}. ${openSentence(pawnCover(c, p.to, student))}` }, squares, namesMove: true, claim: `bishop-off-plan:${mv.to}` };
   }
   return null;
 }

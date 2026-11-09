@@ -8,6 +8,7 @@
  * of theirs reaches it. Each reason is read off chess.js — nothing guessed.
  */
 import { openSentence } from '../utils/openSentence';
+import { andList } from '../utils/andList';
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import { tagSlots } from '../coach/chatTurnCodeReader';
 import { castlingNow, ruleAsked } from './chessRules';
@@ -127,7 +128,7 @@ export function whyNotLegal(fen: string, dest: string, student: 'white' | 'black
         const bp = b ? chess.get(b) : undefined;
         return b && bp ? `your ${NAME[piece]} on ${f} is blocked by ${bp.color === color ? 'your' : 'their'} ${NAME[bp.type]} on ${b}` : `your ${NAME[piece]} on ${f} cannot reach ${dest}`;
       });
-      const text = `${openSentence(NAME[piece])} to ${dest} is not possible: ${why.join('; ')}.`;
+      const text = `${openSentence(NAME[piece])} to ${dest} is not possible: ${andList(why)}.`;
       return text;
     }
   }

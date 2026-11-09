@@ -266,7 +266,8 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
   const openable = theory ? f.famous.filter((x) => isOpenableModelGame(hit.name, x.white, x.black, x.year)) : [];
   if (openable.length) {
     const g = openable.slice(0, 2).map((x) => `${surname(x.white)} against ${surname(x.black)}${x.event ? `, ${x.event.replace(/\s*\d{4}\s*$/, '')}` : ''} ${x.year}`);
-    out.push(`It has been played at the top level — ${g.join('; ')}, in this line's model games.`);
+    // Never a spoken semicolon: two games are joined ", and" (each carries commas).
+    out.push(`It has been played at the top level — ${g.join(', and ')}, in this line's model games.`);
   }
   if (pending || !out.length) return null;
   return { text: out.join(' '), squares };

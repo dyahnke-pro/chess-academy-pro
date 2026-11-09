@@ -729,7 +729,7 @@ export function buildReviewMoveTeachingFact(
     const loose = chess.attackers(winnableTarget.sq as Sq, enemyColor).length === 0;
     const forms = loose
       ? [`${moverIsStudent ? 'Your' : 'Their'} ${p} hits ${t}, and nothing guards it — pressure ${they} have to answer.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} hits ${t}, which has no guard.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} goes after ${t} — nothing guards it.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} attacks ${t}, and it hangs.`]
-      : [`${moverIsStudent ? 'Your' : 'Their'} ${p} trains on ${t}, which is worth more than the ${p} — pressure ${they} have to answer.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} hits ${t}, which is worth more than the ${p}.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} goes after ${t}; trading the ${p} for it wins material.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} attacks ${t}, a bigger piece, so a trade there wins material.`];
+      : [`${moverIsStudent ? 'Your' : 'Their'} ${p} trains on ${t}, which is worth more than the ${p} — pressure ${they} have to answer.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} hits ${t}, which is worth more than the ${p}.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} goes after ${t}. Trading the ${p} for it wins material.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} attacks ${t}, a bigger piece, so a trade there wins material.`];
     return out('threat', sayIdea(phrases, loose ? 'pressure-loose' : 'pressure-exchange', forms), [mv.to, winnableTarget.sq]);
   }
   // (c) A rook or queen seizing a file.

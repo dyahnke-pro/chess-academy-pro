@@ -491,7 +491,7 @@ export function mechanismContrast(fenBefore: string, betterSan: string, worseSan
   if (!b || !w) return null;
   const betterSaid = `${cap(sayMoveClause(b.move.san, fenBefore))} hits ${andList(better.targets.map((t) => t.phrase))} at once`;
   const worseHits = w.move.san.includes('+') ? 'only checks' : 'hits only one thing';
-  return `${betterSaid}; ${sayMoveClause(w.move.san, fenBefore)} ${worseHits}.`;
+  return `${betterSaid}. ${openSentence(`${sayMoveClause(w.move.san, fenBefore)} ${worseHits}`)}.`;
 }
 
 // ── TYPE 1 — WHAT THEIR MOVE CHANGED (Naroditsky catalogue §1) ───────────────

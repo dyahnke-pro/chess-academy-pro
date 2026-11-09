@@ -6,7 +6,7 @@
 //
 // The target is what the turn names (a piece or a square), else the piece or
 // square the conversation was last about ("and how many defend it?").
-import { openSentence } from '../utils/openSentence';
+import { openSentence, sentenceEach } from '../utils/openSentence';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { answersEachPiece, type ConversationState, type EachPieceKind, type ResolvedChatTurn } from './chatTurn';
 import { findLoosePieces } from '../services/loosePieces';
@@ -158,7 +158,7 @@ export function answerIsLoose(chess: Chess, sq: Square | null, student: Color, s
     .map((l) => `${name(l.type)} on ${l.square}`);
   const owner = whose === 'your' ? 'yours' : 'theirs';
   const head = hanging.length
-    ? `Hanging: ${whose} ${andList(hanging)} — ${proofs.join('; ')}.`
+    ? `Hanging: ${whose} ${andList(hanging)}. ${sentenceEach(proofs)}`
     : `Nothing of ${owner} can be taken at a profit right now.`;
   const tail = loose.length ? ` Unguarded but not attacked yet: ${whose} ${andList(loose)}.` : '';
   return `${head}${tail}`;
@@ -388,12 +388,12 @@ export function answerDefend(chess: Chess, sq: Square | null, student: Color): s
   }
   const ways: string[] = [];
   if (take.length) ways.push(`take the attacker with ${orList(take)}`);
-  if (away.length) ways.push(`move it: ${orList(away)}`);
+  if (away.length) ways.push(`move it away, with ${orList(away)}`);
   if (guard.length) ways.push(`guard it with ${orList(guard)}`);
   if (block.length) ways.push(`block the attack with ${orList(block)}`);
   if (other.length) ways.push(`make the capture fail with ${orList(other)}`);
   if (ways.length === 0) return `${capFirst(subject)} cannot be saved without losing something else.`;
-  return `To save ${subject}, ${ways.length === 1 ? ways[0] : `${ways.slice(0, -1).join('; ')}; or ${ways[ways.length - 1]}`}.`;
+  return sentenceEach([`To save ${subject}, ${ways[0]}`, ...ways.slice(1).map((w) => `or ${w}`)]);
 }
 
 /** The squares strictly between two squares on a line (empty when not on one). */
@@ -567,7 +567,7 @@ function renderAttackMoves(chess: Chess, sq: Square, by: Color, student: Color, 
     const byPiece = new Map<string, string[]>();
     for (const m of safe) byPiece.set(m.who, [...(byPiece.get(m.who) ?? []), m.guarded ? `${m.san} (guarded there, so taking it wins nothing)` : m.san]);
     const ways = [...byPiece.entries()].map(([who, sans]) => `${orList(sans)} brings ${mine ? 'your' : 'their'} ${who} onto it`);
-    parts.push(`${mine ? 'To attack' : 'They can attack'} ${subject}: ${ways.join('; ')}.`);
+    parts.push(sentenceEach([`${mine ? 'To attack' : 'They can attack'} ${subject}: ${ways[0]}`, ...ways.slice(1)]));
   }
   for (const m of costly) {
     if (!m.lostTo) continue;

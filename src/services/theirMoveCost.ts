@@ -9,13 +9,14 @@
 //   · their own bishop shut in by the pawn they just moved (its mobility drops
 //     by three or more, the pawn now on its colour, in front of it);
 //   · castling given up by a king move that is not castling;
-//   · the lasting structural damage `describeConcessions` already computes
+//   · the lasting structural damage `concessionParts` already computes
 //     (king cover thinned, a passer granted, a new isolani).
 // Returns null when the move cost nothing a student can see.
 import { Chess, type Square } from 'chess.js';
 import { isOutpost } from './outpost';
 import { minorRouteToSquare } from './positionReadingService';
-import { describeConcessions } from './reviewTeachingPoints';
+import { concessionParts } from './reviewTeachingPoints';
+import { andList } from '../utils/andList';
 
 interface TheirMoveCost {
   text: string;
@@ -144,11 +145,7 @@ export function theirMoveCost(fenBefore: string, san: string, studentColor: 'w' 
   // it and with its count — never here as "(3 shield pawns down to 2)" (walk
   // 2026-09-30: both lanes said it on one ply, this one in raw form).
   void wingKing;
-  let concession = describeConcessions(fenBefore, san, false);
-  if (concession) {
-    const rest = concession.replace(/^The lasting concession: /, '').replace(/\.$/, '').split('; ').filter((c) => !/pawn cover thinned/.test(c));
-    concession = rest.length ? `The lasting concession: ${rest.join('; ')}.` : null;
-  }
-  if (concession) return { kind: 'structure', text: `Their ${played}: ${concession.replace(/^The lasting concession: /, '').replace(/\.$/, '')}.`, squares: [mv.to] };
+  const rest = (concessionParts(fenBefore, san, false) ?? []).filter((c) => !/pawn cover thinned/.test(c));
+  if (rest.length) return { kind: 'structure', text: `Their ${played}: ${andList(rest)}.`, squares: [mv.to] };
   return null;
 }

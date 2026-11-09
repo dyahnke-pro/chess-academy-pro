@@ -1,6 +1,7 @@
 import { trappedAt } from './trappedPiece';
 import { sideToMoveAs } from './threatOut';
 import { openSentence } from '../utils/openSentence';
+import { andList } from '../utils/andList';
 import { pieceRef } from './pieceRef';
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
@@ -35,7 +36,6 @@ export interface TacticsDetectionResult {
   highlights: BoardHighlight[];
   hangingPieces: HangingPiece[];
   tactics: TacticPattern[];
-  summary: string;
 }
 
 // ─── Geometry Helpers ───────────────────────────────────────────────────────
@@ -46,11 +46,6 @@ function capitalize(s: string): string {
   return openSentence(s);
 }
 
-/** A list a person would say out loud: "a, b and c" — never "a and b and c". */
-function listOf(items: readonly string[]): string {
-  if (items.length <= 1) return items[0] ?? '';
-  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
-}
 
 // ─── Board Helpers ──────────────────────────────────────────────────────────
 
@@ -147,7 +142,7 @@ function findForks(chess: Chess): TacticPattern[] {
           // A three-way fork read out as "and … and …" — David's log:
           // "queen on d3 forks knight on d4 and bishop on e3 and knight on b1".
           // Spoken aloud that is a list with no breath in it.
-          description: `${capitalize(forkerName)} on ${sq} forks ${listOf(targetDescs)}`,
+          description: `${capitalize(forkerName)} on ${sq} forks ${andList(targetDescs)}`,
         });
       }
     }
@@ -632,7 +627,7 @@ function findOverloadedPieces(chess: Chess): TacticPattern[] {
         type: 'overload',
         beneficiary: color,
         involvedSquares: [guardSq, ...targets],
-        description: `The ${PIECE_NAMES[guard.type]} on ${guardSq} is overloaded — it's the only defender of both ${listOf(targetDescs)}`,
+        description: `The ${PIECE_NAMES[guard.type]} on ${guardSq} is overloaded — it's the only defender of both ${andList(targetDescs)}`,
       });
     }
   }
@@ -771,47 +766,9 @@ function detectTacticsUncached(fen: string): TacticsDetectionResult {
       }
     }
 
-    const summary = buildSummary(hangingPieces, tactics, turn);
-    return { highlights, hangingPieces, tactics, summary };
+    return { highlights, hangingPieces, tactics };
   } catch {
-    return { highlights: [], hangingPieces: [], tactics: [], summary: '' };
+    return { highlights: [], hangingPieces: [], tactics: [] };
   }
 }
 
-// ─── Summary Builder ────────────────────────────────────────────────────────
-
-/**
- * Build a human-readable summary for the coach prompt.
- */
-function buildSummary(
-  hangingPieces: HangingPiece[],
-  tactics: TacticPattern[],
-  sideToMove: Color,
-): string {
-  const lines: string[] = [];
-
-  if (hangingPieces.length > 0) {
-    const playerHanging = hangingPieces.filter((hp) => hp.color === sideToMove);
-    const opponentHanging = hangingPieces.filter((hp) => hp.color !== sideToMove);
-
-    if (playerHanging.length > 0) {
-      const descs = playerHanging.map(
-        (hp) => `${PIECE_NAMES[hp.piece] ?? hp.piece} on ${hp.square}`,
-      );
-      lines.push(`Side to move has hanging pieces: ${descs.join(', ')}`);
-    }
-
-    if (opponentHanging.length > 0) {
-      const descs = opponentHanging.map(
-        (hp) => `${PIECE_NAMES[hp.piece] ?? hp.piece} on ${hp.square}`,
-      );
-      lines.push(`Opponent has hanging pieces: ${descs.join(', ')}`);
-    }
-  }
-
-  if (tactics.length > 0) {
-    lines.push(`Active tactics: ${tactics.map((t) => t.description).join('; ')}`);
-  }
-
-  return lines.join('\n');
-}

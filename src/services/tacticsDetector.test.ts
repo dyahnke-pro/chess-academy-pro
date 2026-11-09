@@ -27,7 +27,6 @@ describe('detectTactics — starting position', () => {
     expect(result.hangingPieces).toHaveLength(0);
     expect(result.tactics).toHaveLength(0);
     expect(result.highlights).toHaveLength(0);
-    expect(result.summary).toBe('');
   });
 });
 
@@ -227,33 +226,6 @@ describe('detectTactics — D3 material-validation regression', () => {
   });
 });
 
-// ─── Summary / Coach Integration ───────────────────────────────────────────
-
-describe('detectTactics — summary', () => {
-  it('includes hanging piece info in summary', () => {
-    const fen = '4k3/6b1/8/8/3N4/8/8/4K3 w - - 0 1';
-    const result = detectTactics(fen);
-    if (result.hangingPieces.length > 0) {
-      expect(result.summary).toContain('hanging');
-    }
-  });
-
-  it('includes tactic descriptions in summary', () => {
-    // Knight fork position
-    const fen = 'r3k3/2N5/8/8/8/8/8/4K3 b - - 0 1';
-    const result = detectTactics(fen);
-    if (result.tactics.length > 0) {
-      expect(result.summary).toContain('Active tactics');
-    }
-  });
-
-  it('returns empty summary when no tactics or hanging pieces', () => {
-    const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-    const result = detectTactics(fen);
-    expect(result.summary).toBe('');
-  });
-});
-
 // ─── Overload Detection ─────────────────────────────────────────────────────
 
 describe('detectTactics — overloaded pieces', () => {
@@ -346,7 +318,6 @@ describe('detectTactics — edge cases', () => {
     expect(result.highlights).toHaveLength(0);
     expect(result.hangingPieces).toHaveLength(0);
     expect(result.tactics).toHaveLength(0);
-    expect(result.summary).toBe('');
   });
 
   it('handles a position with only kings', () => {

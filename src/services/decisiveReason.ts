@@ -404,7 +404,7 @@ export function decisiveReason(input: {
     if (altDescription && description && twoPlans(description, altDescription) && nextBestSan) {
       // `core` is the contrast alone — chat leads with its own "X and Y are
       // about equally good", so the core must not say it twice.
-      const contrast = `${Played} ${description}; ${dot(nextBestSan, mover)} ${altDescription}. The choice is which job you want done.`;
+      const contrast = `${Played} ${description}. ${openSentence(`${dot(nextBestSan, mover)} ${altDescription}`)}. The choice is which job you want done.`;
       const choice = `The other plan is ${dot(nextBestSan, mover)}${gapEarned ? ', about as good' : ''}: it ${altDescription}. The choice is which job you want done.`;
       return { ...base, kind: 'close', source: 'description', stakeCp: null, core: contrast, choice, text: `Two plans here${gapEarned ? ', about equal' : ''}: ${contrast}`, line: null, squares: [] };
     }

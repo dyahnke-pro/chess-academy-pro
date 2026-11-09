@@ -24,6 +24,7 @@ import { findEnablingMove } from './enablingMove';
 import { masterMovesCachedSync } from './masterPlayLookup';
 import { afterCaptureSan, afterCaptureSanForms } from '../utils/captureWords';
 import type { MoveFundamentalId } from './moveFundamentals';
+import { openSentence } from '../utils/openSentence';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const CENTER: readonly Square[] = ['d4', 'd5', 'e4', 'e5'];
@@ -564,7 +565,7 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
     // student's move's cost: "The book move is X; Y lets them chase…".
     text: late.clause
       ? `The book move is ${sayMoveNoun(mainSan, fen)}: ${late.clause} — ${sayMoveNoun(playedSan, fen)} ${late.short}.`
-      : `The book move is ${sayMoveNoun(mainSan, fen)}; ${sayMoveNoun(playedSan, fen)} ${late.short}.`,
+      : `The book move is ${sayMoveNoun(mainSan, fen)}. ${openSentence(`${sayMoveNoun(playedSan, fen)} ${late.short}`)}.`,
   };
 }
 

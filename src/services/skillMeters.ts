@@ -332,5 +332,5 @@ export function skillMetersAnswer(meters: readonly SkillMeter[], asked: SkillMet
   if (rated.length === 0) return null;
   const list = rated.map((m) => `${m.label} Level ${m.level} (~${Math.round(m.rating / 10) * 10})`).join(', ');
   const unrated = meters.filter((m) => !m.rated).map((m) => m.label);
-  return `Your skill levels, weakest first: ${list}.${rated.length > 1 ? ` Your weakest is ${rated[0].label}; your strongest is ${rated[rated.length - 1].label}.` : ''}${unrated.length ? ` Not rated yet: ${unrated.join(', ')}.` : ''}`;
+  return `Your skill levels, weakest first: ${list}.${rated.length > 1 ? ` Your weakest is ${rated[0].label}, and your strongest is ${rated[rated.length - 1].label}.` : ''}${unrated.length ? ` Not rated yet: ${unrated.join(', ')}.` : ''}`;
 }

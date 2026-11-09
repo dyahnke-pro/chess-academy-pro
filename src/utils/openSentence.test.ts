@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { openSentence, continueSentence } from './openSentence';
+import { openSentence, continueSentence, sentenceEach } from './openSentence';
 
 describe('openSentence', () => {
   it('capitalises a spoken opening word', () => {
@@ -26,5 +26,13 @@ describe('continueSentence', () => {
     expect(continueSentence('O-O tucks the king away.')).toBe('O-O tucks the king away.');
     expect(continueSentence('I see it.')).toBe('I see it.');
     expect(continueSentence('e4 is attacked.')).toBe('e4 is attacked.');
+  });
+});
+
+describe('sentenceEach', () => {
+  it('says each clause as its own sentence, never joined on a semicolon', () => {
+    expect(sentenceEach(['your king is tucked away, theirs is not', 'you have the bishop pair.'])).toBe('Your king is tucked away, theirs is not. You have the bishop pair.');
+    expect(sentenceEach(['e4 is attacked once', ''])).toBe('e4 is attacked once.');
+    expect(sentenceEach([])).toBe('');
   });
 });

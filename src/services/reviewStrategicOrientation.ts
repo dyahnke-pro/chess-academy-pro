@@ -25,7 +25,7 @@
  * REVIEW register (retrospective, the student's own game) — 2nd person for the
  * student, 3rd for the opponent.
  */
-import { openSentence } from '../utils/openSentence';
+import { sentenceEach } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { oppositeWingsRace } from './planRace';
@@ -264,9 +264,7 @@ export function buildMiddlegameOrientation(
   }
 
   if (parts.length === 0) return null;
-  const first = openSentence(parts[0]);
-  const rest = parts.slice(1);
-  const text = rest.length ? `${first}; ${rest.join('; ')}.` : `${first}.`;
+  const text = sentenceEach(parts);
   const arrows = planDoor(fen, studentColorWB, pairs);
   return { id: 'middlegame-orientation', text, arrows, squares: squaresOfArrows(arrows) };
 }

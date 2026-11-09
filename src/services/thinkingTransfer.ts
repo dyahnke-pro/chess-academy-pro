@@ -186,7 +186,7 @@ const GAP_WORDS: Record<ThinkingStep, { know: string; use: string }> = {
 };
 
 const GAP_STEMS: readonly ((k: string, u: string) => string)[] = [
-  (k, u) => `In lessons ${k}; in your games ${u}.`,
+  (k, u) => `In lessons ${k}. In your games ${u}.`,
   (k, u) => `You know this one: in lessons ${k}. In your games ${u}.`,
   (k, u) => `Lessons say ${k}. Your games say ${u}.`,
 ];

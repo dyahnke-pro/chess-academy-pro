@@ -406,7 +406,7 @@ export function planRaceClause(
         ? (past ? ' — and your new queen would have covered their queening square, so theirs could never promote' : ' — and your new queen covers their queening square, so theirs never promotes')
         : (past ? ' — and their new queen would have covered your queening square' : ' — and their new queen covers your queening square, so yours never promotes'))
       : '';
-    return `${counts}${tempoNote}; ${lesson}${cover}`;
+    return `${counts}${tempoNote}. ${openSentence(lesson)}${cover}`;
   }
 
   if (race.kind === 'storm-race') {
@@ -425,7 +425,7 @@ export function planRaceClause(
       : (past
         ? `their storm arrived first — slowing it down came before pushing yours`
         : `their storm arrives first — slow it down before you push yours`);
-    return `${counts}${tie}; ${lesson}`;
+    return `${counts}${tie}. ${openSentence(lesson)}`;
   }
 
   // File collision — silent unless exactly one side can take it this move,

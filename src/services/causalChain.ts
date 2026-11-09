@@ -563,7 +563,7 @@ function buildPrematureQueenDiscoveryChain(g: GameBoards, focusPly: number): Cau
   nodes.push(displacedNode);
   edges.push({
     relation: 'guard',
-    proof: `a knight on ${missing.idealSquare} defends ${loose.target}; the knight on ${missing.knightSquare} does not`,
+    proof: `a knight on ${missing.idealSquare} defends ${loose.target}, and the knight on ${missing.knightSquare} does not`,
   });
   // loose-piece → tactic (enables-tactic).
   nodes.push(looseNode);

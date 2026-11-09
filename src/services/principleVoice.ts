@@ -494,7 +494,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       if (f.played) {
         const t = [
           `${f.played} forces something, but not a win — ${f.gain === 'mate' ? `${unmarked(String(f.better))} was mate` : `${f.better} won material by force`}.`,
-          `Of the forcing moves, ${f.better} was the one that ${f.gain === 'mate' ? 'mates' : 'wins'}; ${f.played} wins nothing.`,
+          `Of the forcing moves, ${f.better} was the one that ${f.gain === 'mate' ? 'mates' : 'wins'}. ${f.played} wins nothing.`,
         ];
         return t[v % t.length];
       }

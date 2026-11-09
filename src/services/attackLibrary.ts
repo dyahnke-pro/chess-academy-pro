@@ -67,7 +67,7 @@ export function knownAttack(fen: string, me: 'w' | 'b', studentCp: number | null
     `A textbook pattern: castled on opposite sides, a hook on ${hook.hook} in front of their king, and your king safe on the other wing — so the pawn storm from ${hook.pawn} to ${hook.contact} is the plan, with nothing of yours left behind.`,
   ], stemKeyOf(fen));
   const squares = [mine, theirs, hook.hook, hook.pawn, hook.contact];
-  const proof = squaresProof(`Your king on ${mine}, theirs on ${theirs}; their pawn on ${hook.hook}, and your pawn from ${hook.pawn} reaches ${hook.contact}`, squares);
+  const proof = squaresProof(`Your king on ${mine}, theirs on ${theirs}. Their pawn on ${hook.hook}, and your pawn from ${hook.pawn} reaches ${hook.contact}`, squares);
   if (!proof) return null;
   return { id: 'opposite-storm', text, squares, proof, claim: `known-attack:opposite-storm:${hook.hook}` };
 }

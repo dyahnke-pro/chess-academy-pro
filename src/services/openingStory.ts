@@ -252,7 +252,7 @@ function forkAt(prefix: readonly string[], movesAt: MovesAt): { families: Family
 
 const countProof = (short: string, families: readonly Family[]): FactProof => ({
   kind: 'count', exact: true, short,
-  full: families.map((f) => `${variationLabel(f.name)}: ${f.games.toLocaleString('en-US')} master games`).join('; '),
+  full: andList(families.map((f) => `${f.games.toLocaleString('en-US')} master games in the ${variationLabel(f.name)}`)),
 });
 
 const AIM_WORDS: Record<IdentityFacts['aims'][number]['kind'], string> = {

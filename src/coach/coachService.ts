@@ -234,6 +234,7 @@ export {
   isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion,
 };
 import { resolveFollowUp } from './followUp';
+import { andList } from '../utils/andList';
 
 export interface CoachServiceOptions {
   /** Override the active provider. Useful for tests. */
@@ -2339,7 +2340,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const clauses = [
       ...new Set([...failedDataTools.keys()].map((n) => DATA_TOOL_DOWN_MESSAGES[n])),
     ];
-    finalText = `⚠️ Heads up — ${clauses.join('; ')}. That part is not made up here — the general read instead:\n\n${finalText}`.trim();
+    finalText = `⚠️ Heads up — ${andList(clauses)}. That part is not made up here — the general read instead:\n\n${finalText}`.trim();
     void logAppAudit({
       kind: 'claim-validator-trip',
       category: 'subsystem',
