@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**741 lines · 15 exports · 24 importers · 10 tests · 0 audits**
+**725 lines · 14 exports · 24 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1398) — names `FACET_RANK`, `reviewFacetRank`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1459) — names `FACT_ROLE`, `FactKind`, `TIE_ORDER`, `rankFacets`, `reviewFacetRank`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4511) — names `reviewFacetRank`
+- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1434) — names `FACET_RANK`, `reviewFacetRank`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1495) — names `FACT_ROLE`, `FactKind`, `TIE_ORDER`, `reviewFacetRank`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4547) — names `reviewFacetRank`
 
 ## Who calls in
 
@@ -72,14 +72,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `factKind` (function) — 1 call site
-- `src/services/exchangeIdeas.test.ts:226`
+- `src/services/exchangeIdeas.test.ts:209`
 
 ### `factValue` (function) — 5 call sites
 - `src/services/coachDecider.ts:471`
 - `src/services/latentFork.test.ts:171`
 - `src/services/latentFork.test.ts:172`
 - `src/services/latentFork.test.ts:173`
-- `src/services/positionFacts.ts:580`
+- `src/services/positionFacts.ts:588`
 
 ### `facetTag` (function) — 4 call sites
 - `src/services/reviewFacetRank.test.ts:19`
@@ -87,19 +87,16 @@
 - `src/services/reviewFacetRank.test.ts:21`
 - `src/test/doorFact.ts:18`
 
-### `facetRank` (function) — 4 call sites
+### `facetRank` (function) — 9 call sites
 - `src/services/factSelector.ts:204`
-- `src/services/reviewFacetRank.test.ts:51`
-- `src/services/reviewFacetRank.test.ts:55`
-- `src/services/reviewFacetRank.test.ts:61`
-
-### `rankFacets` (function) — 6 call sites
 - `src/services/reviewFacetRank.test.ts:25`
+- `src/services/reviewFacetRank.test.ts:26`
+- `src/services/reviewFacetRank.test.ts:27`
 - `src/services/reviewFacetRank.test.ts:32`
-- `src/services/reviewFacetRank.test.ts:40`
+- `src/services/reviewFacetRank.test.ts:36`
+- `src/services/reviewFacetRank.test.ts:37`
+- `src/services/reviewFacetRank.test.ts:39`
 - `src/services/reviewFacetRank.test.ts:45`
-- `src/services/reviewFacetRank.test.ts:49`
-- `src/services/reviewFacetRank.test.ts:50`
 
 ## Tests
 
