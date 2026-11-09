@@ -14,6 +14,13 @@ describe('prizeTeaching — what can be won, and the board reason why', () => {
     expect(r?.squares).toEqual(['e8']);
   });
 
+  it('hit three times, guarded twice: said with a number word, never "3 points times" (prod Learn audit 2026-11-09)', () => {
+    // The d5 knight: hit by both knights and the bishop, guarded by the f6
+    // knight and the b7 bishop — the trades win it (N, N, N, B, B).
+    const r = prizeTeaching('6k1/1b6/5n2/3n4/8/1BN1N3/8/6K1 w - - 0 1', 'd5', 'w', 0);
+    expect(r?.text).toBe('One of their pieces is hit three times and guarded only twice — you win it in the trades. Before you take, check what taking it allows.');
+  });
+
   it('a cheaper attacker: a guard does not save it (22.Qe4: the c3 knight guards, the d5 pawn hits)', () => {
     const r = prizeTeaching('2k1r2r/Bpp2ppp/3q4/3p4/4Q3/2N5/PPP3P1/R5K1 b - - 1 22', 'e4', 'b', 0);
     expect(r?.text).toBe('Their queen is guarded, but a cheaper piece of yours hits it — a guard does not save it. Before you take, check what taking it allows.');

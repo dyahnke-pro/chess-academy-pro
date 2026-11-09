@@ -13,8 +13,7 @@ import { counterThreat, counterThreatLine } from './counterThreat';
 import { playedConcept, playedConceptLine, type PlayedConcept } from './playedConcept';
 import { CAPTURE_VALUE, MATERIAL_VALUE } from './pieceValues';
 import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof } from './proof';
-import { lineShape, lineSeatAt, withArticle } from '../utils/andList';
-import { countWords } from '../utils/countWords';
+import { countWord, lineShape, lineSeatAt, withArticle } from '../utils/andList';
 import { Chess, type Color, type Square } from 'chess.js';
 import { hangingLine, lostLastGuard } from './hangingLine';
 import { legalSeeGainFor, signedCaptureRead, signedLegalSeeFor, structureTransfer, takingTheAttackerAnswers } from './positionReadingService';
@@ -702,7 +701,9 @@ function learnPlanRead(fen: string, openingName: string | null): MastersPlanRead
 
 const PRIZE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 const PRIZE_VALUE = CAPTURE_VALUE;
-const times = (n: number): string => (n === 1 ? 'once' : n === 2 ? 'twice' : `${countWords(n)} times`);
+// A COUNT OF PIECES, said as a number word ("three times"). `countWords` is the
+// material namer — it said "hit 3 points times" (prod Learn audit 2026-11-09).
+const times = (n: number): string => (n === 1 ? 'once' : n === 2 ? 'twice' : `${countWord(n)} times`);
 
 /**
  * WHAT CAN BE WON, AND WHY (Learn tape 2026-10-07: 21.Be8 and 22.Qe4 gave away
