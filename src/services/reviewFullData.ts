@@ -1360,13 +1360,15 @@ export function computeMoveFacets(
   if (isStudent && (ctx.classification === null || ctx.classification === 'book' || ctx.classification === 'good')) {
     // Full the first time a principle speaks this game, a short stem after —
     // the one helper Learn's composer reads (`principleLine`).
-    const lead = principleLine(fenBefore, san, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore))
+    const own = principleLine(fenBefore, san, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore));
+    const lead = own
       // A clean move that kept no opening rule: the rule the engine's move
       // kept (review walk 2026-10-02 — h4, g4, h5 were owed and silent). Never
       // on a book move: theory is not corrected.
       ?? (ctx.classification === 'book' ? null : principleContrastLine(fenBefore, san, ctx.bestMoveSan ?? null, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore)));
     if (lead) {
       const f = made('principleLine', 'rule', lead.text);
+      if (own?.headsMove) f.headsMove = true;
       facets.push(f);
       // The FIRST statement of a principle carries its say-once identity; a
       // stem is its own move's fact and must not be eaten by that ledger.

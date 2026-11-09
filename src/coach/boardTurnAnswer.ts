@@ -362,7 +362,7 @@ async function bestDefenceAnswer(turn: ResolvedChatTurn, board: BoardTurnInput, 
     // THE SHAPE, NOT A SCORE SHEET (David 2026-11-08, the human voice): the
     // rest of the line is said as the voice says every line (`lineShape`);
     // the board plays all of it.
-    return `Against ${moveSan}, their best defence is ${dot}${replySan}, and it is not enough: ${lineShape(rest, lineSeatAt(board.fen, me), fenAfterSans(board.fen, sans.slice(0, 2)))} — ${tail}.`;
+    return `Against ${moveSan}, their best defence is ${dot}${replySan}, and it is not enough: ${lineShape(rest, lineSeatAt(board.fen, me), fenAfterSans(board.fen, sans.slice(0, 2)), 'first')} — ${tail}.`;
   }
   const afterReply = afterUci(afterMove, lineUci[1]);
   const nextSan = afterReply && lineUci[2] ? sanFrom(afterReply, lineUci[2]) : null;
@@ -474,7 +474,7 @@ export async function lineOutcomeAnswer(turn: ResolvedChatTurn, board: BoardTurn
   // move is said with its mover (OS-8 gap 7: "After Nxd5, Nxd5 and Bxd5"
   // named no side).
   const first = lineSeatAt(line.startFen, me);
-  const lead = mainLine ? `The best line: ${lineShape(line.sans, first, line.startFen)}. After it` : `After ${seatedLine(line.sans, first)}`;
+  const lead = mainLine ? `The best line: ${lineShape(line.sans, first, line.startFen, null)}. After it` : `After ${seatedLine(line.sans, first)}`;
   const end = new Chess(line.endFen);
   if (end.isCheckmate()) {
     const w = fromHere ? walkableLine(line.startFen, line.sans, line.sans[0]) : null;

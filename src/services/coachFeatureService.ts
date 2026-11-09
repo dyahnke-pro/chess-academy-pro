@@ -24,7 +24,7 @@ import { phaseTurnsOf } from './phaseTransitionDetector';
 import { detectImmediateTactics } from './liveTacticsContext';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsClause, moveOnlyRestates, computePvLine, pvDepthForRating, afterCapture, NO_PREV_CAPTURE, tacticWord, type PvLine, type PvEngine, type PrevCaptureContext, type MoveScorer } from './pvPlayback';
-import { countWord, lineSeatAt, lineShape, withArticle } from '../utils/andList';
+import { countWord, lineSeatAt, lineShape, lineWinnerFor, withArticle } from '../utils/andList';
 import { BRIEFING_LINE_PLIES, buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { moveThoughtFacts } from './moveThoughtFacts';
 import { composeThought, speaksBehindLead, NOT_LED, type ThoughtStep } from './thoughtComposer';
@@ -2463,7 +2463,7 @@ function* reviewSegmentSteps(
             // (`readTrade`: "it takes off their bishop that was bearing down on
             // your king") is another claim and stays.
             for (let k = facets.length - 1; k >= 0; k -= 1) if (facets[k].tag === 'trade' && facets[k].computer === 'settledExchange') facets.splice(k, 1);
-            facets.push(fact('lineWins', 'tactic', `That wins ${won.what}: ${lineShape(won.sans, lineSeatAt(fenPair.fenBefore, studentColorWB), fenPair.fenBefore)}.`, { stakes: { points: won.net, plies: 0 }, lines: [{ fen: fenPair.fenBefore, sans: won.sans.map((x) => x.replace(/^…/, '')) }] }));
+            facets.push(fact('lineWins', 'tactic', `That wins ${won.what}: ${lineShape(won.sans, lineSeatAt(fenPair.fenBefore, studentColorWB), fenPair.fenBefore, 'first')}.`, { stakes: { points: won.net, plies: 0 }, lines: [{ fen: fenPair.fenBefore, sans: won.sans.map((x) => x.replace(/^…/, '')) }] }));
             if (!causalArrows || causalArrows.length === 0) {
               causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.winningLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
             }
@@ -2733,7 +2733,10 @@ function* reviewSegmentSteps(
           }).join(' ');
           const spoken = worded(true);
           const raw = fact('moveThoughtFacts', 'move-job', spoken, { identity: id, squares: [...named] });
-          if (stepLeads.length > 0 && worded(false) !== spoken) followOf.set(raw, { follow: worded(false), leads: new Set(stepLeads) });
+          // Only a line that opens with the move may be followed by "It also"
+          // (…Kxf7's lead was "Your bishop on c8 stays home for now").
+          const headLeads = stepLeads.filter((f) => f.headsMove === true);
+          if (headLeads.length > 0 && worded(false) !== spoken) followOf.set(raw, { follow: worded(false), leads: new Set(headLeads) });
           if (carriedLoose) raw.claims = [...(raw.claims ?? []), `loose:${carriedLoose}`];
           facets.push(raw);
           facetCommits.set(raw, () => {
@@ -4711,7 +4714,8 @@ async function augmentWithProjections(
       const said = proof.proof.sans.slice(0, proof.plies);
       // Each move with its mover (OS-8 gap 7).
       const firstWB = line.plies[0].moverColor === 'white' ? 'w' : 'b';
-      const moves = lineShape(said, firstWB === studentColorWB ? 'you' : 'they', line.plies[0]?.fenBefore ?? null);
+      const firstSeat: 'you' | 'they' = firstWB === studentColorWB ? 'you' : 'they';
+      const moves = lineShape(said, firstSeat, line.plies[0]?.fenBefore ?? null, lineWinnerFor(firstSeat, forSide === 'student' ? 'you' : forSide === 'opponent' ? 'they' : proof.proof.mate ? null : net > 0 ? 'you' : net < 0 ? 'they' : null));
       return proof.proof.mate ? `${moves} — and it's mate` : `${moves} — ${describeProofResult(proof.proof.ledger as NonNullable<typeof proof.proof.ledger>)}`;
     }
     // No material point settles: the line proves nothing a sentence can hold,
@@ -4766,7 +4770,8 @@ async function augmentWithProjections(
   };
   /** A cost reason's line in words: its shape, then what it settles. */
   const reasonWords = (r: CostReason, firstSeat: 'you' | 'they'): string => {
-    const moves = lineShape(r.plies.map((p) => p.san), firstSeat, r.fen);
+    // The side that did not pay wins the reason's line.
+    const moves = lineShape(r.plies.map((p) => p.san), firstSeat, r.fen, lineWinnerFor(firstSeat, r.seat === 'you' ? 'they' : 'you'));
     return r.mate ? `${moves} — and it's mate` : r.ledger ? `${moves} — ${describeProofResult(r.ledger)}` : moves;
   };
   /** The one classifier's name for the line, when it is a pattern worth

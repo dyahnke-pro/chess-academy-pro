@@ -121,9 +121,10 @@ export function fenAfterSans(fen: string | null, sans: readonly string[]): strin
  *  before the recapture that settles it (the Rxa4 line ends on their rook
  *  taking yours; you take theirs back after). With no board nothing is
  *  added. One move, never a score sheet. */
-function winningMove(sans: readonly string[], fen: string | null): number | null {
+function winningMove(sans: readonly string[], fen: string | null, winner: LineWinner): number | null {
+  if (winner === null) return null;
   const takes = fen ? lineTakes(sans, fen) : null;
-  if (!takes) return null;
+  if (!takes || takes.length === 0) return null;
   // Part of the exchange, not its winner: one half of an even trade, or a
   // take-back on the same square for less than the capture it answers (the
   // Rxd4 Bxd4+ Bxd4 Rxd4 chain is said by its result). A take-back for MORE
@@ -135,14 +136,35 @@ function winningMove(sans: readonly string[], fen: string | null): number | null
     if (prev && prev.to === a.to && a.took <= prev.took) return true;
     return !!next && next.to === a.to && next.took === a.took;
   };
+  // THE WINNER'S OWN CAPTURE (the caller's result says who wins): the other
+  // side's captures inside the line are its answers — taking back a piece the
+  // line gave up is not the move that wins ("That wins a pawn: you play Nxd5,
+  // they answer cxd5 …" named the recapture of the knight Nxd5 gave), and a
+  // line that refutes their capture wins with yours ("they play …Qxg5, you
+  // answer Qxg5").
+  const side = winner === 'first' ? takes[0].color : takes[0].color === 'w' ? 'b' : 'w';
   let best: number | null = null;
   for (let i = 1; i < takes.length - 1; i += 1) {
-    if (takes[i].took === 0 || traded(i)) continue;
+    if (takes[i].took === 0 || traded(i) || takes[i].color !== side) continue;
     if (best === null || takes[i].took > takes[best].took) best = i;
   }
   if (best === null) return null;
   const last = takes[takes.length - 1];
   return last.color === takes[best].color && last.took >= takes[best].took ? null : best;
+}
+
+/** WHO WINS A SPOKEN LINE, by its first move: the side that plays it
+ *  (`first`), the other (`second`), or not stated (`null` — then no move
+ *  inside the line is named, which is never wrong). REQUIRED of every caller:
+ *  only the caller knows, from its own result ("you win a knight", "they mate
+ *  you"); a line is often cut before the material settles, so it cannot be
+ *  read off the moves. */
+export type LineWinner = 'first' | 'second' | null;
+
+/** The winner by seat, as the caller's result names it, relative to the
+ *  line's first move. */
+export function lineWinnerFor(first: LineSeat, winner: LineSeat | null): LineWinner {
+  return winner === null ? null : winner === first ? 'first' : 'second';
 }
 
 /** The moves `lineShape` SAYS, by index into the line: every one up to
@@ -151,11 +173,11 @@ function winningMove(sans: readonly string[], fen: string | null): number | null
  *  already said (a promotion is said "a1, making a queen"). `fen` is
  *  REQUIRED: the board the line starts on, or null where the caller has none.
  *  One rule with `lineShape`. */
-export function lineShapePlies(sans: readonly string[], fen: string | null): number[] {
+export function lineShapePlies(sans: readonly string[], fen: string | null, winner: LineWinner): number[] {
   const n = sans.length;
   if (n <= 0) return [];
   if (n <= LINE_SAID_IN_FULL) return Array.from({ length: n }, (_, i) => i);
-  const won = winningMove(sans, fen);
+  const won = winningMove(sans, fen, winner);
   return won === null ? [0, n - 1] : [0, won, n - 1];
 }
 
@@ -167,15 +189,16 @@ export function lineShapePlies(sans: readonly string[], fen: string | null): num
  * kept in the proof (Learn audit 2026-10-15: "That wins the exchange: Bc5,
  * gxf6, Bxd4, Nxd4, Qe5+, Qe2 and Qxd4" read aloud). `fen` is REQUIRED: the
  * board the line starts on (null where the caller has none), so the move
- * that wins can be found (`lineShapePlies`).
+ * that wins can be found (`lineShapePlies`), and `winner` (REQUIRED, the
+ * caller's own result: `lineWinnerFor`) says whose capture that is.
  */
-export function lineShape(sans: readonly string[], first: LineSeat, fen: string | null): string {
+export function lineShape(sans: readonly string[], first: LineSeat, fen: string | null, winner: LineWinner): string {
   if (sans.length <= LINE_SAID_IN_FULL) return seatedLine(sans, first);
   // The first move, the capture that wins, and where the line LANDS — "the
   // moves that follow" named nothing (claim check 2026-10-17: 144 weighings
   // said "e7? Then the moves that follow — …", a line no student can picture).
   // Full moves, not plies.
-  const said = lineShapePlies(sans, fen);
+  const said = lineShapePlies(sans, fen, winner);
   const seatOf = (i: number): LineSeat => (i % 2 === 0 ? first : OTHER_SEAT[first]);
   const gap = (from: number, to: number): string => {
     const later = Math.ceil((to - from) / 2);

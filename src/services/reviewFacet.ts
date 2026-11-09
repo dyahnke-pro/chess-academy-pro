@@ -34,6 +34,10 @@ export type ReviewFacet = CoachFact & {
    *  never re-reads them off the words (they were split on a semicolon the
    *  voice should never have said). */
   verdict?: { word: string; reasons: readonly string[] };
+  /** Its sentence opens with the move it is about ("Your Rc4 takes the
+   *  half-open c-file"): a later fact about the same move may follow it as
+   *  "It also …". Set where the sentence is built, never read off its words. */
+  headsMove?: boolean;
 };
 
 /** What a facet's computer knows besides its words. */

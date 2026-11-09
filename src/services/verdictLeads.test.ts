@@ -79,7 +79,11 @@ describe('the reply waits for the reason for at most the ceiling, counted from t
   });
   it('Learn\'s reply waits through replyWait', () => {
     const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(page).toMatch(/const padDone = replyWait\(\{ startedAt: thinkStart, minThinkMs: minThink, reason: reasonWarm, ceilingMs: reasonWaitMs \}\);/);
+    expect(page).toMatch(/const padDone = replyWait\(\{ startedAt: thinkStart, minThinkMs: minThink, reason: reasonWarm, ceilingMs: wait\.ceilingMs \}\);/);
+    // …and what it waits on is the one rule (`learnReplyWait`), the verdict's
+    // price included whenever a verdict may be due.
+    expect(page).toMatch(/const wait = learnReplyWait\(/);
+    expect(page).toMatch(/wait\.waitPrice \? Promise\.all\(\[priceRead, midTurnRead\]\)/);
   });
 });
 

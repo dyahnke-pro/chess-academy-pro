@@ -59,7 +59,7 @@ export function withProof(conclusion: string, proof: Proof | null, size: ProofSi
 export function lineProof(line: SpokenLine, first: LineSeat, exact = false): Proof | null {
   const sans = line.sans.filter(Boolean);
   if (sans.length === 0) return null;
-  return { kind: 'line', exact, short: lineShape(sans, first, line.fen), full: seatedLine(sans, first), line };
+  return { kind: 'line', exact, short: lineShape(sans, first, line.fen, null), full: seatedLine(sans, first), line };
 }
 
 /** A line proof said from the STUDENT's seat, whoever built it. A computer

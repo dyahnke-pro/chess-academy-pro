@@ -1374,8 +1374,8 @@ export function errorWhy(args: {
       // A long line is said by the one shaper, so the capture that wins the
       // material is named, never only the line's first move (David
       // 2026-11-09: "yes!").
-      const won = reasonWinWords(r, lineShapePlies(sans, r.fen));
-      tail = ` The line: ${lineShape(sans, 'they', r.fen)}${won ? ` — they win ${won}` : ''}.`;
+      const won = reasonWinWords(r, lineShapePlies(sans, r.fen, 'first'));
+      tail = ` The line: ${lineShape(sans, 'they', r.fen, 'first')}${won ? ` — they win ${won}` : ''}.`;
       line = { fen: r.fen, uci: r.plies.map((p) => p.uci) };
     }
   }

@@ -339,7 +339,7 @@ export function buildDeliberation(input: {
   const played = moverLineProof(fenBefore, bestLine.moves, moverColor);
   const playedSans = played?.line?.sans ?? [];
   const bestLineText = played && playedSans.length >= 3 ? played.short : null;
-  const bestLineAfter = bestLineText && played ? `After ${bestSan}, ${lineShape(playedSans.slice(1), 'they', fenAfterSans(played.line?.fen ?? null, playedSans.slice(0, 1)))} — ${played.short.slice(played.short.indexOf(' — ') + 3)}` : null;
+  const bestLineAfter = bestLineText && played ? `After ${bestSan}, ${lineShape(playedSans.slice(1), 'they', fenAfterSans(played.line?.fen ?? null, playedSans.slice(0, 1)), 'second')} — ${played.short.slice(played.short.indexOf(' — ') + 3)}` : null;
   // A MOVE THAT STARTS A FORCED MATE IS BEST FOR THAT REASON (hard walk
   // 2026-10-10: "Nh6+ is best — it lands on the h6 outpost", then the mate in
   // four). The mate is the why; a square's geometry beside it teaches nothing.
@@ -375,9 +375,9 @@ function shortfallText(c: Candidate): string {
     // lost its first, leaving "Nc3? Then two moves later, they play gxh6" —
     // the …Rh6 that traps the queen unsaid). Any line the shaper shortens is
     // shaped again from the reply.
-    if (c.proofSans && lineShapePlies(c.proofSans, c.refutation?.line?.fen ?? null).length < c.proofSans.length && c.proofSans[0] === c.san && c.proof.includes(' — ')) {
+    if (c.proofSans && lineShapePlies(c.proofSans, c.refutation?.line?.fen ?? null, 'second').length < c.proofSans.length && c.proofSans[0] === c.san && c.proof.includes(' — ')) {
       // The reply opens what is left, so it is said as theirs (OS-8 gap 7).
-      return `${c.san}? Then ${lineShape(c.proofSans.slice(1), 'they', fenAfterSans(c.refutation?.line?.fen ?? null, c.proofSans.slice(0, 1)))} — ${c.proof.slice(c.proof.indexOf(' — ') + 3)}.`;
+      return `${c.san}? Then ${lineShape(c.proofSans.slice(1), 'they', fenAfterSans(c.refutation?.line?.fen ?? null, c.proofSans.slice(0, 1)), 'first')} — ${c.proof.slice(c.proof.indexOf(' — ') + 3)}.`;
     }
     // The proof opens with the candidate the question already named; it is
     // said from the reply on (the one reader of the line format).
@@ -985,7 +985,7 @@ export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good')
     const sans = d.bestLineSans ?? [];
     if (d.bestLine && d.bestReply && sans.length >= 3) {
       const tail = d.bestLine.replace(/^.*? — /, '');
-      return `${n.san} is the best move here${bestReason}. Their best defence is ${d.bestReply}, and then ${lineShape(sans.slice(2), 'you', fenAfterSans(d.bestLineProof?.line?.fen ?? null, sans.slice(0, 2)))} — ${tail}.${others ? ` ${others}` : ''}`;
+      return `${n.san} is the best move here${bestReason}. Their best defence is ${d.bestReply}, and then ${lineShape(sans.slice(2), 'you', fenAfterSans(d.bestLineProof?.line?.fen ?? null, sans.slice(0, 2)), 'first')} — ${tail}.${others ? ` ${others}` : ''}`;
     }
     // No countable proof: the engine's reply is still the answer to "what's
     // their best defence?" (hard walk 2026-10-10, a pawn ending — Kd3 with

@@ -705,7 +705,7 @@ function comboThreatIgnored(c: Ctx): ReturnType<typeof att> | null {
   if (!v) return null;
   return att('ignored-threat', 3, {
     squares: [v.square], moves: [shown.join(' ')], pvMoves: pvHas(c.pvP, (s) => s === line[0]),
-  }, { piece: PNAME[v.type], square: v.square, threat: line[0], line: lineShape(shown, 'they', c.after.fen()), better: c.best.san });
+  }, { piece: PNAME[v.type], square: v.square, threat: line[0], line: lineShape(shown, 'they', c.after.fen(), 'first'), better: c.best.san });
 }
 
 /** WALKED INTO A TACTIC (2026-10-18). The move itself HANDS the opponent a
@@ -800,7 +800,7 @@ function walkedIntoTactic(c: Ctx): ReturnType<typeof att> | null {
     blow: first.san,
     // The voice says the line's SHAPE and what it wins; the board walks the
     // detail (the proof rule) — never a bare list of moves.
-    line: lineShape(shown, 'they', startFen(c.after.fen())),
+    line: lineShape(shown, 'they', startFen(c.after.fen()), 'first'),
     ...(proof.ledger ? { wins: netPieceWords(proof.ledger.studentWon, proof.ledger.opponentWon) ?? countWords(proof.ledger.netPawns, { unit: true }) } : {}),
     mate: proof.mate ? 1 : 0,
     ...(target ? { piece: PNAME[target.type], square: target.square } : {}),

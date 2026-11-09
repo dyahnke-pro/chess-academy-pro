@@ -279,12 +279,12 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
     const sans = reasonSans(r);
     // What it wins beyond what the line, as said, already names: a line that
     // ends "they play a1, making a queen" has said its gain.
-    const won = r.mate ? null : reasonWinWords(r, lineShapePlies(sans, r.fen));
+    const won = r.mate ? null : reasonWinWords(r, lineShapePlies(sans, r.fen, 'first'));
     const result = r.mate ? (markSaysMate(sans[sans.length - 1]) ? '' : ' — and it\'s mate') : won ? ` — ${w.otherWho} win ${won}` : '';
     const lead = mover === args.student
       ? rotateStem([`${c.san} is tempting here, but it fails`, `${c.san} looks natural, but it doesn't work`], stemKeyOf(`${args.fenBefore}|${c.uci}`))
       : rotateStem([`${c.san} was tempting for them, but it fails`, `${c.san} looked natural for them, but it doesn't work`], stemKeyOf(`${args.fenBefore}|${c.uci}`));
-    const text = `${lead}: ${lineShape(sans, w.otherLine, r.fen)}${result}.`;
+    const text = `${lead}: ${lineShape(sans, w.otherLine, r.fen, 'first')}${result}.`;
     const sq = blowSquare(sans);
     const key = temptingKey(c.uci);
     out.push({

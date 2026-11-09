@@ -1587,7 +1587,7 @@ function ledClause(san: string, lead: MoveFundamental): string {
  */
 export function principleLine(
   fenBefore: string, san: string, mover: 'white' | 'black', taughtIds: ReadonlySet<string>, stemKey: number,
-): { id: string; text: string; squares: string[]; first: boolean; names: { from: string; to: string } | null } | null {
+): { id: string; text: string; squares: string[]; first: boolean; names: { from: string; to: string } | null; headsMove: boolean } | null {
   // A line that carries two claims ("mg:…|mg-rule:…") is committed as one id by
   // some callers and split by others — read it the same either way.
   const taught: ReadonlySet<string> = new Set([...taughtIds].flatMap((k) => k.split('|')));
@@ -1624,17 +1624,20 @@ export function principleLine(
     const ruleKey = `mg-rule:${lead.id}`;
     const reason = reasonFor(lead);
     if (reason && !taught.has(ruleKey) && reasonHolds(lead, fenBefore, mover)) {
-      return { id: `${middlegameKey(lead)}|${ruleKey}`, text: `${ledClause(san, lead)} — ${reason}.`, squares: lead.squares, first: true, names: lead.names ?? null };
+      return { id: `${middlegameKey(lead)}|${ruleKey}`, text: `${ledClause(san, lead)} — ${reason}.`, squares: lead.squares, first: true, names: lead.names ?? null, headsMove: true };
     }
-    return { id: middlegameKey(lead), text: `${ledClause(san, lead)}.`, squares: lead.squares, first: true, names: lead.names ?? null };
+    return { id: middlegameKey(lead), text: `${ledClause(san, lead)}.`, squares: lead.squares, first: true, names: lead.names ?? null, headsMove: true };
   }
   const fresh = principleToTeach(fenBefore, san, mover, taught);
-  if (fresh) return { id: fresh.id, text: principleOnceLine(san, fresh, stemKey), squares: fresh.squares, first: true, names: fresh.names ?? null };
+  // A rule said with its reason is two sentences, the second about the rule
+  // ("It matters because …"), so it does not open the move's turn for a
+  // follow-on "It also …"; the move's own sentence does.
+  if (fresh) return { id: fresh.id, text: principleOnceLine(san, fresh, stemKey), squares: fresh.squares, first: true, names: fresh.names ?? null, headsMove: !reasonFor(fresh) };
   const lead = computeMoveFundamentals(fenBefore, san, mover)
     .filter((f) => IS_OPENING_PRINCIPLE[f.id])
     .sort((a, b) => b.weight - a.weight)[0];
   if (!lead || !(REPEAT_TEACHES[lead.id] || lead.forcing)) return null;
-  return { id: lead.id, text: `${ledClause(san, lead)}.`, squares: lead.squares, first: false, names: lead.names ?? null };
+  return { id: lead.id, text: `${ledClause(san, lead)}.`, squares: lead.squares, first: false, names: lead.names ?? null, headsMove: true };
 }
 
 /**
