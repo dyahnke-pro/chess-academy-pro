@@ -2821,7 +2821,8 @@
   "says": "The concessions a move made (squares, structure, king cover), past tense",
   "origin": "map",
   "nodes": [
-   "services/reviewTeachingPoints.ts#describeConcessions"
+   "services/reviewTeachingPoints.ts#describeConcessions",
+   "services/reviewTeachingPoints.ts#concessionParts"
   ]
  },
  {
