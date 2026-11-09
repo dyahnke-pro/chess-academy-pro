@@ -5600,7 +5600,9 @@ async function augmentWithProjections(
       const stem = ([
         { goes: `Watch what they're building — left alone, their ${oppDeepKind} goes:`, starts: `Watch what they're building — left alone, their ${oppDeepKind} starts with` },
         { goes: `Their next ${oppDeepKind}, played out from here:`, starts: `Their next ${oppDeepKind}, played out from here, starts with` },
-        { goes: `Another ${oppDeepKind} of theirs, if nothing stops it — it runs:`, starts: `Another ${oppDeepKind} of theirs, if nothing stops it — it runs from` },
+        // "it runs from a2" read as a square the line leaves from (prod Review
+        // audit 2026-11-09): the idea STARTS with its first move.
+        { goes: `Another ${oppDeepKind} of theirs, if nothing stops it, goes like this:`, starts: `Another ${oppDeepKind} of theirs, if nothing stops it, starts with` },
       ] as const)[oppIdeasTold % 3];
       oppIdeasTold += 1;
       let callOut = oppRun

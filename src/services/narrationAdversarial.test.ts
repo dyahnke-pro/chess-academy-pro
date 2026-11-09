@@ -116,7 +116,7 @@ describe('ADVERSARIAL: 60 machine-played games through every computed lane', () 
               expect(c.square).toMatch(/^[a-h][1-8]$/);
               expect(c.said.toLowerCase()).not.toMatch(/sorry|apolog|my mistake/);
             }
-            const d = findStudentDrawback({ fen, playedSan: sans[i], bestSan: alt, studentColor: mover });
+            const d = findStudentDrawback({ fen, playedSan: sans[i], bestSan: alt, studentColor: mover, place: 'lead' });
             if (d) {
               drawbacks += 1;
               expect(MOVE_RE.test(d.said), `game ${g}: drawback leaked a move — "${d.said}"`).toBe(false);
@@ -177,7 +177,7 @@ describe('ADVERSARIAL: malformed and hostile input', () => {
       expect(() => buildPositionalRead(fen, 'black'), fen).not.toThrow();
       expect(() => planFromUci(fen, ['e2e4', 'e7e5', 'g1f3', 'b8c6'], 'white', null), fen).not.toThrow();
       expect(() => findConcession({ fen, playedSan: 'e4', bestSan: 'd4', coachColor: 'white' }), fen).not.toThrow();
-      expect(() => findStudentDrawback({ fen, playedSan: 'e4', bestSan: 'd4', studentColor: 'white' }), fen).not.toThrow();
+      expect(() => findStudentDrawback({ fen, playedSan: 'e4', bestSan: 'd4', studentColor: 'white', place: 'lead' }), fen).not.toThrow();
     }
   });
 

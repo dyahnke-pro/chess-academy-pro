@@ -6,6 +6,7 @@ import { describe, it, expect } from 'vitest';
 import { withoutTags } from '../utils/thinkPause';
 import { Chess } from 'chess.js';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact } from './playCommentary';
+import { captureRunOfMoves } from './captureRun';
 
 describe('buildPlayCommentary', () => {
   // The "trade off their best piece" beat was REMOVED 2026-08-26 — the
@@ -484,36 +485,36 @@ describe('studentMovePoint — the point of a sound move, only when the board pr
   const LINE = 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4 Bd2 Bxc3';
 
   it('Bxc3 — the bishop pair', () => {
-    expect(studentMovePoint(after(LINE), 'Bxc3', 'Bxc3', null)).toMatch(/two bishops/);
+    expect(studentMovePoint(after(LINE), 'Bxc3', captureRunOfMoves(null, LINE.split(' ')), null)).toMatch(/two bishops/);
   });
   it('dxe5 — a free pawn', () => {
     // Stockfish depth 18: …Bg4 Be2 Qe4 O-O Rd8 Qe1 Nd5 Bd1 — e5 is never taken back.
-    expect(studentMovePoint(after(`${LINE} Bxc3 Nge7`), 'dxe5', 'Nge7', ['d4e5', 'c8g4', 'f1e2', 'd5e4', 'e1g1', 'a8d8', 'd1e1', 'e7d5', 'e2d1'])).toBe('That wins the pawn on e5 — nothing takes it back safely.');
+    expect(studentMovePoint(after(`${LINE} Bxc3 Nge7`), 'dxe5', null, ['d4e5', 'c8g4', 'f1e2', 'd5e4', 'e1g1', 'a8d8', 'd1e1', 'e7d5', 'e2d1'])).toBe('That wins the pawn on e5 — nothing takes it back safely.');
   });
   it('dxe5 keeps its proof: the engine line it was read off and the pawn it nets (A-plan P5)', () => {
-    const f = studentMovePointFact(after(`${LINE} Bxc3 Nge7`), 'dxe5', 'Nge7', ['d4e5', 'c8g4', 'f1e2', 'd5e4', 'e1g1', 'a8d8', 'd1e1', 'e7d5', 'e2d1']);
+    const f = studentMovePointFact(after(`${LINE} Bxc3 Nge7`), 'dxe5', null, ['d4e5', 'c8g4', 'f1e2', 'd5e4', 'e1g1', 'a8d8', 'd1e1', 'e7d5', 'e2d1']);
     expect(f?.line?.sans.slice(0, 3)).toEqual(['dxe5', 'Bg4', 'Be2']);
     expect(f?.stakes).toEqual({ points: 1, plies: 0 });
     expect(f?.squares).toEqual(['d4', 'e5']);
   });
   it('a quiet move\'s point is a description and says so — no line, no stake', () => {
-    const f = studentMovePointFact(after(LINE), 'Bxc3', 'Bxc3', null);
+    const f = studentMovePointFact(after(LINE), 'Bxc3', captureRunOfMoves(null, LINE.split(' ')), null);
     expect(f?.line).toBeNull();
     expect(f?.stakes).toBeNull();
   });
   it('no engine line — the capture claims nothing (WO-OUTCOME-01)', () => {
-    expect(studentMovePoint(after(`${LINE} Bxc3 Nge7`), 'dxe5', 'Nge7', null)).toBeNull();
+    expect(studentMovePoint(after(`${LINE} Bxc3 Nge7`), 'dxe5', null, null)).toBeNull();
   });
   it('Bd2 — the unpin', () => {
-    expect(studentMovePoint(after('e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4'), 'Bd2', 'Bb4', null)).toMatch(/^Bd2 unpins your knight on c3/);
+    expect(studentMovePoint(after('e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4'), 'Bd2', null, null)).toMatch(/^Bd2 unpins your knight on c3/);
   });
   it('a routine move has no point to say', () => {
     expect(studentMovePoint(new Chess().fen(), 'e4', null, null)).toBeNull();
-    expect(studentMovePoint(after('e4 c5'), 'Nf3', 'c5', null)).toBeNull();
+    expect(studentMovePoint(after('e4 c5'), 'Nf3', null, null)).toBeNull();
   });
   it('a recapture is the trade finishing, not material won', () => {
     // cxd4 after …cxd4: even trade.
-    expect(studentMovePoint(after('e4 c5 Nf3 Nc6 c3 e5 d4 cxd4'), 'cxd4', 'cxd4', null)).toBeNull();
+    expect(studentMovePoint(after('e4 c5 Nf3 Nc6 c3 e5 d4 cxd4'), 'cxd4', captureRunOfMoves(null, 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4'.split(' ')), null)).toBeNull();
   });
 });
 
@@ -522,7 +523,7 @@ describe('studentMovePoint — a trade that nets material is not a free piece (h
     const c = new Chess();
     for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4'.split(' ')) c.move(m);
     // Stockfish depth 18: Rxf1 takes the knight back.
-    expect(studentMovePoint(c.fen(), 'Nxf1', 'Bd4', ['g3f1', 'a1f1', 'h4f6', 'c3a4', 'e5d4', 'c2d4', 'b8d7', 'f1d1', 'd7e5'])).toBe('That wins the exchange — your knight for their rook on f1.');
+    expect(studentMovePoint(c.fen(), 'Nxf1', null, ['g3f1', 'a1f1', 'h4f6', 'c3a4', 'e5d4', 'c2d4', 'b8d7', 'f1d1', 'd7e5'])).toBe('That wins the exchange — your knight for their rook on f1.');
   });
 });
 
@@ -530,7 +531,7 @@ describe('a capture is never described as its side effect (hand walk 2026-09-25)
   it('Raxd8 taking the queen back is not "unpins your rook"', () => {
     const c = new Chess();
     for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4 Nxf1 Bxf1 Be6 Bxe5 dxe5 Qd6 Nd7 Qc7 Qd8 Qxd8'.split(' ')) c.move(m);
-    expect(studentMovePoint(c.fen(), 'Raxd8', 'Qxd8', null)).toBeNull();
+    expect(studentMovePoint(c.fen(), 'Raxd8', captureRunOfMoves(null, c.history()), null)).toBeNull();
   });
 });
 

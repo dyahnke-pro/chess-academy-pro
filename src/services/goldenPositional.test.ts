@@ -34,7 +34,7 @@ describe('10…Bxf3 spoils their kingside pawns for good', () => {
 
 describe('13…Qxf3 wins the pawn — computed by the one move-point owner, read off the engine line', () => {
   it('that wins the pawn on f3', () => {
-    expect(studentMovePointFact(QXF3, 'Qxf3', 'Rg4', ['f6f3', 'a1g1', 'g8h8'])?.text).toBe('That wins the pawn on f3 — nothing takes it back safely.');
+    expect(studentMovePointFact(QXF3, 'Qxf3', null, ['f6f3', 'a1g1', 'g8h8'])?.text).toBe('That wins the pawn on f3 — nothing takes it back safely.');
   });
 });
 

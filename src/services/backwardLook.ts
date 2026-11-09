@@ -294,6 +294,7 @@ export function backwardLook(args: {
           playedSan: args.playedSan,
           bestSan: args.bestSan,
           studentColor: args.studentColor,
+          place: 'lead',
         });
       } catch { /* fall through */ }
       // A SQUARE LEFT UNGUARDED IS A COST ONLY IF THEY USE IT (re-walk 1380,
@@ -371,8 +372,13 @@ export function backwardLook(args: {
       // verdict; the square it came through is its reason, said after it, and
       // the "worth seeing" opener has nothing left to promise.
       const allowsMate = (args.allowedMate ?? null) !== null && !!instead;
+      // After the verdict the drawback follows it ("It took …"), never naming
+      // the move twice.
+      const followed = allowsMate && args.bestSan
+        ? findStudentDrawback({ fen: args.fenBefore, playedSan: args.playedSan, bestSan: args.bestSan, studentColor: args.studentColor, place: 'follow' })?.said ?? cost.said
+        : cost.said;
       const line = allowsMate
-        ? [instead ?? '', cost.said].filter(Boolean).join(' ')
+        ? [instead ?? '', followed].filter(Boolean).join(' ')
         : [cost.said, cost.opening, instead ?? ''].filter(Boolean).join(' ');
       return {
         ...(allowsMate ? { stakes: mateStakes('them', Math.max(0, Math.abs(args.allowedMate as number) * 2 - 1), true) } : {}),
@@ -445,8 +451,11 @@ export function backwardLook(args: {
       });
     }
     // THE MOVE IS THE SUBJECT (hard-question walk 2026-10-11: "It let them
-    // play …e5" — with no grade before it, "it" pointed at nothing).
-    const said = w ? w.line.replace(/^It /, `Your ${args.playedSan} `) : '';
+    // play …e5" — with no grade before it, "it" pointed at nothing): said as
+    // "your move", never by name.
+    // Never the move's name: the student just played it and saw it land
+    // (David 2026-11-09: "the user knows that, they see it play out").
+    const said = w ? w.line.replace(/^It /, 'Your move ') : '';
     return w ? { line: said, square: w.squares[0] ?? '', kind: 'drawback', ...(w.squares.length ? { squares: w.squares } : {}), ...(w.proofLine ? { punishLine: w.proofLine } : {}) } : null;
   } catch { return null; }
 }

@@ -149,6 +149,7 @@ import { classifyPhase } from './gamePhaseService';
 import { looseTrigger } from './looseTrigger';
 import { exchangeIdeas } from './exchangeIdeas';
 import { positionOf } from '../utils/samePosition';
+import { captureRunAfterMove, captureRunOfMoves } from './captureRun';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -682,7 +683,13 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // fan we already have.
   const studentToMove = moverColor === studentColor;
   const deliberation = (!quietOpening && studentToMove)
-    ? buildDeliberation({ analysis, fenBefore: fen, moverColor, opponentLastSan: input.opponentLastMove?.san ?? null })
+    ? buildDeliberation({
+      analysis, fenBefore: fen, moverColor,
+      // The capture run their move ended (`captureRun`), continuing the game's.
+      prevCapture: input.opponentLastMove
+        ? captureRunAfterMove(input.history && input.history.length > 1 ? captureRunOfMoves(null, input.history.slice(0, -1)) : null, input.opponentLastMove.fenBefore, input.opponentLastMove.san)
+        : null,
+    })
     : null;
 
   // The prevention layer — a pin/skewer in waiting on the student's own king or

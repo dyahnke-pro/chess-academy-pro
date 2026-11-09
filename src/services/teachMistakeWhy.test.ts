@@ -36,7 +36,7 @@ describe('a mistake turn says what the move allowed, what the better move did, a
   });
 
   it('what the better move did: a4 prepares a5 against the queen that pins d4', () => {
-    expect(bestMoveReason(BEFORE, 'a4', 'w', { mateIn: null, opponentLastSan: 'Qb6' }))
+    expect(bestMoveReason(BEFORE, 'a4', 'w', { mateIn: null, prevCapture: null }))
       .toBe('prepares a5 to kick their queen off b6 and free your pawn on d4 from the pin');
     const said = errorGradeSentence(why('Bc3', REPLY, true), 'inaccuracy', 88);
     expect(said).toContain('a4 was the move — it would prepare a5 to kick their queen off b6 and free your pawn on d4 from the pin.');
@@ -57,7 +57,7 @@ describe('a mistake turn says what the move allowed, what the better move did, a
       replyLineUci, replySan: null, replyKeptWin: null, priorMove: null,
     });
     const v = call(REPLY);
-    expect(v.call?.said).toMatch(/^Bc3 was imprecise\. Your bishop was guarding e3/);
+    expect(v.call?.said).toMatch(/^Your move was imprecise\. Your bishop was guarding e3/);
     expect(v.call?.guardLeft).toBe('e3');
     expect(call([]).declined).toBe('under-the-floor');
   });

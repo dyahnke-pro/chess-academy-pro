@@ -8,7 +8,6 @@
 // docs/DNA-outline.md. Leaf module: its one import is the leaf sentence
 // opener, so the voice service can hold it without pulling the coach into its
 // graph.
-import { openSentence } from '../utils/openSentence';
 
 /** A sentence the DNA refuses outright, and why. */
 export const DNA_REFUSE: ReadonlyArray<{ re: RegExp; why: string }> = [
@@ -54,17 +53,18 @@ export function earnedPraise(kind: PraiseKind, streak: number, rot: number): str
  *  position asks for — it forks the king on h2 and the pawn on a3" (the fork
  *  was the bishop's, the move played), and "After their king to g3, exactly one
  *  move limits the damage. You found it — it forks the king on h2" (the count
- *  is about the NEXT move). `yourMove` is the student's move in words
- *  (`spokenMove.sayYourMove`), REQUIRED, so no stem can be a pronoun again. */
-const AFFIRM_STEMS: ReadonlyArray<(move: string, cap: string) => string> = [
-  (_m, cap) => `${cap} was the move here`,
-  (_m, cap) => `${cap} is the move this position asks for`,
-  (m) => `You found the move: ${m}`,
-  (_m, cap) => `${cap} does the job here`,
+ *  is about the NEXT move). Every stem says it is the move the student
+ *  PLAYED — past tense, "you" — and none names it: they just played it and saw
+ *  it land (David 2026-11-09: "We also don't need to hear 'your f-pawn takes
+ *  on e6' — the user knows that, they see it play out"). */
+const AFFIRM_STEMS: readonly string[] = [
+  'The move you played was the one here',
+  'You played the move this position asks for',
+  'Your move does the job here',
+  'You found the move here',
 ];
-export function affirmMove(yourMove: string, why: string, key: number): string {
-  const cap = openSentence(yourMove);
-  return `${AFFIRM_STEMS[Math.abs(Math.trunc(key)) % AFFIRM_STEMS.length](yourMove, cap)} — it ${why}.`;
+export function affirmMove(why: string, key: number): string {
+  return `${AFFIRM_STEMS[Math.abs(Math.trunc(key)) % AFFIRM_STEMS.length]} — it ${why}.`;
 }
 
 const PRAISE_ALLOWED = new Set<string>([...Object.values(EARNED_PRAISE).flat(), ...STREAK_PRAISE]);

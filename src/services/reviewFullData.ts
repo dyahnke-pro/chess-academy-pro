@@ -27,6 +27,7 @@ import { squareRole } from './squareRole';
 import { Chess, type Color, type Square } from 'chess.js';
 import { uciToSanAt } from './liveFundamental';
 import { landedTacticFor, plyFactsForMove, type PrevCaptureContext } from './pvPlayback';
+import { captureRunAfterMove } from './captureRun';
 import { definitionKey, tacticInvariant } from './conceptEngine';
 import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor, seeSequence } from './positionReadingService';
 import { detectTactics, tacticDescription } from './tacticsDetector';
@@ -674,7 +675,7 @@ export function computeMoveFacets(
     // and its point — unless the student then MISSED it (U8).
     const answer = opponentMoved && bestSan && fellShort && costsPoints && !reason && !consequence
       && !advantageWasMissed(ctx.allSans[ply] ?? null, ctx.replyBestSan)
-      ? studentAnswer(fenAfter, san, ctx.replyBestSan, ctx.playedLineUci)
+      ? studentAnswer(fenAfter, captureRunAfterMove(ctx.prevCap, fenBefore, san), ctx.replyBestSan, ctx.playedLineUci)
       : null;
     // What it allowed first, then the better move with its reason — the
     // heart of the app's order. A better move with no reason is a bare
@@ -1368,7 +1369,7 @@ export function computeMoveFacets(
         // The engine's purpose speaks below; the board computer only when the
         // engine showed none.
         const point = mv && !mv.captured && !ctx.teaching.intent
-          ? studentMovePoint(fenBefore, san, ply >= 2 ? ctx.allSans[ply - 2] ?? null : null, null)
+          ? studentMovePoint(fenBefore, san, ctx.prevCap, null)
           : null;
         if (point && mv) {
           const f = made('studentMovePoint', 'point', point);
@@ -1933,9 +1934,12 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
 /** The student's answer to the opponent's slip, in Review's retrospective
  *  voice — the one wording Learn speaks too (`slipAnswerText`). */
 export function studentAnswer(
-  fenAfter: string, theirSan: string, answerSan: string | null,
+  fenAfter: string,
+  /** The capture run their move ended (`captureRun`), or null when unknown. */
+  prevCapture: PrevCaptureContext | null,
+  answerSan: string | null,
   /** The engine's line after their move, UCI (the answer first), or null. */
   answerLineUci: readonly string[] | null,
 ): string | null {
-  return slipAnswerText(fenAfter, theirSan, answerSan, 'review', answerLineUci);
+  return slipAnswerText(fenAfter, prevCapture, answerSan, 'review', answerLineUci);
 }

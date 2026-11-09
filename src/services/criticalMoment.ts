@@ -31,6 +31,7 @@ import { criticalityThresholds } from './criticalityScan';
 import { refutationProof } from './exchangeLedger';
 import { MATE_HORIZON_CP } from './engineConstants';
 import { decisiveReason, reasonPosed } from './decisiveReason';
+import { takesBack, type PrevCaptureContext } from './captureRun';
 import { emitDecisiveReason } from './decisiveReasonEvents';
 import type { AnalysisLine } from '../types';
 
@@ -281,7 +282,7 @@ export function readCriticalMoment(input: {
     const r = decisiveReason({
       // Only a material reason is used here; the prepared move stays held.
       namesPreparedMove: false,
-      fenBefore: input.fen, san: holdingSans[0], seat: input.seat, opponentLastSan: null,
+      fenBefore: input.fen, san: holdingSans[0], seat: input.seat, prevCapture: null,
       reads: { before: lines.map((l) => ({ rank: l.rank, evaluation: l.evaluation, mate: l.mate ?? null, moves: [...(l.moves ?? [])] }) as AnalysisLine), after: [], passBefore: [], passAfter: [] },
     });
     if (r?.kind === 'the' && r.about === 'move' && r.source === 'material' && r.core) bestReason = { text: r.core, line: r.line };
@@ -461,13 +462,11 @@ export function criticalMomentReveal(read: CriticalMomentRead | null): string | 
 }
 
 /** The played move takes back on the square the opponent's last move captured
- *  on — the trade they started, finished. The same reading `deliberation`
- *  gives "takes back the …". */
-export function finishesTrade(opponentLastSan: string | null, playedSan: string | null): boolean {
-  if (!opponentLastSan || !playedSan) return false;
-  const theirs = /x([a-h][1-8])/.exec(opponentLastSan);
-  const mine = /x([a-h][1-8])/.exec(playedSan);
-  return !!theirs && !!mine && theirs[1] === mine[1];
+ *  on — the trade they started, finished. The one read of the capture run
+ *  (`takesBack`), the same reading `deliberation` gives "takes back the …". */
+export function finishesTrade(prevCapture: PrevCaptureContext | null, fenBefore: string, playedSan: string | null): boolean {
+  if (!prevCapture || !playedSan) return false;
+  try { return takesBack(prevCapture, new Chess(fenBefore).move(playedSan)); } catch { return false; }
 }
 
 /** Did the student play one of the moves that held? Coordinate-free comparison
@@ -487,14 +486,17 @@ export function criticalMomentHeld(read: CriticalMomentRead | null, playedSan: s
  */
 export function criticalMomentFound(
   read: CriticalMomentRead | null, playedSan: string | null,
-  /** REQUIRED: the opponent's move just before — null when unknown. Taking
-   *  back on the square they just captured on finishes THEIR trade; it is not
-   *  a find (Black walk 2026-10-19: "F-pawn takes g3 was the only move that
-   *  kept you level" after …Bxg3, "g-pawn takes h4" after …Qxh4). */
-  opponentLastSan: string | null,
+  /** REQUIRED: the capture run after their move just before (`captureRun`) —
+   *  null when unknown. Taking back on the square they just captured on
+   *  finishes THEIR trade; it is not a find (Black walk 2026-10-19: "F-pawn
+   *  takes g3 was the only move that kept you level" after …Bxg3, "g-pawn
+   *  takes h4" after …Qxh4). Winning the piece they gave is a find. */
+  prevCapture: PrevCaptureContext | null,
+  /** The board the move was played on. */
+  fenBefore: string,
 ): string | null {
   if (!criticalMomentHeld(read, playedSan) || !read) return null;
-  if (finishesTrade(opponentLastSan, playedSan)) return null;
+  if (finishesTrade(prevCapture, fenBefore, playedSan)) return null;
   const stake = stakeText(read.stake as StakeId, { plural: false, past: true });
   const fails = failedCandidates(read.discardedProofs ?? []);
   // The reason is the BEST move's: said only when that is the move they played.

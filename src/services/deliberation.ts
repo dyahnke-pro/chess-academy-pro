@@ -17,7 +17,6 @@ import { afterCaptureSan } from '../utils/captureWords';
 import { captureLeadsTo } from './captureLeadsTo';
 import { openSentence } from '../utils/openSentence';
 import { affirmMove } from './dnaRules';
-import { sayYourMove } from './spokenMove';
 import { Chess, type Square } from 'chess.js';
 import type { StockfishAnalysis, WalkableLine } from '../types';
 import { walkableLine, type Proof } from './proof';
@@ -32,6 +31,7 @@ import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { describeMoveGeometry, quietPurposePhrase } from './groundedAnswer';
 import { kickBreaksPin, pawnKickNext } from './pawnKickNext';
 import { seatCp } from './winChance';
+import { takesBack, type PrevCaptureContext } from './captureRun';
 
 /** A capture that WINS material, the exchange counted out — that is the move's
  *  reason, ahead of any positional gloss. Hand walk 2340: dxe5 "stakes out the
@@ -40,7 +40,7 @@ import { seatCp } from './winChance';
  *  the move's SAN ("The move is Qxe8 — it …"), which already says the capture,
  *  so it says what the capture leads to and never the capture again (David
  *  2026-10-30: "queen takes d8, takes the queen"; `captureWords`). */
-function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentLastSan: string | null): string | null {
+function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', prevCapture: PrevCaptureContext | null): string | null {
   try {
     const c = new Chess(fenBefore);
     const m = c.move(san);
@@ -50,7 +50,9 @@ function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentL
     if (!m?.captured) return null;
     // A recapture is the trade finishing, never material won — and taking back
     // IS the reason ("The move is Rexd8 — it takes the open d-file" after Qxd8).
-    if (opponentLastSan && new RegExp(`x${m.to}(?![1-8])`).test(opponentLastSan)) return afterCaptureSan({ kind: 'take-back', next: null }, 'verb');
+    // Read off the capture RUN, never their SAN: …fxe6 after Bxe6 took a pawn
+    // wins the bishop (prod Learn audit 2026-11-09, "it completes the trade").
+    if (takesBack(prevCapture, m)) return afterCaptureSan({ kind: 'take-back', next: null }, 'verb');
     // SEE counts the recaptures: a positive net is material won, not a trade.
     if (legalSeeGainFor(fenBefore, m.to, mover) <= 0) return null;
     // What THIS capture nets, read by the one board read: a take-back that
@@ -230,10 +232,12 @@ export function buildDeliberation(input: {
    *  the move being played as a weaker option — which reads as a
    *  self-contradiction on the board (G3). */
   excludeSan?: string;
-  /** The opponent's move just before (SAN), or null at the start. REQUIRED: a
-   *  capture back on the square they just took on is the trade finishing, so
-   *  "it wins the queen on d8" after …Qxd8 is false (hand walk 2026-09-25). */
-  opponentLastSan: string | null;
+  /** The capture run after the opponent's move just before (`captureRun`), or
+   *  null when unknown. REQUIRED: a capture back on the square they just took
+   *  on is the trade finishing, so "it wins the queen on d8" after …Qxd8 is
+   *  false (hand walk 2026-09-25) — and a capture worth more than what they
+   *  took wins it (`takesBack`). */
+  prevCapture: PrevCaptureContext | null;
   /** A move the STUDENT named ("why is Ne4 best?", "is Qf3 ok?"), weighed
    *  beside the engine's own candidates (chat thinks like the coach,
    *  2026-10-09). `lineUci` is the engine's line from `fenBefore` STARTING
@@ -336,8 +340,8 @@ export function buildDeliberation(input: {
   // 2026-10-10: "Nh6+ is best — it lands on the h6 outpost", then the mate in
   // four). The mate is the why; a square's geometry beside it teaches nothing.
   const mates = !!played && playedSans.length >= 3 && /and it's mate$/.test(played.short);
-  const bestWhy = bestMoveReason(fenBefore, bestSan, moverColor, { mateIn: mates ? Math.ceil(playedSans.length / 2) : null, opponentLastSan: input.opponentLastSan });
-  const namedWhy = namedCandidate && namedCandidate.san !== bestSan ? moveWhy(fenBefore, namedCandidate.san, moverColor, input.opponentLastSan) : null;
+  const bestWhy = bestMoveReason(fenBefore, bestSan, moverColor, { mateIn: mates ? Math.ceil(playedSans.length / 2) : null, prevCapture: input.prevCapture });
+  const namedWhy = namedCandidate && namedCandidate.san !== bestSan ? moveWhy(fenBefore, namedCandidate.san, moverColor, input.prevCapture) : null;
   const bestReply = (() => {
     if (!bestLine.moves[1]) return null;
     // Written as the reply is said: Black's move carries its ellipsis.
@@ -627,7 +631,7 @@ export function ruleOuts(d: Deliberation, said: ReadonlySet<string>): RuleOut[] 
  * their knight on c6"). `mateIn` is REQUIRED (null when none) and from the
  * MOVER's side, in moves: the caller must say whether the move mates.
  */
-export function bestMoveReason(fenBefore: string, san: string, mover: 'w' | 'b', ctx: { mateIn: number | 'forced' | null; opponentLastSan: string | null }): string | null {
+export function bestMoveReason(fenBefore: string, san: string, mover: 'w' | 'b', ctx: { mateIn: number | 'forced' | null; prevCapture: PrevCaptureContext | null }): string | null {
   // A move that starts a forced mate is best for that reason; a square beside
   // it teaches nothing. A move that mates now says so.
   if (ctx.mateIn !== null) {
@@ -643,7 +647,7 @@ export function bestMoveReason(fenBefore: string, san: string, mover: 'w' | 'b',
   // A quiet move still has its job on the board (walk 2026-10-10: "best move?"
   // gave Kd3 "brings the king to d3, where it covers e4 and c4" and "why does
   // Kd3 work?" gave no reason at all — two answers, two computers).
-  return moveWhy(fenBefore, san, mover, ctx.opponentLastSan)
+  return moveWhy(fenBefore, san, mover, ctx.prevCapture)
     ?? quietPurposePhrase(fenBefore, san, mover === 'w' ? 'white' : 'black', 'mover');
 }
 
@@ -683,9 +687,9 @@ function pinKickWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string | 
   } catch { return null; }
 }
 
-export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentLastSan: string | null): string | null {
+export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', prevCapture: PrevCaptureContext | null): string | null {
   const first = mateThreatWhy(fenBefore, san, mover)
-    ?? materialWhy(fenBefore, san, mover, opponentLastSan)
+    ?? materialWhy(fenBefore, san, mover, prevCapture)
     ?? threatAnswerWhy(fenBefore, san, mover)
     ?? threatMadeWhy(fenBefore, san, mover)
     ?? pinKickWhy(fenBefore, san, mover);
@@ -878,8 +882,8 @@ export function heldVerdictText(v: HeldVerdict): string {
  *  per-game count of found credits (`learnMemory.nextStem`), REQUIRED so a
  *  caller cannot fall back to one stem. `fenBefore` is the board the move was
  *  played from — the stem names the move (`affirmMove`). */
-export function heldFoundText(v: HeldVerdict, fenBefore: string, stem: number): string {
-  return affirmMove(sayYourMove(v.san, fenBefore), v.why, stem);
+export function heldFoundText(v: HeldVerdict, stem: number): string {
+  return affirmMove(v.why, stem);
 }
 
 /** The mover's pawns have claimed more room behind them (`computeTerritory`). */

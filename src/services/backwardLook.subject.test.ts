@@ -18,7 +18,7 @@ describe('the drawback lane names the student\'s move as theirs', () => {
       replyPvUci: ['g4g5', 'f6h5', 'd1h5'],
     }));
     expect(look, 'the drawback lane said nothing on this board').not.toBeNull();
-    expect(look!.line).toMatch(/^Your e6 /);
+    expect(look!.line).toMatch(/^Your move /);
     expect(look!.line).not.toMatch(/^[a-h][1-8]\b/);
   });
 });

@@ -18,6 +18,29 @@ const G1_15 = 'r1b1kr2/pp2p1bp/2np2p1/3R2N1/1q2PBn1/1QN5/PP3PPP/4R1K1 w - - 12 1
 const KC7_BEFORE = '3r4/6p1/p2k3p/1pp5/8/P4K2/7P/3R4 b - - 1 37';
 const KC7_AFTER = '3r4/2k3p1/p6p/1pp5/8/P4K2/7P/3R4 w - - 2 38';
 
+describe('hangingLine — what the prod Learn audit heard (2026-11-09)', () => {
+  // The audit's Scandinavian, after 3.Nc3: the d5 queen is hit by a knight.
+  const QUEEN = 'rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3';
+  it('a piece hit by a cheaper attacker must move — a guard is never offered as the save', () => {
+    for (let k = 0; k < 6; k++) {
+      // Every rotated stem, the same rule (the key rotates on the board).
+      const line = hangingLine({ fen: QUEEN, squares: ['d5'], viewer: 'b', lostGuard: false, still: false }) ?? '';
+      expect(line).not.toMatch(/gets a guard|or guard/);
+    }
+    const line = hangingLine({ fen: QUEEN, squares: ['d5'], viewer: 'b', lostGuard: false, still: false }) ?? '';
+    expect(line).toMatch(/queen on d5/);
+  });
+  it('the taker is the subject: "they can take it", never "them can take it"', () => {
+    // White to move; Black's knight on g4 hit by nothing cheaper — the line said
+    // to the student whose knight it is, with the opponent to move.
+    for (const fen of ['k7/8/8/8/6n1/8/5Q2/K7 w - - 0 1', 'k7/8/8/8/6N1/8/5q2/K7 b - - 0 1']) {
+      const viewer = fen.includes(' w ') ? 'b' : 'w';
+      const line = hangingLine({ fen, squares: ['g4'], viewer, lostGuard: false, still: false }) ?? '';
+      expect(line).not.toMatch(/\bthem can\b/i);
+    }
+  });
+});
+
 describe('hangingLine — one sentence for a piece nothing guards', () => {
   it('your piece, you to move: the piece, that nothing guards it, and what it means', () => {
     const line = hangingLine({ fen: G1_15, squares: ['f4'], viewer: 'w', lostGuard: false, still: false });

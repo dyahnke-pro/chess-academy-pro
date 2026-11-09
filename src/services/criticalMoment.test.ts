@@ -294,7 +294,7 @@ describe('the failing candidates — the strongest proved, the rest named (Learn
         { san: 'Rf1', text: 'Rf1 and Qxf1 — mate', line: { fen: '8/8/8/8/8/8/8/8 w - - 0 1', sans: ['Rf1'] } },
       ],
     } as unknown as Parameters<typeof criticalMomentFound>[0];
-    const out = criticalMomentFound(read, 'Qxd2+', null) ?? '';
+    const out = criticalMomentFound(read, 'Qxd2+', null, '') ?? '';
     expect(out).toContain("Qb6 didn't work: three moves later, Nxd5 — you give up a knight for a pawn");
     expect(out).toContain("Qc3 and Rf1 didn't work either.");
     expect(out).not.toContain('Rxc3');
@@ -338,9 +338,13 @@ describe('taking back is not a find (Black walk 2026-10-19, 14.fxg3 after …Bxg
       ],
       moverColor: 'w', fen,
     });
-    expect(criticalMomentFound(read, 'fxg3', null)).toMatch(/only move/);
-    expect(criticalMomentFound(read, 'fxg3', 'Bxg3')).toBeNull();
+    expect(criticalMomentFound(read, 'fxg3', null, fen)).toMatch(/only move/);
+    // …Bxg3 took a knight: fxg3 takes back a bishop for it.
+    expect(criticalMomentFound(read, 'fxg3', { square: 'g3', capturedValue: 3, net: 3 }, fen)).toBeNull();
     // A capture somewhere ELSE is still a find.
-    expect(criticalMomentFound(read, 'fxg3', 'Bxe4')).toMatch(/only move/);
+    expect(criticalMomentFound(read, 'fxg3', { square: 'e4', capturedValue: 3, net: 3 }, fen)).toMatch(/only move/);
+    // …Bxg3 took only a pawn: fxg3 WINS the bishop, a find (prod Learn audit
+    // 2026-11-09, …fxe6 after Bxe6 heard as "it completes the trade").
+    expect(criticalMomentFound(read, 'fxg3', { square: 'g3', capturedValue: 1, net: 1 }, fen)).toMatch(/only move/);
   });
 });

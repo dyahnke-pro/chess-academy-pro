@@ -207,7 +207,7 @@ const chatReasonOf = (p: Position): DecisiveReason | null => {
   const reads = readsOf(p);
   if (!reads) return null;
   try {
-    return decisiveReason({ fenBefore: p.fenBefore, san: p.san, reads, seat: p.own ? 'student' : 'opponent', opponentLastSan: p.theirLast?.san ?? null, asksToSee: false, namesPreparedMove: true });
+    return decisiveReason({ fenBefore: p.fenBefore, san: p.san, reads, seat: p.own ? 'student' : 'opponent', prevCapture: p.prev, asksToSee: false, namesPreparedMove: true });
   } catch { return null; }
 };
 
@@ -465,17 +465,17 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
     }).map((h) => h.text);
   },
   deliberation: (p) => {
-    const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, opponentLastSan: p.theirLast?.san ?? null });
+    const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, prevCapture: p.prev });
     return d ? deliberationFacts(d, new Set(), true) : null;
   },
   moveJob: (p) => moveJob(p.fenBefore, p.san, p.mover, p.own ? MINE : THEIRS)?.clause ?? null,
   fundamentals: (p) => computeMoveFundamentals(p.fenBefore, p.san, p.mover === 'w' ? 'white' : 'black').map((f) => f.selfContained),
   boardTeacher: (p) => buildReviewMoveTeaching(p.fenBefore, p.san, p.own),
-  moveWhy: (p) => moveWhy(p.fenBefore, p.san, p.mover, p.theirLast?.san ?? null),
+  moveWhy: (p) => moveWhy(p.fenBefore, p.san, p.mover, p.prev),
   bestMoveReason: (p) => {
     const best = p.best;
     if (!best || uciOf(p.fenBefore, p.san) !== best.uci) return null;
-    return bestMoveReason(p.fenBefore, p.san, p.mover, { mateIn: best.mate !== null ? Math.abs(best.mate) : null, opponentLastSan: p.theirLast?.san ?? null });
+    return bestMoveReason(p.fenBefore, p.san, p.mover, { mateIn: best.mate !== null ? Math.abs(best.mate) : null, prevCapture: p.prev });
   },
   // The null-move passes are not cached yet, so this reads only what the
   // two real reads can prove (prevents/prepares that need a pass stay quiet).
@@ -497,7 +497,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
   // Every alternative the weighing would rule out, with its reason, whether or
   // not the position is a real fork (the composer gates that; BUILT should not).
   alternatives: (p) => {
-    const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, opponentLastSan: p.theirLast?.san ?? null });
+    const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, prevCapture: p.prev });
     return d ? ruleOuts(d, NOTHING_SAID).map((r) => r.text) : null;
   },
   // The masters' main move here and what the played move left undone, when

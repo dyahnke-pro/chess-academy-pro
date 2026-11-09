@@ -11,7 +11,11 @@ describe('formationChoice', () => {
     const g = fenAfter(['d3', 'a6', 'f3', 'a5']); // e4 would make the d3-e4-f3 triangle
     const r = formationChoice(g, 'h3', 'w', 'e4', 80);
     // The pawns it joins by their files; d3, e4 and f3 lit, not read out.
-    expect(r?.text).toBe('Of the pawn moves, e4 was the one: it makes a triangle with your d- and f-pawns, and h3 builds nothing.');
+    expect(r?.text).toBe('Of the pawn moves, e4 was the one: it makes a pawn triangle with your d- and f-pawns, and h3 links no pawns.');
+  });
+  it('held, it names a pawn shape, never a bare "triangle" (prod Learn audit 2026-11-09)', () => {
+    const g = fenAfter(['d3', 'a6', 'f3', 'a5']);
+    expect(formationChoice(g, 'h3', 'w', 'e4', 80)?.heldForm?.text).toBe('h3 links no pawns. Another pawn move would make a pawn triangle.');
   });
   it('silent when the choice cost nothing', () => {
     expect(formationChoice(fen, 'h3', 'w', 'c4', 0)).toBeNull();

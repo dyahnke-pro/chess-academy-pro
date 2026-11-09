@@ -12,7 +12,7 @@ describe('one kick claim (g2 6…e5)', () => {
   for (const m of 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3'.split(' ')) c.move(m);
   const before = c.fen();
   it('the move\'s point claims kick:d4', () => {
-    const p = studentMovePointFact(before, 'e5', 'f3', null);
+    const p = studentMovePointFact(before, 'e5', null, null);
     expect(p?.text).toMatch(/kicks their knight off d4/i);
     expect(p?.claim).toBe(kickKey('d4'));
   });

@@ -50,6 +50,6 @@ describe('a fork whose capture still wins was not stopped (review walk oct3b g1 
     // would just be taken — that reply DID take the sting out.
     const b = 'r3k3/2p5/8/8/8/2N5/8/6K1 w - - 0 1';
     const a = 'r3k3/2p5/8/1N6/8/8/8/6K1 b - - 1 1';
-    expect(threatStoppedBy(b, a, 'Kd8', 'w')?.text).toMatch(/stops your Nxc7 fork/);
+    expect(threatStoppedBy(b, a, 'Kd8', 'w')?.text).toMatch(/stops your fork with Nxc7\./);
   });
 });

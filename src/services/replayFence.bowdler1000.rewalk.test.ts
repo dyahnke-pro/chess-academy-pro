@@ -18,7 +18,7 @@ describe('ply 58 — …Rd4+ walked into a discovered check, and the grade says 
   };
   it('names the discovered check, not a bare grade', () => {
     const said = callInaccuracyDetailed(withOneSearch({ ...args, namesBetterMove: true })).call?.said ?? '';
-    expect(said).toMatch(/Rd4\+ was a mistake — it let them in with Kf5\+, a discovered check from the rook on g1/);
+    expect(said).toMatch(/Your move was a mistake — it let them in with Kf5\+, a discovered check from the rook on g1/);
   });
 });
 

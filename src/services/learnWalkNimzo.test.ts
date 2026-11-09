@@ -51,7 +51,7 @@ describe('the instant lane states the threat; the move that meets it comes from 
     for (const h of hits) expect(h.fact).not.toMatch(/deal with that first/i);
   });
   it('a dictated reply is named, never "that reply"', () => {
-    const said = opponentGapClause({ opportunityUci: 'c6a4' } as never, 'dictated', fen, 'b', 'Nd4');
+    const said = opponentGapClause({ opportunityUci: 'c6a4' } as never, 'dictated', fen, 'b', 'Nd4', null);
     expect(said).toMatch(/^Nd4 gives you something: Bxa4/);
     expect(said ?? '').not.toMatch(/that reply/i);
   });

@@ -76,6 +76,7 @@ import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { cheaperAttackerHit, gambitPoint, kingPawnUnderFire, type CheaperHit, mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
 import { habitSaidKey, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, learnHangingWarning, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
+import { captureRunAfterMove, captureRunOfPgn } from '../../services/captureRun';
 
 /** A LINE A LEARN PRODUCER QUEUES for the late wave, as it knows it — made
  *  the one fact by `queueSpokenHint` (WO-STORY-MATRIX-01 P1-6e). */
@@ -10701,7 +10702,7 @@ export function CoachTeachPage({ mode }: {
         // verdict — and a `clear-best` with no point stays silent, because a
         // verdict with no reason is bare praise (Narration Voice Rule 5).
         const goodPoint = grade && (grade.reason === 'clear-best' || grade.reason === 'only-move')
-          ? studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null, preStudentRead?.topLines?.find((l) => l.moves[0] === `${move.from}${move.to}${move.promotion ?? ''}`)?.moves ?? null)
+          ? studentMovePoint(fenBefore, move.san, captureRunOfPgn(move.pgn, move.history.length - 1), preStudentRead?.topLines?.find((l) => l.moves[0] === `${move.from}${move.to}${move.promotion ?? ''}`)?.moves ?? null)
           : null;
         // A RECAPTURE IS NOT A FIND (hand walk 2026-09-30, Ruy: "c-pawn takes d4:
         // nice — that was the only move that holds", then the same for Qxd4 —
@@ -11169,9 +11170,9 @@ export function CoachTeachPage({ mode }: {
                           studentColor: playerColor === 'white' ? 'w' : 'b',
                         });
                         if (gap) {
-                          // Learn: the coach IS the opponent, so the nudge says "I".
+                          // The capture run their reply ended, from the game's own PGN.
                           const clause = opponentGapClause(gap, learnMemRef.current.lastReplyDictated !== null ? 'dictated' : 'coach-is-opponent',
-                            probe.fen(), playerColor === 'white' ? 'w' : 'b', m.san);
+                            probe.fen(), playerColor === 'white' ? 'w' : 'b', m.san, captureRunAfterMove(captureRunOfPgn(move.pgn, move.history.length), move.fen, m.san));
                           const nudge = clause ? gradeNarrationText(clause, probe.fen(), 'CoachTeachPage.opponentGap')?.trim() : null;
                           if (nudge) {
                             let gapSan: string | null = null;
@@ -11914,6 +11915,22 @@ export function CoachTeachPage({ mode }: {
               const boardFen = liveFenRef.current;
               paceBoardMarks(spoken, marks, () => trackAGenRef.current === myTrackAGen && liveFenRef.current === boardFen);
             };
+            // THE ANSWER A QUESTION OWED is track A's line too, and is logged as
+            // one (prod focus audit 2026-11-09: "Before your move, checks,
+            // captures, threats …" was spoken with no row, so the audit could
+            // not tell it from a leak).
+            const speakOwed = (owed: string): Promise<void> | undefined => {
+              if (trackAGenRef.current !== myTrackAGen) return undefined;
+              void logAppAudit({
+                kind: 'coach-narration-spoken',
+                category: 'narration',
+                source: 'CoachTeachPage.trackA',
+                summary: `track A spoke: "${owed.slice(0, 80)}"`,
+                narrationText: owed,
+                fen: liveFenRef.current,
+              });
+              return speakLearn(owed, { channel: 'door', forced: true, intent: 'learn-live' }).then(() => undefined);
+            };
             const speakTrackA = (line: string, marks?: TrackMarks, opts?: { verdict?: boolean }): void => {
               if (trackAGenRef.current !== myTrackAGen) return;
               let owedAfter = '';
@@ -11946,7 +11963,7 @@ export function CoachTeachPage({ mode }: {
                 if (owedSaid && opts?.verdict) owedAfter = owedSaid;
                 else if (owedSaid) {
                   speechChainRef.current = speechChainRef.current
-                    .then(() => (trackAGenRef.current === myTrackAGen ? speakLearn(owedSaid, { channel: 'door', forced: true, intent: 'learn-live' }) : undefined))
+                    .then(() => speakOwed(owedSaid))
                     .catch(() => undefined);
                 }
               }
@@ -12006,7 +12023,7 @@ export function CoachTeachPage({ mode }: {
                 .catch(() => undefined);
               if (owedAfter) {
                 speechChainRef.current = speechChainRef.current
-                  .then(() => (trackAGenRef.current === myTrackAGen ? speakLearn(owedAfter, { channel: 'door', forced: true, intent: 'learn-live' }) : undefined))
+                  .then(() => speakOwed(owedAfter))
                   .catch(() => undefined);
               }
               instantSpokenText = instantSpokenText ? `${instantSpokenText} ${heard}` : heard;
@@ -12700,7 +12717,7 @@ export function CoachTeachPage({ mode }: {
                         // their move fell short is the error call's, and the move
                         // waits for Show me.
                         if (!heldNow.shown && heldMove && found) {
-                          const foundText = heldFoundText(heldNow, fenBefore, nextStem(learnMemRef.current, 'held-found'));
+                          const foundText = heldFoundText(heldNow, nextStem(learnMemRef.current, 'held-found'));
                           queueSpokenHint(fenAfterReply, { computer: 'heldFoundText', text: foundText, lane: 'heldMove', proof: legalLineProof(fenBefore, [move.san], lineSeatAt(fenBefore, playerColor === 'white' ? 'w' : 'b'), true) ?? NO_PROOF.description, namesStudentMove: false, squares: [move.to], claims: [`found-${move.san}`], gradeFen: fenBefore });
                         }
                         captureEvent('learn_move_held_answered', { surface: 'coach-teach', found, shown: heldNow.shown });
@@ -12720,7 +12737,7 @@ export function CoachTeachPage({ mode }: {
                         const answer = studentBestSan ? new Chess(fenBefore).move(studentBestSan) : null;
                         const found = !!answer && answer.from === move.from && answer.to === move.to;
                         if (answer && !heldRevealedHere) {
-                          const text = slipAnswerText(fenBefore, slip.theirSan, studentBestSan ?? null, 'found', preStudentRead.topLines?.[0]?.moves ?? null);
+                          const text = slipAnswerText(fenBefore, captureRunOfPgn(move.pgn, move.history.length - 1), studentBestSan ?? null, 'found', preStudentRead.topLines?.[0]?.moves ?? null);
                           // MISSED is not said: Learn names no move unasked (David
                           // 2026-10-10). Their slip's why — what it let you do —
                           // was already said with their move.
@@ -12875,7 +12892,7 @@ export function CoachTeachPage({ mode }: {
                       if (gambitLine) queueSpokenHint(fenAfterReply, { computer: 'gambitPoint', text: gambitLine, lane: 'movePoint', proof: NO_PROOF.description, namesStudentMove: false, squares: [], claims: [`gambit:${move.to}`] });
                       // The point keeps what the ledger proved (A-plan P5): a capture that
                       // wins carries its engine line as proof and its net as stake.
-                      const pointFact = gambitLine ? null : studentMovePointFact(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null, preStudentRead?.topLines?.find((l) => l.moves[0] === `${move.from}${move.to}${move.promotion ?? ''}`)?.moves ?? null);
+                      const pointFact = gambitLine ? null : studentMovePointFact(fenBefore, move.san, captureRunOfPgn(move.pgn, move.history.length - 1), preStudentRead?.topLines?.find((l) => l.moves[0] === `${move.from}${move.to}${move.promotion ?? ''}`)?.moves ?? null);
                       const point = pointFact?.text ?? null;
                       // SPOKEN ON THE BOARD AFTER THEIR REPLY, SO TRUE THERE
                       // (fresh-game walk 2026-09-27: "That wins the pawn on c4 —
@@ -13000,7 +13017,7 @@ export function CoachTeachPage({ mode }: {
                         } else if (test && move.history.length > test.ply) mateTestRef.current = null;
                         const playedUci = (() => { try { const m = new Chess(fenBefore).move(move.san); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; } })();
                         const learned = intentReads && playedUci && intentReads.before[0]?.moves[0] === playedUci
-                          ? learnMoveReason({ fenBefore, san: move.san, reads: intentReads, seat: 'student', opponentLastSan: move.history.length > 1 ? move.history[move.history.length - 2] : null, asksToSee: provenTagsRef.current.get('calculation-depth') === 'short' })
+                          ? learnMoveReason({ fenBefore, san: move.san, reads: intentReads, seat: 'student', prevCapture: captureRunOfPgn(move.pgn, move.history.length - 1), asksToSee: provenTagsRef.current.get('calculation-depth') === 'short' })
                           : null;
                         const theReason = learned?.reason ?? null;
                         if (theReason?.kind === 'the' && theReason.source === 'material') {
@@ -13179,7 +13196,7 @@ export function CoachTeachPage({ mode }: {
                       passAfter ? stockfishEngine.analyzeWithBudget(passAfter, COACH_TURN_DEPTH, 900, { signal: turnSignal }).catch(() => null) : null,
                     ]);
                     const learned = af?.topLines?.length
-                      ? learnMoveReason({ fenBefore: move.fen, san: theirSan, reads: { before: mid.topLines, after: af.topLines, passBefore: pb?.topLines ?? [], passAfter: pa?.topLines ?? [] }, seat: 'opponent', opponentLastSan: move.san })
+                      ? learnMoveReason({ fenBefore: move.fen, san: theirSan, reads: { before: mid.topLines, after: af.topLines, passBefore: pb?.topLines ?? [], passAfter: pa?.topLines ?? [] }, seat: 'opponent', prevCapture: captureRunOfPgn(move.pgn, move.history.length) })
                       : null;
                     const r = learned?.reason;
                     if (learned && r?.kind === 'the') {
@@ -13343,7 +13360,7 @@ export function CoachTeachPage({ mode }: {
                       queueSpokenHint(cm.fenAfter, { computer: 'backwardLook', text: look.line, lane: look.kind, proof: (look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci, lineSeatAt(look.punishLine.fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(look.line, /^[a-h][1-8]$/.test(look.square) ? [look.square] : []) ?? NO_PROOF.description, namesStudentMove: false, claims: [`look:${look.kind}:coach:${cm.fenAfter.split(' ').slice(0, 2).join(' ')}`], stakes: look.stakes });
                       // The coach told the student to look — remember the board
                       // so the answer is revealed once they have moved from it.
-                      learnMemRef.current.slipAnswer = look.offersStudent ? { fen: cm.fenAfter, theirSan: cm.playedSan } : null;
+                      learnMemRef.current.slipAnswer = look.offersStudent ? { fen: cm.fenAfter } : null;
                       logReasonSource(cm.fenBefore, cm.playedSan, look.line, mid.topLines?.[0]?.moves ?? [], []);
                       captureEvent('coach_inaccuracy_called', {
                         surface: 'coach-teach', kind: look.kind, cost: Math.round(cpLoss),

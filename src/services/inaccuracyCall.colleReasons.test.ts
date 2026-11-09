@@ -27,7 +27,7 @@ describe('the better move is given its own reason, or none', () => {
   });
 
   it('the board read names its piece wherever it is said after "it"', () => {
-    const w = moveWhy(AFTER_QG3, 'Neg6', 'b', 'Qg3');
+    const w = moveWhy(AFTER_QG3, 'Neg6', 'b', null);
     expect(w).toMatch(/^saves the knight from/);
     expect(w).not.toMatch(/\bsaves it\b/);
   });

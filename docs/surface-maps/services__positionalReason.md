@@ -32,7 +32,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/slipCause.ts:144`
 
 ### `positionalReason` (function) — 4 call sites
-- `src/services/inaccuracyCall.ts:1388`
+- `src/services/inaccuracyCall.ts:1452`
 - `src/services/positionalReason.test.ts:16`
 - `src/services/positionalReason.test.ts:20`
 - `src/services/positionalReason.test.ts:24`

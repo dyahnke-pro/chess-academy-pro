@@ -35,6 +35,7 @@ import { seatBare } from '../utils/seatPieces';
 import { mateDescription } from './matePatterns';
 import { withArticle } from '../utils/andList';
 import { afterCaptureSan } from '../utils/captureWords';
+import { takesBack, type PrevCaptureContext } from './captureRun';
 
 type CommentaryKind =
   | 'tactic'
@@ -821,16 +822,17 @@ export function buildPlayCommentary(args: {
 export function studentMovePoint(
   fenBefore: string,
   san: string,
-  /** The opponent's move just before (SAN), or null at the start. REQUIRED:
-   *  a capture on the square they just captured on is a RECAPTURE — the trade
-   *  finishing, never material won (Bxc3 after …Bxc3). */
-  opponentLastSan: string | null,
+  /** The capture run after their move just before (`captureRun`), or null
+   *  when unknown. REQUIRED: a capture back on the square they just took on,
+   *  worth no more than they took, is a RECAPTURE — the trade finishing, never
+   *  material won (Bxc3 after …Bxc3, `takesBack`). */
+  prevCapture: PrevCaptureContext | null,
   /** The engine's line from `fenBefore`, UCI, starting with `san`, or null.
    *  REQUIRED (WO-OUTCOME-01): "that wins the X — nothing takes it back" is
    *  an outcome, read off this line by the one ledger. No line, no claim. */
   lineUci: readonly string[] | null,
 ): string | null {
-  return studentMovePointFact(fenBefore, san, opponentLastSan, lineUci)?.text ?? null;
+  return studentMovePointFact(fenBefore, san, prevCapture, lineUci)?.text ?? null;
 }
 
 /** The point of the move that wins the bishop pair, and the ideas it states —
@@ -855,10 +857,11 @@ interface MovePointFact {
 export function studentMovePointFact(
   fenBefore: string,
   san: string,
-  /** The opponent's move just before (SAN), or null at the start. REQUIRED:
-   *  a capture on the square they just captured on is a RECAPTURE — the trade
-   *  finishing, never material won (Bxc3 after …Bxc3). */
-  opponentLastSan: string | null,
+  /** The capture run after their move just before (`captureRun`), or null
+   *  when unknown. REQUIRED: a capture back on the square they just took on,
+   *  worth no more than they took, is a RECAPTURE — the trade finishing, never
+   *  material won (Bxc3 after …Bxc3, `takesBack`). */
+  prevCapture: PrevCaptureContext | null,
   /** The engine's line from `fenBefore`, UCI, starting with `san`, or null.
    *  REQUIRED (WO-OUTCOME-01): "that wins the X — nothing takes it back" is
    *  an outcome, read off this line by the one ledger. No line, no claim. */
@@ -873,7 +876,7 @@ export function studentMovePointFact(
   let mv;
   try { mv = after.move(san); } catch { return null; }
   if (!mv) return null;
-  const recapture = !!opponentLastSan && new RegExp(`x${mv.to}(?![1-8])`).test(opponentLastSan);
+  const recapture = takesBack(prevCapture, mv);
   let net = 0;
   let lineSans: string[] = [];
   if (mv.captured && !recapture && lineUci && lineUci[0] === `${mv.from}${mv.to}${mv.promotion ?? ''}`) {
@@ -937,7 +940,8 @@ export function studentMovePointFact(
  *  Voice Rule 5 bans. */
 export function slipAnswerText(
   fenAfterSlip: string,
-  theirSan: string,
+  /** The capture run their slip ended (`captureRun`), or null when unknown. */
+  prevCapture: PrevCaptureContext | null,
   answerSan: string | null,
   when: 'found' | 'review' | 'now',
   /** The engine's line from `fenAfterSlip` starting with the answer, UCI, or
@@ -945,7 +949,7 @@ export function slipAnswerText(
   answerLineUci: readonly string[] | null,
 ): string | null {
   if (!answerSan) return null;
-  const point = studentMovePoint(fenAfterSlip, answerSan, theirSan, answerLineUci);
+  const point = studentMovePoint(fenAfterSlip, answerSan, prevCapture, answerLineUci);
   // No point → nothing: a bare "you found it" is an acknowledgment, and the
   // board changing is the acknowledgment (Voice Rule 5; Learn walk 2026-10-02).
   if (!point) return null;

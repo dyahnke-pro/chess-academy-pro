@@ -63,20 +63,20 @@ describe('detectOpponentGap — the take-advantage-of-the-gap', () => {
   const gapHere = () => detectOpponentGap({ opponentIntent: intent, opponentPlayedUci: 'h7h6', analysisAfter: { evaluation: 200, bestMove: 'f3e5', isMate: false, mateIn: null }, studentColor: 'w' })!;
 
   it('names the move WITH its reason (Learn names the move; re-walk 1380, 13.Be3)', () => {
-    const clause = opponentGapClause(gapHere(), 'coach-is-opponent', FEN, 'w', 'h6');
+    const clause = opponentGapClause(gapHere(), 'coach-is-opponent', FEN, 'w', 'h6', null);
     expect(clause).toMatch(/^They let you off there: Nxe5 — it .+\.$/);
     expect(clause).not.toMatch(/if you can spot it/);
   });
 
   it('says nothing when the move cannot be read on this board — never a vague hint', () => {
-    expect(opponentGapClause(gapHere(), 'coach-is-opponent', '8/8/8/8/8/8/8/K6k w - - 0 1', 'w', null)).toBeNull();
+    expect(opponentGapClause(gapHere(), 'coach-is-opponent', '8/8/8/8/8/8/8/K6k w - - 0 1', 'w', null, null)).toBeNull();
   });
 
   it('the opponent is "they" in every seat — never "I", never "he" (V1/V2, D-9)', () => {
-    expect(opponentGapClause(gapHere(), 'coach-is-opponent', FEN, 'w', 'h6')).toMatch(/^They let you off/);
-    expect(opponentGapClause(gapHere(), 'student', FEN, 'w', 'h6')).toMatch(/^They let you off/);
+    expect(opponentGapClause(gapHere(), 'coach-is-opponent', FEN, 'w', 'h6', null)).toMatch(/^They let you off/);
+    expect(opponentGapClause(gapHere(), 'student', FEN, 'w', 'h6', null)).toMatch(/^They let you off/);
     for (const seat of ['coach-is-opponent', 'student'] as const) {
-      expect(opponentGapClause(gapHere(), seat, FEN, 'w', 'h6')).not.toMatch(/\b(he|she|his|her)\b/i);
+      expect(opponentGapClause(gapHere(), seat, FEN, 'w', 'h6', null)).not.toMatch(/\b(he|she|his|her)\b/i);
     }
   });
 });

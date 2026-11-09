@@ -85,7 +85,7 @@ describe('it names the better move AND what it was for', () => {
     }));
     // The reading the record files the slip under, said with it: Bg5 develops
     // the bishop a3 left at home.
-    expect(call?.said).toBe('a3 was a mistake — it cost more than a point of advantage. A minor piece is still at home that the better move would have brought out.');
+    expect(call?.said).toBe('Your move was a mistake — it cost more than a point of advantage. A minor piece is still at home that the better move would have brought out.');
     expect(call?.proof).toBeUndefined();
   });
 
@@ -94,7 +94,7 @@ describe('it names the better move AND what it was for', () => {
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 150,
       side: 'student', moverColor: 'white',
     }));
-    expect(call?.said).toBe('a3 was a mistake — it let them play …d5, which attacks the bishop on c4.');
+    expect(call?.said).toBe('Your move was a mistake — it let them play …d5, which attacks the bishop on c4.');
     expect(call?.said, 'named the better move with no reason').not.toContain('Bg5');
     expect(call?.line?.uci).toEqual(['d7d5', 'c4b3']);
   });
@@ -368,7 +368,7 @@ describe('still winning after the move is said first', () => {
     // The two-ply line proves no reason, so Rxf8+ is not named (named with its
     // reason, or not named — David 2026-09-24).
     const call = callInaccuracy(withOneSearch({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, ...base, moverEvalAfterCp: 418 }));
-    expect(call?.said).toMatch(/^gxh5 still wins/);
+    expect(call?.said).toMatch(/^Your move still wins/);
     expect(call?.said).not.toMatch(/mistake|blunder|Rxf8/);
   });
   it('the grade stands when the position is no longer clearly won', () => {
@@ -398,7 +398,7 @@ describe('clearly better after the move is a cleaner way, not a mistake', () => 
       cpLoss: 115, moverEvalAfterCp: 194, side: 'student', moverColor: 'white', replyLineUci: [], replySan: null,
     }));
     expect(call?.said ?? '').not.toMatch(/mistake/);
-    expect(call?.said ?? '').toMatch(/^Bxc5 keeps you clearly on top/);
+    expect(call?.said ?? '').toMatch(/^Your move keeps you clearly on top/);
   });
   it('where the better move is withheld (Learn), the bare "keeps you on top" is held, never said (prod Learn 2026-10-17)', () => {
     const v = callInaccuracyDetailed(withOneSearch({ namesBetterMove: false, priorMove: null,
@@ -545,7 +545,7 @@ describe('the grade and the cost never contradict (Learn walk 2026-10-01, Rc8; u
     expect(call?.quality).toBe('inaccuracy');
     // The grade is winning chance (−8: already lost); two pawns is a mistake's
     // cost, so it is not said beside "imprecise".
-    expect(call?.said).toBe('Rc8 was imprecise — it let them play d7, which attacks the rook on c8.');
+    expect(call?.said).toBe('Your move was imprecise — it let them play d7, which attacks the rook on c8.');
     expect(call?.said).not.toMatch(/loose|a little imprecise|pawn/);
   });
 });
@@ -619,7 +619,7 @@ describe('Learn free play never names the better move unasked (David 2026-10-10)
   it('the mistake still carries its why and the reply on the board', () => {
     const call = callInaccuracy(withOneSearch({ namesBetterMove: false, priorMove: null, replySan: null, side: 'student', moverColor: 'white',
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE, cpLoss: 150, replyLineUci: ['d7d5', 'c4b3'] }));
-    expect(call?.said).toBe('a3 was a mistake — it let them play …d5, which attacks the bishop on c4.');
+    expect(call?.said).toBe('Your move was a mistake — it let them play …d5, which attacks the bishop on c4.');
     expect(call?.proof?.line?.sans).toEqual(['d5', 'Bb3']);
   });
 });

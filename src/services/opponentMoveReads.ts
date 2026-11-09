@@ -217,7 +217,9 @@ export function ideaCondition(fen: string, student: 'w' | 'b', topLines: readonl
       const text = rotateStem([
         `Watch ${knight}: today it hits only one piece, but it becomes a fork the moment your ${piece} goes to ${cond.to} — so keep it off ${cond.to}.`,
         `${cap(knight)} needs one thing to work: your ${piece} on ${cond.to}. Don't hand it that.`,
-        `Their idea is ${knight}, and it has one condition: your ${piece} on ${cond.to}. Without it, the jump forks nothing.`,
+        // One sentence: "Without it, the jump forks nothing." was heard alone
+        // once the sentence it leans on was dropped (prod Learn audit 2026-11-09).
+        `Their idea is ${knight}, and it forks only once your ${piece} stands on ${cond.to}.`,
       ], stemKeyOf(fen));
       const proof = legalLineProof(fen, [condSan, fork.san], lineSeatAt(fen, student), true);
       if (!proof) continue;

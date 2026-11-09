@@ -55,6 +55,7 @@ import type { WalkableLine } from '../types';
 import { signedLegalSeeFor, legalSeeGain } from './positionReadingService';
 import { positionOf } from '../utils/samePosition';
 import { routeOnward } from '../utils/routeWords';
+import { captureRunAfterMove } from './captureRun';
 
 interface InaccuracyCall {
   /** Straight from `moveRating.classifyMove` — never re-derived here. */
@@ -204,7 +205,7 @@ export function phraseBetterMove(f: BetterMoveFact): string {
 function mateReason(fenBefore: string, bestSan: string, mateIn: number | null): string {
   // The ONE why-best computer words it (deliberation.bestMoveReason).
   const mover: 'w' | 'b' = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
-  return `it ${bestMoveReason(fenBefore, bestSan, mover, { mateIn: mateIn && mateIn > 1 ? mateIn : 'forced', opponentLastSan: null }) ?? 'ends the game'}`;
+  return `it ${bestMoveReason(fenBefore, bestSan, mover, { mateIn: mateIn && mateIn > 1 ? mateIn : 'forced', prevCapture: null }) ?? 'ends the game'}`;
 }
 
 /** Convenience: the fact, computed and worded — or null.
@@ -242,7 +243,7 @@ function bestWinsOnBoard(fen: string, bestSan: string): boolean {
 function boardHalfReason(fenBefore: string, bestSan: string, moverColor: 'white' | 'black', priorMove: PriorMove): string | null {
   // The BOARD half is the one why-best computer every surface reads
   // (2026-10-10 unification) — never a private reader.
-  const board = bestMoveReason(fenBefore, bestSan, moverColor === 'white' ? 'w' : 'b', { mateIn: null, opponentLastSan: priorMove?.san ?? null });
+  const board = bestMoveReason(fenBefore, bestSan, moverColor === 'white' ? 'w' : 'b', { mateIn: null, prevCapture: priorMove ? captureRunAfterMove(null, priorMove.fenBefore, priorMove.san) : null });
   // An even trade is the move's first job, never why it BEATS another move
   // ("Rxf8+ was cleaner — it takes their rook on f8, with check": Kxf8 takes
   // back). A winning capture is worded by the line half above.
@@ -852,8 +853,8 @@ export function callInaccuracyDetailed(args: {
   if (gambit) {
     const b = args.namesBetterMove ? better() : null;
     const said = args.namesBetterMove
-      ? `${args.playedSan} offers a pawn — if they take, the ${gambit}-file opens toward their king. The engine prefers ${args.bestSan}${b ? `, to ${b.why}` : ''}, so it is a practical try, not a free one.`
-      : `${args.playedSan} offers a pawn — if they take, the ${gambit}-file opens toward their king. It is a practical try, not a free one.`;
+      ? `Your move offers a pawn — if they take, the ${gambit}-file opens toward their king. The engine prefers ${args.bestSan}${b ? `, to ${b.why}` : ''}, so it is a practical try, not a free one.`
+      : `Your move offers a pawn — if they take, the ${gambit}-file opens toward their king. It is a practical try, not a free one.`;
     return { call: { quality, side: 'student', cost, said, square: b?.square ?? '', ...(args.namesBetterMove ? { namesBetter: args.bestSan } : {}) } };
   }
   // STILL WINNING IS SAID FIRST (hand walk 1380, move 22: "gxh5 was a
@@ -882,23 +883,25 @@ export function callInaccuracyDetailed(args: {
     // moves still says the standing in place of a wrong grade (pass-2 walk).
     if (!args.namesBetterMove) return { call: null, declined: 'no-why' };
     const said = named
-      ? `${args.playedSan} ${stands}, but ${args.bestSan} was cleaner — ${named}.`
-      : `${args.playedSan} ${stands}.`;
+      ? `Your move ${stands}, but ${args.bestSan} was cleaner — ${named}.`
+      : `Your move ${stands}.`;
     return { call: { quality, side: 'student', cost, said, square: named ? better()?.square ?? '' : '', ...(named ? { namesBetter: args.bestSan } : {}) } };
   }
   if (!underFloor && typeof after === 'number' && after >= BLUNDER_CP && (args.allowedMate ?? null) === null) {
     if (!args.namesBetterMove) return { call: null, declined: 'no-why' };
     const named = reason();
     const said = named
-      ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — ${named}.`
-      : `${args.playedSan} still wins.`;
+      ? `Your move still wins, but ${args.bestSan} was cleaner — ${named}.`
+      : `Your move still wins.`;
     return { call: { quality, side: 'student', cost, said, square: named ? better()?.square ?? '' : '', ...(named ? { namesBetter: args.bestSan } : {}) } };
   }
   // No why → the grade is not said.
   const ew = ewOf();
   const graded = errorGradeSentence(ew, quality as SpokenGradeLabel, cost);
   if (graded === `${GRADE_WORD[quality as SpokenGradeLabel]}.`) return { call: null, declined: 'no-why' };
-  const said = `${args.playedSan} was ${graded}`;
+  // THE STUDENT'S MOVE IS NOT NAMED BACK (David 2026-11-09: "the user knows
+  // that, they see it play out"): "Your move was a blunder", never "h3 was".
+  const said = `Your move was ${graded}`;
   // The mark follows the sentence: the better move's square where it is
   // named, else the square the why is about.
   const mark = ew.namesBetter ? better()?.square ?? '' : ew.failedSquares[0] ?? ew.lostSquare ?? '';
@@ -963,7 +966,7 @@ export function allowedReply(
     const them: 'w' | 'b' = moverColor === 'white' ? 'b' : 'w';
     const noun = `${them === 'b' ? '…' : ''}${reply.san}`;
     // A NAMED MOVE IS NOT A WHY: no clause for what the reply does → no call.
-    const why = moveWhy(fenAfter, reply.san, them, playedSan);
+    const why = moveWhy(fenAfter, reply.san, them, captureRunAfterMove(null, fenBefore, playedSan));
     // WHY A MOVE WAS A MISTAKE IS SOMETHING THEIR REPLY DOES TO YOU — an
     // attack, a check, a pin, a win. "…e5, which stakes out the centre" is a
     // description of their move, not why yours failed; empty > generic.
@@ -1280,7 +1283,7 @@ export function errorWhy(args: {
         const u = replyLineUci[0];
         const san = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san;
         const p = replyPunishment(args.fenBefore, args.playedSan, san);
-        return p ? { said: `${args.moverColor === 'white' ? '…' : ''}${p.replySan}, ${p.gerund}`, line: { fen: c.fen(), uci: [u] } } : null;
+        return p ? { said: `${args.moverColor === 'white' ? '…' : ''}${p.replySan}${p.gerund ? `, ${p.gerund}` : ''}`, line: { fen: c.fen(), uci: [u] } } : null;
       } catch { return null; }
     })()
     : null;

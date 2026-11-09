@@ -3,6 +3,7 @@
 // point he gives. Engine reads are stored with the positions (depth 14,
 // multi-PV), so the test needs no engine.
 import { describe, it, expect } from 'vitest';
+import { Chess } from 'chess.js';
 import { DEFAULT_INTENT, moveIntent, whatItDoes } from './moveIntent';
 import type { AnalysisLine } from '../types';
 import fixture from './__fixtures__/moveIntent-1PI3xfMiUE4.json';
@@ -196,5 +197,31 @@ describe('a stopped capture says what it takes (hard-chat audit 2026-11-08)', ()
     const { whatTheStopDidForTest: whatTheStopDid } = await import('./moveIntent');
     // Qe3xe6+?? — the bishop on e6 is guarded by the queen on d7.
     expect(whatTheStopDid(FEN, 'e3e6', 'w')?.verb ?? '').not.toMatch(/^take /);
+  });
+});
+
+// A STOPPED CAPTURE IS SAID ONCE (prod Learn audit 2026-11-09, the typo game
+// at 17.cxd3): "Their c-pawn taking on d3 stops your queen taking on e1,
+// check, which would take their rook on e1" — the capture named twice.
+describe('a stopped capture names what it takes once', () => {
+  const TYPO = 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4 h3 Nc6 hxg4 O-O-O Be3 e6 Nd2 Nxd4 Bd3 Bc5 Bxd4 Bxd4 O-O Bxc3 bxc3 Qxc3 Nc4 Nd5 Re1 Nf4 Ne3 Nxd3'.split(' ');
+  it('cxd3 stops their queen taking the rook on e1 — no which-clause', () => {
+    const c = new Chess();
+    for (const m of TYPO) c.move(m);
+    const fen = c.fen();
+    const uci = (sans: string[]): string[] => { const b = new Chess(fen); return sans.map((s) => { const m = b.move(s); return `${m.from}${m.to}${m.promotion ?? ''}`; }); };
+    const after = new Chess(fen); after.move('cxd3');
+    const pass = new Chess(fen.replace(' w ', ' b ').replace(/ [a-h]3 /, ' - '));
+    // The read before cxd3 (White to move) and, passing, Black's best is Qxe1+.
+    const reads = {
+      before: [{ rank: 1, evaluation: 0, mate: null, moves: uci(['cxd3', 'Qxd3']), depth: 16 }],
+      after: [{ rank: 1, evaluation: 0, mate: null, moves: (() => { const b = new Chess(after.fen()); const m = b.move('Qxd3'); return [`${m.from}${m.to}`]; })(), depth: 16 }],
+      passBefore: [{ rank: 1, evaluation: -600, mate: null, moves: (() => { const m = new Chess(pass.fen()).move('Qxe1+'); return [`${m.from}${m.to}`]; })(), depth: 16 }],
+      passAfter: [],
+    };
+    const r = moveIntent(fen, 'cxd3', reads as never, 'opponent');
+    const text = r?.text ?? '';
+    expect(text).toMatch(/your queen taking their rook on e1, with check/);
+    expect(text).not.toMatch(/which would take/);
   });
 });

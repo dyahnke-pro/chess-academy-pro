@@ -193,20 +193,20 @@ describe('the backward look — why the STUDENT\'s move was bad', () => {
   const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5';
 
   it('names what the student\'s own move handed over', () => {
-    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white' });
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white', place: 'lead' });
     expect(d, 'the backward look said nothing about a real concession').not.toBeNull();
     expect(d?.square).toBe('d4');
     expect(d?.said).toContain('d4');
   });
 
   it('speaks to the student, not as them', () => {
-    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white' });
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white', place: 'lead' });
     expect(d?.said).toMatch(/\byour\b/i);
     expect(d?.said, 'the coach spoke as if it had played the move').not.toMatch(/^I\b|\bmy\b/i);
   });
 
   it('never scolds and never apologises', () => {
-    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white' });
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white', place: 'lead' });
     const whole = `${d?.said} ${d?.opening}`.toLowerCase();
     for (const word of ['blunder', 'careless', 'mistake', 'bad move', 'sorry', 'should have']) {
       expect(whole, `the coach lectured: ${whole}`).not.toContain(word);
@@ -214,7 +214,7 @@ describe('the backward look — why the STUDENT\'s move was bad', () => {
   });
 
   it('never hands over the punishing move', () => {
-    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white' });
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white', place: 'lead' });
     for (const part of [d?.said ?? '', d?.opening ?? '']) {
       expect(part, `a move leaked: ${part}`).not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
     }
@@ -222,7 +222,7 @@ describe('the backward look — why the STUDENT\'s move was bad', () => {
 
   it('stays silent on a move with no nameable drawback', () => {
     for (const quiet of ['Nc3', 'd3', 'h3']) {
-      expect(findStudentDrawback({ fen: FEN, playedSan: quiet, bestSan: 'O-O', studentColor: 'white' })).toBeNull();
+      expect(findStudentDrawback({ fen: FEN, playedSan: quiet, bestSan: 'O-O', studentColor: 'white', place: 'lead' })).toBeNull();
     }
   });
 });
@@ -236,13 +236,13 @@ describe('tense: retroactive is past, what is coming is future', () => {
   const PRESENT_ACTIONS = /\b(takes|leaves|hands|opens|goes)\b/;
 
   it('the student-facing drawback speaks of the move in the past', () => {
-    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white' });
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white', place: 'lead' });
     expect(d?.said).toMatch(/\b(took|left|opened|went|handed)\b/);
     expect(d?.said, `present tense on a finished move: ${d?.said}`).not.toMatch(PRESENT_ACTIONS);
   });
 
   it('…and of what it will cost in the future', () => {
-    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white' });
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white', place: 'lead' });
     expect(d?.opening, 'the future half was lost').toMatch(/\bwill\b|\bbefore it\b/);
   });
 
@@ -278,7 +278,7 @@ describe('tense: retroactive is past, what is coming is future', () => {
         if (!best) continue;
         for (const found of [
           findConcession({ fen, playedSan: played, bestSan: best, coachColor: colour }),
-          findStudentDrawback({ fen, playedSan: played, bestSan: best, studentColor: colour }),
+          findStudentDrawback({ fen, playedSan: played, bestSan: best, studentColor: colour, place: 'lead' }),
         ]) {
           if (!found) continue;
           seen += 1;
@@ -294,9 +294,9 @@ describe('a move that BLOCKS a guard is named as a block (hand walk 2026-09-24)'
   // 10.Nf3 in the Philidor: the knight steps onto the d1–g4 diagonal.
   const fen = 'r1bq1rk1/pppnbppp/3p1n2/8/3NPP2/1BN5/PPP3PP/R1BQ1RK1 w - - 1 10';
   it('does not say the knight "took your last defender off g4"', () => {
-    const d = findStudentDrawback({ fen, playedSan: 'Nf3', bestSan: 'Qe1', studentColor: 'white' });
+    const d = findStudentDrawback({ fen, playedSan: 'Nf3', bestSan: 'Qe1', studentColor: 'white', place: 'lead' });
     expect(d?.square).toBe('g4');
-    expect(d?.said).toMatch(/^That shut your queen on d1 off from g4/);
+    expect(d?.said).toMatch(/^Your move shut your queen on d1 off from g4/);
   });
 });
 
@@ -304,7 +304,7 @@ describe('a weakness the move did not create is not its fault (hand walk 2340, m
   it('no "that left your pawn on a2 isolated" when a2 was isolated before the move', () => {
     // a2 has no b-pawn beside it already; axb3 (best) would have mended it.
     const fen = '4k3/8/8/8/8/1b6/P3PPPP/2B1K3 w - - 0 21';
-    const found = findStudentDrawback({ fen, playedSan: 'Be3', bestSan: 'axb3', studentColor: 'white' });
+    const found = findStudentDrawback({ fen, playedSan: 'Be3', bestSan: 'axb3', studentColor: 'white', place: 'lead' });
     expect(found?.kind).not.toBe('pawn-weakened');
   });
 });
@@ -313,7 +313,7 @@ describe('a rook on the seventh in an endgame is not a piece gone astray (walk 2
   it('no piece-offside drawback once the queens are off', () => {
     const c = new Chess();
     for (const m of 'e4 e5 Nf3 Nc6 Bb5 Nd4 Nxd4 exd4 O-O Bc5 d3 Qh4 Nd2 c6 Bc4 d6 Nf3 Qh5 Ng5 Ke7 Bxf7 Qxd1 Rxd1 h6 Bxg8 Rxg8 Nf3 Bg4 Re1 g5 Nd2 Raf8 Nb3 Bb6 Bd2 Bc7 e5 dxe5 Bb4+ Kd7 Bxf8 Rxf8 Nc5+ Kc8 Ne4 b6 f3 Be6 Re2 Bd5 Rae1 Bxe4 Rxe4 Kd7 h4 c5 hxg5 hxg5 Kf2 Rf4 Rxf4 gxf4 Rh1 Kc6'.split(' ')) c.move(m);
-    const d = findStudentDrawback({ fen: c.fen(), playedSan: 'Rh7', bestSan: 'a3', studentColor: 'white' });
+    const d = findStudentDrawback({ fen: c.fen(), playedSan: 'Rh7', bestSan: 'a3', studentColor: 'white', place: 'lead' });
     expect(d?.kind).not.toBe('piece-offside');
   });
 });
@@ -322,7 +322,7 @@ describe('only a real outpost is "handed" (walk 700, 30…Nb6 — not the rook Q
   it('no outpost-conceded for a rook on an open file', () => {
     const c = new Chess();
     for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 Bg5 d6 Nf3 O-O e3 c5 Be2 Nc6 O-O h6 Bh4 Bf5 a3 g5 Bg3 Ne4 Nxe4 Bxe4 d5 Nb8 Qb3 Nd7 Rad1 a6 Nd2 Bg6 Bf3 b5 Rfe1 Rb8 Be4 bxc4 Qxc4 Rxb2 Bxg6 fxg6 h3 Qa5 a4 Rxd2 Rxd2 Qxd2 Rc1 Nb6 Qc2 Nc4 Qb3'.split(' ')) c.move(m);
-    const d = findStudentDrawback({ fen: c.fen(), playedSan: 'Nb6', bestSan: 'Qxc1+', studentColor: 'black' });
+    const d = findStudentDrawback({ fen: c.fen(), playedSan: 'Nb6', bestSan: 'Qxc1+', studentColor: 'black', place: 'lead' });
     expect(d?.kind).not.toBe('outpost-conceded');
   });
 });
@@ -330,7 +330,7 @@ describe('only a real outpost is "handed" (walk 700, 30…Nb6 — not the rook Q
 describe('the student\'s piece gone offside is NAMED, with what it costs (Learn tape 2026-10-15)', () => {
   it('"Your bishop went all the way to e6…", never "your piece … worth seeing"', () => {
     const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5';
-    const d = findStudentDrawback({ fen, playedSan: 'Be6', bestSan: 'O-O', studentColor: 'white' });
+    const d = findStudentDrawback({ fen, playedSan: 'Be6', bestSan: 'O-O', studentColor: 'white', place: 'lead' });
     expect(d?.kind).toBe('piece-offside');
     expect(d?.said).toBe('Your bishop went all the way to e6, a long way from your king — a piece that far out needs moves to get back.');
     expect(d?.opening).toBe('');

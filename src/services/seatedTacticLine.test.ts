@@ -30,3 +30,15 @@ describe('seatedTacticLine', () => {
     expect(seatedTacticLine('removal of the guard', guard, fen, 'w', 1)).toMatch(/their queen and their bishop loses its only guard/i);
   });
 });
+
+// Prod Learn audit 2026-11-09: "You have an overloaded defender: their queen is
+// overloaded — it's the only defender of both…" named the motif twice.
+describe('a description that names its motif is the sentence', () => {
+  it('an overloaded queen is said once', () => {
+    const fen = 'r3r1k1/8/8/8/8/8/8/3q2K1 w - - 0 1';
+    const overload = { type: 'overload', description: "The queen on d1 is overloaded — it's the only defender of both the rook on a8 and the rook on e8", involvedSquares: ['d1', 'a8', 'e8'] };
+    const line = seatedTacticLine('overloaded defender', overload, fen, 'w', 0);
+    expect(line).not.toMatch(/You have an overloaded defender/);
+    expect(line).toMatch(/^Their queen is overloaded/);
+  });
+});

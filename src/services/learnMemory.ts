@@ -72,10 +72,10 @@ export interface LearnMemory {
    *  credited as the prevention it is (A-plan P2). */
   theirPrep: { uci: string; fen: string } | null;
   /** The board the opponent's slip left the student, after the coach said
-   *  "look for it" — and the slip itself (SAN), so a capture back on its
-   *  square reads as a recapture. Resolved when the student moves from it:
-   *  "you found it" or the answer with its point (David 2026-10-02). */
-  slipAnswer: { fen: string; theirSan: string } | null;
+   *  "look for it" (a capture back on its square is read off the game's own
+   *  capture run). Resolved when the student moves from it: "you found it" or
+   *  the answer with its point (David 2026-10-02). */
+  slipAnswer: { fen: string } | null;
   /** The coach's last reply, when the STUDENT dictated it (its SAN) — so
    *  "that was a mistake from me" would be false (hand walk 2026-09-24). */
   lastReplyDictated: string | null;

@@ -71,7 +71,7 @@ function reasonCause(input: SlipCauseInput, mover: Color): SlipCause | null {
   const r = decisiveReason({
     // Only a material reason files the slip; the prepared move stays held.
     namesPreparedMove: false,
-    fenBefore: input.fen, san: input.bestSan, seat: 'student', opponentLastSan: null,
+    fenBefore: input.fen, san: input.bestSan, seat: 'student', prevCapture: null,
     reads: { before, passBefore: [], after: [], passAfter: [] },
   });
   // A material reason files the slip whether or not it accounts for the whole

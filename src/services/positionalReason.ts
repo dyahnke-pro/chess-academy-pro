@@ -82,7 +82,7 @@ export function concessionReason(fen: string, playedSan: string, bestSan: string
   if (!bestSan) return null;
   try {
     const mover = new Chess(fen).turn();
-    const c = findStudentDrawback({ fen, playedSan, bestSan, studentColor: mover === 'w' ? 'white' : 'black' });
+    const c = findStudentDrawback({ fen, playedSan, bestSan, studentColor: mover === 'w' ? 'white' : 'black', place: 'follow' });
     return c ? { tag: CONCESSION_TAG[c.kind], note: c.said } : null;
   } catch { return null; }
 }
@@ -140,7 +140,7 @@ export function bestJobReason(fen: string, bestSan: string | null): PositionalRe
   const mover = new Chess(fen).turn();
   const enemy: Color = mover === 'w' ? 'b' : 'w';
   const bestMove = new Chess(fen).move(bestSan);
-  const why = bestMoveReason(fen, bestSan, mover, { mateIn: null, opponentLastSan: null });
+  const why = bestMoveReason(fen, bestSan, mover, { mateIn: null, prevCapture: null });
   const said = (fallback: string): string => (why ? `${bestSan} ${why}.` : fallback);
   if (/^O-O/.test(bestMove.san)) return { tag: 'king-stuck-center', note: said('Castling was the move here.') };
   if (/[+#]/.test(bestMove.san)) return { tag: 'missed-tactic', note: said(`${bestMove.san} was the forcing move.`) };

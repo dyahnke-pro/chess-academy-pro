@@ -82,18 +82,21 @@ export { materialBalance };
 
 interface Register { full: string; short: string; }
 
-/** Per-tactic invariant: WHY the pattern wins. General + reusable. */
+/** Per-tactic invariant: WHY the pattern wins. General + reusable. ONE
+ *  sentence with no dash: it is said after "Remember — " and held to the fact
+ *  before it (`voicePackage` DEPENDENT), so a dash inside it made a chain
+ *  (prod Learn audit 2026-11-09, the overloaded queen). */
 const TACTIC_INVARIANT: Record<Exclude<TacticPatternType, 'none'>, Register> = {
-  fork: { full: 'a fork hits two targets at once, and only one can escape — the other falls.', short: 'Fork — two targets, one falls.' },
+  fork: { full: 'a fork hits two targets at once, and only one can escape, so the other falls.', short: 'Fork — two targets, one falls.' },
   pin: { full: 'a pin freezes the piece in front: it can\'t move without exposing the more valuable piece behind it, so it can be piled on.', short: 'Pin — it can\'t move.' },
   skewer: { full: 'a skewer hits the valuable piece first; when it steps aside, the piece lined up behind it is lost.', short: 'Skewer — the piece behind falls.' },
   discovery: { full: 'a discovered attack unveils a second attacker by moving the piece in front, so two threats land at once.', short: 'Discovery — moving unveils an attack.' },
-  double_check: { full: 'a double check attacks the king with two pieces at once, so it must move — nothing can block or capture both.', short: 'Double check — the king must move.' },
+  double_check: { full: 'a double check attacks the king with two pieces at once, and nothing can block or take both, so the king must move.', short: 'Double check — the king must move.' },
   back_rank: { full: 'a back-rank weakness leaves the king boxed in by its own pawns, so a rook or queen reaching the last rank is mate.', short: 'Back rank — the king is trapped.' },
   removal_of_guard: { full: 'removing the guard takes away the piece defending a key square, and what it protected falls.', short: 'Remove the defender.' },
   trapped_piece: { full: 'a trapped piece has no safe square, so it can be won whoever is to move.', short: 'Trapped piece — no escape.' },
   mate_threat: { full: 'a forced checkmate is coming unless it is answered right now.', short: 'Mate is threatened.' },
-  overload: { full: 'an overloaded piece is doing two defensive jobs at once — take one duty away and the other collapses.', short: 'Overloaded — too many jobs.' },
+  overload: { full: 'an overloaded piece has two jobs at once, so take one away and the other falls.', short: 'Overloaded — too many jobs.' },
   battery: { full: 'a battery stacks two pieces on the same line, multiplying their pressure down it.', short: 'Battery — doubled pressure.' },
 };
 

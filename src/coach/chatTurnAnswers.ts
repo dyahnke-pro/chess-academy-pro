@@ -15,6 +15,7 @@ import { PIECE_NAMES } from '../types/tacticTypes';
 import { andList, orList } from '../utils/andList';
 import { computeMustDefend } from '../services/threatOut';
 import { moveWhy, bestMoveReason } from '../services/deliberation';
+import { NO_PREV_CAPTURE, afterCapture, captureRunOfMoves, type PrevCaptureContext } from '../services/captureRun';
 import { describeMoveGeometry, assembleThreatAnswer } from '../services/groundedAnswer';
 import { toOtherSeat } from '../utils/seatPronouns';
 import { MATERIAL_VALUE } from '../services/pieceValues';
@@ -641,7 +642,15 @@ function explainProvedLine(line: WalkableLine, fen: string, student: Color, hist
   if (line.plies.length === 0 || here(line.startFen) !== here(fen)) return null;
   const mates = /#$/.test(line.plies[line.plies.length - 1].san);
   const mover = new Chess(line.startFen).turn();
-  const last = history.length ? history[history.length - 1] : null;
+  // The capture run before each ply (`captureRun`), continuing the game's: a
+  // capture back on the square they just took on finishes their trade only
+  // when it takes no more than they did.
+  let run: PrevCaptureContext | null = captureRunOfMoves(null, history);
+  const runs = line.plies.map((p) => {
+    const before = run;
+    try { run = afterCapture(run ?? NO_PREV_CAPTURE, new Chess(p.fenBefore).move(p.san)); } catch { run = null; }
+    return before;
+  });
   const parts: string[] = [];
   const name = (san: string, side: Color): string => `${side === 'b' ? '…' : ''}${san}`;
   let forcedNext = false;
@@ -684,8 +693,8 @@ function explainProvedLine(line: WalkableLine, fen: string, student: Color, hist
       return;
     }
     const raw = i === 0 && side === mover
-      ? bestMoveReason(p.fenBefore, p.san, student, { mateIn: mates ? Math.ceil(line.plies.length / 2) : null, opponentLastSan: last })
-      : moveWhy(p.fenBefore, p.san, student, i > 0 ? line.plies[i - 1].san : last);
+      ? bestMoveReason(p.fenBefore, p.san, student, { mateIn: mates ? Math.ceil(line.plies.length / 2) : null, prevCapture: runs[i] })
+      : moveWhy(p.fenBefore, p.san, student, runs[i]);
     const gain = stepGain(p);
     const overstates = raw !== null && gain !== null && endNet !== null && gain > endNet && /\bwins\b/.test(raw);
     const why = overstates ? null : raw;
@@ -718,7 +727,7 @@ export function answerExplainLast(chess: Chess, line: string | null, student: Co
   })();
   const seen = new Set<string>();
   const parts: string[] = [];
-  const last = history.length ? history[history.length - 1] : null;
+  const prevCapture = captureRunOfMoves(null, history);
   for (const m of line.matchAll(LINE_SAN)) {
     const san = m[1];
     if (seen.has(san)) continue;
@@ -728,7 +737,7 @@ export function answerExplainLast(chess: Chess, line: string | null, student: Co
     let mine: Move | null = null;
     try { mine = new Chess(fen).move(san); } catch { mine = null; }
     if (mine && chess.turn() === student) {
-      const why = moveWhy(fen, mine.san, student, last);
+      const why = moveWhy(fen, mine.san, student, prevCapture);
       if (why) parts.push(`${mine.san} ${why}.`);
       continue;
     }

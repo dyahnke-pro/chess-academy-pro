@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1942 lines · 11 exports · 22 importers · 29 tests · 0 audits**
+**1946 lines · 11 exports · 22 importers · 29 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -60,7 +60,7 @@
 - `src/services/danyaBench.measure.test.ts:408`
 - `src/services/exchangeIdeas.test.ts:236`
 - `src/services/forkTrick.test.ts:62`
-- `src/services/hangingLine.test.ts:50`
+- `src/services/hangingLine.test.ts:73`
 - `src/services/hangingVsUndefended.test.ts:13`
 - `src/services/orderComputers.test.ts:315`
 - `src/services/pieceWish.test.ts:58`

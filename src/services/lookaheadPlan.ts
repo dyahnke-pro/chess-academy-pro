@@ -139,7 +139,13 @@ export function seatedTacticLine(word: string, tac: { type: string; description:
   d = continueSentence(d);
   d = seatPieceReferences(d, fen, student);
   const body = openSentence(d);
-  return new RegExp(`\\b${word}\\b`).test(d) ? `${body}.` : `You have ${withArticle(word)}: ${d}.`;
+  // Named already when the description says the motif's head word ("their
+  // queen is overloaded" names the overloaded defender — prod Learn audit
+  // 2026-11-09 heard "You have an overloaded defender: their queen is
+  // overloaded", the motif twice and the seat backwards).
+  const head = word.split(/\s+/)[0].replace(/[^a-z-]/gi, '');
+  const named = new RegExp(`\\b${word}\\b`).test(d) || (head.length > 3 && word.includes(' ') && new RegExp(`\\b${head}\\b`, 'i').test(d));
+  return named ? `${body}.` : `You have ${withArticle(word)}: ${d}.`;
 }
 
 const PIN_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };

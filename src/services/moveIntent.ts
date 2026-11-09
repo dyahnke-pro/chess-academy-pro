@@ -472,7 +472,8 @@ function phrase(
   // "…Rad8 prepares …Qd2, to hit the queen on c1" — theirs, unsaid).
   if (does && /^hit the /.test(does.verb)) does = { ...does, verb: does.verb.replace(/^hit the /, seat === 'student' ? 'hit their ' : 'hit your ') };
   if (seat === 'student') {
-    const stop = prevents ? dot(prevents.san, opp) : '';
+    const capWords = prevents && !prevents.mate ? stoppedCapture(prevents.san, threatDid, 'their', 'your') : null;
+    const stop = prevents ? capWords ?? dot(prevents.san, opp) : '';
     // Said alone (a review ply with nothing else to say) a bare "Qh4 — now
     // …axb4 doesn't work" names no seat (review audit 2026-10-28, ply 49).
     const yours = castles ? 'Castling' : `Your ${played}`;
@@ -488,7 +489,7 @@ function phrase(
     if (prevents && prepares && !held) return `${yours} does two jobs: it stops ${stop}, and it prepares ${prep}${does?.develops ? `, freeing your ${does.develops.piece} on ${does.develops.from}` : does ? `, to ${does.verb}` : ''}.`;
     // "doesn't work", never "isn't possible" — the stopped move is still
     // LEGAL, it just loses (walk 2026-09-30: said five times in one game).
-    const wouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^(hit|take) the /, '$1 your ') : null;
+    const wouldDo = threatDid && !threatDid.castle && !capWords ? threatDid.verb.replace(/^(hit|take) the /, '$1 your ') : null;
     if (prevents?.mate) { const m = unmarked(stop); return rotateStem([`${yours} stops ${m}, which was mate.`, `${pointOf}: ${m} was mate, and now it isn't.`], key); }
     if (prevents && why) return `${yours} stops ${stop}: ${why}.`;
     if (prevents && wouldDo) return `${yours} stops ${stop}, which would ${wouldDo}.`;
@@ -504,10 +505,11 @@ function phrase(
     if (held) return '';
     return rotateStem([`Your ${played} prepares ${prep}.`, `${youPlay} first, so that ${prep} comes next.`], key);
   }
-  const stop = prevents ? `your ${dot(prevents.san, opp)}` : '';
+  const capWords = prevents && !prevents.mate ? stoppedCapture(prevents.san, threatDid, 'your', 'their') : null;
+  const stop = prevents ? capWords ?? `your ${dot(prevents.san, opp)}` : '';
   const prep = prepares ? dot(prepares.san, mover) : '';
   if (prevents && prepares) return `Their ${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does?.develops ? `, freeing their ${does.develops.piece} on ${does.develops.from}` : does ? `, to ${does.verb}` : ''}.`;
-  const theirWouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^(hit|take) the /, '$1 their ') : null;
+  const theirWouldDo = threatDid && !threatDid.castle && !capWords ? threatDid.verb.replace(/^(hit|take) the /, '$1 their ') : null;
   if (prevents?.mate) return `Their ${played} stops ${stop.replace(/[+#]$/, '')}, which was mate.`;
   if (prevents && theirWouldDo) return `Their ${played} stops ${stop}, which would ${theirWouldDo}.`;
   if (prevents) return rotateStem([`Their ${played} stops ${stop}.`, `The point of their ${played}: it rules out ${stop}.`], key);
@@ -518,6 +520,19 @@ function phrase(
 }
 
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** A stopped CAPTURE, said once by what it takes (prod Learn audit
+ *  2026-11-09: "stops your queen taking on e1, check, which would take their
+ *  rook on e1" named the capture twice). Null when the stopped move is not a
+ *  capture of the piece `whatTheStopDid` read on its square. */
+function stoppedCapture(san: string, did: PreparedPoint | null, mover: 'your' | 'their', victims: 'your' | 'their'): string | null {
+  const took = did && !did.castle ? /^take the (\w+) on ([a-h][1-8])$/.exec(did.verb) : null;
+  const cap = /^([NBRQK])?[a-h]?[1-8]?x([a-h][1-8])/.exec(san.replace(/^…/, ''));
+  if (!took || !cap || cap[2] !== took[2]) return null;
+  const piece = PIECE_NAME[(cap[1] ?? 'P').toLowerCase()] ?? 'piece';
+  const check = /\+$/.test(san) ? ', with check' : '';
+  return `${mover} ${piece} taking ${victims} ${took[1]} on ${took[2]}${check}`;
+}
 
 const TIMES = ['', 'once', 'twice', 'three times', 'four times', 'five times'];
 const COUNT = ['none', 'one', 'two', 'three', 'four', 'five'];

@@ -7,6 +7,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { readFileSync } from 'node:fs';
+import { captureRunOfMoves } from '../services/captureRun';
 import { intentWithFallback } from '../services/movePurpose';
 import { centralKingDangerClause, detectCentralKingDanger } from '../services/kingSafety';
 import { principleLine } from '../services/moveFundamentals';
@@ -122,7 +123,7 @@ describe('each producer, on the g3 board, names no move it declares it does not'
     // decisiveReason.test Q6: Bxc5+ wins by force, paying off with Bxg4.
     const fen = 'r1b2b1r/pp2k1p1/5nBp/2p1p3/1B2P1q1/8/PPP2PPP/RN1Q1RK1 w - - 0 12';
     const reads = { before: [line(1, 592, 'b4c5 e7e6 g6f5 e6f7 f5g4 c8g4 d1d3 f8c5 d3c4 g4e6 c4c5'.split(' ')), line(2, 331, 'd1g4 f6g4 b4c5 e7f6 c5f8 h8f8 g6h5 g7g6 h5g4 c8g4'.split(' '))], after: [], passBefore: [], passAfter: [] };
-    const say = (namesPreparedMove: boolean): string => decisiveReason({ namesPreparedMove, fenBefore: fen, san: 'Bxc5+', seat: 'student', opponentLastSan: 'c5', reads })?.text ?? '';
+    const say = (namesPreparedMove: boolean): string => decisiveReason({ namesPreparedMove, fenBefore: fen, san: 'Bxc5+', seat: 'student', prevCapture: null, reads })?.text ?? '';
     const learn = say(false);
     const review = say(true);
     expect(review).toMatch(/later with /);
@@ -235,7 +236,7 @@ describe('every student move of the six games: the engine-backed producers name 
             check('moveIntent', i + 1, san, intent.text, namesFromArrows(arrows, g.side, next), next);
           }
           // Learn asks the reason only of the engine's own move.
-          const learned = pre.topLines[0]?.moves[0] === playedUci && learnMoveReason({ fenBefore: before, san, reads: intentReads, seat: 'student', opponentLastSan: i > 0 ? g.sans[i - 1] : null });
+          const learned = pre.topLines[0]?.moves[0] === playedUci && learnMoveReason({ fenBefore: before, san, reads: intentReads, seat: 'student', prevCapture: captureRunOfMoves(null, g.sans.slice(0, i)) });
           if (learned) {
             // What Learn SAYS of it: a material reason in full, any other only
             // its tail (the worse move, named as the weighing).

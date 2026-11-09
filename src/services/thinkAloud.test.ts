@@ -113,7 +113,7 @@ describe('several jobs at once, in the door\'s own move-why (catalogue §3; game
   it('Bf4: develops, protects e5 and lines up an x-ray at the queen', () => {
     const c = new Chess();
     for (const m of 'e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 g6 Bc4 Nb6 Bb3 d6 Qe2 Bg7 O-O O-O h3 dxe5 dxe5 Qc7'.split(' ')) c.move(m);
-    const why = moveWhy(c.fen(), 'Bf4', 'w', 'Qc7');
+    const why = moveWhy(c.fen(), 'Bf4', 'w', null);
     expect(why).toMatch(/protects your pawn on e5/);
     expect(why).toMatch(/x-ray at their queen on c7/);
   });

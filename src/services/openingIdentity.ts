@@ -12,6 +12,7 @@
 // A LEAF: no imports beyond the move speller and the one /data/ loader
 // (dataFile reaches IndexedDB only by a lazy import).
 import { openSentence } from '../utils/openSentence';
+import { NO_PREV_CAPTURE, afterCapture, type PrevCaptureContext } from './captureRun';
 import { sayMoveNoun } from './spokenMove';
 import { countWords } from '../utils/countWords';
 import { shareAdverb } from '../utils/shareWords';
@@ -283,8 +284,9 @@ export function definingMoveIdea(
   name: string,
   sans: readonly string[],
   student: 'w' | 'b',
-  why: (fenBefore: string, san: string, mover: 'w' | 'b', prevSan: string | null) => string | null,
-  ChessCtor: new () => { move(san: string): unknown; fen(): string },
+  /** The move's reason; `prev` is the capture run before it (`captureRun`). */
+  why: (fenBefore: string, san: string, mover: 'w' | 'b', prev: PrevCaptureContext | null) => string | null,
+  ChessCtor: new () => { move(san: string): { to: string; captured?: string }; fen(): string },
 ): string | null {
   // The family's move first (the Italian's Bc4), then the variation's own
   // when it is a different move (the Giuoco Piano's ...Bc5).
@@ -298,11 +300,12 @@ export function definingMoveIdea(
     if (said.has(`${hit.facts.side}${def}`)) continue;
     said.add(`${hit.facts.side}${def}`);
     const c = new ChessCtor();
+    let run: PrevCaptureContext = NO_PREV_CAPTURE;
     for (let i = 0; i < sans.length; i++) {
       const mover: 'w' | 'b' = i % 2 === 0 ? 'w' : 'b';
       const fenBefore = c.fen();
       if (mover === hit.facts.side && sans[i].replace(/[+#]/g, '') === def) {
-        const w = why(fenBefore, sans[i], mover, i > 0 ? sans[i - 1] : null);
+        const w = why(fenBefore, sans[i], mover, run);
         if (w) {
           const owner = mover === student ? 'your' : 'their';
           const lead = out.length === 0 ? `The key move is ${owner === 'your' ? 'yours' : 'theirs'}, ${sans[i]}` : `In the ${hit.name.split(/[:,]/).pop()?.trim() ?? hit.name}, ${owner} move ${sans[i]} matters too`;
@@ -310,7 +313,7 @@ export function definingMoveIdea(
         }
         break;
       }
-      try { c.move(sans[i]); } catch { break; }
+      try { run = afterCapture(run, c.move(sans[i])); } catch { break; }
     }
   }
   return out.length ? out.join(' ') : null;

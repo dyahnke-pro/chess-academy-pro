@@ -34,10 +34,13 @@ export function replyPunishment(
   // your bishop") — true, and not the point of R2b3.
   const won = materialWon(afterPlayed, replySan);
   const byGeometry = geometry === 'delivers checkmate' || geometry?.startsWith('forks ');
+  // A SAN ending in "#" is read "checkmate" (prod Learn audit 2026-11-09:
+  // "knight to f3, checkmate, and that is checkmate"): the mate is said once.
+  const mateSaid = /#$/.test(replySan);
   const gerund = byGeometry && geometry
-    ? punishmentGerund(geometry)
-    : won?.gerund ?? (geometry ? punishmentGerund(geometry) : null);
-  if (!gerund) return null;
+    ? punishmentGerund(geometry, mateSaid)
+    : won?.gerund ?? (geometry ? punishmentGerund(geometry, mateSaid) : null);
+  if (gerund === null) return null;
   // What the reply won, as DATA — a reader that needs the piece and its
   // square reads this, never the words back (they no longer carry them).
   return { replySan, gerund, won: !byGeometry && won ? { piece: won.piece, square: won.square } : null };
@@ -70,9 +73,9 @@ function materialWon(afterPlayed: string, replySan: string): { gerund: string; p
 /** The opponent's geometry, turned into what it does TO the student. Every
  *  piece it names is the student's (the opponent's move targets them), so
  *  "the" becomes "your" — one perspective, never an owner-less piece. */
-function punishmentGerund(geometry: string): string | null {
+function punishmentGerund(geometry: string, mateSaid: boolean): string | null {
   const g = geometry.trim();
-  if (g === 'delivers checkmate') return 'and that is checkmate';
+  if (g === 'delivers checkmate') return mateSaid ? '' : 'and that is checkmate';
   const yours = (s: string): string => s.replace(/\bthe (king|queen|rook|bishop|knight|pawn)\b/g, 'your $1');
   if (g.startsWith('forks ')) return `forking ${yours(g.slice('forks '.length))}`;
   if (g.startsWith('pins ')) return `pinning ${yours(g.slice('pins '.length))}`;

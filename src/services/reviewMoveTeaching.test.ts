@@ -246,6 +246,16 @@ describe('a king move is named by where it went (prod audit 2026-11-07)', () => 
     expect(text).toMatch(/^The king marches up/);
   });
 
+  it('a king stepping out of check, toward the corner, is not marching up (prod Learn audit 2026-11-09, 30.Kh2)', () => {
+    // The audit's first game after 29…Bc5+: White's king steps g1-h2.
+    const c = new Chess();
+    for (const m of 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4 h3 Nc6 hxg4 O-O-O Bd2 e6 Nb5 Nxd4 Bxa5 Nxg4 Nxa7+ Kb8 Nxd4 Kxa7 Nb3 Rxd1+ Rxd1 Bd6 Be2 Be5 Bxg4 Bxb2 Nc5 Be5 a4 Bd6 Nxb7 Kxb7 O-O Bc5 Bh3 Bd6 Bxe6 fxe6 Bb4 Bxb4 f4 Bc5+'.split(' ')) c.move(m);
+    for (const isStudent of [true, false]) {
+      const text = buildReviewMoveTeachingFact(c.fen(), 'Kh2', isStudent, null)?.text ?? '';
+      expect(text).not.toMatch(/march|fighting piece/);
+    }
+  });
+
   it('a king that steps sideways toward the centre heads for it', () => {
     const text = buildReviewMoveTeachingFact('1k6/pp6/8/8/P1p4K/8/1PP3P1/8 w - - 0 30', 'Kg4', true, null)?.text ?? '';
     expect(text).toMatch(/^The king heads for the centre/);
@@ -256,7 +266,9 @@ describe('a king move is named by where it went (prod audit 2026-11-07)', () => 
     expect(away).toMatch(/toward safety/);
     const toward = buildReviewMoveTeachingFact('r1bq3r/ppp2kpp/2n2n2/3pp3/8/2NP1N2/PPP1PPPP/R1BQKB1R b KQ - 0 8', 'Ke6', true, null)?.text ?? '';
     expect(toward).not.toMatch(/toward safety/);
-    // Kg1-h1 tucks the king into the corner (his Closed Sicilian replay, ply 35).
-    expect(buildReviewMoveTeachingFact('r1br2k1/pp6/4p1pp/2p2p2/2Bb2P1/2NP1R2/PPP4P/5RK1 w - - 1 18', 'Kh1', false, null)?.text ?? '').toMatch(/toward safety/);
+    // Kg1-h1 in his Closed Sicilian replay (ply 35) answers the d4 bishop's
+    // check: a check escape says nothing (rev 30b), never "out of the
+    // crossfire before it starts" with the check already on (2026-11-09).
+    expect(buildReviewMoveTeachingFact('r1br2k1/pp6/4p1pp/2p2p2/2Bb2P1/2NP1R2/PPP4P/5RK1 w - - 1 18', 'Kh1', false, null)?.text ?? '').not.toMatch(/toward safety|march/);
   });
 });

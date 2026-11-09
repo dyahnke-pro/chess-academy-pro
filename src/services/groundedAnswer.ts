@@ -31,7 +31,7 @@ import { mobilityMap, worstPieceNote, namedPawnStructure, findWorstPlacedPiece, 
 import { theirWantedMoves, theirWantSentence } from './prophylaxis';
 import { Chess } from 'chess.js';
 import { toOtherSeat } from '../utils/seatPronouns';
-import { NO_PREV_CAPTURE, afterCapture, type PrevCaptureContext } from './captureRun';
+import { captureRunOfMoves, takesBack, type PrevCaptureContext } from './captureRun';
 import { moverLineProof, netPieceWords } from './exchangeLedger';
 import { isRealPin, absolutePinRay } from './pinGeometry';
 import { tacticWord } from './tacticVocabulary';
@@ -1989,9 +1989,6 @@ export function assembleMoveEvalAnswer(opts: {
    *  answer says it and hands the same moves to the board (hard walk
    *  2026-10-10: "calculate the main line" got the move and no line). */
   pvSan?: readonly string[] | null;
-  /** Their last move (SAN), so a recapture is said as taking back, never as
-   *  winning a piece (the why-best computer reads it). */
-  opponentLastSan?: string | null;
   /** THE reason for the best move (`decisiveReason`, kind 'the'), said in
    *  place of a re-derived one. */
   theReason?: string | null;
@@ -2061,7 +2058,7 @@ export function assembleMoveEvalAnswer(opts: {
   // answer, Learn's weighing and the Why button give the same reason.
   const ownReason = theirMove || opts.theReason ? null : bestMoveReason(fen, bestMoveSan, mover === 'white' ? 'w' : 'b', {
     mateIn: typeof opts.mateIn === 'number' ? opts.mateIn : null,
-    opponentLastSan: opts.opponentLastSan ?? null,
+    prevCapture: opts.prevCapture ?? null,
   });
   // THE reason (the one reason computer), when one accounts for the move's
   // edge over the rest — said as computed, never re-derived here.
@@ -2731,7 +2728,7 @@ export function assembleAlternativesAnswer(opts: {
   const why = explainBestMoveGrounded(fen, null, bestUci, mover, null, null, opts.studentColor && opts.studentColor !== mover ? 'other-side' : 'mover');
   parts.push(`The best move is ${bestSan}.`);
   const moverWB = mover === 'white' ? 'w' : 'b';
-  const reason = why ?? (() => { const r = bestMoveReason(fen, bestSan, moverWB, { mateIn: null, opponentLastSan: null }); return r ? `It ${r}.` : null; })()
+  const reason = why ?? (() => { const r = bestMoveReason(fen, bestSan, moverWB, { mateIn: null, prevCapture: null }); return r ? `It ${r}.` : null; })()
     ?? bestMoveFallbackReason(fen, bestSan, mover);
   if (reason) parts.push(reason);
 
@@ -2877,24 +2874,20 @@ function explainFromMoverSeat(
   // decided both on its own — a third why-best reader and a fourth "what your
   // move let them do" reader. It now reads the one of each: `bestMoveReason`
   // for the move, `errorWhy` for the move played. Taking back is still said as
-  // taking back (it knows the previous capture; the shared reader is told the
-  // last move only as SAN).
+  // taking back (the one read of the capture run, `takesBack`).
   let bestSan: string | null = null;
   let bestClause: string | null = null;
   try {
     const c = new Chess(fenBefore);
     const to = bestMoveUci.slice(2, 4);
-    const captured = c.get(to as never);
     const mv = c.move({ from: bestMoveUci.slice(0, 2), to, promotion: bestMoveUci.length > 4 ? bestMoveUci[4] : undefined });
     if (mv) {
       bestSan = mv.san;
       // Against the RUN on the square (`net`): after cxb4 axb4, …Nxb4 wins the
       // pawn rather than taking it back.
-      const takesBack = captured && prevCapture && prevCapture.square === to
-        && (REVIEW_PIECE_VALUE[captured.type] ?? 0) <= prevCapture.net;
-      if (takesBack && captured) bestClause = `it ${afterCaptureSan({ kind: 'take-back', next: null }, 'verb')}`;
+      if (takesBack(prevCapture, mv)) bestClause = `it ${afterCaptureSan({ kind: 'take-back', next: null }, 'verb')}`;
       else {
-        const why = bestMoveReason(fenBefore, mv.san, mc, { mateIn: null, opponentLastSan: null });
+        const why = bestMoveReason(fenBefore, mv.san, mc, { mateIn: null, prevCapture });
         if (why) bestClause = `it ${why}`;
       }
     }
@@ -3472,7 +3465,7 @@ export function assembleEngineReasoning(opts: {
   const moverMate = typeof opts.mateIn === 'number' ? opts.mateIn * (mc === 'w' ? 1 : -1) : null;
   const firstReason =
     ((opts.studentSide ?? opts.moverColor) === opts.moverColor
-      ? bestMoveReason(plies[0].fenBefore, plies[0].san, mc, { mateIn: moverMate != null && moverMate > 0 ? moverMate : null, opponentLastSan: null })
+      ? bestMoveReason(plies[0].fenBefore, plies[0].san, mc, { mateIn: moverMate != null && moverMate > 0 ? moverMate : null, prevCapture: null })
       : null)
     ?? describeMoveGeometry(plies[0].fenBefore, plies[0].san, opts.moverColor)
     ?? describeEscape(plies[0].fenBefore, plies[0].san)
@@ -7825,10 +7818,6 @@ export function playedSacrificeVerdict(fenBefore: string, san: string, evalAfter
  *  capturer netted on that square), or null when the last move took nothing. */
 export function lastCaptureOf(history: readonly string[] | undefined): PrevCaptureContext | null {
   if (!history || history.length === 0) return null;
-  try {
-    const c = new Chess();
-    let run = NO_PREV_CAPTURE;
-    for (const san of history) run = afterCapture(run, c.move(san));
-    return run.square ? run : null;
-  } catch { return null; }
+  const run = captureRunOfMoves(null, history);
+  return run?.square ? run : null;
 }

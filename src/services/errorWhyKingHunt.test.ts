@@ -18,7 +18,7 @@ describe('the why of a move that let them attack the king', () => {
       replyPvUci: ['g8h8', 'g3h3', 'a2b3', 'h3h6', 'b3c2', 'd1d6', 'c2b3', 'c1b1', 'c8c1', 'b1c1', 'e8c8', 'c1d2', 'c8c2', 'd2e1'],
       replySan: null, cpLoss: 460, studentColor: 'white', moverEvalAfterCp: -200,
     }))!;
-    expect(look.line).toMatch(/^Qg3\+ was a blunder — it let them go after your king: …Bb3\+, …Rc1\+ and …Qc8\+\./);
+    expect(look.line).toMatch(/^Your move was a blunder — it let them go after your king: …Bb3\+, …Rc1\+ and …Qc8\+\./);
     // What the better move did about it (P2, 2026-10-20): the square of the
     // hunt it covers — never "it would complete your development".
     expect(look.line).toContain('Nge2 was the move — it would guard c1, where their rook gives check in that line.');
@@ -35,7 +35,7 @@ describe('the why of a move that let them attack the king', () => {
     // A mate past five moves is named by its first move, never an unfollowable
     // count. The better move is held: its line is too short to prove it stops
     // the mate, and "it would complete your development" is not the why.
-    expect(look.line).toBe('e6 was a blunder — it let them force mate, starting with …Rxc2+.');
+    expect(look.line).toBe('Your move was a blunder — it let them force mate, starting with …Rxc2+.');
     expect(look.punishLine?.uci[0]).toBe('c8c2');
   });
 });

@@ -214,9 +214,8 @@ const PRODUCERS: Record<string, { plies: Plies; run: Producer }> = {
   deliberation: {
     plies: 'captures',
     run: (p) => {
-      const lastSan = p.theirLast?.san ?? null;
-      const w = moveWhy(p.fenBefore, p.san, p.mover, lastSan);
-      const b = bestMoveReason(p.fenBefore, p.san, p.mover, { mateIn: null, opponentLastSan: lastSan });
+      const w = moveWhy(p.fenBefore, p.san, p.mover, p.prev);
+      const b = bestMoveReason(p.fenBefore, p.san, p.mover, { mateIn: null, prevCapture: p.prev });
       return [w ? `The move is ${p.san} — it ${w}.` : null, b ? `The move is ${p.san} — it ${b}.` : null];
     },
   },

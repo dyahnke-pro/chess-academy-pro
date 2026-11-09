@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**770 lines · 11 exports · 4 importers · 3 tests · 0 audits**
+**779 lines · 11 exports · 4 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -65,8 +65,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/handWalk1009.test.ts:295`
 - `src/coach/handWalk1009.test.ts:299`
 
-### `answerExplainLast` (function) — 1 call site
+### `answerExplainLast` (function) — 3 call sites
 - `src/coach/handWalk1009.test.ts:315`
+- `src/services/captureRun.test.ts:94`
+- `src/services/captureRun.test.ts:104`
 
 ### `answerLeftBook` (function) — 2 call sites
 - `src/coach/leftBook.test.ts:19`
@@ -77,6 +79,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/chatTurnAnswers.test.ts`
 - `src/coach/handWalk1009.test.ts`
 - `src/coach/leftBook.test.ts`
+- `src/services/captureRun.test.ts`
 
 ## Audits that reach it
 

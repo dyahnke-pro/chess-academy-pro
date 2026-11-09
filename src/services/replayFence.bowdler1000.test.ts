@@ -54,7 +54,7 @@ describe('ply 58 — Kf8 does not serve another piece\'s plan', () => {
 
 describe('ply 80 — a pawn move keeps its case: "c5", never "C5"', () => {
   it('the dictated gift line opens with the move as written', () => {
-    const line = opponentGapClause({ opportunityUci: 'h4h5' } as never, 'dictated', fenAt(81), 'b', 'c5');
+    const line = opponentGapClause({ opportunityUci: 'h4h5' } as never, 'dictated', fenAt(81), 'b', 'c5', null);
     expect(line).toMatch(/^c5 gives you something: Rh5\+/);
   });
 });

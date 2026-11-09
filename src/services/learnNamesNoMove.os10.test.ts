@@ -93,8 +93,8 @@ describe('the leaks on David\'s record', () => {
     }));
     const { learnMoveReason } = await import('./learnBoardTeaching');
     const reads = { before: [], after: [], passBefore: [], passAfter: [] };
-    learnMoveReason({ fenBefore: new Chess().fen(), san: 'e4', reads, seat: 'student', opponentLastSan: null });
-    learnMoveReason({ fenBefore: F[1], san: 'c5', reads, seat: 'opponent', opponentLastSan: 'e4' });
+    learnMoveReason({ fenBefore: new Chess().fen(), san: 'e4', reads, seat: 'student', prevCapture: null });
+    learnMoveReason({ fenBefore: F[1], san: 'c5', reads, seat: 'opponent', prevCapture: null });
     expect(seen).toEqual([{ seat: 'student', namesPreparedMove: false }, { seat: 'opponent', namesPreparedMove: true }]);
     vi.doUnmock('./decisiveReason');
   });

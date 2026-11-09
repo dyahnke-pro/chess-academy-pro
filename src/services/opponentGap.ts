@@ -15,6 +15,7 @@ import type { StockfishAnalysis } from '../types';
 import type { OpponentIntent } from './opponentIntent';
 import { moveWhy } from './deliberation';
 import { uciToSanAt } from './liveFundamental';
+import type { PrevCaptureContext } from './captureRun';
 
 /** A gift of at least this many pawns (student POV) is worth pointing at. */
 const GIFT_CP = 120;
@@ -107,9 +108,12 @@ export function opponentGapClause(
   studentColor: 'w' | 'b',
   /** The opponent's reply that made the gift. */
   opponentLastSan: string | null,
+  /** The capture run that reply ended (`captureRun`), or null when unknown —
+   *  the gift is read off what it took, never off its SAN. */
+  prevCapture: PrevCaptureContext | null,
 ): string | null {
   const san = uciToSanAt(fen, gap.opportunityUci);
-  const why = san ? moveWhy(fen, san, studentColor, opponentLastSan) : null;
+  const why = san ? moveWhy(fen, san, studentColor, prevCapture) : null;
   if (!san || !why) return null;
   // THE DICTATED REPLY IS NAMED, NEVER "THAT REPLY" (Learn walk, fresh Nimzo
   // game, 2026-09-26): after "You'd love to play Nc5 — but they answer Nxc6",

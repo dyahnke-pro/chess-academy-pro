@@ -65,7 +65,7 @@ describe('it speaks only when a move really cost something', () => {
     // NAMED WITH ITS REASON, OR NOT NAMED (Learn walk, Nimzo, 2026-09-26): with
     // no engine line there is no reason, so the grade stands and Nf6 is not
     // handed over bare.
-    expect(look!.line).toMatch(/Nd4 was a blunder/);
+    expect(look!.line).toMatch(/Your move was a blunder/);
     if (look!.line.includes(HUNG.best)) expect(look!.line).toMatch(new RegExp(`${HUNG.best} was the move — `));
   });
 });
@@ -334,7 +334,7 @@ describe('why the move failed complements what it cost', () => {
     // The mechanism is the error call's own why now (one error computer,
     // 2026-10-10), so it rides the callout: the grade, then why it failed.
     expect(out!.kind).toBe('mistake');
-    expect(out!.line).toMatch(/^Bf3 was .+ d5/);
+    expect(out!.line).toMatch(/^Your move was .+ d5/);
     // The mark follows the sentence — it opens on the attempt, so the mark is
     // the attempt's square.
     expect(out!.square).toBe('d5');

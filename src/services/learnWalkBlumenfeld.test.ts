@@ -97,7 +97,7 @@ describe('F16/F23/F31 — a grade says what the move cost, and whether they took
     // The grade still says what the move COST. On the real line Bxf6 takes the
     // knight but …gxf6 takes the bishop back, so "it let them take your knight"
     // (the old fixture's first-capture read) is not what the line keeps.
-    expect(said).toMatch(/Qd7 was a blunder — it (let them |cost )/);
+    expect(said).toMatch(/Your move was a blunder — it (let them |cost )/);
     expect(said).not.toMatch(/take your knight/);
     expect(said).not.toMatch(/their king/);
   });
@@ -110,7 +110,7 @@ describe('F16/F23/F31 — a grade says what the move cost, and whether they took
     // Never a bare grade (run B walk 2026-09-30); with no line the cost is
     // said, and the position it gave up (WO-DECIDER-02's positional reason):
     // the queen on c7 was e5's only guard, and the game's Be5 came there.
-    expect(v.call?.said).toBe('Qd7 was a blunder — it cost three or four points of advantage. That took your last defender off e5.');
+    expect(v.call?.said).toBe('Your move was a blunder — it cost three or four points of advantage. It took your last defender off e5.');
   });
 });
 
@@ -220,7 +220,7 @@ describe('re-walk — the better move\'s reason is about the move', () => {
   });
   it('the own-move point names its move, so it cannot answer someone else\'s question', async () => {
     const { studentMovePoint } = await import('./playCommentary');
-    const p = studentMovePoint(fenAt(33), 'Qf5', 'a4', null);
+    const p = studentMovePoint(fenAt(33), 'Qf5', null, null);
     if (p) expect(p).toMatch(/^Qf5 /);
   });
 });

@@ -802,7 +802,11 @@ export function openingBreakFor(fen: string, student: 'w' | 'b', openingName: st
  *  before the move, the student played one of the only moves that held. */
 export function foundMoveTeaching(fenBefore: string, san: string, preLines: readonly CriticalFanLine[] | undefined, student: 'w' | 'b', to: string, history: readonly string[]): TeachingFact | null {
   if (!preLines || preLines.length < 2) return null;
-  const found = criticalMomentFound(readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore }), san, priorFromHistory(history, fenBefore)?.san ?? null);
+  // The capture run before the move, from the game's own history (checked to
+  // reach this board): winning the piece they gave is a find, taking back
+  // their trade is not (`takesBack`).
+  const prevCapture = priorFromHistory(history, fenBefore) ? captureRunOfMoves(null, history.slice(0, -1)) : null;
+  const found = criticalMomentFound(readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore }), san, prevCapture, fenBefore);
   if (!found) return null;
   // THE LINE THAT MAKES IT WORK (pass-2 walk 2026-09-30: "Nxd5 was the only
   // move that kept you on top" — he says why: it wins a pawn, because …Bxc3+
@@ -882,7 +886,7 @@ export function studentMoveAnswerLines(history: readonly string[], ply: number, 
   // move made (a pawn duo, a square it covers) follows it, never replaces it.
   if (!/x/.test(history[ply])) {
     // Quiet moves only — nothing material is claimed, so no line is needed.
-    const point = studentMovePoint(fenBefore, history[ply], ply >= 1 ? history[ply - 1] : null, null);
+    const point = studentMovePoint(fenBefore, history[ply], captureRunOfMoves(null, history.slice(0, ply)), null);
     if (point && !out.includes(point)) out.unshift(point);
   }
   return out;
@@ -933,7 +937,7 @@ export function theirMoveAnswerLines(history: readonly string[], ply: number, st
       try {
         const u = best.moves[0];
         const answerSan = new Chess(after).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] })?.san ?? null;
-        const text = slipAnswerText(after, history[ply], answerSan, 'now', best.moves);
+        const text = slipAnswerText(after, captureRunOfMoves(null, history.slice(0, ply + 1)), answerSan, 'now', best.moves);
         if (text) out.push(text);
       } catch { /* the answer is a bonus */ }
     }
@@ -1003,6 +1007,7 @@ export function kingCourseTeaching(fen: string, student: 'w' | 'b'): TeachingFac
 // question, so it is answered here.
 import { promisesOpen, slipCount, type GamePromise, type StoryStore } from './gameStory';
 import { positionOf } from '../utils/samePosition';
+import { captureRunOfMoves, type PrevCaptureContext } from './captureRun';
 import { NAMES_NO_MOVE, namesMoves, studentMovesInLine, boardAfterSans } from './studentMoveNaming';
 
 export type { GamePromise } from './gameStory';
@@ -1084,9 +1089,10 @@ export function bindingTeaching(i: { fenBefore: string; san: string; history: re
   if (!tgt) return null;
   const bind = binding(i.fenBefore, i.san, tgt, moveHit(i.fenBefore, i.san), true);
   if (!bind) return null;
-  // The binding's "this" is the student's move, said by name: the turn speaks
-  // after their reply, and "this" would attach to it.
-  const said = bind.replace(/\bthis\b/, sayYourMove(i.san, i.fenBefore));
+  // The binding's "this" is the student's move: the turn speaks after their
+  // reply, and "this" would attach to it. Said as "your move", never by name
+  // (David 2026-11-09: they just played it and saw it land).
+  const said = bind.replace(/\bthis\b/, 'your move');
   const text = `${openSentence(tgt.text)}, ${said}.`;
   return teachingFact('movePoint', {
     computer: 'bindingFact', kind: 'point', seat: 'student', fen: boardAfterMove(i.fenBefore, i.san), names: NAMES_NO_MOVE,
@@ -1392,7 +1398,7 @@ interface LearnReason {
   posed: { tag: MisconceptionTagId; posedImportance: number } | null;
 }
 
-export function learnMoveReason(input: { fenBefore: string; san: string; reads: IntentReads; seat: 'student' | 'opponent'; opponentLastSan: string | null; asksToSee?: boolean }): LearnReason | null {
+export function learnMoveReason(input: { fenBefore: string; san: string; reads: IntentReads; seat: 'student' | 'opponent'; prevCapture: PrevCaptureContext | null; asksToSee?: boolean }): LearnReason | null {
   // Learn: the student's next move is held — the prepared move is said by its piece (OS-10).
   const reason = decisiveReason({ ...input, namesPreparedMove: input.seat !== 'student' });
   if (!reason) return null;

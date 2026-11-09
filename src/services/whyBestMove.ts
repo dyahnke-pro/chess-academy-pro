@@ -24,6 +24,7 @@ import type { StudentNeedContext } from './needScore';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import type { BoardArrow, WalkableLine } from '../types';
 import { admitArrows, lineClaims } from './arrowDoor';
+import { captureRunOfPgn } from './captureRun';
 
 interface WhyBestMoveInput {
   fen: string;
@@ -104,7 +105,7 @@ export async function computeWhyBestMoveDetail(input: WhyBestMoveInput): Promise
     // reason the chat and Learn's weighing give — then the geometry and the
     // note floor, so a Why tap is never dead.
     const own = fen.split(' ')[1] === sc
-      ? bestMoveReason(fen, san, sc, { mateIn: moverMate > 0 ? moverMate : null, opponentLastSan: history.length ? history[history.length - 1] : null })
+      ? bestMoveReason(fen, san, sc, { mateIn: moverMate > 0 ? moverMate : null, prevCapture: input.pgn ? captureRunOfPgn(input.pgn, history.length) : null })
       : null;
     // WHAT THE MOVE IS FOR, from the engine's own line — the same computer
     // Learn and the review speak (`movePurpose`), ahead of the geometry floor.

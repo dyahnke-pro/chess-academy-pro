@@ -21,7 +21,9 @@ describe('a move that lets them force mate (2026-10-21)', () => {
     expect(g?.reason).toBe('allows-mate');
     expect(g?.fault).toBe(true);
     // The one error computer's words (WO-DEPTH-01): what it let them do.
-    expect(g?.clause).toBe('It let them play …Qh4#, and that is checkmate.');
+    // The "#" is read "checkmate": the mate is said once (prod Learn audit
+    // 2026-11-09, "knight to f3, checkmate, and that is checkmate").
+    expect(g?.clause).toBe('It let them play …Qh4#.');
   });
   it('a mate that no move avoids is not the move\'s fault', () => {
     const g = gradePlayedMove({

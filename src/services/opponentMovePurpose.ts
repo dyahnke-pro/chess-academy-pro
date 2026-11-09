@@ -89,7 +89,9 @@ export function threatStoppedBy(
   // board-truth). The kind is true on either board.
   const san = threat.san.replace(/[+#]+$/, '');
   const what = threat.kind === 'mate' ? `the mate with ${san}`
-    : threat.kind === 'fork' ? `your ${san} fork`
+    // "your Qd4 fork" was read aloud "your queen to d4 fork" (prod Learn audit
+    // 2026-11-09): the fork is named by the move that makes it.
+    : threat.kind === 'fork' ? `your fork with ${san}`
       : `your ${san}, which was winning material`;
   // Rotated on the board the student's threat stood on — only the wrapper
   // varies; which threat, and that it stopped, never do.

@@ -65,16 +65,27 @@ export function hangingLine(i: HangingLineInput): string | null {
   const its = many ? 'their' : 'its';
   if (i.still) return `${lead} ${is} still hanging — nothing guards ${it} yet.`;
   const ownerToMove = board.turn() === first.color;
-  // What it means for whoever is to move.
-  const taker = owner === 'your' ? 'them' : owner === 'their' ? 'you' : null;
+  // What it means for whoever is to move. The taker is the SUBJECT ("they can
+  // take it"; prod Learn audit 2026-11-09 heard "so them can take it").
+  const taker = owner === 'your' ? 'they' : owner === 'their' ? 'you' : null;
   // Lower case, so it can follow "so"; `openSentence` capitalises it where it
   // starts a sentence.
   // The board fact — it is attacked and nothing guards it — never what the
   // line nets (only the exchange ledger says that, outcomeSentences gate).
   const free = taker ? `${taker} can take ${it}` : `${it} can be taken`;
+  // A GUARD SAVES NOTHING FROM A CHEAPER ATTACKER (prod Learn audit
+  // 2026-11-09: the queen on d5, hit by the c3 knight, was "lost unless it
+  // moves or gets a guard"). Then the only answer is to move it.
+  const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+  const cheaperHit = i.squares.some((sq) => {
+    const mine = VALUE[board.get(sq as Square)?.type ?? 'k'];
+    return board.attackers(sq as Square, first.color === 'w' ? 'b' : 'w').some((a) => VALUE[board.get(a)?.type ?? 'k'] < mine);
+  });
   const save = owner === 'their'
-    ? `They have to move ${it} or guard ${it}.`
-    : `${many ? 'They are' : 'It is'} lost unless ${it} ${many ? 'move or get' : 'moves or gets'} a guard.`;
+    ? (cheaperHit ? `They have to move ${it}.` : `They have to move ${it} or guard ${it}.`)
+    : cheaperHit
+      ? `${many ? 'They have' : 'It has'} to move. A guard does not help against a cheaper attacker.`
+      : `${many ? 'They are' : 'It is'} lost unless ${it} ${many ? 'move or get' : 'moves or gets'} a guard.`;
   const after = ownerToMove ? save : `${openSentence(free)}.`;
   const key = stemKeyOf(`${i.fen.split(' ')[0]}|${i.squares.join(',')}`);
   const stems = i.lostGuard

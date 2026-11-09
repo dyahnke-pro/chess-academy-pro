@@ -9,6 +9,7 @@ import { knightSquares } from './exchangeIdeas';
 import { stripDisprovenSentences } from './boardClaimValidator';
 import { deriveNextPlans } from './nextPlans';
 import { finishesTrade } from './criticalMoment';
+import { captureRunOfMoves } from './captureRun';
 import { kingAttack } from './kingAttack';
 import { boardStructure, theirMoveStructure } from './structureReads';
 
@@ -31,9 +32,11 @@ describe('Learn board truth — the real game', () => {
   });
 
   it('14.fxg3 and 19.gxh4 finish their trade — not an only-move find', () => {
-    expect(finishesTrade(GAME[25], GAME[26])).toBe(true); // …Bxg3 fxg3
-    expect(finishesTrade(GAME[35], GAME[36])).toBe(true); // …Qxh4 gxh4
-    expect(finishesTrade(GAME[23], GAME[26])).toBe(false);
+    const run = (ply: number) => captureRunOfMoves(null, GAME.slice(0, ply));
+    expect(finishesTrade(run(26), at(26), GAME[26])).toBe(true); // …Bxg3 fxg3
+    expect(finishesTrade(run(36), at(36), GAME[36])).toBe(true); // …Qxh4 gxh4
+    // A run on another square (…Nxb3 axb3) is not this trade.
+    expect(finishesTrade(run(24), at(26), GAME[26])).toBe(false);
   });
 
   it('22.Rxa5: "the pawn on b6 takes back" is true on the board after Rxa5', () => {

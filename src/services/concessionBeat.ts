@@ -129,6 +129,10 @@ function ranksFromHome(square: string, color: Color): number {
  * actual move and the engine's. The comparison is between two real boards, so
  * every claim is a difference two chess.js reads agree on.
  */
+// Every line names whose move it was, never "That …" (prod Learn audit
+// 2026-11-09: "Your bishop aims at their knight on b4. That took their last
+// defender off d6." — the door had put it after a line about the student's
+// own move, so "That" pointed at the wrong move).
 export function findConcession(args: {
   fen: string;
   /** SAN the coach actually played. */
@@ -221,7 +225,7 @@ export function findConcession(args: {
         kind: 'defender-left',
         square: abandoned,
         blockedGuard,
-        said: `That shut their ${blockedGuard.piece} on ${blockedGuard.square} off from ${abandoned}.`,
+        said: `Their move shut their ${blockedGuard.piece} on ${blockedGuard.square} off from ${abandoned}.`,
         opening: openingLine,
       };
     }
@@ -236,7 +240,7 @@ export function findConcession(args: {
       square: abandoned,
       said: wentAcross
         ? `They don't rate your play over there, so they've taken a defender off ${abandoned} to play on the other wing.`
-        : `That took their last defender off ${abandoned}.`,
+        : `Their move took their last defender off ${abandoned}.`,
       opening: openingLine,
     };
   }
@@ -253,7 +257,7 @@ export function findConcession(args: {
     return {
       kind: 'pawn-weakened',
       square: newIsolated,
-      said: `That left their pawn on ${newIsolated} isolated — no pawn of theirs can ever defend it.`,
+      said: `Their move left their pawn on ${newIsolated} isolated — no pawn of theirs can ever defend it.`,
       opening: `A pawn that can only be defended by pieces is a target for the rest of the game.`,
     };
   }
@@ -326,7 +330,7 @@ export function findConcession(args: {
     return {
       kind: 'outpost-conceded',
       square: conceded.square,
-      said: `That handed you ${conceded.square} — ${conceded.reason}.`,
+      said: `Their move handed you ${conceded.square} — ${conceded.reason}.`,
       opening: `A square their pawns can never challenge is yours for as long as you want it.`,
     };
   }
@@ -379,6 +383,11 @@ export function findStudentDrawback(args: {
   bestSan: string;
   /** The student's colour. */
   studentColor: 'white' | 'black';
+  /** Where the line sits. REQUIRED: 'lead' says "Your move took …" (the line
+   *  opens the turn, so it names whose move); 'follow' says "It took …"
+   *  (said right after a sentence about that move). The move itself is never
+   *  named — the student just played it and saw it land (David 2026-11-09). */
+  place: 'lead' | 'follow';
 }): Concession | null {
   const found = findConcession({
     fen: args.fen,
@@ -394,17 +403,18 @@ export function findStudentDrawback(args: {
   // "Retroactive look should be past tense. Future tense when needed"). The
   // ACTION is finished; a consequence that is still true of the board stays in
   // the present, which is why the second clauses read as they do.
+  const mv = args.place === 'lead' ? 'Your move' : 'It';
   const said = ({
     'defender-left': found.blockedGuard
-      ? `That shut your ${found.blockedGuard.piece} on ${found.blockedGuard.square} off from ${found.square} — nothing of yours watches it now.`
-      : `That took your last defender off ${found.square}.`,
-    'pawn-weakened': `That left your pawn on ${found.square} isolated — no pawn of yours can defend it now.`,
-    'file-opened': `That opened the file next to your own king.`,
+      ? `${mv} shut your ${found.blockedGuard.piece} on ${found.blockedGuard.square} off from ${found.square} — nothing of yours watches it now.`
+      : `${mv} took your last defender off ${found.square}.`,
+    'pawn-weakened': `${mv} left your pawn on ${found.square} isolated — no pawn of yours can defend it now.`,
+    'file-opened': `${mv} opened the file next to your own king.`,
     // Named, with what it costs (Learn tape 2026-10-15: "Your piece went a
     // long way from your king, to c3. Worth seeing before it costs you
     // something." named neither the piece nor the cost).
     'piece-offside': `Your ${found.piece ?? 'piece'} went all the way to ${found.square}, a long way from your king — a piece that far out needs moves to get back.`,
-    'outpost-conceded': `That handed them ${found.square} — ${found.opening.toLowerCase()}`,
+    'outpost-conceded': `${mv} handed them ${found.square} — ${found.opening.toLowerCase()}`,
   })[found.kind];
   return {
     kind: found.kind,

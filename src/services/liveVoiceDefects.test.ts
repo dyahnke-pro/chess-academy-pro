@@ -38,7 +38,7 @@ describe('L1 — nothing advises a finished game', () => {
     expect(buildDeliberation({
       fenBefore: MATE_FEN,
       analysis: { topLines: stale } as never,
-      moverColor: 'b', opponentLastSan: null,
+      moverColor: 'b', prevCapture: null,
     })).toBeNull();
     expect(tacticalReadFromLines(MATE_FEN, [{ moves: ['h1e1'], evaluation: 900 }], 'black')).toBeNull();
   });

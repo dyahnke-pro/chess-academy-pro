@@ -4,7 +4,7 @@
 // "Nxb4, taking back the pawn" on the move that wins it.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { NO_PREV_CAPTURE, afterCapture } from './captureRun';
+import { NO_PREV_CAPTURE, afterCapture, captureRunOfPgn, takesBack } from './captureRun';
 import { captureContextsAlong, computePlyFacts } from './pvPlayback';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { lastCaptureOf } from './groundedAnswer';
@@ -59,5 +59,48 @@ describe('the capture run', () => {
 
   it('the chat reads the run off the game history too', () => {
     expect(lastCaptureOf(['e4', 'c5', 'a3', 'Nc6', 'b4', 'cxb4', 'axb4'])).toEqual({ square: 'b4', capturedValue: 1, net: 0 });
+  });
+});
+
+// ONE "IS THIS A RECAPTURE?" READ (prod Learn audit 2026-11-09). Four
+// producers guessed it from their SAN ("x on the same square"), which cannot
+// see what was taken: after Bxe6 took a PAWN, …fxe6 wins the bishop, and the
+// coach said "your f-pawn taking on e6 — it completes the trade".
+const SCANDI = ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qa5', 'd4', 'Nf6', 'Nf3', 'Bg4', 'h3', 'Nc6', 'hxg4', 'O-O-O', 'Bd2', 'e6', 'Nb5', 'Nxd4', 'Bxa5', 'Nxg4', 'Nxa7+', 'Kb8', 'Nxd4', 'Kxa7', 'Nb3', 'Rxd1+', 'Rxd1', 'Bd6', 'Be2', 'Be5', 'Bxg4', 'Bxb2', 'Nc5', 'Be5', 'a4', 'Bd6', 'Nxb7', 'Kxb7', 'O-O', 'Bc5', 'Bh3', 'Bd6', 'Bxe6'];
+
+describe('takesBack — the one recapture read', () => {
+  it('a capture worth no more than what they took takes back; worth more, it wins', () => {
+    const tookKnight = { square: 'g3', capturedValue: 3, net: 3 };
+    const tookPawn = { square: 'g3', capturedValue: 1, net: 1 };
+    expect(takesBack(tookKnight, { to: 'g3', captured: 'b' })).toBe(true);
+    expect(takesBack(tookPawn, { to: 'g3', captured: 'b' })).toBe(false);
+    expect(takesBack(tookKnight, { to: 'e4', captured: 'b' })).toBe(false);
+    expect(takesBack(null, { to: 'g3', captured: 'b' })).toBe(false);
+    expect(takesBack(tookKnight, { to: 'g3' })).toBe(false);
+  });
+
+  it('the run is built from a PGN, its start read off the header', () => {
+    const c = new Chess('4k3/8/8/3p4/4P3/8/8/4K3 w - - 0 1');
+    c.move('exd5');
+    expect(captureRunOfPgn(c.pgn(), 1)).toEqual({ square: 'd5', capturedValue: 1, net: 1 });
+    expect(captureRunOfPgn(c.pgn(), 0)).toEqual(NO_PREV_CAPTURE);
+    expect(captureRunOfPgn(c.pgn(), 2)).toBeNull();
+  });
+
+  it('…fxe6 after Bxe6 took a pawn wins the bishop — the chat names it so', async () => {
+    const { answerExplainLast } = await import('../coach/chatTurnAnswers');
+    const board = new Chess();
+    for (const san of SCANDI) board.move(san);
+    const text = answerExplainLast(board, 'fxe6', 'b', SCANDI) ?? '';
+    expect(text).toMatch(/fxe6 wins a bishop/);
+    expect(text).not.toMatch(/completes the trade/);
+  });
+
+  it('an even trade still completes it', async () => {
+    const { answerExplainLast } = await import('../coach/chatTurnAnswers');
+    const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Bxc6'];
+    const board = new Chess();
+    for (const san of sans) board.move(san);
+    expect(answerExplainLast(board, 'dxc6', 'b', sans) ?? '').toMatch(/completes the trade/);
   });
 });

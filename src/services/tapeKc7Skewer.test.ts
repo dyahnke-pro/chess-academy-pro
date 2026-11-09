@@ -35,7 +35,7 @@ describe('a win that lands on the move itself names the move once', () => {
   it('"gxf6 wins by force: they win a knight." — never "it is gxf6 itself"', () => {
     const fen = '2kr1b1r/ppp2ppp/2n1pn2/q5P1/3P4/2N2N2/PPP2PP1/R1BQKB1R w KQ - 0 9';
     const r = decisiveReason({
-      namesPreparedMove: true, fenBefore: fen, san: 'gxf6', seat: 'opponent', opponentLastSan: 'e6',
+      namesPreparedMove: true, fenBefore: fen, san: 'gxf6', seat: 'opponent', prevCapture: null,
       reads: {
         before: [
           { rank: 1, evaluation: 420, mate: null, moves: ['g5f6', 'a5b6', 'c1d2', 'b6b2'] },

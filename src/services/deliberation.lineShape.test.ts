@@ -9,7 +9,7 @@ describe('a ruled-out move\'s line is said from the reply (hard-chat audit 2026-
   // that hits the queen was never said.
   const fen = 'r2q1k1r/1pp1b1p1/p1b1pnQ1/8/3P4/P3PN2/1P4PP/RN3RK1 w - - 1 16';
   const d = buildDeliberation({
-    fenBefore: fen, moverColor: 'w', opponentLastSan: null,
+    fenBefore: fen, moverColor: 'w', prevCapture: null,
     analysis: { topLines: [line(1, 100000, 'f3g5 c6e8 g5e6 f8g8 g6g7', 3), line(2, -420, 'b1c3 h8h6 g6h6 g7h6')] } as never,
   }) as Deliberation;
   it('every move after the candidate is said', () => {

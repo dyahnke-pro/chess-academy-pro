@@ -19,7 +19,7 @@ describe('hard walk — mates', () => {
   it('a move that starts a forced mate is best because of the mate, not a square', () => {
     const d = buildDeliberation({
       analysis: { topLines: [{ rank: 1, evaluation: 0, mate: 4, moves: toUci(GOMC, MATE) }] },
-      fenBefore: GOMC, moverColor: 'w', opponentLastSan: null,
+      fenBefore: GOMC, moverColor: 'w', prevCapture: null,
     })!;
     expect(d.bestWhy).toBe('starts a forced mate in 4 moves');
     expect(d.bestLineSans).toEqual(MATE);
@@ -28,7 +28,7 @@ describe('hard walk — mates', () => {
   it('the line an answer recites is handed to the board, and only that line', () => {
     const d = buildDeliberation({
       analysis: { topLines: [{ rank: 1, evaluation: 0, mate: 4, moves: toUci(GOMC, MATE) }] },
-      fenBefore: GOMC, moverColor: 'w', opponentLastSan: null,
+      fenBefore: GOMC, moverColor: 'w', prevCapture: null,
       named: { lineUci: toUci(GOMC, MATE), evaluation: 0, mate: 4 },
     })!;
     const text = namedMoveAnswer(d, 'why-best')!;
@@ -72,7 +72,7 @@ describe('hard walk — mates', () => {
     const pv = ['Kd3', 'Kd6', 'Kc4', 'Kc6', 'd5+', 'Kd6', 'Kb5'];
     const d = buildDeliberation({
       analysis: { topLines: [{ rank: 1, evaluation: 495, mate: null, moves: toUci(PAWN, pv) }] },
-      fenBefore: PAWN, moverColor: 'w', opponentLastSan: null,
+      fenBefore: PAWN, moverColor: 'w', prevCapture: null,
       named: { lineUci: toUci(PAWN, pv), evaluation: 495, mate: null },
     })!;
     expect(namedMoveAnswer(d, 'why-best')).toMatch(/^Kd3 is the best move here — it brings the king to d3, where it covers e4 and c4\. Their best reply is …Kd6\./);
@@ -95,7 +95,7 @@ describe('hard walk — mates', () => {
 
   it('the weighing names the fork the best move lands, not a square it eyes', () => {
     const F = 'r3k3/8/8/1N6/8/8/8/6K1 w - - 0 1';
-    const d = buildDeliberation({ analysis: { topLines: [{ rank: 1, evaluation: 500, mate: null, moves: toUci(F, ['Nc7+']) }] }, fenBefore: F, moverColor: 'w', opponentLastSan: null })!;
+    const d = buildDeliberation({ analysis: { topLines: [{ rank: 1, evaluation: 500, mate: null, moves: toUci(F, ['Nc7+']) }] }, fenBefore: F, moverColor: 'w', prevCapture: null })!;
     expect(d.bestWhy).toBe('forks the king on e8 and the rook on a8');
   });
 });
@@ -103,12 +103,12 @@ describe('hard walk — mates', () => {
 describe('hard-question walk 2026-10-11 — a move that threatens mate', () => {
   it('Nh5 is for the mate it threatens on g7, not an outpost', async () => {
     const { moveWhy } = await import('./deliberation');
-    expect(moveWhy('2rr3k/pp5p/2q1P3/8/4pN2/4P1Q1/bPPR1P2/2K3N1 w - - 3 23', 'Nh5', 'w', '…Rfd8')).toBe('threatens Qg7#');
+    expect(moveWhy('2rr3k/pp5p/2q1P3/8/4pN2/4P1Q1/bPPR1P2/2K3N1 w - - 3 23', 'Nh5', 'w', null)).toBe('threatens Qg7#');
   });
   it('reads as one clause behind "it would" (review noise walk 2026-10-20: "it would it threatens …, mate")', async () => {
     const { moveWhy } = await import('./deliberation');
     const { conditionalJobs } = await import('./inaccuracyCall');
-    const why = moveWhy('2rr3k/pp5p/2q1P3/8/4pN2/4P1Q1/bPPR1P2/2K3N1 w - - 3 23', 'Nh5', 'w', '…Rfd8')!;
+    const why = moveWhy('2rr3k/pp5p/2q1P3/8/4pN2/4P1Q1/bPPR1P2/2K3N1 w - - 3 23', 'Nh5', 'w', null)!;
     expect(`it would ${conditionalJobs(why)}`).toBe('it would threaten Qg7#');
   });
 });

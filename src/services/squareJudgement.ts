@@ -10,6 +10,7 @@
 // when the board does not show it. Pure.
 import type { Color, Square } from 'chess.js';
 import { isOutpost, noPawnCanChallenge, relativeRank } from './outpost';
+import { legalSeeGainFor } from './positionReadingService';
 import { squaresProof, legalLineProof } from './proof';
 import { heldOf } from './planJudgement';
 import { costStakes } from './factStakes';
@@ -214,13 +215,20 @@ export function maskedWeakness(fen: string, student: Color): StructureRead | nul
     for (let f = 0; f < 8; f++) for (let r = 1; r <= 8; r++) {
       const h = sqOn(f, r);
       if (h === s || c.get(h)?.type === 'p') continue;
+      // THEIR camp only (prod Learn audit 2026-11-09: "Their weak a3, a5, c3
+      // and c5" — a5 and c5 were the student's own half, and c5 was the very
+      // square the chasing push went to).
+      if (relativeRank(h, student) < 5) continue;
       if (!isOutpost(c, h, student, false)) continue;
       if (c.attackers(h, enemy).includes(s)) holes.push(h);
     }
     if (holes.length < 2) continue;
+    // The chase must stand: a push the piece (or anything of theirs) simply
+    // wins is not a chase.
     const push = me.moves({ verbose: true }).find((m) => m.piece === 'p' && !m.captured
       && pawnAttacks(m.to, student).includes(s)
-      && !c.attackers(m.to, enemy).some((q) => c.get(q)?.type === 'p'));
+      && !c.attackers(m.to, enemy).some((q) => c.get(q)?.type === 'p')
+      && legalSeeGainFor(m.after, m.to, enemy) <= 0);
     if (!push) continue;
     holes.sort();
     const noun = PIECE_NOUN[c.get(s)?.type ?? 'n'];

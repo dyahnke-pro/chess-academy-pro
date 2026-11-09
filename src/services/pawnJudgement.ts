@@ -350,6 +350,8 @@ export function formationChoice(
   const built = formation(fenBefore, bestSan, student);
   if (!built) return null;
   const kind = built.key.split(':')[1] ?? 'formation';
+  const SHAPE: Record<string, string> = { triangle: 'a pawn triangle', chain: 'a pawn chain', phalanx: 'a pair of pawns side by side' };
+  const shape = SHAPE[kind] ?? withArticle(kind);
   const proof = legalLineProof(fenBefore, [bestSan], lineSeatAt(fenBefore, student));
   if (!proof) return null;
   // The pawns it joins, by their files ("with your f- and h-pawns"), the
@@ -362,7 +364,9 @@ export function formationChoice(
     : `of ${andList(built.squares)}`;
   return {
     act: 'formation', squares: built.squares, proof, key: `formation-choice:${built.key}`, stakes: costStakes(cpLoss) ?? undefined,
-    text: `Of the pawn moves, ${bare(bestSan)} was the one: it makes ${withArticle(kind)} ${withPawns}, and ${bare(san)} builds nothing.`,
-    ...heldOf(`${bare(san)} builds nothing. Another pawn move makes ${withArticle(kind)}.`, [played.mv.to]),
+    text: `Of the pawn moves, ${bare(bestSan)} was the one: it makes ${shape} ${withPawns}, and ${bare(san)} links no pawns.`,
+    // "Another pawn move makes a triangle" named no pawns (prod Learn audit
+    // 2026-11-09): the shape is a pawn shape, said as one.
+    ...heldOf(`${bare(san)} links no pawns. Another pawn move would make ${shape}.`, [played.mv.to]),
   };
 }

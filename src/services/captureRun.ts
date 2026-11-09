@@ -1,8 +1,9 @@
 // captureRun — THE ONE THREAD of captures on a square (2026-10-28). A leaf:
-// piece values only, so the chat's fact computers (`groundedAnswer`, a leaf
-// itself) and the engine-path replays read the same run. Every copy that read
-// one move back called …Nxb4 "taking back the pawn" after cxb4 axb4 — the
-// move that wins it.
+// chess.js and piece values only, so the chat's fact computers
+// (`groundedAnswer`, a leaf itself) and the engine-path replays read the same
+// run. Every copy that read one move back called …Nxb4 "taking back the pawn"
+// after cxb4 axb4 — the move that wins it.
+import { Chess } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
 
 export interface PrevCaptureContext {
@@ -30,3 +31,48 @@ export function afterCapture(prev: PrevCaptureContext, mv: { to: string; capture
   return { square: mv.to, capturedValue: value, net: continues ? value - prev.net : value };
 }
 
+
+/** THE ONE "IS THIS A RECAPTURE?" READ (2026-11-09). A capture on the run's
+ *  square worth no more than what the other side has netted there takes back:
+ *  the trade they started, finished. Worth more, it WINS material — the prod
+ *  Learn audit heard "your f-pawn taking on e6 — it completes the trade" after
+ *  Bxe6 had taken only a pawn, and the move won the bishop. Four producers
+ *  each guessed this from SAN ("x on the same square"), which cannot see what
+ *  was taken; every one reads this now. A null run is unknown: not a take-back. */
+export function takesBack(prev: PrevCaptureContext | null, mv: { to: string; captured?: string | null }): boolean {
+  if (!prev?.square || !mv.captured || prev.square !== mv.to) return false;
+  return (MATERIAL_VALUE[mv.captured] ?? 0) <= prev.net;
+}
+
+/** The run after a game's moves, replayed from `startFen` (the standard start
+ *  when null). Null when a move does not play. */
+export function captureRunOfMoves(startFen: string | null, sans: readonly string[]): PrevCaptureContext | null {
+  try {
+    const c = startFen ? new Chess(startFen) : new Chess();
+    let run = NO_PREV_CAPTURE;
+    for (const san of sans) run = afterCapture(run, c.move(san));
+    return run;
+  } catch { return null; }
+}
+
+/** The run after the first `plies` moves of a game given as PGN — its start
+ *  position read from the PGN's own header, so a game set up from a position
+ *  replays right. Null when the PGN does not load or is shorter. */
+export function captureRunOfPgn(pgn: string, plies: number): PrevCaptureContext | null {
+  try {
+    const c = new Chess();
+    c.loadPgn(pgn);
+    const moves = c.history({ verbose: true });
+    if (plies > moves.length) return null;
+    let run = NO_PREV_CAPTURE;
+    for (const m of moves.slice(0, plies)) run = afterCapture(run, m);
+    return run;
+  } catch { return null; }
+}
+
+/** The run after ONE move from `fenBefore`, continuing `prev` (a fresh run
+ *  when null) — for a surface that holds only the move before. Null when the
+ *  move does not play there. */
+export function captureRunAfterMove(prev: PrevCaptureContext | null, fenBefore: string, san: string): PrevCaptureContext | null {
+  try { return afterCapture(prev ?? NO_PREV_CAPTURE, new Chess(fenBefore).move(san)); } catch { return null; }
+}

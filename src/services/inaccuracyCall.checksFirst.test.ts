@@ -20,7 +20,7 @@ describe('checks first — the move order is the reason', () => {
       fenBefore: fen(), playedSan: 'gxh5', bestSan: 'Rxf8+', bestLineUci: BEST_LINE,
       cpLoss: 261, moverEvalAfterCp: 418, side: 'student', moverColor: 'white',
     }) as never)?.said ?? '';
-    expect(said).toBe("gxh5 still wins, but Rxf8+ was cleaner — checks first: Rxf8+, Kxf8, and gxh5 would still have been there — both moves, not one.");
+    expect(said).toBe("Your move still wins, but Rxf8+ was cleaner — checks first: Rxf8+, Kxf8, and gxh5 would still have been there — both moves, not one.");
   });
   it('negative controls: not a check, or the capture does not come back', () => {
     // The best move is not a check.

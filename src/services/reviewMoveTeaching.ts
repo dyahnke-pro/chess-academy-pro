@@ -802,12 +802,20 @@ export function buildReviewMoveTeachingFact(
     // centre is a step toward safety. Any other king move has none of these
     // ideas and falls through to what the move does see.
     const way = kingWay(mv.from, mv.to, mv.color);
+    // A KING STEPPING OUT OF CHECK is answering the check, not marching
+    // (prod Learn audit 2026-11-09: 30.Kh2 out of …Bc5+ was "Their king
+    // marches up — in the endgame it stops hiding and becomes a fighting
+    // piece"). And a step toward the corner is no march into the fight.
+    let outOfCheck = false;
+    try { outOfCheck = new Chess(mv.before).inCheck(); } catch { /* the move is read as played */ }
     // SAID IN FULL ONCE, THEN REFERRED TO (Review prod audit 2026-10-30: "it
     // marches up — in the endgame it stops hiding and becomes a fighting piece"
     // on three king moves of one game). The refer-back restates; the move says
     // it only beside something new.
-    const said = heavyMinor <= 6
-      ? way.forward
+    const said = outOfCheck
+      ? null
+      : heavyMinor <= 6
+      ? way.forward && !way.awayFromCentre
         ? { key: 'king-march', idea: 'king-activity' as const, lines: ['The king marches up — in the endgame it stops hiding and becomes a fighting piece.', 'The king keeps marching up.'] }
         : way.central
           ? { key: 'king-centre', idea: 'king-activity' as const, lines: ['The king heads for the centre — in the endgame it stops hiding and becomes a fighting piece.', 'The king keeps heading for the centre.'] }

@@ -330,7 +330,7 @@
     {"posture":"walk","tier":"blunder","rank":90,"speak":true,"reason":"spoken","teaches":true,"needSpeak":null,"moveAdvice":null,"spokenCount":1,"quietCount":4,"quietBy":{"unsupported":4},"subsumed":[],"method":false,"stakedCount":1,"unproven":0,"unprovenKinds":[],"leadStaked":true,"supportLinks":{"cause-effect":0,"square":0,"none":0}},
     {"posture":"walk","tier":"swing","rank":70,"speak":true,"reason":"spoken","teaches":true,"needSpeak":null,"moveAdvice":null,"spokenCount":3,"quietCount":3,"quietBy":{"unsupported":3},"subsumed":[],"method":false,"stakedCount":2,"unproven":0,"unprovenKinds":[],"leadStaked":true,"supportLinks":{"cause-effect":1,"square":0,"none":1}},
     {"posture":"walk","tier":"swing","rank":70,"speak":true,"reason":"spoken","teaches":true,"needSpeak":null,"moveAdvice":null,"spokenCount":1,"quietCount":5,"quietBy":{"in-flux":5},"subsumed":[],"method":false,"stakedCount":2,"unproven":0,"unprovenKinds":[],"leadStaked":true,"supportLinks":{"cause-effect":0,"square":0,"none":0}},
-    {"posture":"walk","tier":"blunder","rank":90,"speak":true,"reason":"spoken","teaches":true,"needSpeak":null,"moveAdvice":null,"spokenCount":3,"quietCount":4,"quietBy":{"unsupported":3,"subsumed":1},"subsumed":[["Their dark squares are weak: d6 and b6 are holes no bishop of theirs covers. A k","Their weak b6 and d6 hide behind the bishop on c5. Chase it with b4, and those s"]],"method":false,"stakedCount":1,"unproven":0,"unprovenKinds":[],"leadStaked":true,"supportLinks":{"cause-effect":1,"square":0,"none":1}}
+    {"posture":"walk","tier":"blunder","rank":90,"speak":true,"reason":"spoken","teaches":true,"needSpeak":null,"moveAdvice":null,"spokenCount":3,"quietCount":3,"quietBy":{"unsupported":3},"subsumed":[],"method":false,"stakedCount":1,"unproven":0,"unprovenKinds":[],"leadStaked":true,"supportLinks":{"cause-effect":1,"square":0,"none":1}}
    ],
    "spoken": [
     "1: The rule behind e4: stake out the center and grab space with the pawn to e4. It matters because pieces behind a strong center reach either wing in a move or two.",
@@ -359,7 +359,7 @@
     "24: They put their queen on the c-file first — it's contested now. That plan is off. The new plan is to make your bishop pair count. Here's how: trade pawns to open the board and keep both bishops — on an open board two bishops outgun their knight and bishop. Why it matters: you have two bishops and they don't, and bishops grow stronger as the board opens.",
     "25: Your Qc2 takes the open c-file.",
     "26: ",
-    "27: Your e5 was a mistake, costing more than a point. g3 was stronger: it would give your king luft, a flight square off the back rank. e5 is a pawn break: it attacks their pawn on d6. If they take, it half-opens the e-file for your rooks. That's the price of e5: no pawn of yours can cover d5 again, and their knight on f6 is one move from it. From there it would hit your bishop on e3 and knight on c3. Keeping d5 guarded is part of this structure from here. Of the pawn moves, g3 was the one: it makes a triangle with your f- and h-pawns, and e5 builds nothing. Your e-pawn now attacks their knight on f6, which is worth more than the pawn. Blunder check before you let go of a piece: run CCT for them — what checks, captures and threats do they have once it lands? Here the answer was …dxe5, taking your pawn on e5. That is the “Is my move safe?” habit.",
+    "27: Your e5 was a mistake, costing more than a point. g3 was stronger: it would give your king luft, a flight square off the back rank. e5 is a pawn break: it attacks their pawn on d6. If they take, it half-opens the e-file for your rooks. That's the price of e5: no pawn of yours can cover d5 again, and their knight on f6 is one move from it. From there it would hit your bishop on e3 and knight on c3. Keeping d5 guarded is part of this structure from here. Of the pawn moves, g3 was the one: it makes a pawn triangle with your f- and h-pawns, and e5 links no pawns. Your e-pawn now attacks their knight on f6, which is worth more than the pawn. Blunder check before you let go of a piece: run CCT for them — what checks, captures and threats do they have once it lands? Here the answer was …dxe5, taking your pawn on e5. That is the “Is my move safe?” habit.",
     "28: They take on e5 — taking back would cost you more than the pawn.",
     "29: Your Be4 was a mistake, costing about two points. It let them win material, starting with Nxe4. Better was d5: it would win a pawn. Your queen and bishop form a battery on the diagonal, bearing down on their h-pawn. Their knight sits in front of their own f-pawn, so while it stays there no pawn can come up to back up e5 — and you are already hitting it.",
     "30: They take on e4, and you can take back — your bishop for their knight.",
@@ -369,7 +369,7 @@
     "34: Their e5 was a blunder, costing three or four points. It let you play Bb6, which lands on the b6 outpost, a square none of their pawns can attack. Nxd4 was the better move: it would take your bishop.",
     "35: Your Bc5 was a blunder, costing about two points. It let them play …Nd4, which attacks your queen. Better was Bb6: it would land on the b6 outpost, a square none of their pawns can attack. The pin is a one-move idea, while Bb6 is the plan: it covers d4, keeping their knight off it. Let them open the e-file: every square their rooks could use there is covered.",
     "36: Their Bxc5 was a blunder, costing about two points. Nd4 was stronger: it would park a piece on d4, where none of your pawns can attack it.",
-    "37: Your Nxc5 was a blunder, costing three or four points. After the queen taking on c5, kicking it with the pawn to b6 would not have worked: the queen takes b6, winning a pawn. Their weak b6 and d6 hide behind the bishop on c5. Chase it with b4, and those squares open up again."
+    "37: Your Nxc5 was a blunder, costing three or four points. After the queen taking on c5, kicking it with the pawn to b6 would not have worked: the queen takes b6, winning a pawn. Their dark squares are weak: d6 and b6 are holes no bishop of theirs covers. A knight belongs on one."
    ]
   },
   "learn:sicilian1200": {
@@ -433,7 +433,7 @@
     {"posture":"asked","tier":"critical","rank":65,"speak":true,"reason":"spoken","teaches":true,"needSpeak":null,"moveAdvice":"deciding","spokenCount":1,"quietCount":6,"quietBy":{"in-flux":6},"subsumed":[],"method":false,"stakedCount":1,"unproven":0,"unprovenKinds":[],"leadStaked":false,"supportLinks":{"cause-effect":0,"square":0,"none":0}},
     {"posture":"asked","tier":"none","rank":0,"speak":true,"reason":"spoken","teaches":true,"needSpeak":null,"moveAdvice":"none","spokenCount":1,"quietCount":6,"quietBy":{"in-flux":6},"subsumed":[],"method":false,"stakedCount":0,"unproven":0,"unprovenKinds":[],"leadStaked":false,"supportLinks":{"cause-effect":0,"square":0,"none":0}},
     {"posture":"asked","tier":"must-defend","rank":75,"speak":true,"reason":"spoken","teaches":true,"needSpeak":null,"moveAdvice":"threat","spokenCount":7,"quietCount":0,"quietBy":{},"subsumed":[],"method":false,"stakedCount":1,"unproven":0,"unprovenKinds":[],"leadStaked":true,"supportLinks":{"cause-effect":2,"square":0,"none":4}},
-    {"posture":"asked","tier":"none","rank":0,"speak":true,"reason":"spoken","teaches":true,"needSpeak":null,"moveAdvice":"none","spokenCount":1,"quietCount":3,"quietBy":{"in-flux":3},"subsumed":[],"method":false,"stakedCount":0,"unproven":0,"unprovenKinds":[],"leadStaked":false,"supportLinks":{"cause-effect":0,"square":0,"none":0}}
+    {"posture":"asked","tier":"none","rank":0,"speak":true,"reason":"spoken","teaches":true,"needSpeak":null,"moveAdvice":"none","spokenCount":1,"quietCount":2,"quietBy":{"in-flux":2},"subsumed":[],"method":false,"stakedCount":0,"unproven":0,"unprovenKinds":[],"leadStaked":false,"supportLinks":{"cause-effect":0,"square":0,"none":0}}
    ],
    "spoken": [
     "2: [timing] Their knight is still on g8, so nothing hits your pawn on e4 yet. It doesn't need a guard, so development comes first. [structure-plan] The plan from here: bring both knights and both bishops into the game, since development comes first. Then break with d4 to open the position.",
@@ -485,7 +485,7 @@
     "24: They play Qc8: it takes the open c-file — a highway straight into your position.",
     "25: You play Qc2: it takes the open c-file — a highway straight into their position.",
     "26: ",
-    "27: You play e5 — it attacks their knight on f6. e5 is a pawn break: it attacks their pawn on d6. If they take, it half-opens the e-file for your rooks. e5 builds nothing. Another pawn move makes a triangle.",
+    "27: You play e5 — it attacks their knight on f6. e5 is a pawn break: it attacks their pawn on d6. If they take, it half-opens the e-file for your rooks. e5 links no pawns. Another pawn move would make a pawn triangle.",
     "28: They play dxe5: it wins a pawn — if dxe5, …Nxe5. Nd5 was tempting for them, but it fails: you play Nxd5, they answer exd5 and you play Bxd5 — you win a pawn. It's level, so make chances: Bxc6 creates the imbalance, bishop for knight. d5 keeps it quiet.",
     "29: You play Be4 — it adds its weight to d5, backing your d-pawn's push there.",
     "30: They play Nxe4 — it takes d2 away from your queen on c2.",
@@ -807,7 +807,7 @@
     "32: You play f5 — it gets your pawn off f7 before their rook on f3 can take it. It also loosens your own king's cover, and a pawn never moves back.",
     "33: They play g4 — it loosens their own king's cover, and a pawn never moves back. g4 is a pawn break: it attacks your pawn on f5. If you take, it half-opens the g-file for their rooks, toward your king.",
     "34: You play Bd4+ — it forces the king to react, seizing the initiative for a move.",
-    "35: They play Kh1 — it steps toward safety, out of the crossfire before it starts. R1f2 looked natural for them, but it doesn't work: you play fxg4 — you win a pawn.",
+    "35: R1f2 looked natural for them, but it doesn't work: you play fxg4 — you win a pawn.",
     "36: Your pawns form a chain, and its base on a7 is the one pawn no other pawn guards, so that is the pawn to look after.",
     "37: They play gxf5: it wins a pawn — if …gxf5, Rxf5.",
     "38: You play Bb7 — it goes after their rook on f3, the only piece guarding the pawn on f5. It also lands a pin.",

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**991 lines · 6 exports · 23 importers · 13 tests · 0 audits**
+**999 lines · 6 exports · 23 importers · 13 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -42,7 +42,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `quietMovePoint` (function) — 8 call sites
-- `src/services/playCommentary.ts:921`
+- `src/services/playCommentary.ts:924`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
 - `src/services/reviewWalkOct1.test.ts:71`
@@ -106,8 +106,8 @@
 - `src/services/squareRole.test.ts:29`
 - `src/services/squareRole.test.ts:44`
 
-### `buildReviewMoveTeachingFact` (function) — 14 call sites
-- `src/services/learnBoardTeaching.ts:1223`
+### `buildReviewMoveTeachingFact` (function) — 15 call sites
+- `src/services/learnBoardTeaching.ts:1230`
 - `src/services/moveThoughtFacts.ts:229`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
@@ -116,15 +116,16 @@
 - `src/services/reviewMoveTeaching.test.ts:238`
 - `src/services/reviewMoveTeaching.test.ts:240`
 - `src/services/reviewMoveTeaching.test.ts:245`
-- `src/services/reviewMoveTeaching.test.ts:250`
-- `src/services/reviewMoveTeaching.test.ts:255`
-- `src/services/reviewMoveTeaching.test.ts:257`
+- `src/services/reviewMoveTeaching.test.ts:254`
 - `src/services/reviewMoveTeaching.test.ts:260`
+- `src/services/reviewMoveTeaching.test.ts:265`
+- `src/services/reviewMoveTeaching.test.ts:267`
+- `src/services/reviewMoveTeaching.test.ts:272`
 - `src/services/tapeKc7Skewer.test.ts:29`
 
 ### `nameEndgamePhase` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:4147`
-- `src/services/reviewFullData.ts:1730`
+- `src/services/reviewFullData.ts:1731`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`

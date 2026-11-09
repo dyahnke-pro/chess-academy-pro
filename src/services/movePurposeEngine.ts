@@ -10,6 +10,7 @@ import { stockfishEngine } from './stockfishEngine';
 import { deepFact } from './threeFacts';
 import { uciToSans } from './structureJudgementKit';
 import { answerQuestionThought, type QuestionAnswer, type ThoughtQuestion } from '../coach/questionThought';
+import { captureRunOfMoves, type PrevCaptureContext } from './captureRun';
 
 const DEPTH = 14;
 const BUDGET_MS = 900;
@@ -40,12 +41,14 @@ export async function movePurpose(fenBefore: string, san: string, seat: 'student
 }
 
 /** THE reason for `san` (`decisiveReason`), reading every position it needs. */
-export async function moveReason(fenBefore: string, san: string, seat: 'student' | 'opponent', opponentLastSan: string | null): Promise<DecisiveReason | null> {
+export async function moveReason(fenBefore: string, san: string, seat: 'student' | 'opponent',
+  /** The capture run after the move before (`captureRun`), or null when unknown. */
+  prevCapture: PrevCaptureContext | null): Promise<DecisiveReason | null> {
   const reads = await readIntentReads(fenBefore, san);
   if (!reads) return null;
   // The student's own record decides whether a mate is posed as a test.
   const asksToSee = seat === 'student' ? await calculationProven() : false;
-  return decisiveReason({ fenBefore, san, reads, seat, opponentLastSan, asksToSee, namesPreparedMove: true });
+  return decisiveReason({ fenBefore, san, reads, seat, prevCapture, asksToSee, namesPreparedMove: true });
 }
 
 /** WHAT THE MOVE SETS UP (the three facts, WO-THINK-01): the mover's next move
@@ -79,7 +82,7 @@ async function calculationProven(): Promise<boolean> {
 const ASKED_DEPTH = 16;
 const ASKED_BUDGET_MS = 2000;
 interface AskedBest { uci: string; san: string; evalCp: number | null; mateIn: number | null; pvSan: string[]; reason: DecisiveReason | null }
-export async function askedBestMove(fen: string, opponentLastSan: string | null): Promise<AskedBest | null> {
+export async function askedBestMove(fen: string, prevCapture: PrevCaptureContext | null): Promise<AskedBest | null> {
   let lines: AnalysisLine[] = [];
   try { lines = (await stockfishEngine.analyzeWithBudget(fen, ASKED_DEPTH, ASKED_BUDGET_MS)).topLines ?? []; } catch { return null; }
   const top = [...lines].filter((l) => l.moves.length > 0).sort((a, b) => a.rank - b.rank)[0];
@@ -90,7 +93,7 @@ export async function askedBestMove(fen: string, opponentLastSan: string | null)
   if (!san) return null;
   const reads = await readIntentReads(fen, san, lines);
   const asksToSee = await calculationProven();
-  const reason = reads ? decisiveReason({ fenBefore: fen, san, reads, seat: 'student', opponentLastSan, asksToSee, namesPreparedMove: true }) : null;
+  const reason = reads ? decisiveReason({ fenBefore: fen, san, reads, seat: 'student', prevCapture, asksToSee, namesPreparedMove: true }) : null;
   return { uci: top.moves[0], san, evalCp: typeof top.evaluation === 'number' ? top.evaluation : null, mateIn: top.mate ?? null, pvSan, reason };
 }
 
@@ -124,8 +127,7 @@ export async function askedMoveThought(
   try { const m = new Chess(fenBefore).move(san); uci = `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; }
   const me = board.studentColor === 'white' ? 'w' : 'b';
   const seat: 'student' | 'opponent' = (fenBefore.split(' ')[1] === 'b' ? 'b' : 'w') === me ? 'student' : 'opponent';
-  const opponentLastSan = q === 'opponent-move' ? board.history[board.history.length - 2] ?? null : board.history[board.history.length - 1] ?? null;
-  const reason = q === 'opponent-move' ? null : decisiveReason({ fenBefore, san, reads, seat, opponentLastSan, asksToSee: seat === 'student' ? await calculationProven() : false, namesPreparedMove: true });
+  const reason = q === 'opponent-move' ? null : decisiveReason({ fenBefore, san, reads, seat, prevCapture: captureRunOfMoves(null, board.history), asksToSee: seat === 'student' ? await calculationProven() : false, namesPreparedMove: true });
   const answer = answerQuestionThought(q, { fen: board.fen, history: board.history, studentColor: board.studentColor, bestUci: uci, reads, reason });
   return answer ? { ...answer, reason } : null;
 }

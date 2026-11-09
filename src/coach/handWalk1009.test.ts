@@ -146,8 +146,8 @@ describe('each move keeps its own reason (hand walk 2: "d4 is fine … it guards
     const { moveWhy, namedMoveAnswer } = await import('../services/deliberation');
     const c = new Chess(); for (const m of 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6'.split(' ')) c.move(m);
     const fen = c.fen();
-    const bestWhy = moveWhy(fen, 'd3', 'w', 'Nf6');
-    const namedWhy = moveWhy(fen, 'd4', 'w', 'Nf6');
+    const bestWhy = moveWhy(fen, 'd3', 'w', null);
+    const namedWhy = moveWhy(fen, 'd4', 'w', null);
     const text = namedMoveAnswer({
       best: { san: 'd3', evalCp: 40, deltaCp: 0 }, alternatives: [], isRealChoice: false,
       bestWhy, bestLine: null, named: { san: 'd4', evalCp: 30, deltaCp: 10, shortfall: 'less-precise' }, namedWhy,
@@ -220,7 +220,7 @@ it('pass 1: "Bxc4 now?" says why it is clearly worse — the d4 pawn the c6 knig
   const c = new Chess(); for (const m of 'd4 d5 c4 e6 Nc3 dxc4 e4 Nc6'.split(' ')) c.move(m);
   const d = buildDeliberation({
     analysis: { topLines: [{ rank: 1, evaluation: 60, moves: ['g1f3'], mate: null }] },
-    fenBefore: c.fen(), moverColor: 'w', opponentLastSan: 'Nc6',
+    fenBefore: c.fen(), moverColor: 'w', prevCapture: null,
     named: { lineUci: ['f1c4', 'c6d4'], evaluation: -120, mate: null },
   });
   const text = d ? namedMoveAnswer(d, 'is-it-good') ?? '' : '';
@@ -346,7 +346,7 @@ it('walk 4: "what if I castle?" with the b5 bishop hanging says so, and never "f
   const c = new Chess(); for (const m of 'e4 d5 Nf3 dxe4 Bb5+ c6'.split(' ')) c.move(m);
   const d = buildDeliberation({
     analysis: { topLines: [{ rank: 1, evaluation: -280, moves: ['b5c4'], mate: null }] },
-    fenBefore: c.fen(), moverColor: 'w', opponentLastSan: 'c6',
+    fenBefore: c.fen(), moverColor: 'w', prevCapture: null,
     named: { lineUci: ['e1g1', 'c6b5'], evaluation: -300, mate: null },
   });
   const text = d ? namedMoveAnswer(d, 'is-it-good') ?? '' : '';

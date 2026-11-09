@@ -21,7 +21,7 @@ describe('a piece sent to trade is not offside (ply 13)', () => {
   it('7.Bh6 hitting the g7 bishop is no "long way from your king"', async () => {
     const { findStudentDrawback } = await import('./concessionBeat');
     for (const best of ['O-O-O', 'Nge2', 'g4', 'Nh3']) {
-      const d = findStudentDrawback({ fen: fenAt(12), playedSan: 'Bh6', bestSan: best, studentColor: 'white' });
+      const d = findStudentDrawback({ fen: fenAt(12), playedSan: 'Bh6', bestSan: best, studentColor: 'white', place: 'lead' });
       expect(d?.kind).not.toBe('piece-offside');
     }
   });
@@ -128,7 +128,7 @@ describe('an outpost they already held is not "handed" over (ply 73)', () => {
   it('37.Ng5 does not hand over g3', async () => {
     const { findStudentDrawback } = await import('./concessionBeat');
     for (const best of ['Rxf4', 'Rg4', 'Nxf4']) {
-      const d = findStudentDrawback({ fen: fenAt(72), playedSan: 'Ng5', bestSan: best, studentColor: 'white' });
+      const d = findStudentDrawback({ fen: fenAt(72), playedSan: 'Ng5', bestSan: best, studentColor: 'white', place: 'lead' });
       expect(d?.kind === 'outpost-conceded' && d.square === 'g3').toBe(false);
     }
   });

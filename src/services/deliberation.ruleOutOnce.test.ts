@@ -15,7 +15,7 @@ describe('a loss every move suffers is not why one falls short', () => {
   // Move 19, Black to move. The best, …Rd6, loses a7 to Qxa7 as well.
   const fen = '2k4r/ppp2p1p/4pp2/2Q5/3r4/8/PPP1K1P1/R4B1R b - - 3 19';
   const d = buildDeliberation({
-    fenBefore: fen, moverColor: 'b', opponentLastSan: null,
+    fenBefore: fen, moverColor: 'b', prevCapture: null,
     analysis: { topLines: [
       line(1, 730, 'd4d6 c5a7 d6a6 a7d4 e6e5 d4g4 c8b8 g4g7 h8c8 g7f7'),
       line(2, 798, 'd4e4 e2f3 e4e5 c5a7 e5f5 f3e3 h8d8 h1h7 c8d7 h7f7'),
@@ -32,7 +32,7 @@ describe('a refutation the best move avoids still speaks', () => {
   // The best (O-O) keeps every piece; Nxe5 drops the knight for a pawn.
   const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 3 14';
   const d = buildDeliberation({
-    fenBefore: fen, moverColor: 'w', opponentLastSan: null,
+    fenBefore: fen, moverColor: 'w', prevCapture: null,
     analysis: { topLines: [
       line(1, 82, 'e1g1 f8e7 d2d4 d7d6 d4d5 c6b8 c4d3 g8f6 c2c4 b8d7'),
       line(2, -267, 'f3e5 c6e5 c4b3 d7d5 d2d4 e5g6 b1c3 d5e4 d1e2 g8f6'),

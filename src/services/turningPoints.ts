@@ -30,6 +30,7 @@ import { isMateEval } from './engineConstants';
 import { winChancePercent } from './winChance';
 import { positionOf } from '../utils/samePosition';
 import { withArticle } from '../utils/andList';
+import { captureRunAfterMove } from './captureRun';
 
 /** How many turning points a review asks about (David: "the biggest few"). */
 const TURNING_POINTS_ASKED = 3;
@@ -319,7 +320,6 @@ export function selectTurningPoints(
     trace?.push({ ...at, skip: null });
     const mover: 'w' | 'b' = seg.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
     const prev = ordered[i - 1];
-    const opponentLast = prev && prev.ply === seg.ply - 1 ? prev.san : null;
     const moverColor: 'white' | 'black' = mover === 'w' ? 'white' : 'black';
     // THE WHY, from the computers every coach surface speaks: what the best
     // line wins (`betterMoveReason`, read off the line), else the move's own
@@ -332,7 +332,7 @@ export function selectTurningPoints(
         : null;
     } catch { why = null; }
     if (!why) {
-      try { const w = moveWhy(seg.fenBefore, seg.bestMoveSan, mover, opponentLast); why = w ? `it ${w}` : null; } catch { why = null; }
+      try { const w = moveWhy(seg.fenBefore, seg.bestMoveSan, mover, prev && prev.ply === seg.ply - 1 ? captureRunAfterMove(null, prev.fenBefore, prev.san) : null); why = w ? `it ${w}` : null; } catch { why = null; }
     }
     // WHAT THE PLAYED MOVE ALLOWED — their own best line after it.
     // From the ONE error computer (David 2026-10-10: "Unity!").

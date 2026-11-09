@@ -32,7 +32,7 @@ describe('ply 49 — a loose knight the engine does not punish is not "dropped"'
         { rank: 1, evaluation: 430, mate: null, moves: ['a7b5', 'c7c6', 'b5c7', 'b8b2'] },
         { rank: 2, evaluation: 426, mate: null, moves: ['e3h6', 'g8h7', 'g1g7', 'h7h6'] },
       ] } as never,
-      fenBefore: fenAt(50), moverColor: 'w', opponentLastSan: 'Rb8',
+      fenBefore: fenAt(50), moverColor: 'w', prevCapture: null,
     });
     const bh6 = d?.alternatives.find((a) => a.san === 'Bh6');
     expect(bh6).toBeDefined();

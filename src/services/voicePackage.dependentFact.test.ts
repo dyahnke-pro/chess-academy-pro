@@ -13,7 +13,7 @@ import { buildVoicePackage, type VoiceFact } from './voicePackage';
 
 const FEN = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
 const VERDICT = 'That move was a blunder — the stronger move set up a fork.';
-const RULE = 'Remember — a fork hits two targets at once, and only one can escape — the other falls.';
+const RULE = 'Remember — a fork hits two targets at once, and only one can escape, so the other falls.';
 
 const fact = (text: string): VoiceFact => ({ kind: 'computed', text, fen: FEN });
 

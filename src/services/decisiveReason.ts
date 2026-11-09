@@ -28,6 +28,7 @@ import { openSentence } from '../utils/openSentence';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { unmarked } from '../utils/sanMark';
 import { costReason, reasonSans, reasonWinWords } from './costReason';
+import { takesBack, type PrevCaptureContext } from './captureRun';
 
 export type ReasonKind = 'the' | 'a' | 'close';
 export type ReasonSource = 'material' | 'stops' | 'prepares' | 'description';
@@ -173,7 +174,9 @@ export function decisiveReason(input: {
   san: string;
   reads: IntentReads;
   seat: 'student' | 'opponent';
-  opponentLastSan: string | null;
+  /** The capture run after the move before (`captureRun`), or null when
+   *  unknown. REQUIRED: a recapture is said as taking back. */
+  prevCapture: PrevCaptureContext | null;
   /** The student's own record shows calculation PROVEN (heat map green on
    *  `calculation-depth`): a forced mate is then posed as a visualization
    *  test — "can you see it?" — with the line on the board, never answered in
@@ -251,7 +254,7 @@ export function decisiveReason(input: {
   const played = dot(san, mover);
   // ONE MATE SENTENCE (oneWhyBest gate): the mate reason is bestMoveReason's,
   // not a second copy of its wording here.
-  const mateReason = (n: number | 'forced'): string => `${played} ${bestMoveReason(fenBefore, san, mover, { mateIn: n, opponentLastSan: null }) ?? ''}`.trim();
+  const mateReason = (n: number | 'forced'): string => `${played} ${bestMoveReason(fenBefore, san, mover, { mateIn: n, prevCapture: null }) ?? ''}`.trim();
   const whose = seat === 'student' ? 'your' : 'their';
   // Every line is worded from the STUDENT's seat, whoever moves.
   const studentWB: 'w' | 'b' = seat === 'student' ? mover : mover === 'w' ? 'b' : 'w';
@@ -299,8 +302,9 @@ export function decisiveReason(input: {
     const altTrusted = gapCp >= COVERS_SHARE * Math.min(matStake, MATE_CP / 2);
     // A RECAPTURE: the trade they started finishes here; the reason is taking
     // back, and the cost is what any other move leaves them holding.
-    const recapture = !!input.opponentLastSan && /x/.test(input.opponentLastSan) && /x/.test(san)
-      && squareOf(input.opponentLastSan) === squareOf(san);
+    // Read off the capture RUN (`takesBack`): a capture worth more than what
+    // they took wins it, never "takes back".
+    const recapture = (() => { try { return takesBack(input.prevCapture, new Chess(fenBefore).move(san)); } catch { return false; } })();
     // The seat leads the sentence: "Their Nxd4 takes back" was spoken "their
     // knight takes d4 takes back" (prod walk 2026-10-18) — a capture cannot
     // also be the verb.
@@ -361,7 +365,7 @@ export function decisiveReason(input: {
   const top = covering.at(0) ?? cands.at(0);
   // The board description is worded for the MOVER ("pushes your passed pawn"),
   // so it speaks only for the student's own move — never re-pronouned.
-  const description = seat === 'student' ? bestMoveReason(fenBefore, san, mover, { mateIn: null, opponentLastSan: input.opponentLastSan }) : null;
+  const description = seat === 'student' ? bestMoveReason(fenBefore, san, mover, { mateIn: null, prevCapture: input.prevCapture }) : null;
   const base = { gapCp, gapEarned, nextBestSan, tail: null as string | null, core: null as string | null, choice: null as string | null, about: null as DecisiveReason['about'] };
 
   if (gapCp < CLOSE_GAP_CP) {
@@ -385,7 +389,7 @@ export function decisiveReason(input: {
     // plans, never as "no reason". The alternative is read by the SAME
     // computer from the same seat.
     const altDescription = seat === 'student' && description && nextBestSan && !stops
-      ? bestMoveReason(fenBefore, nextBestSan, mover, { mateIn: null, opponentLastSan: input.opponentLastSan })
+      ? bestMoveReason(fenBefore, nextBestSan, mover, { mateIn: null, prevCapture: input.prevCapture })
       : null;
     if (altDescription && description && twoPlans(description, altDescription) && nextBestSan) {
       // `core` is the contrast alone — chat leads with its own "X and Y are

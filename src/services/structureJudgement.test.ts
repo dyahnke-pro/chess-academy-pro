@@ -149,12 +149,14 @@ describe('squareJudgement', () => {
     expect(semiOutpost(legal('6k1/pp2p1pp/3p4/8/4P3/2N5/PP4PP/6K1 w - - 0 20'), 'Nd5', 'w', 0)).toBeNull();
   });
 
-  it('masked weakness: the c6 knight hides their holes; b5 chases it', () => {
-    const fen = legal('6k1/pp4pp/2n5/8/1P6/8/P4PPP/6K1 w - - 0 20');
+  it('masked weakness: the e6 knight hides their holes; f5 chases it', () => {
+    // Their weak squares are in THEIR camp (prod Learn audit 2026-11-09): the
+    // knight covers c5 and g5, and d4/f4 in White's own half are not theirs.
+    const fen = legal('6k1/p3p3/4n3/8/5P2/8/P5PP/6K1 w - - 0 20');
     const r = voiced(maskedWeakness(fen, 'w'));
-    expect(r.text).toMatch(/^Their weak d4 and e5 hide behind the knight on c6\. Chase it with b5/);
+    expect(r.text).toMatch(/^Their weak c5 and g5 hide behind the knight on e6\. Chase it with f5/);
     // No pawn can chase it: silent.
-    expect(maskedWeakness(legal('6k1/pp4pp/2n5/8/8/8/P4PPP/6K1 w - - 0 20'), 'w')).toBeNull();
+    expect(maskedWeakness(legal('6k1/p3p3/4n3/8/8/8/P5PP/6K1 w - - 0 20'), 'w')).toBeNull();
   });
 
   it('a square valued for safety and route: the queen on a4, then b4', () => {
@@ -326,5 +328,16 @@ describe('structureReads — composed by when they apply', () => {
     expect(held?.text).not.toMatch(/Bxc3|O-O/);
     // The opening position: no structural fact to state.
     expect(boardStructure(new Chess().fen(), 'w')).toEqual([]);
+  });
+});
+
+// Prod Learn audit 2026-11-09 (the Scandinavian game, after Bb4): "Their weak
+// a3, a5, c3 and c5 hide behind the bishop on b4. Chase it with c5" — a5 and
+// c5 are Black's own half, and c5 was the chasing push's own square.
+describe('the masked weakness names squares in their camp only', () => {
+  it('Bb4 covers a3 and c3 in White\'s half, never a5 or c5', () => {
+    const r = maskedWeakness('7r/1kp3pp/3bp3/8/PB6/8/2P2PP1/3R1RK1 b - - 1 23', 'b');
+    expect(r?.text ?? '').not.toMatch(/a5|c5 hide/);
+    if (r) expect(r.squares.filter((s) => /[1-8]/.test(s) && Number(s[1]) >= 5 && s !== 'b4')).toEqual([]);
   });
 });

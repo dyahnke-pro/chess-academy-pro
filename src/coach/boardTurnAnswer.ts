@@ -30,6 +30,7 @@ import { lastMoveIfStudent, lastMoveIfOpponent } from '../services/lastMoveOfLin
 import { computeMustDefend } from '../services/threatOut';
 import { boardPlanFacts } from '../services/boardPlanFacts';
 import { moveWhy } from '../services/deliberation';
+import { captureRunOfMoves } from '../services/captureRun';
 import { andList, lineSeatAt, lineShape, seatedLine } from '../utils/andList';
 import { playNamedLine } from '../services/whyNotLegal';
 import { settledLeadFor, lastMoveOf } from '../services/material';
@@ -108,8 +109,8 @@ export async function answerBoardTurn(turn: ResolvedChatTurn, board: BoardTurnIn
       mate: cand.mateIn,
     }
     : { lineUci: [uci], evaluation: 0, mate: null };
-  const opponentLastSan = board.history.length ? board.history[board.history.length - 1] : null;
-  const d = buildDeliberation({ analysis, fenBefore: board.fen, moverColor: mover, opponentLastSan, named, maxCandidates: 4 });
+  const prevCapture = captureRunOfMoves(null, board.history);
+  const d = buildDeliberation({ analysis, fenBefore: board.fen, moverColor: mover, prevCapture, named, maxCandidates: 4 });
   if (!d) return null;
   // "WHY IS Rxe5 BEST?" ON THE BEST MOVE — the thought a lesson says on it
   // (the reversed matrix): what it does, the moves it beats, the order, the
@@ -263,9 +264,9 @@ export async function developNextAnswer(board: BoardTurnInput, out?: { endorsed?
   const sign = me === 'w' ? 1 : -1;
   const score = (evalCp: number | null, mate: number | null): number =>
     (mate != null ? (mate > 0 ? 100000 : -100000) : (evalCp ?? 0)) * sign;
-  const opponentLastSan = board.history.length ? board.history[board.history.length - 1] : null;
+  const prevCapture = captureRunOfMoves(null, board.history);
   const say = (san: string): string => {
-    const why = moveWhy(board.fen, san, me, opponentLastSan);
+    const why = moveWhy(board.fen, san, me, prevCapture);
     return why ? `${san} — it ${why.replace(/^it /, '')}` : san;
   };
   const sanOf = (uci: string): string | null => {
@@ -306,7 +307,7 @@ export async function developNextAnswer(board: BoardTurnInput, out?: { endorsed?
   if (topScore - best.score >= DEVELOP_GAP_CP) {
     return `${lead} But first ${say(topSan)}. After that, ${say(best.san)}.`;
   }
-  const topWhy = moveWhy(board.fen, topSan, me, opponentLastSan);
+  const topWhy = moveWhy(board.fen, topSan, me, prevCapture);
   return `${lead} The best way to bring one out is ${say(best.san)}. ${topSan} is just as good${topWhy ? ` — it ${topWhy.replace(/^it /, '')}` : ''}.`;
 }
 
@@ -400,9 +401,9 @@ async function fasterWinAnswer(board: BoardTurnInput, out?: { lines?: WalkableLi
     const w = sans.length ? walkableLine(board.fen, sans, sans[0]) : null;
     if (w) out.lines = [w];
   }
-  const opponentLastSan = board.history.length ? board.history[board.history.length - 1] : null;
+  const prevCapture = captureRunOfMoves(null, board.history);
   const reason = (san: string, mateIn: number | null): string => {
-    const r = bestMoveReason(board.fen, san, me, { mateIn, opponentLastSan });
+    const r = bestMoveReason(board.fen, san, me, { mateIn, prevCapture });
     return r ? ` — it ${r}` : '';
   };
   if (best.mate != null && best.mate > 0) {

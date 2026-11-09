@@ -45,6 +45,7 @@ import { bestLineOf, gameLineFrom, GAME_LINE_PLIES } from './annotationLine';
 import { lookupPositionEvals } from './positionEvalCache';
 import type { GameRecord, MisconceptionTagRecord, MistakePuzzle, MoveAnnotation, UserProfile } from '../types';
 import { oneAtATime, type KeyedQueue } from '../utils/oneAtATime';
+import { NO_PREV_CAPTURE, afterCapture, type PrevCaptureContext } from './captureRun';
 
 export interface BlunderForAnalysis {
   /** Position BEFORE the move (FEN). */
@@ -359,7 +360,7 @@ export async function recordReviewedGame(game: GameRecord, playerRating: number)
  *  flagged ply keeps (best line vs played line, each with its eval), as the
  *  skill it posed — or null when the ply kept no lines, the student played the
  *  best move, or no reason accounts for the gap. */
-function reasonPosedFromAnnotation(fen: string, ann: MoveAnnotation, lastSan: string | null): { tag: MisconceptionTagId; posedImportance: number } | null {
+function reasonPosedFromAnnotation(fen: string, ann: MoveAnnotation, prevCapture: PrevCaptureContext | null): { tag: MisconceptionTagId; posedImportance: number } | null {
   if (ann.bestMoveEval == null || ann.evaluation == null) return null;
   // A mate in one keeps no continuation after the best move; it still has a line.
   if (!ann.bestMove || !ann.pv?.afterPlayed.length || (!ann.pv.afterBest.length && storedMate(ann.bestMoveEval) === null)) return null;
@@ -375,7 +376,7 @@ function reasonPosedFromAnnotation(fen: string, ann: MoveAnnotation, lastSan: st
   const r = decisiveReason({
     // The record is read in review, where the prepared move is named.
     namesPreparedMove: true,
-    fenBefore: fen, san: bestSan, seat: 'student', opponentLastSan: lastSan,
+    fenBefore: fen, san: bestSan, seat: 'student', prevCapture,
     // The reads are the BEST move's: the stored fan before it, and nothing
     // after it (the record kept the played move's continuation, not its).
     reads: { before: storedFanBefore(ann, playedUci), after: [], passBefore: [], passAfter: [] },
@@ -435,6 +436,15 @@ export function capabilityPliesFromAnnotations(
   const out: CapabilityPly[] = [];
   const sanAt = new Map<number, string>();
   for (const a of annotations) sanAt.set((a.moveNumber - 1) * 2 + (a.color === 'black' ? 1 : 0), a.san);
+  // The capture run before each ply (`captureRun`): a recapture is read off
+  // what was taken, never off the SAN alone.
+  const runBefore: (PrevCaptureContext | null)[] = [];
+  let run: PrevCaptureContext | null = NO_PREV_CAPTURE;
+  for (let k = 0; k < fens.length; k++) {
+    runBefore.push(run);
+    const san = sanAt.get(k);
+    try { run = run && san ? afterCapture(run, new Chess(fens[k]).move(san)) : null; } catch { run = null; }
+  }
   for (const ann of annotations) {
     if (ann.color !== playerColor) continue;
     const fenIndex = (ann.moveNumber - 1) * 2 + (ann.color === 'black' ? 1 : 0);
@@ -443,7 +453,7 @@ export function capabilityPliesFromAnnotations(
     // line and the played line, the reason the best move was better is a
     // question this board posed — held when they found it, broken when they
     // did not (`recordCapabilityEvidence` decides from the cost).
-    const reasonAsked = reasonPosedFromAnnotation(fens[fenIndex], ann, fenIndex > 0 ? sanAt.get(fenIndex - 1) ?? null : null);
+    const reasonAsked = reasonPosedFromAnnotation(fens[fenIndex], ann, runBefore[fenIndex] ?? null);
     // STILL IN THE BOOK (2026-10-20, David's heat map: "Left theory early"
     // could only be failed): the position is in the openings DB, so the board
     // asked whether the student knows a book move — the SAME question the
