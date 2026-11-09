@@ -44,6 +44,19 @@ export function takesBack(prev: PrevCaptureContext | null, mv: { to: string; cap
   return (MATERIAL_VALUE[mv.captured] ?? 0) <= prev.net;
 }
 
+/** A TAKE-BACK THAT COMES OUT AHEAD: what the other side had netted on the run's
+ *  square, as a piece, when this capture there takes back more (prod focus audit
+ *  2026-11-09: …Qxf2+ took a rook, Kxf2 took the queen, and the line said "it
+ *  wins a queen, and nothing can take back" — the rook it cost went unsaid).
+ *  A net of three is "piece" (a knight or a bishop; the run keeps values).
+ *  Null when this is not such a capture. */
+export function takesBackAhead(prev: PrevCaptureContext | null, mv: { to: string; captured?: string | null }): string | null {
+  if (!prev?.square || !mv.captured || prev.square !== mv.to || prev.net <= 0) return null;
+  if ((MATERIAL_VALUE[mv.captured] ?? 0) <= prev.net) return null;
+  return NET_PIECE[prev.net] ?? 'piece';
+}
+const NET_PIECE: Record<number, string> = { 1: 'p', 5: 'r', 9: 'q' };
+
 /** The run after a game's moves, replayed from `startFen` (the standard start
  *  when null). Null when a move does not play. */
 export function captureRunOfMoves(startFen: string | null, sans: readonly string[]): PrevCaptureContext | null {

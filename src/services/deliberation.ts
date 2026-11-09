@@ -31,7 +31,7 @@ import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { describeMoveGeometry, quietPurposePhrase } from './groundedAnswer';
 import { kickBreaksPin, pawnKickNext } from './pawnKickNext';
 import { seatCp } from './winChance';
-import { takesBack, type PrevCaptureContext } from './captureRun';
+import { takesBack, takesBackAhead, type PrevCaptureContext } from './captureRun';
 
 /** A capture that WINS material, the exchange counted out — that is the move's
  *  reason, ahead of any positional gloss. Hand walk 2340: dxe5 "stakes out the
@@ -53,6 +53,10 @@ function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', prevCaptu
     // Read off the capture RUN, never their SAN: …fxe6 after Bxe6 took a pawn
     // wins the bishop (prod Learn audit 2026-11-09, "it completes the trade").
     if (takesBack(prevCapture, m)) return afterCaptureSan({ kind: 'take-back', next: null }, 'verb');
+    // A take-back that comes out ahead says what it cost too: "wins a queen
+    // for a rook", never "wins a queen, and nothing can take back".
+    const gave = takesBackAhead(prevCapture, m);
+    if (gave) return afterCaptureSan({ kind: 'nets', captured: m.captured, free: false, gave }, 'verb');
     // SEE counts the recaptures: a positive net is material won, not a trade.
     if (legalSeeGainFor(fenBefore, m.to, mover) <= 0) return null;
     // What THIS capture nets, read by the one board read: a take-back that

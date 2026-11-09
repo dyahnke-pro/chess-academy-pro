@@ -4,7 +4,8 @@
 // "Nxb4, taking back the pawn" on the move that wins it.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { NO_PREV_CAPTURE, afterCapture, captureRunOfPgn, takesBack } from './captureRun';
+import { NO_PREV_CAPTURE, afterCapture, captureRunAfterMove, captureRunOfPgn, takesBack, takesBackAhead } from './captureRun';
+import { moveWhy } from './deliberation';
 import { captureContextsAlong, computePlyFacts } from './pvPlayback';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { lastCaptureOf } from './groundedAnswer';
@@ -102,5 +103,25 @@ describe('takesBack — the one recapture read', () => {
     const board = new Chess();
     for (const san of sans) board.move(san);
     expect(answerExplainLast(board, 'dxc6', 'b', sans) ?? '').toMatch(/completes the trade/);
+  });
+});
+
+describe('a take-back that comes out ahead says what it cost (prod focus audit 2026-11-09)', () => {
+  // Record game 1: …Qxf2+ took the rook, Kxf2 took the queen. The line said "it
+  // wins a queen, and nothing can take back"; the rook it cost was never said.
+  const BEFORE_QXF2 = '5k2/p4p2/2P2p1p/1p6/5b2/1Q1r3P/1P1q1RKP/8 b - - 0 38';
+  const AFTER_QXF2 = '5k2/p4p2/2P2p1p/1p6/5b2/1Q1r3P/1P3qKP/8 w - - 0 39';
+  it('reads the rook their queen netted on f2', () => {
+    const run = captureRunAfterMove(null, BEFORE_QXF2, 'Qxf2+');
+    expect(takesBackAhead(run, { to: 'f2', captured: 'q' })).toBe('r');
+    expect(takesBack(run, { to: 'f2', captured: 'q' }), 'not an even take-back').toBe(false);
+  });
+  it('the move\'s reason: "wins a queen for a rook"', () => {
+    const why = moveWhy(AFTER_QXF2, 'Kxf2', 'w', captureRunAfterMove(null, BEFORE_QXF2, 'Qxf2+'));
+    expect(why).toBe('wins a queen for a rook');
+  });
+  it('twin: an even take-back is still "completes the trade"', () => {
+    const run = captureRunAfterMove(null, '4k3/8/8/3n4/8/2N5/8/4K3 b - - 0 1', 'Nxc3');
+    expect(takesBackAhead(run, { to: 'c3', captured: 'n' })).toBeNull();
   });
 });
