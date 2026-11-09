@@ -19,7 +19,11 @@ describe('castling by hand, step by step (his …Nf6, …h6, …Kf7, …Re8, …
     const { fen, san } = before(18);
     const s = castleByHandMove(fen, san, 'your');
     expect(s?.kind).toBe('plan');
-    expect(s?.text).toBe("Your king can't castle any more, so the plan is to castle by hand: the king to f7, a rook to e8 or f8, then the king to g8.");
+    expect(s?.text).toBe("Your king can't castle any more, so your plan is to castle by hand: the king to f7, a rook to e8 or f8, then the king to g8.");
+  });
+  it('their plan is theirs: "Their king can\'t castle any more, so their plan is…" (prod focus audit 2026-11-09: "so the plan is to castle by hand: the king to g7" read as yours)', () => {
+    const { fen, san } = before(18);
+    expect(castleByHandMove(fen, san, 'their')?.text).toMatch(/^Their king can't castle any more, so their plan is to castle by hand: /);
   });
   it('…h6 takes g5 from their knight so the king can come to f7', () => {
     const { fen, san } = before(20);

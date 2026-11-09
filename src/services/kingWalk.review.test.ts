@@ -20,7 +20,7 @@ describe('Review says the king walk on his game', () => {
     expect(said.get(14)).toContain("Where does your king go? On g6 it's mated at once: Qf5#. On f6 it's mated in three: Bg5+, Kg6, Qf5+, Kh5, g4#.");
   });
   it('9…Nf6 to 13…Kg8: castling by hand, plan to done', () => {
-    expect(said.get(18)).toContain("Your king can't castle any more, so the plan is to castle by hand: the king to f7, a rook to e8 or f8, then the king to g8.");
+    expect(said.get(18)).toContain("Your king can't castle any more, so your plan is to castle by hand: the king to f7, a rook to e8 or f8, then the king to g8.");
     expect(said.get(20)).toContain('h6 takes g5 away from their knight');
     expect(said.get(22)).toContain('Kf7 starts castling by hand');
     expect(said.get(22)).toContain('Your bishop on c8 stays home for now, and it has a job there: if their queen checks on c4, it blocks on e6.');

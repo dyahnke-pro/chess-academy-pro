@@ -230,7 +230,7 @@ export function castleByHandMove(fenBefore: string, san: string, who: 'your' | '
   // THE PLAN, stated on a quiet move while it is live (never on a check, a
   // capture or a move out of check — he says it once the fire is out).
   if (!inCheck && !m.captured && !/[+#]/.test(san)) {
-    return { kind: 'plan', key: key('plan'), text: `${Subject} king can't castle any more, so the plan is to castle by hand: ${routeWords(after.steps)}.`, squares: [after.king, after.target] };
+    return { kind: 'plan', key: key('plan'), text: `${Subject} king can't castle any more, so ${who} plan is to castle by hand: ${routeWords(after.steps)}.`, squares: [after.king, after.target] };
   }
   return null;
 }
