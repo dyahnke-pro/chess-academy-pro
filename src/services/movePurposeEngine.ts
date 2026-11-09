@@ -48,7 +48,7 @@ export async function moveReason(fenBefore: string, san: string, seat: 'student'
   if (!reads) return null;
   // The student's own record decides whether a mate is posed as a test.
   const asksToSee = seat === 'student' ? await calculationProven() : false;
-  return decisiveReason({ fenBefore, san, reads, seat, prevCapture, asksToSee, namesPreparedMove: true });
+  return decisiveReason({ fenBefore, san, reads, seat, prevCapture, asksToSee, namesStudentMoves: true });
 }
 
 /** WHAT THE MOVE SETS UP (the three facts, WO-THINK-01): the mover's next move
@@ -93,7 +93,7 @@ export async function askedBestMove(fen: string, prevCapture: PrevCaptureContext
   if (!san) return null;
   const reads = await readIntentReads(fen, san, lines);
   const asksToSee = await calculationProven();
-  const reason = reads ? decisiveReason({ fenBefore: fen, san, reads, seat: 'student', prevCapture, asksToSee, namesPreparedMove: true }) : null;
+  const reason = reads ? decisiveReason({ fenBefore: fen, san, reads, seat: 'student', prevCapture, asksToSee, namesStudentMoves: true }) : null;
   return { uci: top.moves[0], san, evalCp: typeof top.evaluation === 'number' ? top.evaluation : null, mateIn: top.mate ?? null, pvSan, reason };
 }
 
@@ -127,7 +127,7 @@ export async function askedMoveThought(
   try { const m = new Chess(fenBefore).move(san); uci = `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; }
   const me = board.studentColor === 'white' ? 'w' : 'b';
   const seat: 'student' | 'opponent' = (fenBefore.split(' ')[1] === 'b' ? 'b' : 'w') === me ? 'student' : 'opponent';
-  const reason = q === 'opponent-move' ? null : decisiveReason({ fenBefore, san, reads, seat, prevCapture: captureRunOfMoves(null, board.history), asksToSee: seat === 'student' ? await calculationProven() : false, namesPreparedMove: true });
+  const reason = q === 'opponent-move' ? null : decisiveReason({ fenBefore, san, reads, seat, prevCapture: captureRunOfMoves(null, board.history), asksToSee: seat === 'student' ? await calculationProven() : false, namesStudentMoves: true });
   const answer = answerQuestionThought(q, { fen: board.fen, history: board.history, studentColor: board.studentColor, bestUci: uci, reads, reason });
   return answer ? { ...answer, reason } : null;
 }

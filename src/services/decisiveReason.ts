@@ -182,12 +182,14 @@ export function decisiveReason(input: {
    *  test — "can you see it?" — with the line on the board, never answered in
    *  the voice. Grey or red: the mate is stated (grey teaches). */
   asksToSee?: boolean;
-  /** REQUIRED (OS-10): may the reason name the move the explained move
-   *  PREPARES? Learn, before the student's next move, says it by its piece
-   *  ("to free your bishop on f1"), never by the move ("for Be2") — LEARN
-   *  NAMES NO MOVE UNASKED (David's record, 2026-10-19, 1.e4). Review, chat
-   *  and the Why button name it. */
-  namesPreparedMove: boolean;
+  /** REQUIRED (OS-10): may the reason name the STUDENT's moves — the move it
+   *  explains (their own, just played) and the move that move PREPARES?
+   *  Learn says neither by name: the move played is "your move" (David
+   *  2026-11-09: "the user knows that, they see it play out"), the prepared
+   *  move by its piece ("to free your bishop on f1", never "for Be2") — LEARN
+   *  NAMES NO MOVE UNASKED (2026-10-19). Review, chat and the Why button name
+   *  both. Their moves are always named. */
+  namesStudentMoves: boolean;
 }): DecisiveReason | null {
   const { fenBefore, san, reads, seat } = input;
   let mover: 'w' | 'b';
@@ -251,10 +253,16 @@ export function decisiveReason(input: {
     }
     return /x|\+|#/.test(first) ? `: it lets ${replier} play ${first}` : '';
   };
-  const played = dot(san, mover);
+  // LEARN NAMES NO MOVE OF YOURS, the one just played included (David
+  // 2026-11-09: "the user knows that, they see it play out"; prod focus audit
+  // the same night: "Your f7 stops king to e8"): the student's move is "your
+  // move" there. Review, chat and the lessons name it.
+  const namesPlayed = seat !== 'student' || input.namesStudentMoves;
+  const played = namesPlayed ? dot(san, mover) : 'your move';
+  const Played = namesPlayed ? played : 'Your move';
   // ONE MATE SENTENCE (oneWhyBest gate): the mate reason is bestMoveReason's,
   // not a second copy of its wording here.
-  const mateReason = (n: number | 'forced'): string => `${played} ${bestMoveReason(fenBefore, san, mover, { mateIn: n, prevCapture: null }) ?? ''}`.trim();
+  const mateReason = (n: number | 'forced'): string => `${Played} ${bestMoveReason(fenBefore, san, mover, { mateIn: n, prevCapture: null }) ?? ''}`.trim();
   const whose = seat === 'student' ? 'your' : 'their';
   // Every line is worded from the STUDENT's seat, whoever moves.
   const studentWB: 'w' | 'b' = seat === 'student' ? mover : mover === 'w' ? 'b' : 'w';
@@ -283,7 +291,7 @@ export function decisiveReason(input: {
   const longMate = ownMate !== null && ownMate > SHORT_MATE && !heardMate;
   if (ownMate !== null && ownMate > 0 && !longMate && !(nextMate !== null && nextMate > 0)) {
     const asks = input.asksToSee && seat === 'student' && ownMate > 1;
-    cands.push({ source: 'material', stake: MATE_CP, text: ownMate === 1 ? `${unmarked(played)} is mate.` : asks ? `${mateReason(ownMate)} — can you see how it goes? The line is on the board when you want it.` : `${mateReason(ownMate)}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
+    cands.push({ source: 'material', stake: MATE_CP, text: ownMate === 1 ? `${namesPlayed ? unmarked(played) : Played} is mate.` : asks ? `${mateReason(ownMate)} — can you see how it goes? The line is on the board when you want it.` : `${mateReason(ownMate)}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
   } else if (nextMate !== null && nextMate < 0 && nextBestSan) {
     const n = -nextMate;
     cands.push({ source: 'material', stake: MATE_CP, text: `${altLead}, ${dot(nextBestSan, mover)}, walks into a forced mate${n > 1 ? ` in ${movesWord(n)}` : ''}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, next.moves).slice(0, 2 * n) }, squares: [], alt: true });
@@ -309,7 +317,7 @@ export function decisiveReason(input: {
     // knight takes d4 takes back" (prod walk 2026-10-18) — a capture cannot
     // also be the verb.
     if (recapture && matStake > 0 && altTrusted && nextBestSan) {
-      cands.push({ source: 'material', stake: matStake, text: `${seat === 'student' ? 'You take' : 'They take'} back with ${played} — anything else, like ${dot(nextBestSan, mover)}, loses ${pieceWords(fenBefore, next.moves, mover, false)} in the line that follows.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [squareOf(san) ?? ''].filter(Boolean), alt: true });
+      cands.push({ source: 'material', stake: matStake, text: `${seat === 'student' ? 'You take' : 'They take'} back${namesPlayed ? ` with ${played}` : ''} — anything else, like ${dot(nextBestSan, mover)}, loses ${pieceWords(fenBefore, next.moves, mover, false)} in the line that follows.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [squareOf(san) ?? ''].filter(Boolean), alt: true });
     } else if (matStake > 0 && !recapture) {
       // A RECAPTURE IS NEVER A WIN (Learn replay of his Four Knights,
       // 2026-11-08: "They play dxe5 — they win a bishop" after Bxe5 — the
@@ -317,11 +325,11 @@ export function decisiveReason(input: {
       // after Bxe5 called taking the bishop back winning one).
       const win = matOwn > 0 ? seatProof(fenBefore, sansOf(fenBefore, own.moves), mover, studentWB, 'for') : null;
       const loss = !win && matNext < 0 && altTrusted ? seatProof(fenBefore, sansOf(fenBefore, next.moves), mover, studentWB, 'against') : null;
-      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${openSentence(win.text)}.` : withLanding(win.end === "and it's mate" ? mateReason('forced') : `${played} wins by force: ${win.end}`, landsWith(win.sans, mover, input.namesPreparedMove)), line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
+      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? (namesPlayed ? `${openSentence(win.text)}.` : `${openSentence(win.end)}.`) : withLanding(win.end === "and it's mate" ? mateReason('forced') : `${Played} wins by force: ${win.end}`, landsWith(win.sans, mover, input.namesStudentMoves)), line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
       else if (loss && nextBestSan) cands.push({ source: 'material', stake: matStake, text: `${altLead}, ${dot(nextBestSan, mover)}, fails: ${loss.text}.`, line: { fen: fenBefore, sans: loss.sans }, squares: [], alt: true });
       // No short proof, but the count is the reason: say the count, never let a
       // smaller reason stand in for it.
-      else if (matOwn > 0) cands.push({ source: 'material', stake: matStake, text: `${played} comes out ahead in the trades that follow — it wins ${pieceWords(fenBefore, own.moves, mover, true)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, own.moves) }, squares: [], alt: false });
+      else if (matOwn > 0) cands.push({ source: 'material', stake: matStake, text: `${Played} comes out ahead in the trades that follow — it wins ${pieceWords(fenBefore, own.moves, mover, true)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, own.moves) }, squares: [], alt: false });
       else if (nextBestSan && altTrusted) cands.push({ source: 'material', stake: matStake, text: `${altLead}, ${dot(nextBestSan, mover)}, comes out behind in the trades that follow — it loses ${pieceWords(fenBefore, next.moves, mover, false)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [], alt: true });
     }
     // PAST THE FORCING HORIZON: a big gap the heard line cannot show is read on
@@ -343,7 +351,7 @@ export function decisiveReason(input: {
   // Each carries its evidence as a line the board can show: the threat played
   // as if the mover had passed, or the follow-up played as if the other side
   // had — the move the reason names, from the board it is true on.
-  const mi = moveIntent(fenBefore, san, reads, seat, { ...DEFAULT_INTENT, holdPrepared: !input.namesPreparedMove });
+  const mi = moveIntent(fenBefore, san, reads, seat, { ...DEFAULT_INTENT, holdPrepared: !input.namesStudentMoves, holdPlayed: !input.namesStudentMoves });
   const shown = (fen: string | null, moveSan: string): DecisiveReason['line'] => {
     if (!fen) return null;
     try { new Chess(fen).move(moveSan); return { fen, sans: [moveSan] }; } catch { return null; }
@@ -379,7 +387,7 @@ export function decisiveReason(input: {
     // fights for e4"). It outranks a board description; a mere preparation
     // does not.
     const stops = quiet?.source === 'stops' ? quiet : undefined;
-    const what = stops ? stops.text : description ? `One thing it does: ${played} ${description}.` : quiet?.text ?? null;
+    const what = stops ? stops.text : description ? (namesPlayed ? `One thing it does: ${played} ${description}.` : `One thing your move does: it ${description}.`) : quiet?.text ?? null;
     const src: ReasonSource | null = stops ? 'stops' : description ? 'description' : quiet?.source ?? null;
     const useQuiet = !!stops || !description;
     // TWO PLANS, ABOUT EQUAL (David 2026-10-18, the close call: "name both
@@ -394,7 +402,7 @@ export function decisiveReason(input: {
     if (altDescription && description && twoPlans(description, altDescription) && nextBestSan) {
       // `core` is the contrast alone — chat leads with its own "X and Y are
       // about equally good", so the core must not say it twice.
-      const contrast = `${played} ${description}; ${dot(nextBestSan, mover)} ${altDescription}. The choice is which job you want done.`;
+      const contrast = `${Played} ${description}; ${dot(nextBestSan, mover)} ${altDescription}. The choice is which job you want done.`;
       const choice = `The other plan is ${dot(nextBestSan, mover)}${gapEarned ? ', about as good' : ''}: it ${altDescription}. The choice is which job you want done.`;
       return { ...base, kind: 'close', source: 'description', stakeCp: null, core: contrast, choice, text: `Two plans here${gapEarned ? ', about equal' : ''}: ${contrast}`, line: null, squares: [] };
     }
@@ -428,7 +436,7 @@ export function decisiveReason(input: {
   }
   // NOTHING ACCOUNTS FOR THE GAP: the engine's edge lies past what forcing play
   // shows. Say so, and give the one true thing the move does — marked as one.
-  const one = top?.text ?? (description ? `One thing ${whose} ${played} does: it ${description}.` : null);
+  const one = top?.text ?? (description ? (namesPlayed ? `One thing ${whose} ${played} does: it ${description}.` : `One thing your move does: it ${description}.`) : null);
   const aChoice = nextBestSan ? `Anything else, like ${dot(nextBestSan, mover)}, ${givesUp()} — for reasons further down the line.` : null;
   return { ...base, kind: 'a', source: top?.source ?? (description ? 'description' : null), stakeCp: top?.stake ?? null, choice: aChoice, text: `No single reason shows in the next few moves${nextBestSan ? ` — anything else, like ${dot(nextBestSan, mover)}, ${givesUp()}, for reasons further down the line` : ''}.${one ? ` ${one}` : ''}`, line: top?.line ?? null, squares: top?.squares ?? [] };
 }

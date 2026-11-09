@@ -86,16 +86,16 @@ describe('the leaks on David\'s record', () => {
 
   it('1.e4 "to free your bishop on f1 for Be2": Learn asks the reason computer to hold the prepared move', async () => {
     vi.resetModules();
-    const seen: Array<{ seat: string; namesPreparedMove: boolean }> = [];
+    const seen: Array<{ seat: string; namesStudentMoves: boolean }> = [];
     vi.doMock('./decisiveReason', async (orig) => ({
       ...(await orig<typeof import('./decisiveReason')>()),
-      decisiveReason: (i: { seat: string; namesPreparedMove: boolean }) => { seen.push({ seat: i.seat, namesPreparedMove: i.namesPreparedMove }); return null; },
+      decisiveReason: (i: { seat: string; namesStudentMoves: boolean }) => { seen.push({ seat: i.seat, namesStudentMoves: i.namesStudentMoves }); return null; },
     }));
     const { learnMoveReason } = await import('./learnBoardTeaching');
     const reads = { before: [], after: [], passBefore: [], passAfter: [] };
     learnMoveReason({ fenBefore: new Chess().fen(), san: 'e4', reads, seat: 'student', prevCapture: null });
     learnMoveReason({ fenBefore: F[1], san: 'c5', reads, seat: 'opponent', prevCapture: null });
-    expect(seen).toEqual([{ seat: 'student', namesPreparedMove: false }, { seat: 'opponent', namesPreparedMove: true }]);
+    expect(seen).toEqual([{ seat: 'student', namesStudentMoves: false }, { seat: 'opponent', namesStudentMoves: true }]);
     vi.doUnmock('./decisiveReason');
   });
 });

@@ -1084,7 +1084,11 @@ export function describePlan(
     const sq = plan.pushedPassers[plan.pushedPassers.length - 1];
     const rank = Number(sq[1]);
     const advanced = plan.color === 'white' ? rank : 9 - rank;
-    add(10 + advanced * 8, `push the passed pawn on to ${sq}`, [sq]);
+    // Its STAKE, not its square: "e7 was their move — it would push the
+    // passed pawn on to e7" said the move twice (prod focus audit 2026-11-09).
+    // The square is lit with the sentence.
+    const left = 8 - advanced;
+    add(10 + advanced * 8, `push the passed pawn within ${left === 1 ? 'a square' : `${['', '', 'two', 'three', 'four', 'five', 'six'][left] ?? left} squares`} of queening`, [sq]);
   }
   if (plan.outposts.length > 0) {
     add(35, `park a piece on ${plan.outposts[0]}, where none of their pawns can attack it`, [plan.outposts[0]]);

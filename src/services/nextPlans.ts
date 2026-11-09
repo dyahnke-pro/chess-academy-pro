@@ -333,9 +333,13 @@ export function deriveNextPlanFacts(
   // A pawn changes file only by taking — then it is another pawn, and another
   // plan. The plan arc keys its passers the same way (`passer:d`).
   const PAWN_PLAN: ReadonlySet<PlanKind> = new Set<PlanKind>(['weak-pawn', 'passer']);
-  const add = (kind: PlanKind, goal: string, goalIng: string, how: string, squares: string[], file: string | null = null): void => {
+  // A FACT ABOUT THE GOAL is its own sentence, before the how ("It is 3
+  // squares from queening"): inside the how, a repeated how's steps were
+  // dropped and left "Here's how: it is 3 squares from queening" (prod focus
+  // audit 2026-11-09).
+  const add = (kind: PlanKind, goal: string, goalIng: string, how: string, squares: string[], file: string | null = null, fact: string | null = null): void => {
     const anchor = PAWN_PLAN.has(kind) && squares[0] ? squares[0][0] : squares[0] ?? file ?? '';
-    plans.push({ kind, text: `the plan from here is to ${goal}. Here's how: ${how}`, squares, file, id: `${kind}:${anchor}`, goal, goalIng });
+    plans.push({ kind, text: `the plan from here is to ${goal}.${fact ? ` ${fact}` : ''} Here's how: ${how}`, squares, file, id: `${kind}:${anchor}`, goal, goalIng });
   };
 
   // 1. Enemy king exposed in the centre → open lines and attack it, HOW spelled out.
@@ -399,10 +403,10 @@ export function deriveNextPlanFacts(
     // the piece in the way, the escort, the pushes — never one breath held
     // together by a semicolon and two dashes.
     const escort = queensOn
-      ? 'Escort it with your pieces, and bring the king in once the queens come off.'
-      : 'Escort it with your king and pieces.';
+      ? 'escort it with your pieces, and bring the king in once the queens come off.'
+      : 'escort it with your king and pieces.';
     const how = passerHow(chess, passer, studentColorWB);
-    add('passer', `get your passed pawn on ${passer} promoting`, `pushing your passed pawn on ${passer}`, `${how.text} ${escort} Push it one safe square at a time, and every push brings it closer to promotion`, [passer, ...how.squares]);
+    add('passer', `get your passed pawn on ${passer} promoting`, `pushing your passed pawn on ${passer}`, `${how.cover}${how.cover ? escort[0].toUpperCase() + escort.slice(1) : escort} Push it one safe square at a time, and every push brings it closer to promotion`, [passer, ...how.squares], null, how.distance);
   }
 
   // 3. An enemy weak (isolated) pawn on the c–f files → besiege it, HOW spelled
@@ -556,7 +560,7 @@ const times = (n: number): string => TIMES[n] ?? `${n} times`;
 
 
 /** The passer's distance to queening, and the enemy piece covering its next square. */
-function passerHow(chess: Chess, passer: string, color: Color): { text: string; squares: string[] } {
+function passerHow(chess: Chess, passer: string, color: Color): { distance: string; cover: string; squares: string[] } {
   const rank = Number(passer[1]);
   const left = color === 'w' ? 8 - rank : rank - 1;
   const front = `${passer[0]}${rank + (color === 'w' ? 1 : -1)}` as Square;
@@ -566,11 +570,11 @@ function passerHow(chess: Chess, passer: string, color: Color): { text: string; 
   try {
     const by = chess.attackers(front, enemy).map((sq) => ({ sq, p: chess.get(sq) })).filter((x) => x.p && x.p.type !== 'k');
     if (by.length > 0) {
-      cover = ` Their ${PIECE_NOUN[by[0].p?.type ?? 'p']} on ${by[0].sq} covers ${front}, so drive it off or cover ${front} yourself first.`;
+      cover = `their ${PIECE_NOUN[by[0].p?.type ?? 'p']} on ${by[0].sq} covers ${front}, so drive it off or cover ${front} yourself first. `;
       squares.push(by[0].sq, front);
     }
   } catch { cover = ''; }
-  return { text: `it is ${left} square${left === 1 ? '' : 's'} from queening.${cover}`, squares };
+  return { distance: `It is ${left} square${left === 1 ? '' : 's'} from queening.`, cover, squares };
 }
 
 /** The weak pawn counted: how often the student hits it against its guards. */

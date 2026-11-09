@@ -24,7 +24,7 @@ const PASS = [line(1, 0, 'g3g7', 1), line(2, 300, 'e1e6 f7e6 g3g7')];
 
 const reason = (pass: AnalysisLine[]) => decisiveReason({
   fenBefore: FEN, san: 'g6', reads: { before: BEFORE, passBefore: pass, after: AFTER, passAfter: [] },
-  seat: 'opponent', prevCapture: null, namesPreparedMove: true,
+  seat: 'opponent', prevCapture: null, namesStudentMoves: true,
 });
 
 describe('23…g6: the mate it stops, and why the alternative costs', () => {

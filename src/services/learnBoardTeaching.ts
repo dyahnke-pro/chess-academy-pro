@@ -1400,7 +1400,7 @@ interface LearnReason {
 
 export function learnMoveReason(input: { fenBefore: string; san: string; reads: IntentReads; seat: 'student' | 'opponent'; prevCapture: PrevCaptureContext | null; asksToSee?: boolean }): LearnReason | null {
   // Learn: the student's next move is held — the prepared move is said by its piece (OS-10).
-  const reason = decisiveReason({ ...input, namesPreparedMove: input.seat !== 'student' });
+  const reason = decisiveReason({ ...input, namesStudentMoves: input.seat !== 'student' });
   if (!reason) return null;
   const posed = input.seat === 'student' ? reasonPosed(reason) : null;
   emitDecisiveReason({ surface: 'learn', kind: reason.kind, source: reason.source, about: reason.about, gapCp: reason.gapCp, stakeCp: reason.stakeCp, posedTag: posed?.tag ?? null, outcome: posed ? 'held' : 'explained' });

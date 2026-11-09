@@ -29,14 +29,16 @@ export function intentWithFallback(
   reads: IntentReads,
   seat: 'student' | 'opponent',
   book: boolean,
-  /** REQUIRED: Learn, before the student's next move, says what the move
-   *  prepares by its piece, never by the move (LEARN NAMES NO MOVE UNASKED);
-   *  review, chat and the Why button name it. */
-  namesPreparedMove: boolean,
+  /** REQUIRED: may it name the STUDENT's moves? Learn names neither the move
+   *  just played ("your move", David 2026-11-09) nor the move it prepares (by
+   *  its piece, never by the move — LEARN NAMES NO MOVE UNASKED); review, chat
+   *  and the Why button name both. */
+  namesStudentMoves: boolean,
 ): MoveIntent | null {
-  const holdPrepared = !namesPreparedMove;
-  return moveIntent(fenBefore, san, reads, seat, { ...DEFAULT_INTENT, book, holdPrepared })
-    ?? moveIntent(fenBefore, san, reads, seat, { prepare: 'line', prevent: 'concrete', book, holdPrepared });
+  const holdPrepared = !namesStudentMoves;
+  const holdPlayed = !namesStudentMoves;
+  return moveIntent(fenBefore, san, reads, seat, { ...DEFAULT_INTENT, book, holdPrepared, holdPlayed })
+    ?? moveIntent(fenBefore, san, reads, seat, { prepare: 'line', prevent: 'concrete', book, holdPrepared, holdPlayed });
 }
 
 const uciOf = (fen: string, san: string): string | null => {

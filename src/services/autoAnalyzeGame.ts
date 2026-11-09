@@ -375,7 +375,7 @@ function reasonPosedFromAnnotation(fen: string, ann: MoveAnnotation, prevCapture
   if (playedUci === ann.bestMove) return null;
   const r = decisiveReason({
     // The record is read in review, where the prepared move is named.
-    namesPreparedMove: true,
+    namesStudentMoves: true,
     fenBefore: fen, san: bestSan, seat: 'student', prevCapture,
     // The reads are the BEST move's: the stored fan before it, and nothing
     // after it (the record kept the played move's continuation, not its).

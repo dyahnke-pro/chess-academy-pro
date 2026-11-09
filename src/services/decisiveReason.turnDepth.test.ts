@@ -19,7 +19,7 @@ function read(c: Case, which: 'full' | 'cut', seat: 'student' | 'opponent') {
     bestMove: lines[0].moves[0], evaluation: lines[0].evaluation, isMate: false, mateIn: null,
     depth: Math.max(...lines.map((l) => l.depth ?? 0)), topLines: lines, nodesPerSecond: 0,
   } as StockfishAnalysis, TURN_DEPTH);
-  return decisiveReason({ namesPreparedMove: false, fenBefore: c.fen, san: c.san, seat, prevCapture: null, reads: { before: analysis.topLines, after: [], passBefore: [], passAfter: [] } });
+  return decisiveReason({ namesStudentMoves: false, fenBefore: c.fen, san: c.san, seat, prevCapture: null, reads: { before: analysis.topLines, after: [], passBefore: [], passAfter: [] } });
 }
 
 describe('decisiveReason — the gap is said only off a turn-depth read', () => {

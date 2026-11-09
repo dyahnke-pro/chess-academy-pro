@@ -5906,7 +5906,13 @@ it let them …"), or "it" right after a sentence about that move — never its
 name. Still named in Learn: their move, the better move once it is past, moves
 inside a played-out line, an earlier move of the student's, anything asked in
 chat. Review keeps naming the move, its words ROTATED (`moveIntro`: "You play
-X — it …" / "You go X, which …" / a pawn's "Your e4 …").
+X — it …" / "You go X, which …" / a pawn's "Your e4 …"). The computers that
+word a move's reason (`decisiveReason`, `moveIntent` through
+`intentWithFallback`) take ONE required flag, `namesStudentMoves`: false in
+Learn's own seat, so the move played is "your move" and the move it prepares is
+said by its piece (the prod focus audit heard "Your f7 stops king to e8" the
+night the rule was set — the verdicts had been fixed one by one, these two
+computers had not; `learnNamesOwnMove.test.ts`).
 
 **Review names the better move** (the game is over); **chat names it** (you
 asked). Gates: `learnNamesNoMoveUnasked.gate.test.ts`,

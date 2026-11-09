@@ -12,7 +12,7 @@ describe('Learn hands moveIntent every read it needs', () => {
     expect(src).toMatch(/passAfter: againRead\?\.topLines \?\? \[\],/);
   });
   it('when the default read finds nothing, the engine line is tried', () => {
-    // Learn passes namesPreparedMove=false: what the move prepares is said by
+    // Learn passes namesStudentMoves=false: what the move prepares is said by
     // its piece, never by the move (LEARN NAMES NO MOVE UNASKED).
     expect(src).toMatch(/intentWithFallback\(fenBefore, move\.san, intentReads, 'student', studentMoveInBook, false\)/);
   });

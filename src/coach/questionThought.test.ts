@@ -29,7 +29,7 @@ function whyBest(id: string, k: number): { san: string; text: string | null } {
   const uci = r.before[0].uci;
   const san = new Chess(board.fen()).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san;
   const seat = board.turn() === g.studentSide[0] ? 'student' : 'opponent';
-  const reason = decisiveReason({ fenBefore: board.fen(), san, reads, seat, prevCapture: captureRunOfMoves(null, g.sans.slice(0, k)), asksToSee: false, namesPreparedMove: true });
+  const reason = decisiveReason({ fenBefore: board.fen(), san, reads, seat, prevCapture: captureRunOfMoves(null, g.sans.slice(0, k)), asksToSee: false, namesStudentMoves: true });
   const a = answerQuestionThought('why-best-move', { fen: board.fen(), history: g.sans.slice(0, k), studentColor: g.studentSide, bestUci: uci, reads, reason });
   return { san, text: a?.text ?? null };
 }

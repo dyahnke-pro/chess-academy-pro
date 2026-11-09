@@ -207,7 +207,7 @@ const chatReasonOf = (p: Position): DecisiveReason | null => {
   const reads = readsOf(p);
   if (!reads) return null;
   try {
-    return decisiveReason({ fenBefore: p.fenBefore, san: p.san, reads, seat: p.own ? 'student' : 'opponent', prevCapture: p.prev, asksToSee: false, namesPreparedMove: true });
+    return decisiveReason({ fenBefore: p.fenBefore, san: p.san, reads, seat: p.own ? 'student' : 'opponent', prevCapture: p.prev, asksToSee: false, namesStudentMoves: true });
   } catch { return null; }
 };
 

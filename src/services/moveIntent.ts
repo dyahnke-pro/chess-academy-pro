@@ -122,6 +122,11 @@ export interface IntentOptions {
    *  b1 for Nd2" named the move they had not played yet). Set only through
    *  `intentWithFallback`, where it is required. */
   holdPrepared?: boolean;
+  /** Learn: the student's move just PLAYED is "your move", never its name
+   *  (David 2026-11-09: "the user knows that, they see it play out"; prod focus
+   *  audit the same night: "Your f7 stops king to e8"). Set only through
+   *  `intentWithFallback` and `decisiveReason`, where it is required. */
+  holdPlayed?: boolean;
 }
 export const DEFAULT_INTENT: IntentOptions = { prepare: 'unlock', prevent: 'any+deny' };
 
@@ -406,7 +411,7 @@ export function moveIntent(
   // — now …g6 doesn't work" never said …g6 was hitting the f5-knight): read
   // on the board before the move, the mover passing.
   const threatDid = prevents ? whatTheStopDid(fenBefore, prevents.uci, opp) : null;
-  const text = phrase(playedSan, prevents, prepares, seat, mover, fenAfter, prepares ? whatItDoes(fenAfter, prepares.uci, mover) : null, why, threatDid, !!opts.holdPrepared);
+  const text = phrase(playedSan, prevents, prepares, seat, mover, fenAfter, prepares ? whatItDoes(fenAfter, prepares.uci, mover) : null, why, threatDid, !!opts.holdPrepared, !!opts.holdPlayed);
   // Nothing worth saying (a held move with no point): no intent at all.
   if (!text) return null;
   return { prevents, prepares, text, squares, about: seat };
@@ -458,6 +463,8 @@ function phrase(
   threatDid: PreparedPoint | null = null,
   /** The student's prepared move is said by its piece, not named. */
   holdPrepared = false,
+  /** The student's played move is "your move", not named. */
+  holdPlayed = false,
 ): string {
   const dot = (s: string, side: 'w' | 'b'): string => (side === 'b' ? `…${s}` : s);
   const opp: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
@@ -476,8 +483,12 @@ function phrase(
     const stop = prevents ? capWords ?? dot(prevents.san, opp) : '';
     // Said alone (a review ply with nothing else to say) a bare "Qh4 — now
     // …axb4 doesn't work" names no seat (review audit 2026-10-28, ply 49).
-    const yours = castles ? 'Castling' : `Your ${played}`;
-    const pointOf = castles ? 'The point of castling' : `The point of your ${played}`;
+    const yours = holdPlayed ? 'Your move' : castles ? 'Castling' : `Your ${played}`;
+    const pointOf = holdPlayed ? 'The point of your move' : castles ? 'The point of castling' : `The point of your ${played}`;
+    const yourMove = holdPlayed ? 'Your move' : `Your ${played}`;
+    // "You play f4 first, so that …" names the move: held, only the forms that
+    // say "your move" are spoken.
+    const first = (rest: string): string[] => (holdPlayed ? [] : [`${youPlay} first, ${rest}`]);
     // A castle is a move too (OS-11: "You play Nf3 first, so you can castle
     // next" before 7.O-O, in all four games): held like any other.
     const held = holdPrepared && !!prepares;
@@ -496,14 +507,14 @@ function phrase(
     if (prevents) return rotateStem([`${yours} stops ${stop}.`, `${pointOf}: it rules out ${stop}.`], key);
     // Every stem names the seat (review audit 2026-10-15: "…e5 first, so that
     // …Bd6 can bring the bishop into the game" said whose move to no one).
-    if (does?.castle && held) return `Your ${played} clears the last piece from between your king and rook.`;
-    if (does?.castle) return rotateStem([`Your ${played} clears the way to castle.`, `${youPlay} first, so you can castle next.`], key);
-    if (does?.develops && held) return rotateStem([`${youPlay} first, to free your ${does.develops.piece} on ${does.develops.from}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out.`], key);
-    if (does?.develops) return rotateStem([`${youPlay} first, to free your ${does.develops.piece} on ${does.develops.from} for ${prep}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out with ${prep}.`], key);
-    if (does && held) return rotateStem([`${youPlay} first, so that ${prep} can ${does.verb}.`, `Your ${played} gets ${prep} ready to ${does.verb}.`], key);
-    if (does) return rotateStem([`${youPlay} first, so that ${prep} can ${does.verb}.`, `Your ${played} prepares ${prep}, to ${does.verb}.`], key);
+    if (does?.castle && held) return `${yourMove} clears the last piece from between your king and rook.`;
+    if (does?.castle) return rotateStem([`${yourMove} clears the way to castle.`, ...first('so you can castle next.')], key);
+    if (does?.develops && held) return rotateStem([...first(`to free your ${does.develops.piece} on ${does.develops.from}.`), `${yourMove} frees your ${does.develops.piece} on ${does.develops.from} to come out.`], key);
+    if (does?.develops) return rotateStem([...first(`to free your ${does.develops.piece} on ${does.develops.from} for ${prep}.`), `${yourMove} frees your ${does.develops.piece} on ${does.develops.from} to come out with ${prep}.`], key);
+    if (does && held) return rotateStem([...first(`so that ${prep} can ${does.verb}.`), `${yourMove} gets ${prep} ready to ${does.verb}.`], key);
+    if (does) return rotateStem([...first(`so that ${prep} can ${does.verb}.`), `${yourMove} prepares ${prep}, to ${does.verb}.`], key);
     if (held) return '';
-    return rotateStem([`Your ${played} prepares ${prep}.`, `${youPlay} first, so that ${prep} comes next.`], key);
+    return rotateStem([`${yourMove} prepares ${prep}.`, ...first(`so that ${prep} comes next.`)], key);
   }
   const capWords = prevents && !prevents.mate ? stoppedCapture(prevents.san, threatDid, 'your', 'their') : null;
   const stop = prevents ? capWords ?? `your ${dot(prevents.san, opp)}` : '';
