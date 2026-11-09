@@ -26,6 +26,13 @@ describe('a long line names the move that wins (David 2026-11-09: "yes!")', () =
     expect(lineShapePlies(line, fen)).toEqual([0, 2, 3]);
     expect(lineShape(line, 'you', fen)).toBe('you play Bxb7 and Bxa8 a move later, and they answer Rxa8');
   });
+  it('the knight taken in the middle is said, though the line is cut before the recapture (Carlsen–Caruana 19…Ng5, prod Review)', async () => {
+    const { lineShape } = await import('./andList');
+    // After …bxa4: Rxa4 axb4 dxe6 Rxa4 — the d-pawn takes the knight; the line
+    // is said to their rook taking yours (you take theirs back after).
+    const fen = 'r3qrk1/1bp2pb1/3pn1pp/p2P4/pP2Pn1B/4NN2/2B2PPP/R2QR1K1 w - - 0 20';
+    expect(lineShape(['Rxa4', '…axb4', 'dxe6', '…Rxa4'], 'you', fen)).toBe('you play Rxa4 and dxe6 a move later, and they answer Rxa4');
+  });
   it('a line whose last move takes the most already names the win: nothing is added', async () => {
     const { lineShape } = await import('./andList');
     // Nd5 h6 Nxc7+ Kd7 Nxa8: the rook on a8 is the win, and it ends the line.

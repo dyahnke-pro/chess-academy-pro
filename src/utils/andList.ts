@@ -110,21 +110,20 @@ export function fenAfterSans(fen: string | null, sans: readonly string[]): strin
 }
 
 /** THE MOVE THAT WINS, inside a line (David 2026-11-09: a long line said as
- *  its first and last move skipped the capture that won — "they play Bxb7
- *  and, two moves later, you play Rxa8 — you give up a rook" never said the
- *  …Bxa8 that took the rook). Read on the line's board: the side the line
- *  wins for, and of its captures between the first move and the last the one
- *  that takes the most — never one half of a trade (a capture taken straight
- *  back on its square for the same value). It is said unless the line's last
- *  move is that side's and takes as much, so the line already names it. With
- *  no board nothing is added. One move, never a score sheet. */
+ *  its first and last move skipped the capture that won — "you play Rxa4 and,
+ *  two moves later, they play Rxa4 — you win a knight for two pawns" never
+ *  said the dxe6 that took the knight). Read on the line's board: of the
+ *  captures between the first move and the last, the one that takes the most
+ *  — never one half of a trade (a capture taken straight back on its square
+ *  for the same value). It is said unless the line's last move is the same
+ *  side's and takes as much, so the line already names it. Who comes out
+ *  ahead is not read off the line: a line said to its blow is often cut
+ *  before the recapture that settles it (the Rxa4 line ends on their rook
+ *  taking yours; you take theirs back after). With no board nothing is
+ *  added. One move, never a score sheet. */
 function winningMove(sans: readonly string[], fen: string | null): number | null {
   const takes = fen ? lineTakes(sans, fen) : null;
   if (!takes) return null;
-  const won = { w: 0, b: 0 };
-  for (const t of takes) won[t.color] += t.took;
-  if (won.w === won.b) return null;
-  const winner: 'w' | 'b' = won.w > won.b ? 'w' : 'b';
   const traded = (i: number): boolean => {
     const a = takes[i];
     const next = takes[i + 1];
@@ -133,13 +132,12 @@ function winningMove(sans: readonly string[], fen: string | null): number | null
   };
   let best: number | null = null;
   for (let i = 1; i < takes.length - 1; i += 1) {
-    const t = takes[i];
-    if (t.color !== winner || t.took === 0 || traded(i)) continue;
-    if (best === null || t.took > takes[best].took) best = i;
+    if (takes[i].took === 0 || traded(i)) continue;
+    if (best === null || takes[i].took > takes[best].took) best = i;
   }
   if (best === null) return null;
   const last = takes[takes.length - 1];
-  return last.color === winner && last.took >= takes[best].took ? null : best;
+  return last.color === takes[best].color && last.took >= takes[best].took ? null : best;
 }
 
 /** The moves `lineShape` SAYS, by index into the line: every one up to
