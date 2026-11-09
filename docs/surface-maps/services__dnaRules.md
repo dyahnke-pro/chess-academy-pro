@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**102 lines · 6 exports · 8 importers · 2 tests · 0 audits**
+**109 lines · 6 exports · 8 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5629) — names `dnaRules`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5637) — names `dnaRules`
 
 ## Who calls in
 
@@ -35,7 +35,7 @@
 - `src/services/learnReward.ts:127`
 
 ### `affirmMove` (function) — 6 call sites
-- `src/services/deliberation.ts:886`
+- `src/services/deliberation.ts:890`
 - `src/services/dnaRules.test.ts:62`
 - `src/services/dnaRules.test.ts:64`
 - `src/services/dnaRules.test.ts:69`
@@ -57,7 +57,7 @@
 - `src/services/voicePackage.ts:512`
 
 ### `dnaPass` (function) — 9 call sites
-- `src/coach/coachService.ts:2465`
+- `src/coach/coachService.ts:2466`
 - `src/services/dnaRules.test.ts:8`
 - `src/services/dnaRules.test.ts:13`
 - `src/services/dnaRules.test.ts:16`

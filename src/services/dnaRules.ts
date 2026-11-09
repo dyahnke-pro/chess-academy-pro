@@ -60,7 +60,7 @@ export function earnedPraise(kind: PraiseKind, streak: number, rot: number): str
 const AFFIRM_STEMS: readonly string[] = [
   'You played a strong move here',
   'Your move does the job here',
-  'Good move here',
+  'You chose well here',
   'Your move works here',
 ];
 // NEVER "THE ONE" (Learn prod audit 2026-11-09, the second game's 18…Rxh7):

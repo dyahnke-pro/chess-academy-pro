@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**999 lines · 6 exports · 23 importers · 13 tests · 0 audits**
+**1007 lines · 6 exports · 23 importers · 13 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -41,10 +41,11 @@
 ### `kingWay` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `quietMovePoint` (function) — 8 call sites
+### `quietMovePoint` (function) — 9 call sites
 - `src/services/playCommentary.ts:924`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
+- `src/services/reviewMoveTeaching.unpin.test.ts:26`
 - `src/services/reviewWalkOct1.test.ts:71`
 - `src/services/reviewWalkOct1.test.ts:78`
 - `src/services/reviewWalkOct1.test.ts:84`
