@@ -25,7 +25,7 @@ describe('doubleAttack — one piece, two targets', () => {
 describe('mechanismContrast — why one check beats the other', () => {
   it('names what the better check hits and that the other only checks', () => {
     expect(mechanismContrast(TWO_CHECKS, 'Nf7+', 'Rh2+'))
-      .toBe('The knight to f7 hits the king and the queen on d8 at once; the rook to h2 only checks.');
+      .toBe('The knight to f7 hits the king and the queen on d8 at once. The rook to h2 only checks.');
   });
   it('says nothing when the better move carries no double attack', () => {
     expect(mechanismContrast(TWO_CHECKS, 'Rh2+', 'Nf7+')).toBeNull();
