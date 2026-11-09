@@ -29,7 +29,7 @@ describe('roadReason — what each road allows', () => {
     };
     const at: MovesAt = (fen) => db[fen.split(' ').slice(0, 4).join(' ')] ?? null;
     expect(roadReason({ prefix: ITALIAN, chosenSan: 'Nf6', chosenName: 'Italian Game: Two Knights Defense', altSan: 'Bc5', altName: 'Italian Game: Giuoco Piano', student: 'b', movesAt: at })?.text)
-      .toBe('…Nf6 attacks their pawn on e4, where …Bc5 brings your bishop out; it invites Ng5, which joins their bishop on c4 against your pawn on f7.');
+      .toBe('…Nf6 attacks their pawn on e4, where …Bc5 brings your bishop out. It invites Ng5, which joins their bishop on c4 against your pawn on f7.');
     expect(invitedAttack([...ITALIAN, 'Nf6'], 'b', () => [{ san: 'd3', games: 100 }] as LocalDbMove[])).toBeNull();
   });
   it('a score gap of under three points is not said (Najdorf 47.4 vs Classical 47.1)', () => {

@@ -11,7 +11,7 @@ describe('detectBluff', () => {
     expect(b).not.toBeNull();
     expect(b!.square).toBe('d4');
     expect(b!.targets.map((t) => t.square).sort()).toEqual(['b5', 'f3']);
-    expect(bluffClause(b!, true)).toMatch(/wins nothing — no need to react; keep developing/);
+    expect(bluffClause(b!, true)).toMatch(/wins nothing — no need to react\. Keep developing/);
   });
 
   it('negative control: the same jump onto a LOOSE piece is a real threat, not a bluff', () => {

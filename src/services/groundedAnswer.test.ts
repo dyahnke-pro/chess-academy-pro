@@ -312,7 +312,7 @@ describe('assembleOpeningTrapsAnswer — grounded "traps in my strongest opening
     const a = assembleOpeningTrapsAnswer({ sides: [white, black] });
     expect(a).not.toBeNull();
     expect(a!.facts).toMatch(/Your strongest White opening is the Italian Game\./);
-    expect(a!.facts).toMatch(/Trap weapons you can spring: Fried Liver Attack; Legal Mate\./);
+    expect(a!.facts).toMatch(/Trap weapons you can spring: Fried Liver Attack\. Legal Mate\./);
     expect(a!.facts).toMatch(/Watch out for: Blackburne Shilling Gambit\./);
     expect(a!.facts).toMatch(/Your strongest Black opening is the Caro-Kann Defense\./);
     expect(a!.facts).toMatch(/Want to see them\? The Italian Game page teaches every one of them/);
@@ -320,7 +320,7 @@ describe('assembleOpeningTrapsAnswer — grounded "traps in my strongest opening
   });
   it('names EVERY verified trap weapon — no count cap (G4.5)', () => {
     const a = assembleOpeningTrapsAnswer({ sides: [{ name: 'X', color: 'white', traps: ['a', 'b', 'c', 'd', 'e'], warnings: [] }] });
-    expect(a!.facts).toMatch(/a; b; c; d; e\./);
+    expect(a!.facts).toMatch(/A\. B\. C\. D\. E\./);
   });
   it('appends the WLPP teaching-system explanation only when asked', () => {
     const withSys = assembleOpeningTrapsAnswer({ sides: [white], explainSystem: true });
@@ -330,7 +330,7 @@ describe('assembleOpeningTrapsAnswer — grounded "traps in my strongest opening
   });
   it('handles a side with only warnings (no trap weapons)', () => {
     const a = assembleOpeningTrapsAnswer({ sides: [{ name: 'Petroff', color: 'black', traps: [], warnings: ['the early queen sortie'] }] });
-    expect(a!.facts).toMatch(/Watch out for: the early queen sortie\./);
+    expect(a!.facts).toMatch(/Watch out for: The early queen sortie\./);
     expect(a!.facts).not.toMatch(/Trap weapons/);
   });
   it('filters empty strings and drops sides with no traps or warnings', () => {
