@@ -144,7 +144,7 @@ describe('(L) two good moves — on his games', () => {
       { evaluation: -25, mate: null, moves: ['f6h5', 'f4g3'] },
     ];
     const r = alsoGood({ fenBefore: fen, san: 'Nh5', student: 'b', rating: 1500, reads });
-    expect(r?.heldText).toBe('Another move was worth the same here — your knight reaches only 3 squares from h5, against 7 from the other square it had.');
+    expect(r?.heldText).toMatch(/^(Another move was worth the same here|A second move did just as well here|You had another move of the same worth) — your knight reaches only 3 squares from h5, against 7 from the other square it had\.$/);
     expect(r?.heldText).not.toMatch(/d5|Nd5/);
   });
 });
@@ -232,5 +232,21 @@ describe('through the one registry, to every surface', () => {
       replyBestSan: null, replyEvaluation: null,
     }));
     expect(bare.join('\n')).not.toContain('tempting');
+  });
+});
+
+describe('the same-worth opener rotates on the board (prod focus audit 2026-11-09)', () => {
+  // Record game 3 said "Another move was worth the same here —" seven times.
+  it('three stems, picked by the board, never by chance', () => {
+    const fen = 'r1bq1rk1/pp1pppbp/2n2np1/4P3/Q4B2/2P5/PP3PPP/RN2KBNR b KQ - 0 10';
+    const reads: WeighRead[] = [
+      { evaluation: -20, mate: null, moves: ['f6d5', 'f4g3'] },
+      { evaluation: -25, mate: null, moves: ['f6h5', 'f4g3'] },
+    ];
+    const stem = (f: string): string | undefined => alsoGood({ fenBefore: f, san: 'Nh5', student: 'b', rating: 1500, reads })?.heldText.split(' — ')[0];
+    expect(stem(fen), 'the same board, the same words').toBe(stem(fen));
+    // The same position on different move counters is a different key.
+    const stems = new Set(Array.from({ length: 12 }, (_, i) => stem(fen.replace(/ 0 10$/, ` 0 ${10 + i}`))));
+    expect(stems.size).toBeGreaterThan(1);
   });
 });

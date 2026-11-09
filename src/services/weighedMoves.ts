@@ -437,6 +437,14 @@ export interface AlsoGood {
  * WITH the one thing the board shows between them (`moveDifference`). Two
  * moves the board cannot tell apart are not compared out loud.
  */
+/** The held same-worth line's openers (the move is never named: Learn holds
+ *  the student's move, and the other one is still theirs to find). */
+const SAME_WORTH_STEMS: readonly string[] = [
+  'Another move was worth the same here',
+  'A second move did just as well here',
+  'You had another move of the same worth',
+];
+
 export function alsoGood(args: { fenBefore: string; san: string; student: Color; rating: number; reads: readonly WeighRead[] }): AlsoGood | null {
   const played = moveOn(args.fenBefore, args.san);
   if (!played) return null;
@@ -465,8 +473,11 @@ export function alsoGood(args: { fenBefore: string; san: string; student: Color;
     // difference stay ONE sentence: split, the voice kept "Nxe4 and dxe4 both
     // hold here." alone where it had refused the whole.
     const text = `${played.san} and ${c.san} both hold here, and what separates them is that ${d.text}.`;
+    // ROTATED on the board (prod focus audit 2026-11-09: "Another move was
+    // worth the same here —" opened seven lines of one game). Each stem names
+    // the other move, so "the other" in the difference has its referent.
     const heldText = mover === args.student
-      ? `Another move was worth the same here — ${d.favours === played.san ? d.held : d.heldOther}.`
+      ? `${rotateStem(SAME_WORTH_STEMS, stemKeyOf(args.fenBefore))} — ${d.favours === played.san ? d.held : d.heldOther}.`
       : text;
     return { san: c.san, uci: c.uci, gapCp, difference: d, text, heldText,
       squares: [...new Set([played.to, c.to, ...d.squares])], key: `also-good:${uciOf(played)}:${c.uci}` };
