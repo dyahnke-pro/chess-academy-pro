@@ -46,7 +46,7 @@ import { positionalReason } from './positionalReason';
 import { landedTacticFor } from './pvPlayback';
 import { proofCut } from './exchangeLedger';
 import { openSentence } from '../utils/openSentence';
-import { rotateStem } from '../utils/rotateStem';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { replyPunishment } from './moveAllowed';
 import { whyItFailed } from './whyItFailed';
 import { sideToMoveAs } from './threatOut';
@@ -1332,17 +1332,20 @@ export function errorWhy(args: {
   // — a count the student cannot check and no way in). A short mate is played
   // out; a long one names the move it starts with, and its count only where
   // the student can still follow it (five moves or fewer).
+  // ROTATED on the board (prod focus audit 2026-11-09: "Your move was a
+  // blunder — it let them force mate" four times in one game's last moves).
+  const lets = rotateStem(['it let them force mate', 'it walks into a forced mate', 'it hands them a forced mate'], stemKeyOf(args.fenBefore));
   const allowedMateWords = (n: number): string => {
     try {
       const c = new Chess(args.fenBefore); c.move(args.playedSan);
       const opp = args.moverColor === 'white' ? 'b' : 'w';
       const ml = mateLine(c.fen(), replyLineUci, opp, undefined, { minPlies: 1 });
-      if (ml && ml.plies.length <= 3) return `it let them force mate: ${seatedLine(ml.sans, 'they')}`;
+      if (ml && ml.plies.length <= 3) return `${lets}: ${seatedLine(ml.sans, 'they')}`;
       const u = replyLineUci[0];
       const m = u ? c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }) : null;
       const count = n > 0 && n <= 5 ? ` in ${n}` : '';
-      return m ? `it let them force mate${count}, starting with ${m.color === 'b' ? '…' : ''}${m.san}` : `it let them force mate${count}`;
-    } catch { return 'it let them force mate'; }
+      return m ? `${lets}${count}, starting with ${m.color === 'b' ? '…' : ''}${m.san}` : `${lets}${count}`;
+    } catch { return lets; }
   };
   const consequence = args.allowedMate !== null
     ? allowedMateWords(Math.abs(args.allowedMate))

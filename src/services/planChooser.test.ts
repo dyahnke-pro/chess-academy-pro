@@ -18,14 +18,14 @@ describe('the plan chooser (census #52)', () => {
   });
   it('a clear gap names the stronger plan and what the other costs', () => {
     expect(planChoice(FEN, [{ moves: A, evaluation: 130 }, { moves: B, evaluation: 20 }], 'white', null)?.text)
-      .toMatch(/the stronger is getting the knight to f1; getting the bishop to h4 falls short by about a point\.$/);
+      .toMatch(/the stronger is getting the knight to f1\. Getting the bishop to h4 falls short by about a point\.$/);
   });
   it('a cut read names both plans with no amount — never "level", never "by N" (OS-11)', () => {
     const level = planChoice(FEN, [{ moves: A, evaluation: 30, searchedShort: true }, { moves: B, evaluation: 20 }], 'white', null)?.text;
     expect(level).toMatch(/^Two plans are on offer here — getting the knight to f1, or getting the bishop to h4\./);
     expect(level).not.toMatch(/level/);
     expect(planChoice(FEN, [{ moves: A, evaluation: 130 }, { moves: B, evaluation: 20, searchedShort: true }], 'white', null)?.text)
-      .toMatch(/getting the bishop to h4 falls short\.$/);
+      .toMatch(/Getting the bishop to h4 falls short\.$/);
   });
   it('silent in the grey zone, on a mate, or with one line (negative controls)', () => {
     expect(planChoice(FEN, [{ moves: A, evaluation: 80 }, { moves: B, evaluation: 20 }], 'white', null)).toBeNull();

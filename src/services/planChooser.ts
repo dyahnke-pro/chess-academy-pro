@@ -8,6 +8,7 @@ import { Chess } from 'chess.js';
 import { planFromUci } from './lookaheadPlan';
 import { aimWalkableNow, aimsOf, type Aim } from './planArc';
 import { routeNoun } from '../utils/routeWords';
+import { openSentence } from '../utils/openSentence';
 
 /** The first full move a plan choice may be taught on. */
 const PLAN_CHOICE_FROM_MOVE = 10;
@@ -80,5 +81,6 @@ export function planChoice(
       ? `Two plans hold here — ${said(a0)}, or ${said(a1)}. They come out level, so choose the one you understand and play it with purpose.`
       : `Two plans are on offer here — ${said(a0)}, or ${said(a1)}. Choose the one you understand and play it with purpose.` };
   }
-  return { key, text: `Of the two plans on offer, the stronger is ${said(a0)}; ${said(a1)} falls short${earned ? ` by ${costWords(gap)}` : ''}.` };
+  // Two sentences, never a spoken semicolon (prod focus audit 2026-11-09).
+  return { key, text: `Of the two plans on offer, the stronger is ${said(a0)}. ${openSentence(said(a1))} falls short${earned ? ` by ${costWords(gap)}` : ''}.` };
 }
