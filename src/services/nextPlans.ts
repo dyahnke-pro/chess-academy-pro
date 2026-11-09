@@ -406,7 +406,7 @@ export function deriveNextPlanFacts(
       ? 'escort it with your pieces, and bring the king in once the queens come off.'
       : 'escort it with your king and pieces.';
     const how = passerHow(chess, passer, studentColorWB);
-    add('passer', `get your passed pawn on ${passer} promoting`, `pushing your passed pawn on ${passer}`, `${how.cover}${how.cover ? escort[0].toUpperCase() + escort.slice(1) : escort} Push it one safe square at a time, and every push brings it closer to promotion`, [passer, ...how.squares], null, how.distance);
+    add('passer', `get your passed pawn on ${passer} promoting`, `pushing your passed pawn on ${passer}`, `${how.cover}${how.cover ? openSentence(escort) : escort} Push it one safe square at a time, and every push brings it closer to promotion`, [passer, ...how.squares], null, how.distance);
   }
 
   // 3. An enemy weak (isolated) pawn on the c–f files → besiege it, HOW spelled
