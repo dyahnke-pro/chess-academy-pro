@@ -13,7 +13,7 @@
  * A castle is done, not played ("You play O-O" was read "you play castles
  * kingside").
  */
-import { rotateStem, stemKeyOf } from './rotateStem';
+import { rotateStem, stemKeyOf } from './rotateStem.ts';
 
 export type IntroSeat = 'student' | 'opponent';
 

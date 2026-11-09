@@ -11,7 +11,7 @@
 // Deterministic (a fixed walk over a fixed file), grounded (every move is a
 // master move with a game count, G3), and it names nothing it cannot count.
 import { Chess, type Square } from 'chess.js';
-import { introWithPredicate } from '../utils/moveIntro';
+import { introWithPredicate } from '../utils/moveIntro.ts';
 import type { LocalDbMove } from './masterPlayLookup';
 import { shareAdverb } from '../utils/shareWords.ts';
 import { positionOf } from '../utils/samePosition.ts';
