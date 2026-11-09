@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**855 lines · 12 exports · 26 importers · 10 tests · 13 audits**
+**896 lines · 12 exports · 26 importers · 10 tests · 13 audits**
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:387) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6915) — names `conceptEngine`
+- **The tools are COMPUTERS** (CLAUDE.md:392) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6932) — names `conceptEngine`
 
 ## Who calls in
 
@@ -78,24 +78,27 @@
 - `src/services/conceptEngine.test.ts:67`
 - `src/services/conceptEngine.test.ts:92`
 
-### `endgameConceptFor` (function) — 15 call sites
+### `endgameConceptFor` (function) — 18 call sites
 - `src/services/conceptEngine.test.ts:258`
 - `src/services/conceptEngine.test.ts:261`
 - `src/services/conceptEngine.test.ts:264`
 - `src/services/conceptEngine.test.ts:265`
 - `src/services/conceptEngine.test.ts:269`
 - `src/services/conceptEngine.test.ts:270`
-- `src/services/conceptEngine.test.ts:318`
-- `src/services/conceptEngine.test.ts:324`
-- `src/services/endgameService.ts:91`
+- `src/services/conceptEngine.test.ts:275`
+- `src/services/conceptEngine.test.ts:279`
+- `src/services/conceptEngine.test.ts:285`
+- `src/services/conceptEngine.test.ts:333`
+- `src/services/conceptEngine.test.ts:339`
+- `src/services/endgameService.ts:92`
 - `src/services/endgameTablebaseService.ts:282`
 - `src/services/endgameTechnique.test.ts:61`
 - `src/services/endgameTechnique.test.ts:74`
 - `src/services/endgameTechnique.test.ts:224`
-- `src/services/groundedAnswer.ts:4142`
-- `src/services/groundedAnswer.ts:6996`
+- `src/services/groundedAnswer.ts:4143`
+- `src/services/groundedAnswer.ts:6997`
 
-### `conceptForBoard` (function) — 11 call sites
+### `conceptForBoard` (function) — 12 call sites
 - `src/services/claimKeyParity.test.ts:24`
 - `src/services/conceptEngine.test.ts:104`
 - `src/services/conceptEngine.test.ts:111`
@@ -105,8 +108,9 @@
 - `src/services/conceptEngine.test.ts:155`
 - `src/services/conceptEngine.test.ts:191`
 - `src/services/conceptEngine.test.ts:209`
+- `src/services/conceptEngine.test.ts:282`
 - `src/services/liveTacticsContext.ts:123`
-- `src/services/positionFacts.ts:1045`
+- `src/services/positionFacts.ts:1051`
 
 ### `conceptForLine` (function) — 17 call sites
 - `src/services/conceptCoverage.report.test.ts:59`
@@ -115,11 +119,11 @@
 - `src/services/conceptEngine.test.ts:216`
 - `src/services/conceptEngine.test.ts:220`
 - `src/services/conceptEngine.test.ts:229`
-- `src/services/conceptEngine.test.ts:281`
-- `src/services/conceptEngine.test.ts:288`
-- `src/services/conceptEngine.test.ts:300`
-- `src/services/conceptEngine.test.ts:308`
-- `src/services/conceptEngine.test.ts:313`
+- `src/services/conceptEngine.test.ts:296`
+- `src/services/conceptEngine.test.ts:303`
+- `src/services/conceptEngine.test.ts:315`
+- `src/services/conceptEngine.test.ts:323`
+- `src/services/conceptEngine.test.ts:328`
 - `src/services/endgameDrillService.test.ts:163`
 - `src/services/missedTacticService.ts:642`
 - `src/services/puzzleConceptExplanation.ts:142`
@@ -133,22 +137,22 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8704`
+- `src/components/Coach/CoachTeachPage.tsx:8705`
 - `src/services/learnWalkBlumenfeld.test.ts:142`
-- `src/services/positionFacts.ts:1497`
-- `src/services/positionFacts.ts:1499`
-- `src/services/positionFacts.ts:1960`
-- `src/services/positionFacts.ts:1964`
-- `src/services/reviewFullData.ts:746`
-- `src/services/reviewFullData.ts:749`
-- `src/services/reviewFullData.ts:750`
+- `src/services/positionFacts.ts:1503`
+- `src/services/positionFacts.ts:1505`
+- `src/services/positionFacts.ts:1966`
+- `src/services/positionFacts.ts:1970`
+- `src/services/reviewFullData.ts:758`
+- `src/services/reviewFullData.ts:761`
+- `src/services/reviewFullData.ts:762`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8707`
+- `src/components/Coach/CoachTeachPage.tsx:8708`
 - `src/services/dnaLineNarrator.ts:57`
 - `src/services/projectedLineVoice.ts:99`
 - `src/services/puzzleConceptExplanation.ts:131`
-- `src/services/reviewFullData.ts:745`
+- `src/services/reviewFullData.ts:757`
 - `src/services/tacticAlertService.ts:148`
 - `src/services/tacticTypeUnification.test.ts:223`
 - `src/test/auditConceptGameplayCues.test.ts:24`

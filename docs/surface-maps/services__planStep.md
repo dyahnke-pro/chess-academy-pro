@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**88 lines · 1 exports · 3 importers · 2 tests · 0 audits**
+**95 lines · 1 exports · 3 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5929) — names `planStep`
 
 ## Who calls in
 
@@ -18,18 +18,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `planStepLine` (function) — 8 call sites
+### `planStepLine` (function) — 10 call sites
+- `src/services/learnNamesOwnMove.test.ts:86`
+- `src/services/learnNamesOwnMove.test.ts:87`
 - `src/services/planChoice.test.ts:48`
 - `src/services/planChoice.test.ts:55`
 - `src/services/planChoice.test.ts:59`
 - `src/services/planChoice.test.ts:66`
-- `src/services/planThread.ts:143`
-- `src/services/planThread.ts:155`
+- `src/services/planThread.ts:183`
+- `src/services/planThread.ts:195`
 - `src/services/saidOnItsBoard.test.ts:30`
 - `src/services/saidOnItsBoard.test.ts:31`
 
 ## Tests
 
+- `src/services/learnNamesOwnMove.test.ts`
 - `src/services/planChoice.test.ts`
 - `src/services/saidOnItsBoard.test.ts`
 
