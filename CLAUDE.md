@@ -5898,7 +5898,7 @@ it let them …"), or "it" right after a sentence about that move — never its
 name. Still named in Learn: their move, the better move once it is past, moves
 inside a played-out line, an earlier move of the student's, anything asked in
 chat. Review keeps naming the move, its words ROTATED (`moveIntro`: "You play
-X — it …" / "Your knight goes to f3 and …" / "You go X, which …").
+X — it …" / "You go X, which …" / a pawn's "Your e4 …").
 
 **Review names the better move** (the game is over); **chat names it** (you
 asked). Gates: `learnNamesNoMoveUnasked.gate.test.ts`,

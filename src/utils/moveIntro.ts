@@ -4,7 +4,8 @@
  * sound as human as possible").
  *
  * Review and the lessons introduced every move with one stem — "You play Nf3
- * — it develops…", "They play e5 — it…" — on every ply of a game. The facts
+ * — it develops…", "They play e5 — it…" — on every ply of a game. Now: "You
+ * play X — it …", "You go X, which …", and for a pawn "Your e4 …". The facts
  * and the move named are the same here; only the words around them rotate,
  * keyed on the move and its seat (`rotateStem`, never a roll), so a reopened
  * review says it word for word, and Review and the lesson open one move alike.
@@ -21,21 +22,15 @@ function castleWords(san: string): string | null {
   return san.startsWith('O-O-O') ? 'queenside' : 'kingside';
 }
 
-const PIECE: Record<string, string> = { N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king' };
-
-/** "Your Nf3 develops…" is read "your knight to f3 develops…": a piece move is
- *  said as the piece going there ("your knight goes to f3 and develops…"); a
- *  pawn move keeps its name ("your e4 stakes a claim…"). Null for a capture or
- *  a mate, which never take this form. */
-function ownedMove(whose: string, san: string, predicate: string): string | null {
+/** A PAWN move owned by its seat ("your e4 stakes a claim…"). Only a pawn: a
+ *  piece move said "your knight goes to f3 and …" named one more square, and
+ *  repeated the square-choice fact beside it ("Their bishop goes to c4 and …
+ *  Their bishop went to c4. On d3 it blocks…"), so a piece move keeps its
+ *  name in the other forms. "Your Nf3 develops…" is read "your knight to f3
+ *  develops…" and is never said. Null for a capture, which is never the
+ *  subject of its own verb. */
+function ownedPawnMove(whose: string, san: string, predicate: string): string | null {
   const bare = san.replace(/^…/, '');
-  if (bare.includes('x') || bare.endsWith('#')) return null;
-  // "Goes to g3" names a square the move's name did not: never the third in
-  // its sentence (humanSquares gate — "Your queen goes to g3 and stops their
-  // pawn coming to f6, where it would hit your bishop on g5" is a list).
-  if (new Set(predicate.match(/\b[a-h][1-8]\b/g) ?? []).size >= 2 && /^[NBRQK]/.test(bare)) return null;
-  const piece = /^([NBRQK])([a-h])?([1-8])?([a-h][1-8])(\+)?$/.exec(bare);
-  if (piece) return `${whose} ${piece[2] ? `${piece[2]}-` : ''}${PIECE[piece[1]]} goes to ${piece[4]}${piece[5] ? ' with check' : ''} and ${predicate}`;
   return /^[a-h][1-8](=[QRBN])?\+?$/.test(bare) ? `${whose} ${bare} ${predicate}` : null;
 }
 
@@ -69,9 +64,9 @@ export function introWithPredicate(seat: IntroSeat, san: string, predicate: stri
     const rest = predicate.replace(/^castles (their|your) king\b/, 'tucks $1 king');
     if (!/^castles\b/.test(rest)) return `${who} castle ${side}${joined(rest)} ${rest}`;
   }
-  // "Your Nxe5 takes back…" is read "your knight takes e5 takes back": a
+  // "Your exd5 takes back…" is read "your e-pawn takes d5 takes back": a
   // capture is never the subject of its own verb (`captureSaidOnce`).
-  const owned = side ? null : ownedMove(seat === 'student' ? 'Your' : 'Their', san, predicate);
+  const owned = side ? null : ownedPawnMove(seat === 'student' ? 'Your' : 'Their', san, predicate);
   return rotateFitting([
     `${who} play ${san}${joined(predicate)} ${predicate}`,
     ...(owned ? [owned] : []),

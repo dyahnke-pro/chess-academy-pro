@@ -1122,7 +1122,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:9355`
 - `src/services/coachFeatureService.ts:5285`
 - `src/services/coachFeatureService.ts:5374`
-- `src/services/coachFeatureService.ts:6386`
+- `src/services/coachFeatureService.ts:6384`
 - `src/services/liveTacticsContext.ts:486`
 - `src/services/liveTacticsContext.ts:495`
 - `src/services/lookaheadPlan.ts:140`

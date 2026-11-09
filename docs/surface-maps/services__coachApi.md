@@ -279,8 +279,8 @@
 - `src/services/coachApi.computedOnly.test.ts:20`
 - `src/services/coachChatText.ts:221`
 - `src/services/coachFeatureService.ts:354`
-- `src/services/coachFeatureService.ts:6277`
-- `src/services/coachFeatureService.ts:6429`
+- `src/services/coachFeatureService.ts:6275`
+- `src/services/coachFeatureService.ts:6427`
 - `src/services/coachLaneWiring.test.ts:158`
 - `src/services/gameReviewService.ts:58`
 - `src/services/kidGameCoach.ts:220`

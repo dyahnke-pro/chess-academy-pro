@@ -123,7 +123,7 @@ describe('review noise — Carlsen–Grischuk, Norway 2015 (lichess jMVMo1Ua), s
       // A standing leads the move's thought ("A rare book move — … here. You
       // play a6 — it …"); the thought names its move, or the move it answers.
       const body = f.replace(/^(?:The game is on the masters' main line|A rare book move — the game leaves the main line here|The last book move — the masters' file ends here)\. /, '');
-      expect(body).toMatch(/^(?:(?:You|They) (?:play|played|go|went for|castled?) \S+|(?:Your|Their) …?[KQRBN]?[a-h]?x?[a-h][1-8]\S* |(?:Your|Their) (?:[a-h]-)?(?:knight|bishop|rook|queen|king) (?:goes|went) to )/);
+      expect(body).toMatch(/^(?:(?:You|They) (?:play|played|go|went for|castled?) \S+|(?:Your|Their) …?[KQRBN]?[a-h]?x?[a-h][1-8]\S* )/);
     }
     expect(jobs).toBeGreaterThan(0);
   }, 120_000);
