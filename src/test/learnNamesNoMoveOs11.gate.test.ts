@@ -220,7 +220,7 @@ describe('every student move of the six games: the engine-backed producers name 
         const bestSan = ((): string | null => { try { const m = new Chess(before).move({ from: pre.bestMove.slice(0, 2), to: pre.bestMove.slice(2, 4), promotion: pre.bestMove.slice(4, 5) || undefined }); return m.san; } catch { return null; } })();
         const history = g.sans.slice(0, i + 1);
         // The student's move: what it did and cost.
-        for (const h of studentMoveTeaching({ theory: true, fenBefore: before, san, history, cpLoss, bothCp: cpLoss !== null, bestSan, bestLine: best, topLines: pre.topLines, reply: reply.san, cpAfter: mid.isMate ? null : mid.evaluation * sign, popularTopSan: null, saidClaims: new Set() })) {
+        for (const h of studentMoveTeaching({ namesStudentMoves: false, theory: true, fenBefore: before, san, history, cpLoss, bothCp: cpLoss !== null, bestSan, bestLine: best, topLines: pre.topLines, reply: reply.san, cpAfter: mid.isMate ? null : mid.evaluation * sign, popularTopSan: null, saidClaims: new Set() })) {
           check(`studentMove/${h.lane}`, i + 1, san, h.text, h.namesStudentMove, next);
         }
         // Their reply's cost.

@@ -660,6 +660,10 @@ export function squareChoice(args: {
    *  of the move played reached an inaccuracy (\`INACCURACY_CP\`); null when
    *  it did not, or the surface has no price. */
   beaten: string | null;
+  /** REQUIRED: may the move just played be named? Review and the lessons
+   *  yes; Learn asks why that square instead of saying where the piece went
+   *  (David 2026-11-09: "the user knows that, they see it play out"). */
+  namesStudentMoves: boolean;
 }): SquareChoice | null {
   const played = moveOn(args.fenBefore, args.san);
   // A knight's or a bishop's square — his examples all are; a queen or a rook
@@ -735,7 +739,7 @@ export function squareChoice(args: {
   // it hangs"): a person names the most tempting square and its fault, then
   // sums up the rest (`faults` is in the eye's order, most natural first).
   const said = outLoud(all) <= 2 ? all : `on ${faults[0].square} it ${faults[0].text}, and its other squares are no better`;
-  const text = outLoud(said) <= 1
+  const text = outLoud(said) <= 1 && (args.namesStudentMoves || mover !== args.student)
     // The square, then the fault on the other square its own sentence ("Their
     // bishop went to e4 — on g4 it runs into …Bxf3+ — you win the exchange"
     // was a dash chain).
@@ -744,9 +748,12 @@ export function squareChoice(args: {
     // square for …?" said three times in one game).
     : (() => {
       const whose = mover === args.student ? 'your' : 'their';
+      // Learn never says where the student's piece just went: the stem that
+      // names the square is left out there.
+      const namesSquare = args.namesStudentMoves || mover !== args.student;
       return rotateStem([
         `Why that square for ${whose} ${piece}? ${openSentence(said)}.`,
-        `Why ${played.to} for ${whose} ${piece}? ${openSentence(said)}.`,
+        ...(namesSquare ? [`Why ${played.to} for ${whose} ${piece}? ${openSentence(said)}.`] : []),
         `The other squares for ${whose} ${piece} are worse: ${said}.`,
       ], stemKeyOf(`${args.fenBefore}|${uciOf(played)}`));
     })();

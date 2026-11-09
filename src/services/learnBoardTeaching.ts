@@ -157,6 +157,10 @@ export interface StudentMoveInput {
    *  review button, but keep in learn for now also"). Learn, the button, chat
    *  and the lessons say yes. */
   theory: boolean;
+  /** REQUIRED: may the move just played be named? Review, the lessons and an
+   *  asked question yes; Learn says "your move" (David 2026-11-09: "the user
+   *  knows that, they see it play out"). */
+  namesStudentMoves: boolean;
 }
 
 /** ONE VOCABULARY (plan "methodBeat — the live coach names the lesson STEP"):
@@ -406,7 +410,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
   try {
     const me: 'w' | 'b' = i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
     const priced = i.cpLoss;
-    if (priced !== null) for (const s of studentMoveStructure({ fenBefore: i.fenBefore, san: i.san, student: me, cpLoss: priced, bestSan: i.bestSan, bestUci: i.bestLine?.moves ?? [], reply: i.reply, namesBetterMove: false })) {
+    if (priced !== null) for (const s of studentMoveStructure({ fenBefore: i.fenBefore, san: i.san, student: me, cpLoss: priced, bestSan: i.bestSan, bestUci: i.bestLine?.moves ?? [], reply: i.reply, namesBetterMove: false, namesStudentMoves: i.namesStudentMoves })) {
       out.push(teachingFact('structureJudgement', {
         computer: 'studentMoveStructure', kind: 'judgement', ...mine, names: NAMES_NO_MOVE, proof: s.proof, text: s.text, squares: s.squares, claims: [s.key],
         ...(s.stakes ? { stakes: s.stakes } : {}),
@@ -875,7 +879,7 @@ export function studentMoveAnswerLines(history: readonly string[], ply: number, 
   if (!fenBefore || ply < 0 || ply >= history.length) return [];
   // The student asked ("was that a good move?"): theory may answer.
   const hints = studentMoveTeaching({
-    theory: true,
+    theory: true, namesStudentMoves: true,
     fenBefore, san: history[ply], history: history.slice(0, ply + 1), cpLoss, bothCp: true,
     bestSan, bestLine: undefined, reply: history[ply + 1] ?? null, cpAfter: null,
   });

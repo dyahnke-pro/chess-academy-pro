@@ -40,6 +40,10 @@ describe('the misses that carry to the next game (#158)', () => {
     await writeLearnFocusResult(row('g1', 1, [{ seat: 'exploit', tag: 'a-retired-tag' as never }, { seat: 'defend', tag: 'missed-your-fork' }]));
     expect((await loadFocusSetupInput()).carry).toEqual([{ seat: 'defend', tag: 'missed-your-fork' }]);
   });
+  it('BRIDGE: a piece left loose, owed for an hour before it was found the coach cannot set one up, carries no more', async () => {
+    await writeLearnFocusResult(row('g1', 1, [{ seat: 'defend', tag: 'hung-material' }, { seat: 'defend', tag: 'missed-opponents-threat' }]));
+    expect((await loadFocusSetupInput()).carry).toEqual([{ seat: 'defend', tag: 'missed-opponents-threat' }]);
+  });
   it('BRIDGE: a row from before their side carried holds bare tags — each is yours', async () => {
     await writeLearnFocusResult(row('g1', 1, ['missed-your-fork', 'missed-your-free-piece']));
     expect((await loadFocusSetupInput()).carry).toEqual([{ seat: 'exploit', tag: 'missed-your-fork' }, { seat: 'exploit', tag: 'missed-your-free-piece' }]);

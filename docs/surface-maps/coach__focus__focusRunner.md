@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**929 lines · 18 exports · 5 importers · 3 tests · 1 audits**
+**930 lines · 18 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -75,11 +75,11 @@
 - `src/coach/focus/focusRunner.test.ts:575`
 - `src/coach/focus/focusRunner.test.ts:576`
 - `src/coach/focus/focusRunner.test.ts:582`
-- `src/coach/focus/focusRunner.test.ts:617`
-- `src/coach/focus/focusRunner.test.ts:630`
-- `src/coach/focus/focusRunner.test.ts:631`
-- `src/coach/focus/focusRunner.test.ts:644`
-- `src/coach/focus/focusRunner.test.ts:666`
+- `src/coach/focus/focusRunner.test.ts:624`
+- `src/coach/focus/focusRunner.test.ts:637`
+- `src/coach/focus/focusRunner.test.ts:638`
+- `src/coach/focus/focusRunner.test.ts:651`
+- `src/coach/focus/focusRunner.test.ts:673`
 - `src/coach/focus/useFocusRunner.ts:231`
 
 ### `focusOwnsGame` (function) — 1 call site

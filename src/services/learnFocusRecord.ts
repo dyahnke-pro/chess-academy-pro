@@ -21,7 +21,7 @@ import { FOCUS_POSED_IMPORTANCE, type FocusId, type FocusSeat, type LegacyFocusI
 import type { FocusSetupInput } from '../coach/focus/focusSetup';
 import type { OwedPattern } from '../coach/focus/focusPlant';
 import type { SeatTally } from '../coach/focus/focusRunner';
-import type { ChanceDifficulty } from '../coach/focus/focusChances';
+import { LEFT_LOOSE_TAG, type ChanceDifficulty } from '../coach/focus/focusChances';
 import type { RungGame, TacticsRung } from '../coach/focus/focusRung';
 
 export interface LearnFocusResultRecord {
@@ -79,9 +79,12 @@ export async function loadFocusSetupInput(): Promise<Omit<FocusSetupInput, 'rand
   ]);
   const holds = new Map([...profile.entries()].map(([tag, e]) => [tag, e.hold] as const));
   // What the newest game left owed (a tag a later build retired carries
-  // nothing; a bare tag is a row from before their side carried — yours).
+  // nothing; a bare tag is a row from before their side carried — yours). A
+  // piece left loose was owed for an hour on 2026-11-09 before it was found
+  // the coach cannot set one up (`PLANTABLE`); such a row carries it no more.
   const carry = (results.at(-1)?.carry ?? []).flatMap((o): OwedPattern[] => {
     const p: OwedPattern = typeof o === 'string' ? { seat: 'exploit', tag: o } : o;
+    if (p.seat === 'defend' && p.tag === LEFT_LOOSE_TAG) return [];
     return isMisconceptionTagId(p.tag) && (p.seat === 'exploit' || p.seat === 'defend') ? [p] : [];
   });
   return { holds, games: rungGamesFrom(results), tempoBest: tempoBestOf(results), carry };

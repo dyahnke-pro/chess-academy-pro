@@ -1519,7 +1519,7 @@ export function computeMoveFacets(
   if (studentColorWB) {
     const reads: Array<StructureRead & { computer: ComputerName }> = isStudent
       ? [
-        ...studentMoveStructure({ fenBefore, san, student: studentColorWB, cpLoss: Math.max(0, ctx.costCp ?? 0), bestSan: ctx.bestMoveSan, bestUci: ctx.bestLineUci, reply: ctx.replyBestSan, namesBetterMove: true }).map((r) => ({ ...r, computer: 'studentMoveStructure' as const })),
+        ...studentMoveStructure({ fenBefore, san, student: studentColorWB, cpLoss: Math.max(0, ctx.costCp ?? 0), bestSan: ctx.bestMoveSan, bestUci: ctx.bestLineUci, reply: ctx.replyBestSan, namesBetterMove: true, namesStudentMoves: true }).map((r) => ({ ...r, computer: 'studentMoveStructure' as const })),
         // A STANDING FACT OF THE BOARD THE MOVE WAS PLAYED ON is said only
         // where the move left its squares as they were (prod Review
         // 2026-11-09, 39.Rxd6+: "Their d6 pawn is the key pawn: it guards
@@ -1627,7 +1627,7 @@ export function computeMoveFacets(
       // The engine's better move when this move cost an inaccuracy or more:
       // the square choice is not asked of a piece it took elsewhere.
       const beaten = Math.max(0, ctx.costCp ?? 0) >= INACCURACY_CP ? ctx.bestLineUci[0] ?? null : null;
-      add(readBoardAll('squareChoice', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior, beaten })[0]);
+      add(readBoardAll('squareChoice', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior, beaten, namesStudentMoves: true })[0]);
     }
     // THE TEACHING MOVES' NEW COMPUTERS, both seats (2026-11-05): the pawn
     // break and what it is for — the pawn it strikes, the file it opens for

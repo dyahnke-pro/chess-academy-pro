@@ -67,7 +67,7 @@ describe('the later game, named the way he names it (Alekhine walk 2026-10-19)',
   });
 
   it('reaches the student-move door, so Learn and Review hear it', () => {
-    const acts = studentMoveStructure({ fenBefore: BEFORE_RFF7, san: 'Rff7', student: 'w', cpLoss: 0, namesBetterMove: false } as Parameters<typeof studentMoveStructure>[0]).map((x) => x.act);
+    const acts = studentMoveStructure({ fenBefore: BEFORE_RFF7, san: 'Rff7', student: 'w', cpLoss: 0, namesBetterMove: false, namesStudentMoves: false } as Parameters<typeof studentMoveStructure>[0]).map((x) => x.act);
     expect(acts).toContain('rooks-on-seventh');
   });
 });

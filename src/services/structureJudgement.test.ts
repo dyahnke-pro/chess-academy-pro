@@ -51,11 +51,11 @@ describe('pawnJudgement', () => {
 
   it('fix their pawns on your bishop\'s colour: a4 freezes a5 for the dark bishop', () => {
     const fen = legal('6k1/1b3ppp/8/p7/8/8/P4PPP/2B3K1 w - - 0 20');
-    const r = voiced(fixOnBishopColour(fen, 'a4', 'w'));
+    const r = voiced(fixOnBishopColour(fen, 'a4', 'w', 'a4'));
     expect(r.text).toMatch(/^a4 freezes their a5 pawn on a dark square/);
     expect(r.text).toMatch(/no bishop of that colour/);
     // A light-squared bishop cannot use it: silent.
-    expect(fixOnBishopColour(legal('6k1/1b3ppp/8/p7/8/8/P4PPP/3B2K1 w - - 0 20'), 'a4', 'w')).toBeNull();
+    expect(fixOnBishopColour(legal('6k1/1b3ppp/8/p7/8/8/P4PPP/3B2K1 w - - 0 20'), 'a4', 'w', 'a4')).toBeNull();
   });
 
   it('their capture sealed your weakness: exd5 walls the backward d6 off the d-file', () => {
@@ -87,11 +87,11 @@ describe('pawnJudgement', () => {
 
   it('a break that trades off your weak pawn: d5 gets rid of the isolated d4', () => {
     const fen = legal('6k1/pp3ppp/4p3/8/3P4/8/PP3PPP/6K1 w - - 0 20');
-    const r = voiced(breakTradesWeakPawn(fen, 'd5', 'w', 10));
+    const r = voiced(breakTradesWeakPawn(fen, 'd5', 'w', 10, 'd5'));
     expect(r.text).toBe('d5 is the direct way to get rid of your weak d4 pawn: it meets their pawn on e6 and can be traded off.');
     expect(r.held?.tag).toBe('mistimed-pawn-break');
     // A healthy pawn's push is not this lesson.
-    expect(breakTradesWeakPawn(legal('6k1/pp3ppp/4p3/8/2PP4/8/PP3PPP/6K1 w - - 0 20'), 'd5', 'w', 10)).toBeNull();
+    expect(breakTradesWeakPawn(legal('6k1/pp3ppp/4p3/8/2PP4/8/PP3PPP/6K1 w - - 0 20'), 'd5', 'w', 10, 'd5')).toBeNull();
   });
 
   it('don\'t repair their structure: leave f6, it buries the g7 bishop', () => {
@@ -180,18 +180,18 @@ describe('squareJudgement', () => {
 
   it('don\'t plug your own open file: Bf4 blocks the f-rook; e5 keeps it open', () => {
     const fen = legal('6k1/pp3ppp/8/8/3PP3/8/PP4PP/2B2RK1 w - - 0 20');
-    const r = voiced(dontPlugFile(fen, 'Bf4', 'w', 60, 'e5'));
+    const r = voiced(dontPlugFile(fen, 'Bf4', 'w', 60, 'e5', 'Bf4'));
     expect(r.text).toBe('Bf4 plugs your own rook\'s f-file. e5 keeps it open.');
     expect(r.stakes?.points).toBeCloseTo(0.6);
     // A move that cost nothing is not this lesson.
-    expect(dontPlugFile(fen, 'Bf4', 'w', 10, 'e5')).toBeNull();
+    expect(dontPlugFile(fen, 'Bf4', 'w', 10, 'e5', 'Bf4')).toBeNull();
   });
 
   it('a queen in front of its rook doubles on the file — it plugs nothing (prod Learn audit 2026-11-09)', () => {
     // The audit's second game, Black to play 17…Qxd3 with the rook on d8 behind.
     const c = new Chess();
     for (const m of 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4 h3 Nc6 hxg4 O-O-O Be3 e6 Nd2 Nxd4 Bd3 Bc5 Bxd4 Bxd4 O-O Bxc3 bxc3 Qxc3 Nc4 Nd5 Re1 Nf4 Ne3 Nxd3 cxd3'.split(' ')) c.move(m);
-    expect(dontPlugFile(c.fen(), 'Qxd3', 'b', 80, 'Kb8')).toBeNull();
+    expect(dontPlugFile(c.fen(), 'Qxd3', 'b', 80, 'Kb8', 'Qxd3')).toBeNull();
   });
 
   it('squares your unmoved pawns leave open: their knight reaches d4', () => {
@@ -313,9 +313,21 @@ describe('planJudgement', () => {
   });
 });
 
+describe('Learn never names the move just played in a structure read (David 2026-11-09: "the user knows that, they see it play out")', () => {
+  // The prod focus audit heard "Bishop takes a7 plugs your own rook's a-file" in Learn.
+  it('Learn says "Your move"; Review keeps the move\'s name', () => {
+    const fen = legal('6k1/pp3ppp/8/8/3PP3/8/PP4PP/2B2RK1 w - - 0 20');
+    const at = { fenBefore: fen, san: 'Bf4', student: 'w' as const, cpLoss: 60, bestSan: 'e5', bestUci: ['e4e5'], reply: null };
+    const learn = studentMoveStructure({ ...at, namesBetterMove: false, namesStudentMoves: false }).find((r) => r.act === 'dont-plug-file');
+    expect(learn?.text).toBe("Your move plugs your own rook's f-file.");
+    const review = studentMoveStructure({ ...at, namesBetterMove: true, namesStudentMoves: true }).find((r) => r.act === 'dont-plug-file');
+    expect(review?.text).toBe("Bf4 plugs your own rook's f-file. e5 keeps it open.");
+  });
+});
+
 describe('structureReads — composed by when they apply', () => {
   it('the student move, their move, the board and the lines each reach their computers', () => {
-    expect(studentMoveStructure({ fenBefore: legal('6k1/pp3ppp/8/8/3PP3/8/PP4PP/2B2RK1 w - - 0 20'), san: 'Bf4', student: 'w', cpLoss: 60, bestSan: 'e5', bestUci: ['e4e5'], reply: null, namesBetterMove: true }).map((r) => r.act)).toContain('dont-plug-file');
+    expect(studentMoveStructure({ fenBefore: legal('6k1/pp3ppp/8/8/3PP3/8/PP4PP/2B2RK1 w - - 0 20'), san: 'Bf4', student: 'w', cpLoss: 60, bestSan: 'e5', bestUci: ['e4e5'], reply: null, namesBetterMove: true, namesStudentMoves: true }).map((r) => r.act)).toContain('dont-plug-file');
     expect(theirMoveStructure(legal('6k1/pp3ppp/3p4/3np3/2P1P3/8/PP3PPP/6K1 w - - 0 20'), 'exd5', 'b').map((r) => r.act)).toContain('recapture-sealed-weakness');
     // Their king castles long while the student's is central: the plan changes (Alekhine walk 2026-10-19).
     expect(theirMoveStructure(fromSans(['e4', 'Nf6', 'e5', 'Nd5', 'd4', 'd6', 'c4', 'Nb6', 'f4', 'dxe5', 'fxe5', 'Nc6', 'Be3', 'Bf5', 'Nc3', 'Qd7', 'Nf3', 'Bg4', 'Be2']), 'O-O-O', 'w').map((r) => r.act)).toContain('king-committed');

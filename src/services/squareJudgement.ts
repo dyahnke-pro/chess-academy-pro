@@ -308,7 +308,8 @@ export function fileEntryCovered(fen: string, student: Color): StructureRead | n
 
 /** DON'T PLUG YOUR OWN OPEN FILE — the student's piece stepped in front of its
  *  own rook on a file with none of its pawns, and it cost. */
-export function dontPlugFile(fenBefore: string, san: string, student: Color, cpLoss: number, bestSan: string | null): StructureRead | null {
+/** `subject` is REQUIRED: how the move is said — its name where the surface names the student's move (Review), "Your move" in Learn (David 2026-11-09: "the user knows that, they see it play out"). */
+export function dontPlugFile(fenBefore: string, san: string, student: Color, cpLoss: number, bestSan: string | null, subject: string): StructureRead | null {
   if (cpLoss < 40 || !bestSan) return null;
   const r = play(fenBefore, san);
   // A queen in front of its own rook doubles with it on the file (a battery),
@@ -337,8 +338,8 @@ export function dontPlugFile(fenBefore: string, san: string, student: Color, cpL
   if (!proof) return null;
   return {
     act: 'dont-plug-file', squares: [x, rook], proof, key: `plug:${f}`, stakes: costStakes(cpLoss) ?? undefined,
-    text: `${bare(san)} plugs your own rook's ${f}-file. ${bare(bestSan)} keeps it open.`,
-    ...heldOf(`${bare(san)} plugs your own rook's ${f}-file.`, [x, rook]),
+    text: `${subject} plugs your own rook's ${f}-file. ${bare(bestSan)} keeps it open.`,
+    ...heldOf(`${subject} plugs your own rook's ${f}-file.`, [x, rook]),
   };
 }
 

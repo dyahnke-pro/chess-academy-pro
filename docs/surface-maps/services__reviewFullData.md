@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1396) — names `reviewFullData`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1401) — names `reviewFullData`
 
 ## Who calls in
 
@@ -112,8 +112,8 @@
 - `src/services/tacticGeometry.test.ts:268`
 - `src/services/tacticGeometry.test.ts:273`
 - `src/services/unifiedBetterMoveReason.test.ts:39`
-- `src/services/weighedMoves.test.ts:233`
-- `src/services/weighedMoves.test.ts:246`
+- `src/services/weighedMoves.test.ts:239`
+- `src/services/weighedMoves.test.ts:252`
 - `src/test/teach02Wired.test.ts:28`
 - `src/test/teach02Wired.test.ts:68`
 

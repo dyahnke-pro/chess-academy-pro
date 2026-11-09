@@ -82,6 +82,26 @@ export const CHANCE_SEAT: Record<ChanceKind, FocusSeat> = {
   'mate-for-you': 'exploit',
 };
 
+/** WHETHER THE COACH CAN PUT A CHANCE OF THIS KIND ON THE BOARD (#158): a
+ *  pattern missed is owed to the next game only if a plant can pose it
+ *  again. A piece your own move leaves loose (`leave`) exists only after your
+ *  move — no move of the coach's sets it up — so it is never owed (the prod
+ *  focus audit 2026-11-09 asked for one on 24 moves of a game and never could,
+ *  crowding out the pattern that could come back). One answer per kind: a new
+ *  kind fails to compile until it says. */
+export const PLANTABLE: Record<ChanceKind, boolean> = {
+  save: true,
+  leave: false,
+  take: true,
+  shot: true,
+  motif: true,
+  'mate-threat': true,
+  'mate-for-you': true,
+};
+
+/** The tag a piece your move left loose is filed under (`leave`). */
+export const LEFT_LOOSE_TAG: MisconceptionTagId = 'hung-material';
+
 /** How hard a chance is to find — the student's rung scale (`focusRung`):
  *  0 the plainest, 3 the subtlest. */
 export type ChanceDifficulty = TacticsRung;
@@ -552,7 +572,7 @@ export function leftLoose(m: FocusMove): FocusChance | null {
     if (!attacker) continue;
     const best = bestLine(m.lines, m.student);
     return {
-      seat: CHANCE_SEAT.leave, kind: 'leave', tag: 'hung-material',
+      seat: CHANCE_SEAT.leave, kind: 'leave', tag: LEFT_LOOSE_TAG,
       key: `leave:${p.square}`, squares: [p.square, attacker.square],
       piece: p, attacker,
       counts: legalCounts(m.fenAfter, p.square, m.student),

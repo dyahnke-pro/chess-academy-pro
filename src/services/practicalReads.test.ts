@@ -67,7 +67,7 @@ describe('one move guards both', () => {
     const r = missedDefendsBoth(D, 'Qd7', 'b', 600);
     expect(r?.text).toContain('covered both');
     expect(r?.heldForm?.text).not.toMatch(/Q[a-h][1-8]/);
-    const learn = studentMoveStructure({ fenBefore: D, san: 'Qd7', student: 'b', cpLoss: 600, bestSan: null, bestUci: [], reply: null, namesBetterMove: false });
+    const learn = studentMoveStructure({ fenBefore: D, san: 'Qd7', student: 'b', cpLoss: 600, bestSan: null, bestUci: [], reply: null, namesBetterMove: false, namesStudentMoves: false });
     const said = learn.find((x) => x.act === 'missed-defends-both');
     expect(said?.text).not.toMatch(/Q[a-h][1-8]/);
   });

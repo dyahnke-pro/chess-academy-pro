@@ -10202,7 +10202,7 @@ export function CoachTeachPage({ mode }: {
           ...readBoardAll('alsoGood', { fenBefore, san, student: studentCC, rating, reads }).map((f) => ({ f, lane: 'alsoGood' as const })),
           // The student's ply carries its reads (a better square there is
           // seen in them); the coach's ply has no price here to hand on.
-          ...readBoardAll('squareChoice', { fenBefore, san, student: studentCC, rating, reads, priorMove: prior, beaten: null }).map((f) => ({ f, lane: 'squareChoice' as const })),
+          ...readBoardAll('squareChoice', { fenBefore, san, student: studentCC, rating, reads, priorMove: prior, beaten: null, namesStudentMoves: false }).map((f) => ({ f, lane: 'squareChoice' as const })),
         ]).map(({ f, lane }) => ({ namesStudentMove: f.namesStudentMove, lane, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof, ...(f.stakes ? { stakes: f.stakes } : {}), ...(f.heldForm ? { heldForm: f.heldForm } : {}) })));
       } catch { return []; }
     })();
@@ -12560,7 +12560,7 @@ export function CoachTeachPage({ mode }: {
                       const tie = readBoard('tiedDefender', { fenBefore, fenAfterMove: move.fen, fenAfterReply, student: playerColor === 'white' ? 'w' : 'b' });
                       if (tie) queueSpokenHint(fenAfterReply, { computer: tie.computer, text: tie.text, lane: 'movePoint', proof: tie.proof, namesStudentMove: false, squares: tie.squares, claims: tie.claims });
                     }
-                    for (const h of studentMoveTeaching({ theory: true,
+                    for (const h of studentMoveTeaching({ theory: true, namesStudentMoves: false,
                       fenBefore, san: move.san, history: move.history, cpLoss, bothCp: bothCp && cpLoss !== null,
                       bestSan: studentBestSan, bestLine: preStudentRead.topLines?.[0], topLines: preStudentRead.topLines, reply: reply ?? null,
                       cpAfter: bothCp ? mid.evaluation * sign : null,

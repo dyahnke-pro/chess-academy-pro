@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**857 lines · 23 exports · 16 importers · 7 tests · 0 audits**
+**877 lines · 25 exports · 17 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:313) — names `chanceHoldOf`, `chancesAt`, `focusChances`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:258) — names `PLANTABLE`, `chanceHoldOf`, `chancesAt`, `focusChances`
 
 ## Who calls in
 
@@ -27,6 +27,7 @@
 - `src/coach/focus/useFocusRunner.ts`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/missions/scorers/focus.ts`
+- `src/services/coachGameEngine.ts`
 - `src/services/learnFocusRecord.ts`
 
 ## Exports and every call site
@@ -41,6 +42,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `CHANCE_SEAT` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `PLANTABLE` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `LEFT_LOOSE_TAG` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ChanceDifficulty` (type) — 0 call sites
@@ -90,7 +97,7 @@
 - `src/coach/focus/focusChances.test.ts:212`
 - `src/coach/focus/focusChances.test.ts:217`
 - `src/coach/focus/focusChances.test.ts:460`
-- `src/coach/focus/focusRunner.ts:773`
+- `src/coach/focus/focusRunner.ts:790`
 
 ### `posedMotifs` (function) — 1 call site
 - `src/missions/scorers/focus.ts:62`
@@ -133,13 +140,13 @@
 - `src/coach/focus/focusChances.test.ts:505`
 - `src/coach/focus/focusChances.test.ts:515`
 - `src/coach/focus/focusChances.test.ts:531`
-- `src/coach/focus/focusPlant.ts:331`
-- `src/coach/focus/focusRunner.ts:415`
+- `src/coach/focus/focusPlant.ts:370`
+- `src/coach/focus/focusRunner.ts:428`
 
 ### `yourChancesAt` (function) — 3 call sites
 - `src/coach/focus/focusChances.test.ts:532`
-- `src/coach/focus/focusPlant.ts:241`
-- `src/coach/focus/focusPlant.ts:298`
+- `src/coach/focus/focusPlant.ts:279`
+- `src/coach/focus/focusPlant.ts:336`
 
 ### `judgeChance` (function) — 24 call sites
 - `src/coach/focus/focusChances.test.ts:133`
@@ -163,9 +170,9 @@
 - `src/coach/focus/focusChances.test.ts:334`
 - `src/coach/focus/focusChances.test.ts:342`
 - `src/coach/focus/focusChances.test.ts:346`
-- `src/coach/focus/focusRunner.ts:713`
-- `src/coach/focus/focusRunner.ts:729`
-- `src/coach/focus/focusRunner.ts:772`
+- `src/coach/focus/focusRunner.ts:730`
+- `src/coach/focus/focusRunner.ts:746`
+- `src/coach/focus/focusRunner.ts:789`
 
 ### `decidingBlunder` (function) — 8 call sites
 - `src/coach/focus/focusChances.test.ts:353`
@@ -175,19 +182,19 @@
 - `src/coach/focus/focusChances.test.ts:368`
 - `src/coach/focus/focusChances.test.ts:371`
 - `src/coach/focus/focusChances.test.ts:375`
-- `src/coach/focus/focusRunner.ts:861`
+- `src/coach/focus/focusRunner.ts:882`
 
 ### `solvePlies` (function) — 4 call sites
 - `src/coach/focus/focusChances.test.ts:469`
 - `src/coach/focus/focusChances.test.ts:475`
 - `src/coach/focus/focusChances.test.ts:477`
-- `src/coach/focus/focusRunner.ts:403`
+- `src/coach/focus/focusRunner.ts:409`
 
 ### `lineSans` (function) — 4 call sites
 - `src/coach/focus/focusChances.test.ts:470`
 - `src/coach/focus/focusChances.test.ts:480`
 - `src/coach/focus/focusChances.test.ts:481`
-- `src/components/Coach/CoachTeachPage.tsx:13989`
+- `src/components/Coach/CoachTeachPage.tsx:13992`
 
 ## Tests
 

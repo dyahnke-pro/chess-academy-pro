@@ -7,7 +7,7 @@
 //   · the game            — the trend across the student's moves.
 // Every read carries its proof (structureJudgementKit.StructureRead). Pure.
 import type { Color, Square } from 'chess.js';
-import { play, type StructureRead } from './structureJudgementKit';
+import { bare, play, type StructureRead } from './structureJudgementKit';
 import { kingCommitted } from './splitPosition';
 import { squaresProof } from './proof';
 import { standsSafe } from './positionReadingService';
@@ -48,6 +48,10 @@ interface StudentMoveStructureInput {
    *  (David 2026-10-10) — a read that names it speaks its held form, and one
    *  with no held form stays quiet. */
   namesBetterMove: boolean;
+  /** REQUIRED: may the move just played be named? Review yes; Learn says
+   *  "Your move" (David 2026-11-09: "the user knows that, they see it play
+   *  out"). */
+  namesStudentMoves: boolean;
 }
 
 function safe(f: () => StructureRead | null): StructureRead | null {
@@ -57,6 +61,7 @@ function safe(f: () => StructureRead | null): StructureRead | null {
 /** Everything the student's move teaches about structure, squares and plan. */
 export function studentMoveStructure(i: StudentMoveStructureInput): StructureRead[] {
   const { fenBefore, san, student, cpLoss, bestSan, bestUci, reply } = i;
+  const subject = i.namesStudentMoves ? bare(san) : 'Your move';
   // A STANDING CLAIM — what the board IS after the student's move ("d4 and e4
   // stand side by side: together they cover …", "your knight on d5 is safe
   // there") — is read on the board right after the move and spoken once
@@ -78,19 +83,19 @@ export function studentMoveStructure(i: StudentMoveStructureInput): StructureRea
     safe(() => rightIdeaWrongPiece(fenBefore, san, bestSan, cpLoss)),
     safe(() => keepPlanChangeRoute(fenBefore, san, bestUci, cpLoss, reply)),
     safe(() => planOverOneMove(fenBefore, san, bestSan, cpLoss)),
-    safe(() => dontPlugFile(fenBefore, san, student, cpLoss, bestSan)),
+    safe(() => dontPlugFile(fenBefore, san, student, cpLoss, bestSan, subject)),
     safe(() => fileOpenedForDefender(fenBefore, san, student, reply, cpLoss)),
     // The standing branch ("not taking keeps … shut"); the took-branch is a
     // verdict on the move, true whatever the reply does.
     ((r) => (r && r.key.startsWith('ep-took:') ? r : standing(r)))(safe(() => enPassantStructure(fenBefore, san, student, cpLoss, bestSan))),
-    standing(safe(() => fixOnBishopColour(fenBefore, san, student))),
-    standing(safe(() => breakTradesWeakPawn(fenBefore, san, student, cpLoss))),
+    standing(safe(() => fixOnBishopColour(fenBefore, san, student, subject))),
+    standing(safe(() => breakTradesWeakPawn(fenBefore, san, student, cpLoss, subject))),
     standing(safe(() => dontRepair(fenBefore, san, student, cpLoss, bestSan))),
     standing(safe(() => semiOutpost(fenBefore, san, student, cpLoss))),
     standing(safe(() => safeSquareRoute(fenBefore, san, student, bestUci, cpLoss))),
     standing(safe(() => formation(fenBefore, san, student))),
     standing(safe(() => pawnFreeze(fenBefore, san, student, cpLoss))),
-    safe(() => formationChoice(fenBefore, san, student, bestSan, cpLoss)),
+    safe(() => formationChoice(fenBefore, san, student, bestSan, cpLoss, subject)),
     standing(safe(() => wedgePaysLater(fenBefore, san, student, bestUci, cpLoss))),
     safe(() => closedTacticalChance(fenBefore, san, student, bestUci, cpLoss)),
     // Reads its own claim on the board after the reply.

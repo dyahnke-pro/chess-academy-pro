@@ -2398,7 +2398,7 @@ function* reviewSegmentSteps(
       if (moverColor === playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
         const sign = moverColor === 'white' ? 1 : -1;
         const bothCp = Math.abs(m.preMoveEval) < 5000 && Math.abs(m.evaluation) < 5000;
-        const hints = studentMoveTeaching({ theory: false,
+        const hints = studentMoveTeaching({ theory: false, namesStudentMoves: true,
           fenBefore: fenPair.fenBefore,
           san: m.san,
           history: sansForRun.slice(0, m.ply),

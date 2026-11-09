@@ -7,7 +7,7 @@ import { Chess } from 'chess.js';
 import { studentMoveStructure, squaresTheReplyChanged } from './structureReads';
 
 const fa = (moves: string): string => { const c = new Chess(); for (const m of moves.split(' ')) c.move(m); return c.fen(); };
-const base = { san: 'd4', student: 'w' as const, cpLoss: 0, bestSan: 'd4', bestUci: ['d2d4'], namesBetterMove: false };
+const base = { san: 'd4', student: 'w' as const, cpLoss: 0, bestSan: 'd4', bestUci: ['d2d4'], namesBetterMove: false, namesStudentMoves: false };
 
 describe('a standing claim is not spoken once the reply changed its squares', () => {
   it('2.d4 cxd4: the phalanx is gone, so it is not said', () => {
@@ -24,9 +24,9 @@ describe('a standing claim is not spoken once the reply changed its squares', ()
     expect(studentMoveStructure({ ...base, fenBefore: fa('e4 c5'), reply: null }).some((r) => r.act === 'formation')).toBe(true);
   });
   it('a reply that newly hits the piece makes "safe there" stale (review 2026-10-19)', () => {
-    const reads = studentMoveStructure({ fenBefore: '6k1/4bppp/8/8/8/8/PPP2PPP/RN4K1 w - - 0 25', san: 'Nd2', student: 'w', cpLoss: 0, bestSan: 'Nd2', bestUci: ['b1d2', 'g8f8', 'd2f3'], reply: 'Bg5', namesBetterMove: false });
+    const reads = studentMoveStructure({ fenBefore: '6k1/4bppp/8/8/8/8/PPP2PPP/RN4K1 w - - 0 25', san: 'Nd2', student: 'w', cpLoss: 0, bestSan: 'Nd2', bestUci: ['b1d2', 'g8f8', 'd2f3'], reply: 'Bg5', namesBetterMove: false, namesStudentMoves: false });
     expect(reads.map((r) => r.text).join(' ')).not.toMatch(/safe there/);
-    const quiet = studentMoveStructure({ fenBefore: '6k1/4bppp/8/8/8/8/PPP2PPP/RN4K1 w - - 0 25', san: 'Nd2', student: 'w', cpLoss: 0, bestSan: 'Nd2', bestUci: ['b1d2', 'g8f8', 'd2f3'], reply: 'Kf8', namesBetterMove: false });
+    const quiet = studentMoveStructure({ fenBefore: '6k1/4bppp/8/8/8/8/PPP2PPP/RN4K1 w - - 0 25', san: 'Nd2', student: 'w', cpLoss: 0, bestSan: 'Nd2', bestUci: ['b1d2', 'g8f8', 'd2f3'], reply: 'Kf8', namesBetterMove: false, namesStudentMoves: false });
     expect(quiet.map((r) => r.text).join(' ')).toMatch(/safe there/);
   });
   it('the phalanx falls when the reply takes a square it covers', () => {
@@ -34,7 +34,7 @@ describe('a standing claim is not spoken once the reply changed its squares', ()
     expect(reads.some((r) => r.act === 'formation')).toBe(false);
   });
   it('the doubled rooks stay said when their king only steps along the back rank', () => {
-    const reads = studentMoveStructure({ fenBefore: '6k1/p1R3pp/8/8/8/8/3R2PP/6K1 w - - 0 35', san: 'Rdd7', student: 'w', cpLoss: 0, bestSan: 'Rdd7', bestUci: [], reply: 'Kf8', namesBetterMove: false });
+    const reads = studentMoveStructure({ fenBefore: '6k1/p1R3pp/8/8/8/8/3R2PP/6K1 w - - 0 35', san: 'Rdd7', student: 'w', cpLoss: 0, bestSan: 'Rdd7', bestUci: [], reply: 'Kf8', namesBetterMove: false, namesStudentMoves: false });
     expect(reads.some((r) => r.act === 'rooks-on-seventh')).toBe(true);
   });
   it('the changed squares are exactly what the reply moved', () => {

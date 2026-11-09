@@ -603,6 +603,13 @@ describe('planted chances', () => {
         expect(st.plant.need, 'the next plant of yours is not asked for it').toBeNull();
         expect(endCarry(st)).toEqual([{ seat: 'defend', tag }]);
       });
+      it('a piece your own move left loose is filed as a miss but never owed — no move of the coach\'s can set one up', () => {
+        // Ne4 walks the knight onto the d5-pawn's square with nothing guarding it.
+        const HANGS = '4k3/8/8/3p4/8/8/5N2/4K3 w - - 0 1';
+        const { state, effects } = run([{ kind: 'start', setup: at(2) }, board(HANGS, 33), { kind: 'moved', move: move(HANGS, 'Ne4') }]);
+        expect(turnRow(effects[2]), 'twin: the miss was judged').toMatchObject({ kind: 'leave', outcome: 'missed' });
+        expect(state.plant.owed.some((o) => o.tag === 'hung-material'), 'and not owed').toBe(false);
+      });
       it('stopped on your own on another board, it is answered — and only in their seat', () => {
         const st = missedTheirs({ carry: [Y('missed-your-fork')] });
         const stopped = run([board(KNIGHT_HIT_2, 41), { kind: 'moved', move: move(KNIGHT_HIT_2, 'Nb3') }], st).state;

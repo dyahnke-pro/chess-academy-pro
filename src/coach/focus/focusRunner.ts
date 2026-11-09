@@ -34,7 +34,7 @@ import type { RewardKind } from '../../services/rewardEvents';
 import { NO_RUN, stepRun, TEMPO_HAD_LINE, TEMPO_LET_OFF_LINE, TEMPO_RUN_MIN, type TempoRun } from './tempoRun';
 import { positionKey } from '../../services/positionProvenance';
 import {
-  chancesAt, decidingBlunder, judgeChance, leftLoose, solvePlies,
+  chancesAt, decidingBlunder, judgeChance, leftLoose, PLANTABLE, solvePlies,
   type ChanceDifficulty, type ChanceVerdict, type FocusChance, type FocusMove, type ReadLine,
 } from './focusChances';
 import { askLine, clueLine, creditLine, endLine, recapLabel, shownLine, spotLine } from './focusLines';
@@ -793,9 +793,10 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
   // A miss on your side asks the next plant for the same pattern.
   let plant = s.plant;
   for (const x of verdicts) if (x.chance.seat === 'exploit' && x.v === 'missed') plant = { ...plant, need: x.chance.tag };
-  // Every first-try miss is owed to the next game, yours and theirs alike
-  // (David 2026-11-09: their tactics you did not stop carry too).
-  for (const x of verdicts) if (x.v === 'missed') plant = { ...plant, owed: owedAfterMiss(plant.owed, { seat: x.chance.seat, tag: x.chance.tag }) };
+  // Every first-try miss the coach can set up again is owed to the next
+  // game, yours and theirs alike (David 2026-11-09: their tactics you did not
+  // stop carry too); a piece your own move left loose cannot be set up.
+  for (const x of verdicts) if (x.v === 'missed' && PLANTABLE[x.chance.kind]) plant = { ...plant, owed: owedAfterMiss(plant.owed, { seat: x.chance.seat, tag: x.chance.tag }) };
   // A find answers an owed pattern only when it is the habit: the first try,
   // no question asked, and not a board you already missed it on (a move you
   // took back and played again saw the answer first) — in the same seat.

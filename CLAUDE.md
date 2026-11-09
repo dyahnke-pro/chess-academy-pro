@@ -254,8 +254,10 @@ chance for the user to find the focus."
   until a first-try find ends the streak (`PlantState.missStreak`,
   `MISS_SPACING_PLIES`). 🔒 A MISS CARRIES TO THE NEXT GAME (#158, David
   2026-11-09: "This is what build habits and pattern recognition!" → their
-  side too: "yes"): every pattern missed at the first try — a chance of
-  yours, or one of their tactics you did not stop — is owed, with its seat,
+  side too: "yes"): every pattern missed at the first try that the coach
+  can set up again (`PLANTABLE`: a piece your own move left loose cannot be)
+  — a chance of yours, or one of their tactics you did not stop — is owed,
+  with its seat,
   until you answer one of it on your own in that seat (first try, no
   question asked, not on a board you missed it on); the next game puts the
   most recent of each seat back on the board — yours as the guarantee's ask
@@ -5915,7 +5917,11 @@ word a move's reason (`decisiveReason`, `moveIntent` through
 Learn's own seat, so the move played is "your move" and the move it prepares is
 said by its piece (the prod focus audit heard "Your f7 stops king to e8" the
 night the rule was set — the verdicts had been fixed one by one, these two
-computers had not; `learnNamesOwnMove.test.ts`).
+computers had not; `learnNamesOwnMove.test.ts`). The same flag is REQUIRED on
+`studentMoveTeaching` (and through it the structure reads, "Your move plugs
+your own rook's a-file") and on `squareChoice` (Learn asks "Why that square
+for your bishop?", never "Your bishop goes to f5") — the next prod focus audit
+heard "Bishop takes a7 plugs your own rook's a-file" from them.
 
 **Review names the better move** (the game is over); **chat names it** (you
 asked). Gates: `learnNamesNoMoveUnasked.gate.test.ts`,

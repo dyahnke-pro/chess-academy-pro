@@ -83,7 +83,8 @@ export function keyPawn(fen: string, student: Color): StructureRead | null {
 
 /** FIX THEIR PAWNS ON YOUR BISHOP'S COLOUR — the student's push stops an
  *  enemy pawn in its tracks on a square of the colour their bishop attacks. */
-export function fixOnBishopColour(fenBefore: string, san: string, student: Color): StructureRead | null {
+/** `subject` is REQUIRED: how the move is said — its name where the surface names the student's move (Review), "Your move" in Learn (David 2026-11-09: "the user knows that, they see it play out"). */
+export function fixOnBishopColour(fenBefore: string, san: string, student: Color, subject: string): StructureRead | null {
   const r = play(fenBefore, san);
   if (!r || r.mv.color !== student || r.mv.piece !== 'p' || r.mv.captured) return null;
   const enemy = other(student);
@@ -99,7 +100,7 @@ export function fixOnBishopColour(fenBefore: string, san: string, student: Color
   if (!proof) return null;
   return {
     act: 'fix-on-bishop-colour', squares: [r.mv.to, y, myBishop], proof, key: `fix-colour:${y}`,
-    text: `${bare(san)} freezes their ${y} pawn on ${withArticle(shade(y))} square, where your bishop can go after it${theirsGone ? ', and they have no bishop of that colour to guard it' : ''}.`,
+    text: `${subject} freezes their ${y} pawn on ${withArticle(shade(y))} square, where your bishop can go after it${theirsGone ? ', and they have no bishop of that colour to guard it' : ''}.`,
   };
 }
 
@@ -240,7 +241,8 @@ export function formation(fenBefore: string, san: string, student: Color): Struc
 
 /** A BREAK THAT TRADES OFF YOUR WEAK PAWN — the weak pawn steps forward into
  *  contact with theirs, so it can be exchanged instead of defended forever. */
-export function breakTradesWeakPawn(fenBefore: string, san: string, student: Color, cpLoss: number): StructureRead | null {
+/** `subject` is REQUIRED: how the move is said — its name where the surface names the student's move (Review), "Your move" in Learn (David 2026-11-09: "the user knows that, they see it play out"). */
+export function breakTradesWeakPawn(fenBefore: string, san: string, student: Color, cpLoss: number, subject: string): StructureRead | null {
   if (cpLoss > 40) return null;
   const r = play(fenBefore, san);
   if (!r || r.mv.color !== student || r.mv.piece !== 'p' || r.mv.captured) return null;
@@ -257,7 +259,7 @@ export function breakTradesWeakPawn(fenBefore: string, san: string, student: Col
   if (!proof) return null;
   return {
     act: 'break-trades-weak-pawn', squares: [r.mv.from, r.mv.to, e], proof, key: `break-weak:${r.mv.from}`,
-    text: `${bare(san)} is the direct way to get rid of your weak ${r.mv.from} pawn: it meets their pawn on ${e} and can be traded off.`,
+    text: `${subject} is the direct way to get rid of your weak ${r.mv.from} pawn: it meets their pawn on ${e} and can be traded off.`,
     ...(cpLoss <= 20 ? { held: { tag: 'mistimed-pawn-break' as const, posedImportance: 60 } } : {}),
   };
 }
@@ -340,6 +342,8 @@ export function mirroredAsymmetry(fen: string, student: Color): StructureRead | 
  *  with the engine's move as the proof. */
 export function formationChoice(
   fenBefore: string, san: string, student: Color, bestSan: string | null, cpLoss: number,
+  /** How the played move is said: its name (Review) or "Your move" (Learn). */
+  subject: string,
 ): StructureRead | null {
   if (!bestSan || cpLoss < 50 || bare(bestSan) === bare(san)) return null;
   const played = play(fenBefore, san);
@@ -364,9 +368,9 @@ export function formationChoice(
     : `of ${andList(built.squares)}`;
   return {
     act: 'formation', squares: built.squares, proof, key: `formation-choice:${built.key}`, stakes: costStakes(cpLoss) ?? undefined,
-    text: `Of the pawn moves, ${bare(bestSan)} was the one: it makes ${shape} ${withPawns}, and ${bare(san)} links no pawns.`,
+    text: `Of the pawn moves, ${bare(bestSan)} was the one: it makes ${shape} ${withPawns}, and ${subject === bare(san) ? subject : 'yours'} links no pawns.`,
     // "Another pawn move makes a triangle" named no pawns (prod Learn audit
     // 2026-11-09): the shape is a pawn shape, said as one.
-    ...heldOf(`${bare(san)} links no pawns. Another pawn move would make ${shape}.`, [played.mv.to]),
+    ...heldOf(`${subject} links no pawns. Another pawn move would make ${shape}.`, [played.mv.to]),
   };
 }

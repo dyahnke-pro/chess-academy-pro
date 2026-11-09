@@ -433,7 +433,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       ...readBoardAll('temptingRefuted', { fenBefore: i.fenBefore, san: i.san, student, rating: DEFAULT_STUDENT_RATING, reads: weighReads, priorMove: prior }).map((f) => ({ f, weight: 55 })),
       ...readBoardAll('alsoGood', { fenBefore: i.fenBefore, san: i.san, student, rating: DEFAULT_STUDENT_RATING, reads: weighReads }).map((f) => ({ f, weight: 45 })),
       ...readBoardAll('squareChoice', { fenBefore: i.fenBefore, san: i.san, student, rating: DEFAULT_STUDENT_RATING, reads: weighReads, priorMove: prior,
-        beaten: i.costCp !== null && i.costCp >= INACCURACY_CP ? i.reads?.before[0]?.moves[0] ?? null : null }).map((f) => ({ f, weight: 50 })),
+        beaten: i.costCp !== null && i.costCp >= INACCURACY_CP ? i.reads?.before[0]?.moves[0] ?? null : null, namesStudentMoves: true }).map((f) => ({ f, weight: 50 })),
     ];
     for (const { f, weight } of weighed) {
       // A lesson shows its line, so the move is named (the full text).
@@ -616,7 +616,7 @@ function studentMoveFacts(i: Omit<MoveThoughtInput, 'phrases'>): ThoughtFact[] {
   let out: ReturnType<typeof studentMoveTeaching>;
   try {
     out = studentMoveTeaching({
-      theory: i.theory,
+      theory: i.theory, namesStudentMoves: true,
       fenBefore: i.fenBefore, san: i.san.replace(/[!?]+$/, ''),
       history: [...i.history, i.san.replace(/[!?]+$/, '')],
       cpLoss: i.costCp,
