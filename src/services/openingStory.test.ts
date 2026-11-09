@@ -38,6 +38,15 @@ describe('openingStory — Najdorf, English Attack (student Black)', () => {
     const cost = openingStoryAt({ theory: false, history: NAJDORF.slice(0, 12), student: 'b', namesStudentMoves: false, movesAt });
     expect(beat(cost, 'structure-cost')?.text).toMatch(/price of …e5/);
   });
+  it('the identity is theory: the Review walk holds it, Learn says it (Review audit 2026-11-09)', () => {
+    // The audit's Ruy Lopez as White, after 3…a6: the walk said "The usual
+    // answer is the pawn to a6 … 11 moves of master theory" — the book reply
+    // and an opening stat, the Theory button's intro.
+    const RUY = 'e4 e5 Nf3 Nc6 Bb5 a6'.split(' ');
+    const at = (theory: boolean) => openingStoryAt({ theory, history: RUY, student: 'w', namesStudentMoves: false, movesAt });
+    expect(beat(at(true), 'identity')?.text).toMatch(/master theory/);
+    expect(beat(at(false), 'identity')).toBeUndefined();
+  });
   it('names the families at the student\'s fork, by name, never by move', () => {
     const f = beat(story(NAJDORF, 9, 'b'), 'fork');
     expect(f?.text).toMatch(/^A real crossroads: from here master games split into the Najdorf Variation, the Classical Variation and the Dragon Variation/);
