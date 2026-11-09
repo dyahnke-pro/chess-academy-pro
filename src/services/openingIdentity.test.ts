@@ -15,21 +15,21 @@ describe('openingIdentity', () => {
   }, 300_000); // the builder runs mastersPlanRead per opening (~45 s alone)
 
   it('Alekhine: provokes the pawn at the knight, from the student\'s seat', () => {
-    const asBlack = openingIdentityLine('Alekhine Defense', 'b', 'seat', null);
+    const asBlack = openingIdentityLine('Alekhine Defense', 'b', 'seat', null, true);
     expect(asBlack?.text).toMatch(/they (almost always|usually|often|sometimes) answer with the pawn to e5, a centre pawn thrown forward at your knight on f6/);
-    const asWhite = openingIdentityLine('Alekhine Defense', 'w', 'seat', null);
+    const asWhite = openingIdentityLine('Alekhine Defense', 'w', 'seat', null, true);
     expect(asWhite?.text).toMatch(/you (almost always|usually|often|sometimes) answer with the pawn to e5, a centre pawn thrown forward at their knight on f6/);
-    expect(openingIdentityLine('Alekhine Defense', 'w', 'demo', null)?.text).toMatch(/White (almost always|usually|often|sometimes) answers with/);
+    expect(openingIdentityLine('Alekhine Defense', 'w', 'demo', null, true)?.text).toMatch(/White (almost always|usually|often|sometimes) answers with/);
   });
 
   it('a gambit that lasts is said with its length; an ordinary opening is not a gambit', () => {
-    expect(openingIdentityLine('Italian Game: Evans Gambit', 'w', 'seat', null)?.text).toMatch(/you stay a pawn down for at least \d+ moves/);
-    expect(openingIdentityLine("Queen's Gambit", 'w', 'seat', null)?.text ?? '').not.toMatch(/pawn down/);
+    expect(openingIdentityLine('Italian Game: Evans Gambit', 'w', 'seat', null, true)?.text).toMatch(/you stay a pawn down for at least \d+ moves/);
+    expect(openingIdentityLine("Queen's Gambit", 'w', 'seat', null, true)?.text ?? '').not.toMatch(/pawn down/);
   });
 
   it('an e4/e5 standoff is not a locked centre; a real chain is', () => {
-    expect(openingIdentityLine('Italian Game', 'w', 'seat', null)?.text ?? '').not.toMatch(/locks the centre/);
-    expect(openingIdentityLine('French Defense: Advance Variation', 'b', 'seat', null)?.text).toMatch(/locks the centre, pawns on e5 and e6/);
+    expect(openingIdentityLine('Italian Game', 'w', 'seat', null, true)?.text ?? '').not.toMatch(/locks the centre/);
+    expect(openingIdentityLine('French Defense: Advance Variation', 'b', 'seat', null, true)?.text).toMatch(/locks the centre, pawns on e5 and e6/);
   });
 
   it('a variation falls back to its named parent', () => {
@@ -40,11 +40,11 @@ describe('openingIdentity', () => {
   // move later to the Mieses-Kotroc, and the refined entry had nothing of its
   // own — so the family's fact was never spoken all game (340 lines like it).
   it('a refined variation keeps its family\'s fact, naming the family', () => {
-    expect(openingIdentityLine('Scandinavian Defense: Mieses-Kotroc Variation', 'b', 'seat', null)?.text)
+    expect(openingIdentityLine('Scandinavian Defense: Mieses-Kotroc Variation', 'b', 'seat', null, true)?.text)
       .toMatch(/^The Scandinavian Defense challenges the centre at once: they (almost always|usually) take on d5, and you take back with the queen\. The queen is out early, so they gain time hitting it with the knight to c3\./);
     // The Lasker Variation is defined by WHITE's h3; the inherited question is
     // still Black's d5, answered by White — the seat follows the family's move.
-    expect(openingIdentityLine('Scandinavian Defense: Lasker Variation', 'w', 'seat', null)?.text)
+    expect(openingIdentityLine('Scandinavian Defense: Lasker Variation', 'w', 'seat', null, true)?.text)
       .toMatch(/^The Scandinavian Defense challenges the centre at once: you (almost always|usually) take on d5/);
   });
 
@@ -52,22 +52,22 @@ describe('openingIdentity', () => {
     // The Marshall/Modern Scandinavian answers exd5 with …Nf6, not a recapture:
     // "and the pawn is taken back" would be false there, so nothing is inherited.
     for (const n of ['Scandinavian Defense: Marshall Variation', 'Scandinavian Defense: Modern Variation']) {
-      expect(openingIdentityLine(n, 'b', 'seat', null)?.text ?? '').not.toMatch(/taken back/);
+      expect(openingIdentityLine(n, 'b', 'seat', null, true)?.text ?? '').not.toMatch(/taken back/);
     }
   });
 
   it('a defining move that captures offers nothing (an exchange is not a gambit)', () => {
     // exd5 cxd5 was read as "it offers a pawn, and they take it" on 31 lines.
     for (const n of ['Caro-Kann Defense: Exchange Variation', 'French Defense: Exchange Variation', 'Sicilian Defense: Smith-Morra Gambit Accepted']) {
-      expect(openingIdentityLine(n, 'w', 'seat', null)?.text ?? '').not.toMatch(/offers a pawn/);
+      expect(openingIdentityLine(n, 'w', 'seat', null, true)?.text ?? '').not.toMatch(/offers a pawn/);
     }
   });
 
   it('a top-level game is named only when it is a model game of that line the student can open (lead 2026-10-20)', () => {
     // Karthikeyan–Grebnev is not among the Two Knights' model games: unsaid.
-    expect(openingIdentityLine('Italian Game: Two Knights Defense', 'b', 'seat', null)?.text ?? '').not.toMatch(/top level|Karthikeyan/);
+    expect(openingIdentityLine('Italian Game: Two Knights Defense', 'b', 'seat', null, true)?.text ?? '').not.toMatch(/top level|Karthikeyan/);
     // Carlsen–Anton Guijarro 2022 IS a Bird model game: said, and where to find it.
-    expect(openingIdentityLine('Bird Opening', 'w', 'seat', null)?.text).toMatch(/It has been played at the top level — Carlsen against Guijarro, Chessable Masters 2022, in this line's model games\./);
+    expect(openingIdentityLine('Bird Opening', 'w', 'seat', null, true)?.text).toMatch(/It has been played at the top level — Carlsen against Guijarro, Chessable Masters 2022, in this line's model games\./);
   });
 
   it('famous games are over-the-board masters only', () => {

@@ -792,7 +792,7 @@ export function buildTheoryLectureBeats(
   const first = lecture.branches[0];
   // WHAT THE OPENING IS (the one identity computer Learn and chat read):
   // what it provokes, what it aims at — said before the numbers.
-  const identity = openingIdentityLine(lecture.openingName, studentColor === 'black' ? 'b' : 'w', studentColor ? 'seat' : 'demo', null);
+  const identity = openingIdentityLine(lecture.openingName, studentColor === 'black' ? 'b' : 'w', studentColor ? 'seat' : 'demo', null, true);
   // The identity is computed and seat-aware; the key idea waits for the
   // outro, where the masters' plan says it from the game's own position.
   const ideaClause = `${identity ? ` ${identity.text}` : ''}${lecture.equivalence ? ` ${lecture.equivalence}` : ''}`;

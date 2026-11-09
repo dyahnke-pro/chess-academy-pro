@@ -69,7 +69,7 @@ export const STORY_KIND: Record<StoryBeat, FacetTag> = {
  *  it). The character beat is both: "both kings on the kingside" is the board,
  *  "master games put their king on the other wing" is theory. */
 export const BEAT_GROUNDS = {
-  identity: ['theory'],
+  identity: ['name'],
   fork: ['theory'],
   'branch-choice': ['theory'],
   'their-setup': ['theory'],
@@ -90,11 +90,10 @@ export type StoryBeatFact = CoachFact & { kind: (typeof STORY_KIND)[StoryBeat]; 
 /** What a beat says, before it is made the one fact. */
 /** WHAT A STORY LINE RESTS ON (David 2026-11-06: "Keep the theory part for
  *  review only. It belongs in the button"): the board in front of the student,
- *  or THEORY — master games and the book, what the opening is included (its
- *  usual reply, its main line, how deep its theory runs).
+ *  the opening's name and what it is, or THEORY — master games and the book.
  *  Theory speaks only where the student asked for it (Review's Theory button,
  *  chat, the opening lessons); every live and walk surface speaks the rest. */
-export type StoryGround = 'board' | 'theory';
+export type StoryGround = 'board' | 'name' | 'theory';
 
 interface BeatParts {
   /** REQUIRED — what this line rests on (`StoryGround`). */
@@ -405,11 +404,12 @@ export function openingStoryAt(i: OpeningStoryInput): StoryBeatFact[] {
   // that names a move of the student's still to come holds the line, one the
   // board has made false is dropped (`openingIdentityLine`).
   if (name && !isWaypointOpening(name) && inOpening) {
-    const id = openingIdentityLine(name, student, 'seat', liveBoard(now));
-    // THE IDENTITY IS THEORY (2026-11-09, Review audit): "The usual answer is
-    // a6 … 11 moves of master theory" is the book reply and an opening stat —
-    // the Theory button's intro (`reviewOpeningTheory`) says it; the walk does not.
-    if (id) say('identity', { rests: 'theory', text: id.text, squares: id.squares, proof: NO_PROOF.name, key: IDENTITY_CLAIM });
+    // Its theory clauses (the usual reply, the main line, how deep the theory
+    // runs, top-level games) only where the surface says theory — the Review
+    // walk heard "The usual answer is the pawn to a6 … 11 moves of master
+    // theory" (prod audit 2026-11-09); what the opening IS still speaks.
+    const id = openingIdentityLine(name, student, 'seat', liveBoard(now), i.theory);
+    if (id) say('identity', { rests: 'name', text: id.text, squares: id.squares, proof: NO_PROOF.name, key: IDENTITY_CLAIM });
   }
 
   // 4 — THE BRANCH THE STUDENT CHOSE, against the main alternative.

@@ -311,6 +311,6 @@ export function openingIdeaCanCome(name: string, student: 'w' | 'b', fen: string
   if (isWaypointOpening(name) || classifyPhase(fen, { ply }) !== 'opening') return false;
   const status = openingIdentityStatus();
   if (status === 'loading') return true;
-  return status === 'ready' && openingIdentityLine(name, student, 'seat', null) !== null;
+  return status === 'ready' && openingIdentityLine(name, student, 'seat', null, true) !== null;
 }
 

@@ -146,7 +146,13 @@ const FIANCHETTO_HOME: Record<string, string> = { g7: 'f8', b7: 'c8', g2: 'f1', 
 const WAYPOINT = /^(?:King's Pawn Game|Queen's Pawn Game|Indian Defense|King's Pawn|Queen's Pawn|King's Knight Opening)(?::|$)/;
 export function isWaypointOpening(name: string): boolean { return WAYPOINT.test(name.trim()); }
 
-export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'seat' | 'demo', live: LiveIdentityBoard | null): IdentityLine | null {
+/** `theory` is REQUIRED: the clauses that rest on master games — the usual
+ *  reply, the main line's shape, how deep its theory runs, its top-level games
+ *  — speak only where the surface says theory (Learn, the Theory button, chat,
+ *  the lessons), never in the Review walk (David 2026-11-06: "Keep the theory
+ *  part for review only. It belongs in the button"). What the opening IS — it
+ *  provokes, it challenges the centre, it offers a pawn — speaks everywhere. */
+export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'seat' | 'demo', live: LiveIdentityBoard | null, theory: boolean): IdentityLine | null {
   if (WAYPOINT.test(name.trim())) return null;
   const hit = identityFor(name);
   if (!hit) return null;
@@ -199,7 +205,9 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
     const taken = !live || live.pieceAt(on)?.color === other;
     const takeAhead = p.kind === 'takes-offered-pawn' && !!live && !taken && other === student && live.pieceAt(on) !== null;
     if (hitsAhead || tradeAhead || takeAhead) pending = true;
-    if (p.kind === 'pawn-hits' && p.piece && p.square && hitsTrue && !hitsAhead) {
+    // The usual reply to a move that does not provoke it is the book's move.
+    const bookOnly = p.kind === 'pawn-hits' && !p.provoked;
+    if (p.kind === 'pawn-hits' && p.piece && p.square && hitsTrue && !hitsAhead && (theory || !bookOnly)) {
       const target = `${whose(by)} ${PIECE[p.piece] ?? 'piece'} on ${p.square}`;
       out.push(p.provoked
         ? `${it} is built to provoke: ${who(other)} ${shareAdverb(p.share)} ${v('answer')} with ${reply}, a centre pawn thrown forward at ${target}.`
@@ -222,12 +230,12 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
       squares.push(on);
     }
   }
-  if (f.gambit) {
+  if (f.gambit && theory) {
     const n = f.gambit.down;
     const amount = countWords(n);
     out.push(`In the main line ${who(f.gambit.side)} ${v('stay')} ${amount} down for at least ${moves(f.gambit.forPlies)} moves, playing for time instead of material.`);
   }
-  for (const a of f.aims) {
+  for (const a of theory ? f.aims : f.aims.filter((x) => x.kind === 'fianchetto')) {
     // A pawn square or a bishop square of the student's is a move of theirs
     // until it is played: said live only once the board shows it.
     if (live && a.kind === 'locked-centre' && !a.squares.every((sq) => live.pieceAt(sq)?.type === 'p')) continue;
@@ -246,7 +254,7 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
       squares.push(a.squares[0]);
     }
   }
-  if (f.theoryPlies >= 12 && f.forcing >= 30) {
+  if (!theory) { /* how deep the theory runs is theory */ } else if (f.theoryPlies >= 12 && f.forcing >= 30) {
     out.push(`It is sharp and theory-heavy: the master line stays common for ${moves(f.theoryPlies)} moves, and ${f.forcing >= 50 ? 'most' : 'a lot'} of them are captures or checks.`);
   } else if (f.theoryPlies >= 14 && f.forcing <= 10) {
     out.push(`It is a quiet opening: ${moves(f.theoryPlies)} moves of master theory with almost no captures, so understanding the plans matters more than memory.`);
@@ -254,7 +262,7 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
   // A GAME REFERENCE IS ONE THE STUDENT CAN OPEN (lead 2026-10-20: "It has
   // been played at the top level — Karthikeyan against Grebnev" teaches
   // nothing): only the top-level games that are model games of this line.
-  const openable = f.famous.filter((x) => isOpenableModelGame(hit.name, x.white, x.black, x.year));
+  const openable = theory ? f.famous.filter((x) => isOpenableModelGame(hit.name, x.white, x.black, x.year)) : [];
   if (openable.length) {
     const g = openable.slice(0, 2).map((x) => `${surname(x.white)} against ${surname(x.black)}${x.event ? `, ${x.event.replace(/\s*\d{4}\s*$/, '')}` : ''} ${x.year}`);
     out.push(`It has been played at the top level — ${g.join('; ')}, in this line's model games.`);

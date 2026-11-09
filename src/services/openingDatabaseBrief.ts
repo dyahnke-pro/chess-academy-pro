@@ -65,7 +65,7 @@ export async function openingDatabaseBrief(
     await loadOpeningIdentity();
     const prepares = preparesBreakBeat(fenBeforeLast, moves[moves.length - 1], planFor(name), lastMover === student);
     if (prepares) parts.push(prepares);
-    const identity = openingIdentityLine(name, student, 'seat', null)?.text;
+    const identity = openingIdentityLine(name, student, 'seat', null, true)?.text;
     if (identity) parts.push(identity);
   } catch { /* the identity file is unreachable — the database still speaks */ }
 

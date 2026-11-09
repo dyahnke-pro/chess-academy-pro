@@ -5720,7 +5720,7 @@ export async function getCoachChatResponse(
               const { loadOpeningIdentity, openingIdentityLine } = await import('./openingIdentity');
               await loadOpeningIdentity();
               const onBoard = (grounding.moveHistory?.length ?? 0) > 0 && grounding.studentColor;
-              const line = openingIdentityLine(detected.name, grounding.studentColor === 'black' ? 'b' : 'w', onBoard ? 'seat' : 'demo', null);
+              const line = openingIdentityLine(detected.name, grounding.studentColor === 'black' ? 'b' : 'w', onBoard ? 'seat' : 'demo', null, true);
               if (line) identity = ` ${line.text}`;
               // …and what its defining move DOES on this board.
               if (onBoard) {

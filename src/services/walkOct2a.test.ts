@@ -65,7 +65,7 @@ describe('Learn walk oct2a', () => {
   });
 
   it('F11: the King\'s Knight Opening is a waypoint — no identity paragraph', () => {
-    expect(openingIdentityLine("King's Knight Opening: Normal Variation", 'b', 'seat', null)).toBeNull();
+    expect(openingIdentityLine("King's Knight Opening: Normal Variation", 'b', 'seat', null, true)).toBeNull();
   });
 
   it('F12: the Scotch after a waypoint is named plainly, never as a transposition', () => {
