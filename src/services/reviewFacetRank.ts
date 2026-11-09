@@ -722,19 +722,3 @@ function clauseKindForTag(tag: FacetTag): string {
   }
 }
 
-/** Order a ply's kept facets most-important-first. Stable within a rank, so the
- *  authoring order still breaks ties. Returns a NEW array; the set is
- *  unchanged — nothing is ever dropped here (G4.5). */
-export function rankFacets(
-  facets: readonly string[],
-  signals: readonly WeaknessSignal[] = [],
-  /** Per-fact holes the surface already matched — see `facetRank`'s `matched`.
-   *  A fact absent from the map falls through to the tag join, so a surface
-   *  that can only pre-match SOME of its facts is not forced to pre-match all. */
-  matched?: ReadonlyMap<string, WeaknessSignal | null>,
-): string[] {
-  return facets
-    .map((f, i) => ({ f, i, r: facetRank(f, signals, matched?.has(f) ? matched.get(f) : undefined) }))
-    .sort((a, b) => (b.r - a.r) || (a.i - b.i))
-    .map((x) => x.f);
-}

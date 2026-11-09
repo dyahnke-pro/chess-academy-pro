@@ -1,7 +1,7 @@
 // The computer decides what is important — and with the hard caps gone
 // (G4.5) the ORDER is the only thing left that does. David 2026-09-16.
 import { describe, it, expect } from 'vitest';
-import { rankFacets, facetTag, facetRank, FACET_RANK } from './reviewFacetRank';
+import { facetTag, facetRank, FACET_RANK } from './reviewFacetRank';
 import type { WeaknessSignal } from './weaknessSignal';
 
 const hangingHole: WeaknessSignal = {
@@ -22,35 +22,19 @@ describe('reviewFacetRank — importance order', () => {
   });
 
   it('what the move cost leads; the plan that follows trails', () => {
-    const out = rankFacets([PLAN, STRUCT, QUALITY, LOOSE]);
-    expect(out[0]).toBe(QUALITY);
-    expect(out[out.length - 1]).toBe(PLAN);
-  });
-
-  it('NEVER drops a fact — ranking reorders, it does not cap (G4.5)', () => {
-    const input = [PLAN, STRUCT, QUALITY, LOOSE];
-    const out = rankFacets(input);
-    expect(out).toHaveLength(input.length);
-    expect([...out].sort()).toEqual([...input].sort());
-  });
-
-  it('is stable within a rank — authoring order breaks ties', () => {
-    const a = '[structure] first.';
-    const b = '[structure] second.';
-    expect(rankFacets([a, b])).toEqual([a, b]);
+    const ranks = [PLAN, STRUCT, LOOSE].map((f) => facetRank(f));
+    expect(Math.max(...ranks)).toBeLessThan(facetRank(QUALITY));
+    expect(Math.min(...[STRUCT, LOOSE, QUALITY].map((f) => facetRank(f)))).toBeGreaterThan(facetRank(PLAN));
   });
 
   it('the causal-chain lead (untagged prose) always leads', () => {
     const chain = 'Your knight was left loose two moves ago, and this collects it.';
-    expect(rankFacets([QUALITY, chain])[0]).toBe(chain);
+    expect(facetRank(chain)).toBeGreaterThan(facetRank(QUALITY));
   });
 
   it('a student hole lifts a COMPARABLE fact — and never vaults a plan over a blunder', () => {
-    const cold = rankFacets([STRUCT, LOOSE]);
-    const warm = rankFacets([STRUCT, LOOSE], [hangingHole]);
     expect(facetRank(LOOSE, [hangingHole])).toBeGreaterThan(facetRank(LOOSE));
-    expect(cold[0]).toBe(LOOSE);
-    expect(warm[0]).toBe(LOOSE); // already ahead; the boost widens, never inverts
+    expect(facetRank(LOOSE)).toBeGreaterThan(facetRank(STRUCT));
     // the boost is bounded, so the blunder still outranks a boosted plan
     expect(facetRank(QUALITY)).toBeGreaterThan(facetRank(PLAN, [hangingHole]));
   });

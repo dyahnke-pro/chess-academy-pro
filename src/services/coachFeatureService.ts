@@ -3066,8 +3066,8 @@ function* reviewSegmentSteps(
       // 🔒 THE COMPUTER RANKS, THE ORDER IS NOT AUTHORING ORDER (David
       // 2026-09-16). These facets used to be spoken in the order the code
       // happened to push them; the hard caps that were just removed had been
-      // the only thing deciding what a student heard FIRST. `rankFacets` sorts
-      // by importance and adds this student's weakness boost, so the fact that
+      // the only thing deciding what a student heard FIRST. The door orders
+      // them by importance (`facetRank`'s value) and adds this student's weakness boost, so the fact that
       // most changes what they do next leads the beat. The SET is unchanged —
       // ranking reorders, it never drops (G4.5).
       // 🔒 THE COMPUTER CUTS, AT NARRATION TIME — not a branch in code (David
@@ -3075,7 +3075,7 @@ function* reviewSegmentSteps(
       // ranks the narrations does. At narrations time. If the battery is more
       // important than the pin, then the pin stays quiet and the battery wins").
       //
-      // `rankFacets` orders and, by design, never drops. That left four readings
+      // Ordering alone never drops. That left four readings
       // of ONE diagonal — the pin, the battery, the lone defender, the royal
       // guard — all speaking as separate findings. `selectFacts` adds the two
       // things ordering cannot do: it COLLAPSES facts whose squares coincide to
