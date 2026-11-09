@@ -869,6 +869,6 @@ function hitsSquareLeft(passFen: string, threat: string, left: string): boolean 
     const before = c.attackers(left as Square, side);
     const mv = c.move({ from: threat.slice(0, 2), to: threat.slice(2, 4), promotion: threat[4] });
     if (!mv) return false;
-    return c.attackers(left as Square, side).includes(mv.to as Square) && !before.includes(mv.from as Square);
+    return c.attackers(left as Square, side).includes(mv.to) && !before.includes(mv.from);
   } catch { return false; }
 }
