@@ -156,7 +156,7 @@ describe('their move says what it aims at', () => {
   const c = new Chess();
   for (const s of sans) c.move(s);
   const fen = c.fen();
-  const input = (line: string[]) => ({ theory: true, fenBefore: fen, san: 'd5', prev: NO_PREV_CAPTURE, moverIsStudent: false, line, history: sans, theirLast: null, phrases: null, reads: null, costCp: null });
+  const input = (line: string[]) => ({ theory: true, tense: 'now' as const, fenBefore: fen, san: 'd5', prev: NO_PREV_CAPTURE, moverIsStudent: false, line, history: sans, theirLast: null, phrases: null, reads: null, costCp: null });
   it('their move carries the aim as its own fact when the reply does not answer it', () => {
     const aim = moveThoughtFacts(input(['O-O'])).find((f) => f.computer === 'theirTarget');
     expect(aim?.text).toBe('Their d5 is aimed at your bishop on c4.');
