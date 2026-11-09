@@ -615,6 +615,17 @@ async function playGame(context, listener, engine, student, phase, index) {
           }
           if (landed) break;
           tape.notes.push(`replay move ${m.san} ${refused ? 'refused by the drill' : 'did not land'}`);
+          // F16 (2026-11-09): the drill's judgement of an off-key move came
+          // back empty after ~27 s and was said as a refusal. Keep the
+          // engine's own timeline from the tap on — every search, when it was
+          // asked, when its `go` went out, when it answered and how — so the
+          // run names what held or emptied the drill's price search.
+          if (!refused) {
+            const until = Date.now() + 40_000;
+            while (said() === before && Date.now() < until) await page.waitForTimeout(500);
+          }
+          const ledger = await page.evaluate((from) => (window.__engineLedger ? window.__engineLedger().filter((e) => e.askedAt >= from - 2_000) : null), t0).catch(() => null);
+          (tape.replay.engine ??= []).push({ san: m.san, tapAt: t0, saidAfterMs: said() > before ? Date.now() - t0 : null, ledger });
           if (!refused) break;
           // A person reads the drill's hint: "Their knight on c1 is not
           // properly protected" → take it, cheapest piece first (prod record
