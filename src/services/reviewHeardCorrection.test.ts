@@ -10,7 +10,7 @@ describe('Review says when the deeper read disagrees with the grade heard live',
   });
   it('heard fine, the deeper read finds a blunder → the correction rides the verdict', () => {
     expect(correctionAgainstHeard('fine', 'blunder', 'Bb5')).toEqual({
-      text: 'During the game it was called fine; the deeper read says it was a blunder.', ridesVerdict: true,
+      text: 'During the game it was called fine. The deeper read says it was a blunder.', ridesVerdict: true,
     });
   });
   it('NEGATIVE CONTROL: they agree → nothing to say', () => {

@@ -852,7 +852,7 @@ describe('recapSecondPerson — the card never shows the fact package (WO-STANDA
   const base = {
     outcome: '0-1', playerColor: 'black', openingClause: 'with the Caro-Kann',
     blunderCount: 1, mistakeCount: 2, inaccuracyCount: 1,
-    keyMoments: ['On move 12, Nb6 was a mistake; the engine preferred e6 (the evaluation moved from -7.5 to a forced mate for Black).'],
+    keyMoments: ['On move 12, Nb6 was a mistake. The engine preferred e6 (the evaluation moved from -7.5 to a forced mate for Black).'],
     totalErrors: 4,
   };
   it('speaks TO the student — "you", never "the student", and reads the moment as theirs', () => {

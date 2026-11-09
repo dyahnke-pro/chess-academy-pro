@@ -40,7 +40,7 @@ describe('13…Qxf3 wins the pawn — computed by the one move-point owner, read
 
 describe('7…Bb6 keeps the bishop so a trade on c5 cannot double your pawns', () => {
   it('and if they take on b6, axb6 opens the a-file — doubled pawns that cost nothing', () => {
-    expect(denyExchange(BB6, 'Bb6', 'b', 30)?.text).toBe('Your bishop leaves c5, so their bishop can no longer take it there and double your pawns; if they take on b6, axb6 opens the a-file for your rook.');
+    expect(denyExchange(BB6, 'Bb6', 'b', 30)?.text).toBe('Your bishop leaves c5, so their bishop can no longer take it there and double your pawns. If they take on b6, axb6 opens the a-file for your rook.');
   });
   it('NEGATIVE CONTROL: with no rook behind the file, equal damage waiting on b6 still silences it', () => {
     expect(denyExchange(BB6.replace(/^r2qk2r/, '3qk2r').replace(' kq ', ' k '), 'Bb6', 'b', 30)).toBeNull();

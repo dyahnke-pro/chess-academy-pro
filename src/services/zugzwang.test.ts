@@ -15,7 +15,7 @@ describe('readZugzwang', () => {
     // Black to move loses; White to move would only draw → zugzwang for Black.
     const z = await readZugzwang(FEN, lookup({ b: 'loss', w: 'draw' }));
     expect(z).toEqual({ onMove: -1, ifPassed: 0, mutual: false });
-    expect(zugzwangSentence(z!, true)).toBe('Zugzwang: on your move this loses; if it were their move, you would hold the draw. In pawn endings, who has to move decides it.');
+    expect(zugzwangSentence(z!, true)).toBe('Zugzwang: on your move this loses. If it were their move, you would hold the draw. In pawn endings, who has to move decides it.');
   });
   it('mutual zugzwang: whoever moves loses', async () => {
     const z = await readZugzwang(FEN, lookup({ b: 'loss', w: 'loss' }));

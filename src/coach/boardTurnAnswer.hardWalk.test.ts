@@ -42,7 +42,7 @@ describe('their best defence', () => {
 describe('a faster win', () => {
   it('a mate in 4 is the fastest', async () => {
     engineWith(GOMC, [{ sans: MATE, evaluation: 100000, mate: 4 }, { sans: ['Qxd5'], evaluation: 300, mate: null }]);
-    expect(await answerBoardTurn(turn('faster-win'), { fen: GOMC, history: [], studentColor: 'white' })).toBe('Nh6+ is the fastest — it starts a forced mate in 4 moves; nothing mates sooner.');
+    expect(await answerBoardTurn(turn('faster-win'), { fen: GOMC, history: [], studentColor: 'white' })).toBe('Nh6+ is the fastest — it starts a forced mate in 4 moves. Nothing mates sooner.');
   });
   it('the move it names carries its line, so "show me" plays it (hard-chat prod audit 2026-11-07)', async () => {
     engineWith(PAWN, [{ sans: ['Kd3', 'Kd6', 'Kc4', 'Kc6'], evaluation: 495, mate: null }, { sans: ['h5'], evaluation: -100, mate: null }]);

@@ -146,7 +146,7 @@ describe('chat reads the meters', () => {
     const m = computeSkillMeters([], 1400);
     expect(skillMetersAnswer(m, null)).toBeNull();
     const two = m.map((x) => (x.id === 'tactics' ? { ...x, rated: true, rating: 1500, level: 12 } : x.id === 'endgames' ? { ...x, rated: true, rating: 1100, level: 8 } : x));
-    expect(skillMetersAnswer(two, null)).toMatch(/weakest first: Endgames Level 8.*Tactics Level 12.*weakest is Endgames; your strongest is Tactics/);
+    expect(skillMetersAnswer(two, null)).toMatch(/weakest first: Endgames Level 8.*Tactics Level 12.*weakest is Endgames, and your strongest is Tactics/);
   });
 });
 

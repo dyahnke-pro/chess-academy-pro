@@ -51,9 +51,9 @@ describe('a yield is checked against what actually fired', () => {
     // is a mis-stated CLAIMANT LIST; an unhonoured yield on a bare ply is a
     // COVERAGE hole. Different fixes, so the line must distinguish them.
     const why = whyFor(IMMEDIATE);
-    expect(why).toMatch(/none fired;/);
+    expect(why).toMatch(/none fired\./);
     expect(why, 'this ply IS covered by other detectors, and the line must say so rather than cry hole')
-      .toMatch(/the ply still spoke via \[[^\]]+\]/);
+      .toMatch(/[Tt]he ply still spoke via \[[^\]]+\]/);
     expect(why).not.toMatch(/NOTHING else fired/);
   });
 

@@ -86,7 +86,7 @@ describe('the thinking lesson bite (learn-how-to-think)', () => {
   });
 
   it('a known-not-used gap leads the card\'s reason, and the pick is unchanged otherwise', () => {
-    const gap = 'In lessons you find their loose pieces; in your games you still walk past them.';
+    const gap = 'In lessons you find their loose pieces. In your games you still walk past them.';
     const r = rankUpNext({ ...base, thinking: { state: 'grey', skill: 'x', step: 'Am I safe?', gap } });
     const t = r.find((p) => p.kind === 'thinking')!;
     expect(t.reason.startsWith(gap)).toBe(true);

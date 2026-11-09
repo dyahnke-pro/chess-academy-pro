@@ -106,7 +106,7 @@ describe('pawnJudgement', () => {
   it('mirrored-square asymmetry: you can guard d4, they can never guard d5', () => {
     const fen = legal('6k1/pp3ppp/8/8/2p5/2P5/PP3PPP/6K1 w - - 0 20');
     const r = voiced(mirroredAsymmetry(fen, 'w'));
-    expect(r.text).toBe('Your c-pawn can still guard d4; they can never guard d5 the same way, so that square stays a hole for them.');
+    expect(r.text).toBe('Your c-pawn can still guard d4. They can never guard d5 the same way, so that square stays a hole for them.');
     // The symmetric start: nothing to say.
     expect(mirroredAsymmetry(new Chess().fen(), 'w')).toBeNull();
   });
@@ -235,7 +235,7 @@ describe('planJudgement', () => {
   it('keep the plan, change the route: e4 runs into dxe4, g3 through f1', () => {
     const fen = legal('6k1/pp3ppp/8/3p4/8/8/PP1N1PPP/6K1 w - - 0 20');
     const r = voiced(keepPlanChangeRoute(fen, 'Ne4', ['d2f1', 'a7a6', 'f1g3'], 300, 'dxe4'));
-    expect(r.text).toBe('The knight jump to e4 runs into dxe4; that rules out the route, not the plan: it reaches g3 through f1 instead.');
+    expect(r.text).toBe('The knight jump to e4 runs into dxe4. That rules out the route, not the plan: it reaches g3 through f1 instead.');
     // A different piece in the engine's line: silent.
     expect(keepPlanChangeRoute(fen, 'Ne4', ['g1f1', 'a7a6', 'f1e1'], 300, 'dxe4')).toBeNull();
   });
