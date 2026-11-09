@@ -34,3 +34,14 @@ describe('the worst-piece lever — no road, no plan (WO-DEPTH-01, 2026-11-08)',
     expect(worst('r1k5/p1pn3p/8/1pb3p1/8/2N2PBn/PPP4P/2K2R2 b - - 3 21', 'black')).toBe('bring your knight on h3 to f4, an outpost no pawn can chase it from, and the g-pawn backs it up');
   });
 });
+
+describe('a rook\'s road is the file lever\'s idea', () => {
+  it('never "put a rook on the b, d or e file" and then "bring your rook on a1 to b1, on the b-file"', () => {
+    // The colle800 replay game after 21.bxc3 (the decision baseline's ply 42,
+    // 2026-11-09): the a1 rook's road ends on b1, the b-file.
+    const fen = 'r1b1r1k1/5ppp/pq2p3/1p1p2B1/5Q2/2P5/P4PPP/R3R1K1 b - - 0 21';
+    const levers = boardPlanFacts(fen, 'white')?.levers ?? [];
+    expect(levers.some((l) => l.kind === 'file')).toBe(true);
+    expect(levers.filter((l) => l.kind === 'worst')).toEqual([]);
+  });
+});

@@ -135,7 +135,10 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   const road = worst && worst.kind !== 'no-file-rook' && (worst.misplaced || pastOpening || worst.square[1] !== homeRank)
     ? worstPieceRoute(fen, worst.square)
     : null;
-  if (worst && road) {
+  // A rook's road ends on a file — the open-file lever's idea, said above
+  // ("put a rook on the b, d or e file"), never a second line for it.
+  const fileSaid = levers.some((l) => l.kind === 'file');
+  if (worst && road && !(worst.piece === 'r' && fileSaid)) {
     const ref = pieceRef(fen, worst.square, viewer);
     levers.push({ kind: 'worst', phrase: `bring ${ref ? ref.words : `${your} ${PIECE[worst.piece]} on ${worst.square}`} to ${road.target}, ${road.aim}`, squares: [worst.square, ...road.route] });
   }
