@@ -329,6 +329,9 @@ export type AuditKind =
    *  the coach-turn probe, the eval bar's, or none (then the move goes
    *  ungraded — no verdict, no reason, no reward). iOS engine reads 2026-10-20. */
   | 'learn-move-read'
+  /** A Learn turn's late wave thrown away, with why: the student moved on
+   *  before its reads landed, or it failed. Every silence names its gate. */
+  | 'learn-turn-dropped'
   /** LEARN MISSIONS (WO-MISSIONS-01, 2026-10-21). A mission started (its
    *  announce), a student move checked against it (pending / miss / pass /
    *  incomplete — the runner's decision), a rewind answered (try again / play

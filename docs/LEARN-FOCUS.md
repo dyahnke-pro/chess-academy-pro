@@ -347,7 +347,7 @@ focus poses on that board, BOTH seats (`chanceHoldOf` → `ChanceHold`, held as
 forced mate; the piece to save, what attacks it, their motif's targets, their
 mate threat. A danger waits like anything else: before the move it is the
 answer handed over; once the miss stands it is the lesson. A danger the focus
-does not pose still speaks. Every line the Learn page speaks names its CHANNEL (`speakLearn`): `owner` (mission /
+does not pose still speaks. 🔒 **AND THE MISS IS SAID** (David 2026-11-09: "The silent set up of previous errors stills calls out the miss like I wanted right?"): a fact's square points at a chance only when the same piece stands on it on the fact's own board and the chance's (`ChanceHold.fen`, REQUIRED) — the explanation of a miss is about the board before the reply, and their recapture on the same square is another piece; and the reply waits on the verdict's own reads, the move's price and the board between the moves, whenever a verdict may be due (`learnReplyWait`: a missed focus chance or a graded fault up to `VERDICT_WAIT_CEILING_MS`), so a quick student never leaves the board before the miss is said. A late wave thrown away names why (`learn-turn-dropped`); audit F24. Every line the Learn page speaks names its CHANNEL (`speakLearn`): `owner` (mission /
 focus lines), `asked` (the user asked or tapped), `lesson` (a walkthrough,
 drill or session — those end the focus game), `free-play` (volunteered). A
 `free-play` line is dropped while a mission or focus owns the game. A new

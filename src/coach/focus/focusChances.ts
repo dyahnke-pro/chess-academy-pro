@@ -153,7 +153,7 @@ export interface FocusChance {
  *  its targets and the answer's landing; the piece to save, what attacks it,
  *  their motif's targets — so a fact pointing at one waits until the student
  *  has moved (EXPLAIN AT THE MISS, WO-LEARN-SWING-01 P1). Null with none. */
-export function chanceHoldOf(chances: readonly FocusChance[]): ChanceHold | null {
+export function chanceHoldOf(fen: string, chances: readonly FocusChance[]): ChanceHold | null {
   if (chances.length === 0) return null;
   const sq = new Set<string>();
   let mate = false;
@@ -170,7 +170,7 @@ export function chanceHoldOf(chances: readonly FocusChance[]): ChanceHold | null
     if (c.kind === 'mate-for-you') mate = true;
     if (c.kind === 'mate-threat') theirMate = true;
   }
-  return { squares: [...sq], mate, theirMate };
+  return { fen, squares: [...sq], mate, theirMate };
 }
 
 /** A move the user played, with what the engine said about the board it left. */

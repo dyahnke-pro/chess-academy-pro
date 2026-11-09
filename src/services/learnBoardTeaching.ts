@@ -43,7 +43,7 @@ export { habitSaidKey } from './methodBeat';
 import { stepForMethodClaim, THINKING_STEPS } from './thinkingSteps';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import type { AnalysisLine } from '../types';
-import { decisiveReason, reasonEarned, reasonPosed, REASON_WAIT_CEILING_MS, type DecisiveReason } from './decisiveReason';
+import { decisiveReason, reasonEarned, reasonPosed, REASON_WAIT_CEILING_MS, VERDICT_WAIT_CEILING_MS, type DecisiveReason } from './decisiveReason';
 import { emitDecisiveReason } from './decisiveReasonEvents';
 import type { IntentReads } from './moveIntent';
 import type { LearnLane } from './learnTurnDoor';
@@ -1384,10 +1384,36 @@ export { preventsNamedIdea, STOPPED_THEIR_IDEA, preventStakes } from './moveInte
 // evidence as its proof, reported to the audit in the same breath. The page
 // asks once; it never composes the computer, the proof and the emission itself.
 
-/** Should the reply wait for the student's reason? Only at a real decision
- *  out of book; then for at most `REASON_WAIT_CEILING_MS`. */
-export function learnReasonWaitMs(lines: readonly AnalysisLine[] | undefined, mover: 'w' | 'b', inBook: boolean): number {
-  return learnReasonDue(lines, mover, inBook) ? REASON_WAIT_CEILING_MS : 0;
+/** WHAT THE LEARN REPLY WAITS ON BEFORE IT IS PLAYED (David 2026-10-17:
+ *  "Delay the computer move obviously" — the reason lands with the move, not
+ *  after the student has moved again).
+ *  - `warmReason`: at a real decision out of book, the reads the reason is
+ *    built from (`learnReasonDue`), for at most `REASON_WAIT_CEILING_MS`.
+ *  - `waitPrice`: whenever a verdict may be due — the move is out of book and
+ *    either ungraded or graded a fault by the read before it — the move's
+ *    price and the board between the moves, the two reads the verdict is
+ *    built from. A late wave whose board the student has already left is
+ *    thrown away, so without them a quick student never heard the verdict
+ *    (local focus audit 2026-11-09: 7 of 11 turns dropped). A known fault (the
+ *    grade said so, or the student missed a focus chance) waits up to
+ *    `VERDICT_WAIT_CEILING_MS`; an ungraded move the reason's ceiling.
+ *  A quiet move in book replies at once. */
+export function learnReplyWait(i: {
+  lines: readonly AnalysisLine[] | undefined;
+  mover: 'w' | 'b';
+  inBook: boolean;
+  /** The move was priced before it was played (it is in the read's lines). */
+  graded: boolean;
+  /** The pre-move read graded it a fault. */
+  gradeFault: boolean;
+  /** The student missed a focus chance with it (the focus punishes it). */
+  focusMiss: boolean;
+}): { ceilingMs: number; warmReason: boolean; waitPrice: boolean } {
+  const warmReason = learnReasonDue(i.lines, i.mover, i.inBook);
+  const knownFault = i.focusMiss || (!i.inBook && i.gradeFault);
+  const waitPrice = knownFault || (!i.inBook && !i.graded);
+  const ceilingMs = Math.max(warmReason ? REASON_WAIT_CEILING_MS : 0, knownFault ? VERDICT_WAIT_CEILING_MS : waitPrice ? REASON_WAIT_CEILING_MS : 0);
+  return { ceilingMs, warmReason, waitPrice };
 }
 
 /** Is there a reason to give for this move at all — a real decision, out of book? */

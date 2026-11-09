@@ -84,6 +84,13 @@ export type VoiceOwner = 'open' | 'mission' | `focus:${FocusId}`;
  *  speaks; a forced mate for the student waits with it. Null when there is no
  *  such chance, or no focus. REQUIRED at both production doors. */
 export interface ChanceHold {
+  /** THE BOARD THE CHANCES ARE ON (REQUIRED). A fact's square points at a
+   *  chance only when it holds the same thing on the fact's own board as on
+   *  this one: the explanation of a miss is about the board BEFORE the reply,
+   *  and a square shared with a new chance after it is another piece (prod
+   *  focus audit 2026-11-09, …Qd7 planted, Rf1 missed Nxd7: "your knight on
+   *  e5" was held because their recapture on e5 was the next chance). */
+  fen: string;
   squares: readonly string[];
   /** The chance is a forced mate for the student. */
   mate: boolean;
@@ -95,6 +102,31 @@ export interface ChanceHold {
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
  *  the scale of the marginal bar, never a limit. */
 const TURN_WORD_TARGET = 80;
+
+/** What stands on `square` in `fen`: its FEN letter ('N', 'p' …), '' when
+ *  empty, null when the board or square cannot be read. */
+function occupantOf(fen: string, square: string): string | null {
+  if (!/^[a-h][1-8]$/.test(square)) return null;
+  const rows = fen.split(' ')[0]?.split('/');
+  if (rows?.length !== 8) return null;
+  const file = square.charCodeAt(0) - 97;
+  let x = 0;
+  for (const ch of rows[8 - Number(square[1])]) {
+    if (ch >= '1' && ch <= '8') { x += Number(ch); if (x > file) return ''; continue; }
+    if (x === file) return ch;
+    x += 1;
+  }
+  return null;
+}
+
+/** The square holds the same thing on one of the fact's boards as on the
+ *  chance's board — the same piece of the same side, or empty on both. An
+ *  unreadable board reads as the same, so the hold stays. */
+function sameOccupant(square: string, factBoards: readonly string[], chanceFen: string): boolean {
+  const there = occupantOf(chanceFen, square);
+  if (there === null) return true;
+  return factBoards.some((b) => { const here = occupantOf(b, square); return here === null || here === there; });
+}
 
 export type LearnLane =
   // ── the instant wave, spoken with the coach's reply ──
@@ -856,7 +888,7 @@ export function decideTurn(
     const m = isStaked(f.stakes) ? f.stakes.mate : undefined;
     if (chance.mate && m?.for === 'you' && m.forced) return true;
     if (chance.theirMate && m?.for === 'them') return true;
-    return f.squares.some((q) => chanceSquares.has(q));
+    return f.squares.some((q) => chanceSquares.has(q) && sameOccupant(q, [f.fen, ...(f.altFen ? [f.altFen] : [])], chance.fen));
   };
   const offered: LearnLane[] = [];
   const faded: LearnLane[] = [];

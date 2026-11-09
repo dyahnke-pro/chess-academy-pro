@@ -64,7 +64,7 @@ describe('the Learn door under a mission', () => {
     ];
     const rows: LearnTurnRow[] = [];
     const off = onLearnTurn((r) => rows.push(r));
-    const d = coachTurn({ posture: 'learn', turn, facts: laneFacts(facts), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: { squares: ['d4'], mate: false, theirMate: false } });
+    const d = coachTurn({ posture: 'learn', turn, facts: laneFacts(facts), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: { fen: FEN, squares: ['d4'], mate: false, theirMate: false } });
     off();
     expect(d.pkg.spoken).not.toMatch(/d4/);
     // A danger on no chance the focus poses still speaks.
@@ -77,14 +77,37 @@ describe('the Learn door under a mission', () => {
   // the move. It waits; once the student has moved (no chance held on that
   // board any more) it speaks. The old door let every danger through.
   it('a danger on a chance the student has yet to answer waits, and speaks once they have moved', () => {
-    const before = coachTurn({ posture: 'learn', turn, facts: laneFacts(FACTS), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: { squares: ['e4'], mate: false, theirMate: false } });
+    const before = coachTurn({ posture: 'learn', turn, facts: laneFacts(FACTS), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: { fen: FEN, squares: ['e4'], mate: false, theirMate: false } });
     expect(before.pkg.spoken).not.toMatch(/e4/);
     const after = coachTurn({ posture: 'learn', turn, facts: laneFacts(FACTS), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: null });
     expect(after.pkg.spoken).toMatch(/Watch e4/);
   });
+  // THE MISS IS SAID ONCE IT STANDS (prod focus audit 2026-11-09, rung 2, g3
+  // ply 25): the coach left its queen on d7 to the knight on e5, the student
+  // played Rf1, and the coach took the knight on e5. The explanation of the
+  // miss names e5 — the student's knight that could have taken — and the next
+  // board's chance is their knight on e5 to take back. Same square, another
+  // piece: the explanation is not the answer to the next chance, and it was
+  // held there as names-chance, so the miss went unsaid.
+  it('a miss explained on its own board speaks when a new chance on the next board shares a square with another piece on it', () => {
+    const missBoard = 'r1b2rk1/pppq1ppp/2n5/4N3/2NPp3/6K1/PPP3PP/R1BB1R2 b - - 2 13';
+    const nextBoard = 'r1b2rk1/pppq1ppp/8/4n3/2NPp3/6K1/PPP3PP/R1BB1R2 w - - 0 14';
+    const miss: LaneFixture = { lane: 'mistake', text: 'Your move was a blunder — your knight on e5 could have taken their queen on d7.', fen: missBoard, squares: ['e5', 'd7'], stakes: { points: 9, plies: 1 }, proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE };
+    const nextChance = { fen: nextBoard, squares: ['e5', 'c4'], mate: false, theirMate: false };
+    const rows: LearnTurnRow[] = [];
+    const off = onLearnTurn((r) => rows.push(r));
+    const said = coachTurn({ posture: 'learn', turn: { ...turn, ply: 25, slipCp: 900 }, facts: laneFacts([miss]), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: nextChance });
+    off();
+    expect(said.pkg.spoken).toMatch(/queen on d7/);
+    expect(rows[0].heldWhy.mistake).toBeUndefined();
+    // CONTROL: the same square holding the same piece on both boards is the
+    // next chance itself — the line waits.
+    const same = coachTurn({ posture: 'learn', turn: { ...turn, ply: 25, slipCp: 900 }, facts: laneFacts([{ ...miss, fen: nextBoard }]), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: nextChance });
+    expect(same.pkg.spoken).toBe('');
+  });
   it('their mate threat waits too', () => {
     const mate: LaneFixture[] = [{ lane: 'threat', text: 'They threaten mate — cover f7.', fen: FEN, squares: ['h5'], stakes: mateStakes('them', 1, true), proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE }];
-    const held = coachTurn({ posture: 'learn', turn, facts: laneFacts(mate), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: { squares: [], mate: false, theirMate: true } });
+    const held = coachTurn({ posture: 'learn', turn, facts: laneFacts(mate), priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics', chance: { fen: FEN, squares: [], mate: false, theirMate: true } });
     expect(held.pkg.spoken).toBe('');
   });
 });

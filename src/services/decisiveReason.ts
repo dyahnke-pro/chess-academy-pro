@@ -467,6 +467,15 @@ export function reasonEarned(lines: readonly AnalysisLine[] | undefined, mover: 
  *  it the reply plays and the reason follows the move it is about. */
 export const REASON_WAIT_CEILING_MS = 2500;
 
+/** How long a Learn reply may wait on the move's PRICE when the move is a
+ *  known fault (the pre-move read graded it one, or a focus chance was missed
+ *  on it): the price's own read plus its deepening (`PRICE_DEEPEN_BUDGET_MS`).
+ *  The verdict is built from the price, and a verdict whose board the student
+ *  has already left is thrown away (prod focus audit 2026-11-09: a planted
+ *  knight missed, the reply played, the student moved within 2.5 s, and the
+ *  miss was never said). */
+export const VERDICT_WAIT_CEILING_MS = 5500;
+
 // ── BOTH WAYS (David 2026-10-17: "All wiring needs to go both ways") ─────────
 // The computer that TEACHES the reason also says what the position POSED, so a
 // student who finds the decisive move is credited with that skill and one who

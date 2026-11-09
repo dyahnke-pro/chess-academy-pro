@@ -73,7 +73,7 @@ import { buildPositionalRead } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { cheaperAttackerHit, gambitPoint, kingPawnUnderFire, type CheaperHit, mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { habitSaidKey, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, learnHangingWarning, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { habitSaidKey, learnMoveReason, learnReasonDue, learnReplyWait, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, learnHangingWarning, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 import { captureRunAfterMove, captureRunOfPgn } from '../../services/captureRun';
 
@@ -2425,7 +2425,7 @@ export function CoachTeachPage({ mode }: {
   /** THE CHANCES ON THIS BOARD THE STUDENT HAS YET TO ANSWER, for the door
    *  (`chanceHoldOf`): both seats, so a fact pointing at one waits until the
    *  student has moved (EXPLAIN AT THE MISS, WO-LEARN-SWING-01 P1). */
-  const chanceHoldAt = useCallback((fen: string): ChanceHold | null => chanceHoldOf(focusRef.current.chancesToFind(fen)), []);
+  const chanceHoldAt = useCallback((fen: string): ChanceHold | null => chanceHoldOf(fen, focusRef.current.chancesToFind(fen)), []);
   /** The page's takeback, lent to the castling rewind (declared further down). */
   const focusTakeBackRef = useRef<(count: number) => unknown>(() => undefined);
   /** A NEW FOCUS GAME (WO-FOCUS-TACTICS-01) — the classic Learn's free play.
@@ -10547,6 +10547,10 @@ export function CoachTeachPage({ mode }: {
       }
       if (verdict.punish) focusPunishRef.current = { fen: move.fen };
     }
+    // A FOCUS CHANCE MISSED ON THIS MOVE (the coach's reply punishes it): read
+    // here, before the reply is chosen — choosing it spends the marker. The
+    // reply waits on the verdict's reads so the miss is said (`learnReplyWait`).
+    const focusMissedHere = !!focusPunishRef.current && samePosition(focusPunishRef.current.fen, move.fen);
     /** A MISSION OWNS THIS GAME (Campaign): only the mission's own lines speak,
      *  before and after it resolves — every producer waits (the door holds its
      *  lanes as `mission`; the lines that bypass the door check this). The
@@ -10979,16 +10983,20 @@ export function CoachTeachPage({ mode }: {
         // student has already moved again. Capped: past the ceiling the reply
         // plays and the reason follows it. A quiet move replies at once.
         const studentMoverWB: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
-        const reasonWaitMs = learnReasonWaitMs(preStudentRead?.topLines, studentMoverWB, studentMoveInBook);
-        const reasonWarm = reasonWaitMs > 0
-          ? (async () => {
-              await midTurnRead;
-              for (const f of [nullMoveFen(fenBefore), nullMoveFen(move.fen)]) {
-                if (f) await stockfishEngine.analyzeWithBudget(f, COACH_TURN_DEPTH, 900, { signal: turnSignal }).catch(() => null);
-              }
-            })()
-          : Promise.resolve();
-        const padDone = replyWait({ startedAt: thinkStart, minThinkMs: minThink, reason: reasonWarm, ceilingMs: reasonWaitMs });
+        const wait = learnReplyWait({ lines: preStudentRead?.topLines, mover: studentMoverWB, inBook: studentMoveInBook, graded: studentCpLoss !== null, gradeFault: studentGradeFault, focusMiss: focusMissedHere });
+        const reasonWarm = Promise.all([
+          wait.warmReason
+            ? (async () => {
+                await midTurnRead;
+                for (const f of [nullMoveFen(fenBefore), nullMoveFen(move.fen)]) {
+                  if (f) await stockfishEngine.analyzeWithBudget(f, COACH_TURN_DEPTH, 900, { signal: turnSignal }).catch(() => null);
+                }
+              })()
+            : null,
+          // THE VERDICT'S OWN READS: the price and the board between the moves.
+          wait.waitPrice ? Promise.all([priceRead, midTurnRead]).catch(() => null) : null,
+        ]);
+        const padDone = replyWait({ startedAt: thinkStart, minThinkMs: minThink, reason: reasonWarm, ceilingMs: wait.ceilingMs });
         if (reply) {
           // GROUNDING COMPLETENESS (David 2026-06-15): compute what the
           // reply ACTUALLY did — captured piece + squares — from the BEFORE
@@ -12255,6 +12263,21 @@ export function CoachTeachPage({ mode }: {
             // A move called a mistake IS the lesson of that turn; the phase
             // beat waits for this pass and stands down when it called one.
             let mistakeCalledThisTurn = false;
+            // A LATE WAVE THAT IS THROWN AWAY NAMES WHY (every silence names
+            // its gate): the student moved on before its reads landed, or it
+            // failed. A turn with a verdict owed and no row was invisible
+            // (prod focus audit 2026-11-09, g2 ply 14: a planted knight missed
+            // and nothing said, no door row at all).
+            const noteLateDropped = (why: 'moved-before-price' | 'moved-before-facts' | 'error'): void => {
+              void logAppAudit({
+                kind: 'learn-turn-dropped',
+                category: 'subsystem',
+                source: 'CoachTeachPage.verdictPass',
+                summary: `ply ${move.history.length} ${move.san}: late wave dropped (${why})${mistakeCalledThisTurn ? ' — a verdict was owed' : ''}`,
+                details: JSON.stringify({ ply: move.history.length, san: move.san, why, verdictOwed: mistakeCalledThisTurn, slipCp: turnSlipCp }),
+                fen: fenAfterReply,
+              });
+            };
             const verdictPass = Promise.all([midTurnRead, priceRead]).then(async () => {
               try {
                 // The late wave speaks on the price as it SETTLED (deepened
@@ -12264,7 +12287,7 @@ export function CoachTeachPage({ mode }: {
                   studentCpLoss = settledPrice.costCp; studentPriceSettled = settledPrice.settled; studentPriceSearch = settledPrice.search ?? null;
                   turnSlipCp = studentMoveInBook ? null : saidSlipCp(settledPrice, { studentColor: playerColor, fenBefore, playedSan: move.san, bestSan: preStudentRead?.bestMove ? uciMoveToSan(preStudentRead.bestMove, fenBefore) : null, historySans: move.history });
                 }
-                if (liveFenRef.current !== fenAfterReply) return;
+                if (liveFenRef.current !== fenAfterReply) { noteLateDropped('moved-before-price'); return; }
                 // ONE LATE WAVE, SPOKEN (OS-18): the door decides it and the voice says it
                 // with its marks. Called for the verdict the moment it is built, then for
                 // everything else once the turn's reads are in.
@@ -13090,7 +13113,7 @@ export function CoachTeachPage({ mode }: {
                 verdictHandedOver();
                 // The rest of the turn reads the next board's facts.
                 await factsReady;
-                if (liveFenRef.current !== fenAfterReply) return;
+                if (liveFenRef.current !== fenAfterReply) { noteLateDropped('moved-before-facts'); return; }
 
                 // ── WHAT THEIR MOVE COST THEM (census #5) ──────────────────
                 // "…e6 opens a square your knight jumps into", "the passive
@@ -13401,7 +13424,7 @@ export function CoachTeachPage({ mode }: {
                   pendingVoiceRef.current = null;
                   speakLateWave(pending, pending.lines);
                 }
-              } catch { /* bonus */ }
+              } catch { noteLateDropped('error'); }
             });
             // Every way out of the pass releases a held instant line too.
             void verdictPass.finally(verdictHandedOver).catch(() => undefined);

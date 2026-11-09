@@ -504,19 +504,19 @@ describe('chanceHoldOf — what the Learn door holds until the student has moved
   it('their fork stands: the door holds its squares — the forker and what it hits', () => {
     const all = chancesAt({ fen: FRIED, prevFen: null, beforeTheirMove: null, student: 'b', lines: null }, BEGINNER);
     const fork = all.find((c) => c.kind === 'motif')!;
-    const hold = chanceHoldOf(all)!;
+    const hold = chanceHoldOf(FRIED, all)!;
     for (const q of [...(fork.targets ?? []), ...(fork.attacker ? [fork.attacker.square] : [])]) expect(hold.squares).toContain(q);
     // The old hand-over read the exploit seat only: a defend-only board held nothing.
     const defendOnly = all.filter((c) => c.seat === 'defend');
     expect(defendOnly.length).toBeGreaterThan(0);
-    expect(chanceHoldOf(defendOnly)?.squares.length).toBeGreaterThan(0);
+    expect(chanceHoldOf(FRIED, defendOnly)?.squares.length).toBeGreaterThan(0);
   });
   it('their mate threat: the door holds their mate', () => {
     const all = chancesAt({ fen: SCHOLAR, prevFen: null, beforeTheirMove: null, student: 'b', lines: null }, BEGINNER);
-    expect(chanceHoldOf(all)).toMatchObject({ theirMate: true, mate: false });
+    expect(chanceHoldOf(SCHOLAR, all)).toMatchObject({ fen: SCHOLAR, theirMate: true, mate: false });
   });
   it('NEGATIVE CONTROL: no chance on the board, nothing held', () => {
-    expect(chanceHoldOf([])).toBeNull();
+    expect(chanceHoldOf(FRIED, [])).toBeNull();
   });
 });
 

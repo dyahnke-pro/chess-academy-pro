@@ -2260,6 +2260,14 @@ function* reviewSegmentSteps(
       // step), which the convert plan's thread owns below — a mark on this
       // move's facets, not a memory of the game (it rode the seed until 8d).
       const conversionFacets = new Set<ReviewFacet>();
+      // ONE MOVE HEAD A TURN (prod Review audit 2026-11-09, Carlsen–Caruana
+      // 20.Rc4: "Your rook to c4 takes the half-open c-file … You went for
+      // rook to c4, which saves the rook from their knight"). The move's
+      // composed thought behind another line that names the move keeps its
+      // second wording ("It also saves the rook from their knight"); which one
+      // is said is decided where the turn is said — only behind a lead line
+      // that is actually said before it.
+      const followOf = new Map<ReviewFacet, { follow: string; leads: ReadonlySet<ReviewFacet> }>();
       const verdictReasonOut: { text: string | null; playedLine?: boolean; punishSan?: string; lostSquare?: string; guardLeft?: string } = { text: null };
       const facets = computeMoveFacets({
         fundamentals,
@@ -2719,8 +2727,13 @@ function* reviewSegmentSteps(
             const k = facets.findIndex((f) => f.identity === `opp-threat:hanging:${job.squares[1]}`);
             if (k >= 0) facets.splice(k, 1);
           }
-          const spoken = thought.kept.map((f, k) => (k === asked ? f.text.replace(/\.$/, ', and it needs an answer this move.') : f.text)).join(' ');
+          const worded = (lead: boolean): string => thought.kept.map((f, k) => {
+            const text = k === 0 && !lead ? (f.alsoText ?? f.text) : f.text;
+            return k === asked ? text.replace(/\.$/, ', and it needs an answer this move.') : text;
+          }).join(' ');
+          const spoken = worded(true);
           const raw = fact('moveThoughtFacts', 'move-job', spoken, { identity: id, squares: [...named] });
+          if (stepLeads.length > 0 && worded(false) !== spoken) followOf.set(raw, { follow: worded(false), leads: new Set(stepLeads) });
           if (carriedLoose) raw.claims = [...(raw.claims ?? []), `loose:${carriedLoose}`];
           facets.push(raw);
           facetCommits.set(raw, () => {
@@ -3323,8 +3336,19 @@ function* reviewSegmentSteps(
         const squares = said === text ? [...own] : cutMarksWithWords(text, said, { squares: own }, fenPair.fenAfter, null).squares;
         // The causal chain leads (`rankedParts`): its sight-line arrows are
         // drawn only while its words are kept (`causalSaid`, below).
-        return { kind: 'computed' as const, text: said, fen: fenPair.fenAfter, altFen: fenPair.fenBefore, squares, ...(causalLead && k === 0 ? { causalChain: true as const } : {}) };
+        return { kind: 'computed' as const, factId: `door:${k}`, text: said, fen: fenPair.fenAfter, altFen: fenPair.fenBefore, squares, ...(causalLead && k === 0 ? { causalChain: true as const } : {}) };
       });
+      // ONE MOVE HEAD A TURN (`followOf`): the composed thought's part, its
+      // follow wording and the parts that lead it, by the door's own order.
+      const facetOfPart = (k: number): ReviewFacet | undefined => { const at = kept.findIndex((f) => f.text === doorKeys[k]); return at >= 0 ? keptKey[at] : undefined; };
+      const followByPart = new Map<number, { follow: string; leads: number[] }>();
+      for (let k = 0; k < uncappedParts.length; k += 1) {
+        const facet = facetOfPart(k);
+        const rule = facet ? followOf.get(facet) : undefined;
+        if (!rule || uncappedParts[k] !== doorKeys[k]) continue;
+        const leads = uncappedParts.map((_, j) => j).filter((j) => { const f = j === k ? undefined : facetOfPart(j); return !!f && rule.leads.has(f); });
+        if (leads.length > 0) followByPart.set(k, { follow: rule.follow, leads });
+      }
       // The squares the board lights for this ply, each with its sentence.
       const litSaid: Array<{ square: string; said: string }> = [];
       // The causal chain's sentence, when the package kept it — the chain's
@@ -3333,7 +3357,20 @@ function* reviewSegmentSteps(
       let causalSaid: string | null = null;
       const speakDoor = (facts: typeof doorFacts): string | null => {
         if (facts.length === 0) return null;
-        const pkg = buildVoicePackage(facts, undefined, reviewSpokenKeys);
+        let pkg = buildVoicePackage(facts, undefined, reviewSpokenKeys);
+        // The thought behind a line that named the move — said before it, in
+        // this package — does not name the move again: "It also saves the rook
+        // from their knight". Its full wording stays wherever no lead is said
+        // before it (the lead held, said once already, or after it).
+        const keptIds = pkg.kept.map((f) => f.factId);
+        const followed = facts.map((f) => {
+          const k = Number(f.factId.slice(5));
+          const rule = followByPart.get(k);
+          const at = keptIds.indexOf(f.factId);
+          if (!rule || at < 0 || f.text !== uncappedParts[k]) return f;
+          return rule.leads.some((j) => { const i = keptIds.indexOf(`door:${j}`); return i >= 0 && i < at; }) ? { ...f, text: rule.follow } : f;
+        });
+        if (followed.some((f, i) => f !== facts[i])) pkg = buildVoicePackage(followed, undefined, reviewSpokenKeys);
         for (const f of pkg.kept) for (const sq of f.squares ?? []) if (!litSaid.some((x) => x.square === sq)) litSaid.push({ square: sq, said: f.text });
         for (const f of pkg.kept) if ('causalChain' in f && f.causalChain === true) causalSaid = f.text;
         for (const k of spokenSentenceKeys(pkg)) reviewSpokenKeys.add(k);

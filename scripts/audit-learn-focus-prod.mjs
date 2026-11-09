@@ -87,6 +87,9 @@
  *      after only, green silent) after the in-game fade (two finds), it was
  *      asked exactly when the dial says ask, one question a board, and every
  *      'ask' line heard sits on an asked row;
+ *   F24 at a rung that does not pause (2–3) a planted chance missed at the
+ *      first try is SAID once the miss stands: the door speaks its verdict on
+ *      that move (a late wave dropped or a verdict held names why);
  *   F23 a miss carries to the next game (#158), yours and theirs: the setup's
  *      carry is the newest focus row's list (a bare tag on an older row is
  *      yours); the game's first guarantee ask is the head of your seat unless
@@ -671,6 +674,8 @@ async function playGame(context, listener, engine, student, phase, index) {
   tape.plants = events.filter((e) => e.kind === 'focus-plant').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
   tape.castle = events.filter((e) => e.kind === 'castle-watch').map((e) => parse(e.details)).filter(Boolean);
   tape.doorRows = events.filter((e) => e.kind === 'learn-turn-decision').flatMap((e) => parse(e.details)?.rows ?? []);
+  tape.dropRows = events.filter((e) => e.kind === 'learn-turn-dropped').map((e) => parse(e.details)).filter(Boolean);
+  tape.moveReads = events.filter((e) => e.kind === 'learn-move-read').map((e) => parse(e.details)).filter(Boolean);
   tape.heldFreePlay = events.filter((e) => e.source === 'learnVoice.held').map((e) => String(e.summary ?? '').slice(0, 160));
   const pickLine = tape.chosen[0]?.line ?? null;
   tape.kingRows = (await readStore(page, 'capabilityEvidence')).filter((r) => r.tag === 'king-stuck-center' && (r.recordedAt ?? 0) >= startedAt).length;
@@ -887,6 +892,23 @@ async function main() {
       const lost = owedOut ? missesFirstTry.filter((r) => !answered(r) && !owedOut.some((o) => o.seat === r.seat && o.tag === r.tag)).map((r) => `${r.seat}:${r.tag}@${r.ply}`) : ['no carry on the row'];
       check(`${g} F23 a missed pattern carries to the next game`, setupOk && guaranteeOk && carriedOk && lost.length === 0,
         `carried in ${JSON.stringify(wantCarry)} (setup ${JSON.stringify(pick?.carry ?? null)}); first guarantee ask ${firstGuarantee ? `${JSON.stringify(firstGuarantee.ask)} → planted ${firstGuarantee.tag ?? 'nothing'}${missedFirst ? ' (a miss came first)' : ''}` : '— (presented without a plant)'}; ${carriedRows.length} carried-miss plant ask(s)${carriedOk ? '' : ' ASKING ANOTHER PATTERN'}; owes on ${JSON.stringify(owedOut)}${lost.length ? `; LOST ${lost.join(', ')}` : ''}`);
+    }
+    // F24 — a planted chance missed at a rung that does not pause is SAID once
+    // the miss stands (EXPLAIN AT THE MISS): the door speaks its verdict on
+    // that move. The setup is silent; the miss is not (David 2026-11-09).
+    if (rung >= 2) {
+      const VERDICT = new Set(['mistake', 'drawback', 'fundamental']);
+      const planted = t.turns.filter((r) => r.seat === 'exploit' && r.outcome === 'missed' && !r.retry && r.planted);
+      const unsaid = planted.filter((r) => !t.doorRows.some((d) => d.turn?.ply === r.ply && (d.spoke ?? []).some((l) => VERDICT.has(l))));
+      const why = (r) => {
+        const rows = t.doorRows.filter((d) => d.turn?.ply === r.ply);
+        const held = rows.flatMap((d) => (d.held ?? []).filter((l) => VERDICT.has(l)).map((l) => `${l} held ${d.heldWhy?.[l] ?? '?'}`));
+        const dropped = (t.dropRows ?? []).filter((d) => d.ply === r.ply).map((d) => `dropped ${d.why}`);
+        const read = (t.moveReads ?? []).find((m) => m.ply === r.ply - 1)?.read ?? '?';
+        return `@${r.ply} (read ${read}${held.length ? `; ${held.join(', ')}` : ''}${dropped.length ? `; ${dropped.join(', ')}` : ''}${rows.length ? '' : '; no door row'})`;
+      };
+      check(`${g} F24 a planted chance missed is said once the miss stands`, unsaid.length === 0,
+        `${planted.length} planted miss(es), ${planted.length - unsaid.length} said${unsaid.length ? `; UNSAID ${unsaid.map(why).join(' ')}` : ''}; ${(t.dropRows ?? []).length} late wave(s) dropped this game${(t.dropRows ?? []).length ? ` (${[...new Set(t.dropRows.map((d) => d.why))].join(', ')})` : ''}`);
     }
     // 'exempt' only closes a chance a retry left open (the retry took another piece).
     const badRows = t.turns.filter((r) => r.focus !== 'tactics' || r.rung !== rung || !(['found', 'missed'].includes(r.outcome) || (r.outcome === 'exempt' && r.retry)) || !['defend', 'exploit'].includes(r.seat) || typeof r.kind !== 'string' || typeof r.difficulty !== 'number' || typeof r.held !== 'boolean');

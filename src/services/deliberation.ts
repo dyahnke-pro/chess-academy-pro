@@ -661,16 +661,56 @@ export function bestMoveReason(fenBefore: string, san: string, mover: 'w' | 'b',
 function mateThreatWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string | null {
   try {
     const c = new Chess(fenBefore);
+    const inCheck = c.inCheck();
     const m = c.move(san);
     if (!m || c.inCheck()) return null;
     const them: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
     const before = new Set(mateThreatsAgainst(fenBefore, them).moves.map((x) => x.san));
-    const fresh = mateThreatsAgainst(c.fen(), them).moves.filter((x) => !before.has(x.san));
+    // A CHECK ESCAPE MAKES NO MATE THREAT IT TAKES NO PART IN (prod Learn
+    // audit 2026-11-09: "it let them play king to d2, which threatens rook to
+    // a8, checkmate" — Ra8# stood before …Rc1+; the check only paused it). A
+    // side in check has only its escapes, so the board before cannot show the
+    // mates it already threatened: a mate counts as the move's own only where
+    // the move takes part in it.
+    const fresh = mateThreatsAgainst(c.fen(), them).moves.filter((x) => !before.has(x.san))
+      .filter((x) => !inCheck || takesPartInMate(c, m, x, them));
     // Subjectless like every other job ("it" is the caller's): the review walk
     // said "it would it threatens Qxg1#, mate" (2026-10-20) — and the SAN's
     // "#" already says checkmate, so no second "mate".
     return fresh.length ? `threatens ${fresh[0].san}` : null;
   } catch { return null; }
+}
+
+/** Does the move take part in the mate `x`: the moved piece mates, it
+ *  stepped off the mating piece's line, or it now covers a square next to the
+ *  mated king. `after` is the board after the move. */
+function takesPartInMate(after: Chess, m: { from: string; to: string }, x: { from: string; to: string }, mated: 'w' | 'b'): boolean {
+  if (x.from === m.to) return true;
+  if (strictlyBetween(x.from, x.to, m.from)) return true;
+  const king = after.board().flat().find((p) => p?.type === 'k' && p.color === mated)?.square;
+  if (!king) return false;
+  const kf = king.charCodeAt(0); const kr = Number(king[1]);
+  for (let df = -1; df <= 1; df += 1) {
+    for (let dr = -1; dr <= 1; dr += 1) {
+      if (df === 0 && dr === 0) continue;
+      const f = kf + df; const r = kr + dr;
+      if (f < 97 || f > 104 || r < 1 || r > 8) continue;
+      const sq = `${String.fromCharCode(f)}${r}` as Square;
+      if (after.attackers(sq, mated === 'w' ? 'b' : 'w').includes(m.to as Square)) return true;
+    }
+  }
+  return false;
+}
+
+/** `s` lies strictly between `a` and `b` on one rank, file or diagonal. */
+function strictlyBetween(a: string, b: string, s: string): boolean {
+  const [af, ar, bf, br, sf, sr] = [a.charCodeAt(0), Number(a[1]), b.charCodeAt(0), Number(b[1]), s.charCodeAt(0), Number(s[1])];
+  const df = Math.sign(bf - af); const dr = Math.sign(br - ar);
+  if (!(af === bf || ar === br || Math.abs(bf - af) === Math.abs(br - ar))) return false;
+  for (let f = af + df, r = ar + dr; f !== bf || r !== br; f += df, r += dr) {
+    if (f === sf && r === sr) return true;
+  }
+  return false;
 }
 
 /** THE KICK THAT FREES A PIN — a pawn step whose next step hits the piece
