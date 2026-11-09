@@ -238,7 +238,7 @@ export async function findFocusPlant(
   for (const slip of ranked.slice(0, PLANT_VERIFY_MAX)) {
     const lines = linesOf(await read(slip.fenAfter));
     if (!lines) { bump('no-read'); continue; }
-    const yours = yourChancesAt({ fen: slip.fenAfter, prevFen: fen, student: studentOf(slip.fenAfter), lines }, open);
+    const yours = yourChancesAt({ fen: slip.fenAfter, prevFen: null, beforeTheirMove: fen, student: studentOf(slip.fenAfter), lines }, open);
     if (yours.length === 0) { bump('no-chance'); continue; }
     const atStep = yours.filter((c) => c.difficulty === ask.difficulty);
     if (atStep.length === 0) { bump('wrong-difficulty'); continue; }
@@ -295,7 +295,7 @@ export function shownRank(fen: string, slip: SlipCandidate, line: CoachLine | un
   if (gain === null ? !capturesFirst(slip.fenAfter, moves[0]) : gain < 1) return 2;
   const coachWhite = fen.split(' ')[1] === 'w';
   const shown: ReadLine = { moves, evaluation: line.coachCp * (coachWhite ? 1 : -1), mate: null };
-  const yours = yourChancesAt({ fen: slip.fenAfter, prevFen: fen, student, lines: [shown] }, open);
+  const yours = yourChancesAt({ fen: slip.fenAfter, prevFen: null, beforeTheirMove: fen, student, lines: [shown] }, open);
   if (yours.length === 0) return 2;
   const fits = (c: FocusChance): boolean => c.difficulty === ask.difficulty && (!ask.tag || c.tag === ask.tag || c.setupTag === ask.tag);
   return yours.some(fits) && !yours.some((c) => c.difficulty < ask.difficulty) ? 0 : 1;
@@ -328,7 +328,7 @@ async function flipPlant(
     checked += 1;
     const lines = linesOf(await read(after));
     if (!lines) { bump('no-read'); continue; }
-    const theirs = chancesAt({ fen: after, prevFen: fen, student: studentOf(after), lines }, open)
+    const theirs = chancesAt({ fen: after, prevFen: null, beforeTheirMove: fen, student: studentOf(after), lines }, open)
       .filter((c) => c.seat === 'defend' && c.difficulty <= ask.difficulty);
     if (theirs.length === 0) { bump('no-flip'); continue; }
     const hardest = [...theirs].sort((a, b) => b.difficulty - a.difficulty)[0];

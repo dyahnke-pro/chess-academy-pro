@@ -15,7 +15,7 @@ const after = (sans: string[]): string => { const c = new Chess(); for (const s 
 const play = (fen: string, san: string): string => { const c = new Chess(fen); c.move(san); return c.fen(); };
 const keys = (fen: string, lines: ReadLine[] | null = null): string[] => {
   const student = fen.split(' ')[1] === 'w' ? 'w' : 'b';
-  return chancesAt({ fen, prevFen: null, student, lines }, BEGINNER).map((c) => c.key);
+  return chancesAt({ fen, prevFen: null, beforeTheirMove: null, student, lines }, BEGINNER).map((c) => c.key);
 };
 const move = (fen: string, san: string, lines: ReadLine[] | null = null, cpLoss: number | null = null): FocusMove => ({
   fenBefore: fen, san, fenAfter: play(fen, san), student: fen.split(' ')[1] === 'w' ? 'w' : 'b', cpLoss, lines,
@@ -55,21 +55,33 @@ describe('a recapture is the trade finishing, never a piece to take (hand walk 2
   // The walked game: 4.d4 Nxc3 — their knight took yours; 5.bxc3 takes back.
   const PREV = after(['e4', 'c6', 'Nc3', 'Nf6', 'e5', 'Nd5']);
   const NOW = after(['e4', 'c6', 'Nc3', 'Nf6', 'e5', 'Nd5', 'd4', 'Nxc3']);
+  // The board before their move: your d4 made, their …Nxc3 to come.
+  const THEIRS = after(['e4', 'c6', 'Nc3', 'Nf6', 'e5', 'Nd5', 'd4']);
   it('their knight that just took a knight is not posed as loose', () => {
-    expect(chancesAt({ fen: NOW, prevFen: PREV, student: 'w', lines: null }, BEGINNER).map((c) => c.key)).not.toContain('take:c3');
+    expect(chancesAt({ fen: NOW, prevFen: PREV, beforeTheirMove: THEIRS, student: 'w', lines: null }, BEGINNER).map((c) => c.key)).not.toContain('take:c3');
+  });
+  it('…nor when it took back on the square where their first knight stood (Nxd5 Nxd5)', () => {
+    // Your previous turn: their knight on d5. You take it, their b6 knight
+    // takes back: a knight of theirs is on d5 again, and it just arrived. Read
+    // two moves back (the motif reader's board) it "never moved", and was posed
+    // as a free piece — the trade finishing, credited as a find.
+    const turn = '6k1/8/1n6/3n4/2P2N2/8/8/6K1 w - - 0 1';
+    const theirs = '6k1/8/1n6/3N4/2P5/8/8/6K1 b - - 0 1';
+    const now = '6k1/8/8/3n4/2P5/8/8/6K1 w - - 0 2';
+    expect(chancesAt({ fen: now, prevFen: turn, beforeTheirMove: theirs, student: 'w', lines: null }, BEGINNER).map((c) => c.key)).not.toContain('take:d5');
   });
   it('twin: a knight that took only a pawn and hangs is still free to take', () => {
     // …Nxe4?? into the d3 pawn: the knight took a pawn, d3 wins a knight for it.
     const prev = '4k3/8/5n2/8/4P3/3P4/8/4K3 w - - 0 1';
     const now = '4k3/8/8/8/4n3/3P4/8/3K4 w - - 0 2';
-    expect(chancesAt({ fen: now, prevFen: prev, student: 'w', lines: null }, BEGINNER).map((c) => c.key)).toContain('take:e4');
+    expect(chancesAt({ fen: now, prevFen: prev, beforeTheirMove: prev, student: 'w', lines: null }, BEGINNER).map((c) => c.key)).toContain('take:e4');
   });
 });
 
 describe('a piece to take must stay won down the engine\'s line (hand walk 2026-10-23, the plant)', () => {
   // 5…g5 left the f5 bishop to Nxf5 — but …Qa5+ forks the king and the knight.
   const FEN = after(['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4', 'Bf5', 'Ng3', 'g5']);
-  const takes = (lines: ReadLine[]): string[] => chancesAt({ fen: FEN, prevFen: null, student: 'w', lines }, BEGINNER).map((c) => c.key);
+  const takes = (lines: ReadLine[]): string[] => chancesAt({ fen: FEN, prevFen: null, beforeTheirMove: null, student: 'w', lines }, BEGINNER).map((c) => c.key);
   it('taken back by a fork: not posed', () => {
     expect(takes([
       { moves: ['c1g5', 'f5g6', 'g1f3'], evaluation: 242, mate: null },
@@ -94,7 +106,7 @@ describe('the shot clue is true of a quiet shot (hand walk 2026-10-23)', () => {
     { moves: ['d1f3', 'd7f6'], evaluation: 80, mate: null },
   ];
   it('every rotation of the clue names threats, never "a check or a capture" alone', () => {
-    const shot = chancesAt({ fen: FEN, prevFen: null, student: 'w', lines: LINES }, BEGINNER).find((c) => c.kind === 'shot');
+    const shot = chancesAt({ fen: FEN, prevFen: null, beforeTheirMove: null, student: 'w', lines: LINES }, BEGINNER).find((c) => c.kind === 'shot');
     expect(shot?.answerSan).toBe('Nd5');
     for (const ply of [24, 25]) {
       expect(clueLine(shot!, ply)).toContain('threats');
@@ -106,7 +118,7 @@ describe('the shot clue is true of a quiet shot (hand walk 2026-10-23)', () => {
 describe('a loose piece is counted by who can really take', () => {
   it('a defender pinned to the king is named, never counted', () => {
     expect(legalCounts(PINNED_DEFENDER, 'f4', 'w')).toEqual({ attackers: 2, defenders: 1, pinned: [{ type: 'b', square: 'e3' }] });
-    const ch = chancesAt({ fen: PINNED_DEFENDER, prevFen: null, student: 'w', lines: null }, BEGINNER).find((c) => c.key === 'save:f4');
+    const ch = chancesAt({ fen: PINNED_DEFENDER, prevFen: null, beforeTheirMove: null, student: 'w', lines: null }, BEGINNER).find((c) => c.key === 'save:f4');
     // The pinned defender is still not counted (it is loose); the clue says the habit.
     expect(ch && clueLine(ch, 52)).toBe(CLUE.save);
   });
@@ -114,7 +126,7 @@ describe('a loose piece is counted by who can really take', () => {
     expect(legalCounts(QUEEN_GUARDS, 'd4', 'w')).toEqual({ attackers: 1, defenders: 1, pinned: [] });
   });
   it('trading the attacker off is a save, said as a trade (Nf4xd5 …cxd5)', () => {
-    const ch = chancesAt({ fen: PINNED_DEFENDER, prevFen: null, student: 'w', lines: null }, BEGINNER).find((c) => c.key === 'save:f4');
+    const ch = chancesAt({ fen: PINNED_DEFENDER, prevFen: null, beforeTheirMove: null, student: 'w', lines: null }, BEGINNER).find((c) => c.key === 'save:f4');
     expect(ch).toBeDefined();
     if (!ch) return;
     const m = move(PINNED_DEFENDER, 'Nxd5');
@@ -122,16 +134,16 @@ describe('a loose piece is counted by who can really take', () => {
     expect(creditLine(ch, 0, m)).toBe('There it is — that trade keeps the material level.');
   });
   it('taking the attacker that hits a loose rook is a save (Rh1xh4 …Rxh4)', () => {
-    const ch = chancesAt({ fen: ROOK_TRADE, prevFen: null, student: 'w', lines: null }, BEGINNER).find((c) => c.key === 'save:h1');
+    const ch = chancesAt({ fen: ROOK_TRADE, prevFen: null, beforeTheirMove: null, student: 'w', lines: null }, BEGINNER).find((c) => c.key === 'save:h1');
     expect(ch).toBeDefined();
     if (ch) expect(judgeChance(ch, move(ROOK_TRADE, 'Rxh4'))).toBe('found');
   });
   it('twin: a move that leaves the rook where it hangs is still a miss', () => {
-    const ch = chancesAt({ fen: ROOK_TRADE, prevFen: null, student: 'w', lines: null }, BEGINNER).find((c) => c.key === 'save:h1');
+    const ch = chancesAt({ fen: ROOK_TRADE, prevFen: null, beforeTheirMove: null, student: 'w', lines: null }, BEGINNER).find((c) => c.key === 'save:h1');
     if (ch) expect(judgeChance(ch, move(ROOK_TRADE, 'a4'))).toBe('missed');
   });
   it('a piece that moves to safety is said where it stands now', () => {
-    const ch = chancesAt({ fen: KNIGHT_HIT, prevFen: null, student: 'w', lines: null }, BEGINNER).find((c) => c.key === 'save:e4');
+    const ch = chancesAt({ fen: KNIGHT_HIT, prevFen: null, beforeTheirMove: null, student: 'w', lines: null }, BEGINNER).find((c) => c.key === 'save:e4');
     expect(ch).toBeDefined();
     if (ch) expect(creditLine(ch, 1, move(KNIGHT_HIT, 'Nc3'))).toBe('Good — your knight is safe on c3 now.');
   });
@@ -142,7 +154,7 @@ const PAWN_HITS_KNIGHT = '7k/4p3/3N4/8/8/8/8/3QK3 w - - 0 1';
 
 describe('a cheaper attacker is said as one', () => {
   it('a defended piece hit by a pawn: the clue says a cheaper attacker, never the count or the square', () => {
-    const ch = chancesAt({ fen: PAWN_HITS_KNIGHT, prevFen: null, student: 'w', lines: [{ moves: ['d6e4'], evaluation: 0, mate: null }] }, BEGINNER).find((c) => c.key === 'save:d6');
+    const ch = chancesAt({ fen: PAWN_HITS_KNIGHT, prevFen: null, beforeTheirMove: null, student: 'w', lines: [{ moves: ['d6e4'], evaluation: 0, mate: null }] }, BEGINNER).find((c) => c.key === 'save:d6');
     expect(ch).toBeDefined();
     if (ch) expect(clueLine(ch, 0)).toBe(CLUE.saveCheaper);
   });
@@ -151,7 +163,7 @@ describe('a cheaper attacker is said as one', () => {
 describe('loose pieces', () => {
   it('TAKE: a piece of theirs that can be won is posed; the capture finds it', () => {
     expect(keys(LOOSE_KNIGHT)).toEqual(['take:e5']);
-    const [ch] = chancesAt({ fen: LOOSE_KNIGHT, prevFen: null, student: 'w', lines: null }, BEGINNER);
+    const [ch] = chancesAt({ fen: LOOSE_KNIGHT, prevFen: null, beforeTheirMove: null, student: 'w', lines: null }, BEGINNER);
     expect(judgeChance(ch, move(LOOSE_KNIGHT, 'dxe5'))).toBe('found');
     expect(judgeChance(ch, move(LOOSE_KNIGHT, 'Kf2'))).toBe('missed');
   });
@@ -163,7 +175,7 @@ describe('loose pieces', () => {
     expect(keys(LOOSE_KNIGHT, bait)).toEqual([]);
   });
   it('SAVE: your attacked piece is posed; moving it to safety finds it, leaving it misses', () => {
-    const [ch] = chancesAt({ fen: KNIGHT_HIT, prevFen: null, student: 'w', lines: null }, BEGINNER);
+    const [ch] = chancesAt({ fen: KNIGHT_HIT, prevFen: null, beforeTheirMove: null, student: 'w', lines: null }, BEGINNER);
     expect(ch).toMatchObject({ kind: 'save', counts: { attackers: 1, defenders: 0 } });
     expect(judgeChance(ch, move(KNIGHT_HIT, 'Nc3'))).toBe('found');
     expect(judgeChance(ch, move(KNIGHT_HIT, 'Kd2'))).toBe('missed');
@@ -208,7 +220,7 @@ describe('loose pieces', () => {
 
 describe('tactics', () => {
   it('SHOT: a forcing line that wins and stands clear of the next move is posed; playing it finds it', () => {
-    const [ch] = chancesAt({ fen: FORK_SHOT, prevFen: null, student: 'w', lines: FORK_LINES }, BEGINNER);
+    const [ch] = chancesAt({ fen: FORK_SHOT, prevFen: null, beforeTheirMove: null, student: 'w', lines: FORK_LINES }, BEGINNER);
     expect(ch).toMatchObject({ kind: 'shot', answerSan: 'Nc7+', gain: 9 });
     expect(judgeChance(ch, move(FORK_SHOT, 'Nc7+', FORK_LINES))).toBe('found');
     expect(judgeChance(ch, move(FORK_SHOT, 'Kd2', FORK_LINES))).toBe('missed');
@@ -221,11 +233,11 @@ describe('tactics', () => {
       { moves: ['a1h1', 'h2h1', 'a2a1q', 'h1h2', 'a1d4'], evaluation: -900, mate: null },
       { moves: ['a1a8', 'd4a4'], evaluation: 0, mate: null },
     ];
-    const ch = chancesAt({ fen, prevFen: null, student: 'b', lines }, BEGINNER).find((c) => c.kind === 'shot');
+    const ch = chancesAt({ fen, prevFen: null, beforeTheirMove: null, student: 'b', lines }, BEGINNER).find((c) => c.kind === 'shot');
     expect(ch?.setupTag).toBe('missed-your-deflection');
     expect(ch?.tag).not.toBe('missed-your-deflection');
     // A shot with no set-up carries none.
-    const [plain] = chancesAt({ fen: FORK_SHOT, prevFen: null, student: 'w', lines: FORK_LINES }, BEGINNER);
+    const [plain] = chancesAt({ fen: FORK_SHOT, prevFen: null, beforeTheirMove: null, student: 'w', lines: FORK_LINES }, BEGINNER);
     expect(plain.setupTag).toBeUndefined();
   });
   it('SHOT twins: no read, or a second move nearly as good, poses no shot', () => {
@@ -237,7 +249,7 @@ describe('tactics', () => {
     expect(keys(FORK_SHOT, null)).toEqual(['save:d5']);
   });
   it('MOTIF: their standing fork is posed; taking the forker finds it, ignoring it misses', () => {
-    const all = chancesAt({ fen: FRIED, prevFen: null, student: 'b', lines: null }, BEGINNER);
+    const all = chancesAt({ fen: FRIED, prevFen: null, beforeTheirMove: null, student: 'b', lines: null }, BEGINNER);
     const ch = all.find((c) => c.kind === 'motif');
     expect(ch).toMatchObject({ kind: 'motif', tag: 'missed-their-fork' });
     if (!ch) return;
@@ -247,20 +259,20 @@ describe('tactics', () => {
     expect(all.map((c) => c.key)).toContain('take:f7');
   });
   it('MOTIF twin: a motif already standing last turn is not a new question', () => {
-    expect(chancesAt({ fen: FRIED, prevFen: FRIED, student: 'b', lines: null }, BEGINNER).filter((c) => c.kind === 'motif')).toEqual([]);
+    expect(chancesAt({ fen: FRIED, prevFen: FRIED, beforeTheirMove: null, student: 'b', lines: null }, BEGINNER).filter((c) => c.kind === 'motif')).toEqual([]);
   });
 });
 
 describe('mates', () => {
   it('MATE THREAT: their mate threat is posed; covering f7 finds it, a developing move misses', () => {
-    const ch = chancesAt({ fen: SCHOLAR, prevFen: null, student: 'b', lines: null }, BEGINNER).find((c) => c.kind === 'mate-threat');
+    const ch = chancesAt({ fen: SCHOLAR, prevFen: null, beforeTheirMove: null, student: 'b', lines: null }, BEGINNER).find((c) => c.kind === 'mate-threat');
     expect(ch?.tag).toBe('missed-their-mate');
     expect(judgeChance(ch!, move(SCHOLAR, 'g6'))).toBe('found');
     expect(judgeChance(ch!, move(SCHOLAR, 'Nf6'))).toBe('missed');
   });
   it('MATE FOR YOU: a short forced mate is posed; the mating move finds it', () => {
     const lines: ReadLine[] = [{ moves: ['h5f7'], evaluation: 0, mate: 1 }];
-    const [ch] = chancesAt({ fen: SCHOLAR_MATE, prevFen: null, student: 'w', lines }, BEGINNER);
+    const [ch] = chancesAt({ fen: SCHOLAR_MATE, prevFen: null, beforeTheirMove: null, student: 'w', lines }, BEGINNER);
     expect(ch).toMatchObject({ kind: 'mate-for-you', answerSan: 'Qxf7#', mateIn: 1 });
     expect(judgeChance(ch, move(SCHOLAR_MATE, 'Qxf7#', lines))).toBe('found');
     // The mating move IS mate (hand walk 2026-10-23: "queen to d7 starts mate in one").
@@ -269,7 +281,7 @@ describe('mates', () => {
   });
   it('twin: a longer mate is started, never "is" mate', () => {
     const lines: ReadLine[] = [{ moves: ['h5f7'], evaluation: 0, mate: 2 }];
-    const [ch] = chancesAt({ fen: SCHOLAR_MATE, prevFen: null, student: 'w', lines }, BEGINNER);
+    const [ch] = chancesAt({ fen: SCHOLAR_MATE, prevFen: null, beforeTheirMove: null, student: 'w', lines }, BEGINNER);
     expect(creditLine(ch, 0)).toBe('There it is — Qxf7# starts mate in two.');
   });
   it('MATE FOR YOU twin: a mate too long to ask about is not posed', () => {
@@ -281,12 +293,12 @@ describe('a motif is posed only when the record would score it', () => {
   it('their discovery that wins nothing is no question (prod tactics game 1, 19…Ke7)', () => {
     const fen = '1rbq3r/pp2k1p1/2n1p2p/8/3n4/P1N1Q3/1P3PPP/R2R2K1 w - - 2 20';
     const prev = '1rbq3r/pp4p1/2nkp2p/8/3n4/P1N1Q3/1P3PPP/R4RK1 w - - 0 19';
-    expect(chancesAt({ fen, prevFen: prev, student: 'w', lines: null }, BEGINNER).filter((c) => c.kind === 'motif')).toEqual([]);
+    expect(chancesAt({ fen, prevFen: prev, beforeTheirMove: null, student: 'w', lines: null }, BEGINNER).filter((c) => c.kind === 'motif')).toEqual([]);
   });
   it('a pin is said by its name, never its pieces (prod tactics game 3: queen c5, knight c3, rook c1)', () => {
     const fen = '2r1r1kb/p4p1p/5BpP/p1q5/3p4/2N3Q1/PP3PP1/2R2bK1 w - - 0 26';
     const prev = '2r1r1kb/p4p1p/b5pP/p1q3B1/3p4/2N3Q1/PP3PP1/2R2RK1 w - - 0 25';
-    const pin = chancesAt({ fen, prevFen: prev, student: 'w', lines: null }, BEGINNER).find((c) => c.pattern === 'pin');
+    const pin = chancesAt({ fen, prevFen: prev, beforeTheirMove: null, student: 'w', lines: null }, BEGINNER).find((c) => c.pattern === 'pin');
     expect(pin).toBeDefined();
     if (pin) expect(clueLine(pin, 0)).toBe('Hold on — that move lets them pin a piece of yours. Before every move, ask what their checks, captures and threats would be.');
   });
@@ -303,7 +315,7 @@ describe('a loose piece is one decision until a move answers it', () => {
   const RECAPTURE = '1r2q1k1/5pp1/r3pnn1/p2pP1P1/2pP4/b1P3Q1/P1BB3P/2R1KR2 w - - 0 29';
   // The game had an engine read (a rook for a bishop is posed only with one).
   const READ: ReadLine[] = [{ moves: ['h5f6'], evaluation: 100, mate: null }];
-  const rookOn = (fen: string) => chancesAt({ fen, prevFen: null, student: 'w', lines: READ }, BEGINNER).find((c) => c.kind === 'save' && c.piece?.square === 'c1');
+  const rookOn = (fen: string) => chancesAt({ fen, prevFen: null, beforeTheirMove: null, student: 'w', lines: READ }, BEGINNER).find((c) => c.kind === 'save' && c.piece?.square === 'c1');
   it('a check elsewhere leaves the question open (the opponent cannot take while in check)', () => {
     const ch = rookOn(CHECK);
     expect(ch).toBeDefined();
@@ -315,7 +327,7 @@ describe('a loose piece is one decision until a move answers it', () => {
     if (ch) expect(judgeChance(ch, move(RECAPTURE, 'gxf6'))).toBe('exempt');
   });
   const KNIGHT_PAWN = '4k3/8/4p3/3N4/8/8/8/R3K3 w - - 0 1';
-  const knight = () => chancesAt({ fen: KNIGHT_PAWN, prevFen: null, student: 'w', lines: null }, BEGINNER).find((c) => c.kind === 'save' && c.piece?.square === 'd5');
+  const knight = () => chancesAt({ fen: KNIGHT_PAWN, prevFen: null, beforeTheirMove: null, student: 'w', lines: null }, BEGINNER).find((c) => c.kind === 'save' && c.piece?.square === 'd5');
   it('the loose piece giving check from a square nothing attacks is a save', () => {
     const ch = knight();
     expect(ch).toBeDefined();
@@ -325,7 +337,7 @@ describe('a loose piece is one decision until a move answers it', () => {
   // queen on g4 and their queen on e5 hangs to your pawn.
   const QUEEN_FOR_QUEEN = 'r6k/p3n2r/2p1Pn2/1p1pq3/3P2Q1/7p/PPP2P1P/4R1RK w - - 0 35';
   it('taking more than the loose piece is worth, elsewhere, is an answer (dxe5 won a queen)', () => {
-    const ch = chancesAt({ fen: QUEEN_FOR_QUEEN, prevFen: null, student: 'w', lines: null }, BEGINNER).find((c) => c.kind === 'save' && c.piece?.square === 'g4');
+    const ch = chancesAt({ fen: QUEEN_FOR_QUEEN, prevFen: null, beforeTheirMove: null, student: 'w', lines: null }, BEGINNER).find((c) => c.kind === 'save' && c.piece?.square === 'g4');
     expect(ch).toBeDefined();
     if (ch) expect(judgeChance(ch, move(QUEEN_FOR_QUEEN, 'dxe5'))).toBe('found');
   });
@@ -371,8 +383,8 @@ describe('only the open motif levels are asked (WO-MOTIFS-01)', () => {
   const INTERMEDIATE: ReadonlySet<MotifLevel> = new Set<MotifLevel>(['beginner', 'intermediate']);
   it('a locked motif is not asked; once its level is open it is, named in its own words', () => {
     const fen = after();
-    expect(chancesAt({ fen, prevFen: null, student: 'w', lines: null }, BEGINNER).filter((c) => c.kind === 'motif')).toEqual([]);
-    const ch = chancesAt({ fen, prevFen: null, student: 'w', lines: null }, INTERMEDIATE).find((c) => c.kind === 'motif');
+    expect(chancesAt({ fen, prevFen: null, beforeTheirMove: null, student: 'w', lines: null }, BEGINNER).filter((c) => c.kind === 'motif')).toEqual([]);
+    const ch = chancesAt({ fen, prevFen: null, beforeTheirMove: null, student: 'w', lines: null }, INTERMEDIATE).find((c) => c.kind === 'motif');
     expect(ch?.tag).toBe('missed-their-guard-removal');
     expect(ch?.attacker).toEqual({ type: 'n', square: 'c6' });
     if (ch) {
@@ -386,8 +398,9 @@ describe('only the open motif levels are asked (WO-MOTIFS-01)', () => {
 // hard it is to find; the coach's plant and the student's rung read it.
 describe('every chance carries how hard it is to find, on the rung scale', () => {
   const ALL: ReadonlySet<MotifLevel> = new Set<MotifLevel>(['beginner', 'intermediate', 'advanced']);
-  const at = (fen: string, prevFen: string | null, lines: ReadLine[] | null = null, open: ReadonlySet<MotifLevel> = BEGINNER): ReturnType<typeof chancesAt> =>
-    chancesAt({ fen, prevFen, student: fen.split(' ')[1] === 'w' ? 'w' : 'b', lines }, open);
+  // The second board is the one before THEIR last move: what "just moved" reads.
+  const at = (fen: string, beforeTheirMove: string | null, lines: ReadLine[] | null = null, open: ReadonlySet<MotifLevel> = BEGINNER): ReturnType<typeof chancesAt> =>
+    chancesAt({ fen, prevFen: null, beforeTheirMove, student: fen.split(' ')[1] === 'w' ? 'w' : 'b', lines }, open);
 
   it('a piece to take: the one that just moved (0) · one a guard left (1) · one that looks guarded (2)', () => {
     const FEN = '4k3/8/8/4n3/3P4/8/8/3QK3 w - - 0 1';
@@ -452,15 +465,15 @@ describe('every chance carries how hard it is to find, on the rung scale', () =>
 // from the board before the chance, to the move its point lands on.
 describe('play it out walks the chance to where it lands', () => {
   it('a fork plays to the capture (your two moves, their one between)', () => {
-    const [ch] = chancesAt({ fen: FORK_SHOT, prevFen: null, student: 'w', lines: FORK_LINES }, BEGINNER).filter((c) => c.kind === 'shot');
+    const [ch] = chancesAt({ fen: FORK_SHOT, prevFen: null, beforeTheirMove: null, student: 'w', lines: FORK_LINES }, BEGINNER).filter((c) => c.kind === 'shot');
     expect(solvePlies(ch, FORK_SHOT)).toBe(3);
     expect(lineSans(FORK_SHOT, ch.line ?? [], 3)).toEqual(['Nc7+', 'Kd7', 'Nxa8']);
   });
   it('a mate in two plays three plies; a loose piece one', () => {
     const FEN = '6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1';
-    const [mate] = chancesAt({ fen: FEN, prevFen: null, student: 'w', lines: [{ moves: ['a1a8'], evaluation: 0, mate: 2 }, { moves: ['g1f1'], evaluation: 0, mate: null }] }, BEGINNER);
+    const [mate] = chancesAt({ fen: FEN, prevFen: null, beforeTheirMove: null, student: 'w', lines: [{ moves: ['a1a8'], evaluation: 0, mate: 2 }, { moves: ['g1f1'], evaluation: 0, mate: null }] }, BEGINNER);
     expect(solvePlies(mate, FEN)).toBe(3);
-    const [take] = chancesAt({ fen: LOOSE_KNIGHT, prevFen: null, student: 'w', lines: null }, BEGINNER);
+    const [take] = chancesAt({ fen: LOOSE_KNIGHT, prevFen: null, beforeTheirMove: null, student: 'w', lines: null }, BEGINNER);
     expect(solvePlies(take, LOOSE_KNIGHT)).toBe(1);
   });
   it('a line is cut to end on the student\'s move, and stops where it stops being legal', () => {
@@ -476,7 +489,7 @@ describe('a clue never names the piece or its square (David 2026-10-23: "Just sa
       '2r1r1kb/p4p1p/5BpP/p1q5/3p4/2N3Q1/PP3PP1/2R2bK1 w - - 0 26'];
     let said = 0;
     for (const fen of boards) {
-      for (const ch of chancesAt({ fen, prevFen: null, student: fen.split(' ')[1] === 'b' ? 'b' : 'w', lines: null }, ALL_LEVELS)) {
+      for (const ch of chancesAt({ fen, prevFen: null, beforeTheirMove: null, student: fen.split(' ')[1] === 'b' ? 'b' : 'w', lines: null }, ALL_LEVELS)) {
         const line = clueLine(ch, 0);
         said += 1;
         expect(line, `${ch.key} on ${fen}`).not.toMatch(/\b[a-h][1-8]\b/);
@@ -489,7 +502,7 @@ describe('a clue never names the piece or its square (David 2026-10-23: "Just sa
 
 describe('chanceHoldOf — what the Learn door holds until the student has moved (EXPLAIN AT THE MISS, WO-LEARN-SWING-01 P1)', () => {
   it('their fork stands: the door holds its squares — the forker and what it hits', () => {
-    const all = chancesAt({ fen: FRIED, prevFen: null, student: 'b', lines: null }, BEGINNER);
+    const all = chancesAt({ fen: FRIED, prevFen: null, beforeTheirMove: null, student: 'b', lines: null }, BEGINNER);
     const fork = all.find((c) => c.kind === 'motif')!;
     const hold = chanceHoldOf(all)!;
     for (const q of [...(fork.targets ?? []), ...(fork.attacker ? [fork.attacker.square] : [])]) expect(hold.squares).toContain(q);
@@ -499,7 +512,7 @@ describe('chanceHoldOf — what the Learn door holds until the student has moved
     expect(chanceHoldOf(defendOnly)?.squares.length).toBeGreaterThan(0);
   });
   it('their mate threat: the door holds their mate', () => {
-    const all = chancesAt({ fen: SCHOLAR, prevFen: null, student: 'b', lines: null }, BEGINNER);
+    const all = chancesAt({ fen: SCHOLAR, prevFen: null, beforeTheirMove: null, student: 'b', lines: null }, BEGINNER);
     expect(chanceHoldOf(all)).toMatchObject({ theirMate: true, mate: false });
   });
   it('NEGATIVE CONTROL: no chance on the board, nothing held', () => {
@@ -514,7 +527,7 @@ describe("yourChancesAt — your side alone, exactly chancesAt's exploit seat (t
     ['your fork shot beside a piece to save', FORK_SHOT, 'w' as const, FORK_LINES],
     ['their fork and the forker to take', FRIED, 'b' as const, null],
   ])('%s', (_, fen, student, lines) => {
-    const board = { fen, prevFen: null, student, lines };
+    const board = { fen, prevFen: null, beforeTheirMove: null, student, lines };
     const exploit = chancesAt(board, BEGINNER).filter((c) => c.seat === 'exploit');
     expect(yourChancesAt(board, BEGINNER)).toEqual(exploit);
   });

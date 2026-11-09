@@ -44,6 +44,12 @@ export interface FocusBoard {
   fen: string;
   /** The user's previous turn, so a motif already standing then is not posed again. */
   prevFen: string | null;
+  /** The board before THEIR last move (the user's move made, theirs to come):
+   *  what their piece that just moved was, and what it took on arrival. Not
+   *  `prevFen` — that is two moves back, where a recapture by the same kind of
+   *  piece on the same square reads as never having moved (1.Nxd5 Nxd5: their
+   *  knight "stood" on d5 and was posed as a free piece). */
+  beforeTheirMove: string | null;
   student: Color;
   /** The engine's lines at `fen`, or null when no read has landed. */
   lines: readonly ReadLine[] | null;
@@ -324,11 +330,11 @@ function bestLine(lines: readonly ReadLine[] | null, side: Color): { line: ReadL
   return { line: sorted[0], value: pov(sorted[0], side), second: sorted.length > 1 ? pov(sorted[1], side) : null };
 }
 
-/** Was this piece standing on its square on the board before the last move
- *  (`prevFen`, the other side to move)? A piece that just arrived is the
- *  plainest question — it is where the eye already is. */
-function justArrived(prevFen: string | null, p: { type: PieceSymbol; square: string }, owner: Color): boolean | null {
-  const before = prevFen ? board(prevFen) : null;
+/** Was this piece standing on its square on the board before their last move
+ *  (`beforeTheirMove`)? A piece that just arrived is the plainest question —
+ *  it is where the eye already is. */
+function justArrived(beforeTheirMove: string | null, p: { type: PieceSymbol; square: string }, owner: Color): boolean | null {
+  const before = beforeTheirMove ? board(beforeTheirMove) : null;
   if (!before) return null;
   const was = before.get(p.square as Square);
   return !was || was.type !== p.type || was.color !== owner;
@@ -338,14 +344,14 @@ const materialOf = (c: Chess, side: Color): number =>
   piecesOf(c, side).reduce((sum, x) => sum + MATERIAL_VALUE[x.type], 0);
 
 /** What a piece of theirs that just ARRIVED took on its way in (pawn units),
- *  or 0: the material the student lost since `prevFen`, when `p` was not on
+ *  or 0: the material the student lost since `beforeTheirMove`, when `p` was not on
  *  its square then. Their one move in between is the only one that could take,
  *  so a drop belongs to the piece that moved. Hand walk 2026-10-23: 4…Nxc3,
  *  5.bxc3 was credited "their knight on c3 had no defender" — the trade
  *  finishing, not a free piece. */
-function tookOnArrival(prevFen: string | null, fen: string, p: { type: PieceSymbol; square: string }, owner: Color): number {
-  if (justArrived(prevFen, p, owner) !== true) return 0;
-  const before = prevFen ? board(prevFen) : null;
+function tookOnArrival(beforeTheirMove: string | null, fen: string, p: { type: PieceSymbol; square: string }, owner: Color): number {
+  if (justArrived(beforeTheirMove, p, owner) !== true) return 0;
+  const before = beforeTheirMove ? board(beforeTheirMove) : null;
   const now = board(fen);
   if (!before || !now) return 0;
   return Math.max(0, materialOf(before, other(owner)) - materialOf(now, other(owner)));
@@ -373,7 +379,7 @@ function saveChances(b: FocusBoard, c: Chess, open: ReadonlySet<MotifLevel>): Fo
       answerUci: best?.line.moves[0] ?? safeMoveFor(b.fen, p.square, b.student),
       ...(best ? { line: best.line.moves } : {}),
       gain,
-      difficulty: saveDifficulty(b.prevFen, attacker, foe, counts),
+      difficulty: saveDifficulty(b.beforeTheirMove, attacker, foe, counts),
     });
   }
   return out;
@@ -382,9 +388,9 @@ function saveChances(b: FocusBoard, c: Chess, open: ReadonlySet<MotifLevel>): Fo
 /** Your piece to save: attacked by the piece that just moved (0) · by one
  *  already standing, or uncovered (1) · a piece that looks guarded and loses
  *  on the count, or whose guard is pinned (2). */
-function saveDifficulty(prevFen: string | null, attacker: { type: PieceSymbol; square: string }, foe: Color, counts: { defenders: number; pinned: ReadonlyArray<unknown> }): ChanceDifficulty {
+function saveDifficulty(beforeTheirMove: string | null, attacker: { type: PieceSymbol; square: string }, foe: Color, counts: { defenders: number; pinned: ReadonlyArray<unknown> }): ChanceDifficulty {
   if (counts.defenders > 0 || counts.pinned.length > 0) return 2;
-  return justArrived(prevFen, attacker, foe) === true ? 0 : 1;
+  return justArrived(beforeTheirMove, attacker, foe) === true ? 0 : 1;
 }
 
 /**
@@ -468,7 +474,7 @@ function takeChances(b: FocusBoard, c: Chess): FocusChance[] {
     // A piece that just took one worth as much is taken back, not won: the
     // gain over the board before their capture is what is free (as Learn's
     // rewards hold: "taking back what they just took is routine, never a find").
-    if (gain - tookOnArrival(b.prevFen, b.fen, p, foe) < LOOSE_GAIN) continue;
+    if (gain - tookOnArrival(b.beforeTheirMove, b.fen, p, foe) < LOOSE_GAIN) continue;
     // With a read, the engine must agree the capture is (nearly) best: a
     // capture that walks into something worse is bait, not a loose piece.
     let answerUci: string | null = null;
@@ -497,7 +503,7 @@ function takeChances(b: FocusBoard, c: Chess): FocusChance[] {
       counts,
       answerUci, ...(line ? { line } : {}), gain,
       ...(answerUci ? { answerSan: sanOfUci(b.fen, answerUci) ?? undefined } : {}),
-      difficulty: takeDifficulty(b.prevFen, p, foe, counts),
+      difficulty: takeDifficulty(b.beforeTheirMove, p, foe, counts),
     });
   }
   return out;
@@ -506,9 +512,9 @@ function takeChances(b: FocusBoard, c: Chess): FocusChance[] {
 /** A piece to take: the one that just moved there is the plainest (0); a
  *  piece a guard walked away from is subtler (1); one that looks guarded and
  *  loses on the count, or whose guard is pinned, is subtler still (2). */
-function takeDifficulty(prevFen: string | null, p: { type: PieceSymbol; square: string }, owner: Color, counts: { defenders: number; pinned: ReadonlyArray<unknown> }): ChanceDifficulty {
+function takeDifficulty(beforeTheirMove: string | null, p: { type: PieceSymbol; square: string }, owner: Color, counts: { defenders: number; pinned: ReadonlyArray<unknown> }): ChanceDifficulty {
   if (counts.defenders > 0 || counts.pinned.length > 0) return 2;
-  const arrived = justArrived(prevFen, p, owner);
+  const arrived = justArrived(beforeTheirMove, p, owner);
   return arrived === false ? 1 : arrived === true ? 0 : 1;
 }
 

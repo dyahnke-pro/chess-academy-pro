@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**907 lines · 18 exports · 5 importers · 3 tests · 1 audits**
+**909 lines · 18 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -70,15 +70,15 @@
 - `src/coach/focus/useFocusRunner.ts:129`
 
 ### `focusPlantAsk` (function) — 10 call sites
-- `src/coach/focus/focusRunner.test.ts:520`
-- `src/coach/focus/focusRunner.test.ts:521`
-- `src/coach/focus/focusRunner.test.ts:563`
-- `src/coach/focus/focusRunner.test.ts:564`
-- `src/coach/focus/focusRunner.test.ts:570`
-- `src/coach/focus/focusRunner.test.ts:578`
-- `src/coach/focus/focusRunner.test.ts:579`
-- `src/coach/focus/focusRunner.test.ts:592`
-- `src/coach/focus/focusRunner.test.ts:614`
+- `src/coach/focus/focusRunner.test.ts:530`
+- `src/coach/focus/focusRunner.test.ts:531`
+- `src/coach/focus/focusRunner.test.ts:573`
+- `src/coach/focus/focusRunner.test.ts:574`
+- `src/coach/focus/focusRunner.test.ts:580`
+- `src/coach/focus/focusRunner.test.ts:588`
+- `src/coach/focus/focusRunner.test.ts:589`
+- `src/coach/focus/focusRunner.test.ts:602`
+- `src/coach/focus/focusRunner.test.ts:624`
 - `src/coach/focus/useFocusRunner.ts:231`
 
 ### `focusOwnsGame` (function) — 1 call site

@@ -58,6 +58,8 @@ export type PlantedSeat = FocusSeat | null;
 interface BoardState {
   fen: string;
   prevFen: string | null;
+  /** The board before their last move (`FocusBoard.beforeTheirMove`). */
+  beforeTheirMove: string | null;
   /** The ply the user's next move will be (1-based, `GameRecord.promptedPlies`). */
   ply: number;
   student: Color;
@@ -241,7 +243,7 @@ export type FocusEvent =
   | { kind: 'start'; setup: FocusSetup }
   | { kind: 'stop' }
   /** The user is to move on this board. */
-  | { kind: 'board'; fen: string; prevFen: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean; planted: PlantedSeat }
+  | { kind: 'board'; fen: string; prevFen: string | null; beforeTheirMove: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean; planted: PlantedSeat }
   /** An engine read landed for the board the user is on. */
   | { kind: 'read'; fen: string; lines: readonly ReadLine[] }
   /** The user moved (before the coach replies). */
@@ -410,7 +412,7 @@ function owedAfterMiss(owed: readonly MisconceptionTagId[], tag: MisconceptionTa
 function onBoard(s: FocusRunState, b: BoardState): FocusStep {
   const setup = s.setup;
   if (!setup) return { state: s, effects: [] };
-  const chances = chancesAt({ fen: b.fen, prevFen: b.prevFen, student: b.student, lines: b.lines }, new Set(setup.levels));
+  const chances = chancesAt({ fen: b.fen, prevFen: b.prevFen, beforeTheirMove: b.beforeTheirMove, student: b.student, lines: b.lines }, new Set(setup.levels));
   // THE GUARANTEE (focusPlant): the first chance on your side at your rung —
   // the board's own or the coach's plant — presents the focus this game.
   const shown = s.plant.presented ? null : chances.find((c) => presents(c, setup.rung, b.ply, setup.targetPly)) ?? null;
@@ -457,8 +459,8 @@ function onBoard(s: FocusRunState, b: BoardState): FocusStep {
 /** How to spot the chance next time, read off the board it stood on (the
  *  board's own last move is the trigger) and the move that missed it. */
 function spotOf(s: FocusRunState, chance: FocusChance, fenBefore: string, missSan: string): string | null {
-  const prevFen = s.board && sameBoard(s.board.fen, fenBefore) ? s.board.prevFen : null;
-  return spotLine(chance, { prevFen, fen: fenBefore, move: { fenBefore, san: missSan } });
+  const beforeTheirMove = s.board && sameBoard(s.board.fen, fenBefore) ? s.board.beforeTheirMove : null;
+  return spotLine(chance, { beforeTheirMove, fen: fenBefore, move: { fenBefore, san: missSan } });
 }
 
 /** A decision still open when the game ended STOOD: it is filed as Play on
@@ -560,9 +562,9 @@ function stepInner(s: FocusRunState, e: FocusEvent): FocusStep {
       const plant = e.planted ? { ...s.plant, count: s.plant.count + 1, flips: s.plant.flips + (e.planted === 'defend' ? 1 : 0), lastPly: e.ply } : s.plant;
       // A board with castling ready is where "Go back and castle" can return to.
       const castle = castleReady(e.fen, e.student)
-        ? { ...s.castle, boards: [...s.castle.boards.filter((x) => x.ply < e.ply), { ply: e.ply, fen: e.fen, prevFen: e.prevFen, lines: e.lines }] }
+        ? { ...s.castle, boards: [...s.castle.boards.filter((x) => x.ply < e.ply), { ply: e.ply, fen: e.fen, prevFen: e.prevFen, beforeTheirMove: e.beforeTheirMove, lines: e.lines }] }
         : s.castle;
-      const next = onBoard({ ...s, plant, castle, tempo: run.tempo, stood: run.stood, lastMove: null, spoke: false }, { fen: e.fen, prevFen: e.prevFen, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, planted: e.planted, prompted: false, askedChance: null, questioned: null });
+      const next = onBoard({ ...s, plant, castle, tempo: run.tempo, stood: run.stood, lastMove: null, spoke: false }, { fen: e.fen, prevFen: e.prevFen, beforeTheirMove: e.beforeTheirMove, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, planted: e.planted, prompted: false, askedChance: null, questioned: null });
       return { state: next.state, effects: [...run.effects, ...next.effects] };
     }
     case 'read': {
@@ -683,7 +685,7 @@ function goBackAndCastle(s: FocusRunState, target: CastleBoard): FocusStep {
   const flagged: FocusEffect[] = s.pause ? [{ kind: 'taken-back', fen: s.pause.fenBefore, san: s.pause.san, spot: s.pause.chance ? spotOf(s, s.pause.chance, s.pause.fenBefore, s.pause.san) : null }] : [];
   // The moves taken back leave the run too.
   const rewound: FocusRunState = { ...s, pause: null, carried: [], tempo: { ...s.tempo, length: 0 }, stood: s.stood.filter((x) => x.ply < target.ply), lastMove: null, castle: { ...s.castle, boards: s.castle.boards.filter((b) => b.ply <= target.ply) } };
-  const step = onBoard(rewound, { fen: target.fen, prevFen: target.prevFen, ply: target.ply, student: target.fen.split(' ')[1] === 'b' ? 'b' : 'w', lines: target.lines, chances: [], steered: false, planted: null, prompted: true, askedChance: null, questioned: null });
+  const step = onBoard(rewound, { fen: target.fen, prevFen: target.prevFen, beforeTheirMove: target.beforeTheirMove, ply: target.ply, student: target.fen.split(' ')[1] === 'b' ? 'b' : 'w', lines: target.lines, chances: [], steered: false, planted: null, prompted: true, askedChance: null, questioned: null });
   return { state: step.state, effects: [{ kind: 'rewind', ply: target.ply }, ...flagged, { kind: 'prompt', ply: target.ply }, ...step.effects] };
 }
 
@@ -871,7 +873,7 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
   if (b && ahead?.verdict === 'urgent') {
     // The rewind is this one move, by the one rewind rule: never to a board
     // where castling is itself lost (prod 2026-10-23: castling −508, Kd1 −694).
-    const here = rewindTarget([{ ply, fen: b.fen, prevFen: b.prevFen, lines: m.lines ?? b.lines }], m.student);
+    const here = rewindTarget([{ ply, fen: b.fen, prevFen: b.prevFen, beforeTheirMove: b.beforeTheirMove, lines: m.lines ?? b.lines }], m.student);
     const drop = Math.max(0, ahead.castleCp - ahead.realCp);
     return castleStop(state, { fenBefore: m.fenBefore, san: m.san, ply, realCp: ahead.realCp },
       { ply, verdict: 'stop', side: side(), bestCp: ahead.castleCp, realCp: ahead.realCp, whatIfCp: null, drop, gain: null, losing: false, attack: false, rewindPly: null, rewindMoves: null, why: 'urgent' }, here);

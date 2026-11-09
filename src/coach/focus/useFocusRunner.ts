@@ -73,7 +73,7 @@ export interface FocusRunner {
   setUp: () => Promise<FocusSetup>;
   start: (setup: FocusSetup) => void;
   stop: () => void;
-  board: (b: { fen: string; prevFen: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean; planted: PlantedSeat }) => void;
+  board: (b: { fen: string; prevFen: string | null; beforeTheirMove: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean; planted: PlantedSeat }) => void;
   read: (fen: string, lines: readonly ReadLine[]) => void;
   /** A user move, before the coach replies: 'hold' — the miss is being taught
    *  and the coach waits; 'reply' — go on (`punish`: a focus miss stands);
@@ -204,7 +204,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
     dispatch({ kind: 'start', setup }, { replyIsInline: true });
   }, [dispatch]);
   const stop = useCallback(() => { dispatch({ kind: 'stop' }, { replyIsInline: true }); }, [dispatch]);
-  const board = useCallback((b: { fen: string; prevFen: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean; planted: PlantedSeat }) => {
+  const board = useCallback((b: { fen: string; prevFen: string | null; beforeTheirMove: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean; planted: PlantedSeat }) => {
     dispatch({ kind: 'board', ...b }, { replyIsInline: true });
   }, [dispatch]);
   const read = useCallback((fen: string, lines: readonly ReadLine[]) => { dispatch({ kind: 'read', fen, lines }, { replyIsInline: true }); }, [dispatch]);

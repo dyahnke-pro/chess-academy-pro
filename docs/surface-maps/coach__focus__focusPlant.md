@@ -54,8 +54,8 @@
 - `src/coach/focus/focusPlant.test.ts:93`
 - `src/coach/focus/focusPlant.test.ts:94`
 - `src/coach/focus/focusPlant.test.ts:95`
-- `src/coach/focus/focusRunner.ts:416`
-- `src/coach/focus/focusRunner.ts:421`
+- `src/coach/focus/focusRunner.ts:418`
+- `src/coach/focus/focusRunner.ts:423`
 
 ### `FocusPlantAsk` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -100,7 +100,7 @@
 - `src/coach/focus/focusPlant.test.ts:84`
 - `src/coach/focus/focusPlant.test.ts:85`
 - `src/coach/focus/focusPlant.test.ts:88`
-- `src/coach/focus/focusRunner.ts:900`
+- `src/coach/focus/focusRunner.ts:902`
 - `src/components/Coach/CoachTeachPage.tsx:8594`
 
 ### `FocusPlantReject` (type) — 0 call sites

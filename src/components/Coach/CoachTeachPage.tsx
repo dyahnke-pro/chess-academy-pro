@@ -11833,7 +11833,7 @@ export function CoachTeachPage({ mode }: {
               // off the user's move (history after it, the reply, then theirs):
               // `gameRef` updates on render, so right after the reply it still
               // holds the board BEFORE it and filed every ply one short.
-              focusRef.current.board({ fen: boardFen, prevFen: fenBefore || null, ply: move.history.length + 2, student: playerColor === 'white' ? 'w' : 'b', lines: read?.topLines ?? null, steered, planted });
+              focusRef.current.board({ fen: boardFen, prevFen: fenBefore || null, beforeTheirMove: move.fen, ply: move.history.length + 2, student: playerColor === 'white' ? 'w' : 'b', lines: read?.topLines ?? null, steered, planted });
             }
           }
           // THE TURN'S QUESTION is asked AFTER the turn's instant decision

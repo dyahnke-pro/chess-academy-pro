@@ -348,6 +348,8 @@ export interface CastleBoard {
   ply: number;
   fen: string;
   prevFen: string | null;
+  /** The board before their last move (`FocusBoard.beforeTheirMove`). */
+  beforeTheirMove: string | null;
   lines: readonly ReadLine[] | null;
 }
 

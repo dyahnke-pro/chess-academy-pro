@@ -215,11 +215,11 @@ const NEW_REACH: Record<PieceSymbol, string> = {
   k: 'after every king move of theirs, look at the squares it now touches',
 };
 
-/** The move that turned `prevFen` into `fen`, or null. */
-function moveBetween(prevFen: string, fen: string): { type: PieceSymbol; from: string; to: string } | null {
+/** The move that turned `before` into `fen`, or null. */
+function moveBetween(before: string, fen: string): { type: PieceSymbol; from: string; to: string } | null {
   const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
   try {
-    const c = new Chess(prevFen);
+    const c = new Chess(before);
     for (const m of c.moves({ verbose: true })) {
       c.move(m);
       const hit = key(c.fen()) === key(fen);
@@ -253,9 +253,11 @@ function chanceBoard(ch: FocusChance, fen: string): SpotBoard | null {
  *  trigger — the move that made the chance, the piece it hit, the guard that
  *  left — and the habit for that piece. A tactic's chance says its motif's
  *  shape (`spotCue`, every way the sources teach, picked by the board). Null when nothing specific can be said: empty
- *  beats generic. `prevFen` is the board before their last move. */
-export function spotLine(ch: FocusChance, ctx: { prevFen: string | null; fen: string; move?: { fenBefore: string; san: string } }): string | null {
-  const last = ctx.prevFen ? moveBetween(ctx.prevFen, ctx.fen) : null;
+ *  beats generic. `beforeTheirMove` is the board before their last move (never
+ *  the user's previous turn: no one move joins that to `fen`, and every board
+ *  trigger went silent). */
+export function spotLine(ch: FocusChance, ctx: { beforeTheirMove: string | null; fen: string; move?: { fenBefore: string; san: string } }): string | null {
+  const last = ctx.beforeTheirMove ? moveBetween(ctx.beforeTheirMove, ctx.fen) : null;
   switch (ch.kind) {
     case 'save': {
       const a = ch.attacker;
@@ -265,7 +267,7 @@ export function spotLine(ch: FocusChance, ctx: { prevFen: string | null; fen: st
       // Their attacker moved in: its new reach is the habit.
       if (last && last.to === a.square) return `Their ${piece(a.type)} came to ${a.square} and hit your ${piece(p.type)} on ${p.square}${cheap}. Next time, ${NEW_REACH[a.type]}.`;
       // Another piece of theirs moved out of the line: a discovered attack.
-      if (last && ctx.prevFen && !reached(ctx.prevFen, a.square, p.square)) {
+      if (last && ctx.beforeTheirMove && !reached(ctx.beforeTheirMove, a.square, p.square)) {
         return `Their ${piece(last.type)} moved off the line and opened their ${piece(a.type)} on ${a.square} onto your ${piece(p.type)} on ${p.square}${cheap}. Next time, when a piece of theirs moves, look down the line it opens behind it.`;
       }
       return `Their ${piece(a.type)} on ${a.square} was hitting your ${piece(p.type)} on ${p.square}${cheap}. Next time, before every move, check what each of their pieces is hitting.`;
@@ -288,7 +290,7 @@ export function spotLine(ch: FocusChance, ctx: { prevFen: string | null; fen: st
       const p = ch.piece;
       if (!p) return null;
       if (last && last.to === p.square) return `Their ${piece(p.type)} came to ${p.square} with nothing guarding it. Next time, when a piece of theirs lands, ask what guards it.`;
-      if (last && ctx.prevFen && reached(ctx.prevFen, last.from, p.square)) {
+      if (last && ctx.beforeTheirMove && reached(ctx.beforeTheirMove, last.from, p.square)) {
         return `Their ${piece(last.type)} left ${last.from}, and their ${piece(p.type)} on ${p.square} lost its guard. Next time, after every move of theirs, ask what the piece that moved stopped guarding.`;
       }
       return spotCueLine('free-piece', 'yours', chanceBoard(ch, ctx.fen));
