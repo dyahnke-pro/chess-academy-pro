@@ -383,7 +383,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       if (forked.length >= 2) {
         return { fact: `They want ${intent.san}, forking ${andList(forked)} — take the square away from them.`, squares: [intent.target], keys: [forkThreatKey(intent.target, forkedSquares)] };
       }
-      return { fact: `They want ${intent.san} — a fork on ${intent.target}; take the square away from them.`, squares: [intent.target] };
+      return { fact: `They want ${intent.san} — a fork on ${intent.target}. Take the square away from them.`, squares: [intent.target] };
     },
   },
   {
@@ -623,7 +623,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       if (/[qQ]/.test(fen.split(' ')[0] ?? '')) return null;
       const ka = kingActivation(fen, student);
       if (!ka) return null;
-      return { fact: `Your king is a fighting piece now — walk it up toward the centre, starting with ${ka.to}; an active king often decides the endgame.`, squares: [ka.to] };
+      return { fact: `Your king is a fighting piece now — walk it up toward the centre, starting with ${ka.to}. An active king often decides the endgame.`, squares: [ka.to] };
     },
   },
   {
@@ -887,7 +887,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       if (moveNo < 6) return null;
       const keep = bestMinorToKeep(fen, student);
       if (keep?.dominant && keep.note.scope >= 6) {
-        return { fact: `Keep your ${PIECE_NAME[keep.note.piece]} on ${keep.note.square} — it does more than any minor piece they have; don't trade it off.`, squares: [keep.note.square] };
+        return { fact: `Keep your ${PIECE_NAME[keep.note.piece]} on ${keep.note.square} — it does more than any minor piece they have. Don't trade it off.`, squares: [keep.note.square] };
       }
       return null;
     },

@@ -285,7 +285,7 @@ export function denyExchange(fenBefore: string, san: string, student: Side, cost
   const waiting = doublingCapture(r.c.fen(), r.m.to);
   const opens = waiting ? fileOpenedForRook(r.c.fen(), waiting.take, student) : null;
   if (waiting && !opens) return null;
-  const text = `Your ${NAME[r.m.piece]} leaves ${r.m.from}, so their ${NAME[denied.take.piece]} can no longer take it there and double your pawns${opens ? `; if they take on ${r.m.to}, ${opens.san} opens the ${opens.file}-file for your rook` : ''}.`;
+  const text = `Your ${NAME[r.m.piece]} leaves ${r.m.from}, so their ${NAME[denied.take.piece]} can no longer take it there and double your pawns${opens ? `. If they take on ${r.m.to}, ${opens.san} opens the ${opens.file}-file for your rook` : ''}.`;
   const sq = [denied.take.from, r.m.from, denied.back.from];
   const proof = squaresProof(text, sq);
   if (!proof) return null;
@@ -551,7 +551,7 @@ export function simplestWin(fen: string, student: Side, lines: readonly LineIn[]
   const proof = lineProof({ fen, sans: pick.sans }, lineSeatAt(fen, student), pick.mate !== null);
   if (!proof) return null;
   const move = pick.sans[0];
-  const text = `More than one move wins here; ${move} is the simplest — ${why}.`;
+  const text = `More than one move wins here. ${openSentence(move)} is the simplest — ${why}.`;
   const to = play(fen, move)?.m.to;
   return { ...idea('simplest-win', text, to ? [to] : [], proof, `simplest-win:${fen.split(' ')[0]}`), namesMove: true, stakes: pick.mate !== null ? mateStakes('you', 0, true) : { points: pick.net, plies: 0 } };
 }

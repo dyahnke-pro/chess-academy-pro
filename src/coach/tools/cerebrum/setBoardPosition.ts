@@ -146,7 +146,7 @@ export const setBoardPositionTool: Tool = {
           // corrects to the real line instead of inventing a board.
           return {
             ok: false,
-            error: `illegal move "${san}" after ${played.join(' ') || '(start)'} — this line is not real. Give the actual SAN sequence; do not invent moves.`,
+            error: `illegal move "${san}" after ${played.join(' ') || '(start)'} — this line is not real. Give the actual SAN sequence. Do not invent moves.`,
           };
         }
       }

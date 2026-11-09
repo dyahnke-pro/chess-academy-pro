@@ -401,7 +401,7 @@ function formatToolResultsAsFollowUpAsk(
   if (succeededMoves.length > 0) {
     lines.push(
       '',
-      `IMPORTANT: ${succeededMoves.join(', ')} ${succeededMoves.length === 1 ? 'is' : 'are'} ALREADY ON THE BOARD. Do NOT call play_move again with ${succeededMoves.length === 1 ? 'that move' : 'those moves'} — it would either fail (the move is no longer legal from the new position) or play a different move with the same name (different piece). The board has advanced; your job now is to narrate WHAT YOU JUST DID and prompt the student's next move. Use NO more play_move calls this turn unless you genuinely want to play a NEW different move.`,
+      `IMPORTANT: ${succeededMoves.join(', ')} ${succeededMoves.length === 1 ? 'is' : 'are'} ALREADY ON THE BOARD. Do NOT call play_move again with ${succeededMoves.length === 1 ? 'that move' : 'those moves'} — it would either fail (the move is no longer legal from the new position) or play a different move with the same name (different piece). The board has advanced. Your job now is to narrate WHAT YOU JUST DID and prompt the student's next move. Use NO more play_move calls this turn unless you genuinely want to play a NEW different move.`,
     );
   }
   lines.push(

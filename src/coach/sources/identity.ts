@@ -165,7 +165,7 @@ export const DEFAULT_PERSONALITY_SETTINGS: PersonalitySettings = {
 export function loadIdentityPrompt(identity: CoachIdentity = 'danya'): string {
   if (identity !== 'danya') {
     console.warn(
-      `[coachIdentity] '${identity}' personality pack not implemented; using default voice`,
+      `[coachIdentity] '${identity}' personality pack not implemented. Using default voice`,
     );
   }
   return composeIdentityPrompt(DEFAULT_PERSONALITY_SETTINGS);

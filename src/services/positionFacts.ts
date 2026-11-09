@@ -2069,7 +2069,7 @@ function buildClauses(a: {
   }));
   if (opponentLeansOn) ranked.push(clause('computeLeansOn', a.fen, {
     kind: 'opponent-leans',
-    text: `Their ${opponentLeansOn.piece} on ${opponentLeansOn.square} is their best piece — but it leans on the ${opponentLeansOn.leansOn.piece} on ${opponentLeansOn.leansOn.square}; take that away and it's ordinary.`,
+    text: `Their ${opponentLeansOn.piece} on ${opponentLeansOn.square} is their best piece — but it leans on the ${opponentLeansOn.leansOn.piece} on ${opponentLeansOn.leansOn.square}. Take that away and it's ordinary.`,
     squares: [opponentLeansOn.square, opponentLeansOn.leansOn.square],
   }));
   // The FUNDAMENTAL the student's best move serves — the teaching idea, ranked

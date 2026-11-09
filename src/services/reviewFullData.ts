@@ -1088,7 +1088,7 @@ export function computeMoveFacets(
   if (studentColorWB) {
     const enemyWB: Color = studentColorWB === 'w' ? 'b' : 'w';
     const trapTheirs = findTrappedPiece(fenAfter, enemyWB, ctx.playedLineUci);
-    if (trapTheirs) { const f = made('findTrappedPiece', 'trapped', `Their ${trapTheirs.piece} on ${trapTheirs.square} is trapped — attacked by the ${trapTheirs.attackerPiece} on ${trapTheirs.attackerSquare}, and every escape square is covered; it's coming off the board.`); facets.push(f); recSquares(f, [trapTheirs.square, trapTheirs.attackerSquare]); recStakes(f, exchangeStakes(fenAfter, [trapTheirs.square])); }
+    if (trapTheirs) { const f = made('findTrappedPiece', 'trapped', `Their ${trapTheirs.piece} on ${trapTheirs.square} is trapped — attacked by the ${trapTheirs.attackerPiece} on ${trapTheirs.attackerSquare}, and every escape square is covered. It's coming off the board.`); facets.push(f); recSquares(f, [trapTheirs.square, trapTheirs.attackerSquare]); recStakes(f, exchangeStakes(fenAfter, [trapTheirs.square])); }
     const trapMine = findTrappedPiece(fenAfter, studentColorWB, ctx.playedLineUci);
     if (trapMine) { const f = made('findTrappedPiece', 'trapped', `Careful — your ${trapMine.piece} on ${trapMine.square} is trapped: attacked by the ${trapMine.attackerPiece} on ${trapMine.attackerSquare} with no safe square. Look for the cheapest way out.`); facets.push(f); recSquares(f, [trapMine.square, trapMine.attackerSquare]); recStakes(f, exchangeStakes(fenAfter, [trapMine.square])); }
   }

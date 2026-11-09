@@ -8,6 +8,7 @@
 // Board facts only (chess.js + outpost + position reading), said from the
 // student's seat, each carrying the squares or the line it rests on. Silent
 // when the board does not show it. Pure.
+import { openSentence } from '../utils/openSentence';
 import type { Color, Square } from 'chess.js';
 import { isOutpost, noPawnCanChallenge, relativeRank } from './outpost';
 import { legalSeeGainFor } from './positionReadingService';
@@ -192,7 +193,7 @@ export function semiOutpost(fenBefore: string, san: string, student: Color, cpLo
   };
   if (!challengers.every(costs)) return null;
   const ch = challengers[0];
-  const proof = squaresProof(`no pawn of theirs hits ${x} now; their ${ch.from} pawn would need to reach ${ch.at}`, [x, ch.from, ch.at]);
+  const proof = squaresProof(`no pawn of theirs hits ${x} now. Their ${ch.from} pawn would need to reach ${ch.at}`, [x, ch.from, ch.at]);
   if (!proof) return null;
   return {
     act: 'semi-outpost', squares: [x, ch.from, ch.at], proof, key: `semi-outpost:${x}`,
@@ -294,7 +295,7 @@ export function fileEntryCovered(fen: string, student: Color): StructureRead | n
     if (entries.length < 2) continue;
     if (!entries.every((s) => c.attackers(s, student).some((q) => c.get(q)?.type !== 'k'))) continue;
     const guards = [...new Set(entries.flatMap((s) => c.attackers(s, student)))];
-    const proof = squaresProof(`if their ${e} pawn captures, the ${f}-file opens; ${andList(entries)} are each covered by your pieces`, [e, ...entries, ...guards]);
+    const proof = squaresProof(`if their ${e} pawn captures, the ${f}-file opens. ${openSentence(andList(entries))} are each covered by your pieces`, [e, ...entries, ...guards]);
     if (!proof) continue;
     return {
       act: 'file-entry-covered', squares: [e, ...entries], proof, key: `file-entry:${f}`,
@@ -365,7 +366,7 @@ export function unmovedUnits(fenBefore: string, san: string, student: Color): St
     for (const t of [one, two]) {
       if (!t || c.get(t)) break;
       if (!pawnAttacks(t, student).includes(x)) continue;
-      const proof = squaresProof(`your ${p} pawn is still at home; from ${t} it would cover ${x}`, [x, p, t]);
+      const proof = squaresProof(`your ${p} pawn is still at home. From ${t} it would cover ${x}`, [x, p, t]);
       if (!proof) continue;
       return {
         act: 'unmoved-units', squares: [x, p, t], proof, key: `unmoved:${x}`,

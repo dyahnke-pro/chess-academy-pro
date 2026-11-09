@@ -653,8 +653,8 @@ export function pawnSquareRaceRead(fen: string, student: Color, bestSan: string 
   const tp = student === 'w' ? `…${race.theirPush}` : race.theirPush;
   const theirs = race.theirReady === race.yourReady ? `their ${tp} is ready too, but the move is yours` : `their ${tp} isn't ready yet`;
   const text = race.yourSupport
-    ? `Both of you want a pawn on ${race.square}, and the first one there keeps it. ${race.yourSupport} makes ${race.yourPush} safe; ${theirs}, so ${race.square} is yours.`
-    : `Both of you want a pawn on ${race.square}, and the first one there keeps it. ${race.yourPush} is safe now; ${theirs}, so ${race.square} is yours.`;
+    ? `Both of you want a pawn on ${race.square}, and the first one there keeps it. ${race.yourSupport} makes ${race.yourPush} safe. ${openSentence(theirs)}, so ${race.square} is yours.`
+    : `Both of you want a pawn on ${race.square}, and the first one there keeps it. ${race.yourPush} is safe now. ${openSentence(theirs)}, so ${race.square} is yours.`;
   return { text, squares: [race.square], race };
 }
 
@@ -683,7 +683,7 @@ export function pawnSquareRaceProof(fen: string, race: PawnSquareRace): Proof | 
   const pawns: string[] = [];
   for (let r = 1; r <= 8; r += 1) { const p = board.get(`${file}${r}` as Square); if (p && p.type === 'p') pawns.push(`${file}${r}`); }
   const full = race.yourSupport
-    ? `${race.yourSupport} guards ${race.square}, then ${race.yourPush} lands safely; their pawn cannot pass yours once it stands there`
-    : `${race.yourPush} lands on ${race.square} safely now; their pawn cannot pass yours once it stands there`;
+    ? `${race.yourSupport} guards ${race.square}, then ${race.yourPush} lands safely. Their pawn cannot pass yours once it stands there`
+    : `${race.yourPush} lands on ${race.square} safely now. Their pawn cannot pass yours once it stands there`;
   return { kind: 'squares', exact: true, short: `${race.square}, first`, full, squares: [race.square, ...pawns] };
 }

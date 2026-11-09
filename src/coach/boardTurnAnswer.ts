@@ -410,8 +410,8 @@ async function fasterWinAnswer(board: BoardTurnInput, out?: { lines?: WalkableLi
   if (best.mate != null && best.mate > 0) {
     const same = lines.slice(1).filter((l) => l.mate === best.mate).map((l) => l.san);
     return same.length
-      ? `${andList([best.san, ...same])} all mate in ${best.mate} moves; nothing is faster.`
-      : `${best.san} is the fastest${reason(best.san, best.mate)}; nothing mates sooner.`;
+      ? `${andList([best.san, ...same])} all mate in ${best.mate} moves. Nothing is faster.`
+      : `${best.san} is the fastest${reason(best.san, best.mate)}. Nothing mates sooner.`;
   }
   // THE ONE COUNT (2026-10-20): which moves keep the win is the critical-moment
   // computer's, never a second copy of its floor — that copy called a move
@@ -431,7 +431,7 @@ async function fasterWinAnswer(board: BoardTurnInput, out?: { lines?: WalkableLi
       ? `${best.san} is the best move: by the end of its line, ${wins}. It isn't a clear win yet.`
       : `There's no clear win here yet. ${best.san} is the best move${reason(best.san, null)}.`;
   }
-  if (read.resolved && read.count === 1) return `${best.san} is the only move that keeps the win${reason(best.san, null)}; every other move gives it back.`;
+  if (read.resolved && read.count === 1) return `${best.san} is the only move that keeps the win${reason(best.san, null)}. Every other move gives it back.`;
   const alsoWin = read.holdingSans.filter((san) => san !== best.san);
   if (alsoWin.length === 0) return `${best.san} is the cleanest${reason(best.san, null)}.`;
   return `${best.san} is the cleanest${reason(best.san, null)}. ${andList(alsoWin)} ${alsoWin.length > 1 ? 'also win' : 'also wins'}, but keep less.`;

@@ -107,7 +107,7 @@ export function captureChoice(fenBefore: string, san: string, bestSan: string | 
       ], stemKeyOf(fenBefore))
       : rotateStem([
         `Taking on ${o.to} hands them ${h.square} for ${withArticle(knight)} — no pawn of yours can ever chase it off. ${dot}${best.san} was the capture.`,
-        `${dot}${o.san} gives their ${knight} ${h.square} for good; taking on ${best.to} with ${dot}${best.san} keeps that square covered.`,
+        `${dot}${o.san} gives their ${knight} ${h.square} for good. Taking on ${best.to} with ${dot}${best.san} keeps that square covered.`,
       ], stemKeyOf(fenBefore));
     return { text, good: best.san, bad: [o.san, h.recapture], square: h.square, knightFrom: h.from, squares: [o.from, o.to, h.square, h.from], playedBad: !playedBest };
   }

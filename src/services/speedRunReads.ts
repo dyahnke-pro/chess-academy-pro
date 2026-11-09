@@ -84,7 +84,7 @@ export function anyMoveFine(fen: string, lines: Lines): Read | null {
   // verdict on the one they just played (Learn tape 2026-10-15: "This is not a
   // critical moment…" then "Rook takes d3 was the only move…") — so every stem
   // says which move it means.
-  return { idea: rot(fen, 'Your next move is not a big decision — several are about equally good, so save your time for the moves that are.', 'A few moves do the same job here. It is not a critical moment, so save your time for one that is.', 'Nothing hinges on your next move — pick a sensible one and keep your clock for the hard decisions.'), claim: 'srr:any-move-fine', namesMove: true, text: `Several moves are equally good for your next move — ${sans[0]}, ${sans[1]} or ${sans[2]}. Not every move is a big decision; save your time for the ones that are.` };
+  return { idea: rot(fen, 'Your next move is not a big decision — several are about equally good, so save your time for the moves that are.', 'A few moves do the same job here. It is not a critical moment, so save your time for one that is.', 'Nothing hinges on your next move — pick a sensible one and keep your clock for the hard decisions.'), claim: 'srr:any-move-fine', namesMove: true, text: `Several moves are equally good for your next move — ${sans[0]}, ${sans[1]} or ${sans[2]}. Not every move is a big decision. Save your time for the ones that are.` };
 }
 
 /** D2 THE UGLY MOVE THAT IS CORRECT ("the hardest move to make"): the engine's
@@ -114,7 +114,7 @@ export function uglyButRight(fen: string, bestSan: string | null): Read | null {
   if (!retreatHome && !doublesOwn) return null;
   const why = doublesOwn ? 'it doubles your own pawns' : `it walks your ${name(r.move.piece)} back home`;
   // Two sentences, never three dashes in one (Learn tape 2026-10-15).
-  return { claim: `srr:ugly:${r.move.to}`, namesMove: true, text: `${sayMoveClause(r.move.san, fen).replace(/^./, (c) => c.toUpperCase())} looks ugly — ${why} — but it is the move. Don't reject a move for how it looks; check it.` };
+  return { claim: `srr:ugly:${r.move.to}`, namesMove: true, text: `${sayMoveClause(r.move.san, fen).replace(/^./, (c) => c.toUpperCase())} looks ugly — ${why} — but it is the move. Don't reject a move for how it looks. Check it.` };
 }
 
 /** C8 WHICH SIDE TO CASTLE: both ways are legal and one wing's pawn cover is
@@ -130,7 +130,7 @@ export function castleSide(fen: string, me: 'w' | 'b'): Read | null {
   const short = cover(['f', 'g', 'h']); const long = cover(['a', 'b', 'c']);
   if (short === long) return null;
   const side = short > long ? 'short' : 'long';
-  return { claim: 'srr:castle-side', promise: { key: 'castle', piece: 'k', square: `${side === 'short' ? 'g' : 'c'}${me === 'w' ? '1' : '8'}`, say: `Castled ${side} — onto the wing whose pawns are still at home.` }, text: rot(fen, `If you castle, castle ${side}: the pawns on that wing are still at home (${Math.max(short, long)} of 3), the other wing has already been loosened.`, `Castle ${side} when you castle — that wing's pawns are intact (${Math.max(short, long)} of 3); the other side is already loosened.`) };
+  return { claim: 'srr:castle-side', promise: { key: 'castle', piece: 'k', square: `${side === 'short' ? 'g' : 'c'}${me === 'w' ? '1' : '8'}`, say: `Castled ${side} — onto the wing whose pawns are still at home.` }, text: rot(fen, `If you castle, castle ${side}: the pawns on that wing are still at home (${Math.max(short, long)} of 3), the other wing has already been loosened.`, `Castle ${side} when you castle — that wing's pawns are intact (${Math.max(short, long)} of 3). The other side is already loosened.`) };
 }
 
 /** A4 PROVOKE THE COMMITMENT ("Be2 provokes …c4, which releases the pressure"):
@@ -196,7 +196,7 @@ export function heldByTactic(fen: string, me: 'w' | 'b'): Read | null {
     // holds for one move only — the raw read is 0 there, never "safe".
     const read = captureRead(fen, cell.square, them);
     if (read === null || read > 0) continue;
-    return { claim: `srr:held-by-tactic:${cell.square}`, stakes: pieceStakes(cell.type, 1), text: rot(fen, `Your ${name(cell.type)} on ${cell.square} is outnumbered but safe only because of a tactic — check it again after every move, because the moment the tactic disappears, so does its protection.`, `Your ${name(cell.type)} on ${cell.square} survives on a tactic, not on its guards — recheck it every move; one change and it simply hangs.`, `Count again on ${cell.square}: more of theirs hit your ${name(cell.type)} than yours guard it, and only a tactic holds it — keep checking.`), squares: [cell.square] };
+    return { claim: `srr:held-by-tactic:${cell.square}`, stakes: pieceStakes(cell.type, 1), text: rot(fen, `Your ${name(cell.type)} on ${cell.square} is outnumbered but safe only because of a tactic — check it again after every move, because the moment the tactic disappears, so does its protection.`, `Your ${name(cell.type)} on ${cell.square} survives on a tactic, not on its guards — recheck it every move. One change and it simply hangs.`, `Count again on ${cell.square}: more of theirs hit your ${name(cell.type)} than yours guard it, and only a tactic holds it — keep checking.`), squares: [cell.square] };
   }
   return null;
 }
@@ -214,7 +214,7 @@ export function secureFirst(fen: string, me: 'w' | 'b', lines: Lines): Read | nu
   if (!loose) return null;
   const after = play(fen, bestSan);
   if (!after || after.board.attackers(loose.square, me).length === 0 && after.move.from !== loose.square) return null;
-  return { claim: `srr:secure-first:${loose.square}`, stakes: pieceStakes(loose.type, 1), text: `There is something to collect, but your ${name(loose.type)} on ${loose.square} is loose and under fire — ${rot(fen, 'secure it first; the capture will still be there.', 'tidy that up before you go collecting.', 'safety first — the material is not going anywhere.')}`, squares: [loose.square] };
+  return { claim: `srr:secure-first:${loose.square}`, stakes: pieceStakes(loose.type, 1), text: `There is something to collect, but your ${name(loose.type)} on ${loose.square} is loose and under fire — ${rot(fen, 'secure it first. The capture will still be there.', 'tidy that up before you go collecting.', 'safety first — the material is not going anywhere.')}`, squares: [loose.square] };
 }
 
 /** B10 MUTUAL PINS: a piece of yours and a piece of theirs are both pinned to
@@ -385,7 +385,7 @@ export function rightPieceForHole(fen: string, me: 'w' | 'b'): Read | null {
     if (!isOutpost(b, cell.square, me, true)) continue;
     const k = knightReach(fen, cell.square, me);
     if (!k || k.moves > 3) continue;
-    return { claim: `srr:hole:${cell.square}`, promise: { key: `hole:${cell.square}`, piece: 'n', square: cell.square, say: `Now the knight sits on ${cell.square} — the right piece for the hole.` }, text: `The hole on ${cell.square} is held by your bishop, but it belongs to a knight — your knight on ${k.from} gets there in ${k.moves}; a knight on an outpost hits both colours and can only be traded for a piece.`, squares: [cell.square, k.from] };
+    return { claim: `srr:hole:${cell.square}`, promise: { key: `hole:${cell.square}`, piece: 'n', square: cell.square, say: `Now the knight sits on ${cell.square} — the right piece for the hole.` }, text: `The hole on ${cell.square} is held by your bishop, but it belongs to a knight — your knight on ${k.from} gets there in ${k.moves}. A knight on an outpost hits both colours and can only be traded for a piece.`, squares: [cell.square, k.from] };
   }
   return null;
 }
@@ -562,7 +562,7 @@ export function rejectedMoveLater(fen: string, lines: Lines): Read | null {
     // before and after the engine's moves up to the capture; nothing nameable
     // changed → the held form says nothing.
     const prep = preparationOf(fen, san, main.slice(0, at));
-    return { stakes: costStakes(moverCp(fen, lines[0]) - moverCp(fen, l)) ?? undefined, claim: `srr:rejected:${san}`, ...(prep ? { idea: `The ${san.includes('+') && !san.includes('x') ? 'check' : 'capture'} you may be eyeing doesn't work yet — ${prep}, and then it does.` } : {}), namesMove: true, squares: toSquares(fen, [san, first]), text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
+    return { stakes: costStakes(moverCp(fen, lines[0]) - moverCp(fen, l)) ?? undefined, claim: `srr:rejected:${san}`, ...(prep ? { idea: `The ${san.includes('+') && !san.includes('x') ? 'check' : 'capture'} you may be eyeing doesn't work yet — ${prep}, and then it does.` } : {}), namesMove: true, squares: toSquares(fen, [san, first]), text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move. Prepare it.` };
   }
   return null;
 }
@@ -622,7 +622,7 @@ export function flexibleFirst(fen: string, lines: Lines): Read | null {
     // THE IDEA NAMES NO PIECE (OS-10, David's record 2026-10-19, ply 13:
     // "Commit the pawn last — a knight move now" said before his move — the
     // piece to move IS the answer). The principle stands alone.
-    return { idea: rot(fen, 'Make the flexible move first — the pawn move can always come later, but a pawn can never go back.', "Keep your options open — the pawn move will still be there later, and a pawn move can't be taken back.", 'Commit the pawn last — a pawn move is the one you can never take back.'), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
+    return { idea: rot(fen, 'Make the flexible move first — the pawn move can always come later, but a pawn can never go back.', "Keep your options open — the pawn move will still be there later, and a pawn move can't be taken back.", 'Commit the pawn last — a pawn move is the one you can never take back.'), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options. The pawn move can always come later, but it can never go back.` };
   }
   return null;
 }

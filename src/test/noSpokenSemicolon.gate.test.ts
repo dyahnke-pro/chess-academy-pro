@@ -20,7 +20,8 @@ const NOT_SPOKEN = new Map<string, string>([
 /** An audit row's text is read by an audit, never said. */
 const AUDIT_ROW = /\b(summary|details):\s*`/;
 const JOIN_SEMI = /\.join\(\s*(['"`]); \1\s*\)/;
-const TEMPLATE_SEMI = /`[^`]*\$\{[^}]+\}; [^`]*\$\{[^}]+\}[^`]*`/;
+/** A template with a fill that says "; " anywhere in its words. */
+const TEMPLATE_SEMI = /`[^`]*\$\{[^`]*; [^`]*`|`[^`]*; [^`]*\$\{[^`]*`/;
 
 function walk(dir: string, out: string[]): string[] {
   for (const name of readdirSync(dir)) {
@@ -48,6 +49,8 @@ describe('no semicolon is read aloud', () => {
   });
   it('the template check sees a semicolon between two filled parts (negative control)', () => {
     expect(TEMPLATE_SEMI.test('`the stronger is ${a}; ${b} falls short`')).toBe(true);
+    expect(TEMPLATE_SEMI.test('`on their move it ${w} for them; if they could pass`')).toBe(true);
+    expect(TEMPLATE_SEMI.test('`the stronger is ${a}. ${b} falls short`')).toBe(false);
     expect(JOIN_SEMI.test("clauses.join('; ')")).toBe(true);
   });
 });

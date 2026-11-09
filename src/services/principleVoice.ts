@@ -19,7 +19,7 @@ import { costWords } from './engineConstants';
 import { lineShape, withArticle } from '../utils/andList';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import type { SaidSet } from './gameStory';
-import { continueSentence } from '../utils/openSentence';
+import { continueSentence, openSentence } from '../utils/openSentence';
 import { unmarked } from '../utils/sanMark';
 
 const ORD = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth'];
@@ -230,7 +230,7 @@ const VERDICT_WITHOUT_BETTER: Partial<Record<FundamentalId, (f: Facts) => string
   'ignored-threat': (f) => (f.line && f.threat
     // The line opens WITH the threat move — name it once (Learn tape
     // 2026-10-15: "queen to g8, check was already on — queen to g8, check, …").
-    ? `Their threat came first — ${f.line} — and your ${f.piece} on ${f.square} goes; this move doesn't stop it.`
+    ? `Their threat came first — ${f.line} — and your ${f.piece} on ${f.square} goes. This move doesn't stop it.`
     : `Their threat first: the ${f.piece} on ${f.square} was already attacked, and this move doesn't deal with it — they take it next.`),
 };
 
@@ -283,7 +283,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       const s = [
         `Development first: ${f.homeMinors} of your pieces are still at home, and ${f.better} brought one out instead.`,
         `Pieces before pawns — with ${f.homeMinors} still undeveloped, this was the moment for ${f.better}.`,
-        `That's a move that develops nothing while ${f.homeMinors} pieces wait at home; ${f.better} puts one to work.`,
+        `That's a move that develops nothing while ${f.homeMinors} pieces wait at home. ${openSentence(String(f.better))} puts one to work.`,
       ];
       return s[v % s.length];
     }
@@ -300,7 +300,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
         // The king WALKED (D-5): the loss is castling itself, not a punish.
         const w = [
           `Stepping the king to ${f.walked} throws castling away for good — ${f.better} keeps him home and the option open.`,
-          `The king on ${f.walked} can never castle now; ${f.better} was the move, and the king stays put until the rook comes across.`,
+          `The king on ${f.walked} can never castle now. ${openSentence(String(f.better))} was the move, and the king stays put until the rook comes across.`,
           `A king walk to ${f.walked} costs the one move that tucks him away — play ${f.better} and castle when it's time.`,
         ];
         return w[v % w.length];
@@ -323,7 +323,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     case 'early-edge-pawns': {
       const s = [
         `An edge pawn this early does nothing for the centre — ${f.better} fights for it instead.`,
-        `The ${f.pawn} push spends a tempo on the rim while the centre is still up for grabs; ${f.better} was the move.`,
+        `The ${f.pawn} push spends a tempo on the rim while the centre is still up for grabs. ${openSentence(String(f.better))} was the move.`,
         `Edge pawns wait: with the centre unresolved, ${f.better} is where the tempo belongs.`,
       ];
       return s[v % s.length];
@@ -332,7 +332,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       const s = [
         `Both bishops are committed before a single knight — and ${f.kick} hits the one on ${f.square} with gain.`,
         `Knights before bishops: the bishop on ${f.square} gives them a target, and ${f.kick} takes it with tempo.`,
-        `The bishops declared their squares too soon; ${f.kick} kicks the one on ${f.square} for free.`,
+        `The bishops declared their squares too soon. ${openSentence(String(f.kick))} kicks the one on ${f.square} for free.`,
       ];
       return s[v % s.length];
     }
@@ -346,12 +346,12 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
         ? [
           `That buries your own bishop: with ${f.blocker} in the way, the bishop on ${f.bishop} has nowhere to go.`,
           `Your bishop on ${f.bishop} is shut in behind ${f.blocker} — a piece that can't move is a piece you don't have.`,
-          `The bishop on ${f.bishop} loses its diagonal to ${f.blocker}; keep your own pieces breathing.`,
+          `The bishop on ${f.bishop} loses its diagonal to ${f.blocker}. Keep your own pieces breathing.`,
         ]
         : [
           `That cramps your own bishop: with ${f.blocker} in the way, the bishop on ${f.bishop} is down to one square.`,
           `Your bishop on ${f.bishop} loses its diagonal to ${f.blocker} — one square left is barely a piece.`,
-          `The bishop on ${f.bishop} loses its diagonal to ${f.blocker}; keep your own pieces breathing.`,
+          `The bishop on ${f.bishop} loses its diagonal to ${f.blocker}. Keep your own pieces breathing.`,
         ];
       return s[v % s.length];
     }
@@ -367,7 +367,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       const s = [
         `A knight on the rim is dim: on ${f.square} it covers little, and ${f.kick} drives it back anyway.`,
         `The knight on ${f.square} is on the edge of the board — ${f.kick} kicks it, and it never did anything there.`,
-        `Knights belong in the centre; on ${f.square} this one gets hit by ${f.kick} for nothing.`,
+        `Knights belong in the centre. On ${f.square} this one gets hit by ${f.kick} for nothing.`,
       ];
       return s[v % s.length];
     }
@@ -430,14 +430,14 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       const how = Number(f.chase) === 1 ? 'chases it off' : 'removes it';
       const s = [
         `Removing the guard: the ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq} — ${f.better} ${how}, and the ${f.piece} falls.`,
-        `The ${f.piece} on ${f.square} was held by the ${f.guard} alone; ${f.better} ${how}, and this move let the chance go.`,
+        `The ${f.piece} on ${f.square} was held by the ${f.guard} alone. ${openSentence(String(f.better))} ${how}, and this move let the chance go.`,
       ];
       return s[v % s.length];
     }
     case 'ignored-guard-removal': {
       const how = Number(f.played) === 1 ? (Number(f.chase) === 1 ? 'chased it off' : 'removed it') : (Number(f.chase) === 1 ? 'chases it off' : 'removes it');
       const s = [
-        `Your ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq}, and ${f.hit} ${how} — the ${f.piece} falls${f.better ? `; ${f.better} kept it safe` : ''}.`,
+        `Your ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq}, and ${f.hit} ${how} — the ${f.piece} falls${f.better ? `. ${openSentence(String(f.better))} kept it safe` : ''}.`,
         `One guard is not enough: the ${f.guard} on ${f.guardSq} held your ${f.piece} on ${f.square} alone, and ${f.hit} ${how}${f.better ? ` — after ${f.better} it would have held` : ''}.`,
       ];
       return s[v % s.length];
@@ -445,7 +445,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     case 'ignored-pin-pressure': {
       const hit = Number(f.played) === 1 ? `they piled on with ${f.pile}` : `${f.pile} piles on it`;
       const s = [
-        `Your ${f.piece} on ${f.square} is pinned to the ${f.behind} on ${f.behindSq}, and ${hit} — a pinned piece can't run${f.better ? `; ${f.better} kept it safe` : ''}.`,
+        `Your ${f.piece} on ${f.square} is pinned to the ${f.behind} on ${f.behindSq}, and ${hit} — a pinned piece can't run${f.better ? `. ${openSentence(String(f.better))} kept it safe` : ''}.`,
         `A pinned piece is a target: the ${f.piece} on ${f.square} can't move off the pin, and ${hit}${f.better ? ` — after ${f.better} it would have held` : ''}.`,
       ];
       return s[v % s.length];
@@ -457,14 +457,14 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
           // again ("Bxe5 still wins it", David 2026-10-30).
           `Guarded is not safe: the ${f.piece} on ${f.square} has a guard, but ${kick ?? 'the cheaper attacker'} still comes out ahead.`,
           `That leaves the ${f.piece} on ${f.square} short of guards — ${kick ?? 'a capture'} comes out ahead.`,
-          `The ${f.piece} on ${f.square} can be won after this; ${kick ?? 'taking it'} gains material even with its guard.`,
+          `The ${f.piece} on ${f.square} can be won after this. ${openSentence(kick ?? 'taking it')} gains material even with its guard.`,
         ];
         return g[v % g.length];
       }
       const s = [
         `Loose pieces drop off: the ${f.piece} on ${f.square} is left hanging, and after ${kick ?? 'the capture'} nothing can take back.`,
         `That leaves the ${f.piece} on ${f.square} undefended — ${kick ?? 'a capture'} is free.`,
-        `The ${f.piece} on ${f.square} hangs after this; ${kick ?? 'taking it'} is free material.`,
+        `The ${f.piece} on ${f.square} hangs after this. ${openSentence(kick ?? 'taking it')} is free material.`,
       ];
       return s[v % s.length];
     }
@@ -474,7 +474,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       // rook was already attacked".
       if (f.line) {
         const t = [
-          `Their threat came first — ${f.line} — and your ${f.piece} on ${f.square} goes; this move doesn't stop it${f.better ? `, ${f.better} does` : ''}.`,
+          `Their threat came first — ${f.line} — and your ${f.piece} on ${f.square} goes. This move doesn't stop it${f.better ? `, ${f.better} does` : ''}.`,
           `Before your own plan, answer theirs: ${f.line}, and your ${f.piece} on ${f.square} goes. This move leaves it on${f.better ? ` — ${f.better} gets it to safety` : ''}.`,
         ];
         return t[v % t.length];
@@ -484,8 +484,8 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       const s = [
         `Their threat first: the ${f.piece} on ${f.square} was already attacked, and this move doesn't deal with it — ${kick ?? 'the capture'} is coming.`,
         guarded(f)
-          ? `The ${f.piece} on ${f.square} could be won before you moved, and it still can; ${kick ?? 'they take it'} next.`
-          : `The ${f.piece} on ${f.square} was hanging before you moved, and it's still hanging after; ${kick ?? 'they take it'} next.`,
+          ? `The ${f.piece} on ${f.square} could be won before you moved, and it still can. ${openSentence(kick ?? 'they take it')} next.`
+          : `The ${f.piece} on ${f.square} was hanging before you moved, and it's still hanging after. ${openSentence(kick ?? 'they take it')} next.`,
         `Answer the threat before your own plan — the ${f.piece} on ${f.square} stays en prise and ${kick ?? 'the capture'} wins material.`,
       ];
       return s[v % s.length];
@@ -542,13 +542,13 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     }
     case 'wrong-trade-for-material': {
       const s = f.situation === 'ahead' ? [
-        `You're ahead in material — trade pieces and the win gets simpler; ${f.better} does exactly that.`,
+        `You're ahead in material — trade pieces and the win gets simpler. ${openSentence(String(f.better))} does exactly that.`,
         `When you're up, every piece off the board brings the win closer: ${f.better} was the trade to make.`,
         `Ahead means simplify — ${f.better} trades pieces and drains their counterplay.`,
       ] : [
-        `You're behind in material — trading pieces takes your chances with them; ${f.better} keeps them on.`,
+        `You're behind in material — trading pieces takes your chances with them. ${openSentence(String(f.better))} keeps them on.`,
         `When you're down, keep the pieces and trade pawns: ${f.better} holds the tension instead of swapping.`,
-        `Behind means complicate — this trade simplifies toward a lost ending; ${f.better} doesn't.`,
+        `Behind means complicate — this trade simplifies toward a lost ending. ${openSentence(String(f.better))} doesn't.`,
       ];
       return s[v % s.length];
     }
@@ -564,7 +564,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     case 'rook-ignored-open-file': {
       const s = [
         `Rooks belong on open files: the ${f.file}-file was open and ${f.better} takes it — now they get there first.`,
-        `The open ${f.file}-file was yours for ${f.better}; leave it and they occupy it.`,
+        `The open ${f.file}-file was yours for ${f.better}. Leave it and they occupy it.`,
         `An open file is a highway — ${f.better} puts a rook on the ${f.file}-file before they do.`,
       ];
       return s[v % s.length];
@@ -573,7 +573,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       const s = [
         `In the endgame the king is a piece: yours on ${f.king} should be walking in — ${f.better} — before theirs does.`,
         `Activate the king: ${f.better} brings him toward the action, and their king is free to step up too.`,
-        `Queens off, king on — ${f.better} was the move; the king on ${f.king} can't win this from the back.`,
+        `Queens off, king on — ${f.better} was the move. The king on ${f.king} can't win this from the back.`,
       ];
       return s[v % s.length];
     }
@@ -588,7 +588,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     case 'rook-in-front-of-passer': {
       const s = [
         `Rooks belong behind passed pawns: on ${f.rook} yours sits in front of the pawn on ${f.pawn} — ${f.better} puts it behind.`,
-        `In front of the passer the rook blocks its own pawn; ${f.better} goes behind it, where it pushes from strength.`,
+        `In front of the passer the rook blocks its own pawn. ${openSentence(String(f.better))} goes behind it, where it pushes from strength.`,
         `The rook on ${f.rook} has the passed pawn on ${f.pawn} the wrong way round — behind it, with ${f.better}.`,
       ];
       return s[v % s.length];
@@ -596,7 +596,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     case 'passed-pawn-neglected': {
       const s = [
         `Passed pawns must be pushed: your pawn on ${f.pawn} is passed and ${f.better} runs it — every move it waits, they build a blockade in front of it.`,
-        `A passer is a rocket — ${f.better} launches the pawn on ${f.pawn}; leave it home and their pieces wall it in for free.`,
+        `A passer is a rocket — ${f.better} launches the pawn on ${f.pawn}. Leave it home and their pieces wall it in for free.`,
         `Push the passer: ${f.better} was the move, sending the pawn on ${f.pawn} down the board while the road is still open.`,
       ];
       return s[v % s.length];
@@ -604,7 +604,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     case 'lost-the-opposition': {
       const s = [
         `Take the opposition: ${f.better} steps your king square-to-square with theirs and forces them to give way — the played move hands that back.`,
-        `King-and-pawn endings turn on the opposition — ${f.better} seizes it; step aside and their king walks through instead.`,
+        `King-and-pawn endings turn on the opposition — ${f.better} seizes it. Step aside and their king walks through instead.`,
         `Whoever has to move gives ground: ${f.better} keeps your king in the opposition, and this surrenders it.`,
       ];
       return s[v % s.length];
@@ -612,7 +612,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     case 'passive-rook-endgame': {
       const s = [
         `An active rook is worth a pawn: ${f.better} swings yours to ${f.square} on the seventh, cutting their king and raking the pawns — the played move leaves it passive.`,
-        `Rooks belong on the seventh — ${f.better} lands yours on ${f.square}; a passive rook just watches the ending go by.`,
+        `Rooks belong on the seventh — ${f.better} lands yours on ${f.square}. A passive rook just watches the ending go by.`,
         `The seventh rank is the rook's home in the endgame: ${f.better} takes it on ${f.square} while there's still something to attack.`,
       ];
       return s[v % s.length];
@@ -621,14 +621,14 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       const s = [
         `Trade the bad bishop: yours on ${f.bishop} is shut in behind ${f.pawns} of your own pawns on its colour — ${f.better} frees or swaps it, and this leaves it buried.`,
         `A bishop hemmed in by its own pawns is barely a piece — ${f.better} gets the one on ${f.bishop} into the game.`,
-        `Your worst piece is the bishop on ${f.bishop}, boxed in by pawns on its colour; ${f.better} improves it before anything else.`,
+        `Your worst piece is the bishop on ${f.bishop}, boxed in by pawns on its colour. ${openSentence(String(f.better))} improves it before anything else.`,
       ];
       return s[v % s.length];
     }
     case 'overvalued-attack': {
       const s = [
         `The attack was overvalued: ${f.move} commits material, but the engine shows the defence holding and coming out ahead — count the attackers before you invest.`,
-        `That sacrifice doesn't land — after ${f.move} they consolidate and keep the extra material; the attack needed more pieces than you had on it.`,
+        `That sacrifice doesn't land — after ${f.move} they consolidate and keep the extra material. The attack needed more pieces than you had on it.`,
         `You threw ${f.move} at the king before the attack was real — the defender untangles and you're just down material.`,
       ];
       return s[v % s.length];
@@ -662,7 +662,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     case 'capture-toward-centre': {
       const s = [
         `Recapture direction: taking toward the centre is the usual rule, but here ${f.better} was better — it opens the ${f.file}-file for your rook, and ${f.played} kept it closed.`,
-        `Normally you capture toward the centre, yet this is the exception — ${f.better} clears the ${f.file}-file for a rook; ${f.played} leaves the file blocked.`,
+        `Normally you capture toward the centre, yet this is the exception — ${f.better} clears the ${f.file}-file for a rook. ${openSentence(String(f.played))} leaves the file blocked.`,
         `The other capture was the one: ${f.better} opens the ${f.file}-file for your rook, worth more than the central pawn ${f.played} gained.`,
       ];
       return s[v % s.length];
@@ -675,9 +675,9 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       const s = [
         // An empty `better` means the line beside this verdict already names
         // the move (Learn's grade: "h5 was the move — …") — one fact once.
-        `You had it won and rushed — this move throws away ${lost}${f.better ? `; ${f.better} keeps it simple and holds the advantage` : ''}.`,
+        `You had it won and rushed — this move throws away ${lost}${f.better ? `. ${openSentence(String(f.better))} keeps it simple and holds the advantage` : ''}.`,
         `Convert with patience: you were clearly winning and this hands most of it back${f.better ? ` — ${f.better} was the calm move` : ''}.`,
-        `A won position needs care, not haste — this gives up ${lost}${f.better ? `; ${f.better} stays on track` : ''}.`,
+        `A won position needs care, not haste — this gives up ${lost}${f.better ? `. ${openSentence(String(f.better))} stays on track` : ''}.`,
       ];
       return s[v % s.length];
     }
@@ -693,13 +693,13 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       const s = [
         `That leaves the book — ${f.opening} continues ${f.book} here, and ${f.played} steps out of every known line into a worse position.`,
         `Theory ends with ${f.played}: the book move is ${f.book} (${f.opening}), and this departure costs.`,
-        `Out of book early. ${f.book} is what the games play here; ${f.played} is on nobody's line and the engine agrees it is worse.`,
+        `Out of book early. ${f.book} is what the games play here. ${openSentence(String(f.played))} is on nobody's line and the engine agrees it is worse.`,
       ];
       return s[v % s.length];
     }
     case 'no-plan': {
       const s = [
-        `What was ${f.played} for? The position had a plan — ${f.plan} — and this move serves none of it; ${f.better} does.`,
+        `What was ${f.played} for? The position had a plan — ${f.plan} — and this move serves none of it. ${openSentence(String(f.better))} does.`,
         `A move without a purpose: the board wanted you to ${f.plan}, and ${f.played} works on something else entirely. ${f.better} was the plan move.`,
         `Name the target before you move. Here the target was to ${f.plan}. ${f.better} goes there, and ${f.played} does not.`,
       ];

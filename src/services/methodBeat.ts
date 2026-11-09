@@ -412,7 +412,7 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
     const t = s.looseTarget.words;
     return { ...beat('loose-trigger', [
       `Spot the trigger first: ${t} has no defender. A loose piece is where tactics start — look for a move that hits it.`,
-      `The trigger here is ${t} — nothing defends it. Loose pieces drop off; scan for a move that attacks it.`,
+      `The trigger here is ${t} — nothing defends it. Loose pieces drop off. Scan for a move that attacks it.`,
       `Before anything else, notice ${t}: undefended. That is the trigger — now find the move that goes after it.`,
     ], plyForVariety), squares: [s.looseTarget.square] };
   }

@@ -20,6 +20,7 @@
 //                    same position disagree by a band: unexplored ground.
 //
 // Pure: chess.js only. No numbers in the spoken text (bands in words).
+import { openSentence } from '../utils/openSentence';
 import { evalBand, evalBandWords } from './evalBand';
 import { Chess, type Move, type Square } from 'chess.js';
 import { asIfToMove, signedLegalSeeFor } from './positionReadingService';
@@ -218,7 +219,7 @@ export function idlePiece(plies: readonly GamePly[], student: 'w' | 'b'): EndRea
     }
     if (own.length === 0) continue;
     const squares = [p.square, ...own];
-    const proof = squaresProof(`Their knight stood on ${p.square} from early on to the end; ${own.join(' and ')} held its own pawns`, squares);
+    const proof = squaresProof(`Their knight stood on ${p.square} from early on to the end. ${openSentence(own.join(' and '))} held its own pawns`, squares);
     if (!proof) continue;
     const text = rotateStem([
       `Their knight on ${p.square} did nothing all game: its road ran through ${own[0]}, where their own pawn stood.`,

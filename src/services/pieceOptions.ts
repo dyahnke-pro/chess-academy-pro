@@ -312,10 +312,10 @@ export function renderPieceOptions(a: {
       const next = a.options.find((o) => o.san !== best.san);
       const gap = next ? best.moverCp - next.moverCp : 0;
       out.push(next && gap >= SAME_BAND_CP && best.moverCp < MATE_CP
-        ? `So ${a.playedSan} was the right square — it was the move played; the next best, ${next.san}, costs ${costWords(gap)}.`
+        ? `So ${a.playedSan} was the right square — it was the move played. The next best, ${next.san}, costs ${costWords(gap)}.`
         : `So ${a.playedSan} was the right square — it was the move played.`);
     } else if (a.playedCp >= MATE_CP && best.moverCp < MATE_CP) {
-      out.push(`So no — ${unmarked(a.playedSan)} was checkmate; nothing beats that.`);
+      out.push(`So no — ${unmarked(a.playedSan)} was checkmate. Nothing beats that.`);
     } else if (best.moverCp > a.playedCp + SAME_BAND_CP) {
       out.push(`So yes — ${best.san} was better than ${a.playedSan}.`);
     } else if (best.moverCp < a.playedCp - SAME_BAND_CP) {
@@ -327,9 +327,9 @@ export function renderPieceOptions(a: {
       const cost = costWords(a.playedCp - best.moverCp);
       out.push(best.moverCp > -MATE_CP && a.playedCp < MATE_CP
         ? reply
-          ? `So no — moving it doesn't help; ${a.playedSan} was the better move: after ${best.san} the answer is ${reply}, and moving it costs ${cost}.`
-          : `So no — moving it doesn't help; ${a.playedSan} was the better move, and moving it costs ${cost}.`
-        : `So no — moving it doesn't help; ${a.playedSan} was the better move.`);
+          ? `So no — moving it doesn't help. ${openSentence(a.playedSan)} was the better move: after ${best.san} the answer is ${reply}, and moving it costs ${cost}.`
+          : `So no — moving it doesn't help. ${openSentence(a.playedSan)} was the better move, and moving it costs ${cost}.`
+        : `So no — moving it doesn't help. ${openSentence(a.playedSan)} was the better move.`);
     } else {
       out.push(`So ${best.san} was about as good as ${a.playedSan} — neither changes much.`);
     }

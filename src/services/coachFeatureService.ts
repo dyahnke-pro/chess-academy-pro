@@ -320,7 +320,7 @@ export async function generateNarrativeSummary(
       // Convert the engine's best-move UCI → clean SAN (never speak raw UCI).
       const bestSan = m.bestMove ? (uciToSanAt(m.bestMove, fenBefore[i] ?? '') ?? m.bestMove) : null;
       keyMoments.push(
-        `On move ${fullMove}, ${m.san} was ${withArticle(m.classification)}${bestSan ? `; the engine preferred ${bestSan}` : ''}${swing}.`,
+        `On move ${fullMove}, ${m.san} was ${withArticle(m.classification)}${bestSan ? `. The engine preferred ${bestSan}` : ''}${swing}.`,
       );
     }
     prevEvalCp = m.evaluation;
@@ -1276,7 +1276,7 @@ function buildDeterministicNarration(params: {
       if (bestMoveSan) {
         const stems = [
           `Slightly off — ${bestMoveSan} was sharper.`,
-          `${bestMoveSan} keeps the edge; this lets a little of it slip.`,
+          `${bestMoveSan} keeps the edge. This lets a little of it slip.`,
           `The precise move was ${bestMoveSan}. Small thing, but it adds up.`,
         ];
         return w(stems[variant]);
@@ -1294,7 +1294,7 @@ function buildDeterministicNarration(params: {
       if (bestMoveSan) {
         const stems = [
           `This one gives back real ground — ${bestMoveSan} held the position.${swingPhrase}`,
-          `${bestMoveSan} was the move; this hands the initiative back.${swingPhrase}`,
+          `${bestMoveSan} was the move. This hands the initiative back.${swingPhrase}`,
           `A real concession. ${bestMoveSan} kept everything together.${swingPhrase}`,
         ];
         return w(stems[variant]);
@@ -4119,7 +4119,7 @@ function* reviewSegmentSteps(
       if (hit && !trappedAnnounced.has(`${theirsTrapped ? 'e' : 's'}:${hit.square}`)) {
         trappedAnnounced.add(`${theirsTrapped ? 'e' : 's'}:${hit.square}`);
         narration = theirsTrapped
-          ? `Stop and look at their ${hit.piece} on ${hit.square} — it's trapped. The ${hit.attackerPiece} on ${hit.attackerSquare} attacks it, and every square it could run to is covered. That piece is coming off the board; the only question is the price.`
+          ? `Stop and look at their ${hit.piece} on ${hit.square} — it's trapped. The ${hit.attackerPiece} on ${hit.attackerSquare} attacks it, and every square it could run to is covered. That piece is coming off the board. The only question is the price.`
           : `Careful — your ${hit.piece} on ${hit.square} is trapped. The ${hit.attackerPiece} on ${hit.attackerSquare} attacks it, and every escape square is covered. Start looking for the cheapest way to give it up, or a counter-blow that changes the subject.`;
         narrationSource = 'per-move';
       }

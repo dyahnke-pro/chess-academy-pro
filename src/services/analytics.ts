@@ -584,7 +584,7 @@ export function sanitizeEventProps(
       out[`local_${key}`] = value;
       if (import.meta.env?.DEV) {
         console.warn(
-          `[analytics] event prop "${key}" collides with a super-property; sent as "local_${key}". Rename it at the call site.`,
+          `[analytics] event prop "${key}" collides with a super-property. Sent as "local_${key}". Rename it at the call site.`,
         );
       }
     } else {

@@ -291,7 +291,7 @@ function namedTechniqueFor(fen: string, cls: MatchupClass): ComputedConcept | nu
       return technique(
         'rule-of-the-square', 'The rule of the square',
         race.defenderInside
-          ? `The defending king is inside the square of the ${race.pawn} pawn — count the ranks to promotion, draw the square, and a king inside it catches the pawn on its own; the race then depends on the other king.`
+          ? `The defending king is inside the square of the ${race.pawn} pawn — count the ranks to promotion, draw the square, and a king inside it catches the pawn on its own. The race then depends on the other king.`
           : `The defending king is outside the square of the ${race.pawn} pawn — count the ranks to promotion, draw the square, and a king outside it can never catch the pawn: it queens on its own.`,
         race.defenderInside ? 'Inside the square — the pawn is caught.' : 'Outside the square — the pawn queens.', [race.pawn], 0.65,
       );
@@ -301,7 +301,7 @@ function namedTechniqueFor(fen: string, cls: MatchupClass): ComputedConcept | nu
     if (ks) {
       return technique(
         'key-squares', 'The key squares',
-        `The ${ks.pawn} pawn's key squares are ${ks.keySquares.join(', ')} — get the king onto one of them and the pawn promotes by force whoever is to move; the pawn itself waits until the king is there.`,
+        `The ${ks.pawn} pawn's key squares are ${ks.keySquares.join(', ')} — get the king onto one of them and the pawn promotes by force whoever is to move. The pawn itself waits until the king is there.`,
         'Head for a key square.', [ks.pawn, ...ks.keySquares], 0.6,
       );
     }
@@ -333,7 +333,7 @@ function namedTechniqueFor(fen: string, cls: MatchupClass): ComputedConcept | nu
       return technique(
         'philidor', 'The Philidor defence',
         phil.thirdRankSet
-          ? `A Philidor rook ending: the defending king sits in front of the ${phil.pawn} pawn and the rook already holds the third rank, so the attacking king cannot come forward. Hold that rank; the moment the pawn steps up, drop the rook back and check from behind.`
+          ? `A Philidor rook ending: the defending king sits in front of the ${phil.pawn} pawn and the rook already holds the third rank, so the attacking king cannot come forward. Hold that rank. The moment the pawn steps up, drop the rook back and check from behind.`
           : `A Philidor rook ending: the defending king sits in front of the ${phil.pawn} pawn, which has not crossed the fifth rank. The drawing plan is the third-rank defence — put the rook on the third rank to fence the attacking king out, and once the pawn advances, check it from behind for as long as it takes.`,
         'Philidor — hold the third rank.', [phil.pawn], 0.7,
       );

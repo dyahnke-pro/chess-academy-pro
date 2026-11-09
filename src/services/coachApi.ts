@@ -1,6 +1,6 @@
 // All LLM API calls must go through this file only — per CLAUDE.md
 import { evalBand, evalBandWords } from './evalBand';
-import { continueSentence } from '../utils/openSentence';
+import { continueSentence, openSentence } from '../utils/openSentence';
 import { smallTalkKind, smallTalkReply } from '../coach/smallTalk';
 import { lastMoveFromHistory } from './material';
 import { standingPlans, type ArcState } from './planArc';
@@ -2379,11 +2379,11 @@ function describeMoveMoment(m: MoveMoment | undefined): string {
         : `The evaluation has swung back in the student's favor — a genuine recovery.`;
     case 'great-move':
       return before !== undefined && after !== undefined
-        ? `The student's move was strong; the evaluation held at ${fmt(after)} in their favor.`
+        ? `The student's move was strong. The evaluation held at ${fmt(after)} in their favor.`
         : `The student found a strong move that keeps them in control.`;
     case 'opponent-blunder':
       return after !== undefined
-        ? `The opponent just erred; the evaluation jumped to ${fmt(after)} for the student.`
+        ? `The opponent just erred. The evaluation jumped to ${fmt(after)} for the student.`
         : `The opponent just made a mistake that swings the position toward the student.`;
     case 'blunder':
     case 'eval-swing-wrong':
@@ -2701,7 +2701,7 @@ async function computeLiveBoardVerdict(
           ? `By the tablebase, ${tb.bestMove.san} is the move${mateIn ? ` — it forces mate in ${mateIn}` : ' — it holds the win'}.`
           : tb.whiteRelativeResult === 'draw'
             ? `By the tablebase this endgame is drawn, and ${tb.bestMove.san} is the move that holds it.`
-            : `By the tablebase this endgame is lost with best play; ${tb.bestMove.san} is the most stubborn try.`;
+            : `By the tablebase this endgame is lost with best play. ${openSentence(tb.bestMove.san)} is the most stubborn try.`;
         return await voice(facts, 'endgame-best-move');
       }
       // ASSESSMENT reads the same verdict. It used to be answered only by
@@ -2797,9 +2797,9 @@ async function computeLiveBoardVerdict(
       if (said && walk) lastCoachLines = [walk];
       return said;
     }
-    if (scMateIn !== null && scMateIn < 0) return voice(`No — you're the one facing mate (in ${Math.abs(scMateIn)}); focus on defending.`, 'mate');
+    if (scMateIn !== null && scMateIn < 0) return voice(`No — you're the one facing mate (in ${Math.abs(scMateIn)}). Focus on defending.`, 'mate');
     if (scEvalCp !== null && scEvalCp >= 300) return voice(`No forced mate yet, but you're clearly winning (about ${pawns} points) — ${howItWins(grounding.currentFen, sc ?? 'white')}.`, 'mate');
-    if (scEvalCp !== null && scEvalCp <= -300) return voice(`No — you're not mating anyone here; you're worse (about ${pawns} points down).`, 'mate');
+    if (scEvalCp !== null && scEvalCp <= -300) return voice(`No — you're not mating anyone here. You're worse (about ${pawns} points down).`, 'mate');
     return voice("No forced mate here — it isn't that kind of position yet.", 'mate');
   }
 
@@ -2810,7 +2810,7 @@ async function computeLiveBoardVerdict(
   if (scEvalCp !== null && (drawBand === 'clearly' || drawBand === 'decisive')) {
     return scEvalCp > 0
       ? voice(`No — you're ${evalBandWords(drawBand, 'better')} here (about ${pawns} points), not drawing.`, 'draw')
-      : voice(`No — you're ${evalBandWords(drawBand, 'worse')} (about ${pawns} points down); you'd need your opponent to slip to draw.`, 'draw');
+      : voice(`No — you're ${evalBandWords(drawBand, 'worse')} (about ${pawns} points down). You'd need your opponent to slip to draw.`, 'draw');
   }
   if (drawBand === 'level') return voice('Roughly balanced — with accurate play from both sides this could well be a draw.', 'draw');
   return null; // unclear middlegame — let the position default speak.
@@ -4120,7 +4120,7 @@ export async function getCoachChatResponse(
             }
             // Target didn't resolve to an opening we've played OR a known
             // opponent — computed no-data line (G0), not an LLM guess.
-            const noDataFact = `None of your games against "${target}" are logged yet. If that's an opening, drill it and your record starts tracking; if it's an opponent, they aren't in your imported games.`;
+            const noDataFact = `None of your games against "${target}" are logged yet. If that's an opening, drill it and your record starts tracking. If it's an opponent, they aren't in your imported games.`;
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }

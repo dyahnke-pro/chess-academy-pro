@@ -154,7 +154,7 @@ export const lookupPlayerOpeningMovesTool: Tool = {
           moves,
           note:
             moves.length === 0
-              ? `No Lichess games found for ${username} (${color}) at this position — don't invent their moves; teach the line from the master database instead, or confirm the username.`
+              ? `No Lichess games found for ${username} (${color}) at this position — don't invent their moves. Teach the line from the master database instead, or confirm the username.`
               : undefined,
         },
       };

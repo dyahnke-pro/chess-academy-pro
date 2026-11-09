@@ -473,7 +473,7 @@ export function uncertaintyClause(read: TacticalRead, opts: {
   const best = sayN(read.bestMoveSan, read.fen);
   const stems = [
     `It’s genuinely close — ${alt} is about as good as ${best}, so don’t agonise.`,
-    `${openSentence(alt)} is a fine alternative to ${best} here; the two are within a whisker.`,
+    `${openSentence(alt)} is a fine alternative to ${best} here. The two are within a whisker.`,
     `Nothing to lose sleep over — ${alt} does the same job as ${best}.`,
     // No COUNT stem ("there are two good moves here…"): the critical-moment
     // read already counts the moves that hold, and the two spoke back to back

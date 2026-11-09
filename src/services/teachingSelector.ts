@@ -26,6 +26,7 @@
 // can gate on it TOGETHER with need — gating on the thread alone would silence
 // every ply off the thread today, which is the July "there is no coach
 // narration" failure the CLAUDE.md standard forbids reopening.
+import { openSentence } from '../utils/openSentence';
 import { costWords } from './engineConstants';
 import { Chess, type Color } from 'chess.js';
 import type { CoachSurface } from '../coach/types';
@@ -394,7 +395,7 @@ export function renderThesis(t: Thesis, register: ThesisRegister): string {
         : t.swingPawns > 15 ? ' — that move decided the game'
           : ` — it cost ${costWords(t.swingPawns * 100)}`;
       return register === 'retrospective'
-        ? `The game turned at ${t.theirs ? 'their move, ' : ''}${label}${swing}${word ? `; ${withArticle(word)} landed there` : ''}.`
+        ? `The game turned at ${t.theirs ? 'their move, ' : ''}${label}${swing}${word ? `. ${openSentence(withArticle(word))} landed there` : ''}.`
         : `This turns at ${label}${swing}${word ? ` — the ${word} lands there` : ''}.`;
     }
     case 'landed':

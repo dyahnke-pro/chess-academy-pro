@@ -373,7 +373,7 @@ function detectRookActivation(ctx: ConceptCtx): ConceptBeat | null {
   // Open file only counts if the rook actually just took it (moved onto it).
   if (fileIsOpen(ctx.fenAfter, file) && mv.from[0] !== dest[0]) {
     const text = mine
-      ? `Your rook swings onto the open ${dest[0]}-file — the one highway into their position. Open files belong to rooks; this is how they get into the game.`
+      ? `Your rook swings onto the open ${dest[0]}-file — the one highway into their position. Open files belong to rooks. This is how they get into the game.`
       : `Your opponent seizes the open ${dest[0]}-file with the rook — the highway into your camp. Contest the file or your own rooks stay passive.`;
     return { concept: 'rook-open-file', text, source: 'concept:pos-open-file' };
   }
@@ -497,8 +497,8 @@ function detectCreateWeakness(ctx: ConceptCtx): ConceptBeat | null {
   const fileLetter = String.fromCharCode(97 + file);
   const mine = MINE(ctx.moverColor, ctx.studentColor);
   const text = mine
-    ? `That leaves them with ${kind === 'isolated' ? 'an isolated' : 'a doubled'} pawn on the ${fileLetter}-file — a structural weakness. Pieces come and go, but a pawn weakness is slow to fix; pile your pieces onto it and make them defend.`
-    : `Your structure just took a hit — ${kind === 'isolated' ? 'an isolated' : 'doubled'} pawn${kind === 'isolated' ? '' : 's'} on the ${fileLetter}-file. It's a target now; look to trade it off or use the half-open file it hands you.`;
+    ? `That leaves them with ${kind === 'isolated' ? 'an isolated' : 'a doubled'} pawn on the ${fileLetter}-file — a structural weakness. Pieces come and go, but a pawn weakness is slow to fix. Pile your pieces onto it and make them defend.`
+    : `Your structure just took a hit — ${kind === 'isolated' ? 'an isolated' : 'doubled'} pawn${kind === 'isolated' ? '' : 's'} on the ${fileLetter}-file. It's a target now. Look to trade it off or use the half-open file it hands you.`;
   return { concept: 'create-weakness', text, source: kind === 'isolated' ? 'concept:pawn-isolated' : 'concept:pawn-doubled' };
 }
 

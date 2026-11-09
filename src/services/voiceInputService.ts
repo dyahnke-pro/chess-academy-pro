@@ -719,7 +719,7 @@ class VoiceInputService {
         this.clearNativeSilenceTimer();
         this.audit(
           'mic-native-stopped',
-          `native session stopped; pending="${this.nativeLatest.trim().slice(0, 60)}" listening=${this.nativeListening}`,
+          `native session stopped. Pending="${this.nativeLatest.trim().slice(0, 60)}" listening=${this.nativeListening}`,
         );
         // The recognizer stopped. In CONTINUOUS mode this is almost always iOS
         // capping a single SFSpeechRecognizer session (~1 min), NOT the user —

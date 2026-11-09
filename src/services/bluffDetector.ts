@@ -14,6 +14,7 @@
 // Pure chess.js, no engine (G0/G3). Dual-use: the same computer that teaches
 // "no need to react" is the one that can see a student spend a move answering
 // nothing.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import { detectNewThreat } from './groundedAnswer';
 import { legalSeeGainFor, seeReadsStanding, standsSafe } from './positionReadingService';
@@ -116,5 +117,5 @@ export function bluffClause(b: Bluff, opening: boolean): string {
   const hit = b.targets.map((t) => `your ${NAME[t.piece]} on ${t.square}`);
   const list = hit.length === 1 ? hit[0] : `${hit.slice(0, -1).join(', ')} and ${hit[hit.length - 1]}`;
   const next = opening ? 'keep developing' : 'keep improving your pieces';
-  return `Their ${NAME[b.piece]} on ${b.square} looks aggressive, hitting ${list}, but it wins nothing — no need to react; ${next}`;
+  return `Their ${NAME[b.piece]} on ${b.square} looks aggressive, hitting ${list}, but it wins nothing — no need to react. ${openSentence(next)}`;
 }

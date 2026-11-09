@@ -321,5 +321,5 @@ export function resultsLine(
   const pct = (x: number): number => Math.round((x / n) * 100);
   const mine = studentSide === 'white' ? results.white : results.black;
   const theirs = studentSide === 'white' ? results.black : results.white;
-  return `In ${count(n)} ${gamesWord(source)} from here, your side wins ${pct(mine)}% and theirs ${pct(theirs)}%; the rest are drawn.`;
+  return `In ${count(n)} ${gamesWord(source)} from here, your side wins ${pct(mine)}% and theirs ${pct(theirs)}%. The rest are drawn.`;
 }

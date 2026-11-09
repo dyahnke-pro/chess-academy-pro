@@ -25,7 +25,7 @@ function walk(student: 'white' | 'black', zz: Map<number, ZugzwangRead>) {
 describe('zugzwang reaches Review', () => {
   it('on their move the student is the one in it', () => {
     const segs = walk('white', new Map([[2, KP]]));
-    expect(segs.find((s) => s.ply === 2)?.narration ?? '').toMatch(/Zugzwang: on your move this is a draw; if it were their move, you would win/);
+    expect(segs.find((s) => s.ply === 2)?.narration ?? '').toMatch(/Zugzwang: on your move this is a draw\. If it were their move, you would win/);
   });
   it('on the student\'s move the student put them in it', () => {
     const segs = walk('white', new Map([[3, KP]]));

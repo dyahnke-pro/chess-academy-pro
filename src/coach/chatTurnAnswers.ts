@@ -262,7 +262,7 @@ export function answerAboutPiece(chess: Chess, sq: Square | null, student: Color
     const f = sq.charCodeAt(0);
     const r = Number(sq[1]) + dir;
     const covers = [f - 1, f + 1].filter((c) => c >= 97 && c <= 104 && r >= 1 && r <= 8).map((c) => `${String.fromCharCode(c)}${r}`);
-    if (covers.length) lines.push(`It attacks nothing of ${whose === 'your' ? 'yours' : 'theirs'} right now; it covers ${andList(covers)}.`);
+    if (covers.length) lines.push(`It attacks nothing of ${whose === 'your' ? 'yours' : 'theirs'} right now. It covers ${andList(covers)}.`);
   } else lines.push(`It attacks nothing of ${whose === 'your' ? 'yours' : 'theirs'} right now.`);
   if (checksKingLine) lines.push(`It gives check.`);
   if (guards.length) lines.push(`It guards ${mine} ${andList(guards)}.`);

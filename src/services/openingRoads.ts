@@ -178,7 +178,7 @@ export function roadReason(i: {
   // piece came out ("Knight to f3 brings your knight out, where bishop to e2
   // brings your bishop out"), and that is a description of both roads.
   if (!denied.length && mineJob && altJob && !isBareJob(mineJob) && mineJob.clause !== altJob.clause) {
-    parts.push(`${sayJob(i.chosenSan, mineJob.clause)}, where ${sayJob(i.altSan, altJob.clause)}${invite ? `; it invites ${dot(invite.san, them)}, which ${invite.clause.replace(/^it /, '')}` : ''}.`);
+    parts.push(`${sayJob(i.chosenSan, mineJob.clause)}, where ${sayJob(i.altSan, altJob.clause)}${invite ? `. It invites ${dot(invite.san, them)}, which ${invite.clause.replace(/^it /, '')}` : ''}.`);
     squares.push(...mineJob.squares, ...(invite?.squares ?? []));
   } else if (invite) {
     parts.push(`${dot(i.chosenSan, i.student)} invites ${dot(invite.san, them)}, which ${invite.clause.replace(/^it /, '')}.`);

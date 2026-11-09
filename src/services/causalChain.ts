@@ -671,7 +671,7 @@ function buildRemovedDefenderChain(g: GameBoards, focusPly: number): CausalChain
   };
   return {
     nodes: [causeNode, tacticNode],
-    edges: [{ relation: 'guard', proof: `${oppAt.san} moved the ${PIECE_NOUN[guardType]} off ${oppAt.from}${movesEarlier ? ` ${movesEarlier} move(s) earlier` : ''}; it was defending ${s}, now winnable (SEE ${winnableGain(beforeBoard, s)})` }],
+    edges: [{ relation: 'guard', proof: `${oppAt.san} moved the ${PIECE_NOUN[guardType]} off ${oppAt.from}${movesEarlier ? ` ${movesEarlier} move(s) earlier` : ''}. It was defending ${s}, now winnable (SEE ${winnableGain(beforeBoard, s)})` }],
     beneficiary: mover,
     focusPly,
     stance: 'played',

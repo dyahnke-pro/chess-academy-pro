@@ -392,7 +392,7 @@ function shortfallText(c: Candidate): string {
     // by its SAN at the head of the line (2026-10-30: "Qxd8? Qxd8 takes the
     // last queen off" said the move and its capture twice).
     const rest = c.tradeSans && c.tradeSans.length > 1 ? `Then ${seatedLine(c.tradeSans.slice(1), 'they')} — the queens come off` : 'The queens come off';
-    return `${c.san}? ${rest} — with more space or an attack going, you want them on; every piece that comes off shrinks the edge.`;
+    return `${c.san}? ${rest} — with more space or an attack going, you want them on. Every piece that comes off shrinks the edge.`;
   }
   if (c.shortfall === 'drops-material' && c.drops) {
     // HOW IT FALLS, played out: the line from their reply to the capture.

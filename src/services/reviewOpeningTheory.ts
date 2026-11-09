@@ -909,7 +909,7 @@ export function buildTheoryLectureBeats(
     // What it wins is said after the line, past a promotion the line says.
     if (b.refutation) return ` The engine punishes ${b.gameSan}: ${lineShape(b.refutation.sans, seatOf(other))}${b.refutation.what ? ` — ${winner} ${verb} ${b.refutation.what}` : ''}.`;
     if (b.playedCost >= 30) return ` By the engine's count ${b.gameSan} costs ${costWords(b.playedCost)}.`;
-    return ` ${b.gameSan} is perfectly playable — the engine barely minds; it is just less common.`;
+    return ` ${b.gameSan} is perfectly playable — the engine barely minds. It is just less common.`;
   };
   // G2 — FAST-FORWARD the obvious, STOP at the distinctive. Danya rattles the
   // well-known opening moves ("G6, Bishop G7, Knight F3, Knight C6…") and stops

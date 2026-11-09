@@ -1227,7 +1227,7 @@ class StockfishEngine {
             ) {
               this._singleThreadOomRetryUsed = true;
               console.warn(
-                `[Stockfish] Single-thread spawn OOM; retrying after ${SINGLE_THREAD_RETRY_DELAY_MS}ms`,
+                `[Stockfish] Single-thread spawn OOM. Retrying after ${SINGLE_THREAD_RETRY_DELAY_MS}ms`,
               );
               void logAppAudit({
                 kind: 'stockfish-variant-fallback',

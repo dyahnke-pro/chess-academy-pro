@@ -253,7 +253,7 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
     if (allMust.length >= 2 && !forkerTakeable) {
       return {
         mode: 'defend',
-        text: `Two things of yours are hit at once — your ${name(allMust[0].piece)} on ${allMust[0].square} and your ${name(allMust[1].piece)} on ${allMust[1].square}. You can't save everything; decide what to give up, and make them pay for it.`,
+        text: `Two things of yours are hit at once — your ${name(allMust[0].piece)} on ${allMust[0].square} and your ${name(allMust[1].piece)} on ${allMust[1].square}. You can't save everything. Decide what to give up, and make them pay for it.`,
         squares: [allMust[0].square, allMust[1].square],
       };
     }
@@ -299,7 +299,7 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
         mode: 'improve',
         text: queensOn
           ? `You are still in the opening — ${andList(bits)}. Finish developing before anything else.`
-          : `The queens are off, but ${andList(bits)} — develop it now; there is no attack to fear.`,
+          : `The queens are off, but ${andList(bits)} — develop it now. There is no attack to fear.`,
         squares: home.map((h) => h.square),
       };
     }
@@ -327,7 +327,7 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
   const chased = noRetreat(fen, me);
   if (chased) { parts.push(`If they push a pawn to ${chased.push}, your ${name(chased.piece)} on ${chased.square} has nowhere to go — give it a retreat square first.`); sq.push(chased.square, chased.push); }
   const tied = heavyTiedDown(fen, me);
-  if (tied) { parts.push(`Your ${name(tied.piece)} on ${tied.defender} is the only guard on your ${name(tied.guardedPiece)} on ${tied.guarded} — a heavy piece makes a poor defender; free it.`); sq.push(tied.defender, tied.guarded); }
+  if (tied) { parts.push(`Your ${name(tied.piece)} on ${tied.defender} is the only guard on your ${name(tied.guardedPiece)} on ${tied.guarded} — a heavy piece makes a poor defender. Free it.`); sq.push(tied.defender, tied.guarded); }
   const byHand = castleByHand(fen, me);
   if (byHand) { parts.push(byHand.text); sq.push(...byHand.squares); }
   if (hookNow) { parts.push(hookNow.text); sq.push(hookNow.hook, hookNow.pawn); }
@@ -1021,7 +1021,7 @@ export function materialPlan(fen: string, me: 'w' | 'b'): { diff: number; text: 
   // Ahead: THE conversion method speaks (`readConversion` — trade, attack or
   // make a passer); never a second copy of it here.
   if (diff >= 3) { const conv = readConversion(fen, me); return conv ? { diff, text: conv.text } : null; }
-  if (diff <= -3) return { diff, text: `You are ${countWords(-diff)} down — keep pieces on and make it messy; every trade helps them.` };
+  if (diff <= -3) return { diff, text: `You are ${countWords(-diff)} down — keep pieces on and make it messy. Every trade helps them.` };
   return null;
 }
 

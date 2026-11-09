@@ -1,3 +1,4 @@
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import type {
   AnnotationArrow,
@@ -145,7 +146,7 @@ export function sublineToPlayableLine(
     // plus, when the engine judges it dubious, the sound fix. Grounded facts only.
     const pf = proSublineFact(subline);
     introSay = pf.text ? `${headline(subline)}. ${pf.text}` : `${headline(subline)}.`;
-    introShort = pf.fix ? `${trigger} — practical; ${pf.fix} is sound` : `${trigger} — your reply`;
+    introShort = pf.fix ? `${trigger} — practical. ${openSentence(pf.fix)} is sound` : `${trigger} — your reply`;
   } else {
     const why = sublineWhyFact(subline);
     introSay = why.text ? `${headline(subline)}. ${why.text}` : `${headline(subline)}.`;

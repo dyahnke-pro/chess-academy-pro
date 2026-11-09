@@ -356,9 +356,9 @@ export function criticalMomentStatement(
         `${reply}, one move ${s}, and only one. Worth thinking it through.`,
       ], ply)
       : pick([
-        `${reply}, two moves ${s}; everything else concedes.`,
+        `${reply}, two moves ${s}. Everything else concedes.`,
         `${reply}, two moves ${s}. The rest give it away.`,
-        `${reply}, it's narrow — two moves ${s}; every other move costs more.`,
+        `${reply}, it's narrow — two moves ${s}. Every other move costs more.`,
         `${reply}, exactly two moves ${s} — the rest concede.`,
       ], ply) + lookAt(read.holdingSans);
   }
@@ -369,7 +369,7 @@ export function criticalMomentStatement(
     ], ply)
     : pick([
       `Your move now: exactly two moves ${s} — the rest concede.`,
-      `For your next move, two moves ${s}; everything else concedes.`,
+      `For your next move, two moves ${s}. Everything else concedes.`,
     ], ply) + lookAt(read.holdingSans);
 }
 

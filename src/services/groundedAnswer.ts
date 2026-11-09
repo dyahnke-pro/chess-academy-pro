@@ -354,7 +354,7 @@ export function assembleHangingAnswer(fen: string, ask: string | null | undefine
     const named = andList(list.map((l) => `the ${REVIEW_PIECE_NAME[l.type]} on ${l.sq}`));
     const pts = `${list[0].g} point${list[0].g === 1 ? '' : 's'}`;
     return mine
-      ? `Careful — ${named} ${list.length > 1 ? 'are' : 'is'} hanging; they can win about ${pts}.`
+      ? `Careful — ${named} ${list.length > 1 ? 'are' : 'is'} hanging. They can win about ${pts}.`
       : `${cap(named.replace(/^the /, 'their '))} ${list.length > 1 ? 'are' : 'is'} loose — you can win about ${pts}.`;
   };
   const mineLoose = scanMine ? looseOf(me) : [];
@@ -633,7 +633,7 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
   if (wins.length === 0 && !inCheck && !matePart) {
     return {
       facts: isOpp
-        ? `Nothing forcing — they have no immediate threat; none of your pieces are hanging.${ideaPart}`
+        ? `Nothing forcing — they have no immediate threat. None of your pieces are hanging.${ideaPart}`
         : `No immediate threat for you — nothing of theirs is hanging right now.`,
       bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
     };
@@ -1344,7 +1344,7 @@ export function assemblePiecePlanAnswer(
     const reach = squaresAttackedBy(chess, sq, me);
     lines.push(reach.length === 0 ? `it has no squares from ${sq}` : `it reaches ${reach.length} square${reach.length === 1 ? '' : 's'} from ${sq}`);
   }
-  const blockedClause = blockers.length > 0 ? `; ${andList(blockers)} ${blockers.length > 1 ? 'shut' : 'shuts'} its ${isSlider ? 'line' : 'path'}` : '';
+  const blockedClause = blockers.length > 0 ? `. ${openSentence(andList(blockers))} ${blockers.length > 1 ? 'shut' : 'shuts'} its ${isSlider ? 'line' : 'path'}` : '';
 
   // ── THE DEVELOPING SQUARE ────────────────────────────────────────────────
   // The piece is read on a board where it is ITS side to move (flip the
@@ -1788,7 +1788,7 @@ export function assembleAttackAssessment(fen: string, studentColor: 'white' | 'b
   } else if (attackers >= 3 && attackers > defenders) {
     verdict = `You have a real attack: ${atkWord} bearing on their king against ${defWord}. The attackers outnumber the defenders — press it.`;
   } else if (attackers >= 2 && attackers >= defenders) {
-    verdict = `The makings of an attack — ${atkWord} aimed at their king, ${defWord} back. It's close; bring one more attacker over before you commit material.`;
+    verdict = `The makings of an attack — ${atkWord} aimed at their king, ${defWord} back. It's close. Bring one more attacker over before you commit material.`;
   } else {
     verdict = `Not a real attack yet — ${atkWord} against ${defWord}. Their king has enough cover, so improve your pieces first rather than throwing them forward.`;
   }
@@ -2343,7 +2343,7 @@ export function assembleCandidateMoveAnswer(opts: {
     } else if (stmEval !== null && stmEval >= -30) {
       verdict = `${candNorm} is sound — you give up ${give}, but the compensation is real${after ? `: after the best defence ${after}` : ''}.`;
     } else if (stmEval !== null && stmEval >= -150) {
-      verdict = `${candNorm} is speculative — after the best defence the attack doesn't quite cover ${give}${bestSan ? `; ${bestSan} keeps it simpler` : ''}.`;
+      verdict = `${candNorm} is speculative — after the best defence the attack doesn't quite cover ${give}${bestSan ? `. ${openSentence(bestSan)} keeps it simpler` : ''}.`;
     } else if (stmEval !== null) {
       verdict = `${candNorm} is unsound — the attack doesn't work: after the best defence you're just down ${give}${after ? ` (${after})` : ''}${bestSan ? `. Play ${bestSan} instead` : ''}.`;
     }
@@ -2787,11 +2787,11 @@ export function assembleAlternativesAnswer(opts: {
     if (cpLoss <= 30) {
       closeOnes.push(altSan);
     } else if (altBand === null) {
-      parts.push(`${altSan} is playable but slightly worse — it gives up ${costWords(cpLoss)}${replyClause ? `; ${replyClause}` : ''}.`);
+      parts.push(`${altSan} is playable but slightly worse — it gives up ${costWords(cpLoss)}${replyClause ? `. ${openSentence(replyClause)}` : ''}.`);
     } else if (altBand !== 'blunder') {
       parts.push(`${altSan} concedes ${costWords(cpLoss)}${replyClause ? ` — ${replyClause}` : ''}.`);
     } else {
-      parts.push(`${altSan} is much worse — it gives up ${costWords(cpLoss)}${replyClause ? `; ${replyClause}` : ''}.`);
+      parts.push(`${altSan} is much worse — it gives up ${costWords(cpLoss)}${replyClause ? `. ${openSentence(replyClause)}` : ''}.`);
     }
   }
   // Honest when the engine says several moves are fine: don't invent a gap.
@@ -4593,7 +4593,7 @@ export function explainNotationSymbol(text: string | null | undefined): string |
     return `"${sym}" in chess notation means ${SYMBOL_MEANING[sym]}.`;
   }
   if (/^[KQRBN]$/.test(sym)) {
-    return `"${sym}" in chess notation means ${SYMBOL_MEANING[sym]}. A move like "${sym}f3" is that piece moving to f3; a pawn move has no letter at all, just the square, like "e4".`;
+    return `"${sym}" in chess notation means ${SYMBOL_MEANING[sym]}. A move like "${sym}f3" is that piece moving to f3. A pawn move has no letter at all, just the square, like "e4".`;
   }
   if (/^[a-h]$/i.test(sym)) {
     const f = sym.toLowerCase();
@@ -5443,7 +5443,7 @@ export function assembleMisconceptionsAnswer(m: MisconceptionsLike): GroundedAns
   const bucket = t.bucket && t.bucket !== 'uncategorized' ? ` It is ${withArticle(t.bucket)} misconception.` : '';
   const lead = `Your most persistent thinking error is "${t.label}" — logged ${t.total} time${t.total === 1 ? '' : 's'}.`;
   const more = m.distinctTags > 1
-    ? ` You have ${m.distinctTags} distinct misconception patterns tracked; this is the one to fix first.`
+    ? ` You have ${m.distinctTags} distinct misconception patterns tracked. This is the one to fix first.`
     : '';
   return { facts: `${lead}${bucket} ${active}${more}`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
@@ -6039,7 +6039,7 @@ export function assembleMoveRatingAnswer(r: MoveRatingLike): GroundedAnswer | nu
   } else if (r.quality === 'excellent') {
     verdict = `${r.playedSan} is within a whisker of best.${better}`;
   } else if (r.quality === 'good') {
-    verdict = `${r.playedSan} is fine; it gave up very little.${better}`;
+    verdict = `${r.playedSan} is fine. It gave up very little.${better}`;
   } else if (r.errorCall) {
     // WHY IT FAILED, FROM THE ONE ERROR COMPUTER (David 2026-10-10: "Unity!").
     verdict = `${r.playedSan} was ${r.errorCall.sentence}`;
@@ -6169,7 +6169,7 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   if (r.allowedMate !== null) verdict = `walked into a forced mate in ${r.allowedMate}`;
   else if (r.missedMate !== null) verdict = `missed a forced mate in ${r.missedMate}`;
   else if (r.quality === 'excellent') verdict = `was within a whisker of best`;
-  else if (r.quality === 'good') verdict = `was fine${cost('; it gave up very little')}`;
+  else if (r.quality === 'good') verdict = `was fine${cost(', and it gave up very little')}`;
   else if (r.quality === 'inaccuracy') verdict = `was a slight inaccuracy`;
   else if (r.quality === 'mistake') verdict = `was a mistake`;
   else if (r.quality === 'blunder') verdict = `was a blunder`;
@@ -6240,7 +6240,7 @@ export function assembleTransferGapAnswer(t: TransferGapLike): GroundedAnswer | 
   const w = t.worst;
   if (!w || w.gapPoints < 10) return null;
   return {
-    facts: `Your pattern knowledge is ahead of your board vision: you solve ${tacticWord(w.tacticType)} puzzles at ${w.puzzleAccuracyPct}% but only spot them in your own games ${w.gameRecognitionPct}% of the time — ${withArticle(w.gapPoints)}-point gap. Slow down and scan for ${tacticWord(w.tacticType)}s in real games; the knowledge is there, the recognition isn't yet.`,
+    facts: `Your pattern knowledge is ahead of your board vision: you solve ${tacticWord(w.tacticType)} puzzles at ${w.puzzleAccuracyPct}% but only spot them in your own games ${w.gameRecognitionPct}% of the time — ${withArticle(w.gapPoints)}-point gap. Slow down and scan for ${tacticWord(w.tacticType)}s in real games. The knowledge is there, the recognition isn't yet.`,
     bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
   };
 }

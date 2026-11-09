@@ -815,7 +815,7 @@ export function structurePlanFact(fen: string, studentColor: Color): StructurePl
   const centralFile = (sq: string): boolean => sq[0] === 'd' || sq[0] === 'e';
   const myIso = s.pawns.isolatedPawns[studentColor].filter(centralFile)[0];
   if (myIso) {
-    return { id: 'iqp-mine', squares: [myIso], text: `You're playing with the isolated pawn on ${myIso} — keep pieces on and use the open lines for activity; don't drift into the endgame where it's a target.` };
+    return { id: 'iqp-mine', squares: [myIso], text: `You're playing with the isolated pawn on ${myIso} — keep pieces on and use the open lines for activity. Don't drift into the endgame where it's a target.` };
   }
   if (named) return named;
   const theirIso = s.pawns.isolatedPawns[opp].filter(centralFile)[0];
@@ -858,9 +858,9 @@ export function namedPawnStructure(
     const f6 = b('f7') || b('f6');
     // SEATED (hand walk 1600, Caro-Kann as Black: "Black hits d4 with …c5").
     const [hit, hold] = studentColor === 'w' ? ['they hit', 'you defend'] : ['you hit', 'they defend'];
-    if (c5 && f6) return { name: 'French-type pawn chain', plan: `the break comes at the base of the chain — ${hit} d4 with …c5 and …f6; ${hold} the head on e5 and play on the kingside` };
-    if (c5) return { name: 'French-type pawn chain', plan: `the break comes at the base of the chain — ${hit} d4 with …c5; ${hold} the head on e5 and play on the kingside` };
-    if (f6) return { name: 'French-type pawn chain', plan: `the break comes at the head of the chain — ${hit} e5 with …f6; ${hold} it and play on the kingside` };
+    if (c5 && f6) return { name: 'French-type pawn chain', plan: `the break comes at the base of the chain — ${hit} d4 with …c5 and …f6. ${openSentence(hold)} the head on e5 and play on the kingside` };
+    if (c5) return { name: 'French-type pawn chain', plan: `the break comes at the base of the chain — ${hit} d4 with …c5. ${openSentence(hold)} the head on e5 and play on the kingside` };
+    if (f6) return { name: 'French-type pawn chain', plan: `the break comes at the head of the chain — ${hit} e5 with …f6. ${openSentence(hold)} it and play on the kingside` };
   }
   // CLOSED CENTRE — White d5+e4 vs Black d6+e5. Named by the STRUCTURE, never
   // by an opening: the same chain arises from the Damiano, the Philidor and the
@@ -872,8 +872,8 @@ export function namedPawnStructure(
     // check 2026-09-30, item 160: "you break on the queenside with c5" there).
     const qBreak = b('c5') ? 'b4' : 'c5';
     return studentColor === 'w'
-      ? { name: 'Closed centre', plan: `the wings decide: they storm the kingside with …f5-f4 and a pawn avalanche; you break on the queenside with ${qBreak}` }
-      : { name: 'Closed centre', plan: `the wings decide: you storm the kingside with …f5-f4 and a pawn avalanche; they break on the queenside with ${qBreak}` };
+      ? { name: 'Closed centre', plan: `the wings decide: they storm the kingside with …f5-f4 and a pawn avalanche. You break on the queenside with ${qBreak}` }
+      : { name: 'Closed centre', plan: `the wings decide: you storm the kingside with …f5-f4 and a pawn avalanche. They break on the queenside with ${qBreak}` };
   }
   const iso = isolaniStructure(fen, studentColor);
   if (iso) return { name: iso.name, plan: iso.plan };

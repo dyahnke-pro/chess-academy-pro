@@ -25,6 +25,7 @@
  * principleVoice.ts; persisted PVs (annotation.pv) come from the review's
  * deep dive.
  */
+import { openSentence } from '../utils/openSentence';
 import { uciToSans } from './structureJudgementKit';
 import { sideMaterial } from './pieceValues';
 import { sideToMoveAs } from './threatOut';
@@ -2075,7 +2076,7 @@ export function attributePrinciples(
     for (const d of ctx.deferrals) {
       if (d.to.some((claimant) => ids.has(claimant))) continue;
       const covered = pool.length > 0 ? `the ply still spoke via [${pool.map((f) => f.id).join(', ')}]` : 'and NOTHING else fired — the moment is unnamed';
-      why?.push(`${d.from}: YIELD UNHONOURED — stood down for [${d.to.join(', ')}], none fired; ${covered} (${d.reason})`);
+      why?.push(`${d.from}: YIELD UNHONOURED — stood down for [${d.to.join(', ')}], none fired. ${openSentence(covered)} (${d.reason})`);
     }
   }
 
