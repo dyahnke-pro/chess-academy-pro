@@ -2,7 +2,7 @@
 // 2…g6 3.b4 Bg7 4.Nc3 — read off the board, never a remembered pattern.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { deepFact, theirTarget, binding, moveHit } from './threeFacts';
+import { deepFact, theirTarget, binding, bindingFact, moveHit } from './threeFacts';
 
 const fenAfter = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
 
@@ -140,5 +140,23 @@ describe('deepFact — a check is not set up by a check (prod audits 2026-11-08)
     // Qd8+ Kg7 Qd4+ Kg8 Qd8+: a checking run that wins nothing — it was said
     // as "heading on to d4, where it gives check to their king".
     expect(deepFact('6k1/5p2/8/8/8/8/5PPP/3Q2K1 w - - 0 1', 'Qd8+', ['Kg7', 'Qd4+', 'Kg8', 'Qd8+'], true)).toBeNull();
+  });
+});
+
+describe('a move that takes one of the attackers answers in its own words (prod focus audit 2026-11-09)', () => {
+  // Record game 2: Nxg5 and their queen on d3 both hit h7. …Qxd3 took the
+  // queen; its own queen on d3 guarded h7 until cxd3, and the line said "Their
+  // knight taking on g5 is aimed at your pawn on h7, and your move covers it".
+  const BEFORE_NXG5 = 'rn2k1nr/pp3ppp/q1p1p3/3pP1b1/3P4/2NQ3N/PPP2PPP/2KR3R w kq - 0 10';
+  const BEFORE_QXD3 = 'rn2k1nr/pp3ppp/q1p1p3/3pP1N1/3P4/2NQ4/PPP2PPP/2KR3R b kq - 0 10';
+  const target = theirTarget({ fenBefore: BEFORE_NXG5, san: 'Nxg5' }, true);
+  it('their target is the h7 pawn', () => {
+    expect(target?.square).toBe('h7');
+  });
+  it('…Qxd3 is not said to cover it', () => {
+    expect(target && bindingFact(BEFORE_QXD3, 'Qxd3', target, null, true)).toBeNull();
+  });
+  it('twin: a quiet guard still covers it (…Nf6)', () => {
+    expect(target && bindingFact(BEFORE_QXD3, 'Nf6', target, null, true)?.idea).toBe('guard');
   });
 });

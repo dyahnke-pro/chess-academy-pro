@@ -323,6 +323,11 @@ export function bindingFact(fenBefore: string, san: string, target: TheirTarget,
   // A move that takes the attacker, or moves the target away, answers it in
   // its own words (the capture, the retreat) — the binding is not the point.
   if (r.move.to === target.by || r.move.from === target.square) return null;
+  // …and so does a move that takes ANY piece aimed at it (prod focus audit
+  // 2026-11-09: Nxg5 and their queen on d3 both hit h7; …Qxd3 took the queen,
+  // its own queen on d3 guarded h7 for a move, and the line said "and your
+  // move covers it" — the trade was the answer, and cxd3 took the guard).
+  if (r.move.captured && before.attackers(target.square as Square, r.move.color === 'w' ? 'b' : 'w').includes(r.move.to as Square)) return null;
   if (r.board.attackers(target.square as Square, mover).length > before.attackers(target.square as Square, mover).length) {
     return { text: 'and this covers it', idea: 'guard' };
   }
