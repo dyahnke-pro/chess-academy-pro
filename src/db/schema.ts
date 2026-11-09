@@ -31,6 +31,7 @@ import type { CapabilityEvidenceRecord } from '../services/capabilityEvidence';
 import type { LearnFocusResultRecord } from '../services/learnFocusRecord';
 import type { PuzzleMissRecord } from '../services/puzzleMissService';
 import type { MoveVerdictRecord } from '../services/moveVerdictStore';
+import type { BoardReadRecord } from '../services/boardReadStore';
 import type { StudentMemoryRecord } from '../services/studentMemory';
 import type { DemotedRowRecord } from '../services/demotedRows';
 import type { BossAttemptRecord, DialStateRecord, MissionResultRecord, PatternStatRecord } from '../missions/missionCard';
@@ -242,6 +243,7 @@ class ChessAcademyDB extends Dexie {
   dataFiles!: EntityTable<DataFileRecord, 'path'>;
   puzzleMisses!: EntityTable<PuzzleMissRecord, 'id'>;
   moveVerdicts!: EntityTable<MoveVerdictRecord, 'key'>;
+  boardReads!: EntityTable<BoardReadRecord, 'key'>;
   studentMemory!: EntityTable<StudentMemoryRecord, 'id'>;
   demotedRows!: EntityTable<DemotedRowRecord, 'id'>;
   missionResults!: EntityTable<MissionResultRecord, 'id'>;
@@ -1086,6 +1088,13 @@ class ChessAcademyDB extends Dexie {
     // asking, and past that whenever Lichess refuses. Additive cache, no
     // migration — an older install has asked nothing yet.
     this.version(46).stores({ explorerAnswers: 'key, savedAt' });
+
+    // v47 — ONE READ PER BOARD, ACROSS GAMES (task #155, 2026-11-09). Learn's
+    // next-board read and the price of the student's move from it are kept per
+    // position (`boardReadStore`), so the same board in a second game is judged
+    // from the same read and says the same verdict and the same better move.
+    // Additive cache, no migration — an older install has kept nothing yet.
+    this.version(47).stores({ boardReads: 'key, savedAt' });
   }
 }
 

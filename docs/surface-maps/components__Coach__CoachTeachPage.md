@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**17484 lines · 3 exports · 4 importers · 84 tests · 12 audits**
+**17495 lines · 3 exports · 4 importers · 85 tests · 12 audits**
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1726) — names `CoachTeachPage`
-- **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1871) — names `CoachTeachPage`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3765) — names `CoachTeachPage`
-- **The standard post-deploy ritual** (CLAUDE.md:6879) — names `CoachTeachPage`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1734) — names `CoachTeachPage`
+- **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1879) — names `CoachTeachPage`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3773) — names `CoachTeachPage`
+- **The standard post-deploy ritual** (CLAUDE.md:6887) — names `CoachTeachPage`
 
 ## Who calls in
 
@@ -52,6 +52,7 @@
 - `src/components/Coach/learnNextBoardRead.gate.test.ts`
 - `src/components/Coach/multiIntentRouting.test.ts`
 - `src/hooks/questionAlreadyAnswered.test.ts`
+- `src/services/boardReadStore.test.ts`
 - `src/services/claimKeysLooseCount.test.ts`
 - `src/services/coachAnswerGates.test.ts`
 - `src/services/coachGameEngine.test.ts`

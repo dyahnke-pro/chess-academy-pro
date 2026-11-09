@@ -324,6 +324,7 @@ import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighl
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseClaims, conceptInstanceKey, convertKey } from '../../services/positionFacts';
 import { gradePlayedMove, liveMovePrice, priceLabel, studentMovePrice, uciOfSan, type MovePrice, type PriceSearch } from '../../services/playedMoveGrade';
+import { BOARD_READ_LINES, isDraftRead, keptBoardRead, readBoardOnce } from '../../services/boardReadStore';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK, upcomingTacticSquares } from '../../services/liveTacticsContext';
@@ -1562,11 +1563,17 @@ export function CoachTeachPage({ mode }: {
     const handle = setTimeout(() => {
       void (async () => {
         try {
-          const wrapped = await withTimeout(
-            stockfishEngine.analyzePosition(fen, 12, undefined, 'brain', { signal: leftBoard.signal }),
-            5_000,
-            'teach-eval-bar',
-          );
+          // ONE READ PER BOARD (#155): a board with a kept read shows it and
+          // grades from it — no search; the bar reads only a new board.
+          const kept = await keptBoardRead(fen);
+          if (cancelled) return;
+          const wrapped = kept && !isDraftRead(kept)
+            ? { ok: true as const, value: kept }
+            : await withTimeout(
+              stockfishEngine.analyzePosition(fen, 12, undefined, 'brain', { signal: leftBoard.signal }),
+              5_000,
+              'teach-eval-bar',
+            );
           if (cancelled) return;
           if (!wrapped.ok) return;
           const a = wrapped.value;
@@ -10899,12 +10906,16 @@ export function CoachTeachPage({ mode }: {
           if (!reply) return null;
           try { const c = new Chess(move.fen); return c.move(reply) ? c.fen() : null; } catch { return null; }
         })();
+        // ONE READ PER BOARD, ACROSS GAMES (#155): a board Learn has read
+        // before is judged from that read — the same verdict and the same
+        // better move in every game (`boardReadStore`); a new board's read is
+        // kept for the next game.
         const nextBoardRead: Promise<StockfishAnalysis | null> = nextBoardFen
-          ? stockfishEngine.holdForQuestion(async (engine) => {
-              try { stockfishEngine.setMultiPv(6); } catch { /* not ready → stays at default */ }
+          ? readBoardOnce(nextBoardFen, () => stockfishEngine.holdForQuestion(async (engine) => {
+              try { stockfishEngine.setMultiPv(BOARD_READ_LINES); } catch { /* not ready → stays at default */ }
               try { return await engine.analyzePosition(nextBoardFen, COACH_TURN_DEPTH, undefined, NEXT_BOARD_READ_MS); }
               finally { try { stockfishEngine.setMultiPv(3); } catch { /* ignore */ } }
-            }).catch(() => null)
+            })).catch(() => null)
           : Promise.resolve(null);
         void nextBoardRead.then((a) => {
           if (a && nextBoardFen) studentBestReadRef.current = { fen: nextBoardFen, bestUci: a.bestMove || null, whiteCp: a.isMate ? null : a.evaluation, analysis: a };

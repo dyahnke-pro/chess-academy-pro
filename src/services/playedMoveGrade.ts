@@ -24,6 +24,7 @@ import { findHangingPieces } from './tacticClassifier';
 import { moveScoresOneSearch, uciOfSan, type CostFan, type MovePrice } from './moveCost';
 import { SINGLETON_SCORER } from './refutedAlternative';
 import { stockfishEngine } from './stockfishEngine';
+import { keepMovePrice, keptMovePrice } from './boardReadStore';
 import type { MoveScorer } from './pvPlayback';
 import { proofCut } from './exchangeLedger';
 import { gradeMove, provesOnlyMove } from './accuracyService';
@@ -294,7 +295,8 @@ export async function settledMovePrice(args: {
 const PRICE_MEMO = new Map<string, Promise<MovePrice | null>>();
 const PRICE_MEMO_CAP = 256;
 
-/** Test seam: forget every remembered price. */
+/** Test seam: forget every remembered price (a new page; the prices kept on
+ *  the device stay — `boardReadStore.forgetKeptBoards` clears those). */
 export function clearMovePriceMemo(): void { PRICE_MEMO.clear(); }
 
 /** THE PRICE OF THE PLAYED MOVE, FROM ONE SEARCH — memoized per (fen, move).
@@ -311,7 +313,7 @@ export function liveMovePrice(fenBefore: string, playedUci: string, fan: CostFan
  *  through the engine's hold: the search in flight stops and background reads
  *  wait, because the student is waiting on its answer. */
 export function studentMovePrice(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number): Promise<MovePrice | null> {
-  return memoPrice(fenBefore, playedUci, fan, depth, heldSearch);
+  return memoPrice(fenBefore, playedUci, fan, depth, heldSearch, true);
 }
 
 /** One scored search run through the engine's hold: the student is waiting. */
@@ -339,11 +341,19 @@ export function priceAgainstKey(fenBefore: string, playedUci: string, keyUci: st
 
 type OneSearch = (args: { fenBefore: string; playedUci: string; fan: CostFan | null; depth: number; budgetMs?: number }) => ReturnType<typeof moveScoresOneSearch>;
 
-function memoPrice(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number, search: OneSearch): Promise<MovePrice | null> {
+function memoPrice(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number, search: OneSearch, kept = false): Promise<MovePrice | null> {
   const key = `${fenBefore}|${playedUci}`;
   const known = PRICE_MEMO.get(key);
   if (known) return known;
-  const run = settledMovePrice({ fenBefore, playedUci, fan, depth, searchOnce: search });
+  const searched = (): Promise<MovePrice | null> => settledMovePrice({ fenBefore, playedUci, fan, depth, searchOnce: search });
+  // ONE PRICE PER BOARD, ACROSS GAMES (#155): the student's move from a board
+  // Learn has priced before is the price it said then — no search; a fresh
+  // settled price is kept for the next game (`boardReadStore`).
+  const run = kept
+    ? keptMovePrice(fenBefore, playedUci).then((k) => k
+      ? { ...k, ...(k.search ? { search: { ...k.search, searchMs: 0, deepened: false } } : {}) }
+      : searched().then((p) => { if (p) void keepMovePrice(fenBefore, playedUci, p); return p; }))
+    : searched();
   // A failed search is not remembered: the next reader may price it.
   const guarded = run.catch(() => null);
   void guarded.then((p) => { if (p === null && PRICE_MEMO.get(key) === guarded) PRICE_MEMO.delete(key); });
