@@ -184,6 +184,13 @@ export interface FocusPlantPick {
   seat: FocusSeat;
   /** What the move costs the coach against its best candidate. */
   dropCp: number;
+  /** THE READ THAT PROVED IT — the board the move leaves, read by the plant
+   *  (prod focus audit 2026-11-09: …Nc6 was planted on this read, the student
+   *  moved before the board's own read landed, and with no lines the chance
+   *  reader posed nothing, so the guarantee planted again at ply 21). It rides
+   *  with the planted board (\`FocusRunEvent\` 'board' \`plantLines\`), so the
+   *  chance is posed from the read that proved it. */
+  lines: readonly ReadLine[];
 }
 
 function linesOf(a: Awaited<ReturnType<SlipRead>>): ReadLine[] | null {
@@ -246,10 +253,10 @@ export async function findFocusPlant(
     const fit = ask.tag ? atStep.find((c) => c.tag === ask.tag || c.setupTag === ask.tag) : atStep[0];
     if (!fit) {
       bump('wrong-pattern');
-      if (!ask.extra && !anyPattern) anyPattern = { uci: slip.uci, chance: atStep[0], seat: 'exploit', dropCp: slip.dropCp };
+      if (!ask.extra && !anyPattern) anyPattern = { uci: slip.uci, chance: atStep[0], seat: 'exploit', dropCp: slip.dropCp, lines };
       continue;
     }
-    return { pick: { uci: slip.uci, chance: fit, seat: 'exploit', dropCp: slip.dropCp }, scan };
+    return { pick: { uci: slip.uci, chance: fit, seat: 'exploit', dropCp: slip.dropCp, lines }, scan };
   }
   return { pick: anyPattern, scan };
 }
@@ -334,7 +341,7 @@ async function flipPlant(
     const hardest = [...theirs].sort((a, b) => b.difficulty - a.difficulty)[0];
     const dropCp = coachBest - l.coachCp;
     if (!best || hardest.difficulty > best.chance.difficulty || (hardest.difficulty === best.chance.difficulty && dropCp < best.dropCp)) {
-      best = { uci: l.uci, chance: hardest, seat: 'defend', dropCp };
+      best = { uci: l.uci, chance: hardest, seat: 'defend', dropCp, lines };
     }
   }
   return { pick: best, scan };

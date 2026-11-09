@@ -36,7 +36,7 @@ function run(events: FocusEvent[], start: FocusRunState = FOCUS_IDLE): { state: 
 // The shape of a step; the reward effect has its own tests below.
 const kinds = (es: FocusEffect[]): string[] => es.filter((e) => e.kind !== 'reward' && e.kind !== 'question').map((e) => (e.kind === 'say' ? `say:${e.line}` : e.kind));
 const questionRow = (es: FocusEffect[]) => es.find((e): e is Extract<FocusEffect, { kind: 'question' }> => e.kind === 'question')?.row;
-const board = (fen: string, ply: number, steered = false, planted: PlantedSeat = null, prevFen: string | null = null): FocusEvent => ({ kind: 'board', fen, prevFen, beforeTheirMove: null, ply, student: fen.split(' ')[1] === 'w' ? 'w' : 'b', lines: null, steered, planted });
+const board = (fen: string, ply: number, steered = false, planted: PlantedSeat = null, prevFen: string | null = null): FocusEvent => ({ kind: 'board', fen, prevFen, beforeTheirMove: null, ply, student: fen.split(' ')[1] === 'w' ? 'w' : 'b', lines: null, steered, planted, plantLines: null });
 const turnRow = (es: FocusEffect[]) => es.find((e): e is Extract<FocusEffect, { kind: 'turn' }> => e.kind === 'turn')?.row;
 const rewards = (es: FocusEffect[]) => es.filter((e): e is Extract<FocusEffect, { kind: 'reward' }> => e.kind === 'reward');
 
@@ -135,7 +135,7 @@ describe('rung 0: a miss holds the board; never the answer unasked; Show me afte
     // joins it to this board, and every board-specific spot line went generic.
     const yourTurn = '4k3/3p4/8/8/8/8/5N2/4K3 w - - 0 1';
     const theirTurn = '4k3/3p4/8/8/4N3/8/8/4K3 b - - 0 1';
-    const hit: FocusEvent = { kind: 'board', fen: KNIGHT_HIT, prevFen: yourTurn, beforeTheirMove: theirTurn, ply: 9, student: 'w', lines: null, steered: false, planted: null };
+    const hit: FocusEvent = { kind: 'board', fen: KNIGHT_HIT, prevFen: yourTurn, beforeTheirMove: theirTurn, ply: 9, student: 'w', lines: null, steered: false, planted: null, plantLines: null };
     const { effects } = run([...start.slice(0, 3), hit, { kind: 'moved', move: move(KNIGHT_HIT, 'Kd2') }, { kind: 'try-again' }]);
     expect(effects[5][1]).toMatchObject({ kind: 'taken-back', spot: expect.stringMatching(/^Their pawn came to d5 and hit your knight on e4/) });
   });
@@ -434,7 +434,7 @@ describe('the tempo run (David 2026-10-22: "you HAD them on the run!")', () => {
   const A3 = play(P3, 'Ke2');
   const P4 = play(A3, 'Kf5');
   const L = (uci: string, ev = 20) => [{ moves: [uci], evaluation: ev, mate: null }, { moves: ['e1d1'], evaluation: 0, mate: null }];
-  const bd = (fen: string, prevFen: string | null, ply: number, lines: ReturnType<typeof L> | null): FocusEvent => ({ kind: 'board', fen, prevFen, beforeTheirMove: null, ply, student: 'w', lines, steered: false, planted: null });
+  const bd = (fen: string, prevFen: string | null, ply: number, lines: ReturnType<typeof L> | null): FocusEvent => ({ kind: 'board', fen, prevFen, beforeTheirMove: null, ply, student: 'w', lines, steered: false, planted: null, plantLines: null });
   const mv = (fen: string, san: string, lines: ReturnType<typeof L> | null): FocusEvent => ({ kind: 'moved', move: { ...move(fen, san), lines } });
   // The page's board event carries `prevFen` = the board the user moved FROM
   // (the motif reader's "your last turn") — never the board after the move.
@@ -613,7 +613,7 @@ describe('the castling watch', () => {
     { moves: ['d2d3', 'f6g4'], evaluation: -120, mate: null },
     { moves: ['a2a3', 'f6g4'], evaluation: 10, mate: null },
   ];
-  const readyBoard = (ply: number): FocusEvent => ({ kind: 'board', fen: READY, prevFen: null, beforeTheirMove: null, ply, student: 'w', lines: READ, steered: false, planted: null });
+  const readyBoard = (ply: number): FocusEvent => ({ kind: 'board', fen: READY, prevFen: null, beforeTheirMove: null, ply, student: 'w', lines: READ, steered: false, planted: null, plantLines: null });
   const moved = (san: string): FocusEvent => ({ kind: 'moved', move: { ...move(READY, san), lines: READ } });
   const opened = (rung: TacticsRung = 2): FocusEvent[] => [{ kind: 'start', setup: at(rung) }, readyBoard(7)];
 
@@ -742,5 +742,39 @@ describe('the castling watch', () => {
     expect(cheap.effects[2].at(-1)).toEqual({ kind: 'reply', punish: false });
     const stale = run([...opened(), moved('d3'), { kind: 'castle-read', fenBefore: KNIGHT_HIT, realCp: -120, whatIfCp: 40 }]);
     expect(stale.effects[3]).toEqual([]);
+  });
+});
+
+// ONE READ FOR THE PLANTED BOARD (prod focus audit 2026-11-09, rung2-g1): the
+// coach planted 5…Nc6 on its own read — 6.dxc6 wins the knight for a pawn —
+// and the student moved before the board's own read landed. With no lines a
+// knight for a pawn is under the unread gain bar, so nothing was posed and the
+// guarantee planted again at ply 21. The plant's read rides with the board.
+describe('the planted board is read with the read that proved the plant', () => {
+  // 1.d4 e6 2.e3 d5 3.Nf3 c5 4.c4 Qd6 5.cxd5 Nc6 — White to move.
+  const sans = ['d4', 'e6', 'e3', 'd5', 'Nf3', 'c5', 'c4', 'Qd6', 'cxd5', 'Nc6'];
+  const c = new Chess(); for (const s of sans) c.move(s);
+  const NC6 = c.fen();
+  const before = (() => { const b = new Chess(); for (const s of sans.slice(0, -1)) b.move(s); return b.fen(); })();
+  const plantRead = [
+    { moves: ['d5c6', 'b7c6', 'b1c3'], evaluation: 240, mate: null },
+    { moves: ['b1c3', 'e6d5'], evaluation: 30, mate: null },
+    { moves: ['e3e4', 'e6d5'], evaluation: 10, mate: null },
+  ];
+  const planted = (plantLines: typeof plantRead | null): FocusEvent => ({ kind: 'board', fen: NC6, prevFen: null, beforeTheirMove: before, ply: 11, student: 'w', lines: null, steered: false, planted: 'exploit', plantLines });
+  it('with no read of its own yet, the board poses the planted chance from the plant\'s read', () => {
+    const { state } = run([{ kind: 'start', setup: at(2, { targetPly: 11 }) }, planted(plantRead)]);
+    expect(state.board?.chances.some((ch) => ch.key === 'take:c6')).toBe(true);
+    expect(state.plant.presented?.ply).toBe(11);
+  });
+  it('the board\'s own read lands later and cannot take the planted chance away', () => {
+    const own = [{ moves: ['b1c3', 'e6d5'], evaluation: 30, mate: null }, { moves: ['e3e4', 'e6d5'], evaluation: 10, mate: null }];
+    const { state } = run([{ kind: 'start', setup: at(2, { targetPly: 11 }) }, planted(plantRead), { kind: 'read', fen: NC6, lines: own }]);
+    expect(state.board?.chances.some((ch) => ch.key === 'take:c6')).toBe(true);
+  });
+  it('without the plant\'s read the same board poses nothing (the old path)', () => {
+    const { state } = run([{ kind: 'start', setup: at(2, { targetPly: 11 }) }, planted(null)]);
+    expect(state.board?.chances.some((ch) => ch.key === 'take:c6')).toBe(false);
+    expect(state.plant.presented).toBeNull();
   });
 });

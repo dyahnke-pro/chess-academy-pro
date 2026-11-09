@@ -38,7 +38,7 @@ import { learnRewardFor, learnPraise, placePraise, savedWhy, tallyMove, fireLear
 import { useMissionRunner } from '../../missions/useMissionRunner';
 import { useFocusRunner } from '../../coach/focus/useFocusRunner';
 import { RETRY_REWARD, type FocusResult, type MissedChance, type PlantedSeat } from '../../coach/focus/focusRunner';
-import { chanceHoldOf, lineSans } from '../../coach/focus/focusChances';
+import { chanceHoldOf, lineSans, type ReadLine } from '../../coach/focus/focusChances';
 import { studentCp } from '../../coach/focus/castlingWatch';
 import { playOutPrompt } from '../../coach/focus/focusLines';
 import { FOCUS_DIALS } from '../../coach/focus/focusCard';
@@ -2339,7 +2339,7 @@ export function CoachTeachPage({ mode }: {
   const focusSteerPendingRef = useRef(false);
   /** The coach's last reply made a chance (`focusPlant`): on the user's side,
    *  or — flipped — its own tactic. */
-  const focusPlantPendingRef = useRef<PlantedSeat>(null);
+  const focusPlantPendingRef = useRef<{ seat: NonNullable<PlantedSeat>; lines: readonly ReadLine[] | null } | null>(null);
   /** The student's plies (1-based, the runner's count) on boards the coach
    *  MADE a chance on (`replyMadeAChance`): a find there never raises the
    *  opponent's strength (`liveStrength`). */
@@ -8622,7 +8622,8 @@ export function CoachTeachPage({ mode }: {
         : null;
       if (adaptive.source === 'lesson-steer') lessonMomentPendingRef.current = true;
       if (adaptive.focusSteered) focusSteerPendingRef.current = true;
-      if (adaptive.focusPlanted) focusPlantPendingRef.current = adaptive.focusPlanted;
+      // The plant's read rides with the board it leaves (one read per planted board).
+      if (adaptive.focusPlanted) focusPlantPendingRef.current = { seat: adaptive.focusPlanted, lines: adaptive.focusPlantLines ?? null };
       if (replyMadeAChance(adaptive)) coachMadePliesRef.current.add(plyOfFen(fen) + 2);
       if (adaptive.move) {
         const san = uciToSan(adaptive.move);
@@ -11828,14 +11829,14 @@ export function CoachTeachPage({ mode }: {
                 : latestEvalRef.current?.fen === boardFen ? latestEvalRef.current.analysis ?? null : null;
               const steered = focusSteerPendingRef.current;
               focusSteerPendingRef.current = false;
-              const planted = focusPlantPendingRef.current;
+              const plant = focusPlantPendingRef.current;
               focusPlantPendingRef.current = null;
               // The 1-based ply the user's next move will have — the record's
               // count (`promptedPlies`, `steeredPlies`) and `plantAsk`'s. Read
               // off the user's move (history after it, the reply, then theirs):
               // `gameRef` updates on render, so right after the reply it still
               // holds the board BEFORE it and filed every ply one short.
-              focusRef.current.board({ fen: boardFen, prevFen: fenBefore || null, beforeTheirMove: move.fen, ply: move.history.length + 2, student: playerColor === 'white' ? 'w' : 'b', lines: read?.topLines ?? null, steered, planted });
+              focusRef.current.board({ fen: boardFen, prevFen: fenBefore || null, beforeTheirMove: move.fen, ply: move.history.length + 2, student: playerColor === 'white' ? 'w' : 'b', lines: read?.topLines ?? null, steered, planted: plant?.seat ?? null, plantLines: plant?.lines ?? null });
             }
           }
           // THE TURN'S QUESTION is asked AFTER the turn's instant decision

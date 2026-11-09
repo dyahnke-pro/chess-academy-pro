@@ -22,6 +22,7 @@ import '../missions/scorers';
 import { posesDefendSeat } from '../missions/scorers/focus';
 import { findFocusPlant, type FocusPlantAsk, type FocusPlantPick, type FocusPlantReject } from '../coach/focus/focusPlant';
 import type { FocusId, FocusSeat } from '../coach/focus/focusCard';
+import type { ReadLine } from '../coach/focus/focusChances';
 import type { TacticsRung } from '../coach/focus/focusRung';
 import type { MotifLevel } from '../data/tacticMotifs';
 import type { FairKey } from './thinkingPositions';
@@ -559,6 +560,8 @@ interface AdaptiveMoveResult {
    *  (a slip), or — flipped, the student way ahead — their own tactic. A find
    *  on the next board counts half. */
   focusPlanted?: FocusSeat;
+  /** The plant's read of the board this move leaves (\`FocusPlantPick.lines\`). */
+  focusPlantLines?: readonly ReadLine[];
   /** The plant was armed and looked: why it planted nothing (empty when it did). */
   plantScan?: PlantScan;
   /** The read of every move on this board that the human model chose from —
@@ -641,7 +644,7 @@ async function applyMissionDials(
       fen,
       details: JSON.stringify({ focus: mission.focus.id, rung: mission.focus.rung, ask: mission.focus.plant.tag, difficulty: mission.focus.plant.difficulty, extra: mission.focus.plant.extra, carried: mission.focus.plant.carried, missStreak: mission.focus.plant.missStreak, planted: pick?.uci ?? null, seat: pick?.seat ?? null, chance: pick?.chance.key ?? null, tag: pick?.chance.tag ?? null, dropCp: pick?.dropCp ?? null, scan, replaced: chosen.move }),
     });
-    if (pick) return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: 'focus-plant', focusPlanted: pick.seat };
+    if (pick) return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: 'focus-plant', focusPlanted: pick.seat, focusPlantLines: pick.lines };
   }
   // ALONG THE LINE (§6a): the student is on the slip's winning line and it is
   // the coach's turn in it — the coach answers as the line says (its best

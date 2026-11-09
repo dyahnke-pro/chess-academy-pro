@@ -70,6 +70,12 @@ interface BoardState {
   /** The coach's last move was a plant (`focusPlant`): a chance in that seat
    *  here counts half, like a steered one. */
   planted: PlantedSeat;
+  /** ONE READ FOR THE PLANTED BOARD (prod focus audit 2026-11-09): the read
+   *  the plant proved its chance on. The planted seat's chances are posed from
+   *  it as well as from the board's own read, so a student who moves before
+   *  the board's read lands still meets the chance, and a later read may add
+   *  chances but never takes the planted one away. Null off a planted board. */
+  plantLines: readonly ReadLine[] | null;
   /** A question was asked on this board. */
   prompted: boolean;
   /** The chance a question was asked about OUT LOUD on this board (the
@@ -243,7 +249,7 @@ export type FocusEvent =
   | { kind: 'start'; setup: FocusSetup }
   | { kind: 'stop' }
   /** The user is to move on this board. */
-  | { kind: 'board'; fen: string; prevFen: string | null; beforeTheirMove: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean; planted: PlantedSeat }
+  | { kind: 'board'; fen: string; prevFen: string | null; beforeTheirMove: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean; planted: PlantedSeat; plantLines: readonly ReadLine[] | null }
   /** An engine read landed for the board the user is on. */
   | { kind: 'read'; fen: string; lines: readonly ReadLine[] }
   /** The user moved (before the coach replies). */
@@ -412,7 +418,11 @@ function owedAfterMiss(owed: readonly MisconceptionTagId[], tag: MisconceptionTa
 function onBoard(s: FocusRunState, b: BoardState): FocusStep {
   const setup = s.setup;
   if (!setup) return { state: s, effects: [] };
-  const chances = chancesAt({ fen: b.fen, prevFen: b.prevFen, beforeTheirMove: b.beforeTheirMove, student: b.student, lines: b.lines }, new Set(setup.levels));
+  const open = new Set(setup.levels);
+  const read = (lines: readonly ReadLine[] | null): FocusChance[] => chancesAt({ fen: b.fen, prevFen: b.prevFen, beforeTheirMove: b.beforeTheirMove, student: b.student, lines }, open);
+  const own = read(b.lines);
+  const planted = b.planted && b.plantLines ? read(b.plantLines).filter((c) => c.seat === b.planted && !own.some((x) => x.key === c.key)) : [];
+  const chances = [...own, ...planted];
   // THE GUARANTEE (focusPlant): the first chance on your side at your rung —
   // the board's own or the coach's plant — presents the focus this game.
   const shown = s.plant.presented ? null : chances.find((c) => presents(c, setup.rung, b.ply, setup.targetPly)) ?? null;
@@ -564,7 +574,7 @@ function stepInner(s: FocusRunState, e: FocusEvent): FocusStep {
       const castle = castleReady(e.fen, e.student)
         ? { ...s.castle, boards: [...s.castle.boards.filter((x) => x.ply < e.ply), { ply: e.ply, fen: e.fen, prevFen: e.prevFen, beforeTheirMove: e.beforeTheirMove, lines: e.lines }] }
         : s.castle;
-      const next = onBoard({ ...s, plant, castle, tempo: run.tempo, stood: run.stood, lastMove: null, spoke: false }, { fen: e.fen, prevFen: e.prevFen, beforeTheirMove: e.beforeTheirMove, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, planted: e.planted, prompted: false, askedChance: null, questioned: null });
+      const next = onBoard({ ...s, plant, castle, tempo: run.tempo, stood: run.stood, lastMove: null, spoke: false }, { fen: e.fen, prevFen: e.prevFen, beforeTheirMove: e.beforeTheirMove, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, planted: e.planted, plantLines: e.plantLines, prompted: false, askedChance: null, questioned: null });
       return { state: next.state, effects: [...run.effects, ...next.effects] };
     }
     case 'read': {
@@ -685,7 +695,7 @@ function goBackAndCastle(s: FocusRunState, target: CastleBoard): FocusStep {
   const flagged: FocusEffect[] = s.pause ? [{ kind: 'taken-back', fen: s.pause.fenBefore, san: s.pause.san, spot: s.pause.chance ? spotOf(s, s.pause.chance, s.pause.fenBefore, s.pause.san) : null }] : [];
   // The moves taken back leave the run too.
   const rewound: FocusRunState = { ...s, pause: null, carried: [], tempo: { ...s.tempo, length: 0 }, stood: s.stood.filter((x) => x.ply < target.ply), lastMove: null, castle: { ...s.castle, boards: s.castle.boards.filter((b) => b.ply <= target.ply) } };
-  const step = onBoard(rewound, { fen: target.fen, prevFen: target.prevFen, beforeTheirMove: target.beforeTheirMove, ply: target.ply, student: target.fen.split(' ')[1] === 'b' ? 'b' : 'w', lines: target.lines, chances: [], steered: false, planted: null, prompted: true, askedChance: null, questioned: null });
+  const step = onBoard(rewound, { fen: target.fen, prevFen: target.prevFen, beforeTheirMove: target.beforeTheirMove, ply: target.ply, student: target.fen.split(' ')[1] === 'b' ? 'b' : 'w', lines: target.lines, chances: [], steered: false, planted: null, plantLines: null, prompted: true, askedChance: null, questioned: null });
   return { state: step.state, effects: [{ kind: 'rewind', ply: target.ply }, ...flagged, { kind: 'prompt', ply: target.ply }, ...step.effects] };
 }
 
