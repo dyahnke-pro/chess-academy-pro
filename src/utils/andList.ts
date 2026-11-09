@@ -115,7 +115,7 @@ export function fenAfterSans(fen: string | null, sans: readonly string[]): strin
  *  said the dxe6 that took the knight). Read on the line's board: of the
  *  captures between the first move and the last, the one that takes the most
  *  — never one half of a trade (a capture taken straight back on its square
- *  for the same value). It is said unless the line's last move is the same
+ *  for the same value), nor a take-back for less than it answers. It is said unless the line's last move is the same
  *  side's and takes as much, so the line already names it. Who comes out
  *  ahead is not read off the line: a line said to its blow is often cut
  *  before the recapture that settles it (the Rxa4 line ends on their rook
@@ -124,11 +124,16 @@ export function fenAfterSans(fen: string | null, sans: readonly string[]): strin
 function winningMove(sans: readonly string[], fen: string | null): number | null {
   const takes = fen ? lineTakes(sans, fen) : null;
   if (!takes) return null;
+  // Part of the exchange, not its winner: one half of an even trade, or a
+  // take-back on the same square for less than the capture it answers (the
+  // Rxd4 Bxd4+ Bxd4 Rxd4 chain is said by its result). A take-back for MORE
+  // is the blow (…Qxg5 Qxg5 takes the queen).
   const traded = (i: number): boolean => {
     const a = takes[i];
     const next = takes[i + 1];
     const prev = takes[i - 1];
-    return (!!next && next.to === a.to && next.took === a.took) || (!!prev && prev.to === a.to && prev.took === a.took);
+    if (prev && prev.to === a.to && a.took <= prev.took) return true;
+    return !!next && next.to === a.to && next.took === a.took;
   };
   let best: number | null = null;
   for (let i = 1; i < takes.length - 1; i += 1) {

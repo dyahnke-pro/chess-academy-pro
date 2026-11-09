@@ -44,6 +44,11 @@ describe('a long line names the move that wins (David 2026-11-09: "yes!")', () =
     // Ng5 Be6 Bxe6 fxe6 Nxe6: bishop for bishop, then the knight takes e6.
     expect(lineShapePlies(['Ng5', 'Be6', 'Bxe6', 'fxe6', 'Nxe6'], '2b1k3/5p2/8/8/8/1B3N2/8/6K1 w - - 0 1')).toEqual([0, 4]);
   });
+  it('a capture chain on one square is said by its result: no take-back for less is named', async () => {
+    const { lineShapePlies } = await import('./andList');
+    // Rxd4 Bxd4+ Bxd4 Rxd4: the queen falls first; the rest take back.
+    expect(lineShapePlies(['Rxd4', '…Bxd4+', 'Bxd4', '…Rxd4'], '3rk3/8/5b2/8/3q4/8/1B6/3R2K1 w - - 0 1')).toEqual([0, 3]);
+  });
   it('a piece given for less: the move that takes it back is the win', async () => {
     const { lineShape } = await import('./andList');
     const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 1';
