@@ -42,6 +42,19 @@ describe('moveIntro — the move named, the words around it rotated (David 2026-
     const long = 'adds one guard to your pawn on g6, which their pawn on f5 attacks, and gets your king out of the check from their queen';
     for (const san of moves) expect(introWithPredicate('student', san, long).split(/\s+/).length, san).toBeLessThanOrEqual(32);
   });
+  it('"goes to g3" is never the third square in its sentence (humanSquares gate)', () => {
+    const squares = (t: string): number => new Set(t.match(/\b[a-h][1-8]\b/g) ?? []).size;
+    for (const san of ['Qg3', 'Nf3', 'Bc4', 'Re1', 'Bb5+']) {
+      const t = introWithPredicate('student', san, 'stops their pawn coming to f6, where it would hit your bishop on g5');
+      expect(squares(t), t).toBeLessThanOrEqual(2);
+    }
+  });
+  it('never two which-clauses in a row ("You go e4, which prepares e5, which would kick…")', () => {
+    for (const san of moves) {
+      const t = introWithPredicate('student', san, 'prepares e5, which would kick their knight on f6');
+      expect(t.match(/\bwhich\b/g)?.length ?? 0, t).toBeLessThanOrEqual(1);
+    }
+  });
   it('one sentence never holds two dashes', () => {
     for (const san of moves) {
       const t = introWithPredicate('student', san, 'wins a knight — if Bxc3, Qxc3+');

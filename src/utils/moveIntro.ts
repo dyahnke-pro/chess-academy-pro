@@ -30,6 +30,10 @@ const PIECE: Record<string, string> = { N: 'knight', B: 'bishop', R: 'rook', Q: 
 function ownedMove(whose: string, san: string, predicate: string): string | null {
   const bare = san.replace(/^…/, '');
   if (bare.includes('x') || bare.endsWith('#')) return null;
+  // "Goes to g3" names a square the move's name did not: never the third in
+  // its sentence (humanSquares gate — "Your queen goes to g3 and stops their
+  // pawn coming to f6, where it would hit your bishop on g5" is a list).
+  if (new Set(predicate.match(/\b[a-h][1-8]\b/g) ?? []).size >= 2 && /^[NBRQK]/.test(bare)) return null;
   const piece = /^([NBRQK])([a-h])?([1-8])?([a-h][1-8])(\+)?$/.exec(bare);
   if (piece) return `${whose} ${piece[2] ? `${piece[2]}-` : ''}${PIECE[piece[1]]} goes to ${piece[4]}${piece[5] ? ' with check' : ''} and ${predicate}`;
   return /^[a-h][1-8](=[QRBN])?\+?$/.test(bare) ? `${whose} ${bare} ${predicate}` : null;
@@ -71,7 +75,8 @@ export function introWithPredicate(seat: IntroSeat, san: string, predicate: stri
   return rotateFitting([
     `${who} play ${san}${joined(predicate)} ${predicate}`,
     ...(owned ? [owned] : []),
-    `${who} go ${san}, which ${predicate}`,
+    // "You go e4, which prepares e5, which would kick…" stacks two which-clauses.
+    ...(/\bwhich\b/.test(predicate) ? [] : [`${who} go ${san}, which ${predicate}`]),
   ], stemKeyOf(`${seat}|${san}`));
 }
 
