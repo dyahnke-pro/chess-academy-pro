@@ -36,7 +36,7 @@ describe('review walk 1500 — claims the board did not support', () => {
 
 describe('review walk 1500 — tense', () => {
   it('orientation (concept) beats stay in the present — rules, not history', () => {
-    const rule = "Your structure just took a hit — an isolated pawn on the a-file. It's a target now; look to trade it off.";
+    const rule = "Your structure just took a hit — an isolated pawn on the a-file. It's a target now. Look to trade it off.";
     expect(past(rule, 'orientation')).toBe(rule);
     const convert = "You're up material with the position simplified. Improve your worst piece, trade when it's offered.";
     expect(past(convert, 'orientation')).toBe(convert);

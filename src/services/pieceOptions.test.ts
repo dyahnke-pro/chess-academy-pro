@@ -198,7 +198,7 @@ describe('the best square was the move played (Learn walk 2026-10-14)', () => {
       ],
       playedSan: 'Bc3', playedCp: 120, allMoves: 9,
     });
-    expect(text).toMatch(/So Bc3 was the right square — it was the move played; the next best, Be3, costs about a point\./);
+    expect(text).toMatch(/So Bc3 was the right square — it was the move played\. The next best, Be3, costs about a point\./);
   });
   it('a "moving it does not help" verdict says what moving it costs', () => {
     const text = renderPieceOptions({

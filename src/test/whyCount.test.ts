@@ -17,7 +17,7 @@ const EFFECT_WHYS = [
   'Nothing has to happen yet — a useful waiting move is enough, and it makes them commit first.',
   'Bishop takes c3, check is a good trade — it removes a defender of their king.',
   'One knight move here answers no, whatever they reply. After Bd2, your bishop on c3 can be taken.',
-  'So Bc3 was the right square — it was the move played; the next best, Be3, costs about a point.',
+  'So Bc3 was the right square — it was the move played. The next best, Be3, costs about a point.',
   "They're eyeing knight takes a7, check — your pawn on a7 has no defender.",
   "Watch what they're building — left alone, their idea starts with b-pawn takes c5, and it swings the game by five points or more.",
   "You're now threatening knight to c2, check — it forks the king and rook on a1.",

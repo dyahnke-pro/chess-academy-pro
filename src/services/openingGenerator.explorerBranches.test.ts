@@ -108,7 +108,7 @@ describe('a line the opening DB stops on is taught from the masters\' games', ()
     expect(lastOf(fork.children[1].node).idea).not.toContain('run out');
     expect(tree.explorerIncomplete).toBeUndefined();
     // How the database's games scored, from the student's seat.
-    expect(tree.intro).toContain('In 606 master games from here, your side wins 35% and theirs 22%; the rest are drawn.');
+    expect(tree.intro).toContain('In 606 master games from here, your side wins 35% and theirs 22%. The rest are drawn.');
   }, 120_000);
 
   it('the move the line is named for says the break it prepares, from the database', async () => {

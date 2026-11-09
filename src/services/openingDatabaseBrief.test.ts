@@ -28,7 +28,7 @@ describe('openingDatabaseBrief — what an opening is, from the databases', () =
     const text = b?.text ?? '';
     expect(text.startsWith('The Sicilian Defense: Mengarini Variation is e4 c5 a3.')).toBe(true);
     expect(text).toMatch(/They play a3 — it prepares b4: their pawn on a3 covers b4, and masters push b4 in \d+% of their games from here\./);
-    expect(text).toContain('In 606 master games from here, your side wins 35% and theirs 22%; the rest are drawn.');
+    expect(text).toContain('In 606 master games from here, your side wins 35% and theirs 22%. The rest are drawn.');
     // …Nf6 (3%) is under the bar the lesson's fork tiles use.
     expect(text).toContain('The masters answer …g6 in 50%, …Nc6 in 20% and …e6 in 18% of their games.');
   });
