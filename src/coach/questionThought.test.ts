@@ -38,7 +38,7 @@ describe('"why is it best?" — what the move does, then the other moves', () =>
   it('a close call names the move\'s job, then the other plan and its job', () => {
     const { san, text } = whyBest('colle800', 10);
     expect(san).toBe('Nbd2');
-    expect(text).toMatch(new RegExp(`^${introHead('student', 'Nbd2')}develops into the game`));
+    expect(text).toMatch(new RegExp(`^${introHead('student', 'Nbd2', 'now')}develops into the game`));
     expect(text).toMatch(/The other plan is O-O, about as good: it castles your king into safety/);
     // The move's job is said once, never again inside the comparison.
     expect(text!.match(/develops into the game/g)).toHaveLength(1);
@@ -64,7 +64,7 @@ describe('"why did they play that?"', () => {
     const board = new Chess();
     for (const s of g.sans.slice(0, 20)) board.move(s);
     const ctx = { fen: board.fen(), history: g.sans.slice(0, 20), studentColor: g.studentSide, bestUci: null, reads: null, reason: null };
-    expect(answerQuestionThought('opponent-move', ctx)?.text).toMatch(new RegExp(`^${introHead('opponent', 'b5')}`));
+    expect(answerQuestionThought('opponent-move', ctx)?.text).toMatch(new RegExp(`^${introHead('opponent', 'b5', 'now')}`));
     // After the student's own move it is not their move to explain.
     const mine = new Chess(board.fen()); mine.move('Nf1');
     expect(answerQuestionThought('opponent-move', { ...ctx, fen: mine.fen(), history: [...ctx.history, 'Nf1'] })).toBeNull();

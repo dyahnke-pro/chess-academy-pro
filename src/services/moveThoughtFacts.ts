@@ -234,7 +234,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     const subjectLed = /^(The|A|An|This|That|Their|Your)\b/.test(teacher.text);
     // Its develop reading is its last resort ("the knight develops to d2,
     // joining the game") — the move read back, said only when nothing else is.
-    add('board-teacher', 'buildReviewMoveTeachingFact', 'boardTeacher', teacher.idea, joinReview([toClause(teacher.text)], i.moverIsStudent, i.san),
+    add('board-teacher', 'buildReviewMoveTeachingFact', 'boardTeacher', teacher.idea, joinReview([toClause(teacher.text)], i.moverIsStudent, i.san, i.tense),
       subjectLed ? teacher.text : `It also ${continueSentence(teacher.text)}`, teacher.squares, 50, teacher.idea === 'develop' || teacher.restates === true);
   }
 

@@ -8,19 +8,22 @@ function owned(seat: 'student' | 'opponent', san: string): string | null {
   return /^[a-h][1-8](?:=[QRBN])?\+?$/.test(san) ? `${whose} ${esc(san)} ` : null;
 }
 
-/** Any present-tense head for a verb-led predicate, ending where the predicate starts. */
-export function introHead(seat: 'student' | 'opponent', san: string): string {
+/** Any head for a verb-led predicate in the surface's tense (\`moveIntro\`:
+ *  a lesson or a question shows the move, 'now'; Review says a move already
+ *  played, 'past'), ending where the predicate starts. */
+export function introHead(seat: 'student' | 'opponent', san: string, tense: 'now' | 'past'): string {
   const who = seat === 'student' ? 'You' : 'They';
+  if (tense === 'past') return `(?:${who} played ${esc(san)}(?: — it|: it|\\. It)|${who} went for ${esc(san)}, which) `;
   const heads = [`${who} play ${esc(san)}(?: — it|: it|\\. It)`, `${who} go ${esc(san)}, which`];
   const o = owned(seat, san);
   if (o) heads.push(esc(o).replace(/ $/, ''));
   return `(?:${heads.join('|')}) `;
 }
 
-/** Any present-tense head for a gerund list. */
-export function introGerundHead(seat: 'student' | 'opponent', san: string): string {
+/** Any head for a gerund list, in the surface's tense. */
+export function introGerundHead(seat: 'student' | 'opponent', san: string, tense: 'now' | 'past'): string {
   const who = seat === 'student' ? 'You' : 'They';
-  return `(?:${who} play|${who} go) ${esc(san)}, `;
+  return tense === 'past' ? `(?:${who} played|${who} went for) ${esc(san)}, ` : `(?:${who} play|${who} go) ${esc(san)}, `;
 }
 
 /** Any head a Review or lesson sentence about a move may open with, present

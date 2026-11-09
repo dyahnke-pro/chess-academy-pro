@@ -24,6 +24,6 @@ describe('review walk — the student\'s own move says its job past the opening'
     const at = (ply: number): string => segs[ply - 1].narration ?? '';
     
     // The queen it would have hit is the one that moved: no old square named.
-    expect(at(73)).toMatch(new RegExp(introHead('student', 'Qe4') + String.raw`stops their pawn coming to e4, which would have hit your queen\.`));
+    expect(at(73)).toMatch(new RegExp(introHead('student', 'Qe4', 'past') + String.raw`stops their pawn coming to e4, which would have hit your queen\.`));
   }, 120_000);
 });

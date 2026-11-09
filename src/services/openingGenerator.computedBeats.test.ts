@@ -87,7 +87,7 @@ describe('the taught line with the provider dead', () => {
     // it (PASS 1's two-beat contract).
     const own = (n: WalkthroughTreeNode): RegExp => {
       const seat = n.movedBy === tree.studentSide ? 'student' : 'opponent';
-      return new RegExp(`${introHead(seat, n.san ?? '')}|${introGerundHead(seat, n.san ?? '')}`);
+      return new RegExp(`${introHead(seat, n.san ?? '', 'now')}|${introGerundHead(seat, n.san ?? '', 'now')}`);
     };
     for (const n of plies.slice(0, 4)) expect(n.idea, `ply ${n.san}`).toMatch(own(n));
     expect(spoken[0]).toMatch(/\be4\b/);

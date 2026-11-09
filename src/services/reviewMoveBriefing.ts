@@ -24,7 +24,7 @@
  * (the student's own finished game) with the locked perspective: the student is
  * "you", the opponent "they".
  */
-import { introWithGerund, introWithPredicate } from '../utils/moveIntro';
+import { introWithGerund, introWithPredicate, type IntroTense } from '../utils/moveIntro';
 import { evalBand, evalBandWords } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { settledLeadFor, type LastMove } from './material';
@@ -517,7 +517,8 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
     .sort((a, b) => b.score - a.score)
     .slice(0, 3)
     .map((a) => a.text);
-  const moveClause = rankedMechanics.length ? joinReview(rankedMechanics, moverIsStudent, mv.san) : '';
+  // The briefing is Review's: a move already played.
+  const moveClause = rankedMechanics.length ? joinReview(rankedMechanics, moverIsStudent, mv.san, 'past') : '';
   // THEIR TARGET AND THE BINDING (facts two and three): what the other side's
   // last move aims at, said only when this move answers it — it covers the
   // target, or its own point lands on the same side of the board. The move's
@@ -564,7 +565,7 @@ export function toClause(sentence: string): string {
 
 /** Join the ranked aspect clauses into one review-register sentence, seat-stamped:
  *  the student is "you", the opponent "they". A seat-free caller gets "The move X". */
-export function joinReview(clauses: string[], moverIsStudent: boolean | undefined, san: string): string {
+export function joinReview(clauses: string[], moverIsStudent: boolean | undefined, san: string, tense: IntroTense): string {
   const subject = moverIsStudent === true ? 'You play ' : moverIsStudent === false ? 'They play ' : `${cleanSan(san)}: `;
   // The clauses are gerund/participle fragments ("winning the knight", "opening
   // the c-file") that read as a list after the move; the "but conceding…" clause
@@ -589,9 +590,10 @@ export function joinReview(clauses: string[], moverIsStudent: boolean | undefine
   // SAID LIKE A PERSON, ROTATED (David 2026-11-09: "mix up the phrasing
   // whenever possible"): the move is still named, the words around it vary.
   const seat = moverIsStudent ? 'student' : 'opponent';
-  // Review's walk says a move already played: its head is built in the past.
-  if (/^\w+ing\b/.test(said)) return `${introWithGerund(seat, cleanSan(san), said, 'past')}.`;
-  if (said.startsWith('it ')) return `${introWithPredicate(seat, cleanSan(san), said.slice(3), 'past')}.`;
+  // The head in the caller's tense: Review's walk says a move already played,
+  // a lesson the move as it is shown.
+  if (/^\w+ing\b/.test(said)) return `${introWithGerund(seat, cleanSan(san), said, tense)}.`;
+  if (said.startsWith('it ')) return `${introWithPredicate(seat, cleanSan(san), said.slice(3), tense)}.`;
   return `${subject}${cleanSan(san)}${joiner}${said}.`;
 }
 

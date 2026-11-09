@@ -16,8 +16,8 @@ describe('moveIntro — the move named, the words around it rotated (David 2026-
   });
   it('every form names the move, from the right seat', () => {
     for (const san of moves) {
-      expect(introWithPredicate('student', san, 'grabs space', 'now')).toMatch(new RegExp(`^${introHead('student', san)}grabs space$`));
-      expect(introWithPredicate('opponent', san, 'grabs space', 'now')).toMatch(new RegExp(`^${introHead('opponent', san)}grabs space$`));
+      expect(introWithPredicate('student', san, 'grabs space', 'now')).toMatch(new RegExp(`^${introHead('student', san, 'now')}grabs space$`));
+      expect(introWithPredicate('opponent', san, 'grabs space', 'now')).toMatch(new RegExp(`^${introHead('opponent', san, 'now')}grabs space$`));
     }
   });
   it('a piece move keeps its name — never "your knight goes to f3 and …", which repeated the square-choice fact ("Their bishop went to c4")', () => {

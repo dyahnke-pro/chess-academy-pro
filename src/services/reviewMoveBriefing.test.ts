@@ -13,7 +13,7 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
     const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true });
     expect(out).toMatch(/winning a knight/);
     expect(out).not.toMatch(/wins material/);
-    expect(out).toMatch(new RegExp(`^${introGerundHead('student', 'Qxd4')}`));
+    expect(out).toMatch(new RegExp(`^${introGerundHead('student', 'Qxd4', 'past')}`));
   });
 
   it('states the concrete THREAT a move creates ("what it threatens")', () => {
@@ -181,7 +181,7 @@ describe('a teaching sentence that names whose piece keeps its subject (2026-11-
     const { toClause, joinReview } = await import('./reviewMoveBriefing');
     const c = toClause('Their knight joins the fight for e5, backing their e-pawn\'s push there.');
     expect(c).toBe('their knight joins the fight for e5, backing their e-pawn\'s push there');
-    expect(joinReview([c], false, 'Nc6')).toBe(`${introWithPredicate('opponent', 'Nc6', 'joins the fight for e5, backing their e-pawn\'s push there', 'past')}.`);
-    expect(joinReview([toClause('Your pawn joins the fight for d4.')], true, 'c3')).toBe(`${introWithPredicate('student', 'c3', 'joins the fight for d4', 'past')}.`);
+    expect(joinReview([c], false, 'Nc6', 'past')).toBe(`${introWithPredicate('opponent', 'Nc6', 'joins the fight for e5, backing their e-pawn\'s push there', 'past')}.`);
+    expect(joinReview([toClause('Your pawn joins the fight for d4.')], true, 'c3', 'past')).toBe(`${introWithPredicate('student', 'c3', 'joins the fight for d4', 'past')}.`);
   });
 });

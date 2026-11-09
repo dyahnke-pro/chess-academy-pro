@@ -72,4 +72,7 @@
 // 2026-11-09-voice8 — a move is introduced in rotated words (`moveIntro`:
 // "You play X — it …" / "Their knight goes to f3 and …" / "You go X, which …"),
 // a castle said "they castle kingside"; one recapture read (`takesBack`).
-export const WALKTHROUGH_GEN_REV = '2026-11-09-voice8';
+// 2026-11-09-voice9 — the square choice is not asked of a piece the engine
+// took to another square, and never faults a square the engine reads no worse
+// (prod Review 2026-11-09: "Better was Ne2+ … On h3 or e2 it hangs").
+export const WALKTHROUGH_GEN_REV = '2026-11-09-voice9';

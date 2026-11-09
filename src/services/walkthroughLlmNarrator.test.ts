@@ -35,9 +35,9 @@ describe('generateWalkthroughNarrations — computed, not authored', () => {
     // Filler (a GENERIC_ANNOTATION_PATTERNS match) is replaced by the computed fill.
     expect(narrations[2]).not.toBe('The position is roughly equal.');
     // Seat-stamped: the student's own move says "You play", the opponent's "They play".
-    expect(narrations[2]).toMatch(new RegExp(`^(?:${introHead('student', 'Nf3')}|${introGerundHead('student', 'Nf3')})`));
-    expect(narrations[1]).toMatch(new RegExp(`^${introHead('opponent', 'e5')}`));
-    expect(narrations[4]).toMatch(new RegExp(`^(?:${introHead('student', 'Bc4')}|${introGerundHead('student', 'Bc4')})`));
+    expect(narrations[2]).toMatch(new RegExp(`^(?:${introHead('student', 'Nf3', 'now')}|${introGerundHead('student', 'Nf3', 'now')})`));
+    expect(narrations[1]).toMatch(new RegExp(`^${introHead('opponent', 'e5', 'now')}`));
+    expect(narrations[4]).toMatch(new RegExp(`^(?:${introHead('student', 'Bc4', 'now')}|${introGerundHead('student', 'Bc4', 'now')})`));
     // Every fill names something on the board (a square or a piece).
     for (const n of narrations.slice(1)) expect(n).toMatch(/[a-h][1-8]|knight|bishop|pawn|centre|center|king/i);
   });

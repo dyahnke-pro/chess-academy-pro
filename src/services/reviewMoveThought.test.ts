@@ -28,12 +28,16 @@ describe('Review says a move through the one composer', () => {
       fenBefore: c.fen(), san: 'Nf3', moverIsStudent: false, prev: NO_PREV_CAPTURE,
       line: ['Nc6', 'Bc4', 'Nf6', 'Ng5'], history: ['e4', 'e5'], theirLast, reads: null, costCp: null,
     }, newLessonVoice(), null);
-    expect(lesson).toMatch(new RegExp(`^${introHead('opponent', 'Nf3')}develops into the game`));
+    expect(lesson).toMatch(new RegExp(`^${introHead('opponent', 'Nf3', 'now')}develops into the game`));
     // Every sentence of the lesson's thought is in Review's: Review may close
     // the attack's sentence with ", and it needs an answer this move", so the
-    // sentences are matched one by one, each without its full stop.
+    // sentences are matched one by one, each without its full stop. The move's
+    // head is each surface's own tense — the lesson shows the move, Review says
+    // a move already played (\`moveIntro\` tense) — so it is matched apart.
     const review = walk('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5', 'black')[2];
-    for (const sentence of lesson.split(/(?<=\.)\s+/)) expect(review).toContain(sentence.replace(/\.$/, ''));
+    const head = new RegExp(`^${introHead('opponent', 'Nf3', 'now')}`);
+    for (const sentence of lesson.split(/(?<=\.)\s+/)) expect(review).toContain(sentence.replace(head, '').replace(/\.$/, ''));
+    expect(review).toMatch(/^They (?:played Nf3(?: — it|: it|\. It)|went for Nf3, which) develops into the game/);
   }, 60_000);
 
   it('a threat Review says in its own line is not said again by the move (…Nb4: Nxc2+ once)', () => {

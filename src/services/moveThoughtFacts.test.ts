@@ -49,7 +49,7 @@ describe('the lesson says the move\'s real idea (WO-ONE-COACH-01)', () => {
 
   it('the opponent\'s move is said from the student\'s seat ("They play …")', () => {
     const line = lessonLineFor(['e4', 'e5', 'Nf3', 'Nf6', 'Nc3', 'Bc5', 'Bc4', 'd6'], 'white');
-    expect(line).toMatch(new RegExp(`^${introHead('opponent', 'd6')}`));
+    expect(line).toMatch(new RegExp(`^${introHead('opponent', 'd6', 'now')}`));
   });
 
   it('the line ahead still names the trip (the Italian\'s Nbd2)', () => {
@@ -102,7 +102,7 @@ describe("the opponent's move gets its fundamentals, from the student's seat", (
   });
   it('their developing move says what it develops toward', () => {
     const text = lessonThought({ theory: true, fenBefore: fenAfter(['e4', 'e5', 'Nf3']), san: 'Nc6', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['Bb5', 'a6'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
-    expect(text).toMatch(new RegExp(`^${introHead('opponent', 'Nc6')}develops into the game, fighting for the center on d4`));
+    expect(text).toMatch(new RegExp(`^${introHead('opponent', 'Nc6', 'now')}develops into the game, fighting for the center on d4`));
   });
 });
 

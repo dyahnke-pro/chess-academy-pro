@@ -111,7 +111,7 @@ describe('review walk — a move job is ranked by what the move changes', () => 
   // The check is said first, in the move itself ("They play queen to f3,
   // check: …"), then what the move does.
   it('7.Qf3+: a check is always said, first', () => {
-    expect(walk()[12]).toMatch(new RegExp(introHead('opponent', 'Qf3+') + String.raw`piles on your pinned knight on d5 — pinned to the king, it can't run, and it needs an answer this move\.`));
+    expect(walk()[12]).toMatch(new RegExp(introHead('opponent', 'Qf3+', 'past') + String.raw`piles on your pinned knight on d5 — pinned to the king, it can't run, and it needs an answer this move\.`));
   }, 30_000);
   it('7…Ke6: a king says the square it holds first, then the escape', () => {
     expect(walk()[13]).toMatch(new RegExp(MOVE_HEAD + String.raw`adds a second guard to your knight on d5, which their bishop on c4 pins, and gets your king out of the check from their queen on f3\.`));
@@ -144,7 +144,7 @@ describe('review walk — the Fried Liver tape, second pass (lead 2026-10-20)', 
     return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
   }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? ''); };
   it('2.Nf3 says its attack on e5 — the fact 2…Nc6 answers', () => {
-    expect(walk()[2]).toMatch(new RegExp(introHead('opponent', 'Nf3') + String.raw`develops into the game, [^.]*e5, attacking the pawn there, and it needs an answer this move\.`));
+    expect(walk()[2]).toMatch(new RegExp(introHead('opponent', 'Nf3', 'past') + String.raw`develops into the game, [^.]*e5, attacking the pawn there, and it needs an answer this move\.`));
   }, 30_000);
   it('the opening is named as it is identified — the Fried Liver at 6.Nxf7', () => {
     expect(walk()[10]).toMatch(/It's the Fried Liver Attack of the Two Knights Defense\./);
@@ -181,7 +181,7 @@ describe('review walk — a book move is taught by its reason, never by its stan
   const walk = (reply: string): string => { const c = new Chess(); return buildReviewSegmentsForTests(['e4', reply, 'Nc3'].map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; }), 'black', null, true, 1400)[1].narration ?? ''; };
   it('a rare book move says its reason and no standing', () => {
     __setLocalDbForTests(db({ c5: 600, e5: 300, a6: 30 }) as never);
-    expect(walk('a6')).toMatch(new RegExp(introHead('student', 'a6') + String.raw`takes the b5 square away from their bishop\.`));
+    expect(walk('a6')).toMatch(new RegExp(introHead('student', 'a6', 'past') + String.raw`takes the b5 square away from their bishop\.`));
     expect(walk('a6')).not.toMatch(/rare|less common|main line/);
   }, 30_000);
   afterAll(() => { __setLocalDbForTests({ positions: fixture.positions } as never); });
@@ -210,7 +210,7 @@ describe('review walk — one claim said once (lead 2026-10-20)', () => {
     // "Yes move theory to review button") — the walk does not say it.
     expect(walk.join(' ')).not.toMatch(/it invites Ng5/);
     // 4.Ng5 says what it asks of the student, once.
-    expect(walk[6]).toMatch(new RegExp(introHead('opponent', 'Ng5') + String.raw`joins their bishop on c4 against your pawn on f7, and it needs an answer this move\.`));
+    expect(walk[6]).toMatch(new RegExp(introHead('opponent', 'Ng5', 'past') + String.raw`joins their bishop on c4 against your pawn on f7, and it needs an answer this move\.`));
     expect(walk.join(' ').match(/joins their bishop on c4 against your pawn on f7/g)?.length).toBe(1);
   }, 30_000);
 });
