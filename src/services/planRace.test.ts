@@ -42,8 +42,8 @@ describe('planRace — the race, not just the plans', () => {
 
   it('counts the pushes, and moving first cannot rescue a slower pawn', () => {
     expect(detectPlanRace(THEY_FASTER, 'w')).toMatchObject({ youMoveFirst: true, youQueenFirst: false });
-    expect(planRaceClause(THEY_FASTER, 'w', 'live')).toMatch(/they get there first/);
-    expect(planRaceClause(YOU_FASTER, 'w', 'live')).toMatch(/you get there first/);
+    expect(planRaceClause(THEY_FASTER, 'w', 'live')).toMatch(/[Tt]hey get there first/);
+    expect(planRaceClause(YOU_FASTER, 'w', 'live')).toMatch(/[Yy]ou get there first/);
   });
 
   it('says "1 push", never "1 pushes"', () => {
@@ -92,10 +92,10 @@ describe('planRace — the race, not just the plans', () => {
     // said "push it and make them deal with the promotion" having never looked
     // at whether theirs queens first.
     const slow = structurePlan(THEY_FASTER, 'w') ?? '';
-    expect(slow).toMatch(/they get there first/);
+    expect(slow).toMatch(/[Tt]hey get there first/);
     expect(slow).not.toMatch(/push it and make them deal with the promotion/);
     // …and it still says push when the race really is yours.
-    expect(structurePlan(YOU_FASTER, 'w') ?? '').toMatch(/the race is yours/);
+    expect(structurePlan(YOU_FASTER, 'w') ?? '').toMatch(/[Tt]he race is yours/);
     // A lone passer keeps the original, correct plan.
     expect(structurePlan(ONE_SIDE, 'w') ?? '').toMatch(/push it/);
   });

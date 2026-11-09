@@ -52,7 +52,7 @@ describe('a faster win', () => {
   });
   it('one move keeps the win, the rest give it back', async () => {
     engineWith(PAWN, [{ sans: ['Kd3'], evaluation: 495, mate: null }, { sans: ['h5'], evaluation: -100, mate: null }, { sans: ['Ke2'], evaluation: -370, mate: null }]);
-    expect(await answerBoardTurn(turn('faster-win'), { fen: PAWN, history: [], studentColor: 'white' })).toMatch(/^Kd3 is the only move that keeps the win.*every other move gives it back\.$/);
+    expect(await answerBoardTurn(turn('faster-win'), { fen: PAWN, history: [], studentColor: 'white' })).toMatch(/^Kd3 is the only move that keeps the win.*Every other move gives it back\.$/);
   });
   it('a runner-up a hair under the win line is not "every other move gives it back" — one count, the critical-moment computer\'s (2026-10-20)', async () => {
     engineWith(PAWN, [{ sans: ['Kd3'], evaluation: 495, mate: null }, { sans: ['Kf3'], evaluation: 280, mate: null }, { sans: ['Ke2'], evaluation: -370, mate: null }]);

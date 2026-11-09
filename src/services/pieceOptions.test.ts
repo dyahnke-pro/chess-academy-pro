@@ -65,7 +65,7 @@ describe('pieceOptions — narrow to the job, refute each, give the verdict', ()
     expect(text).toMatch(/Where can their queen on f3 go and still guard e4\? Just Qg4 and Qf5\./);
     expect(text).toMatch(/Qf5\? Then O-O and Bxf5 — you win a queen for a bishop\./);
     expect(text).not.toMatch(/Qf5\? Qf5/);
-    expect(text).toMatch(/So no — moving it doesn't help; Bf3 was the better move, and moving it costs more than a point\./);
+    expect(text).toMatch(/So no — moving it doesn't help\. Bf3 was the better move, and moving it costs more than a point\./);
   });
 
   it('NEGATIVE CONTROL: not the mover\'s piece, or no piece there → no answer', async () => {
