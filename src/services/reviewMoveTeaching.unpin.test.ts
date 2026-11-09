@@ -16,3 +16,15 @@ describe('an unpin frees a pin that cost something', () => {
     expect(point).toMatch(/unpins/i);
   });
 });
+
+describe('the piece the unpin frees is the one that matters', () => {
+  // Learn prod audit 2026-11-09, the Scandinavian: 10.Bd2 frees the knight on
+  // c3 from the queen's pin to the king, and (by guarding a1) the pawn on a3
+  // from its pin to the rook. The line named the pawn.
+  const before = fenAfter('e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4 h3 Nc6 a3 O-O-O d5 e6 hxg4 exd5');
+  it('Bd2 unpins the knight on c3, never "the pawn on a3"', () => {
+    const point = quietMovePoint(before, 'Bd2') ?? '';
+    expect(point).toMatch(/[Uu]npins your knight on c3/);
+    expect(point).not.toMatch(/pawn on a3/);
+  });
+});

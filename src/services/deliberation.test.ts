@@ -236,7 +236,11 @@ describe('heldVerdictText — the held answer always carries its reason', async 
     expect(heldVerdictText(v)).toBe('The move is Nf5 — it eyes d4.');
     // Nf5 from a board with the knight on e3 (a real legal move).
     // The move is never named back (David 2026-11-09): they just played it.
-    expect(heldFoundText(v, 0)).toBe('The move you played was the one here — it eyes d4.');
+    expect(heldFoundText(v, 0)).toBe('You played a strong move here — it eyes d4.');
+  });
+  it('the found credit never claims the move was the only one (prod 2026-11-09: said beside "Another move was worth the same")', () => {
+    const said = Array.from({ length: 8 }, (_, k) => heldFoundText(v, k));
+    for (const line of said) expect(line).not.toMatch(/the one here|the move this position asks for|found the move/i);
   });
   it('the found credit rotates its stem — never the same one twice running (OS-11 g1: ×7)', () => {
     const said = Array.from({ length: 7 }, (_, k) => heldFoundText(v, k));

@@ -284,20 +284,28 @@ function pinnedSquares(fen: string, color: 'w' | 'b'): Set<string> {
  *  its square). The sentence names what was freed, and what the moved piece now
  *  eyes. Shared by the review walk and Learn's own-move point. */
 function unpinPoint(fenBefore: string, chessAfter: Chess, mv: Move, moverIsStudent: boolean): string | null {
-  const pinnedBefore = pinnedSquares(fenBefore, mv.color);
-  if (!pinnedBefore.size) return null;
+  const pinsBefore = pinsAgainst(fenBefore, mv.color);
+  if (!pinsBefore.length) return null;
   const pinnedAfter = pinnedSquares(chessAfter.fen(), mv.color);
-  for (const sq of pinnedBefore) {
-    if (sq === mv.from || pinnedAfter.has(sq)) continue;
-    const freed = chessAfter.get(sq as Sq);
-    if (!freed) continue;
-    const base = `Unpins ${moverIsStudent ? 'your' : 'their'} ${PIECE_NOUN[freed.type]} on ${sq}`;
-    const eyed = pieceEyes(chessAfter, mv.to, mv.piece, mv.color).enemies.find((e) => e.type !== 'k');
-    return eyed
-      ? `${base} — and the ${PIECE_NOUN[mv.piece]} aims at ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[eyed.type]} on ${eyed.sq}.`
-      : `${base}, freeing it to join the game.`;
-  }
-  return null;
+  // THE PIECE THAT MATTERS IS NAMED (Learn prod audit 2026-11-09, 10.Bd2 in
+  // the Scandinavian: it freed the knight on c3 from a pin to the king AND the
+  // pawn on a3 from one to an unguarded rook — and the walk named the pawn,
+  // the first square in a Set). A pin to the king outranks a pin to a piece;
+  // then the bigger piece freed.
+  let before: Chess | null = null;
+  try { before = new Chess(fenBefore); } catch { before = null; }
+  const freed = pinsBefore
+    .filter((p) => p.pinned !== mv.from && !pinnedAfter.has(p.pinned))
+    .map((p) => ({ sq: p.pinned, piece: chessAfter.get(p.pinned as Sq), toKing: before?.get(p.behind as Sq)?.type === 'k' }))
+    .filter((x): x is { sq: string; piece: NonNullable<ReturnType<Chess['get']>>; toKing: boolean } => !!x.piece)
+    .sort((a, b) => Number(b.toKing) - Number(a.toKing) || (PIECE_VAL[b.piece.type] ?? 0) - (PIECE_VAL[a.piece.type] ?? 0));
+  const top = freed[0];
+  if (!top) return null;
+  const base = `Unpins ${moverIsStudent ? 'your' : 'their'} ${PIECE_NOUN[top.piece.type]} on ${top.sq}`;
+  const eyed = pieceEyes(chessAfter, mv.to, mv.piece, mv.color).enemies.find((e) => e.type !== 'k');
+  return eyed
+    ? `${base} — and the ${PIECE_NOUN[mv.piece]} aims at ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[eyed.type]} on ${eyed.sq}.`
+    : `${base}, freeing it to join the game.`;
 }
 
 /** A PAWN THAT KICKS a minor or major piece (Learn walk 2026-10-01: …h6

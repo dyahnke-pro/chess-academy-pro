@@ -58,11 +58,18 @@ export function earnedPraise(kind: PraiseKind, streak: number, rot: number): str
  *  it land (David 2026-11-09: "We also don't need to hear 'your f-pawn takes
  *  on e6' — the user knows that, they see it play out"). */
 const AFFIRM_STEMS: readonly string[] = [
-  'The move you played was the one here',
-  'You played the move this position asks for',
+  'You played a strong move here',
   'Your move does the job here',
-  'You found the move here',
+  'Good move here',
+  'Your move works here',
 ];
+// NEVER "THE ONE" (Learn prod audit 2026-11-09, the second game's 18…Rxh7):
+// "The move you played was the one here" was said on the same turn as
+// "Another move was worth the same here". No caller of the affirm proves the
+// move was the only good one — a strong players' choice and the held move are
+// strong, not unique — so no stem claims it ("the one", "the move this
+// position asks for", "you found the move"). An only move is said by the
+// only-move computer, with its proof.
 export function affirmMove(why: string, key: number): string {
   return `${AFFIRM_STEMS[Math.abs(Math.trunc(key)) % AFFIRM_STEMS.length]} — it ${why}.`;
 }
