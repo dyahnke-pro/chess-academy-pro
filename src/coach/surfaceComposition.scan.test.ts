@@ -51,6 +51,12 @@ const INFRA = new Set(['learnTranscript',
   // NOT move any ceiling, and adding a real computer here to duck one is the
   // same cheat as raising one.
   'spokenLanguage',
+  // `boardReadStore` KEEPS engine reads on the device (#155, 2026-11-09: one
+  // read per board across games) — the same class as `stockfishCache`,
+  // `masterPlayCache` and `amateurPlayCache` above. It computes no chess or
+  // teaching fact: it hands back the read a past game took, or keeps a fresh
+  // one; the reads it keeps are the engine's.
+  'boardReadStore',
   // THE MARK SCHEDULE (2026-11-08: "they ALL appear AS THEY ARE STATED"):
   // `markPacing` decides WHEN a mark goes up, `markAnchors` which words announce
   // it, `pacedAnnotations` and `wordMarks` hand a chat answer's or a line's

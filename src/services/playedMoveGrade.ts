@@ -296,7 +296,7 @@ const PRICE_MEMO = new Map<string, Promise<MovePrice | null>>();
 const PRICE_MEMO_CAP = 256;
 
 /** Test seam: forget every remembered price (a new page; the prices kept on
- *  the device stay — `boardReadStore.forgetKeptBoards` clears those). */
+ *  the device, `boardReadStore`, stay). */
 export function clearMovePriceMemo(): void { PRICE_MEMO.clear(); }
 
 /** THE PRICE OF THE PLAYED MOVE, FROM ONE SEARCH — memoized per (fen, move).

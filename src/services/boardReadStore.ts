@@ -127,8 +127,3 @@ export async function keepMovePrice(fen: string, uci: string, price: MovePrice):
     });
   } catch { /* fail-open */ }
 }
-
-/** Test seam: forget every kept board. */
-export function forgetKeptBoards(): Promise<void> {
-  return db.boardReads.clear().catch(() => undefined);
-}

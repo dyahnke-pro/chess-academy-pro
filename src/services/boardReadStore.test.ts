@@ -4,7 +4,8 @@
 // game. The board's read and the move's price are kept, and read first.
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { BOARD_READ_LINES, forgetKeptBoards, keepBoardRead, keepMovePrice, keptBoardRead, keptMovePrice, readBoardOnce } from './boardReadStore';
+import { BOARD_READ_LINES, keepBoardRead, keepMovePrice, keptBoardRead, keptMovePrice, readBoardOnce } from './boardReadStore';
+import { db } from '../db/schema';
 import { clearMovePriceMemo, studentMovePrice } from './playedMoveGrade';
 import { stockfishEngine } from './stockfishEngine';
 import { COACH_TURN_DEPTH } from './engineConstants';
@@ -23,7 +24,7 @@ function read(best: string, depth: number, lines = BOARD_READ_LINES): StockfishA
   } as unknown as StockfishAnalysis;
 }
 
-beforeEach(async () => { await forgetKeptBoards(); clearMovePriceMemo(); });
+beforeEach(async () => { await db.boardReads.clear(); clearMovePriceMemo(); });
 
 describe('one read per board', () => {
   it('a second game on the board reads the first game\'s read — the search is not run again', async () => {
