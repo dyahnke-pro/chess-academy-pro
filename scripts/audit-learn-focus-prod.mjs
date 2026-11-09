@@ -642,6 +642,12 @@ async function playGame(context, listener, engine, student, phase, index) {
     tape.replay.found = (await page.locator('[data-testid="teach-recap-played"]').count().catch(() => 0)) > 0;
   }
   const events = listener.getCapturedEvents().slice(startEvents);
+  // THE ENGINE'S OWN LOG, kept per game: a drill whose move never lands is
+  // read against what the engine was doing (rung 3, 2026-11-09: the judge
+  // never answered — a hold that never released, or a stalled worker).
+  tape.engineLog = events
+    .filter((e) => /stockfish|engine|drill|price|hold/i.test(e.kind ?? ''))
+    .map((e) => ({ at: e.receivedAt ?? e.timestamp ?? 0, kind: e.kind, summary: String(e.summary ?? '').slice(0, 200) }));
   tape.chosen = events.filter((e) => e.kind === 'learn-focus-chosen').map((e) => parse(e.details)).filter(Boolean);
   tape.paints = await page.evaluate(() => window.__rewardPaints ?? []).catch(() => []);
   tape.banners = await page.evaluate(() => window.__rewardBanners ?? []).catch(() => []);
