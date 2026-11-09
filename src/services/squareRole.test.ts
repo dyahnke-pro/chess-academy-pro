@@ -3,7 +3,7 @@
 // narrations from running away").
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { squareRole, namedSquares } from './squareRole';
+import { squareRole, namedSquares, namedSquareParts } from './squareRole';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 
 describe('squareRole', () => {
@@ -74,5 +74,20 @@ describe('an attacked piece is a reason only when the attack is a threat', () =>
     expect(squareRole(c, 'e5', 'w', 'their', 'covers')).toBe('attacking their pawn there');
     const k = new Chess('4k3/8/4p3/3r4/8/2N5/8/4K3 b - - 0 1');
     expect(squareRole(k, 'd5', 'w', 'their', 'covers')).toBe('attacking their rook there');
+  });
+});
+
+describe('one job of several squares is said once, with its count (prod focus audit 2026-11-09)', () => {
+  // Their bishop on d2 fights for e1 and seven more squares: "It is also aiming
+  // at a square no pawn of yours can cover and aiming at a square no pawn of
+  // yours can cover" — two holes, one clause each, neither named.
+  const BOARD = new Chess('1r3k2/pp3p1p/2p2pp1/q1P5/8/3B3P/PPQbR2P/5K1R w - - 0 24');
+  const parts = namedSquareParts(BOARD, ['e1', 'c1', 'c3', 'b4', 'e3', 'f4', 'g5', 'h6'], 'b', 'your');
+  it('no clause is said twice', () => {
+    expect(parts?.also.length).toBe(new Set(parts?.also).size);
+  });
+  it('the holes and the squares their piece wants are said with their count', () => {
+    expect(parts?.also).toContain('aiming at two squares no pawn of yours can cover');
+    expect(parts?.also).toContain('keeping your queen off two squares it wants');
   });
 });

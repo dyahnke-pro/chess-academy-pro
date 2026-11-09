@@ -33,7 +33,17 @@ export function squareRole(
  *  their d-pawn"), and `bare`, said with no square at all ("holding back their
  *  d-pawn") — for a sentence that already has its squares on the board and
  *  must not read a third one out (David 2026-11-05). */
-interface RoleWords { full: string; bare: string }
+interface RoleWords {
+  full: string;
+  bare: string;
+  /** The same job of several squares, said once with its count ("aiming at two
+   *  squares no pawn of yours can cover"). A job with no `many` said by several
+   *  squares is said once as it is. */
+  many?: (n: number) => string;
+}
+
+const COUNT = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
+const countOf = (n: number): string => COUNT[n] ?? String(n);
 
 function squareRoleWords(
   chess: Chess,
@@ -116,8 +126,9 @@ function squareRoleWords(
   // covered by pawns, and saying so teaches nothing.
   // A hole has no square to name its owner by, so with no seat it is not said.
   if (!coverable && rank >= 3 && rank <= 6 && owner !== 'the') {
-    const hole = `a square no pawn of ${owner === 'your' ? 'yours' : 'theirs'} can cover`;
-    return { full: hole, bare: `aiming at ${hole}` };
+    const whose = owner === 'your' ? 'yours' : 'theirs';
+    const hole = `a square no pawn of ${whose} can cover`;
+    return { full: hole, bare: `aiming at ${hole}`, many: (n) => `aiming at ${countOf(n)} squares no pawn of ${whose} can cover` };
   }
   // A SQUARE THEIR PIECE WANTS: one of their minor or major pieces reaches it.
   const wantsAt = chess.attackers(sq, them).find((s) => { const p = chess.get(s); return !!p && p.type !== 'p' && p.type !== 'k' && !named.has(s); });
@@ -126,6 +137,7 @@ function squareRoleWords(
     return {
       full: owner === 'the' ? `keeping the ${NAME[wants.type]} on ${wantsAt} off it` : `keeping ${owner} ${NAME[wants.type]} off it`,
       bare: `keeping ${ownerWord} ${NAME[wants.type]} off a square it wants`,
+      many: (n) => `keeping ${ownerWord} ${NAME[wants.type]} off ${countOf(n)} squares it wants`,
     };
   }
   return null;
@@ -156,7 +168,17 @@ export function namedSquareParts(chess: Chess, squares: readonly string[], me: C
   // human would") — every one still lit by the fact's squares. The piece it
   // attacks leads, the most concrete of them.
   const lead = items.find((i) => i.role.full.startsWith('attacking')) ?? items[0];
-  return { lead: `${lead.sq}, ${lead.role.full}`, also: items.filter((i) => i !== lead).map((i) => i.role.bare) };
+  // ONE JOB, SAID ONCE (prod focus audit 2026-11-09: "It is also aiming at a
+  // square no pawn of yours can cover and aiming at a square no pawn of yours
+  // can cover"): the squares the rest are by what they do, and two squares
+  // with one job are one clause with their count.
+  const groups = new Map<string, { role: RoleWords; n: number }>();
+  for (const i of items) {
+    if (i === lead) continue;
+    const g = groups.get(i.role.bare);
+    if (g) g.n += 1; else groups.set(i.role.bare, { role: i.role, n: 1 });
+  }
+  return { lead: `${lead.sq}, ${lead.role.full}`, also: [...groups.values()].map((g) => (g.n > 1 && g.role.many ? g.role.many(g.n) : g.role.bare)) };
 }
 
 /** The squares `namedSquares` says — the ones with a role, in its order. A
