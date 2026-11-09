@@ -17,6 +17,24 @@ import { rotateStem, stemKeyOf } from './rotateStem.ts';
 
 export type IntroSeat = 'student' | 'opponent';
 
+/** THE TENSE IS DECIDED WHERE THE MOVE IS INTRODUCED (prod Review 2026-11-09,
+ *  Carlsen–Caruana): Review asked for the present form and its past pass
+ *  re-read every finished sentence, so "Your e4 and d5 pawns leave their
+ *  bishop … staring at a wall" was taken for the pawn's intro and said "You
+ *  played e4 — it and d5 pawns leave …" on 20.Nxg5, and "Their d6 pawn is the
+ *  key pawn" became "They played d6 — it pawn is the key pawn". A move being
+ *  shown (a lesson, Learn, chat) is 'now'; a move already played (Review's
+ *  walk) is 'past' and is built in the past here — "You played Nf3 — it …",
+ *  "They went for c5, which …", "You castled kingside — …". The pawn's own
+ *  form ("Your e4 stakes …") has no past of its own: in the past it is the
+ *  played form, in the same rotation slot, so a move's words pick alike. */
+export type IntroTense = 'now' | 'past';
+
+const VERB: Record<IntroTense, { play: string; go: string; castle: string }> = {
+  now: { play: 'play', go: 'go', castle: 'castle' },
+  past: { play: 'played', go: 'went for', castle: 'castled' },
+};
+
 function castleWords(san: string): string | null {
   if (!san.startsWith('O-O')) return null;
   return san.startsWith('O-O-O') ? 'queenside' : 'kingside';
@@ -56,32 +74,35 @@ function joined(predicate: string): string {
  * The move with what it does: `predicate` is verb-led, with no subject
  * ("develops the knight toward the centre", "wins a pawn"). No final stop.
  */
-export function introWithPredicate(seat: IntroSeat, san: string, predicate: string): string {
+export function introWithPredicate(seat: IntroSeat, san: string, predicate: string, tense: IntroTense): string {
   const side = castleWords(san);
   const who = seat === 'student' ? 'You' : 'They';
+  const v = VERB[tense];
   if (side) {
     // "They castle kingside — it castles their king…" says it twice.
     const rest = predicate.replace(/^castles (their|your) king\b/, 'tucks $1 king');
-    if (!/^castles\b/.test(rest)) return `${who} castle ${side}${joined(rest)} ${rest}`;
+    if (!/^castles\b/.test(rest)) return `${who} ${v.castle} ${side}${joined(rest)} ${rest}`;
   }
+  const played = `${who} ${v.play} ${san}${joined(predicate)} ${predicate}`;
   // "Your exd5 takes back…" is read "your e-pawn takes d5 takes back": a
   // capture is never the subject of its own verb (`captureSaidOnce`).
   const owned = side ? null : ownedPawnMove(seat === 'student' ? 'Your' : 'Their', san, predicate);
   return rotateFitting([
-    `${who} play ${san}${joined(predicate)} ${predicate}`,
-    ...(owned ? [owned] : []),
+    played,
+    ...(owned ? [tense === 'now' ? owned : played] : []),
     // "You go e4, which prepares e5, which would kick…" stacks two which-clauses.
-    ...(/\bwhich\b/.test(predicate) ? [] : [`${who} go ${san}, which ${predicate}`]),
+    ...(/\bwhich\b/.test(predicate) ? [] : [`${who} ${v.go} ${san}, which ${predicate}`]),
   ], stemKeyOf(`${seat}|${san}`));
 }
 
 /** The move with a gerund list ("taking back the bishop, opening the c-file"). */
-export function introWithGerund(seat: IntroSeat, san: string, gerund: string): string {
+export function introWithGerund(seat: IntroSeat, san: string, gerund: string, tense: IntroTense): string {
   const side = castleWords(san);
   const who = seat === 'student' ? 'You' : 'They';
-  if (side) return `${who} castle ${side}, ${gerund}`;
+  const v = VERB[tense];
+  if (side) return `${who} ${v.castle} ${side}, ${gerund}`;
   return rotateFitting([
-    `${who} play ${san}, ${gerund}`,
-    `${who} go ${san}, ${gerund}`,
+    `${who} ${v.play} ${san}, ${gerund}`,
+    `${who} ${v.go} ${san}, ${gerund}`,
   ], stemKeyOf(`${seat}|${san}`));
 }

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6603 lines · 33 exports · 71 importers · 86 tests · 4 audits**
+**6596 lines · 33 exports · 71 importers · 86 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -341,8 +341,8 @@
 ### `pendingRecapture` (function) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8865`
 - `src/components/Coach/CoachTeachPage.tsx:8968`
-- `src/components/Coach/CoachTeachPage.tsx:11896`
-- `src/components/Coach/CoachTeachPage.tsx:12283`
+- `src/components/Coach/CoachTeachPage.tsx:11898`
+- `src/components/Coach/CoachTeachPage.tsx:12285`
 - `src/services/coachFeatureService.test.ts:912`
 - `src/services/coachFeatureService.test.ts:913`
 - `src/services/phaseTransitionDetector.test.ts:575`
@@ -357,7 +357,7 @@
 ### `pastTenseReviewNarration` (function) — 4 call sites
 - `src/services/reviewMoveThought.test.ts:58`
 - `src/services/reviewRegister.test.ts:32`
-- `src/services/reviewRegister.test.ts:109`
+- `src/services/reviewRegister.test.ts:119`
 - `src/services/reviewWalk1500.test.ts:17`
 
 ### `openingNameForKey` (function) — 2 call sites
@@ -405,7 +405,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:687`
+- `src/services/reviewFullData.ts:695`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites

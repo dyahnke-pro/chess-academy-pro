@@ -151,33 +151,54 @@ describe('(L) two good moves — on his games', () => {
 
 describe('(C) which square for the piece — on his games, board reads only', () => {
   it('11.Na3 (25w0mYsx_Lk): Nd2 hangs the bishop on d3', () => {
-    expect(squareChoice({ fenBefore: 'r1bq1rk1/ppp2pb1/5npp/4p3/4P2B/2PB4/PP3PPP/RN1Q1RK1 w - - 0 11', san: 'Na3', student: 'w', rating: 1500, reads: null, priorMove: null })?.text)
+    expect(squareChoice({ fenBefore: 'r1bq1rk1/ppp2pb1/5npp/4p3/4P2B/2PB4/PP3PPP/RN1Q1RK1 w - - 0 11', san: 'Na3', student: 'w', rating: 1500, reads: null, priorMove: null, beaten: null })?.text)
       .toBe('Your knight goes to a3. On d2 it leaves your light-squared bishop hanging.');
   });
   it('11…Nd7 (RehhbTF00qQ): …Nc6 blocks the c-pawn — from both seats', () => {
     const fen = 'rn1q1rk1/ppp1bppp/4b3/3pP3/3P4/P1N2N2/1PPQB1PP/R4RK1 b - - 4 11';
-    expect(squareChoice({ fenBefore: fen, san: 'Nd7', student: 'b', rating: 1500, reads: null, priorMove: null })?.text)
+    expect(squareChoice({ fenBefore: fen, san: 'Nd7', student: 'b', rating: 1500, reads: null, priorMove: null, beaten: null })?.text)
       .toBe('Your knight goes to d7. On c6 it blocks your c-pawn.');
-    expect(squareChoice({ fenBefore: fen, san: 'Nd7', student: 'w', rating: 1500, reads: null, priorMove: null })?.text)
+    expect(squareChoice({ fenBefore: fen, san: 'Nd7', student: 'w', rating: 1500, reads: null, priorMove: null, beaten: null })?.text)
       .toBe('Their knight went to d7. On c6 it blocks their c-pawn.');
   });
   it('14…Bf6 (WQFcuBCL1F4): …Bd6 hangs the knight on d5', () => {
-    expect(squareChoice({ fenBefore: 'r4rk1/1ppqb1pp/2n5/p2npp2/6bP/P1NP1NP1/1PPBBP2/R2Q1RK1 b - - 0 14', san: 'Bf6', student: 'b', rating: 1500, reads: null, priorMove: null })?.text)
+    expect(squareChoice({ fenBefore: 'r4rk1/1ppqb1pp/2n5/p2npp2/6bP/P1NP1NP1/1PPBBP2/R2Q1RK1 b - - 0 14', san: 'Bf6', student: 'b', rating: 1500, reads: null, priorMove: null, beaten: null })?.text)
       .toBe('Why f6 for your bishop? On d6 it leaves your knight on d5 hanging.');
   });
   it('a kick is a reason only against a square at least as natural as the one chosen; a queen\'s squares are not weighed', () => {
     // 14…Bf6 again: c5 can be kicked by d4, but the eye weighs …Bc5 below
     // …Bf6, so the kick is not said (any fifth-rank square can be kicked).
-    expect(squareChoice({ fenBefore: 'r4rk1/1ppqb1pp/2n5/p2npp2/6bP/P1NP1NP1/1PPBBP2/R2Q1RK1 b - - 0 14', san: 'Bf6', student: 'b', rating: 1500, reads: null, priorMove: null })?.text).not.toMatch(/kicked/);
+    expect(squareChoice({ fenBefore: 'r4rk1/1ppqb1pp/2n5/p2npp2/6bP/P1NP1NP1/1PPBBP2/R2Q1RK1 b - - 0 14', san: 'Bf6', student: 'b', rating: 1500, reads: null, priorMove: null, beaten: null })?.text).not.toMatch(/kicked/);
     // A queen move asks no square question (a dozen squares, each "kicked").
-    expect(squareChoice({ fenBefore: 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 2 3', san: 'Qg4', student: 'w', rating: 1500, reads: null, priorMove: null })).toBeNull();
+    expect(squareChoice({ fenBefore: 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 2 3', san: 'Qg4', student: 'w', rating: 1500, reads: null, priorMove: null, beaten: null })).toBeNull();
   });
   it('11.Bb2 (55gXMP9N5sM): every other square hangs the knight on a3 — said once', () => {
-    expect(squareChoice({ fenBefore: 'r1b2rk1/pp2ppbp/2n2np1/q1p5/3P4/N1P2NPP/P3PPB1/R1BQR1K1 w - - 1 11', san: 'Bb2', student: 'w', rating: 1500, reads: null, priorMove: null })?.text)
+    expect(squareChoice({ fenBefore: 'r1b2rk1/pp2ppbp/2n2np1/q1p5/3P4/N1P2NPP/P3PPB1/R1BQR1K1 w - - 1 11', san: 'Bb2', student: 'w', rating: 1500, reads: null, priorMove: null, beaten: null })?.text)
       .toBe('Your bishop goes to b2. On its other squares it leaves your knight on a3 hanging.');
   });
+  // Carlsen–Caruana 22…Nh5 (prod Review 2026-11-09): "Better was Ne2+" and
+  // then "Why h5 for their knight? On h3 or e2 it hangs."
+  const NH5 = 'r4rk1/1bp2pb1/3p2p1/pp1Pq1B1/PP2PnQ1/4N3/2B2PPP/R3R1K1 b - - 2 22';
+  it('the engine took this piece to another square: no square question (the surface priced the move)', () => {
+    expect(squareChoice({ fenBefore: NH5, san: 'Nh5', student: 'w', rating: 1400, reads: null, priorMove: null, beaten: null })?.text).toMatch(/e2/);
+    expect(squareChoice({ fenBefore: NH5, san: 'Nh5', student: 'w', rating: 1400, reads: null, priorMove: null, beaten: 'f4e2' })).toBeNull();
+    // Another piece's better move is not this piece's square.
+    expect(squareChoice({ fenBefore: NH5, san: 'Nh5', student: 'w', rating: 1400, reads: null, priorMove: null, beaten: 'a8a7' })).not.toBeNull();
+  });
+  it('a square the engine reads no worse is never said to fail', () => {
+    const reads: WeighRead[] = [
+      { evaluation: 120, mate: null, moves: ['f4e2', 'e1e2'] },
+      { evaluation: 160, mate: null, moves: ['f4h5', 'f2f4'] },
+      { evaluation: 650, mate: null, moves: ['f4h3', 'g2h3'] },
+    ];
+    const t = squareChoice({ fenBefore: NH5, san: 'Nh5', student: 'w', rating: 1400, reads, priorMove: null, beaten: null })?.text ?? '';
+    expect(t).not.toMatch(/e2/);
+    expect(t).toMatch(/h3 it hangs/);
+    // A read that beats the square played by an inaccuracy: not asked at all.
+    expect(squareChoice({ fenBefore: NH5, san: 'Nh5', student: 'w', rating: 1400, reads: [{ ...reads[0], evaluation: 20 }, reads[1], reads[2]], priorMove: null, beaten: null })).toBeNull();
+  });
   it('a pawn move or a capture asks no square question', () => {
-    expect(squareChoice({ fenBefore: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', san: 'e4', student: 'w', rating: 1500, reads: null, priorMove: null })).toBeNull();
+    expect(squareChoice({ fenBefore: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', san: 'e4', student: 'w', rating: 1500, reads: null, priorMove: null, beaten: null })).toBeNull();
   });
 });
 
@@ -200,7 +221,7 @@ describe('through the one registry, to every surface', () => {
 
   it('the lesson composer is handed them (the fan before the move stands in for the reads)', () => {
     const g = game('8urm2D1HhX8');
-    const facts = moveThoughtFacts({ theory: true, fenBefore: g.fenBefore, san: g.played, moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: [], phrases: null,
+    const facts = moveThoughtFacts({ theory: true, tense: 'now', fenBefore: g.fenBefore, san: g.played, moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: [], phrases: null,
       reads: { before: g.reads.map((r, i) => ({ rank: i + 1, evaluation: r.evaluation, mate: r.mate, moves: [...r.moves] })), passBefore: [], after: [], passAfter: [] }, costCp: null });
     expect(facts.filter((f) => f.source === 'weighed').map((f) => f.text)).toContain('Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.');
   });

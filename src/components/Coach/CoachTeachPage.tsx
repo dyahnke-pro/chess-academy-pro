@@ -10199,7 +10199,9 @@ export function CoachTeachPage({ mode }: {
         return plies.flatMap(({ fenBefore, san, reads, prior }) => ([
           ...readBoardAll('temptingRefuted', { fenBefore, san, student: studentCC, rating, reads, priorMove: prior }).map((f) => ({ f, lane: 'temptingRefuted' as const })),
           ...readBoardAll('alsoGood', { fenBefore, san, student: studentCC, rating, reads }).map((f) => ({ f, lane: 'alsoGood' as const })),
-          ...readBoardAll('squareChoice', { fenBefore, san, student: studentCC, rating, reads, priorMove: prior }).map((f) => ({ f, lane: 'squareChoice' as const })),
+          // The student's ply carries its reads (a better square there is
+          // seen in them); the coach's ply has no price here to hand on.
+          ...readBoardAll('squareChoice', { fenBefore, san, student: studentCC, rating, reads, priorMove: prior, beaten: null }).map((f) => ({ f, lane: 'squareChoice' as const })),
         ]).map(({ f, lane }) => ({ namesStudentMove: f.namesStudentMove, lane, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof, ...(f.stakes ? { stakes: f.stakes } : {}), ...(f.heldForm ? { heldForm: f.heldForm } : {}) })));
       } catch { return []; }
     })();

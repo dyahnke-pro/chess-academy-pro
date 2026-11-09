@@ -234,12 +234,12 @@ describe('the structural choice on the board, after their move (linesStructure, 
   };
   const base = { fenBefore, san: 'e3', prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, reads, costCp: null, phrases: null };
   it('a lesson names the fighting move and the quiet one, on their move', () => {
-    const f = moveThoughtFacts({ theory: true, ...base, moverIsStudent: false }).find((x) => x.source === 'structureLines');
+    const f = moveThoughtFacts({ theory: true, tense: 'now', ...base, moverIsStudent: false }).find((x) => x.source === 'structureLines');
     expect(f?.text).toBe('It\'s level, so make chances: Bxc3 creates the imbalance, bishop for knight and doubled pawns for them. O-O keeps it quiet.');
     expect(f?.idea).toBe('plan');
   });
   it('never on the student\'s own move — the read is the choice after theirs', () => {
-    expect(moveThoughtFacts({ theory: true, ...base, moverIsStudent: true }).some((x) => x.source === 'structureLines')).toBe(false);
+    expect(moveThoughtFacts({ theory: true, tense: 'now', ...base, moverIsStudent: true }).some((x) => x.source === 'structureLines')).toBe(false);
   });
 });
 
@@ -288,7 +288,7 @@ describe('the long horizon is said twice a lesson, then the change alone', () =>
   it('the third file opened says only that it opens', () => {
     const fen = 'rnbqkbnr/ppp2ppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3';
     const phrases = new Map<string, number>();
-    const said = [1, 2, 3].map(() => moveThoughtFacts({ theory: true, fenBefore: fen, san: 'exd5', moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: [], phrases, reads: null, costCp: null })
+    const said = [1, 2, 3].map(() => moveThoughtFacts({ theory: true, tense: 'now', fenBefore: fen, san: 'exd5', moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: [], phrases, reads: null, costCp: null })
       .find((f) => f.kind === 'aspect-opens-file')?.text ?? '');
     expect(said[0]).toMatch(/opens the e-file, a road for the rooks from now on\.$/);
     expect(said[1]).toMatch(/a road for the rooks from now on/);

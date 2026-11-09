@@ -361,7 +361,7 @@ function once<T>(fn: (p: Position) => T): (p: Position) => T {
 const lessonPick = once((p: Position): { facts: ThoughtFact[]; composed: ComposedThought } => {
   // The lesson's own inputs: the engine's reads around the move (its choices
   // are the move's own facts now — the weighing is no longer spliced here).
-  const facts = moveThoughtFacts({ theory: true,
+  const facts = moveThoughtFacts({ theory: true, tense: 'now',
     fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
     line: lineAhead(p), history: p.history, theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
   });
@@ -952,7 +952,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
     // EVERY COMPOSER FACT, SCORED BY ITS OWN IDEA: how often Danya says the
     // idea a source states, when that source states it (the learned order).
     {
-      const facts = moveThoughtFacts({ theory: true,
+      const facts = moveThoughtFacts({ theory: true, tense: 'now',
         fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
         line: lineAhead(p), history: p.history, theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
       });

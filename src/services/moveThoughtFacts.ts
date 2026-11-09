@@ -8,7 +8,7 @@
 // (1…h3: "it makes luft" where his note and two other computers said "it keeps
 // their bishop off g4") and stacking two that said one thing.
 import { plyOfFen } from '../utils/plyOfFen';
-import { introWithGerund, introWithPredicate } from '../utils/moveIntro';
+import { introWithGerund, introWithPredicate, type IntroTense } from '../utils/moveIntro';
 import { Chess } from 'chess.js';
 import { NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
 import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
@@ -44,10 +44,15 @@ import { moveOrder } from './moveOrder';
 import { readBoardAll, readKey } from './boardComputers';
 import type { WeighRead } from './weighedMoves';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
+import { INACCURACY_CP } from './engineConstants';
 
 export interface MoveThoughtInput {
   fenBefore: string;
   san: string;
+  /** REQUIRED: the tense the move is introduced in (`moveIntro.IntroTense`):
+   *  'now' for a move being shown (a lesson, a question), 'past' for a move
+   *  already played (Review's walk), built in that tense where it is made. */
+  tense: IntroTense;
   /** Whose move it is. Undefined: a caller that does not know whose line
    *  this is — the move is said seat-free ("Nf3: it …"), in the student's
    *  words, as the briefing always did. */
@@ -144,8 +149,8 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
    *  seat-free "Nf3: it …". */
   // The words around the move rotate, said like a person (`moveIntro`, David
   // 2026-11-09: "mix up the phrasing whenever possible").
-  const lead = (clause: string): string => (i.moverIsStudent === undefined ? `${san}: it ${clause}` : introWithPredicate(seat, san, clause));
-  const gerund = (clause: string): string => (i.moverIsStudent === undefined ? `${san}: ${clause}` : introWithGerund(seat, san, clause));
+  const lead = (clause: string): string => (i.moverIsStudent === undefined ? `${san}: it ${clause}` : introWithPredicate(seat, san, clause, i.tense));
+  const gerund = (clause: string): string => (i.moverIsStudent === undefined ? `${san}: ${clause}` : introWithGerund(seat, san, clause, i.tense));
   /** The squares an idea is about beyond the move itself. */
   const beyond = (sqs: readonly string[]): string[] => [...new Set(sqs)].filter((s) => s !== from && s !== to);
   const facts: ThoughtFact[] = [];
@@ -427,7 +432,8 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     const weighed: Array<{ f: CoachFact; weight: number }> = [
       ...readBoardAll('temptingRefuted', { fenBefore: i.fenBefore, san: i.san, student, rating: DEFAULT_STUDENT_RATING, reads: weighReads, priorMove: prior }).map((f) => ({ f, weight: 55 })),
       ...readBoardAll('alsoGood', { fenBefore: i.fenBefore, san: i.san, student, rating: DEFAULT_STUDENT_RATING, reads: weighReads }).map((f) => ({ f, weight: 45 })),
-      ...readBoardAll('squareChoice', { fenBefore: i.fenBefore, san: i.san, student, rating: DEFAULT_STUDENT_RATING, reads: weighReads, priorMove: prior }).map((f) => ({ f, weight: 50 })),
+      ...readBoardAll('squareChoice', { fenBefore: i.fenBefore, san: i.san, student, rating: DEFAULT_STUDENT_RATING, reads: weighReads, priorMove: prior,
+        beaten: i.costCp !== null && i.costCp >= INACCURACY_CP ? i.reads?.before[0]?.moves[0] ?? null : null }).map((f) => ({ f, weight: 50 })),
     ];
     for (const { f, weight } of weighed) {
       // A lesson shows its line, so the move is named (the full text).
@@ -525,7 +531,9 @@ function withDecisionGap(facts: ThoughtFact[], i: MoveThoughtInput, from: string
  *  top-three clause list (`lessonBeat`), which picked by aspect weight alone,
  *  cut at three and never heard the move's job or its fundamentals. '' when
  *  nothing earned a word: silence beats a repeat. */
-export function lessonThought(input: Omit<MoveThoughtInput, 'phrases'>, voice: LessonVoice, refuted: RefutedAlternative | null): string {
+export function lessonThought(shown: Omit<MoveThoughtInput, 'phrases' | 'tense'>, voice: LessonVoice, refuted: RefutedAlternative | null): string {
+  // A lesson shows the move as it is played: its words are the present's.
+  const input: Omit<MoveThoughtInput, 'phrases'> = { ...shown, tense: 'now' };
   // The line's story is at this move's ply: what it says is said here.
   voice.story.reach(plyOfFen(input.fenBefore));
   const facts = moveThoughtFacts({ ...input, phrases: voice.phrases });
@@ -540,7 +548,9 @@ export function lessonThought(input: Omit<MoveThoughtInput, 'phrases'>, voice: L
  *  the groups the question asks about ("why did they play that?" — their
  *  move, their side, the danger, the line; `questionThought.QUESTION_IDEAS`):
  *  one ordering for every surface, never a lane's own stack of sentences. */
-export function questionThought(input: Omit<MoveThoughtInput, 'phrases'>, groups: ReadonlySet<FactGroup>, refuted: RefutedAlternative | null, reason: DecisiveReason | null): ComposedThought {
+export function questionThought(asked: Omit<MoveThoughtInput, 'phrases' | 'tense'>, groups: ReadonlySet<FactGroup>, refuted: RefutedAlternative | null, reason: DecisiveReason | null): ComposedThought {
+  // A question is answered on the board in front of the student, in the present.
+  const input: Omit<MoveThoughtInput, 'phrases'> = { ...asked, tense: 'now' };
   const voice = newLessonVoice();
   voice.story.reach(plyOfFen(input.fenBefore));
   const facts = moveThoughtFacts({ ...input, phrases: voice.phrases });

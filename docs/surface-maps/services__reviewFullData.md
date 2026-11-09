@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1956 lines · 12 exports · 22 importers · 29 tests · 0 audits**
+**1971 lines · 12 exports · 23 importers · 30 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,6 +25,7 @@
 - `src/services/reviewHeardCorrection.test.ts`
 - `src/services/reviewOneLoosePiece.test.ts`
 - `src/services/reviewOwedComputers.test.ts`
+- `src/services/reviewStandingFacts.test.ts`
 - `src/services/reviewVerdictSentence.test.ts`
 - `src/services/reviewWalk2065.test.ts`
 - `src/services/reviewWalkCT.test.ts`
@@ -55,7 +56,7 @@
 ### `NO_TEACHING_CONTEXT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 58 call sites
+### `computeMoveFacets` (function) — 59 call sites
 - `src/services/batch2Wiring.test.ts:55`
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
@@ -104,14 +105,15 @@
 - `src/services/reviewOneLoosePiece.test.ts:14`
 - `src/services/reviewOwedComputers.test.ts:15`
 - `src/services/reviewOwedComputers.test.ts:72`
+- `src/services/reviewStandingFacts.test.ts:16`
 - `src/services/reviewWalkCT.test.ts:51`
 - `src/services/reviewWalkCT.test.ts:74`
 - `src/services/reviewWalkCT.test.ts:91`
 - `src/services/tacticGeometry.test.ts:268`
 - `src/services/tacticGeometry.test.ts:273`
 - `src/services/unifiedBetterMoveReason.test.ts:39`
-- `src/services/weighedMoves.test.ts:212`
-- `src/services/weighedMoves.test.ts:225`
+- `src/services/weighedMoves.test.ts:233`
+- `src/services/weighedMoves.test.ts:246`
 - `src/test/teach02Wired.test.ts:28`
 - `src/test/teach02Wired.test.ts:68`
 
@@ -174,6 +176,7 @@
 - `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/reviewOneLoosePiece.test.ts`
 - `src/services/reviewOwedComputers.test.ts`
+- `src/services/reviewStandingFacts.test.ts`
 - `src/services/reviewTurnLength.test.ts`
 - `src/services/reviewVerdictSentence.test.ts`
 - `src/services/reviewWalk2065.test.ts`

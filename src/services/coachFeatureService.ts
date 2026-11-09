@@ -2654,7 +2654,7 @@ function* reviewSegmentSteps(
         const leadSquares = new Set(stepLeads.flatMap((f) => [...f.squares]));
         const phrasesHere = new Map(thoughtPhrases);
         const memoryHere = { keys: new Set(thoughtKeys) };
-        const thoughtFacts = moveThoughtFacts({ theory: false,
+        const thoughtFacts = moveThoughtFacts({ theory: false, tense: 'past',
           fenBefore: fenPair.fenBefore, san: m.san, moverIsStudent: mine, prev: prevCap,
           line: moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),
           theirLast: i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null,
@@ -5955,25 +5955,18 @@ function sub(h: string, re: RegExp, past: string): string {
  *  walk of 2026-09-26 heard "this is a race, and it was won by throwing your
  *  pawns". Tense is decided per sentence, so the explicit verb decides it. */
 const PRESENT_FRAMED = /\b(?:is|are)\b/i;
-/** THE MOVE'S HEAD IN THE PAST, for the rotated heads (`moveIntro`, David
- *  2026-11-09: "mix up the phrasing"): "You go Nf3, which…" → "You went for
- *  Nf3, which…"; a pawn's "Your e4 stakes…" → "You played e4 — it stakes…";
- *  "You castle kingside" → "You castled kingside". The "You play" head is the
- *  branch below. */
-function pastRotatedHead(sentence: string): string {
+/** A CASTLE SAID IN THE PRESENT, IN THE PAST ("You castle kingside — the king
+ *  tucks into safety" → "You castled kingside — …", \`reviewConcepts\`). A
+ *  move's own intro is built in the past where it is made (\`moveIntro\`,
+ *  tense 'past'); this pass never re-reads a sentence to find a move in it —
+ *  re-reading "Your e4 and d5 pawns leave …" as the pawn's intro said "You
+ *  played e4 — it and d5 pawns leave …" (prod Review 2026-11-09). */
+function pastCastle(sentence: string): string {
   const castled = /^(\[[a-z-]+\] )?(You|They) castle (?=kingside|queenside)/;
-  if (castled.test(sentence)) return sentence.replace(castled, (_m, tag: string | undefined, who: string) => `${tag ?? ''}${who} castled `);
-  const went = /^(\[[a-z-]+\] )?(You|They) go (?=\S)/;
-  if (went.test(sentence)) return sentence.replace(went, (_m, tag: string | undefined, who: string) => `${tag ?? ''}${who} went for `);
-  const pawn = /^(\[[a-z-]+\] )?(Your|Their) ([a-h][1-8](?:=[QRBN])?\+?) (?=[a-z])/;
-  if (pawn.test(sentence)) {
-    const dash = sentence.includes(' — ') ? ': it ' : ' — it ';
-    return sentence.replace(pawn, (_m, tag: string | undefined, whose: string, san: string) => `${tag ?? ''}${whose === 'Your' ? 'You' : 'They'} played ${san}${dash}`);
-  }
-  return sentence;
+  return castled.test(sentence) ? sentence.replace(castled, (_m, tag: string | undefined, who: string) => `${tag ?? ''}${who} castled `) : sentence;
 }
 function toPastSentence(raw: string): string {
-  const sentence = pastRotatedHead(raw);
+  const sentence = pastCastle(raw);
   // THE MOVE'S OWN SENTENCE IS HISTORY whatever its clause says (Review prod
   // audit 2026-10-30: "You play Rxa8: it trains on their queen on d8, which is
   // worth more…" stayed present beside "You played Nd5 — …"): the head is

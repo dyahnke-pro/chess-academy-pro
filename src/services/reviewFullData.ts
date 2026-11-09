@@ -59,7 +59,7 @@ import { captureChoice } from './captureChoice';
 import { kickAfterRecapture } from './kickMap';
 import { refutedAltProof } from './refutedAlternativeCore';
 import { advantageWasMissed } from './reviewWithholding';
-import { costWords, isMateEval, storedMate, mateDistanceOf, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
+import { costWords, isMateEval, storedMate, mateDistanceOf, MISTAKE_CP, INACCURACY_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { ONLY_MOVE_CP } from './criticalityScan';
 import { computeBoardDelta } from './boardDelta';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
@@ -325,6 +325,14 @@ const OPENING_VERDICT_SILENT_PLY = 10;
  *  movement is engine wobble between depths, and narrating it every ply was
  *  the "ticks 0.4 your way" drumbeat. */
 const EVAL_FACET_MIN_CP = 80;
+
+/** Did the move land on, or leave, one of these squares? */
+function touchedByMove(fenBefore: string, san: string, squares: readonly string[]): boolean {
+  try {
+    const m = new Chess(fenBefore).move(san);
+    return !!m && squares.some((sq) => sq === m.from || sq === m.to);
+  } catch { return false; }
+}
 
 export function computeMoveFacets(
   ctx: MoveFactContext,
@@ -1512,7 +1520,11 @@ export function computeMoveFacets(
     const reads: Array<StructureRead & { computer: ComputerName }> = isStudent
       ? [
         ...studentMoveStructure({ fenBefore, san, student: studentColorWB, cpLoss: Math.max(0, ctx.costCp ?? 0), bestSan: ctx.bestMoveSan, bestUci: ctx.bestLineUci, reply: ctx.replyBestSan, namesBetterMove: true }).map((r) => ({ ...r, computer: 'studentMoveStructure' as const })),
-        ...boardStructure(fenBefore, studentColorWB).map((r) => ({ ...r, computer: 'boardStructure' as const })),
+        // A STANDING FACT OF THE BOARD THE MOVE WAS PLAYED ON is said only
+        // where the move left its squares as they were (prod Review
+        // 2026-11-09, 39.Rxd6+: "Their d6 pawn is the key pawn: it guards
+        // c5" was said as the rook took that pawn — history, not a fact).
+        ...boardStructure(fenBefore, studentColorWB).filter((r) => !touchedByMove(fenBefore, san, r.squares)).map((r) => ({ ...r, computer: 'boardStructure' as const })),
       ]
       : theirMoveStructure(fenBefore, san, studentColorWB).map((r) => ({ ...r, computer: 'theirMoveStructure' as const }));
     for (const r of reads) {
@@ -1612,7 +1624,10 @@ export function computeMoveFacets(
       const prior = ctx.teaching.prevFenBefore && ply >= 2 && ctx.allSans[ply - 2] ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null;
       add(readBoardAll('temptingRefuted', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior })[0]);
       add(readBoardAll('alsoGood', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads })[0]);
-      add(readBoardAll('squareChoice', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior })[0]);
+      // The engine's better move when this move cost an inaccuracy or more:
+      // the square choice is not asked of a piece it took elsewhere.
+      const beaten = Math.max(0, ctx.costCp ?? 0) >= INACCURACY_CP ? ctx.bestLineUci[0] ?? null : null;
+      add(readBoardAll('squareChoice', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior, beaten })[0]);
     }
     // THE TEACHING MOVES' NEW COMPUTERS, both seats (2026-11-05): the pawn
     // break and what it is for — the pawn it strikes, the file it opens for

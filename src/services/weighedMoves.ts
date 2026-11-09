@@ -41,6 +41,7 @@ import { markSaysMate } from '../utils/sanMark';
 import { pieceRef } from './pieceRef';
 import { openSentence } from '../utils/openSentence';
 import { temptingKey } from './conceptKey';
+import { INACCURACY_CP } from './engineConstants';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -653,7 +654,13 @@ export interface SquareChoice {
  * engine's line refutes it. A fault the square played has too is no reason to
  * prefer it, so it is not said. Null when no other square has a fault.
  */
-export function squareChoice(args: { fenBefore: string; san: string; student: Color; rating: number; reads: readonly WeighRead[] | null; priorMove: { fenBefore: string; san: string } | null }): SquareChoice | null {
+export function squareChoice(args: {
+  fenBefore: string; san: string; student: Color; rating: number; reads: readonly WeighRead[] | null; priorMove: { fenBefore: string; san: string } | null;
+  /** REQUIRED: the engine's better move (UCI) when the surface's own price
+   *  of the move played reached an inaccuracy (\`INACCURACY_CP\`); null when
+   *  it did not, or the surface has no price. */
+  beaten: string | null;
+}): SquareChoice | null {
   const played = moveOn(args.fenBefore, args.san);
   // A knight's or a bishop's square — his examples all are; a queen or a rook
   // has a dozen squares and "on e5 it is kicked by f6" said of each is noise.
@@ -663,6 +670,14 @@ export function squareChoice(args: { fenBefore: string; san: string; student: Co
   const playedFaults = new Set(faultsOn(args.fenBefore, played, w.own, w.other, null).map((f) => f.kind));
   const playedRead = args.reads ? readOf(args.reads, uciOf(played)) : null;
   const playedCp = playedRead ? seatCp(playedRead, mover) : null;
+  // THE PIECE'S SQUARE WAS ANOTHER ONE (prod Review 2026-11-09, Carlsen–
+  // Caruana 22…Nh5: "Better was Ne2+" and then "Why h5 for their knight?").
+  // When the engine's better move takes this same piece elsewhere — handed
+  // by the surface that priced the move, or in the reads — "why that
+  // square?" has no answer but "it was not the square", so it is not asked.
+  const otherSquare = (uci: string | null | undefined): boolean => !!uci && uci.slice(0, 2) === played.from && uci !== uciOf(played);
+  if (otherSquare(args.beaten)) return null;
+  if (args.reads && playedCp !== null && args.reads.some((r) => otherSquare(r.moves[0]) && seatCp(r, mover) - playedCp >= INACCURACY_CP)) return null;
   const faults: SquareFault[] = [];
   // The piece's other squares the eye weighs: each at least half as natural
   // as the square it went to (`SIBLING_SHARE`).
@@ -677,6 +692,13 @@ export function squareChoice(args: { fenBefore: string; san: string; student: Co
     if (!m || m.captured) continue;
     let reason: CostReason | null = null;
     const read = args.reads ? readOf(args.reads, c.uci) : null;
+    // A SQUARE THE ENGINE READ NO WORSE IS NO FAULT (prod Review 2026-11-09,
+    // Carlsen–Caruana 22…Nh5: "Better was Ne2+" and then "Why h5 for their
+    // knight? On h3 or e2 it hangs"). The board's one-move faults are what
+    // the eye sees; where the surface read the square, the engine says
+    // whether the eye was right, and a square it scores at least as well as
+    // the one played is never said to fail.
+    if (read && playedCp !== null && seatCp(read, mover) >= playedCp) continue;
     if (read && playedCp !== null) {
       const cost = playedCp - seatCp(read, mover);
       if (cost >= TEMPTING_COST_CP) {

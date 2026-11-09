@@ -349,5 +349,5 @@ export function preparesBreakBeat(
   const whose = moverIsStudent ? 'your' : 'their';
   const pct = Math.round(brk.share * 100);
   // The move's head rotates like every other (`moveIntro`, David 2026-11-09).
-  return `${introWithPredicate(moverIsStudent ? 'student' : 'opponent', moved.san, `prepares ${brk.san}: ${whose} ${PIECE_NAME[moved.piece]} on ${moved.to} covers ${brk.square}, and masters push ${brk.san} in ${pct}% of their games from here`)}.`;
+  return `${introWithPredicate(moverIsStudent ? 'student' : 'opponent', moved.san, `prepares ${brk.san}: ${whose} ${PIECE_NAME[moved.piece]} on ${moved.to} covers ${brk.square}, and masters push ${brk.san} in ${pct}% of their games from here`, 'now')}.`;
 }

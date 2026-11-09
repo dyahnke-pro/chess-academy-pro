@@ -37,7 +37,7 @@ describe('the lesson composer is handed the same facts', () => {
   it('…Kf7 carries the castling step and the bishop kept home', () => {
     const c = new Chess();
     for (const s of GAME.sans.slice(0, 21)) c.move(s);
-    const facts = moveThoughtFacts({ theory: true, fenBefore: c.fen(), san: 'Kf7', moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: GAME.sans.slice(0, 21), phrases: null, reads: null, costCp: null });
+    const facts = moveThoughtFacts({ theory: true, tense: 'now', fenBefore: c.fen(), san: 'Kf7', moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: GAME.sans.slice(0, 21), phrases: null, reads: null, costCp: null });
     const texts = facts.filter((f) => f.source === 'kingWalk').map((f) => f.text);
     expect(texts).toContain('Kf7 starts castling by hand — next, a rook to e8 or f8, then the king to g8.');
     expect(texts).toContain('Your bishop on c8 stays home for now, and it has a job there: if their queen checks on c4, it blocks on e6.');

@@ -199,7 +199,7 @@ export interface BoardContexts {
   alsoGood: { fenBefore: string; san: string; student: Color; rating: number; reads: readonly WeighRead[] | null };
   /** Which square for the piece: its other squares and what goes wrong there
    *  (board reads; the engine's line where `reads` has one). */
-  squareChoice: { fenBefore: string; san: string; student: Color; rating: number; reads: readonly WeighRead[] | null; priorMove: { fenBefore: string; san: string } | null };
+  squareChoice: { fenBefore: string; san: string; student: Color; rating: number; reads: readonly WeighRead[] | null; priorMove: { fenBefore: string; san: string } | null; beaten: string | null };
   /** THE PAWN BREAK (`pawnBreak`, the teaching move S-BREAK): the move `san`
    *  on `fenBefore` (either seat) read as a break and what it is for.
    *  `lastTo` — the square the opponent's last move landed on (a recapture is
@@ -896,8 +896,8 @@ export const BOARD_COMPUTERS = {
     // fianchetto instead" (2.9%): the piece's other squares the eye weighs and
     // what the board shows goes wrong on each. Said about the move played; a
     // square that fails is no move to find.
-    read: ({ fenBefore, san, student, rating, reads, priorMove }, fact) => safe(() => {
-      const r = squareChoice({ fenBefore, san, student, rating, reads, priorMove });
+    read: ({ fenBefore, san, student, rating, reads, priorMove, beaten }, fact) => safe(() => {
+      const r = squareChoice({ fenBefore, san, student, rating, reads, priorMove, beaten });
       if (!r) return null;
       const mine = new Chess(fenBefore).turn() === student;
       return fact({ key: r.key, claims: [r.key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,

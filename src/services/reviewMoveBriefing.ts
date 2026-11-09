@@ -589,8 +589,9 @@ export function joinReview(clauses: string[], moverIsStudent: boolean | undefine
   // SAID LIKE A PERSON, ROTATED (David 2026-11-09: "mix up the phrasing
   // whenever possible"): the move is still named, the words around it vary.
   const seat = moverIsStudent ? 'student' : 'opponent';
-  if (/^\w+ing\b/.test(said)) return `${introWithGerund(seat, cleanSan(san), said)}.`;
-  if (said.startsWith('it ')) return `${introWithPredicate(seat, cleanSan(san), said.slice(3))}.`;
+  // Review's walk says a move already played: its head is built in the past.
+  if (/^\w+ing\b/.test(said)) return `${introWithGerund(seat, cleanSan(san), said, 'past')}.`;
+  if (said.startsWith('it ')) return `${introWithPredicate(seat, cleanSan(san), said.slice(3), 'past')}.`;
   return `${subject}${cleanSan(san)}${joiner}${said}.`;
 }
 

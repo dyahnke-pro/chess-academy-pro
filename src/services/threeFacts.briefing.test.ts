@@ -28,7 +28,7 @@ describe('the three facts in the briefing', () => {
     const shallow = say(3, { withFacts: false });
     const deep = say(3, { withFacts: true });
     expect(shallow).toMatch(/bears down on f5/);
-    expect(deep).toBe(`${introWithGerund('student', 'g6', 'making room for your bishop on g7, where it hits their rook on a1 once their b4 opens the diagonal')}.`);
+    expect(deep).toBe(`${introWithGerund('student', 'g6', 'making room for your bishop on g7, where it hits their rook on a1 once their b4 opens the diagonal', 'past')}.`);
     expect(deep).not.toMatch(/f5/);
   });
   it('…Bg7 is bound to what b4 aims at', () => {

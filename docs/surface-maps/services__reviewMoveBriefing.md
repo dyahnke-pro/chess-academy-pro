@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**621 lines · 12 exports · 24 importers · 16 tests · 0 audits**
+**622 lines · 12 exports · 24 importers · 16 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:3207) — names `buildReviewMoveBriefing`
-- **The standard post-deploy ritual** (CLAUDE.md:6904) — names `Aspect`
+- **⏰ Standing notes** (CLAUDE.md:3215) — names `buildReviewMoveBriefing`
+- **The standard post-deploy ritual** (CLAUDE.md:6918) — names `Aspect`
 
 ## Who calls in
 
@@ -49,15 +49,15 @@
 ### `moveAspects` (function) — 7 call sites
 - `src/services/captureLeadsTo.test.ts:26`
 - `src/services/midExchangeStructure.test.ts:13`
-- `src/services/moveThoughtFacts.ts:175`
-- `src/services/moveThoughtFacts.ts:720`
+- `src/services/moveThoughtFacts.ts:180`
+- `src/services/moveThoughtFacts.ts:730`
 - `src/services/reviewMoveBriefing.test.ts:71`
 - `src/services/reviewMoveBriefing.test.ts:73`
 - `src/test/captureSaidOnce.gate.test.ts:190`
 
 ### `buildReviewMoveBriefing` (function) — 23 call sites
-- `src/services/captureRun.test.ts:45`
-- `src/services/captureRun.test.ts:57`
+- `src/services/captureRun.test.ts:46`
+- `src/services/captureRun.test.ts:58`
 - `src/services/coachFeatureService.ts:2155`
 - `src/services/guardPressure.test.ts:42`
 - `src/services/materialSites.test.ts:20`
@@ -81,12 +81,12 @@
 - `src/test/captureSaidOnce.gate.test.ts:186`
 
 ### `toClause` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:232`
+- `src/services/moveThoughtFacts.ts:237`
 - `src/services/reviewMoveBriefing.test.ts:182`
 - `src/services/reviewMoveBriefing.test.ts:185`
 
 ### `joinReview` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:232`
+- `src/services/moveThoughtFacts.ts:237`
 - `src/services/reviewMoveBriefing.test.ts:184`
 - `src/services/reviewMoveBriefing.test.ts:185`
 
@@ -120,7 +120,7 @@
 - `src/services/moveThoughtFacts.test.ts:254`
 - `src/services/moveThoughtFacts.test.ts:257`
 - `src/services/moveThoughtFacts.test.ts:280`
-- `src/services/moveThoughtFacts.ts:544`
+- `src/services/moveThoughtFacts.ts:554`
 - `src/services/openingGenerator.ts:1988`
 - `src/services/openingGenerator.ts:2615`
 - `src/services/pieceRoute.test.ts:52`

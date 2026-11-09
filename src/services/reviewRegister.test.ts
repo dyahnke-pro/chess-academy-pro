@@ -33,6 +33,16 @@ const past = (narration: string): string => {
   return (seg as { narration: string }).narration;
 };
 
+describe('pastTenseReviewNarration — never finds a move by re-reading a sentence (prod Review 2026-11-09, Carlsen–Caruana)', () => {
+  it('a sentence that opens on a pawn square is not the pawn\'s intro', () => {
+    // Shipped on 20.Nxg5: "You played e4 — it and d5 pawns leave their bishop …".
+    expect(past('Your e4 and d5 pawns leave their bishop on b7 staring at a wall: its long diagonal ends on d5.'))
+      .toBe('Your e4 and d5 pawns leave their bishop on b7 staring at a wall: its long diagonal ends on d5.');
+    // Shipped on 39.Rxd6+: "They played d6 — it pawn is the key pawn".
+    expect(past('Their d6 pawn is the key pawn: it guards c5, and if d6 drops, c5 goes with it.')).not.toMatch(/played d6/);
+  });
+});
+
 describe('pastTenseReviewNarration — retrospective, but never over a plan', () => {
   it('past-tenses a statement of what happened', () => {
     expect(past("You're clearly better.")).toBe('You were clearly better.');
