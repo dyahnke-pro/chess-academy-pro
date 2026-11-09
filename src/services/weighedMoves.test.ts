@@ -97,7 +97,7 @@ describe('(A) the tempting move, refuted — on his games', () => {
   it('3…g6 (HiCeU8tIh0U): …Nf6 does not stop the mate', () => {
     const g = game('HiCeU8tIh0U');
     const r = temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: seat(g.fenBefore), rating: 1500, reads: g.reads, priorMove: null });
-    expect(r?.text).toBe("Nf6 is tempting here, but it fails: they play Qxf7# — and it's mate.");
+    expect(r?.text).toBe("Nf6 is tempting here, but it fails: they play Qxf7#.");
     expect(r?.claims).toContain('rule-out:mate:f7');
   });
 

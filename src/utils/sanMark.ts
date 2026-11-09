@@ -7,3 +7,11 @@
 export function unmarked(san: string): string {
   return san.replace(/[+#]$/, '');
 }
+
+/** The move's own mark already says mate (the voice reads "#" as ",
+ *  checkmate"): a line that ends on it needs no "and it's mate" after it
+ *  (prod focus audit 2026-11-09: "they play rook to e8, checkmate — and it's
+ *  mate"). */
+export function markSaysMate(san: string | null | undefined): boolean {
+  return !!san && /#$/.test(san);
+}

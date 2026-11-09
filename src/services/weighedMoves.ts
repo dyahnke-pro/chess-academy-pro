@@ -37,6 +37,7 @@ import { legalSeeGainFor } from './positionReadingService';
 import { lineProof, type Proof } from './proof';
 import { seatCp, expectedScore } from './winChance';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { markSaysMate } from '../utils/sanMark';
 import { pieceRef } from './pieceRef';
 import { openSentence } from '../utils/openSentence';
 import { temptingKey } from './conceptKey';
@@ -278,7 +279,7 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
     // What it wins beyond what the line, as said, already names: a line that
     // ends "they play a1, making a queen" has said its gain.
     const won = r.mate ? null : reasonWinWords(r, lineShapePlies(sans.length));
-    const result = r.mate ? ' — and it\'s mate' : won ? ` — ${w.otherWho} win ${won}` : '';
+    const result = r.mate ? (markSaysMate(sans[sans.length - 1]) ? '' : ' — and it\'s mate') : won ? ` — ${w.otherWho} win ${won}` : '';
     const lead = mover === args.student
       ? rotateStem([`${c.san} is tempting here, but it fails`, `${c.san} looks natural, but it doesn't work`], stemKeyOf(`${args.fenBefore}|${c.uci}`))
       : rotateStem([`${c.san} was tempting for them, but it fails`, `${c.san} looked natural for them, but it doesn't work`], stemKeyOf(`${args.fenBefore}|${c.uci}`));
@@ -628,7 +629,7 @@ function faultsOn(fenBefore: string, m: Move, own: 'your' | 'their', other: 'you
     // The first move is said; a promotion it makes is not named again.
     const won = reason.mate ? null : reasonWinWords(reason, [0]);
     out.push({ square: m.to, kind: 'refuted', squares: [m.to],
-      text: `runs into ${sans[0]}${reason.mate ? ', and it\'s mate' : won ? ` — ${other === 'your' ? 'you' : 'they'} win ${won}` : ''}` });
+      text: `runs into ${sans[0]}${reason.mate ? (markSaysMate(sans[0]) ? '' : ', and it\'s mate') : won ? ` — ${other === 'your' ? 'you' : 'they'} win ${won}` : ''}` });
   }
   return out;
 }

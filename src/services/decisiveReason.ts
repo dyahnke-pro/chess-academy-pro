@@ -26,7 +26,7 @@ import { bestMoveReason } from './deliberation';
 import { costWords } from './engineConstants';
 import { openSentence } from '../utils/openSentence';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
-import { unmarked } from '../utils/sanMark';
+import { markSaysMate, unmarked } from '../utils/sanMark';
 import { costReason, reasonSans, reasonWinWords } from './costReason';
 import { takesBack, type PrevCaptureContext } from './captureRun';
 
@@ -141,7 +141,9 @@ function seatProof(fen: string, sans: readonly string[], mover: 'w' | 'b', stude
     end = describeProofResult(p.ledger);
   }
   // Each move with its mover (OS-8 gap 7): the line starts with the side to move on `fen`.
-  return { text: `${lineShape(line, lineSeatAt(fen, studentWB))} — ${end}`, sans: line, end };
+  // A line that ends on its own mate mark has said the mate.
+  const shape = lineShape(line, lineSeatAt(fen, studentWB));
+  return { text: p.mate && markSaysMate(line[line.length - 1]) ? shape : `${shape} — ${end}`, sans: line, end };
 }
 
 const LATER_WORDS: Record<number, string> = { 1: 'a move', 2: 'two moves', 3: 'three moves', 4: 'four moves', 5: 'five moves', 6: 'six moves' };
@@ -249,7 +251,7 @@ export function decisiveReason(input: {
     if (r.trust.name) {
       // The first move is said; a promotion it makes is not named again.
       const won = r.mate ? null : reasonWinWords(r, [0]);
-      return `: it runs into ${first}${r.mate ? ", and it's mate" : won ? ` — ${winner} win ${won}` : ''}`;
+      return `: it runs into ${first}${r.mate ? (markSaysMate(first) ? '' : ", and it's mate") : won ? ` — ${winner} win ${won}` : ''}`;
     }
     return /x|\+|#/.test(first) ? `: it lets ${replier} play ${first}` : '';
   };

@@ -82,3 +82,18 @@ describe('a piece the move takes is not "stopped" (prod focus audit 2026-11-09)'
     expect(out?.prevents?.san).toBe('Qxb5');
   });
 });
+
+describe('a threat on the square the piece left was escaped, not stopped (prod focus audit 2026-11-09)', () => {
+  // Rung-2 game 2: "Their bishop taking on f7 stops your g6, which would hit
+  // their bishop on h5" — Bxf7 took the bishop off h5.
+  const FEN = '1B1k1b2/rb1p1pp1/p7/3p1N1B/1p5p/P7/1PP2PPP/2KRR3 w - - 2 20';
+  const reads: IntentReads = {
+    before: [L(300, ['h5f7', 'd8c8'])],
+    passBefore: [L(0, ['g7g6', 'h5g4'])],
+    after: [L(400, ['d8c8', 'f7e8'])],
+    passAfter: [],
+  };
+  it('Bxf7 names no stopped …g6', () => {
+    expect(moveIntent(FEN, 'Bxf7', reads, 'opponent')?.prevents?.san ?? null).not.toBe('g6');
+  });
+});

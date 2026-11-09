@@ -66,7 +66,7 @@ describe('the error computer names a far line only on a second read (real games)
   });
   it('two agreeing reads: named, with the line on the board', () => {
     const ew = errorWhy({ costCp: null, ...base, secondReads: { reply: [castle.reply], best: [] } });
-    expect(ew.consequence).toBe("it let them win a knight for a pawn — the engine's line gets there in 5 moves");
+    expect(ew.consequence).toBe('it let them win a knight for a pawn within 5 moves');
     expect(ew.line?.uci.length).toBeGreaterThan(NAME_NEAR_PLIES);
   });
   // chesscom-145216770269, 9…Bd7: a knight and a pawn for a bishop six moves

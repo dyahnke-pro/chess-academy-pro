@@ -242,7 +242,12 @@ export function moveIntent(
       // the queen). A threat by the piece the move captured is the capture's,
       // never a second job.
       const taken = threat.slice(0, 2) === playedUci.slice(2, 4);
-      if (!threatSan || rescue || taken || threat === playedUci) continue;
+      // …nor a threat whose point was the piece that moved: it hit the square
+      // the piece just left (prod focus audit 2026-11-09: "Their bishop taking
+      // on f7 stops your g6, which would hit their bishop on h5" — the bishop
+      // had left h5). The move escaped it; the escape is not a second job.
+      const escaped = !mates && hitsSquareLeft(passFen, threat, playedUci.slice(0, 2));
+      if (!threatSan || rescue || taken || escaped || threat === playedUci) continue;
       if (opts.prevent === 'concrete' && !concreteThreat(passFen, threat, threatSan, line)) continue;
       const stillLegal = sanOf(fenAfter, threat) !== null;
       const threatNow = valueOfMove(reads.after, threat, opp);
@@ -854,3 +859,16 @@ export function preventStakes(prevents: { threatCp: number } | null | undefined)
 
 /** The wording alone, for tests of the stems. */
 export const phraseIntentForTest = phrase;
+
+/** After `threat` (from `passFen`, the opponent to move), does the moved piece
+ *  newly attack `left` — the square the mover's piece just left? */
+function hitsSquareLeft(passFen: string, threat: string, left: string): boolean {
+  try {
+    const c = new Chess(passFen);
+    const side = c.turn();
+    const before = c.attackers(left as Square, side);
+    const mv = c.move({ from: threat.slice(0, 2), to: threat.slice(2, 4), promotion: threat[4] });
+    if (!mv) return false;
+    return c.attackers(left as Square, side).includes(mv.to as Square) && !before.includes(mv.from as Square);
+  } catch { return false; }
+}

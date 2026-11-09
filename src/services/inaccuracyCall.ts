@@ -1229,7 +1229,7 @@ export function errorWhy(args: {
               // where the naming rule lets the line be named.
               ?? (() => {
                 const r = missedReason();
-                return r && !r.mate && r.trust.name ? `it would win ${reasonWinWords(r, [])} — the engine's line gets there in ${Math.ceil(r.blowPlies / 2)} moves` : null;
+                return r && !r.mate && r.trust.name ? `it would win ${reasonWinWords(r, [])} ${movesOn(Math.ceil(r.blowPlies / 2))}` : null;
               })()
               ?? (args.bestLineUci?.length ? boardHalfReason(args.fenBefore, bestSan, args.moverColor, args.priorMove) : null);
           })();
@@ -1310,7 +1310,7 @@ export function errorWhy(args: {
     ? (() => {
       const r = allowedReason();
       if (!r || r.mate || !r.trust.name) return null;
-      return { said: `it let them win ${reasonWinWords(r, [])} — the engine's line gets there in ${Math.ceil(r.blowPlies / 2)} moves`, line: { fen: r.fen, uci: r.plies.map((p) => p.uci) } };
+      return { said: `it let them win ${reasonWinWords(r, [])} ${movesOn(Math.ceil(r.blowPlies / 2))}`, line: { fen: r.fen, uci: r.plies.map((p) => p.uci) } };
     })()
     : null;
   // The square their reply takes on, when the single or allowed reader names
@@ -2071,3 +2071,11 @@ function discoveredBy(fen: string, uci: string): string | null {
   } catch { return null; }
 }
 
+
+/** How far on a far loss lands, said the way a player says it (prod focus
+ *  audit 2026-11-09: "it let them win the exchange — the engine's line gets
+ *  there in 2 moves" was a dash chain and the machinery's name). The line is
+ *  on the board. */
+function movesOn(n: number): string {
+  return n <= 1 ? 'on the next move' : `within ${n} moves`;
+}

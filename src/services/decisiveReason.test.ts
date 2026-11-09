@@ -31,11 +31,14 @@ describe('decisiveReason — THE reason when one accounts for the gap', () => {
     expect(r?.source).toBe('material');
     expect(r?.text).toMatch(/^Ne5 wins by force/);
   });
-  it('a stopped move whose threat covers the gap', () => {
+  it('a move never "stops" a move of the piece it takes (prod focus audit 2026-11-09)', () => {
+    // This case used to read "Your Qxd3+ stops …Bg6" — Qxd3+ takes that bishop.
+    // The stopped-move search counted the captured piece's own moves; it no
+    // longer does, and the reason is what the capture is.
     const r = run('Qxd3+');
-    expect(r?.kind).toBe('the');
-    expect(r?.source).toBe('stops');
-    expect(r?.stakeCp ?? 0).toBeGreaterThanOrEqual(0.6 * (r?.gapCp ?? 0));
+    expect(r?.source).not.toBe('stops');
+    expect(r?.text).not.toMatch(/stops …B/);
+    expect(r?.text).toMatch(/wins a bishop/);
   });
   it('when a count and a stopped move both cover the gap, the count speaks', () => {
     const r = run('Re5');
