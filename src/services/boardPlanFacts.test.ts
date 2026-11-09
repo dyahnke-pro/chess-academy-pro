@@ -20,3 +20,17 @@ describe('the outpost lever', () => {
     expect(outpost('2r2rk1/pp4pp/8/8/8/8/PP4PP/3RR1K1 w - - 0 20')).toBeUndefined();
   });
 });
+
+describe('the worst-piece lever — no road, no plan (WO-DEPTH-01, 2026-11-08)', () => {
+  const worst = (fen: string, side: 'white' | 'black'): string | undefined =>
+    boardPlanFacts(fen, side)?.levers.find((l) => l.kind === 'worst')?.phrase;
+  it('a knight with no safe road gets no lever ("find a better square" named no square)', () => {
+    // The Colle board: the h5 knight is stuck on the rim and every road is hit.
+    expect(worst('r1bqrnk1/5ppp/p3p3/1p1pn1bN/3p2Q1/2PB4/PP3PPP/R1B1R1K1 w - - 0 16', 'white')).toBeUndefined();
+  });
+  it('a piece with a road: the lever names where it goes and why', () => {
+    // David's game chesscom-1002984876 after 21.Nc3: the h3 knight wants f4
+    // (two knights, so this one is named by its square).
+    expect(worst('r1k5/p1pn3p/8/1pb3p1/8/2N2PBn/PPP4P/2K2R2 b - - 3 21', 'black')).toBe('bring your knight on h3 to f4, an outpost no pawn can chase it from, and the g-pawn backs it up');
+  });
+});

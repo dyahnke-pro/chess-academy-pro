@@ -11,7 +11,7 @@
  */
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
-import { deriveNextPlanFacts, worstPieceNote } from './nextPlans';
+import { deriveNextPlanFacts, worstPieceNote, worstPieceRoute } from './nextPlans';
 import { methodRead, methodPlanSentence, whyThisPlan } from './planChoice';
 import { stripThink } from '../utils/thinkPause';
 import { structurePlanFact } from './nextPlans';
@@ -128,9 +128,16 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   const viewer = voice === 'you' ? myC : theirC;
   // The rook with no file is the open-file lever's (said above), never a
   // second "better square" for the same rook.
-  if (worst && worst.kind !== 'no-file-rook' && (worst.misplaced || pastOpening || worst.square[1] !== homeRank)) {
+  // No road, no plan (WO-DEPTH-01, 2026-11-08): "find a better square for
+  // your knight" names no square and no job — the read says what is wrong
+  // with the piece ("stuck on the rim"); the plan says where it goes, or
+  // nothing (the Colle board: the h5 knight has no safe road).
+  const road = worst && worst.kind !== 'no-file-rook' && (worst.misplaced || pastOpening || worst.square[1] !== homeRank)
+    ? worstPieceRoute(fen, worst.square)
+    : null;
+  if (worst && road) {
     const ref = pieceRef(fen, worst.square, viewer);
-    levers.push({ kind: 'worst', phrase: `find a better square for ${ref ? ref.words : `${your} ${PIECE[worst.piece]} on ${worst.square}`}`, squares: [worst.square] });
+    levers.push({ kind: 'worst', phrase: `bring ${ref ? ref.words : `${your} ${PIECE[worst.piece]} on ${worst.square}`} to ${road.target}, ${road.aim}`, squares: [worst.square, ...road.route] });
   }
   // Chat was ASKED: the method is said as a question and its answers at once.
   // The answers ARE the plan (planChoice.methodPlan) — unless a passed pawn or

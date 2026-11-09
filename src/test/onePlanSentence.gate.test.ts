@@ -32,12 +32,14 @@ describe('one worst piece (census 8): every caller reads nextPlans.worstPieceNot
   it('g3 before 14.Rc1: a rook at home is not the worst piece, in the plan levers or the chat', async () => {
     const { Chess } = await import('chess.js');
     const { boardPlanFacts } = await import('../services/boardPlanFacts');
-    const { worstPieceNote } = await import('../services/nextPlans');
+    const { worstPieceNote, worstPieceRoute } = await import('../services/nextPlans');
     const c = new Chess();
     for (const s of 'b3 e5 Bb2 Nc6 e3 Nf6 Bb5 Bd6 Na3 Na5 Be2 a6 c4 O-O Nc2 Re8 d3 b5 Nf3 c5 O-O Bc7 b4 cxb4 Nxb4 Bb7'.split(' ')) c.move(s);
     const worst = worstPieceNote(c.fen(), 'w');
     const levers = boardPlanFacts(c.fen(), 'white')?.levers.filter((l) => l.kind === 'worst') ?? [];
-    expect(levers.map((l) => l.squares[0])).toEqual(worst ? [worst.square] : []);
+    // The lever is the one worst piece, and only with a road (no road, no
+    // plan — WO-DEPTH-01 2026-11-08).
+    expect(levers.map((l) => l.squares[0])).toEqual(worst && worstPieceRoute(c.fen(), worst.square) ? [worst.square] : []);
     expect(levers.map((l) => l.squares[0])).not.toContain('a1');
   });
 });
