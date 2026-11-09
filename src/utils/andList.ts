@@ -1,3 +1,5 @@
+import { Chess } from 'chess.js';
+
 /**
  * Join EVERY item as English ("a", "a and b", "a, b and c").
  *
@@ -80,32 +82,126 @@ export function seatedLine(sans: readonly string[], first: LineSeat): string {
 /** A line this long or shorter is said move by move (`lineShape`). */
 const LINE_SAID_IN_FULL = 3;
 
+const PIECE_POINTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+
+/** What each move of the line takes (a promotion counts what it adds), and
+ *  who plays it, read off the board the line starts on; null when there is
+ *  no board or the line does not play on it. */
+function lineTakes(sans: readonly string[], fen: string): { took: number; to: string; color: 'w' | 'b' }[] | null {
+  try {
+    const c = new Chess(fen);
+    return sans.map((san) => {
+      const m = c.move(san.replace(/^…/, ''));
+      const took = (m.captured ? PIECE_POINTS[m.captured] ?? 0 : 0) + (m.promotion ? (PIECE_POINTS[m.promotion] ?? 0) - 1 : 0);
+      return { took, to: m.to, color: m.color };
+    });
+  } catch { return null; }
+}
+
+/** The board after the first `k` moves of a line — for a caller that says a
+ *  line from its second move on. Null when there is no board or the moves do
+ *  not play on it. */
+export function fenAfterSans(fen: string | null, sans: readonly string[]): string | null {
+  if (!fen) return null;
+  try {
+    const c = new Chess(fen);
+    for (const san of sans) c.move(san.replace(/^…/, ''));
+    return c.fen();
+  } catch { return null; }
+}
+
+/** THE MOVE THAT WINS, inside a line (David 2026-11-09: a long line said as
+ *  its first and last move skipped the capture that won — "they play Bxb7
+ *  and, two moves later, you play Rxa8 — you give up a rook" never said the
+ *  …Bxa8 that took the rook). Read on the line's board: the side the line
+ *  wins for, and of its captures between the first move and the last the one
+ *  that takes the most — never one half of a trade (a capture taken straight
+ *  back on its square for the same value). It is said unless the line's last
+ *  move is that side's and takes as much, so the line already names it. With
+ *  no board nothing is added. One move, never a score sheet. */
+function winningMove(sans: readonly string[], fen: string | null): number | null {
+  const takes = fen ? lineTakes(sans, fen) : null;
+  if (!takes) return null;
+  const won = { w: 0, b: 0 };
+  for (const t of takes) won[t.color] += t.took;
+  if (won.w === won.b) return null;
+  const winner: 'w' | 'b' = won.w > won.b ? 'w' : 'b';
+  const traded = (i: number): boolean => {
+    const a = takes[i];
+    const next = takes[i + 1];
+    const prev = takes[i - 1];
+    return (!!next && next.to === a.to && next.took === a.took) || (!!prev && prev.to === a.to && prev.took === a.took);
+  };
+  let best: number | null = null;
+  for (let i = 1; i < takes.length - 1; i += 1) {
+    const t = takes[i];
+    if (t.color !== winner || t.took === 0 || traded(i)) continue;
+    if (best === null || t.took > takes[best].took) best = i;
+  }
+  if (best === null) return null;
+  const last = takes[takes.length - 1];
+  return last.color === winner && last.took >= takes[best].took ? null : best;
+}
+
 /** The moves `lineShape` SAYS, by index into the line: every one up to
- *  three, otherwise the first and the last — so a result said after the line
- *  can leave out what those moves already said (a promotion is said "a1,
- *  making a queen"). One rule with `lineShape`. */
-export function lineShapePlies(n: number): number[] {
+ *  three, otherwise the first, the move that wins (`winningMove`), and the
+ *  last — so a result said after the line can leave out what those moves
+ *  already said (a promotion is said "a1, making a queen"). `fen` is
+ *  REQUIRED: the board the line starts on, or null where the caller has none.
+ *  One rule with `lineShape`. */
+export function lineShapePlies(sans: readonly string[], fen: string | null): number[] {
+  const n = sans.length;
   if (n <= 0) return [];
   if (n <= LINE_SAID_IN_FULL) return Array.from({ length: n }, (_, i) => i);
-  return [0, n - 1];
+  const won = winningMove(sans, fen);
+  return won === null ? [0, n - 1] : [0, won, n - 1];
 }
 
 /**
  * A LINE AS THE VOICE SAYS IT (proof guard 2: the voice says the shape, the
  * board shows the detail). Up to three moves are said in full, each with its
- * mover; a longer line is said as its first move and where it lands — the
- * whole line is drawn on the board and kept in the proof (Learn audit
- * 2026-10-15: "That wins the exchange: Bc5, gxf6, Bxd4, Nxd4, Qe5+, Qe2 and
- * Qxd4" read aloud).
+ * mover; a longer line is said as its first move, the capture that wins the
+ * material when the end does not name it, and where it lands — the whole line is drawn on the board and
+ * kept in the proof (Learn audit 2026-10-15: "That wins the exchange: Bc5,
+ * gxf6, Bxd4, Nxd4, Qe5+, Qe2 and Qxd4" read aloud). `fen` is REQUIRED: the
+ * board the line starts on (null where the caller has none), so the move
+ * that wins can be found (`lineShapePlies`).
  */
-export function lineShape(sans: readonly string[], first: LineSeat): string {
+export function lineShape(sans: readonly string[], first: LineSeat, fen: string | null): string {
   if (sans.length <= LINE_SAID_IN_FULL) return seatedLine(sans, first);
-  // The first move and where the line LANDS — "the moves that follow" named
-  // nothing (claim check 2026-10-17: 144 weighings said "e7? Then the moves
-  // that follow — …", a line no student can picture). Full moves, not plies.
-  const later = Math.ceil((sans.length - 1) / 2);
-  const last = (sans.length - 1) % 2 === 0 ? first : OTHER_SEAT[first];
-  return `${seatedPly(sans[0], first, false)} and, ${later === 1 ? 'a move' : `${NUMBER_WORDS[later] ?? later} moves`} later, ${seatedPly(sans[sans.length - 1], last, false)}`;
+  // The first move, the capture that wins, and where the line LANDS — "the
+  // moves that follow" named nothing (claim check 2026-10-17: 144 weighings
+  // said "e7? Then the moves that follow — …", a line no student can picture).
+  // Full moves, not plies.
+  const said = lineShapePlies(sans, fen);
+  const seatOf = (i: number): LineSeat => (i % 2 === 0 ? first : OTHER_SEAT[first]);
+  const gap = (from: number, to: number): string => {
+    const later = Math.ceil((to - from) / 2);
+    return later === 1 ? 'a move' : `${NUMBER_WORDS[later] ?? later} moves`;
+  };
+  // Each said move after the first: the reply that comes straight after is
+  // said as an answer ("they answer Rxa8"); the move that wins, with moves
+  // left out before it, says how far on it comes ("and Bxa8 a move later");
+  // the end the same ("and, two moves later, you play Rxe1"). The whole line
+  // is drawn on the board.
+  let out = seatedPly(sans[0], first, false);
+  let then = false;
+  said.slice(1).forEach((i, k) => {
+    const prev = said[k];
+    const last = k === said.length - 2;
+    const and = then ? ', and ' : ' and ';
+    if (i - prev === 1) {
+      out += `${last ? and : ', '}${seatedPly(sans[i], seatOf(i), seatOf(i) !== seatOf(prev))}`;
+    } else if (last) {
+      out += `${and.trimEnd()}, ${gap(prev, i)} later, ${seatedPly(sans[i], seatOf(i), false)}`;
+    } else {
+      out += seatOf(i) === seatOf(prev)
+        ? ` and ${sans[i].replace(/^…/, '')} ${gap(prev, i)} later`
+        : `, and ${gap(prev, i)} later ${seatedPly(sans[i], seatOf(i), false)}`;
+      then = true;
+    }
+  });
+  return out;
 }
 /** A LINE ONCE ITS FIRST MOVE IS ALREADY NAMED — "Qh4? Then …", "Qh4 didn't
  *  work: …": the sentence has said the move, so the line is said from the

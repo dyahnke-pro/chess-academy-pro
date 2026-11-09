@@ -1371,13 +1371,11 @@ export function errorWhy(args: {
       // The voice says the shape; the board walks the line (proof guard 2).
       // What it wins beyond the moves said: a line said to "a1, making a
       // queen" has named its gain (prod Review 2026-11-06).
-      if (sans.length <= 3) {
-        const won = reasonWinWords(r, lineShapePlies(sans.length));
-        tail = ` The line: ${lineShape(sans, 'they')}${won ? ` — they win ${won}` : ''}.`;
-      } else {
-        const won = reasonWinWords(r, [0]);
-        tail = won ? ` The line starts with ${sans[0]}, and they win ${won}.` : ` The line starts with ${sans[0]}.`;
-      }
+      // A long line is said by the one shaper, so the capture that wins the
+      // material is named, never only the line's first move (David
+      // 2026-11-09: "yes!").
+      const won = reasonWinWords(r, lineShapePlies(sans, r.fen));
+      tail = ` The line: ${lineShape(sans, 'they', r.fen)}${won ? ` — they win ${won}` : ''}.`;
       line = { fen: r.fen, uci: r.plies.map((p) => p.uci) };
     }
   }

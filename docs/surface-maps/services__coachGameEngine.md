@@ -4,15 +4,15 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1390 lines · 14 exports · 9 importers · 14 tests · 2 audits**
+**1393 lines · 14 exports · 9 importers · 14 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
 - **🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)** (CLAUDE.md:117) — names `getAdaptiveMove`
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:266) — names `replyMadeAChance`
-- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:500) — names `gameOpponentStrength`, `replyMadeAChance`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4738) — names `coachGameEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6891) — names `coachGameEngine`, `getAdaptiveMove`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:269) — names `replyMadeAChance`
+- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:503) — names `gameOpponentStrength`, `replyMadeAChance`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4741) — names `coachGameEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6900) — names `coachGameEngine`, `getAdaptiveMove`
 
 ## Who calls in
 
@@ -54,7 +54,7 @@
 - `src/components/Coach/CoachGamePage.tsx:2560`
 - `src/components/Coach/CoachGamePage.tsx:2852`
 - `src/components/Coach/CoachGamePage.tsx:2890`
-- `src/components/Coach/CoachTeachPage.tsx:8651`
+- `src/components/Coach/CoachTeachPage.tsx:8652`
 - `src/components/Openings/OpeningPlayMode.tsx:810`
 - `src/components/Openings/OpeningPlayMode.tsx:835`
 
@@ -78,7 +78,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `replyMadeAChance` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8626`
+- `src/components/Coach/CoachTeachPage.tsx:8627`
 
 ### `getAdaptiveMove` (function) — 64 call sites
 - `src/components/Coach/CoachGamePage.tsx:2355`
@@ -166,8 +166,8 @@
 - `src/App.tsx:170`
 - `src/components/Coach/CoachGamePage.tsx:353`
 - `src/components/Coach/CoachTeachPage.tsx:8545`
-- `src/components/Coach/CoachTeachPage.tsx:10865`
-- `src/components/Coach/CoachTeachPage.tsx:13946`
+- `src/components/Coach/CoachTeachPage.tsx:10868`
+- `src/components/Coach/CoachTeachPage.tsx:13949`
 - `src/components/Openings/OpeningPlayMode.tsx:68`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:1012`
 - `src/hooks/useEndgamePlayout.ts:391`

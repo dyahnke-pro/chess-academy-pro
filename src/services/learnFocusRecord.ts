@@ -19,6 +19,7 @@ import type { HeatState } from './holdRate';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
 import { FOCUS_POSED_IMPORTANCE, type FocusId, type FocusSeat, type LegacyFocusId } from '../coach/focus/focusCard';
 import type { FocusSetupInput } from '../coach/focus/focusSetup';
+import type { OwedPattern } from '../coach/focus/focusPlant';
 import type { SeatTally } from '../coach/focus/focusRunner';
 import type { ChanceDifficulty } from '../coach/focus/focusChances';
 import type { RungGame, TacticsRung } from '../coach/focus/focusRung';
@@ -41,10 +42,11 @@ export interface LearnFocusResultRecord {
   presented?: { ply: number; difficulty: ChanceDifficulty } | null;
   /** The longest tempo run of the game (`tempoRun`); absent on older rows. */
   tempoRun?: number;
-  /** The patterns owed to the next game, the most recent miss first
-   *  (`FocusResult.carry`): its first plant poses the head. Absent on older
-   *  rows (nothing carried). */
-  carry?: MisconceptionTagId[];
+  /** The patterns owed to the next game, the most recent miss first, each
+   *  with its seat (`FocusResult.carry`). Absent on older rows (nothing
+   *  carried); a bare tag is a row from before their side carried, and is
+   *  yours. */
+  carry?: Array<OwedPattern | MisconceptionTagId>;
   at: number;
   /** Rows older than WO-FOCUS-TACTICS-01 carried how the game was scaffolded. */
   mode?: string;
@@ -76,8 +78,12 @@ export async function loadFocusSetupInput(): Promise<Omit<FocusSetupInput, 'rand
     db.learnFocusResults.orderBy('at').toArray().catch(() => [] as LearnFocusResultRecord[]),
   ]);
   const holds = new Map([...profile.entries()].map(([tag, e]) => [tag, e.hold] as const));
-  // What the newest game left owed (a tag a later build retired carries nothing).
-  const carry = (results.at(-1)?.carry ?? []).filter((t) => isMisconceptionTagId(t));
+  // What the newest game left owed (a tag a later build retired carries
+  // nothing; a bare tag is a row from before their side carried — yours).
+  const carry = (results.at(-1)?.carry ?? []).flatMap((o): OwedPattern[] => {
+    const p: OwedPattern = typeof o === 'string' ? { seat: 'exploit', tag: o } : o;
+    return isMisconceptionTagId(p.tag) && (p.seat === 'exploit' || p.seat === 'defend') ? [p] : [];
+  });
   return { holds, games: rungGamesFrom(results), tempoBest: tempoBestOf(results), carry };
 }
 

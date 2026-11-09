@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6963) — names `FundamentalId`, `principleAttribution`
+- **The standard post-deploy ritual** (CLAUDE.md:6966) — names `FundamentalId`, `principleAttribution`
 
 ## Who calls in
 
@@ -240,7 +240,7 @@
 ### `pvSanToUci` (function) — 3 call sites
 - `src/services/misconceptionClassifier.ts:565`
 - `src/services/mistakePuzzleService.ts:1171`
-- `src/services/moveThoughtFacts.ts:282`
+- `src/services/moveThoughtFacts.ts:287`
 
 ### `pvUciToSan` (function) — 14 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`

@@ -88,19 +88,32 @@ export function presents(chance: FocusChance, rung: TacticsRung, ply: number, ta
   return chance.seat === 'exploit' && chance.difficulty >= wantedDifficulty(rung, ply, targetPly);
 }
 
+/** A PATTERN OWED TO A LATER GAME (#158): a tactic missed at its first try,
+ *  with the seat it was missed in — yours (a chance you did not take) or
+ *  theirs (one of their tactics you did not stop; David 2026-11-09: "yes").
+ *  The seat is REQUIRED: the same pattern is a different lesson from each
+ *  side of the board. */
+export interface OwedPattern {
+  seat: FocusSeat;
+  tag: MisconceptionTagId;
+}
+
 /** What the runner asks the coach for on this move. */
 export interface FocusPlantAsk {
   /** The pattern of your last miss: the next plant poses it again. */
   tag: MisconceptionTagId | null;
+  /** The side the plant poses: `exploit` a chance of yours, `defend` one of
+   *  their tactics set up against you to stop (a flip). */
+  seat: FocusSeat;
   difficulty: ChanceDifficulty;
   /** An extra chance (the guarantee is met): way ahead, it flips seats. */
   extra: boolean;
   /** Your chances missed in a row when it was asked (`MISS_SPACING_PLIES`). */
   missStreak: number;
-  /** THE CARRIED PATTERN'S OWN PLANT (#158): the pattern a past game left
-   *  missed and unanswered, asked once the game's guarantee is met by another
-   *  — your side only (never a flip), outside the extras budget, and only that
-   *  pattern. */
+  /** THE CARRIED PATTERN'S OWN PLANT (#158): a pattern a past game left
+   *  missed and unanswered, asked once the game's guarantee is met — in the
+   *  seat it was missed in (theirs is set up against you, a flip), outside
+   *  the extras budget, and only that pattern. */
   carried: boolean;
 }
 
@@ -120,20 +133,29 @@ export interface PlantState {
   /** Your chances missed in a row at their first try; a first-try find ends
    *  it (a find after a clue does not — it needed the help). */
   missStreak: number;
-  /** THE MISS THAT CAME BACK (#158, David 2026-11-09: "Can we have coach play
-   *  misses/similar misses in future games?"): the pattern a past game left
-   *  missed and unanswered, still to be put on the board this game; null once
-   *  a chance of it at your rung has been on the board. */
-  carry: MisconceptionTagId | null;
+  /** THE MISSES THAT CAME BACK (#158, David 2026-11-09: "Can we have coach play
+   *  misses/similar misses in future games?"): the most recent pattern a past
+   *  game left missed and unanswered, one for each seat, still to be put on
+   *  the board this game; each leaves the list once a chance of it has been on
+   *  the board (yours at your rung). */
+  carry: OwedPattern[];
   /** THE PATTERNS OWED TO THE NEXT GAME, the most recent miss first: every
-   *  pattern of yours missed at its first try, until you find one of it on
-   *  your own — at the first try, with no question asked, and not on a board
-   *  you took a move back on. The game ends with the list on its row
-   *  (`FocusResult.carry`), and the next game's first plant poses its head. */
-  owed: MisconceptionTagId[];
+   *  pattern missed at its first try — a chance of yours, or one of their
+   *  tactics you did not stop — until you answer one of it on your own, in
+   *  the same seat: at the first try, with no question asked, and not on a
+   *  board you took a move back on. The game ends with the list on its row
+   *  (`FocusResult.carry`), and the next game plants the head of each seat. */
+  owed: OwedPattern[];
 }
 
-export const NO_PLANTS: PlantState = { count: 0, flips: 0, lastPly: null, need: null, presented: null, missStreak: 0, carry: null, owed: [] };
+export const NO_PLANTS: PlantState = { count: 0, flips: 0, lastPly: null, need: null, presented: null, missStreak: 0, carry: [], owed: [] };
+
+/** The patterns a game puts back on the board: the most recent of each seat
+ *  in what past games left owed (yours first). */
+export function carryHeads(owed: readonly OwedPattern[]): OwedPattern[] {
+  const seats: FocusSeat[] = ['exploit', 'defend'];
+  return seats.flatMap((seat) => owed.find((o) => o.seat === seat) ?? []);
+}
 
 /** Whether the coach plants on the move before board `ply` (the ply the
  *  student's next move will be), at what rung and of what pattern. `fen` is
@@ -150,14 +172,20 @@ export function plantAsk(
   const difficulty = Math.max(0, wantedDifficulty(seat.rung, ply, seat.targetPly) - plant.missStreak) as ChanceDifficulty;
   if (!plant.presented) {
     // THE GUARANTEE: from the target ply, every move until it lands — of the
-    // pattern you just missed, else the one a past game left owed (#158).
-    return ply >= seat.targetPly ? { tag: plant.need ?? plant.carry, difficulty, extra: false, missStreak: plant.missStreak, carried: false } : null;
+    // pattern you just missed, else the one of yours a past game left owed
+    // (#158).
+    const yours = plant.carry.find((c) => c.seat === 'exploit')?.tag ?? null;
+    return ply >= seat.targetPly ? { tag: plant.need ?? yours, seat: 'exploit', difficulty, extra: false, missStreak: plant.missStreak, carried: false } : null;
   }
-  // THE MISS THAT CAME BACK (#158): the guarantee was met by another pattern
-  // (a natural chance, or the plant's fallback), so the carried pattern gets
-  // its own plant — every move until it is on the board, budget or not: a
-  // pattern you missed and never answered comes back every game.
-  if (plant.carry && ply >= seat.targetPly) return { tag: plant.carry, difficulty, extra: true, missStreak: plant.missStreak, carried: true };
+  // THE MISSES THAT CAME BACK (#158): the guarantee was met, so each carried
+  // pattern gets its own plant — every move until it is on the board, budget
+  // or not: a pattern missed and never answered comes back every game. One of
+  // theirs you did not stop is set up against you (a flip, at your rung's
+  // subtlety). With both owed, they take the moves in turn.
+  if (plant.carry.length > 0 && ply >= seat.targetPly) {
+    const c = plant.carry[Math.floor(ply / 2) % plant.carry.length];
+    return { tag: c.tag, seat: c.seat, difficulty, extra: true, missStreak: plant.missStreak, carried: true };
+  }
   // Missing in a row: a chance every two moves until a find — the extra budget
   // and the phase floors are for a student who is finding them.
   if (!missing) {
@@ -171,7 +199,7 @@ export function plantAsk(
     const floor = made <= 1 ? SECOND_CHANCE_PLY : (isEndgameByMaterial(fen) ? 0 : THIRD_CHANCE_PLY);
     if (ply < floor) return null;
   }
-  return { tag: plant.need, difficulty, extra: true, missStreak: plant.missStreak, carried: false };
+  return { tag: plant.need, seat: 'exploit', difficulty, extra: true, missStreak: plant.missStreak, carried: false };
 }
 
 export type FocusPlantReject = 'mid-exchange' | 'no-slip' | 'no-read' | 'no-chance' | 'wrong-difficulty' | 'easier-too' | 'wrong-pattern' | 'no-flip';
@@ -210,9 +238,10 @@ const studentOf = (fenAfter: string): Color => (fenAfter.split(' ')[1] === 'b' ?
  * piece next to the intended shot would be taken instead, and the harder
  * chance would never be asked.
  *
- * THE FLIP: an extra while you are way ahead — the coach's own candidates, in
- * its order, kept when the board after poses THEIR tactic against you at most
- * as hard as your rung (the hardest such, then the smallest cost).
+ * THE FLIP: an extra while you are way ahead, or a carried tactic of theirs
+ * (`ask.seat === 'defend'`, that pattern only) — the coach's own candidates,
+ * in its order, kept when the board after poses THEIR tactic against you at
+ * most as hard as your rung (the hardest such, then the smallest cost).
  */
 export async function findFocusPlant(
   fen: string,
@@ -229,7 +258,9 @@ export async function findFocusPlant(
   const viaExchange = (uci: string): boolean => !mid || completesExchange(fen, uci);
   const open = new Set(focus.levels);
   const coachBest = coachLines.length > 0 ? Math.max(...coachLines.map((l) => l.coachCp)) : null;
-  if (ask.extra && !ask.carried && coachBest !== null && coachBest <= -DECIDED_EVAL_CP) {
+  // A carried tactic of theirs is set up against you whatever the score; way
+  // ahead, an extra flips seats.
+  if (coachBest !== null && (ask.seat === 'defend' || (ask.extra && !ask.carried && coachBest <= -DECIDED_EVAL_CP))) {
     const kept = coachLines.filter((l) => viaExchange(l.uci));
     if (kept.length === 0) { bump('mid-exchange'); return { pick: null, scan }; }
     return flipPlant(fen, kept, coachBest, open, ask, read, scan, bump);
@@ -335,8 +366,10 @@ async function flipPlant(
     checked += 1;
     const lines = linesOf(await read(after));
     if (!lines) { bump('no-read'); continue; }
+    // A carried pattern of theirs is that pattern; a flip way ahead is any.
     const theirs = chancesAt({ fen: after, prevFen: null, beforeTheirMove: fen, student: studentOf(after), lines }, open)
-      .filter((c) => c.seat === 'defend' && c.difficulty <= ask.difficulty);
+      .filter((c) => c.seat === 'defend' && c.difficulty <= ask.difficulty && (ask.seat !== 'defend' || !ask.tag || c.tag === ask.tag || c.setupTag === ask.tag));
+    if (theirs.length === 0 && ask.seat === 'defend') { bump('wrong-pattern'); continue; }
     if (theirs.length === 0) { bump('no-flip'); continue; }
     const hardest = [...theirs].sort((a, b) => b.difficulty - a.difficulty)[0];
     const dropCp = coachBest - l.coachCp;

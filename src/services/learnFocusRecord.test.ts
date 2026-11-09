@@ -25,19 +25,23 @@ describe('the misses that carry to the next game (#158)', () => {
     ({ gameId, focus: 'tactics', rung: 0, atRung: { found: 0, missed: 0 }, tally, presented: null, at, ...(carry !== undefined ? { carry } : {}) });
 
   it('the newest game decides: what it left owed, in its order, is the next game\'s carry', async () => {
-    await writeLearnFocusResult(row('g1', 1, ['missed-your-free-piece']));
-    await writeLearnFocusResult(row('g2', 2, ['missed-your-fork', 'missed-your-free-piece']));
-    expect((await loadFocusSetupInput()).carry).toEqual(['missed-your-fork', 'missed-your-free-piece']);
+    await writeLearnFocusResult(row('g1', 1, [{ seat: 'exploit', tag: 'missed-your-free-piece' }]));
+    await writeLearnFocusResult(row('g2', 2, [{ seat: 'defend', tag: 'missed-your-fork' }, { seat: 'exploit', tag: 'missed-your-free-piece' }]));
+    expect((await loadFocusSetupInput()).carry).toEqual([{ seat: 'defend', tag: 'missed-your-fork' }, { seat: 'exploit', tag: 'missed-your-free-piece' }]);
   });
   it('a game that answered everything carries nothing — nor does a row older than the carry', async () => {
-    await writeLearnFocusResult(row('g1', 1, ['missed-your-fork']));
+    await writeLearnFocusResult(row('g1', 1, [{ seat: 'exploit', tag: 'missed-your-fork' }]));
     await writeLearnFocusResult(row('g2', 2, []));
     expect((await loadFocusSetupInput()).carry).toEqual([]);
     await writeLearnFocusResult(row('g3', 3));
     expect((await loadFocusSetupInput()).carry).toEqual([]);
   });
   it('a pattern a later build retired carries nothing; the rest still do', async () => {
-    await writeLearnFocusResult(row('g1', 1, ['a-retired-tag' as never, 'missed-your-fork']));
-    expect((await loadFocusSetupInput()).carry).toEqual(['missed-your-fork']);
+    await writeLearnFocusResult(row('g1', 1, [{ seat: 'exploit', tag: 'a-retired-tag' as never }, { seat: 'defend', tag: 'missed-your-fork' }]));
+    expect((await loadFocusSetupInput()).carry).toEqual([{ seat: 'defend', tag: 'missed-your-fork' }]);
+  });
+  it('BRIDGE: a row from before their side carried holds bare tags — each is yours', async () => {
+    await writeLearnFocusResult(row('g1', 1, ['missed-your-fork', 'missed-your-free-piece']));
+    expect((await loadFocusSetupInput()).carry).toEqual([{ seat: 'exploit', tag: 'missed-your-fork' }, { seat: 'exploit', tag: 'missed-your-free-piece' }]);
   });
 });

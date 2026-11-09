@@ -110,7 +110,7 @@ interface TheoryBranch {
   /** When the game's move dropped material by force: the engine's reply line,
    *  walked to its last capture (`lineCalc`), and what it wins said after
    *  that line — null when the line's own moves named it (a promotion). */
-  refutation: { sans: string[]; what: string | null } | null;
+  refutation: { sans: string[]; what: string | null; fen: string } | null;
 }
 
 /** The review's own engine read of one game ply (0-based index = ply − 1). */
@@ -272,15 +272,15 @@ export function warmLectureSources(): void {
  *  and — when the reply line wins material — that line to its last capture. */
 function gameReadFor(
   fenBefore: string, san: string, mover: 'white' | 'black', read: LectureGameRead | null,
-): { playedCost: number | null; refutation: { sans: string[]; what: string | null } | null } {
+): { playedCost: number | null; refutation: { sans: string[]; what: string | null; fen: string } | null } {
   if (!read) return { playedCost: null, refutation: null };
-  let refutation: { sans: string[]; what: string | null } | null = null;
+  let refutation: { sans: string[]; what: string | null; fen: string } | null = null;
   if (read.replyLineUci.length >= 2) {
     try {
       const c = new Chess(fenBefore);
       c.move(san);
       const w = lineWins(c.fen(), read.replyLineUci, mover === 'white' ? 'b' : 'w', undefined, { fenBefore, san }, [read.replyEarlier]);
-      if (w) refutation = { sans: w.sans, what: w.afterLine };
+      if (w) refutation = { sans: w.sans, what: w.afterLine, fen: c.fen() };
     } catch { /* no line — the cost stands alone */ }
   }
   return { playedCost: read.cpLoss, refutation };
@@ -907,7 +907,7 @@ export function buildTheoryLectureBeats(
     // "comes out a rook for a knight up".
     const verb = winner === 'you' || winner === 'they' ? 'win' : 'wins';
     // What it wins is said after the line, past a promotion the line says.
-    if (b.refutation) return ` The engine punishes ${b.gameSan}: ${lineShape(b.refutation.sans, seatOf(other))}${b.refutation.what ? ` — ${winner} ${verb} ${b.refutation.what}` : ''}.`;
+    if (b.refutation) return ` The engine punishes ${b.gameSan}: ${lineShape(b.refutation.sans, seatOf(other), b.refutation.fen)}${b.refutation.what ? ` — ${winner} ${verb} ${b.refutation.what}` : ''}.`;
     if (b.playedCost >= 30) return ` By the engine's count ${b.gameSan} costs ${costWords(b.playedCost)}.`;
     return ` ${b.gameSan} is perfectly playable — the engine barely minds. It is just less common.`;
   };

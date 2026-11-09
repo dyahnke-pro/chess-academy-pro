@@ -2455,7 +2455,7 @@ function* reviewSegmentSteps(
             // (`readTrade`: "it takes off their bishop that was bearing down on
             // your king") is another claim and stays.
             for (let k = facets.length - 1; k >= 0; k -= 1) if (facets[k].tag === 'trade' && facets[k].computer === 'settledExchange') facets.splice(k, 1);
-            facets.push(fact('lineWins', 'tactic', `That wins ${won.what}: ${lineShape(won.sans, lineSeatAt(fenPair.fenBefore, studentColorWB))}.`, { stakes: { points: won.net, plies: 0 }, lines: [{ fen: fenPair.fenBefore, sans: won.sans.map((x) => x.replace(/^…/, '')) }] }));
+            facets.push(fact('lineWins', 'tactic', `That wins ${won.what}: ${lineShape(won.sans, lineSeatAt(fenPair.fenBefore, studentColorWB), fenPair.fenBefore)}.`, { stakes: { points: won.net, plies: 0 }, lines: [{ fen: fenPair.fenBefore, sans: won.sans.map((x) => x.replace(/^…/, '')) }] }));
             if (!causalArrows || causalArrows.length === 0) {
               causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.winningLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
             }
@@ -4674,7 +4674,7 @@ async function augmentWithProjections(
       const said = proof.proof.sans.slice(0, proof.plies);
       // Each move with its mover (OS-8 gap 7).
       const firstWB = line.plies[0].moverColor === 'white' ? 'w' : 'b';
-      const moves = lineShape(said, firstWB === studentColorWB ? 'you' : 'they');
+      const moves = lineShape(said, firstWB === studentColorWB ? 'you' : 'they', line.plies[0]?.fenBefore ?? null);
       return proof.proof.mate ? `${moves} — and it's mate` : `${moves} — ${describeProofResult(proof.proof.ledger as NonNullable<typeof proof.proof.ledger>)}`;
     }
     // No material point settles: the line proves nothing a sentence can hold,
@@ -4729,7 +4729,7 @@ async function augmentWithProjections(
   };
   /** A cost reason's line in words: its shape, then what it settles. */
   const reasonWords = (r: CostReason, firstSeat: 'you' | 'they'): string => {
-    const moves = lineShape(r.plies.map((p) => p.san), firstSeat);
+    const moves = lineShape(r.plies.map((p) => p.san), firstSeat, r.fen);
     return r.mate ? `${moves} — and it's mate` : r.ledger ? `${moves} — ${describeProofResult(r.ledger)}` : moves;
   };
   /** The one classifier's name for the line, when it is a pattern worth

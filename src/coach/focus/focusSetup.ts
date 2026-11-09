@@ -17,6 +17,7 @@ import { holdState, type HeatState, type HoldRecord } from '../../services/holdR
 import { MOTIF_LEVELS, levelTags, motifsAt, openLevels, tagsOfMotif, type MotifLevel } from '../../data/tacticMotifs';
 import { PREGAME_LINE, openSeatTags, type FocusId, type FocusSeat } from './focusCard';
 import { rungFrom, SEED_RUNG, type RungGame, type TacticsRung } from './focusRung';
+import type { OwedPattern } from './focusPlant';
 
 export interface FocusSetupInput {
   /** The USE profile's hold record per tag (`summariseEvidence(...).get(tag).hold`). */
@@ -28,8 +29,9 @@ export interface FocusSetupInput {
   /** The longest tempo run in any focus game before this one (0 with none). */
   tempoBest: number;
   /** The patterns the last focus game left missed and unanswered, the most
-   *  recent miss first (its row's `carry`); empty when none. */
-  carry: readonly MisconceptionTagId[];
+   *  recent miss first, each with its seat (its row's `carry`); empty when
+   *  none. */
+  carry: readonly OwedPattern[];
 }
 
 export interface FocusSetup {
@@ -59,11 +61,13 @@ export interface FocusSetup {
    *  it (`coachMoment.momentDial`). A tag absent here is grey — taught. */
   tagStates: Partial<Record<MisconceptionTagId, HeatState>>;
   /** THE MISSES THAT CARRY OVER (#158): the patterns past games left missed
-   *  and unanswered, the most recent first. The coach puts the first back on
-   *  the board this game (its guarantee asks it, falling back to any pattern
-   *  rather than leave the game without its chance; met by another pattern,
-   *  it gets its own plant); the list is owed on until each is answered. */
-  carry: MisconceptionTagId[];
+   *  and unanswered, the most recent first, each with its seat. The coach puts
+   *  the first of each seat back on the board this game — yours as the
+   *  guarantee's ask (falling back to any pattern rather than leave the game
+   *  without its chance; met by another pattern, it gets its own plant),
+   *  theirs set up against you to stop — and the list is owed on until each
+   *  is answered in its seat. */
+  carry: OwedPattern[];
 }
 
 /** The hold over a set of tags, pooled: one number for the whole set. */

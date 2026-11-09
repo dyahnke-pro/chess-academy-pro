@@ -618,7 +618,7 @@ export function refutationProof(fen: string, uci: readonly string[], bestUci: re
  *  "you" (OS-8 gap 7 — "Nxe5, Qd4 and Qxe5" named no side). */
 function heardProof(line: { fen: string; sans: readonly string[] }, end: string): Proof {
   const full = `${seatedLine(line.sans, 'you')} — ${end}`;
-  const short = line.sans.length <= 3 ? full : `${lineShape(line.sans, 'you')} — ${end}`;
+  const short = line.sans.length <= 3 ? full : `${lineShape(line.sans, 'you', line.fen)} — ${end}`;
   return { kind: 'line', exact: false, short, full, line };
 }
 

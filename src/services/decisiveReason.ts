@@ -142,7 +142,7 @@ function seatProof(fen: string, sans: readonly string[], mover: 'w' | 'b', stude
   }
   // Each move with its mover (OS-8 gap 7): the line starts with the side to move on `fen`.
   // A line that ends on its own mate mark has said the mate.
-  const shape = lineShape(line, lineSeatAt(fen, studentWB));
+  const shape = lineShape(line, lineSeatAt(fen, studentWB), fen);
   return { text: p.mate && markSaysMate(line[line.length - 1]) ? shape : `${shape} — ${end}`, sans: line, end };
 }
 

@@ -29,8 +29,11 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
     ["the coach's move choice carries the focus dials, the open motif levels, the rung and the plant ask", /focus: \{ id: focusId, punish, levels: focusRef\.current\.levels\(\), rung: focusRung, plant \}/],
     ['the plant is asked at the board ply the runner counts, from the board the coach moves on', /focusRef\.current\.plantAsk\(plyOfFen\(fen\) \+ 2, fen\)/],
     ['a steered reply is remembered', /if \(adaptive\.focusSteered\) focusSteerPendingRef\.current = true/],
-    ['a planted reply is remembered, with its seat', /if \(adaptive\.focusPlanted\) focusPlantPendingRef\.current = adaptive\.focusPlanted/],
-    ['the next board says it was planted', /steered, planted \}\)/],
+    // The plant's own read rides with it (F13, 2026-11-09): the board poses
+    // the chance the coach proved even when the student moves before the
+    // board's read lands.
+    ['a planted reply is remembered, with its seat and its read', /if \(adaptive\.focusPlanted\) focusPlantPendingRef\.current = \{ seat: adaptive\.focusPlanted, lines: adaptive\.focusPlantLines \?\? null \}/],
+    ['the next board says it was planted, with the plant\'s read', /planted: plant\?\.seat \?\? null, plantLines: plant\?\.lines \?\? null/],
     // The record reads `promptedPlies` / `steeredPlies` 1-based (a move's
     // before-board index + 1, autoAnalyzeGame). `gameRef` lags a render behind
     // the reply, so reading it here filed every focus ply one short and no

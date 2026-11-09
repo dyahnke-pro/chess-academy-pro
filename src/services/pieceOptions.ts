@@ -128,7 +128,7 @@ export function refutationOf(fenAfter: string, pvSans: readonly string[], studen
   // buries its result. Three moves or fewer are said in full; a longer line is
   // its first move, and the option's walkable line carries the rest.
   // Each move with its mover, from the student's seat (OS-8 gap 7).
-  const moves = lineShape(pvSans.slice(0, proof.plies), lineSeatAt(fenAfter, studentWB));
+  const moves = lineShape(pvSans.slice(0, proof.plies), lineSeatAt(fenAfter, studentWB), fenAfter);
   // The line opens with the REPLY, so the replier delivers mate on an odd ply.
   if (proof.mate) return proof.plies % 2 === 1 ? `Then ${moves} — and it's mate` : null;
   if (!proof.ledger) return null;

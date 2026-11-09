@@ -861,7 +861,7 @@ function missedPunish(a: PrincipleAttribution, replySan: string | null): string 
   const line = cap.split(' ');
   if (line.length > 1) {
     if (replySan.replace(/[+#]+$/, '') === line[0].replace(/[+#]+$/, '')) return null;
-    return `That left your ${a.facts.piece} on ${sq} open — ${lineShape(line, 'they')} — and they missed it this time.`;
+    return `That left your ${a.facts.piece} on ${sq} open — ${lineShape(line, 'they', null)} — and they missed it this time.`;
   }
   return `That left your ${a.facts.piece} on ${sq} ${guarded(a.facts) ? 'open' : 'hanging'} to ${cap} — they missed it this time.`;
 }

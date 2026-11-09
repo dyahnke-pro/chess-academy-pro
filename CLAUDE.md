@@ -253,14 +253,17 @@ chance for the user to find the focus."
   rung easier per miss (down to a free piece), past the game's extra budget,
   until a first-try find ends the streak (`PlantState.missStreak`,
   `MISS_SPACING_PLIES`). 🔒 A MISS CARRIES TO THE NEXT GAME (#158, David
-  2026-11-09: "This is what build habits and pattern recognition!"): every
-  pattern of yours missed at the first try is owed until you find one of it
-  on your own (first try, no question asked, not on a board you missed it
-  on); the next game puts the most recent back on the board — the guarantee
-  asks it, or its own plant outside the budget (`PlantState.owed` →
+  2026-11-09: "This is what build habits and pattern recognition!" → their
+  side too: "yes"): every pattern missed at the first try — a chance of
+  yours, or one of their tactics you did not stop — is owed, with its seat,
+  until you answer one of it on your own in that seat (first try, no
+  question asked, not on a board you missed it on); the next game puts the
+  most recent of each seat back on the board — yours as the guarantee's ask
+  or its own plant outside the budget, theirs set up against you to stop (a
+  flip, whatever the score) (`OwedPattern`, `PlantState.owed` →
   `learnFocusResults.carry` → `FocusSetup.carry`); the guarantee outranks
-  the pattern (no fit → any chance at the rung). Silent; the callout is
-  David's call. Way ahead (the app's one
+  the pattern (no fit → any chance at the rung). Silent: no callout (David
+  2026-11-09: "no"). Way ahead (the app's one
   decided bar), an extra FLIPS: the coach sets up its own tactic for you to
   stop. A planted find counts half; a find on a chance the coach made never
   raises its strength (`replyMadeAChance`).

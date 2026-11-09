@@ -87,13 +87,14 @@
  *      after only, green silent) after the in-game fade (two finds), it was
  *      asked exactly when the dial says ask, one question a board, and every
  *      'ask' line heard sits on an asked row;
- *   F23 a miss carries to the next game (#158): the setup's carry is the
- *      newest focus row's list; the game's first guarantee ask is its head
- *      unless a miss of yours this game came first (the plant may fall back
- *      to any pattern; the ask may not); every carried-miss plant asks the
- *      head; and the game's own row owes on every pattern of yours missed at
- *      the first try that no later unprompted first-try find on another
- *      board answered;
+ *   F23 a miss carries to the next game (#158), yours and theirs: the setup's
+ *      carry is the newest focus row's list (a bare tag on an older row is
+ *      yours); the game's first guarantee ask is the head of your seat unless
+ *      a miss of yours this game came first (the plant may fall back to any
+ *      pattern; the ask may not); every carried-miss plant asks the head of
+ *      one seat, in that seat; and the game's own row owes on every pattern
+ *      missed at the first try, in its seat, that no later unprompted
+ *      first-try answer in that seat answered;
  *   no page errors; muted, every billable request aborted and counted.
  *
  * Usage:
@@ -868,19 +869,22 @@ async function main() {
     // F23 — a miss the last game left unanswered comes back (#158).
     {
       const newest = [...(t.rowsBefore ?? [])].sort((a, b) => a.at - b.at).at(-1);
-      const wantCarry = Array.isArray(newest?.carry) ? newest.carry : [];
-      const setupOk = !!pick && JSON.stringify(pick.carry ?? []) === JSON.stringify(wantCarry);
+      const owedOf = (o) => (typeof o === 'string' ? { seat: 'exploit', tag: o } : o);
+      const wantCarry = (Array.isArray(newest?.carry) ? newest.carry : []).map(owedOf);
+      const setupOk = !!pick && JSON.stringify((pick.carry ?? []).map(owedOf)) === JSON.stringify(wantCarry);
+      const headOf = (seat) => wantCarry.find((o) => o.seat === seat)?.tag ?? null;
       const plantPly = (x) => (x.fen ? boardPly(x.fen) : null);
       const firstGuarantee = (t.plants ?? []).find((x) => x.extra === false);
       const missesYours = t.turns.filter((r) => r.seat === 'exploit' && r.outcome === 'missed' && !r.retry);
       const missedFirst = firstGuarantee && missesYours.some((r) => r.ply < (plantPly(firstGuarantee) ?? 0));
-      const guaranteeOk = !wantCarry.length || !firstGuarantee || missedFirst || firstGuarantee.ask === wantCarry[0];
+      const guaranteeOk = !headOf('exploit') || !firstGuarantee || missedFirst || firstGuarantee.ask === headOf('exploit');
       const carriedRows = (t.plants ?? []).filter((x) => x.carried === true);
-      const carriedOk = carriedRows.every((x) => x.ask === wantCarry[0]);
+      const carriedOk = carriedRows.every((x) => x.askSeat && x.ask === headOf(x.askSeat) && (!x.planted || x.seat === x.askSeat));
       const result = t.resultRows[0] ?? null;
-      const owedOut = Array.isArray(result?.carry) ? result.carry : null;
-      const answered = (r) => t.turns.some((f) => f.seat === 'exploit' && f.outcome === 'found' && !f.retry && !f.prompted && f.tag === r.tag && f.ply > r.ply);
-      const lost = owedOut ? missesYours.filter((r) => !answered(r) && !owedOut.includes(r.tag)).map((r) => `${r.tag}@${r.ply}`) : ['no carry on the row'];
+      const owedOut = Array.isArray(result?.carry) ? result.carry.map(owedOf) : null;
+      const missesFirstTry = t.turns.filter((r) => (r.seat === 'exploit' || r.seat === 'defend') && r.outcome === 'missed' && !r.retry);
+      const answered = (r) => t.turns.some((f) => f.seat === r.seat && f.outcome === 'found' && !f.retry && !f.prompted && f.tag === r.tag && f.ply > r.ply);
+      const lost = owedOut ? missesFirstTry.filter((r) => !answered(r) && !owedOut.some((o) => o.seat === r.seat && o.tag === r.tag)).map((r) => `${r.seat}:${r.tag}@${r.ply}`) : ['no carry on the row'];
       check(`${g} F23 a missed pattern carries to the next game`, setupOk && guaranteeOk && carriedOk && lost.length === 0,
         `carried in ${JSON.stringify(wantCarry)} (setup ${JSON.stringify(pick?.carry ?? null)}); first guarantee ask ${firstGuarantee ? `${JSON.stringify(firstGuarantee.ask)} → planted ${firstGuarantee.tag ?? 'nothing'}${missedFirst ? ' (a miss came first)' : ''}` : '— (presented without a plant)'}; ${carriedRows.length} carried-miss plant ask(s)${carriedOk ? '' : ' ASKING ANOTHER PATTERN'}; owes on ${JSON.stringify(owedOut)}${lost.length ? `; LOST ${lost.join(', ')}` : ''}`);
     }
@@ -968,8 +972,10 @@ async function main() {
     // comes two moves apart, one rung easier per miss, past the game's budget.
     const streak = (x) => x.missStreak ?? 0;
     const close = plants.filter((x, i) => i > 0 && x.ply - plants[i - 1].ply < (streak(x) > 0 ? 4 : 8));
-    const tooMany = rung !== null && plants.filter((x) => streak(x) === 0).length > RUNG_CHANCES[rung];
-    const earlyExtra = plants.filter((x) => x.extra && streak(x) === 0 && x.ply < SECOND_CHANCE_PLY);
+    // A carried miss's plant (#158) is outside the budget and comes from the
+    // target ply, so it counts toward neither.
+    const tooMany = rung !== null && plants.filter((x) => streak(x) === 0 && !x.carried).length > RUNG_CHANCES[rung];
+    const earlyExtra = plants.filter((x) => x.extra && streak(x) === 0 && !x.carried && x.ply < SECOND_CHANCE_PLY);
     const flipWrong = plants.filter((x) => x.seat === 'defend' && !x.extra);
     const plantedRows = t.turns.filter((r) => r.planted);
     const fullWeight = plantedRows.filter((r) => r.outcome === 'found' && !r.steered);

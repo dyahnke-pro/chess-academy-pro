@@ -109,7 +109,7 @@ export function lineWins(
     if (net < 1) return null;
   }
   const made = proof.ledger.studentPromoted;
-  const saidMade = promotedIn(lineShapePlies(shown.length).map((i) => shown[i]).filter((p) => p.color === side).map((p) => p.san));
+  const saidMade = promotedIn(lineShapePlies(shown.map((p) => p.san), fen).map((i) => shown[i]).filter((p) => p.color === side).map((p) => p.san));
   const after = gainAfterLine(took, gave, made, saidMade);
   return {
     net,

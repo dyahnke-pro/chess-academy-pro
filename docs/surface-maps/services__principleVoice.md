@@ -40,8 +40,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:5983`
-- `src/services/coachFeatureService.ts:5986`
+- `src/services/coachFeatureService.ts:5976`
+- `src/services/coachFeatureService.ts:5979`
 
 ### `fundamentalHow` (function) — 10 call sites
 - `src/services/fundamentalHow.test.ts:26`
@@ -168,7 +168,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.mcconnell1000.test.ts:22`
 - `src/services/replayFence.sicilian1200.test.ts:57`
 - `src/services/replayFence.sicilian1200.test.ts:64`
-- `src/services/reviewFullData.ts:761`
+- `src/services/reviewFullData.ts:769`
 - `src/services/tradedActiveNamesTheirPiece.test.ts:22`
 - `src/services/walkOct2a.test.ts:173`
 
@@ -178,7 +178,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleVoice.test.ts:42`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:6490`
+- `src/services/coachFeatureService.ts:6483`
 - `src/services/principleVoice.test.ts:50`
 - `src/services/principleVoice.test.ts:55`
 - `src/services/principleVoice.test.ts:59`

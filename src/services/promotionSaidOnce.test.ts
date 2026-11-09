@@ -40,7 +40,7 @@ describe('the new queen is said once', () => {
     // Only its first move said ("it runs into a2"): still the new queen.
     expect(reasonWinWords(r, [0])).toBe('a new queen');
     // The whole line said, to "a1, making a queen": nothing is left to say.
-    expect(reasonWinWords(r, lineShapePlies(r.plies.length))).toBeNull();
+    expect(reasonWinWords(r, lineShapePlies(r.plies.map((p) => p.san), r.fen))).toBeNull();
   });
 
   it('a line won by the one ledger says the queen once too (lineWins)', () => {
@@ -50,8 +50,8 @@ describe('the new queen is said once', () => {
   });
 
   it('lineShape says every move up to three, otherwise the first and the last', () => {
-    expect(lineShapePlies(0)).toEqual([]);
-    expect(lineShapePlies(3)).toEqual([0, 1, 2]);
-    expect(lineShapePlies(6)).toEqual([0, 5]);
+    expect(lineShapePlies([], null)).toEqual([]);
+    expect(lineShapePlies(['a', 'b', 'c'], null)).toEqual([0, 1, 2]);
+    expect(lineShapePlies(['a', 'b', 'c', 'd', 'e', 'f'], null)).toEqual([0, 5]);
   });
 });
