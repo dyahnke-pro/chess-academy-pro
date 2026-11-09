@@ -22,7 +22,7 @@ const ALL_TAGS = MISCONCEPTION_TAGS.map((t) => t.id);
 const statesAll = (st: HeatState): FocusSetup['tagStates'] => Object.fromEntries(ALL_TAGS.map((t) => [t, st])) as FocusSetup['tagStates'];
 const setup = (over: Partial<FocusSetup> = {}): FocusSetup => ({
   focus: 'tactics', rung: 0, reason: 'seed', window: [],
-  seatStates: { defend: 'red', exploit: 'red' }, levels: ['beginner'], targetPly: 12, line: PREGAME_LINE, tempoBest: 0,
+  seatStates: { defend: 'red', exploit: 'red' }, levels: ['beginner'], targetPly: 12, line: PREGAME_LINE, tempoBest: 0, carry: [],
   tagStates: statesAll('short'), ...over,
 });
 const at = (rung: TacticsRung, over: Partial<FocusSetup> = {}): FocusSetup => setup({ rung, ...over });
@@ -518,17 +518,65 @@ describe('planted chances', () => {
     expect(state.plant.need).toBe('missed-your-free-piece');
     expect(state.plant.missStreak).toBe(1);
     expect(focusPlantAsk(state, 36, LOOSE_KNIGHT), 'two moves apart').toBeNull();
-    expect(focusPlantAsk(state, 37, LOOSE_KNIGHT), 'the guarantee is still owed: asked one rung easier').toEqual({ tag: 'missed-your-free-piece', difficulty: 1, extra: false, missStreak: 1 });
+    expect(focusPlantAsk(state, 37, LOOSE_KNIGHT), 'the guarantee is still owed: asked one rung easier').toEqual({ tag: 'missed-your-free-piece', difficulty: 1, extra: false, missStreak: 1, carried: false });
   });
   it('a find at the first try ends the streak; a find after the clue does not', () => {
     const missed = run([...opened(at(2)), board(LOOSE_KNIGHT, 33, false, 'exploit'), { kind: 'moved', move: move(LOOSE_KNIGHT, 'Kf1') }]).state;
     const found = run([board(LOOSE_KNIGHT, 41), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') }], missed).state;
     expect(found.plant.missStreak).toBe(0);
   });
+  // A MISS CARRIES TO THE NEXT GAME (#158, David 2026-11-09: "Can we have
+  // coach play misses/similar misses in future games?" → "This is what build
+  // habits and pattern recognition!"): every pattern of yours missed at its
+  // first try is owed on, most recent first, until you find one of it yourself.
+  describe('a miss carries to the next game (#158)', () => {
+    // Another free piece on another board: the same pattern, a new decision.
+    const LOOSE_KNIGHT_2 = '4k3/8/8/3n4/4P3/8/8/3QK3 w - - 0 1';
+    const endCarry = (st: FocusRunState): unknown =>
+      run([{ kind: 'game-over', at: 1 }], st).effects.flat().find((e): e is Extract<FocusEffect, { kind: 'end' }> => e.kind === 'end')?.result.carry;
+    const missedOnce = (setupOver: Partial<FocusSetup> = {}): FocusRunState =>
+      run([{ kind: 'start', setup: at(2, setupOver) }, board(LOOSE_KNIGHT, 33), { kind: 'moved', move: move(LOOSE_KNIGHT, 'Kf1') }]).state;
+
+    it('a first-try miss heads the list, and the game\'s row carries it', () => {
+      const st = missedOnce({ carry: ['missed-your-fork'] });
+      expect(st.plant.owed).toEqual(['missed-your-free-piece', 'missed-your-fork']);
+      expect(endCarry(st)).toEqual(['missed-your-free-piece', 'missed-your-fork']);
+    });
+    it('found on your own later — another board, the first try, no question — it is answered', () => {
+      const st = run([board(LOOSE_KNIGHT_2, 41), { kind: 'moved', move: move(LOOSE_KNIGHT_2, 'exd5') }], missedOnce({ carry: ['missed-your-fork'] })).state;
+      expect(st.plant.owed).toEqual(['missed-your-fork']);
+      expect(endCarry(st)).toEqual(['missed-your-fork']);
+    });
+    it('found after the coach asked the question, it is still owed (being told is not the habit)', () => {
+      const asked = missedOnce({ tagStates: statesAll('red') });
+      const { state, effects } = run([board(LOOSE_KNIGHT_2, 41), { kind: 'moved', move: move(LOOSE_KNIGHT_2, 'exd5') }], asked);
+      expect(kinds(effects[0]), 'twin: the question was said').toContain('say:ask');
+      expect(state.plant.owed).toEqual(['missed-your-free-piece']);
+    });
+    it('found on the board it was missed on — a move taken back and played again — it is still owed', () => {
+      const st = run([board(LOOSE_KNIGHT, 33), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') }], missedOnce()).state;
+      expect(st.plant.owed).toEqual(['missed-your-free-piece']);
+    });
+    it('the next game puts the head back on the board: the guarantee asks it first', () => {
+      const st = run([{ kind: 'start', setup: at(2, { targetPly: 16, carry: ['missed-your-fork', 'missed-your-free-piece'] }) }]).state;
+      expect(st.plant).toMatchObject({ carry: 'missed-your-fork', owed: ['missed-your-fork', 'missed-your-free-piece'], need: null });
+      expect(focusPlantAsk(st, 16, LOOSE_KNIGHT)).toEqual({ tag: 'missed-your-fork', difficulty: 2, extra: false, missStreak: 0, carried: false });
+      expect(focusPlantAsk(run([{ kind: 'start', setup: at(2, { targetPly: 16 }) }]).state, 16, LOOSE_KNIGHT)?.tag, 'twin: nothing owed, any pattern').toBeNull();
+    });
+    it('the guarantee met by another pattern, the carried one gets its own plant — and once it is on the board, it is done', () => {
+      const met = run([{ kind: 'start', setup: at(0, { carry: ['missed-your-fork'] }) }, board(LOOSE_KNIGHT, 9)]).state;
+      expect(met.plant.presented, 'a free piece presented the focus').not.toBeNull();
+      expect(met.plant.carry, 'a free piece is not the fork').toBe('missed-your-fork');
+      expect(focusPlantAsk(met, 20, LOOSE_KNIGHT)).toMatchObject({ tag: 'missed-your-fork', extra: true, carried: true });
+      const posed = run([{ kind: 'start', setup: at(0, { carry: ['missed-your-free-piece'] }) }, board(LOOSE_KNIGHT, 9)]).state;
+      expect(posed.plant.carry, 'the carried pattern came back on the board').toBeNull();
+      expect(posed.plant.owed, 'and stays owed until it is answered').toEqual(['missed-your-free-piece']);
+    });
+  });
   it('THE GUARANTEE: until a chance at the rung has been on the board, the coach plants from the target ply', () => {
     const fresh = run([{ kind: 'start', setup: at(2, { targetPly: 16 }) }]).state;
     expect(focusPlantAsk(fresh, 15, LOOSE_KNIGHT)).toBeNull();
-    expect(focusPlantAsk(fresh, 16, LOOSE_KNIGHT)).toEqual({ tag: null, difficulty: 2, extra: false, missStreak: 0 });
+    expect(focusPlantAsk(fresh, 16, LOOSE_KNIGHT)).toEqual({ tag: null, difficulty: 2, extra: false, missStreak: 0, carried: false });
     const lowChance = run([{ kind: 'start', setup: at(2) }, board(LOOSE_KNIGHT, 9)]).state;
     expect(lowChance.plant.presented, 'a rung-1 piece does not present rung 2').toBeNull();
     const late = run([{ kind: 'start', setup: at(2) }, board(LOOSE_KNIGHT, 41)]).state;

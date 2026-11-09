@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**322 lines · 16 exports · 5 importers · 2 tests · 2 audits**
+**352 lines · 16 exports · 5 importers · 2 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,7 +38,7 @@
 ### `TOP_RUNG_GRACE_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `wantedDifficulty` (function) — 8 call sites
+### `wantedDifficulty` (function) — 9 call sites
 - `src/coach/focus/focusPlant.arrival.measure.test.ts:139`
 - `src/coach/focus/focusPlant.test.ts:23`
 - `src/coach/focus/focusPlant.test.ts:24`
@@ -47,13 +47,15 @@
 - `src/coach/focus/focusPlant.test.ts:29`
 - `src/coach/focus/focusPlant.test.ts:30`
 - `src/coach/focus/focusPlant.test.ts:31`
+- `src/coach/focus/focusPlant.test.ts:75`
 
-### `presents` (function) — 5 call sites
-- `src/coach/focus/focusPlant.test.ts:79`
-- `src/coach/focus/focusPlant.test.ts:80`
-- `src/coach/focus/focusPlant.test.ts:81`
-- `src/coach/focus/focusPlant.test.ts:82`
-- `src/coach/focus/focusRunner.ts:408`
+### `presents` (function) — 6 call sites
+- `src/coach/focus/focusPlant.test.ts:92`
+- `src/coach/focus/focusPlant.test.ts:93`
+- `src/coach/focus/focusPlant.test.ts:94`
+- `src/coach/focus/focusPlant.test.ts:95`
+- `src/coach/focus/focusRunner.ts:416`
+- `src/coach/focus/focusRunner.ts:421`
 
 ### `FocusPlantAsk` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -64,7 +66,7 @@
 ### `NO_PLANTS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `plantAsk` (function) — 29 call sites
+### `plantAsk` (function) — 35 call sites
 - `src/coach/focus/focusPlant.test.ts:15`
 - `src/coach/focus/focusPlant.test.ts:16`
 - `src/coach/focus/focusPlant.test.ts:17`
@@ -87,13 +89,19 @@
 - `src/coach/focus/focusPlant.test.ts:60`
 - `src/coach/focus/focusPlant.test.ts:61`
 - `src/coach/focus/focusPlant.test.ts:64`
+- `src/coach/focus/focusPlant.test.ts:68`
 - `src/coach/focus/focusPlant.test.ts:69`
 - `src/coach/focus/focusPlant.test.ts:70`
-- `src/coach/focus/focusPlant.test.ts:71`
-- `src/coach/focus/focusPlant.test.ts:72`
 - `src/coach/focus/focusPlant.test.ts:75`
-- `src/coach/focus/focusRunner.ts:878`
-- `src/components/Coach/CoachTeachPage.tsx:8587`
+- `src/coach/focus/focusPlant.test.ts:76`
+- `src/coach/focus/focusPlant.test.ts:77`
+- `src/coach/focus/focusPlant.test.ts:82`
+- `src/coach/focus/focusPlant.test.ts:83`
+- `src/coach/focus/focusPlant.test.ts:84`
+- `src/coach/focus/focusPlant.test.ts:85`
+- `src/coach/focus/focusPlant.test.ts:88`
+- `src/coach/focus/focusRunner.ts:900`
+- `src/components/Coach/CoachTeachPage.tsx:8594`
 
 ### `FocusPlantReject` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -101,21 +109,25 @@
 ### `FocusPlantPick` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `findFocusPlant` (function) — 15 call sites
+### `findFocusPlant` (function) — 19 call sites
 - `src/coach/focus/focusPlant.arrival.measure.test.ts:139`
-- `src/coach/focus/focusPlant.test.ts:102`
-- `src/coach/focus/focusPlant.test.ts:107`
-- `src/coach/focus/focusPlant.test.ts:112`
-- `src/coach/focus/focusPlant.test.ts:118`
+- `src/coach/focus/focusPlant.test.ts:115`
 - `src/coach/focus/focusPlant.test.ts:120`
+- `src/coach/focus/focusPlant.test.ts:125`
+- `src/coach/focus/focusPlant.test.ts:130`
 - `src/coach/focus/focusPlant.test.ts:138`
-- `src/coach/focus/focusPlant.test.ts:150`
-- `src/coach/focus/focusPlant.test.ts:165`
-- `src/coach/focus/focusPlant.test.ts:170`
-- `src/coach/focus/focusPlant.test.ts:198`
-- `src/coach/focus/focusPlant.test.ts:205`
-- `src/coach/focus/focusPlant.test.ts:222`
-- `src/coach/focus/focusPlant.test.ts:228`
+- `src/coach/focus/focusPlant.test.ts:139`
+- `src/coach/focus/focusPlant.test.ts:140`
+- `src/coach/focus/focusPlant.test.ts:144`
+- `src/coach/focus/focusPlant.test.ts:146`
+- `src/coach/focus/focusPlant.test.ts:164`
+- `src/coach/focus/focusPlant.test.ts:176`
+- `src/coach/focus/focusPlant.test.ts:191`
+- `src/coach/focus/focusPlant.test.ts:196`
+- `src/coach/focus/focusPlant.test.ts:224`
+- `src/coach/focus/focusPlant.test.ts:231`
+- `src/coach/focus/focusPlant.test.ts:248`
+- `src/coach/focus/focusPlant.test.ts:254`
 - `src/services/coachGameEngine.ts:883`
 
 ### `shownRank` (function) — 1 call site

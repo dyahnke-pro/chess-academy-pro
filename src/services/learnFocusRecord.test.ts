@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { rungGamesFrom, type LearnFocusResultRecord } from './learnFocusRecord';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { loadFocusSetupInput, rungGamesFrom, writeLearnFocusResult, type LearnFocusResultRecord } from './learnFocusRecord';
+import { db } from '../db/schema';
 
 const tally = { defend: { posed: 0, found: 0, missed: 0, steered: 0 }, exploit: { posed: 0, found: 0, missed: 0, steered: 0 } };
 
@@ -15,5 +16,28 @@ describe('the rung rows (WO-FOCUS-TACTICS-01)', () => {
       { rung: 0, found: 2, missed: 1, at: 2 },
       { rung: 1, found: 0, missed: 0, at: 3 },
     ]);
+  });
+});
+
+describe('the misses that carry to the next game (#158)', () => {
+  beforeEach(async () => { await db.learnFocusResults.clear(); });
+  const row = (gameId: string, at: number, carry?: LearnFocusResultRecord['carry']): Omit<LearnFocusResultRecord, 'id'> =>
+    ({ gameId, focus: 'tactics', rung: 0, atRung: { found: 0, missed: 0 }, tally, presented: null, at, ...(carry !== undefined ? { carry } : {}) });
+
+  it('the newest game decides: what it left owed, in its order, is the next game\'s carry', async () => {
+    await writeLearnFocusResult(row('g1', 1, ['missed-your-free-piece']));
+    await writeLearnFocusResult(row('g2', 2, ['missed-your-fork', 'missed-your-free-piece']));
+    expect((await loadFocusSetupInput()).carry).toEqual(['missed-your-fork', 'missed-your-free-piece']);
+  });
+  it('a game that answered everything carries nothing — nor does a row older than the carry', async () => {
+    await writeLearnFocusResult(row('g1', 1, ['missed-your-fork']));
+    await writeLearnFocusResult(row('g2', 2, []));
+    expect((await loadFocusSetupInput()).carry).toEqual([]);
+    await writeLearnFocusResult(row('g3', 3));
+    expect((await loadFocusSetupInput()).carry).toEqual([]);
+  });
+  it('a pattern a later build retired carries nothing; the rest still do', async () => {
+    await writeLearnFocusResult(row('g1', 1, ['a-retired-tag' as never, 'missed-your-fork']));
+    expect((await loadFocusSetupInput()).carry).toEqual(['missed-your-fork']);
   });
 });

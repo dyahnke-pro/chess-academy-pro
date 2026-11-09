@@ -121,7 +121,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
   const writeResult = useCallback((result: FocusResult) => {
     void writeLearnFocusResult({
       gameId: handsRef.current.gameId() ?? `learn-${Date.now()}`, focus: result.focus, rung: result.rung,
-      tally: result.tally, atRung: result.atRung, presented: result.presented, tempoRun: result.tempo.longest, at: Date.now(),
+      tally: result.tally, atRung: result.atRung, presented: result.presented, tempoRun: result.tempo.longest, carry: result.carry, at: Date.now(),
     });
   }, []);
 

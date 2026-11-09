@@ -41,6 +41,10 @@ export interface LearnFocusResultRecord {
   presented?: { ply: number; difficulty: ChanceDifficulty } | null;
   /** The longest tempo run of the game (`tempoRun`); absent on older rows. */
   tempoRun?: number;
+  /** The patterns owed to the next game, the most recent miss first
+   *  (`FocusResult.carry`): its first plant poses the head. Absent on older
+   *  rows (nothing carried). */
+  carry?: MisconceptionTagId[];
   at: number;
   /** Rows older than WO-FOCUS-TACTICS-01 carried how the game was scaffolded. */
   mode?: string;
@@ -72,7 +76,9 @@ export async function loadFocusSetupInput(): Promise<Omit<FocusSetupInput, 'rand
     db.learnFocusResults.orderBy('at').toArray().catch(() => [] as LearnFocusResultRecord[]),
   ]);
   const holds = new Map([...profile.entries()].map(([tag, e]) => [tag, e.hold] as const));
-  return { holds, games: rungGamesFrom(results), tempoBest: tempoBestOf(results) };
+  // What the newest game left owed (a tag a later build retired carries nothing).
+  const carry = (results.at(-1)?.carry ?? []).filter((t) => isMisconceptionTagId(t));
+  return { holds, games: rungGamesFrom(results), tempoBest: tempoBestOf(results), carry };
 }
 
 /** A focus chance answered, on the record (one writer, the lane-evidence

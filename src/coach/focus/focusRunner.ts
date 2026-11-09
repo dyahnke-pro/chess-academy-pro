@@ -301,6 +301,9 @@ export interface FocusResult {
   /** The longest tempo run this game, the best before it, and whether it beat
    *  it (a run of two or more). */
   tempo: { longest: number; best: number; newBest: boolean };
+  /** The patterns owed to the next game, the most recent miss first
+   *  (`PlantState.owed`): its first plant poses the head. */
+  carry: MisconceptionTagId[];
 }
 
 export type FocusEffect =
@@ -398,6 +401,11 @@ function missedOf(ch: FocusChance, ply: number, fenBefore: string): MissedChance
   return { ply, fenBefore, seat: ch.seat, kind: ch.kind, tag: ch.tag, difficulty: ch.difficulty, line: ch.line ?? (ch.answerUci ? [ch.answerUci] : null), solve: solvePlies(ch, fenBefore), label: recapLabel(ch, ply) };
 }
 
+/** A miss of `tag` puts it at the head of what is owed (#158). */
+function owedAfterMiss(owed: readonly MisconceptionTagId[], tag: MisconceptionTagId): MisconceptionTagId[] {
+  return [tag, ...owed.filter((t) => t !== tag)];
+}
+
 /** Recompute the board's chances and decide whether to ask. */
 function onBoard(s: FocusRunState, b: BoardState): FocusStep {
   const setup = s.setup;
@@ -407,6 +415,10 @@ function onBoard(s: FocusRunState, b: BoardState): FocusStep {
   // the board's own or the coach's plant — presents the focus this game.
   const shown = s.plant.presented ? null : chances.find((c) => presents(c, setup.rung, b.ply, setup.targetPly)) ?? null;
   if (shown) s = { ...s, plant: { ...s.plant, presented: { ply: b.ply, difficulty: shown.difficulty } } };
+  // The carried pattern is on the board at your rung (planted or natural):
+  // it came back — what you do with it decides whether it is owed on.
+  const carry = s.plant.carry;
+  if (carry && chances.some((c) => (c.tag === carry || c.setupTag === carry) && presents(c, setup.rung, b.ply, setup.targetPly))) s = { ...s, plant: { ...s.plant, carry: null } };
   const effects: FocusEffect[] = [];
   let prompted = b.prompted;
   let steered = b.steered;
@@ -478,7 +490,7 @@ function endOf(open: FocusRunState, at: number): FocusStep {
   const longest = Math.max(s.tempo.longest, s.tempo.length);
   const newBest = longest >= TEMPO_RUN_MIN && longest > setup.tempoBest;
   const result: FocusResult = {
-    focus: setup.focus, rung: setup.rung, tally: s.tally, atRung: s.atRung, presented: s.plant.presented,
+    focus: setup.focus, rung: setup.rung, tally: s.tally, atRung: s.atRung, presented: s.plant.presented, carry: s.plant.owed,
     next: { rung: next.rung, step: next.step },
     // A rung-up is said on the card too, ahead of the count toward the next.
     progress: next.step === 'up' ? [rungUpLine(next.rung), rungProgressLine(next)].filter(Boolean).join(' ') : rungProgressLine(next),
@@ -532,7 +544,9 @@ function stepInner(s: FocusRunState, e: FocusEvent): FocusStep {
   switch (e.kind) {
     case 'start':
       return {
-        state: { ...FOCUS_IDLE, setup: e.setup, tally: EMPTY_TALLY() },
+        // THE MISS THAT CAME BACK (#158): the head of what past games left
+        // owed is this game's to put on the board; the whole list is owed on.
+        state: { ...FOCUS_IDLE, setup: e.setup, tally: EMPTY_TALLY(), plant: { ...NO_PLANTS, carry: e.setup.carry[0] ?? null, owed: [...e.setup.carry] } },
         effects: [{ kind: 'say', text: e.setup.line, line: 'announce' }],
       };
     case 'stop':
@@ -759,7 +773,15 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
   const carried = verdicts.filter((x) => x.v === 'exempt').map((x) => ({ key: x.chance.key, prompted, steered: halfOf(x.chance), asked: b?.askedChance === x.chance.key }));
   // A miss on your side asks the next plant for the same pattern.
   let plant = s.plant;
-  for (const x of verdicts) if (x.chance.seat === 'exploit' && x.v === 'missed') plant = { ...plant, need: x.chance.tag };
+  for (const x of verdicts) if (x.chance.seat === 'exploit' && x.v === 'missed') plant = { ...plant, need: x.chance.tag, owed: owedAfterMiss(plant.owed, x.chance.tag) };
+  // A find answers an owed pattern only when it is the habit: the first try,
+  // no question asked, and not a board you already missed it on (a move you
+  // took back and played again saw the answer first).
+  for (const x of verdicts) {
+    if (x.chance.seat !== 'exploit' || x.v !== 'found' || prompted) continue;
+    if (s.missed.some((mc) => mc.seat === 'exploit' && mc.tag === x.chance.tag && sameBoard(mc.fenBefore, m.fenBefore))) continue;
+    plant = { ...plant, owed: plant.owed.filter((t) => t !== x.chance.tag && t !== x.chance.setupTag) };
+  }
   // KEEP MISSING → MORE, EASIER CHANCES (`MISS_SPACING_PLIES`): a chance of
   // yours missed at its first try lengthens the streak; one found ends it.
   const yoursMissed = verdicts.some((x) => x.chance.seat === 'exploit' && x.v === 'missed');

@@ -13,11 +13,11 @@ describe('plantAsk — a chance every game at a varied point, more for beginners
 
   it('THE GUARANTEE waits for the game\'s target ply, then asks every move at the rung', () => {
     expect(plantAsk(owed, rung0, 17, MIDDLEGAME)).toBeNull();
-    expect(plantAsk(owed, rung0, 18, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: false, missStreak: 0 });
-    expect(plantAsk(owed, { rung: 2, posed: 0, targetPly: 12 }, 30, MIDDLEGAME)).toEqual({ tag: null, difficulty: 2, extra: false, missStreak: 0 });
+    expect(plantAsk(owed, rung0, 18, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: false, missStreak: 0, carried: false });
+    expect(plantAsk(owed, { rung: 2, posed: 0, targetPly: 12 }, 30, MIDDLEGAME)).toEqual({ tag: null, difficulty: 2, extra: false, missStreak: 0, carried: false });
   });
   it('no cap holds the guarantee back — not the chances the board posed below the rung', () => {
-    expect(plantAsk(owed, { rung: 3, posed: 6, targetPly: 12 }, 20, MIDDLEGAME)).toEqual({ tag: null, difficulty: 3, extra: false, missStreak: 0 });
+    expect(plantAsk(owed, { rung: 3, posed: 6, targetPly: 12 }, 20, MIDDLEGAME)).toEqual({ tag: null, difficulty: 3, extra: false, missStreak: 0, carried: false });
   });
   it('THE EASIER RUNG: nothing presented by move 20 — one rung easier, never below the plainest', () => {
     expect(wantedDifficulty(2, PLANT_EASIER_FROM_PLY - 1, 12)).toBe(2);
@@ -29,16 +29,16 @@ describe('plantAsk — a chance every game at a varied point, more for beginners
     expect(wantedDifficulty(3, 20 + TOP_RUNG_GRACE_PLIES - 1, 20)).toBe(3);
     expect(wantedDifficulty(3, 20 + TOP_RUNG_GRACE_PLIES, 20)).toBe(2);
     expect(wantedDifficulty(2, 20 + TOP_RUNG_GRACE_PLIES, 20), 'the grace is rung 3\'s alone').toBe(2);
-    expect(plantAsk(NO_PLANTS, { rung: 3, posed: 0, targetPly: 14 }, 24, MIDDLEGAME)).toEqual({ tag: null, difficulty: 2, extra: false, missStreak: 0 });
+    expect(plantAsk(NO_PLANTS, { rung: 3, posed: 0, targetPly: 14 }, 24, MIDDLEGAME)).toEqual({ tag: null, difficulty: 2, extra: false, missStreak: 0, carried: false });
   });
   it('a beginner gets three, one a phase: the second from move 15, the third from move 25 or the endgame', () => {
     const one = { ...rung0, posed: 1 };
     expect(plantAsk(presented, one, SECOND_CHANCE_PLY - 1, MIDDLEGAME)).toBeNull();
-    expect(plantAsk(presented, one, SECOND_CHANCE_PLY, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: true, missStreak: 0 });
+    expect(plantAsk(presented, one, SECOND_CHANCE_PLY, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: true, missStreak: 0, carried: false });
     const two = { ...rung0, posed: 2 };
     expect(plantAsk(presented, two, THIRD_CHANCE_PLY - 1, MIDDLEGAME), 'not yet move 25').toBeNull();
-    expect(plantAsk(presented, two, THIRD_CHANCE_PLY - 1, ENDGAME), 'the endgame came first').toEqual({ tag: null, difficulty: 0, extra: true, missStreak: 0 });
-    expect(plantAsk(presented, two, THIRD_CHANCE_PLY, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: true, missStreak: 0 });
+    expect(plantAsk(presented, two, THIRD_CHANCE_PLY - 1, ENDGAME), 'the endgame came first').toEqual({ tag: null, difficulty: 0, extra: true, missStreak: 0, carried: false });
+    expect(plantAsk(presented, two, THIRD_CHANCE_PLY, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: true, missStreak: 0, carried: false });
     expect(plantAsk(presented, { ...rung0, posed: 3 }, 60, ENDGAME), 'three is the beginner\'s').toBeNull();
   });
   it('an intermediate gets two; the top rungs one', () => {
@@ -61,18 +61,31 @@ describe('plantAsk — a chance every game at a varied point, more for beginners
     expect(plantAsk(after, { ...rung0, posed: 1 }, 30 + PLANT_SPACING_PLIES, MIDDLEGAME)).not.toBeNull();
   });
   it('a miss asks for the same pattern next', () => {
-    expect(plantAsk({ ...presented, need: 'missed-your-fork' }, { ...rung0, posed: 1 }, 30, MIDDLEGAME)).toEqual({ tag: 'missed-your-fork', difficulty: 0, extra: true, missStreak: 0 });
+    expect(plantAsk({ ...presented, need: 'missed-your-fork' }, { ...rung0, posed: 1 }, 30, MIDDLEGAME)).toEqual({ tag: 'missed-your-fork', difficulty: 0, extra: true, missStreak: 0, carried: false });
+  });
+  it('THE MISS THAT CAME BACK (#158): the guarantee asks the carried pattern; your miss this game comes first', () => {
+    const carried: PlantState = { ...NO_PLANTS, carry: 'missed-your-fork', owed: ['missed-your-fork'] };
+    expect(plantAsk(carried, rung0, 18, MIDDLEGAME)).toEqual({ tag: 'missed-your-fork', difficulty: 0, extra: false, missStreak: 0, carried: false });
+    expect(plantAsk({ ...carried, need: 'missed-your-pin' }, rung0, 18, MIDDLEGAME)?.tag).toBe('missed-your-pin');
+    expect(plantAsk(carried, rung0, 17, MIDDLEGAME), 'not before the target ply').toBeNull();
+  });
+  it('met by another pattern, the carried one gets its own plant — past the top rung\'s budget of one', () => {
+    const met: PlantState = { ...presented, carry: 'missed-your-fork', owed: ['missed-your-fork'] };
+    const top = { rung: 3 as const, posed: 1, targetPly: 12 };
+    expect(plantAsk(met, top, 60, ENDGAME)).toEqual({ tag: 'missed-your-fork', difficulty: wantedDifficulty(3, 60, 12), extra: true, missStreak: 0, carried: true });
+    expect(plantAsk({ ...met, carry: null }, top, 60, ENDGAME), 'twin: once it was on the board, the budget holds').toBeNull();
+    expect(plantAsk({ ...met, count: 1, lastPly: 58 }, top, 60, ENDGAME), 'spaced like every plant').toBeNull();
   });
   it('KEEP MISSING (David 2026-10-23): a streak asks easier, sooner, and past the game\'s budget', () => {
     const missing: PlantState = { ...presented, count: 3, lastPly: 30, missStreak: 2 };
     const strong = { rung: 2 as const, posed: 5, targetPly: 12 };
     expect(plantAsk(missing, strong, 30 + MISS_SPACING_PLIES - 1, MIDDLEGAME), 'two moves apart').toBeNull();
-    expect(plantAsk(missing, strong, 30 + MISS_SPACING_PLIES, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: true, missStreak: 2 });
+    expect(plantAsk(missing, strong, 30 + MISS_SPACING_PLIES, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: true, missStreak: 2, carried: false });
     expect(plantAsk({ ...missing, missStreak: 1 }, strong, 34, MIDDLEGAME)?.difficulty, 'one rung easier per miss').toBe(1);
     expect(plantAsk({ ...missing, missStreak: 0 }, strong, 40, MIDDLEGAME), 'twin: no streak — the budget holds').toBeNull();
   });
   it('KEEP MISSING while the guarantee is owed: easier, from the target ply', () => {
-    expect(plantAsk({ ...NO_PLANTS, missStreak: 1 }, { rung: 2, posed: 0, targetPly: 12 }, 20, MIDDLEGAME)).toEqual({ tag: null, difficulty: 1, extra: false, missStreak: 1 });
+    expect(plantAsk({ ...NO_PLANTS, missStreak: 1 }, { rung: 2, posed: 0, targetPly: 12 }, 20, MIDDLEGAME)).toEqual({ tag: null, difficulty: 1, extra: false, missStreak: 1, carried: false });
   });
   it('presents: your side at or above the rung counts; their side never does', () => {
     const take = { seat: 'exploit', difficulty: 1 } as FocusChance;
@@ -83,7 +96,7 @@ describe('plantAsk — a chance every game at a varied point, more for beginners
   });
 });
 
-const ask = (a: Partial<FocusPlantAsk> = {}): FocusPlantAsk => ({ tag: null, difficulty: 0, extra: false, missStreak: 0, ...a });
+const ask = (a: Partial<FocusPlantAsk> = {}): FocusPlantAsk => ({ tag: null, difficulty: 0, extra: false, missStreak: 0, carried: false, ...a });
 const BEGINNER = { levels: ['beginner' as const] };
 
 describe('findFocusPlant — a real slip that leaves your side a chance at your rung', () => {
@@ -108,10 +121,23 @@ describe('findFocusPlant — a real slip that leaves your side a chance at your 
     expect(pick).toBeNull();
     expect(scan['wrong-difficulty']).toBe(1);
   });
-  it('after a miss, only the same pattern is planted', async () => {
-    const { pick, scan } = await findFocusPlant(FEN, coachLines, BEGINNER, ask({ tag: 'missed-your-fork' }), read);
+  it('after a miss, an extra plants only the same pattern', async () => {
+    const { pick, scan } = await findFocusPlant(FEN, coachLines, BEGINNER, ask({ tag: 'missed-your-fork', extra: true }), read);
     expect(pick).toBeNull();
     expect(scan['wrong-pattern']).toBe(1);
+  });
+  it('THE GUARANTEE OUTRANKS THE PATTERN (#158): a carried pattern the board cannot pose still leaves the game its chance', async () => {
+    const { pick, scan } = await findFocusPlant(FEN, coachLines, BEGINNER, ask({ tag: 'missed-your-fork' }), read);
+    expect(pick).toMatchObject({ uci: 'd5f4', seat: 'exploit' });
+    expect(pick?.chance.tag).toBe('missed-your-free-piece');
+    expect(scan['wrong-pattern'], 'the pattern was tried first').toBe(1);
+  });
+  it('the carried pattern\'s own plant is your side only: way ahead it never flips, and it plants only that pattern', async () => {
+    const won = coachLines.map((l) => ({ ...l, coachCp: l.coachCp - 1200 }));
+    const asked = ask({ tag: 'missed-your-free-piece', extra: true, carried: true });
+    expect((await findFocusPlant(FEN, won, BEGINNER, asked, read)).pick).toMatchObject({ uci: 'd5f4', seat: 'exploit' });
+    expect((await findFocusPlant(FEN, won, BEGINNER, ask({ extra: true }), read)).pick?.seat, 'twin: an ordinary extra flips').not.toBe('exploit');
+    expect((await findFocusPlant(FEN, coachLines, BEGINNER, ask({ tag: 'missed-your-fork', extra: true, carried: true }), read)).pick, 'no fallback').toBeNull();
   });
   it('the guarantee is never stopped by a decided game — ahead or behind (David: MUST)', async () => {
     const won = coachLines.map((l) => ({ ...l, coachCp: l.coachCp + 900 }));

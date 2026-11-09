@@ -27,6 +27,9 @@ export interface FocusSetupInput {
   rand: () => number;
   /** The longest tempo run in any focus game before this one (0 with none). */
   tempoBest: number;
+  /** The patterns the last focus game left missed and unanswered, the most
+   *  recent miss first (its row's `carry`); empty when none. */
+  carry: readonly MisconceptionTagId[];
 }
 
 export interface FocusSetup {
@@ -55,6 +58,12 @@ export interface FocusSetup {
    *  the game: the question before the move and the clue after a miss follow
    *  it (`coachMoment.momentDial`). A tag absent here is grey — taught. */
   tagStates: Partial<Record<MisconceptionTagId, HeatState>>;
+  /** THE MISSES THAT CARRY OVER (#158): the patterns past games left missed
+   *  and unanswered, the most recent first. The coach puts the first back on
+   *  the board this game (its guarantee asks it, falling back to any pattern
+   *  rather than leave the game without its chance; met by another pattern,
+   *  it gets its own plant); the list is owed on until each is answered. */
+  carry: MisconceptionTagId[];
 }
 
 /** The hold over a set of tags, pooled: one number for the whole set. */
@@ -105,6 +114,7 @@ export function setUpFocusGame(input: FocusSetupInput): FocusSetup {
     targetPly,
     line: PREGAME_LINE,
     tempoBest: input.tempoBest,
+    carry: [...input.carry],
     tagStates: Object.fromEntries([...input.holds].map(([tag, h]) => [tag, holdState(h)])) as Partial<Record<MisconceptionTagId, HeatState>>,
   };
 }
