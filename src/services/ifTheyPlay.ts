@@ -340,14 +340,14 @@ export function baitSentence(t: ReplyTree, b: ReplyBranch, student: Color, tense
   return ans ? `${lead}, and ${ans}.` : null;
 }
 
-/** The branches said, joined: "If they take on e5, you take back with the
- *  knight; if they play …Qe7, d4 guards your knight on e5." Null: nothing
- *  to say. */
+/** The branches said, a sentence each: "If they take on e5, you take back
+ *  with the knight. If they play …Qe7, d4 guards your knight on e5." (prod
+ *  focus audit 2026-11-09: the branches were one sentence on a spoken
+ *  semicolon). Null: nothing to say. */
 export function treeSentence(t: ReplyTree, branches: readonly ReplyBranch[], student: Color, tense: TreeTense): string | null {
   const clauses = branches.map((b) => branchClause(t, b, student, tense)).filter((s): s is string => !!s);
   if (clauses.length === 0) return null;
-  const body = clauses.join('; ');
-  return `${openSentence(body)}.`;
+  return clauses.map((c) => `${openSentence(c)}.`).join(' ');
 }
 
 /** Can this branch be said? A trusted line (the naming rule) with words in

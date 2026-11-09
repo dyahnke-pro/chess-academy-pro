@@ -62,7 +62,7 @@ describe('the tree', () => {
     const r = row('6JsSbmpj7UQ', 42);
     const { all } = said(r);
     expect(all).toContain('If they take on h6, you take back with the queen');
-    expect(all).toContain('if they take on d4 with the bishop, Qxd4 wins a bishop for a pawn');
+    expect(all).toContain('If they take on d4 with the bishop, Qxd4 wins a bishop for a pawn');
   });
 
   it('the reply the line goes on with is the line itself, never a branch said again', () => {
@@ -80,7 +80,7 @@ describe('the tree', () => {
     const f = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'g7h6', tense: 'past', liveBoard: null });
     // The recapture on h6 they did play is the line; the trade it would have
     // been is not said. Both captures on d4 lose a bishop for a pawn.
-    expect(f[0]?.text).toBe('If they had taken on d4 with the bishop, Qxd4 would have won a bishop for a pawn — a discovered attack: Qxd4, …Qxd4+, Rxd4; if they had taken on d4 with the queen, Qxd4 would have won a bishop for a pawn: Qxd4, …Bxd4+, Rxd4.');
+    expect(f[0]?.text, 'a sentence a branch, never a spoken semicolon').toBe('If they had taken on d4 with the bishop, Qxd4 would have won a bishop for a pawn — a discovered attack: Qxd4, …Qxd4+, Rxd4. If they had taken on d4 with the queen, Qxd4 would have won a bishop for a pawn: Qxd4, …Bxd4+, Rxd4.');
   });
 
   it('no read, no tree — never a guess', () => {
