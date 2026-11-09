@@ -126,7 +126,7 @@ export async function computeWhyBestMoveDetail(input: WhyBestMoveInput): Promise
   //    road (why the natural alternatives fall short). Exclude the interface-y /
   //    convert clauses; keep the teaching ones.
   try {
-    const pf = await computePositionFacts({ theory: true,
+    const pf = await computePositionFacts({ theory: true, namesPlayedMove: true,
       boardComputers: 'composer',
       // A "Why?" TAP is an explicit request, like "read this position" — the
       // student asked, so the moment is ranked, never muted. A dead Why button

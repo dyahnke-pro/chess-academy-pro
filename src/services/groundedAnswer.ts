@@ -4139,7 +4139,8 @@ export function assembleEndgameRuleAnswer(material: EndgameRuleMaterial): Ground
     const facts = twoPawnsPlacementRule();
     return facts ? { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['endgame:two-pawns-vs-king'] } : null;
   }
-  const concept = endgameConceptFor(RULE_POSITION[material]);
+  // The question is how the material mates: the student holds it (White).
+  const concept = endgameConceptFor(RULE_POSITION[material], 'w');
   if (!concept) return null;
   return { facts: concept.full, bestMoveSan: null, bestMoveFromTo: null, sources: [`concept:${concept.id}`] };
 }
@@ -6993,7 +6994,7 @@ export function assemblePositionalAnswer(
     // generic beside the concrete steps below.
     let rule: string | null = null;
     try {
-      const c = endgameConceptFor(fen);
+      const c = endgameConceptFor(fen, myC);
       if (c && c.source === 'technique') rule = c.full;
     } catch { rule = null; }
     if (!rule && bits.length === 0) return null;

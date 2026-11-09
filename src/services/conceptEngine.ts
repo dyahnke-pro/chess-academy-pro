@@ -129,6 +129,28 @@ const MATCHUP_PRINCIPLE: Record<MatchupClass, Register | null> = {
   'non-endgame': null,
 };
 
+/** THE SAME CLASSES SEEN FROM THE SIDE WITHOUT THE PIECES. A principle that
+ *  tells you to "drive the lone king to the edge" is the other side's plan
+ *  when the lone king is yours (prod focus audit 2026-11-09: a student down to
+ *  a bare king heard "this is enough to force mate — drive the lone king to
+ *  the edge"). Only the classes whose plan belongs to one side are here. */
+const DEFENDER_PRINCIPLE: Partial<Record<MatchupClass, Register>> = {
+  'mating-material': { full: 'they have enough to force mate — keep your king in the centre, away from the edge, for as long as you can, so every mate has to be worked for.', short: 'Stay in the centre.' },
+  'pieces-vs-pawns': { full: 'your pawns are your only counterplay against their pieces — push the most advanced one and keep your king beside it.', short: 'Push the pawns.' },
+};
+
+/** The side reduced to a bare king or bare pawns — the one whose plan is to
+ *  hold — or null when both sides still have pieces. */
+function heldSide(fen: string): 'w' | 'b' | null {
+  const board = fen.split(' ')[0];
+  const pieces = (c: 'w' | 'b'): number => (board.match(c === 'w' ? /[QRBN]/g : /[qrbn]/g) ?? []).length;
+  const w = pieces('w');
+  const b = pieces('b');
+  if (w === 0 && b > 0) return 'w';
+  if (b === 0 && w > 0) return 'b';
+  return null;
+}
+
 /** Uppercase the first letter of a sentence. */
 function cap(s: string): string {
   return openSentence(s);
@@ -177,8 +199,8 @@ export function renderTacticConcept(pattern: TacticPattern, boardFen: string): C
  * Returns null for classes with no endgame-technique concept (complex /
  * non-endgame) — those positions are taught by the tactic/positional detectors.
  */
-export function renderMatchupConcept(m: MatchupResult): ComputedConcept | null {
-  const principle = MATCHUP_PRINCIPLE[m.cls];
+export function renderMatchupConcept(m: MatchupResult, defending: boolean): ComputedConcept | null {
+  const principle = (defending ? DEFENDER_PRINCIPLE[m.cls] : undefined) ?? MATCHUP_PRINCIPLE[m.cls];
   if (!principle) return null;
   return {
     id: m.cls,
@@ -200,14 +222,28 @@ import {
   detectBareKingMate, detectTwoPawnsVsKing,
 } from './endgameTechnique';
 
+const HELD_KIND_WORDS: Record<string, string> = {
+  queen: 'queen', rook: 'rook', 'two-bishops': 'two bishops', 'bishop-knight': 'bishop and knight',
+};
 const KIND_WORDS: Record<string, string> = {
   queen: 'a queen', rook: 'a rook', 'two-bishops': 'two bishops', 'bishop-knight': 'a bishop and a knight',
 };
 
 /** The basic checkmates and what cannot mate — the material rule, one sentence. */
-function bareKingConcept(fen: string): ComputedConcept | null {
+function bareKingConcept(fen: string, defending: boolean): ComputedConcept | null {
   const m = detectBareKingMate(fen);
   if (!m) return null;
+  if (defending && (m.kind === 'queen' || m.kind === 'rook' || m.kind === 'two-bishops' || m.kind === 'bishop-knight')) {
+    // The bare king is yours: the method is theirs, the holding is yours.
+    const corners = m.kind === 'bishop-knight'
+      ? ` — and only in a corner of their bishop's colour (${m.corners.join(' or ')}), so run for the other two`
+      : '';
+    return technique(
+      'basic-mate', 'The basic checkmate',
+      `Their ${HELD_KIND_WORDS[m.kind]} against your bare king is a forced mate — at most ${m.maxMoves} moves${corners}. Keep your king in the centre, away from the edge, for as long as you can: every move it stays there is one more they have to find.`,
+      'Stay in the centre.', m.kind === 'bishop-knight' ? m.corners : [], 0.7,
+    );
+  }
   if (m.kind === 'queen' || m.kind === 'rook' || m.kind === 'two-bishops') {
     const how = m.kind === 'queen'
       ? 'box the king in with the queen a knight\'s move away, shrink the box until it is on the edge, then bring your own king up — and watch for stalemate when the box gets small'
@@ -250,9 +286,9 @@ function bareKingConcept(fen: string): ComputedConcept | null {
  * Every `full` states the geometry the detector proved plus the technique's
  * general rule; none claims a game result (the other king may still decide it).
  */
-function namedTechniqueFor(fen: string, cls: MatchupClass): ComputedConcept | null {
+function namedTechniqueFor(fen: string, cls: MatchupClass, defending: boolean): ComputedConcept | null {
   if (cls === 'mating-material' || cls === 'minor-endgame') {
-    const mate = bareKingConcept(fen);
+    const mate = bareKingConcept(fen, defending);
     if (mate) return mate;
   }
   if (cls === 'kp-vs-k') {
@@ -401,13 +437,17 @@ function namedTechniqueFor(fen: string, cls: MatchupClass): ComputedConcept | nu
  * detector fires (specific), else the matchup governing principle (general), else
  * null (not an ending). This is the specific>general>silent degrade.
  */
-export function endgameConceptFor(fen: string): ComputedConcept | null {
+export function endgameConceptFor(fen: string, student: 'w' | 'b'): ComputedConcept | null {
   const m = classifyMatchup(fen);
+  // `student` is REQUIRED: the side with the pieces and the side holding have
+  // different plans on one board, and a principle said from the wrong seat
+  // hands the student the opponent's plan.
+  const defending = heldSide(fen) === student;
   try {
-    const named = namedTechniqueFor(fen, m.cls);
+    const named = namedTechniqueFor(fen, m.cls, defending);
     if (named) return named;
   } catch { /* a predicate that throws teaches nothing — fall through to the principle */ }
-  return renderMatchupConcept(m);
+  return renderMatchupConcept(m, defending);
 }
 
 interface ConceptForBoardOptions {
@@ -453,12 +493,13 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
   const out: ComputedConcept[] = [];
   const seen = new Set<string>();
 
+  // The student: their own game's side, else the mover (a puzzle's solver).
+  const studentColor: 'w' | 'b' = opts.studentSide
+    ? (opts.studentSide === 'white' ? 'w' : 'b')
+    : (fen.split(' ')[1] === 'w' ? 'w' : 'b');
   // 0. The engine's line, when the surface already has one (the one computer).
   const line = opts.analysis?.topLines?.[0];
   if (line && line.moves.length > 0) {
-    const studentColor: 'w' | 'b' = opts.studentSide
-      ? (opts.studentSide === 'white' ? 'w' : 'b')
-      : (fen.split(' ')[1] === 'w' ? 'w' : 'b'); // live board: the mover's line
     const depth = pvDepthForRating(opts.rating ?? DEFAULT_STUDENT_RATING);
     for (const c of conceptForLine({
       fen,
@@ -488,7 +529,7 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
 
   // 2. The endgame governing principle (teaching beat), when it's an ending.
   try {
-    const eg = endgameConceptFor(fen);
+    const eg = endgameConceptFor(fen, studentColor);
     if (eg && !seen.has(eg.id)) {
       // A teaching beat ranks below live tactics but is always worth saying in a
       // quiet ending (where no tactic fired, it becomes the lead). A fired named
@@ -674,7 +715,7 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
         best = { fenAfter, tactic: facts.tacticLanded, isMate: facts.isMate, to: mv.to, material: facts.materialGained, line: [...path] };
       }
       if (!techConcept && wants('technique')) {
-        const tech = endgameConceptFor(fenAfter);
+        const tech = endgameConceptFor(fenAfter, studentColor);
         // A technique found further down the line is about THAT board, so it
         // carries the line that reaches it — the same "After …" the tactic
         // concept rides (claim check 2026-09-27: "the rook on e6 stands behind
@@ -751,7 +792,7 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
   // Endgame teaching beat: the technique reached during the solution (preferred),
   // else the start-position matchup principle.
   try {
-    const start = !techConcept && (wants('technique') || wants('matchup')) ? endgameConceptFor(fen) : null;
+    const start = !techConcept && (wants('technique') || wants('matchup')) ? endgameConceptFor(fen, studentColor) : null;
     const startStands = !start || start.source !== 'technique' || !start.squares.some((sq) => capturedOn.has(sq));
     const eg = techConcept ?? (startStands ? start : null);
     if (eg && !seen.has(eg.id) && wants(eg.source)) {

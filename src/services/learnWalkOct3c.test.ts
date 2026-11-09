@@ -36,7 +36,7 @@ describe('"still hanging" reads the line, not "is it attacked" (walk oct3c, 2.Bb
 describe('king cover is the one shield rule (walk oct3d, 11.Nxe5)', () => {
   it('…dxe5 from d6, in front of the king on e8, is king cover', async () => {
     const { readTrade } = await import('./tradeQuality');
-    const r = readTrade('r1q1k1nr/p1p1bppp/1p1p4/3Pn3/8/2P2NP1/PP2QP1P/RNB1K2R w KQkq - 0 11', 'Nxe5', 'w', null, null);
+    const r = readTrade('r1q1k1nr/p1p1bppp/1p1p4/3Pn3/8/2P2NP1/PP2QP1P/RNB1K2R w KQkq - 0 11', 'Nxe5', 'w', null, null, true);
     expect(r?.text ?? '').toMatch(/king's cover/);
   });
   it('NEGATIVE: a pawn three ranks in front of the king is not its cover', async () => {

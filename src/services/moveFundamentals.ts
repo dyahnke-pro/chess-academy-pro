@@ -1457,20 +1457,24 @@ export function principleOnceLine(
   /** Rotation key — required, stable about the moment (`stemKeyOf` of the
    *  board the move was played from). Only the wrapper rotates. */
   stemKey: number,
+  /** REQUIRED — may the move just played be named? Learn says "your move"
+   *  (David 2026-11-09: "the user knows that, they see it play out"). */
+  namesPlayedMove: boolean,
 ): string {
   const reason = reasonFor(f);
+  const w = movePlayedWords(san, namesPlayedMove);
   // Seated (prod Review audit 2026-10-02: "Be6: get the last minor piece out"
   // named no side). Both callers pass only the STUDENT's own move.
   // Without a reason the move says what it DOES ("Your Bc5 completes your
   // development — every minor piece is out"), never a bare instruction pinned
   // to its name ("Your Bc5: get the last minor piece out" — Learn audit
   // 2026-10-15).
-  if (!reason) return f.led ? `Your ${san} ${f.led}.` : `Your ${san}: ${f.imperative}.`;
+  if (!reason) return f.led ? `${w.your} ${f.led}.` : `${w.your}: ${f.imperative}.`;
   // One idea a sentence (the human register, David 2026-11-08): the rule,
   // then why it holds — never one 40-word sentence on a dash.
   return rotateStem([
-    `${san} follows a rule worth keeping: ${f.imperative}. ${openSentence(reason)}.`,
-    `The rule behind ${san}: ${f.imperative}. It matters because ${reason}.`,
+    `${openSentence(w.bare)} follows a rule worth keeping: ${f.imperative}. ${openSentence(reason)}.`,
+    `The rule behind ${w.bare}: ${f.imperative}. It matters because ${reason}.`,
   ], stemKey);
 }
 
@@ -1570,9 +1574,17 @@ export function fundamentalOfLine(id: string): MoveFundamentalId | null {
 /** "Your Nf3 develops …" — but castling spoken as a subject reads "Your
  *  castle kingside castles your king" (review tape 2026-10-14). Castling is
  *  said as itself: "Castling gets your king to safety …". */
-function ledClause(san: string, lead: MoveFundamental): string {
+function ledClause(san: string, lead: MoveFundamental, namesPlayedMove: boolean): string {
   if (/^O-O/.test(san)) return openSentence(lead.selfContained);
-  return `Your ${san} ${lead.led}`;
+  return `${movePlayedWords(san, namesPlayedMove).your} ${lead.led}`;
+}
+
+/** THE MOVE JUST PLAYED, as said: its name where the surface names it (Review,
+ *  a lesson), "your move" where it does not (Learn — David 2026-11-09: "the
+ *  user knows that, they see it play out"; prod focus audit: "Your rook to c7
+ *  takes the half-open c-file"). */
+export function movePlayedWords(san: string, namesPlayedMove: boolean): { your: string; bare: string } {
+  return namesPlayedMove ? { your: `Your ${san}`, bare: san } : { your: 'Your move', bare: 'your move' };
 }
 
 /**
@@ -1587,6 +1599,8 @@ function ledClause(san: string, lead: MoveFundamental): string {
  */
 export function principleLine(
   fenBefore: string, san: string, mover: 'white' | 'black', taughtIds: ReadonlySet<string>, stemKey: number,
+  /** REQUIRED — may the move just played be named (`movePlayedWords`)? */
+  namesPlayedMove: boolean,
 ): { id: string; text: string; squares: string[]; first: boolean; names: { from: string; to: string } | null; headsMove: boolean } | null {
   // A line that carries two claims ("mg:…|mg-rule:…") is committed as one id by
   // some callers and split by others — read it the same either way.
@@ -1624,20 +1638,20 @@ export function principleLine(
     const ruleKey = `mg-rule:${lead.id}`;
     const reason = reasonFor(lead);
     if (reason && !taught.has(ruleKey) && reasonHolds(lead, fenBefore, mover)) {
-      return { id: `${middlegameKey(lead)}|${ruleKey}`, text: `${ledClause(san, lead)} — ${reason}.`, squares: lead.squares, first: true, names: lead.names ?? null, headsMove: true };
+      return { id: `${middlegameKey(lead)}|${ruleKey}`, text: `${ledClause(san, lead, namesPlayedMove)} — ${reason}.`, squares: lead.squares, first: true, names: lead.names ?? null, headsMove: true };
     }
-    return { id: middlegameKey(lead), text: `${ledClause(san, lead)}.`, squares: lead.squares, first: true, names: lead.names ?? null, headsMove: true };
+    return { id: middlegameKey(lead), text: `${ledClause(san, lead, namesPlayedMove)}.`, squares: lead.squares, first: true, names: lead.names ?? null, headsMove: true };
   }
   const fresh = principleToTeach(fenBefore, san, mover, taught);
   // A rule said with its reason is two sentences, the second about the rule
   // ("It matters because …"), so it does not open the move's turn for a
   // follow-on "It also …"; the move's own sentence does.
-  if (fresh) return { id: fresh.id, text: principleOnceLine(san, fresh, stemKey), squares: fresh.squares, first: true, names: fresh.names ?? null, headsMove: !reasonFor(fresh) };
+  if (fresh) return { id: fresh.id, text: principleOnceLine(san, fresh, stemKey, namesPlayedMove), squares: fresh.squares, first: true, names: fresh.names ?? null, headsMove: !reasonFor(fresh) };
   const lead = computeMoveFundamentals(fenBefore, san, mover)
     .filter((f) => IS_OPENING_PRINCIPLE[f.id])
     .sort((a, b) => b.weight - a.weight)[0];
   if (!lead || !(REPEAT_TEACHES[lead.id] || lead.forcing)) return null;
-  return { id: lead.id, text: `${ledClause(san, lead)}.`, squares: lead.squares, first: false, names: lead.names ?? null, headsMove: true };
+  return { id: lead.id, text: `${ledClause(san, lead, namesPlayedMove)}.`, squares: lead.squares, first: false, names: lead.names ?? null, headsMove: true };
 }
 
 /**

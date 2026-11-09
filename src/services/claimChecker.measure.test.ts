@@ -104,7 +104,7 @@ describe.skipIf(!HAVE)('claim checker — harvest', () => {
           const base = { game: g.id, set, ply: i + 1, seat, fenBefore: before.fen, san: before.san, probe: probe.fen, cpLoss, studentEvalAfter: moverAfter };
 
           try {
-            const pf = await computePositionFacts({ theory: true,
+            const pf = await computePositionFacts({ theory: true, namesPlayedMove: true,
               boardComputers: 'surface', posture: 'walk', fen: probe.fen, moverColor: probe.fen.split(' ')[1] as 'w' | 'b', studentColor: sc, rating,
               analysis: studentBest,
               lastMove: {

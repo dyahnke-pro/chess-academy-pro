@@ -75,6 +75,10 @@ export function kingAttack(
    *  16.Ne3: "knight to f5 next brings the knight to bear"); Review and chat
    *  name it. */
   namesStudentMoves: boolean,
+  /** REQUIRED: may the move just played be named? Learn says "your move"
+   *  (David 2026-11-09: "the user knows that, they see it play out"); Review
+   *  names it. */
+  namesPlayedMove: boolean,
 ): KingAttackPoint | null {
   let before: Chess; let after: Chess; let mv;
   try {
@@ -93,7 +97,12 @@ export function kingAttack(
   if (!hasQueen && a.attackers.size < 2) return null;
   const shelter = shelterSquares(a.king, them);
   const dot = me === 'b' ? '…' : '';
-  const played = `${dot}${mv.san}`;
+  // The move just played is "your move" where the student's moves are not
+  // named (Learn: David 2026-11-09, "the user knows that, they see it play
+  // out" — prod focus audit heard "Queen to e1 with check brings your queen
+  // into the attack").
+  const played = namesPlayedMove ? `${dot}${mv.san}` : 'your move';
+  const Played = namesPlayedMove ? played : 'Your move';
   const tally = a.attackers.size >= 2 && a.attackers.size >= a.defenders.size
     ? ` — ${a.attackers.size} of your pieces on it against ${a.defenders.size} defender${a.defenders.size === 1 ? '' : 's'}`
     : '';
@@ -118,16 +127,16 @@ export function kingAttack(
     const files = [kf - 1, kf, kf + 1].filter((f) => f >= 97 && f <= 104).map((f) => String.fromCharCode(f));
     const pawnsOn = (c: Chess, file: string): number => c.board().flat().filter((x) => x?.type === 'p' && x.square[0] === file).length;
     const opened = files.find((f) => pawnsOn(before, f) > 0 && pawnsOn(after, f) === 0);
-    if (opened && shelter) return out('opens-file', `${played} rips open the ${opened}-file next to their king.`, [`${opened}${a.king[1]}`]);
+    if (opened && shelter) return out('opens-file', `${Played} rips open the ${opened}-file next to their king.`, [`${opened}${a.king[1]}`]);
     if (a.attackers.size - b.attackers.size >= 2) {
-      return out('opens-lines', `${played} opens lines at their king${tally || ` — ${a.attackers.size} of your pieces now bear on it`}.`, [mv.to]);
+      return out('opens-lines', `${Played} opens lines at their king${tally || ` — ${a.attackers.size} of your pieces now bear on it`}.`, [mv.to]);
     }
     return null;
   }
   // Bringing a piece over is a quiet move; a capture is about the material.
   if (mv.piece === 'k' || !shelter || mv.captured) return null;
   if (a.attackers.has(mv.to) && !b.attackers.has(mv.from) && a.attackers.size > b.attackers.size && a.attackers.size >= 2) {
-    return out('adds-attacker', `${played} brings your ${NAME[mv.piece]} into the attack on their king${tally}.`, [mv.to]);
+    return out('adds-attacker', `${Played} brings your ${NAME[mv.piece]} into the attack on their king${tally}.`, [mv.to]);
   }
   if (!a.attackers.has(mv.to) && !b.attackers.has(mv.from) && a.attackers.size >= 1) {
     const kf = a.king.charCodeAt(0);
@@ -136,7 +145,12 @@ export function kingAttack(
     const could = quietNextMoves(before, mv.from, me).some((n) => onWing(n.to) && bearsSafelyFrom(before, mv.from, n.to, me));
     if (next && !could) {
       // Held: the idea, never the square — and no arrow to it.
-      if (!namesStudentMoves) return out('heads-for-king', `${played} heads for their king — one more ${NAME[mv.piece]} move brings it to bear.`, [mv.to]);
+      if (!namesStudentMoves) {
+        const text = namesPlayedMove
+          ? `${played} heads for their king — one more ${NAME[mv.piece]} move brings it to bear.`
+          : `Your ${NAME[mv.piece]} heads for their king — one more move brings it to bear.`;
+        return out('heads-for-king', text, [mv.to]);
+      }
       return {
         ...out('heads-for-king', `${played} heads for their king — ${dot}${next.san} next brings the ${NAME[mv.piece]} to bear.`, [mv.to, next.to]),
         next: { san: next.san, uci: `${mv.to}${next.to}` },

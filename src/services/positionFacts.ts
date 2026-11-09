@@ -159,6 +159,12 @@ interface PositionFactsInput {
    *  Review's Theory button, chat, a lesson (David 2026-11-06: "Keep the
    *  theory part for review only. It belongs in the button"). */
   theory: boolean;
+  /** REQUIRED: may the student's move just played be named? Learn says "your
+   *  move" (David 2026-11-09: "the user knows that, they see it play out" —
+   *  prod focus audit: "Your rook to c7 takes the half-open c-file", "Knight
+   *  takes g3 trades pieces"); Review, chat and a read the student tapped for
+   *  name it. */
+  namesPlayedMove: boolean;
   /** HOW THIS SURFACE LISTENS — required, no default (CLAUDE.md §G4.5.15).
    *
    *  `'walk'` = the student asked for this sequence or tapped to hear it
@@ -1132,7 +1138,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // Learn tape praised "O-O-O does what the opening asks" one line after
     // another lane called O-O-O a mistake: the grade had not reached here yet.
     && (lmBook || ((gradedLoss(lm) ?? Infinity) < 50))
-    ? (madeBy(principleLine(lm.fenBefore, lm.san, studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore)), 'principleLine')
+    ? (madeBy(principleLine(lm.fenBefore, lm.san, studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore), input.namesPlayedMove), 'principleLine')
       // A clean move that kept no opening rule: the rule the engine's move kept
       // (never on a book move — theory is not corrected).
       ?? (lmBook || !lm.reads ? null : madeBy(principleContrastLine(lm.fenBefore, lm.san, uciToSanAt(lm.fenBefore, lm.reads.bestMoveUci), studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore)), 'principleContrastLine')))
@@ -1186,12 +1192,12 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   try {
     if (lm) {
       const t = readTrade(lm.fenBefore, lm.san, studentColor, gradedLoss(lm),
-        lastMoveFromHistory(lm.historySans?.slice(0, -1), lm.fenBefore));
+        lastMoveFromHistory(lm.historySans?.slice(0, -1), lm.fenBefore), input.namesPlayedMove);
       if (t) tradeClauses.push(clause('readTrade', fen, { kind: 'trade', text: t.text, squares: t.squares }));
     }
     if (input.opponentLastMove) {
       const t = readTrade(input.opponentLastMove.fenBefore, input.opponentLastMove.san, studentColor, null,
-        lm ? priorLeadingTo(lm, input.opponentLastMove.fenBefore) : null);
+        lm ? priorLeadingTo(lm, input.opponentLastMove.fenBefore) : null, true);
       if (t) tradeClauses.push(clause('readTrade', fen, { kind: 'trade', text: t.text, squares: t.squares }));
     }
     if (studentToMove) {

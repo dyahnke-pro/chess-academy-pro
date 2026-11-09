@@ -148,7 +148,7 @@ describe('it reaches the LIVE composer', () => {
 
   it('comes OUT of computePositionFacts as a spoken clause', async () => {
     const { computePositionFacts } = await import('./positionFacts');
-    const r = await computePositionFacts({ theory: true,
+    const r = await computePositionFacts({ theory: true, namesPlayedMove: true,
       boardComputers: 'surface', posture: 'walk', fen: SICILIAN, moverColor: 'w', studentColor: 'w', analysis: flat,
     });
     expect(r.latentFork).not.toBeNull();

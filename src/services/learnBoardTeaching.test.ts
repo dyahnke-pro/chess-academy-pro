@@ -37,7 +37,7 @@ describe('learnBoardTeaching — every lane reaches the door', () => {
     const p = (kingFx as { key: string; fen: string; san: string }[]).find((x) => x.key === 'xoS71OW-Re0:21')!;
     const good = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, fenBefore: p.fen, san: p.san, history: [p.san] });
     // Learn holds the next hop (LEARN NAMES NO MOVE UNASKED): the idea speaks, Qg3 is not named.
-    expect(good.some((h) => h.lane === 'kingAttack' && /one more queen move brings it to bear/.test(h.text) && !/Qg3/.test(h.text))).toBe(true);
+    expect(good.some((h) => h.lane === 'kingAttack' && /heads for their king — one more move brings it to bear/.test(h.text) && !/Qg3/.test(h.text))).toBe(true);
     const bad = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, cpLoss: 150, fenBefore: p.fen, san: p.san, history: [p.san] });
     expect(bad.some((h) => h.lane === 'kingAttack')).toBe(false);
   });
@@ -124,11 +124,11 @@ describe('an attack by a cheaper piece says why it matters (Learn audit 2026-10-
 });
 
 describe('every student move gets its own reason — the board teacher as fallback (David 2026-10-14)', () => {
-  it('says what a quiet developing move did, with the move as its subject', async () => {
+  it('says what a quiet developing move did, with "Your move" as its subject (David 2026-11-09: Learn never names the move just played)', async () => {
     const { boardTeacherPoint } = await import('./learnBoardTeaching');
     const h = boardTeacherPoint('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', 'd5', afterOf('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', 'd5'), new Map());
     expect(h?.lane).toBe('movePoint');
-    expect(h?.text).toMatch(/^d5 /);
+    expect(h?.text).toMatch(/^Your move /);
   });
 });
 

@@ -88,7 +88,8 @@ export function patternRule(pattern: MatingPattern): string | null {
   if (pattern.category !== 'piece-mate') return null;
   const fen = pattern.lessonPositions[0]?.fen;
   if (!fen) return null;
-  const c = endgameConceptFor(fen);
+  // The student is the side that mates: the side to move on the lesson board.
+  const c = endgameConceptFor(fen, fen.split(' ')[1] === 'b' ? 'b' : 'w');
   return c && MATE_RULE_IDS.has(c.id) ? c.full : null;
 }
 

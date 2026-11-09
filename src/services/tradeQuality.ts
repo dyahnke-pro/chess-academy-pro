@@ -161,6 +161,10 @@ export function readTrade(
    *  "you were still 3 points behind" with …exd4 taking the knight straight
    *  back) — the count is the ONE settled balance, through this move. */
   priorMove: LastMove | null,
+  /** REQUIRED — may the student's move just played be named? Learn says
+   *  "your move" (David 2026-11-09; prod focus audit: "Knight takes g3 trades
+   *  pieces while you're ahead"). Their moves are always named. */
+  namesPlayedMove: boolean,
 ): TradeRead | null {
   let before: Chess;
   try { before = new Chess(fenBefore); } catch { return null; }
@@ -262,13 +266,14 @@ export function readTrade(
       text: you
         // Said while the recapture is still pending, so the count is framed as
         // what holds ONCE it lands — never as a standing fact of this board.
-        ? `After ${mv.san}, ${dent}, but you're still ${behind} — and trades help the side with more material.`
+        ? `After ${namesPlayedMove ? mv.san : 'your move'}, ${dent}, but you're still ${behind} — and trades help the side with more material.`
         : `After their ${mv.san}, ${dent}, but you're still ${ahead} — and every trade brings your ending closer.`,
       squares: good[0].sq, key: 'trade:behind-structure', moverIsStudent, headsMove: false,
     };
   }
 
-  const subject = you ? mv.san : `Their ${mv.san}`;
+  const playedMove = namesPlayedMove ? mv.san : 'Your move';
+  const subject = you ? playedMove : `Their ${mv.san}`;
   const forWhom = you ? '' : ' for them';
   const sound = cpLoss === null || cpLoss < INACCURACY_CP;
   const costly = cpLoss === null || cpLoss >= 30;
@@ -287,7 +292,7 @@ export function readTrade(
     return {
       call: 'ahead',
       text: you
-        ? `${mv.san} trades pieces while you're ahead — every trade brings a won ending closer.`
+        ? `${playedMove} trades pieces while you're ahead — every trade brings a won ending closer.`
         : `Their ${mv.san} trades pieces while they're ahead — that helps them.`,
       squares: [mv.to], key: 'trade:ahead', moverIsStudent, headsMove: true,
     };
@@ -301,7 +306,7 @@ export function readTrade(
     return {
       call: 'behind',
       text: you
-        ? `${mv.san} trades pieces while you're behind — trades help the side with more material, so keep pieces on.`
+        ? `${playedMove} trades pieces while you're behind — trades help the side with more material, so keep pieces on.`
         : `Their ${mv.san} trades pieces while they're behind — that helps you.`,
       squares: [mv.to], key: 'trade:behind', moverIsStudent, headsMove: true,
     };

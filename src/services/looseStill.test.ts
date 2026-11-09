@@ -56,7 +56,7 @@ describe('g1 14/15 — the bishop on f4', () => {
   });
 
   it('15: positionFacts\' must-defend is on the same key, in the same "still" form', async () => {
-    const r = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'walk', fen: G1_15, moverColor: 'w', studentColor: 'w', analysis: flat, looseSpells: s15 });
+    const r = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: G1_15, moverColor: 'w', studentColor: 'w', analysis: flat, looseSpells: s15 });
     const must = r.clauses.find((c) => c.kind === 'must-defend' && c.squares?.includes('f4'));
     expect(must?.claim).toBe(looseClaim('f4', plyOfFen(G1_15), s15).key);
     expect(must?.text).toMatch(/^Still — /);

@@ -5921,7 +5921,15 @@ computers had not; `learnNamesOwnMove.test.ts`). The same flag is REQUIRED on
 `studentMoveTeaching` (and through it the structure reads, "Your move plugs
 your own rook's a-file") and on `squareChoice` (Learn asks "Why that square
 for your bishop?", never "Your bishop goes to f5") — the next prod focus audit
-heard "Bishop takes a7 plugs your own rook's a-file" from them.
+heard "Bishop takes a7 plugs your own rook's a-file" from them. And the rung-2
+prod audit after that heard five more ("Knight takes g3 trades pieces", "Queen to
+e1 with check brings your queen into the attack", "Your queen to e1 was a step of
+the plan", "c5 kicks their queen off b4", "Your rook to c7 takes the half-open
+c-file"), so the flag is now REQUIRED at every producer that words the played
+move: `readTrade` / `tradeJudgement`, `kingAttack`, `planStepLine`,
+`principleLine` / `principleOnceLine` (one wording, `movePlayedWords`), and
+`computePositionFacts` (`namesPlayedMove`, false on Learn's turn and phase
+reads); the board teacher's own-move point is "Your move" in Learn.
 
 **Review names the better move** (the game is over); **chat names it** (you
 asked). Gates: `learnNamesNoMoveUnasked.gate.test.ts`,

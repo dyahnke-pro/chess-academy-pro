@@ -8,11 +8,11 @@ describe('principle-once line', () => {
     const start = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
     const lead = principleToTeach(start, 'Nc6', 'black', new Set());
     expect(lead?.id).toBe('development');
-    const line = principleOnceLine('Nc6', lead!, 0);
+    const line = principleOnceLine('Nc6', lead!, 0, true);
     expect(line.startsWith('Nc6 follows a rule worth keeping: ')).toBe(true);
     // Rotated, not rolled: every key names the move, the SAME rule, and WHY
     // the rule holds — the imperative alone teaches nothing (David 2026-09-27).
-    const all = new Set([0, 1, 2, 3].map((k) => principleOnceLine('Nc6', lead!, k)));
+    const all = new Set([0, 1, 2, 3].map((k) => principleOnceLine('Nc6', lead!, k, true)));
     expect(all.size).toBeGreaterThan(1);
     for (const t of all) {
       expect(t).toMatch(/Nc6/); expect(t).toContain(lead!.imperative);
@@ -33,12 +33,12 @@ describe('principle-once line', () => {
   });
 
   it('the reasonless form still names whose move it is (prod Review audit 2026-10-02)', () => {
-    const line = principleOnceLine('Be6', { id: 'development', imperative: 'get the last minor piece out, then bring the rooks', reason: null } as never, 0);
+    const line = principleOnceLine('Be6', { id: 'development', imperative: 'get the last minor piece out, then bring the rooks', reason: null } as never, 0, true);
     expect(line).toBe('Your Be6: get the last minor piece out, then bring the rooks.');
   });
 
   it('with no reason, the move says what it does (Learn audit 2026-10-15)', () => {
-    const line = principleOnceLine('Bc5', { id: 'development-complete', imperative: 'get the last minor piece out, then bring the rooks', led: 'completes your development — every minor piece is out, so the rooks come next', reason: null } as never, 0);
+    const line = principleOnceLine('Bc5', { id: 'development-complete', imperative: 'get the last minor piece out, then bring the rooks', led: 'completes your development — every minor piece is out, so the rooks come next', reason: null } as never, 0, true);
     expect(line).toBe('Your Bc5 completes your development — every minor piece is out, so the rooks come next.');
   });
 });

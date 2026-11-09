@@ -44,7 +44,7 @@ import { geometryReads, type GeometryContext } from './tacticGeometry';
 import { studentMoveStructure, theirMoveStructure, boardStructure, linesStructure, type StructureRead } from './structureReads';
 import { STRUCTURE_ROLE } from './structureJudgementKit';
 import { countMethod } from './countMethod';
-import { countKey } from './conceptKey';
+import { countKey, temptingKey } from './conceptKey';
 import { buildPriorityFirst } from './playCommentary';
 import { openingStoryAt, STORY_KIND } from './openingStory';
 import { isEndgameByMaterial } from './gamePhaseService';
@@ -768,8 +768,15 @@ export const BOARD_COMPUTERS = {
       const text = treeSentence(t, said, c.student, c.tense);
       if (text && said.length) {
         const key = `reply-tree:${said.map((b) => `${b.reply.uci}>${b.answer.uci}`).join(',')}`;
+        // A branch whose answer wins RULES OUT that reply — the same claim the
+        // weighed moves make ("…bxa4 was tempting for them, but it fails"), so
+        // it carries the same key and the say-once ledger hears it once (prod
+        // Review audit 2026-11-09: "If they had taken on a4, d-pawn takes e6
+        // would have won a knight", then on the next move "B-pawn takes a4 was
+        // tempting for them, but it fails: …").
+        const ruledOut = said.filter((b) => b.kind === 'wins' || b.kind === 'mate').map((b) => temptingKey(b.reply.uci));
         out.push(fact({
-          key, claims: [key, ...said.map((b) => `reply-tree:${b.reply.uci}`)], text,
+          key, claims: [key, ...said.map((b) => `reply-tree:${b.reply.uci}`), ...ruledOut], text,
           proof: legalLineProof(c.fen, said[0].uci, first) ?? NO_PROOF.description,
           squares: [...new Set(said.flatMap((b) => [b.reply.to, b.answer.to]))], stakes: stakesOfBranches(said),
           seat, namesStudentMove: false, thread: LOCAL_THREAD, fen: c.fen,

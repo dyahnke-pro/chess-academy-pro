@@ -27,7 +27,7 @@ describe('Learn walk oct2a', () => {
     const c = play(`${QGD} Be7 Nxf6+`);           // Black to recapture on f6
     const after = new Chess(c.fen()); after.move('Bxf6');
     expect(settledLeadFor(after.fen(), 'b', lastMoveOf(after))).toBe(0);
-    const t = tradeJudgement(c.fen(), 'Bxf6', 'Bxf6', 'b', 160);
+    const t = tradeJudgement(c.fen(), 'Bxf6', 'Bxf6', 'b', 160, undefined, null, true);
     expect(t?.reason).not.toBe('behind');
   });
 
@@ -47,7 +47,7 @@ describe('Learn walk oct2a', () => {
   it('F13: the knight that gave check is a piece bearing down on your king — trading it off is named', () => {
     const c = play('e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 Nf6 Bg5 Be7 Nc3 O-O Nd5 Re8 Nxf6+');
     // Nxf6+ took on f6: …Bxf6 recaptures, closing an exchange already begun.
-    const t = tradeJudgement(c.fen(), 'Bxf6', 'Bxf6', 'b', 0, undefined, { to: 'f6', captured: 'n' });
+    const t = tradeJudgement(c.fen(), 'Bxf6', 'Bxf6', 'b', 0, undefined, { to: 'f6', captured: 'n' }, true);
     expect(t?.reason).toBe('good');
     expect(t?.text).toMatch(/their knight that was bearing down on your king/);
   });
@@ -155,7 +155,7 @@ import { principleLine } from './moveFundamentals';
 describe('Learn walk oct3a #47', () => {
   it('a queen on a half-open file is never told "a rook needs an open file"', () => {
     const fen = '3qk2r/p1P2p1n/1r2b2p/1pQ1P1p1/3P4/3P2B1/P3BPPP/1R2K2R b Kk - 0 21';
-    const s = JSON.stringify(principleLine(fen, 'Qc8', 'black', new Set(), 0) ?? '');
+    const s = JSON.stringify(principleLine(fen, 'Qc8', 'black', new Set(), 0, true) ?? '');
     expect(s).not.toMatch(/a rook needs/);
   });
 });

@@ -31,7 +31,7 @@ import { costReason, reasonWinWords, type CostReason } from './costReason';
 import { lineTrust, type LineTrust } from './lineTrust';
 import { moveJob, isBareJob, MINE, THEIRS, type BookJobKind } from './bookMoveWhy';
 import { tacticWord } from './tacticVocabulary';
-import { withArticle } from '../utils/andList';
+import { lineShape, withArticle } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
 import type { TacticType } from '../types';
 
@@ -260,11 +260,14 @@ function replyWords(b: ReplyBranch, replier: Color, tense: TreeTense, takers: nu
   return `${tense === 'live' ? 'play' : 'played'} ${dots(reply.san, replier)}`;
 }
 
-function answerWords(b: ReplyBranch, mover: Color, subject: 'you' | 'they', tense: TreeTense): string | null {
+function answerWords(b: ReplyBranch, mover: Color, subject: 'you' | 'they', tense: TreeTense, afterReply: string | null): string | null {
   const y = dots(b.answer.san, mover);
   const motif = b.motif ? ` — ${withArticle(tacticWord(b.motif))}` : '';
   const shown = b.sans.slice(1).map((s, i) => dots(s, i % 2 === 0 ? mover : (mover === 'w' ? 'b' : 'w')));
-  const line = b.blowPlies > 2 ? `: ${shown.slice(0, b.blowPlies).join(', ')}` : '';
+  // Every move of the line says whose it is ("Qxd4, …Qxd4+, Rxd4" was a score
+  // sheet; prod focus audit 2026-11-09 heard "knight takes c4, bishop takes
+  // g5, king takes f1"). The answer wins, so its side is the line's winner.
+  const line = b.blowPlies > 2 ? `: ${lineShape(shown.slice(0, b.blowPlies), subject, afterReply, 'first')}` : '';
   switch (b.kind) {
     // After the game went on, a branch is worth saying only for what it would
     // have won: "if they had taken, you'd have taken back" teaches nothing
@@ -290,6 +293,11 @@ function answerWords(b: ReplyBranch, mover: Color, subject: 'you' | 'they', tens
   }
 }
 
+/** The board the branch's line starts from: the tree's board after the reply. */
+function boardAfterReply(t: ReplyTree, b: ReplyBranch): string | null {
+  try { const c = new Chess(t.fen); c.move(b.reply.san); return c.fen(); } catch { return null; }
+}
+
 /** One branch as a clause: "if they take on e5, you take back with the knight". */
 export function branchClause(t: ReplyTree, b: ReplyBranch, student: Color, tense: TreeTense): string | null {
   const mover: Color = t.replier === 'w' ? 'b' : 'w';
@@ -299,7 +307,7 @@ export function branchClause(t: ReplyTree, b: ReplyBranch, student: Color, tense
   if (b.reply.capture) {
     try { takers = new Set(new Chess(t.fen).moves({ verbose: true }).filter((m) => m.to === b.reply.to && m.captured).map((m) => m.piece)).size; } catch { takers = 1; }
   }
-  const ans = answerWords(b, mover, moverWord, tense);
+  const ans = answerWords(b, mover, moverWord, tense, boardAfterReply(t, b));
   if (!ans) return null;
   const x = replyWords(b, t.replier, tense, takers);
   return tense === 'live' ? `if ${replierWord} ${x}, ${ans}` : `if ${replierWord} had ${x}, ${ans}`;
@@ -336,7 +344,7 @@ export function baitSentence(t: ReplyTree, b: ReplyBranch, student: Color, tense
     if (!loses) return null;
     return `${lead}, and it ${tense === 'live' ? loses : loses.replace(/^loses/, 'would have lost').replace(/^walks/, 'would have walked')}.`;
   }
-  const ans = answerWords(b, mover, mover === student ? 'you' : 'they', tense);
+  const ans = answerWords(b, mover, mover === student ? 'you' : 'they', tense, boardAfterReply(t, b));
   return ans ? `${lead}, and ${ans}.` : null;
 }
 

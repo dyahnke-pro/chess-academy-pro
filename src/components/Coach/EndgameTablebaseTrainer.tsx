@@ -70,7 +70,7 @@ export function EndgameTablebaseTrainer({ fen, studentColor, title, intro, onExi
     setBoardFen(fen);
     let cancelled = false;
     void (async () => {
-      const steps = await buildTablebaseWalk(fen, 24);
+      const steps = await buildTablebaseWalk(fen, studentColor === 'white' ? 'w' : 'b', 24);
       if (cancelled) return;
       if (steps.length === 0) { setUnreachable(true); setStatus("The tablebase for this ending can't be reached right now."); return; }
       setWalk(steps);

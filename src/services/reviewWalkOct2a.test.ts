@@ -34,7 +34,7 @@ describe('review walk oct2a', () => {
 
   it('the rule line names whose move it is', () => {
     const c = play('d4 d5 Nf3 Nc6 e3 Bg4 Bd3 Nf6 Nbd2 Ne4 Be2 Nxd2 Bxd2 Bxf3 Bxf3 e6 O-O Bb4 c3 Bd6 Qc2 Qf6 e4 dxe4 Qxe4 O-O Rfe1 Rab8 Bd1 Ne7 Bc2 Qf5 Qxf5 Nxf5 Bxf5 exf5 b3 h6 c4 c5 dxc5 Bxc5 b4 Bd4 Rad1 Rbe8 Rxe8 Rxe8 g3 Re2 Be1 Bf6 a3 Ra2 Rd3 Ra1 Kf1 g5 c5 Kg7 Rd7 Bc3 Re7 Kf6 Re3 Bxe1 Rxe1 Rxa3 Rd1 Rb3 Rd6+ Kg7 Rd4 a6 f4 g4 Rc4 Kf6 Ke2 Ke7 Kd1 Kd7 Kc2 Ra3 Kb2 Re3 Rc2 Kc6 Kc1 Kb5 Rb2 Rc3+ Kd2 Rf3 Ke2 Rc3 Kd2 Rc4 Kd3 Rxb4 Re2 Kxc5 Re5+ Kc6 Rxf5 Rb3+ Ke2 Rb2+ Kf1 Rxh2 Kg1');   // game 2, before 56…Rc2
-    const line = principleLine(c.fen(), 'Rc2', 'black', new Set(), 0);
+    const line = principleLine(c.fen(), 'Rc2', 'black', new Set(), 0, true);
     expect(line?.text).toMatch(/^Your Rc2 takes the open c-file/);
   });
 });

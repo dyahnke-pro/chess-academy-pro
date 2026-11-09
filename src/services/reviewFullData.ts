@@ -501,7 +501,7 @@ export function computeMoveFacets(
         ? (ctx.preMoveEval - ctx.evaluation) * moverSign
         : null;
       const judged = ctx.studentColorWB ? readTrade(fenBefore, san, ctx.studentColorWB, cost,
-        ply >= 2 && ctx.teaching.prevFenBefore ? lastMoveFromSan(ctx.teaching.prevFenBefore, ctx.allSans[ply - 2]) : null) : null;
+        ply >= 2 && ctx.teaching.prevFenBefore ? lastMoveFromSan(ctx.teaching.prevFenBefore, ctx.allSans[ply - 2]) : null, true) : null;
       // THE TRADE'S PROOF: the capture, then every recapture on the square in
       // least-valuable order — the exchange itself, exact (`seeSequence`).
       const tradeProof = lineProof({ fen: fenBefore, sans: [san, ...seeSequence(fenAfter, tradeSq as Square)] }, lineSeatAt(fenBefore, ctx.studentColorWB), true);
@@ -1364,7 +1364,7 @@ export function computeMoveFacets(
   if (isStudent && (ctx.classification === null || ctx.classification === 'book' || ctx.classification === 'good')) {
     // Full the first time a principle speaks this game, a short stem after —
     // the one helper Learn's composer reads (`principleLine`).
-    const own = principleLine(fenBefore, san, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore));
+    const own = principleLine(fenBefore, san, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore), true);
     const lead = own
       // A clean move that kept no opening rule: the rule the engine's move
       // kept (review walk 2026-10-02 — h4, g4, h5 were owed and silent). Never

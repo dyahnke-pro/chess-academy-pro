@@ -58,7 +58,7 @@ describe('endgame techniques — proven on the labeled lesson corpus', () => {
 
   for (const [fen, want] of Object.entries(EXPECTED)) {
     it(`${posByFen.get(fen)?.lesson}: "${posByFen.get(fen)?.title}" → ${want}`, () => {
-      const c = endgameConceptFor(fen);
+      const c = endgameConceptFor(fen, fen.split(' ')[1] === 'b' ? 'b' : 'w');
       expect(c?.id).toBe(want);
       if (c) {
         expect(c.full).not.toMatch(/\b(we|our|us)\b/i);
@@ -71,7 +71,7 @@ describe('endgame techniques — proven on the labeled lesson corpus', () => {
   it('no OTHER lesson position fires a rook/pawn technique it was not labeled for', () => {
     for (const [fen, meta] of posByFen) {
       if (EXPECTED[fen]) continue;
-      const c = endgameConceptFor(fen);
+      const c = endgameConceptFor(fen, fen.split(' ')[1] === 'b' ? 'b' : 'w');
       expect(c === null || !TECHNIQUE_IDS.has(c.id), `${meta.lesson}: ${meta.title} fired ${c?.id}`).toBe(true);
     }
   });
@@ -221,6 +221,6 @@ describe('detectBackRankDefence — rook/knight pawn, king on the queening squar
 
 describe('endgameConceptFor — the back-rank defence is spoken where it holds', () => {
   it('names it on the knight-pawn hold', () => {
-    expect(endgameConceptFor('1r4k1/R7/5KP1/8/8/8/8/8 w - - 0 1')?.id).toBe('back-rank-defence');
+    expect(endgameConceptFor('1r4k1/R7/5KP1/8/8/8/8/8 w - - 0 1', 'w')?.id).toBe('back-rank-defence');
   });
 });

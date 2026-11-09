@@ -17,7 +17,7 @@ describe('one kick claim (g2 6…e5)', () => {
     expect(p?.claim).toBe(kickKey('d4'));
   });
   it('the principle line is the tempo fact on the same square (positionFacts keys it kick:d4)', () => {
-    const line = principleLine(before, 'e5', 'black', new Set(), 0);
+    const line = principleLine(before, 'e5', 'black', new Set(), 0, true);
     expect(line?.id).toMatch(/(^|:)tempo(:|$)/);
     expect(line?.squares[1]).toBe('d4');
   });

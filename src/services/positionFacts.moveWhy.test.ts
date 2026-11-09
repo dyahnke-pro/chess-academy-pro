@@ -18,7 +18,7 @@ async function ruleAt(sans: string[], i: number, taught: Set<string>, inBook: bo
   const c = new Chess();
   for (const s of sans.slice(0, i)) c.move(s);
   const fenBefore = c.fen(); c.move(sans[i]); const mid = c.fen(); c.move(sans[i + 1]);
-  const r = await computePositionFacts({ posture: 'walk', fen: c.fen(), moverColor: 'w', studentColor: 'w', analysis: flat,
+  const r = await computePositionFacts({ namesPlayedMove: true, posture: 'walk', fen: c.fen(), moverColor: 'w', studentColor: 'w', analysis: flat,
     opponentLastMove: { fenBefore: mid, san: sans[i + 1] },
     lastMove: { fenBefore, san: sans[i], cpLoss, historySans: inBook ? sans.slice(0, i + 1) : null, reads: null }, taughtPrinciples: taught } as never);
   return r.clauses.find((x) => x.kind === 'rule')?.text ?? null;
@@ -47,15 +47,15 @@ describe('the student\'s own move has a why', () => {
   });
   it('principleLine: full with its reason the first time, silent after', () => {
     const c = new Chess(); for (const s of PHILIDOR.slice(0, 10)) c.move(s);
-    const first = principleLine(c.fen(), 'Bc4', 'white', new Set(), 1);
-    const again = principleLine(c.fen(), 'Bc4', 'white', new Set([first?.id ?? '']), 1);
+    const first = principleLine(c.fen(), 'Bc4', 'white', new Set(), 1, true);
+    const again = principleLine(c.fen(), 'Bc4', 'white', new Set([first?.id ?? '']), 1, true);
     expect(first?.first).toBe(true);
     expect(first?.text).toMatch(/because|—/);
     expect(again).toBeNull();
   });
   it('POSITIVE CONTROL: a repeat that forces an answer still speaks (3.Nc3 hits the d5 queen)', () => {
     const c = new Chess(); for (const s of 'e4 d5 exd5 Qxd5'.split(' ')) c.move(s);
-    const again = principleLine(c.fen(), 'Nc3', 'white', new Set(['development', 'center']), 1);
+    const again = principleLine(c.fen(), 'Nc3', 'white', new Set(['development', 'center']), 1, true);
     expect(again?.first).toBe(false);
     expect(again?.text).toMatch(/^Your Nc3 develops into the game with tempo, hitting the queen on d5/);
   });
@@ -103,9 +103,9 @@ describe('past the opening a clean move still has a why (re-walk 1380, 15.Rd1 / 
   it('Rd1 takes the open d-file; g4 goes after the knight on h5', () => {
     const c = new Chess();
     for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
-    expect(principleLine(c.fen(), 'Rd1', 'white', new Set(), 0)?.text).toBe('Your Rd1 takes the open d-file, where the rook belongs — a rook needs an open file to reach their camp.');
+    expect(principleLine(c.fen(), 'Rd1', 'white', new Set(), 0, true)?.text).toBe('Your Rd1 takes the open d-file, where the rook belongs — a rook needs an open file to reach their camp.');
     for (const s of 'Rd1 Qe8 Nd5 c6 Nc3 Bb4 h3 Bxf3 Rxf3 Rd8'.split(' ')) c.move(s);
-    expect(principleLine(c.fen(), 'g4', 'white', new Set(), 0)?.text).toMatch(/^Your g4 kicks their knight off h5/);
+    expect(principleLine(c.fen(), 'g4', 'white', new Set(), 0, true)?.text).toMatch(/^Your g4 kicks their knight off h5/);
   });
 });
 
@@ -113,12 +113,12 @@ describe('middlegame stems: said once, never on a capture, honest about the quee
   const PRE = 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ');
   const board = (extra: string[]): Chess => { const c = new Chess(); for (const s of [...PRE, ...extra]) c.move(s); return c; };
   it('the same idea is heard once a game', () => {
-    const first = principleLine(board([]).fen(), 'Rd1', 'white', new Set(), 0);
+    const first = principleLine(board([]).fen(), 'Rd1', 'white', new Set(), 0, true);
     expect(first?.first).toBe(true);
-    expect(principleLine(board([]).fen(), 'Rd1', 'white', new Set([first?.id ?? '']), 0)).toBeNull();
+    expect(principleLine(board([]).fen(), 'Rd1', 'white', new Set([first?.id ?? '']), 0, true)).toBeNull();
   });
   it('a capture is never credited with a file (Rxf3 is a recapture)', () => {
-    expect(principleLine(board('Rd1 Qe8 Nd5 c6 Nc3 Bb4 h3 Bxf3'.split(' ')).fen(), 'Rxf3', 'white', new Set(), 0)).toBeNull();
+    expect(principleLine(board('Rd1 Qe8 Nd5 c6 Nc3 Bb4 h3 Bxf3'.split(' ')).fen(), 'Rxf3', 'white', new Set(), 0, true)).toBeNull();
   });
 });
 
@@ -133,6 +133,6 @@ describe('a move outside the fan is graded by its cost (walk 3, 11.Qe1)', () => 
   it('a recapture is never credited with a principle, even in the opening (13.fxe5)', () => {
     const c = new Chess();
     for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5'.split(' ')) c.move(s);
-    expect(principleLine(c.fen(), 'fxe5', 'white', new Set(), 0)).toBeNull();
+    expect(principleLine(c.fen(), 'fxe5', 'white', new Set(), 0, true)).toBeNull();
   });
 });

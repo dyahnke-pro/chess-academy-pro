@@ -18,7 +18,7 @@ describe('the fundamental behind a rule line', () => {
     // 20.Bd2 in Firouzja–Carlsen: the bishop on e3 steps out of the f4 pawn's reach.
     const c = new Chess();
     for (const san of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O h3 c5 d5 e6 Bd3 Nbd7 O-O e5 Be3 Nh5 a3 Nf4 b4 b6 Rb1 Nxd3 Qxd3 a6 Rfe1 h6 Qd2 Kh7 Na4 f5 bxc5 bxc5 Qc2 f4'.split(' ')) c.move(san);
-    const line = principleLine(c.fen(), 'Bd2', 'white', new Set(), 0);
+    const line = principleLine(c.fen(), 'Bd2', 'white', new Set(), 0, true);
     expect(line?.id.startsWith('mg:keep-working:')).toBe(true);
     expect(fundamentalOfLine(line?.id ?? '')).toBe('keep-working');
   });

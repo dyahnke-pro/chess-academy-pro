@@ -254,7 +254,7 @@ export interface EndgameWalkStep {
  * G3: every move is the tablebase's optimal move (real, legal); chess.js computes
  * the FENs. The narration downstream phrases the notes.
  */
-export async function buildTablebaseWalk(fen: string, maxPlies = 24): Promise<EndgameWalkStep[]> {
+export async function buildTablebaseWalk(fen: string, student: 'w' | 'b', maxPlies = 24): Promise<EndgameWalkStep[]> {
   const steps: EndgameWalkStep[] = [];
   const taught = new Set<string>();
   let cur = fen;
@@ -279,7 +279,7 @@ export async function buildTablebaseWalk(fen: string, maxPlies = 24): Promise<En
       note: bestMovePoint(cur, best, 'side') ?? mv.san,
       teaching: (() => {
         try {
-          const c = endgameConceptFor(board.fen());
+          const c = endgameConceptFor(board.fen(), student);
           if (!c || c.source !== 'technique' || taught.has(c.id)) return null;
           taught.add(c.id);
           return c.full;

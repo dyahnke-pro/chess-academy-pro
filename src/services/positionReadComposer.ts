@@ -127,7 +127,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   try {
     if (i.analysis?.topLines?.length) {
       const lm = lastMoveIfStudent(sans, i.playerColor, i.fen);
-      const pf = await computePositionFacts({ theory: true,
+      const pf = await computePositionFacts({ theory: true, namesPlayedMove: true,
       boardComputers: 'composer',
         // The student TAPPED "read this position". Silence would be a dead
         // button — the same reasoning that exempts this surface from the

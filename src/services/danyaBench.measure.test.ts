@@ -421,7 +421,7 @@ const reviewFacets = once((p: Position): string[] => {
  *  its candidates are every clause before the door, its clauses what spoke. */
 const liveRead = once((p: Position): Promise<PositionFactsResult> => {
   const cost = costCp(p);
-  return computePositionFacts({ theory: true,
+  return computePositionFacts({ theory: true, namesPlayedMove: true,
     boardComputers: 'composer', posture: 'asked', fen: p.fenAfter, history: [...p.note.lineSan],
     moverColor: p.mover === 'w' ? 'b' : 'w', studentColor: p.student, analysis: analysisOf(p.after),
     cpLossCp: p.own ? cost : null,

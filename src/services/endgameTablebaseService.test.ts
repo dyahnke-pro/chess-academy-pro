@@ -97,7 +97,7 @@ describe('buildTablebaseWalk', () => {
       [p2]: { category: 'loss', moves: [{ uci: 'e5e6', san: 'Ke6', category: 'win', dtz: 11 }] },
       '*': { category: 'unknown', moves: [] },
     });
-    const walk = await buildTablebaseWalk(p1, 2);
+    const walk = await buildTablebaseWalk(p1, p1.split(' ')[1] === 'b' ? 'b' : 'w', 2);
     expect(walk.length).toBeGreaterThanOrEqual(1);
     // chess.js is the SAN truth (G3) — it recomputes SAN from the board, not the
     // stub's label, so a fictional "+" in the stub is correctly dropped.

@@ -103,7 +103,7 @@ describe('each producer, on the g3 board, names no move it declares it does not'
   });
 
   it('moveFundamentals: the fianchetto rule declares the bishop move it names (1.b3)', () => {
-    const r = principleLine(g3At(0), 'b3', 'white', new Set(), 0);
+    const r = principleLine(g3At(0), 'b3', 'white', new Set(), 0, false);
     expect(r?.text).toMatch(/b2/);
     expect(r?.names).toEqual({ from: 'c1', to: 'b2' });
     expect(namesPlayableStudentMove(namesMoves('w', g3At(2), r?.names))).toBe(true);
@@ -157,7 +157,7 @@ describe('every student move of the OS-11 games and David\'s two: the engine-fre
         // The board the student moves on next: after the reply.
         const next = new Chess(c.fen());
         if (g.sans[i + 1]) next.move(g.sans[i + 1]);
-        const r = principleLine(before, san, g.side === 'w' ? 'white' : 'black', new Set(), i);
+        const r = principleLine(before, san, g.side === 'w' ? 'white' : 'black', new Set(), i, false);
         if (r) {
           checked += 1;
           if (!r.names && namedMoves(r.text, next.fen(), g.side).length) leaks.push(`${i + 1}.${san} rule: ${r.text}`);
@@ -248,7 +248,7 @@ describe('every student move of the six games: the engine-backed producers name 
         // The composer on the board the student moves on next.
         const at = readOf(next);
         if (at) {
-          const pf = await computePositionFacts({ theory: true,
+          const pf = await computePositionFacts({ theory: true, namesPlayedMove: true,
             boardComputers: 'surface', posture: 'walk', fen: next, history: g.sans.slice(0, i + 2), moverColor: g.side, studentColor: g.side,
             rating: 1500, analysis: at, evalBoard: () => Promise.reject(new Error('no eval table in the gate')),
             lastMove: { fenBefore: before, san, cpLoss, historySans: history, reads: { historySans: history, bestMoveUci: pre.bestMove || null, bestPvUci: best?.moves ?? [], playedPvUci: mid.topLines[0]?.moves ?? [], price: null }, popular: null, fanBefore: pre.topLines },

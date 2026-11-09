@@ -27,8 +27,8 @@ describe('the plan step credited after their reply holds on the board after it',
     const plan = deriveNextPlanFacts(before, 'w', { namesStudentMoves: true }).find((p) => p.kind === 'weak-pawn' && p.squares[0] === 'c5');
     expect(plan).toBeDefined();
     // Said right after Qc3, it is a step; said after …c4, the pawn is gone.
-    expect(planStepLine(plan!, before, 'Qc3', 'w', 'you', fenAt(63))?.text).toMatch(/one more piece on their weak pawn on c5/);
-    expect(planStepLine(plan!, before, 'Qc3', 'w', 'you', fenAt(64))).toBeNull();
+    expect(planStepLine(plan!, before, 'Qc3', 'w', 'you', fenAt(63), true)?.text).toMatch(/one more piece on their weak pawn on c5/);
+    expect(planStepLine(plan!, before, 'Qc3', 'w', 'you', fenAt(64), true)).toBeNull();
   });
 });
 

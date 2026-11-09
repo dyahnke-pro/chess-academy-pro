@@ -46,7 +46,7 @@ describe('Najdorf 1500 hand walk — the flags stay fixed', () => {
   });
   it('c5 fights for d4 from the side — never "stakes out the center" — and survives the board gate (ply 2)', () => {
     const fen = fenAt(1);
-    const p = principleLine(fen, 'c5', 'black', new Set(), 0);
+    const p = principleLine(fen, 'c5', 'black', new Set(), 0, true);
     expect(p?.text).toMatch(/fight for d4 from the side/);
     expect(p?.text).not.toMatch(/stake out/);
     const pkg = buildVoicePackage([{ kind: 'computed', text: p?.text ?? '', fen: fenAt(3) }]);

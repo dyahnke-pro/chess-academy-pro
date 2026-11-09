@@ -78,7 +78,7 @@ export async function chatBoardClauses(i: ChatBoardInput): Promise<ClauseFact[] 
     const lm = lastMoveIfStudent(sans, i.studentColor, i.fen);
     const om = lastMoveIfOpponent(sans, i.studentColor, i.fen);
     try {
-      const result = await computePositionFacts({ theory: true,
+      const result = await computePositionFacts({ theory: true, namesPlayedMove: true,
       boardComputers: 'composer',
         // A question was asked: the answer may name the move (LEARN NAMES NO MOVE UNASKED).
         namesBestMove: true,

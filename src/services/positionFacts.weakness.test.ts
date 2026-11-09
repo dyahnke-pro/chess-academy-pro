@@ -21,7 +21,7 @@ const sig = (clusterId: string, over: Partial<WeaknessSignal> = {}): WeaknessSig
 /** The must-defend fact's value to this student — the door's one value
  *  (`clauseValue`, P1-6c: the composer's hand rank is deleted). */
 async function mustDefendValue(studentWeaknesses?: readonly WeaknessSignal[]): Promise<number> {
-  const r = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'walk', fen: HANGING_KNIGHT, moverColor: 'w', studentColor: 'w', analysis: flat, studentWeaknesses });
+  const r = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: HANGING_KNIGHT, moverColor: 'w', studentColor: 'w', analysis: flat, studentWeaknesses });
   const md = r.clauses.find((c) => c.kind === 'must-defend');
   return md ? clauseValue(md, studentWeaknesses ?? []) : -1;
 }
@@ -49,7 +49,7 @@ describe('computePositionFacts — studentWeaknesses re-ranks the briefing (Phas
   });
 
   it('the boosted clause still LEADS the briefing (ordering respects the boost)', async () => {
-    const r = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'walk', fen: HANGING_KNIGHT, moverColor: 'w', studentColor: 'w', analysis: flat, studentWeaknesses: [sig('analysis:tactic:hanging_piece')] });
+    const r = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: HANGING_KNIGHT, moverColor: 'w', studentColor: 'w', analysis: flat, studentWeaknesses: [sig('analysis:tactic:hanging_piece')] });
     expect(r.clauses[0].kind).toBe('must-defend');
   });
 });
@@ -63,8 +63,8 @@ describe('concept clause ↔ the student\'s specific hole (vocabulary bridge)', 
       bestMove: 'e6c7', evaluation: 600, isMate: false, mateIn: null, depth: 14, nodesPerSecond: 0,
       topLines: [{ rank: 1, moves: ['e6c7'], evaluation: 600, mate: null }, { rank: 2, moves: ['g1h1'], evaluation: 0, mate: null }],
     } as unknown as import('../types').StockfishAnalysis;
-    const base = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis, rating: 1500 });
-    const boosted = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis, rating: 1500, studentWeaknesses: [sig('analysis:tactic:fork')] });
+    const base = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis, rating: 1500 });
+    const boosted = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis, rating: 1500, studentWeaknesses: [sig('analysis:tactic:fork')] });
     const c0 = base.clauses.find((c) => c.kind === 'concept');
     const c1 = boosted.clauses.find((c) => c.kind === 'concept');
     if (!c0 || !c1) return; // the concept only fires when the detector names the fork on this board

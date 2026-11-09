@@ -11370,7 +11370,7 @@ export function CoachTeachPage({ mode }: {
                     // The move's ONE price (the memoized search the door and the
                     // record read) — the facts' cost and grade, never two reads.
                     const priceForFacts = await priceRead;
-                    const pf = await computePositionFacts({ theory: true,
+                    const pf = await computePositionFacts({ theory: true, namesPlayedMove: false,
                       // Learn reads the board computers in its own lanes.
                       boardComputers: 'surface',
                       // The student asked for this lesson — every taught position

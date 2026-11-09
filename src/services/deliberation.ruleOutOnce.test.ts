@@ -83,10 +83,10 @@ describe('the surface remembers a rule-out and does not repeat it (the wire)', (
   ] } as never;
 
   it('said once, then remembered', async () => {
-    const first = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [] });
+    const first = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [] });
     expect(first.clauses.find((c) => c.kind === 'deliberation')?.text).toMatch(/Nxe5\?/);
     expect(first.remember).toContain('rule-out:e5');
-    const again = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [], alreadySaid: new Set(first.remember) });
+    const again = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [], alreadySaid: new Set(first.remember) });
     expect(again.clauses.some((c) => /Nxe5\?/.test(c.text))).toBe(false);
   });
 
@@ -95,9 +95,9 @@ describe('the surface remembers a rule-out and does not repeat it (the wire)', (
   // about the board; what was already said decides only which sentences of
   // the weighing are spoken. A rule-out said earlier must not un-hold the move.
   it('the move stays held when its rule-out was said before', async () => {
-    const first = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [] });
+    const first = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [] });
     expect(first.heldVerdict).not.toBeNull();
-    const again = await computePositionFacts({ theory: true, boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [], alreadySaid: new Set(first.remember) });
+    const again = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [], alreadySaid: new Set(first.remember) });
     expect(again.heldVerdict).toEqual(first.heldVerdict);
   });
 });

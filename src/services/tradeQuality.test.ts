@@ -6,53 +6,53 @@ import { readTrade, findTradeTarget } from './tradeQuality';
 
 describe('readTrade — a trade judged by the pieces, not the points', () => {
   it('good: takes off their best piece (rook on your seventh)', () => {
-    const r = readTrade('2n5/2R5/1rNp1B1k/p2Pp3/P3P3/7p/1r3P1N/1R3K2 w - - 0 33', 'Rxb2', 'b', null, null);
+    const r = readTrade('2n5/2R5/1rNp1B1k/p2Pp3/P3P3/7p/1r3P1N/1R3K2 w - - 0 33', 'Rxb2', 'b', null, null, true);
     expect(r?.call).toBe('good');
     expect(r?.text).toBe('Their Rxb2 is a good trade for them — it takes off your best piece, the rook on the seventh rank.');
   });
   it('never "good" on a move the grader calls an inaccuracy (prod Review 2026-10-29: "Their Bxf5 was an inaccuracy … is a good trade")', () => {
     // The same trade at a 60cp cost — an inaccuracy (`INACCURACY_CP` = 50).
-    const r = readTrade('2n5/2R5/1rNp1B1k/p2Pp3/P3P3/7p/1r3P1N/1R3K2 w - - 0 33', 'Rxb2', 'b', 60, null);
+    const r = readTrade('2n5/2R5/1rNp1B1k/p2Pp3/P3P3/7p/1r3P1N/1R3K2 w - - 0 33', 'Rxb2', 'b', 60, null, true);
     expect(r?.call).not.toBe('good');
-    expect(readTrade('2n5/2R5/1rNp1B1k/p2Pp3/P3P3/7p/1r3P1N/1R3K2 w - - 0 33', 'Rxb2', 'b', 40, null)?.call).toBe('good');
+    expect(readTrade('2n5/2R5/1rNp1B1k/p2Pp3/P3P3/7p/1r3P1N/1R3K2 w - - 0 33', 'Rxb2', 'b', 40, null, true)?.call).toBe('good');
   });
   it('good: the student takes off their open-file rook', () => {
-    const r = readTrade('r1Rk1b1r/1p1P1ppp/p4q2/1B3n2/1P3B2/1P6/4NPPP/3QK2R b K - 1 25', 'Rxc8', 'b', null, null);
+    const r = readTrade('r1Rk1b1r/1p1P1ppp/p4q2/1B3n2/1P3B2/1P6/4NPPP/3QK2R b K - 1 25', 'Rxc8', 'b', null, null, true);
     expect(r?.text).toBe('Rxc8 is a good trade — it takes off their best piece, the rook on the open file.');
   });
   it('doubled pawns are not "a good trade" for the side that is behind — both halves are said', () => {
-    const r = readTrade('rn2k1nr/pp1b1ppp/1b1p1q2/1N2p3/4P3/3PBN2/PPP2PPP/R2QK2R w KQkq - 3 9', 'Bxb6', 'b', null, null);
+    const r = readTrade('rn2k1nr/pp1b1ppp/1b1p1q2/1N2p3/4P3/3PBN2/PPP2PPP/R2QK2R w KQkq - 3 9', 'Bxb6', 'b', null, null, true);
     expect(r?.call).toBe('behind');
     expect(r?.text).toBe('After their Bxb6, taking back doubles your pawns, but you\'re still two pawns ahead — and every trade brings your ending closer.');
   });
   it('NEGATIVE: the Najdorf — Nxe5 after …Nxe5 won a pawn is not "good for them" — you stay a pawn up (hand walk 2026-09-27)', () => {
     // 1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 a6 6.Nf3 Nc6 7.e5 Nxe5
     const fen = 'r1bqkb1r/1p2pppp/p2p1n2/4n3/8/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 8';
-    expect(readTrade(fen, 'Nxe5', 'b', null, null)?.text).toBe('After their Nxe5, taking back doubles your pawns, but you\'re still a pawn ahead — and every trade brings your ending closer.');
+    expect(readTrade(fen, 'Nxe5', 'b', null, null, true)?.text).toBe('After their Nxe5, taking back doubles your pawns, but you\'re still a pawn ahead — and every trade brings your ending closer.');
   });
   it('good: taking back leaves an isolated pawn (queenless — not "king cover")', () => {
-    const r = readTrade('r5k1/pR6/5p1p/2p1bn1r/2P4B/3P2P1/PP3PK1/5R2 b - - 0 25', 'Nxh4+', 'b', null, null);
+    const r = readTrade('r5k1/pR6/5p1p/2p1bn1r/2P4B/3P2P1/PP3PK1/5R2 b - - 0 25', 'Nxh4+', 'b', null, null, true);
     expect(r?.text).toBe('Nxh4+ is a good trade — taking back leaves their pawn on h4 isolated.');
   });
   it('ahead: every trade helps the side with more material', () => {
-    expect(readTrade('2r1kb1r/pp1b1ppp/5q2/3PNn2/1PB5/1P6/3BNPPP/R2QK2R w KQk - 7 19', 'Nxd7', 'b', null, null)?.call).toBe('ahead');
-    expect(readTrade('r1b1r1k1/5ppp/pq2p1n1/1p1p2B1/3p1N2/2P3Q1/PP3PPP/R3R1K1 b - - 1 19', 'Nxf4', 'b', null, null)?.text)
+    expect(readTrade('2r1kb1r/pp1b1ppp/5q2/3PNn2/1PB5/1P6/3BNPPP/R2QK2R w KQk - 7 19', 'Nxd7', 'b', null, null, true)?.call).toBe('ahead');
+    expect(readTrade('r1b1r1k1/5ppp/pq2p1n1/1p1p2B1/3p1N2/2P3Q1/PP3PPP/R3R1K1 b - - 1 19', 'Nxf4', 'b', null, null, true)?.text)
       .toMatch(/while you're ahead/);
   });
   it('NEGATIVE: an outpost knight traded for a pawn-wrecking recapture is mixed — silent', () => {
-    expect(readTrade('rn4k1/pp4p1/3b1n1p/2pN3r/2P4B/3P2P1/PP3P2/R4R1K w - - 1 20', 'Nxf6+', 'b', null, null)).toBeNull();
+    expect(readTrade('rn4k1/pp4p1/3b1n1p/2pN3r/2P4B/3P2P1/PP3P2/R4R1K w - - 1 20', 'Nxf6+', 'b', null, null, true)).toBeNull();
   });
   it('NEGATIVE: no "king defender" in a queenless ending', () => {
-    expect(readTrade('7R/p4kr1/2K2p2/2p1b3/2Pr3P/8/PP3P2/6R1 w - - 3 37', 'Rxg7+', 'b', null, null)).toBeNull();
+    expect(readTrade('7R/p4kr1/2K2p2/2p1b3/2Pr3P/8/PP3P2/6R1 w - - 3 37', 'Rxg7+', 'b', null, null, true)).toBeNull();
   });
   it('the engine has the last word: no "poor" on a sound move, no "good" on a mistake', () => {
     const fen = 'r5k1/pR6/5p1p/2p1bn1r/2P4B/3P2P1/PP3PK1/5R2 b - - 0 25';
-    expect(readTrade(fen, 'Nxh4+', 'b', 250, null)).toBeNull();
-    expect(readTrade(fen, 'Nxh4+', 'b', 10, null)?.call).toBe('good');
+    expect(readTrade(fen, 'Nxh4+', 'b', 250, null, true)).toBeNull();
+    expect(readTrade(fen, 'Nxh4+', 'b', 10, null, true)?.call).toBe('good');
   });
   it('NEGATIVE: a capture that simply wins material is not a trade', () => {
     // Nothing can take back on h4 after Nxh4 here.
-    expect(readTrade('rnbqkb1r/pppppppp/8/8/7n/5N2/PPPPPPPP/RNBQKB1R w KQkq - 0 1', 'Nxh4', 'w', null, null)).toBeNull();
+    expect(readTrade('rnbqkb1r/pppppppp/8/8/7n/5N2/PPPPPPPP/RNBQKB1R w KQkq - 0 1', 'Nxh4', 'w', null, null, true)).toBeNull();
   });
 });
 
@@ -67,7 +67,7 @@ describe('readTrade — the count settles through the move that led here (oct3a 
   // so …Bxc3+ is not made "3 points behind".
   const fen = 'r1bqk2r/pppp1pp1/5n1p/4p3/1b1NP2B/2NP4/PPP1BPPP/R2QK2R b KQkq - 0 8';
   it('not "behind" once the pending recapture is counted', () => {
-    expect(readTrade(fen, 'Bxc3+', 'b', 200, { to: 'd4', captured: 'n' })?.text ?? '').not.toMatch(/behind/);
+    expect(readTrade(fen, 'Bxc3+', 'b', 200, { to: 'd4', captured: 'n' }, true)?.text ?? '').not.toMatch(/behind/);
   });
   it('a lead of a piece or more is said in words, never "3 points" (review audit 2026-10-14)', async () => {
     const { readFileSync } = await import('node:fs');
@@ -82,11 +82,11 @@ describe('readTrade — a retake that wins nothing back is no trade (2026-11-04)
     const fen = 'r1bqrnk1/4bppp/p1n1p3/1p1pP1NN/3p4/2PB4/PP3PPP/R1BQR1K1 b - - 1 14';
     // 14.Ng5 took nothing: …Bxg5 starts the exchange — and with the prior
     // move unknown, it is read as starting one too.
-    expect(readTrade(fen, 'Bxg5', 'w', null, { to: 'g5', captured: null })).toBeNull();
-    expect(readTrade(fen, 'Bxg5', 'w', null, null)).toBeNull();
+    expect(readTrade(fen, 'Bxg5', 'w', null, { to: 'g5', captured: null }, true)).toBeNull();
+    expect(readTrade(fen, 'Bxg5', 'w', null, null, true)).toBeNull();
   });
   it('a recapture whose retake nets zero closes an even exchange — still a trade (oct2a F13: Nxf6+ Bxf6 Bxf6 Qxf6)', () => {
     const fen = 'r1bqr1k1/ppppbppp/5N2/6B1/3QP3/8/PPP2PPP/R3KB1R b KQ - 0 9';
-    expect(readTrade(fen, 'Bxf6', 'b', null, { to: 'f6', captured: 'n' })).not.toBeNull();
+    expect(readTrade(fen, 'Bxf6', 'b', null, { to: 'f6', captured: 'n' }, true)).not.toBeNull();
   });
 });

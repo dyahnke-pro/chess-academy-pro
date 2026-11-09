@@ -447,7 +447,7 @@ export function moveMissed(fenBefore: string, san: string, replyPv: readonly str
   }
   // A BAD TRADE — THE trade computer judges it (`tradeJudgement`, census
   // "trade judgement"); never a second copy here.
-  const tj = replies[0] ? tradeJudgement(fenBefore, r.move.san, replies[0], me, 100) : null;
+  const tj = replies[0] ? tradeJudgement(fenBefore, r.move.san, replies[0], me, 100, undefined, null, true) : null;
   if (tj && (tj.reason === 'behind' || tj.reason === 'gave-best' || tj.reason === 'bad')) {
     return { text: tj.text, line, tag: 'bad-trade' };
   }

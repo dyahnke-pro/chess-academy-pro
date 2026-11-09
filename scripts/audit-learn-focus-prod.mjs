@@ -887,7 +887,12 @@ async function main() {
       const carriedOk = carriedRows.every((x) => x.askSeat && x.ask === headOf(x.askSeat) && (!x.planted || x.seat === x.askSeat));
       const result = t.resultRows[0] ?? null;
       const owedOut = Array.isArray(result?.carry) ? result.carry.map(owedOf) : null;
-      const missesFirstTry = t.turns.filter((r) => (r.seat === 'exploit' || r.seat === 'defend') && r.outcome === 'missed' && !r.retry);
+      // Only a pattern the coach can set up again is owed (`PLANTABLE`): a
+      // piece the student's own move left loose (`leave`) cannot be, so it is
+      // never carried (prod rung 2, 2026-11-09: this contract counted one as
+      // "LOST" while the app was right not to carry it).
+      const NOT_PLANTABLE = new Set(['leave']);
+      const missesFirstTry = t.turns.filter((r) => (r.seat === 'exploit' || r.seat === 'defend') && r.outcome === 'missed' && !r.retry && !NOT_PLANTABLE.has(r.kind));
       const answered = (r) => t.turns.some((f) => f.seat === r.seat && f.outcome === 'found' && !f.retry && !f.prompted && f.tag === r.tag && f.ply > r.ply);
       const lost = owedOut ? missesFirstTry.filter((r) => !answered(r) && !owedOut.some((o) => o.seat === r.seat && o.tag === r.tag)).map((r) => `${r.seat}:${r.tag}@${r.ply}`) : ['no carry on the row'];
       check(`${g} F23 a missed pattern carries to the next game`, setupOk && guaranteeOk && carriedOk && lost.length === 0,

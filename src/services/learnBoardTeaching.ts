@@ -304,7 +304,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
   // WAS THE TRADE A GOOD DEAL (P3, T3 #45) — a like-for-like trade the reply
   // completed, judged by the first reason the board supports.
   try {
-    const tj = tradeJudgement(i.fenBefore, i.san, i.reply, new Chess(i.fenBefore).turn(), faultCp, i.evalBefore, ((pm) => (pm ? lastMoveFromSan(pm.fenBefore, pm.san) : null))(priorFromHistory(i.history, i.fenBefore)));
+    const tj = tradeJudgement(i.fenBefore, i.san, i.reply, new Chess(i.fenBefore).turn(), faultCp, i.evalBefore, ((pm) => (pm ? lastMoveFromSan(pm.fenBefore, pm.san) : null))(priorFromHistory(i.history, i.fenBefore)), i.namesStudentMoves);
     if (tj) out.push(teachingFact('trade', { computer: 'tradeJudgement', kind: 'trade', ...mine, names: NAMES_NO_MOVE, proof: (i.reply ? legalLineProof(i.fenBefore, [i.san, i.reply], 'you') : null) ?? squaresProof(tj.text, tj.squares) ?? NO_PROOF.stated, text: tj.text, squares: tj.squares, claims: [`trade-${tj.reason}`, `capture:${to}:${i.history.length}`, ...(tj.reason === 'their-best' ? [`piece-quality:${to}`] : [])] }, { event: { name: 'coach_trade_judged', props: { surface: 'coach-teach', reason: tj.reason } }, arrows: [],
       // A good trade the student chose is the 'bad-trade' question answered well.
       ...(tj.reason !== 'behind' && tj.reason !== 'gave-best' && tj.reason !== 'bad' ? { evidence: { tag: 'bad-trade' as const, posedImportance: 60 } } : {}) }));
@@ -330,7 +330,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
   // BRINGING PIECES TO THEIR KING — not on a move that cost a pawn; that
   // move's lesson is the cost.
   if (i.cpLoss !== null && i.cpLoss < 100) {
-    const ka = kingAttack(i.fenBefore, i.san, false);
+    const ka = kingAttack(i.fenBefore, i.san, false, i.namesStudentMoves);
     if (ka) {
       out.push(teachingFact('kingAttack', {
         // "…heads for their king — Qg3 next" names the student's next move.
@@ -1258,7 +1258,10 @@ export function boardTeacherPoint(fenBefore: string, san: string, fenNow: string
   const read = readWithIdeas(fenBefore, san, true, spokenIdeas);
   if (!read) return null;
   const { fact, ideaClaims } = read;
-  const text = withSubject(fact.text, san);
+  // Learn's own move is "your move", never its name (David 2026-11-09: "the
+  // user knows that, they see it play out" — prod focus audit: "c5 kicks
+  // their queen off b4", "King to h8 unpins your pawn on f7").
+  const text = withSubject(fact.text, 'Your move');
   // The board teacher reads the move from the board before it.
   return teachingFact('movePoint', {
     computer: 'buildReviewMoveTeachingFact', kind: 'point', seat: 'student', fen: fenBefore, names: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: fact.squares, claims: [`board-teacher:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`, ...(fact.claim ? [fact.claim] : []), ...ideaClaims],

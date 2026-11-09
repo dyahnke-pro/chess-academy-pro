@@ -55,9 +55,9 @@ describe('Learn board truth — the real game', () => {
 
   // LEARN NAMES NO MOVE UNASKED — the held form of each producer, on the board it was heard.
   it('16.Ne3: heads for their king without naming Nf5', () => {
-    expect(kingAttack(at(30), 'Ne3', true)?.text).toMatch(/Nf5 next/);
-    const held = kingAttack(at(30), 'Ne3', false);
-    expect(held?.text).toBe('Ne3 heads for their king — one more knight move brings it to bear.');
+    expect(kingAttack(at(30), 'Ne3', true, true)?.text).toMatch(/Nf5 next/);
+    const held = kingAttack(at(30), 'Ne3', false, false);
+    expect(held?.text).toBe('Your knight heads for their king — one more move brings it to bear.');
     expect(held?.next).toBeUndefined();
     expect(held?.squares).not.toContain('f5');
   });

@@ -21,7 +21,7 @@ describe('the asked read says a weak pawn once', () => {
     const sans = g.sans.slice(0, p.ply);
     const lm = lastMoveIfStudent(sans, g.studentSide, p.fenAfter);
     const om = lastMoveIfOpponent(sans, g.studentSide, p.fenAfter);
-    const r = await computePositionFacts({ theory: true,
+    const r = await computePositionFacts({ theory: true, namesPlayedMove: true,
       boardComputers: 'composer', posture: 'asked', fen: p.fenAfter,
       moverColor: p.mover === 'w' ? 'b' : 'w', studentColor: g.studentSide === 'white' ? 'w' : 'b',
       analysis: analysisOf(p.after),

@@ -277,13 +277,13 @@ describe('the rule rides with the middlegame purpose, once (B1)', () => {
   const fen = '1r3r1k/pp1R2pp/8/4p3/2B3P1/1P6/1P4nP/1K5R b - - 3 25';
   it('the first outpost says why outposts matter', async () => {
     const { principleLine } = await import('./moveFundamentals');
-    const r = principleLine(fen, 'Ne3', 'black', new Set(), 0);
+    const r = principleLine(fen, 'Ne3', 'black', new Set(), 0, true);
     expect(r?.text).toMatch(/e3 outpost.* — a piece no pawn can chase stays there/);
     expect(r?.id.split('|')).toContain('mg-rule:outpost');
   });
   it('once the rule is taught, only the stem speaks', async () => {
     const { principleLine } = await import('./moveFundamentals');
-    const r = principleLine(fen, 'Ne3', 'black', new Set(['mg-rule:outpost']), 0);
+    const r = principleLine(fen, 'Ne3', 'black', new Set(['mg-rule:outpost']), 0, true);
     expect(r?.text).not.toMatch(/no pawn can chase/);
   });
 });
@@ -316,9 +316,9 @@ describe('the space rule rides with a flank space-grab, once (B1)', () => {
   it('a4 past the opening says why space matters, then only the purpose', () => {
     const c = new Chess();
     for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
-    const first = principleLine(c.fen(), 'a4', 'white', new Set(), 0);
+    const first = principleLine(c.fen(), 'a4', 'white', new Set(), 0, true);
     expect(first?.text).toBe('Your a4 grabs space on the queenside — space is a slow, real edge: keep it and your pieces breathe while theirs stumble over each other.');
-    const again = principleLine(c.fen(), 'a4', 'white', new Set(['mg-rule:space']), 0);
+    const again = principleLine(c.fen(), 'a4', 'white', new Set(['mg-rule:space']), 0, true);
     expect(again?.text).toBe('Your a4 grabs space on the queenside.');
   });
 });
@@ -327,7 +327,7 @@ describe('a rule rides only where its reason is true (B1)', () => {
   it('h3 on move 15, every black minor out, kicks the bishop without the "developing" reason', () => {
     const c = new Chess();
     for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
-    expect(principleLine(c.fen(), 'h3', 'white', new Set(), 0)?.text).toBe('Your h3 kicks their bishop off g4, gaining time.');
+    expect(principleLine(c.fen(), 'h3', 'white', new Set(), 0, true)?.text).toBe('Your h3 kicks their bishop off g4, gaining time.');
   });
 });
 
@@ -335,8 +335,8 @@ describe('prophylaxis carries its rule, once (B1, David 2026-10-01: "Add rule ba
   it('g3 takes f4 from the knight and says why denying a square matters', () => {
     const c = new Chess();
     for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
-    expect(principleLine(c.fen(), 'g3', 'white', new Set(), 0)?.text).toBe('Your g3 takes the f4 square away from their knight — stop what they want before you chase what you want, because a square their piece never reaches is a plan it never starts.');
-    expect(principleLine(c.fen(), 'g3', 'white', new Set(['mg-rule:prophylaxis']), 0)?.text).toBe('Your g3 takes the f4 square away from their knight.');
+    expect(principleLine(c.fen(), 'g3', 'white', new Set(), 0, true)?.text).toBe('Your g3 takes the f4 square away from their knight — stop what they want before you chase what you want, because a square their piece never reaches is a plan it never starts.');
+    expect(principleLine(c.fen(), 'g3', 'white', new Set(['mg-rule:prophylaxis']), 0, true)?.text).toBe('Your g3 takes the f4 square away from their knight.');
   });
 });
 
@@ -356,7 +356,7 @@ describe('the outpost rule rides only with a piece standing on the hole (Learn w
   it('Nh6+ eyes g4 — no "stays there for the whole game"', () => {
     const c = new Chess();
     for (const s of 'h4 Nc6 c3 Nf6 f3 e5 g4 d5 b4 e4 h5 exf3 exf3 Bd6 Kf2 O-O d4 a5 b5 Ne7 a4 c5 g5 Nf5 gxf6 Qxf6 f4 cxd4 c4 dxc4 Bxc4 Bc5 Kf1 Be6 Bxe6 Qxe6 Qf3 Qc4+ Kg2 Qxc1 Ne2 Ne3+ Kg3 Qb2 Nbc3 dxc3 Rab1 Nf5+ Kg4'.split(' ')) c.move(s);
-    const r = principleLine(c.fen(), 'Nh6+', 'black', new Set(), 0);
+    const r = principleLine(c.fen(), 'Nh6+', 'black', new Set(), 0, true);
     // g4 holds THEIR KING: a check, never an outpost target (A-plan P3).
     expect(r?.text ?? '').not.toMatch(/eyes (their king on )?g4/);
     expect(r?.text ?? '').not.toMatch(/stays there/);
@@ -403,7 +403,7 @@ describe('the plan carries its why (prod Learn audit 2026-10-14: "The plan here:
 describe('castling is said as itself, never "Your castle kingside castles …" (review tape 2026-10-14)', () => {
   it('a middlegame castle reads "Castling gets your king to safety …"', () => {
     const fen = 'r4rk1/pp2bppp/2n1pn2/3p4/3P4/2NBPN2/PP3PPP/R3K2R w KQ - 4 30';
-    const r = principleLine(fen, 'O-O', 'white', new Set(), 0);
+    const r = principleLine(fen, 'O-O', 'white', new Set(), 0, true);
     expect(r?.text ?? '').not.toMatch(/Your O-O/);
     if (r) expect(r.text).toMatch(/^Castling gets your king to safety/);
   });

@@ -127,7 +127,7 @@ async function sweepGame(g: FixtureGame): Promise<void> {
     const r = plies[k + 1];
     if (!p.own || r.after.length === 0) continue;
     const historySans = g.sans.slice(0, k + 1);
-    const res = await computePositionFacts({ theory: true,
+    const res = await computePositionFacts({ theory: true, namesPlayedMove: true,
       boardComputers: 'surface', posture: 'walk', fen: r.fenAfter, history: g.sans.slice(0, k + 2),
       moverColor: student, studentColor: student, rating: g.rating, analysis: analysisOf(r.after),
       lastMove: {
@@ -164,7 +164,7 @@ async function sweepGame(g: FixtureGame): Promise<void> {
     const sans = g.sans.slice(0, p.ply);
     const lm = lastMoveIfStudent(sans, g.studentSide, p.fenAfter);
     const om = lastMoveIfOpponent(sans, g.studentSide, p.fenAfter);
-    const res = await computePositionFacts({ theory: true,
+    const res = await computePositionFacts({ theory: true, namesPlayedMove: true,
       boardComputers: 'composer', posture: 'asked', fen: p.fenAfter,
       moverColor: p.mover === 'w' ? 'b' : 'w', studentColor: student, analysis: analysisOf(p.after),
       ...(lm ? { lastMove: lm } : {}), ...(om ? { opponentLastMove: om } : {}), history: sans,

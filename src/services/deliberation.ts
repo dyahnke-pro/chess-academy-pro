@@ -651,7 +651,7 @@ export function bestMoveReason(fenBefore: string, san: string, mover: 'w' | 'b',
   // A quiet move still has its job on the board (walk 2026-10-10: "best move?"
   // gave Kd3 "brings the king to d3, where it covers e4 and c4" and "why does
   // Kd3 work?" gave no reason at all — two answers, two computers).
-  return moveWhy(fenBefore, san, mover, ctx.prevCapture)
+  return moveJobWhy(fenBefore, san, mover, ctx.prevCapture)
     ?? quietPurposePhrase(fenBefore, san, mover === 'w' ? 'white' : 'black', 'mover');
 }
 
@@ -732,6 +732,16 @@ function pinKickWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string | 
 }
 
 export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', prevCapture: PrevCaptureContext | null): string | null {
+  return moveJobWhy(fenBefore, san, mover, prevCapture) ?? checkWhy(fenBefore, san);
+}
+
+/** What the move does on the board beyond the bare fact of a check — the
+ *  reasons `moveWhy` reads before it falls back to "checks the king on g1".
+ *  The why-best computer reads only these: a check alone says WHAT, never why
+ *  the move is best (prod Review 2026-11-09, 22…Nh5: "Better was knight to
+ *  e2, check: it would check your king"; `isBareJob` holds the same rule for
+ *  the book move's job). */
+function moveJobWhy(fenBefore: string, san: string, mover: 'w' | 'b', prevCapture: PrevCaptureContext | null): string | null {
   const first = mateThreatWhy(fenBefore, san, mover)
     ?? materialWhy(fenBefore, san, mover, prevCapture)
     ?? threatAnswerWhy(fenBefore, san, mover)
@@ -753,7 +763,7 @@ export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', prevCa
   const extras = extraJobs(fenBefore, san);
   if (strategic && extras.length > 0) return `${strategic}, and it also ${andList(extras)}`;
   if (extras.length > 0) return andList(extras);
-  return strategic ?? checkWhy(fenBefore, san);
+  return strategic;
 }
 
 /** "trades the bishop for the knight, with check" — what the capture a move

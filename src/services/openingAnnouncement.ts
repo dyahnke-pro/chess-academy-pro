@@ -51,6 +51,12 @@ const NAMING_NOUN = /\b(?:variation|attack|defen[cs]e|gambit|countergambit|count
  *  Defense" (prod focus audit 2026-11-07). */
 function tailOfFamily(parts: readonly string[], family: string): string {
   if (NAMING_NOUN.test(parts[0])) return `the ${parts.join(', ')} of the ${family}`;
+  // A label that already carries its opening's own word is a NAME of its own
+  // ("Old Sicilian", "King's English", "French Benoni"): put in front of the
+  // family it read "the Old Sicilian Sicilian Defense" (prod focus audit
+  // 2026-11-09). Eleven DB labels share a word with their family.
+  const familyWords = new Set(family.toLowerCase().split(/\s+/));
+  if (parts[0].toLowerCase().split(/\s+/).some((w) => familyWords.has(w))) return `the ${parts.join(', ')}`;
   const rest = parts.slice(1);
   return `the ${parts[0]} ${family}${rest.length ? `, ${rest.join(', ')}` : ''}`;
 }

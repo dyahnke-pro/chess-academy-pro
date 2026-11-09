@@ -53,7 +53,7 @@ describe('the reply he named, and the answer he gave', () => {
     expect(said(row('38QzSkFRn4E', 26)).one).toBe('If they play Bf4, …Bxf4 trades bishops.');
   });
   it('a reply that loses: the answer wins it, with the line to the blow', () => {
-    expect(said(row('fGBhk9oqdbg', 22)).one).toBe('If they play …Be6, f5 wins a bishop — a trapped piece: f5, …O-O, fxe6.');
+    expect(said(row('fGBhk9oqdbg', 22)).one).toBe('If they play …Be6, f5 wins a bishop — a trapped piece: you play f5, they castle kingside and you play fxe6.');
   });
 });
 
@@ -80,7 +80,19 @@ describe('the tree', () => {
     const f = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'g7h6', tense: 'past', liveBoard: null });
     // The recapture on h6 they did play is the line; the trade it would have
     // been is not said. Both captures on d4 lose a bishop for a pawn.
-    expect(f[0]?.text, 'a sentence a branch, never a spoken semicolon').toBe('If they had taken on d4 with the bishop, Qxd4 would have won a bishop for a pawn — a discovered attack: Qxd4, …Qxd4+, Rxd4. If they had taken on d4 with the queen, Qxd4 would have won a bishop for a pawn: Qxd4, …Bxd4+, Rxd4.');
+    expect(f[0]?.text, 'a sentence a branch, never a spoken semicolon').toBe('If they had taken on d4 with the bishop, Qxd4 would have won a bishop for a pawn — a discovered attack: you play Qxd4, they answer Qxd4+ and you play Rxd4. If they had taken on d4 with the queen, Qxd4 would have won a bishop for a pawn: you play Qxd4, they answer Bxd4+ and you play Rxd4.');
+  });
+
+  it('a branch whose answer wins rules out that reply: the same claim as the weighed moves\' "tempting, but it fails" (prod Review 2026-11-09)', async () => {
+    const { temptingKey } = await import('./conceptKey');
+    const r = row('6JsSbmpj7UQ', 42);
+    const student = moverOf(r.fen);
+    const f = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'g7h6', tense: 'past', liveBoard: null });
+    // Both captures on d4 lose a bishop for a pawn: each is ruled out.
+    const t = ifTheyPlay({ fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'g7h6' })!;
+    const d4 = t.branches.filter((b) => b.reply.to === 'd4' && b.kind === 'wins').map((b) => temptingKey(b.reply.uci));
+    expect(d4.length).toBe(2);
+    for (const k of d4) expect(f[0]?.claims).toContain(k);
   });
 
   it('no read, no tree — never a guess', () => {
@@ -154,7 +166,7 @@ describe('the bait (WO-COACH-NEXT-TO-YOU-01 C4: induce mistakes)', () => {
     const { t, student } = treeOf(row('fGBhk9oqdbg', 22));
     const b = baitBranch(t, student);
     expect(b?.reply.san).toBe('Be6');
-    expect(baitSentence(t, b!, student, 'live', true)).toBe('This sets a trap: many players at this level answer …Be6, and f5 wins a bishop — a trapped piece: f5, …O-O, fxe6.');
+    expect(baitSentence(t, b!, student, 'live', true)).toBe('This sets a trap: many players at this level answer …Be6, and f5 wins a bishop — a trapped piece: you play f5, they castle kingside and you play fxe6.');
     // Once the game went on, with the answer still the student's to play: what
     // the reply would have lost, never the move that wins it.
     expect(baitSentence(t, b!, student, 'past', false)).toBe('That set a trap: many players at this level answer …Be6 there, and it would have lost a bishop.');

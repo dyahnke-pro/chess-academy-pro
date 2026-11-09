@@ -109,7 +109,7 @@ function board(): string {
 
 async function say(signals: readonly WeaknessSignal[]): Promise<string[]> {
   const fen = board();
-  const pf = await computePositionFacts({ theory: true,
+  const pf = await computePositionFacts({ theory: true, namesPlayedMove: true,
     boardComputers: 'surface', posture: 'walk',
     fen,
     moverColor: 'w',

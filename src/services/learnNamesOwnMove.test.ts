@@ -55,3 +55,49 @@ describe('Learn says "your move", never the move you just played', () => {
     expect(theirs?.text).toBe(named?.text);
   });
 });
+
+// The other five producers that worded the move just played by its name (prod
+// focus audit 2026-11-09, rung 2 game 2, the student Black): "Knight takes g3
+// trades pieces while you're ahead", "Queen to e1 with check brings your queen
+// into the attack", "Your queen to e1 was a step of the plan", "c5 kicks their
+// queen off b4", "Your rook to c7 takes the half-open c-file". One required
+// flag each; Learn passes false. Twin: Review (true) still names it.
+describe('every producer of a played move\'s reason says "your move" in Learn', () => {
+  it('the trade computer', async () => {
+    const { readTrade } = await import('./tradeQuality');
+    const fen = '2r1kb1r/pp1b1ppp/5q2/3PNn2/1PB5/1P6/3BNPPP/R2QK2R w KQk - 7 19';
+    expect(readTrade(fen, 'Nxd7', 'w', null, null, false)?.text).toMatch(/^Your move trades pieces while you're ahead/);
+    expect(readTrade(fen, 'Nxd7', 'w', null, null, true)?.text).toMatch(/^Nxd7 trades pieces while you're ahead/);
+  });
+  it('the king-attack computer', async () => {
+    const { kingAttack } = await import('./kingAttack');
+    const fixture = (await import('./__fixtures__/kingAttack-his.json')).default as Array<{ key: string; fen: string; san: string }>;
+    const p = fixture.find((x) => x.key === 'TNaKFN65B5o:26')!;
+    expect(kingAttack(p.fen, p.san, false, false)?.text).toMatch(/^Your move brings your queen into the attack on their king/);
+    expect(kingAttack(p.fen, p.san, false, true)?.text).toMatch(/^…Qh4 brings your queen/);
+  });
+  it('the plan-step credit', async () => {
+    const { Chess } = await import('chess.js');
+    const { deriveNextPlanFacts } = await import('./nextPlans');
+    const { planStepLine } = await import('./planStep');
+    const ISO = 'r2q1rk1/pp2bppp/2n2n2/3p4/8/2N2N2/PP2BPPP/R2Q1RK1 w - - 0 12';
+    const weak = deriveNextPlanFacts(ISO, 'w', { namesStudentMoves: true }).find((x) => x.kind === 'weak-pawn')!;
+    const c = new Chess(ISO); c.move('Nd4');
+    expect(planStepLine(weak, ISO, 'Nd4', 'w', 'you', c.fen(), false)?.text).toBe('Your move was a step of the plan: it sits in front of their weak pawn on d5, so the pawn can never advance.');
+    expect(planStepLine(weak, ISO, 'Nd4', 'w', 'you', c.fen(), true)?.text).toMatch(/^Your knight to d4 was a step/);
+  });
+  it('the principle line (the move\'s lead fundamental)', async () => {
+    const { principleOnceLine } = await import('./moveFundamentals');
+    const f = { id: 'development-complete', imperative: 'get the last minor piece out, then bring the rooks', led: 'completes your development — every minor piece is out, so the rooks come next', reason: null } as never;
+    expect(principleOnceLine('Bc5', f, 0, false)).toMatch(/^Your move completes your development/);
+    expect(principleOnceLine('Bc5', f, 0, true)).toMatch(/^Your Bc5 completes your development/);
+  });
+  it('the board teacher\'s own-move point (Learn only)', async () => {
+    const { boardTeacherPoint } = await import('./learnBoardTeaching');
+    // a3 kicks the bishop off b4 (the old wording: "a3 kicks their bishop off b4").
+    const fen = 'r1bqk2r/pppp1ppp/2n2n2/8/1bB1P3/2N5/PP3PPP/R1BQK1NR w KQkq - 0 1';
+    const { Chess } = await import('chess.js');
+    const c = new Chess(fen); c.move('a3');
+    expect(boardTeacherPoint(fen, 'a3', c.fen(), new Map())?.text).toBe('Your move kicks their bishop off b4, gaining time.');
+  }, 30_000);
+});

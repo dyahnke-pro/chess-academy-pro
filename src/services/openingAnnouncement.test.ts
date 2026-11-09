@@ -49,6 +49,14 @@ describe('openingAnnouncement — name it once, then once more where theory ends
     expect(openingAnnouncement({ name: 'Sicilian Defense: Open' }, null, 'Sicilian Defense', 'w', null))
       .toBe("It's the Open Sicilian Defense.");
   });
+  it('a label that already names its opening is said alone (prod focus audit 2026-11-09: "the Old Sicilian Sicilian Defense")', () => {
+    expect(openingAnnouncement({ name: 'Sicilian Defense: Old Sicilian' }, null, 'Sicilian Defense', 'w', null))
+      .toBe("It's the Old Sicilian.");
+    expect(openingAnnouncement({ name: 'Benoni Defense: Old Benoni' }, null, 'Benoni Defense', 'b', null))
+      .toBe("It's the Old Benoni.");
+    expect(openingAnnouncement({ name: "English Opening: King's English" }, null, 'English Opening', 'w', null))
+      .toBe("It's the King's English.");
+  });
   it('a filler part leading the tail does not hide the real variation after it', () => {
     expect(openingAnnouncement({ name: "King's Indian Defense: Normal Variation, Deferred Fianchetto" }, null, "King's Indian Defense", 'b', null))
       .toBe("It's the Deferred Fianchetto of the King's Indian Defense.");

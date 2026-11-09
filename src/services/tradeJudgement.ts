@@ -30,7 +30,12 @@ const NAME: Readonly<Record<string, string>> = PIECE_NAMES;
 
 /** `values` = the engine's per-piece table (`evalBoard`) for `fenBefore`, when
  *  the caller has it — the good-piece / bad-piece read (David 2026-09-30). */
-export function tradeJudgement(fenBefore: string, san: string, reply: string | null, student: 'w' | 'b', cpLoss: number, values?: readonly PieceValue[], prior: LastMove | null = null): TradeJudgement | null {
+export function tradeJudgement(
+  fenBefore: string, san: string, reply: string | null, student: 'w' | 'b', cpLoss: number,
+  values: readonly PieceValue[] | undefined, prior: LastMove | null,
+  /** REQUIRED — may the student's move just played be named (`readTrade`)? */
+  namesPlayedMove: boolean,
+): TradeJudgement | null {
   if (!reply) return null;
   let c: Chess;
   try { c = new Chess(fenBefore); } catch { return null; }
@@ -60,7 +65,7 @@ export function tradeJudgement(fenBefore: string, san: string, reply: string | n
     }
   }
   // EVERY OTHER VERDICT IS THE ONE TRADE COMPUTER'S.
-  const r = readTrade(fenBefore, san, student, cpLoss, prior);
+  const r = readTrade(fenBefore, san, student, cpLoss, prior, namesPlayedMove);
   if (!r || !r.moverIsStudent) return null;
   return { reason: r.call, text: r.text, squares: r.squares };
 }

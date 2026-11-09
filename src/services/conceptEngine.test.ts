@@ -53,18 +53,18 @@ describe('conceptEngine — renderer (computed invariant, not authored blob)', (
   });
 
   it('renderMatchupConcept teaches the governing principle of the ending', () => {
-    const rook = renderMatchupConcept(classifyMatchup('1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1'));
+    const rook = renderMatchupConcept(classifyMatchup('1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1'), false);
     expect(rook).not.toBeNull();
     expect(rook!.name).toBe('Rook ending');
     expect(rook!.full.toLowerCase()).toContain('activity');
     expect(rook!.short).toBe('Rook ending — activity first.');
 
-    const ocb = renderMatchupConcept(classifyMatchup('8/8/8/3k4/8/2B5/6b1/4K3 w - - 0 1'));
+    const ocb = renderMatchupConcept(classifyMatchup('8/8/8/3k4/8/2B5/6b1/4K3 w - - 0 1'), false);
     expect(ocb!.full.toLowerCase()).toContain('draw');
   });
 
   it('renderMatchupConcept is null for non-endgame / complex positions', () => {
-    expect(renderMatchupConcept(classifyMatchup('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'))).toBeNull();
+    expect(renderMatchupConcept(classifyMatchup('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'), false)).toBeNull();
   });
 
   it('a rule with no board instance is marked bare, so a live surface can refuse it (16.Rxf3)', () => {
@@ -89,7 +89,7 @@ describe('conceptEngine — renderer (computed invariant, not authored blob)', (
       '6k1/5p2/8/8/8/8/5PQ1/6K1 w - - 0 1', // queen
     ];
     for (const f of fens) {
-      const c = renderMatchupConcept(classifyMatchup(f));
+      const c = renderMatchupConcept(classifyMatchup(f), false);
       if (c) samples.push(c.full, c.short);
     }
     for (const s of samples) {
@@ -255,19 +255,34 @@ describe('conceptEngine — a delivered mate is NAMED by its pattern (P2b)', () 
 describe('endgame rules from the material', () => {
   it('names the basic mate and its method', async () => {
     const { endgameConceptFor } = await import('./conceptEngine');
-    const q = endgameConceptFor('8/8/8/4k3/8/8/8/3QK3 w - - 0 1');
+    const q = endgameConceptFor('8/8/8/4k3/8/8/8/3QK3 w - - 0 1', 'w');
     expect(q?.id).toBe('basic-mate');
     expect(q?.full).toMatch(/at most 10 moves/);
-    const bn = endgameConceptFor('8/8/8/4k3/8/8/8/1N2KB2 w - - 0 1');
+    const bn = endgameConceptFor('8/8/8/4k3/8/8/8/1N2KB2 w - - 0 1', 'w');
     expect(bn?.id).toBe('bishop-knight-mate');
     expect(bn?.full).toMatch(/h1 or a8/);
-    expect(endgameConceptFor('8/8/8/4k3/8/8/8/1N2K1N1 w - - 0 1')?.id).toBe('two-knights-no-mate');
-    expect(endgameConceptFor('8/8/8/4k3/8/8/8/4K1N1 w - - 0 1')?.id).toBe('insufficient-material');
+    expect(endgameConceptFor('8/8/8/4k3/8/8/8/1N2K1N1 w - - 0 1', 'w')?.id).toBe('two-knights-no-mate');
+    expect(endgameConceptFor('8/8/8/4k3/8/8/8/4K1N1 w - - 0 1', 'w')?.id).toBe('insufficient-material');
   });
   it('says the pawns defend each other only when the board proves it', async () => {
     const { endgameConceptFor } = await import('./conceptEngine');
-    expect(endgameConceptFor('8/8/4Pk2/5P2/8/8/8/K7 b - - 0 1')?.id).toBe('pawns-defend-each-other');
-    expect(endgameConceptFor('8/8/5k2/4PP2/8/8/8/K7 b - - 0 1')?.id).not.toBe('pawns-defend-each-other');
+    expect(endgameConceptFor('8/8/4Pk2/5P2/8/8/8/K7 b - - 0 1', 'w')?.id).toBe('pawns-defend-each-other');
+    expect(endgameConceptFor('8/8/5k2/4PP2/8/8/8/K7 b - - 0 1', 'w')?.id).not.toBe('pawns-defend-each-other');
+  });
+  it('the side with the bare king hears how to hold, never the mating method (prod focus audit 2026-11-09)', async () => {
+    const { endgameConceptFor, conceptForBoard } = await import('./conceptEngine');
+    // White has the queen: Black, the bare king, is the student.
+    const held = endgameConceptFor('8/8/8/4k3/8/8/8/3QK3 b - - 0 1', 'b');
+    expect(held?.full).toMatch(/^Their queen against your bare king is a forced mate/);
+    expect(held?.full).not.toMatch(/drive|box the king in/i);
+    // The bishop-and-knight mate: the other two corners are where to run.
+    const bn = endgameConceptFor('8/8/8/4k3/8/8/8/1N2KB2 b - - 0 1', 'b');
+    expect(bn?.full).toMatch(/only in a corner of their bishop's colour \(h1 or a8\), so run for the other two/);
+    // The read-this-position path (conceptForBoard) carries the seat through.
+    const read = conceptForBoard('8/8/8/4k3/8/8/8/3QK3 w - - 0 1', { studentSide: 'black', max: 3 });
+    expect(read.map((c) => c.full).join(' ')).not.toMatch(/drive the lone king|box it in/);
+    // The side with the queen still hears the method.
+    expect(endgameConceptFor('8/8/8/4k3/8/8/8/3QK3 w - - 0 1', 'w')?.full).toMatch(/box the king in with the queen/);
   });
 });
 
@@ -315,13 +330,13 @@ describe('the endgame computers that had no reader (WO-STORY-MATRIX-01, 2026-10-
     expect(lead.full).toContain('d4, d3, e4');
   });
   it('a queen against a centre pawn on the seventh is named, and the rule says it wins', () => {
-    const c = endgameConceptFor('8/8/8/8/8/2Q5/3pk3/7K w - - 0 1');
+    const c = endgameConceptFor('8/8/8/8/8/2Q5/3pk3/7K w - - 0 1', 'w');
     expect(c?.id).toBe('queen-vs-seventh');
     expect(c?.full).toContain('wins');
     expect(c?.squares).toEqual(['d2']);
   });
   it('a queen against a bishop pawn on the seventh: usually a draw', () => {
-    const c = endgameConceptFor('8/8/8/8/8/4Q3/2pk4/K7 w - - 0 1');
+    const c = endgameConceptFor('8/8/8/8/8/4Q3/2pk4/K7 w - - 0 1', 'w');
     expect(c?.id).toBe('queen-vs-seventh');
     expect(c?.full).toContain('usually a draw');
   });
