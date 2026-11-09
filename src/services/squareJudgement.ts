@@ -302,7 +302,10 @@ export function fileEntryCovered(fen: string, student: Color): StructureRead | n
 export function dontPlugFile(fenBefore: string, san: string, student: Color, cpLoss: number, bestSan: string | null): StructureRead | null {
   if (cpLoss < 40 || !bestSan) return null;
   const r = play(fenBefore, san);
-  if (!r || r.mv.color !== student || r.mv.piece === 'p' || r.mv.piece === 'r' || r.mv.piece === 'k') return null;
+  // A queen in front of its own rook doubles with it on the file (a battery),
+  // it plugs nothing (prod Learn audit 2026-11-09: "Queen takes d3 plugs your
+  // own rook's d-file", said after "Your queen seizes the open d-file").
+  if (!r || r.mv.color !== student || r.mv.piece === 'p' || r.mv.piece === 'r' || r.mv.piece === 'k' || r.mv.piece === 'q') return null;
   if (bare(bestSan) === bare(san)) return null;
   const x = r.mv.to;
   const f = x[0];
@@ -325,7 +328,7 @@ export function dontPlugFile(fenBefore: string, san: string, student: Color, cpL
   if (!proof) return null;
   return {
     act: 'dont-plug-file', squares: [x, rook], proof, key: `plug:${f}`, stakes: costStakes(cpLoss) ?? undefined,
-    text: `${bare(san)} plugs your own rook's ${f}-file; ${bare(bestSan)} keeps it open.`,
+    text: `${bare(san)} plugs your own rook's ${f}-file. ${bare(bestSan)} keeps it open.`,
     ...heldOf(`${bare(san)} plugs your own rook's ${f}-file.`, [x, rook]),
   };
 }

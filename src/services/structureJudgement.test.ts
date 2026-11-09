@@ -179,10 +179,17 @@ describe('squareJudgement', () => {
   it('don\'t plug your own open file: Bf4 blocks the f-rook; e5 keeps it open', () => {
     const fen = legal('6k1/pp3ppp/8/8/3PP3/8/PP4PP/2B2RK1 w - - 0 20');
     const r = voiced(dontPlugFile(fen, 'Bf4', 'w', 60, 'e5'));
-    expect(r.text).toBe('Bf4 plugs your own rook\'s f-file; e5 keeps it open.');
+    expect(r.text).toBe('Bf4 plugs your own rook\'s f-file. e5 keeps it open.');
     expect(r.stakes?.points).toBeCloseTo(0.6);
     // A move that cost nothing is not this lesson.
     expect(dontPlugFile(fen, 'Bf4', 'w', 10, 'e5')).toBeNull();
+  });
+
+  it('a queen in front of its rook doubles on the file — it plugs nothing (prod Learn audit 2026-11-09)', () => {
+    // The audit's second game, Black to play 17…Qxd3 with the rook on d8 behind.
+    const c = new Chess();
+    for (const m of 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4 h3 Nc6 hxg4 O-O-O Be3 e6 Nd2 Nxd4 Bd3 Bc5 Bxd4 Bxd4 O-O Bxc3 bxc3 Qxc3 Nc4 Nd5 Re1 Nf4 Ne3 Nxd3 cxd3'.split(' ')) c.move(m);
+    expect(dontPlugFile(c.fen(), 'Qxd3', 'b', 80, 'Kb8')).toBeNull();
   });
 
   it('squares your unmoved pawns leave open: their knight reaches d4', () => {

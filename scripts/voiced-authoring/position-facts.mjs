@@ -296,6 +296,8 @@ function classifyReason({ label, isBest, cpLoss, gap12, threatNetBefore, hangAft
   if (label === 'inaccuracy') return threatNetBefore >= 3 ? 'imprecise-defence' : 'second-best';
   // good / best
   if (isBest && gap12 >= 150) return 'only-move';
+  // A capture that wins at least what the threat cost is a win (mirrors moveReason).
+  if (capture && seeNow >= 2 && seeNow >= threatNetBefore) return 'wins-material';
   if (threatNetBefore >= 3) return 'defends-threat';
   if (capture && seeNow >= 2) return 'wins-material';
   if (isBest && gap12 >= 80) return 'clear-best';            // a real decision, found (mirrors moveReason CLEAR_BEST_GAP_CP)

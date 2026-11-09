@@ -86,6 +86,10 @@ export function classifyMoveReason(i: MoveReasonInputs): MoveReason {
   if (i.label === 'inaccuracy') return i.threatNetBefore >= 3 ? 'imprecise-defence' : 'second-best';
   // good / best / book
   if (i.isBest && i.onlyMove) return 'only-move';
+  // A CAPTURE THAT WINS AT LEAST WHAT THE THREAT COST IS A WIN, not a
+  // defence (prod Learn audit 2026-11-09: …Rxd1+ took their queen for a rook
+  // and was praised "Good defence … keeps your knight on g4 safe").
+  if (i.capture && i.seeNow >= 2 && i.seeNow >= i.threatNetBefore) return 'wins-material';
   if (i.threatNetBefore >= 3) return 'defends-threat';
   if (i.capture && i.seeNow >= 2) return 'wins-material';
   // A REAL DECISION, FOUND (WO-2 good-move verdicts, 2026-09-29): the best move

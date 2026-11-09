@@ -44,6 +44,12 @@ describe('classifyMoveReason — faithful to the validated offline classifier', 
     // A best move that meets a threat still says so.
     expect(classifyMoveReason({ ...base, label: 'best', isBest: true, gap12: 100, threatNetBefore: 3 })).toBe('defends-threat');
   });
+  it('a capture that wins at least the threat\'s worth is a win, not a defence (prod Learn 2026-11-09, …Rxd1+)', () => {
+    // The knight on g4 was hit (3); …Rxd1+ took the queen for a rook (+4).
+    expect(classifyMoveReason({ ...base, label: 'best', isBest: true, threatNetBefore: 3, capture: true, seeNow: 4 })).toBe('wins-material');
+    // A capture that wins less than the threat costs still defends first.
+    expect(classifyMoveReason({ ...base, label: 'best', isBest: true, threatNetBefore: 3, capture: true, seeNow: 2 })).toBe('defends-threat');
+  });
   it('a good capture winning material → wins-material', () => {
     expect(classifyMoveReason({ ...base, label: 'good', capture: true, seeNow: 3 })).toBe('wins-material');
   });

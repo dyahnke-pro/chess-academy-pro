@@ -180,6 +180,17 @@ function spokenProse(listener) {
     .map((e) => String(e.narrationText));
 }
 
+/** Each voiced line with the board it was said on (`boardTimeline`). */
+function spokenOnBoards(listener) {
+  return listener.getCapturedEvents()
+    .filter((e) => e.kind === 'coach-narration-spoken' && e.narrationText && String(e.source ?? '').startsWith('voiceService.') && !String(e.source).startsWith('voiceService.speakPackage'))
+    .map((e) => {
+      const at = e.receivedAt ?? 0;
+      const b = [...boardTimeline].reverse().find((x) => x.t <= at) ?? null;
+      return { text: String(e.narrationText), game: b?.label ?? null, ply: b?.ply ?? 0, last: b?.last ?? null, fen: b?.fen ?? null };
+    });
+}
+
 function spokenLines(listener) {
   return listener.getCapturedEvents()
     .filter((e) => /coach-narration-spoken|voice-speak-invoked/i.test(e.kind ?? ''))
@@ -361,6 +372,12 @@ async function pieceProbe(page, listener) {
 
 }
 
+/** EVERY SPOKEN LINE ON ITS BOARD (David 2026-11-09: "review and evaluate
+ *  each narration line for accuracy"). Each move the mirror applies is stamped
+ *  with the wall time; a spoken line is read against the last board before it. */
+const boardTimeline = [];
+const stampBoard = (label, chess) => boardTimeline.push({ t: Date.now(), label, ply: chess.history().length, fen: chess.fen(), last: chess.history().at(-1) ?? null });
+
 async function askAndPlay(page, listener, ask, label) {
   await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
   await dismissGates(page);
@@ -471,6 +488,7 @@ async function askAndPlay(page, listener, ask, label) {
     await page.waitForTimeout(250);
     await page.locator(`[data-square="${legal.to}"]`).first().click({ timeout: 8000, force: true }).catch(() => {});
     chess.move(legal.san);
+    stampBoard(label, chess);
     moves.push(legal.san);
     const studentPly = chess.history().length;
     if (chess.isGameOver()) break;
@@ -488,6 +506,7 @@ async function askAndPlay(page, listener, ask, label) {
       reply = await absorbOneMove(page, chess);
     }
     if (!reply) { console.log(`[stall] ${label}: no coach reply after ${moves.at(-1)} — stopping at ply ${chess.history().length}`); break; }
+    stampBoard(label, chess);
     moves.push(reply);
     // A STUDENT THINKS BEFORE THEY MOVE (V6, 2026-10-20). The audit used to move
     // ~250ms after the reply, so the turn's LATE wave — where most own-move
@@ -1049,7 +1068,7 @@ async function main() {
   // count (2026-09-16) — so diagnosing a red row meant re-running a 6-minute
   // prod audit to see the lines it already had in memory. David's standing
   // order is to READ the narration; the report has to carry it.
-  const report = { generatedAt: new Date().toISOString(), baseUrl: BASE_URL, ask: ASK, surface: 'live game on /coach/teach', results, spokenLines: spokenLines(listener), spokenProse: spokenProse(listener), listenerEvents: listener.getCapturedEvents().length, listenerByKind: listener.countByKind(), streamEventsThisRun: after.events.length, coachDecisions: decisionRows(listener), learnTurns: learnTurnRows(listener), pageErrors };
+  const report = { generatedAt: new Date().toISOString(), baseUrl: BASE_URL, ask: ASK, surface: 'live game on /coach/teach', results, spokenLines: spokenLines(listener), spokenProse: spokenProse(listener), spokenOnBoards: spokenOnBoards(listener), listenerEvents: listener.getCapturedEvents().length, listenerByKind: listener.countByKind(), streamEventsThisRun: after.events.length, coachDecisions: decisionRows(listener), learnTurns: learnTurnRows(listener), pageErrors };
   await writeFile(`${OUT_DIR}/report.json`, JSON.stringify(report, null, 2));
   const failed = results.filter((r) => !r.pass);
   console.log(`\n${results.length - failed.length}/${results.length} green — report at ${OUT_DIR}/report.json`);
