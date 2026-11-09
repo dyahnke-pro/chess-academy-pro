@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**17502 lines · 3 exports · 4 importers · 84 tests · 12 audits**
+**17484 lines · 3 exports · 4 importers · 84 tests · 12 audits**
 
 ## Locked rules that govern this surface
 
 - **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1726) — names `CoachTeachPage`
 - **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1871) — names `CoachTeachPage`
 - **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3765) — names `CoachTeachPage`
-- **The standard post-deploy ritual** (CLAUDE.md:6871) — names `CoachTeachPage`
+- **The standard post-deploy ritual** (CLAUDE.md:6879) — names `CoachTeachPage`
 
 ## Who calls in
 

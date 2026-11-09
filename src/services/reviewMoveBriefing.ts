@@ -24,6 +24,7 @@
  * (the student's own finished game) with the locked perspective: the student is
  * "you", the opponent "they".
  */
+import { introWithGerund, introWithPredicate } from '../utils/moveIntro';
 import { evalBand, evalBandWords } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { settledLeadFor, type LastMove } from './material';
@@ -584,8 +585,13 @@ export function joinReview(clauses: string[], moverIsStudent: boolean | undefine
   // A clause that carries its own dash takes a colon, so one sentence never
   // holds two dashes ("Be6 — it unpins … — and the bishop eyes …").
   const joiner = /^\w+ing\b/.test(said) ? ', ' : said.includes(' — ') ? ': ' : ' — ';
-  const lead = moverIsStudent === undefined ? subject : `${subject}${cleanSan(san)}${joiner}`;
-  return `${lead}${said}.`;
+  if (moverIsStudent === undefined) return `${subject}${said}.`;
+  // SAID LIKE A PERSON, ROTATED (David 2026-11-09: "mix up the phrasing
+  // whenever possible"): the move is still named, the words around it vary.
+  const seat = moverIsStudent ? 'student' : 'opponent';
+  if (/^\w+ing\b/.test(said)) return `${introWithGerund(seat, cleanSan(san), said)}.`;
+  if (said.startsWith('it ')) return `${introWithPredicate(seat, cleanSan(san), said.slice(3))}.`;
+  return `${subject}${cleanSan(san)}${joiner}${said}.`;
 }
 
 

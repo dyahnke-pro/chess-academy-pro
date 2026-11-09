@@ -1,6 +1,7 @@
 // A move's job read off the masters' plan: 2.a3 in the Sicilian covers b4,
 // the break masters push (David 2026-10-27 — the a3 said nothing).
 import { describe, it, expect } from 'vitest';
+import { introWithPredicate } from '../utils/moveIntro';
 import { Chess } from 'chess.js';
 import { preparesBreakBeat, type MastersPlanRead } from './mastersPlanRead';
 
@@ -21,9 +22,9 @@ describe('preparesBreakBeat', () => {
   it('names the break the move covers, from each seat', () => {
     const before = fenAfter(['e4', 'c5']);
     expect(preparesBreakBeat(before, 'a3', PLAN, false))
-      .toBe('They play a3 — it prepares b4: their pawn on a3 covers b4, and masters push b4 in 56% of their games from here.');
+      .toBe(`${introWithPredicate('opponent', 'a3', 'prepares b4: their pawn on a3 covers b4, and masters push b4 in 56% of their games from here')}.`);
     expect(preparesBreakBeat(before, 'a3', PLAN, true))
-      .toBe('You play a3 — it prepares b4: your pawn on a3 covers b4, and masters push b4 in 56% of their games from here.');
+      .toBe(`${introWithPredicate('student', 'a3', 'prepares b4: your pawn on a3 covers b4, and masters push b4 in 56% of their games from here')}.`);
   });
 
   it('says nothing for a move that does not cover the break square', () => {

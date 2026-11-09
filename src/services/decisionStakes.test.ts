@@ -2,6 +2,7 @@
 // P1-10, stakes.md §5–7). Each test fails on the Build 4 patch or on the code
 // before P1-10b: raw face values on some facts made stakes a switch.
 import { describe, it, expect } from 'vitest';
+import { introHead } from '../test/introPattern';
 import { Chess } from 'chess.js';
 import { lessonThought, moveThoughtFacts, decisionGap } from './moveThoughtFacts';
 import { newLessonVoice } from './reviewMoveBriefing';
@@ -45,7 +46,7 @@ describe('rule 1 — one decision, one gap', () => {
       // The queen's nine points are not the reason for Nc3.
       expect(stakeWc(f.stakes)).toBeLessThanOrEqual(g + 1e-9);
     }
-    expect(lessonThought(input, newLessonVoice(), null)).toMatch(/^You play Nc3 — it develops into the game with tempo/);
+    expect(lessonThought(input, newLessonVoice(), null)).toMatch(new RegExp(`^${introHead('student', 'Nc3')}develops into the game with tempo`));
   });
   it('with no fan to measure the gap, the whole group is unmeasured — never a partial gap', () => {
     const facts = moveThoughtFacts({ ...scandinavianNc3(null), phrases: null }).filter((f) => f.group === 'move');

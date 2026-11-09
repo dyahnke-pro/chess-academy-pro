@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6896) — names `reviewMoveTeaching`
+- **The standard post-deploy ritual** (CLAUDE.md:6904) — names `reviewMoveTeaching`
 
 ## Who calls in
 
@@ -74,7 +74,7 @@
 - `src/services/lessonVoiceIdeas.test.ts:65`
 - `src/services/lessonVoiceIdeas.test.ts:72`
 - `src/services/projectedLineVoice.ts:144`
-- `src/services/reviewMoveBriefing.ts:472`
+- `src/services/reviewMoveBriefing.ts:473`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`
@@ -108,7 +108,7 @@
 
 ### `buildReviewMoveTeachingFact` (function) — 15 call sites
 - `src/services/learnBoardTeaching.ts:1230`
-- `src/services/moveThoughtFacts.ts:229`
+- `src/services/moveThoughtFacts.ts:227`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
 - `src/services/reviewMoveTeaching.test.ts:216`

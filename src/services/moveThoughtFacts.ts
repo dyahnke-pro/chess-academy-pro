@@ -8,6 +8,7 @@
 // (1…h3: "it makes luft" where his note and two other computers said "it keeps
 // their bishop off g4") and stacking two that said one thing.
 import { plyOfFen } from '../utils/plyOfFen';
+import { introWithGerund, introWithPredicate } from '../utils/moveIntro';
 import { Chess } from 'chess.js';
 import { NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
 import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
@@ -139,15 +140,12 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   const mine = i.moverIsStudent !== false;
   const seat: 'student' | 'opponent' = mine ? 'student' : 'opponent';
   const san = i.san.replace(/[!?]+$/, '');
-  /** "You play Nf3 — it …", "They play …", or seat-free "Nf3: it …". */
-  // A clause that carries its own dash takes a colon after the move, so one
-  // sentence never holds two dashes ("You play Bxc3+: it wins a knight — if
-  // Bxc3, …Qxc3+"), the briefing's own joining rule (`joinReview`); one that
-  // carries both a dash and a colon starts its own sentence ("You play Kxf7.
-  // It takes back on f7: you get a knight… — that is what they gave…").
-  const joiner = (clause: string): string => (!clause.includes(' — ') ? ' — it' : clause.includes(': ') ? '. It' : ': it');
-  const lead = (clause: string): string => (i.moverIsStudent === undefined ? `${san}: it ${clause}` : `${mine ? 'You play' : 'They play'} ${san}${joiner(clause)} ${clause}`);
-  const gerund = (clause: string): string => (i.moverIsStudent === undefined ? `${san}: ${clause}` : `${mine ? 'You play' : 'They play'} ${san}, ${clause}`);
+  /** The move with what it does, seat-stamped and rotated (`moveIntro`), or
+   *  seat-free "Nf3: it …". */
+  // The words around the move rotate, said like a person (`moveIntro`, David
+  // 2026-11-09: "mix up the phrasing whenever possible").
+  const lead = (clause: string): string => (i.moverIsStudent === undefined ? `${san}: it ${clause}` : introWithPredicate(seat, san, clause));
+  const gerund = (clause: string): string => (i.moverIsStudent === undefined ? `${san}: ${clause}` : introWithGerund(seat, san, clause));
   /** The squares an idea is about beyond the move itself. */
   const beyond = (sqs: readonly string[]): string[] => [...new Set(sqs)].filter((s) => s !== from && s !== to);
   const facts: ThoughtFact[] = [];

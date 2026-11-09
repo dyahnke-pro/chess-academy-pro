@@ -21,6 +21,7 @@
  * and the `create` spy sees the HOUSE VOICE prompt.
  */
 import { describe, it, expect, vi } from 'vitest';
+import { introGerundHead, introHead } from '../test/introPattern';
 
 type Params = { messages: Array<{ role: string; content: string }> };
 const created: Params[] = [];
@@ -84,10 +85,13 @@ describe('the taught line with the provider dead', () => {
     // to the start: where a corpus note or the authored variation prose
     // teaches this ply, that note LEADS and the computed beat fills behind
     // it (PASS 1's two-beat contract).
-    const own = (n: WalkthroughTreeNode): RegExp => new RegExp(`${n.movedBy === tree.studentSide ? 'You' : 'They'} play ${n.san}(,| —|:)`);
+    const own = (n: WalkthroughTreeNode): RegExp => {
+      const seat = n.movedBy === tree.studentSide ? 'student' : 'opponent';
+      return new RegExp(`${introHead(seat, n.san ?? '')}|${introGerundHead(seat, n.san ?? '')}`);
+    };
     for (const n of plies.slice(0, 4)) expect(n.idea, `ply ${n.san}`).toMatch(own(n));
-    expect(spoken[0]).toMatch(/play e4( —|,)/);
-    expect(spoken[3]).toMatch(/play Nf6(,| —|:)/);
+    expect(spoken[0]).toMatch(/\be4\b/);
+    expect(spoken[3]).toMatch(/\bNf6\b|knight goes to f6/);
     // The Brief cue is computed too (≤ 60 chars, names the move).
     expect(plies[0].shortIdea).toMatch(/^e4 — /);
     expect(plies[3].shortIdea).toMatch(/^Nf6 — /);

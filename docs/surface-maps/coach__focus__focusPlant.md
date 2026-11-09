@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**312 lines · 16 exports · 5 importers · 2 tests · 2 audits**
+**322 lines · 16 exports · 5 importers · 2 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:219) — names `MISS_SPACING_PLIES`, `PlantState`, `focusPlant`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:241) — names `MISS_SPACING_PLIES`, `PlantState`, `focusPlant`
 
 ## Who calls in
 
@@ -49,11 +49,11 @@
 - `src/coach/focus/focusPlant.test.ts:31`
 
 ### `presents` (function) — 5 call sites
-- `src/coach/focus/focusPlant.test.ts:74`
-- `src/coach/focus/focusPlant.test.ts:75`
-- `src/coach/focus/focusPlant.test.ts:76`
-- `src/coach/focus/focusPlant.test.ts:77`
-- `src/coach/focus/focusRunner.ts:402`
+- `src/coach/focus/focusPlant.test.ts:79`
+- `src/coach/focus/focusPlant.test.ts:80`
+- `src/coach/focus/focusPlant.test.ts:81`
+- `src/coach/focus/focusPlant.test.ts:82`
+- `src/coach/focus/focusRunner.ts:408`
 
 ### `FocusPlantAsk` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -64,7 +64,7 @@
 ### `NO_PLANTS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `plantAsk` (function) — 26 call sites
+### `plantAsk` (function) — 29 call sites
 - `src/coach/focus/focusPlant.test.ts:15`
 - `src/coach/focus/focusPlant.test.ts:16`
 - `src/coach/focus/focusPlant.test.ts:17`
@@ -81,16 +81,19 @@
 - `src/coach/focus/focusPlant.test.ts:47`
 - `src/coach/focus/focusPlant.test.ts:48`
 - `src/coach/focus/focusPlant.test.ts:51`
-- `src/coach/focus/focusPlant.test.ts:55`
+- `src/coach/focus/focusPlant.test.ts:52`
+- `src/coach/focus/focusPlant.test.ts:53`
 - `src/coach/focus/focusPlant.test.ts:56`
-- `src/coach/focus/focusPlant.test.ts:59`
+- `src/coach/focus/focusPlant.test.ts:60`
+- `src/coach/focus/focusPlant.test.ts:61`
 - `src/coach/focus/focusPlant.test.ts:64`
-- `src/coach/focus/focusPlant.test.ts:65`
-- `src/coach/focus/focusPlant.test.ts:66`
-- `src/coach/focus/focusPlant.test.ts:67`
+- `src/coach/focus/focusPlant.test.ts:69`
 - `src/coach/focus/focusPlant.test.ts:70`
-- `src/coach/focus/focusRunner.ts:859`
-- `src/components/Coach/CoachTeachPage.tsx:8562`
+- `src/coach/focus/focusPlant.test.ts:71`
+- `src/coach/focus/focusPlant.test.ts:72`
+- `src/coach/focus/focusPlant.test.ts:75`
+- `src/coach/focus/focusRunner.ts:878`
+- `src/components/Coach/CoachTeachPage.tsx:8587`
 
 ### `FocusPlantReject` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -98,23 +101,25 @@
 ### `FocusPlantPick` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `findFocusPlant` (function) — 13 call sites
+### `findFocusPlant` (function) — 15 call sites
 - `src/coach/focus/focusPlant.arrival.measure.test.ts:139`
-- `src/coach/focus/focusPlant.test.ts:97`
 - `src/coach/focus/focusPlant.test.ts:102`
 - `src/coach/focus/focusPlant.test.ts:107`
-- `src/coach/focus/focusPlant.test.ts:113`
-- `src/coach/focus/focusPlant.test.ts:115`
-- `src/coach/focus/focusPlant.test.ts:133`
-- `src/coach/focus/focusPlant.test.ts:145`
-- `src/coach/focus/focusPlant.test.ts:160`
+- `src/coach/focus/focusPlant.test.ts:112`
+- `src/coach/focus/focusPlant.test.ts:118`
+- `src/coach/focus/focusPlant.test.ts:120`
+- `src/coach/focus/focusPlant.test.ts:138`
+- `src/coach/focus/focusPlant.test.ts:150`
 - `src/coach/focus/focusPlant.test.ts:165`
-- `src/coach/focus/focusPlant.test.ts:181`
-- `src/coach/focus/focusPlant.test.ts:187`
+- `src/coach/focus/focusPlant.test.ts:170`
+- `src/coach/focus/focusPlant.test.ts:198`
+- `src/coach/focus/focusPlant.test.ts:205`
+- `src/coach/focus/focusPlant.test.ts:222`
+- `src/coach/focus/focusPlant.test.ts:228`
 - `src/services/coachGameEngine.ts:883`
 
 ### `shownRank` (function) — 1 call site
-- `src/missions/earnedSlip.ts:251`
+- `src/missions/earnedSlip.ts:268`
 
 ## Tests
 

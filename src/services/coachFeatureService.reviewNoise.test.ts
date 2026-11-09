@@ -4,6 +4,7 @@
 // game, a structure claim said on three moves, a queen "paying" a pawn's
 // price, a plain trade, a knight's square count.
 import { describe, it, expect, vi } from 'vitest';
+import { SEAT_MOVE_HEAD } from '../test/introPattern';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
@@ -122,7 +123,7 @@ describe('review noise — Carlsen–Grischuk, Norway 2015 (lichess jMVMo1Ua), s
       // A standing leads the move's thought ("A rare book move — … here. You
       // play a6 — it …"); the thought names its move, or the move it answers.
       const body = f.replace(/^(?:The game is on the masters' main line|A rare book move — the game leaves the main line here|The last book move — the masters' file ends here)\. /, '');
-      expect(body).toMatch(/^(?:(?:You|They) play \S+|(?:Your|Their) …?[KQRBN]?[a-h]?x?[a-h][1-8]\S* )/);
+      expect(body).toMatch(/^(?:(?:You|They) (?:play|played|go|went for|castled?) \S+|(?:Your|Their) …?[KQRBN]?[a-h]?x?[a-h][1-8]\S* |(?:Your|Their) (?:[a-h]-)?(?:knight|bishop|rook|queen|king) (?:goes|went) to )/);
     }
     expect(jobs).toBeGreaterThan(0);
   }, 120_000);
@@ -159,7 +160,7 @@ describe('review noise — one claim, one producer; the need score past the open
     const d = new Chess();
     const segs = buildReviewSegmentsForTests(c.history().map((san, i) => { d.move(san); return { ply: i + 1, san, fenAfter: d.fen(), isCoachMove: i % 2 === 1, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; }), 'white', null, true, 1400);
     // A move's job opens on the move itself ("You play X — it …").
-    const late = segs.filter((g) => g.ply > 30 && /(?:^|\. )(?:You|They) play \S+(?: —|:)/.test(g.narration ?? ''));
+    const late = segs.filter((g) => g.ply > 30 && new RegExp(String.raw`(?:^|\. )${SEAT_MOVE_HEAD}`).test(g.narration ?? ''));
     __setLocalDbForTests(null);
     for (const g of late) expect(g.need?.speak).toBe(true);
   }, 120_000);

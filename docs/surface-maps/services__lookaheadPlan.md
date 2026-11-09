@@ -56,7 +56,7 @@
 - `src/services/replayFence.modern1690.test.ts:82`
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9240`
+- `src/components/Coach/CoachTeachPage.tsx:9239`
 - `src/services/coachFeatureService.ts:4739`
 - `src/services/computedVoiceAudit.report.test.ts:247`
 - `src/services/dnaLineNarrator.ts:59`
@@ -73,7 +73,7 @@
 - `src/services/pvPlayback.ts:285`
 - `src/services/pvPlayback.ts:799`
 - `src/services/pvPlayback.ts:951`
-- `src/services/reviewMoveBriefing.ts:377`
+- `src/services/reviewMoveBriefing.ts:378`
 - `src/services/tacticVocabulary.ts:96`
 - `src/services/teachingSelector.ts:385`
 - `src/services/turningPoints.ts:176`
@@ -82,7 +82,7 @@
 - `src/services/turningPoints.ts:201`
 
 ### `seatedTacticLine` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9251`
+- `src/components/Coach/CoachTeachPage.tsx:9250`
 - `src/services/seatedTacticLine.test.ts:10`
 - `src/services/seatedTacticLine.test.ts:15`
 - `src/services/seatedTacticLine.test.ts:21`
@@ -91,8 +91,8 @@
 - `src/services/seatedTacticLine.test.ts:40`
 
 ### `pinConsequence` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9257`
-- `src/components/Coach/CoachTeachPage.tsx:9359`
+- `src/components/Coach/CoachTeachPage.tsx:9256`
+- `src/components/Coach/CoachTeachPage.tsx:9358`
 - `src/services/lookaheadPlan.test.ts:1047`
 - `src/services/lookaheadPlan.test.ts:1050`
 - `src/services/pinConsequence.test.ts:8`
@@ -211,11 +211,11 @@
 
 ### `stepBothArcs` (function) — 2 call sites
 - `src/components/Coach/CoachGamePage.tsx:3049`
-- `src/components/Coach/CoachTeachPage.tsx:11675`
+- `src/components/Coach/CoachTeachPage.tsx:11674`
 
 ### `planFromUci` (function) — 40 call sites
 - `src/components/Coach/CoachGamePage.tsx:3044`
-- `src/components/Coach/CoachTeachPage.tsx:11658`
+- `src/components/Coach/CoachTeachPage.tsx:11657`
 - `src/services/betterMoveSeveralPieces.test.ts:20`
 - `src/services/claimTruth.manual.test.ts:130`
 - `src/services/coachLaneWiring.test.ts:35`
@@ -260,7 +260,7 @@
 - `src/services/walkOct1Learn.test.ts:115`
 
 ### `forkConsequence` (re-export) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9254`
+- `src/components/Coach/CoachTeachPage.tsx:9253`
 - `src/services/reviewFullData.ts:922`
 - `src/services/tacticVocabulary.ts:211`
 
@@ -333,9 +333,9 @@
 - `src/test/thinkMarkClosed.gate.test.ts:77`
 
 ### `withAnnouncement` (re-export) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:11685`
 - `src/components/Coach/CoachTeachPage.tsx:11686`
-- `src/components/Coach/CoachTeachPage.tsx:11687`
-- `src/components/Coach/CoachTeachPage.tsx:12330`
+- `src/components/Coach/CoachTeachPage.tsx:12312`
 - `src/services/planArc.heldAnnouncement.test.ts:32`
 - `src/services/planArc.ts:163`
 

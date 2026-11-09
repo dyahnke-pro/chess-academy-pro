@@ -48,7 +48,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `warmOpeningIdentity` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:333`
-- `src/components/Coach/CoachTeachPage.tsx:1079`
+- `src/components/Coach/CoachTeachPage.tsx:1078`
 - `src/services/reviewOpeningTheory.ts:268`
 
 ### `setOpeningIdentity` (function) — 26 call sites
@@ -56,17 +56,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:61`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:107`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:122`
-- `src/services/coachFeatureService.openingStory.test.ts:26`
-- `src/services/coachFeatureService.reviewNoise.test.ts:170`
-- `src/services/coachFeatureService.studentJob.test.ts:14`
-- `src/services/coachFeatureService.studentJob.test.ts:22`
+- `src/services/coachFeatureService.openingStory.test.ts:27`
+- `src/services/coachFeatureService.reviewNoise.test.ts:171`
+- `src/services/coachFeatureService.studentJob.test.ts:15`
+- `src/services/coachFeatureService.studentJob.test.ts:23`
 - `src/services/learnBoardTeaching.openingPlan.test.ts:13`
 - `src/services/openingAnnouncement.test.ts:272`
 - `src/services/openingAnnouncement.test.ts:281`
 - `src/services/openingAnnouncement.test.ts:286`
 - `src/services/openingAnnouncement.test.ts:288`
 - `src/services/openingDatabaseBrief.test.ts:12`
-- `src/services/openingGenerator.explorerBranches.test.ts:75`
+- `src/services/openingGenerator.explorerBranches.test.ts:76`
 - `src/services/openingIdea.test.ts:9`
 - `src/services/openingIdentity.test.ts:9`
 - `src/services/openingIdentity.test.ts:80`

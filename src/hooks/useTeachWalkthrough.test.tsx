@@ -5,6 +5,7 @@
  * so transitions fire without timing flakiness.
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { introHead } from '../test/introPattern';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import type { WalkthroughTree } from '../types/walkthroughTree';
 
@@ -196,7 +197,7 @@ describe('useTeachWalkthrough', () => {
     // stamped to the student, never the private computer that called a
     // defended pawn a target.
     // The one composer's line for the move (WO-ONE-COACH-01): what e4 does to the centre.
-    expect(spoken).toMatch(/You play e4 — it stakes (?:a claim in|out) the center/);
+    expect(spoken).toMatch(new RegExp(`${introHead('student', 'e4')}stakes (?:a claim in|out) the center`));
   }, 15000);
 
   it('stop returns to idle and clears the tree', async () => {

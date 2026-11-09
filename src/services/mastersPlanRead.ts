@@ -11,6 +11,7 @@
 // Deterministic (a fixed walk over a fixed file), grounded (every move is a
 // master move with a game count, G3), and it names nothing it cannot count.
 import { Chess, type Square } from 'chess.js';
+import { introWithPredicate } from '../utils/moveIntro';
 import type { LocalDbMove } from './masterPlayLookup';
 import { shareAdverb } from '../utils/shareWords.ts';
 import { positionOf } from '../utils/samePosition.ts';
@@ -345,8 +346,8 @@ export function preparesBreakBeat(
   if (!brk || brk.square === moved.to || brk.from === moved.to) return null;
   const coverers = b.attackers(brk.square as Square, moved.color);
   if (!coverers.includes(moved.to)) return null;
-  const who = moverIsStudent ? 'You play' : 'They play';
   const whose = moverIsStudent ? 'your' : 'their';
   const pct = Math.round(brk.share * 100);
-  return `${who} ${moved.san} — it prepares ${brk.san}: ${whose} ${PIECE_NAME[moved.piece]} on ${moved.to} covers ${brk.square}, and masters push ${brk.san} in ${pct}% of their games from here.`;
+  // The move's head rotates like every other (`moveIntro`, David 2026-11-09).
+  return `${introWithPredicate(moverIsStudent ? 'student' : 'opponent', moved.san, `prepares ${brk.san}: ${whose} ${PIECE_NAME[moved.piece]} on ${moved.to} covers ${brk.square}, and masters push ${brk.san} in ${pct}% of their games from here`)}.`;
 }

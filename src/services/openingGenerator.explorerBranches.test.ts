@@ -4,6 +4,7 @@
 // database is stubbed at its one boundary (`buildExplorerBranches`); the
 // generator, the beats and the cache doors are real.
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { introHead } from '../test/introPattern';
 import type { ExplorerBranches } from './explorerTeachLine';
 
 vi.mock('openai', () => ({
@@ -112,7 +113,7 @@ describe('a line the opening DB stops on is taught from the masters\' games', ()
 
   it('the move the line is named for says the break it prepares, from the database', async () => {
     branchesResult = MASTERS;
-    expect(terminus(await lesson(MENGARINI)).idea).toMatch(/^They play a3 — it prepares b4: their pawn on a3 covers b4, and masters push b4 in \d+% of their games from here\.$/);
+    expect(terminus(await lesson(MENGARINI)).idea).toMatch(new RegExp(String.raw`^${introHead('opponent', 'a3')}prepares b4: their pawn on a3 covers b4, and masters push b4 in \d+% of their games from here\.$`));
   }, 120_000);
 
   it('a lesson built while the database was unreachable is never cached', async () => {

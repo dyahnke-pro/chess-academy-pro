@@ -213,6 +213,23 @@ export function midExchange(fen: string): boolean {
   return false;
 }
 
+/** THE EXCHANGE, FINISHED: a move that does what MID-EXCHANGE holds the
+ *  coach to — in check, any legal reply (each one answers it); otherwise a
+ *  capture of a piece it wins outright (legal SEE ≥ the same bar). A plant made
+ *  mid-exchange goes through one of these, so the coach still never ignores a
+ *  recapture to leave a chance, and a student who keeps leaving pieces about
+ *  still gets the game's chance (prod record g2 2026-11-09: five asks, every
+ *  one refused mid-exchange, and the chance never came). */
+export function completesExchange(fen: string, uci: string): boolean {
+  const board = load(fen);
+  if (!board) return false;
+  if (board.inCheck()) return true;
+  const to = uci.slice(2, 4) as Square;
+  const at = board.get(to);
+  if (!at || at.color === board.turn() || at.type === 'k') return false;
+  return legalSeeGainFor(fen, to, board.turn()) >= WIN_BAR;
+}
+
 /** An engine read of a board: its top lines, white's point of view. */
 export type SlipRead = (fen: string) => Promise<{ topLines: ReadonlyArray<{ evaluation: number; moves: readonly string[]; mate: number | null }> } | null>;
 

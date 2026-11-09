@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { introHead } from '../test/introPattern';
 import { Chess } from 'chess.js';
 import { lessonThought, moveThoughtFacts, LESSON_STUDENT_LANE } from './moveThoughtFacts';
 import { newLessonVoice, BRIEFING_LINE_PLIES } from './reviewMoveBriefing';
@@ -48,7 +49,7 @@ describe('the lesson says the move\'s real idea (WO-ONE-COACH-01)', () => {
 
   it('the opponent\'s move is said from the student\'s seat ("They play …")', () => {
     const line = lessonLineFor(['e4', 'e5', 'Nf3', 'Nf6', 'Nc3', 'Bc5', 'Bc4', 'd6'], 'white');
-    expect(line).toMatch(/^They play d6/);
+    expect(line).toMatch(new RegExp(`^${introHead('opponent', 'd6')}`));
   });
 
   it('the line ahead still names the trip (the Italian\'s Nbd2)', () => {
@@ -97,11 +98,11 @@ describe("the opponent's move gets its fundamentals, from the student's seat", (
   it('their castling is said as theirs', () => {
     const giuoco = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'c3', 'Nf6', 'd3', 'd6'];
     const text = lessonThought({ theory: true, fenBefore: fenAfter(giuoco), san: 'O-O', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['O-O', 'Re1'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
-    expect(text).toBe('They play O-O — it castles their king into safety and swings the rook toward the center.');
+    expect(text).toBe('They castle kingside — it tucks their king into safety and swings the rook toward the center.');
   });
   it('their developing move says what it develops toward', () => {
     const text = lessonThought({ theory: true, fenBefore: fenAfter(['e4', 'e5', 'Nf3']), san: 'Nc6', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['Bb5', 'a6'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
-    expect(text).toMatch(/^They play Nc6 — it develops into the game, fighting for the center on d4/);
+    expect(text).toMatch(new RegExp(`^${introHead('opponent', 'Nc6')}develops into the game, fighting for the center on d4`));
   });
 });
 

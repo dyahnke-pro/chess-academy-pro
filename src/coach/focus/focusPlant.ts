@@ -42,7 +42,7 @@ import type { MisconceptionTagId } from '../../data/misconceptionTags';
 import type { MotifLevel } from '../../data/tacticMotifs';
 import { DECIDED_EVAL_CP } from '../../services/engineConstants';
 import { isEndgameByMaterial } from '../../services/gamePhaseService';
-import { midExchange, PLANT_VERIFY_MAX, slipCandidates, type CoachLine, type SlipCandidate, type SlipRead } from '../../missions/earnedSlip';
+import { completesExchange, midExchange, PLANT_VERIFY_MAX, slipCandidates, type CoachLine, type SlipCandidate, type SlipRead } from '../../missions/earnedSlip';
 import { chancesAt, SHOT_PLIES, yourChancesAt, type ChanceDifficulty, type FocusChance, type ReadLine } from './focusChances';
 import { pvGain } from '../../services/tacticGeometry';
 import type { FocusSeat } from './focusCard';
@@ -139,7 +139,12 @@ export function plantAsk(
   // Missing in a row: a chance every two moves until a find — the extra budget
   // and the phase floors are for a student who is finding them.
   if (!missing) {
-    const made = seat.posed + plant.flips;
+    // A chance on the board counts against the budget whether or not the move
+    // after it was judged: one answered by a forced move (stopping a mate) is
+    // exempt, never posed, and the budget read zero (prod rung3-g2 2026-11-09:
+    // two plants at rung 3, whose budget is one). Your side's plants and the
+    // presented guarantee count too.
+    const made = Math.max(seat.posed, plant.count - plant.flips, 1) + plant.flips;
     if (made >= RUNG_TIERS[seat.rung].chances) return null;
     const floor = made <= 1 ? SECOND_CHANCE_PLY : (isEndgameByMaterial(fen) ? 0 : THIRD_CHANCE_PLY);
     if (ply < floor) return null;
@@ -189,14 +194,19 @@ export async function findFocusPlant(
 ): Promise<{ pick: FocusPlantPick | null; scan: Partial<Record<FocusPlantReject, number>> }> {
   const scan: Partial<Record<FocusPlantReject, number>> = {};
   const bump = (r: FocusPlantReject): void => { scan[r] = (scan[r] ?? 0) + 1; };
-  if (midExchange(fen)) { bump('mid-exchange'); return { pick: null, scan }; }
+  // MID-EXCHANGE the coach answers the check or takes what is on offer first;
+  // its slip, if any, is one of those moves (`completesExchange`).
+  const mid = midExchange(fen);
+  const viaExchange = (uci: string): boolean => !mid || completesExchange(fen, uci);
   const open = new Set(focus.levels);
   const coachBest = coachLines.length > 0 ? Math.max(...coachLines.map((l) => l.coachCp)) : null;
   if (ask.extra && coachBest !== null && coachBest <= -DECIDED_EVAL_CP) {
-    return flipPlant(fen, coachLines, coachBest, open, ask, read, scan, bump);
+    const kept = coachLines.filter((l) => viaExchange(l.uci));
+    if (kept.length === 0) { bump('mid-exchange'); return { pick: null, scan }; }
+    return flipPlant(fen, kept, coachBest, open, ask, read, scan, bump);
   }
-  const slips = slipCandidates(fen, coachLines, 'allow');
-  if (slips.length === 0) { bump('no-slip'); return { pick: null, scan }; }
+  const slips = slipCandidates(fen, coachLines, 'allow').filter((s) => viaExchange(s.uci));
+  if (slips.length === 0) { bump(mid ? 'mid-exchange' : 'no-slip'); return { pick: null, scan }; }
   const pvOf = new Map(coachLines.map((l) => [l.uci, l] as const));
   const ranked = readOrder(slips, (s) => shownRank(fen, s, pvOf.get(s.uci), open, ask));
   for (const slip of ranked.slice(0, PLANT_VERIFY_MAX)) {

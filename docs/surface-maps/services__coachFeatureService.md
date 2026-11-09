@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6587 lines · 33 exports · 71 importers · 86 tests · 4 audits**
+**6607 lines · 33 exports · 71 importers · 86 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:412) — names `coachFeatureService`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4774) — names `coachFeatureService`
 - **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5843) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6940) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6948) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -194,28 +194,28 @@
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:117`
 - `src/services/coachFeatureService.oneCost.test.ts:28`
 - `src/services/coachFeatureService.oneCost.test.ts:33`
-- `src/services/coachFeatureService.openingStory.test.ts:33`
-- `src/services/coachFeatureService.openingStory.test.ts:49`
-- `src/services/coachFeatureService.openingStory.test.ts:56`
-- `src/services/coachFeatureService.openingStory.test.ts:70`
-- `src/services/coachFeatureService.openingStory.test.ts:83`
-- `src/services/coachFeatureService.openingStory.test.ts:103`
-- `src/services/coachFeatureService.openingStory.test.ts:122`
-- `src/services/coachFeatureService.openingStory.test.ts:128`
-- `src/services/coachFeatureService.openingStory.test.ts:141`
-- `src/services/coachFeatureService.openingStory.test.ts:155`
-- `src/services/coachFeatureService.openingStory.test.ts:180`
-- `src/services/coachFeatureService.openingStory.test.ts:204`
-- `src/services/coachFeatureService.openingStory.test.ts:223`
+- `src/services/coachFeatureService.openingStory.test.ts:34`
+- `src/services/coachFeatureService.openingStory.test.ts:50`
+- `src/services/coachFeatureService.openingStory.test.ts:57`
+- `src/services/coachFeatureService.openingStory.test.ts:71`
+- `src/services/coachFeatureService.openingStory.test.ts:84`
+- `src/services/coachFeatureService.openingStory.test.ts:104`
+- `src/services/coachFeatureService.openingStory.test.ts:123`
+- `src/services/coachFeatureService.openingStory.test.ts:129`
+- `src/services/coachFeatureService.openingStory.test.ts:142`
+- `src/services/coachFeatureService.openingStory.test.ts:156`
+- `src/services/coachFeatureService.openingStory.test.ts:181`
+- `src/services/coachFeatureService.openingStory.test.ts:205`
+- `src/services/coachFeatureService.openingStory.test.ts:224`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
 - `src/services/coachFeatureService.planChange.test.ts:48`
-- `src/services/coachFeatureService.reviewNoise.test.ts:37`
-- `src/services/coachFeatureService.reviewNoise.test.ts:103`
-- `src/services/coachFeatureService.reviewNoise.test.ts:160`
-- `src/services/coachFeatureService.reviewNoise.test.ts:185`
-- `src/services/coachFeatureService.reviewNoise.test.ts:194`
-- `src/services/coachFeatureService.studentJob.test.ts:17`
+- `src/services/coachFeatureService.reviewNoise.test.ts:38`
+- `src/services/coachFeatureService.reviewNoise.test.ts:104`
+- `src/services/coachFeatureService.reviewNoise.test.ts:161`
+- `src/services/coachFeatureService.reviewNoise.test.ts:186`
+- `src/services/coachFeatureService.reviewNoise.test.ts:195`
+- `src/services/coachFeatureService.studentJob.test.ts:18`
 - `src/services/coachFeatureService.test.ts:300`
 - `src/services/coachFeatureService.test.ts:316`
 - `src/services/coachFeatureService.test.ts:340`
@@ -262,7 +262,7 @@
 - `src/services/reviewLedgerCounters.test.ts:22`
 - `src/services/reviewMatePly.test.ts:19`
 - `src/services/reviewMoveIntent.test.ts:37`
-- `src/services/reviewMoveThought.test.ts:14`
+- `src/services/reviewMoveThought.test.ts:15`
 - `src/services/reviewNarrationRev.gate.test.ts:39`
 - `src/services/reviewNeedGate.test.ts:30`
 - `src/services/reviewNeedGate.test.ts:46`
@@ -339,10 +339,10 @@
 - `src/services/coachFeatureService.test.ts:626`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8859`
-- `src/components/Coach/CoachTeachPage.tsx:8962`
-- `src/components/Coach/CoachTeachPage.tsx:11886`
-- `src/components/Coach/CoachTeachPage.tsx:12290`
+- `src/components/Coach/CoachTeachPage.tsx:8858`
+- `src/components/Coach/CoachTeachPage.tsx:8961`
+- `src/components/Coach/CoachTeachPage.tsx:11885`
+- `src/components/Coach/CoachTeachPage.tsx:12272`
 - `src/services/coachFeatureService.test.ts:912`
 - `src/services/coachFeatureService.test.ts:913`
 - `src/services/phaseTransitionDetector.test.ts:575`
@@ -355,7 +355,7 @@
 - `src/utils/justCaptured.ts:24`
 
 ### `pastTenseReviewNarration` (function) — 4 call sites
-- `src/services/reviewMoveThought.test.ts:57`
+- `src/services/reviewMoveThought.test.ts:58`
 - `src/services/reviewRegister.test.ts:32`
 - `src/services/reviewRegister.test.ts:109`
 - `src/services/reviewWalk1500.test.ts:17`
