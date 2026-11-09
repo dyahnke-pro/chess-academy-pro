@@ -5957,7 +5957,27 @@ function sub(h: string, re: RegExp, past: string): string {
  *  walk of 2026-09-26 heard "this is a race, and it was won by throwing your
  *  pawns". Tense is decided per sentence, so the explicit verb decides it. */
 const PRESENT_FRAMED = /\b(?:is|are)\b/i;
-function toPastSentence(sentence: string): string {
+/** THE MOVE'S HEAD IN THE PAST, for the rotated heads (`moveIntro`, David
+ *  2026-11-09: "mix up the phrasing"): "You go Nf3, which…" → "You went for
+ *  Nf3, which…"; "Their knight goes to f3 and develops…" → "Their knight went
+ *  to f3, and it develops…"; a pawn's "Your e4 stakes…" → "You played e4 — it
+ *  stakes…". The "You play" head is the branch below. */
+function pastRotatedHead(sentence: string): string {
+  const castled = /^(\[[a-z-]+\] )?(You|They) castle (?=kingside|queenside)/;
+  if (castled.test(sentence)) return sentence.replace(castled, (_m, tag: string | undefined, who: string) => `${tag ?? ''}${who} castled `);
+  const went = /^(\[[a-z-]+\] )?(You|They) go (?=\S)/;
+  if (went.test(sentence)) return sentence.replace(went, (_m, tag: string | undefined, who: string) => `${tag ?? ''}${who} went for `);
+  const piece = /^(\[[a-z-]+\] )?(Your|Their) ((?:[a-h]-)?(?:knight|bishop|rook|queen|king)) goes to ([a-h][1-8])( with check)? and /;
+  if (piece.test(sentence)) return sentence.replace(piece, (_m, tag: string | undefined, whose: string, p: string, sq: string, check: string | undefined) => `${tag ?? ''}${whose} ${p} went to ${sq}${check ?? ''}, and it `);
+  const pawn = /^(\[[a-z-]+\] )?(Your|Their) ([a-h][1-8](?:=[QRBN])?\+?) (?=[a-z])/;
+  if (pawn.test(sentence)) {
+    const dash = sentence.includes(' — ') ? ': it ' : ' — it ';
+    return sentence.replace(pawn, (_m, tag: string | undefined, whose: string, san: string) => `${tag ?? ''}${whose === 'Your' ? 'You' : 'They'} played ${san}${dash}`);
+  }
+  return sentence;
+}
+function toPastSentence(raw: string): string {
+  const sentence = pastRotatedHead(raw);
   // THE MOVE'S OWN SENTENCE IS HISTORY whatever its clause says (Review prod
   // audit 2026-10-30: "You play Rxa8: it trains on their queen on d8, which is
   // worth more…" stayed present beside "You played Nd5 — …"): the head is

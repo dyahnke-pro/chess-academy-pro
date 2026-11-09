@@ -13,6 +13,21 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🗣️ 2026-11-09 NARRATION REVIEW — every spoken line read against its board (David: "review and evaluate each narration line for accuracy and content")
+
+Fixed at their producers, each with a test that fails on the old code:
+- **ONE RECAPTURE READ.** Four producers guessed "is this a recapture?" from the previous move's text; after Bxe6 took a pawn, …fxe6 "completes the trade" was false (it wins the bishop). `captureRun.takesBack(prev, move)` reads the capture run; every caller passes the run (game PGN, history, or the run it held). `captureRunOfMoves` / `captureRunOfPgn` / `captureRunAfterMove` build it.
+- **LEARN NEVER NAMES THE STUDENT'S OWN MOVE BACK** (David: "the user knows that, they see it play out"): "Your move was a blunder…", "You played the move this position asks for — it…", a drawback after the verdict "It took…". Review, lessons, played-out lines, the better move and their moves still name. Rotate the subject if "your move" repeats; never go back to the name.
+- **REVIEW ROTATES HOW A MOVE IS INTRODUCED** (David: "I'm ok with it in review. But please try to mix up the phrasing … as human as possible"): `utils/moveIntro.ts` — "You play X — it …" / "Your knight goes to f3 and …" (a piece move said as the piece going there, a pawn as "your e4 …") / "You go X, which …"; keyed on seat + move (Review and the lesson open a move alike); a capture never the subject of its own verb (captureSaidOnce); a castle is "you castle kingside", never "castle … castles". Read by `reviewMoveBriefing.joinReview`, `moveThoughtFacts` lead/gerund and `mastersPlanRead`. Review's past pass knows every form (`pastRotatedHead`: went for / went to … and it / You played e4 — it / castled). Tests read the head through `src/test/introPattern.ts`, never one stem.
+- Smaller: a stopped capture named once; "your fork with Qd4"; mates said once; overload / fork / double-check rules one sentence; weak squares only in their half, and the chasing push must stand; pawn shapes named; concession lines say whose move; "they can take it"; a cheaper attacker means the piece must move; a king leaving check says nothing about marching; the owed answer is logged as track A's line through the ONE chain link (`chainLine`, one spoke/dropped producer).
+- Kept as is after checking: the page's import of `captureRun` would have put Learn one computer over its ceiling; the notation helper `uciToSans` moved to `utils/uciToSan` (one home for notation) instead.
+
+**The focus plant (task #156):** a student leaving pieces about got every plant refused as mid-exchange (record g2: five asks, no chance all game). Mid-exchange the coach still answers the check or takes what is on offer, and its slip is in HOW it takes (`earnedSlip.completesExchange`). The extras budget counts the presented guarantee and your plants, judged or not (rung3-g2: a forced reply left the first unjudged and a second was planted at rung 3).
+
+**Open, next build (task #155):** one read per board across games. After 6.h3 …Nc6 game 1 said "a mistake — Bh5 was the move", game 2 "a blunder — Bxf3". The verdict store's rule is "every later surface reads it"; Learn writes it and never reads it, and several Learn steps take the best move from the fresh pre-move read. Fix: keep the pre-move read and the price per board (a Dexie store, version bump) so a second game on the board reads the same.
+
+**Owed to David:** the across-game "missed it again" — the carry is built next (the next game plants the missed pattern first); saying "I set this up again and you missed it" breaks the Oct 28 no-read-back rule, his call.
+
 ## 🗣️ WO-HUMAN-VOICE + 🎯 WO-MARKS-AS-SAID — the coach talks like a person, and the board shows what it says as it says it (David 2026-11-08: "I want all narrations to follow this pattern" → "Make sure ALL stated squares pieces moves are covered. Key squares get highlights, moves get arrowed, lines get multiple arrows and a play out line button, and the ALL appear AS THEY ARE STATED!")
 
 **The voice (CLAUDE.md § THE COACH TALKS LIKE A PERSON).** Measured by `node scripts/voice/robotic-count.mjs` over the decision baseline's spoken lines; `humanVoice.gate` holds the counts, which only fall.

@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { NO_PREV_CAPTURE, prevCaptureOf } from './pvPlayback';
+import { introWithGerund, introWithPredicate } from '../utils/moveIntro';
+import { introGerundHead } from '../test/introPattern';
 
 /** Hanging knight on d4 — White's Qxd4 wins it clean. */
 const HANGING_KNIGHT = '4k3/8/8/8/3n4/8/8/3QK3 w - - 0 1';
@@ -11,7 +13,7 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
     const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true });
     expect(out).toMatch(/winning a knight/);
     expect(out).not.toMatch(/wins material/);
-    expect(out).toMatch(/^You play Qxd4,/);
+    expect(out).toMatch(new RegExp(`^${introGerundHead('student', 'Qxd4')}`));
   });
 
   it('states the concrete THREAT a move creates ("what it threatens")', () => {
@@ -42,8 +44,8 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
   it('uses the locked perspective — "you" for the student, "they" for the opponent', () => {
     const yours = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true });
     const theirs = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: false });
-    expect(yours).toMatch(/^You play/);
-    expect(theirs).toMatch(/^They play/);
+    expect(yours).toMatch(/^You(?:r)? /);
+    expect(theirs).toMatch(/^The(?:y|ir) /);
     // Never "we/our" (perspective gate).
     expect(yours).not.toMatch(/\b(we|our|us)\b/i);
   });
@@ -117,7 +119,7 @@ describe('the one "what a move does" sentence (census group 6, 2026-10-07)', () 
   };
   it('1.e4 does not loosen a king still on e1', () => {
     expect(brief(0, true)).not.toMatch(/king's cover/);
-    expect(brief(0, true)).toBe('You play e4 — it stakes a claim in the center and opens lines for the pieces.');
+    expect(brief(0, true)).toBe(`${introWithPredicate('student', 'e4', 'stakes a claim in the center and opens lines for the pieces')}.`);
   });
   // THE QUIET-MOVE RULE (WO-DECIDER-02): a take-back or an even trade with no
   // consequence is the board read back — on a quiet move it says nothing, and
@@ -131,7 +133,7 @@ describe('the one "what a move does" sentence (census group 6, 2026-10-07)', () 
   it('at a critical moment the recapture is the move the line hangs on — taking back, never winning', () => {
     const { fen, prev } = at(24);
     const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, fenBefore: fen, san: line[24], prev, moverIsStudent: true, register: 'teach', criticalMoment: true }) ?? '';
-    expect(out).toBe('This is the critical moment. You play Nxe3, completing the trade.');
+    expect(out).toBe(`This is the critical moment. ${introWithGerund('student', 'Nxe3', 'completing the trade')}.`);
   });
   it('a pawn, a rook lift and a retreat are never said to "develop"', () => {
     for (const n of [8, 12, 20]) expect(brief(n, n % 2 === 0)).not.toMatch(/develops/);
@@ -169,7 +171,7 @@ describe('the DNA template on a whole lesson (David 2026-10-07: "teach me x has 
 describe('a forced loss says so, never the squares a doomed piece "covers" (review depth eval 2026-10-28)', () => {
   it('…Qxe5 after Be5+ hit the king and the queen: the queen for the bishop is the least loss', () => {
     const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, fenBefore: '8/6k1/p5p1/4Bp2/4p2P/5NP1/Pq3P2/7K b - - 2 36', san: 'Qxe5', prev: NO_PREV_CAPTURE, moverIsStudent: true }) ?? '';
-    expect(out).toBe('You play Qxe5, giving up the queen for the bishop — every other move loses more.');
+    expect(out).toBe(`${introWithGerund('student', 'Qxe5', 'giving up the queen for the bishop — every other move loses more')}.`);
     expect(out).not.toMatch(/covers|a square no pawn/);
   });
 });
@@ -179,7 +181,7 @@ describe('a teaching sentence that names whose piece keeps its subject (2026-11-
     const { toClause, joinReview } = await import('./reviewMoveBriefing');
     const c = toClause('Their knight joins the fight for e5, backing their e-pawn\'s push there.');
     expect(c).toBe('their knight joins the fight for e5, backing their e-pawn\'s push there');
-    expect(joinReview([c], false, 'Nc6')).toBe('They play Nc6 — it joins the fight for e5, backing their e-pawn\'s push there.');
-    expect(joinReview([toClause('Your pawn joins the fight for d4.')], true, 'c3')).toBe('You play c3 — it joins the fight for d4.');
+    expect(joinReview([c], false, 'Nc6')).toBe(`${introWithPredicate('opponent', 'Nc6', 'joins the fight for e5, backing their e-pawn\'s push there')}.`);
+    expect(joinReview([toClause('Your pawn joins the fight for d4.')], true, 'c3')).toBe(`${introWithPredicate('student', 'c3', 'joins the fight for d4')}.`);
   });
 });

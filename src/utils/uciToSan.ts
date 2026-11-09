@@ -46,3 +46,19 @@ export function uciLinesToSan(uciMoves: string[], fen: string, maxMoves: number 
     return uciMoves.slice(0, maxMoves).join(' ');
   }
 }
+
+/**
+ * A UCI line as SAN moves, from `fen`, stopping at the first move that does
+ * not play (an engine line past a capture the board no longer allows).
+ */
+export function uciToSans(fen: string, uci: readonly string[]): string[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  const out: string[] = [];
+  for (const u of uci) {
+    try {
+      out.push(chess.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
+    } catch { break; }
+  }
+  return out;
+}

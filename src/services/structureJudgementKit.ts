@@ -7,6 +7,7 @@
 // a read that cannot hand over its squares or its line is not emitted), a
 // say-once key, and what it puts at stake when it has a number.
 import { sideToMoveAs } from './threatOut';
+import { uciToSans } from '../utils/uciToSan';
 import { Chess, type Color, type Square } from 'chess.js';
 import type { Proof } from './proof';
 import type { FactStakes } from './factStakes';
@@ -163,17 +164,8 @@ export function pawnAttacks(sq: string, color: Color): Square[] {
   return [sqAt(fileIdx(sq) - 1, r), sqAt(fileIdx(sq) + 1, r)].filter((x): x is Square => !!x);
 }
 
-/** A UCI line from `fen` as SANs, stopping where it stops being legal. */
-export function uciToSans(fen: string, uci: readonly string[]): string[] {
-  const c = board(fen);
-  if (!c) return [];
-  const out: string[] = [];
-  for (const u of uci) {
-    try {
-      out.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
-    } catch { break; }
-  }
-  return out;
-}
+// A UCI line from `fen` as SANs. The notation lives with the rest of the notation helpers (one home,
+// `utils/uciToSan`); re-exported for the kit's readers.
+export { uciToSans };
 
 export const bare = (san: string): string => san.replace(/[+#!?]+$/, '');

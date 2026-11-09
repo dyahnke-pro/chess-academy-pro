@@ -23,7 +23,6 @@ import { STORY_KEY, PLAN_GOAL, keysUnder, threadKey, threadVariant, toldBoards, 
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { uciToSans } from '../../services/structureJudgementKit';
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { registerCoachHands } from '../../services/coachActuator';
@@ -300,7 +299,7 @@ import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUti
 import { coachService, isProgressQuestion, isImprovementTrendQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
 import { isAuditMarkedPage, logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
 import { buildLearnGameRecord, learnGameEndWhy, rememberHeardVerdict, saveLearnGame as saveLearnGameRecord, type LearnGameEnding, type LearnLiveGrade } from '../../services/learnGameRecord';
-import { uciMoveToSan } from '../../utils/uciToSan';
+import { uciMoveToSan, uciToSans } from '../../utils/uciToSan';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { recoverCoachMoveFromText } from '../../utils/recoverCoachMove';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
@@ -11915,21 +11914,41 @@ export function CoachTeachPage({ mode }: {
               const boardFen = liveFenRef.current;
               paceBoardMarks(spoken, marks, () => trackAGenRef.current === myTrackAGen && liveFenRef.current === boardFen);
             };
-            // THE ANSWER A QUESTION OWED is track A's line too, and is logged as
-            // one (prod focus audit 2026-11-09: "Before your move, checks,
-            // captures, threats …" was spoken with no row, so the audit could
-            // not tell it from a leak).
-            const speakOwed = (owed: string): Promise<void> | undefined => {
-              if (trackAGenRef.current !== myTrackAGen) return undefined;
-              void logAppAudit({
-                kind: 'coach-narration-spoken',
-                category: 'narration',
-                source: 'CoachTeachPage.trackA',
-                summary: `track A spoke: "${owed.slice(0, 80)}"`,
-                narrationText: owed,
-                fen: liveFenRef.current,
-              });
-              return speakLearn(owed, { channel: 'door', forced: true, intent: 'learn-live' }).then(() => undefined);
+            // ONE LINK ON THE CHAIN PER LINE. A line is logged "spoke" when the
+            // voice STARTS it, and "dropped" when the next move superseded it
+            // first (OS-1 replay 2026-10-19: two verdicts logged "track A spoke"
+            // at enqueue, never voiced — queued behind a twenty-second line, then
+            // superseded by the next move). Every track A line joins here: the
+            // turn's own, and the answer a question owed (prod focus audit
+            // 2026-11-09: "Before your move, checks, captures, threats …" was
+            // spoken with no row, so the audit could not tell it from a leak).
+            const chainLine = (heard: string, voice: () => Promise<void>): void => {
+              speechChainRef.current = (speechChainRef.current ?? Promise.resolve())
+                .then(() => {
+                  if (trackAGenRef.current !== myTrackAGen) {
+                    void logAppAudit({
+                      kind: 'coach-narration-dropped',
+                      category: 'narration',
+                      source: 'CoachTeachPage.trackA',
+                      summary: `superseded before the voice reached it: "${heard.slice(0, 80)}"`,
+                      fen: liveFenRef.current,
+                    });
+                    return undefined;
+                  }
+                  void logAppAudit({
+                    kind: 'coach-narration-spoken',
+                    category: 'narration',
+                    source: 'CoachTeachPage.trackA',
+                    summary: `track A spoke: "${heard.slice(0, 80)}"`,
+                    // The whole line, as the late wave logs it: a long turn is
+                    // voiced in pieces, and an audit matching a piece against an
+                    // 80-character summary read the later pieces as strays.
+                    narrationText: heard,
+                    fen: liveFenRef.current,
+                  });
+                  return voice();
+                })
+                .catch(() => undefined);
             };
             const speakTrackA = (line: string, marks?: TrackMarks, opts?: { verdict?: boolean }): void => {
               if (trackAGenRef.current !== myTrackAGen) return;
@@ -11961,71 +11980,34 @@ export function CoachTeachPage({ mode }: {
                 // of the last board led the turn and the verdict landed at
                 // +16.7 s). What the move cost is heard first; the answer follows.
                 if (owedSaid && opts?.verdict) owedAfter = owedSaid;
-                else if (owedSaid) {
-                  speechChainRef.current = speechChainRef.current
-                    .then(() => speakOwed(owedSaid))
-                    .catch(() => undefined);
-                }
+                else if (owedSaid) chainLine(owedSaid, () => speakLearn(owedSaid, { channel: 'door', forced: true, intent: 'learn-live' }));
               }
               const heard = stripThink(line);
-              speechChainRef.current = (speechChainRef.current ?? Promise.resolve())
-                .then(() => {
-                  // A LINE THE VOICE NEVER REACHED IS LOGGED AS DROPPED (OS-1
-                  // replay 2026-10-19: two verdicts logged "track A spoke" at
-                  // enqueue, never voiced — queued behind a twenty-second line,
-                  // then superseded by the next move). The audit row now says
-                  // which.
-                  if (trackAGenRef.current !== myTrackAGen) {
-                    void logAppAudit({
-                      kind: 'coach-narration-dropped',
-                      category: 'narration',
-                      source: 'CoachTeachPage.trackA',
-                      summary: `superseded before the voice reached it: "${heard.slice(0, 80)}"`,
-                      fen: liveFenRef.current,
-                    });
-                    return undefined;
-                  }
-                  // …and "spoke" is logged when the voice STARTS the line.
-                  void logAppAudit({
-                    kind: 'coach-narration-spoken',
-                    category: 'narration',
-                    source: 'CoachTeachPage.trackA',
-                    summary: `track A spoke: "${heard.slice(0, 80)}"`,
-                    // The whole line, as the late wave logs it: a long turn is
-                    // voiced in pieces, and an audit matching a piece against an
-                    // 80-character summary read the later pieces as strays.
-                    narrationText: heard,
-                    fen: liveFenRef.current,
-                  });
-                  // THE ONE CHOKEPOINT (G0; David 2026-09-24: "everything built
-                  // needs to be deterministic, worded by the DNA, and handed to
-                  // the LLM"). Learn's live lines are computed and DNA-worded in
-                  // code; they reach the voice THROUGH `voiceFacts`, in the raw
-                  // register (the computed text is spoken as-is, no model call,
-                  // no latency) — the same seam review speaks through.
-                  // THE ANSWER WAITS FOR THEIR MOVE (David 2026-10-18: "answer
-                  // waits for my move"). The question is spoken now; its answer
-                  // is owed and leads the turn after the student plays, so they
-                  // work it out on the board first. Its marks belonged to this
-                  // board, so they are not drawn on the next one.
-                  const qa = splitThink(line);
-                  // Paced from the moment the line is ON AIR, not when it is
-                  // handed over: the fetch used to put every mark ahead of its
-                  // word (marks map 2026-11-08).
-                  // The answer is owed BEFORE the question speaks.
-                  if (qa) pendingAnswerRef.current = qa[1];
-                  const said = qa
-                    ? speakLearn(qa[0], { channel: 'door', forced: true, intent: 'learn-live' })
-                    : speakLearn(line, { channel: 'door', forced: true, intent: 'learn-live' });
-                  if (marks) void voiceService.untilOnAir(ON_AIR_WAIT_MS).then(() => revealMarks(stripThink(qa ? qa[0] : line), marks));
-                  return said;
-                })
-                .catch(() => undefined);
-              if (owedAfter) {
-                speechChainRef.current = speechChainRef.current
-                  .then(() => speakOwed(owedAfter))
-                  .catch(() => undefined);
-              }
+              chainLine(heard, () => {
+                // THE ONE CHOKEPOINT (G0; David 2026-09-24: "everything built
+                // needs to be deterministic, worded by the DNA, and handed to
+                // the LLM"). Learn's live lines are computed and DNA-worded in
+                // code; they reach the voice THROUGH `voiceFacts`, in the raw
+                // register (the computed text is spoken as-is, no model call,
+                // no latency) — the same seam review speaks through.
+                // THE ANSWER WAITS FOR THEIR MOVE (David 2026-10-18: "answer
+                // waits for my move"). The question is spoken now; its answer
+                // is owed and leads the turn after the student plays, so they
+                // work it out on the board first. Its marks belonged to this
+                // board, so they are not drawn on the next one.
+                const qa = splitThink(line);
+                // Paced from the moment the line is ON AIR, not when it is
+                // handed over: the fetch used to put every mark ahead of its
+                // word (marks map 2026-11-08).
+                // The answer is owed BEFORE the question speaks.
+                if (qa) pendingAnswerRef.current = qa[1];
+                const said = qa
+                  ? speakLearn(qa[0], { channel: 'door', forced: true, intent: 'learn-live' })
+                  : speakLearn(line, { channel: 'door', forced: true, intent: 'learn-live' });
+                if (marks) void voiceService.untilOnAir(ON_AIR_WAIT_MS).then(() => revealMarks(stripThink(qa ? qa[0] : line), marks));
+                return said;
+              });
+              if (owedAfter) chainLine(owedAfter, () => speakLearn(owedAfter, { channel: 'door', forced: true, intent: 'learn-live' }));
               instantSpokenText = instantSpokenText ? `${instantSpokenText} ${heard}` : heard;
             };
             let instantWaits = false;

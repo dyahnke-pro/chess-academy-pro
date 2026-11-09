@@ -5892,6 +5892,14 @@ student finds it alone. A focus chance stays the focus's (`names-chance` holds a
 pointer on its squares). One place decides it: the Learn door (`learnTurnDoor`);
 the arrow door keeps the move off the board.
 
+🔒 **NOR THE MOVE THEY JUST PLAYED (David 2026-11-09: "the user knows that,
+they see it play out").** Learn says "your move" ("Your move was a blunder —
+it let them …"), or "it" right after a sentence about that move — never its
+name. Still named in Learn: their move, the better move once it is past, moves
+inside a played-out line, an earlier move of the student's, anything asked in
+chat. Review keeps naming the move, its words ROTATED (`moveIntro`: "You play
+X — it …" / "Your knight goes to f3 and …" / "You go X, which …").
+
 **Review names the better move** (the game is over); **chat names it** (you
 asked). Gates: `learnNamesNoMoveUnasked.gate.test.ts`,
 `oneErrorComputer.gate.test.ts`, `teachMistakeWhy.test.ts`.

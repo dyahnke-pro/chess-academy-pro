@@ -165,9 +165,12 @@ describe('a costly move\'s verdict is heard before last turn\'s owed answer (OS-
     // The owed answer is held back when the first line is the verdict…
     // (2026-11-07: chained behind this move's own lines — a focus or mission
     // line said before the reply — never raced against them.)
-    expect(page).toMatch(/if \(owedSaid && opts\?\.verdict\) owedAfter = owedSaid;\n\s*else if \(owedSaid\) \{\n\s*speechChainRef\.current = speechChainRef\.current\n\s*\.then\(\(\) => \(trackAGenRef\.current === myTrackAGen \? speakLearn\(owedSaid/);
-    // …queued after the line, and dropped if the turn was superseded.
-    expect(page).toMatch(/if \(owedAfter\) \{\n\s*speechChainRef\.current = speechChainRef\.current\n\s*\.then\(\(\) => \(trackAGenRef\.current === myTrackAGen \? speakLearn\(owedAfter/);
+    // Every track A line joins through ONE chain link (`chainLine`), which
+    // drops a line the next move superseded (learnTrackAHeard.gate).
+    expect(page).toMatch(/if \(owedSaid && opts\?\.verdict\) owedAfter = owedSaid;\n\s*else if \(owedSaid\) chainLine\(owedSaid, \(\) => speakLearn\(owedSaid/);
+    // …queued after the line.
+    expect(page).toMatch(/if \(owedAfter\) chainLine\(owedAfter, \(\) => speakLearn\(owedAfter/);
+    expect(page).toMatch(/const chainLine = \(heard: string, voice: \(\) => Promise<void>\): void => \{\n\s*speechChainRef\.current = \(speechChainRef\.current \?\? Promise\.resolve\(\)\)\n\s*\.then\(\(\) => \{\n\s*if \(trackAGenRef\.current !== myTrackAGen\)/);
     // The wave says whether it leads with the verdict: a 'but' beat.
     expect(page).toMatch(/speakTrackA\(hintPkg\.spoken, [^\n]*, \{ verdict: !!lateDecision\.lead && DNA_BEAT\[lateDecision\.lead\.lane\] === 'but' \}\);/);
   });

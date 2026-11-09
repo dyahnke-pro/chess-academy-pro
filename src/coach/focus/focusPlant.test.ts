@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { findFocusPlant, MISS_SPACING_PLIES, NO_PLANTS, plantAsk, PLANT_EASIER_FROM_PLY, PLANT_SPACING_PLIES, presents, SECOND_CHANCE_PLY, THIRD_CHANCE_PLY, TOP_RUNG_GRACE_PLIES, wantedDifficulty, type FocusPlantAsk, type PlantState } from './focusPlant';
 import type { FocusChance } from './focusChances';
-import type { CoachLine, SlipRead } from '../../missions/earnedSlip';
+import { completesExchange, type CoachLine, type SlipRead } from '../../missions/earnedSlip';
 
 const MIDDLEGAME = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
 const ENDGAME = '4k3/8/8/8/8/8/8/R3K3 w - - 0 40';
@@ -46,6 +46,11 @@ describe('plantAsk — a chance every game at a varied point, more for beginners
     expect(plantAsk(presented, { rung: 1, posed: 2, targetPly: 12 }, 60, ENDGAME)).toBeNull();
     expect(plantAsk(presented, { rung: 2, posed: 1, targetPly: 12 }, 60, ENDGAME)).toBeNull();
     expect(plantAsk(presented, { rung: 3, posed: 1, targetPly: 12 }, 60, ENDGAME)).toBeNull();
+  });
+  it('a chance on the board counts, judged or not (prod rung3-g2: a planted chance met by a forced move was never posed, and a second came at rung 3)', () => {
+    expect(plantAsk({ ...presented, count: 1, lastPly: 38 }, { rung: 3, posed: 0, targetPly: 15 }, 50, MIDDLEGAME), 'the plant made is the one').toBeNull();
+    expect(plantAsk(presented, { rung: 3, posed: 0, targetPly: 15 }, 50, MIDDLEGAME), 'the guarantee presented is the one').toBeNull();
+    expect(plantAsk({ ...presented, count: 1, lastPly: 38 }, { rung: 1, posed: 0, targetPly: 15 }, 50, MIDDLEGAME), 'twin: rung 1 still has its second').not.toBeNull();
   });
   it('a flip counts as one of the game\'s chances', () => {
     expect(plantAsk({ ...presented, flips: 1 }, { rung: 1, posed: 1, targetPly: 12 }, 60, ENDGAME)).toBeNull();
@@ -164,6 +169,42 @@ describe('findFocusPlant — a real slip that leaves your side a chance at your 
   it('twin: asked at rung 0, the same slip plants the knight', async () => {
     const { pick } = await findFocusPlant(TWO, twoLines, BEGINNER, ask({ difficulty: 0 }), twoRead);
     expect(pick?.chance).toMatchObject({ kind: 'take', piece: { square: 'f4' }, difficulty: 0 });
+  });
+});
+
+describe('mid-exchange — the coach takes what is on offer, and its slip is in how it takes', () => {
+  // Black (the coach) to move, a free knight on b4. …cxb4 keeps everything
+  // guarded; …Nxb4 takes it too, but the knight was the bishop's only guard,
+  // and Rxf4 wins it back. …Kd7 ignores the knight — never a plant.
+  const FEN = '4k3/8/8/2pn4/1N3b2/8/8/4KR2 b - - 0 30';
+  const lines: CoachLine[] = [
+    { uci: 'c5b4', coachCp: 300, pv: ['c5b4', 'e1e2'] },
+    { uci: 'e8d7', coachCp: 150, pv: ['e8d7', 'b4d5'] },
+    { uci: 'd5b4', coachCp: 0, pv: ['d5b4', 'f1f4'] },
+  ];
+  const read: SlipRead = (fen) => Promise.resolve(
+    fen.startsWith('4k3/8/8/2p5/1n3b2/') ? { topLines: [{ moves: ['f1f4', 'b4d5'], evaluation: 100, mate: null }, { moves: ['e1e2', 'f4h2'], evaluation: -200, mate: null }] }
+      : fen.startsWith('8/3k4/') ? { topLines: [{ moves: ['b4d5', 'f4h2'], evaluation: 100, mate: null }, { moves: ['f1f4', 'd5f4'], evaluation: -200, mate: null }] }
+        : { topLines: [] });
+  it('completesExchange: a capture that wins the piece, or any reply to a check — never a quiet move', () => {
+    expect(completesExchange(FEN, 'c5b4')).toBe(true);
+    expect(completesExchange(FEN, 'd5b4')).toBe(true);
+    expect(completesExchange(FEN, 'e8d7')).toBe(false);
+    expect(completesExchange(FEN, 'f4h2')).toBe(false);
+    expect(completesExchange('4k3/8/8/8/8/8/8/4KR2 w - - 0 1', 'f1f8'), 'no piece on offer: a capture of nothing').toBe(false);
+    expect(completesExchange('4k3/8/8/8/8/8/4r3/R3K3 w - - 0 1', 'e1d1'), 'in check, every legal reply answers it').toBe(true);
+  });
+  it('prod record g2: the coach plants by HOW it takes — …Nxb4 leaves the bishop its knight was guarding', async () => {
+    const { pick, scan } = await findFocusPlant(FEN, lines, BEGINNER, ask({ difficulty: 1 }), read);
+    expect(scan['mid-exchange'], 'the old bail').toBeUndefined();
+    expect(pick).toMatchObject({ uci: 'd5b4', seat: 'exploit', dropCp: 300 });
+    expect(pick?.chance).toMatchObject({ kind: 'take', tag: 'missed-your-free-piece' });
+  });
+  it('twin: with no capture that leaves a chance, it is still refused mid-exchange — the quiet slip never plays', async () => {
+    const quietOnly = lines.filter((l) => l.uci !== 'd5b4');
+    const { pick, scan } = await findFocusPlant(FEN, quietOnly, BEGINNER, ask({ difficulty: 1 }), read);
+    expect(pick).toBeNull();
+    expect(scan['mid-exchange']).toBe(1);
   });
 });
 

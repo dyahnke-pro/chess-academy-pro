@@ -3,6 +3,7 @@
 // deeper: g6's shallow "it bears down on f5" is REPLACED by what it sets up;
 // Bg7 is bound to what b4 aims at.
 import { describe, it, expect } from 'vitest';
+import { introWithGerund } from '../utils/moveIntro';
 import { Chess } from 'chess.js';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { NO_PREV_CAPTURE } from './pvPlayback';
@@ -27,7 +28,7 @@ describe('the three facts in the briefing', () => {
     const shallow = say(3, { withFacts: false });
     const deep = say(3, { withFacts: true });
     expect(shallow).toMatch(/bears down on f5/);
-    expect(deep).toBe('You play g6, making room for your bishop on g7, where it hits their rook on a1 once their b4 opens the diagonal.');
+    expect(deep).toBe(`${introWithGerund('student', 'g6', 'making room for your bishop on g7, where it hits their rook on a1 once their b4 opens the diagonal')}.`);
     expect(deep).not.toMatch(/f5/);
   });
   it('…Bg7 is bound to what b4 aims at', () => {

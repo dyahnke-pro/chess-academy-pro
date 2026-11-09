@@ -3,6 +3,7 @@
 // game analysis"). The review WALK reads the same openingStory beats Learn
 // reads, on the move they belong to — sized by the student's own record.
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { introHead, MOVE_HEAD } from '../test/introPattern';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { buildReviewSegmentsForTests, STORY_PROVEN_GAMES, type ReviewMoveInput } from './coachFeatureService';
@@ -55,9 +56,9 @@ describe('review walk — each book move the student played, with its job', () =
   it('the masters\' main move the student played is said with what it does (bookMoveWhy)', () => {
     const segs = buildReviewSegmentsForTests(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400);
     // …Be6, the masters' main move: what it does on the board.
-    expect(segs[13].narration ?? '').toMatch(/(?:[^:.]+: it |(?:Your|Their) \S+ |(?:You|They) play \S+(?: — it|: it|\. It) )prepares d5/);
+    expect(segs[13].narration ?? '').toMatch(new RegExp(MOVE_HEAD + String.raw`prepares d5`));
     // A bare development job restates the board and stays quiet.
-    expect(segs[19].narration ?? '').not.toMatch(/(?:[^:.]+: it |(?:Your|Their) \S+ |(?:You|They) play \S+(?: — it|: it|\. It) )brings your knight out\./);
+    expect(segs[19].narration ?? '').not.toMatch(new RegExp(MOVE_HEAD + String.raw`brings your knight out\.`));
     // THE POINT, NEVER THE MOVE (David: "You play the knight to b4 — redundant").
     segs.forEach((s) => { expect(s.narration ?? '').not.toMatch(/\b(?:You|They) play the\b/); });
   }, 30_000);
@@ -87,9 +88,9 @@ describe('review walk — both seats, captures included (BACKLOG §6)', () => {
     const at = (ply: number): string => segs[ply - 1].narration ?? '';
     // A plain trade restates the move (lead 2026-10-20): nothing on 5.exd5.
     expect(at(9)).not.toMatch(/and you can take back/);
-    expect(at(11)).toMatch(/(?:[^:.]+: it |(?:Your|Their) \S+ |(?:You|They) play \S+(?: — it|: it|\. It) )hits your queen on d8 and your rook on h8 at once\./);
-    expect(at(12)).toMatch(/(?:[^:.]+: it |(?:Your|Their) \S+ |(?:You|They) play \S+(?: — it|: it|\. It) )gets you a knight for the pawn they took, but your king has left its back rank to do it, out in the open — that is what they gave the knight for\./);
-    expect(at(15)).toMatch(/(?:[^:.]+: it |(?:Your|Their) \S+ |(?:You|They) play \S+(?: — it|: it|\. It) )adds a third attacker on your knight on d5, and it needs an answer this move\./);
+    expect(at(11)).toMatch(new RegExp(MOVE_HEAD + String.raw`hits your queen on d8 and your rook on h8 at once\.`));
+    expect(at(12)).toMatch(new RegExp(MOVE_HEAD + String.raw`gets you a knight for the pawn they took, but your king has left its back rank to do it, out in the open — that is what they gave the knight for\.`));
+    expect(at(15)).toMatch(new RegExp(MOVE_HEAD + String.raw`adds a third attacker on your knight on d5, and it needs an answer this move\.`));
     // The pin was said with 7…Ke6's guard; 8…Nb4 says only its own guard.
     // 8…Nb4 hits c2 AND holds the pinned knight: both halves — the rule says
     // c2, the move's thought the guard (WO-ONE-COACH-01 Build 5).
@@ -105,15 +106,15 @@ describe('review walk — a move job is ranked by what the move changes', () => 
     return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
   }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? ''); };
   it('4.Ng5: a new attack outranks a guard — the knight joins the c4 bishop against f7', () => {
-    expect(walk()[6]).toMatch(/(?:[^:.]+: it |(?:Your|Their) \S+ |(?:You|They) play \S+(?: — it|: it|\. It) )joins their bishop on c4 against your pawn on f7, and it needs an answer this move\./);
+    expect(walk()[6]).toMatch(new RegExp(MOVE_HEAD + String.raw`joins their bishop on c4 against your pawn on f7, and it needs an answer this move\.`));
   }, 30_000);
   // The check is said first, in the move itself ("They play queen to f3,
   // check: …"), then what the move does.
   it('7.Qf3+: a check is always said, first', () => {
-    expect(walk()[12]).toMatch(/They play Qf3\+: it piles on your pinned knight on d5 — pinned to the king, it can't run, and it needs an answer this move\./);
+    expect(walk()[12]).toMatch(new RegExp(introHead('opponent', 'Qf3+') + String.raw`piles on your pinned knight on d5 — pinned to the king, it can't run, and it needs an answer this move\.`));
   }, 30_000);
   it('7…Ke6: a king says the square it holds first, then the escape', () => {
-    expect(walk()[13]).toMatch(/(?:[^:.]+: it |(?:Your|Their) \S+ |(?:You|They) play \S+(?: — it|: it|\. It) )adds a second guard to your knight on d5, which their bishop on c4 pins, and gets your king out of the check from their queen on f3\./);
+    expect(walk()[13]).toMatch(new RegExp(MOVE_HEAD + String.raw`adds a second guard to your knight on d5, which their bishop on c4 pins, and gets your king out of the check from their queen on f3\.`));
   }, 30_000);
 });
 
@@ -143,7 +144,7 @@ describe('review walk — the Fried Liver tape, second pass (lead 2026-10-20)', 
     return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
   }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? ''); };
   it('2.Nf3 says its attack on e5 — the fact 2…Nc6 answers', () => {
-    expect(walk()[2]).toMatch(/They play Nf3 — it develops into the game, [^.]*e5, attacking the pawn there, and it needs an answer this move\./);
+    expect(walk()[2]).toMatch(new RegExp(introHead('opponent', 'Nf3') + String.raw`develops into the game, [^.]*e5, attacking the pawn there, and it needs an answer this move\.`));
   }, 30_000);
   it('the opening is named as it is identified — the Fried Liver at 6.Nxf7', () => {
     expect(walk()[10]).toMatch(/It's the Fried Liver Attack of the Two Knights Defense\./);
@@ -180,7 +181,7 @@ describe('review walk — a book move is taught by its reason, never by its stan
   const walk = (reply: string): string => { const c = new Chess(); return buildReviewSegmentsForTests(['e4', reply, 'Nc3'].map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; }), 'black', null, true, 1400)[1].narration ?? ''; };
   it('a rare book move says its reason and no standing', () => {
     __setLocalDbForTests(db({ c5: 600, e5: 300, a6: 30 }) as never);
-    expect(walk('a6')).toMatch(/You play a6 — it takes the b5 square away from their bishop\./);
+    expect(walk('a6')).toMatch(new RegExp(introHead('student', 'a6') + String.raw`takes the b5 square away from their bishop\.`));
     expect(walk('a6')).not.toMatch(/rare|less common|main line/);
   }, 30_000);
   afterAll(() => { __setLocalDbForTests({ positions: fixture.positions } as never); });
@@ -209,7 +210,7 @@ describe('review walk — one claim said once (lead 2026-10-20)', () => {
     // "Yes move theory to review button") — the walk does not say it.
     expect(walk.join(' ')).not.toMatch(/it invites Ng5/);
     // 4.Ng5 says what it asks of the student, once.
-    expect(walk[6]).toMatch(/They play Ng5 — it joins their bishop on c4 against your pawn on f7, and it needs an answer this move\./);
+    expect(walk[6]).toMatch(new RegExp(introHead('opponent', 'Ng5') + String.raw`joins their bishop on c4 against your pawn on f7, and it needs an answer this move\.`));
     expect(walk.join(' ').match(/joins their bishop on c4 against your pawn on f7/g)?.length).toBe(1);
   }, 30_000);
 });
