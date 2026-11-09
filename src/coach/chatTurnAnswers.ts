@@ -158,7 +158,7 @@ export function answerIsLoose(chess: Chess, sq: Square | null, student: Color, s
     .map((l) => `${name(l.type)} on ${l.square}`);
   const owner = whose === 'your' ? 'yours' : 'theirs';
   const head = hanging.length
-    ? `Hanging: ${whose} ${andList(hanging)}. ${sentenceEach(proofs)}`
+    ? `Hanging: ${whose} ${andList(hanging)}${proofs.length === 1 ? ` — ${proofs[0]}.` : `. ${sentenceEach(proofs)}`}`
     : `Nothing of ${owner} can be taken at a profit right now.`;
   const tail = loose.length ? ` Unguarded but not attacked yet: ${whose} ${andList(loose)}.` : '';
   return `${head}${tail}`;
