@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**651 lines · 8 exports · 8 importers · 8 tests · 0 audits**
+**655 lines · 8 exports · 8 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,26 +38,28 @@
 ### `StoryGround` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `openingStoryAt` (function) — 12 call sites
+### `openingStoryAt` (function) — 14 call sites
 - `src/services/boardComputers.ts:402`
 - `src/services/holeKey.test.ts:15`
-- `src/services/learnBoardTeaching.test.ts:216`
+- `src/services/learnBoardTeaching.test.ts:207`
 - `src/services/openingStory.test.ts:23`
 - `src/services/openingStory.test.ts:30`
 - `src/services/openingStory.test.ts:38`
-- `src/services/openingStory.test.ts:145`
-- `src/services/openingStory.test.ts:169`
-- `src/services/openingStory.test.ts:180`
-- `src/services/openingStory.test.ts:191`
-- `src/services/openingStory.test.ts:219`
+- `src/services/openingStory.test.ts:47`
+- `src/services/openingStory.test.ts:52`
+- `src/services/openingStory.test.ts:160`
+- `src/services/openingStory.test.ts:184`
+- `src/services/openingStory.test.ts:195`
+- `src/services/openingStory.test.ts:206`
+- `src/services/openingStory.test.ts:234`
 - `src/services/openingStoryWholeBeat.test.ts:26`
 
 ### `BEAT_ORDER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `prefetchOpeningStory` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:93`
-- `src/services/openingStory.test.ts:158`
+- `src/services/learnBoardTeaching.ts:94`
+- `src/services/openingStory.test.ts:173`
 
 ## Tests
 

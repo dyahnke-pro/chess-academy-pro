@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6801) — names `openingDatabaseBrief`
+- **The standard post-deploy ritual** (CLAUDE.md:6935) — names `openingDatabaseBrief`
 
 ## Who calls in
 
@@ -20,7 +20,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openingDatabaseBrief` (function) — 5 call sites
-- `src/services/coachApi.ts:6444`
+- `src/services/coachApi.ts:6398`
 - `src/services/openingDatabaseBrief.test.ts:25`
 - `src/services/openingDatabaseBrief.test.ts:37`
 - `src/services/openingDatabaseBrief.test.ts:46`

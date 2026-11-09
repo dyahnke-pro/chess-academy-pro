@@ -21,9 +21,9 @@
 - **🔒🔒 A NOTE IS SELECTED BY POSITION, NEVER BY NAME — and every number below was re-measured 2026-08-04 (David, emphatic: *"All narrations need to be deterministically found and handed to llm in the package. There is no room for false narrations on this app! Ever!!"* and *"The problem is NOT the gate… Gates are back ups that should never fire. Fix the package or how the position is chosen."*).** (CLAUDE.md:4825) — names `openingGenerator`
 - **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4945) — names `noteArrowSourceAt`, `openingGenerator`
 - **🔒 WHICH NOTES THE KEPT SURFACES MAY SPEAK — split by anchoring (David 2026-08-26).** (CLAUDE.md:5035) — names `WALKTHROUGH_GEN_REV`, `noteArrowSourceAt`, `openingGenerator`
-- **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:6542) — names `generateOpening`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6788) — names `openingGenerator`
-- **The standard post-deploy ritual** (CLAUDE.md:6927) — names `WALKTHROUGH_GEN_REV`, `openingGenerator`
+- **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:6544) — names `generateOpening`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6790) — names `openingGenerator`
+- **The standard post-deploy ritual** (CLAUDE.md:6929) — names `WALKTHROUGH_GEN_REV`, `openingGenerator`
 
 ## Who calls in
 
@@ -90,7 +90,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:6957`
 - `src/components/Coach/CoachTeachPage.tsx:7031`
 - `src/components/Coach/CoachTeachPage.tsx:7764`
-- `src/components/Coach/CoachTeachPage.tsx:13575`
+- `src/components/Coach/CoachTeachPage.tsx:13581`
 - `src/services/lessonCacheKey.test.ts:60`
 - `src/services/lessonCacheKey.test.ts:65`
 - `src/services/lessonCacheKey.test.ts:74`
@@ -133,8 +133,8 @@
 - `src/services/openingGenerator.test.ts:918`
 
 ### `firstSentence` (function) — 14 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:1858`
-- `src/components/Openings/OpeningDetailPage.tsx:1860`
+- `src/components/Openings/OpeningDetailPage.tsx:1859`
+- `src/components/Openings/OpeningDetailPage.tsx:1861`
 - `src/services/openingCourse.ts:165`
 - `src/services/openingCourse.ts:288`
 - `src/services/openingCourse.ts:297`
@@ -226,10 +226,10 @@
 - `src/components/Coach/CoachTeachPage.tsx:6912`
 - `src/components/Coach/CoachTeachPage.tsx:7025`
 - `src/components/Coach/CoachTeachPage.tsx:7759`
-- `src/components/Coach/CoachTeachPage.tsx:13569`
+- `src/components/Coach/CoachTeachPage.tsx:13575`
 - `src/components/Openings/OpeningDetailPage.wiring.test.ts:91`
 - `src/services/generatedLesson.test.ts:5`
-- `src/services/generatedLesson.ts:37`
+- `src/services/generatedLesson.ts:43`
 - `src/services/openingGenerator.computedBeats.test.ts:60`
 - `src/services/openingGenerator.explorerBranches.test.ts:56`
 - `src/services/openingGenerator.explorerBranches.test.ts:85`
@@ -239,7 +239,7 @@
 - `src/services/openingGenerator.test.ts:934`
 - `src/services/openingGenerator.test.ts:937`
 - `src/services/walkthroughGenRev.gate.test.ts:33`
-- `src/test/marksSweep.gate.test.ts:205`
+- `src/test/marksSweep.gate.test.ts:212`
 
 ### `buildLineFactsBlock` (function) — 2 call sites
 - `src/services/computePunishFacts.test.ts:41`
