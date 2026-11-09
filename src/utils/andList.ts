@@ -1,4 +1,5 @@
 import { Chess } from 'chess.js';
+import { MATERIAL_VALUE } from '../services/pieceValues';
 
 /**
  * Join EVERY item as English ("a", "a and b", "a, b and c").
@@ -82,8 +83,6 @@ export function seatedLine(sans: readonly string[], first: LineSeat): string {
 /** A line this long or shorter is said move by move (`lineShape`). */
 const LINE_SAID_IN_FULL = 3;
 
-const PIECE_POINTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-
 /** What each move of the line takes (a promotion counts what it adds), and
  *  who plays it, read off the board the line starts on; null when there is
  *  no board or the line does not play on it. */
@@ -92,7 +91,7 @@ function lineTakes(sans: readonly string[], fen: string): { took: number; to: st
     const c = new Chess(fen);
     return sans.map((san) => {
       const m = c.move(san.replace(/^…/, ''));
-      const took = (m.captured ? PIECE_POINTS[m.captured] ?? 0 : 0) + (m.promotion ? (PIECE_POINTS[m.promotion] ?? 0) - 1 : 0);
+      const took = (m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0) + (m.promotion ? (MATERIAL_VALUE[m.promotion] ?? 0) - 1 : 0);
       return { took, to: m.to, color: m.color };
     });
   } catch { return null; }
