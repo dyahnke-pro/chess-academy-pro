@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingRoads.test.ts:33`
 
 ### `variationLabel` (function) — 3 call sites
-- `src/services/openingStory.ts:195`
+- `src/services/openingStory.ts:255`
 - `src/services/openingStoryWholeBeat.test.ts:41`
 - `src/services/openingStoryWholeBeat.test.ts:42`
 
@@ -35,13 +35,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingRoads.test.ts:70`
 - `src/services/openingRoads.test.ts:75`
 - `src/services/openingRoads.test.ts:79`
-- `src/services/openingStory.ts:379`
-- `src/services/openingStory.ts:514`
+- `src/services/openingStory.ts:454`
+- `src/services/openingStory.ts:590`
 
 ### `spokenRoad` (function) — 3 call sites
 - `src/services/openingRoads.test.ts:82`
 - `src/services/openingRoads.test.ts:83`
-- `src/services/openingStory.ts:374`
+- `src/services/openingStory.ts:449`
 
 ### `roadReason` (function) — 10 call sites
 - `src/services/openingRoads.test.ts:17`
@@ -53,7 +53,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingRoads.test.ts:49`
 - `src/services/openingRoads.test.ts:94`
 - `src/services/openingRoads.test.ts:102`
-- `src/services/openingStory.ts:365`
+- `src/services/openingStory.ts:440`
 
 ## Tests
 

@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6904) — names `reviewMoveTeaching`
+- **The standard post-deploy ritual** (CLAUDE.md:6918) — names `reviewMoveTeaching`
 
 ## Who calls in
 
@@ -53,7 +53,7 @@
 
 ### `buildReviewMoveTeaching` (function) — 53 call sites
 - `src/services/coachFeatureService.ts:1262`
-- `src/services/coachFeatureService.ts:4239`
+- `src/services/coachFeatureService.ts:4237`
 - `src/services/danyaBench.measure.test.ts:473`
 - `src/services/discussionPractice.ts:174`
 - `src/services/guardPressure.test.ts:20`
@@ -124,8 +124,8 @@
 - `src/services/tapeKc7Skewer.test.ts:29`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:4147`
-- `src/services/reviewFullData.ts:1731`
+- `src/services/coachFeatureService.ts:4145`
+- `src/services/reviewFullData.ts:1741`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`
@@ -133,7 +133,7 @@
 - `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:4142`
+- `src/services/coachFeatureService.ts:4140`
 - `src/services/reviewMoveTeaching.test.ts:121`
 - `src/services/reviewMoveTeaching.test.ts:124`
 - `src/services/reviewMoveTeaching.test.ts:130`

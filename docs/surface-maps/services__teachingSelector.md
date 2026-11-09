@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**454 lines · 11 exports · 10 importers · 6 tests · 1 audits**
+**455 lines · 11 exports · 10 importers · 6 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:3142) — names `Thesis`
+- **⏰ Standing notes** (CLAUDE.md:3217) — names `Thesis`
 
 ## Who calls in
 
@@ -46,13 +46,13 @@
 - `src/services/teachingSelector.test.ts:144`
 
 ### `selectTeaching` (function) — 16 call sites
-- `src/hooks/usePhaseNarration.ts:345`
-- `src/services/coachFeatureService.ts:1534`
+- `src/hooks/usePhaseNarration.ts:348`
+- `src/services/coachFeatureService.ts:1718`
 - `src/services/gameTurn.test.ts:42`
 - `src/services/gameTurn.test.ts:48`
 - `src/services/needCoverage.report.test.ts:60`
-- `src/services/openingGenerator.ts:533`
-- `src/services/openingGenerator.ts:2442`
+- `src/services/openingGenerator.ts:540`
+- `src/services/openingGenerator.ts:2524`
 - `src/services/teachingSelector.test.ts:39`
 - `src/services/teachingSelector.test.ts:51`
 - `src/services/teachingSelector.test.ts:80`
@@ -64,18 +64,18 @@
 - `src/services/teachingSelector.test.ts:115`
 
 ### `turnThesis` (function) — 1 call site
-- `src/services/coachFeatureService.ts:4042`
+- `src/services/coachFeatureService.ts:4309`
 
 ### `ThesisRegister` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderThesis` (function) — 13 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
-- `src/components/Coach/CoachGameReview.tsx:1537`
-- `src/hooks/usePhaseNarration.ts:349`
+- `src/components/Coach/CoachGameReview.tsx:1533`
+- `src/hooks/usePhaseNarration.ts:352`
 - `src/services/gameTurn.test.ts:44`
 - `src/services/gameTurn.test.ts:50`
-- `src/services/openingGenerator.ts:2444`
+- `src/services/openingGenerator.ts:2526`
 - `src/services/teachingSelector.test.ts:45`
 - `src/services/teachingSelector.test.ts:46`
 - `src/services/teachingSelector.test.ts:62`
@@ -85,16 +85,16 @@
 - `src/test/reviewTurnFromStory.test.ts:35`
 
 ### `pliesFromSans` (function) — 6 call sites
-- `src/hooks/usePhaseNarration.ts:345`
+- `src/hooks/usePhaseNarration.ts:348`
 - `src/services/needCoverage.report.test.ts:59`
-- `src/services/openingGenerator.ts:531`
+- `src/services/openingGenerator.ts:538`
 - `src/services/teachingSelector.test.ts:111`
 - `src/services/teachingSelector.test.ts:112`
 - `src/services/teachingSelector.test.ts:115`
 
 ### `summarizeTeaching` (function) — 3 call sites
-- `src/services/openingGenerator.ts:533`
-- `src/services/openingGenerator.ts:2443`
+- `src/services/openingGenerator.ts:540`
+- `src/services/openingGenerator.ts:2525`
 - `src/services/teachingSelector.test.ts:116`
 
 ## Tests

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2113 lines · 15 exports · 62 importers · 46 tests · 1 audits**
+**2114 lines · 15 exports · 62 importers · 46 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6941) — names `FundamentalId`, `principleAttribution`
+- **The standard post-deploy ritual** (CLAUDE.md:6963) — names `FundamentalId`, `principleAttribution`
 
 ## Who calls in
 
@@ -240,13 +240,13 @@
 ### `pvSanToUci` (function) — 3 call sites
 - `src/services/misconceptionClassifier.ts:565`
 - `src/services/mistakePuzzleService.ts:1171`
-- `src/services/moveThoughtFacts.ts:284`
+- `src/services/moveThoughtFacts.ts:282`
 
 ### `pvUciToSan` (function) — 14 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:674`
-- `src/services/autoAnalyzeGame.ts:677`
+- `src/services/autoAnalyzeGame.ts:684`
+- `src/services/autoAnalyzeGame.ts:687`
 - `src/services/capabilityEvidence.ts:534`
 - `src/services/coachFeatureService.ts:976`
 - `src/services/coachFeatureService.ts:978`

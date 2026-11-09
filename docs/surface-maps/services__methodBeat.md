@@ -8,9 +8,9 @@
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:380) — names `methodBeat`
-- **Why determinism** (CLAUDE.md:412) — names `methodBeat`
-- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1533) — names `methodBeat`
+- **The tools are COMPUTERS** (CLAUDE.md:388) — names `methodBeat`
+- **Why determinism** (CLAUDE.md:420) — names `methodBeat`
+- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1541) — names `methodBeat`
 
 ## Who calls in
 
@@ -53,8 +53,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:3312`
-- `src/services/positionFacts.ts:1225`
+- `src/services/coachFeatureService.ts:3553`
+- `src/services/positionFacts.ts:1241`
 
 ### `HABIT_KIND` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -85,15 +85,15 @@
 - `src/services/methodSignals.test.ts:66`
 - `src/services/methodSignals.test.ts:71`
 - `src/services/methodSignals.test.ts:72`
-- `src/services/slipQuestion.test.ts:44`
-- `src/services/slipQuestion.test.ts:53`
+- `src/services/slipQuestion.test.ts:45`
+- `src/services/slipQuestion.test.ts:54`
 
 ### `habitSaidKey` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10673`
-- `src/components/Coach/CoachTeachPage.tsx:10674`
+- `src/components/Coach/CoachTeachPage.tsx:10766`
+- `src/components/Coach/CoachTeachPage.tsx:10767`
 - `src/services/learnBoardTeaching.ts:262`
-- `src/services/learnBoardTeaching.ts:1181`
-- `src/services/slipQuestion.test.ts:53`
+- `src/services/learnBoardTeaching.ts:1195`
+- `src/services/slipQuestion.test.ts:54`
 
 ### `liveMethodBeat` (function) — 18 call sites
 - `src/services/looseTrigger.test.ts:18`
@@ -113,7 +113,7 @@
 - `src/services/methodSignals.test.ts:75`
 - `src/services/methodSignals.test.ts:76`
 - `src/services/mustDefendHabit.test.ts:15`
-- `src/services/positionFacts.ts:1085`
+- `src/services/positionFacts.ts:1093`
 
 ### `liveMethodBeatFor` (function) — 24 call sites
 - `src/services/groundedAnswer.ts:3804`

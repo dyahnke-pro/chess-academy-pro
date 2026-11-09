@@ -118,8 +118,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:185`
 - `src/services/exchangeIdeas.test.ts:192`
 - `src/services/exchangeIdeas.test.ts:197`
-- `src/services/learnBoardTruth.realGame.test.ts:49`
-- `src/services/learnBoardTruth.realGame.test.ts:50`
+- `src/services/learnBoardTruth.realGame.test.ts:52`
+- `src/services/learnBoardTruth.realGame.test.ts:53`
 
 ### `cPawnBlock` (function) — 4 call sites
 - `src/services/capabilityEvidence.ts:557`
@@ -135,8 +135,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:216`
 - `src/services/exchangeIdeas.test.ts:217`
 - `src/services/exchangeIdeas.test.ts:221`
-- `src/services/positionFacts.ts:1342`
-- `src/services/reviewFullData.ts:1099`
+- `src/services/positionFacts.ts:1349`
+- `src/services/reviewFullData.ts:1102`
 
 ## Tests
 

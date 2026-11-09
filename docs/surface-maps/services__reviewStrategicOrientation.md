@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**273 lines · 5 exports · 6 importers · 3 tests · 1 audits**
+**271 lines · 5 exports · 6 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -36,8 +36,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planBeatShape.test.ts:78`
 
 ### `buildMiddlegameOrientation` (function) — 16 call sites
-- `src/services/coachFeatureService.ts:3696`
-- `src/services/reviewFullData.ts:1644`
+- `src/services/coachFeatureService.ts:3937`
+- `src/services/reviewFullData.ts:1688`
 - `src/services/reviewStrategicOrientation.test.ts:4`
 - `src/services/reviewStrategicOrientation.test.ts:8`
 - `src/services/reviewStrategicOrientation.test.ts:18`

@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:380) — names `planRace`
-- **G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).** (CLAUDE.md:1605) — names `planRace`
+- **The tools are COMPUTERS** (CLAUDE.md:388) — names `planRace`
+- **G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).** (CLAUDE.md:1613) — names `planRace`
 
 ## Who calls in
 
@@ -32,7 +32,7 @@
 ## Exports and every call site
 
 ### `stepsToPromote` (function) — 1 call site
-- `src/services/nextPlans.ts:601`
+- `src/services/nextPlans.ts:707`
 
 ### `pushesToPromote` (function) — 2 call sites
 - `src/services/planRace.test.ts:63`
@@ -42,9 +42,9 @@
 - `scripts/endgame-drills/generate.ts:311`
 - `src/data/endgameConceptDrills.test.ts:31`
 - `src/data/endgameConceptDrills.test.ts:55`
-- `src/services/conceptEngine.ts:584`
+- `src/services/conceptEngine.ts:587`
 - `src/services/kingAttackReads.test.ts:188`
-- `src/services/nextPlans.ts:682`
+- `src/services/nextPlans.ts:788`
 - `src/services/planRace.test.ts:23`
 - `src/services/planRace.test.ts:28`
 - `src/services/planRace.test.ts:35`
@@ -63,9 +63,9 @@
 - `src/services/planRace.test.ts:212`
 
 ### `planRaceClause` (function) — 17 call sites
-- `src/services/conceptEngine.ts:586`
+- `src/services/conceptEngine.ts:589`
 - `src/services/kingAttackReads.test.ts:194`
-- `src/services/nextPlans.ts:683`
+- `src/services/nextPlans.ts:789`
 - `src/services/planRace.test.ts:24`
 - `src/services/planRace.test.ts:39`
 - `src/services/planRace.test.ts:40`
@@ -79,7 +79,7 @@
 - `src/services/planRace.test.ts:110`
 - `src/services/planRace.test.ts:116`
 - `src/services/planRace.test.ts:158`
-- `src/services/reviewFullData.ts:1151`
+- `src/services/reviewFullData.ts:1180`
 
 ### `fileClaimed` (function) — 4 call sites
 - `src/services/learnBoardTeaching.ts:256`
@@ -89,7 +89,7 @@
 
 ### `planRaceProof` (function) — 2 call sites
 - `src/services/kingAttackReads.test.ts:195`
-- `src/services/reviewFullData.ts:1152`
+- `src/services/reviewFullData.ts:1181`
 
 ### `OPPOSITE_WINGS_CLAIM` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -99,8 +99,8 @@
 
 ### `oppositeWingsRace` (function) — 5 call sites
 - `src/services/kingAttackReads.ts:718`
-- `src/services/learnBoardTeaching.ts:967`
-- `src/services/openingStory.test.ts:104`
+- `src/services/learnBoardTeaching.ts:975`
+- `src/services/openingStory.test.ts:119`
 - `src/services/planRace.test.ts:199`
 - `src/services/reviewStrategicOrientation.ts:229`
 
@@ -116,12 +116,12 @@
 ### `pawnSquareTaken` (function) — 3 call sites
 - `src/services/orderComputers.test.ts:181`
 - `src/services/orderTeaching.ts:106`
-- `src/services/reviewFullData.ts:1272`
+- `src/services/reviewFullData.ts:1308`
 
 ### `pawnSquareRaceProof` (function) — 3 call sites
 - `src/services/orderReads.ts:116`
 - `src/services/orderTeaching.ts:108`
-- `src/services/reviewFullData.ts:1273`
+- `src/services/reviewFullData.ts:1309`
 
 ## Tests
 

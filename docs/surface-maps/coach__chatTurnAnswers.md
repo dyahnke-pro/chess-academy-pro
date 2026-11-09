@@ -67,8 +67,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `answerExplainLast` (function) — 3 call sites
 - `src/coach/handWalk1009.test.ts:315`
-- `src/services/captureRun.test.ts:94`
-- `src/services/captureRun.test.ts:104`
+- `src/services/captureRun.test.ts:95`
+- `src/services/captureRun.test.ts:105`
 
 ### `answerLeftBook` (function) — 2 call sites
 - `src/coach/leftBook.test.ts:19`

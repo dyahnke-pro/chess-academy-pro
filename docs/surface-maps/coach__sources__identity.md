@@ -8,8 +8,10 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4648) — names `identity`
-- **🔒🔒 THE DETAILS A WALK MUST CATCH (David 2026-09-30: "These are the details you need to be catching. Lock in!!")** (CLAUDE.md:5842) — names `identity`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5192) — names `identity`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5842) — names `identity`
+- **🔒🔒 THE DETAILS A WALK MUST CATCH (David 2026-09-30: "These are the details you need to be catching. Lock in!!")** (CLAUDE.md:6523) — names `identity`
+- **The standard post-deploy ritual** (CLAUDE.md:6957) — names `identity`
 
 ## Who calls in
 
@@ -31,12 +33,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `loadIdentityPrompt` (function) — 3 call sites
-- `src/coach/envelope.ts:479`
+- `src/coach/envelope.ts:480`
 - `src/coach/sources/personalities.test.ts:152`
 - `src/coach/sources/personalities.test.ts:158`
 
 ### `loadIdentityPromptForPersonality` (function) — 2 call sites
-- `src/coach/envelope.ts:474`
+- `src/coach/envelope.ts:475`
 - `src/coach/sources/personalities.test.ts:159`
 
 ## Tests

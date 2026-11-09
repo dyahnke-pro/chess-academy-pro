@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1946 lines · 11 exports · 22 importers · 29 tests · 0 audits**
+**1956 lines · 12 exports · 22 importers · 29 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1388) — names `reviewFullData`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1396) — names `reviewFullData`
 
 ## Who calls in
 
@@ -36,6 +36,9 @@
 - `src/test/teach02Wired.test.ts`
 
 ## Exports and every call site
+
+### `positionalVerdictLine` (function) — 1 call site
+- `src/services/coachFeatureService.ts:2910`
 
 ### `prematureBreakWhy` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1172`

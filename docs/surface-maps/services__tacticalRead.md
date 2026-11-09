@@ -72,15 +72,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:98`
 
 ### `namedTacticClause` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:539`
+- `src/services/danyaBehaviors.ts:542`
 - `src/services/danyaDeviceCoverage.test.ts:105`
 - `src/services/tacticalRead.test.ts:123`
 - `src/services/tacticalRead.test.ts:132`
 
 ### `tacticalReadFromLines` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11111`
-- `src/services/claimTruth.manual.test.ts:170`
-- `src/services/danyaBehaviors.ts:537`
+- `src/components/Coach/CoachTeachPage.tsx:11113`
+- `src/services/claimTruth.manual.test.ts:171`
+- `src/services/danyaBehaviors.ts:540`
 - `src/services/danyaDeviceCoverage.test.ts:76`
 - `src/services/liveVoiceDefects.test.ts:43`
 - `src/services/tacticalRead.test.ts:190`
@@ -93,14 +93,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:413`
 
 ### `temptingTurnClause` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11126`
+- `src/components/Coach/CoachTeachPage.tsx:11128`
 - `src/services/danyaDeviceCoverage.test.ts:82`
 - `src/services/tacticalRead.test.ts:265`
 - `src/services/tacticalRead.test.ts:278`
 
 ### `uncertaintyClause` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11138`
-- `src/services/claimTruth.manual.test.ts:172`
+- `src/components/Coach/CoachTeachPage.tsx:11140`
+- `src/services/claimTruth.manual.test.ts:173`
 - `src/services/danyaDeviceCoverage.test.ts:87`
 - `src/services/liveVoiceDefects.test.ts:253`
 - `src/services/tacticalRead.test.ts:250`
@@ -116,13 +116,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:425`
 
 ### `candidateCompareRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11148`
+- `src/components/Coach/CoachTeachPage.tsx:11150`
 - `src/services/compareClaimsNoEdge.test.ts:12`
 - `src/services/danyaDeviceCoverage.test.ts:11`
 - `src/services/tacticalRead.test.ts:12`
 
 ### `temptingFromAnalysis` (function) — 6 call sites
-- `src/services/learnWalkBlumenfeld.test.ts:201`
+- `src/services/learnWalkBlumenfeld.test.ts:206`
 - `src/services/tacticalRead.recaptureTempting.test.ts:15`
 - `src/services/tacticalRead.recaptureTempting.test.ts:22`
 - `src/services/tacticalRead.test.ts:140`

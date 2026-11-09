@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**818 lines · 4 exports · 48 importers · 26 tests · 0 audits**
+**775 lines · 4 exports · 49 importers · 26 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:327) — names `detectTactics`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5655) — names `detectTactics`
+- **The tools are COMPUTERS** (CLAUDE.md:387) — names `detectTactics`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5715) — names `detectTactics`
 
 ## Who calls in
 
@@ -30,6 +30,7 @@
 - `src/services/moveInsight.ts`
 - `src/services/oneSkewerRule.test.ts`
 - `src/services/openingGenerator.ts`
+- `src/services/openingSlip.ts`
 - `src/services/pinBreak.ts`
 - `src/services/pinGeometry.test.ts`
 - `src/services/pinPressure.ts`
@@ -72,40 +73,41 @@
 
 ### `tacticDescription` (function) — 5 call sites
 - `src/services/lookaheadPlan.ts:136`
-- `src/services/reviewFullData.ts:927`
+- `src/services/reviewFullData.ts:954`
 - `src/services/tacticLineRotation.test.ts:31`
 - `src/services/tacticLineRotation.test.ts:34`
 - `src/services/tacticLineRotation.test.ts:39`
 
-### `detectTactics` (function) — 119 call sites
-- `src/components/Tactics/PatternSchoolPage.tsx:68`
+### `detectTactics` (function) — 117 call sites
+- `src/components/Tactics/PatternSchoolPage.tsx:69`
 - `src/missions/patterns/agreement.test.ts:48`
 - `src/missions/patterns/agreement.test.ts:65`
 - `src/services/boardConcepts.ts:296`
 - `src/services/computerAccuracy.audit.test.ts:117`
-- `src/services/conceptEngine.ts:476`
-- `src/services/conceptEngine.ts:717`
-- `src/services/danyaBehaviors.ts:513`
-- `src/services/discussionPractice.ts:59`
-- `src/services/discussionPractice.ts:104`
-- `src/services/discussionPractice.ts:147`
+- `src/services/conceptEngine.ts:479`
+- `src/services/conceptEngine.ts:720`
+- `src/services/danyaBehaviors.ts:491`
+- `src/services/discussionPractice.ts:60`
+- `src/services/discussionPractice.ts:105`
+- `src/services/discussionPractice.ts:148`
 - `src/services/learnRecordTerms.ts:169`
 - `src/services/learnWalkOct3c.test.ts:91`
 - `src/services/learnWalkOct3c.test.ts:97`
 - `src/services/liveNoteTruth.test.ts:59`
 - `src/services/liveTacticsContext.ts:362`
 - `src/services/liveTacticsContext.ts:510`
-- `src/services/lookaheadPlan.ts:1429`
-- `src/services/lookaheadPlan.ts:1492`
+- `src/services/lookaheadPlan.ts:1447`
+- `src/services/lookaheadPlan.ts:1510`
 - `src/services/looseClaim.test.ts:18`
 - `src/services/misconceptionClassifier.ts:107`
 - `src/services/misconceptionClassifier.ts:140`
-- `src/services/misconceptionClassifier.ts:305`
+- `src/services/misconceptionClassifier.ts:307`
 - `src/services/mistakeNarration.ts:396`
 - `src/services/moveInsight.ts:117`
 - `src/services/moveInsight.ts:1065`
 - `src/services/oneSkewerRule.test.ts:18`
-- `src/services/openingGenerator.ts:3575`
+- `src/services/openingGenerator.ts:3581`
+- `src/services/openingSlip.ts:122`
 - `src/services/pinBreak.ts:175`
 - `src/services/pinGeometry.test.ts:72`
 - `src/services/pinGeometry.test.ts:74`
@@ -119,10 +121,10 @@
 - `src/services/pinPressure.ts:108`
 - `src/services/pinPressure.ts:123`
 - `src/services/pinnerPinned.test.ts:6`
-- `src/services/playCommentary.ts:654`
+- `src/services/playCommentary.ts:662`
 - `src/services/playedConcept.ts:59`
 - `src/services/playedConcept.ts:66`
-- `src/services/positionFacts.ts:1357`
+- `src/services/positionFacts.ts:1388`
 - `src/services/pvPlayback.ts:394`
 - `src/services/pvPlayback.ts:414`
 - `src/services/relationClaimCost.report.test.ts:52`
@@ -131,17 +133,17 @@
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:61`
 - `src/services/reviewCorpusNote.test.ts:61`
 - `src/services/reviewDepth.eval.measure.test.ts:258`
-- `src/services/reviewFullData.ts:844`
-- `src/services/reviewFullData.ts:940`
-- `src/services/reviewFullData.ts:1593`
-- `src/services/reviewMoveBriefing.ts:110`
+- `src/services/reviewFullData.ts:871`
+- `src/services/reviewFullData.ts:967`
+- `src/services/reviewFullData.ts:1637`
 - `src/services/reviewMoveBriefing.ts:111`
+- `src/services/reviewMoveBriefing.ts:112`
 - `src/services/reviewNarrationFidelity.test.ts:227`
 - `src/services/reviewOpponentCommentary.ts:74`
 - `src/services/reviewWalk1500.test.ts:23`
 - `src/services/reviewWalk900.test.ts:20`
 - `src/services/tacticClaimOneKey.test.ts:13`
-- `src/services/tacticClaimValidator.test.ts:200`
+- `src/services/tacticClaimValidator.test.ts:175`
 - `src/services/tacticClaimValidator.ts:151`
 - `src/services/tacticLaneVocabulary.test.ts:69`
 - `src/services/tacticVisuals.ts:43`
@@ -153,49 +155,46 @@
 - `src/services/tacticsDetector.groundTruth.test.ts:63`
 - `src/services/tacticsDetector.groundTruth.test.ts:95`
 - `src/services/tacticsDetector.test.ts:26`
-- `src/services/tacticsDetector.test.ts:40`
-- `src/services/tacticsDetector.test.ts:48`
-- `src/services/tacticsDetector.test.ts:60`
+- `src/services/tacticsDetector.test.ts:39`
+- `src/services/tacticsDetector.test.ts:47`
+- `src/services/tacticsDetector.test.ts:59`
+- `src/services/tacticsDetector.test.ts:69`
 - `src/services/tacticsDetector.test.ts:70`
-- `src/services/tacticsDetector.test.ts:71`
-- `src/services/tacticsDetector.test.ts:77`
-- `src/services/tacticsDetector.test.ts:88`
-- `src/services/tacticsDetector.test.ts:103`
-- `src/services/tacticsDetector.test.ts:113`
-- `src/services/tacticsDetector.test.ts:122`
-- `src/services/tacticsDetector.test.ts:130`
-- `src/services/tacticsDetector.test.ts:145`
-- `src/services/tacticsDetector.test.ts:156`
-- `src/services/tacticsDetector.test.ts:165`
-- `src/services/tacticsDetector.test.ts:179`
-- `src/services/tacticsDetector.test.ts:189`
-- `src/services/tacticsDetector.test.ts:199`
-- `src/services/tacticsDetector.test.ts:206`
-- `src/services/tacticsDetector.test.ts:212`
-- `src/services/tacticsDetector.test.ts:218`
-- `src/services/tacticsDetector.test.ts:226`
-- `src/services/tacticsDetector.test.ts:235`
-- `src/services/tacticsDetector.test.ts:244`
-- `src/services/tacticsDetector.test.ts:252`
-- `src/services/tacticsDetector.test.ts:266`
-- `src/services/tacticsDetector.test.ts:276`
-- `src/services/tacticsDetector.test.ts:289`
+- `src/services/tacticsDetector.test.ts:76`
+- `src/services/tacticsDetector.test.ts:87`
+- `src/services/tacticsDetector.test.ts:102`
+- `src/services/tacticsDetector.test.ts:112`
+- `src/services/tacticsDetector.test.ts:121`
+- `src/services/tacticsDetector.test.ts:129`
+- `src/services/tacticsDetector.test.ts:144`
+- `src/services/tacticsDetector.test.ts:155`
+- `src/services/tacticsDetector.test.ts:164`
+- `src/services/tacticsDetector.test.ts:178`
+- `src/services/tacticsDetector.test.ts:188`
+- `src/services/tacticsDetector.test.ts:198`
+- `src/services/tacticsDetector.test.ts:205`
+- `src/services/tacticsDetector.test.ts:211`
+- `src/services/tacticsDetector.test.ts:217`
+- `src/services/tacticsDetector.test.ts:225`
+- `src/services/tacticsDetector.test.ts:238`
+- `src/services/tacticsDetector.test.ts:248`
+- `src/services/tacticsDetector.test.ts:261`
+- `src/services/tacticsDetector.test.ts:272`
+- `src/services/tacticsDetector.test.ts:286`
+- `src/services/tacticsDetector.test.ts:294`
 - `src/services/tacticsDetector.test.ts:300`
-- `src/services/tacticsDetector.test.ts:314`
-- `src/services/tacticsDetector.test.ts:322`
-- `src/services/tacticsDetector.test.ts:328`
-- `src/services/tacticsDetector.test.ts:335`
-- `src/services/tacticsDetector.test.ts:345`
-- `src/services/tacticsDetector.test.ts:354`
-- `src/services/tacticsDetector.test.ts:362`
-- `src/services/tacticsDetector.test.ts:372`
-- `src/services/tacticsDetector.test.ts:380`
-- `src/services/tacticsDetector.test.ts:388`
-- `src/services/tacticsDetector.test.ts:393`
+- `src/services/tacticsDetector.test.ts:307`
+- `src/services/tacticsDetector.test.ts:317`
+- `src/services/tacticsDetector.test.ts:325`
+- `src/services/tacticsDetector.test.ts:333`
+- `src/services/tacticsDetector.test.ts:343`
+- `src/services/tacticsDetector.test.ts:351`
+- `src/services/tacticsDetector.test.ts:359`
+- `src/services/tacticsDetector.test.ts:364`
 - `src/services/theirWantedPin.os1.test.ts:32`
 - `src/services/threatAnswerEvidence.ts:213`
 - `src/services/threatSaidOnce.os1.test.ts:17`
-- `src/services/weaknessAnalyzer.ts:1183`
+- `src/services/weaknessAnalyzer.ts:1184`
 - `src/test/narrationScanner.ts:135`
 
 ## Tests

@@ -8,12 +8,12 @@
 
 ## Locked rules that govern this surface
 
-- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:671) — names `describeThreatRecognition`
-- **G0. THE LLM DECIDES NOTHING — it voices facts computed in code (David 2026-06-10, LOCKED, supreme law).** (CLAUDE.md:754) — names `explainBestMoveGrounded`, `groundedAnswer`
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1358) — names `groundedAnswer`
-- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:4365) — names `describeThreatRecognition`
-- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:4456) — names `explainBestMoveGrounded`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6786) — names `describeThreatRecognition`
+- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:679) — names `describeThreatRecognition`
+- **G0. THE LLM DECIDES NOTHING — it voices facts computed in code (David 2026-06-10, LOCKED, supreme law).** (CLAUDE.md:762) — names `explainBestMoveGrounded`, `groundedAnswer`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1366) — names `groundedAnswer`
+- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:4373) — names `describeThreatRecognition`
+- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:4464) — names `explainBestMoveGrounded`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6800) — names `describeThreatRecognition`
 
 ## Who calls in
 
@@ -120,7 +120,7 @@
 - `src/services/groundedAnswer.test.ts:1639`
 
 ### `evalPhrase` (function) — 1 call site
-- `src/coach/boardTurnAnswer.ts:510`
+- `src/coach/boardTurnAnswer.ts:511`
 
 ### `parsePiecePurpose` (function) — 7 call sites
 - `src/services/piecePurpose.test.ts:17`
@@ -343,7 +343,7 @@
 - `src/services/groundedAnswer.opponentHypothetical.test.ts:66`
 
 ### `findTradeMove` (function) — 3 call sites
-- `src/coach/coachService.ts:1603`
+- `src/coach/coachService.ts:1604`
 - `src/services/groundedAnswer.trade.test.ts:20`
 - `src/services/groundedAnswer.trade.test.ts:38`
 
@@ -385,8 +385,8 @@
 - `src/services/coachFeatureService.test.ts:70`
 - `src/services/coachFeatureService.test.ts:85`
 - `src/services/coachFeatureService.test.ts:92`
-- `src/services/coachFeatureService.ts:3487`
-- `src/services/coachFeatureService.ts:3519`
+- `src/services/coachFeatureService.ts:3485`
+- `src/services/coachFeatureService.ts:3517`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:15`
 - `src/services/explainBestMoveLines.test.ts:19`
@@ -413,7 +413,7 @@
 - `src/hooks/useHintSystem.ts:357`
 - `src/services/computedVoiceGrounding.test.ts:53`
 - `src/services/computedVoiceGrounding.test.ts:111`
-- `src/services/deliberation.ts:645`
+- `src/services/deliberation.ts:649`
 - `src/services/groundedAnswer.test.ts:1092`
 - `src/services/groundedAnswer.test.ts:1099`
 - `src/services/groundedAnswer.test.ts:1107`
@@ -430,7 +430,7 @@
 - `src/services/reviewBoardAwareness.test.ts:22`
 
 ### `quietPurposePhrase` (function) — 1 call site
-- `src/services/deliberation.ts:651`
+- `src/services/deliberation.ts:655`
 
 ### `describeMoveMerit` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1224`
@@ -1040,10 +1040,10 @@
 ### `detectNewThreat` (function) — 21 call sites
 - `src/data/patternRegistry.ts:43`
 - `src/data/patternRegistry.ts:123`
-- `src/services/bluffDetector.ts:73`
+- `src/services/bluffDetector.ts:74`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:3852`
+- `src/services/coachFeatureService.ts:3850`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
@@ -1051,7 +1051,7 @@
 - `src/services/moveInsight.ts:606`
 - `src/services/moveInsight.ts:770`
 - `src/services/opponentMovePurpose.ts:64`
-- `src/services/reviewFullData.ts:1014`
+- `src/services/reviewFullData.ts:1024`
 - `src/services/reviewMoveBriefing.ts:313`
 - `src/services/reviewNarrationFidelity.test.ts:141`
 - `src/services/reviewNarrationFidelity.test.ts:150`
@@ -1065,7 +1065,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3773`
+- `src/services/coachFeatureService.ts:3771`
 - `src/services/reviewNarrationFidelity.test.ts:107`
 - `src/services/reviewNarrationFidelity.test.ts:119`
 - `src/services/reviewNarrationFidelity.test.ts:127`
@@ -1081,7 +1081,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:3873`
+- `src/services/coachFeatureService.ts:3871`
 - `src/services/reviewNarrationFidelity.test.ts:177`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1112,17 +1112,17 @@
 - `src/services/groundedAnswer.sacrificeWords.test.ts:23`
 
 ### `lastCaptureOf` (function) — 5 call sites
-- `src/services/captureRun.test.ts:61`
+- `src/services/captureRun.test.ts:62`
 - `src/services/coachApi.ts:2532`
 - `src/services/coachApi.ts:6100`
 - `src/services/coachApi.ts:6253`
 - `src/services/coachApi.ts:6279`
 
 ### `seatPieceReferences` (re-export) — 40 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9355`
-- `src/services/coachFeatureService.ts:5285`
-- `src/services/coachFeatureService.ts:5374`
-- `src/services/coachFeatureService.ts:6384`
+- `src/components/Coach/CoachTeachPage.tsx:9362`
+- `src/services/coachFeatureService.ts:5283`
+- `src/services/coachFeatureService.ts:5372`
+- `src/services/coachFeatureService.ts:6382`
 - `src/services/liveTacticsContext.ts:486`
 - `src/services/liveTacticsContext.ts:495`
 - `src/services/lookaheadPlan.ts:140`
@@ -1134,11 +1134,11 @@
 - `src/services/reviewBoardAwareness.test.ts:55`
 - `src/services/reviewBoardAwareness.test.ts:56`
 - `src/services/reviewBoardAwareness.test.ts:57`
-- `src/services/reviewFullData.ts:385`
-- `src/services/reviewFullData.ts:529`
-- `src/services/reviewFullData.ts:648`
-- `src/services/reviewFullData.ts:669`
-- `src/services/reviewFullData.ts:870`
+- `src/services/reviewFullData.ts:395`
+- `src/services/reviewFullData.ts:539`
+- `src/services/reviewFullData.ts:658`
+- `src/services/reviewFullData.ts:679`
+- `src/services/reviewFullData.ts:880`
 - `src/services/reviewNarrationFidelity.test.ts:22`
 - `src/services/reviewNarrationFidelity.test.ts:30`
 - `src/services/reviewNarrationFidelity.test.ts:36`

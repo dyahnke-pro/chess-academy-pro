@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**321 lines · 12 exports · 22 importers · 16 tests · 0 audits**
+**322 lines · 12 exports · 22 importers · 16 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -48,7 +48,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `warmOpeningIdentity` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:333`
-- `src/components/Coach/CoachTeachPage.tsx:1078`
+- `src/components/Coach/CoachTeachPage.tsx:1079`
 - `src/services/reviewOpeningTheory.ts:268`
 
 ### `setOpeningIdentity` (function) — 26 call sites
@@ -91,8 +91,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.ts:2488`
 - `src/services/learnBoardTeaching.ts:699`
 - `src/services/lookaheadPlan.ts:546`
-- `src/services/lookaheadPlan.ts:1215`
-- `src/services/lookaheadPlan.ts:1216`
+- `src/services/lookaheadPlan.ts:1219`
+- `src/services/lookaheadPlan.ts:1220`
 - `src/services/openingAnnouncement.ts:226`
 - `src/services/openingDatabaseBrief.ts:66`
 - `src/services/openingGenerator.ts:2014`

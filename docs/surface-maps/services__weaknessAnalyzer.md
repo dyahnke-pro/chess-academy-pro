@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1240 lines · 5 exports · 7 importers · 4 tests · 0 audits**
+**1241 lines · 5 exports · 6 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,7 +12,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/coachTrainingService.test.ts`
 - `src/services/coachTrainingService.ts`
@@ -23,14 +22,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `computeWeaknessProfile` (function) — 5 call sites
-- `src/components/Coach/CoachGamePage.tsx:2079`
-- `src/services/analyticsService.ts:462`
-- `src/services/gameAnalysisService.ts:2955`
+- `src/services/analyticsService.ts:453`
+- `src/services/autoAnalyzeGame.ts:339`
+- `src/services/gameAnalysisService.ts:3304`
 - `src/services/weaknessAnalyzer.test.ts:526`
 - `src/services/weaknessAnalyzer.test.ts:542`
 
 ### `getStoredWeaknessProfile` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11985`
+- `src/components/Coach/CoachTeachPage.tsx:13749`
 - `src/services/coachTrainingService.ts:92`
 - `src/services/weaknessAnalyzer.test.ts:533`
 - `src/services/weaknessAnalyzer.test.ts:553`

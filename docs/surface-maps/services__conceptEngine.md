@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:379) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6901) — names `conceptEngine`
+- **The tools are COMPUTERS** (CLAUDE.md:387) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6915) — names `conceptEngine`
 
 ## Who calls in
 
@@ -133,22 +133,22 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8697`
+- `src/components/Coach/CoachTeachPage.tsx:8704`
 - `src/services/learnWalkBlumenfeld.test.ts:142`
 - `src/services/positionFacts.ts:1497`
 - `src/services/positionFacts.ts:1499`
 - `src/services/positionFacts.ts:1960`
 - `src/services/positionFacts.ts:1964`
-- `src/services/reviewFullData.ts:736`
-- `src/services/reviewFullData.ts:739`
-- `src/services/reviewFullData.ts:740`
+- `src/services/reviewFullData.ts:746`
+- `src/services/reviewFullData.ts:749`
+- `src/services/reviewFullData.ts:750`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8700`
+- `src/components/Coach/CoachTeachPage.tsx:8707`
 - `src/services/dnaLineNarrator.ts:57`
 - `src/services/projectedLineVoice.ts:99`
 - `src/services/puzzleConceptExplanation.ts:131`
-- `src/services/reviewFullData.ts:735`
+- `src/services/reviewFullData.ts:745`
 - `src/services/tacticAlertService.ts:148`
 - `src/services/tacticTypeUnification.test.ts:223`
 - `src/test/auditConceptGameplayCues.test.ts:24`
