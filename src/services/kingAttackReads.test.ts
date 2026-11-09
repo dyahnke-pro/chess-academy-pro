@@ -191,7 +191,7 @@ describe('the attack race across wings (planRace)', () => {
     expect(race.yourPushes).toBe(1);
     expect(race.theirPushes).toBe(2);
     expect(race.youFirst).toBe(true);
-    expect(planRaceClause(STORM, 'w', 'live')).toMatch(/their queenside play is too slow — keep pushing on the kingside/);
+    expect(planRaceClause(STORM, 'w', 'live')).toMatch(/Their queenside play is too slow — keep pushing on the kingside/);
     expect(planRaceProof(STORM, 'w')?.exact).toBe(true);
     expect(stormRace(STORM, 'w')?.text).not.toMatch(/\d+ push/);
   });
