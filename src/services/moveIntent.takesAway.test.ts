@@ -63,3 +63,22 @@ describe('a stopped move is "ruled out", never "taken away" (prod Review audit 2
     }
   });
 });
+
+describe('a piece the move takes is not "stopped" (prod focus audit 2026-11-09)', () => {
+  // Record game 1: …Rxb3 took the queen, and the coach said "Their rook taking
+  // on b3 stops your queen taking their pawn on b5". The queen had no moves left.
+  const FEN = '5k2/p4p2/2P2p1p/1p6/5b2/1Q1r3P/1P3K1P/8 b - - 0 39';
+  const reads: IntentReads = {
+    before: [L(-1200, ['d3b3', 'f2e2'])],
+    passBefore: [L(-700, ['b3b5', 'd3d2'])],
+    after: [L(-1200, ['f2e2', 'b3b2'])],
+    passAfter: [],
+  };
+  it('…Rxb3 names no stopped Qxb5', () => {
+    expect(moveIntent(FEN, 'Rxb3', reads, 'opponent')?.prevents ?? null).toBeNull();
+  });
+  it('twin: …a6, guarding b5, still stops Qxb5 — the guard is about the piece taken, not silence', () => {
+    const out = moveIntent(FEN, 'a6', { before: [L(-1200, ['a7a6', 'f2e2'])], passBefore: [L(-700, ['b3b5', 'd3d2'])], after: [L(-1200, ['f2e2', 'd3d2']), L(-1900, ['b3b5', 'a6b5'], 2)], passAfter: [] }, 'opponent');
+    expect(out?.prevents?.san).toBe('Qxb5');
+  });
+});

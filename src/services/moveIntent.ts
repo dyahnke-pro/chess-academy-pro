@@ -237,7 +237,12 @@ export function moveIntent(
       // "…g6 stops your Rxe6" instead).
       const mates = line.mate !== null && line.mate !== undefined && (line.mate > 0) === (opp === 'w');
       const rescue = threat.slice(2, 4) === playedUci.slice(0, 2) && !mates;
-      if (!threatSan || rescue || threat === playedUci) continue;
+      // A PIECE TAKEN IS NOT STOPPED (prod focus audit 2026-11-09: "Their rook
+      // taking on b3 stops your queen taking their pawn on b5" — the rook took
+      // the queen). A threat by the piece the move captured is the capture's,
+      // never a second job.
+      const taken = threat.slice(0, 2) === playedUci.slice(2, 4);
+      if (!threatSan || rescue || taken || threat === playedUci) continue;
       if (opts.prevent === 'concrete' && !concreteThreat(passFen, threat, threatSan, line)) continue;
       const stillLegal = sanOf(fenAfter, threat) !== null;
       const threatNow = valueOfMove(reads.after, threat, opp);
@@ -272,6 +277,8 @@ export function moveIntent(
   // blocked by the piece standing there (merged walk 2026-09-30: "…c4 — now
   // c4 doesn't work"). Nothing to teach.
   if (prevents && prevents.uci.slice(2, 4) === playedUci.slice(2, 4)) prevents = null;
+  // …nor a move by the piece the move just took (the 'deny' reader too).
+  if (prevents && prevents.uci.slice(0, 2) === playedUci.slice(2, 4)) prevents = null;
 
   // ── PREPARES ────────────────────────────────────────────────────────────
   let prepares: MoveIntent['prepares'] = null;
