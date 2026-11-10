@@ -6,6 +6,7 @@
 
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
 import { appVersion } from './app-version.mjs';
+import { pickSubmissionAppInfo } from './app-info-pick.mjs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
@@ -56,7 +57,7 @@ async function main() {
   mark(!!appFull.data.attributes?.contentRightsDeclaration, 'Content Rights', appFull.data.attributes?.contentRightsDeclaration || 'MISSING');
 
   // Category
-  const info = (await api(`/v1/apps/${app.id}/appInfos?limit=10`)).data.find((i) => i.attributes?.appStoreState !== 'READY_FOR_DISTRIBUTION') || (await api(`/v1/apps/${app.id}/appInfos?limit=1`)).data[0];
+  const info = pickSubmissionAppInfo((await api(`/v1/apps/${app.id}/appInfos?limit=10`)).data);
   const infoFull = await api(`/v1/appInfos/${info.id}?include=primaryCategory,secondaryCategory,primarySubcategoryOne`);
   const rel = infoFull.data.relationships || {};
   const primCat = rel.primaryCategory?.data?.id;

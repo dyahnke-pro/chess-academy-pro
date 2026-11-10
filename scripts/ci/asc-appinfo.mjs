@@ -10,6 +10,7 @@
 
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
 import { appVersion } from './app-version.mjs';
+import { pickSubmissionAppInfo, appInfoState } from './app-info-pick.mjs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
@@ -62,13 +63,10 @@ async function main() {
 
   // ── appInfo: category + content rights ────────────────────────────────────
   const appInfos = (await api('GET', `/v1/apps/${app.id}/appInfos?limit=10`)).data;
-  // The editable appInfo is the one not in a READY_FOR_DISTRIBUTION state.
-  // READY_FOR_SALE is the live one too (2026-11-07: the age rating was written
-  // to it and refused 409 STATE_ERROR) — the editable one is the version in
-  // progress.
-  const LIVE = new Set(['READY_FOR_DISTRIBUTION', 'READY_FOR_SALE']);
-  const editable = appInfos.find((i) => i.attributes?.appStoreState && !LIVE.has(i.attributes.appStoreState)) || appInfos[0];
-  console.log(`appInfo=${editable.id} state=${editable.attributes?.appStoreState}`);
+  // The one in preparation (app-info-pick.mjs; 2026-11-07 the age rating was
+  // written to the live one and refused 409 STATE_ERROR).
+  const editable = pickSubmissionAppInfo(appInfos);
+  console.log(`appInfo=${editable.id} state=${appInfoState(editable)}`);
 
   {
     const r = await api('PATCH', `/v1/appInfos/${editable.id}`, {

@@ -5,6 +5,7 @@
 
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
 import { appVersion } from './app-version.mjs';
+import { pickSubmissionAppInfo } from './app-info-pick.mjs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
@@ -49,7 +50,7 @@ async function main() {
   mark(true, "What's New", a.whatsNew ? `${a.whatsNew.length} chars` : '(first release: not required)');
 
   // 2. App name + subtitle (appInfo localization)
-  const info = (await api(`/v1/apps/${app.id}/appInfos?limit=10`)).data.find((i) => i.attributes?.appStoreState !== 'READY_FOR_DISTRIBUTION') || (await api(`/v1/apps/${app.id}/appInfos?limit=1`)).data[0];
+  const info = pickSubmissionAppInfo((await api(`/v1/apps/${app.id}/appInfos?limit=10`)).data);
   const il = (await api(`/v1/appInfos/${info.id}/appInfoLocalizations?limit=10`)).data.find((l) => l.attributes?.locale === 'en-US');
   mark(!!il?.attributes?.name, 'App name', il?.attributes?.name || 'MISSING');
   mark(true, 'Subtitle', il?.attributes?.subtitle || '(optional, empty)');

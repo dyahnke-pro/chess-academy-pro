@@ -8,6 +8,7 @@
 
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
 import { appVersion } from './app-version.mjs';
+import { pickEditableAppInfo, appInfoState } from './app-info-pick.mjs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
@@ -81,8 +82,8 @@ async function main() {
     // fallback for an app with no appInfo in preparation.
     const readDecl = async () => {
       const infos = (await api('GET', `/v1/apps/${app.id}/appInfos?limit=10`)).data;
-      const info = infos.find((i) => (i.attributes?.state ?? i.attributes?.appStoreState) && (i.attributes?.state ?? i.attributes?.appStoreState) !== 'READY_FOR_DISTRIBUTION' && (i.attributes?.state ?? i.attributes?.appStoreState) !== 'READY_FOR_SALE');
-      console.log(`appInfos: ${infos.map((i) => `${i.id}:${i.attributes?.state ?? i.attributes?.appStoreState}`).join(', ')} → ${info ? info.id : 'none in preparation'}`);
+      const info = pickEditableAppInfo(infos);
+      console.log(`appInfos: ${infos.map((i) => `${i.id}:${appInfoState(i)}`).join(', ')} → ${info ? info.id : 'none in preparation'}`);
       if (info) return (await api('GET', `/v1/appInfos/${info.id}/ageRatingDeclaration`)).data;
       return (await api('GET', `/v1/appStoreVersions/${version.id}/ageRatingDeclaration`)).data;
     };

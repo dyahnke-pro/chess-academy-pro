@@ -15,6 +15,7 @@
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { appVersion } from './app-version.mjs';
+import { pickSubmissionAppInfo } from './app-info-pick.mjs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
@@ -162,8 +163,7 @@ async function main() {
   // the live version's metadata.
   const editableInfo = appInfos.__error
     ? null
-    : (appInfos.data || []).find((i) => i.attributes?.appStoreState !== 'READY_FOR_SALE')
-      ?? (appInfos.data || [])[0];
+    : pickSubmissionAppInfo(appInfos.data || []);
   if (editableInfo) {
     const infoLocs = await api('GET', `/v1/appInfos/${editableInfo.id}/appInfoLocalizations?limit=50`, null, { soft: true });
     const enInfo = infoLocs.__error ? null : (infoLocs.data || []).find((l) => l.attributes?.locale === 'en-US');
