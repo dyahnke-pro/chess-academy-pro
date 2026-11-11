@@ -1178,7 +1178,7 @@
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/London_System"
     ],
-    "variation": "London vs Grunfeld Setup"
+    "variation": "London vs King's Indian"
   },
   {
     "id": "mg-carlsen-london-jobava",
@@ -1219,7 +1219,8 @@
       "concept:pos-development",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/London_System"
-    ]
+    ],
+    "variation": "Jobava London"
   },
   {
     "id": "mg-caruana-catalan-open",
@@ -1428,7 +1429,7 @@
       "concept:pos-space",
       "https://en.wikipedia.org/wiki/English_Opening"
     ],
-    "variation": "English: Symmetrical Variation"
+    "variation": "English: Hedgehog System"
   },
   {
     "id": "mg-caruana-english-mikenas",
@@ -1548,7 +1549,7 @@
       "concept:pos-space",
       "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"
     ],
-    "variation": "Reti: LSB Fianchetto"
+    "variation": "Reti: Anti-Slav"
   },
   {
     "id": "mg-giri-kia-french",
@@ -1589,7 +1590,8 @@
       "concept:att-kingside-storm",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/King's_Indian_Attack"
-    ]
+    ],
+    "variation": "KIA vs QGD-Style Response"
   },
   {
     "id": "mg-carlsen-kia-g6",
@@ -2005,7 +2007,7 @@
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/French_Defence"
     ],
-    "variation": "Rubinstein Variation"
+    "variation": "Fort Knox Variation"
   },
   {
     "id": "mg-french-milnerbarry",
@@ -2425,7 +2427,7 @@
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
     ],
-    "variation": "Two Pawns Attack"
+    "variation": "Voronezh Variation"
   },
   {
     "id": "mg-alekhine-scandtrans",
@@ -2965,7 +2967,7 @@
       "concept:pos-outpost",
       "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
     ],
-    "variation": "Kasparov Variation (4.Nf3)"
+    "variation": "Fischer Variation (4.e3 b6)"
   },
   {
     "id": "mg-queensgambit-exchange-carlsen-kramnik-2016",
@@ -3060,7 +3062,7 @@
       "https://en.wikipedia.org/wiki/Trompowsky_Attack"
     ],
     "criticalMoments": [],
-    "variation": "2...d5 3.Bxf6 Doubled Pawns"
+    "variation": "2...d5 3.Bxf6 gxf6 Recapture"
   },
   {
     "id": "mg-trompowsky-grischuk-giri-2013",
@@ -3450,7 +3452,7 @@
     "middlegameTheme": "London System",
     "lessonSummary": "Gotham vs Hope_6 (2643) — a textbook London System grind. Levy plays his usual Bf4 + e3 + Nf3 + Nbd2 setup, trades the dark-squared bishop on c7-b6 to open the queenside, and outplays his opponent in the endgame after the Ne4-d6 fork wins material. The masterclass London plan in one game: hold the centre, attack the queenside, convert the small advantage.",
     "studentSide": "white",
-    "variation": "Pyramid with Ne5"
+    "variation": "vs Grünfeld Setup"
   },
   {
     "id": "mg-pro-gothamchess-caro-kann-0",
@@ -3620,7 +3622,7 @@
     "middlegameTheme": "Alapin Sicilian (Naroditsky)",
     "lessonSummary": "Naroditsky vs Hikaru (3263!) — Alapin d5-open masterclass against the World Bullet Champion. The Na3-Nb5 outpost wins tempi, the central trades open the position, and Hikaru can't equalise from the Scandinavian-style queen-out simplification. Pure positional crush.",
     "studentSide": "white",
-    "variation": "2…d5 Open Variation"
+    "variation": "2…Nc6 Line"
   },
   {
     "id": "mg-pro-naroditsky-alapin-3",
@@ -4985,7 +4987,7 @@
     "middlegameTheme": "The Two Knights d4: Re1 pin, Bxd5 to expose the king.",
     "lessonSummary": "Play d4 and Re1, sacrifice on d5 to expose the king, convert the ending.",
     "studentSide": "white",
-    "variation": "Two Knights (…Nf6)",
+    "variation": "Scotch Gambit",
     "sources": [
       "https://www.chess.com/game/live/60277343741"
     ]
@@ -5033,7 +5035,7 @@
     "middlegameTheme": "The Jobava: Nb5 raid, dynamic sacrifices, a crushing attack.",
     "lessonSummary": "Play the Jobava Nb5 raid and convert the dynamic complications.",
     "studentSide": "white",
-    "variation": "Pyramid with Ne5"
+    "variation": "Aggressive Jobava-London Hybrid"
   },
   {
     "id": "mg-pro-gothamchess-london-kacparov-kid",
@@ -6508,7 +6510,8 @@
     "lessonSummary": "In the Exchange, Black recaptures and develops freely, equalising with active piece play.",
     "sources": [
       "https://lichess.org/Tj2W9o5a"
-    ]
+    ],
+    "variation": "Exchange Variation"
   },
   {
     "id": "mg-philidor-antoshin",
@@ -6695,7 +6698,7 @@
     "sources": [
       "https://lichess.org/umSRLHgD"
     ],
-    "variation": "Winawer Countergambit (...e5!?)"
+    "variation": "Main Line (a4 Bf5)"
   },
   {
     "id": "mg-slav-geller",
@@ -6737,7 +6740,7 @@
     "sources": [
       "https://lichess.org/1vkjoAU8"
     ],
-    "variation": "Winawer Countergambit (...e5!?)"
+    "variation": "Schlechter Variation (...g6 Fianchetto)"
   },
   {
     "id": "mg-semislav-main",
@@ -6779,7 +6782,7 @@
     "sources": [
       "https://lichess.org/IHRez3l8"
     ],
-    "variation": "Meran Variation Deeper"
+    "variation": "Romih ...Bd6 System"
   },
   {
     "id": "mg-semislav-botvinnik",
@@ -7766,7 +7769,8 @@
     "sources": [
       "https://api.chess.com/pub/player/imrosen/games/archives",
       null
-    ]
+    ],
+    "variation": "vs …e6 Setup"
   },
   {
     "id": "mg-pro-ericrosen-london-c5",
@@ -9340,7 +9344,7 @@
     "sourceUrl": "https://www.chess.com/game/live/124261711465",
     "studentSide": "white",
     "overview": "Hambleton's KIA vs …g6 in action: a bullet win over undefined (undefined) in 2024. Watch the big d4/e4 centre and the space-gaining kingside plan against the King’s Indian. A clean model of the plan working against a strong opponent.",
-    "variation": "vs …g6 (KIA)"
+    "variation": "Double Fianchetto (g3)"
   },
   {
     "id": "mg-pro-aman-reti-vs-g6-kia-2",
@@ -11181,7 +11185,7 @@
     "sourceUrl": "https://www.chess.com/game/live/83700721215",
     "studentSide": "black",
     "overview": "Carlsen vs Firouzja2003 (3287), 2023 — the Italian — the slow Pianissimo build, then a kingside expansion that overwhelms.",
-    "variation": "vs Italian Bc4"
+    "variation": "vs Anti-Marshall d3"
   },
   {
     "id": "mg-pro-carlsen-1e5-var-berlin-nf6",

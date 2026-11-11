@@ -4,16 +4,17 @@
 // variation's identifying prefix, pulls topGames where the STUDENT's side won,
 // fetches the full PGN via the game-export proxy, and prints a ready-to-author
 // model-game entry. Never fabricates — every game is real, decisive for the
-// student, and verified to follow the variation's line.
+// student, and checked against the ONE model-game variation classifier
+// (src/data/modelGameVariation.shared.mjs) so the game it picks is one the
+// tagging script files under this tab.
 //
 // Run: node scripts/source-variation-model-game.mjs <openingId> "<variation name>"
 import fs from 'node:fs';
 import { Chess } from 'chess.js';
+import { analyzeOpening, classifyGame } from '../src/data/modelGameVariation.shared.mjs';
 const PROXY = 'https://chess-academy-pro.vercel.app/api/lichess-explorer';
 const EXPORT = 'https://chess-academy-pro.vercel.app/api/lichess-game-export';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const uci = (moves) => { const c = new Chess(); const out = []; for (const m of moves) { let mv; try { mv = c.move(m); } catch { break; } if (!mv) break; out.push(mv.from + mv.to + (mv.promotion || '')); } return out; };
-const commonLen = (a, b) => { let i = 0; while (i < a.length && i < b.length && a[i] === b[i]) i++; return i; };
 
 const openingId = process.argv[2];
 const varName = process.argv[3];
@@ -25,13 +26,13 @@ if (!variation) { console.error('variation not found:', varName); process.exit(1
 const studentColor = op.color; // 'white' | 'black'
 const wantWin = studentColor === 'white' ? 'white' : 'black';
 
-const varU = uci(variation.pgn.trim().split(/\s+/));
-// Identifying prefix vs main + siblings (where this variation becomes unique).
-const mainU = uci((op.pgn || '').trim().split(/\s+/));
-const sibU = (op.variations || []).filter((v) => v.name !== varName).map((v) => uci(v.pgn.trim().split(/\s+/)));
-let maxShared = commonLen(varU, mainU);
-for (const s of sibU) maxShared = Math.max(maxShared, commonLen(varU, s));
-const idLen = Math.min(maxShared + 1, varU.length);
+// The classifier's reading of this opening: the variation's moves and the
+// ply where its move order becomes its own (vs main + siblings).
+const analysis = analyzeOpening(op);
+const analyzed = analysis.variations.find((v) => v.name === varName);
+if (!analyzed) { console.error('variation has no legal moves:', varName); process.exit(1); }
+const varU = analyzed.uci;
+const idLen = analyzed.moveId;
 // Seed a few plies past the identifying point for a meaningful sample.
 const seedLen = Math.min(Math.max(idLen, 8), varU.length, 16);
 const seedUci = varU.slice(0, seedLen);
@@ -42,18 +43,15 @@ if (!j) { console.error('explorer fetch failed'); process.exit(1); }
 const cand = (j.topGames || []).concat(j.recentGames || []).filter((g) => g.id && g.winner === wantWin);
 console.log(`  ${cand.length} ${wantWin}-win candidate game(s)`);
 
-// Match on the prefix we actually queried (capped at the seed length); for
-// deep lines the full identifying prefix can exceed the 16-ply seed, and the
-// explorer already filtered to games reaching the seed position.
-const idPrefix = varU.slice(0, Math.min(idLen, seedLen));
+// Keep only games the classifier files under THIS tab — by position as well as
+// move order — so the printed entry's `variation` is the tag it will carry.
 let chosen = null;
 for (const g of cand) {
   await sleep(120);
   const pgn = await fetch(`${EXPORT}?id=${g.id}`).then((r) => r.text()).catch(() => null);
   if (!pgn) continue;
   const c = new Chess(); try { c.loadPgn(pgn); } catch { continue; }
-  const gu = uci(c.history());
-  if (commonLen(gu, idPrefix) !== idPrefix.length) continue; // must follow the variation
+  if (classifyGame(c.history(), analysis)?.name !== varName) continue; // must file under this tab
   const W = (pgn.match(/\[White "([^"]+)"\]/) || [])[1] || '?';
   const B = (pgn.match(/\[Black "([^"]+)"\]/) || [])[1] || '?';
   const we = parseInt((pgn.match(/\[WhiteElo "(\d+)"\]/) || [])[1] || '0', 10);
