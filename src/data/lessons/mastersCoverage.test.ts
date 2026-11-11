@@ -138,7 +138,6 @@ const SUSPECT_BASELINE = new Set<string>([
   'vienna-game::Vienna Gambit: Qf3::14:Be7',
   'vienna-game::Vienna Gambit: Qf3::16:c6',
   'benko-gambit::Modern 5.f3 System::13:f3',
-  'sicilian-dragon::Anti-Dragon: Bg5 Line::20:a6',
   'reti-opening::Reti: Reti Gambit::17:Ne4',
   'sicilian-najdorf::Najdorf: Fischer-Sozin Attack (6.Bc4)::20:b4',
   'sicilian-alapin::Alapin: 2...d5 3.exd5 Qxd5 4.d4 Nc6 (with ...e5)::14:Nge7',
