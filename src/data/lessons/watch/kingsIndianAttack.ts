@@ -63,7 +63,7 @@ const TAB_LINES: Record<string, string[]> = {
   'KIA: Botvinnik Setup': ['Nf3', 'd5', 'g3', 'c5', 'Bg2', 'Nc6', 'O-O', 'e5', 'd3', 'Nf6', 'Nbd2', 'Be7', 'e4', 'd4', 'Nc4', 'Qc7', 'a4', 'O-O', 'Nh4', 'Be6', 'b3', 'a6'],
   'KIA: Fischer Attack': ['e4', 'e6', 'd3', 'd5', 'Nd2', 'Nf6', 'Ngf3', 'c5', 'g3', 'Nc6', 'Bg2', 'Be7', 'O-O', 'O-O', 'Re1', 'b5', 'e5', 'Nd7', 'Nf1', 'a5', 'h4', 'b4'],
   'KIA vs QGD-Style Response': ['Nf3', 'd5', 'g3', 'c5', 'Bg2', 'Nc6', 'O-O', 'Nf6', 'd3', 'e6', 'Nbd2', 'Be7', 'e4', 'O-O', 'Re1', 'b6', 'e5', 'Nd7', 'Nf1', 'Bb7', 'Bf4'],
-  'KIA vs KID-Style Response': ['Nf3', 'Nf6', 'g3', 'g6', 'Bg2', 'Bg7', 'O-O', 'O-O', 'd3', 'd6', 'Nbd2', 'e5', 'e4', 'Nc6', 'a4', 'a5'],
+  'KIA vs KID-Style Response': ['Nf3', 'Nf6', 'g3', 'g6', 'Bg2', 'Bg7', 'O-O', 'O-O', 'd3', 'd6', 'Nbd2', 'e5', 'e4', 'Nc6', 'a4', 'a5', 'Nc4', 'Be6', 'b3', 'h6', 'Ba3'],
   'KIA: e5 Wedge System': ['e4', 'e6', 'd3', 'd5', 'Nd2', 'Nf6', 'Ngf3', 'Nc6', 'g3', 'dxe4', 'dxe4', 'Bc5', 'Bg2', 'O-O', 'O-O', 'e5', 'c3', 'a5', 'Qc2', 'b6', 'Nc4'],
   'Keres Variation': ['Nf3', 'd5', 'g3', 'c6', 'Bg2', 'Bg4', 'O-O', 'Nd7', 'd3', 'Ngf6', 'Nbd2', 'e5', 'e4', 'dxe4', 'dxe4', 'Bc5', 'h3', 'Bh5', 'Qe1', 'O-O', 'Nc4', 'Re8'],
 };
@@ -208,7 +208,12 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["e4: you take your share. Now the pawns face each other, e4 against e5, with d3 and d6 behind them. Neither side has a pawn break ready yet, so the pieces decide where the game goes.", 'e4 — your share of the center.'],
     ["…Nc6 covers d4 and backs up e5. The engine prefers …c5. One thing to know: if your knight goes to c4 right now, …b5 kicks it.", '…Nc6 — backs up e5.'],
     ["a4: so first you take b5 away. Now if …b5 ever comes, the a-pawn takes it, and your knight can use c4.", 'a4 — b5 taken away.'],
-    ["…a5: they stop your a-pawn from going further, and their pawn covers b4. It's about level. Your plan for the middlegame: Nc4, where the knight hits e5 and d6, then Re1 and c3 to prepare d4.", '…a5 — fixes the queenside.'],
+    ["…a5: they stop your a-pawn from going further, and their pawn covers b4. It's about level, and with b5 under your a-pawn's watch, c4 is waiting for your knight.", '…a5 — fixes the queenside.'],
+    ["Nc4, the engine's choice, and here's what a4 was for: the knight lands on c4 and …b5 can't come to kick it without dropping a pawn. From c4 it hits a5, d6 and e5, and e5 is now attacked twice, by this knight and the one on f3.", 'Nc4 — hits a5, d6 and e5.'],
+    ["…Be6 develops and goes straight at the knight on c4, which only your d3 pawn guards. Trade it, or give it a second guard?", '…Be6 — hits the c4 knight.'],
+    ["b3, the engine's choice: a second guard on c4, so if …Bxc4 comes, a pawn takes back. And look what else it does: with the b-pawn off b2, your bishop on c1 can come out to b2 or a3.", 'b3 — c4 guarded twice.'],
+    ["…h6: quiet, but it takes g5 away from your pieces. Now neither Ng5, hitting the bishop on e6, nor Bg5, hitting the knight on f6, is possible. It's about level.", '…h6 — no Ng5, no Bg5.'],
+    ["Ba3: the bishop comes out on the other diagonal and hits d6, pinning it to the rook on f8. If that pawn ever moves, the bishop sees all the way to the rook. It's about level. Your plan for the middlegame: Re1 and c3 to get d4 ready, with the bishop on a3 holding d6 in place for as long as the pin lasts.", 'Ba3 — pins d6 to the f8 rook.'],
   ],
   'KIA: e5 Wedge System': [
     ["…O-O, castling before anything else. The engine prefers …e5 at once. Why does the order matter? With their e-pawn still on e6, the e5 square is open to your pawn.", '…O-O — e5 is still open.'],
