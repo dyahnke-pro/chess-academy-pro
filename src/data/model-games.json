@@ -4906,7 +4906,10 @@
     "middlegameTheme": "The Giuoco: Bg5 pin, f4 storm, Bxf7+ sacrifice.",
     "lessonSummary": "Pin with Bg5, storm with f4, and sacrifice on f7 when the king weakens.",
     "studentSide": "white",
-    "variation": "Two Knights (…Nf6)"
+    "variation": "Two Knights (…Nf6)",
+    "sources": [
+      "https://www.chess.com/game/live/10373188699"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-italian-khatanbaatar-fpush",
@@ -4925,7 +4928,10 @@
     "middlegameTheme": "The f4-f5 plan: clamp e6, storm, invade the f-file.",
     "lessonSummary": "Pin with Bg5, play f4-f5, open the f-file, and attack the king.",
     "studentSide": "white",
-    "variation": "Two Knights (…Nf6)"
+    "variation": "Two Knights (…Nf6)",
+    "sources": [
+      "https://www.chess.com/game/live/10474026255"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-italian-zackyy-twoknights",
@@ -4944,7 +4950,10 @@
     "middlegameTheme": "The Two Knights d4: Re1 pin, Bxd5 to expose the king.",
     "lessonSummary": "Play d4 and Re1, sacrifice on d5 to expose the king, convert the ending.",
     "studentSide": "white",
-    "variation": "Two Knights (…Nf6)"
+    "variation": "Two Knights (…Nf6)",
+    "sources": [
+      "https://www.chess.com/game/live/60277343741"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-italian-gummyfox-evans",
@@ -4963,7 +4972,10 @@
     "middlegameTheme": "The Evans: gambit b4, big centre, g-file attack.",
     "lessonSummary": "Gambit the b-pawn, build the centre, and attack down the g-file.",
     "studentSide": "white",
-    "variation": "Evans Gambit"
+    "variation": "Evans Gambit",
+    "sources": [
+      "https://www.chess.com/game/live/70321501365"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-london-blazinq-jobava",
