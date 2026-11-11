@@ -75,4 +75,8 @@
 // 2026-11-09-voice9 — the square choice is not asked of a piece the engine
 // took to another square, and never faults a square the engine reads no worse
 // (prod Review 2026-11-09: "Better was Ne2+ … On h3 or e2 it hangs").
-export const WALKTHROUGH_GEN_REV = '2026-11-09-voice9';
+// 2026-11-11-voice10 — the square line asks "Why that square for …?" and
+// never restates the move, its faults in the conditional ("on e7 it would
+// block …"); the squares a piece is kept off are named; a passer's distance
+// in words (prod Learn + Review audits 2026-11-11).
+export const WALKTHROUGH_GEN_REV = '2026-11-11-voice10';
