@@ -24,8 +24,8 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 ## 000zf. WO-OPENINGS-REWRITE-01 — every opening tab rewritten, one computed beat a move; Levy's taught lines (David 2026-11-11, PLAN.md)
 - ✅ R1 fact sheets per move (masters, engine at fixed depth, board facts, notes); beats written by hand from them (docs/OPENING-WATCH-BEATS.md)
 - 🟠 R2 one-beat-a-move gate ✅ (810 of 819 lessons in a shrink-only baseline); per-tab plan/model/trap census owed
-- 🟠 R3 Watch courses, old lessons deleted: ✅ Trompowsky, Semi-Slav, Benoni, Petrov, Two Knights, Budapest, Najdorf, Old Indian, Bird's (one beat a move, the think-out-loud register); writing Evans, Sveshnikov, Grünfeld; fact sheets running for Réti, KID, English, KIA, Dutch, QGD
-- 🟠 R4 Levy's lines: 920 found, 190 taught lines placed on 16 Gotham openings (65 tabs, 87 replies, 38 traps), walked to a middlegame; fact sheets for all 18 Gotham openings running with his lines as extra tabs; a pro opening rewritten as a Watch course joins the masterclass gates (one opening-record lookup); writers place each line as tab / reply / trap / warning / skip
+- 🟠 R3 Watch courses, old lessons deleted: ✅ Trompowsky, Semi-Slav, Benoni, Petrov, Two Knights, Budapest, Najdorf, Old Indian, Bird's, Evans, Sveshnikov, Grünfeld, Réti, KID, English (one beat a move, the think-out-loud register); writing KIA, Dutch; QGD next
+- 🟠 R4 Levy's lines: 920 found, 190 taught lines placed on 16 Gotham openings, walked to a middlegame; every Gotham line carried to 20+ plies by the one course walker; ✅ Gotham Italian, London, Caro-Kann as Watch courses (Levy's lines placed: new tabs, the rest filed as reply / trap / warning / skip in docs/levy-lines/decisions); writing Scandinavian, French; 13 Gotham openings to go; replies / traps / warnings written next from the decisions files
 - 🟠 R5 ship and audit
 
 ## 000zb. WO-HUMAN-VOICE + WO-MARKS-AS-SAID — the coach talks like a person; the board shows what it says, as it says it (David 2026-11-08, PLAN.md)
