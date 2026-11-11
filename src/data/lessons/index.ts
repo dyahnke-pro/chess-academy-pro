@@ -3,7 +3,6 @@ import type { LessonScript, AnnotationArrow, AnnotationHighlight, PlayableMiddle
 import { PRO_NARODITSKY_CARO_KANN_LESSON } from './proNaroditskyCaroKann';
 import { PRO_NARODITSKY_DRAGODORF_LESSON } from './proNaroditskyDragodorf';
 import { PRO_GOTHAMCHESS_CARO_ADVANCE_LESSON } from './proGothamchessCaroAdvance';
-import { PRO_GOTHAMCHESS_VIENNA_LESSON } from './proGothamchessVienna';
 import { PRO_HIKARU_NIMZO_LARSEN_LESSON } from './proHikaruNimzoLarsen';
 import { PRO_HIKARU_CLOSED_SICILIAN_LESSON } from './proHikaruClosedSicilian';
 import { PRO_HIKARU_RETI_LESSON } from './proHikaruReti';
@@ -100,7 +99,6 @@ import { PRO_GOTHAMCHESS_KIA_LESSON } from './proGothamchessKIA';
 import { PRO_GOTHAMCHESS_CLOSED_SICILIAN_LESSON } from './proGothamchessClosedSicilian';
 import { PRO_GOTHAMCHESS_PIRC_DEFENSE_LESSON } from './proGothamchessPircDefense';
 import { PRO_GOTHAMCHESS_CARO_ADVANCE_VARIATION_LESSONS } from './proGothamchessCaroAdvanceVariations';
-import { PRO_GOTHAMCHESS_VIENNA_VARIATION_LESSONS } from './proGothamchessViennaVariations';
 import { PRO_GOTHAMCHESS_TROMPOWSKY_VARIATION_LESSONS } from './proGothamchessTrompowskyVariations';
 import { PRO_GOTHAMCHESS_ENGLISH_VARIATION_LESSONS } from './proGothamchessEnglishVariations';
 import { PRO_GOTHAMCHESS_PONZIANI_VARIATION_LESSONS } from './proGothamchessPonzianiVariations';
@@ -335,7 +333,6 @@ const LESSONS: Record<string, LessonScript> = {
   [PRO_NAR_FANTASY_CARO_LESSON.openingId]: PRO_NAR_FANTASY_CARO_LESSON,
   // Pro GothamChess (Levy Rozman)
   [PRO_GOTHAMCHESS_CARO_ADVANCE_LESSON.openingId]: PRO_GOTHAMCHESS_CARO_ADVANCE_LESSON,
-  [PRO_GOTHAMCHESS_VIENNA_LESSON.openingId]: PRO_GOTHAMCHESS_VIENNA_LESSON,
   [PRO_HIKARU_NIMZO_LARSEN_LESSON.openingId]: PRO_HIKARU_NIMZO_LARSEN_LESSON,
   [PRO_HIKARU_CLOSED_SICILIAN_LESSON.openingId]: PRO_HIKARU_CLOSED_SICILIAN_LESSON,
   [PRO_HIKARU_RETI_LESSON.openingId]: PRO_HIKARU_RETI_LESSON,
@@ -504,7 +501,6 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS,
   ...PRO_NAR_FANTASY_CARO_VARIATION_LESSONS,
   ...PRO_GOTHAMCHESS_CARO_ADVANCE_VARIATION_LESSONS,
-  ...PRO_GOTHAMCHESS_VIENNA_VARIATION_LESSONS,
   ...PRO_GOTHAMCHESS_TROMPOWSKY_VARIATION_LESSONS,
   ...PRO_GOTHAMCHESS_ENGLISH_VARIATION_LESSONS,
   ...PRO_GOTHAMCHESS_PONZIANI_VARIATION_LESSONS,

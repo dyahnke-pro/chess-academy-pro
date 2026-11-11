@@ -739,6 +739,11 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
       'vienna quiet (bc4 + d3)': ['mp-progothamchess-vie-quiet-bc4-na4'],
       'vienna with …nc6 + …bc5': ['mp-progothamchess-vie-nc6-forcing'],
       'vienna gambit accepted': ['mp-progothamchess-vie-accepted-space'],
+      // The lines he teaches, added as tabs 2026-11-11 (docs/levy-lines/decisions):
+      // no middlegame plan is anchored at their terminals yet.
+      'accepted with qe2': [],
+      'copycat with qg4': [],
+      'quiet vs …na5': [],
     },
   },
   'pro-gothamchess-italian': {

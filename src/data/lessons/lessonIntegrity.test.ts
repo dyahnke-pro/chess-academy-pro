@@ -151,6 +151,9 @@ const ENGINE_EXTENDED_LESSONS = new Set<string>([
   'pro-gothamchess-fantasy-caro::Aggressive 3...g6',
   'pro-gothamchess-fantasy-caro::Counter 3...Qb6',
   'pro-gothamchess-fantasy-caro::Closed 3...g6 5.e5',
+  // GothamChess Vienna: the Stanley order (Nc3 Nf6 Bc4) the DB names to ply 5 (DB-empty rule).
+  'pro-gothamchess-vienna::Vienna Quiet (Bc4 + d3)',
+  'pro-gothamchess-vienna::Vienna with …Nc6 + …Bc5',
 ]);
 
 describe('masterclass G3 — every lesson anchors a real DB opening line', () => {

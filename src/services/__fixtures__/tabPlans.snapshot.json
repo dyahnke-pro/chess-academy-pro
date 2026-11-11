@@ -3955,6 +3955,9 @@
  "pro-gothamchess-vienna::Vienna Gambit Accepted::Vienna Gambit Accepted": [
   "mp-progothamchess-vie-accepted-space"
  ],
+ "pro-gothamchess-vienna::Accepted with Qe2::Accepted with Qe2": [],
+ "pro-gothamchess-vienna::Copycat with Qg4::Copycat with Qg4": [],
+ "pro-gothamchess-vienna::Quiet vs …Na5::Quiet vs …Na5": [],
  "pro-gothamchess-vienna::::Vienna Gambit Main Line": [
   "mp-progothamchess-vie-gambit-main-attack",
   "mp-progothamchess-vienna-gambit-main"
@@ -3971,6 +3974,9 @@
  "pro-gothamchess-vienna::::Vienna Gambit Accepted": [
   "mp-progothamchess-vie-accepted-space"
  ],
+ "pro-gothamchess-vienna::::Accepted with Qe2": [],
+ "pro-gothamchess-vienna::::Copycat with Qg4": [],
+ "pro-gothamchess-vienna::::Quiet vs …Na5": [],
  "pro-gothamchess-kia::main": [
   "mp-progothamchess-kia-e5-kingside",
   "mp-progothamchess-kia-system-attack"

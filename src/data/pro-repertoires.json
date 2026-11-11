@@ -2206,6 +2206,36 @@
             "https://www.chess.com/openings/Vienna-Game",
             "https://api.chess.com/pub/player/gothamchess/games/archives"
           ]
+        },
+        {
+          "name": "Accepted with Qe2",
+          "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3 d6 d4 dxe5 Qe2 Be7 Qxe5 Nc6 Bb5 Bd7 Bxc6 bxc6 Bxf4",
+          "explanation": "Against the accepted gambit, Qe2 instead of the bishop check: the queen pins the e5 pawn to their king and wins it back, then Bb5 pins the knight as well, and the f4 pawn comes back last with your pieces out first.",
+          "sources": [
+            "concept:pos-development",
+            "https://www.chess.com/openings/Vienna-Game",
+            "https://api.chess.com/pub/player/gothamchess/games/archives"
+          ]
+        },
+        {
+          "name": "Copycat with Qg4",
+          "pgn": "e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 g6 Qf3 Nf6 Nge2 d6 d3 h6 Bd2 Bd7 h3 Qe7 O-O-O O-O-O Kb1",
+          "explanation": "When they mirror you with …Nc6 and …Bc5, their bishop has left g7 without a guard: Qg4 hits it at once, and after …g6 the queen swings to f3 against f7, with Nge2, d3 and long castling to follow.",
+          "sources": [
+            "concept:pos-development",
+            "https://www.chess.com/openings/Vienna-Game",
+            "https://api.chess.com/pub/player/gothamchess/games/archives"
+          ]
+        },
+        {
+          "name": "Quiet vs …Na5",
+          "pgn": "e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Na5 Bb3 Nxb3 axb3 d5 Nf3 d4 Ne2 Bd6 Ng3 a5 O-O Ra6 Bd2",
+          "explanation": "The masters' main answer to Bc4 and d3 is the knight hunting your bishop. Drop it to b3, take back with the a-pawn for an open a-file, and meet their central push with Nf3, Ne2 and a knight bound for f5.",
+          "sources": [
+            "concept:pos-development",
+            "https://www.chess.com/openings/Vienna-Game",
+            "https://api.chess.com/pub/player/gothamchess/games/archives"
+          ]
         }
       ],
       "trapLines": [],
