@@ -136,6 +136,56 @@
             "https://www.chess.com/openings/Italian-Game",
             "https://api.chess.com/pub/player/gothamchess/games/archives"
           ]
+        },
+        {
+          "name": "Fried Liver Attack",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4 O-O c6 d4 Qf6 Qe2",
+          "explanation": "Against the Two Knights, Ng5 puts two attackers on f7. If they take back on d5 with the knight, Nxf7 drags their king out, and Qf3+, Nc3, castling and d4 keep it under fire in the middle of the board.",
+          "sources": [
+            "book:italian-game",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Italian-Game"
+          ]
+        },
+        {
+          "name": "Knight Attack …Na5",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Be2 h6 Nh3",
+          "explanation": "The main defence to Ng5: …Na5 chases your bishop and gives up a pawn. Bb5+ and the trade on c6 keep you a pawn up, and Be2 and Nh3 regroup while they play for activity.",
+          "sources": [
+            "book:italian-game",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Italian-Game"
+          ]
+        },
+        {
+          "name": "Evans: Castle First",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 O-O Nf6 d4 exd4 e5 d5 exf6 dxc4 fxg7 Rg8 Re1+",
+          "explanation": "Castle before d4, so the bishop on a5 never pins your c3 pawn. After …Nf6 d4 exd4 e5 d5 you take the knight and then the g7 pawn, and the open e-file keeps their king in the middle in return for the two pawns.",
+          "sources": [
+            "book:italian-game",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Italian-Game"
+          ]
+        },
+        {
+          "name": "Evans: …Be7",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Be7 d4 Na5 Be2 exd4 Qxd4 Nf6 e5 Nc6 Qh4",
+          "explanation": "Against the quiet …Be7 retreat, take the center with d4, keep your bishop with Be2 after …Na5, recapture with the queen, then kick the knight with e5 and swing the queen over to the kingside.",
+          "sources": [
+            "book:italian-game",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Italian-Game"
+          ]
+        },
+        {
+          "name": "Scotch Gambit",
+          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6",
+          "explanation": "Play d4 and answer …exd4 with Bc4, reaching a Two Knights position by another road. After …Nf6 e5 d5 Bb5 Ne4 you take back on d4 while their knight on c6 is pinned, then take on c6 to double their pawns.",
+          "sources": [
+            "book:italian-game",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Italian-Game"
+          ]
         }
       ],
       "trapLines": [],

@@ -1,0 +1,158 @@
+[
+  {
+    "levy": 1,
+    "decision": "tab",
+    "tab": "Fried Liver Attack",
+    "reason": "Ng5 then …Nxd5? Nxf7: the king hunt (Qf3+, Nc3, O-O, d4) is its own plan; ends with you a little better."
+  },
+  {
+    "levy": 2,
+    "decision": "trap",
+    "tab": "Fried Liver Attack",
+    "reason": "…Kg8?? after Qf3+ is their slip at ply 14 on the tab's line: Bxd5+ and mate, which the sheet shows."
+  },
+  {
+    "levy": 3,
+    "decision": "tab",
+    "tab": "Knight Attack …Na5",
+    "reason": "The main defence to Ng5 (…Na5, close to nine masters in ten): you keep a pawn, they get activity; a different plan from the king hunt, ends about level."
+  },
+  {
+    "levy": 4,
+    "decision": "skip",
+    "tab": "Knight Attack …Na5",
+    "reason": "Not a trap: the engine rates …cxb5 as their best reply to Qf3 and Qxa8 ends only about level, so nothing is won; as our own Qf3 sideline it would nearly repeat the …Na5 tab."
+  },
+  {
+    "levy": 5,
+    "decision": "skip",
+    "tab": "Knight Attack …Na5",
+    "reason": "Our own d3 instead of Bb5+ (two masters in a hundred) costs about 0.7 against Bb5+, which the …Na5 tab already teaches; it is our move, so it is not a reply."
+  },
+  {
+    "levy": 6,
+    "decision": "reply",
+    "tab": "Fried Liver Attack",
+    "reason": "…Bc5 (the Traxler) is their reply to Ng5 at ply 8; Bxf7+ and Bb3 leave you clearly better."
+  },
+  {
+    "levy": 7,
+    "decision": "reply",
+    "tab": "Evans Gambit",
+    "reason": "…dxc3 is their reply at ply 14 on the Evans line (one master in twenty); Qb3 and e5 leave you a little better."
+  },
+  {
+    "levy": 8,
+    "decision": "tab",
+    "tab": "Evans: Castle First",
+    "reason": "Castling before d4 (so c3 is never pinned), then e5, leads to the exf6 dxc4 fxg7 line: a different plan from the d4 main line; a declared gambit ending with them a little better, said honestly."
+  },
+  {
+    "levy": 9,
+    "decision": "trap",
+    "tab": "Evans: Castle First",
+    "reason": "…Ne4? instead of …d5 at ply 16 loses to Re1, which hits the unguarded knight; the sheet has you clearly better."
+  },
+  {
+    "levy": 10,
+    "decision": "tab",
+    "tab": "Evans: …Be7",
+    "reason": "…Be7 (three masters in ten) leaves the Evans line early on their move and needs its own plan: Be2, Qxd4, e5 and the queen to the kingside; ends about level."
+  },
+  {
+    "levy": 11,
+    "decision": "reply",
+    "tab": "Evans Gambit",
+    "reason": "…Bb6 (the Evans declined) is their reply at ply 8 on the Evans line; a4 and Nd5 leave you a little better."
+  },
+  {
+    "levy": 12,
+    "decision": "skip",
+    "tab": "Two Knights (…Nf6)",
+    "reason": "The Nakhmanson piece sacrifice (Nc3, costing 1.3 against Re1) ends with them clearly better (-1.7 after Ng5); the engine gives you nothing for the piece."
+  },
+  {
+    "levy": 13,
+    "decision": "skip",
+    "tab": "Two Knights (…Nf6)",
+    "reason": "Its parent line (Levy 12) is skipped, and even after …Ke8? Re1 the engine still has them a little better: no win to show."
+  },
+  {
+    "levy": 14,
+    "decision": "skip",
+    "tab": "",
+    "reason": "The Belgrade Gambit is a Four Knights line (Nc3 on move three), not the Italian; it belongs on a Four Knights page."
+  },
+  {
+    "levy": 15,
+    "decision": "tab",
+    "tab": "Scotch Gambit",
+    "reason": "d4 exd4 Bc4 reaches the Two Knights position after d4 by another road, with the Italian bishop on c4; its e5, d5, Bb5 plan is distinct; ends with you a little better."
+  },
+  {
+    "levy": 16,
+    "decision": "warning",
+    "tab": "Giuoco Piano c3-d4",
+    "reason": "The Jerome Gambit Bxf7+ at ply 7 is your own slip: two pieces for two pawns, and the sheet has them winning at the end."
+  },
+  {
+    "levy": 17,
+    "decision": "reply",
+    "tab": "Scotch Gambit",
+    "reason": "…d6 is their reply to d4 at ply 6 on the Scotch Gambit tab; the queen trade leaves you a little better."
+  },
+  {
+    "levy": 18,
+    "decision": "skip",
+    "tab": "",
+    "reason": "A Scotch Game line (Nxd4, no bishop on c4), not the Italian; it belongs on a Scotch page with Levy 19 to 25."
+  },
+  {
+    "levy": 19,
+    "decision": "skip",
+    "tab": "",
+    "reason": "The Scotch Game (Nxd4) main line, not the Italian; it would be a tab on a Scotch page."
+  },
+  {
+    "levy": 20,
+    "decision": "skip",
+    "tab": "",
+    "reason": "The Scotch Game (Nxd4, the Mieses), not the Italian; it would be a tab on a Scotch page."
+  },
+  {
+    "levy": 21,
+    "decision": "skip",
+    "tab": "",
+    "reason": "A reply inside the Scotch Mieses (Levy 20), which is not taught on this page."
+  },
+  {
+    "levy": 22,
+    "decision": "skip",
+    "tab": "",
+    "reason": "A reply inside the Scotch Mieses (Levy 20), which is not taught on this page."
+  },
+  {
+    "levy": 23,
+    "decision": "skip",
+    "tab": "",
+    "reason": "A reply inside the Scotch Game (Nxd4), which is not taught on this page."
+  },
+  {
+    "levy": 24,
+    "decision": "skip",
+    "tab": "",
+    "reason": "A reply inside the Scotch Game (Nxd4), which is not taught on this page."
+  },
+  {
+    "levy": 25,
+    "decision": "skip",
+    "tab": "",
+    "reason": "A reply inside the Scotch Game (Nxd4), which is not taught on this page."
+  },
+  {
+    "levy": 26,
+    "decision": "skip",
+    "tab": "",
+    "reason": "The Berlin is a Ruy Lopez line (Bb5 on move three), not the Italian, and it is shown as a line not to play."
+  }
+]

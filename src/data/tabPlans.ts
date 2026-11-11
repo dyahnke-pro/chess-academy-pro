@@ -743,6 +743,13 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
       'slow italian d3': [],
       'evans gambit': ['mp-progothamchess-italian-evans-bigcenter'],
       'two knights (…nf6)': ['mp-progothamchess-italian-twoknights-kside'],
+      // The lines he teaches, added as tabs 2026-11-11 (docs/levy-lines/decisions):
+      // no middlegame plan is anchored at their terminals yet.
+      'fried liver attack': [],
+      'knight attack …na5': [],
+      'evans: castle first': [],
+      'evans: …be7': [],
+      'scotch gambit': [],
     },
   },
   'pro-gothamchess-london': {

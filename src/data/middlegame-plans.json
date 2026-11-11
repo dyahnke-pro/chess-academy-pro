@@ -15596,10 +15596,10 @@
     "annotations": [
      "Rc1 — the half-open c-file, claimed first.",
      "…a5 — Black gains queenside space before deciding anything.",
-     "Ne4 — the IQP's outrider: the knight takes the central post the pawn's presence pays for.",
+     "Ne4 — the knight takes a central post, one hop from c5, a square your d4 pawn guards.",
      "…Bg4 — Black develops with the pin-shaped stare at f3.",
      "Re1 — the e-file joins the account.",
-     "…Nb6 — the blockading knight steps back to ask your bishop the question.",
+     "…Nb6 — the blockading knight steps back and hits your bishop on c4.",
      "Bf1 — the calm answer: home, intact, ready to re-emerge.",
      "…Re8 — Black completes the setup. Dead level, says the engine — and in an IQP structure that means the player who knows the standard placements owns the middlegame. Every White piece in this line is on its textbook square."
     ],
@@ -15688,7 +15688,7 @@
     "title": "The IQP Maneuvering Game",
     "intro": "The isolated d-pawn buys activity — rook to c1, knight to e4, every piece on its textbook square.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:italian-game",
      "https://www.chess.com/openings/Italian-Game",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -43535,7 +43535,7 @@
      "Rd1"
     ],
     "annotations": [
-     "…Be6 — Black challenges your Italian bishop.",
+     "…Be6 — their bishop challenges yours on c4.",
      "fxe5 — the lever fires first: the f-pawn takes and the file swings open in front of your rook.",
      "…dxe5 — Black recaptures, keeping the d4-knight propped.",
      "Na3 — the last knight develops sideways, heading for c2 to evict the guest on d4.",
@@ -43635,7 +43635,7 @@
     "title": "Bg5 and the f4 Initiative",
     "intro": "Centre traded, f-file open, and the d4-guest awaiting eviction — the initiative wears white.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:italian-game",
      "https://www.chess.com/openings/Italian-Game",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -43785,7 +43785,7 @@
     "title": "The d4-e4 Initiative",
     "intro": "Pin, leap, wreck the queenside, return — the Evans machinery in eight moves.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:italian-game",
      "https://www.chess.com/openings/Italian-Game",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]

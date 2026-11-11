@@ -54,6 +54,15 @@
     "warnings": 1,
     "keyIdeas": 4
   },
+  "pro-gothamchess-italian": {
+    "variations": 9,
+    "middlegamePlans": 3,
+    "endgamePlans": 0,
+    "modelGames": 4,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
   "scotch-game": {
     "variations": 8,
     "middlegamePlans": 6,
