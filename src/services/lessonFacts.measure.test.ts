@@ -95,7 +95,7 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
           const mat = materialFor(c, me);
           const studentCp = playedRead ? (me === 'w' ? playedRead.cp : -playedRead.cp) : null;
           md.push(`- board after: the ${PIECE_NAME[mv.piece]} on ${mv.to} hits ${hitsFrom(c, mv.to, mv.color).join(', ') || 'nothing of the other side'} · loose: ${loose.join(', ') || 'none'} · pins: ${pins.text.join('; ') || 'none'} · material ${mat >= 0 ? '+' : ''}${mat} for you${studentCp !== null ? ` · say "${evalWords(studentCp)}" (${studentCp}cp your seat), no stronger` : ''} · side marker ${mv.color === 'b' ? `"…${mv.san}"` : `"${mv.san}" (no dots)`}`);
-          if (note) md.push(`- corpus note: ${note.text.replace(/\s+/g, ' ').slice(0, 600)}`);
+          if (note) md.push(`- corpus note (${note.id}): ${[note.explains, note.teaches, note.plans].filter(Boolean).join(' ').replace(/\s+/g, ' ')}`);
           if (d) md.push(`- computed draft: ${d}`);
           engine.flush();
         }

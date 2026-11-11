@@ -15,6 +15,8 @@
 import type { LessonScript } from '../../types';
 import repertoire from '../repertoire.json';
 import gambits from '../gambits.json';
+import { WATCH_COURSES } from './watch';
+import { watchLessons, type WatchCourse } from './watch/watchCourse';
 
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
@@ -101,8 +103,6 @@ import { SCHLIEMANN_DEFENCE_LESSON } from './schliemannDefence';
 import { SCHLIEMANN_DEFENCE_VARIATION_LESSONS } from './schliemannDefenceVariations';
 import { QUEENS_GAMBIT_LESSON } from './queensGambit';
 import { QUEENS_GAMBIT_VARIATION_LESSONS } from './queensGambitVariations';
-import { TROMPOWSKY_ATTACK_LESSON } from './trompowskyAttack';
-import { TROMPOWSKY_ATTACK_VARIATION_LESSONS } from './trompowskyAttackVariations';
 import { BIRDS_OPENING_LESSON } from './birdsOpening';
 import { BIRDS_OPENING_VARIATION_LESSONS } from './birdsOpeningVariations';
 // Gambit-tab lessons that live in gambits.json (not opening-manifests.json,
@@ -142,8 +142,18 @@ interface OpeningLessons {
   traps?: Record<string, LessonScript>;
 }
 
+/** A Watch course (one beat a move, WO-OPENINGS-REWRITE-01) as the gate
+ *  registry reads an opening: every course is gated the day it is written. */
+function watchOpening(course: WatchCourse): OpeningLessons {
+  const { main, variations } = watchLessons(course);
+  if (!main) throw new Error(`${course.openingId}: a Watch course needs its main line`);
+  return { main, variations };
+}
+
 // ── Add a new masterclass opening HERE (and only here) ──────────────────
-const OPENINGS: OpeningLessons[] = [
+// An opening rewritten as a Watch course leaves this list: its course is
+// gated from `WATCH_COURSES` below.
+const HAND_WRITTEN: OpeningLessons[] = [
   { main: RUY_LOPEZ_LESSON, variations: RUY_VARIATION_LESSONS, traps: RUY_TRAP_LESSONS },
   { main: PIRC_DEFENCE_LESSON, variations: PIRC_VARIATION_LESSONS },
   { main: VIENNA_GAME_LESSON, variations: VIENNA_VARIATION_LESSONS, traps: VIENNA_TRAP_LESSONS },
@@ -184,9 +194,17 @@ const OPENINGS: OpeningLessons[] = [
   { main: ALBIN_COUNTERGAMBIT_LESSON, variations: ALBIN_COUNTERGAMBIT_VARIATION_LESSONS },
   { main: SCHLIEMANN_DEFENCE_LESSON, variations: SCHLIEMANN_DEFENCE_VARIATION_LESSONS },
   { main: QUEENS_GAMBIT_LESSON, variations: QUEENS_GAMBIT_VARIATION_LESSONS },
-  { main: TROMPOWSKY_ATTACK_LESSON, variations: TROMPOWSKY_ATTACK_VARIATION_LESSONS },
   { main: BIRDS_OPENING_LESSON, variations: BIRDS_OPENING_VARIATION_LESSONS },
 ];
+
+const OPENINGS: OpeningLessons[] = [...HAND_WRITTEN, ...WATCH_COURSES.map(watchOpening)];
+{
+  const seen = new Set<string>();
+  for (const o of OPENINGS) {
+    if (seen.has(o.main.openingId)) throw new Error(`${o.main.openingId}: registered twice (hand-written and a Watch course)`);
+    seen.add(o.main.openingId);
+  }
+}
 
 // Gambit-tab curated lessons (gambits.json source). All 7 hand-authored
 // curated lessons that render on the Gambit tab — NOT masterclass-tab openings

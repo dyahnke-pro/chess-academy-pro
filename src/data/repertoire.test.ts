@@ -205,6 +205,11 @@ describe('repertoire.json — development depth (main lines)', () => {
         'alekhine-defence',
         'birds-opening',
         'glek-system',
+        // Evans Gambit: the 2026-10-30 engine re-check rebuilt the main line
+        // past the masters database (it runs out at ...Bc7, ply 30); the line
+        // ends with Black's c8 bishop at home behind ...d6, and extending it
+        // would invent moves (G3).
+        'evans-gambit',
       ];
       if (!developmentExceptions.includes(entry.id)) {
         const undeveloped = getUndevelopedMinors(chess);
