@@ -46,10 +46,10 @@ describe('planRace — the race, not just the plans', () => {
     expect(planRaceClause(YOU_FASTER, 'w', 'live')).toMatch(/[Yy]ou get there first/);
   });
 
-  it('says "1 push", never "1 pushes"', () => {
+  it('says "one push", never "one pushes"', () => {
     const c = planRaceClause(YOU_FASTER, 'w', 'live') ?? '';
-    expect(c).toContain('1 push from queening');
-    expect(c).not.toContain('1 pushes');
+    expect(c).toContain('one push from queening');
+    expect(c).not.toContain('one pushes');
   });
 
   it('never promises the result — the arithmetic guides the plan, it does not decide it', () => {

@@ -295,7 +295,7 @@ describe('conceptForLine — a solution that trades into a pawn race (calc hand 
   it('names the race the sacrifice wins, with the counts', () => {
     const lead = conceptForLine({ fen, uci, studentColor: 'b' })[0];
     expect(lead.id).toBe('won-pawn-race');
-    expect(lead.full).toContain('pawn race — both sides have a runner: yours on h5 is 4 pushes from queening, theirs on a4 is 4');
+    expect(lead.full).toContain('pawn race — both sides have a runner: yours on h5 is four pushes from queening, theirs on a4 is four');
     expect(lead.full).toContain('the move is yours');
     expect(lead.full).toContain('covers their queening square');
   });
