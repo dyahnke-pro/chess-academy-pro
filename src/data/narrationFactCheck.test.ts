@@ -315,9 +315,6 @@ const BASELINE_VIOLATIONS = new Set<string>([
   'TRAP frankenstein-nxa8 :: fn2 (short)',
   'TRAP karpov-qe2-mate :: ck-w1 (short)',
   'TRAP wurzburger :: wt3 (short)',
-  'MAIN The French Defence — A Master Class :: d5',
-  'VARIATION french-defence::Advance Variation :: adv3',
-  'VARIATION french-defence::Winawer Variation :: win4',
   'VARIATION london-system::Jobava London :: j2',
   'VARIATION queens-gambit::Exchange Variation :: battery (short)',
   // Plans — existing claims that don't verify
