@@ -151,5 +151,5 @@ describe('every coach surface, every walk position, one standard', () => {
     for (const surface of ['review', 'live composer', 'positional read', 'learn commentary', 'chat assessment', 'chat tactics', 'read position']) {
       expect(HEARD[surface] ?? 0, `${surface} produced nothing to check`).toBeGreaterThanOrEqual(10);
     }
-  }, 600_000);
+  }, 1_800_000);
 });

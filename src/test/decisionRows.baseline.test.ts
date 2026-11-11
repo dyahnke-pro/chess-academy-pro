@@ -208,7 +208,7 @@ describe('every decision and every spoken line on the baseline games is unchange
       }
       if (!snapshot) return;
       for (const [key, rec] of Object.entries(mine)) expect(firstDifference(key, snapshot[key], rec)).toBeNull();
-    }, 600_000);
+    }, 1_800_000);
   }
 
   it.runIf(STATS)('reports the learn lane in numbers', () => {

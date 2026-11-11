@@ -80,5 +80,7 @@ describe('no unresolved merge-conflict markers in tracked files', () => {
         'either — they are usually two answers to the same question, and the newer one is ' +
         'not always the one below the separator.',
     ).toEqual([]);
-  });
+    // Reads every tracked file: 29 s on a machine sharing its cores with
+    // engine chains (2026-11-11), over the 20 s default. The check is unchanged.
+  }, 120_000);
 });

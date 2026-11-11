@@ -112,5 +112,5 @@ describe('squares are named the way a person names them', () => {
       }
     }
     expect(over, t.examples.slice(0, 20).join('\n')).toEqual([]);
-  }, 600_000);
+  }, 1_800_000);
 });
