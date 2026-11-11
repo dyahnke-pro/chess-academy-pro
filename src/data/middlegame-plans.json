@@ -16065,7 +16065,6 @@
     "title": "Pirc: Snatch c2 and Hold",
     "intro": "From their win over just_a_prank. Black’s queen grabs a pawn and scurries to safety.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Pirc-Defense",
      "https://en.wikipedia.org/wiki/Pirc_Defence",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -48950,7 +48949,6 @@
     "title": "Austrian Attack — …c5, …Nd4 and a level middlegame",
     "intro": "You meet the Austrian Attack with …c5 and the …Nd4 jump.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Pirc-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -49080,7 +49078,6 @@
     "title": "Pirc Classical: Trade Off, Double the Pawns",
     "intro": "From their win over eg0210. Black hops the knight to f5 and damages White’s pawns.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Pirc-Defense",
      "https://en.wikipedia.org/wiki/Pirc_Defence",
      "https://api.chess.com/pub/player/gothamchess/games/archives"

@@ -2714,19 +2714,19 @@
       "keyIdeas": [
         "…d6 + …Nf6 + …g6 + …Bg7 — the Pirc setup. Let White overextend in the centre; the fianchetto bishop covers everything.",
         "…c5 is the critical break against the Austrian Attack (f4). Don't delay it — the longer White holds the centre, the worse Black's position becomes.",
-        "The Bb5+ check is annoying but manageable — block with …Nc6 and let White waste time on the pin.",
+        "After Bb5+, whatever blocks stands in a pin. …Bd7 is the masters' block and the engine's choice; …Nc6 hits d4 a second time but is pinned to your king, so it can't step away if they push d5.",
         "After e5 by White (the Austrian Attack break), …Nd7 keeps the knight flexible — heading to b6 or back to f6 depending on the position."
       ],
       "traps": [],
       "warnings": [
-        "Don't play …c5 too early in the Bb5+ lines — block with …Nc6 first, then …c5 when timing is right.",
+        "After …c5 and Bb5+ in the Austrian, …Nc6 invites d5: the push hits the pinned knight and is the engine's best answer for them, more than a pawn in their favour. …Bd7 is the safe block and the engine's choice.",
         "Don't trade the Bg7 bishop early — it's the structural anchor of the whole defence."
       ],
       "variations": [
         {
           "name": "Austrian Attack (f4)",
           "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 c5 Bb5+ Nc6 e5 Nd7",
-          "explanation": "The sharpest Austrian Attack with f4. Black's …c5 strikes immediately; the Bb5+ check is annoying but the …Nc6 block + …Nd7 redirect handles it. 69.2% score across 351 games.",
+          "explanation": "The Austrian Attack with f4, the engine's first choice and the sharpest try. …c5 hits d4 at once; against Bb5+ the line blocks with …Nc6, which the engine rates a little below …Bd7, because d5 would hit the pinned knight. After e5 instead, …Nd7, …dxe5 and …Qa5 win the pawn back, and it ends about level. 69.2% score across 351 games.",
           "sources": [
             "concept:pos-development",
             "https://www.chess.com/openings/Pirc-Defense",
