@@ -14406,7 +14406,7 @@
     "title": "Caro-Kann: Trade Down to Comfortable Equality",
     "intro": "The model line: black trades the knights and centralises into a solid, equal game.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense",
      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -14543,7 +14543,7 @@
     "title": "Caro-Kann: Castle, Trade, Equalise",
     "intro": "Played out: black castles to safety, trades the knights, and reaches an equal game.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense",
      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -14827,7 +14827,7 @@
     "title": "Trade the Attacker",
     "intro": "White spends three tempi arranging the f5 question — the answer costs one move and lands a knight on b4.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -40504,7 +40504,7 @@
     "title": "The Antidote Holds",
     "intro": "Guard b7 with a rook, take the c-file with the other, sidestep the knight — the Exchange pull gets absorbed.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -40653,7 +40653,7 @@
     "title": "Castle Into the Squeeze",
     "intro": "The h5 squeeze is a called bluff — castle into it, fire …c5, and take the g4 pawn when it lunges.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -40795,7 +40795,7 @@
     "title": "Caro-Kann vs Fantasy: Strike the Centre",
     "intro": "From their win over hanqi. Black breaks in the centre and wins a pawn with active rooks.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense",
      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -40938,7 +40938,7 @@
     "title": "Caro-Kann Advance: Blunt the Kingside",
     "intro": "From their win over honza123455. Black reroutes to defend and snuffs out White’s attack.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense",
      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -41079,7 +41079,7 @@
     "title": "The …Bxf3 Structure",
     "intro": "White's queen wanders three times looking for a target; Black develops four pieces and owns the d-file.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]

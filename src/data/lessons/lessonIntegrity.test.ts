@@ -134,6 +134,9 @@ const ENGINE_EXTENDED_LESSONS = new Set<string>([
   'pro-gothamchess-london::vs Grünfeld Setup',
   'pro-gothamchess-london::Poisoned b2 Pawn',
   'pro-gothamchess-london::d5 vs …c5',
+  // GothamChess Caro-Kann: the Two Knights with 3…Nf6 (about one master game in
+  // twelve at that position) — the DB names the Two Knights to ply 5 only.
+  'pro-gothamchess-caro-kann::Tartakower / Two Knights 3...Nf6',
 ]);
 
 describe('masterclass G3 — every lesson anchors a real DB opening line', () => {

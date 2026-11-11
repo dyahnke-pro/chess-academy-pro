@@ -687,6 +687,12 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
         'mp-progothamchess-caro-fantasy-bd6',
         'mp-progothamchess-caro-fantasy-endgame',
       ],
+      // The four tabs taught in the repertoire's videos: no plan is anchored
+      // where any of their lines ends yet (empty > a plan from another line).
+      'exchange with 4.nf3': [],
+      'panov: solid 5...e6': [],
+      'two knights 3...dxe4': [],
+      'advance 3...c5 4.c3': [],
     },
   },
   'pro-gothamchess-trompowsky': {

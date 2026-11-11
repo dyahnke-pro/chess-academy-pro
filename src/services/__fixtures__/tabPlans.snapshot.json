@@ -3161,6 +3161,10 @@
   "mp-progothamchess-caro-fantasy-bd6",
   "mp-progothamchess-caro-fantasy-endgame"
  ],
+ "pro-gothamchess-caro-kann::Exchange with 4.Nf3::Exchange with 4.Nf3": [],
+ "pro-gothamchess-caro-kann::Panov: Solid 5...e6::Panov: Solid 5...e6": [],
+ "pro-gothamchess-caro-kann::Two Knights 3...dxe4::Two Knights 3...dxe4": [],
+ "pro-gothamchess-caro-kann::Advance 3...c5 4.c3::Advance 3...c5 4.c3": [],
  "pro-gothamchess-caro-kann::Classical 4...Bf5 (Main Line)::Classical 4...Bf5 (Main Line)": [
   "mp-pro-gothamchess-carokann-c5",
   "mp-pro-gothamchess-carokann-solid"
@@ -3196,6 +3200,10 @@
   "mp-progothamchess-caro-fantasy-bd6",
   "mp-progothamchess-caro-fantasy-endgame"
  ],
+ "pro-gothamchess-caro-kann::::Exchange with 4.Nf3": [],
+ "pro-gothamchess-caro-kann::::Panov: Solid 5...e6": [],
+ "pro-gothamchess-caro-kann::::Two Knights 3...dxe4": [],
+ "pro-gothamchess-caro-kann::::Advance 3...c5 4.c3": [],
  "pro-gothamchess-scandinavian::main": [
   "mp-progothamchess-scand-qa5-bxc3"
  ],

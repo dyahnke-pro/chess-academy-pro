@@ -1,0 +1,23 @@
+[
+  { "levy": 1, "decision": "skip", "tab": null, "reason": "A 1.d4 line (d4 d5 Bf4 c5 against the London): it never reaches the Caro-Kann, so it belongs on a Black page against 1.d4 (pro-gothamchess-qgd), not here." },
+  { "levy": 2, "decision": "skip", "tab": null, "reason": "A reply inside the same anti-London system as Levy 1 (1.d4), so it goes wherever that line goes; nothing on this page to hang it on." },
+  { "levy": 3, "decision": "skip", "tab": null, "reason": "A reply inside the anti-London system (1.d4), with the Qh5+ Bxg6+ trick that wins for you; belongs with Levy 1 on a page against 1.d4." },
+  { "levy": 4, "decision": "skip", "tab": null, "reason": "A second plan in the anti-London system (1.d4, …g5 and …Nh6-f5); belongs with Levy 1 on a page against 1.d4." },
+  { "levy": 5, "decision": "tab", "tab": "Exchange with 4.Nf3", "reason": "Their quiet Exchange setup (Nf3, Be2 instead of Bd3/Qb3) leaves early on their move; you develop both knights, …Bg4 before …e6, castle; about level." },
+  { "levy": 6, "decision": "tab", "tab": "Panov: Solid 5...e6", "reason": "Your other plan against the Panov (…e6, the masters' most common move, then …dxc4 after Bd3); taught honestly: …b6 costs about half a pawn and d5 comes at once." },
+  { "levy": 7, "decision": "reply", "tab": "Classical 4...Bf5 (Main Line)", "reason": "Their f3 gambit instead of Nxe4 on the main line; the reply pass should say that …exf3 is the engine's choice and …e3 (his idea, giving the pawn back) costs over a pawn." },
+  { "levy": 8, "decision": "skip", "tab": null, "reason": "4…Nf6 5.Nxf6+ gxf6: …gxf6 costs about three-quarters of a pawn against …exf6 and leaves them clearly better; the …exf6 structure is taught on the Two Knights 3...dxe4 tab." },
+  { "levy": 9, "decision": "skip", "tab": null, "reason": "Their 5.Ng3 (three masters in a hundred) inside 4…Nf6, a system this page has no tab for; it branches from the main line on your own move, so it cannot be a reply." },
+  { "levy": 10, "decision": "trap", "tab": "Fantasy Variation 3.f3", "reason": "dxe5 instead of Nf3, then …Qh4+ and g3?? …Qxe4+ wins the h1 rook (you are winning)." },
+  { "levy": 11, "decision": "reply", "tab": "Advance Variation 3.e5 c5", "reason": "Their 4.Nf3 instead of dxc5; after …Nc6 c3 …Bg4 it transposes into the Advance 3...c5 4.c3 tab's plan." },
+  { "levy": 12, "decision": "skip", "tab": null, "reason": "…Nc6 instead of …e6 against 4.dxc5 repeats the Advance Variation 3.e5 c5 tab's plan of winning c5 back, and past his ten moves the line drifts (…O-O-O and …Bxf3 each cost about half a pawn)." },
+  { "levy": 13, "decision": "warning", "tab": "Advance Variation 3.e5 Bf5", "reason": "Your own slip: against 4.h4, …e6 lets g4, f3 and h5 hunt the bishop down (they are winning, about three pawns)." },
+  { "levy": 14, "decision": "skip", "tab": null, "reason": "The same plan as the Advance 3...c5 4.c3 tab (…Nc6, …Bg4, …e6, …Nge7 to f5), with …Nge7 before …cxd4; the tab already teaches it." },
+  { "levy": 15, "decision": "warning", "tab": "Two Knights 3...dxe4", "reason": "Your own slip in the …exf6 structure: after Qc2 and Re8+ Ne2, …Nd7 drops h7 to Bxh7+ (they are clearly better); the tab shows the plan done right." },
+  { "levy": 16, "decision": "skip", "tab": null, "reason": "A sound second plan against the Fantasy (…g6, …Qb6xb2), but the line leaves openings-lichess.json after five plies, under the lesson gate's six-ply anchor; it needs David's sanction (ENGINE_EXTENDED_LESSONS) before it can be a tab." },
+  { "levy": 17, "decision": "trap", "tab": "Fantasy Variation 3.f3", "reason": "The …e5 gambit is a little worse with correct defence (the line shown); its traps are their natural slips off it: exd5 instead of Na4 loses to …Bf2+ and …Bxg1, and Kd2?? meets …Qe3 mate." },
+  { "levy": 18, "decision": "tab", "tab": "Two Knights 3...dxe4", "reason": "Your plan against the Two Knights: …dxe4, …exf6, …Bd6, castle, …Re8 and the knight to f8 guarding h7; about level, they are a little better at the end." },
+  { "levy": 19, "decision": "reply", "tab": "Classical 4...Bf5 (Main Line)", "reason": "Their Hillbilly 2.Bc4 (19 master games) instead of d4; take on e4 and block with …e6, and you end a little better." },
+  { "levy": 20, "decision": "tab", "tab": "Advance 3...c5 4.c3", "reason": "Against 4.c3 every piece aims at d4 (…Nc6, …Bg4, …Nge7 to f5); when h3 asks, trade on f3 and e3 for doubled e-pawns; about level." },
+  { "levy": 21, "decision": "skip", "tab": null, "reason": "…a6 instead of …d5 costs about half a pawn and no master plays it; a one-off novelty from a video, not part of the repertoire." }
+]

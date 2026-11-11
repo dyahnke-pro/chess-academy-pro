@@ -413,5 +413,14 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "pro-gothamchess-caro-kann": {
+    "variations": 13,
+    "middlegamePlans": 9,
+    "endgamePlans": 3,
+    "modelGames": 5,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }
