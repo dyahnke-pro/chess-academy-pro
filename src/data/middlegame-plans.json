@@ -16202,7 +16202,6 @@
     "title": "The d4-e5 Duo",
     "intro": "Rebuild the duo, absorb the check, and let the cramp make Black play perfectly just to stay level.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Ponziani-Opening",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -44425,7 +44424,6 @@
     "title": "The Bind, Honestly Priced",
     "intro": "The engine leans Black; their score says White — the doubled pawns and the e5 cramp are why.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Ponziani-Opening",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -44554,7 +44552,6 @@
     "title": "The Great Liquidation",
     "intro": "Black plays the principled counter; White trades everything in the right order and stands level with the better pawns.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Ponziani-Opening",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -44703,7 +44700,6 @@
     "title": "The Mayhem, Mapped",
     "intro": "A forcing sequence — chaos for the unprepared, a map for you.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Ponziani-Opening",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]

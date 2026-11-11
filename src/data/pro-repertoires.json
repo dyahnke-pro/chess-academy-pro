@@ -727,16 +727,16 @@
       "overview": "The Ponziani is the ambush specialist's dream. Named after Italian theoretician Domenico Lorenzo Ponziani, who analyzed the opening in his 1769 chess book — making it one of the oldest named openings in chess; despite this 250-year pedigree, it never took off in serious tournament play and was relegated to footnote status for centuries. Only in the YouTube era have streamers and content creators (this repertoire among them) revived it as a surprise weapon for amateur play. 1.e4 e5 2.Nf3 Nc6 3.c3 — and your opponent stares at the board confused. 'What is this? Is this just a slow Italian? Should I play …Nf6? …d5?' That confusion IS the opening. 3.c3 prepares d4 with extra support; if Black answers ANYTHING that doesn't immediately challenge the centre, you crash through with 4.d4 and reach a position no Italian player has prepared. This is an attacking, middlegame-decisive repertoire — built to win in the opening and the middlegame, not grind long endings — so it is deepest on the opening and middlegame plans, with endgame theory shown only where the games reach a decisive ending.",
       "keyIdeas": [
         "c3 + d4 is the entire idea. The Italian Game's c3+d4 break is delayed (you only play it after castling); the Ponziani plays c3 IMMEDIATELY, threatening d4 before Black has finished developing.",
-        "Watch for the natural-looking 3…Nf6 — this is what 95% of opponents play. Then 4.d4! and if 4…Nxe4 5.d5! kicks the c6-knight AND attacks the e4-knight (since it's no longer defended by Nc6). Black's pieces tangle and material is lost.",
-        "Against the principled 3…d5, your answer is the unusual 4.Qa4! — pinning the c6-knight to the d-pawn. This isn't a queen sortie like the Scandinavian; it's a specific tactical resource that disrupts Black's whole development.",
+        "Watch for 3…Nf6, about six masters in ten. Then 4.d4: after 4…exd4 you push e5 first, kicking the knight, and only take back on d4 once it has moved; after 4…Nxe4, the masters' main move and the engine's choice, 5.d5 kicks the c6-knight, the only piece guarding e5.",
+        "Against 3…d5, the engine's first choice, your answer is 4.Qa4: with the pawn on c3, the road from d1 to a4 is open, and the queen pins the c6-knight to the king. So after 4…Nf6, 5.Nxe5 takes a pawn the pinned knight can't win back.",
         "The Ponziani has no theory at the club level — your opponents are playing on intuition while you're playing on preparation. Even if engines call the position equal, the tempo advantage is real."
       ],
       "traps": [
-        "After 3…Nf6 4.d4 Nxe4?? 5.d5! the c6-knight has to move (no defender), but wherever it goes (5…Ne7 or 5…Nb8), White plays 6.Qa4+ winning the e4-knight. Pure pin-and-fork tactics from move 5."
+        "After 3…Nf6 4.d4 Nxe4 5.d5 the c6-knight has to move. If it runs to the rim with 5…Na5?, 6.b4 hits it, and after 6…b6 7.bxa5 you have won the knight for a pawn: you are winning."
       ],
       "warnings": [
-        "Be ready for 3…d5! — the principled equaliser. After 4.Qa4 Nf6 5.Nxe5 Bd6 6.Nxc6 bxc6, Black has the bishop pair AND active piece play. Engines call it equal; if you don't know the line, you'll be on the back foot.",
-        "NEVER play d4 without first playing c3. If you skip c3 (or play d4 too soon), Black's 4…exd4 5.Nxd4 reaches an Open Game where the c3-pawn would have been useful — you've simply played a worse Scotch."
+        "Be ready for 3…d5, the engine's first choice. After 4.Qa4 Nf6 5.Nxe5 Bd6 6.Nxc6 bxc6 you are a pawn up, but it is only about level, and their d5-pawn and f6-knight both hit e4. Guard it with 7.d3 at once: the natural 7.Be2 lets …dxe4 and costs you about two thirds of a pawn.",
+        "After 3…d5 4.Qa4 dxe4, don't take back with the queen: 5.Qxe4 costs you about two pawns. 5.Nxe5 is the move, because the pinned c6-knight can't take it."
       ],
       "variations": [
         {
@@ -744,7 +744,6 @@
           "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 exd4 e5 Nd5 Qb3 Nb6 cxd4 d6 Bb5 Be6",
           "explanation": "The main Ponziani with …Nf6: after d4 exd4 you push e5, kicking the knight to d5. Qb3 hits the d5-knight and the b7-pawn at once, so Black retreats …Nb6. You recapture cxd4 for a broad centre, and after …d6 Bb5 pins the c6-knight to the king while …Be6 develops. White has the d4–e5 centre and active pieces.",
           "sources": [
-            "book:chess-fundamentals",
             "https://www.chess.com/openings/Ponziani-Opening",
             "https://en.wikipedia.org/wiki/Ponziani_Opening"
           ]
@@ -752,9 +751,8 @@
         {
           "name": "3...d5 Central Counter",
           "pgn": "e4 e5 Nf3 Nc6 c3 d5 Qa4 Nf6 Nxe5 Bd6 Nxc6 bxc6 d3 O-O Be2 Re8 Nd2",
-          "explanation": "The principled try — Black hits your centre right away. Your reply is the slick 4.Qa4!, pinning the c6-knight to the e8-king down the a4-e8 diagonal (it's …d5 that just vacated d7, and that's exactly what lets the pin bite). Black develops with …Nf6, but you snatch the loose e5-pawn with 5.Nxe5! — legal precisely because c6 is pinned and can't recapture. After 5…Bd6 6.Nxc6 bxc6 you're a clean pawn up; the price is Black's doubled c-pawns and the bishop pair. Theory calls it balanced thanks to Black's activity, but at club level that extra pawn often just holds.",
+          "explanation": "The principled try — Black hits your centre right away. Your reply is the slick 4.Qa4!, pinning the c6-knight to the e8-king down the a4-e8 diagonal (it's …d5 that just vacated d7, and that's exactly what lets the pin bite). Black develops with …Nf6, but you snatch the loose e5-pawn with 5.Nxe5! — legal precisely because c6 is pinned and can't recapture. After 5…Bd6 6.Nxc6 bxc6 you're a clean pawn up and their c-pawns are doubled, but their pieces come out fast and the engine calls it about level: guard e4 with d3 and Nd2 before you castle.",
           "sources": [
-            "book:chess-fundamentals",
             "https://www.chess.com/openings/Ponziani-Opening",
             "https://en.wikipedia.org/wiki/Ponziani_Opening"
           ]
@@ -762,7 +760,27 @@
         {
           "name": "4…Nxe4 (dxc6)",
           "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 Bb6 Qd5 Nf2 Rg1 O-O cxb7 Bxb7 Qxb7",
-          "explanation": "The greedy 4…Nxe4 walks into the dxc6 forcing sequence — 13 corpus games ride it. The king steps to e2, the queen eats b7 and the bishop behind it, and the engine calls the wreckage dead level: a map through mayhem that punishes anyone who improvises.",
+          "explanation": "4…Nxe4 is the masters' main move and the engine's choice, and after 5.d5 the sharpest answer is 5…Bc5, ignoring the knight and going after f2. The forcing line dxc6, …Bxf2+, Ke2, Qd5 and cxb7 leaves you two pieces up for two pawns, but with your king on e2 they are a little better: a line to know move by move.",
+          "sources": [
+            "concept:pos-development",
+            "https://www.chess.com/openings/Ponziani-Opening",
+            "https://api.chess.com/pub/player/gothamchess/games/archives"
+          ]
+        },
+        {
+          "name": "3...Bc5 Big Center",
+          "pgn": "e4 e5 Nf3 Nc6 c3 Bc5 d4 exd4 cxd4 Bb6 d5 Nce7 d6 cxd6 Nc3 Nf6 Bg5 d5 Bxf6 gxf6 Qd2",
+          "explanation": "Against the natural 3…Bc5, d4 hits the bishop and the e5-pawn at once, and after …exd4 cxd4 you have two pawns in the centre. They push the pieces back with d5 and d6; the pawn Black wins on d6 leaves doubled d-pawns, and after Bxf6 the kingside is broken too.",
+          "sources": [
+            "concept:pos-center",
+            "https://www.chess.com/openings/Ponziani-Opening",
+            "https://api.chess.com/pub/player/gothamchess/games/archives"
+          ]
+        },
+        {
+          "name": "6.Bc4 Gambit",
+          "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 exd4 e5 Nd5 Bc4 Nb6 Bb3 dxc3 Nxc3 d5 Nxd5 Be6 Bg5 Qd7 Nxb6",
+          "explanation": "Instead of Qb3, the bishop hits the d5-knight and you leave the d4-pawn alone: if they take on c3, Nxc3 develops a pawn down, and when they give the pawn back with …d5, the knight takes on d5 and trades itself for the b6-knight, about level.",
           "sources": [
             "concept:pos-development",
             "https://www.chess.com/openings/Ponziani-Opening",

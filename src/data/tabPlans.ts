@@ -818,6 +818,10 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
       ],
       '4…nxe4 (dxc6)': ['mp-progothamchess-ponziani-nxe4-gambit'],
       '3...d5 central counter': ['mp-progothamchess-ponziani-d5-qa4'],
+      // The two tabs added from the repertoire's taught lines (2026-11-11,
+      // docs/levy-lines/decisions): no middlegame plan is anchored at their ends yet.
+      '3...bc5 big center': [],
+      '6.bc4 gambit': [],
     },
   },
   'pro-gothamchess-anti-sicilian': {

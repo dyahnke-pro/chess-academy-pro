@@ -3280,6 +3280,8 @@
  "pro-gothamchess-ponziani::dxc6::4…Nxe4 (dxc6)": [
   "mp-progothamchess-ponziani-nxe4-gambit"
  ],
+ "pro-gothamchess-ponziani::3...Bc5 Big Center::3...Bc5 Big Center": [],
+ "pro-gothamchess-ponziani::6.Bc4 Gambit::6.Bc4 Gambit": [],
  "pro-gothamchess-ponziani::::Main Line 3...Nf6 4.d4": [
   "mp-progothamchess-ponziani-main-qb3",
   "mp-progothamchess-ponziani-d4-thrust"
@@ -3293,6 +3295,8 @@
  "pro-gothamchess-ponziani::::4…Nxe4 (dxc6)": [
   "mp-progothamchess-ponziani-nxe4-gambit"
  ],
+ "pro-gothamchess-ponziani::::3...Bc5 Big Center": [],
+ "pro-gothamchess-ponziani::::6.Bc4 Gambit": [],
  "pro-gothamchess-fantasy-caro::main": [
   "mp-progothamchess-fantasy-dxe4-center"
  ],

@@ -175,6 +175,8 @@ const ENGINE_EXTENDED_LESSONS = new Set<string>([
   'pro-gothamchess-closed-sicilian::vs …e6',
   'pro-gothamchess-closed-sicilian::vs …g6 (Bxc6)',
   'pro-gothamchess-closed-sicilian::Fianchetto vs …g6',
+  // GothamChess Ponziani: …Bc5 after 3.c3, which the DB names only to ply 5 (DB-empty rule).
+  'pro-gothamchess-ponziani::3...Bc5 Big Center',
 ]);
 
 describe('masterclass G3 — every lesson anchors a real DB opening line', () => {
