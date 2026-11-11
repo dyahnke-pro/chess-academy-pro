@@ -730,6 +730,13 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
       'anti-french (…e6)': ['mp-progothamchess-eng-e6-doublefianchetto'],
       'symmetric (…c5)': ['mp-progothamchess-eng-c5-maroczy'],
       'vs …c6 (slav-style)': ['mp-progothamchess-eng-c6-slav-g4'],
+      // The lines he teaches, added as tabs 2026-11-11 (docs/levy-lines/decisions):
+      // no middlegame plan is anchored at their terminals yet.
+      'g3 vs …e5': [],
+      'mikenas-carls': [],
+      'botvinnik vs …c5': [],
+      'qa4+ vs …dxc4': [],
+      'e4 gambit vs dutch': [],
     },
   },
   'pro-gothamchess-vienna': {

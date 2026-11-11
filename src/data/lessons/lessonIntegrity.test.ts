@@ -160,6 +160,15 @@ const ENGINE_EXTENDED_LESSONS = new Set<string>([
   'pro-gothamchess-trompowsky::Vaganian Attack (…Ne4)',
   'pro-gothamchess-trompowsky::…d5 system',
   'pro-gothamchess-trompowsky::c4 and e4 vs …d6',
+  // GothamChess English: the Botvinnik and c4 orders the DB names only to ply 2–4 (DB-empty rule).
+  "This repertoire's English — the Botvinnik Centre and Kingside Storm",
+  'pro-gothamchess-english::Botvinnik System vs KID-setup',
+  'pro-gothamchess-english::Anti-French (…e6)',
+  'pro-gothamchess-english::Symmetric (…c5)',
+  'pro-gothamchess-english::vs …c6 (Slav-style)',
+  'pro-gothamchess-english::Mikenas-Carls',
+  'pro-gothamchess-english::Qa4+ vs …dxc4',
+  'pro-gothamchess-english::e4 Gambit vs Dutch',
 ]);
 
 describe('masterclass G3 — every lesson anchors a real DB opening line', () => {

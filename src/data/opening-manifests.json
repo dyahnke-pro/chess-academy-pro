@@ -396,6 +396,15 @@
     "warnings": 0,
     "keyIdeas": 4
   },
+  "pro-gothamchess-english": {
+    "variations": 10,
+    "middlegamePlans": 6,
+    "endgamePlans": 0,
+    "modelGames": 6,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
   "pro-gothamchess-london": {
     "variations": 10,
     "middlegamePlans": 6,

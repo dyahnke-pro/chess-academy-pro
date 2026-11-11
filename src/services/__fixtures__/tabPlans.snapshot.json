@@ -3920,6 +3920,11 @@
  "pro-gothamchess-english::Slav-style::vs …c6 (Slav-style)": [
   "mp-progothamchess-eng-c6-slav-g4"
  ],
+ "pro-gothamchess-english::g3 vs …e5::g3 vs …e5": [],
+ "pro-gothamchess-english::Mikenas-Carls::Mikenas-Carls": [],
+ "pro-gothamchess-english::Botvinnik vs …c5::Botvinnik vs …c5": [],
+ "pro-gothamchess-english::Qa4+ vs …dxc4::Qa4+ vs …dxc4": [],
+ "pro-gothamchess-english::e4 Gambit vs Dutch::e4 Gambit vs Dutch": [],
  "pro-gothamchess-english::::Botvinnik System vs KID-setup": [
   "mp-progothamchess-english-botvinnik-main",
   "mp-progothamchess-english-flank-attack"
@@ -3948,6 +3953,11 @@
  "pro-gothamchess-english::::vs …c6 (Slav-style)": [
   "mp-progothamchess-eng-c6-slav-g4"
  ],
+ "pro-gothamchess-english::::g3 vs …e5": [],
+ "pro-gothamchess-english::::Mikenas-Carls": [],
+ "pro-gothamchess-english::::Botvinnik vs …c5": [],
+ "pro-gothamchess-english::::Qa4+ vs …dxc4": [],
+ "pro-gothamchess-english::::e4 Gambit vs Dutch": [],
  "pro-gothamchess-vienna::main": [
   "mp-progothamchess-vie-gambit-main-attack",
   "mp-progothamchess-vienna-gambit-main"
