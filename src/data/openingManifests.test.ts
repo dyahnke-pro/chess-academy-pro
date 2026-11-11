@@ -20,11 +20,11 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import manifests from './opening-manifests.json';
-import repertoireRaw from './repertoire.json';
+import { openingRecord } from './lessons/openingRecords';
 import middlegamePlansRaw from './middlegame-plans.json';
 import modelGamesRaw from './model-games.json';
 import { FIRST_CLASS_OPENING_IDS } from './lessons/registry';
-import type { OpeningRecord, MiddlegamePlan } from '../types';
+import type { MiddlegamePlan } from '../types';
 
 interface ModelGameLike { openingId: string }
 interface ManifestEntry {
@@ -37,7 +37,6 @@ interface ManifestEntry {
   keyIdeas: number;
 }
 
-const repertoire = repertoireRaw as unknown as OpeningRecord[];
 const middlegamePlans = middlegamePlansRaw as MiddlegamePlan[];
 const modelGames = modelGamesRaw as ModelGameLike[];
 
@@ -68,7 +67,7 @@ function countInTrapFile(openingId: string, kind: 'weapon' | 'warning'): number 
 type ActualCounts = ManifestEntry;
 
 function countActual(openingId: string): ActualCounts {
-  const opening = repertoire.find((o) => o.id === openingId);
+  const opening = openingRecord(openingId);
   if (!opening) {
     return { variations: 0, middlegamePlans: 0, endgamePlans: 0, modelGames: 0, weapons: 0, warnings: 0, keyIdeas: 0 };
   }

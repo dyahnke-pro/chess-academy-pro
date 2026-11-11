@@ -13,8 +13,7 @@
 // un-gated.
 
 import type { LessonScript } from '../../types';
-import repertoire from '../repertoire.json';
-import gambits from '../gambits.json';
+import { openingRecord } from './openingRecords';
 import { WATCH_COURSES } from './watch';
 import { watchLessons, type WatchCourse } from './watch/watchCourse';
 
@@ -227,24 +226,11 @@ export const ALL_LESSONS: RegisteredLesson[] = build();
  *  opening — so a new opening can't ship without declared content floors. */
 export const FIRST_CLASS_OPENING_IDS: string[] = OPENINGS.map((o) => o.main.openingId);
 
-// Orientation source of truth = the opening's `color` field. Most lessons
-// map to a repertoire.json entry; the gambit-tab lessons map to gambits.json
-// (same `color` shape). Both feed the Dexie openings store, so both are
-// valid orientation sources for the gate.
-const COLOR_BY_ID = new Map<string, 'white' | 'black'>([
-  ...(repertoire as Array<{ id: string; color: 'white' | 'black' }>).map(
-    (o) => [o.id, o.color] as const,
-  ),
-  ...(gambits as Array<{ id: string; color: 'white' | 'black' }>).map(
-    (o) => [o.id, o.color] as const,
-  ),
-]);
-
 /** The side the student plays for an opening, read from the opening's
- *  `color` field (repertoire.json or gambits.json) — the DB-driven source of
- *  truth. Lessons must orient to this (white openings white-at-bottom, black
- *  openings black-at-bottom). Returns null when the opening is in neither
- *  source (gate surfaces it). */
+ *  `color` field — repertoire.json, gambits.json or pro-repertoires.json, the
+ *  DB-driven source of truth (`openingRecords`). Lessons must orient to this
+ *  (white openings white-at-bottom, black openings black-at-bottom). Returns
+ *  null when the opening is in none of them (gate surfaces it). */
 export function expectedOrientation(openingId: string): 'white' | 'black' | null {
-  return COLOR_BY_ID.get(openingId) ?? null;
+  return openingRecord(openingId)?.color ?? null;
 }

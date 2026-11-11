@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import repertoireData from '../repertoire.json';
+import { openingRecord } from './openingRecords';
 import { buildVariationTabs } from '../../services/variationTabs';
 import { getLessonScript, getVariationLessonScript } from './index';
 import { FIRST_CLASS_OPENING_IDS } from './registry';
@@ -19,16 +19,13 @@ import type { OpeningVariation } from '../../types';
 // (audit-punish-gems-loop) catches it at runtime too; this catches it before
 // it ever ships.
 
-interface RepOpening { id: string; variations?: OpeningVariation[] }
-// repertoire.json is an array of opening records.
-const OPENINGS = repertoireData as unknown as RepOpening[];
 
 describe('masterclass tabs resolve to distinct lessons — no dup/fallback lines', () => {
   for (const id of FIRST_CLASS_OPENING_IDS) {
-    const op = OPENINGS.find((o) => o.id === id);
+    const op = openingRecord(id) as { id: string; variations?: OpeningVariation[] } | null;
 
     it(`${id}: every variation tab has its own distinct lesson`, () => {
-      expect(op, `${id} not found in repertoire.json`).toBeTruthy();
+      expect(op, `${id} not found in repertoire.json, gambits.json or pro-repertoires.json`).toBeTruthy();
       if (!op) return;
       const main = getLessonScript(id);
       expect(main, `${id} has no main-line lesson`).toBeTruthy();
