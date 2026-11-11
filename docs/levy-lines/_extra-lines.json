@@ -1,0 +1,3966 @@
+{
+ "pro-gothamchess-qgd": [
+  {
+   "name": "Levy 1 (tab, leaves main on your move at ply 6, his first 14 plies): Stonewall via the Queen's Gambit",
+   "moves": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nf3",
+    "c6",
+    "g3",
+    "f5",
+    "Bg2",
+    "Nf6",
+    "O-O",
+    "Bd6",
+    "b3",
+    "O-O",
+    "Ba3",
+    "Bxa3"
+   ]
+  },
+  {
+   "name": "Levy 2 (reply, leaves Exchange Variation on your move at ply 6, his first 8 plies): Stonewall vs 1.c4: ...e6 then ...d5",
+   "moves": [
+    "c4",
+    "e6",
+    "Nc3",
+    "d5",
+    "d4",
+    "c6",
+    "Nf3",
+    "f5",
+    "Bf4",
+    "Nf6",
+    "e3",
+    "Bd6",
+    "Bd3",
+    "Qc7"
+   ]
+  },
+  {
+   "name": "Levy 3 (reply, leaves main on their move at ply 7, his first 12 plies): QGD vs the Catalan: ...Be7, castle, ...b6",
+   "moves": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nf3",
+    "Nf6",
+    "g3",
+    "Be7",
+    "Bg2",
+    "O-O",
+    "O-O",
+    "b6",
+    "cxd5",
+    "exd5"
+   ]
+  },
+  {
+   "name": "Levy 4 (reply, leaves Exchange Variation on their move at ply 7, his first 12 plies): QGD classical: ...Nf6, ...Be7, castle vs Bg5",
+   "moves": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Bg5",
+    "Be7",
+    "e3",
+    "O-O",
+    "Nf3",
+    "h6",
+    "Bh4",
+    "b6"
+   ]
+  },
+  {
+   "name": "Levy 5 (reply, leaves Exchange Variation on your move at ply 6, his first 16 plies): Tarrasch Defense: 3...c5",
+   "moves": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "c5",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "Nc6",
+    "g3",
+    "Nf6",
+    "Bg2",
+    "Be7",
+    "O-O",
+    "O-O",
+    "Bg5",
+    "cxd4"
+   ]
+  },
+  {
+   "name": "Levy 6 (reply, leaves main on your move at ply 8, his first 8 plies): Ragozin: 4...Bb4",
+   "moves": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "Bb4",
+    "Bg5",
+    "h6",
+    "Bxf6",
+    "Qxf6",
+    "e3",
+    "Bxc3+"
+   ]
+  },
+  {
+   "name": "Levy 7 (tab, leaves main on their move at ply 7, his first 12 plies): Open Catalan: ...dxc4 and ...Bb4+ with ...a5",
+   "moves": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "Nf3",
+    "d5",
+    "g3",
+    "dxc4",
+    "Bg2",
+    "Bb4+",
+    "Bd2",
+    "a5",
+    "Qc1",
+    "b5"
+   ]
+  },
+  {
+   "name": "Levy 8 (reply, leaves main on their move at ply 7, his first 12 plies): Open Catalan: check, then back to e7",
+   "moves": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "Nf3",
+    "d5",
+    "g3",
+    "dxc4",
+    "Bg2",
+    "Bb4+",
+    "Bd2",
+    "Be7",
+    "Qa4+",
+    "Bd7"
+   ]
+  },
+  {
+   "name": "Levy 9 (reply, leaves main on their move at ply 7, his first 16 plies): Closed Catalan: take on c4 after castling, ...a6 and ...Bd7",
+   "moves": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "Nf3",
+    "d5",
+    "g3",
+    "Be7",
+    "Bg2",
+    "O-O",
+    "O-O",
+    "dxc4",
+    "Qc2",
+    "a6",
+    "a4",
+    "Bd7",
+    "Qxc4",
+    "Bc6"
+   ]
+  },
+  {
+   "name": "Levy 10 (reply, leaves main on their move at ply 7, his first 16 plies): Catalan with a Stonewall twist: ...Ne4 and ...f5",
+   "moves": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "Nf3",
+    "d5",
+    "g3",
+    "Be7",
+    "Bg2",
+    "O-O",
+    "O-O",
+    "c6",
+    "Qc2",
+    "Ne4",
+    "Nc3",
+    "f5",
+    "b3",
+    "Nd7"
+   ]
+  }
+ ],
+ "pro-gothamchess-caro-kann": [
+  {
+   "name": "Levy 1 (tab, leaves reply@6 on your move at ply 10, his first 12 plies): Anti-London: 2...c5 and the rare ...f6",
+   "moves": [
+    "d4",
+    "d5",
+    "Bf4",
+    "c5",
+    "e3",
+    "cxd4",
+    "exd4",
+    "Nc6",
+    "c3",
+    "f6",
+    "Nd2",
+    "e5",
+    "Bg3",
+    "Bd6"
+   ]
+  },
+  {
+   "name": "Levy 2 (reply, leaves reply@6 on your move at ply 10, his first 16 plies): Anti-London vs 6.Nf3: ...g5 and ...h5",
+   "moves": [
+    "d4",
+    "d5",
+    "Bf4",
+    "c5",
+    "e3",
+    "cxd4",
+    "exd4",
+    "Nc6",
+    "c3",
+    "f6",
+    "Nf3",
+    "g5",
+    "Bg3",
+    "h5",
+    "h4",
+    "g4",
+    "Nfd2",
+    "Bh6"
+   ]
+  },
+  {
+   "name": "Levy 3 (reply, leaves reply@6 on your move at ply 10, his first 18 plies): Anti-London vs 6.Bd3: ...e5 and the Qh5+ trick",
+   "moves": [
+    "d4",
+    "d5",
+    "Bf4",
+    "c5",
+    "e3",
+    "cxd4",
+    "exd4",
+    "Nc6",
+    "c3",
+    "f6",
+    "Bd3",
+    "e5",
+    "Qh5+",
+    "g6",
+    "Bxg6+",
+    "hxg6",
+    "Qxh8",
+    "exf4",
+    "Qxg8",
+    "Bf5"
+   ]
+  },
+  {
+   "name": "Levy 4 (reply, leaves reply@6 on your move at ply 10, his first 16 plies): Anti-London spiky setup: ...g5 and ...Nh6-f5",
+   "moves": [
+    "d4",
+    "d5",
+    "Bf4",
+    "c5",
+    "e3",
+    "cxd4",
+    "exd4",
+    "Nc6",
+    "c3",
+    "f6",
+    "Nf3",
+    "g5",
+    "Bg3",
+    "Nh6",
+    "Bd3",
+    "Nf5",
+    "O-O",
+    "h5"
+   ]
+  },
+  {
+   "name": "Levy 5 (tab, leaves reply@6 on your move at ply 8, his first 19 plies): Exchange: knights, Bg4, e6, castle",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "exd5",
+    "cxd5",
+    "Nf3",
+    "Nf6",
+    "Be2",
+    "Nc6",
+    "O-O",
+    "Bg4",
+    "c3",
+    "e6",
+    "Bf4",
+    "Be7",
+    "Nbd2",
+    "O-O",
+    "Re1",
+    "Bf5"
+   ]
+  },
+  {
+   "name": "Levy 6 (reply, leaves Panov-Botvinnik Attack 3.exd5 cxd5 4.c4 on your move at ply 10, his first 18 plies): Panov: solid ...e6, then ...dxc4 and ...b6/...Bb7",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "exd5",
+    "cxd5",
+    "c4",
+    "Nf6",
+    "Nc3",
+    "e6",
+    "Nf3",
+    "Be7",
+    "Bd3",
+    "dxc4",
+    "Bxc4",
+    "O-O",
+    "O-O",
+    "b6",
+    "d5",
+    "exd5"
+   ]
+  },
+  {
+   "name": "Levy 7 (reply, leaves main on their move at ply 7, his first 9 plies): Blackmar-Diemer style f3: give the pawn back with ...e3",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "f3",
+    "e3",
+    "Bxe3",
+    "Qb6",
+    "Bd3",
+    "Qxb2",
+    "Nge2",
+    "Qb6"
+   ]
+  },
+  {
+   "name": "Levy 8 (reply, leaves reply@0 on your move at ply 10, his first 10 plies): Classical 4...Nf6 5.Nxf6+ gxf6 (Bronstein-Larsen)",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Nf6",
+    "Nxf6+",
+    "gxf6",
+    "c3",
+    "Bf5",
+    "Nf3",
+    "e6"
+   ]
+  },
+  {
+   "name": "Levy 9 (reply, leaves reply@0 on their move at ply 9, his first 10 plies): Classical 4...Nf6 5.Ng3 h5 harassing the knight",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Nf6",
+    "Ng3",
+    "h5",
+    "h4",
+    "c5",
+    "Nf3",
+    "Nc6"
+   ]
+  },
+  {
+   "name": "Levy 10 (trap, leaves Fantasy Variation 3.f3 on their move at ply 9, his first 12 plies): Fantasy 3.f3 dxe4 4.fxe4 e5: the dxe5 Qh4+ trick",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "dxe4",
+    "fxe4",
+    "e5",
+    "dxe5",
+    "Qh4+",
+    "g3",
+    "Qxe4+"
+   ]
+  },
+  {
+   "name": "Levy 11 (tab, leaves reply@5 on your move at ply 10, his first 16 plies): Advance 3...c5: Nc6, pin with Bg4, then ...e6",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "Bg4",
+    "Be2",
+    "e6",
+    "O-O",
+    "cxd4",
+    "cxd4",
+    "Nge7",
+    "Nc3",
+    "Nf5"
+   ]
+  },
+  {
+   "name": "Levy 12 (reply, leaves Advance Variation 3.e5 c5 on your move at ply 8, his first 10 plies): Advance 3...c5 4.dxc5: still ...Nc6 and win c5 back with the bishop",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "dxc5",
+    "Nc6",
+    "Nf3",
+    "Bg4",
+    "Bb5",
+    "Qa5+",
+    "Nc3",
+    "e6"
+   ]
+  },
+  {
+   "name": "Levy 13 (trap, leaves reply@0 on your move at ply 8, his first 13 plies): Advance 4.h4 e6?? pitfall: the bishop gets trapped",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "Bf5",
+    "h4",
+    "e6",
+    "g4",
+    "Be4",
+    "f3",
+    "Bg6",
+    "h5"
+   ]
+  },
+  {
+   "name": "Levy 14 (tab, leaves reply@5 on your move at ply 10, his first 14 plies): Advance 3...c5 vs c3: Nc6, pin, ...e6, knight via e7 to f5",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "c3",
+    "Nc6",
+    "Nf3",
+    "Bg4",
+    "Be2",
+    "e6",
+    "O-O",
+    "Nge7",
+    "dxc5",
+    "Bxf3"
+   ]
+  },
+  {
+   "name": "Levy 15 (tab, leaves reply@0 on their move at ply 15, his first 18 plies): Tartakower plan: Re8, knight d7-f8 guarding the king",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Nf6",
+    "Nxf6+",
+    "exf6",
+    "c3",
+    "Bd6",
+    "Bd3",
+    "O-O",
+    "Qc2",
+    "Re8+",
+    "Ne2",
+    "Nd7",
+    "Bxh7+",
+    "Kh8"
+   ]
+  },
+  {
+   "name": "Levy 16 (reply, leaves Fantasy Variation 3.f3 on your move at ply 6, his first 14 plies): Fantasy 3...g6: ...Qb6 and grab b2",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "Be3",
+    "Qb6",
+    "Qd2",
+    "Qxb2",
+    "Rb1",
+    "Qa3",
+    "Bd3",
+    "e6"
+   ]
+  },
+  {
+   "name": "Levy 17 (trap, leaves Fantasy Variation 3.f3 on your move at ply 6, his first 8 plies): Fantasy 3...e5: the tricky dark-diagonal gambit",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "e5",
+    "dxe5",
+    "Bc5"
+   ]
+  },
+  {
+   "name": "Levy 18 (reply, leaves Tartakower / Two Knights 3...Nf6 on your move at ply 6, his first 10 plies): Two Knights: play it like a Tartakower",
+   "moves": [
+    "e4",
+    "c6",
+    "Nc3",
+    "d5",
+    "Nf3",
+    "dxe4",
+    "Nxe4",
+    "Nf6",
+    "Nxf6+",
+    "exf6",
+    "d4",
+    "Bd6",
+    "Bd3",
+    "O-O"
+   ]
+  },
+  {
+   "name": "Levy 19 (reply, leaves main on their move at ply 5, his first 8 plies): Hillbilly Attack 2.Bc4 d5 3.Bb3 dxe4 4.Qh5: take and block with ...e6",
+   "moves": [
+    "e4",
+    "c6",
+    "Bc4",
+    "d5",
+    "Bb3",
+    "dxe4",
+    "Qh5",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Qh4",
+    "a5",
+    "Nxe4",
+    "a4"
+   ]
+  },
+  {
+   "name": "Levy 20 (tab, leaves reply@5 on your move at ply 10, his first 23 plies): Advance ...c5: ...Nf5 vs Be3, and if h3 trade on f3 and e3",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "c3",
+    "Nc6",
+    "Nf3",
+    "Bg4",
+    "Be2",
+    "e6",
+    "O-O",
+    "cxd4",
+    "cxd4",
+    "Nge7",
+    "Be3",
+    "Nf5",
+    "h3",
+    "Bxf3",
+    "Bxf3",
+    "Nxe3",
+    "fxe3",
+    "g6"
+   ]
+  },
+  {
+   "name": "Levy 21 (reply, leaves main on their move at ply 5, his first 8 plies): Goat Horns 2.d4 a6: ...d5, then ...Bg4, ...e6, ...c5 vs e5",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "a6",
+    "Nf3",
+    "d5",
+    "e5",
+    "Bg4",
+    "Be2",
+    "e6",
+    "O-O",
+    "Ne7",
+    "h3",
+    "Bh5"
+   ]
+  }
+ ],
+ "pro-gothamchess-french-defense": [
+  {
+   "name": "Levy 1 (reply, leaves reply@2 on your move at ply 8, his first 10 plies): Albin vs 3.e3: take on d4 and develop",
+   "moves": [
+    "d4",
+    "d5",
+    "c4",
+    "e5",
+    "e3",
+    "exd4",
+    "exd4",
+    "Nf6",
+    "Nc3",
+    "Bb4",
+    "Bd3",
+    "O-O",
+    "Ne2",
+    "dxc4"
+   ]
+  },
+  {
+   "name": "Levy 2 (tab, leaves main on their move at ply 5, his first 14 plies): Advance: ...c5, ...Nc6, ...Qb6, ...Nh6 (b2 is loose)",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "c3",
+    "Nc6",
+    "Nf3",
+    "Qb6",
+    "Be2",
+    "Nh6",
+    "Bxh6",
+    "gxh6",
+    "Qd2",
+    "Bg7"
+   ]
+  },
+  {
+   "name": "Levy 3 (trap, leaves main on their move at ply 5, his first 17 plies): Advance pitfall: 6.Bd3 cxd4 7.cxd4 Nxd4?? 8.Nxd4 Qxd4 9.Bb5+",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "c3",
+    "Nc6",
+    "Nf3",
+    "Qb6",
+    "Bd3",
+    "cxd4",
+    "cxd4",
+    "Nxd4",
+    "Nxd4",
+    "Qxd4",
+    "Bb5+"
+   ]
+  },
+  {
+   "name": "Levy 4 (reply, leaves main on their move at ply 5, his first 16 plies): Advance: ...cxd4 then ...Nh6-f5 hitting d4",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "c3",
+    "Nc6",
+    "Nf3",
+    "Qb6",
+    "Be2",
+    "cxd4",
+    "cxd4",
+    "Nh6",
+    "Nc3",
+    "Nf5",
+    "Na4",
+    "Qa5+"
+   ]
+  },
+  {
+   "name": "Levy 5 (reply, leaves main on their move at ply 5, his first 14 plies): Advance: ...Nge7 and if dxc5 then ...Qc7",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "c3",
+    "Nc6",
+    "Nf3",
+    "Qb6",
+    "Be2",
+    "Nge7",
+    "dxc5",
+    "Qc7",
+    "O-O",
+    "Ng6"
+   ]
+  },
+  {
+   "name": "Levy 6 (tab, leaves main on your move at ply 6, his first 14 plies): Classical Steinitz: ...c5, ...Nc6, ...Be7",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nc3",
+    "Nf6",
+    "e5",
+    "Nfd7",
+    "f4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "Be3",
+    "Be7",
+    "Qd2",
+    "O-O"
+   ]
+  },
+  {
+   "name": "Levy 7 (reply, leaves main on your move at ply 6, his first 6 plies): Winawer: pin the knight with ...Bb4",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nc3",
+    "Bb4",
+    "e5",
+    "c5",
+    "a3",
+    "Bxc3+",
+    "bxc3",
+    "Ne7",
+    "Qg4",
+    "O-O"
+   ]
+  },
+  {
+   "name": "Levy 8 (tab, leaves main on your move at ply 8, his first 16 plies): Rubinstein with ...Nd7: ...Ngf6, ...b6, ...Bb7",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Nd7",
+    "Nf3",
+    "Ngf6",
+    "Nxf6+",
+    "Nxf6",
+    "Bd3",
+    "b6",
+    "O-O",
+    "Bb7",
+    "Qe2",
+    "Bd6"
+   ]
+  },
+  {
+   "name": "Levy 9 (reply, leaves main on your move at ply 8, his first 14 plies): Fort Knox: ...Bd7-c6 to trade the problem bishop",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Bd7",
+    "Nf3",
+    "Bc6",
+    "Bd3",
+    "Nd7",
+    "O-O",
+    "Ngf6",
+    "Ng3",
+    "Be7"
+   ]
+  },
+  {
+   "name": "Levy 10 (tab, leaves Tarrasch (Nd2) on your move at ply 6, his first 6 plies): Tarrasch 3.Nd2 c5",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nd2",
+    "c5",
+    "exd5",
+    "Qxd5",
+    "Ngf3",
+    "cxd4",
+    "Bc4",
+    "Qd6",
+    "O-O",
+    "Nf6"
+   ]
+  },
+  {
+   "name": "Levy 11 (reply, leaves Tarrasch (Nd2) on your move at ply 6, his first 6 plies): Tarrasch 3.Nd2 h6 (planning ...g5-g4)",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nd2",
+    "h6",
+    "Ngf3",
+    "Nf6",
+    "e5",
+    "Nfd7",
+    "c3",
+    "c5",
+    "Bd3",
+    "Nc6"
+   ]
+  },
+  {
+   "name": "Levy 12 (reply, leaves Tarrasch (Nd2) on your move at ply 6, his first 6 plies): Tarrasch 3.Nd2 Be7 (same ...g5 idea)",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nd2",
+    "Be7",
+    "Ngf3",
+    "Nf6",
+    "e5",
+    "Nfd7",
+    "c3",
+    "c5",
+    "Bd3",
+    "Nc6"
+   ]
+  },
+  {
+   "name": "Levy 13 (tab, leaves main on your move at ply 12, his first 14 plies): Rozman French: Rubinstein ...Nf6, ...gxf6, ...b6, ...Bb7",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Nf6",
+    "Nxf6+",
+    "gxf6",
+    "Nf3",
+    "b6",
+    "Bd3",
+    "Bb7",
+    "Qe2",
+    "Nc6"
+   ]
+  },
+  {
+   "name": "Levy 14 (reply, leaves reply@1 on your move at ply 10, his first 14 plies): Rozman French vs 5.Ng3: ...c5",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Nf6",
+    "Ng3",
+    "c5",
+    "dxc5",
+    "Qxd1+",
+    "Kxd1",
+    "Bxc5",
+    "Ke1",
+    "Nc6"
+   ]
+  },
+  {
+   "name": "Levy 15 (reply, leaves reply@1 on their move at ply 11, his first 12 plies): Burn Variation 4.Bg5 dxe4: ...Be7 and if Bxf6 ...gxf6",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nc3",
+    "Nf6",
+    "Bg5",
+    "dxe4",
+    "Nxe4",
+    "Be7",
+    "Bxf6",
+    "gxf6",
+    "Nf3",
+    "f5"
+   ]
+  },
+  {
+   "name": "Levy 16 (reply, leaves reply@1 on their move at ply 11, his first 14 plies): Burn Variation: 6.Nxf6+ Bxf6, castle, ...b6/...Bb7",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nc3",
+    "Nf6",
+    "Bg5",
+    "dxe4",
+    "Nxe4",
+    "Be7",
+    "Nxf6+",
+    "Bxf6",
+    "Nf3",
+    "O-O",
+    "Qd2",
+    "Bxg5"
+   ]
+  },
+  {
+   "name": "Levy 17 (reply, leaves reply@2 on your move at ply 8, his first 12 plies): Exchange French with c4: ...Nf6, develop, castle short",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "c4",
+    "Nf6",
+    "Nc3",
+    "Be7",
+    "Nf3",
+    "O-O",
+    "cxd5",
+    "Nxd5"
+   ]
+  }
+ ],
+ "pro-gothamchess-london": [
+  {
+   "name": "Levy 1 (tab, leaves vs …c6 (via 2.Bf4) on your move at ply 5, his first 15 plies): Pyramid setup: knight jumps to e5 when ...e5 is coming",
+   "moves": [
+    "d4",
+    "d5",
+    "Bf4",
+    "Nf6",
+    "e3",
+    "e6",
+    "Nf3",
+    "Bd6",
+    "Bg3",
+    "O-O",
+    "Bd3",
+    "Nc6",
+    "c3",
+    "Qe7",
+    "Ne5",
+    "Bxe5",
+    "dxe5"
+   ]
+  },
+  {
+   "name": "Levy 2 (trap, leaves vs …c6 (via 2.Bf4) on your move at ply 5, his first 9 plies): Early ...Qb6: the knight to c3 makes the b2 pawn poison",
+   "moves": [
+    "d4",
+    "d5",
+    "Bf4",
+    "c5",
+    "e3",
+    "Qb6",
+    "Nc3",
+    "Qxb2",
+    "Nb5"
+   ]
+  },
+  {
+   "name": "Levy 3 (tab, leaves vs …c6 (via 2.Bf4) on your move at ply 5, his first 9 plies): Early ...Bf5: switch to a Queen's Gambit and hit b7",
+   "moves": [
+    "d4",
+    "d5",
+    "Bf4",
+    "Bf5",
+    "c4",
+    "e6",
+    "Nc3",
+    "c6",
+    "Qb3",
+    "Qb6",
+    "c5",
+    "Qxb3",
+    "axb3",
+    "Nd7",
+    "b4"
+   ]
+  },
+  {
+   "name": "Levy 4 (trap, leaves reply@1 on their move at ply 10, his first 15 plies): Vs ...g6 and ...d5: the h4-h5 rook sacrifice idea",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "g6",
+    "Nc3",
+    "d5",
+    "e3",
+    "Bg7",
+    "h4",
+    "O-O",
+    "h5",
+    "Nxh5",
+    "Rxh5",
+    "gxh5",
+    "Qxh5"
+   ]
+  },
+  {
+   "name": "Levy 5 (tab, leaves reply@1 on their move at ply 10, his first 13 plies): Vs ...g6 and ...d5: Black stops h5, White develops for a long castle",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "g6",
+    "Nc3",
+    "d5",
+    "e3",
+    "Bg7",
+    "h4",
+    "h5",
+    "Nf3",
+    "O-O",
+    "Ne5",
+    "c5",
+    "Qd2"
+   ]
+  },
+  {
+   "name": "Levy 6 (tab, leaves vs King's Indian (Bh6 + Opposite-Side Castle Attack) on your move at ply 5, his first 9 plies): Vs early ...c5 with the knight on f6: push d5, then the Vaganian gambit",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "d5",
+    "Qb6",
+    "Nc3",
+    "Qxb2",
+    "Bd2",
+    "Qb6",
+    "e4",
+    "d6",
+    "f4",
+    "Qd8",
+    "Nf3"
+   ]
+  },
+  {
+   "name": "Levy 7 (tab, leaves reply@1 on your move at ply 11, his first 11 plies): Vs early ...c5 and ...d6: big center and long castle",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "d5",
+    "d6",
+    "Nc3",
+    "g6",
+    "e4",
+    "Bg7",
+    "Qd2",
+    "a6",
+    "Bh6",
+    "Bxh6",
+    "Qxh6"
+   ]
+  },
+  {
+   "name": "Levy 8 (trap, leaves vs …c6 (via 2.Bf4) on your move at ply 5, his first 15 plies): Taking on c5: the Bxb8 and Bb5+ trick against ...b6",
+   "moves": [
+    "d4",
+    "d5",
+    "Bf4",
+    "Nf6",
+    "e3",
+    "c5",
+    "dxc5",
+    "e6",
+    "b4",
+    "b6",
+    "Bxb8",
+    "Rxb8",
+    "Bb5+",
+    "Bd7",
+    "c6"
+   ]
+  },
+  {
+   "name": "Levy 9 (tab, leaves vs …c6 (via 2.Bf4) on your move at ply 5, his first 15 plies): Vs ...Qb6 trade offer: if ...c4, slide back and break with e4",
+   "moves": [
+    "d4",
+    "d5",
+    "Bf4",
+    "Nf6",
+    "e3",
+    "c5",
+    "c3",
+    "Nc6",
+    "Nd2",
+    "Qb6",
+    "Qb3",
+    "c4",
+    "Qc2",
+    "g6",
+    "e4",
+    "e5",
+    "dxe5"
+   ]
+  },
+  {
+   "name": "Levy 10 (reply, leaves vs …c6 (via 2.Bf4) on your move at ply 5, his first 14 plies): Why Nd2 comes before Nf3: the ...Bf5 shot on a trapped rook",
+   "moves": [
+    "d4",
+    "d5",
+    "Bf4",
+    "Nf6",
+    "e3",
+    "c5",
+    "c3",
+    "Nc6",
+    "Nf3",
+    "Qb6",
+    "Qb3",
+    "c4",
+    "Qc2",
+    "Bf5",
+    "Qc1"
+   ]
+  },
+  {
+   "name": "Levy 11 (tab, leaves vs …c6 (via 2.Bf4) on your move at ply 5, his first 11 plies): Vs ...Bd6: let Black double the f-pawns",
+   "moves": [
+    "d4",
+    "d5",
+    "Bf4",
+    "Nf6",
+    "e3",
+    "e6",
+    "Nf3",
+    "Bd6",
+    "Nbd2",
+    "Bxf4",
+    "exf4",
+    "O-O",
+    "c3",
+    "a5",
+    "Bd3"
+   ]
+  },
+  {
+   "name": "Levy 12 (tab, leaves reply@1 on your move at ply 7, his first 9 plies): Vs the King's Indian with ...d5: Nc3, Qd2 and Bh6",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "g6",
+    "Nc3",
+    "d5",
+    "Qd2",
+    "Bg7",
+    "Bh6",
+    "O-O",
+    "Bxg7",
+    "Kxg7",
+    "e3",
+    "c5",
+    "dxc5"
+   ]
+  },
+  {
+   "name": "Levy 13 (tab, leaves main on your move at ply 17, his first 21 plies): Main line vs ...c5: rerouting the knight to e5 when ...Re8 prepares ...e5",
+   "moves": [
+    "d4",
+    "d5",
+    "Bf4",
+    "Nf6",
+    "e3",
+    "e6",
+    "Nf3",
+    "c5",
+    "c3",
+    "Nc6",
+    "Nbd2",
+    "Bd6",
+    "Bg3",
+    "O-O",
+    "Bd3",
+    "b6",
+    "Qe2",
+    "Re8",
+    "Ne5",
+    "cxd4",
+    "exd4",
+    "Bb7",
+    "Bh4"
+   ]
+  },
+  {
+   "name": "Levy 14 (trap, leaves vs King's Indian (Bh6 + Opposite-Side Castle Attack) on your move at ply 5, his first 11 plies): Vs ...c5 and ...Qb6: Nc3 and Nb5, where ...Na6 runs into a3",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "e3",
+    "Qb6",
+    "Nc3",
+    "Qxb2",
+    "Nb5",
+    "Na6",
+    "a3"
+   ]
+  },
+  {
+   "name": "Levy 15 (tab, leaves vs King's Indian (Bh6 + Opposite-Side Castle Attack) on your move at ply 5, his first 15 plies): Vs ...c5 and ...Qb6: the main line after ...Nd5",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "e3",
+    "Qb6",
+    "Nc3",
+    "Qxb2",
+    "Nb5",
+    "Nd5",
+    "a3",
+    "a6",
+    "Rb1",
+    "Qa2",
+    "Qc1",
+    "axb5",
+    "Ra1"
+   ]
+  },
+  {
+   "name": "Levy 16 (reply, leaves vs King's Indian (Bh6 + Opposite-Side Castle Attack) on your move at ply 5, his first 9 plies): Vs ...Qb6 and ...a6: the g4 pawn sacrifice",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "e3",
+    "Qb6",
+    "Nc3",
+    "a6",
+    "g4",
+    "Nc6",
+    "g5",
+    "Qxb2",
+    "Nge2",
+    "Nb4",
+    "Kd2"
+   ]
+  },
+  {
+   "name": "Levy 17 (trap, leaves vs King's Indian (Bh6 + Opposite-Side Castle Attack) on your move at ply 5, his first 13 plies): Vs ...Qb6: Na3, and ...a6 meets Nc4 with a queen trap",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "e3",
+    "Qb6",
+    "Na3",
+    "a6",
+    "Nc4",
+    "Qb4+",
+    "c3",
+    "Qb5",
+    "Nd6+"
+   ]
+  },
+  {
+   "name": "Levy 18 (reply, leaves vs King's Indian (Bh6 + Opposite-Side Castle Attack) on your move at ply 5, his first 10 plies): Vs ...Qb6, Na3 ...a6 Nc4: the only safe retreat is ...Qa7",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "e3",
+    "Qb6",
+    "Na3",
+    "a6",
+    "Nc4",
+    "Qa7",
+    "dxc5",
+    "Qxc5",
+    "e4",
+    "b5",
+    "Be3"
+   ]
+  },
+  {
+   "name": "Levy 19 (tab, leaves vs King's Indian (Bh6 + Opposite-Side Castle Attack) on your move at ply 5, his first 11 plies): Vs ...c5: d5 then Bd2 and a queenside clamp",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "d5",
+    "d6",
+    "Nc3",
+    "e5",
+    "Bd2",
+    "Be7",
+    "e4",
+    "O-O",
+    "h3",
+    "h6",
+    "Bd3"
+   ]
+  },
+  {
+   "name": "Levy 20 (reply, leaves vs King's Indian (Bh6 + Opposite-Side Castle Attack) on your move at ply 5, his first 11 plies): Taking on c5: ...Qa5+ is met by offering queens on d2",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "dxc5",
+    "Qa5+",
+    "Qd2",
+    "Qxc5",
+    "Nc3",
+    "Nc6",
+    "e4",
+    "e5",
+    "Bg5",
+    "Be7",
+    "Nf3"
+   ]
+  },
+  {
+   "name": "Levy 21 (tab, leaves vs King's Indian (Bh6 + Opposite-Side Castle Attack) on your move at ply 5, his first 9 plies): Taking on c5: vs ...Na6 the surprising f3",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "dxc5",
+    "Na6",
+    "f3",
+    "Nxc5",
+    "e4",
+    "d5",
+    "e5",
+    "Ng8",
+    "Bb5+",
+    "Bd7",
+    "Qxd5"
+   ]
+  },
+  {
+   "name": "Levy 22 (tab, leaves main on your move at ply 5, his first 13 plies): Delayed Catalan: Nf3, g3 and castle before c4",
+   "moves": [
+    "d4",
+    "d5",
+    "Nf3",
+    "Nf6",
+    "g3",
+    "e6",
+    "Bg2",
+    "Bd6",
+    "O-O",
+    "O-O",
+    "c4",
+    "dxc4",
+    "Qc2",
+    "Nc6",
+    "Qxc4"
+   ]
+  },
+  {
+   "name": "Levy 23 (tab, leaves Aggressive Jobava-London Hybrid on your move at ply 5, his first 7 plies): Reaching the gambit via 1...Nf6 2.Nc3",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "e4",
+    "dxe4",
+    "f3",
+    "exf3",
+    "Nxf3",
+    "g6",
+    "Bc4",
+    "Bg7",
+    "O-O",
+    "O-O",
+    "Qe1"
+   ]
+  },
+  {
+   "name": "Levy 24 (reply, leaves Aggressive Jobava-London Hybrid on your move at ply 5, his first 9 plies): 1...Nf6 2.Nc3 d5 3.e4 ...Nxe4: trade and aim at f7",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "e4",
+    "Nxe4",
+    "Nxe4",
+    "dxe4",
+    "Bc4",
+    "Nc6",
+    "Be3",
+    "e5",
+    "dxe5",
+    "Qe7",
+    "c3"
+   ]
+  },
+  {
+   "name": "Levy 25 (tab, leaves Aggressive Jobava-London Hybrid on your move at ply 7, his first 7 plies): Jobava London: Nb5 against c7 before ...c5",
+   "moves": [
+    "d4",
+    "d5",
+    "Bf4",
+    "Nf6",
+    "Nc3",
+    "e6",
+    "Nb5",
+    "Na6",
+    "e3",
+    "Bb4+",
+    "c3",
+    "Be7",
+    "Bd3",
+    "c6",
+    "Na3"
+   ]
+  },
+  {
+   "name": "Levy 26 (tab, leaves main on your move at ply 13, his first 15 plies): Pyramid setup in 30 seconds: c3 against ...c5, knights to f3 and d2",
+   "moves": [
+    "d4",
+    "d5",
+    "Bf4",
+    "Nf6",
+    "e3",
+    "e6",
+    "Nf3",
+    "c5",
+    "c3",
+    "Nc6",
+    "Nbd2",
+    "Bd6",
+    "Bd3",
+    "O-O",
+    "O-O",
+    "Bxf4",
+    "exf4"
+   ]
+  }
+ ],
+ "pro-gothamchess-trompowsky": [
+  {
+   "name": "Levy 1 (tab, leaves …d5 system on your move at ply 5, his first 11 plies): Vs ...d5: take on f6 and build on dark squares with g3",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bg5",
+    "d5",
+    "Bxf6",
+    "exf6",
+    "e3",
+    "Bd6",
+    "g3",
+    "O-O",
+    "Bg2",
+    "c6",
+    "Ne2",
+    "Be6",
+    "Nd2"
+   ]
+  },
+  {
+   "name": "Levy 2 (tab, leaves reply@0 on your move at ply 9, his first 13 plies): Vs ...d5: Stonewall structure with Nd2, Bd3, c3 and f4",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bg5",
+    "d5",
+    "e3",
+    "e6",
+    "Nd2",
+    "Be7",
+    "Bd3",
+    "c5",
+    "c3",
+    "Nbd7",
+    "f4",
+    "h6",
+    "Bh4"
+   ]
+  },
+  {
+   "name": "Levy 3 (tab, leaves main on your move at ply 5, his first 11 plies): Vs ...c5: wedge with d5 and build a c4-f3-e4 wall",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bg5",
+    "c5",
+    "d5",
+    "d6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "h6",
+    "Bf4",
+    "e6",
+    "dxe6"
+   ]
+  },
+  {
+   "name": "Levy 4 (tab, leaves main on your move at ply 5, his first 11 plies): Vs ...e6: the Big Center with e4",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bg5",
+    "e6",
+    "e4",
+    "h6",
+    "Bxf6",
+    "Qxf6",
+    "Nc3",
+    "c5",
+    "Nf3",
+    "cxd4",
+    "e5",
+    "Qd8",
+    "Qxd4"
+   ]
+  },
+  {
+   "name": "Levy 5 (trap, leaves reply@1 on their move at ply 8, his first 11 plies): Raptor: ...Ne4 h4, and ...d5 runs into g6",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bg5",
+    "Ne4",
+    "h4",
+    "Nxg5",
+    "hxg5",
+    "d5",
+    "g6",
+    "hxg6",
+    "Rxh8"
+   ]
+  },
+  {
+   "name": "Levy 6 (reply, leaves reply@1 on their move at ply 8, his first 13 plies): Raptor: after g6 fxg6, aim at the weakened g6 pawn",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bg5",
+    "Ne4",
+    "h4",
+    "Nxg5",
+    "hxg5",
+    "d5",
+    "g6",
+    "fxg6",
+    "e3",
+    "Nc6",
+    "Bd3",
+    "Qd6",
+    "c4"
+   ]
+  },
+  {
+   "name": "Levy 7 (tab, leaves Vaganian Attack (…Ne4) on your move at ply 5, his first 12 plies): Vs ...Ne4: Bf4, then take the knight and target the e4 pawn",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bg5",
+    "Ne4",
+    "Bf4",
+    "d5",
+    "e3",
+    "c5",
+    "Bd3",
+    "cxd4",
+    "Bxe4",
+    "dxe4",
+    "exd4",
+    "g6",
+    "Nc3"
+   ]
+  },
+  {
+   "name": "Levy 8 (reply, leaves Vaganian Attack (…Ne4) on your move at ply 5, his first 9 plies): Vs ...Ne4 and ...c5: d5 and the Bc1 retreat",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bg5",
+    "Ne4",
+    "Bf4",
+    "c5",
+    "d5",
+    "Qb6",
+    "Bc1",
+    "e6",
+    "f3",
+    "Nf6",
+    "e4",
+    "d6",
+    "a4"
+   ]
+  },
+  {
+   "name": "Levy 9 (tab, leaves Vaganian Attack (…Ne4) on your move at ply 5, his first 11 plies): Vs ...Ne4 and ...c5: f3, and ...Qa5+ is blocked with c3",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bg5",
+    "Ne4",
+    "Bf4",
+    "c5",
+    "f3",
+    "Qa5+",
+    "c3",
+    "Nf6",
+    "d5",
+    "e6",
+    "e4",
+    "exd5",
+    "exd5"
+   ]
+  },
+  {
+   "name": "Levy 10 (tab, leaves main on your move at ply 5, his first 13 plies): Vs ...c5 and ...Qb6: the Vaganian gambit with Nc3 and Bd2",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bg5",
+    "c5",
+    "d5",
+    "Qb6",
+    "Nc3",
+    "Qxb2",
+    "Bd2",
+    "Qb6",
+    "e4",
+    "d6",
+    "f4",
+    "Qd8",
+    "Nf3"
+   ]
+  },
+  {
+   "name": "Levy 11 (reply, leaves main on your move at ply 5, his first 11 plies): Vs ...c5 and ...Qb6: the quiet Bc1 retreat",
+   "moves": [
+    "d4",
+    "Nf6",
+    "Bg5",
+    "c5",
+    "d5",
+    "Qb6",
+    "Bc1",
+    "g6",
+    "f3",
+    "Bg7",
+    "e4",
+    "e6",
+    "Nc3",
+    "exd5",
+    "e5"
+   ]
+  }
+ ],
+ "pro-gothamchess-english": [
+  {
+   "name": "Levy 1 (tab, leaves Symmetric (…e5) on your move at ply 5, his first 9 plies): Reverse Sicilian with g3: trade on d5 and develop",
+   "moves": [
+    "c4",
+    "e5",
+    "g3",
+    "Nf6",
+    "Bg2",
+    "d5",
+    "cxd5",
+    "Nxd5",
+    "Nc3",
+    "Nb6",
+    "d3",
+    "Nc6",
+    "Be3",
+    "Bb4",
+    "Nf3"
+   ]
+  },
+  {
+   "name": "Levy 2 (tab, leaves Symmetric (…e5) on your move at ply 5, his first 13 plies): Reverse Sicilian with Nc3, e3 and Nge2, then a queenside expansion",
+   "moves": [
+    "c4",
+    "e5",
+    "g3",
+    "Nf6",
+    "Bg2",
+    "Nc6",
+    "Nc3",
+    "Bc5",
+    "e3",
+    "O-O",
+    "Nge2",
+    "d6",
+    "a3",
+    "Bb6",
+    "b4"
+   ]
+  },
+  {
+   "name": "Levy 3 (tab, leaves main on your move at ply 5, his first 5 plies): Flexible move order: 2.Nc3 and 3.e4 vs ...e6",
+   "moves": [
+    "c4",
+    "Nf6",
+    "Nc3",
+    "e6",
+    "e4",
+    "d5",
+    "e5",
+    "d4",
+    "exf6",
+    "dxc3",
+    "bxc3",
+    "Qxf6",
+    "Nf3",
+    "c5",
+    "d4"
+   ]
+  },
+  {
+   "name": "Levy 4 (tab, leaves main on their move at ply 12, his first 13 plies): Vs a King's Indian setup: Be2, Be3 and a pawn storm before Nf3",
+   "moves": [
+    "c4",
+    "Nf6",
+    "Nc3",
+    "g6",
+    "e4",
+    "d6",
+    "d4",
+    "Bg7",
+    "Be2",
+    "O-O",
+    "Be3",
+    "c5",
+    "h4",
+    "Qa5",
+    "Kf1"
+   ]
+  },
+  {
+   "name": "Levy 5 (tab, leaves Symmetric (…c5) on your move at ply 5, his first 13 plies): Symmetrical English: Botvinnik setup with e4 and Nge2",
+   "moves": [
+    "c4",
+    "c5",
+    "Nc3",
+    "Nc6",
+    "g3",
+    "g6",
+    "Bg2",
+    "Bg7",
+    "e4",
+    "d6",
+    "Nge2",
+    "e6",
+    "d3",
+    "Nge7",
+    "Rb1"
+   ]
+  },
+  {
+   "name": "Levy 6 (tab, leaves Symmetric (…c5) on your move at ply 5, his first 9 plies): Symmetrical English: the early h4 idea",
+   "moves": [
+    "c4",
+    "c5",
+    "Nc3",
+    "Nc6",
+    "g3",
+    "g6",
+    "Bg2",
+    "Bg7",
+    "h4",
+    "Nf6",
+    "Nh3",
+    "d6",
+    "d3",
+    "Bg4",
+    "Nf4"
+   ]
+  },
+  {
+   "name": "Levy 7 (tab, leaves Anti-French (…e6) on your move at ply 5, his first 7 plies): Vs ...e6 and ...d5: Catalan-style gambit, regain with Qa4+",
+   "moves": [
+    "c4",
+    "e6",
+    "g3",
+    "d5",
+    "Bg2",
+    "dxc4",
+    "Qa4+",
+    "Nd7",
+    "Qxc4",
+    "Rb8",
+    "d3",
+    "Ngf6",
+    "Qc2",
+    "b6",
+    "Bd2"
+   ]
+  },
+  {
+   "name": "Levy 8 (tab, leaves vs …c6 (Slav-style) on your move at ply 5, his first 7 plies): Vs ...c6 and ...d5: regain the pawn with Na3",
+   "moves": [
+    "c4",
+    "c6",
+    "g3",
+    "d5",
+    "Bg2",
+    "dxc4",
+    "Na3",
+    "g6",
+    "Nxc4",
+    "Bg7",
+    "d3",
+    "Nf6",
+    "Nf3",
+    "O-O",
+    "O-O"
+   ]
+  },
+  {
+   "name": "Levy 9 (tab, leaves main on your move at ply 5, his first 7 plies): Vs the Dutch: the e4 gambit idea",
+   "moves": [
+    "c4",
+    "f5",
+    "e4",
+    "fxe4",
+    "Nc3",
+    "Nf6",
+    "g4",
+    "g6",
+    "g5",
+    "Nh5",
+    "Nxe4",
+    "Nc6",
+    "d4",
+    "e5",
+    "d5"
+   ]
+  },
+  {
+   "name": "Levy 10 (trap, leaves Symmetric (…e5) on your move at ply 5, his first 19 plies): Reversed Dragon trap: Nd5, Bg5 and a queen sacrifice mate",
+   "moves": [
+    "c4",
+    "e5",
+    "Nc3",
+    "Nc6",
+    "Nf3",
+    "g6",
+    "d4",
+    "exd4",
+    "Nd5",
+    "Bg7",
+    "Bg5",
+    "Nge7",
+    "Nxd4",
+    "Bxd4",
+    "Qxd4",
+    "Nxd4",
+    "Nf6+",
+    "Kf8",
+    "Bh6#"
+   ]
+  }
+ ],
+ "pro-gothamchess-fantasy-caro": [
+  {
+   "name": "Levy 1 (trap, leaves main on your move at ply 15, his first 21 plies): Fantasy 5...exd4: Bc4, castle, Ng5 and the f-file pin",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "dxe4",
+    "fxe4",
+    "e5",
+    "Nf3",
+    "exd4",
+    "Bc4",
+    "Nf6",
+    "O-O",
+    "Bc5",
+    "Ng5",
+    "O-O",
+    "Nxf7",
+    "Rxf7",
+    "Bxf7+",
+    "Kxf7",
+    "e5"
+   ]
+  },
+  {
+   "name": "Levy 2 (reply, leaves main on their move at ply 8, his first 13 plies): Fantasy 4...Nf6?: kick the knight with e5 and c4",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "dxe4",
+    "fxe4",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "c4",
+    "Nb6",
+    "Nc3",
+    "g6",
+    "Be2"
+   ]
+  },
+  {
+   "name": "Levy 3 (reply, leaves Aggressive 3...g6 on your move at ply 9, his first 9 plies): Fantasy 3...g6: Nc3, Bg7, e5 and f4 (So/Caruana plan)",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e5",
+    "f6",
+    "f4",
+    "Nh6",
+    "Nf3",
+    "O-O",
+    "h3"
+   ]
+  },
+  {
+   "name": "Levy 4 (reply, leaves main on your move at ply 5, his first 9 plies): Caro-Kann BDG-style: 3.Nc3 dxe4 4.f3",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "f3",
+    "exf3",
+    "Nxf3",
+    "Nf6",
+    "Bd3",
+    "Bg4",
+    "Be3",
+    "e6",
+    "O-O"
+   ]
+  },
+  {
+   "name": "Levy 5 (trap, leaves main on your move at ply 5, his first 15 plies): Alien Gambit trap: 7...Bg4? 8.Ne5+",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Nf6",
+    "Ng5",
+    "h6",
+    "Nxf7",
+    "Kxf7",
+    "Nf3",
+    "Bg4",
+    "Ne5+"
+   ]
+  },
+  {
+   "name": "Levy 6 (trap, leaves reply@0 on your move at ply 11, his first 17 plies): Fantasy ...Bg4: Bc4, c3 and Qb3 fork",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "dxe4",
+    "fxe4",
+    "e5",
+    "Nf3",
+    "Bg4",
+    "Bc4",
+    "Nd7",
+    "c3",
+    "Ngf6",
+    "Qb3",
+    "Qe7",
+    "Qxb7"
+   ]
+  },
+  {
+   "name": "Levy 7 (reply, leaves Solid 3...e6 on their move at ply 8, his first 9 plies): Fantasy vs ...e6: Be3, Qd2, long castle",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Be3",
+    "Bb4",
+    "e5",
+    "Ng8",
+    "Qd2",
+    "Ne7",
+    "a3"
+   ]
+  },
+  {
+   "name": "Levy 8 (trap, leaves main on your move at ply 5, his first 21 plies): Alien Gambit vs ...c5: c3, and Bg6+ wins the queen",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Nf6",
+    "Ng5",
+    "h6",
+    "Nxf7",
+    "Kxf7",
+    "Nf3",
+    "c5",
+    "c3",
+    "cxd4",
+    "Bd3",
+    "dxc3",
+    "Bg6+",
+    "Kxg6",
+    "Qxd8"
+   ]
+  },
+  {
+   "name": "Levy 9 (reply, leaves main on your move at ply 5, his first 17 plies): Alien Gambit vs the cocoon: Bd3, O-O and Re1",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Nf6",
+    "Ng5",
+    "h6",
+    "Nxf7",
+    "Kxf7",
+    "Nf3",
+    "Nbd7",
+    "Bd3",
+    "e6",
+    "O-O",
+    "Bd6",
+    "Re1"
+   ]
+  },
+  {
+   "name": "Levy 10 (tab, leaves main on your move at ply 5, his first 13 plies): Exchange Caro-Kann: Bd3, c3, Bf4 and Qb3",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "exd5",
+    "cxd5",
+    "Bd3",
+    "Nc6",
+    "c3",
+    "Nf6",
+    "Bf4",
+    "Bg4",
+    "Qb3",
+    "Qd7",
+    "Nd2"
+   ]
+  },
+  {
+   "name": "Levy 11 (reply, leaves main on your move at ply 5, his first 15 plies): Alien Gambit vs ...Bf5: Ne5+ at once",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Nf6",
+    "Ng5",
+    "h6",
+    "Nxf7",
+    "Kxf7",
+    "Nf3",
+    "Bf5",
+    "Ne5+",
+    "Ke8",
+    "g4"
+   ]
+  }
+ ],
+ "pro-gothamchess-caro-advance-white": [
+  {
+   "name": "Levy 1 (tab, leaves main on your move at ply 9, his first 13 plies): Advance 4.h4 h5 5.Bd3: trade the light bishops",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "Bf5",
+    "h4",
+    "h5",
+    "Bd3",
+    "Bxd3",
+    "Qxd3",
+    "e6",
+    "Nf3",
+    "Qa5+",
+    "Nbd2"
+   ]
+  },
+  {
+   "name": "Levy 2 (reply, leaves main on your move at ply 9, his first 18 plies): Advance 4.h4 h5 5.Bd3 ... 6...Qa5+ 7.Bd2 Qa6 8.e6!",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "Bf5",
+    "h4",
+    "h5",
+    "Bd3",
+    "Bxd3",
+    "Qxd3",
+    "Qa5+",
+    "Bd2",
+    "Qa6",
+    "e6",
+    "Qxd3",
+    "cxd3",
+    "fxe6",
+    "Nc3"
+   ]
+  },
+  {
+   "name": "Levy 3 (trap, leaves reply@0 on your move at ply 15, his first 17 plies): Advance 4.h4 h5 5.Bg5 Qb6 6.Bd3: the ...Qxb2 e6! gambit",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "Bf5",
+    "h4",
+    "h5",
+    "Bg5",
+    "Qb6",
+    "Bd3",
+    "Bxd3",
+    "Qxd3",
+    "Qxb2",
+    "e6",
+    "Qxa1",
+    "Qb3"
+   ]
+  },
+  {
+   "name": "Levy 4 (reply, leaves reply@0 on their move at ply 10, his first 15 plies): Advance 4.h4 h6 5.g4 Bh7 6.e6!",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "Bf5",
+    "h4",
+    "h6",
+    "g4",
+    "Bh7",
+    "e6",
+    "fxe6",
+    "Bd3",
+    "Bxd3",
+    "Qxd3",
+    "c5",
+    "Nf3"
+   ]
+  },
+  {
+   "name": "Levy 5 (reply, leaves reply@1 on your move at ply 9, his first 11 plies): Advance 3...c5 4.dxc5 Nc6 5.Bb5",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "dxc5",
+    "Nc6",
+    "Bb5",
+    "e6",
+    "Be3",
+    "Ne7",
+    "Nf3",
+    "Nf5",
+    "b4"
+   ]
+  },
+  {
+   "name": "Levy 6 (trap, leaves reply@0 on their move at ply 12, his first 13 plies): Advance Caro h4 trap: ...e6 and the bishop is trapped",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "Bf5",
+    "h4",
+    "e6",
+    "g4",
+    "Be4",
+    "f3",
+    "Bg6",
+    "h5"
+   ]
+  },
+  {
+   "name": "Levy 7 (reply, leaves reply@0 on your move at ply 11, his first 11 plies): Advance Caro h4 h6 g4 ...Bd7: h5 locks the kingside",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "Bf5",
+    "h4",
+    "h6",
+    "g4",
+    "Bd7",
+    "h5",
+    "c5",
+    "dxc5",
+    "e6",
+    "Be3"
+   ]
+  },
+  {
+   "name": "Levy 8 (reply, leaves vs …c5 (Botvinnik-Carls) on your move at ply 11, his first 11 plies): Advance Caro ...c5 e6: a3 Bxc5 Qg4",
+   "moves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "dxc5",
+    "e6",
+    "a3",
+    "Bxc5",
+    "Qg4",
+    "Ne7",
+    "Bd3",
+    "O-O",
+    "Nf3"
+   ]
+  }
+ ],
+ "pro-gothamchess-scandinavian": [
+  {
+   "name": "Levy 1 (tab, leaves main on your move at ply 10, his first 14 plies): Qa5 with ...Bg4: e6, Be7, castle short",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "d4",
+    "Nf6",
+    "Nf3",
+    "Bg4",
+    "Be2",
+    "e6",
+    "O-O",
+    "Be7",
+    "Ne5",
+    "Bxe2"
+   ]
+  },
+  {
+   "name": "Levy 2 (reply, leaves main on your move at ply 10, his first 12 plies): Qa5 with ...Bg4 and ...Nc6: go long",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "d4",
+    "Nf6",
+    "Nf3",
+    "Bg4",
+    "Be2",
+    "Nc6",
+    "h3",
+    "Bxf3"
+   ]
+  },
+  {
+   "name": "Levy 3 (reply, leaves main on your move at ply 10, his first 15 plies): Qa5 Bg4: the critical h3, g4, Ne5 line",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "d4",
+    "Nf6",
+    "Nf3",
+    "Bg4",
+    "h3",
+    "Bh5",
+    "g4",
+    "Bg6",
+    "Ne5",
+    "e6"
+   ]
+  },
+  {
+   "name": "Levy 4 (reply, leaves main on your move at ply 6, his first 10 plies): Qd6 setup: ...a6 first, then bishop, knight, long castle",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qd6",
+    "d4",
+    "Nf6",
+    "Nf3",
+    "a6",
+    "g3",
+    "Bg4",
+    "Bg2",
+    "Nc6"
+   ]
+  },
+  {
+   "name": "Levy 5 (reply, leaves main on your move at ply 6, his first 6 plies): Qd8: retreat all the way home",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qd8",
+    "d4",
+    "Nf6",
+    "Nf3",
+    "Bg4",
+    "h3",
+    "Bxf3",
+    "Qxf3",
+    "c6"
+   ]
+  },
+  {
+   "name": "Levy 6 (reply, leaves reply@0 on your move at ply 6, his first 8 plies): 3.d4 Nf6 4.c4: ...Qe4+",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "d4",
+    "Nf6",
+    "c4",
+    "Qe4+",
+    "Ne2",
+    "e5",
+    "Nc3",
+    "Bb4",
+    "Bd2",
+    "Bxc3"
+   ]
+  },
+  {
+   "name": "Levy 7 (reply, leaves reply@0 on their move at ply 7, his first 9 plies): 3.d4 e5: hit the centre and trade queens",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "d4",
+    "e5",
+    "dxe5",
+    "Qxd1+",
+    "Kxd1",
+    "Nc6",
+    "f4",
+    "Bf5",
+    "Bd2",
+    "O-O-O"
+   ]
+  },
+  {
+   "name": "Levy 8 (reply, leaves reply@0 on their move at ply 9, his first 10 plies): 3.Nf3: ...Bg4, ...Nc6 and a quick long castle",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nf3",
+    "Bg4",
+    "Be2",
+    "Nc6",
+    "O-O",
+    "O-O-O",
+    "h3",
+    "Bh5",
+    "Nc3",
+    "Qd7"
+   ]
+  },
+  {
+   "name": "Levy 9 (reply, leaves main on their move at ply 5, his first 6 plies): 2.Nc3 dxe4 3.Nxe4 Qd5",
+   "moves": [
+    "e4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Qd5",
+    "Nc3",
+    "Qa5",
+    "d4",
+    "Nf6",
+    "Nf3",
+    "c6",
+    "Bc4",
+    "Bf5"
+   ]
+  },
+  {
+   "name": "Levy 10 (reply, leaves main on their move at ply 5, his first 6 plies): Tennison Gambit 2.Nf3 dxe4 3.Ng5: ...e5",
+   "moves": [
+    "e4",
+    "d5",
+    "Nf3",
+    "dxe4",
+    "Ng5",
+    "e5",
+    "d4",
+    "exd3",
+    "Bxd3",
+    "Be7",
+    "Nf3",
+    "Nc6",
+    "Qe2",
+    "Bg4"
+   ]
+  },
+  {
+   "name": "Levy 11 (reply, leaves main on their move at ply 5, his first 10 plies): Advance 2.e5: ...Bf5, ...e6, ...c5, ...Nc6",
+   "moves": [
+    "e4",
+    "d5",
+    "e5",
+    "Bf5",
+    "d4",
+    "e6",
+    "Nf3",
+    "c5",
+    "c3",
+    "Nc6",
+    "Be2",
+    "Bg6",
+    "O-O",
+    "a6"
+   ]
+  },
+  {
+   "name": "Levy 12 (reply, leaves main on their move at ply 9, his first 10 plies): Leonhardt-style b4 gambit: just take",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "d4",
+    "Nf6",
+    "b4",
+    "Qxb4",
+    "Ne2",
+    "Qa5",
+    "Bd2",
+    "e5"
+   ]
+  },
+  {
+   "name": "Levy 13 (trap, leaves reply@1 on their move at ply 9, his first 16 plies): Icelandic trap: 6.Nc3 Ne4 7.Bd2 Qxd4 8.Nf3?? Qxf2#",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "c4",
+    "e6",
+    "dxe6",
+    "Bxe6",
+    "d4",
+    "Bb4+",
+    "Nc3",
+    "Ne4",
+    "Bd2",
+    "Qxd4",
+    "Nf3",
+    "Qxf2#"
+   ]
+  },
+  {
+   "name": "Levy 14 (trap, leaves reply@1 on their move at ply 9, his first 14 plies): Icelandic trap: 7.Qd3 Bf5 lines up on the queen",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "c4",
+    "e6",
+    "dxe6",
+    "Bxe6",
+    "d4",
+    "Bb4+",
+    "Nc3",
+    "Ne4",
+    "Qd3",
+    "Bf5"
+   ]
+  },
+  {
+   "name": "Levy 15 (trap, leaves Portuguese …Bg4 on their move at ply 7, his first 16 plies): Portuguese Gambit trap: 8.d5? Nb4 and ...Nc2+",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "d4",
+    "Bg4",
+    "f3",
+    "Bf5",
+    "c4",
+    "e6",
+    "dxe6",
+    "Nc6",
+    "exf7+",
+    "Kxf7",
+    "d5",
+    "Nb4"
+   ]
+  },
+  {
+   "name": "Levy 16 (reply, leaves Portuguese …Bg4 on their move at ply 7, his first 18 plies): Portuguese Gambit: 8.Be3 Bb4+ and ...Re8",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "d4",
+    "Bg4",
+    "f3",
+    "Bf5",
+    "c4",
+    "e6",
+    "dxe6",
+    "Nc6",
+    "exf7+",
+    "Kxf7",
+    "Be3",
+    "Bb4+",
+    "Nc3",
+    "Re8",
+    "Qd2",
+    "Qxd4"
+   ]
+  },
+  {
+   "name": "Levy 17 (reply, leaves reply@1 on their move at ply 9, his first 14 plies): Icelandic: 6.Bd2 Bxd2+ 7.Nxd2 Qe7, then ...Nc6 and long castle",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "c4",
+    "e6",
+    "dxe6",
+    "Bxe6",
+    "d4",
+    "Bb4+",
+    "Bd2",
+    "Bxd2+",
+    "Nxd2",
+    "Qe7",
+    "Be2",
+    "O-O"
+   ]
+  },
+  {
+   "name": "Levy 18 (trap, leaves main on your move at ply 14, his first 22 plies): Gotham Scandi trap: d5?! and ...O-O-O",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "d4",
+    "Nf6",
+    "Nf3",
+    "Bf5",
+    "Bc4",
+    "e6",
+    "Bd2",
+    "Bb4",
+    "a3",
+    "Bxc3",
+    "Bxc3",
+    "Qb6",
+    "O-O",
+    "Nc6",
+    "d5",
+    "O-O-O"
+   ]
+  },
+  {
+   "name": "Levy 19 (reply, leaves main on your move at ply 14, his first 22 plies): Gotham Scandi vs Re1: castle short, pressure d4",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "d4",
+    "Nf6",
+    "Nf3",
+    "Bf5",
+    "Bc4",
+    "e6",
+    "Bd2",
+    "Bb4",
+    "a3",
+    "Bxc3",
+    "Bxc3",
+    "Qb6",
+    "O-O",
+    "Nc6",
+    "Re1",
+    "O-O",
+    "Nh4",
+    "Bg6"
+   ]
+  },
+  {
+   "name": "Levy 20 (reply, leaves reply@1 on your move at ply 6, his first 8 plies): 2...Nf6 3.c4 c6: a reverse Danish",
+   "moves": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "c4",
+    "c6",
+    "dxc6",
+    "Nxc6",
+    "Nf3",
+    "e5",
+    "d3",
+    "e4",
+    "dxe4",
+    "Qxd1+"
+   ]
+  }
+ ],
+ "pro-gothamchess-closed-sicilian": [
+  {
+   "name": "Levy 1 (tab, leaves vs …d6 on your move at ply 5, his first 15 plies): Grand Prix vs ...d6/...g6: Bc4, d3, castle, Qe1",
+   "moves": [
+    "e4",
+    "c5",
+    "Nc3",
+    "d6",
+    "f4",
+    "g6",
+    "Nf3",
+    "Bg7",
+    "Bc4",
+    "Nc6",
+    "d3",
+    "Nf6",
+    "O-O",
+    "O-O",
+    "Qe1",
+    "Bg4",
+    "Qh4"
+   ]
+  },
+  {
+   "name": "Levy 2 (reply, leaves main on your move at ply 5, his first 13 plies): Grand Prix vs ...Nc6/...g6: Bb5 and if ...Nd4, castle",
+   "moves": [
+    "e4",
+    "c5",
+    "Nc3",
+    "Nc6",
+    "f4",
+    "g6",
+    "Nf3",
+    "Bg7",
+    "Bb5",
+    "Nd4",
+    "O-O",
+    "Nxb5",
+    "Nxb5",
+    "a6",
+    "Nc3"
+   ]
+  },
+  {
+   "name": "Levy 3 (reply, leaves vs …e6 on your move at ply 5, his first 13 plies): Grand Prix vs ...e6/...d5 ...d4: Bb5+ first, then reroute the knight",
+   "moves": [
+    "e4",
+    "c5",
+    "Nc3",
+    "e6",
+    "f4",
+    "d5",
+    "Nf3",
+    "d4",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+",
+    "Qxd7",
+    "Ne2",
+    "d3",
+    "cxd3"
+   ]
+  },
+  {
+   "name": "Levy 4 (trap, leaves main on your move at ply 5, his first 13 plies): Grand Prix trap: ...Bg4? Bxf7+ and Ng5+",
+   "moves": [
+    "e4",
+    "c5",
+    "Nc3",
+    "Nc6",
+    "f4",
+    "d6",
+    "Nf3",
+    "g6",
+    "Bc4",
+    "Bg4",
+    "Bxf7+",
+    "Kxf7",
+    "Ng5+"
+   ]
+  },
+  {
+   "name": "Levy 5 (tab, leaves main on your move at ply 5, his first 15 plies): Grand Prix: Bc4 setup with Qe1 and the kingside attack",
+   "moves": [
+    "e4",
+    "c5",
+    "Nc3",
+    "Nc6",
+    "f4",
+    "g6",
+    "Nf3",
+    "Bg7",
+    "Bc4",
+    "d6",
+    "O-O",
+    "Nf6",
+    "d3",
+    "O-O",
+    "Qe1",
+    "Bg4",
+    "Qh4"
+   ]
+  },
+  {
+   "name": "Levy 6 (reply, leaves main on your move at ply 5, his first 13 plies): Grand Prix vs ...Nge7: the exception, exd5 and Qe2",
+   "moves": [
+    "e4",
+    "c5",
+    "Nc3",
+    "Nc6",
+    "f4",
+    "e6",
+    "Nf3",
+    "d5",
+    "Bb5",
+    "Ne7",
+    "exd5",
+    "exd5",
+    "Qe2",
+    "Bg4",
+    "Bxc6+"
+   ]
+  },
+  {
+   "name": "Levy 7 (tab, leaves main on your move at ply 5, his first 7 plies): Closed Sicilian vs ...g6: g3 and Bg2 build-up",
+   "moves": [
+    "e4",
+    "c5",
+    "Nc3",
+    "g6",
+    "g3",
+    "Bg7",
+    "Bg2",
+    "Nc6",
+    "d3",
+    "d6",
+    "Be3",
+    "Rb8",
+    "Qd2",
+    "b5",
+    "Nge2"
+   ]
+  }
+ ],
+ "pro-gothamchess-milner-barry": [
+  {
+   "name": "Levy 1 (reply, leaves main on your move at ply 5, his first 9 plies): Anti-French 3.Bd3: let ...dxe4 happen, bishop to f3",
+   "moves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Bd3",
+    "dxe4",
+    "Bxe4",
+    "Nf6",
+    "Bf3",
+    "c5",
+    "Ne2",
+    "Nc6",
+    "c3",
+    "Be7",
+    "O-O"
+   ]
+  }
+ ],
+ "pro-gothamchess-anti-sicilian": [
+  {
+   "name": "Levy 1 (trap, leaves main on your move at ply 5, his first 19 plies): Deferred Wing vs ...Nc6 and ...d5: c4 and the Rb1 trick",
+   "moves": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "b4",
+    "cxb4",
+    "d4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "c4",
+    "bxc3",
+    "Nxc3",
+    "Qa5",
+    "Rb1",
+    "Qxc3+",
+    "Bd2",
+    "Qa3",
+    "d5"
+   ]
+  }
+ ],
+ "pro-gothamchess-vienna": [
+  {
+   "name": "Levy 1 (tab, leaves Vienna Gambit Accepted on your move at ply 13, his first 14 plies): Vienna Gambit accepted: 6.d4 dxe5 7.Qe2",
+   "moves": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4",
+    "exf4",
+    "e5",
+    "Ng8",
+    "Nf3",
+    "d6",
+    "d4",
+    "dxe5",
+    "Qe2",
+    "Be7",
+    "Qxe5"
+   ]
+  },
+  {
+   "name": "Levy 2 (trap, leaves main on your move at ply 9, his first 19 plies): Vienna Gambit 3...d5 4.fxe5 Nxe4 5.d3 Qh4+ trap line",
+   "moves": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4",
+    "d5",
+    "fxe5",
+    "Nxe4",
+    "d3",
+    "Qh4+",
+    "g3",
+    "Nxg3",
+    "Nf3",
+    "Qh5",
+    "Nxd5",
+    "Na6",
+    "Nf4",
+    "Qh6",
+    "Ne2"
+   ]
+  },
+  {
+   "name": "Levy 3 (reply, leaves reply@0 on their move at ply 12, his first 18 plies): Vienna Gambit 5.Qf3 Nc6 6.Bb5 queen-trade line",
+   "moves": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4",
+    "d5",
+    "fxe5",
+    "Nxe4",
+    "Qf3",
+    "Nc6",
+    "Bb5",
+    "Nxc3",
+    "dxc3",
+    "Qh4+",
+    "g3",
+    "Qe4+",
+    "Qxe4",
+    "dxe4",
+    "Be3"
+   ]
+  },
+  {
+   "name": "Levy 4 (reply, leaves reply@0 on your move at ply 15, his first 17 plies): Vienna Gambit 5.Qf3 f5 6.d3 ... 8.Qg3 pawn sacrifice",
+   "moves": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4",
+    "d5",
+    "fxe5",
+    "Nxe4",
+    "Qf3",
+    "f5",
+    "d3",
+    "Nxc3",
+    "bxc3",
+    "d4",
+    "Qg3",
+    "dxc3",
+    "Be2",
+    "Be6",
+    "Bf3"
+   ]
+  },
+  {
+   "name": "Levy 5 (trap, leaves main on your move at ply 5, his first 15 plies): Vienna 2...Nc6 3.Bc4 Bc5 copycat: 4.Qg4 Qf6? 5.Nd5 queen trap",
+   "moves": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "Qg4",
+    "Qf6",
+    "Nd5",
+    "Qxf2+",
+    "Kd1",
+    "g6",
+    "Nh3",
+    "Qd4",
+    "d3"
+   ]
+  },
+  {
+   "name": "Levy 6 (reply, leaves main on your move at ply 5, his first 11 plies): Vienna copycat 4.Qg4 g6 5.Qf3",
+   "moves": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "Qg4",
+    "g6",
+    "Qf3",
+    "Nf6",
+    "Nge2",
+    "d6",
+    "d3",
+    "h6",
+    "Bd2"
+   ]
+  },
+  {
+   "name": "Levy 7 (trap, leaves Vienna Quiet (Bc4 + d3) on their move at ply 12, his first 15 plies): Vienna vs two knights: 4.d3 Bc5 5.f4 d6 6.Nf3 Ng4 7.Ng5",
+   "moves": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "d3",
+    "Bc5",
+    "f4",
+    "d6",
+    "Nf3",
+    "Ng4",
+    "Ng5",
+    "Nf2",
+    "Qh5"
+   ]
+  },
+  {
+   "name": "Levy 8 (reply, leaves Vienna Quiet (Bc4 + d3) on their move at ply 12, his first 13 plies): Vienna vs two knights: 6...O-O 7.f5",
+   "moves": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "d3",
+    "Bc5",
+    "f4",
+    "d6",
+    "Nf3",
+    "O-O",
+    "f5",
+    "Na5",
+    "Qe2"
+   ]
+  },
+  {
+   "name": "Levy 9 (reply, leaves Vienna Quiet (Bc4 + d3) on their move at ply 8, his first 11 plies): Vienna vs two knights: 4...Na5 5.Bb3",
+   "moves": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "d3",
+    "Na5",
+    "Bb3",
+    "Nxb3",
+    "axb3",
+    "d5",
+    "Nf3",
+    "d4",
+    "Ne2"
+   ]
+  },
+  {
+   "name": "Levy 10 (reply, leaves Vienna Gambit Accepted on your move at ply 9, his first 9 plies): Vienna Gambit accepted 4.e5 Ng8 5.d4",
+   "moves": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4",
+    "exf4",
+    "e5",
+    "Ng8",
+    "d4",
+    "Qh4+",
+    "Ke2",
+    "d6",
+    "Nf3",
+    "Bg4",
+    "Nd5"
+   ]
+  },
+  {
+   "name": "Levy 11 (reply, leaves main on your move at ply 5, his first 5 plies): Delayed King's Gambit 2...Nc6 3.f4",
+   "moves": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nc6",
+    "f4",
+    "exf4",
+    "Nf3",
+    "g5",
+    "g3",
+    "g4",
+    "Nh4",
+    "Nd4",
+    "Nd5",
+    "f3",
+    "c3"
+   ]
+  },
+  {
+   "name": "Levy 12 (trap, leaves main on your move at ply 5, his first 15 plies): Vienna 2...Bc5 3.Bc4 Qg5 4.d4 Qxg2 5.Qh5",
+   "moves": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Bc5",
+    "Bc4",
+    "Qg5",
+    "d4",
+    "Qxg2",
+    "Qh5",
+    "Qxh1",
+    "Qxf7+",
+    "Kd8",
+    "Bg5+",
+    "Ne7",
+    "O-O-O"
+   ]
+  },
+  {
+   "name": "Levy 13 (trap, leaves main on your move at ply 5, his first 7 plies): Vienna 2...Bb4 3.Qg4 Qf6? 4.Nd5",
+   "moves": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Bb4",
+    "Qg4",
+    "Qf6",
+    "Nd5"
+   ]
+  }
+ ],
+ "pro-gothamchess-italian": [
+  {
+   "name": "Levy 1 (tab, leaves Two Knights (…Nf6) on your move at ply 7, his first 19 plies): Fried Liver: 6.Nxf7 Kxf7 7.Qf3+ Ke6 8.Nc3 Nb4 9.O-O c6 10.d4",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "Ng5",
+    "d5",
+    "exd5",
+    "Nxd5",
+    "Nxf7",
+    "Kxf7",
+    "Qf3+",
+    "Ke6",
+    "Nc3",
+    "Nb4",
+    "O-O",
+    "c6",
+    "d4",
+    "Qf6",
+    "Qe2"
+   ]
+  },
+  {
+   "name": "Levy 2 (trap, leaves Two Knights (…Nf6) on your move at ply 7, his first 19 plies): Fried Liver: 7...Kg8?? smothered finish",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "Ng5",
+    "d5",
+    "exd5",
+    "Nxd5",
+    "Nxf7",
+    "Kxf7",
+    "Qf3+",
+    "Kg8",
+    "Bxd5+",
+    "Qxd5",
+    "Qxd5+",
+    "Be6",
+    "Qxe6#"
+   ]
+  },
+  {
+   "name": "Levy 3 (tab, leaves Two Knights (…Nf6) on your move at ply 7, his first 15 plies): Two Knights 4...d5 5.exd5 Na5 6.Bb5+ c6 7.dxc6 bxc6 8.Be2",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "Ng5",
+    "d5",
+    "exd5",
+    "Na5",
+    "Bb5+",
+    "c6",
+    "dxc6",
+    "bxc6",
+    "Be2",
+    "h6",
+    "Nh3"
+   ]
+  },
+  {
+   "name": "Levy 4 (trap, leaves Two Knights (…Nf6) on your move at ply 7, his first 17 plies): Two Knights 5...Na5 6.Bb5+ ... 8.Qf3 pin trick",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "Ng5",
+    "d5",
+    "exd5",
+    "Na5",
+    "Bb5+",
+    "c6",
+    "dxc6",
+    "bxc6",
+    "Qf3",
+    "cxb5",
+    "Qxa8"
+   ]
+  },
+  {
+   "name": "Levy 5 (reply, leaves Two Knights (…Nf6) on your move at ply 7, his first 11 plies): Two Knights 5...Na5 6.d3 (practical)",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "Ng5",
+    "d5",
+    "exd5",
+    "Na5",
+    "d3",
+    "h6",
+    "Nf3",
+    "e4",
+    "Qe2"
+   ]
+  },
+  {
+   "name": "Levy 6 (reply, leaves Two Knights (…Nf6) on your move at ply 7, his first 11 plies): Two Knights vs Traxler: 5.Bxf7+ Ke7 6.Bb3",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "Ng5",
+    "Bc5",
+    "Bxf7+",
+    "Ke7",
+    "Bb3",
+    "Rf8",
+    "O-O",
+    "h6",
+    "Nf3"
+   ]
+  },
+  {
+   "name": "Levy 7 (tab, leaves Evans Gambit on their move at ply 14, his first 15 plies): Evans Gambit 5...Ba5 6.d4 exd4 7.O-O dxc3 8.Qb3",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "b4",
+    "Bxb4",
+    "c3",
+    "Ba5",
+    "d4",
+    "exd4",
+    "O-O",
+    "dxc3",
+    "Qb3",
+    "Qf6",
+    "e5"
+   ]
+  },
+  {
+   "name": "Levy 8 (tab, leaves Evans Gambit on your move at ply 11, his first 20 plies): Evans 6.O-O Nf6 7.d4 exd4 8.e5 d5 9.exf6 dxc4 10.fxg7",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "b4",
+    "Bxb4",
+    "c3",
+    "Ba5",
+    "O-O",
+    "Nf6",
+    "d4",
+    "exd4",
+    "e5",
+    "d5",
+    "exf6",
+    "dxc4",
+    "fxg7",
+    "Rg8",
+    "Re1+"
+   ]
+  },
+  {
+   "name": "Levy 9 (trap, leaves Evans Gambit on your move at ply 11, his first 17 plies): Evans 8.e5 Ne4 9.Re1",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "b4",
+    "Bxb4",
+    "c3",
+    "Ba5",
+    "O-O",
+    "Nf6",
+    "d4",
+    "exd4",
+    "e5",
+    "Ne4",
+    "Re1"
+   ]
+  },
+  {
+   "name": "Levy 10 (tab, leaves Evans Gambit on their move at ply 10, his first 18 plies): Evans 5...Be7 6.d4 Na5 7.Be2 exd4 8.Qxd4 Nf6 9.e5 Nc6",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "b4",
+    "Bxb4",
+    "c3",
+    "Be7",
+    "d4",
+    "Na5",
+    "Be2",
+    "exd4",
+    "Qxd4",
+    "Nf6",
+    "e5",
+    "Nc6",
+    "Qh4"
+   ]
+  },
+  {
+   "name": "Levy 11 (reply, leaves Evans Gambit on their move at ply 8, his first 9 plies): Evans declined 4...Bb6 5.a4",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "b4",
+    "Bb6",
+    "a4",
+    "a6",
+    "Nc3",
+    "Nf6",
+    "Nd5",
+    "Nxd5",
+    "exd5"
+   ]
+  },
+  {
+   "name": "Levy 12 (tab, leaves Two Knights (…Nf6) on your move at ply 7, his first 18 plies): Nakhmanson: 6...dxc3 7.Bxf7+ Kxf7 8.Qd5+ Kf6 9.Qxe4",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "d4",
+    "exd4",
+    "O-O",
+    "Nxe4",
+    "Nc3",
+    "dxc3",
+    "Bxf7+",
+    "Kxf7",
+    "Qd5+",
+    "Kf6",
+    "Qxe4",
+    "Be7",
+    "Ng5"
+   ]
+  },
+  {
+   "name": "Levy 13 (trap, leaves Two Knights (…Nf6) on your move at ply 7, his first 17 plies): Nakhmanson: 8...Ke8? 9.Re1",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "d4",
+    "exd4",
+    "O-O",
+    "Nxe4",
+    "Nc3",
+    "dxc3",
+    "Bxf7+",
+    "Kxf7",
+    "Qd5+",
+    "Ke8",
+    "Re1"
+   ]
+  },
+  {
+   "name": "Levy 14 (tab, leaves main on your move at ply 5, his first 9 plies): Belgrade Gambit 4.d4 exd4 5.Nd5",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "d4",
+    "exd4",
+    "Nd5",
+    "Be7",
+    "Bf4",
+    "d6",
+    "Nxd4",
+    "Nxd5",
+    "exd5"
+   ]
+  },
+  {
+   "name": "Levy 15 (tab, leaves main on your move at ply 5, his first 7 plies): Scotch Gambit 3.d4 exd4 4.Bc4",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "exd4",
+    "Bc4",
+    "Nf6",
+    "e5",
+    "d5",
+    "Bb5",
+    "Ne4",
+    "Nxd4",
+    "Bd7",
+    "Bxc6"
+   ]
+  },
+  {
+   "name": "Levy 16 (trap, leaves main on your move at ply 7, his first 11 plies): Jerome Gambit 4.Bxf7+ Kxf7 5.Nxe5+ Nxe5 6.Qh5",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "Bxf7+",
+    "Kxf7",
+    "Nxe5+",
+    "Nxe5",
+    "Qh5+"
+   ]
+  },
+  {
+   "name": "Levy 17 (reply, leaves main on your move at ply 5, his first 11 plies): Scotch 3...d6 4.dxe5 dxe5 5.Qxd8+ Kxd8",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "d6",
+    "dxe5",
+    "dxe5",
+    "Qxd8+",
+    "Kxd8",
+    "Nc3",
+    "Bc5",
+    "Be3",
+    "Bxe3",
+    "fxe3"
+   ]
+  },
+  {
+   "name": "Levy 18 (tab, leaves main on your move at ply 5, his first 13 plies): Scotch Potter: 4...Bc5 5.Nb3 Bb4+ 6.c3 Be7 7.f4",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Bc5",
+    "Nb3",
+    "Bb4+",
+    "c3",
+    "Be7",
+    "f4",
+    "d6",
+    "a4"
+   ]
+  },
+  {
+   "name": "Levy 19 (tab, leaves main on your move at ply 5, his first 17 plies): Scotch Potter: 5...Bb6 6.Nc3 Nf6 7.Bg5 h6 8.Bh4 O-O 9.Qe2",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Bc5",
+    "Nb3",
+    "Bb6",
+    "Nc3",
+    "Nf6",
+    "Bg5",
+    "h6",
+    "Bh4",
+    "O-O",
+    "Qe2",
+    "Ne5",
+    "f4"
+   ]
+  },
+  {
+   "name": "Levy 20 (tab, leaves main on your move at ply 5, his first 15 plies): Scotch Mieses: 4...Nf6 5.Nxc6 bxc6 6.e5 Qe7 7.Qe2 Nd5 8.h4",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Nf6",
+    "Nxc6",
+    "bxc6",
+    "e5",
+    "Qe7",
+    "Qe2",
+    "Nd5",
+    "h4",
+    "a5",
+    "Nd2"
+   ]
+  },
+  {
+   "name": "Levy 21 (reply, leaves main on your move at ply 5, his first 15 plies): Scotch Mieses 6...Nd5? 7.c4 Nb6 8.Bd3",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Nf6",
+    "Nxc6",
+    "bxc6",
+    "e5",
+    "Nd5",
+    "c4",
+    "Nb6",
+    "Bd3",
+    "d5",
+    "cxd5"
+   ]
+  },
+  {
+   "name": "Levy 22 (reply, leaves main on your move at ply 5, his first 13 plies): Scotch Mieses 6...Ne4? 7.Qf3",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Nf6",
+    "Nxc6",
+    "bxc6",
+    "e5",
+    "Ne4",
+    "Qf3",
+    "Ng5",
+    "Qg3"
+   ]
+  },
+  {
+   "name": "Levy 23 (reply, leaves main on your move at ply 5, his first 9 plies): Scotch 4...Qf6 5.Nb5",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Qf6",
+    "Nb5",
+    "Bc5",
+    "Qe2",
+    "Kd8",
+    "N1c3",
+    "Nge7",
+    "h4"
+   ]
+  },
+  {
+   "name": "Levy 24 (reply, leaves main on your move at ply 5, his first 11 plies): Scotch 4...Qh4 5.Nc3 Bc5 6.Be3",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Qh4",
+    "Nc3",
+    "Bc5",
+    "Be3",
+    "Bxd4",
+    "Bxd4",
+    "Nxd4",
+    "Qxd4"
+   ]
+  },
+  {
+   "name": "Levy 25 (reply, leaves main on your move at ply 5, his first 10 plies): Scotch 4...Nxd4 5.Qxd4 c5?",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Nxd4",
+    "Qxd4",
+    "c5",
+    "Qa4",
+    "Bd6",
+    "f4",
+    "a6",
+    "Be3"
+   ]
+  },
+  {
+   "name": "Levy 26 (tab, leaves main on your move at ply 5, his first 16 plies): Berlin main line: 4.O-O Nxe4 5.d4 Nd6 6.Bxc6 dxc6 7.dxe5 Nf5 8.Qxd8+",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "Nf6",
+    "O-O",
+    "Nxe4",
+    "d4",
+    "Nd6",
+    "Bxc6",
+    "dxc6",
+    "dxe5",
+    "Nf5",
+    "Qxd8+",
+    "Kxd8",
+    "Nc3"
+   ]
+  }
+ ],
+ "pro-gothamchess-stafford-refute": [
+  {
+   "name": "Levy 1 (tab, leaves main on your move at ply 5, his first 7 plies): Petrov 3.d4 (Steinitz attack)",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "d4",
+    "exd4",
+    "e5",
+    "Ne4",
+    "Qxd4",
+    "d5",
+    "exd6",
+    "Nxd6",
+    "Nc3",
+    "Nc6",
+    "Qa4"
+   ]
+  }
+ ],
+ "pro-gothamchess-ponziani": [
+  {
+   "name": "Levy 1 (trap, leaves 4…Nxe4 (dxc6) on their move at ply 10, his first 11 plies): Ponziani 4...Nxe4 5.d5 Na5? 6.b4 knight trap",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "Nf6",
+    "d4",
+    "Nxe4",
+    "d5",
+    "Na5",
+    "b4"
+   ]
+  },
+  {
+   "name": "Levy 2 (trap, leaves 4…Nxe4 (dxc6) on their move at ply 10, his first 15 plies): Ponziani 7.Bb5+ Bd7? 8.Nxd7",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "Nf6",
+    "d4",
+    "Nxe4",
+    "d5",
+    "Nb8",
+    "Nxe5",
+    "d6",
+    "Bb5+",
+    "Bd7",
+    "Nxd7"
+   ]
+  },
+  {
+   "name": "Levy 3 (reply, leaves main on their move at ply 6, his first 11 plies): Ponziani 3...Bc5 4.d4 exd4 5.cxd4 Bb6 6.d5",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "Bc5",
+    "d4",
+    "exd4",
+    "cxd4",
+    "Bb6",
+    "d5",
+    "Nce7",
+    "d6",
+    "cxd6",
+    "Nc3"
+   ]
+  },
+  {
+   "name": "Levy 4 (trap, leaves 4…Nxe4 (dxc6) on their move at ply 10, his first 21 plies): Ponziani 4...Nxe4 5.d5 Nb8 6.Nxe5 d6 7.Bb5+ c6 8.dxc6 Qb6 9.cxb7+ underpromotion",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "Nf6",
+    "d4",
+    "Nxe4",
+    "d5",
+    "Nb8",
+    "Nxe5",
+    "d6",
+    "Bb5+",
+    "c6",
+    "dxc6",
+    "Qb6",
+    "cxb7+",
+    "Kd8",
+    "Nxf7+",
+    "Kc7",
+    "bxa8=N+"
+   ]
+  },
+  {
+   "name": "Levy 5 (reply, leaves main on your move at ply 11, his first 11 plies): Ponziani 4...exd4 5.e5 Nd5 6.Bc4",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "Nf6",
+    "d4",
+    "exd4",
+    "e5",
+    "Nd5",
+    "Bc4",
+    "Nb6",
+    "Bb3",
+    "dxc3",
+    "Nxc3"
+   ]
+  },
+  {
+   "name": "Levy 6 (trap, leaves reply@1 on their move at ply 10, his first 13 plies): Ponziani 3...d5 4.Qa4 dxe4 5.Nxe5 Bd7? 6.Nxd7 Qxd7 7.Qxe4+",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "d5",
+    "Qa4",
+    "dxe4",
+    "Nxe5",
+    "Bd7",
+    "Nxd7",
+    "Qxd7",
+    "Qxe4+"
+   ]
+  },
+  {
+   "name": "Levy 7 (trap, leaves 4…Nxe4 (dxc6) on their move at ply 10, his first 21 plies): Ponziani 8...dxe5 9.cxb7+ Bd7 10.Bxd7+ Qxd7 11.bxa8=Q",
+   "moves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "Nf6",
+    "d4",
+    "Nxe4",
+    "d5",
+    "Nb8",
+    "Nxe5",
+    "d6",
+    "Bb5+",
+    "c6",
+    "dxc6",
+    "dxe5",
+    "cxb7+",
+    "Bd7",
+    "Bxd7+",
+    "Qxd7",
+    "bxa8=Q"
+   ]
+  }
+ ]
+}

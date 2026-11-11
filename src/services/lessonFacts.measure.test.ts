@@ -13,6 +13,7 @@ import { describe, it, vi } from 'vitest';
 import { existsSync, readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { nativeEngine } from '../test/nativeStockfish';
+import { findLessonOpening, extraLines, lessonLines } from '../test/lessonLines';
 import { pinsOf, looseOf, materialFor, hitsFrom, evalWords, PIECE_NAME } from '../../scripts/course-replies/boardFacts';
 
 const ON = process.env.LESSON_FACTS === '1';
@@ -25,15 +26,6 @@ vi.mock('./dataFile', async (importOriginal) => {
   const actual = await importOriginal<typeof import('./dataFile')>();
   return { ...actual, loadDataJson: async (path: string) => { try { return JSON.parse(readFileSync(`public${path}`, 'utf8')); } catch { return null; } } };
 });
-
-const sansOf = (pgn: string): string[] => pgn.split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t)).map((t) => t.replace(/^\d+\.+/, '')).filter(Boolean);
-
-/** The line Watch plays: the existing lesson's own moves when they run past
- *  the database PGN on the same path, else the PGN. */
-function watchLine(pgnMoves: string[], lessonMoves: readonly string[] | undefined): string[] {
-  if (!lessonMoves?.length || lessonMoves.length <= pgnMoves.length) return pgnMoves;
-  return pgnMoves.every((m, k) => lessonMoves[k] === m) ? [...lessonMoves] : pgnMoves;
-}
 
 const sanOfUci = (fen: string, uci: string): string => { try { const m = new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined }); return m.san; } catch { return uci; } };
 /** The engine line as SAN, from the mover's seat in pawns. */
@@ -51,17 +43,13 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
     const { getLessonScript, getVariationLessonScript } = await import('../data/lessons');
     await ensureMastersDbLoaded();
     loadFullCorpus();
-    const repertoire = JSON.parse(readFileSync('src/data/repertoire.json', 'utf8')) as Array<{ id: string; name: string; color: 'white' | 'black'; pgn: string; variations?: Array<{ name: string; pgn: string }> }>;
     mkdirSync(OUT, { recursive: true });
     for (const id of IDS) {
-      const op = repertoire.find((o) => o.id === id);
+      const op = findLessonOpening(id);
       if (!op) continue;
       const draftPath = `${OUT}/${id}.json`;
       const drafts = existsSync(draftPath) ? (JSON.parse(readFileSync(draftPath, 'utf8')) as { lines: Array<{ name: string; beats: Array<{ ply: number; say: string }> }> }).lines : [];
-      const lines = [
-        { name: op.name, moves: watchLine(sansOf(op.pgn), getLessonScript(id)?.beats.at(-1)?.moves) },
-        ...(op.variations ?? []).map((v) => ({ name: v.name, moves: watchLine(sansOf(v.pgn), getVariationLessonScript(id, v.name)?.beats.at(-1)?.moves) })),
-      ];
+      const lines = lessonLines(op, (tab) => (tab === null ? getLessonScript(id) : getVariationLessonScript(id, tab))?.beats.at(-1)?.moves, extraLines(id, process.env.LESSON_EXTRA));
       const md: string[] = [`# ${op.name} — fact sheet (student plays ${op.color})`];
       for (const line of lines) {
         md.push(`\n## ${line.name}\n`);
@@ -101,6 +89,9 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
         }
       }
       writeFileSync(`${OUT}/${id}.facts.md`, md.join('\n'));
+      // The lines the sheet walked, in its order, so the writer's input is cut
+      // from the sheet alone (no computed-draft run needed).
+      writeFileSync(`${OUT}/${id}.lines.json`, JSON.stringify(lines.map((l) => ({ tab: l.name, moves: l.moves }))));
       console.log(`facts ${id}: ${lines.length} lines`);
     }
   }, 4 * 60 * 60_000);

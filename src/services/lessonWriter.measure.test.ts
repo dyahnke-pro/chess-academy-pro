@@ -11,6 +11,7 @@
 import { describe, it, vi } from 'vitest';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { nativeEngine } from '../test/nativeStockfish';
+import { findLessonOpening, extraLines, lessonLines, type LessonLine } from '../test/lessonLines';
 
 const ON = process.env.LESSON_WRITER === '1';
 const IDS = (process.env.LESSON_IDS ?? 'trompowsky-attack').split(',').map((s) => s.trim()).filter(Boolean);
@@ -43,17 +44,6 @@ vi.mock('./explorerTeachLine', () => ({
   resultsLine: () => null,
 }));
 
-interface Line { name: string; moves: string[] }
-
-const sansOf = (pgn: string): string[] => pgn.split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t)).map((t) => t.replace(/^\d+\.+/, '')).filter(Boolean);
-
-
-/** The line Watch plays: the existing lesson's own moves when they run past
- *  the database PGN on the same path, else the PGN. */
-function watchLine(pgnMoves: string[], lessonMoves: readonly string[] | undefined): string[] {
-  if (!lessonMoves?.length || lessonMoves.length <= pgnMoves.length) return pgnMoves;
-  return pgnMoves.every((m, k) => lessonMoves[k] === m) ? [...lessonMoves] : pgnMoves;
-}
 
 const sentencesOf = (s: string): string[] => s.split(/(?<=[.!?])\s+/).map((x) => x.trim()).filter(Boolean);
 
@@ -62,15 +52,11 @@ describe.skipIf(!ON)('the lesson writer, one beat a move', () => {
     const { generateOpening } = await import('./openingGenerator');
     const { walkthroughLesson } = await import('./walkthroughLesson');
     const { getLessonScript, getVariationLessonScript } = await import('../data/lessons');
-    const repertoire = JSON.parse(readFileSync('src/data/repertoire.json', 'utf8')) as Array<{ id: string; name: string; eco: string; color: 'white' | 'black'; pgn: string; variations?: Array<{ name: string; pgn: string }> }>;
     mkdirSync(OUT, { recursive: true });
     for (const id of IDS) {
-      const op = repertoire.find((o) => o.id === id);
+      const op = findLessonOpening(id);
       if (!op) { console.log(`no opening ${id}`); continue; }
-      const lines: Line[] = [
-        { name: op.name, moves: watchLine(sansOf(op.pgn), getLessonScript(id)?.beats.at(-1)?.moves) },
-        ...(op.variations ?? []).map((v) => ({ name: v.name, moves: watchLine(sansOf(v.pgn), getVariationLessonScript(id, v.name)?.beats.at(-1)?.moves) })),
-      ];
+      const lines: LessonLine[] = lessonLines(op, (tab) => (tab === null ? getLessonScript(id) : getVariationLessonScript(id, tab))?.beats.at(-1)?.moves, extraLines(id, process.env.LESSON_EXTRA));
       const text: string[] = [];
       const tally = { beats: 0, empty: 0, repeated: 0, words: 0 };
       const out: Array<{ name: string; beats: Array<{ ply: number; san: string; say: string }> }> = [];

@@ -6,7 +6,7 @@
 // student, within half a pawn of the engine's best), else the engine's best, a
 // known mistake punished, stopping at the middlegame on the student's move.
 //
-//   nice node scripts/levy-lines/walk-tabs.mjs   → docs/levy-lines/_tabs-walked.json
+//   nice node scripts/levy-lines/walk-tabs.mjs   → docs/levy-lines/_tabs-walked.json (resumes: walks only what is new)
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { Engine } from '../course-replies/engine.mjs';
 import { walkToMiddlegame, indexKnownMistakes } from '../course-replies/line-walk.mjs';
@@ -19,7 +19,10 @@ const knownMistakes = indexKnownMistakes([...J('src/data/punish-gems.json'), ...
 const done = existsSync(OUT) ? J(OUT) : [];
 const seen = new Set(done.map((d) => d.moves));
 
-const todo = placement.filter((r) => r.taught && (r.place === 'tab' || r.place === 'new-opening') && !seen.has(r.moves));
+// Tabs and new openings, and the replies too: a reply on a tab is walked to a
+// middlegame like every other course subline. Traps end where the punishment
+// lands and are not walked.
+const todo = placement.filter((r) => r.taught && ['tab', 'new-opening', 'reply'].includes(r.place) && !seen.has(r.moves));
 console.log(`[walk-tabs] ${todo.length} to walk (${done.length} already)`);
 const engine = new Engine();
 let k = 0;
