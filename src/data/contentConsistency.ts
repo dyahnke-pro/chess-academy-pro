@@ -65,6 +65,21 @@ function detectDuplicateModelGames(): string[] {
 }
 
 /** Two variation tabs in one opening sharing an identical move line OR identical first Watch beat. */
+/** The first beat of `lesson` past the moves it shares with `other` — the
+ *  beat where the two tabs part. A one-beat-a-move course says a shared move
+ *  the same way on every tab that plays it (the Watch courses key a beat by
+ *  the moves that lead to it), so two tabs' opening beats are equal by design;
+ *  a copied beat is one said again where the boards differ. */
+function ownFirstBeat(lesson: LessonScriptLike | null, other: LessonScriptLike | null): string | undefined {
+  const beats = lesson?.beats ?? [];
+  const otherMoves = other?.beats?.at(-1)?.moves ?? [];
+  let shared = 0;
+  const mine = beats.at(-1)?.moves ?? [];
+  while (shared < mine.length && shared < otherMoves.length && mine[shared] === otherMoves[shared]) shared += 1;
+  return beats.find((b) => (b.moves?.length ?? 0) > shared)?.say ?? beats[0]?.say;
+}
+interface LessonScriptLike { beats?: Array<{ say?: string; moves?: readonly string[] }> }
+
 function detectDuplicateVariationTabs(): string[] {
   const out: string[] = [];
   for (const o of ALL_ENTRIES) {
@@ -72,8 +87,8 @@ function detectDuplicateVariationTabs(): string[] {
     for (let i = 0; i < vs.length; i++) for (let j = i + 1; j < vs.length; j++) {
       const a = vs[i], b = vs[j];
       const sameLine = a.pgn && norm(replaySan(a.pgn)) === norm(replaySan(b.pgn));
-      const beatA = norm(getVariationLessonScript(o.id, a.name)?.beats?.[0]?.say);
-      const beatB = norm(getVariationLessonScript(o.id, b.name)?.beats?.[0]?.say);
+      const beatA = norm(ownFirstBeat(getVariationLessonScript(o.id, a.name), getVariationLessonScript(o.id, b.name)));
+      const beatB = norm(ownFirstBeat(getVariationLessonScript(o.id, b.name), getVariationLessonScript(o.id, a.name)));
       const sameBeat = beatA && beatA === beatB;
       if (sameLine || sameBeat) out.push(`${o.id}::${a.name}==${b.name}`);
     }
