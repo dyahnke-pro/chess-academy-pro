@@ -29,6 +29,7 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /nimzo-larsen/i, label: 'Nimzo-Larsen' },
     { test: /stonewall/i, label: 'Stonewall' },
     { test: /williams/i, label: 'Williams' },
+    { test: /swiss gambit/i, label: 'Swiss' },
   ],
   'trompowsky-attack': [
     { test: /doubled pawns/i, label: 'exf6' },
