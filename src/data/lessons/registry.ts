@@ -26,8 +26,6 @@ import { ITALIAN_GAME_TRAP_LESSONS } from './italianGameTrapLessons';
 import { SCOTCH_GAME_TRAP_LESSONS } from './scotchGameTrapLessons';
 import { QGA_LESSON } from './queensGambitAccepted';
 import { QGA_VARIATION_LESSONS } from './queensGambitAcceptedVariations';
-import { QUEENS_GAMBIT_LESSON } from './queensGambit';
-import { QUEENS_GAMBIT_VARIATION_LESSONS } from './queensGambitVariations';
 // Gambit-tab lessons that live in gambits.json (not opening-manifests.json,
 // so not masterclass-tab openings) but ARE hand-authored curated lessons.
 // Registered here so the content gates (accuracy/integrity/depth/grounding/
@@ -79,7 +77,6 @@ function watchOpening(course: WatchCourse): OpeningLessons {
 const HAND_WRITTEN: OpeningLessons[] = [
   { main: PIRC_DEFENCE_LESSON, variations: PIRC_VARIATION_LESSONS },
   { main: QGA_LESSON, variations: QGA_VARIATION_LESSONS },
-  { main: QUEENS_GAMBIT_LESSON, variations: QUEENS_GAMBIT_VARIATION_LESSONS },
 ];
 
 // An opening's named-trap lessons, by opening id. They stay hand-written beat
