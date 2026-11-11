@@ -38,6 +38,7 @@ import { PRO_GOTHAMCHESS_VIENNA_WATCH } from './proGothamchessVienna';
 import { QGD_WATCH } from './qgd';
 import { RETI_OPENING_WATCH } from './retiOpening';
 import { RUY_LOPEZ_WATCH } from './ruyLopez';
+import { SCANDINAVIAN_DEFENCE_WATCH } from './scandinavianDefence';
 import { SCOTCH_GAME_WATCH } from './scotchGame';
 import { SEMI_SLAV_WATCH } from './semiSlav';
 import { SICILIAN_ALAPIN_WATCH } from './sicilianAlapin';
@@ -85,6 +86,7 @@ export const WATCH_COURSES: readonly WatchCourse[] = [
   QGD_WATCH,
   RETI_OPENING_WATCH,
   RUY_LOPEZ_WATCH,
+  SCANDINAVIAN_DEFENCE_WATCH,
   SCOTCH_GAME_WATCH,
   SEMI_SLAV_WATCH,
   SICILIAN_ALAPIN_WATCH,
