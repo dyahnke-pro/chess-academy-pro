@@ -321,8 +321,6 @@ const BASELINE_VIOLATIONS = new Set<string>([
   'MAIN The French Defence — A Master Class :: d5',
   'VARIATION french-defence::Advance Variation :: adv3',
   'VARIATION french-defence::Winawer Variation :: win4',
-  'MAIN The Sicilian Dragon — A Master Class :: dragonbishop (short)',
-  'VARIATION sicilian-dragon::Levenfish Variation :: f4 (short)',
   'VARIATION london-system::Jobava London :: j2',
   'VARIATION queens-gambit::Exchange Variation :: battery (short)',
   // Plans — existing claims that don't verify

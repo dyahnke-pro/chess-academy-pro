@@ -44,8 +44,6 @@ import { NIMZO_INDIAN_LESSON } from './nimzoIndian';
 import { NIMZO_INDIAN_VARIATION_LESSONS } from './nimzoIndianVariations';
 import { KINGS_GAMBIT_LESSON } from './kingsGambit';
 import { KINGS_GAMBIT_VARIATION_LESSONS } from './kingsGambitVariations';
-import { SICILIAN_DRAGON_LESSON } from './sicilianDragon';
-import { SICILIAN_DRAGON_VARIATION_LESSONS } from './sicilianDragonVariations';
 import { FOUR_KNIGHTS_GAME_LESSON } from './fourKnightsGame';
 import { FOUR_KNIGHTS_GAME_VARIATION_LESSONS } from './fourKnightsGameVariations';
 import { LONDON_SYSTEM_LESSON } from './londonSystem';
@@ -125,7 +123,6 @@ const HAND_WRITTEN: OpeningLessons[] = [
   { main: ALEKHINE_DEFENCE_LESSON, variations: ALEKHINE_DEFENCE_VARIATION_LESSONS },
   { main: BENKO_GAMBIT_LESSON, variations: BENKO_GAMBIT_VARIATION_LESSONS },
   { main: KINGS_GAMBIT_LESSON, variations: KINGS_GAMBIT_VARIATION_LESSONS },
-  { main: SICILIAN_DRAGON_LESSON, variations: SICILIAN_DRAGON_VARIATION_LESSONS },
   { main: FOUR_KNIGHTS_GAME_LESSON, variations: FOUR_KNIGHTS_GAME_VARIATION_LESSONS },
   { main: LONDON_SYSTEM_LESSON, variations: LONDON_SYSTEM_VARIATION_LESSONS },
   { main: CATALAN_OPENING_LESSON, variations: CATALAN_OPENING_VARIATION_LESSONS },
