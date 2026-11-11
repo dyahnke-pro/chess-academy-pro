@@ -1203,12 +1203,11 @@
   "minute": 6,
   "idea": "Taking on d5 with the bishop lets ...Bg4 hit the queen, which has no safe square left; Black wins the queen around move eight.",
   "kind": "trap",
-  "masters": 0,
+  "masters": 1,
   "amateur": 27157,
   "evalCp": 336,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Traxler Counter-Attack",
@@ -1327,8 +1326,7 @@
   "amateur": 105054,
   "evalCp": 53,
   "status": "extends",
-  "extendsId": "pro-gothamchess-italian",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-italian"
  },
  {
   "opening": "Evans Gambit",
@@ -1400,8 +1398,7 @@
   "amateur": 1705,
   "evalCp": 138,
   "status": "extends",
-  "extendsId": "pro-gothamchess-italian",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-italian"
  },
  {
   "opening": "Evans Gambit",
@@ -1557,12 +1554,11 @@
   "minute": 9,
   "idea": "Retreating the king home looks safe but leaves the e4-knight pinned on the open e-file; Re1 and Rxe4 demolish the position.",
   "kind": "trap",
-  "masters": 0,
+  "masters": 2,
   "amateur": 20280,
   "evalCp": -56,
   "status": "extends",
-  "extendsId": "pro-gothamchess-italian",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-italian"
  },
  {
   "opening": "Petrov Defense",
@@ -1694,8 +1690,7 @@
   "amateur": 27,
   "evalCp": 902,
   "status": "extends",
-  "extendsId": "pro-gothamchess-ponziani",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-ponziani"
  },
  {
   "opening": "Ponziani Opening",
@@ -1727,8 +1722,7 @@
   "amateur": 1884,
   "evalCp": 147,
   "status": "extends",
-  "extendsId": "pro-gothamchess-ponziani",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-ponziani"
  },
  {
   "opening": "Four Knights Game",
@@ -2501,12 +2495,11 @@
   "minute": 4,
   "idea": "Develop the second knight, pin the f6-knight, put the queen on e2 behind the e-pawn and castle long; with kings on opposite sides, Nd5 and a g-pawn storm (f3, g4, g5) aim straight at the black king.",
   "kind": "main",
-  "masters": 0,
+  "masters": 112,
   "amateur": 5820,
   "evalCp": 34,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Scotch Game",
@@ -2534,12 +2527,11 @@
   "minute": 8,
   "idea": "After the trade on c6 the e5 push hits the knight; Black must pin with ...Qe7, so Qe2 holds e5. Instead of the theory-heavy c4, h4 eyes Bg5, a rook lift via h3, and h5 against any fianchetto.",
   "kind": "main",
-  "masters": 0,
+  "masters": 711,
   "amateur": 21442,
   "evalCp": 8,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Scotch Game",
@@ -2567,12 +2559,11 @@
   "minute": 7,
   "idea": "Without the ...Qe7 pin, c4 kicks the knight to the edge and Bd3 aims at h7; once Black castles, Qh5 and Nc3 build an attack while the b6-knight is stranded.",
   "kind": "reply",
-  "masters": 0,
+  "masters": 28,
   "amateur": 44600,
   "evalCp": 44,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Scotch Game",
@@ -2827,8 +2818,7 @@
   "amateur": 0,
   "evalCp": 437,
   "status": "extends",
-  "extendsId": "pro-gothamchess-vienna",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-vienna"
  },
  {
   "opening": "Scotch Game",
@@ -2888,8 +2878,7 @@
   "amateur": 0,
   "evalCp": 10000,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Englund Gambit",
@@ -2957,8 +2946,7 @@
   "amateur": 35552,
   "evalCp": -95,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Philidor Defense",
@@ -2990,8 +2978,7 @@
   "amateur": 0,
   "evalCp": 10000,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Ponziani Opening",
@@ -3087,8 +3074,7 @@
   "amateur": 149444,
   "evalCp": 17,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Rousseau Gambit",
@@ -3262,8 +3248,7 @@
   "amateur": 7522,
   "evalCp": 210,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Traxler Counter-Attack",
