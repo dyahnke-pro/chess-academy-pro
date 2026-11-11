@@ -18,6 +18,7 @@ import { PRO_GOTHAMCHESS_FRENCH_DEFENSE_WATCH } from './proGothamchessFrenchDefe
 import { PRO_GOTHAMCHESS_ITALIAN_WATCH } from './proGothamchessItalian';
 import { PRO_GOTHAMCHESS_LONDON_WATCH } from './proGothamchessLondon';
 import { PRO_GOTHAMCHESS_SCANDINAVIAN_WATCH } from './proGothamchessScandinavian';
+import { QGD_WATCH } from './qgd';
 import { RETI_OPENING_WATCH } from './retiOpening';
 import { SEMI_SLAV_WATCH } from './semiSlav';
 import { SICILIAN_NAJDORF_WATCH } from './sicilianNajdorf';
@@ -42,6 +43,7 @@ export const WATCH_COURSES: readonly WatchCourse[] = [
   PRO_GOTHAMCHESS_ITALIAN_WATCH,
   PRO_GOTHAMCHESS_LONDON_WATCH,
   PRO_GOTHAMCHESS_SCANDINAVIAN_WATCH,
+  QGD_WATCH,
   RETI_OPENING_WATCH,
   SEMI_SLAV_WATCH,
   SICILIAN_NAJDORF_WATCH,

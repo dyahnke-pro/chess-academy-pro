@@ -58,8 +58,6 @@ import { SICILIAN_ALAPIN_LESSON } from './sicilianAlapin';
 import { SICILIAN_ALAPIN_VARIATION_LESSONS } from './sicilianAlapinVariations';
 import { PHILIDOR_DEFENCE_LESSON } from './philidorDefence';
 import { PHILIDOR_DEFENCE_VARIATION_LESSONS } from './philidorDefenceVariations';
-import { QGD_LESSON } from './qgd';
-import { QGD_VARIATION_LESSONS } from './qgdVariations';
 import { QGA_LESSON } from './queensGambitAccepted';
 import { QGA_VARIATION_LESSONS } from './queensGambitAcceptedVariations';
 import { SLAV_DEFENCE_LESSON } from './slavDefence';
@@ -139,7 +137,6 @@ const HAND_WRITTEN: OpeningLessons[] = [
   { main: SICILIAN_ALAPIN_LESSON, variations: SICILIAN_ALAPIN_VARIATION_LESSONS },
   { main: NIMZO_INDIAN_LESSON, variations: NIMZO_INDIAN_VARIATION_LESSONS },
   { main: PHILIDOR_DEFENCE_LESSON, variations: PHILIDOR_DEFENCE_VARIATION_LESSONS },
-  { main: QGD_LESSON, variations: QGD_VARIATION_LESSONS },
   { main: QGA_LESSON, variations: QGA_VARIATION_LESSONS },
   { main: SLAV_DEFENCE_LESSON, variations: SLAV_DEFENCE_VARIATION_LESSONS },
   { main: QUEENS_INDIAN_DEFENCE_LESSON, variations: QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS },

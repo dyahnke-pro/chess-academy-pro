@@ -218,8 +218,6 @@ import { SICILIAN_ALAPIN_LESSON } from './sicilianAlapin';
 import { SICILIAN_ALAPIN_VARIATION_LESSONS } from './sicilianAlapinVariations';
 import { PHILIDOR_DEFENCE_LESSON } from './philidorDefence';
 import { PHILIDOR_DEFENCE_VARIATION_LESSONS } from './philidorDefenceVariations';
-import { QGD_LESSON } from './qgd';
-import { QGD_VARIATION_LESSONS } from './qgdVariations';
 import { QGA_LESSON } from './queensGambitAccepted';
 import { QGA_VARIATION_LESSONS } from './queensGambitAcceptedVariations';
 import { SLAV_DEFENCE_LESSON } from './slavDefence';
@@ -304,7 +302,6 @@ const LESSONS: Record<string, LessonScript> = {
   [CATALAN_OPENING_LESSON.openingId]: CATALAN_OPENING_LESSON,
   [SICILIAN_ALAPIN_LESSON.openingId]: SICILIAN_ALAPIN_LESSON,
   [PHILIDOR_DEFENCE_LESSON.openingId]: PHILIDOR_DEFENCE_LESSON,
-  [QGD_LESSON.openingId]: QGD_LESSON,
   [QGA_LESSON.openingId]: QGA_LESSON,
   [SLAV_DEFENCE_LESSON.openingId]: SLAV_DEFENCE_LESSON,
   [QUEENS_INDIAN_DEFENCE_LESSON.openingId]: QUEENS_INDIAN_DEFENCE_LESSON,
@@ -484,7 +481,6 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...CATALAN_OPENING_VARIATION_LESSONS,
   ...SICILIAN_ALAPIN_VARIATION_LESSONS,
   ...PHILIDOR_DEFENCE_VARIATION_LESSONS,
-  ...QGD_VARIATION_LESSONS,
   ...QGA_VARIATION_LESSONS,
   ...SLAV_DEFENCE_VARIATION_LESSONS,
   ...QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS,
