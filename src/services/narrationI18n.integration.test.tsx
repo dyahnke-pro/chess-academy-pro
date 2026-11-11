@@ -3,8 +3,11 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { useLocalizedBeats } from './narrationI18n';
 import { useAppStore } from '../stores/appStore';
 import { buildUserProfile } from '../test/factories';
-import { VIENNA_GAME_LESSON } from '../data/lessons/vienna';
+import { getLessonScript } from '../data/lessons';
 import esPack from '../data/lessons/i18n/vienna-game.es.json';
+
+// The Vienna lesson the app serves (the Watch course since WO-OPENINGS-REWRITE-01).
+const VIENNA_GAME_LESSON = getLessonScript('vienna-game')!;
 
 /**
  * END-TO-END runtime proof for the narration-localization pilot.

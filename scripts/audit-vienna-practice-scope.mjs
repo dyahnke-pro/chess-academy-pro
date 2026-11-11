@@ -17,25 +17,15 @@ import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 const URL = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const OPENING_ID = 'vienna-game';
 
-// Compute the expected lesson-spine ply count from the source (the deepest beat
-// in vienna.ts) so the audit stays honest if the lesson is re-authored. This is
-// lessonToPlayableLine's logic: the longest beat `moves` array. Beats reference
-// either an inline literal (`moves: [...]`) OR a shared spine const built with
-// `const NAME = '<sans>'.split(' ')` and used as `moves: NAME` — resolve both.
-const lessonSrc = await readFile('src/data/lessons/vienna.ts', 'utf-8');
-const constLens = {};
-for (const m of lessonSrc.matchAll(/const\s+(\w+)\s*=\s*'([^']*)'\s*\.split\(/g)) {
-  constLens[m[1]] = m[2].trim().split(/\s+/).filter(Boolean).length;
-}
-let spinePlies = 0;
-for (const m of lessonSrc.matchAll(/moves:\s*\[([^\]]*)\]/g)) {
-  const n = m[1].split(',').map((s) => s.trim()).filter(Boolean).length;
-  if (n > spinePlies) spinePlies = n;
-}
-for (const m of lessonSrc.matchAll(/moves:\s*(\w+)\s*,/g)) {
-  const n = constLens[m[1]] ?? 0;
-  if (n > spinePlies) spinePlies = n;
-}
+// Compute the expected lesson-spine ply count from the source so the audit
+// stays honest if the lesson is re-authored. The lesson is the Watch course
+// (src/data/lessons/watch/viennaGame.ts, WO-OPENINGS-REWRITE-01): its main
+// line is the `MAIN` move list, one beat a move, and lessonToPlayableLine
+// plays that line.
+const lessonSrc = await readFile('src/data/lessons/watch/viennaGame.ts', 'utf-8');
+const mainMatch = lessonSrc.match(/const\s+MAIN\s*=\s*\[([^\]]*)\]/);
+if (!mainMatch) throw new Error('viennaGame.ts: no MAIN move list found');
+const spinePlies = mainMatch[1].split(',').map((s) => s.trim()).filter(Boolean).length;
 const rep = JSON.parse(await readFile('src/data/repertoire.json', 'utf-8'));
 const list = Array.isArray(rep) ? rep : (rep.openings ?? []);
 const fullPlies = list.find((o) => o.id === OPENING_ID).pgn.trim().split(/\s+/).filter(Boolean).length;

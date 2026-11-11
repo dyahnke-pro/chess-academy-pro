@@ -29,6 +29,7 @@ import { SICILIAN_NAJDORF_WATCH } from './sicilianNajdorf';
 import { SICILIAN_SVESHNIKOV_WATCH } from './sicilianSveshnikov';
 import { TROMPOWSKY_ATTACK_WATCH } from './trompowskyAttack';
 import { TWO_KNIGHTS_DEFENCE_WATCH } from './twoKnightsDefence';
+import { VIENNA_GAME_WATCH } from './viennaGame';
 
 export const WATCH_COURSES: readonly WatchCourse[] = [
   ALBIN_COUNTERGAMBIT_WATCH,
@@ -58,4 +59,5 @@ export const WATCH_COURSES: readonly WatchCourse[] = [
   SICILIAN_SVESHNIKOV_WATCH,
   TROMPOWSKY_ATTACK_WATCH,
   TWO_KNIGHTS_DEFENCE_WATCH,
+  VIENNA_GAME_WATCH,
 ];

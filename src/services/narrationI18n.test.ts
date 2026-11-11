@@ -1,8 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { localizeBeats } from './narrationI18n';
 import type { LessonBeat } from '../types';
-import { VIENNA_GAME_LESSON } from '../data/lessons/vienna';
+import { getLessonScript } from '../data/lessons';
 import esPack from '../data/lessons/i18n/vienna-game.es.json';
+
+// The Vienna lesson the app serves (the Watch course since WO-OPENINGS-REWRITE-01).
+const VIENNA_GAME_LESSON = getLessonScript('vienna-game')!;
 
 const squares = (s: string): string[] => (s.match(/[a-h][1-8]/g) ?? []).sort();
 

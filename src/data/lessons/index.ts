@@ -178,8 +178,6 @@ import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { PIRC_DEFENCE_LESSON } from './pircDefence';
 import { PIRC_VARIATION_LESSONS } from './pircVariations';
-import { VIENNA_GAME_LESSON } from './vienna';
-import { VIENNA_VARIATION_LESSONS } from './viennaVariations';
 import { CARO_KANN_LESSON } from './caroKann';
 import { CARO_VARIATION_LESSONS } from './caroKannVariations';
 import { ITALIAN_GAME_LESSON } from './italianGame';
@@ -277,7 +275,6 @@ import { PRO_CARLSEN_KINGS_GAMBIT_LESSON, PRO_CARLSEN_KINGS_GAMBIT_VARIATION_LES
 const LESSONS: Record<string, LessonScript> = {
   [RUY_LOPEZ_LESSON.openingId]: RUY_LOPEZ_LESSON,
   [PIRC_DEFENCE_LESSON.openingId]: PIRC_DEFENCE_LESSON,
-  [VIENNA_GAME_LESSON.openingId]: VIENNA_GAME_LESSON,
   [CARO_KANN_LESSON.openingId]: CARO_KANN_LESSON,
   [ITALIAN_GAME_LESSON.openingId]: ITALIAN_GAME_LESSON,
   [SCOTCH_GAME_LESSON.openingId]: SCOTCH_GAME_LESSON,
@@ -452,7 +449,6 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...ANTI_GRAND_PRIX_BLACK_VARIATION_LESSONS,
   ...RUY_VARIATION_LESSONS,
   ...PIRC_VARIATION_LESSONS,
-  ...VIENNA_VARIATION_LESSONS,
   ...CARO_VARIATION_LESSONS,
   ...ITALIAN_GAME_VARIATION_LESSONS,
   ...SCOTCH_GAME_VARIATION_LESSONS,

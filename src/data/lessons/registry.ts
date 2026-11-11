@@ -22,8 +22,6 @@ import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { RUY_TRAP_LESSONS } from './ruyTrapLessons';
 import { PIRC_DEFENCE_LESSON } from './pircDefence';
 import { PIRC_VARIATION_LESSONS } from './pircVariations';
-import { VIENNA_GAME_LESSON } from './vienna';
-import { VIENNA_VARIATION_LESSONS } from './viennaVariations';
 import { VIENNA_TRAP_LESSONS } from './viennaTrapLessons';
 import { CARO_KANN_LESSON } from './caroKann';
 import { CARO_VARIATION_LESSONS } from './caroKannVariations';
@@ -119,7 +117,6 @@ function watchOpening(course: WatchCourse): OpeningLessons {
 const HAND_WRITTEN: OpeningLessons[] = [
   { main: RUY_LOPEZ_LESSON, variations: RUY_VARIATION_LESSONS },
   { main: PIRC_DEFENCE_LESSON, variations: PIRC_VARIATION_LESSONS },
-  { main: VIENNA_GAME_LESSON, variations: VIENNA_VARIATION_LESSONS },
   { main: CARO_KANN_LESSON, variations: CARO_VARIATION_LESSONS },
   { main: ITALIAN_GAME_LESSON, variations: ITALIAN_GAME_VARIATION_LESSONS },
   { main: SCOTCH_GAME_LESSON, variations: SCOTCH_GAME_VARIATION_LESSONS },
