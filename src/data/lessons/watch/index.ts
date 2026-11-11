@@ -5,6 +5,7 @@ import type { WatchCourse } from './watchCourse';
 import { BENONI_DEFENCE_WATCH } from './benoniDefence';
 import { BIRDS_OPENING_WATCH } from './birdsOpening';
 import { BUDAPEST_GAMBIT_WATCH } from './budapestGambit';
+import { DUTCH_DEFENCE_WATCH } from './dutchDefence';
 import { ENGLISH_OPENING_WATCH } from './englishOpening';
 import { EVANS_GAMBIT_WATCH } from './evansGambit';
 import { GRUNFELD_DEFENCE_WATCH } from './grunfeldDefence';
@@ -27,6 +28,7 @@ export const WATCH_COURSES: readonly WatchCourse[] = [
   BENONI_DEFENCE_WATCH,
   BIRDS_OPENING_WATCH,
   BUDAPEST_GAMBIT_WATCH,
+  DUTCH_DEFENCE_WATCH,
   ENGLISH_OPENING_WATCH,
   EVANS_GAMBIT_WATCH,
   GRUNFELD_DEFENCE_WATCH,
