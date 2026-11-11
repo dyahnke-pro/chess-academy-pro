@@ -18,8 +18,6 @@ import { WATCH_COURSES } from './watch';
 import { watchLessons, type WatchCourse } from './watch/watchCourse';
 
 import { RUY_TRAP_LESSONS } from './ruyTrapLessons';
-import { PIRC_DEFENCE_LESSON } from './pircDefence';
-import { PIRC_VARIATION_LESSONS } from './pircVariations';
 import { VIENNA_TRAP_LESSONS } from './viennaTrapLessons';
 import { CARO_TRAP_LESSONS } from './caroKannTrapLessons';
 import { ITALIAN_GAME_TRAP_LESSONS } from './italianGameTrapLessons';
@@ -73,7 +71,6 @@ function watchOpening(course: WatchCourse): OpeningLessons {
 // An opening rewritten as a Watch course leaves this list: its course is
 // gated from `WATCH_COURSES` below.
 const HAND_WRITTEN: OpeningLessons[] = [
-  { main: PIRC_DEFENCE_LESSON, variations: PIRC_VARIATION_LESSONS },
 ];
 
 // An opening's named-trap lessons, by opening id. They stay hand-written beat

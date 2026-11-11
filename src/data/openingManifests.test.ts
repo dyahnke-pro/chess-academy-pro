@@ -41,8 +41,8 @@ const middlegamePlans = middlegamePlansRaw as MiddlegamePlan[];
 const modelGames = modelGamesRaw as ModelGameLike[];
 
 // Per-opening trap files. NOT all openings have one — Pirc currently has
-// no trap lessons file (its content is all in pircVariations.ts +
-// pircDefence.ts). When absent, weapons/warnings count = 0, which the
+// no trap lessons file (its content is all in its Watch course,
+// watch/pircDefence.ts). When absent, weapons/warnings count = 0, which the
 // manifest reflects.
 const TRAP_FILE_FOR: Record<string, string> = {
   'ruy-lopez': 'src/data/lessons/ruyTrapLessons.ts',

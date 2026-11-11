@@ -1,9 +1,20 @@
 import { describe, it, expect } from 'vitest';
 import { Chess, type Square } from 'chess.js';
-import { PIRC_DEFENCE_LESSON } from './pircDefence';
-import { PIRC_VARIATION_LESSONS } from './pircVariations';
+import type { LessonScript } from '../../types';
+import repertoire from '../repertoire.json';
+import { getLessonScript, getVariationLessonScript } from './index';
 
-const lessons = [PIRC_DEFENCE_LESSON, ...Object.values(PIRC_VARIATION_LESSONS)];
+// The Pirc is a Watch course now (watch/pircDefence.ts, one beat a move). This
+// test reads the lessons the app SERVES — the main line by opening id, a tab
+// by `<openingId>::<tab>` — so it checks what the Openings tab plays, whatever
+// file the beats are written in. The tabs are the opening's variations in
+// repertoire.json: the names the page looks lessons up by.
+const OPENING_ID = 'pirc-defence';
+const entry = (repertoire as unknown as Array<{ id: string; pgn: string; variations?: Array<{ name: string; pgn: string }> }>).find((o) => o.id === OPENING_ID);
+const tabs = entry?.variations ?? [];
+const main = getLessonScript(OPENING_ID);
+const served = tabs.map((t) => ({ tab: t.name, pgn: t.pgn, lesson: getVariationLessonScript(OPENING_ID, t.name) }));
+const lessons: LessonScript[] = [main, ...served.map((s) => s.lesson)].filter((l): l is LessonScript => l !== null);
 
 function fileRank(sq: string): [number, number] {
   return [sq.charCodeAt(0) - 97, Number(sq[1]) - 1];
@@ -56,6 +67,22 @@ describe('Pirc master-class integrity', () => {
           }
         });
       }
+    });
+  }
+});
+
+describe('Pirc master-class tabs — every tab is served', () => {
+  it('reads the real opening (the checks below are not vacuous)', () => {
+    expect(entry, `${OPENING_ID} is not in repertoire.json`).toBeTruthy();
+    expect(tabs.length).toBeGreaterThanOrEqual(8);
+    expect(main, 'the main line has no served lesson').not.toBeNull();
+    expect(main?.beats.at(-1)?.moves.join(' ')).toBe(entry?.pgn);
+  });
+  for (const { tab, pgn, lesson } of served) {
+    it(`${tab}: has its own lesson, on the tab's line`, () => {
+      expect(lesson, `no lesson is served for the tab "${tab}"`).not.toBeNull();
+      const line = lesson?.beats.at(-1)?.moves.join(' ') ?? '';
+      expect(`${line} `.startsWith(`${pgn} `), `"${tab}" plays ${line}, the tab's line is ${pgn}`).toBe(true);
     });
   }
 });

@@ -156,8 +156,6 @@ import { PRO_CARUANA_CARO_KANN_LESSON } from './proCaruanaCaroKann';
 import { PRO_CARUANA_CARO_KANN_VARIATION_LESSONS } from './proCaruanaCaroKannVariations';
 import { PRO_CARUANA_KID_LESSON } from './proCaruanaKID';
 import { PRO_CARUANA_KID_VARIATION_LESSONS } from './proCaruanaKIDVariations';
-import { PIRC_DEFENCE_LESSON } from './pircDefence';
-import { PIRC_VARIATION_LESSONS } from './pircVariations';
 import { GLEK_SYSTEM_LESSON } from './glekSystem';
 import { GLEK_SYSTEM_VARIATION_LESSONS } from './glekSystemVariations';
 import { SMITH_MORRA_GAMBIT_LESSON } from './smithMorraGambit';
@@ -213,7 +211,6 @@ import { PRO_CARLSEN_KINGS_GAMBIT_LESSON, PRO_CARLSEN_KINGS_GAMBIT_VARIATION_LES
  * instead of the move-by-move WalkthroughMode.
  */
 const LESSONS: Record<string, LessonScript> = {
-  [PIRC_DEFENCE_LESSON.openingId]: PIRC_DEFENCE_LESSON,
   [GLEK_SYSTEM_LESSON.openingId]: GLEK_SYSTEM_LESSON,
   [SMITH_MORRA_GAMBIT_LESSON.openingId]: SMITH_MORRA_GAMBIT_LESSON,
   [SCOTCH_GAMBIT_LESSON.openingId]: SCOTCH_GAMBIT_LESSON,
@@ -357,7 +354,6 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...ANTI_ENGLUND_VARIATION_LESSONS,
   ...ANTI_ALAPIN_BLACK_VARIATION_LESSONS,
   ...ANTI_GRAND_PRIX_BLACK_VARIATION_LESSONS,
-  ...PIRC_VARIATION_LESSONS,
   ...GLEK_SYSTEM_VARIATION_LESSONS,
   ...SMITH_MORRA_GAMBIT_VARIATION_LESSONS,
   ...SCOTCH_GAMBIT_VARIATION_LESSONS,
