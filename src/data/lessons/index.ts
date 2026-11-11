@@ -287,6 +287,8 @@ import { SCHLIEMANN_DEFENCE_VARIATION_LESSONS } from './schliemannDefenceVariati
 import { QUEENS_GAMBIT_LESSON } from './queensGambit';
 import { QUEENS_GAMBIT_VARIATION_LESSONS } from './queensGambitVariations';
 import { TROMPOWSKY_ATTACK_LESSON } from './trompowskyAttack';
+import { WATCH_COURSES } from './watch';
+import { watchLessons } from './watch/watchCourse';
 import { TROMPOWSKY_ATTACK_VARIATION_LESSONS } from './trompowskyAttackVariations';
 import { BIRDS_OPENING_LESSON } from './birdsOpening';
 import { BIRDS_OPENING_VARIATION_LESSONS } from './birdsOpeningVariations';
@@ -663,6 +665,16 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PRO_CARUANA_KID_VARIATION_LESSONS,
   ...PRO_CARUANA_NAJDORF_VARIATION_LESSONS,
 };
+
+// THE WATCH COURSES — one beat a move (WO-OPENINGS-REWRITE-01, David
+// 2026-11-11). A course's lines replace the hand-written lessons above for
+// the same opening and tabs; the old beats are deleted once every line of
+// the opening has its course (David: "Once they are replaced, ok to delete").
+for (const course of WATCH_COURSES) {
+  const w = watchLessons(course);
+  if (w.main) LESSONS[course.openingId] = w.main;
+  Object.assign(VARIATION_LESSONS, w.variations);
+}
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {
   if (!openingId) return null;

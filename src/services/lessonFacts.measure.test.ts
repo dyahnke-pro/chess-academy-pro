@@ -27,6 +27,14 @@ vi.mock('./dataFile', async (importOriginal) => {
 });
 
 const sansOf = (pgn: string): string[] => pgn.split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t)).map((t) => t.replace(/^\d+\.+/, '')).filter(Boolean);
+
+/** The line Watch plays: the existing lesson's own moves when they run past
+ *  the database PGN on the same path, else the PGN. */
+function watchLine(pgnMoves: string[], lessonMoves: readonly string[] | undefined): string[] {
+  if (!lessonMoves?.length || lessonMoves.length <= pgnMoves.length) return pgnMoves;
+  return pgnMoves.every((m, k) => lessonMoves[k] === m) ? [...lessonMoves] : pgnMoves;
+}
+
 const sanOfUci = (fen: string, uci: string): string => { try { const m = new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined }); return m.san; } catch { return uci; } };
 /** The engine line as SAN, from the mover's seat in pawns. */
 const lineSans = (fen: string, pv: readonly string[], n: number): string => {
@@ -40,6 +48,7 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
     const { ensureMastersDbLoaded, mastersMovesSync } = await import('./masterPlayLookup');
     const { loadFullCorpus } = await import('../test/loadFullCorpus');
     const { noteAtPosition } = await import('./danyaTeachingService');
+    const { getLessonScript, getVariationLessonScript } = await import('../data/lessons');
     await ensureMastersDbLoaded();
     loadFullCorpus();
     const repertoire = JSON.parse(readFileSync('src/data/repertoire.json', 'utf8')) as Array<{ id: string; name: string; color: 'white' | 'black'; pgn: string; variations?: Array<{ name: string; pgn: string }> }>;
@@ -49,7 +58,10 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
       if (!op) continue;
       const draftPath = `${OUT}/${id}.json`;
       const drafts = existsSync(draftPath) ? (JSON.parse(readFileSync(draftPath, 'utf8')) as { lines: Array<{ name: string; beats: Array<{ ply: number; say: string }> }> }).lines : [];
-      const lines = [{ name: op.name, moves: sansOf(op.pgn) }, ...(op.variations ?? []).map((v) => ({ name: v.name, moves: sansOf(v.pgn) }))];
+      const lines = [
+        { name: op.name, moves: watchLine(sansOf(op.pgn), getLessonScript(id)?.beats.at(-1)?.moves) },
+        ...(op.variations ?? []).map((v) => ({ name: v.name, moves: watchLine(sansOf(v.pgn), getVariationLessonScript(id, v.name)?.beats.at(-1)?.moves) })),
+      ];
       const md: string[] = [`# ${op.name} — fact sheet (student plays ${op.color})`];
       for (const line of lines) {
         md.push(`\n## ${line.name}\n`);
