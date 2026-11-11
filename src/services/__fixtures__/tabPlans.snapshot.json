@@ -3119,12 +3119,14 @@
  "pro-gothamchess-stafford-refute::4...dxc6 5.e5 Line::4...dxc6 5.e5 Line": [
   "mp-progothamchess-stafford-e5space"
  ],
+ "pro-gothamchess-stafford-refute::Modern Attack d4::Modern Attack d4": [],
  "pro-gothamchess-stafford-refute::::Main Refutation d3": [
   "mp-progothamchess-stafford-consolidate"
  ],
  "pro-gothamchess-stafford-refute::::4...dxc6 5.e5 Line": [
   "mp-progothamchess-stafford-e5space"
  ],
+ "pro-gothamchess-stafford-refute::::Modern Attack d4": [],
  "pro-gothamchess-caro-kann::main": [
   "mp-pro-gothamchess-carokann-c5",
   "mp-pro-gothamchess-carokann-solid",

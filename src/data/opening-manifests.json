@@ -261,6 +261,15 @@
     "warnings": 0,
     "keyIdeas": 4
   },
+  "pro-gothamchess-stafford-refute": {
+    "variations": 3,
+    "middlegamePlans": 2,
+    "endgamePlans": 0,
+    "modelGames": 3,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
   "philidor-defence": {
     "variations": 6,
     "middlegamePlans": 1,

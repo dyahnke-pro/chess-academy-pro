@@ -46259,7 +46259,6 @@
     "title": "d4 Slams the Door",
     "intro": "The refutation in one arc: decline the trick, slam the centre, tour the knight to e5.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Petrovs-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -46436,7 +46435,6 @@
     "title": "The Wedge Cashes",
     "intro": "Recapture into the file, swing the queen, and let Black's freeing try open their own king.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Petrovs-Defense-Stafford-Gambit",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]

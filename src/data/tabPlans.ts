@@ -871,6 +871,9 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
       main: ['mp-progothamchess-stafford-consolidate'],
       'main refutation d3': ['mp-progothamchess-stafford-consolidate'],
       '4...dxc6 5.e5 line': ['mp-progothamchess-stafford-e5space'],
+      // The line taught for this opening in the repertoire's videos, added as a
+      // tab 2026-11-11 (docs/levy-lines/decisions): no plan is anchored at its end.
+      'modern attack d4': [],
     },
   },
   'pro-gothamchess-caro-advance-white': {

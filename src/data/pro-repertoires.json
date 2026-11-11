@@ -338,17 +338,16 @@
       "style": "Tactical, Theoretical",
       "overview": "The Stafford Gambit was buried in chess obscurity for nearly a century — invented by American master Joseph Stafford in the 1950s, considered unsound by every serious analyst, and forgotten. Then it became a YouTube phenomenon in 2019, racking up millions of views with Stafford traps against unprepared club players. This repertoire made the natural follow-up: the refutation video that taught the WHITE side how to crush it. The result is that today, half the chess world plays the Stafford and the other half memorised the antidote. The correct line is the most common Stafford position you'll face: someone tried to trick you with 1…e5 2.Nf3 Nf6 (NOT 2…Nc6) hoping for 3.Nxe5 Nc6!? The fix is simple: take the pawn, then play d3 (not d4!) and just consolidate. White is up a clean pawn for nothing — Black has zero compensation against accurate play. This is an attacking, middlegame-decisive repertoire — built to win in the opening and the middlegame, not grind long endings — so it is deepest on the opening and middlegame plans, with endgame theory shown only where the games reach a decisive ending.",
       "keyIdeas": [
-        "d3, NEVER d4. The whole Stafford depends on Black's pieces leaping out after d4 opens central diagonals — d3 keeps the position closed and the extra pawn permanent.",
-        "Develop Be2 (not Bc4!) for fast castling. Bc4 looks active but it gets harassed by …h5+…Ng4 ideas; Be2 is bland but unprovokable.",
-        "Once you've castled, the Stafford fades to nothing. Black's whole 'attack' is one knight on g4 hitting f2 — if your king is on g1 and h3 is available, there's literally nothing for Black.",
+        "d3 first, d4 later. Straight after the trade, d4 leaves your e4 pawn unguarded and …Nxe4 wins it back with a level game; d3 guards it and keeps the extra pawn. Once c3 is in, d4 is the strong move: it hits the bishop on c5 and cuts its road to f2.",
+        "Be2, not Bg5. On e2 the bishop covers g4, so their knight can be taken when it lands there. Bg5, pinning the knight, walks into the Stafford's most famous trap: …Nxe4!, and if you take the queen on d8, …Bxf2 check and …Bg4 is mate.",
+        "Don't castle into …h5 and …Ng4. If your bishop takes the knight there, …hxg4 opens the h-file at your king and nearly all of your edge is gone. Drive the bishop off c5 with c3 and d4 first, kick the knight with h3 once f2 is safe, and castle after that.",
         "Don't get fancy. The Stafford refutation is one of the few openings where you WIN by playing the most boring move every time. Trade pieces, simplify, win the endgame."
       ],
       "traps": [
-        "DON'T fall for 5.d4? after Nxc6 dxc6. Black plays 5…Bd6! preparing …Qe7 hitting e4 and …Ng4 hitting f2 — and the lost tempo of …d4 means White's centre collapses. Always d3 here, never d4."
+        "Don't push d4 straight after Nxc6 dxc6. With the d-pawn past d3, nothing guards your e4 pawn: …Nxe4 takes it back and the game is level again. Play d3 first; d4 comes later, after c3, when it hits the bishop on c5."
       ],
       "warnings": [
-        "Don't play d4 in the first six moves under any circumstance. The Stafford's tactical points (…Ng4, …Qh4) all depend on the f2-pawn being weak after d4 opens the centre.",
-        "When Black tries the standard Stafford bait (…h5 + …Ng4 + …Qh4), DON'T capture material. Just play h3 kicking the knight, then castle. Black has no follow-up and your extra pawn wins."
+        "When …h5 and …Ng4 arrive with their bishop still on c5, don't kick the knight with h3: …Nxf2 forks your queen and rook, and the bishop guards f2, so your king can't take back. Don't take the knight with your bishop either: …hxg4 opens the h-file at your king. The answer is c3, then d4, hitting the bishop and cutting its road to f2. h3 works later, once that bishop has left c5."
       ],
       "variations": [
         {
@@ -356,7 +355,6 @@
           "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4",
           "explanation": "The textbook refutation. After 4.Nxc6 dxc6, you play 5.d3 (NOT 5.d4!) keeping the centre closed and the extra pawn permanent. The Be2 development is deliberately modest — bland but unprovokable. Black's standard …h5 + …Ng4 + …Qh4 attacking battery never gets going against a calmly defended kingside. From here you just castle, trade pieces, win the endgame.",
           "sources": [
-            "book:chess-fundamentals",
             "https://www.chess.com/openings/Petrovs-Defense-Stafford-Gambit",
             "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
           ]
@@ -366,9 +364,17 @@
           "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d4 Qh4 Qf3 Be6 c3",
           "explanation": "The aggressive alternative — push e5 to kick the f6-knight forward. After …Ne4, play d4: it grabs the centre and takes the c5-square away from Black's bishop. The natural-looking d3? is a trap for White — …Bc5! hits f2 and Black's threats come first. After d4 Qh4, Qf3 guards f2 and hits the e4-knight; with …Be6 c3 you keep the extra pawn, the cramping e5-pawn, and an engine edge of about two pawns.",
           "sources": [
-            "book:chess-fundamentals",
             "https://www.chess.com/openings/Petrovs-Defense-Stafford-Gambit",
             "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+          ]
+        },
+        {
+          "name": "Modern Attack d4",
+          "pgn": "e4 e5 Nf3 Nf6 d4 exd4 e5 Ne4 Qxd4 d5 exd6 Nxd6 Nc3 Nc6 Qa4 Bd7 Be3 Nf5 O-O-O Nxe3 fxe3",
+          "explanation": "Against the Petrov, open the center with d4 and the Stafford never happens. If they take on d4, e5 kicks the knight, the queen wins the pawn back with a threat, and Qa4, Be3 and long castling put your pieces out first, with the rook pinning their bishop on d7.",
+          "sources": [
+            "https://en.wikipedia.org/wiki/Petrov%27s_Defence",
+            "https://www.chess.com/openings/Petrovs-Defense-Stafford-Gambit"
           ]
         }
       ],
