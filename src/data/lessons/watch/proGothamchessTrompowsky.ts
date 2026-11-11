@@ -196,7 +196,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["…Bg7 — they don't defend e4; they hit back at d4. Now the bishop on g7 and the queen on d8 both attack it, and only your queen on d1 guards it.", '…Bg7 — d4 is hit twice.'],
     ["Nge2 — why not take on e4 at once? Because after Nxe4, their queen takes on d4, the queens come off, and their bishop lands on d4. So first the knight comes to e2 and gives d4 a second guard. It's the engine's first choice.", 'Nge2 — d4 gets a second guard.'],
     ['…Nc6 — a third hit on d4: the knight joins the bishop on g7 and the queen on d8, against your two guards.', '…Nc6 — three hits on d4.'],
-    ["d5 — three against two, so the pawn steps forward, and it's the engine's first choice: now it hits the knight on c6.", 'd5 — steps out, hits the knight on c6.'],
+    ["d5 — three against two, so the pawn steps forward: now it hits the knight on c6.", 'd5 — steps out, hits the knight on c6.'],
     ["…Ne5 — the knight jumps to the center, and e4 is still hanging. It's about level.", '…Ne5 — e4 still hangs.'],
     ["Nxe4 — and there it is: the pawn that landed on e4 finally falls, and you're a pawn up. It's about level. Your plan for the middlegame: castle and hold the extra pawn. When …Bf5 hits your knight on e4, the other knight comes to g3 to guard it, and the pawn on d5 stays.", 'Nxe4 — the e4 pawn falls.'],
   ],

@@ -139,7 +139,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["O-O: instead of kicking your knight, they castle and leave e4 for you, almost three masters in ten and the engine's top choice. It's an invitation: if you take, the e-file opens toward your king, and their rook gets there first.", 'O-O — e4 is offered.'],
     ["Take it: …Nxe4, three masters in four. You're two pawns up for the moment. But look where your king is: still on e8, on the file their rook is about to take.", '…Nxe4 — two pawns up, for now.'],
     ["Re1, and here's the bill: the rook pins your knight on e4 to your king, and nothing guards the knight. How do you save a pinned piece? Give it a guard.", 'Re1 — pins the knight on e4.'],
-    ["…d5, every master's move: the pawn guards the knight and hits the bishop on c4 in one go. You are a little better, but only for a moment.", '…d5 — guards e4, hits c4.'],
+    ["…d5, every master's move: the pawn guards the knight and hits the bishop on c4 in one go. It's about level, and the knight is still pinned.", '…d5 — guards e4, hits c4.'],
     ["Bxd5: they give the bishop back to take away the knight's guard. Now the knight on e4 is pinned and hit twice, by the rook and the bishop, with nothing defending it.", "Bxd5 — removes the knight's guard."],
     ["…Qxd5 takes the bishop, and the queen guards your knight on e4. You're a piece and a pawn up on the count, and still it's only about level, because of their next move.", '…Qxd5 — guards e4, a piece up.'],
     ["Nc3, the point of the whole line. It hits your queen, the only guard of your knight on e4. Can you take it? …Nxc3 is illegal, because your knight is pinned, and …dxc3 drops your queen to Qxd5. So the queen has to move.", 'Nc3 — hits the queen guarding e4.'],

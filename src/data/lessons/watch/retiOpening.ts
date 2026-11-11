@@ -124,7 +124,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["Bd3: the bishop backs up e4 and keeps an eye on b5. Right now your own pawn on e4 blocks its view of h7, but if that pawn moves forward, the bishop looks straight at their king's corner.", 'Bd3 — backs up e4, hits b5.'],
     ["…Nc6 develops toward e5. But the engine prefers …e5 at once, putting a pawn on that square before yours gets there.", '…Nc6 — natural, but …e5 was better.'],
     ["And yours gets there first: e5 hits the knight on f6, and their own …e5 can never come now. With e4 clear, look at your bishop on d3: it sees all the way to h7.", 'e5 — kicks f6, the bishop sees h7.'],
-    ["…Nb4: they don't save the knight on f6. They counter instead: the knight hits your bishop on d3, which their queen on d8 also hits down the open file, and only your queen guards it. What about …Nd5? Then Bxh7 comes with check. It's about level. Your plan for the middlegame: Rd1, so that if the knight takes on d3 your rook takes back on the open d-file, then Nc3 to finish developing.", '…Nb4 — a counterattack on d3.'],
+    ["…Nb4: they don't save the knight on f6. They counter instead: the knight hits your bishop on d3, which their queen on d8 also hits down the open file, and only your queen guards it. What about …Nd5? Then Bxh7 comes with check. You are a little better. Your plan for the middlegame: Rd1, so that if the knight takes on d3 your rook takes back on the open d-file, then Nc3 to finish developing.", '…Nb4 — a counterattack on d3.'],
   ],
   'Reti: LSB Fianchetto': [
     ["…Nf6, the most common answer, close to four masters in ten: the knight develops and covers e4.", '…Nf6 — develops, covers e4.'],
@@ -144,7 +144,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["…Nd7, nine masters in ten, and from d7 the knight hits your e5 pawn at once, with the knight on c6 hitting it too. Two attackers, two guards: the knight on f3 and the rook on e1.", '…Nd7 — e5 is hit twice.'],
     ["Nf1, nine masters in ten: the knight on d2 reroutes toward the kingside, heading for h2 or e3, and by leaving d2 it opens the way for your bishop on c1.", 'Nf1 — rerouting, frees the c1-bishop.'],
     ["…a5: the a-pawn joins the storm, with …a4 and …b4 to come. The engine slightly prefers …Qb6.", '…a5 — the a-pawn joins in.'],
-    ["Bf4 adds a third guard to e5, so it looks natural, but it's a slip. Why? …g5 chases the bishop, then …g4 chases your knight on f3, and e5 loses its guards. The engine prefers h4, which stops …g5 before it starts, and after Bf4 they are a little better.", 'Bf4 — guards e5, but h4 was better.'],
+    ["Bf4 adds a third guard to e5, so it looks natural, but it's a slip. Why? …g5 chases the bishop, then …g4 chases your knight on f3, and e5 loses its guards. The engine prefers a4 or h4, and h4 stops …g5 before it starts. After Bf4 they are a little better.", 'Bf4 — guards e5, but h4 was better.'],
     ["…Ba6: remember the bishop that …e6 shut in? It comes out the other way, guarding b5 from a6. But …g5 was the shot, and the engine prefers it; after …Ba6 it's about level. Your plan for the middlegame: h4 so …g5 never comes, a3 to meet …a4, and the knight to h2 on its way toward their king.", '…Ba6 — the c8-bishop is out.'],
   ],
   'Reti: Nimzo-English Hybrid': [

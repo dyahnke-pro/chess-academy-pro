@@ -59,7 +59,7 @@ const TAB_LINES: Record<string, string[]> = {
 const TAB_BEATS: Record<string, TabBeats> = {
   'Vienna Gambit Main Line': [
     ["…Qc7, the engine's choice: the queen guards b7 along the seventh rank and, at the same time, hits your e5 pawn. Count the fight for e5: their queen and the knight on c6 against your queen on g3 and the knight on f3. Two against two, so it holds, and it's about level.", '…Qc7 — guards b7, hits e5.'],
-    ["Bb5, the engine's first choice: the same bishop move, but with the queen gone from d7, it now pins the knight on c6 to their king itself. A knight pinned to the king can't move at all, so only their queen is left hitting e5.", 'Bb5 — pins c6 to the king.'],
+    ["Bb5: the same bishop move, but with the queen gone from d7, it now pins the knight on c6 to their king itself. A knight pinned to the king can't move at all, so only their queen is left hitting e5.", 'Bb5 — pins c6 to the king.'],
     ["…O-O-O: they castle long, and that also breaks the pin, because the king steps off e8 and the knight on c6 is free again. The kings are heading for opposite wings, with your rook already on the b-file, right next to their king's file.", '…O-O-O — breaks the pin, castles long.'],
     ["You castle short. With their queen on c7 hitting e5, they are a little better here, so the job is to get your last pieces working. Your plan for the middlegame: Ba3, where your bishop hits the c5 pawn along the diagonal the bxc3 capture opened, then d4 to open the center, with your rook on b1 already pointing at their king's wing.", 'O-O — king safe; Ba3 and d4 next.'],
   ],

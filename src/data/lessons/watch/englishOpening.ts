@@ -43,7 +43,7 @@ const MAIN_BEATS: Array<[string, string]> = [
   ["…Qe5, and now you have two problems. The queen joins their bishop on c8 against your knight on f5: two attackers, one guard. And from e5 the queen also hits c3, and nothing guards that pawn. How do you deal with both at once?", '…Qe5 — hits f5 twice, and c3.'],
   ["With a threat of your own: d4 hits the queen. And look at the diagonal from e5 to c3: your d4 pawn now stands right in the middle of it, so c3 is out of the queen's reach. The engine prefers Bh3, a second guard on the knight.", 'd4 — hits the queen, shields c3.'],
   ["…Qe6: the queen still hits your knight on f5, and now your c4 pawn too, which lost its guard when the d-pawn left d3. But notice that on e6 the queen stands in front of their own bishop on c8, so f5 is hit only once.", '…Qe6 — hits c4 and f5.'],
-  ["One move, two jobs: Qd3 guards the c4 pawn and the knight on f5 at the same time. It's the engine's top choice.", 'Qd3 — guards c4 and f5.'],
+  ["One move, two jobs: Qd3 guards the c4 pawn and the knight on f5 at the same time. But the engine prefers e4, and after Qd3 they are a little better.", 'Qd3 — guards c4 and f5.'],
   ["…Ne4, and one knight jump undoes your queen's work. On e4 it stands between your queen on d3 and the knight on f5, so that knight is down to one guard, the rook on f1. It blocks your bishop's diagonal too, so the pin on b7 is gone.", '…Ne4 — cuts the queen off from f5.'],
   ["h4: space on the kingside, with a point. h5 next would kick the knight off g6.", 'h4 — h5 next kicks the g6-knight.'],
   ["…h5 stops it cold: your pawn can't get to h5 now. The cost is a pawn moved in front of their own king, and pawns never move back.", '…h5 — stops h5, loosens their king.'],

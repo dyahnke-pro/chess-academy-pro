@@ -244,7 +244,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ['…Nc6 — the knight develops and eyes d4, getting …e5 ready.', '…Nc6 — eyes d4 and e5.'],
     ["d4 — the engine's first choice: take the center before their …e5 does. The pawn covers e5 and c5 and opens your bishop on c1.", 'd4 — the center first.'],
     ["…e5 — they hit back at d4 anyway. The engine prefers …d5, and after …e5 it's about level. Take, or push past?", '…e5 — hits d4.'],
-    ["d5 — push past, the engine's first choice. The pawn hits the knight on c6, and their e5 pawn is stuck, blocked by your knight on e4.", 'd5 — hits the c6 knight.'],
+    ["d5 — push past. The pawn hits the knight on c6, and their e5 pawn is stuck, blocked by your knight on e4. But the engine prefers Ne2, developing first, and after d5 they are a little better.", 'd5 — hits the c6 knight.'],
     ['…Bb4+ — instead of moving the knight, they check. The knight on c6 can wait; first your king.', '…Bb4+ — a check first.'],
     ['Bd2 — block with the bishop, and it hits theirs on b4 right back. If they trade, your queen takes back and you can castle long.', 'Bd2 — blocks and offers a trade.'],
     ['…Bxd2+ — they trade bishops, with check.', '…Bxd2+ — the bishops come off.'],

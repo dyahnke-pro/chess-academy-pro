@@ -141,7 +141,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["…Nc5 — half of masters step back to c5; the other half pin with …Bb4. On c5 the knight is safe and still in play, watching d3 and b3. But be honest about this line: they are clearly better.", '…Nc5 — the knight steps back.'],
     ["Ngf3 — three masters in four develop the other knight and guard e5. The engine prefers b4, chasing your knight off c5 straight away; after Ngf3 they are a little better.", 'Ngf3 — guards e5; b4 was stronger.'],
     ["…Nc6 — almost every master plays it. The knight hits e5, and it also covers b4, so their pawn can't come there to chase your knight on c5.", '…Nc6 — hits e5, covers b4.'],
-    ["g3 — their bishop is heading for g2, and their king for g1. While they spend time on that, how do you get at e5?", 'g3 — a fianchetto is coming.'],
+    ["g3 — their bishop is heading for g2, and their king for g1. The engine prefers a3 for them, backing up b4 to chase your knight on c5. While they spend time on the fianchetto, how do you get at e5?", 'g3 — a fianchetto is coming.'],
     ["…Qe7 — the queen joins the knight on c6 against e5. But this is the slip in the line. The better answer was …d6, breaking the center open while their bishop is still at home, and the engine likes it much more. After …Qe7 they are clearly better.", '…Qe7 — hits e5; …d6 was much stronger.'],
     ["Bg2 — the bishop settles on g2, and their king is one move from castling.", 'Bg2 — castling is next.'],
     ["…g6 — you'll fianchetto as well. The pawn makes room for your bishop on g7, where it will hit e5 from a third direction. The engine still slightly prefers …d6.", '…g6 — making room for …Bg7.'],
