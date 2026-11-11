@@ -19,7 +19,7 @@ import { pinsOf, looseOf, materialFor, hitsFrom, evalWords, PIECE_NAME } from '.
 const ON = process.env.LESSON_FACTS === '1';
 const IDS = (process.env.LESSON_IDS ?? 'trompowsky-attack').split(',').map((s) => s.trim()).filter(Boolean);
 const OUT = process.env.LESSON_OUT ?? 'audit-reports/lesson-writer';
-const DEPTH = Number(process.env.LESSON_DEPTH ?? 14);
+const DEPTH = Number(process.env.LESSON_DEPTH ?? 16);
 const engine = nativeEngine(`${OUT}/engine-cache.json`, DEPTH);
 
 vi.mock('./dataFile', async (importOriginal) => {

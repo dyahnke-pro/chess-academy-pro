@@ -14,11 +14,12 @@ import { Engine } from '../course-replies/engine.mjs';
 import { walkToMiddlegame, indexKnownMistakes } from '../course-replies/line-walk.mjs';
 
 const MIN_PLIES = 20;
-// The walker reads DEEPER than the fact sheet (lessonFacts reads at 14): at its
+// The walker reads at the fact sheet's depth (lessonFacts grades at 16): at its
 // default depth 12 it carried the GothamChess Fantasy main line on with Nc3,
 // +2.1 at depth 12 and level at 14, where Nxf7 wins material — a 2-pawn miss
 // taught as the line's last move. A move the walker picks must hold at the
-// depth the sheet will grade it.
+// depth the sheet grades it, and the sheet must not grade the walk shallower
+// (a depth-14 sheet called sound depth-16 moves costly).
 const WALK_DEPTH = 16;
 const [dir, ...ids] = process.argv.slice(2);
 const J = (p) => JSON.parse(readFileSync(p, 'utf8'));
