@@ -14,6 +14,12 @@ import { Engine } from '../course-replies/engine.mjs';
 import { walkToMiddlegame, indexKnownMistakes } from '../course-replies/line-walk.mjs';
 
 const MIN_PLIES = 20;
+// The walker reads DEEPER than the fact sheet (lessonFacts reads at 14): at its
+// default depth 12 it carried the GothamChess Fantasy main line on with Nc3,
+// +2.1 at depth 12 and level at 14, where Nxf7 wins material — a 2-pawn miss
+// taught as the line's last move. A move the walker picks must hold at the
+// depth the sheet will grade it.
+const WALK_DEPTH = 16;
 const [dir, ...ids] = process.argv.slice(2);
 const J = (p) => JSON.parse(readFileSync(p, 'utf8'));
 const masters = J('public/data/openings-masters-db.json').positions;
@@ -31,7 +37,7 @@ for (const id of ids) {
   for (const l of lines) {
     let moves = l.moves;
     if (moves.length < MIN_PLIES) {
-      moves = await walkToMiddlegame(l.moves, { studentColor: color, engine, masters, knownMistakes, openingId: id, minLength: MIN_PLIES, maxPlies: MIN_PLIES + 10 });
+      moves = await walkToMiddlegame(l.moves, { studentColor: color, engine, masters, knownMistakes, openingId: id, minLength: MIN_PLIES, maxPlies: MIN_PLIES + 10, depth: WALK_DEPTH });
       if (moves.length > l.moves.length) extended += 1;
     }
     out.push({ name: l.tab, moves });
