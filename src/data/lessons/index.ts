@@ -234,8 +234,6 @@ import { STAFFORD_GAMBIT_LESSON } from './staffordGambit';
 import { STAFFORD_GAMBIT_VARIATION_LESSONS } from './staffordGambitVariations';
 import { ENGLUND_GAMBIT_LESSON } from './englundGambit';
 import { ENGLUND_GAMBIT_VARIATION_LESSONS } from './englundGambitVariations';
-import { ALBIN_COUNTERGAMBIT_LESSON } from './albinCountergambit';
-import { ALBIN_COUNTERGAMBIT_VARIATION_LESSONS } from './albinCountergambitVariations';
 import { SCHLIEMANN_DEFENCE_LESSON } from './schliemannDefence';
 import { SCHLIEMANN_DEFENCE_VARIATION_LESSONS } from './schliemannDefenceVariations';
 import { QUEENS_GAMBIT_LESSON } from './queensGambit';
@@ -308,7 +306,6 @@ const LESSONS: Record<string, LessonScript> = {
   [MARSHALL_ATTACK_LESSON.openingId]: MARSHALL_ATTACK_LESSON,
   [STAFFORD_GAMBIT_LESSON.openingId]: STAFFORD_GAMBIT_LESSON,
   [ENGLUND_GAMBIT_LESSON.openingId]: ENGLUND_GAMBIT_LESSON,
-  [ALBIN_COUNTERGAMBIT_LESSON.openingId]: ALBIN_COUNTERGAMBIT_LESSON,
   [SCHLIEMANN_DEFENCE_LESSON.openingId]: SCHLIEMANN_DEFENCE_LESSON,
   [QUEENS_GAMBIT_LESSON.openingId]: QUEENS_GAMBIT_LESSON,
   // Pro repertoires — players' actual lines (PGN games = source of truth).
@@ -485,7 +482,6 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...MARSHALL_ATTACK_VARIATION_LESSONS,
   ...STAFFORD_GAMBIT_VARIATION_LESSONS,
   ...ENGLUND_GAMBIT_VARIATION_LESSONS,
-  ...ALBIN_COUNTERGAMBIT_VARIATION_LESSONS,
   ...SCHLIEMANN_DEFENCE_VARIATION_LESSONS,
   ...QUEENS_GAMBIT_VARIATION_LESSONS,
   // Pro repertoires
