@@ -896,6 +896,13 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
       ],
       'vs nc3 (nxd5)': ['mp-progothamchess-scand-nf6nc3-bg4pin'],
       'vs bb5+': ['mp-progothamchess-scand-bb5-ne5'],
+      // The five tabs added from the repertoire's taught lines (2026-11-11,
+      // docs/levy-lines/decisions): no middlegame plan is anchored at their ends yet.
+      'qa5 with …bg4': [],
+      'early …bb4': [],
+      'qd6 with …a6': [],
+      'vs the advance': [],
+      'vs tennison gambit': [],
     },
   },
   'pro-gothamchess-qgd': {

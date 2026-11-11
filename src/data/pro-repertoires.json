@@ -609,6 +609,56 @@
             "https://www.chess.com/openings/Scandinavian-Defense",
             "https://api.chess.com/pub/player/gothamchess/games/archives"
           ]
+        },
+        {
+          "name": "Qa5 with …Bg4",
+          "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4 Be2 e6 O-O Be7 Ne5 Bxe2 Qxe2 O-O Bg5 h6",
+          "explanation": "The light bishop still comes out before …e6, but to g4, where it pins the knight on f3 to the queen. Then …e6, …Be7 and a short castle, and when their knight jumps to e5 the light bishops come off on e2.",
+          "sources": [
+            "book:scandinavian-defence",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+          ]
+        },
+        {
+          "name": "Early …Bb4",
+          "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 Bb4 a3 Bxc3 Bxc3 Qb6 O-O Nc6 Re1 O-O Nh4 Bg6",
+          "explanation": "Skip …c6 and go straight at the knight on c3 with the bishop. After a3 you take on c3, and the queen steps to b6 to hit b2 and d4; the king waits in the center and castles short once a rook pins the e6 pawn.",
+          "sources": [
+            "book:scandinavian-defence",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+          ]
+        },
+        {
+          "name": "Qd6 with …a6",
+          "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 Bg4 Bg2 Nc6 O-O O-O-O h3 Bxf3 Qxf3 Qxd4",
+          "explanation": "The queen retreats to d6 instead of a5, and …a6 takes b5 away so no knight can hit it there. Then …Bg4 pins a guard of d4, …Nc6 and a long castle pile on it, and the trade on f3 lets the queen take the pawn.",
+          "sources": [
+            "book:scandinavian-defence",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+          ]
+        },
+        {
+          "name": "vs the Advance",
+          "pgn": "e4 d5 e5 Bf5 d4 e6 Nf3 c5 c3 Nc6 Be2 Bg6 O-O a6 Be3 Qb6 Qb3 Qxb3 axb3 cxd4",
+          "explanation": "When they push e5 instead of taking on d5, the bishop goes to f5 before …e6, and then …c5, …Nc6 and …Qb6 hit their pawn chain at its base on d4: a French Advance with your light bishop already free.",
+          "sources": [
+            "concept:pos-center",
+            "https://www.chess.com/openings/Scandinavian-Defense",
+            "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+          ]
+        },
+        {
+          "name": "vs Tennison Gambit",
+          "pgn": "e4 d5 Nf3 dxe4 Ng5 e5 d4 exd3 Bxd3 Be7 Nf3 Nc6 Qe2 Bg4 Be3 f5 Bb5 e4 Nbd2 exf3",
+          "explanation": "Against Nf3 and Ng5, take the e4 pawn and then strike with …e5, which opens your queen's line to g5. Once …Bg4 pins the knight on f3 to their queen, …f5 and …e4 win it.",
+          "sources": [
+            "concept:pos-development",
+            "https://www.chess.com/openings/Scandinavian-Defense",
+            "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+          ]
         }
       ],
       "trapLines": [],

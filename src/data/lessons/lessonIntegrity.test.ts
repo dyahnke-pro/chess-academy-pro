@@ -137,6 +137,11 @@ const ENGINE_EXTENDED_LESSONS = new Set<string>([
   // GothamChess Caro-Kann: the Two Knights with 3…Nf6 (about one master game in
   // twelve at that position) — the DB names the Two Knights to ply 5 only.
   'pro-gothamchess-caro-kann::Tartakower / Two Knights 3...Nf6',
+  // GothamChess Scandinavian: White's sidelines the DB names only to ply 2–5 (DB-empty rule).
+  'pro-gothamchess-scandinavian::vs Nc3 (Nxd5)',
+  'pro-gothamchess-scandinavian::vs Bb5+',
+  'pro-gothamchess-scandinavian::vs the Advance',
+  'pro-gothamchess-scandinavian::vs Tennison Gambit',
 ]);
 
 describe('masterclass G3 — every lesson anchors a real DB opening line', () => {

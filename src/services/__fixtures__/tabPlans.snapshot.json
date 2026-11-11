@@ -3221,6 +3221,11 @@
  "pro-gothamchess-scandinavian::vs Bb5+::vs Bb5+": [
   "mp-progothamchess-scand-bb5-ne5"
  ],
+ "pro-gothamchess-scandinavian::Qa5 with …Bg4::Qa5 with …Bg4": [],
+ "pro-gothamchess-scandinavian::Early …Bb4::Early …Bb4": [],
+ "pro-gothamchess-scandinavian::Qd6 with …a6::Qd6 with …a6": [],
+ "pro-gothamchess-scandinavian::vs the Advance::vs the Advance": [],
+ "pro-gothamchess-scandinavian::vs Tennison Gambit::vs Tennison Gambit": [],
  "pro-gothamchess-scandinavian::::Main Line Qa5": [
   "mp-progothamchess-scand-qa5-bxc3"
  ],
@@ -3238,6 +3243,11 @@
  "pro-gothamchess-scandinavian::::vs Bb5+": [
   "mp-progothamchess-scand-bb5-ne5"
  ],
+ "pro-gothamchess-scandinavian::::Qa5 with …Bg4": [],
+ "pro-gothamchess-scandinavian::::Early …Bb4": [],
+ "pro-gothamchess-scandinavian::::Qd6 with …a6": [],
+ "pro-gothamchess-scandinavian::::vs the Advance": [],
+ "pro-gothamchess-scandinavian::::vs Tennison Gambit": [],
  "pro-gothamchess-qgd::main": [
   "mp-progothamchess-qgd-carlsbad-e5",
   "mp-progothamchess-qgd-tartakower-b6"

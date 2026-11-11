@@ -396,6 +396,15 @@
     "warnings": 0,
     "keyIdeas": 4
   },
+  "pro-gothamchess-scandinavian": {
+    "variations": 10,
+    "middlegamePlans": 5,
+    "endgamePlans": 0,
+    "modelGames": 4,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
   "trompowsky-attack": {
     "variations": 6,
     "middlegamePlans": 3,

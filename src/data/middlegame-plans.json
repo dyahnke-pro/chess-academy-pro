@@ -16418,13 +16418,7 @@
      [],
      [],
      [],
-     [
-      {
-       "from": "d5",
-       "to": "c3",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ]
+     []
     ],
     "highlights": [
      [
@@ -16491,7 +16485,6 @@
     "title": "The Trade and the Level Fight",
     "intro": "Bishops off, queen home, king castled by move seven — the Portuguese plays chess while White catches up.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Scandinavian-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -47809,13 +47802,7 @@
      [],
      [],
      [],
-     [
-      {
-       "from": "h5",
-       "to": "g6",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
+     [],
      [],
      [],
      [],
@@ -47874,7 +47861,6 @@
     "title": "Scandinavian: Keep the Bishop, Hold the Balance",
     "intro": "From their win over Leebit02. Black shepherds the bishop and reaches a comfortable game.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Scandinavian-Defense",
      "https://en.wikipedia.org/wiki/Scandinavian_Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -48003,10 +47989,6 @@
       {
        "square": "e5",
        "color": "rgba(250, 204, 21, 0.5)"
-      },
-      {
-       "square": "g5",
-       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
@@ -48025,7 +48007,6 @@
     "title": "Opposite Kings, the …g5 Storm",
     "intro": "White castles short into a Portuguese that castled long on move seven — the g-pawn does the talking.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Scandinavian-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -48100,13 +48081,7 @@
     ],
     "arrows": [
      [],
-     [
-      {
-       "from": "g4",
-       "to": "f3",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
+     [],
      [],
      [],
      [],
@@ -48131,10 +48106,6 @@
       {
        "square": "g4",
        "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f3",
-       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
@@ -48185,7 +48156,6 @@
     "title": "The …Bg4 Hit and the Harass",
     "intro": "Every Black move makes a threat — the queen, the bishop, the knight, all chased in turn.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Scandinavian-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -48272,13 +48242,7 @@
      [],
      [],
      [],
-     [
-      {
-       "from": "a8",
-       "to": "f3",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ]
+     []
     ],
     "highlights": [
      [
@@ -48345,7 +48309,6 @@
     "title": "The Block and the Battery",
     "intro": "Block the check, grab the space, and let the a-file trade stack queen and bishop on the long diagonal.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Scandinavian-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
