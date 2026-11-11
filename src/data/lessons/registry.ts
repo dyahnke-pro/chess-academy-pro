@@ -42,8 +42,6 @@ import { BENKO_GAMBIT_LESSON } from './benkoGambit';
 import { BENKO_GAMBIT_VARIATION_LESSONS } from './benkoGambitVariations';
 import { NIMZO_INDIAN_LESSON } from './nimzoIndian';
 import { NIMZO_INDIAN_VARIATION_LESSONS } from './nimzoIndianVariations';
-import { KINGS_GAMBIT_LESSON } from './kingsGambit';
-import { KINGS_GAMBIT_VARIATION_LESSONS } from './kingsGambitVariations';
 import { LONDON_SYSTEM_LESSON } from './londonSystem';
 import { LONDON_SYSTEM_VARIATION_LESSONS } from './londonSystemVariations';
 import { CATALAN_OPENING_LESSON } from './catalanOpening';
@@ -120,7 +118,6 @@ const HAND_WRITTEN: OpeningLessons[] = [
   { main: SCANDINAVIAN_DEFENCE_LESSON, variations: SCANDINAVIAN_DEFENCE_VARIATION_LESSONS },
   { main: ALEKHINE_DEFENCE_LESSON, variations: ALEKHINE_DEFENCE_VARIATION_LESSONS },
   { main: BENKO_GAMBIT_LESSON, variations: BENKO_GAMBIT_VARIATION_LESSONS },
-  { main: KINGS_GAMBIT_LESSON, variations: KINGS_GAMBIT_VARIATION_LESSONS },
   { main: LONDON_SYSTEM_LESSON, variations: LONDON_SYSTEM_VARIATION_LESSONS },
   { main: CATALAN_OPENING_LESSON, variations: CATALAN_OPENING_VARIATION_LESSONS },
   { main: SICILIAN_ALAPIN_LESSON, variations: SICILIAN_ALAPIN_VARIATION_LESSONS },
