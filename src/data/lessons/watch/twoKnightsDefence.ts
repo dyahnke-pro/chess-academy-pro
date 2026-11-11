@@ -204,6 +204,10 @@ const TAB_BEATS: Record<string, TabBeats> = {
   ],
 };
 
+/** Lines that resolve before a middlegame: the Traxler's checks end at move nine
+ *  (18 plies), as the hand-written lesson it replaces already declared. */
+const ROADMAP_TABS = new Set<string>(['Two Knights: Traxler Counterattack']);
+
 /** File a tab's beats on the first moves it doesn't share with what is already written. */
 for (const [tab, moves] of Object.entries(TAB_LINES)) {
   const own = TAB_BEATS[tab] ?? [];
@@ -220,7 +224,7 @@ export const TWO_KNIGHTS_DEFENCE_WATCH: WatchCourse = {
   sources: ['book:two-knights-defence', 'concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Two_Knights_Defense'],
   lines: [
     { tab: null, moves: MAIN },
-    ...Object.entries(TAB_LINES).map(([tab, moves]) => ({ tab, moves })),
+    ...Object.entries(TAB_LINES).map(([tab, moves]) => ({ tab, moves, ...(ROADMAP_TABS.has(tab) ? { kind: 'roadmap' as const } : {}) })),
   ],
   beats,
 };
