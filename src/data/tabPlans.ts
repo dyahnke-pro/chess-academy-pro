@@ -961,6 +961,15 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
         'mp-progothamchess-qgd-tartakower-b6',
       ],
       'exchange variation': ['mp-progothamchess-qgd-carlsbad-e5'],
+      // The seven tabs added from the repertoire's taught lines (2026-11-11,
+      // docs/levy-lines/decisions): no middlegame plan is anchored at their ends yet.
+      'stonewall setup': [],
+      'tartakower defense': [],
+      'tarrasch defense': [],
+      'ragozin defense': [],
+      'closed catalan': [],
+      'open catalan': [],
+      'catalan classical': [],
     },
   },
   'pro-gothamchess-french-defense': {

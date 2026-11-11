@@ -3258,6 +3258,13 @@
  "pro-gothamchess-qgd::Exchange Variation::Exchange Variation": [
   "mp-progothamchess-qgd-carlsbad-e5"
  ],
+ "pro-gothamchess-qgd::Stonewall Setup::Stonewall Setup": [],
+ "pro-gothamchess-qgd::Tartakower Defense::Tartakower Defense": [],
+ "pro-gothamchess-qgd::Tarrasch Defense::Tarrasch Defense": [],
+ "pro-gothamchess-qgd::Ragozin Defense::Ragozin Defense": [],
+ "pro-gothamchess-qgd::Closed Catalan::Closed Catalan": [],
+ "pro-gothamchess-qgd::Open Catalan::Open Catalan": [],
+ "pro-gothamchess-qgd::Catalan Classical::Catalan Classical": [],
  "pro-gothamchess-qgd::::Classical 5.Bf4 Line": [
   "mp-progothamchess-qgd-classical",
   "mp-progothamchess-qgd-tartakower-b6"
@@ -3265,6 +3272,13 @@
  "pro-gothamchess-qgd::::Exchange Variation": [
   "mp-progothamchess-qgd-carlsbad-e5"
  ],
+ "pro-gothamchess-qgd::::Stonewall Setup": [],
+ "pro-gothamchess-qgd::::Tartakower Defense": [],
+ "pro-gothamchess-qgd::::Tarrasch Defense": [],
+ "pro-gothamchess-qgd::::Ragozin Defense": [],
+ "pro-gothamchess-qgd::::Closed Catalan": [],
+ "pro-gothamchess-qgd::::Open Catalan": [],
+ "pro-gothamchess-qgd::::Catalan Classical": [],
  "pro-gothamchess-ponziani::main": [
   "mp-progothamchess-ponziani-main-qb3",
   "mp-progothamchess-ponziani-d4-thrust"

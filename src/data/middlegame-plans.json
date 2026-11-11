@@ -16329,7 +16329,7 @@
     "title": "QGD Classical: Double Rooks on the e-file",
     "intro": "From their win over GMBenjaminFinegold. Black trades the dark bishops and seizes the open file.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:qgd",
      "https://www.chess.com/openings/Queens-Gambit-Declined",
      "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -48407,7 +48407,7 @@
     "title": "Absorb the Pull",
     "intro": "One knight leap resolves White's initiative into doubled pawns — then the problem bishop finds e6.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:qgd",
      "https://www.chess.com/openings/Queens-Gambit-Declined",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]

@@ -5165,7 +5165,7 @@
    "explanation": "In the QGD, the whole point is to keep the centre solid: …Be7! breaks the pin and prepares …O-O and …h6 with a rock-solid structure. Grabbing the pawn with …dxc4 surrenders the centre and invites e4 with a big space advantage for White — that's the Queen's Gambit Accepted, a different opening. The QGD keeps the …d5/…e6 chain intact: develop with …Be7 and stay solid.",
    "shortNarration": "Be7 — keep the QGD solid, hold d5",
    "sources": [
-    "book:chess-strategy",
+    "book:qgd",
     "https://www.chess.com/openings/Queens-Gambit-Declined",
     "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
    ]
@@ -5177,7 +5177,7 @@
    "explanation": "In the Carlsbad/Exchange structure, Black's freeing plan is …Re8 followed by the …Nbd7-f8-g6 reroute and the …e5 break — the classic antidote to White's minority attack. Playing …b6 weakens the queenside light squares (c6) right where White wants to attack with b4-b5. Don't help the minority attack: play …Re8, reroute the knight, and prepare …e5 to free the position.",
    "shortNarration": "Re8 — prepare the freeing …e5 break",
    "sources": [
-    "book:chess-strategy",
+    "book:qgd",
     "https://www.chess.com/openings/Queens-Gambit-Declined",
     "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
    ]
@@ -5189,7 +5189,7 @@
    "explanation": "In the Nimzo-QGD with Qc2, his choice is …d5! — striking the centre and transposing into a favourable QGD structure where the …Bb4 pin and the …d5 chain give Black a comfortable game. The passive …Nc6 blocks the c-pawn and lets White expand with a3 and e4 unchallenged. Strike the centre with …d5 and reach the solid QGD/Nimzo structure he wins with.",
    "shortNarration": "d5 — strike the centre, reach the QGD",
    "sources": [
-    "book:chess-strategy",
+    "book:qgd",
     "https://www.chess.com/openings/Queens-Gambit-Declined",
     "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
    ]

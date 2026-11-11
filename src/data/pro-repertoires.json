@@ -717,6 +717,83 @@
             "https://www.chess.com/openings/Queens-Gambit-Declined",
             "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
           ]
+        },
+        {
+          "name": "Stonewall Setup",
+          "pgn": "d4 d5 c4 e6 Nf3 c6 g3 f5 Bg2 Nf6 O-O Bd6 b3 O-O Ba3 Bxa3 Nxa3 Qe7 Qc1 Nbd7",
+          "explanation": "Build the wall first: pawns on c6, d5, e6 and f5 take e4 away from their e-pawn for good, then the knight goes to f6, the bishop to d6 and you castle. The price is the hole on e5 and a bishop on c8 behind its own pawns.",
+          "sources": [
+            "book:qgd",
+            "concept:pos-center",
+            "https://www.chess.com/openings/Queens-Gambit-Declined",
+            "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+          ]
+        },
+        {
+          "name": "Tartakower Defense",
+          "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 h6 Bh4 b6 Be2 Bb7 Bxf6 Bxf6 cxd5 exd5",
+          "explanation": "Against the pin on g5: break it with …Be7, castle, ask the bishop with …h6, then …b6 and the bishop to b7, so the piece that …e6 shut in comes out the other way. About level, with the bishop pair.",
+          "sources": [
+            "book:qgd",
+            "concept:pos-center",
+            "https://www.chess.com/openings/Queens-Gambit-Declined",
+            "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+          ]
+        },
+        {
+          "name": "Tarrasch Defense",
+          "pgn": "d4 d5 c4 e6 Nc3 c5 cxd5 exd5 Nf3 Nc6 g3 Nf6 Bg2 Be7 O-O O-O Bg5 cxd4 Nxd4 h6",
+          "explanation": "Strike at d4 with …c5 at once and take back on d5 with the e-pawn: the bishop on c8 is free from the start and every piece gets an open line. In return you accept an isolated pawn on d5, which their bishop on g2 and knight on d4 will aim at.",
+          "sources": [
+            "book:qgd",
+            "concept:pos-center",
+            "https://www.chess.com/openings/Queens-Gambit-Declined",
+            "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+          ]
+        },
+        {
+          "name": "Ragozin Defense",
+          "pgn": "d4 d5 c4 e6 Nc3 Nf6 Nf3 Bb4 Bg5 h6 Bxf6 Qxf6 e3 Bxc3+ bxc3 O-O cxd5 exd5 Rc1 c5",
+          "explanation": "Instead of …Be7, pin the knight on c3 with …Bb4. Ask the bishop on g5 with …h6, take back on f6 with the queen, trade on c3 so their a-pawn stands alone, and break with …c5.",
+          "sources": [
+            "book:qgd",
+            "concept:pos-center",
+            "https://www.chess.com/openings/Queens-Gambit-Declined",
+            "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+          ]
+        },
+        {
+          "name": "Closed Catalan",
+          "pgn": "d4 d5 c4 e6 Nf3 Nf6 g3 Be7 Bg2 O-O O-O b6 cxd5 exd5 Nc3 Bb7 Bf4 Nbd7 Qb3 c6",
+          "explanation": "The Catalan met in the main line's own move order, without taking on c4: bishop to e7, castle, then …b6 and the bishop to b7 behind a solid pawn on d5. Nothing of yours is weak; the price is a quiet position where they are a little better.",
+          "sources": [
+            "book:qgd",
+            "concept:pos-center",
+            "https://www.chess.com/openings/Queens-Gambit-Declined",
+            "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+          ]
+        },
+        {
+          "name": "Open Catalan",
+          "pgn": "d4 Nf6 c4 e6 Nf3 d5 g3 dxc4 Bg2 Bb4+ Bd2 a5 Qc1 b5 a4 bxa4 Rxa4 Bb7 Bxb4 axb4",
+          "explanation": "Against g3, take the pawn on c4 at once, check on b4 so they must block, and guard the bishop with …a5 before …b5. You won't keep the pawn, but they spend moves winning it back while your pieces come out.",
+          "sources": [
+            "book:qgd",
+            "concept:pos-center",
+            "https://www.chess.com/openings/Queens-Gambit-Declined",
+            "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+          ]
+        },
+        {
+          "name": "Catalan Classical",
+          "pgn": "d4 Nf6 c4 e6 Nf3 d5 g3 Be7 Bg2 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qxc4 Bc6 Bg5 Nbd7",
+          "explanation": "The patient answer to the Catalan: bishop to e7 and castle first, then take on c4. …a6 prepares …b5 with a hit on the queen; when a4 stops it, the bishop walks from d7 to c6 to face their bishop on g2.",
+          "sources": [
+            "book:qgd",
+            "concept:pos-center",
+            "https://www.chess.com/openings/Queens-Gambit-Declined",
+            "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+          ]
         }
       ],
       "trapLines": [],

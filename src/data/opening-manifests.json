@@ -548,5 +548,14 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "pro-gothamchess-qgd": {
+    "variations": 9,
+    "middlegamePlans": 3,
+    "endgamePlans": 0,
+    "modelGames": 5,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }
