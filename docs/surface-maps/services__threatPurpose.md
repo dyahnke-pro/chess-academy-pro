@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**103 lines · 2 exports · 2 importers · 1 tests · 0 audits**
+**147 lines · 3 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,21 +18,28 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `threatPurpose` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:4885`
-- `src/services/threatPurpose.test.ts:25`
-- `src/services/threatPurpose.test.ts:30`
-- `src/services/threatPurpose.test.ts:36`
+- `src/services/coachFeatureService.ts:5646`
+- `src/services/threatPurpose.test.ts:26`
+- `src/services/threatPurpose.test.ts:31`
+- `src/services/threatPurpose.test.ts:37`
+
+### `lineBuilds` (function) — 5 call sites
+- `src/services/coachFeatureService.ts:5647`
+- `src/services/threatPurpose.test.ts:88`
+- `src/services/threatPurpose.test.ts:91`
+- `src/services/threatPurpose.test.ts:95`
+- `src/services/threatPurpose.test.ts:98`
 
 ### `lineRestatesClaim` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:4779`
-- `src/services/coachFeatureService.ts:4856`
-- `src/services/threatPurpose.test.ts:49`
+- `src/services/coachFeatureService.ts:5527`
+- `src/services/coachFeatureService.ts:5613`
 - `src/services/threatPurpose.test.ts:50`
-- `src/services/threatPurpose.test.ts:54`
+- `src/services/threatPurpose.test.ts:51`
 - `src/services/threatPurpose.test.ts:55`
 - `src/services/threatPurpose.test.ts:56`
-- `src/services/threatPurpose.test.ts:62`
-- `src/services/threatPurpose.test.ts:67`
+- `src/services/threatPurpose.test.ts:57`
+- `src/services/threatPurpose.test.ts:63`
+- `src/services/threatPurpose.test.ts:68`
 
 ## Tests
 

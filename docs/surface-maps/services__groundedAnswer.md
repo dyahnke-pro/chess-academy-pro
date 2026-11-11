@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7825 lines · 123 exports · 93 importers · 68 tests · 8 audits**
+**7838 lines · 123 exports · 94 importers · 69 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -98,6 +98,7 @@
 - `src/services/opponentMovePurpose.ts`
 - `src/services/pieceActivity.test.ts`
 - `src/services/piecePurpose.test.ts`
+- `src/services/quietPurposeSquares.test.ts`
 - `src/services/recaptureNotAWin.test.ts`
 - `src/services/reviewBoardAwareness.test.ts`
 - `src/services/reviewFullData.ts`
@@ -429,8 +430,9 @@
 - `src/services/reviewBoardAwareness.test.ts:13`
 - `src/services/reviewBoardAwareness.test.ts:22`
 
-### `quietPurposePhrase` (function) — 1 call site
+### `quietPurposePhrase` (function) — 2 call sites
 - `src/services/deliberation.ts:655`
+- `src/services/quietPurposeSquares.test.ts:22`
 
 ### `describeMoveMerit` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1224`
@@ -1122,7 +1124,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:9363`
 - `src/services/coachFeatureService.ts:5325`
 - `src/services/coachFeatureService.ts:5414`
-- `src/services/coachFeatureService.ts:6417`
+- `src/services/coachFeatureService.ts:6422`
 - `src/services/liveTacticsContext.ts:486`
 - `src/services/liveTacticsContext.ts:495`
 - `src/services/lookaheadPlan.ts:140`
@@ -1219,6 +1221,7 @@
 - `src/services/pieceActivity.test.ts`
 - `src/services/piecePurpose.test.ts`
 - `src/services/planChoice.test.ts`
+- `src/services/quietPurposeSquares.test.ts`
 - `src/services/recaptureNotAWin.test.ts`
 - `src/services/reviewBoardAwareness.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
