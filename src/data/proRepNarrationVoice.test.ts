@@ -13,69 +13,85 @@
 // move-number prefixes + 6 over-length cues across the pro lesson files
 // (2026-05-31). Baseline-free: all were fixed; new violations fail the build.
 //
-// Scope: every src/data/lessons/pro{Gothamchess,Naroditsky}*.ts file (the
-// pro-rep Watch/variation/trap lessons). Stats are PRESERVED and EXEMPT:
-// "73.4%", "1,475 games", "200-year" are not move-number prefixes (the regex
-// requires a SAN token — piece/castle/file-rank — immediately after the
-// number+dot, and a decimal like "9.3" has a digit after the dot).
+// Scope: every lesson the app SERVES (`getAllLessonScripts`: the runtime LESSONS
+// and VARIATION_LESSONS maps, Watch courses included). It used to read the
+// pro*.ts lesson files off disk; once the openings became Watch courses
+// (src/data/lessons/watch/, beats in arrays, not `say:` literals) that scan saw
+// none of them, and 60 move numbers in the masterclass lessons had never been
+// gated at all (2026-11-11). Pro lessons are zero-tolerance; the other lessons'
+// existing hits are a shrink-only baseline (spokenMoveNumber.baseline.json) that
+// empties as each opening is rewritten. A cue's words are counted as the Learn
+// cue gate counts them (wlppNarration): a dash is not a word.
+// Stats are PRESERVED and EXEMPT: "73.4%", "1,475 games", "200-year" are not
+// move-number prefixes (the regex requires a SAN token — piece/castle/file-rank —
+// immediately after the number+dot, and a decimal like "9.3" has a digit after
+// the dot).
 
 import { describe, it, expect } from 'vitest';
-import { readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import cmRaw from './common-mistakes.json' assert { type: 'json' };
 import mgRaw from './model-games.json' assert { type: 'json' };
-
-const LESSON_DIR = join(process.cwd(), 'src/data/lessons');
-// Match every pro-rep lesson file regardless of player (proGothamchess*,
-// proNaroditsky*, proEricRosen*, …). Generalized 2026-05-31 so a new player's
-// lessons cannot escape the spoken-voice gate (proLessonFiles already excludes
-// *.test.ts). Was /^pro(Gothamchess|Naroditsky).*\.ts$/.
-const PRO_RE = /^pro[A-Z][A-Za-z]*\.ts$/;
-
-function proLessonFiles(): string[] {
-  return readdirSync(LESSON_DIR).filter((f) => PRO_RE.test(f) && !f.endsWith('.test.ts'));
-}
+import baselineRaw from './lessons/spokenMoveNumber.baseline.json' assert { type: 'json' };
+import { getAllLessonScripts } from './lessons';
+import { WATCH_COURSES } from './lessons/watch';
 
 // A move-number prefix: 1-2 digits, then "." or "…"/"...", then a SAN start
 // (piece N/B/R/Q/K, castle O, or file+rank/x). A decimal ("9.3", "73.4%") is
 // excluded because a digit — not a SAN token — follows the dot.
 const MOVE_NUM = /(?:^|[\s(])\d{1,2}(?:\.|…|\.\.\.)(?:[NBRQKO]|[a-h][1-8x])/;
+const BASELINE = new Set(baselineRaw as string[]);
 
-interface Hit { file: string; kind: 'say' | 'sayShort'; reason: string; text: string }
+interface Hit { key: string; pro: boolean; kind: 'say' | 'sayShort'; reason: string; text: string }
 
-function scan(): { moveNum: Hit[]; longCue: Hit[] } {
+function scan(): { moveNum: Hit[]; longCue: Hit[]; openings: Set<string> } {
   const moveNum: Hit[] = [];
   const longCue: Hit[] = [];
-  for (const file of proLessonFiles()) {
-    const src = readFileSync(join(LESSON_DIR, file), 'utf8');
-    // say: + sayShort: string literals (single/double/backtick), escape-aware
-    for (const m of src.matchAll(/\b(say|sayShort):\s*(["'`])((?:\\.|(?!\2).)*)\2/gs)) {
-      const kind = m[1] as 'say' | 'sayShort';
-      const text = m[3];
-      if (MOVE_NUM.test(text)) moveNum.push({ file, kind, reason: 'move-number prefix', text: text.slice(0, 90) });
-      if (kind === 'sayShort') {
-        const words = text.trim().split(/\s+/).filter(Boolean).length;
-        if (words > 8) longCue.push({ file, kind, reason: `cue is ${words} words (>8)`, text });
+  const openings = new Set<string>();
+  for (const { key, lesson } of getAllLessonScripts()) {
+    openings.add(lesson.openingId);
+    const pro = lesson.openingId.startsWith('pro-');
+    for (const b of lesson.beats) {
+      for (const kind of ['say', 'sayShort'] as const) {
+        const text = b[kind];
+        if (typeof text !== 'string') continue;
+        if (MOVE_NUM.test(text)) moveNum.push({ key: `${key}::${b.id}`, pro, kind, reason: 'move-number prefix', text: text.slice(0, 90) });
+      }
+      if (pro && typeof b.sayShort === 'string') {
+        const words = b.sayShort.trim().split(/\s+/).filter((w) => w && !/^[—–-]+$/.test(w)).length;
+        if (words > 8) longCue.push({ key: `${key}::${b.id}`, pro, kind: 'sayShort', reason: `cue is ${words} words (>8)`, text: b.sayShort });
       }
     }
   }
-  return { moveNum, longCue };
+  return { moveNum, longCue, openings };
 }
 
-describe('pro-rep lesson narration obeys the spoken-voice contract', () => {
-  const { moveNum, longCue } = scan();
+describe('lesson narration obeys the spoken-voice contract', () => {
+  const { moveNum, longCue, openings } = scan();
 
-  it('finds the pro-rep lesson files (guards against a path/glob regression)', () => {
-    expect(proLessonFiles().length).toBeGreaterThan(20);
+  it('reads every served lesson, every Watch course included (guards against a reach regression)', () => {
+    expect(openings.size).toBeGreaterThan(150);
+    for (const c of WATCH_COURSES) expect(openings.has(c.openingId), `${c.openingId} is not served`).toBe(true);
   });
 
-  it('has NO move-number prefixes in spoken say/sayShort (Polly reads "2." as "two")', () => {
-    const msg = moveNum.map((h) => `  [${h.file}] ${h.kind}: ${h.text}`).join('\n');
-    expect(moveNum, `Move-number prefixes in spoken narration — strip "1.e4"→"e4", "3…d5"→"…d5":\n${msg}`).toHaveLength(0);
+  it('has NO move-number prefixes in spoken say/sayShort of a pro lesson (Polly reads "2." as "two")', () => {
+    const bad = moveNum.filter((h) => h.pro);
+    const msg = bad.map((h) => `  [${h.key}] ${h.kind}: ${h.text}`).join('\n');
+    expect(bad, `Move-number prefixes in spoken narration — strip "1.e4"→"e4", "3…d5"→"…d5":\n${msg}`).toHaveLength(0);
   });
 
-  it('has NO Learn cue (sayShort) longer than 8 words', () => {
-    const msg = longCue.map((h) => `  [${h.file}] ${h.reason}: "${h.text}"`).join('\n');
+  it('adds NO move-number prefix to any other lesson (the baseline only shrinks)', () => {
+    const fresh = moveNum.filter((h) => !h.pro && !BASELINE.has(h.key));
+    const msg = fresh.map((h) => `  [${h.key}] ${h.kind}: ${h.text}`).join('\n');
+    expect(fresh, `New move-number prefixes in spoken narration:\n${msg}`).toHaveLength(0);
+  });
+
+  it('keeps no stale baseline entry (a rewritten beat leaves the baseline)', () => {
+    const live = new Set(moveNum.map((h) => h.key));
+    const stale = [...BASELINE].filter((k) => !live.has(k));
+    expect(stale, 'spokenMoveNumber.baseline.json lists beats that no longer say a move number — remove them').toEqual([]);
+  });
+
+  it('has NO Learn cue (sayShort) longer than 8 words in a pro lesson', () => {
+    const msg = longCue.map((h) => `  [${h.key}] ${h.reason}: "${h.text}"`).join('\n');
     expect(longCue, `sayShort cues over the 8-word cap — tighten them:\n${msg}`).toHaveLength(0);
   });
 
