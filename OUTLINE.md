@@ -22,10 +22,10 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 ---
 
 ## 000zf. WO-OPENINGS-REWRITE-01 — every opening tab rewritten, one computed beat a move; Levy's taught lines (David 2026-11-11, PLAN.md)
-- 🟠 R1 the deterministic writer (move order, the opening's idea, no empty or repeated beat) — harness built, measuring the Trompowsky
-- 🟠 R2 the strength gate over every opening
-- 🟠 R3 bake every line offline, thin openings first; old beats set aside
-- 🟠 R4 Levy's lines — 6-agent swarm running
+- ✅ R1 fact sheets per move (masters, engine at fixed depth, board facts, notes); beats written by hand from them (docs/OPENING-WATCH-BEATS.md)
+- 🟠 R2 one-beat-a-move gate ✅ (810 of 819 lessons in a shrink-only baseline); per-tab plan/model/trap census owed
+- 🟠 R3 Watch courses, old lessons deleted: Trompowsky ✅ (161 beats); Semi-Slav, Benoni writing; 9 thin next; ~11,600 moves in all
+- 🟠 R4 Levy's lines — 920 found so far, 2 of 5 agents still running
 - 🟠 R5 ship and audit
 
 ## 000zb. WO-HUMAN-VOICE + WO-MARKS-AS-SAID — the coach talks like a person; the board shows what it says, as it says it (David 2026-11-08, PLAN.md)
