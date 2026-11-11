@@ -654,6 +654,9 @@
  "sicilian-sveshnikov::Novosibirsk::Sveshnikov: Novosibirsk (...Bg5 System)": [
   "mp-siciliansveshnikov-novosibirsk"
  ],
+ "sicilian-sveshnikov::11.c4 Queenside Grip::Sveshnikov: 11.c4 Queenside Grip": [
+  "mp-siciliansveshnikov-11.c4 queenside grip"
+ ],
  "sicilian-sveshnikov::...Rb8 Expansion::Sveshnikov: ...Rb8 Expansion Plan": [
   "mp-siciliansveshnikov-...rb8 expansion"
  ],
