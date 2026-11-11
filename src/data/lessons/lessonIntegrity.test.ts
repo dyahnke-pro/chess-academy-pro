@@ -146,6 +146,11 @@ const ENGINE_EXTENDED_LESSONS = new Set<string>([
   "The King's Indian Attack — A Master Class",
   // The Dutch Leningrad …c6 Line: White's knight-first 2.Nf3, which the DB names only to ply 3 (DB-empty rule).
   'dutch-defence::Leningrad …c6 Line',
+  // GothamChess Fantasy Caro: the DB names the Fantasy only to 3.f3 (ply 5) (DB-empty rule).
+  'pro-gothamchess-fantasy-caro::Solid 3...e6',
+  'pro-gothamchess-fantasy-caro::Aggressive 3...g6',
+  'pro-gothamchess-fantasy-caro::Counter 3...Qb6',
+  'pro-gothamchess-fantasy-caro::Closed 3...g6 5.e5',
 ]);
 
 describe('masterclass G3 — every lesson anchors a real DB opening line', () => {

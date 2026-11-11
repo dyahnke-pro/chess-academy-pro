@@ -4632,18 +4632,6 @@
     "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
     "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
    ]
-  },
-  {
-   "fen": "rnbqk1nr/pp3ppp/2p1p3/3p4/1b1PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 2 5",
-   "wrongMove": "Bd2",
-   "correctMove": "a3",
-   "explanation": "When Black pins with …Bb4 in the …e6 line, the active a3! questions the bishop immediately. After …Bxc3+ bxc3, White gets the bishop pair and a powerful pawn centre with attacking chances on the kingside (the Qg4-Qxg7 raid). The passive Bd2 lets Black keep the tension and equalise comfortably. Challenge the pin with a3 and take the bishop pair.",
-   "shortNarration": "a3 — question the pin, win the pair",
-   "sources": [
-    "book:caro-kann",
-    "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
-    "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-   ]
   }
  ],
  "pro-gothamchess-stafford-refute": [

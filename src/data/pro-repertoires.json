@@ -788,8 +788,8 @@
         "Against the solid …e6, the centre stays closed and you play for the kingside attack with Bf4, Qd3 (or Qd2), O-O-O, then g4-g5 like an open Sicilian English Attack. Just remember which side castled — your king on c1 has to be solid before you commit pawns forward."
       ],
       "traps": [
-        "If Black plays 3…dxe4 4.fxe4 e5?? — the natural-looking central counter — White just plays 5.dxe5! winning a clean pawn. Black's queen has no good square (5...Qxd1+ 6.Kxd1 actually favours White — the e5-pawn cramps Black). Black's only sound reply to 4.fxe4 is …e5 followed by …exd4 (gambit-style), not the simple 4…e5 grab.",
-        "After 3…e6 4.Nc3 Bb4 (the natural pin) — your move is 5.Bf4! NOT Bd2. The Bf4 keeps the central tension AND develops to a more active square; after 5...Nf6 6.e5 cramps the f6-knight back."
+        "After 3…dxe4 4.fxe4 e5, don't grab the pawn: 5.dxe5? walks into …Qh4+, and after 6.g3 Qxe4+ the queen checks your king and hits the rook on h1. 5.Nf3 is the move: it covers h4, and after …exd4 Bc4 your pieces come out first.",
+        "After 3…e6 4.Nc3 Bb4 (the natural pin), Bd2 is the engine's choice and Bf4 is close behind: both meet the pin and keep the centre together."
       ],
       "warnings": [
         "f3 only works after 1.e4 c6 2.d4 d5 3.f3 — never play f3 in OTHER Caro-Kann move orders (like the Classical with 2.Nc3 first), where the f3-pawn would just weaken the kingside without preparing a central duo.",
