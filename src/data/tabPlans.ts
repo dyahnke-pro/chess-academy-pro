@@ -935,6 +935,13 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
         'mp-progothamchess-french-exchange-develop',
         'mp-progothamchess-french-advance-counter',
       ],
+      // The five tabs added from the repertoire's taught lines (2026-11-11): no
+      // middlegame plan is anchored at their ends yet.
+      'advance …qb6': [],
+      'classical steinitz': [],
+      'rubinstein …nd7': [],
+      'tarrasch …c5': [],
+      'rubinstein …b6': [],
     },
   },
   'pro-gothamchess-pirc-defense': {

@@ -4617,7 +4617,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'Nxa1 — win the exchange',
       '',
     ],
-    sources: ['concept:tac-fork', 'concept:pos-material', 'https://www.chess.com/openings/French-Defense-Tarrasch-Variation'],
+    sources: ['concept:tac-fork', 'book:french-defence', 'https://www.chess.com/openings/French-Defense-Tarrasch-Variation'],
   },
 
   // ── GothamChess Pirc Defense (student = BLACK) ───────────────────────────

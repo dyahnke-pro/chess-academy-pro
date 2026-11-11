@@ -5794,7 +5794,10 @@
     "middlegameTheme": "The Rubinstein: …gxf6/…e5, …O-O-O, g-file mating attack.",
     "lessonSummary": "Play the aggressive Rubinstein, castle queenside, and mate down the g-file.",
     "studentSide": "black",
-    "variation": "Tarrasch (Nd2)"
+    "variation": "Tarrasch (Nd2)",
+    "sources": [
+      "https://www.chess.com/game/live/5739337924"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-french-skilled-tar",
@@ -5813,7 +5816,10 @@
     "middlegameTheme": "The Tarrasch: …b6/…Bb7, O-O-O, kingside mating attack.",
     "lessonSummary": "Develop …b6/…Bb7, castle queenside, and attack the king.",
     "studentSide": "black",
-    "variation": "Tarrasch (Nd2)"
+    "variation": "Tarrasch (Nd2)",
+    "sources": [
+      "https://www.chess.com/game/live/165125504988"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-french-crescent-adv",
@@ -5831,7 +5837,11 @@
     "criticalMoments": [],
     "middlegameTheme": "The Advance: …c5/…f5 counterattack, …Rb2 breakthrough.",
     "lessonSummary": "Strike with …c5 and …f5, then break through with the rooks.",
-    "studentSide": "black"
+    "studentSide": "black",
+    "variation": "Advance …Qb6",
+    "sources": [
+      "https://www.chess.com/game/live/167647812489"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-french-aarav-exch",
@@ -5850,7 +5860,10 @@
     "middlegameTheme": "The Exchange: active …Bd6/…Bf5, …Bxh3/…Rxe3 sacrifices.",
     "lessonSummary": "Develop actively, sacrifice for the attack, refuse the draw.",
     "studentSide": "black",
-    "variation": "Exchange (exd5 lines)"
+    "variation": "Exchange (exd5 lines)",
+    "sources": [
+      "https://www.chess.com/game/live/146447784952"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-pirc-chessically-g6",

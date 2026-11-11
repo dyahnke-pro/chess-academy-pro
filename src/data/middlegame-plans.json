@@ -15293,23 +15293,11 @@
     ],
     "arrows": [
      [],
-     [
-      {
-       "from": "b4",
-       "to": "c2",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
      [],
      [],
      [],
-     [
-      {
-       "from": "c2",
-       "to": "a1",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
+     [],
+     [],
      [],
      []
     ],
@@ -15366,7 +15354,7 @@
     "title": "French Rubinstein: the …Nc2 Fork Wins the Rook",
     "intro": "From their win over misutodn. A knight fork and a check net the exchange.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:french-defence",
      "https://www.chess.com/openings/French-Defense",
      "https://en.wikipedia.org/wiki/French_Defence",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -48528,18 +48516,7 @@
       }
      ],
      [],
-     [
-      {
-       "from": "f4",
-       "to": "e3",
-       "color": "rgba(40,185,95,0.92)"
-      },
-      {
-       "from": "f4",
-       "to": "g3",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
+     [],
      [],
      []
     ],
@@ -48588,7 +48565,7 @@
     "title": "French Rubinstein: Active Pieces for a Pawn",
     "intro": "Played out: White grabs a pawn, and Black answers by bringing every piece into play.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:french-defence",
      "https://www.chess.com/openings/French-Defense",
      "https://en.wikipedia.org/wiki/French_Defence",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -48678,10 +48655,6 @@
       {
        "square": "h3",
        "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "g4",
-       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
@@ -48722,10 +48695,6 @@
       {
        "square": "c3",
        "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d4",
-       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
@@ -48738,7 +48707,7 @@
     "title": "The …gxf6 Structure, Paid in Full",
     "intro": "Trade the bishop, grab the pawn with tempo, resettle the knight on e6 — material banked against structural rent.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:french-defence",
      "https://www.chess.com/openings/French-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -48809,13 +48778,7 @@
      [],
      [],
      [],
-     [
-      {
-       "from": "d8",
-       "to": "e8",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
+     [],
      [],
      [],
      [],
@@ -48874,7 +48837,7 @@
     "title": "French Exchange: Damage the Pawns, Take the e-file",
     "intro": "From their win over Julio_Becerra: Black trades to double White’s pawns and grabs the open file.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:french-defence",
      "https://www.chess.com/openings/French-Defense",
      "https://en.wikipedia.org/wiki/French_Defence",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -75173,13 +75136,7 @@
       }
      ],
      [],
-     [
-      {
-       "from": "h3",
-       "to": "f1",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
+     [],
      [],
      [
       {

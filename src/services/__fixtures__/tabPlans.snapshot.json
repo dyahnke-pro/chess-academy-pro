@@ -4063,6 +4063,11 @@
   "mp-progothamchess-french-exchange-develop",
   "mp-progothamchess-french-advance-counter"
  ],
+ "pro-gothamchess-french-defense::Advance …Qb6::Advance …Qb6": [],
+ "pro-gothamchess-french-defense::Classical Steinitz::Classical Steinitz": [],
+ "pro-gothamchess-french-defense::Rubinstein …Nd7::Rubinstein …Nd7": [],
+ "pro-gothamchess-french-defense::Tarrasch …c5::Tarrasch …c5": [],
+ "pro-gothamchess-french-defense::Rubinstein …b6::Rubinstein …b6": [],
  "pro-gothamchess-french-defense::::Rubinstein Main Line": [
   "mp-progothamchess-french-rubinstein-qxd4",
   "mp-progothamchess-french-defense-rubinstein"
@@ -4081,6 +4086,11 @@
   "mp-progothamchess-french-exchange-develop",
   "mp-progothamchess-french-advance-counter"
  ],
+ "pro-gothamchess-french-defense::::Advance …Qb6": [],
+ "pro-gothamchess-french-defense::::Classical Steinitz": [],
+ "pro-gothamchess-french-defense::::Rubinstein …Nd7": [],
+ "pro-gothamchess-french-defense::::Tarrasch …c5": [],
+ "pro-gothamchess-french-defense::::Rubinstein …b6": [],
  "pro-gothamchess-pirc-defense::main": [
   "mp-progothamchess-pirc-austrian-c5",
   "mp-progothamchess-pirc-classical-e5"

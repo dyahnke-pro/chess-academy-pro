@@ -2380,7 +2380,7 @@
       "overview": "This repertoire's French Defense as Black — 1,596 games at 62.7%. The Rubinstein 4...dxe4 line is this repertoire's main French weapon. After Nxe4 / …Nf6 / Nxf6+ / …gxf6, Black accepts doubled f-pawns in exchange for the bishop pair and active piece play. The open g-file becomes a real attacking lever. This is an attacking, middlegame-decisive repertoire — built to win in the opening and the middlegame, not grind long endings — so it is deepest on the opening and middlegame plans, with endgame theory shown only where the games reach a decisive ending.",
       "keyIdeas": [
         "4...dxe4 — the Rubinstein. Accept the doubled pawns; you'll get them back in piece activity.",
-        "…gxf6 recapture (not …exf6) keeps the f6-pawn supporting …e5 — the critical central counter.",
+        "…gxf6 recapture (rather than …Qxf6) keeps a pawn on f6 covering e5 — support for …e5, the critical central counter.",
         "The bishop pair compensates for the structural weakness. Use it actively, especially the dark-squared bishop on the long diagonal.",
         "…e5 is the central counter-break. Once it lands, Black's pieces coordinate and the doubled pawns matter less."
       ],
@@ -2418,6 +2418,56 @@
             "concept:pos-development",
             "https://www.chess.com/openings/French-Defense-Exchange-Variation",
             "https://api.chess.com/pub/player/gothamchess/games/archives"
+          ]
+        },
+        {
+          "name": "Advance …Qb6",
+          "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Be2 Nh6 Bxh6 gxh6 Qd2 Bg7 Na3 cxd4 cxd4 Qb4",
+          "explanation": "Against the Advance, hit the d4–e5 chain at its base with …c5, …Nc6 and …Qb6, and send the king's knight toward f5 by way of h6. If they take it on h6, the doubled h-pawns buy you the half-open g-file and a bishop on g7, and b2 loses its guard.",
+          "sources": [
+            "book:french-defence",
+            "concept:pos-development",
+            "https://www.chess.com/openings/French-Defense"
+          ]
+        },
+        {
+          "name": "Classical Steinitz",
+          "pgn": "e4 e6 d4 d5 Nc3 Nf6 e5 Nfd7 f4 c5 Nf3 Nc6 Be3 Be7 Qd2 O-O dxc5 Nxc5 O-O-O Qa5",
+          "explanation": "Meet Nc3 with …Nf6; when e5 kicks the knight and f4 props up the chain, strike at d4 with …c5 and …Nc6. With the kings castled on opposite wings, your queen and queenside pawns go after theirs.",
+          "sources": [
+            "book:french-defence",
+            "concept:pos-development",
+            "https://www.chess.com/openings/French-Defense"
+          ]
+        },
+        {
+          "name": "Rubinstein …Nd7",
+          "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nd7 Nf3 Ngf6 Nxf6+ Nxf6 Bd3 b6 O-O Bb7 Qe2 Bd6 Ne5 O-O",
+          "explanation": "Take on e4 and play …Nd7 before …Ngf6, so a knight takes back on f6 and your pawns stay whole. The light-squared bishop gets out by way of b6 and b7, onto the long diagonal.",
+          "sources": [
+            "book:french-defence",
+            "concept:pos-development",
+            "https://www.chess.com/openings/French-Defense"
+          ]
+        },
+        {
+          "name": "Tarrasch …c5",
+          "pgn": "e4 e6 d4 d5 Nd2 c5 exd5 Qxd5 Ngf3 cxd4 Bc4 Qd6 O-O Nf6 Nb3 Nc6 Nbxd4 Nxd4 Nxd4 a6",
+          "explanation": "Against Nd2, hit d4 at once with …c5 and take back on d5 with the queen: no knight of theirs can reach c3 to chase it. They win the d4 pawn back, the knights come off, and the d-file is open for both sides.",
+          "sources": [
+            "book:french-defence",
+            "concept:pos-development",
+            "https://www.chess.com/openings/French-Defense"
+          ]
+        },
+        {
+          "name": "Rubinstein …b6",
+          "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3 b6 Bd3 Bb7 Qe2 Nc6 c3 Qd7 O-O O-O-O",
+          "explanation": "The …gxf6 structure with …b6 and …Bb7 instead of …Nc6 and …e5: castle long, and aim the bishop and a rook on the half-open g-file at their king on g1.",
+          "sources": [
+            "book:french-defence",
+            "concept:pos-development",
+            "https://www.chess.com/openings/French-Defense"
           ]
         }
       ],
