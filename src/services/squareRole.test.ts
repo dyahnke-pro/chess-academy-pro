@@ -86,8 +86,11 @@ describe('one job of several squares is said once, with its count (prod focus au
   it('no clause is said twice', () => {
     expect(parts?.also.length).toBe(new Set(parts?.also).size);
   });
-  it('the holes and the squares their piece wants are said with their count', () => {
+  it('the holes are said with their count, the squares a piece wants by name', () => {
     expect(parts?.also).toContain('aiming at two squares no pawn of yours can cover');
-    expect(parts?.also).toContain('keeping your queen off two squares it wants');
+    // prod Learn audit 2026-11-11: "keeping their rook off a square it wants"
+    // never said which square (David 2026-11-07: "I want specificity").
+    expect(parts?.also).toContain('keeping your queen off c1 and c3');
+    expect(parts?.also.join(' ')).not.toMatch(/squares? it wants/);
   });
 });

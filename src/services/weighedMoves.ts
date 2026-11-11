@@ -502,7 +502,9 @@ export function alsoGood(args: { fenBefore: string; san: string; student: Color;
 export interface SquareFault {
   square: string;
   kind: 'hangs' | 'kicked' | 'blocks' | 'refuted';
-  /** What goes wrong there, said after "on <square> it …". */
+  /** What would go wrong there, said after "on <square> it …" — in the
+   *  conditional, since the piece went elsewhere (prod Learn 2026-11-11:
+   *  "Their knight went to a3. On d6 it blocks their bishop"). */
   text: string;
   squares: string[];
 }
@@ -617,20 +619,20 @@ function faultsOn(fenBefore: string, m: Move, own: 'your' | 'their', other: 'you
   const h = hangsAfter(fenBefore, m);
   if (h) {
     out.push({ square: m.to, kind: 'hangs', squares: [h.square],
-      text: h.square === m.to ? 'hangs' : `leaves ${named(h.square, h.piece)} hanging` });
+      text: h.square === m.to ? 'would hang' : `would leave ${named(h.square, h.piece)} hanging` });
   }
   const kick = pawnKick(after.fen(), m.to, m.color);
-  if (kick) out.push({ square: m.to, kind: 'kicked', squares: [m.to], text: `is kicked by ${other} ${kick[0]}-pawn` });
+  if (kick) out.push({ square: m.to, kind: 'kicked', squares: [m.to], text: `would be kicked by ${other} ${kick[0]}-pawn` });
   const blk = blocksOwn(fenBefore, m);
   if (blk) {
-    out.push({ square: m.to, kind: 'blocks', squares: [blk.by], text: `blocks ${named(blk.by, blk.piece)}` });
+    out.push({ square: m.to, kind: 'blocks', squares: [blk.by], text: `would block ${named(blk.by, blk.piece)}` });
   }
   if (reason && out.length === 0) {
     const sans = reasonSans(reason);
     // The first move is said; a promotion it makes is not named again.
     const won = reason.mate ? null : reasonWinWords(reason, [0]);
     out.push({ square: m.to, kind: 'refuted', squares: [m.to],
-      text: `runs into ${sans[0]}${reason.mate ? (markSaysMate(sans[0]) ? '' : ', and it\'s mate') : won ? ` — ${other === 'your' ? 'you' : 'they'} win ${won}` : ''}` });
+      text: `would run into ${sans[0]}${reason.mate ? (markSaysMate(sans[0]) ? '' : ', and it\'s mate') : won ? ` — ${other === 'your' ? 'you' : 'they'} win ${won}` : ''}` });
   }
   return out;
 }

@@ -52,7 +52,17 @@ describe('a save names what it saved (praise never bare)', () => {
   it('names the piece the move took out of the attack', () => {
     // The piece leads: "Nd4 takes your knight" is spoken as a capture of it
     // (David's record 2026-10-19: "Rook to g5 takes your rook out of the attack").
-    expect(savedWhy(FEN, 'Nd4', 'w')).toBe('Your knight steps out of the attack with Nd4.');
+    expect(savedWhy(FEN, 'Nd4', 'w')).toBe('Your knight steps out of the attack.');
+  });
+  it('never names the move just played (prod Learn 2026-11-11: "Knight takes d1 with check keeps your rook on d8 safe")', () => {
+    // Their rook on f8 hits the loose f3 knight: Kf2 guards it, Nd4 moves it.
+    const ROOK = '4kr2/8/8/8/8/5N2/8/4K3 w - - 0 1';
+    expect(savedWhy(ROOK, 'Kf2', 'w')).toBe('Your move keeps your knight on f3 safe.');
+    expect(savedWhy(ROOK, 'Nd4', 'w')).toBe('Your knight steps out of the attack.');
+    for (const san of ['Nd4', 'Kf2']) {
+      const said = savedWhy(ROOK, san, 'w') ?? '';
+      expect(said).not.toMatch(/Nd4|Kf2|knight to d4|king to f2/);
+    }
   });
   it('says nothing when the move saves nothing', () => {
     expect(savedWhy(FEN, 'Kf2', 'w')).toBeNull();

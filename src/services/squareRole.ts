@@ -40,6 +40,9 @@ interface RoleWords {
    *  squares no pawn of yours can cover"). A job with no `many` said by several
    *  squares is said once as it is. */
   many?: (n: number) => string;
+  /** A job said with its squares, gathered by the piece it is about ("keeping
+   *  their rook off d6 and e5"): several squares of one job are one clause. */
+  group?: { key: string; say: (squares: readonly string[]) => string };
 }
 
 const COUNT = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
@@ -134,10 +137,17 @@ function squareRoleWords(
   const wantsAt = chess.attackers(sq, them).find((s) => { const p = chess.get(s); return !!p && p.type !== 'p' && p.type !== 'k' && !named.has(s); });
   const wants = wantsAt ? chess.get(wantsAt) : null;
   if (wants && wantsAt) {
+    // SAID WITH ITS SQUARE (prod Learn audit 2026-11-11: "keeping their rook
+    // off a square it wants" — which square? David 2026-11-07: "I want
+    // specificity"): the job names where the piece is kept out.
+    const who = `${ownerWord} ${NAME[wants.type]}`;
     return {
       full: owner === 'the' ? `keeping the ${NAME[wants.type]} on ${wantsAt} off it` : `keeping ${owner} ${NAME[wants.type]} off it`,
-      bare: `keeping ${ownerWord} ${NAME[wants.type]} off a square it wants`,
-      many: (n) => `keeping ${ownerWord} ${NAME[wants.type]} off ${countOf(n)} squares it wants`,
+      bare: `keeping ${who} off ${sq}`,
+      group: {
+        key: `wants:${wantsAt}`,
+        say: (sqs) => (sqs.length <= 2 ? `keeping ${who} off ${joinAnd([...sqs])}` : `keeping ${who} off ${countOf(sqs.length)} squares, ${sqs[0]} among them`),
+      },
     };
   }
   return null;
@@ -172,13 +182,17 @@ export function namedSquareParts(chess: Chess, squares: readonly string[], me: C
   // square no pawn of yours can cover and aiming at a square no pawn of yours
   // can cover"): the squares the rest are by what they do, and two squares
   // with one job are one clause with their count.
-  const groups = new Map<string, { role: RoleWords; n: number }>();
+  const groups = new Map<string, { role: RoleWords; sqs: string[] }>();
   for (const i of items) {
     if (i === lead) continue;
-    const g = groups.get(i.role.bare);
-    if (g) g.n += 1; else groups.set(i.role.bare, { role: i.role, n: 1 });
+    const key = i.role.group?.key ?? i.role.bare;
+    const g = groups.get(key);
+    if (g) g.sqs.push(i.sq); else groups.set(key, { role: i.role, sqs: [i.sq] });
   }
-  return { lead: `${lead.sq}, ${lead.role.full}`, also: [...groups.values()].map((g) => (g.n > 1 && g.role.many ? g.role.many(g.n) : g.role.bare)) };
+  return {
+    lead: `${lead.sq}, ${lead.role.full}`,
+    also: [...groups.values()].map((g) => (g.role.group ? g.role.group.say(g.sqs) : g.sqs.length > 1 && g.role.many ? g.role.many(g.sqs.length) : g.role.bare)),
+  };
 }
 
 /** The squares `namedSquares` says — the ones with a role, in its order. A

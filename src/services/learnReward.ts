@@ -159,11 +159,14 @@ export function savedWhy(fenBefore: string, san: string, side: 'w' | 'b'): strin
     const saved = before.find((p) => p.square === m.from ? !after.has(m.to) : !after.has(p.square));
     if (!saved) return null;
     const name = PIECE_WORD[saved.piece.toLowerCase()] ?? 'piece';
-    // The piece is the subject, the move how it gets out: "Rg5 takes your
-    // rook out of the attack" is spoken "rook to g5 takes your rook" — a
-    // capture of the student's own rook (David's record, 2026-10-19).
+    // The piece is the subject: "Rg5 takes your rook out of the attack" is
+    // spoken "rook to g5 takes your rook" — a capture of the student's own rook
+    // (David's record, 2026-10-19). And Learn never names the move just played
+    // (David 2026-11-09: "the user knows that, they see it play out"; prod
+    // Learn audit 2026-11-11 heard "Good defence. Knight takes d1 with check
+    // keeps your rook on d8 safe").
     return saved.square === m.from
-      ? `Your ${name} steps out of the attack with ${san}.`
-      : `${san} keeps your ${name} on ${saved.square} safe.`;
+      ? `Your ${name} steps out of the attack.`
+      : `Your move keeps your ${name} on ${saved.square} safe.`;
   } catch { return null; }
 }

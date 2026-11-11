@@ -46,14 +46,14 @@ const EFFECT_WHYS = [
   'Their knight on c6 is out of play while it shields the king on e8 — it cannot move until the pin is broken.',
   'Moving the knight would let your bishop take the queen on d8.',
   // prod Learn 2026-10-29 — each a consequence that names what it acts on.
-  'Good defence. Rook takes d1 with check keeps your queen on e5 safe.',
+  'Good defence. Your move keeps your queen on e5 safe.',
   'Knight to f6 unpins your pawn on g7.',
   'Their pawn joins the fight for f5, holding back your f-pawn.',
   'Their knight bears down on f5, keeping your queen off it.',
   'Their e-pawn takes d5 opens the e-file for the rooks, toward your king.',
   'Before your move, checks, captures, threats: your pawn on h7 could be taken.',
   'Anything else, like queen takes g4, loses material in the line that follows.',
-  'Good defence. Your knight steps out of the attack with knight to f6.',
+  'Good defence. Your knight steps out of the attack.',
   'Your king to b8 let them play rook to h3, which lines up an x-ray at your rook on h8.',
   'Their b4 makes a5 an outpost for the bishop — no enemy pawn can ever challenge it.',
 ];
