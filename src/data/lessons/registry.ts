@@ -29,8 +29,6 @@ import { CARO_TRAP_LESSONS } from './caroKannTrapLessons';
 import { ITALIAN_GAME_LESSON } from './italianGame';
 import { ITALIAN_GAME_VARIATION_LESSONS } from './italianGameVariations';
 import { ITALIAN_GAME_TRAP_LESSONS } from './italianGameTrapLessons';
-import { SCOTCH_GAME_LESSON } from './scotchGame';
-import { SCOTCH_GAME_VARIATION_LESSONS } from './scotchGameVariations';
 import { SCOTCH_GAME_TRAP_LESSONS } from './scotchGameTrapLessons';
 import { FRENCH_DEFENCE_LESSON } from './frenchDefence';
 import { FRENCH_DEFENCE_VARIATION_LESSONS } from './frenchDefenceVariations';
@@ -113,7 +111,6 @@ const HAND_WRITTEN: OpeningLessons[] = [
   { main: PIRC_DEFENCE_LESSON, variations: PIRC_VARIATION_LESSONS },
   { main: CARO_KANN_LESSON, variations: CARO_VARIATION_LESSONS },
   { main: ITALIAN_GAME_LESSON, variations: ITALIAN_GAME_VARIATION_LESSONS },
-  { main: SCOTCH_GAME_LESSON, variations: SCOTCH_GAME_VARIATION_LESSONS },
   { main: FRENCH_DEFENCE_LESSON, variations: FRENCH_DEFENCE_VARIATION_LESSONS },
   { main: SCANDINAVIAN_DEFENCE_LESSON, variations: SCANDINAVIAN_DEFENCE_VARIATION_LESSONS },
   { main: ALEKHINE_DEFENCE_LESSON, variations: ALEKHINE_DEFENCE_VARIATION_LESSONS },

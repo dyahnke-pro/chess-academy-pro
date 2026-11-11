@@ -3,8 +3,8 @@ import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } f
 // Lead-the-eye colour language (playbook §5a): arrows GREEN (vision / threat /
 // intent), highlights YELLOW (key square named in narration) and SOFT BLUE
 // (secondary context). Move squares are auto-painted orange by the player.
-// GENERATED from scripts/_scotch-content.json (validated against the gate
-// suite). Edit the JSON + regenerate, or edit here and keep the JSON in sync.
+// Hand-maintained (its generator and content file were deleted 2026-11-11,
+// when the Scotch became a Watch course); validated by the gate suite.
 const KEY = 'rgba(255,214,0,0.88)';
 const ATK = 'rgba(40,185,95,0.92)';
 const SOFT = 'rgba(80,140,255,0.32)';
@@ -54,7 +54,9 @@ export interface ScotchTrapDef {
 }
 
 export const SCOTCH_GAME_TRAP_DEFS: ScotchTrapDef[] = [
-  { id: 'sea-cadet-mate', name: 'The Sea-Cadet Mate (Göring Gambit)', kind: 'weapon', appliesTo: ['main', 'scotch gambit'] },
+  // The trap is played in the Göring (4.c3 dxc3 Nxc3), so it shows on that tab;
+  // the main (4…Bc5) and Scotch Gambit (4.Bc4) lines never reach it.
+  { id: 'sea-cadet-mate', name: 'The Sea-Cadet Mate (Göring Gambit)', kind: 'weapon', appliesTo: ['göring gambit'] },
 ];
 
 export function getScotchTrapsForTab(tabKey: string): ScotchTrapDef[] {
