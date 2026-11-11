@@ -112,6 +112,11 @@ const ENGINE_EXTENDED_LESSONS = new Set<string>([
   'london-system::London: Ne5 Trade Plan (Nd2 Order)',
   'london-system::London vs Early c5 Challenge',
   'dutch-defence::Anti-Dutch 2.Bg5 Response',
+  // The main line is the repertoire's Reti pgn — the same moves as the
+  // sanctioned Reti Gambit tab below (Nf3 d5 c4 d4 e3 Nc6 …), which the
+  // DB names only through ply 5. The old main lesson played the Nimzo-English
+  // instead, a different line from the page's own, and duplicated that tab.
+  'The Réti Opening — A Master Class', // main lessons are keyed by title
   'reti-opening::Reti: Accepted dxc4 Bxc4',
   'reti-opening::Reti: Reti Gambit',
   'reti-opening::Reti: Reversed Benoni',

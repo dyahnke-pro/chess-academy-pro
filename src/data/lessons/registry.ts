@@ -58,8 +58,6 @@ import { CATALAN_OPENING_LESSON } from './catalanOpening';
 import { CATALAN_OPENING_VARIATION_LESSONS } from './catalanOpeningVariations';
 import { ENGLISH_OPENING_LESSON } from './englishOpening';
 import { ENGLISH_OPENING_VARIATION_LESSONS } from './englishOpeningVariations';
-import { RETI_OPENING_LESSON } from './retiOpening';
-import { RETI_OPENING_VARIATION_LESSONS } from './retiOpeningVariations';
 import { KINGS_INDIAN_ATTACK_LESSON } from './kingsIndianAttack';
 import { KINGS_INDIAN_ATTACK_VARIATION_LESSONS } from './kingsIndianAttackVariations';
 import { SICILIAN_ALAPIN_LESSON } from './sicilianAlapin';
@@ -148,7 +146,6 @@ const HAND_WRITTEN: OpeningLessons[] = [
   { main: LONDON_SYSTEM_LESSON, variations: LONDON_SYSTEM_VARIATION_LESSONS },
   { main: CATALAN_OPENING_LESSON, variations: CATALAN_OPENING_VARIATION_LESSONS },
   { main: ENGLISH_OPENING_LESSON, variations: ENGLISH_OPENING_VARIATION_LESSONS },
-  { main: RETI_OPENING_LESSON, variations: RETI_OPENING_VARIATION_LESSONS },
   { main: KINGS_INDIAN_ATTACK_LESSON, variations: KINGS_INDIAN_ATTACK_VARIATION_LESSONS },
   { main: SICILIAN_ALAPIN_LESSON, variations: SICILIAN_ALAPIN_VARIATION_LESSONS },
   { main: NIMZO_INDIAN_LESSON, variations: NIMZO_INDIAN_VARIATION_LESSONS },
