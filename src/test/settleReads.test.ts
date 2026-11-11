@@ -1,0 +1,42 @@
+import { describe, expect, it } from 'vitest';
+import { settleReads, type ReadFn } from './settleReads';
+import type { NativeLine } from './nativeStockfish';
+
+// The Vienna Copycat board, Black to move after 4.Qg4: the depth-16 reads the
+// sheet got (White's point of view, cp).
+const FEN = 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P1Q1/2N5/PPPP1PPP/R1B1K1NR b KQkq - 5 4';
+const line = (cp: number, ...pv: string[]): NativeLine => ({ cp, mate: null, pv });
+const TOP3 = [line(14, 'd8f6', 'g4g3'), line(18, 'e8f8', 'g4f3'), line(41, 'g7g6', 'g4f3')];
+const ALONE: Record<string, NativeLine> = {
+  d8f6: line(155, 'd8f6', 'c3d5', 'f6f2'),
+  e8f8: line(30, 'e8f8', 'g4f3'),
+  g7g6: line(45, 'g7g6', 'g4f3'),
+};
+const read: ReadFn = async (_fen, opts) => (opts.searchmoves ? [ALONE[opts.searchmoves]] : TOP3);
+
+describe('settleReads — one verdict per move', () => {
+  it('re-reads every candidate on its own when the two reads disagree, so the first choice and the cost agree', async () => {
+    const r = await settleReads(read, FEN, 'd8f6');
+    expect(r.reread).toBe(true);
+    // The old sheet ranked …Qf6 first and said it cost 1.41 at once.
+    expect(r.top[0].pv[0]).toBe('e8f8');
+    expect(r.top.map((l) => l.pv[0])).toEqual(['e8f8', 'g7g6', 'd8f6']);
+    expect(r.cost).toBeCloseTo(1.25, 2);
+  });
+
+  it('keeps the top-3 read when it agrees with the move read on its own', async () => {
+    const agree: ReadFn = async (_fen, opts) => (opts.searchmoves ? [line(20, 'e8f8')] : TOP3);
+    const r = await settleReads(agree, FEN, 'e8f8');
+    expect(r.reread).toBe(false);
+    expect(r.top).toBe(TOP3);
+    expect(r.cost).toBeCloseTo(0.06, 2);
+  });
+
+  it('never prints a negative cost: a move that reads better than the best is re-read with the rest', async () => {
+    const better: ReadFn = async (_fen, opts) => (opts.searchmoves === 'a7a6' ? [line(-60, 'a7a6')] : opts.searchmoves ? [ALONE[opts.searchmoves]] : TOP3);
+    const r = await settleReads(better, FEN, 'a7a6');
+    expect(r.reread).toBe(true);
+    expect(r.top[0].pv[0]).toBe('a7a6');
+    expect(r.cost).toBe(0);
+  });
+});

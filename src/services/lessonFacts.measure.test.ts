@@ -41,6 +41,7 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
     const { loadFullCorpus } = await import('../test/loadFullCorpus');
     const { noteAtPosition } = await import('./danyaTeachingService');
     const { getLessonScript, getVariationLessonScript } = await import('../data/lessons');
+    const { settleReads } = await import('../test/settleReads');
     await ensureMastersDbLoaded();
     loadFullCorpus();
     mkdirSync(OUT, { recursive: true });
@@ -66,11 +67,14 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
           const masters = (mastersMovesSync(fen) ?? []).slice().sort((a, b) => b.games - a.games);
           const total = masters.reduce((a, m) => a + m.games, 0);
           const mastersTxt = masters.slice(0, 5).map((m) => `${m.san} ${Math.round((100 * m.games) / Math.max(1, total))}%`).join(', ');
-          const top = await engine.read(fen, { multipv: 3 });
-          const topTxt = top.map((l) => `${sanOfUci(fen, l.pv[0] ?? '')} ${(sign * l.cp / 100).toFixed(2)} (${lineSans(fen, l.pv, 6)})`).join(' | ');
           const uci = `${mv.from}${mv.to}${mv.promotion ?? ''}`;
-          const playedRead = (await engine.read(fen, { multipv: 1, searchmoves: uci }))[0];
-          const cost = playedRead && top[0] ? (sign * (top[0].cp - playedRead.cp)) / 100 : null;
+          // One verdict per move: when the top-3 read and the move's own read
+          // disagree, every candidate is read on its own (settleReads).
+          const settled = await settleReads(engine.read, fen, uci);
+          const top = settled.top;
+          const topTxt = top.map((l) => `${sanOfUci(fen, l.pv[0] ?? '')} ${(sign * l.cp / 100).toFixed(2)} (${lineSans(fen, l.pv, 6)})`).join(' | ') + (settled.reread ? ' [each move read on its own]' : '');
+          const playedRead = settled.played;
+          const cost = settled.cost;
           const note = noteAtPosition(line.moves.slice(0, i + 1), c.fen(), op.name, op.color);
           const d = draft?.beats.find((b) => b.ply === i + 1)?.say ?? '';
           md.push(`### ${i + 1}. ${seat} ${san}${mv.captured ? ' (capture)' : ''}${c.inCheck() ? ' (check)' : ''}`);

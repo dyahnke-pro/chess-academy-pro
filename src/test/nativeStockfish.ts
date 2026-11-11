@@ -6,13 +6,19 @@
 // needs to be done deterministically").
 //
 // Reads are cached on disk by (fen, multipv, depth, searchmoves), so a re-run
-// costs nothing and a killed run keeps what it read.
+// costs nothing and a killed run keeps what it read. Only a read that reached
+// its depth is cached: a search cut off by the time limit (a loaded machine)
+// is a shallower read, and caching it under the full depth made a later run
+// serve it as the depth it never reached.
 import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { mateEvalFor } from '../services/engineConstants';
 
 export const NATIVE_SF = '/usr/games/stockfish';
+
+/** How long one read may run before it is given up (and not cached). */
+export const READ_TIMEOUT_MS = 600_000;
 
 export interface NativeLine { cp: number; mate: number | null; pv: string[] }
 
@@ -28,7 +34,7 @@ export interface NativeEngine {
   flush(): void;
 }
 
-export function nativeEngine(cachePath: string, defaultDepth: number): NativeEngine {
+export function nativeEngine(cachePath: string, defaultDepth: number, timeoutMs: number = READ_TIMEOUT_MS): NativeEngine {
   const cache: Record<string, NativeLine[]> = existsSync(cachePath) ? JSON.parse(readFileSync(cachePath, 'utf8')) as Record<string, NativeLine[]> : {};
   let dirty = 0;
   const flush = (): void => {
@@ -46,13 +52,16 @@ export function nativeEngine(cachePath: string, defaultDepth: number): NativeEng
       const flip = fen.split(' ')[1] === 'b' ? -1 : 1;
       let done = false;
       let buf = '';
+      let reached = 0;
       const finish = (): void => {
         if (done) return;
         done = true;
         try { sf.kill(); } catch { /* gone */ }
         const lines = [...byRank.entries()].sort((a, b) => a[0] - b[0]).map((e) => e[1]);
-        cache[key] = lines;
-        if (++dirty % 50 === 0) flush();
+        if (reached >= depth) {
+          cache[key] = lines;
+          if (++dirty % 50 === 0) flush();
+        }
         resolve(lines);
       };
       sf.stdout.on('data', (d: Buffer) => {
@@ -63,6 +72,7 @@ export function nativeEngine(cachePath: string, defaultDepth: number): NativeEng
           if (ln.startsWith('bestmove')) { finish(); continue; }
           if (!ln.startsWith('info') || !/ pv /.test(ln) || / bound /.test(ln)) continue;
           const rank = Number(/ multipv (\d+)/.exec(ln)?.[1] ?? 1);
+          reached = Math.max(reached, Number(/ depth (\d+)/.exec(ln)?.[1] ?? 0));
           const cp = /score cp (-?\d+)/.exec(ln);
           const mt = /score mate (-?\d+)/.exec(ln);
           const pv = / pv (.+)$/.exec(ln)?.[1].trim().split(/\s+/) ?? [];
@@ -72,7 +82,7 @@ export function nativeEngine(cachePath: string, defaultDepth: number): NativeEng
       });
       sf.on('error', finish);
       sf.stdin.write(`setoption name Threads value 1\nsetoption name MultiPV value ${multipv}\nposition fen ${fen}\ngo depth ${depth}${opts.searchmoves ? ` searchmoves ${opts.searchmoves}` : ''}\n`);
-      setTimeout(finish, 120_000);
+      setTimeout(finish, timeoutMs);
     });
   };
   const analysis: NativeEngine['analysis'] = async (fen, opts = {}) => {
