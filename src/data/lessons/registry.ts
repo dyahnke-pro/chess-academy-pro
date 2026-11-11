@@ -28,8 +28,6 @@ import { BENKO_GAMBIT_LESSON } from './benkoGambit';
 import { BENKO_GAMBIT_VARIATION_LESSONS } from './benkoGambitVariations';
 import { LONDON_SYSTEM_LESSON } from './londonSystem';
 import { LONDON_SYSTEM_VARIATION_LESSONS } from './londonSystemVariations';
-import { PHILIDOR_DEFENCE_LESSON } from './philidorDefence';
-import { PHILIDOR_DEFENCE_VARIATION_LESSONS } from './philidorDefenceVariations';
 import { QGA_LESSON } from './queensGambitAccepted';
 import { QGA_VARIATION_LESSONS } from './queensGambitAcceptedVariations';
 import { QUEENS_INDIAN_DEFENCE_LESSON } from './queensIndianDefence';
@@ -90,7 +88,6 @@ const HAND_WRITTEN: OpeningLessons[] = [
   { main: PIRC_DEFENCE_LESSON, variations: PIRC_VARIATION_LESSONS },
   { main: BENKO_GAMBIT_LESSON, variations: BENKO_GAMBIT_VARIATION_LESSONS },
   { main: LONDON_SYSTEM_LESSON, variations: LONDON_SYSTEM_VARIATION_LESSONS },
-  { main: PHILIDOR_DEFENCE_LESSON, variations: PHILIDOR_DEFENCE_VARIATION_LESSONS },
   { main: QGA_LESSON, variations: QGA_VARIATION_LESSONS },
   { main: QUEENS_INDIAN_DEFENCE_LESSON, variations: QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS },
   { main: SCHLIEMANN_DEFENCE_LESSON, variations: SCHLIEMANN_DEFENCE_VARIATION_LESSONS },
