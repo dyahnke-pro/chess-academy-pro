@@ -39,6 +39,7 @@ import { RETI_OPENING_WATCH } from './retiOpening';
 import { RUY_LOPEZ_WATCH } from './ruyLopez';
 import { SCOTCH_GAME_WATCH } from './scotchGame';
 import { SEMI_SLAV_WATCH } from './semiSlav';
+import { SICILIAN_ALAPIN_WATCH } from './sicilianAlapin';
 import { SICILIAN_DRAGON_WATCH } from './sicilianDragon';
 import { SICILIAN_NAJDORF_WATCH } from './sicilianNajdorf';
 import { SICILIAN_SVESHNIKOV_WATCH } from './sicilianSveshnikov';
@@ -84,6 +85,7 @@ export const WATCH_COURSES: readonly WatchCourse[] = [
   RUY_LOPEZ_WATCH,
   SCOTCH_GAME_WATCH,
   SEMI_SLAV_WATCH,
+  SICILIAN_ALAPIN_WATCH,
   SICILIAN_DRAGON_WATCH,
   SICILIAN_NAJDORF_WATCH,
   SICILIAN_SVESHNIKOV_WATCH,

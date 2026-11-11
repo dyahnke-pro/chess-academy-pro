@@ -1,0 +1,255 @@
+// Sicilian Alapin — the Watch course, one beat a move (WO-OPENINGS-REWRITE-01).
+// Written from the fact sheet (`LESSON_FACTS=1 LESSON_IDS=sicilian-alapin`):
+// masters' percentages, engine lines at a fixed depth, the board after each
+// move. The student plays Black against 2.c3. Standard:
+// docs/OPENING-WATCH-BEATS.md, said in the think-out-loud register (§2a). One
+// story threads the course: c3 prepares a pawn center on d4 and e4 but takes
+// c3 away from their own knight; you hit e4 at once, and then go after the
+// center they built: the e5 pawn in the …Nf6 lines, the isolated d4 pawn in
+// the …d5 lines, the base of the chain in the …e6 line.
+import type { WatchCourse } from './watchCourse';
+
+const MAIN = ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'cxd4', 'd6', 'Nf3', 'e6', 'Nc3', 'Nxc3', 'bxc3', 'Qc7', 'Bd2', 'Nd7', 'exd6', 'Bxd6', 'Bd3', 'b6', 'O-O', 'Bb7', 'Re1', 'O-O', 'h3', 'Bf4'];
+
+/** The main line's beats, in order — one per move of `MAIN`. */
+const MAIN_BEATS: Array<[string, string]> = [
+  ["e4 — just under half the masters start here. The pawn takes a central square and covers d5 and f5. Your answer is the Sicilian, and this whole course is about one particular way they meet it.", 'e4 — they take the center.'],
+  ["…c5 — the Sicilian, almost half the masters' choice and the engine's first. What does a wing pawn do here? It watches d4. If their d-pawn ever goes there, you take it, and they are left with one pawn in the middle instead of two. Unless they find a way to take back with another pawn. Hold that thought.", '…c5 — the Sicilian: watch d4.'],
+  ["c3 — the Alapin. Only about six masters in a hundred choose it; eight in ten play Nf3. So what is the pawn for? It prepares d4. If you take on d4, this pawn takes back, and they keep two pawns side by side on d4 and e4, the center the usual Sicilian never gives them. The price: c3 was the square their queen's knight wanted. The engine prefers Nf3, and it's about level.", 'c3 — prepares d4, a pawn takes back.'],
+  ["So how do you stop that center? Hit it before it forms. …Nf6, close to half the masters' choice and the engine's top move, attacks e4. And look what c3 cost them: Nc3, the natural way to guard that pawn, is gone, because their own pawn sits on c3.", '…Nf6 — hits e4; no Nc3 to guard.'],
+  ["e5 — nearly every master pushes, and it's the engine's choice too. The pawn hits your knight on f6, so it has to move. Where to? Count the squares before you answer.", 'e5 — kicks the knight.'],
+  ["…Nd5 — every master plays it. The other squares are worse: back to g8 undoes your development, and …Nc6 just lets exf6 take the knight. On d5 the knight stands in the center and hits c3. And here's the bonus: with their pawn on c3, no knight of theirs can come there to chase yours away.", '…Nd5 — central, and Nc3 is impossible.'],
+  ["d4 — a little over half the masters. Now the plan is out in the open: the pawn hits c5, which nothing guards, and if you take, the c-pawn takes back.", 'd4 — hits c5, cxd4 next.'],
+  ["…cxd4 — almost every master takes, and the engine rates …d6 about the same. Why trade now? Your pawn on c5 had no guard, and now it's their center pawn that's gone, for a moment. The pawn on d4 hits c3, so they have to win it back. The question is how.", '…cxd4 — trade; a pawn up for now.'],
+  ["cxd4 — the engine's first choice, though only two masters in ten take back right now; most develop with Nf3 first, and that order has its own tab. With a pawn back on d4, their e5 pawn has a pawn behind it again, and c3 is empty, so their knight can use it after all. That e5 pawn is your target from here on.", 'cxd4 — d4 backs up e5.'],
+  ["So where do you hit back? At the front of the chain. …d6, two masters in three, attacks e5, and right now only the d4 pawn guards it. The further a pawn runs up the board, the more help it needs to stay alive.", '…d6 — hits e5 right away.'],
+  ["Nf3 — eight masters in ten. The knight gives e5 a second guard and covers d4 as well. But notice something about your own position: the knight on d5 has no guard at the moment, because your pawn on d6 blocks the queen. Remember that.", 'Nf3 — a second guard for e5.'],
+  ["…e6 — and that's the fix: the knight on d5 gets a pawn behind it, and your bishop on f8 can come out to e7. Most masters, eight in ten, play …Nc6 here instead, and that line has its own tab. The engine prefers taking at once with …dxe5. This is the quiet, solid choice, and they are a little better.", '…e6 — the d5 knight gets a guard.'],
+  ["Nc3 — remember the square c3 took away from their knight? The pawn has left it, so the knight comes out and challenges yours on d5. From here the line leaves the masters' games.", 'Nc3 — challenges the knight on d5.'],
+  ["…Nxc3 — why trade? Your knight was their target, and now the knight on c3 hits their queen and the a2 pawn, so they have to take back. The only question is with what.", '…Nxc3 — swap the knights.'],
+  ["bxc3 — the only real recapture. The b-pawn comes to c3 and props up d4 again. But count the pawns: the one on a2 has no neighbor any more, and the b-file opens for their rook.", 'bxc3 — d4 propped up; a2 isolated.'],
+  ["…Qc7 — and look what the queen hits: the pawn on c3, which nothing guards. That's the trouble with a pawn on c3 and no b-pawn behind it. They have to spend a move looking after it.", '…Qc7 — hits the loose c3 pawn.'],
+  ["Bd2 — the bishop guards c3. A modest job, but now c3 holds.", 'Bd2 — guards c3.'],
+  ["…Nd7 — back to the target: the knight joins your d6 pawn against e5. Two of yours hit it, the d4 pawn and the knight on f3 guard it. Two against two, so something has to give.", '…Nd7 — a second hit on e5.'],
+  ["exd6 — they release the tension, and with a threat: the pawn on d6 hits your queen on c7. The engine prefers Bd3, keeping the pawn on e5 where it cramps you. Now you take back, and you get to do it with a developing move.", 'exd6 — hits the queen; Bd3 was better.'],
+  ["…Bxd6 — take with the bishop, not the queen. Why? The bishop develops with the recapture and lands on a fine diagonal, aimed at h2. The engine rates the queen recapture well below it.", '…Bxd6 — develops, aims at h2.'],
+  ["Bd3 — a mirror image: your bishop on d6 aims at h2, theirs on d3 aims at h7. Both kings are still in the middle, and both are about to castle toward those bishops.", 'Bd3 — aims at h7.'],
+  ["…b6 — where does your last bishop go? On c8 it's boxed in by your knight on d7 and your pawn on b7. So the b-pawn steps up, and the bishop goes the long way round: b7 next, onto the long diagonal. The engine rates castling first about the same.", '…b6 — the bishop heads for b7.'],
+  ["O-O — their king goes to safety first. Yours is still on e8, and in two moves their rook will show you why that matters.", 'O-O — their king is safe.'],
+  ["…Bb7 — the bishop arrives on the long diagonal and hits the knight on f3. Their g2 pawn and queen guard it, so nothing is won yet. But from here on this bishop stares at their king's side of the board.", '…Bb7 — long diagonal, hits f3.'],
+  ["Re1 — and here's why your king on e8 mattered. The rook comes to the half-open e-file and pins your e6 pawn to your king. Nothing hangs, but you can't leave it like that for long.", 'Re1 — pins e6 to your king.'],
+  ["…O-O — the cure for the pin: your king leaves e8, so the pawn on e6 is just a pawn again. Both kings are safe and every minor piece is out.", '…O-O — king safe; the pin is gone.'],
+  ["h3 — a quiet move. The pawn covers g4, so a knight or bishop of yours that lands there to bother the knight on f3 is simply taken.", 'h3 — takes g4 from your pieces.'],
+  ["…Bf4 — the bishop offers a trade: it hits their bishop on d2. Why trade? That bishop is the one guarding c3, and every trade brings you closer to an ending where their pawns on a2 and c3 are targets. The engine slightly prefers …Rad8, and it's about level. Your plan for the middlegame: trade the dark-squared bishops, put a rook on c8 against the c3 pawn, and bring your knight to f6, where it covers d5, the square in front of their d-pawn.", "…Bf4 — offers to trade off c3's guard."],
+];
+
+const beats: Record<string, { say: string; sayShort: string }> = {};
+MAIN_BEATS.forEach(([say, sayShort], k) => { beats[MAIN.slice(0, k + 1).join(' ')] = { say, sayShort }; });
+
+/** A tab's beats from the first move the main line (or an earlier tab) doesn't share. */
+type TabBeats = Array<[string, string]>;
+
+const TAB_LINES: Record<string, string[]> = {
+  'Alapin: 2...Nf6 Main Line (Endgame)': ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'cxd4', 'd6', 'Nf3', 'Nc6', 'Bc4', 'Nb6', 'Bb3', 'dxe5', 'dxe5', 'Qxd1+', 'Bxd1', 'Nc4', 'Ba4', 'Bd7'],
+  'Alapin: 2...d5 Central Counter (IQP Play)': ['e4', 'c5', 'c3', 'd5', 'exd5', 'Qxd5', 'd4', 'Nf6', 'Nf3', 'e6', 'Bd3', 'Be7', 'O-O', 'O-O', 'Be3', 'cxd4', 'cxd4', 'Nc6', 'Nc3', 'Qd6', 'a3', 'Bd7'],
+  'Alapin: 2...e6 Solid (French Structure)': ['e4', 'c5', 'c3', 'e6', 'd4', 'd5', 'e5', 'Nc6', 'Nf3', 'Bd7', 'Be2', 'Nge7', 'O-O', 'Nf5', 'Na3', 'cxd4', 'cxd4', 'Be7', 'Nc2', 'O-O', 'Bd3', 'f6'],
+  'Alapin: 2...g6 Fianchetto': ['e4', 'c5', 'c3', 'g6', 'd4', 'cxd4', 'cxd4', 'd5', 'e5', 'Bg7', 'Nc3', 'Nc6', 'Nf3', 'Nh6', 'Bb5', 'O-O', 'Bxc6', 'bxc6', 'O-O', 'Bg4', 'h3', 'Bxf3', 'Qxf3', 'Nf5', 'Rd1'],
+  'Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.Nf3 (Alt Move Order)': ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'Nf3', 'Nc6', 'cxd4', 'd6', 'Bc4', 'Nb6', 'Bb3', 'dxe5', 'dxe5', 'Qxd1+', 'Bxd1', 'Nc4', 'Ba4', 'Bd7'],
+  'Alapin: 2...d5 3.exd5 Qxd5 4.d4 Nc6 (with ...e5)': ['e4', 'c5', 'c3', 'd5', 'exd5', 'Qxd5', 'd4', 'Nc6', 'Nf3', 'e5', 'dxe5', 'Qxd1+', 'Kxd1', 'Nge7', 'Bd3', 'Be6', 'Na3', 'O-O-O', 'Kc2', 'Nd5', 'Bd2', 'h6'],
+  'Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.cxd4 d6 (IQP Accepted)': ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'cxd4', 'd6', 'Nf3', 'Nc6', 'Bc4', 'Nb6', 'Bb5', 'dxe5', 'Nxe5', 'Bd7', 'Nxd7', 'Qxd7', 'Nc3', 'e6', 'O-O', 'Be7'],
+  'Alapin: 2...d5 3.exd5 Nf6 (Knight Recapture)': ['e4', 'c5', 'c3', 'd5', 'exd5', 'Nf6', 'd4', 'cxd4', 'cxd4', 'Nxd5', 'Nf3', 'Nc6', 'Be2', 'Bg4', 'O-O', 'e6', 'Nc3', 'Be7', 'h3', 'Bh5', 'Qb3', 'Qb6'],
+  'Alapin: Stoltz Attack (4.Nf3 before d4)': ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'Nf3', 'Nc6', 'Bc4', 'Nb6', 'Bb3', 'd5', 'exd6', 'Qxd6', 'O-O', 'Be6', 'Bxe6', 'Qxe6', 'a4', 'Qd7', 'a5', 'Nd5', 'a6', 'b6', 'd4', 'e6', 'Ne5', 'Nxe5', 'dxe5', 'Be7'],
+};
+
+const TAB_BEATS: Record<string, TabBeats> = {
+  'Alapin: 2...Nf6 Main Line (Endgame)': [
+    ["…Nc6 — the main move, eight masters in ten. Instead of guarding your knight on d5, you develop and go after their center: the knight on c6 attacks d4 and e5 at once. The catch: the d5 knight still has no guard, and they can go after it.", '…Nc6 — hits d4 and e5.'],
+    ["Bc4 — the engine's top move, and it goes straight for your knight on d5, which nothing guards. Retreating to f6 runs into the e5 pawn. So where can it go that hits back?", 'Bc4 — goes after the loose knight.'],
+    ["…Nb6 — the knight steps back and hits the bishop on c4, which has no guard either. Now it's their piece that has to move.", '…Nb6 — hits back at the bishop.'],
+    ["Bb3 — the bishop drops back and keeps its aim at f7. The engine slightly prefers Bb5, pinning your knight on c6, and that line has its own tab. Now it's your move, with the tension still on e5.", 'Bb3 — retreats, still aims at f7.'],
+    ["…dxe5 — take now: the pawn that was cramping you is gone, and your new pawn on e5 hits d4. For the moment you're a pawn up, and they have to choose how to take back.", '…dxe5 — the cramping pawn is gone.'],
+    ["dxe5 — the pawn takes back, but look what it opens: the d-file, with the queens facing each other and nothing in between. The engine prefers Nxe5, and after the pawn recapture you are a little better.", 'dxe5 — queens face off; Nxe5 was better.'],
+    ["…Qxd1+ — trade queens, with check. Why now? With the queens gone your king has nothing to fear, and their e5 pawn has lost its pawn guard. Your knights can go after it in peace.", '…Qxd1+ — queens off, with check.'],
+    ["Bxd1 — taking with the bishop keeps their right to castle; taking with the king is worse. But the bishop has gone all the way back to d1, out of play for now, and you are a little better.", 'Bxd1 — keeps castling; a passive bishop.'],
+    ["…Nc4 — the knight jumps forward and hits two pawns, e5 and b2. On e5 that makes two knights against one defender, the knight on f3. The engine prefers developing with …Bf5 first, and it's about level.", '…Nc4 — hits e5 and b2.'],
+    ["Ba4 — the bishop comes back to life with a pin: your knight on c6 is pinned to your king. So for now only one of your knights really hits e5.", 'Ba4 — pins the knight on c6.'],
+    ["…Bd7 — and it's simple: the bishop steps in between, the pin is gone, and both knights hit e5 again, against one defender. You are a little better. Your plan for the middlegame: win the e5 pawn with your knights, then put your rooks on the open d-file.", '…Bd7 — unpins; e5 is hit twice.'],
+  ],
+  'Alapin: 2...d5 Central Counter (IQP Play)': [
+    ["…d5 — a third of the masters strike in the center at once. Why now? Their c3 hasn't been followed by d4 yet, so you hit e4 before the big center forms. The engine rates …Nf6 a little higher.", '…d5 — hits e4 before d4 comes.'],
+    ["exd5 — nearly every master takes. Now your queen takes back. In the Scandinavian, Nc3 would chase her away at once. Here?", 'exd5 — they take; your queen recaptures.'],
+    ["…Qxd5 — almost every master. Here's the point of playing against c3: the square their knight needs to kick your queen is taken by their own pawn. So she sits in the center and hits a2, d2 and g2.", '…Qxd5 — no Nc3 to chase her.'],
+    ["d4 — nearly every master. The pawn hits c5. If the c-pawns come off, their d-pawn will stand alone, with no pawn on the c-file or the e-file to help it. They are a little better.", 'd4 — hits c5; an isolated pawn looms.'],
+    ["…Nf6 — a little over half the masters, and the engine rates it the same as …Nc6. Keep it simple: the knight goes to its best square and backs up your queen on d5.", '…Nf6 — develops, backs up the queen.'],
+    ["Nf3 — nearly every master. The knight adds a guard to d4 and gets their king ready to castle. They are a little better.", 'Nf3 — guards d4, castling next.'],
+    ["…e6 — the most common move, though nearly as many masters pin the knight with …Bg4. The pawn opens the way for your bishop on f8 and puts a pawn behind your queen on d5. The engine prefers …Nc6, and they are a little better.", '…e6 — solid; frees the f8 bishop.'],
+    ["Bd3 — about two masters in ten; Na3, heading for b5, is the most common move and the engine's choice. On d3 the bishop aims at h7, where your king is about to live. It's about level.", 'Bd3 — aims at h7.'],
+    ["…Be7 — about half the masters. Nothing fancy: the bishop develops and clears the way to castle, so your king is safe before the center opens.", '…Be7 — develop, then castle.'],
+    ["O-O — almost nine masters in ten castle now. Both sides are nearly developed, and the tension between your c5 pawn and their d4 pawn is still there.", 'O-O — their king is safe.'],
+    ["…O-O — nine masters in ten castle too, and so does the engine. Why not take on d4 first? The engine rates that lower; the trade can wait until it helps you most.", '…O-O — king safe, tension kept.'],
+    ["Be3 — from here the line leaves the masters' games. The bishop adds a guard to d4. But look where it stands: right where a pawn of yours on d4 would hit it.", 'Be3 — one more guard on d4.'],
+    ["…cxd4 — the trade, and with a hit: your pawn on d4 attacks their bishop on e3 and the c3 pawn. The engine prefers keeping the tension one more move with …Rd8 or …Nc6, but now the structure gets decided.", '…cxd4 — trade, hitting the bishop.'],
+    ["cxd4 — and there it is: their d-pawn has no pawn on either side. An isolated queen's pawn. It gives them space and open lines, but no pawn can ever guard it, and no pawn of theirs can ever cover d5, the square in front of it.", 'cxd4 — an isolated pawn on d4.'],
+    ["…Nc6 — the knight goes straight for the isolated pawn and hits d4. The engine prefers …b6 first, to get the bishop to b7, but the idea is the same: point your pieces at a pawn no other pawn can help.", '…Nc6 — hits the isolated pawn.'],
+    ["Nc3 — the knight develops and hits your queen on d5, and from c3 it covers d5, the square in front of their pawn.", 'Nc3 — hits your queen.'],
+    ["…Qd6 — where should the queen go? The engine prefers …Qh5, staying active toward their king. On d6 she hits the d4 pawn and h2.", '…Qd6 — hits d4 and h2.'],
+    ["a3 — a small move with a clear job: it covers b4, so your knight can't use that square to hit their bishop on d3.", 'a3 — keeps your knight off b4.'],
+    ["…Bd7 — your last minor piece develops, and your rooks are connected. The engine prefers …Rd8, a rook on the d-file first, and they are a little better. Your plan for the middlegame: rooks to c8 and d8, a knight on d5 in front of the isolated pawn, and trades, because the fewer pieces on the board, the weaker that pawn gets.", '…Bd7 — develops; the rooks connect.'],
+  ],
+  'Alapin: 2...e6 Solid (French Structure)': [
+    ["…e6 — fewer than one master in ten, and a different idea: a quiet pawn that gets ready for …d5. If they build the center with d4, you answer with a French-style pawn chain. The engine rates …Nf6 a little higher.", '…e6 — quietly prepares …d5.'],
+    ["d4 — almost nine masters in ten. The pawn hits c5, but your bishop on f8 now guards it, so there's no rush.", 'd4 — hits c5, which is guarded.'],
+    ["…d5 — nine masters in ten. Now e4 is hit, and they have to choose: take on d5, or push past it.", '…d5 — hits e4.'],
+    ["e5 — a third of the masters push; two in three take on d5 instead. And look at the board: this is exactly the Advance French, reached by a different road. Their pawns on d4 and e5 take space, and the base of that chain, d4, is what you'll attack.", 'e5 — the Advance French structure.'],
+    ["…Nc6 — about seven masters in ten, and the engine rates it the same as …Bd7. The knight joins the attack on d4, and it hits e5 too.", '…Nc6 — more pressure on d4.'],
+    ["Nf3 — nearly every master. The knight guards both d4 and e5, the two pawns your pieces are aiming at.", 'Nf3 — guards d4 and e5.'],
+    ["…Bd7 — about half the masters, and the engine's favorite; …Qb6, going after b2, is nearly as common. The bishop leaves c8, so a rook can use the c-file later. This is the old French problem: your light-squared bishop is a bad bishop, stuck behind your pawns on e6 and d5, and on d7 it at least gets out of the rook's way.", '…Bd7 — clears c8 for a rook.'],
+    ["Be2 — two masters in three. The bishop clears the way to castle, and they are a little better.", 'Be2 — castling next.'],
+    ["…Nge7 — about six masters in ten. Where is this knight going? Not f6, where e5 would kick it. It heads for f5, to hit d4. For a moment it blocks your bishop on f8, so your c5 pawn has lost its guard.", '…Nge7 — heading for f5.'],
+    ["O-O — the engine's first choice; Na3 is a shade more common among masters. Their king is safe, and your c5 pawn is still loose, so expect to settle it soon.", 'O-O — king safe; c5 still loose.'],
+    ["…Nf5 — the knight arrives and hits d4. More masters play …Ng6, aimed at e5 instead, and the engine rates them about the same. Count d4 now: your c5 pawn and both knights hit it. And with the knight off e7, your bishop guards c5 again.", '…Nf5 — the knight hits d4.'],
+    ["Na3 — from here the line leaves the masters' games. Why the rim? The knight is heading for c2, where it guards d4 once more.", 'Na3 — heading for c2.'],
+    ["…cxd4 — you release the tension yourself, and once they take back, the c-file is open all the way.", '…cxd4 — the c-file is about to open.'],
+    ["cxd4 — the structure is set: their pawns on d4 and e5, yours on d5 and e6, and an open c-file between them. Their d4 pawn is the base of the chain, and it no longer has a pawn behind it.", 'cxd4 — the c-file is open.'],
+    ["…Be7 — the bishop develops, points at the knight on a3, and lets you castle.", '…Be7 — develops, castling next.'],
+    ["Nc2 — the knight finishes its trip and guards d4 again. Now d4 has three guards: the knight on c2, the knight on f3 and their queen.", 'Nc2 — another guard on d4.'],
+    ["…O-O — your king is safe, and the rook on f8 now stands on the f-file. Remember that file: your next pawn move is about to open it.", '…O-O — king safe; the f-file waits.'],
+    ["Bd3 — the bishop develops and hits your knight on f5. Your e6 pawn guards it, so nothing hangs.", 'Bd3 — hits the knight on f5.'],
+    ["…f6 — the engine's top move, and here's the point of everything so far. You strike the head of the chain, e5. If they take, the f-file opens for your rook on f8; if they don't, you can take on e5 yourself. Your plan for the middlegame: open the f-file, then bring your knights, your bishop and a rook to bear on the d4 pawn.", '…f6 — strike the head of the chain.'],
+  ],
+  'Alapin: 2...g6 Fianchetto': [
+    ["…g6 — only three masters in a hundred. The idea: let them build the center, then aim a bishop from g7 at it. The engine prefers …Nf6, and they are a little better.", '…g6 — a bishop for the long diagonal.'],
+    ["d4 — almost nine masters in ten take the center. The pawn hits c5, and nothing guards it.", 'd4 — hits the loose c5 pawn.'],
+    ["…cxd4 — nine masters in ten take. But look what it gives them: the c-pawn takes back, and they have exactly the center c3 was played for. The engine prefers striking first with …d5, and they are a little better.", '…cxd4 — trade; …d5 was more precise.'],
+    ["cxd4 — nearly every master. Two pawns side by side on d4 and e4: the full center, and nothing of yours hits it yet.", 'cxd4 — the full pawn center.'],
+    ["…d5 — nine masters in ten, and the engine's top move. Why not develop with …Bg7 first? The engine rates that lower, and Nc3 would give e4 a guard. …d5 hits e4 right now and makes them decide.", '…d5 — hits e4 right away.'],
+    ["e5 — about four masters in ten push, and the engine likes it best; half take on d5. The pawn steps past your attack and stands on the long diagonal, right in the path of your bishop.", 'e5 — blocks the long diagonal.'],
+    ["…Bg7 — the bishop takes the long diagonal anyway and hits e5 already. Their d4 pawn guards it, so this is pressure for the long run: if the e5 and d4 pawns ever go, the bishop sees all the way to b2.", '…Bg7 — hits e5 already.'],
+    ["Nc3 — the knight develops and hits your d5 pawn, the one thing standing in front of their center.", 'Nc3 — hits d5.'],
+    ["…Nc6 — the knight hits d4 and e5, the same two pawns your bishop is aimed at. The engine slightly prefers …Nh6, and it's close.", '…Nc6 — hits d4 and e5.'],
+    ["Nf3 — the knight guards d4 and e5. The engine prefers Bb5, pinning your knight on c6 right away, and it's about level.", 'Nf3 — guards d4 and e5; Bb5 was stronger.'],
+    ["…Nh6 — where is this knight going? Not f6, which their e5 pawn covers. From h6 it heads for f5, to hit d4. But the engine wants something else first: …Bg4, pinning their knight on f3 to the queen, the piece that holds d4 and e5 together. After …Nh6 they are a little better.", '…Nh6 — heading for f5; …Bg4 was better.'],
+    ["Bb5 — the bishop pins your knight on c6 to your king. The engine prefers h3 first, taking g4 away from your bishop, and now it's about level again.", 'Bb5 — pins the c6 knight; h3 was better.'],
+    ["…O-O — you castle out of the pin, so the knight on c6 is free again. But the engine wants …Bg4 here too, and after castling they are a little better.", '…O-O — out of the pin.'],
+    ["Bxc6 — they take the knight anyway, though the engine prefers h3. Look at your b7 pawn: it's pinned to the rook on a8, but a pin to a rook isn't a pin to the king, so it can still take back.", 'Bxc6 — the bishop for your knight.'],
+    ["…bxc6 — the pawn takes back toward the center, so d5 has a pawn behind it now, and the b-file opens for your rook.", '…bxc6 — d5 supported, b-file open.'],
+    ["O-O — both kings are tucked away, and it's about level. Now your light-squared bishop is the one piece still at home. Where should it go?", 'O-O — both kings safe.'],
+    ["…Bg4 — there it is, the move the engine wanted twice already. The bishop pins their knight on f3 to the queen, and that knight is the piece guarding d4 and e5.", '…Bg4 — pins the knight on f3.'],
+    ["h3 — the pawn puts the question to your bishop on g4: take, or retreat? The engine rates it as good as anything here.", 'h3 — the bishop must decide.'],
+    ["…Bxf3 — take it. That knight was one of d4's guards, and your bishop on f3 hits their queen, so they have to take back right away.", '…Bxf3 — removes a guard of d4.'],
+    ["Qxf3 — the queen takes back, and from f3 she hits your d5 pawn and f7. Your c6 pawn guards d5 and your king guards f7, so nothing falls.", 'Qxf3 — hits d5 and f7.'],
+    ["…Nf5 — the knight from h6 finally lands on f5 and hits d4. And look: with their knight gone, nothing of theirs guards d4, so the pawn is hanging.", '…Nf5 — d4 is hanging.'],
+    ["Rd1 — the rook guards d4 from behind, and it's about level. Your plan for the middlegame: …e6 to support d5, then the …f6 break against e5 to free the diagonal for your bishop on g7, with a rook on the b-file aimed at b2.", 'Rd1 — guards d4 from behind.'],
+  ],
+  'Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.Nf3 (Alt Move Order)': [
+    ["Nf3 — about seven masters in ten develop first instead of taking back. The knight hits your d4 pawn, which nothing guards, so they can win it back whenever they like, and meanwhile a piece is out.", 'Nf3 — develops first; d4 can wait.'],
+    ["…Nc6 — about half the masters. The knight develops and hits e5, and for now it also stands guard over your pawn on d4.", '…Nc6 — hits e5, guards d4.'],
+    ["cxd4 — about half the masters take back now; the rest play Bc4 first, and so does the engine. With the pawn back on d4, e5 has its pawn guard again.", 'cxd4 — the pawn comes back.'],
+    ["…d6 — nearly every master. It hits e5. And here's what to notice: this is the same position as in the endgame line, reached by a different move order. Same position, same plan.", '…d6 — hits e5; a familiar position.'],
+    ["Bc4 — just as in the endgame line, the bishop goes after your knight on d5, which nothing guards.", 'Bc4 — goes after the d5 knight.'],
+    ["…Nb6 — move the knight with a hit of your own: from b6 it hits the bishop on c4, which has no guard.", '…Nb6 — hits the bishop on c4.'],
+    ["Bb3 — the bishop steps back and keeps f7 in its sights. The engine rates Bb5, the pin on c6, about the same.", 'Bb3 — back, still aiming at f7.'],
+    ["…dxe5 — you take the pawn that was cramping your position, and your new pawn on e5 hits d4.", '…dxe5 — takes the cramping pawn.'],
+    ["dxe5 — and once more the d-file opens with both queens on it. The engine prefers Nxe5, and now you are a little better.", 'dxe5 — the d-file opens.'],
+    ["…Qxd1+ — same idea as before: swap the queens with check, and leave e5 with no pawn to guard it.", '…Qxd1+ — trade queens, with check.'],
+    ["Bxd1 — taking with the king would give up castling. The bishop sits far back on d1, and you are a little better.", 'Bxd1 — a passive bishop on d1.'],
+    ["…Nc4 — the knight hits e5 and b2, so e5 faces two knights with only the knight on f3 to guard it. The engine prefers …Bf5, developing first, and it's about level.", '…Nc4 — two knights on e5.'],
+    ["Ba4 — the bishop pins your knight on c6 to your king, and that takes one of your attackers off e5.", 'Ba4 — pins the c6 knight.'],
+    ["…Bd7 — break the pin, and e5 has two attackers again. You are a little better. Your plan for the middlegame: collect the e5 pawn with your knights and take over the open d-file with your rooks. Two move orders, one plan.", '…Bd7 — unpins; e5 hit twice.'],
+  ],
+  'Alapin: 2...d5 3.exd5 Qxd5 4.d4 Nc6 (with ...e5)': [
+    ["…Nc6 — fewer than two masters in ten, yet the engine's first choice. The knight develops with a hit on d4. And here's the idea behind it: your e-pawn is coming to e5 next, to hit d4 again.", '…Nc6 — hits d4; …e5 is next.'],
+    ["Nf3 — nine masters in ten. The knight develops and guards d4.", 'Nf3 — develops, guards d4.'],
+    ["…e5 — the counter-punch. The pawn hits d4, and now four of yours hit it: the c5 and e5 pawns, the knight and the queen. It's a rare try; the masters mostly play …Bg4 or …Nf6, and the engine prefers …Nf6. They are a little better.", '…e5 — another hit on d4.'],
+    ["dxe5 — they take, and look what that does: the d-file opens, and their queen on d1 now hits yours on d5, which nothing guards.", 'dxe5 — your queen is hit.'],
+    ["…Qxd1+ — the alternatives are worse. Trade the queens, and with check, because only their king can take back on d1.", '…Qxd1+ — queens off; the king takes.'],
+    ["Kxd1 — forced. Their king has lost the right to castle, but they're a pawn up: the e5 pawn is extra. They are a little better, and your job now is to make that pawn a target.", 'Kxd1 — forced; they keep the extra pawn.'],
+    ["…Nge7 — why e7? The knight is heading for g6, where it hits e5, the extra pawn.", '…Nge7 — heading for g6 and e5.'],
+    ["Bd3 — the bishop develops toward your kingside: it hits h7 and covers g6, the square your knight wants.", 'Bd3 — hits h7, covers g6.'],
+    ["…Be6 — the bishop develops and hits a2, and it clears the last square, so your king can go long.", '…Be6 — hits a2; castle long next.'],
+    ["Na3 — the knight comes out on the edge, heading for c4.", 'Na3 — heading for c4.'],
+    ["…O-O-O — look what castling does: your rook lands on d8, on the same file as their king, and pins the bishop on d3. That bishop has no guard, so they have to deal with it right now.", '…O-O-O — the rook pins the d3 bishop.'],
+    ["Kc2 — the king steps off the d-file, so the pin is gone, and from c2 it guards the bishop on d3.", 'Kc2 — unpins and guards d3.'],
+    ["…Nd5 — the knight comes to the center and hits c3. The engine prefers …Ng6, going after the e5 pawn instead.", '…Nd5 — hits c3; …Ng6 was better.'],
+    ["Bd2 — the bishop guards c3. They are a little better, because they still have the extra pawn on e5.", 'Bd2 — guards c3.'],
+    ["…h6 — a small pawn move with a job: it takes g5 away from their pieces and prepares …g5, which covers f4, the square their f-pawn would use to support e5. They are a little better. Your plan for the middlegame: rooks on the open d-file, …g5 for space, and every piece you can spare aimed at the extra pawn on e5.", '…h6 — takes g5, prepares …g5.'],
+  ],
+  'Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.cxd4 d6 (IQP Accepted)': [
+    ["Bb5 — the engine's top move here. Instead of retreating, the bishop pins your knight on c6 to your king, so that knight can't move.", 'Bb5 — pins the knight on c6.'],
+    ["…dxe5 — take the e5 pawn while you can. Your knight on c6 is still pinned, but your new pawn on e5 hits d4.", '…dxe5 — takes, hitting d4.'],
+    ["Nxe5 — the knight takes back and piles on c6: the bishop and knight both hit it, the knight there can't move, and only your b7 pawn guards it. It also hits f7.", 'Nxe5 — piles on the pinned knight.'],
+    ["…Bd7 — the only good answer; …a6 and …Qd5 both lose ground. The bishop steps in between, so the knight on c6 is no longer pinned to your king, and it adds a guard to c6.", '…Bd7 — breaks the pin, guards c6.'],
+    ["Nxd7 — they take the bishop. Is that a problem? No: it's a trade, knight for bishop, and you simply take back.", 'Nxd7 — knight for bishop.'],
+    ["…Qxd7 — take with the queen. Now look at d4: no pawn of theirs stands on the c-file or the e-file, so it's an isolated queen's pawn, and your queen already hits it.", '…Qxd7 — the queen hits d4.'],
+    ["Nc3 — the knight develops and covers d5 and e4. Keep an eye on the bishop on b5: your knight on c6 is pinned to your queen now.", 'Nc3 — covers d5.'],
+    ["…e6 — the pawn covers d5, the square right in front of the isolated pawn, and opens the way for your bishop on f8. The engine rates …Rd8 a touch higher.", '…e6 — covers d5, frees the bishop.'],
+    ["O-O — their king is safe; from here it's a fight over one pawn, the isolated one on d4.", 'O-O — their king is safe.'],
+    ["…Be7 — the bishop develops and gets your king ready to castle. The engine prefers …Rd8 first, a rook straight onto the d-file, and it's about level. Your plan for the middlegame: castle, put a knight on d5 and your rooks on the d-file, and trade pieces, because an isolated pawn gets weaker with every trade.", '…Be7 — develop and castle; …Rd8 first.'],
+  ],
+  'Alapin: 2...d5 3.exd5 Nf6 (Knight Recapture)': [
+    ["…Nf6 — almost every master takes with the queen, but here's another idea: develop first, and take the pawn back with the knight later. Your queen stays home, where nothing can chase her. The engine rates …Qxd5 higher, and they are a little better.", '…Nf6 — take back with the knight later.'],
+    ["d4 — a third of the masters; nearly as many give a check on b5 first. The pawn hits c5 and claims the center. The engine prefers the check Qa4+, and it's about level.", 'd4 — hits c5; Qa4+ was stronger.'],
+    ["…cxd4 — about four masters in ten trade first; half take on d5 with the knight right away, and the engine prefers that. Now your pawn on d4 hits c3, and the pawn on d5 is still waiting for your knight.", '…cxd4 — trade; …Nxd5 was better.'],
+    ["cxd4 — a third of the masters; just as many check on b5 first, and the engine prefers that check. Now their pawn on d5 is the one loose pawn in the middle, and your knight is about to take it.", 'cxd4 — Bb5+ was stronger.'],
+    ["…Nxd5 — nearly nine masters in ten. The knight takes back on a perfect square: right in front of their d4 pawn, which now stands alone. That's the isolated queen's pawn, and your knight is its blockader.", '…Nxd5 — blockades the isolated pawn.'],
+    ["Nf3 — the engine's first choice, though most masters play Nc3 first. The knight guards d4 and gets their king ready to castle.", 'Nf3 — guards d4.'],
+    ["…Nc6 — about three masters in ten; more than half play …g6. The knight hits d4. And notice the shape: it's the same isolated-pawn structure as the Caro-Kann Panov, with your knight already planted on d5.", '…Nc6 — hits the isolated pawn.'],
+    ["Be2 — a modest square. The engine prefers Nc3, challenging your knight on d5 at once, and it's about level.", 'Be2 — modest; Nc3 was better.'],
+    ["…Bg4 — the bishop develops and hits the knight on f3, the piece that guards d4. The engine prefers …g6, putting the bishop on the long diagonal toward d4.", '…Bg4 — hits the guard of d4.'],
+    ["O-O — their king castles. The engine prefers h3 first, asking your bishop to decide at once.", 'O-O — castles; h3 was more precise.'],
+    ["…e6 — the pawn props up your knight on d5 and opens the way for your bishop on f8.", '…e6 — props up the d5 knight.'],
+    ["Nc3 — the knight finally comes out and challenges yours on d5.", 'Nc3 — challenges the d5 knight.'],
+    ["…Be7 — solid: the bishop develops and you're ready to castle. The engine prefers …Bb4, hitting the knight on c3 that challenges yours.", '…Be7 — develop, castle next.'],
+    ["h3 — the pawn hits your bishop on g4, which nothing guards. The engine prefers Qb3 here.", 'h3 — the g4 bishop must decide.'],
+    ["…Bh5 — the bishop keeps its pressure on the knight on f3. The engine prefers …Bf5.", '…Bh5 — keeps the pressure on f3.'],
+    ["Qb3 — the queen hits your b7 pawn, which nothing guards, and adds a second attacker on your knight on d5.", 'Qb3 — hits b7 and d5.'],
+    ["…Qb6 — the engine rates it with the best moves here. The queen guards b7, offers a trade of queens and hits d4 too. Your plan for the middlegame: trade queens if they allow it, castle, and put your rooks on the d-file; with fewer pieces on the board, the isolated pawn on d4 only gets weaker.", '…Qb6 — guards b7, offers a trade.'],
+  ],
+  'Alapin: Stoltz Attack (4.Nf3 before d4)': [
+    ["Nf3 — about a third of the masters develop before pushing d4. The knight guards e5 and keeps their options open; d4 can still come later.", 'Nf3 — develops first, d4 later.'],
+    ["…Nc6 — about half the masters. The knight develops and hits e5, and the engine rates it about the same as …d6.", '…Nc6 — develops, hits e5.'],
+    ["Bc4 — about half the masters, and it goes straight at your knight on d5, which nothing guards. The engine prefers d4 first.", 'Bc4 — hits the loose knight on d5.'],
+    ["…Nb6 — nearly nine masters in ten. Same idea as always: move the knight with a hit of your own, on the bishop on c4, which has no guard.", '…Nb6 — hits the bishop on c4.'],
+    ["Bb3 — nearly every master. The bishop drops back and aims at f7.", 'Bb3 — retreats, aims at f7.'],
+    ["…d5 — about four masters in ten; more play …c4 to kick the bishop. Look what this pawn does: it cuts the bishop on b3 off from f7, and it dares them to take it en passant.", '…d5 — cuts the bishop off from f7.'],
+    ["exd6 — nearly every master takes en passant. The pawn on d6 hits e7, and nothing of theirs guards it, so you take it back at once.", 'exd6 — en passant.'],
+    ["…Qxd6 — eight masters in ten take with the queen. She comes out with a hit on d2 and h2. The engine prefers …c4 first, kicking the bishop off b3 before you recapture.", '…Qxd6 — the queen recaptures, hits h2.'],
+    ["O-O — a little over half the masters. Their king is safe, and h2 has a guard.", 'O-O — king safe, h2 guarded.'],
+    ["…Be6 — from here the line leaves the masters' games. The bishop develops and offers a trade: it hits the bishop on b3, the piece that was aiming at f7. The engine rates …c4 about the same.", '…Be6 — offers the bishop trade.'],
+    ["Bxe6 — they take the trade, and for a moment the bishop on e6 hits f7, but you simply take back.", 'Bxe6 — the bishops come off.'],
+    ["…Qxe6 — taking with the f-pawn would cost you about a pawn. Material is level, the light-squared bishops are gone, and your queen hits a2.", '…Qxe6 — recaptures, hits a2.'],
+    ["a4 — a pawn march with a target: a5 next, to kick your knight off b6.", 'a4 — a5 next, to kick b6.'],
+    ["…Qd7 — the queen steps back to d7, where she still hits d2 and leaves e6 for your pawn later. The engine rates …Nd5 about the same.", '…Qd7 — hits d2.'],
+    ["a5 — there it is: the pawn hits your knight on b6, and it has to move again.", 'a5 — kicks the knight.'],
+    ["…Nd5 — the knight goes back to its best square, in the center, and hits c3.", '…Nd5 — back to the center.'],
+    ["a6 — the pawn keeps marching and now hits b7. How should you meet it?", 'a6 — hits b7.'],
+    ["…b6 — you step past it and keep the queenside closed. But the engine prefers …b5 or …e6, and after …b6 they are a little better: the pawn on a6 stays as a thorn deep in your position.", '…b6 — keeps it closed; …b5 was better.'],
+    ["d4 — only now does the d-pawn come forward, and it hits c5. They are a little better.", 'd4 — hits c5 at last.'],
+    ["…e6 — the pawn guards your knight on d5 and frees your bishop on f8. The engine prefers …Rd8, and they are a little better.", '…e6 — guards d5; …Rd8 was better.'],
+    ["Ne5 — the knight jumps in and hits three things: your knight on c6, your queen on d7 and the f7 pawn.", 'Ne5 — hits c6, d7 and f7.'],
+    ["…Nxe5 — the simplest answer: trade it off, and the hits on your queen and f7 go with it.", '…Nxe5 — trade the knight off.'],
+    ["dxe5 — they take back, and the pawn on e5 gains space and takes d6 and f6 away from your pieces.", 'dxe5 — space; d6 and f6 covered.'],
+    ["…Be7 — the bishop develops and gets your king ready to castle. The engine prefers …b5, and they are a little better. The move to watch for is Qg4, hitting g7. Your plan for the middlegame: castle quickly so g7 has a guard, keep your knight on d5, and use your queenside pawns to gain space.", '…Be7 — develop; castle before Qg4.'],
+  ],
+};
+
+/** File a tab's beats on the first moves it doesn't share with what is already written. */
+for (const [tab, moves] of Object.entries(TAB_LINES)) {
+  const own = TAB_BEATS[tab] ?? [];
+  let k = 0;
+  while (k < moves.length && beats[moves.slice(0, k + 1).join(' ')]) k += 1;
+  if (own.length !== moves.length - k) throw new Error(`${tab}: ${own.length} beats for ${moves.length - k} unshared moves`);
+  own.forEach(([say, sayShort], i) => { beats[moves.slice(0, k + i + 1).join(' ')] = { say, sayShort }; });
+}
+
+export const SICILIAN_ALAPIN_WATCH: WatchCourse = {
+  openingId: 'sicilian-alapin',
+  title: 'The Alapin Sicilian — A Master Class',
+  orientation: 'black',
+  sources: ['concept:pos-center', 'concept:pos-development', 'concept:pawn-chain', 'concept:pos-outpost', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation'],
+  lines: [
+    { tab: null, moves: MAIN },
+    ...Object.entries(TAB_LINES).map(([tab, moves]) => ({ tab, moves })),
+  ],
+  beats,
+};

@@ -22,7 +22,6 @@
   "src/data/coachesLibrary.ts": 1,
   "src/data/fairyTaleChapters.ts": 10,
   "src/data/lessons/proNaroditskyCaroKann.ts": 1,
-  "src/data/lessons/sicilianAlapinVariations.ts": 1,
   "src/services/coachPrompts.ts": 5,
   "src/services/moveReasonOptions.ts": 1,
   "src/services/perspectiveRule.ts": 2,
