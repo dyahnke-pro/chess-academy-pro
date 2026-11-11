@@ -46571,7 +46571,7 @@
     "title": "The e5-Wedge Middlegame",
     "intro": "From their win over worldwar66. The plan: recover material with tempo, occupy the d-file, and lean on the e5-wedge.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation",
      "https://api.chess.com/pub/player/gothamchess/games/archives",
      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
@@ -46711,7 +46711,7 @@
     "title": "The Majority Machine",
     "intro": "Recapture with tempo, twice — then let the queen raid spend itself against the rolling wing.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -46851,7 +46851,7 @@
     "title": "The Poisoned-Pawn Bargain",
     "intro": "Three pawns for five free moves and a stranded queen — the engine calls it even; the clock rarely does.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]

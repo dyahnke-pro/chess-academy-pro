@@ -4029,6 +4029,8 @@
  "pro-gothamchess-caro-advance-white::Botvinnik-Carls::vs …c5 (Botvinnik-Carls)": [
   "mp-progothamchess-caroadv-c5-dxc5"
  ],
+ "pro-gothamchess-caro-advance-white::Bd3 Bishop Trade::Bd3 Bishop Trade": [],
+ "pro-gothamchess-caro-advance-white::Qg4 vs …c5::Qg4 vs …c5": [],
  "pro-gothamchess-caro-advance-white::Main line (vs …Bf5)::Main line (vs …Bf5)": [
   "mp-progothamchess-caro-advance-h4-pin",
   "mp-progothamchess-caroadv-h6-g4space",
@@ -4045,6 +4047,8 @@
  "pro-gothamchess-caro-advance-white::::vs …c5 (Botvinnik-Carls)": [
   "mp-progothamchess-caroadv-c5-dxc5"
  ],
+ "pro-gothamchess-caro-advance-white::::Bd3 Bishop Trade": [],
+ "pro-gothamchess-caro-advance-white::::Qg4 vs …c5": [],
  "pro-gothamchess-closed-sicilian::main": [
   "mp-progothamchess-closedsic-bb5-bg5",
   "mp-progothamchess-closed-sicilian-bb5-trade"

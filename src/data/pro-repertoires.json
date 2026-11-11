@@ -2436,6 +2436,26 @@
             "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation",
             "https://api.chess.com/pub/player/gothamchess/games/archives"
           ]
+        },
+        {
+          "name": "Bd3 Bishop Trade",
+          "pgn": "e4 c6 d4 d5 e5 Bf5 h4 h5 Bd3 Bxd3 Qxd3 e6 Nf3 Qa5+ Nbd2 Ne7 O-O Qa6 Qc3 Nf5 Nb3",
+          "explanation": "After h4 and …h5, trade off the bishop that …c6 freed with Bd3 instead of going to g5, so the bishop on c1 stays home guarding b2. Then Nf3, castle, keep the queens on, and bring the c1 bishop to g5, the hole …h5 left.",
+          "sources": [
+            "book:caro-kann",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation"
+          ]
+        },
+        {
+          "name": "Qg4 vs …c5",
+          "pgn": "e4 c6 d4 d5 e5 c5 dxc5 e6 a3 Bxc5 Qg4 Ne7 Bd3 O-O Nf3 Ng6 O-O Nc6 Qh5 Bd7 Nc3",
+          "explanation": "Against the Botvinnik-Carls, the queen goes straight to g4 once their bishop has left f8, hitting g7. Bd3 and Nf3 follow, and when their knights gang up on e5, Qh5 hits the g6 knight and guards e5 from the side.",
+          "sources": [
+            "book:caro-kann",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation"
+          ]
         }
       ],
       "trapLines": [],

@@ -881,6 +881,10 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
         'mp-progothamchess-caroadv-qxd4-punish',
       ],
       'vs …c5 (botvinnik-carls)': ['mp-progothamchess-caroadv-c5-dxc5'],
+      // The two tabs added from the repertoire's taught lines (2026-11-11): no
+      // middlegame plan is anchored at their ends yet.
+      'bd3 bishop trade': [],
+      'qg4 vs …c5': [],
     },
   },
   'pro-gothamchess-kia': {

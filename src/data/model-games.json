@@ -5499,7 +5499,10 @@
     "middlegameTheme": "The h4-Bg5 main line: e6 disruption, grind the endgame.",
     "lessonSummary": "Play h4-Bg5, disrupt with e6, and convert the better structure.",
     "studentSide": "white",
-    "variation": "Main line (vs …Bf5)"
+    "variation": "Main line (vs …Bf5)",
+    "sources": [
+      "https://www.chess.com/game/live/5739205530"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-caroadv-julio-qxd4",
@@ -5518,7 +5521,10 @@
     "middlegameTheme": "Punishing …Qxd4: Nf3/Bxf5 with tempo, then e6/Ng6 attack.",
     "lessonSummary": "Against …Qxd4, develop with tempo and sacrifice to expose the king.",
     "studentSide": "white",
-    "variation": "Main line (vs …Bf5)"
+    "variation": "Main line (vs …Bf5)",
+    "sources": [
+      "https://www.chess.com/game/live/168620169188"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-caroadv-norwegian-c5",
@@ -5537,7 +5543,10 @@
     "middlegameTheme": "The …c5 line: dxc5, f4 setup, Bxg6 kingside attack.",
     "lessonSummary": "Grab the pawn with dxc5, set up f4, and attack with Bxg6.",
     "studentSide": "white",
-    "variation": "vs …c5 (Botvinnik-Carls)"
+    "variation": "vs …c5 (Botvinnik-Carls)",
+    "sources": [
+      "https://www.chess.com/game/live/68175165359"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-caroadv-jelena-h6",
@@ -5555,7 +5564,10 @@
     "criticalMoments": [],
     "middlegameTheme": "The …h6 line: g4 space, c4-d5 break, mating attack.",
     "lessonSummary": "Against …h6, grab space with g4, break c4-d5, and mate.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "sources": [
+      "https://www.chess.com/game/live/4525590521"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-kia-finegold",
