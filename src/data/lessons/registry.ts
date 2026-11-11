@@ -64,8 +64,6 @@ import { KINGS_INDIAN_ATTACK_LESSON } from './kingsIndianAttack';
 import { KINGS_INDIAN_ATTACK_VARIATION_LESSONS } from './kingsIndianAttackVariations';
 import { EVANS_GAMBIT_LESSON } from './evansGambit';
 import { EVANS_GAMBIT_VARIATION_LESSONS } from './evansGambitVariations';
-import { SICILIAN_SVESHNIKOV_LESSON } from './sicilianSveshnikov';
-import { SICILIAN_SVESHNIKOV_VARIATION_LESSONS } from './sicilianSveshnikovVariations';
 import { SICILIAN_ALAPIN_LESSON } from './sicilianAlapin';
 import { SICILIAN_ALAPIN_VARIATION_LESSONS } from './sicilianAlapinVariations';
 import { PHILIDOR_DEFENCE_LESSON } from './philidorDefence';
@@ -157,7 +155,6 @@ const HAND_WRITTEN: OpeningLessons[] = [
   { main: RETI_OPENING_LESSON, variations: RETI_OPENING_VARIATION_LESSONS },
   { main: KINGS_INDIAN_ATTACK_LESSON, variations: KINGS_INDIAN_ATTACK_VARIATION_LESSONS },
   { main: EVANS_GAMBIT_LESSON, variations: EVANS_GAMBIT_VARIATION_LESSONS },
-  { main: SICILIAN_SVESHNIKOV_LESSON, variations: SICILIAN_SVESHNIKOV_VARIATION_LESSONS },
   { main: SICILIAN_ALAPIN_LESSON, variations: SICILIAN_ALAPIN_VARIATION_LESSONS },
   { main: NIMZO_INDIAN_LESSON, variations: NIMZO_INDIAN_VARIATION_LESSONS },
   { main: PHILIDOR_DEFENCE_LESSON, variations: PHILIDOR_DEFENCE_VARIATION_LESSONS },

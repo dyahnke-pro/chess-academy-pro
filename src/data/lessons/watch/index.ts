@@ -9,6 +9,7 @@ import { OLD_INDIAN_DEFENCE_WATCH } from './oldIndianDefence';
 import { PETROV_DEFENCE_WATCH } from './petrovDefence';
 import { SEMI_SLAV_WATCH } from './semiSlav';
 import { SICILIAN_NAJDORF_WATCH } from './sicilianNajdorf';
+import { SICILIAN_SVESHNIKOV_WATCH } from './sicilianSveshnikov';
 import { TROMPOWSKY_ATTACK_WATCH } from './trompowskyAttack';
 import { TWO_KNIGHTS_DEFENCE_WATCH } from './twoKnightsDefence';
 
@@ -20,6 +21,7 @@ export const WATCH_COURSES: readonly WatchCourse[] = [
   PETROV_DEFENCE_WATCH,
   SEMI_SLAV_WATCH,
   SICILIAN_NAJDORF_WATCH,
+  SICILIAN_SVESHNIKOV_WATCH,
   TROMPOWSKY_ATTACK_WATCH,
   TWO_KNIGHTS_DEFENCE_WATCH,
 ];
