@@ -59,16 +59,19 @@ const MOTIF_SAMPLE = [...THEME_SAMPLE, ...MOTIF_READER_CASES.map((r) => ({
   fen: r.fen, line: r.line, bestSan: new Chess(r.fen).move({ from: r.line[0].slice(0, 2), to: r.line[0].slice(2, 4), promotion: r.line[0][4] }).san,
 }))];
 
+// Each check replays the whole fixture record; 60 s was not enough on a
+// machine running engine chains beside the gates (2026-11-11: 83 s). The
+// assertions are unchanged; only the wall-clock limit moved.
 describe('every record rev moves with its producer', () => {
   it('OPENING_KEY_REV — the opening key minted from a PGN', () => {
     expect(checkRevFingerprint('opening-key', OPENING_KEY_REV, byGame((g) => openingKeyFromPgn(g.pgn)), FILE)).toBeNull();
-  }, 60_000);
+  }, 300_000);
   it('TACTIC_TYPE_REV — the tactic tag of a mistake puzzle', () => {
     // The line's name AND its set-up: both are stamped on the puzzle row.
     const tags = IN.puzzles.map((p) => { try { return detectTacticLine(p.fen, p.bestMove, p.moves.split(' ')); } catch { return 'threw'; } });
     const lichess = MOTIF_SAMPLE.map((p) => { try { return detectTacticLine(p.fen, p.line[0], p.line); } catch { return 'threw'; } });
     expect(checkRevFingerprint('tactic-type', TACTIC_TYPE_REV, { puzzles: fingerprint(tags), lichess: fingerprint(lichess) }, FILE)).toBeNull();
-  }, 60_000);
+  }, 300_000);
   it('MISCONCEPTION_RULES_REV — the tag a slip is filed under', () => {
     const tags = IN.slips.map((s) => { const c = classifyMisconceptionNow({ fen: s.fen, playedSan: s.playedSan, bestSan: s.bestSan, gamePhase: s.gamePhase } as never); return c ? [c.tag, c.fundamentalId ?? null] : null; });
     // A missed shot on every motif: the solution's first move is best, the
@@ -83,7 +86,7 @@ describe('every record rev moves with its producer', () => {
       return c ? [c.tag, c.fundamentalId ?? null, c.setupTag ?? null] : null;
     });
     expect(checkRevFingerprint('misconception-rules', MISCONCEPTION_RULES_REV, { slips: fingerprint(tags), lichess: fingerprint(missed) }, FILE)).toBeNull();
-  }, 60_000);
+  }, 300_000);
   it('POSITIVE_HALF_REV — the skills a game posed and the student held', () => {
     // The ROWS written, not the plies read: a scoring change (a shot named by
     // its motif, WO-MOTIFS-01) re-files rows without changing a single ply.
@@ -92,16 +95,16 @@ describe('every record rev moves with its producer', () => {
     // set-up), on every motif.
     const named = fingerprint(MOTIF_SAMPLE.map((p) => namedShotTags(p.fen, p.bestSan, p.line)));
     expect(checkRevFingerprint('positive-half', POSITIVE_HALF_REV, { ...rows, 'lichess-motifs': named }, FILE)).toBeNull();
-  }, 60_000);
+  }, 300_000);
   it('THREAT_HALF_REV — their motifs at the student\'s turn, held or broken', () => {
     // The rows written (each motif's own tag), not the plies read.
     expect(checkRevFingerprint('threat-half', THREAT_HALF_REV, byGame((g) => threatAnswersForGame(threatPliesFromAnnotations(g.annotations, seat(g), fensOf(g.pgn)))), FILE)).toBeNull();
-  }, 60_000);
+  }, 300_000);
   it('INSIGHT_STATS_REV — the per-game insight stats', () => {
     expect(checkRevFingerprint('insight-stats', INSIGHT_STATS_REV, byGame((g) => computeInsightStats(g as unknown as GameRecord, seat(g), 'gate')), FILE)).toBeNull();
-  }, 60_000);
+  }, 300_000);
   it('PRO_DATA_REVISION / BASE_DATA_REVISION — the repertoire JSON a device mirrors', () => {
     expect(checkRevFingerprint('pro-data', PRO_DATA_REVISION, { 'pro-repertoires.json': fingerprint(readFileSync('src/data/pro-repertoires.json', 'utf8')) }, FILE)).toBeNull();
     expect(checkRevFingerprint('base-data', BASE_DATA_REVISION, { 'repertoire.json': fingerprint(readFileSync('src/data/repertoire.json', 'utf8')) }, FILE)).toBeNull();
-  }, 60_000);
+  }, 300_000);
 });
