@@ -38,7 +38,7 @@ import { WATCH_COURSES } from './lessons/watch';
 // (piece N/B/R/Q/K, castle O, or file+rank/x). A decimal ("9.3", "73.4%") is
 // excluded because a digit — not a SAN token — follows the dot.
 const MOVE_NUM = /(?:^|[\s(])\d{1,2}(?:\.|…|\.\.\.)(?:[NBRQKO]|[a-h][1-8x])/;
-const BASELINE = new Set(baselineRaw as string[]);
+const BASELINE = new Set<string>(baselineRaw);
 
 interface Hit { key: string; pro: boolean; kind: 'say' | 'sayShort'; reason: string; text: string }
 
