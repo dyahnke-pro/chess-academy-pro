@@ -83,7 +83,7 @@ describe('review need gate (N2) — the UNCAPPED path prod actually runs', () =>
       segs.filter((s) => s.playerColor === 'white' && s.narration).length;
     expect(spokenStudent(cold)).toBeGreaterThan(0);
     expect(spokenStudent(warm)).toBeLessThan(spokenStudent(cold));
-  }, 20_000); // two full review builds — ~6s cold, alone (2026-10-10)
+  }, 120_000); // two full review builds — ~6s cold, alone (2026-10-10); 25 s beside engine chains (2026-11-11)
   it('the OPPONENT\'s plies are never silenced by the student\'s need', () => {
     const warm = buildReviewSegmentsForTests(inputs(), 'white', 'Italian Game', true, 1400, [], familiar);
     const opp = warm.filter((s) => s.playerColor === 'black');
