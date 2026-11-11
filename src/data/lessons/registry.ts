@@ -17,8 +17,6 @@ import { openingRecord } from './openingRecords';
 import { WATCH_COURSES } from './watch';
 import { watchLessons, type WatchCourse } from './watch/watchCourse';
 
-import { RUY_LOPEZ_LESSON } from './ruyLopez';
-import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { RUY_TRAP_LESSONS } from './ruyTrapLessons';
 import { PIRC_DEFENCE_LESSON } from './pircDefence';
 import { PIRC_VARIATION_LESSONS } from './pircVariations';
@@ -105,7 +103,6 @@ function watchOpening(course: WatchCourse): OpeningLessons {
 // An opening rewritten as a Watch course leaves this list: its course is
 // gated from `WATCH_COURSES` below.
 const HAND_WRITTEN: OpeningLessons[] = [
-  { main: RUY_LOPEZ_LESSON, variations: RUY_VARIATION_LESSONS },
   { main: PIRC_DEFENCE_LESSON, variations: PIRC_VARIATION_LESSONS },
   { main: CARO_KANN_LESSON, variations: CARO_VARIATION_LESSONS },
   { main: ITALIAN_GAME_LESSON, variations: ITALIAN_GAME_VARIATION_LESSONS },

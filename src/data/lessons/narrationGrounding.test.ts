@@ -100,10 +100,7 @@ describe('§5b grounding — every arrow + highlight endpoint is grounded in the
 // carry AT LEAST ONE marker — i.e. no totally-bare beat that names squares
 // and leads the eye to none of them. Exactly 1 such beat exists today.
 const SQUARE_RE_H4 = /\b[a-h][1-8]\b/;
-const BARE_BEAT_BASELINE = new Set<string>([
-  'ruy-lopez::Berlin Defense::b4',  // names c3/f4/e6, zero markers — Ruy lead-the-eye backlog
-  'ruy-lopez::Marshall Attack::m1', // pre-existing bare beat (post §5b sweep) — Ruy backlog
-]);
+const BARE_BEAT_BASELINE = new Set<string>([]);
 
 describe('lead-the-eye present — a beat that names squares carries ≥1 marker', () => {
   for (const { scope, key, lesson } of ALL_LESSONS) {
@@ -129,6 +126,6 @@ describe('lead-the-eye baselines are SEALED (David 2026-05-25)', () => {
     expect(Object.keys(BASELINE_VIOLATIONS).length, 'BASELINE_VIOLATIONS grew — ground the markers instead').toBeLessThanOrEqual(0);
   });
   it('BARE_BEAT_BASELINE never grows', () => {
-    expect(BARE_BEAT_BASELINE.size, 'BARE_BEAT_BASELINE grew — add lead-the-eye markers instead').toBeLessThanOrEqual(2);
+    expect(BARE_BEAT_BASELINE.size, 'BARE_BEAT_BASELINE grew — add lead-the-eye markers instead').toBeLessThanOrEqual(0);
   });
 });

@@ -287,9 +287,6 @@ describe('red-target grammar — claim-beats carry paint', () => {
   const CLAIM = /\battack(?:s|ing|ed)?\b|threaten|hangs|hanging\b|target(?:s|ing)?\b|\bpins?\b|pinned|pinning|\bforks?\b|forking|eyes\b|eyeing|pressur/i;
   const SEALED_META_BASELINE = new Set([
     'italian-game::castle',
-    'ruy-lopez::Berlin Defense::b5',
-    'ruy-lopez::Berlin Defense::b7',
-    'ruy-lopez::Exchange Variation::x4',
   ]);
   it('every claim-beat has >=1 arrow or highlight (sealed baseline only shrinks)', async () => {
     const { getAllLessonScripts } = await import('./index');

@@ -156,8 +156,6 @@ import { PRO_CARUANA_CARO_KANN_LESSON } from './proCaruanaCaroKann';
 import { PRO_CARUANA_CARO_KANN_VARIATION_LESSONS } from './proCaruanaCaroKannVariations';
 import { PRO_CARUANA_KID_LESSON } from './proCaruanaKID';
 import { PRO_CARUANA_KID_VARIATION_LESSONS } from './proCaruanaKIDVariations';
-import { RUY_LOPEZ_LESSON } from './ruyLopez';
-import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { PIRC_DEFENCE_LESSON } from './pircDefence';
 import { PIRC_VARIATION_LESSONS } from './pircVariations';
 import { CARO_KANN_LESSON } from './caroKann';
@@ -245,7 +243,6 @@ import { PRO_CARLSEN_KINGS_GAMBIT_LESSON, PRO_CARLSEN_KINGS_GAMBIT_VARIATION_LES
  * instead of the move-by-move WalkthroughMode.
  */
 const LESSONS: Record<string, LessonScript> = {
-  [RUY_LOPEZ_LESSON.openingId]: RUY_LOPEZ_LESSON,
   [PIRC_DEFENCE_LESSON.openingId]: PIRC_DEFENCE_LESSON,
   [CARO_KANN_LESSON.openingId]: CARO_KANN_LESSON,
   [ITALIAN_GAME_LESSON.openingId]: ITALIAN_GAME_LESSON,
@@ -405,7 +402,6 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...ANTI_ENGLUND_VARIATION_LESSONS,
   ...ANTI_ALAPIN_BLACK_VARIATION_LESSONS,
   ...ANTI_GRAND_PRIX_BLACK_VARIATION_LESSONS,
-  ...RUY_VARIATION_LESSONS,
   ...PIRC_VARIATION_LESSONS,
   ...CARO_VARIATION_LESSONS,
   ...ITALIAN_GAME_VARIATION_LESSONS,
