@@ -11,7 +11,7 @@
 // is a shallower read, and caching it under the full depth made a later run
 // serve it as the depth it never reached.
 import { spawn } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { mateEvalFor } from '../services/engineConstants';
 
@@ -39,7 +39,11 @@ export function nativeEngine(cachePath: string, defaultDepth: number, timeoutMs:
   let dirty = 0;
   const flush = (): void => {
     mkdirSync(dirname(cachePath), { recursive: true });
-    writeFileSync(cachePath, JSON.stringify(cache));
+    // Written whole then renamed, so a run sharing the cache never reads a
+    // half-written file (two sheet runners on one cache did, and crashed).
+    const tmp = `${cachePath}.${process.pid}.tmp`;
+    writeFileSync(tmp, JSON.stringify(cache));
+    renameSync(tmp, cachePath);
   };
   const read = (fen: string, opts: { multipv?: number; depth?: number; searchmoves?: string } = {}): Promise<NativeLine[]> => {
     const depth = opts.depth ?? defaultDepth;
