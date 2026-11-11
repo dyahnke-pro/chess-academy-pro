@@ -67,7 +67,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ['e3 — quiet, about one master in five; almost half fianchetto with g3 instead. The pawn covers d4 and f4, the two squares their e5 pawn hits, and it gets d4 ready as a push later.', 'e3 — covers d4 and f4.'],
     ['…Bb4 — three masters in four. The bishop hits your knight on c3, the piece that covers d5 and e4. Their idea is to take it off. If they do, you want to take back with a piece, so your pawns stay healthy. Which piece can do that?', '…Bb4 — hits the c3 knight.'],
     ['Qc2 — nine masters in ten. The queen guards the knight on c3, so if they take it, the queen takes back and your pawns stay whole. And look down the diagonal: from c2 the queen reaches all the way to h7.', 'Qc2 — guards c3, reaches h7.'],
-    ["…Bxc3 — six masters in ten take at once. They give up the bishop for your knight, so after you take back, you'll have both bishops and they won't. Keep that in mind: the bishop pair is your long-term asset in this line.", "…Bxc3 — you'll have the two bishops."],
+    ["…Bxc3 — six masters in ten take at once. They give up the bishop for your knight, so after you take back, you'll have both bishops and they won't. Keep that in mind: the bishop pair is your long-term asset in this line.", "…Bxc3 — the bishop pair will be yours."],
     ['Qxc3 — take back with the queen, as about three masters in four do. Your pawns stay unbroken, and the queen on c3 hits the e5 pawn, which only their knight on c6 guards.', 'Qxc3 — queen back, hits e5.'],
     ['…Qe7 — nearly every master. The queen gives e5 a second guard, and it gets …d5 ready, the push that will hit your c4 pawn.', '…Qe7 — e5 guarded twice.'],
     ["b3 — only about one master in fifteen plays it; the engine prefers Be2, and after b3 it's about level. The idea: the pawn gives c4 a guard before …d5 can hit it, and it opens b2 for your bishop on c1.", 'b3 — guards c4, opens b2.'],
@@ -103,7 +103,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ['Nxd4 — the knight takes back, and their d5 pawn is now isolated: no pawn on the c- or e-file can ever guard it. The classic way to play against it: blockade the square in front of it, d4, and aim your pieces at the pawn. Your knight already sits on that square.', 'Nxd4 — d5 is isolated now.'],
     ["…Bd6 — the bishop steps to d6, aimed at your kingside. The engine prefers …Bc5, hitting your knight on d4, and after …Bd6 it's about level.", '…Bd6 — aimed at your kingside.'],
     ["Nf3 — the knight steps back to cover d4 and e5 from a safer post. The engine prefers castling first; after Nf3 it's about level.", 'Nf3 — back to cover d4.'],
-    ["…a6 — a quiet move: it takes b5 away from your knight on c3 and your bishop on e2. It's about level. Your plan for the middlegame: castle, put a rook on c1, and bring a knight back to d4, the blockade square in front of the isolated pawn; their play comes from active pieces and the open e-file.", '…a6 — covers b5.'],
+    ["…a6 — a quiet move: it covers b5, so your knight on c3 and your bishop on e2 can't go there. It's about level. Your plan for the middlegame: castle, put a rook on c1, and bring a knight back to d4, the blockade square in front of the isolated pawn; their play comes from active pieces and the half-open e-file.", '…a6 — covers b5.'],
   ],
   'Symmetric (…c5)': [
     ['…c5 — the copycat: their c-pawn mirrors yours, about one master in nine. The engine prefers …e5, and after …c5 you are a little better. In a symmetrical position the side to move, you, gets to act first, and that tempo is your edge.', '…c5 — the symmetrical English.'],
@@ -191,7 +191,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["Bd2 — the bishop comes back to block and offers a trade of bishops. It's about level. Your plan for the middlegame: trade the bishops on b4, then a rook to b1 on the half-open b-file and your queen to d2; their king is still in the middle, and your d4 pawn holds the center.", 'Bd2 — blocks, offers the trade.'],
   ],
   'Botvinnik vs …c5': [
-    ['g3 — two masters in three choose this over Nf3. The bishop goes to g2 first, and by holding the knight back you keep a different plan open: e4, with the knight on e2.', 'g3 — bishop first, knight later.'],
+    ['g3 — two masters in three choose this over Nf3. The bishop goes to g2 first, and by holding the knight back you keep a different plan open: e4, with the knight from g1 going to e2.', 'g3 — bishop first, knight later.'],
     ['…g6 — nearly every master copies, their bishop bound for g7.', '…g6 — copying again.'],
     ['Bg2 — the bishop reaches the long diagonal, and with no knight on f3 in the way, it already hits the knight on c6.', 'Bg2 — hits the c6 knight.'],
     ["…Bg7 — and their bishop answers in kind, hitting your knight on c3. A mirror again, but you're about to break it.", '…Bg7 — hits the c3 knight.'],

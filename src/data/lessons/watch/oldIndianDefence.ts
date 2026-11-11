@@ -91,7 +91,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ['O-O — they castle too. Now it\'s your move in a closed center, and the question is where to strike.', 'O-O — both kings safe.'],
     ['…c6 — here\'s the strike. The pawn hits d5, the front of their chain. If they take on c6, your b-pawn takes back; if they let you take on d5, the c-file opens for your rook.', '…c6 — hits d5.'],
     ['Qe2 — the queen steps off d1, which connects their rooks, and from e2 it guards both bishops, on d3 and e3.', 'Qe2 — connects rooks, guards both bishops.'],
-    ['…cxd5 — you take, and your pawn on d5 hits both c4 and e4. How they take back matters: if the e-pawn takes, your bishop on g6 suddenly sees all the way to d3. So the c-pawn is the natural recapture. Your plan from here: put a rook on c8 on the open c-file, while your bishop on g6 keeps leaning on e4.', '…cxd5 — hits c4 and e4.'],
+    ['…cxd5 — you take, and your pawn on d5 hits both c4 and e4. How they take back matters: if the e-pawn takes, your bishop on g6 suddenly sees all the way to d3. So the c-pawn is the natural recapture. Your plan from here: once they take back with the c-pawn, put a rook on c8 on the open c-file, while your bishop on g6 keeps leaning on e4.', '…cxd5 — hits c4 and e4.'],
   ],
   'Old Indian: Tartakower Variation': [
     ['…exd4 — the Tartakower idea: don\'t wait for d5 to clamp the center, release it yourself. You trade your e5 pawn for their d4 pawn, and the e-file half-opens for your rook. The engine prefers …Re8 first; after …exd4 they are clearly better.', '…exd4 — release the center, open the e-file.'],
@@ -108,7 +108,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ['…e5 — the Ukrainian: you strike at d4 right away, without …Nbd7 first. About a quarter of masters choose it, and the engine likes it best of all here. The pawn hits d4, and for now only the d6 pawn guards it.', '…e5 — hit d4 at once.'],
     ['Nf3 — two masters in three develop with a hit on e5. Count it: the d4 pawn and the knight hit e5, and only your d6 pawn guards it. So e5 needs help right now.', 'Nf3 — a second hit on e5.'],
     ['…Nbd7 — there\'s the help, played by about two masters in three. Now e5 has two guards. You have the main line\'s setup; the difference is that their e-pawn is still at home.', '…Nbd7 — a second guard on e5.'],
-    ['g3 — about one master in five goes this way, to put the bishop on g2. Most push e4 instead, and the engine prefers that too; after g3 they are a little better. From g2 their bishop will aim down the long diagonal toward your queenside.', 'g3 — a fianchetto; e4 was stronger.'],
+    ['g3 — about one master in five goes this way, to bring the bishop to g2. Most put a pawn on e4 instead, and the engine prefers that too; after g3 they are a little better. From g2 their bishop will aim down the long diagonal toward your queenside.', 'g3 — a fianchetto; e4 was stronger.'],
     ['…Be7 — about four masters in ten; the rest split between …c6 and …g6. The bishop goes to its usual Old Indian square, and you can castle next move.', '…Be7 — castling next.'],
     ['Bg2 — almost every master completes the fianchetto. For now their own knight on f3 blocks the bishop, but once it moves, the bishop looks down the long diagonal at your b7 pawn.', 'Bg2 — the fianchetto, behind the knight.'],
     ['…O-O — you castle, and the rook comes to f8. Your king is safe before anything opens up in the center.', '…O-O — king safe.'],

@@ -142,7 +142,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["a4 — here's why the knight left a3: the a-pawn can now hit your b5 pawn. Do you defend it? No. Take, and the b-file opens for the rook you just put on b8.", 'a4 — hits b5, opens the queenside.'],
     ["…bxa4 — you take, and look down the b-file: your rook on b8 now hits their b2 pawn, and nothing guards it. Your pawn on a4 is loose too, so it's a race between two loose pawns.", '…bxa4 — the rook on b8 hits b2.'],
     ["Rxa4 — the rook takes back and hits your a6 pawn, which their bishop on f1 also hits and only your bishop on c8 guards. But their b2 pawn still has no guard. Which do you look after first?", 'Rxa4 — hits a6; b2 is still loose.'],
-    ["…a5 — you save the a-pawn: on a5 your queen and your knight on c6 guard it, and it takes b4 away from their knight on c2. The engine prefers …Rxb2, grabbing the b2 pawn first. They are a little better. Your plan for the middlegame: keep your rook on the open b-file against b2, bring the knight round to e7 to challenge d5, and get the bishop to g5, where it covers e3.", '…a5 — a-pawn safe; …Rxb2 was better.'],
+    ["…a5 — you save the a-pawn: on a5 your queen and your knight on c6 guard it, and it keeps their knight on c2 off b4. The engine prefers …Rxb2, grabbing the b2 pawn first. They are a little better. Your plan for the middlegame: keep your rook on the half-open b-file against b2, bring the knight round to e7 to challenge d5, and get the bishop to g5, where it covers e3.", '…a5 — a-pawn safe; …Rxb2 was better.'],
   ],
 };
 

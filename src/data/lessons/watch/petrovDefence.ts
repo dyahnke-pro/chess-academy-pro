@@ -30,7 +30,7 @@ const MAIN_BEATS: Array<[string, string]> = [
   ["Nc3 — nearly nine masters in ten. The knight hits your knight on e4 and your d5 pawn at once, and if you take on c3, the b-pawn takes back toward the center.", 'Nc3 — hits e4 and d5.'],
   ["…Bf5 — how do you hold e4? With a developing move: the bishop comes out to f5, outside your pawn chain, and gives the knight a second guard. About three masters in four play it; …Be6, guarding d5 instead, is the other choice.", '…Bf5 — develops, guards e4 again.'],
   ["a3 — now they come after the knight on b4. Where does it go? Back to c6 looks natural, but as you'll see, that drops a pawn. So you have to solve the knight on b4 and the pressure on d5 together.", 'a3 — kicks the b4 knight.'],
-  ["…Nxc3 — the move order matters. Retreating …Nc6 straight away lets Nxd5 win your pawn, since their knight still hits it. So take that knight first: on c3 yours hits their queen and the bishop on e2, they must take back, and bxc3 leaves them doubled pawns on c3 and c4. Your plan from here: rescue the b4 knight and aim your pieces at those doubled c-pawns.", '…Nxc3 — trade first; doubled c-pawns.'],
+  ["…Nxc3 — the move order matters. Retreating …Nc6 straight away lets Nxd5 win your pawn, since their knight still hits it. So take that knight first: on c3 yours hits their queen and the bishop on e2, they must take back, and bxc3 leaves them doubled pawns on c3 and c4. Your plan from here: rescue the b4 knight and aim your pieces at those doubled c-pawns.", '…Nxc3 — trade first; bxc3 doubles their c-pawns.'],
   ["bxc3 — they have to take back, and the b-pawn does it. Look what the new pawn on c3 does: it hits your knight on b4, so that knight has to move now. In return for the doubled c-pawns, the b-file is half-open for their rook.", 'bxc3 — doubled pawns, hits b4.'],
   ["…Nc6 — where does the knight go? Back to c6, its natural square, where it hits d4 again. …Na6 instead would strand it on the rim.", '…Nc6 — back to c6, eyes d4.'],
   ["Bf4 — where does their last minor piece go? f4, an active diagonal, aimed at your c7 pawn. The engine prefers cxd5, settling the center first; after Bf4 the game is about level.", 'Bf4 — eyes c7; cxd5 was stronger.'],
@@ -121,7 +121,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
   ],
   'Italian Variation': [
     ["Nc3 — instead of d4, they offer a knight trade at once, about a quarter of the masters' choice. Your knight on e4 is attacked and unguarded, so you have to decide now. The engine prefers d4.", 'Nc3 — challenges the e4 knight.'],
-    ["…Nxc3 — take it, as most masters do. From c3 your knight hits their queen, so they must take back, and either pawn does it with doubled c-pawns.", '…Nxc3 — trade; doubled c-pawns follow.'],
+    ["…Nxc3 — take it, as most masters do. From c3 your knight hits their queen, so they must take back, and either pawn does it with doubled c-pawns.", '…Nxc3 — trade; their c-pawns get doubled.'],
     ["dxc3 — every master takes with the d-pawn, and here's why: it opens the d-file and frees the bishop on c1. Doubled c-pawns, but quick development, and that's their plan: develop fast and castle queenside.", 'dxc3 — open lines, doubled c-pawns.'],
     ["…Be7 — more than nine masters in ten. The bishop clears your kingside so you can castle when you choose.", '…Be7 — develop, ready to castle.'],
     ["Be3 — the bishop develops and aims at your a7 pawn, and the plan is plain: Qd2, castle queenside, rooks on the half-open d-file.", 'Be3 — develops; Qd2 and castling next.'],

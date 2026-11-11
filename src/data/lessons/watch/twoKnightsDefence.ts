@@ -120,7 +120,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["…exf3 en passant: your pawn takes as if theirs had only moved one square. Now the knight on e5 has lost its pawn guard, and your bishop on d6 hits it. If a pawn or the bishop takes back on f3, …Bxe5 wins the knight.", '…exf3 — en passant; e5 is loose.'],
     ["So the knight takes back: Nxf3, its fifth move of the game, while their queenside still hasn't moved. You are a little better.", "Nxf3 — forced; the knight's fifth move."],
     ["You castle, and compare the kings: yours is safe on g8, theirs is still on e1, and the e-file has no pawns left on it.", "…O-O — your king is safe, theirs isn't."],
-    ["d4 takes the center and opens the road for their bishop on c1, but their king is still on e1. You're a pawn down and still a little better. Your plan: put a rook on e8 to pin the bishop on e2 to their king, then open more lines with …c5 before they can castle.", 'd4 — center; …Re8 pins e2 next.'],
+    ["d4 takes the center and opens the road for their bishop on c1, but their king is still on e1. You're a pawn down and still a little better. Your plan: put a rook on e8, where it would pin the bishop on e2 to their king, then open more lines with …c5 before they can castle.", 'd4 — center; …Re8 pins e2 next.'],
   ],
   'Two Knights: Traxler Counterattack': [
     ["Here's the counterpunch: …Bc5, the Traxler. You ignore the threat to f7 and aim your bishop at f2, a square next to their king. Be honest about the price: the engine prefers …d5, and after …Bc5 they are clearly better if they find the right path. Fewer than one master in twenty plays it. You're betting they won't.", '…Bc5 — the Traxler: ignore f7, hit f2.'],
@@ -131,7 +131,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["Kg1 runs to the corner, seven masters in ten. No check now, so Nxd8 is a real threat. What do you do with your queen?", 'Kg1 — the corner; Nxd8 is threatened.'],
     ["…Qh4 saves the queen with a threat of its own: …Qf2 is mate. Look at f2: your knight on e4 guards it, and their king has no square to run to. They are a little better here, but only if they see it.", '…Qh4 — threatens …Qf2 mate.'],
     ["g3 blocks the mate and kicks your queen. Can you take the pawn with the queen? No: the h-pawn takes back and wins it. But a piece can take it.", 'g3 — blocks the mate, hits the queen.'],
-    ["…Nxg3 takes the pawn and hits the rook on h1. And look what moving the knight did: your queen on h4 now looks down the fourth rank at their bishop on c4, which has no guard. That's a discovered attack.", '…Nxg3 — hits h1, discovers the queen on c4.'],
+    ["…Nxg3 takes the pawn and hits the rook on h1. And look what moving the knight did: your queen on h4 now looks down the fourth rank at their bishop on c4, which has no guard. That's a discovered attack.", '…Nxg3 — hits h1; your queen now hits c4.'],
     ["hxg3 takes the knight and hits your queen. It's the mistake the Traxler hopes for: Nxh8 was the move. Now you are clearly better.", 'hxg3 — the mistake; Nxh8 was right.'],
     ["…Qxg3 check takes back, and their king's pawn cover is gone. Don't grab the bishop on c4 first: Nxh8 would take your rook. You're a piece down and still a little better, because their king has only one square, f1. Your plan: …Rf8, saving your rook and pinning the knight on f7 to their king, then …d5 to bring your last pieces in.", '…Qxg3+ — check; their king is bare.'],
   ],
@@ -165,7 +165,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["Nf1, and the tour continues toward g3 or e3. It's about level. Your plan: bring the queen to d7 and get ready for the …d5 break when the time is right, with the pawn on e6 backing it up.", 'Nf1 — the tour; aim for …d5.'],
   ],
   'Two Knights: Fritz Variation 5...Nd4': [
-    ["…Nd4, the Fritz. Most masters put the knight on a5; …Nd4 sends it forward instead, toward the center, where it hits c2. Only about one master in twenty-five plays it, and the engine prefers …b5. It's about level, but it gets sharp in a hurry.", '…Nd4 — the Fritz: forward, not the rim.'],
+    ["…Nd4, the Fritz. Most masters play …Na5; …Nd4 sends it forward instead, toward the center, where it hits c2. Only about one master in twenty-five plays it, and the engine prefers …b5. It's about level, but it gets sharp in a hurry.", '…Nd4 — the Fritz: forward, not the rim.'],
     ["c3 kicks the knight at once, almost every master's choice. They are a little better. So does your knight run?", 'c3 — kicks the knight.'],
     ["No: …b5 hits the bishop on c4 instead, nine masters in ten. If they take your knight, you take their bishop.", '…b5 — hits c4 instead of retreating.'],
     ["cxd4 takes your knight. More than nine masters in ten retreat with Bf1 instead, and the engine prefers that too. After cxd4 it's about level.", 'cxd4 — takes the knight; Bf1 was better.'],

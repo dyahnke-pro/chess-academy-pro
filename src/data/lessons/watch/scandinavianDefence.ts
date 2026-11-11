@@ -156,7 +156,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
   ],
   'Gubinsky-Melts (3...Qd8)': [
     ["…Qd8 — the queen goes all the way home, one master in ten. It looks like a wasted move, and it does cost time. But on d8 your queen is out of reach of their developing moves, so the rest of your pieces can come out in peace. The engine's first choice, …Qd6, rates only slightly higher.", '…Qd8 — back home, out of reach.'],
-    ["d4, more than eight masters in ten: the pawn takes the center. Notice your queen on d8 looks straight down the open d-file at it, with their queen behind it on d1.", 'd4 — your queen faces it.'],
+    ["d4, more than eight masters in ten: the pawn takes the center. Notice your queen on d8 looks straight down the half-open d-file at it, with their queen behind it on d1.", 'd4 — your queen faces it.'],
     ["…Nf6, more than eight masters in ten and the engine's first choice: the knight develops and covers d5 and e4. Next comes the same question as always in the Scandinavian: the light-squared bishop, before …e6.", '…Nf6 — then the bishop.'],
     ["Nf3, about six masters in ten and the engine's first choice: the knight develops and guards d4. That knight is about to become your bishop's target.", 'Nf3 — guards d4.'],
     ["…Bg4, about half the masters and the engine's first choice: the bishop comes out before …e6 and pins the knight on f3 to their queen. That's the knight guarding d4, the pawn your queen is already looking at.", '…Bg4 — pins the d4 guard.'],
@@ -189,7 +189,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["Nxf6 — they trade their attacked knight for yours. The engine prefers Ng5, keeping the knight in play, and after Nxf6 you are a little better. Their knight on f6 has no guard, so take it back. With a pawn, or the queen?", 'Nxf6 — trades knights.'],
     ["…gxf6, the engine's first choice by a long way; taking with the queen rates far lower. Yes, your pawns are doubled on f6 and f7. But look what you get: the g-file is open, right in front of their king on g1, and your own king is safe on the other wing.", '…gxf6 — the g-file opens.'],
     ["c3, the engine's first choice: the pawn gives d4 a solid guard. Now two of theirs hold d4, the knight on e2 and the c3 pawn, against your knight and rook.", 'c3 — d4 is held twice.'],
-    ["…Rg8: the rook takes the open g-file and pins the g2 pawn to their king on g1. The engine prefers …e5 first, a pawn hitting d4 a third time, and after …Rg8 it's about level. Your plan from here: …e5 to break open d4, and …h5 to bring another pawn toward their king, with your rook on g8 and your queen on f5 already aimed at that side.", '…Rg8 — the g-file, at their king.'],
+    ["…Rg8: the rook takes the half-open g-file and pins the g2 pawn to their king on g1. The engine prefers …e5 first, a pawn hitting d4 a third time, and after …Rg8 it's about level. Your plan from here: …e5 to break open d4, and …h5 to bring another pawn toward their king, with your rook on g8 and your queen on f5 already aimed at that side.", '…Rg8 — the g-file, at their king.'],
   ],
 };
 

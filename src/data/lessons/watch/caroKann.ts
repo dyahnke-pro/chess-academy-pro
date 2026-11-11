@@ -86,7 +86,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["Ne1, the engine's first choice. A knight going backwards? It wants d3. If the bishops come off on d3, this knight takes back there, and from d3 it guards e5.", 'Ne1 — bound for d3.'],
     ["…O-O, the engine's first choice: king safe first. Their bishop is about to come to d3 to challenge yours, and you're ready for it.", '…O-O — king safe first.'],
     ["Bd3, the engine's first choice: their bishop hits yours on f5, which the e6 pawn guards, and offers the trade. Take, keep, or retreat?", 'Bd3 — challenges your bishop on f5.'],
-    ["…Bxd3, the engine's first choice: take it, and their knight comes back to d3 as planned. Your light-squared bishop leaves the board without ever being shut in behind …e6, the Caro's promise kept. They are a little better. Your plan: …Nb4 to challenge the knight on d3, and a rook to the open c-file.", '…Bxd3 — trade, then …Nb4 and the c-file.'],
+    ["…Bxd3, the engine's first choice: take it, and their knight comes back to d3 as planned. Your light-squared bishop leaves the board without ever being shut in behind …e6, the Caro's promise kept. They are a little better. Your plan: once their knight is back on d3, …Nb4 to challenge it, and a rook to the open c-file.", '…Bxd3 — trade, then …Nb4 and the c-file.'],
   ],
   'Two Knights Variation': [
     ['Nc3, the Two Knights. Only about one master in fourteen plays it; most push d4. They hold the d-pawn back and develop first, and the knight already guards e4 and covers d5, the square your next move wants.', 'Nc3 — the Two Knights, pieces first.'],

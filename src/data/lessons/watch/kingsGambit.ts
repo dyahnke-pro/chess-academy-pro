@@ -191,7 +191,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["Where does their king go? …Kg7, the engine's choice: off the f-file to g7, where it guards h6, the pawn your bishop hits, and the knight on f6. They are clearly better.", '…Kg7 — king to g7, guards h6.'],
     ['Bd3 develops and gives e4 a second guard. The engine prefers Nxd5, taking a pawn. They are clearly better.', 'Bd3 — guards e4; Nxd5 was better.'],
     ["…dxe4: the pawn takes and hits your bishop on d3. They are clearly better.", '…dxe4 — hits your bishop on d3.'],
-    ['Nxe4 takes back and hits the knight on f6, with your bishop on d3 behind it. But look at d4: their queen hits it, and nothing guards it. They are clearly better. Your plan: castle and bring a rook to the f-file against their king on g7, with Be5 ready to pin the knight on f6 to it.', 'Nxe4 — hits f6; d4 is loose.'],
+    ['The knight takes back on e4 and hits the knight on f6, with your bishop on d3 behind it. But look at d4: their queen hits it, and nothing guards it. They are clearly better. Your plan: castle and bring a rook to the f-file against their king on g7. Be5 is ready too: it would pin the knight on f6 to that king.', 'Nxe4 — hits f6; d4 is loose.'],
   ],
   "Bishop's Gambit (3.Bc4)": [
     ["Bc4 — the Bishop's Gambit, about a quarter of the masters, and the engine's first choice here. The bishop goes straight to its best square, aimed at f7, before the knight comes out. The cost: with no knight on f3, …Qh4+ is possible, and after Kf1 your king can't castle. They are a little better.", 'Bc4 — aims at f7, allows …Qh4+.'],

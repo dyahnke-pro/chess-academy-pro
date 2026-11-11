@@ -179,7 +179,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ['…Qb6 — the queen guards b7 and offers a trade on b3. And look: it hits your d4 pawn too, which nothing guards. Do you trade, or is there something better?', '…Qb6 — guards b7, hits d4.'],
     ['c5 — one move, two jobs: the pawn kicks the queen and steps between it and your d4 pawn. If they trade on b3, the a-pawn takes back and your rook on a1 gets the a-file.', 'c5 — kicks the queen, shields d4.'],
     ['…Qxb3 — the queens come off. Take back.', '…Qxb3 — the queens come off.'],
-    ['axb3 — the a-pawn takes, and now your rook on a1 looks straight down the open a-file at a7. You are clearly better.', 'axb3 — the a-file opens for your rook.'],
+    ['axb3 — the a-pawn takes, and now your rook on a1 looks straight down the half-open a-file at a7. You are clearly better.', 'axb3 — the a-file opens for your rook.'],
     ['…Nd7 — the knight goes after your c5 pawn, the one that kicked their queen. Count it: the knight and their bishop on f8 both hit c5, and only your d4 pawn guards it.', '…Nd7 — c5 is hit twice.'],
     ['b4 — a second guard for c5, and now pawns on b4, c5 and d4 hold your queenside space. You are clearly better. So how do they fight back on that side of the board?', 'b4 — c5 guarded twice.'],
     ['…a6 — the pawn takes b5 away, so your b-pawn can\'t march on to b5.', '…a6 — b5 covered.'],

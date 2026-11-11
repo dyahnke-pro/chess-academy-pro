@@ -148,7 +148,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["…d6 — nearly every master. It hits e5. And here's what to notice: this is the same position as in the endgame line, reached by a different move order. Same position, same plan.", '…d6 — hits e5; a familiar position.'],
     ["Bc4 — just as in the endgame line, the bishop goes after your knight on d5, which nothing guards.", 'Bc4 — goes after the d5 knight.'],
     ["…Nb6 — move the knight with a hit of your own: from b6 it hits the bishop on c4, which has no guard.", '…Nb6 — hits the bishop on c4.'],
-    ["Bb3 — the bishop steps back and keeps f7 in its sights. The engine rates Bb5, the pin on c6, about the same.", 'Bb3 — back, still aiming at f7.'],
+    ["Bb3 — the bishop steps back and keeps f7 in its sights. The engine rates Bb5, which would pin the knight on c6, about the same.", 'Bb3 — back, still aiming at f7.'],
     ["…dxe5 — you take the pawn that was cramping your position, and your new pawn on e5 hits d4.", '…dxe5 — takes the cramping pawn.'],
     ["dxe5 — and once more the d-file opens with both queens on it. The engine prefers Nxe5, and now you are a little better.", 'dxe5 — the d-file opens.'],
     ["…Qxd1+ — same idea as before: swap the queens with check, and leave e5 with no pawn to guard it.", '…Qxd1+ — trade queens, with check.'],

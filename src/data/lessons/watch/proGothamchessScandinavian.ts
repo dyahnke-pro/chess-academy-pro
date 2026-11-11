@@ -30,7 +30,7 @@ const MAIN_BEATS: Array<[string, string]> = [
   ["They castle long, the engine's choice: the king leaves e1, out of the line your bishop and queen are aimed down, and the rook lands on d1 behind the d4 pawn. Your king is still in the center, and the e6 pawn is still pinned by the queen on e2, so finish developing first.", 'O-O-O — king off the diagonal.'],
   ['…Nbd7: the last minor piece comes out. From d7 the knight can go to b6 or f6, and it watches e5, the square their knight on f3 would like. The engine rates …Nd5 about the same.', '…Nbd7 — the last piece out.'],
   ['Bb3: the bishop steps back before your knight can reach b6 and hit it there. The engine prefers Nh4, going straight after your bishop on f5, the piece aimed at c2. From b3 the bishop looks down at e6, the pawn that is pinned to your king.', 'Bb3 — steps back; Nh4 was stronger.'],
-  ["…Nd5: the knight jumps to the center and hits the knight on c3 a second time, along with your bishop on b4. It's about level. Your knight on d5 is guarded by the pawn on c6; the e6 pawn can't help while it's pinned. Your plan for the middlegame: when the knights come off on d5, trade bishops on d2, take back with the c-pawn, and use the half-open c-file against their king on c1.", '…Nd5 — a second hit on c3.'],
+  ["…Nd5: the knight jumps to the center and hits the knight on c3 a second time, along with your bishop on b4. It's about level. Your knight on d5 is guarded by the pawn on c6; the e6 pawn can't help while it's pinned. Your plan for the middlegame: when the knights come off on d5, trade bishops on d2, take back with the c-pawn, and then use the c-file, half-open by then, against their king on c1.", '…Nd5 — a second hit on c3.'],
 ];
 
 const beats: Record<string, { say: string; sayShort: string }> = {};
@@ -72,7 +72,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["They castle, and it's about level now. The engine prefers h3, and here's the point: with g4 still open, your bishop on c8 can come to g4 and go after the knight on f3. Castling leaves that door open.", 'O-O — about level; h3 was stronger.'],
     ['…e5: the break, hitting d4 with a pawn. It looks natural, but the engine prefers …Bg4 first, going after the knight on f3 that guards d4, and rates …e5 here about half a pawn worse. They are a little better.', '…e5 — the break; …Bg4 first was better.'],
     ["Nxe5, the engine's choice: the knight grabs the pawn and hits your knight on c6, along with the pawns on f7 and g6. Don't worry, there's a recapture.", 'Nxe5 — takes, hits c6.'],
-    ["…Nxe5, the engine's choice: take back, and the knight hits the pawn on c4. They are a little better. When they take on e5 with the d-pawn, the queens come off on d1 and your bishop on g7 wins the e5 pawn back. Your plan for the middlegame: trade queens on d1, take e5 with the bishop, and bring your rooks to the open d-file.", '…Nxe5 — back, hits c4.'],
+    ["…Nxe5, the engine's choice: take back, and the knight hits the pawn on c4. They are a little better. When they take on e5 with the d-pawn, the queens come off on d1 and your bishop on g7 wins the e5 pawn back. Your plan for the middlegame: trade queens on d1, take e5 with the bishop, and bring your rooks to the d-file, which will be open by then.", '…Nxe5 — back, hits c4.'],
   ],
   'Portuguese …Bg4': [
     ['…Bg4, the Portuguese, about three masters in ten: instead of taking the pawn back, the bishop hits the queen on d1. Why now? The pawn on d5 can wait a move, and you would rather develop with a threat. The engine prefers simply taking back with …Nxd5.', '…Bg4 — the Portuguese, hits the queen.'],
@@ -187,7 +187,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["…Qb6, the engine's choice: the queen hits b2, which nothing guards now, and stands behind your c5 pawn on the diagonal to d4. In the French Advance this is the standard way to pile on d4 and b2.", '…Qb6 — hits the loose b2.'],
     ["Qb3, the engine's choice: the queen guards b2 and hits yours on b6, which nothing guards. So you have to act now: take on b3, or step away?", 'Qb3 — offers the trade, hits b6.'],
     ["…Qxb3, the engine's choice: take, and the queens come off. They take back with the a-pawn, which opens the a-file for their rook.", '…Qxb3 — the queens come off.'],
-    ["axb3, the engine's choice: the pawn takes back, and their rook on a1 now looks up the open a-file at your a6 pawn.", 'axb3 — the a-file opens.'],
+    ["axb3, the engine's choice: the pawn takes back, and their rook on a1 now looks up the half-open a-file at your a6 pawn.", 'axb3 — the a-file opens.'],
     ["…cxd4, the engine's choice: the pawn takes on d4 and hits the bishop on e3. It's about level. Your plan for the middlegame: when they take back on d4, trade pieces there, put your bishop on c5 and your king on e7, and keep the bishop on g6 aimed at their queenside.", '…cxd4 — hits the bishop on e3.'],
   ],
   'vs Tennison Gambit': [

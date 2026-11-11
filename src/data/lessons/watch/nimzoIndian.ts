@@ -188,7 +188,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["gxh3 — they must take back, or they're simply a piece down. Their h-pawns are doubled, and the bishop on f1 now has g2 to come out to.", 'gxh3 — doubled h-pawns.'],
     ["…Nc6 — the knight develops and hits d4. But the engine much prefers …Nh5: with the knight off f6, your queen's road to h4 opens, and …Qh4+ checks their king. After …Nc6 it's about level.", '…Nc6 — hits d4; …Nh5 was stronger.'],
     ["Bg2 — the engine's first choice. The bishop comes out on the square the g-pawn left, and it guards the h3 pawn. It's about level.", 'Bg2 — develops, guards h3.'],
-    ["…Na5 — the knight heads for b3, a square no pawn of theirs can ever attack, and your c4 pawn guards it. From b3 it would hit the rook on a1 and the bishop on c1. The engine prefers castling first, and it's about level. Your plan from here: castle, plant the knight on b3, and keep their queenside clamped with the pawn on c4.", '…Na5 — heading for the hole on b3.'],
+    ["…Na5 — the knight heads for b3, a square no pawn of theirs can ever attack, and your c4 pawn guards it. From b3 it would hit the rook on a1 and the bishop on c1. The engine prefers castling first, and it's about level. Your plan from here: castle, jump the knight into b3, and keep their queenside clamped with the pawn on c4.", '…Na5 — heading for the hole on b3.'],
   ],
   'Fischer Variation (4.e3 b6)': [
     ["…b6 — about one master in seven. Instead of the center, you go for the long diagonal: the bishop on c8 is headed for b7, where it will watch e4. The engine rates castling a touch higher.", '…b6 — the bishop is headed for b7.'],
