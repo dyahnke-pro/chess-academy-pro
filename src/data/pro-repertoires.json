@@ -835,6 +835,26 @@
             "https://www.chess.com/openings/Caro-Kann-Defense",
             "https://api.chess.com/pub/player/gothamchess/games/archives"
           ]
+        },
+        {
+          "name": "Closed 3...g6 5.e5",
+          "pgn": "e4 c6 d4 d5 f3 g6 Nc3 Bg7 e5 f6 f4 Nh6 Nf3 O-O h3 Nf5 g4 Ng3 Rg1 Nxf1 Rxf1",
+          "explanation": "Against the …g6 fianchetto, shut the long diagonal with e5 and prop the pawn up with f4, so the g7 bishop bites on a wall of pawns on d4, e5 and f4. Then take the kingside space with h3 and g4, and keep d4 covered against their knight.",
+          "sources": [
+            "book:caro-kann",
+            "concept:pos-center",
+            "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+          ]
+        },
+        {
+          "name": "Alien Gambit",
+          "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Ng5 h6 Nxf7 Kxf7 Nf3 Bf5 Ne5+ Ke8 g4 Be4 Bc4 e6 f3",
+          "explanation": "A knight sacrifice on f7 by way of Nc3, Nxe4 and Ng5: their king is dragged into the open and loses the right to castle, and every move after it has to make a threat. Objectively it gives them the better game, so it is a gambit to play for the attack, with Ne5 check, Bc4 and pawn kicks against the bishop.",
+          "sources": [
+            "book:caro-kann",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+          ]
         }
       ],
       "trapLines": [],

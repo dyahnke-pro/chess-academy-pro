@@ -45666,7 +45666,7 @@
     "title": "The Ng5 Punishment",
     "intro": "Knight and bishop double on f7 — and castling, the most natural move on the board, loses to the sacrifice.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -45809,7 +45809,7 @@
     "title": "Ne2, Long Castle, the a3 Question",
     "intro": "Defend the pinned knight, castle long, then ask the b4-bishop a question with no good answer.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -45968,7 +45968,7 @@
     "title": "The Ng4 Poke, the d5 Counter",
     "intro": "Black's best try: refuse the bishop trade, then push through the central strike and collect on c6.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -46137,7 +46137,7 @@
     "title": "The Na4 Question",
     "intro": "Queen and bishop gang up on d4 — and one knight jump hits them both.",
     "sources": [
-     "book:chess-fundamentals",
+     "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]

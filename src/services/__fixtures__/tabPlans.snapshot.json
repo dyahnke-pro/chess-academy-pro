@@ -3308,6 +3308,8 @@
  "pro-gothamchess-fantasy-caro::Counter 3...Qb6::Counter 3...Qb6": [
   "mp-progothamchess-fantasy-qb6-na4"
  ],
+ "pro-gothamchess-fantasy-caro::Closed 3...g6 5.e5::Closed 3...g6 5.e5": [],
+ "pro-gothamchess-fantasy-caro::Alien Gambit::Alien Gambit": [],
  "pro-gothamchess-fantasy-caro::::Main Line 3...dxe4 4.fxe4": [
   "mp-progothamchess-fantasy-dxe4-center"
  ],
@@ -3320,6 +3322,8 @@
  "pro-gothamchess-fantasy-caro::::Counter 3...Qb6": [
   "mp-progothamchess-fantasy-qb6-na4"
  ],
+ "pro-gothamchess-fantasy-caro::::Closed 3...g6 5.e5": [],
+ "pro-gothamchess-fantasy-caro::::Alien Gambit": [],
  "pro-gothamchess-milner-barry::main": [
   "mp-progothamchess-mb-main-fstorm",
   "mp-progothamchess-mb-advance-battery"

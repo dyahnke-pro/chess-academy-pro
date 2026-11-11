@@ -5296,7 +5296,10 @@
     "middlegameTheme": "The 3…e6 Fantasy: big centre, d5 space, technical grind.",
     "lessonSummary": "Build the centre, push d5 for space, and convert the endgame.",
     "studentSide": "white",
-    "variation": "Solid 3...e6"
+    "variation": "Solid 3...e6",
+    "sources": [
+      "https://www.chess.com/game/live/113672474239"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-fantasy-saraci-dxe4",
@@ -5315,7 +5318,10 @@
     "middlegameTheme": "The 3…dxe4 line: Nxe6/Nxg7+ sacrifices, drag out the king.",
     "lessonSummary": "In the dxe4 line, sacrifice to expose the king and attack.",
     "studentSide": "white",
-    "variation": "Main Line 3...dxe4 4.fxe4"
+    "variation": "Main Line 3...dxe4 4.fxe4",
+    "sources": [
+      "https://www.chess.com/game/live/166416658870"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-fantasy-matibar-g6",
@@ -5334,7 +5340,10 @@
     "middlegameTheme": "The 3…g6 line: invite …Qxb2, attack with f5 and the e-pawn.",
     "lessonSummary": "Let Black grab b2, chase the queen, and storm with f5 and e6-e7.",
     "studentSide": "white",
-    "variation": "Aggressive 3...g6"
+    "variation": "Aggressive 3...g6",
+    "sources": [
+      "https://www.chess.com/game/live/166172119812"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-fantasy-tjychess-qb6",
@@ -5353,7 +5362,10 @@
     "middlegameTheme": "The 3…Qb6 line: gambit for development, d5 break, mate the king.",
     "lessonSummary": "Against …Qb6, gambit for development, break d5, and hunt the king.",
     "studentSide": "white",
-    "variation": "Counter 3...Qb6"
+    "variation": "Counter 3...Qb6",
+    "sources": [
+      "https://www.chess.com/game/live/83022074119"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-stafford-imrosen",

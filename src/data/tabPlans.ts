@@ -836,6 +836,10 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
       'solid 3...e6': ['mp-progothamchess-fantasy-e6-qg4attack'],
       'aggressive 3...g6': ['mp-progothamchess-fantasy-g6-poisonpawn'],
       'counter 3...qb6': ['mp-progothamchess-fantasy-qb6-na4'],
+      // The two tabs added from the repertoire's taught lines (2026-11-11): no
+      // middlegame plan is anchored at their ends yet.
+      'closed 3...g6 5.e5': [],
+      'alien gambit': [],
     },
   },
   'pro-gothamchess-stafford-refute': {
