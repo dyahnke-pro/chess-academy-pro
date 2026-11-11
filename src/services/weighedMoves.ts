@@ -741,14 +741,12 @@ export function squareChoice(args: {
   // it hangs"): a person names the most tempting square and its fault, then
   // sums up the rest (`faults` is in the eye's order, most natural first).
   const said = outLoud(all) <= 2 ? all : `on ${faults[0].square} it ${faults[0].text}, and its other squares are no better`;
-  const text = outLoud(said) <= 1 && (args.namesStudentMoves || mover !== args.student)
-    // The square, then the fault on the other square its own sentence ("Their
-    // bishop went to e4 — on g4 it runs into …Bxf3+ — you win the exchange"
-    // was a dash chain).
-    ? `${mover === args.student ? `Your ${piece} goes to ${played.to}` : `Their ${piece} went to ${played.to}`}. ${openSentence(said)}.`
-    // ROTATED on the board and the move (prod Review 2026-11-06: "Why that
-    // square for …?" said three times in one game).
-    : (() => {
+  // The move is never restated: the turn's head already said it (prod Review
+  // audit 2026-11-11: "They played knight to f6 — it attacks your e-pawn …
+  // Their knight went to f6. On e7 it …" — one move head a turn). ROTATED on
+  // the board and the move (prod Review 2026-11-06: "Why that square for …?"
+  // said three times in one game).
+  const text = (() => {
       const whose = mover === args.student ? 'your' : 'their';
       // Learn never says where the student's piece just went: the stem that
       // names the square is left out there.
@@ -756,7 +754,8 @@ export function squareChoice(args: {
       return rotateStem([
         `Why that square for ${whose} ${piece}? ${openSentence(said)}.`,
         ...(namesSquare ? [`Why ${played.to} for ${whose} ${piece}? ${openSentence(said)}.`] : []),
-        `The other squares for ${whose} ${piece} are worse: ${said}.`,
+        // "The other squares" only when more than one square is said.
+        ...(new Set(faults.map((f) => f.square)).size > 1 ? [`The other squares for ${whose} ${piece} are worse: ${said}.`] : []),
       ], stemKeyOf(`${args.fenBefore}|${uciOf(played)}`));
     })();
   return { piece: played.piece, to: played.to, faults, text,

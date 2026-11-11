@@ -13,17 +13,17 @@ import { deriveNextPlanFacts } from './nextPlans';
 import { describePlan, type SidePlan } from './lookaheadPlan';
 
 describe('the passer plan: the distance is a fact, the how is the steps', () => {
-  it('"It is 2 squares from queening. Here\'s how: escort it…" — never "Here\'s how: it is"', () => {
+  it('"It is two squares from queening. Here\'s how: escort it…" — never "Here\'s how: it is"', () => {
     // White passed pawn on f6, no queens: the passer plan leads.
     const plan = deriveNextPlanFacts('6k1/8/5P2/8/8/8/8/6K1 w - - 0 1', 'w', { namesStudentMoves: true }).find((p) => p.kind === 'passer');
-    expect(plan?.text).toContain('the plan from here is to get your passed pawn on f6 promoting. It is 2 squares from queening. Here\'s how: escort it with your king and pieces.');
+    expect(plan?.text).toContain('the plan from here is to get your passed pawn on f6 promoting. It is two squares from queening. Here\'s how: escort it with your king and pieces.');
     expect(plan?.text).not.toMatch(/Here's how: it is/i);
   });
   it('a piece covering the next square is the first step of the how', () => {
     // A black rook on f8 covers f7.
     const plan = deriveNextPlanFacts('5rk1/8/5P2/8/8/8/8/6K1 w - - 0 1', 'w', { namesStudentMoves: true }).find((p) => p.kind === 'passer');
     expect(plan, 'the passer plan is on the board').toBeDefined();
-    expect(plan?.text).toMatch(/It is 2 squares from queening\. Here's how: their rook on f8 covers f7, so drive it off or cover f7 yourself first\. Escort it/);
+    expect(plan?.text).toMatch(/It is two squares from queening\. Here's how: their rook on f8 covers f7, so drive it off or cover f7 yourself first\. Escort it/);
   });
 });
 

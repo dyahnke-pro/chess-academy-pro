@@ -152,7 +152,7 @@ describe('(L) two good moves — on his games', () => {
 describe('(C) which square for the piece — on his games, board reads only', () => {
   it('11.Na3 (25w0mYsx_Lk): Nd2 hangs the bishop on d3', () => {
     expect(squareChoice({ fenBefore: 'r1bq1rk1/ppp2pb1/5npp/4p3/4P2B/2PB4/PP3PPP/RN1Q1RK1 w - - 0 11', san: 'Na3', student: 'w', rating: 1500, reads: null, priorMove: null, beaten: null, namesStudentMoves: true })?.text)
-      .toBe('Your knight goes to a3. On d2 it would leave your light-squared bishop hanging.');
+      .toBe('Why that square for your knight? On d2 it would leave your light-squared bishop hanging.');
     // LEARN NEVER RESTATES THE MOVE JUST PLAYED (David 2026-11-09: "the user
     // knows that, they see it play out"; prod focus audit: "Your bishop goes
     // to f5. On e4 it is kicked by their d-pawn."): it asks why that square.
@@ -160,12 +160,20 @@ describe('(C) which square for the piece — on his games, board reads only', ()
     expect(learn).not.toMatch(/goes to a3|Why a3/);
     expect(learn).toMatch(/On d2 it would leave your light-squared bishop hanging/);
   });
+  it('never restates the move the turn already named (prod Review audit 2026-11-11: "They played knight to f6 … Their knight went to f6")', () => {
+    const fen = 'rn1q1rk1/ppp1bppp/4b3/3pP3/3P4/P1N2N2/1PPQB1PP/R4RK1 b - - 4 11';
+    for (const student of ['w', 'b'] as const) {
+      const t = squareChoice({ fenBefore: fen, san: 'Nd7', student, rating: 1500, reads: null, priorMove: null, beaten: null, namesStudentMoves: true })?.text ?? '';
+      expect(t).not.toMatch(/goes to d7|went to d7/);
+      expect(t).toMatch(/would block/);
+    }
+  });
   it('11…Nd7 (RehhbTF00qQ): …Nc6 blocks the c-pawn — from both seats', () => {
     const fen = 'rn1q1rk1/ppp1bppp/4b3/3pP3/3P4/P1N2N2/1PPQB1PP/R4RK1 b - - 4 11';
     expect(squareChoice({ fenBefore: fen, san: 'Nd7', student: 'b', rating: 1500, reads: null, priorMove: null, beaten: null, namesStudentMoves: true })?.text)
-      .toBe('Your knight goes to d7. On c6 it would block your c-pawn.');
+      .toBe('Why d7 for your knight? On c6 it would block your c-pawn.');
     expect(squareChoice({ fenBefore: fen, san: 'Nd7', student: 'w', rating: 1500, reads: null, priorMove: null, beaten: null, namesStudentMoves: true })?.text)
-      .toBe('Their knight went to d7. On c6 it would block their c-pawn.');
+      .toBe('Why d7 for their knight? On c6 it would block their c-pawn.');
   });
   it('14…Bf6 (WQFcuBCL1F4): …Bd6 hangs the knight on d5', () => {
     expect(squareChoice({ fenBefore: 'r4rk1/1ppqb1pp/2n5/p2npp2/6bP/P1NP1NP1/1PPBBP2/R2Q1RK1 b - - 0 14', san: 'Bf6', student: 'b', rating: 1500, reads: null, priorMove: null, beaten: null, namesStudentMoves: true })?.text)
@@ -180,7 +188,7 @@ describe('(C) which square for the piece — on his games, board reads only', ()
   });
   it('11.Bb2 (55gXMP9N5sM): every other square hangs the knight on a3 — said once', () => {
     expect(squareChoice({ fenBefore: 'r1b2rk1/pp2ppbp/2n2np1/q1p5/3P4/N1P2NPP/P3PPB1/R1BQR1K1 w - - 1 11', san: 'Bb2', student: 'w', rating: 1500, reads: null, priorMove: null, beaten: null, namesStudentMoves: true })?.text)
-      .toBe('Your bishop goes to b2. On its other squares it would leave your knight on a3 hanging.');
+      .toBe('Why that square for your bishop? On its other squares it would leave your knight on a3 hanging.');
   });
   // Carlsen–Caruana 22…Nh5 (prod Review 2026-11-09): "Better was Ne2+" and
   // then "Why h5 for their knight? On h3 or e2 it hangs."

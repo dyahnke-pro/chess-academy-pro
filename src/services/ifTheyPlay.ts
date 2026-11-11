@@ -33,6 +33,7 @@ import { moveJob, isBareJob, MINE, THEIRS, type BookJobKind } from './bookMoveWh
 import { tacticWord } from './tacticVocabulary';
 import { lineShape, withArticle } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import type { TacticType } from '../types';
 
 /** One legal reply, scored by the read of the board after the move. */
@@ -310,7 +311,15 @@ export function branchClause(t: ReplyTree, b: ReplyBranch, student: Color, tense
   const ans = answerWords(b, mover, moverWord, tense, boardAfterReply(t, b));
   if (!ans) return null;
   const x = replyWords(b, t.replier, tense, takers);
-  return tense === 'live' ? `if ${replierWord} ${x}, ${ans}` : `if ${replierWord} had ${x}, ${ans}`;
+  // The past is ROTATED on the board and the reply (prod Review audit
+  // 2026-11-11: "if they had taken on SQ, P takes SQ would have won a P for a
+  // P" said three times in one game — the human-voice rule: two or three
+  // phrasings, never Math.random). The live "if they take …" is the
+  // speedrun's own phrase and stays.
+  const key = stemKeyOf(`${t.fen}|${b.reply.uci}`);
+  return tense === 'live'
+    ? `if ${replierWord} ${x}, ${ans}`
+    : rotateStem([`if ${replierWord} had ${x}, ${ans}`, `had ${replierWord} ${x}, ${ans}`, `${replierWord} could have ${x}, but ${ans}`], key);
 }
 
 /** THE BAIT (WO-COACH-NEXT-TO-YOU-01 C4 — the skill "induce mistakes", David

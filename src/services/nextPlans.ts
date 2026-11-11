@@ -574,7 +574,10 @@ function passerHow(chess: Chess, passer: string, color: Color): { distance: stri
       squares.push(by[0].sq, front);
     }
   } catch { cover = ''; }
-  return { distance: `It is ${left} square${left === 1 ? '' : 's'} from queening.`, cover, squares };
+  // Said as a word (prod Review audit 2026-11-11: "It is 6 squares from
+  // queening" — a person says "six").
+  const COUNT = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven'];
+  return { distance: `It is ${COUNT[left] ?? String(left)} square${left === 1 ? '' : 's'} from queening.`, cover, squares };
 }
 
 /** The weak pawn counted: how often the student hits it against its guards. */
