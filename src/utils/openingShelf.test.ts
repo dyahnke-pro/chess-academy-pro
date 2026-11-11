@@ -3,6 +3,7 @@ import { blackShelfGroup, openingsForSide, shelfLabel, sortOpeningsAZ } from './
 import { buildOpeningRecord } from '../test/factories';
 import repertoire from '../data/repertoire.json';
 import manifests from '../data/opening-manifests.json';
+import { openingRecord } from '../data/lessons/openingRecords';
 import type { OpeningRecord } from '../types';
 
 describe('openingShelf', () => {
@@ -36,7 +37,10 @@ describe('openingShelf', () => {
 
   it('every masterclass lands in a real group on the real data', () => {
     const ids = Object.keys(manifests).filter((k) => !k.startsWith('_'));
-    const records = (repertoire as unknown as OpeningRecord[]).filter((o) => ids.includes(o.id));
+    // A masterclass lives in repertoire.json, gambits.json or, once a pro
+    // opening is rewritten as a Watch course, pro-repertoires.json — the one
+    // lookup the lesson gates share (openingRecords).
+    const records = ids.map((id) => openingRecord(id)).filter((o) => o !== null) as unknown as OpeningRecord[];
     expect(records.length).toBe(ids.length);
     const black = openingsForSide(records, 'black');
     const vsE4 = black.filter((o) => blackShelfGroup(o) === 'vs-e4').map((o) => o.id);
