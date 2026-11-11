@@ -48,6 +48,13 @@ const WHY = new RegExp([
   String.raw`\b\d+ of (?:your|their) pieces on it against \d+ defenders?\b`, String.raw`\bthe more (?:they|you) \w+, the more\b`,
   String.raw`\btrades help the side\b`, String.raw`\breach either wing\b`, String.raw`\bout of reach of (?:your|their) \w+`,
   String.raw`\bgaining time\b`, String.raw`\bcannot join the fight\b`, String.raw`\brips open the [a-h]-file\b`,
+  // WHAT A LINE ENDS IN, WHAT A CHECK DOES, WHAT A PLAN IS FOR (prod Review
+  // audit 2026-11-11): "they play a1, making a queen", "it forces the king to
+  // react", "Contest the file or your own rooks stay passive", "getting the
+  // rook to a2 … to take the bishop" — each names what it acts on.
+  String.raw`\bmaking a (?:new )?queen\b`, String.raw`\bforces (?:the|your|their) king to (?:react|move)\b`,
+  String.raw`\bor (?:your|their) (?:own )?\w+ stays? (?:passive|stuck|shut in)\b`,
+  String.raw`\bto take (?:the|your|their) (?:pawn|knight|bishop|rook|queen)\b`,
   String.raw`\btakes the (?:open|half-open) [a-h]-file\b`, String.raw`\bsquare (?:no pawn of (?:theirs|yours)|none of (?:their|your) pawns) can (?:cover|attack|chase)\b`,
   String.raw`\breach(?:es)? (?:their|your) camp\b`, String.raw`\bcloser to (?:a queen|promotion)\b`, String.raw`\bis open to attack\b`, String.raw`\bpawn can chase a piece off\b`,
   String.raw`\bkept (?:you|it) (?:on top|level|in it|alive)\b`, String.raw`\bfighting for the cent(?:er|re)\b`, String.raw`\bcomes? out (?:ahead|behind)\b`, String.raw`\bwins material\b`, String.raw`\bno (?:enemy )?pawn(?: of (?:theirs|yours))? can chase\b`,

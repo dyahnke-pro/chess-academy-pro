@@ -6,6 +6,10 @@ const isWhyFn = isWhy as (s: string) => boolean;
 
 /** Real reasons from the 2026-10-14 walks that the counter used to miss. */
 const EFFECT_WHYS = [
+  'f4 is tempting here, but it fails: they play a2, you answer king to h2 and they play a1, making a queen.',
+  'You played rook to d7, check — it forces the king to react, seizing the initiative for a move.',
+  'Your opponent seizes the open b-file with the rook. Contest the file or your own rooks stay passive.',
+  'Watch where their moves are going: getting the rook to a2, by way of b8 and b2, to take the bishop when it arrives there.',
   'Careful — their pawn on b4 hits your queen on a5, and a guard does not help: the pawn is worth less than your queen.',
   'Their queen going to b2 lifts the pressure: your pawn on h7 is safe now, and this move is yours to spend.',
   'A piece that far from home takes moves to come back.',
@@ -81,6 +85,11 @@ const DESCRIPTIONS_NOT_WHY = [
   'Your knight steps to f6.',
   'Their rook keeps the file.',
   'The rook lines up on the h-file.',
+  // The bare forms of the 2026-11-11 wordings stay descriptions.
+  'Their pawn reaches a1.',
+  'You give check.',
+  'Your rooks are on the back rank.',
+  'Their rook goes to a2.',
 ];
 
 describe('the why-counter (David 2026-10-14: consequence wordings count when they name what they act on)', () => {
