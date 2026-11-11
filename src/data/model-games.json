@@ -3512,7 +3512,10 @@
     "middlegameTheme": "Trompowsky Attack",
     "lessonSummary": "Gotham's TOP opening in action — the Trompowsky Bg5 pin against a strong opponent. Watch how the bishop pair plus space slowly dominates; quiet positional grinding that converts in the endgame. This is the Trompowsky pattern Levy teaches in his YouTube tournaments and speedrun content.",
     "studentSide": "white",
-    "variation": "Vaganian Attack (…Ne4)"
+    "variation": "Vaganian Attack (…Ne4)",
+    "sources": [
+      "https://www.chess.com/game/live/165125481320"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-english-0",
@@ -4661,7 +4664,10 @@
     "middlegameTheme": "The …c5 b2-gambit: g6 to open the king, then a winning rook ending.",
     "lessonSummary": "Gambit the b-pawn for the attack, open the king with g6, grind the ending.",
     "studentSide": "white",
-    "variation": "Vaganian Attack (…Ne4)"
+    "variation": "b2 Gambit vs …Qb6",
+    "sources": [
+      "https://www.chess.com/game/live/4270453884"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-tromp-vidit-d5",
@@ -4680,7 +4686,10 @@
     "middlegameTheme": "The …d5 squeeze: patient e3/c3 build-up, then convert the better bishop.",
     "lessonSummary": "Against …d5, squeeze with e3/c3 and grind the better minor piece home.",
     "studentSide": "white",
-    "variation": "…d5 system"
+    "variation": "…d5 system",
+    "sources": [
+      "https://www.chess.com/game/live/167664611347"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-tromp-steinberg-vaganian",
@@ -4699,7 +4708,10 @@
     "middlegameTheme": "The …Ne4 h4-gambit: open the h-file, attack the king with the heavy pieces.",
     "lessonSummary": "Against …Ne4, gambit with h4, open the h-file, and hunt the king.",
     "studentSide": "white",
-    "variation": "Vaganian Attack (…Ne4)"
+    "variation": "Vaganian Attack (…Ne4)",
+    "sources": [
+      "https://www.chess.com/game/live/167061015711"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-tromp-maciek-g6",
@@ -4718,7 +4730,10 @@
     "middlegameTheme": "The …g6 antidote: double the f-pawns, storm h4-h5, invade the h-file.",
     "lessonSummary": "Against …g6, take on f6, storm with h4-h5, and pour down the open h-file.",
     "studentSide": "white",
-    "variation": "…g6 fianchetto"
+    "variation": "…g6 fianchetto",
+    "sources": [
+      "https://www.chess.com/game/live/147876185324"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-tromp-tjychess-e6",
@@ -4737,7 +4752,10 @@
     "middlegameTheme": "The …e6 main plan: bishop pair on f6, f4/g4 storm, heavy-piece attack.",
     "lessonSummary": "Against …e6, take the bishop pair, storm with f4-g4, attack down the g-file.",
     "studentSide": "white",
-    "variation": "Main line vs …e6"
+    "variation": "Main line vs …e6",
+    "sources": [
+      "https://www.chess.com/game/live/148341256640"
+    ]
   },
   {
     "id": "mg-pro-gothamchess-eng-philippians-g6",

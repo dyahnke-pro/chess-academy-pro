@@ -3875,6 +3875,11 @@
  "pro-gothamchess-trompowsky::…g6 fianchetto::…g6 fianchetto": [
   "mp-progothamchess-tromp-g6-doubled"
  ],
+ "pro-gothamchess-trompowsky::Big Center vs …e6::Big Center vs …e6": [],
+ "pro-gothamchess-trompowsky::Bf4 vs …Ne4 and …c5::Bf4 vs …Ne4 and …c5": [],
+ "pro-gothamchess-trompowsky::Bf4 vs …Ne4 and …d5::Bf4 vs …Ne4 and …d5": [],
+ "pro-gothamchess-trompowsky::b2 Gambit vs …Qb6::b2 Gambit vs …Qb6": [],
+ "pro-gothamchess-trompowsky::c4 and e4 vs …d6::c4 and e4 vs …d6": [],
  "pro-gothamchess-trompowsky::::Main line vs …e6": [
   "mp-progothamchess-tromp-e6-bishoppair"
  ],
@@ -3890,6 +3895,11 @@
  "pro-gothamchess-trompowsky::::…g6 fianchetto": [
   "mp-progothamchess-tromp-g6-doubled"
  ],
+ "pro-gothamchess-trompowsky::::Big Center vs …e6": [],
+ "pro-gothamchess-trompowsky::::Bf4 vs …Ne4 and …c5": [],
+ "pro-gothamchess-trompowsky::::Bf4 vs …Ne4 and …d5": [],
+ "pro-gothamchess-trompowsky::::b2 Gambit vs …Qb6": [],
+ "pro-gothamchess-trompowsky::::c4 and e4 vs …d6": [],
  "pro-gothamchess-english::main": [
   "mp-progothamchess-english-botvinnik-main",
   "mp-progothamchess-english-flank-attack"

@@ -16602,7 +16602,7 @@
     "title": "Trompowsky: Active King, Space on the Wings",
     "intro": "From their win over Vitaly_Sivuk. Queens come off and White grabs space on both wings.",
     "sources": [
-     "book:chess-fundamentals",
+     "concept:pos-development",
      "https://www.chess.com/openings/Trompowsky-Attack",
      "https://en.wikipedia.org/wiki/Trompowsky_Attack",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -16733,7 +16733,7 @@
     "title": "Trompowsky Main: Queens Off, Clear Edge",
     "intro": "From their win over Vitaly_Sivuk. The queens trade and White’s pieces dominate.",
     "sources": [
-     "book:chess-fundamentals",
+     "concept:pos-development",
      "https://www.chess.com/openings/Trompowsky-Attack",
      "https://en.wikipedia.org/wiki/Trompowsky_Attack",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -41529,7 +41529,7 @@
     "title": "Trompowsky: Roll the Kingside Pawns",
     "intro": "Played out: white storms g4-g5 and keeps the king safe enough to press.",
     "sources": [
-     "book:chess-fundamentals",
+     "concept:pos-development",
      "https://www.chess.com/openings/Trompowsky-Attack",
      "https://en.wikipedia.org/wiki/Trompowsky_Attack",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -41660,7 +41660,7 @@
     "title": "Trompowsky: Reroute and Squeeze",
     "intro": "From their win over Algeriano22. White regains the pawn and manoeuvres for the squeeze.",
     "sources": [
-     "book:chess-fundamentals",
+     "concept:pos-development",
      "https://www.chess.com/openings/Trompowsky-Attack",
      "https://en.wikipedia.org/wiki/Trompowsky_Attack",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -41791,7 +41791,7 @@
     "title": "Trompowsky: Queenside Space Clamp",
     "intro": "The plan in motion: white centralises the queen and rolls the queenside pawns.",
     "sources": [
-     "book:chess-fundamentals",
+     "concept:pos-development",
      "https://www.chess.com/openings/Trompowsky-Attack",
      "https://en.wikipedia.org/wiki/Trompowsky_Attack",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -41930,7 +41930,7 @@
     "title": "The b2 Trap, Run to Course",
     "intro": "Every move hits the queen, every hit develops a piece — the grab was a scoresheet, pre-written.",
     "sources": [
-     "book:chess-fundamentals",
+     "concept:pos-development",
      "https://www.chess.com/openings/Trompowsky-Attack",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -42060,7 +42060,7 @@
     "title": "Trompowsky Vaganian Gambit: King Hunt",
     "intro": "From their win over swimmerchess. A knight grab and checks drive the king into the open.",
     "sources": [
-     "book:chess-fundamentals",
+     "concept:pos-development",
      "https://www.chess.com/openings/Trompowsky-Attack",
      "https://en.wikipedia.org/wiki/Trompowsky_Attack",
      "https://api.chess.com/pub/player/gothamchess/games/archives"

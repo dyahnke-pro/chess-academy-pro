@@ -706,6 +706,13 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
       'vaganian attack (…ne4)': ['mp-progothamchess-tromp-vaganian-gambit'],
       '…d5 system': ['mp-progothamchess-tromp-d5-squeeze'],
       '…g6 fianchetto': ['mp-progothamchess-tromp-g6-doubled'],
+      // The five tabs added from the repertoire's taught lines (2026-11-11): no
+      // middlegame plan is anchored at their ends yet.
+      'big center vs …e6': [],
+      'bf4 vs …ne4 and …c5': [],
+      'bf4 vs …ne4 and …d5': [],
+      'b2 gambit vs …qb6': [],
+      'c4 and e4 vs …d6': [],
     },
   },
   'pro-gothamchess-english': {
