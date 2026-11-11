@@ -298,10 +298,12 @@ export function checkBoardClaims(window: Chess[], text: string): BoardClaimViola
  *  `span` moves (plus the one before them), or null on an illegal move. */
 export function boardsFor(moves: string[], startFen?: string, span = 6): Chess[] | null {
   const game = startFen ? new Chess(startFen) : new Chess();
-  const boards: Chess[] = [new Chess(game.fen())];
-  for (const san of moves) {
-    try { game.move(san); } catch { return null; }
-    boards.push(new Chess(game.fen()));
+  // Only the last `span + 1` positions are kept, so only those are copied.
+  const from = Math.max(0, moves.length - span);
+  const boards: Chess[] = from === 0 ? [new Chess(game.fen())] : [];
+  for (let i = 0; i < moves.length; i++) {
+    try { game.move(moves[i]); } catch { return null; }
+    if (i + 1 >= from) boards.push(new Chess(game.fen()));
   }
-  return boards.slice(-(span + 1));
+  return boards;
 }
