@@ -20,7 +20,8 @@ import { findPieceQuality, legalSeeGainFor, pieceScope } from './positionReading
 import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { openSentence } from '../utils/openSentence';
 import { withMover } from '../utils/sideToMove';
-import { detectPlanRace, planRaceClause, stepsToPromote } from './planRace';
+import { detectPlanRace, planRaceClause, pushesToPromote, stepsToPromote } from './planRace';
+import { countWord } from '../utils/andList';
 import { absolutePinRay } from './pinGeometry';
 
 export const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -562,7 +563,11 @@ const times = (n: number): string => TIMES[n] ?? `${n} times`;
 /** The passer's distance to queening, and the enemy piece covering its next square. */
 function passerHow(chess: Chess, passer: string, color: Color): { distance: string; cover: string; squares: string[] } {
   const rank = Number(passer[1]);
-  const left = color === 'w' ? 8 - rank : rank - 1;
+  // PUSHES, THE RACE'S OWN COUNT (prod Review audit 2026-11-11: "It is six
+  // squares from queening … yours on h2 was 5 pushes from queening" — one pawn,
+  // two numbers in one turn). A pawn on its start square with two empty squares
+  // ahead saves a move with the double step; `pushesToPromote` counts it.
+  const left = pushesToPromote(chess, passer, color);
   const front = `${passer[0]}${rank + (color === 'w' ? 1 : -1)}` as Square;
   const enemy: Color = color === 'w' ? 'b' : 'w';
   let cover = '';
@@ -576,8 +581,7 @@ function passerHow(chess: Chess, passer: string, color: Color): { distance: stri
   } catch { cover = ''; }
   // Said as a word (prod Review audit 2026-11-11: "It is 6 squares from
   // queening" — a person says "six").
-  const COUNT = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven'];
-  return { distance: `It is ${COUNT[left] ?? String(left)} square${left === 1 ? '' : 's'} from queening.`, cover, squares };
+  return { distance: `It is ${countWord(left)} push${left === 1 ? '' : 'es'} from queening.`, cover, squares };
 }
 
 /** The weak pawn counted: how often the student hits it against its guards. */

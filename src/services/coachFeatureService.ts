@@ -71,7 +71,7 @@ import { mainConceptLine } from './slipDepth';
 import { flipSideToMove, sideToMoveAs } from './threatOut';
 import { mateStakes, isSacrifice } from './factStakes';
 import { sacrificeLedger, type BestAmong, type SacrificeLedgerRead } from './sacrificeLedger';
-import { threatPurpose, lineRestatesClaim } from './threatPurpose';
+import { threatPurpose, lineRestatesClaim, lineBuilds } from './threatPurpose';
 import type { BestOfEngine, DeepReadEngine } from './gameAnalysisService';
 import { costReason as readCostReason, costReasonRow, type CostReason, type CostReasonRow, type LineRead } from './costReason';
 import { lineTrust, NAME_NEAR_PLIES } from './lineTrust';
@@ -5628,8 +5628,6 @@ async function augmentWithProjections(
       // idea is its first move; once told, it is not told again.
       const firstKey = `first:${line.plies[0].san.replace(/[+#!?]+$/, '')}`;
       if (deepOppSaid.has(oppKey) || deepOppSaid.has(firstKey)) continue;
-      deepOppSaid.add(oppKey);
-      deepOppSaid.add(firstKey);
       // David 2026-09-07 (#4): non-forcing decisive lines count too. Forcing →
       // "threat"; decisive non-forcing → "idea/plan" (honest label). The decisive
       // ≥250cp gate is the noise floor; "left alone" is true for both.
@@ -5637,6 +5635,19 @@ async function augmentWithProjections(
       // A proof when the line settles something; otherwise the IDEA is still
       // the teaching (what they want) — named by its first move, not recited.
       const oppRun = render(line, 'opponent');
+      // THE STAKE IS ITS WHY, AND IT IS SPECIFIC (review audit 2026-10-14:
+      // "their idea starts with d5." and nothing more → David 2026-11-07: "I
+      // want specificity … Not a general statement"). A line that mates says
+      // so; a quiet line says what it BUILDS (`lineBuilds`). "It swings the
+      // game by three or four points" named a stake with no why, so a line
+      // that builds nothing a sentence can name is not told at all.
+      // Its REAL purpose — what the line wins, when that is not what their
+      // first move looks aimed at (missed computers, 2026-10-08).
+      const purpose = (() => { try { return threatPurpose(line, studentColorWB); } catch { return null; } })();
+      const builds = oppRun || matesOut ? null : lineBuilds(line);
+      if (!oppRun && !matesOut && !builds && !purpose) continue;
+      deepOppSaid.add(oppKey);
+      deepOppSaid.add(firstKey);
       const stem = ([
         { goes: `Watch what they're building — left alone, their ${oppDeepKind} goes:`, starts: `Watch what they're building — left alone, their ${oppDeepKind} starts with` },
         { goes: `Their next ${oppDeepKind}, played out from here:`, starts: `Their next ${oppDeepKind}, played out from here, starts with` },
@@ -5647,13 +5658,7 @@ async function augmentWithProjections(
       oppIdeasTold += 1;
       let callOut = oppRun
         ? `${stem.goes} ${oppRun}.`
-        // THE STAKE IS ITS WHY (review audit 2026-10-14: "their idea starts
-        // with d5." and nothing more). The line was kept BECAUSE it mates or
-        // swings the game, so that is said with it.
-        : `${stem.starts} ${line.plies[0].san}${matesOut ? ', and it ends in mate' : oppPovNow !== null && oppPovTerminal !== null ? `, and it swings the game by ${costWords(oppPovTerminal - oppPovNow)}` : ''}.`;
-      // Its REAL purpose — what the line wins, when that is not what their
-      // first move looks aimed at (missed computers, 2026-10-08).
-      const purpose = (() => { try { return threatPurpose(line, studentColorWB); } catch { return null; } })();
+        : `${stem.starts} ${line.plies[0].san}${matesOut ? ', and it ends in mate' : builds ? `, and ${builds}` : ''}.`;
       if (purpose) callOut += ` ${purpose}`;
       const next = segments[i + 1];
       if (next && next.playerColor === studentColorName && next.bestMoveSan) {

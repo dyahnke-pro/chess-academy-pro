@@ -3,6 +3,7 @@ import { describeStructure } from './boardStructure';
 import { legalSeeGainFor } from './positionReadingService';
 import type { Proof } from './proof';
 import { openSentence } from '../utils/openSentence';
+import { countWord } from '../utils/andList';
 
 type Color = 'w' | 'b';
 
@@ -360,10 +361,11 @@ export function planRaceClause(
   const past = register === 'review';
 
   if (race.kind === 'passer-race') {
-    const pushes = (n: number): string => `${n} push${n === 1 ? '' : 'es'}`;
+    // Counts said as words (a person says "five pushes", never "5 pushes").
+    const pushes = (n: number): string => `${countWord(n)} push${n === 1 ? '' : 'es'}`;
     const counts = past
-      ? `both sides had a runner: yours on ${race.yourPawn} was ${pushes(race.yourPushes)} from queening, theirs on ${race.theirPawn} was ${race.theirPushes}`
-      : `both sides have a runner: yours on ${race.yourPawn} is ${pushes(race.yourPushes)} from queening, theirs on ${race.theirPawn} is ${race.theirPushes}`;
+      ? `both sides had a runner: yours on ${race.yourPawn} was ${pushes(race.yourPushes)} from queening, theirs on ${race.theirPawn} was ${countWord(race.theirPushes)}`
+      : `both sides have a runner: yours on ${race.yourPawn} is ${pushes(race.yourPushes)} from queening, theirs on ${race.theirPawn} is ${countWord(race.theirPushes)}`;
 
     // A dead-level count is still a race — the MOVE decides it, and saying so
     // is the whole teaching. The first draft returned null here and threw away

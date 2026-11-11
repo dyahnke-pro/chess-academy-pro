@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { threatPurpose, lineRestatesClaim } from './threatPurpose';
+import { threatPurpose, lineRestatesClaim, lineBuilds } from './threatPurpose';
+import { computePlyFacts } from './pvPlayback';
 import type { PvLine, PvPly } from './pvPlayback';
 
 /** A minimal PvLine from a FEN and SANs (facts: mate only — all this reads). */
@@ -65,5 +66,36 @@ describe('lineRestatesClaim — a deep line that only plays out a spoken claim',
   it('is new when the line mates', () => {
     const mating = lineOf('3r2k1/5ppp/8/8/8/8/P2N1PPP/6K1 b - - 0 1', ['Rxd2', 'a3', 'Rd1#']);
     expect(lineRestatesClaim(mating, [['d8', 'd2', 'd1']])).toBe(false);
+  });
+});
+
+// "Their idea starts with Ne7, and it swings the game by three or four points"
+// (Review, 2026-11-10) — a stake with no why. A quiet line says what it BUILDS,
+// read off its own plies; a line that builds nothing nameable says nothing.
+describe('lineBuilds — what a quiet line of theirs builds', () => {
+  function realLine(fen: string, sans: string[]): PvLine {
+    const c = new Chess(fen);
+    const plies: PvPly[] = sans.map((san) => {
+      const fenBefore = c.fen();
+      const m = c.move(san);
+      const facts = computePlyFacts(fenBefore, c.fen(), { captured: m.captured, san: m.san, color: m.color, promotion: m.promotion });
+      return { san: m.san, uci: `${m.from}${m.to}${m.promotion ?? ''}`, moverColor: m.color === 'w' ? 'white' : 'black', fenBefore, fenAfter: c.fen(), facts };
+    });
+    return { plies, rootEvalCp: 0, terminalEvalCp: null } as unknown as PvLine;
+  }
+
+  it('a line of king shuffles builds nothing a sentence can name', () => {
+    expect(lineBuilds(realLine('6k1/8/8/8/8/8/8/6K1 b - - 0 1', ['Kf7', 'Kf2', 'Ke6']))).toBeNull();
+  });
+  it('a pawn that promotes is named with its square', () => {
+    expect(lineBuilds(realLine('6k1/8/8/8/8/8/1p6/6K1 b - - 0 1', ['b1=Q+', 'Kg2', 'Qb7+']))).toBe('a pawn promotes to a queen on b1');
+  });
+  it('names a passed pawn only when it still stands at the line end', () => {
+    // …c5xd4 leaves Black a passer; White's own moves never count.
+    const keeps = lineBuilds(realLine('6k1/8/8/2p5/3P4/8/8/6K1 b - - 0 1', ['cxd4', 'Kf2', 'Kf7']));
+    expect(keeps).toBe('it leaves them a passed pawn on d4');
+    // Here the king takes it back: the passer is gone; the open c-file stays.
+    const lost = lineBuilds(realLine('6k1/8/8/2p5/3P4/8/3K4/8 b - - 0 1', ['cxd4', 'Kd3', 'Kf7', 'Kxd4']));
+    expect(lost).not.toMatch(/passed pawn/);
   });
 });

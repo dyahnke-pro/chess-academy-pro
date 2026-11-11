@@ -34,7 +34,7 @@ const WHY = new RegExp([
   String.raw`\bneeds? (?:a|an|the) [\w-]+(?: \w+)? to (?:reach|get|win|attack|break)\b`, String.raw`\b(?:is|are) stronger than\b`, String.raw`\bcan never (?:come|be (?:challenged|taken|kicked))\b`,
   String.raw`\bmakes them (?:commit|move|decide|spend)\b`, String.raw`\bremoves? (?:a|the|their|your) (?:defender|guard)\b`, String.raw`\bleaves (?:your|their) \w+ on [a-h][1-8] to be taken\b`,
   String.raw`\bcosts? (?:a little|about|more than|three or four|five) (?:half a |a |two )?points?\b`, String.raw`\bhas no (?:defender|guard)\b`,
-  String.raw`\bswings the game by\b`, String.raw`\bit (?:forks|pins|skewers)\b`, String.raw`\bcosts? (?:them|you) (?:the |a |an )?\w+`,
+  String.raw`\band (?:it (?:[\w -]+ when the \w+ goes to [a-h][1-8]|strips (?:a pawn|\d+ pawns) from your king's cover|leaves them a passed pawn on|plants an? \w+ on|opens the [a-h]-file)|a pawn promotes to)\b`, String.raw`\bit (?:forks|pins|skewers)\b`, String.raw`\bcosts? (?:them|you) (?:the |a |an )?\w+`,
   String.raw`\blet (?:them|you) in\b`, String.raw`\bis open to (?:your|their) \w+`, String.raw`\bcannot move at all\b`,
   // THE FILE TAKEN AND THE SQUARE NO PAWN CAN TOUCH (lead 2026-10-20, Najdorf
   // Zagreb): "Your Qb3 takes the open b-file", "c3 is a square no pawn of

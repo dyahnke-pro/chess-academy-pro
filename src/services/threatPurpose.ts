@@ -6,6 +6,8 @@
 // Pure: chess.js over the line's own plies.
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import type { PvLine } from './pvPlayback';
+import { patternAim } from './tacticVocabulary';
+import { fileList, withArticle } from '../utils/andList';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -51,6 +53,48 @@ export function threatPurpose(line: PvLine, student: Color): string | null {
   const won = piecesWon(line);
   if (!won || won.square === apparent.square || VALUE[won.piece] < VALUE[apparent.piece]) return null;
   return `${looks}, but its real point is your ${NAME[won.piece]} on ${won.square}.`;
+}
+
+/** WHAT A QUIET DECISIVE LINE BUILDS (David 2026-11-07: "I want specificity
+ *  when we teach. Not a general statement"). A projected line of theirs that
+ *  settles no material was said as "their idea starts with Ne7, and it swings
+ *  the game by three or four points" — a stake with no why. This reads the
+ *  line's own plies for the thing it builds: a pawn queening, a tactic landed,
+ *  your king's cover stripped, a passed pawn or an outpost that still stands at
+ *  the line's end, a file opened. The biggest wins; null when the line builds
+ *  nothing a sentence can name, and the caller then says nothing about it.
+ *  Pure: the line's own facts and chess.js. */
+export function lineBuilds(line: PvLine): string | null {
+  const owner = line.plies[0]?.moverColor;
+  if (!owner) return null;
+  const ownerWB: Color = owner === 'white' ? 'w' : 'b';
+  let end: Chess | null = null;
+  try { end = new Chess(line.plies[line.plies.length - 1].fenAfter); } catch { end = null; }
+  const stands = (sq: string, type?: PieceSymbol): boolean => {
+    const p = end?.get(sq as Square);
+    return !!p && p.color === ownerWB && (!type || p.type === type);
+  };
+  let best: { rank: number; say: string } | null = null;
+  const offer = (rank: number, say: string): void => { if (!best || rank < best.rank) best = { rank, say }; };
+  for (const p of line.plies) {
+    if (p.moverColor !== owner) continue;
+    const f = p.facts;
+    const to = p.uci.slice(2, 4) as Square;
+    let mover: PieceSymbol | null = null;
+    try { mover = new Chess(p.fenBefore).get(p.uci.slice(0, 2) as Square)?.type ?? null; } catch { mover = null; }
+    if (f.promotion) offer(0, `a pawn promotes to ${withArticle(f.promotion)} on ${to}`);
+    // A battery only lines pieces up; it is not what makes a line decisive.
+    const aims = f.tacticLanded && f.tacticLanded !== 'battery' ? patternAim(f.tacticLanded, 'third') : null;
+    if (aims && mover) offer(1, `it ${aims} when the ${NAME[mover]} goes to ${to}`);
+    if (f.shieldLost > 0) offer(2, `it strips ${f.shieldLost === 1 ? 'a pawn' : `${f.shieldLost} pawns`} from your king's cover`);
+    for (const sq of f.newPassedPawns) if (stands(sq, 'p')) offer(3, `it leaves them a passed pawn on ${sq}`);
+    if (f.outpostGained && stands(f.outpostGained)) {
+      const piece = end?.get(f.outpostGained as Square)?.type;
+      offer(4, `it plants ${piece ? `a ${NAME[piece]}` : 'a piece'} on ${f.outpostGained}`);
+    }
+    if (f.newOpenFiles.length > 0) offer(5, `it opens ${fileList(f.newOpenFiles)}`);
+  }
+  return (best as { rank: number; say: string } | null)?.say ?? null;
 }
 
 /** The most valuable piece a projected line wins for the side that moves first

@@ -3272,9 +3272,22 @@ function quietPurposeFromMoverSeat(
       // Pressure on the king's own squares is a different kind of fact from
       // central influence, and saying so is the teaching — "eyeing e4 and f7"
       // buries the point of Ng5 in a list.
-      return `${verb} the ${REVIEW_PIECE_NAME[mv.piece]} to ${mv.to}, aiming at ${andList(eyes)}`
+      // SAID LIKE A PERSON (prod Learn audit 2026-11-11: "it would reposition
+      // the queen to d2, aiming at d4, d5, f4, d3, e3 and f2"; David
+      // 2026-11-05: "naming a bunch of squares … sounds too robotic"): at most
+      // two squares out loud. Past two, the squares beside their king lead —
+      // that is the point of the move — else two are named "among others".
+      // Every square stays the fact's, lit on the board.
+      const nearKing = kingZoneAmong(eyes, b, moverColor);
+      const aimed = eyes.length <= 2 ? eyes
+        : nearKing.length > 0 && nearKing.length <= 2 ? nearKing
+        : null;
+      const target = aimed
+        ? andList(aimed)
+        : `${eyes[0]} and ${eyes[1]}, among others`;
+      return `${verb} the ${REVIEW_PIECE_NAME[mv.piece]} to ${mv.to}, aiming at ${target}`
         // The mover's seat; `quietPurposePhrase` turns it for an observer.
-        + kingZoneClause(kingZoneAmong(eyes, b, moverColor), 'their');
+        + kingZoneClause(aimed ? nearKing.filter((sq) => aimed.includes(sq)) : nearKing.filter((sq) => sq === eyes[0] || sq === eyes[1]), 'their');
     }
     return null;
   } catch {
