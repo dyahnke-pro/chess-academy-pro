@@ -34,8 +34,6 @@ import { PHILIDOR_DEFENCE_LESSON } from './philidorDefence';
 import { PHILIDOR_DEFENCE_VARIATION_LESSONS } from './philidorDefenceVariations';
 import { QGA_LESSON } from './queensGambitAccepted';
 import { QGA_VARIATION_LESSONS } from './queensGambitAcceptedVariations';
-import { SLAV_DEFENCE_LESSON } from './slavDefence';
-import { SLAV_DEFENCE_VARIATION_LESSONS } from './slavDefenceVariations';
 import { QUEENS_INDIAN_DEFENCE_LESSON } from './queensIndianDefence';
 import { QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS } from './queensIndianDefenceVariations';
 import { SCHLIEMANN_DEFENCE_LESSON } from './schliemannDefence';
@@ -97,7 +95,6 @@ const HAND_WRITTEN: OpeningLessons[] = [
   { main: NIMZO_INDIAN_LESSON, variations: NIMZO_INDIAN_VARIATION_LESSONS },
   { main: PHILIDOR_DEFENCE_LESSON, variations: PHILIDOR_DEFENCE_VARIATION_LESSONS },
   { main: QGA_LESSON, variations: QGA_VARIATION_LESSONS },
-  { main: SLAV_DEFENCE_LESSON, variations: SLAV_DEFENCE_VARIATION_LESSONS },
   { main: QUEENS_INDIAN_DEFENCE_LESSON, variations: QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS },
   { main: SCHLIEMANN_DEFENCE_LESSON, variations: SCHLIEMANN_DEFENCE_VARIATION_LESSONS },
   { main: QUEENS_GAMBIT_LESSON, variations: QUEENS_GAMBIT_VARIATION_LESSONS },

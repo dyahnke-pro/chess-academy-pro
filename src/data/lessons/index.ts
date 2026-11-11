@@ -170,8 +170,6 @@ import { PHILIDOR_DEFENCE_LESSON } from './philidorDefence';
 import { PHILIDOR_DEFENCE_VARIATION_LESSONS } from './philidorDefenceVariations';
 import { QGA_LESSON } from './queensGambitAccepted';
 import { QGA_VARIATION_LESSONS } from './queensGambitAcceptedVariations';
-import { SLAV_DEFENCE_LESSON } from './slavDefence';
-import { SLAV_DEFENCE_VARIATION_LESSONS } from './slavDefenceVariations';
 import { QUEENS_INDIAN_DEFENCE_LESSON } from './queensIndianDefence';
 import { QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS } from './queensIndianDefenceVariations';
 import { SMITH_MORRA_GAMBIT_LESSON } from './smithMorraGambit';
@@ -238,7 +236,6 @@ const LESSONS: Record<string, LessonScript> = {
   [LONDON_SYSTEM_LESSON.openingId]: LONDON_SYSTEM_LESSON,
   [PHILIDOR_DEFENCE_LESSON.openingId]: PHILIDOR_DEFENCE_LESSON,
   [QGA_LESSON.openingId]: QGA_LESSON,
-  [SLAV_DEFENCE_LESSON.openingId]: SLAV_DEFENCE_LESSON,
   [QUEENS_INDIAN_DEFENCE_LESSON.openingId]: QUEENS_INDIAN_DEFENCE_LESSON,
   [SMITH_MORRA_GAMBIT_LESSON.openingId]: SMITH_MORRA_GAMBIT_LESSON,
   [SCOTCH_GAMBIT_LESSON.openingId]: SCOTCH_GAMBIT_LESSON,
@@ -391,7 +388,6 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...LONDON_SYSTEM_VARIATION_LESSONS,
   ...PHILIDOR_DEFENCE_VARIATION_LESSONS,
   ...QGA_VARIATION_LESSONS,
-  ...SLAV_DEFENCE_VARIATION_LESSONS,
   ...QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS,
   ...SMITH_MORRA_GAMBIT_VARIATION_LESSONS,
   ...SCOTCH_GAMBIT_VARIATION_LESSONS,
