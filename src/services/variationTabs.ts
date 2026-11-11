@@ -502,7 +502,7 @@ function shortLabel(name: string): string {
 /** Compact label for an AUTO-APPENDED tab (a completed variation not hand-listed
  *  in CURATED). Prefers a short parenthetical, else strips the "Opening: " prefix
  *  and generic filler words, capping length so the tab strip stays tidy. */
-function autoLabel(name: string): string {
+export function autoLabel(name: string): string {
   let s = name
     // Drop parentheticals — usually a sub-detail, not the label ("(Endgame)").
     .replace(/\s*\([^)]*\)\s*/g, ' ')
@@ -516,7 +516,16 @@ function autoLabel(name: string): string {
     .replace(/\s{2,}/g, ' ')
     .trim();
   if (!s) s = name.trim();
-  return s.length > 20 ? s.slice(0, 20).trim() : s;
+  if (s.length <= 20) return s;
+  // Cut at a word boundary, never mid-word ("Traxler Counterattac"): the
+  // longest run of whole words that fits, else the first word alone.
+  const words = s.split(' ');
+  let out = words[0];
+  for (const w of words.slice(1)) {
+    if (`${out} ${w}`.length > 20) break;
+    out = `${out} ${w}`;
+  }
+  return out;
 }
 
 /** Longest move-list among a lesson's beats = the full line it teaches. */
