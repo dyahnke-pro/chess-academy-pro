@@ -2,12 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { SCOTCH_GAME_TRAP_DEFS, SCOTCH_GAME_TRAP_LESSONS, getScotchTrapsForTab } from './scotchGameTrapLessons';
 import repertoire from '../repertoire.json';
 import { buildVariationTabs } from '../../services/variationTabs';
+import type { OpeningVariation } from '../../types';
 
 // A named trap shows on the tab whose line it is played in. The Sea-Cadet Mate
 // (4.c3 dxc3 Nxc3) sat on the main (4…Bc5) and Scotch Gambit (4.Bc4) tabs,
 // whose lines never reach it, and was missing from the Göring tab.
 describe('Scotch trap routing', () => {
-  const scotch = (repertoire as Array<{ id: string; pgn: string; variations: Array<{ name: string; pgn: string }> }>).find((o) => o.id === 'scotch-game')!;
+  const scotch = (repertoire as unknown as Array<{ id: string; pgn: string; variations: OpeningVariation[] }>).find((o) => o.id === 'scotch-game')!;
   const tabs = buildVariationTabs('scotch-game', scotch.variations);
   const tabLine = (key: string): string[] => {
     if (key === 'main') return scotch.pgn.split(/\s+/);
