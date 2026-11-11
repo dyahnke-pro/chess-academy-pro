@@ -27,9 +27,17 @@ vi.mock('./stockfishEngine', async () => {
   return { stockfishEngine: { analyzePosition: vi.fn(async (fen: string) => read(fen)) } };
 });
 
+// What a quiet line BUILDS is its own computer (`lineBuilds`, tested in
+// threatPurpose.test). These random lines build nothing nameable and would not
+// be told at all, so the stake is fixed here: this test is about the stem.
+vi.mock('./threatPurpose', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./threatPurpose')>()),
+  lineBuilds: () => 'it opens the e-file',
+}));
+
 import { generateReviewNarration, type ReviewMoveInput } from './coachFeatureService';
 
-const STEMS = [/Watch what they're building — left alone, their \w+ (?:goes:|starts with)/g, /Their next \w+, played out from here/g, /Another \w+ of theirs, if nothing stops it — it runs/g];
+const STEMS = [/Watch what they're building — left alone, their \w+ (?:goes:|starts with)/g, /Their next \w+, played out from here/g, /Another \w+ of theirs, if nothing stops it, (?:goes like this:|starts with)/g];
 
 describe('their deep idea is not one formula said all game', () => {
   it('the stem rotates: none is said more than its share, the first is the full one, none past-tensed', async () => {
@@ -46,6 +54,6 @@ describe('their deep idea is not one formula said all game', () => {
     expect(total, text).toBeGreaterThanOrEqual(3);
     expect(counts[0]).toBeGreaterThan(0);
     for (const [k, m] of counts.entries()) expect(m, `stem ${k} said ${m}× of ${total}`).toBeLessThanOrEqual(Math.ceil(total / STEMS.length));
-    expect(text).not.toMatch(/played out from here: they played|it runs: they played/);
+    expect(text).not.toMatch(/played out from here: they played|goes like this: they played/);
   }, 300_000);
 });

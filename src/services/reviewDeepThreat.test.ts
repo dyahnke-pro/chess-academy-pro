@@ -3,16 +3,18 @@
 // user"). The engine is mocked to a canned multi-ply refutation line so the
 // #5c AGAINST-the-user pass is exercised deterministically: after the
 // opponent's quiet-looking ...Bc5, giving the opponent the move again runs
-// Bxf2+ Kxf2 Qh4+ — a 3-ply swing ≥250cp toward the opponent. The pass must
-// narrate the brewing idea AND close with the stored defense.
+// Qh4 Nf3 Qxf2# — the queen and the c5 bishop mate on f2. The pass must
+// narrate the brewing idea AND close with the stored defense. (It was Bxf2+
+// Kxf2 Qh4+, a line that gives a bishop for a pawn and builds nothing a
+// sentence can name; a deep idea now says what it builds or is not told.)
 import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('./stockfishEngine', () => ({
   stockfishEngine: {
     analyzePosition: vi.fn().mockResolvedValue({
       evaluation: -400,
-      bestMove: 'c5f2',
-      topLines: [{ moves: ['c5f2', 'e1f2', 'd8h4'], evaluation: -400 }],
+      bestMove: 'd8h4',
+      topLines: [{ moves: ['d8h4', 'g1f3', 'h4f2'], evaluation: -400 }],
     }),
   },
 }));
@@ -139,7 +141,9 @@ describe('deep threat AGAINST the student (#5c)', () => {
         ply,
         san,
         isCoachMove: ply % 2 === 0,
-        classification: 'good',
+        // Only …Bc5 is probed: on …e5 the same Qh4 line is legal and would be
+        // told there first (an idea is told once, by its first move).
+        classification: ply === 4 ? 'good' : 'book',
         evaluation: -30,
         preMoveEval: -20,
         bestMove: ply === 5 ? 'g1f3' : null,
@@ -200,8 +204,8 @@ describe('deep threat AGAINST the student (#5c)', () => {
     // …and the surrounding narration IS still past-tensed, so this is a
     // per-sentence carve-out and not the register collapsing.
     expect(oppSeg?.narration ?? '').toMatch(/\bwere\b|\bwas\b/);
-    // The line is rendered ply-by-ply (Bxf2 appears in the narrated run).
-    expect(oppSeg?.narration ?? '').toMatch(/Bxf2/);
+    // The line is rendered to its point: the mate on f2.
+    expect(oppSeg?.narration ?? '').toMatch(/Qxf2/);
     // The DEFENSE from the stored analysis (the student's next best move).
     expect(oppSeg?.narration ?? '').toMatch(/Your defense starts with Nf3/);
   });
