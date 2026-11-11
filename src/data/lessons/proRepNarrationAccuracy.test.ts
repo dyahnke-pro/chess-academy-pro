@@ -55,6 +55,11 @@ function groundedFacts(moves: string[]): { facts: Set<string>; illegal: string |
 }
 
 describe('pro-rep narration board-accuracy (LESSONS map — outside registry.ts)', () => {
+  // Each walk replays every beat of every pro lesson through chess.js — about
+  // 6 s on a loaded machine, past vitest's 5 s default, so it timed out
+  // whenever other work ran beside it.
+  const WALK_TIMEOUT_MS = 60_000;
+
   it(`covers the pro-rep lessons (>0)`, () => {
     expect(proLessons.length).toBeGreaterThan(0);
   });
@@ -68,7 +73,7 @@ describe('pro-rep narration board-accuracy (LESSONS map — outside registry.ts)
       }
     }
     expect(fails, fails.join('\n')).toEqual([]);
-  });
+  }, WALK_TIMEOUT_MS);
 
   it('every "square-piece" narration claim occurs in its beat line', () => {
     const fails: string[] = [];
@@ -90,5 +95,5 @@ describe('pro-rep narration board-accuracy (LESSONS map — outside registry.ts)
       }
     }
     expect(fails, fails.join('\n')).toEqual([]);
-  });
+  }, WALK_TIMEOUT_MS);
 });
