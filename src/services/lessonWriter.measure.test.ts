@@ -7,9 +7,20 @@
 // lesson is the same every run. Writes each line beat by beat, and a tally of
 // the beats that say nothing or repeat a sentence.
 //
+// EVERY FACT THE COMPUTERS FOUND, PER MOVE (`<id>.computers.json`, David
+// 2026-11-11: "Are you using the computers???"). The composed beat is one
+// lead and its support — what the composer kept. The writer needs what the
+// computers FOUND: every fact handed to the composer for the move (the move's
+// job, the board teacher, the deep fact, the reply tree, the refuted natural
+// move, the plan, the structure lines …), each with its computer, its idea
+// and whether the app's own composer spoke it. Captured at the one door every
+// lesson fact passes (`composeThought`, surface `lesson`), keyed by the board
+// and the move, so the fact sheet prints them under that move.
+//
 //   LESSON_WRITER=1 LESSON_IDS=trompowsky-attack npx vitest run src/services/lessonWriter.measure.test.ts
 import { describe, it, vi } from 'vitest';
-import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import { Chess } from 'chess.js';
+import { readFileSync, mkdirSync, writeFileSync, appendFileSync } from 'node:fs';
 import { nativeEngine } from '../test/nativeStockfish';
 import { findLessonOpening, extraLines, fullLines, lessonLines, type LessonLine } from '../test/lessonLines';
 
@@ -18,8 +29,47 @@ const IDS = (process.env.LESSON_IDS ?? 'trompowsky-attack').split(',').map((s) =
 const OUT = process.env.LESSON_OUT ?? 'audit-reports/lesson-writer';
 const DEPTH = Number(process.env.LESSON_DEPTH ?? 14);
 
-const engine = nativeEngine(`${OUT}/engine-cache.json`, DEPTH);
+const engine = nativeEngine(process.env.LESSON_CACHE ?? `${OUT}/engine-cache.json`, DEPTH);
 let multipv = 3;
+
+interface SheetFact { computer: string; source: string; kind: string; group: string; idea: string; seat: string; weight: number; text: string; squares: readonly string[]; spoke: boolean; held?: string }
+const capture = vi.hoisted(() => ({
+  /** The move the lesson is composing right now: `<fenBefore>|<uci>`. */
+  current: null as string | null,
+  byMove: new Map<string, { say: string; facts: SheetFact[] }>(),
+}));
+
+vi.mock('./thoughtComposer', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('./thoughtComposer')>();
+  const composeThought: typeof actual.composeThought = (facts, surface, memory, led) => {
+    const out = actual.composeThought(facts, surface, memory, led);
+    const key = capture.current;
+    if (surface === 'lesson' && key && !capture.byMove.has(key)) {
+      const why = new Map(out.held.map((h) => [h.fact.id, h.why]));
+      const spoke = new Set(out.kept.map((f) => f.id));
+      capture.byMove.set(key, {
+        say: out.spoken,
+        facts: facts.filter((f) => f.text.trim()).map((f) => ({
+          computer: f.computer, source: f.source, kind: f.kind, group: f.group, idea: f.idea, seat: f.seat,
+          weight: f.weight, text: f.text.trim(), squares: f.squares, spoke: spoke.has(f.id), ...(why.has(f.id) ? { held: why.get(f.id) } : {}),
+        })),
+      });
+    }
+    return out;
+  };
+  return { ...actual, composeThought };
+});
+vi.mock('./moveThoughtFacts', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('./moveThoughtFacts')>();
+  const lessonThought: typeof actual.lessonThought = (shown, voice, refuted) => {
+    try {
+      const m = new Chess(shown.fenBefore).move(shown.san);
+      capture.current = `${shown.fenBefore}|${m.from}${m.to}${m.promotion ?? ''}`;
+    } catch { capture.current = null; }
+    try { return actual.lessonThought(shown, voice, refuted); } finally { capture.current = null; }
+  };
+  return { ...actual, lessonThought };
+});
 
 vi.mock('./stockfishEngine', () => {
   const analyzePosition = (fen: string, _depth?: number, opts?: Record<string, string | number>) =>
@@ -75,10 +125,17 @@ describe.skipIf(!ON)('the lesson writer, one beat a move', () => {
           text.push(`${String(b.ply).padStart(3)}. ${b.san.padEnd(7)} ${b.say || '—'}`);
         }
         engine.flush();
+        // Progress on disk (vitest holds console output to the end of a run).
+        appendFileSync(`${OUT}/${id}.writer.progress`, `${new Date().toISOString()} line ${out.length}/${lines.length} ${line.name} (${line.moves.length} plies), ${capture.byMove.size} moves captured\n`);
       }
       const head = `# ${op.name} — ${tally.beats} beats, ${tally.empty} empty, ${tally.repeated} repeated sentences, ${Math.round(tally.words / Math.max(1, tally.beats))} words a beat`;
       writeFileSync(`${OUT}/${id}.txt`, [head, ...text].join('\n'));
       writeFileSync(`${OUT}/${id}.json`, JSON.stringify({ id, tally, lines: out }, null, 1));
+      // Every fact, keyed by board and move. The map holds every opening this
+      // run walked; a board two openings share is the same board.
+      writeFileSync(`${OUT}/${id}.computers.json`, JSON.stringify(Object.fromEntries(capture.byMove), null, 1));
+      const nFacts = [...capture.byMove.values()].reduce((a, v) => a + v.facts.length, 0);
+      console.log(`computers ${id}: ${capture.byMove.size} moves, ${nFacts} facts`);
       console.log(head);
     }
     engine.flush();
