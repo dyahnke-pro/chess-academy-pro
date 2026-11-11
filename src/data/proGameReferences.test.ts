@@ -46,7 +46,10 @@ describe('pro-game-references.json', () => {
     expect(losing, `student-losing references must be excluded at build: ${losing.slice(0, 5).join(', ')}`).toEqual([]);
   });
 
-  it('every PGN replays legally via chess.js and plyCount matches', { timeout: 60000 }, () => {
+  // Replays every stored game: ~23 s alone. The limit is headroom for a
+  // shared machine (ship-check's parallel workers beside other jobs): at 60 s
+  // it failed three pushes in a row with nothing wrong in the data.
+  it('every PGN replays legally via chess.js and plyCount matches', { timeout: 300000 }, () => {
     const bad: string[] = [];
     for (const g of REFS) {
       const chess = new Chess();

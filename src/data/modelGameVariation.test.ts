@@ -37,7 +37,7 @@ describe('model-game variation tags are the deterministic classifier output', ()
         .map((d) => `  ${d.id}: stored=${JSON.stringify(d.stored)} expected=${JSON.stringify(d.expected)}`)
         .join('\n')}`,
     ).toHaveLength(0);
-  }, 30000); // re-derives the classifier across every model game — allow headroom
+  }, 180000); // re-derives the classifier across every model game: ~12 s alone, headroom for a shared machine (30 s timed out under load)
 
   it('files a game that transposes into a tab under that tab, not the tab sharing its move order', () => {
     // GothamChess Vienna vs Kovalev: 2…Nc6 3.Bc4 Nf6 shares the "Quiet vs …Na5"
