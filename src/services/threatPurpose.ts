@@ -90,7 +90,7 @@ export function lineBuilds(line: PvLine): string | null {
     for (const sq of f.newPassedPawns) if (stands(sq, 'p')) offer(3, `it leaves them a passed pawn on ${sq}`);
     if (f.outpostGained && stands(f.outpostGained)) {
       const piece = end?.get(f.outpostGained as Square)?.type;
-      offer(4, `it plants ${piece ? `a ${NAME[piece]}` : 'a piece'} on ${f.outpostGained}`);
+      offer(4, `it plants ${withArticle(piece ? NAME[piece] : 'piece')} on ${f.outpostGained}`);
     }
     if (f.newOpenFiles.length > 0) offer(5, `it opens ${fileList(f.newOpenFiles)}`);
   }
