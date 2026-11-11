@@ -178,8 +178,6 @@ import { GLEK_SYSTEM_LESSON } from './glekSystem';
 import { GLEK_SYSTEM_VARIATION_LESSONS } from './glekSystemVariations';
 import { LONDON_SYSTEM_LESSON } from './londonSystem';
 import { LONDON_SYSTEM_VARIATION_LESSONS } from './londonSystemVariations';
-import { CATALAN_OPENING_LESSON } from './catalanOpening';
-import { CATALAN_OPENING_VARIATION_LESSONS } from './catalanOpeningVariations';
 import { SICILIAN_ALAPIN_LESSON } from './sicilianAlapin';
 import { SICILIAN_ALAPIN_VARIATION_LESSONS } from './sicilianAlapinVariations';
 import { PHILIDOR_DEFENCE_LESSON } from './philidorDefence';
@@ -258,7 +256,6 @@ const LESSONS: Record<string, LessonScript> = {
   [NIMZO_INDIAN_LESSON.openingId]: NIMZO_INDIAN_LESSON,
   [GLEK_SYSTEM_LESSON.openingId]: GLEK_SYSTEM_LESSON,
   [LONDON_SYSTEM_LESSON.openingId]: LONDON_SYSTEM_LESSON,
-  [CATALAN_OPENING_LESSON.openingId]: CATALAN_OPENING_LESSON,
   [SICILIAN_ALAPIN_LESSON.openingId]: SICILIAN_ALAPIN_LESSON,
   [PHILIDOR_DEFENCE_LESSON.openingId]: PHILIDOR_DEFENCE_LESSON,
   [QGA_LESSON.openingId]: QGA_LESSON,
@@ -419,7 +416,6 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...NIMZO_INDIAN_VARIATION_LESSONS,
   ...GLEK_SYSTEM_VARIATION_LESSONS,
   ...LONDON_SYSTEM_VARIATION_LESSONS,
-  ...CATALAN_OPENING_VARIATION_LESSONS,
   ...SICILIAN_ALAPIN_VARIATION_LESSONS,
   ...PHILIDOR_DEFENCE_VARIATION_LESSONS,
   ...QGA_VARIATION_LESSONS,

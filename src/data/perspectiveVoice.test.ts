@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { ALL_LESSONS } from './lessons/registry';
+import { WATCH_COURSES } from './lessons/watch';
 
 // ── PERSPECTIVE VOICE GATE (David 2026-08-28, locked) ────────────────────────
 // "We should always have the coach narrate the same perspective across app." /
@@ -245,17 +246,31 @@ describe('perspective voice — no first-person-plural in shipped narration', ()
   const LESSON_DIR = join(__dirname, 'lessons');
   const BEAT_LITERAL = /\b(say|sayShort)\s*:\s*(["'])((?:\\.|(?!\2)[^\\])*)\2/g;
   const GENDERED_BEAT_CEILING = 21;
+  // Every beat text the two gendered-pronoun checks read: the `say:` literals of
+  // the lesson files, and the Watch courses (WO-OPENINGS-REWRITE-01). A course
+  // files its beats as [say, sayShort] pairs, a shape BEAT_LITERAL never
+  // matches, so reading the files alone left every course unchecked, and each
+  // old lesson file the rewrite deletes shrank this reach toward its floor.
+  const beatTexts = (): Array<{ where: string; text: string }> => {
+    const out: Array<{ where: string; text: string }> = [];
+    for (const file of readdirSync(LESSON_DIR).filter((f) => f.endsWith('.ts') && !f.endsWith('.test.ts'))) {
+      const raw = readFileSync(join(LESSON_DIR, file), 'utf8');
+      for (const m of raw.matchAll(BEAT_LITERAL)) out.push({ where: file, text: m[3] });
+    }
+    for (const course of WATCH_COURSES) {
+      for (const beat of Object.values(course.beats)) {
+        for (const text of [beat.say, beat.sayShort]) out.push({ where: `watch/${course.openingId}`, text });
+      }
+    }
+    return out;
+  };
   it('lesson beats: a gendered pronoun for a COLOUR only ever SHRINKS', () => {
     const offenders: string[] = [];
     let scanned = 0;
-    for (const file of readdirSync(LESSON_DIR).filter((f) => f.endsWith('.ts') && !f.endsWith('.test.ts'))) {
-      const raw = readFileSync(join(LESSON_DIR, file), 'utf8');
-      for (const m of raw.matchAll(BEAT_LITERAL)) {
-        scanned += 1;
-        const text = m[3];
-        const bad = text.split(/(?<=[.!?])\s+/).some((sentence) => GENDERED.test(sentence) && COLOUR_WORD.test(sentence));
-        if (bad) offenders.push(`${file}: ${text.slice(0, 110)}`);
-      }
+    for (const { where, text } of beatTexts()) {
+      scanned += 1;
+      const bad = text.split(/(?<=[.!?])\s+/).some((sentence) => GENDERED.test(sentence) && COLOUR_WORD.test(sentence));
+      if (bad) offenders.push(`${where}: ${text.slice(0, 110)}`);
     }
     // NON-VACUOUS, counting the PROSE and not the files — the exact failure
     // this file's other half shipped for weeks (a beat loop read a field that
@@ -288,15 +303,12 @@ describe('perspective voice — no first-person-plural in shipped narration', ()
     const MASC = /\b(he|he's|he'd|he'll|him|his|himself)\b/i;
     const offenders: string[] = [];
     let scanned = 0;
-    for (const file of readdirSync(LESSON_DIR).filter((f) => f.endsWith('.ts') && !f.endsWith('.test.ts'))) {
-      const raw = readFileSync(join(LESSON_DIR, file), 'utf8');
-      for (const m of raw.matchAll(BEAT_LITERAL)) {
-        scanned += 1;
-        for (const sentence of m[3].split(/(?<=[.!?])\s+/)) {
-          if (MASC.test(sentence) && COLOUR_WORD.test(sentence)) {
-            offenders.push(`${file}: ${sentence.trim().slice(0, 110)}`);
-            break;
-          }
+    for (const { where, text } of beatTexts()) {
+      scanned += 1;
+      for (const sentence of text.split(/(?<=[.!?])\s+/)) {
+        if (MASC.test(sentence) && COLOUR_WORD.test(sentence)) {
+          offenders.push(`${where}: ${sentence.trim().slice(0, 110)}`);
+          break;
         }
       }
     }

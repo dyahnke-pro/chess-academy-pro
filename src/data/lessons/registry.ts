@@ -42,8 +42,6 @@ import { NIMZO_INDIAN_LESSON } from './nimzoIndian';
 import { NIMZO_INDIAN_VARIATION_LESSONS } from './nimzoIndianVariations';
 import { LONDON_SYSTEM_LESSON } from './londonSystem';
 import { LONDON_SYSTEM_VARIATION_LESSONS } from './londonSystemVariations';
-import { CATALAN_OPENING_LESSON } from './catalanOpening';
-import { CATALAN_OPENING_VARIATION_LESSONS } from './catalanOpeningVariations';
 import { SICILIAN_ALAPIN_LESSON } from './sicilianAlapin';
 import { SICILIAN_ALAPIN_VARIATION_LESSONS } from './sicilianAlapinVariations';
 import { PHILIDOR_DEFENCE_LESSON } from './philidorDefence';
@@ -116,7 +114,6 @@ const HAND_WRITTEN: OpeningLessons[] = [
   { main: ALEKHINE_DEFENCE_LESSON, variations: ALEKHINE_DEFENCE_VARIATION_LESSONS },
   { main: BENKO_GAMBIT_LESSON, variations: BENKO_GAMBIT_VARIATION_LESSONS },
   { main: LONDON_SYSTEM_LESSON, variations: LONDON_SYSTEM_VARIATION_LESSONS },
-  { main: CATALAN_OPENING_LESSON, variations: CATALAN_OPENING_VARIATION_LESSONS },
   { main: SICILIAN_ALAPIN_LESSON, variations: SICILIAN_ALAPIN_VARIATION_LESSONS },
   { main: NIMZO_INDIAN_LESSON, variations: NIMZO_INDIAN_VARIATION_LESSONS },
   { main: PHILIDOR_DEFENCE_LESSON, variations: PHILIDOR_DEFENCE_VARIATION_LESSONS },

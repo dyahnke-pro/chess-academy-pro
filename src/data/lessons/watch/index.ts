@@ -6,6 +6,7 @@ import { ALBIN_COUNTERGAMBIT_WATCH } from './albinCountergambit';
 import { BENONI_DEFENCE_WATCH } from './benoniDefence';
 import { BIRDS_OPENING_WATCH } from './birdsOpening';
 import { BUDAPEST_GAMBIT_WATCH } from './budapestGambit';
+import { CATALAN_OPENING_WATCH } from './catalanOpening';
 import { DUTCH_DEFENCE_WATCH } from './dutchDefence';
 import { ENGLISH_OPENING_WATCH } from './englishOpening';
 import { EVANS_GAMBIT_WATCH } from './evansGambit';
@@ -49,6 +50,7 @@ export const WATCH_COURSES: readonly WatchCourse[] = [
   BENONI_DEFENCE_WATCH,
   BIRDS_OPENING_WATCH,
   BUDAPEST_GAMBIT_WATCH,
+  CATALAN_OPENING_WATCH,
   DUTCH_DEFENCE_WATCH,
   ENGLISH_OPENING_WATCH,
   EVANS_GAMBIT_WATCH,
