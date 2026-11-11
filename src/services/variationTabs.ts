@@ -471,7 +471,7 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
   ],
   // Dutch Defence — distinct validated variations (complete builds only). Main
   // pill = the Leningrad g6 main line (repertoire pgn); "Leningrad g6 Main Line"
-  // folds in, and the "Hopton" transposes to the …e5 break. Five distinct tabs.
+  // folds in, and the 2.Nf3 "…c6 Line" (once misnamed the Hopton Attack, which is 2.Bg5) reaches the …e5 break. Five distinct tabs.
   'dutch-defence': [
     { test: /stonewall/i, label: 'Stonewall' },
     { test: /classical/i, label: 'Classical' },

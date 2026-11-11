@@ -144,6 +144,8 @@ const ENGINE_EXTENDED_LESSONS = new Set<string>([
   'pro-gothamchess-scandinavian::vs Tennison Gambit',
   // The King's Indian Attack main line: the Réti-style Nf3 d5 g3 Nf6 Bg2 order the DB names to ply 5 (DB-empty rule).
   "The King's Indian Attack — A Master Class",
+  // The Dutch Leningrad …c6 Line: White's knight-first 2.Nf3, which the DB names only to ply 3 (DB-empty rule).
+  'dutch-defence::Leningrad …c6 Line',
 ]);
 
 describe('masterclass G3 — every lesson anchors a real DB opening line', () => {

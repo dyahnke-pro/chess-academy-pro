@@ -63,7 +63,7 @@ const TAB_LINES: Record<string, string[]> = {
   'Anti-Dutch 2.Bg5 Response': ['d4', 'f5', 'Bg5', 'g6', 'Nc3', 'Bg7', 'e3', 'Nf6', 'Bd3', 'd5', 'Nge2', 'O-O', 'Nf4', 'c6', 'h4', 'Ne4', 'Bxe4', 'fxe4', 'h5', 'Rf5', 'h6', 'Rxg5', 'hxg7', 'Bf5'],
   'Leningrad e5 Break': ['d4', 'f5', 'g3', 'Nf6', 'Bg2', 'g6', 'Nf3', 'Bg7', 'O-O', 'O-O', 'c4', 'd6', 'Nc3', 'c6', 'd5', 'e5', 'dxe6', 'Bxe6', 'b3', 'Na6', 'Ng5', 'Bc8'],
   'Ilyin-Zhenevsky System': ['d4', 'f5', 'g3', 'Nf6', 'Bg2', 'e6', 'Nf3', 'Be7', 'O-O', 'O-O', 'c4', 'd5', 'Nc3', 'c6', 'Qc2', 'Qe8', 'Rb1', 'a5', 'a3', 'b5', 'cxb5', 'cxb5'],
-  'Hopton Attack Response': ['d4', 'f5', 'Nf3', 'Nf6', 'g3', 'g6', 'Bg2', 'Bg7', 'O-O', 'O-O', 'c4', 'd6', 'Nc3', 'c6', 'd5', 'e5', 'dxe6', 'Bxe6', 'b3', 'Na6', 'Bb2', 'Nc5'],
+  'Leningrad …c6 Line': ['d4', 'f5', 'Nf3', 'Nf6', 'g3', 'g6', 'Bg2', 'Bg7', 'O-O', 'O-O', 'c4', 'd6', 'Nc3', 'c6', 'd5', 'e5', 'dxe6', 'Bxe6', 'b3', 'Na6', 'Bb2', 'Nc5'],
 };
 
 const TAB_BEATS: Record<string, TabBeats> = {
@@ -160,7 +160,7 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["cxb5 — they take. The engine prefers b3, holding c4; after cxb5 they are a little better. Their pawn on b5 now hits c6, so you take back.", 'cxb5 — trade; you take back.'],
     ["…cxb5 — and the game is about level. Look at the board: the c-file is open, and your knight on b8 finally has c6. The plan from here: …Nc6, then …b4 to kick the knight off c3, and swing the queen to h5, toward their king.", '…cxb5 — c-file open; …Nc6 next.'],
   ],
-  'Hopton Attack Response': [
+  'Leningrad …c6 Line': [
     ["Nf3 — about one master in six starts with the knight. It covers e5, and g3 with Bg2 can still follow.", 'Nf3 — covers e5 first.'],
     ["…Nf6 — nearly nine masters in ten. Same job as ever: your pawn on f5 and this knight both cover e4.", '…Nf6 — two guards on e4.'],
     ["g3 — about two masters in three. So it's the fianchetto after all, just with the knight out first.", 'g3 — the fianchetto is coming.'],

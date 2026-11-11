@@ -2033,8 +2033,8 @@
  "dutch-defence::Anti-Dutch 2.Bg5::Anti-Dutch 2.Bg5 Response": [
   "mp-dutchdefence-anti-dutch 2.bg5"
  ],
- "dutch-defence::Hopton Attack::Hopton Attack Response": [
-  "mp-dutchdefence-hopton attack"
+ "dutch-defence::Leningrad …c6::Leningrad …c6 Line": [
+  "mp-dutchdefence-leningrad …c6"
  ],
  "dutch-defence::Leningrad g6 Main Line::Leningrad g6 Main Line": [
   "mp-dutchdefence-leningrad g6 main line"
@@ -2072,10 +2072,10 @@
  "dutch-defence::::Ilyin-Zhenevsky System": [
   "mp-dutchdefence-"
  ],
- "dutch-defence::Hopton Attack Response::Hopton Attack Response": [
-  "mp-dutchdefence-hopton attack response"
+ "dutch-defence::Leningrad …c6 Line::Leningrad …c6 Line": [
+  "mp-dutchdefence-leningrad …c6 line"
  ],
- "dutch-defence::::Hopton Attack Response": [
+ "dutch-defence::::Leningrad …c6 Line": [
   "mp-dutchdefence-"
  ],
  "benoni-defence::main": [
