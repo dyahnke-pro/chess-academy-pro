@@ -89,8 +89,6 @@ import { SCHLIEMANN_DEFENCE_LESSON } from './schliemannDefence';
 import { SCHLIEMANN_DEFENCE_VARIATION_LESSONS } from './schliemannDefenceVariations';
 import { QUEENS_GAMBIT_LESSON } from './queensGambit';
 import { QUEENS_GAMBIT_VARIATION_LESSONS } from './queensGambitVariations';
-import { BIRDS_OPENING_LESSON } from './birdsOpening';
-import { BIRDS_OPENING_VARIATION_LESSONS } from './birdsOpeningVariations';
 // Gambit-tab lessons that live in gambits.json (not opening-manifests.json,
 // so not masterclass-tab openings) but ARE hand-authored curated lessons.
 // Registered here so the content gates (accuracy/integrity/depth/grounding/
@@ -173,7 +171,6 @@ const HAND_WRITTEN: OpeningLessons[] = [
   { main: ALBIN_COUNTERGAMBIT_LESSON, variations: ALBIN_COUNTERGAMBIT_VARIATION_LESSONS },
   { main: SCHLIEMANN_DEFENCE_LESSON, variations: SCHLIEMANN_DEFENCE_VARIATION_LESSONS },
   { main: QUEENS_GAMBIT_LESSON, variations: QUEENS_GAMBIT_VARIATION_LESSONS },
-  { main: BIRDS_OPENING_LESSON, variations: BIRDS_OPENING_VARIATION_LESSONS },
 ];
 
 const OPENINGS: OpeningLessons[] = [...HAND_WRITTEN, ...WATCH_COURSES.map(watchOpening)];

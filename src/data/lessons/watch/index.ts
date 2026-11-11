@@ -3,6 +3,7 @@
 // Kept alphabetical, so courses written in parallel merge cleanly.
 import type { WatchCourse } from './watchCourse';
 import { BENONI_DEFENCE_WATCH } from './benoniDefence';
+import { BIRDS_OPENING_WATCH } from './birdsOpening';
 import { BUDAPEST_GAMBIT_WATCH } from './budapestGambit';
 import { OLD_INDIAN_DEFENCE_WATCH } from './oldIndianDefence';
 import { PETROV_DEFENCE_WATCH } from './petrovDefence';
@@ -13,6 +14,7 @@ import { TWO_KNIGHTS_DEFENCE_WATCH } from './twoKnightsDefence';
 
 export const WATCH_COURSES: readonly WatchCourse[] = [
   BENONI_DEFENCE_WATCH,
+  BIRDS_OPENING_WATCH,
   BUDAPEST_GAMBIT_WATCH,
   OLD_INDIAN_DEFENCE_WATCH,
   PETROV_DEFENCE_WATCH,

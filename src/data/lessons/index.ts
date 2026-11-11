@@ -274,8 +274,6 @@ import { QUEENS_GAMBIT_LESSON } from './queensGambit';
 import { QUEENS_GAMBIT_VARIATION_LESSONS } from './queensGambitVariations';
 import { WATCH_COURSES } from './watch';
 import { watchLessons } from './watch/watchCourse';
-import { BIRDS_OPENING_LESSON } from './birdsOpening';
-import { BIRDS_OPENING_VARIATION_LESSONS } from './birdsOpeningVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -354,7 +352,6 @@ const LESSONS: Record<string, LessonScript> = {
   [ALBIN_COUNTERGAMBIT_LESSON.openingId]: ALBIN_COUNTERGAMBIT_LESSON,
   [SCHLIEMANN_DEFENCE_LESSON.openingId]: SCHLIEMANN_DEFENCE_LESSON,
   [QUEENS_GAMBIT_LESSON.openingId]: QUEENS_GAMBIT_LESSON,
-  [BIRDS_OPENING_LESSON.openingId]: BIRDS_OPENING_LESSON,
   // Pro repertoires — players' actual lines (PGN games = source of truth).
   // Registered HERE (runtime LESSONS map) but NOT in registry.ts's OPENINGS
   // (gate registry). Pro-rep doctrine has a different rule set from
@@ -548,7 +545,6 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...ALBIN_COUNTERGAMBIT_VARIATION_LESSONS,
   ...SCHLIEMANN_DEFENCE_VARIATION_LESSONS,
   ...QUEENS_GAMBIT_VARIATION_LESSONS,
-  ...BIRDS_OPENING_VARIATION_LESSONS,
   // Pro repertoires
   ...PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS,
   ...PRO_NARODITSKY_DRAGODORF_VARIATION_LESSONS,
