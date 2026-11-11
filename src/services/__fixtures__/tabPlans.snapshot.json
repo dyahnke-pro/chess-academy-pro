@@ -3042,6 +3042,11 @@
  "pro-gothamchess-italian::…Nf6::Two Knights (…Nf6)": [
   "mp-progothamchess-italian-twoknights-kside"
  ],
+ "pro-gothamchess-italian::Fried Liver Attack::Fried Liver Attack": [],
+ "pro-gothamchess-italian::Knight Attack …Na5::Knight Attack …Na5": [],
+ "pro-gothamchess-italian::Evans: Castle First::Evans: Castle First": [],
+ "pro-gothamchess-italian::Evans: …Be7::Evans: …Be7": [],
+ "pro-gothamchess-italian::Scotch Gambit::Scotch Gambit": [],
  "pro-gothamchess-italian::::Giuoco Piano c3-d4": [
   "mp-progothamchess-italian-evans-style"
  ],
@@ -3055,6 +3060,11 @@
  "pro-gothamchess-italian::::Two Knights (…Nf6)": [
   "mp-progothamchess-italian-twoknights-kside"
  ],
+ "pro-gothamchess-italian::::Fried Liver Attack": [],
+ "pro-gothamchess-italian::::Knight Attack …Na5": [],
+ "pro-gothamchess-italian::::Evans: Castle First": [],
+ "pro-gothamchess-italian::::Evans: …Be7": [],
+ "pro-gothamchess-italian::::Scotch Gambit": [],
  "pro-gothamchess-london::main": [
   "mp-progothamchess-london-standard-ne5",
   "mp-progothamchess-london-classical-attack"
