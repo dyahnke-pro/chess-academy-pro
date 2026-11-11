@@ -3082,6 +3082,12 @@
  "pro-gothamchess-london::via 2.Bf4::vs …c6 (via 2.Bf4)": [
   "mp-progothamchess-london-c6-c4break"
  ],
+ "pro-gothamchess-london::Pyramid with Ne5::Pyramid with Ne5": [],
+ "pro-gothamchess-london::Qb3 vs …Qb6::Qb3 vs …Qb6": [],
+ "pro-gothamchess-london::vs Early …Bf5::vs Early …Bf5": [],
+ "pro-gothamchess-london::vs Grünfeld Setup::vs Grünfeld Setup": [],
+ "pro-gothamchess-london::Poisoned b2 Pawn::Poisoned b2 Pawn": [],
+ "pro-gothamchess-london::d5 vs …c5::d5 vs …c5": [],
  "pro-gothamchess-london::::Standard Setup vs d5": [
   "mp-progothamchess-london-standard-ne5",
   "mp-progothamchess-london-e6-classical"
@@ -3101,6 +3107,12 @@
  "pro-gothamchess-london::::vs …c6 (via 2.Bf4)": [
   "mp-progothamchess-london-c6-c4break"
  ],
+ "pro-gothamchess-london::::Pyramid with Ne5": [],
+ "pro-gothamchess-london::::Qb3 vs …Qb6": [],
+ "pro-gothamchess-london::::vs Early …Bf5": [],
+ "pro-gothamchess-london::::vs Grünfeld Setup": [],
+ "pro-gothamchess-london::::Poisoned b2 Pawn": [],
+ "pro-gothamchess-london::::d5 vs …c5": [],
  "pro-gothamchess-stafford-refute::main": [
   "mp-progothamchess-stafford-consolidate"
  ],
