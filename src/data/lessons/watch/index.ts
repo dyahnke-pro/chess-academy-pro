@@ -8,6 +8,7 @@ import { BUDAPEST_GAMBIT_WATCH } from './budapestGambit';
 import { ENGLISH_OPENING_WATCH } from './englishOpening';
 import { EVANS_GAMBIT_WATCH } from './evansGambit';
 import { GRUNFELD_DEFENCE_WATCH } from './grunfeldDefence';
+import { KINGS_INDIAN_ATTACK_WATCH } from './kingsIndianAttack';
 import { KINGS_INDIAN_DEFENCE_WATCH } from './kingsIndianDefence';
 import { OLD_INDIAN_DEFENCE_WATCH } from './oldIndianDefence';
 import { PETROV_DEFENCE_WATCH } from './petrovDefence';
@@ -29,6 +30,7 @@ export const WATCH_COURSES: readonly WatchCourse[] = [
   ENGLISH_OPENING_WATCH,
   EVANS_GAMBIT_WATCH,
   GRUNFELD_DEFENCE_WATCH,
+  KINGS_INDIAN_ATTACK_WATCH,
   KINGS_INDIAN_DEFENCE_WATCH,
   OLD_INDIAN_DEFENCE_WATCH,
   PETROV_DEFENCE_WATCH,
