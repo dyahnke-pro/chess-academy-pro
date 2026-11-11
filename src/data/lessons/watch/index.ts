@@ -4,6 +4,7 @@
 import type { WatchCourse } from './watchCourse';
 import { BENONI_DEFENCE_WATCH } from './benoniDefence';
 import { BUDAPEST_GAMBIT_WATCH } from './budapestGambit';
+import { OLD_INDIAN_DEFENCE_WATCH } from './oldIndianDefence';
 import { PETROV_DEFENCE_WATCH } from './petrovDefence';
 import { SEMI_SLAV_WATCH } from './semiSlav';
 import { SICILIAN_NAJDORF_WATCH } from './sicilianNajdorf';
@@ -13,6 +14,7 @@ import { TWO_KNIGHTS_DEFENCE_WATCH } from './twoKnightsDefence';
 export const WATCH_COURSES: readonly WatchCourse[] = [
   BENONI_DEFENCE_WATCH,
   BUDAPEST_GAMBIT_WATCH,
+  OLD_INDIAN_DEFENCE_WATCH,
   PETROV_DEFENCE_WATCH,
   SEMI_SLAV_WATCH,
   SICILIAN_NAJDORF_WATCH,
