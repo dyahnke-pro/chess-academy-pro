@@ -315,7 +315,6 @@ const BASELINE_VIOLATIONS = new Set<string>([
   'TRAP frankenstein-nxa8 :: fn2 (short)',
   'TRAP karpov-qe2-mate :: ck-w1 (short)',
   'TRAP wurzburger :: wt3 (short)',
-  'VARIATION london-system::Jobava London :: j2',
   'VARIATION queens-gambit::Exchange Variation :: battery (short)',
   // Plans — existing claims that don't verify
   'PLAN mp-italiangame-twoknights line[0] move 1 :: mp-italiangame-twoknights::0::0',

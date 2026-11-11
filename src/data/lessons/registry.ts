@@ -24,8 +24,6 @@ import { VIENNA_TRAP_LESSONS } from './viennaTrapLessons';
 import { CARO_TRAP_LESSONS } from './caroKannTrapLessons';
 import { ITALIAN_GAME_TRAP_LESSONS } from './italianGameTrapLessons';
 import { SCOTCH_GAME_TRAP_LESSONS } from './scotchGameTrapLessons';
-import { LONDON_SYSTEM_LESSON } from './londonSystem';
-import { LONDON_SYSTEM_VARIATION_LESSONS } from './londonSystemVariations';
 import { QGA_LESSON } from './queensGambitAccepted';
 import { QGA_VARIATION_LESSONS } from './queensGambitAcceptedVariations';
 import { QUEENS_INDIAN_DEFENCE_LESSON } from './queensIndianDefence';
@@ -84,7 +82,6 @@ function watchOpening(course: WatchCourse): OpeningLessons {
 // gated from `WATCH_COURSES` below.
 const HAND_WRITTEN: OpeningLessons[] = [
   { main: PIRC_DEFENCE_LESSON, variations: PIRC_VARIATION_LESSONS },
-  { main: LONDON_SYSTEM_LESSON, variations: LONDON_SYSTEM_VARIATION_LESSONS },
   { main: QGA_LESSON, variations: QGA_VARIATION_LESSONS },
   { main: QUEENS_INDIAN_DEFENCE_LESSON, variations: QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS },
   { main: SCHLIEMANN_DEFENCE_LESSON, variations: SCHLIEMANN_DEFENCE_VARIATION_LESSONS },

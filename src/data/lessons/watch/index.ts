@@ -20,6 +20,7 @@ import { ITALIAN_GAME_WATCH } from './italianGame';
 import { KINGS_GAMBIT_WATCH } from './kingsGambit';
 import { KINGS_INDIAN_ATTACK_WATCH } from './kingsIndianAttack';
 import { KINGS_INDIAN_DEFENCE_WATCH } from './kingsIndianDefence';
+import { LONDON_SYSTEM_WATCH } from './londonSystem';
 import { NIMZO_INDIAN_WATCH } from './nimzoIndian';
 import { OLD_INDIAN_DEFENCE_WATCH } from './oldIndianDefence';
 import { PETROV_DEFENCE_WATCH } from './petrovDefence';
@@ -75,6 +76,7 @@ export const WATCH_COURSES: readonly WatchCourse[] = [
   KINGS_GAMBIT_WATCH,
   KINGS_INDIAN_ATTACK_WATCH,
   KINGS_INDIAN_DEFENCE_WATCH,
+  LONDON_SYSTEM_WATCH,
   NIMZO_INDIAN_WATCH,
   OLD_INDIAN_DEFENCE_WATCH,
   PETROV_DEFENCE_WATCH,
