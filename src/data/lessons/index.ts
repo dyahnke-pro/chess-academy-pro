@@ -88,6 +88,7 @@ import { PRO_HIKARU_RETI_VARIATION_LESSONS } from './proHikaruRetiVariations';
 import { PRO_HIKARU_PIRC_MODERN_VARIATION_LESSONS } from './proHikaruPircModernVariations';
 import { PRO_HIKARU_CARO_KANN_VARIATION_LESSONS } from './proHikaruCaroKannVariations';
 import { PRO_GOTHAMCHESS_QGD_LESSON } from './proGothamchessQGD';
+import { PRO_GOTHAMCHESS_QGD_VARIATION_LESSONS } from './proGothamchessQGDVariations';
 import { PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS } from './proNaroditskyCaroKannVariations';
 import { PRO_NARODITSKY_DRAGODORF_VARIATION_LESSONS } from './proNaroditskyDragodorfVariations';
 import { PRO_NARODITSKY_ALAPIN_VARIATION_LESSONS } from './proNaroditskyAlapinVariations';

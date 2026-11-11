@@ -177,6 +177,15 @@ const ENGINE_EXTENDED_LESSONS = new Set<string>([
   'pro-gothamchess-closed-sicilian::Fianchetto vs …g6',
   // GothamChess Ponziani: …Bc5 after 3.c3, which the DB names only to ply 5 (DB-empty rule).
   'pro-gothamchess-ponziani::3...Bc5 Big Center',
+  // GothamChess Milner-Barry: the French 3.Bd3, which the DB names only to ply 5 (DB-empty rule).
+  'pro-gothamchess-milner-barry::Anti-French 3.Bd3',
+  // GothamChess Anti-Sicilian: the Rossolimo the DB names only to ply 5 (DB-empty rule).
+  "This repertoire's Anti-Sicilian — the Rossolimo, No Theory Required",
+  'pro-gothamchess-anti-sicilian::Rossolimo 3.Bb5 e6',
+  'pro-gothamchess-anti-sicilian::Accelerated Pawn Storm (positional squeeze)',
+  'pro-gothamchess-anti-sicilian::Wing Gambit',
+  // GothamChess KIA: Nf3 first against …c5, which the DB names only to ply 2 (DB-empty rule).
+  'pro-gothamchess-kia::vs Sicilian (KIA vs …c5 + …Nf6)',
 ]);
 
 describe('masterclass G3 — every lesson anchors a real DB opening line', () => {
