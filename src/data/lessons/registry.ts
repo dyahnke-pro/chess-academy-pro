@@ -26,8 +26,6 @@ import { ITALIAN_GAME_TRAP_LESSONS } from './italianGameTrapLessons';
 import { SCOTCH_GAME_TRAP_LESSONS } from './scotchGameTrapLessons';
 import { BENKO_GAMBIT_LESSON } from './benkoGambit';
 import { BENKO_GAMBIT_VARIATION_LESSONS } from './benkoGambitVariations';
-import { NIMZO_INDIAN_LESSON } from './nimzoIndian';
-import { NIMZO_INDIAN_VARIATION_LESSONS } from './nimzoIndianVariations';
 import { LONDON_SYSTEM_LESSON } from './londonSystem';
 import { LONDON_SYSTEM_VARIATION_LESSONS } from './londonSystemVariations';
 import { PHILIDOR_DEFENCE_LESSON } from './philidorDefence';
@@ -92,7 +90,6 @@ const HAND_WRITTEN: OpeningLessons[] = [
   { main: PIRC_DEFENCE_LESSON, variations: PIRC_VARIATION_LESSONS },
   { main: BENKO_GAMBIT_LESSON, variations: BENKO_GAMBIT_VARIATION_LESSONS },
   { main: LONDON_SYSTEM_LESSON, variations: LONDON_SYSTEM_VARIATION_LESSONS },
-  { main: NIMZO_INDIAN_LESSON, variations: NIMZO_INDIAN_VARIATION_LESSONS },
   { main: PHILIDOR_DEFENCE_LESSON, variations: PHILIDOR_DEFENCE_VARIATION_LESSONS },
   { main: QGA_LESSON, variations: QGA_VARIATION_LESSONS },
   { main: QUEENS_INDIAN_DEFENCE_LESSON, variations: QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS },
