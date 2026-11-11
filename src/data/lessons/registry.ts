@@ -117,12 +117,12 @@ function watchOpening(course: WatchCourse): OpeningLessons {
 // An opening rewritten as a Watch course leaves this list: its course is
 // gated from `WATCH_COURSES` below.
 const HAND_WRITTEN: OpeningLessons[] = [
-  { main: RUY_LOPEZ_LESSON, variations: RUY_VARIATION_LESSONS, traps: RUY_TRAP_LESSONS },
+  { main: RUY_LOPEZ_LESSON, variations: RUY_VARIATION_LESSONS },
   { main: PIRC_DEFENCE_LESSON, variations: PIRC_VARIATION_LESSONS },
-  { main: VIENNA_GAME_LESSON, variations: VIENNA_VARIATION_LESSONS, traps: VIENNA_TRAP_LESSONS },
-  { main: CARO_KANN_LESSON, variations: CARO_VARIATION_LESSONS, traps: CARO_TRAP_LESSONS },
-  { main: ITALIAN_GAME_LESSON, variations: ITALIAN_GAME_VARIATION_LESSONS, traps: ITALIAN_GAME_TRAP_LESSONS },
-  { main: SCOTCH_GAME_LESSON, variations: SCOTCH_GAME_VARIATION_LESSONS, traps: SCOTCH_GAME_TRAP_LESSONS },
+  { main: VIENNA_GAME_LESSON, variations: VIENNA_VARIATION_LESSONS },
+  { main: CARO_KANN_LESSON, variations: CARO_VARIATION_LESSONS },
+  { main: ITALIAN_GAME_LESSON, variations: ITALIAN_GAME_VARIATION_LESSONS },
+  { main: SCOTCH_GAME_LESSON, variations: SCOTCH_GAME_VARIATION_LESSONS },
   { main: FRENCH_DEFENCE_LESSON, variations: FRENCH_DEFENCE_VARIATION_LESSONS },
   { main: SCANDINAVIAN_DEFENCE_LESSON, variations: SCANDINAVIAN_DEFENCE_VARIATION_LESSONS },
   { main: ALEKHINE_DEFENCE_LESSON, variations: ALEKHINE_DEFENCE_VARIATION_LESSONS },
@@ -142,7 +142,25 @@ const HAND_WRITTEN: OpeningLessons[] = [
   { main: QUEENS_GAMBIT_LESSON, variations: QUEENS_GAMBIT_VARIATION_LESSONS },
 ];
 
-const OPENINGS: OpeningLessons[] = [...HAND_WRITTEN, ...WATCH_COURSES.map(watchOpening)];
+// An opening's named-trap lessons, by opening id. They stay hand-written beat
+// lessons whether the opening's main line and tabs are hand-written or a Watch
+// course, so they are joined here, once, for both (a course rewrite must not
+// drop its traps out of the gates).
+const TRAP_LESSONS: Readonly<Record<string, Record<string, LessonScript>>> = {
+  'ruy-lopez': RUY_TRAP_LESSONS,
+  'vienna-game': VIENNA_TRAP_LESSONS,
+  'caro-kann': CARO_TRAP_LESSONS,
+  'italian-game': ITALIAN_GAME_TRAP_LESSONS,
+  'scotch-game': SCOTCH_GAME_TRAP_LESSONS,
+};
+
+const OPENINGS: OpeningLessons[] = [...HAND_WRITTEN, ...WATCH_COURSES.map(watchOpening)].map((o) => ({
+  ...o,
+  traps: TRAP_LESSONS[o.main.openingId],
+}));
+for (const id of Object.keys(TRAP_LESSONS)) {
+  if (!OPENINGS.some((o) => o.main.openingId === id)) throw new Error(`${id}: trap lessons for an opening the registry does not have`);
+}
 {
   const seen = new Set<string>();
   for (const o of OPENINGS) {
