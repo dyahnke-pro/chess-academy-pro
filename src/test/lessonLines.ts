@@ -5,6 +5,8 @@
 // existing lesson's own moves when they run past the PGN on the same path. A file
 // of extra tabs (`LESSON_EXTRA`, `{ [openingId]: [{ name, moves }] }`) adds lines
 // the repertoire does not carry yet — Levy's taught lines for his openings (R4).
+// A file of whole line lists (`LESSON_LINES`, from `extend-lines.mjs`) replaces
+// them all: the same lines, each carried on to a middlegame.
 import { existsSync, readFileSync } from 'node:fs';
 
 export interface LessonOpening {
@@ -59,4 +61,12 @@ export function lessonLines(
   ];
   const names = new Set(lines.map((l) => l.name));
   return [...lines, ...extra.filter((l) => !names.has(l.name))];
+}
+
+/** The opening's whole line list from the `LESSON_LINES` file, or null when
+ *  the file does not carry it. */
+export function fullLines(id: string, path: string | undefined): LessonLine[] | null {
+  if (!path || !existsSync(path)) return null;
+  const all = JSON.parse(readFileSync(path, 'utf8')) as Record<string, LessonLine[]>;
+  return all[id]?.map((l) => ({ name: l.name, moves: [...l.moves] })) ?? null;
 }

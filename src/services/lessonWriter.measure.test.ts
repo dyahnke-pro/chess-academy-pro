@@ -11,7 +11,7 @@
 import { describe, it, vi } from 'vitest';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { nativeEngine } from '../test/nativeStockfish';
-import { findLessonOpening, extraLines, lessonLines, type LessonLine } from '../test/lessonLines';
+import { findLessonOpening, extraLines, fullLines, lessonLines, type LessonLine } from '../test/lessonLines';
 
 const ON = process.env.LESSON_WRITER === '1';
 const IDS = (process.env.LESSON_IDS ?? 'trompowsky-attack').split(',').map((s) => s.trim()).filter(Boolean);
@@ -56,7 +56,7 @@ describe.skipIf(!ON)('the lesson writer, one beat a move', () => {
     for (const id of IDS) {
       const op = findLessonOpening(id);
       if (!op) { console.log(`no opening ${id}`); continue; }
-      const lines: LessonLine[] = lessonLines(op, (tab) => (tab === null ? getLessonScript(id) : getVariationLessonScript(id, tab))?.beats.at(-1)?.moves, extraLines(id, process.env.LESSON_EXTRA));
+      const lines: LessonLine[] = fullLines(id, process.env.LESSON_LINES) ?? lessonLines(op, (tab) => (tab === null ? getLessonScript(id) : getVariationLessonScript(id, tab))?.beats.at(-1)?.moves, extraLines(id, process.env.LESSON_EXTRA));
       const text: string[] = [];
       const tally = { beats: 0, empty: 0, repeated: 0, words: 0 };
       const out: Array<{ name: string; beats: Array<{ ply: number; san: string; say: string }> }> = [];

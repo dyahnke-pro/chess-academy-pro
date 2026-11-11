@@ -13,7 +13,7 @@ import { describe, it, vi } from 'vitest';
 import { existsSync, readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { nativeEngine } from '../test/nativeStockfish';
-import { findLessonOpening, extraLines, lessonLines } from '../test/lessonLines';
+import { findLessonOpening, extraLines, fullLines, lessonLines } from '../test/lessonLines';
 import { pinsOf, looseOf, materialFor, hitsFrom, evalWords, PIECE_NAME } from '../../scripts/course-replies/boardFacts';
 
 const ON = process.env.LESSON_FACTS === '1';
@@ -49,7 +49,7 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
       if (!op) continue;
       const draftPath = `${OUT}/${id}.json`;
       const drafts = existsSync(draftPath) ? (JSON.parse(readFileSync(draftPath, 'utf8')) as { lines: Array<{ name: string; beats: Array<{ ply: number; say: string }> }> }).lines : [];
-      const lines = lessonLines(op, (tab) => (tab === null ? getLessonScript(id) : getVariationLessonScript(id, tab))?.beats.at(-1)?.moves, extraLines(id, process.env.LESSON_EXTRA));
+      const lines = fullLines(id, process.env.LESSON_LINES) ?? lessonLines(op, (tab) => (tab === null ? getLessonScript(id) : getVariationLessonScript(id, tab))?.beats.at(-1)?.moves, extraLines(id, process.env.LESSON_EXTRA));
       const md: string[] = [`# ${op.name} — fact sheet (student plays ${op.color})`];
       for (const line of lines) {
         md.push(`\n## ${line.name}\n`);
