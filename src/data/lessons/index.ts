@@ -176,8 +176,6 @@ import { STAFFORD_GAMBIT_LESSON } from './staffordGambit';
 import { STAFFORD_GAMBIT_VARIATION_LESSONS } from './staffordGambitVariations';
 import { ENGLUND_GAMBIT_LESSON } from './englundGambit';
 import { ENGLUND_GAMBIT_VARIATION_LESSONS } from './englundGambitVariations';
-import { SCHLIEMANN_DEFENCE_LESSON } from './schliemannDefence';
-import { SCHLIEMANN_DEFENCE_VARIATION_LESSONS } from './schliemannDefenceVariations';
 import { QUEENS_GAMBIT_LESSON } from './queensGambit';
 import { QUEENS_GAMBIT_VARIATION_LESSONS } from './queensGambitVariations';
 import { WATCH_COURSES } from './watch';
@@ -229,7 +227,6 @@ const LESSONS: Record<string, LessonScript> = {
   [MARSHALL_ATTACK_LESSON.openingId]: MARSHALL_ATTACK_LESSON,
   [STAFFORD_GAMBIT_LESSON.openingId]: STAFFORD_GAMBIT_LESSON,
   [ENGLUND_GAMBIT_LESSON.openingId]: ENGLUND_GAMBIT_LESSON,
-  [SCHLIEMANN_DEFENCE_LESSON.openingId]: SCHLIEMANN_DEFENCE_LESSON,
   [QUEENS_GAMBIT_LESSON.openingId]: QUEENS_GAMBIT_LESSON,
   // Pro repertoires — players' actual lines (PGN games = source of truth).
   // Registered HERE (runtime LESSONS map) but NOT in registry.ts's OPENINGS
@@ -376,7 +373,6 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...MARSHALL_ATTACK_VARIATION_LESSONS,
   ...STAFFORD_GAMBIT_VARIATION_LESSONS,
   ...ENGLUND_GAMBIT_VARIATION_LESSONS,
-  ...SCHLIEMANN_DEFENCE_VARIATION_LESSONS,
   ...QUEENS_GAMBIT_VARIATION_LESSONS,
   // Pro repertoires
   ...PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS,

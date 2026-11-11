@@ -47,6 +47,7 @@ import { QUEENS_INDIAN_DEFENCE_WATCH } from './queensIndianDefence';
 import { RETI_OPENING_WATCH } from './retiOpening';
 import { RUY_LOPEZ_WATCH } from './ruyLopez';
 import { SCANDINAVIAN_DEFENCE_WATCH } from './scandinavianDefence';
+import { SCHLIEMANN_DEFENCE_WATCH } from './schliemannDefence';
 import { SCOTCH_GAME_WATCH } from './scotchGame';
 import { SEMI_SLAV_WATCH } from './semiSlav';
 import { SICILIAN_ALAPIN_WATCH } from './sicilianAlapin';
@@ -104,6 +105,7 @@ export const WATCH_COURSES: readonly WatchCourse[] = [
   RETI_OPENING_WATCH,
   RUY_LOPEZ_WATCH,
   SCANDINAVIAN_DEFENCE_WATCH,
+  SCHLIEMANN_DEFENCE_WATCH,
   SCOTCH_GAME_WATCH,
   SEMI_SLAV_WATCH,
   SICILIAN_ALAPIN_WATCH,
