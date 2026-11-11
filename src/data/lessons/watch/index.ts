@@ -6,6 +6,7 @@ import { BENONI_DEFENCE_WATCH } from './benoniDefence';
 import { BIRDS_OPENING_WATCH } from './birdsOpening';
 import { BUDAPEST_GAMBIT_WATCH } from './budapestGambit';
 import { EVANS_GAMBIT_WATCH } from './evansGambit';
+import { GRUNFELD_DEFENCE_WATCH } from './grunfeldDefence';
 import { OLD_INDIAN_DEFENCE_WATCH } from './oldIndianDefence';
 import { PETROV_DEFENCE_WATCH } from './petrovDefence';
 import { SEMI_SLAV_WATCH } from './semiSlav';
@@ -19,6 +20,7 @@ export const WATCH_COURSES: readonly WatchCourse[] = [
   BIRDS_OPENING_WATCH,
   BUDAPEST_GAMBIT_WATCH,
   EVANS_GAMBIT_WATCH,
+  GRUNFELD_DEFENCE_WATCH,
   OLD_INDIAN_DEFENCE_WATCH,
   PETROV_DEFENCE_WATCH,
   SEMI_SLAV_WATCH,
