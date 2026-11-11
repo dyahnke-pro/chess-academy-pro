@@ -6952,7 +6952,7 @@
   "taught": true,
   "played": 0,
   "evalCp": 0,
-  "masters": 0,
+  "masters": 1,
   "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7 Bxf2+ Kxf2 Nxe4+ Kg1 Qh4 g3 Nxg3 hxg3 Qxg3+ Kf1 Rf8"
  },
  {
@@ -6988,7 +6988,7 @@
   "taught": true,
   "played": 0,
   "evalCp": 0,
-  "masters": 0,
+  "masters": 3,
   "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7 Bxf2+ Kf1 Qe7 Nxh8 d5 exd5 Nd4 c3 Bg4 Qa4+ Nd7"
  },
  {
@@ -7006,7 +7006,7 @@
   "taught": true,
   "played": 0,
   "evalCp": 336,
-  "masters": 0,
+  "masters": 1,
   "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7 Bxf2+ Kf1 Qe7 Nxh8 d5 Bxd5 Bg4"
  },
  {
@@ -7024,7 +7024,7 @@
   "taught": true,
   "played": 0,
   "evalCp": -90,
-  "masters": 0,
+  "masters": 4,
   "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Bxf7+ Ke7 Bb3 Rf8 O-O d6"
  },
  {
@@ -7096,7 +7096,7 @@
   "taught": true,
   "played": 0,
   "evalCp": -34,
-  "masters": 0,
+  "masters": 11,
   "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 O-O Nf6 d4 exd4 e5 d5 exf6 dxc4 fxg7 Rg8"
  },
  {
@@ -7132,7 +7132,7 @@
   "taught": true,
   "played": 0,
   "evalCp": 8,
-  "masters": 0,
+  "masters": 17,
   "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Be7 d4 Na5 Be2 exd4 Qxd4 Nf6 e5 Nc6"
  },
  {
@@ -7186,7 +7186,7 @@
   "taught": true,
   "played": 0,
   "evalCp": -56,
-  "masters": 0,
+  "masters": 2,
   "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Nc3 dxc3 Bxf7+ Kxf7 Qd5+ Ke8 Re1"
  },
  {
@@ -7366,7 +7366,7 @@
   "taught": true,
   "played": 0,
   "evalCp": 8,
-  "masters": 0,
+  "masters": 2,
   "moves": "e4 e5 Nf3 Nc6 Bb5 f5 Bxc6 dxc6 Nxe5 Qd4 Nf3 Qxe4+"
  },
  {
@@ -7384,7 +7384,7 @@
   "taught": true,
   "played": 0,
   "evalCp": 21,
-  "masters": 0,
+  "masters": 5,
   "moves": "e4 e5 Nf3 Nc6 Bb5 f5 exf5 e4 Qe2 Qe7 Bxc6 bxc6 Nd4 Nf6"
  },
  {
@@ -7402,7 +7402,7 @@
   "taught": true,
   "played": 0,
   "evalCp": -62,
-  "masters": 0,
+  "masters": 400,
   "moves": "e4 e5 Nf3 Nc6 Bb5 f5 d3 fxe4 dxe4 Nf6 O-O d6"
  },
  {
@@ -7636,7 +7636,7 @@
   "taught": true,
   "played": 0,
   "evalCp": 202,
-  "masters": 0,
+  "masters": 1,
   "moves": "e4 e5 Nf3 Nc6 c3 d5 Qa4 dxe4 Nxe5 Bd7 Nxd7 Qxd7 Qxe4+"
  },
  {
@@ -7726,7 +7726,7 @@
   "taught": true,
   "played": 0,
   "evalCp": 34,
-  "masters": 0,
+  "masters": 112,
   "moves": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nb3 Bb6 Nc3 Nf6 Bg5 h6 Bh4 O-O Qe2"
  },
  {
@@ -7744,7 +7744,7 @@
   "taught": true,
   "played": 0,
   "evalCp": 8,
-  "masters": 0,
+  "masters": 711,
   "moves": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5 h4"
  },
  {
@@ -7762,7 +7762,7 @@
   "taught": true,
   "played": 0,
   "evalCp": 44,
-  "masters": 0,
+  "masters": 28,
   "moves": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Nd5 c4 Nb6 Bd3"
  },
  {
@@ -7816,7 +7816,7 @@
   "taught": true,
   "played": 0,
   "evalCp": 155,
-  "masters": 1,
+  "masters": 2,
   "moves": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nc3 Bc5 Be3"
  },
  {
@@ -8104,7 +8104,7 @@
   "taught": true,
   "played": 0,
   "evalCp": -113,
-  "masters": 0,
+  "masters": 1,
   "moves": "e4 e5 Nf3 Nc6 Bc4 f5 d4 fxe4 Nxe5 d5 Bb5 Qd6"
  },
  {

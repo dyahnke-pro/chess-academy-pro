@@ -968,8 +968,7 @@
   "amateur": 175,
   "evalCp": 509,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Two Knights Defense",
@@ -1093,12 +1092,11 @@
   "minute": 2,
   "idea": "With the king tucked on g1, the queen comes to h4 and the knight crashes into g3; after the queen check Black saves the rook with ...Rf8 and follows with ...d5 to bring the c8-bishop into the hunt.",
   "kind": "main",
-  "masters": 0,
+  "masters": 1,
   "amateur": 6118,
   "evalCp": 0,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Traxler Counter-Attack",
@@ -1135,8 +1133,7 @@
   "amateur": 945,
   "evalCp": 450,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Traxler Counter-Attack",
@@ -1169,12 +1166,11 @@
   "minute": 6,
   "idea": "Against the critical Kf1, move the queen, let White take the rook, and strike with ...d5 and ...Nd4; when Bg4 drives the queen out with a check, the quiet ...Nd7 leaves the white king defenseless against ...Qf6 or ...Qh4 ideas.",
   "kind": "main",
-  "masters": 0,
+  "masters": 3,
   "amateur": 24322,
   "evalCp": 0,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Traxler Counter-Attack",
@@ -1359,12 +1355,11 @@
   "minute": 4,
   "idea": "Castle first and push e5 to kick the f6-knight; Black's only good answer is ...d5, leading to a wild position where White wins the g7 pawn and the black king loses its kingside cover.",
   "kind": "main",
-  "masters": 0,
+  "masters": 11,
   "amateur": 27130,
   "evalCp": -34,
   "status": "extends",
-  "extendsId": "pro-gothamchess-italian",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-italian"
  },
  {
   "opening": "Evans Gambit",
@@ -1429,12 +1424,11 @@
   "minute": 5,
   "idea": "Against the solid ...Be7 and ...Na5, keep the bishop with Be2, recapture with the queen, kick the knight with e5, and swing the queen over to g3 (via h4 or f4) with h4-h5 ideas against the kingside.",
   "kind": "main",
-  "masters": 0,
+  "masters": 17,
   "amateur": 690,
   "evalCp": 8,
   "status": "extends",
-  "extendsId": "pro-gothamchess-italian",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-italian"
  },
  {
   "opening": "Evans Gambit",
@@ -1523,8 +1517,7 @@
   "amateur": 951,
   "evalCp": -82,
   "status": "extends",
-  "extendsId": "pro-gothamchess-italian",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-italian"
  },
  {
   "opening": "Nakhmanson Gambit",
@@ -1816,8 +1809,7 @@
   "amateur": 0,
   "evalCp": 10000,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Ruy Lopez: Schliemann (Jaenisch) Gambit",
@@ -2296,8 +2288,7 @@
   "amateur": 0,
   "evalCp": 1467,
   "status": "extends",
-  "extendsId": "pro-gothamchess-ponziani",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-ponziani"
  },
  {
   "opening": "Ponziani Opening",
@@ -2908,12 +2899,11 @@
   "minute": 3,
   "idea": "The best defense: Nc3 and Rb1 chase the queen, Nd5 hits c7 and the bishop, and only the precise Rb5 keeps White on top; one wrong move here and the black queen and bishop break through.",
   "kind": "main",
-  "masters": 0,
+  "masters": 4,
   "amateur": 1727,
   "evalCp": -216,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Englund Gambit",
@@ -3016,8 +3006,7 @@
   "amateur": 0,
   "evalCp": 925,
   "status": "extends",
-  "extendsId": "pro-gothamchess-ponziani",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-ponziani"
  },
  {
   "opening": "Vienna Game",
@@ -3283,8 +3272,7 @@
   "amateur": 0,
   "evalCp": 10000,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Latvian Gambit",
