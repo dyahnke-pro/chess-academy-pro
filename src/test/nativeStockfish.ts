@@ -10,6 +10,7 @@
 import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
+import { mateEvalFor } from '../services/engineConstants';
 
 export const NATIVE_SF = '/usr/games/stockfish';
 
@@ -66,7 +67,7 @@ export function nativeEngine(cachePath: string, defaultDepth: number): NativeEng
           const mt = /score mate (-?\d+)/.exec(ln);
           const pv = / pv (.+)$/.exec(ln)?.[1].trim().split(/\s+/) ?? [];
           const mate = mt ? Number(mt[1]) * flip : null;
-          byRank.set(rank, { cp: cp ? Number(cp[1]) * flip : (mate !== null ? (mate > 0 ? 30000 - Math.abs(mate) : -30000 + Math.abs(mate)) : 0), mate, pv });
+          byRank.set(rank, { cp: cp ? Number(cp[1]) * flip : mt ? mateEvalFor(Number(mt[1])) * flip : 0, mate, pv });
         }
       });
       sf.on('error', finish);

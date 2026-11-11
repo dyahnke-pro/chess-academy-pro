@@ -1000,8 +1000,7 @@
   "amateur": 58231,
   "evalCp": -60,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Two Knights Defense",
@@ -1236,12 +1235,11 @@
   "minute": 10,
   "idea": "Against the objectively best bishop capture, put the rook on the half-open f-file, then ...d6, ...h6, ...Bg4 and a queen swing via e8 to g6; the king often walks to d8 and Black's pieces are very active for a pawn.",
   "kind": "reply",
-  "masters": 0,
+  "masters": 4,
   "amateur": 29829,
   "evalCp": -90,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Traxler Counter-Attack",
@@ -1787,8 +1785,7 @@
   "amateur": 0,
   "evalCp": 10000,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Stafford Gambit",
@@ -1911,12 +1908,11 @@
   "minute": 5,
   "idea": "Whenever White takes on f5, push ...e4 to hit the knight; answer the pin Qe2 with ...Qe7, and after White gives up the bishop for the knight, develop with ...Nf6 and later ...c5 and ...Bb7.",
   "kind": "main",
-  "masters": 0,
+  "masters": 5,
   "amateur": 8049,
   "evalCp": 21,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Ruy Lopez: Schliemann (Jaenisch) Gambit",
@@ -1974,8 +1970,7 @@
   "amateur": 15915,
   "evalCp": -46,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Two Knights: Ponziani-Steinitz Gambit",
@@ -2033,8 +2028,7 @@
   "amateur": 10462,
   "evalCp": 425,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Two Knights: Ponziani-Steinitz Gambit",
@@ -2065,8 +2059,7 @@
   "amateur": 22576,
   "evalCp": 182,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Two Knights: Ponziani-Steinitz Gambit",
@@ -2364,12 +2357,11 @@
   "minute": 7,
   "idea": "The queen on a4 pins the c6-knight, so taking on e4 lets Nxe5 hit it again; if Black unpins with ...Bd7, grab the bishop and take e4 with check, a clean pawn up with the bishop pair.",
   "kind": "trap",
-  "masters": 0,
+  "masters": 1,
   "amateur": 33449,
   "evalCp": 202,
   "status": "extends",
-  "extendsId": "pro-gothamchess-ponziani",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-ponziani"
  },
  {
   "opening": "Ponziani Opening",
@@ -2479,8 +2471,7 @@
   "amateur": 166,
   "evalCp": 46,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Scotch Game",
@@ -2611,8 +2602,7 @@
   "amateur": 2876,
   "evalCp": 37,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Scotch Game",
@@ -2722,8 +2712,7 @@
   "amateur": 79775,
   "evalCp": 16,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Stafford Gambit",
@@ -2779,8 +2768,7 @@
   "amateur": 2483,
   "evalCp": -64,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Wayward Queen Attack",
@@ -3156,8 +3144,7 @@
   "amateur": 124869,
   "evalCp": 137,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Rousseau Gambit",
@@ -3213,8 +3200,7 @@
   "amateur": 1464,
   "evalCp": -70,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Rousseau Gambit",
@@ -3239,12 +3225,11 @@
   "minute": 5,
   "idea": "The engine's d4 is met by ...fxe4 hitting the knight; after Nxe5, ...d5 hits the bishop, and when it pins from b5, ...Qd6 defends the c6-knight and keeps Black's big center.",
   "kind": "main",
-  "masters": 0,
+  "masters": 1,
   "amateur": 15499,
   "evalCp": -113,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Rousseau Gambit",
