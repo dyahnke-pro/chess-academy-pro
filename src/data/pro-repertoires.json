@@ -899,23 +899,23 @@
       "style": "Gambit, Aggressive",
       "overview": "Here's the deal with the French Defence: if you let Black play it on their terms, they reach a structure they've studied since they were a kid and you spend the next 60 moves chipping at a granite wall. The Milner-Barry says: not today. Named after Stuart Milner-Barry — British chess master AND Bletchley Park codebreaker who worked alongside Alan Turing on cracking the Enigma — this gambit was his pet anti-French weapon in the 1930s-40s. After 1.e4 e6 2.d4 d5 3.e5 (the Advance) c5 4.c3 Nc6 5.Nf3, when Black plays the natural 5...Qb6 hitting d4, you don't defend the pawn — you sacrifice it with 6.Bd3! Black is invited to grab it; if they do, you've traded one pawn for total development supremacy. If they don't, you've reached a position with the better-placed pieces. This is an attacking, middlegame-decisive repertoire — built to win in the opening and the middlegame, not grind long endings — so it is deepest on the opening and middlegame plans, with endgame theory shown only where the games reach a decisive ending.",
       "keyIdeas": [
-        "The d4-pawn is the bait. After Black plays …Qb6 hitting it, you respond Bd3 — NOT Nc3 (which blocks the queen's defence) and NOT Qd2 (passive). The point: Bd3 develops AND prepares O-O; if Black takes the d4-pawn, your lead in development is worth more than a pawn.",
-        "The standard sequence after Black accepts: 6...cxd4 7.cxd4 Nxd4 8.Nxd4 Qxd4 9.Nc3 — Black's queen is now in the open, the Nc3 develops with tempo, and Black is forced into defensive moves while you finish development.",
-        "The e5-pawn is your structural ally for the whole game. It cramps Black's c8-bishop (locked behind …b6 or …f6), it controls f6 and d6, and it supports a future f4-f5 kingside attack. Defend it like a king.",
-        "After 9.Nc3, look for Black's natural 9...a6 (preparing …b5) and respond 10.Qe2 + 11.Kh1 — the king tucks away while you prepare Rd1 piling on the queen. Black has the extra pawn but spends the next 15 moves trying to consolidate."
+        "The d4 pawn is the bait. After …Qb6 lines up on d4, Bd3 develops the bishop toward h7, gets you ready to castle, and leaves d4 to its fate. a3, the masters' main move there, is a touch stronger by the engine; Bd3 is the gambit. If they take on d4 with pawn, knight and queen, they are a pawn up and a little better, but you have castled while their king is still on e8.",
+        "Why every master plays …Bd7 before grabbing d4: if the knight takes at once, Nxd4 Qxd4 and Bb5+ uncovers your queen on d1 against theirs on d4, and after the block you take the queen. With the bishop on d7 that check is gone, so the gambit runs …Bd7, O-O, …Nxd4, Nxd4 Qxd4, Nc3. The engine prefers Nbd2 to the recapture and Qe2 to Nc3, guarding e5 first.",
+        "The e5 pawn takes d6 and f6 away from their pieces. Once their queen lands on d4, e5 is loose, but grabbing it with …Qxe5 is a mistake: Re1 hits the queen, and after it steps back Nxd5 wins a pawn back. The engine rates that more than half a pawn worse for them than …a6.",
+        "After …a6, which takes b5 from your knight, Qe2 guards e5 and clears d1 for a rook, and Kh1 steps out of the pin on f2, so f4 can follow and guard e5 a second time. They are a pawn up and a little better; your trumps are the castled king and the open lines while theirs sits on e8."
       ],
       "traps": [
-        "If Black gets really greedy with 9...Qxb2?? — punishment via 10.Nc3 Qb4 (only square — Qa3 hangs to Nb5) 11.Rb1 Qa5 12.Nb5! — the knight forks ideas (Nc7+, Nd6+) and Black's queen is in serious trouble. The b2-pawn is double-poisoned."
+        "If the knight grabs d4 before …Bd7 is played (…cxd4 cxd4 …Nxd4? Nxd4 …Qxd4), Bb5+ wins the queen: the bishop gives check and uncovers your queen on d1 against theirs on d4, and after the block you take it. Qa4+ does not work there: their queen on d4 covers a4."
       ],
       "warnings": [
         "ONLY play this against the Advance French (after 3.e5 — Black has committed to …c5). It does NOT work against the Winawer (3.Nc3 Bb4) or the Classical (3.Nc3 Nf6) — those need different systems entirely.",
-        "If Black declines the gambit with 6...Bd7 (instead of 6...cxd4), DON'T try to hold the d-pawn — just develop with 7.O-O and play a normal Advance French. The Milner-Barry's whole point is the gambit; if Black declines, accept the equal middlegame."
+        "If Black plays …Bd7 before taking on d4, keeping the c5 pawn on the board, don't castle on reflex: dxc5, then castling, is the engine's choice and leaves you a little better. Castle first and they can still take on d4 and turn it back into the gambit, about level."
       ],
       "variations": [
         {
           "name": "Main Gambit Line",
           "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Nxd4 Qxd4 Nc3 a6 Qe2 Ne7 Kh1",
-          "explanation": "The full Milner-Barry. Black accepts the pawn sacrifice with 6...cxd4 7.cxd4 Bd7 (developing first, planning Nxd4 next) 8.O-O Nxd4! (the moment of truth — Black grabs the pawn) 9.Nxd4 Qxd4. White is down a pawn but plays 10.Nc3 with tempo on the queen, 10...a6 (preventing Nb5 fork) 11.Qe2 (preparing Rd1 + Rad1) 11...Ne7 (Black develops) 12.Kh1 — the king safety prophylaxis before the attack begins. Position: Black is up a pawn but undeveloped (rook still on h8, king on e8, bishop on f8); White has every piece in optimal place. The next 5 moves are forced for Black — defend or die — while White picks up tempos building the attack.",
+          "explanation": "The full Milner-Barry. Black takes on d4 and plays …Bd7 before grabbing the pawn (an immediate …Nxd4 loses the queen to Bb5+). After you castle, …Nxd4 Nxd4 Qxd4 wins it, and their queen in the center hits b2, d3, e5 and f2. Nc3, …a6 to take b5 from your knight, Qe2 to guard e5 and Kh1 to step out of the pin on f2 follow. They are a pawn up and a little better; you have castled, their king is on e8, and f4 comes next.",
           "sources": [
             "book:french-defence",
             "concept:pos-center",
@@ -925,7 +925,7 @@
         {
           "name": "Black Declines with Bd7",
           "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 Bd7 O-O cxd4 cxd4 Nxd4 Nxd4 Qxd4 Nc3 Qb6",
-          "explanation": "Sometimes Black plays 6...Bd7 first (developing) rather than 6...cxd4 immediately. After 7.O-O cxd4 8.cxd4 Nxd4 9.Nxd4 Qxd4 10.Nc3 — same gambit position reached via different move order. Black's only difference: the bishop is already on d7 (so 10...Qb6 retreating the queen is the standard plan). The end position favours White's better development, but Black has the extra pawn AND has avoided the worst of the Milner-Barry attack by retreating the queen early.",
+          "explanation": "Black plays …Bd7 first, keeping the c5 pawn on the board. The engine prefers dxc5 here, but castling keeps the gambit: …cxd4 cxd4 Nxd4 Nxd4 Qxd4 Nc3 reaches the main line by another order. Then the queen drops back to b6 instead of …a6, still pinning f2 to your king. They are a pawn up and a little better; a4 and Re1 come next.",
           "sources": [
             "book:french-defence",
             "concept:pos-center",
@@ -935,7 +935,17 @@
         {
           "name": "Anti-French 3.e5 Advance",
           "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Nh6 Bd3 cxd4 cxd4 Nf5 Bxf5 exf5 Nc3 Be6 O-O Be7",
-          "explanation": "When Black tries the unusual 5...Nh6 (heading to f5 to challenge your light-squared bishop), accept the trade: 6.Bd3 cxd4 7.cxd4 Nf5 8.Bxf5! exf5 — Black has doubled f-pawns and a cramped position. White's central pawns plus open structure for the rooks give a long-term positional edge. Black's …Be6 + …Be7 development is passive; you're playing for the win on positional grounds rather than the usual gambit fireworks.",
+          "explanation": "When Black tries …Nh6, heading for f5 to pile on d4, Bd3 takes f5 away first. After …cxd4 cxd4 Nf5, Bxf5 exf5 removes the attacker and leaves them doubled f-pawns, though their light-squared bishop is free. Nc3 hits d5 and …Be6 guards it. Castling there costs about two-thirds of a pawn: Ne2, heading for f4, is the engine's move. The line ends about level.",
+          "sources": [
+            "book:french-defence",
+            "concept:pos-center",
+            "https://en.wikipedia.org/wiki/French_Defence"
+          ]
+        },
+        {
+          "name": "Anti-French 3.Bd3",
+          "pgn": "e4 e6 d4 d5 Bd3 dxe4 Bxe4 Nf6 Bf3 c5 Ne2 Nc6 c3 Be7 O-O O-O Bf4 h6 a4 Bd6 dxc5",
+          "explanation": "A different answer to the French: the bishop goes to d3 and lets …dxe4 happen. It is rare and the engine rates it a third of a pawn below Nc3, but after Bxe4 and Bf3 the bishop sits on the long diagonal pinning b7 to the rook, the knight goes to e2 because f3 is taken, and c3 props up d4. The line ends about level.",
           "sources": [
             "book:french-defence",
             "concept:pos-center",

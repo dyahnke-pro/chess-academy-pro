@@ -3344,6 +3344,7 @@
  "pro-gothamchess-milner-barry::Anti-French 3.e5 Advance::Anti-French 3.e5 Advance": [
   "mp-progothamchess-mb-advance-battery"
  ],
+ "pro-gothamchess-milner-barry::Anti-French 3.Bd3::Anti-French 3.Bd3": [],
  "pro-gothamchess-milner-barry::::Main Gambit Line": [
   "mp-progothamchess-mb-main-fstorm",
   "mp-progothamchess-french-rubinstein"
@@ -3354,6 +3355,7 @@
  "pro-gothamchess-milner-barry::::Anti-French 3.e5 Advance": [
   "mp-progothamchess-mb-advance-battery"
  ],
+ "pro-gothamchess-milner-barry::::Anti-French 3.Bd3": [],
  "pro-gothamchess-anti-sicilian::main": [
   "mp-progothamchess-antisic-e6-open",
   "mp-progothamchess-antisic-g6-d4break"

@@ -849,6 +849,9 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
       ],
       'black declines with bd7': ['mp-progothamchess-mb-declines-na4'],
       'anti-french 3.e5 advance': ['mp-progothamchess-mb-advance-battery'],
+      // The tab added from the repertoire's taught lines (2026-11-11,
+      // docs/levy-lines/decisions): no middlegame plan is anchored at its end yet.
+      'anti-french 3.bd3': [],
     },
   },
   'pro-gothamchess-fantasy-caro': {

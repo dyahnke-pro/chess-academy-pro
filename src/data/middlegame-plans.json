@@ -15467,7 +15467,6 @@
     "title": "The Honest Ledger",
     "intro": "The pawn never quite comes home at best play — and Black spends the whole game babysitting a queen to prove it.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/French-Defense-Advance-Milner-Barry-Gambit",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -45241,7 +45240,6 @@
     "title": "Milner-Barry: the f4-f5 Pawn Storm",
     "intro": "Played out: the f-pawn storms forward, the signature Milner-Barry kingside plan.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/French-Defense-Advance-Variation",
      "https://en.wikipedia.org/wiki/French_Defence",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -45372,7 +45370,6 @@
     "title": "Milner-Barry: the a4-a5-a6 Queenside Storm",
     "intro": "The plan in motion: a check wins a pawn, then the a-pawn storms to a6.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/French-Defense-Advance-Variation",
      "https://en.wikipedia.org/wiki/French_Defence",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -45503,7 +45500,6 @@
     "title": "Milner-Barry: Reroute the Knight to f4",
     "intro": "How it unfolds: the knight reroutes Ne1-d3-f4 to a dominant post.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/French-Defense-Advance-Variation",
      "https://en.wikipedia.org/wiki/French_Defence",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
