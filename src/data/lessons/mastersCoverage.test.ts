@@ -322,7 +322,6 @@ const SOUNDNESS_BASELINE = new Set<string>([
   'semi-slav::Meran Variation Deeper::29:Qf3',
   'two-knights-defence::Two Knights: Traxler Counterattack::17:hxg3',
   'albin-countergambit::Lasker Trap::11:Bxb4',
-  'trompowsky-attack::2...Ne4 3.Bf4 Main Line::19:a3',
   'trompowsky-attack::2...e6 French-Type Structure::20:c5',
   'scotch-gambit::Bb4+ Check (4…Bb4+)::22:Bd6',
   'vienna-gambit::Gambit Accepted (…exf4)::16:Bg4',

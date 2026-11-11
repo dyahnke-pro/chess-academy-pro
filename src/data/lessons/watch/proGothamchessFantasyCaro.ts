@@ -7,7 +7,7 @@
 // recorded in docs/levy-lines/decisions/pro-gothamchess-fantasy-caro.json.
 import type { WatchCourse } from './watchCourse';
 
-const MAIN = ['e4', 'c6', 'd4', 'd5', 'f3', 'dxe4', 'fxe4', 'e5', 'Nf3', 'exd4', 'Bc4', 'Nf6', 'O-O', 'Bc5', 'Ng5', 'O-O', 'e5', 'd3+', 'Kh1', 'Ng4', 'Nc3'];
+const MAIN = ['e4', 'c6', 'd4', 'd5', 'f3', 'dxe4', 'fxe4', 'e5', 'Nf3', 'exd4', 'Bc4', 'Nf6', 'O-O', 'Bc5', 'Ng5', 'O-O', 'e5', 'd3+', 'Kh1', 'Ng4', 'Nxf7'];
 
 /** The main line's beats, in order — one per move of `MAIN`. */
 const MAIN_BEATS: Array<[string, string]> = [
@@ -31,7 +31,7 @@ const MAIN_BEATS: Array<[string, string]> = [
   ["…d3 check! The d-pawn steps forward and uncovers their bishop on c5, aimed straight down the diagonal at your king on g1. The pawn on d3 hits c2 as well. So where does the king go?", '…d3+ — a discovered check from c5.'],
   ["Kh1, by far the best. Block with Be3, and their bishop takes it with check and then takes your knight on g5 too; Rf2 is just as bad. In the corner the king is safe, the attack on f7 is still there, and you are clearly better.", 'Kh1 — the king steps into the corner.'],
   ["…Ng4: the knight gets out of the pawn's way and jumps at e5 and h2. But look at what it left behind. With f6 empty, your rook on f1 sees f7, so bishop, knight and rook all hit f7, and only their rook and king guard it.", '…Ng4 — f7 now hit three times.'],
-  ["Nc3 brings out the last knight, but it misses the moment. Three hits on f7 against two guards: Nxf7 was the move, and after …Rxf7 Bxf7 check you'd have won a rook and a pawn for the knight. After Nc3 it's only about level, and …Qd4 is coming at your bishop on c4, which nothing guards. Your plan for the middlegame: h3 to send the knight on g4 away, then win back the pawn on d3, which your c2 pawn and your queen both hit.", 'Nc3 — natural, but Nxf7 was the shot.'],
+  ["Three on two, so take. Nxf7 grabs the pawn this whole line has been aiming at, and now the knight hits their queen on d8. Can they take back? Not with the king: your bishop and rook both guard f7. They can with the rook, but then Bxf7 comes with check, and you've won a rook and a pawn for your knight. You are clearly better. Your plan for the middlegame: after …Rxf7 Bxf7 check, win back the d3 pawn with your queen and play the exchange and a pawn up, with your rook on the open f-file.", 'Nxf7 — three on two; hits the queen.'],
 ];
 
 const beats: Record<string, { say: string; sayShort: string }> = {};
@@ -41,7 +41,7 @@ MAIN_BEATS.forEach(([say, sayShort], k) => { beats[MAIN.slice(0, k + 1).join(' '
 type TabBeats = Array<[string, string]>;
 
 const TAB_LINES: Record<string, string[]> = {
-  'Main Line 3...dxe4 4.fxe4': ['e4', 'c6', 'd4', 'd5', 'f3', 'dxe4', 'fxe4', 'e5', 'Nf3', 'exd4', 'Bc4', 'Nf6', 'O-O', 'Bc5', 'Ng5', 'O-O', 'e5', 'd3+', 'Kh1', 'Ng4', 'Nc3'],
+  'Main Line 3...dxe4 4.fxe4': ['e4', 'c6', 'd4', 'd5', 'f3', 'dxe4', 'fxe4', 'e5', 'Nf3', 'exd4', 'Bc4', 'Nf6', 'O-O', 'Bc5', 'Ng5', 'O-O', 'e5', 'd3+', 'Kh1', 'Ng4', 'Nxf7'],
   'Solid 3...e6': ['e4', 'c6', 'd4', 'd5', 'f3', 'e6', 'Nc3', 'Bb4', 'Bf4', 'Ne7', 'Qd3', 'b6', 'Ne2', 'O-O', 'O-O-O', 'Ba6', 'Qe3', 'Bd6', 'h4', 'c5', 'Bxd6'],
   'Aggressive 3...g6': ['e4', 'c6', 'd4', 'd5', 'f3', 'g6', 'Nc3', 'Bg7', 'Be3', 'dxe4', 'fxe4', 'Nf6', 'Nf3', 'O-O', 'Bd3', 'Ng4', 'Bg1', 'e5', 'd5', 'Nf6', 'dxc6'],
   'Counter 3...Qb6': ['e4', 'c6', 'd4', 'd5', 'f3', 'Qb6', 'Nc3', 'dxe4', 'fxe4', 'e5', 'Nf3', 'exd4', 'Nxd4', 'Bc5', 'Na4', 'Qa5+', 'c3', 'Bd6', 'Nf3', 'Bc7', 'Qd4'],
