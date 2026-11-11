@@ -41,14 +41,14 @@ type TabBeats = Array<[string, string]>;
 
 const TAB_LINES: Record<string, string[]> = {
   'Giuoco Piano c3-d4': ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'c3', 'Nf6', 'd4', 'exd4', 'cxd4', 'Bb4+', 'Bd2', 'Bxd2+', 'Nbxd2', 'd5', 'exd5', 'Nxd5', 'O-O', 'O-O'],
-  'Slow Italian d3': ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'Nf6', 'O-O', 'd6', 'c3', 'a6', 'a4', 'Ba7', 'Re1', 'O-O', 'Nbd2', 'Be6'],
-  'Evans Gambit': ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'b4', 'Bxb4', 'c3', 'Ba5', 'd4', 'exd4', 'O-O', 'd6', 'cxd4', 'Bb6', 'Nc3', 'Bg4'],
-  'Two Knights (…Nf6)': ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'O-O', 'Bc5', 'd4', 'Bxd4', 'Nxd4', 'Nxd4', 'Bg5', 'd6', 'f4'],
+  'Slow Italian d3': ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'Nf6', 'O-O', 'd6', 'c3', 'a6', 'a4', 'Ba7', 'Re1', 'O-O', 'Nbd2', 'Be6', 'h3', 'h6', 'b4'],
+  'Evans Gambit': ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'b4', 'Bxb4', 'c3', 'Ba5', 'd4', 'exd4', 'O-O', 'd6', 'cxd4', 'Bb6', 'Nc3', 'Bg4', 'Bb5', 'Bd7', 'd5'],
+  'Two Knights (…Nf6)': ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'O-O', 'Bc5', 'd4', 'Bxd4', 'Nxd4', 'Nxd4', 'Bg5', 'd6', 'f4', 'Be6', 'Na3', 'Nc6', 'f5', 'Bxc4', 'Nxc4'],
   'Fried Liver Attack': ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'Ng5', 'd5', 'exd5', 'Nxd5', 'Nxf7', 'Kxf7', 'Qf3+', 'Ke6', 'Nc3', 'Nb4', 'O-O', 'c6', 'd4', 'Qf6', 'Qe2'],
-  'Knight Attack …Na5': ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'Ng5', 'd5', 'exd5', 'Na5', 'Bb5+', 'c6', 'dxc6', 'bxc6', 'Be2', 'h6', 'Nh3'],
+  'Knight Attack …Na5': ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'Ng5', 'd5', 'exd5', 'Na5', 'Bb5+', 'c6', 'dxc6', 'bxc6', 'Be2', 'h6', 'Nh3', 'Bd6', 'd3', 'O-O', 'Ng1'],
   'Evans: Castle First': ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'b4', 'Bxb4', 'c3', 'Ba5', 'O-O', 'Nf6', 'd4', 'exd4', 'e5', 'd5', 'exf6', 'dxc4', 'fxg7', 'Rg8', 'Re1+'],
-  'Evans: …Be7': ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'b4', 'Bxb4', 'c3', 'Be7', 'd4', 'Na5', 'Be2', 'exd4', 'Qxd4', 'Nf6', 'e5', 'Nc6', 'Qh4'],
-  'Scotch Gambit': ['e4', 'e5', 'Nf3', 'Nc6', 'd4', 'exd4', 'Bc4', 'Nf6', 'e5', 'd5', 'Bb5', 'Ne4', 'Nxd4', 'Bd7', 'Bxc6'],
+  'Evans: …Be7': ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'b4', 'Bxb4', 'c3', 'Be7', 'd4', 'Na5', 'Be2', 'exd4', 'Qxd4', 'Nf6', 'e5', 'Nc6', 'Qh4', 'Nd5', 'Qg3'],
+  'Scotch Gambit': ['e4', 'e5', 'Nf3', 'Nc6', 'd4', 'exd4', 'Bc4', 'Nf6', 'e5', 'd5', 'Bb5', 'Ne4', 'Nxd4', 'Bd7', 'Bxc6', 'bxc6', 'O-O', 'Bc5', 'f3', 'Ng5', 'f4'],
 };
 
 const TAB_BEATS: Record<string, TabBeats> = {
@@ -66,7 +66,10 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["Re1, about half the masters: the rook backs up e4 and clears f1, a square your knight from b1 can use on its way to the kingside. The price: with the rook gone, only your king guards f2, the pawn their bishop on a7 is staring at.", 'Re1 — backs up e4, frees f1.'],
     ["…O-O, six masters in ten. And now it's mutual: your bishop on c4 pins their f7 pawn to their king, just as their bishop on a7 pins your f2 pawn to yours.", '…O-O — f7 is pinned now too.'],
     ["Nbd2: the knight starts its trip toward f1 and the kingside. But nearly nine masters in ten play h3 first, and the engine agrees. Why? h3 takes g4 away from their knight. Without it, …Ng4 hits f2 a second time, and only your king guards it.", 'Nbd2 — natural; h3 first stops …Ng4.'],
-    ["…Be6: their bishop hits yours on c4 and offers a trade. The engine prefers …Ng4, the very move h3 would have stopped, hitting f2 with knight and bishop. As played, it's about level. Your plan for the middlegame: h3 now, so …Ng4 is gone for good, then b4 for space on the queenside, while the knight on d2 carries on to f1, heading for the kingside.", '…Be6 — offers a trade; …Ng4 was stronger.'],
+    ["…Be6: their bishop hits yours on c4 and offers a trade. The engine prefers …Ng4, the very move h3 would have stopped, hitting f2 with knight and bishop. As played, it's about level. So what now: take on e6, or first make sure …Ng4 never comes?", '…Be6 — offers a trade; …Ng4 was stronger.'],
+    ["h3, the engine's choice: first things first. A pawn now covers g4, so …Ng4 is gone for good, and the knight on f6 can never jump at f2 that way. The trade on e6 can wait.", 'h3 — …Ng4 is gone for good.'],
+    ["…h6: the same idea on their side. Now a pawn covers g5, so neither your bishop on c1 nor the knight on f3 can land there. Both sides have taken away the square the other's pieces wanted.", '…h6 — the mirror, covers g5.'],
+    ["b4, the engine's choice: the pawn grabs space on the queenside and covers c5, so their bishop can never come back to that square. It's about level. Your plan for the middlegame: a5 next for more space, the knight from d2 through f1 to e3, where it blocks the bishop on a7 and offers itself in trade, and d4 once your pieces are ready.", 'b4 — queenside space, covers c5.'],
   ],
   'Evans Gambit': [
     ["b4: the Evans Gambit. You throw a pawn at the bishop on c5, and here's the point: if they take it, c3 comes with a hit on the bishop, and d4 follows, building your big center while their bishop runs around. About seven masters in a hundred go for it. The engine prefers c3 and rates the gambit about level; you're playing for time and the initiative, not for the pawn.", 'b4 — the Evans Gambit, a pawn for time.'],
@@ -80,7 +83,10 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["cxd4: you take back, and there's your big center, pawns on d4 and e4, for one pawn. A little over half the masters play Qb3 first, and the engine prefers it too, with the queen and bishop lined up on f7.", 'cxd4 — the big center, one pawn down.'],
     ["…Bb6, a little more than half the masters: the bishop finally leaves the a5 diagonal and hits your d4 pawn instead. The engine prefers …Nf6, hitting e4 and getting a piece out.", '…Bb6 — hits d4.'],
     ["Nc3, about half the masters: your last minor piece comes out and guards e4. Now take stock: two center pawns, three pieces developed and your king castled, against a bishop that has moved four times. That's what the pawn bought you. You are a little better.", 'Nc3 — develops, guards e4.'],
-    ["…Bg4, close to four masters in ten: the bishop pins your knight on f3 to your queen, and that knight is one of the guards of d4. You are a little better. Your plan for the middlegame: Bb5, pinning their knight on c6 in turn, and keep the pawns on d4 and e4 ready to roll forward with d5 or e5 once your pieces are in place.", '…Bg4 — pins the knight to the queen.'],
+    ["…Bg4, close to four masters in ten: the bishop pins your knight on f3 to your queen, and that knight is one of the guards of d4. You are a little better. So how do you answer a pin? With one of your own.", '…Bg4 — pins the knight to the queen.'],
+    ["Bb5, nearly nine masters in ten and the engine's choice: a pin for a pin. Now their knight on c6 is stuck in front of their king, and a knight that can't move is a target for your d-pawn.", 'Bb5 — a pin for a pin.'],
+    ['…Bd7: the bishop drops back to break the pin on c6, and in doing so it lets go of your knight on f3. The engine prefers …Bxf3 first, giving up the bishop to double your f-pawns. Their knight on c6 can move again, but is there time?', '…Bd7 — breaks the pin; …Bxf3 was stronger.'],
+    ["d5, the engine's choice: the pawn kicks the knight off c6. But notice what moving it opened: their bishop on b6 now looks straight down at f2 and your king. You are a little better. Your plan for the middlegame: when the knight jumps to e5, trade it off with your knight from f3, then Ba3 to cover f8 and keep their king in the center.", 'd5 — kicks the knight; watch f2.'],
   ],
   'Two Knights (…Nf6)': [
     ["…Nf6, the Two Knights, a little under half the masters: instead of mirroring your bishop, they hit your e4 pawn at once, and nothing guards it. Your answer sets the tone of the game: guard it, open the center, or go after f7 with Ng5.", '…Nf6 — the Two Knights, hits e4.'],
@@ -92,7 +98,13 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["…Nxd4, every master: they take, and you're a pawn down. Look at what you have instead: two bishops, a king already castled, and the bishop that pinned f2 is gone.", '…Nxd4 — a pawn up for them.'],
     ["Bg5, about a third of masters and the engine's choice; f4 is the more common move. The bishop pins the knight on f6 to their queen, and look at your e4 pawn: the only piece hitting it is that pinned knight, so it's safe for now.", 'Bg5 — pins f6, holds e4.'],
     ["…d6, close to half the masters: the pawn props up e5 and opens the road for the bishop on c8. The pin on f6 is still there, and your next move goes after e5.", '…d6 — props up e5.'],
-    ["f4, every master: the pawn hits e5, and with your rook already on f1, opening the f-file is the plan. It's about level. Your plan for the middlegame: take on e5 to open the f-file for your rook, trade on f6 if it breaks up their kingside pawns, and point everything at f7.", 'f4 — hits e5, the f-file opens.'],
+    ["f4, every master: the pawn hits e5, and with your rook already on f1, opening the f-file is the plan. It's about level. So how do they meet it?", 'f4 — hits e5, the f-file opens.'],
+    ['…Be6, about half the masters: the bishop challenges yours on c4, which nothing guards. The engine prefers …Bg4, hitting your queen, after which both queens come off.', '…Be6 — hits c4; …Bg4 was stronger.'],
+    ['Na3, more than half the masters: your last minor piece comes out, and from a3 it guards c4. If they trade bishops, this knight takes back.', 'Na3 — develops, guards c4.'],
+    ['…Nc6: the knight leaves d4 and heads home. Why retreat? Your f-pawn is about to roll forward, and on c6 the knight guards e5 a second time.', '…Nc6 — back home, guards e5.'],
+    ["f5, the engine's choice: the pawn kicks the bishop off e6 and grabs space on the kingside. Now the bishop has to decide: retreat, or take your bishop on c4 first.", 'f5 — kicks the bishop, grabs space.'],
+    ['…Bxc4: they trade first, and the bishop on c4 hits your rook on f1. Take it back with the knight from a3, exactly what Na3 prepared.', '…Bxc4 — trades, hits f1.'],
+    ["Nxc4, the engine's choice: the knight takes back and lands on c4, hitting d6 and e5. You're still a pawn down, but it's about level. Your plan for the middlegame: trade on f6 when it breaks up their pawns, bring this knight to e3 to watch d5, and use your f5 pawn's grip on e6 and g6 to keep their kingside cramped.", 'Nxc4 — takes back, hits d6 and e5.'],
   ],
   'Fried Liver Attack': [
     ["Ng5: the knight jumps straight at f7. Count it: this knight and your bishop on c4 against one defender, their king. The threat is Nxf7, taking a pawn and hitting their queen and rook at once. About one master in six goes for it; the calm d3 is the main road, and the engine rates it a hair higher. Yes, you're moving a piece twice in the opening, but you're asking a question they have to answer right now.", 'Ng5 — two attackers on f7.'],
@@ -119,7 +131,11 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["…bxc6, every master: back to one extra pawn for you. But look at what they have for it: the bishop on c8 now sees all the way to a6, the b-file is half-open for a rook, and your bishop on b5 still needs a safe square. That's the deal in this line: a pawn for activity.", '…bxc6 — a pawn for activity.'],
     ["Where does the bishop go? Be2, three masters in ten; Bd3 is a little more common, and the engine rates them about the same. On e2 the bishop is safe, and unlike Bd3 it doesn't block your d-pawn.", 'Be2 — safe, d-pawn free.'],
     ["…h6, nearly every master: the pawn kicks your knight, the one that jumped to g5 to start all this. Where does it go?", '…h6 — kicks the knight.'],
-    ["Nh3, half the masters and the engine's choice. Why the rim? Because Nf3 runs into …e4, and the knight gets kicked again. From h3 it can come back to f3 later, by way of g1. It's about level. Your plan for the middlegame: castle, play d3 to give your pieces room, and hold on to the extra pawn while they push for activity.", 'Nh3 — dodges …e4, returns later.'],
+    ["Nh3, half the masters and the engine's choice. Why the rim? Because Nf3 runs into …e4, and the knight gets kicked again. From h3 it can come back to f3 later, by way of g1. It's about level. So where do their pieces go against a knight on the rim?", 'Nh3 — dodges …e4, returns later.'],
+    ["…Bd6, about four masters in ten and the engine's choice: the bishop props up e5 and clears the way to castle.", '…Bd6 — props up e5, castle next.'],
+    ['d3, nearly nine masters in ten: the pawn takes e4 away from their pieces and opens the diagonal for your bishop on c1. And with e4 covered, f3 is a safe square again.', 'd3 — covers e4, frees c1.'],
+    ['…O-O, nine masters in ten: their king is safe on g8. Count the deal so far: you have the extra pawn, they have more pieces out and the half-open b-file.', '…O-O — safe, and ahead in development.'],
+    ["Ng1: the knight starts back toward f3, the square …e4 kept it from using; with your pawn on d3 covering e4, it's safe there now. It costs time, though. The engine prefers Nc3, developing first, and as played they are a little better. Your plan for the middlegame: Nf3, castle, and hold on to the extra pawn while they push their e- and f-pawns at your kingside.", 'Ng1 — heading for f3; Nc3 first.'],
   ],
   'Evans: Castle First': [
     ["O-O: castle before anything else. Only about four masters in a hundred do; d4 at once is the main move, and the engine prefers it, so here they are a little better. The idea: your king leaves e1 before the center opens, so the bishop on a5 never gets to pin your c3 pawn.", 'O-O — king first; d4 was stronger.'],
@@ -144,7 +160,9 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["…Nf6: the knight blocks the queen's diagonal to g7 and hits your e4 pawn. The engine prefers …d5, hitting back in the center, and after …Nf6 you are a little better.", '…Nf6 — blocks g7, hits e4.'],
     ["e5, the engine's choice: the pawn hits the knight on f6. Where can it go?", 'e5 — hits the knight.'],
     ["…Nc6, the engine's choice: they leave the knight on f6 where it is. The other knight jumps back to c6 and hits your queen, so you have to deal with that first.", '…Nc6 — hits your queen.'],
-    ["Qh4: the queen steps away and still hits the knight on f6, now from the side. Hit by your queen and your e5 pawn, that knight has to retreat, and the engine sends it back to g8. It's about level. Your plan for the middlegame: Qg3 to hit g7, castle, and bring the knight from b1 out through a3, while their king walks to f8 instead of castling.", 'Qh4 — keeps hitting f6.'],
+    ["Qh4: the queen steps away and still hits the knight on f6, now from the side. Hit by your queen and your e5 pawn, that knight has to move. The engine sends it back to g8; where else could it go?", 'Qh4 — keeps hitting f6.'],
+    ['…Nd5: the knight jumps to the center instead and hits your c3 pawn. But it takes their last knight away from the kingside, and your queen can swing to g3 to hit g7. The engine prefers …Ng8. You are a little better.', '…Nd5 — hits c3; …Ng8 was better.'],
+    ['Qg3: the queen hits g7, which nothing guards, so they have to spend a move on it, castling or stepping the king to f8. You are a little better. Your plan for the middlegame: castle, bring a rook to d1, and keep the queen on g3 aimed at their king, with Bh6 ready once it sits on g8.', 'Qg3 — hits the loose g7 pawn.'],
   ],
   'Scotch Gambit': [
     ["d4: why wait? Instead of developing the bishop first, the pawn hits e5 right away. Only about one master in eleven plays it here, but the engine likes it best of all. This is the Scotch, and the line you're about to see gives it an Italian twist.", 'd4 — hits e5 at once.'],
@@ -157,7 +175,13 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ["…Ne4, more than eight masters in ten: the knight jumps into the center, away from your pawn, and eyes f2.", '…Ne4 — centralizes, eyes f2.'],
     ["Nxd4, nearly every master: now you take the pawn back, and the knight on c6 can't recapture while it's pinned. Material is level, and your knight joins the pressure on c6.", 'Nxd4 — pawn back, hits c6.'],
     ["…Bd7, seven masters in ten: the bishop steps in between, so the knight on c6 is no longer pinned to the king. And now your e5 pawn is loose, because that knight can take it.", '…Bd7 — breaks the pin.'],
-    ["Bxc6, nearly every master: take the knight before it can grab e5. When the pawn takes back, their c-pawns are doubled. You are a little better. Your plan for the middlegame: castle, then f3 to kick the knight off e4, and f4 to build a pawn chain behind e5, with space on the kingside.", 'Bxc6 — before …Nxe5; doubles their c-pawns.'],
+    ["Bxc6, nearly every master: take the knight before it can grab e5. When the pawn takes back, their c-pawns are doubled. You are a little better. Which way will they take back?", 'Bxc6 — before …Nxe5; doubles their c-pawns.'],
+    ["…bxc6, the engine's choice: material is level again, and their c-pawns are doubled on c6 and c7. That's a long-term weakness. The short-term question is their knight on e4, held in place by the d5 pawn.", '…bxc6 — doubled c-pawns.'],
+    ["You castle, the engine's choice: your king is safe, and the rook on f1 stands behind the f-pawn you're about to push.", 'O-O — king safe, rook behind f2.'],
+    ["…Bc5, the engine's choice: the bishop develops with a hit on your knight on d4. Notice the diagonal: it runs on through to your king on g1, so the moment your f-pawn moves, that knight is pinned.", '…Bc5 — hits d4, aims at g1.'],
+    ["f3: the pawn kicks the knight off e4. And here's the cost: with f2 gone, your knight on d4 is now pinned to your king by the bishop on c5. Be3, guarding d4 first, is just as good.", 'f3 — kicks the knight; d4 is pinned.'],
+    ["…Ng5, the engine's choice: the knight steps back and hits your f3 pawn. Will it be allowed to stay there?", '…Ng5 — hits f3.'],
+    ["f4: the pawn kicks the knight once more and props up e5 from behind, a pawn chain. The engine prefers Be3 first, breaking the pin on your knight on d4. It's about level. Your plan for the middlegame: Be3 to unpin the knight, c3 to give it a second guard, and Nd2 to challenge their knight when it comes back to e4.", 'f4 — kicks it again, props up e5.'],
   ],
 };
 
