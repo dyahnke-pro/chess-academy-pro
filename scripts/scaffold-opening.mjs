@@ -1,9 +1,9 @@
-// Scaffold a new masterclass opening: stubs the lesson files + the tab-plan
-// resolver, then prints the exact wiring edits + gate checklist (playbook
-// §0.7). It does NOT auto-edit the shared files (registry.ts, variationTabs.ts,
-// opening-manifests.json, OpeningDetailPage) — those have ordering/insertion
-// nuance and registering an unauthored lesson would instantly red the gates;
-// the author wires them once the beats are written.
+// Scaffold a new masterclass opening: stubs the lesson files, then prints the
+// exact wiring edits + gate checklist (playbook §0.7). It does NOT auto-edit
+// the shared files (registry.ts, variationTabs.ts, opening-manifests.json, the
+// tab-plan table src/data/tabPlans.ts) — those have ordering/insertion nuance
+// and registering an unauthored lesson would instantly red the gates; the
+// author wires them once the beats are written.
 //
 //   node scripts/scaffold-opening.mjs <id> "<Display Name>" <white|black>
 //   e.g. node scripts/scaffold-opening.mjs scotch-game "Scotch Game" white
@@ -16,14 +16,12 @@ if (!id || !name || (color !== 'white' && color !== 'black')) {
   process.exit(1);
 }
 
-// id (scotch-game) → camel (scotchGame) → Pascal (ScotchGame) → CONST (SCOTCH_GAME)
+// id (scotch-game) → camel (scotchGame) → CONST (SCOTCH_GAME)
 const camel = id.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-const Pascal = camel.charAt(0).toUpperCase() + camel.slice(1);
 const CONST = id.replace(/-/g, '_').toUpperCase();
 const idNoDash = id.replace(/-/g, '');
 
 const lessonsDir = 'src/data/lessons';
-const servicesDir = 'src/services';
 mkdirSync(lessonsDir, { recursive: true });
 
 const files = {
@@ -61,20 +59,6 @@ export const ${CONST}_VARIATION_LESSONS: Record<string, LessonScript> = {
   //   orientation: '${color}', beats: [ ... ] },
 };
 `,
-  [`${servicesDir}/${camel}MasterclassTabs.ts`]: `// Tab → middlegame-plan map for ${name}. Wire into OpeningDetailPage's
-// subjectPlanIds chain (playbook §0.7 STEP 4). Returns null for other openings
-// so the chain falls through.
-const ${CONST}_TAB_PLAN_IDS: Record<string, string> = {
-  // main: 'mp-${idNoDash}-main',
-  // '<lowercased tab label>': 'mp-${idNoDash}-<tab>',
-};
-
-export function get${Pascal}TabPlanIds(openingId: string, tabKey: string): string[] | null {
-  if (openingId !== '${id}') return null;
-  const planId = ${CONST}_TAB_PLAN_IDS[tabKey];
-  return planId ? [planId] : null;
-}
-`,
 };
 
 let created = 0;
@@ -91,7 +75,9 @@ console.log(`     import { ${CONST}_LESSON } from './${camel}';`);
 console.log(`     import { ${CONST}_VARIATION_LESSONS } from './${camel}Variations';`);
 console.log(`     { main: ${CONST}_LESSON, variations: ${CONST}_VARIATION_LESSONS },\n`);
 console.log(`2. variationTabs.ts — add CURATED['${id}'] = [{ test: /regex/i, label: 'Tab' }, …]`);
-console.log(`3. OpeningDetailPage.tsx — add get${Pascal}TabPlanIds to the subjectPlanIds chain`);
+console.log(`3. src/data/tabPlans.ts — add the opening's row to TAB_PLAN_TABLE (every curated tab explicit, [] when it has no plan):`);
+console.log(`     '${id}': { key: 'label', tabs: { main: ['mp-${idNoDash}-main'], '<lowercased tab label>': ['mp-${idNoDash}-<tab>'] } },`);
+console.log(`   then re-record the snapshot: TAB_PLANS_SNAPSHOT_WRITE=1 npx vitest run src/services/tabPlans.snapshot.test.ts`);
 console.log(`4. middlegame-plans.json — plans id 'mp-${idNoDash}-<tab>', openingId '${id}'; run add-leadeye-to-plans.mjs`);
 console.log(`5. punish-gems: run mine-punish-gems.mjs, then author GEM_NARRATION in punishGemNarration.ts`);
 console.log(`6. model-games.json — REAL games, studentSide '${color}', student winning; add '${id}' to modelGames-orientation PROTECTED`);

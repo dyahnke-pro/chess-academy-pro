@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { tabPlanIds, tabiaPlanOf, tabHasPlans, tabiaPlanShown, tabiaStructureShown } from './tabPlans';
+import { tabPlanIds, curatedTabPlanIds, tabiaPlanOf, tabHasPlans, tabiaPlanShown, tabiaStructureShown } from './tabPlans';
 import plansJson from '../data/middlegame-plans.json';
 import type { MiddlegamePlan } from '../types';
 
@@ -10,7 +10,7 @@ const plan = (id: string, openingId: string, fen: string): MiddlegamePlan => ({
   id, openingId, criticalPositionFen: fen, title: id, overview: '', pawnBreaks: [], pieceManeuvers: [], strategicThemes: [], endgameTransitions: [],
 });
 
-describe('tabPlans — the one resolver chain the page and the measure read', () => {
+describe('tabPlans — the one resolver the page and the measure read', () => {
   it('resolves a curated tab from its table, an uncurated variation to its own plan id, an uncurated main line to every plan', () => {
     expect(tabPlanIds('ruy-lopez', null)).toBeDefined();
     expect(tabPlanIds('no-such-opening', { label: 'Some Line', name: 'Some Line' })).toEqual(['mp-nosuchopening-some line']);
@@ -29,6 +29,36 @@ describe('tabPlans — the one resolver chain the page and the measure read', ()
     expect(tabiaPlanOf([ending], 'x', ['mp-x-end-endgame'], end)).toBeNull();
     expect(tabHasPlans([ending], 'x', ['mp-x-end-endgame'])).toBe(true);
     expect(tabHasPlans([], 'x', undefined)).toBe(false);
+  });
+
+  it('reads the one tab-plan table: each row keys on its own name of the tab', () => {
+    // Ruy rows key on the display label, the Pirc and the pro rows on the full name.
+    expect(curatedTabPlanIds('ruy-lopez', { label: 'Berlin', name: 'Berlin Defence, Rio Gambit' })).toEqual(['mp-ruylopez-berlin', 'mp-ruylopez-berlin-endgame']);
+    expect(curatedTabPlanIds('pirc-defence', { label: 'Austrian Attack w…', name: 'Austrian Attack' })).toEqual(['mp-pircdefence-austrian']);
+    // An explicit [] decides the tab; a tab the row leaves out, or an opening
+    // with no row, is not the table's — `tabPlanIds` falls back.
+    expect(curatedTabPlanIds('pirc-defence', null)).toEqual([]);
+    expect(curatedTabPlanIds('ruy-lopez', { label: 'Nowhere', name: 'Nowhere' })).toBeNull();
+    expect(tabPlanIds('ruy-lopez', { label: 'Nowhere', name: 'Nowhere' })).toEqual(['mp-ruylopez-nowhere']);
+    expect(curatedTabPlanIds('no-such-opening', null)).toBeNull();
+  });
+
+  it('keeps the rows that are more than a lookup: every other tab, a name that contains, a family by prefix', () => {
+    // Every variation tab without a plan resolves to [] (otherTabs).
+    expect(curatedTabPlanIds('pro-ericrosen-qgd', { label: 'x', name: 'Any Line' })).toEqual([]);
+    // Any Samay Raina open-e5 tab whose name contains "ruy" owns the Chigorin plan.
+    expect(curatedTabPlanIds('pro-samayraina-open-e5', { label: 'x', name: 'Ruy Lopez Chigorin' })).toEqual(['mp-prosamayopene5-chigorin']);
+    expect(curatedTabPlanIds('pro-samayraina-open-e5', { label: 'x', name: 'Scotch' })).toEqual([]);
+    expect(curatedTabPlanIds('pro-samayraina-open-e5', null)).toEqual(['mp-prosamayopene5-d5break']);
+    // A Carlsen opening with no row of its own still resolves to [] on every tab.
+    expect(curatedTabPlanIds('pro-carlsen-not-yet-built', { label: 'x', name: 'Any Line' })).toEqual([]);
+    expect(curatedTabPlanIds('pro-carlsen-not-yet-built', null)).toEqual([]);
+  });
+
+  it('hands out a copy — a caller cannot change the table', () => {
+    const ids = tabPlanIds('ruy-lopez', null) ?? [];
+    ids.push('mp-not-a-plan');
+    expect(tabPlanIds('ruy-lopez', null)).toEqual(['mp-ruylopez-d4']);
   });
 
   it('reads the real plans file (non-vacuous)', () => {

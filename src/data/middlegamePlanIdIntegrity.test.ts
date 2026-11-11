@@ -1,11 +1,11 @@
 // Middlegame-Plan ID Integrity Gate (2026-07-16).
 //
-// Catches the failure mode where a tab-plan resolver references a plan id
+// Catches the failure mode where the tab-plan table references a plan id
 // that doesn't exist in middlegame-plans.json. The runtime consumption is a
 // graceful filter (MiddlegamePlansSection drops unknown ids), so a dangling
 // id never crashes — it silently renders an EMPTY middlegame-plans zone on
 // that variation tab. The coverage gate (proRepTabPlanCoverage) can't see it
-// because the resolver still returns a non-null array.
+// because the table still returns a non-null array.
 //
 // Found 2026-07-16: 39 dangling ids across 20 resolver files — resolvers
 // authored optimistically for plans that were never written (git history
@@ -14,17 +14,17 @@
 // pruned); the rest are the masterclass variation-plan authoring backlog
 // below.
 //
-// Contract: every 'mp-*' literal in a tab-resolver service file must exist
-// in middlegame-plans.json, OR sit in the shrink-only baseline. When you
+// Contract: every plan id in the tab-plan table (src/data/tabPlans.ts — its
+// rows and its families) must exist in middlegame-plans.json, OR sit in the
+// shrink-only baseline. It reads the table itself, never file names: when the
+// 84 per-opening resolver files were folded into one table (WO-OPENINGS-
+// REWRITE-01 R2), a file-name scan would have read nothing and passed. When you
 // AUTHOR one of the baselined plans, remove its id here — the baseline only
 // ever shrinks. Adding a NEW dangling id fails the build.
 
 import { describe, it, expect } from 'vitest';
-import { readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
 import middlegamePlans from './middlegame-plans.json' assert { type: 'json' };
-
-const SERVICES_DIR = join(__dirname, '..', 'services');
+import { TAB_PLAN_TABLE, TAB_PLAN_FAMILIES, type TabPlanRow } from './tabPlans';
 
 // Never-authored masterclass variation plans (the authoring backlog).
 // Shrink-only: remove an id when its plan lands in middlegame-plans.json.
@@ -43,49 +43,38 @@ interface PlanRecord {
 
 const PLAN_IDS = new Set((middlegamePlans as PlanRecord[]).map((p) => p.id));
 
-function resolverFiles(): string[] {
-  return readdirSync(SERVICES_DIR).filter(
-    (f) =>
-      (f.endsWith('TabPlans.ts') || f.endsWith('MasterclassTabs.ts') || f.endsWith('masterclassTabs.ts')) &&
-      !f.endsWith('.test.ts'),
-  );
+/** Every (row, plan id) pair the tab-plan table names. */
+function tablePlanIds(): Array<{ row: string; id: string }> {
+  const rows: Array<[string, TabPlanRow]> = [
+    ...Object.entries(TAB_PLAN_TABLE),
+    ...TAB_PLAN_FAMILIES.map((f): [string, TabPlanRow] => [`${f.prefix}*`, f.row]),
+  ];
+  return rows.flatMap(([row, r]) => [
+    ...Object.values(r.tabs).flat(),
+    ...(r.containing ?? []).flatMap((c) => c.ids),
+    ...(r.otherTabs ?? []),
+  ].map((id) => ({ row, id })));
 }
 
-function planIdLiterals(source: string): string[] {
-  const ids: string[] = [];
-  const re = /'(mp-[A-Za-z0-9-]+)'/g;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(source)) !== null) ids.push(m[1]);
-  return ids;
-}
-
-describe('middlegame-plan id integrity — every resolver id exists (or is baselined)', () => {
-  it('no resolver references a plan id missing from middlegame-plans.json', () => {
-    const violations: string[] = [];
-    for (const file of resolverFiles()) {
-      const source = readFileSync(join(SERVICES_DIR, file), 'utf8');
-      for (const id of planIdLiterals(source)) {
-        if (!PLAN_IDS.has(id) && !BASELINE_MISSING.has(id)) {
-          violations.push(`${file}: ${id}`);
-        }
-      }
-    }
+describe('middlegame-plan id integrity — every tab-plan table id exists (or is baselined)', () => {
+  it('the table references no plan id missing from middlegame-plans.json', () => {
+    const named = tablePlanIds();
+    // Non-vacuous: the table is read (459 distinct ids on 2026-11-11).
+    expect(new Set(named.map((n) => n.id)).size).toBeGreaterThan(400);
+    const violations = named
+      .filter(({ id }) => !PLAN_IDS.has(id) && !BASELINE_MISSING.has(id))
+      .map(({ row, id }) => `${row}: ${id}`);
     expect(violations).toEqual([]);
   });
 
   it('baseline only shrinks — every baselined id is still referenced somewhere and still missing', () => {
-    const referenced = new Set<string>();
-    for (const file of resolverFiles()) {
-      for (const id of planIdLiterals(readFileSync(join(SERVICES_DIR, file), 'utf8'))) {
-        referenced.add(id);
-      }
-    }
+    const referenced = new Set(tablePlanIds().map((n) => n.id));
     const stale: string[] = [];
     for (const id of BASELINE_MISSING) {
       if (PLAN_IDS.has(id)) {
         stale.push(`${id} — plan now exists, remove from BASELINE_MISSING`);
       } else if (!referenced.has(id)) {
-        stale.push(`${id} — no resolver references it anymore, remove from BASELINE_MISSING`);
+        stale.push(`${id} — the table no longer references it, remove from BASELINE_MISSING`);
       }
     }
     expect(stale).toEqual([]);

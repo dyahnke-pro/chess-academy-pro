@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getGlekSystemTabPlanIds } from './glekSystemMasterclassTabs';
+import { curatedTabPlanIds } from './tabPlans';
 import { OPENING_ID_ALIASES } from './openingService';
 import repertoire from '../data/repertoire.json';
 import manifests from '../data/opening-manifests.json';
@@ -35,26 +35,22 @@ describe('Glek System masterclass wiring', () => {
 
   it('tab plan ids resolve to real middlegame plans', () => {
     const planIds = new Set((middlegamePlans as Array<{ id: string }>).map((p) => p.id));
-    const mainPlans = getGlekSystemTabPlanIds(GLEK, 'main');
+    const mainPlans = curatedTabPlanIds(GLEK, null);
     expect(mainPlans && mainPlans.length).toBeGreaterThan(0);
     for (const id of mainPlans ?? []) expect(planIds.has(id), `missing plan ${id}`).toBe(true);
-    const d5Plans = getGlekSystemTabPlanIds(GLEK, 'central 4...d5');
+    const d5Plans = curatedTabPlanIds(GLEK, { label: 'Central 4...d5', name: 'Central 4...d5' });
     for (const id of d5Plans ?? []) expect(planIds.has(id), `missing plan ${id}`).toBe(true);
   });
 
-  it('every variation tab has an explicit plan entry (unmapped = leak-all)', () => {
-    // A tab key missing from the map returns null, which the detail page
-    // treats as "no filter" — every plan then renders on that tab. Each
-    // curated tab must therefore have an explicit (possibly empty) entry.
+  it('every variation tab has an explicit plan entry (unmapped = generic fallback)', () => {
+    // A tab the table leaves out falls through to the generic fallback, not
+    // to this course's hand-picked plans. Each curated tab must therefore
+    // have an explicit (possibly empty) entry in the tab-plan table.
     const entry = (repertoire as Array<{ id: string; variations?: Array<{ name: string; pgn: string }> }>).find((o) => o.id === GLEK);
     const tabs = buildVariationTabs(GLEK, (entry?.variations ?? []) as never);
     for (const tab of tabs) {
-      const key = tab.label.toLowerCase();
-      expect(getGlekSystemTabPlanIds(GLEK, key), `tab "${key}" unmapped — plans would leak`).not.toBeNull();
+      const names = { label: tab.label, name: entry?.variations?.[tab.index]?.name ?? '' };
+      expect(curatedTabPlanIds(GLEK, names), `tab "${tab.label}" unmapped — plans would leak`).not.toBeNull();
     }
-  });
-
-  it('returns null for a non-Glek opening', () => {
-    expect(getGlekSystemTabPlanIds('four-knights-game', 'main')).toBeNull();
   });
 });

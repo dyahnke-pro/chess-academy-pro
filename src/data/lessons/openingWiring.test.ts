@@ -11,12 +11,12 @@ import { buildVariationTabs } from '../../services/variationTabs';
 // CURATED entry or the show-all fallback). It also catches dead/typo CURATED
 // rows by proving the produced tabs are well-formed.
 //
-// NOT gated here (cross-module, can't import cleanly): the tab→plan resolver
-// chain in OpeningDetailPage (getRuyTabPlanIds / getPircTabPlanIds /
-// getViennaTabPlanIds → generic fallback). When you add an opening with
-// per-tab plans, add its get<Id>TabPlanIds to that chain — see playbook §0.7
-// STEP 4. The generic MiddlegamePlansSection fallback covers openings without
-// a resolver (e.g. caro-kann), so a missing resolver degrades gracefully.
+// NOT gated here: which plans a tab owns. When you add an opening with per-tab
+// plans, add the opening's row to the tab-plan table (`src/data/tabPlans.ts`)
+// — see playbook §0.7 STEP 4; `tabPlans.snapshot.test.ts` records every tab's
+// answer. An opening with no row falls back (a variation → its own
+// `mp-<id>-<tab>` plan, the main line → every plan of the opening), so a
+// missing row degrades gracefully.
 
 describe('opening wiring-readiness — registered openings produce variation tabs', () => {
   for (const oid of FIRST_CLASS_OPENING_IDS) {

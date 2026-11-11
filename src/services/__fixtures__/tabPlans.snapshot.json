@@ -1,0 +1,5590 @@
+{
+ "italian-game::main": [
+  "mp-italiangame-modern"
+ ],
+ "italian-game::Two Knights::Italian: Two Knights with d4": [
+  "mp-italiangame-twoknights"
+ ],
+ "italian-game::Evans Gambit::Evans Gambit Accepted: Main Line": [
+  "mp-italiangame-evans"
+ ],
+ "italian-game::Møller::Italian: Modern Moller Attack": [
+  "mp-italiangame-moller"
+ ],
+ "italian-game::Main with Nc3::Giuoco Piano: Main Line with Nc3": [
+  "mp-italiangame-main with nc3"
+ ],
+ "italian-game::Greco Attack::Giuoco Piano: Greco Attack (Bd2 line)": [
+  "mp-italiangame-greco attack"
+ ],
+ "italian-game::Closed Italian with::Giuoco Pianissimo: Closed Italian with a4/Ba2": [
+  "mp-italiangame-closed italian with"
+ ],
+ "italian-game::Hungarian::Italian: Hungarian Defense": [
+  "mp-italiangame-hungarian"
+ ],
+ "italian-game::Giuoco Piano: Main Line with Nc3::Giuoco Piano: Main Line with Nc3": [
+  "mp-italiangame-giuoco piano: main line with nc3"
+ ],
+ "italian-game::::Giuoco Piano: Main Line with Nc3": [
+  "mp-italiangame-"
+ ],
+ "italian-game::Giuoco Piano: Greco Attack (Bd2 line)::Giuoco Piano: Greco Attack (Bd2 line)": [
+  "mp-italiangame-giuoco piano: greco attack (bd2 line)"
+ ],
+ "italian-game::::Giuoco Piano: Greco Attack (Bd2 line)": [
+  "mp-italiangame-"
+ ],
+ "italian-game::Giuoco Pianissimo: Closed Italian with a4/Ba2::Giuoco Pianissimo: Closed Italian with a4/Ba2": [
+  "mp-italiangame-giuoco pianissimo: closed italian with a4/ba2"
+ ],
+ "italian-game::::Giuoco Pianissimo: Closed Italian with a4/Ba2": [
+  "mp-italiangame-"
+ ],
+ "italian-game::Evans Gambit Accepted: Main Line::Evans Gambit Accepted: Main Line": [
+  "mp-italiangame-evans gambit accepted: main line"
+ ],
+ "italian-game::::Evans Gambit Accepted: Main Line": [
+  "mp-italiangame-"
+ ],
+ "italian-game::Italian: Hungarian Defense::Italian: Hungarian Defense": [
+  "mp-italiangame-italian: hungarian defense"
+ ],
+ "italian-game::::Italian: Hungarian Defense": [
+  "mp-italiangame-"
+ ],
+ "italian-game::Italian: Two Knights with d4::Italian: Two Knights with d4": [
+  "mp-italiangame-italian: two knights with d4"
+ ],
+ "italian-game::::Italian: Two Knights with d4": [
+  "mp-italiangame-"
+ ],
+ "italian-game::Italian: Modern Moller Attack::Italian: Modern Moller Attack": [
+  "mp-italiangame-italian: modern moller attack"
+ ],
+ "italian-game::::Italian: Modern Moller Attack": [
+  "mp-italiangame-"
+ ],
+ "ruy-lopez::main": [
+  "mp-ruylopez-d4"
+ ],
+ "ruy-lopez::Berlin::Berlin Defense": [
+  "mp-ruylopez-berlin",
+  "mp-ruylopez-berlin-endgame"
+ ],
+ "ruy-lopez::Open::Open Ruy Lopez": [
+  "mp-ruylopez-open"
+ ],
+ "ruy-lopez::Marshall::Marshall Attack": [
+  "mp-ruylopez-marshall"
+ ],
+ "ruy-lopez::Exchange::Exchange Variation": [
+  "mp-ruylopez-exchange"
+ ],
+ "ruy-lopez::Breyer::Closed Ruy Lopez (Breyer)": [
+  "mp-ruylopez-breyer"
+ ],
+ "ruy-lopez::Chigorin::Closed Ruy Lopez (Chigorin)": [
+  "mp-ruylopez-chigorin"
+ ],
+ "ruy-lopez::Zaitsev::Closed Ruy Lopez (Zaitsev)": [
+  "mp-ruylopez-zaitsev"
+ ],
+ "ruy-lopez::Anti-Marshall::Anti-Marshall (8.a4)": [
+  "mp-ruylopez-anti-marshall"
+ ],
+ "ruy-lopez::Arkhangelsk::Arkhangelsk Variation": [
+  "mp-ruylopez-arkhangelsk"
+ ],
+ "ruy-lopez::Closed Ruy Lopez (Breyer)::Closed Ruy Lopez (Breyer)": [
+  "mp-ruylopez-closed ruy lopez (breyer)"
+ ],
+ "ruy-lopez::::Closed Ruy Lopez (Breyer)": [
+  "mp-ruylopez-"
+ ],
+ "ruy-lopez::Closed Ruy Lopez (Chigorin)::Closed Ruy Lopez (Chigorin)": [
+  "mp-ruylopez-closed ruy lopez (chigorin)"
+ ],
+ "ruy-lopez::::Closed Ruy Lopez (Chigorin)": [
+  "mp-ruylopez-"
+ ],
+ "ruy-lopez::Closed Ruy Lopez (Zaitsev)::Closed Ruy Lopez (Zaitsev)": [
+  "mp-ruylopez-closed ruy lopez (zaitsev)"
+ ],
+ "ruy-lopez::::Closed Ruy Lopez (Zaitsev)": [
+  "mp-ruylopez-"
+ ],
+ "ruy-lopez::Open Ruy Lopez::Open Ruy Lopez": [
+  "mp-ruylopez-open ruy lopez"
+ ],
+ "ruy-lopez::::Open Ruy Lopez": [
+  "mp-ruylopez-"
+ ],
+ "ruy-lopez::Berlin Defense::Berlin Defense": [
+  "mp-ruylopez-berlin defense"
+ ],
+ "ruy-lopez::::Berlin Defense": [
+  "mp-ruylopez-"
+ ],
+ "ruy-lopez::Marshall Attack::Marshall Attack": [
+  "mp-ruylopez-marshall attack"
+ ],
+ "ruy-lopez::::Marshall Attack": [
+  "mp-ruylopez-"
+ ],
+ "ruy-lopez::Anti-Marshall (8.a4)::Anti-Marshall (8.a4)": [
+  "mp-ruylopez-anti-marshall (8.a4)"
+ ],
+ "ruy-lopez::::Anti-Marshall (8.a4)": [
+  "mp-ruylopez-"
+ ],
+ "ruy-lopez::Arkhangelsk Variation::Arkhangelsk Variation": [
+  "mp-ruylopez-arkhangelsk variation"
+ ],
+ "ruy-lopez::::Arkhangelsk Variation": [
+  "mp-ruylopez-"
+ ],
+ "ruy-lopez::Exchange Variation::Exchange Variation": [
+  "mp-ruylopez-exchange variation"
+ ],
+ "ruy-lopez::::Exchange Variation": [
+  "mp-ruylopez-"
+ ],
+ "scotch-game::main": [
+  "mp-scotchgame-main"
+ ],
+ "scotch-game::Mieses::Scotch: Mieses Variation 4...Nf6 (e5 Push)": [
+  "mp-scotchgame-mieses"
+ ],
+ "scotch-game::Scotch Gambit::Scotch Gambit (4.Bc4)": [
+  "mp-scotchgame-gambit"
+ ],
+ "scotch-game::Four Knights::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)": [
+  "mp-scotchgame-fourknights"
+ ],
+ "scotch-game::Kasparov Nb3::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)": [
+  "mp-scotchgame-kasparov"
+ ],
+ "scotch-game::Steinitz::Scotch: 4...Qh4 (Steinitz Variation)": [
+  "mp-scotchgame-steinitz"
+ ],
+ "scotch-game::Schmidt::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)": [
+  "mp-scotchgame-schmidt"
+ ],
+ "scotch-game::Göring Gambit::Scotch: Göring Gambit (4.c3)": [
+  "mp-scotchgame-göring gambit"
+ ],
+ "scotch-game::Scotch: Classical 4...Bc5 (Be3 Qf6 Main Line)::Scotch: Classical 4...Bc5 (Be3 Qf6 Main Line)": [
+  "mp-scotchgame-scotch: classical 4...bc5 (be3 qf6 main line)"
+ ],
+ "scotch-game::::Scotch: Classical 4...Bc5 (Be3 Qf6 Main Line)": [
+  "mp-scotchgame-"
+ ],
+ "scotch-game::Scotch: Mieses Variation 4...Nf6 (e5 Push)::Scotch: Mieses Variation 4...Nf6 (e5 Push)": [
+  "mp-scotchgame-scotch: mieses variation 4...nf6 (e5 push)"
+ ],
+ "scotch-game::::Scotch: Mieses Variation 4...Nf6 (e5 Push)": [
+  "mp-scotchgame-"
+ ],
+ "scotch-game::Scotch Gambit (4.Bc4)::Scotch Gambit (4.Bc4)": [
+  "mp-scotchgame-scotch gambit (4.bc4)"
+ ],
+ "scotch-game::::Scotch Gambit (4.Bc4)": [
+  "mp-scotchgame-"
+ ],
+ "scotch-game::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)": [
+  "mp-scotchgame-scotch: schmidt variation (4...nf6 5.nc3 bb4)"
+ ],
+ "scotch-game::::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)": [
+  "mp-scotchgame-"
+ ],
+ "scotch-game::Scotch: Göring Gambit (4.c3)::Scotch: Göring Gambit (4.c3)": [
+  "mp-scotchgame-scotch: göring gambit (4.c3)"
+ ],
+ "scotch-game::::Scotch: Göring Gambit (4.c3)": [
+  "mp-scotchgame-"
+ ],
+ "scotch-game::Scotch: 4...Qh4 (Steinitz Variation)::Scotch: 4...Qh4 (Steinitz Variation)": [
+  "mp-scotchgame-scotch: 4...qh4 (steinitz variation)"
+ ],
+ "scotch-game::::Scotch: 4...Qh4 (Steinitz Variation)": [
+  "mp-scotchgame-"
+ ],
+ "scotch-game::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)": [
+  "mp-scotchgame-scotch four knights (4...nf6 5.nc3 bb4 6.nxc6 bxc6 7.bd3 d5)"
+ ],
+ "scotch-game::::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)": [
+  "mp-scotchgame-"
+ ],
+ "scotch-game::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)": [
+  "mp-scotchgame-scotch: kasparov's nb3 line (4...bc5 5.nb3)"
+ ],
+ "scotch-game::::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)": [
+  "mp-scotchgame-"
+ ],
+ "vienna-game::main": [
+  "mp-viennagame-classical"
+ ],
+ "vienna-game::Gambit::Vienna Gambit": [
+  "mp-viennagame-gambit"
+ ],
+ "vienna-game::vs 2…Nc6::Vienna vs 2...Nc6": [
+  "mp-viennagame-vs-nc6"
+ ],
+ "vienna-game::Frankenstein-Dracula::Frankenstein-Dracula": [
+  "mp-viennagame-frankenstein-dracula"
+ ],
+ "vienna-game::Paulsen::Paulsen Attack": [
+  "mp-viennagame-paulsen"
+ ],
+ "vienna-game::Qf3::Vienna Gambit: Qf3": [
+  "mp-viennagame-qf3"
+ ],
+ "vienna-game::Stanley::Stanley Variation": [
+  "mp-viennagame-stanley"
+ ],
+ "vienna-game::Vienna Gambit::Vienna Gambit Accepted": [
+  "mp-viennagame-vienna gambit"
+ ],
+ "vienna-game::Copycat::Copycat Variation": [
+  "mp-viennagame-copycat"
+ ],
+ "vienna-game::Vienna Gambit: Qf3::Vienna Gambit: Qf3": [
+  "mp-viennagame-vienna gambit: qf3"
+ ],
+ "vienna-game::::Vienna Gambit: Qf3": [
+  "mp-viennagame-"
+ ],
+ "vienna-game::Vienna Gambit::Vienna Gambit": [
+  "mp-viennagame-vienna gambit"
+ ],
+ "vienna-game::::Vienna Gambit": [
+  "mp-viennagame-"
+ ],
+ "vienna-game::::Frankenstein-Dracula": [
+  "mp-viennagame-"
+ ],
+ "vienna-game::Stanley Variation::Stanley Variation": [
+  "mp-viennagame-stanley variation"
+ ],
+ "vienna-game::::Stanley Variation": [
+  "mp-viennagame-"
+ ],
+ "vienna-game::Vienna vs 2...Nc6::Vienna vs 2...Nc6": [
+  "mp-viennagame-vienna vs 2...nc6"
+ ],
+ "vienna-game::::Vienna vs 2...Nc6": [
+  "mp-viennagame-"
+ ],
+ "vienna-game::Vienna Gambit Accepted::Vienna Gambit Accepted": [
+  "mp-viennagame-vienna gambit accepted"
+ ],
+ "vienna-game::::Vienna Gambit Accepted": [
+  "mp-viennagame-"
+ ],
+ "vienna-game::Paulsen Attack::Paulsen Attack": [
+  "mp-viennagame-paulsen attack"
+ ],
+ "vienna-game::::Paulsen Attack": [
+  "mp-viennagame-"
+ ],
+ "vienna-game::Copycat Variation::Copycat Variation": [
+  "mp-viennagame-copycat variation"
+ ],
+ "vienna-game::::Copycat Variation": [
+  "mp-viennagame-"
+ ],
+ "kings-gambit::main": [
+  "mp-kings-gambit-bishop-pair-attack",
+  "mp-kings-gambit-endgame"
+ ],
+ "kings-gambit::Classical::King's Knight Gambit Classical": [
+  "mp-kings-gambit-open-f-file"
+ ],
+ "kings-gambit::Fischer::Fischer Defense": [
+  "mp-kingsgambit-fischer"
+ ],
+ "kings-gambit::Falkbeer::Falkbeer Counter-Gambit": [
+  "mp-kingsgambit-falkbeer"
+ ],
+ "kings-gambit::Declined::King's Gambit Declined": [
+  "mp-kingsgambit-declined"
+ ],
+ "kings-gambit::Bishop's::Bishop's Gambit (3.Bc4)": [
+  "mp-kingsgambit-bishop's"
+ ],
+ "kings-gambit::Kieseritzky::Kieseritzky Gambit": [
+  "mp-kingsgambit-kieseritzky"
+ ],
+ "kings-gambit::Muzio::Muzio Gambit": [
+  "mp-kingsgambit-muzio"
+ ],
+ "kings-gambit::Allgaier::Allgaier Gambit": [
+  "mp-kingsgambit-allgaier"
+ ],
+ "kings-gambit::King's Knight Gambit Classical::King's Knight Gambit Classical": [
+  "mp-kingsgambit-king's knight gambit classical"
+ ],
+ "kings-gambit::::King's Knight Gambit Classical": [
+  "mp-kingsgambit-"
+ ],
+ "kings-gambit::Fischer Defense::Fischer Defense": [
+  "mp-kingsgambit-fischer defense"
+ ],
+ "kings-gambit::::Fischer Defense": [
+  "mp-kingsgambit-"
+ ],
+ "kings-gambit::Muzio Gambit::Muzio Gambit": [
+  "mp-kingsgambit-muzio gambit"
+ ],
+ "kings-gambit::::Muzio Gambit": [
+  "mp-kingsgambit-"
+ ],
+ "kings-gambit::Falkbeer Counter-Gambit::Falkbeer Counter-Gambit": [
+  "mp-kingsgambit-falkbeer counter-gambit"
+ ],
+ "kings-gambit::::Falkbeer Counter-Gambit": [
+  "mp-kingsgambit-"
+ ],
+ "kings-gambit::King's Gambit Declined::King's Gambit Declined": [
+  "mp-kingsgambit-king's gambit declined"
+ ],
+ "kings-gambit::::King's Gambit Declined": [
+  "mp-kingsgambit-"
+ ],
+ "kings-gambit::Kieseritzky Gambit::Kieseritzky Gambit": [
+  "mp-kingsgambit-kieseritzky gambit"
+ ],
+ "kings-gambit::::Kieseritzky Gambit": [
+  "mp-kingsgambit-"
+ ],
+ "kings-gambit::Allgaier Gambit::Allgaier Gambit": [
+  "mp-kingsgambit-allgaier gambit"
+ ],
+ "kings-gambit::::Allgaier Gambit": [
+  "mp-kingsgambit-"
+ ],
+ "kings-gambit::Bishop's Gambit (3.Bc4)::Bishop's Gambit (3.Bc4)": [
+  "mp-kingsgambit-bishop's gambit (3.bc4)"
+ ],
+ "kings-gambit::::Bishop's Gambit (3.Bc4)": [
+  "mp-kingsgambit-"
+ ],
+ "four-knights-game::main": [
+  "mp-fourknightsgame-main"
+ ],
+ "four-knights-game::Scotch Four Knights::Scotch Four Knights: 4.d4 exd4 5.Nxd4": [
+  "mp-fourknightsgame-scotchfk"
+ ],
+ "four-knights-game::Italian Four Knights::Italian Four Knights: 4.Bc4": [
+  "mp-fourknightsgame-italian"
+ ],
+ "four-knights-game::Glek System::Glek System: 4.g3": [
+  "mp-fourknightsgame-glek",
+  "mp-fourknightsgame-glek-f4trap"
+ ],
+ "four-knights-game::Rubinstein::Rubinstein Variation: 4.Bb5 Nd4": [
+  "mp-fourknightsgame-rubinstein"
+ ],
+ "four-knights-game::4.Bb5 Bb4 Main::Spanish Four Knights: 4.Bb5 Bb4 Main Line": [
+  "mp-fourknightsgame-4.bb5 bb4 main"
+ ],
+ "four-knights-game::4.d4 exd4 5.Nd5::Belgrade Gambit: 4.d4 exd4 5.Nd5": [
+  "mp-fourknightsgame-4.d4 exd4 5.nd5"
+ ],
+ "four-knights-game::4.Nxe5::Halloween Gambit: 4.Nxe5": [
+  "mp-fourknightsgame-4.nxe5"
+ ],
+ "four-knights-game::4.Bb5 Bb4::Symmetrical Variation: 4.Bb5 Bb4": [
+  "mp-fourknightsgame-4.bb5 bb4"
+ ],
+ "four-knights-game::...Qe7::Metger Unpin: ...Qe7 System": [
+  "mp-fourknightsgame-...qe7"
+ ],
+ "four-knights-game::Spanish Four Knights: 4.Bb5 Bb4 Main Line::Spanish Four Knights: 4.Bb5 Bb4 Main Line": [
+  "mp-fourknightsgame-spanish four knights: 4.bb5 bb4 main line"
+ ],
+ "four-knights-game::::Spanish Four Knights: 4.Bb5 Bb4 Main Line": [
+  "mp-fourknightsgame-"
+ ],
+ "four-knights-game::Scotch Four Knights: 4.d4 exd4 5.Nxd4::Scotch Four Knights: 4.d4 exd4 5.Nxd4": [
+  "mp-fourknightsgame-scotch four knights: 4.d4 exd4 5.nxd4"
+ ],
+ "four-knights-game::::Scotch Four Knights: 4.d4 exd4 5.Nxd4": [
+  "mp-fourknightsgame-"
+ ],
+ "four-knights-game::Belgrade Gambit: 4.d4 exd4 5.Nd5::Belgrade Gambit: 4.d4 exd4 5.Nd5": [
+  "mp-fourknightsgame-belgrade gambit: 4.d4 exd4 5.nd5"
+ ],
+ "four-knights-game::::Belgrade Gambit: 4.d4 exd4 5.Nd5": [
+  "mp-fourknightsgame-"
+ ],
+ "four-knights-game::Halloween Gambit: 4.Nxe5::Halloween Gambit: 4.Nxe5": [
+  "mp-fourknightsgame-halloween gambit: 4.nxe5"
+ ],
+ "four-knights-game::::Halloween Gambit: 4.Nxe5": [
+  "mp-fourknightsgame-"
+ ],
+ "four-knights-game::Symmetrical Variation: 4.Bb5 Bb4::Symmetrical Variation: 4.Bb5 Bb4": [
+  "mp-fourknightsgame-symmetrical variation: 4.bb5 bb4"
+ ],
+ "four-knights-game::::Symmetrical Variation: 4.Bb5 Bb4": [
+  "mp-fourknightsgame-"
+ ],
+ "four-knights-game::Italian Four Knights: 4.Bc4::Italian Four Knights: 4.Bc4": [
+  "mp-fourknightsgame-italian four knights: 4.bc4"
+ ],
+ "four-knights-game::::Italian Four Knights: 4.Bc4": [
+  "mp-fourknightsgame-"
+ ],
+ "four-knights-game::Rubinstein Variation: 4.Bb5 Nd4::Rubinstein Variation: 4.Bb5 Nd4": [
+  "mp-fourknightsgame-rubinstein variation: 4.bb5 nd4"
+ ],
+ "four-knights-game::::Rubinstein Variation: 4.Bb5 Nd4": [
+  "mp-fourknightsgame-"
+ ],
+ "four-knights-game::Metger Unpin: ...Qe7 System::Metger Unpin: ...Qe7 System": [
+  "mp-fourknightsgame-metger unpin: ...qe7 system"
+ ],
+ "four-knights-game::::Metger Unpin: ...Qe7 System": [
+  "mp-fourknightsgame-"
+ ],
+ "four-knights-game::Glek System: 4.g3::Glek System: 4.g3": [
+  "mp-fourknightsgame-glek system: 4.g3"
+ ],
+ "four-knights-game::::Glek System: 4.g3": [
+  "mp-fourknightsgame-"
+ ],
+ "glek-system::main": [
+  "mp-gleksystem-bc5-f5",
+  "mp-gleksystem-traditional-f4",
+  "mp-gleksystem-f4trap"
+ ],
+ "glek-system::Central 4...d5::Central Break: 4...d5": [
+  "mp-gleksystem-d5-outpost"
+ ],
+ "glek-system::Pin 4...Bb4::Pin Variation: 4...Bb4": [],
+ "glek-system::Fianchetto 4...g6::Symmetrical: 4...g6": [],
+ "glek-system::Central Break: 4...d5::Central Break: 4...d5": [
+  "mp-gleksystem-central break: 4...d5"
+ ],
+ "glek-system::::Central Break: 4...d5": [
+  "mp-gleksystem-"
+ ],
+ "glek-system::Pin Variation: 4...Bb4::Pin Variation: 4...Bb4": [
+  "mp-gleksystem-pin variation: 4...bb4"
+ ],
+ "glek-system::::Pin Variation: 4...Bb4": [
+  "mp-gleksystem-"
+ ],
+ "glek-system::Symmetrical: 4...g6::Symmetrical: 4...g6": [
+  "mp-gleksystem-symmetrical: 4...g6"
+ ],
+ "glek-system::::Symmetrical: 4...g6": [
+  "mp-gleksystem-"
+ ],
+ "sicilian-najdorf::main": [
+  "mp-siciliannajdorf-main"
+ ],
+ "sicilian-najdorf::Classical::Najdorf: Classical (6.Be2 with ...e5)": [
+  "mp-siciliannajdorf-classical"
+ ],
+ "sicilian-najdorf::6.Bg5::Najdorf: 6.Bg5 Main Line (with e6 and f4)": [
+  "mp-siciliannajdorf-6bg5"
+ ],
+ "sicilian-najdorf::Poisoned Pawn::Najdorf: Poisoned Pawn (6.Bg5 Qb6)": [
+  "mp-siciliannajdorf-poisoned"
+ ],
+ "sicilian-najdorf::6.f3::Najdorf: 6.f3 English Attack Move Order": [
+  "mp-siciliannajdorf-6f3"
+ ],
+ "sicilian-najdorf::Fischer-Sozin::Najdorf: Fischer-Sozin Attack (6.Bc4)": [
+  "mp-siciliannajdorf-fischer"
+ ],
+ "sicilian-najdorf::6.g3::Najdorf: Adams Attack (6.g3 Fianchetto)": [
+  "mp-siciliannajdorf-6g3"
+ ],
+ "sicilian-najdorf::Ng4::Najdorf: 6.Be3 ...Ng4 (Bishop Trade Attempt)": [
+  "mp-siciliannajdorf-ng4"
+ ],
+ "sicilian-najdorf::6.a4::Najdorf: Anti-Najdorf (6.a4)": [
+  "mp-siciliannajdorf-6a4"
+ ],
+ "sicilian-najdorf::English Attack::Najdorf: English Attack (6.Be3 Main Line)": [
+  "mp-siciliannajdorf-english attack"
+ ],
+ "sicilian-najdorf::Najdorf: English Attack (6.Be3 Main Line)::Najdorf: English Attack (6.Be3 Main Line)": [
+  "mp-siciliannajdorf-najdorf: english attack (6.be3 main line)"
+ ],
+ "sicilian-najdorf::::Najdorf: English Attack (6.Be3 Main Line)": [
+  "mp-siciliannajdorf-"
+ ],
+ "sicilian-najdorf::Najdorf: Classical (6.Be2 with ...e5)::Najdorf: Classical (6.Be2 with ...e5)": [
+  "mp-siciliannajdorf-najdorf: classical (6.be2 with ...e5)"
+ ],
+ "sicilian-najdorf::::Najdorf: Classical (6.Be2 with ...e5)": [
+  "mp-siciliannajdorf-"
+ ],
+ "sicilian-najdorf::Najdorf: 6.Bg5 Main Line (with e6 and f4)::Najdorf: 6.Bg5 Main Line (with e6 and f4)": [
+  "mp-siciliannajdorf-najdorf: 6.bg5 main line (with e6 and f4)"
+ ],
+ "sicilian-najdorf::::Najdorf: 6.Bg5 Main Line (with e6 and f4)": [
+  "mp-siciliannajdorf-"
+ ],
+ "sicilian-najdorf::Najdorf: Poisoned Pawn (6.Bg5 Qb6)::Najdorf: Poisoned Pawn (6.Bg5 Qb6)": [
+  "mp-siciliannajdorf-najdorf: poisoned pawn (6.bg5 qb6)"
+ ],
+ "sicilian-najdorf::::Najdorf: Poisoned Pawn (6.Bg5 Qb6)": [
+  "mp-siciliannajdorf-"
+ ],
+ "sicilian-najdorf::Najdorf: 6.f3 English Attack Move Order::Najdorf: 6.f3 English Attack Move Order": [
+  "mp-siciliannajdorf-najdorf: 6.f3 english attack move order"
+ ],
+ "sicilian-najdorf::::Najdorf: 6.f3 English Attack Move Order": [
+  "mp-siciliannajdorf-"
+ ],
+ "sicilian-najdorf::Najdorf: Fischer-Sozin Attack (6.Bc4)::Najdorf: Fischer-Sozin Attack (6.Bc4)": [
+  "mp-siciliannajdorf-najdorf: fischer-sozin attack (6.bc4)"
+ ],
+ "sicilian-najdorf::::Najdorf: Fischer-Sozin Attack (6.Bc4)": [
+  "mp-siciliannajdorf-"
+ ],
+ "sicilian-najdorf::Najdorf: Adams Attack (6.g3 Fianchetto)::Najdorf: Adams Attack (6.g3 Fianchetto)": [
+  "mp-siciliannajdorf-najdorf: adams attack (6.g3 fianchetto)"
+ ],
+ "sicilian-najdorf::::Najdorf: Adams Attack (6.g3 Fianchetto)": [
+  "mp-siciliannajdorf-"
+ ],
+ "sicilian-najdorf::Najdorf: 6.Be3 ...Ng4 (Bishop Trade Attempt)::Najdorf: 6.Be3 ...Ng4 (Bishop Trade Attempt)": [
+  "mp-siciliannajdorf-najdorf: 6.be3 ...ng4 (bishop trade attempt)"
+ ],
+ "sicilian-najdorf::::Najdorf: 6.Be3 ...Ng4 (Bishop Trade Attempt)": [
+  "mp-siciliannajdorf-"
+ ],
+ "sicilian-najdorf::Najdorf: Anti-Najdorf (6.a4)::Najdorf: Anti-Najdorf (6.a4)": [
+  "mp-siciliannajdorf-najdorf: anti-najdorf (6.a4)"
+ ],
+ "sicilian-najdorf::::Najdorf: Anti-Najdorf (6.a4)": [
+  "mp-siciliannajdorf-"
+ ],
+ "sicilian-dragon::main": [
+  "mp-siciliandragon-main"
+ ],
+ "sicilian-dragon::Soltis::Yugoslav Attack: Soltis Variation": [
+  "mp-siciliandragon-soltis"
+ ],
+ "sicilian-dragon::Chinese Dragon::Yugoslav Attack: Chinese Dragon": [
+  "mp-siciliandragon-chinese"
+ ],
+ "sicilian-dragon::Classical::Classical Variation": [
+  "mp-siciliandragon-classical"
+ ],
+ "sicilian-dragon::Levenfish::Levenfish Variation": [
+  "mp-siciliandragon-levenfish"
+ ],
+ "sicilian-dragon::Accelerated::Accelerated Dragon": [
+  "mp-siciliandragon-accelerated"
+ ],
+ "sicilian-dragon::Anti-Dragon Bg5::Anti-Dragon: Bg5 Line": [
+  "mp-siciliandragon-antibg5"
+ ],
+ "sicilian-dragon::Dragadorf Hybrid::Dragadorf Hybrid": [
+  "mp-siciliandragon-dragadorf hybrid"
+ ],
+ "sicilian-dragon::Yugoslav Attack Main Line::Yugoslav Attack Main Line": [
+  "mp-siciliandragon-yugoslav attack main line"
+ ],
+ "sicilian-dragon::::Yugoslav Attack Main Line": [
+  "mp-siciliandragon-"
+ ],
+ "sicilian-dragon::Yugoslav Attack: Soltis Variation::Yugoslav Attack: Soltis Variation": [
+  "mp-siciliandragon-yugoslav attack: soltis variation"
+ ],
+ "sicilian-dragon::::Yugoslav Attack: Soltis Variation": [
+  "mp-siciliandragon-"
+ ],
+ "sicilian-dragon::Yugoslav Attack: Chinese Dragon::Yugoslav Attack: Chinese Dragon": [
+  "mp-siciliandragon-yugoslav attack: chinese dragon"
+ ],
+ "sicilian-dragon::::Yugoslav Attack: Chinese Dragon": [
+  "mp-siciliandragon-"
+ ],
+ "sicilian-dragon::Classical Variation::Classical Variation": [
+  "mp-siciliandragon-classical variation"
+ ],
+ "sicilian-dragon::::Classical Variation": [
+  "mp-siciliandragon-"
+ ],
+ "sicilian-dragon::Levenfish Variation::Levenfish Variation": [
+  "mp-siciliandragon-levenfish variation"
+ ],
+ "sicilian-dragon::::Levenfish Variation": [
+  "mp-siciliandragon-"
+ ],
+ "sicilian-dragon::Accelerated Dragon::Accelerated Dragon": [
+  "mp-siciliandragon-accelerated dragon"
+ ],
+ "sicilian-dragon::::Accelerated Dragon": [
+  "mp-siciliandragon-"
+ ],
+ "sicilian-dragon::::Dragadorf Hybrid": [
+  "mp-siciliandragon-"
+ ],
+ "sicilian-dragon::Anti-Dragon: Bg5 Line::Anti-Dragon: Bg5 Line": [
+  "mp-siciliandragon-anti-dragon: bg5 line"
+ ],
+ "sicilian-dragon::::Anti-Dragon: Bg5 Line": [
+  "mp-siciliandragon-"
+ ],
+ "sicilian-sveshnikov::main": [
+  "mp-siciliansveshnikov-main"
+ ],
+ "sicilian-sveshnikov::9.Bxf6::Sveshnikov: 9.Bxf6 gxf6 Early Exchange": [
+  "mp-siciliansveshnikov-9bxf6"
+ ],
+ "sicilian-sveshnikov::Chelyabinsk c4::Sveshnikov: Chelyabinsk (c4 System)": [
+  "mp-siciliansveshnikov-chelyabinsk"
+ ],
+ "sicilian-sveshnikov::Anti-Svesh 6.Nf3::Anti-Sveshnikov: 6.Nf3 Quiet Retreat": [
+  "mp-siciliansveshnikov-antisvesh"
+ ],
+ "sicilian-sveshnikov::Kalashnikov::Sveshnikov: Kalashnikov (4...e5 5.Nb5 d6)": [
+  "mp-siciliansveshnikov-kalashnikov"
+ ],
+ "sicilian-sveshnikov::Novosibirsk::Sveshnikov: Novosibirsk (...Bg5 System)": [
+  "mp-siciliansveshnikov-novosibirsk"
+ ],
+ "sicilian-sveshnikov::...Rb8 Expansion::Sveshnikov: ...Rb8 Expansion Plan": [
+  "mp-siciliansveshnikov-...rb8 expansion"
+ ],
+ "sicilian-sveshnikov::Sveshnikov: Main Line 9.Nd5 (Deep)::Sveshnikov: Main Line 9.Nd5 (Deep)": [
+  "mp-siciliansveshnikov-sveshnikov: main line 9.nd5 (deep)"
+ ],
+ "sicilian-sveshnikov::::Sveshnikov: Main Line 9.Nd5 (Deep)": [
+  "mp-siciliansveshnikov-"
+ ],
+ "sicilian-sveshnikov::Sveshnikov: 9.Bxf6 gxf6 Early Exchange::Sveshnikov: 9.Bxf6 gxf6 Early Exchange": [
+  "mp-siciliansveshnikov-sveshnikov: 9.bxf6 gxf6 early exchange"
+ ],
+ "sicilian-sveshnikov::::Sveshnikov: 9.Bxf6 gxf6 Early Exchange": [
+  "mp-siciliansveshnikov-"
+ ],
+ "sicilian-sveshnikov::Sveshnikov: Chelyabinsk (c4 System)::Sveshnikov: Chelyabinsk (c4 System)": [
+  "mp-siciliansveshnikov-sveshnikov: chelyabinsk (c4 system)"
+ ],
+ "sicilian-sveshnikov::::Sveshnikov: Chelyabinsk (c4 System)": [
+  "mp-siciliansveshnikov-"
+ ],
+ "sicilian-sveshnikov::Sveshnikov: Novosibirsk (...Bg5 System)::Sveshnikov: Novosibirsk (...Bg5 System)": [
+  "mp-siciliansveshnikov-sveshnikov: novosibirsk (...bg5 system)"
+ ],
+ "sicilian-sveshnikov::::Sveshnikov: Novosibirsk (...Bg5 System)": [
+  "mp-siciliansveshnikov-"
+ ],
+ "sicilian-sveshnikov::Anti-Sveshnikov: 6.Nf3 Quiet Retreat::Anti-Sveshnikov: 6.Nf3 Quiet Retreat": [
+  "mp-siciliansveshnikov-anti-sveshnikov: 6.nf3 quiet retreat"
+ ],
+ "sicilian-sveshnikov::::Anti-Sveshnikov: 6.Nf3 Quiet Retreat": [
+  "mp-siciliansveshnikov-"
+ ],
+ "sicilian-sveshnikov::Sveshnikov: 11.c4 Queenside Grip::Sveshnikov: 11.c4 Queenside Grip": [
+  "mp-siciliansveshnikov-sveshnikov: 11.c4 queenside grip"
+ ],
+ "sicilian-sveshnikov::::Sveshnikov: 11.c4 Queenside Grip": [
+  "mp-siciliansveshnikov-"
+ ],
+ "sicilian-sveshnikov::Sveshnikov: Kalashnikov (4...e5 5.Nb5 d6)::Sveshnikov: Kalashnikov (4...e5 5.Nb5 d6)": [
+  "mp-siciliansveshnikov-sveshnikov: kalashnikov (4...e5 5.nb5 d6)"
+ ],
+ "sicilian-sveshnikov::::Sveshnikov: Kalashnikov (4...e5 5.Nb5 d6)": [
+  "mp-siciliansveshnikov-"
+ ],
+ "sicilian-sveshnikov::Sveshnikov: ...Rb8 Expansion Plan::Sveshnikov: ...Rb8 Expansion Plan": [
+  "mp-siciliansveshnikov-sveshnikov: ...rb8 expansion plan"
+ ],
+ "sicilian-sveshnikov::::Sveshnikov: ...Rb8 Expansion Plan": [
+  "mp-siciliansveshnikov-"
+ ],
+ "sicilian-alapin::main": [
+  "mp-sicilianalapin-main"
+ ],
+ "sicilian-alapin::2...Nf6 Main::Alapin: 2...Nf6 Main Line (Endgame)": [],
+ "sicilian-alapin::2...d5 IQP::Alapin: 2...d5 Central Counter (IQP Play)": [
+  "mp-sicilianalapin-d5"
+ ],
+ "sicilian-alapin::2...e6::Alapin: 2...e6 Solid (French Structure)": [],
+ "sicilian-alapin::2...g6::Alapin: 2...g6 Fianchetto": [],
+ "sicilian-alapin::2...Nf6 5.Nf3::Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.Nf3 (Alt Move Order)": [],
+ "sicilian-alapin::2...d5 Qxd5::Alapin: 2...d5 3.exd5 Qxd5 4.d4 Nc6 (with ...e5)": [
+  "mp-sicilianalapin-d5"
+ ],
+ "sicilian-alapin::2...Nf6 IQP::Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.cxd4 d6 (IQP Accepted)": [],
+ "sicilian-alapin::2...d5 Nf6::Alapin: 2...d5 3.exd5 Nf6 (Knight Recapture)": [],
+ "sicilian-alapin::Stoltz 4.Nf3::Alapin: Stoltz Attack (4.Nf3 before d4)": [],
+ "sicilian-alapin::Alapin: 2...Nf6 Main Line (Endgame)::Alapin: 2...Nf6 Main Line (Endgame)": [
+  "mp-sicilianalapin-alapin: 2...nf6 main line (endgame)"
+ ],
+ "sicilian-alapin::::Alapin: 2...Nf6 Main Line (Endgame)": [
+  "mp-sicilianalapin-"
+ ],
+ "sicilian-alapin::Alapin: 2...d5 Central Counter (IQP Play)::Alapin: 2...d5 Central Counter (IQP Play)": [
+  "mp-sicilianalapin-alapin: 2...d5 central counter (iqp play)"
+ ],
+ "sicilian-alapin::::Alapin: 2...d5 Central Counter (IQP Play)": [
+  "mp-sicilianalapin-"
+ ],
+ "sicilian-alapin::Alapin: 2...e6 Solid (French Structure)::Alapin: 2...e6 Solid (French Structure)": [
+  "mp-sicilianalapin-alapin: 2...e6 solid (french structure)"
+ ],
+ "sicilian-alapin::::Alapin: 2...e6 Solid (French Structure)": [
+  "mp-sicilianalapin-"
+ ],
+ "sicilian-alapin::Alapin: 2...g6 Fianchetto::Alapin: 2...g6 Fianchetto": [
+  "mp-sicilianalapin-alapin: 2...g6 fianchetto"
+ ],
+ "sicilian-alapin::::Alapin: 2...g6 Fianchetto": [
+  "mp-sicilianalapin-"
+ ],
+ "sicilian-alapin::Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.Nf3 (Alt Move Order)::Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.Nf3 (Alt Move Order)": [
+  "mp-sicilianalapin-alapin: 2...nf6 3.e5 nd5 4.d4 cxd4 5.nf3 (alt move order)"
+ ],
+ "sicilian-alapin::::Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.Nf3 (Alt Move Order)": [
+  "mp-sicilianalapin-"
+ ],
+ "sicilian-alapin::Alapin: 2...d5 3.exd5 Qxd5 4.d4 Nc6 (with ...e5)::Alapin: 2...d5 3.exd5 Qxd5 4.d4 Nc6 (with ...e5)": [
+  "mp-sicilianalapin-alapin: 2...d5 3.exd5 qxd5 4.d4 nc6 (with ...e5)"
+ ],
+ "sicilian-alapin::::Alapin: 2...d5 3.exd5 Qxd5 4.d4 Nc6 (with ...e5)": [
+  "mp-sicilianalapin-"
+ ],
+ "sicilian-alapin::Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.cxd4 d6 (IQP Accepted)::Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.cxd4 d6 (IQP Accepted)": [
+  "mp-sicilianalapin-alapin: 2...nf6 3.e5 nd5 4.d4 cxd4 5.cxd4 d6 (iqp accepted)"
+ ],
+ "sicilian-alapin::::Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.cxd4 d6 (IQP Accepted)": [
+  "mp-sicilianalapin-"
+ ],
+ "sicilian-alapin::Alapin: 2...d5 3.exd5 Nf6 (Knight Recapture)::Alapin: 2...d5 3.exd5 Nf6 (Knight Recapture)": [
+  "mp-sicilianalapin-alapin: 2...d5 3.exd5 nf6 (knight recapture)"
+ ],
+ "sicilian-alapin::::Alapin: 2...d5 3.exd5 Nf6 (Knight Recapture)": [
+  "mp-sicilianalapin-"
+ ],
+ "sicilian-alapin::Alapin: Stoltz Attack (4.Nf3 before d4)::Alapin: Stoltz Attack (4.Nf3 before d4)": [
+  "mp-sicilianalapin-alapin: stoltz attack (4.nf3 before d4)"
+ ],
+ "sicilian-alapin::::Alapin: Stoltz Attack (4.Nf3 before d4)": [
+  "mp-sicilianalapin-"
+ ],
+ "french-defence::main": [
+  "mp-frenchdefence-main-endgame"
+ ],
+ "french-defence::Exchange::Exchange Variation": [
+  "mp-frenchdefence-exchange"
+ ],
+ "french-defence::Advance::Advance Variation": [
+  "mp-frenchdefence-advance"
+ ],
+ "french-defence::Tarrasch::Tarrasch Variation": [
+  "mp-frenchdefence-tarrasch"
+ ],
+ "french-defence::Rubinstein::Rubinstein Variation": [
+  "mp-frenchdefence-rubinstein"
+ ],
+ "french-defence::Winawer::Winawer Variation": [
+  "mp-frenchdefence-winawer"
+ ],
+ "french-defence::Classical::Classical Variation": [
+  "mp-frenchdefence-classical"
+ ],
+ "french-defence::Burn::Burn Variation": [
+  "mp-frenchdefence-burn"
+ ],
+ "french-defence::McCutcheon::McCutcheon Variation": [
+  "mp-frenchdefence-mccutcheon"
+ ],
+ "french-defence::Milner-Barry::Advance: Milner-Barry Gambit": [
+  "mp-frenchdefence-milnerbarry"
+ ],
+ "french-defence::Fort Knox::Fort Knox Variation": [
+  "mp-frenchdefence-fortknox"
+ ],
+ "french-defence::Advance Variation::Advance Variation": [
+  "mp-frenchdefence-advance variation"
+ ],
+ "french-defence::::Advance Variation": [
+  "mp-frenchdefence-"
+ ],
+ "french-defence::Winawer Variation::Winawer Variation": [
+  "mp-frenchdefence-winawer variation"
+ ],
+ "french-defence::::Winawer Variation": [
+  "mp-frenchdefence-"
+ ],
+ "french-defence::Classical Variation::Classical Variation": [
+  "mp-frenchdefence-classical variation"
+ ],
+ "french-defence::::Classical Variation": [
+  "mp-frenchdefence-"
+ ],
+ "french-defence::Tarrasch Variation::Tarrasch Variation": [
+  "mp-frenchdefence-tarrasch variation"
+ ],
+ "french-defence::::Tarrasch Variation": [
+  "mp-frenchdefence-"
+ ],
+ "french-defence::Exchange Variation::Exchange Variation": [
+  "mp-frenchdefence-exchange variation"
+ ],
+ "french-defence::::Exchange Variation": [
+  "mp-frenchdefence-"
+ ],
+ "french-defence::Burn Variation::Burn Variation": [
+  "mp-frenchdefence-burn variation"
+ ],
+ "french-defence::::Burn Variation": [
+  "mp-frenchdefence-"
+ ],
+ "french-defence::Fort Knox Variation::Fort Knox Variation": [
+  "mp-frenchdefence-fort knox variation"
+ ],
+ "french-defence::::Fort Knox Variation": [
+  "mp-frenchdefence-"
+ ],
+ "french-defence::Advance: Milner-Barry Gambit::Advance: Milner-Barry Gambit": [
+  "mp-frenchdefence-advance: milner-barry gambit"
+ ],
+ "french-defence::::Advance: Milner-Barry Gambit": [
+  "mp-frenchdefence-"
+ ],
+ "french-defence::McCutcheon Variation::McCutcheon Variation": [
+  "mp-frenchdefence-mccutcheon variation"
+ ],
+ "french-defence::::McCutcheon Variation": [
+  "mp-frenchdefence-"
+ ],
+ "french-defence::Rubinstein Variation::Rubinstein Variation": [
+  "mp-frenchdefence-rubinstein variation"
+ ],
+ "french-defence::::Rubinstein Variation": [
+  "mp-frenchdefence-"
+ ],
+ "caro-kann::main": [
+  "mp-carokann-main",
+  "mp-carokann-main-endgame"
+ ],
+ "caro-kann::Advance::Advance Variation": [
+  "mp-carokann-advance",
+  "mp-carokann-advance-endgame"
+ ],
+ "caro-kann::Exchange::Exchange Variation": [
+  "mp-carokann-exchange"
+ ],
+ "caro-kann::Two Knights::Two Knights Variation": [
+  "mp-carokann-two-knights"
+ ],
+ "caro-kann::Panov::Panov-Botvinnik Attack": [
+  "mp-carokann-panov"
+ ],
+ "caro-kann::Fantasy::Fantasy Variation": [
+  "mp-carokann-fantasy"
+ ],
+ "caro-kann::Tartakower::Tartakower/Breyer Variation": [
+  "mp-carokann-tartakower"
+ ],
+ "caro-kann::Classical::Classical Variation": [
+  "mp-carokann-classical"
+ ],
+ "caro-kann::Classical Variation::Classical Variation": [
+  "mp-carokann-classical variation"
+ ],
+ "caro-kann::::Classical Variation": [
+  "mp-carokann-"
+ ],
+ "caro-kann::Advance Variation::Advance Variation": [
+  "mp-carokann-advance variation"
+ ],
+ "caro-kann::::Advance Variation": [
+  "mp-carokann-"
+ ],
+ "caro-kann::Two Knights Variation::Two Knights Variation": [
+  "mp-carokann-two knights variation"
+ ],
+ "caro-kann::::Two Knights Variation": [
+  "mp-carokann-"
+ ],
+ "caro-kann::Panov-Botvinnik Attack::Panov-Botvinnik Attack": [
+  "mp-carokann-panov-botvinnik attack"
+ ],
+ "caro-kann::::Panov-Botvinnik Attack": [
+  "mp-carokann-"
+ ],
+ "caro-kann::Fantasy Variation::Fantasy Variation": [
+  "mp-carokann-fantasy variation"
+ ],
+ "caro-kann::::Fantasy Variation": [
+  "mp-carokann-"
+ ],
+ "caro-kann::Exchange Variation::Exchange Variation": [
+  "mp-carokann-exchange variation"
+ ],
+ "caro-kann::::Exchange Variation": [
+  "mp-carokann-"
+ ],
+ "caro-kann::Tartakower/Breyer Variation::Tartakower/Breyer Variation": [
+  "mp-carokann-tartakower/breyer variation"
+ ],
+ "caro-kann::::Tartakower/Breyer Variation": [
+  "mp-carokann-"
+ ],
+ "pirc-defence::main": [],
+ "pirc-defence::Austrian Attack::Austrian Attack": [
+  "mp-pircdefence-austrian"
+ ],
+ "pirc-defence::Classical System::Classical System": [
+  "mp-pircdefence-classical"
+ ],
+ "pirc-defence::150 Attack::150 Attack": [
+  "mp-pircdefence-150"
+ ],
+ "pirc-defence::Byrne Variation::Byrne Variation": [
+  "mp-pircdefence-byrne"
+ ],
+ "pirc-defence::Lion Variation::Lion Variation": [
+  "mp-pircdefence-lion"
+ ],
+ "pirc-defence::Fianchetto System::Fianchetto System": [
+  "mp-pircdefence-fianchetto"
+ ],
+ "pirc-defence::Czech Defence::Czech Defence": [
+  "mp-pircdefence-czech"
+ ],
+ "pirc-defence::Austrian Attack with e5 c5::Austrian Attack with e5 c5": [
+  "mp-pircdefence-austrian-e5"
+ ],
+ "pirc-defence::::Austrian Attack": [
+  "mp-pircdefence-austrian"
+ ],
+ "pirc-defence::::Classical System": [
+  "mp-pircdefence-classical"
+ ],
+ "pirc-defence::::150 Attack": [
+  "mp-pircdefence-150"
+ ],
+ "pirc-defence::::Byrne Variation": [
+  "mp-pircdefence-byrne"
+ ],
+ "pirc-defence::::Lion Variation": [
+  "mp-pircdefence-lion"
+ ],
+ "pirc-defence::::Fianchetto System": [
+  "mp-pircdefence-fianchetto"
+ ],
+ "pirc-defence::::Czech Defence": [
+  "mp-pircdefence-czech"
+ ],
+ "pirc-defence::::Austrian Attack with e5 c5": [
+  "mp-pircdefence-austrian-e5"
+ ],
+ "scandinavian-defence::main": [
+  "mp-scandinaviandefence-main"
+ ],
+ "scandinavian-defence::Qa5 Solid::Qa5 Main Line": [
+  "mp-scandinaviandefence-qa5"
+ ],
+ "scandinavian-defence::Tiviakov::Qd6 Tiviakov Variation": [
+  "mp-scandinaviandefence-tiviakov"
+ ],
+ "scandinavian-defence::Modern::Nf6 Modern Variation": [
+  "mp-scandinaviandefence-modern"
+ ],
+ "scandinavian-defence::Portuguese::Portuguese Variation": [
+  "mp-scandinaviandefence-portuguese"
+ ],
+ "scandinavian-defence::Icelandic::Icelandic Gambit": [
+  "mp-scandinaviandefence-icelandic"
+ ],
+ "scandinavian-defence::Gubinsky-Melts::Gubinsky-Melts (3...Qd8)": [
+  "mp-scandinaviandefence-gubinsky"
+ ],
+ "scandinavian-defence::Qa5 with Bd2 Main::Qa5 with Bd2 Main Line": [
+  "mp-scandinaviandefence-qa5 with bd2 main"
+ ],
+ "scandinavian-defence::Qa5 Main Line::Qa5 Main Line": [
+  "mp-scandinaviandefence-qa5 main line"
+ ],
+ "scandinavian-defence::::Qa5 Main Line": [
+  "mp-scandinaviandefence-"
+ ],
+ "scandinavian-defence::Nf6 Modern Variation::Nf6 Modern Variation": [
+  "mp-scandinaviandefence-nf6 modern variation"
+ ],
+ "scandinavian-defence::::Nf6 Modern Variation": [
+  "mp-scandinaviandefence-"
+ ],
+ "scandinavian-defence::Icelandic Gambit::Icelandic Gambit": [
+  "mp-scandinaviandefence-icelandic gambit"
+ ],
+ "scandinavian-defence::::Icelandic Gambit": [
+  "mp-scandinaviandefence-"
+ ],
+ "scandinavian-defence::Qd6 Tiviakov Variation::Qd6 Tiviakov Variation": [
+  "mp-scandinaviandefence-qd6 tiviakov variation"
+ ],
+ "scandinavian-defence::::Qd6 Tiviakov Variation": [
+  "mp-scandinaviandefence-"
+ ],
+ "scandinavian-defence::Portuguese Variation::Portuguese Variation": [
+  "mp-scandinaviandefence-portuguese variation"
+ ],
+ "scandinavian-defence::::Portuguese Variation": [
+  "mp-scandinaviandefence-"
+ ],
+ "scandinavian-defence::Gubinsky-Melts (3...Qd8)::Gubinsky-Melts (3...Qd8)": [
+  "mp-scandinaviandefence-gubinsky-melts (3...qd8)"
+ ],
+ "scandinavian-defence::::Gubinsky-Melts (3...Qd8)": [
+  "mp-scandinaviandefence-"
+ ],
+ "scandinavian-defence::Qa5 with Bd2 Main Line::Qa5 with Bd2 Main Line": [
+  "mp-scandinaviandefence-qa5 with bd2 main line"
+ ],
+ "scandinavian-defence::::Qa5 with Bd2 Main Line": [
+  "mp-scandinaviandefence-"
+ ],
+ "alekhine-defence::main": [
+  "mp-alekhinedefence-main"
+ ],
+ "alekhine-defence::Four Pawns::Four Pawns Attack": [
+  "mp-alekhinedefence-fourpawns"
+ ],
+ "alekhine-defence::Exchange::Exchange Variation": [
+  "mp-alekhinedefence-exchange"
+ ],
+ "alekhine-defence::Chase::Chase Variation": [
+  "mp-alekhinedefence-chase"
+ ],
+ "alekhine-defence::Scandinavian::Scandinavian Transposition": [
+  "mp-alekhinedefence-scandtrans"
+ ],
+ "alekhine-defence::Voronezh::Voronezh Variation": [
+  "mp-alekhinedefence-voronezh"
+ ],
+ "alekhine-defence::Modern::Modern Variation": [
+  "mp-alekhinedefence-modern"
+ ],
+ "alekhine-defence::Two Pawns Attack::Two Pawns Attack": [
+  "mp-alekhinedefence-two pawns attack"
+ ],
+ "alekhine-defence::Four Pawns Attack::Four Pawns Attack": [
+  "mp-alekhinedefence-four pawns attack"
+ ],
+ "alekhine-defence::::Four Pawns Attack": [
+  "mp-alekhinedefence-"
+ ],
+ "alekhine-defence::Modern Variation::Modern Variation": [
+  "mp-alekhinedefence-modern variation"
+ ],
+ "alekhine-defence::::Modern Variation": [
+  "mp-alekhinedefence-"
+ ],
+ "alekhine-defence::Exchange Variation::Exchange Variation": [
+  "mp-alekhinedefence-exchange variation"
+ ],
+ "alekhine-defence::::Exchange Variation": [
+  "mp-alekhinedefence-"
+ ],
+ "alekhine-defence::::Two Pawns Attack": [
+  "mp-alekhinedefence-"
+ ],
+ "alekhine-defence::Chase Variation::Chase Variation": [
+  "mp-alekhinedefence-chase variation"
+ ],
+ "alekhine-defence::::Chase Variation": [
+  "mp-alekhinedefence-"
+ ],
+ "alekhine-defence::Scandinavian Transposition::Scandinavian Transposition": [
+  "mp-alekhinedefence-scandinavian transposition"
+ ],
+ "alekhine-defence::::Scandinavian Transposition": [
+  "mp-alekhinedefence-"
+ ],
+ "alekhine-defence::Voronezh Variation::Voronezh Variation": [
+  "mp-alekhinedefence-voronezh variation"
+ ],
+ "alekhine-defence::::Voronezh Variation": [
+  "mp-alekhinedefence-"
+ ],
+ "philidor-defence::main": [
+  "mp-philidordefence-main"
+ ],
+ "philidor-defence::Exchange::Exchange Variation": [
+  "mp-philidordefence-exchange"
+ ],
+ "philidor-defence::Antoshin::Antoshin Variation": [
+  "mp-philidordefence-antoshin"
+ ],
+ "philidor-defence::Nimzowitsch::Nimzowitsch Variation": [
+  "mp-philidordefence-nimzowitsch"
+ ],
+ "philidor-defence::Hanham::Hanham Variation": [
+  "mp-philidordefence-hanham"
+ ],
+ "philidor-defence::Modern d3 Hybrid::Modern d3 Hybrid": [
+  "mp-philidordefence-modern d3 hybrid"
+ ],
+ "philidor-defence::Hanham Variation::Hanham Variation": [
+  "mp-philidordefence-hanham variation"
+ ],
+ "philidor-defence::::Hanham Variation": [
+  "mp-philidordefence-"
+ ],
+ "philidor-defence::Nimzowitsch Variation::Nimzowitsch Variation": [
+  "mp-philidordefence-nimzowitsch variation"
+ ],
+ "philidor-defence::::Nimzowitsch Variation": [
+  "mp-philidordefence-"
+ ],
+ "philidor-defence::Exchange Variation::Exchange Variation": [
+  "mp-philidordefence-exchange variation"
+ ],
+ "philidor-defence::::Exchange Variation": [
+  "mp-philidordefence-"
+ ],
+ "philidor-defence::Antoshin Variation::Antoshin Variation": [
+  "mp-philidordefence-antoshin variation"
+ ],
+ "philidor-defence::::Antoshin Variation": [
+  "mp-philidordefence-"
+ ],
+ "philidor-defence::Philidor Counter-Gambit::Philidor Counter-Gambit": [
+  "mp-philidordefence-philidor counter-gambit"
+ ],
+ "philidor-defence::::Philidor Counter-Gambit": [
+  "mp-philidordefence-"
+ ],
+ "philidor-defence::::Modern d3 Hybrid": [
+  "mp-philidordefence-"
+ ],
+ "petrov-defence::main": [
+  "mp-petrovdefence-main",
+  "mp-petrovdefence-main-endgame"
+ ],
+ "petrov-defence::Steinitz 3.d4::Steinitz Variation": [
+  "mp-petrovdefence-steinitz"
+ ],
+ "petrov-defence::dxc3 Lines::Italian Variation": [
+  "mp-petrovdefence-italian"
+ ],
+ "petrov-defence::Three Knights::Three Knights Game": [
+  "mp-petrovdefence-threeknights"
+ ],
+ "petrov-defence::5.Bd3::5.Bd3 Line": [
+  "mp-petrovdefence-bd3"
+ ],
+ "petrov-defence::Cochrane Gambit::Cochrane Gambit": [
+  "mp-petrovdefence-cochrane gambit"
+ ],
+ "petrov-defence::Kaufmann Attack::Kaufmann Attack": [
+  "mp-petrovdefence-kaufmann attack"
+ ],
+ "petrov-defence::Classical Variation::Classical Variation": [
+  "mp-petrovdefence-classical variation"
+ ],
+ "petrov-defence::::Classical Variation": [
+  "mp-petrovdefence-"
+ ],
+ "petrov-defence::Steinitz Variation::Steinitz Variation": [
+  "mp-petrovdefence-steinitz variation"
+ ],
+ "petrov-defence::::Steinitz Variation": [
+  "mp-petrovdefence-"
+ ],
+ "petrov-defence::Three Knights Game::Three Knights Game": [
+  "mp-petrovdefence-three knights game"
+ ],
+ "petrov-defence::::Three Knights Game": [
+  "mp-petrovdefence-"
+ ],
+ "petrov-defence::::Cochrane Gambit": [
+  "mp-petrovdefence-"
+ ],
+ "petrov-defence::Italian Variation::Italian Variation": [
+  "mp-petrovdefence-italian variation"
+ ],
+ "petrov-defence::::Italian Variation": [
+  "mp-petrovdefence-"
+ ],
+ "petrov-defence::5.Bd3 Line::5.Bd3 Line": [
+  "mp-petrovdefence-5.bd3 line"
+ ],
+ "petrov-defence::::5.Bd3 Line": [
+  "mp-petrovdefence-"
+ ],
+ "petrov-defence::::Kaufmann Attack": [
+  "mp-petrovdefence-"
+ ],
+ "queens-gambit::main": [
+  "mp-queensgambit-minority"
+ ],
+ "queens-gambit::Exchange::Exchange Variation": [
+  "mp-queensgambit-minority"
+ ],
+ "queens-gambit::Slav::Slav Defence Response": [
+  "mp-queensgambit-slav"
+ ],
+ "queens-gambit::Accepted::Queen's Gambit Accepted": [
+  "mp-queensgambit-accepted"
+ ],
+ "queens-gambit::Semi-Slav::Semi-Slav Response": [
+  "mp-queensgambit-semi-slav"
+ ],
+ "queens-gambit::Tartakower::Tartakower Variation": [
+  "mp-queensgambit-tartakower"
+ ],
+ "queens-gambit::Early Bf4::Anti-QGD: Early Bf4 System": [
+  "mp-queensgambit-early bf4"
+ ],
+ "queens-gambit::Catalan::Catalan Transposition": [
+  "mp-queensgambit-catalan"
+ ],
+ "queens-gambit::Exchange Variation::Exchange Variation": [
+  "mp-queensgambit-exchange variation"
+ ],
+ "queens-gambit::::Exchange Variation": [
+  "mp-queensgambit-"
+ ],
+ "queens-gambit::Classical Mainline::Classical Mainline": [
+  "mp-queensgambit-classical mainline"
+ ],
+ "queens-gambit::::Classical Mainline": [
+  "mp-queensgambit-"
+ ],
+ "queens-gambit::Tartakower Variation::Tartakower Variation": [
+  "mp-queensgambit-tartakower variation"
+ ],
+ "queens-gambit::::Tartakower Variation": [
+  "mp-queensgambit-"
+ ],
+ "queens-gambit::Queen's Gambit Accepted::Queen's Gambit Accepted": [
+  "mp-queensgambit-queen's gambit accepted"
+ ],
+ "queens-gambit::::Queen's Gambit Accepted": [
+  "mp-queensgambit-"
+ ],
+ "queens-gambit::Slav Defence Response::Slav Defence Response": [
+  "mp-queensgambit-slav defence response"
+ ],
+ "queens-gambit::::Slav Defence Response": [
+  "mp-queensgambit-"
+ ],
+ "queens-gambit::Semi-Slav Response::Semi-Slav Response": [
+  "mp-queensgambit-semi-slav response"
+ ],
+ "queens-gambit::::Semi-Slav Response": [
+  "mp-queensgambit-"
+ ],
+ "queens-gambit::Catalan Transposition::Catalan Transposition": [
+  "mp-queensgambit-catalan transposition"
+ ],
+ "queens-gambit::::Catalan Transposition": [
+  "mp-queensgambit-"
+ ],
+ "queens-gambit::Anti-QGD: Early Bf4 System::Anti-QGD: Early Bf4 System": [
+  "mp-queensgambit-anti-qgd: early bf4 system"
+ ],
+ "queens-gambit::::Anti-QGD: Early Bf4 System": [
+  "mp-queensgambit-"
+ ],
+ "london-system::main": [
+  "mp-londonsystem-main"
+ ],
+ "london-system::vs KID::London vs King's Indian": [
+  "mp-londonsystem-kid"
+ ],
+ "london-system::Jobava::Jobava London": [
+  "mp-londonsystem-jobava"
+ ],
+ "london-system::vs Queen's Pawn::London vs Queen's Pawn": [
+  "mp-londonsystem-vs queen's pawn"
+ ],
+ "london-system::vs Grunfeld::London vs Grunfeld Setup": [
+  "mp-londonsystem-vs grunfeld"
+ ],
+ "london-system::vs Dutch::London vs Dutch": [
+  "mp-londonsystem-vs dutch"
+ ],
+ "london-system::vs Bf5 Mirror::London vs Bf5 Mirror": [
+  "mp-londonsystem-vs bf5 mirror"
+ ],
+ "london-system::Ne5 Trade Plan::London: Ne5 Trade Plan (Nd2 Order)": [
+  "mp-londonsystem-ne5 trade plan"
+ ],
+ "london-system::vs Early c5::London vs Early c5 Challenge": [
+  "mp-londonsystem-vs early c5"
+ ],
+ "london-system::London vs Queen's Pawn::London vs Queen's Pawn": [
+  "mp-londonsystem-london vs queen's pawn"
+ ],
+ "london-system::::London vs Queen's Pawn": [
+  "mp-londonsystem-"
+ ],
+ "london-system::London vs King's Indian::London vs King's Indian": [
+  "mp-londonsystem-london vs king's indian"
+ ],
+ "london-system::::London vs King's Indian": [
+  "mp-londonsystem-"
+ ],
+ "london-system::Jobava London::Jobava London": [
+  "mp-londonsystem-jobava london"
+ ],
+ "london-system::::Jobava London": [
+  "mp-londonsystem-"
+ ],
+ "london-system::London vs Grunfeld Setup::London vs Grunfeld Setup": [
+  "mp-londonsystem-london vs grunfeld setup"
+ ],
+ "london-system::::London vs Grunfeld Setup": [
+  "mp-londonsystem-"
+ ],
+ "london-system::London vs Dutch::London vs Dutch": [
+  "mp-londonsystem-london vs dutch"
+ ],
+ "london-system::::London vs Dutch": [
+  "mp-londonsystem-"
+ ],
+ "london-system::London vs Bf5 Mirror::London vs Bf5 Mirror": [
+  "mp-londonsystem-london vs bf5 mirror"
+ ],
+ "london-system::::London vs Bf5 Mirror": [
+  "mp-londonsystem-"
+ ],
+ "london-system::London: Ne5 Trade Plan (Nd2 Order)::London: Ne5 Trade Plan (Nd2 Order)": [
+  "mp-londonsystem-london: ne5 trade plan (nd2 order)"
+ ],
+ "london-system::::London: Ne5 Trade Plan (Nd2 Order)": [
+  "mp-londonsystem-"
+ ],
+ "london-system::London vs Early c5 Challenge::London vs Early c5 Challenge": [
+  "mp-londonsystem-london vs early c5 challenge"
+ ],
+ "london-system::::London vs Early c5 Challenge": [
+  "mp-londonsystem-"
+ ],
+ "catalan-opening::main": [
+  "mp-catalanopening-main"
+ ],
+ "catalan-opening::Closed::Closed Catalan: ...c6 System": [
+  "mp-catalanopening-closed"
+ ],
+ "catalan-opening::vs Slav::Catalan vs Slav Setup: ...c6 and ...dxc4": [
+  "mp-catalanopening-slav"
+ ],
+ "catalan-opening::dxc4 Qc2 Recovery::Open Catalan: dxc4 Qc2 Recovery": [
+  "mp-catalanopening-dxc4 qc2 recovery"
+ ],
+ "catalan-opening::a6-b5 with a4 Break::Open Catalan: a6-b5 with a4 Break": [
+  "mp-catalanopening-a6-b5 with a4 break"
+ ],
+ "catalan-opening::Catalan with ...Nbd7::Catalan with ...Nbd7 Line": [
+  "mp-catalanopening-catalan with ...nbd7"
+ ],
+ "catalan-opening::...Be7 without::Catalan Declined: ...Be7 without ...dxc4": [
+  "mp-catalanopening-...be7 without"
+ ],
+ "catalan-opening::Early Qa4+::Early Qa4+ Line": [
+  "mp-catalanopening-early qa4+"
+ ],
+ "catalan-opening::Open Catalan: dxc4 Qc2 Recovery::Open Catalan: dxc4 Qc2 Recovery": [
+  "mp-catalanopening-open catalan: dxc4 qc2 recovery"
+ ],
+ "catalan-opening::::Open Catalan: dxc4 Qc2 Recovery": [
+  "mp-catalanopening-"
+ ],
+ "catalan-opening::Closed Catalan: ...c6 System::Closed Catalan: ...c6 System": [
+  "mp-catalanopening-closed catalan: ...c6 system"
+ ],
+ "catalan-opening::::Closed Catalan: ...c6 System": [
+  "mp-catalanopening-"
+ ],
+ "catalan-opening::Open Catalan: a6-b5 with a4 Break::Open Catalan: a6-b5 with a4 Break": [
+  "mp-catalanopening-open catalan: a6-b5 with a4 break"
+ ],
+ "catalan-opening::::Open Catalan: a6-b5 with a4 Break": [
+  "mp-catalanopening-"
+ ],
+ "catalan-opening::Catalan with ...Nbd7 Line::Catalan with ...Nbd7 Line": [
+  "mp-catalanopening-catalan with ...nbd7 line"
+ ],
+ "catalan-opening::::Catalan with ...Nbd7 Line": [
+  "mp-catalanopening-"
+ ],
+ "catalan-opening::Catalan vs Slav Setup: ...c6 and ...dxc4::Catalan vs Slav Setup: ...c6 and ...dxc4": [
+  "mp-catalanopening-catalan vs slav setup: ...c6 and ...dxc4"
+ ],
+ "catalan-opening::::Catalan vs Slav Setup: ...c6 and ...dxc4": [
+  "mp-catalanopening-"
+ ],
+ "catalan-opening::Catalan Declined: ...Be7 without ...dxc4::Catalan Declined: ...Be7 without ...dxc4": [
+  "mp-catalanopening-catalan declined: ...be7 without ...dxc4"
+ ],
+ "catalan-opening::::Catalan Declined: ...Be7 without ...dxc4": [
+  "mp-catalanopening-"
+ ],
+ "catalan-opening::Early Qa4+ Line::Early Qa4+ Line": [
+  "mp-catalanopening-early qa4+ line"
+ ],
+ "catalan-opening::::Early Qa4+ Line": [
+  "mp-catalanopening-"
+ ],
+ "trompowsky-attack::main": [
+  "mp-trompowskyattack-main"
+ ],
+ "trompowsky-attack::exf6::2...d5 3.Bxf6 Doubled Pawns": [
+  "mp-trompowskyattack-exf6"
+ ],
+ "trompowsky-attack::2...e6::2...e6 French-Type Structure": [
+  "mp-trompowskyattack-e6"
+ ],
+ "trompowsky-attack::Raptor::Raptor Variation 2...c5": [
+  "mp-trompowskyattack-raptor"
+ ],
+ "trompowsky-attack::2...g6::2...g6 Fianchetto Response": [
+  "mp-trompowskyattack-2...g6"
+ ],
+ "trompowsky-attack::Vaganian::Vaganian Gambit 2...Ne4 3.Bf4 c5": [
+  "mp-trompowskyattack-vaganian"
+ ],
+ "trompowsky-attack::gxf6::2...d5 3.Bxf6 gxf6 Recapture": [
+  "mp-trompowskyattack-gxf6"
+ ],
+ "trompowsky-attack::2...Ne4 3.Bf4 Main::2...Ne4 3.Bf4 Main Line": [
+  "mp-trompowskyattack-2...ne4 3.bf4 main"
+ ],
+ "trompowsky-attack::2...Ne4 3.Bf4 c5::2...Ne4 3.Bf4 c5 4.f3 Sideline": [
+  "mp-trompowskyattack-2...ne4 3.bf4 c5"
+ ],
+ "trompowsky-attack::2...Ne4 3.Bf4 Main Line::2...Ne4 3.Bf4 Main Line": [
+  "mp-trompowskyattack-2...ne4 3.bf4 main line"
+ ],
+ "trompowsky-attack::::2...Ne4 3.Bf4 Main Line": [
+  "mp-trompowskyattack-"
+ ],
+ "trompowsky-attack::2...d5 3.Bxf6 Doubled Pawns::2...d5 3.Bxf6 Doubled Pawns": [
+  "mp-trompowskyattack-2...d5 3.bxf6 doubled pawns"
+ ],
+ "trompowsky-attack::::2...d5 3.Bxf6 Doubled Pawns": [
+  "mp-trompowskyattack-"
+ ],
+ "trompowsky-attack::2...e6 French-Type Structure::2...e6 French-Type Structure": [
+  "mp-trompowskyattack-2...e6 french-type structure"
+ ],
+ "trompowsky-attack::::2...e6 French-Type Structure": [
+  "mp-trompowskyattack-"
+ ],
+ "trompowsky-attack::Raptor Variation 2...c5::Raptor Variation 2...c5": [
+  "mp-trompowskyattack-raptor variation 2...c5"
+ ],
+ "trompowsky-attack::::Raptor Variation 2...c5": [
+  "mp-trompowskyattack-"
+ ],
+ "trompowsky-attack::2...g6 Fianchetto Response::2...g6 Fianchetto Response": [
+  "mp-trompowskyattack-2...g6 fianchetto response"
+ ],
+ "trompowsky-attack::::2...g6 Fianchetto Response": [
+  "mp-trompowskyattack-"
+ ],
+ "trompowsky-attack::Vaganian Gambit 2...Ne4 3.Bf4 c5::Vaganian Gambit 2...Ne4 3.Bf4 c5": [
+  "mp-trompowskyattack-vaganian gambit 2...ne4 3.bf4 c5"
+ ],
+ "trompowsky-attack::::Vaganian Gambit 2...Ne4 3.Bf4 c5": [
+  "mp-trompowskyattack-"
+ ],
+ "trompowsky-attack::2...Ne4 3.Bf4 c5 4.f3 Sideline::2...Ne4 3.Bf4 c5 4.f3 Sideline": [
+  "mp-trompowskyattack-2...ne4 3.bf4 c5 4.f3 sideline"
+ ],
+ "trompowsky-attack::::2...Ne4 3.Bf4 c5 4.f3 Sideline": [
+  "mp-trompowskyattack-"
+ ],
+ "trompowsky-attack::2...d5 3.Bxf6 gxf6 Recapture::2...d5 3.Bxf6 gxf6 Recapture": [
+  "mp-trompowskyattack-2...d5 3.bxf6 gxf6 recapture"
+ ],
+ "trompowsky-attack::::2...d5 3.Bxf6 gxf6 Recapture": [
+  "mp-trompowskyattack-"
+ ],
+ "qgd::main": [
+  "mp-qgd-main",
+  "mp-qgd-main-endgame"
+ ],
+ "qgd::Tartakower::Tartakower Variation": [
+  "mp-qgd-tartakower"
+ ],
+ "qgd::Lasker::Lasker Defense": [
+  "mp-qgd-lasker"
+ ],
+ "qgd::Exchange::Exchange Variation": [
+  "mp-qgd-exchange"
+ ],
+ "qgd::Bf4 Lines::Bf4 QGD": [
+  "mp-qgd-bf4"
+ ],
+ "qgd::Orthodox Main::Orthodox Defense Main Line": [
+  "mp-qgd-orthodox main"
+ ],
+ "qgd::Ragozin::Ragozin Variation": [
+  "mp-qgd-ragozin"
+ ],
+ "qgd::Vienna::Vienna Variation": [
+  "mp-qgd-vienna"
+ ],
+ "qgd::Cambridge Springs::Cambridge Springs": [
+  "mp-qgd-cambridge springs"
+ ],
+ "qgd::Orthodox Defense Main Line::Orthodox Defense Main Line": [
+  "mp-qgd-orthodox defense main line"
+ ],
+ "qgd::::Orthodox Defense Main Line": [
+  "mp-qgd-"
+ ],
+ "qgd::Tartakower Variation::Tartakower Variation": [
+  "mp-qgd-tartakower variation"
+ ],
+ "qgd::::Tartakower Variation": [
+  "mp-qgd-"
+ ],
+ "qgd::Lasker Defense::Lasker Defense": [
+  "mp-qgd-lasker defense"
+ ],
+ "qgd::::Lasker Defense": [
+  "mp-qgd-"
+ ],
+ "qgd::Exchange Variation::Exchange Variation": [
+  "mp-qgd-exchange variation"
+ ],
+ "qgd::::Exchange Variation": [
+  "mp-qgd-"
+ ],
+ "qgd::Ragozin Variation::Ragozin Variation": [
+  "mp-qgd-ragozin variation"
+ ],
+ "qgd::::Ragozin Variation": [
+  "mp-qgd-"
+ ],
+ "qgd::Vienna Variation::Vienna Variation": [
+  "mp-qgd-vienna variation"
+ ],
+ "qgd::::Vienna Variation": [
+  "mp-qgd-"
+ ],
+ "qgd::::Cambridge Springs": [
+  "mp-qgd-"
+ ],
+ "qgd::Bf4 QGD::Bf4 QGD": [
+  "mp-qgd-bf4 qgd"
+ ],
+ "qgd::::Bf4 QGD": [
+  "mp-qgd-"
+ ],
+ "qga::main": [
+  "mp-qga-main",
+  "mp-qga-main-endgame"
+ ],
+ "qga::Smyslov::Smyslov Variation 3...a6": [
+  "mp-qga-smyslov"
+ ],
+ "qga::Sadler::Sadler Variation ...Bg4": [
+  "mp-qga-sadler"
+ ],
+ "qga::Janowski::Janowski Variation ...Qd5": [
+  "mp-qga-janowski"
+ ],
+ "qga::Classical e3 Bxc4 c5::Classical e3 Bxc4 c5 Main Line": [
+  "mp-qga-classical e3 bxc4 c5"
+ ],
+ "qga::Alekhine 4.Nc3::Alekhine Variation 4.Nc3": [
+  "mp-qga-alekhine 4.nc3"
+ ],
+ "qga::Modern Tabiya with::Modern Tabiya with Rd1": [
+  "mp-qga-modern tabiya with"
+ ],
+ "qga::Classical e3 Bxc4 c5 Main Line::Classical e3 Bxc4 c5 Main Line": [
+  "mp-qga-classical e3 bxc4 c5 main line"
+ ],
+ "qga::::Classical e3 Bxc4 c5 Main Line": [
+  "mp-qga-"
+ ],
+ "qga::Smyslov Variation 3...a6::Smyslov Variation 3...a6": [
+  "mp-qga-smyslov variation 3...a6"
+ ],
+ "qga::::Smyslov Variation 3...a6": [
+  "mp-qga-"
+ ],
+ "qga::Sadler Variation ...Bg4::Sadler Variation ...Bg4": [
+  "mp-qga-sadler variation ...bg4"
+ ],
+ "qga::::Sadler Variation ...Bg4": [
+  "mp-qga-"
+ ],
+ "qga::Alekhine Variation 4.Nc3::Alekhine Variation 4.Nc3": [
+  "mp-qga-alekhine variation 4.nc3"
+ ],
+ "qga::::Alekhine Variation 4.Nc3": [
+  "mp-qga-"
+ ],
+ "qga::Modern Tabiya with Rd1::Modern Tabiya with Rd1": [
+  "mp-qga-modern tabiya with rd1"
+ ],
+ "qga::::Modern Tabiya with Rd1": [
+  "mp-qga-"
+ ],
+ "qga::Janowski Variation ...Qd5::Janowski Variation ...Qd5": [
+  "mp-qga-janowski variation ...qd5"
+ ],
+ "qga::::Janowski Variation ...Qd5": [
+  "mp-qga-"
+ ],
+ "slav-defence::main": [
+  "mp-slavdefence-main",
+  "mp-slavdefence-main-endgame"
+ ],
+ "slav-defence::Geller Gambit::Geller Gambit": [
+  "mp-slavdefence-geller"
+ ],
+ "slav-defence::Schlechter::Schlechter Variation (...g6 Fianchetto)": [
+  "mp-slavdefence-schlechter"
+ ],
+ "slav-defence::Main::Main Line (a4 Bf5)": [
+  "mp-slavdefence-main",
+  "mp-slavdefence-main-endgame"
+ ],
+ "slav-defence::Exchange::Exchange Variation": [
+  "mp-slavdefence-exchange"
+ ],
+ "slav-defence::Chebanenko::Chebanenko Variation (4...a6)": [
+  "mp-slavdefence-chebanenko"
+ ],
+ "slav-defence::Quiet::Quiet Variation (4.e3)": [
+  "mp-slavdefence-quiet"
+ ],
+ "slav-defence::Winawer::Winawer Countergambit (...e5!?)": [
+  "mp-slavdefence-winawer"
+ ],
+ "slav-defence::Modern Qc2/Qb3::Modern Qc2/Qb3 Line": [
+  "mp-slavdefence-modern qc2/qb3"
+ ],
+ "slav-defence::Main Line (a4 Bf5)::Main Line (a4 Bf5)": [
+  "mp-slavdefence-main line (a4 bf5)"
+ ],
+ "slav-defence::::Main Line (a4 Bf5)": [
+  "mp-slavdefence-"
+ ],
+ "slav-defence::Exchange Variation::Exchange Variation": [
+  "mp-slavdefence-exchange variation"
+ ],
+ "slav-defence::::Exchange Variation": [
+  "mp-slavdefence-"
+ ],
+ "slav-defence::Chebanenko Variation (4...a6)::Chebanenko Variation (4...a6)": [
+  "mp-slavdefence-chebanenko variation (4...a6)"
+ ],
+ "slav-defence::::Chebanenko Variation (4...a6)": [
+  "mp-slavdefence-"
+ ],
+ "slav-defence::Quiet Variation (4.e3)::Quiet Variation (4.e3)": [
+  "mp-slavdefence-quiet variation (4.e3)"
+ ],
+ "slav-defence::::Quiet Variation (4.e3)": [
+  "mp-slavdefence-"
+ ],
+ "slav-defence::::Geller Gambit": [
+  "mp-slavdefence-"
+ ],
+ "slav-defence::Schlechter Variation (...g6 Fianchetto)::Schlechter Variation (...g6 Fianchetto)": [
+  "mp-slavdefence-schlechter variation (...g6 fianchetto)"
+ ],
+ "slav-defence::::Schlechter Variation (...g6 Fianchetto)": [
+  "mp-slavdefence-"
+ ],
+ "slav-defence::Winawer Countergambit (...e5!?)::Winawer Countergambit (...e5!?)": [
+  "mp-slavdefence-winawer countergambit (...e5!?)"
+ ],
+ "slav-defence::::Winawer Countergambit (...e5!?)": [
+  "mp-slavdefence-"
+ ],
+ "slav-defence::Modern Qc2/Qb3 Line::Modern Qc2/Qb3 Line": [
+  "mp-slavdefence-modern qc2/qb3 line"
+ ],
+ "slav-defence::::Modern Qc2/Qb3 Line": [
+  "mp-slavdefence-"
+ ],
+ "semi-slav::main": [
+  "mp-semislav-main",
+  "mp-semislav-main-endgame"
+ ],
+ "semi-slav::Meran::Meran Variation Deeper": [
+  "mp-semislav-meran"
+ ],
+ "semi-slav::Botvinnik::Botvinnik Variation Deep": [
+  "mp-semislav-botvinnik"
+ ],
+ "semi-slav::Moscow::Moscow Variation Bxf6": [
+  "mp-semislav-moscow"
+ ],
+ "semi-slav::Stoltz::Stoltz Qc2 Variation": [
+  "mp-semislav-stoltz"
+ ],
+ "semi-slav::Anti-Meran Bd3::Anti-Meran Bd3 Line": [
+  "mp-semislav-anti-meran bd3"
+ ],
+ "semi-slav::Reynolds::Reynolds Variation": [
+  "mp-semislav-reynolds"
+ ],
+ "semi-slav::Romih ...Bd6::Romih ...Bd6 System": [
+  "mp-semislav-romih ...bd6"
+ ],
+ "semi-slav::Meran Variation Deeper::Meran Variation Deeper": [
+  "mp-semislav-meran variation deeper"
+ ],
+ "semi-slav::::Meran Variation Deeper": [
+  "mp-semislav-"
+ ],
+ "semi-slav::Botvinnik Variation Deep::Botvinnik Variation Deep": [
+  "mp-semislav-botvinnik variation deep"
+ ],
+ "semi-slav::::Botvinnik Variation Deep": [
+  "mp-semislav-"
+ ],
+ "semi-slav::Anti-Meran Bd3 Line::Anti-Meran Bd3 Line": [
+  "mp-semislav-anti-meran bd3 line"
+ ],
+ "semi-slav::::Anti-Meran Bd3 Line": [
+  "mp-semislav-"
+ ],
+ "semi-slav::Stoltz Qc2 Variation::Stoltz Qc2 Variation": [
+  "mp-semislav-stoltz qc2 variation"
+ ],
+ "semi-slav::::Stoltz Qc2 Variation": [
+  "mp-semislav-"
+ ],
+ "semi-slav::Moscow Variation Bxf6::Moscow Variation Bxf6": [
+  "mp-semislav-moscow variation bxf6"
+ ],
+ "semi-slav::::Moscow Variation Bxf6": [
+  "mp-semislav-"
+ ],
+ "semi-slav::Reynolds Variation::Reynolds Variation": [
+  "mp-semislav-reynolds variation"
+ ],
+ "semi-slav::::Reynolds Variation": [
+  "mp-semislav-"
+ ],
+ "semi-slav::Romih ...Bd6 System::Romih ...Bd6 System": [
+  "mp-semislav-romih ...bd6 system"
+ ],
+ "semi-slav::::Romih ...Bd6 System": [
+  "mp-semislav-"
+ ],
+ "kings-indian-defence::main": [
+  "mp-kingsindiandefence-main"
+ ],
+ "kings-indian-defence::Bayonet::Bayonet Attack (9.b4)": [
+  "mp-kingsindiandefence-bayonet"
+ ],
+ "kings-indian-defence::Four Pawns::Four Pawns Attack": [
+  "mp-kingsindiandefence-fourpawns"
+ ],
+ "kings-indian-defence::Fianchetto::Fianchetto Variation": [
+  "mp-kingsindiandefence-fianchetto"
+ ],
+ "kings-indian-defence::Classical Main::Classical Main Line (Mar del Plata)": [
+  "mp-kingsindiandefence-classical main"
+ ],
+ "kings-indian-defence::Saemisch::Saemisch Variation": [
+  "mp-kingsindiandefence-saemisch"
+ ],
+ "kings-indian-defence::Petrosian::Petrosian System (Bg5)": [
+  "mp-kingsindiandefence-petrosian"
+ ],
+ "kings-indian-defence::Averbakh::Averbakh Variation": [
+  "mp-kingsindiandefence-averbakh"
+ ],
+ "kings-indian-defence::Makogonov::Makogonov Variation (h3)": [
+  "mp-kingsindiandefence-makogonov"
+ ],
+ "kings-indian-defence::Classical Main Line (Mar del Plata)::Classical Main Line (Mar del Plata)": [
+  "mp-kingsindiandefence-classical main line (mar del plata)"
+ ],
+ "kings-indian-defence::::Classical Main Line (Mar del Plata)": [
+  "mp-kingsindiandefence-"
+ ],
+ "kings-indian-defence::Bayonet Attack (9.b4)::Bayonet Attack (9.b4)": [
+  "mp-kingsindiandefence-bayonet attack (9.b4)"
+ ],
+ "kings-indian-defence::::Bayonet Attack (9.b4)": [
+  "mp-kingsindiandefence-"
+ ],
+ "kings-indian-defence::Saemisch Variation::Saemisch Variation": [
+  "mp-kingsindiandefence-saemisch variation"
+ ],
+ "kings-indian-defence::::Saemisch Variation": [
+  "mp-kingsindiandefence-"
+ ],
+ "kings-indian-defence::Four Pawns Attack::Four Pawns Attack": [
+  "mp-kingsindiandefence-four pawns attack"
+ ],
+ "kings-indian-defence::::Four Pawns Attack": [
+  "mp-kingsindiandefence-"
+ ],
+ "kings-indian-defence::Fianchetto Variation::Fianchetto Variation": [
+  "mp-kingsindiandefence-fianchetto variation"
+ ],
+ "kings-indian-defence::::Fianchetto Variation": [
+  "mp-kingsindiandefence-"
+ ],
+ "kings-indian-defence::Petrosian System (Bg5)::Petrosian System (Bg5)": [
+  "mp-kingsindiandefence-petrosian system (bg5)"
+ ],
+ "kings-indian-defence::::Petrosian System (Bg5)": [
+  "mp-kingsindiandefence-"
+ ],
+ "kings-indian-defence::Averbakh Variation::Averbakh Variation": [
+  "mp-kingsindiandefence-averbakh variation"
+ ],
+ "kings-indian-defence::::Averbakh Variation": [
+  "mp-kingsindiandefence-"
+ ],
+ "kings-indian-defence::Makogonov Variation (h3)::Makogonov Variation (h3)": [
+  "mp-kingsindiandefence-makogonov variation (h3)"
+ ],
+ "kings-indian-defence::::Makogonov Variation (h3)": [
+  "mp-kingsindiandefence-"
+ ],
+ "nimzo-indian::main": [
+  "mp-nimzoindian-main",
+  "mp-nimzoindian-main-endgame"
+ ],
+ "nimzo-indian::Rubinstein::Rubinstein System (4.e3)": [
+  "mp-nimzoindian-rubinstein"
+ ],
+ "nimzo-indian::Hübner::Huebner Variation (4.e3 c5)": [
+  "mp-nimzoindian-huebner"
+ ],
+ "nimzo-indian::Leningrad::Leningrad Variation (4.Bg5)": [
+  "mp-nimzoindian-leningrad"
+ ],
+ "nimzo-indian::Kasparov::Kasparov Variation (4.Nf3)": [
+  "mp-nimzoindian-kasparov"
+ ],
+ "nimzo-indian::Sämisch::Saemisch Variation (4.a3)": [
+  "mp-nimzoindian-saemisch"
+ ],
+ "nimzo-indian::4.f3::4.f3 (Aggressive Center)": [
+  "mp-nimzoindian-f3"
+ ],
+ "nimzo-indian::Fischer::Fischer Variation (4.e3 b6)": [
+  "mp-nimzoindian-fischer"
+ ],
+ "nimzo-indian::Classical::Classical Variation (4.Qc2)": [
+  "mp-nimzoindian-classical"
+ ],
+ "nimzo-indian::Classical Variation (4.Qc2)::Classical Variation (4.Qc2)": [
+  "mp-nimzoindian-classical variation (4.qc2)"
+ ],
+ "nimzo-indian::::Classical Variation (4.Qc2)": [
+  "mp-nimzoindian-"
+ ],
+ "nimzo-indian::Rubinstein System (4.e3)::Rubinstein System (4.e3)": [
+  "mp-nimzoindian-rubinstein system (4.e3)"
+ ],
+ "nimzo-indian::::Rubinstein System (4.e3)": [
+  "mp-nimzoindian-"
+ ],
+ "nimzo-indian::Huebner Variation (4.e3 c5)::Huebner Variation (4.e3 c5)": [
+  "mp-nimzoindian-huebner variation (4.e3 c5)"
+ ],
+ "nimzo-indian::::Huebner Variation (4.e3 c5)": [
+  "mp-nimzoindian-"
+ ],
+ "nimzo-indian::Leningrad Variation (4.Bg5)::Leningrad Variation (4.Bg5)": [
+  "mp-nimzoindian-leningrad variation (4.bg5)"
+ ],
+ "nimzo-indian::::Leningrad Variation (4.Bg5)": [
+  "mp-nimzoindian-"
+ ],
+ "nimzo-indian::Kasparov Variation (4.Nf3)::Kasparov Variation (4.Nf3)": [
+  "mp-nimzoindian-kasparov variation (4.nf3)"
+ ],
+ "nimzo-indian::::Kasparov Variation (4.Nf3)": [
+  "mp-nimzoindian-"
+ ],
+ "nimzo-indian::Saemisch Variation (4.a3)::Saemisch Variation (4.a3)": [
+  "mp-nimzoindian-saemisch variation (4.a3)"
+ ],
+ "nimzo-indian::::Saemisch Variation (4.a3)": [
+  "mp-nimzoindian-"
+ ],
+ "nimzo-indian::4.f3 (Aggressive Center)::4.f3 (Aggressive Center)": [
+  "mp-nimzoindian-4.f3 (aggressive center)"
+ ],
+ "nimzo-indian::::4.f3 (Aggressive Center)": [
+  "mp-nimzoindian-"
+ ],
+ "nimzo-indian::Fischer Variation (4.e3 b6)::Fischer Variation (4.e3 b6)": [
+  "mp-nimzoindian-fischer variation (4.e3 b6)"
+ ],
+ "nimzo-indian::::Fischer Variation (4.e3 b6)": [
+  "mp-nimzoindian-"
+ ],
+ "grunfeld-defence::main": [
+  "mp-grunfelddefence-main"
+ ],
+ "grunfeld-defence::Russian System::Russian System (Qb3)": [
+  "mp-grunfelddefence-russian"
+ ],
+ "grunfeld-defence::Classical Bc4::Bc4 Classical": [
+  "mp-grunfelddefence-bc4"
+ ],
+ "grunfeld-defence::Modern Rb1::Exchange: Nf3 c5 Rb1 (Modern)": [
+  "mp-grunfelddefence-modernrb1"
+ ],
+ "grunfeld-defence::Main::Exchange Variation: Main Line": [
+  "mp-grunfelddefence-main"
+ ],
+ "grunfeld-defence::Be3 Qa5 Qd2 with Rc1::Exchange: Be3 Qa5 Qd2 with Rc1": [
+  "mp-grunfelddefence-be3 qa5 qd2 with rc1"
+ ],
+ "grunfeld-defence::Fianchetto::Fianchetto Variation": [
+  "mp-grunfelddefence-fianchetto"
+ ],
+ "grunfeld-defence::Neo-Grünfeld::Neo-Grünfeld (g3 without Nc3)": [
+  "mp-grunfelddefence-neo-grünfeld"
+ ],
+ "grunfeld-defence::Taimanov::Taimanov Variation (f3)": [
+  "mp-grunfelddefence-taimanov"
+ ],
+ "grunfeld-defence::Exchange Variation: Main Line::Exchange Variation: Main Line": [
+  "mp-grunfelddefence-exchange variation: main line"
+ ],
+ "grunfeld-defence::::Exchange Variation: Main Line": [
+  "mp-grunfelddefence-"
+ ],
+ "grunfeld-defence::Exchange: Be3 Qa5 Qd2 with Rc1::Exchange: Be3 Qa5 Qd2 with Rc1": [
+  "mp-grunfelddefence-exchange: be3 qa5 qd2 with rc1"
+ ],
+ "grunfeld-defence::::Exchange: Be3 Qa5 Qd2 with Rc1": [
+  "mp-grunfelddefence-"
+ ],
+ "grunfeld-defence::Russian System (Qb3)::Russian System (Qb3)": [
+  "mp-grunfelddefence-russian system (qb3)"
+ ],
+ "grunfeld-defence::::Russian System (Qb3)": [
+  "mp-grunfelddefence-"
+ ],
+ "grunfeld-defence::Fianchetto Variation::Fianchetto Variation": [
+  "mp-grunfelddefence-fianchetto variation"
+ ],
+ "grunfeld-defence::::Fianchetto Variation": [
+  "mp-grunfelddefence-"
+ ],
+ "grunfeld-defence::Bc4 Classical::Bc4 Classical": [
+  "mp-grunfelddefence-bc4 classical"
+ ],
+ "grunfeld-defence::::Bc4 Classical": [
+  "mp-grunfelddefence-"
+ ],
+ "grunfeld-defence::Neo-Grünfeld (g3 without Nc3)::Neo-Grünfeld (g3 without Nc3)": [
+  "mp-grunfelddefence-neo-grünfeld (g3 without nc3)"
+ ],
+ "grunfeld-defence::::Neo-Grünfeld (g3 without Nc3)": [
+  "mp-grunfelddefence-"
+ ],
+ "grunfeld-defence::Exchange: Nf3 c5 Rb1 (Modern)::Exchange: Nf3 c5 Rb1 (Modern)": [
+  "mp-grunfelddefence-exchange: nf3 c5 rb1 (modern)"
+ ],
+ "grunfeld-defence::::Exchange: Nf3 c5 Rb1 (Modern)": [
+  "mp-grunfelddefence-"
+ ],
+ "grunfeld-defence::Taimanov Variation (f3)::Taimanov Variation (f3)": [
+  "mp-grunfelddefence-taimanov variation (f3)"
+ ],
+ "grunfeld-defence::::Taimanov Variation (f3)": [
+  "mp-grunfelddefence-"
+ ],
+ "dutch-defence::main": [
+  "mp-dutchdefence-main"
+ ],
+ "dutch-defence::Stonewall::Stonewall d5 e6 Bd6": [
+  "mp-dutchdefence-stonewall"
+ ],
+ "dutch-defence::Classical::Classical Be7 Line": [
+  "mp-dutchdefence-classical"
+ ],
+ "dutch-defence::Ilyin-Zhenevsky::Ilyin-Zhenevsky System": [
+  "mp-dutchdefence-ilyinzhenevsky"
+ ],
+ "dutch-defence::Leningrad …e5::Leningrad e5 Break": [
+  "mp-dutchdefence-leningrade5"
+ ],
+ "dutch-defence::Leningrad g6 Main::Leningrad g6 Main Line": [
+  "mp-dutchdefence-leningrad g6 main"
+ ],
+ "dutch-defence::Anti-Dutch 2.Bg5::Anti-Dutch 2.Bg5 Response": [
+  "mp-dutchdefence-anti-dutch 2.bg5"
+ ],
+ "dutch-defence::Hopton Attack::Hopton Attack Response": [
+  "mp-dutchdefence-hopton attack"
+ ],
+ "dutch-defence::Leningrad g6 Main Line::Leningrad g6 Main Line": [
+  "mp-dutchdefence-leningrad g6 main line"
+ ],
+ "dutch-defence::::Leningrad g6 Main Line": [
+  "mp-dutchdefence-"
+ ],
+ "dutch-defence::Stonewall d5 e6 Bd6::Stonewall d5 e6 Bd6": [
+  "mp-dutchdefence-stonewall d5 e6 bd6"
+ ],
+ "dutch-defence::::Stonewall d5 e6 Bd6": [
+  "mp-dutchdefence-"
+ ],
+ "dutch-defence::Classical Be7 Line::Classical Be7 Line": [
+  "mp-dutchdefence-classical be7 line"
+ ],
+ "dutch-defence::::Classical Be7 Line": [
+  "mp-dutchdefence-"
+ ],
+ "dutch-defence::Anti-Dutch 2.Bg5 Response::Anti-Dutch 2.Bg5 Response": [
+  "mp-dutchdefence-anti-dutch 2.bg5 response"
+ ],
+ "dutch-defence::::Anti-Dutch 2.Bg5 Response": [
+  "mp-dutchdefence-"
+ ],
+ "dutch-defence::Leningrad e5 Break::Leningrad e5 Break": [
+  "mp-dutchdefence-leningrad e5 break"
+ ],
+ "dutch-defence::::Leningrad e5 Break": [
+  "mp-dutchdefence-"
+ ],
+ "dutch-defence::Ilyin-Zhenevsky System::Ilyin-Zhenevsky System": [
+  "mp-dutchdefence-ilyin-zhenevsky system"
+ ],
+ "dutch-defence::::Ilyin-Zhenevsky System": [
+  "mp-dutchdefence-"
+ ],
+ "dutch-defence::Hopton Attack Response::Hopton Attack Response": [
+  "mp-dutchdefence-hopton attack response"
+ ],
+ "dutch-defence::::Hopton Attack Response": [
+  "mp-dutchdefence-"
+ ],
+ "benoni-defence::main": [
+  "mp-benonidefence-main"
+ ],
+ "benoni-defence::Fianchetto::Fianchetto Variation (g3/Bg2)": [
+  "mp-benonidefence-fianchetto"
+ ],
+ "benoni-defence::Taimanov::Taimanov Variation (f4/Bb5+)": [
+  "mp-benonidefence-taimanov"
+ ],
+ "benoni-defence::Four Pawns::Four Pawns Attack (...Ng4 Counter)": [
+  "mp-benonidefence-fourpawns"
+ ],
+ "benoni-defence::Modern Main with::Modern Main Line (Nd2/f3) with ...b5 Race": [
+  "mp-benonidefence-modern main with"
+ ],
+ "benoni-defence::Classical::Classical Variation (Bf4 — d6 Pressure)": [
+  "mp-benonidefence-classical"
+ ],
+ "benoni-defence::Modern Main Line (Nd2/f3) with ...b5 Race::Modern Main Line (Nd2/f3) with ...b5 Race": [
+  "mp-benonidefence-modern main line (nd2/f3) with ...b5 race"
+ ],
+ "benoni-defence::::Modern Main Line (Nd2/f3) with ...b5 Race": [
+  "mp-benonidefence-"
+ ],
+ "benoni-defence::Fianchetto Variation (g3/Bg2)::Fianchetto Variation (g3/Bg2)": [
+  "mp-benonidefence-fianchetto variation (g3/bg2)"
+ ],
+ "benoni-defence::::Fianchetto Variation (g3/Bg2)": [
+  "mp-benonidefence-"
+ ],
+ "benoni-defence::Classical Variation (Bf4 — d6 Pressure)::Classical Variation (Bf4 — d6 Pressure)": [
+  "mp-benonidefence-classical variation (bf4 — d6 pressure)"
+ ],
+ "benoni-defence::::Classical Variation (Bf4 — d6 Pressure)": [
+  "mp-benonidefence-"
+ ],
+ "benoni-defence::Taimanov Variation (f4/Bb5+)::Taimanov Variation (f4/Bb5+)": [
+  "mp-benonidefence-taimanov variation (f4/bb5+)"
+ ],
+ "benoni-defence::::Taimanov Variation (f4/Bb5+)": [
+  "mp-benonidefence-"
+ ],
+ "benoni-defence::Four Pawns Attack (...Ng4 Counter)::Four Pawns Attack (...Ng4 Counter)": [
+  "mp-benonidefence-four pawns attack (...ng4 counter)"
+ ],
+ "benoni-defence::::Four Pawns Attack (...Ng4 Counter)": [
+  "mp-benonidefence-"
+ ],
+ "benoni-defence::Czech Benoni (...e5 Closed Center)::Czech Benoni (...e5 Closed Center)": [
+  "mp-benonidefence-czech benoni (...e5 closed center)"
+ ],
+ "benoni-defence::::Czech Benoni (...e5 Closed Center)": [
+  "mp-benonidefence-"
+ ],
+ "benoni-defence::Snake Benoni (...Bd7-a4 Maneuver)::Snake Benoni (...Bd7-a4 Maneuver)": [
+  "mp-benonidefence-snake benoni (...bd7-a4 maneuver)"
+ ],
+ "benoni-defence::::Snake Benoni (...Bd7-a4 Maneuver)": [
+  "mp-benonidefence-"
+ ],
+ "benko-gambit::main": [
+  "mp-benkogambit-main",
+  "mp-benkogambit-endgame"
+ ],
+ "benko-gambit::Declined::Benko Declined: Nf3 System": [
+  "mp-benkogambit-declined"
+ ],
+ "benko-gambit::Zaitsev::Zaitsev Variation": [
+  "mp-benkogambit-zaitsev"
+ ],
+ "benko-gambit::Half-Accepted::Half-Accepted": [
+  "mp-benkogambit-halfaccepted"
+ ],
+ "benko-gambit::Fianchetto::Fianchetto Variation": [
+  "mp-benkogambit-fianchetto"
+ ],
+ "benko-gambit::King Walk::King Walk Variation": [
+  "mp-benkogambit-king walk"
+ ],
+ "benko-gambit::Main::Fully Accepted: Main Line": [
+  "mp-benkogambit-main",
+  "mp-benkogambit-endgame"
+ ],
+ "benko-gambit::Modern 5.f3::Modern 5.f3 System": [
+  "mp-benkogambit-modern 5.f3"
+ ],
+ "benko-gambit::Fianchetto Variation::Fianchetto Variation": [
+  "mp-benkogambit-fianchetto variation"
+ ],
+ "benko-gambit::::Fianchetto Variation": [
+  "mp-benkogambit-"
+ ],
+ "benko-gambit::King Walk Variation::King Walk Variation": [
+  "mp-benkogambit-king walk variation"
+ ],
+ "benko-gambit::::King Walk Variation": [
+  "mp-benkogambit-"
+ ],
+ "benko-gambit::Benko Declined: Nf3 System::Benko Declined: Nf3 System": [
+  "mp-benkogambit-benko declined: nf3 system"
+ ],
+ "benko-gambit::::Benko Declined: Nf3 System": [
+  "mp-benkogambit-"
+ ],
+ "benko-gambit::Zaitsev Variation::Zaitsev Variation": [
+  "mp-benkogambit-zaitsev variation"
+ ],
+ "benko-gambit::::Zaitsev Variation": [
+  "mp-benkogambit-"
+ ],
+ "benko-gambit::::Half-Accepted": [
+  "mp-benkogambit-"
+ ],
+ "benko-gambit::Fully Accepted: Main Line::Fully Accepted: Main Line": [
+  "mp-benkogambit-fully accepted: main line"
+ ],
+ "benko-gambit::::Fully Accepted: Main Line": [
+  "mp-benkogambit-"
+ ],
+ "benko-gambit::Modern 5.f3 System::Modern 5.f3 System": [
+  "mp-benkogambit-modern 5.f3 system"
+ ],
+ "benko-gambit::::Modern 5.f3 System": [
+  "mp-benkogambit-"
+ ],
+ "queens-indian::main": [
+  "mp-queensindian-main",
+  "mp-queensindian-main-endgame"
+ ],
+ "queens-indian::Petrosian a3::Queen's Indian: Petrosian Variation (a3)": [
+  "mp-queensindian-petrosian"
+ ],
+ "queens-indian::…Bb4+::Queen's Indian: Nimzowitsch Variation (...Bb4+)": [
+  "mp-queensindian-bb4"
+ ],
+ "queens-indian::Miles …Ba6::Queen's Indian: Miles Variation (...Ba6)": [
+  "mp-queensindian-miles"
+ ],
+ "queens-indian::Fianchetto::Queen's Indian: Fianchetto Variation (Deep)": [
+  "mp-queensindian-fianchetto"
+ ],
+ "queens-indian::Kasparov::Queen's Indian: Kasparov Variation (Nc3/a3)": [
+  "mp-queensindian-kasparov"
+ ],
+ "queens-indian::Classical::Queen's Indian: Classical Variation (...Be7)": [
+  "mp-queensindian-classical"
+ ],
+ "queens-indian::4.e3::Queen's Indian: 4.e3 System": [
+  "mp-queensindian-4.e3"
+ ],
+ "queens-indian::Queen's Indian: Fianchetto Variation (Deep)::Queen's Indian: Fianchetto Variation (Deep)": [
+  "mp-queensindian-queen's indian: fianchetto variation (deep)"
+ ],
+ "queens-indian::::Queen's Indian: Fianchetto Variation (Deep)": [
+  "mp-queensindian-"
+ ],
+ "queens-indian::Queen's Indian: Petrosian Variation (a3)::Queen's Indian: Petrosian Variation (a3)": [
+  "mp-queensindian-queen's indian: petrosian variation (a3)"
+ ],
+ "queens-indian::::Queen's Indian: Petrosian Variation (a3)": [
+  "mp-queensindian-"
+ ],
+ "queens-indian::Queen's Indian: Kasparov Variation (Nc3/a3)::Queen's Indian: Kasparov Variation (Nc3/a3)": [
+  "mp-queensindian-queen's indian: kasparov variation (nc3/a3)"
+ ],
+ "queens-indian::::Queen's Indian: Kasparov Variation (Nc3/a3)": [
+  "mp-queensindian-"
+ ],
+ "queens-indian::Queen's Indian: Nimzowitsch Variation (...Bb4+)::Queen's Indian: Nimzowitsch Variation (...Bb4+)": [
+  "mp-queensindian-queen's indian: nimzowitsch variation (...bb4+)"
+ ],
+ "queens-indian::::Queen's Indian: Nimzowitsch Variation (...Bb4+)": [
+  "mp-queensindian-"
+ ],
+ "queens-indian::Queen's Indian: Classical Variation (...Be7)::Queen's Indian: Classical Variation (...Be7)": [
+  "mp-queensindian-queen's indian: classical variation (...be7)"
+ ],
+ "queens-indian::::Queen's Indian: Classical Variation (...Be7)": [
+  "mp-queensindian-"
+ ],
+ "queens-indian::Queen's Indian: Miles Variation (...Ba6)::Queen's Indian: Miles Variation (...Ba6)": [
+  "mp-queensindian-queen's indian: miles variation (...ba6)"
+ ],
+ "queens-indian::::Queen's Indian: Miles Variation (...Ba6)": [
+  "mp-queensindian-"
+ ],
+ "queens-indian::Queen's Indian: 4.e3 System::Queen's Indian: 4.e3 System": [
+  "mp-queensindian-queen's indian: 4.e3 system"
+ ],
+ "queens-indian::::Queen's Indian: 4.e3 System": [
+  "mp-queensindian-"
+ ],
+ "budapest-gambit::main": [
+  "mp-budapestgambit-main",
+  "mp-budapestgambit-endgame"
+ ],
+ "budapest-gambit::Adler::Budapest Gambit: Adler Variation": [
+  "mp-budapestgambit-adler"
+ ],
+ "budapest-gambit::Fajarowicz::Budapest Gambit: Fajarowicz Variation": [
+  "mp-budapestgambit-fajarowicz"
+ ],
+ "budapest-gambit::Rubinstein::Budapest Gambit: Rubinstein Variation": [
+  "mp-budapestgambit-rubinstein"
+ ],
+ "budapest-gambit::Main Bf4::Budapest Gambit: Main Bf4 Line": [
+  "mp-budapestgambit-main bf4"
+ ],
+ "budapest-gambit::Alekhine::Budapest Gambit: Alekhine Variation": [
+  "mp-budapestgambit-alekhine"
+ ],
+ "budapest-gambit::Alekhine with Bc5::Budapest Gambit: Alekhine Variation with Bc5": [
+  "mp-budapestgambit-alekhine with bc5"
+ ],
+ "budapest-gambit::3...Ne4 Trappy::Budapest Gambit: 3...Ne4 Trappy Line": [
+  "mp-budapestgambit-3...ne4 trappy"
+ ],
+ "budapest-gambit::Budapest Gambit: Adler Variation::Budapest Gambit: Adler Variation": [
+  "mp-budapestgambit-budapest gambit: adler variation"
+ ],
+ "budapest-gambit::::Budapest Gambit: Adler Variation": [
+  "mp-budapestgambit-"
+ ],
+ "budapest-gambit::Budapest Gambit: Fajarowicz Variation::Budapest Gambit: Fajarowicz Variation": [
+  "mp-budapestgambit-budapest gambit: fajarowicz variation"
+ ],
+ "budapest-gambit::::Budapest Gambit: Fajarowicz Variation": [
+  "mp-budapestgambit-"
+ ],
+ "budapest-gambit::Budapest Gambit: Rubinstein Variation::Budapest Gambit: Rubinstein Variation": [
+  "mp-budapestgambit-budapest gambit: rubinstein variation"
+ ],
+ "budapest-gambit::::Budapest Gambit: Rubinstein Variation": [
+  "mp-budapestgambit-"
+ ],
+ "budapest-gambit::Budapest Gambit: Main Bf4 Line::Budapest Gambit: Main Bf4 Line": [
+  "mp-budapestgambit-budapest gambit: main bf4 line"
+ ],
+ "budapest-gambit::::Budapest Gambit: Main Bf4 Line": [
+  "mp-budapestgambit-"
+ ],
+ "budapest-gambit::Budapest Gambit: Alekhine Variation::Budapest Gambit: Alekhine Variation": [
+  "mp-budapestgambit-budapest gambit: alekhine variation"
+ ],
+ "budapest-gambit::::Budapest Gambit: Alekhine Variation": [
+  "mp-budapestgambit-"
+ ],
+ "budapest-gambit::Budapest Gambit: Alekhine Variation with Bc5::Budapest Gambit: Alekhine Variation with Bc5": [
+  "mp-budapestgambit-budapest gambit: alekhine variation with bc5"
+ ],
+ "budapest-gambit::::Budapest Gambit: Alekhine Variation with Bc5": [
+  "mp-budapestgambit-"
+ ],
+ "budapest-gambit::Budapest Gambit: 3...Ne4 Trappy Line::Budapest Gambit: 3...Ne4 Trappy Line": [
+  "mp-budapestgambit-budapest gambit: 3...ne4 trappy line"
+ ],
+ "budapest-gambit::::Budapest Gambit: 3...Ne4 Trappy Line": [
+  "mp-budapestgambit-"
+ ],
+ "old-indian-defence::main": [
+  "mp-oldindiandefence-main",
+  "mp-oldindiandefence-main-endgame"
+ ],
+ "old-indian-defence::Czech::Old Indian: Czech Variation": [
+  "mp-oldindiandefence-czech"
+ ],
+ "old-indian-defence::Be2 System::Old Indian: Be2 Development": [
+  "mp-oldindiandefence-be2"
+ ],
+ "old-indian-defence::Janowski::Old Indian: Janowski Variation": [
+  "mp-oldindiandefence-janowski"
+ ],
+ "old-indian-defence::Tartakower::Old Indian: Tartakower Variation": [
+  "mp-oldindiandefence-tartakower"
+ ],
+ "old-indian-defence::Ukrainian::Old Indian: Ukrainian Variation": [
+  "mp-oldindiandefence-ukrainian"
+ ],
+ "old-indian-defence::Main with d5::Old Indian: Main Line with d5": [
+  "mp-oldindiandefence-main with d5"
+ ],
+ "old-indian-defence::Seirawan::Old Indian: Seirawan System": [
+  "mp-oldindiandefence-seirawan"
+ ],
+ "old-indian-defence::Old Indian: Czech Variation::Old Indian: Czech Variation": [
+  "mp-oldindiandefence-old indian: czech variation"
+ ],
+ "old-indian-defence::::Old Indian: Czech Variation": [
+  "mp-oldindiandefence-"
+ ],
+ "old-indian-defence::Old Indian: Janowski Variation::Old Indian: Janowski Variation": [
+  "mp-oldindiandefence-old indian: janowski variation"
+ ],
+ "old-indian-defence::::Old Indian: Janowski Variation": [
+  "mp-oldindiandefence-"
+ ],
+ "old-indian-defence::Old Indian: Tartakower Variation::Old Indian: Tartakower Variation": [
+  "mp-oldindiandefence-old indian: tartakower variation"
+ ],
+ "old-indian-defence::::Old Indian: Tartakower Variation": [
+  "mp-oldindiandefence-"
+ ],
+ "old-indian-defence::Old Indian: Ukrainian Variation::Old Indian: Ukrainian Variation": [
+  "mp-oldindiandefence-old indian: ukrainian variation"
+ ],
+ "old-indian-defence::::Old Indian: Ukrainian Variation": [
+  "mp-oldindiandefence-"
+ ],
+ "old-indian-defence::Old Indian: Main Line with d5::Old Indian: Main Line with d5": [
+  "mp-oldindiandefence-old indian: main line with d5"
+ ],
+ "old-indian-defence::::Old Indian: Main Line with d5": [
+  "mp-oldindiandefence-"
+ ],
+ "old-indian-defence::Old Indian: Seirawan System::Old Indian: Seirawan System": [
+  "mp-oldindiandefence-old indian: seirawan system"
+ ],
+ "old-indian-defence::::Old Indian: Seirawan System": [
+  "mp-oldindiandefence-"
+ ],
+ "old-indian-defence::Old Indian: Be2 Development::Old Indian: Be2 Development": [
+  "mp-oldindiandefence-old indian: be2 development"
+ ],
+ "old-indian-defence::::Old Indian: Be2 Development": [
+  "mp-oldindiandefence-"
+ ],
+ "english-opening::main": [
+  "mp-englishopening-main"
+ ],
+ "english-opening::Symmetrical::English: Symmetrical Variation": [
+  "mp-englishopening-symmetrical"
+ ],
+ "english-opening::Mikenas::Mikenas Attack": [
+  "mp-englishopening-mikenas"
+ ],
+ "english-opening::Reversed Sicilian::English: Reversed Sicilian": [
+  "mp-englishopening-reversed sicilian"
+ ],
+ "english-opening::Four Knights::English: Four Knights Variation": [
+  "mp-englishopening-four knights"
+ ],
+ "english-opening::Botvinnik::English: Botvinnik System": [
+  "mp-englishopening-botvinnik"
+ ],
+ "english-opening::Hedgehog::English: Hedgehog System": [
+  "mp-englishopening-hedgehog"
+ ],
+ "english-opening::Bremen::Bremen System": [
+  "mp-englishopening-bremen"
+ ],
+ "english-opening::Ultra-Symmetrical::Ultra-Symmetrical Variation": [
+  "mp-englishopening-ultra-symmetrical"
+ ],
+ "english-opening::English: Reversed Sicilian::English: Reversed Sicilian": [
+  "mp-englishopening-english: reversed sicilian"
+ ],
+ "english-opening::::English: Reversed Sicilian": [
+  "mp-englishopening-"
+ ],
+ "english-opening::English: Symmetrical Variation::English: Symmetrical Variation": [
+  "mp-englishopening-english: symmetrical variation"
+ ],
+ "english-opening::::English: Symmetrical Variation": [
+  "mp-englishopening-"
+ ],
+ "english-opening::English: Four Knights Variation::English: Four Knights Variation": [
+  "mp-englishopening-english: four knights variation"
+ ],
+ "english-opening::::English: Four Knights Variation": [
+  "mp-englishopening-"
+ ],
+ "english-opening::English: Botvinnik System::English: Botvinnik System": [
+  "mp-englishopening-english: botvinnik system"
+ ],
+ "english-opening::::English: Botvinnik System": [
+  "mp-englishopening-"
+ ],
+ "english-opening::English: Hedgehog System::English: Hedgehog System": [
+  "mp-englishopening-english: hedgehog system"
+ ],
+ "english-opening::::English: Hedgehog System": [
+  "mp-englishopening-"
+ ],
+ "english-opening::Mikenas Attack::Mikenas Attack": [
+  "mp-englishopening-mikenas attack"
+ ],
+ "english-opening::::Mikenas Attack": [
+  "mp-englishopening-"
+ ],
+ "english-opening::Bremen System::Bremen System": [
+  "mp-englishopening-bremen system"
+ ],
+ "english-opening::::Bremen System": [
+  "mp-englishopening-"
+ ],
+ "english-opening::Ultra-Symmetrical Variation::Ultra-Symmetrical Variation": [
+  "mp-englishopening-ultra-symmetrical variation"
+ ],
+ "english-opening::::Ultra-Symmetrical Variation": [
+  "mp-englishopening-"
+ ],
+ "reti-opening::main": [
+  "mp-retiopening-main"
+ ],
+ "reti-opening::Anti-Slav::Reti: Anti-Slav": [
+  "mp-retiopening-antislav"
+ ],
+ "reti-opening::KIA g3 Bg2 d3 e4::Reti: KIA Setup g3 Bg2 d3 e4": [
+  "mp-retiopening-kia g3 bg2 d3 e4"
+ ],
+ "reti-opening::Advance c4 d4::Reti: Advance c4 d4": [
+  "mp-retiopening-advance c4 d4"
+ ],
+ "reti-opening::Accepted dxc4 Bxc4::Reti: Accepted dxc4 Bxc4": [
+  "mp-retiopening-accepted dxc4 bxc4"
+ ],
+ "reti-opening::LSB Fianchetto::Reti: LSB Fianchetto": [
+  "mp-retiopening-lsb fianchetto"
+ ],
+ "reti-opening::Nimzo-English Hybrid::Reti: Nimzo-English Hybrid": [
+  "mp-retiopening-nimzo-english hybrid"
+ ],
+ "reti-opening::Reti Gambit::Reti: Reti Gambit": [
+  "mp-retiopening-reti gambit"
+ ],
+ "reti-opening::Reversed Benoni::Reti: Reversed Benoni": [
+  "mp-retiopening-reversed benoni"
+ ],
+ "reti-opening::Reti: KIA Setup g3 Bg2 d3 e4::Reti: KIA Setup g3 Bg2 d3 e4": [
+  "mp-retiopening-reti: kia setup g3 bg2 d3 e4"
+ ],
+ "reti-opening::::Reti: KIA Setup g3 Bg2 d3 e4": [
+  "mp-retiopening-"
+ ],
+ "reti-opening::Reti: Advance c4 d4::Reti: Advance c4 d4": [
+  "mp-retiopening-reti: advance c4 d4"
+ ],
+ "reti-opening::::Reti: Advance c4 d4": [
+  "mp-retiopening-"
+ ],
+ "reti-opening::Reti: Accepted dxc4 Bxc4::Reti: Accepted dxc4 Bxc4": [
+  "mp-retiopening-reti: accepted dxc4 bxc4"
+ ],
+ "reti-opening::::Reti: Accepted dxc4 Bxc4": [
+  "mp-retiopening-"
+ ],
+ "reti-opening::Reti: LSB Fianchetto::Reti: LSB Fianchetto": [
+  "mp-retiopening-reti: lsb fianchetto"
+ ],
+ "reti-opening::::Reti: LSB Fianchetto": [
+  "mp-retiopening-"
+ ],
+ "reti-opening::Reti: Nimzo-English Hybrid::Reti: Nimzo-English Hybrid": [
+  "mp-retiopening-reti: nimzo-english hybrid"
+ ],
+ "reti-opening::::Reti: Nimzo-English Hybrid": [
+  "mp-retiopening-"
+ ],
+ "reti-opening::Reti: Reti Gambit::Reti: Reti Gambit": [
+  "mp-retiopening-reti: reti gambit"
+ ],
+ "reti-opening::::Reti: Reti Gambit": [
+  "mp-retiopening-"
+ ],
+ "reti-opening::Reti: Anti-Slav::Reti: Anti-Slav": [
+  "mp-retiopening-reti: anti-slav"
+ ],
+ "reti-opening::::Reti: Anti-Slav": [
+  "mp-retiopening-"
+ ],
+ "reti-opening::Reti: Reversed Benoni::Reti: Reversed Benoni": [
+  "mp-retiopening-reti: reversed benoni"
+ ],
+ "reti-opening::::Reti: Reversed Benoni": [
+  "mp-retiopening-"
+ ],
+ "kings-indian-attack::main": [
+  "mp-kingsindianattack-main"
+ ],
+ "kings-indian-attack::vs French::KIA vs French Structure": [
+  "mp-kingsindianattack-vs french"
+ ],
+ "kings-indian-attack::Fischer::KIA: Fischer Attack": [
+  "mp-kingsindianattack-fischer"
+ ],
+ "kings-indian-attack::e5 Wedge::KIA: e5 Wedge System": [
+  "mp-kingsindianattack-e5 wedge"
+ ],
+ "kings-indian-attack::vs Caro::KIA vs Caro-Kann Structure": [
+  "mp-kingsindianattack-vs caro"
+ ],
+ "kings-indian-attack::vs Sicilian::KIA vs Sicilian Structure": [
+  "mp-kingsindianattack-vs sicilian"
+ ],
+ "kings-indian-attack::Botvinnik::KIA: Botvinnik Setup": [
+  "mp-kingsindianattack-botvinnik"
+ ],
+ "kings-indian-attack::vs QGD::KIA vs QGD-Style Response": [
+  "mp-kingsindianattack-vs qgd"
+ ],
+ "kings-indian-attack::KID-style::KIA vs KID-Style Response": [
+  "mp-kingsindianattack-kid"
+ ],
+ "kings-indian-attack::Keres::Keres Variation": [
+  "mp-kingsindianattack-keres"
+ ],
+ "kings-indian-attack::KIA vs French Structure::KIA vs French Structure": [
+  "mp-kingsindianattack-kia vs french structure"
+ ],
+ "kings-indian-attack::::KIA vs French Structure": [
+  "mp-kingsindianattack-"
+ ],
+ "kings-indian-attack::KIA vs Sicilian Structure::KIA vs Sicilian Structure": [
+  "mp-kingsindianattack-kia vs sicilian structure"
+ ],
+ "kings-indian-attack::::KIA vs Sicilian Structure": [
+  "mp-kingsindianattack-"
+ ],
+ "kings-indian-attack::KIA vs Caro-Kann Structure::KIA vs Caro-Kann Structure": [
+  "mp-kingsindianattack-kia vs caro-kann structure"
+ ],
+ "kings-indian-attack::::KIA vs Caro-Kann Structure": [
+  "mp-kingsindianattack-"
+ ],
+ "kings-indian-attack::KIA: Botvinnik Setup::KIA: Botvinnik Setup": [
+  "mp-kingsindianattack-kia: botvinnik setup"
+ ],
+ "kings-indian-attack::::KIA: Botvinnik Setup": [
+  "mp-kingsindianattack-"
+ ],
+ "kings-indian-attack::KIA: Fischer Attack::KIA: Fischer Attack": [
+  "mp-kingsindianattack-kia: fischer attack"
+ ],
+ "kings-indian-attack::::KIA: Fischer Attack": [
+  "mp-kingsindianattack-"
+ ],
+ "kings-indian-attack::KIA vs QGD-Style Response::KIA vs QGD-Style Response": [
+  "mp-kingsindianattack-kia vs qgd-style response"
+ ],
+ "kings-indian-attack::::KIA vs QGD-Style Response": [
+  "mp-kingsindianattack-"
+ ],
+ "kings-indian-attack::KIA vs KID-Style Response::KIA vs KID-Style Response": [
+  "mp-kingsindianattack-kia vs kid-style response"
+ ],
+ "kings-indian-attack::::KIA vs KID-Style Response": [
+  "mp-kingsindianattack-"
+ ],
+ "kings-indian-attack::KIA: e5 Wedge System::KIA: e5 Wedge System": [
+  "mp-kingsindianattack-kia: e5 wedge system"
+ ],
+ "kings-indian-attack::::KIA: e5 Wedge System": [
+  "mp-kingsindianattack-"
+ ],
+ "kings-indian-attack::Keres Variation::Keres Variation": [
+  "mp-kingsindianattack-keres variation"
+ ],
+ "kings-indian-attack::::Keres Variation": [
+  "mp-kingsindianattack-"
+ ],
+ "birds-opening::main": [
+  "mp-birdsopening-main"
+ ],
+ "birds-opening::Leningrad::Bird's: Leningrad Formation": [
+  "mp-birdsopening-leningrad"
+ ],
+ "birds-opening::From's::Bird's: From's Gambit Accepted": [
+  "mp-birdsopening-from's"
+ ],
+ "birds-opening::Nimzo-Larsen::Bird's: Nimzo-Larsen Hybrid": [
+  "mp-birdsopening-nimzo"
+ ],
+ "birds-opening::Stonewall::Bird's: Stonewall Formation": [
+  "mp-birdsopening-stonewall"
+ ],
+ "birds-opening::Williams::Bird's: Williams Variation": [
+  "mp-birdsopening-williams"
+ ],
+ "birds-opening::Swiss::Bird's: Swiss Gambit": [
+  "mp-birdsopening-swiss"
+ ],
+ "birds-opening::From's Gambit::Bird's: From's Gambit Declined": [
+  "mp-birdsopening-from's gambit"
+ ],
+ "birds-opening::Bird's: Leningrad Formation::Bird's: Leningrad Formation": [
+  "mp-birdsopening-bird's: leningrad formation"
+ ],
+ "birds-opening::::Bird's: Leningrad Formation": [
+  "mp-birdsopening-"
+ ],
+ "birds-opening::Bird's: From's Gambit Accepted::Bird's: From's Gambit Accepted": [
+  "mp-birdsopening-bird's: from's gambit accepted"
+ ],
+ "birds-opening::::Bird's: From's Gambit Accepted": [
+  "mp-birdsopening-"
+ ],
+ "birds-opening::Bird's: Nimzo-Larsen Hybrid::Bird's: Nimzo-Larsen Hybrid": [
+  "mp-birdsopening-bird's: nimzo-larsen hybrid"
+ ],
+ "birds-opening::::Bird's: Nimzo-Larsen Hybrid": [
+  "mp-birdsopening-"
+ ],
+ "birds-opening::Bird's: Stonewall Formation::Bird's: Stonewall Formation": [
+  "mp-birdsopening-bird's: stonewall formation"
+ ],
+ "birds-opening::::Bird's: Stonewall Formation": [
+  "mp-birdsopening-"
+ ],
+ "birds-opening::Bird's: Swiss Gambit::Bird's: Swiss Gambit": [
+  "mp-birdsopening-bird's: swiss gambit"
+ ],
+ "birds-opening::::Bird's: Swiss Gambit": [
+  "mp-birdsopening-"
+ ],
+ "birds-opening::Bird's: From's Gambit Declined::Bird's: From's Gambit Declined": [
+  "mp-birdsopening-bird's: from's gambit declined"
+ ],
+ "birds-opening::::Bird's: From's Gambit Declined": [
+  "mp-birdsopening-"
+ ],
+ "birds-opening::Bird's: Williams Variation::Bird's: Williams Variation": [
+  "mp-birdsopening-bird's: williams variation"
+ ],
+ "birds-opening::::Bird's: Williams Variation": [
+  "mp-birdsopening-"
+ ],
+ "two-knights-defence::main": [
+  "mp-twoknightsdefence-main",
+  "mp-twoknightsdefence-main-endgame"
+ ],
+ "two-knights-defence::4.d4 Italian::Two Knights: Italian Two Knights d4": [
+  "mp-twoknightsdefence-d4"
+ ],
+ "two-knights-defence::Fried Liver::Two Knights: Fried Liver Defence 5...Na5": [
+  "mp-twoknightsdefence-friedliver"
+ ],
+ "two-knights-defence::Max Lange::Two Knights: Max Lange Attack": [
+  "mp-twoknightsdefence-maxlange"
+ ],
+ "two-knights-defence::Traxler::Two Knights: Traxler Counterattack": [
+  "mp-twoknightsdefence-traxler"
+ ],
+ "two-knights-defence::Quiet Italian d3::Two Knights: Quiet Italian d3 with ...Be7": [
+  "mp-twoknightsdefence-quiet italian d3"
+ ],
+ "two-knights-defence::Fritz 5...Nd4::Two Knights: Fritz Variation 5...Nd4": [
+  "mp-twoknightsdefence-fritz 5...nd4"
+ ],
+ "two-knights-defence::Ulvestad::Two Knights: Ulvestad Variation": [
+  "mp-twoknightsdefence-ulvestad"
+ ],
+ "two-knights-defence::4.d3 Main with::Two Knights: 4.d3 Main Line with ...Be7": [
+  "mp-twoknightsdefence-4.d3 main with"
+ ],
+ "two-knights-defence::Two Knights: Italian Two Knights d4::Two Knights: Italian Two Knights d4": [
+  "mp-twoknightsdefence-two knights: italian two knights d4"
+ ],
+ "two-knights-defence::::Two Knights: Italian Two Knights d4": [
+  "mp-twoknightsdefence-"
+ ],
+ "two-knights-defence::Two Knights: Fried Liver Defence 5...Na5::Two Knights: Fried Liver Defence 5...Na5": [
+  "mp-twoknightsdefence-two knights: fried liver defence 5...na5"
+ ],
+ "two-knights-defence::::Two Knights: Fried Liver Defence 5...Na5": [
+  "mp-twoknightsdefence-"
+ ],
+ "two-knights-defence::Two Knights: Traxler Counterattack::Two Knights: Traxler Counterattack": [
+  "mp-twoknightsdefence-two knights: traxler counterattack"
+ ],
+ "two-knights-defence::::Two Knights: Traxler Counterattack": [
+  "mp-twoknightsdefence-"
+ ],
+ "two-knights-defence::Two Knights: Max Lange Attack::Two Knights: Max Lange Attack": [
+  "mp-twoknightsdefence-two knights: max lange attack"
+ ],
+ "two-knights-defence::::Two Knights: Max Lange Attack": [
+  "mp-twoknightsdefence-"
+ ],
+ "two-knights-defence::Two Knights: Quiet Italian d3 with ...Be7::Two Knights: Quiet Italian d3 with ...Be7": [
+  "mp-twoknightsdefence-two knights: quiet italian d3 with ...be7"
+ ],
+ "two-knights-defence::::Two Knights: Quiet Italian d3 with ...Be7": [
+  "mp-twoknightsdefence-"
+ ],
+ "two-knights-defence::Two Knights: Fritz Variation 5...Nd4::Two Knights: Fritz Variation 5...Nd4": [
+  "mp-twoknightsdefence-two knights: fritz variation 5...nd4"
+ ],
+ "two-knights-defence::::Two Knights: Fritz Variation 5...Nd4": [
+  "mp-twoknightsdefence-"
+ ],
+ "two-knights-defence::Two Knights: Ulvestad Variation::Two Knights: Ulvestad Variation": [
+  "mp-twoknightsdefence-two knights: ulvestad variation"
+ ],
+ "two-knights-defence::::Two Knights: Ulvestad Variation": [
+  "mp-twoknightsdefence-"
+ ],
+ "two-knights-defence::Two Knights: 4.d3 Main Line with ...Be7::Two Knights: 4.d3 Main Line with ...Be7": [
+  "mp-twoknightsdefence-two knights: 4.d3 main line with ...be7"
+ ],
+ "two-knights-defence::::Two Knights: 4.d3 Main Line with ...Be7": [
+  "mp-twoknightsdefence-"
+ ],
+ "evans-gambit::main": [
+  "mp-evansgambit-main",
+  "mp-evansgambit-endgame"
+ ],
+ "evans-gambit::Declined::Evans Gambit Declined": [
+  "mp-evansgambit-declined"
+ ],
+ "evans-gambit::Compromised::Evans Gambit: Compromised Defence": [
+  "mp-evansgambit-compromised"
+ ],
+ "evans-gambit::Lasker::Evans Gambit: Lasker Defence": [
+  "mp-evansgambit-lasker"
+ ],
+ "evans-gambit::Slow::Evans Gambit: Slow Variation": [
+  "mp-evansgambit-slow"
+ ],
+ "evans-gambit::Stone-Ware::Evans Gambit: Stone-Ware Variation": [
+  "mp-evansgambit-stone-ware"
+ ],
+ "evans-gambit::Morphy Attack::Evans Gambit: Morphy Attack": [
+  "mp-evansgambit-morphy attack"
+ ],
+ "evans-gambit::Anderssen::Evans Gambit: Anderssen Variation": [
+  "mp-evansgambit-anderssen"
+ ],
+ "evans-gambit::Main with Qb3::Evans Gambit: Main Line with Qb3": [
+  "mp-evansgambit-main with qb3"
+ ],
+ "evans-gambit::Evans Gambit: Slow Variation::Evans Gambit: Slow Variation": [
+  "mp-evansgambit-evans gambit: slow variation"
+ ],
+ "evans-gambit::::Evans Gambit: Slow Variation": [
+  "mp-evansgambit-"
+ ],
+ "evans-gambit::Evans Gambit: Compromised Defence::Evans Gambit: Compromised Defence": [
+  "mp-evansgambit-evans gambit: compromised defence"
+ ],
+ "evans-gambit::::Evans Gambit: Compromised Defence": [
+  "mp-evansgambit-"
+ ],
+ "evans-gambit::Evans Gambit Declined::Evans Gambit Declined": [
+  "mp-evansgambit-evans gambit declined"
+ ],
+ "evans-gambit::::Evans Gambit Declined": [
+  "mp-evansgambit-"
+ ],
+ "evans-gambit::Evans Gambit: Stone-Ware Variation::Evans Gambit: Stone-Ware Variation": [
+  "mp-evansgambit-evans gambit: stone-ware variation"
+ ],
+ "evans-gambit::::Evans Gambit: Stone-Ware Variation": [
+  "mp-evansgambit-"
+ ],
+ "evans-gambit::Evans Gambit: Lasker Defence::Evans Gambit: Lasker Defence": [
+  "mp-evansgambit-evans gambit: lasker defence"
+ ],
+ "evans-gambit::::Evans Gambit: Lasker Defence": [
+  "mp-evansgambit-"
+ ],
+ "evans-gambit::Evans Gambit: Morphy Attack::Evans Gambit: Morphy Attack": [
+  "mp-evansgambit-evans gambit: morphy attack"
+ ],
+ "evans-gambit::::Evans Gambit: Morphy Attack": [
+  "mp-evansgambit-"
+ ],
+ "evans-gambit::Evans Gambit: Anderssen Variation::Evans Gambit: Anderssen Variation": [
+  "mp-evansgambit-evans gambit: anderssen variation"
+ ],
+ "evans-gambit::::Evans Gambit: Anderssen Variation": [
+  "mp-evansgambit-"
+ ],
+ "evans-gambit::Evans Gambit: Main Line with Qb3::Evans Gambit: Main Line with Qb3": [
+  "mp-evansgambit-evans gambit: main line with qb3"
+ ],
+ "evans-gambit::::Evans Gambit: Main Line with Qb3": [
+  "mp-evansgambit-"
+ ],
+ "albin-countergambit::main": [
+  "mp-albincountergambit-main",
+  "mp-albincountergambit-endgame"
+ ],
+ "albin-countergambit::Fianchetto::Fianchetto Variation": [
+  "mp-albincountergambit-fianchetto"
+ ],
+ "albin-countergambit::Lasker Trap::Lasker Trap": [
+  "mp-albincountergambit-lasker"
+ ],
+ "albin-countergambit::Spassky::Spassky Variation": [
+  "mp-albincountergambit-spassky"
+ ],
+ "albin-countergambit::Fianchetto Variation::Fianchetto Variation": [
+  "mp-albincountergambit-fianchetto variation"
+ ],
+ "albin-countergambit::::Fianchetto Variation": [
+  "mp-albincountergambit-"
+ ],
+ "albin-countergambit::::Lasker Trap": [
+  "mp-albincountergambit-"
+ ],
+ "albin-countergambit::Spassky Variation::Spassky Variation": [
+  "mp-albincountergambit-spassky variation"
+ ],
+ "albin-countergambit::::Spassky Variation": [
+  "mp-albincountergambit-"
+ ],
+ "schliemann-defence::main": [
+  "mp-schliemanndefence-main"
+ ],
+ "schliemann-defence::Schönemann 4.d4::Schönemann Attack": [
+  "mp-schliemanndefence-schonemann"
+ ],
+ "schliemann-defence::4.exf5::Jänisch Gambit Accepted": [
+  "mp-schliemanndefence-exf5"
+ ],
+ "schliemann-defence::Dyckhoff 4.d3::Dyckhoff Variation": [
+  "mp-schliemanndefence-dyckhoff"
+ ],
+ "schliemann-defence::Schönemann Attack::Schönemann Attack": [
+  "mp-schliemanndefence-schönemann attack"
+ ],
+ "schliemann-defence::::Schönemann Attack": [
+  "mp-schliemanndefence-"
+ ],
+ "schliemann-defence::Jänisch Gambit Accepted::Jänisch Gambit Accepted": [
+  "mp-schliemanndefence-jänisch gambit accepted"
+ ],
+ "schliemann-defence::::Jänisch Gambit Accepted": [
+  "mp-schliemanndefence-"
+ ],
+ "schliemann-defence::Dyckhoff Variation::Dyckhoff Variation": [
+  "mp-schliemanndefence-dyckhoff variation"
+ ],
+ "schliemann-defence::::Dyckhoff Variation": [
+  "mp-schliemanndefence-"
+ ],
+ "scotch-gambit::main": null,
+ "scotch-gambit::4…Bc5::Bc5 Defence (4…Bc5)": [
+  "mp-scotchgambit-4…bc5"
+ ],
+ "scotch-gambit::4…Bb4+::Bb4+ Check (4…Bb4+)": [
+  "mp-scotchgambit-4…bb4+"
+ ],
+ "scotch-gambit::…Nf6::Sharp f3 Centre (…Nf6)": [
+  "mp-scotchgambit-…nf6"
+ ],
+ "scotch-gambit::Bc5 Defence (4…Bc5)::Bc5 Defence (4…Bc5)": [
+  "mp-scotchgambit-bc5 defence (4…bc5)"
+ ],
+ "scotch-gambit::::Bc5 Defence (4…Bc5)": [
+  "mp-scotchgambit-"
+ ],
+ "scotch-gambit::Bb4+ Check (4…Bb4+)::Bb4+ Check (4…Bb4+)": [
+  "mp-scotchgambit-bb4+ check (4…bb4+)"
+ ],
+ "scotch-gambit::::Bb4+ Check (4…Bb4+)": [
+  "mp-scotchgambit-"
+ ],
+ "scotch-gambit::Sharp f3 Centre (…Nf6)::Sharp f3 Centre (…Nf6)": [
+  "mp-scotchgambit-sharp f3 centre (…nf6)"
+ ],
+ "scotch-gambit::::Sharp f3 Centre (…Nf6)": [
+  "mp-scotchgambit-"
+ ],
+ "vienna-gambit::main": null,
+ "vienna-gambit::…exf4::Gambit Accepted (…exf4)": [
+  "mp-viennagambit-…exf4"
+ ],
+ "vienna-gambit::vs …d5::Qf3 Setup (vs …d5)": [
+  "mp-viennagambit-vs …d5"
+ ],
+ "vienna-gambit::Gambit Accepted (…exf4)::Gambit Accepted (…exf4)": [
+  "mp-viennagambit-gambit accepted (…exf4)"
+ ],
+ "vienna-gambit::::Gambit Accepted (…exf4)": [
+  "mp-viennagambit-"
+ ],
+ "vienna-gambit::Qf3 Setup (vs …d5)::Qf3 Setup (vs …d5)": [
+  "mp-viennagambit-qf3 setup (vs …d5)"
+ ],
+ "vienna-gambit::::Qf3 Setup (vs …d5)": [
+  "mp-viennagambit-"
+ ],
+ "danish-gambit::main": null,
+ "danish-gambit::…Nc6 & …Bb4::Schlechter Defence (…Nc6 & …Bb4)": [
+  "mp-danishgambit-…nc6 & …bb4"
+ ],
+ "danish-gambit::Schlechter Defence (…Nc6 & …Bb4)::Schlechter Defence (…Nc6 & …Bb4)": [
+  "mp-danishgambit-schlechter defence (…nc6 & …bb4)"
+ ],
+ "danish-gambit::::Schlechter Defence (…Nc6 & …Bb4)": [
+  "mp-danishgambit-"
+ ],
+ "smith-morra-gambit::main": null,
+ "smith-morra-gambit::…d6 & …e6::Classical Defence (…d6 & …e6)": [
+  "mp-smithmorragambit-…d6 & …e6"
+ ],
+ "smith-morra-gambit::2…Nf6::Alapin Declined (2…Nf6)": [
+  "mp-smithmorragambit-2…nf6"
+ ],
+ "smith-morra-gambit::d3 Return Declined::d3 Return Declined": [
+  "mp-smithmorragambit-d3 return declined"
+ ],
+ "smith-morra-gambit::Classical Defence (…d6 & …e6)::Classical Defence (…d6 & …e6)": [
+  "mp-smithmorragambit-classical defence (…d6 & …e6)"
+ ],
+ "smith-morra-gambit::::Classical Defence (…d6 & …e6)": [
+  "mp-smithmorragambit-"
+ ],
+ "smith-morra-gambit::Alapin Declined (2…Nf6)::Alapin Declined (2…Nf6)": [
+  "mp-smithmorragambit-alapin declined (2…nf6)"
+ ],
+ "smith-morra-gambit::::Alapin Declined (2…Nf6)": [
+  "mp-smithmorragambit-"
+ ],
+ "smith-morra-gambit::::d3 Return Declined": [
+  "mp-smithmorragambit-"
+ ],
+ "stafford-gambit::main": null,
+ "stafford-gambit::Bg5 — the Stafford Mate::Bg5 — the Stafford Mate": [
+  "mp-staffordgambit-bg5 — the stafford mate"
+ ],
+ "stafford-gambit::Nc3 — the Knight Raid::Nc3 — the Knight Raid": [
+  "mp-staffordgambit-nc3 — the knight raid"
+ ],
+ "stafford-gambit::::Bg5 — the Stafford Mate": [
+  "mp-staffordgambit-"
+ ],
+ "stafford-gambit::::Nc3 — the Knight Raid": [
+  "mp-staffordgambit-"
+ ],
+ "marshall-attack::main": null,
+ "marshall-attack::White avoids the gambit::d4 Decline (White avoids the gambit)": [
+  "mp-marshallattack-white avoids the gambit"
+ ],
+ "marshall-attack::d4 Decline (White avoids the gambit)::d4 Decline (White avoids the gambit)": [
+  "mp-marshallattack-d4 decline (white avoids the gambit)"
+ ],
+ "marshall-attack::::d4 Decline (White avoids the gambit)": [
+  "mp-marshallattack-"
+ ],
+ "englund-gambit::main": null,
+ "englund-gambit::Qc1#::The Englund Mate (Qc1#)": [
+  "mp-englundgambit-qc1#"
+ ],
+ "englund-gambit::The Englund Mate (Qc1#)::The Englund Mate (Qc1#)": [
+  "mp-englundgambit-the englund mate (qc1#)"
+ ],
+ "englund-gambit::::The Englund Mate (Qc1#)": [
+  "mp-englundgambit-"
+ ],
+ "pro-gothamchess-italian::main": [
+  "mp-progothamchess-italian-evans-style"
+ ],
+ "pro-gothamchess-italian::Giuoco Piano c3-d4::Giuoco Piano c3-d4": [
+  "mp-progothamchess-italian-evans-style"
+ ],
+ "pro-gothamchess-italian::Slow Italian d3::Slow Italian d3": [],
+ "pro-gothamchess-italian::Evans Gambit::Evans Gambit": [
+  "mp-progothamchess-italian-evans-bigcenter"
+ ],
+ "pro-gothamchess-italian::…Nf6::Two Knights (…Nf6)": [
+  "mp-progothamchess-italian-twoknights-kside"
+ ],
+ "pro-gothamchess-italian::::Giuoco Piano c3-d4": [
+  "mp-progothamchess-italian-evans-style"
+ ],
+ "pro-gothamchess-italian::::Slow Italian d3": [],
+ "pro-gothamchess-italian::::Evans Gambit": [
+  "mp-progothamchess-italian-evans-bigcenter"
+ ],
+ "pro-gothamchess-italian::Two Knights (…Nf6)::Two Knights (…Nf6)": [
+  "mp-progothamchess-italian-twoknights-kside"
+ ],
+ "pro-gothamchess-italian::::Two Knights (…Nf6)": [
+  "mp-progothamchess-italian-twoknights-kside"
+ ],
+ "pro-gothamchess-london::main": [
+  "mp-progothamchess-london-standard-ne5",
+  "mp-progothamchess-london-classical-attack"
+ ],
+ "pro-gothamchess-london::Standard Setup vs d5::Standard Setup vs d5": [
+  "mp-progothamchess-london-standard-ne5",
+  "mp-progothamchess-london-e6-classical"
+ ],
+ "pro-gothamchess-london::Bh6 + Opposite-Side Castle Attack::vs King's Indian (Bh6 + Opposite-Side Castle Attack)": [
+  "mp-progothamchess-london-kid-rooksac"
+ ],
+ "pro-gothamchess-london::Aggressive Jobava-London Hybrid::Aggressive Jobava-London Hybrid": [
+  "mp-progothamchess-london-jobava-nb5"
+ ],
+ "pro-gothamchess-london::via 2.Bf4::vs …c6 (via 2.Bf4)": [
+  "mp-progothamchess-london-c6-c4break"
+ ],
+ "pro-gothamchess-london::::Standard Setup vs d5": [
+  "mp-progothamchess-london-standard-ne5",
+  "mp-progothamchess-london-e6-classical"
+ ],
+ "pro-gothamchess-london::vs King's Indian (Bh6 + Opposite-Side Castle Attack)::vs King's Indian (Bh6 + Opposite-Side Castle Attack)": [
+  "mp-progothamchess-london-kid-rooksac"
+ ],
+ "pro-gothamchess-london::::vs King's Indian (Bh6 + Opposite-Side Castle Attack)": [
+  "mp-progothamchess-london-kid-rooksac"
+ ],
+ "pro-gothamchess-london::::Aggressive Jobava-London Hybrid": [
+  "mp-progothamchess-london-jobava-nb5"
+ ],
+ "pro-gothamchess-london::vs …c6 (via 2.Bf4)::vs …c6 (via 2.Bf4)": [
+  "mp-progothamchess-london-c6-c4break"
+ ],
+ "pro-gothamchess-london::::vs …c6 (via 2.Bf4)": [
+  "mp-progothamchess-london-c6-c4break"
+ ],
+ "pro-gothamchess-stafford-refute::main": [
+  "mp-progothamchess-stafford-consolidate"
+ ],
+ "pro-gothamchess-stafford-refute::Main Refutation d3::Main Refutation d3": [
+  "mp-progothamchess-stafford-consolidate"
+ ],
+ "pro-gothamchess-stafford-refute::4...dxc6 5.e5 Line::4...dxc6 5.e5 Line": [
+  "mp-progothamchess-stafford-e5space"
+ ],
+ "pro-gothamchess-stafford-refute::::Main Refutation d3": [
+  "mp-progothamchess-stafford-consolidate"
+ ],
+ "pro-gothamchess-stafford-refute::::4...dxc6 5.e5 Line": [
+  "mp-progothamchess-stafford-e5space"
+ ],
+ "pro-gothamchess-caro-kann::main": [
+  "mp-pro-gothamchess-carokann-c5",
+  "mp-pro-gothamchess-carokann-solid",
+  "mp-progothamchess-caro-d3-endgame"
+ ],
+ "pro-gothamchess-caro-kann::Main Line::Classical 4...Bf5 (Main Line)": [
+  "mp-pro-gothamchess-carokann-c5",
+  "mp-pro-gothamchess-carokann-solid"
+ ],
+ "pro-gothamchess-caro-kann::Classical Capablanca 4...Bf5 5.Ng3 Bg6 6.h4::Classical Capablanca 4...Bf5 5.Ng3 Bg6 6.h4": [
+  "mp-pro-gothamchess-carokann-c5",
+  "mp-pro-gothamchess-carokann-solid"
+ ],
+ "pro-gothamchess-caro-kann::Tartakower / Two Knights 3...Nf6::Tartakower / Two Knights 3...Nf6": [
+  "mp-progothamchess-caro-classical-bd6"
+ ],
+ "pro-gothamchess-caro-kann::Two Knights 2.Nc3 d5 3.Nf3 Bg4::Two Knights 2.Nc3 d5 3.Nf3 Bg4": [
+  "mp-progothamchess-caro-two-knights"
+ ],
+ "pro-gothamchess-caro-kann::Advance Variation 3.e5 Bf5::Advance Variation 3.e5 Bf5": [
+  "mp-progothamchess-caro-bf5-trade"
+ ],
+ "pro-gothamchess-caro-kann::Advance Variation 3.e5 c5::Advance Variation 3.e5 c5": [
+  "mp-progothamchess-caro-advance-c5"
+ ],
+ "pro-gothamchess-caro-kann::Exchange Variation 3.exd5::Exchange Variation 3.exd5": [
+  "mp-progothamchess-caro-exchange-fianchetto"
+ ],
+ "pro-gothamchess-caro-kann::Panov-Botvinnik Attack 3.exd5 cxd5 4.c4::Panov-Botvinnik Attack 3.exd5 cxd5 4.c4": [
+  "mp-progothamchess-caro-panov",
+  "mp-progothamchess-caro-panov-endgame"
+ ],
+ "pro-gothamchess-caro-kann::Fantasy Variation 3.f3::Fantasy Variation 3.f3": [
+  "mp-progothamchess-caro-fantasy-bd6",
+  "mp-progothamchess-caro-fantasy-endgame"
+ ],
+ "pro-gothamchess-caro-kann::Classical 4...Bf5 (Main Line)::Classical 4...Bf5 (Main Line)": [
+  "mp-pro-gothamchess-carokann-c5",
+  "mp-pro-gothamchess-carokann-solid"
+ ],
+ "pro-gothamchess-caro-kann::::Classical 4...Bf5 (Main Line)": [
+  "mp-pro-gothamchess-carokann-c5",
+  "mp-pro-gothamchess-carokann-solid"
+ ],
+ "pro-gothamchess-caro-kann::::Classical Capablanca 4...Bf5 5.Ng3 Bg6 6.h4": [
+  "mp-pro-gothamchess-carokann-c5",
+  "mp-pro-gothamchess-carokann-solid"
+ ],
+ "pro-gothamchess-caro-kann::::Tartakower / Two Knights 3...Nf6": [
+  "mp-progothamchess-caro-classical-bd6"
+ ],
+ "pro-gothamchess-caro-kann::::Two Knights 2.Nc3 d5 3.Nf3 Bg4": [
+  "mp-progothamchess-caro-two-knights"
+ ],
+ "pro-gothamchess-caro-kann::::Advance Variation 3.e5 Bf5": [
+  "mp-progothamchess-caro-bf5-trade"
+ ],
+ "pro-gothamchess-caro-kann::::Advance Variation 3.e5 c5": [
+  "mp-progothamchess-caro-advance-c5"
+ ],
+ "pro-gothamchess-caro-kann::::Exchange Variation 3.exd5": [
+  "mp-progothamchess-caro-exchange-fianchetto"
+ ],
+ "pro-gothamchess-caro-kann::::Panov-Botvinnik Attack 3.exd5 cxd5 4.c4": [
+  "mp-progothamchess-caro-panov",
+  "mp-progothamchess-caro-panov-endgame"
+ ],
+ "pro-gothamchess-caro-kann::::Fantasy Variation 3.f3": [
+  "mp-progothamchess-caro-fantasy-bd6",
+  "mp-progothamchess-caro-fantasy-endgame"
+ ],
+ "pro-gothamchess-scandinavian::main": [
+  "mp-progothamchess-scand-qa5-bxc3"
+ ],
+ "pro-gothamchess-scandinavian::Main Line Qa5::Main Line Qa5": [
+  "mp-progothamchess-scand-qa5-bxc3"
+ ],
+ "pro-gothamchess-scandinavian::2...Nf6 Scandinavian::2...Nf6 Scandinavian": [],
+ "pro-gothamchess-scandinavian::Portuguese …Bg4::Portuguese …Bg4": [
+  "mp-progothamchess-scandi-portuguese",
+  "mp-progothamchess-scand-nf6bg4-oooattack"
+ ],
+ "pro-gothamchess-scandinavian::Nxd5::vs Nc3 (Nxd5)": [
+  "mp-progothamchess-scand-nf6nc3-bg4pin"
+ ],
+ "pro-gothamchess-scandinavian::vs Bb5+::vs Bb5+": [
+  "mp-progothamchess-scand-bb5-ne5"
+ ],
+ "pro-gothamchess-scandinavian::::Main Line Qa5": [
+  "mp-progothamchess-scand-qa5-bxc3"
+ ],
+ "pro-gothamchess-scandinavian::::2...Nf6 Scandinavian": [],
+ "pro-gothamchess-scandinavian::::Portuguese …Bg4": [
+  "mp-progothamchess-scandi-portuguese",
+  "mp-progothamchess-scand-nf6bg4-oooattack"
+ ],
+ "pro-gothamchess-scandinavian::vs Nc3 (Nxd5)::vs Nc3 (Nxd5)": [
+  "mp-progothamchess-scand-nf6nc3-bg4pin"
+ ],
+ "pro-gothamchess-scandinavian::::vs Nc3 (Nxd5)": [
+  "mp-progothamchess-scand-nf6nc3-bg4pin"
+ ],
+ "pro-gothamchess-scandinavian::::vs Bb5+": [
+  "mp-progothamchess-scand-bb5-ne5"
+ ],
+ "pro-gothamchess-qgd::main": [
+  "mp-progothamchess-qgd-carlsbad-e5",
+  "mp-progothamchess-qgd-tartakower-b6"
+ ],
+ "pro-gothamchess-qgd::Classical 5.Bf4 Line::Classical 5.Bf4 Line": [
+  "mp-progothamchess-qgd-classical",
+  "mp-progothamchess-qgd-tartakower-b6"
+ ],
+ "pro-gothamchess-qgd::Exchange Variation::Exchange Variation": [
+  "mp-progothamchess-qgd-carlsbad-e5"
+ ],
+ "pro-gothamchess-qgd::::Classical 5.Bf4 Line": [
+  "mp-progothamchess-qgd-classical",
+  "mp-progothamchess-qgd-tartakower-b6"
+ ],
+ "pro-gothamchess-qgd::::Exchange Variation": [
+  "mp-progothamchess-qgd-carlsbad-e5"
+ ],
+ "pro-gothamchess-ponziani::main": [
+  "mp-progothamchess-ponziani-main-qb3",
+  "mp-progothamchess-ponziani-d4-thrust"
+ ],
+ "pro-gothamchess-ponziani::Main Line 3...Nf6 4.d4::Main Line 3...Nf6 4.d4": [
+  "mp-progothamchess-ponziani-main-qb3",
+  "mp-progothamchess-ponziani-d4-thrust"
+ ],
+ "pro-gothamchess-ponziani::3...d5 Central Counter::3...d5 Central Counter": [
+  "mp-progothamchess-ponziani-d5-qa4"
+ ],
+ "pro-gothamchess-ponziani::dxc6::4…Nxe4 (dxc6)": [
+  "mp-progothamchess-ponziani-nxe4-gambit"
+ ],
+ "pro-gothamchess-ponziani::::Main Line 3...Nf6 4.d4": [
+  "mp-progothamchess-ponziani-main-qb3",
+  "mp-progothamchess-ponziani-d4-thrust"
+ ],
+ "pro-gothamchess-ponziani::::3...d5 Central Counter": [
+  "mp-progothamchess-ponziani-d5-qa4"
+ ],
+ "pro-gothamchess-ponziani::4…Nxe4 (dxc6)::4…Nxe4 (dxc6)": [
+  "mp-progothamchess-ponziani-nxe4-gambit"
+ ],
+ "pro-gothamchess-ponziani::::4…Nxe4 (dxc6)": [
+  "mp-progothamchess-ponziani-nxe4-gambit"
+ ],
+ "pro-gothamchess-fantasy-caro::main": [
+  "mp-progothamchess-fantasy-dxe4-center"
+ ],
+ "pro-gothamchess-fantasy-caro::Main Line 3...dxe4 4.fxe4::Main Line 3...dxe4 4.fxe4": [
+  "mp-progothamchess-fantasy-dxe4-center"
+ ],
+ "pro-gothamchess-fantasy-caro::Solid 3...e6::Solid 3...e6": [
+  "mp-progothamchess-fantasy-e6-qg4attack"
+ ],
+ "pro-gothamchess-fantasy-caro::Aggressive 3...g6::Aggressive 3...g6": [
+  "mp-progothamchess-fantasy-g6-poisonpawn"
+ ],
+ "pro-gothamchess-fantasy-caro::Counter 3...Qb6::Counter 3...Qb6": [
+  "mp-progothamchess-fantasy-qb6-na4"
+ ],
+ "pro-gothamchess-fantasy-caro::::Main Line 3...dxe4 4.fxe4": [
+  "mp-progothamchess-fantasy-dxe4-center"
+ ],
+ "pro-gothamchess-fantasy-caro::::Solid 3...e6": [
+  "mp-progothamchess-fantasy-e6-qg4attack"
+ ],
+ "pro-gothamchess-fantasy-caro::::Aggressive 3...g6": [
+  "mp-progothamchess-fantasy-g6-poisonpawn"
+ ],
+ "pro-gothamchess-fantasy-caro::::Counter 3...Qb6": [
+  "mp-progothamchess-fantasy-qb6-na4"
+ ],
+ "pro-gothamchess-milner-barry::main": [
+  "mp-progothamchess-mb-main-fstorm",
+  "mp-progothamchess-mb-advance-battery"
+ ],
+ "pro-gothamchess-milner-barry::Main Gambit Line::Main Gambit Line": [
+  "mp-progothamchess-mb-main-fstorm",
+  "mp-progothamchess-french-rubinstein"
+ ],
+ "pro-gothamchess-milner-barry::Black Declines with Bd7::Black Declines with Bd7": [
+  "mp-progothamchess-mb-declines-na4"
+ ],
+ "pro-gothamchess-milner-barry::Anti-French 3.e5 Advance::Anti-French 3.e5 Advance": [
+  "mp-progothamchess-mb-advance-battery"
+ ],
+ "pro-gothamchess-milner-barry::::Main Gambit Line": [
+  "mp-progothamchess-mb-main-fstorm",
+  "mp-progothamchess-french-rubinstein"
+ ],
+ "pro-gothamchess-milner-barry::::Black Declines with Bd7": [
+  "mp-progothamchess-mb-declines-na4"
+ ],
+ "pro-gothamchess-milner-barry::::Anti-French 3.e5 Advance": [
+  "mp-progothamchess-mb-advance-battery"
+ ],
+ "pro-gothamchess-anti-sicilian::main": [
+  "mp-progothamchess-antisic-e6-open",
+  "mp-progothamchess-antisic-g6-d4break"
+ ],
+ "pro-gothamchess-anti-sicilian::Rossolimo 3.Bb5 e6::Rossolimo 3.Bb5 e6": [
+  "mp-progothamchess-antisic-e6-open"
+ ],
+ "pro-gothamchess-anti-sicilian::Rossolimo 3.Bb5 g6::Rossolimo 3.Bb5 g6": [
+  "mp-progothamchess-antisic-g6-d4break"
+ ],
+ "pro-gothamchess-anti-sicilian::positional squeeze::Accelerated Pawn Storm (positional squeeze)": [
+  "mp-progothamchess-antisic-accel-storm"
+ ],
+ "pro-gothamchess-anti-sicilian::::Rossolimo 3.Bb5 e6": [
+  "mp-progothamchess-antisic-e6-open"
+ ],
+ "pro-gothamchess-anti-sicilian::::Rossolimo 3.Bb5 g6": [
+  "mp-progothamchess-antisic-g6-d4break"
+ ],
+ "pro-gothamchess-anti-sicilian::Accelerated Pawn Storm (positional squeeze)::Accelerated Pawn Storm (positional squeeze)": [
+  "mp-progothamchess-antisic-accel-storm"
+ ],
+ "pro-gothamchess-anti-sicilian::::Accelerated Pawn Storm (positional squeeze)": [
+  "mp-progothamchess-antisic-accel-storm"
+ ],
+ "pro-naroditsky-caro-kann::main": [],
+ "pro-naroditsky-caro-kann::Nc3::Two Knights Variation (Nc3)": [
+  "mp-pronarocaro-twoknights-b5-coord",
+  "mp-pronarocaro-two-knights-endgame"
+ ],
+ "pro-naroditsky-caro-kann::Nf3::King's Indian Attack (Nf3)": [
+  "mp-pronarocaro-kia-b5-expansion",
+  "mp-pronarocaro-kia-reti-endgame"
+ ],
+ "pro-naroditsky-caro-kann::exd5::Exchange Variation (exd5)": [
+  "mp-pronarocaro-exchange-bg4-pin",
+  "mp-pronarocaro-exchange-endgame"
+ ],
+ "pro-naroditsky-caro-kann::Nc3::Classical Variation (Nc3)": [
+  "mp-pronarocaro-classical-kingside-storm",
+  "mp-pronarocaro-classical-endgame"
+ ],
+ "pro-naroditsky-caro-kann::f3::Fantasy Variation (f3)": [
+  "mp-pronarocaro-fantasy-central-break",
+  "mp-pronarocaro-fantasy-endgame"
+ ],
+ "pro-naroditsky-caro-kann::d4 g6::Modern Defense Transposition (d4 g6)": [
+  "mp-pronarocaro-modern-trade-and-develop",
+  "mp-pronarocaro-modern-trans-endgame"
+ ],
+ "pro-naroditsky-caro-kann::3.e5 c5::Advance Variation (3.e5 c5)": [
+  "mp-pronarocaro-advance-knight-reroute",
+  "mp-pronarocaro-advance-c5-endgame"
+ ],
+ "pro-naroditsky-caro-kann::3.e5 Bf5::Advance Variation (3.e5 Bf5)": [
+  "mp-pronarocaro-advance-bf5-piece-storm",
+  "mp-pronarocaro-advance-bf5-endgame"
+ ],
+ "pro-naroditsky-caro-kann::4.c4::Panov-Botvinnik Attack (4.c4)": [
+  "mp-pronarocaro-panov-queenside-coordination",
+  "mp-pronarocaro-panov-endgame"
+ ],
+ "pro-naroditsky-caro-kann::2.d3::d3 Sideline (2.d3)": [
+  "mp-pronarocaro-d3-bishop-trade-pressure",
+  "mp-pronarocaro-d3-sideline-endgame"
+ ],
+ "pro-naroditsky-caro-kann::Two Knights Variation (Nc3)::Two Knights Variation (Nc3)": [
+  "mp-pronarocaro-twoknights-b5-coord",
+  "mp-pronarocaro-two-knights-endgame"
+ ],
+ "pro-naroditsky-caro-kann::::Two Knights Variation (Nc3)": [
+  "mp-pronarocaro-twoknights-b5-coord",
+  "mp-pronarocaro-two-knights-endgame"
+ ],
+ "pro-naroditsky-caro-kann::King's Indian Attack (Nf3)::King's Indian Attack (Nf3)": [
+  "mp-pronarocaro-kia-b5-expansion",
+  "mp-pronarocaro-kia-reti-endgame"
+ ],
+ "pro-naroditsky-caro-kann::::King's Indian Attack (Nf3)": [
+  "mp-pronarocaro-kia-b5-expansion",
+  "mp-pronarocaro-kia-reti-endgame"
+ ],
+ "pro-naroditsky-caro-kann::Exchange Variation (exd5)::Exchange Variation (exd5)": [
+  "mp-pronarocaro-exchange-bg4-pin",
+  "mp-pronarocaro-exchange-endgame"
+ ],
+ "pro-naroditsky-caro-kann::::Exchange Variation (exd5)": [
+  "mp-pronarocaro-exchange-bg4-pin",
+  "mp-pronarocaro-exchange-endgame"
+ ],
+ "pro-naroditsky-caro-kann::Classical Variation (Nc3)::Classical Variation (Nc3)": [
+  "mp-pronarocaro-classical-kingside-storm",
+  "mp-pronarocaro-classical-endgame"
+ ],
+ "pro-naroditsky-caro-kann::::Classical Variation (Nc3)": [
+  "mp-pronarocaro-classical-kingside-storm",
+  "mp-pronarocaro-classical-endgame"
+ ],
+ "pro-naroditsky-caro-kann::Fantasy Variation (f3)::Fantasy Variation (f3)": [
+  "mp-pronarocaro-fantasy-central-break",
+  "mp-pronarocaro-fantasy-endgame"
+ ],
+ "pro-naroditsky-caro-kann::::Fantasy Variation (f3)": [
+  "mp-pronarocaro-fantasy-central-break",
+  "mp-pronarocaro-fantasy-endgame"
+ ],
+ "pro-naroditsky-caro-kann::Modern Defense Transposition (d4 g6)::Modern Defense Transposition (d4 g6)": [
+  "mp-pronarocaro-modern-trade-and-develop",
+  "mp-pronarocaro-modern-trans-endgame"
+ ],
+ "pro-naroditsky-caro-kann::::Modern Defense Transposition (d4 g6)": [
+  "mp-pronarocaro-modern-trade-and-develop",
+  "mp-pronarocaro-modern-trans-endgame"
+ ],
+ "pro-naroditsky-caro-kann::Advance Variation (3.e5 c5)::Advance Variation (3.e5 c5)": [
+  "mp-pronarocaro-advance-knight-reroute",
+  "mp-pronarocaro-advance-c5-endgame"
+ ],
+ "pro-naroditsky-caro-kann::::Advance Variation (3.e5 c5)": [
+  "mp-pronarocaro-advance-knight-reroute",
+  "mp-pronarocaro-advance-c5-endgame"
+ ],
+ "pro-naroditsky-caro-kann::Advance Variation (3.e5 Bf5)::Advance Variation (3.e5 Bf5)": [
+  "mp-pronarocaro-advance-bf5-piece-storm",
+  "mp-pronarocaro-advance-bf5-endgame"
+ ],
+ "pro-naroditsky-caro-kann::::Advance Variation (3.e5 Bf5)": [
+  "mp-pronarocaro-advance-bf5-piece-storm",
+  "mp-pronarocaro-advance-bf5-endgame"
+ ],
+ "pro-naroditsky-caro-kann::Panov-Botvinnik Attack (4.c4)::Panov-Botvinnik Attack (4.c4)": [
+  "mp-pronarocaro-panov-queenside-coordination",
+  "mp-pronarocaro-panov-endgame"
+ ],
+ "pro-naroditsky-caro-kann::::Panov-Botvinnik Attack (4.c4)": [
+  "mp-pronarocaro-panov-queenside-coordination",
+  "mp-pronarocaro-panov-endgame"
+ ],
+ "pro-naroditsky-caro-kann::d3 Sideline (2.d3)::d3 Sideline (2.d3)": [
+  "mp-pronarocaro-d3-bishop-trade-pressure",
+  "mp-pronarocaro-d3-sideline-endgame"
+ ],
+ "pro-naroditsky-caro-kann::::d3 Sideline (2.d3)": [
+  "mp-pronarocaro-d3-bishop-trade-pressure",
+  "mp-pronarocaro-d3-sideline-endgame"
+ ],
+ "pro-naroditsky-alapin::main": [
+  "mp-pronaroAlapin-nf6main-mg"
+ ],
+ "pro-naroditsky-alapin::2…d5 Open Variation::2…d5 Open Variation": [
+  "mp-pronaroAlapin-d5open-mg",
+  "mp-pronaroAlapin-d5open-endgame"
+ ],
+ "pro-naroditsky-alapin::2…e6 French-Style::2…e6 French-Style": [
+  "mp-pronaroAlapin-e6french-mg",
+  "mp-pronaroAlapin-e6french-endgame"
+ ],
+ "pro-naroditsky-alapin::2…d6 Mainline::2…d6 Mainline": [
+  "mp-pronaroAlapin-d6main-mg",
+  "mp-pronaroAlapin-d6main-endgame"
+ ],
+ "pro-naroditsky-alapin::2…g6 Hyper-Dragon::2…g6 Hyper-Dragon": [
+  "mp-pronaroAlapin-g6dragon-mg",
+  "mp-pronaroAlapin-g6dragon-endgame"
+ ],
+ "pro-naroditsky-alapin::2…Nc6 Line::2…Nc6 Line": [
+  "mp-pronaroAlapin-nc6-mg",
+  "mp-pronaroAlapin-nc6-endgame"
+ ],
+ "pro-naroditsky-alapin::Spine 4…d6 Bc4 Gambit::Spine 4…d6 Bc4 Gambit": [
+  "mp-pronaroAlapin-spined6-mg",
+  "mp-pronaroAlapin-spined6-endgame"
+ ],
+ "pro-naroditsky-alapin::Spine 4…e6 IQP Lines::Spine 4…e6 IQP Lines": [
+  "mp-pronaroAlapin-spinee6-mg",
+  "mp-pronaroAlapin-spinee6-endgame"
+ ],
+ "pro-naroditsky-alapin::::2…d5 Open Variation": [
+  "mp-pronaroAlapin-d5open-mg",
+  "mp-pronaroAlapin-d5open-endgame"
+ ],
+ "pro-naroditsky-alapin::::2…e6 French-Style": [
+  "mp-pronaroAlapin-e6french-mg",
+  "mp-pronaroAlapin-e6french-endgame"
+ ],
+ "pro-naroditsky-alapin::::2…d6 Mainline": [
+  "mp-pronaroAlapin-d6main-mg",
+  "mp-pronaroAlapin-d6main-endgame"
+ ],
+ "pro-naroditsky-alapin::::2…g6 Hyper-Dragon": [
+  "mp-pronaroAlapin-g6dragon-mg",
+  "mp-pronaroAlapin-g6dragon-endgame"
+ ],
+ "pro-naroditsky-alapin::::2…Nc6 Line": [
+  "mp-pronaroAlapin-nc6-mg",
+  "mp-pronaroAlapin-nc6-endgame"
+ ],
+ "pro-naroditsky-alapin::::Spine 4…d6 Bc4 Gambit": [
+  "mp-pronaroAlapin-spined6-mg",
+  "mp-pronaroAlapin-spined6-endgame"
+ ],
+ "pro-naroditsky-alapin::::Spine 4…e6 IQP Lines": [
+  "mp-pronaroAlapin-spinee6-mg",
+  "mp-pronaroAlapin-spinee6-endgame"
+ ],
+ "pro-naroditsky-najdorf::main": [
+  "mp-pronaroNajdorf-opposite-castle-race"
+ ],
+ "pro-naroditsky-najdorf::Be3 English Attack::Be3 English Attack": [
+  "mp-pronaroNaj-english-race",
+  "mp-pronaroNaj-english-bxh6"
+ ],
+ "pro-naroditsky-najdorf::Be2 Classical::Be2 Classical": [
+  "mp-pronaroNaj-classical-development",
+  "mp-pronaroNaj-classical-nb6"
+ ],
+ "pro-naroditsky-najdorf::h3 Adams Attack::h3 Adams Attack": [
+  "mp-pronaroNaj-adams-defense",
+  "mp-pronaroNaj-adams-counter"
+ ],
+ "pro-naroditsky-najdorf::Bc4 Sozin / Fischer Attack::Bc4 Sozin / Fischer Attack": [],
+ "pro-naroditsky-najdorf::::Be3 English Attack": [
+  "mp-pronaroNaj-english-race",
+  "mp-pronaroNaj-english-bxh6"
+ ],
+ "pro-naroditsky-najdorf::::Be2 Classical": [
+  "mp-pronaroNaj-classical-development",
+  "mp-pronaroNaj-classical-nb6"
+ ],
+ "pro-naroditsky-najdorf::::h3 Adams Attack": [
+  "mp-pronaroNaj-adams-defense",
+  "mp-pronaroNaj-adams-counter"
+ ],
+ "pro-naroditsky-najdorf::::Bc4 Sozin / Fischer Attack": [],
+ "pro-naroditsky-kid::main": [],
+ "pro-naroditsky-kid::Be2::Classical Mar del Plata (Be2)": [
+  "mp-pronaroKID-classical-kingside"
+ ],
+ "pro-naroditsky-kid::g3::Fianchetto Variation (g3)": [
+  "mp-pronaroKID-fianchetto-queenside",
+  "mp-pronaroKID-fianchetto-simplify"
+ ],
+ "pro-naroditsky-kid::Anti-KID with Nf3 first::Anti-KID with Nf3 first": [
+  "mp-pronaroKID-antikidnf3-yugoslav",
+  "mp-pronaroKID-antikidnf3-rooklift"
+ ],
+ "pro-naroditsky-kid::h3::Makogonov (h3)": [
+  "mp-pronaroKID-makogonov-kingside",
+  "mp-pronaroKID-makogonov-nc5"
+ ],
+ "pro-naroditsky-kid::f3::Sämisch (f3)": [
+  "mp-pronaroKID-saemisch-queenside",
+  "mp-pronaroKID-saemisch-central",
+  "mp-pronaroKID-saemisch-endgame"
+ ],
+ "pro-naroditsky-kid::Petrosian / Nge2::Petrosian / Nge2": [
+  "mp-pronaroKID-petrosian-central",
+  "mp-pronaroKID-petrosian-re8"
+ ],
+ "pro-naroditsky-kid::f4::Four Pawns Attack (f4)": [
+  "mp-pronaroKID-fourpawns-reroute",
+  "mp-pronaroKID-fourpawns-counter"
+ ],
+ "pro-naroditsky-kid::Classical Mar del Plata (Be2)::Classical Mar del Plata (Be2)": [
+  "mp-pronaroKID-classical-kingside"
+ ],
+ "pro-naroditsky-kid::::Classical Mar del Plata (Be2)": [
+  "mp-pronaroKID-classical-kingside"
+ ],
+ "pro-naroditsky-kid::Fianchetto Variation (g3)::Fianchetto Variation (g3)": [
+  "mp-pronaroKID-fianchetto-queenside",
+  "mp-pronaroKID-fianchetto-simplify"
+ ],
+ "pro-naroditsky-kid::::Fianchetto Variation (g3)": [
+  "mp-pronaroKID-fianchetto-queenside",
+  "mp-pronaroKID-fianchetto-simplify"
+ ],
+ "pro-naroditsky-kid::::Anti-KID with Nf3 first": [
+  "mp-pronaroKID-antikidnf3-yugoslav",
+  "mp-pronaroKID-antikidnf3-rooklift"
+ ],
+ "pro-naroditsky-kid::Makogonov (h3)::Makogonov (h3)": [
+  "mp-pronaroKID-makogonov-kingside",
+  "mp-pronaroKID-makogonov-nc5"
+ ],
+ "pro-naroditsky-kid::::Makogonov (h3)": [
+  "mp-pronaroKID-makogonov-kingside",
+  "mp-pronaroKID-makogonov-nc5"
+ ],
+ "pro-naroditsky-kid::Sämisch (f3)::Sämisch (f3)": [
+  "mp-pronaroKID-saemisch-queenside",
+  "mp-pronaroKID-saemisch-central",
+  "mp-pronaroKID-saemisch-endgame"
+ ],
+ "pro-naroditsky-kid::::Sämisch (f3)": [
+  "mp-pronaroKID-saemisch-queenside",
+  "mp-pronaroKID-saemisch-central",
+  "mp-pronaroKID-saemisch-endgame"
+ ],
+ "pro-naroditsky-kid::::Petrosian / Nge2": [
+  "mp-pronaroKID-petrosian-central",
+  "mp-pronaroKID-petrosian-re8"
+ ],
+ "pro-naroditsky-kid::Four Pawns Attack (f4)::Four Pawns Attack (f4)": [
+  "mp-pronaroKID-fourpawns-reroute",
+  "mp-pronaroKID-fourpawns-counter"
+ ],
+ "pro-naroditsky-kid::::Four Pawns Attack (f4)": [
+  "mp-pronaroKID-fourpawns-reroute",
+  "mp-pronaroKID-fourpawns-counter"
+ ],
+ "pro-naroditsky-alekhine::main": [],
+ "pro-naroditsky-alekhine::Nc3 Two Knights::Nc3 Two Knights": [
+  "mp-pronaroAlek-twoknights-equality"
+ ],
+ "pro-naroditsky-alekhine::c4 Modern Main::c4 Modern Main": [
+  "mp-pronaroAlek-modern-development",
+  "mp-pronaroAlek-modern-nb4"
+ ],
+ "pro-naroditsky-alekhine::Nf3 / Modern Quiet::Nf3 / Modern Quiet": [
+  "mp-pronaroAlek-modernquiet-conversion"
+ ],
+ "pro-naroditsky-alekhine::::Nc3 Two Knights": [
+  "mp-pronaroAlek-twoknights-equality"
+ ],
+ "pro-naroditsky-alekhine::::c4 Modern Main": [
+  "mp-pronaroAlek-modern-development",
+  "mp-pronaroAlek-modern-nb4"
+ ],
+ "pro-naroditsky-alekhine::::Nf3 / Modern Quiet": [
+  "mp-pronaroAlek-modernquiet-conversion"
+ ],
+ "pro-naroditsky-kia::main": [
+  "mp-pronaroKIA-symmetric-attack"
+ ],
+ "pro-naroditsky-kia::d5 KIA mainline::d5 KIA mainline": [
+  "mp-pronaroKIA-reti-attack"
+ ],
+ "pro-naroditsky-kia::g6 Modern setup::g6 Modern setup": [
+  "mp-pronaroKIA-symmetric-e5push"
+ ],
+ "pro-naroditsky-kia::d4 KID transposition::d4 KID transposition": [
+  "mp-pronaroKIA-kid-transposition"
+ ],
+ "pro-naroditsky-kia::Reti gambit::vs ...e5 (Reti gambit)": [
+  "mp-pronaroKIA-vs-e5-conversion",
+  "mp-pronaroKIA-vs-e5-endgame"
+ ],
+ "pro-naroditsky-kia::Slav-like::vs ...c6 (Slav-like)": [
+  "mp-pronaroKIA-vs-c6-attack",
+  "mp-pronaroKIA-vs-c6-endgame"
+ ],
+ "pro-naroditsky-kia::Owen::vs ...b6 (Owen)": [
+  "mp-pronaroKIA-vs-b6-expand",
+  "mp-pronaroKIA-vs-b6-endgame"
+ ],
+ "pro-naroditsky-kia::French-style::vs ...e6 (French-style)": [
+  "mp-pronaroKIA-vs-e6-attack",
+  "mp-pronaroKIA-vs-e6-endgame"
+ ],
+ "pro-naroditsky-kia::::d5 KIA mainline": [
+  "mp-pronaroKIA-reti-attack"
+ ],
+ "pro-naroditsky-kia::::g6 Modern setup": [
+  "mp-pronaroKIA-symmetric-e5push"
+ ],
+ "pro-naroditsky-kia::::d4 KID transposition": [
+  "mp-pronaroKIA-kid-transposition"
+ ],
+ "pro-naroditsky-kia::vs ...e5 (Reti gambit)::vs ...e5 (Reti gambit)": [
+  "mp-pronaroKIA-vs-e5-conversion",
+  "mp-pronaroKIA-vs-e5-endgame"
+ ],
+ "pro-naroditsky-kia::::vs ...e5 (Reti gambit)": [
+  "mp-pronaroKIA-vs-e5-conversion",
+  "mp-pronaroKIA-vs-e5-endgame"
+ ],
+ "pro-naroditsky-kia::vs ...c6 (Slav-like)::vs ...c6 (Slav-like)": [
+  "mp-pronaroKIA-vs-c6-attack",
+  "mp-pronaroKIA-vs-c6-endgame"
+ ],
+ "pro-naroditsky-kia::::vs ...c6 (Slav-like)": [
+  "mp-pronaroKIA-vs-c6-attack",
+  "mp-pronaroKIA-vs-c6-endgame"
+ ],
+ "pro-naroditsky-kia::vs ...b6 (Owen)::vs ...b6 (Owen)": [
+  "mp-pronaroKIA-vs-b6-expand",
+  "mp-pronaroKIA-vs-b6-endgame"
+ ],
+ "pro-naroditsky-kia::::vs ...b6 (Owen)": [
+  "mp-pronaroKIA-vs-b6-expand",
+  "mp-pronaroKIA-vs-b6-endgame"
+ ],
+ "pro-naroditsky-kia::vs ...e6 (French-style)::vs ...e6 (French-style)": [
+  "mp-pronaroKIA-vs-e6-attack",
+  "mp-pronaroKIA-vs-e6-endgame"
+ ],
+ "pro-naroditsky-kia::::vs ...e6 (French-style)": [
+  "mp-pronaroKIA-vs-e6-attack",
+  "mp-pronaroKIA-vs-e6-endgame"
+ ],
+ "pro-naroditsky-rossolimo::main": [],
+ "pro-naroditsky-rossolimo::Nc6 Rossolimo proper::Nc6 Rossolimo proper": [
+  "mp-pronaroRoss-nc6-maroczy"
+ ],
+ "pro-naroditsky-rossolimo::e6 Open avoidance::e6 Open avoidance": [
+  "mp-pronaroRoss-e6-taimanov"
+ ],
+ "pro-naroditsky-rossolimo::Bxd7+ Trade::Bxd7+ Trade": [
+  "mp-pronaroRoss-bd7-conversion"
+ ],
+ "pro-naroditsky-rossolimo::c3 Sideline::c3 Sideline": [
+  "mp-pronaroRoss-c3-spanish",
+  "mp-pronaroRoss-c3-endgame"
+ ],
+ "pro-naroditsky-rossolimo::Bc4 vs ...d6::Bc4 vs ...d6": [
+  "mp-pronaroRoss-bc4-italian",
+  "mp-pronaroRoss-bc4-endgame"
+ ],
+ "pro-naroditsky-rossolimo::Hyper Dragon::vs ...g6 (Hyper Dragon)": [
+  "mp-pronaroRoss-g6-maroczy",
+  "mp-pronaroRoss-g6-endgame"
+ ],
+ "pro-naroditsky-rossolimo::::Nc6 Rossolimo proper": [
+  "mp-pronaroRoss-nc6-maroczy"
+ ],
+ "pro-naroditsky-rossolimo::::e6 Open avoidance": [
+  "mp-pronaroRoss-e6-taimanov"
+ ],
+ "pro-naroditsky-rossolimo::::Bxd7+ Trade": [
+  "mp-pronaroRoss-bd7-conversion"
+ ],
+ "pro-naroditsky-rossolimo::::c3 Sideline": [
+  "mp-pronaroRoss-c3-spanish",
+  "mp-pronaroRoss-c3-endgame"
+ ],
+ "pro-naroditsky-rossolimo::::Bc4 vs ...d6": [
+  "mp-pronaroRoss-bc4-italian",
+  "mp-pronaroRoss-bc4-endgame"
+ ],
+ "pro-naroditsky-rossolimo::vs ...g6 (Hyper Dragon)::vs ...g6 (Hyper Dragon)": [
+  "mp-pronaroRoss-g6-maroczy",
+  "mp-pronaroRoss-g6-endgame"
+ ],
+ "pro-naroditsky-rossolimo::::vs ...g6 (Hyper Dragon)": [
+  "mp-pronaroRoss-g6-maroczy",
+  "mp-pronaroRoss-g6-endgame"
+ ],
+ "pro-naroditsky-jobava-london::main": [],
+ "pro-naroditsky-jobava-london::e6 French Setup::e6 French Setup": [
+  "mp-pronaroJob-french-attack"
+ ],
+ "pro-naroditsky-jobava-london::c6 Slav-Style::c6 Slav-Style": [
+  "mp-pronaroJob-slav-trade"
+ ],
+ "pro-naroditsky-jobava-london::a6 with ...c5::a6 with ...c5": [
+  "mp-pronaroJob-a6c5-bd3"
+ ],
+ "pro-naroditsky-jobava-london::::e6 French Setup": [
+  "mp-pronaroJob-french-attack"
+ ],
+ "pro-naroditsky-jobava-london::::c6 Slav-Style": [
+  "mp-pronaroJob-slav-trade"
+ ],
+ "pro-naroditsky-jobava-london::::a6 with ...c5": [
+  "mp-pronaroJob-a6c5-bd3"
+ ],
+ "pro-naroditsky-ruy-lopez::main": [],
+ "pro-naroditsky-ruy-lopez::Berlin Defense::Berlin Defense": [
+  "mp-pronaroRuy-berlin-endgame",
+  "mp-pronaroRuy-berlin-bd2"
+ ],
+ "pro-naroditsky-ruy-lopez::Closed with d3::Closed with d3": [
+  "mp-pronaroRuy-d3-positional",
+  "mp-pronaroRuy-d3-flank"
+ ],
+ "pro-naroditsky-ruy-lopez::Steinitz Defense::Steinitz Defense": [
+  "mp-pronaroRuy-steinitz-d4",
+  "mp-pronaroRuy-steinitz-e5push"
+ ],
+ "pro-naroditsky-ruy-lopez::::Berlin Defense": [
+  "mp-pronaroRuy-berlin-endgame",
+  "mp-pronaroRuy-berlin-bd2"
+ ],
+ "pro-naroditsky-ruy-lopez::::Closed with d3": [
+  "mp-pronaroRuy-d3-positional",
+  "mp-pronaroRuy-d3-flank"
+ ],
+ "pro-naroditsky-ruy-lopez::::Steinitz Defense": [
+  "mp-pronaroRuy-steinitz-d4",
+  "mp-pronaroRuy-steinitz-e5push"
+ ],
+ "pro-naroditsky-fantasy-caro::main": [],
+ "pro-naroditsky-fantasy-caro::Black accepts with dxe4::Black accepts with dxe4": [
+  "mp-pronaroFantasy-kingside-attack"
+ ],
+ "pro-naroditsky-fantasy-caro::Modern setup with g6::Modern setup with g6": [
+  "mp-pronaroditskyfantasycaro-modern setup with g6"
+ ],
+ "pro-naroditsky-fantasy-caro::Qb6 pressure sideline::Qb6 pressure sideline": [
+  "mp-pronaroditskyfantasycaro-qb6 pressure sideline"
+ ],
+ "pro-naroditsky-fantasy-caro::::Black accepts with dxe4": [
+  "mp-pronaroFantasy-kingside-attack"
+ ],
+ "pro-naroditsky-fantasy-caro::::Modern setup with g6": [
+  "mp-pronaroditskyfantasycaro-"
+ ],
+ "pro-naroditsky-fantasy-caro::::Qb6 pressure sideline": [
+  "mp-pronaroditskyfantasycaro-"
+ ],
+ "pro-gothamchess-trompowsky::main": [
+  "mp-progothamchess-tromp-e6-bishoppair",
+  "mp-progothamchess-tromp-c5-gambit"
+ ],
+ "pro-gothamchess-trompowsky::Main line vs …e6::Main line vs …e6": [
+  "mp-progothamchess-tromp-e6-bishoppair"
+ ],
+ "pro-gothamchess-trompowsky::…Ne4::Vaganian Attack (…Ne4)": [
+  "mp-progothamchess-tromp-vaganian-gambit"
+ ],
+ "pro-gothamchess-trompowsky::…d5 system::…d5 system": [
+  "mp-progothamchess-tromp-d5-squeeze"
+ ],
+ "pro-gothamchess-trompowsky::…g6 fianchetto::…g6 fianchetto": [
+  "mp-progothamchess-tromp-g6-doubled"
+ ],
+ "pro-gothamchess-trompowsky::::Main line vs …e6": [
+  "mp-progothamchess-tromp-e6-bishoppair"
+ ],
+ "pro-gothamchess-trompowsky::Vaganian Attack (…Ne4)::Vaganian Attack (…Ne4)": [
+  "mp-progothamchess-tromp-vaganian-gambit"
+ ],
+ "pro-gothamchess-trompowsky::::Vaganian Attack (…Ne4)": [
+  "mp-progothamchess-tromp-vaganian-gambit"
+ ],
+ "pro-gothamchess-trompowsky::::…d5 system": [
+  "mp-progothamchess-tromp-d5-squeeze"
+ ],
+ "pro-gothamchess-trompowsky::::…g6 fianchetto": [
+  "mp-progothamchess-tromp-g6-doubled"
+ ],
+ "pro-gothamchess-english::main": [
+  "mp-progothamchess-english-botvinnik-main",
+  "mp-progothamchess-english-flank-attack"
+ ],
+ "pro-gothamchess-english::Botvinnik System vs KID-setup::Botvinnik System vs KID-setup": [
+  "mp-progothamchess-english-botvinnik-main",
+  "mp-progothamchess-english-flank-attack"
+ ],
+ "pro-gothamchess-english::…e5::Symmetric (…e5)": [
+  "mp-progothamchess-eng-e5-reversedsicilian"
+ ],
+ "pro-gothamchess-english::…e6::Anti-French (…e6)": [
+  "mp-progothamchess-eng-e6-doublefianchetto"
+ ],
+ "pro-gothamchess-english::…c5::Symmetric (…c5)": [
+  "mp-progothamchess-eng-c5-maroczy"
+ ],
+ "pro-gothamchess-english::Slav-style::vs …c6 (Slav-style)": [
+  "mp-progothamchess-eng-c6-slav-g4"
+ ],
+ "pro-gothamchess-english::::Botvinnik System vs KID-setup": [
+  "mp-progothamchess-english-botvinnik-main",
+  "mp-progothamchess-english-flank-attack"
+ ],
+ "pro-gothamchess-english::Symmetric (…e5)::Symmetric (…e5)": [
+  "mp-progothamchess-eng-e5-reversedsicilian"
+ ],
+ "pro-gothamchess-english::::Symmetric (…e5)": [
+  "mp-progothamchess-eng-e5-reversedsicilian"
+ ],
+ "pro-gothamchess-english::Anti-French (…e6)::Anti-French (…e6)": [
+  "mp-progothamchess-eng-e6-doublefianchetto"
+ ],
+ "pro-gothamchess-english::::Anti-French (…e6)": [
+  "mp-progothamchess-eng-e6-doublefianchetto"
+ ],
+ "pro-gothamchess-english::Symmetric (…c5)::Symmetric (…c5)": [
+  "mp-progothamchess-eng-c5-maroczy"
+ ],
+ "pro-gothamchess-english::::Symmetric (…c5)": [
+  "mp-progothamchess-eng-c5-maroczy"
+ ],
+ "pro-gothamchess-english::vs …c6 (Slav-style)::vs …c6 (Slav-style)": [
+  "mp-progothamchess-eng-c6-slav-g4"
+ ],
+ "pro-gothamchess-english::::vs …c6 (Slav-style)": [
+  "mp-progothamchess-eng-c6-slav-g4"
+ ],
+ "pro-gothamchess-vienna::main": [
+  "mp-progothamchess-vie-gambit-main-attack",
+  "mp-progothamchess-vienna-gambit-main"
+ ],
+ "pro-gothamchess-vienna::Vienna Gambit Main Line::Vienna Gambit Main Line": [
+  "mp-progothamchess-vie-gambit-main-attack",
+  "mp-progothamchess-vienna-gambit-main"
+ ],
+ "pro-gothamchess-vienna::Bc4 + d3::Vienna Quiet (Bc4 + d3)": [
+  "mp-progothamchess-vie-quiet-bc4-na4"
+ ],
+ "pro-gothamchess-vienna::Vienna with …Nc6 + …Bc5::Vienna with …Nc6 + …Bc5": [
+  "mp-progothamchess-vie-nc6-forcing"
+ ],
+ "pro-gothamchess-vienna::Vienna Gambit Accepted::Vienna Gambit Accepted": [
+  "mp-progothamchess-vie-accepted-space"
+ ],
+ "pro-gothamchess-vienna::::Vienna Gambit Main Line": [
+  "mp-progothamchess-vie-gambit-main-attack",
+  "mp-progothamchess-vienna-gambit-main"
+ ],
+ "pro-gothamchess-vienna::Vienna Quiet (Bc4 + d3)::Vienna Quiet (Bc4 + d3)": [
+  "mp-progothamchess-vie-quiet-bc4-na4"
+ ],
+ "pro-gothamchess-vienna::::Vienna Quiet (Bc4 + d3)": [
+  "mp-progothamchess-vie-quiet-bc4-na4"
+ ],
+ "pro-gothamchess-vienna::::Vienna with …Nc6 + …Bc5": [
+  "mp-progothamchess-vie-nc6-forcing"
+ ],
+ "pro-gothamchess-vienna::::Vienna Gambit Accepted": [
+  "mp-progothamchess-vie-accepted-space"
+ ],
+ "pro-gothamchess-kia::main": [
+  "mp-progothamchess-kia-e5-kingside",
+  "mp-progothamchess-kia-system-attack"
+ ],
+ "pro-gothamchess-kia::vs …d5 + …c5::vs …d5 + …c5": [
+  "mp-progothamchess-kia-e5-kingside",
+  "mp-progothamchess-kia-system-attack"
+ ],
+ "pro-gothamchess-kia::KIA vs …c5 + …Nf6::vs Sicilian (KIA vs …c5 + …Nf6)": [
+  "mp-progothamchess-kia-sicilian-reroute"
+ ],
+ "pro-gothamchess-kia::::vs …d5 + …c5": [
+  "mp-progothamchess-kia-e5-kingside",
+  "mp-progothamchess-kia-system-attack"
+ ],
+ "pro-gothamchess-kia::vs Sicilian (KIA vs …c5 + …Nf6)::vs Sicilian (KIA vs …c5 + …Nf6)": [
+  "mp-progothamchess-kia-sicilian-reroute"
+ ],
+ "pro-gothamchess-kia::::vs Sicilian (KIA vs …c5 + …Nf6)": [
+  "mp-progothamchess-kia-sicilian-reroute"
+ ],
+ "pro-gothamchess-caro-advance-white::main": [
+  "mp-progothamchess-caroadv-qxd4-punish"
+ ],
+ "pro-gothamchess-caro-advance-white::vs …Bf5::Main line (vs …Bf5)": [
+  "mp-progothamchess-caro-advance-h4-pin",
+  "mp-progothamchess-caroadv-h6-g4space",
+  "mp-progothamchess-caroadv-qxd4-punish"
+ ],
+ "pro-gothamchess-caro-advance-white::Botvinnik-Carls::vs …c5 (Botvinnik-Carls)": [
+  "mp-progothamchess-caroadv-c5-dxc5"
+ ],
+ "pro-gothamchess-caro-advance-white::Main line (vs …Bf5)::Main line (vs …Bf5)": [
+  "mp-progothamchess-caro-advance-h4-pin",
+  "mp-progothamchess-caroadv-h6-g4space",
+  "mp-progothamchess-caroadv-qxd4-punish"
+ ],
+ "pro-gothamchess-caro-advance-white::::Main line (vs …Bf5)": [
+  "mp-progothamchess-caro-advance-h4-pin",
+  "mp-progothamchess-caroadv-h6-g4space",
+  "mp-progothamchess-caroadv-qxd4-punish"
+ ],
+ "pro-gothamchess-caro-advance-white::vs …c5 (Botvinnik-Carls)::vs …c5 (Botvinnik-Carls)": [
+  "mp-progothamchess-caroadv-c5-dxc5"
+ ],
+ "pro-gothamchess-caro-advance-white::::vs …c5 (Botvinnik-Carls)": [
+  "mp-progothamchess-caroadv-c5-dxc5"
+ ],
+ "pro-gothamchess-closed-sicilian::main": [
+  "mp-progothamchess-closedsic-bb5-bg5",
+  "mp-progothamchess-closed-sicilian-bb5-trade"
+ ],
+ "pro-gothamchess-closed-sicilian::Closed Sicilian Main::Closed Sicilian Main": [
+  "mp-progothamchess-closedsic-bb5-bg5",
+  "mp-progothamchess-closed-sicilian-bb5-trade"
+ ],
+ "pro-gothamchess-closed-sicilian::vs …d6::vs …d6": [
+  "mp-progothamchess-closedsic-d6-oppositecastle"
+ ],
+ "pro-gothamchess-closed-sicilian::vs …e6::vs …e6": [
+  "mp-progothamchess-closedsic-e6-oooattack"
+ ],
+ "pro-gothamchess-closed-sicilian::Bxc6::vs …g6 (Bxc6)": [
+  "mp-progothamchess-closedsic-g6-nd5"
+ ],
+ "pro-gothamchess-closed-sicilian::::Closed Sicilian Main": [
+  "mp-progothamchess-closedsic-bb5-bg5",
+  "mp-progothamchess-closed-sicilian-bb5-trade"
+ ],
+ "pro-gothamchess-closed-sicilian::::vs …d6": [
+  "mp-progothamchess-closedsic-d6-oppositecastle"
+ ],
+ "pro-gothamchess-closed-sicilian::::vs …e6": [
+  "mp-progothamchess-closedsic-e6-oooattack"
+ ],
+ "pro-gothamchess-closed-sicilian::vs …g6 (Bxc6)::vs …g6 (Bxc6)": [
+  "mp-progothamchess-closedsic-g6-nd5"
+ ],
+ "pro-gothamchess-closed-sicilian::::vs …g6 (Bxc6)": [
+  "mp-progothamchess-closedsic-g6-nd5"
+ ],
+ "pro-gothamchess-french-defense::main": [
+  "mp-progothamchess-french-rubinstein-qxd4",
+  "mp-progothamchess-french-tarrasch-b5gambit"
+ ],
+ "pro-gothamchess-french-defense::Rubinstein Main Line::Rubinstein Main Line": [
+  "mp-progothamchess-french-rubinstein-qxd4",
+  "mp-progothamchess-french-defense-rubinstein"
+ ],
+ "pro-gothamchess-french-defense::Nd2::Tarrasch (Nd2)": [
+  "mp-progothamchess-french-tarrasch-b5gambit"
+ ],
+ "pro-gothamchess-french-defense::exd5 lines::Exchange (exd5 lines)": [
+  "mp-progothamchess-french-exchange-develop",
+  "mp-progothamchess-french-advance-counter"
+ ],
+ "pro-gothamchess-french-defense::::Rubinstein Main Line": [
+  "mp-progothamchess-french-rubinstein-qxd4",
+  "mp-progothamchess-french-defense-rubinstein"
+ ],
+ "pro-gothamchess-french-defense::Tarrasch (Nd2)::Tarrasch (Nd2)": [
+  "mp-progothamchess-french-tarrasch-b5gambit"
+ ],
+ "pro-gothamchess-french-defense::::Tarrasch (Nd2)": [
+  "mp-progothamchess-french-tarrasch-b5gambit"
+ ],
+ "pro-gothamchess-french-defense::Exchange (exd5 lines)::Exchange (exd5 lines)": [
+  "mp-progothamchess-french-exchange-develop",
+  "mp-progothamchess-french-advance-counter"
+ ],
+ "pro-gothamchess-french-defense::::Exchange (exd5 lines)": [
+  "mp-progothamchess-french-exchange-develop",
+  "mp-progothamchess-french-advance-counter"
+ ],
+ "pro-gothamchess-pirc-defense::main": [
+  "mp-progothamchess-pirc-austrian-c5",
+  "mp-progothamchess-pirc-classical-e5"
+ ],
+ "pro-gothamchess-pirc-defense::f4::Austrian Attack (f4)": [
+  "mp-progothamchess-pirc-austrian-c5",
+  "mp-progothamchess-pirc-c5-break"
+ ],
+ "pro-gothamchess-pirc-defense::Nf3 setup::Classical (Nf3 setup)": [
+  "mp-progothamchess-pirc-classical-e5"
+ ],
+ "pro-gothamchess-pirc-defense::Be3 + f3::150 Attack (Be3 + f3)": [
+  "mp-progothamchess-pirc-150-b5"
+ ],
+ "pro-gothamchess-pirc-defense::Austrian Attack (f4)::Austrian Attack (f4)": [
+  "mp-progothamchess-pirc-austrian-c5",
+  "mp-progothamchess-pirc-c5-break"
+ ],
+ "pro-gothamchess-pirc-defense::::Austrian Attack (f4)": [
+  "mp-progothamchess-pirc-austrian-c5",
+  "mp-progothamchess-pirc-c5-break"
+ ],
+ "pro-gothamchess-pirc-defense::Classical (Nf3 setup)::Classical (Nf3 setup)": [
+  "mp-progothamchess-pirc-classical-e5"
+ ],
+ "pro-gothamchess-pirc-defense::::Classical (Nf3 setup)": [
+  "mp-progothamchess-pirc-classical-e5"
+ ],
+ "pro-gothamchess-pirc-defense::150 Attack (Be3 + f3)::150 Attack (Be3 + f3)": [
+  "mp-progothamchess-pirc-150-b5"
+ ],
+ "pro-gothamchess-pirc-defense::::150 Attack (Be3 + f3)": [
+  "mp-progothamchess-pirc-150-b5"
+ ],
+ "pro-hikaru-nimzo-larsen::main": null,
+ "pro-hikaru-nimzo-larsen::1...e5 Main Line::1...e5 Main Line": [
+  "mp-prohikarunimzolarsen-1...e5 main line"
+ ],
+ "pro-hikaru-nimzo-larsen::1...d5::1...d5": [
+  "mp-prohikarunimzolarsen-1...d5"
+ ],
+ "pro-hikaru-nimzo-larsen::1...Nf6::1...Nf6": [
+  "mp-prohikarunimzolarsen-1...nf6"
+ ],
+ "pro-hikaru-nimzo-larsen::1...c5::1...c5": [
+  "mp-prohikarunimzolarsen-1...c5"
+ ],
+ "pro-hikaru-nimzo-larsen::1...b6 Symmetric::1...b6 Symmetric": [
+  "mp-prohikarunimzolarsen-1...b6 symmetric"
+ ],
+ "pro-hikaru-nimzo-larsen::1...g6::1...g6": [
+  "mp-prohikarunimzolarsen-1...g6"
+ ],
+ "pro-hikaru-nimzo-larsen::1...e6::1...e6": [
+  "mp-prohikarunimzolarsen-1...e6"
+ ],
+ "pro-hikaru-nimzo-larsen::::1...e5 Main Line": [
+  "mp-prohikarunimzolarsen-"
+ ],
+ "pro-hikaru-nimzo-larsen::::1...d5": [
+  "mp-prohikarunimzolarsen-"
+ ],
+ "pro-hikaru-nimzo-larsen::::1...Nf6": [
+  "mp-prohikarunimzolarsen-"
+ ],
+ "pro-hikaru-nimzo-larsen::::1...c5": [
+  "mp-prohikarunimzolarsen-"
+ ],
+ "pro-hikaru-nimzo-larsen::::1...b6 Symmetric": [
+  "mp-prohikarunimzolarsen-"
+ ],
+ "pro-hikaru-nimzo-larsen::::1...g6": [
+  "mp-prohikarunimzolarsen-"
+ ],
+ "pro-hikaru-nimzo-larsen::::1...e6": [
+  "mp-prohikarunimzolarsen-"
+ ],
+ "pro-hikaru-closed-sicilian::main": null,
+ "pro-hikaru-closed-sicilian::Grand Prix f4 + f5::Grand Prix f4 + f5": [
+  "mp-prohikaruclosedsicilian-grand prix f4 + f5"
+ ],
+ "pro-hikaru-closed-sicilian::vs ...e6::vs ...e6": [
+  "mp-prohikaruclosedsicilian-vs ...e6"
+ ],
+ "pro-hikaru-closed-sicilian::::Grand Prix f4 + f5": [
+  "mp-prohikaruclosedsicilian-"
+ ],
+ "pro-hikaru-closed-sicilian::::vs ...e6": [
+  "mp-prohikaruclosedsicilian-"
+ ],
+ "pro-hikaru-reti::main": null,
+ "pro-hikaru-reti::Réti into the b3 system::Réti into the b3 system": [
+  "mp-prohikarureti-réti into the b3 system"
+ ],
+ "pro-hikaru-reti::vs ...d5::vs ...d5": [
+  "mp-prohikarureti-vs ...d5"
+ ],
+ "pro-hikaru-reti::vs ...c5::vs ...c5": [
+  "mp-prohikarureti-vs ...c5"
+ ],
+ "pro-hikaru-reti::::Réti into the b3 system": [
+  "mp-prohikarureti-"
+ ],
+ "pro-hikaru-reti::::vs ...d5": [
+  "mp-prohikarureti-"
+ ],
+ "pro-hikaru-reti::::vs ...c5": [
+  "mp-prohikarureti-"
+ ],
+ "pro-hikaru-pirc-modern::main": null,
+ "pro-hikaru-pirc-modern::vs Be3 + Qd2::vs Be3 + Qd2": [
+  "mp-prohikarupircmodern-vs be3 + qd2"
+ ],
+ "pro-hikaru-pirc-modern::vs Nf3 Classical::vs Nf3 Classical": [
+  "mp-prohikarupircmodern-vs nf3 classical"
+ ],
+ "pro-hikaru-pirc-modern::...c6 setup::...c6 setup": [
+  "mp-prohikarupircmodern-...c6 setup"
+ ],
+ "pro-hikaru-pirc-modern::vs Austrian f4::vs Austrian f4": [
+  "mp-prohikarupircmodern-vs austrian f4"
+ ],
+ "pro-hikaru-pirc-modern::::vs Be3 + Qd2": [
+  "mp-prohikarupircmodern-"
+ ],
+ "pro-hikaru-pirc-modern::::vs Nf3 Classical": [
+  "mp-prohikarupircmodern-"
+ ],
+ "pro-hikaru-pirc-modern::::...c6 setup": [
+  "mp-prohikarupircmodern-"
+ ],
+ "pro-hikaru-pirc-modern::::vs Austrian f4": [
+  "mp-prohikarupircmodern-"
+ ],
+ "pro-hikaru-caro-kann::main": null,
+ "pro-hikaru-caro-kann::vs Advance 3.e5 Bf5::vs Advance 3.e5 Bf5": [
+  "mp-prohikarucarokann-vs advance 3.e5 bf5"
+ ],
+ "pro-hikaru-caro-kann::vs Exchange::vs Exchange": [
+  "mp-prohikarucarokann-vs exchange"
+ ],
+ "pro-hikaru-caro-kann::vs Two Knights::vs Two Knights": [
+  "mp-prohikarucarokann-vs two knights"
+ ],
+ "pro-hikaru-caro-kann::::vs Advance 3.e5 Bf5": [
+  "mp-prohikarucarokann-"
+ ],
+ "pro-hikaru-caro-kann::::vs Exchange": [
+  "mp-prohikarucarokann-"
+ ],
+ "pro-hikaru-caro-kann::::vs Two Knights": [
+  "mp-prohikarucarokann-"
+ ],
+ "pro-ericrosen-stafford::main": [],
+ "pro-ericrosen-stafford::5.Nc3::Five Knights (5.Nc3)": [
+  "mp-proericstafford-nc3-openh"
+ ],
+ "pro-ericrosen-stafford::5.e5::Space Grab (5.e5)": [],
+ "pro-ericrosen-stafford::4.Nf3::Knight Retreat (4.Nf3)": [],
+ "pro-ericrosen-stafford::3.Nc3::Four Knights Decline (3.Nc3)": [
+  "mp-proericstafford-fourknights-bishop"
+ ],
+ "pro-ericrosen-stafford::4.d4::Pawn Returned (4.d4)": [],
+ "pro-ericrosen-stafford::Five Knights (5.Nc3)::Five Knights (5.Nc3)": [
+  "mp-proericstafford-nc3-openh"
+ ],
+ "pro-ericrosen-stafford::::Five Knights (5.Nc3)": [
+  "mp-proericstafford-nc3-openh"
+ ],
+ "pro-ericrosen-stafford::Space Grab (5.e5)::Space Grab (5.e5)": [],
+ "pro-ericrosen-stafford::::Space Grab (5.e5)": [],
+ "pro-ericrosen-stafford::Knight Retreat (4.Nf3)::Knight Retreat (4.Nf3)": [],
+ "pro-ericrosen-stafford::::Knight Retreat (4.Nf3)": [],
+ "pro-ericrosen-stafford::Four Knights Decline (3.Nc3)::Four Knights Decline (3.Nc3)": [
+  "mp-proericstafford-fourknights-bishop"
+ ],
+ "pro-ericrosen-stafford::::Four Knights Decline (3.Nc3)": [
+  "mp-proericstafford-fourknights-bishop"
+ ],
+ "pro-ericrosen-stafford::Pawn Returned (4.d4)::Pawn Returned (4.d4)": [],
+ "pro-ericrosen-stafford::::Pawn Returned (4.d4)": [],
+ "pro-ericrosen-london::main": [
+  "mp-proericlondon-ne5-battery",
+  "mp-proericlondon-endgame"
+ ],
+ "pro-ericrosen-london::vs …d5 Classical::vs …d5 Classical": [
+  "mp-proericlondon-ne5-battery"
+ ],
+ "pro-ericrosen-london::vs …e6 Setup::vs …e6 Setup": [
+  "mp-proericlondon-ne5-battery"
+ ],
+ "pro-ericrosen-london::vs …c5 and …Qb6::vs …c5 and …Qb6": [],
+ "pro-ericrosen-london::e4 Attacking Hybrid::vs …d6 (e4 Attacking Hybrid)": [
+  "mp-proericlondon-h4-storm"
+ ],
+ "pro-ericrosen-london::::vs …d5 Classical": [
+  "mp-proericlondon-ne5-battery"
+ ],
+ "pro-ericrosen-london::::vs …e6 Setup": [
+  "mp-proericlondon-ne5-battery"
+ ],
+ "pro-ericrosen-london::::vs …c5 and …Qb6": [],
+ "pro-ericrosen-london::vs …d6 (e4 Attacking Hybrid)::vs …d6 (e4 Attacking Hybrid)": [
+  "mp-proericlondon-h4-storm"
+ ],
+ "pro-ericrosen-london::::vs …d6 (e4 Attacking Hybrid)": [
+  "mp-proericlondon-h4-storm"
+ ],
+ "pro-ericrosen-sicilian::main": [
+  "mp-proericsicilian-maroczy-a5",
+  "mp-proericsicilian-endgame"
+ ],
+ "pro-ericrosen-sicilian::…e6::Taimanov (…e6)": [],
+ "pro-ericrosen-sicilian::Bb5::vs Rossolimo (Bb5)": [],
+ "pro-ericrosen-sicilian::c3::vs Alapin (c3)": [],
+ "pro-ericrosen-sicilian::vs 2.Nc3::vs 2.Nc3": [],
+ "pro-ericrosen-sicilian::Taimanov (…e6)::Taimanov (…e6)": [],
+ "pro-ericrosen-sicilian::::Taimanov (…e6)": [],
+ "pro-ericrosen-sicilian::vs Rossolimo (Bb5)::vs Rossolimo (Bb5)": [],
+ "pro-ericrosen-sicilian::::vs Rossolimo (Bb5)": [],
+ "pro-ericrosen-sicilian::vs Alapin (c3)::vs Alapin (c3)": [],
+ "pro-ericrosen-sicilian::::vs Alapin (c3)": [],
+ "pro-ericrosen-sicilian::::vs 2.Nc3": [],
+ "pro-ericrosen-qgd::main": [
+  "mp-proericqgd-minority-counter",
+  "mp-proericqgd-endgame"
+ ],
+ "pro-ericrosen-qgd::Catalan::vs Nf3 (Catalan)": [],
+ "pro-ericrosen-qgd::vs Bg5::Cambridge Springs (vs Bg5)": [],
+ "pro-ericrosen-qgd::vs Nf3 (Catalan)::vs Nf3 (Catalan)": [],
+ "pro-ericrosen-qgd::::vs Nf3 (Catalan)": [],
+ "pro-ericrosen-qgd::Cambridge Springs (vs Bg5)::Cambridge Springs (vs Bg5)": [],
+ "pro-ericrosen-qgd::::Cambridge Springs (vs Bg5)": [],
+ "pro-ericrosen-budapest::main": [
+  "mp-proericbudapest-e5knight"
+ ],
+ "pro-ericrosen-budapest::…Bc5::vs Nf3 (…Bc5)": [],
+ "pro-ericrosen-budapest::Declined::vs Nc3 (Declined)": [],
+ "pro-ericrosen-budapest::vs Nf3 (…Bc5)::vs Nf3 (…Bc5)": [],
+ "pro-ericrosen-budapest::::vs Nf3 (…Bc5)": [],
+ "pro-ericrosen-budapest::vs Nc3 (Declined)::vs Nc3 (Declined)": [],
+ "pro-ericrosen-budapest::::vs Nc3 (Declined)": [],
+ "pro-ericrosen-closed-sicilian::main": [
+  "mp-proericclosedsic-f5storm"
+ ],
+ "pro-ericrosen-closed-sicilian::f4 + Bb5+::vs …e6 (f4 + Bb5+)": [],
+ "pro-ericrosen-closed-sicilian::Open d4::vs …g6 (Open d4)": [],
+ "pro-ericrosen-closed-sicilian::vs …e6 (f4 + Bb5+)::vs …e6 (f4 + Bb5+)": [],
+ "pro-ericrosen-closed-sicilian::::vs …e6 (f4 + Bb5+)": [],
+ "pro-ericrosen-closed-sicilian::vs …g6 (Open d4)::vs …g6 (Open d4)": [],
+ "pro-ericrosen-closed-sicilian::::vs …g6 (Open d4)": [],
+ "pro-ericrosen-scandinavian::main": [
+  "mp-proericscandi-e5break"
+ ],
+ "pro-ericrosen-scandinavian::…Nxd5::vs Nc3 (…Nxd5)": [],
+ "pro-ericrosen-scandinavian::…Nxd5::vs Nf3 (…Nxd5)": [],
+ "pro-ericrosen-scandinavian::vs Nc3 (…Nxd5)::vs Nc3 (…Nxd5)": [],
+ "pro-ericrosen-scandinavian::::vs Nc3 (…Nxd5)": [],
+ "pro-ericrosen-scandinavian::vs Nf3 (…Nxd5)::vs Nf3 (…Nxd5)": [],
+ "pro-ericrosen-scandinavian::::vs Nf3 (…Nxd5)": [],
+ "pro-ericrosen-french::main": [
+  "mp-proericfrench-c5break"
+ ],
+ "pro-ericrosen-french::…c5::vs Advance (…c5)": [],
+ "pro-ericrosen-french::Nd2::vs Tarrasch (Nd2)": [],
+ "pro-ericrosen-french::vs Exchange::vs Exchange": [],
+ "pro-ericrosen-french::vs Advance (…c5)::vs Advance (…c5)": [],
+ "pro-ericrosen-french::::vs Advance (…c5)": [],
+ "pro-ericrosen-french::vs Tarrasch (Nd2)::vs Tarrasch (Nd2)": [],
+ "pro-ericrosen-french::::vs Tarrasch (Nd2)": [],
+ "pro-ericrosen-french::::vs Exchange": [],
+ "pro-caruana-ruy-lopez::main": null,
+ "pro-caruana-ruy-lopez::Morphy …a6 Closed::Morphy …a6 Closed": [
+  "mp-procaruanaruylopez-morphy …a6 closed"
+ ],
+ "pro-caruana-ruy-lopez::Berlin Endgame::Berlin Endgame": [
+  "mp-procaruanaruylopez-berlin endgame"
+ ],
+ "pro-caruana-ruy-lopez::Open Variation::Open Variation": [
+  "mp-procaruanaruylopez-open variation"
+ ],
+ "pro-caruana-ruy-lopez::::Morphy …a6 Closed": [
+  "mp-procaruanaruylopez-"
+ ],
+ "pro-caruana-ruy-lopez::::Berlin Endgame": [
+  "mp-procaruanaruylopez-"
+ ],
+ "pro-caruana-ruy-lopez::::Open Variation": [
+  "mp-procaruanaruylopez-"
+ ],
+ "pro-caruana-nimzo-indian::main": null,
+ "pro-caruana-nimzo-indian::Rubinstein with …c5::Rubinstein with …c5": [
+  "mp-procaruananimzoindian-rubinstein with …c5"
+ ],
+ "pro-caruana-nimzo-indian::::Rubinstein with …c5": [
+  "mp-procaruananimzoindian-"
+ ],
+ "pro-caruana-najdorf::main": [
+  "mp-pro-caruana-najdorf-outpost"
+ ],
+ "pro-caruana-najdorf::English Attack 6.Be3::English Attack 6.Be3": [],
+ "pro-caruana-najdorf::Classical 6.Be2::Classical 6.Be2": [
+  "mp-pro-caruana-najdorf-outpost",
+  "mp-pro-caruana-najdorf-endgame"
+ ],
+ "pro-caruana-najdorf::::English Attack 6.Be3": [],
+ "pro-caruana-najdorf::::Classical 6.Be2": [
+  "mp-pro-caruana-najdorf-outpost",
+  "mp-pro-caruana-najdorf-endgame"
+ ],
+ "pro-caruana-taimanov::main": null,
+ "pro-caruana-taimanov::…Qc7 system::…Qc7 system": [
+  "mp-procaruanataimanov-…qc7 system"
+ ],
+ "pro-caruana-taimanov::::…Qc7 system": [
+  "mp-procaruanataimanov-"
+ ],
+ "pro-samayraina-open-sicilian::main": [
+  "mp-prosamayopensic-d5outpost",
+  "mp-prosamayOpenSicilian-endgame"
+ ],
+ "pro-samayraina-open-sicilian::Sveshnikov::vs 2…Nc6 (Sveshnikov)": [],
+ "pro-samayraina-open-sicilian::Taimanov::vs 2…e6 (Taimanov)": [],
+ "pro-samayraina-open-sicilian::Dragon::vs 2…g6 (Dragon)": [],
+ "pro-samayraina-open-sicilian::vs 2…Nc6 (Sveshnikov)::vs 2…Nc6 (Sveshnikov)": [],
+ "pro-samayraina-open-sicilian::::vs 2…Nc6 (Sveshnikov)": [],
+ "pro-samayraina-open-sicilian::vs 2…e6 (Taimanov)::vs 2…e6 (Taimanov)": [],
+ "pro-samayraina-open-sicilian::::vs 2…e6 (Taimanov)": [],
+ "pro-samayraina-open-sicilian::vs 2…g6 (Dragon)::vs 2…g6 (Dragon)": [],
+ "pro-samayraina-open-sicilian::::vs 2…g6 (Dragon)": [],
+ "pro-samayraina-ruy::main": [
+  "mp-prosamayruy-d4break"
+ ],
+ "pro-samayraina-ruy::Berlin Defense::Berlin Defense": [],
+ "pro-samayraina-ruy::Exchange Variation::Exchange Variation": [],
+ "pro-samayraina-ruy::Steinitz::vs 3…d6 (Steinitz)": [],
+ "pro-samayraina-ruy::::Berlin Defense": [],
+ "pro-samayraina-ruy::::Exchange Variation": [],
+ "pro-samayraina-ruy::vs 3…d6 (Steinitz)::vs 3…d6 (Steinitz)": [],
+ "pro-samayraina-ruy::::vs 3…d6 (Steinitz)": [],
+ "pro-samayraina-italian::main": [
+  "mp-prosamayitalian-reroute",
+  "mp-prosamayItalian-endgame"
+ ],
+ "pro-samayraina-italian::Two Knights::vs 3…Nf6 (Two Knights)": [],
+ "pro-samayraina-italian::Hungarian::vs 3…Be7 (Hungarian)": [],
+ "pro-samayraina-italian::vs 3…Nf6 (Two Knights)::vs 3…Nf6 (Two Knights)": [],
+ "pro-samayraina-italian::::vs 3…Nf6 (Two Knights)": [],
+ "pro-samayraina-italian::vs 3…Be7 (Hungarian)::vs 3…Be7 (Hungarian)": [],
+ "pro-samayraina-italian::::vs 3…Be7 (Hungarian)": [],
+ "pro-samayraina-french-white::main": [
+  "mp-prosamayfrenchw-minority"
+ ],
+ "pro-samayraina-french-white::vs c5 break::vs c5 break": [],
+ "pro-samayraina-french-white::vs …Bd6 symmetry::vs …Bd6 symmetry": [],
+ "pro-samayraina-french-white::::vs c5 break": [],
+ "pro-samayraina-french-white::::vs …Bd6 symmetry": [],
+ "pro-samayraina-caro-white::main": [
+  "mp-prosamaycarow-iqp"
+ ],
+ "pro-samayraina-caro-white::French-style::2…e6 (French-style)": [],
+ "pro-samayraina-caro-white::3.exd5::Exchange (3.exd5)": [],
+ "pro-samayraina-caro-white::2…e6 (French-style)::2…e6 (French-style)": [],
+ "pro-samayraina-caro-white::::2…e6 (French-style)": [],
+ "pro-samayraina-caro-white::Exchange (3.exd5)::Exchange (3.exd5)": [],
+ "pro-samayraina-caro-white::::Exchange (3.exd5)": [],
+ "pro-samayraina-open-e5::main": [
+  "mp-prosamayopene5-d5break"
+ ],
+ "pro-samayraina-open-e5::3.Bb5::vs Ruy Lopez (3.Bb5)": [
+  "mp-prosamayopene5-chigorin"
+ ],
+ "pro-samayraina-open-e5::3.d4::vs Scotch (3.d4)": [],
+ "pro-samayraina-open-e5::3.Nc3::vs Four Knights (3.Nc3)": [],
+ "pro-samayraina-open-e5::vs Ruy Lopez (3.Bb5)::vs Ruy Lopez (3.Bb5)": [
+  "mp-prosamayopene5-chigorin"
+ ],
+ "pro-samayraina-open-e5::::vs Ruy Lopez (3.Bb5)": [
+  "mp-prosamayopene5-chigorin"
+ ],
+ "pro-samayraina-open-e5::vs Scotch (3.d4)::vs Scotch (3.d4)": [],
+ "pro-samayraina-open-e5::::vs Scotch (3.d4)": [],
+ "pro-samayraina-open-e5::vs Four Knights (3.Nc3)::vs Four Knights (3.Nc3)": [],
+ "pro-samayraina-open-e5::::vs Four Knights (3.Nc3)": [],
+ "pro-samayraina-sicilian-black::main": [
+  "mp-prosamaysicb-d5break",
+  "mp-prosamaysicb-b5expansion",
+  "mp-prosamaySicilianBlack-endgame"
+ ],
+ "pro-samayraina-sicilian-black::Bowdler::vs Bc4 (Bowdler)": [],
+ "pro-samayraina-sicilian-black::2.c3::vs Alapin (2.c3)": [],
+ "pro-samayraina-sicilian-black::Bb5::vs Rossolimo (Bb5)": [],
+ "pro-samayraina-sicilian-black::2.Nc3::vs Closed (2.Nc3)": [],
+ "pro-samayraina-sicilian-black::vs Bc4 (Bowdler)::vs Bc4 (Bowdler)": [],
+ "pro-samayraina-sicilian-black::::vs Bc4 (Bowdler)": [],
+ "pro-samayraina-sicilian-black::vs Alapin (2.c3)::vs Alapin (2.c3)": [],
+ "pro-samayraina-sicilian-black::::vs Alapin (2.c3)": [],
+ "pro-samayraina-sicilian-black::vs Rossolimo (Bb5)::vs Rossolimo (Bb5)": [],
+ "pro-samayraina-sicilian-black::::vs Rossolimo (Bb5)": [],
+ "pro-samayraina-sicilian-black::vs Closed (2.Nc3)::vs Closed (2.Nc3)": [],
+ "pro-samayraina-sicilian-black::::vs Closed (2.Nc3)": [],
+ "pro-samayraina-scandi::main": [
+  "mp-prosamayscandi-c5break"
+ ],
+ "pro-samayraina-scandi::Main::…Qa5 (Main)": [],
+ "pro-samayraina-scandi::…Bg4 Pin::…Bg4 Pin": [],
+ "pro-samayraina-scandi::…Qa5 (Main)::…Qa5 (Main)": [],
+ "pro-samayraina-scandi::::…Qa5 (Main)": [],
+ "pro-samayraina-scandi::::…Bg4 Pin": [],
+ "pro-samayraina-kings-gambit::main": [
+  "mp-prosamaykg-centralbreak"
+ ],
+ "pro-samayraina-kings-gambit::…Nc6::vs King's Gambit Declined (…Nc6)": [],
+ "pro-samayraina-kings-gambit::…d5::vs Falkbeer (…d5)": [],
+ "pro-samayraina-kings-gambit::vs King's Gambit Declined (…Nc6)::vs King's Gambit Declined (…Nc6)": [],
+ "pro-samayraina-kings-gambit::::vs King's Gambit Declined (…Nc6)": [],
+ "pro-samayraina-kings-gambit::vs Falkbeer (…d5)::vs Falkbeer (…d5)": [],
+ "pro-samayraina-kings-gambit::::vs Falkbeer (…d5)": [],
+ "pro-caruana-italian::main": null,
+ "pro-caruana-italian::Two Knights 3...Nf6::Two Knights 3...Nf6": [
+  "mp-procaruanaitalian-two knights 3...nf6"
+ ],
+ "pro-caruana-italian::::Two Knights 3...Nf6": [
+  "mp-procaruanaitalian-"
+ ],
+ "pro-caruana-french::main": null,
+ "pro-caruana-french::Winawer 3...Bb4::Winawer 3...Bb4": [
+  "mp-procaruanafrench-winawer 3...bb4"
+ ],
+ "pro-caruana-french::Advance 3.e5::Advance 3.e5": [
+  "mp-procaruanafrench-advance 3.e5"
+ ],
+ "pro-caruana-french::Tarrasch 3.Nd2::Tarrasch 3.Nd2": [
+  "mp-procaruanafrench-tarrasch 3.nd2"
+ ],
+ "pro-caruana-french::Exchange 3.exd5::Exchange 3.exd5": [
+  "mp-procaruanafrench-exchange 3.exd5"
+ ],
+ "pro-caruana-french::::Winawer 3...Bb4": [
+  "mp-procaruanafrench-"
+ ],
+ "pro-caruana-french::::Advance 3.e5": [
+  "mp-procaruanafrench-"
+ ],
+ "pro-caruana-french::::Tarrasch 3.Nd2": [
+  "mp-procaruanafrench-"
+ ],
+ "pro-caruana-french::::Exchange 3.exd5": [
+  "mp-procaruanafrench-"
+ ],
+ "pro-caruana-caro-kann::main": null,
+ "pro-caruana-caro-kann::Advance 3.e5 Bf5::Advance 3.e5 Bf5": [
+  "mp-procaruanacarokann-advance 3.e5 bf5"
+ ],
+ "pro-caruana-caro-kann::Exchange 3.exd5::Exchange 3.exd5": [
+  "mp-procaruanacarokann-exchange 3.exd5"
+ ],
+ "pro-caruana-caro-kann::::Advance 3.e5 Bf5": [
+  "mp-procaruanacarokann-"
+ ],
+ "pro-caruana-caro-kann::::Exchange 3.exd5": [
+  "mp-procaruanacarokann-"
+ ],
+ "pro-caruana-kid::main": null,
+ "pro-caruana-kid::Classical 5.Nc3 + e4::Classical 5.Nc3 + e4": [
+  "mp-procaruanakid-classical 5.nc3 + e4"
+ ],
+ "pro-caruana-kid::::Classical 5.Nc3 + e4": [
+  "mp-procaruanakid-"
+ ],
+ "pro-carlsen-open-sicilian::main": [
+  "mp-procarlsen-opensicilian-storm",
+  "mp-carlsen-opensic-endgame"
+ ],
+ "pro-carlsen-open-sicilian::Rossolimo vs ...Nc6::Rossolimo vs ...Nc6": [],
+ "pro-carlsen-open-sicilian::Open vs ...e6::Open vs ...e6": [],
+ "pro-carlsen-open-sicilian::Moscow Bb5+::Moscow Bb5+": [],
+ "pro-carlsen-open-sicilian::Classical Bc4::Classical Bc4": [
+  "mp-carlsen-opensic-classical"
+ ],
+ "pro-carlsen-open-sicilian::Hyperaccelerated ...g6::Hyperaccelerated ...g6": [],
+ "pro-carlsen-open-sicilian::::Rossolimo vs ...Nc6": [],
+ "pro-carlsen-open-sicilian::::Open vs ...e6": [],
+ "pro-carlsen-open-sicilian::::Moscow Bb5+": [],
+ "pro-carlsen-open-sicilian::::Classical Bc4": [
+  "mp-carlsen-opensic-classical"
+ ],
+ "pro-carlsen-open-sicilian::::Hyperaccelerated ...g6": [],
+ "pro-carlsen-ruy-lopez::main": [
+  "mp-procarlsen-ruy-knighttour",
+  "mp-procarlsen-ruy-endgame"
+ ],
+ "pro-carlsen-ruy-lopez::Italian Bc4::Italian Bc4": [
+  "mp-carlsen-ruy-italian"
+ ],
+ "pro-carlsen-ruy-lopez::Berlin vs ...Nf6::Berlin vs ...Nf6": [],
+ "pro-carlsen-ruy-lopez::vs Petrov ...Nf6::vs Petrov ...Nf6": [],
+ "pro-carlsen-ruy-lopez::Scotch d4::Scotch d4": [],
+ "pro-carlsen-ruy-lopez::Four Knights Nc3::Four Knights Nc3": [
+  "mp-carlsen-ruy-fourknights"
+ ],
+ "pro-carlsen-ruy-lopez::::Italian Bc4": [
+  "mp-carlsen-ruy-italian"
+ ],
+ "pro-carlsen-ruy-lopez::::Berlin vs ...Nf6": [],
+ "pro-carlsen-ruy-lopez::::vs Petrov ...Nf6": [],
+ "pro-carlsen-ruy-lopez::::Scotch d4": [],
+ "pro-carlsen-ruy-lopez::::Four Knights Nc3": [
+  "mp-carlsen-ruy-fourknights"
+ ],
+ "pro-carlsen-queens-pawn::main": [
+  "mp-procarlsen-queenspawn-battery",
+  "mp-procarlsen-queenspawn-endgame"
+ ],
+ "pro-carlsen-queens-pawn::vs King's Indian g6::vs King's Indian g6": [
+  "mp-carlsen-qp-kid"
+ ],
+ "pro-carlsen-queens-pawn::Nimzo-Indian Nc3::Nimzo-Indian Nc3": [],
+ "pro-carlsen-queens-pawn::Catalan g3::Catalan g3": [
+  "mp-carlsen-qp-catalan"
+ ],
+ "pro-carlsen-queens-pawn::Queen's Indian b6::Queen's Indian b6": [],
+ "pro-carlsen-queens-pawn::Bogo-Indian Bb4+::Bogo-Indian Bb4+": [],
+ "pro-carlsen-queens-pawn::::vs King's Indian g6": [
+  "mp-carlsen-qp-kid"
+ ],
+ "pro-carlsen-queens-pawn::::Nimzo-Indian Nc3": [],
+ "pro-carlsen-queens-pawn::::Catalan g3": [
+  "mp-carlsen-qp-catalan"
+ ],
+ "pro-carlsen-queens-pawn::::Queen's Indian b6": [],
+ "pro-carlsen-queens-pawn::::Bogo-Indian Bb4+": [],
+ "pro-carlsen-sicilian::main": [
+  "mp-procarlsen-sicilian-qstorm",
+  "mp-carlsen-sicilian-endgame"
+ ],
+ "pro-carlsen-sicilian::vs Rossolimo Bb5::vs Rossolimo Bb5": [],
+ "pro-carlsen-sicilian::Taimanov ...e6::Taimanov ...e6": [],
+ "pro-carlsen-sicilian::Open vs ...Nc6::Open vs ...Nc6": [
+  "mp-carlsen-sic-opennc6"
+ ],
+ "pro-carlsen-sicilian::vs Alapin c3::vs Alapin c3": [],
+ "pro-carlsen-sicilian::vs Smith-Morra / d4::vs Smith-Morra / d4": [],
+ "pro-carlsen-sicilian::::vs Rossolimo Bb5": [],
+ "pro-carlsen-sicilian::::Taimanov ...e6": [],
+ "pro-carlsen-sicilian::::Open vs ...Nc6": [
+  "mp-carlsen-sic-opennc6"
+ ],
+ "pro-carlsen-sicilian::::vs Alapin c3": [],
+ "pro-carlsen-sicilian::::vs Smith-Morra / d4": [],
+ "pro-carlsen-1e5::main": [
+  "mp-procarlsen-1e5-chigorin",
+  "mp-procarlsen-1e5-endgame"
+ ],
+ "pro-carlsen-1e5::vs Italian Bc4::vs Italian Bc4": [],
+ "pro-carlsen-1e5::Berlin ...Nf6::Berlin ...Nf6": [],
+ "pro-carlsen-1e5::vs Anti-Marshall d3::vs Anti-Marshall d3": [
+  "mp-carlsen-1e5-antimarshall"
+ ],
+ "pro-carlsen-1e5::vs Scotch d4::vs Scotch d4": [],
+ "pro-carlsen-1e5::vs Four Knights::vs Four Knights": [],
+ "pro-carlsen-1e5::::vs Italian Bc4": [],
+ "pro-carlsen-1e5::::Berlin ...Nf6": [],
+ "pro-carlsen-1e5::::vs Anti-Marshall d3": [
+  "mp-carlsen-1e5-antimarshall"
+ ],
+ "pro-carlsen-1e5::::vs Scotch d4": [],
+ "pro-carlsen-1e5::::vs Four Knights": [],
+ "pro-carlsen-nimzo::main": [
+  "mp-procarlsen-nimzo-qside",
+  "mp-procarlsen-nimzo-endgame"
+ ],
+ "pro-carlsen-nimzo::Nimzo-Indian Bb4::Nimzo-Indian Bb4": [],
+ "pro-carlsen-nimzo::Queen's Indian b6::Queen's Indian b6": [],
+ "pro-carlsen-nimzo::vs Catalan g3::vs Catalan g3": [
+  "mp-carlsen-nimzo-catalan"
+ ],
+ "pro-carlsen-nimzo::Bogo-Indian Bb4+::Bogo-Indian Bb4+": [],
+ "pro-carlsen-nimzo::::Nimzo-Indian Bb4": [],
+ "pro-carlsen-nimzo::::Queen's Indian b6": [],
+ "pro-carlsen-nimzo::::vs Catalan g3": [
+  "mp-carlsen-nimzo-catalan"
+ ],
+ "pro-carlsen-nimzo::::Bogo-Indian Bb4+": [],
+ "pro-carlsen-kid::main": [
+  "mp-procarlsen-kid-f5storm",
+  "mp-carlsen-kid-endgame"
+ ],
+ "pro-carlsen-kid::Fianchetto g3::Fianchetto g3": [],
+ "pro-carlsen-kid::Grünfeld ...d5::Grünfeld ...d5": [],
+ "pro-carlsen-kid::Makogonov h3::Makogonov h3": [],
+ "pro-carlsen-kid::Sämisch f3::Sämisch f3": [],
+ "pro-carlsen-kid::::Fianchetto g3": [],
+ "pro-carlsen-kid::::Grünfeld ...d5": [],
+ "pro-carlsen-kid::::Makogonov h3": [],
+ "pro-carlsen-kid::::Sämisch f3": [],
+ "pro-carlsen-french::main": [
+  "mp-procarlsen-french-qbreak",
+  "mp-carlsen-french-endgame"
+ ],
+ "pro-carlsen-french::vs Tarrasch Nd2::vs Tarrasch Nd2": [],
+ "pro-carlsen-french::vs Advance e5::vs Advance e5": [
+  "mp-carlsen-french-advance"
+ ],
+ "pro-carlsen-french::vs Exchange::vs Exchange": [],
+ "pro-carlsen-french::Winawer Bb4::Winawer Bb4": [],
+ "pro-carlsen-french::::vs Tarrasch Nd2": [],
+ "pro-carlsen-french::::vs Advance e5": [
+  "mp-carlsen-french-advance"
+ ],
+ "pro-carlsen-french::::vs Exchange": [],
+ "pro-carlsen-french::::Winawer Bb4": [],
+ "pro-aman-sicilian-kan::main": null,
+ "pro-aman-sicilian-kan::Bd3 + f4::Open Kan (Bd3 + f4)": [
+  "mp-proamansiciliankan-bd3 + f4"
+ ],
+ "pro-aman-sicilian-kan::...Nc6::Taimanov (...Nc6)": [
+  "mp-proamansiciliankan-...nc6"
+ ],
+ "pro-aman-sicilian-kan::5.c4::Maróczy Bind (5.c4)": [
+  "mp-proamansiciliankan-5.c4"
+ ],
+ "pro-aman-sicilian-kan::2.c3::vs Alapin (2.c3)": [
+  "mp-proamansiciliankan-2.c3"
+ ],
+ "pro-aman-sicilian-kan::Open Kan (Bd3 + f4)::Open Kan (Bd3 + f4)": [
+  "mp-proamansiciliankan-open kan (bd3 + f4)"
+ ],
+ "pro-aman-sicilian-kan::::Open Kan (Bd3 + f4)": [
+  "mp-proamansiciliankan-"
+ ],
+ "pro-aman-sicilian-kan::Taimanov (...Nc6)::Taimanov (...Nc6)": [
+  "mp-proamansiciliankan-taimanov (...nc6)"
+ ],
+ "pro-aman-sicilian-kan::::Taimanov (...Nc6)": [
+  "mp-proamansiciliankan-"
+ ],
+ "pro-aman-sicilian-kan::Maróczy Bind (5.c4)::Maróczy Bind (5.c4)": [
+  "mp-proamansiciliankan-maróczy bind (5.c4)"
+ ],
+ "pro-aman-sicilian-kan::::Maróczy Bind (5.c4)": [
+  "mp-proamansiciliankan-"
+ ],
+ "pro-aman-sicilian-kan::vs Alapin (2.c3)::vs Alapin (2.c3)": [
+  "mp-proamansiciliankan-vs alapin (2.c3)"
+ ],
+ "pro-aman-sicilian-kan::::vs Alapin (2.c3)": [
+  "mp-proamansiciliankan-"
+ ],
+ "pro-aman-nimzo-indian::main": null,
+ "pro-aman-nimzo-indian::e3::Rubinstein (e3)": [
+  "mp-proamannimzoindian-e3"
+ ],
+ "pro-aman-nimzo-indian::3.Nf3 Bb4+::Bogo-Indian (3.Nf3 Bb4+)": [
+  "mp-proamannimzoindian-3.nf3 bb4+"
+ ],
+ "pro-aman-nimzo-indian::4.Qc2::Classical (4.Qc2)": [
+  "mp-proamannimzoindian-4.qc2"
+ ],
+ "pro-aman-nimzo-indian::Rubinstein (e3)::Rubinstein (e3)": [
+  "mp-proamannimzoindian-rubinstein (e3)"
+ ],
+ "pro-aman-nimzo-indian::::Rubinstein (e3)": [
+  "mp-proamannimzoindian-"
+ ],
+ "pro-aman-nimzo-indian::Bogo-Indian (3.Nf3 Bb4+)::Bogo-Indian (3.Nf3 Bb4+)": [
+  "mp-proamannimzoindian-bogo-indian (3.nf3 bb4+)"
+ ],
+ "pro-aman-nimzo-indian::::Bogo-Indian (3.Nf3 Bb4+)": [
+  "mp-proamannimzoindian-"
+ ],
+ "pro-aman-nimzo-indian::Classical (4.Qc2)::Classical (4.Qc2)": [
+  "mp-proamannimzoindian-classical (4.qc2)"
+ ],
+ "pro-aman-nimzo-indian::::Classical (4.Qc2)": [
+  "mp-proamannimzoindian-"
+ ],
+ "pro-aman-caro-kann::main": null,
+ "pro-aman-caro-kann::…Bf5::Advance (…Bf5)": [
+  "mp-proamancarokann-…bf5"
+ ],
+ "pro-aman-caro-kann::2.Nf3::vs Two Knights (2.Nf3)": [
+  "mp-proamancarokann-2.nf3"
+ ],
+ "pro-aman-caro-kann::3.exd5::vs Exchange (3.exd5)": [
+  "mp-proamancarokann-3.exd5"
+ ],
+ "pro-aman-caro-kann::Advance (…Bf5)::Advance (…Bf5)": [
+  "mp-proamancarokann-advance (…bf5)"
+ ],
+ "pro-aman-caro-kann::::Advance (…Bf5)": [
+  "mp-proamancarokann-"
+ ],
+ "pro-aman-caro-kann::vs Two Knights (2.Nf3)::vs Two Knights (2.Nf3)": [
+  "mp-proamancarokann-vs two knights (2.nf3)"
+ ],
+ "pro-aman-caro-kann::::vs Two Knights (2.Nf3)": [
+  "mp-proamancarokann-"
+ ],
+ "pro-aman-caro-kann::vs Exchange (3.exd5)::vs Exchange (3.exd5)": [
+  "mp-proamancarokann-vs exchange (3.exd5)"
+ ],
+ "pro-aman-caro-kann::::vs Exchange (3.exd5)": [
+  "mp-proamancarokann-"
+ ],
+ "pro-aman-reti::main": null,
+ "pro-aman-reti::QGD structure::vs …d5 (QGD structure)": [
+  "mp-proamanreti-qgd structure"
+ ],
+ "pro-aman-reti::KIA::vs …g6 (KIA)": [
+  "mp-proamanreti-kia"
+ ],
+ "pro-aman-reti::g3::Double Fianchetto (g3)": [
+  "mp-proamanreti-g3"
+ ],
+ "pro-aman-reti::vs …d5 (QGD structure)::vs …d5 (QGD structure)": [
+  "mp-proamanreti-vs …d5 (qgd structure)"
+ ],
+ "pro-aman-reti::::vs …d5 (QGD structure)": [
+  "mp-proamanreti-"
+ ],
+ "pro-aman-reti::vs …g6 (KIA)::vs …g6 (KIA)": [
+  "mp-proamanreti-vs …g6 (kia)"
+ ],
+ "pro-aman-reti::::vs …g6 (KIA)": [
+  "mp-proamanreti-"
+ ],
+ "pro-aman-reti::Double Fianchetto (g3)::Double Fianchetto (g3)": [
+  "mp-proamanreti-double fianchetto (g3)"
+ ],
+ "pro-aman-reti::::Double Fianchetto (g3)": [
+  "mp-proamanreti-"
+ ],
+ "pro-aman-ruy-lopez::main": null,
+ "pro-aman-ruy-lopez::…a6::Morphy (…a6)": [
+  "mp-proamanruylopez-…a6"
+ ],
+ "pro-aman-ruy-lopez::…Nf6::Berlin (…Nf6)": [
+  "mp-proamanruylopez-…nf6"
+ ],
+ "pro-aman-ruy-lopez::Morphy (…a6)::Morphy (…a6)": [
+  "mp-proamanruylopez-morphy (…a6)"
+ ],
+ "pro-aman-ruy-lopez::::Morphy (…a6)": [
+  "mp-proamanruylopez-"
+ ],
+ "pro-aman-ruy-lopez::Berlin (…Nf6)::Berlin (…Nf6)": [
+  "mp-proamanruylopez-berlin (…nf6)"
+ ],
+ "pro-aman-ruy-lopez::::Berlin (…Nf6)": [
+  "mp-proamanruylopez-"
+ ],
+ "pro-aman-open-sicilian::main": null,
+ "pro-aman-open-sicilian::…a6::vs Najdorf (…a6)": [
+  "mp-proamanopensicilian-…a6"
+ ],
+ "pro-aman-open-sicilian::…Nc6::vs Classical (…Nc6)": [
+  "mp-proamanopensicilian-…nc6"
+ ],
+ "pro-aman-open-sicilian::…g6::vs Dragon (…g6)": [
+  "mp-proamanopensicilian-…g6"
+ ],
+ "pro-aman-open-sicilian::vs Najdorf (…a6)::vs Najdorf (…a6)": [
+  "mp-proamanopensicilian-vs najdorf (…a6)"
+ ],
+ "pro-aman-open-sicilian::::vs Najdorf (…a6)": [
+  "mp-proamanopensicilian-"
+ ],
+ "pro-aman-open-sicilian::vs Classical (…Nc6)::vs Classical (…Nc6)": [
+  "mp-proamanopensicilian-vs classical (…nc6)"
+ ],
+ "pro-aman-open-sicilian::::vs Classical (…Nc6)": [
+  "mp-proamanopensicilian-"
+ ],
+ "pro-aman-open-sicilian::vs Dragon (…g6)::vs Dragon (…g6)": [
+  "mp-proamanopensicilian-vs dragon (…g6)"
+ ],
+ "pro-aman-open-sicilian::::vs Dragon (…g6)": [
+  "mp-proamanopensicilian-"
+ ],
+ "pro-aman-rossolimo::main": null,
+ "pro-aman-rossolimo::Bxc6::vs …g6 (Bxc6)": [
+  "mp-proamanrossolimo-bxc6"
+ ],
+ "pro-aman-rossolimo::vs …e6::vs …e6": [
+  "mp-proamanrossolimo-vs …e6"
+ ],
+ "pro-aman-rossolimo::Moscow vs …d6::Moscow vs …d6": [
+  "mp-proamanrossolimo-moscow vs …d6"
+ ],
+ "pro-aman-rossolimo::vs …g6 (Bxc6)::vs …g6 (Bxc6)": [
+  "mp-proamanrossolimo-vs …g6 (bxc6)"
+ ],
+ "pro-aman-rossolimo::::vs …g6 (Bxc6)": [
+  "mp-proamanrossolimo-"
+ ],
+ "pro-aman-rossolimo::::vs …e6": [
+  "mp-proamanrossolimo-"
+ ],
+ "pro-aman-rossolimo::::Moscow vs …d6": [
+  "mp-proamanrossolimo-"
+ ],
+ "pro-aman-french-white::main": null,
+ "pro-aman-french-white::…Bb4::Winawer (…Bb4)": [
+  "mp-proamanfrenchwhite-…bb4"
+ ],
+ "pro-aman-french-white::…Nf6::Classical (…Nf6)": [
+  "mp-proamanfrenchwhite-…nf6"
+ ],
+ "pro-aman-french-white::…dxe4::Rubinstein (…dxe4)": [
+  "mp-proamanfrenchwhite-…dxe4"
+ ],
+ "pro-aman-french-white::Winawer (…Bb4)::Winawer (…Bb4)": [
+  "mp-proamanfrenchwhite-winawer (…bb4)"
+ ],
+ "pro-aman-french-white::::Winawer (…Bb4)": [
+  "mp-proamanfrenchwhite-"
+ ],
+ "pro-aman-french-white::Classical (…Nf6)::Classical (…Nf6)": [
+  "mp-proamanfrenchwhite-classical (…nf6)"
+ ],
+ "pro-aman-french-white::::Classical (…Nf6)": [
+  "mp-proamanfrenchwhite-"
+ ],
+ "pro-aman-french-white::Rubinstein (…dxe4)::Rubinstein (…dxe4)": [
+  "mp-proamanfrenchwhite-rubinstein (…dxe4)"
+ ],
+ "pro-aman-french-white::::Rubinstein (…dxe4)": [
+  "mp-proamanfrenchwhite-"
+ ],
+ "pro-aman-anti-caro::main": null,
+ "pro-aman-anti-caro::…Bg4::Two Knights (…Bg4)": [
+  "mp-proamananticaro-…bg4"
+ ],
+ "pro-aman-anti-caro::vs …dxe4::vs …dxe4": [
+  "mp-proamananticaro-vs …dxe4"
+ ],
+ "pro-aman-anti-caro::Two Knights (…Bg4)::Two Knights (…Bg4)": [
+  "mp-proamananticaro-two knights (…bg4)"
+ ],
+ "pro-aman-anti-caro::::Two Knights (…Bg4)": [
+  "mp-proamananticaro-"
+ ],
+ "pro-aman-anti-caro::::vs …dxe4": [
+  "mp-proamananticaro-"
+ ],
+ "pro-carlsen-scandinavian::main": [
+  "mp-carlsen-scandinavian-c5",
+  "mp-carlsen-scandinavian-endgame"
+ ],
+ "pro-carlsen-scandinavian::3…Qa5 Main::3…Qa5 Main": [],
+ "pro-carlsen-scandinavian::vs 2.Nc3::vs 2.Nc3": [],
+ "pro-carlsen-scandinavian::Modern 2…Nf6::Modern 2…Nf6": [],
+ "pro-carlsen-scandinavian::3…Qd8 Solid::3…Qd8 Solid": [],
+ "pro-carlsen-scandinavian::::3…Qa5 Main": [],
+ "pro-carlsen-scandinavian::::vs 2.Nc3": [],
+ "pro-carlsen-scandinavian::::Modern 2…Nf6": [],
+ "pro-carlsen-scandinavian::::3…Qd8 Solid": [],
+ "pro-carlsen-caro-kann::main": [
+  "mp-carlsen-caro-c5",
+  "mp-carlsen-caro-endgame"
+ ],
+ "pro-carlsen-caro-kann::vs Two Knights::vs Two Knights": [],
+ "pro-carlsen-caro-kann::Exchange::Exchange": [],
+ "pro-carlsen-caro-kann::KIA::vs 2.Nf3 d3 (KIA)": [],
+ "pro-carlsen-caro-kann::::vs Two Knights": [],
+ "pro-carlsen-caro-kann::::Exchange": [],
+ "pro-carlsen-caro-kann::vs 2.Nf3 d3 (KIA)::vs 2.Nf3 d3 (KIA)": [],
+ "pro-carlsen-caro-kann::::vs 2.Nf3 d3 (KIA)": [],
+ "pro-carlsen-modern::main": [
+  "mp-carlsen-modern-c5",
+  "mp-carlsen-modern-endgame"
+ ],
+ "pro-carlsen-modern::Classical Nf3::Classical Nf3": [],
+ "pro-carlsen-modern::vs Nc3 with …c6/…d5::vs Nc3 with …c6/…d5": [],
+ "pro-carlsen-modern::vs Austrian f4::vs Austrian f4": [],
+ "pro-carlsen-modern::::Classical Nf3": [],
+ "pro-carlsen-modern::::vs Nc3 with …c6/…d5": [],
+ "pro-carlsen-modern::::vs Austrian f4": [],
+ "pro-carlsen-closed-sicilian::main": [
+  "mp-carlsen-closedsic-f5",
+  "mp-carlsen-closedsic-endgame"
+ ],
+ "pro-carlsen-closed-sicilian::vs …d6::vs …d6": [],
+ "pro-carlsen-closed-sicilian::vs …e6::vs …e6": [],
+ "pro-carlsen-closed-sicilian::Bb5 vs …Nc6::Bb5 vs …Nc6": [],
+ "pro-carlsen-closed-sicilian::::vs …d6": [],
+ "pro-carlsen-closed-sicilian::::vs …e6": [],
+ "pro-carlsen-closed-sicilian::::Bb5 vs …Nc6": [],
+ "pro-carlsen-reti::main": [
+  "mp-carlsen-reti-e5",
+  "mp-carlsen-reti-endgame"
+ ],
+ "pro-carlsen-reti::Réti into c4 vs …Nf6::Réti into c4 vs …Nf6": [],
+ "pro-carlsen-reti::vs …c5 Symmetric::vs …c5 Symmetric": [],
+ "pro-carlsen-reti::Catalan::vs …e6 (Catalan)": [],
+ "pro-carlsen-reti::::Réti into c4 vs …Nf6": [],
+ "pro-carlsen-reti::::vs …c5 Symmetric": [],
+ "pro-carlsen-reti::vs …e6 (Catalan)::vs …e6 (Catalan)": [],
+ "pro-carlsen-reti::::vs …e6 (Catalan)": [],
+ "pro-carlsen-kings-gambit::main": [
+  "mp-carlsen-kg-d4"
+ ],
+ "pro-carlsen-kings-gambit::Falkbeer 2…d5::Falkbeer 2…d5": [],
+ "pro-carlsen-kings-gambit::Bishop's Gambit 3.Bc4::Bishop's Gambit 3.Bc4": [],
+ "pro-carlsen-kings-gambit::Declined …Bc5::Declined …Bc5": [],
+ "pro-carlsen-kings-gambit::::Falkbeer 2…d5": [],
+ "pro-carlsen-kings-gambit::::Bishop's Gambit 3.Bc4": [],
+ "pro-carlsen-kings-gambit::::Declined …Bc5": [],
+ "pro-naroditsky-dragodorf::main": [
+  "mp-pronardragodorf-main-cfile"
+ ],
+ "pro-naroditsky-dragodorf::Be3::English Attack (Be3)": [
+  "mp-pronardragodorf-english-queenside"
+ ],
+ "pro-naroditsky-dragodorf::Be2::Classical (Be2)": [
+  "mp-pronardragodorf-classical-e5"
+ ],
+ "pro-naroditsky-dragodorf::h3 Adams Attack::h3 Adams Attack": [],
+ "pro-naroditsky-dragodorf::English Attack (Be3)::English Attack (Be3)": [
+  "mp-pronardragodorf-english-queenside"
+ ],
+ "pro-naroditsky-dragodorf::::English Attack (Be3)": [
+  "mp-pronardragodorf-english-queenside"
+ ],
+ "pro-naroditsky-dragodorf::Classical (Be2)::Classical (Be2)": [
+  "mp-pronardragodorf-classical-e5"
+ ],
+ "pro-naroditsky-dragodorf::::Classical (Be2)": [
+  "mp-pronardragodorf-classical-e5"
+ ],
+ "pro-naroditsky-dragodorf::::h3 Adams Attack": [],
+ "anti-caro-fantasy::main": null,
+ "anti-caro-fantasy::e6::Maróczy Variation (e6)": [
+  "mp-anticarofantasy-e6"
+ ],
+ "anti-caro-fantasy::g6::Maróczy Variation (g6)": [
+  "mp-anticarofantasy-g6"
+ ],
+ "anti-caro-fantasy::Qb6::Maróczy Variation (Qb6)": [
+  "mp-anticarofantasy-qb6"
+ ],
+ "anti-caro-fantasy::Maróczy Variation (e6)::Maróczy Variation (e6)": [
+  "mp-anticarofantasy-maróczy variation (e6)"
+ ],
+ "anti-caro-fantasy::::Maróczy Variation (e6)": [
+  "mp-anticarofantasy-"
+ ],
+ "anti-caro-fantasy::Maróczy Variation (g6)::Maróczy Variation (g6)": [
+  "mp-anticarofantasy-maróczy variation (g6)"
+ ],
+ "anti-caro-fantasy::::Maróczy Variation (g6)": [
+  "mp-anticarofantasy-"
+ ],
+ "anti-caro-fantasy::Maróczy Variation (Qb6)::Maróczy Variation (Qb6)": [
+  "mp-anticarofantasy-maróczy variation (qb6)"
+ ],
+ "anti-caro-fantasy::::Maróczy Variation (Qb6)": [
+  "mp-anticarofantasy-"
+ ],
+ "anti-french-advance::main": null,
+ "anti-french-advance::Advance Variation::Advance Variation": [
+  "mp-antifrenchadvance-advance variation"
+ ],
+ "anti-french-advance::::Advance Variation": [
+  "mp-antifrenchadvance-"
+ ],
+ "anti-french-tarrasch::main": null,
+ "anti-french-tarrasch::closed centre::Traditional …Nf6 (closed centre)": [
+  "mp-antifrenchtarrasch-closed centre"
+ ],
+ "anti-french-tarrasch::Traditional …Nf6 (closed centre)::Traditional …Nf6 (closed centre)": [
+  "mp-antifrenchtarrasch-traditional …nf6 (closed centre)"
+ ],
+ "anti-french-tarrasch::::Traditional …Nf6 (closed centre)": [
+  "mp-antifrenchtarrasch-"
+ ],
+ "anti-pirc-austrian::main": null,
+ "anti-pirc-austrian::Austrian Attack, Dragon Formation::Austrian Attack, Dragon Formation": [
+  "mp-antipircaustrian-austrian attack, dragon formation"
+ ],
+ "anti-pirc-austrian::::Austrian Attack, Dragon Formation": [
+  "mp-antipircaustrian-"
+ ],
+ "anti-pirc-battery::main": null,
+ "anti-pirc-battery::Punishing …Ng4::Punishing …Ng4": [
+  "mp-antipircbattery-punishing …ng4"
+ ],
+ "anti-pirc-battery::The …e5 Endgame Grind::The …e5 Endgame Grind": [
+  "mp-antipircbattery-the …e5 endgame grind"
+ ],
+ "anti-pirc-battery::Modern Order: the Gurgenidze …c6+…d5::Modern Order: the Gurgenidze …c6+…d5": [
+  "mp-antipircbattery-modern order: the gurgenidze …c6+…d5"
+ ],
+ "anti-pirc-battery::::Punishing …Ng4": [
+  "mp-antipircbattery-"
+ ],
+ "anti-pirc-battery::::The …e5 Endgame Grind": [
+  "mp-antipircbattery-"
+ ],
+ "anti-pirc-battery::::Modern Order: the Gurgenidze …c6+…d5": [
+  "mp-antipircbattery-"
+ ],
+ "anti-philidor::main": null,
+ "anti-philidor::The Legal's Mate Trap::The Legal's Mate Trap": [
+  "mp-antiphilidor-the legal's mate trap"
+ ],
+ "anti-philidor::defused::The Center Fork Trick (defused)": [
+  "mp-antiphilidor-defused"
+ ],
+ "anti-philidor::::The Legal's Mate Trap": [
+  "mp-antiphilidor-"
+ ],
+ "anti-philidor::The Center Fork Trick (defused)::The Center Fork Trick (defused)": [
+  "mp-antiphilidor-the center fork trick (defused)"
+ ],
+ "anti-philidor::::The Center Fork Trick (defused)": [
+  "mp-antiphilidor-"
+ ],
+ "anti-elephant::main": null,
+ "anti-elephant::The Greedy …Qg5 Refuted::The Greedy …Qg5 Refuted": [
+  "mp-antielephant-the greedy …qg5 refuted"
+ ],
+ "anti-elephant::…Qe7 and f6 — dodge the Qh5 trap with Nd3::…Qe7 and f6 — dodge the Qh5 trap with Nd3": [
+  "mp-antielephant-…qe7 and f6 — dodge the qh5 trap with nd3"
+ ],
+ "anti-elephant::::The Greedy …Qg5 Refuted": [
+  "mp-antielephant-"
+ ],
+ "anti-elephant::::…Qe7 and f6 — dodge the Qh5 trap with Nd3": [
+  "mp-antielephant-"
+ ],
+ "anti-danish::main": null,
+ "anti-danish::The Practical …d5 Takeout::The Practical …d5 Takeout": [
+  "mp-antidanish-the practical …d5 takeout"
+ ],
+ "anti-danish::::The Practical …d5 Takeout": [
+  "mp-antidanish-"
+ ],
+ "anti-latvian::main": null,
+ "anti-latvian::The …fxe4 Grab::The …fxe4 Grab": [
+  "mp-antilatvian-the …fxe4 grab"
+ ],
+ "anti-latvian::::The …fxe4 Grab": [
+  "mp-antilatvian-"
+ ],
+ "anti-owen::main": null,
+ "anti-scandinavian::main": null,
+ "anti-scandinavian::Bronstein Variation::Bronstein Variation": [
+  "mp-antiscandinavian-bronstein variation"
+ ],
+ "anti-scandinavian::Valencian Variation, Main Line::Valencian Variation, Main Line": [
+  "mp-antiscandinavian-valencian variation, main line"
+ ],
+ "anti-scandinavian::Bb5+!::Modern 2…Nf6 (Bb5+!)": [
+  "mp-antiscandinavian-bb5+!"
+ ],
+ "anti-scandinavian::::Bronstein Variation": [
+  "mp-antiscandinavian-"
+ ],
+ "anti-scandinavian::::Valencian Variation, Main Line": [
+  "mp-antiscandinavian-"
+ ],
+ "anti-scandinavian::Modern 2…Nf6 (Bb5+!)::Modern 2…Nf6 (Bb5+!)": [
+  "mp-antiscandinavian-modern 2…nf6 (bb5+!)"
+ ],
+ "anti-scandinavian::::Modern 2…Nf6 (Bb5+!)": [
+  "mp-antiscandinavian-"
+ ],
+ "anti-alekhine-modern::main": null,
+ "anti-alekhine-modern::Modern Variation, Larsen Variation::Modern Variation, Larsen Variation": [
+  "mp-antialekhinemodern-modern variation, larsen variation"
+ ],
+ "anti-alekhine-modern::Modern Variation, Alburt Variation::Modern Variation, Alburt Variation": [
+  "mp-antialekhinemodern-modern variation, alburt variation"
+ ],
+ "anti-alekhine-modern::Modern Variation, Schmid Variation::Modern Variation, Schmid Variation": [
+  "mp-antialekhinemodern-modern variation, schmid variation"
+ ],
+ "anti-alekhine-modern::::Modern Variation, Larsen Variation": [
+  "mp-antialekhinemodern-"
+ ],
+ "anti-alekhine-modern::::Modern Variation, Alburt Variation": [
+  "mp-antialekhinemodern-"
+ ],
+ "anti-alekhine-modern::::Modern Variation, Schmid Variation": [
+  "mp-antialekhinemodern-"
+ ],
+ "anti-modern-150::main": null,
+ "anti-modern-150::a6::Standard Defense (a6)": [
+  "mp-antimodern150-a6"
+ ],
+ "anti-modern-150::c6::Standard Defense (c6)": [
+  "mp-antimodern150-c6"
+ ],
+ "anti-modern-150::Nf6::Standard Defense (Nf6)": [
+  "mp-antimodern150-nf6"
+ ],
+ "anti-modern-150::Standard Defense (a6)::Standard Defense (a6)": [
+  "mp-antimodern150-standard defense (a6)"
+ ],
+ "anti-modern-150::::Standard Defense (a6)": [
+  "mp-antimodern150-"
+ ],
+ "anti-modern-150::Standard Defense (c6)::Standard Defense (c6)": [
+  "mp-antimodern150-standard defense (c6)"
+ ],
+ "anti-modern-150::::Standard Defense (c6)": [
+  "mp-antimodern150-"
+ ],
+ "anti-modern-150::Standard Defense (Nf6)::Standard Defense (Nf6)": [
+  "mp-antimodern150-standard defense (nf6)"
+ ],
+ "anti-modern-150::::Standard Defense (Nf6)": [
+  "mp-antimodern150-"
+ ],
+ "anti-sicilian-rossolimo::main": null,
+ "anti-sicilian-rossolimo::Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation::Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation": [
+  "mp-antisicilianrossolimo-nyezhmetdinov-rossolimo attack, fianchetto variation"
+ ],
+ "anti-sicilian-rossolimo::e6::Nyezhmetdinov-Rossolimo Attack (e6)": [
+  "mp-antisicilianrossolimo-e6"
+ ],
+ "anti-sicilian-rossolimo::d6::Nyezhmetdinov-Rossolimo Attack (d6)": [
+  "mp-antisicilianrossolimo-d6"
+ ],
+ "anti-sicilian-rossolimo::Nf6::Nyezhmetdinov-Rossolimo Attack (Nf6)": [
+  "mp-antisicilianrossolimo-nf6"
+ ],
+ "anti-sicilian-rossolimo::::Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation": [
+  "mp-antisicilianrossolimo-"
+ ],
+ "anti-sicilian-rossolimo::Nyezhmetdinov-Rossolimo Attack (e6)::Nyezhmetdinov-Rossolimo Attack (e6)": [
+  "mp-antisicilianrossolimo-nyezhmetdinov-rossolimo attack (e6)"
+ ],
+ "anti-sicilian-rossolimo::::Nyezhmetdinov-Rossolimo Attack (e6)": [
+  "mp-antisicilianrossolimo-"
+ ],
+ "anti-sicilian-rossolimo::Nyezhmetdinov-Rossolimo Attack (d6)::Nyezhmetdinov-Rossolimo Attack (d6)": [
+  "mp-antisicilianrossolimo-nyezhmetdinov-rossolimo attack (d6)"
+ ],
+ "anti-sicilian-rossolimo::::Nyezhmetdinov-Rossolimo Attack (d6)": [
+  "mp-antisicilianrossolimo-"
+ ],
+ "anti-sicilian-rossolimo::Nyezhmetdinov-Rossolimo Attack (Nf6)::Nyezhmetdinov-Rossolimo Attack (Nf6)": [
+  "mp-antisicilianrossolimo-nyezhmetdinov-rossolimo attack (nf6)"
+ ],
+ "anti-sicilian-rossolimo::::Nyezhmetdinov-Rossolimo Attack (Nf6)": [
+  "mp-antisicilianrossolimo-"
+ ],
+ "anti-benoni-push::main": null,
+ "anti-benoni-push::Fully Accepted Variation::Fully Accepted Variation": [
+  "mp-antibenonipush-fully accepted variation"
+ ],
+ "anti-benoni-push::Pawn Storm Variation::Pawn Storm Variation": [
+  "mp-antibenonipush-pawn storm variation"
+ ],
+ "anti-benoni-push::Benoni Defense::Benoni Defense": [
+  "mp-antibenonipush-benoni defense"
+ ],
+ "anti-benoni-push::Czech Benoni Defense::Czech Benoni Defense": [
+  "mp-antibenonipush-czech benoni defense"
+ ],
+ "anti-benoni-push::::Fully Accepted Variation": [
+  "mp-antibenonipush-"
+ ],
+ "anti-benoni-push::::Pawn Storm Variation": [
+  "mp-antibenonipush-"
+ ],
+ "anti-benoni-push::::Benoni Defense": [
+  "mp-antibenonipush-"
+ ],
+ "anti-benoni-push::::Czech Benoni Defense": [
+  "mp-antibenonipush-"
+ ],
+ "anti-englund::main": null,
+ "anti-englund::Main Line::Main Line": [
+  "mp-antienglund-main line"
+ ],
+ "anti-englund::Englund Gambit::Englund Gambit": [
+  "mp-antienglund-englund gambit"
+ ],
+ "anti-englund::Zilbermints Gambit::Zilbermints Gambit": [
+  "mp-antienglund-zilbermints gambit"
+ ],
+ "anti-englund::::Main Line": [
+  "mp-antienglund-"
+ ],
+ "anti-englund::::Englund Gambit": [
+  "mp-antienglund-"
+ ],
+ "anti-englund::::Zilbermints Gambit": [
+  "mp-antienglund-"
+ ],
+ "anti-kid-saemisch::main": null,
+ "anti-kid-saemisch::Sämisch Variation, Sämisch Gambit::Sämisch Variation, Sämisch Gambit": [
+  "mp-antikidsaemisch-sämisch variation, sämisch gambit"
+ ],
+ "anti-kid-saemisch::Sämisch Variation, Yates Defense::Sämisch Variation, Yates Defense": [
+  "mp-antikidsaemisch-sämisch variation, yates defense"
+ ],
+ "anti-kid-saemisch::a6::Sämisch Variation, Normal Defense (a6)": [
+  "mp-antikidsaemisch-a6"
+ ],
+ "anti-kid-saemisch::Nbd7::Sämisch Variation, Normal Defense (Nbd7)": [
+  "mp-antikidsaemisch-nbd7"
+ ],
+ "anti-kid-saemisch::::Sämisch Variation, Sämisch Gambit": [
+  "mp-antikidsaemisch-"
+ ],
+ "anti-kid-saemisch::::Sämisch Variation, Yates Defense": [
+  "mp-antikidsaemisch-"
+ ],
+ "anti-kid-saemisch::Sämisch Variation, Normal Defense (a6)::Sämisch Variation, Normal Defense (a6)": [
+  "mp-antikidsaemisch-sämisch variation, normal defense (a6)"
+ ],
+ "anti-kid-saemisch::::Sämisch Variation, Normal Defense (a6)": [
+  "mp-antikidsaemisch-"
+ ],
+ "anti-kid-saemisch::Sämisch Variation, Normal Defense (Nbd7)::Sämisch Variation, Normal Defense (Nbd7)": [
+  "mp-antikidsaemisch-sämisch variation, normal defense (nbd7)"
+ ],
+ "anti-kid-saemisch::::Sämisch Variation, Normal Defense (Nbd7)": [
+  "mp-antikidsaemisch-"
+ ],
+ "anti-grunfeld-exchange::main": null,
+ "anti-grunfeld-exchange::O-O::Exchange Variation, Classical Variation (O-O)": [
+  "mp-antigrunfeldexchange-o-o"
+ ],
+ "anti-grunfeld-exchange::Exchange Variation, Classical Variation (O-O)::Exchange Variation, Classical Variation (O-O)": [
+  "mp-antigrunfeldexchange-exchange variation, classical variation (o-o)"
+ ],
+ "anti-grunfeld-exchange::::Exchange Variation, Classical Variation (O-O)": [
+  "mp-antigrunfeldexchange-"
+ ],
+ "anti-nimzo-qc2::main": null,
+ "anti-nimzo-qc2::Classical Variation, Noa Variation::Classical Variation, Noa Variation": [
+  "mp-antinimzoqc2-classical variation, noa variation"
+ ],
+ "anti-nimzo-qc2::Classical Variation, Berlin Variation, Pirc Variation::Classical Variation, Berlin Variation, Pirc Variation": [
+  "mp-antinimzoqc2-classical variation, berlin variation, pirc variation"
+ ],
+ "anti-nimzo-qc2::::Classical Variation, Noa Variation": [
+  "mp-antinimzoqc2-"
+ ],
+ "anti-nimzo-qc2::::Classical Variation, Berlin Variation, Pirc Variation": [
+  "mp-antinimzoqc2-"
+ ],
+ "anti-qid-fianchetto::main": null,
+ "anti-qid-fianchetto::Fianchetto Variation, Traditional Line::Fianchetto Variation, Traditional Line": [
+  "mp-antiqidfianchetto-fianchetto variation, traditional line"
+ ],
+ "anti-qid-fianchetto::::Fianchetto Variation, Traditional Line": [
+  "mp-antiqidfianchetto-"
+ ],
+ "anti-dutch-staunton::main": null,
+ "anti-dutch-staunton::Staunton Gambit::Staunton Gambit": [
+  "mp-antidutchstaunton-staunton gambit"
+ ],
+ "anti-dutch-staunton::Staunton Gambit, Lasker Variation::Staunton Gambit, Lasker Variation": [
+  "mp-antidutchstaunton-staunton gambit, lasker variation"
+ ],
+ "anti-dutch-staunton::Staunton Gambit, Chigorin Variation::Staunton Gambit, Chigorin Variation": [
+  "mp-antidutchstaunton-staunton gambit, chigorin variation"
+ ],
+ "anti-dutch-staunton::::Staunton Gambit": [
+  "mp-antidutchstaunton-"
+ ],
+ "anti-dutch-staunton::::Staunton Gambit, Lasker Variation": [
+  "mp-antidutchstaunton-"
+ ],
+ "anti-dutch-staunton::::Staunton Gambit, Chigorin Variation": [
+  "mp-antidutchstaunton-"
+ ],
+ "anti-qgd-exchange::main": null,
+ "anti-qgd-exchange::Be7::Queen's Gambit Declined (Be7)": [
+  "mp-antiqgdexchange-be7"
+ ],
+ "anti-qgd-exchange::Queen's Gambit Declined (Be7)::Queen's Gambit Declined (Be7)": [
+  "mp-antiqgdexchange-queen's gambit declined (be7)"
+ ],
+ "anti-qgd-exchange::::Queen's Gambit Declined (Be7)": [
+  "mp-antiqgdexchange-"
+ ],
+ "anti-budapest::main": null,
+ "anti-budapest::g5::Budapest Defense, Rubinstein Variation (g5)": [
+  "mp-antibudapest-g5"
+ ],
+ "anti-budapest::Budapest Defense, Rubinstein Variation (g5)::Budapest Defense, Rubinstein Variation (g5)": [
+  "mp-antibudapest-budapest defense, rubinstein variation (g5)"
+ ],
+ "anti-budapest::::Budapest Defense, Rubinstein Variation (g5)": [
+  "mp-antibudapest-"
+ ],
+ "anti-london-black::main": null,
+ "anti-london-black::c3::Accelerated London System, Steinitz Countergambit (c3)": [
+  "mp-antilondonblack-c3"
+ ],
+ "anti-london-black::Nf3::Accelerated London System, Steinitz Countergambit (Nf3)": [
+  "mp-antilondonblack-nf3"
+ ],
+ "anti-london-black::The …c5 + …Qb6 Poison::The …c5 + …Qb6 Poison": [
+  "mp-antilondonblack-the …c5 + …qb6 poison"
+ ],
+ "anti-london-black::Accelerated London System, Steinitz Countergambit (c3)::Accelerated London System, Steinitz Countergambit (c3)": [
+  "mp-antilondonblack-accelerated london system, steinitz countergambit (c3)"
+ ],
+ "anti-london-black::::Accelerated London System, Steinitz Countergambit (c3)": [
+  "mp-antilondonblack-"
+ ],
+ "anti-london-black::Accelerated London System, Steinitz Countergambit (Nf3)::Accelerated London System, Steinitz Countergambit (Nf3)": [
+  "mp-antilondonblack-accelerated london system, steinitz countergambit (nf3)"
+ ],
+ "anti-london-black::::Accelerated London System, Steinitz Countergambit (Nf3)": [
+  "mp-antilondonblack-"
+ ],
+ "anti-london-black::::The …c5 + …Qb6 Poison": [
+  "mp-antilondonblack-"
+ ],
+ "anti-catalan-black::main": null,
+ "anti-catalan-black::Open Defense, Alekhine Variation::Open Defense, Alekhine Variation": [
+  "mp-anticatalanblack-open defense, alekhine variation"
+ ],
+ "anti-catalan-black::::Open Defense, Alekhine Variation": [
+  "mp-anticatalanblack-"
+ ],
+ "anti-trompowsky-black::main": null,
+ "anti-trompowsky-black::2...e6::Solid Line (2...e6)": [
+  "mp-antitrompowskyblack-2...e6"
+ ],
+ "anti-trompowsky-black::2...c5::Vaganian Gambit (2...c5)": [
+  "mp-antitrompowskyblack-2...c5"
+ ],
+ "anti-trompowsky-black::Solid Line (2...e6)::Solid Line (2...e6)": [
+  "mp-antitrompowskyblack-solid line (2...e6)"
+ ],
+ "anti-trompowsky-black::::Solid Line (2...e6)": [
+  "mp-antitrompowskyblack-"
+ ],
+ "anti-trompowsky-black::Vaganian Gambit (2...c5)::Vaganian Gambit (2...c5)": [
+  "mp-antitrompowskyblack-vaganian gambit (2...c5)"
+ ],
+ "anti-trompowsky-black::::Vaganian Gambit (2...c5)": [
+  "mp-antitrompowskyblack-"
+ ],
+ "anti-colle-black::main": null,
+ "anti-colle-black::c4::Colle System (c4)": [
+  "mp-anticolleblack-c4"
+ ],
+ "anti-colle-black::c3::Colle System (c3)": [
+  "mp-anticolleblack-c3"
+ ],
+ "anti-colle-black::dxc5::Colle System (dxc5)": [
+  "mp-anticolleblack-dxc5"
+ ],
+ "anti-colle-black::Nbd2::Colle System (Nbd2)": [
+  "mp-anticolleblack-nbd2"
+ ],
+ "anti-colle-black::b3::Colle System (b3)": [
+  "mp-anticolleblack-b3"
+ ],
+ "anti-colle-black::Be2::Colle System (Be2)": [
+  "mp-anticolleblack-be2"
+ ],
+ "anti-colle-black::Colle System (c4)::Colle System (c4)": [
+  "mp-anticolleblack-colle system (c4)"
+ ],
+ "anti-colle-black::::Colle System (c4)": [
+  "mp-anticolleblack-"
+ ],
+ "anti-colle-black::Colle System (c3)::Colle System (c3)": [
+  "mp-anticolleblack-colle system (c3)"
+ ],
+ "anti-colle-black::::Colle System (c3)": [
+  "mp-anticolleblack-"
+ ],
+ "anti-colle-black::Colle System (dxc5)::Colle System (dxc5)": [
+  "mp-anticolleblack-colle system (dxc5)"
+ ],
+ "anti-colle-black::::Colle System (dxc5)": [
+  "mp-anticolleblack-"
+ ],
+ "anti-colle-black::Colle System (Nbd2)::Colle System (Nbd2)": [
+  "mp-anticolleblack-colle system (nbd2)"
+ ],
+ "anti-colle-black::::Colle System (Nbd2)": [
+  "mp-anticolleblack-"
+ ],
+ "anti-colle-black::Colle System (b3)::Colle System (b3)": [
+  "mp-anticolleblack-colle system (b3)"
+ ],
+ "anti-colle-black::::Colle System (b3)": [
+  "mp-anticolleblack-"
+ ],
+ "anti-colle-black::Colle System (Be2)::Colle System (Be2)": [
+  "mp-anticolleblack-colle system (be2)"
+ ],
+ "anti-colle-black::::Colle System (Be2)": [
+  "mp-anticolleblack-"
+ ],
+ "anti-smith-morra-black::main": null,
+ "anti-smith-morra-black::Qe2::Smith-Morra Gambit Accepted, Paulsen Formation (Qe2)": [
+  "mp-antismithmorrablack-qe2"
+ ],
+ "anti-smith-morra-black::highest-scoring::The …Nf6 Decline (highest-scoring)": [
+  "mp-antismithmorrablack-highest-scoring"
+ ],
+ "anti-smith-morra-black::Smith-Morra Gambit Accepted, Paulsen Formation (Qe2)::Smith-Morra Gambit Accepted, Paulsen Formation (Qe2)": [
+  "mp-antismithmorrablack-smith-morra gambit accepted, paulsen formation (qe2)"
+ ],
+ "anti-smith-morra-black::::Smith-Morra Gambit Accepted, Paulsen Formation (Qe2)": [
+  "mp-antismithmorrablack-"
+ ],
+ "anti-smith-morra-black::The …Nf6 Decline (highest-scoring)::The …Nf6 Decline (highest-scoring)": [
+  "mp-antismithmorrablack-the …nf6 decline (highest-scoring)"
+ ],
+ "anti-smith-morra-black::::The …Nf6 Decline (highest-scoring)": [
+  "mp-antismithmorrablack-"
+ ],
+ "anti-alapin-black::main": null,
+ "anti-alapin-black::Alapin Variation, Smith-Morra Declined::Alapin Variation, Smith-Morra Declined": [
+  "mp-antialapinblack-alapin variation, smith-morra declined"
+ ],
+ "anti-alapin-black::Alapin Variation::Alapin Variation": [
+  "mp-antialapinblack-alapin variation"
+ ],
+ "anti-alapin-black::::Alapin Variation, Smith-Morra Declined": [
+  "mp-antialapinblack-"
+ ],
+ "anti-alapin-black::::Alapin Variation": [
+  "mp-antialapinblack-"
+ ],
+ "anti-grand-prix-black::main": null,
+ "anti-grand-prix-black::Bb5::Grand Prix Attack (Bb5)": [
+  "mp-antigrandprixblack-bb5"
+ ],
+ "anti-grand-prix-black::Bc4::Grand Prix Attack (Bc4)": [
+  "mp-antigrandprixblack-bc4"
+ ],
+ "anti-grand-prix-black::Grand Prix Attack (Bb5)::Grand Prix Attack (Bb5)": [
+  "mp-antigrandprixblack-grand prix attack (bb5)"
+ ],
+ "anti-grand-prix-black::::Grand Prix Attack (Bb5)": [
+  "mp-antigrandprixblack-"
+ ],
+ "anti-grand-prix-black::Grand Prix Attack (Bc4)::Grand Prix Attack (Bc4)": [
+  "mp-antigrandprixblack-grand prix attack (bc4)"
+ ],
+ "anti-grand-prix-black::::Grand Prix Attack (Bc4)": [
+  "mp-antigrandprixblack-"
+ ],
+ "belgrade-gambit::main": null,
+ "belgrade-gambit::The Greedy …Ne5 Refuted::The Greedy …Ne5 Refuted": [
+  "mp-belgradegambit-the greedy …ne5 refuted"
+ ],
+ "belgrade-gambit::The …Nxe4 Grab::The …Nxe4 Grab": [
+  "mp-belgradegambit-the …nxe4 grab"
+ ],
+ "belgrade-gambit::The …Nb4 Book Move::The …Nb4 Book Move": [
+  "mp-belgradegambit-the …nb4 book move"
+ ],
+ "belgrade-gambit::The …h6 Prophylaxis::The …h6 Prophylaxis": [
+  "mp-belgradegambit-the …h6 prophylaxis"
+ ],
+ "belgrade-gambit::::The Greedy …Ne5 Refuted": [
+  "mp-belgradegambit-"
+ ],
+ "belgrade-gambit::::The …Nxe4 Grab": [
+  "mp-belgradegambit-"
+ ],
+ "belgrade-gambit::::The …Nb4 Book Move": [
+  "mp-belgradegambit-"
+ ],
+ "belgrade-gambit::::The …h6 Prophylaxis": [
+  "mp-belgradegambit-"
+ ],
+ "anti-kings-gambit-black::main": null,
+ "anti-kings-gambit-black::Kieseritzky Gambit, Anderssen Defense::Kieseritzky Gambit, Anderssen Defense": [
+  "mp-antikingsgambitblack-kieseritzky gambit, anderssen defense"
+ ],
+ "anti-kings-gambit-black::Bishop's Gambit, Bogoljubow Defense::Bishop's Gambit, Bogoljubow Defense": [
+  "mp-antikingsgambitblack-bishop's gambit, bogoljubow defense"
+ ],
+ "anti-kings-gambit-black::::Kieseritzky Gambit, Anderssen Defense": [
+  "mp-antikingsgambitblack-"
+ ],
+ "anti-kings-gambit-black::::Bishop's Gambit, Bogoljubow Defense": [
+  "mp-antikingsgambitblack-"
+ ],
+ "anti-hippo::main": null,
+ "anti-hippo::The a-file opener::The a-file opener": [
+  "mp-antihippo-the a-file opener"
+ ],
+ "anti-hippo::gxh4?? — the storm breaks through::gxh4?? — the storm breaks through": [
+  "mp-antihippo-gxh4?? — the storm breaks through"
+ ],
+ "anti-hippo::The d4 break — close it with …e4::The d4 break — close it with …e4": [
+  "mp-antihippo-the d4 break — close it with …e4"
+ ],
+ "anti-hippo::::The a-file opener": [
+  "mp-antihippo-"
+ ],
+ "anti-hippo::::gxh4?? — the storm breaks through": [
+  "mp-antihippo-"
+ ],
+ "anti-hippo::::The d4 break — close it with …e4": [
+  "mp-antihippo-"
+ ],
+ "anti-hippo-white::main": null,
+ "anti-hippo-white::The dxe5 trade::The dxe5 trade": [
+  "mp-antihippowhite-the dxe5 trade"
+ ],
+ "anti-hippo-white::The h5 stopper — rewind and re-aim::The h5 stopper — rewind and re-aim": [
+  "mp-antihippowhite-the h5 stopper — rewind and re-aim"
+ ],
+ "anti-hippo-white::::The dxe5 trade": [
+  "mp-antihippowhite-"
+ ],
+ "anti-hippo-white::::The h5 stopper — rewind and re-aim": [
+  "mp-antihippowhite-"
+ ],
+ "accel-dragon::main": null,
+ "accel-dragon::Qd2 too early — the Ng4 crush::Qd2 too early — the Ng4 crush": [
+  "mp-acceldragon-qd2 too early — the ng4 crush"
+ ],
+ "accel-dragon::The Nxc6 punish attempt — Ng8 holds::The Nxc6 punish attempt — Ng8 holds": [
+  "mp-acceldragon-the nxc6 punish attempt — ng8 holds"
+ ],
+ "accel-dragon::Maróczy bind — Nf6 first and the e5 trap::Maróczy bind — Nf6 first and the e5 trap": [
+  "mp-acceldragon-maróczy bind — nf6 first and the e5 trap"
+ ],
+ "accel-dragon::Maróczy bind proper — the Qb6 poke and a5::Maróczy bind proper — the Qb6 poke and a5": [
+  "mp-acceldragon-maróczy bind proper — the qb6 poke and a5"
+ ],
+ "accel-dragon::::Qd2 too early — the Ng4 crush": [
+  "mp-acceldragon-"
+ ],
+ "accel-dragon::::The Nxc6 punish attempt — Ng8 holds": [
+  "mp-acceldragon-"
+ ],
+ "accel-dragon::::Maróczy bind — Nf6 first and the e5 trap": [
+  "mp-acceldragon-"
+ ],
+ "accel-dragon::::Maróczy bind proper — the Qb6 poke and a5": [
+  "mp-acceldragon-"
+ ]
+}

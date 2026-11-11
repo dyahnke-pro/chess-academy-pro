@@ -347,11 +347,13 @@ itself decides the set from the criteria + gates (no algo fuzzy-match, and no
 asking "how many"). The lowercased `label` is the `tabKey` used by STEPS 1c/4.
 Match Vienna's entry exactly.
 
-**STEP 4 — tab → middlegame-plan map.** Create
-`src/services/<id>MasterclassTabs.ts` exporting `get<Id>TabPlanIds(tabKey)`:
-maps each lowercased tab label (and `'main'`) → that tab's plan id. Then in
-`OpeningDetailPage.tsx`, import it and add one branch next to
-`getViennaTabPlanIds`. Model file: `viennaMasterclassTabs.ts`.
+**STEP 4 — tab → middlegame-plan map.** Add the opening's row to the
+tab-plan table (`src/data/tabPlans.ts`, `TAB_PLAN_TABLE`): `key: 'label'`
+and `tabs` mapping each lowercased tab label (and `'main'`) → that tab's plan
+ids (an `-endgame` plan id on the tab whose endgame section shows it). Give
+every curated tab an explicit entry, `[]` when it has no plan. Nothing else to
+wire: the page and the coverage measure read the one lookup
+(`tabPlans.tabPlanIds`). Model row: `'vienna-game'`.
 
 **STEP 5 — middlegame plans (one per tab).** `src/data/middlegame-plans.json`:
 add plans with id `mp-<idnodashes>-<tab>` (e.g. `mp-viennagame-gambit`),
@@ -583,7 +585,7 @@ For each first-class variation tab, author:
 - **A Watch/Learn beat-lesson** — `RUY_VARIATION_LESSONS`-style
   `LessonScript`, white-oriented, narrated.
 - **An endgame** — ONLY if the line has a genuine, characteristic one
-  (see §4). Routed via the hand-picked plan table (`ruyMasterclassTabs.ts`).
+  (see §4). Routed via the hand-picked plan table (the `'ruy-lopez'` row of `src/data/tabPlans.ts`).
 - **Traps** — ONLY real named ones that genuinely arise (see §3).
 
 ## 3. Weapons (traps) rules

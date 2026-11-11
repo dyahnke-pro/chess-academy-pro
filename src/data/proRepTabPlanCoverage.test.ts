@@ -7,55 +7,15 @@
 // build (per doctrine STEP 12.5 — "this step was missed in the
 // Alapin reference build — David caught it post-deploy").
 //
-// The test walks every pro-rep opening + variation and confirms a
-// resolver returns SOME result (even []) for each (openingId,
+// The test walks every pro-rep opening + variation and confirms the
+// tab-plan table returns SOME result (even []) for each (openingId,
 // variationName) pair. An explicit [] declares "no plans for this
-// tab yet" — that's allowed. `null` means no resolver registered —
-// that's the bug.
+// tab yet" — that's allowed. `null` means the opening has no row (or
+// its row leaves the tab out) — that's the bug.
 
 import { describe, it, expect } from 'vitest';
 import proRepertoires from './pro-repertoires.json' assert { type: 'json' };
-import { getProNaroditskyAlapinTabPlanIds } from '../services/proNaroditskyAlapinTabPlans';
-import { getProNaroditskyKIDTabPlanIds } from '../services/proNaroditskyKIDTabPlans';
-import { getProNaroditskyRemainingTabPlanIds } from '../services/proNaroditskyRemainingTabPlans';
-import { getProNaroditskyCaroTabPlanIds } from '../services/proNaroditskyCaroTabPlans';
-import { getProCaruanaNajdorfTabPlanIds } from '../services/proCaruanaNajdorfTabPlans';
-import { getProEricRosenStaffordTabPlanIds } from '../services/proEricRosenStaffordTabPlans';
-import { getProEricRosenLondonTabPlanIds } from '../services/proEricRosenLondonTabPlans';
-import { getProEricRosenSicilianTabPlanIds } from '../services/proEricRosenSicilianTabPlans';
-import { getProEricRosenQGDTabPlanIds } from '../services/proEricRosenQGDTabPlans';
-import { getProEricRosenBudapestTabPlanIds } from '../services/proEricRosenBudapestTabPlans';
-import { getProEricRosenClosedSicilianTabPlanIds } from '../services/proEricRosenClosedSicilianTabPlans';
-import { getProEricRosenScandinavianTabPlanIds } from '../services/proEricRosenScandinavianTabPlans';
-import { getProEricRosenFrenchTabPlanIds } from '../services/proEricRosenFrenchTabPlans';
-import { getProCarlsenTabPlanIds } from '../services/proCarlsenTabPlans';
-import { getProSamayRainaOpenSicilianTabPlanIds } from '../services/proSamayRainaOpenSicilianTabPlans';
-import { getProSamayRainaRuyTabPlanIds } from '../services/proSamayRainaRuyTabPlans';
-import { getProSamayRainaItalianTabPlanIds } from '../services/proSamayRainaItalianTabPlans';
-import { getProSamayRainaFrenchWhiteTabPlanIds } from '../services/proSamayRainaFrenchWhiteTabPlans';
-import { getProSamayRainaCaroWhiteTabPlanIds } from '../services/proSamayRainaCaroWhiteTabPlans';
-import { getProSamayRainaOpenE5TabPlanIds } from '../services/proSamayRainaOpenE5TabPlans';
-import { getProSamayRainaSicilianBlackTabPlanIds } from '../services/proSamayRainaSicilianBlackTabPlans';
-import { getProSamayRainaScandiTabPlanIds } from '../services/proSamayRainaScandiTabPlans';
-import { getProSamayRainaKingsGambitTabPlanIds } from '../services/proSamayRainaKingsGambitTabPlans';
-import { getProGothamchessCaroTabPlanIds } from '../services/proGothamchessCaroTabPlans';
-import { getProGothamchessTrompowskyTabPlanIds } from '../services/proGothamchessTrompowskyTabPlans';
-import { getProGothamchessEnglishTabPlanIds } from '../services/proGothamchessEnglishTabPlans';
-import { getProGothamchessViennaTabPlanIds } from '../services/proGothamchessViennaTabPlans';
-import { getProGothamchessItalianTabPlanIds } from '../services/proGothamchessItalianTabPlans';
-import { getProGothamchessLondonTabPlanIds } from '../services/proGothamchessLondonTabPlans';
-import { getProGothamchessPonzianiTabPlanIds } from '../services/proGothamchessPonzianiTabPlans';
-import { getProGothamchessAntiSicilianTabPlanIds } from '../services/proGothamchessAntiSicilianTabPlans';
-import { getProGothamchessMilnerBarryTabPlanIds } from '../services/proGothamchessMilnerBarryTabPlans';
-import { getProGothamchessFantasyTabPlanIds } from '../services/proGothamchessFantasyTabPlans';
-import { getProGothamchessStaffordTabPlanIds } from '../services/proGothamchessStaffordTabPlans';
-import { getProGothamchessCaroAdvanceTabPlanIds } from '../services/proGothamchessCaroAdvanceTabPlans';
-import { getProGothamchessKiaTabPlanIds } from '../services/proGothamchessKiaTabPlans';
-import { getProGothamchessClosedSicilianTabPlanIds } from '../services/proGothamchessClosedSicilianTabPlans';
-import { getProGothamchessScandinavianTabPlanIds } from '../services/proGothamchessScandinavianTabPlans';
-import { getProGothamchessQgdTabPlanIds } from '../services/proGothamchessQgdTabPlans';
-import { getProGothamchessFrenchTabPlanIds } from '../services/proGothamchessFrenchTabPlans';
-import { getProGothamchessPircTabPlanIds } from '../services/proGothamchessPircTabPlans';
+import { curatedTabPlanIds } from '../services/tabPlans';
 
 interface ProRepEntry {
   id: string;
@@ -66,58 +26,10 @@ const PRO_OPENINGS: ProRepEntry[] = (proRepertoires.openings as ProRepEntry[]).f
   (op) => op.id.startsWith('pro-'),
 );
 
-// The resolver chain mirrors OpeningDetailPage.tsx — keep in sync.
-const RESOLVERS: Array<(openingId: string, tabKey: string) => string[] | null> = [
-  getProNaroditskyAlapinTabPlanIds,
-  getProNaroditskyKIDTabPlanIds,
-  getProNaroditskyRemainingTabPlanIds,
-  getProNaroditskyCaroTabPlanIds,
-  getProCaruanaNajdorfTabPlanIds,
-  getProEricRosenStaffordTabPlanIds,
-  getProEricRosenLondonTabPlanIds,
-  getProEricRosenSicilianTabPlanIds,
-  getProEricRosenQGDTabPlanIds,
-  getProEricRosenBudapestTabPlanIds,
-  getProEricRosenClosedSicilianTabPlanIds,
-  getProEricRosenScandinavianTabPlanIds,
-  getProEricRosenFrenchTabPlanIds,
-  getProCarlsenTabPlanIds,
-  getProSamayRainaOpenSicilianTabPlanIds,
-  getProSamayRainaRuyTabPlanIds,
-  getProSamayRainaItalianTabPlanIds,
-  getProSamayRainaFrenchWhiteTabPlanIds,
-  getProSamayRainaCaroWhiteTabPlanIds,
-  getProSamayRainaOpenE5TabPlanIds,
-  getProSamayRainaSicilianBlackTabPlanIds,
-  getProSamayRainaScandiTabPlanIds,
-  getProSamayRainaKingsGambitTabPlanIds,
-  getProGothamchessCaroTabPlanIds,
-  getProGothamchessTrompowskyTabPlanIds,
-  getProGothamchessEnglishTabPlanIds,
-  getProGothamchessViennaTabPlanIds,
-  getProGothamchessItalianTabPlanIds,
-  getProGothamchessLondonTabPlanIds,
-  getProGothamchessPonzianiTabPlanIds,
-  getProGothamchessAntiSicilianTabPlanIds,
-  getProGothamchessMilnerBarryTabPlanIds,
-  getProGothamchessFantasyTabPlanIds,
-  getProGothamchessStaffordTabPlanIds,
-  getProGothamchessCaroAdvanceTabPlanIds,
-  getProGothamchessKiaTabPlanIds,
-  getProGothamchessClosedSicilianTabPlanIds,
-  getProGothamchessScandinavianTabPlanIds,
-  getProGothamchessQgdTabPlanIds,
-  getProGothamchessFrenchTabPlanIds,
-  getProGothamchessPircTabPlanIds,
-];
-
+// The one tab-plan table (`src/data/tabPlans.ts`), read through the page's own
+// lookup — never a re-typed chain. The pro rows key on the full variation name.
 function resolve(openingId: string, variationName: string): string[] | null {
-  const tabKey = variationName.toLowerCase();
-  for (const r of RESOLVERS) {
-    const result = r(openingId, tabKey);
-    if (result !== null) return result;
-  }
-  return null;
+  return curatedTabPlanIds(openingId, { label: variationName, name: variationName });
 }
 
 describe('tab-plan resolver coverage gate — every Naroditsky variation has a resolver', () => {
