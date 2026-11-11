@@ -29,8 +29,12 @@ export interface SettledRead {
   reread: boolean;
 }
 
-/** A disagreement this large (centipawns) between two reads of one move is re-read. */
-export const DISAGREE_CP = 30;
+/** A disagreement this large (centipawns) between two reads of one move is
+ *  re-read. It is the writing bar: a beat names the engine's better move when
+ *  the line's move costs 0.15 or more, so a gap of that size between the two
+ *  reads decides what the beat says (a 0.30 bar left "first choice" and
+ *  "costs 0.15–0.28" side by side on the sheet). */
+export const DISAGREE_CP = 15;
 
 export async function settleReads(read: ReadFn, fen: string, playedUci: string): Promise<SettledRead> {
   const sign = fen.split(' ')[1] === 'b' ? -1 : 1;

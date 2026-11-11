@@ -32,6 +32,14 @@ describe('settleReads — one verdict per move', () => {
     expect(r.cost).toBeCloseTo(0.06, 2);
   });
 
+  it('re-reads a gap at the writing bar too: first in the list, yet 0.20 worse on its own', async () => {
+    const small: ReadFn = async (_fen, opts) => (opts.searchmoves === 'd8f6' ? [line(34, 'd8f6')] : opts.searchmoves ? [ALONE[opts.searchmoves]] : TOP3);
+    const r = await settleReads(small, FEN, 'd8f6');
+    expect(r.reread).toBe(true);
+    expect(r.top[0].pv[0]).toBe('e8f8');
+    expect(r.cost).toBeCloseTo(0.04, 2);
+  });
+
   it('never prints a negative cost: a move that reads better than the best is re-read with the rest', async () => {
     const better: ReadFn = async (_fen, opts) => (opts.searchmoves === 'a7a6' ? [line(-60, 'a7a6')] : opts.searchmoves ? [ALONE[opts.searchmoves]] : TOP3);
     const r = await settleReads(better, FEN, 'a7a6');
