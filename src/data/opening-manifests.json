@@ -414,6 +414,15 @@
     "warnings": 0,
     "keyIdeas": 4
   },
+  "pro-gothamchess-kia": {
+    "variations": 2,
+    "middlegamePlans": 3,
+    "endgamePlans": 0,
+    "modelGames": 4,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
   "pro-gothamchess-london": {
     "variations": 10,
     "middlegamePlans": 6,

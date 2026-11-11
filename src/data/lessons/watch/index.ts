@@ -24,6 +24,7 @@ import { PRO_GOTHAMCHESS_ENGLISH_WATCH } from './proGothamchessEnglish';
 import { PRO_GOTHAMCHESS_FANTASY_CARO_WATCH } from './proGothamchessFantasyCaro';
 import { PRO_GOTHAMCHESS_FRENCH_DEFENSE_WATCH } from './proGothamchessFrenchDefense';
 import { PRO_GOTHAMCHESS_ITALIAN_WATCH } from './proGothamchessItalian';
+import { PRO_GOTHAMCHESS_KIA_WATCH } from './proGothamchessKia';
 import { PRO_GOTHAMCHESS_LONDON_WATCH } from './proGothamchessLondon';
 import { PRO_GOTHAMCHESS_MILNER_BARRY_WATCH } from './proGothamchessMilnerBarry';
 import { PRO_GOTHAMCHESS_PIRC_DEFENSE_WATCH } from './proGothamchessPircDefense';
@@ -66,6 +67,7 @@ export const WATCH_COURSES: readonly WatchCourse[] = [
   PRO_GOTHAMCHESS_FANTASY_CARO_WATCH,
   PRO_GOTHAMCHESS_FRENCH_DEFENSE_WATCH,
   PRO_GOTHAMCHESS_ITALIAN_WATCH,
+  PRO_GOTHAMCHESS_KIA_WATCH,
   PRO_GOTHAMCHESS_LONDON_WATCH,
   PRO_GOTHAMCHESS_MILNER_BARRY_WATCH,
   PRO_GOTHAMCHESS_PIRC_DEFENSE_WATCH,

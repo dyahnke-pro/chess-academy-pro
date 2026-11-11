@@ -2397,12 +2397,12 @@
       "keyIdeas": [
         "Same setup every game: Nf3 + g3 + Bg2 + O-O + d3 + Nbd2 + e4. Pattern recognition beats opening theory at amateur level.",
         "e4-e5 is the central thrust. Once your pieces are out, this push grabs space and cramps Black's kingside.",
-        "Nbd2 → Nf1 → Ng3 reroute is the classical attacking knight maneuver. Combined with f4-f5, this creates a kingside attack from any starting position.",
+        "The knight on d2 is the attacker in waiting: once the rook goes to e1, it travels through f1 and on to h2 and g4, or to e3, toward their king. In the main line the engine's plan after h4 is exactly that: the knight to h2 and g4, and the bishop to f4.",
         "Bg2 on the long diagonal aims at b7 and Black's queenside. Don't trade it unless you get tangible compensation."
       ],
       "traps": [],
       "warnings": [
-        "Don't rush e4 — wait until your knight is on d2 and the d3 pawn supports it. Premature e4 gets challenged.",
+        "Against …c5 and …g6, keep the d-pawn on d3 until c3 is in. After d4 …cxd4, if your knight takes back, …Nxd4 and your queen can't recapture: the bishop on g7 is aimed at d4, and you're a piece down. With c3 played first, a pawn takes back on d4 and the push works.",
         "Don't trade the Bg2 bishop without strong compensation — it's the system's strongest piece."
       ],
       "variations": [

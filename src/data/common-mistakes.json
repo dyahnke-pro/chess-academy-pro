@@ -4737,25 +4737,12 @@
  ],
  "pro-gothamchess-kia": [
   {
-   "fen": "r1bqk2r/pp2bppp/2n1pn2/2pp4/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w kq - 3 7",
-   "wrongMove": "c3",
-   "correctMove": "e4",
-   "explanation": "The whole point of the King's Indian Attack is the e4 break! — striking the centre and preparing the e5 wedge and the kingside attack. The passive c3 drifts without a plan and lets Black seize the initiative with …d4 or queenside expansion. When your pieces are set (Nf3, g3, Bg2, d3, Nbd2), play e4 and follow with e5 and the Nf1-h2-g4 reroute. The KIA is an attacking system — commit to e4.",
-   "shortNarration": "e4 — the KIA central break",
-   "sources": [
-    "book:chess-strategy",
-    "https://www.chess.com/openings/Kings-Indian-Attack",
-    "https://en.wikipedia.org/wiki/King%27s_Indian_Attack"
-   ]
-  },
-  {
    "fen": "r1bq1rk1/p3bppp/2n1pn2/1ppp4/4P3/3P1NP1/PPPN1PBP/R1BQR1K1 w - - 0 9",
    "wrongMove": "a4",
    "correctMove": "e5",
-   "explanation": "When Black expands with …b5 against the KIA, the key is e5! — grabbing the kingside space wedge that defines the King's Indian Attack and starting the attack. Reacting on the queenside with a4 plays into Black's hands, where he is faster. Ignore the queenside and play on YOUR side: e5 cramps Black, the knight reroutes Nf1-h2-g4, and White's attack on the king outruns Black's counterplay.",
-   "shortNarration": "e5 — grab kingside space, attack",
+   "explanation": "When they expand with …b5, the masters' main answer is e5, seven in ten: the pawn hits the knight on f6 and grabs space on the side where your attack will come. a4, hitting b5, costs about two tenths of a pawn: …b4 just pushes past, and the pawn is safe there with c5 behind it.",
+   "shortNarration": "e5 — hit the knight, grab space",
    "sources": [
-    "book:chess-strategy",
     "https://www.chess.com/openings/Kings-Indian-Attack",
     "https://en.wikipedia.org/wiki/King%27s_Indian_Attack"
    ]
@@ -4764,10 +4751,9 @@
    "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/8/5NP1/PPPPPPBP/RNBQ1RK1 w kq - 2 5",
    "wrongMove": "d4",
    "correctMove": "d3",
-   "explanation": "Against the …c5/…g6 Sicilian setup, the KIA way is the modest d3! — keeping the centre closed for the slow kingside attack with e4, Re1, and Nf1-h2-g4. Lunging d4 opens the centre and transposes into an Open-Sicilian-like position where Black is comfortable. Stay true to the King's Indian Attack: play d3, build the kingside, and attack the king behind the closed centre.",
-   "shortNarration": "d3 — keep it closed for the KIA",
+   "explanation": "Against the …c5 and …g6 setup, keep the pawn on d3 for now. The natural d4 costs about eight tenths of a pawn, because it runs into the bishop on g7: after …cxd4, if your knight takes back, …Nxd4 and your queen can't recapture, so you'd have to give the pawn with c3. d3 covers e4 and c4, and d4 comes later, once c3 is in.",
+   "shortNarration": "d3 — d4 runs into the g7-bishop",
    "sources": [
-    "book:chess-strategy",
     "https://www.chess.com/openings/Kings-Indian-Attack",
     "https://en.wikipedia.org/wiki/King%27s_Indian_Attack"
    ]

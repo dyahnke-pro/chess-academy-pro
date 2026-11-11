@@ -46979,7 +46979,6 @@
     "title": "The Tension Game",
     "intro": "Hold the centre until Black releases it — then own the e4 point and the open file.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Kings-Indian-Attack",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -47109,7 +47108,6 @@
     "title": "KIA vs Sicilian: Reroute and Race",
     "intro": "The model line: white reroutes the knight to e3 and races on the kingside.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Kings-Indian-Attack",
      "https://en.wikipedia.org/wiki/King%27s_Indian_Attack",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
