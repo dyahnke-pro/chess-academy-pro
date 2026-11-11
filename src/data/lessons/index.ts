@@ -162,8 +162,6 @@ import { GLEK_SYSTEM_LESSON } from './glekSystem';
 import { GLEK_SYSTEM_VARIATION_LESSONS } from './glekSystemVariations';
 import { QGA_LESSON } from './queensGambitAccepted';
 import { QGA_VARIATION_LESSONS } from './queensGambitAcceptedVariations';
-import { QUEENS_INDIAN_DEFENCE_LESSON } from './queensIndianDefence';
-import { QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS } from './queensIndianDefenceVariations';
 import { SMITH_MORRA_GAMBIT_LESSON } from './smithMorraGambit';
 import { SMITH_MORRA_GAMBIT_VARIATION_LESSONS } from './smithMorraGambitVariations';
 import { SCOTCH_GAMBIT_LESSON } from './scotchGambit';
@@ -224,7 +222,6 @@ const LESSONS: Record<string, LessonScript> = {
   [PIRC_DEFENCE_LESSON.openingId]: PIRC_DEFENCE_LESSON,
   [GLEK_SYSTEM_LESSON.openingId]: GLEK_SYSTEM_LESSON,
   [QGA_LESSON.openingId]: QGA_LESSON,
-  [QUEENS_INDIAN_DEFENCE_LESSON.openingId]: QUEENS_INDIAN_DEFENCE_LESSON,
   [SMITH_MORRA_GAMBIT_LESSON.openingId]: SMITH_MORRA_GAMBIT_LESSON,
   [SCOTCH_GAMBIT_LESSON.openingId]: SCOTCH_GAMBIT_LESSON,
   [VIENNA_GAMBIT_LESSON.openingId]: VIENNA_GAMBIT_LESSON,
@@ -372,7 +369,6 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PIRC_VARIATION_LESSONS,
   ...GLEK_SYSTEM_VARIATION_LESSONS,
   ...QGA_VARIATION_LESSONS,
-  ...QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS,
   ...SMITH_MORRA_GAMBIT_VARIATION_LESSONS,
   ...SCOTCH_GAMBIT_VARIATION_LESSONS,
   ...VIENNA_GAMBIT_VARIATION_LESSONS,
