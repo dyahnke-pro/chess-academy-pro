@@ -7,7 +7,7 @@
 // docs/levy-lines/decisions/pro-gothamchess-london.json.
 import type { WatchCourse } from './watchCourse';
 
-const MAIN = ['d4', 'd5', 'Nf3', 'Nf6', 'Bf4', 'c5', 'e3', 'Nc6', 'Nbd2', 'e6', 'c3', 'Bd6', 'Bg3', 'O-O', 'Bd3', 'b6', 'O-O', 'Bb7'];
+const MAIN = ['d4', 'd5', 'Nf3', 'Nf6', 'Bf4', 'c5', 'e3', 'Nc6', 'Nbd2', 'e6', 'c3', 'Bd6', 'Bg3', 'O-O', 'Bd3', 'b6', 'O-O', 'Bb7', 'Ne5', 'Qc7', 'Nxc6'];
 
 /** The main line's beats, in order — one per move of `MAIN`. */
 const MAIN_BEATS: Array<[string, string]> = [
@@ -28,7 +28,10 @@ const MAIN_BEATS: Array<[string, string]> = [
   ["Bd3 — where does the last bishop belong? On d3, aimed straight at h7, the pawn in front of their king. Both your bishops are out now, only castling is left, and you are a little better.", 'Bd3 — aimed straight at h7.'],
   ["…b6 — remember the bishop on c8, shut in by …e6? Here's its way out: …Bb7 next, on the long diagonal. The engine prefers trading on g3 first, and after …b6 you are a little better.", '…b6 — the c8-bishop heads for b7.'],
   ["You castle, and your king is safe. The engine prefers e4 at once, the central break, and after castling it's about level.", 'O-O — king safe; e4 is the break.'],
-  ["…Bb7 — the bishop finally gets out, onto the long diagonal, though for now its own knight on c6 stands in the way. It's about level, with every piece developed. Your plan for the middlegame: Qe2 to get the queen behind your e-pawn, then e4, the break this whole setup was built for, or Ne5, with the d4 pawn holding the knight.", '…Bb7 — out; Qe2 and e4 next.'],
+  ["…Bb7 — the bishop finally gets out, onto the long diagonal, though for now its own knight on c6 stands in the way. It's about level, with every piece developed. So where do you go from here? Two roads: the knight jumps into e5, or the queen goes to e2 to get e4 ready.", '…Bb7 — out; Ne5 or Qe2 next.'],
+  ["Ne5 — the knight jumps into e5, guarded by the d4 pawn and your bishop on g3, and it hits their knight on c6 and the f7 pawn. Do they take it, or let it stay?", 'Ne5 — the knight lands on e5.'],
+  ["…Qc7 — they leave it there, and the queen backs up the knight on c6. The engine slightly prefers …g6. But look at the diagonal from g3: only your knight on e5 stands between your bishop and theirs on d6, with their queen right behind it on c7. What happens if the knight moves?", '…Qc7 — the queen backs up c6.'],
+  ["Nxc6 — the knight takes, and stepping off e5 it uncovers your bishop on g3: now their bishop on d6 is pinned to the queen on c7. They'll take back on c6, and it's about level. Your plan for the middlegame: Qe2 to get the queen behind your e-pawn, then e4, the central break this whole setup was built for.", 'Nxc6 — takes, and the d6-bishop is pinned.'],
 ];
 
 const beats: Record<string, { say: string; sayShort: string }> = {};
@@ -41,15 +44,15 @@ const KID = "vs King's Indian (Bh6 + Opposite-Side Castle Attack)";
 
 const TAB_LINES: Record<string, string[]> = {
   'Standard Setup vs d5': ['d4', 'd5', 'Nf3', 'Nf6', 'Bf4', 'c5', 'e3', 'Nc6', 'Nbd2', 'e6', 'c3', 'Bd6', 'Bg3', 'O-O', 'Bd3', 'b6', 'O-O', 'Bb7', 'Qe2', 'Bxg3', 'hxg3', 'Qc7', 'dxc5', 'bxc5', 'e4', 'h6', 'Rad1', 'Rfe8'],
-  [KID]: ['d4', 'Nf6', 'Bf4', 'g6', 'Nc3', 'Bg7', 'Qd2', 'O-O', 'Bh6', 'Bxh6', 'Qxh6', 'c5', 'O-O-O'],
+  [KID]: ['d4', 'Nf6', 'Bf4', 'g6', 'Nc3', 'Bg7', 'Qd2', 'O-O', 'Bh6', 'Bxh6', 'Qxh6', 'c5', 'O-O-O', 'd5', 'dxc5', 'e5', 'Qg5', 'Nc6', 'Nf3', 'Bf5', 'e3'],
   'Aggressive Jobava-London Hybrid': ['d4', 'd5', 'Nc3', 'Nf6', 'Bf4', 'e6', 'e3', 'c5', 'Nf3', 'a6', 'Be2', 'Nc6', 'O-O', 'Bd6', 'Bxd6', 'Qxd6', 'Na4', 'cxd4', 'exd4', 'O-O'],
-  'vs …c6 (via 2.Bf4)': ['d4', 'd5', 'Bf4', 'c6', 'e3', 'Nf6', 'Nf3', 'Bf5', 'c4', 'Nbd7', 'Nc3', 'dxc4', 'Bxc4', 'e6', 'O-O'],
-  'Pyramid with Ne5': ['d4', 'd5', 'Bf4', 'Nf6', 'e3', 'e6', 'Nf3', 'Bd6', 'Bg3', 'O-O', 'Bd3', 'Nc6', 'c3', 'Qe7', 'Ne5', 'Bxe5', 'dxe5'],
-  'Qb3 vs …Qb6': ['d4', 'd5', 'Bf4', 'Nf6', 'e3', 'c5', 'c3', 'Nc6', 'Nd2', 'Qb6', 'Qb3', 'c4', 'Qc2', 'g6', 'e4', 'e5', 'dxe5'],
-  'vs Early …Bf5': ['d4', 'd5', 'Bf4', 'Bf5', 'c4', 'e6', 'Nc3', 'c6', 'Qb3', 'Qb6', 'c5', 'Qxb3', 'axb3', 'Nd7', 'b4'],
-  'vs Grünfeld Setup': ['d4', 'Nf6', 'Bf4', 'g6', 'Nc3', 'd5', 'e3', 'Bg7', 'h4', 'h5', 'Nf3', 'O-O', 'Ne5', 'c5', 'Qd2'],
-  'Poisoned b2 Pawn': ['d4', 'Nf6', 'Bf4', 'c5', 'e3', 'Qb6', 'Nc3', 'Qxb2', 'Nb5', 'Nd5', 'a3', 'a6', 'Rb1', 'Qa2', 'Qc1', 'axb5', 'Ra1'],
-  'd5 vs …c5': ['d4', 'Nf6', 'Bf4', 'c5', 'd5', 'd6', 'Nc3', 'e5', 'Bd2', 'Be7', 'e4', 'O-O', 'h3', 'h6', 'Bd3'],
+  'vs …c6 (via 2.Bf4)': ['d4', 'd5', 'Bf4', 'c6', 'e3', 'Nf6', 'Nf3', 'Bf5', 'c4', 'Nbd7', 'Nc3', 'dxc4', 'Bxc4', 'e6', 'O-O', 'Be7', 'h3', 'O-O', 'Nh4', 'Be4', 'Nxe4'],
+  'Pyramid with Ne5': ['d4', 'd5', 'Bf4', 'Nf6', 'e3', 'e6', 'Nf3', 'Bd6', 'Bg3', 'O-O', 'Bd3', 'Nc6', 'c3', 'Qe7', 'Ne5', 'Bxe5', 'dxe5', 'Nd7', 'f4', 'f6', 'exf6'],
+  'Qb3 vs …Qb6': ['d4', 'd5', 'Bf4', 'Nf6', 'e3', 'c5', 'c3', 'Nc6', 'Nd2', 'Qb6', 'Qb3', 'c4', 'Qc2', 'g6', 'e4', 'e5', 'dxe5', 'Ng4', 'O-O-O', 'Ncxe5', 'Nh3'],
+  'vs Early …Bf5': ['d4', 'd5', 'Bf4', 'Bf5', 'c4', 'e6', 'Nc3', 'c6', 'Qb3', 'Qb6', 'c5', 'Qxb3', 'axb3', 'Nd7', 'b4', 'a6', 'e3', 'Rd8', 'Nf3', 'f6', 'Bxa6'],
+  'vs Grünfeld Setup': ['d4', 'Nf6', 'Bf4', 'g6', 'Nc3', 'd5', 'e3', 'Bg7', 'h4', 'h5', 'Nf3', 'O-O', 'Ne5', 'c5', 'Qd2', 'cxd4', 'exd4', 'Nc6', 'f3', 'Bf5', 'O-O-O'],
+  'Poisoned b2 Pawn': ['d4', 'Nf6', 'Bf4', 'c5', 'e3', 'Qb6', 'Nc3', 'Qxb2', 'Nb5', 'Nd5', 'a3', 'a6', 'Rb1', 'Qa2', 'Qc1', 'axb5', 'Ra1', 'Qxa1', 'Qxa1', 'Nxf4', 'exf4'],
+  'd5 vs …c5': ['d4', 'Nf6', 'Bf4', 'c5', 'd5', 'd6', 'Nc3', 'e5', 'Bd2', 'Be7', 'e4', 'O-O', 'h3', 'h6', 'Bd3', 'Na6', 'Nge2', 'Nh7', 'Ng3', 'Rb8', 'Nb5'],
 };
 
 const TAB_BEATS: Record<string, TabBeats> = {
@@ -77,7 +80,15 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ['…Bxh6 — they take, and now their bishop on h6 hits your queen on d2, with nothing guarding it. So you take back. The engine prefers …d5 to this trade, and you are a little better.', '…Bxh6 — the bishops come off.'],
     ['Qxh6 — and look where your queen lands: right next to their king, hitting h7. Both h7 and the rook on f8 are guarded for now, but the bishop that used to cover the dark squares around their king is gone, and you are a little better.', 'Qxh6 — queen next to their king.'],
     ['…c5 — they hit back in the center, at d4. Look closely: with your queen gone from d2, nothing guards that pawn, and nothing guards their c5 pawn either.', '…c5 — hits d4, now unguarded.'],
-    ['O-O-O — the king goes long, and your rook lands on d1, right behind the d4 pawn, so it\'s guarded again. The engine prefers taking on c5 first, but you are still a little better. Your plan for the middlegame: e3 to shore up d4, then f3 to keep their knights off e4 and g4, with your queen already sitting on h6, next to their king.', 'O-O-O — the rook guards d4.'],
+    ['O-O-O — the king goes long, and your rook lands on d1, right behind the d4 pawn, so it\'s guarded again. The engine prefers taking on c5 first, but you are still a little better. Keep an eye on that rook: the d-file is about to matter.', 'O-O-O — the rook guards d4.'],
+    ['…d5 — they claim the center with a pawn, and their c5 pawn still has no guard. Can you take it? Yes, and the capture does more than win a pawn.', '…d5 — center pawn; c5 still loose.'],
+    ['dxc5 — the pawn takes, and look what the move uncovers: your rook on d1 now pins their d5 pawn to the queen on d8. The engine prefers e3 first, shoring up the center, and after dxc5 it\'s about level, with a pawn in your pocket.', 'dxc5 — a pawn, and d5 is pinned.'],
+    ['…e5 — they don\'t rush to win the pawn back. Their e-pawn takes space, so now two pawns stand side by side on d5 and e5.', '…e5 — two pawns side by side.'],
+    ['Qg5 — the queen swings to g5 and hits e5, which nothing guards, and the knight on f6. And look at the g-file: the pawn on g6 is pinned to their king on g8.', 'Qg5 — hits e5 and the f6-knight.'],
+    ['…Nc6 — the knight comes out and guards e5.', '…Nc6 — guards e5.'],
+    ['Nf3 — a second hit on e5, and your last knight is out. Their pawn there has only the knight on c6 to guard it.', 'Nf3 — a second hit on e5.'],
+    ['…Bf5 — the bishop comes out and hits c2, right in front of your king. The engine prefers …h6, chasing your queen first, and now you are a little better.', '…Bf5 — hits c2; …h6 was better.'],
+    ['e3 — the pawn covers d4 and opens a road for your bishop on f1. You are a little better, and a pawn up. Your plan for the middlegame: Bb5 to go after the knight on c6, the only guard of their e5 pawn, with your queen and knight already hitting it.', 'e3 — frees f1, covers d4.'],
   ],
   'Aggressive Jobava-London Hybrid': [
     ['Nc3 — the Jobava setup: the knight comes out in front of your c-pawn and hits d5 at once. Only about one master in a hundred plays it, and the engine prefers c4, but it stays about level and takes the game away from the usual paths. The bishop comes to f4 next.', 'Nc3 — the Jobava knight, hits d5.'],
@@ -112,7 +123,13 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ['…dxc4 — they give up the center and take on c4, and nothing guards that pawn there. The engine prefers …e6, keeping d5 standing. Now just take back.', '…dxc4 — gives up the center.'],
     ['Bxc4 — look at the bishop: it went from f1 to c4 in one move, and it lands on the diagonal toward f7. Both your bishops are out on open diagonals, and you are a little better.', 'Bxc4 — f1 to c4 in one go.'],
     ['…e6 — solid: the pawn covers d5 and f5 and blocks your bishop\'s view of f7.', "…e6 — blocks the bishop's view of f7."],
-    ['You castle, and every minor piece of yours is out. You are a little better. Your plan for the middlegame: h3 and Nh4 to go after their bishop on f5 and win the bishop pair, with Re1 to bring the last rook to the center.', 'O-O — castle; Nh4 hunts the f5-bishop.'],
+    ['You castle, and every minor piece of yours is out. You are a little better. Now, which of their pieces bothers you most? The bishop on f5.', 'O-O — castled; now, the f5-bishop.'],
+    ['…Be7 — modest: the bishop gets out of the way so they can castle.', '…Be7 — castling next.'],
+    ['h3 — a small move with two jobs: it gives your bishop on f4 a retreat on h2, and it keeps their knight off g4.', 'h3 — h2 for the bishop, g4 covered.'],
+    ['…O-O — their king goes to g8. Now your knight on f3 can go after that bishop on f5.', '…O-O — their king is safe.'],
+    ['Nh4 — the knight hits the bishop on f5. If they let you take it, you keep both bishops and they don\'t.', 'Nh4 — hunts the f5-bishop.'],
+    ['…Be4 — the bishop steps aside and hits g2, which your king guards. But on e4 it can be taken: your knight on c3 hits it.', '…Be4 — sidesteps, but c3 hits it.'],
+    ['Nxe4 — take it: the knight trades itself for their bishop, and they\'ll take back with the knight from f6. You keep both bishops, and you are a little better. Your plan for the middlegame: bring the knight on h4 back to f3 and on toward e5, and let your two bishops work once the center opens.', 'Nxe4 — knight for bishop; two bishops.'],
   ],
   'Pyramid with Ne5': [
     ['…Nf6 — the most common answer, close to six masters in ten. The knight develops and covers e4, and you can go on building: e3 next.', '…Nf6 — develops and covers e4.'],
@@ -128,7 +145,11 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ['…Qe7 — the queen steps behind the e-pawn, so when …e5 comes, the pawn has it backing it up. So what do you do about that push?', '…Qe7 — the queen backs up …e5.'],
     ['Ne5 — take the square before their pawn does. The knight is guarded by the d4 pawn and your bishop on g3, it hits their knight on c6 and the f7 pawn, and now …e5 is off the table.', 'Ne5 — the knight takes the square first.'],
     ['…Bxe5 — they take the knight off e5. Now, which piece takes back: the d-pawn or the bishop?', '…Bxe5 — they take the knight.'],
-    ['dxe5 — the pawn, and look what it hits: their knight on f6, which has to move. Bxe5 instead lets their knight on c6 trade itself for your bishop. It\'s about level. Your plan for the middlegame: once the knight moves, f4 to hold your new pawn on e5, which takes d6 and f6 away from their pieces and cramps their kingside.', 'dxe5 — hits the knight on f6.'],
+    ['dxe5 — the pawn, and look what it hits: their knight on f6, which has to move. Bxe5 instead lets their knight on c6 trade itself for your bishop. It\'s about level. So where does the knight go, and can you hold on to that pawn on e5?', 'dxe5 — hits the knight on f6.'],
+    ['…Nd7 — the knight steps back and hits your e5 pawn. Count it: their knights on d7 and c6 attack it, and only your bishop on g3 guards it.', '…Nd7 — e5 hit twice, guarded once.'],
+    ['f4 — the second guard, and the engine\'s choice. Now e5 holds, and the pawns on e5 and f4 take d6 and f6 away from their pieces.', 'f4 — e5 guarded twice.'],
+    ['…f6 — they hit back at e5 with a pawn, to break the cramp before it sets in.', '…f6 — hits e5, breaks the cramp.'],
+    ['exf6 — take, and the pawn hits their queen on e7, so they take back on f6. It\'s about level. Your plan for the middlegame: castle, then Re1 to meet the …e5 push they\'ll want, with your bishop on d3 still aimed at h7.', 'exf6 — takes, and hits the queen.'],
   ],
   'Qb3 vs …Qb6': [
     ['…c5 — the most common answer, close to six masters in ten. The pawn hits d4 from the side, and nothing guards it on c5. Your answer is the same as always: keep d4 solid.', '…c5 — the side-hit on d4.'],
@@ -142,7 +163,11 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ['…g6 — that blocks the queen\'s view of h7 and gets their bishop ready for g7.', '…g6 — blocks h7, bishop to g7.'],
     ['e4 — there\'s the break. The pawn hits d5, the base of their chain, and your knight on d2 and queen on c2 both back it up. You are a little better.', 'e4 — the break, hits the base.'],
     ['…e5 — a counterpunch: the pawn hits your bishop on f4 and the d4 pawn. But it\'s a mistake. The engine prefers …Nxe4, and now you are clearly better. Do you save the bishop?', '…e5 — counterpunch, but a mistake.'],
-    ['dxe5 — no, you take. Now your pawn hits their knight on f6, and nothing guards it, while the pawn that was hitting your bishop is gone. You are clearly better. Your plan for the middlegame: exd5 to break their center open, then pick up the c4 pawn that ran ahead.', 'dxe5 — hits the loose knight on f6.'],
+    ['dxe5 — no, you take. Now your pawn hits their knight on f6, and nothing guards it, while the pawn that was hitting your bishop is gone. You are clearly better. So where can the knight go?', 'dxe5 — hits the loose knight on f6.'],
+    ['…Ng4 — it jumps forward and hits e5, f2 and h2. Meanwhile their pawn on d5 has lost its last guard, and your e4 pawn is hitting it.', '…Ng4 — hits e5; d5 left loose.'],
+    ['O-O-O — the king goes long, away from the knight\'s raid, and the rook comes to d1. Your f2 pawn hangs now, but so does their pawn on d5, and you are clearly better.', 'O-O-O — king safe; d5 still loose.'],
+    ['…Ncxe5 — the other knight wins the e5 pawn back, so the material is level. But d5 is still loose.', '…Ncxe5 — material level again.'],
+    ['Nh3 — the last knight comes out and guards f2. The engine prefers Ngf3, challenging the knight on e5, and after Nh3 you are a little better. Your plan for the middlegame: exd5 to take the loose pawn and open the center, then Nxc4 to collect the pawn that ran ahead.', 'Nh3 — guards f2; Ngf3 was stronger.'],
   ],
   'vs Early …Bf5': [
     ['…Bf5 — a mirror: their bishop comes out just like yours, and it hits c2, which your queen guards. Only about two masters in a hundred try it, and the engine prefers …c5. Here\'s the catch: with the bishop gone from c8, nothing guards b7. So do you keep building your pyramid, or go after that pawn?', '…Bf5 — the mirror; b7 is unguarded.'],
@@ -156,7 +181,13 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ['…Qxb3 — the queens come off. Take back.', '…Qxb3 — the queens come off.'],
     ['axb3 — the a-pawn takes, and now your rook on a1 looks straight down the open a-file at a7. You are clearly better.', 'axb3 — the a-file opens for your rook.'],
     ['…Nd7 — the knight goes after your c5 pawn, the one that kicked their queen. Count it: the knight and their bishop on f8 both hit c5, and only your d4 pawn guards it.', '…Nd7 — c5 is hit twice.'],
-    ['b4 — a second guard for c5, and now pawns on b4, c5 and d4 hold your queenside space. You are clearly better. Your plan for the middlegame: e3 and Nf3 to finish developing, and keep d6 in mind: with your pawn on c5 and theirs on c6 and e6, no pawn of theirs can ever cover it, a perfect outpost for your bishop.', 'b4 — c5 guarded twice, d6 a hole.'],
+    ['b4 — a second guard for c5, and now pawns on b4, c5 and d4 hold your queenside space. You are clearly better. So how do they fight back on that side of the board?', 'b4 — c5 guarded twice.'],
+    ['…a6 — the pawn takes b5 away, so your b-pawn can\'t march on to b5.', '…a6 — b5 covered.'],
+    ['e3 — now the bishop on f1 sees all the way to a6, and with your rook on a1 behind it on the file, that pawn is hit twice. Their rook on a8 and the b7 pawn hold it, for now. The engine prefers Nf3 first.', 'e3 — the f1-bishop sees a6.'],
+    ['…Rd8 — the rook leaves the a-file, and look what that gives up: a6 is now hit twice and guarded only by the b7 pawn. The engine prefers …Rc8.', '…Rd8 — a6 loses a guard.'],
+    ['Nf3 — the last minor piece comes out and covers e5. You are clearly better, and the pawn on a6 isn\'t going anywhere.', 'Nf3 — covers e5; a6 can wait.'],
+    ['…f6 — they get ready for …e5. But a6 is still hit twice and guarded once.', '…f6 — …e5 next; a6 still hangs.'],
+    ['Bxa6 — take it. The bishop now hits b7, which nothing guards, and if the b-pawn takes the bishop, your rook takes back on a6. You are clearly better, a pawn up. Your plan for the middlegame: keep d6 in mind: with your pawn on c5 and theirs on c6 and e6, no pawn of theirs can ever cover it, a perfect outpost for your bishop.', 'Bxa6 — a pawn up; d6 a hole.'],
   ],
   'vs Grünfeld Setup': [
     ['…d5 — about three masters in four play it: a pawn on d5 and the bishop to g7 next, a Grünfeld setup. The pawn covers e4, so the big center you might have built is off the table. You need another plan, and it starts on the edge of the board.', '…d5 — a Grünfeld setup, e4 covered.'],
@@ -168,7 +199,13 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ['…O-O — seven masters in ten castle. Their king looks safe behind the h5 pawn, but that\'s not forever: later, g4 can knock the h5 pawn away and reopen the h-file.', '…O-O — the king castles behind h5.'],
     ['Ne5 — the knight lands on e5, guarded by the d4 pawn and your bishop on f4, and it hits g6 and f7, the pawns around their king.', 'Ne5 — the outpost, hits g6 and f7.'],
     ['…c5 — the counterpunch: the pawn hits d4, the pawn holding up your knight on e5.', "…c5 — hits d4, the knight's support."],
-    ['Qd2 — the queen steps up, and now b1, c1 and d1 are all empty: you can castle queenside next. It\'s about level. Your plan for the middlegame: castle long, then f3 and g4 to knock their h5 pawn away and open lines toward their king.', 'Qd2 — queenside castling is ready.'],
+    ['Qd2 — the queen steps up, and now b1, c1 and d1 are all empty: you can castle queenside next. It\'s about level. But first they have a capture to make.', 'Qd2 — queenside castling is ready.'],
+    ['…cxd4 — they take, and the pawn on d4 hits your knight on c3 and the e3 pawn. The engine slightly prefers …Nc6 first. How do you take back?', '…cxd4 — hits c3 and e3.'],
+    ['exd4 — with the e-pawn. Qxd4 is far worse: …Ng4 hits your knight on e5 straight away. Now d4 holds up the knight again, and the e-file is half-open.', 'exd4 — the pawn holds e5 again.'],
+    ['…Nc6 — the knight challenges yours on e5 and hits d4. Both hold: your queen guards d4, and d4 and the bishop on f4 guard e5.', '…Nc6 — challenges the e5-knight.'],
+    ['f3 — a quiet move with a point: it takes e4 and g4 away from their pieces, and it gets your g-pawn ready to push to g4 later.', 'f3 — covers e4 and g4.'],
+    ['…Bf5 — the bishop comes out and hits c2. Castling queenside will put your king right next to that pawn.', '…Bf5 — hits c2.'],
+    ['O-O-O — and the king goes long, where it guards c2. It\'s about level. Your plan for the middlegame: g4 to knock their h5 pawn away and open lines toward their king, with your queen and the knight on e5 already pointed at their kingside.', 'O-O-O — king long, c2 guarded.'],
   ],
   'Poisoned b2 Pawn': [
     ['…c5 — about one master in eight hits d4 straight away. Now you have a real choice: support d4 with e3, push past with d5, or take on c5. Each one leads to a different game.', '…c5 — hits d4 straight away.'],
@@ -184,7 +221,11 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ['…Qa2 — the queen slips to a2 and hits your rook on b1, which your queen guards. Grabbing the rook was worse: after Qxb1, the knight checks on c7 first, and your queen takes back on b1.', '…Qa2 — out of reach, hits b1.'],
     ['Qc1 — the box closes. From c1 your queen covers a3, b2 and c2, and the rook and the c2 pawn take care of a1 and b3. Next comes Ra1, straight at the queen on a2.', 'Qc1 — boxes in their queen.'],
     ['…axb5 — they grab the knight, and for a moment you\'re a piece and a pawn down. But watch the queen on a2.', '…axb5 — they take the knight.'],
-    ['Ra1 — the rook hits the queen on a2, and every square it could run to is covered. So its best is to take the rook and be taken back: a queen for a rook. You are a little better. Your plan for the middlegame: after Qxa1, go after the loose pawns on b5 and c5, starting with your bishop on f1, while their king still sits in the center on e8.', 'Ra1 — the queen has no safe square.'],
+    ['Ra1 — the rook hits the queen on a2, and every square it could run to is covered. You are a little better. So what can the queen do?', 'Ra1 — the queen has no safe square.'],
+    ['…Qxa1 — its best: it takes the rook and gives itself up for it. On a1 it even pins your queen on c1 to the king on e1, but that doesn\'t matter: you simply take it.', '…Qxa1 — queen for rook.'],
+    ['Qxa1 — take it. Count it up: you gave a pawn, a knight and a rook, and you got their queen, so the material is level and you are a little better. One thing to note: their rook on a8 now pins your a3 pawn to your queen.', 'Qxa1 — material level, a little better.'],
+    ['…Nxf4 — the knight takes your bishop, but nothing guards it on f4. The engine prefers …e5. Take it back.', '…Nxf4 — takes the bishop.'],
+    ['exf4 — the pawn takes back, and now your bishop on f1 sees all the way to b5. You are a little better. Your plan for the middlegame: go after the loose pawns on b5 and c5 with your queen and bishop, while their king still sits in the center on e8.', 'exf4 — b5 and c5 are loose.'],
   ],
   'd5 vs …c5': [
     ['d5 — push past. About a third of masters do it, and it\'s the engine\'s choice: the pawn grabs space and takes c6 and e6 away from their pieces. Your bishop on f4 is already outside the pawns, which is exactly where you want it in this structure.', "d5 — grabs space, the engine's choice."],
@@ -197,7 +238,13 @@ const TAB_BEATS: Record<string, TabBeats> = {
     ['…O-O — they castle short, and their king tucks in behind the pawns on f7, g7 and h7.', '…O-O — their king goes short.'],
     ['h3 — a small move with a clear job: it takes g4 away from their knight on f6 and their bishop on c8.', 'h3 — takes g4 away.'],
     ['…h6 — they do the same for g5, so your bishop on d2 can\'t come to g5.', '…h6 — takes g5 away.'],
-    ['Bd3 — the last bishop comes out and guards your e4 pawn. You are clearly better. Your plan for the middlegame: a4, so their …b5 break never gets going, and then g4 to grab space on the other wing.', 'Bd3 — guards e4; a4 and g4 next.'],
+    ['Bd3 — the last bishop comes out and guards your e4 pawn. You are clearly better. Only one piece of yours is still at home: the knight on g1.', 'Bd3 — guards e4.'],
+    ['…Na6 — a knight on the rim, heading for c7 or b4. Your bishop on d3 could take it and double their a-pawns, but there\'s no hurry.', '…Na6 — heading for c7 or b4.'],
+    ['Nge2 — the last knight comes out, on its way to g3, where it will look at f5 and h5.', 'Nge2 — heading for g3.'],
+    ['…Nh7 — the knight steps out of the way: now their bishop on e7 can go to g5 and offer to trade itself off. Remember, that\'s their bad bishop, so they\'d love to swap it.', '…Nh7 — …Bg5 to swap the bad bishop.'],
+    ['Ng3 — the knight arrives, eyeing f5 and h5.', 'Ng3 — watching f5 and h5.'],
+    ['…Rb8 — the rook gets behind the b-pawn to support …b5. The engine prefers …b6, and now you are clearly better.', '…Rb8 — …b5 is coming.'],
+    ['Nb5 — the knight jumps into b5, right where their …b5 push wanted to go, and it hits a7 and d6. You are a little better. Your plan for the middlegame: a4 to keep the knight on b5, so their …b5 break never gets going, and then g4 to grab space on the other wing.', 'Nb5 — sits on b5, hits a7.'],
   ],
 };
 

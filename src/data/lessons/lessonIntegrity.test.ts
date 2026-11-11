@@ -123,6 +123,17 @@ const ENGINE_EXTENDED_LESSONS = new Set<string>([
   'kings-indian-attack::KIA vs Sicilian Structure',
   'kings-indian-attack::KIA vs Caro-Kann Structure',
   "birds-opening::Bird's: Swiss Gambit",
+  // GothamChess London: early-Bf4 orders the DB names only to ply 3–5 (DB-empty rule).
+  'London System — A Master Class',
+  'pro-gothamchess-london::Standard Setup vs d5',
+  "pro-gothamchess-london::vs King's Indian (Bh6 + Opposite-Side Castle Attack)",
+  'pro-gothamchess-london::vs …c6 (via 2.Bf4)',
+  'pro-gothamchess-london::Pyramid with Ne5',
+  'pro-gothamchess-london::Qb3 vs …Qb6',
+  'pro-gothamchess-london::vs Early …Bf5',
+  'pro-gothamchess-london::vs Grünfeld Setup',
+  'pro-gothamchess-london::Poisoned b2 Pawn',
+  'pro-gothamchess-london::d5 vs …c5',
 ]);
 
 describe('masterclass G3 — every lesson anchors a real DB opening line', () => {
