@@ -3818,7 +3818,7 @@
  },
  {
   "side": "white",
-  "moves": "d4 Nf6 Bf4 c5 d5 d6 Nc3 e5 e4 exf4 Qd2",
+  "moves": "d4 Nf6 Bf4 c5 d5 d6 Nc3 g6 e4 Bg7 Qd2",
   "names": [
    "Vs early ...c5 and ...d6: big center and long castle"
   ],
@@ -3844,13 +3844,13 @@
   ],
   "played": 0,
   "score": null,
-  "masters": 0,
-  "amateur": 29,
-  "evalCp": -414,
+  "masters": 10,
+  "amateur": 35742,
+  "evalCp": 50,
   "ideas": [
    "When Black plays quietly after d5, White builds e4 behind the space pawn, brings the queen to d2 and castles long for a kingside pawn storm."
   ],
-  "endFen": "rnbqkb1r/pp3ppp/3p1n2/2pP4/4Pp2/2N5/PPPQ1PPP/R3KBNR b KQkq - 1 6",
+  "endFen": "rnbqk2r/pp2ppbp/3p1np1/2pP4/4PB2/2N5/PPPQ1PPP/R3KBNR b KQkq - 2 6",
   "files": [
    "d4-white.json"
   ]
@@ -4520,7 +4520,7 @@
  },
  {
   "side": "white",
-  "moves": "d4 Nf6 Bg5 c5 d5 Ne4 f3 Nxg5 e4",
+  "moves": "d4 Nf6 Bg5 c5 d5 d6 c4 g6 Nc3 Bg7 e4",
   "names": [
    "Vs ...c5: wedge with d5 and build a c4-f3-e4 wall"
   ],
@@ -4546,13 +4546,13 @@
   ],
   "played": 0,
   "score": null,
-  "masters": 0,
-  "amateur": 21,
-  "evalCp": -348,
+  "masters": 102,
+  "amateur": 104956,
+  "evalCp": 35,
   "ideas": [
    "Black's ...c5 is answered with d5, followed by a pawn wall in the center that leaves Black short of space."
   ],
-  "endFen": "rnbqkb1r/pp1ppppp/8/2pP2n1/4P3/5P2/PPP3PP/RN1QKBNR b KQkq - 0 5",
+  "endFen": "rnbqk2r/pp2ppbp/3p1np1/2pP2B1/2P1P3/2N5/PP3PPP/R2QKBNR b KQkq - 0 6",
   "files": [
    "d4-white.json"
   ]
@@ -4598,7 +4598,46 @@
  },
  {
   "side": "white",
-  "moves": "d4 Nf6 Bg5 Ne4 h4 Nxg5 hxg5 d5 g6 fxg6 e3 Bf5 Bd3",
+  "moves": "d4 Nf6 Bg5 Ne4 h4 Nxg5 hxg5 d5 g6 hxg6 Rxh8",
+  "names": [
+   "Raptor: ...Ne4 h4, and ...d5 runs into g6"
+  ],
+  "openings": [
+   "Trompowsky Attack"
+  ],
+  "kinds": [
+   "trap"
+  ],
+  "statuses": [
+   "extends"
+  ],
+  "extends": [
+   "pro-gothamchess-trompowsky"
+  ],
+  "taught": true,
+  "videos": [
+   {
+    "id": "79-toxo-ebU",
+    "title": "CRUSH People With The Trompowsky Attack!",
+    "minute": 7
+   }
+  ],
+  "played": 0,
+  "score": null,
+  "masters": 0,
+  "amateur": 3,
+  "evalCp": 491,
+  "ideas": [
+   "If Black takes on g5, the h-file opens for White's rook. After ...d5 the pawn jumps to g6, and taking it with the h-pawn drops the h8 rook to the open file."
+  ],
+  "endFen": "rnbqkb1R/ppp1ppp1/6p1/3p4/3P4/8/PPP1PPP1/RN1QKBN1 b Qq - 0 6",
+  "files": [
+   "d4-white.json"
+  ]
+ },
+ {
+  "side": "white",
+  "moves": "d4 Nf6 Bg5 Ne4 h4 Nxg5 hxg5 d5 g6 fxg6 e3 Nc6 Bd3",
   "names": [
    "Raptor: after g6 fxg6, aim at the weakened g6 pawn"
   ],
@@ -4625,12 +4664,12 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": 619,
-  "evalCp": -48,
+  "amateur": 972,
+  "evalCp": -30,
   "ideas": [
    "If Black takes on g6 with the f-pawn, the kingside is a mess: White develops the bishop to d3 to hit g6, with tactics along the h-file against the rook."
   ],
-  "endFen": "rn1qkb1r/ppp1p1pp/6p1/3p1b2/3P4/3BP3/PPP2PP1/RN1QK1NR b KQkq - 2 7",
+  "endFen": "r1bqkb1r/ppp1p1pp/2n3p1/3p4/3P4/3BP3/PPP2PP1/RN1QK1NR b KQkq - 2 7",
   "files": [
    "d4-white.json"
   ]
@@ -4902,9 +4941,9 @@
  },
  {
   "side": "white",
-  "moves": "d4 Nf6 Nf3 g6 g3 Bg7 Bg2 O-O O-O d6 c4",
+  "moves": "d4 d5 Nf3 Nf6 g3 e6 Bg2 Bd6 O-O O-O c4 dxc4 Qc2",
   "names": [
-   "Catalan move order via Nf3 and a delayed c4"
+   "Delayed Catalan: Nf3, g3 and castle before c4"
   ],
   "openings": [
    "Catalan"
@@ -4921,18 +4960,18 @@
    {
     "id": "nMuvv1HksL4",
     "title": "How to play the Catalan | 10-Minute Chess Openings",
-    "minute": 1
+    "minute": 4
    }
   ],
   "played": 0,
   "score": null,
-  "masters": 19010,
-  "amateur": 2689528,
-  "evalCp": 44,
+  "masters": 3,
+  "amateur": 11890,
+  "evalCp": 25,
   "ideas": [
-   "White can go Nf3, g3, Bg2 and castle before pushing c4, aiming for the same Catalan structure while avoiding early commitments."
+   "White can delay c4 until the kingside is ready. Once Black grabs the c4 pawn, the g2 bishop's diagonal is open and White regains the pawn with Qc2 (or Nbd2); with the bishop on d6, Ne5 is less useful because it can simply be traded off."
   ],
-  "endFen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 0 6",
+  "endFen": "rnbq1rk1/ppp2ppp/3bpn2/8/2pP4/5NP1/PPQ1PPBP/RNB2RK1 b - - 1 7",
   "files": [
    "d4-white.json"
   ]
@@ -5052,7 +5091,7 @@
  },
  {
   "side": "white",
-  "moves": "c4 e5 g3 Nc6 Bg2 g6 Nc3 Bc5 e3 Nf6 Nge2 O-O a3",
+  "moves": "c4 e5 g3 Nf6 Bg2 Nc6 Nc3 Bc5 e3 O-O Nge2 d6 a3",
   "names": [
    "Reverse Sicilian with Nc3, e3 and Nge2, then a queenside expansion"
   ],
@@ -5078,13 +5117,13 @@
   ],
   "played": 0,
   "score": null,
-  "masters": 0,
-  "amateur": 18,
-  "evalCp": 52,
+  "masters": 48,
+  "amateur": 19087,
+  "evalCp": 34,
   "ideas": [
    "With the knight on e2 supporting the center, White expands on the queenside with a3, b4 and Rb1, complementing the long-diagonal bishop."
   ],
-  "endFen": "r1bq1rk1/pppp1p1p/2n2np1/2b1p3/2P5/P1N1P1P1/1P1PNPBP/R1BQK2R b KQ - 0 7",
+  "endFen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2P5/P1N1P1P1/1P1PNPBP/R1BQK2R b KQ - 0 7",
   "files": [
    "d4-white.json"
   ]
@@ -5130,7 +5169,7 @@
  },
  {
   "side": "white",
-  "moves": "c4 Nf6 Nc3 g6 e4 d6 d4 Bg7 Be2 O-O Be3 e5 h4",
+  "moves": "c4 Nf6 Nc3 g6 e4 d6 d4 Bg7 Be2 O-O Be3 c5 h4",
   "names": [
    "Vs a King's Indian setup: Be2, Be3 and a pawn storm before Nf3"
   ],
@@ -5156,13 +5195,13 @@
   ],
   "played": 0,
   "score": null,
-  "masters": 1,
-  "amateur": 1181,
-  "evalCp": -67,
+  "masters": 0,
+  "amateur": 811,
+  "evalCp": -60,
   "ideas": [
    "Delaying Nf3 keeps the g- and h-pawns free: White plays h4 and h5 (and g4) with Qd2 and Bh6 to strip Black's king before even developing the knight."
   ],
-  "endFen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP2P/2N1B3/PP2BPP1/R2QK1NR b KQ - 0 7",
+  "endFen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPP2P/2N1B3/PP2BPP1/R2QK1NR b KQ - 0 7",
   "files": [
    "d4-white.json"
   ]
@@ -5399,7 +5438,7 @@
  },
  {
   "side": "white",
-  "moves": "d4 d5 c4 e6 Nc3 Nf6 Nf3 Be7 Bg5 O-O Qc2 h6 h4",
+  "moves": "d4 d5 c4 e6 Nc3 Nf6 Nf3 Be7 Bg5 O-O Qc2 h6 h4 hxg5 hxg5 Ne4 Nxe4 dxe4 Qxe4",
   "names": [
    "QGD with Bg5 and Qc2: the h4 'fishing pole' bait"
   ],
@@ -5410,11 +5449,9 @@
    "trap"
   ],
   "statuses": [
-   "extends"
+   "new"
   ],
-  "extends": [
-   "pro-gothamchess-qgd"
-  ],
+  "extends": [],
   "taught": true,
   "videos": [
    {
@@ -5425,20 +5462,20 @@
   ],
   "played": 0,
   "score": null,
-  "masters": 6,
-  "amateur": 7657,
-  "evalCp": -9,
+  "masters": 0,
+  "amateur": 813,
+  "evalCp": 252,
   "ideas": [
    "With the queen on c2 eyeing h7, h4 offers the g5 bishop: if ...hxg5, the h-file opens and the queen and rook crash through toward h7."
   ],
-  "endFen": "rnbq1rk1/ppp1bpp1/4pn1p/3p2B1/2PP3P/2N2N2/PPQ1PPP1/R3KB1R b KQ - 0 7",
+  "endFen": "rnbq1rk1/ppp1bpp1/4p3/6P1/2PPQ3/5N2/PP2PPP1/R3KB1R b KQ - 0 10",
   "files": [
    "d4-white.json"
   ]
  },
  {
   "side": "white",
-  "moves": "d4 d5 c4 e6 Nc3 Nf6 Nf3 Be7 Bg5 O-O e3 h6 Bd3 hxg5 O-O g4 Rc1",
+  "moves": "d4 d5 c4 e6 Nc3 Nf6 Nf3 Be7 Bg5 O-O e3 h6 Bh4 b6 Bd3 Bb7 O-O Nbd7 Rc1",
   "names": [
    "QGD with Bg5: the solid Bd3, castle and Rc1 plan"
   ],
@@ -5449,11 +5486,9 @@
    "main"
   ],
   "statuses": [
-   "extends"
+   "new"
   ],
-  "extends": [
-   "pro-gothamchess-qgd"
-  ],
+  "extends": [],
   "taught": true,
   "videos": [
    {
@@ -5464,13 +5499,13 @@
   ],
   "played": 0,
   "score": null,
-  "masters": 0,
-  "amateur": 1,
-  "evalCp": -627,
+  "masters": 122,
+  "amateur": 31982,
+  "evalCp": -5,
   "ideas": [
    "The steady approach: keep e3 until the bishop is out, develop to d3, castle, bring the rook to c1 and prepare e4."
   ],
-  "endFen": "rnbq1rk1/ppp1bpp1/4pn2/3p4/2PP2p1/2NBPN2/PP3PPP/2RQ1RK1 b - - 1 9",
+  "endFen": "r2q1rk1/pbpnbpp1/1p2pn1p/3p4/2PP3B/2NBPN2/PP3PPP/2RQ1RK1 b - - 5 10",
   "files": [
    "d4-white.json"
   ]
@@ -5744,7 +5779,7 @@
    "Blackmar-Diemer Gambit"
   ],
   "kinds": [
-   "trap"
+   "reply"
   ],
   "statuses": [
    "new"
@@ -6034,15 +6069,15 @@
  },
  {
   "side": "white",
-  "moves": "d4 d5 Bf4 c5 Nc3 Nc6 Nb5",
+  "moves": "d4 d5 Bf4 Nf6 Nc3 e6 Nb5",
   "names": [
-   "Early Nc3 and Nb5 aiming at c7"
+   "Jobava London: Nb5 against c7 before ...c5"
   ],
   "openings": [
    "Jobava London"
   ],
   "kinds": [
-   "trap"
+   "main"
   ],
   "statuses": [
    "extends"
@@ -6060,13 +6095,13 @@
   ],
   "played": 0,
   "score": null,
-  "masters": 0,
-  "amateur": 23846,
-  "evalCp": -345,
+  "masters": 895,
+  "amateur": 1222762,
+  "evalCp": 7,
   "ideas": [
-   "With the c-pawn gone from c7, the knight jumps to b5 to land on c7 with the bishop's help, a forking idea in the style of a reversed Fried Liver."
+   "With the c-pawn still on c7, the knight jumps to b5 and teams up with the f4 bishop against c7, in the spirit of a reversed Fried Liver. Against an early ...c5 this jump fails to ...Qa5+, so it is a weapon only before Black commits the c-pawn."
   ],
-  "endFen": "r1bqkbnr/pp2pppp/2n5/1Npp4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 3 4",
+  "endFen": "rnbqkb1r/ppp2ppp/4pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 1 4",
   "files": [
    "d4-white.json"
   ]
@@ -6769,7 +6804,7 @@
   "score": null,
   "masters": 0,
   "amateur": 0,
-  "evalCp": 100000,
+  "evalCp": 10000,
   "ideas": [
    "After ...exd4 the knight goes to d5 instead of recapturing. Bg5 forces a block on e7, and when the bishop takes on d4 White gives up the queen: the knight check on f6 and Bh6 mate follow."
   ],
@@ -6780,7 +6815,7 @@
  },
  {
   "side": "white",
-  "moves": "d4 d5 c4 c6 Nc3 Nf6 Nf3 e6 Bf4 dxc4 e3 b5 Bd3 cxd3 O-O",
+  "moves": "d4 d5 c4 e6 Nc3 Nf6 Nf3 Be7 Bf4 O-O e3 Nbd7 Bd3 c5 O-O",
   "names": [
    "Queen's Gambit Declined in eight moves: develop the bishop before e3"
   ],
@@ -6804,20 +6839,20 @@
   ],
   "played": 0,
   "score": null,
-  "masters": 0,
-  "amateur": 0,
-  "evalCp": -495,
+  "masters": 4,
+  "amateur": 9336,
+  "evalCp": 4,
   "ideas": [
    "If Black declines, develop both knights, bring the dark bishop out before playing e3 so it is not locked in, then develop the other bishop and castle."
   ],
-  "endFen": "rnbqkb1r/p4ppp/2p1pn2/1p6/3P1B2/2NpPN2/PP3PPP/R2Q1RK1 b kq - 1 8",
+  "endFen": "r1bq1rk1/pp1nbppp/4pn2/2pp4/2PP1B2/2NBPN2/PP3PPP/R2Q1RK1 b - - 1 8",
   "files": [
    "d4-white.json"
   ]
  },
  {
   "side": "white",
-  "moves": "d4 d5 Bf4 Nf6 e3 e6 Nf3 c5 c3 Nc6 Nbd2 Bd6 Bd3 Bxf4 O-O",
+  "moves": "d4 d5 Bf4 Nf6 e3 e6 Nf3 c5 c3 Nc6 Nbd2 Bd6 Bd3 O-O O-O",
   "names": [
    "Pyramid setup in 30 seconds: c3 against ...c5, knights to f3 and d2"
   ],
@@ -6843,13 +6878,13 @@
   ],
   "played": 0,
   "score": null,
-  "masters": 0,
-  "amateur": 27,
-  "evalCp": -486,
+  "masters": 9,
+  "amateur": 18268,
+  "evalCp": 0,
   "ideas": [
    "Bishop to f4 before e3, knights to f3 and d2, and every time Black plays ...c5 answer with c3 to complete the pawn pyramid before castling."
   ],
-  "endFen": "r1bqk2r/pp3ppp/2n1pn2/2pp4/3P1b2/2PBPN2/PP1N1PPP/R2Q1RK1 b kq - 1 8",
+  "endFen": "r1bq1rk1/pp3ppp/2nbpn2/2pp4/3P1B2/2PBPN2/PP1N1PPP/R2Q1RK1 b - - 6 8",
   "files": [
    "d4-white.json"
   ]
@@ -7037,6 +7072,45 @@
    "White lets the b2 pawn go, retreats the bishop to d2 and, after the queen returns, overruns the center with e4 and f4."
   ],
   "endFen": "rnb1kb1r/pp2pppp/1q1p1n2/2pP4/4PP2/2N5/P1PB2PP/R2QKBNR b KQkq - 0 7",
+  "files": [
+   "d4-white.json"
+  ]
+ },
+ {
+  "side": "white",
+  "moves": "d4 Nf6 Bg5 c5 d5 Qb6 Bc1 g6 f3 Bg7 e4",
+  "names": [
+   "Vs ...c5 and ...Qb6: the quiet Bc1 retreat"
+  ],
+  "openings": [
+   "Trompowsky Attack"
+  ],
+  "kinds": [
+   "reply"
+  ],
+  "statuses": [
+   "extends"
+  ],
+  "extends": [
+   "pro-gothamchess-trompowsky"
+  ],
+  "taught": true,
+  "videos": [
+   {
+    "id": "79-toxo-ebU",
+    "title": "CRUSH People With The Trompowsky Attack!",
+    "minute": 9
+   }
+  ],
+  "played": 0,
+  "score": null,
+  "masters": 1,
+  "amateur": 75,
+  "evalCp": 26,
+  "ideas": [
+   "Rather than gambit b2, the bishop goes home to c1 where nothing can hit it; White then builds f3 and e4 to cramp Black."
+  ],
+  "endFen": "rnb1k2r/pp1pppbp/1q3np1/2pP4/4P3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 6",
   "files": [
    "d4-white.json"
   ]
@@ -14903,7 +14977,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 175,
   "evalCp": 509,
   "ideas": [
    "When White takes the bait on f7, Black sacrifices on f2 and e4 to drag the king forward; the queen checks plus ...d5 open the c8-bishop and the king is hunted in the center."
@@ -15088,7 +15162,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 945,
   "evalCp": 450,
   "ideas": [
    "If the king walks to e3, the queen check from d4 forces it to e2 and the capture on c4 comes with check while hitting the f7-knight, winning back both sacrificed pieces."
@@ -15199,7 +15273,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 29829,
   "evalCp": -90,
   "ideas": [
    "Against the objectively best bishop capture, put the rook on the half-open f-file, then ...d6, ...h6, ...Bg4 and a queen swing via e8 to g6; the king often walks to d8 and Black's pieces are very active for a pawn."
@@ -15272,7 +15346,7 @@
   ],
   "played": 0,
   "score": null,
-  "masters": 152,
+  "masters": 154,
   "amateur": 299073,
   "evalCp": -89,
   "ideas": [
@@ -15312,7 +15386,7 @@
   "played": 0,
   "score": null,
   "masters": 11,
-  "amateur": null,
+  "amateur": 105054,
   "evalCp": 53,
   "ideas": [
    "Strike the center at once and castle; if Black keeps grabbing, the queen jumps to b3 and teams up with the c4-bishop against f7 while White's king is already safe."
@@ -15351,7 +15425,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 27130,
   "evalCp": -34,
   "ideas": [
    "Castle first and push e5 to kick the f6-knight; Black's only good answer is ...d5, leading to a wild position where White wins the g7 pawn and the black king loses its kingside cover."
@@ -15390,7 +15464,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 1705,
   "evalCp": 138,
   "ideas": [
    "If Black parks the knight on e4 instead of hitting back with ...d5, the rook pins it on the e-file and White's development turns into a direct attack."
@@ -15429,7 +15503,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 690,
   "evalCp": 8,
   "ideas": [
    "Against the solid ...Be7 and ...Na5, keep the bishop with Be2, recapture with the queen, kick the knight with e5, and swing the queen over to g3 (via h4 or f4) with h4-h5 ideas against the kingside."
@@ -15507,7 +15581,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 951,
   "evalCp": -82,
   "ideas": [
    "Taking the knight lets the bishop sacrifice on f7 and the queen check win back the e4-knight; the black king is stuck on f6 and Bg5 tricks are in the air."
@@ -15546,7 +15620,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 20280,
   "evalCp": -56,
   "ideas": [
    "Retreating the king home looks safe but leaves the e4-knight pinned on the open e-file; Re1 and Rxe4 demolish the position."
@@ -15620,7 +15694,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 0,
   "evalCp": 10000,
   "ideas": [
    "Queen and bishop both aim at f7, the square only the king guards; if Black develops the knight to f6 and blocks nothing, the queen takes on f7 with mate."
@@ -15696,7 +15770,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 1624,
   "evalCp": 246,
   "ideas": [
    "After Black grabs the e4 pawn, d5 kicks the c6-knight; if it goes to the rim, b4 leaves it with no square at all."
@@ -15735,7 +15809,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 1884,
   "evalCp": 147,
   "ideas": [
    "Blocking the check with the bishop lets the e5-knight take on d7, and the black queen is overloaded around the pinned pieces."
@@ -15809,7 +15883,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 0,
   "evalCp": 10000,
   "ideas": [
    "The knight jump to d4 offers the e5 pawn; if White takes it, the queen hits g2 and the knight, eats the rook-side pawns, and ends with a smothered knight mate on f3."
@@ -15846,7 +15920,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 0,
   "evalCp": 10000,
   "ideas": [
    "Recapture toward the center to free queen and bishops, aim the bishop at f2, and support ...Ng4 with ...h5; when White castles and kicks the knight, ...Qd6 brings the queen to the h-file and taking the knight opens it for mate."
@@ -15883,7 +15957,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 64019,
   "evalCp": 226,
   "ideas": [
    "Recapture toward the center to open queen and bishop; ...Qd4 hits e5 and e4 together, and the tempting Qh5+ is met by ...g6, because the d4-queen also guards h8 and the white queen and knight are both hanging."
@@ -15920,7 +15994,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 29079,
   "evalCp": 8,
   "ideas": [
    "If the knight retreats, take the e4 pawn with check; Black has the bishop pair, can trade queens or castle long, and White's king is still in the center."
@@ -15957,7 +16031,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 8049,
   "evalCp": 21,
   "ideas": [
    "Whenever White takes on f5, push ...e4 to hit the knight; answer the pin Qe2 with ...Qe7, and after White gives up the bishop for the knight, develop with ...Nf6 and later ...c5 and ...Bb7."
@@ -15994,7 +16068,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 37642,
   "evalCp": -62,
   "ideas": [
    "Against the quiet d3, take on e4 to open the f-file, develop the knight, and don't grab e4 again while underdeveloped; ...d6, a bishop out and short castling put the rook on the open file."
@@ -16031,7 +16105,7 @@
   "played": 0,
   "score": null,
   "masters": 571,
-  "amateur": null,
+  "amateur": 15915,
   "evalCp": -46,
   "ideas": [
    "When White defends the center with Nc3, the plan is the same: take on e4, develop the knight and recapture with the queen, keeping the f-file and a strong center."
@@ -16068,7 +16142,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 10462,
   "evalCp": 425,
   "ideas": [
    "Covering the mate with g3 loses: the knight takes on g3, and after fxg3 the queen check on e4 forks the king and the h1 rook; Levy then follows up with ...d5 against the c4-bishop while the f7-knight is stranded."
@@ -16105,7 +16179,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 22576,
   "evalCp": 182,
   "ideas": [
    "If White castles to stop the mate, sacrifice on f2; after the rook recaptures, the bishop joins the queen against the pinned rook and the king."
@@ -16142,7 +16216,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 89522,
   "evalCp": 123,
   "ideas": [
    "If White simply takes the knight, the pawn fork on d5 wins back the piece; Black then develops the bishop and queen and castles long with ...f5 and ...g5 to follow."
@@ -16179,7 +16253,7 @@
   "played": 0,
   "score": null,
   "masters": 41,
-  "amateur": null,
+  "amateur": 351487,
   "evalCp": -100,
   "ideas": [
    "When Black holds the pawn with ...g5 and kicks the knight with ...g4, White castles and lets the knight go, getting a huge lead in development and the f-file against f7."
@@ -16218,7 +16292,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 45704,
   "evalCp": -14,
   "ideas": [
    "A better King's Gambit: the e5 push sends the knight home, so White builds the d4-e5 center and wins back f4 later."
@@ -16333,7 +16407,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 141940,
   "evalCp": -245,
   "ideas": [
    "White gives two pieces to pull the king forward and bring the queen in; the queen attacks the e5-knight and the c5-bishop, and a king stuck in the middle has to defend precisely."
@@ -16372,7 +16446,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 134175,
   "evalCp": 96,
   "ideas": [
    "...Bc5 runs into d4 and a two-pawn center; the pawns start pushing Black's pieces back (d5 hits the knight) while White follows with Bc4, Qb3 and castling."
@@ -16411,7 +16485,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 0,
   "evalCp": 1467,
   "ideas": [
    "...Qb6 hits the b5-bishop and f2, but the pawn capture on b7 is a discovered check; if the king steps aside, Nxf7+ and promoting to a knight on a8 forks king and queen."
@@ -16449,8 +16523,8 @@
   ],
   "played": 0,
   "score": null,
-  "masters": 0,
-  "amateur": null,
+  "masters": 15,
+  "amateur": 31238,
   "evalCp": -7,
   "ideas": [
    "Don't recapture on d4; push e5 and, after ...Nd5, hit the knight with the bishop in gambit style, aiming for a tight d4-e5 pawn wedge behind which the pieces gather."
@@ -16489,7 +16563,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 33449,
   "evalCp": 202,
   "ideas": [
    "The queen on a4 pins the c6-knight, so taking on e4 lets Nxe5 hit it again; if Black unpins with ...Bd7, grab the bishop and take e4 with check, a clean pawn up with the bishop pair."
@@ -16527,8 +16601,8 @@
   ],
   "played": 0,
   "score": null,
-  "masters": 66,
-  "amateur": null,
+  "masters": 70,
+  "amateur": 9449,
   "evalCp": -35,
   "ideas": [
    "Against Black's best, ...f6 shoring up e5, add pressure on the pinned knight with the bishop and then challenge the center and castle."
@@ -16567,7 +16641,7 @@
   "played": 0,
   "score": null,
   "masters": 117,
-  "amateur": null,
+  "amateur": 23356,
   "evalCp": -26,
   "ideas": [
    "Blocking the pin with the bishop leaves d5 hanging; White takes it and Black has to find ...Nd4-style play to justify the pawn."
@@ -16604,7 +16678,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 117570,
   "evalCp": 56,
   "ideas": [
    "If Black props up e5 with ...d6, trade on e5 and swap queens so Black loses castling; develop Nc3 and the bishops, and castle long so the rook faces the black king on the d-file."
@@ -16641,7 +16715,7 @@
   "played": 0,
   "score": null,
   "masters": 64,
-  "amateur": null,
+  "amateur": 166,
   "evalCp": 46,
   "ideas": [
    "Retreat the knight to b3 with tempo on the bishop; after the check and ...Be7, f4 stops ...Nf6 by threatening e5, and Black's pieces are pushed back."
@@ -16678,7 +16752,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 5820,
   "evalCp": 34,
   "ideas": [
    "Develop the second knight, pin the f6-knight, put the queen on e2 behind the e-pawn and castle long; with kings on opposite sides, Nd5 and a g-pawn storm (f3, g4, g5) aim straight at the black king."
@@ -16715,7 +16789,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 21442,
   "evalCp": 8,
   "ideas": [
    "After the trade on c6 the e5 push hits the knight; Black must pin with ...Qe7, so Qe2 holds e5. Instead of the theory-heavy c4, h4 eyes Bg5, a rook lift via h3, and h5 against any fianchetto."
@@ -16752,7 +16826,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 44600,
   "evalCp": 44,
   "ideas": [
    "Without the ...Qe7 pin, c4 kicks the knight to the edge and Bd3 aims at h7; once Black castles, Qh5 and Nc3 build an attack while the b6-knight is stranded."
@@ -16789,7 +16863,7 @@
   "played": 0,
   "score": null,
   "masters": 67,
-  "amateur": null,
+  "amateur": 2876,
   "evalCp": 37,
   "ideas": [
    "A knight on e4 is loose; the queen comes to f3 and chases it, gaining time."
@@ -16863,7 +16937,7 @@
   "played": 0,
   "score": null,
   "masters": 1,
-  "amateur": null,
+  "amateur": 41286,
   "evalCp": 155,
   "ideas": [
    "Against the early queen, don't trade on c6 into a mating attack; hold d4 with Be3, castle long and later kick the queen with Nf5 and g3."
@@ -16900,7 +16974,7 @@
   "played": 0,
   "score": null,
   "masters": 8,
-  "amateur": null,
+  "amateur": 552366,
   "evalCp": 57,
   "ideas": [
    "After the bishop trade on c6, taking the e5 pawn is a mistake: the queen forks the e5-knight and the e4 pawn and Black wins the material back."
@@ -16937,7 +17011,7 @@
   "played": 0,
   "score": null,
   "masters": 7,
-  "amateur": null,
+  "amateur": 79775,
   "evalCp": 16,
   "ideas": [
    "If White grabs the c6-knight, Black takes the c4-bishop; Black gets quick development, castles, and aims both bishops (d6 and b7) at the white king."
@@ -17011,7 +17085,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 2483,
   "evalCp": -64,
   "ideas": [
    "Instead of moving the attacked knight, pin the e5 pawn with ...Qe7; after Qe2 the knight goes to d5 with ...Nb4 jumps toward c2, then Black regains the pawn and castles long."
@@ -17087,7 +17161,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 0,
   "evalCp": 437,
   "ideas": [
    "Against the early ...Qg5, give up g2 with d4 to open the c1-bishop; Qh5 hits f7 with the c4-bishop, and if Black grabs the rook, the queen check, Bg5+ and long castling bring every white piece into the attack."
@@ -17124,7 +17198,7 @@
   "played": 0,
   "score": null,
   "masters": 1,
-  "amateur": null,
+  "amateur": 1181779,
   "evalCp": 143,
   "ideas": [
    "Trading on d4 and kicking the queen with ...c5 leaves a hole on d5; White just retreats the queen, plants a knight on d5 and develops the bishops, already clearly better."
@@ -17161,7 +17235,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 0,
   "evalCp": 10000,
   "ideas": [
    "When the bishop pins the f3-knight to the queen, h3 asks it to decide; if it keeps the pin with ...Bh5, Nxe5 breaks it, and grabbing the queen allows Bxf7+ and a knight mate on d5."
@@ -17200,7 +17274,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 0,
   "evalCp": 925,
   "ideas": [
    "Taking the e5-knight opens the a4-e8 diagonal; the pawn capture on b7 is a discovered check, and after the block and trade on d7 the pawn promotes on a8."
@@ -17276,7 +17350,7 @@
   "played": 0,
   "score": null,
   "masters": 8758,
-  "amateur": null,
+  "amateur": 149444,
   "evalCp": 17,
   "ideas": [
    "The Berlin endgame: White castles and lets e4 go, wins the pawn back, and after the queen trade Black has the bishop pair but a king on d8 and doubled c-pawns; Levy shows it as the main line he does not recommend for club players."
@@ -17313,7 +17387,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 195684,
   "evalCp": 28,
   "ideas": [
    "Against the Italian bishop, hit back with ...f5; if White takes, ...e4 leaves the f3-knight no safe square except home, and Black develops with ...Nf6, ...d5 and the bishop, a big center for a pawn."
@@ -17350,7 +17424,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 124869,
   "evalCp": 137,
   "ideas": [
    "Meet the pin Qe2 by pinning back with ...Qe7; once the knight retreats, ...Nf6 with ...d5 or ...Nd4 (hitting the queen and eyeing c2) is coming."
@@ -17424,7 +17498,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 1464,
   "evalCp": -70,
   "ideas": [
    "Against the calm d3, develop the knight; if the knight jumps to g5 toward f7, ...d5 and then ...b5 deflect the c4-bishop, like the Ulvestad in the Two Knights."
@@ -17461,7 +17535,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 15499,
   "evalCp": -113,
   "ideas": [
    "The engine's d4 is met by ...fxe4 hitting the knight; after Nxe5, ...d5 hits the bishop, and when it pins from b5, ...Qd6 defends the c6-knight and keeps Black's big center."
@@ -17498,7 +17572,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 7522,
   "evalCp": 210,
   "ideas": [
    "The scary queen check is met by ...g6; the knight sacrifice on g6 is answered by ...Nf6 hitting the queen, and ...Nxd4 leaves White's pieces hanging with c2 under fire."
@@ -17535,7 +17609,7 @@
   "played": 0,
   "score": null,
   "masters": 0,
-  "amateur": null,
+  "amateur": 0,
   "evalCp": 10000,
   "ideas": [
    "With the white king on e3, kicking the e4-knight with d3 is a blunder: the queen checks from f4 and mates on f2, guarded by the knight."
@@ -22945,6 +23019,35 @@
   "evalCp": -21,
   "ideas": [],
   "endFen": "rnbqkbnr/ppp1pppp/8/3p4/8/P1P5/1P1PPPPP/RNBQKBNR b KQkq - 0 2",
+  "files": [
+   "own-games.json"
+  ]
+ },
+ {
+  "side": "white",
+  "moves": "d4 Nf6 Nf3 g6 g3 Bg7 Bg2 O-O",
+  "names": [
+   "Indian Defense: Przepiorka Variation"
+  ],
+  "openings": [
+   "Queen's Pawn 2.Nf3 vs ...Nf6"
+  ],
+  "kinds": [
+   "spine"
+  ],
+  "statuses": [
+   "new"
+  ],
+  "extends": [],
+  "taught": false,
+  "videos": [],
+  "played": 5,
+  "score": 10,
+  "masters": 9728,
+  "amateur": 1759875,
+  "evalCp": 36,
+  "ideas": [],
+  "endFen": "rnbq1rk1/ppppppbp/5np1/8/3P4/5NP1/PPP1PPBP/RNBQK2R w KQ - 3 5",
   "files": [
    "own-games.json"
   ]

@@ -1493,8 +1493,7 @@
   "amateur": 64006,
   "evalCp": -70,
   "status": "extends",
-  "extendsId": "pro-gothamchess-italian",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-italian"
  },
  {
   "opening": "Nakhmanson Gambit",
@@ -1663,8 +1662,7 @@
   "amateur": 1624,
   "evalCp": 246,
   "status": "extends",
-  "extendsId": "pro-gothamchess-ponziani",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-ponziani"
  },
  {
   "opening": "Ponziani Opening",
@@ -1857,8 +1855,7 @@
   "amateur": 64019,
   "evalCp": 226,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Ruy Lopez: Schliemann (Jaenisch) Gambit",
@@ -1883,12 +1880,11 @@
   "minute": 3,
   "idea": "If the knight retreats, take the e4 pawn with check; Black has the bishop pair, can trade queens or castle long, and White's king is still in the center.",
   "kind": "main",
-  "masters": 0,
+  "masters": 2,
   "amateur": 29079,
   "evalCp": 8,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Ruy Lopez: Schliemann (Jaenisch) Gambit",
@@ -1945,12 +1941,11 @@
   "minute": 7,
   "idea": "Against the quiet d3, take on e4 to open the f-file, develop the knight, and don't grab e4 again while underdeveloped; ...d6, a bishop out and short castling put the rook on the open file.",
   "kind": "main",
-  "masters": 0,
+  "masters": 400,
   "amateur": 37642,
   "evalCp": -62,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Ruy Lopez: Schliemann (Jaenisch) Gambit",
@@ -2148,8 +2143,7 @@
   "amateur": 351487,
   "evalCp": -100,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Vienna Game",
@@ -2249,8 +2243,7 @@
   "amateur": 141940,
   "evalCp": -245,
   "status": "extends",
-  "extendsId": "pro-gothamchess-italian",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-italian"
  },
  {
   "opening": "Ponziani Opening",
@@ -2278,8 +2271,7 @@
   "amateur": 134175,
   "evalCp": 96,
   "status": "extends",
-  "extendsId": "pro-gothamchess-ponziani",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-ponziani"
  },
  {
   "opening": "Ponziani Opening",
@@ -2342,12 +2334,11 @@
   "minute": 6,
   "idea": "Don't recapture on d4; push e5 and, after ...Nd5, hit the knight with the bishop in gambit style, aiming for a tight d4-e5 pawn wedge behind which the pieces gather.",
   "kind": "reply",
-  "masters": 0,
+  "masters": 15,
   "amateur": 31238,
   "evalCp": -7,
   "status": "extends",
-  "extendsId": "pro-gothamchess-ponziani",
-  "mastersSource": "local-masters-db"
+  "extendsId": "pro-gothamchess-ponziani"
  },
  {
   "opening": "Ponziani Opening",
@@ -2458,8 +2449,7 @@
   "amateur": 117570,
   "evalCp": 56,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Scotch Game",
@@ -2672,12 +2662,11 @@
   "minute": 14,
   "idea": "Against the early queen, don't trade on c6 into a mating attack; hold d4 with Be3, castle long and later kick the queen with Nf5 and g3.",
   "kind": "reply",
-  "masters": 1,
+  "masters": 2,
   "amateur": 41286,
   "evalCp": 155,
   "status": "new",
-  "extendsId": null,
-  "mastersSource": "local-masters-db"
+  "extendsId": null
  },
  {
   "opening": "Ruy Lopez",

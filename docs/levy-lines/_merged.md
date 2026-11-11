@@ -1,6 +1,6 @@
-# Levy's lines, merged — 937 read, 0 illegal dropped, 906 distinct, 846 after folding prefixes
+# Levy's lines, merged — 938 read, 0 illegal dropped, 907 distinct, 849 after folding prefixes
 
-taught in a video: 463 · played only: 383 · already in his section (duplicate): 53
+taught in a video: 465 · played only: 384 · already in his section (duplicate): 53
 
 ## white e4 e5 Nf3 Nc6 — 39 lines (35 taught)
 - Fried Liver: 6.Nxf7 Kxf7 7.Qf3+ Ke6 8.Nc3 Nb4 9.O-O c6 10.d4 [main, extends, 1 video, 106cp]: e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4 O-O c6 d4
@@ -254,6 +254,32 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 - Queen's Gambit Accepted: Old Variation — 3.e3 [branch, new, 5 games, -113cp]: d4 d5 c4 dxc4 e3 e5 Bxc4 Nc6 Nf3 e4 Nfd2 Qg5 Nxe4 Qxg2 Ng3 Bb4+
 - Queen's Gambit Accepted: Old Variation — 4...exd4 [branch, new, 5 games, -19cp]: d4 d5 c4 dxc4 e3 e5 Bxc4 exd4 exd4 Bd6 Nf3 Nf6 O-O O-O h3 h6
 
+## white d4 d5 Bf4 Nf6 — 11 lines (8 taught)
+- Pyramid setup: knight jumps to e5 when ...e5 is coming [main, extends, 1 video, 10cp]: d4 d5 Bf4 Nf6 e3 e6 Nf3 Bd6 Bg3 O-O Bd3 Nc6 c3 Qe7 Ne5
+- Taking on c5: the Bxb8 and Bb5+ trick against ...b6 [trap, extends, 1 video, 340cp]: d4 d5 Bf4 Nf6 e3 c5 dxc5 e6 b4 b6 Bxb8 Rxb8 Bb5+ Bd7 c6
+- Vs ...Qb6 trade offer: if ...c4, slide back and break with e4 [main, extends, 1 video, 39cp]: d4 d5 Bf4 Nf6 e3 c5 c3 Nc6 Nd2 Qb6 Qb3 c4 Qc2 g6 e4
+- Why Nd2 comes before Nf3: the ...Bf5 shot on a trapped rook [reply, extends, 1 video, -22cp]: d4 d5 Bf4 Nf6 e3 c5 c3 Nc6 Nf3 Qb6 Qb3 c4 Qc2 Bf5
+- Vs ...Bd6: let Black double the f-pawns [main, extends, 1 video, 23cp]: d4 d5 Bf4 Nf6 e3 e6 Nf3 Bd6 Nbd2 Bxf4 exf4
+- Main line vs ...c5: rerouting the knight to e5 when ...Re8 prepares ...e5 [main, extends, 1 video, 96cp]: d4 d5 Bf4 Nf6 e3 e6 Nf3 c5 c3 Nc6 Nbd2 Bd6 Bg3 O-O Bd3 b6 Qe2 Re8 Ne5 cxd4 exd4
+- Jobava London: Nb5 against c7 before ...c5 [main, extends, 1 video, 7cp]: d4 d5 Bf4 Nf6 Nc3 e6 Nb5
+- Pyramid setup in 30 seconds: c3 against ...c5, knights to f3 and d2 [main, extends, 1 video, 0cp]: d4 d5 Bf4 Nf6 e3 e6 Nf3 c5 c3 Nc6 Nbd2 Bd6 Bd3 O-O O-O
+- Rapport-Jobava System — 3.Nc3 [branch, extends, 6 games, -11cp]: d4 d5 Bf4 Nf6 Nc3 e6 Nb5 Na6 a3
+- Queen's Pawn Game: Accelerated London System [spine, extends, 5 games, 10cp]: d4 d5 Bf4 Nf6 e3 c5 Nf3 Nc6 Nbd2 cxd4 exd4
+- Queen's Pawn Game: Accelerated London System — 3...e6 [branch, extends, 5 games, 10cp]: d4 d5 Bf4 Nf6 e3 e6 Nf3 Bd6 Bg3 O-O Nbd2
+
+## white d4 Nf6 Bg5 Ne4 — 11 lines (5 taught)
+- Raptor: ...Ne4 h4, and ...d5 runs into g6 [trap, extends, 1 video, 491cp]: d4 Nf6 Bg5 Ne4 h4 Nxg5 hxg5 d5 g6 hxg6 Rxh8
+- Raptor: after g6 fxg6, aim at the weakened g6 pawn [reply, extends, 1 video, -30cp]: d4 Nf6 Bg5 Ne4 h4 Nxg5 hxg5 d5 g6 fxg6 e3 Nc6 Bd3
+- Vs ...Ne4: Bf4, then take the knight and target the e4 pawn [main, extends, 1 video, 18cp]: d4 Nf6 Bg5 Ne4 Bf4 d5 e3 c5 Bd3 cxd4 Bxe4 dxe4
+- Vs ...Ne4 and ...c5: d5 and the Bc1 retreat [reply, extends, 1 video, 31cp]: d4 Nf6 Bg5 Ne4 Bf4 c5 d5 Qb6 Bc1
+- Vs ...Ne4 and ...c5: f3, and ...Qa5+ is blocked with c3 [main, extends, 1 video, 52cp]: d4 Nf6 Bg5 Ne4 Bf4 c5 f3 Qa5+ c3 Nf6 d5
+- Trompowsky Attack: Raptor Variation — 3...Nxg5 [branch, extends, 7 games, -34cp]: d4 Nf6 Bg5 Ne4 h4 Nxg5 hxg5 g6 e3 Bg7 c3
+- Trompowsky Attack: Raptor Variation — 4...h6 [branch, extends, 7 games, 38cp]: d4 Nf6 Bg5 Ne4 h4 d5 e3 h6 Bf4 Bf5 Bd3 e6 g4 Bh7 f3 Nf6
+- Trompowsky Attack: Raptor Variation — 5...Nxd2 [branch, extends, 6 games, 104cp]: d4 Nf6 Bg5 Ne4 h4 c5 d5 Qb6 Nd2 Nxd2 Bxd2 Qxb2 e4 d6
+- Trompowsky Attack: Raptor Variation — 2...Ne4 [branch, duplicate, 5 games, 197cp]: d4 Nf6 Bg5 Ne4 h4 c5 d5 Qb6 Nd2 Nxg5 hxg5 Qxb2 g6 fxg6 Ngf3 d6
+- Trompowsky Attack: Raptor Variation — 3...d5 [branch, extends, 5 games, 73cp]: d4 Nf6 Bg5 Ne4 h4 d5 e3 c5 Bd3 cxd4 exd4 Nc6 Bxe4 dxe4 d5 Ne5
+- Trompowsky Attack: Raptor Variation — 3...h6 [branch, extends, 5 games, 0cp]: d4 Nf6 Bg5 Ne4 h4 h6 Bf4 d5 e3 Bf5 Bd3 e6 g4 Bh7 f3 Nf6 Bxh7
+
 ## white e4 e5 Nc3 Nc6 — 11 lines (7 taught)
 - Vienna 2...Nc6 3.Bc4 Bc5 copycat: 4.Qg4 Qf6? 5.Nd5 queen trap [trap, extends, 1 video, 329cp]: e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1 g6 Nh3 Qd4 d3
 - Vienna copycat 4.Qg4 g6 5.Qf3 [reply, extends, 1 video, 49cp]: e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 g6 Qf3 Nf6 Nge2
@@ -279,21 +305,9 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 - Modern Defense: Beefeater Variation [spine, new, 5 games, -96cp]: d4 g6 c4 Bg7 Nc3 c5 d5 Bxc3+ bxc3 f5 h4 Nf6 h5 Rg8 hxg6 hxg6
 - Queen's Pawn Game: Modern Defense — 3.e4 [branch, new, 5 games, -71cp]: d4 g6 c4 Bg7 e4 Nc6 Nf3 e5 Bg5 f6 Be3
 
-## white d4 d5 Bf4 Nf6 — 10 lines (7 taught)
-- Pyramid setup: knight jumps to e5 when ...e5 is coming [main, extends, 1 video, 10cp]: d4 d5 Bf4 Nf6 e3 e6 Nf3 Bd6 Bg3 O-O Bd3 Nc6 c3 Qe7 Ne5
-- Taking on c5: the Bxb8 and Bb5+ trick against ...b6 [trap, extends, 1 video, 340cp]: d4 d5 Bf4 Nf6 e3 c5 dxc5 e6 b4 b6 Bxb8 Rxb8 Bb5+ Bd7 c6
-- Vs ...Qb6 trade offer: if ...c4, slide back and break with e4 [main, extends, 1 video, 39cp]: d4 d5 Bf4 Nf6 e3 c5 c3 Nc6 Nd2 Qb6 Qb3 c4 Qc2 g6 e4
-- Why Nd2 comes before Nf3: the ...Bf5 shot on a trapped rook [reply, extends, 1 video, -22cp]: d4 d5 Bf4 Nf6 e3 c5 c3 Nc6 Nf3 Qb6 Qb3 c4 Qc2 Bf5
-- Vs ...Bd6: let Black double the f-pawns [main, extends, 1 video, 23cp]: d4 d5 Bf4 Nf6 e3 e6 Nf3 Bd6 Nbd2 Bxf4 exf4
-- Main line vs ...c5: rerouting the knight to e5 when ...Re8 prepares ...e5 [main, extends, 1 video, 96cp]: d4 d5 Bf4 Nf6 e3 e6 Nf3 c5 c3 Nc6 Nbd2 Bd6 Bg3 O-O Bd3 b6 Qe2 Re8 Ne5 cxd4 exd4
-- Pyramid setup in 30 seconds: c3 against ...c5, knights to f3 and d2 [main, extends, 1 video, -486cp]: d4 d5 Bf4 Nf6 e3 e6 Nf3 c5 c3 Nc6 Nbd2 Bd6 Bd3 Bxf4 O-O
-- Rapport-Jobava System — 3.Nc3 [branch, extends, 6 games, -11cp]: d4 d5 Bf4 Nf6 Nc3 e6 Nb5 Na6 a3
-- Queen's Pawn Game: Accelerated London System [spine, extends, 5 games, 10cp]: d4 d5 Bf4 Nf6 e3 c5 Nf3 Nc6 Nbd2 cxd4 exd4
-- Queen's Pawn Game: Accelerated London System — 3...e6 [branch, extends, 5 games, 10cp]: d4 d5 Bf4 Nf6 e3 e6 Nf3 Bd6 Bg3 O-O Nbd2
-
 ## white d4 Nf6 Bf4 c5 — 10 lines (10 taught)
 - Vs early ...c5 with the knight on f6: push d5, then the Vaganian gambit [main, extends, 1 video, 60cp]: d4 Nf6 Bf4 c5 d5 Qb6 Nc3 Qxb2 Bd2
-- Vs early ...c5 and ...d6: big center and long castle [main, extends, 1 video, -414cp]: d4 Nf6 Bf4 c5 d5 d6 Nc3 e5 e4 exf4 Qd2
+- Vs early ...c5 and ...d6: big center and long castle [main, extends, 1 video, 50cp]: d4 Nf6 Bf4 c5 d5 d6 Nc3 g6 e4 Bg7 Qd2
 - Vs ...c5 and ...Qb6: Nc3 and Nb5, where ...Na6 runs into a3 [trap, extends, 1 video, 206cp]: d4 Nf6 Bf4 c5 e3 Qb6 Nc3 Qxb2 Nb5 Na6 a3
 - Vs ...c5 and ...Qb6: the main line after ...Nd5 [main, extends, 1 video, 53cp]: d4 Nf6 Bf4 c5 e3 Qb6 Nc3 Qxb2 Nb5 Nd5 a3 a6 Rb1 Qa2 Qc1
 - Vs ...Qb6 and ...a6: the g4 pawn sacrifice [reply, extends, 1 video, 45cp]: d4 Nf6 Bf4 c5 e3 Qb6 Nc3 a6 g4
@@ -302,18 +316,6 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 - Vs ...c5: d5 then Bd2 and a queenside clamp [main, extends, 1 video, 87cp]: d4 Nf6 Bf4 c5 d5 d6 Nc3 e5 Bd2 Be7 e4
 - Taking on c5: ...Qa5+ is met by offering queens on d2 [reply, extends, 1 video, 45cp]: d4 Nf6 Bf4 c5 dxc5 Qa5+ Qd2 Qxc5 Nc3 Nc6 e4
 - Taking on c5: vs ...Na6 the surprising f3 [main, extends, 1 video, 15cp]: d4 Nf6 Bf4 c5 dxc5 Na6 f3 Nxc5 e4
-
-## white d4 Nf6 Bg5 Ne4 — 10 lines (4 taught)
-- Raptor: after g6 fxg6, aim at the weakened g6 pawn [reply, extends, 1 video, -48cp]: d4 Nf6 Bg5 Ne4 h4 Nxg5 hxg5 d5 g6 fxg6 e3 Bf5 Bd3
-- Vs ...Ne4: Bf4, then take the knight and target the e4 pawn [main, extends, 1 video, 18cp]: d4 Nf6 Bg5 Ne4 Bf4 d5 e3 c5 Bd3 cxd4 Bxe4 dxe4
-- Vs ...Ne4 and ...c5: d5 and the Bc1 retreat [reply, extends, 1 video, 31cp]: d4 Nf6 Bg5 Ne4 Bf4 c5 d5 Qb6 Bc1
-- Vs ...Ne4 and ...c5: f3, and ...Qa5+ is blocked with c3 [main, extends, 1 video, 52cp]: d4 Nf6 Bg5 Ne4 Bf4 c5 f3 Qa5+ c3 Nf6 d5
-- Trompowsky Attack: Raptor Variation — 3...Nxg5 [branch, extends, 7 games, -34cp]: d4 Nf6 Bg5 Ne4 h4 Nxg5 hxg5 g6 e3 Bg7 c3
-- Trompowsky Attack: Raptor Variation — 4...h6 [branch, extends, 7 games, 38cp]: d4 Nf6 Bg5 Ne4 h4 d5 e3 h6 Bf4 Bf5 Bd3 e6 g4 Bh7 f3 Nf6
-- Trompowsky Attack: Raptor Variation — 5...Nxd2 [branch, extends, 6 games, 104cp]: d4 Nf6 Bg5 Ne4 h4 c5 d5 Qb6 Nd2 Nxd2 Bxd2 Qxb2 e4 d6
-- Trompowsky Attack: Raptor Variation — 2...Ne4 [branch, duplicate, 5 games, 197cp]: d4 Nf6 Bg5 Ne4 h4 c5 d5 Qb6 Nd2 Nxg5 hxg5 Qxb2 g6 fxg6 Ngf3 d6
-- Trompowsky Attack: Raptor Variation — 3...d5 [branch, extends, 5 games, 73cp]: d4 Nf6 Bg5 Ne4 h4 d5 e3 c5 Bd3 cxd4 exd4 Nc6 Bxe4 dxe4 d5 Ne5
-- Trompowsky Attack: Raptor Variation — 3...h6 [branch, extends, 5 games, 0cp]: d4 Nf6 Bg5 Ne4 h4 h6 Bf4 d5 e3 Bf5 Bd3 e6 g4 Bh7 f3 Nf6 Bxh7
 
 ## white d4 Nf6 Bg5 d5 — 9 lines (3 taught)
 - Vs ...d5: take on f6 and build on dark squares with g3 [main, extends, 1 video, -31cp]: d4 Nf6 Bg5 d5 Bxf6 exf6 e3 Bd6 g3 O-O Bg2
@@ -382,6 +384,15 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 - Englund: f-pawn gambit 4...f6 [reply, new, 1 video, -171cp]: d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 f6 exf6 Qxf6
 - Englund Gambit: Main Line [spine, new, 13 games, -168cp]: d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Nc3 Bb4 Rb1 Qa3 Rb3 Qa5
 
+## white d4 Nf6 Bg5 c5 — 7 lines (3 taught)
+- Vs ...c5: wedge with d5 and build a c4-f3-e4 wall [main, extends, 1 video, 35cp]: d4 Nf6 Bg5 c5 d5 d6 c4 g6 Nc3 Bg7 e4
+- Vs ...c5 and ...Qb6: the Vaganian gambit with Nc3 and Bd2 [main, extends, 1 video, 43cp]: d4 Nf6 Bg5 c5 d5 Qb6 Nc3 Qxb2 Bd2 Qb6 e4 d6 f4
+- Vs ...c5 and ...Qb6: the quiet Bc1 retreat [reply, extends, 1 video, 26cp]: d4 Nf6 Bg5 c5 d5 Qb6 Bc1 g6 f3 Bg7 e4
+- Trompowsky Attack — 3.Nc3 [branch, extends, 8 games, 55cp]: d4 Nf6 Bg5 c5 Nc3 cxd4 Qxd4 Nc6 Qh4 Qa5 O-O-O d6 e4 Be6 Kb1 O-O-O
+- Trompowsky Attack — 3...Ne4 [branch, duplicate, 7 games, 54cp]: d4 Nf6 Bg5 c5 d5 Ne4 h4 Qb6 Nd2 Nxg5 hxg5 Qxb2 g6 fxg6 Ngf3
+- Trompowsky Attack: Poisoned Pawn Variation — 2...c5 [branch, extends, 5 games, 28cp]: d4 Nf6 Bg5 c5 d5 Qb6 Nc3 Qxb2 Bd2 Qb6 e4 d6 f4 g6 Rb1
+- Trompowsky Attack — 3...d6 [branch, extends, 5 games, 91cp]: d4 Nf6 Bg5 c5 d5 d6 Nc3 g6 Qd2 Bg7 Bh6 O-O
+
 ## white d4 Nf6 Bg5 e6 — 7 lines (1 taught)
 - Vs ...e6: the Big Center with e4 [main, extends, 1 video, -14cp]: d4 Nf6 Bg5 e6 e4 h6 Bxf6 Qxf6 Nc3 c5 Nf3
 - Trompowsky Attack: Classical Defense — 3...c5 [branch, extends, 9 games, 39cp]: d4 Nf6 Bg5 e6 Nd2 c5 e4 cxd4 e5 h6 Bh4 g5 Bg3 Nd5 h4 gxh4 Rxh4 Nc6 Ngf3
@@ -394,7 +405,7 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 ## white d4 d5 e4 dxe4 — 7 lines (7 taught)
 - Main line: f3, recapture with the knight, offer the bishop trade [main, new, 1 video, -55cp]: d4 d5 e4 dxe4 Nc3 Nf6 f3 exf3 Nxf3 Bf5 Bd3 Bxd3 Qxd3
 - If Black ignores f3 with ...e6, take back on e4 [reply, new, 1 video, 48cp]: d4 d5 e4 dxe4 Nc3 Nf6 f3 e6 fxe4
-- ...Bg4: h3, g4 and Ne5, then h4-h5 hunts the bishop [trap, new, 1 video, -67cp]: d4 d5 e4 dxe4 Nc3 Nf6 f3 exf3 Nxf3 Bg4 h3 Bh5 g4 Bg6 Ne5 e6 h4
+- ...Bg4: h3, g4 and Ne5, then h4-h5 hunts the bishop [reply, new, 1 video, -67cp]: d4 d5 e4 dxe4 Nc3 Nf6 f3 exf3 Nxf3 Bg4 h3 Bh5 g4 Bg6 Ne5 e6 h4
 - Black's best: ...c5, answered by closing the center with d5 [reply, new, 1 video, -43cp]: d4 d5 e4 dxe4 Nc3 Nf6 f3 c5 d5
 - Vs ...Bf5: Bg5 to undermine the f6 knight [reply, new, 1 video, -58cp]: d4 d5 e4 dxe4 Nc3 Nf6 f3 Bf5 Bg5
 - Bg5 before f3 [reply, new, 1 video, -47cp]: d4 d5 e4 dxe4 Nc3 Nf6 Bg5
@@ -417,22 +428,6 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 - Anti-London spiky setup: ...g5 and ...Nh6-f5 [reply, new, 1 video, -10cp]: d4 d5 Bf4 c5 e3 cxd4 exd4 Nc6 c3 f6 Nf3 g5 Bg3 Nh6 Bd3 Nf5
 - Queen's Pawn Game: Accelerated London System, Steinitz Countergambit — 2...c5 [branch, new, 5 games, 0cp]: d4 d5 Bf4 c5 e3 cxd4 exd4 Nc6 c3 f6 Nf3 g5 Bg3 h5 h3
 
-## white d4 Nf6 Bg5 c5 — 6 lines (2 taught)
-- Vs ...c5: wedge with d5 and build a c4-f3-e4 wall [main, extends, 1 video, -348cp]: d4 Nf6 Bg5 c5 d5 Ne4 f3 Nxg5 e4
-- Vs ...c5 and ...Qb6: the Vaganian gambit with Nc3 and Bd2 [main, extends, 1 video, 43cp]: d4 Nf6 Bg5 c5 d5 Qb6 Nc3 Qxb2 Bd2 Qb6 e4 d6 f4
-- Trompowsky Attack — 3.Nc3 [branch, extends, 8 games, 55cp]: d4 Nf6 Bg5 c5 Nc3 cxd4 Qxd4 Nc6 Qh4 Qa5 O-O-O d6 e4 Be6 Kb1 O-O-O
-- Trompowsky Attack — 3...Ne4 [branch, duplicate, 7 games, 54cp]: d4 Nf6 Bg5 c5 d5 Ne4 h4 Qb6 Nd2 Nxg5 hxg5 Qxb2 g6 fxg6 Ngf3
-- Trompowsky Attack: Poisoned Pawn Variation — 2...c5 [branch, extends, 5 games, 28cp]: d4 Nf6 Bg5 c5 d5 Qb6 Nc3 Qxb2 Bd2 Qb6 e4 d6 f4 g6 Rb1
-- Trompowsky Attack — 3...d6 [branch, extends, 5 games, 91cp]: d4 Nf6 Bg5 c5 d5 d6 Nc3 g6 Qd2 Bg7 Bh6 O-O
-
-## white d4 d5 c4 c6 — 6 lines (4 taught)
-- Slav with an early ...Bf5: Qb3 hits b7 [reply, new, 1 video, 81cp]: d4 d5 c4 c6 Nf3 Nf6 Nc3 Bf5 cxd5 cxd5 Qb3
-- Meran sideline with Be2 [reply, new, 1 video, 17cp]: d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Be2
-- Quiet setup with b3, Bb2 and Qc2 [reply, new, 1 video, -63cp]: d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 b3 Bb4 Bb2 Ne4 Qc2
-- Queen's Gambit Declined in eight moves: develop the bishop before e3 [main, new, 1 video, -495cp]: d4 d5 c4 c6 Nc3 Nf6 Nf3 e6 Bf4 dxc4 e3 b5 Bd3 cxd3 O-O
-- Semi-Slav Defense: Botvinnik Variation — 2...c6 [branch, new, 5 games, -36cp]: d4 d5 c4 c6 Nc3 Nf6 Nf3 e6 Bg5 dxc4 e4 b5 e5 h6 Bh4 g5 Bg3 Nd5 Nd2
-- Semi-Slav Defense — 3.Nf3 [branch, new, 5 games, 11cp]: d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 g3
-
 ## white e4 c5 Nc3 Nc6 — 6 lines (5 taught)
 - Grand Prix vs ...Nc6/...g6: Bb5 and if ...Nd4, castle [reply/main, new, 2 video, -8cp]: e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bb5 Nd4 O-O Nxb5 Nxb5
 - Grand Prix trap: ...Bg4? Bxf7+ and Ng5+ [trap, new, 2 video, 180cp]: e4 c5 Nc3 Nc6 f4 d6 Nf3 g6 Bc4 Bg4 Bxf7+ Kxf7 Ng5+
@@ -448,6 +443,13 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 - Two Knights + Qe2 trap vs ...Nf6: 6...Nbd7?? 7.Nd6# [trap, new, 1 video, 10000cp]: e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 Qe2 Nbd7 Nd6#
 - Caro-Kann Defense: Two Knights Attack — 3.Nf3 [branch, new, 9 games, 34cp]: e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 Qe2 Nxe4 Qxe4
 - Caro-Kann Defense: Goldman Variation [spine, new, 5 games, 36cp]: e4 c6 Nc3 d5 Qf3 dxe4 Nxe4 Nf6 Bc4 Nbd7 d4 e6 Ne2
+
+## white d4 d5 c4 c6 — 5 lines (3 taught)
+- Slav with an early ...Bf5: Qb3 hits b7 [reply, new, 1 video, 81cp]: d4 d5 c4 c6 Nf3 Nf6 Nc3 Bf5 cxd5 cxd5 Qb3
+- Meran sideline with Be2 [reply, new, 1 video, 17cp]: d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Be2
+- Quiet setup with b3, Bb2 and Qc2 [reply, new, 1 video, -63cp]: d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 b3 Bb4 Bb2 Ne4 Qc2
+- Semi-Slav Defense: Botvinnik Variation — 2...c6 [branch, new, 5 games, -36cp]: d4 d5 c4 c6 Nc3 Nf6 Nf3 e6 Bg5 dxc4 e4 b5 e5 h6 Bh4 g5 Bg3 Nd5 Nd2
+- Semi-Slav Defense — 3.Nf3 [branch, new, 5 games, 11cp]: d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 g3
 
 ## white d4 Nf6 c4 e6 — 5 lines (3 taught)
 - Open Catalan: Qc2 and a4 against ...a6 [main, new, 1 video, 29cp]: d4 Nf6 c4 e6 Nf3 d5 g3 Be7 Bg2 O-O O-O dxc4 Qc2 a6 a4
@@ -528,6 +530,12 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 - Vs the King's Indian with ...d5: Nc3, Qd2 and Bh6 [main, extends, 1 video, 14cp]: d4 Nf6 Bf4 g6 Nc3 d5 Qd2 Bg7 Bh6
 - Indian Defense: Accelerated London System [spine, extends, 6 games, 82cp]: d4 Nf6 Bf4 g6 Nc3 Bg7 e4 d6 Qd2 O-O
 
+## white d4 d5 c4 e6 — 4 lines (3 taught)
+- QGD with Bg5 and Qc2: the h4 'fishing pole' bait [trap, new, 1 video, 252cp]: d4 d5 c4 e6 Nc3 Nf6 Nf3 Be7 Bg5 O-O Qc2 h6 h4 hxg5 hxg5 Ne4 Nxe4 dxe4 Qxe4
+- QGD with Bg5: the solid Bd3, castle and Rc1 plan [main, new, 1 video, -5cp]: d4 d5 c4 e6 Nc3 Nf6 Nf3 Be7 Bg5 O-O e3 h6 Bh4 b6 Bd3 Bb7 O-O Nbd7 Rc1
+- Queen's Gambit Declined in eight moves: develop the bishop before e3 [main, new, 1 video, 4cp]: d4 d5 c4 e6 Nc3 Nf6 Nf3 Be7 Bf4 O-O e3 Nbd7 Bd3 c5 O-O
+- Queen's Gambit Declined: Three Knights Variation — 3.Nf3 [branch, new, 5 games, 21cp]: d4 d5 c4 e6 Nf3 Nf6 Nc3 Be7 Bg5
+
 ## white d4 Nf6 Nc3 d5 — 4 lines (3 taught)
 - Reaching the gambit via 1...Nf6 2.Nc3 [main, new, 1 video, -52cp]: d4 Nf6 Nc3 d5 e4 dxe4 f3
 - 1...Nf6 2.Nc3 d5 3.e4 ...Nxe4: trade and aim at f7 [reply, new, 1 video, -73cp]: d4 Nf6 Nc3 d5 e4 Nxe4 Nxe4 dxe4 Bc4
@@ -569,23 +577,28 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 - London: ...cxd4 and ...Bf5 [reply, new, 1 video, -25cp]: d4 Nf6 Nf3 d5 Bf4 c5 e3 cxd4 exd4 Bf5
 - Queen's Gambit Accepted: Janowski-Larsen Variation — 2.Nf3 [branch, new, 11 games, -57cp]: d4 Nf6 Nf3 d5 c4 dxc4 e3 Bg4 Bxc4 e6
 
-## white d4 d5 Bf4 c5 — 3 lines (2 taught)
-- Early ...Qb6: the knight to c3 makes the b2 pawn poison [trap, extends, 1 video, 101cp]: d4 d5 Bf4 c5 e3 Qb6 Nc3 Qxb2 Nb5
-- Early Nc3 and Nb5 aiming at c7 [trap, extends, 1 video, -345cp]: d4 d5 Bf4 c5 Nc3 Nc6 Nb5
-- Queen's Pawn Game: Accelerated London System, Steinitz Countergambit — 2...c5 [branch, extends, 9 games, 16cp]: d4 d5 Bf4 c5 e3 Nc6
-
 ## white d4 d5 e3 Nf6 — 3 lines (3 taught)
 - The perfect Stonewall: Bd3, Nd2, f4 and a knight on e5 [main, new, 1 video, 53cp]: d4 d5 e3 Nf6 Bd3 e6 Nd2 Be7 f4 O-O Ngf3 Nc6 c3 a6 O-O b5 Ne5
 - Vs ...Nc6: play f4 at once to stop ...e5 [main, new, 1 video, -19cp]: d4 d5 e3 Nf6 Bd3 Nc6 f4
 - Vs ...c5: support with c3 and recapture with the e-pawn [main, new, 1 video, -29cp]: d4 d5 e3 Nf6 Bd3 e6 Nd2 Be7 f4 c5 c3
+
+## white d4 d5 Nf3 Nf6 — 3 lines (1 taught)
+- Delayed Catalan: Nf3, g3 and castle before c4 [main, new, 1 video, 25cp]: d4 d5 Nf3 Nf6 g3 e6 Bg2 Bd6 O-O O-O c4 dxc4 Qc2
+- Queen's Pawn Game: Torre Attack, Gossip Variation — 3.Bg5 [branch, new, 8 games, -38cp]: d4 d5 Nf3 Nf6 Bg5 Ne4 h4 c5
+- Queen's Pawn Game: Symmetrical Variation, Pseudo-Catalan [spine, new, 5 games, 0cp]: d4 d5 Nf3 Nf6 g3 Bf5 Bg2 e6 c4
 
 ## white d4 e5 dxe5 Nc6 — 3 lines (2 taught)
 - Vs the Englund Gambit: keep the pawn, Nc3 and e4 [reply, new, 1 video, 48cp]: d4 e5 dxe5 Nc6 Nc3 Nxe5 e4
 - White vs the Englund: Nc3 refutes the ...Qe7 setup [reply, new, 1 video, 122cp]: d4 e5 dxe5 Nc6 Nf3 Qe7 Nc3
 - Englund Gambit: Main Line [spine, new, 5 games, 14cp]: d4 e5 dxe5 Nc6 Nf3 Qe7 Nc3 Nxe5 Nxe5 Qxe5 e4 Nf6 Bd3 Bb4 O-O
 
+## white c4 e5 g3 Nf6 — 3 lines (2 taught)
+- Reverse Sicilian with g3: trade on d5 and develop [main, extends, 1 video, 22cp]: c4 e5 g3 Nf6 Bg2 d5 cxd5 Nxd5 Nc3
+- Reverse Sicilian with Nc3, e3 and Nge2, then a queenside expansion [main, extends, 1 video, 34cp]: c4 e5 g3 Nf6 Bg2 Nc6 Nc3 Bc5 e3 O-O Nge2 d6 a3
+- English Opening: King's English Variation — 2.g3 [branch, extends, 5 games, -7cp]: c4 e5 g3 Nf6 Bg2 c6 d4 exd4 Qxd4 d5 cxd5 cxd5 Nf3 Nc6 Qd1
+
 ## white c4 Nf6 Nc3 g6 — 3 lines (1 taught)
-- Vs a King's Indian setup: Be2, Be3 and a pawn storm before Nf3 [main, extends, 1 video, -67cp]: c4 Nf6 Nc3 g6 e4 d6 d4 Bg7 Be2 O-O Be3 e5 h4
+- Vs a King's Indian setup: Be2, Be3 and a pawn storm before Nf3 [main, extends, 1 video, -60cp]: c4 Nf6 Nc3 g6 e4 d6 d4 Bg7 Be2 O-O Be3 c5 h4
 - English Opening: Anglo-Indian Defense, Queen's Knight Variation — 3...Bg7 [branch, extends, 9 games, 14cp]: c4 Nf6 Nc3 g6 e4 Bg7 e5 Ng8 d4 d6 f4
 - King's Indian Defense: Semi-Averbakh System [spine, duplicate, 5 games, 81cp]: c4 Nf6 Nc3 g6 e4 d6 d4 Bg7 Be2 O-O Be3 e5 d5 a5 g4 Na6
 
@@ -598,11 +611,6 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 - Queen's Gambit Accepted: take the center, and ...b5 meets a4 [trap, new, 1 video, 452cp]: d4 d5 c4 dxc4 e4 b5 a4 a6 axb5 axb5 Rxa8
 - QGA with ...b5 and ...c6: the knight raid on b5 [trap, new, 1 video, 64cp]: d4 d5 c4 dxc4 e4 b5 a4 c6 axb5 cxb5 Nc3 a6 Nxb5
 - Queen's Gambit Accepted: Bogoljubow Defense — 2...dxc4 [branch, new, 5 games, 6cp]: d4 d5 c4 dxc4 Nf3 Nf6 Nc3 a6 e4 b5 e5 Nd5 a4
-
-## white d4 d5 c4 e6 — 3 lines (2 taught)
-- QGD with Bg5 and Qc2: the h4 'fishing pole' bait [trap, extends, 1 video, -9cp]: d4 d5 c4 e6 Nc3 Nf6 Nf3 Be7 Bg5 O-O Qc2 h6 h4
-- QGD with Bg5: the solid Bd3, castle and Rc1 plan [main, extends, 1 video, -627cp]: d4 d5 c4 e6 Nc3 Nf6 Nf3 Be7 Bg5 O-O e3 h6 Bd3 hxg5 O-O g4 Rc1
-- Queen's Gambit Declined: Three Knights Variation — 3.Nf3 [branch, new, 5 games, 21cp]: d4 d5 c4 e6 Nf3 Nf6 Nc3 Be7 Bg5
 
 ## white d4 f5 e4 fxe4 — 3 lines (2 taught)
 - Vs the Dutch: e4, Nc3 and Bg5 [main, new, 1 video, 24cp]: d4 f5 e4 fxe4 Nc3 Nf6 Bg5
@@ -674,9 +682,9 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 - Anti-Catalan: ...b5 when c4 is delayed [reply, new, 1 video, -19cp]: d4 Nf6 Nf3 e6 g3 b5 Bg2 Bb7
 - Indian Defense: Anti-Nimzo-Indian — 2...e6 [branch, duplicate, 7 games, -39cp]: d4 Nf6 Nf3 e6 c4 d5
 
-## white c4 e5 g3 Nf6 — 2 lines (1 taught)
-- Reverse Sicilian with g3: trade on d5 and develop [main, extends, 1 video, 22cp]: c4 e5 g3 Nf6 Bg2 d5 cxd5 Nxd5 Nc3
-- English Opening: King's English Variation — 2.g3 [branch, extends, 5 games, -7cp]: c4 e5 g3 Nf6 Bg2 c6 d4 exd4 Qxd4 d5 cxd5 cxd5 Nf3 Nc6 Qd1
+## white d4 d5 Bf4 c5 — 2 lines (1 taught)
+- Early ...Qb6: the knight to c3 makes the b2 pawn poison [trap, extends, 1 video, 101cp]: d4 d5 Bf4 c5 e3 Qb6 Nc3 Qxb2 Nb5
+- Queen's Pawn Game: Accelerated London System, Steinitz Countergambit — 2...c5 [branch, extends, 9 games, 16cp]: d4 d5 Bf4 c5 e3 Nc6
 
 ## white c4 Nf6 Nc3 e6 — 2 lines (1 taught)
 - Flexible move order: 2.Nc3 and 3.e4 vs ...e6 [main, extends, 1 video, 42cp]: c4 Nf6 Nc3 e6 e4
@@ -695,7 +703,7 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 - Indian Defense: Gibbins-Weidenhagen Gambit Accepted [spine, new, 5 games, -33cp]: d4 Nf6 g4 Nxg4 e4 Nf6 e5 Nd5 c4 Nb6
 
 ## white c4 e5 Nc3 Nc6 — 2 lines (1 taught)
-- Reversed Dragon trap: Nd5, Bg5 and a queen sacrifice mate [trap, extends, 1 video, 100000cp]: c4 e5 Nc3 Nc6 Nf3 g6 d4 exd4 Nd5 Bg7 Bg5 Nge7 Nxd4 Bxd4 Qxd4 Nxd4 Nf6+ Kf8 Bh6#
+- Reversed Dragon trap: Nd5, Bg5 and a queen sacrifice mate [trap, extends, 1 video, 10000cp]: c4 e5 Nc3 Nc6 Nf3 g6 d4 exd4 Nd5 Bg7 Bg5 Nge7 Nxd4 Bxd4 Qxd4 Nxd4 Nf6+ Kf8 Bh6#
 - English Opening: King's English Variation, Four Knights Variation, Quiet Line — 2...Nc6 [branch, extends, 5 games, 42cp]: c4 e5 Nc3 Nc6 Nf3 Nf6 e3 Bb4 Qc2 O-O Nd5 Bc5
 
 ## white Nc3 d5 e4 d4 — 2 lines (1 taught)
@@ -773,10 +781,6 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 ## white d4 d5 Bg5 Nf6 — 2 lines (0 taught)
 - Queen's Pawn Game: Levitsky Attack — 3.Nd2 [branch, new, 9 games, 20cp]: d4 d5 Bg5 Nf6 Nd2 e6 e3 Be7 Bd3
 - Queen's Pawn Game: Levitsky Attack [spine, new, 7 games, -11cp]: d4 d5 Bg5 Nf6 Bxf6 exf6 e3 Bd6 c4 dxc4 Bxc4 O-O
-
-## white d4 d5 Nf3 Nf6 — 2 lines (0 taught)
-- Queen's Pawn Game: Torre Attack, Gossip Variation — 3.Bg5 [branch, new, 8 games, -38cp]: d4 d5 Nf3 Nf6 Bg5 Ne4 h4 c5
-- Queen's Pawn Game: Symmetrical Variation, Pseudo-Catalan [spine, new, 5 games, 0cp]: d4 d5 Nf3 Nf6 g3 Bf5 Bg2 e6 c4
 
 ## black e4 e6 Nf3 d5 — 2 lines (0 taught)
 - French Defense: Exchange Variation — 2.Nf3 [branch, duplicate, 7 games, -42cp]: e4 e6 Nf3 d5 exd5 exd5 d4 Bd6 Bd3 Bg4 O-O Ne7
@@ -863,14 +867,8 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 ## white d4 Nf6 e3 g6 — 1 lines (1 taught)
 - Vs the King's Indian: no Nd2, aim for e4 [main, new, 1 video, -24cp]: d4 Nf6 e3 g6 f4 Bg7 Nf3 O-O Bd3 d6 c3
 
-## white d4 Nf6 Nf3 g6 — 1 lines (1 taught)
-- Catalan move order via Nf3 and a delayed c4 [main, new, 1 video, 44cp]: d4 Nf6 Nf3 g6 g3 Bg7 Bg2 O-O O-O d6 c4
-
 ## white d4 c5 d5 e5 — 1 lines (1 taught)
 - Vs ...c5: push d5 and support it with c4 [main, new, 1 video, 81cp]: d4 c5 d5 e5 c4 d6 Nc3 Be7 e4
-
-## white c4 e5 g3 Nc6 — 1 lines (1 taught)
-- Reverse Sicilian with Nc3, e3 and Nge2, then a queenside expansion [main, extends, 1 video, 52cp]: c4 e5 g3 Nc6 Bg2 g6 Nc3 Bc5 e3 Nf6 Nge2 O-O a3
 
 ## white c4 c6 g3 d5 — 1 lines (1 taught)
 - Vs ...c6 and ...d5: regain the pawn with Na3 [main, extends, 1 video, 34cp]: c4 c6 g3 d5 Bg2 dxc4 Na3
@@ -1237,6 +1235,9 @@ taught in a video: 463 · played only: 383 · already in his section (duplicate)
 
 ## white a3 d5 c3 — 1 lines (0 taught)
 - Anderssen's Opening [spine, new, 8 games, -21cp]: a3 d5 c3
+
+## white d4 Nf6 Nf3 g6 — 1 lines (0 taught)
+- Indian Defense: Przepiorka Variation [spine, new, 5 games, 36cp]: d4 Nf6 Nf3 g6 g3 Bg7 Bg2 O-O
 
 ## white d4 c6 Bf4 d5 — 1 lines (0 taught)
 - Queen's Pawn Game [spine, duplicate, 7 games, 43cp]: d4 c6 Bf4 d5 e3 Nf6
