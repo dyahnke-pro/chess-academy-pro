@@ -47,19 +47,28 @@ describe('ASC workflows target the version we actually ship', () => {
     expect(shippedMarketingVersion()).toMatch(/^[0-9]+(\.[0-9]+)*$/);
   });
 
-  it('every hardcoded APP_VERSION matches IOS_MARKETING_VERSION', () => {
+  // Since 2026-10-21 the version has one home: the ASC scripts read it through
+  // scripts/ci/app-version.mjs (PINNED_MARKETING_VERSION), and the workflows
+  // carry none. A workflow that hardcodes one again is the drift this file
+  // exists to stop, and an ASC script that reads APP_VERSION without the
+  // resolver falls back to a stale literal.
+  it('no workflow hardcodes APP_VERSION, or it matches the pinned version', () => {
     const shipped = shippedMarketingVersion();
-    const declared = workflowsDeclaringAppVersion();
-    // Guard the guard: if the workflows stop declaring APP_VERSION this test
-    // must not silently pass on an empty set.
-    expect(declared.length).toBeGreaterThan(0);
-
-    const drifted = declared.filter((d) => d.version !== shipped);
+    const drifted = workflowsDeclaringAppVersion().filter((d) => d.version !== shipped);
     expect(
       drifted,
       `these workflows target a different version than ci_post_clone.sh (${shipped}). ` +
         `A stale value points the ASC scripts at the version already live on the App Store:\n` +
         drifted.map((d) => `  ${d.file}: APP_VERSION ${d.version}`).join('\n'),
     ).toEqual([]);
+  });
+
+  it('every ASC script that reads APP_VERSION goes through the one resolver', () => {
+    const scripts = readdirSync('scripts/ci').filter((f) => /^asc-.*\.mjs$/.test(f));
+    const readers = scripts.filter((f) => readFileSync(join('scripts/ci', f), 'utf8').includes('APP_VERSION'));
+    // Guard the guard: the resolver must have readers, or this checks nothing.
+    expect(readers.length).toBeGreaterThan(0);
+    const bypass = readers.filter((f) => !readFileSync(join('scripts/ci', f), 'utf8').includes('app-version'));
+    expect(bypass, `these ASC scripts read APP_VERSION without scripts/ci/app-version.mjs: ${bypass.join(', ')}`).toEqual([]);
   });
 });
