@@ -6,6 +6,7 @@
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
 import { appVersion } from './app-version.mjs';
 import { pickSubmissionAppInfo } from './app-info-pick.mjs';
+import { readAppPriceRows, currentPrice, isFreePrice } from './app-price-read.mjs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
@@ -56,26 +57,18 @@ async function main() {
   mark(true, 'Subtitle', il?.attributes?.subtitle || '(optional, empty)');
   mark(!!il?.attributes?.privacyPolicyUrl, 'Privacy Policy URL', il?.attributes?.privacyPolicyUrl || 'MISSING');
 
-  // 3. App price (Free?)
-  // A to-one relationship takes no `limit`: Apple answers that query 400, and
-  // the check used to read the refusal as "no schedule" (2026-11-07). A failed
-  // read is reported as a failed read, never as missing data.
-  const sched = await api(`/v1/apps/${app.id}/appPriceSchedule?include=manualPrices,baseTerritory`);
-  if (sched.__error) {
-    mark(false, 'App price', `could not read the price schedule (${sched.__error}): ${String(sched.__body).replace(/\s+/g, ' ').slice(0, 300)}`);
-  } else if (sched.data) {
-    const prices = (sched.included || []).filter((x) => x.type === 'appPrices');
-    let free = false;
-    for (const p of prices) {
-      const ppId = p.relationships?.appPricePoint?.data?.id;
-      if (!ppId) continue;
-      const pp = await api(`/v1/appPricePoints/${ppId}`);
-      const cp = pp.data?.attributes?.customerPrice;
-      if (cp === '0.00' || cp === '0' || Number(cp) === 0) free = true;
-      console.log(`   price point customerPrice=${cp}`);
+  // 3. App price (Free?) — app-price-read.mjs reads each row's price point;
+  // a row it cannot price is reported as unread, never as "not free".
+  {
+    const read = await readAppPriceRows((p) => api(p), app.id);
+    if ('error' in read) {
+      mark(false, 'App price', `could not read the price (${read.error})`);
+    } else {
+      const now = currentPrice(read.rows, new Date().toISOString().slice(0, 10));
+      if ('unknown' in now) mark(false, 'App price', `could not read the price (${now.unknown})`);
+      else mark(isFreePrice(now.customerPrice), 'App price', isFreePrice(now.customerPrice) ? `Free (USA ${now.customerPrice})` : `USA ${now.customerPrice} — NOT free`);
     }
-    mark(free || prices.length === 0, 'App price', free ? 'Free' : (prices.length ? 'NOT free — set to Free' : 'schedule present'));
-  } else { mark(false, 'App price', 'no schedule — set price (Free)'); }
+  }
 
   // 4. Build + encryption declaration
   const build = await api(`/v1/appStoreVersions/${version.id}/build`);

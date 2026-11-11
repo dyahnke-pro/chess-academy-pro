@@ -4,6 +4,7 @@
 // re-reads. Env: ASC_KEY_P8/_ID/_ISSUER_ID, APP_BUNDLE_ID.
 
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
+import { readAppPriceRows, currentPrice, isFreePrice } from './app-price-read.mjs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
@@ -33,44 +34,27 @@ async function api(method, path, body, { soft = true } = {}) {
 
 async function dumpSchedule(app, label) {
   console.log(`\n--- ${label} ---`);
-  const rel = await api('GET', `/v1/apps/${app.id}?include=appPriceSchedule`);
-  console.log('app.relationships.appPriceSchedule:', JSON.stringify(rel.data?.relationships?.appPriceSchedule || null));
-  const sched = await api('GET', `/v1/apps/${app.id}/appPriceSchedule?include=manualPrices,baseTerritory`);
-  if (sched.__error) { console.log(`GET appPriceSchedule → ${sched.__error}: ${sched.__body}`); return null; }
-  console.log('appPriceSchedule.data:', JSON.stringify(sched.data || null));
-  const prices = (sched.included || []).filter((x) => x.type === 'appPrices');
-  for (const p of prices) {
-    const ppId = p.relationships?.appPricePoint?.data?.id;
-    if (!ppId) { console.log('  appPrice with no price point:', p.id); continue; }
-    const pp = await api('GET', `/v1/appPricePoints/${ppId}`);
-    console.log(`  appPrice ${p.id} → customerPrice=${pp.data?.attributes?.customerPrice} start=${p.attributes?.startDate}`);
-  }
-  return sched.data ? prices : null;
+  const read = await readAppPriceRows((p) => api('GET', p), app.id);
+  if ('error' in read) { console.log(`price read failed: ${read.error}`); return read; }
+  for (const r of read.rows) console.log(`  ${r.territory ?? '(all)'} ${r.startDate ?? '…'} → ${r.endDate ?? '…'}: customerPrice=${r.customerPrice}`);
+  return read;
 }
 
 async function main() {
   const app = (await api('GET', `/v1/apps?filter[bundleId]=${encodeURIComponent(BUNDLE_ID)}&limit=1`)).data[0];
   console.log(`app=${app.id}`);
 
-  let prices = await dumpSchedule(app, 'BEFORE');
-
-  const isFree = prices && prices.length === 0
-    ? false
-    : (prices || []).some(() => false); // we resolve free below from price points already printed
-  // Determine free presence by re-reading price points inline:
-  let free = false;
-  if (prices) {
-    for (const p of prices) {
-      const ppId = p.relationships?.appPricePoint?.data?.id;
-      if (!ppId) continue;
-      const pp = await api('GET', `/v1/appPricePoints/${ppId}`);
-      const cp = pp.data?.attributes?.customerPrice;
-      if (cp === '0.00' || cp === '0' || Number(cp) === 0) free = true;
-    }
+  const read = await dumpSchedule(app, 'BEFORE');
+  // Write only on a price that was READ and is not free. An unread price
+  // (the old reader's "no price point") is never a reason to write a schedule.
+  if ('rows' in read && read.rows.length > 0) {
+    const now = currentPrice(read.rows, new Date().toISOString().slice(0, 10));
+    if ('unknown' in now) { console.error(`::error::price unread (${now.unknown}) — nothing written`); process.exit(1); }
+    if (isFreePrice(now.customerPrice)) { console.log(`\n✅ Already Free (USA ${now.customerPrice}) — nothing to repair.`); return; }
+    console.log(`\nUSA price in force: ${now.customerPrice} — setting Free.`);
+  } else if ('error' in read && read.error !== 'the app has no price schedule') {
+    console.error(`::error::${read.error} — nothing written`); process.exit(1);
   }
-  console.log(`\nfree detected = ${free}, schedule present = ${!!prices}`);
-
-  if (free) { console.log('\n✅ Already Free — nothing to repair.'); return; }
 
   // Find the USD 0.00 (free) price point and (re)create the schedule.
   let freeId = null;
