@@ -154,6 +154,12 @@ const ENGINE_EXTENDED_LESSONS = new Set<string>([
   // GothamChess Vienna: the Stanley order (Nc3 Nf6 Bc4) the DB names to ply 5 (DB-empty rule).
   'pro-gothamchess-vienna::Vienna Quiet (Bc4 + d3)',
   'pro-gothamchess-vienna::Vienna with …Nc6 + …Bc5',
+  // GothamChess Trompowsky: the Bg5 lines the DB names only to ply 4–5 (DB-empty rule).
+  "This repertoire's Trompowsky — vs …e6 and the f4 Storm",
+  'pro-gothamchess-trompowsky::Main line vs …e6',
+  'pro-gothamchess-trompowsky::Vaganian Attack (…Ne4)',
+  'pro-gothamchess-trompowsky::…d5 system',
+  'pro-gothamchess-trompowsky::c4 and e4 vs …d6',
 ]);
 
 describe('masterclass G3 — every lesson anchors a real DB opening line', () => {

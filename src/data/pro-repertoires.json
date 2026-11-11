@@ -2003,12 +2003,10 @@
         "Nd2 develops without blocking the c1-h6 diagonal. The c3-d4-e3 pawn pyramid gets built later; piece play comes first.",
         "e3-e4 is the late-middlegame trick. After everyone's developed and Black thinks they're solid, the e4 push opens the position with all White's pieces aimed at the kingside."
       ],
-      "traps": [
-        "If Black plays an early …Ne4 (Vaganian-style attack on the bishop), retreat Bh4 — the knight on e4 has no real support and gets chased away with h4 + Nd2-Nxe4."
-      ],
+      "traps": [],
       "warnings": [
         "Don't trade your Bg5 bishop too early. The whole point of the Trompowsky is keeping that bishop active against the f6-knight — trading it makes the …e6 / …d5 structure pleasant for Black.",
-        "After …Ne4, don't play Bf4 letting Black trade the bishop on e3 — it concedes the bishop pair and Black's better."
+        "After …Ne4 the knight attacks your bishop on g5. Move it (Bf4 or Bh4) or guard it with h4 first — the natural Nd2 drops the bishop to …Nxg5."
       ],
       "variations": [
         {
@@ -2053,7 +2051,7 @@
         },
         {
           "name": "Big Center vs …e6",
-          "pgn": "d4 Nf6 Bg5 e6 e4 h6 Bxf6 Qxf6 Nc3 c5 Nf3 cxd4 e5 Qd8 Qxd4 Nc6 Qe3 a6 Bd3 Qc7 O-O",
+          "pgn": "d4 Nf6 Bg5 e6 e4 h6 Bxf6 Qxf6 Nc3 c5 Nf3 cxd4 e5 Qd8 Qxd4 Nc6 Qe3 Qb6 Qxb6 axb6 Bb5",
           "explanation": "Against …e6, take the whole center with e4: the pinned knight can't take it without losing the queen, and after …h6 you trade on f6 and keep both center pawns. Their queen comes out early on f6, and e5 later gains time on it.",
           "sources": [
             "concept:pos-development",
@@ -2063,7 +2061,7 @@
         },
         {
           "name": "Bf4 vs …Ne4 and …c5",
-          "pgn": "d4 Nf6 Bg5 Ne4 Bf4 c5 f3 Qa5+ c3 Nf6 d5 e6 e4 exd5 exd5 d6 Qd2 Be7 c4 Qxd2+ Nxd2",
+          "pgn": "d4 Nf6 Bg5 Ne4 Bf4 c5 f3 Qa5+ c3 Nf6 d5 e6 e4 exd5 exd5 d6 Qd2 Be7 Na3 Nbd7 Nc4",
           "explanation": "Against …Ne4, step back with Bf4; when they hit d4 with …c5, f3 kicks the loose knight, c3 blocks the queen check, and d5 with e4 takes the center.",
           "sources": [
             "concept:pos-development",
@@ -2083,8 +2081,8 @@
         },
         {
           "name": "b2 Gambit vs …Qb6",
-          "pgn": "d4 Nf6 Bg5 c5 d5 Qb6 Nc3 Qxb2 Bd2 Qb6 e4 d6 f4 Qd8 Nf3 a6 a4 g6 Bc4 Bg7 e5",
-          "explanation": "Against …c5, d5 and …Qb6, give up the b2 pawn with Nc3: Bd2 guards the knight, and while their queen walks home, e4, f4 and e5 build a big center.",
+          "pgn": "d4 Nf6 Bg5 c5 d5 Qb6 Nc3 Qxb2 Bd2 Qb6 e4 d6 f4 Qd8 Nf3 a6 a4 e6 Bc4 exd5 Nxd5",
+          "explanation": "Against …c5, d5 and …Qb6, give up the b2 pawn with Nc3: Bd2 guards the knight, and while their queen walks home, e4 and f4 build a big center.",
           "sources": [
             "concept:pos-development",
             "https://www.chess.com/openings/Trompowsky-Attack",
@@ -2093,7 +2091,7 @@
         },
         {
           "name": "c4 and e4 vs …d6",
-          "pgn": "d4 Nf6 Bg5 c5 d5 d6 c4 g6 Nc3 Bg7 e4 h6 Bf4 e6 dxe6 Bxe6 Qxd6 Qa5 Bd2 Qb6 Qxb6",
+          "pgn": "d4 Nf6 Bg5 c5 d5 d6 c4 g6 Nc3 Bg7 e4 h6 Bf4 e6 dxe6 Bxe6 Qxd6 Nc6 Qxc5 Nd7 Qa3",
           "explanation": "Meet …c5 with d5, and after …d6 build a wall of pawns on c4, d5 and e4; when …e6 hits the wall, take on e6, and the d6 pawn falls.",
           "sources": [
             "concept:pos-development",
