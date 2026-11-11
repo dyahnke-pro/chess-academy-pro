@@ -2526,6 +2526,26 @@
             "https://www.chess.com/openings/Closed-Sicilian-Defense",
             "https://api.chess.com/pub/player/gothamchess/games/archives"
           ]
+        },
+        {
+          "name": "Grand Prix Attack",
+          "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4 d6 O-O Nf6 d3 O-O Qe1 Bg4 Qh4 Bxf3 Rxf3 e6 f5",
+          "explanation": "The f-pawn goes first: the knight comes to f3 behind it, the bishop to c4 aims at f7, and after castling the queen swings from e1 toward h4 while the pawn rolls on to f5 against their castled king.",
+          "sources": [
+            "concept:pos-development",
+            "https://www.chess.com/openings/Closed-Sicilian-Defense",
+            "https://api.chess.com/pub/player/gothamchess/games/archives"
+          ]
+        },
+        {
+          "name": "Fianchetto vs …g6",
+          "pgn": "e4 c5 Nc3 g6 g3 Bg7 Bg2 Nc6 d3 d6 Be3 Rb8 Qd2 b5 Nge2 b4 Nd1 Nd4 O-O h5 h3",
+          "explanation": "Against an early …g6, a fianchetto of your own with g3 and Bg2, then d3 and Be3, the queen to d2 with Bh6 in mind, and a closed center while their pawns run at your knight on the queenside.",
+          "sources": [
+            "concept:pos-development",
+            "https://www.chess.com/openings/Closed-Sicilian-Defense",
+            "https://api.chess.com/pub/player/gothamchess/games/archives"
+          ]
         }
       ],
       "trapLines": [],

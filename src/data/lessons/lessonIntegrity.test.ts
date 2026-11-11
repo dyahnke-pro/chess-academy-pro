@@ -169,6 +169,12 @@ const ENGINE_EXTENDED_LESSONS = new Set<string>([
   'pro-gothamchess-english::Mikenas-Carls',
   'pro-gothamchess-english::Qa4+ vs …dxc4',
   'pro-gothamchess-english::e4 Gambit vs Dutch',
+  // GothamChess Closed Sicilian: 2.Nc3 orders the DB names only to ply 3–4 (DB-empty rule).
+  "This repertoire's Closed Sicilian — 2.Nc3 and a Theory-Light Pull",
+  'pro-gothamchess-closed-sicilian::Closed Sicilian Main',
+  'pro-gothamchess-closed-sicilian::vs …e6',
+  'pro-gothamchess-closed-sicilian::vs …g6 (Bxc6)',
+  'pro-gothamchess-closed-sicilian::Fianchetto vs …g6',
 ]);
 
 describe('masterclass G3 — every lesson anchors a real DB opening line', () => {

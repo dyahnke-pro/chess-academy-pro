@@ -14913,7 +14913,6 @@
     "title": "Closed Sicilian: the d5 Outpost Grip",
     "intro": "From their win over donwhitenoise. The knight plants on d5 and grips the position.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Closed-Sicilian",
      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed_Variation",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -47270,7 +47269,6 @@
     "title": "The Opposite-Castle Race",
     "intro": "Both kings committed, tactics flying — eight forced moves that end dead level, and preparation decides.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Closed-Sicilian-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -47413,7 +47411,6 @@
     "title": "The Return Ticket",
     "intro": "Hit by …e5, the bishop retreats to d2 — and re-emerges on g5 as a pin two moves later.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Closed-Sicilian-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -47552,7 +47549,6 @@
     "title": "Bxc6 and the Centre Recapture",
     "intro": "Double the pawns early, recapture toward the centre, and bank the structural annuity.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Closed-Sicilian-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -47707,7 +47703,6 @@
     "title": "The f5 Tour",
     "intro": "Knight to h4, f5, e3 — a threat at every stop, and d5 waiting at the end.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/Closed-Sicilian-Defense",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]

@@ -909,6 +909,10 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
       'vs …d6': ['mp-progothamchess-closedsic-d6-oppositecastle'],
       'vs …e6': ['mp-progothamchess-closedsic-e6-oooattack'],
       'vs …g6 (bxc6)': ['mp-progothamchess-closedsic-g6-nd5'],
+      // The lines he teaches, added as tabs 2026-11-11 (docs/levy-lines/decisions):
+      // no middlegame plan is anchored at their terminals yet.
+      'grand prix attack': [],
+      'fianchetto vs …g6': [],
     },
   },
   'pro-gothamchess-scandinavian': {

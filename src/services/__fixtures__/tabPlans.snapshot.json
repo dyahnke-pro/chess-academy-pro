@@ -4066,6 +4066,8 @@
  "pro-gothamchess-closed-sicilian::Bxc6::vs …g6 (Bxc6)": [
   "mp-progothamchess-closedsic-g6-nd5"
  ],
+ "pro-gothamchess-closed-sicilian::Grand Prix Attack::Grand Prix Attack": [],
+ "pro-gothamchess-closed-sicilian::Fianchetto vs …g6::Fianchetto vs …g6": [],
  "pro-gothamchess-closed-sicilian::::Closed Sicilian Main": [
   "mp-progothamchess-closedsic-bb5-bg5",
   "mp-progothamchess-closed-sicilian-bb5-trade"
@@ -4082,6 +4084,8 @@
  "pro-gothamchess-closed-sicilian::::vs …g6 (Bxc6)": [
   "mp-progothamchess-closedsic-g6-nd5"
  ],
+ "pro-gothamchess-closed-sicilian::::Grand Prix Attack": [],
+ "pro-gothamchess-closed-sicilian::::Fianchetto vs …g6": [],
  "pro-gothamchess-french-defense::main": [
   "mp-progothamchess-french-rubinstein-qxd4",
   "mp-progothamchess-french-tarrasch-b5gambit"
