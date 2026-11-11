@@ -20,7 +20,7 @@ function oneBeatPerMove(moves: readonly (readonly string[])[]): boolean {
 describe('one beat a move — every Openings lesson', () => {
   const lessons = getAllLessonScripts().filter(({ lesson }) => lesson.kind !== 'trap');
   const packed = lessons.filter(({ lesson }) => !oneBeatPerMove(lesson.beats.map((b) => b.moves))).map(({ key }) => key);
-  const owed = new Set(baseline as string[]);
+  const owed = new Set(baseline);
 
   it('a lesson not in the baseline says one beat for every move', () => {
     expect(packed.filter((k) => !owed.has(k))).toEqual([]);
@@ -28,7 +28,7 @@ describe('one beat a move — every Openings lesson', () => {
 
   it('the baseline only shrinks: a rewritten or removed lesson leaves it', () => {
     const live = new Set(packed);
-    expect((baseline as string[]).filter((k) => !live.has(k))).toEqual([]);
+    expect(baseline.filter((k) => !live.has(k))).toEqual([]);
   });
 
   it('measures something (negative control)', () => {

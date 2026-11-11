@@ -44,6 +44,42 @@ Trompowsky, …c5 in the Sicilian, the gambit pawn) carries the opening's idea
 in full: what it threatens, what theory it sidesteps, the structure it aims
 for.
 
+## 2a. The register — think out loud, the way he teaches (David 2026-11-11: "Does your narration style match Danya?")
+
+The first Trompowsky draft had the right facts in the wrong voice: an
+annotated book ("Bd3 — the bishop develops with a threat: …"). Naroditsky
+teaches by thinking out loud. Every beat is said that way, within the app's
+voice rules (you/they, never I/we, no talk about the app):
+
+- **Open on the question the position asks** when there is one: "Where does
+  this bishop belong?", "Do you have to move the bishop? No —", "Why take on
+  c5 right now?". Not every beat — a recapture or a natural developing move
+  can just be said.
+- **Walk the tempting move to its consequence** before giving the answer: "The
+  natural move is Nc3 — but then …Qxb2, and nothing takes back."
+- **Then the answer, and what it sets up**: "So the bishop goes home to c1.
+  Quiet, but now e4 is coming."
+- **Thread the moves together**: "This is the setup for Qh4", "Remember that
+  loose bishop on h5 — here is why it mattered." A course is one story.
+- **Link to what the student may know** when it is true of the structure: "the
+  same a3–b4 idea as the Advance French". Name the concept: prophylaxis, an
+  outpost, a pawn break, a bad bishop.
+- **A little color, earned**: "look at", "here's the point", "and that's the
+  whole idea". Never praise for its own sake, never filler.
+
+Same facts, both registers:
+
+> Book: "Bd3 — the bishop develops with a threat: it hits the knight on e4,
+> and that knight is the only piece guarding their c5 pawn."
+>
+> His register: "Where does this bishop belong? d3 — and look what it hits:
+> the knight on e4. Why care? That knight is the only thing holding their c5
+> pawn. If it ever has to leave, c5 just falls."
+
+Reference only, never quoted: his transcripts are in
+`data/sources/danya-voice/transcripts/` (gitignored). Read a few minutes of one
+before writing, for the rhythm. Never lift his sentences.
+
 ## 3. The Learn cue
 
 `sayShort` ≤ 8 words: the move plus the idea in 3–5 words ("Bf4 — active
