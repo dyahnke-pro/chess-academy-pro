@@ -834,6 +834,9 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
       'rossolimo 3.bb5 e6': ['mp-progothamchess-antisic-e6-open'],
       'rossolimo 3.bb5 g6': ['mp-progothamchess-antisic-g6-d4break'],
       'accelerated pawn storm (positional squeeze)': ['mp-progothamchess-antisic-accel-storm'],
+      // The line taught for this opening in the repertoire's videos, added as a
+      // tab 2026-11-11 (docs/levy-lines/decisions): no plan is anchored at its end.
+      'wing gambit': [],
     },
   },
   'pro-gothamchess-milner-barry': {

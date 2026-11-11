@@ -969,27 +969,26 @@
       "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 cxd4 Nxd4 Nxd4 Qxd4",
       "color": "white",
       "style": "Positional, Anti-Theoretical",
-      "overview": "The Sicilian is the most theoretical opening in chess. The Rossolimo says: 'Don't play that game.' Named after Russian-born American GM Nicolas Rossolimo, who systematized the 3.Bb5 approach in the 1940s-50s and used it throughout the corpus to score remarkable results against the Sicilian. Top grandmasters have played it consistently throughout the corpus — both as a winning weapon against weaker opposition AND as a peace offering against the best, since the resulting positions reward technical skill over memorization. After 1.e4 c5 2.Nf3 Nc6, White plays 3.Bb5 — pinning the c6-knight against Black's development. Now there's no Open Sicilian. No Najdorf preparation. Black has to play their own game against a setup that 9 out of 10 Sicilian players haven't studied beyond move 7. You'll lose to a 2200; you'll crush a 1500. This is an attacking, middlegame-decisive repertoire — built to win in the opening and the middlegame, not grind long endings — so it is deepest on the opening and middlegame plans, with endgame theory shown only where the games reach a decisive ending.",
+      "overview": "The Sicilian is the most theoretical opening in chess. The Rossolimo says: 'Don't play that game.' Named after Russian-born American GM Nicolas Rossolimo, who systematized the 3.Bb5 approach in the 1940s-50s and used it throughout the corpus to score remarkable results against the Sicilian. Top grandmasters have played it consistently throughout the corpus — both as a winning weapon against weaker opposition AND as a peace offering against the best, since the resulting positions reward technical skill over memorization. After 1.e4 c5 2.Nf3 Nc6, White plays 3.Bb5 — hitting the knight on c6, the piece that covers d4 and e5. Now there's no Open Sicilian. No Najdorf preparation. Black has to play their own game against a setup that 9 out of 10 Sicilian players haven't studied beyond move 7. You'll lose to a 2200; you'll crush a 1500. This is an attacking, middlegame-decisive repertoire — built to win in the opening and the middlegame, not grind long endings — so it is deepest on the opening and middlegame plans, with endgame theory shown only where the games reach a decisive ending.",
       "keyIdeas": [
-        "Bb5 is the heart of the system. It pins the c6-knight (preventing standard …e5 pushes), prepares Bxc6 (creating doubled pawns on c6), and develops the bishop to a useful square. Don't trade it lightly — the bishop on b5 is the entire opening.",
-        "Decide early: trade or retreat. Against …a6, your two choices are 4.Bxc6 (commit to the structural game — doubled pawns for Black, two bishops for you) or 4.Ba4 (keep the bishop, play for Italian-style positions). Bxc6 is more concrete; Ba4 keeps options open.",
-        "The d4 break still works in the Rossolimo — but on YOUR terms. After castling, you can play d4 in one move (one of White's structural advantages over an Open Sicilian where d4 happens on move 3). The IQP positions favour White because the c6-pawn is doubled and weak.",
-        "Avoids Najdorf/Dragon/Sveshnikov/Taimanov/Kan completely. The Sicilian player has spent years studying open lines — none of that helps in the Rossolimo. You're playing a different game and they're improvising from move 7."
+        "Bb5 is the heart of the system. The bishop hits the knight on c6, the piece that covers d4 and e5, and threatens to take it and double their c-pawns. It isn't a pin: their d7 pawn stands between the knight and the king. When to take is the decision of the opening: against …g6 you take on c6 before long; against …e6 and …Nge7 a knight can take back, so the bishop goes home to f1 when …a6 asks.",
+        "Against …a6 the bishop has to decide: take on c6, or step back. In the main line it goes all the way home to f1, the engine's first choice, where it guards g2 and still eyes a6. Taking on c6 is close behind, but there a knight takes back and their pawns stay whole.",
+        "The d4 break comes once your rook is on e1 and the e-file has opened. After …d5 you take, and once their knight takes back on d5, the pawn on e6 is pinned to their king by your rook. Then d4 opens the center while that king is still on e8, and the trades end with the queens off and their king stuck in the middle on d8.",
+        "It sidesteps the Open Sicilian. After …Nc6, most masters play d4 and walk into the main lines; Bb5, about three in ten, is the engine's first choice and takes the game somewhere quieter, where plans matter more than memorised moves."
       ],
       "traps": [
         "Against …g6 (the fianchetto setup), Bxc6 gives up the bishop to damage Black's pawns: after …dxc6 or …bxc6 Black has doubled c-pawns, a long-term target, in exchange for the bishop pair."
       ],
       "warnings": [
-        "The Rossolimo ONLY works against 2…Nc6. If Black plays 2…d6 (Najdorf move order) or 2…e6 (Taimanov move order), you can't play Bb5+ because there's nothing to pin. Have a different anti-Sicilian (like the Closed Sicilian with c3 or the Alapin) in reserve.",
-        "Don't trade Bxc6 reflexively — sometimes the pin is the point. If Black hasn't played …a6 yet and you have other useful moves (O-O, Re1, d4 prep), use the pin as a long-term asset rather than cashing it in immediately."
+        "The Rossolimo needs …Nc6: Bb5 is aimed at that knight. After …d6 or …e6 instead (seven masters in ten choose one of those), there's no knight on c6 to hit, so this plan doesn't apply; have another answer ready for those moves.",
+        "Don't take on c6 by reflex. Against …e6, castling first is the engine's choice and two masters in three play it; taking at once is about a fifth of a pawn worse. Keep the bishop on b5 while it does a job, and decide when …a6 asks the question."
       ],
       "variations": [
         {
           "name": "Rossolimo 3.Bb5 e6",
           "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 cxd4 Nxd4 Nxd4 Qxd4",
-          "explanation": "The flagship Rossolimo. Black plays 3…e6 (prepping the …d5 break) and …Nge7 to back it up. You set up with 4.O-O Nge7 5.Re1 a6, then the quiet little retreat 6.Bf1! — tucking the bishop back to keep the b1-h7 diagonal and clear the way for d4. After 6…d5 7.exd5 Nxd5 8.d4 cxd4 9.Nxd4 Nxd4 10.Qxd4 you've traded into an open, near-symmetric middlegame — no d-pawns left on the board, your queen centralised on d4 and Black's pieces a step behind. You'll bring that f1-bishop back to life once things settle. Classic Rossolimo squeeze.",
+          "explanation": "The flagship Rossolimo. Black plays 3…e6 (prepping the …d5 break) and …Nge7 to back it up. You set up with 4.O-O Nge7 5.Re1 a6, then the quiet little retreat 6.Bf1! — tucking the bishop all the way home, where it guards g2 and still eyes a6. After 6…d5 7.exd5 Nxd5 8.d4 cxd4 9.Nxd4 Nxd4 10.Qxd4 you've traded into an open, near-symmetric middlegame — no d-pawns left on the board, your queen centralised on d4 and Black's pieces a step behind. You'll bring that f1-bishop back to life once things settle. Classic Rossolimo squeeze.",
           "sources": [
-            "book:chess-fundamentals",
             "https://www.chess.com/openings/Sicilian-Defense",
             "https://en.wikipedia.org/wiki/Sicilian_Defence"
           ]
@@ -997,9 +996,8 @@
         {
           "name": "Rossolimo 3.Bb5 g6",
           "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Re1 e5 Bxc6 dxc6 d3",
-          "explanation": "Against the fianchetto setup, the Rossolimo gets concrete. Black plays 3...g6 + 4...Bg7 preparing to put the bishop on the long diagonal. You respond 5.Re1 e5 (Black tries to lock the centre supporting the fianchetto) 6.Bxc6! dxc6 (Black recaptures with the d-pawn to keep the central pawn structure) 7.d3 — locking in a long-term structural advantage. Black has doubled c-pawns and the half-open d-file is yours. The bishop on g7 looks active but it's biting on YOUR central pawn on d3 — defended. Position favours the better long-term technique.",
+          "explanation": "Against the fianchetto setup, the Rossolimo gets concrete. Black plays 3...g6 + 4...Bg7 preparing to put the bishop on the long diagonal. You respond 5.Re1 e5 (Black tries to lock the centre supporting the fianchetto) 6.Bxc6! dxc6 (Black recaptures with the d-pawn to keep the central pawn structure) 7.d3 — locking in a long-term structural advantage. Black has doubled c-pawns, a long-term target, and the bishop pair in return. The bishop on g7 looks active, but its own pawn on e5 blocks it. Position favours the better long-term technique.",
           "sources": [
-            "book:chess-fundamentals",
             "https://www.chess.com/openings/Sicilian-Defense",
             "https://en.wikipedia.org/wiki/Sicilian_Defence"
           ]
@@ -1009,7 +1007,15 @@
           "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 Bxc6 bxc6 d3 d5 e5 Ne7 b3 Ng6 Bb2",
           "explanation": "Top grandmasters popularised this approach — trade on c6 IMMEDIATELY after Black's …e6 setup. After 4.Bxc6 bxc6 (Black takes with the b-pawn keeping the c-file under control) 5.d3 d5 6.e5! — you push the e-pawn to cramp Black, the c-pawn structure (now doubled and weak) is a permanent target. White's plan: develop with Nbd2, h3, O-O, then attack on the kingside while Black struggles to find counterplay with the broken queenside. Top grandmasters have won multiple games in this line at the highest level.",
           "sources": [
-            "book:chess-fundamentals",
+            "https://www.chess.com/openings/Sicilian-Defense",
+            "https://en.wikipedia.org/wiki/Sicilian_Defence"
+          ]
+        },
+        {
+          "name": "Wing Gambit",
+          "pgn": "e4 c5 Nf3 Nc6 b4 cxb4 d4 d5 exd5 Qxd5 c4 bxc3 Nxc3 Qa5 Rb1 Qxc3+ Bd2 Qa3 d5 e6 dxc6",
+          "explanation": "A gambit instead of Bb5: b4 gives a wing pawn so that d4 can take the center with no c-pawn there to trade it off. After the queen comes to d5, c4 and Nxc3 gain time on it, Rb1 offers the knight, and once the queen has to run to a3, d5 and dxc6 win the piece back. You end up a pawn or two down, but it's about level, with their pieces still at home.",
+          "sources": [
             "https://www.chess.com/openings/Sicilian-Defense",
             "https://en.wikipedia.org/wiki/Sicilian_Defence"
           ]

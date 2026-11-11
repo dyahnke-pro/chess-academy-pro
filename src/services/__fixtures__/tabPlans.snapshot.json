@@ -3369,6 +3369,7 @@
  "pro-gothamchess-anti-sicilian::positional squeeze::Accelerated Pawn Storm (positional squeeze)": [
   "mp-progothamchess-antisic-accel-storm"
  ],
+ "pro-gothamchess-anti-sicilian::Wing Gambit::Wing Gambit": [],
  "pro-gothamchess-anti-sicilian::::Rossolimo 3.Bb5 e6": [
   "mp-progothamchess-antisic-e6-open"
  ],
@@ -3381,6 +3382,7 @@
  "pro-gothamchess-anti-sicilian::::Accelerated Pawn Storm (positional squeeze)": [
   "mp-progothamchess-antisic-accel-storm"
  ],
+ "pro-gothamchess-anti-sicilian::::Wing Gambit": [],
  "pro-naroditsky-caro-kann::main": [],
  "pro-naroditsky-caro-kann::Nc3::Two Knights Variation (Nc3)": [
   "mp-pronarocaro-twoknights-b5-coord",

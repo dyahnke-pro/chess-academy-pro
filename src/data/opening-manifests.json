@@ -468,6 +468,15 @@
     "warnings": 0,
     "keyIdeas": 4
   },
+  "pro-gothamchess-anti-sicilian": {
+    "variations": 4,
+    "middlegamePlans": 3,
+    "endgamePlans": 0,
+    "modelGames": 2,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
   "pro-gothamchess-caro-kann": {
     "variations": 13,
     "middlegamePlans": 9,
