@@ -1,9 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { lessonToPlayableLine } from './index';
+import { getLessonScript, getVariationLessonScriptsForOpening, lessonToPlayableLine } from './index';
 import { ALL_LESSONS } from './registry';
-import { CARO_KANN_LESSON } from './caroKann';
-import { CARO_VARIATION_LESSONS } from './caroKannVariations';
 import { CARO_TRAP_LESSONS, getCaroTrapPlayableLine } from './caroKannTrapLessons';
 import { getPunishGemsForOpening, gemToPlayableLine, type PunishGem } from './punishGems';
 import type { LessonScript, PlayableMiddlegameLine } from '../../types';
@@ -56,9 +54,15 @@ function fromGem(gem: PunishGem): Surface {
   };
 }
 
+// The Caro masterclass as it is served: the Watch course's main line and
+// every tab (getLessonScript / the variation map), not a file on disk.
+const caroMain = getLessonScript('caro-kann');
+if (!caroMain) throw new Error('caro-kann has no served main-line lesson');
+const caroVariations = getVariationLessonScriptsForOpening('caro-kann').map((v) => v.lesson);
+
 const surfaces: Surface[] = [
-  fromLesson(CARO_KANN_LESSON),
-  ...Object.values(CARO_VARIATION_LESSONS).map(fromLesson),
+  fromLesson(caroMain),
+  ...caroVariations.map(fromLesson),
   ...Object.keys(CARO_TRAP_LESSONS).map(fromTrap),
   ...getPunishGemsForOpening('caro-kann').map(fromGem),
   ...getPunishGemsForOpening('ruy-lopez').map(fromGem),

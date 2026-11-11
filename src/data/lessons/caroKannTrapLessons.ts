@@ -57,8 +57,12 @@ export interface CaroTrapDef {
   appliesTo: string[];
 }
 
+// The Karpov trap leaves the main line on your own fourth move (…Nd7 where the
+// main line plays …Bf5), so it shows on the main tab, the board where you make
+// that choice. No tab plays …Nd7; the Classical tab is never shown (it is the
+// main line again, `variationTabs` CURATED), so it carries no trap.
 export const CARO_TRAP_DEFS: CaroTrapDef[] = [
-  { id: 'karpov-qe2-mate', name: 'The Qe2 Smothered Mate', kind: 'warning', appliesTo: ['main', 'classical'] },
+  { id: 'karpov-qe2-mate', name: 'The Qe2 Smothered Mate', kind: 'warning', appliesTo: ['main'] },
 ];
 
 export function getCaroTrapsForTab(tabKey: string): CaroTrapDef[] {
