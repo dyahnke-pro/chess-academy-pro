@@ -70,8 +70,6 @@ import { QGA_LESSON } from './queensGambitAccepted';
 import { QGA_VARIATION_LESSONS } from './queensGambitAcceptedVariations';
 import { SLAV_DEFENCE_LESSON } from './slavDefence';
 import { SLAV_DEFENCE_VARIATION_LESSONS } from './slavDefenceVariations';
-import { KINGS_INDIAN_DEFENCE_LESSON } from './kingsIndianDefence';
-import { KINGS_INDIAN_DEFENCE_VARIATION_LESSONS } from './kingsIndianDefenceVariations';
 import { QUEENS_INDIAN_DEFENCE_LESSON } from './queensIndianDefence';
 import { QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS } from './queensIndianDefenceVariations';
 import { ALBIN_COUNTERGAMBIT_LESSON } from './albinCountergambit';
@@ -153,7 +151,6 @@ const HAND_WRITTEN: OpeningLessons[] = [
   { main: QGD_LESSON, variations: QGD_VARIATION_LESSONS },
   { main: QGA_LESSON, variations: QGA_VARIATION_LESSONS },
   { main: SLAV_DEFENCE_LESSON, variations: SLAV_DEFENCE_VARIATION_LESSONS },
-  { main: KINGS_INDIAN_DEFENCE_LESSON, variations: KINGS_INDIAN_DEFENCE_VARIATION_LESSONS },
   { main: QUEENS_INDIAN_DEFENCE_LESSON, variations: QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS },
   { main: ALBIN_COUNTERGAMBIT_LESSON, variations: ALBIN_COUNTERGAMBIT_VARIATION_LESSONS },
   { main: SCHLIEMANN_DEFENCE_LESSON, variations: SCHLIEMANN_DEFENCE_VARIATION_LESSONS },

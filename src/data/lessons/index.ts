@@ -238,8 +238,6 @@ import { QGA_LESSON } from './queensGambitAccepted';
 import { QGA_VARIATION_LESSONS } from './queensGambitAcceptedVariations';
 import { SLAV_DEFENCE_LESSON } from './slavDefence';
 import { SLAV_DEFENCE_VARIATION_LESSONS } from './slavDefenceVariations';
-import { KINGS_INDIAN_DEFENCE_LESSON } from './kingsIndianDefence';
-import { KINGS_INDIAN_DEFENCE_VARIATION_LESSONS } from './kingsIndianDefenceVariations';
 import { QUEENS_INDIAN_DEFENCE_LESSON } from './queensIndianDefence';
 import { QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS } from './queensIndianDefenceVariations';
 import { SMITH_MORRA_GAMBIT_LESSON } from './smithMorraGambit';
@@ -326,7 +324,6 @@ const LESSONS: Record<string, LessonScript> = {
   [QGD_LESSON.openingId]: QGD_LESSON,
   [QGA_LESSON.openingId]: QGA_LESSON,
   [SLAV_DEFENCE_LESSON.openingId]: SLAV_DEFENCE_LESSON,
-  [KINGS_INDIAN_DEFENCE_LESSON.openingId]: KINGS_INDIAN_DEFENCE_LESSON,
   [QUEENS_INDIAN_DEFENCE_LESSON.openingId]: QUEENS_INDIAN_DEFENCE_LESSON,
   [SMITH_MORRA_GAMBIT_LESSON.openingId]: SMITH_MORRA_GAMBIT_LESSON,
   [SCOTCH_GAMBIT_LESSON.openingId]: SCOTCH_GAMBIT_LESSON,
@@ -514,7 +511,6 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...QGD_VARIATION_LESSONS,
   ...QGA_VARIATION_LESSONS,
   ...SLAV_DEFENCE_VARIATION_LESSONS,
-  ...KINGS_INDIAN_DEFENCE_VARIATION_LESSONS,
   ...QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS,
   ...SMITH_MORRA_GAMBIT_VARIATION_LESSONS,
   ...SCOTCH_GAMBIT_VARIATION_LESSONS,
