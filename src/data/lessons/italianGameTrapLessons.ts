@@ -3,8 +3,9 @@ import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } f
 // Lead-the-eye colour language (playbook §5a): arrows GREEN (vision / threat /
 // intent), highlights YELLOW (key square named in narration) and SOFT BLUE
 // (secondary context). Move squares are auto-painted orange by the player.
-// GENERATED from scripts/_italian-content.json (validated against the gate
-// suite). Edit the JSON + regenerate, or edit here and keep the JSON in sync.
+// Edited here. Its old generator (scripts/_gen-italian.mjs and its JSON) was
+// deleted with the hand-written Italian lessons it also wrote, which the Watch
+// course `watch/italianGame.ts` replaced (WO-OPENINGS-REWRITE-01).
 const KEY = 'rgba(255,214,0,0.88)';
 const ATK = 'rgba(40,185,95,0.92)';
 const VIS = 'rgba(40,185,95,0.92)';
