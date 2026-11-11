@@ -4199,7 +4199,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'bxa5 — win the piece',
       '', '', '', '', '',
     ],
-    sources: ['concept:tac-trapped-piece', 'concept:pos-knight-rim', 'https://www.chess.com/openings/Ponziani-Opening'],
+    sources: ['https://www.chess.com/openings/Ponziani-Opening'],
   },
 
   // 4…Nxe4 5.d5 Bc5 6.dxc6 Bxf2+ 7.Ke2 …d5?! — White consolidates the extra
@@ -4221,7 +4221,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '', 'Kxf2 — mop up, a piece up',
       '', '', '',
     ],
-    sources: ['concept:pos-material', 'concept:pos-king-safety', 'https://www.chess.com/openings/Ponziani-Opening'],
+    sources: ['concept:pos-king-safety', 'https://www.chess.com/openings/Ponziani-Opening'],
   },
 
   // 3…d5 4.Qa4 Nf6 5.Nxe5 …Bd7?! — White grabs the e5-pawn and trades cleanly,
@@ -4245,7 +4245,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'd4 — claim the centre, a pawn up',
       '',
     ],
-    sources: ['concept:pos-material', 'concept:pos-center', 'https://www.chess.com/openings/Ponziani-Opening'],
+    sources: ['concept:pos-center', 'https://www.chess.com/openings/Ponziani-Opening'],
   },
 
   // ── GothamChess Anti-Sicilian Rossolimo (student = WHITE) ────────────────
@@ -4268,7 +4268,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '', 'Bf4 — develop, White better',
       '', '', '',
     ],
-    sources: ['concept:pos-center', 'concept:pos-pawn-structure', 'https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation'],
+    sources: ['concept:pos-center', 'https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation'],
   },
 
   // After Bxc6 + c3 Nf6 Re1, …d5?! lets White grab the e5 wedge with a lasting
@@ -4315,7 +4315,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '', 'a4 — expand, White better',
       '', '', '',
     ],
-    sources: ['concept:pos-pawn-structure', 'concept:pos-center', 'https://www.chess.com/openings/French-Defense-Advance-Variation'],
+    sources: ['concept:pos-center', 'https://www.chess.com/openings/French-Defense-Advance-Variation'],
   },
 
   // Main gambit: …Nxd4?! grabs the pawn but Nxd4 then Nb5-Nd6+ wins material
@@ -4341,7 +4341,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'Nd6+ — check, trade, keep the piece',
       '', '', '',
     ],
-    sources: ['concept:tac-fork', 'concept:tac-knight-outpost', 'https://www.chess.com/openings/French-Defense-Advance-Variation-Milner-Barry-Gambit'],
+    sources: ['concept:tac-fork', 'https://www.chess.com/openings/French-Defense-Advance-Variation-Milner-Barry-Gambit'],
   },
 
   // Declined with …Bd7: …Nge7?! is passive; dxc5! grabs the pawn back with a
@@ -4391,7 +4391,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '', 'Nxd5 — win the pawn',
       '',
     ],
-    sources: ['concept:pos-center', 'concept:tac-overloaded-defender', 'https://www.chess.com/openings/French-Defense-Advance-Variation'],
+    sources: ['concept:pos-center', 'https://www.chess.com/openings/French-Defense-Advance-Variation'],
   },
 
   // ── GothamChess Fantasy Variation vs Caro (student = WHITE) ──────────────
@@ -4439,7 +4439,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '', 'Bxh6 — wreck the pawns, a pawn up',
       '', '', '',
     ],
-    sources: ['concept:pos-center', 'concept:pos-pawn-structure', 'https://www.chess.com/openings/Stafford-Gambit'],
+    sources: ['concept:pos-center', 'https://www.chess.com/openings/Stafford-Gambit'],
   },
 
   // ── GothamChess Caro-Kann Advance, White (student = WHITE) ───────────────
@@ -4466,7 +4466,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'Qxc2 — win the piece',
       '', '', '',
     ],
-    sources: ['concept:tac-trapped-piece', 'concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
+    sources: ['concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
   },
 
   // vs …c5 dxc5 …Qa5+?! the check achieves nothing; Nc3 develops and White
@@ -4488,7 +4488,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '', '', '…Nxe5 — Black grabs e5',
       '', '',
     ],
-    sources: ['concept:pos-development', 'concept:pos-material', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
+    sources: ['concept:pos-development', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
   },
 
   // Nf3 line vs …c5: …c4?! releases the tension; Qe2 then b3 undermines for a
@@ -4510,7 +4510,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '', '', '…a6 — prop the b5-pawn',
       '', '',
     ],
-    sources: ['concept:pos-pawn-structure', 'concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
+    sources: ['concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
   },
 
   // Main line: …Qa6?! offers the queen trade but loses time; c4 grabs the
@@ -4562,7 +4562,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'Kg8 — tuck the king, a piece up',
       '', '', '',
     ],
-    sources: ['concept:pos-king-safety', 'concept:pos-material', 'https://www.chess.com/openings/Scandinavian-Defense'],
+    sources: ['concept:pos-king-safety', 'https://www.chess.com/openings/Scandinavian-Defense'],
   },
 
   // ── GothamChess French Defense (student = BLACK) ─────────────────────────
@@ -4649,7 +4649,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'd5 — strike the centre, Black better',
       '',
     ],
-    sources: ['concept:tac-zwischenzug', 'concept:pos-material', 'https://www.chess.com/openings/Pirc-Defense'],
+    sources: ['https://www.chess.com/openings/Pirc-Defense'],
   },
 
   // ── Pro-rep gems (2026-05-31 depth build) — mined engine-first, positional tier ──
