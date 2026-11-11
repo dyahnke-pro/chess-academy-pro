@@ -82,7 +82,7 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
     const { loadFullCorpus } = await import('../test/loadFullCorpus');
     const { noteAtPosition } = await import('./danyaTeachingService');
     const { getLessonScript, getVariationLessonScript } = await import('../data/lessons');
-    const { settleReads } = await import('../test/settleReads');
+    const { settleReads, agreedVerdict, NAME_CP } = await import('../test/settleReads');
     await ensureMastersDbLoaded();
     loadFullCorpus();
     mkdirSync(OUT, { recursive: true });
@@ -124,18 +124,43 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
           const topTxt = top.map((l) => `${sanOfUci(fen, l.pv[0] ?? '')} ${(sign * l.cp / 100).toFixed(2)} (${lineSans(fen, l.pv, 6)})`).join(' | ') + (settled.reread ? ' [each move read on its own]' : '');
           const playedRead = settled.played;
           const cost = settled.cost;
+          // THE ONE VERDICT A BEAT MAY SPEAK: a better move is named only when
+          // it is ahead by the naming bar now and one move deeper (two reads
+          // that agree). The board after the move is read once: it is the next
+          // move's own board, so the sheet cannot contradict itself across
+          // two blocks.
+          const childOf = (u: string): { fen: string; mate: boolean; stale: boolean } | null => {
+            try { const b = new Chess(fen); b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.slice(4, 5) || undefined }); return { fen: b.fen(), mate: b.isCheckmate(), stale: b.isStalemate() || b.isDraw() }; } catch { return null; }
+          };
+          const verdict = await agreedVerdict(engine.read, fen, uci, settled, childOf);
+          const after = c.isGameOver() ? null : (await engine.read(c.fen(), { multipv: 3 }))[0] ?? null;
+          const pawns = (cp: number): string => (cp / 100).toFixed(2);
+          const verdictTxt = verdict.kind === 'prefers'
+            ? `the engine prefers ${sanOfUci(fen, verdict.uci)} — two reads agree (${pawns(verdict.now)} better now, ${pawns(verdict.deeper)} one move deeper). You may name it.`
+            : verdict.kind === 'unsettled'
+              ? `NO agreed better move — the first read likes ${sanOfUci(fen, verdict.uci)} by ${pawns(verdict.now)}, one move deeper it is ${pawns(verdict.deeper)}. Name no better move and make no engine claim.`
+              : verdict.kind === 'first'
+                ? `the engine's first choice. No better move.`
+                : `no move is ahead of it by ${pawns(NAME_CP)}. Name no better move; do not call it the engine's first choice.`;
           const note = noteAtPosition(line.moves.slice(0, i + 1), c.fen(), op.name, op.color);
           const found = computers[`${fen}|${uci}`];
           moves += 1; if (found?.facts.length) withFacts += 1;
           md.push(`### ${i + 1}. ${seat} ${san}${mv.captured ? ' (capture)' : ''}${c.inCheck() ? ' (check)' : ''}`);
           md.push(`- masters here (${total} games): ${mastersTxt || 'none — out of the masters database'}`);
           md.push(`- engine (mover's view, pawns): ${topTxt}`);
-          md.push(`- ${san} itself: ${playedRead ? (sign * playedRead.cp / 100).toFixed(2) : '?'}${cost !== null ? `, costs ${cost.toFixed(2)} against the best` : ''}; line after: ${playedRead ? lineSans(fen, playedRead.pv, 7) : '?'}`);
+          md.push(`- ${san} itself: ${playedRead ? (sign * playedRead.cp / 100).toFixed(2) : '?'}${after ? ` (one move deeper: ${(sign * after.cp / 100).toFixed(2)})` : ''}${cost !== null ? `, first read costs ${cost.toFixed(2)}` : ''}; line after: ${playedRead ? lineSans(fen, playedRead.pv, 7) : '?'}`);
+          md.push(`- verdict: ${verdictTxt}`);
           const me = op.color === 'white' ? 'w' : 'b';
           const pins = pinsOf(c, me);
           const loose = looseOf(c, me, pins.pinned);
           const mat = materialFor(c, me);
-          const studentCp = playedRead ? (me === 'w' ? playedRead.cp : -playedRead.cp) : null;
+          // The eval word: the weaker of the two reads of this position (the
+          // move's own read and the board one move deeper); level when they
+          // disagree on who is better.
+          const seatCp = (cp: number): number => (me === 'w' ? cp : -cp);
+          const cp1 = playedRead ? seatCp(playedRead.cp) : null;
+          const cp2 = after ? seatCp(after.cp) : null;
+          const studentCp = cp1 === null ? cp2 : cp2 === null ? cp1 : Math.sign(cp1) !== Math.sign(cp2) && cp1 !== 0 && cp2 !== 0 ? 0 : Math.abs(cp1) <= Math.abs(cp2) ? cp1 : cp2;
           md.push(`- board after: the ${PIECE_NAME[mv.piece]} on ${mv.to} hits ${hitsFrom(c, mv.to, mv.color).join(', ') || 'nothing of the other side'} · loose: ${loose.join(', ') || 'none'} · pins: ${pins.text.join('; ') || 'none'} · material ${mat >= 0 ? '+' : ''}${mat} for you${studentCp !== null ? ` · say "${evalWords(studentCp)}" (${studentCp}cp your seat), no stronger` : ''} · side marker ${mv.color === 'b' ? `"…${mv.san}"` : `"${mv.san}" (no dots)`}`);
           if (note) md.push(`- corpus note (${note.id}): ${[note.explains, note.teaches, note.plans].filter(Boolean).join(' ').replace(/\s+/g, ' ')}`);
           // The computers' facts: the ones the app's composer spoke first (*),
