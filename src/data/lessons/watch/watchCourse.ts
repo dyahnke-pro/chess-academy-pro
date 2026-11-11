@@ -20,6 +20,9 @@ export interface WatchLine {
   /** null for the main line; the tab's variation name otherwise. */
   tab: string | null;
   moves: readonly string[];
+  /** 'roadmap' for a short sideline that stops before the middlegame on
+   *  purpose (the depth gate's opt-out); every other line is a variation. */
+  kind?: 'roadmap';
 }
 
 export interface WatchCourse {
@@ -68,7 +71,7 @@ export function watchLesson(course: WatchCourse, line: WatchLine): LessonScript 
     minutes: minutesFor(beats.length),
     orientation: course.orientation,
     beats,
-    kind: 'variation',
+    kind: line.kind ?? 'variation',
     sources: [...course.sources],
   };
 }

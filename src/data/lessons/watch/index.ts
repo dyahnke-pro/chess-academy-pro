@@ -4,9 +4,11 @@ import type { WatchCourse } from './watchCourse';
 import { BENONI_DEFENCE_WATCH } from './benoniDefence';
 import { SEMI_SLAV_WATCH } from './semiSlav';
 import { TROMPOWSKY_ATTACK_WATCH } from './trompowskyAttack';
+import { PETROV_DEFENCE_WATCH } from './petrovDefence';
 
 export const WATCH_COURSES: readonly WatchCourse[] = [
   BENONI_DEFENCE_WATCH,
   SEMI_SLAV_WATCH,
   TROMPOWSKY_ATTACK_WATCH,
+  PETROV_DEFENCE_WATCH,
 ];
