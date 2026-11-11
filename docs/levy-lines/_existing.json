@@ -1,0 +1,410 @@
+[
+ {
+  "id": "pro-gothamchess-italian",
+  "name": "Italian Game",
+  "color": "white",
+  "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O",
+  "variations": [
+   {
+    "name": "Giuoco Piano c3-d4",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O"
+   },
+   {
+    "name": "Slow Italian d3",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7 Re1 O-O Nbd2 Be6"
+   },
+   {
+    "name": "Evans Gambit",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Bg4"
+   },
+   {
+    "name": "Two Knights (…Nf6)",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 O-O Bc5 d4 Bxd4 Nxd4 Nxd4 Bg5 d6 f4"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-london",
+  "name": "London System",
+  "color": "white",
+  "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6 c3 Bd6 Bg3 O-O Bd3 b6 O-O Bb7",
+  "variations": [
+   {
+    "name": "Standard Setup vs d5",
+    "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6 c3 Bd6 Bg3 O-O Bd3 b6 O-O Bb7 Qe2 Bxg3 hxg3 Qc7 dxc5 bxc5 e4 h6 Rad1 Rfe8"
+   },
+   {
+    "name": "vs King's Indian (Bh6 + Opposite-Side Castle Attack)",
+    "pgn": "d4 Nf6 Bf4 g6 Nc3 Bg7 Qd2 O-O Bh6 Bxh6 Qxh6 c5 O-O-O"
+   },
+   {
+    "name": "Aggressive Jobava-London Hybrid",
+    "pgn": "d4 d5 Nc3 Nf6 Bf4 e6 e3 c5 Nf3 a6 Be2 Nc6 O-O Bd6 Bxd6 Qxd6 Na4 cxd4 exd4 O-O"
+   },
+   {
+    "name": "vs …c6 (via 2.Bf4)",
+    "pgn": "d4 d5 Bf4 c6 e3 Nf6 Nf3 Bf5 c4 Nbd7 Nc3 dxc4 Bxc4 e6 O-O"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-stafford-refute",
+  "name": "Stafford Gambit Refutation",
+  "color": "white",
+  "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4",
+  "variations": [
+   {
+    "name": "Main Refutation d3",
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4"
+   },
+   {
+    "name": "4...dxc6 5.e5 Line",
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d4 Qh4 Qf3 Be6 c3"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-caro-kann",
+  "name": "Caro-Kann Defense",
+  "color": "black",
+  "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bd2 Ngf6 O-O-O Be7",
+  "variations": [
+   {
+    "name": "Classical 4...Bf5 (Main Line)",
+    "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bd2 Ngf6 O-O-O Be7"
+   },
+   {
+    "name": "Classical Capablanca 4...Bf5 5.Ng3 Bg6 6.h4",
+    "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 h5 Bh7 Nf3 Nd7 Bd3 Bxd3 Qxd3 e6 Bf4 Ngf6 O-O-O Be7 Kb1 O-O Ne5"
+   },
+   {
+    "name": "Tartakower / Two Knights 3...Nf6",
+    "pgn": "e4 c6 Nc3 d5 Nf3 Nf6 e5 Ne4 Ne2 Qb6 d4 e6 Ng3 Nxg3 hxg3 c5"
+   },
+   {
+    "name": "Two Knights 2.Nc3 d5 3.Nf3 Bg4",
+    "pgn": "e4 c6 Nc3 d5 Nf3 Bg4 h3 Bxf3 Qxf3 e6 d4 Nf6 Bd3 dxe4 Nxe4 Nxe4 Qxe4 Nd7 O-O Nf6"
+   },
+   {
+    "name": "Advance Variation 3.e5 Bf5",
+    "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3 Nd7 O-O Ne7 Nbd2 Nc6 c3 cxd4 cxd4"
+   },
+   {
+    "name": "Advance Variation 3.e5 c5",
+    "pgn": "e4 c6 d4 d5 e5 c5 dxc5 e6 a3 Bxc5 Nf3 Nc6 Bd3 Nge7 b4 Bb6"
+   },
+   {
+    "name": "Exchange Variation 3.exd5",
+    "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 Nf6 Bf4 Bg4 Qb3 Qd7 Nd2 e6 Ngf3 Bd6 Bxd6 Qxd6 O-O O-O"
+   },
+   {
+    "name": "Panov-Botvinnik Attack 3.exd5 cxd5 4.c4",
+    "pgn": "e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 g6 cxd5 Nxd5 Bc4 Nb6 Bb3 Bg7 Nf3 O-O O-O Nc6 d5 Na5 Re1 Nxb3 axb3"
+   },
+   {
+    "name": "Fantasy Variation 3.f3",
+    "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6 c3 Bd6"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-scandinavian",
+  "name": "Scandinavian Defense",
+  "color": "black",
+  "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 c6 Qe2 Bb4 O-O-O Nbd7",
+  "variations": [
+   {
+    "name": "Main Line Qa5",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 c6 Qe2 Bb4 O-O-O Nbd7"
+   },
+   {
+    "name": "2...Nf6 Scandinavian",
+    "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb6 Nf3 g6 Nc3 Bg7 Be3 O-O Be2 Nc6 O-O e5"
+   },
+   {
+    "name": "Portuguese …Bg4",
+    "pgn": "e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 Nf3 Nc6 Be3 O-O-O"
+   },
+   {
+    "name": "vs Nc3 (Nxd5)",
+    "pgn": "e4 d5 exd5 Nf6 Nc3 Nxd5 Bc4 c6 Qf3 Nf6 Nge2 Nbd7 d4 Nb6"
+   },
+   {
+    "name": "vs Bb5+",
+    "pgn": "e4 d5 exd5 Nf6 Bb5+ Nbd7 Nc3 a6 Be2 b5 a3 Bb7"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-qgd",
+  "name": "Queen's Gambit Declined",
+  "color": "black",
+  "pgn": "d4 d5 c4 e6 Nf3 Nf6 Nc3 Be7 Bf4 O-O e3 c5 dxc5 Bxc5 Qc2 Nc6 a3 Qa5 Rd1 Be7",
+  "variations": [
+   {
+    "name": "Classical 5.Bf4 Line",
+    "pgn": "d4 d5 c4 e6 Nf3 Nf6 Nc3 Be7 Bf4 O-O e3 c5 dxc5 Bxc5 Qc2 Nc6 a3 Qa5 Rd1 Be7"
+   },
+   {
+    "name": "Exchange Variation",
+    "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 Nbd7 Nf3 Re8 Qc2 c6 O-O Nf8"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-ponziani",
+  "name": "Ponziani Opening",
+  "color": "white",
+  "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 exd4 e5 Nd5 Qb3 Nb6 cxd4 d6 Bb5 Be6",
+  "variations": [
+   {
+    "name": "Main Line 3...Nf6 4.d4",
+    "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 exd4 e5 Nd5 Qb3 Nb6 cxd4 d6 Bb5 Be6"
+   },
+   {
+    "name": "3...d5 Central Counter",
+    "pgn": "e4 e5 Nf3 Nc6 c3 d5 Qa4 Nf6 Nxe5 Bd6 Nxc6 bxc6 d3 O-O Be2 Re8 Nd2"
+   },
+   {
+    "name": "4…Nxe4 (dxc6)",
+    "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 Bb6 Qd5 Nf2 Rg1 O-O cxb7 Bxb7 Qxb7"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-fantasy-caro",
+  "name": "Fantasy Variation vs Caro-Kann",
+  "color": "white",
+  "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Bc5",
+  "variations": [
+   {
+    "name": "Main Line 3...dxe4 4.fxe4",
+    "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Bc5"
+   },
+   {
+    "name": "Solid 3...e6",
+    "pgn": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 Bf4 Ne7 Qd3 b6"
+   },
+   {
+    "name": "Aggressive 3...g6",
+    "pgn": "e4 c6 d4 d5 f3 g6 Nc3 Bg7 Be3 dxe4 fxe4 Nf6 Nf3 O-O Bd3"
+   },
+   {
+    "name": "Counter 3...Qb6",
+    "pgn": "e4 c6 d4 d5 f3 Qb6 Nc3 dxe4 fxe4 e5 Nf3 exd4 Nxd4 Bc5 Na4 Qa5+ c3"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-milner-barry",
+  "name": "Milner-Barry Gambit vs French",
+  "color": "white",
+  "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Nxd4 Qxd4 Nc3 a6 Qe2 Ne7 Kh1",
+  "variations": [
+   {
+    "name": "Main Gambit Line",
+    "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Nxd4 Qxd4 Nc3 a6 Qe2 Ne7 Kh1"
+   },
+   {
+    "name": "Black Declines with Bd7",
+    "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 Bd7 O-O cxd4 cxd4 Nxd4 Nxd4 Qxd4 Nc3 Qb6"
+   },
+   {
+    "name": "Anti-French 3.e5 Advance",
+    "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Nh6 Bd3 cxd4 cxd4 Nf5 Bxf5 exf5 Nc3 Be6 O-O Be7"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-anti-sicilian",
+  "name": "Anti-Sicilian Rossolimo",
+  "color": "white",
+  "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 cxd4 Nxd4 Nxd4 Qxd4",
+  "variations": [
+   {
+    "name": "Rossolimo 3.Bb5 e6",
+    "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 cxd4 Nxd4 Nxd4 Qxd4"
+   },
+   {
+    "name": "Rossolimo 3.Bb5 g6",
+    "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Re1 e5 Bxc6 dxc6 d3"
+   },
+   {
+    "name": "Accelerated Pawn Storm (positional squeeze)",
+    "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 Bxc6 bxc6 d3 d5 e5 Ne7 b3 Ng6 Bb2"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-trompowsky",
+  "name": "Trompowsky Attack",
+  "color": "white",
+  "pgn": "d4 Nf6 Bg5 e6 Nd2 h6 Bh4 d5 e3 Be7 Bd3 b6 c3 O-O Bxf6 Bxf6 f4 Ba6 Qe2 Bxd3 Qxd3 c5 Ngf3 Nc6",
+  "variations": [
+   {
+    "name": "Main line vs …e6",
+    "pgn": "d4 Nf6 Bg5 e6 Nd2 h6 Bh4 d5 e3 Be7 Bd3 b6 c3 O-O"
+   },
+   {
+    "name": "Vaganian Attack (…Ne4)",
+    "pgn": "d4 Nf6 Bg5 Ne4 h4 c5 d5 Qb6 Nd2 Nxg5 hxg5 Qxb2 g6 fxg6 Ngf3 d6 e4 Qf6 e5 dxe5 Rb1 e6 Bb5+ Bd7"
+   },
+   {
+    "name": "…d5 system",
+    "pgn": "d4 Nf6 Bg5 d5 e3 c5 c3 Nc6 Nd2 Qb6 Qb3 c4 Qc2 Bg4 Bxf6 gxf6 e4 e6 Be2 Rg8 Bxg4 Rxg4 g3 dxe4"
+   },
+   {
+    "name": "…g6 fianchetto",
+    "pgn": "d4 Nf6 Bg5 g6 Bxf6 exf6 e3 Bg7 g3 O-O Bg2 f5 Ne2 Nc6 O-O d6 c4 Ne7 Nbc3 c6 b4 Rb8 a4 Be6"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-english",
+  "name": "English Opening",
+  "color": "white",
+  "pgn": "c4 Nf6 Nc3 g6 e4 d6 d4 Bg7 Be2 O-O Be3 e5 d5 a5 g4 Na6",
+  "variations": [
+   {
+    "name": "Botvinnik System vs KID-setup",
+    "pgn": "c4 Nf6 Nc3 g6 e4 d6 d4 Bg7 Be2 O-O Be3 e5 d5 a5 g4 Na6"
+   },
+   {
+    "name": "Symmetric (…e5)",
+    "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 e3 Bb4 Qc2 Bxc3 Qxc3 Qe7 b3 d5 d4 Bg4 Nxe5 Nxe5 dxe5 Ne4 Qc2"
+   },
+   {
+    "name": "Anti-French (…e6)",
+    "pgn": "c4 e6 Nc3 d5 e3 Nf6 Nf3 Be7 b3 O-O Bb2 c5 cxd5 exd5 d4 Nc6 Be2 Re8 h3 cxd4 Nxd4 Bd6 Nf3 a6"
+   },
+   {
+    "name": "Symmetric (…c5)",
+    "pgn": "c4 c5 Nc3 Nc6 Nf3 g6 g3 Bg7 Bg2 Nf6 O-O O-O d3 d6"
+   },
+   {
+    "name": "vs …c6 (Slav-style)",
+    "pgn": "c4 c6 Nc3 d5 e3 Nf6 Nf3 e6 b3 Nbd7 Bb2 e5 Qc2 a6 h3"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-vienna",
+  "name": "Vienna Game",
+  "color": "white",
+  "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 c5 Qg3 Nc6 Nf3 Be6 Rb1 Qd7 Bb5 O-O-O O-O Be7 d4 c4",
+  "variations": [
+   {
+    "name": "Vienna Gambit Main Line",
+    "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 c5 Qg3 Nc6 Nf3 Be6 Rb1"
+   },
+   {
+    "name": "Vienna Quiet (Bc4 + d3)",
+    "pgn": "e4 e5 Nc3 Nf6 Bc4 Nc6 d3 Bc5 f4 d6 Nf3 Bg4 Na4"
+   },
+   {
+    "name": "Vienna with …Nc6 + …Bc5",
+    "pgn": "e4 e5 Nc3 Nf6 Bc4 Nc6 d3 Bc5 f4 d6 Nf3"
+   },
+   {
+    "name": "Vienna Gambit Accepted",
+    "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3 d6 d4 dxe5 Bb5+ c6 Bc4"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-kia",
+  "name": "King's Indian Attack",
+  "color": "white",
+  "pgn": "Nf3 d5 g3 c5 Bg2 Nc6 O-O e6 d3 Nf6 Nbd2 Be7 e4 O-O Re1",
+  "variations": [
+   {
+    "name": "vs …d5 + …c5",
+    "pgn": "Nf3 d5 g3 c5 Bg2 Nc6 O-O e6 d3 Nf6 Nbd2 Be7 e4 O-O Re1"
+   },
+   {
+    "name": "vs Sicilian (KIA vs …c5 + …Nf6)",
+    "pgn": "Nf3 c5 g3 Nc6 Bg2 g6 O-O Bg7 d3 Nf6 Nbd2 d6 e4"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-caro-advance-white",
+  "name": "Caro-Kann Advance",
+  "color": "white",
+  "pgn": "e4 c6 d4 d5 e5 Bf5 h4 h5 Bg5 Qb6 Bd3 Bxd3 Qxd3 e6 Nd2 Ne7 c4",
+  "variations": [
+   {
+    "name": "Main line (vs …Bf5)",
+    "pgn": "e4 c6 d4 d5 e5 Bf5 h4 h5 Bg5 Qb6 Bd3 Bxd3 Qxd3 e6 Nd2 Ne7 c4"
+   },
+   {
+    "name": "vs …c5 (Botvinnik-Carls)",
+    "pgn": "e4 c6 d4 d5 e5 c5 dxc5 e6 a3 Bxc5 Nf3 Nc6 Bd3 Nge7 b4 Bb6 Bb2 Ng6 O-O Nf4 c4 O-O Nc3 Nxd3"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-closed-sicilian",
+  "name": "Closed Sicilian",
+  "color": "white",
+  "pgn": "e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3 Nxb5 Nxb5 a6 Nc3 d6 d4 cxd4 Qxd4 Nf6 Bg5 e5 Qd3 Be6 O-O-O Be7 Bxf6 gxf6",
+  "variations": [
+   {
+    "name": "Closed Sicilian Main",
+    "pgn": "e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3 Nxb5 Nxb5 a6 Nc3 d6 d4 cxd4 Qxd4"
+   },
+   {
+    "name": "vs …d6",
+    "pgn": "e4 c5 Nc3 d6 d4 cxd4 Qxd4 Nc6 Qd2 g6 b3 Bh6 f4 Nf6 Bb2 O-O O-O-O e5 g3 Re8 Kb1"
+   },
+   {
+    "name": "vs …e6",
+    "pgn": "e4 c5 Nc3 e6 d4 cxd4 Qxd4 Nc6 Qd3 Nf6 Bf4 Bb4 O-O-O"
+   },
+   {
+    "name": "vs …g6 (Bxc6)",
+    "pgn": "e4 c5 Nc3 Nc6 Bb5 g6 Bxc6 dxc6 d3 Bg7 Be3 c4 h3 cxd3 cxd3"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-french-defense",
+  "name": "French Defense",
+  "color": "black",
+  "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3 Nc6 g3 e5 Bg2 Bg4",
+  "variations": [
+   {
+    "name": "Rubinstein Main Line",
+    "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3 Nc6 g3 e5 Bg2 Bg4 h3 Bxf3 Bxf3 Qxd4 Qe2 O-O-O O-O Qd7 Bg2 Rg8 Qh5 Qe6 Be3 Bd6 c4 f5 Bd5 Qg6 Qxg6 Rxg6"
+   },
+   {
+    "name": "Tarrasch (Nd2)",
+    "pgn": "e4 e6 d4 d5 Nd2 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3 Nc6 g3 e5 d5 Nb4 c4 Bf5 Qa4+ b5 cxb5 Qxd5 b6+ c6"
+   },
+   {
+    "name": "Exchange (exd5 lines)",
+    "pgn": "e4 e6 d4 d5 exd5 exd5 Nf3 Bd6 Bd3 Bg4 O-O Ne7 Re1 Nc6 Bg5 f6 Bh4 Qd7 c3 O-O-O Nbd2 g5 Bg3 h5"
+   }
+  ]
+ },
+ {
+  "id": "pro-gothamchess-pirc-defense",
+  "name": "Pirc Defense",
+  "color": "black",
+  "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 c5 Bb5+ Nc6 e5 Nd7",
+  "variations": [
+   {
+    "name": "Austrian Attack (f4)",
+    "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 c5 Bb5+ Nc6 e5 Nd7"
+   },
+   {
+    "name": "Classical (Nf3 setup)",
+    "pgn": "e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be2 O-O O-O Nc6 d5 Nb8 Bg5 e5 dxe6 Bxe6 Re1 Nc6 Nd5 Bxd5 exd5 Ne7"
+   },
+   {
+    "name": "150 Attack (Be3 + f3)",
+    "pgn": "e4 d6 d4 Nf6 Nc3 g6 Be3 c6 f3 b5 a3 Nbd7 g4 Bg7"
+   }
+  ]
+ }
+]

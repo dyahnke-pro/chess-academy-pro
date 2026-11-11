@@ -13,6 +13,17 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 📖 WO-OPENINGS-REWRITE-01 — every opening tab rewritten, one computed beat a move, thin openings first; Levy's taught lines (David 2026-11-11: "How well do the opening tabs teach the trompowski?" → "I want you to find as many Levy taught lines as possible. We also need to make sure every other opening is strong. This should have already been done. This concerns me." → "Also check master DB to find his lines. I want a full rewrite of the opening tab. But it needs to be done deterministically. I want 1 beat per move explaining the why, the move order, this is our chance to teach like Naroditski, and we don't do it. We start with the thin openings." → "And yes. Ok to swarm")
+
+**Why it was missed.** Every course passed every gate (a lesson exists, reaches a middlegame, two registers, sources, board-true claims) — and no gate counted how many moves one paragraph covers. Census 2026-11-11 over 133 openings: the 43 courses' Watch beats cover a median 3.7 moves on the main line and 5.9 on a tab (the Trompowsky: 5 beats over 21 plies; each tab 3 beats over ~20 plies); 11 courses have no trap; most have 1–3 known mistakes. Pro lessons are denser (2–4) but uneven.
+
+**The plan (agreed 2026-11-11).**
+- **R1 — the deterministic writer.** The app's own pipeline (`generateOpening` → `computedPlyBeat` → the lesson composer) already writes one beat a move; read with real engine reads (harness `lessonWriter.measure.test.ts`, native Stockfish at a FIXED depth via `src/test/nativeStockfish.ts`, so a lesson is the same every run). Owed: say the move order (what the masters play instead, and why ours first), the opening's own idea on its signature move (Bg5's threat of Bxf6), no empty beat, no repeated sentence.
+- **R2 — the strength gate.** A census gate over every opening: one beat a move with a why, lines to a middlegame from the masters database, a plan and a model game on every tab, traps and known mistakes where the games have them. Shrink-only fail list.
+- **R3 — the rewrite.** Each opening's lines BAKED offline by the R1 writer at a fixed depth (deterministic, instant on the phone, readable and gated before it ships), served to Watch and Learn in place of the hand-written beats, which are SET ASIDE (kept, not spoken) until David says delete. Thin first: Semi-Slav, Sveshnikov, Grünfeld, Benoni, Petrov, Two Knights, Trompowsky, Najdorf, Budapest, Old Indian, Bird's, Evans; then every course and pro tab.
+- **R4 — Levy's lines.** A 6-agent swarm (`docs/levy-lines/*.json`): his opening videos (transcripts are reference only, never his words), his chess.com tree, the masters database; every move chess.js-legal, game counts, Stockfish at the line's end; marked new / extends / duplicate against his 18 openings. Then added as tabs or openings, taught by the R1 writer.
+- **R5 — ship and audit**, reading the lessons line by line.
+
 ## 🗣️ 2026-11-09 NARRATION REVIEW — every spoken line read against its board (David: "review and evaluate each narration line for accuracy and content")
 
 Fixed at their producers, each with a test that fails on the old code:
