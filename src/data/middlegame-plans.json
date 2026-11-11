@@ -16016,7 +16016,6 @@
     "title": "Ne5 and the Great Trade-Down",
     "intro": "Take the outpost, defuse the battery by trading pairs, and reach the level, solid middlegame the London exists for.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/London-System",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -43857,21 +43856,9 @@
      [],
      [],
      [],
-     [
-      {
-       "from": "h4",
-       "to": "h5",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
      [],
-     [
-      {
-       "from": "e3",
-       "to": "g5",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
+     [],
+     [],
      []
     ],
     "highlights": [
@@ -43927,7 +43914,6 @@
     "title": "London: Gain Space and Shove the Knight",
     "intro": "The model line: the h-pawn gains space and shoves Black’s knight to the rim.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/London-System",
      "https://en.wikipedia.org/wiki/London_System",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
@@ -44095,7 +44081,6 @@
     "title": "The a4-Knight Probes c5",
     "intro": "Probe, retreat with purpose, fix the wing — the Jobava squeeze runs on structure, not fireworks.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/London-System",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -44263,7 +44248,6 @@
     "title": "Bxc6 and the e5 Outpost",
     "intro": "Trade so Black keeps the bad bishop, then land the knight on e5 with tempo.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/London-System",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -44426,7 +44410,6 @@
     "title": "The Bishop Keeps Its Diagonal",
     "intro": "Black chases the London bishop for three moves; it dances e5-g3 and ends up better placed than it started.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/London-System",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]
@@ -44588,7 +44571,6 @@
     "title": "Weather the Counter",
     "intro": "Bank the offered pawn, block with tempo, and spend one quiet move killing the whole counterattack.",
     "sources": [
-     "book:chess-fundamentals",
      "https://www.chess.com/openings/London-System",
      "https://api.chess.com/pub/player/gothamchess/games/archives"
     ]

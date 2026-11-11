@@ -258,6 +258,66 @@
             "https://www.chess.com/openings/London-System",
             "https://api.chess.com/pub/player/gothamchess/games/archives"
           ]
+        },
+        {
+          "name": "Pyramid with Ne5",
+          "pgn": "d4 d5 Bf4 Nf6 e3 e6 Nf3 Bd6 Bg3 O-O Bd3 Nc6 c3 Qe7 Ne5 Bxe5 dxe5",
+          "explanation": "The bishop goes to f4 before e3 and steps back to g3 when …Bd6 offers a trade. Once …Nc6 and …Qe7 get …e5 ready, your knight takes e5 first, and if they capture it, the pawn that takes back hits the knight on f6 and cramps their kingside.",
+          "sources": [
+            "concept:pos-development",
+            "concept:pos-center",
+            "https://en.wikipedia.org/wiki/London_System"
+          ]
+        },
+        {
+          "name": "Qb3 vs …Qb6",
+          "pgn": "d4 d5 Bf4 Nf6 e3 c5 c3 Nc6 Nd2 Qb6 Qb3 c4 Qc2 g6 e4 e5 dxe5",
+          "explanation": "Against …c5 and …Qb6 the pawn triangle holds, and Qb3 answers the queen with a trade offer. If they push past with …c4 instead, your queen steps back to c2 and e4 hits their pawn chain at its base on d5.",
+          "sources": [
+            "concept:pos-development",
+            "concept:pos-center",
+            "https://en.wikipedia.org/wiki/London_System"
+          ]
+        },
+        {
+          "name": "vs Early …Bf5",
+          "pgn": "d4 d5 Bf4 Bf5 c4 e6 Nc3 c6 Qb3 Qb6 c5 Qxb3 axb3 Nd7 b4",
+          "explanation": "When their light-squared bishop comes out to f5 early, nothing is left guarding b7. You switch to c4, Nc3 and Qb3 to go after it, and after the queens come off, c5 and b4 grab queenside space and leave d6 as a hole in their camp.",
+          "sources": [
+            "concept:pos-development",
+            "concept:pos-center",
+            "https://en.wikipedia.org/wiki/London_System"
+          ]
+        },
+        {
+          "name": "vs Grünfeld Setup",
+          "pgn": "d4 Nf6 Bf4 g6 Nc3 d5 e3 Bg7 h4 h5 Nf3 O-O Ne5 c5 Qd2",
+          "explanation": "Against …g6 and …d5 your h-pawn runs to h4 before they castle. When …h5 stops it, you develop with Nf3, Ne5 and Qd2, castle queenside, and keep g4 in hand to reopen the h-file.",
+          "sources": [
+            "concept:pos-development",
+            "concept:pos-center",
+            "https://en.wikipedia.org/wiki/London_System"
+          ]
+        },
+        {
+          "name": "Poisoned b2 Pawn",
+          "pgn": "d4 Nf6 Bf4 c5 e3 Qb6 Nc3 Qxb2 Nb5 Nd5 a3 a6 Rb1 Qa2 Qc1 axb5 Ra1",
+          "explanation": "Against …c5 and …Qb6 you let the b2 pawn go: Nc3 and Nb5 aim at a check on c7. After …Nd5, a3, Rb1 and Qc1 take the squares around their queen until it has to give itself up for your rook.",
+          "sources": [
+            "concept:pos-development",
+            "concept:pos-center",
+            "https://en.wikipedia.org/wiki/London_System"
+          ]
+        },
+        {
+          "name": "d5 vs …c5",
+          "pgn": "d4 Nf6 Bf4 c5 d5 d6 Nc3 e5 Bd2 Be7 e4 O-O h3 h6 Bd3",
+          "explanation": "Against an early …c5 the pawn goes to d5 and grabs space. When …e5 hits the bishop it drops back to d2, e4 completes your center, and their bishop on e7 is left behind its own pawns on d6 and e5.",
+          "sources": [
+            "concept:pos-development",
+            "concept:pos-center",
+            "https://en.wikipedia.org/wiki/London_System"
+          ]
         }
       ],
       "trapLines": [],

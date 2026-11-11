@@ -11,6 +11,7 @@ import { KINGS_INDIAN_DEFENCE_WATCH } from './kingsIndianDefence';
 import { OLD_INDIAN_DEFENCE_WATCH } from './oldIndianDefence';
 import { PETROV_DEFENCE_WATCH } from './petrovDefence';
 import { PRO_GOTHAMCHESS_ITALIAN_WATCH } from './proGothamchessItalian';
+import { PRO_GOTHAMCHESS_LONDON_WATCH } from './proGothamchessLondon';
 import { RETI_OPENING_WATCH } from './retiOpening';
 import { SEMI_SLAV_WATCH } from './semiSlav';
 import { SICILIAN_NAJDORF_WATCH } from './sicilianNajdorf';
@@ -28,6 +29,7 @@ export const WATCH_COURSES: readonly WatchCourse[] = [
   OLD_INDIAN_DEFENCE_WATCH,
   PETROV_DEFENCE_WATCH,
   PRO_GOTHAMCHESS_ITALIAN_WATCH,
+  PRO_GOTHAMCHESS_LONDON_WATCH,
   RETI_OPENING_WATCH,
   SEMI_SLAV_WATCH,
   SICILIAN_NAJDORF_WATCH,

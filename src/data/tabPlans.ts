@@ -770,6 +770,14 @@ export const TAB_PLAN_TABLE: Readonly<Record<string, TabPlanRow>> = {
       'aggressive jobava-london hybrid': [
         'mp-progothamchess-london-jobava-nb5',
       ],
+      // The six tabs added from the repertoire's taught lines (2026-11-11): no
+      // middlegame plan is anchored at their ends yet.
+      'pyramid with ne5': [],
+      'qb3 vs …qb6': [],
+      'vs early …bf5': [],
+      'vs grünfeld setup': [],
+      'poisoned b2 pawn': [],
+      'd5 vs …c5': [],
     },
   },
   'pro-gothamchess-ponziani': {
