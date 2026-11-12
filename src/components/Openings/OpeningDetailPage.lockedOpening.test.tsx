@@ -12,7 +12,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { screen, waitFor, fireEvent, render } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
-import { OpeningDetailPage, OPEN_ON_LOCKED_OPENING } from './OpeningDetailPage';
+import { OpeningDetailPage, OPENING_ACCESS } from './OpeningDetailPage';
 import { buildOpeningRecord } from '../../test/factories';
 import type { OpeningRecord } from '../../types';
 import { db } from '../../db/schema';
@@ -20,6 +20,8 @@ import { useFreeTierStore } from '../../stores/freeTierStore';
 
 const mockGetOpeningById = vi.fn();
 const mockCanView = vi.fn((): boolean => false);
+const mockEligible = vi.fn((): boolean => false);
+const mockClaim = vi.fn(async (_id: string): Promise<string> => 'ok');
 
 vi.mock('../../services/gamesCourseRecord', () => ({
   gamesCourseRecord: (): Promise<null> => Promise.resolve(null),
@@ -53,6 +55,7 @@ vi.mock('../../hooks/useEntitlement', () => ({
 vi.mock('../../services/freeTierService', async (importOriginal) => ({
   ...(await importOriginal<typeof import('../../services/freeTierService')>()),
   canViewOpening: (): boolean => mockCanView(),
+  isEligibleFreeOpening: (): boolean => mockEligible(),
   isMembersOnlyOpening: (): boolean => false,
 }));
 
@@ -131,7 +134,7 @@ describe('a locked opening opens its page and the main-line Watch, nothing else'
   });
 
   it('only the page and the main-line Watch are open on a locked opening', () => {
-    const open = Object.entries(OPEN_ON_LOCKED_OPENING).filter(([, v]) => v).map(([k]) => k).sort();
+    const open = Object.entries(OPENING_ACCESS).filter(([, v]) => v === 'free').map(([k]) => k).sort();
     expect(open).toEqual(['detail', 'walkthrough']);
   });
 
@@ -201,5 +204,69 @@ describe('a locked opening opens its page and the main-line Watch, nothing else'
     expect(screen.queryByTestId('opening-unlock-bar')).toBeNull();
     fireEvent.click(screen.getByTestId('learn-btn'));
     expect(screen.queryByTestId('wall-locked-action')).toBeNull();
+  });
+});
+
+describe('the free pick: they know before they spend it (David 2026-11-12)', () => {
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    mockGetOpeningById.mockResolvedValue(lockedOpening);
+    mockCanView.mockReturnValue(true);
+    mockEligible.mockReturnValue(true);
+    mockClaim.mockResolvedValue('ok');
+    useFreeTierStore.setState((s) => ({
+      hydrated: true,
+      row: { ...s.row, freeOpeningId: null, freeOpeningIds: [], earnedOpeningCredits: 0, trainingOpeningCredits: 0 },
+      claimFreeOpening: mockClaim as unknown as typeof s.claimFreeOpening,
+    }));
+    await db.studentMemory.clear();
+  });
+
+  it('Learn does not start: the page asks, and says what the pick costs', async () => {
+    renderPage();
+    await waitFor(() => expect(screen.getByTestId('learn-btn')).toBeInTheDocument());
+    expect(screen.getByTestId('free-pick-hint')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('learn-btn'));
+    const ask = await screen.findByTestId('free-pick-confirm');
+    expect(ask.textContent).toContain('This makes Italian Game your free opening');
+    expect(ask.textContent).toContain('main-line Watch free');
+    expect(ask.textContent).toContain('$0.99');
+    expect(mockClaim).not.toHaveBeenCalled();
+    expect(screen.getByTestId('learn-btn')).toBeInTheDocument();
+  });
+
+  it('"Keep browsing" picks nothing and stays on the page', async () => {
+    renderPage();
+    await waitFor(() => expect(screen.getByTestId('practice-btn')).toBeInTheDocument());
+    fireEvent.click(screen.getByTestId('practice-btn'));
+    fireEvent.click(await screen.findByTestId('free-pick-confirm-no'));
+    expect(screen.queryByTestId('free-pick-confirm')).toBeNull();
+    expect(mockClaim).not.toHaveBeenCalled();
+    expect(screen.getByTestId('practice-btn')).toBeInTheDocument();
+  });
+
+  it('"Make it my free opening" picks THIS opening, then starts the drill they asked for', async () => {
+    renderPage();
+    await waitFor(() => expect(screen.getByTestId('learn-btn')).toBeInTheDocument());
+    fireEvent.click(screen.getByTestId('learn-btn'));
+    fireEvent.click(await screen.findByTestId('free-pick-confirm-yes'));
+    await waitFor(() => expect(mockClaim).toHaveBeenCalledWith('locked-test'));
+    await waitFor(() => expect(screen.queryByTestId('learn-btn')).toBeNull());
+  });
+
+  it('Watch never asks: the main line plays without spending the pick', async () => {
+    renderPage();
+    await waitFor(() => expect(screen.getByTestId('walkthrough-btn')).toBeInTheDocument());
+    fireEvent.click(screen.getByTestId('walkthrough-btn'));
+    expect(screen.getByTestId('lesson-player')).toBeInTheDocument();
+    expect(mockClaim).not.toHaveBeenCalled();
+  });
+
+  it('with a referral credit it says how many free openings are left', async () => {
+    useFreeTierStore.setState((s) => ({ row: { ...s.row, earnedOpeningCredits: 1 } }));
+    renderPage();
+    await waitFor(() => expect(screen.getByTestId('learn-btn')).toBeInTheDocument());
+    fireEvent.click(screen.getByTestId('learn-btn'));
+    expect((await screen.findByTestId('free-pick-confirm')).textContent).toContain('one of your 2 free openings');
   });
 });
