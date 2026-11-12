@@ -405,7 +405,10 @@ export function moveDifference(
   // other move keeps guarded ("Nh5 keeps your knight on d5 guarded"); and a
   // piece left loose matters only when something already hits it (a b2 pawn
   // or a rook on a8 with no guard is half the boards of a game).
-  if (cmp && cmp.square !== a.to && cmp.square !== bm.to && hitAfter(fenBefore, cmp.drops, cmp.square)) {
+  // …nor the square a move leaves: after a4 the pawn is not on a5 to be kept
+  // guarded (Review prod audit 2026-11-12, Giri–Carlsen 25…a4: "a4 keeps your
+  // pawn on a5 guarded, and Bxe4 leaves it loose").
+  if (cmp && !([a.to, bm.to, a.from, bm.from] as string[]).includes(cmp.square) && hitAfter(fenBefore, cmp.drops, cmp.square)) {
     return { kind: 'loose', favours: cmp.keeps, other: cmp.drops, squares: [cmp.square],
       text: `${cmp.keeps} keeps ${own} ${NAME[cmp.piece] ?? 'piece'} on ${cmp.square} guarded, and ${cmp.drops} leaves it loose`,
       // The held forms name the piece, never the other move (David

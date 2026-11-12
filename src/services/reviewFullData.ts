@@ -1218,7 +1218,12 @@ export function computeMoveFacets(
         const comp = sacrificeCompensation(fenAfter, moverWB, moverPovCp, moverWB === studentColorWB, moverPovBeforeCp);
         // Seated: "It's a sacrifice" on the opponent's move read as the student's
         // own (prod 2026-09-23, QGD c4). The clauses are already seated.
-        if (comp.length) {
+        // A sacrifice that forces mate is said by its mate line, which leads
+        // (Review prod audit 2026-11-12, Giri–Carlsen 34…Qe1+: "Your move is a
+        // sacrifice — compensation: you're already on top here. You have mate
+        // in one with your rook on c1"): the mate is what it gets.
+        const matesFor = ctx.evaluation != null && isMateEval(ctx.evaluation) && (moverWB === 'w' ? ctx.evaluation > 0 : ctx.evaluation < 0);
+        if (comp.length && !matesFor) {
           const f = made('sacrificeCompensation', 'sac', `${moverWB === studentColorWB ? 'Your' : 'Their'} move is a sacrifice — compensation: ${andList(comp)}.`);
           facets.push(f);
           // The compensation is shown by the play that follows: the engine's
