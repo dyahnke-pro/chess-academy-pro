@@ -101,7 +101,7 @@ describe('8.Bxf7+ on the live producers: one loss, one habit', () => {
     expect(turn.teachesMethod).toBe(true);
   });
   it('the blunder-check lane is a method, so the door keeps one beside a taught HOW', () => {
-    const hints = studentMoveTeaching({ namesStudentMoves: true, fenBefore, san: 'Bxf7+', reply: 'Kxf7', history: [...H, 'Bxf7+'], cpLoss: 204, cpAfter: -236, bothCp: true, bestSan: 'e5', bestLine: undefined, studentColor: 'white' } as never);
+    const hints = studentMoveTeaching({ linesAfter: [], namesStudentMoves: true, fenBefore, san: 'Bxf7+', reply: 'Kxf7', history: [...H, 'Bxf7+'], cpLoss: 204, cpAfter: -236, bothCp: true, bestSan: 'e5', bestLine: undefined, studentColor: 'white' } as never);
     const bc = hints.find((h) => h.lane === 'blunderCheck');
     expect(bc).toBeDefined();
     expect(bc!.claims?.some((c) => c.startsWith('method:'))).toBe(true);
@@ -138,7 +138,7 @@ describe('20.Qxf4 on the live producers: one answer, one reason', () => {
   });
 
   it('the recapture line does not give the better recapture a second reason', () => {
-    const hints = studentMoveTeaching({ namesStudentMoves: true, fenBefore, san: 'Qxf4', reply: 'f6', history: [...SANS, 'Qxf4'], cpLoss: 175, cpAfter: -292, bothCp: true, bestSan: 'Bxf4', bestLine: undefined, studentColor: 'white' } as never);
+    const hints = studentMoveTeaching({ linesAfter: [], namesStudentMoves: true, fenBefore, san: 'Qxf4', reply: 'f6', history: [...SANS, 'Qxf4'], cpLoss: 175, cpAfter: -292, bothCp: true, bestSan: 'Bxf4', bestLine: undefined, studentColor: 'white' } as never);
     expect(hints.find((h) => h.lane === 'recapture')).toBeUndefined();
     expect(hints.map((h) => h.text).join(' ')).not.toMatch(/e5 hits it/);
   });

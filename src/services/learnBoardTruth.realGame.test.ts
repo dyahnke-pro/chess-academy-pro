@@ -54,12 +54,18 @@ describe('Learn board truth — the real game', () => {
   });
 
   // LEARN NAMES NO MOVE UNASKED — the held form of each producer, on the board it was heard.
-  it('16.Ne3: heads for their king without naming Nf5', () => {
-    expect(kingAttack(at(30), 'Ne3', true, true)?.text).toMatch(/Nf5 next/);
-    const held = kingAttack(at(30), 'Ne3', false, false);
-    expect(held?.text).toBe('Your knight heads for their king — one more move brings it to bear.');
-    expect(held?.next).toBeUndefined();
-    expect(held?.squares).not.toContain('f5');
+  // 16.Ne3 used to "head for their king — Nf5 next" off geometry alone. The
+  // engine's lines after it (depth 16) never play Nf5 within three moves (…Nc6
+  // Rf2, …f6 Rf2, …b5 Bd2), so it is not said in either form (pass-3 false
+  // facts, class B). The held wording is held in kingAttack.test on Re3.
+  it('16.Ne3: no line plays Nf5, so no "heads for their king"', () => {
+    const lines = [
+      ['b8c6', 'f1f2', 'f7f6', 'g3g4', 'c6d4', 'c1d2', 'd6d5', 'e4d5', 'e6d5', 'e3d5'],
+      ['f7f6', 'f1f2', 'b8c6', 'g3g4', 'c6d4', 'c1d2', 'd6d5', 'e4d5', 'e6d5', 'e3d5'],
+      ['b7b5', 'c1d2', 'b8c6', 'g3g4', 'f7f6', 'f1f2', 'c6d4', 'a1f1', 'b5b4', 'h5h4'],
+    ];
+    expect(kingAttack(at(30), 'Ne3', true, true, lines)?.kind).not.toBe('heads-for-king');
+    expect(kingAttack(at(30), 'Ne3', false, false, lines)?.kind).not.toBe('heads-for-king');
   });
 
   it('20…Nd4: the masked hole and the unmoved pawn hold c3', () => {

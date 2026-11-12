@@ -12,7 +12,10 @@
 //     bear on it;
 //   · brings a piece over (quietly) to bear on it, the attack at least two;
 //   · heads there: one more quiet move of that piece lands it, safely, on a
-//     square bearing on their king — where from its old square it could not.
+//     square bearing on their king — where from its old square it could not —
+//     AND the engine's own line plays that move (pass-3 Petrov, 7…Be7: "heads
+//     for their king — …Bh4 next" with …Bh4 in no line; Vienna 5.Nf3 and the
+//     Copycat's Nh3: "…Ng5 next", likewise). No line, no hop.
 // Only against a CASTLED king for the quiet kinds (an uncastled king in the
 // centre is a different lesson), only with a queen or two attackers already,
 // never on a mating move (that has its own sentence).
@@ -34,6 +37,26 @@ interface KingAttackPoint {
 }
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+
+/** The next hop must come within this many plies of the line after the move
+ *  (three moves a side) — the window `moveIntent` reads a prepared move in. */
+const HOP_PLIES = 6;
+
+/** The squares the engine's lines move the piece now on `at` to next: the
+ *  first move each line makes with that piece, by its side, inside the window.
+ *  `lines` start with the opponent's reply (UCI). */
+function hopsInLines(at: string, lines: ReadonlyArray<readonly string[]>): Set<string> {
+  const out = new Set<string>();
+  for (const l of lines) {
+    let sq = at;
+    for (let k = 0; k < Math.min(l.length, HOP_PLIES); k += 1) {
+      const u = l[k];
+      if (k % 2 === 0) { if (u.slice(2, 4) === sq) break; continue; } // their move took it
+      if (u.slice(0, 2) === sq) { out.add(u.slice(2, 4)); break; }
+    }
+  }
+  return out;
+}
 
 /** `c` with `color` to move and no en-passant square — to ask where a piece
  *  could go next. */
@@ -79,6 +102,10 @@ export function kingAttack(
    *  (David 2026-11-09: "the user knows that, they see it play out"); Review
    *  names it. */
   namesPlayedMove: boolean,
+  /** REQUIRED: the engine's lines from the board after the move (UCI, their
+   *  reply first). A piece "heads for their king" only where a line plays
+   *  its next hop; empty — no line was read — and the hop is never claimed. */
+  linesAfter: ReadonlyArray<readonly string[]>,
 ): KingAttackPoint | null {
   let before: Chess; let after: Chess; let mv;
   try {
@@ -141,7 +168,8 @@ export function kingAttack(
   if (!a.attackers.has(mv.to) && !b.attackers.has(mv.from) && a.attackers.size >= 1) {
     const kf = a.king.charCodeAt(0);
     const onWing = (sq: string): boolean => Math.abs(sq.charCodeAt(0) - kf) <= 2;
-    const next = quietNextMoves(after, mv.to, me).find((n) => onWing(n.to) && bearsSafelyFrom(after, mv.to, n.to, me));
+    const hops = hopsInLines(mv.to, linesAfter);
+    const next = quietNextMoves(after, mv.to, me).find((n) => hops.has(n.to) && onWing(n.to) && bearsSafelyFrom(after, mv.to, n.to, me));
     const could = quietNextMoves(before, mv.from, me).some((n) => onWing(n.to) && bearsSafelyFrom(before, mv.from, n.to, me));
     if (next && !could) {
       // Held: the idea, never the square — and no arrow to it.

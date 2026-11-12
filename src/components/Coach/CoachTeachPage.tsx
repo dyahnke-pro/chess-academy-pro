@@ -12602,6 +12602,7 @@ export function CoachTeachPage({ mode }: {
                     for (const h of studentMoveTeaching({ theory: true, namesStudentMoves: false,
                       fenBefore, san: move.san, history: move.history, cpLoss, bothCp: bothCp && cpLoss !== null,
                       bestSan: studentBestSan, bestLine: preStudentRead.topLines?.[0], topLines: preStudentRead.topLines, reply: reply ?? null,
+                      linesAfter: (mid?.topLines ?? []).map((l) => l.moves),
                       cpAfter: bothCp ? mid.evaluation * sign : null,
                       evalBefore: tradeTable,
                       popularTopSan: getCachedAmateurPlay(fenBefore)?.moves[0]?.san ?? null,

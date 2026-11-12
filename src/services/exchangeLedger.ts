@@ -414,11 +414,17 @@ export function proofCut(
    *  2026-10-02: "Why gxf6 was better — the line runs gxf6 — you win a
    *  knight" after Nxf6+). Optional: a line from a quiet board has none. */
   prior?: { fenBefore: string; san: string } | null,
+  /** The line's OWN moves after `sans`, when `sans` is a cut of a longer line
+   *  (the heard horizon, a gift). The recapture the cut is played out with is
+   *  then the move the line itself plays there, never one it did not (pass-3
+   *  false facts: "Qxd4? Then …Nxd4" where the line goes …f6, since …Nxd4
+   *  walks into Nf6+ and Bh6 mate). Absent: the line ended there. */
+  continuation?: readonly string[],
 ): LineProof | null {
   if (prior && sans.length > 0 && /x/.test(prior.san)) {
     const sq = (san: string): string | undefined => /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(san)?.[1];
     if (/x/.test(sans[0]) && sq(sans[0]) === sq(prior.san)) {
-      const p = proofCut(prior.fenBefore, [prior.san, ...sans], studentColorWB);
+      const p = proofCut(prior.fenBefore, [prior.san, ...sans], studentColorWB, null, continuation);
       if (!p) return null;
       return { ...p, plies: Math.max(1, p.plies - 1), sans: p.sans.slice(1) };
     }
@@ -444,6 +450,16 @@ export function proofCut(
     const occ = chess.get(sq as Square);
     const mover = chess.turn();
     if (!occ || occ.color === mover || legalSeeGainFor(chess.fen(), sq as Square, mover) <= 0) break;
+    // A cut of a longer line takes back only the way the line itself does.
+    if (continuation) {
+      const own = continuation[line.length - sans.length];
+      if (!own) break;
+      let m;
+      try { m = chess.move(own); } catch { break; }
+      if (!m.captured || m.to !== sq) { chess.undo(); break; }
+      line.push(m.san);
+      continue;
+    }
     const caps = chess.moves({ verbose: true }).filter((m) => m.to === sq && m.captured);
     if (!caps.length) break;
     caps.sort((x, y) => (VALUE[x.piece as PieceLetter] ?? 100) - (VALUE[y.piece as PieceLetter] ?? 100));
@@ -471,7 +487,7 @@ export function proofCut(
   // and stepping into a capture is exactly what that move can cost.
   const loser: 'w' | 'b' = full.netPawns > 0 ? (studentColorWB === 'w' ? 'b' : 'w') : studentColorWB;
   const gift = lineGiftIndex(fenBefore, sans, loser);
-  if (gift > 0) return proofCut(fenBefore, sans.slice(0, gift), studentColorWB);
+  if (gift > 0) return proofCut(fenBefore, sans.slice(0, gift), studentColorWB, null, [...sans.slice(gift), ...(continuation ?? [])]);
   // The PROOF is the shortest prefix that reaches that result where the count
   // ALSO agrees nothing can be taken back — so exd5 is proved through c4, the
   // move that holds the pawn, not stopped at exd5 (the engine merely did not
@@ -600,7 +616,7 @@ export function heardProofCut(
   const horizon = heardHorizon(fen, whole.sans);
   if (whole.plies <= horizon) return whole;
   if (whole.mate) return null;
-  const near = proofCut(fen, sans.slice(0, horizon), studentColorWB, prior);
+  const near = proofCut(fen, sans.slice(0, horizon), studentColorWB, prior, sans.slice(horizon));
   if (!near || near.plies > horizon || near.mate || !near.ledger?.settled) return null;
   return near;
 }

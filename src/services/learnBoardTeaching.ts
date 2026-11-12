@@ -133,6 +133,12 @@ export interface StudentMoveInput {
   bestLine: AnalysisLine | undefined;
   /** Their answer to the student's move, SAN, when already on the board. */
   reply: string | null;
+  /** REQUIRED: the engine's lines from the board AFTER the student's move
+   *  (UCI, their reply first), best first — every follow-up a lane names
+   *  must be a move one of them plays (pass-3: "…Be7 heads for their king —
+   *  one more bishop move" with no bishop move in any line). Empty when the
+   *  surface read none: then no follow-up is named. */
+  linesAfter: ReadonlyArray<readonly string[]>;
   /** The engine's per-piece table (`evalBoard`) at `fenBefore` — fetched by the
    *  page only when the move completed a trade, for the good-piece /
    *  bad-piece read. Absent → the trade is judged without it. */
@@ -330,7 +336,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
   // BRINGING PIECES TO THEIR KING — not on a move that cost a pawn; that
   // move's lesson is the cost.
   if (i.cpLoss !== null && i.cpLoss < 100) {
-    const ka = kingAttack(i.fenBefore, i.san, false, i.namesStudentMoves);
+    const ka = kingAttack(i.fenBefore, i.san, false, i.namesStudentMoves, i.linesAfter);
     if (ka) {
       out.push(teachingFact('kingAttack', {
         // "…heads for their king — Qg3 next" names the student's next move.
@@ -882,6 +888,8 @@ export function studentMoveAnswerLines(history: readonly string[], ply: number, 
     theory: true, namesStudentMoves: true,
     fenBefore, san: history[ply], history: history.slice(0, ply + 1), cpLoss, bothCp: true,
     bestSan, bestLine: undefined, reply: history[ply + 1] ?? null, cpAfter: null,
+    // No engine line after the move is read here: no follow-up is named.
+    linesAfter: [],
   });
   const out = hints.map((h) => h.text);
   // WHAT A QUIET MOVE IS FOR — Learn's move point (Play on demand, David

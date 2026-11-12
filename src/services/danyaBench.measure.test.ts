@@ -457,7 +457,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
   studentMove: (p) => {
     if (!p.own) return null;
     const best = p.best;
-    return studentMoveTeaching({ namesStudentMoves: true, theory: true,
+    return studentMoveTeaching({ linesAfter: [], namesStudentMoves: true, theory: true,
       fenBefore: p.fenBefore, san: p.san, history: p.history, cpLoss: costCp(p), bothCp: true,
       bestSan: best ? sansOf(p.fenBefore, [best.uci], 1).at(0) ?? null : null,
       bestLine: linesOf(p.before)[0], reply: p.reply ? sansOf(p.fenAfter, [p.reply.uci], 1).at(0) ?? null : null,

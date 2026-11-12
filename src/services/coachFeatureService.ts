@@ -2421,6 +2421,8 @@ function* reviewSegmentSteps(
           bestSan: bestMoveSan,
           bestLine: m.bestMove ? { rank: 1, evaluation: m.preMoveEval, moves: [m.bestMove, ...(m.pv?.afterBest ?? [])], mate: storedMate(m.preMoveEval), earlier: m.pv?.earlierBest?.length ? { depth: Math.max(0, (m.pv.depth ?? 2) - 2), moves: m.pv.earlierBest } : null } : undefined,
           reply: sansForRun[m.ply] ?? null,
+          // The record's own line after the move played (their reply first).
+          linesAfter: m.pv?.afterPlayed?.length ? [m.pv.afterPlayed] : [],
           cpAfter: bothCp ? m.evaluation * sign : null,
         });
         for (const h of hints) {

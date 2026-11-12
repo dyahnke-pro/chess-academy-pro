@@ -156,6 +156,11 @@ const PREPARE_CP = 50;
 /** A stopped move the surface's own line plays within this many plies was not
  *  stopped (three moves a side). */
 const STOPPED_PLIES = 6;
+/** …and a PREPARED move is one the engine's line plays within the same window
+ *  (three moves a side). Past it the board has changed under the claim (pass-3
+ *  Petrov, Steinitz 5.Nxe5: "Their Nxe5 prepares f4" — f4 came on the line's
+ *  thirteenth ply, after the knight had been traded off). */
+const PREPARED_PLIES = STOPPED_PLIES;
 /** A reply counts as gone when it now scores this much worse than their best. */
 const GONE_CP = 60;
 
@@ -175,6 +180,27 @@ function valueFor(l: AnalysisLine, pov: 'w' | 'b'): number {
 export function nullMoveFen(fen: string): string | null {
   // The one null-move rule lives in threatOut (census 2026-10-10).
   return flipSideToMove(fen);
+}
+
+/** Does the piece standing on `sq` (the one the move took) make a capture of
+ *  its own in the first moves of `line`, played from `passFen` (the side that
+ *  owns it to move)? Followed square to square; once another piece lands
+ *  where it stands, it is gone. */
+function takenPieceStrikes(passFen: string, line: readonly string[], sq: string): boolean {
+  try {
+    const c = new Chess(passFen);
+    let at = sq;
+    for (let k = 0; k < Math.min(line.length, STOPPED_PLIES); k += 1) {
+      const u = line[k];
+      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.slice(4, 5) || undefined });
+      if (!m) return false;
+      if (k % 2 === 0 && m.from === at) {
+        if (m.captured) return true;
+        at = m.to;
+      } else if (m.to === at) return false;
+    }
+  } catch { /* an unreadable line proves nothing */ }
+  return false;
 }
 
 function sanOf(fen: string, uci: string): string | null {
@@ -207,12 +233,14 @@ export function moveIntent(
   let fenAfter: string;
   let playedUci: string;
   let mover: 'w' | 'b';
+  let captured = false;
   try {
     const c = new Chess(fenBefore);
     mover = c.turn();
     const m = c.move(playedSan);
     if (!m) return null;
     playedUci = `${m.from}${m.to}${m.promotion ?? ''}`;
+    captured = !!m.captured;
     fenAfter = c.fen();
     if (c.isGameOver()) return null;
   } catch { return null; }
@@ -249,7 +277,12 @@ export function moveIntent(
       // taking on b3 stops your queen taking their pawn on b5" — the rook took
       // the queen). A threat by the piece the move captured is the capture's,
       // never a second job.
-      const taken = threat.slice(0, 2) === playedUci.slice(2, 4);
+      // …nor a threat the TAKEN PIECE carries out further down its own line
+      // (pass-3 Petrov, Steinitz 10.bxc3: "it stops your …Bxh2+" — the pass
+      // line ran …Bxh2+ Kxh2 …Nxd1, and the queen was won by the knight on c3
+      // that bxc3 took). The check was only the way in; the capture is the job.
+      const taken = threat.slice(0, 2) === playedUci.slice(2, 4)
+        || (captured && takenPieceStrikes(passFen, line.moves, playedUci.slice(2, 4)));
       // …nor a threat whose point was the piece that moved: it hit the square
       // the piece just left (prod focus audit 2026-11-09: "Their bishop taking
       // on f7 stops your g6, which would hit their bishop on h5" — the bishop
@@ -323,7 +356,7 @@ export function moveIntent(
     // prepares …Qe7", "Bf4 first, so that Rc1 can take the c-file" — moves in
     // no line of the engine's.
     const engineSaw = new Set<string>();
-    for (const l of reads.after) (l.moves ?? []).forEach((u, k) => { if (k % 2 === 1) engineSaw.add(u); });
+    for (const l of reads.after) (l.moves ?? []).slice(0, PREPARED_PLIES).forEach((u, k) => { if (k % 2 === 1) engineSaw.add(u); });
     const pick = unlocked.find((u) => engineSaw.has(u.uci));
     if (pick) prepares = { uci: pick.uci, san: pick.san, gainCp: PREPARE_CP };
   } else if (opts.prepare === 'line') {
@@ -335,7 +368,7 @@ export function moveIntent(
     const bestBefore = valueFor(reads.before[0], mover);
     try {
       const c = new Chess(fenAfter);
-      for (let i = 0; i < Math.min(line.length, 6); i += 1) {
+      for (let i = 0; i < Math.min(line.length, PREPARED_PLIES); i += 1) {
         const u = line[i];
         const mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.slice(4, 5) || undefined });
         if (!mv) break;

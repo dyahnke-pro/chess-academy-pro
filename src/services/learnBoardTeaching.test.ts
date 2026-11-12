@@ -7,7 +7,7 @@ import ruleFx from './__fixtures__/ruleException-his.json';
 import kingFx from './__fixtures__/kingAttack-his.json';
 import falseFx from './__fixtures__/falseAlarm-his.json';
 
-const base = { cpLoss: 0, bothCp: true, bestSan: null, bestLine: undefined, reply: null, cpAfter: null };
+const base = { cpLoss: 0, bothCp: true, bestSan: null, bestLine: undefined, reply: null, cpAfter: null, linesAfter: [] as string[][] };
 
 const afterOf = (fen: string, san: string): string => { const c = new Chess(fen); c.move(san); return c.fen(); };
 
@@ -35,11 +35,16 @@ describe('learnBoardTeaching — every lane reaches the door', () => {
 
   it('king attack comes out, not on a move that cost a pawn', () => {
     const p = (kingFx as { key: string; fen: string; san: string }[]).find((x) => x.key === 'xoS71OW-Re0:21')!;
-    const good = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, fenBefore: p.fen, san: p.san, history: [p.san] });
+    // The engine's line after Qe1 (depth 16) plays the hop: …Nxb3 axb3 …Re8 Qg3.
+    const linesAfter = [['c5b3', 'a2b3', 'f8e8', 'e1g3', 'd6d5', 'e4e5', 'f6e4', 'c3e4', 'd5e4', 'f3d2']];
+    const good = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, linesAfter, fenBefore: p.fen, san: p.san, history: [p.san] });
     // Learn holds the next hop (LEARN NAMES NO MOVE UNASKED): the idea speaks, Qg3 is not named.
     expect(good.some((h) => h.lane === 'kingAttack' && /heads for their king — one more move brings it to bear/.test(h.text) && !/Qg3/.test(h.text))).toBe(true);
-    const bad = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, cpLoss: 150, fenBefore: p.fen, san: p.san, history: [p.san] });
+    const bad = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, linesAfter, cpLoss: 150, fenBefore: p.fen, san: p.san, history: [p.san] });
     expect(bad.some((h) => h.lane === 'kingAttack')).toBe(false);
+    // …and with no line read after the move, no hop is claimed.
+    const blind = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, fenBefore: p.fen, san: p.san, history: [p.san] });
+    expect(blind.some((h) => h.lane === 'kingAttack' && /heads for their king/.test(h.text))).toBe(false);
   });
 
   it('don\'t panic needs the student to have played the engine\'s move', () => {
@@ -67,7 +72,9 @@ describe('learnBoardTeaching — every lane reaches the door', () => {
 
   it('a held next hop draws no arrow — the arrow would name the move (Black walk 2026-10-19)', () => {
     const p = (kingFx as { key: string; fen: string; san: string }[]).find((x) => x.key === 'xoS71OW-Re0:21')!;
-    const [h] = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, fenBefore: p.fen, san: p.san, history: [p.san] }).filter((x) => x.lane === 'kingAttack');
+    // The engine's line after Qe1 (depth 16): …Nxb3 axb3 …Re8 Qg3 — the hop it plays.
+    const linesAfter = [['c5b3', 'a2b3', 'f8e8', 'e1g3', 'd6d5', 'e4e5', 'f6e4', 'c3e4', 'd5e4', 'f3d2']];
+    const [h] = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, linesAfter, fenBefore: p.fen, san: p.san, history: [p.san] }).filter((x) => x.lane === 'kingAttack');
     expect(h.arrows).toEqual([]);
     expect(h.text).not.toMatch(/g3/);
   });

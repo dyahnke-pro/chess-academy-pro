@@ -73,8 +73,8 @@ describe('every producer of a played move\'s reason says "your move" in Learn', 
     const { kingAttack } = await import('./kingAttack');
     const fixture = (await import('./__fixtures__/kingAttack-his.json')).default as Array<{ key: string; fen: string; san: string }>;
     const p = fixture.find((x) => x.key === 'TNaKFN65B5o:26')!;
-    expect(kingAttack(p.fen, p.san, false, false)?.text).toMatch(/^Your move brings your queen into the attack on their king/);
-    expect(kingAttack(p.fen, p.san, false, true)?.text).toMatch(/^…Qh4 brings your queen/);
+    expect(kingAttack(p.fen, p.san, false, false, [])?.text).toMatch(/^Your move brings your queen into the attack on their king/);
+    expect(kingAttack(p.fen, p.san, false, true, [])?.text).toMatch(/^…Qh4 brings your queen/);
   });
   it('the plan-step credit', async () => {
     const { Chess } = await import('chess.js');

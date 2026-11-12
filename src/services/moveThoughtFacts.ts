@@ -673,6 +673,7 @@ function studentMoveFacts(i: Omit<MoveThoughtInput, 'phrases'>): ThoughtFact[] {
       cpLoss: i.costCp,
       bothCp: !!best && !!after && best.mate == null && after.mate == null,
       bestSan, bestLine: best, reply: i.line?.[0] ?? null,
+      linesAfter: (i.reads?.after ?? []).map((l) => l.moves),
       cpAfter, ...(i.reads ? { topLines: i.reads.before } : {}),
     });
   } catch { return []; }

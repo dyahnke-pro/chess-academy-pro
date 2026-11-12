@@ -260,7 +260,7 @@ describe('WIRED BOTH WAYS — every lane answers, and each surface carries the f
   });
 
   it('LEARN: the student\'s move carries the lane out, with a real proof and a held row', () => {
-    const hints = studentMoveTeaching({ namesStudentMoves: true, theory: true,
+    const hints = studentMoveTeaching({ linesAfter: [], namesStudentMoves: true, theory: true,
       fenBefore: fenOf('c4 e5 Nc3'), san: 'Nf6', history: 'c4 e5 Nc3 Nf6'.split(' '), cpLoss: 0, bothCp: true,
       bestSan: 'Nf6', bestLine: undefined, reply: null, cpAfter: 0,
     });
@@ -269,14 +269,14 @@ describe('WIRED BOTH WAYS — every lane answers, and each surface carries the f
     expect(isProof(ny!.proof)).toBe(true);
     expect(ny!.evidence?.tag).toBe('neglected-development');
 
-    const cc = studentMoveTeaching({ namesStudentMoves: true, theory: true,
+    const cc = studentMoveTeaching({ linesAfter: [], namesStudentMoves: true, theory: true,
       fenBefore: 'rnbqkb1r/pp3ppp/3pp3/3PP3/8/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 1', san: 'dxe5', history: [], cpLoss: 0, bothCp: true,
       bestSan: 'dxe5', bestLine: undefined, reply: null, cpAfter: 0,
     }).find((h) => h.lane === 'captureChoice');
     expect(cc && isProof(cc.proof)).toBe(true);
     expect(cc!.arrows.length).toBeGreaterThan(0);
 
-    const pf = studentMoveTeaching({ namesStudentMoves: true, theory: true,
+    const pf = studentMoveTeaching({ linesAfter: [], namesStudentMoves: true, theory: true,
       fenBefore: '5rk1/p5pp/2ppp3/4p2R/4N1q1/5Q2/PPP3P1/1K6 w - - 3 22', san: 'Rh3', history: [], cpLoss: 0, bothCp: true,
       bestSan: 'Rh3', bestLine: undefined, reply: null, cpAfter: 0,
       topLines: [{ rank: 1, moves: ['h5h3'], evaluation: 0, mate: null }, { rank: 2, moves: ['f3g4', 'f8f1', 'g4d1', 'f1d1'], evaluation: -100000, mate: -2 }],
@@ -286,7 +286,7 @@ describe('WIRED BOTH WAYS — every lane answers, and each surface carries the f
 
   it('LEARN: the trade ledger rides on their reply', () => {
     const hist = 'd4 d5 c4 e6 Nf3 Nf6 e3 Be7 Bd3 dxc4'.split(' ');
-    const h = studentMoveTeaching({ namesStudentMoves: true, theory: true,
+    const h = studentMoveTeaching({ linesAfter: [], namesStudentMoves: true, theory: true,
       fenBefore: fenOf(hist.slice(0, -1).join(' ')), san: 'dxc4', history: hist, cpLoss: 0, bothCp: true,
       bestSan: 'dxc4', bestLine: undefined, reply: 'Bxc4', cpAfter: 0,
     }).find((x) => x.lane === 'tradeLedger');
