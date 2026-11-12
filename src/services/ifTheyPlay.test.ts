@@ -212,3 +212,19 @@ describe('repliesNotWeighed — one branch, one claim', () => {
     expect(repliesNotWeighed([r('a4b5')], said, 57).map((x) => x.uci)).toEqual(['a4b5']);
   });
 });
+
+describe('replies with one answer are said once', () => {
+  it('Scotch 2.Nf3: …Nf6 and …d6 are both met by d4 — one sentence, not two', () => {
+    const fen = (() => { const c = new Chess(); for (const s of ['e4', 'e5', 'Nf3']) c.move(s); return c.fen(); })();
+    const read: ReplyRead[] = [
+      { uci: 'g8f6', cp: -30, mate: null, pv: ['g8f6', 'd2d4', 'f6e4', 'f1d3'] },
+      { uci: 'd7d6', cp: -40, mate: null, pv: ['d7d6', 'd2d4', 'e5d4', 'f3d4'] },
+      { uci: 'b8c6', cp: -20, mate: null, pv: ['b8c6', 'd2d4', 'e5d4', 'f3d4'] },
+    ];
+    const t = ifTheyPlay({ fen, replies: read, rating: 1500, student: 'w', seconds: [], played: null });
+    expect(t).not.toBeNull();
+    const branches = t!.branches.filter((q) => q.reply.uci !== 'b8c6' && sayable(t!, q, 'w', 'live'));
+    const all = treeSentence(t!, branches, 'w', 'live');
+    expect(all).toBe('If they play …Nf6 or …d6, d4 joins your knight on f3 against their pawn on e5.');
+  });
+});

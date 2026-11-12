@@ -314,6 +314,21 @@ function boardAfterReply(t: ReplyTree, b: ReplyBranch): string | null {
 
 /** One branch as a clause: "if they take on e5, you take back with the knight". */
 export function branchClause(t: ReplyTree, b: ReplyBranch, student: Color, tense: TreeTense): string | null {
+  const p = branchParts(t, b, student, tense);
+  if (!p) return null;
+  // The past is ROTATED on the board and the reply (prod Review audit
+  // 2026-11-11: "if they had taken on SQ, P takes SQ would have won a P for a
+  // P" said three times in one game — the human-voice rule: two or three
+  // phrasings, never Math.random). The live "if they take …" is the
+  // speedrun's own phrase and stays.
+  const key = stemKeyOf(`${t.fen}|${b.reply.uci}`);
+  return tense === 'live'
+    ? `if ${p.replierWord} ${p.x}, ${p.ans}`
+    : rotateStem([`if ${p.replierWord} had ${p.x}, ${p.ans}`, `had ${p.replierWord} ${p.x}, ${p.ans}`, `${p.replierWord} could have ${p.x}, but ${p.ans}`], key);
+}
+
+/** A branch's two halves: the reply in words and the answer in words. */
+function branchParts(t: ReplyTree, b: ReplyBranch, student: Color, tense: TreeTense): { replierWord: string; x: string; ans: string } | null {
   const mover: Color = t.replier === 'w' ? 'b' : 'w';
   const replierWord = t.replier === student ? 'you' : 'they';
   const moverWord = mover === student ? 'you' : 'they';
@@ -330,15 +345,7 @@ export function branchClause(t: ReplyTree, b: ReplyBranch, student: Color, tense
   const ans = answerWords(b, mover, moverWord, tense, boardAfterReply(t, b));
   if (!ans) return null;
   const x = replyWords(b, t.replier, tense, takers, twins);
-  // The past is ROTATED on the board and the reply (prod Review audit
-  // 2026-11-11: "if they had taken on SQ, P takes SQ would have won a P for a
-  // P" said three times in one game — the human-voice rule: two or three
-  // phrasings, never Math.random). The live "if they take …" is the
-  // speedrun's own phrase and stays.
-  const key = stemKeyOf(`${t.fen}|${b.reply.uci}`);
-  return tense === 'live'
-    ? `if ${replierWord} ${x}, ${ans}`
-    : rotateStem([`if ${replierWord} had ${x}, ${ans}`, `had ${replierWord} ${x}, ${ans}`, `${replierWord} could have ${x}, but ${ans}`], key);
+  return { replierWord, x, ans };
 }
 
 /** THE BAIT (WO-COACH-NEXT-TO-YOU-01 C4 — the skill "induce mistakes", David
@@ -381,6 +388,27 @@ export function baitSentence(t: ReplyTree, b: ReplyBranch, student: Color, tense
  *  focus audit 2026-11-09: the branches were one sentence on a spoken
  *  semicolon). Null: nothing to say. */
 export function treeSentence(t: ReplyTree, branches: readonly ReplyBranch[], student: Color, tense: TreeTense): string | null {
+  // Replies with ONE answer are said once ("If they play …Nf6 or …d6, d4
+  // joins your knight against e5"), never the same answer twice in a row
+  // (WO-OPENINGS-REWRITE-01 C3: the lesson said it once per reply).
+  if (tense === 'live') {
+    const groups: Array<{ replierWord: string; xs: string[]; ans: string }> = [];
+    for (const b of branches) {
+      const p = branchParts(t, b, student, tense);
+      if (!p) continue;
+      const g = groups.find((q) => q.ans === p.ans && q.replierWord === p.replierWord);
+      if (g) g.xs.push(p.x); else groups.push({ replierWord: p.replierWord, xs: [p.x], ans: p.ans });
+    }
+    if (groups.length === 0) return null;
+    // "play …Nf6 or …d6": a verb the replies share is said once.
+    const or = (xs: string[]): string => {
+      if (xs.length === 1) return xs[0];
+      const verb = xs.every((x) => x.startsWith('play ')) ? 'play ' : '';
+      const ys = xs.map((x) => x.slice(verb.length));
+      return `${verb}${ys.slice(0, -1).join(', ')} or ${ys.at(-1)}`;
+    };
+    return groups.map((g) => `${openSentence(`if ${g.replierWord} ${or(g.xs)}, ${g.ans}`)}.`).join(' ');
+  }
   const clauses = branches.map((b) => branchClause(t, b, student, tense)).filter((s): s is string => !!s);
   if (clauses.length === 0) return null;
   return clauses.map((c) => `${openSentence(c)}.`).join(' ');
