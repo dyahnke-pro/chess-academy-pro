@@ -39,6 +39,7 @@ import { refutedAltProof, type RefutedAlternative } from './refutedAlternativeCo
 import { costStakes, isStaked, stakeWc, NO_STAKES } from './factStakes';
 import { moverCp, wcGap } from './winChance';
 import { playedUci } from './planSteps';
+import { evalReading } from './reviewMoveBriefing';
 import { counterThreatTeaching, planChoiceTeaching, studentMoveTeaching } from './learnBoardTeaching';
 import type { LearnLane } from './learnTurnDoor';
 import { computeMustDefend } from './threatOut';
@@ -488,10 +489,22 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 52 });
       }
     }
+    let standingSaid = false;
     if (after0 && after0.mate == null) {
       for (const f of readBoardAll('compensation', { fenAfter, student, studentCp: after0.evaluation * (student === 'w' ? 1 : -1), line: after0.moves })) {
-        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'compensation', weight: 48 });
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'eval', weight: 48 });
+        standingSaid = true;
       }
+    }
+    // THE STANDING WHEN THE MOVE CHANGED IT — Review's verdict and its board
+    // reason, the one producer (`evalReading`). Compensation is the same idea
+    // said with its reason, so it stands alone when it speaks.
+    const before0 = i.reads?.before[0];
+    if (!standingSaid && after0 && after0.mate == null && before0 && before0.mate == null) {
+      const pov = (cp: number): number => cp * (student === 'w' ? 1 : -1);
+      const m = (() => { try { return new Chess(i.fenBefore).move(i.san); } catch { return null; } })();
+      const text = evalReading(fenAfter, pov(before0.evaluation), pov(after0.evaluation), null, student, m ? { to: m.to, captured: m.captured ?? null } : null);
+      if (text) add('eval', 'evalReading', 'evalRead', 'eval', text, undefined, [], 45);
     }
   }
   // THE REPLY TREE (his "if Black plays Qe7, you play d4, cementing the

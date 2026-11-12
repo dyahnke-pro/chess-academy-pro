@@ -62,7 +62,9 @@ export type ThoughtSource =
   /** The moves a player weighs (`weighedMoves.ts`): the tempting move refuted, the move of the same worth, the square. */
   | 'weighed'
   /** The teaching moves' new computers (2026-11-05): the pawn break (`pawnBreak.ts`). */
-  | 'teachingMove';
+  | 'teachingMove'
+  /** The position's standing when the move changed it (`reviewMoveBriefing.evalReading`). */
+  | 'evalRead';
 
 /** WHO SPEAKS FIRST IN A STEP when two facts hold the same stake — measured on
  *  the Danya bench (`danyaBench.measure.test.ts`): how often a source's line in
@@ -98,6 +100,8 @@ export const SOURCE_RANK: Record<ThoughtSource, number> = {
   baitSet: 23,
   weighed: 24,
   teachingMove: 25,
+  // Not measured on the bench yet (2026-11-12): ranked after every measured source.
+  evalRead: 26,
 };
 
 /** ONE FACT, the composer's only input — the one fact shape (`coachFact.ts`),
@@ -154,7 +158,7 @@ export interface ComposedThought {
   /** The facts that spoke, in spoken order. */
   kept: ThoughtFact[];
   /** Facts that did not speak, and why — so a quiet move is diagnosable. */
-  held: Array<{ fact: ThoughtFact; why: 'step-not-asked' | 'same-idea' | 'not-support-or-news' | 'by-product' | 'third-job' | 'restates' | 'already-said' | 'refused' }>;
+  held: Array<{ fact: ThoughtFact; why: 'step-not-asked' | 'same-idea' | 'not-support-or-news' | 'by-product' | 'third-job' | 'restates' | 'already-said' | 'refused' | 'below-step-bar' }>;
 }
 
 /** THE STEPS ANOTHER LINE ON THIS MOVE ALREADY LEADS (Review's rule or point
@@ -205,7 +209,20 @@ function isNews(f: ThoughtFact, lead: ThoughtFact): boolean {
  *  what is said matches him (31.0% → 32.8%). Measured with the moves that
  *  really followed each note: the bench first read an engine line there, which
  *  pushed the piece's trip down for a fault of the bench, not of the trip. */
-const POLICY: { floor: number; gap: number; newsMargin: number; offsets: Partial<Record<ThoughtSource, number>> } = thoughtPolicy;
+const POLICY: { floor: number; gap: number; newsMargin: number; offsets: Partial<Record<ThoughtSource, number>>; stepBars?: Partial<Record<ThoughtStep, number>> } = thoughtPolicy;
+
+/** THE STEP BAR (WO-OPENINGS-REWRITE-01 C2, fitted on the hand-written Watch
+ *  beats and Danya's notes together): once the turn has said something, a
+ *  later step opens only when its lead weighs at least that step's bar. The
+ *  writers drop whole steps the composer used to open on every move (the
+ *  reply tree on 680 of 872 moves where they used it on one in five). A bar,
+ *  never a cap: anything worth it still speaks; the danger step is never
+ *  barred, and a turn's first fact is never barred. */
+function belowStepBar(f: ThoughtFact, saidSoFar: number): boolean {
+  if (saidSoFar === 0 || f.step === 'danger') return false;
+  const bar = POLICY.stepBars?.[f.step];
+  return bar !== undefined && weighOf(f) < bar;
+}
 
 /** A fact's weight as the composer compares it: the producer's own, with its
  *  computer's fitted offset. */
@@ -289,6 +306,7 @@ export function composeThought(
     // off g4" and "takes the g4 square away from their bishop" are one idea.
     if (picked.some((p) => p.step === f.step && sameIdea(p, f))) { held.push({ fact: f, why: 'same-idea' }); continue; }
     const lead = leadOf.get(f.step);
+    if (!lead && belowStepBar(f, picked.length)) { held.push({ fact: f, why: 'below-step-bar' }); continue; }
     if (MOVE_STEPS.has(f.step)) {
       const outside = ledOutside.has(f.step);
       if (!lead && !outside) { if (pick(f)) leadOf.set(f.step, f); continue; }

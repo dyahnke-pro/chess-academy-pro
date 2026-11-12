@@ -46,7 +46,7 @@ def objective(P):
 sources = sorted({f['source'] for n in notes for f in n['facts']})
 POLICY_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'src', 'data', 'thought-policy.json')
 shipped = json.load(open(POLICY_PATH))
-P = {**copy.deepcopy(BASE), 'floor': shipped['floor'], 'gap': shipped['gap'], 'newsMargin': shipped.get('newsMargin', 0.09), 'woff': dict(shipped['offsets'])}
+P = {**copy.deepcopy(BASE), 'floor': shipped['floor'], 'gap': shipped['gap'], 'newsMargin': shipped.get('newsMargin', 0.09), 'woff': dict(shipped['offsets']), 'stepBars': dict(shipped.get('stepBars', {}))}
 best = objective(P)
 for _ in range(6):
     improved = False

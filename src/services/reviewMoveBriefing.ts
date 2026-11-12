@@ -200,6 +200,17 @@ function explainEval(fen: string, studentPovCp: number, studentWB: 'w' | 'b', la
   const V = openSentence(verdict);
   return why.length ? `${V} — ${why.join(', ')}.` : `${V}.`;
 }
+/** THE POSITION'S STANDING, SAID WHEN IT MOVED: the verdict and the board's
+ *  reason for it, on a band change or a real swing (≥ 40cp) — never as a
+ *  mantra every ply. One producer for Review's briefing and the lesson
+ *  composer (WO-OPENINGS-REWRITE-01: the writers said it on 15% of beats the
+ *  lesson composer never had it for). Null when the standing did not move. */
+export function evalReading(fenAfter: string, povBeforeCp: number | null, povAfterCp: number, swingCp: number | null, studentWB: 'w' | 'b', lastMove: LastMove | null): string | null {
+  const swing = swingCp ?? (povBeforeCp != null ? povAfterCp - povBeforeCp : 0);
+  const bandChanged = povBeforeCp != null && signedBand(povAfterCp) !== signedBand(povBeforeCp);
+  if (!bandChanged && Math.abs(swing) < 40) return null;
+  return explainEval(fenAfter, povAfterCp, studentWB, lastMove);
+}
 /** The DELTA — how this move moved the eval (student POV cp swing). Null when it
  *  barely moved (a quiet move keeps its silence rather than "held the balance"
  *  every ply). */
@@ -593,11 +604,8 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
       ? (input.studentColorWB === 'w' ? input.evalBeforeWhiteCp : -input.evalBeforeWhiteCp)
       : null;
     const swing = input.studentSwingCp ?? (povBefore != null ? povAfter - povBefore : 0);
-    const bandChanged = povBefore != null && signedBand(povAfter) !== signedBand(povBefore);
-    if (bandChanged || Math.abs(swing) >= 40) {
-      evalLead = explainEval(fenAfter, povAfter, input.studentColorWB, { to: mv.to, captured: mv.captured ?? null });
-      deltaTail = deltaTailClause(swing) ?? '';
-    }
+    evalLead = evalReading(fenAfter, povBefore, povAfter, input.studentSwingCp ?? null, input.studentColorWB, { to: mv.to, captured: mv.captured ?? null }) ?? '';
+    if (evalLead) deltaTail = deltaTailClause(swing) ?? '';
   }
 
   // The criticality "this is the moment" line leads (David 2026-09-07: "say that

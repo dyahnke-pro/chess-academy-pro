@@ -285,7 +285,7 @@ const IDEA_AS_KINDS: Record<IdeaKind, Kind[]> = {
   'king-safety': ['king-safety', 'castle'], 'attack-king': ['king-safety', 'attack'], center: ['center', 'break'], space: ['space'],
   outpost: ['outpost'], file: ['file'], diagonal: ['diagonal'], 'passed-pawn': ['endgame'], promote: ['endgame'],
   weakness: ['weakness', 'structure'], tempo: ['tempo'], 'king-activity': ['endgame', 'activity'], route: ['activity', 'plan'],
-  'set-up': ['prepare', 'line', 'attack'], choice: ['alternative'], order: ['order'], plan: ['plan'],
+  'set-up': ['prepare', 'line', 'attack'], choice: ['alternative'], order: ['order'], plan: ['plan'], eval: ['material'],
 };
 const SQUARE = /\b[a-h][1-8]\b/g;
 function sentencesOf(text: string): string[] {
@@ -680,6 +680,8 @@ const FACT_COMPUTER: Record<FactKind, string> = {
   'opp-think': 'services/methodBeat.ts#liveMethodBeat',
   'pawn-break': 'services/pawnBreak.ts#pawnBreak',
   'opposite-bishops': 'services/oppositeBishops.ts#oppositeBishops',
+  'plan-steps': 'services/planSteps.ts#planSteps',
+  compensation: 'services/compensation.ts#compensation',
   provoke: 'services/speedRunReads.ts#provokes',
   tension: 'services/speedRunReads.ts#keepTension',
   trigger: 'services/speedRunReads.ts#rejectedMoveLater',

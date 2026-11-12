@@ -113,7 +113,7 @@ STEP_ORDER = {'danger': 0, 'name': 1, 'yours': 2, 'theirs': 3, 'choices': 4, 'no
 SOURCE_RANK = {'moveWhy': 1, 'briefing': 2, 'fundamental': 3, 'boardTeacher': 4, 'moveJob': 5, 'refuted': 7, 'alternatives': 8,
                'prophylaxis': 10, 'notYet': 9, 'deepFact': 11, 'binding': 12, 'pieceRoute': 13, 'bestLine': 14,
                'counterThreat': 15, 'theirAim': 16, 'planChoice': 17, 'moveOrder': 18, 'structureLines': 19,
-               'purpose': 20, 'studentMove': 21, 'kingWalk': 22, 'ifTheyPlay': 23, 'weighed': 24}
+               'purpose': 20, 'studentMove': 21, 'kingWalk': 22, 'ifTheyPlay': 23, 'baitSet': 23, 'weighed': 24, 'teachingMove': 25, 'evalRead': 26}
 MOVE_STEPS = {'yours', 'theirs'}
 TARGETED = {'break', 'attack', 'defend', 'pin', 'fork', 'skewer', 'discovered', 'capture', 'prevent', 'outpost', 'file', 'diagonal', 'weakness'}
 
@@ -182,6 +182,14 @@ def compose(facts, P):
             continue
         lead = lead_of.get(f['step'])
         if lead is None:
+            # THE STEP BAR (WO-OPENINGS-REWRITE-01 C2): once the turn has said
+            # something, a later step speaks only if its lead clears the bar —
+            # the writers drop whole steps the composer used to say on every
+            # move. A bar, never a cap: anything worth it still speaks. The
+            # danger step is never barred.
+            bar = P.get('stepBars', {}).get(f['step'], P.get('stepBar'))
+            if bar is not None and picked and f['step'] != 'danger' and weight(f) < bar:
+                continue
             lead_of[f['step']] = f
             picked.append((f, False))
             continue

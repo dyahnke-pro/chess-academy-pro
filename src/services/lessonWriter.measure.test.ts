@@ -32,7 +32,15 @@ const DEPTH = Number(process.env.LESSON_DEPTH ?? 14);
 const engine = nativeEngine(process.env.LESSON_CACHE ?? `${OUT}/engine-cache.json`, DEPTH);
 let multipv = 3;
 
-interface SheetFact { computer: string; source: string; kind: string; group: string; idea: string; seat: string; weight: number; text: string; squares: readonly string[]; spoke: boolean; held?: string }
+interface SheetFact {
+  computer: string; source: string; kind: string; group: string; idea: string; seat: string; weight: number; text: string; squares: readonly string[]; spoke: boolean; held?: string;
+  /** What the offline replay of the composer needs (scripts/bench/thought_replay.py):
+   *  the step, whether it only restates the board, what rides on it, and the
+   *  words it speaks behind its step's lead — so the writers' choices can be
+   *  fitted on the same composer the Danya bench fits (WO-OPENINGS-REWRITE-01 C2). */
+  step: string; restates: boolean; sv: number; wc: number | null; decision: string | null; alsoText: string;
+}
+import { stakeValue, isStaked, stakeWc } from './factStakes';
 const capture = vi.hoisted(() => ({
   /** The move the lesson is composing right now: `<fenBefore>|<uci>`. */
   current: null as string | null,
@@ -52,6 +60,8 @@ vi.mock('./thoughtComposer', async (importOriginal) => {
         facts: facts.filter((f) => f.text.trim()).map((f) => ({
           computer: f.computer, source: f.source, kind: f.kind, group: f.group, idea: f.idea, seat: f.seat,
           weight: f.weight, text: f.text.trim(), squares: f.squares, spoke: spoke.has(f.id), ...(why.has(f.id) ? { held: why.get(f.id) } : {}),
+          step: f.step, restates: f.restates === true, sv: stakeValue(f.stakes) ?? 0, wc: isStaked(f.stakes) ? stakeWc(f.stakes) : null,
+          decision: isStaked(f.stakes) ? f.stakes.decision ?? null : null, alsoText: (f.alsoText ?? f.text).trim(),
         })),
       });
     }
