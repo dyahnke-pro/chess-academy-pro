@@ -234,7 +234,10 @@ export function PaywallPage({ feature, opening, moment, onLeave }: PaywallProps 
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-zinc-100">
-      <div className="mx-auto flex min-h-screen max-w-md flex-col px-6 py-10">
+      {/* The opening wall renders INSIDE the app, under the phone tab bar —
+          without this pad "Not now" sat behind the bar and could not be
+          tapped (2026-11-12). The app's one bottom pad for that bar. */}
+      <div className="mx-auto flex min-h-screen max-w-md flex-col px-6 pt-10 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-10">
         <header className="mb-6 text-center">
           <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#c9a84c]/15">
             <Crown className="h-7 w-7 text-[#c9a84c]" />
