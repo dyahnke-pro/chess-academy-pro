@@ -108,7 +108,7 @@
 - `src/services/reviewFacet.ts:113`
 - `src/services/reviewFacet.ts:125`
 - `src/services/teachingFact.ts:91`
-- `src/services/thoughtComposer.ts:178`
+- `src/services/thoughtComposer.ts:183`
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 19 call sites

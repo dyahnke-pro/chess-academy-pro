@@ -133,6 +133,11 @@ export interface ThoughtRegister {
   steps: ReadonlySet<ThoughtStep>;
   /** Further facts in a step speak as support or news (true), or not at all. */
   depth: 'one' | 'thread';
+  /** REQUIRED: whether the fitted step bars (`thought-policy.json`) hold a
+   *  later step. A lesson and Review say what they choose to; a question picks
+   *  its steps itself ("why is it best?" asks for the other moves), so a bar
+   *  there would hold the answer to the question. */
+  stepBars: boolean;
 }
 
 /** The surfaces that compose through here. Learn had a row and no caller
@@ -142,9 +147,9 @@ export interface ThoughtRegister {
 export type ThoughtSurface = 'lesson' | 'review' | 'chat';
 const ALL_STEPS: ReadonlySet<ThoughtStep> = new Set(Object.keys(THOUGHT_ORDER) as ThoughtStep[]);
 export const THOUGHT_REGISTER: Record<ThoughtSurface, ThoughtRegister> = {
-  lesson: { steps: ALL_STEPS, depth: 'thread' },
-  review: { steps: ALL_STEPS, depth: 'thread' },
-  chat: { steps: ALL_STEPS, depth: 'thread' },
+  lesson: { steps: ALL_STEPS, depth: 'thread', stepBars: true },
+  review: { steps: ALL_STEPS, depth: 'thread', stepBars: true },
+  chat: { steps: ALL_STEPS, depth: 'thread', stepBars: false },
 };
 
 /** The say-once memory a lesson, a review or a game keeps across its moves:
@@ -309,7 +314,7 @@ export function composeThought(
     // off g4" and "takes the g4 square away from their bishop" are one idea.
     if (picked.some((p) => p.step === f.step && sameIdea(p, f))) { held.push({ fact: f, why: 'same-idea' }); continue; }
     const lead = leadOf.get(f.step);
-    if (!lead && belowStepBar(f, picked.length)) { held.push({ fact: f, why: 'below-step-bar' }); continue; }
+    if (!lead && reg.stepBars && belowStepBar(f, picked.length)) { held.push({ fact: f, why: 'below-step-bar' }); continue; }
     if (MOVE_STEPS.has(f.step)) {
       const outside = ledOutside.has(f.step);
       if (!lead && !outside) { if (pick(f)) leadOf.set(f.step, f); continue; }
