@@ -3,180 +3,180 @@
   "lang": "es",
   "beats": {
     "vienna-game-1": {
-      "say": "e4: el peón de rey toma el centro y abre dos caminos a la vez, uno para tu dama y otro para el alfil de f1. Casi la mitad de las partidas de ajedrez entre maestros empiezan así. Ten presente el peón f que está detrás. En la Viena tiene un trabajo que hacer más adelante.",
+      "say": "e4 toma el centro y abre dos caminos a la vez, uno para tu dama y otro para el alfil en f1. Mantén un ojo en el peón de f detrás de él. En la Vienesa, ese peón es el que tiene una tarea que cumplir más adelante.",
       "sayShort": "e4 — centro, libera dama y alfil."
     },
     "vienna-game-2": {
-      "say": "…e5: te salen al encuentro, peón contra peón, y toman su parte del centro. La Siciliana, …c5, es la respuesta más común entre los maestros, casi el doble de popular, pero …e5 es el camino a la Viena, y el motor las valora muy parecido.",
-      "sayShort": "…e5 — te salen al encuentro."
+      "say": "…e5 te sale al paso peón contra peón, y libera el alfil de f8, que adoraría c5 y echar un vistazo a tu peón de f2. Este es el camino hacia la Vienesa, y tu próxima jugada decide si la partida se mantiene tranquila o se vuelve afilada.",
+      "sayShort": "…e5 — te sale al paso de frente."
     },
     "vienna-game-3": {
-      "say": "Esta es la pregunta que todo jugador de e4 responde a continuación: ¿qué caballo sale primero? Nueve de cada diez maestros juegan Nf3 y atacan e5 de inmediato. La Viena juega Nc3. ¿Por qué el caballo de dama? Protege e4 y controla d5, y deja libre el peón f. Sin un caballo en f3, f4 puede llegar después, golpeando e5 por el costado: la idea del Gambito de Rey, pero con un caballo ya desarrollado. El motor prefiere Nf3 por poco. Tras Nc3 la posición está más o menos igualada.",
-      "sayShort": "Nc3 — protege e4, deja libre el peón f."
+      "say": "¿Qué caballo sale primero? Nf3 ataca e5 de inmediato, y es la jugada natural. La Vienesa trae al otro: Nc3 protege e4 y deja libre el peón f. Sin un caballo en f3, f4 puede venir después y atacar e5 desde el flanco, la idea del Gambito de Rey con un caballo ya desarrollado.",
+      "sayShort": "Nc3 — protege e4, mantiene libre el peón f."
     },
     "vienna-game-4": {
-      "say": "…Nf6, siete de cada diez maestros: el caballo se desarrolla y ataca tu peón de e4 enseguida. Tu caballo de c3 ya lo protege, así que no queda nada colgando. Ese es el primer trabajo de Nc3. …Nc6, la otra respuesta principal, tiene su propia pestaña.",
-      "sayShort": "…Nf6 — ataca e4, pero Nc3 lo protege."
+      "say": "…Nf6, la primera elección del motor: el caballo ataca tu peón de e4, y tu caballo en c3 ya lo defiende. La idea más importante es …d5 a continuación, atacando e4 por segunda vez y abriendo el centro. …Nc6, la otra respuesta principal, tiene su propia pestaña.",
+      "sayShort": "…Nf6 — ataca e4, …d5 a continuación."
     },
     "vienna-game-5": {
-      "say": "Ahora eliges tu sistema. g3, la jugada más común de los maestros, es el fianchetto tranquilo, y f4 es el gambito. Cada una tiene su propia pestaña. La línea principal toma el camino italiano: Bc4, cerca de una cuarta parte de las partidas de los maestros. Mira adónde apunta el alfil: a f7, el único peón de su campo que solo protege su rey.",
+      "say": "Tres caminos aquí: g3 con tranquilidad, f4 como gambito, cada uno en su propia pestaña. Esta línea elige Bc4, apuntando a f7, el peón que solo su rey defiende. Y si capturan tu peón con …Nxe4? Qh5 se une al alfil contra f7, y eso es el Frankenstein-Dracula.",
       "sayShort": "Bc4 — el alfil italiano, apuntando a f7."
     },
     "vienna-game-6": {
-      "say": "…Bc5: te copian, y su alfil apunta a f2, la casilla que solo protege tu rey. Más o menos uno de cada cinco maestros lo juega. …Nc6 es lo más común, y …Nxe4, llevándose tu peón, lleva al salvaje Frankenstein-Drácula, que tiene su propia pestaña.",
+      "say": "…Bc5 te imita: su alfil ahora apunta a f2, el peón que solo tu rey defiende, y despeja el camino para enrocar. …Nc6 es la jugada más común, y …Nxe4 inicia el Frankenstein-Dracula en su propia pestaña.",
       "sayShort": "…Bc5 — el espejo, apuntando a f2."
     },
     "vienna-game-7": {
-      "say": "d3, ocho de cada diez maestros. Tu peón de e4 es el que ataca su caballo, y ahora también lo protege un peón. Eso importa: el caballo de c3 ya no tiene que hacer guardia, así que queda libre para ir a un sitio mejor más adelante. Y se abre la diagonal para tu alfil de c1.",
-      "sayShort": "d3 — protege e4, libera el caballo."
+      "say": "d3 le da a tu peón de e4 un peón que lo protege, y eso cambia discretamente la tarea del caballo. Ya no tiene que quedarse en c3 sujetando e4. Recuérdalo, porque en esta línea el caballo se va en un largo recorrido hacia su rey.",
+      "sayShort": "d3 — protege e4, libera al caballo."
     },
     "vienna-game-8": {
-      "say": "…O-O: más o menos uno de cada ocho maestros enroca aquí. …c6 y …d6 son lo más común. Pero mira lo que les cuesta el enroque: con su rey en g8, tu alfil de c4 clava el peón de f7 contra él. Ten presente esa clavada.",
+      "say": "…O-O pone a su rey a resguardo, pero mira lo que cuesta. Con el rey en g8, tu alfil en c4 clava el peón de f7 contra él. Ese peón no puede moverse mientras dure la clavada, así que su peón de f queda atascado por ahora.",
       "sayShort": "…O-O — y ahora f7 está clavado."
     },
     "vienna-game-9": {
-      "say": "Ahora que han enrocado, la favorita de los maestros es f4, casi la mitad de sus partidas: es el peón f que Nc3 dejó libre. El motor prefiere la tranquila Nf3, y la línea principal también. Desarrolla con una amenaza: el caballo ataca e5, y nada protege ese peón.",
+      "say": "La jugada tentadora es f4, el avance que Nc3 mantenía libre, y es la favorita de los maestros aquí. La primera elección del motor es la tranquila Nf3: desarrolla y ataca e5, que nada defiende, así que su próxima jugada tiene que ocuparse de ello.",
       "sayShort": "Nf3 — desarrolla y ataca e5."
     },
     "vienna-game-10": {
-      "say": "…d6, siete de cada diez maestros: un peón protege e5, y se abre el camino para su alfil de c8. El motor prefiere por poco …Nc6, protegiéndolo con una pieza.",
+      "say": "…d6 responde a la amenaza: ahora un peón protege e5, y el alfil de c8 tiene su salida. La protección con un peón es la forma sólida, y deja c6 libre para un peón que importará pronto.",
       "sayShort": "…d6 — protege e5, libera c8."
     },
     "vienna-game-11": {
-      "say": "Enrocas, y mira el tablero: es un espejo. Tu alfil clava su peón de f7 contra su rey, y su alfil de c5 clava tu peón de f2 contra el tuyo. A partir de aquí la línea sale de las partidas de los maestros. La primera opción del motor era Na4, ofreciendo cambiar ese alfil de c5.",
-      "sayShort": "O-O — los dos peones f, clavados."
+      "say": "Enrocas, y el tablero es un espejo: tu alfil clava f7 a su rey, su alfil en c5 clava f2 al tuyo. Ninguno de los peones f puede moverse, así que la lucha se traslada al centro: tu d4 contra su …d5.",
+      "sayShort": "O-O — ambos peones f están clavados ahora."
     },
     "vienna-game-12": {
-      "say": "…c6, la primera opción del motor. ¿Adónde va esto? El peón controla d5 y b5, así que …d5 puede llegar con un peón detrás, y un peón en d5 atacaría tu alfil de c4. Tu alfil quiere una casilla más segura antes de que eso ocurra.",
+      "say": "…c6, la primera elección del motor, y aquí está el punto: …d5 puede venir después con un peón detrás, y un peón en d5 golpea tu alfil en c4. …b5 es otra forma de perseguirlo. Tu alfil quiere una casilla más segura primero.",
       "sayShort": "…c6 — prepara …d5."
     },
     "vienna-game-13": {
-      "say": "Bb3: el alfil retrocede antes de que …d5 pueda atacarlo, y se queda en la misma diagonal: sigue apuntando a f7 y sigue clavando ese peón contra su rey.",
+      "say": "Bb3 retrocede antes de que …d5 pueda atacarlo, y se mantiene en la misma diagonal, todavía clavando f7 a su rey. No obstante, nota una cosa sobre b3: un caballo en c5 lo ataca ahí. Ese caballo va en camino.",
       "sayShort": "Bb3 — retrocede, mantiene la clavada."
     },
     "vienna-game-14": {
-      "say": "…Nbd7: sale el último caballo. En c6 ya está su propio peón, así que va a d7, donde respalda e5 y más adelante puede saltar a c5.",
+      "say": "…Nbd7 saca al último caballo. c6 está ocupada por su propio peón, así que va a d7, donde respalda e5 y más tarde puede saltar a c5.",
       "sayShort": "…Nbd7 — respalda e5, luego c5."
     },
     "vienna-game-15": {
-      "say": "Esta es la maniobra de la Viena, y la primera opción del motor. Tu caballo de c3 ya hizo su trabajo, porque ahora d3 protege e4, así que se va hacia el flanco de rey: Ne2, luego g3, y desde g3 puede llegar a f5. Además deja paso a tu peón c para que vaya a c3 y apoye d4.",
-      "sayShort": "Ne2 — el caballo va hacia g3 y f5."
+      "say": "Aquí está la maniobra de Viena, y la primera elección del motor. Tu caballo en c3 ha cumplido su función, ya que d3 sostiene e4 ahora, así que se dirige al flanco de rey: Ne2, luego Ng3, luego f5, justo delante de su rey. De paso despeja c3 para tu peón de c, que respaldará d4.",
+      "sayShort": "Ne2 — el caballo se dirige a g3, f5."
     },
     "vienna-game-16": {
-      "say": "…Bb6, la elección del motor: el alfil sale de c5 antes de que tu avance d4 pueda atacarlo, y sigue apuntando a f2. Tu peón f sigue clavado contra tu rey.",
+      "say": "…Bb6, la elección del motor, y un movimiento por delante de tu plan. Una vez que lleguen c3 y d4, un alfil en c5 sería atacado, así que retrocede ahora. Y mantiene la diagonal: tu peón de f2 sigue clavado a tu rey.",
       "sayShort": "…Bb6 — se aparta, sigue apuntando a f2."
     },
     "vienna-game-17": {
-      "say": "c3: un peón que se quedará detrás de d4 cuando llegue, el mismo plan que en la Italiana: primero c3, después d4. Y deja libre c2, una casilla de retirada para tu alfil de b3. Recuerda esa casilla.",
+      "say": "c3 — un peón para situarse detrás de d4 cuando llegue, el mismo plan que en la Italiana: primero c3, después d4. Y deja libre c2, una casilla de retirada para tu alfil en b3. Recuerda esa casilla.",
       "sayShort": "c3 — prepara d4, deja libre c2."
     },
     "vienna-game-18": {
-      "say": "…Nc5: el caballo de d7 salta hacia delante, y mira lo que ataca: tu alfil de b3 y tus peones de d3 y e4. Si el alfil se queda, …Nxb3 lo cambia. ¿Lo dejas ir o lo conservas?",
-      "sayShort": "…Nc5 — ataca tu alfil de b3."
+      "say": "…Nc5 — el caballo de d7 salta hacia adelante, y mira a qué ataca: tu alfil en b3 y tus peones en d3 y e4. Si el alfil se queda, …Nxb3 lo cambia. Entonces, ¿lo dejas ir o lo mantienes?",
+      "sayShort": "…Nc5 — ataca tu alfil en b3."
     },
     "vienna-game-19": {
-      "say": "Consérvalo: Bc2, en la casilla que vació c3, fuera del alcance del caballo. Desde c2 apunta hacia h7, aunque de momento tu propio peón de d3 le cierra el paso. Cuando ese peón avance a d4, la línea se abre. Y fíjate: su caballo de c5 ahora tapa a su propio alfil, así que tu peón de f2 ya no está clavado.",
-      "sayShort": "Bc2 — conserva el alfil, apunta a h7."
+      "say": "Mantén Bc2, la primera elección del motor, en la casilla c3 que quedó vacía. Deja el alfil en b3 y …Nxb3 se lo lleva. Y mira las clavadas: tu alfil ha dejado la diagonal hacia f7, y su caballo en c5 ahora bloquea el camino de su propio alfil hacia f2. Ambos peones f vuelven a estar libres.",
+      "sayShort": "Bc2 — conserva el alfil, ambas clavadas desaparecen."
     },
     "vienna-game-20": {
-      "say": "…Bg4, la elección del motor: el alfil ataca tu caballo de f3. Ahora mismo tu caballo de e2 está entre él y tu dama. Pero ese caballo va camino de g3, y cuando se vaya, el caballo de f3 quedará clavado contra tu dama de d1.",
-      "sayShort": "…Bg4 — ataca f3, viene una clavada."
+      "say": "…Bg4, la elección del motor: el alfil ataca tu caballo en f3. Ahora mismo tu caballo en e2 se interpone entre él y tu dama. Pero ese caballo va camino de g3, y cuando se marche, el caballo en f3 quedará clavado a tu dama en d1.",
+      "sayShort": "…Bg4 — ataca f3, se viene una clavada."
     },
     "vienna-game-21": {
-      "say": "Ng3 de todos modos, y el motor está de acuerdo. Sí, tu caballo de f3 ahora está clavado contra tu dama, pero h3 puede preguntarle al alfil cuando quieras. Y el caballo de g3 está a un salto de f5.",
-      "sayShort": "Ng3 — acepta la clavada, luego f5."
+      "say": "Ng3, la primera elección del motor, y sí, cae en la clavada: tu caballo en f3 queda ahora clavado contra tu dama. ¿Por qué permitirlo? El caballo en g3 suma una defensa a e4, y está a un salto de f5. Si alguna vez lo capturan allí, exf5 te entrega la pareja de alfiles y entreabre la columna e para tus torres.",
+      "sayShort": "Ng3 — acepta la clavada, f5 después."
     },
     "vienna-game-22": {
-      "say": "…Nh5, la elección del motor: el caballo de f6 salta a la banda y ataca tu caballo de g3. La idea es un cambio: quitarse de encima ese caballo antes de que llegue a f5.",
-      "sayShort": "…Nh5 — desafía a tu caballo de g3."
+      "say": "…Nh5, la elección del motor: el caballo de f6 salta al borde y ataca tu caballo en g3. La idea es un cambio: deshacerse de ese caballo antes de que llegue a f5.",
+      "sayShort": "…Nh5 — desafía tu caballo en g3."
     },
     "vienna-game-23": {
-      "say": "¿Es hora de la ruptura para la que se jugó c3? d4 ataca el caballo de c5 y el peón de e5 a la vez. Pero llega una jugada antes de tiempo. El motor quería primero Nf5, poniendo el caballo en la casilla para la que era todo su viaje. Después de d4, ellos están un poco mejor.",
+      "say": "Dos jugadas que sopesar: Nf5, o la ruptura para la que se construyó c3. d4 golpea a la vez el caballo en c5 y el peón en e5, y es tentador. Pero el motor quiere Nf5 primero, y dos lecturas coinciden: el caballo debe llegar a su casilla antes de que se abra el centro. Después de d4, están un poco mejor.",
       "sayShort": "d4 — la ruptura, pero una jugada antes."
     },
     "vienna-game-24": {
-      "say": "…exd4 captura, y el peón de d4 ataca c3. Vas un peón abajo por un momento, pero ese peón de d4 no tiene protección. Recaptura con el peón c.",
-      "sayShort": "…exd4 — captura, pero d4 está suelto."
+      "say": "…exd4, y ahora la recaptura tentadora es Nxd4. No lo hagas: tu caballo en f3 está clavado, y en el momento en que se mueva, …Bxd1 se lleva tu dama. Así que el peón de c recaptura. Ese clavado es el precio del tour del caballo, y te seguirá costando hasta que h3 interpele al alfil.",
+      "sayShort": "…exd4 — y Nxd4 pierde tu dama."
     },
     "vienna-game-25": {
-      "say": "cxd4: el material vuelve a estar igualado, y el nuevo peón ataca el caballo de c5. Tienes peones en d4 y e4 uno al lado del otro, el centro que estabas construyendo. Aun así, ellos siguen un poco mejor, y la próxima jugada muestra por qué.",
-      "sayShort": "cxd4 — igualado otra vez, ataca c5."
+      "say": "cxd4: el material vuelve a estar igualado, y el nuevo peón ataca al caballo en c5. Tienes peones en d4 y e4 uno al lado del otro, el centro que estabas construyendo. Sin embargo, ellos siguen siendo un poco mejores, y la siguiente jugada muestra por qué.",
+      "sayShort": "cxd4 — igualados de nuevo, ataca c5."
     },
     "vienna-game-26": {
-      "say": "…Ne6: el caballo retrocede y se suma al ataque sobre d4. Ahora el caballo de e6 y el alfil de b6 lo atacan los dos. Y aquí es donde duele la clavada: tu caballo de f3 es uno de los defensores de d4, pero está clavado. Si alguna vez sale de f3, …Bxd1 se lleva tu dama.",
+      "say": "…Ne6 — el caballo retrocede y se suma al ataque sobre d4. Ahora el caballo en e6 y el alfil en b6 lo atacan ambos. Y aquí es donde duele la clavada: tu caballo en f3 es uno de los defensores de d4, pero está clavado. Si alguna vez abandona f3, …Bxd1 se lleva tu dama.",
       "sayShort": "…Ne6 — dos atacantes sobre d4."
     },
     "vienna-game-27": {
-      "say": "Nf5: ahí está, la casilla que buscaba todo el viaje del caballo desde c3. Ataca d6 y g7, justo al lado de su rey. El motor prefiere por poco Be3, protegiendo primero d4. Ellos siguen un poco mejor.",
-      "sayShort": "Nf5 — la casilla que buscaba el viaje."
+      "say": "Nf5, la casilla por la que se hizo todo el recorrido desde c3. Mira lo que hace ahí: ataca g7 junto a su rey y cubre d4. Ahora, si …Nxd4, este caballo simplemente recaptura. Ellos siguen un poco mejor.",
+      "sayShort": "Nf5 — la casilla a la que apuntaba el recorrido."
     },
     "vienna-game-28": {
-      "say": "…d5 ataca tu peón de e4, pero es un error. La jugada era …Nf6. Ahora llega h3 para hacerle la pregunta a su alfil de g4, y tú estás un poco mejor.",
+      "say": "…d5 ataca tu peón de e4, y es un error: …Nf6 era la jugada, y dos lecturas coinciden. El problema es el tiempo. Te permite jugar h3 de inmediato, y el alfil en g4 tiene que decidir mientras tu caballo sigue en f5. Estás un poco mejor.",
       "sayShort": "…d5 — ataca e4, pero es un error."
     },
     "vienna-game-29": {
-      "say": "h3: ahora es el momento de preguntar. El peón ataca el alfil de g4, y el alfil no tiene protección, así que tiene que decidir: capturar en f3, capturar en f5 o huir. Estás un poco mejor.",
-      "sayShort": "h3 — le pregunta al alfil de g4."
+      "say": "h3 — ahora es el momento de preguntar. El peón ataca al alfil en g4, y el alfil no tiene defensa, así que tiene que decidir. Si captura en f3, tu dama recaptura: la clavada desaparece para siempre y los dos alfiles son tuyos. Estás un poco mejor.",
+      "sayShort": "h3 — interroga al alfil en g4."
     },
     "vienna-game-30": {
-      "say": "…Bxf5 se lleva el caballo que más les molestaba. Pero el motor prefiere …Bxf3, y después de esto estás claramente mejor. ¿Por qué? Mira lo que hace tu recaptura.",
-      "sayShort": "…Bxf5 — cambia tu caballo."
+      "say": "…Bxf5 captura el caballo que más les molestaba, y es un desliz: …Bxf3 era mejor, y dos lecturas coinciden. La diferencia está en tu recaptura. Aquí el peón de e recaptura, y el nuevo peón en f5 echará a un caballo.",
+      "sayShort": "…Bxf5 — un desliz, …Bxf3 era mejor."
     },
     "vienna-game-31": {
-      "say": "exf5: y mira el nuevo peón: ataca el caballo de e6. Mejor todavía, su alfil ya no está, así que tu caballo de f3 ya no está clavado. Estás un poco mejor.",
-      "sayShort": "exf5 — ataca e6, desclava tu caballo."
+      "say": "exf5, y mira lo que el cambio te dejó: la pareja de alfiles, un peón en f5 que ataca al caballo en e6, y tu caballo en f3 por fin libre de la clavada. El costo es un peón aislado en d4, un blanco para el resto de la partida. Estás un poco mejor.",
+      "sayShort": "exf5 — ataca e6, libera tu caballo."
     },
     "vienna-game-32": {
-      "say": "…Nc7, la elección del motor. ¿Por qué no llevarse d4? Porque tu caballo de f3 ahora está libre y simplemente recaptura. Así que el caballo va a c7, donde protege d5.",
+      "say": "…Nc7, la elección del motor. ¿Por qué no capturar d4 en su lugar? Porque tu caballo en f3 está libre ahora, y simplemente recaptura. Así que el caballo va a c7, donde protege d5.",
       "sayShort": "…Nc7 — se retira, protege d5."
     },
     "vienna-game-33": {
-      "say": "Bg5 desarrolla tu última pieza menor atacando su dama de d8. Y mira tu peón de f5: les quita e6 y g6 a sus piezas. Estás claramente mejor.",
-      "sayShort": "Bg5 — desarrolla atacando d8."
+      "say": "Bg5 ataca su dama en d8, y el momento importa. Hace una jugada el caballo en e6 cubría g5 y habría capturado el alfil. Ahora ese caballo está en c7, así que tu última pieza menor sale con tempo. Estás un poco mejor.",
+      "sayShort": "Bg5 — se desarrolla con un ataque a d8."
     },
     "vienna-game-34": {
-      "say": "…Qd6 saca a la dama de la línea del alfil. El motor prefiere …Nf6, trayendo el caballo de vuelta desde la banda. Estás claramente mejor.",
+      "say": "…Qd6 aparta a la dama de la línea del alfil, y desde d6 cubre f4, manteniendo a tu alfil fuera de esa diagonal por ahora. Tienes clara ventaja: posees la pareja de alfiles, y su caballo en h5 sigue en el borde.",
       "sayShort": "…Qd6 — fuera de la línea del alfil."
     },
     "vienna-game-35": {
-      "say": "Qd2 protege tu alfil de g5 y el peón de d4. Pero deja escapar la ventaja: la jugada del motor era a4, ganando espacio en el flanco de dama. Ahora solo estás un poco mejor.",
+      "say": "Dos jugadas para sopesar: Qd2, que protege tu alfil en g5 y el peón de d4, o a4, que apunta a a5 para expulsar al alfil de b6. El motor quiere a4, y dos lecturas coinciden. Después de Qd2 la ventaja se escapa, y queda más o menos igualado.",
       "sayShort": "Qd2 — protege g5, pero a4 era mejor."
     },
     "vienna-game-36": {
-      "say": "…Rfe8, la elección del motor: la torre toma la columna e, que está completamente abierta. Sin la ventaja después de Qd2, ahora la posición está más o menos igualada.",
+      "say": "…Rfe8, la elección del motor: la torre toma la columna e, que está completamente abierta. Con la ventaja desaparecida tras Qd2, ahora está más o menos igualado.",
       "sayShort": "…Rfe8 — la torre toma la columna e."
     },
     "vienna-game-37": {
-      "say": "g4: ¿te acuerdas del caballo de h5? Lleva en la banda desde que desafió a tu caballo de g3, y ahora el peón lo echa. No tiene protección, así que tiene que moverse. El precio: tu rey pierde un peón de cobertura. La posición está más o menos igualada.",
-      "sayShort": "g4 — echa al caballo de h5."
+      "say": "g4 — ¿recuerdas el caballo en h5? Ha estado en el borde desde que desafió a tu caballo en g3, y ahora el peón lo expulsa. No tiene defensa, así que tiene que moverse. El precio: tu rey pierde un peón de cobertura. Está más o menos igualado.",
+      "sayShort": "g4 — expulsa al caballo en h5."
     },
     "vienna-game-38": {
-      "say": "…Nf6: el caballo vuelve al centro y ataca tu peón de g4. El motor prefiere primero …h6, atacando tu alfil de g5. Ahora estás un poco mejor.",
-      "sayShort": "…Nf6 — vuelve al centro, ataca g4."
+      "say": "…Nf6 trae de vuelta al caballo desde el borde, y ataca tu peón de g4. Pero el verdadero objetivo está a un salto: desde f6 el caballo puede aterrizar en e4, respaldado por el peón de d5, y atacar tu dama en d2. Estás un poco mejor.",
+      "sayShort": "…Nf6 — de vuelta al centro, e4 a continuación."
     },
     "vienna-game-39": {
-      "say": "Bf4: el alfil deja g5 atacando su dama de d6, que no tiene protección. La dama tiene que moverse otra vez. Estás un poco mejor.",
-      "sayShort": "Bf4 — ataca la dama de d6."
+      "say": "Bf4 ataca a la dama en d6, que no tiene defensa, y es la misma lección de tiempo que Bg5. Hace una jugada el caballo en h5 cubría f4. Ahora ese caballo ha vuelto a f6, así que el alfil viene con tempo. Estás un poco mejor.",
+      "sayShort": "Bf4 — ataca a la dama en d6."
     },
     "vienna-game-40": {
-      "say": "…Qf8: la dama vuelve junto a su rey, fuera del alcance del alfil. El motor prefiere por poco …Qd8.",
-      "sayShort": "…Qf8 — vuelve a casa, fuera de alcance."
+      "say": "…Qf8 resguarda a la dama junto a su rey, fuera del alcance del alfil, y sigues estando un poco mejor. La pieza a vigilar es el caballo en f6. Está a un salto de e4, donde golpearía a tu dama en d2.",
+      "sayShort": "…Qf8 — de vuelta a casa, fuera de alcance."
     },
     "vienna-game-41": {
-      "say": "Be5: el alfil toma el centro y ataca los dos caballos, en c7 y f6. Pero los dos están protegidos, así que no queda nada colgando, y no hace nada contra su próxima jugada: …Ne4, atacando tu dama de d2. El motor prefiere Qd1, sacando la dama del alcance de ese caballo. Después de Be5 la posición está más o menos igualada.",
-      "sayShort": "Be5 — ataca los dos caballos, Qd1 era mejor."
+      "say": "Be5 coloca el alfil en el centro contra ambos caballos, en c7 y f6. Pero ambos están defendidos, así que no hay nada colgando. El motor prefiere Rfe1, y dos lecturas coinciden: la torre toma primero la columna e abierta. Después de Be5 está más o menos igualado.",
+      "sayShort": "Be5 — ataca a ambos caballos, Rfe1 era mejor."
     },
     "vienna-game-42": {
-      "say": "…Ne4, la elección del motor: el caballo cae en e4, apoyado por el peón de d5, y ataca tu dama de d2 y el peón de f2.",
-      "sayShort": "…Ne4 — ataca tu dama y f2."
+      "say": "…Ne4, la elección del motor, y ahí está el salto: el caballo aterriza en e4, respaldado por el peón de d5, y ataca a tu dama en d2 y al peón de f2. Si la dama retrocede a d1, …f6 viene después y ataca a tu alfil en e5.",
+      "sayShort": "…Ne4 — ataca a tu dama y a f2."
     },
     "vienna-game-43": {
-      "say": "Qf4: la dama se aparta y devuelve el ataque al caballo, y desde f4 también protege tu alfil de e5. El motor prefiere Qd1. La posición está más o menos igualada.",
-      "sayShort": "Qf4 — ataca el caballo, protege e5."
+      "say": "¿Adónde va la dama? Qf4 se aparta con una amenaza de respuesta sobre el caballo, y desde f4 también protege tu alfil en e5. El motor prefiere Qd1, y dos lecturas coinciden. Está más o menos igualado.",
+      "sayShort": "Qf4 — ataca al caballo, protege e5."
     },
     "vienna-game-44": {
-      "say": "…Rac8, la primera opción del motor: la última torre entra en juego, y la posición está más o menos igualada. Su próxima idea es …f6, echando tu alfil de e5, así que tu plan es atacar el caballo de e4 antes: Bb3, presionando el peón de d5 que lo sostiene, y una torre a e1.",
-      "sayShort": "…Rac8 — igualado, carga sobre e4."
+      "say": "…Rac8 protege el caballo en c7 por segunda vez, ya que tu alfil en e5 lo ataca, y la posición está más o menos igualada. Su siguiente idea es …f6, echando tu alfil. Tu plan: Bb3, presionando el peón de d5 que sostiene al caballo en e4, y luego una torre a e1 contra ese caballo.",
+      "sayShort": "…Rac8 — más o menos igualada, acumula fuerzas sobre e4."
     }
   }
 }
