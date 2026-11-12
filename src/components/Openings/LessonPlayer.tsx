@@ -1,4 +1,4 @@
-import { mentionedMoveArrows } from '../../services/mentionedMoveArrows';
+import { mentionedMoveArrows, narrationSidesOf } from '../../services/mentionedMoveArrows';
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Chess } from 'chess.js';
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
@@ -349,13 +349,21 @@ function LessonPlayerAt({ script, onExit, onComplete, onContinueToNext, startBea
   // pair") gets code-computed vision arrows for each mention, revealed on the
   // same spoken-sentence cadence as authored arrows. Authored arrows and the
   // trail are excluded so nothing doubles up.
+  // WHOSE move a named move is comes from the lesson, never from a guess: how
+  // its words mark the side (a Watch course is strict — White's move bare,
+  // Black's with the dots) and who "you" is on this beat.
   const mentionArrows = useMemo(
     () =>
-      mentionedMoveArrows(beat.say ?? '', fens[idx] ?? '', [
-        ...(beat.arrows ?? []),
-        ...trailArrows.map((t) => ({ from: t.startSquare, to: t.endSquare })),
-      ]),
-    [beat, fens, idx, trailArrows],
+      mentionedMoveArrows(
+        beat.say ?? '',
+        fens[idx] ?? '',
+        [
+          ...(beat.arrows ?? []),
+          ...trailArrows.map((t) => ({ from: t.startSquare, to: t.endSquare })),
+        ],
+        narrationSidesOf(script, beat.orientation ?? script.orientation),
+      ),
+    [beat, fens, idx, trailArrows, script],
   );
   const boardArrows: BoardArrow[] = [
     ...trailArrows,

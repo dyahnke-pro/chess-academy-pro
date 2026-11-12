@@ -26,7 +26,7 @@ describe('green-arrow ceiling', () => {
     const mv = at(['e4', 'c5', 'Nf3', 'Nc6', 'd4', 'cxd4', 'Nxd4', 'g6']);
     const r = groundedSegmentArrows(
       "Through the early moves — the knight to c3, White's bishop to e3, our knight to f6 —",
-      '', mv,
+      '', mv, 'black',
     );
     const green = r.arrows.filter((a) => a.color === 'green');
     expect(green.length).toBe(3);
@@ -40,7 +40,7 @@ describe('green-arrow ceiling', () => {
       'so the pawn to f3 is risky; the knight to a5 hits the bishop, the queen to b5 offers ' +
       'the trade, the queen to d7 keeps it on, the queen to c6 eyes the long diagonal, and ' +
       'the knight to e5 lands in the middle.';
-    const green = groundedSegmentArrows(text, '', mv).arrows.filter((a) => a.color === 'green');
+    const green = groundedSegmentArrows(text, '', mv, 'black').arrows.filter((a) => a.color === 'green');
     expect(green).toEqual([]);
   });
 
@@ -50,7 +50,7 @@ describe('green-arrow ceiling', () => {
     const text =
       'The queen takes f3, the pawn to f3, the knight to a5, the queen to b5, the queen to d7, ' +
       'the queen to c6, the knight to e5.';
-    const arrows = groundedSegmentArrows(text, '', mv).arrows;
+    const arrows = groundedSegmentArrows(text, '', mv, 'black').arrows;
     expect(arrows.filter((a) => a.color === 'orange')).toHaveLength(1);
     expect(arrows.filter((a) => a.color === 'green')).toEqual([]);
   });
@@ -60,6 +60,6 @@ describe('green-arrow ceiling', () => {
     const text =
       'The queen takes f3, the pawn to f3, the knight to a5, the queen to b5, the queen to d7, ' +
       'the queen to c6, the knight to e5.';
-    expect(groundedSegmentArrows(text, '', mv).spans).toEqual([]);
+    expect(groundedSegmentArrows(text, '', mv, 'black').spans).toEqual([]);
   });
 });

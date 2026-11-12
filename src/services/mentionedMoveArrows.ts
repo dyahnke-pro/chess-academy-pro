@@ -22,22 +22,37 @@
 // One derivation, one gate, every surface. Kept as its own export so the two
 // call sites read the way they always did; the sequential-road behaviour they
 // depend on lives in `deriveNarrationArrows` (its plan-chain board).
-import { deriveNarrationArrows } from './narrationArrows';
-import type { AnnotationArrow } from '../types';
+import { deriveNarrationArrows, type NarrationSides } from './narrationArrows';
+import type { AnnotationArrow, MoveMarking } from '../types';
 
 /** Green vision arrow — the playbook's lead-the-eye colour for non-move
  *  reference arrows (matches LessonPlayer's default). */
 const VISION = 'rgba(40,185,95,0.92)';
 
+/** What the resolver must be told about a lesson's words (or the words of the
+ *  line played from it): how they mark whose move a named move is — what the
+ *  lesson's builder declared, else 'loose', since the hand-written lessons and
+ *  plan lines name either side's move bare — and who "you" is, the seat the
+ *  player shows it from. The ONE reader, so the two players cannot answer
+ *  differently for the same lesson. */
+export function narrationSidesOf(
+  source: { moveMarking?: MoveMarking },
+  student: 'white' | 'black',
+): NarrationSides {
+  return { marking: source.moveMarking ?? 'loose', student };
+}
+
 /** Arrows for every move the prose mentions, resolved against `fen`.
  *  `exclude` suppresses duplicates of authored arrows and the beat's own
- *  move (its squares are auto-painted by the player). Deterministic. */
+ *  move (its squares are auto-painted by the player). `sides` is the caller's
+ *  answer about the text (`narrationSidesOf`). Deterministic. */
 export function mentionedMoveArrows(
   text: string,
   fen: string,
-  exclude: Array<{ from: string; to: string }> = [],
+  exclude: ReadonlyArray<{ from: string; to: string }>,
+  sides: NarrationSides,
 ): AnnotationArrow[] {
-  return deriveNarrationArrows(text, fen, exclude).arrows.map((a) => ({
+  return deriveNarrationArrows(text, fen, exclude, sides).arrows.map((a) => ({
     from: a.from,
     to: a.to,
     color: VISION,

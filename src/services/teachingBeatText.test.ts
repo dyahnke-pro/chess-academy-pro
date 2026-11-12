@@ -14,6 +14,9 @@ const note = (over: Partial<DanyaNote>): DanyaNote => ({
   explains: '', teaches: '', plans: '', concepts: [], sources: [], ...over,
 });
 
+/** A corpus note names either side's move bare, and addresses no seat here. */
+const LOOSE = { marking: 'loose', student: null } as const;
+
 describe('teachingBeatText', () => {
   it('carries explains, teaches AND plans', () => {
     const beat = teachingBeatText(note({
@@ -35,8 +38,8 @@ describe('teachingBeatText', () => {
     const withPlans = teachingBeatText(note({
       explains: 'White is developed.', teaches: 'Develop before striking.', plans: 'White prepares d4 to open the centre.',
     }));
-    expect(mentionedMoveArrows(withoutPlans, fen, [])).toEqual([]);
-    const arrows = mentionedMoveArrows(withPlans, fen, []);
+    expect(mentionedMoveArrows(withoutPlans, fen, [], LOOSE)).toEqual([]);
+    const arrows = mentionedMoveArrows(withPlans, fen, [], LOOSE);
     expect(arrows.some((a) => a.to === 'd4'), 'no arrow for the move named in plans').toBe(true);
   });
 });

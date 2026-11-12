@@ -14,7 +14,7 @@ import {
 import { LessonScaffold } from './LessonScaffold';
 import { voiceService } from '../../services/voiceService';
 import { useCoachBoardStore } from '../../stores/coachBoardStore';
-import { mentionedMoveArrows } from '../../services/mentionedMoveArrows';
+import { mentionedMoveArrows, narrationSidesOf } from '../../services/mentionedMoveArrows';
 import { logAppAudit } from '../../services/appAuditor';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { reportPlayableLineContinuity } from '../../services/continuityGuard';
@@ -238,6 +238,14 @@ export function PlayableLinePlayer({
     return demoFenAtIndex(demoMoveIndex);
   }, [demoMoveIndex, demoFenAtIndex, line.fen]);
 
+  // WHOSE move a named move is, for the arrows drawn off the annotations: how
+  // the line's words mark the side (the lesson's own answer when the line was
+  // built from one) and the seat it is played from.
+  const lineSides = useMemo(
+    () => narrationSidesOf({ moveMarking: line.moveMarking }, boardOrientation),
+    [line.moveMarking, boardOrientation],
+  );
+
   const currentDemoArrows = useMemo((): BoardArrow[] => {
     // Intro beat: the plan's idea arrows (breaks + future-open lines) on the
     // static critical position, before any move.
@@ -249,10 +257,10 @@ export function PlayableLinePlayer({
     // use; authored arrows stay first and duplicates are excluded.
     const say = demoMoveIndex < (line.annotations ?? []).length ? (line.annotations?.[demoMoveIndex] ?? '') : '';
     const mentioned = say
-      ? mentionedMoveArrows(say, demoFenAtIndex(demoMoveIndex), authored.map((a) => ({ from: a.from, to: a.to })))
+      ? mentionedMoveArrows(say, demoFenAtIndex(demoMoveIndex), authored.map((a) => ({ from: a.from, to: a.to })), lineSides)
       : [];
     return arrowsToBoard([...authored, ...mentioned], demoFenAtIndex(demoMoveIndex), boardOrientation);
-  }, [demoMoveIndex, line.arrows, line.intro, line.annotations, line.fen, demoFenAtIndex, boardOrientation]);
+  }, [demoMoveIndex, line.arrows, line.intro, line.annotations, line.fen, lineSides, demoFenAtIndex, boardOrientation]);
 
   // Lead-the-eye highlights — light up exactly the squares the current
   // annotation names so the student looks where the words point instead

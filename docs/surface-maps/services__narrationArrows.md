@@ -4,44 +4,59 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**303 lines · 1 exports · 6 importers · 3 tests · 0 audits**
+**526 lines · 2 exports · 9 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1330) — names `deriveNarrationArrows`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1756) — names `deriveNarrationArrows`
 
 ## Who calls in
 
 - `src/data/lessons/punishGems.ts`
 - `src/services/continuationMoveNarration.universal.test.ts`
 - `src/services/mentionedMoveArrows.ts`
+- `src/services/narrationArrows.markers.measure.test.ts`
+- `src/services/narrationArrows.sides.test.ts`
 - `src/services/narrationArrows.spoken.test.ts`
 - `src/services/narrationArrows.test.ts`
 - `src/services/openingGenerator.ts`
+- `src/test/watchArrowSides.gate.test.ts`
 
 ## Exports and every call site
 
-### `deriveNarrationArrows` (function) — 14 call sites
-- `src/data/lessons/punishGems.ts:238`
+### `NarrationSides` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `deriveNarrationArrows` (function) — 20 call sites
+- `src/data/lessons/punishGems.ts:247`
 - `src/services/continuationMoveNarration.universal.test.ts:125`
-- `src/services/continuationMoveNarration.universal.test.ts:147`
-- `src/services/mentionedMoveArrows.ts:40`
-- `src/services/narrationArrows.spoken.test.ts:28`
-- `src/services/narrationArrows.spoken.test.ts:83`
-- `src/services/narrationArrows.test.ts:24`
-- `src/services/narrationArrows.test.ts:35`
-- `src/services/narrationArrows.test.ts:46`
-- `src/services/narrationArrows.test.ts:60`
-- `src/services/narrationArrows.test.ts:71`
-- `src/services/narrationArrows.test.ts:79`
-- `src/services/narrationArrows.test.ts:85`
-- `src/services/openingGenerator.ts:1291`
+- `src/services/continuationMoveNarration.universal.test.ts:148`
+- `src/services/mentionedMoveArrows.ts:55`
+- `src/services/narrationArrows.markers.measure.test.ts:98`
+- `src/services/narrationArrows.sides.test.ts:22`
+- `src/services/narrationArrows.sides.test.ts:27`
+- `src/services/narrationArrows.sides.test.ts:194`
+- `src/services/narrationArrows.spoken.test.ts:31`
+- `src/services/narrationArrows.spoken.test.ts:86`
+- `src/services/narrationArrows.test.ts:28`
+- `src/services/narrationArrows.test.ts:39`
+- `src/services/narrationArrows.test.ts:50`
+- `src/services/narrationArrows.test.ts:64`
+- `src/services/narrationArrows.test.ts:75`
+- `src/services/narrationArrows.test.ts:83`
+- `src/services/narrationArrows.test.ts:89`
+- `src/services/openingGenerator.ts:1309`
+- `src/test/watchArrowSides.gate.test.ts:130`
+- `src/test/watchArrowSides.gate.test.ts:168`
 
 ## Tests
 
 - `src/services/continuationMoveNarration.universal.test.ts`
+- `src/services/narrationArrows.markers.measure.test.ts`
+- `src/services/narrationArrows.sides.test.ts`
 - `src/services/narrationArrows.spoken.test.ts`
 - `src/services/narrationArrows.test.ts`
+- `src/test/watchArrowSides.gate.test.ts`
 
 ## Audits that reach it
 

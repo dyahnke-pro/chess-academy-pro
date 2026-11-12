@@ -10,7 +10,7 @@ import gemsData from '../punish-gems.json';
 import gambitGemsData from '../gambit-punish-gems.json';
 import { getGemNarration, hasGemNarration } from './punishGemNarration';
 import { narrateContinuationMove } from '../../services/continuationMoveNarration';
-import { deriveNarrationArrows } from '../../services/narrationArrows';
+import { deriveNarrationArrows, type NarrationSides } from '../../services/narrationArrows';
 import { GAMBIT_GEM_NARRATION } from './gambitGemNarration';
 import type { PlayableMiddlegameLine, AnnotationArrow } from '../../types';
 
@@ -205,6 +205,10 @@ export function gemToPlayableLine(gem: PunishGem): PlayableMiddlegameLine | null
   // uses: every clause is checked against the position before it is spoken, so
   // the tail explains the advantage instead of just replaying moves silently.
   const authoredPlies = moves.length - (gem.demonstrationPlies ?? 0);
+  // What the arrow resolver is told about a gem's Watch prose: it is
+  // hand-written and names either side's move bare ('loose'), and "you" is the
+  // side that punishes — the mover of the ply after the slip.
+  const gemSides: NarrationSides = { marking: 'loose', student: punishPly % 2 === 0 ? 'white' : 'black' };
 
   for (let i = 0; i < moves.length; i++) {
     let from = '';
@@ -240,7 +244,7 @@ export function gemToPlayableLine(gem: PunishGem): PlayableMiddlegameLine | null
       from && to
         ? [
             { from, to, color: 'orange' },
-            ...deriveNarrationArrows(watch, chess.fen(), [{ from, to }]).arrows.map((a) => ({
+            ...deriveNarrationArrows(watch, chess.fen(), [{ from, to }], gemSides).arrows.map((a) => ({
               from: a.from,
               to: a.to,
               color: 'green' as const,

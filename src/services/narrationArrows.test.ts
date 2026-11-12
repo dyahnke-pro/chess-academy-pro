@@ -14,6 +14,10 @@ const fenAfter = (sans: string[]): string => {
 
 const sansOf = (r: ReturnType<typeof deriveNarrationArrows>): string[] => r.arrows.map((a) => `${a.from}-${a.to}`);
 
+/** The generated Grand Prix / Glek prose names either side's move bare
+ *  ("Black … play d6, e6, or g6") and addresses no seat. */
+const LOOSE = { marking: 'loose', student: null } as const;
+
 describe('deriveNarrationArrows — the shipped false arrows', () => {
   it('"keeps the knight off f3" is a square reference, not a pawn push', () => {
     // Grand Prix, after 1.e4 c5 2.Nc3.
@@ -21,7 +25,7 @@ describe('deriveNarrationArrows — the shipped false arrows', () => {
     const text =
       "Nc3 does double duty: it defends e4 so Black can't strike there for free, "
       + 'and it keeps the knight off f3 for now, letting White decide which attacking setup to build.';
-    const r = deriveNarrationArrows(text, fen, [{ from: 'b1', to: 'c3' }]);
+    const r = deriveNarrationArrows(text, fen, [{ from: 'b1', to: 'c3' }], LOOSE);
     expect(sansOf(r)).not.toContain('f2-f3');
     expect(r.rejected.some((x) => x.token === 'f3' && /square reference/.test(x.reason))).toBe(true);
   });
@@ -32,7 +36,7 @@ describe('deriveNarrationArrows — the shipped false arrows', () => {
     const text =
       'f4 is the defining move of the Grand Prix Attack. White immediately starts building a '
       + 'kingside pawn storm, planning to follow up with Bc4 (or Bb5).';
-    const r = deriveNarrationArrows(text, fen, [{ from: 'f2', to: 'f4' }]);
+    const r = deriveNarrationArrows(text, fen, [{ from: 'f2', to: 'f4' }], LOOSE);
     // Bc4 is the plan step; Bb5 is the alternative — BOTH start from f1.
     expect(sansOf(r)).toContain('f1-c4');
     expect(sansOf(r)).toContain('f1-b5');
@@ -43,7 +47,7 @@ describe('deriveNarrationArrows — the shipped false arrows', () => {
   it('"Qe1-h4" is one queen move, not a pawn to h4', () => {
     const fen = fenAfter(['e4', 'c5', 'Nc3', 'Nc6', 'f4']);
     const text = 'The plan is Qe1-h4, swinging the queen to the kingside.';
-    const r = deriveNarrationArrows(text, fen, [{ from: 'f2', to: 'f4' }]);
+    const r = deriveNarrationArrows(text, fen, [{ from: 'f2', to: 'f4' }], LOOSE);
     expect(sansOf(r)).not.toContain('h2-h4');
     // Qe1 then h4 is not legal in one move here, so nothing is drawn rather
     // than something wrong — a missing arrow beats a false one.
@@ -57,7 +61,7 @@ describe('deriveNarrationArrows — what it must still draw', () => {
     const fen = fenAfter(['e4', 'c5', 'Nc3', 'Nc6']);
     const text =
       "Black waits to see where White puts the bishop before deciding whether to play d6, e6, or g6.";
-    const r = deriveNarrationArrows(text, fen, [{ from: 'b8', to: 'c6' }]);
+    const r = deriveNarrationArrows(text, fen, [{ from: 'b8', to: 'c6' }], LOOSE);
     const drawn = sansOf(r);
     expect(drawn).toContain('d7-d6');
     expect(drawn).toContain('e7-e6');
@@ -68,7 +72,7 @@ describe('deriveNarrationArrows — what it must still draw', () => {
     // White has castled, so the king is on g1 and the h3/Kh2 regroup is real.
     const fen = fenAfter(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'O-O']);
     const text = 'A common set-up is h3, then Kh2.';
-    const r = deriveNarrationArrows(text, fen, []);
+    const r = deriveNarrationArrows(text, fen, [], LOOSE);
     // Kh2 is only legal AFTER h3 — the chain must have advanced to find it.
     expect(sansOf(r)).toContain('h2-h3');
     expect(sansOf(r)).toContain('g1-h2');
@@ -76,13 +80,13 @@ describe('deriveNarrationArrows — what it must still draw', () => {
 
   it('never draws a move that is illegal from any real position', () => {
     const fen = fenAfter(['e4', 'c5']);
-    const r = deriveNarrationArrows('White could try Qh8 or Nf9 or blah.', fen, []);
+    const r = deriveNarrationArrows('White could try Qh8 or Nf9 or blah.', fen, [], LOOSE);
     expect(r.arrows).toHaveLength(0);
   });
 
   it('reports every rejection so a bake pass can be reviewed', () => {
     const fen = fenAfter(['e4', 'c5', 'Nc3']);
-    const r = deriveNarrationArrows('The knight sits on c3 and eyes d5.', fen, []);
+    const r = deriveNarrationArrows('The knight sits on c3 and eyes d5.', fen, [], LOOSE);
     expect(r.arrows).toHaveLength(0);
     expect(r.rejected.length).toBeGreaterThan(0);
   });

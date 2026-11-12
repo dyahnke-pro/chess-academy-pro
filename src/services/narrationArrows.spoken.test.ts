@@ -24,8 +24,11 @@ const at = (sans: readonly string[]): string => {
   for (const s of sans) c.move(s);
   return c.fen();
 };
+/** The voiced walk: a corpus note names either side's move in words, and the
+ *  student of the Accelerated Dragon is Black ("our knight to f6"). */
+const VOICED = { marking: 'loose', student: 'black' } as const;
 const drawn = (text: string, sans: readonly string[]): string[] =>
-  deriveNarrationArrows(text, at(sans), []).arrows.map((a) => `${a.from}-${a.to}`);
+  deriveNarrationArrows(text, at(sans), [], VOICED).arrows.map((a) => `${a.from}-${a.to}`);
 
 describe('spoken-register moves draw arrows', () => {
   it('draws both moves of "the pawn to d6 and d4"', () => {
@@ -80,6 +83,6 @@ describe('ambiguity draws nothing rather than the wrong piece', () => {
     const fen = at(['Nf3', 'd5', 'd4', 'Nf6']);
     const both = new Chess(fen).moves({ verbose: true }).filter((m) => m.to === 'd2' && m.piece === 'n');
     expect(both.length).toBeGreaterThan(1); // the premise of the test
-    expect(deriveNarrationArrows('The knight to d2 holds everything together.', fen, []).arrows).toEqual([]);
+    expect(deriveNarrationArrows('The knight to d2 holds everything together.', fen, [], VOICED).arrows).toEqual([]);
   });
 });

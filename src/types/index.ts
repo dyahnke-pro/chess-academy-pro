@@ -252,6 +252,17 @@ export interface OpeningMoveAnnotation {
  * or branch to a sideline and come back — things a PGN-locked
  * walkthrough cannot do. Played by useStrictNarration (voice-gated).
  */
+/** How a text marks whose move a named move is (half of the arrow resolver's
+ *  REQUIRED answer, `NarrationSides`). The dots mean Black's move in every text
+ *  ("…Nf6"). What a BARE move means is the text's own convention:
+ *  - 'strict' — White's move is written bare, Black's with the dots, always
+ *    (the Watch courses; the rule is printed on every fact sheet). A bare move
+ *    is White's and is never drawn for Black, and nothing is guessed: a move
+ *    said in words with no owner draws only when one side alone can make it.
+ *  - 'loose'  — a bare move may be either side's ("Black plays d6"): the side
+ *    to move is tried first, then the other. */
+export type MoveMarking = 'strict' | 'loose';
+
 export interface LessonBeat {
   id: string;
   /** SAN moves from the start position that produce the shown position.
@@ -291,6 +302,12 @@ export interface LessonScript {
    *  proving the line's ideas were checked against the books/online, not
    *  training recall. Gated for masterclass lessons (David 2026-05-25). */
   sources?: string[];
+  /** How the beats' words mark whose move a named move is. Declared where the
+   *  convention is known — a Watch course is 'strict', stamped as it becomes a
+   *  served lesson (`data/lessons/index.ts`); absent on the hand-written
+   *  lessons, which name either side's move bare ('loose', `narrationSidesOf`).
+   *  Carried onto the played line by `lessonToPlayableLine`. */
+  moveMarking?: MoveMarking;
 }
 
 // ─── Common Mistakes ──────────────────────────────────────────────────────
@@ -534,6 +551,10 @@ export interface PlayableMiddlegameLine {
   /** Independent-verification source refs (book:/concept:/reputable URL). */
   sources?: string[];
   title: string;
+  /** How the annotations mark whose move a named move is — the lesson's own
+   *  answer when the line was built from one (`lessonToPlayableLine`); absent
+   *  = 'loose' (`narrationSidesOf`). */
+  moveMarking?: MoveMarking;
 }
 
 export interface MiddlegamePlan {

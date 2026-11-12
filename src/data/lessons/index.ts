@@ -430,10 +430,19 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
 // 2026-11-11). A course's lines replace the hand-written lessons above for
 // the same opening and tabs; the old beats are deleted once every line of
 // the opening has its course (David: "Once they are replaced, ok to delete").
+//
+// A course's beats are written to the fact sheet's rule, printed on every
+// sheet: White's move bare, Black's with the dots. THIS is where a course
+// becomes a served lesson, so this is where that is declared — the players
+// read it off the lesson (`narrationSidesOf`) and hand it to the arrow resolver,
+// which then never draws a bare move for Black or a dotted one for White.
+// Gate: `src/test/watchArrowSides.gate.test.ts` (every served course lesson
+// is declared strict).
+const writtenStrict = (lesson: LessonScript): LessonScript => ({ ...lesson, moveMarking: 'strict' });
 for (const course of WATCH_COURSES) {
   const w = watchLessons(course);
-  if (w.main) LESSONS[course.openingId] = w.main;
-  Object.assign(VARIATION_LESSONS, w.variations);
+  if (w.main) LESSONS[course.openingId] = writtenStrict(w.main);
+  for (const [key, lesson] of Object.entries(w.variations)) VARIATION_LESSONS[key] = writtenStrict(lesson);
 }
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {
@@ -750,5 +759,9 @@ export function lessonToPlayableLine(
     if (beat.arrows) arrows[ply] = beat.arrows;
     if (beat.highlights) highlights[ply] = beat.highlights;
   }
-  return { fen: LESSON_START_FEN, moves, annotations, arrows, highlights, learnCues, title: lesson.title };
+  return {
+    fen: LESSON_START_FEN, moves, annotations, arrows, highlights, learnCues, title: lesson.title,
+    // The annotations ARE the lesson's beats, so they are marked the way it is.
+    ...(lesson.moveMarking ? { moveMarking: lesson.moveMarking } : {}),
+  };
 }

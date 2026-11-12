@@ -93,6 +93,13 @@ diagonal, eyes c7.").
   Ne4 here").
 - Squares named are lit and moves named are arrowed by code — write the
   square or the move, never mark it by hand.
+- The arrow goes to the side the move is written for: a bare move is drawn
+  for White only, a dotted move for Black only (`narrationArrows`, gate
+  `src/test/watchArrowSides.gate.test.ts`). So keep the marker exact — a Black
+  move written bare ("Nxd4 Qxd4" for a line both sides play) draws nothing —
+  and never reword a beat to dodge an arrow. A move said in words ("the knight
+  heads for f5") is drawn for the one side that can make it; when both sides
+  could, say whose it is ("your knight", "their bishop") or nothing is drawn.
 - The engine line says what happens ("if …Qb6, Nc3 and the b-pawn is
   poisoned"), never "the engine says".
 - Old hand-written beats for the line are deleted when the new ones land

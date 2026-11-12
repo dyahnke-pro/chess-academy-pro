@@ -41,8 +41,10 @@ for (const key of keys) {
     if (!text) return;
     plies += 1;
     const exclude = [{ from: mv.from, to: mv.to }];
-    const oldSet = new Set(mentionedMoveArrows(text, fen, exclude).map((a) => `${a.from}-${a.to}`));
-    const res = deriveNarrationArrows(text, fen, exclude);
+    // The baked narrations name either side's move bare, and address no seat.
+    const sides = { marking: 'loose', student: null } as const;
+    const oldSet = new Set(mentionedMoveArrows(text, fen, exclude, sides).map((a) => `${a.from}-${a.to}`));
+    const res = deriveNarrationArrows(text, fen, exclude, sides);
     const newSet = new Set(res.arrows.map((a) => `${a.from}-${a.to}`));
 
     for (const a of oldSet) {

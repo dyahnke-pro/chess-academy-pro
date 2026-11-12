@@ -126,6 +126,7 @@ describe('arrow derivation is universal', () => {
           'The plan is Nf3, then d4 and Qd2, hitting e5 and controlling d5.',
           fen,
           [{ from: mv.from, to: mv.to }],
+          { marking: 'loose', student: null },
         );
         const board = new Chess(fen);
         for (const a of res.arrows) {
@@ -148,6 +149,7 @@ describe('arrow derivation is universal', () => {
         'Both sides have finished developing and the position is balanced.',
         c.fen(),
         [],
+        { marking: 'loose', student: null },
       );
       expect(res.arrows).toHaveLength(0);
     }

@@ -1283,6 +1283,10 @@ export function groundedSegmentArrows(
   noteText: string | null,
   prose: string,
   move: { from: string; to: string; fen: string },
+  /** The seat the lesson is taught from — who "you / your" is in the note and
+   *  the prose. REQUIRED: "your knight to d5" is one side's move, and the
+   *  arrow resolver never guesses which (`NarrationSides`). */
+  studentSide: 'white' | 'black',
 ): {
   // NonNullable, not the bare field type: the orange trail is unconditional, so
   // this can never return undefined arrows. Declaring the segment's OPTIONAL
@@ -1298,7 +1302,13 @@ export function groundedSegmentArrows(
 } {
   const source = noteText?.trim() ? 'note' : 'prose';
   const text = source === 'note' ? (noteText as string) : prose;
-  const all = deriveNarrationArrows(text, move.fen, [{ from: move.from, to: move.to }]).arrows;
+  // 'loose': neither a corpus note nor the computed beat is written to the
+  // Watch courses' marker rule ("Black kicks the bishop with a6"), so a bare
+  // move keeps the old order — the side to move, then the other. The dots,
+  // where they are written, still mean Black's.
+  const all = deriveNarrationArrows(
+    text, move.fen, [{ from: move.from, to: move.to }], { marking: 'loose', student: studentSide },
+  ).arrows;
   // Over the ceiling: this ply recites a LINE, not a couple of candidate moves.
   // The orange trail still marks the move being played; the line itself waits
   // for the walk-out rather than being dumped on one board.
@@ -2159,7 +2169,7 @@ async function generateOpeningFromDbNarration(
       if (extMove) {
         const segment: NarrationSegmentType = {
           text,
-          arrows: groundedSegmentArrows(branchNoteSources[j + 1] ?? null, text, extMove).arrows,
+          arrows: groundedSegmentArrows(branchNoteSources[j + 1] ?? null, text, extMove, studentSide).arrows,
         };
         if (shortText) segment.shortText = shortText;
         node.narration = [segment];
@@ -2186,7 +2196,7 @@ async function generateOpeningFromDbNarration(
     if (branchMove) {
       const segment: NarrationSegmentType = {
         text: branchSpoken,
-        arrows: groundedSegmentArrows(branchNoteSources[0] ?? null, teaser, branchMove).arrows,
+        arrows: groundedSegmentArrows(branchNoteSources[0] ?? null, teaser, branchMove, studentSide).arrows,
       };
       if (shortTeaser) segment.shortText = shortTeaser;
       branchNode.narration = [segment];
@@ -2456,7 +2466,7 @@ async function generateOpeningFromDbNarration(
     // that prose IS the teaching, reworded and board-gated OFFLINE where a bad
     // line could be rejected. Deriving from it is still deriving from grounded
     // content — it is not the runtime model choosing what to point at.
-    const grounded = groundedSegmentArrows(plyNoteText[i], text, p);
+    const grounded = groundedSegmentArrows(plyNoteText[i], text, p, studentSide);
     const segmentArrows: NarrationSegmentType['arrows'] = grounded.arrows;
     // Highlights read the SAME source as the arrows — a yellow square the
     // narration points at is the same class of claim as a green arrow, so

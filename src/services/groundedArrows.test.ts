@@ -42,6 +42,7 @@ describe('groundedSegmentArrows — the note decides, not the model', () => {
       'Black kicks the bishop with a6 before committing anywhere else.',
       'White will follow up with d4 and take the centre.',
       move,
+      'white',
     );
     expect(r.source).toBe('note');
     expect(green(r)).toContain('a7-a6');
@@ -50,7 +51,7 @@ describe('groundedSegmentArrows — the note decides, not the model', () => {
   });
 
   it('falls back to the prose when no note grounds the ply', () => {
-    const r = groundedSegmentArrows(null, 'Black kicks the bishop with a6.', move);
+    const r = groundedSegmentArrows(null, 'Black kicks the bishop with a6.', move, 'white');
     expect(r.source).toBe('prose');
     expect(green(r)).toContain('a7-a6');
   });
@@ -59,7 +60,7 @@ describe('groundedSegmentArrows — the note decides, not the model', () => {
     // A blank note must not blank the arrows — that would silently strip the
     // board on any ply whose note graded down to nothing.
     for (const blank of ['', '   ', '\n']) {
-      const r = groundedSegmentArrows(blank, 'Black kicks the bishop with a6.', move);
+      const r = groundedSegmentArrows(blank, 'Black kicks the bishop with a6.', move, 'white');
       expect(r.source).toBe('prose');
       expect(green(r)).toContain('a7-a6');
     }
@@ -67,12 +68,12 @@ describe('groundedSegmentArrows — the note decides, not the model', () => {
 
   it('always keeps the orange trail on the move just played', () => {
     for (const note of ['Black kicks the bishop with a6.', null, '']) {
-      expect(orange(groundedSegmentArrows(note, 'anything at all', move))).toEqual(['f1-b5']);
+      expect(orange(groundedSegmentArrows(note, 'anything at all', move, 'white'))).toEqual(['f1-b5']);
     }
   });
 
   it('draws nothing green when the note names no move', () => {
-    const r = groundedSegmentArrows('This is the main tabiya of the whole opening.', 'White plays d4.', move);
+    const r = groundedSegmentArrows('This is the main tabiya of the whole opening.', 'White plays d4.', move, 'white');
     expect(r.source).toBe('note');
     expect(green(r)).toEqual([]);
   });
@@ -80,7 +81,7 @@ describe('groundedSegmentArrows — the note decides, not the model', () => {
   it('never draws a note move that is illegal at THIS position (G3)', () => {
     // The note is keyed to an opening, so its prose can name a move that is
     // not available on the live board. It must resolve or draw nothing.
-    const r = groundedSegmentArrows('The knight belongs on d5 after Nxd5.', 'x', move);
+    const r = groundedSegmentArrows('The knight belongs on d5 after Nxd5.', 'x', move, 'white');
     expect(r.source).toBe('note');
     expect(green(r)).toEqual([]);
   });

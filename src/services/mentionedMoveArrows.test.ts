@@ -12,14 +12,17 @@ const fenAfter = (sans: string): string => {
 // traditional h3/Kh2/Nd2/f4 road with no arrows (David's complaint).
 const TABIYA = fenAfter('e4 e5 Nf3 Nc6 Nc3 Nf6 g3 Bc5 Bg2 d6 d3 a6 O-O O-O');
 
+/** The Glek lesson is hand-written ('loose') and taught from White's seat. */
+const GLEK = { marking: 'loose', student: 'white' } as const;
+
 describe('mentionedMoveArrows', () => {
   it('arrows a single mentioned move from the live position', () => {
-    const arrows = mentionedMoveArrows('Without a6, White plays Na4 and wins the bishop pair.', TABIYA);
+    const arrows = mentionedMoveArrows('Without a6, White plays Na4 and wins the bishop pair.', TABIYA, [], GLEK);
     expect(arrows).toContainEqual(expect.objectContaining({ from: 'c3', to: 'a4' }));
   });
 
   it('arrows a whole SEQUENTIAL road, each step on the evolving position', () => {
-    const arrows = mentionedMoveArrows('The traditional plan runs h3, then Kh2, Nd2 and finally f4.', TABIYA);
+    const arrows = mentionedMoveArrows('The traditional plan runs h3, then Kh2, Nd2 and finally f4.', TABIYA, [], GLEK);
     const pairs = arrows.map((a) => `${a.from}-${a.to}`);
     expect(pairs).toContain('h2-h3'); // legal now
     expect(pairs).toContain('g1-h2'); // only legal AFTER h3 — the probe played it
@@ -28,7 +31,7 @@ describe('mentionedMoveArrows', () => {
   });
 
   it('skips tokens that ground nowhere and never invents an arrow', () => {
-    const arrows = mentionedMoveArrows('One day Qh5 mates, but Rxa8 is impossible here.', TABIYA);
+    const arrows = mentionedMoveArrows('One day Qh5 mates, but Rxa8 is impossible here.', TABIYA, [], GLEK);
     for (const a of arrows) {
       const legal = new Chess(TABIYA).moves({ verbose: true });
       // every arrow's from-square holds a piece that can reach its to-square
@@ -39,7 +42,7 @@ describe('mentionedMoveArrows', () => {
   });
 
   it('excludes duplicates of authored arrows', () => {
-    const arrows = mentionedMoveArrows('White plays Na4 next.', TABIYA, [{ from: 'c3', to: 'a4' }]);
+    const arrows = mentionedMoveArrows('White plays Na4 next.', TABIYA, [{ from: 'c3', to: 'a4' }], GLEK);
     expect(arrows).toHaveLength(0);
   });
 
@@ -54,7 +57,7 @@ describe('mentionedMoveArrows', () => {
     // If flooding turns out to be real, the cure is upstream — say fewer moves
     // — not a board that quietly disagrees with the sentence above it.
     const text = 'Candidate roads: h3 Kh2 Nd2 f4 Be3 Qd2 Re1 b4 a4 d4.';
-    const arrows = mentionedMoveArrows(text, TABIYA);
+    const arrows = mentionedMoveArrows(text, TABIYA, [], GLEK);
     expect(arrows.length, 'a named move went undrawn').toBeGreaterThan(6);
     // LEGAL ALONG THE CHAIN, NOT ALL ON THE ROOT BOARD. `deriveNarrationArrows`
     // walks a plan chain, so a road named after an earlier one is resolved from

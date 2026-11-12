@@ -26,7 +26,7 @@ describe('splitSegmentBySentence', () => {
 
   it('gives each sentence only the arrows it names', () => {
     const text = 'Black kicks the bishop with a6. Later Nf6 develops with tempo.';
-    const grounded = groundedSegmentArrows(text, text, move);
+    const grounded = groundedSegmentArrows(text, text, move, 'white');
     const segments = splitSegmentBySentence({ text, arrows: grounded.arrows }, grounded.spans);
     expect(segments.length).toBe(2);
 
@@ -40,7 +40,7 @@ describe('splitSegmentBySentence', () => {
 
   it('keeps the orange trail on EVERY segment — the played move must not blink out', () => {
     const text = 'Black kicks the bishop with a6. Later Nf6 develops with tempo.';
-    const grounded = groundedSegmentArrows(text, text, move);
+    const grounded = groundedSegmentArrows(text, text, move, 'white');
     for (const seg of splitSegmentBySentence({ text, arrows: grounded.arrows }, grounded.spans)) {
       expect((seg.arrows ?? []).filter((a) => a.color === 'orange').map((a) => `${a.from}-${a.to}`))
         .toEqual(['f1-b5']);
@@ -49,7 +49,7 @@ describe('splitSegmentBySentence', () => {
 
   it('never loses an arrow across the split', () => {
     const text = 'The plan is a6, then Nf6 and later d6. That is the whole setup.';
-    const grounded = groundedSegmentArrows(text, text, move);
+    const grounded = groundedSegmentArrows(text, text, move, 'white');
     const before = (grounded.arrows ?? []).filter((a) => a.color !== 'orange').map((a) => `${a.from}-${a.to}`).sort();
     const after = splitSegmentBySentence({ text, arrows: grounded.arrows }, grounded.spans)
       .flatMap((s) => (s.arrows ?? []).filter((a) => a.color !== 'orange').map((a) => `${a.from}-${a.to}`))
@@ -59,14 +59,14 @@ describe('splitSegmentBySentence', () => {
 
   it('leaves a single-sentence beat exactly as it was', () => {
     const text = 'Black kicks the bishop with a6.';
-    const grounded = groundedSegmentArrows(text, text, move);
+    const grounded = groundedSegmentArrows(text, text, move, 'white');
     const seg = { text, arrows: grounded.arrows };
     expect(splitSegmentBySentence(seg, grounded.spans)).toEqual([seg]);
   });
 
   it('speaks the short cue once, on the first segment only', () => {
     const text = 'Black kicks the bishop with a6. Later Nf6 develops with tempo.';
-    const grounded = groundedSegmentArrows(text, text, move);
+    const grounded = groundedSegmentArrows(text, text, move, 'white');
     const segments = splitSegmentBySentence(
       { text, arrows: grounded.arrows, shortText: 'a6 — kick the bishop' },
       grounded.spans,
@@ -77,7 +77,7 @@ describe('splitSegmentBySentence', () => {
 
   it('places an unplaceable arrow on the first segment rather than dropping it', () => {
     const text = 'One sentence here. And a second one.';
-    const grounded = groundedSegmentArrows(text, text, move);
+    const grounded = groundedSegmentArrows(text, text, move, 'white');
     // A span the text never mentions — must still be carried somewhere.
     const segments = splitSegmentBySentence(
       { text, arrows: [...(grounded.arrows ?? []), { from: 'b1', to: 'c3', color: 'green' }] },
