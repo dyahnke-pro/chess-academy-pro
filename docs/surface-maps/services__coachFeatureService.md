@@ -239,8 +239,8 @@
 - `src/services/coachFeatureService.test.ts:841`
 - `src/services/coachFeatureService.test.ts:897`
 - `src/services/coachFeatureService.trade.test.ts:19`
-- `src/services/coachNoRecall.test.ts:45`
-- `src/services/coachNoRecall.test.ts:57`
+- `src/services/coachNoRecall.test.ts:47`
+- `src/services/coachNoRecall.test.ts:59`
 - `src/services/danyaBench.measure.test.ts:398`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
