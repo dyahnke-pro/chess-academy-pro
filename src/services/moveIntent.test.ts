@@ -179,7 +179,10 @@ describe('a pawn that strikes a pawn is about the strike (Alekhine walk 2026-10-
   });
   it('NEGATIVE CONTROL: a quiet pawn move with no contact still names what it unblocks', () => {
     const fen = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
-    const out = moveIntent(fen, 'd6', { before: [l(['d7d6'])], after: [l(['d2d4'])], passBefore: [l(['d7d6'])], passAfter: [l(['b8d7'])] }, 'opponent');
+    // The unblocked move is one the engine's own line after …d6 plays for
+    // them (task 172: what the side would play with a free move is not what
+    // the move prepared).
+    const out = moveIntent(fen, 'd6', { before: [l(['d7d6'])], after: [l(['d2d4', 'b8d7'])], passBefore: [l(['d7d6'])], passAfter: [l(['b8d7'])] }, 'opponent');
     expect(out?.prepares?.san).toBe('Nd7');
   });
 });

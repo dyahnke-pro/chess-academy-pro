@@ -239,6 +239,13 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // moves of one game, when only those four were said once.
   const seated = (clause: string): string => (mine ? clause : toOtherSeat(clause));
   for (const f of computeMoveFundamentals(i.fenBefore, i.san, sideOf(i.fenBefore) === 'w' ? 'white' : 'black')) {
+    // A PUSH THE RULE CALLS PREPARED IS ONE A LINE GOES ON TO PLAY (task 172:
+    // "…d6 prepares e5 — when the e-pawn goes forward, it will be supported"
+    // in the Benko, where no line of the engine's and no move of the lesson's
+    // plays …e5). The rule reads the board — the square is guarded now — and
+    // the board cannot say the push is the plan; the lines the surface knows
+    // follow can. With none known, the board is all there is.
+    if (f.id === 'prepare-break' && f.names && follow.length > 0 && !follow.some((line) => linePlays(fenAfter, line, f.names as { from: string; to: string }))) continue;
     const idea = FUNDAMENTAL_IDEA[f.id];
     add('fundamental', 'computeMoveFundamentals', 'fundamental', idea, lead(seated(f.led)), `It also ${seated(f.led)}`, f.squares, f.weight, false, [`phrase:${idea}`]);
   }
@@ -661,7 +668,16 @@ function purposeFact(i: Omit<MoveThoughtInput, 'phrases'>, voice: LessonVoice): 
   if (!i.reads || i.moverIsStudent === undefined) return null;
   if (i.reads.passBefore.length === 0 && i.reads.passAfter.length === 0) return null;
   const seat: FactSeat = i.moverIsStudent ? 'student' : 'opponent';
-  const intent = moveIntent(i.fenBefore, i.san, i.reads, seat);
+  // The line the lesson goes on with: a move it plays was not "stopped".
+  const lineAfter: string[] = [];
+  if (i.tense === 'now' && i.line) {
+    try {
+      const c = new Chess(i.fenBefore);
+      c.move(i.san);
+      for (const s of i.line) { const m = c.move(s); lineAfter.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
+    } catch { /* the playable prefix */ }
+  }
+  const intent = moveIntent(i.fenBefore, i.san, lineAfter.length ? { ...i.reads, lineAfter } : i.reads, seat);
   if (!intent?.prepares) return null;
   const mover = sideOf(i.fenBefore);
   const studentColor: 'white' | 'black' = (mover === 'w') === i.moverIsStudent ? 'white' : 'black';
@@ -733,6 +749,19 @@ export function refutedFact(r: RefutedAlternative, fenBefore: string, seat: Fact
 
 function sideOf(fen: string): 'w' | 'b' {
   return fen.split(' ')[1] === 'b' ? 'b' : 'w';
+}
+
+/** Does the side that just moved go on to play `mv` (from → to) in `line`
+ *  (SAN from `fenAfter`, the other side's reply first)? */
+function linePlays(fenAfter: string, line: readonly string[], mv: { from: string; to: string }): boolean {
+  try {
+    const c = new Chess(fenAfter);
+    for (let k = 0; k < line.length; k += 1) {
+      const m = c.move(line[k]);
+      if (k % 2 === 1 && m.from === mv.from && m.to === mv.to) return true;
+    }
+  } catch { /* the playable prefix was read */ }
+  return false;
 }
 
 /** Whether the reply that follows in the line answers their aim — the same

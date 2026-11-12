@@ -46,7 +46,11 @@ describe('"why is it best?" — what the move does, then the other moves', () =>
   it('a real gap: what the move does, then what anything else gives up', () => {
     const { text } = whyBest('sicilian1200', 36);
     expect(text).toMatch(/^You (?:play|go) Qxc5/);
-    expect(text).toMatch(/Anything else, like Ng5, gives up about half a point\.$/);
+    // Qxc5 takes back the bishop …Bxc5 took: the trade is what it does. It was
+    // "played first, so that b4 comes next" — a take-back credited with a pawn
+    // push (task 172). No single reason covers the gap, and the answer says so.
+    expect(text).not.toMatch(/so that b4/);
+    expect(text).toMatch(/Anything else, like Ng5, gives up about half a point — for reasons further down the line\.$/);
   });
   it('a choice the board refuses never silences the true one behind it', () => {
     // "h4 or dxc5 — both hold here" leads the choices step and is refused as

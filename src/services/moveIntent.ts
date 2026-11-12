@@ -23,6 +23,7 @@ import { storedMate } from './engineConstants';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { legalSeeGainFor, legalSeeGainOn, standsSafe } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
+import { materialDeficit } from './exchangeLedger';
 import { isOnHomeSquare } from './development';
 import { unmarked } from '../utils/sanMark';
 
@@ -40,6 +41,10 @@ export interface IntentReads {
   /** Their actual reply to the move, when the surface knows it (Learn does:
    *  the coach's own move). Defaults to the first move of `after[0]`. */
   reply?: string;
+  /** THE LINE THE SURFACE GOES ON WITH after the move (UCI, the reply first):
+   *  a lesson's taught line. A move it plays was not "stopped". Absent: the
+   *  surface shows no line (a live game). */
+  lineAfter?: readonly string[];
   /** THE FOLLOW-UP PLAYED FIRST (`moveOrder`'s second read): the board where
    *  the mover's next move in the line was played instead of this one,
    *  opponent to move — read by a surface that makes the extra search (a
@@ -148,6 +153,9 @@ export interface MoveIntent {
 export const THREAT_CP = 100;
 /** A follow-up is "prepared" when it gained at least this much. */
 const PREPARE_CP = 50;
+/** A stopped move the surface's own line plays within this many plies was not
+ *  stopped (three moves a side). */
+const STOPPED_PLIES = 6;
 /** A reply counts as gone when it now scores this much worse than their best. */
 const GONE_CP = 60;
 
@@ -278,6 +286,14 @@ export function moveIntent(
   // …e6 doesn't work", and …e6 was their very next move). On the board the
   // student hears it on, the line contradicts what just happened.
   if (prevents && reads.reply && reads.reply.slice(0, 4) === prevents.uci.slice(0, 4)) prevents = null;
+  // …nor one the line the surface shows goes on to play within three moves
+  // (task 172: "d4 stops your …e5" in the Albin, whose line plays …e5 a move
+  // later; "…c6 stops your cxd5" with cxd5 the lesson's next move).
+  if (prevents && reads.lineAfter) {
+    const theirs = reads.lineAfter.slice(0, STOPPED_PLIES).filter((_, k) => k % 2 === 0);
+    const stopped = prevents.uci.slice(0, 4);
+    if (theirs.some((u) => u.slice(0, 4) === stopped)) prevents = null;
+  }
   // A move onto the square the student just took is not "stopped", it is
   // blocked by the piece standing there (merged walk 2026-09-30: "…c4 — now
   // c4 doesn't work"). Nothing to teach.
@@ -294,17 +310,21 @@ export function moveIntent(
     // THE REPLAY GUARD (WO-COACH-TEACHER review 2026-09-29): the move must be
     // the CAUSE. Replay their reply without the move (this side passes) — the
     // follow-up must fail there, and must work after the move and the reply.
-    const reply = reads.reply ?? reads.after[0]?.moves?.[0];
     const unlocked = unlockedMoves(fenBefore, playedSan);
+    // THE ENGINE PLAYS IT, FOR THIS SIDE, IN ITS OWN LINES AFTER THE MOVE (task
+    // 172, 2026-11-11). A move the board unlocked is PREPARED only when a real
+    // line goes on to play it — it sees the pins and the replies exchange
+    // counting cannot (Kh1 then f4). Two looser kinds of evidence stood here
+    // and are gone: the move the side would play after a FREE extra move (the
+    // pass read — a move that needs the opponent to do nothing is no plan), and
+    // a lone unlock that only passed a replay of one reply. Between them they
+    // said "e4 frees their bishop to come out with Be2" where every line goes
+    // …Bxf1; "…Nfd7 prepares …f6", "Nxd4 first, so that f3 comes next", "…Bf8
+    // prepares …Qe7", "Bf4 first, so that Rc1 can take the c-file" — moves in
+    // no line of the engine's.
     const engineSaw = new Set<string>();
-    for (const l of [...reads.after, ...reads.passAfter]) (l.moves ?? []).forEach((u) => engineSaw.add(u));
-    // Two kinds of evidence. The engine playing it in its lines is one (it sees
-    // the pins and lines exchange counting cannot — Kh1 then f4). Without that,
-    // a lone unlock must pass the replay guard AND not merely step into the
-    // square the moved piece left (Kh1 → Rg1 is not a plan).
-    const vacated = playedUci.slice(0, 2);
-    const pick = unlocked.find((u) => engineSaw.has(u.uci))
-      ?? (unlocked.length === 1 && unlocked[0].uci.slice(2, 4) !== vacated && causedBy(fenBefore, fenAfter, reply, unlocked[0]) ? unlocked[0] : undefined);
+    for (const l of reads.after) (l.moves ?? []).forEach((u, k) => { if (k % 2 === 1) engineSaw.add(u); });
+    const pick = unlocked.find((u) => engineSaw.has(u.uci));
     if (pick) prepares = { uci: pick.uci, san: pick.san, gainCp: PREPARE_CP };
   } else if (opts.prepare === 'line') {
     // The engine's main line after the move, walked for THIS side's moves (the
@@ -409,6 +429,16 @@ export function moveIntent(
       const parts = fenBefore.split(' ');
       parts[1] = parts[1] === 'w' ? 'b' : 'w'; parts[3] = '-';
       if (legalSeeGainOn(new Chess(parts.join(' ')), playedUci.slice(0, 2) as Parameters<typeof legalSeeGainOn>[1]) >= 1) prepares = null;
+    } catch { /* keep */ }
+  }
+  // …and A CAPTURE THAT ONLY GETS MATERIAL BACK IS ABOUT THE TRADE (task 172:
+  // "…exd5 first, to free your knight on b8 for …Nc6", "their Qxd2 prepares
+  // c5", "their Bxc4 prepares d5" — take-backs). The side was behind by what it
+  // took: the capture's point is that it is level again.
+  if (prepares) {
+    try {
+      const m = new Chess(fenBefore).move(playedSan);
+      if (m.captured && materialDeficit(fenBefore, mover) >= (MATERIAL_VALUE[m.captured] ?? 0)) prepares = null;
     } catch { /* keep */ }
   }
   if (!prevents && !prepares) return null;
@@ -647,7 +677,13 @@ export function whatItDoes(fenAfter: string, prepUci: string, mover: 'w' | 'b'):
   const opp: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
   const hits = (b: Chess, from: string): string[] => {
     try {
-      const probe = new Chess(nullMoveFen(b.fen()) ?? b.fen());
+      // The mover to move: the board itself when it is already their turn (the
+      // board BEFORE the prepared move), a pass by the other side when it is
+      // not (the board after it). Flipping both read the board before as the
+      // opponent's turn, so the piece "hit nothing" there and every target it
+      // already had was new: "…dxc6 first, so that …Bd7 can hit their pawn on
+      // f5" — the bishop on c8 hit f5 the moment the d-pawn left (task 172).
+      const probe = b.turn() === mover ? b : new Chess(nullMoveFen(b.fen()) ?? b.fen());
       if (probe.turn() !== mover) return [];
       return probe.moves({ square: from as never, verbose: true }).filter((x) => x.captured).map((x) => x.to);
     } catch { return []; }
@@ -730,26 +766,6 @@ function denied(
 }
 
 const uciToMove = (uci: string): { from: string; to: string; promotion?: string } => ({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined });
-
-/** The replay guard: `u` works after the move and their reply, and fails when
- *  the same reply is played without the move (this side passes instead). A
- *  reply that is illegal without the move falls back to the board before it. */
-function causedBy(fenBefore: string, fenAfter: string, reply: string | undefined, u: IntentMove): boolean {
-  const toMove = (uci: string): { from: string; to: string; promotion?: string } => ({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined });
-  const afterReply = (fen: string | null): string | null => {
-    if (!fen || !reply) return null;
-    try { const c = new Chess(fen); return c.move(toMove(reply)) ? c.fen() : null; } catch { return null; }
-  };
-  const real = afterReply(fenAfter);
-  // With no reply to replay (game over, unreadable), the unlock test stands.
-  if (!real) return true;
-  const works = (fen: string): boolean => {
-    try { return !!new Chess(fen).moves({ verbose: true }).find((m) => `${m.from}${m.to}${m.promotion ?? ''}` === u.uci) && safeLanding(fen, toMove(u.uci)); } catch { return false; }
-  };
-  if (!works(real)) return false;
-  const without = afterReply(nullMoveFen(fenBefore));
-  return without ? !works(without) : true;
-}
 
 /** Moving `m` from `fen` lands safely: the opponent wins nothing by taking. */
 function safeLanding(fen: string, m: { from: string; to: string; promotion?: string }): boolean {
