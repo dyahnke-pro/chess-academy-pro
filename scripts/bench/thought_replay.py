@@ -166,7 +166,7 @@ def same_idea(a, b):
 # THE DEPTH OF A FACT — the composer's tables (`thoughtComposer.ts`
 # SOURCE_DEPTH / IDEA_DEPTH / factDepth), mirrored; thoughtComposer.test.ts
 # holds this copy to the code.
-HIDDEN_SOURCES = {'deepFact', 'binding', 'bestLine', 'notYet', 'prophylaxis', 'baitSet', 'ifTheyPlay', 'counterThreat', 'moveOrder', 'refuted', 'alternatives', 'weighed'}
+HIDDEN_SOURCES = {'deepFact', 'binding', 'bestLine', 'notYet', 'prophylaxis', 'baitSet', 'ifTheyPlay', 'counterThreat', 'moveOrder', 'refuted', 'alternatives', 'weighed', 'knownSlip'}
 HIDDEN_IDEAS = {'tactic', 'set-up', 'mate', 'order', 'prevent', 'choice'}
 OBVIOUS_IDEAS = {'develop', 'castle', 'recapture', 'check', 'center', 'space'}
 NAMED_IS_WHY = {'develop', 'castle', 'recapture', 'check'}
@@ -180,7 +180,7 @@ def depth(f):
         return 'obvious'
     if f['source'] in HIDDEN_SOURCES:
         return 'hidden'
-    if f['idea'] == 'prevent' and f['source'] == 'fundamental':
+    if f['idea'] == 'prevent' and f['source'] in ('fundamental', 'moveGains'):
         return 'why'
     if f['source'] == 'moveJob' and f['idea'] in OBVIOUS_IDEAS:
         return 'why'
@@ -209,7 +209,7 @@ def compose(facts, P):
         f = facts[i]
         if f['step'] == 'danger':
             return (0, -(f.get('sv') or 0), i)
-        return (STEP_ORDER[f['step']], -value(f, P), i)
+        return (STEP_ORDER[f['step']], int(f['source'] == 'openingStory'), -value(f, P), i)
     picked = []
     lead_of = {}
     byproduct = {}

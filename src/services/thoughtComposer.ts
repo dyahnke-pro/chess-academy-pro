@@ -53,6 +53,9 @@ export const THOUGHT_ORDER: Record<ThoughtStep, number> = {
 /** Every computer that hands the composer facts. A new one fails to compile
  *  until its depth is said (`SOURCE_DEPTH`). */
 export type ThoughtSource =
+  /** The opening's story (`openingStory`): the thread across the moves — the
+   *  road chosen, its price, their setup, the key break, the plan. */
+  | 'openingStory'
   | 'moveWhy' | 'briefing' | 'boardTeacher' | 'moveJob' | 'fundamental' | 'deepFact' | 'binding'
   | 'pieceRoute' | 'refuted' | 'alternatives' | 'prophylaxis' | 'notYet' | 'bestLine' | 'counterThreat' | 'theirAim' | 'planChoice' | 'moveOrder' | 'structureLines' | 'purpose' | 'studentMove'
   /** The king walked by hand (`kingWalk.ts`): the squares, the route, the bishop kept home, the rule. */
@@ -167,7 +170,7 @@ export type FactDepth = 'hidden' | 'why' | 'obvious';
 /** The computers whose facts are consequences, never the move's face. */
 export const SOURCE_DEPTH: Record<ThoughtSource, 'hidden' | 'why'> = {
   moveWhy: 'why', briefing: 'why', fundamental: 'why', boardTeacher: 'why', moveJob: 'why', pieceRoute: 'why',
-  purpose: 'why', studentMove: 'why', kingWalk: 'why', planChoice: 'why', structureLines: 'why', teachingMove: 'why', evalRead: 'why', openingTheory: 'why',
+  purpose: 'why', studentMove: 'why', kingWalk: 'why', planChoice: 'why', structureLines: 'why', teachingMove: 'why', evalRead: 'why', openingTheory: 'why', openingStory: 'why',
   // A stop is the move's reason, never above the answer to a threat (Fried
   // Liver 8…Nb4: "it stops Qd3" led over "their Nc3 is aimed at your knight
   // on d5, and this covers it").
@@ -200,7 +203,7 @@ export const IDEA_DEPTH: Record<IdeaKind, FactDepth> = {
   'win-material': 'why', trade: 'why', rescue: 'why', guard: 'why', threat: 'why', pressure: 'why', prepare: 'why',
   unpin: 'why', 'king-safety': 'why', 'attack-king': 'why', outpost: 'why', file: 'why',
   diagonal: 'why', 'passed-pawn': 'why', promote: 'why', weakness: 'why', tempo: 'why', 'king-activity': 'why',
-  route: 'why', plan: 'why', eval: 'why', theory: 'why',
+  route: 'why', plan: 'why', eval: 'why', theory: 'why', structure: 'why',
 };
 /** AN IDEA THAT CONTAINS ANOTHER: a kick is an attack that gains time, a
  *  material win or a tactic is an attack that lands. On the same squares the
@@ -268,7 +271,7 @@ export const IDEA_SKILL: Record<IdeaKind, { student: MisconceptionTagId | null; 
   recapture: { student: null, opponent: null }, rescue: { student: null, opponent: null }, guard: { student: null, opponent: null },
   unpin: { student: null, opponent: null }, 'attack-king': { student: null, opponent: null }, center: { student: null, opponent: null },
   diagonal: { student: null, opponent: null }, weakness: { student: null, opponent: null }, choice: { student: null, opponent: null },
-  order: { student: null, opponent: null }, eval: { student: null, opponent: null }, theory: { student: null, opponent: null }, prepare: { student: null, opponent: null },
+  order: { student: null, opponent: null }, eval: { student: null, opponent: null }, theory: { student: null, opponent: null }, structure: { student: null, opponent: null }, prepare: { student: null, opponent: null },
 };
 function recordStateOf(f: ThoughtFact, record: ThoughtRecord | null): HeatState | null {
   if (!record) return null;
@@ -301,6 +304,10 @@ function orderWith(record: ThoughtRecord | null): (a: ThoughtFact, b: ThoughtFac
     // THE DANGER STEP is the nearest thing at stake first: a piece hanging now
     // before a threat that needs setting up.
     || (a.step === 'danger' ? (stakeValue(b.stakes) ?? 0) - (stakeValue(a.stakes) ?? 0) : 0)
+    // THE STORY FOLLOWS THE MOVE (his order: what the move changed first): the
+    // opening's thread — the price paid, their setup, the key break — is said
+    // behind whatever the move itself does in its step, never ahead of it.
+    || (Number(a.source === 'openingStory') - Number(b.source === 'openingStory'))
     || (valueOf(b, record) - valueOf(a, record))
     || (ia - ib);
 }

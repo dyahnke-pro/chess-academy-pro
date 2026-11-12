@@ -291,6 +291,7 @@ const IDEA_AS_KINDS: Record<IdeaKind, Kind[]> = {
   'set-up': ['prepare', 'line', 'attack'], choice: ['alternative'], order: ['order'], plan: ['plan'], eval: ['material'],
   // Opening theory, calculated: the main move, the other tries, the reply, the score.
   theory: ['theory', 'alternative'],
+  structure: ['structure', 'plan'],
 };
 const SQUARE = /\b[a-h][1-8]\b/g;
 function sentencesOf(text: string): string[] {

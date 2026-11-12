@@ -22,9 +22,9 @@ describe('preparesBreakBeat', () => {
   it('names the break the move covers, from each seat', () => {
     const before = fenAfter(['e4', 'c5']);
     expect(preparesBreakBeat(before, 'a3', PLAN, false))
-      .toBe(`${introWithPredicate('opponent', 'a3', 'prepares b4: their pawn on a3 covers b4, and masters push b4 in 56% of their games from here', 'now')}.`);
+      .toBe(`${introWithPredicate('opponent', 'a3', 'prepares b4: their pawn on a3 covers the square, and masters push it in 56% of their games from here', 'now')}.`);
     expect(preparesBreakBeat(before, 'a3', PLAN, true))
-      .toBe(`${introWithPredicate('student', 'a3', 'prepares b4: your pawn on a3 covers b4, and masters push b4 in 56% of their games from here', 'now')}.`);
+      .toBe(`${introWithPredicate('student', 'a3', 'prepares b4: your pawn on a3 covers the square, and masters push it in 56% of their games from here', 'now')}.`);
   });
 
   it('says nothing for a move that does not cover the break square', () => {

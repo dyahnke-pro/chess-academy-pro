@@ -17,13 +17,17 @@ import { NO_PROOF, squaresProof, lineProof } from './proof';
 import type { DecisiveReason } from './decisiveReason';
 import type { SpokenLine } from './voicePackage';
 import { openingTheoryFacts } from './openingTheory';
-import { moveStops } from './moveStops';
+import { moveStops, stopsBreak } from './moveStops';
+import { orderByThreat } from './orderByThreat';
+import { namedStructureFormed, namedStructureLine } from './namedStructure';
 import { pieceOutFirst } from './pieceOutFirst';
 import { lineCut } from './lineCut';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { criticalityThresholds } from './criticalityScan';
 import { knownSlipIndexNow, knownSlipsAt } from './knownSlips';
 import { detectOpeningByOrder } from './openingDetectionService';
+import { preparesBreakClause } from './mastersPlanRead';
+import { storyPlanAfter } from './openingStory';
 import { transposedOpening } from './openingPositions';
 import { openingEquivalence } from './openingEquivalence';
 import { lineSeatAt } from '../utils/andList';
@@ -48,7 +52,7 @@ import { moveIntent, intentRule, type IntentReads } from './moveIntent';
 import { buildDeliberation, ruleOuts, NOTHING_SAID } from './deliberation';
 import { refutedAltProof, type RefutedAlternative } from './refutedAlternativeCore';
 import { costStakes, isStaked, stakeWc, NO_STAKES } from './factStakes';
-import { moverCp, wcGap } from './winChance';
+import { moverCp, wcGap, type LineScore } from './winChance';
 import { playedUci } from './planSteps';
 import { evalReading, signedBand } from './reviewMoveBriefing';
 import { counterThreatTeaching, planChoiceTeaching, studentMoveTeaching } from './learnBoardTeaching';
@@ -335,7 +339,10 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // Their move's expected reply is the student's next move: a surface that may
   // not name it holds it (`namesStudentMove`).
   for (const t of openingTheoryFacts(i.fenBefore, i.san, mine)) {
-    add(t.kind, 'openingTheoryFacts', 'openingTheory', 'theory', lead(t.clause), t.sentence, t.squares, 40, false, [`theory:${t.kind}:${t.names.join(',')}`]);
+    // Only the standing is said about the move itself ("You play c4: masters
+    // usually play it"); the rest are sentences of their own steps.
+    const own = t.kind === 'book-standing';
+    add(t.kind, 'openingTheoryFacts', 'openingTheory', 'theory', own ? lead(t.clause) : t.sentence, t.sentence, t.squares, 40, false, [`theory:${t.kind}:${t.names.join(',')}`]);
     if (t.kind === 'book-reply' && !mine) facts[facts.length - 1] = { ...facts[facts.length - 1], namesStudentMove: true };
   }
 
@@ -354,6 +361,17 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // sentence of its own, never a second intro of the same move.
     add('move-order', 'pieceOutFirst', 'moveGains', 'order', also, also, outFirst.squares, 72, false, [`out-first:${outFirst.squares.join('')}`]);
   }
+  // THE ORDER, READ OFF THE BOARD (gap B1): the mover's next move in the line,
+  // played first, would let them pin, fork or kick — this order does not.
+  const order = outFirst ? null : orderByThreat(i.fenBefore, i.san, i.line ?? follow[0] ?? [], mine);
+  if (order) {
+    const does = order.would.replace(/^would (\w+)/, (_m, v: string) => `${v}s`);
+    const said = rotateStem([
+      `Why not ${order.follow} first? It would allow ${order.answer}, which ${does}`,
+      `The order matters: ${order.follow} straight away would allow ${order.answer}, which ${does}`,
+    ], stemKeyOf(`${i.fenBefore}|${i.san}|order`));
+    add('move-order', 'orderByThreat', 'moveGains', 'order', said, said, order.squares, 72, false, [`order-board:${order.follow}>${order.answer}`]);
+  }
 
   // TRANSPOSITION AND ANALOGY (gaps A7, A11): "this transposes into the
   // Exchange French"; "a reversed Sicilian", "an Alekhine with c3 and c5
@@ -365,6 +383,25 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     if (into) add('equivalence', 'openingEquivalence', 'openingTheory', 'theory', lead(`transposes into the ${into}`), `It transposes into the ${into}`, [to], 44, false, [`transposed:${into}`]);
     const eq = openingEquivalence(after, mine === (sideOf(i.fenBefore) === 'w') ? 'w' : 'b');
     if (eq) add('equivalence', 'openingEquivalence', 'openingTheory', 'theory', eq.text, eq.text, eq.squares, 42, false, [eq.claim]);
+    // THE MASTERS' BREAK THE MOVE PREPARES (David 2026-10-27, "the a3
+    // Sicilian": 2.a3 covers b4, and masters push b4 in 56% of their games):
+    // the move's own job, read in the composer like every other — it was a
+    // fill-in for a beat with nothing to say, so the opening story's "their
+    // break is b4" took its place and the move lost its reason (2026-11-12).
+    const prep = preparesBreakClause(i.fenBefore, i.san, storyPlanAfter(after), mine);
+    if (prep) add('move-job', 'preparesBreakClause', 'openingTheory', 'prepare', lead(prep.clause), `It also ${prep.clause}`, prep.squares, 62, false, [`prepares-break:${prep.squares[1]}`]);
+  }
+
+  // THE STRUCTURE BY NAME, WITH ITS PLANS (gap D1): said when the move
+  // creates it — "That makes it the French pawn chain. Your plan is to hit
+  // the chain at its base …" — from the student's seat.
+  {
+    const formed = namedStructureFormed(i.fenBefore, i.san);
+    if (formed) {
+      const studentSeat: 'w' | 'b' = mine === (sideOf(i.fenBefore) === 'w') ? 'w' : 'b';
+      const line = namedStructureLine(formed, studentSeat);
+      add('structure-plan', 'namedStructureFormed', 'structureLines', 'structure', line, line, formed.squares, 58, false, [`structure:${formed.name}`]);
+    }
   }
 
   // THE OPENING'S STORY in the lesson (infrastructure item 2, 2026-11-12):
@@ -375,7 +412,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   {
     const studentColor: 'w' | 'b' = mine === (sideOf(i.fenBefore) === 'w') ? 'w' : 'b';
     for (const f of i.story ? readBoardAll('openingStory', { history: [...i.history, i.san], fen: fenAfter, student: studentColor, namesStudentMoves: true, theory: i.theory }) : []) {
-      facts.push({ ...f, namesStudentMove: false, source: 'openingTheory', idea: 'plan', weight: 38 });
+      facts.push({ ...f, namesStudentMove: false, source: 'openingStory', idea: 'plan', weight: 38 });
     }
   }
 
@@ -396,27 +433,10 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     }
   }
 
-  // THE ONLY MOVE (gap B6, "the only move not to lose"): the move played is
-  // the engine's best on the fan before it, the next best gives up at least
-  // the app's only-move gap, and the game is still in contest. Said with the
-  // next best and what it gives up — never a bare "only move".
+  // THE ONLY MOVE (gap B6): said with the next best and what it gives up.
   {
-    const lines = i.reads?.before ?? [];
-    const played = `${from}${to}`;
-    if (lines.length >= 2 && lines[0].moves[0]?.slice(0, 4) === played) {
-      const best = moverCp(i.fenBefore, lines[0]);
-      const second = moverCp(i.fenBefore, lines[1]);
-      const gap = best - second;
-      if (gap >= criticalityThresholds().onlyMove && Math.abs(best) < 400) {
-        let secondSan: string | null = null;
-        try { const u = lines[1].moves[0]; secondSan = new Chess(i.fenBefore).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san; } catch { secondSan = null; }
-        if (secondSan) {
-          const pawns = Math.round(gap / 100);
-          const gives = pawns >= 3 ? 'gives up far more' : pawns === 2 ? 'gives up about two pawns' : 'gives up about a pawn';
-          add('key-moment', 'onlyMove', 'moveGains', 'choice', lead(`is the only move that holds here — the next best, ${secondSan}, ${gives}`), `It's the only move that holds here: the next best, ${secondSan}, ${gives}`, [to], 66, false, [`only:${played}`]);
-        }
-      }
-    }
+    const only = onlyMove(i.fenBefore, `${from}${to}`, i.reads?.before ?? []);
+    if (only) add('key-moment', 'onlyMove', 'moveGains', 'choice', lead(`is the only move that holds here — the next best, ${only.secondSan}, ${only.gives}`), `It's the only move that holds here: the next best, ${only.secondSan}, ${only.gives}`, [to], 66, false, [`only:${from}${to}`]);
   }
 
   // WHAT THE MOVE CUTS (gap B3): "Bd3 cuts the queen off from d4" — the moved
@@ -428,7 +448,16 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // worked before the move and no longer does — "it stops …Bg4, which would
   // pin your knight on f3 against your queen". Both seats.
   for (const s of moveStops(i.fenBefore, i.san, mine)) {
-    add('stop', 'moveStops', 'moveGains', 'prevent', lead(`stops ${s.san}, which ${s.would}`), `It also stops ${s.san}, which ${s.would}`, s.squares, 70, false, [`stops:${s.san}`]);
+    add('stop', 'moveStops', 'moveGains', 'prevent', lead(s.clause), `It also ${s.clause}`, s.squares, 70, false, [`stops:${s.san}`]);
+  }
+  // THEIR BREAK, STOPPED ("a5, stopping b4"): the pawn break their side
+  // plays in master games from here, which the move makes lose material.
+  {
+    const plan = storyPlanAfter(i.history);
+    const moverWhite = sideOf(i.fenBefore) === 'w';
+    const theirBreak = plan ? (moverWhite ? plan.black : plan.white) : null;
+    const brk = theirBreak ? stopsBreak(i.fenBefore, i.san, theirBreak.san, mine) : null;
+    if (brk) add('stop', 'stopsBreak', 'moveGains', 'prevent', lead(brk.clause), `It also ${brk.clause}`, brk.squares, 72, false, [`stops-break:${brk.san}`]);
   }
 
   // THE PIECE'S TRIP down the line that follows.
@@ -733,6 +762,10 @@ export function lessonThought(shown: Omit<MoveThoughtInput, 'phrases' | 'tense'>
   return composeThought([...facts, ...(alt ? [alt] : []), ...(purpose ? [purpose] : []), ...studentMoveFacts(input)], 'lesson', voice, NOT_LED, null).spoken;
 }
 
+/** The story's lines that are about the move itself (its price, what their
+ *  setup chose) — the ones a question about that move may hear. */
+const MOVE_STEPS_OF_STORY: ReadonlySet<string> = new Set(['yours', 'theirs']);
+
 /** THE QUESTION PICKS THE IDEAS (the reversed matrix, David 2026-11-06:
  *  "help answer questions from users"). A question about a move is answered by
  *  the same facts a lesson says on it, through the same composer, keeping only
@@ -749,7 +782,9 @@ export function questionThought(asked: Omit<MoveThoughtInput, 'phrases' | 'tense
   const purpose = purposeFact(input, voice);
   const next = reason ? nextBestFact(reason, input.fenBefore, input.moverIsStudent !== false ? 'student' : 'opponent') : null;
   const all = [...facts, ...(alt ? [alt] : []), ...(next ? [next] : []), ...(purpose ? [purpose] : []), ...studentMoveFacts(input)];
-  return composeThought(all.filter((f) => groups.has(f.group)), 'chat', voice, NOT_LED, null);
+  // A story line about the board, not the move ("both kings are on the
+  // kingside"), answers no question about a move: the lesson's thread only.
+  return composeThought(all.filter((f) => groups.has(f.group) && !(f.source === 'openingStory' && !MOVE_STEPS_OF_STORY.has(f.step))), 'chat', voice, NOT_LED, null);
 }
 
 /** WHAT LEARN'S STUDENT-MOVE LANES MAY SAY IN A LESSON, AND AS WHICH IDEA
@@ -825,6 +860,11 @@ export function studentMoveFacts(i: Omit<MoveThoughtInput, 'phrases'>): ThoughtF
   for (const t of out) {
     const idea = LESSON_STUDENT_LANE[t.lane];
     if (!idea) continue;
+    // The opening this board is, read on the board after THEIR reply: the
+    // composer reads it on the move's own board (`openingEquivalence` above),
+    // so a lesson never says the next board's transposition on this move
+    // ("Take back your c3 and their …d6" on the c3 beat, before …Nc6).
+    if (t.computer === 'openingEquivalence') continue;
     const { lane: _lane, event: _event, arrows: _arrows, evidence: _evidence, ownMoveReason: _own, ...fact } = t;
     facts.push({ ...fact, id: `studentMove:${t.lane}:${facts.length}`, source: 'studentMove', idea, weight: 50 });
   }
@@ -949,3 +989,17 @@ function replyAnswers(fen: string, line: readonly string[] | null, aim: NonNulla
   return [deep?.target ?? null, threat, moveHit(fen, reply)].some((own) => bindingFact(fen, reply, aim, own, true) !== null);
 }
 
+/** THE ONLY MOVE (gap B6, "the only move not to lose"): the move played is
+ *  the engine's best on the fan before it, the next best gives up at least
+ *  the app's only-move gap, and the game is still in contest. Returns the
+ *  next best and what it gives up — never a bare "only move" — or null. */
+export function onlyMove(fenBefore: string, playedUci: string, lines: readonly (LineScore & { moves: readonly string[] })[]): { secondSan: string; gives: string } | null {
+  if (lines.length < 2 || lines[0].moves[0]?.slice(0, 4) !== playedUci.slice(0, 4)) return null;
+  const best = moverCp(fenBefore, lines[0]);
+  const gap = best - moverCp(fenBefore, lines[1]);
+  if (gap < criticalityThresholds().onlyMove || Math.abs(best) >= 400) return null;
+  let secondSan: string;
+  try { const u = lines[1].moves[0]; secondSan = new Chess(fenBefore).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san; } catch { return null; }
+  const pawns = Math.round(gap / 100);
+  return { secondSan, gives: pawns >= 3 ? 'gives up far more' : pawns === 2 ? 'gives up about two pawns' : 'gives up about a pawn' };
+}

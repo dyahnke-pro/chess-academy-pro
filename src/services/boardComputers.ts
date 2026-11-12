@@ -303,20 +303,32 @@ function boardAfter(fen: string, san: string): string | null {
   try { const b = new Chess(fen); b.move(san); return b.fen(); } catch { return null; }
 }
 
-/** Where the known slips reach — Review only (David 2026-10-29: the gems are
- *  the opening pages' to teach; David 2026-11-04: "it needs to be in review
- *  for sure"). */
+// David 2026-11-12: "You can have coach state those lines and tactics. We
+// need ppl to like my app and use it. Let's not hold anything back" — this
+// REPLACES the 2026-10-29 rule that kept gems off Learn, the lessons and chat.
+const SLIP_NOT_PLAY: SurfaceAnswer = { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING); the Openings Play rung calls out the live punish itself (findLivePunishment)' };
+const SLIP_NOT_TACTICS: SurfaceAnswer = { not: 'a puzzle poses one tactic; a known slip is about a game move at a board the index holds' };
+const SLIP_NOT_WEAK: SurfaceAnswer = { not: 'the slip played is graded as the move\'s own cost and filed by the record\'s writers; the index adds no skill of its own' };
+/** The slip read on ONE move's board (`knownSlip`, `trapAhead`): the lesson
+ *  and chat composer and the Review walk each read their own move. */
 const KNOWN_SLIP_SURFACES: Record<CoachSurface, SurfaceAnswer> = {
-  // David 2026-11-12: "You can have coach state those lines and tactics. We
-  // need ppl to like my app and use it. Let's not hold anything back" — this
-  // REPLACES the 2026-10-29 rule that kept gems off Learn, the lessons and chat.
   lesson: { wired: 'services/moveThoughtFacts.ts' },
-  learn: { wired: 'services/boardComputers.ts' },
-  review: REVIEW,
-  play: { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING); the Openings Play rung calls out the live punish itself (findLivePunishment)' },
+  learn: { not: 'Learn reads both seats\' last two moves at once through slipsOnLine' },
+  review: { wired: 'services/reviewFullData.ts' },
+  play: SLIP_NOT_PLAY,
   chat: { wired: 'services/moveThoughtFacts.ts' },
-  tactics: { not: 'a puzzle poses one tactic; a known slip is about a game move at a board the index holds' },
-  weaknesses: { not: 'the slip played is graded as the move\'s own cost and filed by the record\'s writers; the index adds no skill of its own' },
+  tactics: SLIP_NOT_TACTICS,
+  weaknesses: SLIP_NOT_WEAK,
+};
+/** The slips on the line just played (`slipsOnLine`): Learn's turn. */
+const SLIPS_ON_LINE_SURFACES: Record<CoachSurface, SurfaceAnswer> = {
+  lesson: { not: 'the lesson composer reads each move\'s board itself through knownSlip and trapAhead' },
+  learn: LEARN,
+  review: { not: 'the Review walk reads each ply\'s board itself through knownSlip and trapAhead' },
+  play: SLIP_NOT_PLAY,
+  chat: { not: 'the chat composer reads the move\'s board itself through knownSlip and trapAhead' },
+  tactics: SLIP_NOT_TACTICS,
+  weaknesses: SLIP_NOT_WEAK,
 };
 
 /** A known slip as the one fact, on the board it is played from. */
@@ -544,7 +556,7 @@ export const BOARD_COMPUTERS = {
     computer: 'knownSlip',
     kind: 'common-wrong',
     phase: ANY,
-    surfaces: KNOWN_SLIP_SURFACES,
+    surfaces: SLIPS_ON_LINE_SURFACES,
   },
   moveGains: {
     // WHAT A MOVE STOPS, THE ORDER IT KEEPS, THE LINE IT CUTS (gaps B1-B3,

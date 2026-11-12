@@ -651,7 +651,27 @@ export function joinSpoken(kept: readonly VoiceFact[]): string {
     if (/^[a-h][1-8x]/.test(trimmed) || /^[KQRBN]x?[a-h][1-8]/.test(trimmed)) return trimmed;
     return openSentence(trimmed);
   };
-  return kept.map((f) => sentence(f.text)).join(' ');
+  return nameOnce(kept.map((f) => sentence(f.text)).join(' '));
+}
+
+/** THE FULL NAME ONCE (human voice rule 3, David 2026-11-08: "the full name
+ *  once, then 'it' / 'the knight' — never the same square three times in one
+ *  line"): a piece named with its square ("your knight on f3") is said again
+ *  as "your knight" in the same turn. Only the same owner, piece and square:
+ *  a different knight keeps its square. */
+export function nameOnce(text: string): string {
+  // The squares each owner's piece kind has been named on: the square goes
+  // only when one piece of that kind has been named (two of their pawns keep
+  // theirs).
+  const squaresOf = new Map<string, Set<string>>();
+  return text.replace(/\b(your|their|the)\s+(king|queen|rook|bishop|knight|pawn)\s+on\s+([a-h][1-8])\b/gi, (whole, owner: string, piece: string, sq: string) => {
+    const kind = `${owner.toLowerCase()} ${piece.toLowerCase()}`;
+    const named = squaresOf.get(kind) ?? new Set<string>();
+    const again = named.has(sq) && named.size === 1;
+    named.add(sq);
+    squaresOf.set(kind, named);
+    return again ? `${owner} ${piece}` : whole;
+  });
 }
 
 /** A spoken line's arrow — one per move, in the order said. */

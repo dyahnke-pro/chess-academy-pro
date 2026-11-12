@@ -14,31 +14,54 @@ import { legalSeeGainFor } from './positionReadingService';
 import { PIECE_NAMES } from '../types/tacticTypes';
 
 export interface MoveStop {
-  kind: 'pin' | 'kick' | 'fork' | 'check';
+  /** `square`: a development square taken from their knight. `break`: their
+   *  masters' pawn break, which would now lose material. */
+  kind: 'pin' | 'kick' | 'fork' | 'check' | 'square' | 'break';
   /** Their move it stops, as they would have played it (SAN). */
   san: string;
   /** "would pin your knight on c3 against your queen" — from the mover's seat. */
   would: string;
+  /** What the move does, said after the move: "stops …Bg4, which would pin
+   *  your knight on f3 against your queen on d1". */
+  clause: string;
   squares: string[];
 }
 
 const NAME = PIECE_NAMES as Readonly<Record<string, string>>;
 
-/** Their checks that land safely on `fen` (they to move via a pass). */
-function safeChecks(fen: string, me: Color): Array<{ san: string; from: Square; to: Square; piece: string }> {
+interface WinningCheck { san: string; from: Square; to: Square; hit: { square: Square; piece: string } }
+
+/** Their checks that land safely on `fen` (they to move via a pass) AND win
+ *  something: once the king steps aside, the checking piece takes a piece of
+ *  `me`'s that the trade on its square loses. A check that only checks is
+ *  answered by a block or a king step and stops nothing worth teaching (Nc3
+ *  against an early queen led with "it stops …Qe4+" over "develops with
+ *  tempo, hitting the queen" — 2026-11-12). */
+function winningChecks(fen: string, me: Color): WinningCheck[] {
   const them: Color = me === 'w' ? 'b' : 'w';
   const f = sideToMoveAs(fen, them);
   if (!f) return [];
   let b: Chess;
   try { b = new Chess(f); } catch { return []; }
   if (b.inCheck()) return [];
-  const out: Array<{ san: string; from: Square; to: Square; piece: string }> = [];
+  const out: WinningCheck[] = [];
   for (const m of b.moves({ verbose: true })) {
-    if (!m.san.includes('+') || m.captured) continue;
+    if (!m.san.includes('+') || m.captured || m.piece === 'p') continue;
     b.move(m);
-    const safe = legalSeeGainFor(b.fen(), m.to, me) <= 0;
+    let hit: WinningCheck['hit'] | null = null;
+    if (legalSeeGainFor(b.fen(), m.to, me) <= 0) {
+      const again = sideToMoveAs(b.fen(), them);
+      if (again) {
+        try {
+          for (const x of new Chess(again).moves({ square: m.to, verbose: true })) {
+            if (!x.captured || x.captured === 'k') continue;
+            if (legalSeeGainFor(b.fen(), x.to, them) > 0) { hit = { square: x.to, piece: x.captured }; break; }
+          }
+        } catch { /* no board with them to move again: no second hit */ }
+      }
+    }
     b.undo();
-    if (safe) out.push({ san: m.san, from: m.from, to: m.to, piece: m.piece });
+    if (hit) out.push({ san: m.san, from: m.from, to: m.to, hit });
   }
   return out;
 }
@@ -55,8 +78,26 @@ export function moveStops(fenBefore: string, san: string, mine: boolean): MoveSt
   const out: MoveStop[] = [];
   const after = theirWantedMoves(fenAfter, me);
   const still = (from: string, to: string): boolean => after.some((w) => w.from === from && w.to === to);
+  const pawnHits = (fen: string, sq: string): Square[] => {
+    try { const b = new Chess(fen); return b.attackers(sq as Square, me).filter((f) => b.get(f)?.type === 'p'); } catch { return []; }
+  };
   for (const w of theirWantedMoves(fenBefore, me)) {
-    if (still(w.from, w.to)) continue;
+    if (still(w.from, w.to)) {
+      // STILL THERE, BUT NOW MET BY A PAWN (his "d6 ensures White can't kick
+      // the knight with e5"): the kick or pin lands on a square one of the
+      // mover's pawns now takes on, so it is a trade, not a free tempo.
+      const was = pawnHits(fenBefore, w.to);
+      const taker = pawnHits(fenAfter, w.to).find((f) => !was.includes(f));
+      if (!taker || w.hit.some((h) => h.square === moved.from)) continue;
+      const [v0] = w.hit;
+      const answer = `${me === 'b' ? '…' : ''}${taker[0]}x${w.to}`;
+      const piece0 = `${own} ${NAME[v0.piece] ?? 'piece'} on ${v0.square}`;
+      const wouldMet = w.kind === 'pin' ? `can't pin ${piece0} for free any more: ${answer} now meets it`
+        : w.kind === 'fork' ? `can't fork for free any more: ${answer} now meets it`
+          : `can't kick ${piece0} for free any more: ${answer} now meets it`;
+      out.push({ kind: w.kind, san: dot(w.san), would: wouldMet, clause: `means ${dot(w.san)} ${wouldMet}`, squares: [w.to, taker, v0.square] });
+      continue;
+    }
     // The threatened piece walked away: its rescue, not a stop.
     if (w.hit.some((h) => h.square === moved.from)) continue;
     const [v, ...rest] = w.hit;
@@ -64,15 +105,61 @@ export function moveStops(fenBefore: string, san: string, mine: boolean): MoveSt
     const would = w.kind === 'pin' ? `would pin ${piece(v)}${rest[0] ? ` against ${piece(rest[0])}` : ''}`
       : w.kind === 'fork' ? `would fork ${[v, ...rest].map(piece).join(' and ')}`
         : `would hit ${piece(v)}`;
-    out.push({ kind: w.kind, san: dot(w.san), would, squares: [w.to, ...w.hit.map((h) => h.square)] });
+    out.push({ kind: w.kind, san: dot(w.san), would, clause: `stops ${dot(w.san)}, which ${would}`, squares: [w.to, ...w.hit.map((h) => h.square)] });
   }
-  const checksAfter = safeChecks(fenAfter, me);
-  for (const c of safeChecks(fenBefore, me)) {
+  const checksAfter = winningChecks(fenAfter, me);
+  for (const c of winningChecks(fenBefore, me)) {
     if (checksAfter.some((x) => x.from === c.from && x.to === c.to)) continue;
-    // A check is a stop worth saying when it would come with a threat: the
-    // checking piece is a minor or major landing near the king.
-    if (c.piece === 'p') continue;
-    out.push({ kind: 'check', san: dot(c.san), would: `would give check from ${c.to}`, squares: [c.to] });
+    if (out.some((o) => o.san === dot(c.san))) continue;
+    const would = `would give check from ${c.to} and win ${own} ${NAME[c.hit.piece] ?? 'piece'} on ${c.hit.square}`;
+    out.push({ kind: 'check', san: dot(c.san), would, clause: `stops ${dot(c.san)}, which ${would}`, squares: [c.to, c.hit.square] });
+  }
+  // A SQUARE TAKEN FROM THEIR KNIGHT ("e5 prevents Nf6", "takes c6 away from
+  // the knight"): a knight still at home, its natural square now hit by the
+  // mover's pawn and not before. Only a pawn move takes a square for good.
+  const them: Color = me === 'w' ? 'b' : 'w';
+  const boardBefore = new Chess(fenBefore);
+  const boardNow = new Chess(fenAfter);
+  if (boardBefore.get(moved.from as Square)?.type === 'p') {
+    for (const [home, sq] of KNIGHT_SQUARES[them]) {
+      const k = boardNow.get(home as Square);
+      if (!k || k.type !== 'n' || k.color !== them) continue;
+      const on = boardNow.get(sq as Square);
+      if (on && on.color === them) continue;
+      if (pawnHits(fenBefore, sq).length > 0 || pawnHits(fenAfter, sq).length === 0) continue;
+      const theirs = mine ? 'their' : 'your';
+      out.push({ kind: 'square', san: dot(`N${sq}`), would: `takes ${sq} away from ${theirs} knight on ${home}`, clause: `takes ${sq} away from ${theirs} knight on ${home}`, squares: [sq, home] });
+    }
   }
   return out;
+}
+
+/** The knights' natural squares, by their home square. */
+const KNIGHT_SQUARES: Record<Color, ReadonlyArray<readonly [string, string]>> = {
+  w: [['g1', 'f3'], ['b1', 'c3']],
+  b: [['g8', 'f6'], ['b8', 'c6']],
+};
+
+/** THEIR BREAK, STOPPED (his "a5, stopping b4", "Nc6 hinders d4"): the pawn
+ *  break their side plays in master games from here (`breakSan` on
+ *  `breakSquare`) worked before the move — legal, and not losing the pawn —
+ *  and after it the push is gone or now loses material. Null when it still
+ *  works, or never did. */
+export function stopsBreak(fenBefore: string, san: string, breakSan: string, mine: boolean): MoveStop | null {
+  let me: Color; let fenAfter: string;
+  try { const c = new Chess(fenBefore); me = c.turn(); c.move(san); fenAfter = c.fen(); } catch { return null; }
+  const them: Color = me === 'w' ? 'b' : 'w';
+  const push = (fen: string): { ok: boolean; to: string } | null => {
+    const f = sideToMoveAs(fen, them);
+    if (!f) return null;
+    try { const b = new Chess(f); const m = b.move(breakSan.replace(/^…/, '')); if (!m) return { ok: false, to: '' }; return { ok: legalSeeGainFor(b.fen(), m.to, me) <= 0, to: m.to }; } catch { return { ok: false, to: '' }; }
+  };
+  const was = push(fenBefore);
+  if (!was || !was.ok) return null;
+  const now = push(fenAfter);
+  if (!now || now.ok) return null;
+  const dot = (s: string): string => (them === 'b' ? `…${s.replace(/^…/, '')}` : s.replace(/^…/, ''));
+  const theirs = mine ? 'their' : 'your';
+  const would = now.to ? 'would now lose a pawn' : "can't be played now";
+  return { kind: 'break', san: dot(breakSan), would, clause: `stops ${dot(breakSan)}, ${theirs} break in master games from here: it ${would}`, squares: [was.to] };
 }

@@ -44,6 +44,17 @@ describe('green-arrow ceiling', () => {
     expect(green).toEqual([]);
   });
 
+  // The ceiling is per SENTENCE: the beat reveals its arrows sentence by
+  // sentence, so two sentences of three candidates are six arrows the board
+  // never shows at once (marks sweep 2026-11-12: a lesson naming the masters'
+  // other moves and their usual reply drew nothing at all).
+  it('counts the ceiling per sentence, not per beat', () => {
+    const mv = at(['e4', 'c5', 'Nf3', 'Nc6', 'd4', 'cxd4', 'Nxd4', 'g6']);
+    const text = 'Masters also play Nc3, Be3 and c4 here. Their usual answers are Bg7, Nf6 and d6.';
+    const green = groundedSegmentArrows(text, '', mv, 'white').arrows.filter((a) => a.color === 'green');
+    expect(green.length).toBe(6);
+  });
+
   it('keeps the orange trail even when the green arrows are withheld', () => {
     // The move being played is never in doubt — only the recited line waits.
     const mv = at(['e4', 'c5', 'c3', 'd5', 'exd5', 'Qxd5', 'd4', 'Nc6', 'Nf3', 'Bg4', 'Nbd2', 'Nf6', 'Bc4', 'Bxf3']);

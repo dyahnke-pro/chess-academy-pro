@@ -26,7 +26,9 @@ export type IdeaKind =
    *  but level: two pieces ahead in development"). */
   | 'eval'
   /** Opening theory, calculated: the main move, the other tries, the reply, the score (`openingTheory`). */
-  | 'theory';
+  | 'theory'
+  /** The pawn structure by name with its plans (`namedStructure`). */
+  | 'structure';
 
 export const BOOK_JOB_IDEA: Record<BookJobKind, IdeaKind> = {
   rescue: 'rescue', guard: 'guard', stopsPin: 'prevent', stopsPush: 'prevent', tempo: 'tempo',
@@ -80,7 +82,7 @@ export const IDEA_FAMILY: Record<IdeaKind, IdeaFamily> = {
   develop: 'placement', center: 'placement', space: 'placement', outpost: 'placement', file: 'placement',
   diagonal: 'placement', route: 'placement', 'king-activity': 'placement', prepare: 'placement',
   'passed-pawn': 'pawns', promote: 'pawns', weakness: 'pawns',
-  choice: 'thinking', order: 'thinking', plan: 'thinking', eval: 'thinking', theory: 'thinking',
+  choice: 'thinking', order: 'thinking', plan: 'thinking', eval: 'thinking', theory: 'thinking', structure: 'thinking',
 };
 
 /** A BY-PRODUCT, NOT A SECOND JOB (round 3, M-TWO-JOBS): when a move wins,

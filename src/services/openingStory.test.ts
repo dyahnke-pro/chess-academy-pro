@@ -97,7 +97,7 @@ describe('openingStory — Najdorf, English Attack (student Black)', () => {
     expect(beat(story(NAJDORF, 15, 'b'), 'structure-paid')?.text).toBe('…Be6 pays that price: your bishop now guards d5.');
   });
   it('…e5 names its built-in cost, and …Be6 pays it', () => {
-    expect(beat(story(NAJDORF, 12, 'b'), 'structure-cost')?.text).toBe("That's the price of …e5: no pawn of yours can cover d5 again, and their knight on c3 is one move from it. From there it would hit your knight on f6. Keeping d5 guarded is part of this structure from here.");
+    expect(beat(story(NAJDORF, 12, 'b'), 'structure-cost')?.text).toBe("That's the price of …e5: no pawn of yours can cover d5 again, and their knight on c3 is one move from it. From there it would hit your knight on f6. Keeping that square guarded is part of this structure from here.");
     expect(beat(story(NAJDORF, 14, 'b'), 'structure-paid')?.text).toBe('…Be6 pays that price: your bishop now guards d5.');
   });
   it('before the race arrives, master games say their king goes to the other wing', () => {

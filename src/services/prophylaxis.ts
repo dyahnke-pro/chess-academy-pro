@@ -153,7 +153,7 @@ function stillWorks(fenAfterPrevention: string, me: Color, i: { m: Move; kind: P
  *  squares and the motif. The ONE place "their next move pins, kicks or forks
  *  your piece" is computed — Learn's prevention, the obvious-stop verdict and
  *  chat's "their ideas" all read it (OS-1 root cause 1). */
-interface TheirWant {
+export interface TheirWant {
   kind: ProphylaxisKind;
   san: string;
   from: Square;

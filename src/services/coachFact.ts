@@ -155,7 +155,11 @@ export const FACT_GROUP: Record<CoachFactKind, FactGroup> = {
   // The move's second job is what the move changed, said behind the first.
   'two-jobs': 'move',
   // Opening theory, calculated: what masters play here is about the move.
-  'book-standing': 'move', 'book-alternatives': 'move', 'book-reply': 'move', 'book-score': 'move',
+  // The move's standing is said with the move; the other main moves are the
+  // choices, the masters' reply is the line, the score is the verdict — his
+  // order, each in its step (a book line filed with the move named the move
+  // twice: "You played c3: it isn't the only main move … Your c3 prepares d4").
+  'book-standing': 'move', 'book-alternatives': 'choices', 'book-reply': 'line', 'book-score': 'verdict',
   // ── the teaching moves' own kinds (2026-11-05), each in the group of the
   // kind it came from: the reply tree a line played out; the move order "not
   // yet, first this"; castling the story's plan; the move most players play
@@ -246,6 +250,10 @@ export const COMPUTER_CATALOG = {
   pieceRoute: { file: 'services/pieceRoute.ts', says: 'the trip the moved piece takes down the line that follows' },
   pieceOutFirst: { file: 'services/pieceOutFirst.ts', says: 'a bishop or queen brought out before its own pawn push closes its road (…Bf5 before …e6)' },
   lineCut: { file: 'services/lineCut.ts', says: "a queen, rook or bishop of the mover's whose line the moved piece now blocks — a centre square, a guard or an attack lost" },
+  namedStructureFormed: { file: 'services/namedStructure.ts', says: 'the move creates a named pawn structure (Carlsbad, French chain, KID chain, Maróczy, Stonewall, Hedgehog, Benoni, Scheveningen), said with both sides\' plans' },
+  orderByThreat: { file: 'services/orderByThreat.ts', says: "the mover's next move in the line, played first, would let the other side pin, fork or kick a piece this order keeps safe" },
+  stopsBreak: { file: 'services/moveStops.ts', says: "the move makes the pawn break the other side plays in master games from here lose material, or takes it away" },
+  preparesBreakClause: { file: 'services/mastersPlanRead.ts', says: "the move covers the square of its side's masters' break: it prepares the break, with how often masters push it from here" },
   onlyMove: { file: 'services/moveThoughtFacts.ts', says: "the move played is the only one that holds: the engine's next best gives up at least the only-move gap" },
   moveStops: { file: 'services/moveStops.ts', says: "the opponent's useful moves (a pin, a kick, a fork, a safe check) a move takes away" },
   openingTheoryFacts: { file: 'services/openingTheory.ts', says: "opening theory, calculated from the masters' games: the main move, the other tries and their aims, the reply, the score" },

@@ -194,7 +194,9 @@ export function extractMentionedSanSpans(text: string): Array<{ san: string; ind
       // move", "d4 was the better move" (human voice 2026-11-08 — the better
       // move leads its own sentence, and a pawn move lost its arrow).
       const after = cleaned.slice(match.index + san.length, match.index + san.length + 40);
-      const judgedMove = /^\s+(?:is|was)\s+(?:stronger|better|cleaner|best|the\s+(?:better|best|only|right|stronger)\s+move|the\s+move|the\s+one)\b/.test(after);
+      // …and opening theory names moves the same way: "…c5 is the main
+      // move", "Nf3 is a known mistake" (2026-11-12: lit as a square).
+      const judgedMove = /^\s+(?:is|was|isn't)\s+(?:stronger|better|cleaner|best|the\s+(?:better|best|only|right|stronger|main|usual)\s+move|the\s+move|the\s+one|one\s+of\s+the\s+main\s+moves|a\s+known\s+(?:mistake|trap))\b/.test(after);
       if (!judgedMove && /^\s+(?:is|was|stays|remains)\b/.test(after)) continue;
     }
     out.push({ san, index: match.index, end: match.index + san.length, text: cleaned });
@@ -212,12 +214,19 @@ export function squaresNamedNotMoves(text: string, boards: readonly string[]): s
   const legalOn = (san: string): boolean => boards.some((f) => {
     try { return !!new Chess(f).move(san.replace(/^…/, '')); } catch { return false; }
   });
-  const moveSquares = new Set(
-    extractMentionedSanSpans(text)
-      .filter((sp) => !/^[a-h][1-8]$/.test(sp.san) || legalOn(sp.san))
-      .flatMap((sp) => sp.san.match(/[a-h][1-8]/g) ?? []),
-  );
-  return [...new Set(stripBoardMarkers(text).match(/\b[a-h][1-8]\b/g) ?? [])].filter((q) => !moveSquares.has(q));
+  // PER SENTENCE: a square that is a move's square in one sentence is still a
+  // square named in another ("Your d5 attacks their pawn on e4" … "after
+  // …dxe4 you win a pawn" left e4 unlit, 2026-11-12).
+  const out = new Set<string>();
+  for (const sentence of text.split(/(?<=[.!?])\s+/)) {
+    const moveSquares = new Set(
+      extractMentionedSanSpans(sentence)
+        .filter((sp) => !/^[a-h][1-8]$/.test(sp.san) || legalOn(sp.san))
+        .flatMap((sp) => sp.san.match(/[a-h][1-8]/g) ?? []),
+    );
+    for (const q of stripBoardMarkers(sentence).match(/\b[a-h][1-8]\b/g) ?? []) if (!moveSquares.has(q)) out.add(q);
+  }
+  return [...out];
 }
 
 /** SANs the text rules out: the one a move STOPS / prevents / takes away, a
@@ -234,10 +243,18 @@ export function ruledOutSans(text: string): Set<string> {
   // (Review's `knownSlip`: "A known mistake here: f6", "Club players go wrong
   // with f6"): the slip is said so it is avoided, never drawn as a move to play.
   const clubSlip = new RegExp(String.raw`(?:known (?:mistake|trap) here:|go wrong with)\s+…?(${SAN})`, 'g');
-  for (const re of [before, after, away, bad, clubSlip]) {
+  // "it stops the mate with Qxg7" names the move it stops after its purpose.
+  const stopsWith = new RegExp(String.raw`\b(?:stops|prevents)\s+the\s+(?:mate|check|fork|pin|skewer|capture|threat)\s+(?:with|on)\s+…?(${SAN})`, 'gi');
+  for (const re of [before, after, away, bad, clubSlip, stopsWith]) {
     let m: RegExpExecArray | null;
     while ((m = re.exec(text)) !== null) out.add(m[1]);
   }
+  // "Take back your c3 and their …d6 and this is the Old Sicilian": the moves
+  // undone to reach another opening are said, never drawn.
+  const undone = /\btake back\s+([^.]*?)\s+and this (?:is|would be)\b/gi;
+  let u: RegExpExecArray | null;
+  const tokU = new RegExp(SAN, 'g');
+  while ((u = undone.exec(text)) !== null) for (const t of u[1].match(tokU) ?? []) out.add(t);
   // …and the WHOLE refuted line after it: "h4 didn't work: h4, hxg5 and hxg5 —
   // you come out behind" (Learn walk 2026-10-01, game 2 ply 39: Nc5 was drawn
   // green and …Nf4 red out of a line the sentence says fails).
@@ -256,7 +273,10 @@ export function ruledOutSans(text: string): Set<string> {
   while ((l = line.exec(text)) !== null) {
     for (const t of l[1].match(tok) ?? []) out.add(t);
   }
-  return out;
+  // ONE spelling: the mention reader hands moves over without their check or
+  // mate sign ("stops Rf7+" is mentioned as Rf7), so a ruled-out move must be
+  // keyed the same way or it is never matched — and is drawn as a move to play.
+  return new Set([...out].map((x) => x.replace(/[+#]+$/, '')));
 }
 /** The SANs a line may ARROW: every mentioned move except the ones it rules
  *  out (a move it stops, a "Why not X?", a line that "didn't work", an

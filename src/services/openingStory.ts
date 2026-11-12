@@ -290,6 +290,16 @@ function planHere(fen: string, name: string | null, movesAt: MovesAt, inOpening:
   return mastersPlanRead(fen, movesAt) ?? (name && inOpening ? planStillAhead(planFor(name), fen) : null);
 }
 
+/** The masters' plan on the board a line reached — the read the story
+ *  speaks from (`planHere` with the story's own name and phase), for a
+ *  composer that ties a move to the plan (`preparesBreakClause`). */
+export function storyPlanAfter(history: readonly string[], movesAt: MovesAt = masterMovesCachedSync): MastersPlanRead | null {
+  const now = boardAfter([...history]);
+  if (!now || history.length === 0) return null;
+  const fen = now.fen();
+  return planHere(fen, nameAfter([...history]), movesAt, classifyPhase(fen, { ply: history.length }) === 'opening');
+}
+
 /** Masters answered here, with fewer games than "usually" can rest on. An
  *  unknown position (nothing looked up) is never thin. */
 function knownThin(fen: string, movesAt: MovesAt): boolean {
@@ -506,7 +516,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryBeatFact[] {
     if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH && h.hits.length && holes.includes(h.hole)) {
       say('structure-cost', {
         rests: 'board',
-        text: `That's the price of ${dot(san, student)}: no pawn of yours can cover ${h.hole} again, and ${knightDistance('their', h.from, h.moves, fen)}. ${h.moves === 0 ? 'It hits' : 'From there it would hit'} ${hitWords(now, 'your', h.hits)}. Keeping ${h.hole} guarded is part of this structure from here.`,
+        text: `That's the price of ${dot(san, student)}: no pawn of yours can cover ${h.hole} again, and ${knightDistance('their', h.from, h.moves, fen)}. ${h.moves === 0 ? 'It hits' : 'From there it would hit'} ${hitWords(now, 'your', h.hits)}. Keeping that square guarded is part of this structure from here.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
         // ONE HOLE, ONE KEY (dup map #5): every computer that names this hole
         // says it under `hole:<sq>`, so a second reading of it is dropped.

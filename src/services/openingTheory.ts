@@ -110,11 +110,20 @@ export function openingTheoryFacts(fenBefore: string, san: string, mine: boolean
   }
 
   // A4 — every other main move, each with what it aims for (a bar, never a cap).
+  // An alternative that aims for what the move played aims for is said as
+  // that ("Masters also play …Nc6 here, with the same idea") — never its aim
+  // in the same words again (the voice gate, 2026-11-12: "d6 prepares e5 …
+  // …Nc6, which prepares e5").
+  const ownAim = aimOf(fenBefore, san, mover, mine);
+  const aimKey = (a: string): string => a.split(/[,—:]/)[0].trim();
   for (const m of here.moves.filter((x) => clean(x.san) !== clean(san) && x.pct >= ALT_SHARE)) {
     const aim = aimOf(fenBefore, m.san, mover, mine);
     if (!aim) continue;
     const alt = dotted(m.san, mover);
-    out.push({ kind: 'book-alternatives', clause: `isn't the only main move — masters also play ${alt}, which ${aim}`, sentence: `Masters also play ${alt} here, which ${aim}.`, squares: [m.to], names: [m.san] });
+    const same = ownAim !== null && aimKey(aim) === aimKey(ownAim);
+    out.push(same
+      ? { kind: 'book-alternatives', clause: `isn't the only main move — masters also play ${alt}, with the same idea`, sentence: `Masters also play ${alt} here, with the same idea.`, squares: [m.to], names: [m.san] }
+      : { kind: 'book-alternatives', clause: `isn't the only main move — masters also play ${alt}, which ${aim}`, sentence: `Masters also play ${alt} here, which ${aim}.`, squares: [m.to], names: [m.san] });
   }
 
   // A5 — how it scores for the mover, where the games say it clearly.

@@ -33,3 +33,14 @@ describe('openingTheoryFacts', () => {
     expect(openingTheoryFacts(fenAfter('a3 h6 b4 h5'), 'Ra2', true)).toEqual([]);
   });
 });
+
+describe('an alternative with the same aim (voice gate, 2026-11-12)', () => {
+  it('is said as "with the same idea", never the aim again', async () => {
+    const { Chess } = await import('chess.js');
+    const c = new Chess(); for (const m of ['e4', 'c5', 'Nf3']) c.move(m);
+    const facts = openingTheoryFacts(c.fen(), 'd6', true);
+    const alts = facts.filter((f) => f.kind === 'book-alternatives');
+    expect(alts.length).toBeGreaterThan(0);
+    for (const a of alts) expect(a.sentence).not.toMatch(/which prepares e5/);
+  });
+});

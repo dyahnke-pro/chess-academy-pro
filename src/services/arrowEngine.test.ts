@@ -100,6 +100,17 @@ describe('one refuted-line rule for every surface (2026-10-01)', () => {
   it('a line that "didn\'t work" keeps none of its moves', () => {
     expect(extractArrowableSans('Nf3 held. h4 didn\'t work: h4, hxg5 and hxg5 — you lose a piece.')).toEqual(['Nf3']);
   });
+  // The mention reader drops the check sign; the ruled-out key did not, so a
+  // stopped check was drawn as a move to play (marks sweep 2026-11-12).
+  it('a stopped check is never arrowed', () => {
+    expect(extractArrowableSans('It also stops Rf7+, which would give check from f7.')).toEqual([]);
+  });
+  it('a stopped mate named after its purpose is never arrowed', () => {
+    expect(extractArrowableSans("Their …g6 isn't idle — it stops the mate with Qxg7.")).toEqual(['g6']);
+  });
+  it('the moves undone to reach another opening are never arrowed', () => {
+    expect(extractArrowableSans('Take back your c3 and their …d6 and this is the Sicilian Defense: Old Sicilian.')).toEqual([]);
+  });
 });
 
 describe('resolveSanToArrow', () => {

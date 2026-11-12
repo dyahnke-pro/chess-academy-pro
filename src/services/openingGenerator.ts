@@ -26,7 +26,6 @@ import { Chess, type Move } from 'chess.js';
 import { openingKeyFromSans } from './openingKey';
 import { perspectiveRule } from './perspectiveRule';
 import { buildExplorerBranches, resultsLine } from './explorerTeachLine';
-import { preparesBreakBeat } from './mastersPlanRead';
 import { continueSentence } from '../utils/openSentence';
 import { computedPlanAt } from './computedPlan';
 import { storedTreeAnswer } from './deepTree';
@@ -75,7 +74,7 @@ import { scoreEveryMove } from './humanReply';
 import type { ReplyRead } from './ifTheyPlay';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { selectTeaching, summarizeTeaching, renderThesis, pliesFromSans, type SelectorPly } from './teachingSelector';
-import { loadOpeningIdentity, openingIdentityLine, planFor } from './openingIdentity';
+import { loadOpeningIdentity, openingIdentityLine } from './openingIdentity';
 import { registerFor } from '../coach/surfaceContract';
 import { detectTactics } from './tacticsDetector';
 import { stageArrayHasUsableEntry } from './stageEntryValidity';
@@ -1287,6 +1286,9 @@ export function groundedSegmentArrows(
    *  the prose. REQUIRED: "your knight to d5" is one side's move, and the
    *  arrow resolver never guesses which (`NarrationSides`). */
   studentSide: 'white' | 'black',
+  /** The board before the move: an alternative to it ("Masters also play
+   *  Bb5+ here") is drawn from there when its piece has not moved. */
+  fenBefore: string | null = null,
 ): {
   // NonNullable, not the bare field type: the orange trail is unconditional, so
   // this can never return undefined arrows. Declaring the segment's OPTIONAL
@@ -1301,26 +1303,80 @@ export function groundedSegmentArrows(
   spans: Array<{ from: string; to: string; san: string; index: number }>;
 } {
   const source = noteText?.trim() ? 'note' : 'prose';
-  const text = source === 'note' ? (noteText as string) : prose;
+  // The beat LEADS with its note and the computed beat follows (`preferRaw`:
+  // spoken as computed, no model in the loop), so when the spoken text carries
+  // the note the whole spoken beat is grounded and is read for arrows — the
+  // computed sentences after the note name moves too ("Masters also play Nf3
+  // here", 2026-11-12: drew nothing because only the note was read).
+  const text = source === 'note' && !prose.includes((noteText as string).trim()) ? (noteText as string) : (prose || (noteText ?? ''));
   // 'loose': neither a corpus note nor the computed beat is written to the
   // Watch courses' marker rule ("Black kicks the bishop with a6"), so a bare
   // move keeps the old order — the side to move, then the other. The dots,
   // where they are written, still mean Black's.
-  const all = deriveNarrationArrows(
-    text, move.fen, [{ from: move.from, to: move.to }], { marking: 'loose', student: studentSide },
-  ).arrows;
-  // Over the ceiling: this ply recites a LINE, not a couple of candidate moves.
-  // The orange trail still marks the move being played; the line itself waits
-  // for the walk-out rather than being dumped on one board.
-  const derived = all.length > MAX_GREEN_ARROWS_PER_PLY ? [] : all;
+  const derivation = deriveNarrationArrows(
+    text, move.fen, [{ from: move.from, to: move.to }], { marking: 'loose', student: studentSide }, fenBefore,
+  );
+  const all = derivation.arrows;
+  // Over the ceiling: a SENTENCE that recites a LINE, not a couple of
+  // candidate moves. The ceiling is per sentence because the beat reveals its
+  // arrows sentence by sentence (`splitSegmentBySentence`): a beat that names
+  // the masters' other moves in one sentence and their reply in the next never
+  // has more than one sentence's arrows on the board. The orange trail still
+  // marks the move being played; a recited line waits for the walk-out rather
+  // than being dumped on one board.
+  const bounds: number[] = [];
+  let cursor = 0;
+  for (const sentence of splitSentences(text)) {
+    const at = text.indexOf(sentence, cursor);
+    cursor = (at >= 0 ? at : cursor) + sentence.length;
+    bounds.push(cursor);
+  }
+  const sentenceAt = (index: number): number => { const k = bounds.findIndex((end) => index < end); return k >= 0 ? k : bounds.length; };
+  const perSentence = new Map<number, number>();
+  for (const a of all) perSentence.set(sentenceAt(a.index), (perSentence.get(sentenceAt(a.index)) ?? 0) + 1);
+  const derived = all.filter((a) => (perSentence.get(sentenceAt(a.index)) ?? 0) <= MAX_GREEN_ARROWS_PER_PLY);
+  const again = derivation.rejected.filter((r) => r.reason === 'duplicate of an existing arrow');
   return {
     source,
-    spans: derived.map((a) => ({ from: a.from, to: a.to, san: a.san, index: a.index })),
+    // A move named again in a later sentence is drawn with that sentence too
+    // (the reader keeps one arrow per move; "Your c3 prepares d4 … after d4
+    // you have the better game" lost the second d4, 2026-11-12).
+    spans: [
+      ...derived.map((a) => ({ from: a.from, to: a.to, san: a.san, index: a.index })),
+      ...again.flatMap((r) => { const a = derived.find((d) => d.token === r.token); return a ? [{ from: a.from, to: a.to, san: a.san, index: r.index }] : []; }),
+    ],
     arrows: [
       { from: move.from, to: move.to, color: 'orange' },
       ...derived.map((a) => ({ from: a.from, to: a.to, color: 'green' as const })),
     ],
   };
+}
+
+/** ONE beat builder for every move a lesson speaks — the spine, a branch's
+ *  first move and its extension moves alike (marks sweep 2026-11-12: branch
+ *  beats carried arrows from a short teaser and no highlights at all, so the
+ *  opening theory they now speak named squares the board never lit). The
+ *  arrows come from the grounding note when there is one, else from the
+ *  spoken text; every square the spoken beat names is lit; the beat is split
+ *  by sentence so each mark arrives with its words. */
+export function beatSegments(
+  noteText: string | null,
+  text: string,
+  move: { from: string; to: string; fen: string },
+  fenBefore: string,
+  studentSide: 'white' | 'black',
+  shortText: string | undefined,
+): NarrationSegmentType[] {
+  const grounded = groundedSegmentArrows(noteText, text, move, studentSide, fenBefore);
+  const arrowSource = grounded.source === 'note' ? (noteText as string) : text;
+  const namedSquares = [...new Set([
+    ...extractMentionedSquares(arrowSource).slice(0, MAX_CANDIDATE_HIGHLIGHTS),
+    ...squaresNamedNotMoves(text, [move.fen, fenBefore]),
+  ])].filter((sq) => sq !== move.to && sq !== move.from);
+  const segment: NarrationSegmentType = { text, arrows: grounded.arrows };
+  if (namedSquares.length > 0) segment.highlights = namedSquares.map((square) => ({ square, color: 'yellow' as const }));
+  if (shortText) segment.shortText = shortText;
+  return splitSegmentBySentence(segment, grounded.spans);
 }
 
 /** Split one ply's narration into per-SENTENCE segments, each carrying only the
@@ -1339,7 +1395,8 @@ export function splitSegmentBySentence(
 
   const trail = (segment.arrows ?? []).filter((a) => a.color === 'orange');
   const green = (segment.arrows ?? []).filter((a) => a.color !== 'orange');
-  const spanOf = new Map(spans.map((sp) => [`${sp.from}-${sp.to}`, sp.index]));
+  const spansOf = new Map<string, number[]>();
+  for (const sp of spans) spansOf.set(`${sp.from}-${sp.to}`, [...(spansOf.get(`${sp.from}-${sp.to}`) ?? []), sp.index]);
 
   // Character range of each sentence within the beat, walked in order so a
   // repeated sentence cannot resolve to the wrong occurrence.
@@ -1352,18 +1409,18 @@ export function splitSegmentBySentence(
     cursor = start + sentence.length;
   }
 
-  const sentenceOf = (key: string): number => {
-    const idx = spanOf.get(key);
-    if (idx === undefined) return 0;
-    const hit = bounds.findIndex((b) => idx >= b.start && idx < b.end);
-    return hit >= 0 ? hit : 0;
+  const sentencesOf = (key: string): number[] => {
+    const at = spansOf.get(key);
+    if (!at) return [0];
+    const hits = at.map((idx) => bounds.findIndex((b) => idx >= b.start && idx < b.end)).map((h) => (h >= 0 ? h : 0));
+    return [...new Set(hits)];
   };
 
   // Highlights follow their arrow's sentence when one names the same square,
   // so a yellow square lights up with the words that point at it.
   const highlights = segment.highlights ?? [];
   return sentences.map((text, i) => {
-    const own = green.filter((a) => sentenceOf(`${a.from}-${a.to}`) === i);
+    const own = green.filter((a) => sentencesOf(`${a.from}-${a.to}`).includes(i));
     const out: NarrationSegmentType = { text, arrows: [...trail, ...own] };
     const mine = highlights.filter((h) => squaresInText(text).has(h.square));
     const leftovers = i === sentences.length - 1
@@ -1995,6 +2052,9 @@ async function generateOpeningFromDbNarration(
   // the board, seat-stamped. Tour mode keeps every beat to its first sentence
   // (the student wants a quick playthrough, not a lecture).
   const startFenForBeats = new Chess().fen();
+  // The opening plans the beats read (`storyPlanAfter` → `planFor`): loaded
+  // before the first beat, so a move that prepares the masters' break says so.
+  try { await loadOpeningIdentity(); } catch { /* the identity file is unreachable — the plan reads the live masters walk only */ }
   const spineVoice = newLessonVoice();
   // The capture RUN along the spine (…Nxb4 after cxb4 axb4 wins the pawn).
   const spineRuns = captureContextsAlong(startFenForBeats, positions.map((p) => p.san));
@@ -2009,24 +2069,8 @@ async function generateOpeningFromDbNarration(
     );
     return pace === 'tour' ? firstSentence(beat) : beat;
   });
-  // THE MOVE THE LINE IS NAMED FOR, FROM THE DATABASE (David 2026-10-27: 2.a3,
-  // the Mengarini's whole point, said nothing — the board teacher finds no job
-  // for a quiet pawn move). In a lesson the games database built, a last spine
-  // move with no beat says the masters' break it prepares, when it covers that
-  // square on the board.
-  if (explorerBuilt && positions.length > 0 && !computedBeats[positions.length - 1]) {
-    const last = positions.length - 1;
-    try {
-      await loadOpeningIdentity();
-      const beat = preparesBreakBeat(
-        last === 0 ? startFenForBeats : positions[last - 1].fen,
-        positions[last].san,
-        planFor(entry.canonicalName),
-        positions[last].movedBy === studentSide,
-      );
-      if (beat) computedBeats[last] = beat;
-    } catch { /* the identity file is unreachable — the move stays quiet */ }
-  }
+  // The move the line is named for says the masters' break it prepares
+  // through the composer itself (`preparesBreakClause` in moveThoughtFacts).
   const computedShorts: Array<string | undefined> = positions.map((p, i) =>
     computedPlyShort(i === 0 ? startFenForBeats : positions[i - 1].fen, p.fen, p.san, p.from, p.to),
   );
@@ -2167,12 +2211,7 @@ async function generateOpeningFromDbNarration(
       // j-th extension move's replayed from/to/fen.
       const extMove = branchSeq[j + 1];
       if (extMove) {
-        const segment: NarrationSegmentType = {
-          text,
-          arrows: groundedSegmentArrows(branchNoteSources[j + 1] ?? null, text, extMove, studentSide).arrows,
-        };
-        if (shortText) segment.shortText = shortText;
-        node.narration = [segment];
+        node.narration = beatSegments(branchNoteSources[j + 1] ?? null, text, extMove, branchSeq[j].fen, studentSide, shortText);
       }
       extChildren = [{ node }];
     }
@@ -2194,12 +2233,7 @@ async function generateOpeningFromDbNarration(
     if (shortTeaser) branchNode.shortIdea = shortTeaser;
     const branchMove = branchSeq[0];
     if (branchMove) {
-      const segment: NarrationSegmentType = {
-        text: branchSpoken,
-        arrows: groundedSegmentArrows(branchNoteSources[0] ?? null, teaser, branchMove, studentSide).arrows,
-      };
-      if (shortTeaser) segment.shortText = shortTeaser;
-      branchNode.narration = [segment];
+      branchNode.narration = beatSegments(branchNoteSources[0] ?? null, branchSpoken, branchMove, terminusFen, studentSide, shortTeaser);
     }
     return {
       label: b.label,
@@ -2466,46 +2500,15 @@ async function generateOpeningFromDbNarration(
     // that prose IS the teaching, reworded and board-gated OFFLINE where a bad
     // line could be rejected. Deriving from it is still deriving from grounded
     // content — it is not the runtime model choosing what to point at.
-    const grounded = groundedSegmentArrows(plyNoteText[i], text, p, studentSide);
-    const segmentArrows: NarrationSegmentType['arrows'] = grounded.arrows;
-    // Highlights read the SAME source as the arrows — a yellow square the
-    // narration points at is the same class of claim as a green arrow, so
-    // letting it come from the prose while the arrows come from the note
-    // would put the model back in charge of half the board.
-    const arrowSource = grounded.source === 'note' ? (plyNoteText[i] as string) : text;
-    // …and every square the SPOKEN beat names (marks sweep 2026-11-08: "your
-    // queen on d8" went unlit when the note was the source). The beat is
-    // computed (`preferRaw`), so its squares are the computers' — lit, not
-    // capped: the voice reveals each mark with its sentence (narrationSegments).
+    // Highlights read the SAME source as the arrows (the note when the ply is
+    // grounded), plus every square the SPOKEN beat names (marks sweep
+    // 2026-11-08), and the beat is split by sentence so the board reveals in
+    // step with the voice — one builder for the spine and the branches.
     const prevFen = i > 0 ? positions[i - 1].fen : new Chess().fen();
-    const namedSquares = [...new Set([
-      ...extractMentionedSquares(arrowSource).slice(0, MAX_CANDIDATE_HIGHLIGHTS),
-      ...squaresNamedNotMoves(text, [p.fen, prevFen]),
-    ])].filter((sq) => sq !== p.to && sq !== p.from);
-    const segment: NarrationSegmentType = { text, arrows: segmentArrows };
-    if (namedSquares.length > 0) {
-      segment.highlights = namedSquares.map((square) => ({ square, color: 'yellow' as const }));
-    }
-    if (shortText) segment.shortText = shortText;
-    if (node.ideaFlipped) segment.textFlipped = node.ideaFlipped;
-    if (node.shortIdeaFlipped) segment.shortTextFlipped = node.shortIdeaFlipped;
-    // ARROWS ARRIVE AS THEY ARE SPOKEN (David 2026-08-01: "can we have the
-    // arrows appear as they are being spoken?").
-    //
-    // The runtime already does this — the walkthrough loops a node's segments
-    // and sets each one's arrows immediately BEFORE speaking it. What was
-    // missing is that this builder emitted ONE segment per ply carrying every
-    // arrow, so there was nothing to stagger: eight arrows landed at once while
-    // the coach was still on the first clause. Splitting the ply into
-    // sentences, each holding only the arrows it names, is what turns the
-    // existing reveal loop into a lead-the-eye.
-    //
-    // The split is by the arrow's own character offset in the text, not by
-    // re-matching square names: `deriveNarrationArrows` already recorded where
-    // each move was mentioned, so a sentence gets exactly the arrows it speaks.
-    // Any arrow whose sentence cannot be identified rides the FIRST segment, so
-    // an arrow is never dropped for being hard to place.
-    node.narration = splitSegmentBySentence(segment, grounded.spans);
+    const segs = beatSegments(plyNoteText[i], text, p, prevFen, studentSide, shortText);
+    if (node.ideaFlipped) segs[0].textFlipped = node.ideaFlipped;
+    if (node.shortIdeaFlipped) segs[0].shortTextFlipped = node.shortIdeaFlipped;
+    node.narration = segs;
     nextChildren = [{ node }];
   }
   // In Face mode, surface the canonical counter's name with a

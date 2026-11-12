@@ -83,6 +83,22 @@ function legalOn(fens: readonly string[], san: string): boolean {
   return false;
 }
 
+/** The move resolves only on an earlier board and its piece no longer stands
+ *  on its square on the board shown (`boards[0]`). */
+function pieceGone(boards: readonly string[], san: string): boolean {
+  const bare = san.replace(/^…/, '');
+  const on = (f: string): { from: string; type: string; color: string } | null => { try { const m = new Chess(f).move(bare); return m ? { from: m.from, type: m.piece, color: m.color } : null; } catch { return null; } };
+  const flip = (f: string): string => { const p = f.split(' '); p[1] = p[1] === 'w' ? 'b' : 'w'; p[3] = '-'; return p.join(' '); };
+  if (on(boards[0]) || on(flip(boards[0]))) return false;
+  for (const f of boards.slice(1)) {
+    const m = on(f) ?? on(flip(f));
+    if (!m) continue;
+    const now = new Chess(boards[0]).get(m.from as Parameters<Chess['get']>[0]);
+    return !now || now.type !== m.type || now.color !== m.color;
+  }
+  return false;
+}
+
 /** One spoken line against the board's marks. `lit` = squares lit or on an
  *  arrow; `arrowTo` = arrow destinations; `played` = the move on the board
  *  (lit by the last-move highlight); `drawnPlies` = the longest line drawn. */
@@ -103,6 +119,10 @@ function check(surface: string, kind: string, text: string, lit: ReadonlySet<str
     if (unlit.length) { t.unlit += 1; rows.push({ surface, kind, rule: 'unlit', what: unlit.join(' '), text: s }); }
     const bare = moves.filter((san) => {
       if (ruled.has(san) || bareSan(san) === bareSan(played)) return false;
+      // A move whose piece has LEFT its square on the board shown ("Masters
+      // also play …Nbd7" after …Nc6 took the knight off b8) is said and
+      // cannot be drawn: an arrow from an empty square shows nothing.
+      if (pieceGone(boards, san)) return false;
       const d = destOf(san);
       return d !== null && d !== 'castle' && !arrowTo.has(d);
     });

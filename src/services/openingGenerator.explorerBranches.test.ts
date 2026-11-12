@@ -113,7 +113,7 @@ describe('a line the opening DB stops on is taught from the masters\' games', ()
 
   it('the move the line is named for says the break it prepares, from the database', async () => {
     branchesResult = MASTERS;
-    expect(terminus(await lesson(MENGARINI)).idea).toMatch(new RegExp(String.raw`^${introHead('opponent', 'a3', 'now')}prepares b4: their pawn on a3 covers b4, and masters push b4 in \d+% of their games from here\.$`));
+    expect(terminus(await lesson(MENGARINI)).idea).toMatch(new RegExp(String.raw`^${introHead('opponent', 'a3', 'now')}prepares b4: their pawn on a3 covers the square, and masters push it in \d+% of their games from here\.$`));
   }, 120_000);
 
   it('a lesson built while the database was unreachable is never cached', async () => {

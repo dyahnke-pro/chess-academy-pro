@@ -329,12 +329,12 @@ const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop'
  * fact plus database fact, from the student's seat. Null when the move does
  * not cover its side's break square, or the break IS this move.
  */
-export function preparesBreakBeat(
+export function preparesBreakClause(
   fenBefore: string,
   san: string,
   read: MastersPlanRead | null,
   moverIsStudent: boolean,
-): string | null {
+): { clause: string; squares: string[] } | null {
   if (!read) return null;
   let b: Chess;
   let moved: ReturnType<Chess['move']>;
@@ -348,6 +348,20 @@ export function preparesBreakBeat(
   if (!coverers.includes(moved.to)) return null;
   const whose = moverIsStudent ? 'your' : 'their';
   const pct = Math.round(brk.share * 100);
+  // The break's square is said once ("prepares d4: their knight on f3
+  // covers d4, and masters push d4" said it three times, 2026-11-12).
+  return { clause: `prepares ${brk.san}: ${whose} ${PIECE_NAME[moved.piece]} on ${moved.to} covers the square, and masters push it in ${pct}% of their games from here`, squares: [moved.to, brk.square] };
+}
+
+/** The break-prep said as the move's whole beat (the opening brief). */
+export function preparesBreakBeat(
+  fenBefore: string,
+  san: string,
+  read: MastersPlanRead | null,
+  moverIsStudent: boolean,
+): string | null {
+  const c = preparesBreakClause(fenBefore, san, read, moverIsStudent);
+  if (!c) return null;
   // The move's head rotates like every other (`moveIntro`, David 2026-11-09).
-  return `${introWithPredicate(moverIsStudent ? 'student' : 'opponent', moved.san, `prepares ${brk.san}: ${whose} ${PIECE_NAME[moved.piece]} on ${moved.to} covers ${brk.square}, and masters push ${brk.san} in ${pct}% of their games from here`, 'now')}.`;
+  return `${introWithPredicate(moverIsStudent ? 'student' : 'opponent', san, c.clause, 'now')}.`;
 }

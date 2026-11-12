@@ -673,7 +673,15 @@ export function namedMoveArrows(text: string, fen: string, student: 'w' | 'b', p
       }
       if (placed || !prevFen) continue;
       const m = tryMove(prevFen, san);
-      if (m) push({ from: m.from, to: m.to, role: 'missed', fen: prevFen, vouchedBy: 'engine', source: 'learn.namedMissed' });
+      // A move from the board before: the student's better move ('missed'),
+      // or the other side's alternative to the move they played ("Masters
+      // also play …Be4 here") — drawn in their colour, and only while its
+      // piece still stands on its square (an arrow from an empty square shows
+      // nothing: "…Nbd7" after the knight went to c6).
+      if (!m) continue;
+      let still = false;
+      try { const p0 = new Chess(prevFen).get(m.from as Square); const p1 = new Chess(fen).get(m.from as Square); still = !!p0 && !!p1 && p0.type === p1.type && p0.color === p1.color; } catch { still = false; }
+      if (still) push({ from: m.from, to: m.to, role: m.color === student ? 'missed' : 'theirs', fen: prevFen, vouchedBy: 'engine', source: 'learn.namedMissed' });
     }
   }
   return out;

@@ -602,3 +602,16 @@ describe('a trimmed fact keeps only the marks its words still state (marks sweep
     expect(second?.squares).toEqual(['c4', 'f7']);
   });
 });
+
+describe('nameOnce — the full name once (human voice rule 3)', () => {
+  it('a piece named again drops its square', async () => {
+    const { nameOnce } = await import('./voicePackage');
+    expect(nameOnce('It stops …Bh5, which would pin your knight on f3. It also unpins your knight on f3.'))
+      .toBe('It stops …Bh5, which would pin your knight on f3. It also unpins your knight.');
+  });
+  it('two pieces of one kind keep their squares', async () => {
+    const { nameOnce } = await import('./voicePackage');
+    const t = 'It hits their pawn on d5. Their pawn on e4 is loose. And their pawn on d5 falls.';
+    expect(nameOnce(t)).toBe(t);
+  });
+});

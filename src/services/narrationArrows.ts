@@ -169,7 +169,12 @@ const IN_MIND_AFTER = /^\s+in\s+mind\b/i;
 // Nf3 … the knight goes to e2" drew c3-e2). The dots may stand between the
 // word and the move ("or …Nbd7").
 const ALTERNATIVE_BEFORE =
-  /\b(or|instead\s+of|rather\s+than|than|unlike|over|versus|vs\.?|not|never|avoid(?:ing)?)\s*\(?\s*(?:…|\.{3})?$/i;
+  /\b(or|instead\s+of|rather\s+than|than|unlike|over|versus|vs\.?|not|never|avoid(?:ing)?|also\s+play|(?:usually|mostly|always)\s+play|answer\s+with|known\s+(?:mistake|trap)\s+here:)\s*\(?\s*(?:…|\.{3})?$/i;
+// …and opening theory names the moves of ONE position, each from the live
+// board: "Bb5 is the main move", "Masters also play Bc4 here", "…Nxd5 is a
+// known trap" (2026-11-12: "Bb5 is the main move. Masters also play Bc4"
+// moved the bishop to b5 on the plan's board and drew Bc4 from there).
+const ALTERNATIVE_AFTER = /^\s+(?:is|was|isn't)\s+(?:the\s+main\s+move|one\s+of\s+the\s+main\s+moves|a\s+known\s+(?:mistake|trap)|the\s+usual)/i;
 
 // NO CAP (David 2026-08-10: "If the coach says a move or square they need to be
 // arrowed or highlighted… Remove all caps. We can add them back on once I see
@@ -317,9 +322,15 @@ export function deriveNarrationArrows(
   fen: string,
   exclude: ReadonlyArray<{ from: string; to: string }>,
   sides: NarrationSides,
+  /** The board before the move the text is about: an ALTERNATIVE to that
+   *  move ("Masters also play Bb5+ here") is played from it, and drawn only
+   *  when its piece still stands on its square on the live board. */
+  before: string | null = null,
 ): DerivationResult {
   const rejected: Array<{ token: string; index: number; reason: string }> = [];
   if (!text || !fen) return { arrows: [], rejected };
+  let beforeBoard: Chess | null = null;
+  try { beforeBoard = before ? new Chess(before) : null; } catch { beforeBoard = null; }
 
   let original: Chess;
   try {
@@ -394,14 +405,16 @@ export function deriveNarrationArrows(
         spoken = listHead.spoken;
         listHead = { end: index + token.length, isSquareRef: false, spoken };
       } else {
-        const isSquareRef = inList && listHead
+        // "d4 is the main move" names a move, whatever "is" usually means.
+        const theoryMove = ALTERNATIVE_AFTER.test(text.slice(index + token.length, index + token.length + 40));
+        const isSquareRef = !theoryMove && (inList && listHead
           ? listHead.isSquareRef
           : SQUARE_CONTEXT_BEFORE.test(before)
             || SQUARE_LIST_HEAD_BEFORE.test(before)
             || SQUARE_VERB_BEFORE.test(before)
             || SQUARE_PREPOSITION_BEFORE.test(before)
             || SQUARE_CONTEXT_AFTER.test(after)
-            || (KEEP_BEFORE.test(before) && IN_MIND_AFTER.test(after));
+            || (KEEP_BEFORE.test(before) && IN_MIND_AFTER.test(after)));
         listHead = { end: index + token.length, isSquareRef, spoken: null };
         if (isSquareRef) {
           rejected.push({ token, index, reason: 'square reference, not a move' });
@@ -425,7 +438,7 @@ export function deriveNarrationArrows(
     // A PLAN step continues from wherever the chain is; one that fits nothing
     // there may still be a parallel mention from the real position — tried
     // last rather than drawing nothing.
-    const stages = alternative || chain === original ? [original] : [chain, original];
+    const stages = alternative ? (beforeBoard ? [original, beforeBoard] : [original]) : chain === original ? [original] : [chain, original];
     let stands = false;
     let standing = 'piece';
     let hit: Resolved | null = null;
@@ -455,6 +468,12 @@ export function deriveNarrationArrows(
       } else {
         hit = resolve(boards[position.turn()]) ?? resolve(boards[OTHER[position.turn()]]);
       }
+      // An alternative found on the board before the move: drawn only when
+      // its piece still stands there on the live board.
+      if (hit && position === beforeBoard) {
+        const now = original.get(hit.from as Square);
+        if (!now || now.type !== hit.piece || now.color !== hit.color) { hit = null; continue; }
+      }
       if (hit) {
         // The plan's board brings this piece back to the square it stands on
         // in the live position: the beat's own move, said again.
@@ -465,7 +484,7 @@ export function deriveNarrationArrows(
           continue;
         }
         hitBoard = boards[hit.color];
-        hitOnLive = position === original;
+        hitOnLive = position === original || position === beforeBoard;
         break;
       }
     }
@@ -512,13 +531,13 @@ export function deriveNarrationArrows(
     const index = m.index ?? 0;
     const squares = m[3].split('-').filter(Boolean);
     const dest = squares[squares.length - 1];
-    consider(`${m[1]}${dest}`, index, ALTERNATIVE_BEFORE.test(text.slice(Math.max(0, index - 24), index)));
+    consider(`${m[1]}${dest}`, index, ALTERNATIVE_BEFORE.test(text.slice(Math.max(0, index - 24), index)) || ALTERNATIVE_AFTER.test(text.slice(index + m[0].length, index + m[0].length + 40)));
   }
 
   for (const m of text.matchAll(SAN_TOKEN)) {
     const index = m.index ?? 0;
     if (insideCompound(index)) continue;
-    consider(m[0], index, ALTERNATIVE_BEFORE.test(text.slice(Math.max(0, index - 24), index)));
+    consider(m[0], index, ALTERNATIVE_BEFORE.test(text.slice(Math.max(0, index - 24), index)) || ALTERNATIVE_AFTER.test(text.slice(index + m[0].length, index + m[0].length + 40)));
   }
 
   return { arrows, rejected };

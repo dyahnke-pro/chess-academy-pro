@@ -260,9 +260,15 @@ function computeEquivalence(history: readonly string[], student: 'w' | 'b'): Ope
       // moves names their owners).
       const wOwner = student === 'w' ? 'your' : 'their';
       const bOwner = student === 'b' ? 'your' : 'their';
+      // The move just played is "this move" — it was named a breath ago (the
+      // voice gate, 2026-11-12: "Take back your c3 … Your c3 prepares d4").
+      const lastSan = (history[history.length - 1] ?? '').replace(/[+#]$/, '');
+      const lastByWhite = history.length % 2 === 1;
+      const wSaid = lastByWhite && w.replace(/[+#]$/, '') === lastSan ? 'this move' : `${wOwner} ${w}`;
+      const bSaid = !lastByWhite && bl.replace(/[+#]$/, '') === lastSan ? 'this move' : `${bOwner} …${bl}`;
       const text = rotateStem([
-        `This is the ${hit.name} with ${wOwner} ${w} and ${bOwner} …${bl} thrown in.`,
-        `Take back ${wOwner} ${w} and ${bOwner} …${bl} and this is the ${hit.name}.`,
+        `This is the ${hit.name} with ${wSaid} and ${bSaid} thrown in.`,
+        `Take back ${wSaid} and ${bSaid} and this is the ${hit.name}.`,
       ], stemKeyOf(fen));
       best = { kind: 'inserted', name: hit.name, text, proof, squares: [b.from, b.to, a.from, a.to], inserted: [s1, s2], claim: EQUIVALENCE_CLAIM };
     }
