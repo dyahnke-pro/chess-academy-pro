@@ -178,7 +178,10 @@ describe('the mirror-structure race: two pawns, one square (planRace)', () => {
     expect(read?.race.square).toBe('e5');
     expect(read?.text).toMatch(/e5 is yours/);
     voice(read!.text);
-    expect(pawnSquareTaken(fen, 'e5', 0)?.text).toMatch(/can never come now/);
+    const taken = pawnSquareTaken(fen, 'e5', 0)?.text ?? '';
+    expect(taken).toMatch(/their e-pawn can never reach it now/);
+    // The square named once (the human register).
+    expect(taken.match(/e5/g)?.length).toBe(1);
   });
   it('never on the first moves (1.e4 e5 is not a lesson)', () => {
     expect(pawnSquareRaces(fenOf('e4'), 'b')).toEqual([]);

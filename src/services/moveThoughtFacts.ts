@@ -264,7 +264,10 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
 
   // THE DEEP FACT — what the move made possible down the line.
   const deep = deepFact(i.fenBefore, i.san, i.line, mine);
-  if (deep) add('deep-fact', 'deepFact', 'deepFact', 'set-up', gerund(deep.text), `It also ${deep.verb}`, [deep.target], 56);
+  // A deep fact that TAKES a piece is about that piece too: its square rides
+  // on the fact, so a move that already attacks it does not say it twice
+  // ("Re2 attacks their pawn on c2. It also takes their pawn on c2 next").
+  if (deep) add('deep-fact', 'deepFact', 'deepFact', 'set-up', gerund(deep.text), `It also ${deep.verb}`, /x/.test(deep.follow.san) ? [deep.follow.to, deep.target] : [deep.target], 56);
 
   // THE ANSWER TO THEIR LAST MOVE — what it aimed at, and how this meets it.
   const tgt = theirTarget(i.theirLast, mine);

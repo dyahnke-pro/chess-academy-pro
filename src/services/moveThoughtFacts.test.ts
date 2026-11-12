@@ -122,7 +122,9 @@ describe("their prophylactic move says what it stops", () => {
     const c = new Chess();
     for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'd6']) c.move(s);
     const text = lessonThought({ theory: true, fenBefore: c.fen(), san: 'h3', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['Be7', 'O-O'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
-    expect(text).toContain('takes away g4: Bg4 would pin their knight on f3');
+    // Which of the two readers of the same stop leads is the fitted policy's
+    // choice (`thought-policy.json`); the idea, from the student's seat, is the test.
+    expect(text).toMatch(/your bishop off g4.*pin their knight on f3|takes away g4: Bg4 would pin their knight on f3/);
   });
 });
 
@@ -141,17 +143,19 @@ describe('the move\'s choices come from the engine read', () => {
     ],
     after: [], passBefore: [], passAfter: [],
   };
+  // Whether the weighing is SAID is the composer's fitted choice (a step bar,
+  // `thought-policy.json`); that the read reaches the move's facts as a
+  // choice with its line is what this tests.
+  const factsOf = (moverIsStudent: boolean, r: typeof reads | null): string[] =>
+    moveThoughtFacts({ theory: true, fenBefore: fen, san: 'Nf6', prev: NO_PREV_CAPTURE, moverIsStudent, line: null, history: [], theirLast: null, reads: r, costCp: r ? 0 : null, tense: 'now', phrases: newLessonVoice().phrases }).map((f) => f.text);
   it('the tempting move is ruled out, with its line', () => {
-    const text = lessonThought({ theory: true, fenBefore: fen, san: 'Nf6', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: [], theirLast: null, reads, costCp: 0 }, newLessonVoice(), null);
-    expect(text).toContain('Qh4? Then they answer Nxh4 — they win a queen.');
+    expect(factsOf(true, reads).some((t) => t.includes('Qh4? Then they answer Nxh4 — they win a queen.'))).toBe(true);
   });
   it('the opponent\'s move is not weighed for them', () => {
-    const text = lessonThought({ theory: true, fenBefore: fen, san: 'Nf6', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: null, history: [], theirLast: null, reads, costCp: 0 }, newLessonVoice(), null);
-    expect(text).not.toContain('Qh4?');
+    expect(factsOf(false, reads).some((t) => t.includes('Qh4?'))).toBe(false);
   });
   it('no read, no weighing — never an invented one', () => {
-    const text = lessonThought({ theory: true, fenBefore: fen, san: 'Nf6', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
-    expect(text).not.toContain('Qh4?');
+    expect(factsOf(true, null).some((t) => t.includes('Qh4?'))).toBe(false);
   });
 });
 
@@ -301,5 +305,20 @@ describe('the long horizon is said twice a lesson, then the change alone', () =>
     expect(said[0]).toMatch(/opens the e-file, a road for the rooks from now on\.$/);
     expect(said[1]).toMatch(/a road for the rooks from now on/);
     expect(said[2]).toMatch(/opens the e-file\.$/);
+  });
+});
+
+// A DEEP FACT THAT TAKES THE PIECE THE MOVE ALREADY ATTACKS is one idea, said
+// once (decision baseline 2026-11-12, Sicilian Closed …Re2: "Re2 attacks their
+// pawn on c2. It also takes their pawn on c2 next, where it hits their pawn on b2").
+describe('a deep fact that takes the attacked piece is not said twice', () => {
+  it('…Re2 attacking c2 does not also say it takes c2 next', () => {
+    const fen = '4rr2/p6k/1p1N3p/2p5/8/3P4/PPP4P/6RK b - - 2 28';
+    const facts = moveThoughtFacts({ theory: true, fenBefore: fen, san: 'Re2', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Ne4', 'Rxc2'], history: [], theirLast: null, reads: null, costCp: null, tense: 'now', phrases: newLessonVoice().phrases });
+    const deep = facts.find((f) => f.source === 'deepFact');
+    // The square it takes rides on the fact, so the composer's one-idea-per-
+    // square rule holds it behind the move's own attack on c2.
+    expect(deep?.text).toContain('taking their pawn on c2 next');
+    expect(deep?.squares).toContain('c2');
   });
 });

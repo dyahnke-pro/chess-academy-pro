@@ -38,6 +38,10 @@ export type ReviewFacet = CoachFact & {
    *  half-open c-file"): a later fact about the same move may follow it as
    *  "It also …". Set where the sentence is built, never read off its words. */
   headsMove?: boolean;
+  /** Its wording when a line before it in the turn already named the move
+   *  ("It follows a rule worth keeping" for "g6 follows …"). Set where the
+   *  sentence is built. */
+  follow?: string;
 };
 
 /** What a facet's computer knows besides its words. */

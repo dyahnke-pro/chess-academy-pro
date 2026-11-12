@@ -1374,6 +1374,7 @@ export function computeMoveFacets(
     if (lead) {
       const f = made('principleLine', 'rule', lead.text);
       if (own?.headsMove) f.headsMove = true;
+      if (own?.follow) f.follow = own.follow;
       facets.push(f);
       // The FIRST statement of a principle carries its say-once identity; a
       // stem is its own move's fact and must not be eaten by that ledger.

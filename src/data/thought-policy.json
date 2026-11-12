@@ -1,30 +1,60 @@
 {
-  "about": "How often each computer's fact is chosen when a move has more than one (WO-ONE-COACH-01 Build 5). Fitted by scripts/bench/fit-thought-policy.py on the Danya bench dump: coordinate descent on the training half of his videos, objective = his ideas said + his lead idea said + 0.5 x the share of spoken facts that match one of his ideas, at most 25 words a note (his average). Scored on the other half, never tuned on.",
-  "floor": 40,
+  "about": "How the composer chooses among a move's facts. Fitted JOINTLY on the hand-written Watch beats (which facts each writer used and led with, 8 courses written in the Danya style sheet) and on Danya's notes (the bench dump, 2,488 notes), by scripts/bench/fit-writer-policy.py --danya <dump> with DANYA_W=3: coordinate descent over the second job's floor and gap, the news margin, a bar per step and one offset per computer, on half the courses and half his videos; scored on the other halves, never tuned on. Danya weighted 3x because the writers and Danya disagree on the lead (the writers lead with the move's job ~45% of beats, Danya ~17-20%): at 1x the writers' lead match rose 31% -> 49% but Danya's fell 32% -> 29%; at 3x Danya holds and the turn falls to his length.",
+  "floor": 10,
   "gap": 40,
   "newsMargin": 0.09,
   "offsets": {
+    "briefing": 30,
     "fundamental": 20,
-    "prophylaxis": 20,
+    "studentMove": 20,
+    "theirAim": 20,
     "moveJob": 5,
+    "deepFact": 5,
     "pieceRoute": 0,
-    "binding": -15,
-    "boardTeacher": -20,
-    "deepFact": -40
+    "binding": -5,
+    "boardTeacher": -15,
+    "prophylaxis": -20,
+    "alternatives": -40,
+    "kingWalk": -40,
+    "purpose": -40
   },
   "heldOut": {
-    "notes": 2930,
+    "notes": 1244,
     "before": {
-      "any": 39.28,
-      "lead": 29.35,
-      "words": 19.36,
-      "precision": 31.0
+      "any": 44.8,
+      "lead": 32.0,
+      "words": 28.9
     },
     "after": {
-      "any": 42.18,
-      "lead": 31.77,
-      "words": 20.34,
-      "precision": 32.78
+      "any": 43.8,
+      "lead": 32.2,
+      "words": 25.4
+    }
+  },
+  "stepBars": {
+    "choices": 30,
+    "theirs": 100,
+    "line": 50,
+    "board": 50,
+    "notYet": 50,
+    "verdict": 50,
+    "habit": 50,
+    "name": 50,
+    "yours": 50
+  },
+  "heldOutWriters": {
+    "beats": 554,
+    "before": {
+      "used": 51.6,
+      "lead": 30.7,
+      "precision": 38.4,
+      "facts": 2.9
+    },
+    "after": {
+      "used": 51.3,
+      "lead": 32.9,
+      "precision": 41.6,
+      "facts": 2.6
     }
   }
 }

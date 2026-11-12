@@ -1475,6 +1475,8 @@ export function principleOnceLine(
   /** REQUIRED — may the move just played be named? Learn says "your move"
    *  (David 2026-11-09: "the user knows that, they see it play out"). */
   namesPlayedMove: boolean,
+  /** The move was already named earlier in the turn: the rule says "it". */
+  named = false,
 ): string {
   const reason = reasonFor(f);
   const w = movePlayedWords(san, namesPlayedMove);
@@ -1486,10 +1488,12 @@ export function principleOnceLine(
   // 2026-10-15).
   if (!reason) return f.led ? `${w.your} ${f.led}.` : `${w.your}: ${f.imperative}.`;
   // One idea a sentence (the human register, David 2026-11-08): the rule,
-  // then why it holds — never one 40-word sentence on a dash.
+  // then why it holds — never one 40-word sentence on a dash. Said after a
+  // line that already named the move, it is "it" (the full name once).
+  const subject = named ? 'it' : w.bare;
   return rotateStem([
-    `${openSentence(w.bare)} follows a rule worth keeping: ${f.imperative}. ${openSentence(reason)}.`,
-    `The rule behind ${w.bare}: ${f.imperative}. It matters because ${reason}.`,
+    `${openSentence(subject)} follows a rule worth keeping: ${f.imperative}. ${openSentence(reason)}.`,
+    `The rule behind ${subject}: ${f.imperative}. It matters because ${reason}.`,
   ], stemKey);
 }
 
@@ -1616,7 +1620,7 @@ export function principleLine(
   fenBefore: string, san: string, mover: 'white' | 'black', taughtIds: ReadonlySet<string>, stemKey: number,
   /** REQUIRED — may the move just played be named (`movePlayedWords`)? */
   namesPlayedMove: boolean,
-): { id: string; text: string; squares: string[]; first: boolean; names: { from: string; to: string } | null; headsMove: boolean } | null {
+): { id: string; text: string; squares: string[]; first: boolean; names: { from: string; to: string } | null; headsMove: boolean; follow?: string } | null {
   // A line that carries two claims ("mg:…|mg-rule:…") is committed as one id by
   // some callers and split by others — read it the same either way.
   const taught: ReadonlySet<string> = new Set([...taughtIds].flatMap((k) => k.split('|')));
@@ -1661,7 +1665,13 @@ export function principleLine(
   // A rule said with its reason is two sentences, the second about the rule
   // ("It matters because …"), so it does not open the move's turn for a
   // follow-on "It also …"; the move's own sentence does.
-  if (fresh) return { id: fresh.id, text: principleOnceLine(san, fresh, stemKey, namesPlayedMove), squares: fresh.squares, first: true, names: fresh.names ?? null, headsMove: !reasonFor(fresh) };
+  if (fresh) {
+    const withReason = !!reasonFor(fresh);
+    return { id: fresh.id, text: principleOnceLine(san, fresh, stemKey, namesPlayedMove), squares: fresh.squares, first: true, names: fresh.names ?? null, headsMove: !withReason,
+      // Behind a line that already named the move (Review, decision baseline
+      // 2026-11-12: "You played g6 — … g6 follows a rule worth keeping").
+      ...(withReason ? { follow: principleOnceLine(san, fresh, stemKey, namesPlayedMove, true) } : {}) };
+  }
   const lead = computeMoveFundamentals(fenBefore, san, mover)
     .filter((f) => IS_OPENING_PRINCIPLE[f.id])
     .sort((a, b) => b.weight - a.weight)[0];

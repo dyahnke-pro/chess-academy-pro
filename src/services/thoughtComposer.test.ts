@@ -2,6 +2,7 @@ import { NO_STAKES } from './factStakes';
 import { describe, it, expect } from 'vitest';
 import { composeThought, type ThoughtFact, NOT_LED } from './thoughtComposer';
 import { NO_PROOF } from './proof';
+import policy from '../data/thought-policy.json';
 
 const FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4';
 
@@ -35,8 +36,8 @@ describe('the one composer (WO-ONE-COACH-01)', () => {
     const lead = fact({ idea: 'prevent', text: 'You play h3 — it keeps their bishop off g4.', squares: ['g4'], weight: 70 });
     const close = fact({ idea: 'king-safety', text: 'You play h3 — it makes luft.', alsoText: 'It also makes luft.', weight: 60 });
     expect(composeThought([lead, close], 'lesson', null, NOT_LED).spoken).toBe('You play h3 — it keeps their bishop off g4. It also makes luft.');
-    // Under the fitted floor (40, `thought-policy.json`) it is an afterthought.
-    const far = { ...close, weight: 30 };
+    // Below the fitted floor or the gap (`thought-policy.json`) it is an afterthought.
+    const far = { ...close, weight: Math.min(policy.floor, lead.weight - policy.gap) - 1 };
     expect(composeThought([lead, far], 'lesson', null, NOT_LED).spoken).toBe('You play h3 — it keeps their bishop off g4.');
   });
 

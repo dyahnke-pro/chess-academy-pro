@@ -2741,6 +2741,10 @@ function* reviewSegmentSteps(
           // (…Kxf7's lead was "Your bishop on c8 stays home for now").
           const headLeads = stepLeads.filter((f) => f.headsMove === true);
           if (headLeads.length > 0 && worded(false) !== spoken) followOf.set(raw, { follow: worded(false), leads: new Set(headLeads) });
+          // …and the other way round: a rule line said after this one does not
+          // name the move again ("You played g6 — … It follows a rule worth
+          // keeping: fianchetto the bishop to g7").
+          for (const r of facets) if (r.follow && r !== raw) followOf.set(r, { follow: r.follow, leads: new Set([raw]) });
           if (carriedLoose) raw.claims = [...(raw.claims ?? []), `loose:${carriedLoose}`];
           facets.push(raw);
           facetCommits.set(raw, () => {

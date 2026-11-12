@@ -68,6 +68,7 @@ def evaluate(P, half):
 
 # --danya <dump.jsonl>: fit jointly with Danya's own notes (the Danya bench
 # dump), so the writers' choices are never bought by losing his.
+DANYA_W = float(os.environ.get('DANYA_W', '1'))
 DANYA = load(sys.argv[sys.argv.index('--danya') + 1], extended()) if '--danya' in sys.argv else None
 
 def danya_obj(P, half):
@@ -77,7 +78,7 @@ def danya_obj(P, half):
 def objective(P):
     s = evaluate(P, 'train')
     w = s['used'] + s['lead'] + LAMBDA * s['precision']
-    return w + (danya_obj(P, 'train') if DANYA else 0)
+    return w + (DANYA_W * danya_obj(P, 'train') if DANYA else 0)
 
 POLICY_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'src', 'data', 'thought-policy.json')
 shipped = json.load(open(POLICY_PATH))

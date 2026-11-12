@@ -42,3 +42,18 @@ describe('principle-once line', () => {
     expect(line).toBe('Your Bc5 completes your development — every minor piece is out, so the rooks come next.');
   });
 });
+
+// THE FULL NAME ONCE (decision baseline 2026-11-12, Review: "You played g6 — …
+// g6 follows a rule worth keeping … the one on g6"): said after a line that
+// already named the move, the rule line says "it".
+describe('the rule line behind a line that named the move', () => {
+  it('says "it", never the move again, in every rotation', () => {
+    const start = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
+    const lead = principleToTeach(start, 'Nc6', 'black', new Set());
+    for (const k of [0, 1, 2, 3]) {
+      const t = principleOnceLine('Nc6', lead!, k, true, true);
+      expect(t).not.toMatch(/Nc6/);
+      expect(t).toMatch(/^(It follows a rule worth keeping|The rule behind it)/);
+    }
+  });
+});
