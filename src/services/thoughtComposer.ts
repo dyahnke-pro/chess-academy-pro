@@ -209,7 +209,7 @@ function isNews(f: ThoughtFact, lead: ThoughtFact): boolean {
  *  what is said matches him (31.0% → 32.8%). Measured with the moves that
  *  really followed each note: the bench first read an engine line there, which
  *  pushed the piece's trip down for a fault of the bench, not of the trip. */
-const POLICY: { floor: number; gap: number; newsMargin: number; offsets: Partial<Record<ThoughtSource, number>>; stepBars?: Partial<Record<ThoughtStep, number>> } = thoughtPolicy;
+const POLICY: { floor: number; gap: number; newsMargin: number; offsets: Partial<Record<ThoughtSource | `${ThoughtSource}|${IdeaKind}`, number>>; stepBars?: Partial<Record<ThoughtStep, number>> } = thoughtPolicy;
 
 /** THE STEP BAR (WO-OPENINGS-REWRITE-01 C2, fitted on the hand-written Watch
  *  beats and Danya's notes together): once the turn has said something, a
@@ -225,9 +225,12 @@ function belowStepBar(f: ThoughtFact, saidSoFar: number): boolean {
 }
 
 /** A fact's weight as the composer compares it: the producer's own, with its
- *  computer's fitted offset. */
+ *  computer's fitted offset, and the offset for that computer's idea where
+ *  one is fitted (the board teacher's "covers f4, holding back their f-pawn"
+ *  is its centre reading — description the writers and Danya leave out —
+ *  while its threat reading is not). */
 function weighOf(f: ThoughtFact): number {
-  return f.weight + (POLICY.offsets[f.source] ?? 0);
+  return f.weight + (POLICY.offsets[f.source] ?? 0) + (POLICY.offsets[`${f.source}|${f.idea}`] ?? 0);
 }
 
 function order(a: ThoughtFact, b: ThoughtFact, ia: number, ib: number): number {

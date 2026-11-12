@@ -46,14 +46,28 @@ describe('the one composer (WO-ONE-COACH-01)', () => {
   // half of Danya's videos that order said more of what he says, and a larger
   // share of it was his.
   it("the fitted offsets decide which computer's fact leads", () => {
-    const teacher = fact({ source: 'boardTeacher', idea: 'center', text: 'You play Nc3 — the knight bears down on d5.', alsoText: 'The knight bears down on d5.', squares: ['d5'], weight: 60 });
+    const teacher = fact({ source: 'boardTeacher', idea: 'prevent', text: 'You play Nc3 — it keeps their knight off d5.', alsoText: 'It also keeps their knight off d5.', squares: ['d5'], weight: 60 });
     const fundamental = fact({ source: 'fundamental', idea: 'develop', text: 'You play Nc3 — it develops into the game.', alsoText: 'It also develops into the game.', squares: ['e4'], weight: 50 });
-    expect(composeThought([teacher, fundamental], 'lesson', null, NOT_LED).spoken).toBe('You play Nc3 — it develops into the game. The knight bears down on d5.');
+    expect(composeThought([teacher, fundamental], 'lesson', null, NOT_LED).spoken).toBe('You play Nc3 — it develops into the game. It also keeps their knight off d5.');
   });
-  it('every fitted offset names a computer the composer knows', async () => {
+  // ONE IDEA OF A COMPUTER CAN BE WEIGHED ON ITS OWN (decision baseline
+  // 2026-11-12): the board teacher's centre reading ("bears down on f4,
+  // holding back their f-pawn") opened Review turns ahead of the move's real
+  // teaching; its threat reading still speaks.
+  it("the board teacher's centre reading is weighed below its other readings", () => {
+    const centre = fact({ source: 'boardTeacher', idea: 'center', text: 'You play Nc3 — the knight bears down on d5.', alsoText: 'The knight bears down on d5.', squares: ['d5'], weight: 60 });
+    const fundamental = fact({ source: 'fundamental', idea: 'develop', text: 'You play Nc3 — it develops into the game.', alsoText: 'It also develops into the game.', squares: ['e4'], weight: 50 });
+    expect(composeThought([centre, fundamental], 'lesson', null, NOT_LED).spoken).toBe('You play Nc3 — it develops into the game.');
+  });
+  it('every fitted offset names a computer the composer knows (and, for an idea offset, an idea)', async () => {
     const policy = (await import('../data/thought-policy.json')).default as { offsets: Record<string, number> };
     const { SOURCE_RANK } = await import('./thoughtComposer');
-    for (const k of Object.keys(policy.offsets)) expect(Object.keys(SOURCE_RANK)).toContain(k);
+    const { IDEA_FAMILY } = await import('./ideaKind');
+    for (const k of Object.keys(policy.offsets)) {
+      const [source, idea] = k.split('|');
+      expect(Object.keys(SOURCE_RANK)).toContain(source);
+      if (idea !== undefined) expect(Object.keys(IDEA_FAMILY)).toContain(idea);
+    }
   });
 
   it('a line that only restates the move never leads a step another fact explains', () => {

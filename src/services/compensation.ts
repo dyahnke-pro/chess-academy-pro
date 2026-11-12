@@ -75,7 +75,7 @@ export function compensation(fenAfter: string, student: Color, studentCp: number
     const rank = Number(p.square[1]); const adv = comp === 'w' ? rank >= 5 : rank <= 4;
     if (!adv) continue;
     const passed = !board.board().flat().some((q) => q && q.type === 'p' && q.color === other && Math.abs(q.square.charCodeAt(0) - p.square.charCodeAt(0)) <= 1 && (comp === 'w' ? Number(q.square[1]) > rank : Number(q.square[1]) < rank));
-    if (passed) { reasons.push(`${comp === student ? 'your' : 'their'} passed pawn on ${p.square as Square}`); squares.push(p.square); }
+    if (passed) { reasons.push(`${comp === student ? 'your' : 'their'} passed pawn on ${p.square}`); squares.push(p.square); }
   }
   if (!reasons.length) return null;
   const compCp = comp === student ? studentCp : -studentCp;

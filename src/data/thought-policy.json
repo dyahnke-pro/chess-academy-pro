@@ -1,5 +1,5 @@
 {
-  "about": "How the composer chooses among a move's facts. Fitted JOINTLY on the hand-written Watch beats (which facts each writer used and led with, 8 courses written in the Danya style sheet) and on Danya's notes (the bench dump, 2,488 notes), by scripts/bench/fit-writer-policy.py --danya <dump> with DANYA_W=3: coordinate descent over the second job's floor and gap, the news margin, a bar per step and one offset per computer, on half the courses and half his videos; scored on the other halves, never tuned on. Danya weighted 3x because the writers and Danya disagree on the lead (the writers lead with the move's job ~45% of beats, Danya ~17-20%): at 1x the writers' lead match rose 31% -> 49% but Danya's fell 32% -> 29%; at 3x Danya holds and the turn falls to his length.",
+  "about": "How the composer chooses among a move's facts. Fitted JOINTLY on the hand-written Watch beats (which facts each writer used and led with, 8 courses written in the Danya style sheet) and on Danya's notes (the bench dump, 2,488 notes), by scripts/bench/fit-writer-policy.py --danya <dump> with DANYA_W=3: coordinate descent over the second job's floor and gap, the news margin, a bar per step and one offset per computer, on half the courses and half his videos; scored on the other halves, never tuned on. Danya weighted 3x because the writers and Danya disagree on the lead (the writers lead with the move's job ~45% of beats, Danya ~17-20%): at 1x the writers' lead match rose 31% -> 49% but Danya's fell 32% -> 29%; at 3x Danya holds and the turn falls to his length. One idea offset on top of the computers': the board teacher's centre reading (\"covers f4, holding back their f-pawn\") at -30, which opened Review turns ahead of the move's real teaching at the fitted floor (reviewMoveThought.test); held out it beats raising the floor to 40 on both sets.",
   "floor": 10,
   "gap": 40,
   "newsMargin": 0.09,
@@ -14,6 +14,7 @@
     "binding": -5,
     "boardTeacher": -15,
     "prophylaxis": -20,
+    "boardTeacher|center": -30,
     "alternatives": -40,
     "kingWalk": -40,
     "purpose": -40
@@ -26,9 +27,9 @@
       "words": 28.9
     },
     "after": {
-      "any": 43.8,
+      "any": 43.7,
       "lead": 32.2,
-      "words": 25.4
+      "words": 25.1
     }
   },
   "stepBars": {
@@ -51,10 +52,10 @@
       "facts": 2.9
     },
     "after": {
-      "used": 51.3,
+      "used": 50.6,
       "lead": 32.9,
-      "precision": 41.6,
-      "facts": 2.6
+      "precision": 41.8,
+      "facts": 2.53
     }
   }
 }
