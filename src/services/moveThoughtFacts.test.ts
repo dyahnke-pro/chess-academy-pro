@@ -336,3 +336,12 @@ describe('onlyMove (gap B6)', () => {
     expect(onlyMove(start, 'e2e4', [{ moves: ['e2e4'], evaluation: 40 }, { moves: ['d2d4'], evaluation: 30 }])).toBeNull();
   });
 });
+
+describe('a plain stopped check never leads a move with a real job', () => {
+  it('Nc3 against …Qd5 leads with the tempo on the queen, not …Qe4+', () => {
+    const c = new Chess(); for (const m of ['e4', 'd5', 'exd5', 'Qxd5']) c.move(m);
+    const said = lessonThought({ theory: false, fenBefore: c.fen(), san: 'Nc3', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: ['e4', 'd5', 'exd5', 'Qxd5'], theirLast: 'Qxd5', reads: null, costCp: null }, newLessonVoice(), null);
+    expect(said).not.toMatch(/^[^.]*Qe4/);
+  });
+});
+
