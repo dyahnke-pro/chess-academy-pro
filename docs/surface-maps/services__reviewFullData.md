@@ -39,10 +39,10 @@
 ## Exports and every call site
 
 ### `positionalVerdictLine` (function) — 1 call site
-- `src/services/coachFeatureService.ts:2934`
+- `src/services/coachFeatureService.ts:2973`
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1172`
+- `src/services/coachFeatureService.ts:1180`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -60,8 +60,8 @@
 - `src/services/batch2Wiring.test.ts:55`
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
-- `src/services/coachFeatureService.ts:2272`
-- `src/services/danyaBench.measure.test.ts:408`
+- `src/services/coachFeatureService.ts:2283`
+- `src/services/danyaBench.measure.test.ts:414`
 - `src/services/exchangeIdeas.test.ts:236`
 - `src/services/forkTrick.test.ts:62`
 - `src/services/hangingLine.test.ts:73`

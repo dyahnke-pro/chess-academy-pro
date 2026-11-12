@@ -4,33 +4,35 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**272 lines · 2 exports · 4 importers · 1 tests · 0 audits**
+**278 lines · 2 exports · 5 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5852) — names `openingEquivalence`
 
 ## Who calls in
 
+- `src/services/moveThoughtFacts.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/orderReads.ts`
 - `src/services/orderTeaching.ts`
-- `src/services/reviewFullData.ts`
+- `src/services/reviewOpeningTheory.ts`
 
 ## Exports and every call site
 
 ### `flipFen` (function) — 1 call site
-- `src/services/orderComputers.test.ts:244`
+- `src/services/orderComputers.test.ts:249`
 
-### `openingEquivalence` (function) — 8 call sites
-- `src/services/orderComputers.test.ts:214`
-- `src/services/orderComputers.test.ts:222`
-- `src/services/orderComputers.test.ts:236`
-- `src/services/orderComputers.test.ts:240`
+### `openingEquivalence` (function) — 9 call sites
+- `src/services/moveThoughtFacts.ts:384`
+- `src/services/orderComputers.test.ts:219`
+- `src/services/orderComputers.test.ts:227`
 - `src/services/orderComputers.test.ts:241`
-- `src/services/orderReads.ts:68`
-- `src/services/orderTeaching.ts:115`
-- `src/services/reviewFullData.ts:1184`
+- `src/services/orderComputers.test.ts:245`
+- `src/services/orderComputers.test.ts:246`
+- `src/services/orderReads.ts:70`
+- `src/services/orderTeaching.ts:121`
+- `src/services/reviewOpeningTheory.ts:475`
 
 ## Tests
 

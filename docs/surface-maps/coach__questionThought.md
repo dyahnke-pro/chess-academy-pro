@@ -33,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/boardTurnAnswer.planOrder.test.ts:42`
 - `src/coach/boardTurnAnswer.planOrder.test.ts:43`
 - `src/coach/boardTurnAnswer.planOrder.test.ts:44`
-- `src/coach/boardTurnAnswer.ts:155`
+- `src/coach/boardTurnAnswer.ts:179`
 
 ### `QuestionContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -42,13 +42,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `answerQuestionThought` (function) — 7 call sites
-- `src/coach/questionThought.test.ts:31`
-- `src/coach/questionThought.test.ts:65`
-- `src/coach/questionThought.test.ts:68`
-- `src/coach/questionThought.test.ts:72`
-- `src/services/danyaBench.measure.test.ts:450`
-- `src/services/danyaBench.measure.test.ts:452`
-- `src/services/movePurposeEngine.ts:129`
+- `src/coach/questionThought.test.ts:33`
+- `src/coach/questionThought.test.ts:71`
+- `src/coach/questionThought.test.ts:74`
+- `src/coach/questionThought.test.ts:78`
+- `src/services/danyaBench.measure.test.ts:456`
+- `src/services/danyaBench.measure.test.ts:458`
+- `src/services/movePurposeEngine.ts:131`
 
 ## Tests
 

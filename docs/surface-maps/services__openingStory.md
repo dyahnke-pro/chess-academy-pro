@@ -4,11 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**655 lines · 8 exports · 8 importers · 8 tests · 0 audits**
+**678 lines · 9 exports · 9 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5846) — names `openingStory`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5855) — names `BEAT_GROUNDS`, `openingStory`
+- **The standard post-deploy ritual** (CLAUDE.md:6928) — names `openingStory`
 
 ## Who calls in
 
@@ -18,6 +19,7 @@
 - `src/services/learnBoardTeaching.ts`
 - `src/services/learnTurnDoor.thought.test.ts`
 - `src/services/learnTurnDoor.ts`
+- `src/services/moveThoughtFacts.ts`
 - `src/services/openingStory.test.ts`
 - `src/services/openingStoryWholeBeat.test.ts`
 
@@ -38,10 +40,14 @@
 ### `StoryGround` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `storyPlanAfter` (function) — 2 call sites
+- `src/services/moveThoughtFacts.ts:391`
+- `src/services/moveThoughtFacts.ts:456`
+
 ### `openingStoryAt` (function) — 14 call sites
-- `src/services/boardComputers.ts:402`
+- `src/services/boardComputers.ts:443`
 - `src/services/holeKey.test.ts:15`
-- `src/services/learnBoardTeaching.test.ts:207`
+- `src/services/learnBoardTeaching.test.ts:217`
 - `src/services/openingStory.test.ts:23`
 - `src/services/openingStory.test.ts:30`
 - `src/services/openingStory.test.ts:38`

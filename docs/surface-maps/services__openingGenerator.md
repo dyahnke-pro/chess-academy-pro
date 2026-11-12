@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4379 lines · 30 exports · 22 importers · 26 tests · 10 audits**
+**4382 lines · 31 exports · 22 importers · 25 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,9 +21,9 @@
 - **🔒🔒 A NOTE IS SELECTED BY POSITION, NEVER BY NAME — and every number below was re-measured 2026-08-04 (David, emphatic: *"All narrations need to be deterministically found and handed to llm in the package. There is no room for false narrations on this app! Ever!!"* and *"The problem is NOT the gate… Gates are back ups that should never fire. Fix the package or how the position is chosen."*).** (CLAUDE.md:4838) — names `openingGenerator`
 - **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4958) — names `noteArrowSourceAt`, `openingGenerator`
 - **🔒 WHICH NOTES THE KEPT SURFACES MAY SPEAK — split by anchoring (David 2026-08-26).** (CLAUDE.md:5048) — names `WALKTHROUGH_GEN_REV`, `noteArrowSourceAt`, `openingGenerator`
-- **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:6583) — names `generateOpening`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6829) — names `openingGenerator`
-- **The standard post-deploy ritual** (CLAUDE.md:6968) — names `WALKTHROUGH_GEN_REV`, `openingGenerator`
+- **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:6590) — names `generateOpening`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6836) — names `openingGenerator`
+- **The standard post-deploy ritual** (CLAUDE.md:6976) — names `WALKTHROUGH_GEN_REV`, `openingGenerator`
 
 ## Who calls in
 
@@ -90,7 +90,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:6964`
 - `src/components/Coach/CoachTeachPage.tsx:7038`
 - `src/components/Coach/CoachTeachPage.tsx:7771`
-- `src/components/Coach/CoachTeachPage.tsx:13634`
+- `src/components/Coach/CoachTeachPage.tsx:13648`
 - `src/services/lessonCacheKey.test.ts:60`
 - `src/services/lessonCacheKey.test.ts:65`
 - `src/services/lessonCacheKey.test.ts:74`
@@ -156,7 +156,7 @@
 ### `MAX_GREEN_ARROWS_PER_PLY` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `groundedSegmentArrows` (function) — 16 call sites
+### `groundedSegmentArrows` (function) — 17 call sites
 - `src/services/groundedArrows.test.ts:41`
 - `src/services/groundedArrows.test.ts:54`
 - `src/services/groundedArrows.test.ts:63`
@@ -165,14 +165,18 @@
 - `src/services/groundedArrows.test.ts:84`
 - `src/services/groundedSegmentArrows.cap.test.ts:27`
 - `src/services/groundedSegmentArrows.cap.test.ts:43`
-- `src/services/groundedSegmentArrows.cap.test.ts:53`
-- `src/services/groundedSegmentArrows.cap.test.ts:63`
+- `src/services/groundedSegmentArrows.cap.test.ts:54`
+- `src/services/groundedSegmentArrows.cap.test.ts:64`
+- `src/services/groundedSegmentArrows.cap.test.ts:74`
 - `src/services/segmentReveal.test.ts:29`
 - `src/services/segmentReveal.test.ts:43`
 - `src/services/segmentReveal.test.ts:52`
 - `src/services/segmentReveal.test.ts:62`
 - `src/services/segmentReveal.test.ts:69`
 - `src/services/segmentReveal.test.ts:80`
+
+### `beatSegments` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `splitSegmentBySentence` (function) — 6 call sites
 - `src/services/segmentReveal.test.ts:30`
@@ -226,7 +230,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:6919`
 - `src/components/Coach/CoachTeachPage.tsx:7032`
 - `src/components/Coach/CoachTeachPage.tsx:7766`
-- `src/components/Coach/CoachTeachPage.tsx:13628`
+- `src/components/Coach/CoachTeachPage.tsx:13642`
 - `src/components/Openings/OpeningDetailPage.wiring.test.ts:91`
 - `src/services/generatedLesson.test.ts:5`
 - `src/services/generatedLesson.ts:43`
@@ -240,7 +244,7 @@
 - `src/services/openingGenerator.test.ts:934`
 - `src/services/openingGenerator.test.ts:937`
 - `src/services/walkthroughGenRev.gate.test.ts:33`
-- `src/test/marksSweep.gate.test.ts:212`
+- `src/test/marksSweep.gate.test.ts:237`
 
 ### `buildLineFactsBlock` (function) — 2 call sites
 - `src/services/computePunishFacts.test.ts:41`
@@ -281,7 +285,6 @@
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts`
 - `src/services/cachedTreeSweep.test.ts`
 - `src/services/computePunishFacts.test.ts`
-- `src/services/gemCrushLines.computed.test.ts`
 - `src/services/generatedLesson.test.ts`
 - `src/services/groundedArrows.test.ts`
 - `src/services/groundedSegmentArrows.cap.test.ts`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**526 lines · 2 exports · 10 importers · 7 tests · 0 audits**
+**545 lines · 2 exports · 10 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -47,7 +47,7 @@
 - `src/services/narrationArrows.test.ts:75`
 - `src/services/narrationArrows.test.ts:83`
 - `src/services/narrationArrows.test.ts:89`
-- `src/services/openingGenerator.ts:1309`
+- `src/services/openingGenerator.ts:1316`
 - `src/test/watchArrowSides.gate.test.ts:130`
 - `src/test/watchArrowSides.gate.test.ts:168`
 
