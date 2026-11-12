@@ -79,4 +79,9 @@
 // never restates the move, its faults in the conditional ("on e7 it would
 // block …"); the squares a piece is kept off are named; a passer's distance
 // in words (prod Learn + Review audits 2026-11-11).
-export const WALKTHROUGH_GEN_REV = '2026-11-11-voice10';
+// 2026-11-12-exchange-end — task 172, the fact-sheet writers' log: a capture's
+// claims (material, structure, what the piece aims at) are read on the board
+// its exchange ends on; a pin is the one pin test's; "prepares X" needs X in
+// the engine's own line; a held bishop check must be usable; a file their pawn
+// still stands on is half-open; a pawn they can simply take kicks nothing.
+export const WALKTHROUGH_GEN_REV = '2026-11-12-exchange-end';
