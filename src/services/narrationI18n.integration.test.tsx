@@ -54,7 +54,9 @@ describe('narrationI18n end-to-end (real pack, real hook, real store)', () => {
     const firstSpanish = (esPack.beats as Record<string, { say: string }>)[VIENNA_GAME_LESSON.beats[0].id].say;
     expect(result.current[0].say).toBe(firstSpanish);
     // The Spanish prose is genuinely Spanish (a marker word the English never has).
-    expect(result.current[0].say.toLowerCase()).toContain('ajedrez');
+    // It reads as Spanish (the pack is regenerated when the English course is,
+    // so no one word of it is fixed).
+    expect(result.current[0].say.toLowerCase()).toMatch(/\b(el|la|tu|del|con|para)\b/);
 
     // EVERY beat: localized to Spanish AND every board square identical to the
     // English source (the G3 board-accuracy guard — the picture can't drift).
