@@ -10,6 +10,7 @@
 import { Chess } from 'chess.js';
 import { CAPTURE_VALUE } from './pieceValues';
 import { captureNet } from './material';
+import { seatCp } from './winChance';
 
 interface InBetween {
   /** The capture that waits, as SAN on the board it is played from now. */
@@ -56,11 +57,8 @@ export type FirstIsBest =
  *  mover's view) and still "wait" — the naming bar (`settleReads.NAME_CP`). */
 const WAIT_CP = 30;
 
-const MATE_CP = 100_000;
-const moverCp = (r: FanRead, mover: 'w' | 'b'): number => {
-  const v = r.mate !== null && r.mate !== undefined ? (r.mate > 0 ? MATE_CP : -MATE_CP) : r.evaluation;
-  return mover === 'w' ? v : -v;
-};
+// A read's value from the mover's seat: the one win-chance leaf's fold.
+const moverCp = (r: FanRead, mover: 'w' | 'b'): number => seatCp(r, mover);
 
 /** The in-between move at `fen` along the line `pv` (UCI), or null.
  *  `firstIsBest` is REQUIRED: whether `pv` is the engine's best line, or the

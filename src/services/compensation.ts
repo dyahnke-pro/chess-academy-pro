@@ -9,6 +9,7 @@
 // PURE: the board, the engine's number and chess.js. Dual use: the same
 // assessment a lesson explains is the one a student's gambit is judged by.
 import { Chess, type Color } from 'chess.js';
+import { developedMinorCount } from './development';
 import { quietBalance } from './material';
 import { evalBand, evalBandWords } from './evalBand';
 
@@ -24,17 +25,6 @@ export interface Assessment {
   text: string;
 }
 
-const HOME: Record<Color, string[]> = { w: ['b1', 'g1', 'c1', 'f1'], b: ['b8', 'g8', 'c8', 'f8'] };
-
-function minorsOut(board: Chess, c: Color): number {
-  let out = 0;
-  for (const row of board.board()) for (const p of row) {
-    if (!p || p.color !== c || (p.type !== 'n' && p.type !== 'b')) continue;
-    if (!HOME[c].includes(p.square)) out += 1;
-  }
-  // A minor taken off the board is not "developed": count against what is left.
-  return out;
-}
 const kingOf = (board: Chess, c: Color): string | null => board.board().flat().find((p) => p && p.type === 'k' && p.color === c)?.square ?? null;
 const castled = (sq: string | null, c: Color): boolean => !!sq && sq[1] === (c === 'w' ? '1' : '8') && 'gcb'.includes(sq[0]);
 const middle = (sq: string | null): boolean => !!sq && 'de'.includes(sq[0]);
@@ -65,7 +55,7 @@ export function compensation(fenAfter: string, student: Color, studentCp: number
   if (!comp || down < 1) return null;
   const other: Color = comp === 'w' ? 'b' : 'w';
   const reasons: string[] = []; const squares: string[] = [];
-  const lead = minorsOut(board, comp) - minorsOut(board, other);
+  const lead = developedMinorCount(board, comp) - developedMinorCount(board, other);
   if (lead >= 2) reasons.push(`${comp === student ? "you're" : "they're"} ${NUM[lead] ?? lead} pieces ahead in development`);
   const ok = kingOf(board, other);
   if (middle(ok) && castled(kingOf(board, comp), comp)) { reasons.push(`${comp === student ? 'their' : 'your'} king is still in the middle`); if (ok) squares.push(ok); }
