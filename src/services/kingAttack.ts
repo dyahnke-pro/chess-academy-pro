@@ -48,7 +48,7 @@ const HOP_PLIES = 6;
 function hopsInLines(at: string, lines: ReadonlyArray<readonly string[]>): Set<string> {
   const out = new Set<string>();
   for (const l of lines) {
-    let sq = at;
+    const sq = at;
     for (let k = 0; k < Math.min(l.length, HOP_PLIES); k += 1) {
       const u = l[k];
       if (k % 2 === 0) { if (u.slice(2, 4) === sq) break; continue; } // their move took it

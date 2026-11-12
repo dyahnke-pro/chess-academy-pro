@@ -8,7 +8,7 @@
 //
 // PURE: the board, the engine's number and chess.js. Dual use: the same
 // assessment a lesson explains is the one a student's gambit is judged by.
-import { Chess, type Color, type Square } from 'chess.js';
+import { Chess, type Color } from 'chess.js';
 import { quietBalance } from './material';
 import { evalBand, evalBandWords } from './evalBand';
 
