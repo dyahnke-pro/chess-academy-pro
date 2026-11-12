@@ -54,6 +54,23 @@ const valueFor = (l: AnalysisLine | undefined, pov: 'w' | 'b'): number | null =>
 const moveOf = (uci: string): { from: string; to: string; promotion?: string } =>
   ({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined });
 
+/** What `winner` nets (pawns) from the captures of the line that land on
+ *  `square` alone — the trade there, counted on its own. */
+function netOnSquare(fen: string, sans: readonly string[], square: string, winner: 'w' | 'b'): number {
+  let net = 0;
+  try {
+    const c = new Chess(fen);
+    for (const s of sans) {
+      const m = c.move(s);
+      if (!m) break;
+      if (m.to !== square || !m.captured) continue;
+      const v = MATERIAL_VALUE[m.captured] ?? 0;
+      net += m.color === winner ? v : -v;
+    }
+  } catch { /* the playable prefix is what is counted */ }
+  return net;
+}
+
 /** The student's next move in the engine's line after X: `after[0].moves[1]`. */
 export function followUpOf(after: readonly AnalysisLine[]): string | null {
   const pv = after[0]?.moves ?? [];
@@ -133,8 +150,14 @@ export function moveOrder(
     const proof = sans.length ? proofCut(yFen, sans, opp) : null;
     const net = proof && !proof.mate && proof.ledger ? proof.ledger.netPawns : 0;
     const piece = NAME[r.captured] ?? 'piece';
-    if (net >= (MATERIAL_VALUE[r.captured] ?? 0)) { cost = `and the ${piece} on ${r.to} ${DROPPED}`; drops = true; }
-    else if (net > 0) cost = `and it would have cost material on ${r.to}`;
+    // THE SQUARE IS NAMED ONLY WHERE THE MATERIAL GOES (Dutch …d4: "…Ng4 at
+    // once would have met Nxd7, and it would have cost material on d7" — Nxd7
+    // Qxd7 is a bishop for a knight; the line's pawn falls on d5 later). The
+    // proved line's captures ON R's square, counted on their own, say whether
+    // the cost is there; when the gain lands elsewhere the cost is the line's.
+    const onSquare = proof ? netOnSquare(yFen, proof.sans, r.to, opp) : 0;
+    if (net >= (MATERIAL_VALUE[r.captured] ?? 0) && onSquare >= (MATERIAL_VALUE[r.captured] ?? 0)) { cost = `and the ${piece} on ${r.to} ${DROPPED}`; drops = true; }
+    else if (net > 0) cost = onSquare > 0 ? `and it would have cost material on ${r.to}` : 'and the line after it would have cost material';
   }
   if (!cost) return null;
 

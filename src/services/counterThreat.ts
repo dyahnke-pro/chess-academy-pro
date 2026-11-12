@@ -81,7 +81,9 @@ export function counterThreat(fenBefore: string, san: string): CounterThreat | n
 export function counterThreatLine(c: CounterThreat, byStudent: boolean): string {
   const left = NAME[c.left.piece] ?? 'piece';
   const hit = NAME[c.hit.piece] ?? 'piece';
-  const idea = "That's danger levels: answer a threat with a threat to something worth more.";
+  // The idea in the coach's own words — never a player's catchphrase ("danger
+  // levels" is a streamer's phrase; Watch-course writers 2026-11-12 cut it).
+  const idea = 'Answer a threat with a threat to something worth more.';
   if (byStudent) {
     return `You left your ${left} on ${c.left.square} and went after their ${hit} on ${c.hit.square} instead — the bigger threat comes first. ${idea}`;
   }

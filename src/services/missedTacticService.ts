@@ -676,7 +676,7 @@ function nameLine(
   // 1c. THE IN-BETWEEN MOVE (A-plan P7): the best move is a forcing move
   // played INSTEAD of a capture that is still there later in the line — the
   // same detector Learn teaches it from ("not yet — first this").
-  if (pvUci && pvUci.length >= 3 && pvUci[0] === bestMoveUci && inBetweenMove(fen, pvUci)) return named('zwischenzug');
+  if (pvUci && pvUci.length >= 3 && pvUci[0] === bestMoveUci && inBetweenMove(fen, pvUci, 'best')) return named('zwischenzug');
 
 
   // 2. A capture of a piece that had no defender — board-certain.

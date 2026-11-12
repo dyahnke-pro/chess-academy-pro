@@ -203,8 +203,21 @@ export function lineDiff(fen: string, uciLine: readonly string[], student: Color
   const board = new Chess(fen);
   const start = snap(board);
   const sans: string[] = [];
-  for (const p of played.slice(0, k)) { board.move(p.san); sans.push(p.san); }
+  const colors: Color[] = [];
+  const snaps: Snapshot[] = [start];
+  for (const p of played.slice(0, k)) { const m = board.move(p.san); sans.push(p.san); colors.push(m.color); snaps.push(snap(board)); }
   const end = snap(board);
+  // WHICH MOVE OF THE LINE MADE THE PASSER (Watch writers 2026-11-12, Scotch
+  // e5: "you get a passed pawn (e5)" — it is passed only once …f5 is played;
+  // the f7 pawn stops it until then). A passer the line's first move did not
+  // make is said with the move that made it: the first one from which a passed
+  // pawn of that side stands on the file to the line's end.
+  const madeBy = (sq: string, c: Color): string | null => {
+    const f = fileOf(sq);
+    let j = snaps.length - 1;
+    while (j > 0 && pawnFeatures(snaps[j - 1], c).passed.some((x) => fileOf(x) === f)) j -= 1;
+    return j > 1 ? `${colors[j - 1] === 'b' ? '…' : ''}${sans[j - 1]}` : null;
+  };
   const them: Color = student === 'w' ? 'b' : 'w';
   const facts: string[] = [];
   const bal = (s: Snapshot): number => s.material[student] - s.material[them];
@@ -222,7 +235,7 @@ export function lineDiff(fen: string, uciLine: readonly string[], student: Color
     const d = newOf(a.doubled, b.doubled); const i = newOf(a.isolated, b.isolated); const p = newOf(a.passed, b.passed);
     if (d.length) facts.push(`${who} get doubled pawns (${d.join(', ')})`);
     if (i.length) facts.push(`${who} get an isolated pawn (${i.join(', ')})`);
-    if (p.length) facts.push(`${who} get a passed pawn (${p.join(', ')})`);
+    if (p.length) facts.push(`${who} get a passed pawn (${p.map((x) => { const by = madeBy(x, c); return by ? `${x}, once ${by} is played` : x; }).join('; ')})`);
   }
   const pair = (s: Snapshot, c: Color): boolean => s.bishops[c] >= 2;
   if (pair(start, student) && !pair(end, student)) facts.push('you lose the bishop pair');

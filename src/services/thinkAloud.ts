@@ -201,7 +201,7 @@ export function notYet(fen: string, best: Candidate): { text: string; capture: s
   // ONE DETECTOR (A-plan P7): the in-between move, read by `inBetweenMove`,
   // which the tactic record reads too.
   // `best.pv` is the engine's line in UCI, its first move the best move.
-  const ib = inBetweenMove(fen, [...best.pv]);
+  const ib = inBetweenMove(fen, [...best.pv], 'best');
   if (!ib) return null;
   return {
     capture: ib.capture,

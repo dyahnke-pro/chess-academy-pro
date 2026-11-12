@@ -74,13 +74,21 @@ describe('the lesson says the move\'s real idea (WO-ONE-COACH-01)', () => {
 describe('the lesson says "not yet — first this"', () => {
   it('a check first, the bishop on e6 taken after: the capture is not going anywhere', () => {
     const fen = '7k/ppp2pp1/4b3/8/8/1B6/PPP2PPP/3Q2K1 w - - 0 1';
-    const text = lessonThought({ theory: true, fenBefore: fen, san: 'Qh5+', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Kg8', 'Bxe6', 'fxe6'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
+    // "Can wait" is an engine claim: the reads put the check ahead of taking now.
+    const reads = { before: [{ rank: 1, evaluation: 300, mate: null, moves: ['d1h5', 'h8g8', 'b3e6', 'f7e6'] }, { rank: 2, evaluation: 0, mate: null, moves: ['b3e6', 'f7e6'] }], passBefore: [], after: [], passAfter: [] };
+    const text = lessonThought({ theory: true, fenBefore: fen, san: 'Qh5+', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Kg8', 'Bxe6', 'fxe6'], history: [], theirLast: null, reads, costCp: null }, newLessonVoice(), null);
     expect(text).toMatch(/Taking on e6 can wait — it isn't going anywhere\. The check comes first, and you take after\./);
   });
   it('their in-between move is said from your seat', () => {
     const fen = '3q2k1/ppp2ppp/1b6/8/8/4B3/PPP2PP1/7K b - - 0 1';
-    const text = lessonThought({ theory: true, fenBefore: fen, san: 'Qh4+', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['Kg1', 'Bxe3', 'fxe3'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
+    const reads = { before: [{ rank: 1, evaluation: -300, mate: null, moves: ['d8h4', 'h1g1', 'b6e3', 'f2e3'] }, { rank: 2, evaluation: 0, mate: null, moves: ['b6e3', 'f2e3'] }], passBefore: [], after: [], passAfter: [] };
+    const text = lessonThought({ theory: true, fenBefore: fen, san: 'Qh4+', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['Kg1', 'Bxe3', 'fxe3'], history: [], theirLast: null, reads, costCp: null }, newLessonVoice(), null);
     expect(text).toMatch(/They don't take on e3 yet — it isn't going anywhere\. The check comes first, and they take after\./);
+  });
+  it('no reads, no "can wait": the engine was never asked whether taking now is better (KG main Nc3)', () => {
+    const fen = '7k/ppp2pp1/4b3/8/8/1B6/PPP2PPP/3Q2K1 w - - 0 1';
+    const text = lessonThought({ theory: true, fenBefore: fen, san: 'Qh5+', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Kg8', 'Bxe6', 'fxe6'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
+    expect(text).not.toMatch(/can wait/);
   });
   it('a quiet move that captures nothing later says no "not yet"', () => {
     const fen = '7k/ppp2pp1/4b3/8/8/1B6/PPP2PPP/3Q2K1 w - - 0 1';

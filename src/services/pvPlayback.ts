@@ -444,6 +444,14 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
     };
     const landed = detectTactics(fenAfter).tactics
       .filter((x) => x.type !== 'none')
+      // The board's `discovery` is a discovered attack IN WAITING (a piece of
+      // the mover's standing in front of its own slider): the move SET IT UP,
+      // it unveiled nothing. A discovery that lands is a property of the move,
+      // read by the move-based scan below (Two Knights 5…Na5 dxc6 "lands a
+      // discovered attack" with the pawn now in front of the b5 bishop;
+      // Cochrane …d5 Nxd5 "wins a pawn — a discovered attack" with the knight
+      // stepping onto its own bishop's diagonal).
+      .filter((x) => x.type !== 'discovery')
       .filter((x) => !beforeSigs.has(sig(x)))
       .filter((x) => !((x.type === 'pin' || x.type === 'skewer') && !isSlider))
       // The MOVED piece must be the tactic's AGENT (the maker of the fork/pin/

@@ -45,6 +45,22 @@ describe('givesUp — what a pawn move gives up for good', () => {
 });
 
 describe('lineDiff — where a line leads', () => {
+  it('a passer the line\'s first move did not make is said with the move that made it (Scotch main e5: …f5 makes it)', () => {
+    // Before …f5, the f7 pawn stands in front of e5's neighbour file: e5 is
+    // not passed. The sheet said "you get a passed pawn (e5)" as if e5 did it.
+    const fen = '2br1rk1/2p2ppp/p1n2q2/1p6/2p1PP2/2P5/PPBNQ1PP/R4RK1 w - - 0 17';
+    const d = lineDiff(fen, ['e4e5', 'f6h4', 'd2e4', 'c6e7', 'e4g3', 'f7f5', 'e2f2', 'h4h6'], 'w');
+    expect(d?.facts).toContain('you get a passed pawn (e5, once …f5 is played)');
+    expect(d?.facts).not.toContain('you get a passed pawn (e5)');
+  });
+
+  it('NEGATIVE CONTROL: a passer the first move makes carries no maker', () => {
+    // 1.e4 d5 2.exd5 — a white pawn on d5 with the c- and e-pawns still home
+    // is not passed; take the c- and e-pawns away and exd5 passes it at once.
+    const d = lineDiff('4k3/8/8/3p4/4P3/8/8/4K3 w - - 0 1', ['e4d5', 'e8d7'], 'w');
+    expect(d?.facts).toContain('you get a passed pawn (d5)');
+  });
+
   it('the Scandinavian exchange: a pawn each, the e-file half-open for White, the d-file for Black', () => {
     const d = lineDiff(new Chess().fen(), ['e2e4', 'd7d5', 'e4d5', 'd8d5'], 'w');
     expect(d?.sans).toEqual(['e4', 'd5', 'exd5', 'Qxd5']);

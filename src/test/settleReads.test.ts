@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { agreedVerdict, settleReads, type ReadFn, type SettledRead } from './settleReads';
+import { agreedVerdict, favouriteCost, settleReads, type ReadFn, type SettledRead } from './settleReads';
 import type { NativeLine } from './nativeStockfish';
 
 // The Vienna Copycat board, Black to move after 4.Qg4: the depth-16 reads the
@@ -82,5 +82,32 @@ describe('agreedVerdict — a better move is named only when two reads agree', (
     const mates = (uci: string): { fen: string; mate: boolean; stale: boolean } => ({ fen: `child-${uci} b - - 0 6`, mate: uci === 'e2e3', stale: false });
     const v = await agreedVerdict(deeper({ d4d5: -40 }), W, 'd4d5', settled, mates);
     expect(v.kind).toBe('prefers');
+  });
+});
+
+// The club favourite's cost (the sheet's "A COMMON MISTAKE" line), White to
+// move: the line plays d4, the club favourite is Nxg4 (the Kieseritzky).
+describe('favouriteCost — the club favourite is measured against the line\'s move, by two reads', () => {
+  const W = 'rnbqkb1r/pppp1p1p/5n2/4N3/4PppP/8/PPPP2P1/RNBQKB1R w KQkq - 2 5';
+  const childOf = (uci: string): { fen: string; mate: boolean; stale: boolean } => ({ fen: `child-${uci} b - - 0 5`, mate: false, stale: false });
+  const reads = (own: Record<string, number>, deep: Record<string, number>): ReadFn => async (fen, opts) => {
+    if (fen.startsWith('child-')) return [line(deep[fen.split(' ')[0].replace('child-', '')] ?? 0, 'x')];
+    return [line(own[opts.searchmoves ?? ''] ?? 0, opts.searchmoves ?? 'x')];
+  };
+  const settled: SettledRead = { top: [line(40, 'e5g4'), line(20, 'd2d4')], played: line(20, 'd2d4'), cost: 0.2, reread: true };
+
+  it('a favourite the engine ranks above the line\'s move costs nothing (the old line said 0.90 against the top read)', async () => {
+    const c = await favouriteCost(reads({ e5g4: 40 }, { d2d4: 15, e5g4: 35 }), W, 'd2d4', 'e5g4', settled, childOf);
+    expect(c?.cost).toBe(0);
+  });
+
+  it('a favourite worse in both reads costs the smaller of the two', async () => {
+    const c = await favouriteCost(reads({ e5g4: -60 }, { d2d4: 15, e5g4: -50 }), W, 'd2d4', 'e5g4', settled, childOf);
+    expect(c).toMatchObject({ now: 80, deeper: 65, cost: 65 });
+  });
+
+  it('a cost the deeper read does not confirm is no cost', async () => {
+    const c = await favouriteCost(reads({ e5g4: -60 }, { d2d4: 15, e5g4: 20 }), W, 'd2d4', 'e5g4', settled, childOf);
+    expect(c?.cost).toBe(0);
   });
 });

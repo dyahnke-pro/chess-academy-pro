@@ -706,7 +706,10 @@ export function computeMoveFundamentals(
         ...(fianchetto ? { names: { from: freed, to: fianchetto } } : {}),
       });
     }
-    const guards = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s));
+    // A square an ENEMY piece stands on is hit, not guarded (Petrov …d6 was
+    // "supports the center, guarding e5" with their knight on e5 — the kick
+    // read above already says what the pawn does to it).
+    const guards = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s) && after.get(s as Square)?.color !== (mover === 'w' ? 'b' : 'w'));
     if (guards.length > 0) {
       const g = andList(guards); // no slice (G4.5) — CORE_CENTER is four squares
       out.push({

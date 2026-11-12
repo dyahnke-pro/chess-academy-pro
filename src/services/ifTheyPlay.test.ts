@@ -79,8 +79,10 @@ describe('the tree', () => {
     const student = moverOf(r.fen);
     const f = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'g7h6', tense: 'past', liveBoard: null });
     // The recapture on h6 they did play is the line; the trade it would have
-    // been is not said. Both captures on d4 lose a bishop for a pawn.
-    expect(f[0]?.text, 'a sentence a branch, never a spoken semicolon').toBe('Had they taken on d4 with the bishop, Qxd4 would have won a bishop for a pawn — a discovered attack: you play Qxd4, they answer Qxd4+ and you play Rxd4. If they had taken on d4 with the queen, Qxd4 would have won a bishop for a pawn: you play Qxd4, they answer Bxd4+ and you play Rxd4.');
+    // been is not said. Both captures on d4 lose a bishop for a pawn. Qxd4
+    // unveils nothing (the rook on d1 stands behind its own queen): no
+    // "discovered attack" (false facts class C, 2026-11-12).
+    expect(f[0]?.text, 'a sentence a branch, never a spoken semicolon').toBe('Had they taken on d4 with the bishop, Qxd4 would have won a bishop for a pawn: you play Qxd4, they answer Qxd4+ and you play Rxd4. If they had taken on d4 with the queen, Qxd4 would have won a bishop for a pawn: you play Qxd4, they answer Bxd4+ and you play Rxd4.');
   });
 
   it('the past is said more than one way across a game (prod Review audit 2026-11-11: "if they had taken on SQ, … would have won …" three times)', () => {

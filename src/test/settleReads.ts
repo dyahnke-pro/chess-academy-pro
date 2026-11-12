@@ -120,3 +120,31 @@ export async function agreedVerdict(
   }
   return agreed ? { kind: 'prefers', ...agreed } : { kind: 'unsettled', ...best };
 }
+
+/** THE CLUB FAVOURITE'S COST, READ THE WAY THE VERDICT IS (Watch writers
+ *  2026-11-12, King's Gambit: the Kieseritzky d4 sheet said the club
+ *  favourite Nxg4 "costs 0.90" while its own engine list ranked Nxg4 above
+ *  d4). The old line measured the favourite against the top-3 read's best
+ *  move, by one read. The cost of a move instead of the line's move is what
+ *  it gives up against THAT move: both read on their own now, and the boards
+ *  after each one move deeper — the two reads a better move is named by. A
+ *  favourite either read puts level or ahead costs nothing. Mover's view, cp. */
+export async function favouriteCost(
+  read: ReadFn,
+  fen: string,
+  playedUci: string,
+  favUci: string,
+  settled: SettledRead,
+  childOf: (uci: string) => { fen: string; mate: boolean; stale: boolean } | null,
+): Promise<{ now: number; deeper: number; cost: number; line: NativeLine } | null> {
+  const sign = fen.split(' ')[1] === 'b' ? -1 : 1;
+  const own = (await read(fen, { multipv: 1, searchmoves: favUci }))[0];
+  if (!own || !settled.played) return null;
+  const now = sign * settled.played.cp - sign * own.cp;
+  const playedChild = childOf(playedUci);
+  const favChild = childOf(favUci);
+  const p = playedChild ? await deeperValue(read, playedChild, sign) : null;
+  const f = favChild ? await deeperValue(read, favChild, sign) : null;
+  const deeper = p !== null && f !== null ? p - f : 0;
+  return { now, deeper, cost: Math.max(0, Math.min(now, deeper)), line: own };
+}

@@ -308,7 +308,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // same lesson. The lesson said this idea on 0 of the 527 notes where he says
   // it (the Danya bench, 2026-10-30).
   if (i.line && i.line.length >= 2) {
-    const ib = inBetweenMove(i.fenBefore, pvSanToUci(i.fenBefore, [i.san, ...i.line]));
+    const ib = inBetweenMove(i.fenBefore, pvSanToUci(i.fenBefore, [i.san, ...i.line]), { reads: i.reads?.before ?? [] });
     if (ib) {
       const first = ib.check ? 'The check' : 'The threat';
       const text = mine

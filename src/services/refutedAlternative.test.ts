@@ -62,6 +62,9 @@ describe('refutedAlternative', () => {
           { rank: 2, moves: ['g8f6', 'h5f7'], evaluation: 9999, mate: 1 },
         ],
       },
+      // One move deeper (the cost's second read): the board after each.
+      [after(FEN, ['g7g6'])]: { evaluation: 30, topLines: [{ rank: 1, moves: ['h5f3'], evaluation: 30, mate: null }] },
+      [after(FEN, ['g8f6'])]: { evaluation: 9999, topLines: [{ rank: 1, moves: ['h5f7'], evaluation: 9999, mate: 1 }] },
     });
     const r = await refutedAlternative({ fenBefore: FEN, taughtSan: 'g6', candidates: candidatesFromMasters(MASTERS), studentColor: 'black', engine });
     expect(r).not.toBeNull();
@@ -104,6 +107,8 @@ describe('refutedAlternative', () => {
       },
       [after(FEN, ['g7g6', 'h5f3'])]: { evaluation: 30 },
       [after(FEN, ['d8e7', 'h5f3'])]: { evaluation: 130 },
+      [after(FEN, ['g7g6'])]: { evaluation: 30, topLines: [{ rank: 1, moves: ['h5f3'], evaluation: 30, mate: null }] },
+      [after(FEN, ['d8e7'])]: { evaluation: 130, topLines: [{ rank: 1, moves: ['h5f3'], evaluation: 130, mate: null }] },
     });
     const cands: AlternativeCandidate[] = [{ san: 'g6', games: 400, pct: 80 }, { san: 'Qe7', games: 100, pct: 20 }];
     const r = await refutedAlternative({ fenBefore: FEN, taughtSan: 'g6', candidates: cands, studentColor: 'black', engine });
@@ -111,6 +116,30 @@ describe('refutedAlternative', () => {
     expect(r!.concept).toBeNull();
     expect(r!.text).toMatch(/about a point/);
     expect(r!.text).not.toMatch(/fork|pin|mate/i);
+  });
+
+  it('the cost is the SETTLED one: the smaller of the read now and one move deeper (KG Classical: O-O was "about a point", it reads 0.42)', async () => {
+    const lines = {
+      [FEN]: {
+        evaluation: 30,
+        topLines: [
+          { rank: 1, moves: ['g7g6', 'h5f3'], evaluation: 30, mate: null },
+          { rank: 2, moves: ['d8e7', 'h5f3'], evaluation: 130, mate: null }, // 100cp now
+        ],
+      },
+      [after(FEN, ['g7g6', 'h5f3'])]: { evaluation: 30 },
+      [after(FEN, ['d8e7', 'h5f3'])]: { evaluation: 130 },
+      [after(FEN, ['g7g6'])]: { evaluation: 30, topLines: [{ rank: 1, moves: ['h5f3'], evaluation: 30, mate: null }] },
+    };
+    const cands: AlternativeCandidate[] = [{ san: 'g6', games: 400, pct: 80 }, { san: 'Qe7', games: 100, pct: 20 }];
+    // One move deeper Qe7 costs 0.62: the cost said is half a point, not a point.
+    const half = cannedEngine({ ...lines, [after(FEN, ['d8e7'])]: { evaluation: 92, topLines: [{ rank: 1, moves: ['h5f3'], evaluation: 92, mate: null }] } });
+    const r = await refutedAlternative({ fenBefore: FEN, taughtSan: 'g6', candidates: cands, studentColor: 'black', engine: half });
+    expect(r?.costCp).toBe(62);
+    expect(r!.text).toMatch(/about half a point/);
+    // One move deeper Qe7 costs 0.20: no settled cost, nothing said.
+    const flat = cannedEngine({ ...lines, [after(FEN, ['d8e7'])]: { evaluation: 50, topLines: [{ rank: 1, moves: ['h5f3'], evaluation: 50, mate: null }] } });
+    expect(await refutedAlternative({ fenBefore: FEN, taughtSan: 'g6', candidates: cands, studentColor: 'black', engine: flat })).toBeNull();
   });
 
   it('move one: the cost is ONE search, never two graded differently (oct3a review walk)', async () => {

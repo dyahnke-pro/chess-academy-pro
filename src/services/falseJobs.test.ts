@@ -38,17 +38,17 @@ describe('the move’s job', () => {
 describe('the in-between move', () => {
   it('"taking on d5 can wait" is not said of a capture that loses the knight where it stands (Benko …Qa5+)', () => {
     const fen = 'rnbqkb1r/3ppppp/5n2/1BpP4/8/4P3/PP3PPP/RNBQK1NR b KQkq - 0 6';
-    expect(inBetweenMove(fen, ['d8a5', 'b1c3', 'c8b7', 'c1d2', 'f6d5'])).toBeNull();
+    expect(inBetweenMove(fen, ['d8a5', 'b1c3', 'c8b7', 'c1d2', 'f6d5'], 'best')).toBeNull();
   });
 
   it('a bishop stepping back along its line makes no new threat (Bh4 after …h6)', () => {
     const fen = 'rnbq1rk1/ppp1bpp1/4pn1p/3p2B1/2PP4/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 7';
-    expect(inBetweenMove(fen, ['g5h4', 'b7b6', 'c4d5', 'e6d5'])).toBeNull();
+    expect(inBetweenMove(fen, ['g5h4', 'b7b6', 'c4d5', 'e6d5'], 'best')).toBeNull();
   });
 
   it('a check first, then a capture that was sound all along, is still one', () => {
     // White can take the loose pawn on a7 at once, or check first and take after.
-    const ib = inBetweenMove('4k3/p7/8/8/8/8/8/R3K2R w - - 0 1', ['h1h8', 'e8d7', 'a1a7']);
+    const ib = inBetweenMove('4k3/p7/8/8/8/8/8/R3K2R w - - 0 1', ['h1h8', 'e8d7', 'a1a7'], 'best');
     expect(ib?.captureSquare).toBe('a7');
     expect(ib?.check).toBe(true);
   });

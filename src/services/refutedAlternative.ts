@@ -24,6 +24,7 @@ import { Chess } from 'chess.js';
 import { computePvLine, type PvEngine, type PvLine, type MoveScorer } from './pvPlayback';
 import { conceptForLine } from './conceptEngine';
 import { stemKeyOf } from '../utils/rotateStem';
+import { seatCp } from './winChance';
 import { criticalityThresholds } from './criticalityScan';
 import { stockfishEngine } from './stockfishEngine';
 import { lineTrust } from './lineTrust';
@@ -76,6 +77,26 @@ export const BACKGROUND_SCORER: PvEngine & MoveScorer = {
   },
 };
 
+/** What `alt` gives up against `taught` ONE MOVE DEEPER: the board after each,
+ *  read on its own, from the mover's seat (cp). Null when either board could
+ *  not be read. A mated board is the most a move can win; a drawn one is 0. */
+async function deeperGapCp(engine: PvEngine, fen: string, taught: string, alt: string, mover: 'w' | 'b', depth: number): Promise<number | null> {
+  const childValue = async (uci: string): Promise<number | null> => {
+    const c = new Chess(fen);
+    try { if (!c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined })) return null; } catch { return null; }
+    if (c.isCheckmate()) return 100_000;
+    if (c.isGameOver()) return 0;
+    const r = await engine.analyzePosition(c.fen(), depth);
+    const top = r.topLines?.[0];
+    if (!top) return null;
+    return seatCp({ evaluation: top.evaluation, mate: top.mate ?? null }, mover);
+  };
+  const t = await childValue(taught);
+  if (t === null) return null;
+  const a = await childValue(alt);
+  return a === null ? null : Math.round(t - a);
+}
+
 function sanToUci(fen: string, san: string): string | null {
   try {
     const c = new Chess(fen);
@@ -118,6 +139,15 @@ export async function refutedAlternative(input: RefutedAlternativeInput): Promis
     const fan = await engine.scoreMoves(input.fenBefore, [taughtUci, altUci], depth);
     costCp = alternativeCostCp(taughtUci, altUci, fan, moverIsWhite ? 'w' : 'b');
     if (costCp === null || costCp < criticalityThresholds().notable) return null;
+    // THE COST IS THE SETTLED ONE (Watch writers 2026-11-12: KG Classical "O-O
+    // costs about a point" where the move's own read costs 0.42; Scotch Mieses
+    // "Nc3 costs about half a point" where it costs 0.14). One read of two
+    // moves is confirmed one move deeper — the board after each, read on its
+    // own, the rule a better move is named by (`settleReads.agreedVerdict`) —
+    // and the smaller of the two is the cost said. No second read, no cost.
+    const deeper = await deeperGapCp(engine, input.fenBefore, taughtUci, altUci, moverIsWhite ? 'w' : 'b', depth);
+    if (deeper === null || deeper < criticalityThresholds().notable) return null;
+    costCp = Math.min(costCp, deeper);
     fanAltLine = fan.find((l) => l.moves[0] === altUci)?.moves ?? null;
     fanTaughtLine = fan.find((l) => l.moves[0] === taughtUci)?.moves ?? null;
     altLine = await computePvLine(input.fenBefore, { firstUci: altUci, maxPlies, depth, engine });

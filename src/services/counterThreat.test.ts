@@ -14,7 +14,9 @@ describe('danger levels — answering a threat with a bigger one', () => {
     expect(c?.line?.sans).toEqual(['exf6', 'Rxd1']);
     const line = counterThreatLine(c!, false);
     expect(line).toMatch(/^They left their knight on f6 and hit your queen on d1 instead/);
-    expect(line).toMatch(/danger levels/);
+    expect(line).toMatch(/Answer a threat with a threat to something worth more\./);
+    // No player's catchphrase in a computer's words (Watch writers 2026-11-12).
+    expect(line).not.toMatch(/danger level/i);
     expect(line).toMatch(/exf6 wins a knight, but Rxd1 costs you your queen\./);
   });
   it('NEGATIVE CONTROL: saving the knight is not a counter-threat', () => {

@@ -79,7 +79,12 @@ export function castleByHand(fen: string, me: Color): CastleByHandPlan | null {
   const third = me === 'w' ? 3 : 6;
   const kFile = king[0];
   const kRank = Number(king[1]);
-  if (!'def'.includes(kFile) || (kRank !== home && kRank !== second)) return null;
+  // The walk is to the KINGSIDE shelter, a step at a time, so the king starts
+  // on the e- or f-file. A king on the d-file is nearer the queenside, and
+  // "the king to f8" from d8 is no single step (two-knights Ulvestad, …Bb7
+  // with the king on d8: "king to f8, pawn to g6, king to g7" — the wrong
+  // wing, said as one move).
+  if (!'ef'.includes(kFile) || (kRank !== home && kRank !== second)) return null;
   const ownPawn = (s: string): boolean => { const p = at(b, s); return !!p && p.type === 'p' && p.color === me; };
   const ownPiece = (s: string, t: string): boolean => { const p = at(b, s); return !!p && p.type === t && p.color === me; };
   // The shelter: a g-pawn and an h-pawn, at home or one step up.

@@ -168,7 +168,11 @@ describe('endgameDrillService', () => {
       }
     }
     expect(checked).toBeGreaterThan(10);
-    expect(engineHinted, 'the engine named nothing on any drill — the wire is not firing').toBeGreaterThanOrEqual(15);
+    // 13 since 2026-11-12: puzzle 00hJY (three drills) lost an engine lead of
+    // "discovery" — a discovered attack IN WAITING the board scan had called
+    // landed (`computePlyFacts`; Lichess tags the puzzle crushing / long, no
+    // discovery). The floor guards the wire firing, never a false lead.
+    expect(engineHinted, 'the engine named nothing on any drill — the wire is not firing').toBeGreaterThanOrEqual(12);
   }, 20000);
 
   describe('defaultDrillTier', () => {

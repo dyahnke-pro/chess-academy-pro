@@ -12,7 +12,7 @@ const PV = ['e1e8', 'g8h7', 'b3d5'];
 
 describe('the in-between move', () => {
   it('is found: a check first, the capture still there after the reply', () => {
-    expect(inBetweenMove(FEN, PV)).toEqual({ capture: 'Bxd5', captureSquare: 'd5', first: 'Re8+', check: true, line: ['Re8+', 'Kh7', 'Bxd5'] });
+    expect(inBetweenMove(FEN, PV, 'best')).toEqual({ capture: 'Bxd5', captureSquare: 'd5', first: 'Re8+', check: true, line: ['Re8+', 'Kh7', 'Bxd5'] });
   });
   it('Learn teaches it ("not yet — first …")', () => {
     expect(notYet(FEN, { san: 'Re8+', pv: PV, cp: 300 })?.text).toMatch(/^The capture on d5 is not going anywhere\. Not yet — first .* with check, and take after\.$/);
@@ -28,6 +28,6 @@ describe('the in-between move', () => {
     expect(detectTacticType(FEN, 'e1e8', PV)).toBe('zwischenzug');
   });
   it('NEGATIVE: a plain capture first is not an in-between move', () => {
-    expect(inBetweenMove(FEN, ['b3d5', 'g8h7', 'e1e8'])).toBeNull();
+    expect(inBetweenMove(FEN, ['b3d5', 'g8h7', 'e1e8'], 'best')).toBeNull();
   });
 });

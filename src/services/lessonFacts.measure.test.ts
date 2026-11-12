@@ -128,7 +128,7 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
     const { loadFullCorpus } = await import('../test/loadFullCorpus');
     const { noteAtPosition } = await import('./danyaTeachingService');
     const { getLessonScript, getVariationLessonScript } = await import('../data/lessons');
-    const { settleReads, agreedVerdict, NAME_CP } = await import('../test/settleReads');
+    const { settleReads, agreedVerdict, favouriteCost, NAME_CP } = await import('../test/settleReads');
     await ensureMastersDbLoaded();
     loadFullCorpus();
     mkdirSync(OUT, { recursive: true });
@@ -256,12 +256,15 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
             if (fav !== san && share(favN) >= 15) {
               let favUci = '';
               try { const b = new Chess(fen); const m = b.move(fav); favUci = `${m.from}${m.to}${m.promotion ?? ''}`; } catch { /* not legal here */ }
-              if (favUci && top[0]) {
-                const own = (await engine.read(fen, { multipv: 1, searchmoves: favUci }))[0];
-                if (own) {
-                  const costFav = (sign * top[0].cp - sign * own.cp) / 100;
-                  md.push(`  - the club favourite ${fav} (${share(favN)}%): ${costFav >= 0.5 ? `costs ${costFav.toFixed(2)} — A COMMON MISTAKE you may name` : `costs ${Math.max(0, costFav).toFixed(2)} — playable, not a mistake`}; engine line: ${lineSans(fen, own.pv, 6)}`);
-                }
+              // Its cost against THE LINE'S MOVE, read the way the verdict is
+              // (`favouriteCost`: both on their own now, and one move deeper)
+              // — never against the top read's best move by one read, which
+              // called a favourite the list ranked above the line's move "A
+              // COMMON MISTAKE" (Kieseritzky d4 vs Nxg4, 2026-11-12).
+              const fc = favUci ? await favouriteCost(engine.read, fen, uci, favUci, settled, childOf) : null;
+              if (fc) {
+                const costFav = fc.cost / 100;
+                md.push(`  - the club favourite ${fav} (${share(favN)}%): ${costFav >= 0.5 ? `costs ${costFav.toFixed(2)} against ${san} (two reads agree: ${(fc.now / 100).toFixed(2)} now, ${(fc.deeper / 100).toFixed(2)} one move deeper) — A COMMON MISTAKE you may name` : `costs ${costFav.toFixed(2)} against ${san} — playable, not a mistake`}; engine line: ${lineSans(fen, fc.line.pv, 6)}`);
               }
             }
           }

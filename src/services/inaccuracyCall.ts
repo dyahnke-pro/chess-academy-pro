@@ -1267,7 +1267,15 @@ export function errorWhy(args: {
       return !tookIt && !onLine ? failedRead.missed : failedRead.line;
     })()
     : null;
-  const punishment = args.quality === 'inaccuracy' || !caused || failed ? null : punishmentOf(args.fenBefore, args.playedSan, replyLineUci, args.moverColor);
+  const takenOnTheWay = args.quality === 'inaccuracy' || !caused || failed ? null : punishmentOf(args.fenBefore, args.playedSan, replyLineUci, args.moverColor);
+  // A PAWN TAKEN ON THE WAY IS NOT THE WHY OF A HUNT (20.Qg3+, a 4.6 cost:
+  // the line takes the c2 pawn with …Bxc2 and then checks the king down the
+  // c-file). A win the plan reader names that covers under half the cost
+  // yields to the king hunt the same line reads; the hunt is the cost.
+  const smallWin = takenOnTheWay ? winClauseValue(takenOnTheWay.why) : null;
+  const huntOverWin = smallWin !== null && smallWin * 100 * 2 < reasonCost && args.missedMate === null && args.allowedMate === null
+    && !!kingHunt(args.fenBefore, args.playedSan, replyLineUci, args.moverColor);
+  const punishment = huntOverWin ? null : takenOnTheWay;
   // "AND THEY MISSED IT" ONLY WHEN THEIR REPLY DID NOT KEEP THE WIN (walk
   // oct3a, 28.h5).
   const missed = !!punishment?.first && (args.replySan ?? null) !== null
