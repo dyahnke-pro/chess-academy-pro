@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2224 lines · 17 exports · 42 importers · 50 tests · 3 audits**
+**2226 lines · 17 exports · 42 importers · 50 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -104,7 +104,7 @@
 - `src/services/positionFacts.weakness.test.ts:71`
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11515`
+- `src/components/Coach/CoachTeachPage.tsx:11531`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:471`
 - `src/services/raceAimOneVoice.test.ts:20`
@@ -238,7 +238,7 @@
 - `src/test/teach02Wired.test.ts:140`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11637`
+- `src/components/Coach/CoachTeachPage.tsx:11653`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -266,7 +266,7 @@
 - `src/services/conceptKey.ts:11`
 - `src/services/danyaBehaviors.ts:530`
 - `src/services/kingAttackReads.ts:662`
-- `src/services/learnBoardTeaching.ts:520`
+- `src/services/learnBoardTeaching.ts:526`
 - `src/services/looseStill.test.ts:37`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`

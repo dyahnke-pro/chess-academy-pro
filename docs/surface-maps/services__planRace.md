@@ -80,17 +80,17 @@
 - `src/services/planRace.test.ts:110`
 - `src/services/planRace.test.ts:116`
 - `src/services/planRace.test.ts:158`
-- `src/services/reviewFullData.ts:1192`
+- `src/services/reviewFullData.ts:1193`
 
 ### `fileClaimed` (function) — 4 call sites
-- `src/services/learnBoardTeaching.ts:260`
+- `src/services/learnBoardTeaching.ts:266`
 - `src/services/planRace.test.ts:141`
 - `src/services/planRace.test.ts:148`
 - `src/services/planRace.test.ts:149`
 
 ### `planRaceProof` (function) — 2 call sites
 - `src/services/kingAttackReads.test.ts:195`
-- `src/services/reviewFullData.ts:1193`
+- `src/services/reviewFullData.ts:1194`
 
 ### `OPPOSITE_WINGS_CLAIM` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -100,29 +100,29 @@
 
 ### `oppositeWingsRace` (function) — 5 call sites
 - `src/services/kingAttackReads.ts:718`
-- `src/services/learnBoardTeaching.ts:979`
+- `src/services/learnBoardTeaching.ts:987`
 - `src/services/openingStory.test.ts:119`
 - `src/services/planRace.test.ts:199`
 - `src/services/reviewStrategicOrientation.ts:229`
 
 ### `pawnSquareRaces` (function) — 2 call sites
 - `src/services/orderComputers.test.ts:175`
-- `src/services/orderComputers.test.ts:184`
+- `src/services/orderComputers.test.ts:187`
 
 ### `pawnSquareRaceRead` (function) — 3 call sites
 - `src/services/orderComputers.test.ts:177`
-- `src/services/orderComputers.test.ts:187`
+- `src/services/orderComputers.test.ts:190`
 - `src/services/orderReads.ts:114`
 
 ### `pawnSquareTaken` (function) — 3 call sites
 - `src/services/orderComputers.test.ts:181`
 - `src/services/orderTeaching.ts:106`
-- `src/services/reviewFullData.ts:1320`
+- `src/services/reviewFullData.ts:1321`
 
 ### `pawnSquareRaceProof` (function) — 3 call sites
 - `src/services/orderReads.ts:116`
 - `src/services/orderTeaching.ts:108`
-- `src/services/reviewFullData.ts:1321`
+- `src/services/reviewFullData.ts:1322`
 
 ## Tests
 

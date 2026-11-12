@@ -90,7 +90,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:6964`
 - `src/components/Coach/CoachTeachPage.tsx:7038`
 - `src/components/Coach/CoachTeachPage.tsx:7771`
-- `src/components/Coach/CoachTeachPage.tsx:13617`
+- `src/components/Coach/CoachTeachPage.tsx:13634`
 - `src/services/lessonCacheKey.test.ts:60`
 - `src/services/lessonCacheKey.test.ts:65`
 - `src/services/lessonCacheKey.test.ts:74`
@@ -226,11 +226,11 @@
 - `src/components/Coach/CoachTeachPage.tsx:6919`
 - `src/components/Coach/CoachTeachPage.tsx:7032`
 - `src/components/Coach/CoachTeachPage.tsx:7766`
-- `src/components/Coach/CoachTeachPage.tsx:13611`
+- `src/components/Coach/CoachTeachPage.tsx:13628`
 - `src/components/Openings/OpeningDetailPage.wiring.test.ts:91`
 - `src/services/generatedLesson.test.ts:5`
 - `src/services/generatedLesson.ts:43`
-- `src/services/lessonWriter.measure.test.ts:114`
+- `src/services/lessonWriter.measure.test.ts:124`
 - `src/services/openingGenerator.computedBeats.test.ts:61`
 - `src/services/openingGenerator.explorerBranches.test.ts:57`
 - `src/services/openingGenerator.explorerBranches.test.ts:86`

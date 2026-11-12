@@ -25,31 +25,31 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `threatProof` (function) — 10 call sites
-- `src/services/positionFacts.ts:1780`
-- `src/services/reviewFullData.ts:813`
+- `src/services/positionFacts.ts:1898`
+- `src/services/reviewFullData.ts:904`
 - `src/services/threatProof.test.ts:8`
 - `src/services/threatProof.test.ts:17`
 - `src/services/threatProof.test.ts:23`
 - `src/services/threatProof.test.ts:31`
 - `src/services/threatProof.test.ts:51`
 - `src/services/threatProof.test.ts:55`
-- `src/test/captureSaidOnce.gate.test.ts:246`
+- `src/test/captureSaidOnce.gate.test.ts:245`
 - `src/test/mateSaidOnce.gate.test.ts:30`
 
 ### `provenThreatLine` (function) — 4 call sites
-- `src/services/boardComputers.ts:441`
-- `src/services/boardComputers.ts:455`
-- `src/services/boardComputers.ts:471`
+- `src/services/boardComputers.ts:544`
+- `src/services/boardComputers.ts:558`
+- `src/services/boardComputers.ts:574`
 - `src/services/threatProof.test.ts:24`
 
 ### `threatStakes` (function) — 4 call sites
-- `src/services/boardComputers.ts:443`
-- `src/services/boardComputers.ts:456`
-- `src/services/coachDecider.ts:677`
-- `src/services/learnBoardTeaching.ts:462`
+- `src/services/boardComputers.ts:546`
+- `src/services/boardComputers.ts:559`
+- `src/services/coachDecider.ts:704`
+- `src/services/learnBoardTeaching.ts:487`
 
 ### `looseClaims` (function) — 4 call sites
-- `src/services/boardComputers.ts:456`
+- `src/services/boardComputers.ts:559`
 - `src/services/looseClaim.test.ts:20`
 - `src/services/looseClaim.test.ts:23`
 - `src/services/looseClaim.test.ts:30`

@@ -4,22 +4,26 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1007 lines · 6 exports · 23 importers · 13 tests · 0 audits**
+**1056 lines · 6 exports · 27 importers · 17 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6918) — names `reviewMoveTeaching`
+- **The standard post-deploy ritual** (CLAUDE.md:6935) — names `reviewMoveTeaching`
 
 ## Who calls in
 
 - `src/services/coachFeatureService.ts`
+- `src/services/countedWhenTradeEnds.test.ts`
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/discussionPractice.ts`
+- `src/services/exchangeNotFinished.test.ts`
+- `src/services/falseJobs.test.ts`
 - `src/services/guardPressure.test.ts`
 - `src/services/learnBoardTeaching.ts`
 - `src/services/learnMoveTeaching.ts`
 - `src/services/lessonVoiceIdeas.test.ts`
 - `src/services/moveThoughtFacts.ts`
+- `src/services/pinIsAPin.test.ts`
 - `src/services/playCommentary.ts`
 - `src/services/projectedLineVoice.ts`
 - `src/services/reviewFullData.ts`
@@ -54,7 +58,7 @@
 
 ### `buildReviewMoveTeaching` (function) — 53 call sites
 - `src/services/coachFeatureService.ts:1262`
-- `src/services/coachFeatureService.ts:4237`
+- `src/services/coachFeatureService.ts:4285`
 - `src/services/danyaBench.measure.test.ts:473`
 - `src/services/discussionPractice.ts:174`
 - `src/services/guardPressure.test.ts:20`
@@ -75,7 +79,7 @@
 - `src/services/lessonVoiceIdeas.test.ts:65`
 - `src/services/lessonVoiceIdeas.test.ts:72`
 - `src/services/projectedLineVoice.ts:144`
-- `src/services/reviewMoveBriefing.ts:473`
+- `src/services/reviewMoveBriefing.ts:599`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`
@@ -103,13 +107,26 @@
 - `src/services/reviewWalkOct1.test.ts:72`
 - `src/services/reviewWalkOct1.test.ts:79`
 - `src/services/reviewWalkOct1.test.ts:91`
-- `src/services/reviewWalkOct1.test.ts:96`
+- `src/services/reviewWalkOct1.test.ts:99`
 - `src/services/squareRole.test.ts:29`
 - `src/services/squareRole.test.ts:44`
 
-### `buildReviewMoveTeachingFact` (function) — 15 call sites
-- `src/services/learnBoardTeaching.ts:1230`
-- `src/services/moveThoughtFacts.ts:227`
+### `buildReviewMoveTeachingFact` (function) — 28 call sites
+- `src/services/countedWhenTradeEnds.test.ts:100`
+- `src/services/countedWhenTradeEnds.test.ts:115`
+- `src/services/exchangeNotFinished.test.ts:196`
+- `src/services/exchangeNotFinished.test.ts:200`
+- `src/services/exchangeNotFinished.test.ts:204`
+- `src/services/exchangeNotFinished.test.ts:243`
+- `src/services/exchangeNotFinished.test.ts:302`
+- `src/services/exchangeNotFinished.test.ts:307`
+- `src/services/exchangeNotFinished.test.ts:312`
+- `src/services/falseJobs.test.ts:82`
+- `src/services/falseJobs.test.ts:86`
+- `src/services/falseJobs.test.ts:106`
+- `src/services/learnBoardTeaching.ts:1242`
+- `src/services/moveThoughtFacts.ts:256`
+- `src/services/pinIsAPin.test.ts:16`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
 - `src/services/reviewMoveTeaching.test.ts:216`
@@ -125,8 +142,8 @@
 - `src/services/tapeKc7Skewer.test.ts:29`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:4145`
-- `src/services/reviewFullData.ts:1741`
+- `src/services/coachFeatureService.ts:4193`
+- `src/services/reviewFullData.ts:1768`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`
@@ -134,7 +151,7 @@
 - `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:4140`
+- `src/services/coachFeatureService.ts:4188`
 - `src/services/reviewMoveTeaching.test.ts:121`
 - `src/services/reviewMoveTeaching.test.ts:124`
 - `src/services/reviewMoveTeaching.test.ts:130`
@@ -144,9 +161,13 @@
 
 ## Tests
 
+- `src/services/countedWhenTradeEnds.test.ts`
 - `src/services/danyaBench.measure.test.ts`
+- `src/services/exchangeNotFinished.test.ts`
+- `src/services/falseJobs.test.ts`
 - `src/services/guardPressure.test.ts`
 - `src/services/lessonVoiceIdeas.test.ts`
+- `src/services/pinIsAPin.test.ts`
 - `src/services/reviewMoveTeaching.denied.test.ts`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts`
 - `src/services/reviewMoveTeaching.test.ts`

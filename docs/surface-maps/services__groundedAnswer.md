@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7838 lines · 123 exports · 94 importers · 69 tests · 8 audits**
+**7842 lines · 123 exports · 94 importers · 69 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -386,8 +386,8 @@
 - `src/services/coachFeatureService.test.ts:70`
 - `src/services/coachFeatureService.test.ts:85`
 - `src/services/coachFeatureService.test.ts:92`
-- `src/services/coachFeatureService.ts:3525`
-- `src/services/coachFeatureService.ts:3557`
+- `src/services/coachFeatureService.ts:3533`
+- `src/services/coachFeatureService.ts:3565`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:15`
 - `src/services/explainBestMoveLines.test.ts:19`
@@ -414,7 +414,7 @@
 - `src/hooks/useHintSystem.ts:357`
 - `src/services/computedVoiceGrounding.test.ts:53`
 - `src/services/computedVoiceGrounding.test.ts:111`
-- `src/services/deliberation.ts:649`
+- `src/services/deliberation.ts:660`
 - `src/services/groundedAnswer.test.ts:1092`
 - `src/services/groundedAnswer.test.ts:1099`
 - `src/services/groundedAnswer.test.ts:1107`
@@ -431,7 +431,7 @@
 - `src/services/reviewBoardAwareness.test.ts:22`
 
 ### `quietPurposePhrase` (function) — 2 call sites
-- `src/services/deliberation.ts:655`
+- `src/services/deliberation.ts:666`
 - `src/services/quietPurposeSquares.test.ts:22`
 
 ### `describeMoveMerit` (function) — 7 call sites
@@ -1045,7 +1045,7 @@
 - `src/services/bluffDetector.ts:74`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:3890`
+- `src/services/coachFeatureService.ts:3898`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
@@ -1053,8 +1053,8 @@
 - `src/services/moveInsight.ts:606`
 - `src/services/moveInsight.ts:770`
 - `src/services/opponentMovePurpose.ts:64`
-- `src/services/reviewFullData.ts:1036`
-- `src/services/reviewMoveBriefing.ts:313`
+- `src/services/reviewFullData.ts:1037`
+- `src/services/reviewMoveBriefing.ts:370`
 - `src/services/reviewNarrationFidelity.test.ts:141`
 - `src/services/reviewNarrationFidelity.test.ts:150`
 - `src/services/reviewNarrationFidelity.test.ts:162`
@@ -1067,7 +1067,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3811`
+- `src/services/coachFeatureService.ts:3819`
 - `src/services/reviewNarrationFidelity.test.ts:107`
 - `src/services/reviewNarrationFidelity.test.ts:119`
 - `src/services/reviewNarrationFidelity.test.ts:127`
@@ -1083,7 +1083,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:3911`
+- `src/services/coachFeatureService.ts:3919`
 - `src/services/reviewNarrationFidelity.test.ts:177`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1122,9 +1122,9 @@
 
 ### `seatPieceReferences` (re-export) — 40 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9363`
-- `src/services/coachFeatureService.ts:5325`
-- `src/services/coachFeatureService.ts:5414`
-- `src/services/coachFeatureService.ts:6422`
+- `src/services/coachFeatureService.ts:5333`
+- `src/services/coachFeatureService.ts:5422`
+- `src/services/coachFeatureService.ts:6430`
 - `src/services/liveTacticsContext.ts:486`
 - `src/services/liveTacticsContext.ts:495`
 - `src/services/lookaheadPlan.ts:140`
@@ -1136,11 +1136,11 @@
 - `src/services/reviewBoardAwareness.test.ts:55`
 - `src/services/reviewBoardAwareness.test.ts:56`
 - `src/services/reviewBoardAwareness.test.ts:57`
-- `src/services/reviewFullData.ts:403`
-- `src/services/reviewFullData.ts:551`
-- `src/services/reviewFullData.ts:670`
-- `src/services/reviewFullData.ts:691`
-- `src/services/reviewFullData.ts:892`
+- `src/services/reviewFullData.ts:404`
+- `src/services/reviewFullData.ts:552`
+- `src/services/reviewFullData.ts:671`
+- `src/services/reviewFullData.ts:692`
+- `src/services/reviewFullData.ts:893`
 - `src/services/reviewNarrationFidelity.test.ts:22`
 - `src/services/reviewNarrationFidelity.test.ts:30`
 - `src/services/reviewNarrationFidelity.test.ts:36`

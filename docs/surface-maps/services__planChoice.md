@@ -24,11 +24,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `methodRead` (function) — 17 call sites
-- `src/services/boardPlanFacts.ts:139`
+- `src/services/boardPlanFacts.ts:149`
 - `src/services/deferredAnswers.realGame.test.ts:12`
 - `src/services/deferredAnswers.realGame.test.ts:26`
-- `src/services/groundedAnswer.ts:3744`
-- `src/services/groundedAnswer.ts:6891`
+- `src/services/groundedAnswer.ts:3754`
+- `src/services/groundedAnswer.ts:6902`
 - `src/services/namesStudentMove.leaks.test.ts:28`
 - `src/services/namesStudentMove.leaks.test.ts:34`
 - `src/services/oneWorstPiece.test.ts:30`
@@ -48,7 +48,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planThread.ts:264`
 
 ### `whyThisPlan` (function) — 4 call sites
-- `src/services/boardPlanFacts.ts:143`
+- `src/services/boardPlanFacts.ts:153`
 - `src/services/planChoice.test.ts:20`
 - `src/services/planChoice.test.ts:26`
 - `src/services/planThread.ts:256`
@@ -63,12 +63,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:167`
 
 ### `methodPlanSentence` (function) — 2 call sites
-- `src/services/boardPlanFacts.ts:140`
+- `src/services/boardPlanFacts.ts:150`
 - `src/services/planThread.ts:253`
 
 ### `methodLine` (function) — 9 call sites
 - `src/services/deferredAnswers.realGame.test.ts:12`
-- `src/services/groundedAnswer.ts:3746`
+- `src/services/groundedAnswer.ts:3756`
 - `src/services/namesStudentMove.leaks.test.ts:29`
 - `src/services/oneWorstPiece.test.ts:32`
 - `src/services/planChoice.test.ts:34`
@@ -81,7 +81,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:170`
 
 ### `weaknessLine` (function) — 1 call site
-- `src/services/groundedAnswer.ts:6892`
+- `src/services/groundedAnswer.ts:6903`
 
 ## Tests
 

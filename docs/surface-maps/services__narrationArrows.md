@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**526 lines · 2 exports · 9 importers · 6 tests · 0 audits**
+**526 lines · 2 exports · 10 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@
 
 - `src/data/lessons/punishGems.ts`
 - `src/services/continuationMoveNarration.universal.test.ts`
+- `src/services/falseJobs.test.ts`
 - `src/services/mentionedMoveArrows.ts`
 - `src/services/narrationArrows.markers.measure.test.ts`
 - `src/services/narrationArrows.sides.test.ts`
@@ -27,10 +28,11 @@
 ### `NarrationSides` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `deriveNarrationArrows` (function) — 20 call sites
+### `deriveNarrationArrows` (function) — 21 call sites
 - `src/data/lessons/punishGems.ts:247`
 - `src/services/continuationMoveNarration.universal.test.ts:125`
 - `src/services/continuationMoveNarration.universal.test.ts:148`
+- `src/services/falseJobs.test.ts:75`
 - `src/services/mentionedMoveArrows.ts:55`
 - `src/services/narrationArrows.markers.measure.test.ts:98`
 - `src/services/narrationArrows.sides.test.ts:22`
@@ -52,6 +54,7 @@
 ## Tests
 
 - `src/services/continuationMoveNarration.universal.test.ts`
+- `src/services/falseJobs.test.ts`
 - `src/services/narrationArrows.markers.measure.test.ts`
 - `src/services/narrationArrows.sides.test.ts`
 - `src/services/narrationArrows.spoken.test.ts`

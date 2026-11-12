@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1977 lines · 12 exports · 23 importers · 30 tests · 0 audits**
+**1983 lines · 12 exports · 23 importers · 30 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,7 +39,7 @@
 ## Exports and every call site
 
 ### `positionalVerdictLine` (function) — 1 call site
-- `src/services/coachFeatureService.ts:2926`
+- `src/services/coachFeatureService.ts:2934`
 
 ### `prematureBreakWhy` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1172`
@@ -66,7 +66,7 @@
 - `src/services/forkTrick.test.ts:62`
 - `src/services/hangingLine.test.ts:73`
 - `src/services/hangingVsUndefended.test.ts:13`
-- `src/services/orderComputers.test.ts:315`
+- `src/services/orderComputers.test.ts:318`
 - `src/services/pieceWish.test.ts:58`
 - `src/services/reviewFullData.pinHolds.test.ts:19`
 - `src/services/reviewFullData.pinHolds.test.ts:45`
@@ -112,8 +112,8 @@
 - `src/services/tacticGeometry.test.ts:268`
 - `src/services/tacticGeometry.test.ts:273`
 - `src/services/unifiedBetterMoveReason.test.ts:39`
-- `src/services/weighedMoves.test.ts:239`
-- `src/services/weighedMoves.test.ts:252`
+- `src/services/weighedMoves.test.ts:247`
+- `src/services/weighedMoves.test.ts:260`
 - `src/test/teach02Wired.test.ts:28`
 - `src/test/teach02Wired.test.ts:68`
 

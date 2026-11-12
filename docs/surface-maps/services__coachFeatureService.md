@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6643 lines · 33 exports · 71 importers · 86 tests · 4 audits**
+**6651 lines · 33 exports · 71 importers · 86 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -341,8 +341,8 @@
 ### `pendingRecapture` (function) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8866`
 - `src/components/Coach/CoachTeachPage.tsx:8969`
-- `src/components/Coach/CoachTeachPage.tsx:11907`
-- `src/components/Coach/CoachTeachPage.tsx:12309`
+- `src/components/Coach/CoachTeachPage.tsx:11923`
+- `src/components/Coach/CoachTeachPage.tsx:12325`
 - `src/services/coachFeatureService.test.ts:912`
 - `src/services/coachFeatureService.test.ts:913`
 - `src/services/phaseTransitionDetector.test.ts:575`
@@ -373,11 +373,11 @@
 - `src/services/reviewCorpusSweep.test.ts:148`
 - `src/services/reviewDeepIdeaStake.test.ts:36`
 - `src/services/reviewDeepIdeaStake.test.ts:55`
-- `src/services/reviewDeepIdeaStem.test.ts:42`
-- `src/services/reviewDeepThreat.test.ts:36`
-- `src/services/reviewDeepThreat.test.ts:62`
-- `src/services/reviewDeepThreat.test.ts:114`
-- `src/services/reviewDeepThreat.test.ts:150`
+- `src/services/reviewDeepIdeaStem.test.ts:50`
+- `src/services/reviewDeepThreat.test.ts:38`
+- `src/services/reviewDeepThreat.test.ts:64`
+- `src/services/reviewDeepThreat.test.ts:116`
+- `src/services/reviewDeepThreat.test.ts:154`
 - `src/services/reviewDepth.eval.measure.test.ts:233`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
 - `src/services/reviewHabitClosesTurn.test.ts:53`
@@ -406,7 +406,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:699`
+- `src/services/reviewFullData.ts:700`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites

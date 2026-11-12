@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**277 lines · 13 exports · 9 importers · 2 tests · 0 audits**
+**282 lines · 14 exports · 10 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,6 +19,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionFacts.ts`
 - `src/services/refutedAlternative.ts`
 - `src/services/refutedAlternativeCore.test.ts`
+- `src/services/refutedFanSample.test.ts`
 - `src/services/reviewFullData.ts`
 - `src/test/teach02Wired.test.ts`
 
@@ -31,48 +32,53 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `droppedJob` (function) — 3 call sites
-- `src/services/refutedAlternative.ts:156`
+- `src/services/refutedAlternative.ts:186`
 - `src/services/refutedAlternativeCore.test.ts:60`
 - `src/services/refutedAlternativeCore.test.ts:66`
 
 ### `MIN_ALTERNATIVE_SHARE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `pickAlternative` (function) — 6 call sites
+### `MIN_ALTERNATIVE_GAMES` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `pickAlternative` (function) — 8 call sites
 - `src/services/refutedAlternative.test.ts:45`
 - `src/services/refutedAlternative.test.ts:46`
 - `src/services/refutedAlternative.test.ts:49`
 - `src/services/refutedAlternative.test.ts:50`
-- `src/services/refutedAlternative.test.ts:167`
-- `src/services/refutedAlternative.ts:99`
+- `src/services/refutedAlternative.test.ts:196`
+- `src/services/refutedAlternative.ts:120`
+- `src/services/refutedFanSample.test.ts:11`
+- `src/services/refutedFanSample.test.ts:15`
 
 ### `renderRefutedAlternative` (function) — 8 call sites
-- `src/services/refutedAlternative.test.ts:143`
-- `src/services/refutedAlternative.test.ts:148`
-- `src/services/refutedAlternative.test.ts:160`
-- `src/services/refutedAlternative.test.ts:168`
-- `src/services/refutedAlternative.test.ts:175`
-- `src/services/refutedAlternative.test.ts:176`
-- `src/services/refutedAlternative.ts:157`
+- `src/services/refutedAlternative.test.ts:172`
+- `src/services/refutedAlternative.test.ts:177`
+- `src/services/refutedAlternative.test.ts:189`
+- `src/services/refutedAlternative.test.ts:197`
+- `src/services/refutedAlternative.test.ts:204`
+- `src/services/refutedAlternative.test.ts:205`
+- `src/services/refutedAlternative.ts:187`
 - `src/services/refutedAlternativeCore.test.ts:71`
 
 ### `candidatesFromMasters` (function) — 6 call sites
 - `src/services/refutedAlternative.test.ts:43`
 - `src/services/refutedAlternative.test.ts:51`
-- `src/services/refutedAlternative.test.ts:66`
-- `src/services/refutedAlternative.test.ts:92`
-- `src/services/refutedAlternative.test.ts:139`
-- `src/services/refutedAlternative.ts:172`
+- `src/services/refutedAlternative.test.ts:69`
+- `src/services/refutedAlternative.test.ts:95`
+- `src/services/refutedAlternative.test.ts:168`
+- `src/services/refutedAlternative.ts:202`
 
 ### `candidatesFromAmateur` (function) — 2 call sites
-- `src/services/positionFacts.ts:1117`
-- `src/services/refutedAlternative.ts:171`
+- `src/services/positionFacts.ts:1131`
+- `src/services/refutedAlternative.ts:201`
 
 ### `FanLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `alternativeProof` (function) — 4 call sites
-- `src/services/refutedAlternative.ts:130`
+- `src/services/refutedAlternative.ts:160`
 - `src/services/refutedAlternativeCore.test.ts:35`
 - `src/services/refutedAlternativeCore.test.ts:45`
 - `src/services/refutedAlternativeCore.test.ts:46`
@@ -80,20 +86,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `alternativeCostCp` (function) — 3 call sites
 - `src/services/moveCost.ts:94`
 - `src/services/moveCost.ts:115`
-- `src/services/refutedAlternative.ts:119`
+- `src/services/refutedAlternative.ts:140`
 
 ### `refutedFromFan` (function) — 2 call sites
-- `src/services/positionFacts.ts:1117`
+- `src/services/positionFacts.ts:1131`
 - `src/services/refutedAlternativeCore.test.ts:14`
 
 ### `refutedAltProof` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:706`
-- `src/services/positionFacts.ts:1226`
-- `src/services/reviewFullData.ts:1315`
+- `src/services/moveThoughtFacts.ts:778`
+- `src/services/positionFacts.ts:1249`
+- `src/services/reviewFullData.ts:1350`
 
 ## Tests
 
 - `src/services/refutedAlternativeCore.test.ts`
+- `src/services/refutedFanSample.test.ts`
 - `src/test/teach02Wired.test.ts`
 
 ## Audits that reach it

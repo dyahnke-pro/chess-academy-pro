@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**174 lines · 7 exports · 5 importers · 9 tests · 0 audits**
+**204 lines · 7 exports · 5 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:380) — names `refutedAlternative`
-- **The standard post-deploy ritual** (CLAUDE.md:6927) — names `refutedAlternative`
+- **The tools are COMPUTERS** (CLAUDE.md:393) — names `refutedAlternative`
+- **The standard post-deploy ritual** (CLAUDE.md:6968) — names `refutedAlternative`
 
 ## Who calls in
 
@@ -27,49 +27,53 @@
 ### `BACKGROUND_SCORER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `refutedAlternative` (function) — 8 call sites
+### `refutedAlternative` (function) — 10 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/coachFeatureService.ts:4474`
-- `src/services/openingGenerator.ts:1976`
-- `src/services/refutedAlternative.test.ts:66`
-- `src/services/refutedAlternative.test.ts:92`
-- `src/services/refutedAlternative.test.ts:109`
-- `src/services/refutedAlternative.test.ts:133`
-- `src/services/refutedAlternative.test.ts:139`
+- `src/services/coachFeatureService.ts:4621`
+- `src/services/openingGenerator.ts:1986`
+- `src/services/refutedAlternative.test.ts:69`
+- `src/services/refutedAlternative.test.ts:95`
+- `src/services/refutedAlternative.test.ts:114`
+- `src/services/refutedAlternative.test.ts:137`
+- `src/services/refutedAlternative.test.ts:142`
+- `src/services/refutedAlternative.test.ts:162`
+- `src/services/refutedAlternative.test.ts:168`
 
 ### `candidatesForPosition` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:4456`
-- `src/services/openingGenerator.ts:1973`
-- `src/services/refutedAlternative.test.ts:156`
-- `src/services/refutedAlternative.test.ts:158`
+- `src/services/coachFeatureService.ts:4603`
+- `src/services/openingGenerator.ts:1983`
+- `src/services/refutedAlternative.test.ts:185`
+- `src/services/refutedAlternative.test.ts:187`
 
-### `pickAlternative` (re-export) — 7 call sites
+### `pickAlternative` (re-export) — 9 call sites
 - `src/services/refutedAlternative.test.ts:45`
 - `src/services/refutedAlternative.test.ts:46`
 - `src/services/refutedAlternative.test.ts:49`
 - `src/services/refutedAlternative.test.ts:50`
-- `src/services/refutedAlternative.test.ts:167`
-- `src/services/refutedAlternativeCore.ts:91`
-- `src/services/refutedAlternativeCore.ts:243`
+- `src/services/refutedAlternative.test.ts:196`
+- `src/services/refutedAlternativeCore.ts:96`
+- `src/services/refutedAlternativeCore.ts:248`
+- `src/services/refutedFanSample.test.ts:11`
+- `src/services/refutedFanSample.test.ts:15`
 
 ### `renderRefutedAlternative` (re-export) — 9 call sites
-- `src/services/refutedAlternative.test.ts:143`
-- `src/services/refutedAlternative.test.ts:148`
-- `src/services/refutedAlternative.test.ts:160`
-- `src/services/refutedAlternative.test.ts:168`
-- `src/services/refutedAlternative.test.ts:175`
-- `src/services/refutedAlternative.test.ts:176`
+- `src/services/refutedAlternative.test.ts:172`
+- `src/services/refutedAlternative.test.ts:177`
+- `src/services/refutedAlternative.test.ts:189`
+- `src/services/refutedAlternative.test.ts:197`
+- `src/services/refutedAlternative.test.ts:204`
+- `src/services/refutedAlternative.test.ts:205`
 - `src/services/refutedAlternativeCore.test.ts:71`
-- `src/services/refutedAlternativeCore.ts:102`
-- `src/services/refutedAlternativeCore.ts:263`
+- `src/services/refutedAlternativeCore.ts:107`
+- `src/services/refutedAlternativeCore.ts:268`
 
 ### `candidatesFromMasters` (re-export) — 6 call sites
 - `src/services/refutedAlternative.test.ts:43`
 - `src/services/refutedAlternative.test.ts:51`
-- `src/services/refutedAlternative.test.ts:66`
-- `src/services/refutedAlternative.test.ts:92`
-- `src/services/refutedAlternative.test.ts:139`
-- `src/services/refutedAlternativeCore.ts:158`
+- `src/services/refutedAlternative.test.ts:69`
+- `src/services/refutedAlternative.test.ts:95`
+- `src/services/refutedAlternative.test.ts:168`
+- `src/services/refutedAlternativeCore.ts:163`
 
 ## Tests
 
