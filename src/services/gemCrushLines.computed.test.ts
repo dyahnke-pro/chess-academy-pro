@@ -85,7 +85,7 @@ async function productionSources(): Promise<Map<string, string>> {
   return out;
 }
 
-describe('gems live on the opening pages and in Review, never in Learn (gate)', () => {
+describe('gems: the Play rung callout stays on the opening pages; the coach reads the index through one door (gate)', () => {
   it('the live punish callout is called only from an opening screen', async () => {
     const callers = [...(await productionSources())].filter(([p, c]) => p !== 'src/services/gemCrushLines.ts' && /findLivePunishment\(/.test(c)).map(([p]) => p);
     // Non-vacuous: the Play rung still calls it.
@@ -99,41 +99,26 @@ describe('gems live on the opening pages and in Review, never in Learn (gate)', 
     expect(importers.filter((p) => !p.startsWith('src/components/Openings/') && p !== 'src/services/gameStrength.ts')).toEqual([]);
   });
 
-  /** Review's files: the facet builder, the walk's composer and its free-board
-   *  rebuild. The only coach files that may read a gem. */
-  const REVIEW_FILES = ['src/services/reviewFullData.ts', 'src/services/coachFeatureService.ts', 'src/components/Coach/CoachGameReview.tsx'];
-  const GEM_IMPORT = /punishGems'|gemCrushLines'|gemTrapMenu'|clubGems'|gambitGems'|punishGemNarration'|knownSlips'/;
-
-  it('no Learn or chat file reads a gem to teach it', async () => {
-    const src = await productionSources();
-    const teaching = [...src].filter(([p]) => !REVIEW_FILES.includes(p) && (p.startsWith('src/components/Coach/') || p.startsWith('src/hooks/') || p.startsWith('src/coach/')
-      || ['src/services/reviewOpeningTheory.ts', 'src/services/openingGenerator.ts', 'src/services/masterclassWalkthroughAdapter.ts', 'src/services/coachGameEngine.ts', 'src/services/learnBoardTeaching.ts', 'src/services/positionFacts.ts'].includes(p)));
-    expect(teaching.length).toBeGreaterThan(10);
-    // Non-vacuous: Learn's page and the live composer are in the set.
-    expect(teaching.map(([p]) => p)).toEqual(expect.arrayContaining(['src/components/Coach/CoachTeachPage.tsx', 'src/services/positionFacts.ts']));
-    const reads = teaching.filter(([, c]) => GEM_IMPORT.test(c)).map(([p]) => p);
-    expect(reads).toEqual([]);
-    // The chat's trap lane points at the opening's page and names no gem.
-    const chat = src.get('src/services/coachApi.ts') ?? '';
-    expect(chat).not.toMatch(/gemTrapMenu'|punish with \$\{|gemTrapChoices|MORE_TRAPS_CHIP/);
-  });
-
-  it('Review reads the club gem index through one door: the registry\'s knownSlip, from its facet builder alone', async () => {
+  // REPLACED 2026-11-12 (David: "You can have coach state those lines and
+  // tactics … Let's not hold anything back"): gems are no longer kept off
+  // Learn, the lessons and chat. What still holds is ONE DOOR — the
+  // registry's knownSlip / trapAhead / slipsOnLine rows read the club index.
+  it('every surface reads the club gem index through one door: the registry rows', async () => {
     const src = await productionSources();
     // Only Review's files (and the registry row itself) import the door; the
     // test harness (src/test/) reads the index off disk the way Review does.
     const importers = [...src].filter(([p, c]) => !p.startsWith('src/test/') && /from '[./]*(?:services\/)?knownSlips'/.test(c)).map(([p]) => p);
     expect(importers).toEqual(expect.arrayContaining(['src/services/reviewFullData.ts', 'src/services/coachFeatureService.ts', 'src/services/boardComputers.ts']));
-    expect(importers.filter((p) => !REVIEW_FILES.includes(p) && p !== 'src/services/boardComputers.ts')).toEqual([]);
-    // Only Review's facet builder reads the registry row.
-    // (Two rows since 2026-11-05: the slip played, and the trap ahead.)
-    const callers = [...src].filter(([, c]) => /readBoard(?:All)?\('(?:knownSlip|trapAhead)'/.test(c)).map(([p]) => p);
-    expect(callers).toEqual(['src/services/reviewFullData.ts']);
-    // And each registry row answers Learn with a reason, never a wire.
+    const REVIEW_FILES = ['src/services/reviewFullData.ts', 'src/services/coachFeatureService.ts', 'src/components/Coach/CoachGameReview.tsx'];
+    // The index is read only where the registry rows are called.
+    expect(importers.filter((p) => !REVIEW_FILES.includes(p) && p !== 'src/services/boardComputers.ts' && p !== 'src/services/moveThoughtFacts.ts')).toEqual([]);
+    const callers = [...src].filter(([, c]) => /readBoard(?:All)?\('(?:knownSlip|trapAhead|slipsOnLine)'/.test(c)).map(([p]) => p).sort();
+    expect(callers).toEqual(['src/components/Coach/CoachTeachPage.tsx', 'src/services/moveThoughtFacts.ts', 'src/services/reviewFullData.ts']);
+    // Every coach surface that teaches a move is wired.
     const { BOARD_COMPUTERS } = await import('./boardComputers');
-    for (const row of [BOARD_COMPUTERS.knownSlip, BOARD_COMPUTERS.trapAhead]) {
-      expect('wired' in row.surfaces.learn).toBe(false);
+    for (const row of [BOARD_COMPUTERS.knownSlip, BOARD_COMPUTERS.trapAhead, BOARD_COMPUTERS.slipsOnLine]) {
       expect(row.surfaces.review).toEqual({ wired: 'services/reviewFullData.ts' });
+      for (const s of ['lesson', 'learn', 'chat'] as const) expect('wired' in row.surfaces[s]).toBe(true);
     }
   });
 });

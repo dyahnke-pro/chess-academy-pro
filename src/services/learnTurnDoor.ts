@@ -156,6 +156,12 @@ export type LearnLane =
   | 'priorityFirst'
   | 'rejectedTempting'
   | 'bookMove'
+  /** Opening theory, calculated (`openingTheory.ts`): main move, other tries, reply, score. */
+  | 'openingTheory'
+  /** What a move stops, the order it keeps, the line it cuts (gaps B1-B3). */
+  | 'moveGains'
+  /** A known mistake or trap either side just played (the club index). */
+  | 'knownSlip'
   | 'planArc'
   | 'drawback'
   | 'mistake'
@@ -272,7 +278,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   foundMove: 'affirm', heldMove: 'affirm', slipAnswer: 'affirm', movePoint: 'affirm', moveIntent: 'affirm', recapture: 'affirm', kingAttack: 'affirm',
   ruleException: 'affirm', fileRace: 'affirm', trade: 'affirm', timing: 'affirm', strongChoice: 'affirm',
   falseAlarm: 'affirm', tempo: 'affirm', pushOrHold: 'affirm',
-  mistake: 'but', drawback: 'but', fundamental: 'but', register: 'but', rejectedTempting: 'but', kneeJerk: 'but', bookMove: 'but',
+  mistake: 'but', drawback: 'but', fundamental: 'but', register: 'but', rejectedTempting: 'but', kneeJerk: 'but', bookMove: 'but', openingTheory: 'but', moveGains: 'but', knownSlip: 'but',
   // The blunder check names the piece the move lost — the verdict's reason, so
   // it is the verdict's beat and rides a verdict turn (Learn audit 2026-10-14:
   // "e6 was a blunder — it cost three or four points" spoke, its reason held).
@@ -384,7 +390,7 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   commentary: 'not-ending', behavior: 'not-ending', positional: 'not-ending',
   openingIdea: STORY_PHASE, openingIdentity: STORY_PHASE, openingEquivalence: 'not-ending',
   openingRoads: STORY_PHASE, openingChoice: STORY_PHASE, openingCost: STORY_PHASE, openingTheirs: STORY_PHASE, openingStory: STORY_PHASE,
-  opening: 'not-ending', bookMove: phaseOfComputer(BOARD_COMPUTERS.bookMove.phase),
+  opening: 'not-ending', bookMove: phaseOfComputer(BOARD_COMPUTERS.bookMove.phase), openingTheory: phaseOfComputer(BOARD_COMPUTERS.openingTheory.phase), moveGains: 'any', knownSlip: 'any',
   lastTimeHere: phaseOfComputer(BOARD_COMPUTERS.lastTimeHere.phase), sameAsLastTime: phaseOfComputer(BOARD_COMPUTERS.lastTimeHere.phase),
   tempo: 'not-ending', notYetPlayed: 'not-ending', holdResource: 'not-ending',
   structure: 'not-ending', kingSafety: 'not-ending', kingAttack: 'not-ending',
@@ -540,6 +546,9 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // RIDES WITH ITS DEPARTURE (Learn audit 2026-10-14, game 1: a threat turn
   // held the reason and "You left the book with …" spoke bare). It is offered
   // only on the departure ply, where the `opening` line (always) names it.
+  knownSlip: { factKind: BOARD_COMPUTERS.slipsOnLine.kind, kind: 'computed', why: 'a known mistake or trap either side just played, with its punishment', lead: 66, always: true },
+  moveGains: { factKind: BOARD_COMPUTERS.moveGains.kind, kind: 'computed', why: 'what the move stops, the order it keeps, the line it cuts', lead: 50, always: true },
+  openingTheory: { factKind: BOARD_COMPUTERS.openingTheory.kind, kind: 'computed', why: "opening theory, calculated from the masters' games: the main move or a sideline, the other main tries and their aims, the reply, the score", lead: 40, always: true },
   bookMove: { factKind: BOARD_COMPUTERS.bookMove.kind, kind: 'computed', why: 'the student left the book: the order, the square or the line, and why it matters', lead: 64, always: true },
   // Behind the walkability check (2026-09-29): walk 2 heard 3 false lines in 4
   // — routes read off one engine line the CURRENT board cannot walk. Learn

@@ -1,61 +1,61 @@
 {
-  "about": "How the composer chooses among a move's facts. Fitted JOINTLY on the hand-written Watch beats (which facts each writer used and led with, 8 courses written in the Danya style sheet) and on Danya's notes (the bench dump, 2,488 notes), by scripts/bench/fit-writer-policy.py --danya <dump> with DANYA_W=3: coordinate descent over the second job's floor and gap, the news margin, a bar per step and one offset per computer, on half the courses and half his videos; scored on the other halves, never tuned on. Danya weighted 3x because the writers and Danya disagree on the lead (the writers lead with the move's job ~45% of beats, Danya ~17-20%): at 1x the writers' lead match rose 31% -> 49% but Danya's fell 32% -> 29%; at 3x Danya holds and the turn falls to his length. One idea offset on top of the computers': the board teacher's centre reading (\"covers f4, holding back their f-pawn\") at -30, which opened Review turns ahead of the move's real teaching at the fitted floor (reviewMoveThought.test); held out it beats raising the floor to 40 on both sets.",
-  "floor": 10,
-  "gap": 40,
-  "newsMargin": 0.09,
-  "offsets": {
-    "briefing": 30,
-    "fundamental": 20,
-    "studentMove": 20,
-    "theirAim": 20,
-    "moveJob": 5,
-    "deepFact": 5,
-    "pieceRoute": 0,
-    "binding": -5,
-    "boardTeacher": -15,
-    "prophylaxis": -20,
-    "boardTeacher|center": -30,
-    "alternatives": -40,
-    "kingWalk": -40,
+  "about": "The composer's ORDER inside each step (thoughtComposer.composeThought). Every verified find is said (David 2026-11-12); what is fitted is which fact leads: the fact's depth band (factDepth: a hidden consequence and the move's own job first, the obvious last), then one prior per idea and per computer, fitted JOINTLY on the hand-written Watch beats (which facts each writer used and led with) and on Danya's notes (the bench dump), by scripts/bench/fit-composer-order.py: half the courses and half his videos fitted, the other halves scored. A hidden idea or computer is never fitted below zero (David: deep consequences and prophylaxis weighted heavily). recordRaise lifts a red skill on the student's record within its band (not fitted: the benches carry no record).",
+  "depth": {
+    "hidden": 100,
+    "why": 100,
+    "obvious": 0
+  },
+  "ideaPrior": {
+    "win-material": 20,
+    "route": 10,
+    "trade": 10,
+    "diagonal": 10,
+    "unpin": 10,
+    "file": -20,
+    "tempo": -20,
+    "center": -40,
+    "king-safety": -40,
+    "pressure": -40,
+    "space": -40
+  },
+  "sourcePrior": {
+    "teachingMove": 40,
+    "alternatives": 10,
+    "boardTeacher": -30,
     "purpose": -40
   },
+  "recordRaise": 50,
   "heldOut": {
-    "notes": 1244,
     "before": {
-      "any": 44.8,
-      "lead": 32.0,
-      "words": 28.9
+      "rule": "the old composer: a floor, a gap, step bars and two jobs a move",
+      "danya": {
+        "notes": 982,
+        "any": 44.5,
+        "lead": 32.9,
+        "words": 25.0
+      },
+      "writers": {
+        "beats": 554,
+        "used": 50.6,
+        "lead": 32.9,
+        "precision": 41.8,
+        "words": 42.8
+      }
     },
-    "after": {
-      "any": 43.7,
-      "lead": 32.2,
-      "words": 25.1
-    }
-  },
-  "stepBars": {
-    "choices": 30,
-    "theirs": 100,
-    "line": 50,
-    "board": 50,
-    "notYet": 50,
-    "verdict": 50,
-    "habit": 50,
-    "name": 50,
-    "yours": 50
-  },
-  "heldOutWriters": {
-    "beats": 554,
-    "before": {
-      "used": 51.6,
-      "lead": 30.7,
-      "precision": 38.4,
-      "facts": 2.9
-    },
-    "after": {
-      "used": 50.6,
-      "lead": 32.9,
-      "precision": 41.8,
-      "facts": 2.53
+    "fitted": {
+      "danya": {
+        "notes": 982,
+        "any": 47.3,
+        "lead": 34.7,
+        "words": 35.7
+      },
+      "writers": {
+        "beats": 554,
+        "used": 70.6,
+        "lead": 52.9,
+        "precision": 42.7,
+        "words": 53.2
+      }
     }
   }
 }

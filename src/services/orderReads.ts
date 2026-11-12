@@ -50,10 +50,10 @@ export function orderReads(args: {
   topLines: readonly Line[];
   engineBest: string | null;
   /** REQUIRED: may this surface speak opening THEORY — the named opening this
-   *  board equals (`openingEquivalence`), the book move? Only where the student
-   *  asked for it (Review's Theory button, chat, a lesson; David 2026-11-06:
-   *  "Keep the theory part for review only. It belongs in the button"). Learn
-   *  and the Review walk say no. */
+   *  board equals (`openingEquivalence`), the book move? Review's walk, its
+   *  Theory button, chat, the lessons and Learn say yes (David 2026-11-12,
+   *  option B: "Review: It should describe the opening, the plans, the
+   *  theory, the why behind move order"); a caller that must not, says no. */
   theory: boolean;
 }): OrderRead[] {
   const out: OrderRead[] = [];

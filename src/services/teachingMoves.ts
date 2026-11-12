@@ -251,4 +251,5 @@ export const TEACHING_MOVES: Record<CoachFactKind, readonly TeachingMove[]> = {
   // composer says behind the move's lead — "it develops, and it also sets a
   // trap" — admitted by the test fitted on the moves he calls two jobs.
   'two-jobs': ['M-TWO-JOBS'],
+  'book-standing': [], 'book-alternatives': [], 'book-reply': [], 'book-score': [],
 };

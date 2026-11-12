@@ -33,7 +33,11 @@ describe('Review says each claim once a move (Carlsen–Caruana)', () => {
   });
 
   it('26…Qd4: their queen on the loose d5 pawn is said once — by the reach, not again as a weak-pawn target', () => {
-    expect(at(52)).toMatch(/hits your d-pawn, which is loose/);
+    // At most once, by whichever line carries the loose claim. Since every
+    // verified find is said (2026-11-12), the f6 knight's loose e4 pawn at
+    // move 4 is said too, so d5 is this side's third loose piece — quiet by
+    // the loose-count rule (the first is said, the second names the habit).
+    expect((at(52).match(/hits your d-pawn, which is loose|hits your pawn on d5, and nothing guards it/g) ?? []).length).toBeLessThanOrEqual(1);
     expect(at(52)).not.toMatch(/trains on your weak pawn on d5/);
   });
 

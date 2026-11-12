@@ -21,7 +21,21 @@ import { BRIEFING_LINE_PLIES, newLessonVoice } from '../services/reviewMoveBrief
 import { lessonThought } from '../services/moveThoughtFacts';
 import { buildReviewSegmentsForTests, type ReviewMoveInput, type ReviewMoveSegment } from '../services/coachFeatureService';
 import { classifyCpLoss } from '../services/gameAnalysisService';
+import { leadingBookPlies } from '../services/bookDeparture';
 import type { StoryStore } from '../services/gameStory';
+import { setOpeningIdentity } from '../services/openingIdentity';
+import { setOpeningPositions } from '../services/openingPositions';
+import { setKnownSlipIndexForTests } from '../services/knownSlips';
+import { __setLocalDbForTests } from '../services/masterPlayLookup';
+
+/** THE OPENING DATA THE APP LOADS (2026-11-12): the identity file and the
+ *  masters database are fetched by the app at start; a replay without them
+ *  narrated every opening with no name, no plan and no masters' move, so the
+ *  baselines under-reported opening teaching. Every replay loads them. */
+setOpeningIdentity(JSON.parse(readFileSync(join(process.cwd(), 'public/data/opening-identity.json'), 'utf8')));
+setOpeningPositions(JSON.parse(readFileSync(join(process.cwd(), 'public/data/opening-positions.json'), 'utf8')) as Record<string, [string, number]>);
+setKnownSlipIndexForTests((JSON.parse(readFileSync(join(process.cwd(), 'public/data/club-gems.json'), 'utf8')) as { boards: Record<string, never[]> }).boards);
+__setLocalDbForTests(JSON.parse(readFileSync(join(process.cwd(), 'public/data/openings-masters-db.json'), 'utf8')));
 
 export interface EngineRead { uci: string; cp: number | null; mate: number | null; pv: string[] }
 /** The two reads of one ply; `after` is empty when the move ended the game. */
@@ -120,7 +134,7 @@ export function lessonLines(game: ReplayGame): string[] {
   const voice = newLessonVoice();
   // The game's own reads, as the lesson generator's engine pass reads them:
   // the fan before each move and the read after it.
-  return replayPlies(game).map((p) => lessonThought({ theory: true,
+  return replayPlies(game).map((p) => lessonThought({ theory: true, story: true,
     fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own, line: p.line, theirLast: p.theirLast, history: p.history,
     reads: p.before.length || p.after.length ? { before: linesOf(p.before), after: linesOf(p.after), passBefore: [], passAfter: [] } : null,
     costCp: p.costCp,
@@ -131,12 +145,18 @@ export function lessonLines(game: ReplayGame): string[] {
  *  stores them (the eval after, the best eval before, the best move, the
  *  cost, both lines). The opponent's moves are the other seat. */
 export function reviewInputs(game: ReplayGame): ReviewMoveInput[] {
-  return replayPlies(game).map((p) => {
+  // THE BOOK, AS THE APP GRADES IT (`gameAnalysisService`): a move inside the
+  // game's leading book plies is 'book' unless it is a blunder or better; the
+  // replay graded every book move by its cost alone, so 7.h4 (the Tal
+  // Variation) was faulted against "develop first" (2026-11-12).
+  const bookPlies = leadingBookPlies(game.sans);
+  return replayPlies(game).map((p, k) => {
     const white = p.mover === 'w';
     const deliveredMate = /#$/.test(p.san);
-    const classification = p.costCp !== null
+    const graded = p.costCp !== null
       ? classifyCpLoss(p.costCp, p.best ? evalOf(p.best) : null, p.reply ? evalOf(p.reply) : null, white, deliveredMate, p.fenBefore, p.san)
       : null;
+    const classification = k < bookPlies && (graded === null || graded === 'good' || graded === 'inaccuracy' || graded === 'mistake') ? 'book' : graded;
     return {
       ply: p.ply, san: p.san, isCoachMove: !p.own, classification,
       evaluation: p.reply ? evalOf(p.reply) : null,

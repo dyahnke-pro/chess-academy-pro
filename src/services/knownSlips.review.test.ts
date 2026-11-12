@@ -22,17 +22,17 @@ const fenAfter = (sans: string): string => { const c = new Chess(); for (const s
 describe('Review says the known slip ahead, both seats, on his Scotch Gambit game', () => {
   const walk = said(GAME);
   it('2.Nf3 and 3.d4: the mistake the student (Black) could make next — said on the move that reached the board', () => {
-    expect(walk.get(3)).toContain('A known mistake here: f6, and after Nxe5 they win a pawn.');
+    expect(walk.get(3)).toContain('A known mistake here: …f6, and after Nxe5 they win a pawn.');
     // Its words rotate on how many the game has said: one formula is never
     // said three times a game.
-    expect(walk.get(5)).toContain('f6 is a known mistake on this board, and after Bc4 they have the better game.');
+    expect(walk.get(5)).toContain('…f6 is a known mistake on this board, and after Bc4 they have the better game.');
   });
   it('4…Bc5: the trap set for them — called a trap because it clears the trap bar, its material counted off the line', () => {
-    expect(walk.get(8)).toContain('A known trap here: Nxd4, and after Bxd4 you win two knights for a bishop and a pawn.');
+    expect(walk.get(8)).toContain('A known trap here: Nxd4, and after …Bxd4 you win two knights for a bishop and a pawn.');
   });
   it('their slip ahead is the student\'s chance ("you"), the student\'s own is "they"', () => {
-    expect(walk.get(10)).toContain('Qd5 is a known mistake on this board, and after Qe7 you have the better game.');
-    expect(walk.get(11)).toContain('Here, Kf8 is a known mistake at club level: after Bb3 they have the better game.');
+    expect(walk.get(10)).toContain('Qd5 is a known mistake on this board, and after …Qe7 you have the better game.');
+    expect(walk.get(11)).toContain('Here, …Kf8 is a known mistake at club level: after Bb3 they have the better game.');
   });
   it('one a move, and a board the index holds no slip for says none', () => {
     for (const [ply, text] of walk) {
@@ -50,15 +50,15 @@ describe('Review says the slip that was played, as why it was a mistake', () => 
   const SANS = ['e4', 'e5', 'Qh5', 'Nc6', 'Bc4', 'Nf6', 'Qxf7#'];
   it('the student\'s own slip (Black): a known trap, and the mate — said on the move that played it', () => {
     const walk = said({ sans: SANS, studentSide: 'black', reads: [] });
-    expect(walk.get(6)).toContain('Club players go wrong with Nf6 here — a known trap: Qxf7 is mate.');
+    expect(walk.get(6)).toContain('Club players go wrong with …Nf6 here — a known trap: Qxf7 is mate.');
     expect(walk.get(5)).not.toMatch(/known trap|go wrong with/);
     // A trap's material is counted off its line: g6?? Qxe5+ wins a rook, a
     // knight and a pawn — never "the queen" for nine points.
-    expect(walk.get(3)).toContain('A known trap here: g6, and after Qxe5+ they win a rook, a knight and a pawn.');
+    expect(walk.get(3)).toContain('A known trap here: …g6, and after Qxe5+ they win a rook, a knight and a pawn.');
   });
   it('their slip (the student is White): the same trap, said to the student who punishes it', () => {
     const walk = said({ sans: SANS, studentSide: 'white', reads: [] });
-    expect(walk.get(6)).toContain('Club players go wrong with Nf6 here — a known trap: Qxf7 is mate.');
+    expect(walk.get(6)).toContain('Club players go wrong with …Nf6 here — a known trap: Qxf7 is mate.');
     expect(walk.get(3)).toContain('after Qxe5+ you win a rook, a knight and a pawn.');
   });
 });
@@ -114,7 +114,7 @@ describe('a known slip is said once a game, wherever it stays available', () => 
 
   it('…d5 / Nxe5 said on 3.Bb5 is not said again on 5.d3', () => {
     const walk = said({ sans: SANS, studentSide: 'white', reads: [] });
-    expect(walk.get(5)).toContain('d5 is a known mistake on this board, and after Nxe5 you win a pawn.');
+    expect(walk.get(5)).toContain('…d5 is a known mistake on this board, and after Nxe5 you win a pawn.');
     const again = [...walk].filter(([ply, text]) => ply > 5 && /\bd5\b[^.]*known mistake|known mistake[^.]*\bd5\b/.test(text));
     expect(again).toEqual([]);
   });

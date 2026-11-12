@@ -312,15 +312,20 @@ function unpinPoint(fenBefore: string, chessAfter: Chess, mv: Move, moverIsStude
 
 /** A PAWN THAT KICKS a minor or major piece (Learn walk 2026-10-01: …h6
  *  against Bg5 was called "luft"; its point was the bishop). */
-function pawnKickPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean): string | null {
+function pawnKickPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean): { text: string; square: string } | null {
   if (mv.captured) return null;
   // KICK OR TRAP — the one trapped-piece computer decides.
   const hit = pawnHit(chessAfter.fen(), mv);
   if (!hit) return null;
   const whose = moverIsStudent ? 'their' : 'your';
-  return hit.trapped
-    ? `Hits ${whose} ${PIECE_NOUN[hit.type]} on ${hit.square}, and it has no safe square to run to.`
-    : `Kicks ${whose} ${PIECE_NOUN[hit.type]} off ${hit.square}, gaining time.`;
+  // The square it kicks rides with the words, so the composer knows "kicks
+  // their bishop off f5" and "attacks their bishop on f5" are one claim.
+  return {
+    square: hit.square,
+    text: hit.trapped
+      ? `Hits ${whose} ${PIECE_NOUN[hit.type]} on ${hit.square}, and it has no safe square to run to.`
+      : `Kicks ${whose} ${PIECE_NOUN[hit.type]} off ${hit.square}, gaining time.`,
+  };
 }
 
 /** A KICK PREPARED — a quiet pawn step whose NEXT step would attack an enemy
@@ -334,7 +339,23 @@ function pawnKickNextPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean)
   // The kicked piece by what it is; its square said only when two of a kind
   // need it, lit either way (David 2026-11-05: three squares in a breath).
   const ref = pieceRef(chessAfter.fen(), kick.target.sq, moverIsStudent ? mv.color : (mv.color === 'w' ? 'b' : 'w'));
-  const base = `Prepares ${kick.next}, which would kick ${ref ? ref.words : `${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[kick.target.type]} off ${kick.target.sq}`}`;
+  // THE PUSH NAMES WHICH ONE (marks sweep 2026-11-12: "e4 prepares e5, which
+  // would kick their knight on f6" — three squares in a breath): when the
+  // pushed pawn would hit only one enemy piece of that kind, "their knight"
+  // says which; its square stays lit on the board.
+  const whose = moverIsStudent ? 'their' : 'your';
+  const dir = mv.color === 'w' ? 1 : -1;
+  const hitRank = Number(kick.next[1]) + dir;
+  const sameKindHit = [-1, 1].filter((df) => {
+    const f = String.fromCharCode(kick.next.charCodeAt(0) + df);
+    if (f < 'a' || f > 'h') return false;
+    const c = chessAfter.get(`${f}${hitRank}` as Sq);
+    return !!c && c.color !== mv.color && c.type === kick.target.type;
+  }).length;
+  const words = ref && !ref.saysSquare ? ref.words
+    : sameKindHit === 1 ? `${whose} ${PIECE_NOUN[kick.target.type]}`
+      : ref ? ref.words : `${whose} ${PIECE_NOUN[kick.target.type]} off ${kick.target.sq}`;
+  const base = `Prepares ${kick.next}, which would kick ${words}`;
   // THE KICK THAT BREAKS A PIN (David's 13th move, 2026-10-20: a4 prepared
   // a5 against the queen on b6 that pinned his d4 pawn to his king).
   const pin = kickBreaksPin(chessAfter, kick, mv.color);
@@ -442,7 +463,7 @@ export function quietMovePoint(fenBefore: string, san: string): string | null {
   const chess = new Chess(fenBefore);
   let mv: Move;
   try { mv = chess.move(san); } catch { return null; }
-  return unpinPoint(fenBefore, chess, mv, true) ?? pawnKickPoint(chess, mv, true) ?? luftPoint(chess, mv) ?? pawnKickNextPoint(chess, mv, true);
+  return unpinPoint(fenBefore, chess, mv, true) ?? pawnKickPoint(chess, mv, true)?.text ?? luftPoint(chess, mv) ?? pawnKickNextPoint(chess, mv, true);
 }
 
 /**
@@ -706,7 +727,7 @@ export function buildReviewMoveTeachingFact(
     if (!mv.captured && CENTER.has(mv.to) && hasPieces(chess)) {
       const brk = centralBreak(chess, mv, moverIsStudent);
       if (brk) return out('center', brk.text, brk.squares);
-      return out('center', sayIdea(phrases, 'pawn-center', ['Stakes a claim in the center and opens lines for the pieces.', 'Takes its share of the center.', 'It adds another pawn to the center.']));
+      return out('center', sayIdea(phrases, 'pawn-center', ['Stakes a claim in the center and opens lines for the pieces.', 'Takes its share of the center.', 'Adds another pawn to the center.']));
     }
     if (!mv.captured && BROAD_CENTER.has(mv.to) && (toRank === 4 || toRank === 5) && hasPieces(chess)) {
       // A c/f-file pawn that ATTACKS a central square is fighting for the centre
@@ -727,7 +748,7 @@ export function buildReviewMoveTeachingFact(
       // named none of them): a pawn of theirs it hits, or the square with its role.
       const hitPawn = struck.find((sq) => { const p = chess.get(sq as Sq); return p && p.type === 'p' && p.color !== mv.color; });
       const whose = moverIsStudent ? 'their' : 'your';
-      if (hitPawn) return out('center', `Strikes at ${whose} pawn on ${hitPawn} from the flank — a central pawn ${moverIsStudent ? 'you can trade off or make them' : 'they can trade off or make you'} defend.`, [hitPawn]);
+      if (hitPawn) return out('pressure', `Strikes at ${whose} pawn on ${hitPawn} from the flank — a central pawn ${moverIsStudent ? 'you can trade off or make them' : 'they can trade off or make you'} defend.`, [hitPawn]);
       const named = namedSquares(chess, struck, mv.color, whose);
       return named ? out('center', `Fights for the center from the flank: ${named}.`, struck) : out('space', 'Gains space on the flank.');
     }
@@ -736,7 +757,7 @@ export function buildReviewMoveTeachingFact(
     // one rank on an adjacent file. That's back-rank insurance, a real teaching
     // point currently spoken as silence.
     const kick = pawnKickPoint(chess, mv, moverIsStudent);
-    if (kick) return out('tempo', kick);
+    if (kick) return out('tempo', kick.text, [kick.square]);
     const luft = luftPoint(chess, mv, phrases);
     if (luft) return out('king-safety', luft);
     const kickNext = pawnKickNextPoint(chess, mv, moverIsStudent);
@@ -775,12 +796,17 @@ export function buildReviewMoveTeachingFact(
     // already computed — nothing guards it, or it is worth more than the
     // attacker — so each kind keeps its own memory and its own forms.
     const p = PIECE_NOUN[mv.piece]; const t = `${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[winnableTarget.type]} on ${winnableTarget.sq}`;
-    const they = moverIsStudent ? 'they' : 'you';
+    // THE ASK IS SAID ONCE, by the surface that knows the reply must come now
+    // (Review's "it needs an answer this move"): "— pressure you have to answer
+    // — it needs an answer this move" was one claim twice (decision baseline
+    // 2026-11-12, sicilian …Nf6).
     const loose = chess.attackers(winnableTarget.sq as Sq, enemyColor).length === 0;
     const forms = loose
-      ? [`${moverIsStudent ? 'Your' : 'Their'} ${p} hits ${t}, and nothing guards it — pressure ${they} have to answer.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} hits ${t}, which has no guard.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} goes after ${t} — nothing guards it.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} attacks ${t}, and it hangs.`]
-      : [`${moverIsStudent ? 'Your' : 'Their'} ${p} trains on ${t}, which is worth more than the ${p} — pressure ${they} have to answer.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} hits ${t}, which is worth more than the ${p}.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} goes after ${t}. Trading the ${p} for it wins material.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} attacks ${t}, a bigger piece, so a trade there wins material.`];
-    return out('threat', sayIdea(phrases, loose ? 'pressure-loose' : 'pressure-exchange', forms), [mv.to, winnableTarget.sq]);
+      ? [`${moverIsStudent ? 'Your' : 'Their'} ${p} hits ${t}, and nothing guards it.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} hits ${t}, which has no guard.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} goes after ${t} — nothing guards it.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} attacks ${t}, and it hangs.`]
+      : [`${moverIsStudent ? 'Your' : 'Their'} ${p} trains on ${t}, worth more than the ${p}, so it has to move or be guarded.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} hits ${t}, which is worth more than the ${p}.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} goes after ${t}. Trading the ${p} for it wins material.`, `${moverIsStudent ? 'Your' : 'Their'} ${p} attacks ${t}, a bigger piece, so a trade there wins material.`];
+    // An attack on a target that can be WON (loose, or worth more than the
+    // attacker) is pressure — it contains the bare attack on the same square.
+    return out('pressure', sayIdea(phrases, loose ? 'pressure-loose' : 'pressure-exchange', forms), [mv.to, winnableTarget.sq]);
   }
   // (c) A rook or queen seizing a file.
   if (mv.piece === 'r' || mv.piece === 'q') {

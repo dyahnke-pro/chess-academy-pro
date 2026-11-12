@@ -10,7 +10,10 @@ describe('contrastMoves', () => {
     const c = contrastMoves(FEN, 'Rad1', 'Rfd1');
     expect(c).toEqual({ keeps: 'Rfd1', drops: 'Rad1', piece: 'p', square: 'a2' });
     // The pawn is named by its file (`pieceRef`); a2 is lit, not read out.
-    expect(contrastClause(c!, FEN, 'w')).toBe('The difference between Rfd1 and Rad1: Rfd1 keeps your a-pawn defended, and Rad1 leaves it with no guard');
+    expect(contrastClause(c!, FEN, 'w', null)).toBe('The difference between Rfd1 and Rad1: Rfd1 keeps your a-pawn defended, and Rad1 leaves it with no guard');
+    // Played, the move is "your move": the turn names it once.
+    expect(contrastClause(c!, FEN, 'w', 'Rfd1')).toBe('Here Rad1 would leave your a-pawn with no guard, and your move keeps it defended');
+    expect(contrastClause(c!, FEN, 'w', 'Rad1')).toBe('Here Rfd1 keeps your a-pawn defended, and your move leaves it with no guard');
   });
 
   it('the order of the arguments does not change the answer', () => {

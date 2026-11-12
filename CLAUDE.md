@@ -5523,15 +5523,18 @@ playbook holds the rules you MUST follow, in particular:
      not in the weapon section. **The small edges are NOT deleted:** an
      engine-verified slip worth ≥ +0.5 is a KNOWN MISTAKE (`isTeachableSlipGem`),
      worded "a known mistake … punishes it", never "trap" or "crush".
-     `practical`/unverified NEVER ship as either. 🔒 **BOTH ARE TAUGHT ON THE
-     OPENING PAGES ONLY (David 2026-10-29: "it's not good to teach them in
-     learn because that's free and I want a reason for ppl to buy the
-     openings").** The opening page's trap cards and their-known-mistakes card
-     and the Play rung's live punish callout (`findLivePunishment`, called only
-     from `src/components/Openings/`) read them; Learn with Coach (its chat
-     trap menu included) and Review with Coach never teach a gem, and the
-     coach never walks into one on purpose. Gate:
-     `gemCrushLines.computed.test.ts`.
+     `practical`/unverified NEVER ship as either. 🔒 **THE COACH SAYS THEM
+     EVERYWHERE (David 2026-11-12: "You can have coach state those lines and
+     tactics. We need ppl to like my app and use it. Let's not hold anything
+     back. When it becomes more popular we can cut back").** 🔴 This REPLACES
+     the 2026-10-29 "opening pages only" rule, DELETED (the Lake Butler rule).
+     The opening pages keep their trap cards and the Play rung's live callout
+     (`findLivePunishment`, from `src/components/Openings/` only); the coach
+     reads the club index through ONE door, the registry's `knownSlip` /
+     `trapAhead` / `slipsOnLine` rows — Review's facet builder, the lesson and
+     chat composer (`moveThoughtFacts`), and Learn's `knownSlip` lane (a slip
+     either side just played). The coach still never walks into one on
+     purpose. Gate: `gemCrushLines.computed.test.ts`.
   5. **WALK EVERY VARIATION'S FULL LINE** node-by-node (not just the shared
      prefix — Marshall/Breyer/Berlin diverge late), with a shared scanned-FEN
      set so overlapping lines don't re-burn engine time.
@@ -5836,24 +5839,28 @@ Learn free play no producer names the student's move — the better move after
 a mistake, the held move at a key moment, the answer to their slip — unless the
 student ASKED (Show me, Hint, a question).
 
-🔄 **OPENING THEORY: REVIEW'S THEORY BUTTON, AND LEARN FOR NOW (David
-2026-11-05/06: "Keep the theory part for review only. It belongs in the
-button." → "Yes move theory to review button, but keep in learn for now
-also.").** 🔴 This REPLACES the 2026-10-14 "ONE CARVE-OUT — THEORY", which is
-DELETED rather than annotated. The Review WALK says no opening theory: no book
-move, no book standing ("the masters' main line", "the last book move"), no
-masters' plan or opening stat, no "the same opening as", no fork / branch /
-their-setup / key-break / horizon-plan story beat — those are the Theory
-button's (`reviewOpeningTheory`: the identity and equivalence in the intro, the
-student's departure with the book move's job via `bookMoveWhy`, the masters'
-plan and the break in the outro). Learn keeps its theory lanes until David
-says otherwise; chat and the lessons say theory. Every theory producer takes a
-REQUIRED `theory: boolean` (`openingStory`, `positionFacts`, `orderReads`,
-`moveThoughtFacts`, `studentMoveTeaching`), so a new caller decides it; only
-the Review walk passes `false`. Board beats speak everywhere
-(`openingStory.BEAT_GROUNDS`: the structure's cost and payment, what their move
-does, the "both kings" character). Gates: `openingStory.test.ts`,
-`coachFeatureService.openingStory.test.ts`, `bookMoveWhy.test.ts`.
+🔄 **OPENING THEORY: REVIEW TEACHES THE OPENING; THE STATISTICS ARE THE THEORY
+BUTTON'S; LEARN SAYS IT ON A SLIP (David 2026-11-12: "Review: It should describe
+the opening, the plans, the theory, the why behind move order, common mistakes.
+Learn should have all those things ready to go at a moments notice if the user
+makes a slip" → option B, "Agreed"; "I want opening theory to be calculated").**
+🔴 This REPLACES the 2026-11-05/06 "theory only in the Theory button" rule, which
+is DELETED rather than annotated. The Review WALK says the opening on the move
+where it belongs: what it is, the roads masters take at a fork, the road chosen
+and why, their setup, the key break, the plan beyond the book, the book move's
+job, the move-order and wrong-square slips (`openingSlip`), the transpositions
+(`openingEquivalence`), the common mistakes. The book's STATISTICS — the usual
+reply, how deep the theory runs, top-level games — stay behind the Theory button
+(`reviewOpeningTheory`), in chat and in the lessons: the opening story's
+`theory` ground (`BEAT_GROUNDS`; the plans rest on `plan`). Learn computes the
+same facts on every book position and says them when the student slips. Every
+theory producer takes a REQUIRED `theory: boolean` (`openingStory`,
+`positionFacts`, `orderReads`, `moveThoughtFacts`, `studentMoveTeaching`); the
+Review walk passes `REVIEW_WALK_TEACHES_THEORY` and the story `false` (its
+statistics). All of it is CALCULATED — Wikibooks, Wikipedia and Danya are
+training and reference data only, never spoken (`data/sources/wikibooks/`,
+Drive). Gates: `openingStory.test.ts`, `coachFeatureService.openingStory.test.ts`,
+`bookMoveWhy.test.ts`.
 
 What still speaks:
 1. **The why of every mistake** — yours and theirs at the same detail (David
@@ -6918,6 +6925,7 @@ After every `git push origin main`:
    | the opponent's STRENGTH or MOVE CHOICE on any surface (`gameStrength`, `liveStrength`, `humanMove`, `humanReply`, `engineStrength`, `getAdaptiveMove`'s human layer, `coachPlaySession.getCoachMove`, Play's fast path) | `scripts/audit-opponent-strength-prod.mjs` (muted, on David's record: plays Learn, two Play games and the Openings Play tab; S2 one `studentElo` per game, S3 a second game is a new game, S4 past the book the human model chose) + `npx vitest run src/services/gameStrength.test.ts src/services/humanMove.test.ts src/services/humanReply.test.ts src/test/oneRatedMoveDoor.gate.test.ts`. A changed feature or fit re-measures the model: `scripts/meter/all-moves-reads.mjs` in shards, `scripts/meter/engine-elo-picks.mjs`, then `HUMAN_FIT=1 HUMAN_READS=<dir> HUMAN_ENGINE_PICKS=<file> HUMAN_FIT_WRITE=1 npx vitest run src/services/humanMove.measure.test.ts` — READ the per-rating band table against the players' |
    | `/coach/play` + `/coach` review — full games | `scripts/audit-coach-full-games.mjs` via the `full-game-audit.yml` workflow (🔒 THE FULL-GAME AUDIT STANDARD — see locked section below the matrix) |
    | the Stockfish SINGLETON's threads on review (`stockfishEngine` multi-thread build, `setMultiPv`, `analyzeWithBudget`, the review's projection chains, `scanCriticalMoments`) | `scripts/audit-engine-worker-census-prod.mjs` — names the UCI command that precedes each pthread spawn (CDP target census + a main-thread `postMessage` hook). Measured 2026-09-19: the reopen census climbs 5→41→76 inside ONE live engine with zero stalls/respawns in PostHog; under a mid-run deploy it reached 124 and threw `WebAssembly.Memory(): could not allocate memory`. Run it BEFORE touching the singleton for #21; its per-spawn histogram is the diagnosis. |
+   | opening theory, calculated (`openingTheory`, `moveStops`, `pieceOutFirst`, `lineCut`, the only-move fact, the opening story in lessons; Learn's `openingTheory`/`moveGains` lanes on a slip) | `npx vitest run src/services/openingTheory.test.ts src/services/moveStops.test.ts src/services/pieceOutFirst.test.ts src/services/lineCut.test.ts src/services/coachFeatureService.openingStory.test.ts` + the Wikibooks bench (`DANYA_BENCH=1 DANYA_BENCH_NOTES=data/sources/wikibooks/wikibooks-notes.json DANYA_BENCH_READS=audit-reports/.fixtures/wiki-bench DANYA_BENCH_EVERY=3 DANYA_BENCH_OFFSET=<i> DANYA_BENCH_DUMP=<dir>/dump-<i>.jsonl`, three shards, ~25 min) and READ the lesson + Review tape on the decision baseline (Review: no main-move/score/reply statistics; Learn: none in book) |
    | the ONE cost reason and its naming rule (`costReason`, `lineTrust`, Review's deep read `COST_REASON_DEPTH`, the free second read `AnalysisLine.earlier`, `errorWhy`'s REQUIRED `secondReads`, the two-move deep fact) | `scripts/audit-review-overhaul-prod.mjs` row `REASON both-seats-same-depth` (both seats' costly moves carry one reason row; a named line only near / agreed / forcing-agreed; the seats named at the same rate) + `npx vitest run src/services/lineTrust.test.ts src/services/costReason.test.ts src/services/threeFacts.test.ts`; re-measure on the app's own path with `REVIEW_DEPTH_EVAL=1 npx vitest run src/services/reviewDepth.eval.measure.test.ts` (uncapped, 8-ply record lines and the pooled deep read by default — the first runs measured the capped path, which the app does not run) |
    | batch game analysis / the Stockfish worker pool (`gameAnalysisService`, `stockfishEngine`, `resolveWorkerUrl`) | `scripts/audit-analysis-pool-engine-prod.mjs` (the pool names its engine build + it matches the singleton's + no WASM trap — the surface that crash-stormed iOS invisibly) |
    | `/coach/teach` bare-name routing (`CoachTeachPage` opening capture, `questionIntents`) | `scripts/audit-bare-name-routing-prod.mjs` (a QUESTION must not be routed as an opening name and burn a generation — and a real name must still route) |

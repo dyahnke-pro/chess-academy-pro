@@ -26,6 +26,8 @@ describe('boardComputers — the one registry', () => {
           structureMove: /studentMoveStructure\(/, structureTheirMove: /theirMoveStructure\(/, structureBoard: /boardStructure\(/,
           // Learn packs the priority to the hint dial's register, so it calls the computer itself.
           priorityFirst: /buildPriorityFirst\(/,
+          // The composer reads the opening-theory and move-gain computers directly (gaps A-B, 2026-11-12).
+          openingTheory: /openingTheoryFacts\(/, moveGains: /moveStops\(/,
         };
         if (!viaRegistry && !(fnByComputer[id]?.test(code))) bad.push(`${id}/${surface}: ${ans.wired} never calls it`);
       }

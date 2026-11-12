@@ -27,7 +27,7 @@ import { plyFactsClause, moveOnlyRestates, computePvLine, pvDepthForRating, afte
 import { countWord, lineSeatAt, lineShape, lineWinnerFor, withArticle } from '../utils/andList';
 import { BRIEFING_LINE_PLIES, buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { moveThoughtFacts } from './moveThoughtFacts';
-import { composeThought, speaksBehindLead, NOT_LED, type ThoughtStep } from './thoughtComposer';
+import { composeThought, speaksBehindLead, NOT_LED, type ThoughtStep, type ThoughtRecord } from './thoughtComposer';
 import { FUNDAMENTAL_IDEA, type IdeaKind } from './ideaKind';
 import { explainEvalByPieceQuality, worstPieceMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
@@ -424,6 +424,15 @@ export function recapSecondPerson(r: {
  *  24 Review sentences naming a square nothing lit, from nine producers (the
  *  better move's reason, the route, "it let you play d5, which attacks their
  *  knight on c6" …); the board reads the words, so no producer can forget. */
+/** THE REVIEW WALK TEACHES THE OPENING (David 2026-11-12, option B: "Review:
+ *  It should describe the opening, the plans, the theory, the why behind move
+ *  order, common mistakes" → "Agreed"): the book move's job, the move-order and
+ *  wrong-square slips, the transpositions, the masters' plans speak on the move
+ *  where they belong. The book's statistics — the usual reply, how deep the
+ *  theory runs, top-level games — stay behind the Theory button (the opening
+ *  story's `theory` ground, still off in the walk). */
+const REVIEW_WALK_TEACHES_THEORY = true;
+
 export function segmentLitSquares(seg: Pick<ReviewMoveSegment, 'narration' | 'keySquares' | 'fenAfter' | 'fenBefore'>): string[] {
   const out = new Set<string>(seg.keySquares ?? []);
   if (seg.narration) for (const sq of squaresNamedNotMoves(seg.narration, [seg.fenAfter, seg.fenBefore])) out.add(sq);
@@ -966,9 +975,8 @@ function attributeGameFundamentals(
     let fundamentals: PrincipleAttribution[] = [];
     try {
       fundamentals = attributePrinciples({
-        // The Review walk says no opening theory (David 2026-11-06): the
-        // departure from the book is the Theory button's.
-        theory: false,
+        // The walk says the departure from the book and why (option B).
+        theory: REVIEW_WALK_TEACHES_THEORY,
         historySans: sansForRun.slice(0, m.ply),
         bestSan: bestMoveSan,
         replySan: sansForRun[m.ply] ?? null,
@@ -1642,6 +1650,9 @@ function* reviewSegmentSteps(
   const fade = fadeLevelsFrom(studentNeed?.heat);
   // The record the threat voice reads (the same shape Learn's door reads).
   const reviewRecord: StudentRecord = { weaknesses: studentWeaknesses ?? [], capabilities: studentNeed?.capabilities ?? null, heat: studentNeed?.heat ?? new Map() };
+  // The same record decides what the composer holds as proven (green) and
+  // raises as a hole (red) — read off the one heat map.
+  const thoughtRecord: ThoughtRecord = { stateOf: (skill) => reviewRecord.heat.get(skill)?.state ?? 'grey' };
   // Package-completion once-per-game beats (David 2026-07-24: "complete the
   // package"): the simplify-when-ahead trade idea fires at most once (the
   // `tradeIdeaSpoken` flag in the story — no seed carried it before 8d).
@@ -2406,7 +2417,7 @@ function* reviewSegmentSteps(
       if (moverColor === playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
         const sign = moverColor === 'white' ? 1 : -1;
         const bothCp = Math.abs(m.preMoveEval) < 5000 && Math.abs(m.evaluation) < 5000;
-        const hints = studentMoveTeaching({ theory: false, namesStudentMoves: true,
+        const hints = studentMoveTeaching({ theory: REVIEW_WALK_TEACHES_THEORY, namesStudentMoves: true,
           fenBefore: fenPair.fenBefore,
           san: m.san,
           history: sansForRun.slice(0, m.ply),
@@ -2662,11 +2673,16 @@ function* reviewSegmentSteps(
         // step: the composer adds only a second job — a new claim that clears
         // the policy's floor (…Nxd5's rule said the recapture; "adds its
         // weight to f4" was trivia behind it).
-        const stepLeads = facets.filter((f) => FACET_ROLE[f.tag] === 'teach' && (stepOf(f.tag, 'student') === 'yours' || stepOf(f.tag, 'student') === 'theirs'));
+        // The opening's story (what masters play from here, their break) is the
+        // opening's plan, never this move's job: it does not lead the move's
+        // step, so the move's own reason still speaks (decision baseline
+        // 2026-11-12, 2…c6: "In master games their break is …d5" silenced "c6
+        // prepares d5 — when the d-pawn goes forward, it will be supported").
+        const stepLeads = facets.filter((f) => FACET_ROLE[f.tag] === 'teach' && !(f.identity ?? '').startsWith('hint:story:') && (stepOf(f.tag, 'student') === 'yours' || stepOf(f.tag, 'student') === 'theirs'));
         const leadSquares = new Set(stepLeads.flatMap((f) => [...f.squares]));
         const phrasesHere = new Map(thoughtPhrases);
         const memoryHere = { keys: new Set(thoughtKeys) };
-        const thoughtFacts = moveThoughtFacts({ theory: false, tense: 'past',
+        const thoughtFacts = moveThoughtFacts({ theory: REVIEW_WALK_TEACHES_THEORY, story: false, tense: 'past',
           fenBefore: fenPair.fenBefore, san: m.san, moverIsStudent: mine, prev: prevCap,
           line: moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),
           theirLast: i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null,
@@ -2684,6 +2700,17 @@ function* reviewSegmentSteps(
           // The king walked by hand: Review says it through its own facets
           // (the registry's reads, both seats), so it is not said twice.
           && f.source !== 'kingWalk'
+          // A transposition or an analogy: Review says it through its opening
+          // lines (the order reads), so it is not said twice.
+          && !(f.source === 'openingTheory' && f.kind === 'equivalence')
+          // The opening's story: Review says it through its own story lines.
+          && f.computer !== 'openingStoryAt'
+          // Known slips: Review says them from its facet builder (reviewFullData).
+          && f.source !== 'knownSlip'
+          // The book's statistics (main move or sideline, how it scores, the
+          // usual reply) are the Theory button's (option B, David 2026-11-12);
+          // the other main tries and their aims are theory the walk teaches.
+          && !(f.kind === 'book-standing' || f.kind === 'book-score' || f.kind === 'book-reply')
           // The moves a player weighs: Review says them through its own
           // facets (the registry's reads, both seats).
           && f.source !== 'weighed'
@@ -2699,7 +2726,7 @@ function* reviewSegmentSteps(
         // fact is the move's second job and nothing follows it (two jobs a
         // move at most, M-TWO-JOBS).
         const led: ReadonlySet<ThoughtStep> = stepLeads.length > 0 ? new Set<ThoughtStep>([mine ? 'yours' : 'theirs']) : NOT_LED;
-        const thought = composeThought(thoughtFacts, 'review', memoryHere, led);
+        const thought = composeThought(thoughtFacts, 'review', memoryHere, led, thoughtRecord);
         if (thought.spoken && !hintsSaid.has(id)) {
           const named = new Set(thought.kept.flatMap((f) => [...f.squares]));
           // The job's attack said here is the teaching statement of the
@@ -2733,10 +2760,22 @@ function* reviewSegmentSteps(
           }
           const worded = (lead: boolean): string => thought.kept.map((f, k) => {
             const text = k === 0 && !lead ? (f.alsoText ?? f.text) : f.text;
-            return k === asked ? text.replace(/\.$/, ', and it needs an answer this move.') : text;
+            // A sentence that already ends on an "and" clause takes the ask as
+            // its own clause, never a second "and" (decision baseline
+            // 2026-11-12: "…and hitting the e-pawn, and it needs an answer").
+            if (k !== asked) return text;
+            const last = text.split(/(?<=[.!?])\s+/).at(-1) ?? text;
+            // …and never a dash chain ("…and nothing guards it — it needs an
+            // answer this move"): it rides as the sentence's consequence. Never
+            // a sentence of its own — the same words every time, the say-once
+            // ledger drops the second.
+            return /\band\b|—/.test(last) ? text.replace(/\.$/, ', so it needs an answer this move.') : text.replace(/\.$/, ', and it needs an answer this move.');
           }).join(' ');
           const spoken = worded(true);
-          const raw = fact('moveThoughtFacts', 'move-job', spoken, { identity: id, squares: [...named] });
+          // A kept fact's line rides with the words that say it ("It also heads
+          // on to e6 a move later" — marks sweep 2026-11-12: said, never drawn).
+          const keptLines = thought.kept.flatMap((f) => [...(f.lines ?? [])]);
+          const raw = fact('moveThoughtFacts', 'move-job', spoken, { identity: id, squares: [...named], ...(keptLines.length > 0 ? { lines: keptLines } : {}) });
           // Only a line that opens with the move may be followed by "It also"
           // (…Kxf7's lead was "Your bishop on c8 stays home for now").
           const headLeads = stepLeads.filter((f) => f.headsMove === true);

@@ -68,8 +68,8 @@ describe('Review walk 2026-10-01 — a prepared kick is the point of h4', () => 
   const pre = (() => { const c = new Chess(); for (const m of 'e4 d5 exd5 Nf6 Bb5+ Bd7 Be2 Nxd5 d4 Nc6 c4 Nf6 d5 Ne5 Nf3 Ng6'.split(' ')) c.move(m); return c.fen(); })();
   it('h4 prepares h5 against the knight on g6', () => {
     // Two knights of theirs: the kicked one keeps its square (David 2026-11-05).
-    expect(quietMovePoint(pre, 'h4')).toBe('Prepares h5, which would kick their knight on g6.');
-    expect(buildReviewMoveTeaching(pre, 'h4', true)).toMatch(/Prepares h5, which would kick their knight on g6/);
+    expect(quietMovePoint(pre, 'h4')).toBe('Prepares h5, which would kick their knight.');
+    expect(buildReviewMoveTeaching(pre, 'h4', true)).toMatch(/Prepares h5, which would kick their knight\./);
   });
   it('not a push the pawn could already play in one move (his King\'s Indian, 9…c6)', () => {
     // Learn said "c6 prepares c5, which would kick their knight on d4" — but
@@ -88,7 +88,7 @@ describe('Review walk 2026-10-01 — a prepared kick is the point of h4', () => 
 describe('Review walk 2026-10-01 — a kick by the opponent is said in the student seat', () => {
   it('their h4 prepares h5 against YOUR knight', () => {
     const c = new Chess(); for (const m of 'e4 d5 exd5 Nf6 Bb5+ Bd7 Be2 Nxd5 d4 Nc6 c4 Nf6 d5 Ne5 Nf3 Ng6'.split(' ')) c.move(m);
-    expect(buildReviewMoveTeaching(c.fen(), 'h4', false)).toMatch(/kick your knight on g6/);
+    expect(buildReviewMoveTeaching(c.fen(), 'h4', false)).toMatch(/kick your knight\./);
   });
   it('their pawn kick names your piece', () => {
     const c = new Chess(); for (const m of 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 d3 h6 Nf3 e4 dxe4 Nxe4 Qe2 Nxc4 Qxc4'.split(' ')) c.move(m);

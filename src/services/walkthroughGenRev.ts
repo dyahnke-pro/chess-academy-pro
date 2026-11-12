@@ -84,4 +84,6 @@
 // its exchange ends on; a pin is the one pin test's; "prepares X" needs X in
 // the engine's own line; a held bishop check must be usable; a file their pawn
 // still stands on is half-open; a pawn they can simply take kicks nothing.
-export const WALKTHROUGH_GEN_REV = '2026-11-12-exchange-end';
+// 2026-11-12-found-spoken — the composer says every verified find, hidden
+// consequences never folded away, obvious facts last, each claim once.
+export const WALKTHROUGH_GEN_REV = '2026-11-12-found-spoken';

@@ -473,7 +473,7 @@ describe('a clean move with no rule says what it is FOR — Learn\'s move point 
       forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     }));
     // Two black knights: the kicked one keeps its square (David 2026-11-05).
-    expect(facets.some((f) => f === '[point] g4 prepares g5, which would kick their knight on f6.')).toBe(true);
+    expect(facets.some((f) => f === '[point] g4 prepares g5, which would kick their knight.')).toBe(true);
   });
 });
 

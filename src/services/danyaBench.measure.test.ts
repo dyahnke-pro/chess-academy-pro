@@ -42,6 +42,9 @@ import { decisiveReason, type DecisiveReason } from './decisiveReason';
 import { answerQuestionThought } from '../coach/questionThought';
 import { moveJob, bookMoveWhy, MINE, THEIRS } from './bookMoveWhy';
 import { mastersMovesSync, __setLocalDbForTests } from './masterPlayLookup';
+import { setOpeningIdentity } from './openingIdentity';
+import { setOpeningPositions } from './openingPositions';
+import { setKnownSlipIndexForTests } from './knownSlips';
 import { computeMoveFundamentals } from './moveFundamentals';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 import { deepFact, theirTarget } from './threeFacts';
@@ -224,42 +227,42 @@ type Kind =
   | 'line' | 'habit' | 'theory' | 'mate' | 'material' | 'endgame' | 'trap' | 'rescue';
 
 const LEXICON: Record<Kind, RegExp> = {
-  develop: /\b(develop(s|ed|ing|ment)?|bring(s|ing)? (out|into play))\b/,
+  develop: /\b(develop(s|ed|ing|ment)?|bring(s|ing)? (out|into play)|fianchett\w*)\b/,
   castle: /\b(castl(e|es|ed|ing)|o-o)\b/,
   center: /\b(cent(re|er|ral|res|ers))\b/,
   space: /\b(space|clamp|gain(s|ing)? ground|cramp(s|ed)?)\b/,
-  break: /\b(break|strike(s|ing)? at|undermin\w*|lever)\b/,
-  attack: /\b(attack(s|ing|ed)?|hit(s|ting)?|pressure|eye(s|ing)?|target(s|ing)?|threat\w*|go(es)? after|aim(s|ed|ing)? at)\b/,
+  break: /\b(break|break(s|ing)? up|base of the (pawn )?chain|strike(s|ing)? at|undermin\w*|lever)\b/,
+  attack: /\b(attack(s|ing|ed)?|attackers?|hit(s|ting)?|pressure|eye(s|ing)?|target(s|ing)?|threat\w*|go(es)? after|aim(s|ed|ing)? at|pil(e|es|ed|ing) (up )?(on|onto)|lean(s|ing)? on|bear(s|ing)? down)\b/,
   defend: /\b(defen(d|ds|ded|ding|ce|se|der)|protect\w*|guard\w*|support\w*|shield\w*|cover(s|ed|ing)?)\b/,
   pin: /\b(pin(s|ned|ning)?)\b/,
   fork: /\bfork\w*/,
   skewer: /\bskewer\w*/,
   discovered: /\bdiscover\w*/,
   trade: /\b(trad(e|es|ed|ing)|exchang\w*|swap\w*)\b/,
-  capture: /\b(captur\w*|take(s)? (back|on)|recaptur\w*|win(s|ning)? (a|the) (pawn|piece|knight|bishop|rook|queen|exchange)|grab\w*)\b/,
-  prevent: /\b(prevent\w*|stop(s|ping)?|deny|denies|denying|take(s)? away|keep(s|ing)? \w+ (\w+ )?(off|out)|prophyla\w*|rule(s)? out|so that \w+ (can't|cannot)|restrain\w*|restrict\w*|blockad\w*)\b/,
-  prepare: /\b(prepar\w*|make(s)? room|clear(s|ing)? the way|open(s|ing)? the way|ready to|so that|in order to|paving|set(s|ting)? up)\b/,
+  capture: /\b(captur\w*|take(s)? (back|on)|recaptur\w*|win(s|ning)? (a|the) (pawn|piece|knight|bishop|rook|queen|exchange)|grab\w*(?! the [a-h][1-8]-square))\b/,
+  prevent: /\b((refus\w*|not|never|without|won't|doesn't|does not) (to )?(walk\w* into|allow\w*)|avoiding|keep(s|ing)? \w+ (\w+ )?from|can no longer|prevent\w*|stop(s|ping)?|deny|denies|denying|take(s)? away|keep(s|ing)? \w+ (\w+ )?(off|out)|prophyla\w*|rule(s)? out|so that \w+ (can't|cannot)|restrain\w*|restrict\w*|blockad\w*)\b/,
+  prepare: /\b(prepar\w*|make(s)? room|clear(s|ing)? the way|open(s|ing)? the way|ready to|so that|in order to|paving|set(s|ting)? up|invit(e|es|ing))\b/,
   tempo: /\b(tempo|tempi|kick(s|ing)?|chase(s|d)?|gain(s|ing)? (a )?time)\b/,
-  'king-safety': /\b(king safety|safe king|exposed|luft|shelter|escape square|attack(ing)? the king|king('s)? (is )?(safe|exposed|stuck))\b/,
-  weakness: /\b(weak(ness|nesses|en|ens|ened|ening)?|isolat\w*|doubled|backward|hole(s)?)\b/,
-  structure: /\b(pawn structure|pawn chain|structure)\b/,
+  'king-safety': /\b(tuck\w* (\w+ )?king|king\w* tucks?|king (\w+ )?(to )?safe(ty|ly)|king safety|safe king|exposed|luft|shelter|escape square|attack(ing)? the king|king('s)? (is )?(safe|exposed|stuck))\b/,
+  weakness: /\b(concede(s|d)? (the|a) [\w-]+|gives? up control|weak(ness|nesses|en|ens|ened|ening)?|isolat\w*|doubled|backward|hole(s)?)\b/,
+  structure: /\b(pawn structure|pawn chain|structure|chain)\b/,
   outpost: /\boutpost\w*/,
   file: /\b(open file|half-open|semi-open|[a-h]-file|the file)\b/,
-  diagonal: /\bdiagonal\w*/,
-  activity: /\b(activ(e|ity|ate|ates|ating)|improv(e|es|ing)|rerout\w*|manoeuv\w*|maneuv\w*|redeploy\w*|worst piece|head(s|ing)? (for|to|toward)|on (its|the) way to|by way of|transit|send(s|ing)? the (knight|bishop|rook|queen|king) (on )?to|then (the )?(knight|bishop|rook|queen|king) (to|on to|goes|heads|comes))\b/,
+  diagonal: /\b(diagonal\w*|fianchett\w*)/,
+  activity: /\b(on the rim|stranded|misplaced|swing(s|ing)?|activ(e|ity|ate|ates|ating)|improv(e|es|ing)|rerout\w*|manoeuv\w*|maneuv\w*|redeploy\w*|worst piece|head(s|ing)? (for|to|toward)|on (its|the) way to|by way of|transit|send(s|ing)? the (knight|bishop|rook|queen|king) (on )?to|then (the )?(knight|bishop|rook|queen|king) (to|on to|goes|heads|comes))\b/,
   plan: /\b(plan(s)?|the idea|idea is|aim(s|ing)?|goal|want(s)? to|looking to|intend\w*)\b/,
   alternative: /\b(instead|rather than|would be|too (passive|slow|early|risky|committal)|the problem with|doesn't work|does not work|fails?|failed|why not|not good|wrong)\b/,
-  order: /\b(first|before|not yet|move order|only then|after that|premature|too early|wait(s)?)\b/,
+  order: /\b(first(?! time)|before|not yet|move order|only then|after that|premature|too early|wait(s)?)\b/,
   line: /\bif\b[^.]{0,120}(\bthen\b|,)/,
-  habit: /\b(always|whenever|never|rule of thumb|principle|remember|habit|ask yourself|get used to|in general|typical(ly)?)\b/,
-  theory: /\b(main ?line|theory|theoretical|book|popular|most common|the masters|classical|standard|mainstream)\b/,
+  habit: /\b((?<!almost )always|whenever|never|rule of thumb|principle|remember|habit|ask yourself|get used to|in general|typical(ly)?)\b/,
+  theory: /\b(transpos\w*|main ?line|theory|theoretical|book|popular|most common|the masters|classical|standard|mainstream|rarely played|seldom played|(main|usual|normal) move|master (play|games?|practice)|(better|superior|good|poor|bad) record|top[- ]level|grandmasters?)\b/,
   mate: /\b(mate|checkmate|mating)\b/,
-  material: /\b(material|pawn up|piece up|up a (pawn|piece)|down a (pawn|piece)|extra pawn|exchange up)\b/,
+  material: /\b(material|pawn up|piece up|up a (pawn|piece)|down a (pawn|piece)|extra pawn|exchange up|sacrific\w*|gambit\w*|for the pawn|a pawn down|pawn for)\b/,
   endgame: /\b(endgame|ending|promot\w*|passed pawn|passer|opposition|queening)\b/,
   trap: /\btrap(s|ped|ping)?\b/,
   // A RESCUE (Build 5): his "retreats", "steps away", "saves the …" had no kind
   // at all (382 notes), so neither his rescues nor the coach's were seen.
-  rescue: /\b(retreat\w*|step(s|ping)? (back|away|out of)|drops? back|goes back|out of (the )?(attack|danger|reach|check)|get(s|ting)? (\w+ )?(\w+ )?out of|escap\w*|sav(e|es|ed|ing) (the|your|their|its|a))\b/,
+  rescue: /\b(scurr\w*|(goes|comes|falls|heads|retreats?) back|retreat\w*|step(s|ping)? (back|away|out of)|drops? back|goes back|out of (the )?(attack|danger|reach|check)|get(s|ting)? (\w+ )?(\w+ )?out of|escap\w*|sav(e|es|ed|ing) (the|your|their|its|a))\b/,
 };
 const ALL_KINDS = Object.keys(LEXICON) as Kind[];
 /** Kinds whose point is a TARGET: the coach must name the same square. */
@@ -286,6 +289,8 @@ const IDEA_AS_KINDS: Record<IdeaKind, Kind[]> = {
   outpost: ['outpost'], file: ['file'], diagonal: ['diagonal'], 'passed-pawn': ['endgame'], promote: ['endgame'],
   weakness: ['weakness', 'structure'], tempo: ['tempo'], 'king-activity': ['endgame', 'activity'], route: ['activity', 'plan'],
   'set-up': ['prepare', 'line', 'attack'], choice: ['alternative'], order: ['order'], plan: ['plan'], eval: ['material'],
+  // Opening theory, calculated: the main move, the other tries, the reply, the score.
+  theory: ['theory', 'alternative'],
 };
 const SQUARE = /\b[a-h][1-8]\b/g;
 function sentencesOf(text: string): string[] {
@@ -361,11 +366,11 @@ function once<T>(fn: (p: Position) => T): (p: Position) => T {
 const lessonPick = once((p: Position): { facts: ThoughtFact[]; composed: ComposedThought } => {
   // The lesson's own inputs: the engine's reads around the move (its choices
   // are the move's own facts now — the weighing is no longer spliced here).
-  const facts = moveThoughtFacts({ theory: true, tense: 'now',
+  const facts = moveThoughtFacts({ theory: true, story: true, tense: 'now',
     fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
     line: lineAhead(p), history: p.history, theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
   });
-  return { facts, composed: composeThought(facts, 'lesson', { keys: new Set<string>() }, NOT_LED) };
+  return { facts, composed: composeThought(facts, 'lesson', { keys: new Set<string>() }, NOT_LED, null) };
 });
 
 /** Review's own line for the move, with its `[tag]`s: the walk's segment
@@ -434,7 +439,7 @@ const TAG = /\[([a-z0-9-]+)\]/gi;
 const tagsOf = (text: string | null): string[] => [...(text ?? '').matchAll(TAG)].map((m) => m[1].toLowerCase());
 
 const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Promise<string | string[] | null>> = {
-  lesson: (p) => lessonThought({ theory: true,
+  lesson: (p) => lessonThought({ theory: true, story: true,
     fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own,
     line: lineAhead(p), history: p.history, theirLast: p.theirLast, reads: readsOf(p), costCp: costCp(p),
   }, newLessonVoice(), null),
@@ -867,6 +872,9 @@ const pct = (t: Tally | undefined): string => (t && t.danya ? `${Math.round((100
 it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () => {
   // The books the app loads over the network, from disk.
   __setLocalDbForTests(JSON.parse(readFileSync('public/data/openings-masters-db.json', 'utf8')));
+  setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
+  setOpeningPositions(JSON.parse(readFileSync('public/data/opening-positions.json', 'utf8')) as Record<string, [string, number]>);
+  setKnownSlipIndexForTests((JSON.parse(readFileSync('public/data/club-gems.json', 'utf8')) as { boards: Record<string, never[]> }).boards);
   const positions = loadPositions();
   expect(positions.length).toBeGreaterThan(0);
   const only = (process.env.DANYA_BENCH_SOURCES ?? '').split(',').filter(Boolean) as SourceId[];
@@ -885,6 +893,12 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
   const kept: KeptNote[] = [];
   const factValues = new Map<string, { n: number; hits: number; lead: number }>();
   const dump: string[] | null = process.env.DANYA_BENCH_DUMP ? [] : null;
+  // SAVED AS IT GOES (2026-11-12: a 2-hour dump hit its time limit and kept
+  // nothing): each note's line is appended to <dump>.partial the moment it is
+  // made, and the line count there is the run's progress.
+  const partial = process.env.DANYA_BENCH_DUMP ? `${process.env.DANYA_BENCH_DUMP}.partial` : null;
+  if (partial) writeFileSync(partial, '');
+  const keep = (line: string): void => { dump?.push(line); if (partial) appendFileSync(partial, line + '\n'); };
   const reachOn = process.env.DANYA_BENCH_REACH !== '0';
   const reach = new Map<string, ReachTally>();
   const tally = (c: string): ReachTally => {
@@ -955,7 +969,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
     // EVERY COMPOSER FACT, SCORED BY ITS OWN IDEA: how often Danya says the
     // idea a source states, when that source states it (the learned order).
     {
-      const facts = moveThoughtFacts({ theory: true, tense: 'now',
+      const facts = moveThoughtFacts({ theory: true, story: true, tense: 'now',
         fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
         line: lineAhead(p), history: p.history, theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
       });
@@ -966,7 +980,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
         // The one composer's own pick on this move (the `thought` source's
         // inputs): what it kept, in spoken order, and why each other fact held.
         const pick = lessonPick(p).composed;
-        dump.push(JSON.stringify({
+        keep(JSON.stringify({
           id: p.note.id, video: videoOf(p.note.id), own: p.own, to: p.to, san: p.san, fenBefore: p.fenBefore,
           danyaText, lesson: said.lesson, sources: said,
           composer: {

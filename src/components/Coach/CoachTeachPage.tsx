@@ -10089,6 +10089,17 @@ export function CoachTeachPage({ mode }: {
     // orders it as a teaching fact (David 2026-10-14: "make sure this new
     // computer routes to the dna"), never glued to the opening name.
     const bookMoveRead = readBoard('bookMove', { history: args.historyAfterReply, student: studentCC });
+    // OPENING THEORY, CALCULATED, on the student's move and the reply.
+    // LEARN STAYS QUIET IN BOOK; THE OPENING'S THEORY IS READY FOR A SLIP
+    // (David 2026-11-12: "Learn should have all those things ready to go at a
+    // moments notice if the user makes a slip"): the calculated theory and
+    // what the move stops, kept and cut speak only on the turn the student
+    // left the book (the slip computer spoke).
+    const theoryReads = bookMoveRead ? readBoardAll('openingTheory', { history: args.historyAfterReply, student: studentCC }) : [];
+    const gainReads = bookMoveRead ? readBoardAll('moveGains', { history: args.historyAfterReply, student: studentCC }) : [];
+    // KNOWN MISTAKES AND TRAPS either side just played (David 2026-11-12:
+    // "Let's not hold anything back").
+    const slipReads = readBoardAll('slipsOnLine', { history: args.historyAfterReply, student: studentCC });
     // MEMORY BY POSITION: the student left theory from this very board in
     // another game, at a cost — said with what they played this time.
     const lastHereRead = ((): CoachFact | null => {
@@ -10232,6 +10243,9 @@ export function CoachTeachPage({ mode }: {
       ...(threatLine ? [{ namesStudentMove: namesPlayableStudentMove(threatNames), lane: 'threat' as const, computer: threatComputer, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), claims: [...new Set([...(threatClaim ? [threatClaim] : []), ...threatClaims, ...(threatCostRead?.claims ?? [])])], stakes: threatCostRead?.stakes ?? undefined, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
       ...(countRead ? [{ namesStudentMove: false, lane: 'countMethod' as const, computer: countRead.computer, text: countRead.text, fen: args.fenAfterReply, squares: countRead.squares, claims: countRead.claims, stakes: countRead.stakes ?? undefined, role: countRead.role, proof: countRead.proof }] : []),
       ...(lastHereRead ? [{ namesStudentMove: false, computer: lastHereRead.computer, lane: readKey(lastHereRead).startsWith('last-here:same:') ? 'sameAsLastTime' as const : 'lastTimeHere' as const, text: lastHereRead.text, fen: lastHereRead.fen, claims: lastHereRead.claims, proof: lastHereRead.proof }] : []),
+      ...slipReads.map((t) => ({ namesStudentMove: t.namesStudentMove, lane: 'knownSlip' as const, computer: t.computer, text: t.text, fen: t.fen, squares: t.squares, claims: t.claims, role: t.role, proof: t.proof })),
+      ...gainReads.map((t) => ({ namesStudentMove: false, lane: 'moveGains' as const, computer: t.computer, text: t.text, fen: t.fen, squares: t.squares, claims: t.claims, role: t.role, proof: t.proof })),
+      ...theoryReads.map((t) => ({ namesStudentMove: false, lane: 'openingTheory' as const, computer: t.computer, text: t.text, fen: t.fen, squares: t.squares, claims: t.claims, role: t.role, proof: t.proof })),
       ...(bookMoveRead ? [{ namesStudentMove: false, lane: 'bookMove' as const, computer: bookMoveRead.computer, text: bookMoveRead.text, fen: bookMoveRead.fen, squares: bookMoveRead.squares, claims: bookMoveRead.claims, role: bookMoveRead.role, proof: bookMoveRead.proof, ...(bookMoveRead.skill ? { skill: bookMoveRead.skill } : {}) }] : []),
       ...kingWalkFacts,
       ...ifTheyPlayFacts,

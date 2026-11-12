@@ -84,7 +84,9 @@ export type LessonFactKind = AspectKind | 'checkmate' | 'board-teacher' | 'deep-
    *  step's lead, so the move is heard doing two things at once ("It also
    *  hits their bishop on b4"). Made by the composer from the fact it admits,
    *  never by a producer (`thoughtComposer.composeThought`). */
-  | 'two-jobs';
+  | 'two-jobs'
+  /** Opening theory, calculated (`openingTheory.ts`). */
+  | 'book-standing' | 'book-alternatives' | 'book-reply' | 'book-score';
 
 /** The one vocabulary of fact kinds: the door's and the lesson composer's. */
 export type CoachFactKind = FactKind | LessonFactKind;
@@ -152,6 +154,8 @@ export const FACT_GROUP: Record<CoachFactKind, FactGroup> = {
   checkmate: 'move', 'board-teacher': 'move', 'deep-fact': 'move', binding: 'move', route: 'move', stop: 'move',
   // The move's second job is what the move changed, said behind the first.
   'two-jobs': 'move',
+  // Opening theory, calculated: what masters play here is about the move.
+  'book-standing': 'move', 'book-alternatives': 'move', 'book-reply': 'move', 'book-score': 'move',
   // ── the teaching moves' own kinds (2026-11-05), each in the group of the
   // kind it came from: the reply tree a line played out; the move order "not
   // yet, first this"; castling the story's plan; the move most players play
@@ -240,6 +244,11 @@ export const COMPUTER_CATALOG = {
   bindingFact: { file: 'services/threeFacts.ts', says: 'what their last move aimed at, and how this move meets it' },
   theirTarget: { file: 'services/threeFacts.ts', says: 'what their move newly aims at among your pieces, said on their move when your reply does not answer it' },
   pieceRoute: { file: 'services/pieceRoute.ts', says: 'the trip the moved piece takes down the line that follows' },
+  pieceOutFirst: { file: 'services/pieceOutFirst.ts', says: 'a bishop or queen brought out before its own pawn push closes its road (…Bf5 before …e6)' },
+  lineCut: { file: 'services/lineCut.ts', says: "a queen, rook or bishop of the mover's whose line the moved piece now blocks — a centre square, a guard or an attack lost" },
+  onlyMove: { file: 'services/moveThoughtFacts.ts', says: "the move played is the only one that holds: the engine's next best gives up at least the only-move gap" },
+  moveStops: { file: 'services/moveStops.ts', says: "the opponent's useful moves (a pin, a kick, a fork, a safe check) a move takes away" },
+  openingTheoryFacts: { file: 'services/openingTheory.ts', says: "opening theory, calculated from the masters' games: the main move, the other tries and their aims, the reply, the score" },
   inBetweenMove: { file: 'services/inBetweenMove.ts', says: 'not yet, first this: a forcing move before the capture that is still there after' },
   findProphylaxis: { file: 'services/prophylaxis.ts', says: 'the other side\'s wanted pin, kick or fork, and the move that stops it' },
   // The weighing as a choices fact — handed to the composer by the Danya

@@ -53,7 +53,7 @@ import type { GamePhase } from '../types';
 import { packageForRegister } from './hintRegister';
 import { FUNDAMENTAL_TAG } from './principleAttribution';
 import { castleByHandMove, kingFromCentre, keptHome, kingSquares } from './kingWalk';
-import { knownSlip, type KnownSlipContext } from './knownSlips';
+import { knownSlip, knownSlipIndexNow, knownSlipsAt, type KnownSlipContext } from './knownSlips';
 import { ifTheyPlay, treeSentence, sayable, baitBranch, baitSentence, type ReplyRead, type ReplyBranch, type TreeTense } from './ifTheyPlay';
 import { mateStakes } from './factStakes';
 import { MOTIF_OF_TACTIC, MOTIFS } from '../data/tacticMotifs';
@@ -63,6 +63,10 @@ import { pawnBreak } from './pawnBreak';
 import { oppositeBishops } from './oppositeBishops';
 import { planSteps, planStepsText, planStepsKey } from './planSteps';
 import { compensation } from './compensation';
+import { openingTheoryFacts } from './openingTheory';
+import { moveStops } from './moveStops';
+import { pieceOutFirst } from './pieceOutFirst';
+import { lineCut } from './lineCut';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -119,6 +123,15 @@ export interface BoardContexts {
   /** The book move the student just left, with the job it does on the board
    *  (the student's own departure, the move it happened or the reply after). */
   bookMove: { history: readonly string[]; student: Color };
+  /** Opening theory, calculated, on the last two moves of `history` (the
+   *  student's move and the reply): main move, other tries, reply, score. */
+  openingTheory: { history: readonly string[]; student: Color };
+  /** What each of the last two moves of `history` stops, the order it kept,
+   *  the line it cut (gaps B1-B3). `follow`: the line after, when known. */
+  moveGains: { history: readonly string[]; student: Color };
+  /** The club index's known mistakes and traps on the last two moves of
+   *  `history` (Learn): a slip either side played, else the slip waiting. */
+  slipsOnLine: { history: readonly string[]; student: Color };
   /** The student's own costly departure from this position in another game. */
   lastTimeHere: { fenBefore: string; playedSan: string; rows: readonly BookDepartureRow[]; currentGameId: string | null };
   /** The student's queen or rook attacked with no safe square. */
@@ -294,11 +307,14 @@ function boardAfter(fen: string, san: string): string | null {
  *  the opening pages' to teach; David 2026-11-04: "it needs to be in review
  *  for sure"). */
 const KNOWN_SLIP_SURFACES: Record<CoachSurface, SurfaceAnswer> = {
-  lesson: { not: 'the opening pages teach the index as their weapon section and their known mistakes (gemCrushLines); a lesson line is a model line, not a slip' },
-  learn: { not: 'gems stay off Learn (David 2026-10-29: "a reason for ppl to buy the openings"); Learn is not decided (2026-11-04)' },
+  // David 2026-11-12: "You can have coach state those lines and tactics. We
+  // need ppl to like my app and use it. Let's not hold anything back" — this
+  // REPLACES the 2026-10-29 rule that kept gems off Learn, the lessons and chat.
+  lesson: { wired: 'services/moveThoughtFacts.ts' },
+  learn: { wired: 'services/boardComputers.ts' },
   review: REVIEW,
   play: { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING); the Openings Play rung calls out the live punish itself (findLivePunishment)' },
-  chat: { not: 'the chat\'s trap lane points at the opening\'s page and names no gem (gemCrushLines gate)' },
+  chat: { wired: 'services/moveThoughtFacts.ts' },
   tactics: { not: 'a puzzle poses one tactic; a known slip is about a game move at a board the index holds' },
   weaknesses: { not: 'the slip played is graded as the move\'s own cost and filed by the record\'s writers; the index adds no skill of its own' },
 };
@@ -458,6 +474,119 @@ export const BOARD_COMPUTERS = {
       chat: COMPOSER,
       tactics: { not: 'a puzzle has no book departure' },
       weaknesses: { not: 'owed — the departure row (bookDepartureWeakness) could carry the job' },
+    },
+  },
+  openingTheory: {
+    // OPENING THEORY, CALCULATED (David 2026-11-12: "I want the gap filled" →
+    // "the new lines we are adding is what I want on"): the masters' games at
+    // the board each of the last two moves was played on — the main move or a
+    // sideline, the other main tries and their aims, how it scores. Learn says
+    // "your move", never its name; the reply the masters give to THEIR move is
+    // the student's next move, so it is not said here.
+    read: ({ history, student }, fact) => safe(() => {
+      const out: ReturnType<MakeFact>[] = [];
+      const board = new Chess();
+      const fens: string[] = [];
+      for (const san of history) { fens.push(board.fen()); board.move(san); }
+      for (let k = Math.max(0, history.length - 2); k < history.length; k++) {
+        const fenBefore = fens[k];
+        const mover: Color = new Chess(fenBefore).turn();
+        const mine = mover === student;
+        const san = history[k];
+        const spokenOn = boardAfter(fenBefore, san);
+        if (!spokenOn) continue;
+        const subject = mine ? 'Your move' : `Their ${mover === 'b' ? '…' : ''}${san}`;
+        for (const t of openingTheoryFacts(fenBefore, san, mine)) {
+          if (t.kind === 'book-reply' && !mine) continue;
+          const text = `${subject} ${t.clause}.`;
+          const key = `theory:${k}:${t.kind}:${t.names.join(',')}`;
+          out.push(fact({ key, claims: [key], text, proof: squaresProof(text, t.squares) ?? NO_PROOF.stated, squares: [...t.squares], stakes: null, seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: spokenOn, role: 'teach' }));
+        }
+      }
+      return out.length > 0 ? out : null;
+    }),
+    computer: 'openingTheoryFacts',
+    // The door's word for a fact about the opening itself (the name group).
+    kind: 'opening',
+    phase: NOT_ENDING,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' },
+      learn: LEARN,
+      review: { wired: 'services/moveThoughtFacts.ts' },
+      play: { not: 'Play volunteers nothing; the Openings Play rung speaks its own slip lines' },
+      chat: { wired: 'services/moveThoughtFacts.ts' },
+      tactics: { not: 'a puzzle has no opening theory' },
+      weaknesses: { not: 'theory is knowledge, not a find the record keeps' },
+    },
+  },
+  slipsOnLine: {
+    // KNOWN MISTAKES AND TRAPS IN LEARN (David 2026-11-12: "Let's not hold
+    // anything back"): the student's move and the reply, each read on the
+    // board it was played from — a known slip played, said with its
+    // punishment.
+    read: ({ history, student }, fact) => safe(() => {
+      const index = knownSlipIndexNow();
+      if (!index || history.length === 0) return null;
+      const board = new Chess();
+      const fens: string[] = [];
+      for (const san of history) { fens.push(board.fen()); board.move(san); }
+      const out: CoachFact[] = [];
+      for (let k = Math.max(0, history.length - 2); k < history.length; k++) {
+        const f = knownSlipFact(knownSlip({ fen: fens[k], gems: knownSlipsAt(index, fens[k]), played: history[k], student, verdictPunish: null, saidNext: null, told: k, on: 'played' }), fens[k], fact);
+        if (f) out.push(f);
+      }
+      // The slip still to come is not named: on the student's side it names a
+      // move they could play, on theirs the reply has already been chosen.
+      // An opponent's slip played names the student's punishing move
+      // (`namesStudentMove`), and the turn door decides whether it may speak.
+      return out.length > 0 ? out : null;
+    }),
+    computer: 'knownSlip',
+    kind: 'common-wrong',
+    phase: ANY,
+    surfaces: KNOWN_SLIP_SURFACES,
+  },
+  moveGains: {
+    // WHAT A MOVE STOPS, THE ORDER IT KEEPS, THE LINE IT CUTS (gaps B1-B3,
+    // David 2026-11-12: "I want the gap filled" — on every surface). Learn
+    // reads the student's move and the reply: "Your move stops …Bg4, which
+    // would pin your knight on f3 against your queen on d1".
+    read: ({ history, student }, fact) => safe(() => {
+      const out: ReturnType<MakeFact>[] = [];
+      const board = new Chess();
+      const fens: string[] = [];
+      for (const san of history) { fens.push(board.fen()); board.move(san); }
+      for (let k = Math.max(0, history.length - 2); k < history.length; k++) {
+        const fenBefore = fens[k];
+        const mover: Color = new Chess(fenBefore).turn();
+        const mine = mover === student;
+        const san = history[k];
+        const spokenOn = boardAfter(fenBefore, san);
+        if (!spokenOn) continue;
+        const subject = mine ? 'Your move' : `Their ${mover === 'b' ? '…' : ''}${san}`;
+        const say = (key: string, clause: string, squares: string[]): void => {
+          const text = `${subject} ${clause}.`;
+          out.push(fact({ key: `${k}:${key}`, claims: [`gain:${k}:${key}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.stated, squares, stakes: null, seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: spokenOn, role: 'teach' }));
+        };
+        for (const s of moveStops(fenBefore, san, mine)) say(`stops:${s.san}`, `stops ${s.san}, which ${s.would}`, s.squares);
+        const o = pieceOutFirst(fenBefore, san, history.slice(k + 1));
+        if (o) say(`out:${o.pawn}`, `brings the ${o.piece} out before ${o.pawn} closes its road`, o.squares);
+        const c = lineCut(fenBefore, san, mine);
+        if (c) say(`cut:${c.squares.join('')}`, `cuts ${c.piece} off from ${c.lost}`, c.squares);
+      }
+      return out.length > 0 ? out : null;
+    }),
+    computer: 'moveStops',
+    kind: 'stopped',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' },
+      learn: LEARN,
+      review: { wired: 'services/moveThoughtFacts.ts' },
+      play: { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING)' },
+      chat: { wired: 'services/moveThoughtFacts.ts' },
+      tactics: { not: 'a puzzle poses one tactic' },
+      weaknesses: { not: 'a reading of the move, no question of the student\'s posed' },
     },
   },
   // ONE COACH (unified 2026-10-17): the count and the priority Learn teaches,

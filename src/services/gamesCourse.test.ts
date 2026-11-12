@@ -208,7 +208,7 @@ describe('courseRecord', () => {
     expect(rec.variations?.[0].name).toMatch(/\(…Nc6\)$/);
     // THE REASON FIRST, the share after (WO-ONE-COACH-01): the tab used to say
     // only how often masters play the move.
-    expect(rec.variations?.[0].explanation).toBe(`${introWithPredicate('student', 'Nc6', 'develops into the game, fighting for the center on d4, holding back the d-pawn, and e5, holding back the e-pawn', 'now')}. Masters play it in 20% of the 597 games at that point.`);
+    expect(rec.variations?.[0].explanation).toBe(`${introWithPredicate('student', 'Nc6', 'develops into the game, fighting for the center on d4, holding back the d-pawn and e-pawn', 'now')}. Masters play it in 20% of the 597 games at that point.`);
     expect(rec.variations?.[2].name).toMatch(/\(Nf3\)$/);
   });
 });

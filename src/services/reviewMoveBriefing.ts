@@ -151,7 +151,9 @@ function materialNet(fen: string, studentWB: 'w' | 'b', lastMove: LastMove | nul
 }
 /** Signed eval band (student POV): 0 balanced, ±1 touch, ±2 clear, ±3 decisive. */
 /** The band WITH its side: +slightly and −slightly are different standings. */
-const signedBand = (cp: number): string => `${evalBand(cp)}${evalBand(cp) === 'level' ? '' : cp > 0 ? '+' : '-'}`;
+/** The standing's band, signed from the student's seat — the claim a
+ *  standing makes, so a lesson or a review says each standing once. */
+export const signedBand = (cp: number): string => `${evalBand(cp)}${evalBand(cp) === 'level' ? '' : cp > 0 ? '+' : '-'}`;
 
 function evalVerdict(studentPovCp: number): string {
   // The one ladder (evalBand, census 2026-10-10); review's own words.

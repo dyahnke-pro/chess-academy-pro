@@ -1440,7 +1440,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         const theirLast = pathSans.length >= 2
           ? { fenBefore: fenForPath(pathSans.slice(0, -2), treeRef.current?.startFen), san: pathSans[pathSans.length - 2] }
           : null;
-        idea = lessonThought({ theory: true,
+        idea = lessonThought({ theory: true, story: true,
           fenBefore, san: node.san, prev,
           moverIsStudent: mover === (treeRef.current?.studentSide ?? 'white'),
           line,

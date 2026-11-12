@@ -7,8 +7,8 @@ Danya's 7,477 position notes, with its words. This module re-tags those words
 with the bench's own idea tagger (ported here; it reproduces the bench's
 tagging exactly) and replays the composer's selection
 (`thoughtComposer.composeThought`), so a selection policy is scored in a
-second instead of a 25-minute bench run. `fit-thought-policy.py` fits the
-policy the composer ships (`src/data/thought-policy.json`).
+second instead of a 25-minute bench run. `fit-composer-order.py` fits the
+order the composer ships (`src/data/thought-policy.json`).
 """
 import json, re
 
@@ -26,7 +26,7 @@ LEXICON = {
     'skewer': r"\bskewer\w*",
     'discovered': r"\bdiscover\w*",
     'trade': r"\b(trad(e|es|ed|ing)|exchang\w*|swap\w*)\b",
-    'capture': r"\b(captur\w*|take(s)? (back|on)|recaptur\w*|win(s|ning)? (a|the) (pawn|piece|knight|bishop|rook|queen|exchange)|grab\w*)\b",
+    'capture': r"\b(captur\w*|take(s)? (back|on)|recaptur\w*|win(s|ning)? (a|the) (pawn|piece|knight|bishop|rook|queen|exchange)|grab\w*(?! the [a-h][1-8]-square))\b",
     'prevent': r"\b(prevent\w*|stop(s|ping)?|deny|denies|denying|take(s)? away|keep(s|ing)? \w+ (\w+ )?(off|out)|prophyla\w*|rule(s)? out|so that \w+ (can't|cannot)|restrain\w*|restrict\w*|blockad\w*)\b",
     'prepare': r"\b(prepar\w*|make(s)? room|clear(s|ing)? the way|open(s|ing)? the way|ready to|so that|in order to|paving)\b",
     'tempo': r"\b(tempo|tempi|kick(s|ing)?|chase(s|d)?|gain(s|ing)? (a )?time)\b",
@@ -39,9 +39,9 @@ LEXICON = {
     'activity': r"\b(activ(e|ity|ate|ates|ating)|improv(e|es|ing)|rerout\w*|manoeuv\w*|maneuv\w*|redeploy\w*|worst piece)\b",
     'plan': r"\b(plan(s)?|the idea|idea is|aim(s|ing)?|goal|want(s)? to|looking to|intend\w*)\b",
     'alternative': r"\b(instead|rather than|would be|too (passive|slow|early|risky|committal)|the problem with|doesn't work|does not work|fails?|failed|why not|not good|wrong)\b",
-    'order': r"\b(first|before|not yet|move order|only then|after that|premature|too early|wait(s)?)\b",
+    'order': r"\b(first(?! time)|before|not yet|move order|only then|after that|premature|too early|wait(s)?)\b",
     'line': r"\bif\b[^.]{0,120}(\bthen\b|,)",
-    'habit': r"\b(always|whenever|never|rule of thumb|principle|remember|habit|ask yourself|get used to|in general|typical(ly)?)\b",
+    'habit': r"\b((?<!almost )always|whenever|never|rule of thumb|principle|remember|habit|ask yourself|get used to|in general|typical(ly)?)\b",
     'theory': r"\b(main ?line|theory|theoretical|book|popular|most common|the masters|classical|standard|mainstream)\b",
     'mate': r"\b(mate|checkmate|mating)\b",
     'material': r"\b(material|pawn up|piece up|up a (pawn|piece)|down a (pawn|piece)|extra pawn|exchange up)\b",
@@ -92,12 +92,24 @@ def distinct_ideas(ideas):
 # ── the tagger fixes (Build 5), folded into the bench too ──
 
 
-RESCUE = r"\b(retreat\w*|step(s|ping)? (back|away|out of)|drops? back|goes back|out of (the )?(attack|danger|reach|check)|get(s|ting)? (\w+ )?(\w+ )?out of|escap\w*|sav(e|es|ed|ing) (the|your|their|its|a)\b)"
+RESCUE = r"\b(scurr\w*|(goes|comes|falls|heads|retreats?) back|retreat\w*|step(s|ping)? (back|away|out of)|drops? back|goes back|out of (the )?(attack|danger|reach|check)|get(s|ting)? (\w+ )?(\w+ )?out of|escap\w*|sav(e|es|ed|ing) (the|your|their|its|a)\b)"
 EXTRA = {
-    'prepare': r"\bset(s|ting)? up\b",
-    'activity': r"\b(head(s|ing)? (for|to|toward)|on (its|the) way to|by way of|transit|send(s|ing)? the (knight|bishop|rook|queen|king) (on )?to|then (the )?(knight|bishop|rook|queen|king) (to|on to|goes|heads|comes))\b",
+    'prepare': r"\b(set(s|ting)? up|invit(e|es|ing))\b",
+    'activity': r"\b(on the rim|stranded|misplaced|swing(s|ing)?|head(s|ing)? (for|to|toward)|on (its|the) way to|by way of|transit|send(s|ing)? the (knight|bishop|rook|queen|king) (on )?to|then (the )?(knight|bishop|rook|queen|king) (to|on to|goes|heads|comes))\b",
     'defend': r"\bcover(s|ed|ing)?\b",
-    'attack': r"\baim(s|ed|ing)? at\b",
+    'attack': r"\b(aim(s|ed|ing)? at|attackers?|pil(e|es|ed|ing) (up )?(on|onto)|lean(s|ing)? on|bear(s|ing)? down)\b",
+    # THE TAGGER CHECK (2026-11-12, 50 of his notes read by hand): 17 ideas
+    # missed, prophylaxis 2 of 3. Each line below is a miss from that read.
+    'prevent': r"\b((refus\w*|not|never|without|won't|doesn't|does not) (to )?(walk\w* into|allow\w*)|avoiding|keep(s|ing)? \w+ (\w+ )?from|can no longer)\b",
+    'break': r"\b(break(s|ing)? up|base of the (pawn )?chain)\b",
+    'structure': r"\bchain\b",
+    'diagonal': r"\bfianchett\w*",
+    'develop': r"\bfianchett\w*",
+    'king-safety': r"\b(tuck\w* (\w+ )?king|king\w* tucks?|king (\w+ )?(to )?safe(ty|ly))\b",
+    'weakness': r"\b(concede(s|d)? (the|a) [\w-]+|gives? up control)\b",
+    'theory': r"\b(transpos\w*|rarely played|seldom played|(main|usual|normal) move|master (play|games?|practice)|(better|superior|good|poor|bad) record|top[- ]level|grandmasters?)\b",
+    # THE WIKIBOOKS CHECK (2026-11-12): a sacrifice and a gambit are material.
+    'material': r"\b(sacrific\w*|gambit\w*|for the pawn|a pawn down|pawn for)\b",
 }
 
 def extended():
@@ -110,10 +122,6 @@ def extended():
 
 
 STEP_ORDER = {'danger': 0, 'name': 1, 'yours': 2, 'theirs': 3, 'choices': 4, 'notYet': 5, 'line': 6, 'board': 7, 'verdict': 8, 'habit': 9}
-SOURCE_RANK = {'moveWhy': 1, 'briefing': 2, 'fundamental': 3, 'boardTeacher': 4, 'moveJob': 5, 'refuted': 7, 'alternatives': 8,
-               'prophylaxis': 10, 'notYet': 9, 'deepFact': 11, 'binding': 12, 'pieceRoute': 13, 'bestLine': 14,
-               'counterThreat': 15, 'theirAim': 16, 'planChoice': 17, 'moveOrder': 18, 'structureLines': 19,
-               'purpose': 20, 'studentMove': 21, 'kingWalk': 22, 'ifTheyPlay': 23, 'baitSet': 23, 'weighed': 24, 'teachingMove': 25, 'evalRead': 26}
 MOVE_STEPS = {'yours', 'theirs'}
 TARGETED = {'break', 'attack', 'defend', 'pin', 'fork', 'skewer', 'discovered', 'capture', 'prevent', 'outpost', 'file', 'diagonal', 'weakness'}
 
@@ -149,32 +157,63 @@ def covers(coach, d):
 def same_idea(a, b):
     if a['idea'] != b['idea']:
         return False
+    if a['idea'] == 'rescue':
+        return True
     if not a['squares'] or not b['squares']:
         return True
     return bool(set(a['squares']) & set(b['squares']))
 
+# THE DEPTH OF A FACT — the composer's tables (`thoughtComposer.ts`
+# SOURCE_DEPTH / IDEA_DEPTH / factDepth), mirrored; thoughtComposer.test.ts
+# holds this copy to the code.
+HIDDEN_SOURCES = {'deepFact', 'binding', 'bestLine', 'notYet', 'prophylaxis', 'baitSet', 'ifTheyPlay', 'counterThreat', 'moveOrder', 'refuted', 'alternatives', 'weighed'}
+HIDDEN_IDEAS = {'tactic', 'set-up', 'mate', 'order', 'prevent', 'choice'}
+OBVIOUS_IDEAS = {'develop', 'castle', 'recapture', 'check', 'center', 'space'}
+NAMED_IS_WHY = {'develop', 'castle', 'recapture', 'check'}
+SAYS_MORE = {'tempo': ('threat', 'pressure'), 'win-material': ('threat', 'pressure'), 'tactic': ('threat', 'pressure'),
+             'attack-king': ('threat', 'pressure'), 'mate': ('threat', 'check', 'pressure'), 'pressure': ('threat',)}
+MATERIAL = {'win-material', 'trade', 'recapture', 'rescue'}
+PLACEMENT = {'develop', 'center', 'space', 'outpost', 'file', 'diagonal', 'route', 'king-activity', 'prepare'}
+
+def depth(f):
+    if f.get('restates'):
+        return 'obvious'
+    if f['source'] in HIDDEN_SOURCES:
+        return 'hidden'
+    if f['idea'] == 'prevent' and f['source'] == 'fundamental':
+        return 'why'
+    if f['source'] == 'moveJob' and f['idea'] in OBVIOUS_IDEAS:
+        return 'why'
+    if f['idea'] in HIDDEN_IDEAS:
+        return 'hidden'
+    if f['idea'] in OBVIOUS_IDEAS:
+        return 'why' if f['squares'] and f['idea'] in NAMED_IS_WHY else 'obvious'
+    return 'why'
+
+def value(f, P):
+    return P['depth'][depth(f)] + P['ideaPrior'].get(f['idea'], 0) + P['sourcePrior'].get(f['source'], 0) + f['weight'] / 100
+
 def compose(facts, P):
-    """P: floor, gap, w (dict 'source|idea' or 'source' -> weight override/offset), rank (source -> rank)."""
-    def weight(f):
-        k = f"{f['source']}|{f['idea']}"
-        if k in P.get('wset', {}):
-            return P['wset'][k]
-        return f['weight'] + P.get('woff', {}).get(f['source'], 0) + P.get('woff', {}).get(k, 0)
-    rank = {**SOURCE_RANK, **P.get('rank', {})}
-    idx = list(range(len(facts)))
-    # The composer's order: step, what rides on it (P1-10), restates, weight.
-    order = sorted(idx, key=lambda i: (STEP_ORDER[facts[i]['step']], -facts[i].get('sv', 0), int(facts[i]['restates']), -weight(facts[i]), rank[facts[i]['source']], i))
-    margin = P.get('newsMargin', 0.09)
-    def news(f, lead):
-        # Rule 4: a different decision, or a gap that clears the lead's.
-        if f.get('wc') is None:
+    """The composer's choice (`composeThought`): every verified find in Danya's
+    step order, each step ordered by depth and the fitted priors; one claim
+    once. P: the policy (`thought-policy.json`: depth, ideaPrior, sourcePrior).
+    The replay has no voice package, record or say-once memory (the dump
+    carries none), and no fact kind (a cost is counted as a job)."""
+    def said_with_more(f):
+        if f['step'] not in MOVE_STEPS:
             return False
-        if f.get('decision') and lead.get('decision') and f['decision'] != lead['decision']:
-            return True
-        return f['wc'] >= (lead.get('wc') or 0) + margin
-    picked = []  # (fact, also)
+        return any(g is not f and g['step'] == f['step'] and (depth(g) == 'hidden') == (depth(f) == 'hidden') and set(g['squares']) & set(f['squares'])
+                   and (f['idea'] in SAYS_MORE.get(g['idea'], ()) or (g['idea'] == f['idea'] and (g.get('sv') or 0) > (f.get('sv') or 0))) for g in facts)
+    idx = [i for i in range(len(facts)) if not said_with_more(facts[i])]
+    def key(i):
+        f = facts[i]
+        if f['step'] == 'danger':
+            return (0, -(f.get('sv') or 0), i)
+        return (STEP_ORDER[f['step']], -value(f, P), i)
+    picked = []
     lead_of = {}
-    for i in order:
+    byproduct = {}
+    for i in sorted(idx, key=key):
         f = facts[i]
         if f.get('words', 1) == 0:
             continue
@@ -182,46 +221,30 @@ def compose(facts, P):
             continue
         lead = lead_of.get(f['step'])
         if lead is None:
-            # THE STEP BAR (WO-OPENINGS-REWRITE-01 C2): once the turn has said
-            # something, a later step speaks only if its lead clears the bar —
-            # the writers drop whole steps the composer used to say on every
-            # move. A bar, never a cap: anything worth it still speaks. The
-            # danger step is never barred.
-            bar = P.get('stepBars', {}).get(f['step'], P.get('stepBar'))
-            if bar is not None and picked and f['step'] != 'danger' and weight(f) < bar:
-                continue
             lead_of[f['step']] = f
             picked.append((f, False))
             continue
-        if f['step'] in MOVE_STEPS:
-            def same_sq(x, y):
-                if P.get('sameSquares') == 'jaccard':
-                    a_, b_ = set(x), set(y)
-                    if not a_ or not b_:
-                        return False
-                    return len(a_ & b_) / len(a_ | b_) >= 0.6
-                return bool(set(x) & set(y))
-            if any(p['step'] == f['step'] and same_sq(f['squares'], p['squares']) for p, _ in picked):
-                continue
-            floor = P.get('floorTheirs', P['floor']) if f['step'] == 'theirs' else P['floor']
-            gap = P.get('gapTheirs', P['gap']) if f['step'] == 'theirs' else P['gap']
-            second = (not f['restates']) and weight(f) >= floor and weight(f) >= weight(lead) - gap
-            if second or news(f, lead):
-                picked.append((f, True))
+        if f.get('restates'):
             continue
-        support = bool(set(f['squares']) & set(lead['squares']))
-        if support or news(f, lead):
-            picked.append((f, True))
-    # quiet-move rule
+        if f['step'] in MOVE_STEPS:
+            d = depth(f)
+            if any(p['step'] == f['step'] and (depth(p) == 'hidden') == (d == 'hidden') and set(f['squares']) & set(p['squares']) for p, _ in picked):
+                continue
+            if lead['idea'] in MATERIAL and f['idea'] in PLACEMENT:
+                byproduct.setdefault(f['step'], []).append(f)
+                continue
+        picked.append((f, True))
     steps = {}
     for f, also in picked:
         steps.setdefault(f['step'], []).append(f)
-    keep = []
+    out = []
     for f, also in picked:
-        if all(x['restates'] for x in steps[f['step']]):
-            continue
-        keep.append((f, also))
-    return keep
+        if not all(x['restates'] for x in steps[f['step']]):
+            out.append((f, also))
+        elif f is steps[f['step']][0]:
+            # The restating lead goes; its by-products speak in its place.
+            out.extend((g, k > 0) for k, g in enumerate(byproduct.get(f['step'], [])))
+    return out
 
 def score(notes, P, half='all'):
     n = any_c = lead_c = 0
@@ -244,5 +267,12 @@ def score(notes, P, half='all'):
             'own': (100 * own[1] / max(1, own[0]), 100 * own[2] / max(1, own[0])),
             'their': (100 * their[1] / max(1, their[0]), 100 * their[2] / max(1, their[0]))}
 
-BASE = {'floor': 50, 'gap': 15, 'woff': {}, 'wset': {}, 'rank': {}}
+def shipped_policy():
+    """The policy the composer ships (src/data/thought-policy.json)."""
+    import os
+    p = os.path.join(os.path.dirname(__file__), '..', '..', 'src', 'data', 'thought-policy.json')
+    d = json.load(open(p))
+    return {'depth': d['depth'], 'ideaPrior': dict(d['ideaPrior']), 'sourcePrior': dict(d['sourcePrior'])}
+
+BASE = {'depth': {'hidden': 100, 'why': 100, 'obvious': 0}, 'ideaPrior': {}, 'sourcePrior': {}}
 

@@ -110,7 +110,8 @@ describe("the opponent's move gets its fundamentals, from the student's seat", (
   });
   it('their developing move says what it develops toward', () => {
     const text = lessonThought({ theory: true, fenBefore: fenAfter(['e4', 'e5', 'Nf3']), san: 'Nc6', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['Bb5', 'a6'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
-    expect(text).toMatch(new RegExp(`^${introHead('opponent', 'Nc6', 'now')}develops into the game, fighting for the center on d4`));
+    // The plain develop is what anyone sees: it comes after the move's reason.
+    expect(text).toMatch(/develops into the game, fighting for the center on d4/);
   });
 });
 

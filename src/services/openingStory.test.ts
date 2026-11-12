@@ -26,13 +26,13 @@ const beat = (facts: StoryBeatFact[], b: StoryBeat): StoryBeatFact | undefined =
 beforeAll(() => { setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8'))); });
 
 describe('openingStory — Najdorf, English Attack (student Black)', () => {
-  it('THEORY WHERE THE SURFACE SAYS IT (David 2026-11-06: "Yes move theory to review button, but keep in learn for now also")', () => {
+  it('THE PLANS EVERYWHERE, THE STATISTICS WHERE THE SURFACE ASKS (David 2026-11-12, option B)', () => {
     const at = (theory: boolean) => openingStoryAt({ theory, history: NAJDORF.slice(0, 9), student: 'b', namesStudentMoves: false, movesAt });
-    // The crossroads is master-game theory: Learn, Review's Theory button, chat.
+    // The crossroads is a plan the masters take: every surface says it, the
+    // Review walk included (David 2026-11-12, option B).
     expect(beat(at(true), 'fork')).toBeDefined();
-    // The Review walk asks for none — and every beat it does hear has a ground
-    // other than theory.
-    expect(beat(at(false), 'fork')).toBeUndefined();
+    expect(beat(at(false), 'fork')).toBeDefined();
+    // What the walk hears never rests on the book's statistics.
     expect(at(false).every((f) => (BEAT_GROUNDS[f.storyBeat] as readonly string[]).some((g) => g !== 'theory'))).toBe(true);
     // The board's own story stays: …e5's built-in cost at move 12.
     const cost = openingStoryAt({ theory: false, history: NAJDORF.slice(0, 12), student: 'b', namesStudentMoves: false, movesAt });

@@ -162,6 +162,7 @@ export function namedSquares(chess: Chess, squares: readonly string[], me: Color
   return parts.also.length ? `${parts.lead}, and also ${joinAnd(parts.also)}` : parts.lead;
 }
 
+const SQUARE_WORD = /\b[a-h][1-8]\b/;
 const joinAnd = (xs: readonly string[]): string => (xs.length === 1 ? xs[0] : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
 
 /** `namedSquares` in two parts, for a caller that can end its sentence after
@@ -172,7 +173,24 @@ export function namedSquareParts(chess: Chess, squares: readonly string[], me: C
   const items = squares.flatMap((sq) => { const role = squareRoleWords(chess, sq as Square, me, owner, 'covers', named); return role ? [{ sq, role }] : []; });
   if (!items.length) return null;
   const said = items.map((i) => `${i.sq}, ${i.role.full}`);
-  if (said.length <= 2) return { lead: said.length === 1 ? said[0] : `${said[0]}, and ${said[1]}`, also: [] };
+  if (said.length === 1) return { lead: said[0], also: [] };
+  // TWO: the second by its job when its job says which square without naming
+  // it (humanSquares 2026-11-12: "e6 adds its weight to d5, holding back your
+  // d-pawn, and f5, backing their f-pawn's push there" — three squares in a
+  // breath). Lit either way.
+  if (said.length === 2) {
+    const [a, b] = [items[0].role, items[1].role];
+    // An attacked piece keeps its square: the target is the point ("e4,
+    // attacking the pawn there"), never "hitting the e-pawn".
+    if (SQUARE_WORD.test(b.bare) || b.full.startsWith('attacking')) return { lead: `${said[0]}, and ${said[1]}`, also: [] };
+    // One job twice is one clause: "holding back the d-pawn and the e-pawn".
+    const aw = a.full.split(' ');
+    const bw = b.bare.split(' ');
+    let k = 0;
+    while (k < aw.length - 1 && k < bw.length - 1 && aw[k] === bw[k]) k += 1;
+    const shared = a.full === a.bare && k >= 1 && /ing$/.test(aw[0]);
+    return { lead: shared ? `${said[0]} and ${bw.slice(k).join(' ')}` : `${said[0]}, and ${b.bare}`, also: [] };
+  }
   // THREE OR MORE: one square read out, the rest by what they do (David
   // 2026-11-05: "We still need to name squares. We just need to do it like a
   // human would") — every one still lit by the fact's squares. The piece it

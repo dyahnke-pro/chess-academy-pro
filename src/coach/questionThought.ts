@@ -127,7 +127,7 @@ export function answerQuestionThought(q: ThoughtQuestion, ctx: QuestionContext):
     try { for (const s of history.slice(0, -1)) b.move(s); } catch { return null; }
     return { fenBefore: b.fen(), san: history[k - 1] };
   })() : null;
-  const composed = questionThought({
+  const composed = questionThought({ story: true,
     fenBefore, san: mv.san, moverIsStudent, prev: runs[k] ?? NO_PREV_CAPTURE, line: line.length ? line : null, theirLast, history,
     reads: ctx.reads, costCp: null, theory: true,
   }, new Set(spec.groups), null, spec.move === 'best' ? ctx.reason : null);

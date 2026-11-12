@@ -28,7 +28,7 @@ describe('the center fight teaches a reason or stays out of the line', () => {
   it('Nf3 against …d5 names e5 WITH its reason', () => {
     const note = buildReviewMoveTeaching('rnbqkbnr/ppp1pppp/8/3p4/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2', 'Nf3', true) ?? '';
     expect(note).not.toMatch(/fighting for the center\./);
-    expect(note).toMatch(/e5, holding back their e-pawn/);
+    expect(note).toMatch(/holding back their d-pawn and e-pawn/);
   });
 });
 
@@ -40,9 +40,9 @@ describe('a role is never claimed for an occupied or back-rank square', () => {
     // Your own piece on the square has no role.
     expect(squareRole(c, 'e4', 'w', 'their', 'covers')).toBeNull();
   });
-  it('items join with a comma before the last', () => {
+  it('one job on two squares is one clause (no third square in a breath)', () => {
     const note = buildReviewMoveTeaching('rnbqkbnr/ppp1pppp/8/3p4/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2', 'Nf3', true) ?? '';
-    expect(note).toBe('Your knight bears down on d4, holding back their d-pawn, and e5, holding back their e-pawn.');
+    expect(note).toBe('Your knight bears down on d4, holding back their d-pawn and e-pawn.');
   });
 });
 

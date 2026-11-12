@@ -46,7 +46,9 @@ describe('rule 1 — one decision, one gap', () => {
       // The queen's nine points are not the reason for Nc3.
       expect(stakeWc(f.stakes)).toBeLessThanOrEqual(g + 1e-9);
     }
-    expect(lessonThought(input, newLessonVoice(), null)).toMatch(new RegExp(`^${introHead('student', 'Nc3', 'now')}develops into the game with tempo`));
+    const said = lessonThought(input, newLessonVoice(), null);
+    // Developing with tempo is the tempo idea, not the plain develop.
+    expect(said).toMatch(new RegExp(`^${introHead('student', 'Nc3', 'now')}develops into the game with tempo`));
   });
   it('with no fan to measure the gap, the whole group is unmeasured — never a partial gap', () => {
     const facts = moveThoughtFacts({ ...scandinavianNc3(null), phrases: null }).filter((f) => f.group === 'move');
@@ -69,23 +71,16 @@ describe('stakes are win chance, not centipawns', () => {
   });
 });
 
-describe('rule 4 — news is relative to the turn', () => {
+describe('every verified find is said (David 2026-11-12: "if computers find something we speak it")', () => {
   const fact = (id: string, text: string, squares: string[], stakes: ThoughtFact['stakes'], step: ThoughtFact['step'] = 'board'): ThoughtFact => ({
     id, text, squares, stakes, step, group: 'structure', kind: 'plan-now', computer: 'moveAspects', source: 'briefing', idea: id === 'lead' ? 'plan' : 'weakness',
     weight: 50, seat: 'student', fen: '8/8/8/8/8/8/8/8 w - - 0 1', proof: NO_PROOF.description, thread: LOCAL_THREAD, namesStudentMove: false, claims: [id],
   } as unknown as ThoughtFact);
   const D = 'x|student';
-  it('a fact behind the lead on the same decision speaks only when its gap clears the lead\'s', () => {
+  it('a fact behind the lead speaks whatever its stake, small or large (no news margin)', () => {
     const lead = fact('lead', 'The plan is the c-file.', ['c1'], { points: 1, plies: 0, wc: 0.1, decision: D });
     const small = fact('small', 'Their pawn on a7 is weak.', ['a7'], { points: 1, plies: 0, wc: 0.12, decision: D });
     const big = fact('big', 'Their queen on h4 is trapped.', ['h4'], { points: 9, plies: 0, wc: 0.4, decision: D });
-    const said = composeThought([lead, small, big], 'lesson', null, NOT_LED).kept.map((f) => f.id);
-    expect(said).toContain('big');
-    expect(said).not.toContain('small');
-  });
-  it('a fact on another decision is news', () => {
-    const lead = fact('lead', 'The plan is the c-file.', ['c1'], { points: 1, plies: 0, wc: 0.3, decision: D });
-    const other = fact('other', 'Their knight on f6 has nowhere to go.', ['f6'], { points: 1, plies: 0, wc: 0.05, decision: 'y|opponent' });
-    expect(composeThought([lead, other], 'lesson', null, NOT_LED).kept.map((f) => f.id)).toContain('other');
+    expect(composeThought([lead, small, big], 'lesson', null, NOT_LED, null).kept.map((f) => f.id).sort()).toEqual(['big', 'lead', 'small']);
   });
 });

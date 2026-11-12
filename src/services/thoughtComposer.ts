@@ -12,22 +12,24 @@
 // — never a sentence to be read back. The composer:
 //   1. places each fact in its step (the producer says which; never read off
 //      the words);
-//   2. leads each step with the fact worth the most (`stakeValue`), then the
-//      source the Danya bench measured best for that step (`SOURCE_RANK`);
-//   3. lets a further fact in a step speak only as SUPPORT (it names a square
-//      the step's lead names) or as NEWS (a pawn or more at stake) — one
-//      thread, never a stack;
+//   2. orders each step by how deep the fact sits (`factDepth`: a hidden
+//      consequence and the move's own job first, the obvious last), then by
+//      the priors fitted on the writers and on Danya (`thought-policy.json`);
+//      a red skill on the student's record rises;
+//   3. SAYS EVERY VERIFIED FIND (David 2026-11-12) — one claim once, a skill
+//      the record proves (green) held, a fact the board refutes never said;
 //   4. says each claim once (the say-once memory a lesson, a review or a game
 //      keeps), through the one voice package (board truth, no praise, no
 //      interface talk).
-// Surfaces differ only in which steps they ask for and how many facts a step
-// may carry; the order and the choice are this file's.
+// Surfaces differ only in which steps they ask for and whose record they
+// read; the order and the choice are this file's.
 import type { SaidSet } from './gameStory';
 import { emitEverything, everythingListening } from './everythingEvents';
-import { stakeValue, isStaked, stakeWc } from './factStakes';
-import { causeEffect } from './factRelations';
+import { stakeValue } from './factStakes';
 import { placeFact, type CoachFact } from './coachFact';
 import thoughtPolicy from '../data/thought-policy.json';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
+import type { HeatState } from './holdRate';
 import { sameIdea, isByProduct, type IdeaKind } from './ideaKind';
 import { buildVoicePackage, claimKey, joinSpoken, spokenSentenceKeys, type VoiceFact } from './voicePackage';
 import { TEACHING_MOVES } from './teachingMoves';
@@ -49,7 +51,7 @@ export const THOUGHT_ORDER: Record<ThoughtStep, number> = {
 };
 
 /** Every computer that hands the composer facts. A new one fails to compile
- *  until it is ranked below. */
+ *  until its depth is said (`SOURCE_DEPTH`). */
 export type ThoughtSource =
   | 'moveWhy' | 'briefing' | 'boardTeacher' | 'moveJob' | 'fundamental' | 'deepFact' | 'binding'
   | 'pieceRoute' | 'refuted' | 'alternatives' | 'prophylaxis' | 'notYet' | 'bestLine' | 'counterThreat' | 'theirAim' | 'planChoice' | 'moveOrder' | 'structureLines' | 'purpose' | 'studentMove'
@@ -64,45 +66,13 @@ export type ThoughtSource =
   /** The teaching moves' new computers (2026-11-05): the pawn break (`pawnBreak.ts`). */
   | 'teachingMove'
   /** The position's standing when the move changed it (`reviewMoveBriefing.evalReading`). */
-  | 'evalRead';
-
-/** WHO SPEAKS FIRST IN A STEP when two facts hold the same stake — measured on
- *  the Danya bench (`danyaBench.measure.test.ts`): how often a source's line in
- *  that step carries an idea he said there, learned on half his videos. Lower
- *  is earlier. */
-export const SOURCE_RANK: Record<ThoughtSource, number> = {
-  moveWhy: 1,
-  briefing: 2,
-  fundamental: 3,
-  boardTeacher: 4,
-  moveJob: 5,
-  refuted: 7,
-  alternatives: 8,
-  prophylaxis: 10,
-  notYet: 9,
-  deepFact: 11,
-  binding: 12,
-  pieceRoute: 13,
-  // The line played out speaks alone in its step (WO-STORY-MATRIX-01 P1-9).
-  bestLine: 14,
-  counterThreat: 15,
-  theirAim: 16,
-  planChoice: 17,
-  moveOrder: 18,
-  structureLines: 19,
-  purpose: 20,
-  studentMove: 21,
-  // Not measured on the bench yet (2026-11-04): ranked after every measured source.
-  kingWalk: 22,
-  // Not measured on the bench yet (2026-11-05): ranked after every measured source.
-  ifTheyPlay: 23,
-  // The bait sits beside the reply tree it is read from.
-  baitSet: 23,
-  weighed: 24,
-  teachingMove: 25,
-  // Not measured on the bench yet (2026-11-12): ranked after every measured source.
-  evalRead: 26,
-};
+  | 'evalRead'
+  /** Opening theory, calculated (`openingTheory.ts`): main move, other tries, reply, score. */
+  | 'openingTheory'
+  /** What a move stops, the order it keeps, the line it cuts (`moveStops`, `pieceOutFirst`, `lineCut`). */
+  | 'moveGains'
+  /** The club index's known mistakes and traps (`knownSlips`, the registry rows). */
+  | 'knownSlip';
 
 /** ONE FACT, the composer's only input — the one fact shape (`coachFact.ts`),
  *  its step derived from its kind, with what this composer ranks by: the
@@ -125,19 +95,12 @@ export interface ThoughtFact extends CoachFact {
   restates?: boolean;
 }
 
-/** HOW DEEP A SURFACE GOES. Every surface says the same steps in the same
- *  order; Review may let a step carry its further facts, the live surfaces
- *  keep one a step plus the news. */
+/** WHAT A SURFACE ASKS FOR. Every surface says the same steps in the same
+ *  order and keeps every verified find (David 2026-11-12: "if computers find
+ *  something we speak it"); a question picks its steps itself. */
 export interface ThoughtRegister {
   /** The steps this surface says (in THOUGHT_ORDER whatever order is given). */
   steps: ReadonlySet<ThoughtStep>;
-  /** Further facts in a step speak as support or news (true), or not at all. */
-  depth: 'one' | 'thread';
-  /** REQUIRED: whether the fitted step bars (`thought-policy.json`) hold a
-   *  later step. A lesson and Review say what they choose to; a question picks
-   *  its steps itself ("why is it best?" asks for the other moves), so a bar
-   *  there would hold the answer to the question. */
-  stepBars: boolean;
 }
 
 /** The surfaces that compose through here. Learn had a row and no caller
@@ -147,9 +110,9 @@ export interface ThoughtRegister {
 export type ThoughtSurface = 'lesson' | 'review' | 'chat';
 const ALL_STEPS: ReadonlySet<ThoughtStep> = new Set(Object.keys(THOUGHT_ORDER) as ThoughtStep[]);
 export const THOUGHT_REGISTER: Record<ThoughtSurface, ThoughtRegister> = {
-  lesson: { steps: ALL_STEPS, depth: 'thread', stepBars: true },
-  review: { steps: ALL_STEPS, depth: 'thread', stepBars: true },
-  chat: { steps: ALL_STEPS, depth: 'thread', stepBars: false },
+  lesson: { steps: ALL_STEPS },
+  review: { steps: ALL_STEPS },
+  chat: { steps: ALL_STEPS },
 };
 
 /** The say-once memory a lesson, a review or a game keeps across its moves:
@@ -163,7 +126,7 @@ export interface ComposedThought {
   /** The facts that spoke, in spoken order. */
   kept: ThoughtFact[];
   /** Facts that did not speak, and why — so a quiet move is diagnosable. */
-  held: Array<{ fact: ThoughtFact; why: 'step-not-asked' | 'same-idea' | 'not-support-or-news' | 'by-product' | 'third-job' | 'restates' | 'already-said' | 'refused' | 'below-step-bar' }>;
+  held: Array<{ fact: ThoughtFact; why: 'step-not-asked' | 'same-idea' | 'by-product' | 'restates' | 'already-said' | 'refused' | 'record-green' }>;
 }
 
 /** THE STEPS ANOTHER LINE ON THIS MOVE ALREADY LEADS (Review's rule or point
@@ -171,11 +134,6 @@ export interface ComposedThought {
  *  the move's second job, and nothing follows it. A surface whose composer
  *  speaks alone answers `NOT_LED`. */
 export const NOT_LED: ReadonlySet<ThoughtStep> = new Set<ThoughtStep>();
-
-/** A MOVE SAYS AT MOST TWO JOBS (M-TWO-JOBS, round 3): its lead and one more,
- *  "it does two things at once". A third ("It also … It also …") was a
- *  stack, never a thought (Bf6: the outpost, Qg7#, and the rook on c3). */
-const MOVE_JOBS = 2;
 
 /** THE MOVE'S SECOND JOB, said as its own kind (`two-jobs`, the teaching move
  *  M-TWO-JOBS) with the words it speaks. */
@@ -191,81 +149,178 @@ function isCost(f: ThoughtFact): boolean {
   return TEACHING_MOVES[f.kind].includes('M-OPP-COST');
 }
 
-/** NEWS IS RELATIVE TO THE TURN (WO-STORY-MATRIX-01 P1-10, rule 4): a fact
- *  speaks behind its step's lead as news only when it answers a different
- *  decision than the lead, or what rides on it clears the lead's by the
- *  fitted margin (`POLICY.newsMargin`, expected score). "A pawn or more" was
- *  any pawn on any turn: threats on pawns joined turns where he says nothing
- *  about them (Build 4, cause 4). */
-function isNews(f: ThoughtFact, lead: ThoughtFact): boolean {
-  if (!isStaked(f.stakes)) return false;
-  const leadDecision = isStaked(lead.stakes) ? lead.stakes.decision : undefined;
-  if (f.stakes.decision && leadDecision && f.stakes.decision !== leadDecision) return true;
-  const leadWc = isStaked(lead.stakes) ? stakeWc(lead.stakes) : 0;
-  return stakeWc(f.stakes) >= leadWc + POLICY.newsMargin;
+/** HOW DEEP A FACT SITS (David 2026-11-12: "I want second and third order
+ *  consequences weighted heavily. Tactics, the deep line calculations. Traps."
+ *  → "The obvious facts I want at the bottom of the list" → "Prophylaxis needs
+ *  to be weighted highly"):
+ *    hidden  — a consequence the board does not show: the line played out, what
+ *              the move makes possible later, a stopped pin, kick or fork, a
+ *              tactic, a trap, the move order, why the other move fails;
+ *    why     — what the move does, with its reason;
+ *    obvious — what anyone sees: it develops, castles, takes back, checks.
+ *  A hidden fact is ALWAYS said and never folded into a plainer fact on the
+ *  same squares, and an obvious one comes last. Measured on the benches (held
+ *  out): putting the hidden facts FIRST lost both leads (Danya's 34.6 → 27.6,
+ *  the writers' 48.7 → 40.6) — both lead with the move's own job and give the
+ *  consequence next — so hidden and why share the top of the order. */
+export type FactDepth = 'hidden' | 'why' | 'obvious';
+/** The computers whose facts are consequences, never the move's face. */
+export const SOURCE_DEPTH: Record<ThoughtSource, 'hidden' | 'why'> = {
+  moveWhy: 'why', briefing: 'why', fundamental: 'why', boardTeacher: 'why', moveJob: 'why', pieceRoute: 'why',
+  purpose: 'why', studentMove: 'why', kingWalk: 'why', planChoice: 'why', structureLines: 'why', teachingMove: 'why', evalRead: 'why', openingTheory: 'why',
+  // A stop is the move's reason, never above the answer to a threat (Fried
+  // Liver 8…Nb4: "it stops Qd3" led over "their Nc3 is aimed at your knight
+  // on d5, and this covers it").
+  moveGains: 'why',
+  // A known mistake and its punishment is a consequence the board hides.
+  knownSlip: 'hidden',
+  deepFact: 'hidden', binding: 'hidden', bestLine: 'hidden', notYet: 'hidden', prophylaxis: 'hidden', baitSet: 'hidden',
+  // What their move aims at now is the attack itself, one claim with the
+  // other lines on its square (decision baseline 2026-11-12: "Their Qd8 is
+  // aimed at your queen on c8. Their queen attacks your queen on c8").
+  theirAim: 'why',
+  ifTheyPlay: 'hidden', counterThreat: 'hidden', moveOrder: 'hidden', refuted: 'hidden',
+  alternatives: 'hidden', weighed: 'hidden',
+};
+/** The ideas that are consequences, or plain sight, whichever computer says them. */
+export const IDEA_DEPTH: Record<IdeaKind, FactDepth> = {
+  tactic: 'hidden', 'set-up': 'hidden', mate: 'hidden', order: 'hidden',
+  // Why the other move falls short: the line that refutes it.
+  choice: 'hidden',
+  // A STOPPED pin, kick or fork (the move's job, the prophylaxis computer). A
+  // square merely taken from a piece ("takes d5 from their bishop", the
+  // fundamentals' reading) is the move's face, not a stop: Danya says those
+  // 2.5% of the time (the 2026-11-12 graphs).
+  prevent: 'hidden',
+  develop: 'obvious', castle: 'obvious', recapture: 'obvious', check: 'obvious',
+  // Square control and space: what a piece or pawn covers is on the board for
+  // anyone to see (the board teacher's "covers f4, holding back their f-pawn",
+  // the description the writers and Danya leave out).
+  center: 'obvious', space: 'obvious',
+  'win-material': 'why', trade: 'why', rescue: 'why', guard: 'why', threat: 'why', pressure: 'why', prepare: 'why',
+  unpin: 'why', 'king-safety': 'why', 'attack-king': 'why', outpost: 'why', file: 'why',
+  diagonal: 'why', 'passed-pawn': 'why', promote: 'why', weakness: 'why', tempo: 'why', 'king-activity': 'why',
+  route: 'why', plan: 'why', eval: 'why', theory: 'why',
+};
+/** AN IDEA THAT CONTAINS ANOTHER: a kick is an attack that gains time, a
+ *  material win or a tactic is an attack that lands. On the same squares the
+ *  containing fact is the claim said with more. */
+export const SAYS_MORE: Partial<Record<IdeaKind, readonly IdeaKind[]>> = {
+  tempo: ['threat', 'pressure'],
+  'win-material': ['threat', 'pressure'],
+  tactic: ['threat', 'pressure'],
+  'attack-king': ['threat', 'pressure'],
+  mate: ['threat', 'check', 'pressure'],
+  // An attack on a target that can be won contains the bare attack.
+  pressure: ['threat'],
+};
+
+/** The plain faces of a move that turn into its reason when they name what
+ *  they act on (a develop that attacks e5, a check that forks). Square control
+ *  and space always name squares, so naming them is no reason. */
+const NAMED_IS_WHY: ReadonlySet<IdeaKind> = new Set<IdeaKind>(['develop', 'castle', 'recapture', 'check']);
+export function factDepth(f: Pick<ThoughtFact, 'restates' | 'source' | 'idea' | 'squares'>): FactDepth {
+  if (f.restates === true) return 'obvious';
+  if (SOURCE_DEPTH[f.source] === 'hidden') return 'hidden';
+  // A move's stop read off the board (the fundamentals, `moveStops`) is its
+  // reason, never a hidden consequence above the answer to a threat.
+  if (f.idea === 'prevent' && (f.source === 'fundamental' || f.source === 'moveGains')) return 'why';
+  // THE MOVE'S JOB is its reason by construction (`bookMoveWhy`), and it marks
+  // its bare forms itself (`isBareJob` → restates): "Kxf7 gets you a knight
+  // for the pawn, but your king has left its back rank" is no plain recapture.
+  if (f.source === 'moveJob' && IDEA_DEPTH[f.idea] === 'obvious') return 'why';
+  // AN OBVIOUS IDEA THAT NAMES WHAT IT ACTS ON SAYS WHY: "Nf3 develops into
+  // the game, attacking the pawn on e5, and it needs an answer" is the move's
+  // reason; "it brings your knight out" is what anyone sees.
+  if (NAMED_IS_WHY.has(f.idea) && f.squares.length > 0) return 'why';
+  return IDEA_DEPTH[f.idea];
 }
 
-/** HOW OFTEN EACH COMPUTER IS CHOSEN, FITTED ON DANYA'S NOTES (WO-ONE-COACH-01
- *  Build 5, David 2026-10-30: "adjust how often they get chosen, to get us as
- *  close to Danya's teaching as possible"). An offset per computer on the
- *  producer's own weight, and the second job's floor and gap — fitted on half
- *  his videos (`scripts/bench/fit-thought-policy.py`), scored on the other half:
- *  his ideas 39.3% → 42.2%, his lead idea 29.4% → 31.8%, and a larger share of
- *  what is said matches him (31.0% → 32.8%). Measured with the moves that
- *  really followed each note: the bench first read an engine line there, which
- *  pushed the piece's trip down for a fault of the bench, not of the trip. */
-const POLICY: { floor: number; gap: number; newsMargin: number; offsets: Partial<Record<ThoughtSource | `${ThoughtSource}|${IdeaKind}`, number>>; stepBars?: Partial<Record<ThoughtStep, number>> } = thoughtPolicy;
-
-/** THE STEP BAR (WO-OPENINGS-REWRITE-01 C2, fitted on the hand-written Watch
- *  beats and Danya's notes together): once the turn has said something, a
- *  later step opens only when its lead weighs at least that step's bar. The
- *  writers drop whole steps the composer used to open on every move (the
- *  reply tree on 680 of 872 moves where they used it on one in five). A bar,
- *  never a cap: anything worth it still speaks; the danger step is never
- *  barred, and a turn's first fact is never barred. */
-function belowStepBar(f: ThoughtFact, saidSoFar: number): boolean {
-  if (saidSoFar === 0 || f.step === 'danger') return false;
-  const bar = POLICY.stepBars?.[f.step];
-  return bar !== undefined && weighOf(f) < bar;
+/** THE STUDENT'S RECORD, for the surfaces that know whose game it is (Review).
+ *  Read off the one heat map (`holdRate`), never a second estimator. A lesson
+ *  is the same for everyone and a question was asked, so both pass null. */
+export interface ThoughtRecord { stateOf(skill: MisconceptionTagId): HeatState }
+/** THE SKILL A FACT TEACHES, by its idea and whose move it is — the record's
+ *  row it is read against. Exhaustive: a new idea fails to compile until it
+ *  says which skill it teaches, or that it teaches none. */
+export const IDEA_SKILL: Record<IdeaKind, { student: MisconceptionTagId | null; opponent: MisconceptionTagId | null }> = {
+  mate: { student: 'missed-your-mate', opponent: 'missed-their-mate' },
+  'win-material': { student: 'missed-your-free-piece', opponent: 'hung-material' },
+  tactic: { student: 'missed-tactic', opponent: 'missed-opponents-threat' },
+  'set-up': { student: 'missed-set-up', opponent: 'missed-opponents-threat' },
+  threat: { student: null, opponent: 'missed-opponents-threat' },
+  pressure: { student: null, opponent: 'missed-opponents-threat' },
+  check: { student: null, opponent: 'missed-opponents-threat' },
+  prevent: { student: 'missed-opponents-threat', opponent: null },
+  develop: { student: 'neglected-development', opponent: null },
+  castle: { student: 'king-stuck-center', opponent: null },
+  'king-safety': { student: 'weakened-king-safety', opponent: null },
+  tempo: { student: null, opponent: 'tempo-handed' },
+  space: { student: null, opponent: 'space-conceded' },
+  trade: { student: 'bad-trade', opponent: null },
+  'passed-pawn': { student: 'passed-pawn-neglected', opponent: null },
+  promote: { student: 'passed-pawn-neglected', opponent: null },
+  'king-activity': { student: 'passive-king-endgame', opponent: null },
+  outpost: { student: 'misplaced-piece', opponent: null },
+  route: { student: 'misplaced-piece', opponent: null },
+  file: { student: 'passive-rook', opponent: null },
+  plan: { student: 'no-plan', opponent: null },
+  recapture: { student: null, opponent: null }, rescue: { student: null, opponent: null }, guard: { student: null, opponent: null },
+  unpin: { student: null, opponent: null }, 'attack-king': { student: null, opponent: null }, center: { student: null, opponent: null },
+  diagonal: { student: null, opponent: null }, weakness: { student: null, opponent: null }, choice: { student: null, opponent: null },
+  order: { student: null, opponent: null }, eval: { student: null, opponent: null }, theory: { student: null, opponent: null }, prepare: { student: null, opponent: null },
+};
+function recordStateOf(f: ThoughtFact, record: ThoughtRecord | null): HeatState | null {
+  if (!record) return null;
+  const skill = IDEA_SKILL[f.idea][f.seat];
+  return skill ? record.stateOf(skill) : null;
 }
 
-/** A fact's weight as the composer compares it: the producer's own, with its
- *  computer's fitted offset, and the offset for that computer's idea where
- *  one is fitted (the board teacher's "covers f4, holding back their f-pawn"
- *  is its centre reading — description the writers and Danya leave out —
- *  while its threat reading is not). */
-function weighOf(f: ThoughtFact): number {
-  return f.weight + (POLICY.offsets[f.source] ?? 0) + (POLICY.offsets[`${f.source}|${f.idea}`] ?? 0);
+/** THE ORDER INSIDE A STEP, FITTED (WO-COMPOSER-ORDER, 2026-11-12): the depth's
+ *  band, then one prior per idea and per computer, fitted on the hand-written
+ *  Watch beats and Danya's notes together (`scripts/bench/fit-composer-order.py`,
+ *  half the courses and half his videos; scored on the other halves). A hidden
+ *  idea or computer is never fitted below zero — David's rule, measured: it
+ *  costs the writers' lead 1.4 points. */
+const POLICY: {
+  depth: Record<FactDepth, number>;
+  ideaPrior: Partial<Record<IdeaKind, number>>;
+  sourcePrior: Partial<Record<ThoughtSource, number>>;
+  recordRaise: number;
+} = thoughtPolicy as unknown as typeof POLICY;
+
+/** What a fact is worth in its step's order. A red skill on the student's
+ *  record rises within its band. */
+function valueOf(f: ThoughtFact, record: ThoughtRecord | null): number {
+  const red = recordStateOf(f, record) === 'red' ? POLICY.recordRaise : 0;
+  return POLICY.depth[factDepth(f)] + (POLICY.ideaPrior[f.idea] ?? 0) + (POLICY.sourcePrior[f.source] ?? 0) + red + f.weight / 100;
 }
 
-function order(a: ThoughtFact, b: ThoughtFact, ia: number, ib: number): number {
-  return (THOUGHT_ORDER[a.step] - THOUGHT_ORDER[b.step])
-    || ((stakeValue(b.stakes) ?? 0) - (stakeValue(a.stakes) ?? 0))
-    // A fact that only restates the board never leads a step another fact
-    // explains ("it brings your knight out" behind the knight's trip).
-    || (Number(a.restates === true) - Number(b.restates === true))
-    || (weighOf(b) - weighOf(a))
-    || (SOURCE_RANK[a.source] - SOURCE_RANK[b.source])
+function orderWith(record: ThoughtRecord | null): (a: ThoughtFact, b: ThoughtFact, ia: number, ib: number) => number {
+  return (a, b, ia, ib) => (THOUGHT_ORDER[a.step] - THOUGHT_ORDER[b.step])
+    // THE DANGER STEP is the nearest thing at stake first: a piece hanging now
+    // before a threat that needs setting up.
+    || (a.step === 'danger' ? (stakeValue(b.stakes) ?? 0) - (stakeValue(a.stakes) ?? 0) : 0)
+    || (valueOf(b, record) - valueOf(a, record))
     || (ia - ib);
 }
 
-/** The steps that say what a move did. A different idea there on different
- *  squares is the move's SECOND JOB ("restrain and develop in one stroke"),
- *  said when it weighs at least the policy's floor and comes within its gap of
- *  the lead (`POLICY`, fitted on the Danya bench). The same squares in other
- *  words are ONE CLAIM ("guards e5" / "supports the center, guarding e5"): the
- *  geometry is said once (G4.5.1) — measured too: the documented Jaccard rule
- *  scored half a point more only by saying the overlap twice ("attacks your
- *  pawn on e4… and e4, attacking the pawn there"). */
+/** The steps that say what a move did: a fact there on the squares a picked
+ *  fact names is ONE CLAIM in other words ("guards e5" /
+ *  "supports the center, guarding e5") — the geometry is said once (G4.5.1).
+ *  A hidden consequence on those squares is a different claim. */
 const MOVE_STEPS: ReadonlySet<ThoughtStep> = new Set<ThoughtStep>(['yours', 'theirs']);
 
 /** WHEN ANOTHER LINE ALREADY LEADS THE MOVE'S STEP (Review's rule or point
- *  on the same move), a fact here speaks only as that step's second job: a
- *  different claim — none of the lead's squares — that weighs the policy's
- *  floor. The same test the composer applies inside a step, for a lead said
- *  by another producer. */
+ *  on the same move), a fact here speaks unless it restates the board or says
+ *  that line's squares again — a hidden consequence always speaks. */
 export function speaksBehindLead(f: ThoughtFact, leadSquares: ReadonlySet<string>): boolean {
-  return f.restates !== true && weighOf(f) >= POLICY.floor && !f.squares.some((s) => leadSquares.has(s));
+  if (f.restates === true) return false;
+  const depth = factDepth(f);
+  // Behind a line that already teaches the move, what anyone sees adds nothing
+  // ("…Nxd5 — the knight lands in the centre", then "it adds its weight to f4").
+  if (depth === 'obvious') return false;
+  return depth === 'hidden' || !f.squares.some((s) => leadSquares.has(s));
 }
 
 /** ONE THOUGHT from the facts a move earned. */
@@ -274,13 +329,36 @@ export function composeThought(
   surface: ThoughtSurface,
   memory: ThoughtMemory | null,
   ledOutside: ReadonlySet<ThoughtStep>,
+  /** The student's record where the surface knows whose game it is (Review);
+   *  null on a lesson (the same for everyone) and an asked question. */
+  record: ThoughtRecord | null,
 ): ComposedThought {
   const reg = THOUGHT_REGISTER[surface];
   const held: ComposedThought['held'] = [];
-  const indexed = facts.map((f, i) => ({ f, i })).filter(({ f }) => f.text.trim().length > 0);
+  // ONE CLAIM, THE WORDS THAT SAY MORE: a fact whose idea another fact on the
+  // same squares contains ("attacks your bishop on b5" inside "kicks your
+  // bishop off b5, gaining time") is that fact said with less, whatever their
+  // order — held before the order is read.
+  // …AND OF ONE CLAIM IN THE SAME WORDS' WORTH, THE ONE WITH MORE AT STAKE
+  // (David 2026-11-12: importance from the evaluation): "hits your pawn on d5,
+  // and nothing guards it" over "attacks your pawn on d5".
+  const oneClaim = (f: ThoughtFact, g: ThoughtFact): boolean => g.step === f.step && g.text.trim().length > 0
+    && (factDepth(g) === 'hidden') === (factDepth(f) === 'hidden') && g.squares.some((s) => f.squares.includes(s));
+  const staked = (f: ThoughtFact): number => stakeValue(f.stakes) ?? 0;
+  const saidWithMore = (f: ThoughtFact): boolean => MOVE_STEPS.has(f.step) && facts.some((g) => g !== f && oneClaim(f, g)
+    && ((SAYS_MORE[g.idea] ?? []).includes(f.idea) || (g.idea === f.idea && staked(g) > staked(f))));
+  for (const f of facts) if (f.text.trim() && saidWithMore(f)) held.push({ fact: f, why: 'same-idea' });
+  const indexed = facts.map((f, i) => ({ f, i })).filter(({ f }) => f.text.trim().length > 0 && !saidWithMore(f));
+  const order = orderWith(record);
   const sorted = indexed.sort((x, y) => order(x.f, y.f, x.i, y.i)).map(({ f }) => f);
 
-  // Pick: the step's lead, then its support and news.
+  // EVERY VERIFIED FIND IS SAID (David 2026-11-12: "if computers come back
+  // empty in those slots then obviously it doesn't get said. But if computers
+  // find something we speak it. Unless the student record shows it doesn't
+  // need to be said."). A fact is held only when it is the same claim as one
+  // already picked, false on the board (the voice refuses it), already said in
+  // this lesson, review or game, a skill the student's record proves (green),
+  // or the board restated. No floor, no bar, no count of jobs.
   const picked: ThoughtFact[] = [];
   const leadOf = new Map<ThoughtStep, ThoughtFact>();
   // A FACT THE VOICE WOULD REFUSE NEVER TAKES A PLACE (the reversed matrix,
@@ -313,39 +391,36 @@ export function composeThought(
     // ONE IDEA IS SAID ONCE, by the computer that leads it: "keeps their bishop
     // off g4" and "takes the g4 square away from their bishop" are one idea.
     if (picked.some((p) => p.step === f.step && sameIdea(p, f))) { held.push({ fact: f, why: 'same-idea' }); continue; }
+    // THE RECORD PROVES IT: a skill the student holds (green) is not taught
+    // again — unless it is a danger now, or a consequence the board hides
+    // (one rule with Learn's threat voice: green and hidden still speaks).
+    if (f.step !== 'danger' && factDepth(f) !== 'hidden' && recordStateOf(f, record) === 'green') { held.push({ fact: f, why: 'record-green' }); continue; }
     const lead = leadOf.get(f.step);
-    if (!lead && reg.stepBars && belowStepBar(f, picked.length)) { held.push({ fact: f, why: 'below-step-bar' }); continue; }
+    // A FACT THAT ONLY RESTATES THE BOARD ("it gives check", "it brings your
+    // knight out") is not a find: behind a fact of its step it adds nothing.
+    if ((lead || ledOutside.has(f.step)) && f.restates === true) { held.push({ fact: f, why: 'restates' }); continue; }
     if (MOVE_STEPS.has(f.step)) {
       const outside = ledOutside.has(f.step);
       if (!lead && !outside) { if (pick(f)) leadOf.set(f.step, f); continue; }
-      const sameClaim = picked.some((p) => p.step === f.step && f.squares.some((s) => p.squares.includes(s)));
+      const depth = factDepth(f);
+      const sameClaim = picked.some((p) => p.step === f.step && (factDepth(p) === 'hidden') === (depth === 'hidden') && f.squares.some((s) => p.squares.includes(s)));
       if (sameClaim) { held.push({ fact: f, why: 'same-idea' }); continue; }
       const job = !isCost(f);
       const jobs = picked.filter((p) => p.step === f.step && !isCost(p));
       const jobsBefore = jobs.length + (outside ? 1 : 0);
-      if (job && jobsBefore >= MOVE_JOBS) { held.push({ fact: f, why: 'third-job' }); continue; }
-      // A job after another job is the move's second (its own kind); a cost,
-      // or the move's first job, speaks as itself.
+      // A job after another job is one more of the move's jobs (its own kind);
+      // a cost, or the move's first job, speaks as itself.
       const said = (text: string): ThoughtFact => (job && jobsBefore >= 1 ? asSecondJob(f, text) : { ...f, text });
       // Behind another producer's line on this move: the caller kept only
       // what speaks there (`speaksBehindLead`), in its own words.
       if (!lead) { if (pick(f, said(f.text))) leadOf.set(f.step, f); continue; }
       const firstJob = jobs.at(0) ?? lead;
       if (job && isByProduct(firstJob.idea, f.idea)) { held.push({ fact: f, why: 'by-product' }); continue; }
-      const secondJob = f.restates !== true && weighOf(f) >= POLICY.floor && weighOf(f) >= weighOf(lead) - POLICY.gap;
-      if (reg.depth === 'thread' && (secondJob || isNews(f, lead))) { pick(f, said(f.alsoText ?? f.text)); continue; }
-      held.push({ fact: f, why: 'not-support-or-news' });
+      pick(f, said(f.alsoText ?? f.text));
       continue;
     }
     if (!lead) { if (pick(f)) leadOf.set(f.step, f); continue; }
-    const news = isNews(f, lead);
-    // Another fact in a later step speaks as support — it names a square the
-    // step's lead names, or the lead's line changes a relation it stands on
-    // (cause → effect, `factRelations`, P1-11) — or as news (relative to the
-    // lead, rule 4): one thread, never a stack.
-    const support = f.squares.some((s) => lead.squares.includes(s)) || causeEffect(lead, f);
-    if (reg.depth === 'thread' && (support || news)) { pick(f, { ...f, text: f.alsoText ?? f.text }); continue; }
-    held.push({ fact: f, why: 'not-support-or-news' });
+    pick(f, { ...f, text: f.alsoText ?? f.text });
   }
 
   // THE QUIET-MOVE RULE (WO-DECIDER-02): a step whose facts only restate the
@@ -362,6 +437,17 @@ export function composeThought(
       // nothing). A restating fact never silences the one that says why.
       const explains = held.find((h) => h.why === 'same-idea' && h.fact.step === st && h.fact.restates !== true && inStep.some((p) => sameIdea(p, h.fact)));
       if (explains) { held.splice(held.indexOf(explains), 1); picked.splice(at, 0, explains.fact); }
+      // …AND A BY-PRODUCT OF THAT LEAD IS ONE NO MORE (2026-11-12, the
+      // decision baseline: Bxc4 "completes the trade" led, held "it covers f7,
+      // attacking their pawn there, which only their king guards" as its
+      // by-product, and was then dropped — the move said nothing). With the
+      // restating lead gone, what the move does from its square speaks.
+      const freed = held.filter((h) => h.why === 'by-product' && h.fact.step === st);
+      freed.forEach((h, k) => {
+        held.splice(held.indexOf(h), 1);
+        const first = !explains && k === 0;
+        picked.splice(at + (explains ? 1 : 0) + k, 0, first ? h.fact : { ...h.fact, text: h.fact.alsoText ?? h.fact.text });
+      });
     }
   }
 

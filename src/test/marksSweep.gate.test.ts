@@ -190,7 +190,12 @@ async function sweepGame(g: FixtureGame): Promise<void> {
     const played = (s.spokenLineArrows ?? []).flatMap((a) => [a.uci.slice(0, 2), a.uci.slice(2, 4)]);
     const lit = new Set([...segmentLitSquares(s), ...moveSquares(s.fenBefore, s.san), ...arrows.flatMap((a) => [a.startSquare, a.endSquare]), ...played]);
     for (const a of s.spokenLineArrows ?? []) arrowTo.add(a.uci.slice(2, 4));
-    check('review', 'segment', s.narration, lit, arrowTo, Math.max(arrows.length, s.spokenLineArrows?.length ?? 0), null, [s.fenAfter, s.fenBefore], s.san);
+    // A said line is drawn in full: the arrows the walk admits against the
+    // plies the kept fact's line has (`spokenLineArrows`); with no line kept,
+    // a "moves later" sentence must still show four plies.
+    const lineSaid = s.spokenLineArrows?.length ?? 0;
+    const lineDrawn = marks.lines[0]?.length ?? 0;
+    check('review', 'segment', s.narration, lit, arrowTo, lineSaid >= 2 ? lineDrawn : arrows.length, lineSaid >= 2 ? lineSaid : null, [s.fenAfter, s.fenBefore], s.san);
     statedCheck('review', 'segment', s.narration, marks.items);
     // A line said out loud is played on the board (the walk's spoken line):
     // Review's facets once dropped every fact's line, so none was drawn.

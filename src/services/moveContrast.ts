@@ -66,8 +66,13 @@ export function contrastMoves(fenBefore: string, sanA: string, sanB: string): Mo
   const a = looseAfter(fenBefore, sanA);
   const b = looseAfter(fenBefore, sanB);
   if (!a || !b) return null;
-  const onlyA = [...a.entries()].filter(([sq]) => !b.has(sq));
-  const onlyB = [...b.entries()].filter(([sq]) => !a.has(sq));
+  // A SQUARE ONE OF THE MOVES LANDS ON holds a different piece on each board:
+  // "h4 keeps your knight on h5 defended, and Nh5 leaves it with no guard" said
+  // of a knight that h4 never puts on h5 (decision baseline 2026-11-12). The
+  // difference is a piece that stands on both boards.
+  const landed = new Set([sanA, sanB].map((san) => { try { return new Chess(fenBefore).move(san).to as string; } catch { return ''; } }));
+  const onlyA = [...a.entries()].filter(([sq]) => !b.has(sq) && !landed.has(sq));
+  const onlyB = [...b.entries()].filter(([sq]) => !a.has(sq) && !landed.has(sq));
   if (onlyA.length > 0 && onlyB.length === 0) return { keeps: sanB, drops: sanA, piece: onlyA[0][1], square: onlyA[0][0] };
   if (onlyB.length > 0 && onlyA.length === 0) return { keeps: sanA, drops: sanB, piece: onlyB[0][1], square: onlyB[0][0] };
   return null;
@@ -80,8 +85,16 @@ export function contrastClause(
    *  piece is named by what it is (`pieceRef`), its square lit, not read out. */
   fen: string,
   student: Color,
+  /** REQUIRED — the move the student played: it is "your move", and only the
+   *  other is named, so the turn names its move once (decision baseline
+   *  2026-11-12: "You played h4 … The difference between h4 and Be2: h4 keeps
+   *  your g-pawn defended" said h4 three times). Null where neither was. */
+  played: string | null,
 ): string {
   const piece = pieceRef(fen, c.square, student)?.words ?? `your ${NAME[c.piece] ?? 'piece'} on ${c.square}`;
+  const bare = (san: string): string => san.replace(/[+#!?]+$/, '');
+  if (played && bare(played) === bare(c.keeps)) return `Here ${c.drops} would leave ${piece} with no guard, and your move keeps it defended`;
+  if (played && bare(played) === bare(c.drops)) return `Here ${c.keeps} keeps ${piece} defended, and your move leaves it with no guard`;
   // Led by a word, never the SAN (spoken, a leading SAN opens lowercase).
   return `The difference between ${c.keeps} and ${c.drops}: ${c.keeps} keeps ${piece} defended, and ${c.drops} leaves it with no guard`;
 }

@@ -49,8 +49,8 @@ const capture = vi.hoisted(() => ({
 
 vi.mock('./thoughtComposer', async (importOriginal) => {
   const actual = await importOriginal<typeof import('./thoughtComposer')>();
-  const composeThought: typeof actual.composeThought = (facts, surface, memory, led) => {
-    const out = actual.composeThought(facts, surface, memory, led);
+  const composeThought: typeof actual.composeThought = (facts, surface, memory, led, record) => {
+    const out = actual.composeThought(facts, surface, memory, led, record);
     const key = capture.current;
     if (surface === 'lesson' && key && !capture.byMove.has(key)) {
       const why = new Map(out.held.map((h) => [h.fact.id, h.why]));

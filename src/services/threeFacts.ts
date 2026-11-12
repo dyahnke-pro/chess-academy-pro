@@ -158,6 +158,14 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
     if (!replySan || !nextSan) return null;
     const reply = play(board.fen(), replySan);
     if (!reply) return null;
+    // WHAT THEIR REPLY FORCES IS NOT THIS MOVE'S PURPOSE (decision baseline
+    // 2026-11-12: Qg4 "heads on to g3, where it hits their knight" — the queen
+    // left g4 because Nxe5 hit it; Qe7 "heads on to d8, where it hits your
+    // queen" — d8 blocked a check). After a check, every move answers it; a
+    // piece their reply attacks moves because it is attacked.
+    if (reply.board.inCheck()) return null;
+    const chased = pieceSq !== null && reply.board.attackers(pieceSq as Square, reply.move.color).length > 0
+      && board.attackers(pieceSq as Square, reply.move.color).length === 0;
     // They took the piece that just moved: what follows is a trade, told by
     // the exchange computers — never "opening the way" for the recapture
     // (v4: …Bf6 Bxf6 Qxf6 said as "opening the way for your queen to f6").
@@ -178,6 +186,7 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
     stirred.add(n.from); stirred.add(n.to);
     forcedSoFar = forcedSoFar && lineIsForcing(reply.board.fen(), [`${n.from}${n.to}${n.promotion ?? ''}`], 1, n.color);
     const samePiece = pieceSq !== null && n.from === pieceSq;
+    if (samePiece && chased) return null;
     if (samePiece) {
       const wasOn = pieceSq;
       pieceSq = n.to;
@@ -229,6 +238,17 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
     const openerMove = ray && ray.squares.includes(reply.move.from) && reply.move.to !== hit.square ? reply.move : null;
     const opener = openerMove ? openerMove.san : null;
     const piece = PIECE[n.piece];
+    // THE TARGET IS NAMED WHERE IT STANDS NOW, or said to have moved: a
+    // piece that only reaches its square in the line is "by then on e3"
+    // (Kasparov–Karpov 36.Rfd2: "hits their queen on e3" with the queen on
+    // d4 — the floor had kept the line quiet; said, it was false).
+    // A piece that only reaches its square in the line was brought there by
+    // the other side: hitting it is their doing, not this move's purpose
+    // (Kasparov–Karpov 36.Rfd2 was said to hit "their queen on e3" with the
+    // queen on d4; "by then on e3" was true and still no reason for Rfd2).
+    const there = now.board.get(hit.square as Square);
+    const standsThere = !!there && there.type === hit.type && there.color !== m.color;
+    if (hit.type !== 'k' && !standsThere) continue;
     const victim = hit.type === 'k' ? `${other} king` : `${other} ${PIECE[hit.type]} on ${hit.square}`;
     const verb = hit.type === 'k' ? 'gives check to' : 'hits';
     const later = LATER[k] ?? '';

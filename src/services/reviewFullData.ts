@@ -1255,7 +1255,7 @@ export function computeMoveFacets(
     // move played — the other candidate's board is hypothetical.
     const onBoard = c ? (() => { try { const p = new Chess(fenAfter).get(c.square as Square); return !!p && p.type === c.piece && p.color === studentColorWB; } catch { return false; } })() : false;
     if (c && onBoard && studentColorWB) {
-      const t = made('contrastMoves', 'contrast', `${contrastClause(c, fenAfter, studentColorWB)}.`);
+      const t = made('contrastMoves', 'contrast', `${contrastClause(c, fenAfter, studentColorWB, san)}.`);
       facets.push(t);
       recSquares(t, [c.square]);
     }

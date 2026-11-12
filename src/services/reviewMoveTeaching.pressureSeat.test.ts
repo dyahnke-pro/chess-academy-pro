@@ -8,13 +8,15 @@ import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 const FEN = '4k3/pppp1ppp/5n2/8/5B2/8/PPPP1PPP/6K1 b - - 0 1';
 
 describe('pressure is answered by the side under attack', () => {
-  it("the opponent's knight hitting the student's bishop is pressure YOU have to answer", () => {
+  it("the opponent's knight hitting the student's bishop is said as theirs, at your bishop", () => {
     const line = buildReviewMoveTeaching(FEN, 'Nh5', false) ?? '';
-    expect(line).toMatch(/pressure you have to answer/);
-    expect(line).not.toMatch(/pressure they have to answer/);
+    expect(line).toMatch(/^Their knight .* your bishop on f4/);
+    expect(line).not.toMatch(/their bishop/);
+    // The ask is said once, by the surface (Review's "it needs an answer").
+    expect(line).not.toMatch(/have to answer/);
   });
-  it("NEGATIVE CONTROL: the student's own knight doing it is pressure THEY have to answer", () => {
-    expect(buildReviewMoveTeaching(FEN, 'Nh5', true) ?? '').toMatch(/pressure they have to answer/);
+  it("NEGATIVE CONTROL: the student's own knight doing it is yours, at their bishop", () => {
+    expect(buildReviewMoveTeaching(FEN, 'Nh5', true) ?? '').toMatch(/^Your knight .* their bishop on f4/);
   });
 });
 

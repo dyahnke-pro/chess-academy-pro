@@ -8123,3 +8123,15 @@ startup and `pgrep` reported it running for 50 minutes, with a Monitor filter
 that never matched the crash text; and a first cut of the unhonoured-yield
 reporter printed "this ply is unattributed" about a ply three detectors had
 attributed. Both were caught by reading output, not by a gate.
+
+## WO-OPENING-THEORY-01 — opening theory, calculated (2026-11-12)
+
+David: "I want opening theory to be calculated" → "Make the computers, train them, get the opening theory working!" → "We don't need all lines on everywhere! I just didn't want you building in review". Sources (Wikibooks, Wikipedia) are training and reference only; nothing of theirs is spoken.
+
+**Surfaces (agreed):** lessons + chat say everything; Review says plans, alternatives with aims, order, stops — the main-move/score/reply statistics stay behind the Theory button (option B); Learn stays quiet in book and the new lines speak only on the turn the student left it (`bookMoveRead`).
+
+**Built** (each with a test on real boards): `openingTheory.ts` (A2–A5, ALT_SHARE 10% from the pages' own alternatives), `pieceOutFirst.ts` (B1), `moveStops.ts` (B2), `lineCut.ts` (B3), the only move (B6), transposition + analogy and the opening story into the lesson composer (`story` REQUIRED on `MoveThoughtInput`, false in Review — 45 ms a move it would drop). Learn lanes `openingTheory`, `moveGains`.
+
+**Measured** (Wikibooks bench, 1,829 positions, habit tagger fixed — "masters almost always" is not a habit): any page idea said 61.6% → 71.8%; lead idea 30.2% → 35.0%; words 34 → 47.
+
+**Known mistakes and traps on every surface** (David 2026-11-12: "You can have coach state those lines and tactics … Let's not hold anything back. When it becomes more popular we can cut back"): the pages' alternatives are mostly moves masters never play (1,102) or under 2% (757) — refutations — and the club index says them now in lessons, chat and Learn (a slip just played), through the registry's one door. Owed: A8 history (async index), aliases/ECO, structure plans by name, precision.

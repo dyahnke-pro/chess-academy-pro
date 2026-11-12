@@ -158,10 +158,9 @@ export interface StudentMoveInput {
    *  short callback. */
   saidClaims?: ReadonlySet<string>;
   /** REQUIRED: may this surface speak opening THEORY — the named opening this
-   *  board equals (`openingEquivalence`), the book move? Review's walk says no:
-   *  its theory is the Theory button (David 2026-11-06: "Yes move theory to
-   *  review button, but keep in learn for now also"). Learn, the button, chat
-   *  and the lessons say yes. */
+   *  board equals (`openingEquivalence`), the book move? Review's walk, its
+   *  Theory button, Learn, chat and the lessons say yes (David 2026-11-12,
+   *  option B); the book's statistics are the opening story's own gate. */
   theory: boolean;
   /** REQUIRED: may the move just played be named? Review, the lessons and an
    *  asked question yes; Learn says "your move" (David 2026-11-09: "the user

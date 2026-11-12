@@ -3,6 +3,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { deepFact, theirTarget, binding, bindingFact, moveHit } from './threeFacts';
+import modelGamesForDeep from '../data/model-games.json';
 
 const fenAfter = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
 
@@ -158,5 +159,19 @@ describe('a move that takes one of the attackers answers in its own words (prod 
   });
   it('twin: a quiet guard still covers it (…Nf6)', () => {
     expect(target && bindingFact(BEFORE_QXD3, 'Nf6', target, null, true)?.idea).toBe('guard');
+  });
+});
+
+// A TARGET THAT ONLY REACHES ITS SQUARE IN THE LINE is not said to stand there
+// now (Kasparov–Karpov 1985, 36.Rfd2: "hits their queen on e3" with the queen
+// on d4 — false on the board the student sees).
+describe('the deep fact names a target where it stands', () => {
+  it('Rfd2: the queen only reaches e3 in the line, so hitting it is not Rfd2\'s purpose', () => {
+    const g = (modelGamesForDeep as Array<{ id: string; pgn: string }>).find((x) => x.id === 'mg-kasparov-karpov-wch85')!;
+    const c = new Chess(); c.loadPgn(g.pgn); const sans = c.history();
+    const b = new Chess(); for (const s of sans.slice(0, 70)) b.move(s);
+    const d = deepFact(b.fen(), sans[70], sans.slice(71, 79), true);
+    expect(d?.text ?? '').not.toMatch(/queen/);
+    expect(d).toBeNull();
   });
 });

@@ -44,7 +44,29 @@ export type KnownSlipIndex = Readonly<Record<string, readonly ClubGem[]>>;
  *  so no line is dropped for a file still loading. Null only when the index
  *  cannot be had at all (offline with no copy): there is then nothing to say. */
 export async function loadKnownSlipIndex(): Promise<KnownSlipIndex | null> {
-  return clubGemBoards();
+  const i = await clubGemBoards();
+  if (i) loadedIndex = i;
+  return i;
+}
+
+/** THE INDEX FOR A SURFACE THAT CANNOT WAIT (a lesson's beat, Learn's turn,
+ *  a chat answer — David 2026-11-12: "You can have coach state those lines
+ *  and tactics … Let's not hold anything back"): the index once it has
+ *  loaded, and the first call starts the load. Null until then — a slip is
+ *  never guessed. */
+let loadedIndex: KnownSlipIndex | null = null;
+let loadStarted = false;
+export function knownSlipIndexNow(): KnownSlipIndex | null {
+  if (!loadedIndex && !loadStarted) {
+    loadStarted = true;
+    void loadKnownSlipIndex().catch(() => { loadStarted = false; });
+  }
+  return loadedIndex;
+}
+/** Tests and the replay harness hand the index in as the app holds it. */
+export function setKnownSlipIndexForTests(index: KnownSlipIndex | null): void {
+  loadedIndex = index;
+  loadStarted = index !== null;
 }
 
 /** The index's board key for a position. */
@@ -162,7 +184,12 @@ export function knownSlip(ctx: KnownSlipContext): KnownSlipRead | null {
   const punisher = slipBy === 'student' ? 'they' : 'you';
   const name = isWeaponGem(asGem) ? 'trap' : 'mistake';
   // What it costs: a mate on the board, or the line's own result.
-  const result = exactMate ? `${unmarked(punishSan)} is mate` : `after ${punishSan} ${outcome(gem, fen, sans, punisher, student)}`;
+  // Black's moves are said with their dots (decision baseline 2026-11-12: "A
+  // known mistake here: e5" of Black's …e5 read as White's move).
+  const said = (san: string, by: 'w' | 'b'): string => (by === 'b' ? `…${san}` : san);
+  const slipSaid = said(slipSan, mover);
+  const punishSaid = said(punishSan, mover === 'w' ? 'b' : 'w');
+  const result = exactMate ? `${unmarked(punishSaid)} is mate` : `after ${punishSaid} ${outcome(gem, fen, sans, punisher, student)}`;
   let afterSlip = '';
   try { const b = new Chess(fen); b.move(slipSan); afterSlip = b.fen(); } catch { return null; }
   const verdictSaidIt = on === 'played' && !!ctx.verdictPunish && sameMove(afterSlip, ctx.verdictPunish, punishSan);
@@ -173,20 +200,20 @@ export function knownSlip(ctx: KnownSlipContext): KnownSlipRead | null {
   // never said three times a game.
   const text = rotateStem(on === 'reached'
     ? [
-      `A known ${name} here: ${slipSan}, and ${result}.`,
-      `${slipSan} is a known ${name} on this board, and ${result}.`,
-      `Here, ${slipSan} is a known ${name} at club level: ${result}.`,
+      `A known ${name} here: ${slipSaid}, and ${result}.`,
+      `${slipSaid} is a known ${name} on this board, and ${result}.`,
+      `Here, ${slipSaid} is a known ${name} at club level: ${result}.`,
     ]
     : verdictSaidIt
       ? [
         `That was a known ${name} at club level.`,
-        `${slipSan} is a known ${name} on this board.`,
-        `Club players go wrong with ${slipSan} here — a known ${name}.`,
+        `${slipSaid} is a known ${name} on this board.`,
+        `Club players go wrong with ${slipSaid} here — a known ${name}.`,
       ]
       : [
         `That was a known ${name} at club level, and ${result}.`,
-        `${slipSan} is a known ${name} on this board, and ${result}.`,
-        `Club players go wrong with ${slipSan} here — a known ${name}: ${result}.`,
+        `${slipSaid} is a known ${name} on this board, and ${result}.`,
+        `Club players go wrong with ${slipSaid} here — a known ${name}: ${result}.`,
       ], ctx.told);
   const squares: string[] = [];
   try {

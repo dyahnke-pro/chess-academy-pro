@@ -43,6 +43,6 @@ describe('the composer reads the link as support', () => {
   it('a fact on another square follows its cause', () => {
     const lead = fact('lead', 'line', ['f7'], proofOf(['Bxf7+', 'Kxf7']));
     const queen = fact('queen', 'line', ['d8'], NO_PROOF.description);
-    expect(composeThought([lead, queen], 'lesson', null, NOT_LED).kept.map((f) => f.id)).toEqual(['lead', 'queen']);
+    expect(composeThought([lead, queen], 'lesson', null, NOT_LED, null).kept.map((f) => f.id)).toEqual(['lead', 'queen']);
   });
 });
