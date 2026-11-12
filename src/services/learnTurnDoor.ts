@@ -225,7 +225,10 @@ export type LearnLane =
   | 'squareChoice'
   // ── the teaching moves' new computers (2026-11-05) ──
   | 'pawnBreak'
-  | 'oppositeBishops';
+  | 'oppositeBishops'
+  // ── the plan's next steps and compensation (2026-11-12) ──
+  | 'planSteps'
+  | 'compensation';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
@@ -291,6 +294,8 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   temptingRefuted: 'refute', alsoGood: 'affirm', squareChoice: 'affirm',
   pawnBreak: 'point',
   oppositeBishops: 'verdict',
+  planSteps: 'point',
+  compensation: 'verdict',
 };
 
 
@@ -399,6 +404,8 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   squareChoice: phaseOfComputer(BOARD_COMPUTERS.squareChoice.phase),
   pawnBreak: phaseOfComputer(BOARD_COMPUTERS.pawnBreak.phase),
   oppositeBishops: phaseOfComputer(BOARD_COMPUTERS.oppositeBishops.phase),
+  planSteps: phaseOfComputer(BOARD_COMPUTERS.planSteps.phase),
+  compensation: phaseOfComputer(BOARD_COMPUTERS.compensation.phase),
 };
 
 /** Is this lane's fact out of place on this board? */
@@ -451,6 +458,8 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // just played, either seat — the break and what it is for. ──
   pawnBreak: { factKind: BOARD_COMPUTERS.pawnBreak.kind, kind: 'computed', why: 'the pawn break and what it is for — the pawn it strikes, the file it opens for the rooks, the bishop it frees', lead: 58 },
   oppositeBishops: { factKind: BOARD_COMPUTERS.oppositeBishops.kind, kind: 'computed', why: 'opposite-coloured bishops and what they mean with what is left — the attacker\'s game with heavy pieces on, the drawish ending without', lead: 56 },
+  planSteps: { factKind: BOARD_COMPUTERS.planSteps.kind, kind: 'computed', why: 'the plan\'s next quiet steps off the engine\'s line and what ties them — a square they aim at, a break, castling to finish', lead: 50 },
+  compensation: { factKind: BOARD_COMPUTERS.compensation.kind, kind: 'computed', why: 'a side down material and still level or better, with the board reason that pays for it', lead: 52 },
   // ── the moves a player weighs (weighedMoves, 2026-11-05): said about the
   // move just played — the natural move that fails, with its line; the move
   // of the same worth and the board's difference (held while it may still be

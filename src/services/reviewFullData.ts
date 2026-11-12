@@ -11,6 +11,7 @@
  * uncapped review speaks these verbatim (un-warmed) so no fact is compressed away
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
+import { playedUci } from './planSteps';
 import { opponentHabits, habitsOf } from './thinkAloud';
 import { openSentence, continueSentence, sentenceEach } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
@@ -1647,6 +1648,10 @@ export function computeMoveFacets(
       add(readBoardAll('pawnBreak', { fenBefore, san, student: studentColorWB, lastTo })[0]);
       // Opposite-coloured bishops settled by this move, and what they mean.
       add(readBoardAll('oppositeBishops', { fenBefore, san, student: studentColorWB })[0]);
+      // The plan's next steps off the engine's line after the move, and the
+      // compensation a side down material is playing for (2026-11-12).
+      if (ctx.playedLineUci.length) add(readBoardAll('planSteps', { fenAfter, line: ctx.playedLineUci, student: studentColorWB, played: playedUci(fenBefore, san) })[0]);
+      if (ctx.evaluation != null && storedMate(ctx.evaluation) == null) add(readBoardAll('compensation', { fenAfter, student: studentColorWB, studentCp: ctx.evaluation * (studentColorWB === 'w' ? 1 : -1), line: ctx.playedLineUci })[0]);
     }
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.

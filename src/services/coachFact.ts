@@ -169,6 +169,10 @@ export const FACT_GROUP: Record<CoachFactKind, FactGroup> = {
   'pawn-break': 'move',
   // Opposite-coloured bishops are the structure of the board from here.
   'opposite-bishops': 'structure',
+  // The composer's two new computers (2026-11-12): the plan's next steps and
+  // what pays for a material deficit.
+  'plan-steps': 'story',
+  'compensation': 'structure',
   // ── the teaching moves' own kinds, round 2, each in the group of the kind
   // it came from: the speed-run reads the concepts, their idea's condition
   // their side, the behaviours the story ──
@@ -438,6 +442,8 @@ export const COMPUTER_CATALOG = {
   alsoGood: { file: 'services/weighedMoves.ts', says: 'two moves of the same worth and the one thing the board shows between them' },
   squareChoice: { file: 'services/weighedMoves.ts', says: 'which square for the piece: its other squares a player weighs, and what goes wrong on each' },
   oppositeBishops: { file: 'services/oppositeBishops.ts', says: 'opposite-coloured bishops whatever else is on: with queens or rooks the attacker\'s game (the bishop that hits the other king\'s squares), bishops and pawns the drawish ending' },
+  planSteps: { file: 'services/planSteps.ts', says: 'the plan\'s next steps in the engine\'s quiet line: the mover\'s next two or three moves and what ties them (a square they line up on, a break they build to, castling to finish)' },
+  compensation: { file: 'services/compensation.ts', says: 'who is better when one side is down material, and the board\'s reason for it: a development lead, a king left in the middle, the bishop pair, an advanced passed pawn' },
   pawnBreak: { file: 'services/pawnBreak.ts', says: 'the pawn break and what it is for: the pawn it strikes (the base of their chain), the file it opens for the rooks, the bishop it frees' },
 } satisfies Record<string, CatalogRow>;
 

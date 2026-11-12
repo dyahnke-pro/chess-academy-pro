@@ -20,7 +20,9 @@ export type IdeaKind =
   /** Move order: "not yet — first this, and take after". */
   | 'order'
   /** A choice between plans: the engine's two best lines carry two. */
-  | 'plan';
+  | 'plan'
+  /** A side down material and still level or better, and what pays for it. */
+  | 'compensation';
 
 export const BOOK_JOB_IDEA: Record<BookJobKind, IdeaKind> = {
   rescue: 'rescue', guard: 'guard', stopsPin: 'prevent', stopsPush: 'prevent', tempo: 'tempo',
@@ -74,7 +76,7 @@ export const IDEA_FAMILY: Record<IdeaKind, IdeaFamily> = {
   develop: 'placement', center: 'placement', space: 'placement', outpost: 'placement', file: 'placement',
   diagonal: 'placement', route: 'placement', 'king-activity': 'placement', prepare: 'placement',
   'passed-pawn': 'pawns', promote: 'pawns', weakness: 'pawns',
-  choice: 'thinking', order: 'thinking', plan: 'thinking',
+  choice: 'thinking', order: 'thinking', plan: 'thinking', compensation: 'thinking',
 };
 
 /** A BY-PRODUCT, NOT A SECOND JOB (round 3, M-TWO-JOBS): when a move wins,

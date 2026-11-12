@@ -38,6 +38,7 @@ import { buildDeliberation, ruleOuts, NOTHING_SAID } from './deliberation';
 import { refutedAltProof, type RefutedAlternative } from './refutedAlternativeCore';
 import { costStakes, isStaked, stakeWc, NO_STAKES } from './factStakes';
 import { moverCp, wcGap } from './winChance';
+import { playedUci } from './planSteps';
 import { counterThreatTeaching, planChoiceTeaching, studentMoveTeaching } from './learnBoardTeaching';
 import type { LearnLane } from './learnTurnDoor';
 import { computeMustDefend } from './threatOut';
@@ -476,6 +477,21 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // Opposite-coloured bishops settled by this move — a plan for the game.
     for (const f of readBoardAll('oppositeBishops', { fenBefore: i.fenBefore, san: i.san, student })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 50 });
+    }
+    // THE PLAN'S NEXT STEPS and COMPENSATION (2026-11-12, the writers' "Bd3
+    // and Qc2, both aimed at h7" and "a pawn down but slightly better"), off
+    // the lesson's read after the move. A lesson shows its line: every move
+    // named.
+    const after0 = i.reads?.after[0];
+    if (after0?.moves.length) {
+      for (const f of readBoardAll('planSteps', { fenAfter, line: after0.moves, student, played: playedUci(i.fenBefore, i.san) })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 52 });
+      }
+    }
+    if (after0 && after0.mate == null) {
+      for (const f of readBoardAll('compensation', { fenAfter, student, studentCp: after0.evaluation * (student === 'w' ? 1 : -1), line: after0.moves })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'compensation', weight: 48 });
+      }
     }
   }
   // THE REPLY TREE (his "if Black plays Qe7, you play d4, cementing the

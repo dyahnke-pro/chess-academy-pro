@@ -11458,6 +11458,22 @@ export function CoachTeachPage({ mode }: {
                     // never — so their next pin, kick or fork was said only once it
                     // landed). Where the move is held, THEIR IDEA speaks and is
                     // drawn as their move; the stopping move waits for the ask.
+                    // THE PLAN'S NEXT STEPS and COMPENSATION (2026-11-12), both
+                    // seats: your plan off the read after your move, theirs off
+                    // the read after their reply; what pays for a side being
+                    // material down, off the read after their reply.
+                    {
+                      const meWB: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+                      const yourLine = midReadForFacts?.topLines?.[0]?.moves ?? [];
+                      const theirLine = studentBest?.topLines?.[0]?.moves ?? [];
+                      const top = studentBest?.topLines?.[0];
+                      const reads = [
+                        ...(yourLine.length ? readBoardAll('planSteps', { fenAfter: move.fen, line: yourLine, student: meWB, played: `${move.from}${move.to}${move.promotion ?? ''}` }).map((f) => ({ f, lane: 'planSteps' as const })) : []),
+                        ...(theirLine.length ? readBoardAll('planSteps', { fenAfter: probe.fen(), line: theirLine, student: meWB, played: m ? `${m.from}${m.to}${m.promotion ?? ''}` : null }).map((f) => ({ f, lane: 'planSteps' as const })) : []),
+                        ...(top && top.mate == null ? readBoardAll('compensation', { fenAfter: probe.fen(), student: meWB, studentCp: top.evaluation * (meWB === 'w' ? 1 : -1), line: top.moves }).map((f) => ({ f, lane: 'compensation' as const })) : []),
+                      ];
+                      for (const { f, lane } of reads) queueSpokenHint(f.fen, { computer: f.computer, text: f.text, lane, proof: f.proof, namesStudentMove: f.namesStudentMove, squares: f.squares, claims: f.claims, lines: f.lines });
+                    }
                     const phRead = studentBest?.topLines
                       ? readBoard('prophylaxis', { fen: probe.fen(), engineFirstMoves: studentBest.topLines.map((l) => l.moves[0]).filter((m): m is string => !!m) })
                       : null;

@@ -84,6 +84,9 @@ export type FacetTag =
   // what it is for (`pawnBreak`); opposite-coloured bishops and what they
   // mean with what is left on the board (`oppositeBishops`).
   | 'pawn-break' | 'opposite-bishops'
+  // The composer's computers (2026-11-12): the plan's next steps, and what
+  // pays for a material deficit (H-EVAL with its why).
+  | 'plan-steps' | 'compensation'
   // Their idea's one condition (`opponentMoveReads.ideaCondition`), said in
   // Review as their move's read was — under its own kind (S-TRIGGER).
   | 'their-trigger';
@@ -262,6 +265,10 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // Opposite-coloured bishops: who is better and how the game is played from
   // here, once — beside the turn of the game's read (`stock`).
   'opposite-bishops': 35,
+  // The plan's next steps beside the plan's other reads; the compensation
+  // beside the turn of the game's read.
+  'plan-steps': 46,
+  compensation: 36,
   // Their idea's one condition: where their move's read sat.
   'their-trigger': 77,
 };
@@ -343,6 +350,8 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   'push-or-hold': 'teach',
   'pawn-break': 'teach',
   'opposite-bishops': 'teach',
+  'plan-steps': 'teach',
+  compensation: 'teach',
   'their-trigger': 'teach',
   // What the move did — descriptions. Each speaks only beside a teaching
   // point on its own squares; a ply of descriptions alone is silent.
@@ -496,7 +505,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   'false-alarm': 'principle', 'rule-exception': 'principle', 'push-or-hold': 'principle',
   'opp-think': 'safety', 'forcing-scan': 'safety',
   // The teaching moves' new computers.
-  'pawn-break': 'plan', 'opposite-bishops': 'plan',
+  'pawn-break': 'plan', 'opposite-bishops': 'plan', 'plan-steps': 'plan', compensation: 'plan',
   provoke: 'plan', tension: 'plan', trigger: 'plan', 'their-trigger': 'safety', space: 'plan', wishlist: 'plan',
   'structure-plan': 'plan', 'opponent-intent': 'plan', 'student-leans': 'plan', 'opponent-leans': 'plan',
 };
@@ -559,6 +568,10 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   'pawn-break': 'proven',
   // The bishops' rule is a rule of the game; the board is its example.
   'opposite-bishops': 'method',
+  // The plan rides on the engine's line, played; the compensation states its
+  // evidence (the pieces out, the king's square).
+  'plan-steps': 'proven',
+  compensation: 'description',
   // Each owes what the kind it came from owes.
   provoke: 'description', tension: 'description', trigger: 'description', 'their-trigger': 'proven',
   space: 'description', wishlist: 'description',

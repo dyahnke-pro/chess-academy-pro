@@ -61,6 +61,8 @@ import { temptingRefuted, alsoGood, squareChoice, type WeighRead } from './weigh
 import { costStakes } from './factStakes';
 import { pawnBreak } from './pawnBreak';
 import { oppositeBishops } from './oppositeBishops';
+import { planSteps, planStepsText, planStepsKey } from './planSteps';
+import { compensation } from './compensation';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -209,6 +211,17 @@ export interface BoardContexts {
    *  `fenBefore` (either seat) after which one bishop each, on opposite
    *  colours, stands settled with a consequence it did not have before. */
   oppositeBishops: { fenBefore: string; san: string; student: Color };
+  /** THE PLAN'S NEXT STEPS (`planSteps`): on `fenAfter` (the move just
+   *  played, either seat), the mover's next quiet moves in the engine's line
+   *  `line` (UCI, the reply first) and what ties them — a square they all aim
+   *  at, or a break. `played`: the move that made `fenAfter` (UCI), or null —
+   *  a plan tied only by the break that move prepares is the move's own job. */
+  planSteps: { fenAfter: string; line: readonly string[]; student: Color; played: string | null };
+  /** COMPENSATION (`positionAssessment`): on `fenAfter`, a side down material
+   *  and still level or better by the engine (`studentCp`, the student's
+   *  seat), with the board reason that pays for it. `line`: the engine's line
+   *  from `fenAfter` (UCI) — a capture or check next is a trade still going. */
+  compensation: { fenAfter: string; student: Color; studentCp: number; line: readonly string[] };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -955,6 +968,50 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED,
       tactics: { not: 'a puzzle poses one tactic; the bishops are the game\'s structure' },
       weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
+    },
+  },
+  planSteps: {
+    // The writers' "Bd3 and Qc2, both aimed at h7, then castle" (2026-11-12):
+    // the plan's next steps off the engine's quiet line, said with what ties
+    // them. A line with a capture or check in it is a fight, said elsewhere.
+    read: ({ fenAfter, line, student, played }, fact) => safe(() => {
+      const p = planSteps(fenAfter, line, played);
+      if (!p) return null;
+      const mover: Color = fenAfter.split(' ')[1] === 'w' ? 'b' : 'w';
+      const mine = mover === student;
+      const text = planStepsText(p, mine ? 'your' : 'their');
+      const key = planStepsKey(p, mover);
+      const proof = legalLineProof(fenAfter, p.line, lineSeatAt(fenAfter, student)) ?? NO_PROOF.description;
+      return fact({ key, claims: [key], text, proof, squares: p.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen: fenAfter,
+        ...(isProof(proof) && proof.line ? { lines: [proof.line] } : {}) });
+    }),
+    computer: 'planSteps',
+    kind: 'plan-steps',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED,
+      tactics: { not: 'a puzzle poses one tactic; a plan is the quiet stretch of a game' },
+      weaknesses: { not: 'a plan read off the engine\'s line — no question of the student\'s posed' },
+    },
+  },
+  compensation: {
+    // The writers' "a pawn down, but slightly better" (2026-11-12): said only
+    // when material and the engine disagree, with the board reason for it.
+    read: ({ fenAfter, student, studentCp, line }, fact) => safe(() => {
+      const a = compensation(fenAfter, student, studentCp, line);
+      if (!a) return null;
+      const key = `compensation:${a.who}:${a.down}`;
+      return fact({ key, claims: [key], text: a.text, proof: squaresProof(a.text, a.squares) ?? NO_PROOF.description, squares: a.squares, stakes: null,
+        seat: a.who === 'you' ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'compensation',
+    kind: 'compensation',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED,
+      tactics: { not: 'a puzzle poses one tactic; compensation is the standing of a whole position' },
+      weaknesses: { not: 'a reading of the position — no question of the student\'s posed' },
     },
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };
