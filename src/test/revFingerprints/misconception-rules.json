@@ -1,7 +1,7 @@
 {
-  "rev": "2026-11-03-discovery-lands",
+  "rev": "2026-11-12-false-facts",
   "parts": {
     "slips": "1d1df8ebd0fdedb6",
-    "lichess": "1eeb941ee0279767"
+    "lichess": "d921b80c32d99076"
   }
 }

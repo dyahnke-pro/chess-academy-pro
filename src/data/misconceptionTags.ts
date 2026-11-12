@@ -542,7 +542,8 @@ export function isMisconceptionTagId(id: string): id is MisconceptionTagId {
  *  `setup` row beside it).
  *  2026-11-03: a discovery whose revealer they simply take does not land
  *  (effbb78), so a missed shot that only was one is named by what does. */
-export const MISCONCEPTION_RULES_REV = '2026-11-03-discovery-lands';
+// 2026-11-12-false-facts: task 172 — a discovery is named only when the move uncovers it (never the board's discovery "in waiting"), a guarded square holds no enemy piece, a take-back that comes out ahead is worded by what it nets.
+export const MISCONCEPTION_RULES_REV = '2026-11-12-false-facts';
 
 /** Bump when analysed games must be re-read for the POSITIVE half
  *  (2026-10-20: re-read from the one-price annotations, `RECORD_PRICE_REV`) (the heat
