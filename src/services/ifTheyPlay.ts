@@ -260,12 +260,15 @@ export type TreeTense = 'live' | 'past';
 
 const dots = (san: string, color: Color): string => (color === 'b' ? `…${san}` : san);
 
-function replyWords(b: ReplyBranch, replier: Color, tense: TreeTense, takers: number): string {
+function replyWords(b: ReplyBranch, replier: Color, tense: TreeTense, takers: number, twins: boolean): string {
   const { reply } = b;
   if (reply.castle) return tense === 'live' ? 'castle' : 'castled';
   if (reply.capture) {
     const piece = reply.san[0] === reply.san[0].toUpperCase() && /^[NBRQK]/.test(reply.san) ? NAME[reply.san[0].toLowerCase()] : 'pawn';
-    const withWhat = takers > 1 ? ` with the ${piece}` : '';
+    // TWO OF A KIND THAT CAN BOTH TAKE ARE TOLD APART (task 172: "if they take
+    // on d2 with the knight, …Bxg2 wins a bishop" — true of the knight from f3
+    // only; the one from b1 takes safely).
+    const withWhat = twins ? ` with the ${piece} from ${reply.from}` : takers > 1 ? ` with the ${piece}` : '';
     return `${tense === 'live' ? 'take' : 'taken'} on ${reply.to}${withWhat}`;
   }
   return `${tense === 'live' ? 'play' : 'played'} ${dots(reply.san, replier)}`;
@@ -315,12 +318,18 @@ export function branchClause(t: ReplyTree, b: ReplyBranch, student: Color, tense
   const replierWord = t.replier === student ? 'you' : 'they';
   const moverWord = mover === student ? 'you' : 'they';
   let takers = 0;
+  let twins = false;
   if (b.reply.capture) {
-    try { takers = new Set(new Chess(t.fen).moves({ verbose: true }).filter((m) => m.to === b.reply.to && m.captured).map((m) => m.piece)).size; } catch { takers = 1; }
+    try {
+      const takes = new Chess(t.fen).moves({ verbose: true }).filter((m) => m.to === b.reply.to && m.captured);
+      takers = new Set(takes.map((m) => m.piece)).size;
+      const mine = takes.find((m) => m.from === b.reply.from);
+      twins = !!mine && takes.filter((m) => m.piece === mine.piece).length > 1;
+    } catch { takers = 1; }
   }
   const ans = answerWords(b, mover, moverWord, tense, boardAfterReply(t, b));
   if (!ans) return null;
-  const x = replyWords(b, t.replier, tense, takers);
+  const x = replyWords(b, t.replier, tense, takers, twins);
   // The past is ROTATED on the board and the reply (prod Review audit
   // 2026-11-11: "if they had taken on SQ, P takes SQ would have won a P for a
   // P" said three times in one game — the human-voice rule: two or three

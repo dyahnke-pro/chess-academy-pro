@@ -793,9 +793,13 @@ export function buildReviewMoveTeachingFact(
     }
     if (struct?.pawns.halfOpenFiles[mv.color].includes(file)) {
       // WHAT IS LEFT THERE, named (12.Rg1: the rook aims at g7, before the king).
+      // …and only what it SEES: with a piece of its own in front of it, or
+      // their pawn already behind it, it presses on nothing (task 172: "Re1
+      // presses down the half-open e-file, leaning on what's left there" with
+      // its own bishop on e2 in the way; "Qc2 … the c-file" behind its knight
+      // on c3). The line that named nothing is gone with the cases it hid.
       const at = firstEnemyUpFile(chess, mv.to, mv.color);
       if (at) return out('file', `${moverIsStudent ? 'Your' : 'Their'} ${PIECE_NOUN[mv.piece]} presses down the half-open ${file}-file at ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[at.type]} on ${at.sq}.`, [at.sq]);
-      return out('file', `${moverIsStudent ? 'Your' : 'Their'} ${PIECE_NOUN[mv.piece]} presses down the half-open ${file}-file, leaning on what's left there.`);
     }
   }
   // (d) Controls central squares, or reaches into the opponent's half.

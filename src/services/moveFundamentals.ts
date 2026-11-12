@@ -649,7 +649,8 @@ export function computeMoveFundamentals(
       // twice and taught nothing (Blumenfeld walk F2).
       imperative: `open up the center — challenge their pawn on ${andList(contactBy)}`,
       pointer: `open up the center — challenge their pawn on ${andList(contactBy)}`,
-      squares: [mv.to],
+      // The pawn it challenges is named, so it is lit.
+      squares: [mv.to, ...contactBy],
     } : mv.to[0] !== 'd' && mv.to[0] !== 'e' && coreHitBy(mv.to, mover).length > 0 ? {
       // A FLANK PAWN fights for the center from the side — it does not stake
       // it out (hand walk 2026-09-27: "stake out the center … with the pawn
@@ -1378,7 +1379,18 @@ export function strategicPlanPointer(fenBefore: string, moveSan: string, moverCo
   const lead = leadingFundamentals(fenBefore, moveSan, moverColor)[0];
   if (!lead) return null;
   const why = strategicReason(fenBefore, moveSan, moverColor);
-  return why ? `The plan here: ${lead.pointer} — ${why}.` : `The plan here: ${lead.pointer}.`;
+  return planHere(lead.pointer, why);
+}
+
+/** "The plan here: <idea> — <why>." — ONE DASH A SENTENCE (the voice rule's
+ *  dash chain): an idea that carries its own dash ("open up the center —
+ *  challenge their pawn on e6") takes its reason as the next sentence. The one
+ *  wording of the plan line, for the held pointer and the asked plan alike. */
+export function planHere(idea: string, why: string | null): string {
+  if (!why) return `The plan here: ${idea}.`;
+  return idea.includes(' — ')
+    ? `The plan here: ${idea}. ${openSentence(why)}.`
+    : `The plan here: ${idea} — ${why}.`;
 }
 
 /** WHY THE PLAN — the reason of the plan's leading fundamental, true on this

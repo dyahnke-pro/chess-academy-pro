@@ -1,7 +1,7 @@
 {
-  "rev": "2026-11-03-discovery-lands",
+  "rev": "2026-11-12-zwischenzug-sound-capture",
   "parts": {
     "puzzles": "00e30cfb971ab1f7",
-    "lichess": "c05344ebe248bbb9"
+    "lichess": "4f5db51eb187742a"
   }
 }

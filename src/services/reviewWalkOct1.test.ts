@@ -93,7 +93,12 @@ describe('Review walk 2026-10-01 — a kick by the opponent is said in the stude
   it('their pawn kick names your piece', () => {
     const c = new Chess(); for (const m of 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 d3 h6 Nf3 e4 dxe4 Nxe4 Qe2 Nxc4 Qxc4'.split(' ')) c.move(m);
     // after Qxc4, black to move: …b5 kicks the queen on c4
-    expect(buildReviewMoveTeaching(c.fen(), 'b5', false)).toMatch(/Kicks your queen off c4/);
+    // …b5 hits the queen, and the queen takes it with check: a pawn they can
+    // simply take kicks nothing and gains no time (task 172). The hit is still
+    // said from the student's seat.
+    const said = buildReviewMoveTeaching(c.fen(), 'b5', false);
+    expect(said).toMatch(/^Their pawn hits your queen on c4/);
+    expect(said).not.toMatch(/gaining time/);
   });
 });
 

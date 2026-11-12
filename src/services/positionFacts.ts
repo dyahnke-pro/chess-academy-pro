@@ -31,7 +31,7 @@ import type { StockfishAnalysis, TacticType } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess, type Square } from 'chess.js';
 import type { GamePromise } from './learnBoardTeaching';
-import { strategicWhyImperative, strategicReason, strategicPlanPointer, strategicClaims, strategicSquares, principleLine, principleContrastLine, isForcedReply, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
+import { planHere, strategicWhyImperative, strategicReason, strategicPlanPointer, strategicClaims, strategicSquares, principleLine, principleContrastLine, isForcedReply, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { isTheoryLine } from './bookDeparture';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy } from './opponentMovePurpose';
@@ -1023,7 +1023,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // (hand walk 2026-09-27, a queenless ending) points at nothing on the board.
     if (idea && /\b[a-h][1-8]\b|-file\b|castle/.test(idea)) {
       const why = strategicReason(fen, bestSanHere, moverColor === 'w' ? 'white' : 'black');
-      fundamentalText = why ? `The plan here: ${idea} — ${why}.` : `The plan here: ${idea}.`;
+      fundamentalText = planHere(idea, why);
       fundamentalHeld = strategicPlanPointer(fen, bestSanHere, moverColor === 'w' ? 'white' : 'black');
       fundamentalClaim = strategicClaims(fen, bestSanHere, moverColor === 'w' ? 'white' : 'black')[0] ?? null;
       fundamentalSquares = strategicSquares(fen, bestSanHere, moverColor === 'w' ? 'white' : 'black');
@@ -1193,12 +1193,13 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     if (lm) {
       const t = readTrade(lm.fenBefore, lm.san, studentColor, gradedLoss(lm),
         lastMoveFromHistory(lm.historySans?.slice(0, -1), lm.fenBefore), input.namesPlayedMove);
-      if (t) tradeClauses.push(clause('readTrade', fen, { kind: 'trade', text: t.text, squares: t.squares }));
+      // The trade's move is named, so it is drawn.
+      if (t) tradeClauses.push(clause('readTrade', fen, { kind: 'trade', text: t.text, squares: t.squares, lines: [{ fen: lm.fenBefore, sans: [lm.san] }] }));
     }
     if (input.opponentLastMove) {
       const t = readTrade(input.opponentLastMove.fenBefore, input.opponentLastMove.san, studentColor, null,
         lm ? priorLeadingTo(lm, input.opponentLastMove.fenBefore) : null, true);
-      if (t) tradeClauses.push(clause('readTrade', fen, { kind: 'trade', text: t.text, squares: t.squares }));
+      if (t) tradeClauses.push(clause('readTrade', fen, { kind: 'trade', text: t.text, squares: t.squares, lines: [{ fen: input.opponentLastMove.fenBefore, sans: [input.opponentLastMove.san] }] }));
     }
     if (studentToMove) {
       const tt = findTradeTarget(fen, studentColor);

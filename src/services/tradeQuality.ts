@@ -45,11 +45,17 @@ interface TradeRead {
 
 
 /** Squares next to `color`'s king that the piece on `sq` covers — counted
- *  only while the king is really under fire: the enemy queen is on and at
- *  least one enemy piece already aims at the king's zone. A rook "guarding the
- *  king" in a queenless ending, or a bishop covering an e1 king nobody
- *  attacks, is not a defender worth naming (hand read 2026-09-27). */
-function kingGuardCount(chess: Chess, sq: Square, color: Color): number {
+ *  only while the king is really under fire: the enemy queen is on and an
+ *  enemy piece that STAYS ON THE BOARD aims at a square this piece guards. A
+ *  rook "guarding the king" in a queenless ending, or a bishop covering an e1
+ *  king nobody attacks, is not a defender worth naming (hand read
+ *  2026-09-27). Nor is a piece whose guarded squares nobody hits, or only the
+ *  piece being traded for it hits (task 172: "…Nxc3 is a good trade — it
+ *  removes a defender of their king": the c3 knight covered d1 and e2, which
+ *  nothing attacked — the only pressure on that king was the e4 knight's own,
+ *  on d2 and f2, and the trade takes that knight off too). `leaving` is the
+ *  other piece of the trade, REQUIRED so every reader says which piece goes. */
+function kingGuardCount(chess: Chess, sq: Square, color: Color, leaving: Square): number {
   const king = chess.board().flat().find((c) => c && c.type === 'k' && c.color === color);
   if (!king) return 0;
   const enemy: Color = color === 'w' ? 'b' : 'w';
@@ -62,8 +68,9 @@ function kingGuardCount(chess: Chess, sq: Square, color: Color): number {
       const f = kf + df; const r = kr + dr;
       if (f < 97 || f > 104 || r < 1 || r > 8) continue;
       const target = `${String.fromCharCode(f)}${r}` as Square;
-      if (chess.attackers(target, color).includes(sq)) n += 1;
-      if (chess.attackers(target, enemy).length > 0) pressed = true;
+      if (!chess.attackers(target, color).includes(sq)) continue;
+      n += 1;
+      if (chess.attackers(target, enemy).some((a) => a !== leaving)) pressed = true;
     }
   }
   return pressed ? n : 0;
@@ -216,13 +223,13 @@ export function readTrade(
   if (kingAttackCount(board0, mv.to, mover) >= 2) {
     good.push({ why: `it takes off ${theirs(NAME[mv.captured])} that was bearing down on ${yours('king')}`, key: 'attacker-removed', sq: [mv.to] });
   }
-  if (kingGuardCount(board0, mv.to, enemy) >= 2) {
+  if (kingGuardCount(board0, mv.to, enemy, mv.from) >= 2) {
     good.push({ why: `it removes a defender of ${theirs('king')}`, key: 'guard-removed', sq: [mv.to] });
   }
   if (given && given.quality === 'good') {
     bad.push({ why: `it gives up ${yours('best piece')}, the ${NAME[mv.piece]} ${qualityPhrase(given)}`, key: 'best-given', sq: [mv.from] });
   }
-  if (kingGuardCount(board0, mv.from, mover) >= 2) {
+  if (kingGuardCount(board0, mv.from, mover, mv.to) >= 2) {
     bad.push({ why: `it gives up a defender of ${yours('king')}`, key: 'guard-given', sq: [mv.from] });
   }
   if (mv.piece === 'b' && mv.captured === 'n' && bishopCount(board0, mover) === 2 && bishopCount(board0, enemy) < 2) {

@@ -4,7 +4,7 @@
 // "kicks their knight off a5, gaining time"). A leaf: chess.js and the legal
 // static exchange, nothing that imports the coach.
 import { Chess, type Color, type Square } from 'chess.js';
-import { legalSeeGainOn } from './positionReadingService';
+import { legalSeeGainOn, signedLegalSeeFor } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 import { sideToMoveAs } from './threatOut';
 
@@ -75,6 +75,21 @@ export function pawnHit(fenAfter: string, mv: { piece: string; to: string; color
   if (mv.piece !== 'p') return null;
   let after: Chess;
   try { after = new Chess(fenAfter); } catch { return null; }
+  // A PAWN THEY CAN SIMPLY TAKE KICKS NOTHING (task 172: "d6 kicks their
+  // knight off e7, gaining time" with …cxd6 next; "cxb7 kicks their rook off
+  // a8" with …Bxb7 next). When taking the pawn costs them nothing (the signed
+  // legal count is not negative), the answer to the hit is the capture — unless
+  // a pawn of the mover's takes back onto the same square, which hits the same
+  // pieces again.
+  if (after.turn() !== mv.color) {
+    const takes = after.moves({ verbose: true }).filter((m) => m.to === mv.to && !!m.captured);
+    if (takes.length > 0 && signedLegalSeeFor(fenAfter, mv.to as Square, after.turn()) >= 0) {
+      takes.sort((a, b) => VAL[a.piece] - VAL[b.piece]);
+      const taken = new Chess(fenAfter);
+      taken.move(takes[0].san);
+      if (!taken.moves({ verbose: true }).some((m) => m.to === mv.to && m.piece === 'p' && !!m.captured)) return null;
+    }
+  }
   const dir = mv.color === 'w' ? 1 : -1;
   const f = mv.to.charCodeAt(0);
   const r = Number(mv.to[1]) + dir;

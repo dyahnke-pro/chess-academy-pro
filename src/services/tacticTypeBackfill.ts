@@ -50,7 +50,11 @@ import type { ClassifiedTactic, MistakePuzzle, MoveAnnotation } from '../types';
 // the best move (it was handed the bare continuation, which never matched).
 // 2026-11-03: a discovery whose revealer they simply take does not land
 // (effbb78), so a line that only was one is named by what does.
-export const TACTIC_TYPE_REV = '2026-11-03-discovery-lands';
+// 2026-11-12: an in-between move needs a capture that is SOUND where it stands
+// and a first move that makes a new threat (task 172: "taking on d5 can wait"
+// of a capture that lost the knight). A kick that only makes a capture sound
+// (…c5, Qc3, …Qxb6) is the sequence it is, no longer filed as a zwischenzug.
+export const TACTIC_TYPE_REV = '2026-11-12-zwischenzug-sound-capture';
 
 interface TacticTypeBackfillResult {
   /** Rows read across both stores. */

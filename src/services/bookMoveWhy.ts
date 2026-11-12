@@ -410,6 +410,12 @@ function stopsJob(main: Chess, played: Chess, student: Color, before: Chess, w: 
       pinnedType = pin.pinnedType;
     }
     if (!threat || !pinnedType) continue;
+    // THE PIECE IT WOULD PIN MUST STILL BE THERE (task 172: "Nd2 keeps your
+    // bishop off g4, where it would pin their knight on f3" — the knight that
+    // just left f3). A move that takes the target away is that piece moving,
+    // not a square kept from them.
+    const still = main.get(squares[1]);
+    if (!still || still.color !== student || still.type !== pinnedType) continue;
     // THE PIN MUST WORK AFTER THE STUDENT'S MOVE: a pinner that is simply lost
     // on its square threatens nothing, so the book move stopped nothing (hand
     // grade 2026-10-14: "d4 keeps their bishop off g4" when Bg4 lost a piece
@@ -446,8 +452,26 @@ function stopsJob(main: Chess, played: Chess, student: Color, before: Chess, w: 
   return null;
 }
 
+/** The wing the mover castles on in the first line that castles within the
+ *  next few of its own moves (`follow`: SAN after the move, the reply first). */
+function castlesNextOn(follow: FollowLines): 'k' | 'q' | null {
+  for (const line of follow) {
+    for (let i = 1; i < Math.min(line.length, 6); i += 2) {
+      const s = line[i].replace(/[+#!?]+$/, '');
+      if (s === 'O-O') return 'k';
+      if (s === 'O-O-O') return 'q';
+    }
+  }
+  return null;
+}
+
 /** 3. CASTLE — the book move clears the way to castle and the student's does not. */
-function castleJob(main: Chess, played: Chess, student: Color, mainFrom: Square, mainPiece: PieceSymbol, w: SeatWords = MINE): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
+function castleJob(
+  main: Chess, played: Chess, student: Color, mainFrom: Square, mainPiece: PieceSymbol, w: SeatWords,
+  /** REQUIRED: the wing a line the surface knows castles on next for this
+   *  side, or null when none is known. */
+  castlesOn: 'k' | 'q' | null,
+): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
   // ONLY A PIECE THAT STOOD IN THE WAY clears the way (sample 2026-10-14: "the
   // pawn to d4 clears the last piece between your king and rook").
   const rank = student === 'w' ? '1' : '8';
@@ -459,7 +483,13 @@ function castleJob(main: Chess, played: Chess, student: Color, mainFrom: Square,
     return { k: ms.includes('O-O'), q: ms.includes('O-O-O') };
   };
   const a = can(main); const b = can(played);
-  const kSide = 'fg'.includes(mainFrom[0]); const qSide = 'bcd'.includes(mainFrom[0]);
+  // CASTLING THAT WAS ALREADY THERE IS NOT CLEARED (task 172: "…Nbd7 brings
+  // their knight out and clears the way to castle next move" with short
+  // castling legal the move before). With one wing open already, the move
+  // clears the way only when the wing it opens is the one the line castles on
+  // (…Be7 with long castling legal, and …O-O the next move).
+  const had = b.k || b.q;
+  const kSide = 'fg'.includes(mainFrom[0]) && (!had || castlesOn === 'k'); const qSide = 'bcd'.includes(mainFrom[0]) && (!had || castlesOn === 'q');
   if (kSide && a.k && !b.k) return { kind: 'castle', prepsCastle: true, squares: [], clause: `it clears the last piece between ${w.own} king and rook, so ${w.you} can castle next move`, short: 'keeps your king in the middle a move longer' };
   if (qSide && a.q && !b.q) return { kind: 'castle', prepsCastle: true, squares: [], clause: 'it clears the way to castle long next move', short: 'keeps your king in the middle a move longer' };
   return null;
@@ -526,7 +556,7 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
   const castles = /^O-O/.test(mainSan) && !/^O-O/.test(playedSan)
     ? { kind: 'castle' as const, squares: [] as Square[], clause: castlesClause(mainSan, MINE), short: 'keeps your king in the middle a move longer' }
     : null;
-  const castlesNext = castleJob(mainMv.board, playedMv.board, student, mainMv.from, mainMv.piece);
+  const castlesNext = castleJob(mainMv.board, playedMv.board, student, mainMv.from, mainMv.piece, MINE, null);
   const develops = developJob(mainMv, playedMv, student);
   // THE JOB, THEN ITS CONSEQUENCE (his register): a developing move that also
   // clears the way to castle is said as both — "it brings your knight out and
@@ -759,7 +789,7 @@ function rankedMoveJob(fen: string, san: string, mv: NonNullable<ReturnType<type
   const home = mover === 'w' ? '1' : '8';
   const develops = (mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === home
     ? { kind: 'develop' as const, squares: [mv.to], clause: `it brings ${w.own} ${NAME[mv.piece]} out` } : null;
-  const castlesNext = castleJob(mv.board, pass, mover, mv.from, mv.piece, w);
+  const castlesNext = castleJob(mv.board, pass, mover, mv.from, mv.piece, w, castlesNextOn(follow));
   const rescue = rescueJob(before, mv, pass, mover, w);
   const guard = guardJob(mv.board, pass, mover, mv.to, w);
   // A KING STEP OUT OF CHECK is said as one: escaping a check is not

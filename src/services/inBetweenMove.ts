@@ -6,9 +6,10 @@
 // (`detectTacticType`) files a missed one as 'zwischenzug' — one detector, so
 // the coach that teaches the in-between move is the coach that catches you
 // walking past it.
-// Leaf: chess.js and the piece values only.
+// Leaf: chess.js, the piece values and the one material read (`captureNet`).
 import { Chess } from 'chess.js';
 import { CAPTURE_VALUE } from './pieceValues';
+import { captureNet } from './material';
 
 interface InBetween {
   /** The capture that waits, as SAN on the board it is played from now. */
@@ -47,14 +48,27 @@ export function inBetweenMove(fen: string, pv: readonly string[]): InBetween | n
   let first;
   try { first = new Chess(fen).move({ from: pv[0].slice(0, 2), to: pv[0].slice(2, 4), promotion: pv[0][4] }); } catch { return null; }
   if (!first || first.captured) return null;
-  // FORCING: a check, or a new hit on a piece worth at least the mover.
+  // FORCING: a check, or a NEW hit that is a threat — on a piece worth more
+  // than the mover, or one nothing guards. A piece that already hit its target
+  // from where it stood makes no new threat by stepping back along the line
+  // (task 172: Bh4 after …h6 was "the threat comes first"), and a guarded
+  // piece of the same worth is not threatened (…Bb7 "hitting" a knight on f3
+  // that two pieces guard).
   const after = new Chess(fen); after.move(first.san);
   const forcing = first.san.includes('+') || after.board().flat().some((x) => {
     if (!x || x.color === first.color || x.type === 'p' || x.type === 'k') return false;
-    try { return after.attackers(x.square, first.color).includes(first.to) && (CAPTURE_VALUE[x.type] ?? 0) >= (CAPTURE_VALUE[first.piece] ?? 0); } catch { return false; }
+    try {
+      if (!after.attackers(x.square, first.color).includes(first.to)) return false;
+      if (board.attackers(x.square, first.color).includes(first.from)) return false;
+      return (CAPTURE_VALUE[x.type] ?? 0) > (CAPTURE_VALUE[first.piece] ?? 0) || after.attackers(x.square, x.color).length === 0;
+    } catch { return false; }
   });
   if (!forcing) return null;
-  const caps = board.moves({ verbose: true }).filter((m) => m.captured);
+  // THE CAPTURE THAT WAITS IS ONE WORTH MAKING: a capture that loses material
+  // where it stands was never on ("Taking on d5 can wait" in the Benko, where
+  // …Nxd5 at that moment loses the knight to Qxd5; 3.Bb5 "they don't take on
+  // e5 yet", where Nxe5 loses a knight for a pawn).
+  const caps = board.moves({ verbose: true }).filter((m) => m.captured && (captureNet(fen, m.san) ?? -1) >= 0);
   const sans = sansOf(fen, pv, 8);
   for (let i = 2; i < sans.length; i += 2) {
     const later = caps.find((m) => sans[i]?.replace(/[+#]/g, '').endsWith(m.to) && sans[i].includes('x'));
