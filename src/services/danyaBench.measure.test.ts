@@ -568,6 +568,7 @@ const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
   baitSet: 'services/ifTheyPlay.ts#baitBranch',
   weighed: 'services/weighedMoves.ts#temptingRefuted',
   teachingMove: 'services/pawnBreak.ts#pawnBreak',
+  evalRead: 'services/reviewMoveBriefing.ts#evalReading',
 };
 
 /** Review's facet tags and the live composer's clause kinds (ONE vocabulary,
