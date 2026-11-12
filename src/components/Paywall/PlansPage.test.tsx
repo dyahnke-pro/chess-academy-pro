@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { PlansPage } from './PlansPage';
 import { useEntitlementStore } from '../../stores/entitlementStore';
@@ -12,11 +12,12 @@ vi.mock('../../services/billingService', () => ({
   clearBillingError: () => {},
 }));
 
-function renderAt(path: string): void {
+function renderAt(path: string, from?: string): void {
   render(
-    <MemoryRouter initialEntries={[path]}>
+    <MemoryRouter initialEntries={[from ? { pathname: path, state: { from } } : path]}>
       <Routes>
         <Route path="/pro" element={<PlansPage />} />
+        <Route path="/" element={<div data-testid="home-route" />} />
         <Route path="/settings" element={<div data-testid="settings-route" />} />
       </Routes>
     </MemoryRouter>,
@@ -37,6 +38,26 @@ describe('PlansPage — the plans, opened on purpose', () => {
   it('a subscriber has nothing to buy and goes back to Settings', () => {
     useEntitlementStore.getState().setEntitlement({ isPro: true, source: 'subscription' });
     renderAt('/pro');
+    expect(screen.getByTestId('settings-route')).toBeInTheDocument();
+  });
+});
+
+describe('PlansPage — "Not now" goes back where it was opened from (2026-11-12)', () => {
+  beforeEach(() => useEntitlementStore.getState().reset());
+
+  it('opened from Home, it returns Home', () => {
+    useEntitlementStore.getState().setEntitlement({ isPro: false, source: 'none' });
+    renderAt('/pro', '/');
+    fireEvent.click(screen.getByTestId('paywall-back-free'));
+    fireEvent.click(screen.getByTestId('decline-skip'));
+    expect(screen.getByTestId('home-route')).toBeInTheDocument();
+  });
+
+  it('opened with no origin (Settings), it returns to Settings as before', () => {
+    useEntitlementStore.getState().setEntitlement({ isPro: false, source: 'none' });
+    renderAt('/pro');
+    fireEvent.click(screen.getByTestId('paywall-back-free'));
+    fireEvent.click(screen.getByTestId('decline-skip'));
     expect(screen.getByTestId('settings-route')).toBeInTheDocument();
   });
 });

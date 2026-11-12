@@ -28,6 +28,10 @@ export interface MemoryDataByKind {
   'variation-tab': { tabIndex: number };
   /** Opening checkpoint quiz: the question reached, or done. key = opening id. */
   'quiz-progress': { index: number; completed: boolean };
+  /** The opening wall popped up after the free main-line Watch of an opening
+   *  that is not theirs — once per opening (David 2026-11-12); after that the
+   *  unlock bar stays on the page instead. key = opening id. */
+  'after-watch-wall': { at: number };
   /** Book reader: the chapter and page. key = book id. */
   'book-page': { activeIdx: number; page: number };
   /** Trap / warning lines finished in Train mode, by line NAME (an index drifts when the list changes). */
@@ -83,6 +87,7 @@ export const MEMORY_KINDS: Record<MemoryKind, { surface: MemorySurface }> = {
   'book-page': { surface: 'openings' },
   'trap-lines-done': { surface: 'openings' },
   'quiz-progress': { surface: 'openings' },
+  'after-watch-wall': { surface: 'openings' },
   'chat-thread': { surface: 'chat' },
   'kid-progress': { surface: 'kid' },
   'served-puzzles': { surface: 'tactics' },

@@ -147,6 +147,7 @@ import { useCoachBoardStore } from '../../stores/coachBoardStore';
 import type { OpeningRecord, MiddlegamePlan, ModelGame } from '../../types';
 import { advanceFirstRun } from '../../services/firstRunJourney';
 import { recallData, remember } from '../../services/studentMemory';
+import { getOpeningOffer } from '../../services/billingService';
 import {
   ArrowLeft,
   BookOpen as LearnIcon,
@@ -170,17 +171,6 @@ import {
   Lock,
   Check,
 } from 'lucide-react';
-
-/** ViewModes where the student is ACTIVELY DRILLING (playing moves): Learn,
- *  Practice, Play and every prefixed flavour (variation-, trap-, warning-,
- *  named-trap-, gem-, pitfall-, subline-, middlegame-). Watch/walkthrough
- *  modes, model games and the detail page are NOT drills — they stay free to
- *  sample on every opening (David 2026-09-02). */
-const ACTIVE_DRILL_MODE = /(?:^|-)(?:learn|practice|play)$/;
-/** Legacy trap/warning TRAINING modes are drills too — the student plays the
- *  line — they just carry no rung suffix, so match them explicitly or they'd be
- *  a hole in the wall (drill any opening's traps free). */
-const ACTIVE_DRILL_EXTRA: ReadonlySet<string> = new Set(['train-warnings']);
 
 type ViewMode =
   | 'detail'
@@ -219,6 +209,53 @@ type ViewMode =
   | 'subline-practice'
   | 'subline-play'
   | 'model-game';
+
+/** What an opening that is NOT the student's still opens (David 2026-11-12:
+ *  "only the main lines watch should be available to users that have claimed
+ *  an opening"). The page itself and the main line's Watch stay free, so they
+ *  can see what they would be buying; every other mode — variations, traps,
+ *  gems, plans, pitfalls, sublines, model games and every Learn / Practice /
+ *  Play — shows the opening wall. A Record, so a new view mode cannot compile
+ *  until it answers. This REPLACES the drill regex that left every Watch, plan
+ *  and model game free on every opening (David 2026-09-02). */
+export const OPEN_ON_LOCKED_OPENING: Record<ViewMode, boolean> = {
+  detail: true,
+  walkthrough: true,
+  learn: false,
+  practice: false,
+  play: false,
+  'variation-learn': false,
+  'variation-practice': false,
+  'variation-play': false,
+  'warning-learn': false,
+  'warning-practice': false,
+  'warning-play': false,
+  'variation-walkthrough': false,
+  'warning-walkthrough': false,
+  'train-warnings': false,
+  'named-trap': false,
+  'named-trap-learn': false,
+  'named-trap-practice': false,
+  'named-trap-play': false,
+  'gem-watch': false,
+  'gem-learn': false,
+  'gem-practice': false,
+  'gem-play': false,
+  'middlegame-watch': false,
+  'middlegame-plan': false,
+  'middlegame-practice': false,
+  'middlegame-play': false,
+  'pitfall-watch': false,
+  'pitfall-learn': false,
+  'pitfall-practice': false,
+  'pitfall-play': false,
+  'subline-detail': false,
+  'subline-watch': false,
+  'subline-learn': false,
+  'subline-practice': false,
+  'subline-play': false,
+  'model-game': false,
+};
 
 function computeFenFromPgn(pgn: string, setupFen?: string): string {
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
@@ -761,11 +798,46 @@ export function OpeningDetailPage(): JSX.Element {
     return opening.warningLines.map((v) => computeFenFromPgn(v.pgn, v.setupFen));
   }, [opening?.warningLines]);
 
-  // Watch is FREE TO SAMPLE on every opening; an ACTIVE DRILL (Learn /
-  // Practice / Play) is what commits a student to one. Browsing ('detail'),
-  // model games and every Watch/walkthrough mode never spend the free pick and
-  // never hit the wall.
-  const isActiveDrill = ACTIVE_DRILL_MODE.test(viewMode) || ACTIVE_DRILL_EXTRA.has(viewMode);
+  // IS THIS OPENING CLOSED TO THEM? A free user who has spent their free pick
+  // (and has not bought this one) — ONE answer, read by the wall, the
+  // after-Watch pop-up and the unlock bar. Before they claim, every eligible
+  // opening is open (canViewOpening), so a curious browser is never walled.
+  const openingLocked = gateEnabled && !isPro && freeTierHydrated && !!id
+    && !canViewOpening(id, freeTierRow, ownedOpeningIds);
+  const walledHere = openingLocked && !OPEN_ON_LOCKED_OPENING[viewMode];
+
+  // The wall that pops up when the free main-line Watch of a locked opening
+  // ENDS — once per opening (David 2026-11-12). Remembered per opening, so a
+  // replay does not throw a wall they already said no to; the unlock bar on
+  // the page is the way back to it from then on.
+  const [afterWatchWall, setAfterWatchWall] = useState(false);
+  const [afterWatchWallSeen, setAfterWatchWallSeen] = useState(false);
+  useEffect(() => {
+    setAfterWatchWall(false);
+    setAfterWatchWallSeen(false);
+    if (!id) return;
+    let live = true;
+    void recallData('after-watch-wall', id).then((m) => { if (live && m) setAfterWatchWallSeen(true); });
+    return () => { live = false; };
+  }, [id]);
+  const afterMainLineWatch = useCallback((): void => {
+    if (!openingLocked || !id || afterWatchWallSeen) return;
+    setAfterWatchWallSeen(true);
+    setAfterWatchWall(true);
+    trackSecondOpeningWalled(id, freeTierRow.freeOpeningId ?? '');
+    void remember('after-watch-wall', id, { at: Date.now() });
+  }, [openingLocked, id, afterWatchWallSeen, freeTierRow.freeOpeningId]);
+  // The store's price for this one opening, for the unlock bar ("Unlock for
+  // $0.99"). Read only on a locked opening; null off-store (web) — the bar
+  // then names no price and the wall shows the plans alone.
+  const [unlockPrice, setUnlockPrice] = useState<string | null>(null);
+  useEffect(() => {
+    setUnlockPrice(null);
+    if (!openingLocked || !id) return;
+    let live = true;
+    void getOpeningOffer(id).then((o) => { if (live && o) setUnlockPrice(o.priceString); });
+    return () => { live = false; };
+  }, [openingLocked, id]);
 
   // Has the student actually DRILLED this opening — completed a Learn,
   // Practice or Play rung on the main line, a variation, or a weapon? Read off
@@ -789,7 +861,7 @@ export function OpeningDetailPage(): JSX.Element {
     // A bought opening never spends the free slot (à la carte, 2026-10-25).
     if (ownedOpeningIds.includes(id)) return;
     if (!canViewOpening(id, freeTierRow, ownedOpeningIds)) {
-      if (isActiveDrill) trackSecondOpeningWalled(id, freeTierRow.freeOpeningId ?? '');
+      if (walledHere) trackSecondOpeningWalled(id, freeTierRow.freeOpeningId ?? '');
       return;
     }
     if (!hasDrilledThisOpening) return;
@@ -800,7 +872,7 @@ export function OpeningDetailPage(): JSX.Element {
         setJustClaimedFree(true);
       }
     });
-  }, [gateEnabled, isPro, freeTierHydrated, isActiveDrill, hasDrilledThisOpening, id, freeTierRow, claimFreeOpening, ownedOpeningIds]);
+  }, [gateEnabled, isPro, freeTierHydrated, walledHere, hasDrilledThisOpening, id, freeTierRow, claimFreeOpening, ownedOpeningIds]);
 
   // First-run journey: starting an opening's lesson is its last step.
   useEffect(() => {
@@ -874,8 +946,28 @@ export function OpeningDetailPage(): JSX.Element {
   // can sample the whole library and only commits when they drill. Dormant
   // unless the gate is live + non-Pro.
   if (libraryWalled) return <PaywallPage feature="library" />;
-  if (isActiveDrill && gateEnabled && !isPro && freeTierHydrated && id && !canViewOpening(id, freeTierRow, ownedOpeningIds)) {
-    return <PaywallPage feature="opening" opening={{ id, name: opening.name }} />;
+  // The opening wall — after the free Watch ends, or in front of anything a
+  // locked opening does not open. "Not now" comes back to this page, never
+  // Home: they were in the middle of this opening.
+  if (afterWatchWall && openingLocked) {
+    return (
+      <PaywallPage
+        feature="opening"
+        opening={{ id: opening.id, name: opening.name }}
+        moment="after-watch"
+        onLeave={() => setAfterWatchWall(false)}
+      />
+    );
+  }
+  if (walledHere) {
+    return (
+      <PaywallPage
+        feature="opening"
+        opening={{ id: opening.id, name: opening.name }}
+        moment="locked-action"
+        onLeave={() => setViewMode('detail')}
+      />
+    );
   }
 
   // Walkthrough mode (main line or variation)
@@ -894,7 +986,7 @@ export function OpeningDetailPage(): JSX.Element {
             // waiting for them rather than needing to be found.
             void markRungComplete(opening.id, MAIN_LINE_INDEX, 'watch')
               .then(() => loadOpening())
-              .then(() => setViewMode('detail'));
+              .then(() => { setViewMode('detail'); afterMainLineWatch(); });
           }}
           onContinueToNext={() => setViewMode('learn')}
         />
@@ -948,7 +1040,7 @@ export function OpeningDetailPage(): JSX.Element {
         onComplete={() => {
           void markRungComplete(opening.id, lineIndex, 'watch')
             .then(() => loadOpening())
-            .then(() => setViewMode('detail'));
+            .then(() => { setViewMode('detail'); if (!onVariation) afterMainLineWatch(); });
         }}
         onContinueToNext={() => (onVariation ? handleStartVariationLearn(activeVariationIndex) : setViewMode('learn'))}
       />
@@ -2595,6 +2687,23 @@ export function OpeningDetailPage(): JSX.Element {
         overview={subjectOverview}
         keyIdeas={subjectKeyIdeas}
       />
+
+      {/* THE UNLOCK BAR — once the after-Watch wall has been seen on a locked
+          opening, the way back to it stays here instead of popping up again
+          (David 2026-11-12). Sits above the phone tab bar. */}
+      {openingLocked && afterWatchWallSeen && (
+        <div className="sticky bottom-[calc(5rem+env(safe-area-inset-bottom,0px))] md:bottom-0 z-20 mt-4">
+          <button
+            type="button"
+            onClick={() => setAfterWatchWall(true)}
+            data-testid="opening-unlock-bar"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold shadow-lg border-2 border-emerald-500/50 bg-emerald-600 text-white"
+          >
+            <Lock size={16} />
+            {unlockPrice ? `Unlock this opening for ${unlockPrice}` : 'Unlock this opening'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -24,7 +24,9 @@ describe('the opening page reads what was bought', () => {
     expect(effect).toContain('if (ownedOpeningIds.includes(id)) return;');
   });
 
-  it('the drill wall names its opening so it can sell just that one', () => {
-    expect(PAGE).toMatch(/<PaywallPage feature="opening" opening=\{\{ id, name: opening\.name \}\} \/>/);
+  it('every opening wall names its opening so it can sell just that one', () => {
+    const walls = PAGE.match(/<PaywallPage\s+feature="opening"[\s\S]*?\/>/g) ?? [];
+    expect(walls.length).toBe(2);
+    for (const w of walls) expect(w).toMatch(/opening=\{\{ id: opening\.id, name: opening\.name \}\}/);
   });
 });

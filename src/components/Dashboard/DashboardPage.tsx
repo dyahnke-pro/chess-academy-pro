@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/appStore';
 import { updateStreak } from '../../services/sessionGenerator';
 import { seedDatabase } from '../../services/dataLoader';
-import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight, Baby } from 'lucide-react';
+import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight, Baby, Crown } from 'lucide-react';
+import { useEntitlement } from '../../hooks/useEntitlement';
+import { isBillingConfigured } from '../../services/billingService';
+import { trackPlansOpened } from '../../services/billingAnalytics';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
 import { TableOfContents } from './TableOfContents';
@@ -167,6 +170,13 @@ export function DashboardPage(): JSX.Element {
   // Which row blinks ROTATES per app open (homeSuggestion); the ring pill stays the day's.
   const suggestion = useHomeSuggestion();
   useSayPickReason(suggestion?.pick ?? null);
+  // GO PRO, IN SIGHT (David 2026-11-12). The plans lived only behind Settings
+  // and behind a spent free limit, so neither a new user nor App Review could
+  // find where to pay (2.1(b), rejected twice). Shown to a free user wherever
+  // the store is live; a subscriber, the web app and a still-resolving
+  // entitlement never see it.
+  const { shouldShowPaywall } = useEntitlement();
+  const showGoPro = shouldShowPaywall && isBillingConfigured();
 
   useEffect(() => {
     void seedDatabase();
@@ -233,6 +243,19 @@ export function DashboardPage(): JSX.Element {
           <span className="text-sm font-semibold text-amber-400">Import Games</span>
         </button>
       </div>
+
+      {showGoPro && (
+        <div className="max-w-lg mx-auto w-full">
+          <button
+            onClick={() => { trackPlansOpened('home'); void navigate('/pro', { state: { from: '/' } }); }}
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#c9a84c]/15 border-2 border-[#c9a84c]/50 hover:opacity-80 transition-all duration-200"
+            data-testid="home-go-pro-btn"
+          >
+            <Crown size={18} className="text-[#e5c874]" />
+            <span className="text-sm font-semibold text-[#e5c874]">Go Pro — every opening, unlimited coach</span>
+          </button>
+        </div>
+      )}
 
       {/* Smart Search */}
       <div className="max-w-lg mx-auto w-full">

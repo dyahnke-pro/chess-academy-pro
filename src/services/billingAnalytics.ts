@@ -276,7 +276,9 @@ export function trackBillingUnconfiguredNative(platform: string, bundle: string)
 }
 
 /** The plans page was opened on purpose, from the Subscription card. */
-export function trackPlansOpened(source: 'settings'): void {
+/** Where the plans were opened on purpose from: Settings → Subscription, or
+ *  the Go Pro bar on Home (David 2026-11-12). */
+export function trackPlansOpened(source: 'settings' | 'home'): void {
   captureEvent(BILLING_EVENT.plansOpened, { source });
 }
 
