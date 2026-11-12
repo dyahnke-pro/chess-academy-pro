@@ -86,11 +86,16 @@ export function droppedJob(fenBefore: string, sans: readonly string[]): string |
  *  not a cap: every alternative at or above it is eligible. */
 export const MIN_ALTERNATIVE_SHARE = 10;
 
+/** …and below this many games it is a handful, whatever its share: "Plenty
+ *  of games go Nbd7 here" was 14% of 22 games — three (task 172). A share is a
+ *  claim about players; three games are three games. */
+export const MIN_ALTERNATIVE_GAMES = 20;
+
 /** The most-played real alternative that is not the taught move, when it is
  *  played often enough to be a real temptation. */
 export function pickAlternative(taughtSan: string, candidates: readonly AlternativeCandidate[]): AlternativeCandidate | null {
   const taught = stripGlyphs(taughtSan);
-  const alts = candidates.filter((c) => stripGlyphs(c.san) !== taught && c.games > 0
+  const alts = candidates.filter((c) => stripGlyphs(c.san) !== taught && c.games >= MIN_ALTERNATIVE_GAMES
     && (c.pct === null || c.pct >= MIN_ALTERNATIVE_SHARE));
   if (alts.length === 0) return null;
   return [...alts].sort((a, b) => b.games - a.games)[0];
