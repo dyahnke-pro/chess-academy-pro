@@ -10,7 +10,7 @@ import { NO_PREV_CAPTURE } from './captureRun';
 const weaknessesAfter = (line: string, san: string, moverIsStudent: boolean): string[] => {
   const c = new Chess();
   for (const m of line.split(' ').filter(Boolean)) c.move(m);
-  const read = moveAspects({ fenBefore: c.fen(), san, prev: NO_PREV_CAPTURE, moverIsStudent });
+  const read = moveAspects({ fenBefore: c.fen(), san, prev: NO_PREV_CAPTURE, moverIsStudent, follow: [] });
   return (read?.aspects ?? []).filter((a) => a.idea === 'weakness').map((a) => a.verb);
 };
 

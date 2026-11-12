@@ -129,7 +129,7 @@ describe('(L) two good moves — on his games', () => {
     // 10…Nd5 vs …Nh5 (Fz0_pECE5vo): the knight on d5 is where it went, so it
     // is not "kept guarded" by the other move; the knight's reach is the point.
     const fen = 'r1bq1rk1/pp1pppbp/2n2np1/4P3/Q4B2/2P5/PP3PPP/RN2KBNR b KQ - 0 10';
-    expect(moveDifference(fen, 'Nd5', 'Nh5', 'your')?.text).toBe('your knight does more on d5, with 7 squares from there against 3 on h5');
+    expect(moveDifference(fen, 'Nd5', 'Nh5', 'your', { a: null, b: null })?.text).toBe('your knight does more on d5, with 7 squares from there against 3 on h5');
   });
 
   it('when the other move has the edge, the held form says the edge without naming it (prod audit 2026-11-07)', () => {
@@ -138,7 +138,7 @@ describe('(L) two good moves — on his games', () => {
     const fen = 'r1bq1rk1/pp1pppbp/2n2np1/4P3/Q4B2/2P5/PP3PPP/RN2KBNR b KQ - 0 10';
     // Specific (David 2026-11-07: "Not a general statement"): the piece, its
     // square and its reach — and never the other move's square (d5).
-    expect(moveDifference(fen, 'Nh5', 'Nd5', 'your')?.heldOther).toBe('your knight reaches only 3 squares from h5, against 7 from the other square it had');
+    expect(moveDifference(fen, 'Nh5', 'Nd5', 'your', { a: null, b: null })?.heldOther).toBe('your knight reaches only 3 squares from h5, against 7 from the other square it had');
     const reads: WeighRead[] = [
       { evaluation: -20, mate: null, moves: ['f6d5', 'f4g3'] },
       { evaluation: -25, mate: null, moves: ['f6h5', 'f4g3'] },

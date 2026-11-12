@@ -35,7 +35,7 @@ describe('the plan step credited after their reply holds on the board after it',
 describe('a move that steps away from a threatened push names no square it left', () => {
   it("37.Qe4 stops …e4, which would have hit the queen — not \"your queen on f3\"", () => {
     expect(game[72]).toBe('Qe4');
-    const job = moveJob(fenAt(72), 'Qe4', 'w', MINE);
+    const job = moveJob(fenAt(72), 'Qe4', 'w', MINE, null, []);
     expect(job?.clause).toBe('it stops their pawn coming to e4, which would have hit your queen');
     expect(job?.squares).not.toContain('f3');
   });

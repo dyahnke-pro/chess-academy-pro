@@ -29,6 +29,7 @@ import { Chess, type Color, type Move } from 'chess.js';
 import { humanMoveProbabilities } from './humanMove';
 import { costReason, reasonWinWords, type CostReason } from './costReason';
 import { lineTrust, type LineTrust } from './lineTrust';
+import { NO_FOLLOW } from './exchangeLedger';
 import { moveJob, isBareJob, MINE, THEIRS, type BookJobKind } from './bookMoveWhy';
 import { tacticWord } from './tacticVocabulary';
 import { lineShape, withArticle } from '../utils/andList';
@@ -235,8 +236,17 @@ function branchOf(
   if (reply.check && y.piece !== 'k' && !y.captured) {
     return { ...plain, kind: 'block', job: null };
   }
+  // The answer's job is read with what the reply's own line plays after it: a
+  // capture whose gain that line gives straight back is no "wins a pawn, and
+  // nothing can take back" (task 172: "…Nf6, Nxe5 wins a pawn", with the read
+  // going on …d6, Nf3, …Nxe4).
   let job: ReturnType<typeof moveJob> = null;
-  try { job = moveJob(fenX, y.san, mover, mover === args.student ? MINE : THEIRS); } catch { job = null; }
+  try {
+    const after: string[] = [];
+    const walk = new Chess(y.after);
+    for (const u of read.pv.slice(2)) { const m = playUci(walk, u); if (!m) break; after.push(m.san); }
+    job = moveJob(fenX, y.san, mover, mover === args.student ? MINE : THEIRS, null, after.length ? [after] : NO_FOLLOW);
+  } catch { job = null; }
   if (job && !isBareJob(job) && ANSWER_JOBS.has(job.kind) && /^it /.test(job.clause)) {
     return { ...plain, kind: 'job', job: job.clause.replace(/^it /, '') };
   }

@@ -202,7 +202,7 @@ export function alternativeProof(
     before: null, priorMove: null, against: againstUci,
   });
   if (!reason || reason.kind !== 'allowed' || !reason.trust.name) return { lineSans: [], proofResult: null, reason };
-  const proofResult = reason.mate ? "it's mate" : reason.ledger ? describeProofResult(reason.ledger) : null;
+  const proofResult = reason.mate ? "it's mate" : reason.ledger ? describeProofResult(reason.ledger, { fen: reason.fen, student: studentWB }) : null;
   return { lineSans: proofResult ? [altSan.replace(/^…/, ''), ...reason.plies.map((p) => p.san)] : [], proofResult, reason };
 }
 

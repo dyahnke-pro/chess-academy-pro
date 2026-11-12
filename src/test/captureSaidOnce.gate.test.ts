@@ -187,14 +187,14 @@ const PRODUCERS: Record<string, { plies: Plies; run: Producer }> = {
   },
   moveAspects: {
     plies: 'captures',
-    run: (p) => (moveAspects({ fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: true })?.aspects ?? [])
+    run: (p) => (moveAspects({ fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: true, follow: [] })?.aspects ?? [])
       .flatMap((a) => [`You play ${p.san}, ${a.text}.`, `You play ${p.san} — it ${a.verb}.`]),
   },
   // The move's job, said after its SAN by every caller.
   moveJob: {
     plies: 'captures',
     run: (p) => [MINE, THEIRS].flatMap((w) => {
-      const j = moveJob(p.fenBefore, p.san, p.mover, w, p.prior);
+      const j = moveJob(p.fenBefore, p.san, p.mover, w, p.prior, []);
       return j ? [j.clause, j.compact, ...(j.forms ?? [])].filter((x): x is string => !!x).map((c) => `${lineSan(p)} — ${c}.`) : [];
     }),
   },

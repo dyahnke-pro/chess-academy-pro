@@ -23,7 +23,7 @@ describe('captureLeadsTo: the net, read off the board', () => {
   });
 
   it('the lesson composer says the exchange too: a rook taken by a pawn that is taken back', () => {
-    const a = moveAspects({ fenBefore: '4q2k/2r1r1p1/4PR1p/p1p5/P2pQ2P/1P1B1R2/6P1/6K1 b - - 0 38', san: 'gxf6', prev: NO_PREV_CAPTURE, moverIsStudent: true });
+    const a = moveAspects({ fenBefore: '4q2k/2r1r1p1/4PR1p/p1p5/P2pQ2P/1P1B1R2/6P1/6K1 b - - 0 38', san: 'gxf6', prev: NO_PREV_CAPTURE, moverIsStudent: true, follow: [] });
     const win = a?.aspects.find((x) => x.idea === 'win-material');
     expect(win?.text).toBe('winning a rook for a pawn');
   });

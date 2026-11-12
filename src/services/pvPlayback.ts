@@ -358,6 +358,37 @@ const PIECE_WORD: Record<string, string> = {
 /** Exported so a surface that already holds a raw PV can replay it with the
  *  SAME facts the engine path computes, instead of a thinner hand-rolled copy
  *  that quietly sees less (see `lookaheadPlan.planFromUci`). */
+/** WHAT A MOVE CHANGED IN THE STRUCTURE, between two boards: the files it
+ *  opened, the passers it made and handed over, the outpost it gave the
+ *  mover. One read, so the board a move leaves and the board its exchange
+ *  ends on (`material.exchangeEnd`) are read the same way — the briefing
+ *  reads the second when take-backs are coming (task 172). */
+export function structureDelta(
+  before: ReturnType<typeof describeStructure>, after: ReturnType<typeof describeStructure>, mover: 'w' | 'b', promoted: boolean,
+): { newOpenFiles: string[]; newPassedPawns: string[]; passedPawnsHanded: string[]; outpost: NonNullable<ReturnType<typeof describeStructure>>['outposts'][number] | undefined } {
+  const defender: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+  // A promotion empties the file by turning the pawn into a piece — that is
+  // not a file opened (calc hand walk 2026-10-01: "h1=Q, promoting to a queen,
+  // opening the h-file").
+  const newOpenFiles = before && after && !promoted
+    ? after.pawns.openFiles.filter((f) => !before.pawns.openFiles.includes(f))
+    : [];
+  // A passer that merely ADVANCED is not a new one: "h4, creating a passed pawn
+  // on h4" was said of a pawn that was passed on h5 (same walk). A passer on a
+  // file that had one which is no longer standing is the same pawn moving.
+  const newPassersFor = (side: 'w' | 'b'): string[] => {
+    const had = before ? before.pawns.passedPawns[side] : [];
+    const now = after ? after.pawns.passedPawns[side] : [];
+    const moved = had.filter((sq) => !now.includes(sq));
+    return now.filter((sq) => !had.includes(sq) && !moved.some((m) => m[0] === sq[0]));
+  };
+  const outpostsBefore = before ? before.outposts.filter((o) => o.color === mover).map((o) => o.square) : [];
+  const outpost = after
+    ? after.outposts.find((o) => o.color === mover && !outpostsBefore.includes(o.square))
+    : undefined;
+  return { newOpenFiles, newPassedPawns: newPassersFor(mover), passedPawnsHanded: newPassersFor(defender), outpost };
+}
+
 export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
   captured?: string; san: string; color: 'w' | 'b'; promotion?: string;
 }, prev?: PrevCaptureContext): PlyFacts {
@@ -545,27 +576,7 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
     }
   }
 
-  // A promotion empties the file by turning the pawn into a piece — that is
-  // not a file opened (calc hand walk 2026-10-01: "h1=Q, promoting to a queen,
-  // opening the h-file").
-  const newOpenFiles = before && after && !mv.promotion
-    ? after.pawns.openFiles.filter((f) => !before.pawns.openFiles.includes(f))
-    : [];
-  // A passer that merely ADVANCED is not a new one: "h4, creating a passed pawn
-  // on h4" was said of a pawn that was passed on h5 (same walk). A passer on a
-  // file that had one which is no longer standing is the same pawn moving.
-  const newPassersFor = (side: 'w' | 'b'): string[] => {
-    const had = before ? before.pawns.passedPawns[side] : [];
-    const now = after ? after.pawns.passedPawns[side] : [];
-    const moved = had.filter((sq) => !now.includes(sq));
-    return now.filter((sq) => !had.includes(sq) && !moved.some((m) => m[0] === sq[0]));
-  };
-  const newPassedPawns = newPassersFor(mover);
-  const passedPawnsHanded = newPassersFor(defender);
-  const outpostsBefore = before ? before.outposts.filter((o) => o.color === mover).map((o) => o.square) : [];
-  const outpostAfterNew = after
-    ? after.outposts.find((o) => o.color === mover && !outpostsBefore.includes(o.square))
-    : undefined;
+  const { newOpenFiles, newPassedPawns, passedPawnsHanded, outpost: outpostAfterNew } = structureDelta(before, after, mover, !!mv.promotion);
   const shieldLost = shieldLoss(fenBefore, fenAfter, defender);
 
   return {

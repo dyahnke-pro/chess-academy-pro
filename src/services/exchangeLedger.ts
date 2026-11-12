@@ -20,6 +20,7 @@ import { lineShape, seatedLine, withArticle } from '../utils/andList';
 import type { Proof } from './proof';
 import { Chess, type Square } from 'chess.js';
 import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
+import { materialBalance } from './pieceValues';
 import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 
 export type PieceLetter = 'p' | 'n' | 'b' | 'r' | 'q';
@@ -312,6 +313,40 @@ export function settledNetForLine(
   return null;
 }
 
+/** How far down the line that follows a capture its gain must still stand:
+ *  three moves a side. "bxc4 wins a pawn, and nothing can take back" with
+ *  Bxc4 three moves later in the lesson's own line is the gambit pawn on
+ *  loan, not a pawn won (task 172). */
+export const GAIN_HOLDS_PLIES = 6;
+
+/**
+ * DOES WHAT A CAPTURE NETS STILL STAND IN THE LINES THAT FOLLOW IT? `gain` is
+ * what the capture nets on its own square (`material.exchangeEnd`); `follow`
+ * is every line the surface knows comes next (the engine's line after the
+ * move, the taught line), each SAN, the reply first. True when none is known
+ * (`[]`) — then the board is all there is. False when a line's own settled
+ * count gives the material back: …dxe4 "wins a knight, and nothing can take
+ * back" while Nxc6 takes a knight on the very next move; Nxe5 "wins a pawn"
+ * while …d6 and …Nxe4 win it straight back (task 172, the reply tree and the
+ * move's job).
+ */
+export type FollowLines = ReadonlyArray<readonly string[]>;
+export const NO_FOLLOW: FollowLines = [];
+export function gainHoldsInLine(fenBefore: string, san: string, follow: FollowLines, mover: 'w' | 'b', gain: number): boolean {
+  return follow.every((line) => {
+    if (line.length === 0) return true;
+    const net = settledNetForLine(fenBefore, [san, ...line.slice(0, GAIN_HOLDS_PLIES)], mover);
+    return net !== null && net >= gain;
+  });
+}
+
+/** How far `seatWB` is BEHIND in material on `fen`, in pawns (0 when level or
+ *  ahead) — the standing a line's result is said against. */
+export function materialDeficit(fen: string, seatWB: 'w' | 'b'): number {
+  const lead = (seatWB === 'w' ? 1 : -1) * materialBalance(fen);
+  return lead < 0 ? -lead : 0;
+}
+
 /**
  * The exchange a capture STARTS, read off the engine's line: the ledger at the
  * first point the trade is finished (no profitable take-back on the last
@@ -496,8 +531,27 @@ export function lineGiftIndex(fenBefore: string, sans: readonly string[], giver:
 
 /** The result a proof line ends on, from the student's seat, in piece names:
  *  "you win a knight", "they win a rook", or the two-sided trade sentence. */
-export function describeProofResult(ledger: ExchangeLedger): string {
+export function describeProofResult(
+  ledger: ExchangeLedger,
+  /** REQUIRED: the board the line started from and the student's colour, or
+   *  null where the caller has neither. A side that was BEHIND by at least
+   *  what the line wins it only gets material back, and that is what is said
+   *  (task 172: "After Nxe4, they play …Nxe4 and you answer Qxe4 — you win a
+   *  pawn", one move after …dxe4 took that pawn; "…you play Bxc4 — you win a
+   *  pawn" of the Queen's Gambit pawn; "…Ngxe5 — you win a pawn" of the
+   *  Albin's). The ledger counts what changes hands IN the line; what the side
+   *  stood at before it is the board's. */
+  start: { fen: string; student: 'w' | 'b' } | null,
+): string {
   const two = describeExchange(ledger);
+  // A like-for-like trade that leaves one side a clean gain is that gain.
+  const g = [...ledger.studentWon]; const l = [...ledger.opponentWon];
+  for (let i = g.length - 1; i >= 0; i -= 1) { const j = l.indexOf(g[i]); if (j >= 0) { g.splice(i, 1); l.splice(j, 1); } }
+  const back = (winner: 'w' | 'b', won: readonly PieceLetter[]): boolean => !!start && won.length > 0 && materialDeficit(start.fen, winner) >= sum(won);
+  // Said as a count, like every gain after a line ("a pawn back"; "the pawn"
+  // would be the capture said again — `captureSaidOnce.gate`).
+  if (start && l.length === 0 && g.length > 0 && back(start.student, g)) return `you win ${nameSide(g)} back`;
+  if (start && g.length === 0 && l.length > 0 && back(start.student === 'w' ? 'b' : 'w', l)) return `they win ${nameSide(l)} back`;
   if (two) return two;
   if (ledger.studentWon.length > 0 && ledger.opponentWon.length === 0) return `you win ${nameSide(ledger.studentWon)}`;
   if (ledger.opponentWon.length > 0 && ledger.studentWon.length === 0) return `they win ${nameSide(ledger.opponentWon)}`;
@@ -552,9 +606,9 @@ export function heardProofCut(
 }
 
 /** A loss cut, said: the line to where it proves, and what it costs. */
-function lossProofOf(fen: string, cut: LineProof): Proof {
+function lossProofOf(fen: string, cut: LineProof, lossSeat: 'w' | 'b'): Proof {
   const line = { fen, sans: cut.sans.slice(0, cut.plies) };
-  return heardProof(line, cut.mate ? "and it's mate" : describeProofResult(cut.ledger as ExchangeLedger));
+  return heardProof(line, cut.mate ? "and it's mate" : describeProofResult(cut.ledger as ExchangeLedger, { fen, student: lossSeat }));
 }
 
 /** A line cut to the point it PROVES AGAINST the side that starts it — mate
@@ -607,7 +661,7 @@ export function refutationProof(fen: string, uci: readonly string[], bestUci: re
   if (!cut) return null;
   const best = moverLossCut(fen, bestUci, moverWB);
   if (best && lossPawns(cut) >= lossPawns(best)) return null;
-  return lossProofOf(fen, cut);
+  return lossProofOf(fen, cut, moverWB);
 }
 
 /** THE VOICE SAYS THE SHAPE, THE BOARD SHOWS THE DETAIL (proof guard 2): a
@@ -639,5 +693,5 @@ export function moverLineProof(fen: string, uci: readonly string[], moverWB: 'w'
   const said = (end: string): Proof => heardProof(line, end);
   if (proof.mate) return proof.plies % 2 === 1 ? said("and it's mate") : null;
   if (!proof.ledger || proof.ledger.netPawns <= 0) return null;
-  return said(describeProofResult(proof.ledger));
+  return said(describeProofResult(proof.ledger, { fen, student: moverWB }));
 }

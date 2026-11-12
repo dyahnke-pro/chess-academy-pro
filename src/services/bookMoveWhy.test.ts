@@ -171,14 +171,14 @@ describe('the hand-graded falsehoods of 2026-10-14 stay fixed (each failed on th
 describe('moveJob — one counter for the guards of one piece', () => {
   it('9…c6 is the FOURTH guard of the knight on d5, never "another"', () => {
     const fen = fenOf('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4 O-O');
-    expect(moveJob(fen, 'c6', 'b', MINE)?.clause).toMatch(/^it adds a fourth guard to your knight on d5/);
+    expect(moveJob(fen, 'c6', 'b', MINE, null, [])?.clause).toMatch(/^it adds a fourth guard to your knight on d5/);
   });
 });
 
 describe('moveJob — a piece that faces an equal one offers the trade', () => {
   it('10…Qf6 challenges the queen on f3, offering to trade queens (the g7 pawn guards f6)', () => {
     const fen = fenOf('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4 O-O c6 d4');
-    expect(moveJob(fen, 'Qf6', 'b', MINE)?.clause).toBe('it challenges their queen on f3, offering to trade queens');
+    expect(moveJob(fen, 'Qf6', 'b', MINE, null, [])?.clause).toBe('it challenges their queen on f3, offering to trade queens');
   });
 });
 
@@ -196,11 +196,11 @@ describe('a move prepares a push only with its own piece (OS-11, Ruy 3…Qf6)', 
 describe('taking back a piece that just promoted wins a pawn, not a queen', () => {
   const AFTER_PROMO = '1n1Qk3/5ppp/b7/2Q1N2q/p3P3/6P1/PPP2P1P/R3K2R b KQ - 0 21';
   it('Kxd8 after cxd8=Q+ claims no queen', () => {
-    const j = moveJob(AFTER_PROMO, 'Kxd8', 'b', MINE, { to: 'd8', captured: 'r', promoted: true });
+    const j = moveJob(AFTER_PROMO, 'Kxd8', 'b', MINE, { to: 'd8', captured: 'r', promoted: true }, []);
     expect(j?.clause ?? '').not.toMatch(/you get a queen/);
   });
   it('NEGATIVE CONTROL: the same take-back of a queen that did not just promote does', () => {
-    const j = moveJob(AFTER_PROMO, 'Kxd8', 'b', MINE, { to: 'd8', captured: 'r', promoted: false });
+    const j = moveJob(AFTER_PROMO, 'Kxd8', 'b', MINE, { to: 'd8', captured: 'r', promoted: false }, []);
     expect(j?.clause ?? '').toMatch(/gets you a queen for the rook they took/);
   });
 });
@@ -211,13 +211,13 @@ describe('taking back a piece that just promoted wins a pawn, not a queen', () =
 describe('a king step out of check is the board, not a job', () => {
   it('Ke7 out of Nxd6+: bare', async () => {
     const { isBareJob } = await import('./bookMoveWhy');
-    const j = moveJob('1nb1k2r/5ppp/2PN4/r2Qp1q1/p3P3/6P1/PPP2P1P/R3K1NR b KQk - 0 14', 'Ke7', 'b', MINE, null);
+    const j = moveJob('1nb1k2r/5ppp/2PN4/r2Qp1q1/p3P3/6P1/PPP2P1P/R3K1NR b KQk - 0 14', 'Ke7', 'b', MINE, null, []);
     expect(j).not.toBeNull();
     expect(isBareJob(j!)).toBe(true);
   });
   it('NEGATIVE CONTROL: a developing move that prepares castling is not bare', async () => {
     const { isBareJob } = await import('./bookMoveWhy');
-    const j = moveJob('rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 2', 'Bc4', 'w', MINE, null);
+    const j = moveJob('rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 2', 'Bc4', 'w', MINE, null, []);
     expect(j && isBareJob(j)).toBe(false);
   });
 });

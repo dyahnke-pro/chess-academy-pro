@@ -336,6 +336,37 @@ export function structureSignature(fen: string): StructureSignature | null {
   };
 }
 
+/** A pawn weakness one side has on a board that it did not have before. */
+export interface NewPawnWeakness { kind: 'isolated' | 'doubled'; file: string; squares: string[] }
+
+/**
+ * THE PAWN WEAKNESSES A CHANGE OF BOARD GAVE `side` — the one read of "this
+ * move left them an isolated pawn / doubled pawns" (task 172, 2026-11-11).
+ * Three producers each compared the two boards BY SQUARE, so a pawn that was
+ * already isolated and stepped forward was a "new" isolated pawn ("b5
+ * concedes an isolated pawn on the b-file", isolated on b4 the move before),
+ * and a pawn of an already-doubled pair that advanced doubled the file again
+ * ("…c5 leaves you doubled pawns on c5", with pawns on c7 and c4).
+ *
+ * By FILE, and only when there are MORE of the kind than before: an isolated
+ * pawn that changes file by capturing is the same weak pawn. Isolated first
+ * (the order every producer said them in).
+ */
+export function newPawnWeaknesses(
+  before: PawnStructureFacts, after: PawnStructureFacts, side: Color,
+): NewPawnWeakness[] {
+  const out: NewPawnWeakness[] = [];
+  const isoFiles = (p: PawnStructureFacts): string[] => [...new Set(p.isolatedPawns[side].map((s) => s[0]))];
+  const isoBefore = isoFiles(before); const isoAfter = isoFiles(after);
+  if (isoAfter.length > isoBefore.length) {
+    for (const f of isoAfter) if (!isoBefore.includes(f)) out.push({ kind: 'isolated', file: f, squares: after.isolatedPawns[side].filter((s) => s[0] === f) });
+  }
+  if (after.doubledFiles[side].length > before.doubledFiles[side].length) {
+    for (const f of after.doubledFiles[side]) if (!before.doubledFiles[side].includes(f)) out.push({ kind: 'doubled', file: f, squares: [] });
+  }
+  return out;
+}
+
 /** THE ONE PAWN READ FOR ONE SIDE (one-coach P2, census group 10): passed
  *  pawns, isolated pawns and doubled files, from `describeStructure`. Every
  *  "is this pawn passed / isolated / doubled" on a real board asks here. */

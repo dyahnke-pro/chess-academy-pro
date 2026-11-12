@@ -25,6 +25,7 @@ import { Chess, type Square, type Move } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
 import { lineIsForcing } from './lineTrust';
 import { proofCut } from './exchangeLedger';
+import { actsFromItsSquare, exchangeEnd } from './material';
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -260,12 +261,24 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
   return null;
 }
 
+/** A CAPTURE'S piece is still on its square when the exchange it is part of
+ *  is over (`material.exchangeEnd`), and the count is a standing one. A quiet
+ *  move is not an exchange: a pawn pushed at a bishop aims at it whether or
+ *  not it can be taken (taking it is how the aim is answered). */
+function stays(fenBefore: string, san: string): boolean {
+  if (!/x/.test(san)) return true;
+  const end = exchangeEnd(fenBefore, san);
+  return !!end && actsFromItsSquare(end);
+}
+
 /** The most valuable enemy unit the moved piece itself attacks after `san`
  *  (the king, a piece, or a pawn nothing guards), or null — the move's own
  *  point when it threatens nothing concrete ("Bg7 trains on the rook on a1"). */
 export function moveHit(fenBefore: string, san: string): string | null {
   const r = play(fenBefore, san);
   if (!r) return null;
+  // A piece the other side takes straight back hits nothing from there.
+  if (!stays(fenBefore, san)) return null;
   return hits(r.board, r.move.to, r.move.color).at(0)?.square ?? null;
 }
 
@@ -284,6 +297,11 @@ export function theirTarget(theirLast: { fenBefore: string; san: string } | null
   // A check is answered as a check: what else the checking piece eyes is not
   // what the reply is about.
   if (r.board.inCheck()) return null;
+  // A PIECE THAT IS TAKEN STRAIGHT BACK AIMS AT NOTHING (task 172: "Their Bxd3
+  // is aimed at your pawn on c4" with Qxd3 next; "Their Bxf6 is aimed at your
+  // queen on d8" with the bishop taken on f6). The one read of the exchange
+  // says whether the piece that landed is still there when it is over.
+  if (!stays(theirLast.fenBefore, theirLast.san)) return null;
   let best: { square: string; type: string } | null = null;
   for (const row of r.board.board()) {
     for (const cell of row) {

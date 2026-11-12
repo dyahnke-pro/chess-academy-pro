@@ -138,7 +138,7 @@ function seatProof(fen: string, sans: readonly string[], mover: 'w' | 'b', stude
     if (!p.ledger) return null;
     const moverNet = studentWB === mover ? p.ledger.netPawns : -p.ledger.netPawns;
     if (side === 'for' ? moverNet <= 0 : moverNet >= 0) return null;
-    end = describeProofResult(p.ledger);
+    end = describeProofResult(p.ledger, { fen, student: studentWB });
   }
   // Each move with its mover (OS-8 gap 7): the line starts with the side to move on `fen`.
   // A line that ends on its own mate mark has said the mate.

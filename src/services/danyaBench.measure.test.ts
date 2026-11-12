@@ -468,7 +468,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
     const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, prevCapture: p.prev });
     return d ? deliberationFacts(d, new Set(), true) : null;
   },
-  moveJob: (p) => moveJob(p.fenBefore, p.san, p.mover, p.own ? MINE : THEIRS)?.clause ?? null,
+  moveJob: (p) => moveJob(p.fenBefore, p.san, p.mover, p.own ? MINE : THEIRS, null, [])?.clause ?? null,
   fundamentals: (p) => computeMoveFundamentals(p.fenBefore, p.san, p.mover === 'w' ? 'white' : 'black').map((f) => f.selfContained),
   boardTeacher: (p) => buildReviewMoveTeaching(p.fenBefore, p.san, p.own),
   moveWhy: (p) => moveWhy(p.fenBefore, p.san, p.mover, p.prev),

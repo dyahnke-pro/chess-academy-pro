@@ -34,6 +34,8 @@ import { lineShape, lineShapePlies, orList, andList, type LineSeat } from '../ut
 import { contrastMoves } from './moveContrast';
 import { findHangingPieces } from './tacticClassifier';
 import { legalSeeGainFor } from './positionReadingService';
+import { exchangeEnd } from './material';
+import { describeStructure, newPawnWeaknesses } from './boardStructure';
 import { lineProof, type Proof } from './proof';
 import { seatCp, expectedScore } from './winChance';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -336,20 +338,46 @@ function hitAfter(fenBefore: string, san: string, sq: string): boolean {
   try { const m = b.move(san); return b.attackers(sq as Square, m.color === 'w' ? 'b' : 'w').length > 0; } catch { return false; }
 }
 
-/** The mover's pawns that are doubled or isolated after a move. */
-function pawnFaults(fenAfter: string, side: Color): Set<string> {
-  const b = boardOf(fenAfter);
-  const out = new Set<string>();
-  if (!b) return out;
-  const files = new Map<string, string[]>();
-  for (const row of b.board()) for (const c of row) {
-    if (c && c.type === 'p' && c.color === side) files.set(c.square[0], [...(files.get(c.square[0]) ?? []), c.square]);
-  }
-  for (const [f, sqs] of files) {
-    if (sqs.length > 1) for (const s of sqs) out.add(`doubled:${s}`);
-    const fi = f.charCodeAt(0);
-    const near = [String.fromCharCode(fi - 1), String.fromCharCode(fi + 1)].some((x) => files.has(x));
-    if (!near) for (const s of sqs) out.add(`isolated:${s}`);
+/** The board at the end of `follow` (UCI) played from `fen`, or null when the
+ *  line does not play. */
+function boardAfterLine(fen: string, follow: readonly string[]): string | null {
+  const b = boardOf(fen);
+  if (!b) return null;
+  try { for (const u of follow) b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { return null; }
+  return b.fen();
+}
+
+/** THE FAULTS A MOVE LEAVES ITS MOVER, READ WHEN ITS EXCHANGE IS OVER (task
+ *  172, the single most frequent false fact on the fact sheets: "exd4 leaves
+ *  you doubled pawns on d6" with Nxd4 next, on six Philidor moves; "dxc5
+ *  leaves you doubled pawns on c5" on five London moves). New against the
+ *  board before the move, on the board `exchangeEnd` settles on — and, when
+ *  the surface read the move's line (`follow`), still standing at the end of
+ *  it: …dxc4 doubles no c-pawns in a line that plays Bxc4 three moves on. */
+function newFaultsAfter(fenBefore: string, m: Move, follow: readonly string[] | null): Array<{ kind: string; square: string }> {
+  const end = exchangeEnd(fenBefore, m.san);
+  if (!end || !end.standing) return [];
+  const before = describeStructure(fenBefore)?.pawns;
+  const after = describeStructure(end.fen)?.pawns;
+  if (!before || !after) return [];
+  const lineEnd = follow && follow.length > 0 ? boardAfterLine(m.after, follow) : null;
+  const atLineEnd = lineEnd ? describeStructure(lineEnd)?.pawns ?? null : null;
+  const pawnsOn = (file: string): string[] => {
+    const b = boardOf(end.fen);
+    const out: string[] = [];
+    if (b) for (const row of b.board()) for (const c of row) if (c && c.type === 'p' && c.color === m.color && c.square[0] === file) out.push(c.square);
+    return out;
+  };
+  const out: Array<{ kind: string; square: string }> = [];
+  // The one read of a weakness a move made (`boardStructure.newPawnWeaknesses`).
+  for (const w of newPawnWeaknesses(before, after, m.color)) {
+    if (follow && follow.length > 0) {
+      const still = !!atLineEnd && (w.kind === 'doubled' ? atLineEnd.doubledFiles[m.color].includes(w.file) : atLineEnd.isolatedPawns[m.color].some((sq) => sq[0] === w.file));
+      if (!still) continue;
+    }
+    // Named by the pawn the move put there, else the file's first pawn.
+    const sqs = pawnsOn(w.file);
+    out.push({ kind: w.kind, square: sqs.includes(m.to) ? m.to : sqs[0] ?? m.to });
   }
   return out;
 }
@@ -361,7 +389,13 @@ function pawnFaults(fenAfter: string, side: Color): Set<string> {
  * seat; the move named first (`a`) is the one the difference favours. Null
  * when the board shows none — then the two are not compared out loud.
  */
-export function moveDifference(fenBefore: string, sanA: string, sanB: string, own: 'your' | 'their'): (MoveDifference & { favours: string; other: string }) | null {
+export function moveDifference(
+  fenBefore: string, sanA: string, sanB: string, own: 'your' | 'their',
+  /** REQUIRED: the line the surface read after each move (UCI, the reply
+   *  first), or null where it read none — a fault the move's own line undoes
+   *  is not said. */
+  follow: { a: readonly string[] | null; b: readonly string[] | null },
+): (MoveDifference & { favours: string; other: string }) | null {
   const a = moveOn(fenBefore, sanA);
   const bm = moveOn(fenBefore, sanB);
   if (!a || !bm) return null;
@@ -388,12 +422,10 @@ export function moveDifference(fenBefore: string, sanA: string, sanB: string, ow
   const afterA = boardOf(fenBefore); const afterB = boardOf(fenBefore);
   if (!afterA || !afterB) return null;
   try { afterA.move(a.san); afterB.move(bm.san); } catch { return null; }
-  const fa = pawnFaults(afterA.fen(), side); const fb = pawnFaults(afterB.fen(), side);
-  const before = pawnFaults(fenBefore, side);
-  const newA = [...fa].filter((x) => !before.has(x)); const newB = [...fb].filter((x) => !before.has(x));
+  const newA = newFaultsAfter(fenBefore, a, follow.a); const newB = newFaultsAfter(fenBefore, bm, follow.b);
   if ((newA.length === 0) !== (newB.length === 0)) {
     const [f, o, faults] = newA.length === 0 ? [a, bm, newB] : [bm, a, newA];
-    const [kind, sq] = faults[0].split(':');
+    const { kind, square: sq } = faults[0];
     return { kind: 'structure', favours: f.san, other: o.san, squares: [sq],
       text: `${f.san} keeps ${own} pawns whole, and ${o.san} leaves ${own === 'your' ? 'you' : 'them'} ${kind === 'doubled' ? 'doubled pawns' : 'an isolated pawn'} on ${sq}`,
       held: `${own === 'your' ? 'yours' : 'theirs'} keeps ${own} pawns whole, where the other leaves ${own === 'your' ? 'you' : 'them'} ${kind === 'doubled' ? 'doubled pawns' : 'an isolated pawn'}`,
@@ -402,7 +434,11 @@ export function moveDifference(fenBefore: string, sanA: string, sanB: string, ow
   // Activity compares like with like: the same piece on its two squares — a
   // knight, a bishop or a rook (a queen reaches a dozen squares from almost
   // anywhere, and a queen's reach against a knight's says nothing).
-  if (a.from === bm.from && 'nbr'.includes(a.piece)) {
+  // …and only a piece that STAYS on its square does anything from it: a bishop
+  // taken the move after ("Bg3 or Bxd6 — your bishop does more on d6", with
+  // …Qxd6 next) reaches nothing (task 172).
+  const stays = (m: Move): boolean => !m.captured || exchangeEnd(fenBefore, m.san)?.pieceStays === true;
+  if (a.from === bm.from && 'nbr'.includes(a.piece) && stays(a) && stays(bm)) {
     const ra = reachFrom(afterA.fen(), a.to, side);
     const rb = reachFrom(afterB.fen(), bm.to, side);
     const [hi, lo, rh, rl] = ra >= rb ? [a, bm, ra, rb] : [bm, a, rb, ra];
@@ -464,7 +500,7 @@ export function alsoGood(args: { fenBefore: string; san: string; student: Color;
     const ce = es(read);
     if (Math.abs(ce - playedEs) > SAME_WORTH || best - ce > GOOD_MOVE) continue;
     const gapCp = Math.round(Math.abs(seatCp(read, mover) - seatCp(playedRead, mover)));
-    const d = moveDifference(args.fenBefore, played.san, c.san, w.own);
+    const d = moveDifference(args.fenBefore, played.san, c.san, w.own, { a: playedRead.moves.slice(1), b: read.moves.slice(1) });
     if (!d) {
       if (!bothWin && ce >= BOTH_WIN && playedEs >= BOTH_WIN) bothWin = { c, gap: gapCp };
       continue;

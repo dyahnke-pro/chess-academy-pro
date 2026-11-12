@@ -30,14 +30,16 @@ import { openSentence, continueSentence } from '../utils/openSentence';
 import { settledLeadFor, type LastMove } from './material';
 import { Chess } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
+import { actsFromItsSquare, exchangeEnd } from './material';
+import { gainHoldsInLine, materialDeficit, netPieceWords, GAIN_HOLDS_PLIES, NO_FOLLOW, type FollowLines } from './exchangeLedger';
 import { boardEdgeWords } from '../utils/countWords';
-import { computePlyFacts, tacticWord, type PrevCaptureContext } from './pvPlayback';
+import { computePlyFacts, structureDelta, tacticWord, type PrevCaptureContext } from './pvPlayback';
 // The previous-move context is part of this input's contract, so it travels
 // with it: a caller builds `prev` without reaching for a second computer.
 export { prevCaptureOf, NO_PREV_CAPTURE } from './pvPlayback';
 import { detectNewThreat } from './groundedAnswer';
 import { detectTactics } from './tacticsDetector';
-import { describeStructure } from './boardStructure';
+import { describeStructure, newPawnWeaknesses, type NewPawnWeakness } from './boardStructure';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 import { shieldLoss } from './kingSafety';
 import { gainedBishopPair } from './bishopPair';
@@ -90,15 +92,37 @@ export interface Aspect {
   restates?: boolean;
 }
 
+/** Did the move UNCOVER an attack: does a piece of the mover's other than the
+ *  one that moved attack an enemy piece now that it did not attack before? */
+function unveilsAttack(fenBefore: string, fenAfter: string, mv: { to: string; color: 'w' | 'b' }): boolean {
+  try {
+    const before = new Chess(fenBefore);
+    const after = new Chess(fenAfter);
+    for (const cell of after.board().flat()) {
+      if (!cell || cell.color === mv.color) continue;
+      const was = new Set<string>(before.attackers(cell.square, mv.color));
+      if (after.attackers(cell.square, mv.color).some((s) => s !== mv.to && !was.has(s))) return true;
+    }
+    return false;
+  } catch { return false; }
+}
+
 /** New pawn weaknesses on `side` created between two structures (isolated / doubled
  *  / backward) — the honest, board-true structural delta. */
-function newPawnWeakness(before: ReturnType<typeof describeStructure>, after: ReturnType<typeof describeStructure>, side: 'w' | 'b'): string | null {
+function newPawnWeakness(
+  before: ReturnType<typeof describeStructure>, after: ReturnType<typeof describeStructure>, side: 'w' | 'b',
+  /** The boards a few moves down each line the surface knows follows: a
+   *  weakness a line undoes is not one the move conceded (…dxc4 "concedes
+   *  doubled pawns on the c-file" in a line that plays Bxc4 three moves on). */
+  later: ReadonlyArray<ReturnType<typeof describeStructure>>,
+): string | null {
   if (!before || !after) return null;
-  const iso = after.pawns.isolatedPawns[side].filter((s) => !before.pawns.isolatedPawns[side].includes(s));
-  if (iso.length) return `an isolated pawn on the ${iso[0][0]}-file`;
-  const dbl = after.pawns.doubledFiles[side].filter((f) => !before.pawns.doubledFiles[side].includes(f));
-  if (dbl.length) return `doubled pawns on the ${dbl[0]}-file`;
-  return null;
+  const stands = (w: NewPawnWeakness): boolean => later.every((l) => !l || (w.kind === 'doubled'
+    ? l.pawns.doubledFiles[side].includes(w.file)
+    : l.pawns.isolatedPawns[side].some((s) => s[0] === w.file)));
+  const w = newPawnWeaknesses(before.pawns, after.pawns, side).find(stands);
+  if (!w) return null;
+  return w.kind === 'isolated' ? `an isolated pawn on the ${w.file}-file` : `doubled pawns on the ${w.file}-file`;
 }
 
 /** A tactic of one of `types` newly created by the move, whose agent is the
@@ -249,6 +273,20 @@ function cheapestCaptureOn(fen: string, sq: string): string | null {
   } catch { return null; }
 }
 
+/** THE CAPTURE THAT COMES NEXT on `sq`, named — or `'choice'` when two pieces
+ *  of the same worth can make it: which one takes is theirs to decide, so it
+ *  is not named (task 172: "it keeps the trade going, with …Bxe5 next" where
+ *  the game went …Nxe5). */
+function nextCaptureOn(fen: string, sq: string): { san: string } | 'choice' | null {
+  try {
+    const takes = new Chess(fen).moves({ verbose: true }).filter((m) => m.to === sq && m.captured);
+    takes.sort((a, b) => (MATERIAL_VALUE[a.piece] ?? 0) - (MATERIAL_VALUE[b.piece] ?? 0));
+    if (takes.length > 1 && (MATERIAL_VALUE[takes[1].piece] ?? 0) === (MATERIAL_VALUE[takes[0].piece] ?? 0)) return 'choice';
+  } catch { return null; }
+  const san = cheapestCaptureOn(fen, sq);
+  return san ? { san } : null;
+}
+
 /** Any legal capture on `sq` for the side to move — "nothing can take back"
  *  is said only when this is false. */
 function takenBackOn(fen: string, sq: string): boolean {
@@ -283,8 +321,15 @@ function exchangeOn(fenAfter: string, sq: string): { reply: string; again: strin
  * after the move) and the one composer (which speaks each as a line of the
  * move's thought). Null when the move is illegal.
  */
-export function moveAspects(input: { fenBefore: string; san: string; prev: PrevCaptureContext; moverIsStudent?: boolean }): { mate: boolean; aspects: Aspect[]; threat: ReturnType<typeof detectNewThreat> } | null {
-  const { fenBefore, san, prev, moverIsStudent } = input;
+export function moveAspects(input: {
+  fenBefore: string; san: string; prev: PrevCaptureContext; moverIsStudent?: boolean;
+  /** REQUIRED: every line the surface knows comes after the move (the
+   *  engine's line after it, the taught line), SAN, the reply first —
+   *  `NO_FOLLOW` where it knows none. A gain a line gives straight back is not
+   *  a gain (task 172). */
+  follow: FollowLines;
+}): { mate: boolean; aspects: Aspect[]; threat: ReturnType<typeof detectNewThreat> } | null {
+  const { fenBefore, san, prev, moverIsStudent, follow } = input;
   let mv: ReturnType<Chess['move']> | null = null;
   let fenAfter = '';
   try {
@@ -317,6 +362,13 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
   }
 
   const recapture = !!mv.captured && prev.square === mv.to && prev.capturedValue > 0;
+  // THE ONE READ OF THE EXCHANGE THIS MOVE STARTS OR GOES ON WITH (task 172):
+  // the take-backs the legal count says will come, the board when they are
+  // over, and what the mover nets by then. Everything below that counts
+  // material or reads structure is said of THAT board, never of the one that
+  // lasts a single move.
+  const end = exchangeEnd(fenBefore, san);
+  const dots = (s: string, i: number): string => ((i % 2 === 0) === (moverWB === 'w') ? `…${s}` : s);
 
   // 2. Material won — the count of it (never a bare "wins material"). Every
   //    clause here follows the move's SAN, which already says the capture
@@ -326,19 +378,35 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
   //    is won only through the trade on the square (they can take back, and
   //    taking back loses it again), the trade is said: "cxb4, winning a pawn —
   //    if axb4, …Nxb4" (2026-10-28).
-  if (mv.captured && facts.materialGained >= 1) {
-    const back = recapture ? null : exchangeOn(fenAfter, mv.to);
-    const free = !back && !takenBackOn(fenAfter, mv.to);
+  if (mv.captured && facts.materialGained >= 1 && gainHoldsInLine(fenBefore, san, follow, moverWB, end?.net ?? facts.materialGained)) {
+    // The take-backs that WILL come (each side profits by its own) are the
+    // exchange; a take-back that only loses more is shown as the two captures
+    // that prove it ("Nxd5 wins a pawn — if Nxd5, …Bxd5").
+    const seq = recapture ? [] : end?.sans ?? [];
+    const back = recapture || seq.length > 0 ? null : exchangeOn(fenAfter, mv.to);
+    const free = seq.length === 0 && !back && !takenBackOn(fenAfter, mv.to);
     // Ahead, but the take-back costs the capturer (no answer to it on the
     // square): the exchange — "winning a rook for a knight", never "winning a
     // rook" (`captureWords`).
     const gave = !free && !back && !recapture ? facts.gaveBack : null;
-    const nets = { kind: 'nets' as const, captured: mv.captured, free, gave };
-    const trade = back ? ` — if ${back.reply}, ${back.again}` : '';
+    // MATERIAL THE MOVER WAS BEHIND BY IS WON BACK, never "won" (the gambit
+    // pawn of the Queen's Gambit: "Bxc4 wins a pawn, and nothing can take
+    // back" two moves after …dxc4).
+    const regains = !recapture && materialDeficit(fenBefore, moverWB) >= facts.materialGained;
+    // A longer exchange is named by what it NETS, piece for piece, by the one
+    // ledger namer ("Nxc6 wins a knight — if …bxc6, Bxc6+" was a knight for a
+    // knight and a pawn: it wins a pawn).
+    const netWords = seq.length >= 2 && end ? netPieceWords(end.moverTook, end.otherTook) : null;
+    const tail = seq.length === 2 ? ` — if ${dots(seq[0], 0)}, ${dots(seq[1], 1)}` : seq.length > 2 ? ` once the trade on ${mv.to} is over` : back ? ` — if ${back.reply}, ${back.again}` : '';
+    const lead = (form: 'verb' | 'participle'): string => {
+      if (regains && (free || netWords === null) && !gave) return afterCaptureSan({ kind: 'wins-back', captured: mv.captured as string }, form);
+      if (netWords) return `${form === 'verb' ? 'wins' : 'winning'} ${netWords}${regains ? ' back' : ''}`;
+      return afterCaptureSan({ kind: 'nets' as const, captured: mv.captured as string, free, gave }, form);
+    };
     aspects.push({
       kind: 'aspect-wins',
-      text: `${afterCaptureSan(nets, 'participle')}${trade}`,
-      verb: `${afterCaptureSan(nets, 'verb')}${trade}`,
+      text: `${lead('participle')}${tail}`,
+      verb: `${lead('verb')}${tail}`,
       idea: 'win-material', squares: [mv.to], weight: 90, keystone: true,
     });
   }
@@ -348,9 +416,9 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
   //     c5, d4, f2" on Bxe3 (census group 6, 2026-10-07). A take-back that
   //     walks into a second capture says so (axb4 after cxb4: …Nxb4 is next).
   if (mv.captured && facts.materialGained <= 0 && (facts.materialGained > -1 || recapture)) {
-    const again = recapture && facts.materialGained < 0 ? cheapestCaptureOn(fenAfter, mv.to) : null;
+    const again = recapture && facts.materialGained < 0 ? nextCaptureOn(fenAfter, mv.to) : null;
     const leadsTo = recapture
-      ? { kind: 'take-back' as const, next: again }
+      ? again === 'choice' ? { kind: 'trade-goes-on' as const } : { kind: 'take-back' as const, next: again?.san ?? null }
       : { kind: 'trade' as const, piece: mv.piece, captured: mv.captured };
     const text = afterCaptureSan(leadsTo, 'participle');
     const verb = afterCaptureSan(leadsTo, 'verb');
@@ -374,7 +442,18 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
   }
 
   // 3. A tactic LANDED (fork / pin / skewer) — when it isn't already the threat.
-  if (facts.tacticLanded && !threat) {
+  // A TACTIC IS LANDED BY A PIECE THAT STAYS TO MAKE IT (task 172: "Bxf6
+  // lands a pin" with …gxf6 taking the bishop next move). The one exchange
+  // read says whether the moved piece is still on its square when the
+  // take-backs are over.
+  const agentStays = !end || actsFromItsSquare(end);
+  // …AND A DISCOVERED ATTACK IS LANDED ONLY WHEN THE MOVE UNCOVERED ONE (task
+  // 172: "Nxc6 lands a discovered attack" — the knight had stepped in FRONT of
+  // its bishop; "d4 lands a discovered attack" with nothing new attacked). The
+  // playback's `discovery` is also the board scan's discovery IN WAITING (a
+  // piece that could move and unveil), which the set-up aspect says.
+  const uncovered = facts.tacticLanded !== 'discovery' || unveilsAttack(fenBefore, fenAfter, mv);
+  if (facts.tacticLanded && !threat && agentStays && uncovered) {
     aspects.push({ kind: 'aspect-tactic-lands', text: `landing ${withArticle(tacticWord(facts.tacticLanded))}`, verb: `lands ${withArticle(tacticWord(facts.tacticLanded))}`, idea: 'tactic', squares: [], weight: 84, keystone: true });
   }
   // 3b. Battery / discovery / overload the fork/pin/skewer set doesn't carry.
@@ -390,33 +469,57 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
   // 6. Prising open the enemy king's cover (an attacking ramification).
   if (facts.shieldLost > 0) aspects.push({ kind: 'aspect-opens-king', text: `prising open ${enemyPoss} king's cover`, verb: `prises open ${enemyPoss} king's cover`, idea: 'attack-king', squares: [], weight: 68 });
 
+  // NOT IN THE MIDDLE OF AN EXCHANGE (Danya bench reading, 2026-10-30; task
+  // 172, 2026-11-11): a move whose piece the other side takes back leaves a
+  // board that lasts one move — "cxd4 concedes doubled pawns" (White takes
+  // back on d4), "axb5 leaves them an isolated a-pawn" (…axb5 is coming),
+  // "bxa6 creates a passed pawn on a6" (…Bxa6 takes it). Every structure read
+  // below — the outpost, the passer made or handed over, the file opened, the
+  // weakness inflicted or conceded — is said when the exchange is over: on
+  // the last capture of it, of the board that stays.
+  const midExchange = !!end && (end.sans.length > 0 || !end.standing);
+  // WHAT THE EXCHANGE LEAVES is still the move's doing: the file …Qxd5 leaves
+  // open after exd5, the passer that stands when the take-backs are done. So
+  // the files, passers and outposts are read on the board the exchange ENDS
+  // on — the same read (`structureDelta`), a later board — and are silent only
+  // when that board is not a standing one. The pawn weaknesses below stay
+  // silent until the last capture: whose pawns are doubled is the take-back's
+  // fact to state, not the first capture's.
+  const settled = !end || end.sans.length === 0
+    ? { newOpenFiles: facts.newOpenFiles, newPassedPawns: facts.newPassedPawns, passedPawnsHanded: facts.passedPawnsHanded, outpost: facts.outpostGained, outpostPiece: facts.outpostPiece, outpostLanded: facts.outpostLanded }
+    : (() => {
+      const d = structureDelta(before, describeStructure(end.fen), moverWB, !!mv.promotion);
+      // WHEN A SIDE HAD A CHOICE OF CAPTURER the end board is one of several
+      // (…Bxe4 met by dxe4 or Nxe4: only one of them opens the d-file), so a
+      // claim is kept only when the board the move leaves shows it too.
+      const also = <T,>(xs: readonly T[], now: readonly T[]): T[] => (end.forced ? [...xs] : xs.filter((x) => now.includes(x)));
+      const post = d.outpost && (end.forced || d.outpost.square === facts.outpostGained) ? d.outpost : undefined;
+      return { newOpenFiles: also(d.newOpenFiles, facts.newOpenFiles), newPassedPawns: also(d.newPassedPawns, facts.newPassedPawns), passedPawnsHanded: also(d.passedPawnsHanded, facts.passedPawnsHanded), outpost: post?.square ?? null, outpostPiece: post ? (post.piece === 'n' ? 'knight' : 'bishop') : undefined, outpostLanded: post ? post.square === mv.to && end.pieceStays : undefined };
+    })();
+  const structureStands = !end || end.standing;
+
   // 7. Structure the move MAKES for the mover.
-  if (facts.outpostGained) aspects.push({ kind: 'aspect-outpost', text: facts.outpostPiece && facts.outpostLanded === false
-    ? `making ${facts.outpostGained} an outpost for the ${facts.outpostPiece} that no pawn can challenge`
-    : `planting an outpost on ${facts.outpostGained} that no pawn can challenge`, verb: facts.outpostPiece && facts.outpostLanded === false
-    ? `makes ${facts.outpostGained} an outpost for the ${facts.outpostPiece} that no pawn can challenge`
-    : `plants an outpost on ${facts.outpostGained} that no pawn can challenge`, idea: 'outpost', squares: [facts.outpostGained], weight: 52 });
-  if (facts.newPassedPawns.length > 0) aspects.push({ kind: 'aspect-passer', text: `creating a passed pawn on ${facts.newPassedPawns[0]}`, verb: `creates a passed pawn on ${facts.newPassedPawns[0]}`, idea: 'passed-pawn', squares: [facts.newPassedPawns[0]], weight: 54 });
-  if (facts.passedPawnsHanded.length > 0) aspects.push({ kind: 'aspect-passer-handed', text: `handing ${moverIsStudent === undefined ? 'the other side' : enemyObj} a passed pawn on ${facts.passedPawnsHanded[0]}`, verb: `hands ${moverIsStudent === undefined ? 'the other side' : enemyObj} a passed pawn on ${facts.passedPawnsHanded[0]}`, idea: 'weakness', squares: [facts.passedPawnsHanded[0]], weight: 54 });
+  if (settled.outpost && structureStands) aspects.push({ kind: 'aspect-outpost', text: settled.outpostPiece && settled.outpostLanded === false
+    ? `making ${settled.outpost} an outpost for the ${settled.outpostPiece} that no pawn can challenge`
+    : `planting an outpost on ${settled.outpost} that no pawn can challenge`, verb: settled.outpostPiece && settled.outpostLanded === false
+    ? `makes ${settled.outpost} an outpost for the ${settled.outpostPiece} that no pawn can challenge`
+    : `plants an outpost on ${settled.outpost} that no pawn can challenge`, idea: 'outpost', squares: [settled.outpost], weight: 52 });
+  if (settled.newPassedPawns.length > 0 && structureStands) aspects.push({ kind: 'aspect-passer', text: `creating a passed pawn on ${settled.newPassedPawns[0]}`, verb: `creates a passed pawn on ${settled.newPassedPawns[0]}`, idea: 'passed-pawn', squares: [settled.newPassedPawns[0]], weight: 54 });
+  if (settled.passedPawnsHanded.length > 0 && structureStands) aspects.push({ kind: 'aspect-passer-handed', text: `handing ${moverIsStudent === undefined ? 'the other side' : enemyObj} a passed pawn on ${settled.passedPawnsHanded[0]}`, verb: `hands ${moverIsStudent === undefined ? 'the other side' : enemyObj} a passed pawn on ${settled.passedPawnsHanded[0]}`, idea: 'weakness', squares: [settled.passedPawnsHanded[0]], weight: 54 });
   // Said as a move's own fact, the file it opens is a road for the rooks long
   // after this move (S-LONG-HORIZON, round 4: his "we get the g-file" is about
   // the play to come).
-  if (facts.newOpenFiles.length > 0) aspects.push({ kind: 'aspect-opens-file', text: `opening the ${facts.newOpenFiles[0]}-file`, verb: `opens the ${facts.newOpenFiles[0]}-file`, horizon: ', a road for the rooks from now on', idea: 'file', squares: [], weight: 44 });
+  if (settled.newOpenFiles.length > 0 && structureStands) aspects.push({ kind: 'aspect-opens-file', text: `opening the ${settled.newOpenFiles[0]}-file`, verb: `opens the ${settled.newOpenFiles[0]}-file`, horizon: ', a road for the rooks from now on', idea: 'file', squares: [], weight: 44 });
 
   // 8. Structural damage the move INFLICTS on the opponent vs CONCEDES in its own
   //    camp — both are real ramifications; the self-inflicted one is a downside.
-  //    NOT IN THE MIDDLE OF AN EXCHANGE (Danya bench reading, 2026-10-30): a
-  //    capture the other side can take back on the same square leaves a board
-  //    that lasts one move — "cxd4 concedes doubled pawns" (White takes back
-  //    on d4), "axb5 leaves them an isolated a-pawn" (…axb5 is coming). The
-  //    structure is said when the exchange is over.
-  const captureSquare = mv.captured ? mv.to : null;
-  const midExchange = captureSquare !== null && (() => {
-    try { return new Chess(fenAfter).attackers(captureSquare, moverWB === 'w' ? 'b' : 'w').length > 0; } catch { return false; }
-  })();
-  const enemyWeak = midExchange ? null : newPawnWeakness(before, after, moverWB === 'w' ? 'b' : 'w');
+  // …and still there a few moves down every line the surface knows follows.
+  const later = midExchange ? [] : follow.map((line) => {
+    try { const c = new Chess(fenAfter); for (const s of line.slice(0, GAIN_HOLDS_PLIES)) c.move(s); return describeStructure(c.fen()); } catch { return null; }
+  });
+  const enemyWeak = midExchange ? null : newPawnWeakness(before, after, moverWB === 'w' ? 'b' : 'w', later);
   if (enemyWeak) aspects.push({ kind: 'aspect-their-weakness', text: `leaving ${enemyObj} with ${enemyWeak}`, verb: `leaves ${enemyObj} with ${enemyWeak}`, idea: 'weakness', squares: [], weight: 50 });
-  const ownWeak = midExchange ? null : newPawnWeakness(before, after, moverWB);
+  const ownWeak = midExchange ? null : newPawnWeakness(before, after, moverWB, later);
   if (ownWeak) aspects.push({ kind: 'aspect-own-weakness', text: `but conceding ${ownWeak} of ${ownPoss} own`, verb: `concedes ${ownWeak} of ${ownPoss} own`, idea: 'weakness', squares: [], weight: 47 });
 
   // 9. Loosening the mover's OWN king cover (a downside worth flagging).
@@ -439,7 +542,9 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
     return null;
   }
 
-  const read = moveAspects({ fenBefore, san, prev, moverIsStudent });
+  // The briefing is Review's: the line it holds is the game's own moves, which
+  // a later slip of either side changes — the board alone decides here.
+  const read = moveAspects({ fenBefore, san, prev, moverIsStudent, follow: NO_FOLLOW });
   if (!read) return null;
   // ── Checkmate ends the game — the one beat, nothing else matters.
   if (read.mate) {

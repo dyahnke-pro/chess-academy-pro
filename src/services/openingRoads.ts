@@ -13,6 +13,7 @@
 // Every fact comes from chess.js, the opening DB and the masters counts (G0).
 import { Chess, type Square } from 'chess.js';
 import { moveJob, isBareJob, MINE, THEIRS, type PriorCapture } from './bookMoveWhy';
+import { NO_FOLLOW } from './exchangeLedger';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import type { LocalDbMove } from './masterPlayLookup';
 import type { MovesAt } from './mastersPlanRead';
@@ -79,7 +80,8 @@ export function invitedAttack(afterMine: readonly string[], student: 'w' | 'b', 
   const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
   for (const m of [...ms].sort((x, y) => y.games - x.games)) {
     if (m.games / total < INVITE_SHARE) break;
-    const j = moveJob(b.fen(), m.san, them, THEIRS);
+    // The masters' file names the reply, not what follows it: the board decides.
+    const j = moveJob(b.fen(), m.san, them, THEIRS, null, NO_FOLLOW);
     if (j && j.kind === 'attack' && /\byour\b/.test(j.clause)) return { san: m.san, clause: j.clause, squares: j.squares };
   }
   return null;
@@ -171,8 +173,8 @@ export function roadReason(i: {
     const pm = pb ? (() => { try { return pb.move(last); } catch { return null; } })() : null;
     if (pm?.captured) prior = { to: pm.to, captured: pm.captured, promoted: !!pm.promotion };
   }
-  const mineJob = moveJob(fenBefore, i.chosenSan, i.student, MINE, prior);
-  const altJob = moveJob(fenBefore, i.altSan, i.student, MINE, prior);
+  const mineJob = moveJob(fenBefore, i.chosenSan, i.student, MINE, prior, NO_FOLLOW);
+  const altJob = moveJob(fenBefore, i.altSan, i.student, MINE, prior, NO_FOLLOW);
   const invite = invitedAttack([...i.prefix, i.chosenSan], i.student, i.movesAt);
   // The chosen road's job must be a reason: two bare jobs differ only in which
   // piece came out ("Knight to f3 brings your knight out, where bishop to e2

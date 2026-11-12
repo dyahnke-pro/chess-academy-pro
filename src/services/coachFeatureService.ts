@@ -65,7 +65,7 @@ import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
 import { readBoard, readBoardAll, readKey } from './boardComputers';
 import { replyReadsFromFan, repliesNotWeighed, type ReplyRead } from './ifTheyPlay';
-import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
+import { proofCut, describeProofResult, NO_FOLLOW, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, prematureBreakWhy, INFLUENCE_LOOSE_TAIL_RE, positionalVerdictLine } from './reviewFullData';
 import { mainConceptLine } from './slipDepth';
 import { flipSideToMove, sideToMoveAs } from './threatOut';
@@ -2566,7 +2566,9 @@ function* reviewSegmentSteps(
         if (prevSan && /x/.test(prevSan)) {
           try { const pm = new Chess(fenChain[i - 1].fenBefore).move(prevSan); if (pm.captured) prior = { to: pm.to, captured: pm.captured, promoted: !!pm.promotion }; } catch { prior = null; }
         }
-        const job = moveJob(fenPair.fenBefore, m.san, moverColor === 'white' ? 'w' : 'b', mine ? MINE : THEIRS, prior);
+        // Review's line is the game's own moves, which a later slip of either
+        // side changes: the board alone decides what a capture nets here.
+        const job = moveJob(fenPair.fenBefore, m.san, moverColor === 'white' ? 'w' : 'b', mine ? MINE : THEIRS, prior, NO_FOLLOW);
         const id = `hint:move-job:${m.ply}`;
         // ONE CLAIM, ONE PRODUCER: the board-influence line ("[does] Your pawn
         // on e5 now eyes their knight on f6") states the same attack as the
@@ -4716,7 +4718,7 @@ async function augmentWithProjections(
       const firstWB = line.plies[0].moverColor === 'white' ? 'w' : 'b';
       const firstSeat: 'you' | 'they' = firstWB === studentColorWB ? 'you' : 'they';
       const moves = lineShape(said, firstSeat, line.plies[0]?.fenBefore ?? null, lineWinnerFor(firstSeat, forSide === 'student' ? 'you' : forSide === 'opponent' ? 'they' : proof.proof.mate ? null : net > 0 ? 'you' : net < 0 ? 'they' : null));
-      return proof.proof.mate ? `${moves} — and it's mate` : `${moves} — ${describeProofResult(proof.proof.ledger as NonNullable<typeof proof.proof.ledger>)}`;
+      return proof.proof.mate ? `${moves} — and it's mate` : `${moves} — ${describeProofResult(proof.proof.ledger as NonNullable<typeof proof.proof.ledger>, line.plies[0] && studentColorWB ? { fen: line.plies[0].fenBefore, student: studentColorWB } : null)}`;
     }
     // No material point settles: the line proves nothing a sentence can hold,
     // and its verdict is already the move's own verdict. Say nothing — every
@@ -4772,7 +4774,7 @@ async function augmentWithProjections(
   const reasonWords = (r: CostReason, firstSeat: 'you' | 'they'): string => {
     // The side that did not pay wins the reason's line.
     const moves = lineShape(r.plies.map((p) => p.san), firstSeat, r.fen, lineWinnerFor(firstSeat, r.seat === 'you' ? 'they' : 'you'));
-    return r.mate ? `${moves} — and it's mate` : r.ledger ? `${moves} — ${describeProofResult(r.ledger)}` : moves;
+    return r.mate ? `${moves} — and it's mate` : r.ledger ? `${moves} — ${describeProofResult(r.ledger, studentColorWB ? { fen: r.fen, student: studentColorWB } : null)}` : moves;
   };
   /** The one classifier's name for the line, when it is a pattern worth
    *  naming ("— a fork"); the material or the mate says the rest. */

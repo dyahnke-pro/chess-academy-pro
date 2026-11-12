@@ -327,7 +327,15 @@ export function composeThought(
   for (const st of new Set(picked.map((f) => f.step))) {
     const inStep = picked.filter((f) => f.step === st);
     if (inStep.every((f) => f.restates)) {
+      const at = picked.indexOf(inStep[0]);
       for (const f of inStep) { held.push({ fact: f, why: 'restates' }); picked.splice(picked.indexOf(f), 1); }
+      // …AND THE FACT THAT EXPLAINS THE SAME IDEA TAKES ITS PLACE (task 172:
+      // "it trades bishops" led the step, held "Bxe4 is a good trade — it takes
+      // off their bishop that was bearing down on your king" as the same idea,
+      // and was then dropped for only restating the board — the step said
+      // nothing). A restating fact never silences the one that says why.
+      const explains = held.find((h) => h.why === 'same-idea' && h.fact.step === st && h.fact.restates !== true && inStep.some((p) => sameIdea(p, h.fact)));
+      if (explains) { held.splice(held.indexOf(explains), 1); picked.splice(at, 0, explains.fact); }
     }
   }
 

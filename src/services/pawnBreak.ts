@@ -26,6 +26,7 @@
 // PURE: chess.js and the proof shape.
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { legalLineProof, type Proof } from './proof';
+import { exchangeEnd } from './material';
 import { andList } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -143,10 +144,30 @@ export function pawnBreak(fenBefore: string, san: string, whose: 'your' | 'their
   const them: Color = me === 'w' ? 'b' : 'w';
   // THE TRADE: the break takes a pawn, or their pawn can take the break pawn.
   let traded: Chess;
+  /** The board right after the first capture of the trade. */
+  let first: Chess;
+  /** A side had a choice of capturer on the way to `traded`. */
+  let choice = false;
   let line: string[];
   let struck: string;
+  // THE TRADE IS READ WHEN IT IS OVER (task 172: "b4 … if they take, it
+  // half-opens the b-file" with the a-pawn taking back on b4 — it is the
+  // a-file that opens). The board after the first capture lasts one move; what
+  // the break opens is said of the board the exchange on that square ends on
+  // (`material.exchangeEnd`).
+  // WHEN A SIDE HAS A CHOICE OF CAPTURER the end board is one of several
+  // (…dxe5 met by fxe5 or Nxe5: the f-file half-opens in one, the e-file in
+  // the other), so a file or a bishop is named only when the board the first
+  // capture leaves shows it too.
+  const settled = (fenBefore2: string, capture: string, fallback: Chess): Chess => {
+    const end = exchangeEnd(fenBefore2, capture);
+    if (!end || end.sans.length === 0) return fallback;
+    choice = !end.forced;
+    try { return new Chess(end.fen); } catch { return fallback; }
+  };
   if (mv.captured === 'p') {
-    traded = after;
+    first = after;
+    traded = settled(fenBefore, mv.san, after);
     line = [mv.san];
     struck = mv.to;
   } else {
@@ -155,12 +176,15 @@ export function pawnBreak(fenBefore: string, san: string, whose: 'your' | 'their
       // No pawn of theirs can take: the break strikes a pawn it attacks.
       const hit = pawnHits(mv.to, me).find((s) => { const p = after.get(s); return !!p && p.type === 'p' && p.color === them; });
       if (!hit) return null;
+      first = after;
       traded = after;
       line = [mv.san];
       struck = hit;
     } else {
-      traded = new Chess(after.fen());
-      traded.move(take.san);
+      const took = new Chess(after.fen());
+      took.move(take.san);
+      first = took;
+      traded = settled(after.fen(), take.san, took);
       line = [mv.san, take.san];
       struck = take.from;
     }
@@ -180,11 +204,14 @@ export function pawnBreak(fenBefore: string, san: string, whose: 'your' | 'their
     // (castled or walked) — an uncastled king can still choose its side.
     const theirKing = traded.findPiece({ type: 'k', color: them })[0];
     const kingSettled = !!theirKing && theirKing !== (them === 'w' ? 'e1' : 'e8');
-    for (const f of [...new Set([mv.from[0], mv.to[0], struck[0]])]) {
+    // Every file a pawn of the mover's left over the trade (the break pawn's,
+    // and the file of a pawn that took back).
+    for (const f of 'abcdefgh') {
       if (pawnsOnFile(standing, f, me) === 0 || pawnsOnFile(traded, f, me) > 0) continue;
+      if (choice && pawnsOnFile(first, f, me) > 0) continue;
       if (rooks.length === 0) continue;
       const onFile = rooks.filter((r) => r[0] === f);
-      const open = pawnsOnFile(traded, f, them) === 0;
+      const open = pawnsOnFile(traded, f, them) === 0 && (!choice || pawnsOnFile(first, f, them) === 0);
       const toKing = kingSettled && Math.abs(theirKing.charCodeAt(0) - f.charCodeAt(0)) <= 1;
       // SQUARES NAMED LIKE A HUMAN (David 2026-11-05): the one square a break
       // is about is the pawn it strikes; the rook and the bishop are said in
@@ -196,6 +223,10 @@ export function pawnBreak(fenBefore: string, san: string, whose: 'your' | 'their
     for (const row of traded.board()) {
       for (const cell of row) {
         if (!cell || cell.color !== me || cell.type !== 'b') continue;
+        // …a bishop that took back in the trade moved; it was not freed by it.
+        const stood = standing.get(cell.square);
+        if (!stood || stood.type !== 'b' || stood.color !== me) continue;
+        if (choice && reach(first, cell.square, me) - reach(standing, cell.square, me) < FREED_SQUARES) continue;
         if (reach(traded, cell.square, me) - reach(standing, cell.square, me) >= FREED_SQUARES) {
           opens.push({ text: `frees ${whose} ${traded.squareColor(cell.square) === 'dark' ? 'dark' : 'light'}-squared ${NAME.b}`, squares: [cell.square] });
         }

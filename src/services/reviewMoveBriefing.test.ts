@@ -68,9 +68,9 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
   it('a move that loosens its own king\'s cover says it is for good; an opened file says what it is for', async () => {
     const { moveAspects } = await import('./reviewMoveBriefing');
     const { NO_PREV_CAPTURE } = await import('./captureRun');
-    const cover = moveAspects({ fenBefore: 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7', san: 'g4', prev: NO_PREV_CAPTURE, moverIsStudent: true })?.aspects.find((a) => a.kind === 'aspect-own-king-cover');
+    const cover = moveAspects({ fenBefore: 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7', san: 'g4', prev: NO_PREV_CAPTURE, moverIsStudent: true, follow: [] })?.aspects.find((a) => a.kind === 'aspect-own-king-cover');
     expect(`${cover?.verb}${cover?.horizon}`).toBe("loosens your own king's cover, and a pawn never moves back");
-    const file = moveAspects({ fenBefore: 'rnbqkbnr/ppp2ppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3', san: 'exd5', prev: NO_PREV_CAPTURE, moverIsStudent: true })?.aspects.find((a) => a.kind === 'aspect-opens-file');
+    const file = moveAspects({ fenBefore: 'rnbqkbnr/ppp2ppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3', san: 'exd5', prev: NO_PREV_CAPTURE, moverIsStudent: true, follow: [] })?.aspects.find((a) => a.kind === 'aspect-opens-file');
     expect(`${file?.verb}${file?.horizon}`).toBe('opens the e-file, a road for the rooks from now on');
   });
 

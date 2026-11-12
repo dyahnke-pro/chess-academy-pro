@@ -189,7 +189,10 @@ describe('a target is named with its owner', () => {
     const { theirBoardPoint } = await import('./learnBoardTeaching');
     const before = '2kr3r/ppp2ppp/4pn2/q1b3P1/3n4/2NB1N2/PPPB1PP1/R2QK2R w KQ - 2 11';
     const point = theirBoardPoint(before, 'gxf6', afterOf(before, 'gxf6'), new Map());
-    expect(point?.text).toMatch(/your pawn on g7/);
+    // …gxf6 takes the pawn straight back, so it "hits" nothing on g7 (task
+    // 172: a claim made before the exchange is finished). What the capture
+    // leaves on the board is said instead — still with its owner.
+    expect(point?.text).toBe('The capture means your h-pawn is isolated now — a target with no neighbor to defend it.');
     expect(point?.text).not.toMatch(/the pawn on g7/);
   });
 });

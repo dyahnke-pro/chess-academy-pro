@@ -20,7 +20,7 @@ import { Chess } from 'chess.js';
 import { pawnHit } from './trappedPiece';
 import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause } from './keySquares';
 import type { Move } from 'chess.js';
-import { describeStructure } from './boardStructure';
+import { describeStructure, newPawnWeaknesses } from './boardStructure';
 import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
 import { namedSquares, namedSquareParts } from './squareRole';
 import { outpostKey } from './conceptKey';
@@ -28,6 +28,7 @@ import { kickBreaksPin, pawnKickNext, pinsAgainst } from './pawnKickNext';
 import { computeMoveFundamentals } from './moveFundamentals';
 import { andList } from '../utils/andList';
 import { pieceRef } from './pieceRef';
+import { actsFromItsSquare, exchangeEnd } from './material';
 
 // Q1 — OCCUPATION. A pawn reaching one of these has staked the centre.
 const CENTER = new Set(CORE_CENTER);
@@ -203,13 +204,14 @@ type Struct = NonNullable<ReturnType<typeof describeStructure>>;
  */
 function createdEnemyWeakness(before: Struct, after: Struct, mover: 'w' | 'b', moverIsStudent: boolean): string | null {
   const enemy: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
-  // A NEW isolated enemy pawn = a lasting, board-true target.
-  const newIso = after.pawns.isolatedPawns[enemy].filter((s) => !before.pawns.isolatedPawns[enemy].includes(s));
-  if (newIso.length) return `${moverIsStudent ? 'their' : 'your'} ${newIso[0][0]}-pawn is isolated now — a target with no neighbor to defend it`;
-  // NEW doubled enemy pawns on a file.
-  const newDbl = after.pawns.doubledFiles[enemy].filter((f) => !before.pawns.doubledFiles[enemy].includes(f));
-  if (newDbl.length) return `${moverIsStudent ? 'they are' : 'you are'} left with doubled pawns on the ${newDbl[0]}-file`;
-  return null;
+  // The one read of a weakness a move made (`newPawnWeaknesses`): a NEW
+  // isolated enemy pawn is a lasting, board-true target; then NEW doubled
+  // enemy pawns on a file.
+  const w = newPawnWeaknesses(before.pawns, after.pawns, enemy)[0];
+  if (!w) return null;
+  return w.kind === 'isolated'
+    ? `${moverIsStudent ? 'their' : 'your'} ${w.file}-pawn is isolated now — a target with no neighbor to defend it`
+    : `${moverIsStudent ? 'they are' : 'you are'} left with doubled pawns on the ${w.file}-file`;
 }
 
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -530,6 +532,20 @@ export function buildReviewMoveTeachingFact(
     return out('castle', sayIdea(phrases, 'castle', ['The king is tucked safely away and the rook connects to the center.', 'The king steps out of the middle.', 'The king is castled and the rook is in play.']));
   }
 
+  // A CAPTURING PIECE THAT IS TAKEN STRAIGHT BACK DOES NOTHING FROM ITS SQUARE (task 172,
+  // 2026-11-11: "…Bxf1 goes after their pawn on g2 — nothing guards it" with
+  // Kxf1 next, three Benko lines; "…Nxb3 trains on their rook on a1" with Bxb3
+  // next; "…Nxc3 bears down on d5 and e4" with bxc3 next). Everything below
+  // reads what the moved piece sees, guards, pins or controls from where it
+  // landed, so it is said only of a piece that is still there when the
+  // exchange on its square is over (`material.exchangeEnd`). A pawn that is
+  // taken back still changed the structure: that is read on the board the
+  // exchange ends on, and nothing else of it is said.
+  // An exchange is started by a capture: a quiet move is read as it always was.
+  const end = mv.captured ? exchangeEnd(fenBefore, san) : null;
+  const taken = !!end && !actsFromItsSquare(end);
+  if (taken && mv.piece !== 'p') return null;
+
   // A CONCRETE THREAT LEADS over the developing gloss (David 2026-09-07: "it
   // should say what it threatens… especially move 20 more than move 4"). If the
   // minor piece now attacks an enemy piece, the "bears down on the center" /
@@ -624,25 +640,49 @@ export function buildReviewMoveTeachingFact(
     // outpost? Compare the structure before vs after (board-true delta). This
     // catches captures like exd6 that leave a half-open file behind.
     const before = describeStructure(fenBefore);
-    const after = describeStructure(chess.fen());
-    if (before && after) {
+    // The structure that STAYS: the board the exchange on this square ends on.
+    // When a side had a choice of capturer on the way there (`end.forced`
+    // false) that board is one of several, so a claim is kept only when the
+    // board the move leaves shows it too.
+    const now = describeStructure(chess.fen());
+    const after = end && end.sans.length > 0 ? describeStructure(end.fen) : now;
+    const choice = !!end && end.sans.length > 0 && !end.forced;
+    if (before && after && now) {
       const moverKey = mv.color; // 'w' | 'b'
       // §1: a created enemy weakness is the strongest "because" — name it first.
-      const target = createdEnemyWeakness(before, after, moverKey, moverIsStudent);
-      const gainedHalfOpen = after.pawns.halfOpenFiles[moverKey].filter(
-        (f) => !before.pawns.halfOpenFiles[moverKey].includes(f),
-      );
+      const settledTarget = createdEnemyWeakness(before, after, moverKey, moverIsStudent);
+      const target = choice && createdEnemyWeakness(before, now, moverKey, moverIsStudent) !== settledTarget ? null : settledTarget;
+      // A file the mover's pawn has left, with THEIR pawn still on it. With a
+      // choice of capturer the file must be the mover's to use on both boards,
+      // and half-open on either (…cxd4 met by cxd4 or Nxd4: the c-file is open
+      // in one line and half-open in the other — half-open is what is sure).
+      const left = (st: NonNullable<typeof now>, f: string): boolean => !st.pawns.pawnFiles[moverKey].includes(f);
+      const gainedHalfOpen = 'abcdefgh'.split('').filter((f) => before.pawns.pawnFiles[moverKey].includes(f) && left(after, f)
+        && (choice
+          ? left(now, f) && (after.pawns.halfOpenFiles[moverKey].includes(f) || now.pawns.halfOpenFiles[moverKey].includes(f))
+          : after.pawns.halfOpenFiles[moverKey].includes(f)));
       if (gainedHalfOpen.length) {
         // TOWARD THE KING it faces (11.gxf3: the g-file opens toward yours).
         const f = gainedHalfOpen[0];
         const enemyKing = chess.board().flat().find((c) => c && c.type === 'k' && c.color !== mv.color);
-        const toward = enemyKing && Math.abs(enemyKing.square.charCodeAt(0) - f.charCodeAt(0)) <= 1 ? `, toward ${moverIsStudent ? 'their' : 'your'} king` : '';
+        // A file the mover's pawn has left with THEIR pawn still on it is
+        // HALF-open — which is all this branch reads (`halfOpenFiles`). It was
+        // said as "opens the e-file" with a White pawn on e4, while the pawn
+        // break said "half-opens" of the same move (task 172).
+        const opens = 'Half-opens';
+        // …and it runs TOWARD THE KING only when the king stands on it: a
+        // half-open file ends at their pawn. "…dxc6 opens the d-file for the
+        // rooks, toward your king" was said with the king on e1, beside the
+        // file and behind its own d-pawn (four times in two lessons).
+        const toward = enemyKing && enemyKing.square[0] === f ? `, toward ${moverIsStudent ? 'their' : 'your'} king` : '';
         return out('file', target
-          ? `Opens the ${f}-file for the rooks${toward} — and ${target}.`
-          : `Opens the ${f}-file for the rooks${toward}.`);
+          // One dash a sentence: the target carries its own.
+          ? `${opens} the ${f}-file for the rooks${toward}, and ${target}.`
+          : `${opens} the ${f}-file for the rooks${toward}.`);
       }
       const newOutpost = after.outposts.find(
-        (o) => o.color === moverKey && !before.outposts.some((b) => b.square === o.square && b.color === o.color),
+        (o) => o.color === moverKey && !before.outposts.some((b) => b.square === o.square && b.color === o.color)
+          && (!choice || now.outposts.some((n) => n.square === o.square && n.color === o.color)),
       );
       if (newOutpost) {
         // The outpost's defining property IS the "because": no enemy pawn can
@@ -657,6 +697,8 @@ export function buildReviewMoveTeachingFact(
         return out('weakness', `${mv.captured ? 'The capture means' : 'Now'} ${target}.`);
       }
     }
+    // A pawn that is taken back did nothing else that lasts.
+    if (taken) return null;
     // Quiet central push (not a capture) — stake the center / gain space. Not
     // in a pure pawn ending: there are no pieces to open lines for or cramp,
     // and "f4, gains space and cramps the opponent" was said of a runner in a
@@ -801,7 +843,10 @@ export function buildReviewMoveTeachingFact(
   }
   // (e) The king — its journey IS the lesson (endgame = few pieces left → the
   //     king turns into a fighting piece; else it's about getting to safety).
-  if (mv.piece === 'k') {
+  // A KING THAT TAKES is taking: the capture is its point, told by the capture
+  // computers — "Kxf1 steps toward safety, out of the crossfire" was a forced
+  // take-back that gave up castling (task 172, three Benko lines).
+  if (mv.piece === 'k' && !mv.captured) {
     const heavyMinor = chess.board().flat().filter((c) => c && c.type !== 'p' && c.type !== 'k').length;
     // THE WORDS FOLLOW WHERE THE KING WENT (prod audit 2026-11-07: "The king
     // marches up" on …Kc8-b8 and "keeps marching up" on Kd1-e1 — sideways moves

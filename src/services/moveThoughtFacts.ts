@@ -11,6 +11,7 @@ import { plyOfFen } from '../utils/plyOfFen';
 import { introWithGerund, introWithPredicate, type IntroTense } from '../utils/moveIntro';
 import { Chess } from 'chess.js';
 import { NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
+import { NO_FOLLOW } from './exchangeLedger';
 import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
 import { NO_PROOF, squaresProof, lineProof } from './proof';
 import type { DecisiveReason } from './decisiveReason';
@@ -177,7 +178,21 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
 
   // THE BRIEFING'S ASPECTS — the threat, the material, the trade, the tactic,
   // the check, the promotion, the king cover, the structure made or conceded.
-  const read = moveAspects({ fenBefore: i.fenBefore, san: i.san, prev: i.prev, moverIsStudent: i.moverIsStudent });
+  // WHAT THE SURFACE KNOWS COMES AFTER THE MOVE (task 172): the engine's line
+  // after it and the line the surface goes on with (the taught line, the
+  // game). A capture's gain is said only when it stands in every one of them.
+  const follow: string[][] = [];
+  const engineAfter = i.reads?.after[0]?.moves ?? [];
+  if (engineAfter.length > 0) {
+    const sans: string[] = [];
+    try { const c = new Chess(fenAfter); for (const u of engineAfter) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san); } catch { /* the playable prefix */ }
+    if (sans.length > 0) follow.push(sans);
+  }
+  // The line a lesson or an answer SHOWS is the line the student sees next; a
+  // game already played (Review, 'past') went on with moves a later slip of
+  // either side changed, so there only the engine's line counts.
+  if (i.tense === 'now' && i.line && i.line.length > 0) follow.push([...i.line]);
+  const read = moveAspects({ fenBefore: i.fenBefore, san: i.san, prev: i.prev, moverIsStudent: i.moverIsStudent, follow });
   if (read?.mate) {
     add('checkmate', 'moveAspects', 'briefing', 'mate', `${i.moverIsStudent === undefined ? 'This delivers' : mine ? 'You deliver' : 'They deliver'} checkmate — the king has no reply`, undefined, [], 100);
     return facts;
@@ -195,7 +210,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     if (!i.theirLast || !/x/.test(i.theirLast.san)) return null;
     try { const pm = new Chess(i.theirLast.fenBefore).move(i.theirLast.san); return pm.captured ? { to: pm.to, captured: pm.captured, promoted: !!pm.promotion } : null; } catch { return null; }
   })();
-  const job = (() => { try { return moveJob(i.fenBefore, i.san, sideOf(i.fenBefore), mine ? MINE : THEIRS, prior); } catch { return null; } })();
+  const job = (() => { try { return moveJob(i.fenBefore, i.san, sideOf(i.fenBefore), mine ? MINE : THEIRS, prior, follow); } catch { return null; } })();
   if (job) {
     // A JOB SAID MANY TIMES A LESSON OR A GAME ROTATES ITS WORDS (v5 re-run
     // 2026-10-29: "Wins their pawn on a2, and nothing can take back." four
@@ -727,7 +742,7 @@ function replyAnswers(fen: string, line: readonly string[] | null, aim: NonNulla
   const reply = line?.[0];
   if (!reply) return false;
   const deep = deepFact(fen, reply, line.slice(1), true);
-  const threat = moveAspects({ fenBefore: fen, san: reply, prev: NO_PREV_CAPTURE, moverIsStudent: true })?.threat?.san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?:=[QRBN])?$/)?.[1] ?? null;
+  const threat = moveAspects({ fenBefore: fen, san: reply, prev: NO_PREV_CAPTURE, moverIsStudent: true, follow: NO_FOLLOW })?.threat?.san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?:=[QRBN])?$/)?.[1] ?? null;
   return [deep?.target ?? null, threat, moveHit(fen, reply)].some((own) => bindingFact(fen, reply, aim, own, true) !== null);
 }
 

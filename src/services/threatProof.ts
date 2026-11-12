@@ -59,7 +59,7 @@ export function threatProof(fen: string, student: 'w' | 'b', squares: readonly s
   // takes a knight: the guards only take back a pawn (Learn walk 2026-10-13:
   // the count went out as the why and explained nothing).
   const free = named.defenders === 0 ? computeExchangeLedger(them, [cap.san], student) : null;
-  const result = free && free.settled && free.netPawns < 0 ? describeProofResult(free) : null;
+  const result = free && free.settled && free.netPawns < 0 ? describeProofResult(free, { fen: them, student }) : null;
   // In PIECES, never a point count (V3: no statistic is spoken).
   const attackerName = PIECE_NAMES[cap.piece] ?? 'piece';
   const targetName = PIECE_NAMES[named.piece] ?? 'piece';

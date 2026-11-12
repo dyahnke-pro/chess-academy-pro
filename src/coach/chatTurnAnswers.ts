@@ -702,7 +702,7 @@ function explainProvedLine(line: WalkableLine, fen: string, student: Color, hist
     parts.push(why ? `${said} ${why}.` : i === 0 ? `It starts with ${said}.` : `Then ${said}.`);
   });
   if (ledger?.settled && (ledger.studentWon.length > 0 || ledger.opponentWon.length > 0) && lastSaidWin !== endNet) {
-    parts.push(`${openSentence(describeProofResult(ledger))}.`);
+    parts.push(`${openSentence(describeProofResult(ledger, line.plies[0] ? { fen: line.plies[0].fenBefore, student } : null))}.`);
   }
   if (out) out.lines = [line];
   return parts.join(' ');

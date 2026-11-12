@@ -24,7 +24,7 @@ describe('proofCut — stop where the claim settles', () => {
     const p = proofCut(fen, line, 'w');
     expect(p).not.toBeNull();
     expect(p!.plies).toBe(3);
-    expect(describeProofResult(p!.ledger!)).toBe('you win a pawn');
+    expect(describeProofResult(p!.ledger!, null)).toBe('you win a pawn');
   });
 
   it('a line that settles nothing proves no material point (null → the caller says the verdict)', () => {

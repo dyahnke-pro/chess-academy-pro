@@ -426,7 +426,7 @@ async function fasterWinAnswer(board: BoardTurnInput, out?: { lines?: WalkableLi
     const sans: string[] = [];
     try { const c = new Chess(board.fen); for (const u of pv) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san); } catch { /* the playable prefix */ }
     const ledger = sans.length ? computeExchangeLedger(board.fen, sans, me) : null;
-    const wins = ledger?.settled && ledger.netPawns >= 1 ? describeProofResult(ledger) : null;
+    const wins = ledger?.settled && ledger.netPawns >= 1 ? describeProofResult(ledger, { fen: board.fen, student: me }) : null;
     return wins
       ? `${best.san} is the best move: by the end of its line, ${wins}. It isn't a clear win yet.`
       : `There's no clear win here yet. ${best.san} is the best move${reason(best.san, null)}.`;

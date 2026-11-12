@@ -134,7 +134,7 @@ export function refutationOf(fenAfter: string, pvSans: readonly string[], studen
   if (!proof.ledger) return null;
   const studentAhead = proof.ledger.netPawns > 0;
   const againstMover = optionMover === studentWB ? !studentAhead : studentAhead;
-  return againstMover ? `Then ${moves} — ${describeProofResult(proof.ledger)}` : null;
+  return againstMover ? `Then ${moves} — ${describeProofResult(proof.ledger, { fen: fenAfter, student: studentWB })}` : null;
 }
 
 /**

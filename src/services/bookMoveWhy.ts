@@ -11,7 +11,9 @@
 // alternative and why it falls short, and the consequence. Every job below is
 // a fact the board proves; a job the board cannot show is never said.
 import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
-import { CAPTURE_VALUE } from './pieceValues';
+import { CAPTURE_VALUE, MATERIAL_VALUE } from './pieceValues';
+import { actsFromItsSquare, exchangeEnd } from './material';
+import { gainHoldsInLine, materialDeficit, type FollowLines } from './exchangeLedger';
 import { legalSeeGainOn } from './positionReadingService';
 import { sayMoveNoun } from './spokenMove';
 // ROUTED COMPUTERS (David 2026-10-14: "Any computers you can route in?"): the
@@ -603,16 +605,20 @@ function hitTargets(board: Chess, from: Square, mover: Color, pawns = false): Ar
 /** CAPTURES. A capture's point is what it takes and what it leaves: taking
  *  back what was just taken, a capture that also forks, a capture that wins
  *  material outright, or a trade they can answer. Read off the board. */
-function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, mover: Color, w: SeatWords, prior: PriorCapture | null): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string } & JobContext) | null {
+function captureJob(fen: string, san: string, mv: NonNullable<ReturnType<typeof after>>, mover: Color, w: SeatWords, prior: PriorCapture | null, follow: FollowLines): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string } & JobContext) | null {
   let before: Chess;
   try { before = new Chess(fen); } catch { return null; }
   const took = before.get(mv.to);
   if (!took || took.color === mover) return null;
+  // THE ONE READ OF THE EXCHANGE (task 172): what the capture is worth is what
+  // it nets when the take-backs on its square are over, and a piece that is
+  // taken straight back does nothing from there.
+  const end = exchangeEnd(fen, san);
   // EVERY CLAUSE HERE FOLLOWS THE MOVE'S SAN, which already says the capture
   // ("Bxe7" is spoken "bishop takes e7"), so it says what the capture leads to
   // and never the capture again (David 2026-10-30: "queen takes d8, takes the
   // queen"; `captureWords`).
-  const forks = hitTargets(mv.board, mv.to, mover);
+  const forks = end && actsFromItsSquare(end) ? hitTargets(mv.board, mv.to, mover) : [];
   if (forks.length >= 2) {
     const named = forks.slice(0, 2).map((f) => `${w.other} ${NAME[f.piece]} on ${f.square}`).join(' and ');
     return { kind: 'fork', squares: [mv.to, ...forks.map((f) => f.square)], clause: `it hits ${named} at once` };
@@ -625,6 +631,11 @@ function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, move
     // rank — that is what the sacrifice was for, and it is the point.
     const kingOut = mv.piece === 'k' && mv.to[1] !== (mover === 'w' ? '1' : '8');
     if (gain <= 0) return null;
+    // …AND IT IS THE LAST CAPTURE OF THE EXCHANGE: a take-back that is itself
+    // taken back got nothing "for the pawn they took" (…Nxe4 after dxe4 Nxe4,
+    // with Qxe4 next: knights come off, said as "gets them a knight for the
+    // pawn you took"; the Schliemann's …Nxe5 with dxe5 next).
+    if (!end || end.sans.length > 0 || !end.standing) return null;
     const seat = w.you === 'you' ? 'you' : 'they';
     const gets = afterCaptureSan({ kind: 'take-back-gain', got: took.type, gave: prior.captured, seat }, 'verb');
     return {
@@ -637,6 +648,17 @@ function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, move
   // you can take back" and "the material is level again" are the board.
   const back = mv.board.attackers(mv.to, mover === 'w' ? 'b' : 'w').length > 0;
   if (!back) {
+    // A GAIN THE LINE GIVES STRAIGHT BACK IS NOT A GAIN: …dxe4 "wins a knight,
+    // and nothing can take back" with Nxc6 taking a knight next move; …bxc4
+    // "wins a pawn" with Bxc4 three moves on in the lesson's own line.
+    const worth = MATERIAL_VALUE[took.type] ?? 0;
+    if (!gainHoldsInLine(fen, san, follow, mover, worth)) return null;
+    // MATERIAL THE MOVER WAS BEHIND BY COMES BACK, it is not won: the Queen's
+    // Gambit's Bxc4 was "costs you a pawn — nothing can take back" of the pawn
+    // taken two moves earlier.
+    if (materialDeficit(fen, mover) >= worth) {
+      return { kind: 'capture', squares: [mv.to], clause: `it ${afterCaptureSan({ kind: 'wins-back', captured: took.type }, 'verb')}` };
+    }
     const nets = { kind: 'nets' as const, captured: took.type, free: true, gave: null };
     const forms = afterCaptureSanForms(nets, w.you === 'you' ? 'you' : 'they').map((f) => `it ${f}`);
     return { kind: 'capture', squares: [mv.to], clause: forms[0], forms };
@@ -708,7 +730,15 @@ const andThen = (first: string, second: string): string => `${first}, and ${seco
  * another move, in the MOVER's seat with the words of `w`. Null when the
  * board shows no job — never a generic line.
  */
-export function moveJob(fen: string, san: string, mover: Color, w: SeatWords, prior: PriorCapture | null = null): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string } & JobContext) | null {
+export function moveJob(
+  fen: string, san: string, mover: Color, w: SeatWords,
+  /** REQUIRED: the capture the move before this one made, or null. */
+  prior: PriorCapture | null,
+  /** REQUIRED: every line the surface knows comes after the move (SAN, the
+   *  reply first; `NO_FOLLOW` when it knows none) — a capture's gain is said
+   *  only when it stands in them (`gainHoldsInLine`). */
+  follow: FollowLines,
+): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string } & JobContext) | null {
   const mv = after(fen, san);
   if (!mv) return null;
   let before: Chess;
@@ -716,7 +746,7 @@ export function moveJob(fen: string, san: string, mover: Color, w: SeatWords, pr
   const them: Color = mover === 'w' ? 'b' : 'w';
   const pass = asIfTheirMove(before, them);
   if (!pass) return null;
-  const job = rankedMoveJob(fen, san, mv, before, pass, mover, w, prior);
+  const job = rankedMoveJob(fen, san, mv, before, pass, mover, w, prior, follow);
   // A CHECK IS ALWAYS SAID — it is what the move forces first.
   if (/\+$/.test(san)) {
     const check = (c: string): string => `it gives check and ${c.replace(/^it /, '')}`;
@@ -729,9 +759,9 @@ export function moveJob(fen: string, san: string, mover: Color, w: SeatWords, pr
  *  own point, then a new attack, then the defence of a threatened piece, then
  *  development and the centre. A king's step that guards a piece says the
  *  guard first and the escape after. */
-function rankedMoveJob(fen: string, san: string, mv: NonNullable<ReturnType<typeof after>>, before: Chess, pass: Chess, mover: Color, w: SeatWords, prior: PriorCapture | null): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string } & JobContext) | null {
+function rankedMoveJob(fen: string, san: string, mv: NonNullable<ReturnType<typeof after>>, before: Chess, pass: Chess, mover: Color, w: SeatWords, prior: PriorCapture | null, follow: FollowLines): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string } & JobContext) | null {
   const them: Color = mover === 'w' ? 'b' : 'w';
-  if (/x/.test(san)) return captureJob(fen, mv, mover, w, prior);
+  if (/x/.test(san)) return captureJob(fen, san, mv, mover, w, prior, follow);
   // CASTLING RESTATES THE MOVE (lead 2026-10-20, Review noise walk): "tucks
   // your king away" is the move itself; why it was the moment is the rule
   // lane's, which says it with the reason.

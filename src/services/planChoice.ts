@@ -155,7 +155,7 @@ function cctRead(
     const seq = seeSequence(fen, u.win.square as Square);
     const ledger = seq.length ? computeExchangeLedger(fen, seq, student) : null;
     if (ledger && ledger.settled && ledger.netPawns > 0) {
-      const result = describeProofResult(ledger);
+      const result = describeProofResult(ledger, { fen, student });
       if (holdCapture) {
         return { answer: 'something of theirs falls in the trades — find it', past: `on ${u.win.square}, ${result} in the trades`, step: 'take what the trades give first — material comes before any plan', squares: [], credit: [u.win.square] };
       }

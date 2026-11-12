@@ -39,9 +39,19 @@ export type CaptureLeadsTo =
    *  "Bxa5 Nxa5 is a queen for a bishop, said as 'winning your queen'").
    *  REQUIRED: every caller says whether the capturer is given back. */
   | { kind: 'nets'; captured: string; free: boolean; gave: string | null }
+  /** It nets material the capturer was BEHIND by: the gambit pawn coming
+   *  back, a piece regained on another square. Material is level again (or
+   *  nearer level), so it is never "wins a pawn", "costs you a pawn" or "a
+   *  free pawn" (task 172: QGA Bxc4 said as "costs you a pawn — nothing can
+   *  take back" of the pawn Black took two moves earlier). */
+  | { kind: 'wins-back'; captured: string }
   /** A take-back that ends the trade, or — `next` set — the trade goes on
    *  with that capture ("…Ncxd4"). */
   | { kind: 'take-back'; next: string | null }
+  /** A take-back the trade goes on from, with a choice of pieces to make the
+   *  next capture: none is named (task 172: "with …Bxe5 next" where the game
+   *  went …Nxe5). */
+  | { kind: 'trade-goes-on' }
   /** A take-back that comes out ahead: what the taker gets for what the
    *  other side took first. `seat` is the taker from the student's seat. */
   | { kind: 'take-back-gain'; got: string; gave: string; seat: 'you' | 'they' }
@@ -69,10 +79,18 @@ export function afterCaptureSan(leadsTo: CaptureLeadsTo, form: CaptureForm): str
       const what = leadsTo.gave ? `${count} for ${withArticle(capturePieceName(leadsTo.gave))}` : count;
       return v(`wins ${what}`, `winning ${what}`);
     }
+    case 'wins-back': {
+      // A COUNT, like every gain said after a capture's SAN ("wins a pawn",
+      // never "the pawn" — that is the capture said again).
+      const count = withArticle(capturePieceName(leadsTo.captured));
+      return v(`wins ${count} back`, `winning ${count} back`);
+    }
     case 'take-back':
       return leadsTo.next
         ? v(`keeps the trade going, with ${leadsTo.next} next`, `keeping the trade going, with ${leadsTo.next} next`)
         : v('completes the trade', 'completing the trade');
+    case 'trade-goes-on':
+      return v('keeps the trade going', 'keeping the trade going');
     case 'take-back-gain': {
       const taker = leadsTo.seat === 'you' ? 'you' : 'them';
       const first = leadsTo.seat === 'you' ? 'they' : 'you';
