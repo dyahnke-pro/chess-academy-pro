@@ -25,6 +25,8 @@ import { Chess } from 'chess.js';
 import { nativeEngine } from '../test/nativeStockfish';
 import { findLessonOpening, extraLines, fullLines, lessonLines } from '../test/lessonLines';
 import { pinsOf, looseOf, materialFor, hitsFrom, evalWords, PIECE_NAME } from '../../scripts/course-replies/boardFacts';
+import { givesUp, lineDiff, planItem } from '../../scripts/course-replies/consequences';
+import { readdirSync } from 'node:fs';
 
 const ON = process.env.LESSON_FACTS === '1';
 const IDS = (process.env.LESSON_IDS ?? 'trompowsky-attack').split(',').map((s) => s.trim()).filter(Boolean);
@@ -76,6 +78,47 @@ const lineSans = (fen: string, pv: readonly string[], n: number): string => {
   return out.join(' ');
 };
 
+/** THE CLUB TREE (WO-OPENINGS-REWRITE-01, 2026-11-12): what Lichess players
+ *  rated 1200–1999 played at each move order, four months of 2016, to move 9
+ *  (`scripts/all-openings/build-club-tree.mjs`). It is what a "most players
+ *  get this wrong" beat needs: the club favourite, and what it costs. Loaded
+ *  once, the months merged. */
+const CLUB_DIR = process.env.CLUB_TREE_DIR ?? '/home/user/chess-academy-pro/data/sources/club-tree';
+let clubTree: Map<string, Map<string, number>> | null = null;
+function clubAt(moves: readonly string[]): { total: number; moves: Array<[string, number]> } | null {
+  if (!clubTree) {
+    clubTree = new Map();
+    if (existsSync(CLUB_DIR)) {
+      for (const f of readdirSync(CLUB_DIR).filter((x) => x.endsWith('.json'))) {
+        const month = JSON.parse(readFileSync(`${CLUB_DIR}/${f}`, 'utf8')) as { nodes: Record<string, { m: Record<string, number[]> }> };
+        for (const [key, node] of Object.entries(month.nodes)) {
+          let row = clubTree.get(key);
+          if (!row) { row = new Map(); clubTree.set(key, row); }
+          // bands: b0 <1200, b1 1200–1599, b2 1600–1999 — the club band is b1 + b2.
+          for (const [san, c] of Object.entries(node.m)) row.set(san, (row.get(san) ?? 0) + c[3] + c[6]);
+        }
+      }
+    }
+  }
+  const row = clubTree.get(moves.join(' '));
+  if (!row) return null;
+  const list = [...row].sort((a, b) => b[1] - a[1]);
+  const total = list.reduce((a, [, n]) => a + n, 0);
+  return total ? { total, moves: list } : null;
+}
+
+/** THE LINE'S PLAN (the third order): the hand-written middlegame plan whose
+ *  anchor sits on this line (G9.3 Gate C pins them to the line's end), with
+ *  its breaks, manoeuvres and the endgames it heads for. */
+interface PlanRec { id: string; openingId: string; criticalPositionFen: string; title: string; overview: string; pawnBreaks: unknown[]; pieceManeuvers: unknown[]; strategicThemes: string[]; endgameTransitions: string[] }
+const PLANS = JSON.parse(readFileSync('src/data/middlegame-plans.json', 'utf8')) as PlanRec[];
+const boardKey = (fen: string): string => fen.split(' ').slice(0, 2).join(' ');
+function plansOnLine(openingId: string, moves: readonly string[]): PlanRec[] {
+  const c = new Chess(); const seen = new Set<string>([boardKey(c.fen())]);
+  for (const m of moves) { try { c.move(m); } catch { break; } seen.add(boardKey(c.fen())); }
+  return PLANS.filter((p) => p.openingId === openingId && seen.has(boardKey(p.criticalPositionFen)));
+}
+
 describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
   it('writes one block per move of every line', async () => {
     const { ensureMastersDbLoaded, mastersMovesSync } = await import('./masterPlayLookup');
@@ -104,7 +147,27 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
       const computedTexts: string[] = [];
       for (const line of lines) {
         md.push(`\n## ${line.name}\n`);
+        // THE THIRD ORDER: where this line is heading — the middlegame plan and
+        // the endgames it leads to. A beat may point at it before the line
+        // arrives ("this is all about the …c5 break later").
+        const plans = plansOnLine(id, line.moves);
+        for (const p of plans) {
+          md.push(`- THE LINE'S PLAN (${p.id}): ${p.title}. ${oneLine(p.overview)}`);
+          const breaks = p.pawnBreaks.map(planItem).filter(Boolean); const routes = p.pieceManeuvers.map(planItem).filter(Boolean);
+          if (breaks.length) md.push(`  - breaks: ${breaks.join(' · ')}`);
+          if (routes.length) md.push(`  - manoeuvres: ${routes.join(' · ')}`);
+          if (p.strategicThemes?.length) md.push(`  - themes: ${p.strategicThemes.join(' · ')}`);
+          if (p.endgameTransitions?.length) md.push(`  - endgames it heads for: ${p.endgameTransitions.join(' · ')}`);
+        }
+        if (!plans.length) {
+          const others = PLANS.filter((p) => p.openingId === id);
+          md.push(`- THE LINE'S PLAN: no hand-written plan is anchored on this line; read its plan from the last move's engine line.`);
+          for (const p of others) {
+            md.push(`- the opening's plan on another line (${p.id}, about the opening, not this exact line): ${p.title}${p.endgameTransitions?.length ? `; endgames it heads for: ${p.endgameTransitions.join(' · ')}` : ''}`);
+          }
+        }
         const c = new Chess();
+        let prev: { fen: string; uci: string; to: string; captured: boolean } | null = null;
         for (let i = 0; i < line.moves.length; i += 1) {
           const fen = c.fen();
           const mover = c.turn() === 'w' ? 'white' : 'black';
@@ -150,6 +213,43 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
           md.push(`- engine (mover's view, pawns): ${topTxt}`);
           md.push(`- ${san} itself: ${playedRead ? (sign * playedRead.cp / 100).toFixed(2) : '?'}${after ? ` (one move deeper: ${(sign * after.cp / 100).toFixed(2)})` : ''}${cost !== null ? `, first read costs ${cost.toFixed(2)}` : ''}; line after: ${playedRead ? lineSans(fen, playedRead.pv, 7) : '?'}`);
           md.push(`- verdict: ${verdictTxt}`);
+          // THE SECOND ORDER: where the move's own engine line goes, read off
+          // the board at its end — what is traded, what structure is left,
+          // which files open, where the kings stand. A beat says what these
+          // prove, not what the board shows now.
+          const meColor = op.color === 'white' ? 'w' : 'b';
+          // A recapture finishes a trade the move before began: read the line
+          // from the board before that capture, so "+3 for you" is never said
+          // of a piece only taken back.
+          const recapture = Boolean(mv.captured && prev && prev.captured && prev.to === mv.to);
+          const diff = playedRead
+            ? (recapture && prev ? lineDiff(prev.fen, [prev.uci, ...playedRead.pv], meColor, 9) : lineDiff(fen, playedRead.pv, meColor, 8))
+            : null;
+          if (diff && diff.facts.length) md.push(`- second order (${recapture ? 'from the capture this move answers, ' : ''}the engine's line, ${diff.plies} moves: ${diff.sans.join(' ')}): ${diff.facts.join('; ')}`);
+          const lost = givesUp(fen, san);
+          if (lost.length) {
+            const owner = seat === 'YOU' ? 'their' : 'your';
+            md.push(`- gives up for good (${seat === 'YOU' ? 'you' : 'they'} can never cover these with a pawn again): ${lost.map((g) => `${g.square}${g.reachedBy.length ? ` — ${g.reachedBy.map((r) => `${owner} ${r.replace(/^the /, '')}`).join(', ')} can land there` : ''}`).join('; ')}`);
+          }
+          // THE COMMON MISTAKE: the club favourite here, and what it costs
+          // when it is not the line's move.
+          const club = clubAt(line.moves.slice(0, i));
+          if (club && club.total >= 50) {
+            const share = (n: number): number => Math.round((100 * n) / club.total);
+            md.push(`- club players here (1200–1999, ${club.total} games): ${club.moves.slice(0, 4).map(([m, n]) => `${m} ${share(n)}%`).join(', ')}${club.moves.find(([m]) => m === san) ? '' : ` — ${san} is not among their moves`}`);
+            const [fav, favN] = club.moves[0];
+            if (fav !== san && share(favN) >= 15) {
+              let favUci = '';
+              try { const b = new Chess(fen); const m = b.move(fav); favUci = `${m.from}${m.to}${m.promotion ?? ''}`; } catch { /* not legal here */ }
+              if (favUci && top[0]) {
+                const own = (await engine.read(fen, { multipv: 1, searchmoves: favUci }))[0];
+                if (own) {
+                  const costFav = (sign * top[0].cp - sign * own.cp) / 100;
+                  md.push(`  - the club favourite ${fav} (${share(favN)}%): ${costFav >= 0.5 ? `costs ${costFav.toFixed(2)} — A COMMON MISTAKE you may name` : `costs ${Math.max(0, costFav).toFixed(2)} — playable, not a mistake`}; engine line: ${lineSans(fen, own.pv, 6)}`);
+                }
+              }
+            }
+          }
           const me = op.color === 'white' ? 'w' : 'b';
           const pins = pinsOf(c, me);
           const loose = looseOf(c, me, pins.pinned);
@@ -174,6 +274,7 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
             md.push(`- computers: nothing found on this move`);
           }
           if (found?.say) md.push(`- computed beat: ${found.say.replace(/\s+/g, ' ')}`);
+          prev = { fen, uci, to: mv.to, captured: Boolean(mv.captured) };
           engine.flush();
         }
       }

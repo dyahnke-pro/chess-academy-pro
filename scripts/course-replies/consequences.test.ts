@@ -1,0 +1,87 @@
+import { describe, expect, it } from 'vitest';
+import { Chess } from 'chess.js';
+import { givesUp, lineDiff, pawnCanEverCover, planItem } from './consequences';
+
+const after = (...sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
+
+describe('givesUp — what a pawn move gives up for good', () => {
+  it('…g6 gives up nothing yet after 1.e4: h6 can never be covered again, but no white piece can reach it', () => {
+    expect(givesUp(after('e4'), 'g6')).toEqual([]);
+  });
+
+  it('bxc3 gives up a3 to no one and c3 is not a hole while its own pawn stands there (Four Knights)', () => {
+    // 1.e4 e5 2.Nf3 Nc6 3.Nc3 Nf6 4.Bb5 Bb4 5.O-O O-O 6.d3 Bxc3 7.bxc3
+    expect(givesUp(after('e4', 'e5', 'Nf3', 'Nc6', 'Nc3', 'Nf6', 'Bb5', 'Bb4', 'O-O', 'O-O', 'd3', 'Bxc3'), 'bxc3')).toEqual([]);
+  });
+
+  it('…f6 gives up nothing: e6 and g6 can still be covered by the d- and h-pawns', () => {
+    expect(givesUp(after('e4'), 'f6')).toEqual([]);
+  });
+
+  it('names the minor piece that can reach the lost square: 1.d4 Nf6 2.Nf3 g6 — Bh6 at once', () => {
+    const g = givesUp(after('d4', 'Nf6', 'Nf3'), 'g6');
+    expect(g).toEqual([{ square: 'h6', reachedBy: ['the bishop on c1 (one move)'] }]);
+  });
+
+  it('…h6 gives up nothing while the f-pawn still covers g6', () => {
+    expect(givesUp(after('e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3'), 'h6')).toEqual([]);
+  });
+
+  it('a piece move gives up nothing by this measure', () => {
+    expect(givesUp(after('e4'), 'Nf6')).toEqual([]);
+  });
+
+  it('pawnCanEverCover reads a pawn behind on a neighbouring file', () => {
+    const c = new Chess(after('e4', 'g6'));
+    expect(pawnCanEverCover(c, 'f6', 'b')).toBe(true);
+    expect(pawnCanEverCover(c, 'h6', 'b')).toBe(false);
+  });
+});
+
+describe('lineDiff — where a line leads', () => {
+  it('the Scandinavian exchange: a pawn each, the e-file half-open for White, the d-file for Black', () => {
+    const d = lineDiff(new Chess().fen(), ['e2e4', 'd7d5', 'e4d5', 'd8d5'], 'w');
+    expect(d?.sans).toEqual(['e4', 'd5', 'exd5', 'Qxd5']);
+    expect(d?.facts).toContain('off the board: yours a pawn; theirs a pawn');
+    expect(d?.facts).toContain('half-open for you (no pawn of yours on it): e-file');
+    expect(d?.facts).toContain('half-open for them: d-file');
+    expect(d?.facts.some((f) => f.startsWith('material'))).toBe(false);
+  });
+
+  it('reads the queens coming off and the king that took back', () => {
+    // 1.d4 d5 2.c4 dxc4 3.e4 e5 4.dxe5 Qxd1+ 5.Kxd1
+    const d = lineDiff(new Chess().fen(), ['d2d4', 'd7d5', 'c2c4', 'd5c4', 'e2e4', 'e7e5', 'd4e5', 'd8d1', 'e1d1'], 'w', 10);
+    expect(d?.facts).toContain('the queens are off');
+    expect(d?.facts.some((f) => f.includes('your king on d1'))).toBe(true);
+  });
+
+  it('reads a new isolated pawn: the Tarrasch, 1.d4 d5 2.c4 e6 3.Nc3 c5 4.cxd5 exd5 5.dxc5 Bxc5', () => {
+    const d = lineDiff(new Chess().fen(), ['d2d4', 'd7d5', 'c2c4', 'e7e6', 'b1c3', 'c7c5', 'c4d5', 'e6d5', 'd4c5', 'f8c5'], 'b', 10);
+    expect(d?.facts).toContain('you get an isolated pawn (d5)');
+  });
+
+  it('never ends in the middle of a trade: 1…e5 2.Nf3 Nc6 3.d4 exd4 4.Nxd4 Nf6 5.Nxc6 (…bxc6 to come) stops at 4.Nxd4', () => {
+    // The Evans sheet printed "material +3 for you" here: the line stopped on
+    // Nxc6 with …bxc6 still to come.
+    const d = lineDiff(after('e4'), ['e7e5', 'g1f3', 'b8c6', 'd2d4', 'e5d4', 'f3d4', 'g8f6', 'd4c6'], 'w', 8);
+    expect(d?.sans.at(-1)).toBe('Nxd4');
+    expect(d?.facts.some((f) => f.startsWith('material'))).toBe(false);
+  });
+
+  it('keeps a line that ends on the recapture: the trade is complete', () => {
+    const d = lineDiff(after('e4'), ['e7e5', 'g1f3', 'b8c6', 'd2d4', 'e5d4', 'f3d4', 'c6d4', 'd1d4'], 'w', 8);
+    expect(d?.sans.at(-1)).toBe('Qxd4');
+    expect(d?.facts).toContain('off the board: yours a knight, a pawn; theirs a knight, a pawn');
+  });
+
+  it('stops at the first illegal move and says nothing for an empty line', () => {
+    expect(lineDiff(new Chess().fen(), ['e7e5'], 'w')).toBeNull();
+  });
+});
+
+describe('planItem', () => {
+  it('reads a string or an object record', () => {
+    expect(planItem('…c5 break')).toBe('…c5 break');
+    expect(planItem({ move: '...c5', explanation: 'hits d4' })).toBe('...c5 — hits d4');
+  });
+});
