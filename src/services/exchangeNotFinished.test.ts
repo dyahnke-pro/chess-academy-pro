@@ -284,6 +284,12 @@ describe('a fact that only restates the board never silences the one that says w
   });
 });
 
+describe('a quiet move starts no exchange', () => {
+  it('f4 opens no f-file: it is a pawn push, and whether …Qxf4 takes it is theirs to choose (Schliemann, move 9)', () => {
+    expect(aspectsOf('r1b1kb1r/ppp3pp/2N2n2/1B4q1/4p3/8/PPPPQPPP/R1B1K2R w KQkq - 3 9', 'f4', false).map((a) => a.kind)).not.toContain('aspect-opens-file');
+  });
+});
+
 describe('a discovery in waiting is set up, never landed', () => {
   it('Nxc6 lands no discovered attack: the knight stepped in front of its bishop, nothing was uncovered (Schliemann)', () => {
     const kinds = (moveAspects({ fenBefore: 'r1bqkbnr/ppp3pp/2n5/1B2N3/4p3/8/PPPP1PPP/R1BQK2R w KQkq - 0 7', san: 'Nxc6', prev: NO_PREV_CAPTURE, moverIsStudent: false, follow: [] })?.aspects ?? []).map((a) => a.kind);

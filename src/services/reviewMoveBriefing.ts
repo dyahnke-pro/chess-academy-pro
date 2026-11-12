@@ -366,8 +366,10 @@ export function moveAspects(input: {
   // the take-backs the legal count says will come, the board when they are
   // over, and what the mover nets by then. Everything below that counts
   // material or reads structure is said of THAT board, never of the one that
-  // lasts a single move.
-  const end = exchangeEnd(fenBefore, san);
+  // lasts a single move. An exchange is started by a CAPTURE: a quiet move is
+  // read on the board it leaves, as it always was ("f4 opens the f-file" is
+  // not said of a pawn push because the count has …Qxf4 taking it).
+  const end = mv.captured ? exchangeEnd(fenBefore, san) : null;
   const dots = (s: string, i: number): string => ((i % 2 === 0) === (moverWB === 'w') ? `…${s}` : s);
 
   // 2. Material won — the count of it (never a bare "wins material"). Every
