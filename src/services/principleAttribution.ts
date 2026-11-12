@@ -422,6 +422,18 @@ function movedBefore(history: Move[], mover: Color, last: Move): number {
   }
   return count;
 }
+/** `to` lies on one of the diagonals from `from`, with every square between empty. */
+function openDiagonalBetween(chess: Chess, from: string, to: string): boolean {
+  const df = to.charCodeAt(0) - from.charCodeAt(0);
+  const dr = Number(to[1]) - Number(from[1]);
+  if (df === 0 || Math.abs(df) !== Math.abs(dr)) return false;
+  const sf = Math.sign(df); const sr = Math.sign(dr);
+  for (let k = 1; k < Math.abs(df); k += 1) {
+    const sq = `${String.fromCharCode(from.charCodeAt(0) + sf * k)}${Number(from[1]) + sr * k}` as Square;
+    if (chess.get(sq)) return false;
+  }
+  return true;
+}
 function pieceMobility(chess: Chess, sq: Square, color: Color): number {
   return legalMovesFor(chess, color).filter((m) => m.from === sq).length;
 }
@@ -1276,8 +1288,15 @@ const DETECTORS: Detector[] = [
   (c) => {
     const { last, mover } = c;
     if (last.piece === 'b') return null;
+    // No read, no claim: a move that gives check leaves no legal board with
+    // the mover to move, and its mobility read 0 for every bishop (Learn prod
+    // audit 2026-11-12, …Rde8+: "Your bishop on c5 is shut in behind e8").
+    if (!withTurn(c.after, mover)) return null;
     for (const b of pieces(c.before, mover, 'b')) {
       if (b.square === last.to) continue;
+      // The piece that moved must stand on one of the bishop's diagonals, with
+      // nothing between them — it is what blocks it, or it is not the blocker.
+      if (!openDiagonalBetween(c.after, b.square, last.to)) continue;
       const beforeMob = pieceMobility(c.before, b.square, mover);
       const afterMob = pieceMobility(c.after, b.square, mover);
       const bestMob = pieceMobility(c.afterBest, b.square, mover);

@@ -156,3 +156,17 @@ describe('a piece hung outright is a LOOSE PIECE, never an "overvalued attack" (
   });
 });
 
+
+// A MOVE THAT GIVES CHECK BURIES NOTHING (Learn prod audit 2026-11-12,
+// …Rde8+: "Your bishop on c5 is shut in behind e8"). With the opponent in
+// check there is no legal board with the mover to move, so every bishop read
+// mobility 0; and the piece that moved must stand on the bishop's diagonal to
+// be what blocks it.
+describe('buried own bishop', () => {
+  it('a check is not a bishop buried behind the checking piece', () => {
+    const out = attributePrinciples({ theory: true, replySan: null,
+      historySans: ['e4', 'e5', 'Bc4', 'd6', 'Qh5', 'Nf6', 'Qxf7+'], bestSan: 'd3', classification: 'mistake',
+    });
+    expect(out.find((a) => a.id === 'buried-own-bishop')).toBeUndefined();
+  });
+});

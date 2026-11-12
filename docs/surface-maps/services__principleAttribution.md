@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2114 lines · 15 exports · 62 importers · 46 tests · 1 audits**
+**2133 lines · 15 exports · 62 importers · 46 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6972) — names `FundamentalId`, `principleAttribution`
+- **The standard post-deploy ritual** (CLAUDE.md:6980) — names `FundamentalId`, `principleAttribution`
 
 ## Who calls in
 
@@ -114,7 +114,7 @@
 - `src/services/principleAttribution.section14.test.ts:150`
 - `src/services/principleAttribution.section14.test.ts:161`
 
-### `attributePrinciples` (function) — 121 call sites
+### `attributePrinciples` (function) — 122 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/blockedOwnRetreat.test.ts:25`
 - `src/services/blockedOwnRetreat.test.ts:34`
@@ -189,6 +189,7 @@
 - `src/services/principleAttribution.test.ts:135`
 - `src/services/principleAttribution.test.ts:143`
 - `src/services/principleAttribution.test.ts:152`
+- `src/services/principleAttribution.test.ts:167`
 - `src/services/principleAttribution.walkedIntoTactic.test.ts:30`
 - `src/services/principleAttribution.walkedIntoTactic.test.ts:46`
 - `src/services/principleAttributionEndgame.test.ts:44`
@@ -240,7 +241,7 @@
 ### `pvSanToUci` (function) — 3 call sites
 - `src/services/misconceptionClassifier.ts:565`
 - `src/services/mistakePuzzleService.ts:1171`
-- `src/services/moveThoughtFacts.ts:287`
+- `src/services/moveThoughtFacts.ts:314`
 
 ### `pvUciToSan` (function) — 14 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
@@ -255,7 +256,7 @@
 - `src/services/liveFundamental.ts:135`
 - `src/services/liveFundamental.ts:142`
 - `src/services/principleAttribution.test.ts:46`
-- `src/services/recordRevs.gate.test.ts:81`
+- `src/services/recordRevs.gate.test.ts:84`
 - `src/services/teachMistakeWhy.test.ts:84`
 
 ## Tests
