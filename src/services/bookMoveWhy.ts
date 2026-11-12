@@ -13,6 +13,7 @@
 import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
 import { CAPTURE_VALUE, MATERIAL_VALUE } from './pieceValues';
 import { actsFromItsSquare, exchangeEnd } from './material';
+import { findPins } from './pinGeometry';
 import { gainHoldsInLine, materialDeficit, type FollowLines } from './exchangeLedger';
 import { legalSeeGainOn } from './positionReadingService';
 import { sayMoveNoun } from './spokenMove';
@@ -117,35 +118,24 @@ function asIfTheirMove(board: Chess, them: Color): Chess | null {
   try { return new Chess(parts.join(' ')); } catch { return null; }
 }
 
-const STEPS: Record<string, Array<[number, number]>> = {
-  b: [[1, 1], [1, -1], [-1, 1], [-1, -1]],
-  r: [[1, 0], [-1, 0], [0, 1], [0, -1]],
-  q: [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]],
-};
-const sq = (f: number, r: number): Square | null => (f < 0 || f > 7 || r < 0 || r > 7 ? null : (`${'abcdefgh'[f]}${r + 1}` as Square));
-
-/** A pin the slider on `from` makes: the first student piece on a ray, with a
- *  more valuable student piece (or the king) right behind it. */
+/** A pin the slider on `from` makes on a piece of the student's — read by the
+ *  ONE test of a pin (`pinGeometry.findPins` → `isRealPin`), never a walk of
+ *  its own. The walk that stood here tested geometry and value only, so a
+ *  knight in front of a rook that is guarded was "pinned" (task 172: "Qc2 adds
+ *  a second guard to their knight on c3, which your queen on a5 pins" — the
+ *  rook on e1 behind it is guarded; "…Rfc8 adds a third guard to their knight
+ *  on c6, which your queen on c1 pins" — the rook that just went to c8 is the
+ *  piece behind it). A pawn or a king in front is not a pin a job names. */
 function pinBy(board: Chess, from: Square, student: Color): { pinned: Square; behind: Square; pinnedType: PieceSymbol; behindType: PieceSymbol } | null {
   const p = board.get(from);
-  if (!p || !STEPS[p.type]) return null;
-  const f0 = from.charCodeAt(0) - 97; const r0 = Number(from[1]) - 1;
-  for (const [df, dr] of STEPS[p.type]) {
-    let first: Square | null = null;
-    for (let i = 1; i < 8; i += 1) {
-      const s = sq(f0 + df * i, r0 + dr * i);
-      if (!s) break;
-      const q = board.get(s);
-      if (!q) continue;
-      if (q.color !== student) break;
-      if (!first) { first = s; continue; }
-      const front = board.get(first);
-      if (!front) break;
-      if (q.type === 'k' || CAPTURE_VALUE[q.type] > CAPTURE_VALUE[front.type]) {
-        if (front.type !== 'p' && front.type !== 'k') return { pinned: first, behind: s, pinnedType: front.type, behindType: q.type };
-      }
-      break;
-    }
+  if (!p || p.color === student) return null;
+  for (const pin of findPins(board, from)) {
+    const pinned = pin.involvedSquares[1] as Square;
+    const behind = pin.involvedSquares[2] as Square;
+    const front = board.get(pinned);
+    const back = board.get(behind);
+    if (!front || !back || front.type === 'p' || front.type === 'k') continue;
+    return { pinned, behind, pinnedType: front.type, behindType: back.type };
   }
   return null;
 }

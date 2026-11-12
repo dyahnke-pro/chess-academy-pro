@@ -9,65 +9,33 @@
 // their queen off b6 and free your pawn on d4 from the pin"). Both used to be
 // private to `reviewMoveTeaching`, so the better-move reason never saw them.
 //
-// A LEAF: chess.js only.
+// A LEAF: chess.js and the one pin test.
 import { Chess, type Move } from 'chess.js';
+import { findPins } from './pinGeometry';
 
 type Sq = Parameters<Chess['get']>[0];
-
-const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-
-const RAYS: Record<string, number[][]> = {
-  r: [[1, 0], [-1, 0], [0, 1], [0, -1]],
-  b: [[1, 1], [1, -1], [-1, 1], [-1, -1]],
-  q: [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]],
-};
 
 /** A pin against `color`: the enemy slider on `pinner`, `color`'s piece on
  *  `pinned`, and the costlier piece (or king) on `behind`. */
 export interface PinAgainst { pinner: string; pinned: string; behind: string }
 
-/** Every pin against `color` — absolute (to the king) OR relative (to a MORE
- *  valuable friendly piece behind). Board-true: walking out from each enemy
- *  rook/bishop/queen, the first piece is a friendly A and the next a friendly
- *  of greater value (or the king) with nothing between → A is pinned. The pin
- *  must COST something: the rear piece is the king, worth more than the pinner,
- *  or undefended ("Nf6 unpins your pawn on f7" was a pawn in front of a
- *  defended knight on g8, walk 2026-09-27). */
+/** Every pin against `color` a coach would name — read by the ONE test of a
+ *  pin (`pinGeometry.findPins` → `isRealPin`): the piece behind is worth more,
+ *  the piece in front can leave the line, it cannot simply take the pinner,
+ *  and stepping off the line costs something (the king behind, a piece worth
+ *  more than the pinner, or one nothing else guards).
+ *
+ *  This was a walk of its own with a weaker test, and the board teacher's
+ *  unpin read it (task 172, 2026-11-11): "Bf4 unpins their pawn on a2" (a
+ *  pawn on its own file in front of its rook — its pushes never leave the
+ *  line), "Qd2 unpins their pawn on e4" (the same, on the e-file), "…dxc6
+ *  unpins your pawn on b7" (a pawn that could take the bishop "pinning" it). */
 export function pinsAgainst(fen: string, color: 'w' | 'b'): PinAgainst[] {
-  const out: PinAgainst[] = [];
   let chess: Chess;
-  try { chess = new Chess(fen); } catch { return out; }
-  const enemy: 'w' | 'b' = color === 'w' ? 'b' : 'w';
-  const val = (t: string): number => (t === 'k' ? 100 : (PIECE_VAL[t] ?? 0));
-  for (const row of chess.board()) {
-    for (const cell of row) {
-      if (!cell || cell.color !== enemy || !RAYS[cell.type]) continue;
-      const f0 = cell.square.charCodeAt(0) - 97;
-      const r0 = Number(cell.square[1]) - 1;
-      for (const [df, dr] of RAYS[cell.type]) {
-        let f = f0 + df;
-        let r = r0 + dr;
-        let a: { sq: string; val: number } | null = null;
-        while (f >= 0 && f <= 7 && r >= 0 && r <= 7) {
-          const s = `${String.fromCharCode(97 + f)}${r + 1}`;
-          const pc = chess.get(s as Sq);
-          if (pc) {
-            if (!a) {
-              if (pc.color === color && pc.type !== 'k') a = { sq: s, val: val(pc.type) };
-              else break; // enemy piece, or our king as the first piece → no pin starts here
-            } else {
-              const rearCosts = pc.type === 'k' || val(pc.type) > val(cell.type) || chess.attackers(s as Sq, color).length === 0;
-              if (pc.color === color && val(pc.type) > a.val && rearCosts) out.push({ pinner: cell.square, pinned: a.sq, behind: s });
-              break; // the second piece resolves the line
-            }
-          }
-          f += df;
-          r += dr;
-        }
-      }
-    }
-  }
-  return out;
+  try { chess = new Chess(fen); } catch { return []; }
+  return findPins(chess)
+    .filter((p) => p.beneficiary !== color)
+    .map((p) => ({ pinner: p.involvedSquares[0], pinned: p.involvedSquares[1], behind: p.involvedSquares[2] }));
 }
 
 /** A pawn step whose NEXT step would attack an enemy piece (review walk
