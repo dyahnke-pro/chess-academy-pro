@@ -30,7 +30,7 @@ import { lastMoveIfStudent, lastMoveIfOpponent } from '../services/lastMoveOfLin
 import { computeMustDefend } from '../services/threatOut';
 import { boardPlanFacts } from '../services/boardPlanFacts';
 import { moveWhy } from '../services/deliberation';
-import { captureRunOfMoves } from '../services/captureRun';
+import { captureRunOfMoves, lastMoveOfHistory } from '../services/captureRun';
 import { andList, fenAfterSans, lineSeatAt, lineShape, seatedLine } from '../utils/andList';
 import { sentenceEach } from '../utils/openSentence';
 import { playNamedLine } from '../services/whyNotLegal';
@@ -111,7 +111,7 @@ export async function answerBoardTurn(turn: ResolvedChatTurn, board: BoardTurnIn
     }
     : { lineUci: [uci], evaluation: 0, mate: null };
   const prevCapture = captureRunOfMoves(null, board.history);
-  const d = buildDeliberation({ analysis, fenBefore: board.fen, moverColor: mover, prevCapture, named, maxCandidates: 4 });
+  const d = buildDeliberation({ analysis, fenBefore: board.fen, moverColor: mover, prevCapture, priorMove: lastMoveOfHistory(board.history, board.fen), named, maxCandidates: 4 });
   if (!d) return null;
   // "WHY IS Rxe5 BEST?" ON THE BEST MOVE — the thought a lesson says on it
   // (the reversed matrix): what it does, the moves it beats, the order, the
@@ -352,7 +352,7 @@ async function bestDefenceAnswer(turn: ResolvedChatTurn, board: BoardTurnInput, 
   const replySan = lineUci[1] ? sanFrom(afterMove, lineUci[1]) : null;
   if (!replySan) return null;
   const dot = me === 'w' ? '…' : '';
-  const proof = moverLineProof(board.fen, lineUci, me);
+  const proof = moverLineProof(board.fen, lineUci, me, lastMoveOfHistory(board.history, board.fen));
   const sans = proof?.line?.sans ?? [];
   if (proof && sans.length >= 3) {
     const rest = sans.slice(2);

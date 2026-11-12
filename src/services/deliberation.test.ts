@@ -14,7 +14,7 @@ describe('buildDeliberation — the weighing from the fan', () => {
   const analysis = { topLines: [line(1, 30, 'e1g1'), line(2, -250, 'f3e5', 'c6e5'), line(3, 10, 'd2d3')] };
 
   it('names the best move and weighs the alternatives', () => {
-    const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', prevCapture: null });
+    const d = buildDeliberation({ priorMove: null, analysis, fenBefore: FEN, moverColor: 'w', prevCapture: null });
     expect(d).not.toBeNull();
     expect(d!.best.san).toBe('O-O');
     expect(d!.isRealChoice).toBe(true);
@@ -22,21 +22,21 @@ describe('buildDeliberation — the weighing from the fan', () => {
   });
 
   it('flags the material-dropping alternative concretely (board-true)', () => {
-    const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
+    const d = buildDeliberation({ priorMove: null, analysis, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
     const nxe5 = d.alternatives.find((a) => a.san === 'Nxe5')!;
     expect(nxe5.shortfall).toBe('drops-material');
     expect(nxe5.drops).toMatchObject({ piece: 'n', square: 'e5' });
   });
 
   it('classifies a near-eval alternative as merely less precise, not a blunder', () => {
-    const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
+    const d = buildDeliberation({ priorMove: null, analysis, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
     const d3 = d.alternatives.find((a) => a.san === 'd3')!;
     expect(d3.shortfall).toBe('less-precise');
     expect(d3.drops).toBeUndefined();
   });
 
   it('renders the weighing as ordered board-true facts', () => {
-    const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
+    const d = buildDeliberation({ priorMove: null, analysis, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
     const facts = deliberationFacts(d, NOTHING_SAID, true);
     expect(facts).toMatch(/Nxe5\? Then they answer Nxe5 — you give up a knight for a pawn\./);
     // d3 sits inside the coin-flip band — weighing it is the banned filler.
@@ -45,19 +45,19 @@ describe('buildDeliberation — the weighing from the fan', () => {
   });
 
   it('the verdict carries its reason, or it is not said (David 2026-09-24)', () => {
-    const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
+    const d = buildDeliberation({ priorMove: null, analysis, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
     expect(deliberationFacts({ ...d, bestWhy: null }, NOTHING_SAID, true)).not.toMatch(/The move is/);
     expect(deliberationFacts({ ...d, bestWhy: 'castles your king into safety' }, NOTHING_SAID, true)).toMatch(/The move is O-O — it castles your king into safety\.$/);
   });
 
   it('honours the "first 3, maybe 4" cap', () => {
     const wide = { topLines: [line(1, 30, 'e1g1'), line(2, 20, 'd2d3'), line(3, 10, 'd2d4'), line(4, 5, 'b1c3'), line(5, 0, 'h2h3')] };
-    const d = buildDeliberation({ analysis: wide, fenBefore: FEN, moverColor: 'w', maxCandidates: 3, prevCapture: null })!;
+    const d = buildDeliberation({ priorMove: null, analysis: wide, fenBefore: FEN, moverColor: 'w', maxCandidates: 3, prevCapture: null })!;
     expect(d.alternatives.length).toBe(2); // best + 2 alternatives = 3 candidates
   });
 
   it('the rule-outs drop the conclusion AND the coin-flip, keep the real fork', () => {
-    const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
+    const d = buildDeliberation({ priorMove: null, analysis, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
     const facts = ruleOuts(d, NOTHING_SAID).map((r) => r.text).join(' ');
     expect(facts).toMatch(/Nxe5\? Then they answer Nxe5 — you give up a knight for a pawn\./); // the real fork speaks
     expect(facts).not.toMatch(/d3/); // the ~20cp coin-flip is filler — dropped, not weighed
@@ -67,7 +67,7 @@ describe('buildDeliberation — the weighing from the fan', () => {
   it('drops the taught move from the weighing (excludeSan — no self-contradiction)', () => {
     // The DB-canonical taught move here is d3 — it must NEVER be listed as a
     // weaker alternative against itself.
-    const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', prevCapture: null, excludeSan: 'd3' })!;
+    const d = buildDeliberation({ priorMove: null, analysis, fenBefore: FEN, moverColor: 'w', prevCapture: null, excludeSan: 'd3' })!;
     expect(d.alternatives.map((a) => a.san)).not.toContain('d3');
     expect(ruleOuts(d, NOTHING_SAID).map((r) => r.text).join(' ')).not.toMatch(/d3/);
   });
@@ -76,13 +76,13 @@ describe('buildDeliberation — the weighing from the fan', () => {
     // Three near-equal moves (all within MEANINGFUL_DELTA_CP) = a quiet opening.
     // The weighing must be '' (silence), never "X is playable, but not as precise".
     const quiet = { topLines: [line(1, 30, 'e1g1'), line(2, 20, 'd2d3'), line(3, 15, 'a2a3')] };
-    const d = buildDeliberation({ analysis: quiet, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
+    const d = buildDeliberation({ priorMove: null, analysis: quiet, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
     expect(d.isRealChoice).toBe(true); // there ARE alternatives...
     expect(ruleOuts(d, NOTHING_SAID)).toEqual([]); // ...but none worth weighing
   });
 
   it('is NOT a real choice when the fan has one line (forced / only-move)', () => {
-    const d = buildDeliberation({ analysis: { topLines: [line(1, 30, 'e1g1')] }, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
+    const d = buildDeliberation({ priorMove: null, analysis: { topLines: [line(1, 30, 'e1g1')] }, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
     expect(d.isRealChoice).toBe(false);
     expect(deliberationFacts(d, NOTHING_SAID, true)).toBe('');
   });
@@ -93,7 +93,7 @@ describe('S5 — a candidate is a lesson only with its reason', () => {
     const { buildDeliberation, ruleOuts } = await import('./deliberation');
     // 1.e4 e5 2.Nf3 Nc6 3.Bc4, Black to move: 3…Qh4?? 4.Nxh4 drops the queen.
     const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
-    const d = buildDeliberation({
+    const d = buildDeliberation({ priorMove: null,
       fenBefore: fen,
       moverColor: 'b', prevCapture: null,
       analysis: { topLines: [
@@ -114,7 +114,7 @@ describe('S5 — a candidate is a lesson only with its reason', () => {
   it('NEGATIVE CONTROL: a line that proves nothing gets no invented reason', async () => {
     const { buildDeliberation } = await import('./deliberation');
     const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
-    const d = buildDeliberation({
+    const d = buildDeliberation({ priorMove: null,
       fenBefore: fen, moverColor: 'b', prevCapture: null,
       analysis: { topLines: [
         { rank: 1, evaluation: -20, mate: null, moves: ['g8f6'] },
@@ -132,7 +132,7 @@ describe('an exchange is not "drops the rook" (hand walk 2026-09-24)', () => {
       { rank: 1, moves: ['g2g4'], evaluation: 250, mate: null, depth: 20 },
       { rank: 2, moves: ['d1d8'], evaluation: 230, mate: null, depth: 20 },
     ] };
-    const d = buildDeliberation({ analysis: analysis as never, fenBefore: fen, moverColor: 'w', prevCapture: null })!;
+    const d = buildDeliberation({ priorMove: null, analysis: analysis as never, fenBefore: fen, moverColor: 'w', prevCapture: null })!;
     const rxd8 = d.alternatives.find((a) => a.san === 'Rxd8');
     expect(rxd8, 'Rxd8 must be weighed for this test to mean anything').toBeDefined();
     expect(rxd8?.shortfall).not.toBe('drops-material');
@@ -159,13 +159,13 @@ describe('a capture that wins material says so (hand walk 2340, move 9)', () => 
     const c = new Chess();
     for (const m of 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4 Bd2 Bxc3 Bxc3 Nge7'.split(' ')) c.move(m);
     const analysis = { topLines: [line(1, 120, 'd4e5'), line(2, -150, 'd1d2')] };
-    const d = buildDeliberation({ analysis, fenBefore: c.fen(), moverColor: 'w', prevCapture: null })!;
+    const d = buildDeliberation({ priorMove: null, analysis, fenBefore: c.fen(), moverColor: 'w', prevCapture: null })!;
     expect(d.bestWhy).toBe('wins a pawn');
   });
 
   it('a plain recapture is a trade, not a win', () => {
     // O-O is best in the Italian fixture — no capture, so the positional why stands.
-    const d = buildDeliberation({ analysis: { topLines: [line(1, 30, 'e1g1'), line(2, -250, 'f3e5')] }, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
+    const d = buildDeliberation({ priorMove: null, analysis: { topLines: [line(1, 30, 'e1g1'), line(2, -250, 'f3e5')] }, fenBefore: FEN, moverColor: 'w', prevCapture: null })!;
     expect(d.bestWhy).toMatch(/castles/);
   });
 });
@@ -176,7 +176,7 @@ describe('a recapture is the trade finishing (hand walk 2026-09-25, Qxd8 Rexd8)'
     const c = new Chess();
     for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4 Nxf1 Bxf1 Be6 Bxe5 dxe5 Qd6 Nd7 Qc7 Qd8 Qxd8'.split(' ')) c.move(m);
     const analysis = { topLines: [line(1, -250, 'e8d8'), line(2, -900, 'a7a6')] };
-    const d = buildDeliberation({ analysis, fenBefore: c.fen(), moverColor: 'b', prevCapture: captureRunOfMoves(null, c.history()) })!;
+    const d = buildDeliberation({ priorMove: null, analysis, fenBefore: c.fen(), moverColor: 'b', prevCapture: captureRunOfMoves(null, c.history()) })!;
     expect(d.bestWhy ?? '').not.toMatch(/wins the queen/);
     // …and taking back IS the reason, not "it takes the open d-file".
     expect(d.bestWhy).toBe('completes the trade');
@@ -188,7 +188,7 @@ describe('mate is the reason (hand walk 1200: "Qxd6# — it wins the bishop on d
     const { Chess } = await import('chess.js');
     const c = new Chess('6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1');
     const analysis = { topLines: [{ rank: 1, evaluation: 0, mate: 1, moves: ['d1d8'] }, line(2, 300, 'g1f1')] };
-    const d = buildDeliberation({ analysis, fenBefore: c.fen(), moverColor: 'w', prevCapture: null })!;
+    const d = buildDeliberation({ priorMove: null, analysis, fenBefore: c.fen(), moverColor: 'w', prevCapture: null })!;
     expect(d.bestWhy).toBe('ends the game');
   });
 });
@@ -203,7 +203,7 @@ describe('the best move played out (P2 #3)', () => {
       { rank: 1, evaluation: -700, mate: null, moves: uci(['Qg5', 'Nxf7', 'Qxg2', 'Rf1', 'Qxe4+', 'Be2', 'Nf3#']), depth: 16 },
       { rank: 2, evaluation: 50, mate: null, moves: uci(['Nf6', 'O-O']), depth: 16 },
     ] };
-    const d = buildDeliberation({ analysis: analysis as never, fenBefore: fen, moverColor: 'b', prevCapture: captureRunOfMoves(null, c.history()) })!;
+    const d = buildDeliberation({ priorMove: null, analysis: analysis as never, fenBefore: fen, moverColor: 'b', prevCapture: captureRunOfMoves(null, c.history()) })!;
     expect(d.bestLine ?? '').toMatch(/Qg5/);
   });
 });
@@ -218,7 +218,7 @@ describe('weighing the candidates (P2 #4)', () => {
       { rank: 1, evaluation: -700, mate: null, moves: uci(['Qg5', 'Nxf7', 'Qxg2', 'Rf1', 'Qxe4+', 'Be2', 'Nf3#']), depth: 16 },
       { rank: 2, evaluation: 50, mate: null, moves: uci(['Nf6', 'O-O']), depth: 16 },
     ] };
-    const d = buildDeliberation({ analysis: analysis as never, fenBefore: fen, moverColor: 'b', prevCapture: captureRunOfMoves(null, c.history()) })!;
+    const d = buildDeliberation({ priorMove: null, analysis: analysis as never, fenBefore: fen, moverColor: 'b', prevCapture: captureRunOfMoves(null, c.history()) })!;
     const text = deliberationFacts(d, NOTHING_SAID, true);
     if (text.includes('The move is')) {
       expect(text).toMatch(/^Candidates: .*Qg5/);

@@ -17,7 +17,7 @@ const MATE = ['Nh6+', 'Kf8', 'Qf6+', 'Ke8', 'Bb5+', 'c6', 'Bxc6#'];
 
 describe('hard walk — mates', () => {
   it('a move that starts a forced mate is best because of the mate, not a square', () => {
-    const d = buildDeliberation({
+    const d = buildDeliberation({ priorMove: null,
       analysis: { topLines: [{ rank: 1, evaluation: 0, mate: 4, moves: toUci(GOMC, MATE) }] },
       fenBefore: GOMC, moverColor: 'w', prevCapture: null,
     })!;
@@ -26,7 +26,7 @@ describe('hard walk — mates', () => {
   });
 
   it('the line an answer recites is handed to the board, and only that line', () => {
-    const d = buildDeliberation({
+    const d = buildDeliberation({ priorMove: null,
       analysis: { topLines: [{ rank: 1, evaluation: 0, mate: 4, moves: toUci(GOMC, MATE) }] },
       fenBefore: GOMC, moverColor: 'w', prevCapture: null,
       named: { lineUci: toUci(GOMC, MATE), evaluation: 0, mate: 4 },
@@ -61,7 +61,7 @@ describe('hard walk — mates', () => {
   });
 
   it('"calculate the main line" says the proven line and plays it', () => {
-    const a = assembleMoveEvalAnswer({ fen: GOMC, bestMoveUci: toUci(GOMC, ['Nh6+'])[0], studentColor: 'white', mateIn: 4, pvSan: MATE } as Parameters<typeof assembleMoveEvalAnswer>[0])!;
+    const a = assembleMoveEvalAnswer({ priorMove: null, fen: GOMC, bestMoveUci: toUci(GOMC, ['Nh6+'])[0], studentColor: 'white', mateIn: 4, pvSan: MATE } as Parameters<typeof assembleMoveEvalAnswer>[0])!;
     expect(a.facts).toMatch(/^The best move is Nh6\+\. It starts a forced mate in 4 moves\. You play Nh6\+, they answer Kf8/);
     expect(a.facts).toMatch(/Bxc6# — and it's mate/);
     expect(a.lines?.[0].plies.map((p) => p.san)).toEqual(MATE);
@@ -70,7 +70,7 @@ describe('hard walk — mates', () => {
   it('"what\'s their best defence?" names the engine reply when nothing is countable', () => {
     const PAWN = '8/8/1p4pp/p2k1p2/P2P1P1P/4K1P1/8/8 w - - 0 35';
     const pv = ['Kd3', 'Kd6', 'Kc4', 'Kc6', 'd5+', 'Kd6', 'Kb5'];
-    const d = buildDeliberation({
+    const d = buildDeliberation({ priorMove: null,
       analysis: { topLines: [{ rank: 1, evaluation: 495, mate: null, moves: toUci(PAWN, pv) }] },
       fenBefore: PAWN, moverColor: 'w', prevCapture: null,
       named: { lineUci: toUci(PAWN, pv), evaluation: 495, mate: null },
@@ -95,7 +95,7 @@ describe('hard walk — mates', () => {
 
   it('the weighing names the fork the best move lands, not a square it eyes', () => {
     const F = 'r3k3/8/8/1N6/8/8/8/6K1 w - - 0 1';
-    const d = buildDeliberation({ analysis: { topLines: [{ rank: 1, evaluation: 500, mate: null, moves: toUci(F, ['Nc7+']) }] }, fenBefore: F, moverColor: 'w', prevCapture: null })!;
+    const d = buildDeliberation({ priorMove: null, analysis: { topLines: [{ rank: 1, evaluation: 500, mate: null, moves: toUci(F, ['Nc7+']) }] }, fenBefore: F, moverColor: 'w', prevCapture: null })!;
     expect(d.bestWhy).toBe('forks the king on e8 and the rook on a8');
   });
 });

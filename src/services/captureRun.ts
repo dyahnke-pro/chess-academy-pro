@@ -4,7 +4,8 @@
 // run. Every copy that read one move back called …Nxb4 "taking back the pawn"
 // after cxb4 axb4 — the move that wins it.
 import { Chess } from 'chess.js';
-import { MATERIAL_VALUE } from './pieceValues';
+import { MATERIAL_VALUE, materialBalance } from './pieceValues';
+import type { CaptureLeadsTo } from '../utils/captureWords';
 
 export interface PrevCaptureContext {
   /** The square the previous ply captured on (its destination), or null. */
@@ -44,18 +45,60 @@ export function takesBack(prev: PrevCaptureContext | null, mv: { to: string; cap
   return (MATERIAL_VALUE[mv.captured] ?? 0) <= prev.net;
 }
 
-/** A TAKE-BACK THAT COMES OUT AHEAD: what the other side had netted on the run's
- *  square, as a piece, when this capture there takes back more (prod focus audit
- *  2026-11-09: …Qxf2+ took a rook, Kxf2 took the queen, and the line said "it
- *  wins a queen, and nothing can take back" — the rook it cost went unsaid).
- *  A net of three is "piece" (a knight or a bishop; the run keeps values).
- *  Null when this is not such a capture. */
-export function takesBackAhead(prev: PrevCaptureContext | null, mv: { to: string; captured?: string | null }): string | null {
+/** A TAKE-BACK THAT COMES OUT AHEAD, said — THE ONE WORDING, read by every
+ *  producer that says what a capture on the run's square wins (the move's
+ *  reason, `deliberation.materialWhy`, and the briefing's aspects,
+ *  `reviewMoveBriefing.moveAspects`).
+ *
+ *  When what the other side netted on the run is ONE piece, the capture wins
+ *  its own piece for that one (prod focus audit 2026-11-09: …Qxf2+ took a
+ *  rook, Kxf2 took the queen — "wins a queen for a rook", never "wins a queen,
+ *  and nothing can take back"). When it is not (Scotch Göring …Nxe5 Nxe5
+ *  dxe5: they netted a knight for a pawn), the piece the capture takes is the
+ *  other half of a trade, and what the mover is up is the run's NET — "dxe5
+ *  wins a knight" was said of a move that completes a trade a pawn up.
+ *  `read.net` is what the mover nets over the run once this capture is in
+ *  (what the surface counts, take-backs still to come off it); `fenAfter`
+ *  the board the capture leaves, read for whether the net only pays back
+ *  material the mover was down when the run began — the board before the move
+ *  is mid-trade (Göring: Black "down" a knight for two pawns until dxe5), so
+ *  it is the board after that says it: a mover still not ahead won it back;
+ *  `final` that nothing can take back on the square. Null when this is not
+ *  such a capture. */
+export function takeBackAhead(
+  prev: PrevCaptureContext | null,
+  mv: { to: string; captured?: string | null },
+  read: { net: number; fenAfter: string; final: boolean },
+): CaptureLeadsTo | null {
   if (!prev?.square || !mv.captured || prev.square !== mv.to || prev.net <= 0) return null;
-  if ((MATERIAL_VALUE[mv.captured] ?? 0) <= prev.net) return null;
-  return NET_PIECE[prev.net] ?? 'piece';
+  if ((MATERIAL_VALUE[mv.captured] ?? 0) <= prev.net || read.net < 1) return null;
+  const gave = ONE_PIECE[prev.net];
+  if (gave) return { kind: 'nets', captured: mv.captured, free: false, gave };
+  const lead = materialBalance(read.fenAfter) * (mover(read.fenAfter) === 'w' ? 1 : -1);
+  return { kind: 'take-back-net', net: read.net, back: lead <= 0, final: read.final };
 }
-const NET_PIECE: Record<number, string> = { 1: 'p', 5: 'r', 9: 'q' };
+/** A run net that is one piece (three: a knight or a bishop — the run keeps
+ *  values, so it is "a piece"). */
+/** The side that made the move the board `fen` follows (the side NOT to move). */
+const mover = (fen: string): 'w' | 'b' => (fen.split(' ')[1] === 'w' ? 'b' : 'w');
+const ONE_PIECE: Record<number, string> = { 1: 'p', 3: 'piece', 5: 'r', 9: 'q' };
+
+/** THE LAST MOVE OF A GAME'S MOVES and the board before it, replayed from the
+ *  standard start — the `prior` a line read from the board after it needs
+ *  (`exchangeLedger.moverLineProof`). Null on no moves, when one does not
+ *  play, or when they do not end on `fen` (a surface whose board is not the
+ *  end of its history gets no prior, never a move that did not lead here). */
+export function lastMoveOfHistory(sans: readonly string[] | undefined, fen: string): { fenBefore: string; san: string } | null {
+  if (!sans || sans.length === 0) return null;
+  try {
+    const c = new Chess();
+    for (const san of sans.slice(0, -1)) c.move(san);
+    const fenBefore = c.fen();
+    const m = c.move(sans[sans.length - 1]);
+    if (c.fen().split(' ')[0] !== fen.split(' ')[0]) return null;
+    return { fenBefore, san: m.san };
+  } catch { return null; }
+}
 
 /** The run after a game's moves, replayed from `startFen` (the standard start
  *  when null). Null when a move does not play. */

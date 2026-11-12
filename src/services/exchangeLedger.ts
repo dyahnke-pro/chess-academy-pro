@@ -680,18 +680,34 @@ function heardProof(line: { fen: string; sans: readonly string[] }, end: string)
  *  Z"): the line cut to where it PROVES FOR the side that starts it — that side
  *  mates, or settles a material gain — said from the student's seat. Null when
  *  the line proves nothing, or runs past the horizon a listener can follow. */
-export function moverLineProof(fen: string, uci: readonly string[], moverWB: 'w' | 'b'): Proof | null {
+export function moverLineProof(
+  fen: string,
+  uci: readonly string[],
+  moverWB: 'w' | 'b',
+  /** REQUIRED: the move that led to `fen` and the board before it, or null
+   *  where the surface has none. A line that opens by taking back on the
+   *  square that move captured on is the other half of a trade: counted from
+   *  `fen` it wins the piece taken back (Scotch Göring, after …Bxc3: "After
+   *  bxc3, they play Nf6, you answer e5 and they play dxe5 — you win a bishop
+   *  for a pawn", when bxc3 only takes back for the knight and the pawn is
+   *  lost). The ledger starts before it (`proofCut`'s prior). */
+  prior: { fenBefore: string; san: string } | null,
+): Proof | null {
   const sans: string[] = [];
   try {
     const c = new Chess(fen);
     for (const u of uci) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }).san);
   } catch { /* the playable prefix is what we have */ }
   if (sans.length === 0) return null;
-  const proof = heardProofCut(fen, sans, moverWB);
+  const proof = heardProofCut(fen, sans, moverWB, prior);
   if (!proof) return null;
   const line = { fen, sans: proof.sans.slice(0, proof.plies) };
   const said = (end: string): Proof => heardProof(line, end);
   if (proof.mate) return proof.plies % 2 === 1 ? said("and it's mate") : null;
   if (!proof.ledger || proof.ledger.netPawns <= 0) return null;
-  return said(describeProofResult(proof.ledger, { fen, student: moverWB }));
+  // The ledger starts where the trade did: before `prior` when the line takes
+  // back on its square, so the material the mover stood at is read there.
+  const sq = (x: string): string | undefined => /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(x)?.[1];
+  const fromPrior = !!prior && /x/.test(prior.san) && /x/.test(sans[0]) && sq(sans[0]) === sq(prior.san);
+  return said(describeProofResult(proof.ledger, { fen: fromPrior && prior ? prior.fenBefore : fen, student: moverWB }));
 }

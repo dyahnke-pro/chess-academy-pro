@@ -34,6 +34,7 @@ import { actsFromItsSquare, exchangeEnd } from './material';
 import { gainHoldsInLine, materialDeficit, netPieceWords, GAIN_HOLDS_PLIES, NO_FOLLOW, type FollowLines } from './exchangeLedger';
 import { boardEdgeWords } from '../utils/countWords';
 import { computePlyFacts, structureDelta, tacticWord, type PrevCaptureContext } from './pvPlayback';
+import { takeBackAhead } from './captureRun';
 // The previous-move context is part of this input's contract, so it travels
 // with it: a caller builds `prev` without reaching for a second computer.
 export { prevCaptureOf, NO_PREV_CAPTURE } from './pvPlayback';
@@ -411,7 +412,14 @@ export function moveAspects(input: {
     // knight and a pawn: it wins a pawn).
     const netWords = seq.length >= 2 && end ? netPieceWords(end.moverTook, end.otherTook) : null;
     const tail = seq.length === 2 ? ` — if ${dots(seq[0], 0)}, ${dots(seq[1], 1)}` : seq.length > 2 ? ` once the trade on ${mv.to} is over` : back ? ` — if ${back.reply}, ${back.again}` : '';
+    // A TAKE-BACK THAT COMES OUT AHEAD wins the run's net, never the piece
+    // it takes (Scotch Göring …Nxe5 Nxe5 dxe5: "dxe5 wins a knight, and
+    // nothing can take back" — the knight was the other half of a trade, and
+    // the pawn is what Black is up). One wording with the move's reason
+    // (`captureRun.takeBackAhead`).
+    const ahead = recapture ? takeBackAhead(prev, mv, { net: facts.materialGained, fenAfter, final: !takenBackOn(fenAfter, mv.to) }) : null;
     const lead = (form: 'verb' | 'participle'): string => {
+      if (ahead) return afterCaptureSan(ahead, form);
       if (regains && (free || netWords === null) && !gave) return afterCaptureSan({ kind: 'wins-back', captured: mv.captured as string }, form);
       if (netWords) return `${form === 'verb' ? 'wins' : 'winning'} ${netWords}${regains ? ' back' : ''}`;
       return afterCaptureSan({ kind: 'nets' as const, captured: mv.captured as string, free, gave }, form);

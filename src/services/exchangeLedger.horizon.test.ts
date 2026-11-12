@@ -27,12 +27,12 @@ describe('moverLineProof — the winning line, played out (P2 #3)', () => {
     // Black to move after 4.Nxe5?? in the Blackburne Shilling: …Qg5 hits e5 and g2.
     const c = new Chess();
     for (const m of 'e4 e5 Nf3 Nc6 Bc4 Nd4 Nxe5'.split(' ')) c.move(m);
-    const got = moverLineProof(c.fen(), uciOf(c.fen(), ['Qg5', 'Nxf7', 'Qxg2', 'Rf1', 'Qxe4+', 'Be2', 'Nf3#']), 'b');
+    const got = moverLineProof(c.fen(), uciOf(c.fen(), ['Qg5', 'Nxf7', 'Qxg2', 'Rf1', 'Qxe4+', 'Be2', 'Nf3#']), 'b', null);
     expect(got?.short ?? '').toMatch(/mate|win/);
     expect(got!.line!.sans.length).toBeGreaterThanOrEqual(3);
   });
   it('a line that proves nothing says nothing', async () => {
     const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 3 3';
-    expect(moverLineProof(fen, uciOf(fen, ['O-O', 'Nf6', 'd3', 'Be7']), 'w')).toBeNull();
+    expect(moverLineProof(fen, uciOf(fen, ['O-O', 'Nf6', 'd3', 'Be7']), 'w', null)).toBeNull();
   });
 });

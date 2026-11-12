@@ -74,7 +74,7 @@ import { tagSlots } from '../coach/chatTurnCodeReader';
 import { answerRuleQuestion } from './chessRules';
 import { illegalNamedMove } from './whyNotLegal';
 import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleOpponentHypotheticalAnswer, assembleTradeAnswer, assembleEndgameOutlookAnswer, boardWeaknessNow, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, explainNotationSymbol, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleEndgamePrinciplesAnswer, assembleEndgameRuleAnswer, endgameRuleDemoFen, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType, type GroundedAnswer } from './groundedAnswer';
-import { captureRunOfMoves, type PrevCaptureContext } from './captureRun';
+import { captureRunOfMoves, lastMoveOfHistory, type PrevCaptureContext } from './captureRun';
 import { walkableLine } from './proof';
 import { mateInOneMoveOnBoard } from './boardState';
 import { classifyMatePattern, explainMate } from './matePatterns';
@@ -2529,7 +2529,7 @@ async function serveGroundedPositionDefault(
       typeof grounding.engineMateIn === 'number'
         ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
         : null;
-    const answer = assembleMoveEvalAnswer({ fen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, prevCapture: lastCaptureOf(grounding.moveHistory) });
+    const answer = assembleMoveEvalAnswer({ fen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, prevCapture: lastCaptureOf(grounding.moveHistory), priorMove: lastMoveOfHistory(grounding.moveHistory, fen) });
     if (computedOnly && answer?.facts?.trim()) return `${prefix}${answer.facts}`.trim();
     if (answer) {
       // DETERMINISTIC → COMPUTER, never the LLM (David 2026-09-02, chokepoint
@@ -6285,7 +6285,7 @@ export async function getCoachChatResponse(
                 ? await moveReason(bestFen, bestMoveSanHere, 'student', runHere).catch(() => null)
                 : null;
             if (bestReason) emitDecisiveReason({ surface: 'chat', kind: bestReason.kind, source: bestReason.source, about: bestReason.about, gapCp: bestReason.gapCp, stakeCp: bestReason.stakeCp, posedTag: null, outcome: 'explained' });
-            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: runHere, pvSan: askedHere ? askedHere.pvSan : bestFen === grounding.currentFen ? grounding.enginePlan?.pvSan ?? null : null, theReason: bestReason?.kind === 'the' ? bestReason.text : bestReason?.kind === 'close' ? bestReason.core : null, closeAlt: bestReason?.kind === 'close' && bestReason.gapEarned ? bestReason.nextBestSan : null });
+            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: runHere, priorMove: bestFen === grounding.currentFen ? lastMoveOfHistory(grounding.moveHistory, bestFen) : null, pvSan: askedHere ? askedHere.pvSan : bestFen === grounding.currentFen ? grounding.enginePlan?.pvSan ?? null : null, theReason: bestReason?.kind === 'the' ? bestReason.text : bestReason?.kind === 'close' ? bestReason.core : null, closeAlt: bestReason?.kind === 'close' && bestReason.gapEarned ? bestReason.nextBestSan : null });
             if (answer) {
               const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
               if (voiced) {

@@ -401,7 +401,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // itself, and the engine's best is never named over it: a taught line's
   // move may not be the engine's (G3), so only the rule-outs are said.
   if (mine && i.reads && i.reads.before.length >= 2) {
-    const d = buildDeliberation({ analysis: { topLines: [...i.reads.before] }, fenBefore: i.fenBefore, moverColor: sideOf(i.fenBefore), excludeSan: san, prevCapture: i.prev });
+    const d = buildDeliberation({ analysis: { topLines: [...i.reads.before] }, fenBefore: i.fenBefore, moverColor: sideOf(i.fenBefore), excludeSan: san, prevCapture: i.prev, priorMove: i.theirLast });
     if (d) {
       for (const r of ruleOuts(d, NOTHING_SAID)) {
         facts.push({

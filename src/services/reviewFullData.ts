@@ -901,7 +901,7 @@ export function computeMoveFacets(
     // speaks).
     const tacProof = (b: 'w' | 'b' | undefined, squares: readonly string[]): Proof | null => {
       if (!b || !toMove) return null;
-      return b === toMove ? moverLineProof(fenAfter, ctx.playedLineUci, b) : threatProof(fenAfter, toMove, squares);
+      return b === toMove ? moverLineProof(fenAfter, ctx.playedLineUci, b, { fenBefore, san }) : threatProof(fenAfter, toMove, squares);
     };
     // THIS INSTANCE'S PLACE AMONG THE GAME'S — the instances the walk has said
     // before this move, then the new ones this move builds — so a tactic's

@@ -31,7 +31,7 @@ import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { describeMoveGeometry, quietPurposePhrase } from './groundedAnswer';
 import { kickBreaksPin, pawnKickNext } from './pawnKickNext';
 import { seatCp } from './winChance';
-import { takesBack, takesBackAhead, type PrevCaptureContext } from './captureRun';
+import { takesBack, takeBackAhead, type PrevCaptureContext } from './captureRun';
 
 /** A capture that WINS material, the exchange counted out — that is the move's
  *  reason, ahead of any positional gloss. Hand walk 2340: dxe5 "stakes out the
@@ -54,9 +54,14 @@ function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', prevCaptu
     // wins the bishop (prod Learn audit 2026-11-09, "it completes the trade").
     if (takesBack(prevCapture, m)) return afterCaptureSan({ kind: 'take-back', next: null }, 'verb');
     // A take-back that comes out ahead says what it cost too: "wins a queen
-    // for a rook", never "wins a queen, and nothing can take back".
-    const gave = takesBackAhead(prevCapture, m);
-    if (gave) return afterCaptureSan({ kind: 'nets', captured: m.captured, free: false, gave }, 'verb');
+    // for a rook", never "wins a queen, and nothing can take back" — and when
+    // the run's net is no one piece, the net (`captureRun.takeBackAhead`).
+    const ahead = prevCapture ? takeBackAhead(prevCapture, m, {
+      net: (VAL[m.captured] ?? 0) - prevCapture.net,
+      fenAfter: c.fen(),
+      final: !c.moves({ verbose: true }).some((x) => x.to === m.to && !!x.captured),
+    }) : null;
+    if (ahead) return afterCaptureSan(ahead, 'verb');
     // SEE counts the recaptures: a positive net is material won, not a trade.
     if (legalSeeGainFor(fenBefore, m.to, mover) <= 0) return null;
     // What THIS capture nets, read by the one board read: a take-back that
@@ -242,6 +247,12 @@ export function buildDeliberation(input: {
    *  false (hand walk 2026-09-25) — and a capture worth more than what they
    *  took wins it (`takesBack`). */
   prevCapture: PrevCaptureContext | null;
+  /** REQUIRED: the move that led to `fenBefore` and the board before it, or
+   *  null where the surface has none. The best line played out is counted
+   *  from before it when it opens by taking back on that move's square — a
+   *  take-back is the other half of a trade, never a piece won
+   *  (`moverLineProof`). */
+  priorMove: { fenBefore: string; san: string } | null;
   /** A move the STUDENT named ("why is Ne4 best?", "is Qf3 ok?"), weighed
    *  beside the engine's own candidates (chat thinks like the coach,
    *  2026-10-09). `lineUci` is the engine's line from `fenBefore` STARTING
@@ -336,7 +347,7 @@ export function buildDeliberation(input: {
 
   // Played out only when it takes more than the move itself to see (3+ plies):
   // a one-move win is already the reason.
-  const played = moverLineProof(fenBefore, bestLine.moves, moverColor);
+  const played = moverLineProof(fenBefore, bestLine.moves, moverColor, input.priorMove);
   const playedSans = played?.line?.sans ?? [];
   const bestLineText = played && playedSans.length >= 3 ? played.short : null;
   const bestLineAfter = bestLineText && played ? `After ${bestSan}, ${lineShape(playedSans.slice(1), 'they', fenAfterSans(played.line?.fen ?? null, playedSans.slice(0, 1)), 'second')} — ${played.short.slice(played.short.indexOf(' — ') + 3)}` : null;

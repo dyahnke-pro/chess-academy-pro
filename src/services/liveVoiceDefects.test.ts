@@ -35,7 +35,7 @@ describe('L1 — nothing advises a finished game', () => {
     expect(c.moves()).toHaveLength(0);
 
     const stale = [{ rank: 1, moves: ['h1e1'], evaluation: 900, mate: null }];
-    expect(buildDeliberation({
+    expect(buildDeliberation({ priorMove: null,
       fenBefore: MATE_FEN,
       analysis: { topLines: stale } as never,
       moverColor: 'b', prevCapture: null,

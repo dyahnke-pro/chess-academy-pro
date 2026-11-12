@@ -207,7 +207,7 @@ describe('the board teacher credits nothing to a piece the take-back removes', (
 
 describe('a line that only gets material back wins it back', () => {
   it('Nxe4 …Nxe4 Qxe4 after …dxe4: the pawn comes back, no pawn is won (London)', () => {
-    const proof = moverLineProof(LONDON_QXE4, uciLine(LONDON_QXE4, ['Nxe4', 'Nxe4', 'Qxe4']), 'w');
+    const proof = moverLineProof(LONDON_QXE4, uciLine(LONDON_QXE4, ['Nxe4', 'Nxe4', 'Qxe4']), 'w', null);
     expect(proof?.short ?? '').not.toMatch(/you win a pawn$/);
     expect(proof?.short ?? '').toMatch(/you win a pawn back$/);
   });
@@ -216,7 +216,7 @@ describe('a line that only gets material back wins it back', () => {
     const c = new Chess();
     for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nd4']) c.move(m);
     // Not a claim about theory: a line whose ledger is one pawn up, from level.
-    const proof = moverLineProof(c.fen(), uciLine(c.fen(), ['Nxe5', 'Ne6', 'd3']), 'w');
+    const proof = moverLineProof(c.fen(), uciLine(c.fen(), ['Nxe5', 'Ne6', 'd3']), 'w', null);
     expect(proof?.short ?? '').toMatch(/you win a pawn$/);
   });
 });

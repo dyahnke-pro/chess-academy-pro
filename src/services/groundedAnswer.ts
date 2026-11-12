@@ -1996,6 +1996,10 @@ export function assembleMoveEvalAnswer(opts: {
    *  answer names both rather than crowning one (escalating walk 2026-10-17:
    *  "the best move is Qd3", then "exf5 is about as good"). */
   closeAlt?: string | null;
+  /** REQUIRED: the move that led to `fen` and the board before it, or null
+   *  where the caller has none — a line that opens by taking back on its
+   *  square is counted as the trade it finishes (`moverLineProof`). */
+  priorMove: { fenBefore: string; san: string } | null;
 }): GroundedAnswer | null {
   const { fen, bestMoveUci } = opts;
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
@@ -2090,7 +2094,7 @@ export function assembleMoveEvalAnswer(opts: {
       const c = new Chess(fen);
       for (const san of opts.pvSan) { const m = c.move(san); uci.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
     } catch { /* the playable prefix is what we have */ }
-    const proof = moverLineProof(fen, uci, mover === 'white' ? 'w' : 'b');
+    const proof = moverLineProof(fen, uci, mover === 'white' ? 'w' : 'b', opts.priorMove);
     const sans = proof?.line?.sans ?? [];
     if (proof && sans.length >= 3) {
       if (!opts.theReason) parts.push(`${openSentence(proof.full)}.`);

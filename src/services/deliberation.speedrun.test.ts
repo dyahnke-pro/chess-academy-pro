@@ -18,13 +18,13 @@ describe('the queen trade that throws away space', () => {
     ],
   });
   it('castling into …dxe5 and the queen trade is ruled out for its reason', () => {
-    const d = buildDeliberation({ fenBefore: fen, analysis: analysis(-20), moverColor: 'w', prevCapture: null } as never);
+    const d = buildDeliberation({ priorMove: null, fenBefore: fen, analysis: analysis(-20), moverColor: 'w', prevCapture: null } as never);
     const alt = d?.alternatives.find((a) => a.san === 'O-O');
     expect(alt?.shortfall).toBe('trades-queens');
     expect(deliberationFacts(d as never, NOTHING_SAID, true)).toMatch(/O-O\? Then they play dxe5, you answer dxe5, they play Qxd1 and you answer Rxd1 — the queens come off — with more space or an attack going, you want them on/);
   });
   it('not when the engine says the trade costs nothing (non-vacuous)', () => {
-    const d = buildDeliberation({ fenBefore: fen, analysis: analysis(35), moverColor: 'w', prevCapture: null } as never);
+    const d = buildDeliberation({ priorMove: null, fenBefore: fen, analysis: analysis(35), moverColor: 'w', prevCapture: null } as never);
     expect(d?.alternatives.find((a) => a.san === 'O-O')?.shortfall).not.toBe('trades-queens');
   });
 });
@@ -32,7 +32,7 @@ describe('the queen trade that throws away space', () => {
 describe('no queen trade where no queens are left (Alekhine walk 2026-10-19)', () => {
   it('a queenless ending never says a move "takes the last queen off"', () => {
     const fen = '2k5/1pprb3/4p1r1/2P1N2p/3P2p1/7P/P5PK/1R2R3 w - - 0 38';
-    const d = buildDeliberation({ fenBefore: fen, analysis: {
+    const d = buildDeliberation({ priorMove: null, fenBefore: fen, analysis: {
       bestMove: 'e5c4', evaluation: 250, isMate: false, mateIn: null, depth: 16, nodesPerSecond: 0,
       topLines: [
         { rank: 1, evaluation: 250, mate: null, moves: ['e5c4', 'g4h3'] },

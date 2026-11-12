@@ -75,7 +75,7 @@ describe('Q10 — "is my bishop on e3 good or bad?" answers about the bishop', (
 describe('Q1 — the best move is said with a reason', () => {
   it('a quiet best move with no tactical point still says why it is best', async () => {
     const { assembleMoveEvalAnswer } = await import('../services/groundedAnswer');
-    const f = assembleMoveEvalAnswer({ fen: 'r1q2rk1/pp2bppp/2nppn2/8/Q2PP3/2N1BB2/PP3PPP/3R1RK1 w - - 8 13', bestMoveUci: 'g2g3', evalCp: 100, mateIn: null, studentColor: 'white' })?.facts ?? '';
+    const f = assembleMoveEvalAnswer({ priorMove: null, fen: 'r1q2rk1/pp2bppp/2nppn2/8/Q2PP3/2N1BB2/PP3PPP/3R1RK1 w - - 8 13', bestMoveUci: 'g2g3', evalCp: 100, mateIn: null, studentColor: 'white' })?.facts ?? '';
     expect(f).toMatch(/^The best move is g3\. \S/);
     expect(f).not.toMatch(/^The best move is g3\. You're/);
   });

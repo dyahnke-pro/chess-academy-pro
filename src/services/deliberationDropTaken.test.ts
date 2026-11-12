@@ -18,7 +18,7 @@ describe('a move "drops" only what their line takes', () => {
       const p = at(ply);
       expect(p).toBeTruthy();
       if (!p) return;
-      const d = buildDeliberation({ analysis: analysisOf(p.after), fenBefore: p.fenAfter, moverColor: 'w', prevCapture: captureRunAfterMove(p.prev, p.fenBefore, p.san), maxCandidates: 6 });
+      const d = buildDeliberation({ priorMove: null, analysis: analysisOf(p.after), fenBefore: p.fenAfter, moverColor: 'w', prevCapture: captureRunAfterMove(p.prev, p.fenBefore, p.san), maxCandidates: 6 });
       const alt = d?.alternatives.find((a) => a.san === san);
       expect(alt, `${san} weighed`).toBeTruthy();
       expect(alt?.drops?.square).not.toBe(wrong);
@@ -35,7 +35,7 @@ describe('a dropped piece is said with the move that takes it', () => {
     const { ruleOuts } = await import('./deliberation');
     const p = at(26);
     if (!p) throw new Error('ply 26 missing');
-    const d = buildDeliberation({ analysis: analysisOf(p.after), fenBefore: p.fenAfter, moverColor: 'w', prevCapture: captureRunAfterMove(p.prev, p.fenBefore, p.san), maxCandidates: 6 });
+    const d = buildDeliberation({ priorMove: null, analysis: analysisOf(p.after), fenBefore: p.fenAfter, moverColor: 'w', prevCapture: captureRunAfterMove(p.prev, p.fenBefore, p.san), maxCandidates: 6 });
     const alt = d?.alternatives.find((a) => a.san === 'Bg5+');
     expect(alt?.drops).toMatchObject({ square: 'f7', line: ['Kxf7'], moved: false });
     expect(d && ruleOuts(d, new Set()).find((r) => r.san === 'Bg5+')?.text).toBe('Bg5+? Then they play Kxf7, and the bishop on f7 is lost.');

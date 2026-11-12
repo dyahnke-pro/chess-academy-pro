@@ -465,7 +465,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
     }).map((h) => h.text);
   },
   deliberation: (p) => {
-    const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, prevCapture: p.prev });
+    const d = buildDeliberation({ priorMove: null, analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, prevCapture: p.prev });
     return d ? deliberationFacts(d, new Set(), true) : null;
   },
   moveJob: (p) => moveJob(p.fenBefore, p.san, p.mover, p.own ? MINE : THEIRS, null, [])?.clause ?? null,
@@ -497,7 +497,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
   // Every alternative the weighing would rule out, with its reason, whether or
   // not the position is a real fork (the composer gates that; BUILT should not).
   alternatives: (p) => {
-    const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, prevCapture: p.prev });
+    const d = buildDeliberation({ priorMove: null, analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, prevCapture: p.prev });
     return d ? ruleOuts(d, NOTHING_SAID).map((r) => r.text) : null;
   },
   // The masters' main move here and what the played move left undone, when

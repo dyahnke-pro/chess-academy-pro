@@ -27,7 +27,7 @@ describe('ply 49 — a loose knight the engine does not punish is not "dropped"'
   it('Bh6 within a whisker of the best is never "That drops the knight on a7"', () => {
     // The live read had Nb5 first and Bh6 a whisker behind; depth 16 has them the
     // other way round (456 v 426) — either way the knight on a7 costs nothing.
-    const d = buildDeliberation({
+    const d = buildDeliberation({ priorMove: null,
       analysis: { topLines: [
         { rank: 1, evaluation: 430, mate: null, moves: ['a7b5', 'c7c6', 'b5c7', 'b8b2'] },
         { rank: 2, evaluation: 426, mate: null, moves: ['e3h6', 'g8h7', 'g1g7', 'h7h6'] },

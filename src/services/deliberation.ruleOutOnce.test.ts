@@ -14,7 +14,7 @@ const line = (rank: number, evaluation: number, uci: string) => ({ rank, evaluat
 describe('a loss every move suffers is not why one falls short', () => {
   // Move 19, Black to move. The best, …Rd6, loses a7 to Qxa7 as well.
   const fen = '2k4r/ppp2p1p/4pp2/2Q5/3r4/8/PPP1K1P1/R4B1R b - - 3 19';
-  const d = buildDeliberation({
+  const d = buildDeliberation({ priorMove: null,
     fenBefore: fen, moverColor: 'b', prevCapture: null,
     analysis: { topLines: [
       line(1, 730, 'd4d6 c5a7 d6a6 a7d4 e6e5 d4g4 c8b8 g4g7 h8c8 g7f7'),
@@ -31,7 +31,7 @@ describe('a loss every move suffers is not why one falls short', () => {
 describe('a refutation the best move avoids still speaks', () => {
   // The best (O-O) keeps every piece; Nxe5 drops the knight for a pawn.
   const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 3 14';
-  const d = buildDeliberation({
+  const d = buildDeliberation({ priorMove: null,
     fenBefore: fen, moverColor: 'w', prevCapture: null,
     analysis: { topLines: [
       line(1, 82, 'e1g1 f8e7 d2d4 d7d6 d4d5 c6b8 c4d3 g8f6 c2c4 b8d7'),

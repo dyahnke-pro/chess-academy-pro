@@ -1,4 +1,5 @@
 import { withArticle } from './andList';
+import { countWords } from './countWords';
 
 // ONE WAY TO SAY A CAPTURE (WO-STORY-MATRIX-01 Phase 1 step 4; David
 // 2026-10-30: "Redundant to say Qxd8 (narrated like: queen takes d8, takes
@@ -55,6 +56,13 @@ export type CaptureLeadsTo =
   /** A take-back that comes out ahead: what the taker gets for what the
    *  other side took first. `seat` is the taker from the student's seat. */
   | { kind: 'take-back-gain'; got: string; gave: string; seat: 'you' | 'they' }
+  /** A take-back that comes out ahead by less than the piece it takes: the
+   *  gain is the RUN's net, never the piece (Scotch Göring …Nxe5 Nxe5 dxe5:
+   *  "dxe5 wins a knight" — the knight was the other half of a trade, and
+   *  the pawn …Nxe5 took is what Black is up). `net` is the mover's net over
+   *  the run in points; `back` when that pays back material the mover was
+   *  behind by; `final` when nothing can take back on the square. */
+  | { kind: 'take-back-net'; net: number; back: boolean; final: boolean }
   /** A capture they can answer in kind. */
   | { kind: 'trade'; piece: string; captured: string }
   /** A capture that hands over more than it takes. */
@@ -96,6 +104,13 @@ export function afterCaptureSan(leadsTo: CaptureLeadsTo, form: CaptureForm): str
       const first = leadsTo.seat === 'you' ? 'they' : 'you';
       const what = `${withArticle(capturePieceName(leadsTo.got))} for the ${capturePieceName(leadsTo.gave)} ${first} took`;
       return v(`gets ${taker} ${what}`, `getting ${taker} ${what}`);
+    }
+    case 'take-back-net': {
+      const count = countWords(leadsTo.net, { unit: true });
+      const won = leadsTo.back ? `${count} back` : count;
+      return leadsTo.final
+        ? v(`completes the trade and wins ${won}`, `completing the trade and winning ${won}`)
+        : v(`wins ${won} on the trade so far`, `winning ${won} on the trade so far`);
     }
     case 'trade': {
       const mine = capturePieceName(leadsTo.piece);

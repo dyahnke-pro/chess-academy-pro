@@ -695,6 +695,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       prevCapture: input.opponentLastMove
         ? captureRunAfterMove(input.history && input.history.length > 1 ? captureRunOfMoves(null, input.history.slice(0, -1)) : null, input.opponentLastMove.fenBefore, input.opponentLastMove.san)
         : null,
+      priorMove: input.opponentLastMove ?? null,
     })
     : null;
 
@@ -748,7 +749,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       const mv = c.move({ from: line[0].slice(0, 2), to: line[0].slice(2, 4), promotion: line[0][4] });
       const hit = mv ? pawnHit(c.fen(), mv) : null;
       if (!mv || !hit?.trapped || !lineTakesPiece(fen, hit.square, line)) return null;
-      return { san: mv.san, to: mv.to, square: hit.square, type: hit.type, proof: moverLineProof(fen, line, studentColor)?.short ?? null };
+      return { san: mv.san, to: mv.to, square: hit.square, type: hit.type, proof: moverLineProof(fen, line, studentColor, input.opponentLastMove ?? null)?.short ?? null };
     } catch { return null; }
   })();
 

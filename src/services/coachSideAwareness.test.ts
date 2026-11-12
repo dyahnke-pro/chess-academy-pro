@@ -64,7 +64,7 @@ describe('whose best move it is', () => {
   const BLACK_TO_MOVE = 'r2qk2r/p2ppp1p/b1p3p1/3nP3/Q7/5N2/PP3PPP/RNB1K2R b KQkq - 2 11';
 
   it('names the opponent when it is not the student to move', () => {
-    const answer = assembleMoveEvalAnswer({
+    const answer = assembleMoveEvalAnswer({ priorMove: null,
       fen: BLACK_TO_MOVE,
       bestMoveUci: 'd8b6',
       studentColor: 'white',
@@ -74,7 +74,7 @@ describe('whose best move it is', () => {
   });
 
   it("calls it the best move when it IS the student's turn", () => {
-    const answer = assembleMoveEvalAnswer({
+    const answer = assembleMoveEvalAnswer({ priorMove: null,
       fen: BLACK_TO_MOVE,
       bestMoveUci: 'd8b6',
       studentColor: 'black',
@@ -85,7 +85,7 @@ describe('whose best move it is', () => {
   it('keeps the old wording when no side was supplied', () => {
     // Chat asks ("what should I play here?") arrive on the student's own turn
     // and pass no colour; they must read exactly as before.
-    const answer = assembleMoveEvalAnswer({ studentColor: null, fen: BLACK_TO_MOVE, bestMoveUci: 'd8b6' });
+    const answer = assembleMoveEvalAnswer({ priorMove: null, studentColor: null, fen: BLACK_TO_MOVE, bestMoveUci: 'd8b6' });
     expect(answer?.facts).toContain('The best move is Qb6');
   });
 });
