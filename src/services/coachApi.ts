@@ -2914,8 +2914,12 @@ export async function readChatTurnStructured(opts: {
  *  recaps. 'live' = the sitting-next-to-you register for everything else warm
  *  (move commentary, phase narration, opening/plan teaching). Pure — exported
  *  for the register test. Pass undefined when warm is off. */
-export function resolveWarmRegister(intent: string | undefined): 'review' | 'live' | null {
+export function resolveWarmRegister(intent: string | undefined): 'review' | 'live' | 'lesson' | null {
   if (intent === undefined) return null;
+  // One beat of an opening lesson (WO-OPENINGS-REWRITE-01, David 2026-11-12:
+  // "Turn it on"): the Danya style sheet's length and lead, never the live
+  // register's five to eight sentences.
+  if (/^walkthrough-beat\b/.test(intent)) return 'lesson';
   return /^(game-review\b|review-)/.test(intent) ? 'review' : 'live';
 }
 
@@ -3095,6 +3099,24 @@ export async function voiceFacts(
       'square, piece, number, name, or claim that is not in the facts. Spell moves out ' +
       'in plain words ("the knight goes to f3"), NEVER chess notation. No praise ("great ' +
       'job"), no slang, no idioms — just describe the idea kindly so the child learns.'
+    : register === 'lesson'
+    // ONE BEAT OF AN OPENING LESSON (WO-OPENINGS-REWRITE-01 C3, David
+    // 2026-11-12: "Turn it on"). The composer chose the facts and their order
+    // (fitted on the hand-written beats and Danya's notes); this only says them
+    // the way the writers do — the style sheet's lengths (about 40 words on the
+    // student's move, 35 on theirs), one idea taken to its point, players'
+    // words. Every move and square must survive (`mustPreserve`).
+    ? 'You are a chess teacher narrating ONE move of an opening lesson, in the clear, ' +
+      'concept-first voice of a great speedrun teacher. You will be given FACTS about this ' +
+      'move, already true and verified, in the order to say them. Say ALL of them, in that ' +
+      'order, as one short spoken beat of about 35 to 45 words. Lead with the first fact. ' +
+      'Where two facts are one idea, say them as one sentence that takes the idea to its ' +
+      'point ("so", "which means", "and that is why"); never say the same thing twice. Use ' +
+      'players\' words (hanging, loose, pinned, can\'t take back). One idea a sentence: no ' +
+      'dash chains, no semicolons, no list of moves read out like a score sheet. Keep every ' +
+      'move and every square exactly as written. Never mention an engine or a computer. THE ' +
+      'ONE RULE YOU CANNOT BREAK: add NO chess content that is not in the facts — no move, ' +
+      'square, piece, number, plan, threat, verdict or claim of your own.'
     : register === 'review'
     // POST-GAME REVIEW register (David 2026-07-11: "I want my post game reviews
     // to sound like his!"). The tape-review voice: the game is a STORY with
@@ -3214,7 +3236,7 @@ export async function voiceFacts(
   // pyramid ordering (the prompt) + the stale-beat guard + pre-warmed engine
   // reads, not from starving the beat. G5 untouched (brief still clips via
   // applyBriefVoiceCap, silent stays silent).
-  const voiceMaxTokens = register === 'review' ? 700 : opts.warm ? 384 : 240;
+  const voiceMaxTokens = register === 'review' ? 700 : register === 'lesson' ? 200 : opts.warm ? 384 : 240;
   try {
     const out = await callDeepSeek(
       cfg.apiKey,
