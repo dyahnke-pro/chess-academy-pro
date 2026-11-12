@@ -13,9 +13,9 @@
  *       never the coach hand-off and never the legacy walkthrough.
  *   A4  the voice spoke the lesson (a narration row while Watch played).
  *   A5  a line under a masterclass (the Vienna's Mengarini) stays on a page;
- *       a line the stored trees cannot build (the Paris Gambit: no master
- *       games, not in the strong-online tree) still hands off — the page
- *       never reads Lichess live, so it hands off every time.
+ *       a line no master game reaches (the Paris Gambit) gets its page too:
+ *       the builder walks the engine past a thin line's games
+ *       (WO-ALL-SECTION-DEPTH, 2026-11-08), so it no longer hands off.
  *   B1  the main tab lists no reply before the page's own name (O10: the
  *       Mengarini drops 2.Nf3 / 2.Nc3), a tab lists the opponent's replies
  *       built from the games (O3), and a reply with no hand-written narration
@@ -200,12 +200,12 @@ try {
   check('B4 each is worded a known mistake, never a trap', slips.length > 0 && slips.every((t) => /Known mistake/.test(t) && !/\btrap\b/i.test(t) && /club players under 1600/.test(t)), slips.slice(0, 2).join(' || ').slice(0, 300));
   const tagline = String(await js('return document.body.innerText.includes("Yours to avoid, theirs to punish.")'));
   check('B4 the Pitfalls zone names both seats', tagline === 'true', tagline);
-  // Negative control: no master game reaches the Paris Gambit and the stored
-  // strong-online tree does not hold it, so the page builds nothing and the
-  // coach still teaches it live. (2026-10-29: with a live read under the page
-  // it built nine tabs or handed off by whether Lichess answered.)
+  // A line no master game reaches (the Paris Gambit) still gets its page: since
+  // WO-ALL-SECTION-DEPTH (2026-11-08) the builder walks the engine past a thin
+  // main line's games and reads the club games for its variations, so it no
+  // longer hands off to the coach (the hand-off this row asserted before).
   const odd = await openOpening(slug('A00', 'Amar Opening: Paris Gambit'));
-  check('A5 a line the tree cannot build still hands off to the coach', odd === 'handed-off', `${odd} at ${await href()}`);
+  check('A5 a line no master game reaches still gets its page (the engine past its games)', odd === 'page', `${odd} at ${await href()}`);
 } catch (e) {
   check('harness', false, String(e));
 } finally {
