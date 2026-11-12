@@ -13,6 +13,9 @@ import { Chess, type Square } from 'chess.js';
 import { homeSquaresOf } from './development';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { openSentence } from '../utils/openSentence';
+import { landingIsSafe } from './positionReadingService';
+import { quietBalance } from './material';
+import { materialBalance } from './pieceValues';
 
 interface HeldResource {
   text: string;
@@ -38,6 +41,15 @@ function pawnsOnFile(c: Chess, file: string, color: 'w' | 'b'): number {
   return n;
 }
 
+/** The side to move wins at least `min` pawns' worth by a capture on this
+ *  board (the legal static exchange, anywhere). */
+function winsByCapture(fen: string, min: number): boolean {
+  try {
+    const gain = quietBalance(fen) - materialBalance(fen);
+    return (fen.split(' ')[1] === 'w' ? gain : -gain) >= min;
+  } catch { return false; }
+}
+
 /** `fen` with `color` to move, or null when that board cannot exist. */
 function withTurn(fen: string, color: 'w' | 'b'): Chess | null {
   // The one null-move rule (threatOut.sideToMoveAs, census 2026-10-10).
@@ -57,16 +69,30 @@ function heldResourceLine(fen: string): Omit<HeldResource, 'text' | 'check'> | n
   try { board = new Chess(fen); } catch { return null; }
   const them = board.turn();
   const me: 'w' | 'b' = them === 'w' ? 'b' : 'w';
+  // THEY TAKE FIRST (task 172): with material of the student's to win, their
+  // "natural developing move" is not what comes next — …Nxe5 in the
+  // Schliemann with dxe5 on the board said "once their knight comes to c3".
+  if (winsByCapture(fen, 1)) return null;
   const devs = board.moves({ verbose: true }).filter((m) => m.piece === 'n' && !m.captured
     && homeSquaresOf('n', them).includes(m.from));
   for (const d of devs) {
     const b1 = new Chess(fen);
     b1.move(d.san);
+    // …AND THE STUDENT TAKES WHAT IS WORTH MORE THAN A PAWN: with that to win
+    // once the knight has come out, the bishop move is not the move (…c6 hit
+    // the bishop on b5: after Nc3 it is …cxb5, a bishop for a pawn, never
+    // …Bb4). A pawn there for the taking does not change the plan (the Queen's
+    // Gambit's …dxc4 is on in every line where …Bb4 is the idea).
+    if (winsByCapture(b1.fen(), 2)) continue;
     for (const bm of b1.moves({ verbose: true })) {
       if (bm.piece !== 'b' || bm.captured) continue;
       const b2 = new Chess(b1.fen());
       b2.move(bm.san);
       if (!b2.attackers(d.to, me).includes(bm.to)) continue;
+      // THE SQUARE MUST BE THE BISHOP'S TO USE: a bishop that is simply taken
+      // there pins nothing ("the bishop check is still in hand" with a3
+      // played, axb4; with their queen on a4, Qxb4).
+      if (!landingIsSafe(b2.fen(), bm.to)) continue;
       // A PIN: lift the knight and the bishop sees their king.
       const probe = new Chess(b2.fen());
       probe.remove(d.to);
