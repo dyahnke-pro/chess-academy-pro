@@ -27,6 +27,12 @@ describe('givesUp — what a pawn move gives up for good', () => {
     expect(givesUp(after('e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3'), 'h6')).toEqual([]);
   });
 
+  it('no road through a square the mover\'s own pawn covers: Scotch …c6 leaves d6, but the knight cannot go via b5', () => {
+    // 1.e4 e5 2.Nf3 Nc6 3.Nc3 Nf6 4.d4 exd4 5.Nxd4 Bb4 6.Nxc6 bxc6 7.Bd3 d5 8.exd5 cxd5 9.O-O O-O 10.Bg5 c6
+    const g = givesUp(after('e4', 'e5', 'Nf3', 'Nc6', 'Nc3', 'Nf6', 'd4', 'exd4', 'Nxd4', 'Bb4', 'Nxc6', 'bxc6', 'Bd3', 'd5', 'exd5', 'cxd5', 'O-O', 'O-O', 'Bg5'), 'c6');
+    expect(g.flatMap((x) => x.reachedBy).some((r) => r.includes('via b5'))).toBe(false);
+  });
+
   it('a piece move gives up nothing by this measure', () => {
     expect(givesUp(after('e4'), 'Nf6')).toEqual([]);
   });

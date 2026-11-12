@@ -62,8 +62,14 @@ function minorsReaching(fen: string, sq: string, enemy: Color): string[] {
   const best = new Map<string, { piece: PieceSymbol; via: string | null }>();
   const moves = b.moves({ verbose: true }).filter((m) => m.piece === 'n' || m.piece === 'b');
   for (const m of moves) if (m.to === sq) best.set(m.from, { piece: m.piece, via: null });
+  // A stepping stone a pawn of the side that gave the square up still covers
+  // is no road there (the Four Knights Scotch …c6: the knight "via b5" ran
+  // into the new c6 pawn).
+  const after = new Chess(fen);
+  const guarded = (via: string): boolean => (['w', 'b'] as Color[]).filter((c) => c !== enemy).some((own) =>
+    after.board().flat().some((p) => p && p.type === 'p' && p.color === own && pawnAttacks(p.square, own).includes(via)));
   for (const m of moves) {
-    if (best.has(m.from) || m.to === sq) continue;
+    if (best.has(m.from) || m.to === sq || guarded(m.to)) continue;
     const b2 = withTurn(b.fen(), enemy);
     if (!b2) continue;
     try { b2.move({ from: m.from, to: m.to, promotion: m.promotion }); } catch { continue; }

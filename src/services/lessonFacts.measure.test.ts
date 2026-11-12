@@ -114,9 +114,12 @@ interface PlanRec { id: string; openingId: string; criticalPositionFen: string; 
 const PLANS = JSON.parse(readFileSync('src/data/middlegame-plans.json', 'utf8')) as PlanRec[];
 const boardKey = (fen: string): string => fen.split(' ').slice(0, 2).join(' ');
 function plansOnLine(openingId: string, moves: readonly string[]): PlanRec[] {
-  const c = new Chess(); const seen = new Set<string>([boardKey(c.fen())]);
-  for (const m of moves) { try { c.move(m); } catch { break; } seen.add(boardKey(c.fen())); }
-  return PLANS.filter((p) => p.openingId === openingId && seen.has(boardKey(p.criticalPositionFen)));
+  // A plan belongs to the line whose END it is anchored at (its last six
+  // plies): an anchor in the opening moves every line shares is another
+  // line's plan (trial 2: the Four Knights main plan printed on eight lines).
+  const c = new Chess(); const tail = new Set<string>();
+  moves.forEach((m, i) => { try { c.move(m); } catch { return; } if (i >= moves.length - 6) tail.add(boardKey(c.fen())); });
+  return PLANS.filter((p) => p.openingId === openingId && tail.has(boardKey(p.criticalPositionFen)));
 }
 
 describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
@@ -225,7 +228,19 @@ describe.skipIf(!ON)('the fact sheet a lesson is written from', () => {
           const diff = playedRead
             ? (recapture && prev ? lineDiff(prev.fen, [prev.uci, ...playedRead.pv], meColor, 9) : lineDiff(fen, playedRead.pv, meColor, 8))
             : null;
-          if (diff && diff.facts.length) md.push(`- second order (${recapture ? 'from the capture this move answers, ' : ''}the engine's line, ${diff.plies} moves: ${diff.sans.join(' ')}): ${diff.facts.join('; ')}`);
+          // A count the engine's own evaluation does not back is a line still
+          // sorting itself out (a take-back two moves later, a piece still
+          // trapped): say so, and name no material or structure from it
+          // (trial 2, 2026-11-12: "+3 for you" where the eval said level).
+          const countM = diff?.facts.find((f) => f.startsWith('material '));
+          const counted = countM ? Number(countM.split(' ')[1]) : 0;
+          const evalSeat = playedRead ? (meColor === 'w' ? playedRead.cp : -playedRead.cp) : null;
+          const unresolved = Boolean(countM && evalSeat !== null && Math.abs(counted * 100 - evalSeat) > 150);
+          if (diff && unresolved) {
+            md.push(`- second order: the engine's line (${diff.sans.join(' ')}) is still sorting out material where it ends (the count says ${counted > 0 ? '+' : ''}${counted}, the engine ${(evalSeat! / 100).toFixed(2)}): name no material or structure from it.`);
+          } else if (diff && diff.facts.length) {
+            md.push(`- second order (${recapture ? 'from the capture this move answers, ' : ''}the engine's line, ${diff.plies} moves: ${diff.sans.join(' ')}): ${diff.facts.join('; ')}`);
+          }
           const lost = givesUp(fen, san);
           if (lost.length) {
             const owner = seat === 'YOU' ? 'their' : 'your';
