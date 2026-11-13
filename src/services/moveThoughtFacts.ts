@@ -461,8 +461,10 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // Read through the registry's one door. Review reads the same rows from its
   // own facet builder, so it skips these here (`source` 'knownSlip').
   {
+    // The club index once loaded; the curated gems answer before it and where
+    // it holds nothing for a board (`knownSlipsAt`).
     const index = knownSlipIndexNow();
-    if (index) {
+    {
       const studentColor: 'w' | 'b' = mine === (sideOf(i.fenBefore) === 'w') ? 'w' : 'b';
       const told = i.history.length;
       const played = readBoardAll('knownSlip', { fen: i.fenBefore, gems: knownSlipsAt(index, i.fenBefore), played: i.san, student: studentColor, verdictPunish: null, saidNext: null, told });

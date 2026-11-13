@@ -28,11 +28,14 @@ describe('Review says the known slip ahead, both seats, on his Scotch Gambit gam
     expect(walk.get(5)).toContain('…f6 is a known mistake on this board, and after Bc4 they have the better game.');
   });
   it('4…Bc5: the trap set for them — called a trap because it clears the trap bar, its material counted off the line', () => {
-    expect(walk.get(8)).toContain('A known trap here: Nxd4, and after …Bxd4 you win two knights for a bishop and a pawn.');
+    // 4.Ng5?! (the curated gem, …Be7 +1.7) is said on ply 6 first, so the words
+    // have rotated by here.
+    expect(walk.get(6)).toContain('Here, Ng5 is a known mistake at club level: after …Be7 you have the better game.');
+    expect(walk.get(8)).toContain('Nxd4 is a known trap on this board, and after …Bxd4 you win two knights for a bishop and a pawn.');
   });
   it('their slip ahead is the student\'s chance ("you"), the student\'s own is "they"', () => {
-    expect(walk.get(10)).toContain('Qd5 is a known mistake on this board, and after …Qe7 you have the better game.');
-    expect(walk.get(11)).toContain('Here, …Kf8 is a known mistake at club level: after Bb3 they have the better game.');
+    expect(walk.get(10)).toContain('Here, Qd5 is a known mistake at club level: after …Qe7 you have the better game.');
+    expect(walk.get(11)).toContain('A known mistake here: …Kf8, and after Bb3 they have the better game.');
   });
   it('one a move, and a board the index holds no slip for says none', () => {
     for (const [ply, text] of walk) {

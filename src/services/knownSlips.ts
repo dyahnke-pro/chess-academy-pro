@@ -27,7 +27,7 @@ import { Chess } from 'chess.js';
 import { unmarked } from '../utils/sanMark';
 import { clubGemBoards, clubGemForIndex, type ClubGem } from './clubGems';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
-import { isWeaponGem } from '../data/lessons/punishGems';
+import { getAllPunishGems, isKnownSlipGem, isWeaponGem, MATE_CP } from '../data/lessons/punishGems';
 import { legalLineProof, type Proof } from './proof';
 import { lineSeatAt } from '../utils/andList';
 import { rotateStem } from '../utils/rotateStem';
@@ -74,9 +74,46 @@ function boardKey(fen: string): string {
   return fen.split(' ').slice(0, 4).join(' ');
 }
 
-/** The slips the index holds at this board, or none. */
+/** THE CURATED FALLBACK (fix 6, 2026-11-13): the hand-checked punish gems
+ *  (`punish-gems.json`, engine-verified at the quiet end of the punishment)
+ *  in the index's own shape, keyed by the board the slip is played from. Read
+ *  where the club index holds nothing for a board — a course's line the club
+ *  miner never walked, or the index not loaded yet. Only known mistakes and
+ *  traps (`isKnownSlipGem`); the calculator's own gems are the index's. */
+let curatedBoards: Record<string, ClubGem[]> | null = null;
+export function curatedSlipBoards(): Readonly<Record<string, readonly ClubGem[]>> {
+  if (curatedBoards) return curatedBoards;
+  const out: Record<string, ClubGem[]> = {};
+  for (const g of getAllPunishGems()) {
+    if (!isKnownSlipGem(g) || g.computed || g.punishSeq.length === 0) continue;
+    let fen: string;
+    let by: 'white' | 'black';
+    try {
+      const c = new Chess();
+      for (const m of g.lineMoves.split(/\s+/).filter(Boolean)) c.move(m);
+      fen = c.fen();
+      by = c.turn() === 'w' ? 'white' : 'black';
+      c.move(g.inaccuracy);
+    } catch { continue; }
+    const cp = g.engineCp ?? 0;
+    const mate = cp >= MATE_CP / 10 || /#$/.test(g.punishSeq[g.punishSeq.length - 1] ?? '');
+    (out[boardKey(fen)] ??= []).push({
+      tier: isWeaponGem(g) ? 'trap' : 'known',
+      line: g.lineMoves, slip: g.inaccuracy, by, best: null,
+      games: Math.round((g.games * g.freqPct) / 100), share: g.freqPct, moverScore: null,
+      punish: g.punishSeq.join(' '), mate, won: 0, endCp: mate ? 0 : cp, juice: (g.freqPct * Math.min(cp, 1000)) / 100,
+    });
+  }
+  curatedBoards = out;
+  return out;
+}
+
+/** The slips the index holds at this board — or, where it holds none, the
+ *  curated ones (`curatedSlipBoards`). */
 export function knownSlipsAt(index: KnownSlipIndex | null, fen: string): readonly ClubGem[] {
-  return index?.[boardKey(fen)] ?? [];
+  const key = boardKey(fen);
+  const club = index?.[key];
+  return club && club.length > 0 ? club : curatedSlipBoards()[key] ?? [];
 }
 
 /** Two moves are the same move on this board — by COORDINATES, never by SAN
