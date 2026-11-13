@@ -77,7 +77,11 @@ export type ThoughtSource =
   /** The club index's known mistakes and traps (`knownSlips`, the registry rows). */
   | 'knownSlip'
   /** What a costly move allows (`costReason` → `allowedClause`): the line that punishes it. */
-  | 'costReason';
+  | 'costReason'
+  /** What the move threatens two or three moves deep (`moveThreat`): the null-move line that wins material the board did not offer before. */
+  | 'moveThreat'
+  /** A gambit's idea and the engine's verdict (`gambitIdea`): what is given, what comes back, whether it pays. */
+  | 'gambitIdea';
 
 /** ONE FACT, the composer's only input — the one fact shape (`coachFact.ts`),
  *  its step derived from its kind, with what this composer ranks by: the
@@ -180,6 +184,9 @@ export const SOURCE_DEPTH: Record<ThoughtSource, 'hidden' | 'why'> = {
   // A known mistake and its punishment is a consequence the board hides.
   knownSlip: 'hidden',
   costReason: 'hidden',
+  // A threat is the move's reason: what it asks the opponent to answer.
+  moveThreat: 'why',
+  gambitIdea: 'why',
   deepFact: 'hidden', binding: 'hidden', bestLine: 'hidden', notYet: 'hidden', prophylaxis: 'hidden', baitSet: 'hidden',
   // What their move aims at now is the attack itself, one claim with the
   // other lines on its square (decision baseline 2026-11-12: "Their Qd8 is

@@ -368,6 +368,8 @@ export const COMPUTER_CATALOG = {
   computeBoardDelta: { file: 'services/boardDelta.ts', says: 'the lines a move opened and what it gave up' },
   correctionAgainstHeard: { file: 'services/reviewFullData.ts', says: 'the deeper read correcting the grade heard live' },
   errorWhy: { file: 'services/inaccuracyCall.ts', says: 'what a costly move allowed or missed, with the line that shows it' },
+  gambitIdea: { file: 'services/gambitIdea.ts', says: 'a gambit: what the move gives, what comes back along the line that takes it, and whether the engine says it pays' },
+  moveThreat: { file: 'services/moveThreat.ts', says: 'what a move threatens two or three moves deep: the null-move line that wins material the board did not offer before' },
   allowedClause: { file: 'services/costReason.ts', says: 'what a costly move allows: the punishing line, from the student\'s seat' },
   tacticInvariant: { file: 'services/conceptEngine.ts', says: 'the rule a tactic rests on, said where the student missed it' },
   renderFundamentalVerdict: { file: 'services/principleVoice.ts', says: 'the fundamental a move broke and how to keep it' },

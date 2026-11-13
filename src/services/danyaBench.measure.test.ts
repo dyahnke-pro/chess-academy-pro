@@ -88,6 +88,11 @@ interface Position {
   prev: PrevCaptureContext;
   before: Read[];
   after: Read[];
+  /** The null-move reads (`scripts/bench/pass-reads.mjs`, the app's one null
+   *  move): the other side to move before, the mover again after — what the
+   *  threat readers read. Empty where the run has none. */
+  passBefore: Read[];
+  passAfter: Read[];
   /** The engine's best move before, and its best reply after (none when the read is empty). */
   best: Read | undefined;
   reply: Read | undefined;
@@ -145,6 +150,15 @@ function loadPositions(): Position[] {
       if (r.before) reads.set(r.id, { before: r.before, after: r.after ?? [] });
     }
   }
+  const passes = new Map<string, { passBefore: Read[]; passAfter: Read[] }>();
+  for (const f of readdirSync(READS).filter((x) => /^pass-\d+\.jsonl$/.test(x))) {
+    for (const line of readFileSync(`${READS}/${f}`, 'utf8').split('\n')) {
+      if (!line) continue;
+      let r: { id: string; passBefore?: Read[]; passAfter?: Read[] };
+      try { r = JSON.parse(line); } catch { continue; }
+      if (r.passBefore || r.passAfter) passes.set(r.id, { passBefore: r.passBefore ?? [], passAfter: r.passAfter ?? [] });
+    }
+  }
   const out: Position[] = [];
   for (const [id, r] of reads) {
     const note = byId.get(id);
@@ -171,7 +185,7 @@ function loadPositions(): Position[] {
     const student: 'w' | 'b' = note.studentSide === 'white' ? 'w' : 'b';
     out.push({
       note, own: mover === student, mover, student, fenBefore, san: mv.san, to: mv.to, fenAfter: c.fen(),
-      history: note.lineSan.slice(0, -1), theirLast, prev, before: r.before, after: r.after, best: r.before.at(0), reply: r.after.at(0),
+      history: note.lineSan.slice(0, -1), theirLast, prev, before: r.before, after: r.after, passBefore: passes.get(id)?.passBefore ?? [], passAfter: passes.get(id)?.passAfter ?? [], best: r.before.at(0), reply: r.after.at(0),
       ahead: aheadOf.get(id) ?? [],
     });
   }
@@ -202,7 +216,7 @@ function uciOf(fen: string, san: string): string | null {
 /** Mover-POV cost of the played move, from the two cached reads. */
 /** The engine's reads around the move, as the lesson generator reads them. */
 function readsOf(p: Position): IntentReads | null {
-  return p.before.length || p.after.length ? { before: linesOf(p.before), after: linesOf(p.after), passBefore: [], passAfter: [] } : null;
+  return p.before.length || p.after.length ? { before: linesOf(p.before), after: linesOf(p.after), passBefore: linesOf(p.passBefore), passAfter: linesOf(p.passAfter) } : null;
 }
 
 /** THE reason for the move he explains, as the chat reads it. */
@@ -227,12 +241,12 @@ type Kind =
   | 'line' | 'habit' | 'theory' | 'mate' | 'material' | 'endgame' | 'trap' | 'rescue';
 
 const LEXICON: Record<Kind, RegExp> = {
-  develop: /\b(develop(s|ed|ing|ment)?|bring(s|ing)? (out|into play)|fianchett\w*)\b/,
+  develop: /\b(develop(s|ed|ing|ment)?|bring(s|ing)? (out|into play)|fianchett\w*|open(s|ing)? (the|a) (diagonal|line|way) for (the|your|their|its) (\w+ )?(bishop|queen|rook))\b/,
   castle: /\b(castl(e|es|ed|ing)|o-o)\b/,
   center: /\b(cent(re|er|ral|res|ers))\b/,
   space: /\b(space|clamp|gain(s|ing)? ground|cramp(s|ed)?)\b/,
   break: /\b(break|break(s|ing)? up|base of the (pawn )?chain|strike(s|ing)? at|undermin\w*|lever)\b/,
-  attack: /\b(attack(s|ing|ed)?|attackers?|hit(s|ting)?|pressure|eye(s|ing)?|target(s|ing)?|threat\w*|go(es)? after|aim(s|ed|ing)? at|pil(e|es|ed|ing) (up )?(on|onto)|lean(s|ing)? on|bear(s|ing)? down)\b/,
+  attack: /\b(attack(s|ing|ed)?|attackers?|hit(s|ting)?|pressure|eye(s|ing)?|target(s|ing)?|threat\w*|go(es)? after|aim(s|ed|ing)? at|pil(e|es|ed|ing) (up )?(on|onto)|lean(s|ing)? on|bear(s|ing)? down|put(s|ting)? the question to)\b/,
   defend: /\b(defen(d|ds|ded|ding|ce|se|der)|protect\w*|guard\w*|support\w*|shield\w*|cover(s|ed|ing)?)\b/,
   pin: /\b(pin(s|ned|ning)?)\b/,
   fork: /\bfork\w*/,
@@ -242,7 +256,7 @@ const LEXICON: Record<Kind, RegExp> = {
   capture: /\b(captur\w*|take(s)? (back|on)|recaptur\w*|win(s|ning)? (a|the) (pawn|piece|knight|bishop|rook|queen|exchange)|grab\w*(?! the [a-h][1-8]-square))\b/,
   prevent: /\b((refus\w*|not|never|without|won't|doesn't|does not) (to )?(walk\w* into|allow\w*)|avoiding|keep(s|ing)? \w+ (\w+ )?from|can no longer|prevent\w*|stop(s|ping)?|deny|denies|denying|take(s)? away|keep(s|ing)? \w+ (\w+ )?(off|out)|prophyla\w*|rule(s)? out|so that \w+ (can't|cannot)|restrain\w*|restrict\w*|blockad\w*)\b/,
   prepare: /\b(prepar\w*|make(s)? room|clear(s|ing)? the way|open(s|ing)? the way|ready to|so that|in order to|paving|set(s|ting)? up|invit(e|es|ing))\b/,
-  tempo: /\b(tempo|tempi|kick(s|ing)?|chase(s|d)?|gain(s|ing)? (a )?time)\b/,
+  tempo: /\b(tempo|tempi|kick(s|ing)?|chase(s|d)?|gain(s|ing)? (a )?time|put(s|ting)? the question to)\b/,
   'king-safety': /\b(tuck\w* (\w+ )?king|king\w* tucks?|king (\w+ )?(to )?safe(ty|ly)|king safety|safe king|exposed|luft|shelter|escape square|attack(ing)? the king|king('s)? (is )?(safe|exposed|stuck))\b/,
   weakness: /\b(concede(s|d)? (the|a) [\w-]+|gives? up control|weak(ness|nesses|en|ens|ened|ening)?|isolat\w*|doubled|backward|hole(s)?)\b/,
   structure: /\b(pawn structure|pawn chain|structure|chain)\b/,
@@ -257,7 +271,7 @@ const LEXICON: Record<Kind, RegExp> = {
   habit: /\b((?<!almost )always|whenever|never|rule of thumb|principle|remember|habit|ask yourself|get used to|in general|typical(ly)?)\b/,
   theory: /\b(transpos\w*|main ?line|theory|theoretical|book|popular|most common|the masters|classical|standard|mainstream|rarely played|seldom played|(main|usual|normal) move|master (play|games?|practice)|(better|superior|good|poor|bad) record|top[- ]level|grandmasters?)\b/,
   mate: /\b(mate|checkmate|mating)\b/,
-  material: /\b(material|pawn up|piece up|up a (pawn|piece)|down a (pawn|piece)|extra pawn|exchange up|sacrific\w*|gambit\w*|for the pawn|a pawn down|pawn for)\b/,
+  material: /\b(material|pawn up|piece up|up a (pawn|piece)|down a (pawn|piece)|extra pawn|exchange up|sacrific\w*|gambit\w*|for the pawn|a pawn down|pawn for|win(s|ning)? (a|the|two) (pawn|piece|knight|bishop|rook|queen|exchange)s?|win(s|ning)? (it|\w+) back|regain\w*|free (pawn|piece))\b/,
   endgame: /\b(endgame|ending|promot\w*|passed pawn|passer|opposition|queening)\b/,
   trap: /\btrap(s|ped|ping)?\b/,
   // A RESCUE (Build 5): his "retreats", "steps away", "saves the …" had no kind
@@ -483,10 +497,8 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
     if (!best || uciOf(p.fenBefore, p.san) !== best.uci) return null;
     return bestMoveReason(p.fenBefore, p.san, p.mover, { mateIn: best.mate !== null ? Math.abs(best.mate) : null, prevCapture: p.prev });
   },
-  // The null-move passes are not cached yet, so this reads only what the
-  // two real reads can prove (prevents/prepares that need a pass stay quiet).
   moveIntent: (p) => moveIntent(p.fenBefore, p.san,
-    { before: linesOf(p.before), passBefore: [], after: linesOf(p.after), passAfter: [] },
+    { before: linesOf(p.before), passBefore: linesOf(p.passBefore), after: linesOf(p.after), passAfter: linesOf(p.passAfter) },
     p.own ? 'student' : 'opponent')?.text ?? null,
   deepFact: (p) => deepFact(p.fenBefore, p.san, lineAhead(p), p.own)?.text ?? null,
   theirTarget: (p) => theirTarget(p.theirLast, p.own)?.text ?? null,
@@ -554,6 +566,8 @@ const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
   moveGains: 'services/moveStops.ts#moveStops',
   knownSlip: 'services/knownSlips.ts#knownSlip',
   costReason: 'services/costReason.ts#allowedClause',
+  moveThreat: 'services/moveThreat.ts#moveThreat',
+  gambitIdea: 'services/gambitIdea.ts#gambitIdea',
   moveWhy: 'services/deliberation.ts#moveWhy',
   briefing: 'services/reviewMoveBriefing.ts#buildReviewMoveBriefing',
   boardTeacher: 'services/reviewMoveTeaching.ts#buildReviewMoveTeachingFact',

@@ -97,19 +97,23 @@ EXTRA = {
     'prepare': r"\b(set(s|ting)? up|invit(e|es|ing))\b",
     'activity': r"\b(on the rim|stranded|misplaced|swing(s|ing)?|head(s|ing)? (for|to|toward)|on (its|the) way to|by way of|transit|send(s|ing)? the (knight|bishop|rook|queen|king) (on )?to|then (the )?(knight|bishop|rook|queen|king) (to|on to|goes|heads|comes))\b",
     'defend': r"\bcover(s|ed|ing)?\b",
-    'attack': r"\b(aim(s|ed|ing)? at|attackers?|pil(e|es|ed|ing) (up )?(on|onto)|lean(s|ing)? on|bear(s|ing)? down)\b",
     # THE TAGGER CHECK (2026-11-12, 50 of his notes read by hand): 17 ideas
     # missed, prophylaxis 2 of 3. Each line below is a miss from that read.
     'prevent': r"\b((refus\w*|not|never|without|won't|doesn't|does not) (to )?(walk\w* into|allow\w*)|avoiding|keep(s|ing)? \w+ (\w+ )?from|can no longer)\b",
     'break': r"\b(break(s|ing)? up|base of the (pawn )?chain)\b",
     'structure': r"\bchain\b",
     'diagonal': r"\bfianchett\w*",
-    'develop': r"\bfianchett\w*",
     'king-safety': r"\b(tuck\w* (\w+ )?king|king\w* tucks?|king (\w+ )?(to )?safe(ty|ly))\b",
     'weakness': r"\b(concede(s|d)? (the|a) [\w-]+|gives? up control)\b",
     'theory': r"\b(transpos\w*|rarely played|seldom played|(main|usual|normal) move|master (play|games?|practice)|(better|superior|good|poor|bad) record|top[- ]level|grandmasters?)\b",
     # THE WIKIBOOKS CHECK (2026-11-12): a sacrifice and a gambit are material.
-    'material': r"\b(sacrific\w*|gambit\w*|for the pawn|a pawn down|pawn for)\b",
+    # THE SCORER CHECK (2026-11-13, 50 misses read by hand): the coach said the
+    # idea in other words — "opens the diagonal for the bishop" is development,
+    # "wins a pawn" is material, "putting the question to" is the kick.
+    'material': r"\b(sacrific\w*|gambit\w*|for the pawn|a pawn down|pawn for|win(s|ning)? (a|the|two) (pawn|piece|knight|bishop|rook|queen|exchange)s?|win(s|ning)? (it|\w+) back|regain\w*|free (pawn|piece))\b",
+    'develop': r"\b(fianchett\w*|open(s|ing)? (the|a) (diagonal|line|way) for (the|your|their|its) (\w+ )?(bishop|queen|rook))\b",
+    'attack': r"\b(aim(s|ed|ing)? at|attackers?|pil(e|es|ed|ing) (up )?(on|onto)|lean(s|ing)? on|bear(s|ing)? down|put(s|ting)? the question to)\b",
+    'tempo': r"\b(put(s|ting)? the question to)\b",
 }
 
 def extended():

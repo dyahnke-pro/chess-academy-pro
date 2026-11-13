@@ -64,6 +64,8 @@ import type { WeighRead } from './weighedMoves';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { INACCURACY_CP, MISTAKE_CP } from './engineConstants';
 import { allowedClause, costReason } from './costReason';
+import { moveThreat } from './moveThreat';
+import { gambitIdea } from './gambitIdea';
 
 export interface MoveThoughtInput {
   fenBefore: string;
@@ -225,6 +227,18 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // its kind in a lesson or a game (the WHY rule), then the change alone.
     const verb = a.horizon && horizonSaid(i.phrases, a.kind) ? `${a.verb}${a.horizon}` : a.verb;
     add(a.kind, 'moveAspects', 'briefing', a.idea, lead(verb), `It also ${verb}`, a.squares, a.weight, a.restates === true);
+  }
+
+  // WHAT THE MOVE THREATENS, DEEPER (fix 3, 2026-11-13): the one-move threat
+  // above is the briefing's; a threat two or three moves long (Bg5 → Bxf6 and
+  // cxd5) is read off the null-move line (`moveThreat`). Not on a costly move:
+  // its line is what it allows, said below.
+  const oneMoveThreat = (read?.aspects ?? []).some((a) => a.kind === 'aspect-threat');
+  if (!oneMoveThreat && i.reads && i.reads.passAfter.length > 0 && (i.costCp === null || i.costCp < MISTAKE_CP)) {
+    const mover = sideOf(i.fenBefore);
+    const studentWB: 'w' | 'b' = mine || i.moverIsStudent === undefined ? mover : mover === 'w' ? 'b' : 'w';
+    const t = moveThreat(i.fenBefore, i.san, { before: i.reads.before, after: i.reads.after, passAfter: i.reads.passAfter }, studentWB);
+    if (t) add('aspect-threat', 'moveThreat', 'moveThreat', 'threat', lead(t.clause), `It also ${t.clause}`, t.squares, 86, false);
   }
 
   // WHAT A COSTLY MOVE ALLOWS (fix 1, 2026-11-13): a move the engine grades a
@@ -681,7 +695,19 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       }
     }
     let standingSaid = false;
-    if (after0 && after0.mate == null) {
+    // A GAMBIT (fix 4, 2026-11-13): what the move gives, what comes back along
+    // the line that takes it, and the engine's verdict, said apart ("offers a
+    // pawn: if they play dxc3 and you answer Nxc3, you're a piece ahead in
+    // development. The engine calls it about level"). It is the standing for
+    // this move, so compensation does not say it again.
+    if (i.reads && i.reads.after.length > 0) {
+      const g = gambitIdea(i.fenBefore, i.san, i.reads.after, student);
+      if (g) {
+        add('compensation', 'gambitIdea', 'gambitIdea', 'eval', `${lead(g.clause)}. ${g.verdict}`, `It ${g.clause}. ${g.verdict}`, g.squares, 80, false, [`gambit:${g.sans[0]}`]);
+        standingSaid = true;
+      }
+    }
+    if (!standingSaid && after0 && after0.mate == null) {
       for (const f of readBoardAll('compensation', { fenAfter, student, studentCp: after0.evaluation * (student === 'w' ? 1 : -1), line: after0.moves })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'eval', weight: 48 });
         standingSaid = true;

@@ -204,6 +204,19 @@ export function gainWords(took: readonly string[], gave: readonly string[], prom
   return caps ? `${caps}, and ${made}` : made;
 }
 
+/** WHAT A LINE NETS IN MATERIAL, by piece: a bishop for a knight is no
+ *  material, so the minors cancel before naming (Bxf6 …exf6 cxd5 wins "a
+ *  pawn", never "a knight and a pawn"). The threat and gambit readers say
+ *  what is won or given through this one wording. */
+export function materialGainWords(ledger: ExchangeLedger): string | null {
+  const took = [...ledger.studentWon];
+  const gave = [...ledger.opponentWon];
+  for (const [a, b] of [['n', 'b'], ['b', 'n']] as const) {
+    while (took.includes(a) && gave.includes(b)) { took.splice(took.indexOf(a), 1); gave.splice(gave.indexOf(b), 1); }
+  }
+  return gainWords(took, gave, ledger.studentPromoted);
+}
+
 /** The pieces made by promotion in these moves (SAN: "a1=Q" makes a queen). */
 export function promotedIn(sans: readonly string[]): PieceLetter[] {
   const out: PieceLetter[] = [];

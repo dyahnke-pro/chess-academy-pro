@@ -53,10 +53,27 @@ export function compensation(fenAfter: string, student: Color, studentCp: number
   if (mine <= -1 && studentCp >= -50) { comp = student; down = Math.round(-mine); }
   else if (mine >= 1 && studentCp <= 50) { comp = student === 'w' ? 'b' : 'w'; down = Math.round(mine); }
   if (!comp || down < 1) return null;
+  const { reasons, squares } = compensationReasons(board, comp, student);
+  if (!reasons.length) return null;
+  const compCp = comp === student ? studentCp : -studentCp;
+  const band = evalBandWords(evalBand(compCp), compCp >= 0 ? 'better' : 'worse');
+  const who = comp === student ? 'you' : 'they';
+  const pawns = down === 1 ? 'a pawn' : `${NUM[down] ?? down} pawns`;
+  const bandWords = band === 'level' ? 'it is about level' : `${who === 'you' ? "you're" : "they're"} ${band}`;
+  const why = reasons.length === 1 ? reasons[0] : `${reasons.slice(0, -1).join(', ')} and ${reasons.at(-1)}`;
+  const text = `${who === 'you' ? "You're" : "They're"} ${pawns} down, but ${bandWords}: ${why}.`;
+  return { who, down, band, reasons, squares, text };
+}
+
+/** WHAT PAYS FOR MATERIAL, read off the board (the one list: `compensation`
+ *  and `gambitIdea` both say it): a development lead of two pieces, the other
+ *  king still in the middle while this side has castled, the bishop pair, an
+ *  advanced passed pawn. Worded from the student's seat. */
+export function compensationReasons(board: Chess, comp: Color, student: Color, minLead = 2): { reasons: string[]; squares: string[] } {
   const other: Color = comp === 'w' ? 'b' : 'w';
   const reasons: string[] = []; const squares: string[] = [];
   const lead = developedMinorCount(board, comp) - developedMinorCount(board, other);
-  if (lead >= 2) reasons.push(`${comp === student ? "you're" : "they're"} ${NUM[lead] ?? lead} pieces ahead in development`);
+  if (lead >= minLead) reasons.push(`${comp === student ? "you're" : "they're"} ${lead === 1 ? 'a piece' : `${NUM[lead] ?? lead} pieces`} ahead in development`);
   const ok = kingOf(board, other);
   if (middle(ok) && castled(kingOf(board, comp), comp)) { reasons.push(`${comp === student ? 'their' : 'your'} king is still in the middle`); if (ok) squares.push(ok); }
   if (bishops(board, comp) === 2 && bishops(board, other) < 2) reasons.push(`${comp === student ? 'you have' : 'they have'} the bishop pair`);
@@ -67,13 +84,5 @@ export function compensation(fenAfter: string, student: Color, studentCp: number
     const passed = !board.board().flat().some((q) => q && q.type === 'p' && q.color === other && Math.abs(q.square.charCodeAt(0) - p.square.charCodeAt(0)) <= 1 && (comp === 'w' ? Number(q.square[1]) > rank : Number(q.square[1]) < rank));
     if (passed) { reasons.push(`${comp === student ? 'your' : 'their'} passed pawn on ${p.square}`); squares.push(p.square); }
   }
-  if (!reasons.length) return null;
-  const compCp = comp === student ? studentCp : -studentCp;
-  const band = evalBandWords(evalBand(compCp), compCp >= 0 ? 'better' : 'worse');
-  const who = comp === student ? 'you' : 'they';
-  const pawns = down === 1 ? 'a pawn' : `${NUM[down] ?? down} pawns`;
-  const bandWords = band === 'level' ? 'it is about level' : `${who === 'you' ? "you're" : "they're"} ${band}`;
-  const why = reasons.length === 1 ? reasons[0] : `${reasons.slice(0, -1).join(', ')} and ${reasons.at(-1)}`;
-  const text = `${who === 'you' ? "You're" : "They're"} ${pawns} down, but ${bandWords}: ${why}.`;
-  return { who, down, band, reasons, squares, text };
+  return { reasons, squares };
 }
