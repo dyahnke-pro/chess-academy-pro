@@ -63,6 +63,10 @@ export function moveThreat(
   try {
     const c = new Chess(fenBefore);
     mover = c.turn();
+    // An escape from check makes no threat of its own: what the pass line
+    // wins after it was there before (bench 2026-11-13: Kh1 out of …Bxh2+
+    // "threatens" the fork Nxd8+ the knight on c6 already had).
+    if (c.inCheck()) return null;
     const m = c.move(san);
     playedUci = `${m.from}${m.to}${m.promotion ?? ''}`;
     if (c.inCheck()) return null; // a check is its own beat
@@ -95,8 +99,10 @@ export function moveThreat(
   if (net === null || net < 1) return null;
   // It is new: the best line before the move did not already win this much
   // (unless that line IS this move).
-  const b0 = reads.before[0];
-  if (b0 && b0.moves.length > 0 && b0.moves[0] !== playedUci) {
+  // It is new: the mover's best line before the move — the best one that is
+  // not this move — did not already win this much.
+  const b0 = reads.before.find((l) => l.moves.length > 0 && l.moves[0] !== playedUci);
+  if (b0) {
     const before = settledNetForLine(fenBefore, sansOf(fenBefore, b0.moves, LINE_PLIES), mover);
     if (before !== null && before >= net) return null;
   }

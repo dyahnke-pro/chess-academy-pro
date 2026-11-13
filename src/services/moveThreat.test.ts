@@ -42,4 +42,11 @@ describe('moveThreat', () => {
     }, 'w');
     expect(t?.clause).toBe('threatens mate in two: you play Qe8+, they answer Rxe8 and you play Rxe8#');
   });
+  // Bench 2026-11-13: Kh1 out of …Bxh2+ was said to threaten the fork Nxd8+
+  // that the knight on c6 already had.
+  it('an escape from check makes no threat of its own', () => {
+    const fen = 'r1bqk2r/1pp2ppp/p1N5/3p4/B3n3/8/PPP2PPb/RNBQR1K1 w kq - 0 10';
+    const any = [{ moves: ['c6d8'], evaluation: 900, mate: null, depth: 14 } as unknown as AnalysisLine];
+    expect(moveThreat(fen, 'Kh1', { before: any, after: any, passAfter: any }, 'w')).toBeNull();
+  });
 });

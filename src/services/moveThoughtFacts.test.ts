@@ -366,4 +366,12 @@ describe('a costly move is said with what it allows (fix 1, 2026-11-13)', () => 
       [{ cp: null, mate: -1, pv: ['h4e4'] }], 9999);
     expect(said).toMatch(/Qxe4#/);
   });
+  // Bench 2026-11-13: the surface's cost is null for a mate read (no number),
+  // and 3.Ke2?? in the Scandinavian was said to "prepare Qe1".
+  it('a move that walks into mate is said so even when the cost is not a number', () => {
+    const facts = moveThoughtFacts({ story: false, theory: false, tense: 'now', fenBefore: 'rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3', san: 'Ke2', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: [], theirLast: null,
+      reads: { before: L([{ cp: 0, mate: null, pv: ['b1c3', 'd5a5'] }]), after: L([{ cp: null, mate: -1, pv: ['d5e4'] }]), passBefore: [], passAfter: [] }, costCp: null, phrases: newLessonVoice().phrases });
+    expect(facts.map((f) => f.text).join(' ')).toMatch(/walks into mate: they play …?Qe4#/);
+    expect(facts.map((f) => f.text).join(' ')).not.toMatch(/prepares/);
+  });
 });

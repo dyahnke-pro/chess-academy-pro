@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
 import type { AnalysisLine } from '../types';
 import { gambitIdea } from './gambitIdea';
 
@@ -32,5 +33,19 @@ describe('gambitIdea', () => {
   });
   it('nothing when the engine declines the material (its lines do not take)', () => {
     expect(gambitIdea(GORING, 'c3', GORING_AFTER.slice(1), 'w')).toBeNull();
+  });
+  // Wikibooks bench positions read by hand (2026-11-13), real engine reads.
+  // Not gambits: the piece taken was already hanging (Kh1 — an escape from
+  // check, O-O, …Nd6), an even trade (Bxc6), a free pawn not taken (…Bf5), a
+  // bishop for a knight (…g5). Gambits: Bd3 leaves d4, g4 (Devin), f4 (Vienna).
+  describe('read on the bench', () => {
+    const cases = JSON.parse(readFileSync('src/test/fixtures/gambit-cases.json', 'utf8')) as Array<{ id: string; san: string; fen: string; after: Array<{ moves: string[]; evaluation: number; mate: number | null }> }>;
+    const at = (id: string) => { const c = cases.find((x) => x.id === id)!; return gambitIdea(c.fen, c.san, read(c.after), c.fen.split(' ')[1] as 'w' | 'b'); };
+    it.each(['vc-wb_e4_e5-242', 'vc-wb_e4_c5-44', 'vc-wb_e4_e5-139', 'vc-wb_d4_d5-46', 'vc-wb_d4_d5-106', 'vc-wb_e4_e5-28'])('%s is no gambit', (id) => {
+      expect(at(id)).toBeNull();
+    });
+    it.each(['vc-wb_e4_c6-12', 'vc-wb_d4_Nf6-127', 'vc-wb_e4_e5-215'])('%s offers a pawn', (id) => {
+      expect(at(id)?.clause).toMatch(/^offers a pawn/);
+    });
   });
 });

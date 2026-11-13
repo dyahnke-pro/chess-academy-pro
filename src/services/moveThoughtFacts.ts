@@ -62,9 +62,10 @@ import { moveOrder } from './moveOrder';
 import { readBoardAll, readKey } from './boardComputers';
 import type { WeighRead } from './weighedMoves';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
-import { INACCURACY_CP, MISTAKE_CP } from './engineConstants';
+import { BLUNDER_CP, INACCURACY_CP, MATE_EVAL_VALUE, MISTAKE_CP } from './engineConstants';
 import { allowedClause, costReason } from './costReason';
 import { moveThreat } from './moveThreat';
+import type { AnalysisLine } from '../types';
 import { gambitIdea } from './gambitIdea';
 
 export interface MoveThoughtInput {
@@ -248,12 +249,19 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // wins a queen for a bishop" and nothing of …Bxf2+ Ke2 Bg4#; Ke2 allowing
   // …Qxe4# said a model game's name and nothing else.
   const after0r = i.reads?.after[0];
-  if (i.costCp !== null && i.costCp >= MISTAKE_CP && after0r && after0r.moves.length > 0) {
+  // A MOVE THAT WALKS INTO A FORCED MATE costs everything, though no
+  // centipawn number says so (a mate read has none — bench 2026-11-13: the
+  // Scandinavian's 3.Ke2?? allowing …Qe4# was said to "prepare Qe1").
+  const moverOfMove = sideOf(i.fenBefore);
+  const matedAfter = (l: AnalysisLine | undefined): boolean => !!l && l.mate !== null && l.mate !== undefined && (moverOfMove === 'w' ? l.mate < 0 : l.mate > 0);
+  const allowsMate = matedAfter(after0r) && !matedAfter(i.reads?.before[0]);
+  const costOrMate = allowsMate ? Math.max(i.costCp ?? 0, MATE_EVAL_VALUE) : i.costCp;
+  if (costOrMate !== null && costOrMate >= MISTAKE_CP && after0r && after0r.moves.length > 0) {
     const mover = sideOf(i.fenBefore);
     const studentWB: 'w' | 'b' = mine ? mover : mover === 'w' ? 'b' : 'w';
     const earlier = after0r.earlier?.moves;
     const r = costReason({
-      fenBefore: i.fenBefore, playedSan: i.san, mover, student: studentWB, costCp: i.costCp,
+      fenBefore: i.fenBefore, playedSan: i.san, mover, student: studentWB, costCp: costOrMate,
       after: { uci: after0r.moves, source: 'deep', seconds: earlier && earlier.length > 0 ? [earlier] : [] },
       before: null, priorMove: null, against: i.reads?.before[0]?.moves ?? null,
     });
@@ -933,6 +941,12 @@ export function studentMoveFacts(i: Omit<MoveThoughtInput, 'phrases'>): ThoughtF
 function purposeFact(i: Omit<MoveThoughtInput, 'phrases'>, voice: LessonVoice): ThoughtFact | null {
   if (!i.reads || i.moverIsStudent === undefined) return null;
   if (i.reads.passBefore.length === 0 && i.reads.passAfter.length === 0) return null;
+  // A MOVE THAT LOSES BIG PREPARES NOTHING worth saying: its plan never
+  // arrives (3.Ke2?? "prepares Qe1" beside …Qe4#). What it allows is said.
+  const moverWB = sideOf(i.fenBefore);
+  const a0 = i.reads.after[0];
+  const mated = !!a0 && a0.mate !== null && a0.mate !== undefined && (moverWB === 'w' ? a0.mate < 0 : a0.mate > 0);
+  if (mated || (i.costCp !== null && i.costCp >= BLUNDER_CP)) return null;
   const seat: FactSeat = i.moverIsStudent ? 'student' : 'opponent';
   // The line the lesson goes on with: a move it plays was not "stopped".
   const lineAfter: string[] = [];
