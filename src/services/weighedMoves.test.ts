@@ -235,7 +235,7 @@ describe('through the one registry, to every surface', () => {
 
   it('the lesson composer is handed them (the fan before the move stands in for the reads)', () => {
     const g = game('8urm2D1HhX8');
-    const facts = moveThoughtFacts({ theory: true, tense: 'now', fenBefore: g.fenBefore, san: g.played, moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: [], phrases: null,
+    const facts = moveThoughtFacts({ story: false, theory: true, tense: 'now', fenBefore: g.fenBefore, san: g.played, moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: [], phrases: null,
       reads: { before: g.reads.map((r, i) => ({ rank: i + 1, evaluation: r.evaluation, mate: r.mate, moves: [...r.moves] })), passBefore: [], after: [], passAfter: [] }, costCp: null });
     expect(facts.filter((f) => f.source === 'weighed').map((f) => f.text)).toContain('Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.');
   });

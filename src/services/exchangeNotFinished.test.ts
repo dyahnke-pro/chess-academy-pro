@@ -275,7 +275,7 @@ describe('a fact that only restates the board never silences the one that says w
     const games = (JSON.parse(readFileSync('src/test/fixtures/learn-replay-games.json', 'utf8')) as { games: (ReplayGame & { id: string })[] }).games;
     const p = replayPlies(games.find((g) => g.id === 'sicilianClosed1000')!)[45];
     expect(p.san).toBe('Bxe4');
-    const said = lessonThought({ theory: true,
+    const said = lessonThought({ story: false, theory: true,
       fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own, line: p.line, theirLast: p.theirLast, history: p.history,
       reads: { before: linesOf(p.before), after: linesOf(p.after), passBefore: [], passAfter: [] }, costCp: p.costCp,
     }, newLessonVoice(), null);

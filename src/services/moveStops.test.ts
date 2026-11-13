@@ -10,14 +10,14 @@ describe('moveStops', () => {
     const stops = moveStops(fenAfter('e4 e5 Nf3 Nc6 Bc4 Bc5 d3 d6'), 'h3', true);
     const pin = stops.find((s) => s.san === '…Bg4');
     expect(pin?.kind).toBe('pin');
-    expect(pin?.would).toBe('would pin your knight on f3 against your queen on d1');
+    expect(pin?.would).toBe('would pin your knight on f3 against your queen');
   });
   it("a move that stops nothing says nothing", () => {
     expect(moveStops(new Chess().fen(), 'e4', true)).toEqual([]);
   });
   it("the opponent's stop is said in their seat", () => {
     const stops = moveStops(fenAfter('e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3'), 'h6', false);
-    expect(stops.find((s) => s.san === 'Bg5')?.would ?? '').toMatch(/their knight on f6 against their queen on d8/);
+    expect(stops.find((s) => s.san === 'Bg5')?.would ?? '').toMatch(/their knight on f6 against their queen/);
   });
 });
 
@@ -31,7 +31,7 @@ describe('a stopped check is said only when the check wins something', () => {
 describe('the new stops (prevention, 2026-11-12)', () => {
   it("…d6 in the King's Indian: e5 no longer kicks the knight for free", () => {
     const stops = moveStops('rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4', 'd6', true);
-    expect(stops.map((s) => s.clause)).toContain("means e5 can't kick your knight on f6 for free any more: …dxe5 now meets it");
+    expect(stops.map((s) => s.clause)).toContain('means …dxe5 now answers e5, which would kick your knight on f6');
   });
   it('2.e5 against the Sicilian takes f6 away from their knight', () => {
     const stops = moveStops('rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', 'e5', true);

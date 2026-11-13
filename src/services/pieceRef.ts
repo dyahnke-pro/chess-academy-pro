@@ -72,3 +72,15 @@ export function pieceRef(fen: string, square: string, viewer: Color): PieceRef |
   }
   return withSquare(`${owner} ${NAME[piece.type]}`);
 }
+
+/** The same name for a producer that words the seat itself ("your" / "their"
+ *  as `owner`): the viewer is read off whose piece stands there. `fallback`
+ *  when the square is empty or the board does not load. */
+export function seatPieceWords(fen: string, square: string, owner: string, fallback: string): string {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return fallback; }
+  const piece = board.get(square as Square);
+  if (!piece) return fallback;
+  const viewer: Color = owner === 'your' ? piece.color : piece.color === 'w' ? 'b' : 'w';
+  return pieceRef(fen, square, viewer)?.words ?? fallback;
+}

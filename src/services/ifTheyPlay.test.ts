@@ -162,7 +162,7 @@ describe('the lesson composer is handed the tree', () => {
   it('…Nc4 in his game: "if they take on e5, you take back with the knight"', () => {
     const r = row('1rcEbI44WqE', 47);
     const fenBefore = '1nkr3r/1pp1b1pp/4pp2/2P1P3/b2P4/4B2P/P2NBKP1/1R2R3 w - - 0 24';
-    const facts = moveThoughtFacts({ theory: true, tense: 'now',
+    const facts = moveThoughtFacts({ story: false, theory: true, tense: 'now',
       fenBefore, san: 'Nc4', moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: [], phrases: null,
       reads: { before: [], after: [], passBefore: [], passAfter: [], everyAfter: { replies: r.read, rating: 1500 } }, costCp: null,
     });

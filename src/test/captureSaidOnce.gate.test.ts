@@ -178,7 +178,7 @@ const PRODUCERS: Record<string, { plies: Plies; run: Producer }> = {
   // The one composer's facts — every lesson, Learn and Review line.
   moveThoughtFacts: {
     plies: 'captures',
-    run: (p) => [true, false].flatMap((seat) => moveThoughtFacts({ theory: true, tense: 'now', fenBefore: p.fenBefore, san: p.san, moverIsStudent: seat, prev: p.prev, line: p.line, history: [], theirLast: p.theirLast, phrases: null, reads: null, costCp: null })
+    run: (p) => [true, false].flatMap((seat) => moveThoughtFacts({ story: false, theory: true, tense: 'now', fenBefore: p.fenBefore, san: p.san, moverIsStudent: seat, prev: p.prev, line: p.line, history: [], theirLast: p.theirLast, phrases: null, reads: null, costCp: null })
       .flatMap((f) => [f.text, f.alsoText])),
   },
   reviewMoveBriefing: {

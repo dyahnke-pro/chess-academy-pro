@@ -20,9 +20,7 @@
 // Pure (chess.js + the wanted-moves reader). Both seats.
 import { Chess, type Color } from 'chess.js';
 import { theirWantedMoves, type TheirWant } from './prophylaxis';
-import { PIECE_NAMES } from '../types/tacticTypes';
-
-const NAME = PIECE_NAMES as Readonly<Record<string, string>>;
+import { seatPieceWords } from './pieceRef';
 
 export interface OrderPoint {
   /** The follow-up that has to wait, as said ("…e6"). */
@@ -55,7 +53,7 @@ export function orderByThreat(fenBefore: string, san: string, line: readonly str
   const key = (w: TheirWant): string => `${w.from}${w.to}`;
   const afterX = new Set(theirWantedMoves(x.fen, me).map(key));
   const own = mine ? 'your' : 'their';
-  const piece = (h: { square: string; piece: string }): string => `${own} ${NAME[h.piece] ?? 'piece'} on ${h.square}`;
+  const piece = (h: { square: string; piece: string }): string => seatPieceWords(y.fen, h.square, own, `${own} piece on ${h.square}`);
   for (const w of theirWantedMoves(y.fen, me)) {
     if (afterX.has(key(w))) continue;
     if (w.to === y.to) continue;

@@ -14,7 +14,7 @@ function lessonLineFor(sans: string[], studentSide: 'white' | 'black'): string {
   const n = sans.length - 1;
   const runs = captureContextsAlong(fens[0], sans);
   const mover: 'white' | 'black' = n % 2 === 0 ? 'white' : 'black';
-  return lessonThought({ theory: true,
+  return lessonThought({ story: false, theory: true,
     fenBefore: fens[n], san: sans[n], prev: runs[n], moverIsStudent: mover === studentSide,
     line: null, history: sans.slice(0, n), theirLast: n > 0 ? { fenBefore: fens[n - 1], san: sans[n - 1] } : null, reads: null, costCp: null,
   }, newLessonVoice(), null);
@@ -59,7 +59,7 @@ describe('the lesson says the move\'s real idea (WO-ONE-COACH-01)', () => {
     for (const s of ITALIAN) { fens.push(c.fen()); c.move(s); }
     const runs = captureContextsAlong(fens[0], ITALIAN);
     const n = 16;
-    const text = lessonThought({ theory: true,
+    const text = lessonThought({ story: false, theory: true,
       fenBefore: fens[n], san: ITALIAN[n], prev: runs[n], moverIsStudent: true,
       line: ITALIAN.slice(n + 1, n + 1 + BRIEFING_LINE_PLIES), history: ITALIAN.slice(0, n), theirLast: { fenBefore: fens[n - 1], san: ITALIAN[n - 1] }, reads: null, costCp: null,
     }, newLessonVoice(), null);
@@ -76,23 +76,23 @@ describe('the lesson says "not yet — first this"', () => {
     const fen = '7k/ppp2pp1/4b3/8/8/1B6/PPP2PPP/3Q2K1 w - - 0 1';
     // "Can wait" is an engine claim: the reads put the check ahead of taking now.
     const reads = { before: [{ rank: 1, evaluation: 300, mate: null, moves: ['d1h5', 'h8g8', 'b3e6', 'f7e6'] }, { rank: 2, evaluation: 0, mate: null, moves: ['b3e6', 'f7e6'] }], passBefore: [], after: [], passAfter: [] };
-    const text = lessonThought({ theory: true, fenBefore: fen, san: 'Qh5+', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Kg8', 'Bxe6', 'fxe6'], history: [], theirLast: null, reads, costCp: null }, newLessonVoice(), null);
+    const text = lessonThought({ story: false, theory: true, fenBefore: fen, san: 'Qh5+', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Kg8', 'Bxe6', 'fxe6'], history: [], theirLast: null, reads, costCp: null }, newLessonVoice(), null);
     expect(text).toMatch(/Taking on e6 can wait — it isn't going anywhere\. The check comes first, and you take after\./);
   });
   it('their in-between move is said from your seat', () => {
     const fen = '3q2k1/ppp2ppp/1b6/8/8/4B3/PPP2PP1/7K b - - 0 1';
     const reads = { before: [{ rank: 1, evaluation: -300, mate: null, moves: ['d8h4', 'h1g1', 'b6e3', 'f2e3'] }, { rank: 2, evaluation: 0, mate: null, moves: ['b6e3', 'f2e3'] }], passBefore: [], after: [], passAfter: [] };
-    const text = lessonThought({ theory: true, fenBefore: fen, san: 'Qh4+', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['Kg1', 'Bxe3', 'fxe3'], history: [], theirLast: null, reads, costCp: null }, newLessonVoice(), null);
+    const text = lessonThought({ story: false, theory: true, fenBefore: fen, san: 'Qh4+', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['Kg1', 'Bxe3', 'fxe3'], history: [], theirLast: null, reads, costCp: null }, newLessonVoice(), null);
     expect(text).toMatch(/They don't take on e3 yet — it isn't going anywhere\. The check comes first, and they take after\./);
   });
   it('no reads, no "can wait": the engine was never asked whether taking now is better (KG main Nc3)', () => {
     const fen = '7k/ppp2pp1/4b3/8/8/1B6/PPP2PPP/3Q2K1 w - - 0 1';
-    const text = lessonThought({ theory: true, fenBefore: fen, san: 'Qh5+', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Kg8', 'Bxe6', 'fxe6'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
+    const text = lessonThought({ story: false, theory: true, fenBefore: fen, san: 'Qh5+', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Kg8', 'Bxe6', 'fxe6'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
     expect(text).not.toMatch(/can wait/);
   });
   it('a quiet move that captures nothing later says no "not yet"', () => {
     const fen = '7k/ppp2pp1/4b3/8/8/1B6/PPP2PPP/3Q2K1 w - - 0 1';
-    const text = lessonThought({ theory: true, fenBefore: fen, san: 'h3', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Kg8', 'Kh1', 'Kh8'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
+    const text = lessonThought({ story: false, theory: true, fenBefore: fen, san: 'h3', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Kg8', 'Kh1', 'Kh8'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
     expect(text).not.toMatch(/going anywhere|can wait/);
   });
 });
@@ -105,11 +105,11 @@ describe("the opponent's move gets its fundamentals, from the student's seat", (
   const fenAfter = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
   it('their castling is said as theirs', () => {
     const giuoco = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'c3', 'Nf6', 'd3', 'd6'];
-    const text = lessonThought({ theory: true, fenBefore: fenAfter(giuoco), san: 'O-O', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['O-O', 'Re1'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
+    const text = lessonThought({ story: false, theory: true, fenBefore: fenAfter(giuoco), san: 'O-O', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['O-O', 'Re1'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
     expect(text).toBe('They castle kingside — it tucks their king into safety and swings the rook toward the center.');
   });
   it('their developing move says what it develops toward', () => {
-    const text = lessonThought({ theory: true, fenBefore: fenAfter(['e4', 'e5', 'Nf3']), san: 'Nc6', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['Bb5', 'a6'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
+    const text = lessonThought({ story: false, theory: true, fenBefore: fenAfter(['e4', 'e5', 'Nf3']), san: 'Nc6', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['Bb5', 'a6'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
     // The plain develop is what anyone sees: it comes after the move's reason.
     expect(text).toMatch(/develops into the game, fighting for the center on d4/);
   });
@@ -122,7 +122,7 @@ describe("their prophylactic move says what it stops", () => {
   it('their h3 takes away the g4 pin, said from your seat', () => {
     const c = new Chess();
     for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'd6']) c.move(s);
-    const text = lessonThought({ theory: true, fenBefore: c.fen(), san: 'h3', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['Be7', 'O-O'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
+    const text = lessonThought({ story: false, theory: true, fenBefore: c.fen(), san: 'h3', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: ['Be7', 'O-O'], history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
     // Which of the two readers of the same stop leads is the fitted policy's
     // choice (`thought-policy.json`); the idea, from the student's seat, is the test.
     expect(text).toMatch(/your bishop off g4.*pin their knight on f3|takes away g4: Bg4 would pin their knight on f3/);
@@ -148,7 +148,7 @@ describe('the move\'s choices come from the engine read', () => {
   // `thought-policy.json`); that the read reaches the move's facts as a
   // choice with its line is what this tests.
   const factsOf = (moverIsStudent: boolean, r: typeof reads | null): string[] =>
-    moveThoughtFacts({ theory: true, fenBefore: fen, san: 'Nf6', prev: NO_PREV_CAPTURE, moverIsStudent, line: null, history: [], theirLast: null, reads: r, costCp: r ? 0 : null, tense: 'now', phrases: newLessonVoice().phrases }).map((f) => f.text);
+    moveThoughtFacts({ story: false, theory: true, fenBefore: fen, san: 'Nf6', prev: NO_PREV_CAPTURE, moverIsStudent, line: null, history: [], theirLast: null, reads: r, costCp: r ? 0 : null, tense: 'now', phrases: newLessonVoice().phrases }).map((f) => f.text);
   it('the tempting move is ruled out, with its line', () => {
     expect(factsOf(true, reads).some((t) => t.includes('Qh4? Then they answer Nxh4 — they win a queen.'))).toBe(true);
   });
@@ -169,7 +169,7 @@ describe('their move says what it aims at', () => {
   const c = new Chess();
   for (const s of sans) c.move(s);
   const fen = c.fen();
-  const input = (line: string[]) => ({ theory: true, tense: 'now' as const, fenBefore: fen, san: 'd5', prev: NO_PREV_CAPTURE, moverIsStudent: false, line, history: sans, theirLast: null, phrases: null, reads: null, costCp: null });
+  const input = (line: string[]) => ({ story: false, theory: true, tense: 'now' as const, fenBefore: fen, san: 'd5', prev: NO_PREV_CAPTURE, moverIsStudent: false, line, history: sans, theirLast: null, phrases: null, reads: null, costCp: null });
   it('their move carries the aim as its own fact when the reply does not answer it', () => {
     const aim = moveThoughtFacts(input(['O-O'])).find((f) => f.computer === 'theirTarget');
     expect(aim?.text).toBe('Their d5 is aimed at your bishop on c4.');
@@ -190,7 +190,7 @@ describe('a threat answered with a bigger one', () => {
   it('their move leaves a piece and hits a bigger one: said from your seat, with the line', () => {
     // counterThreat.test.ts: …Rd8 leaves the knight on f6 and hits the queen on d1.
     const BEFORE_RD8 = 'r3k2r/ppq2ppp/2p2n2/4P3/4P3/2P2B2/P1P3PP/R2Q1RK1 b kq - 0 14';
-    const text = lessonThought({ theory: true, fenBefore: BEFORE_RD8, san: 'Rd8', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: null, history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
+    const text = lessonThought({ story: false, theory: true, fenBefore: BEFORE_RD8, san: 'Rd8', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: null, history: [], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
     expect(text).toMatch(/the bigger threat comes first/);
   });
 });
@@ -206,11 +206,11 @@ describe('their move leaves two plans', () => {
   const B = ['b1c3', 'f8c5', 'd2d3', 'd7d6', 'c1g5', 'h7h6', 'g5h4', 'g7g5', 'h4g3'];
   const reads = { before: [], after: [{ rank: 1, evaluation: 30, mate: null, moves: A }, { rank: 2, evaluation: 20, mate: null, moves: B }], passBefore: [], passAfter: [] };
   it('both plans are said on their move', () => {
-    const text = lessonThought({ theory: true, fenBefore: before, san: 'Nf6', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: null, history: [], theirLast: null, reads, costCp: null }, newLessonVoice(), null);
+    const text = lessonThought({ story: false, theory: true, fenBefore: before, san: 'Nf6', prev: NO_PREV_CAPTURE, moverIsStudent: false, line: null, history: [], theirLast: null, reads, costCp: null }, newLessonVoice(), null);
     expect(text).toMatch(/Two plans hold here — getting the knight to f1, or getting the bishop to h4\./);
   });
   it('never on the student\'s own move (the plans are theirs to choose next)', () => {
-    const text = lessonThought({ theory: true, fenBefore: before, san: 'Nf6', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: [], theirLast: null, reads, costCp: null }, newLessonVoice(), null);
+    const text = lessonThought({ story: false, theory: true, fenBefore: before, san: 'Nf6', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: [], theirLast: null, reads, costCp: null }, newLessonVoice(), null);
     expect(text).not.toMatch(/Two plans/);
   });
 });
@@ -228,7 +228,7 @@ describe('the move that had to come first', () => {
       after: [{ rank: 1, evaluation: p.xLine.cp, mate: null, moves: p.xLine.pv }],
       followFirst: { uci: `${y.from}${y.to}`, line: { rank: 1, evaluation: p.yFirst.cp, mate: null, moves: p.yFirst.pv } },
     };
-    const text = lessonThought({ theory: true, fenBefore: p.fenBefore, san: p.x, prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: [], theirLast: null, reads, costCp: null }, newLessonVoice(), null);
+    const text = lessonThought({ story: false, theory: true, fenBefore: p.fenBefore, san: p.x, prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: [], theirLast: null, reads, costCp: null }, newLessonVoice(), null);
     expect(text).toMatch(/Be3 first — Nc3 straight away would have run into …Qxd4|The order matters: Be3 before Nc3/);
   });
 });
@@ -247,12 +247,12 @@ describe('the structural choice on the board, after their move (linesStructure, 
   };
   const base = { fenBefore, san: 'e3', prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, reads, costCp: null, phrases: null };
   it('a lesson names the fighting move and the quiet one, on their move', () => {
-    const f = moveThoughtFacts({ theory: true, tense: 'now', ...base, moverIsStudent: false }).find((x) => x.source === 'structureLines');
+    const f = moveThoughtFacts({ story: false, theory: true, tense: 'now', ...base, moverIsStudent: false }).find((x) => x.source === 'structureLines');
     expect(f?.text).toBe('It\'s level, so make chances: Bxc3 creates the imbalance, bishop for knight and doubled pawns for them. O-O keeps it quiet.');
     expect(f?.idea).toBe('plan');
   });
   it('never on the student\'s own move — the read is the choice after theirs', () => {
-    expect(moveThoughtFacts({ theory: true, tense: 'now', ...base, moverIsStudent: true }).some((x) => x.source === 'structureLines')).toBe(false);
+    expect(moveThoughtFacts({ story: false, theory: true, tense: 'now', ...base, moverIsStudent: true }).some((x) => x.source === 'structureLines')).toBe(false);
   });
 });
 
@@ -263,7 +263,7 @@ describe('what the move prepares reaches the lesson, proven against the pass rea
     const m = fixture['15'];
     const lines = (r: typeof m.before) => r.map((l, k) => ({ rank: k + 1, evaluation: l.cp ?? 0, moves: l.pv, mate: l.mate }));
     const reads = { before: lines(m.before), after: lines(m.after), passBefore: lines(m.passBefore), passAfter: lines(m.passAfter) };
-    const input = { theory: true, fenBefore: m.fenBefore, san: m.san, prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: [], theirLast: null, reads, costCp: 0 };
+    const input = { story: false, theory: true, fenBefore: m.fenBefore, san: m.san, prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: [], theirLast: null, reads, costCp: 0 };
     const voice = newLessonVoice();
     expect(lessonThought(input, voice, null)).toMatch(/so that f4|prepares f4/);
     // Without the pass reads there is no proof, and no purpose line.
@@ -287,7 +287,7 @@ describe("Learn's student-move lanes reach the lesson (WO-STORY-MATRIX-01 P1-9c)
     const c = new Chess();
     const fens: string[] = [];
     for (const s of sans) { fens.push(c.fen()); c.move(s); }
-    const text = lessonThought({ theory: true,
+    const text = lessonThought({ story: false, theory: true,
       fenBefore: fens[7], san: 'exd5', prev: captureContextsAlong(fens[0], sans)[7], moverIsStudent: true,
       line: ['Bg5', 'Be7'], history: sans.slice(0, 7), theirLast: { fenBefore: fens[6], san: 'cxd5' }, reads: null, costCp: null,
     }, newLessonVoice(), null);
@@ -301,7 +301,7 @@ describe('the long horizon is said twice a lesson, then the change alone', () =>
   it('the third file opened says only that it opens', () => {
     const fen = 'rnbqkbnr/ppp2ppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3';
     const phrases = new Map<string, number>();
-    const said = [1, 2, 3].map(() => moveThoughtFacts({ theory: true, tense: 'now', fenBefore: fen, san: 'exd5', moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: [], phrases, reads: null, costCp: null })
+    const said = [1, 2, 3].map(() => moveThoughtFacts({ story: false, theory: true, tense: 'now', fenBefore: fen, san: 'exd5', moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: [], phrases, reads: null, costCp: null })
       .find((f) => f.kind === 'aspect-opens-file')?.text ?? '');
     expect(said[0]).toMatch(/opens the e-file, a road for the rooks from now on\.$/);
     expect(said[1]).toMatch(/a road for the rooks from now on/);
@@ -315,7 +315,7 @@ describe('the long horizon is said twice a lesson, then the change alone', () =>
 describe('a deep fact that takes the attacked piece is not said twice', () => {
   it('…Re2 attacking c2 does not also say it takes c2 next', () => {
     const fen = '4rr2/p6k/1p1N3p/2p5/8/3P4/PPP4P/6RK b - - 2 28';
-    const facts = moveThoughtFacts({ theory: true, fenBefore: fen, san: 'Re2', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Ne4', 'Rxc2'], history: [], theirLast: null, reads: null, costCp: null, tense: 'now', phrases: newLessonVoice().phrases });
+    const facts = moveThoughtFacts({ story: false, theory: true, fenBefore: fen, san: 'Re2', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Ne4', 'Rxc2'], history: [], theirLast: null, reads: null, costCp: null, tense: 'now', phrases: newLessonVoice().phrases });
     const deep = facts.find((f) => f.source === 'deepFact');
     // The square it takes rides on the fact, so the composer's one-idea-per-
     // square rule holds it behind the move's own attack on c2.
@@ -340,7 +340,7 @@ describe('onlyMove (gap B6)', () => {
 describe('a plain stopped check never leads a move with a real job', () => {
   it('Nc3 against …Qd5 leads with the tempo on the queen, not …Qe4+', () => {
     const c = new Chess(); for (const m of ['e4', 'd5', 'exd5', 'Qxd5']) c.move(m);
-    const said = lessonThought({ theory: false, fenBefore: c.fen(), san: 'Nc3', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: ['e4', 'd5', 'exd5', 'Qxd5'], theirLast: 'Qxd5', reads: null, costCp: null }, newLessonVoice(), null);
+    const said = lessonThought({ story: false, theory: false, fenBefore: c.fen(), san: 'Nc3', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: ['e4', 'd5', 'exd5', 'Qxd5'], theirLast: null, reads: null, costCp: null }, newLessonVoice(), null);
     expect(said).not.toMatch(/^[^.]*Qe4/);
   });
 });

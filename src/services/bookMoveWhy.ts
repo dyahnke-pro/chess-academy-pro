@@ -11,6 +11,7 @@
 // alternative and why it falls short, and the consequence. Every job below is
 // a fact the board proves; a job the board cannot show is never said.
 import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
+import { seatPieceWords } from './pieceRef';
 import { CAPTURE_VALUE, MATERIAL_VALUE } from './pieceValues';
 import { actsFromItsSquare, exchangeEnd } from './material';
 import { findPins } from './pinGeometry';
@@ -225,7 +226,7 @@ function stopsPushJob(main: Chess, played: Chess, student: Color, before: Chess,
       kind: 'stopsPush',
       squares: stillThere ? [z.to, hits[0]] : [z.to],
       clause: stillThere
-        ? `it stops ${w.other} pawn coming to ${z.to}, where it would hit ${w.own} ${NAME[victim.type]} on ${hits[0]}`
+        ? `it stops ${w.other} pawn coming to ${z.to}, where it would hit ${seatPieceWords(main.fen(), hits[0], w.own, `${w.own} ${NAME[victim.type]} on ${hits[0]}`)}`
         : `it stops ${w.other} pawn coming to ${z.to}, which would have hit ${w.own} ${NAME[victim.type]}`,
       short: `lets it come`,
     };
@@ -326,7 +327,7 @@ function clearsRoadJob(fen: string, mainSan: string, w: SeatWords = MINE): Job |
   return {
     kind: 'prepares',
     squares: [o.opened, o.then.from, o.then.to],
-    clause: `it clears ${o.opened}, so ${w.own} ${NAME[o.then.piece]} on ${o.then.from} can come to ${o.then.to} next`,
+    clause: `it clears ${o.opened}, so ${seatPieceWords(fen, o.then.from, w.own, `${w.own} ${NAME[o.then.piece]} on ${o.then.from}`)} can come to ${o.then.to} next`,
     short: `leaves that road shut`,
   };
 }
@@ -351,11 +352,11 @@ function rescueJob(before: Chess, mainMv: NonNullable<ReturnType<typeof after>>,
   return {
     kind: 'rescue',
     squares: [mainMv.from, by.sq, mainMv.to],
-    clause: `it takes ${w.own} ${NAME[mainMv.piece]} out of reach of ${w.other} ${NAME[by.p.type]} on ${by.sq}`,
+    clause: `it takes ${w.own} ${NAME[mainMv.piece]} out of reach of ${seatPieceWords(before.fen(), by.sq, w.other, `${w.other} ${NAME[by.p.type]} on ${by.sq}`)}`,
     forms: [
-      `it takes ${w.own} ${NAME[mainMv.piece]} out of reach of ${w.other} ${NAME[by.p.type]} on ${by.sq}`,
-      `it gets ${w.own} ${NAME[mainMv.piece]} off ${mainMv.from} before ${w.other} ${NAME[by.p.type]} on ${by.sq} can take it`,
-      `it moves ${w.own} ${NAME[mainMv.piece]} off ${mainMv.from}, out of reach of ${w.other} ${NAME[by.p.type]} on ${by.sq}`,
+      `it takes ${w.own} ${NAME[mainMv.piece]} out of reach of ${seatPieceWords(before.fen(), by.sq, w.other, `${w.other} ${NAME[by.p.type]} on ${by.sq}`)}`,
+      `it gets ${w.own} ${NAME[mainMv.piece]} off ${mainMv.from} before ${seatPieceWords(before.fen(), by.sq, w.other, `${w.other} ${NAME[by.p.type]} on ${by.sq}`)} can take it`,
+      `it moves ${w.own} ${NAME[mainMv.piece]} off ${mainMv.from}, out of reach of ${seatPieceWords(before.fen(), by.sq, w.other, `${w.other} ${NAME[by.p.type]} on ${by.sq}`)}`,
     ],
     short: `leaves it on ${mainMv.from} for them to take`,
   };
@@ -374,7 +375,8 @@ function guardJob(main: Chess, played: Chess, student: Color, mainTo: Square, w:
     if (theirs < 0 || mine <= theirs) continue;
     const byPiece = main.get(p.by);
     if (!byPiece) continue;
-    const pressure = p.pin ? `which ${w.other} ${NAME[byPiece.type]} on ${p.by} pins` : `which ${w.other} ${NAME[byPiece.type]} on ${p.by} attacks`;
+    const by = seatPieceWords(main.fen(), p.by, w.other, `${w.other} ${NAME[byPiece.type]} on ${p.by}`);
+    const pressure = p.pin ? `which ${by} pins` : `which ${by} attacks`;
     return {
       kind: 'guard',
       squares: [p.square, p.by],
@@ -801,7 +803,7 @@ function rankedMoveJob(fen: string, san: string, mv: NonNullable<ReturnType<type
   // check from their queen on d5." three times a game in five games, a reason
   // in none): a forced step out of check says nothing on its own
   // (`isBareJob`); with a guard it carries, the guard is said with it.
-  const escape = checker?.p ? { kind: 'rescue' as const, squares: [checker.sq], clause: `it gets ${w.own} king out of the check from ${w.other} ${NAME[checker.p.type]} on ${checker.sq}`, escapesCheck: true } : null;
+  const escape = checker?.p ? { kind: 'rescue' as const, squares: [checker.sq], clause: `it gets ${w.own} king out of the check from ${seatPieceWords(before.fen(), checker.sq, w.other, `${w.other} ${NAME[checker.p.type]} on ${checker.sq}`)}`, escapesCheck: true } : null;
   const flight = escape ?? (mv.piece === 'k' ? rescue : null);
   if (mv.piece === 'k' && guard) {
     return {

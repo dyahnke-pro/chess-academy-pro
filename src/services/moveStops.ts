@@ -12,6 +12,7 @@ import { theirWantedMoves } from './prophylaxis';
 import { sideToMoveAs } from './threatOut';
 import { legalSeeGainFor } from './positionReadingService';
 import { PIECE_NAMES } from '../types/tacticTypes';
+import { seatPieceWords } from './pieceRef';
 
 export interface MoveStop {
   /** `square`: a development square taken from their knight. `break`: their
@@ -91,17 +92,16 @@ export function moveStops(fenBefore: string, san: string, mine: boolean): MoveSt
       if (!taker || w.hit.some((h) => h.square === moved.from)) continue;
       const [v0] = w.hit;
       const answer = `${me === 'b' ? '…' : ''}${taker[0]}x${w.to}`;
-      const piece0 = `${own} ${NAME[v0.piece] ?? 'piece'} on ${v0.square}`;
-      const wouldMet = w.kind === 'pin' ? `can't pin ${piece0} for free any more: ${answer} now meets it`
-        : w.kind === 'fork' ? `can't fork for free any more: ${answer} now meets it`
-          : `can't kick ${piece0} for free any more: ${answer} now meets it`;
-      out.push({ kind: w.kind, san: dot(w.san), would: wouldMet, clause: `means ${dot(w.san)} ${wouldMet}`, squares: [w.to, taker, v0.square] });
+      const piece0 = seatPieceWords(fenBefore, v0.square, own, `${own} ${NAME[v0.piece] ?? 'piece'} on ${v0.square}`);
+      const act = w.kind === 'pin' ? `pin ${piece0}` : w.kind === 'fork' ? 'fork your pieces' : `kick ${piece0}`;
+      const act2 = mine ? act : act.replace('your pieces', 'their pieces');
+      out.push({ kind: w.kind, san: dot(w.san), would: `would ${act2}, but ${answer} now answers it`, clause: `means ${answer} now answers ${dot(w.san)}, which would ${act2}`, squares: [w.to, taker, v0.square] });
       continue;
     }
     // The threatened piece walked away: its rescue, not a stop.
     if (w.hit.some((h) => h.square === moved.from)) continue;
     const [v, ...rest] = w.hit;
-    const piece = (h: { square: string; piece: string }): string => `${own} ${NAME[h.piece] ?? 'piece'} on ${h.square}`;
+    const piece = (h: { square: string; piece: string }): string => seatPieceWords(fenBefore, h.square, own, `${own} ${NAME[h.piece] ?? 'piece'} on ${h.square}`);
     const would = w.kind === 'pin' ? `would pin ${piece(v)}${rest[0] ? ` against ${piece(rest[0])}` : ''}`
       : w.kind === 'fork' ? `would fork ${[v, ...rest].map(piece).join(' and ')}`
         : `would hit ${piece(v)}`;

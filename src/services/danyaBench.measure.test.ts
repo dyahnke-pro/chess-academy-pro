@@ -549,6 +549,10 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
 
 /** The ThoughtFact sources (lesson, and Review's move line) → computer. */
 const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
+  openingStory: 'services/openingStory.ts#openingStoryAt',
+  openingTheory: 'services/openingTheory.ts#openingTheoryFacts',
+  moveGains: 'services/moveStops.ts#moveStops',
+  knownSlip: 'services/knownSlips.ts#knownSlip',
   moveWhy: 'services/deliberation.ts#moveWhy',
   briefing: 'services/reviewMoveBriefing.ts#buildReviewMoveBriefing',
   boardTeacher: 'services/reviewMoveTeaching.ts#buildReviewMoveTeachingFact',

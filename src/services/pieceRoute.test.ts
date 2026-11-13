@@ -51,7 +51,7 @@ describe('the lesson beat says the trip', () => {
     const runs = captureContextsAlong(fens[0], ITALIAN);
     const voice = newLessonVoice();
     const n = 17;
-    const text = lessonThought({ theory: true,
+    const text = lessonThought({ story: false, theory: true,
       fenBefore: fens[n - 1], san: ITALIAN[n - 1], prev: runs[n - 1], moverIsStudent: true,
       line: ITALIAN.slice(n, n + BRIEFING_LINE_PLIES),
       history: ITALIAN.slice(0, n - 1), theirLast: { fenBefore: fens[n - 2], san: ITALIAN[n - 2] }, reads: null, costCp: null,

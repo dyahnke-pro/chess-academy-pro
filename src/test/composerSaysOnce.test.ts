@@ -8,10 +8,10 @@ import { replayPlies, linesOf, lessonLines, reviewSegments, type ReplayGame } fr
 import { lessonThought } from '../services/moveThoughtFacts';
 import { newLessonVoice } from '../services/reviewMoveBriefing';
 
-const game: ReplayGame = { ...(JSON.parse(readFileSync('src/test/fixtures/gotham-jelena.json', 'utf8')) as ReplayGame), id: 'gotham-jelena', rating: 1500 };
+const game: ReplayGame = { ...(JSON.parse(readFileSync('src/test/fixtures/gotham-jelena.json', 'utf8')) as ReplayGame) };
 function said(ply: number): string {
   const p = replayPlies(game)[ply - 1];
-  return lessonThought({ theory: true, fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own, line: p.line, theirLast: p.theirLast, history: p.history,
+  return lessonThought({ story: false, theory: true, fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own, line: p.line, theirLast: p.theirLast, history: p.history,
     reads: p.before.length || p.after.length ? { before: linesOf(p.before), after: linesOf(p.after), passBefore: [], passAfter: [] } : null, costCp: p.costCp }, newLessonVoice(), null);
 }
 
@@ -53,7 +53,7 @@ describe('what the baseline read found', () => {
     for (const l of [...jl, ...cl]) expect(l).not.toMatch(/, and [^,.]*, and it needs an answer/);
   });
   it('a flank strike at a centre pawn is a point, not a centre platitude (Review, …c5 at d4)', () => {
-    const seg = reviewSegments(colle as ReplayGame & { rating: number }, 800).find((x) => x.ply === 8);
+    const seg = reviewSegments(colle, 800).find((x) => x.ply === 8);
     expect(seg?.narration ?? '').toMatch(/strikes at your pawn on d4 from the flank/);
   }, 120_000);
 });

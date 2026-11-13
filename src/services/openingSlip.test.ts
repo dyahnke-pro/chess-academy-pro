@@ -59,7 +59,7 @@ describe('SQUARE — the same piece, another square', () => {
   it('his chesscom-164463094532, Winawer 4.Nf3 for 4.Ne2: why e2 was the square', () => {
     const r = slip(['e4', 'e6', 'd4', 'd5', 'Nc3', 'Bb4'], 'Nf3', ['e5', 'exd5', 'Ne2']);
     expect(r?.kind).toBe('square');
-    expect(r?.text).toContain('It adds a second guard to your knight on c3, which their bishop on b4 pins. The knight to f3 leaves it guarded once.');
+    expect(r?.text).toContain('It adds a second guard to your knight on c3, which their dark-squared bishop pins. The knight to f3 leaves it guarded once.');
   });
 });
 

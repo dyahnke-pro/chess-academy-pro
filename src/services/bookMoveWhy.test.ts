@@ -10,7 +10,7 @@ describe('bookMoveWhy — the book move named, with what it DOES on the board (D
     const fen = fenOf('e4 e6 d4 d5 Nc3 Bb4');
     const w = bookMoveWhy(fen, 'Ne2', 'Nf3', 'w');
     expect(w?.kind).toBe('guard');
-    expect(w?.text).toBe('The book move is the knight to e2: it adds a second guard to your knight on c3, which their bishop on b4 pins — the knight to f3 leaves it guarded once.');
+    expect(w?.text).toBe('The book move is the knight to e2: it adds a second guard to your knight on c3, which their dark-squared bishop pins — the knight to f3 leaves it guarded once.');
     expect(w?.squares).toEqual(['c3', 'b4']);
   });
 
@@ -82,7 +82,7 @@ describe('the book-move why routes through the door on the DNA "but" beat (David
       const read = readBoard('bookMove', { history, student: 'w' });
       // THE OPENING SLIP (2026-11-08): the same knight to another square —
       // why the book square was better, and what the student's left undone.
-      expect(read?.text).toBe('Your knight belongs on e2 here. It adds a second guard to your knight on c3, which their bishop on b4 pins. The knight to f3 leaves it guarded once.');
+      expect(read?.text).toBe('Your knight belongs on e2 here. It adds a second guard to your knight on c3, which their dark-squared bishop pins. The knight to f3 leaves it guarded once.');
       // Not their departure, not the student's seat: nothing.
       expect(readBoard('bookMove', { history, student: 'b' })).toBeNull();
       const fen = c.fen();
@@ -162,7 +162,7 @@ describe('the hand-graded falsehoods of 2026-10-14 stay fixed (each failed on th
     // Scandinavian, 6.h3: the pawn hits the bishop on g4. Book is Bh5; Nc6
     // leaves the bishop to hxg4 (prod Learn audit 2026-10-14, said nothing).
     const fen = 'rn2kb1r/ppp1pppp/5n2/q7/3P2b1/2N2N1P/PPP2PP1/R1BQKB1R b KQkq - 0 6';
-    expect(bookMoveWhy(fen, 'Bh5', 'Nc6', 'b')?.text).toBe('The book move is the bishop to h5: it takes your bishop out of reach of their pawn on h3 — the knight to c6 leaves it on g4 for them to take.');
+    expect(bookMoveWhy(fen, 'Bh5', 'Nc6', 'b')?.text).toBe('The book move is the bishop to h5: it takes your bishop out of reach of their h-pawn — the knight to c6 leaves it on g4 for them to take.');
     // A bishop move that also escapes is no rescue to fault.
     expect(bookMoveWhy(fen, 'Bh5', 'Bf5', 'b')?.kind).not.toBe('rescue');
   });

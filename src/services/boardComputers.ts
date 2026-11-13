@@ -512,7 +512,7 @@ export const BOARD_COMPUTERS = {
           if (t.kind === 'book-reply' && !mine) continue;
           const text = `${subject} ${t.clause}.`;
           const key = `theory:${k}:${t.kind}:${t.names.join(',')}`;
-          out.push(fact({ key, claims: [key], text, proof: squaresProof(text, t.squares) ?? NO_PROOF.stated, squares: [...t.squares], stakes: null, seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: spokenOn, role: 'teach' }));
+          out.push(fact({ key, claims: [key], text, proof: squaresProof(text, t.squares) ?? NO_PROOF.name, squares: [...t.squares], stakes: null, seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: spokenOn, role: 'teach' }));
         }
       }
       return out.length > 0 ? out : null;
@@ -578,7 +578,10 @@ export const BOARD_COMPUTERS = {
         const subject = mine ? 'Your move' : `Their ${mover === 'b' ? '…' : ''}${san}`;
         const say = (key: string, clause: string, squares: string[]): void => {
           const text = `${subject} ${clause}.`;
-          out.push(fact({ key: `${k}:${key}`, claims: [`gain:${k}:${key}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.stated, squares, stakes: null, seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: spokenOn, role: 'teach' }));
+          // What a move stops is proven on its squares; with none, it is not said.
+          const proof = squaresProof(text, squares);
+          if (!proof) return;
+          out.push(fact({ key: `${k}:${key}`, claims: [`gain:${k}:${key}`], text, proof, squares, stakes: null, seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: spokenOn, role: 'teach' }));
         };
         for (const s of moveStops(fenBefore, san, mine)) say(`stops:${s.san}`, `stops ${s.san}, which ${s.would}`, s.squares);
         const o = pieceOutFirst(fenBefore, san, history.slice(k + 1));
