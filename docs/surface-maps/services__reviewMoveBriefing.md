@@ -51,13 +51,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `signedBand` (const) — 1 call site
-- `src/services/moveThoughtFacts.ts:746`
+- `src/services/moveThoughtFacts.ts:753`
 
 ### `evalReading` (function) — 4 call sites
 - `src/services/evalReading.test.ts:11`
 - `src/services/evalReading.test.ts:17`
 - `src/services/evalReading.test.ts:23`
-- `src/services/moveThoughtFacts.ts:743`
+- `src/services/moveThoughtFacts.ts:750`
 
 ### `moveAspects` (function) — 12 call sites
 - `src/services/captureLeadsTo.test.ts:26`
@@ -68,7 +68,7 @@
 - `src/services/exchangeNotFinished.test.ts:295`
 - `src/services/midExchangeStructure.test.ts:13`
 - `src/services/moveThoughtFacts.ts:221`
-- `src/services/moveThoughtFacts.ts:1064`
+- `src/services/moveThoughtFacts.ts:1081`
 - `src/services/reviewMoveBriefing.test.ts:71`
 - `src/services/reviewMoveBriefing.test.ts:73`
 - `src/test/captureSaidOnce.gate.test.ts:190`
@@ -99,19 +99,19 @@
 - `src/test/captureSaidOnce.gate.test.ts:186`
 
 ### `toClause` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:341`
+- `src/services/moveThoughtFacts.ts:348`
 - `src/services/reviewMoveBriefing.test.ts:182`
 - `src/services/reviewMoveBriefing.test.ts:185`
 
 ### `joinReview` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:341`
+- `src/services/moveThoughtFacts.ts:348`
 - `src/services/reviewMoveBriefing.test.ts:184`
 - `src/services/reviewMoveBriefing.test.ts:185`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newLessonVoice` (function) — 42 call sites
+### `newLessonVoice` (function) — 44 call sites
 - `src/hooks/useTeachWalkthrough.ts:902`
 - `src/hooks/useTeachWalkthrough.ts:903`
 - `src/services/danyaBench.measure.test.ts:460`
@@ -144,7 +144,9 @@
 - `src/services/moveThoughtFacts.test.ts:374`
 - `src/services/moveThoughtFacts.test.ts:389`
 - `src/services/moveThoughtFacts.test.ts:404`
-- `src/services/moveThoughtFacts.ts:848`
+- `src/services/moveThoughtFacts.test.ts:419`
+- `src/services/moveThoughtFacts.test.ts:434`
+- `src/services/moveThoughtFacts.ts:855`
 - `src/services/openingGenerator.ts:2058`
 - `src/services/openingGenerator.ts:2628`
 - `src/services/pieceRoute.test.ts:52`

@@ -101,7 +101,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:247`
 - `src/services/exchangeLedger.test.ts:267`
 - `src/services/exchangeLedger.test.ts:273`
-- `src/services/gambitIdea.ts:114`
+- `src/services/gambitIdea.ts:126`
 - `src/services/gemCrushLines.ts:171`
 - `src/services/knownSlips.ts:182`
 - `src/services/moveThreat.ts:116`
@@ -128,15 +128,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lineCalc.ts:231`
 
 ### `materialGainWords` (function) — 2 call sites
-- `src/services/gambitIdea.ts:115`
+- `src/services/gambitIdea.ts:127`
 - `src/services/moveThreat.ts:117`
 
 ### `promotedIn` (function) — 2 call sites
-- `src/services/costReason.ts:295`
+- `src/services/costReason.ts:306`
 - `src/services/lineCalc.ts:112`
 
 ### `gainAfterLine` (function) — 2 call sites
-- `src/services/costReason.ts:296`
+- `src/services/costReason.ts:307`
 - `src/services/lineCalc.ts:113`
 
 ### `describeExchange` (function) — 9 call sites
@@ -154,7 +154,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/decisiveReason.ts:104`
 - `src/services/decisiveReason.ts:342`
 - `src/services/decisiveReason.ts:343`
-- `src/services/gambitIdea.ts:110`
+- `src/services/gambitIdea.ts:122`
 - `src/services/moveComparison.ts:183`
 - `src/services/moveComparison.ts:184`
 - `src/services/moveInsight.lineAudit.test.ts:49`

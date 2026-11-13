@@ -126,7 +126,7 @@
 - `src/services/falseJobs.test.ts:86`
 - `src/services/falseJobs.test.ts:106`
 - `src/services/learnBoardTeaching.ts:1249`
-- `src/services/moveThoughtFacts.ts:336`
+- `src/services/moveThoughtFacts.ts:343`
 - `src/services/pinIsAPin.test.ts:16`
 - `src/services/reviewMoveTeaching.oppositeWings.test.ts:13`
 - `src/services/reviewMoveTeaching.oppositeWings.test.ts:18`

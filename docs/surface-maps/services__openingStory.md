@@ -41,8 +41,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `storyPlanAfter` (function) — 2 call sites
-- `src/services/moveThoughtFacts.ts:439`
-- `src/services/moveThoughtFacts.ts:508`
+- `src/services/moveThoughtFacts.ts:446`
+- `src/services/moveThoughtFacts.ts:515`
 
 ### `openingStoryAt` (function) — 14 call sites
 - `src/services/boardComputers.ts:443`

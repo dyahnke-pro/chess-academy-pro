@@ -44,7 +44,7 @@
 
 ### `openingTheoryFacts` (function) — 8 call sites
 - `src/services/boardComputers.ts:511`
-- `src/services/moveThoughtFacts.ts:389`
+- `src/services/moveThoughtFacts.ts:396`
 - `src/services/openingTheory.test.ts:17`
 - `src/services/openingTheory.test.ts:23`
 - `src/services/openingTheory.test.ts:29`
