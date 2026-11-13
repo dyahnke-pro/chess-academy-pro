@@ -104,7 +104,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/gambitIdea.ts:126`
 - `src/services/gemCrushLines.ts:171`
 - `src/services/knownSlips.ts:182`
-- `src/services/moveThreat.ts:116`
+- `src/services/moveThreat.ts:114`
 - `src/services/patternFails.ts:129`
 - `src/services/planChoice.ts:156`
 - `src/services/threatProof.ts:61`
@@ -129,7 +129,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `materialGainWords` (function) — 2 call sites
 - `src/services/gambitIdea.ts:127`
-- `src/services/moveThreat.ts:117`
+- `src/services/moveThreat.ts:115`
 
 ### `promotedIn` (function) — 2 call sites
 - `src/services/costReason.ts:306`
@@ -159,9 +159,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveComparison.ts:184`
 - `src/services/moveInsight.lineAudit.test.ts:49`
 - `src/services/moveInsight.ts:405`
-- `src/services/moveThreat.ts:98`
-- `src/services/moveThreat.ts:106`
-- `src/services/moveThreat.ts:112`
+- `src/services/moveThreat.ts:96`
+- `src/services/moveThreat.ts:104`
+- `src/services/moveThreat.ts:110`
 - `src/services/thinkAloud.ts:106`
 
 ### `GAIN_HOLDS_PLIES` (const) — 0 call sites

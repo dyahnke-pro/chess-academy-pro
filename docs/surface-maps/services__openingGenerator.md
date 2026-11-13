@@ -133,8 +133,8 @@
 - `src/services/openingGenerator.test.ts:918`
 
 ### `firstSentence` (function) — 14 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:1859`
-- `src/components/Openings/OpeningDetailPage.tsx:1861`
+- `src/components/Openings/OpeningDetailPage.tsx:1979`
+- `src/components/Openings/OpeningDetailPage.tsx:1981`
 - `src/services/openingCourse.ts:165`
 - `src/services/openingCourse.ts:288`
 - `src/services/openingCourse.ts:297`

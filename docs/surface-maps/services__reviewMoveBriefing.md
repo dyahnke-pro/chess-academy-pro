@@ -111,7 +111,7 @@
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newLessonVoice` (function) — 44 call sites
+### `newLessonVoice` (function) — 45 call sites
 - `src/hooks/useTeachWalkthrough.ts:902`
 - `src/hooks/useTeachWalkthrough.ts:903`
 - `src/services/danyaBench.measure.test.ts:460`
@@ -146,6 +146,7 @@
 - `src/services/moveThoughtFacts.test.ts:404`
 - `src/services/moveThoughtFacts.test.ts:419`
 - `src/services/moveThoughtFacts.test.ts:434`
+- `src/services/moveThoughtFacts.test.ts:447`
 - `src/services/moveThoughtFacts.ts:855`
 - `src/services/openingGenerator.ts:2058`
 - `src/services/openingGenerator.ts:2628`
