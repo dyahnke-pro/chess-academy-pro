@@ -8135,3 +8135,12 @@ David: "I want opening theory to be calculated" → "Make the computers, train t
 **Measured** (Wikibooks bench, 1,829 positions, habit tagger fixed — "masters almost always" is not a habit): any page idea said 61.6% → 71.8%; lead idea 30.2% → 35.0%; words 34 → 47.
 
 **Known mistakes and traps on every surface** (David 2026-11-12: "You can have coach state those lines and tactics … Let's not hold anything back. When it becomes more popular we can cut back"): the pages' alternatives are mostly moves masters never play (1,102) or under 2% (757) — refutations — and the club index says them now in lessons, chat and Learn (a slip just played), through the registry's one door. Owed: A8 history (async index), aliases/ECO, structure plans by name, precision.
+
+**The six fixes (2026-11-13, David: "Go")**, each a computer with a test on a real board:
+1. ✅ What a costly move allows, said in lessons and chat through the one cost computer (`costReason` → `allowedClause`): "it walks into mate: …Bxf2+, Ke2 and …Bg4#". A line that ends with the mover mated voids any material it seemed to win (`gainHoldsInLine`).
+2. 🟠 Bench repair: pass reads for all 2,257 Wikibooks positions (`scripts/bench/pass-reads.mjs`), scorer synonyms (measurement only); the "note is about another move" filter was dropped — it agreed with a hand reading on only 35 of 50.
+3. ✅ `moveThreat`: the threat a move makes two or three moves deep, read off the null-move line and counted by the exchange ledger (Bg5 → Bxf6 …exf6 cxd5 wins a pawn), new and needing an answer; mate in two or three said as one. A bishop for a knight is no material (`materialGainWords`).
+4. ✅ `gambitIdea`: what a move gives, what comes back along the line that takes it (`compensationReasons`, the one list), and the engine's verdict, said apart — Göring c3 "about level", the Halloween Nxe5 "does not quite pay".
+5. ✅ The kick that prepares or makes the pin break (h6 → "…g5 breaks it"; …g5 itself), castling onto the opposite wing.
+6. ✅ The known slips fall back to the curated punish gems where the club index has no board (`curatedSlipBoards`).
+Also from reading 50 Danya misses (746 notes, any idea covered 50.9%; ~23 real misses, ~15 the scorer's, ~7 notes about another move): "keeping the pin" on a retreat, doubling rooks, a rook outpost, unmasking a rook or queen on its file — built and tested.
