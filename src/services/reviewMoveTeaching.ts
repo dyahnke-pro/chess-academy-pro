@@ -546,6 +546,19 @@ export function buildReviewMoveTeachingFact(
   const toRank = Number(mv.to[1]);
 
   // Castling — the idea is king safety + rook activation, not "castles".
+  // OPPOSITE WINGS (fix 5, 2026-11-13; the writers' "Both sides often use
+  // their pawns … to open lines on the side they are attacking"): when this
+  // castling puts the kings on opposite wings, that is the game's plan, and
+  // it is said instead of the shelter.
+  if (mv.san.startsWith('O-O')) {
+    const other = chess.board().flat().find((p) => p && p.type === 'k' && p.color !== mv.color)?.square ?? null;
+    const home = mv.color === 'w' ? '8' : '1';
+    const mine = mv.san.startsWith('O-O-O') ? 'q' : 'k';
+    const theirs = other && other[1] === home ? ('abc'.includes(other[0]) ? 'q' : 'fgh'.includes(other[0]) ? 'k' : null) : null;
+    if (other && theirs && theirs !== mine) {
+      return out('attack-king', `The kings are on opposite wings now, ${mv.to} and ${other}, so each side can throw its pawns at the other king without opening its own.`, [mv.to, other]);
+    }
+  }
   if (mv.san.startsWith('O-O-O')) {
     return out('castle', sayIdea(phrases, 'castle-long', ['The king finds shelter on the queenside and the rook swings toward the open center.', 'The king goes long, and the rook comes to the center.']));
   }

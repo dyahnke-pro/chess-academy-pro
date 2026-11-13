@@ -463,8 +463,8 @@ export function computeMoveFundamentals(
         : {
           id: 'tempo',
           weight: 88,
-          led: `kicks their ${name} off ${hit.square}, gaining time`,
-          selfContained: `the pawn kicks their ${name} off ${hit.square}, so they spend a move while you gain one`,
+          led: `kicks their ${name} off ${hit.square}, gaining time${breakWords(fenBefore, after, hit.square, mover, mv.to)}`,
+          selfContained: `the pawn kicks their ${name} off ${hit.square}, so they spend a move while you gain one${breakWords(fenBefore, after, hit.square, mover, mv.to)}`,
           imperative: `kick their ${name} off ${hit.square} with a pawn and gain the time`,
           pointer: `kick their ${name} off ${hit.square} with a pawn and gain the time`,
           squares: [mv.to, hit.square],
@@ -1818,4 +1818,64 @@ export function ruleForPurpose(
     .sort((a, b) => b.weight - a.weight)[0];
   if (!lead) return null;
   return { text: reasonFor(lead) as string, keys: [lead.id, `mg-rule:${lead.id}`] };
+}
+
+/** A KICK THAT PREPARES THE PIN BREAK (fix 5, 2026-11-13; the writers'
+ *  "drives the bishop back, so as to gain the ability to play …g5 and break
+ *  the pin"). The kicked piece pins one of the mover's pieces to a bigger one
+ *  behind it; it can keep the pin by stepping back along the same line; and
+ *  from there a pawn push of the mover's hits it again, on a square the pawn
+ *  that kicked now guards. Read off the board after the kick, chess.js only.
+ *  Empty when any part is missing. */
+function breakWords(fenBefore: string, board: Chess, pinner: string, mover: 'w' | 'b', guard: string): string {
+  // The pin is read on the board BEFORE the kick: …g5 against Bh4 stands on
+  // the pin line itself.
+  let pre: Chess;
+  try { pre = new Chess(fenBefore); } catch { return ''; }
+  const p = board.get(pinner as Square);
+  if (!p || p.color === mover || (p.type !== 'b' && p.type !== 'q')) return '';
+  const f = (sq: string): number => sq.charCodeAt(0) - 97;
+  const r = (sq: string): number => Number(sq[1]) - 1;
+  const at = (x: number, y: number): string | null => (x >= 0 && x < 8 && y >= 0 && y < 8 ? `${String.fromCharCode(97 + x)}${y + 1}` : null);
+  const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+  for (const [dx, dy] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+    // The pinned piece, then a bigger one of the mover's behind it.
+    let x = f(pinner) + dx; let y = r(pinner) + dy;
+    let pinned: string | null = null; let behind = false;
+    for (let sq = at(x, y); sq; x += dx, y += dy, sq = at(x, y)) {
+      const q = pre.get(sq as Square);
+      if (!q) continue;
+      if (q.color !== mover) break;
+      if (!pinned) { if (q.type === 'k' || q.type === 'p') break; pinned = sq; continue; }
+      behind = VALUE[q.type] > VALUE[pre.get(pinned as Square)?.type ?? 'p'];
+      break;
+    }
+    if (!pinned || !behind) continue;
+    // Where it keeps the pin: one step back along the same line. No such
+    // square, and the kick itself breaks the pin (…g5 against Bh4).
+    const back = at(f(pinner) - dx, r(pinner) - dy);
+    const pinnedName = PIECE_NAME[board.get(pinned as Square)?.type ?? ''] ?? 'piece';
+    // The kicking pawn now stands between them, or the bishop has no square
+    // left on the line: the kick itself breaks the pin.
+    const blocked = (() => { for (let bx = f(pinner) + dx, by = r(pinner) + dy, sq = at(bx, by); sq && sq !== pinned; bx += dx, by += dy, sq = at(bx, by)) if (board.get(sq as Square)) return true; return false; })();
+    if (blocked || !back || board.get(back as Square)) return `, and it breaks the pin on your ${pinnedName}`;
+    // The push that hits it there, onto a square the kicking pawn guards.
+    const ahead = mover === 'w' ? 1 : -1;
+    for (const sx of [-1, 1]) {
+      const land = at(f(back) + sx, r(back) - ahead);
+      // The bishop has left that square by then (it stepped back to keep the pin).
+      if (!land || (land !== pinner && board.get(land as Square))) continue;
+      const guards = f(guard) - f(land) === 1 || f(land) - f(guard) === 1 ? r(guard) + ahead === r(land) : false;
+      if (!guards) continue;
+      const one = at(f(land), r(land) - ahead);
+      const two = at(f(land), r(land) - 2 * ahead);
+      const pawnAt = (sq: string | null): boolean => !!sq && board.get(sq as Square)?.type === 'p' && board.get(sq as Square)?.color === mover;
+      const homeRank = mover === 'w' ? 1 : 6;
+      const reach = pawnAt(one) || (!!one && !board.get(one as Square) && pawnAt(two) && r(two as string) === homeRank);
+      if (!reach) continue;
+      const push = `${mover === 'b' ? '…' : ''}${land}`;
+      return `. If it keeps the pin from ${back}, ${push} breaks it`;
+    }
+  }
+  return '';
 }
