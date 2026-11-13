@@ -32,3 +32,11 @@ describe('unmasking a file', () => {
     expect(led('3r1bk1/3r3p/p1pnqpp1/Pb2p3/2pPP3/1pP1BNNP/1P1R1PPK/R1Q5 b - - 3 26', 'Nf7', 'black').some((l) => /^unmasks your rook on d7, which now looks straight down the d-file/.test(l))).toBe(true);
   });
 });
+
+describe('an unmasked queen on a guarded pawn is only the board', () => {
+  // Bench 2026-11-13: Nb5 in the Taimanov "unmasks your queen on d1 … bearing
+  // on their d-pawn", a pawn guarded by the bishop and the queen.
+  it('Nb5 says nothing of the queen on d1', () => {
+    expect(led('r1bqkbnr/pp1p1ppp/2n1p3/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5', 'Nb5', 'white').some((l) => /unmasks/.test(l))).toBe(false);
+  });
+});

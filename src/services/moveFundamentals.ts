@@ -528,7 +528,16 @@ export function computeMoveFundamentals(
         if (p) { if (p.color !== mover) target = sq; break; }
         seen += 1;
       }
-      if (seen < 3 && !target) continue;
+      // Worth saying only when the file now reaches something: a piece, or a
+      // pawn the file wins or pressures past its guards (bench 2026-11-13:
+      // Nb5 "unmasks your queen on d1 … bearing on their d-pawn", a pawn
+      // guarded twice). An open run to nothing is the open-file read's.
+      if (!target) continue;
+      const tp = after.get(target as Square);
+      // A rook belongs on a file and bears on whatever is there; a queen
+      // unmasked onto a guarded pawn early on is only the board.
+      if (after.get(behind as Square)?.type === 'q' && tp?.type === 'p' && after.attackers(target as Square, mover).length <= after.attackers(target as Square, tp.color).length) continue;
+      if (seen < 1) continue;
       const slider = after.get(behind as Square);
       const sliderName = slider?.type === 'q' ? 'queen' : 'rook';
       const hits = target ? `, bearing on ${seatPieceWords(after.fen(), target, 'their', `their ${PIECE_NAME[after.get(target as Square)?.type ?? 'p']} on ${target}`)}` : '';
