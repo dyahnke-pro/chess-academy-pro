@@ -1,7 +1,7 @@
 {
-  "_rule": "CLAUDE.md § USAGE REPORTS ARE A CLEAN SLATE. Report ONLY events with timestamp >= watermark. After reporting, append the window to history and move the watermark to the report time. Old windows are reported only when David asks.",
+  "_rule": "CLAUDE.md \u00a7 USAGE REPORTS ARE A CLEAN SLATE. Report ONLY events with timestamp >= watermark. After reporting, append the window to history and move the watermark to the report time. Old windows are reported only when David asks.",
   "exclude": "Every device_id in the Vercel env OWNER_DEVICE_IDS is David, never a user. Exclude them from every count (web and native) before any other filter.",
-  "watermark": "2026-10-24T20:04:38Z",
+  "watermark": "2026-11-12T19:10:00Z",
   "history": [
     {
       "window": [
@@ -32,8 +32,26 @@
       "purchases": 0,
       "paywall_hits": 4,
       "feedback": 1,
-      "pending_owner_check": "920c78d1 Detroit Mac (appstore, 6880 events) — likely David, asked 2026-10-24",
+      "pending_owner_check": "920c78d1 Detroit Mac (appstore, 6880 events) \u2014 likely David, asked 2026-10-24",
       "headline": "5 real users (Mumbai, Sofia, Miami, Accra, Maiden NC); Miami did 12 lessons then hit the 2nd-opening wall 4x and never bought; 3 new users all gone after day 1; Keychain bug (SecureStorage.then) wiped the device id on every fresh install Oct 21-22"
+    },
+    {
+      "window": [
+        "2026-10-24T20:04:38Z",
+        "2026-11-12T19:10:00Z"
+      ],
+      "label": "Oct 24 - Nov 12",
+      "grade": "D",
+      "real_users_native": 19,
+      "new_users": 16,
+      "returning_users": 2,
+      "apple_review_sessions": 3,
+      "purchases": 0,
+      "plans_opened": 4,
+      "restore_taps": 4,
+      "revenuecat": "1 active paid sub = 920c78d1 (David's own Mac, $1.99 monthly, Oct 26); 0 real-user subs or trials",
+      "feedback": 0,
+      "headline": "19 real users (13 US; Baghdad, Cork, Tirat Carmel, Belarus, Germany, DR); 17 of 19 used it on one day only; 2 came back (one 7 days, one 3 days); nobody bought \u2014 4 opened the plans, 4 tapped Restore with nothing to restore"
     }
   ]
 }

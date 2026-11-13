@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { PaywallPage } from './PaywallPage';
 import type { ComponentProps } from 'react';
 
@@ -37,10 +37,19 @@ function renderPaywall(feature?: Exclude<NonNullable<Props>['feature'], 'opening
   );
 }
 
-function renderOpeningWall() {
+function renderOpeningWall(
+  moment: 'after-watch' | 'locked-action' = 'locked-action',
+  onLeave: () => void = () => {},
+) {
   return render(
-    <MemoryRouter>
-      <PaywallPage feature="opening" opening={{ id: 'caro-kann', name: 'Caro-Kann Defense' }} />
+    <MemoryRouter initialEntries={['/openings/caro-kann']}>
+      <Routes>
+        <Route
+          path="/openings/caro-kann"
+          element={<PaywallPage feature="opening" opening={{ id: 'caro-kann', name: 'Caro-Kann Defense' }} moment={moment} onLeave={onLeave} />}
+        />
+        <Route path="/" element={<div data-testid="home-route" />} />
+      </Routes>
     </MemoryRouter>,
   );
 }
@@ -105,5 +114,27 @@ describe('PaywallPage — contextual copy', () => {
     expect(screen.getByText(/free plan includes/i)).toBeTruthy();
     expect(screen.getByText(/20 free tactics puzzles/i)).toBeTruthy();
     expect(screen.getByText(/Kids mode free for a week/i)).toBeTruthy();
+  });
+});
+
+describe('PaywallPage — the opening wall says its moment and comes back to the opening (David 2026-11-12)', () => {
+  it('after the free Watch, it says they watched the main line and names the opening', () => {
+    renderOpeningWall('after-watch');
+    expect(screen.getByText(/watched the main line\. Unlock Caro-Kann Defense to learn it, practice it and play it/i)).toBeTruthy();
+  });
+
+  it('in front of a locked action, it says the free opening is used', () => {
+    renderOpeningWall('locked-action');
+    expect(screen.getByText(/used your free opening\. Unlock Caro-Kann Defense on its own/i)).toBeTruthy();
+  });
+
+  it('"Not now" on the opening wall hands back to the opening, never Home', () => {
+    const onLeave = vi.fn();
+    renderOpeningWall('after-watch', onLeave);
+    expect(screen.getByTestId('paywall-back-free')).toHaveTextContent('Not now — back to this opening');
+    fireEvent.click(screen.getByTestId('paywall-back-free'));
+    fireEvent.click(screen.getByTestId('decline-skip'));
+    expect(onLeave).toHaveBeenCalledTimes(1);
+    expect(screen.queryByTestId('home-route')).toBeNull();
   });
 });

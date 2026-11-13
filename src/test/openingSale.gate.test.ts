@@ -14,17 +14,23 @@ const PAGE = readFileSync(resolve(__dirname, '../components/Openings/OpeningDeta
 describe('the opening page reads what was bought', () => {
   it('every canViewOpening call passes the owned openings from the store', () => {
     const calls = PAGE.match(/canViewOpening\([^)]*\)/g) ?? [];
-    expect(calls.length).toBeGreaterThanOrEqual(3);
+    expect(calls.length).toBeGreaterThanOrEqual(1);
     for (const c of calls) expect(c).toMatch(/,\s*ownedOpeningIds\)$/);
     expect(PAGE).toMatch(/const \{[^}]*ownedOpeningIds[^}]*\} = useEntitlement\(\)/);
   });
 
-  it('the free-slot claim returns before claiming an owned opening', () => {
-    const effect = PAGE.slice(PAGE.indexOf('// Claim the ONE free opening'), PAGE.indexOf('void claimFreeOpening(id)'));
-    expect(effect).toContain('if (ownedOpeningIds.includes(id)) return;');
+  it('a bought opening never asks for, or spends, the free pick', () => {
+    // The pick is claimed only from the free-pick confirm, and the confirm
+    // shows only while `freePickOpen` — which excludes an owned opening.
+    const open = PAGE.slice(PAGE.indexOf('const freePickOpen ='), PAGE.indexOf('freePickOpenRef.current = freePickOpen;'));
+    expect(open).toContain('!ownedOpeningIds.includes(id)');
+    expect(PAGE.match(/claimFreeOpening\(id\)/g) ?? []).toHaveLength(1);
+    expect(PAGE.slice(PAGE.indexOf('const confirmFreePick'))).toMatch(/^const confirmFreePick[\s\S]*?claimFreeOpening\(id\)/);
   });
 
-  it('the drill wall names its opening so it can sell just that one', () => {
-    expect(PAGE).toMatch(/<PaywallPage feature="opening" opening=\{\{ id, name: opening\.name \}\} \/>/);
+  it('every opening wall names its opening so it can sell just that one', () => {
+    const walls = PAGE.match(/<PaywallPage\s+feature="opening"[\s\S]*?\/>/g) ?? [];
+    expect(walls.length).toBe(2);
+    for (const w of walls) expect(w).toMatch(/opening=\{\{ id: opening\.id, name: opening\.name \}\}/);
   });
 });

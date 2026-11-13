@@ -286,7 +286,7 @@ export type ClaimResult =
 type OpeningSlotState = Pick<FreeTierRecord, 'freeOpeningId' | 'freeOpeningIds' | 'earnedOpeningCredits' | 'trainingOpeningCredits'>;
 
 /** The set of openings the user has claimed for free (legacy id folded in). Pure. */
-function claimedOpenings(state: OpeningSlotState): string[] {
+export function claimedOpenings(state: OpeningSlotState): string[] {
   const ids = Array.isArray(state.freeOpeningIds) ? state.freeOpeningIds.filter(Boolean) : [];
   const set = new Set(ids);
   if (state.freeOpeningId) set.add(state.freeOpeningId);

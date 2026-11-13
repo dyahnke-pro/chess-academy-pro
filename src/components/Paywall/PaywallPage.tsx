@@ -78,7 +78,8 @@ const FEATURE_PROMPT: Record<PaywallFeature, string | null> = {
   // Opened on purpose from Settings → Subscription — nothing was walled.
   settings: null,
   puzzles: 'You’ve used all 20 free puzzles. Go Pro for unlimited tactics tuned to your level.',
-  opening: 'You’ve used your free opening. Unlock just this one, or go Pro for every opening.',
+  // The opening wall reads OPENING_PROMPT by its moment instead.
+  opening: null,
   // The All section — every opening in the games database — is for members
   // only (David 2026-11-07: "Lock out all for monthly members only").
   library: 'Every opening in the library is for members. Go Pro to open every one, line by line.',
@@ -88,16 +89,33 @@ const FEATURE_PROMPT: Record<PaywallFeature, string | null> = {
   app: null,
 };
 
-/** The drill wall names the opening it stands in front of, so it can sell
- *  just that one ($0.99 à la carte, David 2026-10-25). Every other wall has no
- *  opening — the union makes the opening wall unable to forget it. */
-type PaywallProps =
-  | { feature: 'opening'; opening: { id: string; name: string } }
-  | { feature?: Exclude<PaywallFeature, 'opening'>; opening?: undefined };
+/** WHEN the opening wall is shown (David 2026-11-12: "I want the paywall to
+ *  pop up after the free watch"). On an opening that is not their free one the
+ *  main-line Watch plays free; the wall shows when it ends, and in front of
+ *  anything else on that opening. */
+export type OpeningWallMoment = 'after-watch' | 'locked-action';
 
-export function PaywallPage({ feature, opening }: PaywallProps = {}): JSX.Element {
+/** The line at the top of the opening wall, by moment. A Record, so a new
+ *  moment cannot compile until it says what the student reads. */
+const OPENING_PROMPT: Record<OpeningWallMoment, (name: string) => string> = {
+  'after-watch': (name) => `You’ve watched the main line. Unlock ${name} to learn it, practice it and play it.`,
+  'locked-action': (name) => `You’ve used your free opening. Unlock ${name} on its own, or go Pro for every opening.`,
+};
+
+/** The opening wall names the opening it stands in front of, so it can sell
+ *  just that one ($0.99 à la carte, David 2026-10-25), says which moment it is
+ *  shown at, and is TOLD where "Not now" goes: back to that opening, never Home
+ *  (the student was in the middle of it). Every other wall has none of these —
+ *  the union makes the opening wall unable to forget them. */
+type PaywallProps =
+  | { feature: 'opening'; opening: { id: string; name: string }; moment: OpeningWallMoment; onLeave: () => void }
+  | { feature?: Exclude<PaywallFeature, 'opening'>; opening?: undefined; moment?: undefined; onLeave?: () => void };
+
+export function PaywallPage({ feature, opening, moment, onLeave }: PaywallProps = {}): JSX.Element {
   const { isResolving } = useEntitlement();
-  const featurePrompt = feature ? FEATURE_PROMPT[feature] : null;
+  const featurePrompt = opening
+    ? OPENING_PROMPT[moment](opening.name)
+    : feature ? FEATURE_PROMPT[feature] : null;
   // The one-opening offer, priced by the store. null = not for sale here (web,
   // product not live yet) → only the plans show, exactly as before.
   const [offer, setOffer] = useState<OpeningOffer | null>(null);
@@ -120,6 +138,11 @@ export function PaywallPage({ feature, opening }: PaywallProps = {}): JSX.Elemen
       feature ?? null,
       slug === 'other' ? otherText.trim() || undefined : undefined,
     );
+    if (onLeave) {
+      setDeclineOpen(false);
+      onLeave();
+      return;
+    }
     void navigate(feature === 'settings' ? '/settings' : '/');
   };
 
@@ -211,7 +234,10 @@ export function PaywallPage({ feature, opening }: PaywallProps = {}): JSX.Elemen
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-zinc-100">
-      <div className="mx-auto flex min-h-screen max-w-md flex-col px-6 py-10">
+      {/* The opening wall renders INSIDE the app, under the phone tab bar —
+          without this pad "Not now" sat behind the bar and could not be
+          tapped (2026-11-12). The app's one bottom pad for that bar. */}
+      <div className="mx-auto flex min-h-screen max-w-md flex-col px-6 pt-10 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-10">
         <header className="mb-6 text-center">
           <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#c9a84c]/15">
             <Crown className="h-7 w-7 text-[#c9a84c]" />
@@ -413,7 +439,7 @@ export function PaywallPage({ feature, opening }: PaywallProps = {}): JSX.Elemen
               setDeclineOpen(true);
             }}
           >
-            Not now — back to free features
+            {opening ? 'Not now — back to this opening' : 'Not now — back to free features'}
           </button>
         </p>
       </div>
@@ -470,7 +496,7 @@ export function PaywallPage({ feature, opening }: PaywallProps = {}): JSX.Elemen
               onClick={() => submitDecline('skipped')}
               className="mt-3 w-full text-center text-xs text-zinc-500 underline"
             >
-              Skip — back to free features
+              {opening ? 'Skip' : 'Skip — back to free features'}
             </button>
           </div>
         </div>

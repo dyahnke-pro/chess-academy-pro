@@ -15,7 +15,8 @@ import { ModelGamesSection } from './ModelGamesSection';
 import { ModelGameViewer } from './ModelGameViewer';
 import { useEntitlement } from '../../hooks/useEntitlement';
 import { useFreeTierStore } from '../../stores/freeTierStore';
-import { canViewOpening, isEligibleFreeOpening, hasFreeOpeningRoom, isMembersOnlyOpening } from '../../services/freeTierService';
+import { canViewOpening, isEligibleFreeOpening, hasFreeOpeningRoom, isMembersOnlyOpening, claimedOpenings, openingSlotsRemaining } from '../../services/freeTierService';
+import { PRICE_OPENING } from '../../data/pricing';
 import {
   trackFreeOpeningClaimed,
   trackLibraryWalled,
@@ -147,6 +148,7 @@ import { useCoachBoardStore } from '../../stores/coachBoardStore';
 import type { OpeningRecord, MiddlegamePlan, ModelGame } from '../../types';
 import { advanceFirstRun } from '../../services/firstRunJourney';
 import { recallData, remember } from '../../services/studentMemory';
+import { getOpeningOffer } from '../../services/billingService';
 import {
   ArrowLeft,
   BookOpen as LearnIcon,
@@ -170,17 +172,6 @@ import {
   Lock,
   Check,
 } from 'lucide-react';
-
-/** ViewModes where the student is ACTIVELY DRILLING (playing moves): Learn,
- *  Practice, Play and every prefixed flavour (variation-, trap-, warning-,
- *  named-trap-, gem-, pitfall-, subline-, middlegame-). Watch/walkthrough
- *  modes, model games and the detail page are NOT drills — they stay free to
- *  sample on every opening (David 2026-09-02). */
-const ACTIVE_DRILL_MODE = /(?:^|-)(?:learn|practice|play)$/;
-/** Legacy trap/warning TRAINING modes are drills too — the student plays the
- *  line — they just carry no rung suffix, so match them explicitly or they'd be
- *  a hole in the wall (drill any opening's traps free). */
-const ACTIVE_DRILL_EXTRA: ReadonlySet<string> = new Set(['train-warnings']);
 
 type ViewMode =
   | 'detail'
@@ -220,6 +211,56 @@ type ViewMode =
   | 'subline-play'
   | 'model-game';
 
+/** What each view of an opening costs a free user (David 2026-11-12). ONE
+ *  table read by the wall, the free-pick confirm and the unlock bar:
+ *  - `free`   — the page and the main line's Watch: open on every opening, so
+ *               they can see what they would be buying;
+ *  - `sample` — every other Watch, plans, model games: open while the free
+ *               pick is still open, walled on an opening that is not theirs;
+ *  - `drill`  — every Learn / Practice / Play: starting one while the pick is
+ *               open ASKS first ("They need to know") and the yes is the pick;
+ *               walled on an opening that is not theirs.
+ *  A Record, so a new view mode cannot compile until it answers. */
+export type OpeningAccess = 'free' | 'sample' | 'drill';
+export const OPENING_ACCESS: Record<ViewMode, OpeningAccess> = {
+  detail: 'free',
+  walkthrough: 'free',
+  learn: 'drill',
+  practice: 'drill',
+  play: 'drill',
+  'variation-learn': 'drill',
+  'variation-practice': 'drill',
+  'variation-play': 'drill',
+  'warning-learn': 'drill',
+  'warning-practice': 'drill',
+  'warning-play': 'drill',
+  'variation-walkthrough': 'sample',
+  'warning-walkthrough': 'sample',
+  'train-warnings': 'drill',
+  'named-trap': 'sample',
+  'named-trap-learn': 'drill',
+  'named-trap-practice': 'drill',
+  'named-trap-play': 'drill',
+  'gem-watch': 'sample',
+  'gem-learn': 'drill',
+  'gem-practice': 'drill',
+  'gem-play': 'drill',
+  'middlegame-watch': 'sample',
+  'middlegame-plan': 'drill', // the plan's Learn rung (it renders mode 'learn')
+  'middlegame-practice': 'drill',
+  'middlegame-play': 'drill',
+  'pitfall-watch': 'sample',
+  'pitfall-learn': 'drill',
+  'pitfall-practice': 'drill',
+  'pitfall-play': 'drill',
+  'subline-detail': 'sample',
+  'subline-watch': 'sample',
+  'subline-learn': 'drill',
+  'subline-practice': 'drill',
+  'subline-play': 'drill',
+  'model-game': 'sample',
+};
+
 function computeFenFromPgn(pgn: string, setupFen?: string): string {
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
   // setupFen optional: puzzle-derived trap lines start from a
@@ -245,7 +286,25 @@ export function OpeningDetailPage(): JSX.Element {
   const triggerStarAnimation = useStarAnimationStore((store) => store.trigger);
   const [opening, setOpening] = useState<OpeningRecord | null>(null);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<ViewMode>('detail');
+  const [viewMode, setViewModeRaw] = useState<ViewMode>('detail');
+  // THE FREE-PICK CONFIRM (David 2026-11-12: "They need to know"). While the
+  // student's free opening is still unpicked, starting any drill here does not
+  // start it: the page stays put and asks, under the rungs, whether this is the
+  // opening they want; the yes IS the pick. Every view change on the page goes
+  // through this one setter, so no button can start a drill around the ask.
+  // Inline, never a pop-up (David 2026-09-02); the arm-then-commit shape is the
+  // expert pass's.
+  const freePickOpenRef = useRef(false);
+  const [pendingDrill, setPendingDrill] = useState<ViewMode | null>(null);
+  const setViewMode = useCallback((mode: ViewMode): void => {
+    if (freePickOpenRef.current && OPENING_ACCESS[mode] === 'drill') {
+      setPendingDrill(mode);
+      setViewModeRaw('detail');
+      return;
+    }
+    setPendingDrill(null);
+    setViewModeRaw(mode);
+  }, []);
   const [activeVariationIndex, setActiveVariationIndex] = useState(-1);
   const [activeWarningLineIndex, setActiveWarningLineIndex] = useState(-1);
   const [activeNamedTrapId, setActiveNamedTrapId] = useState<string | null>(null);
@@ -761,11 +820,46 @@ export function OpeningDetailPage(): JSX.Element {
     return opening.warningLines.map((v) => computeFenFromPgn(v.pgn, v.setupFen));
   }, [opening?.warningLines]);
 
-  // Watch is FREE TO SAMPLE on every opening; an ACTIVE DRILL (Learn /
-  // Practice / Play) is what commits a student to one. Browsing ('detail'),
-  // model games and every Watch/walkthrough mode never spend the free pick and
-  // never hit the wall.
-  const isActiveDrill = ACTIVE_DRILL_MODE.test(viewMode) || ACTIVE_DRILL_EXTRA.has(viewMode);
+  // IS THIS OPENING CLOSED TO THEM? A free user who has spent their free pick
+  // (and has not bought this one) — ONE answer, read by the wall, the
+  // after-Watch pop-up and the unlock bar. Before they claim, every eligible
+  // opening is open (canViewOpening), so a curious browser is never walled.
+  const openingLocked = gateEnabled && !isPro && freeTierHydrated && !!id
+    && !canViewOpening(id, freeTierRow, ownedOpeningIds);
+  const walledHere = openingLocked && OPENING_ACCESS[viewMode] !== 'free';
+
+  // The wall that pops up when the free main-line Watch of a locked opening
+  // ENDS — once per opening (David 2026-11-12). Remembered per opening, so a
+  // replay does not throw a wall they already said no to; the unlock bar on
+  // the page is the way back to it from then on.
+  const [afterWatchWall, setAfterWatchWall] = useState(false);
+  const [afterWatchWallSeen, setAfterWatchWallSeen] = useState(false);
+  useEffect(() => {
+    setAfterWatchWall(false);
+    setAfterWatchWallSeen(false);
+    if (!id) return;
+    let live = true;
+    void recallData('after-watch-wall', id).then((m) => { if (live && m) setAfterWatchWallSeen(true); });
+    return () => { live = false; };
+  }, [id]);
+  const afterMainLineWatch = useCallback((): void => {
+    if (!openingLocked || !id || afterWatchWallSeen) return;
+    setAfterWatchWallSeen(true);
+    setAfterWatchWall(true);
+    trackSecondOpeningWalled(id, freeTierRow.freeOpeningId ?? '');
+    void remember('after-watch-wall', id, { at: Date.now() });
+  }, [openingLocked, id, afterWatchWallSeen, freeTierRow.freeOpeningId]);
+  // The store's price for this one opening, for the unlock bar ("Unlock for
+  // $0.99"). Read only on a locked opening; null off-store (web) — the bar
+  // then names no price and the wall shows the plans alone.
+  const [unlockPrice, setUnlockPrice] = useState<string | null>(null);
+  useEffect(() => {
+    setUnlockPrice(null);
+    if (!openingLocked || !id) return;
+    let live = true;
+    void getOpeningOffer(id).then((o) => { if (live && o) setUnlockPrice(o.priceString); });
+    return () => { live = false; };
+  }, [openingLocked, id]);
 
   // Has the student actually DRILLED this opening — completed a Learn,
   // Practice or Play rung on the main line, a variation, or a weapon? Read off
@@ -776,31 +870,39 @@ export function OpeningDetailPage(): JSX.Element {
     [opening],
   );
 
-  // Claim the ONE free opening the first time the student COMPLETES a drill
-  // here (idempotent; only when nothing is claimed yet). David 2026-09-02: a
-  // TAP can no longer be the signal — with the whole course unlocked up front a
-  // curious tap would burn their pick, so the claim waits for real commitment.
-  useEffect(() => {
-    if (!gateEnabled || isPro || !freeTierHydrated) return;
-    if (!id || !isEligibleFreeOpening(id)) return;
-    // canViewOpening honors the earned-credit allowance (base 1 + referral /
-    // review credits), so a walled opening is one with NO free slot left AND
-    // not already claimed. An active drill there is the upgrade-pressure moment.
-    // A bought opening never spends the free slot (à la carte, 2026-10-25).
-    if (ownedOpeningIds.includes(id)) return;
-    if (!canViewOpening(id, freeTierRow, ownedOpeningIds)) {
-      if (isActiveDrill) trackSecondOpeningWalled(id, freeTierRow.freeOpeningId ?? '');
-      return;
-    }
-    if (!hasDrilledThisOpening) return;
+  // Is the free pick still open here? Their pick is unspent, this opening can
+  // be it, and they do not own it. Then a drill ASKS before it starts, and the
+  // yes claims it (this REPLACES the silent claim on a completed drill, David
+  // 2026-09-02 — a student found out they had picked only at the paywall).
+  const freePickOpen = gateEnabled && !isPro && freeTierHydrated && !!id
+    && isEligibleFreeOpening(id) && !ownedOpeningIds.includes(id)
+    && hasFreeOpeningRoom(freeTierRow) && !claimedOpenings(freeTierRow).includes(id);
+  freePickOpenRef.current = freePickOpen;
+  const freePicksLeft = openingSlotsRemaining(freeTierRow);
+  const confirmFreePick = useCallback((): void => {
+    const drill = pendingDrill;
+    if (!id || !drill) return;
     void claimFreeOpening(id).then((result) => {
+      if (result !== 'ok' && result !== 'already-claimed-this') return;
+      freePickOpenRef.current = false;
       if (result === 'ok') {
         void finishBite('free-opening');
         trackFreeOpeningClaimed(id);
         setJustClaimedFree(true);
       }
+      setPendingDrill(null);
+      setViewModeRaw(drill);
     });
-  }, [gateEnabled, isPro, freeTierHydrated, isActiveDrill, hasDrilledThisOpening, id, freeTierRow, claimFreeOpening, ownedOpeningIds]);
+  }, [id, pendingDrill, claimFreeOpening]);
+  const freePickConfirmRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const el = freePickConfirmRef.current;
+    if (pendingDrill && el && typeof el.scrollIntoView === 'function') el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }, [pendingDrill]);
+
+  useEffect(() => {
+    if (walledHere && id) trackSecondOpeningWalled(id, freeTierRow.freeOpeningId ?? '');
+  }, [walledHere, id, freeTierRow.freeOpeningId]);
 
   // First-run journey: starting an opening's lesson is its last step.
   useEffect(() => {
@@ -874,8 +976,28 @@ export function OpeningDetailPage(): JSX.Element {
   // can sample the whole library and only commits when they drill. Dormant
   // unless the gate is live + non-Pro.
   if (libraryWalled) return <PaywallPage feature="library" />;
-  if (isActiveDrill && gateEnabled && !isPro && freeTierHydrated && id && !canViewOpening(id, freeTierRow, ownedOpeningIds)) {
-    return <PaywallPage feature="opening" opening={{ id, name: opening.name }} />;
+  // The opening wall — after the free Watch ends, or in front of anything a
+  // locked opening does not open. "Not now" comes back to this page, never
+  // Home: they were in the middle of this opening.
+  if (afterWatchWall && openingLocked) {
+    return (
+      <PaywallPage
+        feature="opening"
+        opening={{ id: opening.id, name: opening.name }}
+        moment="after-watch"
+        onLeave={() => setAfterWatchWall(false)}
+      />
+    );
+  }
+  if (walledHere) {
+    return (
+      <PaywallPage
+        feature="opening"
+        opening={{ id: opening.id, name: opening.name }}
+        moment="locked-action"
+        onLeave={() => setViewMode('detail')}
+      />
+    );
   }
 
   // Walkthrough mode (main line or variation)
@@ -894,7 +1016,7 @@ export function OpeningDetailPage(): JSX.Element {
             // waiting for them rather than needing to be found.
             void markRungComplete(opening.id, MAIN_LINE_INDEX, 'watch')
               .then(() => loadOpening())
-              .then(() => setViewMode('detail'));
+              .then(() => { setViewMode('detail'); afterMainLineWatch(); });
           }}
           onContinueToNext={() => setViewMode('learn')}
         />
@@ -948,7 +1070,7 @@ export function OpeningDetailPage(): JSX.Element {
         onComplete={() => {
           void markRungComplete(opening.id, lineIndex, 'watch')
             .then(() => loadOpening())
-            .then(() => setViewMode('detail'));
+            .then(() => { setViewMode('detail'); if (!onVariation) afterMainLineWatch(); });
         }}
         onContinueToNext={() => (onVariation ? handleStartVariationLearn(activeVariationIndex) : setViewMode('learn'))}
       />
@@ -1573,9 +1695,7 @@ export function OpeningDetailPage(): JSX.Element {
   // repeat on every opening, fire while they're still browsing (killing the
   // free-sampling we just built), and break the "never reference the interface"
   // narration rule. A quiet line at the point of choice does the same job.
-  const showFreePickHint =
-    gateEnabled && !isPro && freeTierHydrated && !!id &&
-    isEligibleFreeOpening(id) && !ownedOpeningIds.includes(id) && hasFreeOpeningRoom(freeTierRow) && canViewOpening(id, freeTierRow, ownedOpeningIds);
+  const showFreePickHint = freePickOpen;
   const ladderNext = nextRung(opening, ladderLine);
   // "I already know this" expert pass — a lifetime budget of ONE per color
   // (one White opening + one Black opening). Spending it unlocks the WHOLE
@@ -2004,12 +2124,43 @@ export function OpeningDetailPage(): JSX.Element {
             <div className={`grid gap-1.5 ${primary ? 'grid-cols-3' : 'grid-cols-4'}`}>
               {(primary ? secondary : rungs).map((r) => renderRung(r, false))}
             </div>
-            {showFreePickHint && (
+            {pendingDrill && freePickOpen ? (
+              <div
+                ref={freePickConfirmRef}
+                className="mt-3 rounded-xl border-2 border-emerald-500/40 bg-emerald-500/10 px-3 py-3"
+                data-testid="free-pick-confirm"
+              >
+                <p className="text-sm text-theme-text">
+                  {freePicksLeft > 1
+                    ? <>This uses one of your {freePicksLeft} free openings on <span className="font-semibold">{opening.name}</span>.</>
+                    : <>This makes <span className="font-semibold">{opening.name}</span> your free opening.</>}
+                  {' '}Every other opening keeps its main-line Watch free; the rest unlocks for {PRICE_OPENING} each.
+                </p>
+                <div className="mt-3 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={confirmFreePick}
+                    className="flex-1 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white"
+                    data-testid="free-pick-confirm-yes"
+                  >
+                    Make it my free opening
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPendingDrill(null)}
+                    className="flex-1 py-2 rounded-lg text-sm font-medium border border-theme-border text-theme-text"
+                    data-testid="free-pick-confirm-no"
+                  >
+                    Keep browsing
+                  </button>
+                </div>
+              </div>
+            ) : showFreePickHint && (
               <p
                 className="text-xs text-emerald-400/90 mt-2 px-0.5"
                 data-testid="free-pick-hint"
               >
-                Finish a lesson here and this whole course is yours, free.
+                You haven’t picked your free opening yet. Starting a lesson here asks you first.
               </p>
             )}
             {/* Ladder guidance + unlock-all escape */}
@@ -2595,6 +2746,23 @@ export function OpeningDetailPage(): JSX.Element {
         overview={subjectOverview}
         keyIdeas={subjectKeyIdeas}
       />
+
+      {/* THE UNLOCK BAR — once the after-Watch wall has been seen on a locked
+          opening, the way back to it stays here instead of popping up again
+          (David 2026-11-12). Sits above the phone tab bar. */}
+      {openingLocked && afterWatchWallSeen && (
+        <div className="sticky bottom-[calc(5rem+env(safe-area-inset-bottom,0px))] md:bottom-0 z-20 mt-4">
+          <button
+            type="button"
+            onClick={() => setAfterWatchWall(true)}
+            data-testid="opening-unlock-bar"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold shadow-lg border-2 border-emerald-500/50 bg-emerald-600 text-white"
+          >
+            <Lock size={16} />
+            {unlockPrice ? `Unlock this opening for ${unlockPrice}` : 'Unlock this opening'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
