@@ -25,6 +25,8 @@ import { lineTrust, type LineSeconds, type LineTrust } from './lineTrust';
 import { detectTacticType } from './missedTacticService';
 import { MATERIAL_VALUE } from './pieceValues';
 import type { TacticType } from '../types';
+import { lineSeatAt, lineShape } from '../utils/andList';
+import { markSaysMate } from '../utils/sanMark';
 
 /** A read of one board: its principal line, where it came from, and the other
  *  reads of the SAME board that may vouch for it. (Named `LineRead`: the board
@@ -294,6 +296,28 @@ export function reasonWinWords(r: CostReason, said: readonly number[]): string |
   const after = gainAfterLine(took, gave, made, saidMade);
   if (!after.left) return null;
   return after.words ?? count();
+}
+
+/** WHAT A COSTLY MOVE ALLOWS, as the move's predicate, from the student's
+ *  seat — the one rendering the lesson and chat composer say (fix 1,
+ *  2026-11-13: the lessons said "You play Bxd8 — it wins a queen for a
+ *  bishop" and nothing of …Bxf2+ Ke2 Bg4#). A line the reads vouch for
+ *  (`lineTrust`) is said to its blow and what it wins; one they do not is
+ *  said only by its first move, and only when that move is a check or a
+ *  capture (a fact one move deep). Null for a 'missed' reason (the better
+ *  move's job says that one) or nothing to say. */
+export function allowedClause(r: CostReason, studentWB: 'w' | 'b'): string | null {
+  if (r.kind !== 'allowed') return null;
+  const sans = reasonSans(r);
+  if (sans.length === 0) return null;
+  const whom = r.seat === 'you' ? 'them' : 'you';
+  if (r.trust.name) {
+    const line = lineShape(sans, lineSeatAt(r.fen, studentWB), r.fen, 'first');
+    if (r.mate) return `walks into mate: ${line}${markSaysMate(sans[sans.length - 1]) ? '' : ", and it's mate"}`;
+    const won = reasonWinWords(r, []);
+    return won ? `lets ${whom} win ${won}: ${line}` : null;
+  }
+  return /x|\+|#/.test(sans[0]) ? `lets ${whom} play ${sans[0]}` : null;
 }
 
 /** The line to the blow, as SAN with the black move marked (…Nxe5). */

@@ -335,9 +335,27 @@ export const NO_FOLLOW: FollowLines = [];
 export function gainHoldsInLine(fenBefore: string, san: string, follow: FollowLines, mover: 'w' | 'b', gain: number): boolean {
   return follow.every((line) => {
     if (line.length === 0) return true;
+    // A LINE THAT MATES THE MOVER takes every gain with it (fix 1,
+    // 2026-11-13: the Stafford's Bxd8 "wins a queen for a bishop" with
+    // …Bxf2+ Ke2 Bg4# the engine's own line): material is counted only on a
+    // board the game goes on from.
+    if (matesMover(fenBefore, [san, ...line], mover)) return false;
     const net = settledNetForLine(fenBefore, [san, ...line.slice(0, GAIN_HOLDS_PLIES)], mover);
     return net !== null && net >= gain;
   });
+}
+
+/** Does the line (SAN or UCI, from `fenBefore`) end with `mover` checkmated? */
+function matesMover(fenBefore: string, line: readonly string[], mover: 'w' | 'b'): boolean {
+  try {
+    const c = new Chess(fenBefore);
+    for (const mv of line) {
+      const m = /^[a-h][1-8][a-h][1-8][qrbn]?$/.test(mv) ? c.move({ from: mv.slice(0, 2), to: mv.slice(2, 4), promotion: mv[4] }) : c.move(mv.replace(/^…/, ''));
+      if (!m) return false;
+      if (c.isCheckmate()) return c.turn() === mover;
+    }
+  } catch { return false; }
+  return false;
 }
 
 /** How far `seatWB` is BEHIND in material on `fen`, in pawns (0 when level or

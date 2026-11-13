@@ -345,3 +345,25 @@ describe('a plain stopped check never leads a move with a real job', () => {
   });
 });
 
+
+describe('a costly move is said with what it allows (fix 1, 2026-11-13)', () => {
+  const L = (rows: Array<{ cp: number | null; mate: number | null; pv: string[] }>) => rows.map((r, k) => ({ rank: k + 1, evaluation: r.cp ?? 0, mate: r.mate, moves: r.pv }));
+  const thought = (fen: string, san: string, before: Parameters<typeof L>[0], after: Parameters<typeof L>[0], costCp: number): string => {
+    const facts = moveThoughtFacts({ story: false, theory: false, tense: 'now', fenBefore: fen, san, prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: [], theirLast: null,
+      reads: { before: L(before), after: L(after), passBefore: [], passAfter: [] }, costCp, phrases: newLessonVoice().phrases });
+    return facts.map((f) => f.text).join(' ');
+  };
+  it("the Stafford's Bxd8 wins no queen: it runs into mate", () => {
+    const said = thought('r1bqk2r/ppp2ppp/2p5/2b3B1/4n3/3P4/PPP2PPP/RN1QKB1R w KQkq - 0 7', 'Bxd8',
+      [{ cp: -369, mate: null, pv: ['d1e2', 'd8g5', 'f2f4', 'c5f2', 'e1d1', 'g5f4'] }],
+      [{ cp: null, mate: -2, pv: ['c5f2', 'e1e2', 'c8g4'] }], 9999);
+    expect(said).not.toMatch(/wins a queen/);
+    expect(said).toMatch(/walks into mate: they play …?Bxf2\+, you answer Ke2 and they play …?Bg4#/);
+  });
+  it('Ke2 against …Qh4 is said with the mate it allows', () => {
+    const said = thought('rnb1k1nr/pppp1ppp/8/2b1P3/4P2q/8/PPPP2PP/RNBQKBNR w KQkq - 1 4', 'Ke2',
+      [{ cp: -346, mate: null, pv: ['g2g3', 'h4e4', 'd1e2', 'e4h1', 'g1f3', 'b8c6'] }],
+      [{ cp: null, mate: -1, pv: ['h4e4'] }], 9999);
+    expect(said).toMatch(/Qxe4#/);
+  });
+});

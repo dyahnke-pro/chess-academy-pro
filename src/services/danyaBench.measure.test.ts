@@ -553,6 +553,7 @@ const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
   openingTheory: 'services/openingTheory.ts#openingTheoryFacts',
   moveGains: 'services/moveStops.ts#moveStops',
   knownSlip: 'services/knownSlips.ts#knownSlip',
+  costReason: 'services/costReason.ts#allowedClause',
   moveWhy: 'services/deliberation.ts#moveWhy',
   briefing: 'services/reviewMoveBriefing.ts#buildReviewMoveBriefing',
   boardTeacher: 'services/reviewMoveTeaching.ts#buildReviewMoveTeachingFact',

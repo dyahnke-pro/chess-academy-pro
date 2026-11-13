@@ -75,7 +75,9 @@ export type ThoughtSource =
   /** What a move stops, the order it keeps, the line it cuts (`moveStops`, `pieceOutFirst`, `lineCut`). */
   | 'moveGains'
   /** The club index's known mistakes and traps (`knownSlips`, the registry rows). */
-  | 'knownSlip';
+  | 'knownSlip'
+  /** What a costly move allows (`costReason` → `allowedClause`): the line that punishes it. */
+  | 'costReason';
 
 /** ONE FACT, the composer's only input — the one fact shape (`coachFact.ts`),
  *  its step derived from its kind, with what this composer ranks by: the
@@ -177,6 +179,7 @@ export const SOURCE_DEPTH: Record<ThoughtSource, 'hidden' | 'why'> = {
   moveGains: 'why',
   // A known mistake and its punishment is a consequence the board hides.
   knownSlip: 'hidden',
+  costReason: 'hidden',
   deepFact: 'hidden', binding: 'hidden', bestLine: 'hidden', notYet: 'hidden', prophylaxis: 'hidden', baitSet: 'hidden',
   // What their move aims at now is the attack itself, one claim with the
   // other lines on its square (decision baseline 2026-11-12: "Their Qd8 is

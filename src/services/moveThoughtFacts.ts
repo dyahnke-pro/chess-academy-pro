@@ -62,7 +62,8 @@ import { moveOrder } from './moveOrder';
 import { readBoardAll, readKey } from './boardComputers';
 import type { WeighRead } from './weighedMoves';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
-import { INACCURACY_CP } from './engineConstants';
+import { INACCURACY_CP, MISTAKE_CP } from './engineConstants';
+import { allowedClause, costReason } from './costReason';
 
 export interface MoveThoughtInput {
   fenBefore: string;
@@ -224,6 +225,29 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // its kind in a lesson or a game (the WHY rule), then the change alone.
     const verb = a.horizon && horizonSaid(i.phrases, a.kind) ? `${a.verb}${a.horizon}` : a.verb;
     add(a.kind, 'moveAspects', 'briefing', a.idea, lead(verb), `It also ${verb}`, a.squares, a.weight, a.restates === true);
+  }
+
+  // WHAT A COSTLY MOVE ALLOWS (fix 1, 2026-11-13): a move the engine grades a
+  // mistake or worse is said with the line that punishes it — the one cost
+  // computer every surface grades with (`costReason`), worded by its one
+  // renderer, both seats from the student's. The Stafford's Bxd8 said "it
+  // wins a queen for a bishop" and nothing of …Bxf2+ Ke2 Bg4#; Ke2 allowing
+  // …Qxe4# said a model game's name and nothing else.
+  const after0r = i.reads?.after[0];
+  if (i.costCp !== null && i.costCp >= MISTAKE_CP && after0r && after0r.moves.length > 0) {
+    const mover = sideOf(i.fenBefore);
+    const studentWB: 'w' | 'b' = mine ? mover : mover === 'w' ? 'b' : 'w';
+    const earlier = after0r.earlier?.moves;
+    const r = costReason({
+      fenBefore: i.fenBefore, playedSan: i.san, mover, student: studentWB, costCp: i.costCp,
+      after: { uci: after0r.moves, source: 'deep', seconds: earlier && earlier.length > 0 ? [earlier] : [] },
+      before: null, priorMove: null, against: i.reads?.before[0]?.moves ?? null,
+    });
+    const clause = r ? allowedClause(r, studentWB) : null;
+    if (r && clause) {
+      const sq = r.plies.slice(0, r.blowPlies).map((p) => p.uci.slice(2, 4));
+      add('consequence', 'allowedClause', 'costReason', r.mate ? 'mate' : 'win-material', lead(clause), `It ${clause}`, sq, 92, false, [`allows:${r.plies[0]?.uci ?? ''}`]);
+    }
   }
 
   // THE MOVE'S JOB, from the speaker's seat.
