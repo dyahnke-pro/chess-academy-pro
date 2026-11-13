@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**730 lines · 23 exports · 56 importers · 14 tests · 0 audits**
+**761 lines · 24 exports · 60 importers · 15 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/coach/boardTurnAnswer.ts`
 - `src/coach/chatTurnAnswers.ts`
+- `src/services/bookMoveWhy.keepPin.test.ts`
 - `src/services/bookMoveWhy.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/costReason.ts`
@@ -27,6 +28,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts`
 - `src/services/exchangeNotFinished.test.ts`
 - `src/services/factStakes.ts`
+- `src/services/gambitIdea.ts`
 - `src/services/gemCrushLines.ts`
 - `src/services/giftedMaterialIsNotWon.test.ts`
 - `src/services/groundedAnswer.ts`
@@ -44,8 +46,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveIntent.ts`
 - `src/services/moveOrder.ts`
 - `src/services/moveThoughtFacts.ts`
+- `src/services/moveThreat.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/openingRoads.ts`
+- `src/services/openingTheory.ts`
 - `src/services/patternFails.ts`
 - `src/services/pieceOptions.ts`
 - `src/services/planChoice.ts`
@@ -77,7 +81,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ExchangeLedger` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeExchangeLedger` (function) — 24 call sites
+### `computeExchangeLedger` (function) — 26 call sites
 - `src/coach/boardTurnAnswer.ts:428`
 - `src/coach/chatTurnAnswers.ts:492`
 - `src/coach/chatTurnAnswers.ts:662`
@@ -97,8 +101,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:247`
 - `src/services/exchangeLedger.test.ts:267`
 - `src/services/exchangeLedger.test.ts:273`
+- `src/services/gambitIdea.ts:114`
 - `src/services/gemCrushLines.ts:171`
-- `src/services/knownSlips.ts:123`
+- `src/services/knownSlips.ts:182`
+- `src/services/moveThreat.ts:116`
 - `src/services/patternFails.ts:129`
 - `src/services/planChoice.ts:156`
 - `src/services/threatProof.ts:61`
@@ -108,10 +114,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/decisiveReason.ts:117`
 - `src/services/exchangeIdeas.ts:619`
 - `src/services/groundedAnswer.ts:2176`
-- `src/services/knownSlips.ts:128`
+- `src/services/knownSlips.ts:187`
 - `src/services/patternFails.ts:130`
-- `src/services/principleAttribution.ts:804`
-- `src/services/reviewMoveBriefing.ts:413`
+- `src/services/principleAttribution.ts:816`
+- `src/services/reviewMoveBriefing.ts:415`
 - `src/services/reviewPositionalAssessment.ts:147`
 - `src/services/tacticGeometry.ts:552`
 - `src/services/whyItFailed.ts:266`
@@ -121,12 +127,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:278`
 - `src/services/lineCalc.ts:231`
 
+### `materialGainWords` (function) — 2 call sites
+- `src/services/gambitIdea.ts:115`
+- `src/services/moveThreat.ts:117`
+
 ### `promotedIn` (function) — 2 call sites
-- `src/services/costReason.ts:293`
+- `src/services/costReason.ts:295`
 - `src/services/lineCalc.ts:112`
 
 ### `gainAfterLine` (function) — 2 call sites
-- `src/services/costReason.ts:294`
+- `src/services/costReason.ts:296`
 - `src/services/lineCalc.ts:113`
 
 ### `describeExchange` (function) — 9 call sites
@@ -140,14 +150,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:208`
 - `src/services/punishCountsPlayedMove.test.ts:19`
 
-### `settledNetForLine` (function) — 8 call sites
+### `settledNetForLine` (function) — 12 call sites
 - `src/services/decisiveReason.ts:104`
 - `src/services/decisiveReason.ts:342`
 - `src/services/decisiveReason.ts:343`
+- `src/services/gambitIdea.ts:110`
 - `src/services/moveComparison.ts:183`
 - `src/services/moveComparison.ts:184`
 - `src/services/moveInsight.lineAudit.test.ts:49`
 - `src/services/moveInsight.ts:405`
+- `src/services/moveThreat.ts:98`
+- `src/services/moveThreat.ts:106`
+- `src/services/moveThreat.ts:112`
 - `src/services/thinkAloud.ts:106`
 
 ### `GAIN_HOLDS_PLIES` (const) — 0 call sites
@@ -160,13 +174,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gainHoldsInLine` (function) — 2 call sites
-- `src/services/bookMoveWhy.ts:675`
-- `src/services/reviewMoveBriefing.ts:395`
+- `src/services/bookMoveWhy.ts:691`
+- `src/services/reviewMoveBriefing.ts:397`
 
 ### `materialDeficit` (function) — 3 call sites
-- `src/services/bookMoveWhy.ts:679`
+- `src/services/bookMoveWhy.ts:695`
 - `src/services/moveIntent.ts:474`
-- `src/services/reviewMoveBriefing.ts:409`
+- `src/services/reviewMoveBriefing.ts:411`
 
 ### `settledExchange` (function) — 5 call sites
 - `src/services/playCommentary.ts:892`
@@ -179,11 +193,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `proofCut` (function) — 44 call sites
-- `src/services/coachFeatureService.ts:4755`
-- `src/services/coachFeatureService.ts:4758`
-- `src/services/costReason.ts:135`
-- `src/services/costReason.ts:166`
-- `src/services/costReason.ts:169`
+- `src/services/coachFeatureService.ts:4794`
+- `src/services/coachFeatureService.ts:4797`
+- `src/services/costReason.ts:137`
+- `src/services/costReason.ts:168`
+- `src/services/costReason.ts:171`
 - `src/services/gemCrushLines.ts:162`
 - `src/services/giftedMaterialIsNotWon.test.ts:14`
 - `src/services/giftedMaterialIsNotWon.test.ts:30`
@@ -204,15 +218,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lookaheadPlan.ts:671`
 - `src/services/lookaheadPlan.ts:733`
 - `src/services/moveOrder.ts:150`
-- `src/services/openingGenerator.ts:3617`
+- `src/services/openingGenerator.ts:3620`
 - `src/services/pieceOptions.ts:124`
 - `src/services/playedMoveGrade.ts:117`
-- `src/services/principleAttribution.ts:475`
-- `src/services/principleAttribution.ts:539`
-- `src/services/principleAttribution.ts:756`
-- `src/services/principleAttribution.ts:759`
-- `src/services/principleAttribution.ts:769`
-- `src/services/principleAttribution.ts:772`
+- `src/services/principleAttribution.ts:487`
+- `src/services/principleAttribution.ts:551`
+- `src/services/principleAttribution.ts:768`
+- `src/services/principleAttribution.ts:771`
+- `src/services/principleAttribution.ts:781`
+- `src/services/principleAttribution.ts:784`
 - `src/services/projectedLineVoice.report.test.ts:107`
 - `src/services/projectedLineVoice.ts:68`
 - `src/services/punishCountsPlayedMove.test.ts:17`
@@ -220,8 +234,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalkOct2a.test.ts:24`
 - `src/services/reviewWalkOct2a.test.ts:26`
 - `src/services/slipDepth.ts:62`
-- `src/services/threeFacts.ts:204`
-- `src/services/threeFacts.ts:221`
+- `src/services/threeFacts.ts:213`
+- `src/services/threeFacts.ts:230`
 - `src/services/whyItFailed.ts:219`
 
 ### `lineGiftIndex` (function) — 4 call sites
@@ -233,8 +247,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `describeProofResult` (function) — 10 call sites
 - `src/coach/boardTurnAnswer.ts:429`
 - `src/coach/chatTurnAnswers.ts:705`
-- `src/services/coachFeatureService.ts:4727`
-- `src/services/coachFeatureService.ts:4783`
+- `src/services/coachFeatureService.ts:4766`
+- `src/services/coachFeatureService.ts:4822`
 - `src/services/decisiveReason.ts:141`
 - `src/services/lineProof.test.ts:27`
 - `src/services/pieceOptions.ts:137`
@@ -281,6 +295,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/bookMoveWhy.keepPin.test.ts`
 - `src/services/countedWhenTradeEnds.test.ts`
 - `src/services/exchangeLedger.continuation.test.ts`
 - `src/services/exchangeLedger.horizon.test.ts`

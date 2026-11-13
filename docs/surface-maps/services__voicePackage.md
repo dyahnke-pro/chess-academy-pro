@@ -70,7 +70,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnTurnDoor.test.ts:990`
 - `src/services/slipQuestion.test.ts:45`
 - `src/services/slipQuestion.test.ts:54`
-- `src/services/thoughtComposer.ts:397`
+- `src/services/thoughtComposer.ts:407`
 
 ### `buildVoicePackage` (function) — 92 call sites
 - `src/components/Coach/CoachGameReview.tsx:1935`
@@ -95,9 +95,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/ruleGradeFen.test.ts:9`
 - `src/services/ruleGradeFen.test.ts:12`
 - `src/services/speedRunReads.scale.test.ts:41`
-- `src/services/thoughtComposer.ts:378`
-- `src/services/thoughtComposer.ts:389`
-- `src/services/thoughtComposer.ts:469`
+- `src/services/thoughtComposer.ts:388`
+- `src/services/thoughtComposer.ts:399`
+- `src/services/thoughtComposer.ts:479`
 - `src/services/voicePackage.dependentFact.test.ts:22`
 - `src/services/voicePackage.dependentFact.test.ts:25`
 - `src/services/voicePackage.dependentFact.test.ts:28`
@@ -184,9 +184,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/os11RootCauses5And6.replay.test.ts:34`
 - `src/services/os11RootCauses5And6.replay.test.ts:47`
 - `src/services/outpostOneKey.test.ts:20`
-- `src/services/thoughtComposer.ts:390`
-- `src/services/thoughtComposer.ts:476`
-- `src/services/thoughtComposer.ts:480`
+- `src/services/thoughtComposer.ts:400`
+- `src/services/thoughtComposer.ts:486`
+- `src/services/thoughtComposer.ts:490`
 - `src/services/voicePackage.test.ts:399`
 - `src/services/voicePackage.test.ts:408`
 - `src/services/voicePackage.test.ts:420`
@@ -199,7 +199,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `joinSpoken` (function) — 4 call sites
 - `src/services/learnTurnDoor.ts:1357`
-- `src/services/thoughtComposer.ts:492`
+- `src/services/thoughtComposer.ts:502`
 - `src/services/voicePackage.test.ts:578`
 - `src/services/voicePackage.test.ts:587`
 

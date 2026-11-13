@@ -51,13 +51,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `signedBand` (const) — 1 call site
-- `src/services/moveThoughtFacts.ts:676`
+- `src/services/moveThoughtFacts.ts:746`
 
 ### `evalReading` (function) — 4 call sites
 - `src/services/evalReading.test.ts:11`
 - `src/services/evalReading.test.ts:17`
 - `src/services/evalReading.test.ts:23`
-- `src/services/moveThoughtFacts.ts:673`
+- `src/services/moveThoughtFacts.ts:743`
 
 ### `moveAspects` (function) — 12 call sites
 - `src/services/captureLeadsTo.test.ts:26`
@@ -67,8 +67,8 @@
 - `src/services/exchangeNotFinished.test.ts:25`
 - `src/services/exchangeNotFinished.test.ts:295`
 - `src/services/midExchangeStructure.test.ts:13`
-- `src/services/moveThoughtFacts.ts:217`
-- `src/services/moveThoughtFacts.ts:988`
+- `src/services/moveThoughtFacts.ts:221`
+- `src/services/moveThoughtFacts.ts:1064`
 - `src/services/reviewMoveBriefing.test.ts:71`
 - `src/services/reviewMoveBriefing.test.ts:73`
 - `src/test/captureSaidOnce.gate.test.ts:190`
@@ -99,48 +99,52 @@
 - `src/test/captureSaidOnce.gate.test.ts:186`
 
 ### `toClause` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:293`
+- `src/services/moveThoughtFacts.ts:341`
 - `src/services/reviewMoveBriefing.test.ts:182`
 - `src/services/reviewMoveBriefing.test.ts:185`
 
 ### `joinReview` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:293`
+- `src/services/moveThoughtFacts.ts:341`
 - `src/services/reviewMoveBriefing.test.ts:184`
 - `src/services/reviewMoveBriefing.test.ts:185`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newLessonVoice` (function) — 38 call sites
+### `newLessonVoice` (function) — 42 call sites
 - `src/hooks/useTeachWalkthrough.ts:902`
 - `src/hooks/useTeachWalkthrough.ts:903`
-- `src/services/danyaBench.measure.test.ts:446`
+- `src/services/danyaBench.measure.test.ts:460`
 - `src/services/decisionStakes.test.ts:50`
 - `src/services/exchangeNotFinished.test.ts:281`
 - `src/services/gamesCourse.ts:367`
 - `src/services/lessonVoice.story.test.ts:29`
 - `src/services/lessonVoice.story.test.ts:41`
-- `src/services/moveThoughtFacts.test.ts:20`
-- `src/services/moveThoughtFacts.test.ts:65`
-- `src/services/moveThoughtFacts.test.ts:79`
-- `src/services/moveThoughtFacts.test.ts:85`
-- `src/services/moveThoughtFacts.test.ts:90`
-- `src/services/moveThoughtFacts.test.ts:95`
-- `src/services/moveThoughtFacts.test.ts:108`
-- `src/services/moveThoughtFacts.test.ts:112`
-- `src/services/moveThoughtFacts.test.ts:125`
-- `src/services/moveThoughtFacts.test.ts:151`
-- `src/services/moveThoughtFacts.test.ts:182`
-- `src/services/moveThoughtFacts.test.ts:193`
-- `src/services/moveThoughtFacts.test.ts:209`
-- `src/services/moveThoughtFacts.test.ts:213`
-- `src/services/moveThoughtFacts.test.ts:231`
-- `src/services/moveThoughtFacts.test.ts:267`
-- `src/services/moveThoughtFacts.test.ts:270`
-- `src/services/moveThoughtFacts.test.ts:293`
-- `src/services/moveThoughtFacts.test.ts:318`
-- `src/services/moveThoughtFacts.test.ts:343`
-- `src/services/moveThoughtFacts.ts:778`
+- `src/services/moveThoughtFacts.test.ts:21`
+- `src/services/moveThoughtFacts.test.ts:66`
+- `src/services/moveThoughtFacts.test.ts:80`
+- `src/services/moveThoughtFacts.test.ts:86`
+- `src/services/moveThoughtFacts.test.ts:91`
+- `src/services/moveThoughtFacts.test.ts:96`
+- `src/services/moveThoughtFacts.test.ts:109`
+- `src/services/moveThoughtFacts.test.ts:113`
+- `src/services/moveThoughtFacts.test.ts:126`
+- `src/services/moveThoughtFacts.test.ts:152`
+- `src/services/moveThoughtFacts.test.ts:183`
+- `src/services/moveThoughtFacts.test.ts:194`
+- `src/services/moveThoughtFacts.test.ts:210`
+- `src/services/moveThoughtFacts.test.ts:214`
+- `src/services/moveThoughtFacts.test.ts:232`
+- `src/services/moveThoughtFacts.test.ts:268`
+- `src/services/moveThoughtFacts.test.ts:271`
+- `src/services/moveThoughtFacts.test.ts:294`
+- `src/services/moveThoughtFacts.test.ts:319`
+- `src/services/moveThoughtFacts.test.ts:344`
+- `src/services/moveThoughtFacts.test.ts:354`
+- `src/services/moveThoughtFacts.test.ts:374`
+- `src/services/moveThoughtFacts.test.ts:389`
+- `src/services/moveThoughtFacts.test.ts:404`
+- `src/services/moveThoughtFacts.ts:848`
 - `src/services/openingGenerator.ts:2058`
 - `src/services/openingGenerator.ts:2628`
 - `src/services/pieceRoute.test.ts:52`

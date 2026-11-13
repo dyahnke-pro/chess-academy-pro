@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1082 lines · 6 exports · 27 importers · 17 tests · 0 audits**
+**1095 lines · 6 exports · 28 importers · 18 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,6 +29,7 @@
 - `src/services/reviewFullData.ts`
 - `src/services/reviewMoveBriefing.ts`
 - `src/services/reviewMoveTeaching.denied.test.ts`
+- `src/services/reviewMoveTeaching.oppositeWings.test.ts`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts`
 - `src/services/reviewMoveTeaching.test.ts`
 - `src/services/reviewMoveTeaching.unpin.test.ts`
@@ -59,7 +60,7 @@
 ### `buildReviewMoveTeaching` (function) — 53 call sites
 - `src/services/coachFeatureService.ts:1270`
 - `src/services/coachFeatureService.ts:4324`
-- `src/services/danyaBench.measure.test.ts:479`
+- `src/services/danyaBench.measure.test.ts:493`
 - `src/services/discussionPractice.ts:174`
 - `src/services/guardPressure.test.ts:20`
 - `src/services/guardPressure.test.ts:24`
@@ -111,7 +112,7 @@
 - `src/services/squareRole.test.ts:29`
 - `src/services/squareRole.test.ts:44`
 
-### `buildReviewMoveTeachingFact` (function) — 28 call sites
+### `buildReviewMoveTeachingFact` (function) — 31 call sites
 - `src/services/countedWhenTradeEnds.test.ts:100`
 - `src/services/countedWhenTradeEnds.test.ts:115`
 - `src/services/exchangeNotFinished.test.ts:196`
@@ -125,8 +126,11 @@
 - `src/services/falseJobs.test.ts:86`
 - `src/services/falseJobs.test.ts:106`
 - `src/services/learnBoardTeaching.ts:1249`
-- `src/services/moveThoughtFacts.ts:288`
+- `src/services/moveThoughtFacts.ts:336`
 - `src/services/pinIsAPin.test.ts:16`
+- `src/services/reviewMoveTeaching.oppositeWings.test.ts:13`
+- `src/services/reviewMoveTeaching.oppositeWings.test.ts:18`
+- `src/services/reviewMoveTeaching.oppositeWings.test.ts:19`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
 - `src/services/reviewMoveTeaching.test.ts:216`
@@ -169,6 +173,7 @@
 - `src/services/lessonVoiceIdeas.test.ts`
 - `src/services/pinIsAPin.test.ts`
 - `src/services/reviewMoveTeaching.denied.test.ts`
+- `src/services/reviewMoveTeaching.oppositeWings.test.ts`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts`
 - `src/services/reviewMoveTeaching.test.ts`
 - `src/services/reviewMoveTeaching.unpin.test.ts`

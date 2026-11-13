@@ -24,7 +24,7 @@
 - `src/services/orderComputers.test.ts:249`
 
 ### `openingEquivalence` (function) — 9 call sites
-- `src/services/moveThoughtFacts.ts:384`
+- `src/services/moveThoughtFacts.ts:432`
 - `src/services/orderComputers.test.ts:219`
 - `src/services/orderComputers.test.ts:227`
 - `src/services/orderComputers.test.ts:241`

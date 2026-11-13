@@ -46,8 +46,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/questionThought.test.ts:71`
 - `src/coach/questionThought.test.ts:74`
 - `src/coach/questionThought.test.ts:78`
-- `src/services/danyaBench.measure.test.ts:456`
-- `src/services/danyaBench.measure.test.ts:458`
+- `src/services/danyaBench.measure.test.ts:470`
+- `src/services/danyaBench.measure.test.ts:472`
 - `src/services/movePurposeEngine.ts:131`
 
 ## Tests

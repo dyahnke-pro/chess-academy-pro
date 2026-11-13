@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**579 lines · 16 exports · 30 importers · 9 tests · 0 audits**
+**582 lines · 16 exports · 30 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -94,21 +94,21 @@
 - `src/services/boardComputers.ts:776`
 - `src/services/boardComputers.ts:1199`
 - `src/services/learnTurnDoor.ts:755`
-- `src/services/moveThoughtFacts.ts:194`
-- `src/services/moveThoughtFacts.ts:487`
-- `src/services/moveThoughtFacts.ts:507`
-- `src/services/moveThoughtFacts.ts:576`
-- `src/services/moveThoughtFacts.ts:590`
-- `src/services/moveThoughtFacts.ts:915`
-- `src/services/moveThoughtFacts.ts:941`
-- `src/services/moveThoughtFacts.ts:958`
+- `src/services/moveThoughtFacts.ts:198`
+- `src/services/moveThoughtFacts.ts:539`
+- `src/services/moveThoughtFacts.ts:559`
+- `src/services/moveThoughtFacts.ts:628`
+- `src/services/moveThoughtFacts.ts:642`
+- `src/services/moveThoughtFacts.ts:991`
+- `src/services/moveThoughtFacts.ts:1017`
+- `src/services/moveThoughtFacts.ts:1034`
 - `src/services/openingStory.ts:419`
 - `src/services/positionFacts.ts:556`
 - `src/services/reviewFacet.ts:85`
 - `src/services/reviewFacet.ts:113`
 - `src/services/reviewFacet.ts:125`
 - `src/services/teachingFact.ts:91`
-- `src/services/thoughtComposer.ts:144`
+- `src/services/thoughtComposer.ts:150`
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 19 call sites
@@ -118,14 +118,14 @@
 - `src/services/coachFact.test.ts:111`
 - `src/services/coachFact.test.ts:112`
 - `src/services/learnTurnDoor.ts:756`
-- `src/services/moveThoughtFacts.ts:195`
-- `src/services/moveThoughtFacts.ts:487`
-- `src/services/moveThoughtFacts.ts:508`
-- `src/services/moveThoughtFacts.ts:577`
-- `src/services/moveThoughtFacts.ts:591`
-- `src/services/moveThoughtFacts.ts:916`
-- `src/services/moveThoughtFacts.ts:942`
-- `src/services/moveThoughtFacts.ts:959`
+- `src/services/moveThoughtFacts.ts:199`
+- `src/services/moveThoughtFacts.ts:539`
+- `src/services/moveThoughtFacts.ts:560`
+- `src/services/moveThoughtFacts.ts:629`
+- `src/services/moveThoughtFacts.ts:643`
+- `src/services/moveThoughtFacts.ts:992`
+- `src/services/moveThoughtFacts.ts:1018`
+- `src/services/moveThoughtFacts.ts:1035`
 - `src/services/openingStory.ts:420`
 - `src/services/positionFacts.ts:564`
 - `src/services/reviewFacet.ts:96`
