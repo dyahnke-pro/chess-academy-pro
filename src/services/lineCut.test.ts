@@ -14,3 +14,10 @@ describe('lineCut', () => {
     expect(lineCut(new Chess().fen(), 'Nf3', true)).toBeNull();
   });
 });
+
+describe('the moved piece is never the piece cut off', () => {
+  it('Kasparov–Karpov 1985 g24, e5: the rook on e6 is not cut off from the pawn that moved', () => {
+    const cut = lineCut('bq2r2k/6bp/4R3/6P1/P1Q1P2R/2N5/1rn3BP/6K1 w - - 2 40', 'e5', true);
+    expect(cut?.lost ?? '').not.toMatch(/e4/);
+  });
+});

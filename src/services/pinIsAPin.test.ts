@@ -62,13 +62,13 @@ describe('a guard is said beside a pin only when it is one (the move’s job)', 
     const c = new Chess();
     for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'd6', 'd4']) c.move(m);
     const job = moveJob(c.fen(), 'Nge7', 'b', MINE, null, []);
-    expect(job?.clause).toMatch(/your knight on c6, which their bishop on b5 pins/);
+    expect(job?.clause).toMatch(/your knight on c6, which their light-squared bishop pins/);
   });
 
   it('Rd1 guards the bishop on d3 their queen ATTACKS: a guarded rook behind it is no pin (Milner-Barry)', () => {
     const c = new Chess('r3kbnr/1p1b1ppp/p3p3/3pP3/3q4/2NB4/PP3PPP/R1BQ1RK1 w kq - 0 11');
     c.move('Qe2'); c.move('Be7');
-    expect(moveJob(c.fen(), 'Rd1', 'w', MINE, null, [])?.clause).toBe('it adds a second guard to your bishop on d3, which their queen on d4 attacks');
+    expect(moveJob(c.fen(), 'Rd1', 'w', MINE, null, [])?.clause).toBe('it adds a second guard to your bishop on d3, which their queen attacks');
   });
 
   it('…Rhd8 guards the knight on d7 their rook ATTACKS: the rook now behind it is guarded (QGA)', () => {

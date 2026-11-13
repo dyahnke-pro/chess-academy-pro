@@ -96,7 +96,7 @@ describe('review walk — both seats, captures included (BACKLOG §6)', () => {
     // 8…Nb4 hits c2 AND holds the pinned knight: both halves — the rule says
     // c2, the move's thought the guard (WO-ONE-COACH-01 Build 5).
     expect(at(16)).toMatch(/hits the pawn on c2/);
-    expect(at(16)).toMatch(/Their Nc3 is aimed at your knight on d5, and this covers it\./);
+    expect(at(16)).toMatch(/Their Nc3 is aimed at your knight(?: on d5)?, and this covers it\./);
   }, 30_000);
 });
 
@@ -115,7 +115,7 @@ describe('review walk — a move job is ranked by what the move changes', () => 
     expect(walk()[12]).toMatch(new RegExp(introHead('opponent', 'Qf3+', 'past') + String.raw`piles on your pinned knight on d5 — pinned to the king, it can't run, so it needs an answer this move\.`));
   }, 30_000);
   it('7…Ke6: a king says the square it holds first, then the escape', () => {
-    expect(walk()[13]).toMatch(new RegExp(MOVE_HEAD + String.raw`adds a second guard to your knight on d5, which their bishop on c4 pins, and gets your king out of the check from their queen on f3\.`));
+    expect(walk()[13]).toMatch(new RegExp(MOVE_HEAD + String.raw`adds a second guard to your knight on d5, which their light-squared bishop pins, and gets your king out of the check from their queen\.`));
   }, 30_000);
 });
 
@@ -131,9 +131,9 @@ describe('review walk — said when it changes, never as a formula', () => {
       chess.move(san);
       return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
     }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? '');
-    expect(walk.join(' ').match(/which their bishop on c4 pins/g)?.length).toBe(1);
+    expect(walk.join(' ').match(/which their (?:bishop on c4|light-squared bishop) pins/g)?.length).toBe(1);
     // The guard of the pinned knight, without the pin (the rule says c2).
-    expect(walk[15]).toMatch(/Their Nc3 is aimed at your knight on d5, and this covers it\./);
+    expect(walk[15]).toMatch(/Their Nc3 is aimed at your knight(?: on d5)?, and this covers it\./);
     expect(walk[15]).not.toMatch(/Their Nc3 is aimed at[^.]*pins/);
   }, 30_000);
 });

@@ -52,3 +52,10 @@ describe('stopsBreak', () => {
     expect(s?.clause).toBe('stops …d5, their break in master games from here: it would now lose a pawn');
   });
 });
+
+describe('a square is taken only by a pawn that stays', () => {
+  it('…dxe4 in the Caro-Kann takes nothing from the knight on g1: Nxe4 wins the pawn back', () => {
+    expect(moveStops(fenAfter('e4 c6 d4 d5 Nc3'), 'dxe4', false).filter((s) => s.kind === 'square')).toEqual([]);
+  });
+});
+

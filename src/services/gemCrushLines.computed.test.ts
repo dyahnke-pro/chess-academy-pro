@@ -116,9 +116,10 @@ describe('gems: the Play rung callout stays on the opening pages; the coach read
     expect(callers).toEqual(['src/components/Coach/CoachTeachPage.tsx', 'src/services/moveThoughtFacts.ts', 'src/services/reviewFullData.ts']);
     // Every coach surface that teaches a move is wired.
     const { BOARD_COMPUTERS } = await import('./boardComputers');
-    for (const row of [BOARD_COMPUTERS.knownSlip, BOARD_COMPUTERS.trapAhead, BOARD_COMPUTERS.slipsOnLine]) {
-      expect(row.surfaces.review).toEqual({ wired: 'services/reviewFullData.ts' });
-      for (const s of ['lesson', 'learn', 'chat'] as const) expect('wired' in row.surfaces[s]).toBe(true);
-    }
+    // Each surface reads the index through ONE of the three rows (a move's
+    // board, or Learn's last two moves): every coach surface is wired by one.
+    const rows = [BOARD_COMPUTERS.knownSlip, BOARD_COMPUTERS.trapAhead, BOARD_COMPUTERS.slipsOnLine];
+    for (const s of ['lesson', 'learn', 'chat', 'review'] as const) expect(rows.some((row) => 'wired' in row.surfaces[s])).toBe(true);
+    expect(BOARD_COMPUTERS.knownSlip.surfaces.review).toEqual({ wired: 'services/reviewFullData.ts' });
   });
 });

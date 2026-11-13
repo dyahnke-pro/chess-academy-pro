@@ -29,8 +29,9 @@ export function lineCut(fenBefore: string, san: string, mine: boolean): LineCut 
   let before: Chess;
   let after: Chess;
   let to: string;
+  let movedFrom: string;
   let mover: Color;
-  try { before = new Chess(fenBefore); mover = before.turn(); after = new Chess(fenBefore); const mv = after.move(san); if (mv.captured) return null; to = mv.to; } catch { return null; }
+  try { before = new Chess(fenBefore); mover = before.turn(); after = new Chess(fenBefore); const mv = after.move(san); if (mv.captured) return null; to = mv.to; movedFrom = mv.from; } catch { return null; }
   const own = mine ? 'your' : 'their', other = mine ? 'their' : 'your';
   for (const row of before.board()) for (const cell of row) {
     if (!cell || cell.color !== mover || !'bqr'.includes(cell.type)) continue;
@@ -38,7 +39,10 @@ export function lineCut(fenBefore: string, san: string, mine: boolean): LineCut 
     const candidates: Array<{ sq: string; lost: string; weight: number }> = [];
     for (let f = 0; f < 8; f++) for (let r = 1; r <= 8; r++) {
       const sq = `${String.fromCharCode(97 + f)}${r}` as Square;
-      if (sq === to || sq === from) continue;
+      // The moved piece's own square is not a piece left behind (Kasparov–
+      // Karpov 1985 g24, e5: "cuts your rook off from your pawn on e4" —
+      // the pawn on e4 was the one that moved).
+      if (sq === to || sq === from || sq === movedFrom) continue;
       if (!onLineBetween(from, sq, to)) continue;
       const sawBefore = before.attackers(sq, mover).includes(from);
       const seesAfter = after.attackers(sq, mover).includes(from);

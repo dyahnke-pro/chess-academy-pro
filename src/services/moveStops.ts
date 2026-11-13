@@ -72,8 +72,8 @@ function winningChecks(fen: string, me: Color): WinningCheck[] {
 export function moveStops(fenBefore: string, san: string, mine: boolean): MoveStop[] {
   let me: Color;
   let fenAfter: string;
-  let moved: { from: string };
-  try { const c = new Chess(fenBefore); me = c.turn(); const mv = c.move(san); moved = { from: mv.from }; fenAfter = c.fen(); } catch { return []; }
+  let moved: { from: string; to: string };
+  try { const c = new Chess(fenBefore); me = c.turn(); const mv = c.move(san); moved = { from: mv.from, to: mv.to }; fenAfter = c.fen(); } catch { return []; }
   const own = mine ? 'your' : 'their';
   const dot = (s: string): string => (me === 'w' ? `…${s}` : s);
   const out: MoveStop[] = [];
@@ -120,7 +120,9 @@ export function moveStops(fenBefore: string, san: string, mine: boolean): MoveSt
   const them: Color = me === 'w' ? 'b' : 'w';
   const boardBefore = new Chess(fenBefore);
   const boardNow = new Chess(fenAfter);
-  if (boardBefore.get(moved.from as Square)?.type === 'p') {
+  // The pawn must stay where it went: one they win straight back (dxe4, Nxe4)
+  // takes no square for good.
+  if (boardBefore.get(moved.from as Square)?.type === 'p' && legalSeeGainFor(fenAfter, moved.to as Square, them) <= 0) {
     for (const [home, sq] of KNIGHT_SQUARES[them]) {
       const k = boardNow.get(home as Square);
       if (!k || k.type !== 'n' || k.color !== them) continue;

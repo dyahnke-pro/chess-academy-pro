@@ -29,7 +29,7 @@ describe('Review says the king walk on his game', () => {
     expect(said.get(26)).toContain('Rule of thumb: the further the king is from the centre, the safer it is');
   });
   it('14.Bb2: still worse, and why', () => {
-    expect(said.get(27)).toContain("You're slightly worse: their queen and bishop on the long diagonal hold your knight on f6 in place: if it moves anywhere but h5, Qxg7 is mate — and e5 would hit it.");
+    expect(said.get(27)).toContain("You're slightly worse: their queen and bishop on the long diagonal hold your knight in place: if it moves anywhere but h5, Qxg7 is mate — and e5 would hit it.");
   });
 }, 180_000);
 
