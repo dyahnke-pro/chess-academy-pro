@@ -756,8 +756,40 @@ export function computeMoveFundamentals(
   //    where a rook belongs.
   // A rook already on the file does not "take" it by sliding along it (manual
   // claim check 2026-09-30, item 11: Rd8-d7 "takes the half-open d-file").
+  // DOUBLING (Danya: "you swing the back rook down to a3, doubling", "doubling
+  // rooks on the b-file"): the rook lands next to another rook of the
+  // mover's on its file or rank with nothing between, and they were not
+  // doubled there before. Its own home rank is only connecting.
+  const doubled = mv.piece === 'r' ? doubledWith(after, mv.to, mover) : null;
+  const wasDoubled = mv.piece === 'r' && doubled ? doubledWith(new Chess(fenBefore), mv.from, mover)?.line === doubled.line : false;
+  const ordinal = (r: number): string => ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'][r - 1] ?? `${r}th`;
+  const doubleWords = doubled && !wasDoubled
+    ? (doubled.line === 'file' ? `the ${fileOf(mv.to)}-file` : `the ${ordinal(mover === 'w' ? Number(mv.to[1]) : 9 - Number(mv.to[1]))} rank`)
+    : null;
+  if (doubleWords && fileOf(mv.from) === fileOf(mv.to)) {
+    out.push({
+      id: 'open-file',
+      weight: phase === 'endgame' ? 60 : 72,
+      led: `doubles your rooks on ${doubleWords}`,
+      selfContained: `puts the second rook beside the first on ${doubleWords}, so they work together`,
+      imperative: `double your rooks on ${doubleWords}`,
+      pointer: `double your rooks on ${doubleWords}`,
+      squares: [mv.to, doubled!.with],
+    });
+  }
   if ((mv.piece === 'r' || mv.piece === 'q') && fileOf(mv.from) !== fileOf(mv.to)) {
     const openness = fileOpenness(after, fileOf(mv.to), mover);
+    if (!openness && doubleWords) {
+      out.push({
+        id: 'open-file',
+        weight: phase === 'endgame' ? 60 : 72,
+        led: `doubles your rooks on ${doubleWords}`,
+        selfContained: `puts the second rook beside the first on ${doubleWords}, so they work together`,
+        imperative: `double your rooks on ${doubleWords}`,
+        pointer: `double your rooks on ${doubleWords}`,
+        squares: [mv.to, doubled!.with],
+      });
+    }
     if (openness) {
       const name = PIECE_NAME[mv.piece];
       const fileName = `${fileOf(mv.to)}-file`;
@@ -769,7 +801,9 @@ export function computeMoveFundamentals(
         id: 'open-file',
         weight: phase === 'endgame' ? 60 : 72,
         // A file is where a ROOK belongs; a queen merely uses it.
-        led: mv.piece === 'r' ? `${take} the ${openness} ${fileName}, where the rook belongs` : `${take} the ${openness} ${fileName}`,
+        led: mv.piece === 'r'
+          ? (doubleWords ? (doubled?.line === 'file' ? `doubles your rooks on the ${openness} ${fileName}` : `${take} the ${openness} ${fileName}, and doubles your rooks on ${doubleWords}`) : `${take} the ${openness} ${fileName}, where the rook belongs`)
+          : `${take} the ${openness} ${fileName}`,
         selfContained: `brings the ${name} to the ${openness} ${fileName}`,
         imperative: mv.piece === 'r' ? `take the ${openness} ${fileName}, where the rook belongs` : `take the ${openness} ${fileName} with the queen`,
         pointer: `put your ${name} on the ${openness} ${fileName}`,
@@ -1878,4 +1912,28 @@ function breakWords(fenBefore: string, board: Chess, pinner: string, mover: 'w' 
     }
   }
   return '';
+}
+
+/** Another rook of `color`'s next to the rook on `sq` along its file or rank,
+ *  nothing between — not on the color's home rank, where two rooks are only
+ *  connected. */
+function doubledWith(board: Chess, sq: string, color: 'w' | 'b'): { line: 'file' | 'rank'; with: string } | null {
+  const home = color === 'w' ? '1' : '8';
+  for (const [dx, dy] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) {
+    let x = sq.charCodeAt(0) - 97 + dx; let y = Number(sq[1]) - 1 + dy;
+    while (x >= 0 && x < 8 && y >= 0 && y < 8) {
+      const at = `${String.fromCharCode(97 + x)}${y + 1}`;
+      const p = board.get(at as Square);
+      if (p) {
+        if (p.color === color && p.type === 'r') {
+          const line = dx === 0 ? 'file' : 'rank';
+          if (line === 'rank' && sq[1] === home) return null;
+          return { line, with: at };
+        }
+        break;
+      }
+      x += dx; y += dy;
+    }
+  }
+  return null;
 }
