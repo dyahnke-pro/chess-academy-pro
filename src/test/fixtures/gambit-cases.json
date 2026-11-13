@@ -558,5 +558,125 @@
 "mate": null
 }
 ]
+},
+{
+"id": "vc-wb_d4_d5-72",
+"san": "e6",
+"fen": "rnbqkbnr/ppp1pppp/8/3p2B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 1 2",
+"before": [
+{
+"moves": [
+"c7c5",
+"e2e3",
+"d8b6",
+"b1c3",
+"e7e6",
+"g1f3",
+"c5c4",
+"a1b1"
+],
+"evaluation": -12,
+"mate": null
+},
+{
+"moves": [
+"h7h6",
+"g5f4",
+"g8f6",
+"e2e3",
+"c7c5",
+"c2c3",
+"b8c6",
+"b1d2"
+],
+"evaluation": -9,
+"mate": null
+},
+{
+"moves": [
+"f7f6",
+"g5f4",
+"b8c6",
+"g1f3",
+"g7g5",
+"f4g3",
+"h7h5",
+"h2h3"
+],
+"evaluation": 4,
+"mate": null
+},
+{
+"moves": [
+"g8f6",
+"e2e3",
+"c7c5",
+"g5f6",
+"e7f6",
+"d4c5",
+"b8c6",
+"b1d2"
+],
+"evaluation": 8,
+"mate": null
+},
+{
+"moves": [
+"c8f5",
+"c2c4",
+"d5c4",
+"g1f3",
+"h7h6",
+"g5h4",
+"g7g5",
+"h4g3"
+],
+"evaluation": 16,
+"mate": null
+}
+],
+"after": [
+{
+"moves": [
+"g5d8",
+"e8d8",
+"e2e3",
+"h7h6",
+"c2c4",
+"f8b4",
+"b1c3",
+"b4c3"
+],
+"evaluation": 611,
+"mate": null
+},
+{
+"moves": [
+"g1f3",
+"g8f6",
+"c2c4",
+"c7c5",
+"c4d5",
+"e6d5",
+"b1c3"
+],
+"evaluation": 30,
+"mate": null
+},
+{
+"moves": [
+"d1d2",
+"g8f6",
+"e2e3",
+"f8e7",
+"g1f3",
+"e8g8",
+"c2c4",
+"c7c5"
+],
+"evaluation": -4,
+"mate": null
+}
+]
 }
 ]

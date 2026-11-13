@@ -407,3 +407,18 @@ describe('a move that loses big is not credited (bench 2026-11-13)', () => {
     expect(said).not.toMatch(/gives a pawn/);
   });
 });
+
+describe('a blunder is not praised (round-2 read 2026-11-13)', () => {
+  it('…e6?? dropping the queen to Bxd8 says what it loses, not that it opens a diagonal', () => {
+    const cases = JSON.parse(readFileSync('src/test/fixtures/gambit-cases.json', 'utf8')) as Array<{ id: string; san: string; fen: string; before?: Array<{ moves: string[]; evaluation: number; mate: number | null }>; after: Array<{ moves: string[]; evaluation: number; mate: number | null }> }>;
+    const c = cases.find((x) => x.id === 'vc-wb_d4_d5-72')!;
+    const R = (ls: typeof c.after) => ls.map((l, k) => ({ rank: k + 1, ...l }));
+    const cost = c.after[0].evaluation - (c.before?.[0]?.evaluation ?? 0);
+    expect(cost).toBeGreaterThanOrEqual(300);
+    const facts = moveThoughtFacts({ story: false, theory: false, tense: 'now', fenBefore: c.fen, san: c.san, prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: [], theirLast: null,
+      reads: { before: R(c.before ?? []), after: R(c.after), passBefore: [], passAfter: [] }, costCp: cost, phrases: newLessonVoice().phrases });
+    const said = facts.map((f) => f.text).join(' ');
+    expect(said).not.toMatch(/opens the diagonal|supports the center/);
+    expect(said).toMatch(/queen/);
+  });
+});

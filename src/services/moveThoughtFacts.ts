@@ -258,6 +258,10 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   const costOrMate = allowsMate ? Math.max(i.costCp ?? 0, MATE_EVAL_VALUE) : i.costCp;
   // A mistake or worse: what it allows is the lesson, not what it stops.
   const losesBig = costOrMate !== null && costOrMate >= MISTAKE_CP;
+  // A BLUNDER IS NOT PRAISED (round-2 read 2026-11-13: …e6?? dropping the
+  // queen to Bxd8 opened with "it opens the diagonal for your bishop"). Its
+  // development and board points are dropped; what it loses is the lesson.
+  const blunder = costOrMate !== null && costOrMate >= BLUNDER_CP;
   if (costOrMate !== null && costOrMate >= MISTAKE_CP && after0r && after0r.moves.length > 0) {
     const mover = sideOf(i.fenBefore);
     const studentWB: 'w' | 'b' = mine ? mover : mover === 'w' ? 'b' : 'w';
@@ -317,7 +321,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // your bishop" was held because c6 had taken b5 — the h6 turn said nothing).
   const STOCK_PHRASE: ReadonlySet<IdeaKind> = new Set<IdeaKind>(['develop', 'center', 'castle', 'space']);
   const seated = (clause: string): string => (mine ? clause : toOtherSeat(clause));
-  for (const f of computeMoveFundamentals(i.fenBefore, i.san, sideOf(i.fenBefore) === 'w' ? 'white' : 'black')) {
+  for (const f of blunder ? [] : computeMoveFundamentals(i.fenBefore, i.san, sideOf(i.fenBefore) === 'w' ? 'white' : 'black')) {
     // A PUSH THE RULE CALLS PREPARED IS ONE A LINE GOES ON TO PLAY (task 172:
     // "…d6 prepares e5 — when the e-pawn goes forward, it will be supported"
     // in the Benko, where no line of the engine's and no move of the lesson's
@@ -333,7 +337,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   }
 
   // THE BOARD TEACHER — the move's idea on the board, from the speaker's seat.
-  const teacher = buildReviewMoveTeachingFact(i.fenBefore, i.san, mine, i.phrases);
+  const teacher = blunder ? null : buildReviewMoveTeachingFact(i.fenBefore, i.san, mine, i.phrases);
   if (teacher) {
     const subjectLed = /^(The|A|An|This|That|Their|Your)\b/.test(teacher.text);
     // Its develop reading is its last resort ("the knight develops to d2,
