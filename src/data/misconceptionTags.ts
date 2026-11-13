@@ -570,7 +570,7 @@ export const MISCONCEPTION_RULES_REV = '2026-11-12-buried-bishop';
  *  producers (L5) change what one sample game poses — the castling and
  *  loose-piece reads follow the board (castling that drops a piece, the
  *  centre fork trick and a sound sacrifice are not those questions). */
-export const POSITIVE_HALF_REV = '2026-11-12-zwischenzug'; // the in-between move needs a sound waiting capture and a new threat (task 172), so a shot that was only a kick is filed under its own name; before: the quiet set-up (`missed-set-up`) is posed on every analysed move
+export const POSITIVE_HALF_REV = '2026-11-13-rook-files'; // a rook that doubles, unmasks or lands on an outpost is a rook-activity find (`moveFundamentals`); before: the in-between move needs a sound waiting capture and a new threat (task 172), so a shot that was only a kick is filed under its own name; before: the quiet set-up (`missed-set-up`) is posed on every analysed move
 // 2026-10-20: the rev fingerprint gate (recordRevs.gate.test.ts) found the
 // recorded held-skill rows of a real game had changed since 10-19 with this rev
 // unmoved, so devices kept the old green rows; then the one-price re-price moved
