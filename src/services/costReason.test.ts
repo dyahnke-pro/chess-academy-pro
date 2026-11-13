@@ -2,7 +2,7 @@
 // slip and theirs; only the seat differs.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { costReason, costReasonRow, reasonNeed } from './costReason';
+import { allowedClause, costReason, costReasonRow, reasonNeed } from './costReason';
 
 const fenAfter = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
 
@@ -98,5 +98,21 @@ describe('costReason — a reason is what the costly line wins BEYOND the move i
       after: { uci: ['a2a1r'], source: 'record', seconds: [] }, before: null, priorMove: null, against: null,
     });
     expect(r?.plies[0].san).toBe('a1=Q+');
+  });
+});
+
+// A trade later in the line is not material given back (baseline replay
+// 2026-11-13, Sicilian Closed 1000 ply 28): …e6 hung the queen to Bxd8, and
+// the line went on …Bd4+ Kh1 Rxd8 …Bxc3 bxc3 — the lead dipped for one ply
+// mid-trade and the reason was thrown away.
+describe('a trade later in the line does not void the blow', () => {
+  it('…e6 hanging the queen to Bxd8 is said, past the …Bxc3 bxc3 trade', () => {
+    const r = costReason({
+      fenBefore: 'r1bq1rk1/pp2ppb1/6pp/2p5/2B4B/2NP1R2/PPP3PP/R5K1 b - - 1 14', playedSan: 'e6', mover: 'b', student: 'b', costCp: 467,
+      after: { uci: ['h4d8', 'g7d4', 'g1h1', 'f8d8', 'a1f1', 'd4c3', 'b2c3', 'd8f8', 'h1g1', 'b7b6', 'h2h4', 'c8b7'], source: 'deep', seconds: [] },
+      before: null, priorMove: null, against: null,
+    });
+    expect(r?.kind).toBe('allowed');
+    expect(r && allowedClause(r, 'b')).toMatch(/^lets them win a queen for a bishop/);
   });
 });

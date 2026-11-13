@@ -702,6 +702,9 @@ function captureJob(fen: string, san: string, mv: NonNullable<ReturnType<typeof 
   return null;
 }
 
+const onlyOfKind = (board: Chess, type: string, color: Color): boolean =>
+  board.board().flat().filter((c) => c && c.color === color && c.type === type).length === 1;
+
 /** ADDS AN ATTACKER — the moved piece joins the attack on a piece of theirs
  *  that was already under fire, or hits one worth more than itself. */
 function attackJob(mv: NonNullable<ReturnType<typeof after>>, mover: Color, w: SeatWords): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string }) | null {
@@ -712,7 +715,10 @@ function attackJob(mv: NonNullable<ReturnType<typeof after>>, mover: Color, w: S
   const clause = t.attackers === 1
     ? `it attacks ${w.other} ${NAME[t.piece]} on ${t.square}`
     : mate
-      ? `it joins ${w.own} ${NAME[mate.type]} on ${t.with[0]} against ${w.other} ${NAME[t.piece]} on ${t.square}`
+      // The partner is named by what it is when it is the only one of its
+      // kind ("joins their knight against your bishop on d4"): the board
+      // lights it, and a sentence never lists three squares.
+      ? `it joins ${w.own} ${NAME[mate.type]}${onlyOfKind(mv.board, mate.type, mover) ? '' : ` on ${t.with[0]}`} against ${w.other} ${NAME[t.piece]} on ${t.square}`
       : `it adds ${times(t.attackers)} attacker on ${w.other} ${NAME[t.piece]} on ${t.square}`;
   return { kind: 'attack', squares: [mv.to, t.square, ...t.with], clause };
 }

@@ -44,7 +44,7 @@ describe('the reply he named, and the answer he gave', () => {
     expect(said(row('4_Ev1a1_2Mg', 8)).one).toBe('If they take on e4, …d5 attacks their knight on e4.');
   });
   it('6WyNj23mrCc@18: …Bf5 is met by g4, his answer', () => {
-    expect(said(row('6WyNj23mrCc', 18)).one).toBe('If they play …Bf5, g4 joins your queen on f3 against their bishop on f5.');
+    expect(said(row('6WyNj23mrCc', 18)).one).toBe('If they play …Bf5, g4 joins your queen against their bishop on f5.');
   });
   it('ILYWTV0uCio@22: Bd3 is met by …g6, his answer', () => {
     expect(said(row('ILYWTV0uCio', 22)).one).toBe('If they play Bd3, …g6 attacks their knight on h5.');

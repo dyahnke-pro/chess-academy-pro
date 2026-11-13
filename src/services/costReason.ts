@@ -179,7 +179,18 @@ function walk(
     const at = plies[Math.min(p.plies, plies.length) - 1]?.fenAfter;
     if (at && p.sans.length <= plies.length) {
       const blowLead = lead(at, winner);
-      const gaveBack = plies.slice(p.plies).some((x) => lead(x.fenAfter, winner) < blowLead - need / 2);
+      // A TRADE LATER IN THE LINE IS NOT MATERIAL GIVEN BACK: the lead dips
+      // for one ply and the winner's next move takes it back (baseline replay
+      // 2026-11-13, …e6?? hanging the queen to Bxd8 was read as no reason
+      // because the line went on …Bxc3 bxc3). The reply to the blow itself is
+      // never such a trade — dxc3 bxc3 wins nothing until Rxc3.
+      const floor = blowLead - need / 2;
+      const rest = plies.slice(p.plies);
+      // The reply to the blow may not take anything back at all: "dxc3 wins a
+      // pawn" is not a blow while bxc3 retakes it (the win is Rxc3).
+      const gaveBack = rest.some((x, j) => j === 0
+        ? lead(x.fenAfter, winner) < blowLead
+        : lead(x.fenAfter, winner) < floor && !(rest[j + 1] && lead(rest[j + 1].fenAfter, winner) >= floor));
       if (gaveBack) continue;
     }
     proof = p;

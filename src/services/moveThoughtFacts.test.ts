@@ -422,3 +422,17 @@ describe('a blunder is not praised (round-2 read 2026-11-13)', () => {
     expect(said).toMatch(/queen/);
   });
 });
+
+// Bench r10 2026-11-13, Bg2 (wb_Nf3_c5): the move's job said "clears the way
+// to castle next move" and its purpose said it again ("Your Bg2 clears the way
+// to castle.") — one claim, two computers, two keys.
+describe('castling made ready is said once', () => {
+  it('Bg2 says it clears the way to castle once', async () => {
+    const { linesOf } = await import('../test/replayGame');
+    const c = JSON.parse(readFileSync('src/test/fixtures/castle-prep-bg2.json', 'utf8')) as { fen: string; san: string; before: never[]; after: never[]; passBefore: never[]; passAfter: never[] };
+    const reads = { before: linesOf(c.before), after: linesOf(c.after), passBefore: linesOf(c.passBefore), passAfter: linesOf(c.passAfter) };
+    const text = lessonThought({ story: false, theory: true, fenBefore: c.fen, san: c.san, prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['g6', 'O-O'], history: ['Nf3', 'c5', 'g3', 'Nc6'], theirLast: null, reads, costCp: 4 }, newLessonVoice(), null);
+    expect(text).toMatch(/castle/);
+    expect((text.match(/way to castle|so you can castle/g) ?? []).length).toBe(1);
+  });
+});

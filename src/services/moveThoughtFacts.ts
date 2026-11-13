@@ -300,7 +300,10 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // again behind it; a bare "it gives check" is the check itself.
     const saysCheck = /^gives check\b/.test(clause);
     const idea: IdeaKind = job.clause === 'it gives check' ? 'check' : BOOK_JOB_IDEA[job.kind];
-    add('move-job', 'moveJob', 'moveJob', idea, lead(clause), `It also ${clause}`, job.squares, JOB_WEIGHT[job.kind], isBareJob(job), saysCheck ? [`move:${from}${to}:${ideaClaim('check', [])}`] : []);
+    add('move-job', 'moveJob', 'moveJob', idea, lead(clause), `It also ${clause}`, job.squares, JOB_WEIGHT[job.kind], isBareJob(job), [
+      ...(saysCheck ? [`move:${from}${to}:${ideaClaim('check', [])}`] : []),
+      ...(job.prepsCastle ? [castlePrepClaim(from, to)] : []),
+    ]);
   }
 
   // THE FUNDAMENTALS — worded from the mover's own seat ("saves the queen from
@@ -719,7 +722,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // development. The engine calls it about level"). It is the standing for
     // this move, so compensation does not say it again.
     if (i.reads && i.reads.after.length > 0) {
-      const g = gambitIdea(i.fenBefore, i.san, i.reads.after, student);
+      const g = gambitIdea(i.fenBefore, i.san, i.reads.after, student, costOrMate);
       if (g) {
         // ONE GIFT, SAID ONCE: the opening's own line about this capture
         // ("It offers a pawn, and they almost always take it on f4") is the
@@ -952,6 +955,10 @@ export function studentMoveFacts(i: Omit<MoveThoughtInput, 'phrases'>): ThoughtF
  *  worth it because …") — Learn's own line. A lesson only: Review says the
  *  move's purpose through its own intent read. Null without the pass reads,
  *  which are the proof. */
+/** The claim "this move clears the way to castle", one key for every
+ *  computer that says it (the move job, the purpose). */
+const castlePrepClaim = (from: string, to: string): string => `move:${from}${to}:castle-prep`;
+
 function purposeFact(i: Omit<MoveThoughtInput, 'phrases'>, voice: LessonVoice): ThoughtFact | null {
   if (!i.reads || i.moverIsStudent === undefined) return null;
   if (i.reads.passBefore.length === 0 && i.reads.passAfter.length === 0) return null;
@@ -995,7 +1002,13 @@ function purposeFact(i: Omit<MoveThoughtInput, 'phrases'>, voice: LessonVoice): 
     ...placeFact(kind, seat), computer: 'moveIntent', source: 'purpose', idea: 'prepare', text: close(text),
     squares: intent.squares, weight: 58, thread: LOCAL_THREAD, stakes: stakesOf(kind, costStakes(intent.prepares.gainCp)),
     proof: squaresProof(text, intent.squares) ?? NO_PROOF.description, seat, fen: i.fenBefore,
-    claims: [`purpose:prepares:${intent.prepares.uci}`, ...(rule?.keys.map((k) => STORY_KEY.principle(k)) ?? [])],
+    claims: [
+      `purpose:prepares:${intent.prepares.uci}`,
+      // Castling made ready is the move job's claim too ("brings your bishop
+      // out and clears the way to castle next move"): said once a turn.
+      ...(/^O-O/.test(intent.prepares.san) ? (() => { try { const m = new Chess(i.fenBefore).move(i.san); return [castlePrepClaim(m.from, m.to)]; } catch { return []; } })() : []),
+      ...(rule?.keys.map((k) => STORY_KEY.principle(k)) ?? []),
+    ],
   };
 }
 

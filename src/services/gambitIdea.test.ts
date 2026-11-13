@@ -18,16 +18,38 @@ describe('gambitIdea', () => {
   // material of its own (…dxc3 Nxc3 leaves the count where it was): not said
   // as a gift — a move that gives nothing on the board is never "offers".
   it('Göring c3: no material given on the board, so no gift is claimed', () => {
-    expect(gambitIdea(GORING, 'c3', GORING_AFTER, 'w')).toBeNull();
+    expect(gambitIdea(GORING, 'c3', GORING_AFTER, 'w', null)).toBeNull();
   });
-  it('the Halloween Nxe5 gives a knight for a pawn, and the engine says it does not quite pay', () => {
-    const g = gambitIdea(HALLOWEEN, 'Nxe5', HALLOWEEN_AFTER, 'w');
+  it('the Halloween Nxe5 gives a knight for a pawn, and it does not quite pay', () => {
+    const g = gambitIdea(HALLOWEEN, 'Nxe5', HALLOWEEN_AFTER, 'w', null);
     expect(g?.clause).toMatch(/^gives a knight for a pawn/);
     expect(g?.sound).toBe(false);
-    expect(g?.verdict).toBe("The engine says it does not quite pay: they're slightly better.");
+    expect(g?.verdict).toBe("It does not quite pay: they're slightly better.");
   });
   it("the Icelandic's …c6 likewise gives up winning the pawn back (…dxc6 Nxc6 leaves the count), so no gift", () => {
-    expect(gambitIdea(ICELANDIC, 'c6', ICELANDIC_AFTER, 'b')).toBeNull();
+    expect(gambitIdea(ICELANDIC, 'c6', ICELANDIC_AFTER, 'b', null)).toBeNull();
+  });
+  // Whether it pays is what it COST, not where the side stands (baseline
+  // replay 2026-11-13, Sicilian Closed 1000, ply 28): Black was six points up,
+  // …e6 hung the queen to Bxd8, and Black stays clearly better — the line said
+  // "it pays: you're clearly better even so".
+  it('a queen hung while far ahead is a blunder, not a gambit that pays', () => {
+    const fen = 'r1bq1rk1/pp2ppb1/6pp/2p5/2B4B/2NP1R2/PPP3PP/R5K1 b - - 1 14';
+    const after = read([{"moves": ["h4d8", "g7d4", "g1h1", "f8d8", "a1f1", "d4c3", "b2c3", "d8f8", "h1g1", "b7b6", "h2h4", "c8b7"], "evaluation": -184, "mate": null}]);
+    expect(gambitIdea(fen, 'e6', after, 'b', 651 - 184)).toBeNull();
+  });
+  it('a gift that costs a point does not pay, and says what it cost', () => {
+    const g = gambitIdea(HALLOWEEN, 'Nxe5', HALLOWEEN_AFTER, 'w', 180);
+    expect(g?.sound).toBe(false);
+    expect(g?.verdict).toBe('It does not pay: it costs more than a point.');
+  });
+  it('a gift that costs next to nothing pays', () => {
+    const c = (JSON.parse(readFileSync('src/test/fixtures/gambit-cases.json', 'utf8')) as Array<{ id: string; san: string; fen: string; after: Array<{ moves: string[]; evaluation: number; mate: number | null }> }>).find((x) => x.id === 'vc-wb_e4_e5-215')!;
+    const cheap = gambitIdea(c.fen, c.san, read(c.after), c.fen.split(' ')[1] as 'w' | 'b', 20);
+    const dear = gambitIdea(c.fen, c.san, read(c.after), c.fen.split(' ')[1] as 'w' | 'b', 120);
+    expect(dear?.sound).toBe(false);
+    expect(dear?.verdict).toMatch(/^It does not pay: it costs/);
+    expect(cheap?.verdict).not.toMatch(/engine/);
   });
   // Wikibooks bench positions read by hand (2026-11-13), real engine reads.
   // Not gambits: the piece taken was already hanging (Kh1 — an escape from
@@ -35,7 +57,7 @@ describe('gambitIdea', () => {
   // bishop for a knight (…g5). Gambits: Bd3 leaves d4, g4 (Devin), f4 (Vienna).
   describe('read on the bench', () => {
     const cases = JSON.parse(readFileSync('src/test/fixtures/gambit-cases.json', 'utf8')) as Array<{ id: string; san: string; fen: string; after: Array<{ moves: string[]; evaluation: number; mate: number | null }> }>;
-    const at = (id: string) => { const c = cases.find((x) => x.id === id)!; return gambitIdea(c.fen, c.san, read(c.after), c.fen.split(' ')[1] as 'w' | 'b'); };
+    const at = (id: string) => { const c = cases.find((x) => x.id === id)!; return gambitIdea(c.fen, c.san, read(c.after), c.fen.split(' ')[1] as 'w' | 'b', null); };
     it.each(['vc-wb_e4_e5-242', 'vc-wb_e4_c5-44', 'vc-wb_e4_e5-139', 'vc-wb_d4_d5-46', 'vc-wb_d4_d5-106', 'vc-wb_e4_e5-28'])('%s is no gambit', (id) => {
       expect(at(id)).toBeNull();
     });

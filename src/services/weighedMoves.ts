@@ -300,7 +300,11 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
   // pull and the cost together (`real`): …b6 dropping the rook is played
   // more than …Qxd4+ dropping the queen, though a queen capture with check
   // catches the eye more (his 17…Rb8, played because …b6 loses the rook).
-  return out.sort((x, y) => y.real - x.real).map(({ real: _real, ...t }) => t);
+  // A temptation that walks into mate is the one to warn about first, however
+  // often the others are played (his 3…g6: "…Nf6 does not stop the mate",
+  // over …d5 dropping a pawn — both refuted once later trades stopped reading
+  // as material given back, 2026-11-13).
+  return out.sort((x, y) => Number(y.reason.mate) - Number(x.reason.mate) || y.real - x.real).map(({ real: _real, ...t }) => t);
 }
 
 // ── (L) TWO GOOD MOVES, AND WHAT SEPARATES THEM ─────────────────────────────

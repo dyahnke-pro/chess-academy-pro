@@ -22,6 +22,7 @@ import { materialBalance } from './pieceValues';
 import { computeExchangeLedger, materialGainWords, settledNetForLine } from './exchangeLedger';
 import { compensationReasons } from './compensation';
 import { evalBand, evalBandWords } from './evalBand';
+import { BLUNDER_CP, costWords } from './engineConstants';
 import { lineSeatAt, lineShape } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 
@@ -42,6 +43,8 @@ export interface GambitIdea {
 const LINE_PLIES = 8;
 /** A gambit is level or better within half a pawn. */
 const SOUND_CP = -50;
+/** It pays when it costs less than this against the best move. */
+const SOUND_COST_CP = 60;
 /** Past this the giver is clearly worse: no gambit, a mistake. */
 const CLEARLY_LOST_CP = 150;
 
@@ -65,7 +68,16 @@ export function gambitIdea(
   san: string,
   after: readonly AnalysisLine[],
   studentWB: 'w' | 'b',
+  /** What the move cost against the best one, from the mover's seat (null:
+   *  no read). Whether a gambit PAYS is what it cost, never where the side
+   *  stands: a side six points up that hangs its queen is still "clearly
+   *  better", and the gift did not pay (baseline replay 2026-11-13, …e6??
+   *  "it pays: you're clearly better even so"). */
+  costCp: number | null,
 ): GambitIdea | null {
+  // A move that costs a blunder's worth gave nothing away on purpose: what it
+  // allows is said instead.
+  if (costCp !== null && costCp >= BLUNDER_CP) return null;
   let fenAfter: string;
   let mover: 'w' | 'b';
   let played: { to: string; piece: string };
@@ -129,13 +141,15 @@ export function gambitIdea(
     // what the move allows is said instead (bench 2026-11-13, Bxe6+?? "gives
     // a pawn … they're winning").
     if (cp < -CLEARLY_LOST_CP) return null;
-    const sound = cp >= SOUND_CP;
+    const sound = cp >= SOUND_CP && (costCp === null || costCp < SOUND_COST_CP);
     const giver = mover === studentWB ? 'you' : 'they';
     const taker = giver === 'you' ? 'they' : 'you';
     const band = evalBand(cp);
     const verdict = sound
-      ? (band === 'level' ? 'The engine calls it about level, so the material is paid for.' : `The engine says it pays: ${giver === 'you' ? "you're" : "they're"} ${evalBandWords(band, 'better')} even so.`)
-      : `The engine says it does not ${band === 'slightly' ? 'quite ' : ''}pay: ${taker === 'you' ? "you're" : "they're"} ${evalBandWords(band, 'better')}.`;
+      ? (band === 'level' ? "It's about level, so the material is paid for." : `It pays: ${giver === 'you' ? "you're" : "they're"} ${evalBandWords(band, 'better')} even so.`)
+      : costCp !== null && costCp >= SOUND_COST_CP
+        ? `It does not pay: it costs ${costWords(costCp)}.`
+        : `It does not ${band === 'slightly' ? 'quite ' : ''}pay: ${taker === 'you' ? "you're" : "they're"} ${evalBandWords(band, 'better')}.`;
     const sq = [...new Set([...squares, ...prefix.map((s) => /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(s)?.[1]).filter((x): x is string => !!x)])];
     return { clause, verdict, sound, sans: prefix, squares: [...new Set([capSq, ...sq])], captureSquare: capSq };
   }
