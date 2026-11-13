@@ -4,6 +4,7 @@
 // reads of them (depth 14).
 import { describe, it, expect } from 'vitest';
 import { moveThreat } from './moveThreat';
+import type { AnalysisLine } from '../types';
 
 type Case = { fen: string; san: string; before: never[]; after: never[]; passAfter: never[] };
 const BG5: Case = {"fen": "r1bqkb1r/pp2pppp/2n2n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR w KQkq - 3 6", "san": "Bg5", "before": [{"rank": 1, "evaluation": 29, "mate": null, "moves": ["g1f3", "c8g4", "c4d5", "f6d5", "d1b3", "g4f3", "g2f3", "e7e6"]}, {"rank": 2, "evaluation": 23, "mate": null, "moves": ["c1g5", "e7e6", "g1f3", "f8b4", "f1d3", "h7h6", "g5h4", "d5c4"]}], "after": [{"rank": 1, "evaluation": 0, "mate": null, "moves": ["d5c4", "d4d5", "c6a5", "b2b4", "c4b3", "f1b5", "c8d7", "b5d7"]}, {"rank": 2, "evaluation": 4, "mate": null, "moves": ["c8e6", "g5f6", "e7f6", "c4c5", "g7g6", "f1b5", "f8g7", "g1e2"]}], "passAfter": [{"rank": 1, "evaluation": 109, "mate": null, "moves": ["g5f6", "e7f6", "c4d5", "c6b4", "f1b5", "c8d7", "d1e2", "d8e7"]}, {"rank": 2, "evaluation": 63, "mate": null, "moves": ["g1f3", "e7e6", "c4d5", "e6d5", "f1b5", "f8e7", "b5c6", "b7c6"]}]};
@@ -29,5 +30,16 @@ describe('moveThreat', () => {
   });
   it('from the other seat the words turn: their move threatens you', () => {
     expect(read(BG5, 'b')?.clause).toMatch(/they play Bxf6/);
+  });
+  // Stockfish depth 14: after Qe2, with White to move again, Qe8+ Rxe8 Rxe8#
+  // (mate in two); with Black to move, …g6 holds (White +5.7).
+  it('a mate threat two moves long is said as one, with its line', () => {
+    const fen = 'r5k1/5ppp/8/8/8/8/1Q3PPP/4R1K1 w - - 0 1';
+    const t = moveThreat(fen, 'Qe2', {
+      before: [{ moves: ['b2b7', 'a8f8'], evaluation: 538, mate: null, depth: 14 } as unknown as AnalysisLine],
+      after: [{ moves: ['g7g6', 'e2f3'], evaluation: 567, mate: null, depth: 14 } as unknown as AnalysisLine],
+      passAfter: [{ moves: ['e2e8', 'a8e8', 'e1e8'], evaluation: 0, mate: 2, depth: 14 } as unknown as AnalysisLine],
+    }, 'w');
+    expect(t?.clause).toBe('threatens mate in two: you play Qe8+, they answer Rxe8 and you play Rxe8#');
   });
 });

@@ -72,7 +72,22 @@ export function moveThreat(
   const pa = reads.passAfter[0];
   const answered = reads.after[0];
   if (!pass || !pa || pa.moves.length === 0 || !answered) return null;
-  if (pa.mate !== null && pa.mate !== undefined) return null; // a mate threat is the briefing's
+  // A MATE THREAT two or three moves long (Danya: "the rook swings to d7, the
+  // knight and bishop pile in, and mate arrives in a couple of moves"). Mate in
+  // one is the briefing's (`detectNewThreat`). It needs an answer: with their
+  // move they can stop it (the read where they reply is no forced mate); and
+  // it is new: the board before the move held no mate for the mover.
+  if (pa.mate !== null && pa.mate !== undefined) {
+    const n = mover === 'w' ? pa.mate : -pa.mate;
+    if (n < 2 || n > 3) return null;
+    const forced = (l: AnalysisLine | undefined): boolean => !!l && l.mate !== null && l.mate !== undefined && (mover === 'w' ? l.mate > 0 : l.mate < 0);
+    if (forced(answered) || forced(reads.before[0])) return null;
+    const mateLine = sansOf(pass, pa.moves, 2 * n - 1);
+    if (mateLine.length !== 2 * n - 1 || !/#$/.test(mateLine[mateLine.length - 1])) return null;
+    const shape = lineShape(mateLine, lineSeatAt(pass, studentWB), pass, 'first');
+    const squares = [...new Set(mateLine.map((x) => /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(x)?.[1]).filter((x): x is string => !!x))];
+    return { clause: `threatens mate in ${n === 2 ? 'two' : 'three'}: ${shape}`, sans: mateLine, net: 0, squares };
+  }
   // It needs an answer.
   if (pov(pa, mover) - pov(answered, mover) < THREAT_ANSWER_CP) return null;
   const sans = sansOf(pass, pa.moves, LINE_PLIES);

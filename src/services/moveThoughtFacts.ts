@@ -238,7 +238,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     const mover = sideOf(i.fenBefore);
     const studentWB: 'w' | 'b' = mine || i.moverIsStudent === undefined ? mover : mover === 'w' ? 'b' : 'w';
     const t = moveThreat(i.fenBefore, i.san, { before: i.reads.before, after: i.reads.after, passAfter: i.reads.passAfter }, studentWB);
-    if (t) add('aspect-threat', 'moveThreat', 'moveThreat', 'threat', lead(t.clause), `It also ${t.clause}`, t.squares, 86, false);
+    if (t) add('aspect-threat', 'moveThreat', 'moveThreat', /^threatens mate/.test(t.clause) ? 'mate' : 'threat', lead(t.clause), `It also ${t.clause}`, t.squares, /^threatens mate/.test(t.clause) ? 94 : 86, false);
   }
 
   // WHAT A COSTLY MOVE ALLOWS (fix 1, 2026-11-13): a move the engine grades a
