@@ -739,7 +739,9 @@ export function concessionParts(fenBefore: string, san: string, moverIsStudent: 
     // The shield only matters while their queen can use the gap (a rook
     // endgame king is meant to walk out — hand walk 2026-09-27).
     const foeQueen = after.board().flat().some((p) => p?.type === 'q' && p.color === enemy);
-    if (foeQueen && shieldA < shieldB) out.push(`${poss} king's pawn cover thinned (${shieldB} shield pawns down to ${shieldA})`);
+    // SAID LIKE A PERSON (prod Learn audit 2026-11-13: "your king's pawn cover
+    // thinned (1 shield pawns down to 0)" was a count in brackets).
+    if (foeQueen && shieldA < shieldB) out.push(shieldA === 0 ? `${poss} king has no pawn left in front of it` : `${poss} king has ${shieldB - shieldA === 1 ? 'one pawn' : `${shieldB - shieldA} pawns`} fewer in front of it`);
     if (sB && sA) {
       const passB = sB.pawns.passedPawns[enemy].length; const passA = sA.pawns.passedPawns[enemy].length;
       // FROM THE STUDENT'S SEAT (Learn walk 2026-10-01: "Their …f4: it hands

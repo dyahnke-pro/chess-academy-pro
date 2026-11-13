@@ -220,7 +220,7 @@ describe('describeConcessions (David 2026-07-21 — name the lasting damage)', (
     // White g1-king castled; g2-g4 rips its own shield.
     const why = describeConcessions(c.fen(), 'g4', true);
     expect(why).not.toBeNull();
-    expect(why).toMatch(/king's pawn cover thinned/i);
+    expect(why).toMatch(/king has (no pawn left|.+ fewer) in front of it/i);
   });
 
   it('stays silent when the move concedes nothing structural', async () => {

@@ -145,7 +145,7 @@ export function theirMoveCost(fenBefore: string, san: string, studentColor: 'w' 
   // it and with its count — never here as "(3 shield pawns down to 2)" (walk
   // 2026-09-30: both lanes said it on one ply, this one in raw form).
   void wingKing;
-  const rest = (concessionParts(fenBefore, san, false) ?? []).filter((c) => !/pawn cover thinned/.test(c));
+  const rest = (concessionParts(fenBefore, san, false) ?? []).filter((c) => !/king has (no pawn left|.+ fewer) in front of it/.test(c));
   if (rest.length) return { kind: 'structure', text: `Their ${played}: ${andList(rest)}.`, squares: [mv.to] };
   return null;
 }

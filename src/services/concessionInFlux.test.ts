@@ -15,6 +15,6 @@ describe('describeConcessions — never mid-exchange', () => {
   it('NEGATIVE CONTROL: a quiet move that thins the king cover still names it', () => {
     // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6 4.O-O Be7 5.g4 — the g-pawn leaves the castled king.
     const c = new Chess(); for (const s of 'e4 e5 Nf3 Nc6 Bc4 Nf6 O-O Be7'.split(' ')) c.move(s);
-    expect(describeConcessions(c.fen(), 'g4', true)).toMatch(/king's pawn cover thinned/);
+    expect(describeConcessions(c.fen(), 'g4', true)).toMatch(/king has (no pawn left|.+ fewer) in front of it/);
   });
 });
