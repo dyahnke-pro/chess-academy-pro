@@ -562,7 +562,7 @@ export function computeMoveFundamentals(
   // third rank or beyond, on a square no pawn of theirs can ever attack, held
   // there by a pawn of the mover's.
   if (mv.piece === 'r' && !mv.captured && relRank(mv.to, mover) >= 6 && relRank(mv.to, mover) <= 7 && !hangsThere && isOutpost(after, mv.to, mover, false)
-    && after.attackers(mv.to as Square, mover).some((sq) => after.get(sq)?.type === 'p')) {
+    && after.attackers(mv.to, mover).some((sq) => after.get(sq)?.type === 'p')) {
     out.push({
       id: 'outpost',
       weight: 80,
@@ -833,6 +833,7 @@ export function computeMoveFundamentals(
   const doubled = mv.piece === 'r' ? doubledWith(after, mv.to, mover) : null;
   const wasDoubled = mv.piece === 'r' && doubled ? doubledWith(new Chess(fenBefore), mv.from, mover)?.line === doubled.line : false;
   const ordinal = (r: number): string => ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'][r - 1] ?? `${r}th`;
+  const doubledAt = doubled?.with ?? mv.to;
   const doubleWords = doubled && !wasDoubled
     ? (doubled.line === 'file' ? `the ${fileOf(mv.to)}-file` : `the ${ordinal(mover === 'w' ? Number(mv.to[1]) : 9 - Number(mv.to[1]))} rank`)
     : null;
@@ -844,7 +845,7 @@ export function computeMoveFundamentals(
       selfContained: `puts the second rook beside the first on ${doubleWords}, so they work together`,
       imperative: `double your rooks on ${doubleWords}`,
       pointer: `double your rooks on ${doubleWords}`,
-      squares: [mv.to, doubled!.with],
+      squares: [mv.to, doubledAt],
     });
   }
   if ((mv.piece === 'r' || mv.piece === 'q') && fileOf(mv.from) !== fileOf(mv.to)) {
@@ -857,7 +858,7 @@ export function computeMoveFundamentals(
         selfContained: `puts the second rook beside the first on ${doubleWords}, so they work together`,
         imperative: `double your rooks on ${doubleWords}`,
         pointer: `double your rooks on ${doubleWords}`,
-        squares: [mv.to, doubled!.with],
+        squares: [mv.to, doubledAt],
       });
     }
     if (openness) {
