@@ -14,11 +14,11 @@ const ICELANDIC = 'rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2';
 const ICELANDIC_AFTER = read([{"moves": ["d5c6", "b8c6", "g1f3", "e7e5", "f1b5", "f8d6", "b5c6", "b7c6"], "evaluation": 75, "mate": null}, {"moves": ["g1f3", "c6d5", "d2d4", "g8f6", "f1b5", "c8d7", "a2a4", "a7a6"], "evaluation": 15, "mate": null}, {"moves": ["d2d4", "c6d5", "f1d3", "b8c6", "c2c3", "g8f6", "c1f4", "c8g4"], "evaluation": 13, "mate": null}]);
 
 describe('gambitIdea', () => {
-  it('Göring c3: offers a pawn, the development it buys, and a sound verdict', () => {
-    const g = gambitIdea(GORING, 'c3', GORING_AFTER, 'w');
-    expect(g?.clause).toBe("offers a pawn: if they play dxc3 and you answer Nxc3, you're a piece ahead in development");
-    expect(g?.sound).toBe(true);
-    expect(g?.verdict).toMatch(/about level/);
+  // The Göring's c3 gives up winning the d4-pawn back rather than giving
+  // material of its own (…dxc3 Nxc3 leaves the count where it was): not said
+  // as a gift — a move that gives nothing on the board is never "offers".
+  it('Göring c3: no material given on the board, so no gift is claimed', () => {
+    expect(gambitIdea(GORING, 'c3', GORING_AFTER, 'w')).toBeNull();
   });
   it('the Halloween Nxe5 gives a knight for a pawn, and the engine says it does not quite pay', () => {
     const g = gambitIdea(HALLOWEEN, 'Nxe5', HALLOWEEN_AFTER, 'w');
@@ -26,13 +26,8 @@ describe('gambitIdea', () => {
     expect(g?.sound).toBe(false);
     expect(g?.verdict).toBe("The engine says it does not quite pay: they're slightly better.");
   });
-  it("from the other seat: Black's c6 offers a pawn, worded for the Black student", () => {
-    const g = gambitIdea(ICELANDIC, 'c6', ICELANDIC_AFTER, 'b');
-    expect(g?.clause).toMatch(/^offers a pawn: if they play dxc6 and you answer Nxc6/);
-    expect(g?.verdict).toMatch(/they're slightly better/);
-  });
-  it('nothing when the engine declines the material (its lines do not take)', () => {
-    expect(gambitIdea(GORING, 'c3', GORING_AFTER.slice(1), 'w')).toBeNull();
+  it("the Icelandic's …c6 likewise gives up winning the pawn back (…dxc6 Nxc6 leaves the count), so no gift", () => {
+    expect(gambitIdea(ICELANDIC, 'c6', ICELANDIC_AFTER, 'b')).toBeNull();
   });
   // Wikibooks bench positions read by hand (2026-11-13), real engine reads.
   // Not gambits: the piece taken was already hanging (Kh1 — an escape from

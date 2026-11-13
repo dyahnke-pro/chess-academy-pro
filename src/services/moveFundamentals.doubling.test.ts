@@ -40,3 +40,13 @@ describe('an unmasked queen on a guarded pawn is only the board', () => {
     expect(led('r1bqkbnr/pp1p1ppp/2n1p3/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5', 'Nb5', 'white').some((l) => /unmasks/.test(l))).toBe(false);
   });
 });
+
+describe('an unmasked queen carries no rook reason', () => {
+  // The Colle replay: Bh6 unmasked the queen on g3 and was said with "a rook
+  // needs an open file to reach their camp".
+  it('Bh6 off the g-file: the unmask has no borrowed reason', () => {
+    const f = computeMoveFundamentals('6k1/6p1/8/6B1/8/6Q1/8/6K1 w - - 0 1', 'Bh6', 'white').find((x) => /^unmasks your queen/.test(x.led));
+    expect(f).toBeDefined();
+    expect(f?.reason).toBeNull();
+  });
+});

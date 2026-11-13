@@ -549,6 +549,9 @@ export function computeMoveFundamentals(
         imperative: `step off the ${fileOf(mv.from)}-file and unmask your ${sliderName}`,
         pointer: `move the piece in front of your ${sliderName} off its file`,
         squares: [behind, ...(target ? [target] : [])],
+        // The open-file rule is a ROOK's ("a rook needs an open file"); a
+        // queen unmasked carries no borrowed reason.
+        ...(sliderName === 'queen' ? { reason: null } : {}),
       });
       break;
     }
