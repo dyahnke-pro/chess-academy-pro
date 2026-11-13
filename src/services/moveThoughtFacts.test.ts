@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { introHead } from '../test/introPattern';
 import { Chess } from 'chess.js';
 import { lessonThought, moveThoughtFacts, LESSON_STUDENT_LANE } from './moveThoughtFacts';
@@ -373,5 +374,21 @@ describe('a costly move is said with what it allows (fix 1, 2026-11-13)', () => 
       reads: { before: L([{ cp: 0, mate: null, pv: ['b1c3', 'd5a5'] }]), after: L([{ cp: null, mate: -1, pv: ['d5e4'] }]), passBefore: [], passAfter: [] }, costCp: null, phrases: newLessonVoice().phrases });
     expect(facts.map((f) => f.text).join(' ')).toMatch(/walks into mate: they play …?Qe4#/);
     expect(facts.map((f) => f.text).join(' ')).not.toMatch(/prepares/);
+  });
+});
+
+describe('a gambit is one claim (bench 2026-11-13)', () => {
+  it('the Vienna Gambit says its gift once: the idea and the verdict, not the opening line too', async () => {
+    const { setOpeningIdentity } = await import('./openingIdentity');
+    const { setOpeningPositions } = await import('./openingPositions');
+    setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
+    setOpeningPositions(JSON.parse(readFileSync('public/data/opening-positions.json', 'utf8')) as Record<string, [string, number]>);
+    const cases = JSON.parse(readFileSync('src/test/fixtures/gambit-cases.json', 'utf8')) as Array<{ id: string; san: string; fen: string; after: Array<{ moves: string[]; evaluation: number; mate: number | null }> }>;
+    const c = cases.find((x) => x.id === 'vc-wb_e4_e5-215')!;
+    const facts = moveThoughtFacts({ story: true, theory: true, tense: 'now', fenBefore: c.fen, san: c.san, prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, history: ['e4', 'e5', 'Nc3', 'Nc6'], theirLast: null,
+      reads: { before: [], after: c.after.map((l, k) => ({ rank: k + 1, ...l })), passBefore: [], passAfter: [] }, costCp: null, phrases: newLessonVoice().phrases });
+    const said = facts.map((f) => f.text).join(' ');
+    expect(said).toMatch(/offers a pawn: if they play exf4/);
+    expect((said.match(/offers a pawn/g) ?? []).length).toBe(1);
   });
 });

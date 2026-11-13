@@ -713,6 +713,12 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     if (i.reads && i.reads.after.length > 0) {
       const g = gambitIdea(i.fenBefore, i.san, i.reads.after, student);
       if (g) {
+        // ONE GIFT, SAID ONCE: the opening's own line about this capture
+        // ("It offers a pawn, and they almost always take it on f4") is the
+        // same claim; the gambit's idea and verdict replace it.
+        for (let k = facts.length - 1; k >= 0; k -= 1) {
+          if (facts[k].source === 'openingStory' && facts[k].squares.includes(g.captureSquare)) facts.splice(k, 1);
+        }
         add('compensation', 'gambitIdea', 'gambitIdea', 'eval', `${lead(g.clause)}. ${g.verdict}`, `It ${g.clause}. ${g.verdict}`, g.squares, 80, false, [`gambit:${g.sans[0]}`]);
         standingSaid = true;
       }

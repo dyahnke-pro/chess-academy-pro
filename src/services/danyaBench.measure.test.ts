@@ -269,7 +269,7 @@ const LEXICON: Record<Kind, RegExp> = {
   order: /\b(first(?! time)|before|not yet|move order|only then|after that|premature|too early|wait(s)?)\b/,
   line: /\bif\b[^.]{0,120}(\bthen\b|,)/,
   habit: /\b((?<!almost )always|whenever|never|rule of thumb|principle|remember|habit|ask yourself|get used to|in general|typical(ly)?)\b/,
-  theory: /\b(transpos\w*|main ?line|theory|theoretical|book|popular|most common|the masters|classical|standard|mainstream|rarely played|seldom played|(main|usual|normal) move|master (play|games?|practice)|(better|superior|good|poor|bad) record|top[- ]level|grandmasters?)\b/,
+  theory: /\b(transpos\w*|masters (also |almost always |usually |rarely |mostly )?(play|answer)\w*|main ?line|theory|theoretical|book|popular|most common|the masters|classical|standard|mainstream|rarely played|seldom played|(main|usual|normal) move|master (play|games?|practice)|(better|superior|good|poor|bad) record|top[- ]level|grandmasters?)\b/,
   mate: /\b(mate|checkmate|mating)\b/,
   material: /\b(material|pawn up|piece up|up a (pawn|piece)|down a (pawn|piece)|extra pawn|exchange up|sacrific\w*|gambit\w*|for the pawn|a pawn down|pawn for|win(s|ning)? (a|the|two) (pawn|piece|knight|bishop|rook|queen|exchange)s?|win(s|ning)? (it|\w+) back|regain\w*|free (pawn|piece))\b/,
   endgame: /\b(endgame|ending|promot\w*|passed pawn|passer|opposition|queening)\b/,

@@ -105,7 +105,7 @@ EXTRA = {
     'diagonal': r"\bfianchett\w*",
     'king-safety': r"\b(tuck\w* (\w+ )?king|king\w* tucks?|king (\w+ )?(to )?safe(ty|ly))\b",
     'weakness': r"\b(concede(s|d)? (the|a) [\w-]+|gives? up control)\b",
-    'theory': r"\b(transpos\w*|rarely played|seldom played|(main|usual|normal) move|master (play|games?|practice)|(better|superior|good|poor|bad) record|top[- ]level|grandmasters?)\b",
+    'theory': r"\b(transpos\w*|masters (also |almost always |usually |rarely |mostly )?(play|answer)\w*|rarely played|seldom played|(main|usual|normal) move|master (play|games?|practice)|(better|superior|good|poor|bad) record|top[- ]level|grandmasters?)\b",
     # THE WIKIBOOKS CHECK (2026-11-12): a sacrifice and a gambit are material.
     # THE SCORER CHECK (2026-11-13, 50 misses read by hand): the coach said the
     # idea in other words — "opens the diagonal for the bishop" is development,

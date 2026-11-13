@@ -35,6 +35,8 @@ export interface GambitIdea {
   sound: boolean;
   /** The acceptance line to its quiet point, SAN, the capture first. */
   sans: string[];
+  /** The square the material is taken on. */
+  captureSquare: string;
   squares: string[];
 }
 
@@ -137,7 +139,7 @@ export function gambitIdea(
       ? (band === 'level' ? 'The engine calls it about level, so the material is paid for.' : `The engine likes it: ${giver === 'you' ? "you're" : "they're"} ${evalBandWords(band, 'better')} even ${countWords(down)} down.`)
       : `The engine says it does not ${band === 'slightly' ? 'quite ' : ''}pay: ${taker === 'you' ? "you're" : "they're"} ${evalBandWords(band, 'better')}.`;
     const sq = [...new Set([...squares, ...prefix.map((s) => /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(s)?.[1]).filter((x): x is string => !!x)])];
-    return { clause, verdict, sound, sans: prefix, squares: sq };
+    return { clause, verdict, sound, sans: prefix, squares: [...new Set([capSq, ...sq])], captureSquare: capSq };
   }
   return null;
 }
