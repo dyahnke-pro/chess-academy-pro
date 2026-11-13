@@ -474,6 +474,13 @@ export function moveIntent(
       if (m.captured && materialDeficit(fenBefore, mover) >= (MATERIAL_VALUE[m.captured] ?? 0)) prepares = null;
     } catch { /* keep */ }
   }
+  // A QUIET MOVE IS STOPPED ONLY WITH WHAT IT WOULD HAVE DONE (blind grade
+  // 2026-11-13, Nxe5 "stops …Nf6" — …Nf6 is still a sound move, and nothing
+  // said what it would have hit). A capture, a check or mate says itself.
+  // The two-job sentence ("does two jobs: it stops …, and it prepares …")
+  // has no room for that reason, so beside a prepared move a quiet stop is
+  // not said either.
+  if (prevents && !/[x+#]/.test(prevents.san) && (prepares || (!stopReason(fenAfter, prevents.uci, mover) && !whatTheStopDid(fenBefore, prevents.uci, opp)))) prevents = null;
   if (!prevents && !prepares) return null;
   const squares = [...new Set([
     playedUci.slice(2, 4),

@@ -35,3 +35,17 @@ describe('compensation — down material and still fine, with what pays for it',
     expect(compensation(fen, 'w', 0, [])).toBeNull(); // no line, no read
   });
 });
+
+// Blind grade 2026-11-13: the quiet count took the capture on offer, so a
+// level board was "a pawn down" (Ruy, after O-O: …Nxe4 on offer). A real
+// two-pawn deficit on the board (Open Ruy after Re1) is still said.
+describe('down is what the board and the quiet count agree on', () => {
+  it('a level board after O-O in the Ruy is not a pawn down', () => {
+    const a = compensation('r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 3 5', 'w', 0, ['f8e7']);
+    expect(a?.text ?? '').not.toMatch(/down/);
+  });
+  it('two pawns down on the board is still said as two', () => {
+    const a = compensation('r1bqkb1r/1ppp1ppp/p1n5/8/B2pn3/5N2/PPP2PPP/RNBQR1K1 b kq - 1 7', 'w', 60, ['d7d5']);
+    expect(a?.text).toMatch(/^You're two pawns down/);
+  });
+});

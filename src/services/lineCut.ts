@@ -36,6 +36,10 @@ export function lineCut(fenBefore: string, san: string, mine: boolean): LineCut 
   for (const row of before.board()) for (const cell of row) {
     if (!cell || cell.color !== mover || !'bqr'.includes(cell.type)) continue;
     const from = cell.square;
+    // The piece that moved cuts nothing of its own: its old line is just
+    // where it stood (blind grade 2026-11-13, Qe2 "cuts your queen off from
+    // your knight on f3" — the queen on e2 still guards f3).
+    if (from === movedFrom) continue;
     const candidates: Array<{ sq: string; lost: string; weight: number }> = [];
     for (let f = 0; f < 8; f++) for (let r = 1; r <= 8; r++) {
       const sq = `${String.fromCharCode(97 + f)}${r}` as Square;

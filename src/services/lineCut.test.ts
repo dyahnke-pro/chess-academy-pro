@@ -21,3 +21,9 @@ describe('the moved piece is never the piece cut off', () => {
     expect(cut?.lost ?? '').not.toMatch(/e4/);
   });
 });
+
+describe('the piece that moved cuts nothing of its own', () => {
+  it('Qe2 does not cut the queen off from the knight on f3', () => {
+    expect(lineCut('r1bqkb1r/ppp2pp1/5n1p/n2P4/2B1p3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 8', 'Qe2', true)).toBeNull();
+  });
+});

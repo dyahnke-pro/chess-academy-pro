@@ -436,3 +436,15 @@ describe('castling made ready is said once', () => {
     expect((text.match(/way to castle|so you can castle/g) ?? []).length).toBe(1);
   });
 });
+
+// Blind grade 2026-11-13, the Elephant Gambit's Nxe5: "it stops …Nf6" with
+// nothing said of what …Nf6 would have done — and …Nf6 is still a sound move.
+describe('a quiet move is stopped only with what it would have done', () => {
+  it('Nxe5 does not "stop …Nf6"', async () => {
+    const { linesOf } = await import('../test/replayGame');
+    const c = JSON.parse(readFileSync('src/test/fixtures/stop-quiet-nxe5.json', 'utf8')) as { fen: string; san: string; before: never[]; after: never[]; passBefore: never[]; passAfter: never[] };
+    const reads = { before: linesOf(c.before), after: linesOf(c.after), passBefore: linesOf(c.passBefore), passAfter: linesOf(c.passAfter) };
+    const text = lessonThought({ story: false, theory: true, fenBefore: c.fen, san: c.san, prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Bd6', 'd4'], history: ['e4', 'e5', 'Nf3', 'd5'], theirLast: null, reads, costCp: 26 }, newLessonVoice(), null);
+    expect(text).not.toMatch(/stops …Nf6/);
+  });
+});

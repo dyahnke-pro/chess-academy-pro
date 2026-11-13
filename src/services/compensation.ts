@@ -11,6 +11,7 @@
 import { Chess, type Color } from 'chess.js';
 import { developedMinorCount } from './development';
 import { quietBalance } from './material';
+import { materialBalance } from './pieceValues';
 import { evalBand, evalBandWords } from './evalBand';
 
 export interface Assessment {
@@ -47,7 +48,14 @@ export function compensation(fenAfter: string, student: Color, studentCp: number
     const m = new Chess(fenAfter).move({ from: first.slice(0, 2), to: first.slice(2, 4), promotion: first.slice(4, 5) || undefined });
     if (m.captured || m.san.includes('+') || m.san.includes('#')) return null;
   } catch { return null; }
-  const bal = quietBalance(fenAfter); // White-positive, the capture on offer counted
+  // DOWN IS WHAT THE BOARD AND THE QUIET COUNT AGREE ON (blind grade
+  // 2026-11-13): the quiet count takes the capture on offer, so after O-O in
+  // the Ruy (…Nxe4 on offer, won straight back) it called a level board "a
+  // pawn down", and a pawn on offer counted twice. The smaller of the two,
+  // and only when both say the same side is down.
+  const quiet = quietBalance(fenAfter); // White-positive, the capture on offer counted
+  const raw = materialBalance(fenAfter);
+  const bal = Math.sign(quiet) === Math.sign(raw) ? Math.sign(raw) * Math.min(Math.abs(quiet), Math.abs(raw)) : 0;
   const mine = student === 'w' ? bal : -bal;
   let comp: Color | null = null; let down = 0;
   if (mine <= -1 && studentCp >= -50) { comp = student; down = Math.round(-mine); }

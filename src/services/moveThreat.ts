@@ -19,6 +19,7 @@
 import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { flipSideToMove } from './threatOut';
+import { seatCp } from './winChance';
 import { computeExchangeLedger, materialGainWords, settledNetForLine } from './exchangeLedger';
 import { lineSeatAt, lineShape } from '../utils/andList';
 
@@ -45,11 +46,8 @@ function sansOf(fen: string, uci: readonly string[], max: number): string[] {
   return out;
 }
 
-/** Centipawns from `side`'s seat (reads are White's view; a mate is large). */
-function pov(l: AnalysisLine, side: 'w' | 'b'): number {
-  const v = l.mate !== null && l.mate !== undefined ? (l.mate > 0 ? 10000 : -10000) : l.evaluation;
-  return side === 'w' ? v : -v;
-}
+/** Centipawns from `side`'s seat: the one converter (`seatCp`). */
+const pov = (l: AnalysisLine, side: 'w' | 'b'): number => seatCp(l, side);
 
 export function moveThreat(
   fenBefore: string,
