@@ -44,6 +44,8 @@ const LINE_PLIES = 8;
 const QUIET_PLIES = 6;
 /** A gambit is level or better within half a pawn. */
 const SOUND_CP = -50;
+/** Past this the giver is clearly worse: no gambit, a mistake. */
+const CLEARLY_LOST_CP = 150;
 
 function sansOf(fen: string, uci: readonly string[], max: number): string[] {
   const out: string[] = [];
@@ -131,6 +133,10 @@ export function gambitIdea(
       ? `${verb} ${given}: if ${shape}${why}`
       : `${verb} ${given}, and ${taker0} can take with ${prefix[0]}`;
     const cp = pov(l.evaluation);
+    // Material given for a clearly lost position is a mistake, not a gambit:
+    // what the move allows is said instead (bench 2026-11-13, Bxe6+?? "gives
+    // a pawn … they're winning").
+    if (cp < -CLEARLY_LOST_CP) return null;
     const sound = cp >= SOUND_CP;
     const giver = mover === studentWB ? 'you' : 'they';
     const taker = giver === 'you' ? 'they' : 'you';

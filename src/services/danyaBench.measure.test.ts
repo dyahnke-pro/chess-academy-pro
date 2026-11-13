@@ -246,7 +246,7 @@ const LEXICON: Record<Kind, RegExp> = {
   center: /\b(cent(re|er|ral|res|ers))\b/,
   space: /\b(space|clamp|gain(s|ing)? ground|cramp(s|ed)?)\b/,
   break: /\b(break|break(s|ing)? up|base of the (pawn )?chain|strike(s|ing)? at|undermin\w*|lever)\b/,
-  attack: /\b(attack(s|ing|ed)?|attackers?|hit(s|ting)?|pressure|eye(s|ing)?|target(s|ing)?|threat\w*|go(es)? after|aim(s|ed|ing)? at|pil(e|es|ed|ing) (up )?(on|onto)|lean(s|ing)? on|bear(s|ing)? down|put(s|ting)? the question to)\b/,
+  attack: /\b(attack(s|ing|ed)?|attackers?|kick(s|ed|ing)?|trains? on|in(to)? the attack|hit(s|ting)?|pressure|eye(s|ing)?|target(s|ing)?|threat\w*|go(es)? after|aim(s|ed|ing)? at|pil(e|es|ed|ing) (up )?(on|onto)|lean(s|ing)? on|bear(s|ing)? down|put(s|ting)? the question to)\b/,
   defend: /\b(defen(d|ds|ded|ding|ce|se|der)|protect\w*|guard\w*|support\w*|shield\w*|cover(s|ed|ing)?)\b/,
   pin: /\b(pin(s|ned|ning)?)\b/,
   fork: /\bfork\w*/,

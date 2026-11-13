@@ -112,7 +112,7 @@ EXTRA = {
     # "wins a pawn" is material, "putting the question to" is the kick.
     'material': r"\b(sacrific\w*|gambit\w*|for the pawn|a pawn down|pawn for|win(s|ning)? (a|the|two) (pawn|piece|knight|bishop|rook|queen|exchange)s?|win(s|ning)? (it|\w+) back|regain\w*|free (pawn|piece))\b",
     'develop': r"\b(fianchett\w*|open(s|ing)? (the|a) (diagonal|line|way) for (the|your|their|its) (\w+ )?(bishop|queen|rook))\b",
-    'attack': r"\b(aim(s|ed|ing)? at|attackers?|pil(e|es|ed|ing) (up )?(on|onto)|lean(s|ing)? on|bear(s|ing)? down|put(s|ting)? the question to)\b",
+    'attack': r"\b(aim(s|ed|ing)? at|kick(s|ed|ing)?|trains? on|in(to)? the attack|attackers?|pil(e|es|ed|ing) (up )?(on|onto)|lean(s|ing)? on|bear(s|ing)? down|put(s|ting)? the question to)\b",
     'tempo': r"\b(put(s|ting)? the question to)\b",
 }
 

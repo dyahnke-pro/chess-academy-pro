@@ -256,6 +256,8 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   const matedAfter = (l: AnalysisLine | undefined): boolean => !!l && l.mate !== null && l.mate !== undefined && (moverOfMove === 'w' ? l.mate < 0 : l.mate > 0);
   const allowsMate = matedAfter(after0r) && !matedAfter(i.reads?.before[0]);
   const costOrMate = allowsMate ? Math.max(i.costCp ?? 0, MATE_EVAL_VALUE) : i.costCp;
+  // A mistake or worse: what it allows is the lesson, not what it stops.
+  const losesBig = costOrMate !== null && costOrMate >= MISTAKE_CP;
   if (costOrMate !== null && costOrMate >= MISTAKE_CP && after0r && after0r.moves.length > 0) {
     const mover = sideOf(i.fenBefore);
     const studentWB: 'w' | 'b' = mine ? mover : mover === 'w' ? 'b' : 'w';
@@ -495,7 +497,9 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // WHAT THE MOVE STOPS (gap B2): their pin, kick, fork or safe check that
   // worked before the move and no longer does — "it stops …Bg4, which would
   // pin your knight on f3 against your queen". Both seats.
-  for (const s of moveStops(i.fenBefore, i.san, mine)) {
+  // A MOVE THAT LOSES BIG IS NOT CREDITED with what it stops (bench
+  // 2026-11-13: Bxe6+?? "stops …h6" — what it allows is the lesson).
+  for (const s of losesBig ? [] : moveStops(i.fenBefore, i.san, mine)) {
     add('stop', 'moveStops', 'moveGains', 'prevent', lead(s.clause), `It also ${s.clause}`, s.squares, 70, false, [`stops:${s.san}`]);
   }
   // THEIR BREAK, STOPPED ("a5, stopping b4"): the pawn break their side
