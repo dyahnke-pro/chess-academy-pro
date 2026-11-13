@@ -35,6 +35,7 @@ import { findGuardRemovals } from './guardRemoval';
 import { isPassedPawnAt } from './boardStructure';
 import { pawnHit } from './trappedPiece';
 import { openSentence } from '../utils/openSentence';
+import { seatPieceWords } from './pieceRef';
 
 export type MoveFundamentalId =
   | 'king-safety'
@@ -502,6 +503,46 @@ export function computeMoveFundamentals(
       pointer: `plant your ${name} on a square in their half that no pawn of theirs can attack${hitsTail(after, mv.to, mover)}`,
       squares: [mv.to],
     });
+  }
+
+  // UNMASKING A FILE (Danya: "The knight steps to f7, unmasking the rook so it
+  // bears straight down the file"): the piece leaves a file where a rook or
+  // queen of the mover's stood behind it, and that piece now sees three or
+  // more squares further up the file, or an enemy piece.
+  if (fileOf(mv.from) !== fileOf(mv.to)) {
+    const up = mover === 'w' ? 1 : -1;
+    for (const dir of [up, -up]) {
+      let y = Number(mv.from[1]) - dir;
+      let behind: string | null = null;
+      while (y >= 1 && y <= 8) {
+        const sq = `${fileOf(mv.from)}${y}`;
+        const p = after.get(sq as Square);
+        if (p) { if (p.color === mover && (p.type === 'r' || p.type === 'q')) behind = sq; break; }
+        y -= dir;
+      }
+      if (!behind || dir !== up) continue;
+      let seen = 0; let target: string | null = null;
+      for (let yy = Number(mv.from[1]); yy >= 1 && yy <= 8; yy += dir) {
+        const sq = `${fileOf(mv.from)}${yy}`;
+        const p = after.get(sq as Square);
+        if (p) { if (p.color !== mover) target = sq; break; }
+        seen += 1;
+      }
+      if (seen < 3 && !target) continue;
+      const slider = after.get(behind as Square);
+      const sliderName = slider?.type === 'q' ? 'queen' : 'rook';
+      const hits = target ? `, bearing on ${seatPieceWords(after.fen(), target, 'their', `their ${PIECE_NAME[after.get(target as Square)?.type ?? 'p']} on ${target}`)}` : '';
+      out.push({
+        id: 'open-file',
+        weight: 70,
+        led: `unmasks your ${sliderName} on ${behind}, which now looks straight down the ${fileOf(mv.from)}-file${hits}`,
+        selfContained: `steps off the ${fileOf(mv.from)}-file so the ${sliderName} behind it bears down the file`,
+        imperative: `step off the ${fileOf(mv.from)}-file and unmask your ${sliderName}`,
+        pointer: `move the piece in front of your ${sliderName} off its file`,
+        squares: [behind, ...(target ? [target] : [])],
+      });
+      break;
+    }
   }
 
   // A ROOK OUTPOST deep in their camp (Danya: "The rook drops onto d3 — a dream
