@@ -162,7 +162,7 @@ describe('the hand-graded falsehoods of 2026-10-14 stay fixed (each failed on th
     // Scandinavian, 6.h3: the pawn hits the bishop on g4. Book is Bh5; Nc6
     // leaves the bishop to hxg4 (prod Learn audit 2026-10-14, said nothing).
     const fen = 'rn2kb1r/ppp1pppp/5n2/q7/3P2b1/2N2N1P/PPP2PP1/R1BQKB1R b KQkq - 0 6';
-    expect(bookMoveWhy(fen, 'Bh5', 'Nc6', 'b')?.text).toBe('The book move is the bishop to h5: it takes your bishop out of reach of their h-pawn — the knight to c6 leaves it on g4 for them to take.');
+    expect(bookMoveWhy(fen, 'Bh5', 'Nc6', 'b')?.text).toBe('The book move is the bishop to h5: it takes your bishop out of reach of their h-pawn, keeping the pin on their knight on f3 — the knight to c6 leaves it on g4 for them to take.');
     // A bishop move that also escapes is no rescue to fault.
     expect(bookMoveWhy(fen, 'Bh5', 'Bf5', 'b')?.kind).not.toBe('rescue');
   });

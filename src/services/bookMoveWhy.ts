@@ -349,6 +349,20 @@ function rescueJob(before: Chess, mainMv: NonNullable<ReturnType<typeof after>>,
     .filter((a): a is { sq: Square; p: NonNullable<ReturnType<Chess['get']>> } => !!a.p)
     .sort((a, b) => CAPTURE_VALUE[a.p.type] - CAPTURE_VALUE[b.p.type])[0];
   if (!by) return null;
+  // KEEPING THE PIN (Danya: "The bishop to h4, keeping the pin"): the piece
+  // pinned the same piece from where it stood and still pins it from where it
+  // went — the retreat's point, said with it.
+  const kept = (() => {
+    const was = findPins(before, mainMv.from).map((p) => p.involvedSquares[1]);
+    if (was.length === 0) return null;
+    const now = findPins(mainMv.board, mainMv.to).find((p) => was.includes(p.involvedSquares[1]));
+    const pinned = now ? mainMv.board.get(now.involvedSquares[1] as Square) : null;
+    return now && pinned ? `, keeping the pin on ${w.other} ${NAME[pinned.type]} on ${now.involvedSquares[1]}` : null;
+  })();
+  if (kept) {
+    const clause = `it takes ${w.own} ${NAME[mainMv.piece]} out of reach of ${seatPieceWords(before.fen(), by.sq, w.other, `${w.other} ${NAME[by.p.type]} on ${by.sq}`)}${kept}`;
+    return { kind: 'rescue', squares: [mainMv.from, by.sq, mainMv.to], clause, forms: [clause], short: `leaves it on ${mainMv.from} for them to take` };
+  }
   return {
     kind: 'rescue',
     squares: [mainMv.from, by.sq, mainMv.to],
