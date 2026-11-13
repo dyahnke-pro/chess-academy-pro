@@ -32,10 +32,10 @@ import { __setLocalDbForTests } from '../services/masterPlayLookup';
  *  masters database are fetched by the app at start; a replay without them
  *  narrated every opening with no name, no plan and no masters' move, so the
  *  baselines under-reported opening teaching. Every replay loads them. */
-setOpeningIdentity(JSON.parse(readFileSync(join(process.cwd(), 'public/data/opening-identity.json'), 'utf8')));
+setOpeningIdentity(JSON.parse(readFileSync(join(process.cwd(), 'public/data/opening-identity.json'), 'utf8')) as Parameters<typeof setOpeningIdentity>[0]);
 setOpeningPositions(JSON.parse(readFileSync(join(process.cwd(), 'public/data/opening-positions.json'), 'utf8')) as Record<string, [string, number]>);
 setKnownSlipIndexForTests((JSON.parse(readFileSync(join(process.cwd(), 'public/data/club-gems.json'), 'utf8')) as { boards: Record<string, never[]> }).boards);
-__setLocalDbForTests(JSON.parse(readFileSync(join(process.cwd(), 'public/data/openings-masters-db.json'), 'utf8')));
+__setLocalDbForTests(JSON.parse(readFileSync(join(process.cwd(), 'public/data/openings-masters-db.json'), 'utf8')) as Parameters<typeof __setLocalDbForTests>[0]);
 
 export interface EngineRead { uci: string; cp: number | null; mate: number | null; pv: string[] }
 /** The two reads of one ply; `after` is empty when the move ended the game. */

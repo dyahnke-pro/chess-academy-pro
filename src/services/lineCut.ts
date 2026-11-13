@@ -40,13 +40,13 @@ export function lineCut(fenBefore: string, san: string, mine: boolean): LineCut 
       const sq = `${String.fromCharCode(97 + f)}${r}` as Square;
       if (sq === to || sq === from) continue;
       if (!onLineBetween(from, sq, to)) continue;
-      const sawBefore = before.attackers(sq, mover).includes(from as Square);
-      const seesAfter = after.attackers(sq, mover).includes(from as Square);
+      const sawBefore = before.attackers(sq, mover).includes(from);
+      const seesAfter = after.attackers(sq, mover).includes(from);
       if (!sawBefore || seesAfter) continue;
       const occ = before.get(sq);
       if (occ && occ.color === mover && occ.type !== 'k' && (CENTER.has(sq) || after.attackers(sq, mover === 'w' ? 'b' : 'w').length > 0)) candidates.push({ sq, lost: `${own} ${NAME[occ.type]} on ${sq}`, weight: 3 });
       else if (occ && occ.color !== mover && occ.type !== 'p') candidates.push({ sq, lost: `${other} ${NAME[occ.type]} on ${sq}`, weight: 2 });
-      else if (!occ && CENTER.has(sq)) candidates.push({ sq, lost: `${sq}`, weight: 1 });
+      else if (!occ && CENTER.has(sq)) candidates.push({ sq, lost: sq, weight: 1 });
     }
     candidates.sort((a, b) => b.weight - a.weight);
     if (candidates[0]) return { piece: `${own} ${NAME[cell.type]}`, lost: candidates[0].lost, squares: [from, to, candidates[0].sq] };
