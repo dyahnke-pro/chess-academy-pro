@@ -504,6 +504,23 @@ export function computeMoveFundamentals(
     });
   }
 
+  // A ROOK OUTPOST deep in their camp (Danya: "The rook drops onto d3 — a dream
+  // outpost deep in White's camp, jamming their pieces"): a rook on their
+  // third rank or beyond, on a square no pawn of theirs can ever attack, held
+  // there by a pawn of the mover's.
+  if (mv.piece === 'r' && !mv.captured && relRank(mv.to, mover) >= 6 && relRank(mv.to, mover) <= 7 && !hangsThere && isOutpost(after, mv.to, mover, false)
+    && after.attackers(mv.to as Square, mover).some((sq) => after.get(sq)?.type === 'p')) {
+    out.push({
+      id: 'outpost',
+      weight: 80,
+      led: `plants your rook on the ${mv.to} outpost, deep in their camp where no pawn of theirs can attack it`,
+      selfContained: `plants the rook on ${mv.to}, deep in their camp, where no pawn can challenge it`,
+      imperative: `plant your rook on the ${mv.to} outpost, deep in their camp`,
+      pointer: `plant your rook deep in their camp, on a square no pawn of theirs can attack`,
+      squares: [mv.to],
+    });
+  }
+
   // EYES A HOLE — a knight already in play re-routes to where it hits a
   // square deep in their camp that no pawn of theirs can ever cover: the
   // outpost it is heading for (review walk 2026-10-01: 5.Ne4 against …c5 and

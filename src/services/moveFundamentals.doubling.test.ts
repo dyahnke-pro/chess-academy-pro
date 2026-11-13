@@ -16,3 +16,11 @@ describe('doubling rooks', () => {
     expect(led('6k1/5ppp/8/8/8/8/5PPP/R5RK w - - 0 1', 'Rd1', 'white').some((l) => /doubles/.test(l))).toBe(false);
   });
 });
+
+describe('a rook outpost', () => {
+  // Danya (vc-1AMYr01rkHE): "The rook drops onto d3 — a dream outpost deep in
+  // White's camp."
+  it('…Rd3, held by the c4-pawn, is a rook outpost', () => {
+    expect(led('5bk1/3r1n1p/pBp1q1p1/Pb2p3/2p1P3/1pP3NP/1P3PPK/R1Q2N2 b - - 2 30', 'Rd3', 'black')).toContain('plants your rook on the d3 outpost, deep in their camp where no pawn of theirs can attack it');
+  });
+});
