@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**87 lines · 2 exports · 3 importers · 2 tests · 0 audits**
+**98 lines · 2 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,8 +21,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PlanChoiceLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `planChoice` (function) — 12 call sites
-- `src/services/learnBoardTeaching.ts:575`
+### `planChoice` (function) — 14 call sites
+- `src/services/learnBoardTeaching.ts:584`
 - `src/services/planChoicePasserNow.test.ts:13`
 - `src/services/planChooser.test.ts:14`
 - `src/services/planChooser.test.ts:20`
@@ -34,6 +34,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChooser.test.ts:35`
 - `src/services/planChooser.test.ts:42`
 - `src/services/planChooser.test.ts:58`
+- `src/services/planChooser.test.ts:74`
+- `src/services/planChooser.test.ts:75`
 
 ## Tests
 
