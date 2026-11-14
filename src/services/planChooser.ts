@@ -9,6 +9,7 @@ import { planFromUci } from './lookaheadPlan';
 import { aimWalkableNow, aimsOf, type Aim } from './planArc';
 import { routeNoun } from '../utils/routeWords';
 import { openSentence } from '../utils/openSentence';
+import { deriveNextPlanFacts } from './nextPlans';
 
 /** The first full move a plan choice may be taught on. */
 const PLAN_CHOICE_FROM_MOVE = 10;
@@ -52,6 +53,16 @@ export function planChoice(
   if (gap >= SHARP_PLAN_GAP_CP || opensForcing(fen, l0.moves[0])) return null;
   // Neither level (≤ 30) nor clearly stronger (≥ 80): silent.
   if (gap > 30 && gap < 80) return null;
+  // ONE PLAN VOICE (Learn prod audit 2026-11-14: "convert your extra
+  // material" → "Two plans hold here — an attack on their king, or the rook to
+  // f2" → "The plan changes here — now it's to convert"). Converting extra
+  // material is the plan while the board offers it (the plan thread keeps it
+  // standing), so no choice of plans is offered beside it; the board's plans,
+  // read by the computer the plan thread reads, decide it for every surface.
+  // (A passed pawn may still be one of the two plans offered.)
+  const seatWB: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const studentPovCp = studentColor === 'white' ? l0.evaluation : -l0.evaluation;
+  if (deriveNextPlanFacts(fen, seatWB, { namesStudentMoves: false, studentPovCp }).some((p) => p.kind === 'convert')) return null;
   const p0 = planFromUci(fen, l0.moves, studentColor, lastMove);
   const p1 = planFromUci(fen, l1.moves, studentColor, lastMove);
   if (!p0 || !p1) return null;

@@ -55,12 +55,23 @@ describe('Learn walk 2026-10-02, ply 22 — no "outpost" on a square a pawn hold
       { moves: ['e7f5', 'g5f6', 'f5g3', 'f2g2', 'g3h1', 'g2h1', 'd8f6', 'd1e1', 'c8f5', 'e1f2'], evaluation: -157 },
       { moves: ['f6e8', 'f1d3', 'g7g6', 'b1d2', 'e8g7', 'd2f1', 'c5d4'], evaluation: -148 },
     ];
-    const r = planChoice(fen, lines, 'black', { fenBefore: 'r1bq1rk1/1p2nppp/3b1n2/pPpp3P/P2P2P1/2P2P2/5K2/RNBQ1BNR w - c6 0 12', san: 'g5' });
+    const r = planChoice(fen, lines, 'black', { fenBefore: 'r1bq1rk1/1p2nppp/3b1n2/pPpp3P/P2P2P1/2P2P2/5K2/RNBQ1BNR w - c6 0 12', san: 'g5' }, null);
     expect(r?.text ?? '').not.toMatch(/outpost on h5/);
   });
   it('h5 is no outpost on that board, and the chooser holds every outpost to the board', () => {
     const fen = 'r1bq1rk1/1p2nppp/3b1n2/pPpp2PP/P2P4/2P2P2/5K2/RNBQ1BNR b - - 0 12';
     expect(aimWalkableNow({ id: 'outpost:h5', kind: 'outpost', squares: ['h5'], goal: 'h5', phrase: 'the outpost on h5' } as never, fen, 'b')).toBe(false);
     expect(readFileSync('src/services/planChooser.ts', 'utf8')).toMatch(/a\.kind === 'route' \|\| aimWalkableNow\(a, fen, seat\)/);
+  });
+});
+
+describe('one plan voice: no choice of plans while converting is the plan (Learn prod audit 2026-11-14)', () => {
+  it('the same two plans are offered level, but not a knight up — converting is the plan', async () => {
+    const { deriveNextPlanFacts } = await import('./nextPlans');
+    // The fixture board with Black's f6 knight taken off: White is a knight up.
+    const UP = 'r1bqkb1r/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 12';
+    expect(deriveNextPlanFacts(UP, 'w', { namesStudentMoves: false, studentPovCp: 330 }).map((p) => p.kind)).toContain('convert');
+    expect(planChoice(FEN, [{ moves: A, evaluation: 30 }, { moves: B, evaluation: 20 }], 'white', null)?.text).toMatch(/Two plans/);
+    expect(planChoice(UP, [{ moves: A, evaluation: 330 }, { moves: B, evaluation: 320 }], 'white', null)).toBeNull();
   });
 });
