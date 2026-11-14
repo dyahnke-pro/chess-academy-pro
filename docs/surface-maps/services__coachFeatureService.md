@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6690 lines · 33 exports · 72 importers · 87 tests · 4 audits**
+**6707 lines · 33 exports · 73 importers · 88 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -77,6 +77,7 @@
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRefuted.test.ts`
 - `src/services/reviewRegister.test.ts`
+- `src/services/reviewUnpinOnce.test.ts`
 - `src/services/reviewWalk1500.test.ts`
 - `src/services/reviewWalk900.test.ts`
 - `src/services/reviewZugzwang.test.ts`
@@ -173,7 +174,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegmentsForTests` (function) — 117 call sites
+### `buildReviewSegmentsForTests` (function) — 118 call sites
 - `src/services/batch2Wiring.test.ts:75`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -285,6 +286,7 @@
 - `src/services/reviewOneFailureSentence.test.ts:16`
 - `src/services/reviewOneLineOnce.test.ts:16`
 - `src/services/reviewTheirHabit.test.ts:24`
+- `src/services/reviewUnpinOnce.test.ts:19`
 - `src/services/reviewZugzwang.test.ts:22`
 - `src/test/computedOrderWired.test.ts:59`
 - `src/test/everySurfaceSpeaks.test.ts:94`
@@ -343,8 +345,8 @@
 ### `pendingRecapture` (function) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8866`
 - `src/components/Coach/CoachTeachPage.tsx:8969`
-- `src/components/Coach/CoachTeachPage.tsx:11937`
-- `src/components/Coach/CoachTeachPage.tsx:12339`
+- `src/components/Coach/CoachTeachPage.tsx:11938`
+- `src/components/Coach/CoachTeachPage.tsx:12340`
 - `src/services/coachFeatureService.test.ts:912`
 - `src/services/coachFeatureService.test.ts:913`
 - `src/services/phaseTransitionDetector.test.ts:575`
@@ -496,6 +498,7 @@
 - `src/services/reviewRegister.test.ts`
 - `src/services/reviewTheirHabit.test.ts`
 - `src/services/reviewTurnLength.test.ts`
+- `src/services/reviewUnpinOnce.test.ts`
 - `src/services/reviewWalk1500.test.ts`
 - `src/services/reviewWalk900.test.ts`
 - `src/services/reviewZugzwang.test.ts`
