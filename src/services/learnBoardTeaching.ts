@@ -1041,9 +1041,12 @@ export function noteSlip(story: StoryStore, id: string, ply: number): string {
   // ONE SENTENCE WITH THE DIAGNOSIS (Learn prod audit 2026-11-14: "That's the
   // second time this game." spoken on its own, its diagnosis said apart) — a
   // clause, never a sentence of its own, so nothing can separate the two.
-  if (n === 2) return 'Second time this game: ';
-  if (n === 3) return 'Third time this game, and this is the habit to fix: ';
-  return n > 3 ? 'Again: ' : '';
+  // ONE VOICE FOR THE REPEAT: the fundamental's own repeat stem already says
+  // it ("You missed a forcing move again", `principleVoice.shortVerdict`), so
+  // the count is added only where it adds something — the third slip, the
+  // habit to fix (decision baseline 2026-11-14: "Second time this game: You
+  // missed a forcing move again").
+  return n === 3 ? 'Third time this game, and this is the habit to fix: ' : '';
 }
 
 /** The story event that remembers an idea — once per key while it is open.

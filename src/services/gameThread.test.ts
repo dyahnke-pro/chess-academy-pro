@@ -9,11 +9,12 @@ const fenAt = (sans: string): string => { const c = new Chess(); for (const m of
 const line = (moves: string[], evaluation: number) => ({ moves, evaluation, mate: null });
 
 describe('the coach reacts to the student: the same slip twice this game (David 2026-10-06)', () => {
-  it('first is plain, second and third say so, a new game forgets', () => {
+  it('first is plain, the third says so, a new game forgets', () => {
     const mem = createLearnMemory({ livePlies: () => 0 });
     expect(noteSlip(mem.story, 'loose-piece', 8)).toBe('');
     expect(noteSlip(mem.story, 'tempo', 10)).toBe('');
-    expect(noteSlip(mem.story, 'loose-piece', 12)).toMatch(/second time this game/i);
+    // The second slip is said by the fundamental's own repeat stem ("… again").
+    expect(noteSlip(mem.story, 'loose-piece', 12)).toBe('');
     expect(noteSlip(mem.story, 'loose-piece', 14)).toMatch(/third time this game/i);
     mem.newGame();
     expect(noteSlip(mem.story, 'loose-piece', 8)).toBe('');
@@ -21,9 +22,11 @@ describe('the coach reacts to the student: the same slip twice this game (David 
   it('a takeback takes back the slips it undid (the story\'s events, P1-8c)', () => {
     const mem = createLearnMemory({ livePlies: () => 0 });
     noteSlip(mem.story, 'loose-piece', 8);
-    expect(noteSlip(mem.story, 'loose-piece', 12)).toMatch(/second time this game/i);
+    noteSlip(mem.story, 'loose-piece', 12);
     mem.rewind(10);
-    expect(noteSlip(mem.story, 'loose-piece', 12)).toMatch(/second time this game/i);
+    // The slip at 12 was taken back: the next is the second again, not the third.
+    expect(noteSlip(mem.story, 'loose-piece', 12)).toBe('');
+    expect(noteSlip(mem.story, 'loose-piece', 14)).toMatch(/third time this game/i);
   });
 });
 

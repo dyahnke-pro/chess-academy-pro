@@ -166,12 +166,12 @@ describe('the one answer reader (fundamentalReply + sameReplyAsGrade), every sur
 describe('a repeated slip is said with its diagnosis, never alone (Learn prod audit 2026-11-14)', () => {
   it('the prefix opens the diagnosis sentence, and with the diagnosis already said it is noted, not said', () => {
     let noted = 0;
-    const prefix = () => { noted += 1; return 'Second time this game: '; };
+    const prefix = () => { noted += 1; return 'Third time this game, and this is the habit to fix: '; };
     const said = mistakeTurnLine({
       fund: { ...FUND, square: 'd5' }, evidence: '', lostSquare: 'f7', gradeReply: null, bookSaid: false,
       slipPrefix: prefix, plainTail: '', concession: null, slipQuestion: () => null,
     });
-    expect(said.body).toBe(`Second time this game: ${FUND.diagnosis}`);
+    expect(said.body).toBe(`Third time this game, and this is the habit to fix: ${FUND.diagnosis}`);
     const bookSaid = mistakeTurnLine({
       fund: { ...FUND, square: 'd5' }, evidence: '', lostSquare: 'f7', gradeReply: null, bookSaid: true,
       slipPrefix: prefix, plainTail: '', concession: null, slipQuestion: () => null,
