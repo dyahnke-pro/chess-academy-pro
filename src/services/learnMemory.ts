@@ -286,3 +286,16 @@ export function instanceStem(mem: Pick<LearnMemory, 'stemCounts'>, family: strin
 export function rememberKeptClaims(kept: ReadonlyArray<{ claims?: readonly string[] }>, remember: (key: string) => void): void {
   for (const f of kept) for (const c of f.claims ?? []) if (!/^win-[a-h][1-8]$/.test(c)) remember(c);
 }
+
+/** THE MATE RUN IS SAID ONCE (Learn prod audit 2026-11-14: "There's a forced
+ *  mate here — mate in 5", "— mate in 4", "— mate in 3" on three moves
+ *  running). Each count was its own say-once key, so a student who kept
+ *  finding the mating moves heard it again every move. A mate SHORTER than the
+ *  one last said is the same mate going on; a longer one is news (the student
+ *  let it slip) and is said. Pure: reads the last said tactic key only. */
+export function mateRunContinues(lastSaidKey: string, key: string): boolean {
+  if (!key.startsWith('mate:') || !lastSaidKey.startsWith('mate:')) return false;
+  const now = Number(key.slice(5));
+  const said = Number(lastSaidKey.slice(5));
+  return Number.isFinite(now) && Number.isFinite(said) && now < said;
+}

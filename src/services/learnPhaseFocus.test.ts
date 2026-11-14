@@ -50,6 +50,8 @@ describe('a tactic alert is heard (David 2026-10-19: "i also never heard a tacti
     const writes = code.match(/lastTacticKey = /g) ?? [];
     expect(writes.length).toBe(1);
     expect(code).toMatch(/markTacticSaid = \(\) => \{\s*learnMemRef\.current\.lastTacticKey = saidKey/);
+    // A mate already said is not said again while it runs (2026-11-14).
+    expect(code).toMatch(/mateRunContinues\(learnMemRef\.current\.lastTacticKey, tacticKey\)/);
   });
 });
 

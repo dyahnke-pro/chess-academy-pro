@@ -325,3 +325,14 @@ describe('Learn remembers what SPOKE, never what was offered (prod Learn 2026-10
     expect([...mem.story.current().said.keys()]).toEqual(['They keep moving the same piece twice.']);
   });
 });
+
+describe('the mate run is said once (Learn prod audit 2026-11-14)', () => {
+  it('a shorter mate after one already said is the same mate going on; a longer one is news', async () => {
+    const { mateRunContinues } = await import('./learnMemory');
+    expect(mateRunContinues('mate:5', 'mate:4')).toBe(true);
+    expect(mateRunContinues('mate:5', 'mate:2')).toBe(true);
+    expect(mateRunContinues('mate:3', 'mate:5')).toBe(false);
+    expect(mateRunContinues('win:nf6', 'mate:3')).toBe(false);
+    expect(mateRunContinues('', 'mate:3')).toBe(false);
+  });
+});

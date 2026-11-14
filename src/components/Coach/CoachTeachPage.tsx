@@ -18,7 +18,7 @@ import { isReleased } from '../../data/heldSurfaces';
 import { characterTurn } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { startLearnTranscript, stopLearnTranscript, noteLearnEntry } from '../../services/learnTranscript';
-import { createLearnMemory, markOpeningFactsSpoken, nextStem, instanceStem, rememberKeptClaims, type LearnMemory } from '../../services/learnMemory';
+import { createLearnMemory, markOpeningFactsSpoken, mateRunContinues, nextStem, instanceStem, rememberKeptClaims, type LearnMemory } from '../../services/learnMemory';
 import { STORY_KEY, PLAN_GOAL, keysUnder, threadKey, threadVariant, toldBoards, identityHeard, noteOpening, openingAt, openingBreak, switchesSaid, type StoryHeard } from '../../services/gameStory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
@@ -9486,7 +9486,7 @@ export function CoachTeachPage({ mode }: {
       // finds it — which is exactly what makes two of them indistinguishable
       // out loud. Guard on the words the student hears, not on the board state
       // behind them.
-      if (tacticLine && (tacticKey === learnMemRef.current.lastTacticKey || learnMemRef.current.story.current().said.has(ALERT_KEY.tacticLine(tacticLine)))) {
+      if (tacticLine && (tacticKey === learnMemRef.current.lastTacticKey || mateRunContinues(learnMemRef.current.lastTacticKey, tacticKey) || learnMemRef.current.story.current().said.has(ALERT_KEY.tacticLine(tacticLine)))) {
         tacticSquares = [];
         tacticLine = null;
       } else if (tacticLine) {
