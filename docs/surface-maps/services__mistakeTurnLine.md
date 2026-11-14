@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**128 lines · 6 exports · 8 importers · 4 tests · 0 audits**
+**131 lines · 6 exports · 8 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,24 +35,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/whyItFailed.lostSquare.test.ts:23`
 
 ### `sameReplyAsGrade` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:3254`
+- `src/services/coachFeatureService.ts:3592`
 - `src/services/mistakeTurnLine.test.ts:155`
 - `src/services/mistakeTurnLine.test.ts:157`
 - `src/services/mistakeTurnLine.test.ts:158`
-- `src/services/reviewFullData.ts:747`
+- `src/services/reviewFullData.ts:780`
 
 ### `fundamentalReply` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:3255`
+- `src/services/coachFeatureService.ts:3593`
 - `src/services/learnFundamentalNarration.ts:127`
 - `src/services/mistakeTurnLine.test.ts:153`
 - `src/services/mistakeTurnLine.test.ts:162`
-- `src/services/reviewFullData.ts:748`
+- `src/services/reviewFullData.ts:781`
 
 ### `MistakeTurn` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `mistakeTurnLine` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12721`
+### `mistakeTurnLine` (function) — 11 call sites
+- `src/components/Coach/CoachTeachPage.tsx:12855`
 - `src/services/mistakeTurnLine.test.ts:23`
 - `src/services/mistakeTurnLine.test.ts:36`
 - `src/services/mistakeTurnLine.test.ts:44`
@@ -61,6 +61,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeTurnLine.test.ts:69`
 - `src/services/mistakeTurnLine.test.ts:98`
 - `src/services/mistakeTurnLine.test.ts:131`
+- `src/services/mistakeTurnLine.test.ts:170`
+- `src/services/mistakeTurnLine.test.ts:175`
 
 ## Tests
 
