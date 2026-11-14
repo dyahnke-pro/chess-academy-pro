@@ -119,7 +119,10 @@ export function mistakeTurnLine(a: MistakeTurnInput): MistakeTurn {
     body = join(a.evidence);
     how = a.fund.howOnly;
   } else {
-    body = join(`${a.slipPrefix()}${a.bookSaid ? '' : a.fund.diagnosis}`, a.evidence);
+    // The repeat prefix rides its diagnosis; with the diagnosis already said
+    // (the opening lane said the departure) it is noted, never said alone.
+    const again = a.slipPrefix();
+    body = join(a.bookSaid ? '' : `${again}${a.fund.diagnosis}`, a.evidence);
     how = a.fund.howOnly;
   }
   const habit = how || a.slipQuestion() || '';

@@ -162,3 +162,21 @@ describe('the one answer reader (fundamentalReply + sameReplyAsGrade), every sur
     expect(fundamentalReply(['Bxf4'], fenBefore, 'Qxf4')).toBeNull();
   });
 });
+
+describe('a repeated slip is said with its diagnosis, never alone (Learn prod audit 2026-11-14)', () => {
+  it('the prefix opens the diagnosis sentence, and with the diagnosis already said it is noted, not said', () => {
+    let noted = 0;
+    const prefix = () => { noted += 1; return 'Second time this game: '; };
+    const said = mistakeTurnLine({
+      fund: { ...FUND, square: 'd5' }, evidence: '', lostSquare: 'f7', gradeReply: null, bookSaid: false,
+      slipPrefix: prefix, plainTail: '', concession: null, slipQuestion: () => null,
+    });
+    expect(said.body).toBe(`Second time this game: ${FUND.diagnosis}`);
+    const bookSaid = mistakeTurnLine({
+      fund: { ...FUND, square: 'd5' }, evidence: '', lostSquare: 'f7', gradeReply: null, bookSaid: true,
+      slipPrefix: prefix, plainTail: '', concession: null, slipQuestion: () => null,
+    });
+    expect(bookSaid.body).toBe('');
+    expect(noted).toBe(2);
+  });
+});

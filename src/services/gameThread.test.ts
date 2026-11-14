@@ -13,17 +13,17 @@ describe('the coach reacts to the student: the same slip twice this game (David 
     const mem = createLearnMemory({ livePlies: () => 0 });
     expect(noteSlip(mem.story, 'loose-piece', 8)).toBe('');
     expect(noteSlip(mem.story, 'tempo', 10)).toBe('');
-    expect(noteSlip(mem.story, 'loose-piece', 12)).toMatch(/second time this game/);
-    expect(noteSlip(mem.story, 'loose-piece', 14)).toMatch(/Third time this game/);
+    expect(noteSlip(mem.story, 'loose-piece', 12)).toMatch(/second time this game/i);
+    expect(noteSlip(mem.story, 'loose-piece', 14)).toMatch(/third time this game/i);
     mem.newGame();
     expect(noteSlip(mem.story, 'loose-piece', 8)).toBe('');
   });
   it('a takeback takes back the slips it undid (the story\'s events, P1-8c)', () => {
     const mem = createLearnMemory({ livePlies: () => 0 });
     noteSlip(mem.story, 'loose-piece', 8);
-    expect(noteSlip(mem.story, 'loose-piece', 12)).toMatch(/second time this game/);
+    expect(noteSlip(mem.story, 'loose-piece', 12)).toMatch(/second time this game/i);
     mem.rewind(10);
-    expect(noteSlip(mem.story, 'loose-piece', 12)).toMatch(/second time this game/);
+    expect(noteSlip(mem.story, 'loose-piece', 12)).toMatch(/second time this game/i);
   });
 });
 

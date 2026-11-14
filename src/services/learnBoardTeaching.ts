@@ -1038,9 +1038,12 @@ const PROMISE_PLIES = 16;
 export function noteSlip(story: StoryStore, id: string, ply: number): string {
   story.note(ply, [{ kind: 'slip', id }]);
   const n = slipCount(story.current(), id);
-  if (n === 2) return "That's the second time this game. ";
-  if (n === 3) return 'Third time this game — this is the habit to fix. ';
-  return n > 3 ? 'Again. ' : '';
+  // ONE SENTENCE WITH THE DIAGNOSIS (Learn prod audit 2026-11-14: "That's the
+  // second time this game." spoken on its own, its diagnosis said apart) — a
+  // clause, never a sentence of its own, so nothing can separate the two.
+  if (n === 2) return 'Second time this game: ';
+  if (n === 3) return 'Third time this game, and this is the habit to fix: ';
+  return n > 3 ? 'Again: ' : '';
 }
 
 /** The story event that remembers an idea — once per key while it is open.
