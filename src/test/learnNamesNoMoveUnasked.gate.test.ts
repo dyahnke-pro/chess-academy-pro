@@ -72,5 +72,10 @@ describe('Learn names no move unasked', () => {
     expect(page).toMatch(/uncertaintyClause\(turnRead, \{[^}]*namesMoves: false/);
     expect(page).toMatch(/candidateCompareRead\([^\n]{0,240}namesMoves: false/);
   });
+  it('the instant grade says "your move", never the move it grades (2026-11-14)', () => {
+    const page = read('components/Coach/CoachTeachPage.tsx');
+    expect(page).not.toMatch(/`\$\{move\.san\}: \$\{grade\.clause\}/);
+    expect(page).toMatch(/learnGradeLine\(grade\.clause\)/);
+  });
 });
 

@@ -323,7 +323,7 @@ import type { ResolvedStep } from '../../coach/requestSteps';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseClaims, conceptInstanceKey, convertKey } from '../../services/positionFacts';
-import { gradePlayedMove, liveMovePrice, priceLabel, studentMovePrice, uciOfSan, type MovePrice, type PriceSearch } from '../../services/playedMoveGrade';
+import { gradePlayedMove, learnGradeLine, liveMovePrice, priceLabel, studentMovePrice, uciOfSan, type MovePrice, type PriceSearch } from '../../services/playedMoveGrade';
 import { BOARD_READ_LINES, isDraftRead, keptBoardRead, readBoardOnce } from '../../services/boardReadStore';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
@@ -10778,7 +10778,8 @@ export function CoachTeachPage({ mode }: {
           && !(isRecapture && !grade.fault) && !foundSpeaks;
         if (grade && speakGrade && turnOwner === 'open') {
           // The clause is a verdict ("that meets the threat.");
-          // heard on its own it names no move. Lead with the move it grades.
+          // heard on its own it names no move. Learn leads with "your move",
+          // never its name (`learnGradeLine`).
           // THE QUESTION RIDES THE FIRST LINE THAT NAMES THE SLIP (David
           // 2026-10-14): this instant grade lands before the full verdict, so
           // when it names an unanswered threat or a hung piece it carries the
@@ -10791,7 +10792,7 @@ export function CoachTeachPage({ mode }: {
               ? answerDangerQuestion(null, move.history.length)
               : BLUNDER_CHECK_QUESTION
             : null;
-          const gradeLine = `${praise ? `${praise} ` : ''}${goodPoint ? `${move.san}: ${grade.clause} ${goodPoint}` : `${move.san}: ${grade.clause}`}${habitQ ? ` ${habitQ}` : ''}`;
+          const gradeLine = `${praise ? `${praise} ` : ''}${goodPoint ? `${learnGradeLine(grade.clause)} ${goodPoint}` : learnGradeLine(grade.clause)}${habitQ ? ` ${habitQ}` : ''}`;
           praise = null;
           // Recorded as said, so the late wave's move-point lane does not
           // repeat the reason a second later.

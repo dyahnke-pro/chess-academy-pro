@@ -398,3 +398,18 @@ export function priceLabel(price: MovePrice | null, mover: 'w' | 'b'): MoveLabel
 }
 
 export { uciOfSan };
+
+/** THE INSTANT GRADE, SAID IN LEARN — "your move", never its name (David
+ *  2026-11-09: "the user knows that, they see it play out"). The clause is a
+ *  verdict with no subject ("It let them take your rook on h8.", "that meets
+ *  the threat.", "the only move that holds here."); Learn gives it the
+ *  student's move as its subject in words, so "Queen takes g2: it let them …"
+ *  is never heard. */
+export function learnGradeLine(clause: string): string {
+  const c = clause.trim();
+  if (/^it\b/i.test(c)) return `Your move${c.slice(2)}`;
+  if (/^that\b/i.test(c)) return `Your move${c.slice(4)}`;
+  if (/^the\b/i.test(c)) return `Your move was ${c}`;
+  if (/^solid\b/i.test(c)) return `Your move was ${c}`;
+  return `Your move: ${c}`;
+}
