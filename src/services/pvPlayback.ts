@@ -15,6 +15,7 @@
  * root promise is truncated/refused (`delivers=false`): a line we can't
  * verify is a line we don't teach.
  */
+import { isPawnBreak } from './pawnBreak';
 import { gainedBishopPair } from './bishopPair';
 import { andList, fileList, withArticle } from '../utils/andList';
 import { afterCaptureSan } from '../utils/captureWords';
@@ -896,13 +897,24 @@ export function factsOnlyRestate(f: PlyFacts): boolean {
 /** `factsOnlyRestate` for a real game move (fenBefore + SAN) — and a capture
  *  that wins the bishop pair is not a restatement (Danya's take-backs, measured
  *  2026-10-28). False on an illegal move. Pure. */
-export function moveOnlyRestates(fenBefore: string, san: string, prev?: PrevCaptureContext): boolean {
+export function moveOnlyRestates(
+  fenBefore: string, san: string,
+  /** REQUIRED — the square the opponent's last move landed on (null at the
+   *  start): a pawn break is a decision, never a restatement, and only the one
+   *  definition (`isPawnBreak`) can tell a break from a take-back. */
+  lastTo: string | null,
+  prev?: PrevCaptureContext,
+): boolean {
   try {
     const c = new Chess(fenBefore);
     const mv = c.move(san);
     if (!mv) return false;
     // Neither a capture nor a check: nothing to restate, and no board read.
     if (!mv.captured && !c.inCheck()) return false;
+    // A PAWN BREAK IS NOT A RESTATEMENT (prod Review audit 2026-11-14,
+    // Giri–Carlsen 7…cxd4: listed as a silent restatement while the break
+    // computer said it half-opens the c-file for the rooks).
+    if (isPawnBreak(fenBefore, san, lastTo)) return false;
     return factsOnlyRestate(computePlyFacts(fenBefore, c.fen(), {
       captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion,
     }, prev)) && !gainedBishopPair(fenBefore, mv.san);

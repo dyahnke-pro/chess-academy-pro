@@ -2745,6 +2745,16 @@ function* reviewSegmentSteps(
           });
           const carriedLoose = carried >= 0 ? looseSquareOf(facets[carried]) : null;
           if (carried >= 0) facets.splice(carried, 1);
+          // ONE POINT A MOVE (prod Review audit 2026-11-14, Giri–Carlsen 31…Kh8:
+          // "You went for Kh8, which unpins your pawn on g7, freeing it to join
+          // the game. Kh8 unpins your pawn, freeing it to join the game"). The
+          // thought's board teacher and the walk's move-point facet are one
+          // computer (`unpinPoint` and its siblings) read through two doors;
+          // when the thought says the move's point, the facet steps aside.
+          if (thought.kept.some((k) => k.source === 'boardTeacher')) {
+            const point = facets.findIndex((f) => f.identity === `point:${m.ply}`);
+            if (point >= 0) facets.splice(point, 1);
+          }
           // Their attack that asks an answer says so in the sentence that
           // names the target (a sentence of its own is the same words every
           // time, and the say-once ledger drops the second).
@@ -4311,7 +4321,7 @@ function* reviewSegmentSteps(
       if (clause) {
         narration = `Your opponent ${clause}.`;
         narrationSource = 'opponent';
-      } else if (!moveOnlyRestates(fenPair.fenBefore, m.san, prevCap)) {
+      } else if (!moveOnlyRestates(fenPair.fenBefore, m.san, i > 0 ? lastLanded(fenChain[i - 1].fenBefore, moves[i - 1].san) : null, prevCap)) {
         // A capture or check that does nothing more stays silent (the
         // quiet-move rule): the positional fallback below said "the bishop
         // rakes toward c5, d4, f2" of a take-back (census group 6).
@@ -4432,9 +4442,11 @@ function* reviewSegmentSteps(
   // reads as one.
   {
     let run: PrevCaptureContext = NO_PREV_CAPTURE;
+    let lastTo: string | null = null;
     for (const sg of [...segments].sort((a, b) => a.ply - b.ply)) {
-      if (!(sg.narration ?? '').trim() && moveOnlyRestates(sg.fenBefore, sg.san, run)) sg.quietRestates = true;
+      if (!(sg.narration ?? '').trim() && moveOnlyRestates(sg.fenBefore, sg.san, lastTo, run)) sg.quietRestates = true;
       try { run = afterCapture(run, new Chess(sg.fenBefore).move(sg.san)); } catch { run = NO_PREV_CAPTURE; }
+      lastTo = lastLanded(sg.fenBefore, sg.san);
     }
   }
   // WHY NO FUNDAMENTAL, CARRIED ON THE PLY (clean-pass review walk 2026-10-04,
@@ -6661,6 +6673,11 @@ export function moveMeetsThreat(fenBefore: string, san: string, threatSan: strin
 /** Replace the verdict's reason for the better move ("— <old>") with one read
  *  off a fresher line of the same ply, or drop it when that line proves none.
  *  The narration is left alone when the old reason is not found as spoken. */
+/** The square a move landed on, or null when it does not play. */
+function lastLanded(fenBefore: string, san: string): string | null {
+  try { return new Chess(fenBefore).move(san)?.to ?? null; } catch { return null; }
+}
+
 export function replaceVerdictReason(narration: string, oldReason: string, freshReason: string | null): string {
   if (freshReason === oldReason) return narration;
   // The reason follows the better move after a colon ("f6 was stronger: it

@@ -32,12 +32,14 @@ describe.skipIf(process.env.DANYA_BARS !== '1')('danya bars', () => { it('measur
     for (const n of onMain) notedAt.set(n.lineSan!.length, n);
     const c = new Chess();
     let run: PrevCaptureContext = NO_PREV_CAPTURE;
+    let lastTo: string | null = null;
     for (let i = 0; i < main.lineSan!.length; i += 1) {
       const fen = c.fen();
       const san = main.lineSan![i];
       let mv;
       try { mv = c.move(san); } catch { break; }
-      const restates = moveOnlyRestates(fen, san, run);
+      const restates = moveOnlyRestates(fen, san, lastTo, run);
+      lastTo = mv.to;
       const k = restates ? 'restate' : mv.captured ? 'capture' : /[+#]/.test(mv.san) ? 'check' : 'quiet';
       cls[k].plies += 1;
       const note = notedAt.get(i + 1);

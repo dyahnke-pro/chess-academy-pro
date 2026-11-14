@@ -1323,7 +1323,17 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       // of …Rxd5 read against the rook now on d5).
       const played = (() => { try { return new Chess(posBefore.fen()).move(SANS[n - 1]); } catch { return null; } })();
       const tookIt = !!played?.captured && played.to === m[2].toLowerCase() && played.captured === PIECE[m[1].toLowerCase()];
-      const cell = (recapture ? posNext : past || alternative || tookIt ? posBefore : pos).get(m[2].toLowerCase());
+      // …and when the game did NOT take back (Giri–Carlsen 32.Nxd5 …Qd2,
+      // review 2026-11-14 false red: "taking back leaves your pawn on d5
+      // isolated"), the claim is about the recapture's own board: every legal
+      // capture onto the square this move landed on is read.
+      const recaptureBoards = recapture && played
+        ? new Chess(pos.fen()).moves({ verbose: true }).filter((x) => x.to === played.to && x.captured)
+          .map((x) => { const b = new Chess(pos.fen()); b.move(x.san); return b; })
+        : [];
+      const boards = recapture ? [posNext, ...recaptureBoards] : [past || alternative || tookIt ? posBefore : pos];
+      const cells = boards.map((b) => b.get(m[2].toLowerCase()));
+      const cell = cells.find((c) => c && c.type === PIECE[m[1].toLowerCase()]) ?? cells[0];
       if (!cell || cell.type !== PIECE[m[1].toLowerCase()]) accFails.push(`ply ${n}: "${m[1]} on ${m[2]}" but board has ${cell ? cell.type : 'empty'}`);
     }
     // SEAT — whose ply this is comes from the GAME (see `isStudentPly`), not

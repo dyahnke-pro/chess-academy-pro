@@ -24,6 +24,7 @@ describe.skipIf(process.env.CMP !== '1')('review depth — two runs compared', (
     if (!Array.isArray(a.plies) || !b.said) continue;
     const seat: 'w' | 'b' = a.seat === 'black' || a.seat === 'b' ? 'b' : 'w';
     let run: PrevCaptureContext = NO_PREV_CAPTURE;
+    let lastTo: string | null = null;
     const c = new Chess();
     for (let i = 0; i < a.plies.length; i += 1) {
       const p = a.plies[i];
@@ -31,7 +32,8 @@ describe.skipIf(process.env.CMP !== '1')('review depth — two runs compared', (
       const fen = c.fen();
       let mv;
       try { mv = c.move(p.san); } catch { break; }
-      const restates = moveOnlyRestates(fen, p.san, run);
+      const restates = moveOnlyRestates(fen, p.san, lastTo, run);
+      lastTo = mv.to;
       run = afterCapture(run, mv);
       const sa: string = a.said[String(ply)] ?? '';
       const sb: string = b.said[String(ply)] ?? '';

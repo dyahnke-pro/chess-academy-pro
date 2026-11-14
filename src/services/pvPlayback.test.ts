@@ -480,15 +480,22 @@ describe('the quiet-move rule: a move that only restates the board (WO-DECIDER-0
     const c = new Chess();
     for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'd4', 'exd4']) c.move(m);
     // Nxd4 takes the pawn back: the trade, read back.
-    expect(moveOnlyRestates(c.fen(), 'Nxd4', { square: 'd4', capturedValue: 1, net: 1 })).toBe(true);
+    expect(moveOnlyRestates(c.fen(), 'Nxd4', null, { square: 'd4', capturedValue: 1, net: 1 })).toBe(true);
     // A quiet developing move is not a restatement — its purpose may speak.
-    expect(moveOnlyRestates(new Chess().fen(), 'Nf3')).toBe(false);
+    expect(moveOnlyRestates(new Chess().fen(), 'Nf3', null)).toBe(false);
     // A free knight is won, not restated.
-    expect(moveOnlyRestates('4k3/8/8/4n3/8/8/4Q3/4K3 w - - 0 1', 'Qxe5+')).toBe(false);
+    expect(moveOnlyRestates('4k3/8/8/4n3/8/8/4Q3/4K3 w - - 0 1', 'Qxe5+', null)).toBe(false);
     // A check with nothing else on the board: the board read back.
-    expect(moveOnlyRestates('4k3/8/8/8/8/8/8/R3K3 w - - 0 1', 'Ra8+')).toBe(true);
+    expect(moveOnlyRestates('4k3/8/8/8/8/8/8/R3K3 w - - 0 1', 'Ra8+', null)).toBe(true);
     // A check that forks the king and the rook lands a tactic.
-    expect(moveOnlyRestates('r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1', 'Nc7+')).toBe(false);
+    expect(moveOnlyRestates('r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1', 'Nc7+', null)).toBe(false);
+  });
+  it('a pawn break is a decision, never a restatement (Giri–Carlsen 7…cxd4)', async () => {
+    const { moveOnlyRestates } = await import('./pvPlayback');
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const m of ['e4', 'e6', 'd4', 'd5', 'e5', 'c5', 'c3', 'Nc6', 'Nf3', 'Bd7', 'Be2', 'Nge7', 'O-O']) c.move(m);
+    expect(moveOnlyRestates(c.fen(), 'cxd4', 'g1')).toBe(false);
   });
   it('a take-back that wins the bishop pair is a purpose, not a restatement (Danya: "for the bishop pair")', async () => {
     const { moveOnlyRestates, plyFactsClause } = await import('./pvPlayback');
@@ -496,7 +503,7 @@ describe('the quiet-move rule: a move that only restates the board (WO-DECIDER-0
     const c = new Chess();
     for (const m of ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'a3', 'Bxc3+']) c.move(m);
     const prev = { square: 'c3', capturedValue: 3, net: 3 };
-    expect(moveOnlyRestates(c.fen(), 'bxc3', prev)).toBe(false);
+    expect(moveOnlyRestates(c.fen(), 'bxc3', null, prev)).toBe(false);
     expect(plyFactsClause(c.fen(), 'bxc3', { prev, victimOwner: 'their', sanSaid: true })).toMatch(/wins the bishop pair/);
   });
 });
