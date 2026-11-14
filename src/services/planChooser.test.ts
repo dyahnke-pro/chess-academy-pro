@@ -55,7 +55,7 @@ describe('Learn walk 2026-10-02, ply 22 — no "outpost" on a square a pawn hold
       { moves: ['e7f5', 'g5f6', 'f5g3', 'f2g2', 'g3h1', 'g2h1', 'd8f6', 'd1e1', 'c8f5', 'e1f2'], evaluation: -157 },
       { moves: ['f6e8', 'f1d3', 'g7g6', 'b1d2', 'e8g7', 'd2f1', 'c5d4'], evaluation: -148 },
     ];
-    const r = planChoice(fen, lines, 'black', { fenBefore: 'r1bq1rk1/1p2nppp/3b1n2/pPpp3P/P2P2P1/2P2P2/5K2/RNBQ1BNR w - c6 0 12', san: 'g5' }, null);
+    const r = planChoice(fen, lines, 'black', { fenBefore: 'r1bq1rk1/1p2nppp/3b1n2/pPpp3P/P2P2P1/2P2P2/5K2/RNBQ1BNR w - c6 0 12', san: 'g5' });
     expect(r?.text ?? '').not.toMatch(/outpost on h5/);
   });
   it('h5 is no outpost on that board, and the chooser holds every outpost to the board', () => {
