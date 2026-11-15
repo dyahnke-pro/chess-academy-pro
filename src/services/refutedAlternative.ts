@@ -51,7 +51,6 @@ interface RefutedAlternativeInput {
   engine?: PvEngine & MoveScorer;
   /** Engine depth for the comparison and the proof line. */
   depth?: number;
-  maxPlies?: number;
 }
 
 /** The singleton as a scorer: `searchmoves` rides its queued search. One
@@ -116,7 +115,6 @@ function sanToUci(fen: string, san: string): string | null {
 export async function refutedAlternative(input: RefutedAlternativeInput): Promise<RefutedAlternative | null> {
   const engine = input.engine ?? SINGLETON_SCORER;
   const depth = input.depth ?? 12;
-  const maxPlies = input.maxPlies ?? 6;
   const alt = pickAlternative(input.taughtSan, input.candidates);
   if (!alt) return null;
   const taughtUci = sanToUci(input.fenBefore, input.taughtSan);
@@ -150,7 +148,7 @@ export async function refutedAlternative(input: RefutedAlternativeInput): Promis
     costCp = Math.min(costCp, deeper);
     fanAltLine = fan.find((l) => l.moves[0] === altUci)?.moves ?? null;
     fanTaughtLine = fan.find((l) => l.moves[0] === taughtUci)?.moves ?? null;
-    altLine = await computePvLine(input.fenBefore, { firstUci: altUci, maxPlies, depth, engine });
+    altLine = await computePvLine(input.fenBefore, { firstUci: altUci, depth, engine });
   } catch { return null; }
   if (!altLine) return null;
   const seconds = [fanAltLine ? fanAltLine.slice(1) : null];

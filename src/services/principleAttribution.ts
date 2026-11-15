@@ -37,7 +37,7 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findContinuationsAtPly } from './openingDetectionService';
 import { deriveNextPlanFacts, findWorstPlacedPiece, worstReason, type PlanFact } from './nextPlans';
 import { winPercent, bandForWinPctLost } from './accuracyService';
-import { MAX_PV_DEPTH_PLIES } from './ratingBands';
+import { lineTrust } from './lineTrust';
 import { BLUNDER_CP } from './engineConstants';
 import { developedMinorCount, homeMinorCount, isMinorAtHome, minorsAtHome } from './development';
 import { netPieceWords, proofCut } from './exchangeLedger';
@@ -206,6 +206,12 @@ export interface AttributionInput {
   classification: string | null;
   /** Persisted engine lines (SAN), optional corroboration. */
   pvAfterPlayed?: readonly string[];
+  /** The engine's SHALLOWER read of `pvAfterPlayed`'s line (SAN, from the same
+   *  board) — the second read `lineTrust` compares, so a punishment deeper
+   *  than two moves counts as a lapse only when two reads agree on it. Absent
+   *  = one read, and the line is trusted only near (David 2026-11-15: no ply
+   *  horizon, the line rule decides). */
+  pvAfterPlayedEarlier?: readonly string[];
   pvAfterBest?: readonly string[];
   /** Persisted engine eval BEFORE the played move, MOVER POV in centipawns
    *  (positive = mover better). From the review's fixed-depth analysis — present
@@ -540,6 +546,18 @@ function centreBias(sq: string): number { return Math.abs(fileIdx(sq) - 3.5); }
 /** What `sans` wins for `opp` played from `fen` with `opp` to move — the ONE
  *  ledger rule (WO-OUTCOME-01). Null when the line is not legal there (the
  *  board changed under it); 0 when it proves nothing. */
+/** A SAN line as UCI from `fen`, or null when a move does not play. */
+function sanLineToUci(fen: string, sans: readonly string[]): string[] | null {
+  const b = new Chess(fen);
+  const out: string[] = [];
+  for (const san of sans) {
+    let m: Move;
+    try { m = b.move(san); } catch { return null; }
+    out.push(`${m.from}${m.to}${m.promotion ?? ''}`);
+  }
+  return out;
+}
+
 function lineNetForSide(fen: string, sans: readonly string[], opp: Color): { net: number; plies: number } | null {
   const parts = fen.split(' ');
   if (parts[1] !== opp) { parts[1] = opp; parts[3] = '-'; }
@@ -560,7 +578,7 @@ interface Ctx {
   history: Move[]; plyIndex: number; opening: boolean; endgame: boolean;
   /** `AttributionInput.theory`. */
   theory: boolean;
-  pvP?: readonly string[]; pvB?: readonly string[];
+  pvP?: readonly string[]; pvPE?: readonly string[]; pvB?: readonly string[];
   /** The opponent's actual reply, parsed on `after`, or null. */
   reply: Move | null;
   /** Persisted engine eval before/after the played move, MOVER POV (cp).
@@ -1856,12 +1874,22 @@ const DETECTORS: Detector[] = [
       return yieldTo(c, 'calculation-depth', CALC_DEPTH_CLAIMANTS,
         `the punishment ${pvP[firstForcing]} is already legal as the immediate reply — not a depth lapse`);
     }
-    // A BLOW DEEPER THAN ANY LINE THE COACH EVER SPELLS IS NOT A CALCULATION
-    // LAPSE (hand walk 1380, move 10: a 1380 told the punishment "arrives on
-    // their 7th move" — ply 13). Nobody is held to a line past the coach's own
-    // horizon; that loss is positional, and another fundamental owns it.
-    if (firstForcing + 1 > MAX_PV_DEPTH_PLIES) {
-      return no(c, 'calculation-depth', `the punishment ${pvP[firstForcing]} lands at ply ${firstForcing + 1}, past the ${MAX_PV_DEPTH_PLIES}-ply horizon`);
+    // NO HORIZON ON A CALCULATION LAPSE (David 2026-11-15: "I want full depth
+    // narration … if a seven move line is seen it's worth speaking to high
+    // level players"). The 7-ply horizon that called every deeper blow
+    // "positional" is DELETED. What stays is the honesty the horizon stood in
+    // for, the one line rule (`lineTrust`): near, the line stands on one read;
+    // deeper, the engine's two reads must agree on it (and past five moves its
+    // moves must force), so a lapse is never charged on a line one search
+    // guessed.
+    {
+      const fenAfter = c.after.fen();
+      const uci = sanLineToUci(fenAfter, pvP.slice(0, firstForcing + 1));
+      const earlier = c.pvPE?.length ? sanLineToUci(fenAfter, c.pvPE) : null;
+      const trust = uci ? lineTrust({ fen: fenAfter, uci, plies: firstForcing + 1, winner: c.opp, seconds: [earlier] }) : null;
+      if (!trust?.name) {
+        return no(c, 'calculation-depth', `the punishment ${pvP[firstForcing]} lands at ply ${firstForcing + 1} on a line the engine's reads do not confirm (${trust?.why ?? 'no-line'})`);
+      }
     }
     // THE BLOW MUST WIN SOMETHING (clean-pass review walk 2026-10-04, G1 #43:
     // "after Rhc8 hitting your rook, Nd4, Rxc1+ arrives" — Rxc1+ Rxc1 is a
@@ -2003,7 +2031,7 @@ export function attributePrinciples(
   const ctx: Ctx = {
     before, after, afterBest, mover, opp: other(mover), last, best, history,
     plyIndex: input.historySans.length, opening: input.historySans.length <= OPENING_PLIES, theory: input.theory,
-    endgame: isEndgame(before), pvP: input.pvAfterPlayed, pvB: input.pvAfterBest,
+    endgame: isEndgame(before), pvP: input.pvAfterPlayed, pvPE: input.pvAfterPlayedEarlier, pvB: input.pvAfterBest,
     reply: input.replySan ? tryMove(after, input.replySan) : null,
     evalBefore: input.evalBefore, evalAfterPlayed: input.evalAfterPlayed,
     ...(why ? { why, deferrals: [] } : {}),

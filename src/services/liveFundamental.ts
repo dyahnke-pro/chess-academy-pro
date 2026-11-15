@@ -49,6 +49,9 @@ export interface LiveFundamentalReads {
   /** The engine's PV from the position AFTER the played move, UCI — the
    *  opponent's punishing line. */
   playedPvUci?: readonly string[];
+  /** The same search's shallower read of `playedPvUci` (UCI, from the same
+   *  board) — the second read the depth lapse is checked against. */
+  playedPvEarlierUci?: readonly string[];
   /** A mate the best move offered that the played move let go (plies), or null. */
   missedMate?: number | null;
   /** A mate the played move now allows the opponent (plies), or null. */
@@ -134,6 +137,9 @@ export function attributeLiveFundamental(input: LiveFundamentalReads): Principle
   const pvAfterPlayed = input.playedPvUci && input.playedPvUci.length > 0
     ? pvUciToSan(afterFen(input.fenBefore, input.playedSan) ?? input.fenBefore, [...input.playedPvUci])
     : undefined;
+  const pvAfterPlayedEarlier = input.playedPvEarlierUci && input.playedPvEarlierUci.length > 0
+    ? pvUciToSan(afterFen(input.fenBefore, input.playedSan) ?? input.fenBefore, [...input.playedPvEarlierUci])
+    : undefined;
   // `bestPvUci` is the engine's line FROM fenBefore, so its first move IS the
   // best move — the attributor wants the line AFTER it, replayed from the
   // post-best position (mirrors the review path). Drop move 1.
@@ -149,6 +155,7 @@ export function attributeLiveFundamental(input: LiveFundamentalReads): Principle
     bestSan: input.bestSan,
     classification: 'mistake', // flagged is proven above; the attributor names WHY
     pvAfterPlayed,
+    pvAfterPlayedEarlier,
     pvAfterBest,
     evalBefore: evalBeforeMover,
     evalAfterPlayed: evalAfterMover,

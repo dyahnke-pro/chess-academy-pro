@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { computePvLine, plyFactsForMove, plyFactsClause, computePlyFacts, tacticWord, tacticWinsMaterial, pvDepthForRating, type PvEngine } from './pvPlayback';
+import { computePvLine, plyFactsForMove, plyFactsClause, computePlyFacts, tacticWord, tacticWinsMaterial, type PvEngine } from './pvPlayback';
 import type { StockfishAnalysis } from '../types';
 
 /** Canned engine: maps fen → analysis. Unknown fen → throws (like a dead worker). */
@@ -26,28 +26,20 @@ function cannedEngine(map: Record<string, Partial<StockfishAnalysis>>): PvEngine
 // 1.e4 e5 2.Bc4 Nc6 3.Qh5 Nf6?? → Qxf7#
 const MATE_FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4';
 
-describe('pvDepthForRating — deeper for stronger, capped at the reliable window (Phase 2)', () => {
-  it('scales UP with rating', () => {
-    expect(pvDepthForRating(900)).toBe(3);
-    expect(pvDepthForRating(1400)).toBe(4);
-    expect(pvDepthForRating(1700)).toBe(5);
-    expect(pvDepthForRating(1900)).toBe(6);
-    expect(pvDepthForRating(2300)).toBe(7);
-  });
-  it('a stronger player gets a DEEPER line than a weaker one (David 2026-09-07)', () => {
-    expect(pvDepthForRating(1800)).toBeGreaterThan(pvDepthForRating(1400));
-    expect(pvDepthForRating(1400)).toBeGreaterThan(pvDepthForRating(1000));
-  });
-  it('never exceeds the depth-14 reliable window (7) or drops below a teachable floor (3)', () => {
-    for (const r of [200, 800, 1500, 2600, 3200]) {
-      const d = pvDepthForRating(r);
-      expect(d).toBeGreaterThanOrEqual(3);
-      expect(d).toBeLessThanOrEqual(7);
-    }
-  });
-});
-
 describe('pvPlayback — computePvLine (Phase 1)', () => {
+  it('walks the engine\'s WHOLE line — no ply cut (David 2026-11-15: "I want full depth narration")', async () => {
+    const fen = new Chess().fen();
+    const uci = ['e2e4', 'e7e5', 'g1f3', 'b8c6', 'f1b5', 'a7a6', 'b5a4', 'g8f6', 'e1g1', 'f8e7'];
+    const end = new Chess(fen);
+    for (const u of uci) end.move({ from: u.slice(0, 2), to: u.slice(2, 4) });
+    const engine = cannedEngine({
+      [fen]: { evaluation: 30, topLines: [{ rank: 1, evaluation: 30, moves: uci, mate: null }] },
+      [end.fen()]: { evaluation: 30, topLines: [{ rank: 1, evaluation: 30, moves: ['f1e1'], mate: null }] },
+    });
+    const line = await computePvLine(fen, { engine });
+    expect(line!.plies).toHaveLength(10);   // the old default cut it at 8
+    expect(line!.plies[9].san).toBe('Be7');
+  });
   it('replays the PV through chess.js: SAN, fens, mate fact; a mate line delivers', async () => {
     const engine = cannedEngine({
       [MATE_FEN]: {

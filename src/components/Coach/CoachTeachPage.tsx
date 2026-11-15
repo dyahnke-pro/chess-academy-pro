@@ -9195,11 +9195,12 @@ export function CoachTeachPage({ mode }: {
         // THE MATE IS ANNOUNCED, ITS MOVE IS NOT (David 2026-10-10: "I do not
         // want the better move stated in learn free play unless the user asks
         // for it"). This used to say "Qh7 is mate" under the 2026-09-24 rule
-        // that rule replaced. The count is said only when it is short — past
-        // five a live read finds A mate, not the fastest (walk 2026-10-01).
+        // that rule replaced. Past five a live read finds A mate, not always
+        // the fastest (walk 2026-10-01), so the count is said as a bound —
+        // "mate in 7 or fewer" — never dropped (David 2026-11-15: full depth).
         tacticLine = forcedMateN === 1
           ? "There's a mate in one here."
-          : forcedMateN > 5 ? "There's a forced mate here." : `There's a forced mate here — mate in ${forcedMateN}.`;
+          : forcedMateN > 5 ? `There's a forced mate here — mate in ${forcedMateN} or fewer.` : `There's a forced mate here — mate in ${forcedMateN}.`;
         tacticFactProof = NO_PROOF.withheld;
       } else if (theirHanging.length > 0) {
         const prize = theirHanging[0];
@@ -11136,7 +11137,7 @@ export function CoachTeachPage({ mode }: {
                 if (!(await breathe())) return;
                 try {
                   if (studentBest?.topLines && probe.turn() === (playerColor === 'white' ? 'w' : 'b')) {
-                    turnRead = tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor, { maxPlies: 6 });
+                    turnRead = tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor);
                     // QUEUE THE REGISTER so it is HEARD — the but-turn ("you'd love
                     // X, but…") and the honest hedge ("genuinely close"), his top
                     // devices, spoken when the board reaches this position via the
@@ -11424,6 +11425,7 @@ export function CoachTeachPage({ mode }: {
                           bestMoveUci: preStudentRead.bestMove || null,
                           bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                           playedPvUci: midReadForFacts?.topLines?.[0]?.moves ?? [],
+                          playedPvEarlierUci: midReadForFacts?.topLines?.[0]?.earlier?.moves ?? [],
                           price: priceForFacts,
                           ...mateContext(preStudentRead, midReadForFacts, playerColor),
                         } : null,
@@ -12730,6 +12732,7 @@ export function CoachTeachPage({ mode }: {
                       price: bothCp ? studentPrice : null,
                       bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                       playedPvUci: mid.topLines?.[0]?.moves ?? [],
+                      playedPvEarlierUci: mid.topLines?.[0]?.earlier?.moves ?? [],
                       ...mateContext(preStudentRead, mid, playerColor),
                     }, fundamentalsSeen, habitsSeen);
                     if (fundamental) {

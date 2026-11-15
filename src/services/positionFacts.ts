@@ -78,7 +78,7 @@ import { attributeLiveFundamental, uciToSanAt, type LiveFundamentalReads } from 
  * attributes the neglected FUNDAMENTAL from them (`attributeLiveFundamental`)
  * and hands the id to need — the same id Learn speaks, computed once.
  */
-export interface LiveMoveReads extends Pick<LiveFundamentalReads, 'historySans' | 'price' | 'bestPvUci' | 'playedPvUci' | 'missedMate' | 'allowedMate'> {
+export interface LiveMoveReads extends Pick<LiveFundamentalReads, 'historySans' | 'price' | 'bestPvUci' | 'playedPvUci' | 'playedPvEarlierUci' | 'missedMate' | 'allowedMate'> {
   /** The engine's best move at `fenBefore`, UCI, or null when no read landed. */
   bestMoveUci: string | null;
 }
@@ -757,7 +757,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // 2026-11-07: "More tactics the better"): read down the engine's own sound
   // lines, every motif the one classifier names. Out of the quiet opening, on
   // the student's move; the trap above is the same idea when it is one move.
-  const setUpRead = studentToMove && !quietOpening ? detectSetUpChance(fen, analysis.topLines ?? [], studentColor) : null;
+  const setUpRead = studentToMove && !quietOpening ? detectSetUpChance(fen, analysis.topLines ?? [], studentColor, 'full') : null;
   const setUp = setUpRead && !(trapChance && namedSan(fen, trapChance.san)?.from === setUpRead.uci.slice(0, 2) && trapChance.to === setUpRead.uci.slice(2, 4)) ? setUpRead : null;
 
   // §9 king-safety — a castled king with a broken shelter AND real attackers on
@@ -886,6 +886,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
         historySans: lm.reads.historySans,
         bestPvUci: lm.reads.bestPvUci,
         playedPvUci: lm.reads.playedPvUci,
+        playedPvEarlierUci: lm.reads.playedPvEarlierUci,
         price: lm.reads.price,
         missedMate: lm.reads.missedMate,
         allowedMate: lm.reads.allowedMate,

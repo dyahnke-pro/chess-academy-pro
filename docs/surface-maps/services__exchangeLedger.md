@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**761 lines · 24 exports · 60 importers · 15 tests · 0 audits**
+**766 lines · 25 exports · 60 importers · 15 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1369) — names `exchangeLedger`
 
 ## Who calls in
 
@@ -116,7 +116,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2176`
 - `src/services/knownSlips.ts:187`
 - `src/services/patternFails.ts:130`
-- `src/services/principleAttribution.ts:816`
+- `src/services/principleAttribution.ts:834`
 - `src/services/reviewMoveBriefing.ts:415`
 - `src/services/reviewPositionalAssessment.ts:147`
 - `src/services/tacticGeometry.ts:552`
@@ -193,8 +193,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `proofCut` (function) — 44 call sites
-- `src/services/coachFeatureService.ts:4794`
-- `src/services/coachFeatureService.ts:4797`
+- `src/services/coachFeatureService.ts:4807`
+- `src/services/coachFeatureService.ts:4810`
 - `src/services/costReason.ts:137`
 - `src/services/costReason.ts:168`
 - `src/services/costReason.ts:171`
@@ -221,12 +221,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingGenerator.ts:3620`
 - `src/services/pieceOptions.ts:124`
 - `src/services/playedMoveGrade.ts:117`
-- `src/services/principleAttribution.ts:487`
-- `src/services/principleAttribution.ts:551`
-- `src/services/principleAttribution.ts:768`
-- `src/services/principleAttribution.ts:771`
-- `src/services/principleAttribution.ts:781`
-- `src/services/principleAttribution.ts:784`
+- `src/services/principleAttribution.ts:493`
+- `src/services/principleAttribution.ts:569`
+- `src/services/principleAttribution.ts:786`
+- `src/services/principleAttribution.ts:789`
+- `src/services/principleAttribution.ts:799`
+- `src/services/principleAttribution.ts:802`
 - `src/services/projectedLineVoice.report.test.ts:107`
 - `src/services/projectedLineVoice.ts:68`
 - `src/services/punishCountsPlayedMove.test.ts:17`
@@ -247,14 +247,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `describeProofResult` (function) — 10 call sites
 - `src/coach/boardTurnAnswer.ts:429`
 - `src/coach/chatTurnAnswers.ts:705`
-- `src/services/coachFeatureService.ts:4766`
-- `src/services/coachFeatureService.ts:4822`
+- `src/services/coachFeatureService.ts:4779`
+- `src/services/coachFeatureService.ts:4835`
 - `src/services/decisiveReason.ts:141`
 - `src/services/lineProof.test.ts:27`
 - `src/services/pieceOptions.ts:137`
 - `src/services/planChoice.ts:158`
 - `src/services/refutedAlternativeCore.ts:210`
 - `src/services/threatProof.ts:62`
+
+### `QUIET_PROOF_PLIES` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `heardHorizon` (function) — 2 call sites
 - `src/services/decisiveReason.ts:103`

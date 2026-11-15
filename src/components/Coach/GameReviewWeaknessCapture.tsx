@@ -86,6 +86,7 @@ export function buildBlunders(moves: CoachGameMove[], playerColor: 'white' | 'bl
     let pvAfterPlayed: string[] | undefined;
     let pvAfterBest: string[] | undefined;
     if (move.pv?.afterPlayed?.length) pvAfterPlayed = pvUciToSan(move.fen, move.pv.afterPlayed);
+    const pvAfterPlayedEarlier = move.pv?.earlierPlayed?.length ? pvUciToSan(move.fen, move.pv.earlierPlayed) : undefined;
     if (move.pv?.afterBest?.length && bestSan) {
       try {
         const c = new Chess(fenBefore);
@@ -102,6 +103,7 @@ export function buildBlunders(moves: CoachGameMove[], playerColor: 'white' | 'bl
       moveNumber: move.moveNumber,
       historySans,
       pvAfterPlayed,
+      pvAfterPlayedEarlier,
       pvAfterBest,
       evalBefore,
       evalAfterPlayed,

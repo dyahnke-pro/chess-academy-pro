@@ -21,7 +21,6 @@ import type { Proof } from './proof';
 import { Chess, type Square } from 'chess.js';
 import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
 import { materialBalance } from './pieceValues';
-import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 
 export type PieceLetter = 'p' | 'n' | 'b' | 'r' | 'q';
 
@@ -606,14 +605,20 @@ export function describeProofResult(
 }
 
 /**
- * HOW DEEP A HEARD PROOF MAY RUN. A quiet line past MAX_PV_DEPTH_PLIES proves
- * nothing to a listener, but a FORCED line does: every move a check, a capture
+ * HOW DEEP A HEARD PROOF MAY RUN. NOT A NARRATION CAP (David 2026-11-15: "I
+ * want full depth narration"): a FORCED line runs to its end, however long, and
+ * the line itself is named by `lineTrust`, never by this. What this bounds is
+ * only the CLAIM a quiet line makes — what it settles by `QUIET_PROOF_PLIES`
+ * is said as a true lower bound, never a guess about its quiet tail. A FORCED
+ * line proves to a listener: every move a check, a capture
  * or the answer to a check is how a strong player calculates, and it is
  * followable to its end (hard tier 2026-10-10: "what do I get for Bd5+?" — the
  * bishop comes back on ply 9, Bd5+ cxd5 Qxd5+ Ne4 Rxh1 Kxh1 Qxe4+ Qxe4 fxe4,
  * and the 7-ply cut left the sacrifice with no outcome). The horizon is the
  * longer of the two: the quiet window, or the line's forced prefix.
  */
+export const QUIET_PROOF_PLIES = 7;
+
 export function heardHorizon(fen: string, sans: readonly string[]): number {
   let forced = 0;
   try {
@@ -625,7 +630,7 @@ export function heardHorizon(fen: string, sans: readonly string[]): number {
       forced += 1;
     }
   } catch { /* the playable prefix is what we have */ }
-  return Math.max(MAX_PV_DEPTH_PLIES, forced);
+  return Math.max(QUIET_PROOF_PLIES, forced);
 }
 
 /**

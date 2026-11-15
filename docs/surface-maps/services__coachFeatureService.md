@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6707 lines · 33 exports · 73 importers · 88 tests · 4 audits**
+**6708 lines · 33 exports · 73 importers · 88 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:425) — names `coachFeatureService`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4787) — names `coachFeatureService`
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5862) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6928) — names `coachFeatureService`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4793) — names `coachFeatureService`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5868) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6934) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -95,7 +95,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/services/autoAnalyzeGame.ts:336`
+- `src/services/autoAnalyzeGame.ts:338`
 - `src/services/coachFeatureService.test.ts:205`
 - `src/services/coachFeatureService.test.ts:220`
 - `src/services/coachFeatureService.test.ts:243`
@@ -131,8 +131,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `segmentMarks` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:2407`
-- `src/components/Coach/CoachGameReview.tsx:3196`
+- `src/components/Coach/CoachGameReview.tsx:2406`
+- `src/components/Coach/CoachGameReview.tsx:3195`
 - `src/services/coachFeatureService.segmentMarks.test.ts:19`
 - `src/test/marksSweep.gate.test.ts:206`
 
@@ -141,7 +141,7 @@
 - `src/services/namedMoveArrows.test.ts:71`
 
 ### `foldReviewRefrains` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1833`
+- `src/components/Coach/CoachGameReview.tsx:1832`
 - `src/services/reviewLedgerCounters.test.ts:69`
 - `src/services/reviewLedgerCounters.test.ts:81`
 
@@ -295,7 +295,7 @@
 - `src/test/reviewExplore.continuity.test.ts:62`
 
 ### `buildReviewSegmentsYielding` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:1832`
+- `src/components/Coach/CoachGameReview.tsx:1831`
 - `src/services/reviewBuildYields.test.ts:35`
 
 ### `defaultIntroText` (function) — 4 call sites
@@ -317,7 +317,7 @@
 - `src/test/mateSaidOnce.gate.test.ts:69`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4247`
+- `src/components/Coach/CoachGameReview.tsx:4246`
 - `src/services/coachFeatureService.test.ts:801`
 - `src/services/coachFeatureService.test.ts:804`
 - `src/services/coachFeatureService.test.ts:811`
@@ -345,8 +345,8 @@
 ### `pendingRecapture` (function) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8866`
 - `src/components/Coach/CoachTeachPage.tsx:8969`
-- `src/components/Coach/CoachTeachPage.tsx:11938`
-- `src/components/Coach/CoachTeachPage.tsx:12340`
+- `src/components/Coach/CoachTeachPage.tsx:11940`
+- `src/components/Coach/CoachTeachPage.tsx:12342`
 - `src/services/coachFeatureService.test.ts:912`
 - `src/services/coachFeatureService.test.ts:913`
 - `src/services/phaseTransitionDetector.test.ts:575`

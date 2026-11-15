@@ -300,11 +300,12 @@ export function tacticalReadFromLines(
   fen: string,
   topLines: ReadonlyArray<{ moves: string[]; evaluation: number }>,
   studentColor: 'white' | 'black',
-  opts: { dropThresholdCp?: number; requireForcing?: boolean; maxPlies?: number } = {},
+  opts: { dropThresholdCp?: number; requireForcing?: boolean } = {},
 ): TacticalRead | null {
   const best = topLines.length > 0 ? topLines[0] : undefined;
   if (!best || !best.moves || best.moves.length === 0) return null;
-  const plies = replayUci(fen, best.moves.slice(0, opts.maxPlies ?? 8));
+  // The engine's whole line (David 2026-11-15: full depth, no length cap).
+  const plies = replayUci(fen, best.moves);
   if (plies.length === 0) return null;
   const first = plies[0];
   const rootEvalCp = best.evaluation; // WHITE POV, like computePvLine.rootEvalCp

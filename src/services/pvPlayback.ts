@@ -348,10 +348,6 @@ export interface PvLine {
   closeAlternative: { san: string; gapCp: number } | null;
 }
 
-// THE DEPTH TABLE LIVES IN THE LEAF `ratingBands` (a pure computer that must
-// not import the engine reads it too); re-exported so every caller is unchanged.
-export { pvDepthForRating } from './ratingBands';
-
 const PIECE_WORD: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
 };
@@ -621,7 +617,9 @@ export async function computePvLine(
   } = {},
 ): Promise<PvLine | null> {
   const engine = opts.engine ?? stockfishEngine;
-  const maxPlies = opts.maxPlies ?? 8;
+  // The engine's whole line (David 2026-11-15: full depth). A caller that
+  // wants only the next move asks for `maxPlies: 1`; nothing else trims it.
+  const maxPlies = opts.maxPlies ?? Number.POSITIVE_INFINITY;
   const depth = opts.depth ?? 14;
 
   let root: StockfishAnalysis;

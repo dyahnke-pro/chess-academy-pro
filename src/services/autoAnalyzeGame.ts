@@ -67,6 +67,7 @@ export interface BlunderForAnalysis {
    *  gated fundamentals on the recording path so they become drillable
    *  weaknesses (David 2026-09-06). */
   pvAfterPlayed?: string[];
+  pvAfterPlayedEarlier?: string[];
   pvAfterBest?: string[];
   evalBefore?: number;
   evalAfterPlayed?: number;
@@ -166,6 +167,7 @@ export async function autoAnalyzeBlunders(
         gamePhase: b.gamePhase,
         ...(b.historySans ? { historySans: b.historySans } : {}),
         ...(b.pvAfterPlayed ? { pvAfterPlayed: b.pvAfterPlayed } : {}),
+        ...(b.pvAfterPlayedEarlier ? { pvAfterPlayedEarlier: b.pvAfterPlayedEarlier } : {}),
         ...(b.pvAfterBest ? { pvAfterBest: b.pvAfterBest } : {}),
         ...(b.evalBefore !== undefined ? { evalBefore: b.evalBefore } : {}),
         ...(b.evalAfterPlayed !== undefined ? { evalAfterPlayed: b.evalAfterPlayed } : {}),
@@ -683,6 +685,9 @@ async function writeGameRecord(gameId: string, username: string | undefined, opt
       ...(ann.pv?.afterPlayed.length
         ? { pvAfterPlayed: pvUciToSan(fens[fenIndex + 1] ?? fen, ann.pv.afterPlayed) }
         : {}),
+      ...(ann.pv?.earlierPlayed?.length
+        ? { pvAfterPlayedEarlier: pvUciToSan(fens[fenIndex + 1] ?? fen, ann.pv.earlierPlayed) }
+        : {}),
       ...(ann.pv?.afterBest.length
         ? { pvAfterBest: pvUciToSan(fen, ann.pv.afterBest) }
         : {}),
@@ -941,6 +946,7 @@ async function reattributePending(
       gamePhase: b.gamePhase,
       ...(b.historySans ? { historySans: b.historySans } : {}),
       ...(b.pvAfterPlayed ? { pvAfterPlayed: b.pvAfterPlayed } : {}),
+      ...(b.pvAfterPlayedEarlier ? { pvAfterPlayedEarlier: b.pvAfterPlayedEarlier } : {}),
       ...(b.pvAfterBest ? { pvAfterBest: b.pvAfterBest } : {}),
       ...(b.evalBefore !== undefined ? { evalBefore: b.evalBefore } : {}),
       ...(b.evalAfterPlayed !== undefined ? { evalAfterPlayed: b.evalAfterPlayed } : {}),

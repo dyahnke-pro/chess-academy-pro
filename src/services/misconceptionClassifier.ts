@@ -53,6 +53,8 @@ export interface ClassifyMisconceptionInput {
    *  not just spoken review lines (David 2026-09-06). Absent live → those stay
    *  silent, which is correct. */
   pvAfterPlayed?: string[];
+  /** The engine's shallower read of `pvAfterPlayed` (SAN) — the second read. */
+  pvAfterPlayedEarlier?: string[];
   pvAfterBest?: string[];
   evalBefore?: number;
   evalAfterPlayed?: number;
@@ -283,6 +285,7 @@ function classifyMisconceptionImpl(
       // Classified at the moment of the move — the reply is not played yet.
       replySan: null,
       pvAfterPlayed: input.pvAfterPlayed,
+      pvAfterPlayedEarlier: input.pvAfterPlayedEarlier,
       pvAfterBest: input.pvAfterBest,
       evalBefore: input.evalBefore,
       evalAfterPlayed: input.evalAfterPlayed,

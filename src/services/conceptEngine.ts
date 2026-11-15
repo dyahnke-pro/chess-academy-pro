@@ -462,8 +462,8 @@ interface ConceptForBoardOptions {
    *  fields actually read are required, so a `Pick` (as positionFacts holds)
    *  and the full analysis both fit. */
   analysis?: Pick<StockfishAnalysis, 'topLines' | 'evaluation'> | null;
-  /** Student rating — scales the PV walk depth (`pvDepthForRating`) and the
-   *  shared criticality thresholds. Default 1500. */
+  /** Student rating — the shared criticality thresholds only; the PV is
+   *  walked in full (David 2026-11-15). Default 1500. */
   rating?: number;
 }
 
@@ -500,10 +500,9 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
   // 0. The engine's line, when the surface already has one (the one computer).
   const line = opts.analysis?.topLines?.[0];
   if (line && line.moves.length > 0) {
-    const depth = pvDepthForRating(opts.rating ?? DEFAULT_STUDENT_RATING);
     for (const c of conceptForLine({
       fen,
-      uci: line.moves.slice(0, depth),
+      uci: line.moves,
       studentColor,
       rootEvalCp: opts.analysis?.evaluation ?? null,
       lineEvalCp: line.evaluation,
@@ -553,7 +552,7 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
 }
 
 // ─── conceptForLine — THE single walker (solution OR engine PV) ──────────────
-import { computePlyFacts, pvDepthForRating, afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
+import { computePlyFacts, afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
 import { classifyMatePattern } from './matePatterns';
 import { detectPlanRace, planRaceClause } from './planRace';
 import { findBreakthrough, findTriangulation } from './endgamePawnReads';
@@ -819,7 +818,6 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
 
 // ─── POSITIONAL concept source (§E) ──────────────────────────────────────────
 import { boardConcepts } from './boardConcepts';
-import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 /** Positional-tag → invariant (computed vocabulary; general + reusable). Only the
  *  board-PROVABLE tags boardConcepts emits — never intent judgements. */

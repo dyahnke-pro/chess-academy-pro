@@ -23,7 +23,7 @@ import { readZugzwang, zugzwangProof, zugzwangSentence, type ZugzwangRead } from
 import { phaseTurnsOf } from './phaseTransitionDetector';
 import { detectImmediateTactics } from './liveTacticsContext';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
-import { plyFactsClause, moveOnlyRestates, computePvLine, pvDepthForRating, afterCapture, NO_PREV_CAPTURE, tacticWord, type PvLine, type PvEngine, type PrevCaptureContext, type MoveScorer } from './pvPlayback';
+import { plyFactsClause, moveOnlyRestates, computePvLine, afterCapture, NO_PREV_CAPTURE, tacticWord, type PvLine, type PvEngine, type PrevCaptureContext, type MoveScorer } from './pvPlayback';
 import { countWord, lineSeatAt, lineShape, lineWinnerFor, withArticle } from '../utils/andList';
 import { BRIEFING_LINE_PLIES, buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { moveThoughtFacts } from './moveThoughtFacts';
@@ -982,6 +982,7 @@ function attributeGameFundamentals(
         replySan: sansForRun[m.ply] ?? null,
         classification: m.classification,
         pvAfterPlayed: m.pv?.afterPlayed?.length ? pvUciToSan(fenPair.fenAfter, m.pv.afterPlayed) : undefined,
+        pvAfterPlayedEarlier: m.pv?.earlierPlayed?.length ? pvUciToSan(fenPair.fenAfter, m.pv.earlierPlayed) : undefined,
         pvAfterBest: m.pv?.afterBest?.length && bestMoveSan
           ? pvUciToSan((() => { const c = new Chess(fenPair.fenBefore); try { c.move(bestMoveSan); } catch { return fenPair.fenBefore; } return c.fen(); })(), m.pv.afterBest)
           : undefined,
@@ -4671,7 +4672,7 @@ async function refutedAlternativesForGame(
       const j = jobs[i];
       const r = await refutedAlternative({
         fenBefore: j.fenBefore, taughtSan: j.m.san, candidates: j.candidates,
-        studentColor: playerColor, depth: 10, maxPlies: 4, ...(engine ? { engine } : {}),
+        studentColor: playerColor, depth: 10, ...(engine ? { engine } : {}),
       }).catch(() => null);
       if (r && !stopped) out.set(j.m.ply, r);
     }
@@ -4735,8 +4736,8 @@ async function augmentWithProjections(
    *  (David 2026-07-21, IMG_4571: "How does white take advantage of this
    *  mistake?" — production reviews need the ramification, not just the badge). */
   scope: 'full' | 'mistakes' = 'full',
-  /** The student's rating — scales how DEEP the spelled threat lines run
-   *  (Phase 2: deeper for stronger, via pvDepthForRating). Default 1500. */
+  /** The student's rating — read by the reply tree's likely replies only; it
+   *  never scales how deep a line is spelled (David 2026-11-15). */
   rating = DEFAULT_STUDENT_RATING,
   /** Per-pass wall-clock ms, filled as each pass finishes (review-prep-timing). */
   timings: Record<string, number> = {},
@@ -4744,10 +4745,10 @@ async function augmentWithProjections(
   let passStart = Date.now();
   const augStart = passStart;
   const mark = (pass: string): void => { timings[pass] = Date.now() - passStart; passStart = Date.now(); };
-  // How many plies to spell a deep threat line — rating-scaled, capped at the
-  // reliable window (Phase 2, David 2026-09-07: "spell the lines out for
-  // everyone", "the more advanced player should get a DEEPER calculation").
-  const deepThreatPlies = pvDepthForRating(rating);
+  // A deep threat line runs to where its idea lands, as far as the engine
+  // searched (David 2026-11-15: "I want full depth narration" — the
+  // rating-scaled 3–7 ply cut is deleted; `lineTrust` decides what is named).
+  const deepThreatPlies = Number.POSITIVE_INFINITY;
   // Render a projected line — computed in code, no LLM (G0). `rich` is kept
   // for call-site compatibility.
   // `forSide` — WHOSE point the caller offers this line as proof of. Required:
@@ -4997,11 +4998,11 @@ async function augmentWithProjections(
   const poolOrder: Array<{ fen: string; maxPlies: number }> = [
     // The 6-ply line after a costly move is read only by the missed-prevention
     // pass now — the cost reason reads its own deep read (WO-DECIDER-02).
-    ...flaggedForPunish.filter((s) => missedProphyFens.has(s.fenBefore)).map((s) => ({ fen: s.fenAfter, maxPlies: 6 })),
+    ...flaggedForPunish.filter((s) => missedProphyFens.has(s.fenBefore)).map((s) => ({ fen: s.fenAfter, maxPlies: Number.POSITIVE_INFINITY })),
     ...[...deepFens.values()].map((fen) => ({ fen, maxPlies: deepThreatPlies })),
     ...[...deepOppFens.values()].map((fen) => ({ fen, maxPlies: deepThreatPlies })),
-    ...[...prophyFens.values()].map((fen) => ({ fen, maxPlies: 3 })),
-    ...[...missedProphyFens.values()].map((fen) => ({ fen, maxPlies: 3 })),
+    ...[...prophyFens.values()].map((fen) => ({ fen, maxPlies: Number.POSITIVE_INFINITY })),
+    ...[...missedProphyFens.values()].map((fen) => ({ fen, maxPlies: Number.POSITIVE_INFINITY })),
   ];
   const poolDone = new Map<string, { promise: Promise<PvLine | null>; resolve: (v: PvLine | null) => void }>();
   /** One unit of pooled work. `engine` is the lane's own worker, or undefined
@@ -5200,7 +5201,7 @@ async function augmentWithProjections(
     try {
       for (const s of flaggedStudent) {
         const line = await raceTimeout(
-          computePvLine(s.fenBefore, { firstUci: s.bestMoveUci as string, maxPlies: 6 }),
+          computePvLine(s.fenBefore, { firstUci: s.bestMoveUci as string }),
           PROJ_TIMEOUT_MS,
           null,
         ).catch(() => null);
@@ -5222,7 +5223,7 @@ async function augmentWithProjections(
       // well. One ply, one line — re-read it off a fresh line of its own.
       for (const s of flaggedOpponent) {
         const line = await raceTimeout(
-          computePvLine(s.fenBefore, { firstUci: s.bestMoveUci as string, maxPlies: 6 }),
+          computePvLine(s.fenBefore, { firstUci: s.bestMoveUci as string }),
           PROJ_TIMEOUT_MS,
           null,
         ).catch(() => null);

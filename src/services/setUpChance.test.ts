@@ -22,7 +22,7 @@ const PIN_ENDING = '8/1ppkb3/4p1r1/2P4p/3PR3/6pP/P5P1/5RK1 w - - 2 45';
 
 describe('moment 3: the tactic a quiet move sets up', () => {
   it('a quiet queen move that pins their knight to their king — said without the move', () => {
-    const s = detectSetUpChance(PIN_KING, [line(PIN_KING, ['Qa4', 'h5'])], 'w');
+    const s = detectSetUpChance(PIN_KING, [line(PIN_KING, ['Qa4', 'h5'])], 'w', 'full');
     expect(s?.kind).toBe('pin');
     expect(s?.targets).toEqual(['n', 'k']);
     const held = setUpHeldClause(s!);
@@ -33,19 +33,27 @@ describe('moment 3: the tactic a quiet move sets up', () => {
   });
 
   it('a pin to the queen says the queen is what falls', () => {
-    const s = detectSetUpChance(PIN_QUEEN, [line(PIN_QUEEN, ['Bg5', 'h6'])], 'w');
+    const s = detectSetUpChance(PIN_QUEEN, [line(PIN_QUEEN, ['Bg5', 'h6'])], 'w', 'full');
     expect(setUpHeldClause(s!)).toBe('A quiet move here pins their knight to their queen: if it steps off the line, the queen behind it is attacked.');
   });
 
   it('a quiet knight move whose line forks king and bishop next move — named by the one classifier', () => {
-    const s = detectSetUpChance(FORK, [line(FORK, ['Nf3', 'Qxf3', 'Qxf3+', 'Kg1', 'c6', 'c5', 'Be5', 'Ne2', 'dxc5', 'Ng3', 'Qxd3'], -715)], 'b');
+    const s = detectSetUpChance(FORK, [line(FORK, ['Nf3', 'Qxf3', 'Qxf3+', 'Kg1', 'c6', 'c5', 'Be5', 'Ne2', 'dxc5', 'Ng3', 'Qxd3'], -715)], 'b', 'full');
     expect(s).toMatchObject({ kind: 'strike', motif: 'fork', depth: 2 });
     expect(setUpHeldClause(s!)).toBe('A quiet move here sets up a fork of their king and bishop: it wins material on your next move.');
     expect(setUpSkill(s!)).toBe('missed-your-fork');
   });
 
+  it('the record reads on its fitted scale; what is said has no depth cap (David 2026-11-15)', () => {
+    const fork = line(FORK, ['Nf3', 'Qxf3', 'Qxf3+', 'Kg1', 'c6', 'c5', 'Be5', 'Ne2', 'dxc5', 'Ng3', 'Qxd3'], -715);
+    expect(detectSetUpChance(FORK, [fork], 'b', 'full')?.depth).toBe(2);
+    // A one-move scale sees no two-move set-up: the horizon is the caller's,
+    // never a constant inside the detector.
+    expect(detectSetUpChance(FORK, [fork], 'b', 1)).toBeNull();
+  });
+
   it('a mating threat that wins the queen never claims mate', () => {
-    const s = detectSetUpChance(MATE_THREAT, [line(MATE_THREAT, ['Nh5', 'Qg4', 'hxg4', 'Bxd4', 'Nxd4', 'Nxd4', 'Qg7#'], 900)], 'w');
+    const s = detectSetUpChance(MATE_THREAT, [line(MATE_THREAT, ['Nh5', 'Qg4', 'hxg4', 'Bxd4', 'Nxd4', 'Nxd4', 'Qg7#'], 900)], 'w', 'full');
     expect(s?.mates).toBe(false);
     expect(setUpHeldClause(s!)).not.toMatch(/ends in mate/);
     expect(setUpHeldClause(s!)).toMatch(/wins material on your next move/);
@@ -53,14 +61,14 @@ describe('moment 3: the tactic a quiet move sets up', () => {
 
   it('a line more than half a pawn worse than the best sets nothing up', () => {
     const best = { rank: 1, evaluation: 200, moves: ['h2h3'], mate: null };
-    const s = detectSetUpChance(PIN_KING, [best, { ...line(PIN_KING, ['Qa4', 'h5'], 100), rank: 2 }], 'w');
+    const s = detectSetUpChance(PIN_KING, [best, { ...line(PIN_KING, ['Qa4', 'h5'], 100), rank: 2 }], 'w', 'full');
     expect(s).toBeNull();
   });
 
   it('not the student\'s move, or a capture first, sets nothing up', () => {
-    expect(detectSetUpChance(PIN_KING, [line(PIN_KING, ['Qa4', 'h5'])], 'b')).toBeNull();
+    expect(detectSetUpChance(PIN_KING, [line(PIN_KING, ['Qa4', 'h5'])], 'b', 'full')).toBeNull();
     const cap = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
-    expect(detectSetUpChance(cap, [line(cap, ['exd5', 'Qxd5'])], 'w')).toBeNull();
+    expect(detectSetUpChance(cap, [line(cap, ['exd5', 'Qxd5'])], 'w', 'full')).toBeNull();
   });
 });
 
@@ -69,28 +77,28 @@ describe('what is not a set-up', () => {
     // h5 hits the knight on g6; the line wins the other knight after it takes
     // the pawn. The threat readers say this, not moment 3.
     const fen = 'r2qkb1r/pppbppp1/5nnp/3P4/2P4P/5N2/PP2BPP1/RNBQK2R w KQkq - 0 10';
-    expect(detectSetUpChance(fen, [line(fen, ['h5', 'Nxh5', 'Rxh5', 'e6'], 200)], 'w')).toBeNull();
+    expect(detectSetUpChance(fen, [line(fen, ['h5', 'Nxh5', 'Rxh5', 'e6'], 200)], 'w', 'full')).toBeNull();
   });
 
   it('a line cut off mid-exchange, the student in check, wins nothing', () => {
     // …Qxe1 takes the queen, Nxf6+ checks, and the rook takes the queen back.
     const fen = 'rn3rk1/pp3ppp/2p2n2/q3p3/6b1/P1NP2P1/1PP2PBP/R1B1QRK1 b - - 0 11';
-    expect(detectSetUpChance(fen, [line(fen, ['Re8', 'Ne4', 'Qxe1', 'Nxf6+'], -150)], 'b')).toBeNull();
+    expect(detectSetUpChance(fen, [line(fen, ['Re8', 'Ne4', 'Qxe1', 'Nxf6+'], -150)], 'b', 'full')).toBeNull();
   });
 
   it('a piece they simply put where it is taken is not a tactic the quiet move built', () => {
     // Kh8, then Ba6 drops the bishop: a waiting move, not a shot.
     const fen = 'r5k1/4pp1p/3p2p1/2pP4/2B5/p3PK2/1r3PPP/R7 b - - 5 27';
-    expect(detectSetUpChance(fen, [line(fen, ['Kh8', 'Ba6', 'Rxa6', 'g4'], -300)], 'b')).toBeNull();
+    expect(detectSetUpChance(fen, [line(fen, ['Kh8', 'Ba6', 'Rxa6', 'g4'], -300)], 'b', 'full')).toBeNull();
   });
 
   it('a tactic already on the board is the shot (moment 2), never a set-up', () => {
     // The fork board with a white rook left loose on h5: …gxh5 wins it now.
     const fen = 'r4rk1/ppp1pp1p/3p1bp1/5P1R/2PnP3/2NB3q/PP3P1P/R2Q1R1K b - - 0 13';
     const quiet = line(fen, ['Nf3', 'Qxf3', 'Qxf3+', 'Kg1', 'c6', 'c5', 'Be5', 'Ne2', 'dxc5', 'Ng3', 'Qxd3'], -715);
-    expect(detectSetUpChance(fen, [quiet], 'b')?.motif).toBe('fork');
+    expect(detectSetUpChance(fen, [quiet], 'b', 'full')?.motif).toBe('fork');
     const shot = { ...line(fen, ['gxh5', 'a3'], -700), rank: 2 };
-    expect(detectSetUpChance(fen, [quiet, shot], 'b')).toBeNull();
+    expect(detectSetUpChance(fen, [quiet, shot], 'b', 'full')).toBeNull();
   });
 });
 

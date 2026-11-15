@@ -1359,10 +1359,16 @@ G5 specifies. Nothing else may cap.
   student's computed need clears the bar, however many plies that is" has no
   ceiling. A hard cap says "stop after N regardless of value"; selection says
   "value decides". They are opposites — do not conflate them.
-- **`maxPlies` on a projected line** where it is already DEEPER than
-  `pvDepthForRating` for the band (the punishment pass's 6 beats the scaled
-  value for every player under 2100). Unifying that onto the scaled value would
-  SHORTEN lines for most users. Verify the direction before touching it.
+- 🔴 **CORRECTED 2026-11-15 (David: "You gotta unlock that narration limit!" →
+  "I want full depth narration … Rating more for the strength of coach. Not its
+  voice.").** The `maxPlies` exemption that sat here is DELETED along with
+  `pvDepthForRating` (3–7 plies by rating) and `MAX_PV_DEPTH_PLIES` (7): no line
+  the coach speaks is cut by a ply count or by the rating. How far a line is said
+  is the ONE line rule, `lineTrust` (near on one read, deeper when two reads
+  agree, past five moves forcing too). The one bound left is
+  `exchangeLedger.QUIET_PROOF_PLIES`: what a QUIET line claims to WIN is said as
+  a lower bound settled by ply 7 — the line itself is not cut, and a forced line
+  proves to its end.
 
 **SWEEP STATUS — do not let this be forgotten (2026-09-16).**
 - DONE, review path: 8 caps removed (verdict reasons ×2, intro key moments, the

@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**896 lines · 12 exports · 26 importers · 10 tests · 13 audits**
+**894 lines · 12 exports · 26 importers · 10 tests · 13 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:392) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6932) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6946) — names `conceptEngine`
 
 ## Who calls in
 
@@ -95,8 +95,8 @@
 - `src/services/endgameTechnique.test.ts:61`
 - `src/services/endgameTechnique.test.ts:74`
 - `src/services/endgameTechnique.test.ts:224`
-- `src/services/groundedAnswer.ts:4143`
-- `src/services/groundedAnswer.ts:6997`
+- `src/services/groundedAnswer.ts:4160`
+- `src/services/groundedAnswer.ts:7014`
 
 ### `conceptForBoard` (function) — 12 call sites
 - `src/services/claimKeyParity.test.ts:24`
@@ -110,7 +110,7 @@
 - `src/services/conceptEngine.test.ts:209`
 - `src/services/conceptEngine.test.ts:282`
 - `src/services/liveTacticsContext.ts:123`
-- `src/services/positionFacts.ts:1051`
+- `src/services/positionFacts.ts:1053`
 
 ### `conceptForLine` (function) — 17 call sites
 - `src/services/conceptCoverage.report.test.ts:59`
@@ -128,7 +128,7 @@
 - `src/services/missedTacticService.ts:642`
 - `src/services/puzzleConceptExplanation.ts:142`
 - `src/services/puzzleConceptHint.ts:108`
-- `src/services/refutedAlternative.ts:144`
+- `src/services/refutedAlternative.ts:172`
 - `src/services/tacticTypeUnification.test.ts:61`
 
 ### `positionalConcepts` (function) — 3 call sites
@@ -139,25 +139,25 @@
 ### `definitionKey` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8705`
 - `src/services/learnWalkBlumenfeld.test.ts:142`
-- `src/services/positionFacts.ts:1503`
-- `src/services/positionFacts.ts:1505`
-- `src/services/positionFacts.ts:1966`
-- `src/services/positionFacts.ts:1970`
-- `src/services/reviewFullData.ts:758`
-- `src/services/reviewFullData.ts:761`
+- `src/services/positionFacts.ts:1506`
+- `src/services/positionFacts.ts:1508`
+- `src/services/positionFacts.ts:1969`
+- `src/services/positionFacts.ts:1973`
+- `src/services/reviewFullData.ts:759`
 - `src/services/reviewFullData.ts:762`
+- `src/services/reviewFullData.ts:763`
 
 ### `tacticInvariant` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8708`
 - `src/services/dnaLineNarrator.ts:57`
 - `src/services/projectedLineVoice.ts:99`
 - `src/services/puzzleConceptExplanation.ts:131`
-- `src/services/reviewFullData.ts:757`
+- `src/services/reviewFullData.ts:758`
 - `src/services/tacticAlertService.ts:148`
 - `src/services/tacticTypeUnification.test.ts:223`
 - `src/test/auditConceptGameplayCues.test.ts:24`
 
-### `materialBalance` (re-export) — 60 call sites
+### `materialBalance` (re-export) — 66 call sites
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:41`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:90`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:94`
@@ -198,10 +198,16 @@
 - `scripts/pro-repertoire/mine-ruy-traps.mjs:90`
 - `scripts/pro-repertoire/mine-ruy-traps.mjs:94`
 - `scripts/pro-repertoire/mine-ruy-traps.mjs:103`
+- `src/services/captureRun.ts:77`
+- `src/services/compensation.ts:57`
 - `src/services/conceptEngine.test.ts:24`
 - `src/services/conceptEngine.test.ts:26`
 - `src/services/conceptEngine.test.ts:28`
 - `src/services/endgameMoveReads.ts:94`
+- `src/services/exchangeLedger.ts:376`
+- `src/services/gambitIdea.ts:94`
+- `src/services/gambitIdea.ts:120`
+- `src/services/holdResource.ts:48`
 - `src/services/howItWins.ts:13`
 - `src/services/material.ts:41`
 - `src/services/material.ts:57`

@@ -19,8 +19,8 @@
  * must not voice a firm verdict off it.
  *
  * TWO DEPTHS, ONLY ONE HERE. This decides how deep we SEARCH (truth). How many
- * moves of the line the coach SPEAKS is a teaching decision made elsewhere
- * (`pvDepthForRating`, need); a weaker student still gets a true verdict.
+ * moves of the line the coach SPEAKS is decided elsewhere, by the line rule
+ * (`lineTrust`) and never the rating; a weaker student still gets a true verdict.
  */
 import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';

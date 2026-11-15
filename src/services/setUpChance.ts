@@ -29,6 +29,7 @@ import { MOTIF_OF_TACTIC, MOTIFS, type MotifId } from '../data/tacticMotifs';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { AnalysisLine } from '../types';
 import { andList } from '../utils/andList';
+import { lineTrust } from './lineTrust';
 import { CAPTURE_VALUE } from './pieceValues';
 
 const VALUE = CAPTURE_VALUE;
@@ -38,8 +39,19 @@ const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop',
 export const SET_UP_SOUND_CP = 50;
 /** The strike must net this much (pawns) — a piece or the exchange and more. */
 export const SET_UP_GAIN = 2;
-/** It lands on the student's second or third move. */
-const SET_UP_MAX_DEPTH = 3;
+/** HOW DEEP A SET-UP IS READ — REQUIRED from every caller (David 2026-11-15:
+ *  "I want full depth narration"). `'full'`: what the student HEARS — the
+ *  strike may land on any move of the engine's line; past two moves it is said
+ *  only when the one honesty rule names that line (`lineTrust`: a second read
+ *  agrees, and past five moves every move of theirs is forced). A number: the
+ *  RECORD's measurement scale — the population table (`skill-difficulty.json`,
+ *  row `missed-set-up`) was fitted at three moves, so the record scores the
+ *  student on that same scale until the table is re-fitted. */
+export type SetUpHorizon = 'full' | number;
+/** The scale the record's population row was fitted on (owed: re-fit at full depth). */
+export const RECORD_SET_UP_MOVES = 3;
+/** How far `tacticNow` looks for a shot already on the board. */
+const SHOT_NOW_MOVES = 3;
 
 /** How each motif is set up, in words: "sets up ___". */
 const SET_UP_WORDS: Record<MotifId, string> = {
@@ -145,7 +157,7 @@ function tacticNow(fen: string, lines: readonly AnalysisLine[], me: Color): bool
     let mv;
     try { mv = c.move({ from: first.slice(0, 2), to: first.slice(2, 4), ...(first.length > 4 ? { promotion: first[4] } : {}) }); } catch { return false; }
     if (!mv.captured && !mv.promotion && !c.inCheck()) return false;
-    return pvGainDepth(fen, l.moves, me, SET_UP_GAIN, 2 * SET_UP_MAX_DEPTH) !== null;
+    return pvGainDepth(fen, l.moves, me, SET_UP_GAIN, 2 * SHOT_NOW_MOVES) !== null;
   });
 }
 
@@ -172,11 +184,14 @@ function threatens(after: Chess, sq: Square, me: Color): boolean {
  *     the tactic this moment teaches.
  *  The strike is the student's next move when it is a check or a capture (a
  *  check that forks is named at the check), else their first capture. */
-function strikeOf(fen: string, line: readonly string[], me: Color): SetUpChance | null {
+function strikeOf(fen: string, line: readonly string[], me: Color, horizon: SetUpHorizon, seconds: ReadonlyArray<readonly string[] | null | undefined>): SetUpChance | null {
   const q = quietMove(fen, line[0]);
   if (!q || threatens(q.after, q.to, me)) return null;
-  const depth = pvGainDepth(fen, line, me, SET_UP_GAIN, 2 * SET_UP_MAX_DEPTH);
-  if (depth === null || depth < 2 || depth > SET_UP_MAX_DEPTH) return null;
+  const maxMoves = horizon === 'full' ? Math.ceil(line.length / 2) : horizon;
+  const depth = pvGainDepth(fen, line, me, SET_UP_GAIN, 2 * maxMoves);
+  if (depth === null || depth < 2 || depth > maxMoves) return null;
+  // Past two moves an engine line is said only when the one rule names it.
+  if (horizon === 'full' && depth > 2 && !lineTrust({ fen, uci: line, plies: 2 * depth - 1, winner: me, seconds }).name) return null;
   if (!holdsToTheEnd(fen, line, me)) return null;
   // Walk the student's moves after the quiet one, up to the depth that nets.
   const walk = new Chess(fen);
@@ -279,7 +294,7 @@ function pinOf(fen: string, line: readonly string[], me: Color): SetUpChance | n
  * before a pin, a bigger gain first, the engine's order breaking ties. Null
  * when it is not the student's move or no sound line sets anything up.
  */
-export function detectSetUpChance(fen: string, topLines: readonly AnalysisLine[], student: Color): SetUpChance | null {
+export function detectSetUpChance(fen: string, topLines: readonly AnalysisLine[], student: Color, horizon: SetUpHorizon): SetUpChance | null {
   let board: Chess;
   try { board = new Chess(fen); } catch { return null; }
   if (board.turn() !== student || topLines.length === 0) return null;
@@ -290,7 +305,7 @@ export function detectSetUpChance(fen: string, topLines: readonly AnalysisLine[]
   if (tacticNow(fen, sound, student)) return null;
   let found: SetUpChance | null = null;
   for (const l of sound) {
-    const s = strikeOf(fen, l.moves, student);
+    const s = strikeOf(fen, l.moves, student, horizon, [l.earlier?.moves ?? null]);
     if (s && (!found || found.kind === 'pin' || s.gain > found.gain)) found = s;
   }
   if (found) return found;
@@ -317,7 +332,7 @@ export function setUpPosed(fen: string, bestLineUci: readonly string[]): boolean
   if (bestLineUci.length < 3) return false;
   let me: Color;
   try { me = new Chess(fen).turn(); } catch { return false; }
-  return detectSetUpChance(fen, [{ rank: 1, evaluation: 0, mate: null, moves: [...bestLineUci] }], me)?.kind === 'strike';
+  return detectSetUpChance(fen, [{ rank: 1, evaluation: 0, mate: null, moves: [...bestLineUci] }], me, RECORD_SET_UP_MOVES)?.kind === 'strike';
 }
 
 /** The skill a set-up points at: the motif's own "you missed it" row. */

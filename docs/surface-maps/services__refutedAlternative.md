@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**204 lines · 7 exports · 5 importers · 9 tests · 0 audits**
+**202 lines · 7 exports · 5 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:393) — names `refutedAlternative`
-- **The standard post-deploy ritual** (CLAUDE.md:6968) — names `refutedAlternative`
+- **The standard post-deploy ritual** (CLAUDE.md:6982) — names `refutedAlternative`
 
 ## Who calls in
 
@@ -29,8 +29,8 @@
 
 ### `refutedAlternative` (function) — 10 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/coachFeatureService.ts:4621`
-- `src/services/openingGenerator.ts:1986`
+- `src/services/coachFeatureService.ts:4673`
+- `src/services/openingGenerator.ts:2043`
 - `src/services/refutedAlternative.test.ts:69`
 - `src/services/refutedAlternative.test.ts:95`
 - `src/services/refutedAlternative.test.ts:114`
@@ -40,8 +40,8 @@
 - `src/services/refutedAlternative.test.ts:168`
 
 ### `candidatesForPosition` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:4603`
-- `src/services/openingGenerator.ts:1983`
+- `src/services/coachFeatureService.ts:4655`
+- `src/services/openingGenerator.ts:2040`
 - `src/services/refutedAlternative.test.ts:185`
 - `src/services/refutedAlternative.test.ts:187`
 

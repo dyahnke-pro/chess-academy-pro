@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**137 lines · 8 exports · 16 importers · 3 tests · 1 audits**
+**137 lines · 8 exports · 17 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:45) — names `criticalityScan`
-- **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:171) — names `criticalityScan`
-- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:4058) — names `criticalityScan`, `scanCriticality`
-- **The standard post-deploy ritual** (CLAUDE.md:6390) — names `CriticalMoment`, `scanCriticality`
+- **The tools are COMPUTERS** (CLAUDE.md:394) — names `criticalityScan`
+- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:539) — names `criticalityScan`
+- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:4511) — names `criticalityScan`, `scanCriticality`
+- **The standard post-deploy ritual** (CLAUDE.md:6933) — names `CriticalMoment`, `scanCriticality`
 
 ## Who calls in
 
@@ -22,6 +22,7 @@
 - `src/services/mistakeLineGrowth.test.ts`
 - `src/services/mistakeLineGrowth.ts`
 - `src/services/mistakePuzzleService.ts`
+- `src/services/moveThoughtFacts.ts`
 - `src/services/narrationImportance.ts`
 - `src/services/positionFacts.ts`
 - `src/services/refutedAlternative.ts`
@@ -49,24 +50,26 @@
 ### `CriticalMoment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `criticalityThresholds` (function) — 17 call sites
-- `src/services/conceptEngine.ts:576`
-- `src/services/criticalMoment.ts:194`
+### `criticalityThresholds` (function) — 19 call sites
+- `src/services/conceptEngine.ts:596`
+- `src/services/criticalMoment.ts:197`
 - `src/services/criticalityScan.test.ts:20`
+- `src/services/moveThoughtFacts.ts:1093`
 - `src/services/narrationImportance.ts:139`
-- `src/services/positionFacts.ts:543`
-- `src/services/refutedAlternative.ts:101`
-- `src/services/refutedAlternativeCore.ts:239`
+- `src/services/positionFacts.ts:651`
+- `src/services/refutedAlternative.ts:139`
+- `src/services/refutedAlternative.ts:147`
+- `src/services/refutedAlternativeCore.ts:258`
 - `src/services/skillScaling.test.ts:98`
-- `src/services/speedRunReads.ts:77`
-- `src/services/speedRunReads.ts:165`
-- `src/services/speedRunReads.ts:426`
-- `src/services/speedRunReads.ts:495`
-- `src/services/speedRunReads.ts:533`
-- `src/services/speedRunReads.ts:598`
-- `src/services/speedRunReads.ts:692`
-- `src/services/studentNeedLoader.ts:130`
-- `src/services/thinkAloud.ts:486`
+- `src/services/speedRunReads.ts:80`
+- `src/services/speedRunReads.ts:168`
+- `src/services/speedRunReads.ts:437`
+- `src/services/speedRunReads.ts:512`
+- `src/services/speedRunReads.ts:550`
+- `src/services/speedRunReads.ts:615`
+- `src/services/speedRunReads.ts:737`
+- `src/services/studentNeedLoader.ts:140`
+- `src/services/thinkAloud.ts:546`
 
 ### `ONLY_MOVE_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

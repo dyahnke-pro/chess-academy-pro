@@ -15,8 +15,8 @@
 // through the back door: a 1.2-pawn swing was a moment for a 1500 and silence
 // for a 900, with the same board in front of both. What decides WHETHER a
 // moment is worth anything is the REAL centipawn cost against the engine and
-// the student's own record (need, the heat map); the rating may scale DEPTH
-// (how far a line is walked, `pvDepthForRating`) and never the bar. The
+// the student's own record (need, the heat map); the rating scales neither
+// the bar nor how far a line is said (that is `lineTrust`, 2026-11-15). The
 // numbers are the app's ONE move-quality vocabulary (`engineConstants`), so a
 // "mistake" here is a mistake in the review's labels and in the coach's mouth.
 //

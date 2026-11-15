@@ -36,7 +36,7 @@ describe.skipIf(!RUN)('moment 3 on real boards', () => {
         if (!ok) continue;
         boards += 1;
         const lines: AnalysisLine[] = r.before.map((l, k) => ({ rank: k + 1, evaluation: l.cp ?? 0, mate: l.mate, moves: l.pv }));
-        const s = detectSetUpChance(c.fen(), lines, c.turn());
+        const s = detectSetUpChance(c.fen(), lines, c.turn(), 'full');
         if (!s) continue;
         found += 1;
         const key = `${s.kind}:${s.motif}`;

@@ -2040,7 +2040,7 @@ async function generateOpeningFromDbNarration(
       const candidates = candidatesForPosition(preFen, mastersMovesSync(preFen));
       if (candidates.length < 2) continue;
       try {
-        const r = await refutedAlternative({ fenBefore: preFen, taughtSan: positions[i].san, candidates, studentColor: studentSide, depth: 12, maxPlies: 6 });
+        const r = await refutedAlternative({ fenBefore: preFen, taughtSan: positions[i].san, candidates, studentColor: studentSide, depth: 12 });
         if (r) {
           refutedByPly[i] = r;
           refutedFacts.push({ ply: i + 1, alt: r.alt, pct: r.pct, costCp: r.costCp, concept: r.concept?.id ?? null });

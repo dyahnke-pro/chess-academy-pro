@@ -1638,7 +1638,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     try {
       line = await computePvLine(seed.fenBefore, {
         firstUci: seed.bestUci,
-        maxPlies: 6,
         depth: 12,
         engine: { analyzePosition: (f, d) => stockfishEngine.analyzeWithBudget(f, d, 3500) },
       });

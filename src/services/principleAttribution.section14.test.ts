@@ -24,8 +24,8 @@ describe('section 14 — calculation-depth (PV-gated)', () => {
   // Every PV here is LEGAL and its blow WINS on the one ledger (clean-pass walk
   // 2026-10-04: the old fixtures played Bxf6 onto an empty f6, and a blow that
   // only trades — "Rhc8, Nd4, Rxc1+" — is no lapse).
-  it('fires when the punishment lands DEEP in the engine line (quiet replies, then the blow)', () => {
-    const attrs = attributePrinciples({ theory: true, replySan: null, ...base, pvAfterPlayed: DEEP7 });
+  it('fires when the punishment lands DEEP in the engine line (quiet replies, then the blow) and two reads agree', () => {
+    const attrs = attributePrinciples({ theory: true, replySan: null, ...base, pvAfterPlayed: DEEP7, pvAfterPlayedEarlier: DEEP7 });
     const hit = attrs.find((a) => a.id === 'calculation-depth');
     expect(hit, JSON.stringify(attrs.map((a) => a.id))).toBeTruthy();
     expect(hit?.facts.punish).toBe('axb4');
@@ -35,7 +35,7 @@ describe('section 14 — calculation-depth (PV-gated)', () => {
   it('the blow is THEIR move — a capture of the student\'s own inside the line is not it (walk 700, 16…a6)', () => {
     // Student's (Black) own capture sits at ply 4 (odd = theirs); their only
     // forcing move comes later at ply 5.
-    const attrs = attributePrinciples({ theory: true, replySan: null, ...base, pvAfterPlayed: ['e6', 'Rb8', 'Qf3', 'Nxd4', 'Qxf7#'] });
+    const attrs = attributePrinciples({ theory: true, replySan: null, ...base, pvAfterPlayed: ['e6', 'Rb8', 'Qf3', 'Nxd4', 'Qxf7#'], pvAfterPlayedEarlier: ['e6', 'Rb8', 'Qf3', 'Nxd4', 'Qxf7#'] });
     expect(attrs.find((a) => a.id === 'calculation-depth')?.facts.punish).toBe('Qxf7#');
   });
 
@@ -66,7 +66,7 @@ describe('section 14 — calculation-depth (PV-gated)', () => {
     // ply 62 of the real game: 30 → -69, a 99cp cost near equality. That is
     // ~9 win% — comfortably an inaccuracy — and the PATTERN (quiet move,
     // punishment three plies deep) is no less true at 99cp than at 150.
-    const attrs = attributePrinciples({ theory: true, replySan: null, ...base, evalBefore: 30, evalAfterPlayed: -69, pvAfterPlayed: PV });
+    const attrs = attributePrinciples({ theory: true, replySan: null, ...base, evalBefore: 30, evalAfterPlayed: -69, pvAfterPlayed: PV, pvAfterPlayedEarlier: PV });
     expect(attrs.find((a) => a.id === 'calculation-depth'),
       `the 150cp dead band is back: ${JSON.stringify(attrs.map((a) => a.id))}`).toBeTruthy();
   });
@@ -76,21 +76,24 @@ describe('section 14 — calculation-depth (PV-gated)', () => {
     // it is ~3.5 win%, under an inaccuracy, so the position barely moved and
     // there is no calculation error to name. This is the case the currency
     // change exists for, and it must stay silent.
-    const attrs = attributePrinciples({ theory: true, replySan: null, ...base, evalBefore: 900, evalAfterPlayed: 700, pvAfterPlayed: PV });
+    const attrs = attributePrinciples({ theory: true, replySan: null, ...base, evalBefore: 900, evalAfterPlayed: 700, pvAfterPlayed: PV, pvAfterPlayedEarlier: PV });
     expect(attrs.find((a) => a.id === 'calculation-depth')).toBeUndefined();
   });
-  // Hand walk 1380, move 10: a 1380 was told the punishment "arrives on their
-  // 7th move" — ply 13. A blow past the coach's own horizon is not a
-  // calculation lapse anyone could be held to.
-  it('negative control: a blow past the 7-ply horizon is not a depth error', () => {
+  // NO PLY HORIZON (David 2026-11-15: "I want full depth narration … if a
+  // seven move line is seen it's worth speaking"). The 7-ply horizon is gone;
+  // the line rule decides: a deep blow counts when the engine's two reads agree
+  // on it, and one read alone is trusted only near (two moves).
+  it('a blow at ply 9 counts when two reads agree — the old 7-ply horizon is deleted', () => {
     const deep = ['g3', 'g6', 'h3', 'h5', 'a3', 'Nb4', 'd5', 'a6', 'axb4'];   // lands at ply 9
-    expect(attributePrinciples({ theory: true, replySan: null, ...base, pvAfterPlayed: deep }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
-    // …and ply 7 still counts.
-    const edge = DEEP7;
-    expect(attributePrinciples({ theory: true, replySan: null, ...base, pvAfterPlayed: edge }).find((a) => a.id === 'calculation-depth')?.facts.depth).toBe(7);
+    expect(attributePrinciples({ theory: true, replySan: null, ...base, pvAfterPlayed: deep, pvAfterPlayedEarlier: deep }).find((a) => a.id === 'calculation-depth')?.facts.depth).toBe(9);
+  });
+  it('negative control: a deep blow on ONE read, or on reads that disagree, is not charged', () => {
+    expect(attributePrinciples({ theory: true, replySan: null, ...base, pvAfterPlayed: DEEP7 }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
+    const other = ['h3', 'g6', 'a4', 'Nb4', 'd5', 'a6', 'axb4'];
+    expect(attributePrinciples({ theory: true, replySan: null, ...base, pvAfterPlayed: DEEP7, pvAfterPlayedEarlier: other }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
   });
   it('negative control: no real cost → silent; no PV → silent (live path)', () => {
-    expect(attributePrinciples({ theory: true, replySan: null, ...base, evalAfterPlayed: 0, pvAfterPlayed: DEEP7 }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
+    expect(attributePrinciples({ theory: true, replySan: null, ...base, evalAfterPlayed: 0, pvAfterPlayed: DEEP7, pvAfterPlayedEarlier: DEEP7 }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
     expect(attributePrinciples({ theory: true, replySan: null, ...base }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
   });
 });

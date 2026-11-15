@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2133 lines · 15 exports · 62 importers · 46 tests · 1 audits**
+**2161 lines · 15 exports · 62 importers · 46 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6980) — names `FundamentalId`, `principleAttribution`
+- **The standard post-deploy ritual** (CLAUDE.md:6994) — names `FundamentalId`, `principleAttribution`
 
 ## Who calls in
 
@@ -87,7 +87,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isPositionalFundamental` (function) — 1 call site
-- `src/services/misconceptionClassifier.ts:296`
+- `src/services/misconceptionClassifier.ts:299`
 
 ### `PrincipleEvidence` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -108,13 +108,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `captureIsTrade` (function) — 1 call site
-- `src/services/misconceptionClassifier.ts:341`
+- `src/services/misconceptionClassifier.ts:344`
 
 ### `planTargets` (function) — 2 call sites
-- `src/services/principleAttribution.section14.test.ts:150`
-- `src/services/principleAttribution.section14.test.ts:161`
+- `src/services/principleAttribution.section14.test.ts:153`
+- `src/services/principleAttribution.section14.test.ts:164`
 
-### `attributePrinciples` (function) — 122 call sites
+### `attributePrinciples` (function) — 123 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/blockedOwnRetreat.test.ts:25`
 - `src/services/blockedOwnRetreat.test.ts:34`
@@ -129,10 +129,10 @@
 - `src/services/claimTruth.manual.test.ts:180`
 - `src/services/claimTruth.manual.test.ts:185`
 - `src/services/claimTruth.manual.test.ts:193`
-- `src/services/coachFeatureService.ts:968`
+- `src/services/coachFeatureService.ts:977`
 - `src/services/learnWalkBlumenfeld.test.ts:67`
-- `src/services/liveFundamental.ts:145`
-- `src/services/misconceptionClassifier.ts:277`
+- `src/services/liveFundamental.ts:151`
+- `src/services/misconceptionClassifier.ts:279`
 - `src/services/principleAttribution.guardRemoval.test.ts:18`
 - `src/services/principleAttribution.guardRemoval.test.ts:35`
 - `src/services/principleAttribution.guardRemoval.test.ts:43`
@@ -159,19 +159,20 @@
 - `src/services/principleAttribution.section14.test.ts:52`
 - `src/services/principleAttribution.section14.test.ts:69`
 - `src/services/principleAttribution.section14.test.ts:79`
-- `src/services/principleAttribution.section14.test.ts:87`
-- `src/services/principleAttribution.section14.test.ts:90`
+- `src/services/principleAttribution.section14.test.ts:88`
+- `src/services/principleAttribution.section14.test.ts:91`
 - `src/services/principleAttribution.section14.test.ts:93`
-- `src/services/principleAttribution.section14.test.ts:94`
-- `src/services/principleAttribution.section14.test.ts:119`
-- `src/services/principleAttribution.section14.test.ts:130`
-- `src/services/principleAttribution.section14.test.ts:138`
-- `src/services/principleAttribution.section14.test.ts:142`
-- `src/services/principleAttribution.section14.test.ts:169`
-- `src/services/principleAttribution.section14.test.ts:173`
-- `src/services/principleAttribution.section14.test.ts:182`
-- `src/services/principleAttribution.section14.test.ts:218`
-- `src/services/principleAttribution.section14.test.ts:232`
+- `src/services/principleAttribution.section14.test.ts:96`
+- `src/services/principleAttribution.section14.test.ts:97`
+- `src/services/principleAttribution.section14.test.ts:122`
+- `src/services/principleAttribution.section14.test.ts:133`
+- `src/services/principleAttribution.section14.test.ts:141`
+- `src/services/principleAttribution.section14.test.ts:145`
+- `src/services/principleAttribution.section14.test.ts:172`
+- `src/services/principleAttribution.section14.test.ts:176`
+- `src/services/principleAttribution.section14.test.ts:185`
+- `src/services/principleAttribution.section14.test.ts:221`
+- `src/services/principleAttribution.section14.test.ts:235`
 - `src/services/principleAttribution.test.ts:20`
 - `src/services/principleAttribution.test.ts:39`
 - `src/services/principleAttribution.test.ts:47`
@@ -239,22 +240,26 @@
 - `src/services/yieldHonoured.test.ts:70`
 
 ### `pvSanToUci` (function) — 3 call sites
-- `src/services/misconceptionClassifier.ts:565`
+- `src/services/misconceptionClassifier.ts:568`
 - `src/services/mistakePuzzleService.ts:1171`
-- `src/services/moveThoughtFacts.ts:314`
+- `src/services/moveThoughtFacts.ts:537`
 
-### `pvUciToSan` (function) — 14 call sites
+### `pvUciToSan` (function) — 18 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
-- `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:684`
-- `src/services/autoAnalyzeGame.ts:687`
+- `src/components/Coach/GameReviewWeaknessCapture.tsx:89`
+- `src/components/Coach/GameReviewWeaknessCapture.tsx:93`
+- `src/services/autoAnalyzeGame.ts:686`
+- `src/services/autoAnalyzeGame.ts:689`
+- `src/services/autoAnalyzeGame.ts:692`
 - `src/services/capabilityEvidence.ts:534`
-- `src/services/coachFeatureService.ts:976`
-- `src/services/coachFeatureService.ts:978`
+- `src/services/coachFeatureService.ts:984`
+- `src/services/coachFeatureService.ts:985`
+- `src/services/coachFeatureService.ts:987`
 - `src/services/discussionPractice.ts:452`
 - `src/services/discussionPractice.ts:460`
-- `src/services/liveFundamental.ts:135`
-- `src/services/liveFundamental.ts:142`
+- `src/services/liveFundamental.ts:138`
+- `src/services/liveFundamental.ts:141`
+- `src/services/liveFundamental.ts:148`
 - `src/services/principleAttribution.test.ts:46`
 - `src/services/recordRevs.gate.test.ts:84`
 - `src/services/teachMistakeWhy.test.ts:84`

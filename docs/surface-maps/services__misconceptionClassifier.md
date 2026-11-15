@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**591 lines · 4 exports · 16 importers · 12 tests · 1 audits**
+**594 lines · 4 exports · 16 importers · 12 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6955) — names `misconceptionClassifier`
+- **The standard post-deploy ritual** (CLAUDE.md:7008) — names `misconceptionClassifier`
 
 ## Who calls in
 
@@ -38,7 +38,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `classifyMisconception` (function) — 31 call sites
-- `src/services/autoAnalyzeGame.ts:921`
+- `src/services/autoAnalyzeGame.ts:941`
 - `src/services/discussionPractice.ts:290`
 - `src/services/misconceptionClassifier.test.ts:12`
 - `src/services/misconceptionClassifier.test.ts:21`
@@ -75,13 +75,13 @@
 - `src/services/classifierCoverage.measure.test.ts:66`
 - `src/services/expertFade.measure.test.ts:102`
 - `src/services/inaccuracyVoice.ts:87`
-- `src/services/learnFocusRecord.ts:99`
+- `src/services/learnFocusRecord.ts:114`
 - `src/services/motifNaming.test.ts:32`
 - `src/services/motifNaming.test.ts:70`
 - `src/services/motifNaming.test.ts:74`
 - `src/services/principleAttribution.walkedIntoTactic.test.ts:18`
-- `src/services/recordRevs.gate.test.ts:73`
-- `src/services/recordRevs.gate.test.ts:82`
+- `src/services/recordRevs.gate.test.ts:76`
+- `src/services/recordRevs.gate.test.ts:85`
 - `src/services/slipCause.test.ts:39`
 - `src/services/slipCause.test.ts:49`
 

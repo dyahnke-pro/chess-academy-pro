@@ -537,7 +537,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     weight: 449,
     detect: ({ fen, studentWord, topLines }) => {
       if (!topLines || topLines.length === 0) return null;
-      const read = tacticalReadFromLines(fen, topLines, studentWord, { maxPlies: 6 });
+      const read = tacticalReadFromLines(fen, topLines, studentWord);
       if (!read?.keyTactic) return null;
       const point = namedTacticClause(read.line);
       if (!point) return null;
