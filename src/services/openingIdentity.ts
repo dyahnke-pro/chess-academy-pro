@@ -46,7 +46,6 @@ type IdentityMap = Record<string, IdentityFacts>;
 
 let facts: IdentityMap | null = null;
 let loading: Promise<void> | null = null;
-let failed = false;
 
 /** Load once (chat awaits it; Learn warms it and reads when ready). */
 export function loadOpeningIdentity(): Promise<void> {
@@ -54,21 +53,15 @@ export function loadOpeningIdentity(): Promise<void> {
   // Through the one /data/ loader: the native bundle strips public/data, so
   // a bare fetch 404s on iOS and the opening story never loads (2026-10-20).
   loading ??= loadDataJson('/data/opening-identity.json')
-    .then((j) => { if (j) facts = j as IdentityMap; else failed = true; })
-    .catch(() => { failed = true; })
+    .then((j) => { if (j) facts = j as IdentityMap; })
+    .catch(() => undefined)
     .finally(() => { loading = null; });
   return loading;
 }
 export function warmOpeningIdentity(): void { void loadOpeningIdentity(); }
 
 /** For tests and callers that already hold the map. */
-export function setOpeningIdentity(map: IdentityMap | null): void { facts = map; failed = false; }
-
-/** Whether the facts are in hand, still coming, or never will be — so a caller
- *  that WAITS for an identity line can tell "not yet" from "none". */
-export function openingIdentityStatus(): 'ready' | 'loading' | 'failed' {
-  return facts ? 'ready' : failed ? 'failed' : 'loading';
-}
+export function setOpeningIdentity(map: IdentityMap | null): void { facts = map; }
 
 /** The facts for this exact name, else the nearest named parent ("Sicilian
  *  Defense: Najdorf Variation, English Attack" → "…: Najdorf Variation" →

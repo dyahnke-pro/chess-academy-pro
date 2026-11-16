@@ -283,7 +283,7 @@ export function knownSlip(ctx: KnownSlipContext): KnownSlipRead | null {
         `That was a known ${name} at club level.`,
         `${slipSaid} is a known ${name} on this board.`,
         `Club players go wrong with ${slipSaid} here — a known ${name}.`,
-      ], ctx.told), proof: NO_PROOF.stated, squares: squares.slice(0, 2) }
+      ], ctx.told), proof: NO_PROOF.withheld, squares: squares.slice(0, 2) }
     : undefined;
   return {
     key: `known-slip:${mover}:${unmarked(slipSan)}>${unmarked(punishSan)}`,

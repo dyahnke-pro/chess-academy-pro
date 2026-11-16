@@ -3,7 +3,7 @@ import { Chess } from 'chess.js';
 import { davidEvidence, davidSlips, davidNow } from './__fixtures__/davidRecord';
 import type { CapabilityEvidenceRecord } from './capabilityEvidence';
 import { plainHitOnBoard } from './learnRecordTerms';
-import { plainThreatState, studentRecordFrom } from './studentRecord';
+import { studentRecordFrom } from './studentRecord';
 
 // David 2026-11-16: "It's still stating the obvious. That the pawn sticks my
 // pawn" → "That's not the right fix what about people learning how to play?"
@@ -19,6 +19,8 @@ const rows = (fen: string, outcomes: ('held' | 'broken')[]): CapabilityEvidenceR
     id: `p${fen.length}-${i}`, tag: 'missed-opponents-threat', outcome, fen, playedSan: 'Nc3',
     posedImportance: 90, recordedAt: i, origin: 'learn', prompted: false, sourceGameId: `g${fen.length}-${i}`,
   }));
+
+const plainThreatState = (ev: CapabilityEvidenceRecord[], sl: never[], now: number): string => studentRecordFrom([], ev, sl, now).plainThreats;
 
 describe('the plain-threat record', () => {
   it('reads a plain pawn hit off the board alone', () => {

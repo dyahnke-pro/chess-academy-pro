@@ -30,7 +30,8 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { teachingFact, type TeachingFact } from './teachingFact';
 export type { TeachingFact } from './teachingFact';
 import { recordLaneEvidence } from './capabilityEvidence';
-import { recordTermForThreat, threatInputFor, threatVisibility, threatVoice, type RecordTerm, type ThreatPattern, type ThreatProducer, type ThreatVoice, type VisibilityTerm } from './learnRecordTerms';
+import { recordTermForThreat, seesPlainThreats, threatInputFor, threatVisibility, threatVoice, type RecordTerm, type ThreatPattern, type ThreatProducer, type ThreatVoice, type VisibilityTerm } from './learnRecordTerms';
+import type { HeatState } from './heatMap';
 import { newThreatsAtTurn, recordThreatAnswer } from './threatAnswerEvidence';
 import type { StudentRecord } from './studentRecord';
 export type { ThreatProducer } from './learnRecordTerms';
@@ -1110,9 +1111,10 @@ export function theirDeepFactTeaching(fenBefore: string, theirSan: string, lineA
  *  game is replayed from the start, and a history that does not lead to
  *  `fenBefore` (a game set up from a position) says nothing. */
 export function bindingTeaching(i: { fenBefore: string; san: string; history: readonly string[];
-  /** REQUIRED: the student's record shows they see plain threats. */
-  plainThreatsSeen: boolean }): TeachingFact | null {
-  const tgt = theirTarget(priorFromHistory(i.history, i.fenBefore), true, i.plainThreatsSeen);
+  /** REQUIRED: the student's record of seeing plain threats
+   *  (`StudentRecord.plainThreats`), read by the one rule (`seesPlainThreats`). */
+  plainThreats: HeatState }): TeachingFact | null {
+  const tgt = theirTarget(priorFromHistory(i.history, i.fenBefore), true, seesPlainThreats(i.plainThreats));
   if (!tgt) return null;
   const bind = binding(i.fenBefore, i.san, tgt, moveHit(i.fenBefore, i.san), true);
   if (!bind) return null;

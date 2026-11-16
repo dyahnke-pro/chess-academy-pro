@@ -74,7 +74,7 @@ function recordOf(
 }
 
 /** The one hold rate, over the threat rows whose board posed a plain hit. */
-export function plainThreatState(evidence: readonly CapabilityEvidenceRecord[], slips: readonly MisconceptionTagRecord[], now: number): HeatState {
+function plainThreatState(evidence: readonly CapabilityEvidenceRecord[], slips: readonly MisconceptionTagRecord[], now: number): HeatState {
   const ev = evidence.filter((r) => r.tag === PLAIN_THREAT_TAG && plainHitOnBoard(r.fen));
   const sl = slips.filter((r) => r.tag === PLAIN_THREAT_TAG && plainHitOnBoard(r.fen));
   return heatMap(ev, sl, { now }).find((t) => t.tag === PLAIN_THREAT_TAG)?.state ?? 'grey';

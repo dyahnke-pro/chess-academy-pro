@@ -102,7 +102,7 @@ export function storedFanBefore(rec: StoredMoveRead, playedUci: string | null): 
  *  the mover's score — the MultiPV the in-between move (`inBetweenMove`) and
  *  the fighting line (`structureLines`) compare. Review reads it; the record's
  *  posed reason keeps the two-line fan its population table was fitted on. */
-export function storedFanWithCandidates(rec: StoredMoveRead, playedUci: string | null, fenBefore: string): AnalysisLine[] {
+function storedFanWithCandidates(rec: StoredMoveRead, playedUci: string | null, fenBefore: string): AnalysisLine[] {
   const fan = storedFanBefore(rec, playedUci);
   const reads = rec.weighed?.reads ?? [];
   if (fan.length === 0 || reads.length === 0) return fan;
