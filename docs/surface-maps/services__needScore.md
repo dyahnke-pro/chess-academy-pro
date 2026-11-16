@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**507 lines · 11 exports · 36 importers · 27 tests · 2 audits**
+**510 lines · 11 exports · 37 importers · 28 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4492) — names `COLD_START_GAMES`, `familiarity`, `needScore`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4573) — names `computeNeed`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4729) — names `familiarity`
-- **The standard post-deploy ritual** (CLAUDE.md:6909) — names `needScore`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4551) — names `COLD_START_GAMES`, `familiarity`, `needScore`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4632) — names `computeNeed`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4788) — names `familiarity`
+- **The standard post-deploy ritual** (CLAUDE.md:7004) — names `needScore`
 
 ## Who calls in
 
@@ -44,6 +44,7 @@
 - `src/services/reviewLastTimeHere.test.ts`
 - `src/services/reviewNeedGate.test.ts`
 - `src/services/reviewOneClaimOnce.test.ts`
+- `src/services/reviewUnpinOnce.test.ts`
 - `src/services/reviewZugzwang.test.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/studentNeedLoader.ts`
@@ -66,7 +67,7 @@
 ### `StudentNeedContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `coldStudent` (function) — 47 call sites
+### `coldStudent` (function) — 48 call sites
 - `src/services/askedRecord.test.ts:47`
 - `src/services/batch2Wiring.test.ts:75`
 - `src/services/capabilityRead.test.ts:36`
@@ -83,11 +84,11 @@
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:58`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:112`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:117`
-- `src/services/coachFeatureService.openingStory.test.ts:48`
-- `src/services/coachFeatureService.reviewNoise.test.ts:44`
+- `src/services/coachFeatureService.openingStory.test.ts:50`
+- `src/services/coachFeatureService.reviewNoise.test.ts:45`
 - `src/services/coachFeatureService.trade.test.ts:19`
-- `src/services/coachFeatureService.ts:1584`
-- `src/services/coachFeatureService.ts:5965`
+- `src/services/coachFeatureService.ts:1727`
+- `src/services/coachFeatureService.ts:6341`
 - `src/services/fundamentalReachesDecider.test.ts:54`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`
@@ -95,7 +96,7 @@
 - `src/services/needScore.test.ts:69`
 - `src/services/needScore.test.ts:79`
 - `src/services/oneStudentRating.test.ts:84`
-- `src/services/openingGenerator.ts:1967`
+- `src/services/openingGenerator.ts:2034`
 - `src/services/reviewLastTimeHere.test.ts:25`
 - `src/services/reviewLastTimeHere.test.ts:31`
 - `src/services/reviewNeedGate.test.ts:30`
@@ -109,9 +110,10 @@
 - `src/services/reviewOneClaimOnce.test.ts:108`
 - `src/services/reviewOneClaimOnce.test.ts:125`
 - `src/services/reviewOneClaimOnce.test.ts:147`
+- `src/services/reviewUnpinOnce.test.ts:19`
 - `src/services/reviewZugzwang.test.ts:22`
-- `src/services/studentNeedLoader.ts:299`
-- `src/services/teachingSelector.ts:271`
+- `src/services/studentNeedLoader.ts:301`
+- `src/services/teachingSelector.ts:272`
 - `src/services/whyBestMove.needWire.test.ts:21`
 - `src/test/computedOrderWired.test.ts:59`
 
@@ -144,7 +146,7 @@
 - `scripts/catalog-sweep/sweep-matrix.test.ts:46`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:47`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:116`
-- `src/services/coachFeatureService.ts:1751`
+- `src/services/coachFeatureService.ts:1894`
 - `src/services/facedReplies.ts:25`
 - `src/services/facedReplies.ts:34`
 - `src/services/homeOpeningSteer.ts:96`
@@ -162,8 +164,8 @@
 - `src/services/openingWalkthroughService.ts:125`
 - `src/services/openingWalkthroughService.ts:126`
 - `src/services/openingWalkthroughService.ts:138`
-- `src/services/studentNeedLoader.ts:170`
-- `src/services/studentNeedLoader.ts:173`
+- `src/services/studentNeedLoader.ts:171`
+- `src/services/studentNeedLoader.ts:174`
 
 ### `computeNeed` (function) — 63 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
@@ -193,7 +195,7 @@
 - `src/services/coachDecisionEmits.test.ts:135`
 - `src/services/coachDecisionEmits.test.ts:143`
 - `src/services/coachDecisionEmits.test.ts:149`
-- `src/services/coachFeatureService.ts:1584`
+- `src/services/coachFeatureService.ts:1727`
 - `src/services/fundamentalReachesDecider.test.ts:132`
 - `src/services/fundamentalReachesDecider.test.ts:146`
 - `src/services/fundamentalReachesDecider.test.ts:157`
@@ -227,8 +229,8 @@
 - `src/services/oneOpeningKey.test.ts:141`
 - `src/services/oneOpeningKey.test.ts:143`
 - `src/services/positionFacts.liveFundamental.test.ts:80`
-- `src/services/positionFacts.ts:1380`
-- `src/services/teachingSelector.ts:316`
+- `src/services/positionFacts.ts:1420`
+- `src/services/teachingSelector.ts:317`
 
 ## Tests
 
@@ -253,6 +255,7 @@
 - `src/services/reviewLastTimeHere.test.ts`
 - `src/services/reviewNeedGate.test.ts`
 - `src/services/reviewOneClaimOnce.test.ts`
+- `src/services/reviewUnpinOnce.test.ts`
 - `src/services/reviewZugzwang.test.ts`
 - `src/services/studentMomentBoost.test.ts`
 - `src/services/studentNeedLoader.test.ts`

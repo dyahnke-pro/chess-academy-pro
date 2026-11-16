@@ -3,7 +3,7 @@ import { moveIntentsForGame, type ReviewIntent } from './reviewMoveIntent';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { tacticGeometryKey } from './conceptKey';
 import { reasonFormula } from '../utils/reasonFormula';
-import { recordTermForThreat, threatInputFor, threatVisibility, threatVoice } from './learnRecordTerms';
+import { recordTermForThreat, seesPlainThreats, threatInputFor, threatVisibility, threatVoice } from './learnRecordTerms';
 import type { StudentRecord } from './studentRecord';
 import { lastMoveFromSan } from './material';
 import { Chess } from 'chess.js';
@@ -1650,7 +1650,7 @@ function* reviewSegmentSteps(
   // The fade per skill, from the same record (one rule with Learn).
   const fade = fadeLevelsFrom(studentNeed?.heat);
   // The record the threat voice reads (the same shape Learn's door reads).
-  const reviewRecord: StudentRecord = { weaknesses: studentWeaknesses ?? [], capabilities: studentNeed?.capabilities ?? null, heat: studentNeed?.heat ?? new Map() };
+  const reviewRecord: StudentRecord = { weaknesses: studentWeaknesses ?? [], capabilities: studentNeed?.capabilities ?? null, heat: studentNeed?.heat ?? new Map(), plainThreats: studentNeed?.plainThreats ?? 'grey' };
   // The same record decides what the composer holds as proven (green) and
   // raises as a hole (red) — read off the one heat map.
   const thoughtRecord: ThoughtRecord = { stateOf: (skill) => reviewRecord.heat.get(skill)?.state ?? 'grey' };
@@ -2166,6 +2166,7 @@ function* reviewSegmentSteps(
         || (swingCp != null && Math.abs(swingCp) >= 150);
       return buildReviewMoveBriefing({
         fenBefore: fenPair.fenBefore, san: m.san, prev: prevCap, phrases: reviewPhrases,
+        plainThreatsSeen: seesPlainThreats(reviewRecord.plainThreats),
         moverIsStudent, studentSwingCp: swingCp, criticalMoment: critical,
         // The eval verdict + why (why the position is what it is) and the delta
         // (how this move moved it) — the reasons David wants to hear.
@@ -2335,7 +2336,8 @@ function* reviewSegmentSteps(
         const sq = /^opp-threat:hanging:([a-h][1-8])$/.exec(facets[k].identity ?? '')?.[1];
         if (!sq) continue;
         const input = threatInputFor({ kind: 'hanging', square: sq }, { fenBefore: fenPair.fenBefore, opponentSan: m.san });
-        const voice = threatVoice(recordTermForThreat(input.pattern, reviewRecord).state, threatVisibility(input.sighting).visibility).voice;
+        const visibility = threatVisibility(input.sighting).visibility;
+        const voice = threatVoice(recordTermForThreat(input.pattern, reviewRecord, visibility).state, visibility).voice;
         if (voice === 'quiet') facets.splice(k, 1);
       }
       // The game looked back on (batch 2) — each read once a game, through the
@@ -2684,6 +2686,7 @@ function* reviewSegmentSteps(
         const phrasesHere = new Map(thoughtPhrases);
         const memoryHere = { keys: new Set(thoughtKeys) };
         const thoughtFacts = moveThoughtFacts({ theory: REVIEW_WALK_TEACHES_THEORY, story: false, tense: 'past',
+          plainThreatsSeen: seesPlainThreats(reviewRecord.plainThreats),
           fenBefore: fenPair.fenBefore, san: m.san, moverIsStudent: mine, prev: prevCap,
           line: moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),
           theirLast: i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null,

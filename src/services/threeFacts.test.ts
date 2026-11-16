@@ -59,45 +59,50 @@ describe('deepFact — what the move sets up, down the line', () => {
 
 describe('theirTarget — what their last move aims at', () => {
   it('their b4 is aimed at your c5 pawn (nothing guards it)', () => {
-    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true);
+    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true, true);
     expect(t?.text).toBe('their b4 is aimed at your pawn on c5');
     expect(t?.square).toBe('c5');
   });
   it('a pawn its guards cover is no target', () => {
     // 1.e4 e5 2.Nf3 hits e5 — but …Nc6 is not played yet, so it is; with
     // d6 already in, the knight's attack on a guarded pawn is no target.
-    expect(theirTarget({ fenBefore: fenAfter(['e4', 'e5', 'd3', 'd6']), san: 'Nf3' }, true)).toBeNull();
+    expect(theirTarget({ fenBefore: fenAfter(['e4', 'e5', 'd3', 'd6']), san: 'Nf3' }, true, true)).toBeNull();
   });
 });
 
 describe('binding — how the move answers it', () => {
   it('…Bg7 threatens Bxa1: it hits back on the side b4 is attacking', () => {
-    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true)!;
+    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true, true)!;
     expect(binding(fenAfter(['e4', 'c5', 'a3', 'g6', 'b4']), 'Bg7', t, 'a1', true)).toBe('so this hits back on the side they\'re attacking');
   });
   it('…b6 guarding the c5 pawn their b4 hits is OBVIOUS — a plain hit, plainly guarded, is not said (David 2026-11-16)', () => {
-    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true)!;
+    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true, true)!;
     expect(t.plain).toBe(true);
     expect(binding(fenAfter(['e4', 'c5', 'a3', 'g6', 'b4']), 'b6', t, null, true)).toBeNull();
   });
-  it("David's Caro: their …d5 hits his e-pawn and f3 guards it — obvious, not said", () => {
-    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c6', 'd4']), san: 'd5' }, true)!;
+  it("David's Caro: their …d5 hits his e-pawn and f3 guards it — obvious to a student whose record shows he sees them, not said", () => {
+    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c6', 'd4']), san: 'd5' }, true, true)!;
     expect(t.plain).toBe(true);
     expect(binding(fenAfter(['e4', 'c6', 'd4', 'd5']), 'f3', t, null, true)).toBeNull();
   });
+  it('a LEARNER (no record that they see plain threats) hears the same Caro guard', () => {
+    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c6', 'd4']), san: 'd5' }, true, false)!;
+    expect(t.plain).toBeUndefined();
+    expect(binding(fenAfter(['e4', 'c6', 'd4', 'd5']), 'f3', t, null, true)).toMatch(/covers it/);
+  });
   it('nothing when the move takes the attacker (the capture says it)', () => {
-    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true)!;
+    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true, true)!;
     expect(binding(fenAfter(['e4', 'c5', 'a3', 'g6', 'b4']), 'cxb4', t, 'b4', true)).toBeNull();
   });
   it('…h6 against Bg5: it goes after the bishop aimed at the knight', () => {
-    const t = theirTarget({ fenBefore: fenAfter(['d4', 'Nf6', 'Nf3', 'e6']), san: 'Bg5' }, true)!;
+    const t = theirTarget({ fenBefore: fenAfter(['d4', 'Nf6', 'Nf3', 'e6']), san: 'Bg5' }, true, true)!;
     expect(t.text).toBe('their Bg5 is aimed at your knight on f6');
     expect(binding(fenAfter(['d4', 'Nf6', 'Nf3', 'e6', 'Bg5']), 'h6', t, 'g5', true)).toBe('and this goes after the bishop doing it');
   });
   it('a pawn poked while a bishop is hit is no answer (v4: …Qe5 in a lost game)', () => {
     // Their Bb5 is aimed at your knight on c6; a point on their a2 pawn is
     // on the same wing but worth less than the knight — no counter.
-    const t = theirTarget({ fenBefore: fenAfter(['e4', 'e5', 'Nf3', 'Nc6']), san: 'Bb5' }, true)!;
+    const t = theirTarget({ fenBefore: fenAfter(['e4', 'e5', 'Nf3', 'Nc6']), san: 'Bb5' }, true, true)!;
     expect(t.square).toBe('c6');
     expect(binding(fenAfter(['e4', 'e5', 'Nf3', 'Nc6', 'Bb5']), 'h6', t, 'a2', true)).toBeNull();
     // Control: the same wing at equal or greater worth (their bishop on b5's
@@ -107,21 +112,21 @@ describe('binding — how the move answers it', () => {
   it('a queen "hitting" a rook its partner guards is no counter (v4: …Qe5 in a lost game)', () => {
     // Black's Rfc8 is aimed at the bishop on c6; Qe5 eyes b8, but Rc8 guards
     // it — the only real hit is the e7 pawn, worth less than the bishop.
-    const t = theirTarget({ fenBefore: '1r3rk1/p3pp1p/1qB3p1/5b2/5P2/2Q3P1/PPP4P/2KRR3 b - - 2 19', san: 'Rfc8' }, true)!;
+    const t = theirTarget({ fenBefore: '1r3rk1/p3pp1p/1qB3p1/5b2/5P2/2Q3P1/PPP4P/2KRR3 b - - 2 19', san: 'Rfc8' }, true, true)!;
     expect(t.square).toBe('c6');
     const fen = '1rr3k1/p3pp1p/1qB3p1/5b2/5P2/2Q3P1/PPP4P/2KRR3 w - - 3 20';
     expect(moveHit(fen, 'Qe5')).toBe('e7');
     expect(binding(fen, 'Qe5', t, moveHit(fen, 'Qe5'), true)).toBeNull();
   });
   it('a capture is its own point, never "hits back"', () => {
-    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true)!;
+    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true, true)!;
     expect(binding(fenAfter(['e4', 'c5', 'a3', 'g6', 'b4']), 'cxb4', t, 'a3', true)).toBeNull();
   });
   it('a check is answered as a check: no target', () => {
-    expect(theirTarget({ fenBefore: fenAfter(['e4', 'e5', 'Nf3', 'd6']), san: 'Bb5+' }, true)).toBeNull();
+    expect(theirTarget({ fenBefore: fenAfter(['e4', 'e5', 'Nf3', 'd6']), san: 'Bb5+' }, true, true)).toBeNull();
   });
   it('nothing when the move answers neither way', () => {
-    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true)!;
+    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true, true)!;
     expect(binding(fenAfter(['e4', 'c5', 'a3', 'g6', 'b4']), 'h6', t, 'g5', true)).toBeNull();
   });
 });
@@ -156,7 +161,7 @@ describe('a move that takes one of the attackers answers in its own words (prod 
   // knight taking on g5 is aimed at your pawn on h7, and your move covers it".
   const BEFORE_NXG5 = 'rn2k1nr/pp3ppp/q1p1p3/3pP1b1/3P4/2NQ3N/PPP2PPP/2KR3R w kq - 0 10';
   const BEFORE_QXD3 = 'rn2k1nr/pp3ppp/q1p1p3/3pP1N1/3P4/2NQ4/PPP2PPP/2KR3R b kq - 0 10';
-  const target = theirTarget({ fenBefore: BEFORE_NXG5, san: 'Nxg5' }, true);
+  const target = theirTarget({ fenBefore: BEFORE_NXG5, san: 'Nxg5' }, true, true);
   it('their target is the h7 pawn', () => {
     expect(target?.square).toBe('h7');
   });

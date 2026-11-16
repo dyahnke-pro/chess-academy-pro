@@ -37,7 +37,7 @@ describe('their move: what it sets up, said with their move', () => {
 describe('your move: what their last move aimed at, and how yours answers it', () => {
   it('…Bg7 against b4: it hits back on the side they are attacking', () => {
     const history = ['e4', 'c5', 'a3', 'g6', 'b4', 'Bg7'];
-    const h = bindingTeaching({ fenBefore: fenAfter(history.slice(0, 5)), san: 'Bg7', history });
+    const h = bindingTeaching({ fenBefore: fenAfter(history.slice(0, 5)), san: 'Bg7', history, plainThreatsSeen: true });
     expect(h?.text).toMatch(/^Their b4 is aimed at your pawn on c5, so your move hits back on the side they're attacking\.$/);
     expect(h?.ownMoveReason).toBe(true);
     expect(h?.lane).toBe('movePoint');
@@ -45,12 +45,16 @@ describe('your move: what their last move aimed at, and how yours answers it', (
 
   it('…b6 guarding the pawn their b4 hits is obvious — not said (David 2026-11-16: "It\'s still stating the obvious")', () => {
     const history = ['e4', 'c5', 'a3', 'g6', 'b4', 'b6'];
-    expect(bindingTeaching({ fenBefore: fenAfter(history.slice(0, 5)), san: 'b6', history })).toBeNull();
+    expect(bindingTeaching({ fenBefore: fenAfter(history.slice(0, 5)), san: 'b6', history, plainThreatsSeen: true })).toBeNull();
+  });
+  it('…b6 IS said to a learner whose record does not yet show they see plain threats', () => {
+    const history = ['e4', 'c5', 'a3', 'g6', 'b4', 'b6'];
+    expect(bindingTeaching({ fenBefore: fenAfter(history.slice(0, 5)), san: 'b6', history, plainThreatsSeen: false })?.text).toMatch(/b4/);
   });
 
   it('nothing when the move answers neither way', () => {
     const history = ['e4', 'c5', 'a3', 'g6', 'b4', 'h6'];
-    expect(bindingTeaching({ fenBefore: fenAfter(history.slice(0, 5)), san: 'h6', history })).toBeNull();
+    expect(bindingTeaching({ fenBefore: fenAfter(history.slice(0, 5)), san: 'h6', history, plainThreatsSeen: true })).toBeNull();
   });
 });
 

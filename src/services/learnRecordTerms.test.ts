@@ -116,7 +116,7 @@ describe('the voice — David\'s table on his record', () => {
   // His forks: held 18 of the last 20 parries (green); threat-seeing as a
   // whole: 11 of 20 (red).
   const forkVoice = (t: ThreatSighting): ReturnType<typeof threatVoice> =>
-    threatVoice(recordTermForThreat('fork', david).state, threatVisibility(t).visibility);
+    threatVoice(recordTermForThreat('fork', david, threatVisibility(t).visibility).state, threatVisibility(t).visibility);
   it('a simple threat on his GREEN fork record goes QUIET', () => {
     expect(forkVoice(SIMPLE)).toEqual({ voice: 'quiet', decidedBy: 'visibility' });
   });
@@ -127,16 +127,25 @@ describe('the voice — David\'s table on his record', () => {
     expect(forkVoice(DISCOVERED).voice).toBe('short');
     expect(forkVoice(PIN).voice).toBe('short');
   });
-  it('red and grey never go quiet on a threat with more to it; a plain one is quiet for everyone', () => {
-    for (const s of ['red', 'grey'] as const) for (const v of ['simple', 'hidden'] as const) expect(THREAT_VOICE[s][v]).toBe('full');
-    for (const s of ['red', 'grey', 'short', 'green'] as const) expect(THREAT_VOICE[s].plain).toBe('quiet');
+  it('red and grey never go quiet; a plain threat follows the same table on its OWN record', () => {
+    for (const s of ['red', 'grey'] as const) for (const v of ['plain', 'simple', 'hidden'] as const) expect(THREAT_VOICE[s][v]).toBe('full');
+    expect(THREAT_VOICE.green.plain).toBe('quiet');
   });
-  it("David's Caro, 1.e4 c6 2.d4 d5: the pawn that just moved hits his e-pawn — plain, and quiet on his red record", () => {
-    const CARO = { fenBefore: fenAfterMoves(['e4', 'c6', 'd4']), opponentSan: 'd5' };
-    const i = threatInputFor({ kind: 'hanging', square: 'e4' }, CARO);
-    expect(threatVisibility(i.sighting)).toEqual({ visibility: 'plain', rule: 'plain-hit' });
-    expect(threatVoice(recordTermForThreat(i.pattern, david).state, threatVisibility(i.sighting).visibility).voice).toBe('quiet');
-    expect(threatVoice(recordTermForThreat(i.pattern, EMPTY_RECORD).state, threatVisibility(i.sighting).visibility).voice).toBe('quiet');
+  const CARO = { fenBefore: fenAfterMoves(['e4', 'c6', 'd4']), opponentSan: 'd5' };
+  const caro = threatInputFor({ kind: 'hanging', square: 'e4' }, CARO);
+  const caroVoice = (r: typeof david): string => {
+    const v = threatVisibility(caro.sighting).visibility;
+    return threatVoice(recordTermForThreat(caro.pattern, r, v).state, v).voice;
+  };
+  it("David's Caro, 1.e4 c6 2.d4 d5: the pawn that just moved hits his e-pawn — plain", () => {
+    expect(threatVisibility(caro.sighting)).toEqual({ visibility: 'plain', rule: 'plain-hit' });
+  });
+  it('a LEARNER hears it: no record (grey) gets the full line (David 2026-11-16: "what about people learning how to play?")', () => {
+    expect(caroVoice(EMPTY_RECORD)).toBe('full');
+  });
+  it('a student who misses plain threats hears it; one who sees them does not', () => {
+    expect(caroVoice({ ...EMPTY_RECORD, plainThreats: 'red' })).toBe('full');
+    expect(caroVoice({ ...EMPTY_RECORD, plainThreats: 'green' })).toBe('quiet');
   });
 });
 
@@ -159,10 +168,10 @@ describe('each threat reads its own skill', () => {
   });
   it('his forks (held 18 of the last 20) with no open fork hole read green, though threat-seeing is red', () => {
     expect(recordTermFor('missed-opponents-threat', david).state).toBe('red');
-    expect(recordTermForThreat('fork', david).state).toBe('green');
+    expect(recordTermForThreat('fork', david, 'simple').state).toBe('green');
   });
   it('an open fork hole keeps the fork loud though the fork record is green', () => {
-    const term = recordTermForThreat('fork', { ...david, weaknesses: [forkHole] });
+    const term = recordTermForThreat('fork', { ...david, weaknesses: [forkHole] }, 'simple');
     expect(term.state).toBe('red');
     expect(term.raise).toBeGreaterThan(0);
   });
@@ -173,7 +182,7 @@ describe('each threat reads its own skill', () => {
     expect(after.attackers('e4', 'b')).toContain('d5');
     const input = threatInputFor({ kind: 'tactic', tactic: { type: 'fork', squares: ['d5', 'c4', 'e4'] } }, FORK_TRICK);
     expect(threatVisibility(input.sighting).visibility).toBe('simple');
-    const voice = (r: typeof david): string => threatVoice(recordTermForThreat(input.pattern, r).state, threatVisibility(input.sighting).visibility).voice;
+    const voice = (r: typeof david): string => threatVoice(recordTermForThreat(input.pattern, r, threatVisibility(input.sighting).visibility).state, threatVisibility(input.sighting).visibility).voice;
     expect(voice(david)).toBe('quiet');
     expect(voice({ ...david, weaknesses: [forkHole] })).toBe('full');
   });
@@ -243,18 +252,18 @@ describe('the motif reads its OWN record once the board has asked it', () => {
   it('forks he let land turn forks red though threat-seeing is green', () => {
     const r = withRows(rowsOf('missed-their-fork', ['broken', 'broken', 'broken', ...held(5)], 100));
     expect(recordTermFor('missed-opponents-threat', r).state).toBe('green');
-    expect(recordTermForThreat('fork', r).state).toBe('red');
+    expect(recordTermForThreat('fork', r, 'simple').state).toBe('red');
   });
   it('forks parried 8 times turn forks green on their own', () => {
     const r = studentRecordFrom([], rowsOf('missed-their-fork', held(8)), [], davidNow);
-    expect(recordTermForThreat('fork', r)).toMatchObject({ state: 'green', raise: 0 });
+    expect(recordTermForThreat('fork', r, 'simple')).toMatchObject({ state: 'green', raise: 0 });
   });
   it('fewer than 8 parries is not proof yet: forks fall back to threat-seeing', () => {
     const r = withRows(rowsOf('missed-their-fork', held(3), 100));
-    expect(recordTermForThreat('fork', r)).toEqual(recordTermFor('missed-opponents-threat', r));
+    expect(recordTermForThreat('fork', r, 'simple')).toEqual(recordTermFor('missed-opponents-threat', r));
   });
   it('for an empty record a parried fork stays grey and speaks', () => {
     const r = studentRecordFrom([], rowsOf('missed-their-fork', ['held']), [], davidNow);
-    expect(recordTermForThreat('fork', r).state).toBe('grey');
+    expect(recordTermForThreat('fork', r, 'simple').state).toBe('grey');
   });
 });

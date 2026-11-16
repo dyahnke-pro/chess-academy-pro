@@ -39,7 +39,7 @@ describe('the board teacher says the pressure on the only guard', () => {
 
 describe('every surface hears the same idea', () => {
   it('the lesson briefing: Bb5 in the Ruy no longer "covers c4"', () => {
-    const text = buildReviewMoveBriefing({ fenBefore: RUY, san: 'Bb5', prev: NO_PREV_CAPTURE, phrases: null, moverIsStudent: true, register: 'teach', line: ['a6', 'Ba4'], theirLast: null }) ?? '';
+    const text = buildReviewMoveBriefing({ plainThreatsSeen: false, fenBefore: RUY, san: 'Bb5', prev: NO_PREV_CAPTURE, phrases: null, moverIsStudent: true, register: 'teach', line: ['a6', 'Ba4'], theirLast: null }) ?? '';
     expect(text).toMatch(/goes after their knight on c6, the only guard of their pawn on e5/);
     expect(text).not.toMatch(/c4/);
   });

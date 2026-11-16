@@ -33,7 +33,7 @@
 // this same function (invariant: one computer set).
 
 import type { WeaknessSignal } from './weaknessSignal';
-import type { HeatTile } from './heatMap';
+import type { HeatState, HeatTile } from './heatMap';
 import { sameOpeningFamily } from './openingKey';
 import type { OpeningKey } from '../types';
 import { matchClauseKind, matchFundamental, matchTacticPattern, matchTag, boostFor, clauseKindBucket, MAX_WEAKNESS_BOOST } from './weaknessSignal';
@@ -98,6 +98,9 @@ export interface StudentNeedContext {
    * whose misses it never saw (OS-1 §C1). Empty = every skill grey.
    */
   heat: ReadonlyMap<MisconceptionTagId, HeatTile>;
+  /** Whether they see a PLAIN threat (`StudentRecord.plainThreats`). REQUIRED:
+   *  the threat voice reads it. Grey on a cold student. */
+  plainThreats: HeatState;
   /**
    * WHAT THE STUDENT ASKED ABOUT — per skill, how many times they asked a
    * question on a board that posed it, within their last games
@@ -110,7 +113,7 @@ export interface StudentNeedContext {
 /** The empty context — a brand-new student. Every data term is zero; the
  *  cold-start prior carries the coach. */
 export function coldStudent(rating = DEFAULT_STUDENT_RATING): StudentNeedContext {
-  return { rating, gamesPlayed: 0, signals: [], bookDepartures: [], capabilities: new Map(), heat: new Map(), asked: new Map() };
+  return { rating, gamesPlayed: 0, signals: [], bookDepartures: [], capabilities: new Map(), heat: new Map(), plainThreats: 'grey', asked: new Map() };
 }
 
 export interface NeedPlyInput {

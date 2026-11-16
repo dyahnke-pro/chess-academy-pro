@@ -212,6 +212,41 @@ export function threatVisibility(t: ThreatSighting): VisibilityTerm {
   return single && pawnInIt && isPlainPattern(t.pattern) ? { visibility: 'plain', rule: 'plain-hit' } : { visibility: 'simple', rule: 'direct-hit' };
 }
 
+/** THE RECORD'S HALF OF THE PLAIN RULE: a board, the student to move, whose
+ *  one exposed unit is in a plain pawn hit — one attacker, a pawn in it (the
+ *  pawn hits a piece, or a pawn of theirs is hit). Read off a recorded row's
+ *  own board, so the record says whether THIS student sees plain threats
+ *  (David 2026-11-16: "what about people learning how to play?"). */
+export function plainHitOnBoard(fen: string): boolean {
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return false; }
+  if (b.inCheck()) return false;
+  const me = b.turn();
+  const foe = me === 'w' ? 'b' : 'w';
+  const exposed: { sq: Square; type: string; atk: Square[] }[] = [];
+  for (const row of b.board()) for (const cell of row) {
+    if (!cell || cell.color !== me || cell.type === 'k') continue;
+    const atk = b.attackers(cell.square, foe);
+    if (atk.length === 0) continue;
+    const guards = b.attackers(cell.square, me).length;
+    const cheapest = Math.min(...atk.map((sq) => VALUE(b.get(sq)?.type ?? 'k')));
+    if (guards === 0 || atk.length > guards || cheapest < VALUE(cell.type)) exposed.push({ sq: cell.square, type: cell.type, atk });
+  }
+  if (exposed.length !== 1 || exposed[0].atk.length !== 1) return false;
+  return exposed[0].type === 'p' || b.get(exposed[0].atk[0])?.type === 'p';
+}
+
+/** THE ONE RULE for "they see plain threats": held at least 75% of the last
+ *  times posed (amber or green). Amber gets one short line on the threat
+ *  (`THREAT_VOICE.short.plain`) and nothing more — never the extra "and your
+ *  move covers it" (`theirTarget`). Red and grey are taught in full. */
+export function seesPlainThreats(state: HeatState): boolean {
+  return state === 'green' || state === 'short';
+}
+
+/** The skill a plain threat is recorded under. */
+export const PLAIN_THREAT_TAG: MisconceptionTagId = 'missed-opponents-threat';
+
 /** The threats whose whole point is the capture of the one piece hit. */
 const PLAIN_PATTERNS: ReadonlySet<ThreatPattern> = new Set<ThreatPattern>(['hanging', 'cheaper-hit']);
 const isPlainPattern = (p: ThreatPattern | undefined): boolean => p === undefined || PLAIN_PATTERNS.has(p);
@@ -223,15 +258,15 @@ export type ThreatVoice = 'full' | 'short' | 'quiet';
 /** David's table (2026-10-19, locked). A new state or visibility fails to
  *  compile until someone answers for it. */
 export const THREAT_VOICE: Record<HeatState, Record<ThreatVisibility, ThreatVoice>> = {
-  // A PLAIN threat is quiet for everyone — no voice and no arrow, the record
-  // never raises it (David 2026-11-16, his Caro, "It's still stating the
-  // obvious. That the pawn [attacks] my pawn"): on the board, just played, no
-  // calculation. A miss is explained after it (explain at the miss), and the
-  // focus question still asks a red or grey student the habit before the move.
-  red: { plain: 'quiet', simple: 'full', hidden: 'full' },
-  grey: { plain: 'quiet', simple: 'full', hidden: 'full' },
+  // A PLAIN threat reads its OWN record (`StudentRecord.plainThreats`, the
+  // hold rate on boards whose one threat was a plain pawn hit): a student
+  // still learning to see them hears it, one who sees them does not (David
+  // 2026-11-16: "It's still stating the obvious" → "what about people
+  // learning how to play?").
+  red: { plain: 'full', simple: 'full', hidden: 'full' },
+  grey: { plain: 'full', simple: 'full', hidden: 'full' },
   // Held 75–89% of the last 20: one short line, whatever the threat's shape.
-  short: { plain: 'quiet', simple: 'short', hidden: 'short' },
+  short: { plain: 'short', simple: 'short', hidden: 'short' },
   green: { plain: 'quiet', simple: 'quiet', hidden: 'short' },
 };
 
@@ -243,7 +278,7 @@ interface VoiceTerm {
 }
 
 export function threatVoice(state: HeatState, visibility: ThreatVisibility): VoiceTerm {
-  return { voice: THREAT_VOICE[state][visibility], decidedBy: state === 'green' || visibility === 'plain' ? 'visibility' : 'record' };
+  return { voice: THREAT_VOICE[state][visibility], decidedBy: state === 'green' ? 'visibility' : 'record' };
 }
 
 // ─── 4. Each threat reads its OWN skill ─────────────────────────────────────
@@ -325,8 +360,14 @@ export function skillForThreat(pattern: ThreatPattern): ThreatSkill {
  *      fork right once must not make forks noisier than before.
  *  Raise-only: the motif can make a threat louder, never quieter than its
  *  own proof allows. */
-export function recordTermForThreat(pattern: ThreatPattern, record: StudentRecord): RecordTerm {
+export function recordTermForThreat(pattern: ThreatPattern, record: StudentRecord,
+  /** REQUIRED: a plain threat reads the plain-threat record, not the skill's. */
+  visibility: ThreatVisibility): RecordTerm {
   const skill = THREAT_SKILL[pattern];
+  if (visibility === 'plain') {
+    const base = recordTermFor(PLAIN_THREAT_TAG, record);
+    return { ...base, state: record.plainThreats, reason: `plain threats ${record.plainThreats}` };
+  }
   const base = recordTermFor(skill.tag, record);
   const hole = skill.motif ? matchTag(weaknessClusterForTactic(skill.motif), record.weaknesses) : null;
   const holeBoost = hole ? boostFor(hole) : 0;

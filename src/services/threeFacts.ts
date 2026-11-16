@@ -312,7 +312,11 @@ export function moveHit(fenBefore: string, san: string): string | null {
  * board) newly aims at among the mover's units — most valuable first, a pawn
  * only when it is short of guards. Seat words are the mover's.
  */
-export function theirTarget(theirLast: { fenBefore: string; san: string } | null, moverIsStudent: boolean): TheirTarget | null {
+export function theirTarget(theirLast: { fenBefore: string; san: string } | null, moverIsStudent: boolean,
+  /** REQUIRED: the student's record shows they see plain threats (green on
+   *  `StudentRecord.plainThreats`). Only then is a plain hit too obvious to
+   *  say; a learner, or a lesson with no record, hears it. */
+  plainSeen: boolean): TheirTarget | null {
   if (!theirLast) return null;
   const before = (() => { try { return new Chess(theirLast.fenBefore); } catch { return null; } })();
   const r = play(theirLast.fenBefore, theirLast.san);
@@ -343,7 +347,7 @@ export function theirTarget(theirLast: { fenBefore: string; san: string } | null
   if (!best) return null;
   const own = moverIsStudent ? 'your' : 'their';
   const other = moverIsStudent ? 'their' : 'your';
-  const plain = threatVisibility({ fenBefore: theirLast.fenBefore, opponentSan: theirLast.san, attacker: r.move.to, targets: [best.square], pattern: 'hanging' }).visibility === 'plain';
+  const plain = moverIsStudent && plainSeen && threatVisibility({ fenBefore: theirLast.fenBefore, opponentSan: theirLast.san, attacker: r.move.to, targets: [best.square], pattern: 'hanging' }).visibility === 'plain';
   return { text: `${other} ${r.move.san} is aimed at ${own} ${PIECE[best.type]} on ${best.square}`, square: best.square, by: r.move.to, ...(plain ? { plain } : {}) };
 }
 
@@ -373,10 +377,11 @@ export function bindingFact(fenBefore: string, san: string, target: TheirTarget,
   // move covers it" — the trade was the answer, and cxd3 took the guard).
   if (r.move.captured && before.attackers(target.square as Square, r.move.color === 'w' ? 'b' : 'w').includes(r.move.to)) return null;
   if (r.board.attackers(target.square as Square, mover).length > before.attackers(target.square as Square, mover).length) {
-    // A PLAIN HIT, PLAINLY GUARDED, IS OBVIOUS (David 2026-11-16, his Caro:
-    // "Their d5 is aimed at your pawn on e4, and your move covers it" — "It's
-    // still stating the obvious"). Both halves are on the board; nothing is
-    // calculated. Going after the attacker still speaks below.
+    // A PLAIN HIT, PLAINLY GUARDED, IS OBVIOUS — to a student whose record
+    // shows they see them (David 2026-11-16, his Caro: "Their d5 is aimed at
+    // your pawn on e4, and your move covers it" — "It's still stating the
+    // obvious" → "what about people learning how to play?"). Going after the
+    // attacker still speaks below.
     if (target.plain) return null;
     return { text: 'and this covers it', idea: 'guard' };
   }

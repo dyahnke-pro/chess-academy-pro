@@ -1109,8 +1109,10 @@ export function theirDeepFactTeaching(fenBefore: string, theirSan: string, lineA
  *  the side they're attacking"). `history` ends with the student's move; the
  *  game is replayed from the start, and a history that does not lead to
  *  `fenBefore` (a game set up from a position) says nothing. */
-export function bindingTeaching(i: { fenBefore: string; san: string; history: readonly string[] }): TeachingFact | null {
-  const tgt = theirTarget(priorFromHistory(i.history, i.fenBefore), true);
+export function bindingTeaching(i: { fenBefore: string; san: string; history: readonly string[];
+  /** REQUIRED: the student's record shows they see plain threats. */
+  plainThreatsSeen: boolean }): TeachingFact | null {
+  const tgt = theirTarget(priorFromHistory(i.history, i.fenBefore), true, i.plainThreatsSeen);
   if (!tgt) return null;
   const bind = binding(i.fenBefore, i.san, tgt, moveHit(i.fenBefore, i.san), true);
   if (!bind) return null;
@@ -1343,8 +1345,8 @@ export function learnThreatVoice(
   record: StudentRecord,
 ): ThreatVoiceDecision {
   const input = threatInputFor(producer, move);
-  const term = recordTermForThreat(input.pattern, record);
   const visibility = threatVisibility(input.sighting);
+  const term = recordTermForThreat(input.pattern, record, visibility.visibility);
   const { voice } = threatVoice(term.state, visibility.visibility);
   return {
     voice,

@@ -178,12 +178,12 @@ const PRODUCERS: Record<string, { plies: Plies; run: Producer }> = {
   // The one composer's facts — every lesson, Learn and Review line.
   moveThoughtFacts: {
     plies: 'captures',
-    run: (p) => [true, false].flatMap((seat) => moveThoughtFacts({ story: false, theory: true, tense: 'now', fenBefore: p.fenBefore, san: p.san, moverIsStudent: seat, prev: p.prev, line: p.line, history: [], theirLast: p.theirLast, phrases: null, reads: null, costCp: null })
+    run: (p) => [true, false].flatMap((seat) => moveThoughtFacts({ plainThreatsSeen: false, story: false, theory: true, tense: 'now', fenBefore: p.fenBefore, san: p.san, moverIsStudent: seat, prev: p.prev, line: p.line, history: [], theirLast: p.theirLast, phrases: null, reads: null, costCp: null })
       .flatMap((f) => [f.text, f.alsoText])),
   },
   reviewMoveBriefing: {
     plies: 'captures',
-    run: (p) => [true, false, undefined].map((seat) => buildReviewMoveBriefing({ fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: seat, line: p.line, theirLast: p.theirLast, phrases: null, criticalMoment: true })),
+    run: (p) => [true, false, undefined].map((seat) => buildReviewMoveBriefing({ plainThreatsSeen: false, fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: seat, line: p.line, theirLast: p.theirLast, phrases: null, criticalMoment: true })),
   },
   moveAspects: {
     plies: 'captures',

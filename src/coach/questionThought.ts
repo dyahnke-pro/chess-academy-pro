@@ -130,6 +130,8 @@ export function answerQuestionThought(q: ThoughtQuestion, ctx: QuestionContext):
   const composed = questionThought({ story: true,
     fenBefore, san: mv.san, moverIsStudent, prev: runs[k] ?? NO_PREV_CAPTURE, line: line.length ? line : null, theirLast, history,
     reads: ctx.reads, costCp: null, theory: true,
+    // Asked: the answer says what their move aims at, however plain.
+    plainThreatsSeen: false,
   }, new Set(spec.groups), null, spec.move === 'best' ? ctx.reason : null);
   const text = composed.spoken.trim();
   return text ? { text, move: { san: mv.san, from: mv.from, to: mv.to } } : null;

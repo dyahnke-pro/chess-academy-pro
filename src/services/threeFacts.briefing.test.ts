@@ -15,7 +15,7 @@ function fenBefore(n: number): string {
   return c.fen();
 }
 function say(n: number, opts: { withFacts: boolean; student?: boolean }): string {
-  return buildReviewMoveBriefing({
+  return buildReviewMoveBriefing({ plainThreatsSeen: false,
     phrases: null, prev: NO_PREV_CAPTURE, register: 'teach', moverIsStudent: opts.student ?? true,
     fenBefore: fenBefore(n), san: LINE[n],
     line: opts.withFacts ? LINE.slice(n + 1, n + 3) : null,
@@ -41,7 +41,7 @@ describe('the three facts in the briefing', () => {
     const c = new Chess('2b1k3/8/8/8/8/8/8/1R2K3 w - - 0 1');
     const before = c.fen();
     c.move('Rb8');
-    const out = buildReviewMoveBriefing({
+    const out = buildReviewMoveBriefing({ plainThreatsSeen: false,
       phrases: null, prev: NO_PREV_CAPTURE, register: 'teach', moverIsStudent: true,
       fenBefore: c.fen(), san: 'Kd7', line: null, theirLast: { fenBefore: before, san: 'Rb8' },
     }) ?? '';

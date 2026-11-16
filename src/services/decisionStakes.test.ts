@@ -36,7 +36,7 @@ const FAN = {
 describe('rule 1 — one decision, one gap', () => {
   it('Nc3 against …Qd5: the move facts share one decision and its small gap; "develops with tempo" leads', () => {
     const input = scandinavianNc3(FAN);
-    const facts = moveThoughtFacts({ ...input, phrases: null }).filter((f) => f.group === 'move');
+    const facts = moveThoughtFacts({ plainThreatsSeen: false, ...input, phrases: null }).filter((f) => f.group === 'move');
     expect(facts.length).toBeGreaterThan(1);
     const g = decisionGap(input.fenBefore, 'b1c3', FAN, 0)!;
     expect(g).toBeCloseTo(wcGap(45, 30), 6);
@@ -52,7 +52,7 @@ describe('rule 1 — one decision, one gap', () => {
     expect(said).toMatch(new RegExp(`^${introHead('student', 'Nc3', 'now')}develops into the game with tempo`));
   });
   it('with no fan to measure the gap, the whole group is unmeasured — never a partial gap', () => {
-    const facts = moveThoughtFacts({ ...scandinavianNc3(null), phrases: null }).filter((f) => f.group === 'move');
+    const facts = moveThoughtFacts({ plainThreatsSeen: false, ...scandinavianNc3(null), phrases: null }).filter((f) => f.group === 'move');
     expect(facts.length).toBeGreaterThan(0);
     for (const f of facts) expect(f.stakes, f.text).toEqual({ none: 'unmeasured' });
   });

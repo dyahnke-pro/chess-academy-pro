@@ -38,7 +38,7 @@ const experienced: StudentNeedContext = {
   gamesPlayed: 20,
   signals: [persistentHole],
   bookDepartures: [],
-  capabilities: new Map(), heat: new Map(), asked: new Map(),
+  capabilities: new Map(), plainThreats: 'grey' as const, heat: new Map(), asked: new Map(),
   openingId: openingKeyFor('B10', 'Caro-Kann Defense'),
   lineReps: Array(40).fill(5),
   openingScore: 0.5,

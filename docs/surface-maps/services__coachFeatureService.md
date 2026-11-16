@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6708 lines · 33 exports · 73 importers · 88 tests · 4 audits**
+**6711 lines · 33 exports · 73 importers · 88 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:425) — names `coachFeatureService`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4793) — names `coachFeatureService`
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5868) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6934) — names `coachFeatureService`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4805) — names `coachFeatureService`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5880) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6946) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -343,10 +343,10 @@
 - `src/services/coachFeatureService.test.ts:626`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8866`
-- `src/components/Coach/CoachTeachPage.tsx:8969`
-- `src/components/Coach/CoachTeachPage.tsx:11940`
-- `src/components/Coach/CoachTeachPage.tsx:12342`
+- `src/components/Coach/CoachTeachPage.tsx:8867`
+- `src/components/Coach/CoachTeachPage.tsx:8970`
+- `src/components/Coach/CoachTeachPage.tsx:11938`
+- `src/components/Coach/CoachTeachPage.tsx:12340`
 - `src/services/coachFeatureService.test.ts:912`
 - `src/services/coachFeatureService.test.ts:913`
 - `src/services/phaseTransitionDetector.test.ts:575`

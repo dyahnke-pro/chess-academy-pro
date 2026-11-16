@@ -3,14 +3,14 @@ import { puzzleMethodLine, mistakeSlipRead, cpFromThemes, type StudentRecord } f
 import type { MethodHabit } from './methodBeat';
 import type { WeaknessSignal } from './weaknessSignal';
 
-const COLD: StudentRecord = { weaknesses: [], capabilities: null, heat: new Map() };
+const COLD: StudentRecord = { weaknesses: [], capabilities: null, heat: new Map(), plainThreats: 'grey' };
 
 function tacticHole(over: Partial<WeaknessSignal>): StudentRecord {
   const w = {
     clusterId: 'analysis:tactic:fork', bucket: 'tactical', label: 'Forks',
     openCount: 4, severity: 60, puzzleThemes: ['fork'], total: 4, ...over,
   } as WeaknessSignal;
-  return { weaknesses: [w], capabilities: null, heat: new Map() };
+  return { weaknesses: [w], capabilities: null, heat: new Map(), plainThreats: 'grey' };
 }
 
 describe('puzzleMethodLine — a habit only when the puzzle earns it', () => {

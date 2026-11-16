@@ -104,7 +104,7 @@ const PLAYED_IT_RIGHT_FIVE_TIMES: StudentNeedContext = {
   gamesPlayed: 40,
   signals: [],
   bookDepartures: [],
-  capabilities: new Map(), heat: new Map(), asked: new Map(),
+  capabilities: new Map(), plainThreats: 'grey' as const, heat: new Map(), asked: new Map(),
   lineReps: Array.from({ length: 40 }, (_, i) => (i === 26 ? FAMILIAR_REPS : 0)),
 };
 

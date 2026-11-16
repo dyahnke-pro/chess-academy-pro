@@ -71,6 +71,10 @@ import { gambitIdea } from './gambitIdea';
 export interface MoveThoughtInput {
   fenBefore: string;
   san: string;
+  /** REQUIRED: the student's record shows they see plain threats
+   *  (`StudentRecord.plainThreats` green) — then a plain hit, plainly answered,
+   *  is not said. A lesson has no record: false (taught). */
+  plainThreatsSeen: boolean;
   /** REQUIRED: the tense the move is introduced in (`moveIntro.IntroTense`):
    *  'now' for a move being shown (a lesson, a question), 'past' for a move
    *  already played (Review's walk), built in that tense where it is made. */
@@ -361,7 +365,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     i.line && i.line.length > deep.lineIndex ? [{ fen: fenAfter, sans: i.line.slice(0, deep.lineIndex + 1) }] : undefined);
 
   // THE ANSWER TO THEIR LAST MOVE — what it aimed at, and how this meets it.
-  const tgt = theirTarget(i.theirLast, mine);
+  const tgt = theirTarget(i.theirLast, mine, i.plainThreatsSeen);
   if (tgt) {
     const ownPoint = deep?.target ?? read?.threat?.san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?:=[QRBN])?$/)?.[1] ?? moveHit(i.fenBefore, i.san);
     const bind = bindingFact(i.fenBefore, i.san, tgt, ownPoint, mine);
@@ -377,7 +381,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // move's facts: what the piece now eyes is the move's point only when the
   // move does nothing else (a capture, a file opened, a break say more).
   if (i.moverIsStudent === false) {
-    const aim = theirTarget({ fenBefore: i.fenBefore, san: i.san }, true);
+    const aim = theirTarget({ fenBefore: i.fenBefore, san: i.san }, true, i.plainThreatsSeen);
     // Only an aim the student has to answer: a piece that really falls
     // (`computeMustDefend`, SEE-checked) — a capture that is taken straight
     // back, or a piece eyed behind its guards, aims at nothing.
@@ -828,9 +832,10 @@ function withDecisionGap(facts: ThoughtFact[], i: MoveThoughtInput, from: string
  *  top-three clause list (`lessonBeat`), which picked by aspect weight alone,
  *  cut at three and never heard the move's job or its fundamentals. '' when
  *  nothing earned a word: silence beats a repeat. */
-export function lessonThought(shown: Omit<MoveThoughtInput, 'phrases' | 'tense'>, voice: LessonVoice, refuted: RefutedAlternative | null): string {
-  // A lesson shows the move as it is played: its words are the present's.
-  const input: Omit<MoveThoughtInput, 'phrases'> = { ...shown, tense: 'now' };
+export function lessonThought(shown: Omit<MoveThoughtInput, 'phrases' | 'tense' | 'plainThreatsSeen'>, voice: LessonVoice, refuted: RefutedAlternative | null): string {
+  // A lesson shows the move as it is played: its words are the present's. It
+  // reads no student record, so a plain threat is taught.
+  const input: Omit<MoveThoughtInput, 'phrases'> = { ...shown, tense: 'now', plainThreatsSeen: false };
   // The line's story is at this move's ply: what it says is said here.
   voice.story.reach(plyOfFen(input.fenBefore));
   const facts = moveThoughtFacts({ ...input, phrases: voice.phrases });

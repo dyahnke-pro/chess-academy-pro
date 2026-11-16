@@ -12,7 +12,8 @@
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { profileOfSnapshot, summariseEvidence, type CapabilityEvidenceRecord, type CapabilityProfile } from './capabilityEvidence';
 import { evidenceMirror, slipMirror } from './recordMirror';
-import { heatMap, type HeatTile } from './heatMap';
+import { heatMap, type HeatState, type HeatTile } from './heatMap';
+import { PLAIN_THREAT_TAG, plainHitOnBoard } from './learnRecordTerms';
 import type { WeaknessSignal } from './weaknessSignal';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { MisconceptionTagRecord } from '../types';
@@ -27,10 +28,14 @@ export interface StudentRecord {
   /** One tile per skill — red / grey / green, the heat map tab's verdict.
    *  A skill with no tile is grey. */
   heat: ReadonlyMap<MisconceptionTagId, HeatTile>;
+  /** Whether they SEE a plain threat (a pawn hit, one target), by the one
+   *  hold rate over the boards whose one threat was plain
+   *  (`plainHitOnBoard`). Grey until 8 are on record — a learner is taught. */
+  plainThreats: HeatState;
 }
 
 /** A fresh install: nothing recorded, every skill grey. */
-export const EMPTY_STUDENT_RECORD: StudentRecord = { weaknesses: [], capabilities: null, heat: new Map() };
+export const EMPTY_STUDENT_RECORD: StudentRecord = { weaknesses: [], capabilities: null, heat: new Map(), plainThreats: 'grey' };
 
 /** THE ONE BUILDER. With an explicit `now` it is a pure function of the rows
  *  in hand (tests, offline measures). Without one it builds the CURRENT
@@ -65,7 +70,14 @@ function recordOf(
 ): StudentRecord {
   const heat = new Map<MisconceptionTagId, HeatTile>();
   for (const t of heatMap(evidence, slips, { now, profile: capabilities })) heat.set(t.tag, t);
-  return { weaknesses, capabilities, heat };
+  return { weaknesses, capabilities, heat, plainThreats: plainThreatState(evidence, slips, now) };
+}
+
+/** The one hold rate, over the threat rows whose board posed a plain hit. */
+export function plainThreatState(evidence: readonly CapabilityEvidenceRecord[], slips: readonly MisconceptionTagRecord[], now: number): HeatState {
+  const ev = evidence.filter((r) => r.tag === PLAIN_THREAT_TAG && plainHitOnBoard(r.fen));
+  const sl = slips.filter((r) => r.tag === PLAIN_THREAT_TAG && plainHitOnBoard(r.fen));
+  return heatMap(ev, sl, { now }).find((t) => t.tag === PLAIN_THREAT_TAG)?.state ?? 'grey';
 }
 
 /** The last current-record build (`studentRecordFrom` without `now`): the

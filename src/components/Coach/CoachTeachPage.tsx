@@ -74,6 +74,7 @@ import { intentRule, intentWithFallback, nullMoveFen } from '../../services/move
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { cheaperAttackerHit, gambitPoint, kingPawnUnderFire, type CheaperHit, mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
 import { habitSaidKey, learnMoveReason, learnReasonDue, learnReplyWait, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, learnHangingWarning, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { seesPlainThreats } from '../../services/learnRecordTerms';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 import { captureRunAfterMove, captureRunOfPgn } from '../../services/captureRun';
 
@@ -12632,7 +12633,7 @@ export function CoachTeachPage({ mode }: {
                     // WHAT THEIR LAST MOVE WAS AIMED AT, AND HOW YOURS ANSWERS IT
                     // (the three facts, WO-THINK-01) — a reason for your move.
                     {
-                      const bind = bindingTeaching({ fenBefore, san: move.san, history: move.history });
+                      const bind = bindingTeaching({ fenBefore, san: move.san, history: move.history, plainThreatsSeen: seesPlainThreats(studentRecordRef.current.plainThreats) });
                       if (bind) queueHint(fenAfterReply, bind, move.fen);
                     }
                     // THE OPENING SUMMARY (census #52): the first move out of the

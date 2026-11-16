@@ -173,11 +173,11 @@ describe('a capture’s job is what it nets when the exchange is over (moveJob)'
 
 describe('a piece that is taken straight back aims at nothing', () => {
   it('…Bxd3 is not aimed at the c4 pawn: Qxd3 takes the bishop (London)', () => {
-    expect(theirTarget({ fenBefore: LONDON_BXD3, san: 'Bxd3' }, true)).toBeNull();
+    expect(theirTarget({ fenBefore: LONDON_BXD3, san: 'Bxd3' }, true, false)).toBeNull();
   });
 
   it('Bxf6 is not aimed at the queen on d8: the bishop is taken (Queen’s Indian)', () => {
-    expect(theirTarget({ fenBefore: QID_BXF6, san: 'Bxf6' }, true)).toBeNull();
+    expect(theirTarget({ fenBefore: QID_BXF6, san: 'Bxf6' }, true, false)).toBeNull();
   });
 
   it('the moved piece hits nothing from a square it is taken on', () => {
@@ -187,7 +187,7 @@ describe('a piece that is taken straight back aims at nothing', () => {
   it('a piece that stays still aims: Bg5 at the knight it pins', () => {
     const c = new Chess();
     for (const m of ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6']) c.move(m);
-    expect(theirTarget({ fenBefore: c.fen(), san: 'Bg5' }, true)?.square).toBe('f6');
+    expect(theirTarget({ fenBefore: c.fen(), san: 'Bg5' }, true, false)?.square).toBe('f6');
   });
 });
 

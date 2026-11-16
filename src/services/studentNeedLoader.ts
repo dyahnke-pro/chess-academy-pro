@@ -66,6 +66,7 @@ export interface StudentNeedBase {
   bookDepartures: StudentNeedContext['bookDepartures'];
   capabilities: StudentNeedContext['capabilities'];
   heat: StudentNeedContext['heat'];
+  plainThreats: StudentNeedContext['plainThreats'];
   /** The skills the student asked about, within their last games (`askedRecord`). */
   asked: StudentNeedContext['asked'];
   /** Every non-master, non-fixture game (scores). */
@@ -256,7 +257,7 @@ async function readStudentNeedBase(q: BaseQuery, key: string, generation: number
     // fade levels share, not a fourth read of every row (2026-10-21).
     const evidence = await evidenceMirror.rows().catch((): readonly CapabilityEvidenceRecord[] => []);
     const slips = await slipMirror.rows().catch((): readonly MisconceptionTagRecord[] => []);
-    const { heat, capabilities } = studentRecordFrom(signals, evidence, slips);
+    const { heat, capabilities, plainThreats } = studentRecordFrom(signals, evidence, slips);
     // WHAT THEY ASKED, within their last games (David 2026-11-07: across games).
     const asked = await askedCountsSince(askWindowStart(games));
     const base: StudentNeedBase = {
@@ -270,6 +271,7 @@ async function readStudentNeedBase(q: BaseQuery, key: string, generation: number
       bookDepartures,
       capabilities: capabilities ?? new Map<MisconceptionTagId, CapabilityProfileEntry>(),
       heat,
+      plainThreats,
       asked,
       games,
       analysed,
@@ -305,6 +307,7 @@ export function contextForLine(base: StudentNeedBase | null, sans: readonly stri
     bookDepartures: base.bookDepartures,
     capabilities: base.capabilities,
     heat: base.heat,
+    plainThreats: base.plainThreats,
     asked: base.asked,
     openingId: base.openingId,
     openingGames: base.openingGames,

@@ -228,6 +228,10 @@ function deltaTailClause(swing: number): string | null {
 interface ReviewMoveBriefingInput {
   fenBefore: string;
   san: string;
+  /** REQUIRED: the student's record shows they see plain threats
+   *  (`StudentRecord.plainThreats` green), so a plain hit plainly answered is
+   *  not said (`theirTarget`). */
+  plainThreatsSeen: boolean;
   /** Recapture context (an even trade never reads as a windfall). REQUIRED:
    *  three lesson builders left it out, so every baked lesson read the
    *  recapture Nxe3 as "winning the bishop" (census group 6, 2026-10-07).
@@ -651,7 +655,7 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   // else what the moved piece itself now attacks.
   let targetLine = '';
   if (moveClause && moverIsStudent !== undefined) {
-    const tgt = theirTarget(input.theirLast, moverIsStudent);
+    const tgt = theirTarget(input.theirLast, moverIsStudent, input.plainThreatsSeen);
     // The deep fact's hit counts only when the deep fact is said.
     const deepSaid = deep && rankedMechanics.includes(deep.text) ? deep.target : null;
     const ownPoint = deepSaid ?? (threat ? threatSquare(threat.san) : null) ?? moveHit(fenBefore, san);
