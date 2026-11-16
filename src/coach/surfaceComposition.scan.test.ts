@@ -124,6 +124,10 @@ const INFRA = new Set(['learnTranscript',
   // ceiling: the import that put the scan at 255 was this one, and a signal
   // bus is not a computer.
   'weaknessModelEvents',
+  // `everythingEvents` is the same class: a listener set with zero imports
+  // that carries the doors' own decision rows to the owner's Everything panel
+  // (task #101). It computes no fact; it did NOT move a ceiling.
+  'everythingEvents',
   // `gameStory` computes NO chess fact — it is the game's say-once ledger,
   // each key with the ply it was said, and its rewind / new-game rules: the
   // same class as a cache. It replaced `standingFactMemory` (this entry's

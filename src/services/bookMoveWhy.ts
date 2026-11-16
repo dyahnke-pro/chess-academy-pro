@@ -361,12 +361,12 @@ function rescueJob(before: Chess, mainMv: NonNullable<ReturnType<typeof after>>,
       .sort((a, b) => CAPTURE_VALUE[a.p.type] - CAPTURE_VALUE[b.p.type])[0];
     if (!guard) return null;
     const guardWords = seatPieceWords(mainMv.board.fen(), guard.sq, w.own, `${w.own} ${NAME[guard.p.type]} on ${guard.sq}`);
-    const clause = `it moves ${w.own} ${NAME[mainMv.piece]} to ${mainMv.to}, where ${guardWords} guards it from ${byWords}`;
+    const clause = `it puts ${w.own} ${NAME[mainMv.piece]} where ${guardWords} guards it from ${byWords}`;
     return {
       kind: 'rescue',
       squares: [mainMv.from, by.sq, mainMv.to, guard.sq],
       clause,
-      forms: [clause, `it gets ${w.own} ${NAME[mainMv.piece]} off ${mainMv.from} to ${mainMv.to}, where ${guardWords} covers it against ${byWords}`],
+      forms: [clause, `it moves ${w.own} ${NAME[mainMv.piece]} where ${guardWords} covers it against ${byWords}`],
       short: `leaves it on ${mainMv.from} for them to take`,
     };
   }

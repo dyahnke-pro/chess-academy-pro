@@ -27,6 +27,7 @@ export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   'src/components/Openings/SrsTrainerPage.tsx::taughtRef': { lifetime: 'per-board', what: 'the moves each opening teaches per board, read from the course data for this review session' },
   'src/components/Academy/CourseTrainerPage.tsx::progressRef': { lifetime: 'per-board', what: 'attempts per drill line this course session' },
   'src/components/Board/VoiceChatMic.tsx::messagesRef': { lifetime: 'per-board', what: 'voice turn transcript for the brain call' },
+  'src/components/Coach/EverythingPanel.tsx::buffer': { lifetime: 'per-board', what: 'the owner\'s debug view of the most recent decisions, emptied when Everything mode is turned off' },
   'src/components/Common/ScrollHintBar.tsx::initialRef': { lifetime: 'per-board', what: 'render scratch' },
   'src/components/ui/RewardLayer.tsx::particles': { lifetime: 'per-board', what: 'animation scratch' },
   'src/components/ui/RewardLayer.tsx::flash': { lifetime: 'per-board', what: 'animation scratch' },

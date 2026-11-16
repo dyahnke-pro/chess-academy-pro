@@ -804,7 +804,7 @@
     "29: They play Bxd8 — it wins a queen for a bishop. They play Bxd8: it is the only move that holds here — the next best, Rxf7, gives up far more.",
     "30: You play Rxd8 — it seizes the half-open d-file, where the rook belongs. It also completes the trade and wins the bishop pair.",
     "31: They play Raf1 — it lands a battery. It also doubles their rooks on the half-open f-file.",
-    "32: Your f5 gets your pawn off f7 to f5, where your e-pawn covers it against their rook on f3. It also loosens your own king's cover, and a pawn never moves back.",
+    "32: Your f5 moves your pawn where your e-pawn covers it against their rook on f3. It also loosens your own king's cover, and a pawn never moves back.",
     "33: g4 is a pawn break: it attacks your pawn on f5. If you take, it half-opens the g-file for their rooks, toward your king. It also loosens their own king's cover, and a pawn never moves back.",
     "34: You go Bd4+, which forces the king to react, seizing the initiative for a move.",
     "35: R1f2 looked natural for them, but it doesn't work: you play fxg4 — you win a pawn.",

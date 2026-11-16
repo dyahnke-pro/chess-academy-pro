@@ -18,9 +18,10 @@ describe('rescueJob: the attacker still reaching the new square', () => {
     const said = [j?.clause ?? '', ...(j?.forms ?? [])].join(' | ');
     expect(said).not.toMatch(/out of reach|before .* can take it/);
   });
-  it('says where the pawn is safe and what guards it there', () => {
+  it('says what guards the pawn where it went', () => {
     const j = moveJob(BEFORE_A4, 'a4', 'b', MINE, null, NO_FOLLOW);
-    expect(j?.clause).toMatch(/a4/);
-    expect(j?.clause).toMatch(/bishop/);
+    // Named by its guard and its attacker, never a list of squares.
+    expect(j?.clause).toMatch(/your (light-squared )?bishop/);
+    expect(j?.clause).toMatch(/guards it from their rook/);
   });
 });
