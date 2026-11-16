@@ -26,6 +26,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { lineIsForcing } from './lineTrust';
 import { proofCut } from './exchangeLedger';
 import { actsFromItsSquare, exchangeEnd } from './material';
+import { threatVisibility } from './learnRecordTerms';
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -57,6 +58,10 @@ export interface TheirTarget {
   square: string;
   /** Where the attacker stands (their move's landing square). */
   by: string;
+  /** A PLAIN hit (`threatVisibility`): one piece of the mover's, hit by the
+   *  piece that just moved, in the open — on the board, just played, no
+   *  calculation. Guarding it is obvious and is not said (`bindingFact`). */
+  plain?: boolean;
 }
 
 const FILES = 'abcdefgh';
@@ -338,7 +343,8 @@ export function theirTarget(theirLast: { fenBefore: string; san: string } | null
   if (!best) return null;
   const own = moverIsStudent ? 'your' : 'their';
   const other = moverIsStudent ? 'their' : 'your';
-  return { text: `${other} ${r.move.san} is aimed at ${own} ${PIECE[best.type]} on ${best.square}`, square: best.square, by: r.move.to };
+  const plain = threatVisibility({ fenBefore: theirLast.fenBefore, opponentSan: theirLast.san, attacker: r.move.to, targets: [best.square], pattern: 'hanging' }).visibility === 'plain';
+  return { text: `${other} ${r.move.san} is aimed at ${own} ${PIECE[best.type]} on ${best.square}`, square: best.square, by: r.move.to, ...(plain ? { plain } : {}) };
 }
 
 /**
@@ -367,6 +373,11 @@ export function bindingFact(fenBefore: string, san: string, target: TheirTarget,
   // move covers it" — the trade was the answer, and cxd3 took the guard).
   if (r.move.captured && before.attackers(target.square as Square, r.move.color === 'w' ? 'b' : 'w').includes(r.move.to)) return null;
   if (r.board.attackers(target.square as Square, mover).length > before.attackers(target.square as Square, mover).length) {
+    // A PLAIN HIT, PLAINLY GUARDED, IS OBVIOUS (David 2026-11-16, his Caro:
+    // "Their d5 is aimed at your pawn on e4, and your move covers it" — "It's
+    // still stating the obvious"). Both halves are on the board; nothing is
+    // calculated. Going after the attacker still speaks below.
+    if (target.plain) return null;
     return { text: 'and this covers it', idea: 'guard' };
   }
   // GOING AFTER THE ATTACKER: the moved piece now hits the piece doing it

@@ -69,6 +69,25 @@ describe('Review says the slip that was played, as why it was a mistake', () => 
 describe('the computer, through the registry', () => {
   const index = knownSlipIndexFromDisk();
   const board = fenAfter('e4 e5 Nf3 Nc6 d4');
+  it("their slip just played names the student's punishing move — so it says so, and its held form is the verdict alone (David's Caro, 4…Nf6)", () => {
+    // White to punish: Black's slip on this board, the student is White.
+    const slip = knownSlipsAt(index, board)[0];
+    const playedBoard = board;
+    const r = knownSlip({ fen: playedBoard, gems: knownSlipsAt(index, playedBoard), played: slip?.slip ?? 'f6', on: 'played', student: 'w', verdictPunish: null, saidNext: null, told: 1 });
+    expect(r, 'the index holds …f6 on this board').not.toBeNull();
+    if (!r) return;
+    expect(r.seat).toBe('opponent');
+    expect(r.namesStudentMove).toBe(true);
+    expect(r.heldForm?.text).toMatch(/known (mistake|trap) on this board\.$/);
+    expect(r.heldForm?.text).not.toMatch(/after|mate|you win|better game/);
+  });
+  it("the student's own slip played keeps the punishment (it is THEIR move, already on the board)", () => {
+    const r = knownSlip({ fen: board, gems: knownSlipsAt(index, board), played: 'f6', on: 'played', student: 'b', verdictPunish: null, saidNext: null, told: 0 });
+    expect(r).not.toBeNull();
+    if (!r) return;
+    expect(r.namesStudentMove).toBe(false);
+    expect(r.heldForm).toBeUndefined();
+  });
   it('reads the index board by board, and is the one fact with its proof', () => {
     // The slip ahead on the board the move reached is a trap named before it
     // lands (its own registry row and kind since 2026-11-05).
@@ -120,7 +139,7 @@ describe('a known slip is said once a game, wherever it stays available', () => 
     expect(walk.get(5)).toContain('…d5 is a known mistake on this board, and after Nxe5 you win a pawn.');
     const again = [...walk].filter(([ply, text]) => ply > 5 && /\bd5\b[^.]*known mistake|known mistake[^.]*\bd5\b/.test(text));
     expect(again).toEqual([]);
-  });
+  }, 30_000); // walks a whole game through the review build (~5 s alone)
 
   it('two boards, one slip, one key', () => {
     const atBb5 = reached('e4 e5 Nf3 Nc6 Bb5', 'a6', 0);

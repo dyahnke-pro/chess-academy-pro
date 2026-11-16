@@ -79,8 +79,12 @@ describe('recordTermFor — David\'s record', () => {
 });
 
 describe('threatVisibility — named rules on real boards', () => {
-  it('the moved piece hitting a loose piece is SIMPLE', () => {
+  it('the moved piece hitting ONE loose PIECE is SIMPLE — the record decides (a rook lost is the lesson)', () => {
     expect(threatVisibility(SIMPLE)).toEqual({ visibility: 'simple', rule: 'direct-hit' });
+  });
+  it('a pawn that just moved kicking a piece is PLAIN (1.e4 Nf6 2.e5)', () => {
+    const i = threatInputFor({ kind: 'cheaper-hit', hit: { sq: 'f6', bySq: 'e5' } }, { fenBefore: fenAfterMoves(['e4', 'Nf6']), opponentSan: 'e5' });
+    expect(threatVisibility(i.sighting)).toEqual({ visibility: 'plain', rule: 'plain-hit' });
   });
   it.each([
     [DISCOVERED, 'discovered'],
@@ -116,18 +120,23 @@ describe('the voice — David\'s table on his record', () => {
   it('a simple threat on his GREEN fork record goes QUIET', () => {
     expect(forkVoice(SIMPLE)).toEqual({ voice: 'quiet', decidedBy: 'visibility' });
   });
+  it('a loose piece hit on his RED threat-seeing record still gets the FULL callout', () => {
+    expect(voiceFor(david, SIMPLE)).toEqual({ voice: 'full', decidedBy: 'record' });
+  });
   it('a hidden threat on a green record speaks SHORT', () => {
     expect(forkVoice(DISCOVERED).voice).toBe('short');
     expect(forkVoice(PIN).voice).toBe('short');
   });
-  it('a simple threat on his RED threat-seeing record speaks FULL', () => {
-    expect(voiceFor(david, SIMPLE)).toEqual({ voice: 'full', decidedBy: 'record' });
-  });
-  it('the same simple threat for an empty record speaks FULL', () => {
-    expect(voiceFor(EMPTY_RECORD, SIMPLE)).toEqual({ voice: 'full', decidedBy: 'record' });
-  });
-  it('red and grey never go quiet', () => {
+  it('red and grey never go quiet on a threat with more to it; a plain one is quiet for everyone', () => {
     for (const s of ['red', 'grey'] as const) for (const v of ['simple', 'hidden'] as const) expect(THREAT_VOICE[s][v]).toBe('full');
+    for (const s of ['red', 'grey', 'short', 'green'] as const) expect(THREAT_VOICE[s].plain).toBe('quiet');
+  });
+  it("David's Caro, 1.e4 c6 2.d4 d5: the pawn that just moved hits his e-pawn — plain, and quiet on his red record", () => {
+    const CARO = { fenBefore: fenAfterMoves(['e4', 'c6', 'd4']), opponentSan: 'd5' };
+    const i = threatInputFor({ kind: 'hanging', square: 'e4' }, CARO);
+    expect(threatVisibility(i.sighting)).toEqual({ visibility: 'plain', rule: 'plain-hit' });
+    expect(threatVoice(recordTermForThreat(i.pattern, david).state, threatVisibility(i.sighting).visibility).voice).toBe('quiet');
+    expect(threatVoice(recordTermForThreat(i.pattern, EMPTY_RECORD).state, threatVisibility(i.sighting).visibility).voice).toBe('quiet');
   });
 });
 
@@ -172,7 +181,7 @@ describe('each threat reads its own skill', () => {
 
 describe('threatInputFor — one call per producer', () => {
   const SCANDI = { fenBefore: fenAfterMoves(['e4', 'd5', 'exd5', 'Qxd5']), opponentSan: 'Nc3' };
-  it('cheaper-hit: Nc3 hitting the queen on d5 is simple', () => {
+  it('cheaper-hit: Nc3 hitting the queen on d5 is simple (no pawn in it)', () => {
     const i = threatInputFor({ kind: 'cheaper-hit', hit: { sq: 'd5', bySq: 'c3' } }, SCANDI);
     expect(i.pattern).toBe('cheaper-hit');
     expect(threatVisibility(i.sighting)).toEqual({ visibility: 'simple', rule: 'direct-hit' });

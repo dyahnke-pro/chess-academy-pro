@@ -43,10 +43,9 @@ describe('your move: what their last move aimed at, and how yours answers it', (
     expect(h?.lane).toBe('movePoint');
   });
 
-  it('…b6 covers the pawn their b4 is aimed at', () => {
+  it('…b6 guarding the pawn their b4 hits is obvious — not said (David 2026-11-16: "It\'s still stating the obvious")', () => {
     const history = ['e4', 'c5', 'a3', 'g6', 'b4', 'b6'];
-    const h = bindingTeaching({ fenBefore: fenAfter(history.slice(0, 5)), san: 'b6', history });
-    expect(h?.text).toMatch(/^Their b4 is aimed at your pawn on c5, and your move covers it\.$/);
+    expect(bindingTeaching({ fenBefore: fenAfter(history.slice(0, 5)), san: 'b6', history })).toBeNull();
   });
 
   it('nothing when the move answers neither way', () => {

@@ -78,7 +78,14 @@ export function recordTermFor(skillTag: MisconceptionTagId, record: StudentRecor
 
 // ─── 2. Threat visibility ───────────────────────────────────────────────────
 
-export type ThreatVisibility = 'simple' | 'hidden';
+/** `plain` — ONE piece of yours, hit by the piece that just moved, out in the
+ *  open, and the threat is only that capture: on the board, just played, no
+ *  calculation (David 2026-11-15: "if it's on the board, just played, and needs
+ *  no future calculation it's obvious"). `simple` — a direct hit with more to
+ *  it: two targets at once (a fork), or a hit whose point is a follow-up (Ng5
+ *  on f7); the record decides those (2026-10-19). `hidden` — anything that
+ *  takes calculating to see. */
+export type ThreatVisibility = 'plain' | 'simple' | 'hidden';
 
 /** Every rule that can decide visibility, in the order they are checked. */
 export type VisibilityRule =
@@ -103,7 +110,9 @@ export type VisibilityRule =
    *  threat must come from something deeper. */
   | 'guarded-enough'
   /** The piece that just moved hits a loose or under-guarded piece: simple. */
-  | 'direct-hit';
+  | 'direct-hit'
+  /** …and only that one piece, and the threat is just taking it: plain. */
+  | 'plain-hit';
 
 /** How far a bishop, rook or queen must reach (in king steps) before its
  *  attack is no longer in plain sight. */
@@ -192,8 +201,20 @@ export function threatVisibility(t: ThreatSighting): VisibilityTerm {
     const attackers = after.attackers(sq as Square, foe).length;
     return guards === 0 || attackers > guards || attackerValue < VALUE(target.type);
   });
-  return exposed ? { visibility: 'simple', rule: 'direct-hit' } : hidden('guarded-enough');
+  if (!exposed) return hidden('guarded-enough');
+  // PLAIN: one target, the threat is the capture itself, and a PAWN is in it —
+  // the pawn that just moved hits a piece, or a piece hits a pawn (David
+  // 2026-11-16: "That the pawn sticks my pawn"). A loose PIECE hit by a piece
+  // stays SIMPLE: losing a bishop is the loss the record teaches. A fork's two
+  // targets, or a hit whose point comes later, are SIMPLE too.
+  const single = hit.length === 1 && targets.length === 1;
+  const pawnInIt = piece?.type === 'p' || after.get(hit[0] as Square)?.type === 'p';
+  return single && pawnInIt && isPlainPattern(t.pattern) ? { visibility: 'plain', rule: 'plain-hit' } : { visibility: 'simple', rule: 'direct-hit' };
 }
+
+/** The threats whose whole point is the capture of the one piece hit. */
+const PLAIN_PATTERNS: ReadonlySet<ThreatPattern> = new Set<ThreatPattern>(['hanging', 'cheaper-hit']);
+const isPlainPattern = (p: ThreatPattern | undefined): boolean => p === undefined || PLAIN_PATTERNS.has(p);
 
 // ─── 3. The voice ───────────────────────────────────────────────────────────
 
@@ -202,11 +223,16 @@ export type ThreatVoice = 'full' | 'short' | 'quiet';
 /** David's table (2026-10-19, locked). A new state or visibility fails to
  *  compile until someone answers for it. */
 export const THREAT_VOICE: Record<HeatState, Record<ThreatVisibility, ThreatVoice>> = {
-  red: { simple: 'full', hidden: 'full' },
-  grey: { simple: 'full', hidden: 'full' },
+  // A PLAIN threat is quiet for everyone — no voice and no arrow, the record
+  // never raises it (David 2026-11-16, his Caro, "It's still stating the
+  // obvious. That the pawn [attacks] my pawn"): on the board, just played, no
+  // calculation. A miss is explained after it (explain at the miss), and the
+  // focus question still asks a red or grey student the habit before the move.
+  red: { plain: 'quiet', simple: 'full', hidden: 'full' },
+  grey: { plain: 'quiet', simple: 'full', hidden: 'full' },
   // Held 75–89% of the last 20: one short line, whatever the threat's shape.
-  short: { simple: 'short', hidden: 'short' },
-  green: { simple: 'quiet', hidden: 'short' },
+  short: { plain: 'quiet', simple: 'short', hidden: 'short' },
+  green: { plain: 'quiet', simple: 'quiet', hidden: 'short' },
 };
 
 interface VoiceTerm {
@@ -217,7 +243,7 @@ interface VoiceTerm {
 }
 
 export function threatVoice(state: HeatState, visibility: ThreatVisibility): VoiceTerm {
-  return { voice: THREAT_VOICE[state][visibility], decidedBy: state === 'green' ? 'visibility' : 'record' };
+  return { voice: THREAT_VOICE[state][visibility], decidedBy: state === 'green' || visibility === 'plain' ? 'visibility' : 'record' };
 }
 
 // ─── 4. Each threat reads its OWN skill ─────────────────────────────────────

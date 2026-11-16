@@ -17,8 +17,7 @@ import { bookDeparture, warmBookPosition, type BookDeparture } from './bookDepar
 import { sayMoveNoun } from './spokenMove';
 import { costWords, MISTAKE_CP } from './engineConstants';
 import { transposedOpening } from './openingPositions';
-import { isWaypointOpening, openingIdentityLine, openingIdentityStatus, planFor } from './openingIdentity';
-import { classifyPhase } from './gamePhaseService';
+import { isWaypointOpening, planFor } from './openingIdentity';
 import type { DetectedOpening } from '../types';
 import type { MastersPlanRead } from './mastersPlanRead';
 import { Chess } from 'chess.js';
@@ -66,11 +65,18 @@ function tailOfFamily(parts: readonly string[], family: string): string {
 export function spokenOpeningLabel(name: string): string {
   return spoken(name);
 }
+/** THE NAME PLAYERS USE, where the database's is not it (David 2026-11-16:
+ *  "most people call it 'the fantasy' variation"). Keyed by the family and
+ *  the database's part, so a namesake in another family keeps its own name. */
+const COMMON_PART: Record<string, string> = {
+  'Caro-Kann Defense|Maróczy Variation': 'Fantasy Variation',
+};
 function spoken(name: string): string {
   const [family, ...rest] = name.split(':');
   const tail = rest.join(':').trim();
   if (!tail) return name.trim();
-  const parts = tail.split(',').map((p) => p.trim()).filter((p) => p && !GENERIC_TAIL.test(p));
+  const parts = tail.split(',').map((p) => p.trim()).filter((p) => p && !GENERIC_TAIL.test(p))
+    .map((p) => COMMON_PART[`${family.trim()}|${p}`] ?? p);
   return parts.length ? `${family.trim()}: ${parts.join(', ')}` : family.trim();
 }
 
@@ -294,29 +300,17 @@ export function theirOpeningVerdict(
 /**
  * MAY LEARN SAY THIS OPENING'S NAME NOW? (lead 2026-10-20, Learn Scandinavian
  * walk: "This game is the Scandinavian Defense." to a student who had asked
- * for the Mieses-Kotroc, with no idea beside it.)
+ * for the Mieses-Kotroc.)
  *  - not the opening the student ASKED to play, nor its family — unless the
  *    moves transposed into it; a deeper name the moves reach is still news;
- *  - the FIRST name is said with its idea: with nothing heard yet and no
- *    identity ready this turn, it waits for the turn the identity is — but
- *    only while that idea can still come (`openingIdeaCanCome`). An opening
- *    with no identity line (the Petrov's Three Knights) waited forever and was
- *    never named all game (#2's golden replay, 2026-10-20).
+ *  - otherwise AT ONCE, the move it is known (David 2026-11-16: "It didn't
+ *    state the opening name until move 3. The Karo can be identified right
+ *    away"). The first name used to wait for its idea; an idea that names a
+ *    move of the student's still to come waited past the opening's first moves
+ *    and took the name with it. The idea rides with the name when it is
+ *    ready, and on its own turn when it is not.
  */
-export function learnNameMaySpeak(i: { name: string; asked: string | null; transposed: boolean; identityReady: boolean; ideaCanCome: boolean; spokenOpening: string | null }): boolean {
-  if (i.asked && !i.transposed && i.asked.startsWith(i.name)) return false;
-  return i.identityReady || i.spokenOpening !== null || !i.ideaCanCome;
-}
-
-/** CAN THIS OPENING'S IDEA STILL BE SAID? The identity story beat exists only
- *  while the game is in the opening, and only for an opening that has an
- *  identity line (`openingStoryAt`, beat 2) — 781 of the 1,924 named openings
- *  have none (the Italian, the Najdorf, the Petrov). While the facts are still
- *  loading the idea may yet come; a load that failed means it never will. */
-export function openingIdeaCanCome(name: string, student: 'w' | 'b', fen: string, ply: number): boolean {
-  if (isWaypointOpening(name) || classifyPhase(fen, { ply }) !== 'opening') return false;
-  const status = openingIdentityStatus();
-  if (status === 'loading') return true;
-  return status === 'ready' && openingIdentityLine(name, student, 'seat', null, true) !== null;
+export function learnNameMaySpeak(i: { name: string; asked: string | null; transposed: boolean }): boolean {
+  return !(i.asked && !i.transposed && i.asked.startsWith(i.name));
 }
 

@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2278 lines · 32 exports · 64 importers · 34 tests · 2 audits**
+**2291 lines · 32 exports · 66 importers · 35 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3824) — names `OpeningEntry`, `detectOpening`, `findContinuationsAtPly`, `findOpeningByPgnPrefix`, `findSiblingExtensionBranches`, `isTeachable`, `openingDetectionService`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5511) — names `isTeachable`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3852) — names `OpeningEntry`, `detectOpening`, `findContinuationsAtPly`, `findOpeningByPgnPrefix`, `findSiblingExtensionBranches`, `isTeachable`, `openingDetectionService`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5539) — names `isTeachable`
 
 ## Who calls in
 
@@ -39,6 +39,7 @@
 - `src/services/coachGameEngine.ts`
 - `src/services/coachSessionRouter.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
+- `src/services/fantasyName.test.ts`
 - `src/services/firstRunPickers.test.ts`
 - `src/services/gameInsightsService.ts`
 - `src/services/gamesCourse.ts`
@@ -50,6 +51,7 @@
 - `src/services/masterclassRedirect.ts`
 - `src/services/masterclassWalkthroughAdapter.ts`
 - `src/services/mistakePuzzleService.ts`
+- `src/services/moveThoughtFacts.ts`
 - `src/services/namedMoveResolution.test.ts`
 - `src/services/oneOpeningKey.test.ts`
 - `src/services/openingDatabaseBrief.ts`
@@ -91,7 +93,7 @@
 
 ### `detectOpening` (function) — 35 call sites
 - `scripts/patterns/mineCore.ts:120`
-- `src/coach/coachService.ts:936`
+- `src/coach/coachService.ts:937`
 - `src/coach/sources/annotationContext.ts:79`
 - `src/coach/sources/middlegamePlan.ts:51`
 - `src/coach/sources/modelGames.ts:57`
@@ -99,13 +101,13 @@
 - `src/components/Coach/CoachGamePage.tsx:1647`
 - `src/components/Coach/CoachGamePage.tsx:3206`
 - `src/components/Coach/CoachGamePage.tsx:3278`
-- `src/components/Coach/CoachTeachPage.tsx:11195`
+- `src/components/Coach/CoachTeachPage.tsx:11230`
 - `src/services/builtReplies.ts:39`
 - `src/services/builtReplies.ts:63`
 - `src/services/clubReplies.ts:182`
 - `src/services/clubReplies.ts:208`
-- `src/services/coachFeatureService.ts:3623`
-- `src/services/coachFeatureService.ts:4004`
+- `src/services/coachFeatureService.ts:3719`
+- `src/services/coachFeatureService.ts:4100`
 - `src/services/computedVoiceAudit.report.test.ts:293`
 - `src/services/gamesCourse.ts:167`
 - `src/services/gamesCourse.ts:307`
@@ -126,16 +128,17 @@
 - `src/services/openingKey.test.ts:26`
 - `src/services/openingKey.ts:39`
 
-### `detectOpeningByOrder` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9585`
-- `src/services/coachFeatureService.ts:2484`
+### `detectOpeningByOrder` (function) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9594`
+- `src/services/coachFeatureService.ts:2506`
+- `src/services/moveThoughtFacts.ts:436`
 - `src/services/openingPositions.test.ts:27`
 - `src/services/openingPositions.test.ts:37`
-- `src/services/openingStory.ts:187`
+- `src/services/openingStory.ts:191`
 
 ### `detectOpeningTranspositional` (function) — 11 call sites
-- `src/services/coachApi.ts:5712`
-- `src/services/coachApi.ts:6789`
+- `src/services/coachApi.ts:5713`
+- `src/services/coachApi.ts:6790`
 - `src/services/openingTransposition.test.ts:9`
 - `src/services/openingTransposition.test.ts:13`
 - `src/services/openingTransposition.test.ts:17`
@@ -165,18 +168,18 @@
 - `src/services/openingDetectionService.test.ts:576`
 - `src/services/openingDetectionService.test.ts:590`
 - `src/services/openingDetectionService.test.ts:620`
-- `src/services/openingGenerator.ts:2794`
-- `src/services/openingGenerator.ts:3117`
-- `src/services/openingGenerator.ts:3207`
+- `src/services/openingGenerator.ts:2807`
+- `src/services/openingGenerator.ts:3130`
+- `src/services/openingGenerator.ts:3220`
 
-### `resolveOpeningEntry` (function) — 90 call sites
+### `resolveOpeningEntry` (function) — 91 call sites
 - `src/coach/ask/playName.ts:53`
 - `src/coach/requestSteps.ts:90`
 - `src/components/Coach/CoachGamePage.tsx:984`
-- `src/components/Coach/CoachTeachPage.tsx:5907`
-- `src/components/Coach/CoachTeachPage.tsx:6602`
-- `src/components/Coach/CoachTeachPage.tsx:13656`
-- `src/components/Coach/CoachTeachPage.tsx:15828`
+- `src/components/Coach/CoachTeachPage.tsx:5914`
+- `src/components/Coach/CoachTeachPage.tsx:6609`
+- `src/components/Coach/CoachTeachPage.tsx:13724`
+- `src/components/Coach/CoachTeachPage.tsx:15896`
 - `src/data/voicedWalkthroughs.test.ts:96`
 - `src/data/voicedWalkthroughs.test.ts:111`
 - `src/data/voicedWalkthroughs.test.ts:113`
@@ -184,9 +187,10 @@
 - `src/data/voicedWalkthroughs.ts:197`
 - `src/services/builtReplies.ts:37`
 - `src/services/builtReplies.ts:59`
-- `src/services/coachApi.ts:6382`
-- `src/services/coachApi.ts:6418`
+- `src/services/coachApi.ts:6383`
+- `src/services/coachApi.ts:6419`
 - `src/services/coachSessionRouter.ts:253`
+- `src/services/fantasyName.test.ts:19`
 - `src/services/firstRunPickers.test.ts:16`
 - `src/services/masterclassWalkthroughAdapter.ts:330`
 - `src/services/namedMoveResolution.test.ts:26`
@@ -234,18 +238,18 @@
 - `src/services/openingFuzzyMatcher.ts:473`
 - `src/services/openingFuzzyMatcher.ts:497`
 - `src/services/openingFuzzyMatcher.ts:531`
-- `src/services/openingGenerator.ts:129`
-- `src/services/openingGenerator.ts:296`
-- `src/services/openingGenerator.ts:1753`
-- `src/services/openingGenerator.ts:2590`
-- `src/services/openingGenerator.ts:2791`
-- `src/services/openingGenerator.ts:2928`
-- `src/services/openingGenerator.ts:2940`
-- `src/services/openingGenerator.ts:2963`
-- `src/services/openingGenerator.ts:3115`
-- `src/services/openingGenerator.ts:3205`
-- `src/services/openingGenerator.ts:3729`
-- `src/services/openingGenerator.ts:4144`
+- `src/services/openingGenerator.ts:128`
+- `src/services/openingGenerator.ts:295`
+- `src/services/openingGenerator.ts:1820`
+- `src/services/openingGenerator.ts:2603`
+- `src/services/openingGenerator.ts:2804`
+- `src/services/openingGenerator.ts:2941`
+- `src/services/openingGenerator.ts:2953`
+- `src/services/openingGenerator.ts:2976`
+- `src/services/openingGenerator.ts:3128`
+- `src/services/openingGenerator.ts:3218`
+- `src/services/openingGenerator.ts:3742`
+- `src/services/openingGenerator.ts:4157`
 - `src/services/openingMatchup.ts:100`
 - `src/services/openingNameResolution.test.ts:37`
 - `src/services/openingNameResolution.test.ts:49`
@@ -272,8 +276,8 @@
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:71`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:113`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:127`
-- `src/components/Coach/CoachTeachPage.tsx:798`
-- `src/components/Coach/CoachTeachPage.tsx:803`
+- `src/components/Coach/CoachTeachPage.tsx:799`
+- `src/components/Coach/CoachTeachPage.tsx:804`
 - `src/services/openingDbGrounding.ts:222`
 - `src/services/openingSublines.ts:100`
 
@@ -301,8 +305,8 @@
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:74`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:37`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:43`
-- `src/components/Coach/CoachTeachPage.tsx:6877`
-- `src/components/Coach/CoachTeachPage.tsx:8504`
+- `src/components/Coach/CoachTeachPage.tsx:6884`
+- `src/components/Coach/CoachTeachPage.tsx:8511`
 - `src/services/coachLaneWiring.test.ts:380`
 - `src/services/inGameChatIntent.ts:164`
 - `src/services/inGameChatIntent.ts:175`
@@ -331,24 +335,24 @@
 - `src/services/mistakePuzzleService.ts:74`
 
 ### `findContinuationsAtPly` (function) — 7 call sites
-- `src/services/autoAnalyzeGame.ts:394`
+- `src/services/autoAnalyzeGame.ts:397`
 - `src/services/openingDetectionService.test.ts:331`
 - `src/services/openingDetectionService.test.ts:340`
 - `src/services/openingDetectionService.test.ts:354`
-- `src/services/openingGenerator.ts:3227`
-- `src/services/principleAttribution.section14.test.ts:105`
-- `src/services/principleAttribution.ts:1873`
+- `src/services/openingGenerator.ts:3240`
+- `src/services/principleAttribution.section14.test.ts:108`
+- `src/services/principleAttribution.ts:1921`
 
 ### `ForkBranch` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `findSiblingExtensionBranches` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:740`
+- `src/components/Coach/CoachTeachPage.tsx:741`
 - `src/services/openingDetectionService.test.ts:578`
 - `src/services/openingDetectionService.test.ts:592`
 - `src/services/openingDetectionService.test.ts:622`
-- `src/services/openingGenerator.ts:2796`
-- `src/services/openingGenerator.ts:3119`
+- `src/services/openingGenerator.ts:2809`
+- `src/services/openingGenerator.ts:3132`
 - `src/services/openingSublines.ts:104`
 
 ### `resolveTeachSpine` (function) — 8 call sites
@@ -359,7 +363,7 @@
 - `src/services/openingDetectionService.teachSpine.test.ts:91`
 - `src/services/openingDetectionService.teachSpine.test.ts:93`
 - `src/services/openingDetectionService.teachSpine.test.ts:99`
-- `src/services/openingGenerator.ts:1769`
+- `src/services/openingGenerator.ts:1836`
 
 ### `findRelatedDbEntries` (function) — 7 call sites
 - `src/services/openingDbGrounding.ts:210`
@@ -368,7 +372,7 @@
 - `src/services/openingDetectionService.test.ts:215`
 - `src/services/openingDetectionService.test.ts:220`
 - `src/services/openingDetectionService.test.ts:225`
-- `src/services/openingGenerator.ts:156`
+- `src/services/openingGenerator.ts:155`
 
 ### `LinePickerOption` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -378,21 +382,21 @@
 - `src/services/builtReplies.ts:40`
 
 ### `resolveCuratedVariation` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:6231`
-- `src/components/Coach/CoachTeachPage.tsx:6885`
+- `src/components/Coach/CoachTeachPage.tsx:6238`
+- `src/components/Coach/CoachTeachPage.tsx:6892`
 - `src/services/openingDetectionService.test.ts:544`
 - `src/services/openingDetectionService.test.ts:550`
 - `src/services/openingDetectionService.test.ts:554`
 - `src/services/openingDetectionService.test.ts:555`
 - `src/services/openingDetectionService.test.ts:565`
-- `src/services/openingGenerator.ts:1753`
-- `src/services/openingGenerator.ts:2590`
+- `src/services/openingGenerator.ts:1820`
+- `src/services/openingGenerator.ts:2603`
 
 ### `findLinePickerOptions` (function) — 18 call sites
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:115`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:129`
-- `src/components/Coach/CoachTeachPage.tsx:6520`
-- `src/components/Coach/CoachTeachPage.tsx:6749`
+- `src/components/Coach/CoachTeachPage.tsx:6527`
+- `src/components/Coach/CoachTeachPage.tsx:6756`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:30`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:43`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:47`
@@ -410,7 +414,7 @@
 
 ### `getNextOpeningBookMove` (function) — 11 call sites
 - `src/coach/tools/cerebellum/localOpeningBook.ts:100`
-- `src/services/coachGameEngine.ts:318`
+- `src/services/coachGameEngine.ts:319`
 - `src/services/openingDetectionService.test.ts:109`
 - `src/services/openingDetectionService.test.ts:115`
 - `src/services/openingDetectionService.test.ts:121`
@@ -425,16 +429,16 @@
 - `src/services/openingDetectionService.test.ts:7`
 
 ### `inferStudentSideFromName` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2929`
-- `src/components/Coach/CoachTeachPage.tsx:6164`
-- `src/components/Coach/CoachTeachPage.tsx:6255`
-- `src/components/Coach/CoachTeachPage.tsx:6256`
-- `src/components/Coach/CoachTeachPage.tsx:6498`
-- `src/components/Coach/CoachTeachPage.tsx:6573`
+- `src/components/Coach/CoachTeachPage.tsx:2936`
+- `src/components/Coach/CoachTeachPage.tsx:6171`
+- `src/components/Coach/CoachTeachPage.tsx:6262`
+- `src/components/Coach/CoachTeachPage.tsx:6263`
+- `src/components/Coach/CoachTeachPage.tsx:6505`
 - `src/components/Coach/CoachTeachPage.tsx:6580`
-- `src/components/Coach/CoachTeachPage.tsx:6605`
-- `src/components/Coach/CoachTeachPage.tsx:6914`
-- `src/components/Coach/CoachTeachPage.tsx:7693`
+- `src/components/Coach/CoachTeachPage.tsx:6587`
+- `src/components/Coach/CoachTeachPage.tsx:6612`
+- `src/components/Coach/CoachTeachPage.tsx:6921`
+- `src/components/Coach/CoachTeachPage.tsx:7700`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:91`
 - `src/data/voicedWalkthroughs.test.ts:6`
 - `src/services/allSectionDepth.measure.test.ts:74`
@@ -442,18 +446,18 @@
 - `src/services/allSectionDepth.measure.test.ts:203`
 - `src/services/gamesCourseRecord.ts:62`
 - `src/services/openingDatabaseBrief.ts:48`
-- `src/services/openingGenerator.ts:1787`
-- `src/services/openingGenerator.ts:2605`
-- `src/services/openingGenerator.ts:3124`
-- `src/services/openingGenerator.ts:3211`
-- `src/services/openingGenerator.ts:3769`
+- `src/services/openingGenerator.ts:1854`
+- `src/services/openingGenerator.ts:2618`
+- `src/services/openingGenerator.ts:3137`
+- `src/services/openingGenerator.ts:3224`
+- `src/services/openingGenerator.ts:3782`
 - `src/services/punishStageSeat.test.ts:35`
 - `src/services/punishStageSeat.test.ts:87`
 
 ### `studentSideForPlay` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:6497`
-- `src/components/Coach/CoachTeachPage.tsx:15402`
-- `src/components/Coach/CoachTeachPage.tsx:15452`
+- `src/components/Coach/CoachTeachPage.tsx:6504`
+- `src/components/Coach/CoachTeachPage.tsx:15470`
+- `src/components/Coach/CoachTeachPage.tsx:15520`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`
@@ -481,6 +485,7 @@
 - `src/services/analysisTelemetry.test.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/evalCommentAnnotations.test.ts`
+- `src/services/fantasyName.test.ts`
 - `src/services/firstRunPickers.test.ts`
 - `src/services/gameAnalysisService.deepAgrees.test.ts`
 - `src/services/gameAnalysisService.oneVerdict.test.ts`

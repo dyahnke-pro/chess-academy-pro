@@ -75,9 +75,15 @@ describe('binding — how the move answers it', () => {
     const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true)!;
     expect(binding(fenAfter(['e4', 'c5', 'a3', 'g6', 'b4']), 'Bg7', t, 'a1', true)).toBe('so this hits back on the side they\'re attacking');
   });
-  it('…b6 covers the c5 pawn', () => {
+  it('…b6 guarding the c5 pawn their b4 hits is OBVIOUS — a plain hit, plainly guarded, is not said (David 2026-11-16)', () => {
     const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true)!;
-    expect(binding(fenAfter(['e4', 'c5', 'a3', 'g6', 'b4']), 'b6', t, null, true)).toBe('and this covers it');
+    expect(t.plain).toBe(true);
+    expect(binding(fenAfter(['e4', 'c5', 'a3', 'g6', 'b4']), 'b6', t, null, true)).toBeNull();
+  });
+  it("David's Caro: their …d5 hits his e-pawn and f3 guards it — obvious, not said", () => {
+    const t = theirTarget({ fenBefore: fenAfter(['e4', 'c6', 'd4']), san: 'd5' }, true)!;
+    expect(t.plain).toBe(true);
+    expect(binding(fenAfter(['e4', 'c6', 'd4', 'd5']), 'f3', t, null, true)).toBeNull();
   });
   it('nothing when the move takes the attacker (the capture says it)', () => {
     const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true)!;
@@ -157,8 +163,9 @@ describe('a move that takes one of the attackers answers in its own words (prod 
   it('…Qxd3 is not said to cover it', () => {
     expect(target && bindingFact(BEFORE_QXD3, 'Qxd3', target, null, true)).toBeNull();
   });
-  it('twin: a quiet guard still covers it (…Nf6)', () => {
-    expect(target && bindingFact(BEFORE_QXD3, 'Nf6', target, null, true)?.idea).toBe('guard');
+  it('twin: a quiet guard of a PLAIN hit is obvious and not said (…Nf6)', () => {
+    expect(target?.plain).toBe(true);
+    expect(target && bindingFact(BEFORE_QXD3, 'Nf6', target, null, true)).toBeNull();
   });
 });
 

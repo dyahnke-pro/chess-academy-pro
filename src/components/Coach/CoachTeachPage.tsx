@@ -131,7 +131,7 @@ import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalk
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
 import { isTheoryLine } from '../../services/bookDeparture';
 import { PLAY_OPENING_RE, readsAsQuestion, resolvePlayName } from '../../coach/ask/playName';
-import { openingAnnouncementForGame, theirOpeningVerdict, openingNameForBoard, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook, learnNameMaySpeak, openingIdeaCanCome } from '../../services/openingAnnouncement';
+import { openingAnnouncementForGame, theirOpeningVerdict, openingNameForBoard, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook, learnNameMaySpeak } from '../../services/openingAnnouncement';
 import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
@@ -9606,15 +9606,12 @@ export function CoachTeachPage({ mode }: {
       const queuedName = openingAt(told, 'queued');
       const spokenName = openingAt(told, 'named');
       const queuedLabel = queuedName ? spokenOpeningLabel(queuedName) : null;
-      // Not the opening the student asked to play, and the first name only
-      // with its idea (`learnNameMaySpeak`, lead 2026-10-20).
+      // Not the opening the student asked to play (`learnNameMaySpeak`);
+      // otherwise the move it is known.
       const mayName = !!det && learnNameMaySpeak({
         name: det.name,
         asked: useCoachMemoryStore.getState().intendedOpening?.name ?? null,
         transposed,
-        identityReady: storyReads.some((r) => r.storyBeat === 'identity'),
-        ideaCanCome: openingIdeaCanCome(det.name, playerColor === 'white' ? 'w' : 'b', args.fenAfterReply, history.length),
-        spokenOpening: spokenName,
       });
       const announce = det && mayName && det.name !== queuedName && spokenOpeningLabel(det.name) !== queuedLabel
         ? openingAnnouncementForGame(det, history, spokenName, playerColor === 'white' ? 'w' : 'b', transposed)

@@ -335,7 +335,7 @@ const SLIPS_ON_LINE_SURFACES: Record<CoachSurface, SurfaceAnswer> = {
 function knownSlipFact(r: ReturnType<typeof knownSlip>, fen: string, fact: MakeFact): CoachFact | null {
   if (!r) return null;
   return fact({ key: r.key, claims: [r.key], text: r.text, proof: r.proof, squares: r.squares, stakes: r.stakes, seat: r.seat,
-    namesStudentMove: r.namesStudentMove, thread: LOCAL_THREAD, fen, role: 'teach', ...(r.proof.line ? { lines: [r.proof.line] } : {}) });
+    namesStudentMove: r.namesStudentMove, thread: LOCAL_THREAD, fen, role: 'teach', ...(r.proof.line ? { lines: [r.proof.line] } : {}), ...(r.heldForm ? { heldForm: r.heldForm } : {}) });
 }
 
 export const BOARD_COMPUTERS = {

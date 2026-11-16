@@ -468,6 +468,15 @@ for the same game and ply are one miss), with at least 8 posed.
 This replaces "green once proven, whatever comes after": on his record, 715
 threats held against 259 missed is ~73%, so the coach calls them out.
 
+🔒 **A PLAIN THREAT IS QUIET AT EVERY STATE (David 2026-11-16, his Caro after
+1.e4 c6 2.d4 d5: "It's still stating the obvious. That the pawn sticks my
+pawn").** One attacker on one piece, that piece either hanging or worth more
+than the attacker (`threatVisibility` → `plain`, rule `plain-hit`), is the
+picture every player sees; red and grey included, it gets no voice
+(`THREAT_VOICE[*].plain = 'quiet'`), and the three facts do not name it as
+"they aim at … your move covers it" (`TheirTarget.plain`). A fork, a hit on a
+king, a hidden or pinned piece still speak by the record.
+
 🚨 **GREY MEANS TEACH IT — AN UNRATED PLAYER GETS THE FULL CAPABILITIES OF THE
 DETECTORS (David 2026-09-18, correcting a session that had grey as "lower
 urgency than red"): "An unrated player gets treated with the full capabilities

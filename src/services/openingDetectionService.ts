@@ -678,6 +678,17 @@ const NAME_ALIASES: Record<string, string> = {
   'budapest gambit': 'Indian Defense: Budapest Defense, Alekhine Variation',
   'budapest': 'Indian Defense: Budapest Defense, Alekhine Variation',
   'budapest defense': 'Indian Defense: Budapest Defense, Alekhine Variation',
+  // The Caro-Kann's 3.f3 is the "Fantasy" to players; the DB names it after
+  // Maróczy (David 2026-11-16). Said as "Fantasy Variation" too
+  // (openingAnnouncement.COMMON_PART).
+  'fantasy': 'Caro-Kann Defense: Maróczy Variation',
+  'fantasy variation': 'Caro-Kann Defense: Maróczy Variation',
+  'the fantasy': 'Caro-Kann Defense: Maróczy Variation',
+  'fantasy caro': 'Caro-Kann Defense: Maróczy Variation',
+  'fantasy caro kann': 'Caro-Kann Defense: Maróczy Variation',
+  'caro kann fantasy': 'Caro-Kann Defense: Maróczy Variation',
+  'caro kann fantasy variation': 'Caro-Kann Defense: Maróczy Variation',
+  'caro fantasy': 'Caro-Kann Defense: Maróczy Variation',
   // Unaliased, "closed sicilian" fuzzy-matched an ENGLISH reversed line.
   'closed sicilian': 'Sicilian Defense: Closed',
   'the closed sicilian': 'Sicilian Defense: Closed',
@@ -913,7 +924,9 @@ function stripNameFiller(q: string): string {
  *  2026-09-27). One lookup, both spellings. */
 function aliasFor(name: string): string | undefined {
   const k = name.trim().toLowerCase();
-  return NAME_ALIASES[k] ?? NAME_ALIASES[k.replace(/[‘’'`]/g, '')];
+  const bare = k.replace(/[‘’'`]/g, '');
+  // …and hyphen-tolerant: "Caro-Kann Fantasy" is "caro kann fantasy".
+  return NAME_ALIASES[k] ?? NAME_ALIASES[bare] ?? NAME_ALIASES[bare.replace(/-/g, ' ')];
 }
 
 export function resolveOpeningEntry(

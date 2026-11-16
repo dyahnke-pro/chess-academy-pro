@@ -28,11 +28,11 @@ import { unmarked } from '../utils/sanMark';
 import { clubGemBoards, clubGemForIndex, type ClubGem } from './clubGems';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
 import { getAllPunishGems, isKnownSlipGem, isWeaponGem, MATE_CP } from '../data/lessons/punishGems';
-import { legalLineProof, type Proof } from './proof';
+import { legalLineProof, NO_PROOF, type Proof } from './proof';
 import { lineSeatAt } from '../utils/andList';
 import { rotateStem } from '../utils/rotateStem';
 import { mateStakes, type FactStakes } from './factStakes';
-import type { FactSeat } from './coachFact';
+import type { FactSeat, HeldForm } from './coachFact';
 
 export type { ClubGem };
 
@@ -169,6 +169,9 @@ export interface KnownSlipRead {
   /** It names a move the student could still play on the board they move on
    *  next — only a slip of theirs still ahead. */
   namesStudentMove: boolean;
+  /** The same verdict without the student's move (`CoachFact.heldForm`):
+   *  their slip just played, and the punishment is the student's to find. */
+  heldForm?: HeldForm;
 }
 
 /** What the punishment ends in, from the student's seat: "they force mate",
@@ -269,6 +272,19 @@ export function knownSlip(ctx: KnownSlipContext): KnownSlipRead | null {
   // after Nxe5 you win a pawn" on 5.d3). The same move, punished the same way,
   // is one claim on every board it stays available on; a slip punished another
   // way is another claim.
+  // THEIR SLIP, JUST PLAYED: THE PUNISHMENT IS THE STUDENT'S NEXT MOVE
+  // (David 2026-11-16, his Caro 4…Nf6: "It stated that this move was a mistake,
+  // which is good. But then it told me what to play. That's giving the
+  // answer."). The line names it, so it says so; Learn speaks the verdict
+  // alone, and the move stays the student's to find.
+  const punishIsTheirsToFind = on === 'played' && slipBy === 'opponent' && !verdictSaidIt;
+  const heldForm: HeldForm | undefined = punishIsTheirsToFind
+    ? { text: rotateStem([
+        `That was a known ${name} at club level.`,
+        `${slipSaid} is a known ${name} on this board.`,
+        `Club players go wrong with ${slipSaid} here — a known ${name}.`,
+      ], ctx.told), proof: NO_PROOF.stated, squares: squares.slice(0, 2) }
+    : undefined;
   return {
     key: `known-slip:${mover}:${unmarked(slipSan)}>${unmarked(punishSan)}`,
     text,
@@ -276,6 +292,7 @@ export function knownSlip(ctx: KnownSlipContext): KnownSlipRead | null {
     squares: [...new Set(squares)],
     stakes,
     seat: slipBy,
-    namesStudentMove: on === 'reached' && slipBy === 'student',
+    namesStudentMove: (on === 'reached' && slipBy === 'student') || punishIsTheirsToFind,
+    ...(heldForm ? { heldForm } : {}),
   };
 }
