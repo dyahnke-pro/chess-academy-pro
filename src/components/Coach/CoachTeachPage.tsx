@@ -42,7 +42,7 @@ import { chanceHoldOf, lineSans, type ReadLine } from '../../coach/focus/focusCh
 import { studentCp } from '../../coach/focus/castlingWatch';
 import { playOutPrompt } from '../../coach/focus/focusLines';
 import { FOCUS_DIALS } from '../../coach/focus/focusCard';
-import { FocusBanner } from './FocusBanner';
+import { FocusBanner, FocusChip } from './FocusBanner';
 import { MISSIONS, PHASE_ORDER, missionForPhase, progressOf } from '../../missions/registry';
 import { MissionCardSheet } from '../Campaign/MissionCardSheet';
 import { BriefingFlow } from '../Campaign/BriefingFlow';
@@ -15077,6 +15077,7 @@ export function CoachTeachPage({ mode }: {
             capturedPieces={isTeachPlayerWhite ? teachCaptured.white : teachCaptured.black}
             materialAdvantage={isTeachPlayerWhite ? Math.max(0, teachMaterialAdv) : Math.max(0, -teachMaterialAdv)}
             isActive={!busy}
+            actions={!walkthrough.isActive ? <FocusChip view={focus.view} /> : undefined}
           />
         </div>
 
@@ -15205,7 +15206,7 @@ export function CoachTeachPage({ mode }: {
           // the Openings Play rung; Learn's own controls sit in the one small
           // extras row. Why reads the proof behind the last thing SPOKEN; Play
           // line walks it only when pressed — Why draws the arrows, never moves.
-          <div className="flex flex-col gap-1 px-3 py-1.5" data-testid="teach-nav-row">
+          <div className="flex flex-col gap-1 px-3 py-1" data-testid="teach-nav-row">
           <CoachBoardBar
             keepRef={boardFit.keepRef}
             onBack={canStepBack ? goToPrevMove : null}

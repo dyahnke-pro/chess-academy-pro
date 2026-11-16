@@ -250,16 +250,21 @@ export function AppLayout(): JSX.Element {
 
       {bgAnalysisRunning && (
         <div
-          className="flex items-center gap-2 px-4 py-1.5 text-xs font-medium"
+          className="hidden md:flex items-center gap-2 px-4 py-1 text-xs font-medium whitespace-nowrap"
           style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
           data-testid="bg-analysis-banner"
         >
-          <span className="animate-spin inline-block w-3 h-3 border-2 border-current border-t-transparent rounded-full" />
-          <span>Analyzing games{bgAnalysisProgress ? ` — ${bgAnalysisProgress}` : '...'}</span>
+          <span className="animate-spin inline-block w-3 h-3 shrink-0 border-2 border-current border-t-transparent rounded-full" />
+          {/* ONE LINE, AND ON A PHONE NO ROW AT ALL (David's phone, 2026-11-16:
+              "The board is the wrong size … It needs to fill the screen"). The
+              game's name wrapped to two lines and took the board's height on
+              every screen; on a phone the progress rides in the header's own
+              row (`bg-analysis-chip`) and this row is desktop only. */}
+          <span className="min-w-0 truncate">Analyzing games{bgAnalysisProgress ? ` — ${bgAnalysisProgress}` : '...'}</span>
           <button
             type="button"
             onClick={() => cancelBackgroundAnalysis()}
-            className="ml-auto px-2 py-0.5 rounded font-semibold border border-current/40 hover:opacity-80 active:opacity-60"
+            className="ml-auto shrink-0 px-2 py-0.5 rounded font-semibold border border-current/40 hover:opacity-80 active:opacity-60"
             style={{ background: 'color-mix(in srgb, var(--color-bg) 18%, transparent)' }}
             data-testid="bg-analysis-stop"
             aria-label="Stop analyzing games"
@@ -271,14 +276,27 @@ export function AppLayout(): JSX.Element {
 
       {/* Mobile header */}
       <header
-        className="md:hidden flex items-center justify-between px-4 py-3 border-b"
+        className="md:hidden flex items-center justify-between gap-2 px-4 py-2 border-b"
         style={{ background: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 min-w-0">
           <span className="text-xl">♛</span>
-          <span className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>
+          <span className="font-bold text-sm whitespace-nowrap" style={{ color: 'var(--color-text)' }}>
             Chess Academy
           </span>
+          {bgAnalysisRunning && (
+            <button
+              type="button"
+              onClick={() => cancelBackgroundAnalysis()}
+              className="flex items-center gap-1 min-w-0 rounded-full px-2 py-0.5 text-[11px] font-semibold"
+              style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+              data-testid="bg-analysis-chip"
+              aria-label="Analyzing games — tap to stop"
+            >
+              <span className="animate-spin inline-block w-2.5 h-2.5 shrink-0 border-2 border-current border-t-transparent rounded-full" />
+              <span className="truncate">{bgAnalysisProgress ? bgAnalysisProgress.split(' — ')[0] : '…'}</span>
+            </button>
+          )}
         </div>
         <div className="flex items-center gap-2">
           <QuickFeedbackButton />

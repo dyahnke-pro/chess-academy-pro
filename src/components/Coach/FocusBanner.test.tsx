@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { FocusBanner } from './FocusBanner';
+import { FocusBanner, FocusChip } from './FocusBanner';
 import type { FocusView } from '../../coach/focus/useFocusRunner';
 
 const hands = () => ({ onTryAgain: vi.fn(), onPlayOn: vi.fn(), onShowMe: vi.fn() });
@@ -12,10 +12,11 @@ describe('FocusBanner', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('names the focus and the student\'s rung, and offers no rewind while the game plays', () => {
-    render(<FocusBanner view={view({ rung: 2 })} {...hands()} />);
-    expect(screen.getByTestId('focus-banner').textContent).toContain('Tactics');
-    expect(screen.getByTestId('focus-rung').textContent).toBe('Strong intermediate');
+  it('the chip names the focus and the student\'s rung; the banner takes no row while the game plays', () => {
+    render(<><FocusChip view={view({ rung: 2 })} /><FocusBanner view={view({ rung: 2 })} {...hands()} /></>);
+    expect(screen.getByTestId('focus-chip').textContent).toContain('Tactics');
+    expect(screen.getByTestId('focus-rung').textContent).toBe('· Strong intermediate');
+    expect(screen.getByTestId('focus-banner').textContent).toBe('');
     expect(screen.queryByTestId('focus-rewind')).toBeNull();
   });
 
