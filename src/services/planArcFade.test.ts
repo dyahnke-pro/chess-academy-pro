@@ -53,10 +53,14 @@ describe('the plan line reads the one fade', () => {
     expect(r.state).toBe('red');
     expect(r.said).toMatch(/^How do you find a plan\?/);
   });
-  it('the same record with the plan skill proven green: the plan alone', () => {
+  it('the same record with the plan skill proven green: silent (David 2026-11-16: "Green silent")', () => {
     const r = spoken(provenRecord(), DAVID.slips);
     expect(r.state).toBe('green');
-    expect(r.said).toBe('The plan: put a rook on the open e-file. Attack their king on f8 before it gets out.');
+    expect(r.said).toBe('');
+  });
+  it('amber (75–89%): the plan alone, one short line', () => {
+    const d = decideTurn([{ lane: 'planArc', text: planLine.text, fen: BOARD, squares: planLine.squares, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE }], '', undefined, null, new Map([['no-plan', 'short' as const]]));
+    expect(d.pkg.spoken).toBe('The plan: put a rook on the open e-file. Attack their king on f8 before it gets out.');
   });
   it('a fresh device (grey): the whole method, taught in full', () => {
     const r = spoken([], []);
