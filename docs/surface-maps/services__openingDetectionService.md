@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3855) — names `OpeningEntry`, `detectOpening`, `findContinuationsAtPly`, `findOpeningByPgnPrefix`, `findSiblingExtensionBranches`, `isTeachable`, `openingDetectionService`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5542) — names `isTeachable`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3860) — names `OpeningEntry`, `detectOpening`, `findContinuationsAtPly`, `findOpeningByPgnPrefix`, `findSiblingExtensionBranches`, `isTeachable`, `openingDetectionService`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5547) — names `isTeachable`
 
 ## Who calls in
 
@@ -106,8 +106,8 @@
 - `src/services/builtReplies.ts:63`
 - `src/services/clubReplies.ts:182`
 - `src/services/clubReplies.ts:208`
-- `src/services/coachFeatureService.ts:3722`
-- `src/services/coachFeatureService.ts:4103`
+- `src/services/coachFeatureService.ts:3730`
+- `src/services/coachFeatureService.ts:4111`
 - `src/services/computedVoiceAudit.report.test.ts:293`
 - `src/services/gamesCourse.ts:167`
 - `src/services/gamesCourse.ts:307`

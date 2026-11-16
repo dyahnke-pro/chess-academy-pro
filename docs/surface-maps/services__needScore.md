@@ -8,10 +8,10 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4551) — names `COLD_START_GAMES`, `familiarity`, `needScore`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4632) — names `computeNeed`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4788) — names `familiarity`
-- **The standard post-deploy ritual** (CLAUDE.md:7004) — names `needScore`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4556) — names `COLD_START_GAMES`, `familiarity`, `needScore`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4637) — names `computeNeed`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4793) — names `familiarity`
+- **The standard post-deploy ritual** (CLAUDE.md:7009) — names `needScore`
 
 ## Who calls in
 
@@ -88,7 +88,7 @@
 - `src/services/coachFeatureService.reviewNoise.test.ts:45`
 - `src/services/coachFeatureService.trade.test.ts:19`
 - `src/services/coachFeatureService.ts:1727`
-- `src/services/coachFeatureService.ts:6341`
+- `src/services/coachFeatureService.ts:6349`
 - `src/services/fundamentalReachesDecider.test.ts:54`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`

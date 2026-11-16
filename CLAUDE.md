@@ -461,8 +461,13 @@ rate over the LAST 20 times the board posed the skill (held vs missed, each miss
 counted once — a `capabilityEvidence` broken row and a `misconceptionTags` slip
 for the same game and ply are one miss), with at least 8 posed.
 - **≥ 90% → GREEN:** quiet. A simple threat gets NO voice and NO arrow (an
-  arrow is a hint, and a hinted find is not proof).
-- **75–89% → one short line.**
+  arrow is a hint, and a hinted find is not proof). Every teaching line on a
+  green skill is SILENT, on every surface (`fadeText` level `silent`, David
+  2026-11-16: "Yes. Green silent"); its miss is still explained — the decider
+  says the point on a moment that is the board's (`SPEAKS_ON_IMPORTANCE`),
+  Learn never fades a line about a slip just made, and a warning before the
+  move keeps the threat voice's one short line.
+- **75–89% → one short line** (`fadeText` level `short`: the point alone).
 - **< 75% → RED:** full callout.
 - **< 8 posed → GREY:** taught in full.
 This replaces "green once proven, whatever comes after": on his record, 715

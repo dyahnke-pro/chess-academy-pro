@@ -1,33 +1,28 @@
-// THE FADE — one rule for every surface (David 2026-10-17: "Agreed" — shorten
-// per skill, never silence a whole proven layer). A LEAF: the record's
-// capability entry decides the level, the level decides how much of a teaching
-// line is said. Learn's door, the shared decider (Review, the live composer)
-// and the loader all read this one module, so a skill sounds the same
-// everywhere.
-//   full    — grey or red: the whole lesson;
-//   lighter — answered right since the last miss, not yet proven: the point
-//             and its reason;
-//   short   — proven: the point alone.
-// A slip resets the streak, so the record itself returns a skill to full.
-//
-// READ FROM THE HOLD RATE (David 2026-10-19, "Agreed"): the heat tile's state
-// is the hold rate over the last 20 times the board posed the skill, both
-// halves of the record counted once. The fade maps it 1:1 —
-//   green (≥ 90%)  → short;  short (75–89%) → lighter;  red / grey → full.
-// So an open pile of misses (David's 1,428 hung-material slips) keeps a skill
-// in full through its rate, not through a second rule beside it.
+// THE FADE — one rule for every surface, read from the student's record per
+// skill. A LEAF: the record's heat tile decides the level, the level decides
+// how much of a teaching line is said. Learn's door, the shared decider
+// (Review, the live composer) and the loader all read this one module, so a
+// skill sounds the same everywhere. The heat map's own three states:
+//   red / grey (< 75%, or < 8 posed) → the whole lesson;
+//   short (75–89% of the last 20)    → one short line, the point alone;
+//   green (≥ 90%)                    → SILENT (David 2026-11-16: "Yes. Green
+//                                      silent").
+// A green skill's MISS is still explained: the decider says a silent fact's
+// point on a moment that is the board's (a blunder, an only move, a live
+// hang — `SPEAKS_ON_IMPORTANCE`), and Learn never fades a line about a slip
+// just made (`fadeWhenGreen`). The miss counts against the green.
 import type { HeatTile } from './heatMap';
 import { splitThink, stripThink, THINK_MARK } from '../utils/thinkPause';
 import { openSentence } from '../utils/openSentence';
 
-export type FadeLevel = 'lighter' | 'short';
-/** Per skill; a plain set reads as `short` for every member (proven tags). */
+export type FadeLevel = 'short' | 'silent';
+/** Per skill; a plain set reads as `silent` for every member (proven tags). */
 export type FadeLevels = ReadonlySet<string> | ReadonlyMap<string, FadeLevel>;
 
 export function fadeLevelFor(tile: HeatTile | undefined): FadeLevel | null {
   if (!tile) return null;
-  if (tile.state === 'green') return 'short';
-  return tile.state === 'short' ? 'lighter' : null;
+  if (tile.state === 'green') return 'silent';
+  return tile.state === 'short' ? 'short' : null;
 }
 
 /** Per skill, from the record's heat tiles (`StudentRecord.heat`, the
@@ -42,23 +37,23 @@ export function fadeLevelsFrom(heat: ReadonlyMap<string, HeatTile> | null | unde
 export function fadeLevelOf(levels: FadeLevels | null | undefined, tag: string | null | undefined): FadeLevel | null {
   if (!levels || !tag || levels.size === 0) return null;
   if (levels instanceof Map) return (levels as ReadonlyMap<string, FadeLevel>).get(tag) ?? null;
-  return (levels as ReadonlySet<string>).has(tag) ? 'short' : null;
+  return (levels as ReadonlySet<string>).has(tag) ? 'silent' : null;
 }
 
 const SENTENCE = /(?<=[.!?])\s+(?=[A-Z"“…])/;
 
-/** The line at a level: short keeps the first sentence, lighter the first two.
- *  A QUESTION ("question ‖ answer") is never cut into a question with no
- *  answer: a skill they have PROVEN is not asked at all — the point is said
- *  instead — and a lighter one keeps the question whole. The point is the
+/** The line at a level: silent says nothing; short keeps the point — the
+ *  first sentence. A QUESTION ("question ‖ answer") is never cut into a
+ *  question with no answer: at short it is not asked at all, the point is
+ *  said instead. The point is the
  *  CONCLUSION the line draws after its answer when it draws one ("…‖ So the
  *  plan: …", every step of it, up to its "Why …?"), else the answer's first
  *  sentence. */
 export function fadeText(text: string, level: FadeLevel | null): string {
   if (!level) return text;
+  if (level === 'silent') return '';
   const qa = splitThink(text);
   if (qa) {
-    if (level !== 'short') return text;
     const marks = text.split(THINK_MARK);
     const conclusion = marks.length % 2 === 1 ? stripThink(marks[marks.length - 1]) : '';
     if (conclusion) {
@@ -72,8 +67,7 @@ export function fadeText(text: string, level: FadeLevel | null): string {
     return fadeText(stripThink(qa[1]), 'short');
   }
   const sentences = text.split(SENTENCE);
-  const keep = level === 'short' ? 1 : 2;
-  return sentences.length > keep ? sentences.slice(0, keep).join(' ') : text;
+  return sentences.length > 1 ? sentences[0] : text;
 }
 
 function cap(s: string): string {

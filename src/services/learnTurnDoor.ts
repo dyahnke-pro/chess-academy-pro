@@ -840,9 +840,14 @@ export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels |
   // move (David 2026-10-18: threat-spotting green, the threat warning still
   // spoke in full — a pre-move warning records no answer, so the green proven
   // elsewhere never reached it). A line about a slip just made never fades.
-  const fades = !!role?.tag && (role.held.state === 'wired' || saidBeforeTheMove(role));
+  const before = !!role && saidBeforeTheMove(role);
+  const fades = !!role?.tag && (role.held.state === 'wired' || before);
   const tag = skill ?? (fades ? role.tag : null);
-  return fadeText(text, fadeLevelOf(green, tag));
+  const level = fadeLevelOf(green, tag);
+  // A WARNING BEFORE THE MOVE is never silenced by the fade: the threat voice
+  // already decided which threats a green student hears (`THREAT_VOICE`: a
+  // hidden one keeps one short line), so the fade cuts it to that line at most.
+  return fadeText(text, before && level === 'silent' ? 'short' : level);
 }
 
 /** Lanes that always ride for a beginner: the principle, said every time. */
@@ -949,6 +954,8 @@ export function decideTurn(
     if (pointsAtChance(f)) { if (!chanceHeld.includes(f.lane)) chanceHeld.push(f.lane); for (const c of f.claims) heldThisTurn?.add(c); continue; }
     const text = fadeWhenGreen(f.lane, f.text, green ?? null, f.skill);
     if (text !== f.text && !faded.includes(f.lane)) faded.push(f.lane);
+    // Green is silent: the fade said nothing.
+    if (!text.trim()) continue;
     // ONE REASON PER MOVE, ACROSS EVERY WAVE AND BOTH SEATS (Learn tapes
     // 2026-10-19 and 2026-10-29: "That's what strong players play here — it
     // saves it…" then "Your queen to a5 saves it…"; "Their d4 frees their

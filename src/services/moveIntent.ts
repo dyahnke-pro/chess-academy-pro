@@ -75,6 +75,9 @@ export interface StoredMoveRead {
   /** The score after the played move. */
   evaluation: number | null;
   pv?: { afterPlayed: readonly string[]; afterBest: readonly string[] };
+  /** The candidates' reads (`StoredWeighReads`): one line per move a player
+   *  weighs here, the candidate first, White's view. */
+  weighed?: { depth?: number; reads: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null; earlier?: readonly string[] }> };
 }
 
 /** THE STORED FAN BEFORE A RECORDED MOVE (WO-STORY-MATRIX-01 P1-9): the best
@@ -93,14 +96,33 @@ export function storedFanBefore(rec: StoredMoveRead, playedUci: string | null): 
   return out;
 }
 
+/** THE STORED FAN WITH THE CANDIDATES (2026-11-16, David: "wire in the
+ *  missing review builds"): the two lines one search kept, then every move a
+ *  player weighs on this board that the record read (`weighed`), ranked by
+ *  the mover's score — the MultiPV the in-between move (`inBetweenMove`) and
+ *  the fighting line (`structureLines`) compare. Review reads it; the record's
+ *  posed reason keeps the two-line fan its population table was fitted on. */
+export function storedFanWithCandidates(rec: StoredMoveRead, playedUci: string | null, fenBefore: string): AnalysisLine[] {
+  const fan = storedFanBefore(rec, playedUci);
+  const reads = rec.weighed?.reads ?? [];
+  if (fan.length === 0 || reads.length === 0) return fan;
+  const mover = fenBefore.split(' ')[1] === 'b' ? -1 : 1;
+  const seen = new Set(fan.map((l) => l.moves[0]));
+  const extra = reads
+    .filter((r) => r.moves.length > 0 && !seen.has(r.moves[0]))
+    .map((r): AnalysisLine => ({ rank: 0, evaluation: r.evaluation, mate: r.mate, moves: [...r.moves], ...(r.earlier ? { earlier: { depth: Math.max(0, (rec.weighed?.depth ?? 2) - 2), moves: [...r.earlier] } } : {}) }))
+    .sort((a, b) => mover * (b.evaluation - a.evaluation));
+  return [...fan, ...extra].map((l, k) => ({ ...l, rank: k + 1 }));
+}
+
 /** A recorded move's reads as the four a move's computers take: the stored fan
- *  before it, and the played line as the board-after read. No pass reads are
- *  stored, so those are empty — never invented. Null when the record kept no
- *  line at all. */
+ *  before it (with the candidates' reads), and the played line as the
+ *  board-after read. No pass reads are stored, so those are empty — never
+ *  invented. Null when the record kept no line at all. */
 export function storedIntentReads(fenBefore: string, san: string, rec: StoredMoveRead): IntentReads | null {
   let playedUci: string | null = null;
   try { const m = new Chess(fenBefore).move(san); playedUci = `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; }
-  const before = storedFanBefore(rec, playedUci);
+  const before = storedFanWithCandidates(rec, playedUci, fenBefore);
   const after: AnalysisLine[] = rec.evaluation != null && rec.pv?.afterPlayed.length
     ? [{ rank: 1, evaluation: rec.evaluation, mate: storedMate(rec.evaluation), moves: [...rec.pv.afterPlayed] }]
     : [];

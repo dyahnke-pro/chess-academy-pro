@@ -60,7 +60,7 @@ const PLAN = '[plan-now] Your plan is to push the queenside majority.';
 const LOOSE = '[loose] Your knight on c6 is loose.';
 const PRINCIPLE = '[principle] You developed a knight before the bishop.';
 const bundle = { board: CALM_BOARD, facts: [doorFact(PLAN), doorFact(PRINCIPLE), doorFact(LOOSE)] };
-const student = (layers = ALL_GREY) => ({ rating: 400, weaknesses: [], need: null, moveAdvice: null, momentBoost: NO_BOOST, layers, fade: new Map() as ReadonlyMap<string, 'lighter' | 'short'> });
+const student = (layers = ALL_GREY) => ({ rating: 400, weaknesses: [], need: null, moveAdvice: null, momentBoost: NO_BOOST, layers, fade: new Map() as ReadonlyMap<string, 'short' | 'silent'> });
 
 describe('the door teaches by layer', () => {
   it('grey: the plan comes after safety and principle (the fundamental still leads — locked 2026-09-05)', () => {
@@ -85,14 +85,14 @@ describe('the door teaches by layer', () => {
     expect(red.spoken.indexOf(PLAN)).toBeLessThan(red.spoken.indexOf(TECHNIQUE));
   });
 
-  // SHORTEN, NEVER SILENCE A REASON (David 2026-10-17: "Agreed"). A teaching
-  // fact in a proven layer speaks its short form; a DESCRIPTION still goes quiet.
+  // GREEN IS SILENT (David 2026-11-16): a teaching fact in a proven layer says
+  // nothing on a quiet moment; a DESCRIPTION goes quiet too.
   const PRAISE = '[praise] That knight move looks natural.';
-  it('a GREEN layer shortens its teaching facts and quiets its descriptions', () => {
+  it('a GREEN layer silences its teaching facts and its descriptions', () => {
     const layers = { safety: 'green', principle: 'green', plan: 'grey' } as const;
     const d = decide(quiet, student(layers), { ...bundle, facts: [...bundle.facts, doorFact(PRAISE)] }, 'walk');
-    expect(d.spoken).toContain(PRINCIPLE);
-    expect(d.faded.get(PRINCIPLE)).toBe('short');
+    expect(d.spoken).not.toContain(PRINCIPLE);
+    expect(d.quiet.find((q) => q.text === PRINCIPLE)?.why).toBe('proven');
     expect(d.spoken).not.toContain(PRAISE);
     expect(d.quiet.find((q) => q.text === PRAISE)?.why).toBe('proven');
     // Negative control: nothing fades when the layer is not proven.
@@ -100,9 +100,9 @@ describe('the door teaches by layer', () => {
   });
 
   it('a skill shown at the record fades per skill, before its layer is green', () => {
-    const fadeStudent = { ...student(), fade: new Map([['neglected-development', 'lighter' as const]]) };
+    const fadeStudent = { ...student(), fade: new Map([['neglected-development', 'short' as const]]) };
     const d = decide(quiet, fadeStudent, { ...bundle, facts: [doorFact(PLAN), doorFact(PRINCIPLE, { skill: 'neglected-development' }), doorFact(LOOSE)] }, 'walk');
-    expect(d.faded.get(PRINCIPLE)).toBe('lighter');
+    expect(d.faded.get(PRINCIPLE)).toBe('short');
     expect(d.faded.has(PLAN)).toBe(false);
   });
 

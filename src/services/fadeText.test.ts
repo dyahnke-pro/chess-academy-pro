@@ -5,8 +5,8 @@ describe('a question fades whole, never to a dangling question', () => {
   it('a proven skill is not asked — the point of the answer is said', () => {
     expect(fadeText(q, 'short')).toBe('Their weakness: the pawn on d6.');
   });
-  it('a lighter skill keeps the question with its answer', () => {
-    expect(fadeText(q, 'lighter')).toBe(q);
+  it('a green skill says nothing (David 2026-11-16: "Green silent")', () => {
+    expect(fadeText(q, 'silent')).toBe('');
   });
 });
 
@@ -16,7 +16,7 @@ describe('the plan method fades for a student who has proven planning (planArc, 
     const { fadeWhenGreen } = await import('./learnTurnDoor');
     const method = `${askThenAnswer('How do you find a plan? First the forcing scan — checks, captures, threats. Then three things: where is their weakness, which of your pieces is worst, where is your pawn break?', 'Checks, captures, threats: nothing forcing. Your worst piece: the bishop on c1.', () => null)} So the plan: bring the bishop on c1 to e3; then break open with the push to f4. Why in that order? A break opens the position.`;
     expect(fadeWhenGreen('planArc', method, new Map([['no-plan', 'short' as const]]))).toBe('The plan: bring the bishop on c1 to e3; then break open with the push to f4.');
-    expect(fadeWhenGreen('planArc', method, new Map([['no-plan', 'lighter' as const]]))).toBe(method);
+    expect(fadeWhenGreen('planArc', method, new Map([['no-plan', 'silent' as const]]))).toBe('');
     expect(fadeWhenGreen('planArc', method, null)).toBe(method);
-  });
+  }, 30_000); // imports the whole Learn door (~5 s cold)
 });

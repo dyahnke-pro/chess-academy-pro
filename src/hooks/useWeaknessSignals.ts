@@ -8,6 +8,7 @@ import { useEffect, useRef } from 'react';
 import { loadFadeLevels, loadWeaknessSignals } from '../services/weaknessSignalLoader';
 import { onWeaknessModelSettled } from '../services/weaknessModelEvents';
 import type { WeaknessSignal } from '../services/weaknessSignal';
+import type { FadeLevel } from '../services/fadeText';
 
 /**
  * Returns a ref whose `.current` is the student's weakness signals ([] until
@@ -32,8 +33,8 @@ export function useWeaknessSignals(): React.RefObject<readonly WeaknessSignal[]>
 /** The per-skill fade levels (`loadFadeLevels`), refreshed when the record
  *  changes — what the Learn door reads to shorten a lesson the student has
  *  shown they know. */
-export function useFadeLevels(): React.RefObject<ReadonlyMap<string, 'lighter' | 'short'>> {
-  const ref = useRef<ReadonlyMap<string, 'lighter' | 'short'>>(new Map());
+export function useFadeLevels(): React.RefObject<ReadonlyMap<string, FadeLevel>> {
+  const ref = useRef<ReadonlyMap<string, FadeLevel>>(new Map());
   useEffect(() => {
     let alive = true;
     const load = (): void => { void loadFadeLevels().then((t) => { if (alive) ref.current = t; }); };

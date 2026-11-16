@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:3238) — names `buildReviewMoveBriefing`
-- **The standard post-deploy ritual** (CLAUDE.md:6961) — names `Aspect`
+- **⏰ Standing notes** (CLAUDE.md:3243) — names `buildReviewMoveBriefing`
+- **The standard post-deploy ritual** (CLAUDE.md:6966) — names `Aspect`
 
 ## Who calls in
 

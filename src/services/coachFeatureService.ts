@@ -2696,7 +2696,15 @@ function* reviewSegmentSteps(
           // and its cost from one search.
           reads: storedIntentReads(fenPair.fenBefore, m.san, m),
           costCp: recordedMoveCost(m, moverColor),
-        }).filter((f) => (f.step === 'yours' || f.step === 'theirs') && !(skipJob && f.source === 'moveJob')
+        // REVIEW'S DEEP DIVE (David 2026-11-16: "wire in the missing review
+        // builds"): the move's own steps, and two the thought builds that no
+        // Review producer says — "not yet, first this" (the move order, the
+        // in-between move) and the fighting line the structure's plan races,
+        // read off the stored candidates (`storedFanWithCandidates`). The rest
+        // Review says through its own producers (the candidates it weighed,
+        // the verdict, the punishment line) or the Theory button (the book).
+        }).filter((f) => (f.step === 'yours' || f.step === 'theirs' || f.step === 'notYet' || (f.step === 'board' && f.source === 'structureLines'))
+          && !(skipJob && f.source === 'moveJob')
           && !(f.source === 'briefing' && REVIEW_OWNS_IDEA.has(f.idea)) && !ruleIdeas.has(f.idea)
           // What their move aims at is a threat Review says through its own
           // producer ([threat]); the lesson says it as the move's fact.

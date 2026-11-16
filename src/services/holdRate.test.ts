@@ -43,7 +43,7 @@ describe("the hold rate on David's drop", () => {
     const tile = record.heat.get('hung-material');
     expect(tile?.hold).toMatchObject({ posed: 20, held: 14, missed: 4.5 });
     expect(tile?.state).toBe('short');
-    expect(fade.get('hung-material')).toBe('lighter');
+    expect(fade.get('hung-material')).toBe('short');
     expect(threatVoice(tile!.state, 'simple').voice).toBe('short');
   });
   it.each([
@@ -53,7 +53,7 @@ describe("the hold rate on David's drop", () => {
     const tile = record.heat.get(tag);
     expect(tile?.hold.rate).toBeCloseTo(rate, 5);
     expect(tile?.state).toBe('green');
-    expect(fade.get(tag)).toBe('short');
+    expect(fade.get(tag)).toBe('silent');
     expect(threatVoice('green', 'simple').voice).toBe('quiet');
   });
   it('a skill never posed is grey and taught in full', () => {
@@ -104,12 +104,12 @@ describe('the hold-rate rule', () => {
     const ev = Array.from({ length: 9 }, (_, i) => row('held', `g${i}`, 1, i));
     expect(hold(ev, [{ ...slip('x', 3, 100), grade: 'inaccuracy' }])).toMatchObject({ posed: 10, held: 9, missed: 0.5 });
   });
-  it('75–89% is SHORT: the fade says the lighter line, a threat one short line', () => {
+  it('75–89% is SHORT: the fade says one short line, a threat one short line', () => {
     const ev = Array.from({ length: 20 }, (_, i) => row(i < 4 ? 'broken' : 'held', `g${i}`, 1, i));
     const tile = heatMap(ev, []).find((t) => t.tag === 'hung-material')!;
     expect(tile.hold.rate).toBe(0.8);
     expect(tile.state).toBe('short');
-    expect(fadeLevelsFrom(new Map([[tile.tag, tile]])).get(tile.tag)).toBe('lighter');
+    expect(fadeLevelsFrom(new Map([[tile.tag, tile]])).get(tile.tag)).toBe('short');
     expect(threatVoice('short', 'simple').voice).toBe('short');
     expect(threatVoice('short', 'hidden').voice).toBe('short');
   });

@@ -482,12 +482,23 @@ export function decide(
     const veto = boardVeto(f.kind, bundle.board, f.squares);
     if (veto) { provenQuiet.push({ text: f.text, why: veto }); return false; }
     if (HABIT_KINDS.has(f.kind)) return true;
-    // SHORTEN, NEVER SILENCE A REASON (David 2026-10-17: "Agreed" — one rule
-    // with Learn). A teaching fact on a skill the student has shown speaks its
-    // short form; only a DESCRIPTION in a proven layer still goes quiet.
+    // THE FADE, one rule with Learn (`fadeText`): amber speaks its short form,
+    // green is silent (David 2026-11-16: "Green silent"); a DESCRIPTION in a
+    // proven layer goes quiet below its value bar.
     const level = fadeLevelOf(student.fade, f.skill)
-      ?? (student.layers[FACT_LAYER[f.kind]] === 'green' ? 'short' as const : null);
-    if (FACT_ROLE[f.kind] === 'teach') { if (level) faded.set(f, level); return true; }
+      ?? (student.layers[FACT_LAYER[f.kind]] === 'green' ? 'silent' as const : null);
+    if (FACT_ROLE[f.kind] === 'teach') {
+      // GREEN IS SILENT (David 2026-11-16), but a moment that is the board's
+      // (a blunder, an only move, a live hang) still says the point: a green
+      // skill's miss is explained, and it counts against the green.
+      if (level === 'silent') {
+        if (!SPEAKS_ON_IMPORTANCE.has(importance.tier)) { provenQuiet.push({ text: f.text, why: 'proven' }); return false; }
+        faded.set(f, 'short');
+        return true;
+      }
+      if (level) faded.set(f, level);
+      return true;
+    }
     if (student.layers[FACT_LAYER[f.kind]] !== 'green') return true;
     if (valueOf(f) >= GREEN_QUIET_BELOW) return true;
     provenQuiet.push({ text: f.text, why: 'proven' });

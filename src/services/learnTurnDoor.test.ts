@@ -345,9 +345,10 @@ const QUIET_SETTLED = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQk
 
 describe('the fade — short phrasing when the skill is green (David 2026-09-30)', () => {
   const TWO = 'That trade gives up your better minor piece. Keep the bishop that has open diagonals and trade the one blocked by its own pawns.';
-  it('a lane on a PROVEN tag speaks only its first sentence', async () => {
+  it('a lane on a PROVEN tag says nothing (green silent); amber says its first sentence', async () => {
     const { fadeWhenGreen } = await import('./learnTurnDoor');
-    expect(fadeWhenGreen('trade', TWO, new Set(['bad-trade']))).toBe('That trade gives up your better minor piece.');
+    expect(fadeWhenGreen('trade', TWO, new Set(['bad-trade']))).toBe('');
+    expect(fadeWhenGreen('trade', TWO, new Map([['bad-trade', 'short' as const]]))).toBe('That trade gives up your better minor piece.');
   });
   it('grey or red keeps the full teaching (negative controls)', async () => {
     const { fadeWhenGreen } = await import('./learnTurnDoor');
@@ -858,23 +859,23 @@ describe('a structure judgement is a reason, never an aside (A-plan P3, prod Lea
   });
 });
 
-describe('the fade is gradual (2026-10-17): lighter while learning, short once proven', () => {
+describe('the fade follows the heat map: amber one short line, green silent (David 2026-11-16)', () => {
   const THREE = 'That trade gives up your better minor piece. Your bishop on c4 has open diagonals. Keep the bishop that has open diagonals and trade the one blocked by its own pawns.';
-  it('a skill answered right since its last miss keeps the point and its reason', async () => {
+  it('a green skill says nothing', async () => {
     const { fadeWhenGreen } = await import('./learnTurnDoor');
-    expect(fadeWhenGreen('trade', THREE, new Map([['bad-trade', 'lighter' as const]]))).toBe('That trade gives up your better minor piece. Your bishop on c4 has open diagonals.');
+    expect(fadeWhenGreen('trade', THREE, new Map([['bad-trade', 'silent' as const]]))).toBe('');
   });
-  it('a proven skill keeps the point alone; an unknown skill keeps the whole lesson', async () => {
+  it('an amber skill keeps the point alone; an unknown skill keeps the whole lesson', async () => {
     const { fadeWhenGreen } = await import('./learnTurnDoor');
     expect(fadeWhenGreen('trade', THREE, new Map([['bad-trade', 'short' as const]]))).toBe('That trade gives up your better minor piece.');
     expect(fadeWhenGreen('trade', THREE, new Map([['hung-material', 'short' as const]]))).toBe(THREE);
   });
-  it('the hold rate decides the level: green is short, short is lighter, red and grey are full', async () => {
+  it('the hold rate decides the level: green is silent, short (amber) is one line, red and grey are full', async () => {
     const { fadeLevelFor } = await import('./fadeText');
     const t = (state: HeatTileT['state']): HeatTileT =>
       ({ tag: 'hung-material', label: 'x', state, hold: { posed: 20, held: 0, heldWeight: 0, missed: 0, rate: 0 }, openCount: 0, openWeight: 0, held: 0, broken: 0, heldStreak: 0, streakGames: 0, progress: 0 });
-    expect(fadeLevelFor(t('green'))).toBe('short');
-    expect(fadeLevelFor(t('short'))).toBe('lighter');
+    expect(fadeLevelFor(t('green'))).toBe('silent');
+    expect(fadeLevelFor(t('short'))).toBe('short');
     expect(fadeLevelFor(t('grey'))).toBeNull();
     expect(fadeLevelFor(t('red'))).toBeNull();
     expect(fadeLevelFor(undefined)).toBeNull();
@@ -980,7 +981,7 @@ describe('pointers by the record (David 2026-11-05: "keep the point at moves wit
     expect(d.pointed).toBe(true);
   });
   it('amber or green: the student finds it alone — the pointer waits', () => {
-    for (const level of ['lighter', 'short'] as const) {
+    for (const level of ['short', 'silent'] as const) {
       const d = decideTurn([named('misplaced-piece')], '', undefined, null, new Map([['misplaced-piece', level]]));
       expect(d.pkg.spoken).toBe('');
       expect(d.pointed).toBe(false);

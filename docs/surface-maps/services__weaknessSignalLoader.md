@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**116 lines · 4 exports · 8 importers · 5 tests · 0 audits**
+**116 lines · 4 exports · 9 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6539) — names `weaknessSignalLoader`
+- **The standard post-deploy ritual** (CLAUDE.md:7010) — names `weaknessSignalLoader`
 
 ## Who calls in
 
@@ -16,6 +16,7 @@
 - `src/hooks/useWeaknessSignals.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/loopCloses.review.integration.test.ts`
+- `src/services/recordReaders.oneRead.test.ts`
 - `src/services/studentNeedLoader.ts`
 - `src/services/studentRecord.ts`
 - `src/services/tacticAlertService.ts`
@@ -24,14 +25,14 @@
 ## Exports and every call site
 
 ### `loadWeaknessSignals` (function) — 9 call sites
-- `src/components/Openings/OpeningPlayMode.tsx:79`
-- `src/hooks/useWeaknessSignals.ts:22`
-- `src/services/coachFeatureService.ts:5568`
-- `src/services/loopCloses.review.integration.test.ts:81`
+- `src/components/Openings/OpeningPlayMode.tsx:84`
+- `src/hooks/useWeaknessSignals.ts:23`
+- `src/services/coachFeatureService.ts:6357`
+- `src/services/loopCloses.review.integration.test.ts:82`
 - `src/services/puzzleService.ts:353`
-- `src/services/studentNeedLoader.ts:215`
-- `src/services/studentRecord.ts:52`
-- `src/services/tacticAlertService.ts:600`
+- `src/services/studentNeedLoader.ts:235`
+- `src/services/studentRecord.ts:97`
+- `src/services/tacticAlertService.ts:606`
 - `src/services/weaknessSignalLoader.green.test.ts:43`
 
 ### `loadProvenTags` (function) — 2 call sites
@@ -39,10 +40,13 @@
 - `src/services/learnRecordWatch.ts:29`
 
 ### `loadFadeLevels` (function) — 1 call site
-- `src/hooks/useWeaknessSignals.ts:39`
+- `src/hooks/useWeaknessSignals.ts:40`
 
-### `invalidateWeaknessSignals` (function) — 3 call sites
-- `src/services/loopCloses.review.integration.test.ts:61`
+### `invalidateWeaknessSignals` (function) — 6 call sites
+- `src/services/loopCloses.review.integration.test.ts:62`
+- `src/services/recordReaders.oneRead.test.ts:62`
+- `src/services/recordReaders.oneRead.test.ts:75`
+- `src/services/recordReaders.oneRead.test.ts:90`
 - `src/services/weaknessSignalLoader.green.test.ts:42`
 - `src/services/weaknessSignalLoader.green.test.ts:53`
 
@@ -51,6 +55,7 @@
 - `src/services/learnTurnDoor.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/oneOpeningKey.test.ts`
+- `src/services/recordReaders.oneRead.test.ts`
 - `src/services/tacticAlertService.test.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
 
