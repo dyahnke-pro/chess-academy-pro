@@ -15003,10 +15003,6 @@ export function CoachTeachPage({ mode }: {
         {!walkthrough.isActive && (
           !bossGameOn && <MissionBanner view={mission.view} onTryAgain={mission.tryAgain} onPlayOn={mission.playOn} />
         )}
-        {/* THE FOCUS (WO-FOCUS-TACTICS-01): tactics and the rung, and on a
-            taught miss the rewind — Try again first, Play on beside it; after
-            a second miss at rung 0, Show me or Play on. */}
-        {!walkthrough.isActive && <FocusBanner view={focus.view} onTryAgain={focus.tryAgain} onPlayOn={focus.playOn} onShowMe={focus.showMe} />}
         {/* THE CAMPAIGN UI (Lane C): this game's missions before it starts, a
             new idea's briefing, and the recap when it ends. */}
         {/* The briefing has its own board: a full-screen sheet, so it is never
@@ -15070,7 +15066,10 @@ export function CoachTeachPage({ mode }: {
 
         {/* Player (David) info bar — matches Play's layout below the
             board. */}
-        <div className="px-2 pb-1">
+        <div className="relative px-2 pb-1">
+          {/* THE FOCUS REWIND lies over this row on a miss (`FocusBanner`):
+              a row of its own resized the board every time it came and went. */}
+          {!walkthrough.isActive && <FocusBanner view={focus.view} onTryAgain={focus.tryAgain} onPlayOn={focus.playOn} onShowMe={focus.showMe} />}
           <PlayerInfoBar
             name={activeProfile?.name ?? 'You'}
             rating={activeProfile?.currentRating ?? undefined}

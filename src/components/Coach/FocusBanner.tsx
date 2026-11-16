@@ -30,18 +30,24 @@ export function FocusChip({ view }: { view: FocusView }): JSX.Element | null {
 /** The Learn board's focus rewind (WO-FOCUS-TACTICS-01): on a taught miss,
  *  "Try again" first, "Play on" beside it ("Take it back" for the one deciding
  *  blunder, "Go back and castle" for a castling STOP); after a second miss at
- *  rung 0, "Show me" — the student's own tap, never automatic. It takes no
- *  height while the game plays; the focus label is `FocusChip`. */
+ *  rung 0, "Show me" — the student's own tap, never automatic.
+ *
+ *  IT NEVER TAKES A ROW (David 2026-11-16: "the board shifts after moves. It
+ *  zooms in and then back out"). The board is sized to what is left under it,
+ *  so a row that comes and goes resized the board on the very move the student
+ *  was thinking about — 399 → 353 px and back. It is laid OVER the student's
+ *  player row (its parent is `relative`), the same height, the rule the mission
+ *  banner already keeps. The label is `FocusChip`. */
 export function FocusBanner({ view, onTryAgain, onPlayOn, onShowMe }: FocusBannerProps): JSX.Element | null {
   if (!view.focus) return null;
   return (
-    <div className={view.paused ? 'px-3 pb-2' : ''} data-testid="focus-banner" data-focus={view.focus} data-rung={view.rung ?? ''} data-paused={view.paused ? (view.paused.castle !== null ? 'castle' : view.paused.deciding ? 'deciding' : view.paused.showMe ? 'show-me' : 'miss') : ''}>
+    <div className={view.paused ? 'absolute inset-0 z-10' : 'hidden'} data-testid="focus-banner" data-focus={view.focus} data-rung={view.rung ?? ''} data-paused={view.paused ? (view.paused.castle !== null ? 'castle' : view.paused.deciding ? 'deciding' : view.paused.showMe ? 'show-me' : 'miss') : ''}>
       {view.paused && (
-        <div className="flex gap-2" data-testid="focus-rewind">
+        <div className="flex h-full gap-2" data-testid="focus-rewind">
           {view.paused.showMe ? (
             <button
               onClick={onShowMe}
-              className="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-sky-500 px-3 py-2 text-sm font-semibold text-white"
+              className="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-sky-500 px-3 text-sm font-semibold text-white"
               data-testid="focus-show-me"
             >
               <Lightbulb size={14} />Show me
@@ -49,7 +55,7 @@ export function FocusBanner({ view, onTryAgain, onPlayOn, onShowMe }: FocusBanne
           ) : (
             <button
               onClick={onTryAgain}
-              className="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-sky-500 px-3 py-2 text-sm font-semibold text-white"
+              className="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-sky-500 px-3 text-sm font-semibold text-white"
               data-testid="focus-try-again"
             >
               <RotateCcw size={14} />{view.paused.castle !== null ? castleRewindButton(view.paused.castle) : view.paused.deciding ? 'Take it back' : 'Try again'}
@@ -57,7 +63,7 @@ export function FocusBanner({ view, onTryAgain, onPlayOn, onShowMe }: FocusBanne
           )}
           <button
             onClick={onPlayOn}
-            className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-theme-border px-3 py-2 text-sm font-medium text-theme-text"
+            className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-theme-border bg-theme-bg px-3 text-sm font-medium text-theme-text"
             data-testid="focus-play-on"
           >
             <Play size={14} />Play on

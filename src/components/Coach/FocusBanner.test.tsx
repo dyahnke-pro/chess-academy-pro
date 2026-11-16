@@ -20,6 +20,12 @@ describe('FocusBanner', () => {
     expect(screen.queryByTestId('focus-rewind')).toBeNull();
   });
 
+  it('the rewind lies over the player row — it never takes a row of its own (the board resized on every miss)', () => {
+    render(<FocusBanner view={view({ paused: { deciding: false, showMe: false, castle: null } })} {...hands()} />);
+    expect(screen.getByTestId('focus-banner').className).toContain('absolute');
+    expect(screen.getByTestId('focus-banner').className).toContain('inset-0');
+  });
+
   it('a taught miss offers Try again and Play on — never Show me — and each reaches its hand', () => {
     const h = hands();
     render(<FocusBanner view={view({ paused: { deciding: false, showMe: false, castle: null } })} {...h} />);
