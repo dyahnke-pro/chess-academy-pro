@@ -21,6 +21,7 @@ import { TRUSTED_LINE_DEPTH, REVIEW_READ_DEPTH } from './engineConstants';
 import { generateReviewNarration, type ReviewMoveInput, type ReviewNarration } from './coachFeatureService';
 import { storyOf, storyThrough, spliceStory, type StorySeed } from './gameStory';
 import { getCachedReviewNarration, storeReviewNarration, reviewNarrationCacheKey } from './reviewNarrationCache';
+import { everythingListening } from './everythingEvents';
 import { logAppAudit } from './appAuditor';
 import type { CoachGameMove } from '../types';
 
@@ -98,7 +99,10 @@ export function getOrBuildReviewNarration(req: ReviewNarrationRequest): Promise<
   const running = inflight.get(slot);
   if (running) return running;
   const build = (async (): Promise<ReviewNarrationResult> => {
-    if (req.gameId && complete && !seeded) {
+    // EVERYTHING MODE (owner only) reads every line the walk weighs as it is
+    // BUILT: a cached walk weighs nothing, so while it listens the walk is
+    // rebuilt (a student's device never listens).
+    if (req.gameId && complete && !seeded && !everythingListening()) {
       const hit = await getCachedReviewNarration(req.gameId, key);
       if (hit) return { narration: hit, cacheHit: true, key };
     }

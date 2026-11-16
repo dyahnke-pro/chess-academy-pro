@@ -10,7 +10,8 @@
 //   node scripts/bench/danya-reads.mjs <outDir> <i/n> [depth=14]
 //
 // Writes <outDir>/reads-<i>.jsonl ({ id, before: [line], after: [line] }, each
-// line { uci, cp, mate, pv }) and a progress line every 25 notes to
+// line { uci, cp, mate, pv, earlier? } — the whole line, and its read two depths
+// shallower) and a progress line every 25 notes to
 // <outDir>/progress.log.
 import { spawn } from 'node:child_process';
 import { appendFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
@@ -60,20 +61,28 @@ async function read(fen, multiPv) {
   send(`position fen ${fen}`);
   send(`go depth ${DEPTH}`);
   const lines = await until((l) => l.startsWith('bestmove'));
+  // THE WHOLE LINE, and its read two depths shallower (`AnalysisLine.earlier`,
+  // the app's free second read) — the line rule (`lineTrust`) names a line
+  // past two moves only when two reads agree, so a bench without them could
+  // never see a deep line the app says (2026-11-16).
   const byRank = new Map();
+  const earlier = new Map();
   for (const l of lines) {
     if (!l.startsWith('info ') || /\b(lowerbound|upperbound)\b/.test(l)) continue;
     const s = /score (cp|mate) (-?\d+)/.exec(l);
     const r = /multipv (\d+)/.exec(l);
     const p = / pv (.+)$/.exec(l);
+    const d = / depth (\d+)/.exec(l);
     if (!s || !p) continue;
+    const rank = r ? Number(r[1]) : 1;
     const v = Number(s[2]) * (blackToMove ? -1 : 1);
-    const pv = p[1].trim().split(/\s+/).slice(0, 12);
-    byRank.set(r ? Number(r[1]) : 1, s[1] === 'cp'
+    const pv = p[1].trim().split(/\s+/);
+    if (d && Number(d[1]) === Number(DEPTH) - 2) earlier.set(rank, pv);
+    byRank.set(rank, s[1] === 'cp'
       ? { uci: pv[0], cp: v, mate: null, pv }
       : { uci: pv[0], cp: null, mate: v === 0 ? (blackToMove ? 1 : -1) : v, pv });
   }
-  return [...byRank.entries()].sort((a, b) => a[0] - b[0]).map(([, x]) => x);
+  return [...byRank.entries()].sort((a, b) => a[0] - b[0]).map(([rank, x]) => (earlier.has(rank) ? { ...x, earlier: earlier.get(rank) } : x));
 }
 
 const started = Date.now();

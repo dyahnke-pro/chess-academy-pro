@@ -198,7 +198,13 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
     // An offered pawn the student takes waits until it is taken.
     const taken = !live || live.pieceAt(on)?.color === other;
     const takeAhead = p.kind === 'takes-offered-pawn' && !!live && !taken && other === student && live.pieceAt(on) !== null;
-    if (hitsAhead || tradeAhead || takeAhead) pending = true;
+    // THE NAME COMES AT ONCE, WITH ITS IDEA (David 2026-11-16: "The Karo can
+    // be identified right away"): a trade still to come is said by the pawn
+    // it hits, never by the student's move — their capture, or the hit on
+    // the student's pawn when the capture would be the student's.
+    const tradeFrom = tradeAhead ? pawnCaptureFrom(p.reply, other) : null;
+    const tradeHit = tradeFrom !== null && has(tradeFrom, other, 'p');
+    if (hitsAhead || (tradeAhead && !tradeHit) || takeAhead) pending = true;
     // The usual reply to a move that does not provoke it is the book's move.
     const bookOnly = p.kind === 'pawn-hits' && !p.provoked;
     if (p.kind === 'pawn-hits' && p.piece && p.square && hitsTrue && !hitsAhead && (theory || !bookOnly)) {
@@ -207,6 +213,11 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
         ? `${it} is built to provoke: ${who(other)} ${shareAdverb(p.share)} ${v('answer')} with ${reply}, a centre pawn thrown forward at ${target}.`
         : `The usual answer is ${reply}, putting the question to ${target}.`);
       squares.push(p.square);
+    } else if (p.kind === 'invites-trade' && tradeAhead && tradeHit && tradeFrom) {
+      out.push(other === student
+        ? `${it} hits ${whose(other)} pawn on ${tradeFrom} at once.`
+        : `${it} hits ${whose(other)} pawn on ${tradeFrom} at once, so ${who(other)} ${shareAdverb(p.share)} ${v('take')} on ${on}.`);
+      squares.push(tradeFrom, on);
     } else if (p.kind === 'invites-trade' && traded) {
       // THE TRADE'S COST IS ITS WHY (Learn audit 2026-10-14: "…and the pawn is
       // taken back" said what, never why it matters). Computed by the builder
@@ -264,6 +275,14 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
   }
   if (pending || !out.length) return null;
   return { text: out.join(' '), squares };
+}
+
+/** Where a pawn capture ("exd5") starts, for the side that plays it. */
+function pawnCaptureFrom(san: string, side: 'w' | 'b'): string | null {
+  const m = /^([a-h])x([a-h])([1-8])/.exec(san);
+  if (!m) return null;
+  const rank = Number(m[3]) + (side === 'w' ? -1 : 1);
+  return rank >= 1 && rank <= 8 ? `${m[1]}${rank}` : null;
 }
 
 /**

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**315 lines · 11 exports · 23 importers · 17 tests · 0 audits**
+**334 lines · 11 exports · 24 importers · 18 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingGenerator.explorerBranches.test.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/openingIdea.test.ts`
+- `src/services/openingIdentity.atOnce.test.ts`
 - `src/services/openingIdentity.test.ts`
 - `src/services/openingStory.test.ts`
 - `src/services/openingStory.ts`
@@ -48,11 +49,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingGenerator.ts:2552`
 
 ### `warmOpeningIdentity` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:333`
-- `src/components/Coach/CoachTeachPage.tsx:1079`
+- `src/components/Coach/CoachGameReview.tsx:334`
+- `src/components/Coach/CoachTeachPage.tsx:1081`
 - `src/services/reviewOpeningTheory.ts:268`
 
-### `setOpeningIdentity` (function) — 25 call sites
+### `setOpeningIdentity` (function) — 27 call sites
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:38`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:61`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:107`
@@ -67,6 +68,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingDatabaseBrief.test.ts:12`
 - `src/services/openingGenerator.explorerBranches.test.ts:76`
 - `src/services/openingIdea.test.ts:9`
+- `src/services/openingIdentity.atOnce.test.ts:20`
+- `src/services/openingIdentity.atOnce.test.ts:21`
 - `src/services/openingIdentity.test.ts:9`
 - `src/services/openingIdentity.test.ts:80`
 - `src/services/openingStory.test.ts:26`
@@ -111,10 +114,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingStory.ts:448`
 - `src/services/openingStory.ts:486`
 
-### `openingIdentityLine` (function) — 19 call sites
+### `openingIdentityLine` (function) — 23 call sites
 - `src/services/coachApi.ts:5724`
 - `src/services/openingDatabaseBrief.ts:68`
 - `src/services/openingGenerator.ts:2553`
+- `src/services/openingIdentity.atOnce.test.ts:23`
+- `src/services/openingIdentity.atOnce.test.ts:27`
+- `src/services/openingIdentity.atOnce.test.ts:33`
+- `src/services/openingIdentity.atOnce.test.ts:37`
 - `src/services/openingIdentity.test.ts:18`
 - `src/services/openingIdentity.test.ts:20`
 - `src/services/openingIdentity.test.ts:22`
@@ -150,6 +157,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingDatabaseBrief.test.ts`
 - `src/services/openingGenerator.explorerBranches.test.ts`
 - `src/services/openingIdea.test.ts`
+- `src/services/openingIdentity.atOnce.test.ts`
 - `src/services/openingIdentity.test.ts`
 - `src/services/openingStory.test.ts`
 - `src/services/openingStoryWholeBeat.test.ts`

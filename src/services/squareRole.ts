@@ -106,11 +106,16 @@ function squareRoleWords(
   const one = `${file}${rank + back}` as Square;
   const p1 = chess.get(one);
   const heldBack = { full: '', bare: `holding back ${ownerWord} ${file}-pawn` };
-  if (p1 && p1.type === 'p' && p1.color === them) return { ...heldBack, full: `holding back ${theirPawn(one)}` };
+  // HELD BACK ONLY WHEN THE PUSH WOULD LOSE THE PAWN (Review prod audit
+  // 2026-11-16, Giri–Carlsen 6.Be2: "bears down on c4, holding back your
+  // c-pawn" with the d5 pawn guarding c4): covered more often than guarded.
+  const holds = chess.attackers(sq, me).length > chess.attackers(sq, them).length;
   const two = `${file}${rank + 2 * back}` as Square;
   const p2 = chess.get(two);
   const startRank = them === 'w' ? 2 : 7;
-  if (!p1 && p2 && p2.type === 'p' && p2.color === them && Number(two[1]) === startRank) return { ...heldBack, full: `holding back ${theirPawn(two)}` };
+  const pusher = p1 && p1.type === 'p' && p1.color === them ? one
+    : !p1 && p2 && p2.type === 'p' && p2.color === them && Number(two[1]) === startRank ? two : null;
+  if (pusher) return holds ? { ...heldBack, full: `holding back ${theirPawn(pusher)}` } : null;
   // YOUR PAWN'S PUSH: a square your own pawn steps to next (one step, or two
   // from its start rank) — a piece covering it backs the advance.
   const fwd = me === 'w' ? -1 : 1;

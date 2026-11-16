@@ -349,6 +349,27 @@ function rescueJob(before: Chess, mainMv: NonNullable<ReturnType<typeof after>>,
     .filter((a): a is { sq: Square; p: NonNullable<ReturnType<Chess['get']>> } => !!a.p)
     .sort((a, b) => CAPTURE_VALUE[a.p.type] - CAPTURE_VALUE[b.p.type])[0];
   if (!by) return null;
+  const byWords = seatPieceWords(before.fen(), by.sq, w.other, `${w.other} ${NAME[by.p.type]} on ${by.sq}`);
+  // STILL IN REACH, NOW GUARDED (Review prod audit 2026-11-16, Giri–Carlsen:
+  // "a5 takes your pawn out of reach of their rook on a1" with the rook still
+  // on the open a-file): the attacker reaches the new square too, so the move
+  // saved the piece by putting it where it is guarded — that is what is said.
+  if (mainMv.board.attackers(mainMv.to, them).includes(by.sq)) {
+    const guard = mainMv.board.attackers(mainMv.to, student)
+      .map((sq) => ({ sq, p: mainMv.board.get(sq) }))
+      .filter((a): a is { sq: Square; p: NonNullable<ReturnType<Chess['get']>> } => !!a.p)
+      .sort((a, b) => CAPTURE_VALUE[a.p.type] - CAPTURE_VALUE[b.p.type])[0];
+    if (!guard) return null;
+    const guardWords = seatPieceWords(mainMv.board.fen(), guard.sq, w.own, `${w.own} ${NAME[guard.p.type]} on ${guard.sq}`);
+    const clause = `it moves ${w.own} ${NAME[mainMv.piece]} to ${mainMv.to}, where ${guardWords} guards it from ${byWords}`;
+    return {
+      kind: 'rescue',
+      squares: [mainMv.from, by.sq, mainMv.to, guard.sq],
+      clause,
+      forms: [clause, `it gets ${w.own} ${NAME[mainMv.piece]} off ${mainMv.from} to ${mainMv.to}, where ${guardWords} covers it against ${byWords}`],
+      short: `leaves it on ${mainMv.from} for them to take`,
+    };
+  }
   // KEEPING THE PIN (Danya: "The bishop to h4, keeping the pin"): the piece
   // pinned the same piece from where it stood and still pins it from where it
   // went — the retreat's point, said with it.
@@ -360,17 +381,17 @@ function rescueJob(before: Chess, mainMv: NonNullable<ReturnType<typeof after>>,
     return now && pinned ? `, keeping the pin on ${w.other} ${NAME[pinned.type]} on ${now.involvedSquares[1]}` : null;
   })();
   if (kept) {
-    const clause = `it takes ${w.own} ${NAME[mainMv.piece]} out of reach of ${seatPieceWords(before.fen(), by.sq, w.other, `${w.other} ${NAME[by.p.type]} on ${by.sq}`)}${kept}`;
+    const clause = `it takes ${w.own} ${NAME[mainMv.piece]} out of reach of ${byWords}${kept}`;
     return { kind: 'rescue', squares: [mainMv.from, by.sq, mainMv.to], clause, forms: [clause], short: `leaves it on ${mainMv.from} for them to take` };
   }
   return {
     kind: 'rescue',
     squares: [mainMv.from, by.sq, mainMv.to],
-    clause: `it takes ${w.own} ${NAME[mainMv.piece]} out of reach of ${seatPieceWords(before.fen(), by.sq, w.other, `${w.other} ${NAME[by.p.type]} on ${by.sq}`)}`,
+    clause: `it takes ${w.own} ${NAME[mainMv.piece]} out of reach of ${byWords}`,
     forms: [
-      `it takes ${w.own} ${NAME[mainMv.piece]} out of reach of ${seatPieceWords(before.fen(), by.sq, w.other, `${w.other} ${NAME[by.p.type]} on ${by.sq}`)}`,
-      `it gets ${w.own} ${NAME[mainMv.piece]} off ${mainMv.from} before ${seatPieceWords(before.fen(), by.sq, w.other, `${w.other} ${NAME[by.p.type]} on ${by.sq}`)} can take it`,
-      `it moves ${w.own} ${NAME[mainMv.piece]} off ${mainMv.from}, out of reach of ${seatPieceWords(before.fen(), by.sq, w.other, `${w.other} ${NAME[by.p.type]} on ${by.sq}`)}`,
+      `it takes ${w.own} ${NAME[mainMv.piece]} out of reach of ${byWords}`,
+      `it gets ${w.own} ${NAME[mainMv.piece]} off ${mainMv.from} before ${byWords} can take it`,
+      `it moves ${w.own} ${NAME[mainMv.piece]} off ${mainMv.from}, out of reach of ${byWords}`,
     ],
     short: `leaves it on ${mainMv.from} for them to take`,
   };

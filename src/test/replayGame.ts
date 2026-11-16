@@ -37,7 +37,12 @@ setOpeningPositions(JSON.parse(readFileSync(join(process.cwd(), 'public/data/ope
 setKnownSlipIndexForTests((JSON.parse(readFileSync(join(process.cwd(), 'public/data/club-gems.json'), 'utf8')) as { boards: Record<string, never[]> }).boards);
 __setLocalDbForTests(JSON.parse(readFileSync(join(process.cwd(), 'public/data/openings-masters-db.json'), 'utf8')) as Parameters<typeof __setLocalDbForTests>[0]);
 
-export interface EngineRead { uci: string; cp: number | null; mate: number | null; pv: string[] }
+export interface EngineRead {
+  uci: string; cp: number | null; mate: number | null; pv: string[];
+  /** The same line read two depths shallower (`AnalysisLine.earlier`), where
+   *  the reads kept it (`scripts/bench/danya-reads.mjs` since 2026-11-16). */
+  earlier?: string[];
+}
 /** The two reads of one ply; `after` is empty when the move ended the game. */
 export interface PlyReads { ply: number; before: EngineRead[]; after: EngineRead[] }
 export interface ReplayGame {
@@ -78,7 +83,7 @@ export function evalOf(r: EngineRead): number {
 }
 
 export function linesOf(reads: readonly EngineRead[]): AnalysisLine[] {
-  return reads.map((r, k) => ({ rank: k + 1, evaluation: evalOf(r), moves: [...r.pv], mate: r.mate }));
+  return reads.map((r, k) => ({ rank: k + 1, evaluation: evalOf(r), moves: [...r.pv], mate: r.mate, ...(r.earlier ? { earlier: { depth: 12, moves: [...r.earlier] } } : {}) }));
 }
 
 /** The reads in the shape the live composer takes. */

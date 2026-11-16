@@ -287,7 +287,7 @@ export function obligationLifts(prevFen: string, studentSan: string, theirSanPla
     const theirs = `their ${PIECE[mv.piece]} on ${mv.to}`;
     const text = rotateStem([
       `With ${theirs}, ${name} no longer hangs — you don't have to spend this move guarding it.`,
-      `Notice what their ${PIECE[mv.piece]} gave up by going to ${mv.to}: ${name} isn't attacked any more, so the move you owed it is free again.`,
+      `Notice what their ${PIECE[mv.piece]} gave up by going to ${mv.to}: ${name} no longer hangs, so the move you owed it is free again.`,
       `Their ${PIECE[mv.piece]} going to ${mv.to} lifts the pressure: ${name} is safe now, and this move is yours to spend.`,
     ], stemKeyOf(after.fen()));
     const squares = [x.square, mv.from, mv.to];

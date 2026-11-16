@@ -121,6 +121,8 @@ import { useStudentNeed } from '../../hooks/useStudentNeed';
 import { DEFAULT_STUDENT_RATING, isBeginnerMode } from '../../services/ratingBands';
 import { useFadeLevels, useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import { useStudentRecord } from '../../hooks/useStudentRecord';
+import { EverythingPanel } from './EverythingPanel';
+import { GameSettingsButton } from './GameSettingsButton';
 import { storyPhaseTransition } from '../../services/phaseTransitionDetector';
 import { resolvePhaseNarrationVerbosity } from '../../utils/coachNarration';
 import { useTeachWalkthrough, isStartablePunishLesson, isValidConceptsQuestion, isValidFindMoveQuestion, isValidDrillLine } from '../../hooks/useTeachWalkthrough';
@@ -14490,6 +14492,56 @@ export function CoachTeachPage({ mode }: {
 
   // Tour / Chat / Tips: in the header's second row on desktop, in the Coach
   // bar on a phone (one header row there, so the board gets the height).
+  // THE GAME'S SETTINGS — colour, difficulty and the analysis toggles. One
+  // copy, two layouts: the desktop header row, and on a phone one button in
+  // the coach's bar (the header row went, so the board gets its height —
+  // David 2026-11-16: "The board is the wrong size … It needs to fill the
+  // screen").
+  const colorSelector = (
+    <div className="flex items-center gap-0.5 rounded-lg border border-theme-border p-0.5" data-testid="color-selector">
+      <button
+        onClick={() => { setPlayerColor('white'); game.setOrientation('white'); }}
+        disabled={game.history.length > 0}
+        className={`w-6 h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
+          playerColor === 'white' ? 'ring-2 ring-theme-accent ring-inset' : ''
+        }`}
+        aria-label="Play as white"
+        data-testid="color-white-btn"
+      >
+        <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-white border border-neutral-300" />
+      </button>
+      <button
+        onClick={() => {
+          // The student took Black on a fresh board — the coach has
+          // White and MUST open, or the game just sits there (David
+          // 2026-07-12: he flipped to Black for the Benko and had to
+          // push the coach's d4 himself). One seat function for the
+          // button and the typed request.
+          takeSeat('black', (line) => {
+            setMessages((prev) => [...prev, { id: freshTurnId('coach-open'), role: 'assistant', content: line, timestamp: Date.now() }]);
+            voiceService.stop();
+            void speakLearn(line, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
+          });
+        }}
+        disabled={game.history.length > 0}
+        className={`w-6 h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
+          playerColor === 'black' ? 'ring-2 ring-theme-accent ring-inset' : ''
+        }`}
+        aria-label="Play as black"
+        data-testid="color-black-btn"
+      >
+        <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-neutral-800 border border-neutral-600" />
+      </button>
+    </div>
+  );
+  const analysisToggles = (
+    <AnalysisToggles
+      showEvalBar={showEvalBarEffective}
+      onToggleEvalBar={() => setEvalBarOverride((prev) => !(prev ?? settings.showEvalBar))}
+      showEngineLines={showEngineLinesEffective}
+      onToggleEngineLines={() => setEngineLinesOverride((prev) => !(prev ?? settings.showEngineLines))}
+    />
+  );
   const teachActions = (
     <div className="flex items-center gap-2">
       <button
@@ -14678,7 +14730,9 @@ export function CoachTeachPage({ mode }: {
         {/* Header — mirrors CoachGamePage's two-row pattern. Row 1:
             back + title + color selector + analysis toggles. Row 2:
             difficulty + coach tips. Same chrome as /coach/play. */}
-        <div className="px-2 py-1 md:p-4 border-b border-theme-border md:space-y-1.5">
+        {/* Phone: no header row — its settings sit in one button in the
+            coach's bar (`GameSettingsButton`), so the board gets the height. */}
+        <div className="hidden md:block px-2 py-1 md:p-4 border-b border-theme-border md:space-y-1.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 md:gap-3">
               <button
@@ -14696,55 +14750,12 @@ export function CoachTeachPage({ mode }: {
                   {mode === 'campaign' ? 'One habit at a time' : 'Lessons + analysis'}
                 </p>
               </div>
-              {/* Phone: the difficulty sits in the one header row. */}
-              <div className="md:hidden">
-                <DifficultyToggle value={difficulty} onChange={setDifficulty} disabled={game.history.length > 0} />
-              </div>
             </div>
             <div className="flex items-center gap-1 md:gap-2">
               {/* Color selector — matches Play. Disabled once a move
                   has been played in this session. */}
-              <div className="flex items-center gap-0.5 rounded-lg border border-theme-border p-0.5" data-testid="color-selector">
-                <button
-                  onClick={() => { setPlayerColor('white'); game.setOrientation('white'); }}
-                  disabled={game.history.length > 0}
-                  className={`w-6 h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
-                    playerColor === 'white' ? 'ring-2 ring-theme-accent ring-inset' : ''
-                  }`}
-                  aria-label="Play as white"
-                  data-testid="color-white-btn"
-                >
-                  <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-white border border-neutral-300" />
-                </button>
-                <button
-                  onClick={() => {
-                    // The student took Black on a fresh board — the coach has
-                    // White and MUST open, or the game just sits there (David
-                    // 2026-07-12: he flipped to Black for the Benko and had to
-                    // push the coach's d4 himself). One seat function for the
-                    // button and the typed request.
-                    takeSeat('black', (line) => {
-                      setMessages((prev) => [...prev, { id: freshTurnId('coach-open'), role: 'assistant', content: line, timestamp: Date.now() }]);
-                      voiceService.stop();
-                      void speakLearn(line, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
-                    });
-                  }}
-                  disabled={game.history.length > 0}
-                  className={`w-6 h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
-                    playerColor === 'black' ? 'ring-2 ring-theme-accent ring-inset' : ''
-                  }`}
-                  aria-label="Play as black"
-                  data-testid="color-black-btn"
-                >
-                  <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-neutral-800 border border-neutral-600" />
-                </button>
-              </div>
-              <AnalysisToggles
-                showEvalBar={showEvalBarEffective}
-                onToggleEvalBar={() => setEvalBarOverride((prev) => !(prev ?? settings.showEvalBar))}
-                showEngineLines={showEngineLinesEffective}
-                onToggleEngineLines={() => setEngineLinesOverride((prev) => !(prev ?? settings.showEngineLines))}
-              />
+              {colorSelector}
+              {analysisToggles}
             </div>
           </div>
           {/* Row 2: Difficulty toggle + Chat + Tips buttons — same widgets
@@ -14775,7 +14786,16 @@ export function CoachTeachPage({ mode }: {
             // the reason, the board is locked — said in the coach's bar, so the
             // board never moves for it.
             status={opponentThinking ? 'Thinking…' : undefined}
-            actions={<div className="md:hidden">{teachActions}</div>}
+            actions={(
+              <div className="md:hidden flex items-center gap-2">
+                <GameSettingsButton color={playerColor} difficulty={difficulty}>
+                  <DifficultyToggle value={difficulty} onChange={setDifficulty} disabled={game.history.length > 0} />
+                  {colorSelector}
+                  {analysisToggles}
+                </GameSettingsButton>
+                {teachActions}
+              </div>
+            )}
           />
         </div>
 
@@ -15308,6 +15328,8 @@ export function CoachTeachPage({ mode }: {
             onStartAsking={stopCoachNow}
           />
         </div>
+        {/* EVERYTHING MODE (owner only): every line the doors weighed, said or held. */}
+        <EverythingPanel />
 
         {/* Line picker — when the user typed a broad opening, render
             tappable variation tiles instead of immediately kicking

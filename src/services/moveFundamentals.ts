@@ -601,7 +601,11 @@ export function computeMoveFundamentals(
       // knight at c3, a hole" left out what stood on c3).
       const sqs = andList(targets.map((sq) => { const p = after.get(sq as Square); return p && p.color === them ? `their ${PIECE_NAME[p.type] ?? 'piece'} on ${sq}` : sq; }));
       const one = targets.length === 1;
-      const what = one ? 'a square no pawn of theirs can cover' : 'squares no pawn of theirs can cover';
+      // A piece of theirs is said as a piece no pawn can guard, never "a square"
+      // (Review prod audit 2026-11-16: "eyes their d-pawn, a square no pawn of
+      // theirs can cover").
+      const onPiece = one && !!after.get(targets[0] as Square);
+      const what = onPiece ? 'which no pawn of theirs can guard' : one ? 'a square no pawn of theirs can cover' : 'squares no pawn of theirs can cover';
       out.push({
         id: 'outpost',
         weight: 70,

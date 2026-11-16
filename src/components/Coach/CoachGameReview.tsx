@@ -1,4 +1,5 @@
 import { intentWithFallback } from '../../services/movePurpose';
+import { EverythingPanel } from './EverythingPanel';
 import { positionOf } from '../../utils/samePosition';
 import { useRememberedThread } from '../../hooks/useRememberedThread';
 import { useRememberedSetting } from '../../hooks/useRememberedSetting';
@@ -3694,6 +3695,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </div>
             )}
 
+            {/* EVERYTHING MODE (owner only): every line the walk weighed, said or held. */}
+            <EverythingPanel />
             {/* Current-move narration banner — PINNED in the fixed region so
                 the coach's per-move "why" is ALWAYS visible. It used to live in
                 the flex-1 scroll middle, which the board + nav + bottom bar
