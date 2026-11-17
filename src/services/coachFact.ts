@@ -467,6 +467,9 @@ export const COMPUTER_CATALOG = {
   compensation: { file: 'services/compensation.ts', says: 'who is better when one side is down material, and the board\'s reason for it: a development lead, a king left in the middle, the bishop pair, an advanced passed pawn' },
   emptyCheckAt: { file: 'services/emptyCheck.ts', says: 'a check that cost half a pawn and is answered by a block or a king step: the checking piece has to move again' },
   desperadoAt: { file: 'services/desperado.ts', says: 'two of the mover\'s pieces hanging, and the engine\'s best move sells the one that is lost anyway: it captures on its way out' },
+  castlingTakenAway: { file: 'services/castlingTakenAway.ts', says: 'the move just played took castling away: a square the king must cross or land on is now covered, by the piece that moved or along the line it opened' },
+  castlingWing: { file: 'services/castlingWing.ts', says: 'which way the king castled against their pawns: toward files they have no pawn on (roads for their rooks) or away from them' },
+  pieceMovedAgain: { file: 'services/pieceMovedAgain.ts', says: 'one piece moved again while the others wait at home: two moves where one would do, back on a square it stood on, its third trip with minors undeveloped' },
   pawnBreak: { file: 'services/pawnBreak.ts', says: 'the pawn break and what it is for: the pawn it strikes (the base of their chain), the file it opens for the rooks, the bishop it frees' },
 } satisfies Record<string, CatalogRow>;
 
