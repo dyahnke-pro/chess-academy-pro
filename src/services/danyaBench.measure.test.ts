@@ -20,7 +20,8 @@
 // re-scores in minutes. Run:
 //   DANYA_BENCH=1 npx vitest run src/services/danyaBench.measure.test.ts
 // Optional: DANYA_BENCH_READS=<dir> (default audit-reports/.fixtures/danya-bench),
-// DANYA_BENCH_LIMIT=<n> (first n notes with reads), DANYA_BENCH_SOURCES=a,b.
+// DANYA_BENCH_LIMIT=<n> (first n notes with reads), DANYA_BENCH_SOURCES=a,b,
+// DANYA_BENCH_IDS=<json keyed by note id> (only those boards).
 // Writes audit-reports/danya-bench/report.json and prints the tables.
 //
 // REACH (WO-STORY-MATRIX-01 P1-0): per computer and per surface, how many
@@ -192,7 +193,12 @@ function loadPositions(): Position[] {
   out.sort((a, b) => a.note.id.localeCompare(b.note.id));
   const every = Math.max(1, Number(process.env.DANYA_BENCH_EVERY ?? 1));
   const offset = Number(process.env.DANYA_BENCH_OFFSET ?? 0) % every;
-  const sampled = out.filter((_, k) => k % every === offset);
+  // DANYA_BENCH_IDS=<json file keyed by note id>: only those boards (the
+  // concept check puts his transcript ideas on their boards, David 2026-11-17:
+  // "run the 'have' to make sure they work").
+  const idsFile = process.env.DANYA_BENCH_IDS;
+  const want = idsFile ? new Set(Object.keys(JSON.parse(readFileSync(idsFile, 'utf8')) as Record<string, unknown>)) : null;
+  const sampled = out.filter((p, k) => (want ? want.has(p.note.id) : k % every === offset));
   const limit = Number(process.env.DANYA_BENCH_LIMIT ?? 0);
   return limit > 0 ? sampled.slice(0, limit) : sampled;
 }
@@ -920,7 +926,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
   // nothing): each note's line is appended to <dump>.partial the moment it is
   // made, and the line count there is the run's progress.
   const partial = process.env.DANYA_BENCH_DUMP ? `${process.env.DANYA_BENCH_DUMP}.partial` : null;
-  if (partial) writeFileSync(partial, '');
+  if (partial) { writeFileSync(partial, ''); writeFileSync(`${process.env.DANYA_BENCH_DUMP}.reach.partial`, ''); }
   const keep = (line: string): void => { dump?.push(line); if (partial) appendFileSync(partial, line + '\n'); };
   const reachOn = process.env.DANYA_BENCH_REACH !== '0';
   const reach = new Map<string, ReachTally>();
@@ -1013,7 +1019,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
           },
           danya: d.map((x) => ({ kind: x.kind, squares: [...x.squares] })),
           facts: facts.map((f) => ({
-            source: f.source, idea: f.idea, step: f.step, weight: f.weight, squares: [...f.squares], restates: f.restates === true,
+            source: f.source, computer: f.computer, idea: f.idea, step: f.step, weight: f.weight, squares: [...f.squares], restates: f.restates === true,
             // What rides on it (P1-10): the order's value, the expected-score
             // gap and the decision it answers — the replay's stakes and news.
             sv: stakeValue(f.stakes) ?? 0, wc: isStaked(f.stakes) ? stakeWc(f.stakes) : null, decision: isStaked(f.stakes) ? f.stakes.decision ?? null : null,
@@ -1048,6 +1054,8 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
       for (const id of ids) if (isComputerSource(id) && (said[id] ?? '').trim()) built.add(SOURCE_COMPUTER[id]);
       for (const s of REACH_SURFACES) for (const c of r[s].reached) built.add(c);
       for (const c of built) tally(c).built += 1;
+      // With a dump, each note's BUILT computers go beside it, saved as it goes.
+      if (partial) appendFileSync(`${process.env.DANYA_BENCH_DUMP}.reach.partial`, JSON.stringify({ id: p.note.id, built: [...built] }) + '\n');
       for (const s of REACH_SURFACES) {
         for (const c of r[s].reached) tally(c).reached[s] += 1;
         for (const c of r[s].said) tally(c).said[s] += 1;
