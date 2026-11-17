@@ -225,7 +225,33 @@ export function betterMoveReason(
   // The LINE half: what the better move's whole line wins, checks first.
   const f = betterMoveFact(fenBefore, playedSan, bestSan, bestLineUci, moverColor, priorMove);
   if (f) return phraseBetterMove(f);
-  return boardHalfReason(fenBefore, bestSan, moverColor, priorMove);
+  const board = boardHalfReason(fenBefore, bestSan, moverColor, priorMove);
+  // A CAPTURE THE LINE WINS BACK WINS NOTHING (Danya _4xb 4.d4: "Nxe5 was the
+  // better move: it would win a pawn" — …Bd4 Nf3 Bxc3 dxc3 Nxe4 takes it back).
+  // The board read says what the capture takes; the line says what it keeps.
+  if (board && bestLineUci.length >= 4 && isCaptureLead(fenBefore, bestSan)) {
+    const sans = lineSans(fenBefore, bestLineUci);
+    const mover: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
+    // proofCut is null when the whole line settles no gain for the mover.
+    if (sans.length >= 4) {
+      const proof = proofCut(fenBefore, sans, mover, priorMove);
+      if (!proof || (!proof.mate && (!proof.ledger || proof.ledger.netPawns < 1))) return null;
+    }
+  }
+  return board;
+}
+
+function isCaptureLead(fen: string, san: string): boolean {
+  try { return !!new Chess(fen).move(san)?.captured; } catch { return false; }
+}
+
+function lineSans(fen: string, uci: readonly string[]): string[] {
+  const c = new Chess(fen);
+  const out: string[] = [];
+  for (const u of uci) {
+    try { const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); if (!m) break; out.push(m.san); } catch { break; }
+  }
+  return out;
 }
 
 /** The BOARD half of the better move's reason: what the move does on the board

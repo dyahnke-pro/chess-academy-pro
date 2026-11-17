@@ -7300,7 +7300,11 @@ export function detectNewThreat(
           }
         }
         if ((hitsKing && majors.length >= 1) || majors.length >= 2) {
-          if (landingIsSafe(sim.fen(), played.to)) { // forker un-takeable (pin-aware)
+          // …and not simply TRADED OFF by a piece it forks (Danya Fozb 27.Ne7:
+          // "threatening Qc6+ — it forks the king and queen on d6" — …Qxc6
+          // Nxc6 swaps queens and the fork wins nothing).
+          const tradedByVictim = sim.moves({ verbose: true }).some((x) => x.to === played.to && !!x.captured && x.piece !== 'k' && majorSquares.includes(x.from) && (PIECE_VALUE_LOCAL[x.piece] ?? 99) <= (PIECE_VALUE_LOCAL[played.piece] ?? 0));
+          if (landingIsSafe(sim.fen(), played.to) && !tradedByVictim) { // forker un-takeable (pin-aware)
             // Every reader says the detail after the threat's SAN ("threatening
             // Nxf7 — …"), which already says the capture: what it nets, never
             // the capture again (David 2026-10-30; `captureWords`).

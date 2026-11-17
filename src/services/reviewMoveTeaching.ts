@@ -729,7 +729,14 @@ export function buildReviewMoveTeachingFact(
       if (target) {
         // A pawn move that created a weakness without opening a file / outpost
         // (e.g. a capture that isolates an enemy pawn) — the target IS the point.
-        return out('weakness', `${mv.captured ? 'The capture means' : 'Now'} ${target}.`);
+        // …and WHEN: a weakness that exists only once they take back is said
+        // as the trade's result (Danya 4e6z 13…exd5: "the capture means their
+        // d-pawn is isolated now" — it is isolated only after 14.exd5).
+        const onlyAfterTrade = !!end && end.sans.length > 0 && createdEnemyWeakness(before, now, moverKey, moverIsStudent) !== target;
+        const text = onlyAfterTrade
+          ? `Once ${moverIsStudent ? 'they take' : 'you take'} back, ${target.replace(/ is isolated now/, ' is isolated')}.`
+          : `${mv.captured ? 'The capture means' : 'Now'} ${target}.`;
+        return out('weakness', text);
       }
     }
     // A pawn that is taken back did nothing else that lasts.

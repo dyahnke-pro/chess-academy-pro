@@ -2640,7 +2640,7 @@ function* reviewSegmentSteps(
         const heard = !!job && [...storySaid].some((t) => t.includes(job.clause.replace(/^it /, '')));
         if (job && heard && !told && !hintsSaid.has(id) && moverColor !== playerColor && job.kind === 'attack' && job.squares[1]) {
           const ask = whatItAsks(fenPair.fenAfter, job.squares[1], moverColor === 'white' ? 'w' : 'b', THEIRS);
-          if (ask) {
+          if (ask && replyAnswersAttack(fenPair.fenAfter, job.squares[1], m.pv?.afterPlayed?.[0] ?? null)) {
             facets.push(fact('whatItAsks', 'move-job', `${ask}.`, { identity: id, squares: job.squares }));
           }
         }
@@ -2650,7 +2650,14 @@ function* reviewSegmentSteps(
         // that asks nothing is held. Checks and joined attacks keep their own
         // clause either way.
         const theirAttack = !!job && moverColor !== playerColor && job.kind === 'attack' && !!job.squares[1];
-        const asks = theirAttack && job ? whatItAsks(fenPair.fenAfter, job.squares[1], moverColor === 'white' ? 'w' : 'b', THEIRS) !== null : false;
+        // …and only when the engine's best reply ANSWERS it (Danya BGTB 4…Nf6:
+        // "…and e4, attacking the pawn there, so it needs an answer this move"
+        // — the engine leaves e4 and plays Nf3). An attack the best move
+        // ignores asks nothing.
+        const asks = theirAttack && job
+          ? whatItAsks(fenPair.fenAfter, job.squares[1], moverColor === 'white' ? 'w' : 'b', THEIRS) !== null
+            && replyAnswersAttack(fenPair.fenAfter, job.squares[1], m.pv?.afterPlayed?.[0] ?? null)
+          : false;
         const plainAttackAsksNothing = theirAttack && !asks && !!job && /^it attacks /.test(job.clause);
         // THE MOVE'S OWN THOUGHT, FROM THE ONE COMPOSER (WO-ONE-COACH-01 Build
         // 5, David 2026-10-30: "Remember to unify this build"). Review said a
@@ -6753,4 +6760,22 @@ export function addVerdictReason(narration: string, bestSan: string, reason: str
   const end = at + marker.length;
   if (!/^[.;]/.test(narration.slice(end))) return narration;   // already carries a clause
   return `${narration.slice(0, end)} — ${reason}${narration.slice(end)}`;
+}
+
+/** Does the engine's best reply ANSWER an attack on `target`: move it, take an
+ *  attacker of it, or add a guard to it? No reply known → the board read stands. */
+export function replyAnswersAttack(fenAfter: string, target: string, replyUci: string | null): boolean {
+  if (!replyUci) return true;
+  try {
+    const c = new Chess(fenAfter);
+    const owner = c.get(target as Square)?.color;
+    if (!owner) return true;
+    const attackers = c.attackers(target as Square, owner === 'w' ? 'b' : 'w');
+    const guardsBefore = c.attackers(target as Square, owner).length;
+    const mv = c.move({ from: replyUci.slice(0, 2), to: replyUci.slice(2, 4), promotion: replyUci[4] });
+    if (!mv) return true;
+    if (mv.from === target) return true;
+    if (attackers.includes(mv.to)) return true;
+    return c.attackers(target as Square, owner).length > guardsBefore;
+  } catch { return true; }
 }

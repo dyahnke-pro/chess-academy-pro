@@ -272,3 +272,12 @@ describe('a king move is named by where it went (prod audit 2026-11-07)', () => 
     expect(buildReviewMoveTeachingFact('r1br2k1/pp6/4p1pp/2p2p2/2Bb2P1/2NP1R2/PPP4P/5RK1 w - - 1 18', 'Kh1', false, null)?.text ?? '').not.toMatch(/toward safety|march/);
   });
 });
+
+// Danya speedrun 4e6zHMBUgvg, 13…exd5: "The capture means their d-pawn is
+// isolated now" — White has no d-pawn until 14.exd5 takes back.
+describe('a weakness that comes only with the take-back is said as the trade’s result', () => {
+  it('13…exd5: not "isolated now"', () => {
+    const t = buildReviewMoveTeaching('r2qkb1r/pp1n1ppp/4p3/2pP4/3nP3/P4P2/1P2BP1P/RNBQK2R b KQkq - 2 13', 'exd5', true) ?? '';
+    expect(t).not.toMatch(/isolated now/);
+  });
+});
