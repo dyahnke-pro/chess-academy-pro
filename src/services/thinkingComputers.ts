@@ -253,6 +253,7 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   bothSaved: 'answer-danger',
   perpetualCheck: 'forcing-moves',
   windmill: 'forcing-moves',
+  minorMatchup: 'assess',
   tradeOfferAt: 'assess',
   fileTradeAt: 'assess',
   pawnEndingTradeAt: 'assess',

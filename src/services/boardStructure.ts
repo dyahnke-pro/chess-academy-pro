@@ -275,6 +275,24 @@ interface StructureSignature {
   queensideMajority: Color | null;
 }
 
+/**
+ * EVERY PAIR OF PAWNS LOCKED HEAD-TO-HEAD — a white pawn with a black pawn
+ * directly in front of it, so neither can push. The one reader of locked
+ * pawns: the locked centre above counts its files on c–f, and the minor-piece
+ * matchup (`minorMatchup`) counts them all to call a board closed or open.
+ */
+export function lockedPawnPairs(chess: Chess): Array<{ white: string; black: string }> {
+  const out: Array<{ white: string; black: string }> = [];
+  for (const f of FILES) {
+    for (let r = 2; r <= 6; r++) {
+      const w = chess.get(`${f}${r}` as Parameters<Chess['get']>[0]);
+      const b = chess.get(`${f}${r + 1}` as Parameters<Chess['get']>[0]);
+      if (w?.type === 'p' && w.color === 'w' && b?.type === 'p' && b.color === 'b') out.push({ white: `${f}${r}`, black: `${f}${r + 1}` });
+    }
+  }
+  return out;
+}
+
 export function structureSignature(fen: string): StructureSignature | null {
   const s = describeStructure(fen);
   if (!s) return null;
@@ -295,18 +313,9 @@ export function structureSignature(fen: string): StructureSignature | null {
   let queensideMajority: Color | null = null;
   if (chess) {
     const allPawns = pieces(chess).filter((p) => p.type === 'p');
-    const pawnAt = (f: string, r: number, c: Color): boolean =>
-      allPawns.some((p) => p.color === c && p.square === `${f}${r}`);
-    let lockedFiles = 0;
-    for (const f of ['c', 'd', 'e', 'f']) {
-      for (let r = 2; r <= 6; r++) {
-        if (pawnAt(f, r, 'w') && pawnAt(f, r + 1, 'b')) {
-          lockedFiles++;
-          break;
-        }
-      }
-    }
-    lockedCenter = lockedFiles >= 2;
+    // The one locked-pawn reader (`lockedPawnPairs`), counted on c–f.
+    const centreFiles = new Set(lockedPawnPairs(chess).map((p) => p.white[0]).filter((f) => 'cdef'.includes(f)));
+    lockedCenter = centreFiles.size >= 2;
 
     const countWing = (c: Color, wing: 'q' | 'k'): number =>
       allPawns.filter(

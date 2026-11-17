@@ -246,6 +246,13 @@ export function detectRookPawnCorner(fen: string): RookPawnCornerResult | null {
   return null;
 }
 
+/** THE WRONG-BISHOP DRAW, in words — the one sentence for it, said by the
+ *  endgame concept (`conceptEngine`) and by the move that trades into it
+ *  (`minorMatchup`). */
+export function wrongBishopDrawText(r: { pawn: Square; corner: Square }): string {
+  return `The ${r.pawn} pawn is a rook pawn, and the bishop never touches its promotion corner on ${r.corner}. With the defending king in that corner nothing can evict it, so the pawn cannot be forced through: a wrong-bishop draw.`;
+}
+
 // ─── ROOK ENDINGS: LUCENA / PHILIDOR / CUT-OFF / ROOK BEHIND THE PASSER ──────
 
 interface LucenaResult { side: Side; pawn: Square; }

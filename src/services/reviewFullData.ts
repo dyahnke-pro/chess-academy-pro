@@ -1665,6 +1665,8 @@ export function computeMoveFacets(
       add(readBoardAll('pawnBreak', { fenBefore, san, student: studentColorWB, lastTo })[0]);
       // Opposite-coloured bishops settled by this move, and what they mean.
       add(readBoardAll('oppositeBishops', { fenBefore, san, student: studentColorWB })[0]);
+      // Knight against bishop made by this move, and which minor is better.
+      add(readBoardAll('minorMatchup', { fenBefore, san, student: studentColorWB })[0]);
       // What the pawn move did to the lines through its squares, and a piece
       // at a chain's base or a pinned pawn guard (S4 pawns), both seats.
       add(readBoardAll('pawnCutsGuard', { fenBefore, san, student: studentColorWB })[0]);
