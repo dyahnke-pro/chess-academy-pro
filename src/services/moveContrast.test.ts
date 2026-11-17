@@ -31,3 +31,10 @@ describe('contrastMoves — a loose piece nothing can reach is no difference (re
     expect(contrastMoves(fen, 'h4', 'Qb3')).toBeNull();
   });
 });
+
+describe('the contrast compares a piece that stands on both boards', () => {
+  it('never says Rc7 keeps the rook defended that Rc7 moved away (Danya -Am8 29.Nxd7)', () => {
+    const c = contrastMoves('2R2r2/p2nkp2/1p2pq2/3pNp1Q/1P1P4/P6P/5PP1/6K1 w - - 2 29', 'Nxd7', 'Rc7');
+    expect(c?.square).not.toBe('c8');
+  });
+});

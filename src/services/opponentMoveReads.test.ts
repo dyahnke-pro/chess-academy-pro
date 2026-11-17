@@ -140,3 +140,11 @@ describe('readTheirMove — the one producer', () => {
     expect(matesInOne(new Chess().fen())).toEqual([]);
   });
 });
+
+describe('their move helped you: the piece that really hits', () => {
+  it('Nc6 uncovers the bishop on e3 onto the rook — it is not the knight that hits it (Danya J4Wz 20.Nc6)', () => {
+    const r = helpedYou('1r6/p1rkbpp1/3p1n1p/3P4/3N4/P1N1B3/1PP2PPP/1R3RK1 b - - 5 19', 'Rc5', 'w', [{ moves: ['d4c6', 'b8c8', 'e3c5'], evaluation: 300 } as never]);
+    expect(r?.text ?? '').not.toMatch(/knight to c6 now comes with gain of time, hitting/i);
+    expect(r?.text).toMatch(/uncovers your bishop on e3/);
+  });
+});

@@ -51,6 +51,10 @@ export function findEnablingMove(fen: string, pvUci: readonly string[]): Enablin
   if (!mv(pvUci[1])) return null;
   const b = mv(pvUci[2]);
   if (!b || (b.piece !== 'b' && b.piece !== 'r' && b.piece !== 'q')) return null;
+  // The same piece moving twice is a reroute: it was never "in the way" of
+  // itself (Danya -Am8 26.Qxh5: "Qh7 first … your queen is in the way" with
+  // the queen on h6 — the move that went first was the queen's own).
+  if (b.from === a.to) return null;
   // B could not be played on the starting board…
   const legalNow = start.moves({ verbose: true }).some((m) => m.from === b.from && m.to === b.to);
   if (legalNow) return null;

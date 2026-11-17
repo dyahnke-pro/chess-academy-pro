@@ -16,3 +16,11 @@ describe('enablingMove — A first because it opens the road for B', () => {
     expect(findEnablingMove(fen, ['e1e2', 'h7h6', 'f1d3'])).toBeNull();
   });
 });
+
+describe('the same piece twice is no enabling move', () => {
+  it('a queen that steps away and comes back through its own square was never in its own way', () => {
+    // Qh6-h7, …Nh5, Qh7xh5: the road h7→h5 runs through h6, where the queen
+    // itself stood.
+    expect(findEnablingMove('k7/8/5n1Q/8/8/8/8/6K1 w - - 0 1', ['h6h7', 'f6h5', 'h7h5'])).toBeNull();
+  });
+});

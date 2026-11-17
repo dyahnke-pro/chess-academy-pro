@@ -1196,9 +1196,14 @@ export function goodPieceClause(kind: PieceQualityKind, square: string): string 
  *  the kinds that are never praised (prod Learn audit 2026-10-14: "Your rook on
  *  d8 owns the open d-file — build your play around it." said what and never
  *  why). Exhaustive, so a new kind must decide its reason. */
+/** The two reasons the piece reads and the fundamentals share — written once.
+ *  An outpost is never "there for the whole game": a piece can still trade it
+ *  off (Danya S-ZY 11.Nc6, the knight traded on c6 later). */
+export const OUTPOST_REASON = 'no pawn can chase it away, so they have to give up a piece to get rid of it';
+export const OPEN_FILE_REASON = 'a rook needs an open file to reach their camp';
 const GOOD_PIECE_REASON: Record<PieceQualityKind, string | null> = {
-  outpost: 'a piece no pawn can chase stays there for the whole game',
-  'open-file': 'a rook needs an open file to reach their camp',
+  outpost: OUTPOST_REASON,
+  'open-file': OPEN_FILE_REASON,
   'semi-open-file': 'no pawn of yours stands in its way on that file',
   'seventh-rank': 'on the seventh it attacks their pawns where they stand',
   'bad-bishop': null,

@@ -75,3 +75,11 @@ describe('one move guards both', () => {
     expect(missedDefendsBoth(D, 'Qd7', 'b', 600)?.text).not.toContain('Qg8+');
   });
 });
+
+describe('the queen trade names the lead as what it is', () => {
+  it('three pawns up is never "a piece up" (Danya S-ZY 29.Nxc7)', () => {
+    const r = queenTradeRead('2n5/p1q1kppp/2P1p3/1N2P3/8/4P2P/PP3PP1/6K1 w - - 0 29', 'Nxc7', 'w', 0);
+    expect(r?.text).toMatch(/three pawns up/);
+    expect(r?.text).not.toMatch(/piece/);
+  });
+});

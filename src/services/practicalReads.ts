@@ -294,6 +294,18 @@ function pawnEndingAfterTrade(fen: string): boolean {
   return !/[nbrNBR]/.test(fen.split(' ')[0] ?? '');
 }
 
+const COUNT_WORD = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
+/** What the student is up, queens aside: a rook, a piece, or a number of
+ *  pawns — said as the thing it is. */
+function leadWords(c: Chess, student: Color): { up: string; extra: string } {
+  const them = other(student);
+  const d = (t: 'p' | 'n' | 'b' | 'r'): number => piecesOf(c, student, t).length - piecesOf(c, them, t).length;
+  if (d('r') >= 1) return { up: 'a rook', extra: 'the extra rook' };
+  if (d('n') + d('b') >= 1) return { up: 'a piece', extra: 'the extra piece' };
+  const pawns = Math.max(1, d('p'));
+  return pawns === 1 ? { up: 'a pawn', extra: 'the extra pawn' } : { up: `${COUNT_WORD[pawns] ?? pawns} pawns`, extra: 'the extra pawns' };
+}
+
 /** The queen trade, judged by how far ahead the student is. */
 export function queenTradeRead(fenBefore: string, san: string, student: Color, cpLoss: number): StructureRead | null {
   const before = boardOf(fenBefore);
@@ -305,7 +317,10 @@ export function queenTradeRead(fenBefore: string, san: string, student: Color, c
   const up = balanceFor(fenBefore, student) - 9 * (piecesOf(before, student, 'q').length - piecesOf(before, other(student), 'q').length);
   const verb = kind === 'made' ? 'Trading' : 'Offering to trade';
   if (up >= 3 && cpLoss < SOUND_CP) {
-    const text = `${verb} queens a piece up is the safe road: with the queens off nothing of theirs can threaten your king, and the extra piece wins the ending.`;
+    // The lead named by what it is: three pawns are not "a piece" (Danya S-ZY
+    // 28.Qxc7+, White three pawns up).
+    const lead = leadWords(before, student);
+    const text = `${verb} queens ${lead.up} up is the safe road: with the queens off nothing of theirs can threaten your king, and ${lead.extra} ${lead.extra.endsWith('s') ? 'win' : 'wins'} the ending.`;
     return withProof('queen-trade-ahead', text, [r.mv.to], 'queen-trade');
   }
   if (up >= 1 && up < 3 && cpLoss >= COSTLY_CP && !pawnEndingAfterTrade(r.after.fen())) {

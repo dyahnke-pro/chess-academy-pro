@@ -21,6 +21,7 @@
 import { Chess, type Color } from 'chess.js';
 import { theirWantedMoves, type TheirWant } from './prophylaxis';
 import { seatPieceWords } from './pieceRef';
+import { legalSeeGainFor } from './positionReadingService';
 
 export interface OrderPoint {
   /** The follow-up that has to wait, as said ("…e6"). */
@@ -33,6 +34,17 @@ export interface OrderPoint {
 }
 
 /** Is X's order the point? `mine`: the student moved (words in their seat). */
+/** The most the side `me` can win by one capture on the board `c` (me to
+ *  move), counted to the end of its trades, in pawns. */
+function wonAfter(c: Chess, me: Color): number {
+  let best = 0;
+  for (const row of c.board()) for (const cell of row) {
+    if (!cell || cell.color === me || cell.type === 'k') continue;
+    best = Math.max(best, legalSeeGainFor(c.fen(), cell.square, me));
+  }
+  return best;
+}
+
 export function orderByThreat(fenBefore: string, san: string, line: readonly string[], mine: boolean): OrderPoint | null {
   const followSan = line[1];
   if (!followSan) return null;
@@ -62,6 +74,10 @@ export function orderByThreat(fenBefore: string, san: string, line: readonly str
     try {
       const c = new Chess(y.fen);
       c.move(w.san);
+      // …AND THE REPLY DOES NOT JUST LOSE MATERIAL: a reply that leaves the
+      // mover a winning capture is no reason to fear the order (Danya 4T9
+      // 9…Nxd4: "Why not …e5 first? It would allow Bg5" — …exd4 wins a knight).
+      if (wonAfter(c, me) >= 1) continue;
       if (!c.move(san)) continue;
     } catch { continue; }
     const [v, ...rest] = w.hit;

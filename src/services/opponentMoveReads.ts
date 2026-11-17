@@ -496,7 +496,18 @@ export function helpedYou(fenBefore: string, san: string, student: 'w' | 'b', to
     const now = new Chess(after.fen()); now.move(bestSan);
     const hits = now.attackers(mv.to, student).length > 0;
     const wins = signedLegalSeeFor(asIfToMove(now.fen(), student) ?? now.fen(), mv.to, student) > 0;
-    if (hits && wins && !best.captured) reason = `${sayMoveNoun(bestSan, after.fen())} now comes with gain of time, hitting the ${PIECE[mv.piece]} they just moved`;
+    if (hits && wins && !best.captured) {
+      // Who hits it: the piece that moved, or one its move uncovered (Danya
+      // J4Wz 20.Nc6: the bishop behind the knight hits the rook, not the knight).
+      const hitters = now.attackers(mv.to, student);
+      const before = new Set(after.attackers(mv.to, student));
+      const uncovered = hitters.find((sq) => sq !== best.to && !before.has(sq));
+      if (hitters.includes(best.to)) reason = `${sayMoveNoun(bestSan, after.fen())} now comes with gain of time, hitting the ${PIECE[mv.piece]} they just moved`;
+      else if (uncovered) {
+        const t = now.get(uncovered);
+        reason = `${sayMoveNoun(bestSan, after.fen())} now comes with gain of time: it uncovers your ${t ? PIECE[t.type] : 'piece'} on ${uncovered} onto the ${PIECE[mv.piece]} they just moved`;
+      }
+    }
   }
   // (a) not possible before their move.
   const asYou = asIfToMove(fenBefore, student);

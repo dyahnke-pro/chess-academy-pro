@@ -22,7 +22,7 @@ import { rotateStem } from '../utils/rotateStem';
 import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause, standingHoles } from './keySquares';
 import { andList, withArticle } from '../utils/andList';
 import type { Square } from 'chess.js';
-import { landingIsSafe, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
+import { landingIsSafe, legalSeeGainFor, seeReadsStanding, OUTPOST_REASON, OPEN_FILE_REASON } from './positionReadingService';
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { homeMinorCount, homeSquaresOf, isOnHomeSquare } from './development';
@@ -1464,8 +1464,8 @@ const PRINCIPLE_REASON: Record<MoveFundamental['id'], string | null> = {
   'open-diagonal': 'a bishop shut in behind its own pawns is a spectator',
   center: 'pieces behind a strong center reach either wing in a move or two',
   'king-safety': 'a king left in the middle gets caught the moment the center opens',
-  outpost: 'a piece no pawn can chase stays there for the whole game',
-  'open-file': 'a rook needs an open file to reach their camp',
+  outpost: OUTPOST_REASON,
+  'open-file': OPEN_FILE_REASON,
   tempo: 'every move they spend retreating is a move they do not spend developing',
   'attack-defender': null,
   'keep-working': null,

@@ -70,9 +70,20 @@ export function contrastMoves(fenBefore: string, sanA: string, sanB: string): Mo
   // "h4 keeps your knight on h5 defended, and Nh5 leaves it with no guard" said
   // of a knight that h4 never puts on h5 (decision baseline 2026-11-12). The
   // difference is a piece that stands on both boards.
-  const landed = new Set([sanA, sanB].map((san) => { try { return new Chess(fenBefore).move(san).to as string; } catch { return ''; } }));
-  const onlyA = [...a.entries()].filter(([sq]) => !b.has(sq) && !landed.has(sq));
-  const onlyB = [...b.entries()].filter(([sq]) => !a.has(sq) && !landed.has(sq));
+  // …AND A SQUARE ONE OF THE MOVES LEAVES: "Here Rc7 keeps your rook
+  // defended" of the rook Rc7 itself moved off c8 (Danya -Am8 29.Nxd7). Only a
+  // square that holds the same piece on both boards is compared.
+  const after = (san: string): Chess | null => { try { const c = new Chess(fenBefore); c.move(san); return c; } catch { return null; } };
+  const boardA = after(sanA);
+  const boardB = after(sanB);
+  if (!boardA || !boardB) return null;
+  const same = (sq: string): boolean => {
+    const x = boardA.get(sq as Square);
+    const y = boardB.get(sq as Square);
+    return !!x && !!y && x.type === y.type && x.color === y.color;
+  };
+  const onlyA = [...a.entries()].filter(([sq]) => !b.has(sq) && same(sq));
+  const onlyB = [...b.entries()].filter(([sq]) => !a.has(sq) && same(sq));
   if (onlyA.length > 0 && onlyB.length === 0) return { keeps: sanB, drops: sanA, piece: onlyA[0][1], square: onlyA[0][0] };
   if (onlyB.length > 0 && onlyA.length === 0) return { keeps: sanA, drops: sanB, piece: onlyB[0][1], square: onlyB[0][0] };
   return null;
