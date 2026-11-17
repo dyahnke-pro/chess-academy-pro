@@ -18,6 +18,7 @@
  * With every weight zero (every card before the Campaign master WO) nothing
  * is read and nothing is re-ranked.
  */
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { BossId, CoachDials, MissionPhase, PatternId } from './missionCard';
 import type { FocusId } from '../coach/focus/focusCard';
 import type { MotifLevel } from '../data/tacticMotifs';
@@ -56,7 +57,10 @@ export interface ScoringContext {
   /** A Learn focus game's focus (WO-LEARN-FOCUS-01) and the student's open
    *  motif levels (WO-MOTIFS-01), for the `focus` scorer. Null off a focus
    *  game. */
-  focus: { id: FocusId; levels: ReadonlySet<MotifLevel> } | null;
+  focus: { id: FocusId; levels: ReadonlySet<MotifLevel>;
+    /** The positional skills the student's record still needs (red or grey),
+     *  which the `skillSteer` scorer sets up (WO-SET-WEAKNESS-01). */
+    needs: ReadonlySet<MisconceptionTagId> } | null;
 }
 
 /** Pure: how much this scorer likes the candidate, clamped to [-1, 1]. */

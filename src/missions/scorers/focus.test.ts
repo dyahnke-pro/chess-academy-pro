@@ -20,7 +20,7 @@ const KING_SIDE = '4k3/8/8/q7/8/8/5PPP/6K1 b - - 0 1';
 const GIFT = '4k3/8/2n5/8/8/2P5/8/4K3 b - - 0 1';
 
 const ctx = (fen: string, focus: FocusId | null, windowCp = 100): ScoringContext => ({
-  fen, coach: 'b', windowCp, coachEvalCp: 0, pattern: null, phase: 'middlegame', bossId: null, targets: [], focus: focus ? { id: focus, levels: BEGINNER } : null,
+  fen, coach: 'b', windowCp, coachEvalCp: 0, pattern: null, phase: 'middlegame', bossId: null, targets: [], focus: focus ? { id: focus, levels: BEGINNER, needs: new Set() } : null,
 });
 
 describe('posesDefendSeat — the defend question the coach can set without a gift', () => {

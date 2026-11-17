@@ -363,6 +363,8 @@ export type AuditKind =
   /** A technique ending (`bestPlay` on): the coach played its engine-best move. */
   | 'mission-best-play'
   | 'focus-steer'
+  /** The coach steered toward a positional skill the student's record still needs (WO-SET-WEAKNESS-01). */
+  | 'skill-steer'
   /** The coach planted a chance on the student's side of the focus, or
    *  looked and why it planted none (`focusPlant`). */
   | 'focus-plant'

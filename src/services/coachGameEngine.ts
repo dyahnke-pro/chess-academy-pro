@@ -20,6 +20,8 @@ import { hasActiveWeights, scoreCandidates, weightsForDials, type ScorerWeights,
 // Every scorer module registers itself (WO-CAMPAIGN-MASTER).
 import '../missions/scorers';
 import { posesDefendSeat } from '../missions/scorers/focus';
+import { posesNeededSkill } from '../missions/scorers/skillSteer';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findFocusPlant, type FocusPlantAsk, type FocusPlantPick, type FocusPlantReject } from '../coach/focus/focusPlant';
 import type { FocusId, FocusSeat } from '../coach/focus/focusCard';
 import type { ReadLine } from '../coach/focus/focusChances';
@@ -192,6 +194,10 @@ const DIAL_READ_LINES = 8;
  *  the coach's own move, the board after it is read once more, deeper; a steer
  *  that hands the student two pawns or more is refused. The audit's F7 bar. */
 const STEER_GIFT_CP = 200;
+/** THE SKILL STEER'S PULL (WO-SET-WEAKNESS-01): lighter than the focus, so a
+ *  tactic the focus sets up always leads, and a positional question the
+ *  record needs is the coach's pick only among moves that pose no tactic. */
+const SKILL_STEER_WEIGHT = 0.5;
 const STEER_VERIFY_DEPTH = 12;
 /** The earned slip's engine reads (WO-MISSIONS-02, §6a): the coach's own read
  *  of EVERY legal move (its candidates — where the slips come from) and up to
@@ -489,6 +495,10 @@ export interface MissionDialsOpt {
     /** REQUIRED — the student's tactics rung (`focusRung`), recorded on the
      *  `focus-plant` row the focus audit holds to its contract (F20). */
     rung: TacticsRung;
+    /** REQUIRED — the positional skills the student's record still needs (red
+     *  or grey), which the coach steers toward with its own natural moves
+     *  (`skillSteer`, WO-SET-WEAKNESS-01). Empty when the record holds them. */
+    needs: readonly MisconceptionTagId[];
     /** REQUIRED — the runner's plant ask (`focusPlant.plantAsk`): the coach
      *  may play one real slip that leaves the student's side of the focus on
      *  the board (the asked pattern, when there is one), or null. */
@@ -763,7 +773,9 @@ async function applyMoveScorers(
   mission: MissionDialsOpt,
   chosen: AdaptiveMoveResult,
 ): Promise<AdaptiveMoveResult> {
-  const weights: ScorerWeights = { ...weightsForDials(mission.dials), ...(mission.boss?.weights ?? {}), ...(mission.focus ? { focus: 1 } : {}) };
+  // The focus leads; the skill steer (WO-SET-WEAKNESS-01) is the lighter pull
+  // toward a positional question the record still needs.
+  const weights: ScorerWeights = { ...weightsForDials(mission.dials), ...(mission.boss?.weights ?? {}), ...(mission.focus ? { focus: 1, ...(mission.focus.needs.length ? { skillSteer: SKILL_STEER_WEIGHT } : {}) } : {}) };
   if (!hasActiveWeights(weights)) return chosen;
   const analysis = await withBudget(stockfishEngine.holdForQuestion(async (engine) => {
     try { stockfishEngine.setMultiPv(DIAL_READ_LINES); } catch { /* not ready → the default lines */ }
@@ -784,7 +796,7 @@ async function applyMoveScorers(
     phase: mission.phase,
     bossId: mission.boss?.id ?? null,
     targets: mission.boss?.targets ?? [],
-    focus: mission.focus ? { id: mission.focus.id, levels: new Set(mission.focus.levels) } : null,
+    focus: mission.focus ? { id: mission.focus.id, levels: new Set(mission.focus.levels), needs: new Set(mission.focus.needs) } : null,
   };
   const ranked = scoreCandidates(candidates, ctx, weights);
   const pick = ranked.length > 0 ? ranked[0] : null;
@@ -802,7 +814,22 @@ async function applyMoveScorers(
   });
   // THE FOCUS STEER (WO-LEARN-FOCUS-01): the swap set the focus's defend
   // question — recorded so the user's answer to it counts as steered.
-  const steered = !!mission.focus && posesDefendSeat(mission.focus.id, fen, pick.uci, coach, new Set(mission.focus.levels));
+  const focusSteer = !!mission.focus && posesDefendSeat(mission.focus.id, fen, pick.uci, coach, new Set(mission.focus.levels));
+  // THE SKILL STEER (WO-SET-WEAKNESS-01): the swap set up a positional skill
+  // the record needs — steered too, so the student's answer counts half and a
+  // find never raises the coach's strength.
+  const skillsSet = mission.focus && !focusSteer ? posesNeededSkill(fen, pick.uci, new Set(mission.focus.needs)) : [];
+  if (skillsSet.length > 0 && mission.focus) {
+    void logAppAudit({
+      kind: 'skill-steer',
+      category: 'subsystem',
+      source: 'coachGameEngine.applyMoveScorers',
+      summary: `${chosen.move || 'none'} → ${pick.uci} sets up ${skillsSet.join(', ')} (cpLoss=${pick.cpLoss}, window=${ctx.windowCp})`,
+      fen,
+      details: JSON.stringify({ replaced: chosen.move, played: pick.uci, skills: skillsSet, needs: mission.focus.needs, cpLoss: pick.cpLoss, windowCp: ctx.windowCp }),
+    });
+  }
+  const steered = focusSteer || skillsSet.length > 0;
   if (steered && mission.focus && ctx.coachEvalCp !== null) {
     const deep = await steerCost(fen, pick.uci, coach, ctx.coachEvalCp);
     if (deep !== null && deep >= STEER_GIFT_CP) {
@@ -817,7 +844,7 @@ async function applyMoveScorers(
       return chosen;
     }
   }
-  if (steered && mission.focus) {
+  if (focusSteer && mission.focus) {
     void logAppAudit({
       kind: 'focus-steer',
       category: 'subsystem',

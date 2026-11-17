@@ -211,6 +211,7 @@ import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';
 import { seedMasterPuzzles } from '../../services/puzzleService';
 import { explainDrillConcept } from '../../services/puzzleConceptExplanation';
+import { STEER_SKILLS } from '../../missions/scorers/skillSteer';
 import { gradeMistakePuzzle } from '../../services/mistakePuzzleService';
 import { reportCoachReask, isMoveReport } from '../../services/coachNonAnswer';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
@@ -8604,7 +8605,11 @@ export function CoachTeachPage({ mode }: {
             // the BOARD ply the user's next move will have (the runner's
             // own count: history after the coach's move, plus one).
             const plant = punish ? null : focusRef.current.plantAsk(plyOfFen(fen) + 2, fen);
-            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null, focus: { id: focusId, punish, levels: focusRef.current.levels(), rung: focusRung, plant } };
+            // THE SKILL STEER (WO-SET-WEAKNESS-01): the positional skills the
+            // record still needs — red or grey, never faded (green → silent,
+            // amber → short) — which the coach sets up with its natural moves.
+            const needs = STEER_SKILLS.filter((t) => !provenTagsRef.current?.has(t));
+            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null, focus: { id: focusId, punish, levels: focusRef.current.levels(), rung: focusRung, plant, needs } };
           }
           const own = missionRef.current.dials(plyOfFen(fen));
           const dials = own ? { ...own, strengthOffset: own.strengthOffset + onRampRef.current } : null;
