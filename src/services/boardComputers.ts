@@ -67,6 +67,9 @@ import { openingTheoryFacts } from './openingTheory';
 import { moveStops } from './moveStops';
 import { pieceOutFirst } from './pieceOutFirst';
 import { lineCut } from './lineCut';
+import { harmlessPin, harmlessPinLine } from './harmlessPin';
+import { queenNet, queenNetLine } from './queenNet';
+import { bothSaved, bothSavedLine, type ReplyLine } from './bothSaved';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses' | 'think';
 
@@ -235,6 +238,19 @@ export interface BoardContexts {
    *  seat), with the board reason that pays for it. `line`: the engine's line
    *  from `fenAfter` (UCI) — a capture or check next is a trade still going. */
   compensation: { fenAfter: string; student: Color; studentCp: number; line: readonly string[] };
+  /** RATE A PIN (`harmlessPin`, Danya 1Rejj 7.Bb5): the move `san` on
+   *  `fenBefore` (either seat) pins a piece that a pawn guards, and the
+   *  engine's line `line` from the board after it (UCI, their reply first)
+   *  ends the pin within two of the pinned side's moves. */
+  harmlessPin: { fenBefore: string; san: string; student: Color; line: readonly string[] };
+  /** LIST THE QUEEN'S ESCAPES (`queenNet`, Danya hv0P 12.Nd4): the move `san`
+   *  on `fenBefore` (either seat) takes a safe square from the other queen
+   *  and leaves it one or none. */
+  queenNet: { fenBefore: string; san: string; student: Color };
+  /** TWO HANGING, ONE MOVE SAVES BOTH (`bothSaved`, Danya FozbG 27.Ne7): the
+   *  move `san` on `fenBefore` (either seat). `replies`: the engine's lines
+   *  from the board after it, best first (White-POV cp); [] where none. */
+  bothSaved: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -1181,6 +1197,75 @@ export const BOARD_COMPUTERS = {
       tactics: { not: 'a puzzle poses one tactic; compensation is the standing of a whole position' },
       weaknesses: { not: 'a reading of the position — no question of the student\'s posed' },
       think: THINK,
+    },
+  },
+  harmlessPin: {
+    // His "rate a pin in two checks" (1Rejj 7.Bb5): a pawn guards the pinned
+    // piece, and the engine's line ends the pin within two of their moves.
+    read: ({ fenBefore, san, student, line }, fact) => safe(() => {
+      const h = harmlessPin(fenBefore, san, line);
+      if (!h) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mine = h.pinnerColor === student;
+      const text = harmlessPinLine(h, mine, fenAfter);
+      const squares = [h.pinner.square, h.pinned.square, h.target.square, h.guard, h.end.square];
+      return fact({ key: h.key, claims: [h.key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        // The end of the pin is the pinned side's move: named when that is the student.
+        seat: mine ? 'student' : 'opponent', namesStudentMove: !mine, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'harmlessPin',
+    kind: 'defence-idea',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: { not: 'owed — not in the Learn turn door yet (CoachTeachPage reads none of its lanes); the composer and Review say it' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  queenNet: {
+    // His "list its escapes: everything is covered except …Qe6" (hv0P 12.Nd4).
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const n = queenNet(fenBefore, san);
+      if (!n) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mine = n.queenColor !== student;
+      const text = queenNetLine(n, mine, fenAfter);
+      const squares = [n.to, n.queen, ...n.taken, ...n.left];
+      return fact({ key: n.key, claims: [n.key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'queenNet',
+    kind: 'tactic',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: { not: 'owed — not in the Learn turn door yet (CoachTeachPage reads none of its lanes); the composer and Review say it' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  bothSaved: {
+    // His "rook and knight both hang: find a knight move that also defends
+    // the rook" (FozbG 27.Ne7). The sibling of the desperado.
+    read: ({ fenBefore, san, student, replies }, fact) => safe(() => {
+      const b = bothSaved(fenBefore, san, replies);
+      if (!b) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mine = new Chess(fenBefore).turn() === student;
+      const text = bothSavedLine(b, mine ? 'your' : 'their', fenAfter);
+      const squares = [b.moved.from, b.moved.to, b.other.square];
+      return fact({ key: b.key, claims: [b.key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'bothSaved',
+    kind: 'defence-idea',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: { not: 'owed — not in the Learn turn door yet (CoachTeachPage reads none of its lanes); the composer and Review say it' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
     },
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };

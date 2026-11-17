@@ -1664,6 +1664,13 @@ export function computeMoveFacets(
       // compensation a side down material is playing for (2026-11-12).
       if (ctx.playedLineUci.length) add(readBoardAll('planSteps', { fenAfter, line: ctx.playedLineUci, student: studentColorWB, played: playedUci(fenBefore, san) })[0]);
       if (ctx.evaluation != null && storedMate(ctx.evaluation) == null) add(readBoardAll('compensation', { fenAfter, student: studentColorWB, studentCp: ctx.evaluation * (studentColorWB === 'w' ? 1 : -1), line: ctx.playedLineUci })[0]);
+      // Defence, both seats (Danya's speedruns, 2026-11-17): a pin that will
+      // not hold, the queen's escapes counted, two hanging pieces one move
+      // saves (the record keeps one line after the move, so a save the engine
+      // has to vouch for stays unsaid here).
+      add(readBoardAll('harmlessPin', { fenBefore, san, student: studentColorWB, line: ctx.playedLineUci })[0]);
+      add(readBoardAll('queenNet', { fenBefore, san, student: studentColorWB })[0]);
+      add(readBoardAll('bothSaved', { fenBefore, san, student: studentColorWB, replies: ctx.playedLineUci.length ? [{ cp: ctx.evaluation != null && storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: null, moves: ctx.playedLineUci }] : [] })[0]);
     }
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.

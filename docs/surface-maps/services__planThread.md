@@ -57,7 +57,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planThreadTurn` (function) — 26 call sites
-- `src/services/boardComputers.ts:784`
+- `src/services/boardComputers.ts:801`
 - `src/services/gameStory.rewind.test.ts:25`
 - `src/services/planArcFade.test.ts:31`
 - `src/services/planChoice.test.ts:78`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2806 lines · 78 exports · 138 importers · 28 tests · 2 audits**
+**2806 lines · 78 exports · 140 importers · 28 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -36,6 +36,7 @@
 - `src/services/boardState.ts`
 - `src/services/boardUrgency.ts`
 - `src/services/bookMoveWhy.ts`
+- `src/services/bothSaved.ts`
 - `src/services/capabilityEvidence.ts`
 - `src/services/captureLeadsTo.ts`
 - `src/services/causalChain.ts`
@@ -109,6 +110,7 @@
 - `src/services/prophylaxis.ts`
 - `src/services/pvPlayback.ts`
 - `src/services/queenGrabTrap.ts`
+- `src/services/queenNet.ts`
 - `src/services/relations.ts`
 - `src/services/replayFence.bowdler1000.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
@@ -199,7 +201,7 @@
 - `src/services/moveTiming.ts:32`
 - `src/services/reviewConcepts.ts:97`
 
-### `legalSeeGainOn` (function) — 18 call sites
+### `legalSeeGainOn` (function) — 19 call sites
 - `src/services/bookMoveWhy.ts:195`
 - `src/services/bookMoveWhy.ts:342`
 - `src/services/bookMoveWhy.ts:343`
@@ -212,6 +214,7 @@
 - `src/services/moveIntent.ts:486`
 - `src/services/moveIntent.ts:556`
 - `src/services/practicalReads.ts:177`
+- `src/services/queenNet.ts:55`
 - `src/services/reviewTeachingPoints.ts:103`
 - `src/services/reviewTeachingPoints.ts:469`
 - `src/services/reviewTeachingPoints.ts:680`
@@ -300,7 +303,7 @@
 - `src/services/orderByThreat.ts:110`
 - `src/services/prophylaxis.ts:105`
 
-### `legalSeeGainFor` (function) — 123 call sites
+### `legalSeeGainFor` (function) — 124 call sites
 - `src/coach/focus/castlingWatch.ts:159`
 - `src/coach/focus/castlingWatch.ts:161`
 - `src/coach/focus/focusChances.ts:388`
@@ -330,6 +333,7 @@
 - `src/services/bluffDetector.ts:54`
 - `src/services/bluffDetector.ts:148`
 - `src/services/boardState.ts:42`
+- `src/services/bothSaved.ts:48`
 - `src/services/captureLeadsTo.ts:30`
 - `src/services/causalChain.ts:45`
 - `src/services/checkIsNotAGuard.test.ts:39`
@@ -532,10 +536,11 @@
 - `src/services/positionReadingService.test.ts:938`
 - `src/services/theirMoveCost.ts:39`
 
-### `findHangingBySee` (function) — 28 call sites
+### `findHangingBySee` (function) — 29 call sites
 - `src/coach/chatTurnAnswers.ts:211`
 - `src/components/Coach/CoachTeachPage.tsx:9159`
 - `src/components/Coach/CoachTeachPage.tsx:9165`
+- `src/services/bothSaved.ts:70`
 - `src/services/computedMaterialTruth.corpus.test.ts:216`
 - `src/services/computedMaterialTruth.corpus.test.ts:226`
 - `src/services/conversionMethod.ts:65`

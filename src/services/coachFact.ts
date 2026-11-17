@@ -466,6 +466,9 @@ export const COMPUTER_CATALOG = {
   evalReading: { file: 'services/reviewMoveBriefing.ts', says: 'the position\'s standing in words when a move changed it (a band change or a real swing): who is better and the board\'s reason — material, the more exposed king, a passed pawn, an isolated pawn' },
   compensation: { file: 'services/compensation.ts', says: 'who is better when one side is down material, and the board\'s reason for it: a development lead, a king left in the middle, the bishop pair, an advanced passed pawn' },
   emptyCheckAt: { file: 'services/emptyCheck.ts', says: 'a check that cost half a pawn and is answered by a block or a king step: the checking piece has to move again' },
+  harmlessPin: { file: 'services/harmlessPin.ts', says: 'a pin the move just made that will not hold: a pawn guards the pinned piece and the engine\'s line ends the pin within two of their moves (castling, a piece between, a pawn kick)' },
+  queenNet: { file: 'services/queenNet.ts', says: 'the move takes a safe square from the other side\'s raiding (or attacked) queen and leaves it one safe square or none, each square read by the legal exchange' },
+  bothSaved: { file: 'services/bothSaved.ts', says: 'two of the mover\'s pieces hanging, and the move steps one of them to a square that guards the other, both safe after it by the legal exchange or the engine\'s own replies' },
   desperadoAt: { file: 'services/desperado.ts', says: 'two of the mover\'s pieces hanging, and the engine\'s best move sells the one that is lost anyway: it captures on its way out' },
   pawnBreak: { file: 'services/pawnBreak.ts', says: 'the pawn break and what it is for: the pawn it strikes (the base of their chain), the file it opens for the rooks, the bishop it frees' },
 } satisfies Record<string, CatalogRow>;
