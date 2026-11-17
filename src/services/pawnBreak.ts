@@ -27,6 +27,7 @@
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { legalLineProof, type Proof } from './proof';
 import { exchangeEnd } from './material';
+import { isChainBase } from './chainBase';
 import { andList } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -109,15 +110,6 @@ function pawnHits(sq: string, color: Color): Square[] {
   return [-1, 1].map((df) => String.fromCharCode(f + df)).filter((x) => x >= 'a' && x <= 'h').map((x) => `${x}${r}` as Square);
 }
 
-/** Is the pawn of `color` on `sq` the BASE of a pawn chain: it holds a pawn of
- *  its own, and no pawn of its own holds it? */
-function chainBase(board: Chess, sq: string, color: Color): boolean {
-  const holds = pawnHits(sq, color).some((s) => { const p = board.get(s); return !!p && p.type === 'p' && p.color === color; });
-  if (!holds) return false;
-  const held = board.attackers(sq as Square, color).some((s) => board.get(s)?.type === 'p');
-  return !held;
-}
-
 /** Where the mover's rooks stand. */
 function rooksOf(board: Chess, color: Color): string[] {
   const out: string[] = [];
@@ -191,7 +183,7 @@ export function pawnBreak(fenBefore: string, san: string, whose: 'your' | 'their
   }
   const tradeBoard = line.length === 2 || mv.captured === 'p';
   // WHAT IT STRIKES, on the board as it stood.
-  const base = chainBase(before, struck, them);
+  const base = isChainBase(before, struck as Square, them);
   const centre = CENTRE.has(struck);
   // WHAT THE TRADE OPENS — against the board with the break pawn still
   // standing (the push's own board; the capture's, the board before it), so

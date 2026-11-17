@@ -731,6 +731,17 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     for (const f of readBoardAll('oppositeBishops', { fenBefore: i.fenBefore, san: i.san, student })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 50 });
     }
+    // What the pawn move did to the lines through its squares, the piece at a
+    // chain's base, the pawn guard pinned to its king (S4 pawns).
+    for (const f of readBoardAll('pawnOpensCastling', { fenBefore: i.fenBefore, san: i.san, student })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'king-safety', weight: 55 });
+    }
+    for (const f of [...readBoardAll('pawnCutsGuard', { fenBefore: i.fenBefore, san: i.san, student }), ...readBoardAll('pinnedPawnGuard', { fenBefore: i.fenBefore, san: i.san, student })]) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'tactic', weight: 60 });
+    }
+    for (const f of readBoardAll('chainBase', { fenBefore: i.fenBefore, san: i.san, student })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: f.stakes ? 'pressure' : 'guard', weight: 50 });
+    }
     // THE PLAN'S NEXT STEPS and COMPENSATION (2026-11-12, the writers' "Bd3
     // and Qc2, both aimed at h7" and "a pawn down but slightly better"), off
     // the lesson's read after the move. A lesson shows its line: every move
