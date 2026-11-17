@@ -117,6 +117,29 @@ describe('"why is X best?" on the best move is the lesson\'s thought on it (the 
     expect(await answerBoardTurn(turn('why-best-move', 'Nxd5'), board)).toMatch(/^Nxd5 isn't the best move here\./);
     expect(asked).toBe(false);
   });
+  // A SOUND NAMED MOVE (David 2026-11-17: "make sure the computers can answer
+  // questions about their calculations"): "is Nxe5 good?" says what the move
+  // does from its own thought, then how it compares — before, a move a hair
+  // under the best got the weighing alone and none of its computers spoke.
+  it('a named move as sound as the best: its own thought, then the comparison', async () => {
+    let asked: string | null = null;
+    setBoardEngineForTests({
+      analysis: async () => ({ topLines: [
+        { rank: 1, evaluation: 40, mate: null, moves: ['e4d5', 'f6d5', 'c3d5', 'd8d5'] },
+        { rank: 2, evaluation: 30, mate: null, moves: ['f3e5', 'd5e4'] },
+      ], evaluation: 0, isMate: false, mateIn: null, depth: 14, seldepth: 14 }),
+      candidate: async () => ({ evalCp: 30, mateIn: null, lineUci: ['d5e4'] }),
+      thought: async (_b, san) => { asked = san; return {
+        text: `You play ${san} — it adds a second attacker on their pawn on f7.`,
+        move: { san, from: 'f3', to: 'e5' },
+        reason: null,
+      }; },
+    });
+    const a = await answerBoardTurn(turn('candidate-move', 'Nxe5'), board);
+    expect(asked).toBe('Nxe5');
+    expect(a).toMatch(/^You play Nxe5 — it adds a second attacker on their pawn on f7\. Nxe5 is fine\./);
+    expect(a).toMatch(/exd5/);
+  });
   it('no thought (engine failed): the weighing still answers', async () => {
     expect(await answerBoardTurn(turn('why-best-move', 'exd5'), board)).toMatch(/^exd5 is the best move here/);
   });

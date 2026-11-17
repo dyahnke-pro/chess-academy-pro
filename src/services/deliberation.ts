@@ -991,7 +991,15 @@ const NAMED_SAME_AS_BEST_CP = MEANINGFUL_DELTA_CP;
  * short with the line that proves it, or "about as good" inside the coin-flip
  * band. Null when the weighing has nothing to say about it.
  */
-export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good'): string | null {
+/** Is the named move as sound as the best — within the same-as-best margin,
+ *  dropping nothing? The chat says what such a move DOES (its own thought),
+ *  then how it compares (`namedMoveAnswer` with `ownSaid`). */
+export function namedIsSound(d: Deliberation): boolean {
+  const n = d.named;
+  return !!n && n.san !== d.best.san && n.deltaCp < NAMED_SAME_AS_BEST_CP && n.shortfall !== 'drops-material';
+}
+
+export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good', opts: { ownSaid?: boolean } = {}): string | null {
   const n = d.named;
   if (!n) return null;
   const line = d.bestLine ? ` ${openSentence(d.bestLine)}.` : '';
@@ -1017,7 +1025,8 @@ export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good')
   if (n.deltaCp < NAMED_SAME_AS_BEST_CP && n.shortfall !== 'drops-material') {
     // Each move carries its own reason: the student's move first, then the
     // engine's alternative with its reason, never one reason across both.
-    const own = d.namedWhy ? ` — it ${d.namedWhy}` : '';
+    // Said already when the move's own thought leads the answer.
+    const own = d.namedWhy && !opts.ownSaid ? ` — it ${d.namedWhy}` : '';
     const alt = d.bestWhy ? ` ${d.best.san} is the engine's choice${bestReason}.` : ` The engine slightly prefers ${d.best.san}.`;
     // "Fine" is a verdict on the position, not only on the gap (walk 4:
     // "castling is fine" with the b5 bishop hanging and the game lost). When

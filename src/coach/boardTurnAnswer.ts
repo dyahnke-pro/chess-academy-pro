@@ -15,7 +15,7 @@
  */
 import { Chess, type Square } from 'chess.js';
 import type { ResolvedChatTurn, ChatKind } from './chatTurn';
-import { bestMoveReason, buildDeliberation, namedMoveAnswer, spokenLines } from '../services/deliberation';
+import { bestMoveReason, buildDeliberation, namedIsSound, namedMoveAnswer, spokenLines } from '../services/deliberation';
 import { moverLineProof, computeExchangeLedger, describeProofResult } from '../services/exchangeLedger';
 import { readCriticalMoment } from '../services/criticalMoment';
 import { walkableLine } from '../services/proof';
@@ -124,6 +124,20 @@ export async function answerBoardTurn(turn: ResolvedChatTurn, board: BoardTurnIn
       const walk = r?.line && r.line.fen === board.fen ? walkableLine(r.line.fen, r.line.sans, san) : null;
       if (walk && out) out.lines = [walk];
       return thought.text;
+    }
+  }
+  // A NAMED MOVE AS SOUND AS THE BEST ("is Qf3 good?", "what happens if I play
+  // Qf3?"): what the move does, from its own thought — every computer that
+  // reads the move (David 2026-11-17: "make sure the computers can answer
+  // questions about their calculations") — then how it compares. A move that
+  // falls short is answered by the weighing: what it allows is the answer.
+  if (namedIsSound(d)) {
+    const thought = await engine.thought(board, san);
+    const verdict = namedMoveAnswer(d, turn.kind === 'why-best-move' ? 'why-best' : 'is-it-good', { ownSaid: true });
+    if (thought?.text && verdict) {
+      const said = `${thought.text} ${verdict}`;
+      if (out) { const lines = spokenLines(d, board.fen, said); if (lines.length) out.lines = lines; }
+      return said;
     }
   }
   const text = namedMoveAnswer(d, turn.kind === 'why-best-move' ? 'why-best' : 'is-it-good');
