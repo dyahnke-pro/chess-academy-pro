@@ -1062,7 +1062,11 @@ export const BOARD_COMPUTERS = {
       if (!r) return null;
       const mine = new Chess(fenBefore).turn() === student;
       const held = mine ? { text: r.heldText, proof: NO_PROOF.method, squares: [] as string[] } : null;
-      return fact({ key: r.key, claims: [r.key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,
+      // "Both keep the win, take your pick" is ONE idea however many moves
+      // it is said of: one claim, so the say-once ledger says it once a game
+      // (the Danya Review tapes said it 55 times in 20 games).
+      const claims = r.difference === null ? ['also-good:both-win'] : [r.key];
+      return fact({ key: r.key, claims, text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,
         seat: mine ? 'student' : 'opponent', namesStudentMove: !!held, thread: LOCAL_THREAD, fen: fenBefore, ...(held ? { heldForm: held } : {}) });
     }),
     computer: 'alsoGood',
