@@ -295,6 +295,51 @@ export const IDEA_SKILL: Record<IdeaKind, { student: MisconceptionTagId | null; 
   diagonal: { student: null, opponent: null }, weakness: { student: null, opponent: null }, choice: { student: null, opponent: null },
   order: { student: null, opponent: null }, eval: { student: null, opponent: null }, theory: { student: null, opponent: null }, structure: { student: null, opponent: null }, prepare: { student: null, opponent: null },
 };
+/** THE THREE TIERS (WO-TIERS-01, David 2026-11-17: "separate the computers.
+ *  Facts vs teaching concepts … separate the key concepts from advanced
+ *  concepts so beginners get fundamental teachings weighted higher"). Every
+ *  fact carries its idea, so the tier is read off the idea, exhaustive: a new
+ *  idea fails to compile until it says its tier.
+ *  - fact: what the board shows (a hit, a threat, a check, material, a mate);
+ *  - key: the fundamentals (develop, castle, the centre, trades, files, tempo);
+ *  - advanced: plans, structures, prophylaxis, routes, outposts, move order. */
+export type TeachTier = 'fact' | 'key' | 'advanced';
+export const IDEA_TIER: Record<IdeaKind, TeachTier> = {
+  mate: 'fact', 'win-material': 'fact', recapture: 'fact', rescue: 'fact', guard: 'fact', threat: 'fact',
+  pressure: 'fact', tactic: 'fact', check: 'fact', eval: 'fact',
+  trade: 'key', develop: 'key', castle: 'key', 'king-safety': 'key', center: 'key', tempo: 'key', file: 'key',
+  diagonal: 'key', 'passed-pawn': 'key', promote: 'key', 'king-activity': 'key', unpin: 'key', 'attack-king': 'key',
+  choice: 'key', theory: 'key',
+  prevent: 'advanced', prepare: 'advanced', space: 'advanced', outpost: 'advanced', weakness: 'advanced',
+  route: 'advanced', 'set-up': 'advanced', plan: 'advanced', structure: 'advanced', order: 'advanced',
+};
+
+/** The fundamentals the record can prove: the student's skill behind every
+ *  key-tier idea (`IDEA_SKILL`). */
+const KEY_SKILLS: readonly MisconceptionTagId[] = [...new Set((Object.keys(IDEA_TIER) as IdeaKind[])
+  .filter((k) => IDEA_TIER[k] === 'key')
+  .map((k) => IDEA_SKILL[k].student)
+  .filter((t): t is MisconceptionTagId => t !== null))];
+
+/** How much of the student's fundamentals the record holds green, 0–1 (grey
+ *  and absent are not held: absent ≠ mastered). */
+export function fundamentalsHeld(record: ThoughtRecord): number {
+  if (KEY_SKILLS.length === 0) return 0;
+  return KEY_SKILLS.filter((t) => record.stateOf(t) === 'green').length / KEY_SKILLS.length;
+}
+
+/** THE TIER'S WEIGHT, ALGO'D TO THE STUDENT (David 2026-11-17: "this is algo'd
+ *  to the user … Not a hard and fast rule. It's just a weighting"). Read off
+ *  this student's record, never the rating: while the fundamentals are not yet
+ *  held, facts and key concepts rise; as they hold, advanced concepts rise in
+ *  their place. A weighting inside the step's order — nothing is silenced by
+ *  its tier. No record (a lesson, a question): no tilt. */
+function tierLift(f: ThoughtFact, record: ThoughtRecord | null): number {
+  if (!record) return 0;
+  const held = fundamentalsHeld(record);
+  return IDEA_TIER[f.idea] === 'advanced' ? POLICY.recordRaise * held : POLICY.recordRaise * (1 - held) / 2;
+}
+
 function recordStateOf(f: ThoughtFact, record: ThoughtRecord | null): HeatState | null {
   if (!record) return null;
   const skill = IDEA_SKILL[f.idea][f.seat];
@@ -318,7 +363,7 @@ const POLICY: {
  *  record rises within its band. */
 function valueOf(f: ThoughtFact, record: ThoughtRecord | null): number {
   const red = recordStateOf(f, record) === 'red' ? POLICY.recordRaise : 0;
-  return POLICY.depth[factDepth(f)] + (POLICY.ideaPrior[f.idea] ?? 0) + (POLICY.sourcePrior[f.source] ?? 0) + red + f.weight / 100;
+  return POLICY.depth[factDepth(f)] + (POLICY.ideaPrior[f.idea] ?? 0) + (POLICY.sourcePrior[f.source] ?? 0) + red + tierLift(f, record) + f.weight / 100;
 }
 
 function orderWith(record: ThoughtRecord | null): (a: ThoughtFact, b: ThoughtFact, ia: number, ib: number) => number {

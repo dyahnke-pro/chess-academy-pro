@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { NO_STAKES } from './factStakes';
 import { describe, it, expect } from 'vitest';
-import { composeThought, type ThoughtFact, type ThoughtRecord, NOT_LED, SOURCE_DEPTH, IDEA_DEPTH, factDepth } from './thoughtComposer';
+import { composeThought, type ThoughtFact, type ThoughtRecord, NOT_LED, SOURCE_DEPTH, IDEA_DEPTH, factDepth, IDEA_TIER, fundamentalsHeld, IDEA_SKILL } from './thoughtComposer';
 import { IDEA_FAMILY } from './ideaKind';
 import { NO_PROOF } from './proof';
 import policy from '../data/thought-policy.json';
@@ -177,6 +177,35 @@ describe('the record decides what is held and what rises', () => {
     const b = fact({ idea: 'file', text: 'You play Re1 — it takes the open e-file.', alsoText: 'It also takes the open e-file.', squares: ['e1'], weight: 10 });
     expect(said([a, b], rec({})).startsWith('You play Re1 — it guards e4')).toBe(true);
     expect(said([a, b], rec({ 'passive-rook': 'red' })).startsWith('You play Re1 — it takes the open e-file')).toBe(true);
+  });
+});
+
+// THE THREE TIERS, ALGO'D TO THE STUDENT (WO-TIERS-01, David 2026-11-17).
+describe('facts, key concepts and advanced concepts weigh by the record', () => {
+  const rec = (states: Record<string, 'red' | 'green'>): ThoughtRecord => ({ stateOf: (t) => states[t] ?? 'grey' });
+  const keyGreen = rec(Object.fromEntries((Object.keys(IDEA_TIER) as Array<keyof typeof IDEA_TIER>)
+    .filter((k) => IDEA_TIER[k] === 'key').map((k) => IDEA_SKILL[k].student).filter(Boolean).map((t) => [t as string, 'green' as const])));
+  // Two jobs of one move, equal in every other way: a key concept (the long
+  // diagonal) and an advanced one (the weak square), neither a recorded skill.
+  const key = fact({ idea: 'diagonal', text: 'You play Bg2 — it takes the long diagonal.', alsoText: 'It also takes the long diagonal.', squares: ['g2'], weight: 50 });
+  const adv = fact({ idea: 'weakness', text: 'You play Bg2 — it eyes their weak d5 square.', alsoText: 'It also eyes their weak d5 square.', squares: ['d5'], weight: 50 });
+  const lead = (r: ThoughtRecord | null): string => said([key, adv], r).split('.')[0];
+  it('fundamentals held is read off the record, absent is not held', () => {
+    expect(fundamentalsHeld(rec({}))).toBe(0);
+    expect(fundamentalsHeld(keyGreen)).toBe(1);
+  });
+  it('while the fundamentals are not held the key concept rises; once held, the advanced one does', () => {
+    const notHeld = lead(rec({}));
+    const held = lead(keyGreen);
+    expect(notHeld).not.toBe(held);
+    expect(held).toMatch(/weak d5/);
+  });
+  it('a weighting, never a gate: both are said either way', () => {
+    for (const r of [rec({}), keyGreen, null]) {
+      const out = said([key, adv], r);
+      expect(out).toMatch(/long diagonal/);
+      expect(out).toMatch(/weak d5/);
+    }
   });
 });
 

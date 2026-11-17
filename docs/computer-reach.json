@@ -1,42 +1,42 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, door = computed in a Learn turn and decided by Learn's turn door (spoken when the door keeps it); a door-only row says why in `door` (an adapter of computers the other surfaces read, or Learn-only by design).",
  "graph": {
-  "files": 1679,
-  "nodes": 16512
+  "files": 1684,
+  "nodes": 16613
  },
  "totals": {
-  "computers": 346,
-  "offTheSixSurfaces": 28,
+  "computers": 345,
+  "offTheSixSurfaces": 27,
   "learnDoorOnly": 17,
   "learnDoorOnlyUnexplained": 0,
   "otherScreensOnly": 10,
-  "dead": 1,
+  "dead": 0,
   "missingFromCode": 0,
   "surfaces": {
    "learn": {
     "yes": 31,
-    "door": 222,
-    "no": 93
+    "door": 224,
+    "no": 90
    },
    "review": {
     "yes": 236,
-    "no": 110
+    "no": 109
    },
    "lesson": {
-    "yes": 158,
-    "no": 188
+    "yes": 159,
+    "no": 186
    },
    "chat": {
     "yes": 223,
-    "no": 123
+    "no": 122
    },
    "tapped": {
     "yes": 159,
-    "no": 187
+    "no": 186
    },
    "tactics": {
     "yes": 174,
-    "no": 172
+    "no": 171
    }
   }
  },
@@ -72,9 +72,7 @@
    "services/shareableInsightsService.ts#(module)",
    "services/tacticAlertService.ts#detectGameplayTactic"
   ],
-  "dead": [
-   "services/missedTacticService.ts#legacyTacticGeometry"
-  ]
+  "dead": []
  },
  "missingFromCode": [],
  "computers": [
@@ -3098,23 +3096,6 @@
    ]
   },
   {
-   "key": "services/missedTacticService.ts#legacyTacticGeometry",
-   "name": "legacyTacticGeometry (old one-ply classifier)",
-   "file": "services/missedTacticService.ts",
-   "fn": "legacyTacticGeometry",
-   "says": "The pre-P4b one-ply tactic type with no reality gate",
-   "origin": "map",
-   "learn": "no",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": false,
-   "other": [],
-   "where": "dead (no production caller)"
-  },
-  {
    "key": "services/mistakeNarration.ts#whatTheMoveAllowed",
    "name": "mistakeNarration — generateMistakeNarration / whatTheMoveAllowed / keepsWhatWasDropped",
    "file": "services/mistakeNarration.ts",
@@ -3671,7 +3652,7 @@
    "fn": "(module)",
    "says": "WHAT A MOVE CHANGED, AS FACTS FOR THE ONE COMPOSER (WO-ONE-COACH-01). The computers that say what a move does — the briefing's aspects, the",
    "origin": "extra",
-   "learn": "no",
+   "learn": "door",
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
@@ -4457,7 +4438,7 @@
    "fn": "pieceRoute",
    "says": "The piece's TRIP down the line that follows (the same piece moves on by choice, not chased, >=2 more stops): 'sending the knight on to e3, b",
    "origin": "map",
-   "learn": "no",
+   "learn": "door",
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
@@ -5170,7 +5151,7 @@
    "origin": "map",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "yes",
@@ -5179,7 +5160,9 @@
     "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {

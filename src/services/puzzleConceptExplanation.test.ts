@@ -179,7 +179,7 @@ describe('puzzle explanation reads like a coach (live walk 2026-10-03)', () => {
     const r = explain('8/8/4k2p/4p2P/p3K1P1/P2R1P2/8/1r6 w - - 2 57', 'd3d8 b1e1 e4d3 e1d1 d3c3 d1d8', ['crushing', 'endgame', 'long', 'rookEndgame', 'skewer']);
     expect(r).not.toBeNull();
     expect(r!.spoken).not.toMatch(FILLER);
-    expect(r!.spoken).toMatch(/They have to play Kd3\./);
+    expect(r!.spoken).toMatch(/They have to play Kd3\.|Their only move is Kd3\.|Kd3 is forced\./);
     expect(r!.spoken).toMatch(/Rxd8, and you win a rook\./);
   });
 

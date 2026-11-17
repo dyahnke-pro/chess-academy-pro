@@ -33,6 +33,7 @@ import { andList, countWord, withArticle } from '../utils/andList';
 import { getConcept } from './chessConceptService';
 import { conceptForLine, tacticInvariant, type ComputedConcept } from './conceptEngine';
 import { unmarked } from '../utils/sanMark';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 /** Lichess puzzle theme → chess-concepts.json concept id (the IDEA passage).
  *  Only patterns the corpus actually teaches; a theme with no concept still
@@ -280,9 +281,12 @@ function opponentClause(p: ReadPly, prevStudentTo: string | null): string {
     if (!p.inCheck && prevStudentTo === p.to) return `${they} take back with ${p.san}`;
     return `${they} take your ${PIECE_NAME[p.captured] ?? 'piece'} with ${p.san}`;
   }
-  if (p.only) return `they have to play ${p.san}`;
-  if (p.inCheck) return `they answer the check with ${p.san}`;
-  return `they answer ${p.san}`;
+  // Two or three phrasings, rotated on the move (human voice rule 6), so a
+  // line with two forced replies does not say "they have to play" twice.
+  const key = stemKeyOf(`${p.san}|${p.to}`);
+  if (p.only) return rotateStem([`they have to play ${p.san}`, `their only move is ${p.san}`, `${p.san} is forced`], key);
+  if (p.inCheck) return rotateStem([`they answer the check with ${p.san}`, `they get out of check with ${p.san}`], key);
+  return rotateStem([`they answer ${p.san}`, `they reply ${p.san}`], key);
 }
 
 /**

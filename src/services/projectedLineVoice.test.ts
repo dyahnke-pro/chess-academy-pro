@@ -61,7 +61,7 @@ describe('projectedLineVoice — a line played out for the student', () => {
     const quiet = line('6k1/8/8/8/3n4/2Q5/P7/6K1 b - - 0 1', ['Kf7', 'Qc4+']);
     const v = projectedLineVoice(quiet, 'black', { teachQuiet: false, explainTemptation: false });
     expect(v[0]).toBeNull();
-    expect(v[1]).toBe('They answer Qc4+.');
+    expect(v[1]).toMatch(/^They (answer|reply) Qc4\+\.$/);
   });
 });
 
@@ -84,7 +84,7 @@ describe('a sacrifice has not made its point yet (Morphy, Opera game)', () => {
     const v = projectedLineVoice(line(c.fen(), ['Nxb5', 'cxb5', 'Bxb5+', 'Nbd7', 'O-O-O']), 'white', { teachQuiet: true, explainTemptation: false });
     expect(v[4]).not.toBeNull();
     expect(v[1]).toBe('They take back with cxb5.');
-    expect(v[3]).toBe('They answer the check with Nbd7.');
+    expect(v[3]).toMatch(/^They (answer the check|get out of check) with Nbd7\.$/);
   });
 });
 
