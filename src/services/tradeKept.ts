@@ -185,8 +185,11 @@ export function tradeKeptAt(input: TradeKeptInput): TradeKept | null {
     if (steppedAway && reason.kind !== 'behind') continue;
     // A guarded man the move itself takes away is guarded no more.
     if (reason.kind === 'guard' && played.from === reason.guarded.square) continue;
-    // A move that attacks the offered piece is no tension kept: it kicks it.
-    if (reason.kind === 'no-threat') {
+    // A move that attacks the offered piece keeps no trade off the board: it
+    // kicks it, or piles on so that taking now wins it (colle800 15.Qg4: the
+    // queen joins the c1 bishop on g5, and "taking on g5 would trade bishops"
+    // was said beside "taking on g5 now wins a piece").
+    {
       const a = new Chess(fenBefore);
       a.move(played);
       if (a.attackers(cap.to, me).includes(played.to)) continue;

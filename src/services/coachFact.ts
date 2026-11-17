@@ -474,7 +474,6 @@ export const COMPUTER_CATALOG = {
   queenNet: { file: 'services/queenNet.ts', says: 'the move takes a safe square from the other side\'s raiding (or attacked) queen and leaves it one safe square or none, each square read by the legal exchange' },
   bothSaved: { file: 'services/bothSaved.ts', says: 'two of the mover\'s pieces hanging, and the move steps one of them to a square that guards the other, both safe after it by the legal exchange or the engine\'s own replies' },
   desperadoAt: { file: 'services/desperado.ts', says: 'two of the mover\'s pieces hanging, and the engine\'s best move sells the one that is lost anyway: it captures on its way out' },
-  pawnOpensCastling: { file: 'services/pawnLines.ts', says: 'the square a pawn left opens an enemy bishop, rook or queen onto a square the king castles across: that castling is off while the piece stays' },
   pawnCutsGuard: { file: 'services/pawnLines.ts', says: 'the square a pawn lands on cuts an enemy slider off from a piece it guarded, which is hanging now' },
   chainBase: { file: 'services/chainBase.ts', says: 'a piece that comes to the base of a pawn chain — to guard your own, lost by the count before, or to hit theirs, lost by the count after' },
   pinnedPawnGuard: { file: 'services/pinnedPawnGuard.ts', says: 'a square whose pawn guard is pinned to its king and can\'t take back, hit by the move just played' },

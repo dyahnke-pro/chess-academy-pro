@@ -2,15 +2,9 @@
 // pawns, Danya's speedruns: "every pawn move opens a diagonal or frees a
 // square — make it a habit to check which lines changed"). A pawn never moves
 // back, so the line it opens stays open and the line it closes stays closed.
-// Two reads, both seats, chess.js only:
+// One read, both seats, chess.js only (the castling square a pawn opens is
+// `castlingTakenAway`'s, which reads any move):
 //
-//  - THE CASTLING SQUARE OPENED (`pawnOpensCastling`, his "f3 opens the
-//    g1–a7 diagonal; with Black's bishop on c5, White can no longer castle
-//    short"): the square the pawn left was the only thing between an enemy
-//    bishop, rook or queen and a square the king crosses or lands on when it
-//    castles, with the right still there. Castling through or onto an
-//    attacked square is illegal, so while that piece stays, that castling is
-//    off.
 //  - THE GUARD CUT (`pawnCutsGuard`, his "…c4 cuts the line between the b3
 //    queen and the f7 bishop", "…c3 interferes: it blocks the queen's diagonal
 //    to a5"): the square the pawn landed on stood between an enemy bishop,
@@ -25,7 +19,6 @@
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { squaresProof, type Proof } from './proof';
-import { andList } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -90,49 +83,6 @@ function played(fenBefore: string, san: string): { before: Chess; after: Chess; 
   try { m = after.move(san); } catch { return null; }
   if (m.piece !== 'p') return null;
   return { before, after, from: m.from, to: m.to, color: m.color, captured: !!m.captured };
-}
-
-/** THE CASTLING SQUARE THE PAWN OPENED: an enemy slider now hits a square the
- *  mover's king must cross or land on to castle, through the square the pawn
- *  left, and nothing hit that square before. */
-export function pawnOpensCastling(fenBefore: string, san: string, mine: boolean): PawnLineRead | null {
-  const p = played(fenBefore, san);
-  if (!p) return null;
-  const me = p.color;
-  const them: Color = me === 'w' ? 'b' : 'w';
-  const back = me === 'w' ? '1' : '8';
-  if (p.after.get(`e${back}` as Square)?.type !== 'k' || p.after.get(`e${back}` as Square)?.color !== me) return null;
-  const rights = fenBefore.split(' ')[2] ?? '-';
-  const sides: Array<{ side: 'short' | 'long'; squares: Square[] }> = [];
-  if (rights.includes(me === 'w' ? 'K' : 'k')) sides.push({ side: 'short', squares: [`f${back}`, `g${back}`] as Square[] });
-  if (rights.includes(me === 'w' ? 'Q' : 'q')) sides.push({ side: 'long', squares: [`d${back}`, `c${back}`] as Square[] });
-  for (const { side, squares } of sides) {
-    // Already off before the move: the pawn changed nothing.
-    if (squares.some((x) => p.before.attackers(x, them).length > 0)) continue;
-    for (const s of sliders(p.after, them)) {
-      const hit = squares.filter((x) => {
-        const v = stepTo(s.square, x, s.type);
-        if (!v) return false;
-        const path = between(s.square, x, v);
-        return path.includes(p.from) && path.every((q) => !p.after.get(q));
-      });
-      if (!hit.length) continue;
-      const own = mine ? 'your' : 'their';
-      const other = mine ? 'their' : 'your';
-      const subj = mine ? 'you' : 'they';
-      const piece = `${other} ${NAME[s.type]} on ${s.square}`;
-      const at = andList(hit);
-      const pawn = `${own} ${p.from[0]}-pawn`;
-      const text = rotateStem([
-        `${cap(piece)} now sees all the way to ${at}, through the square ${pawn} left. While it stays there, ${subj} can't castle ${side}.`,
-        `With ${pawn} gone from ${p.from}, ${piece} hits ${at}. ${cap(subj)} can't castle ${side} while it sits there.`,
-        `${cap(piece)} looks straight through ${p.from} at ${at} now. Until it moves, castling ${side} is off for ${mine ? 'you' : 'them'}.`,
-      ], stemKeyOf(`${fenBefore}|${san}`));
-      const squaresSaid = [s.square, p.from, ...hit];
-      return { key: `castle-opened:${me}:${side}:${s.square}`, text, squares: squaresSaid, proof: squaresProof(text, squaresSaid), mine, gain: null };
-    }
-  }
-  return null;
 }
 
 /** THE GUARD THE PAWN CUT: the square the pawn landed on stood between an

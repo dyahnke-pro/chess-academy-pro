@@ -132,11 +132,11 @@ export function pieceMovedAgain(history: readonly string[], san: string, student
   // A MOVE WITH A JOB: it now hits something it can win, or the engine calls
   // it fine — then the trip is not the lesson of this move.
   const fine = !chased && costCp !== null && costCp < FINE_CP;
-  if (!chased) {
-    for (const row of board.board()) for (const p of row) {
-      if (!p || p.color !== enemy || p.type === 'k') continue;
-      if (board.attackers(p.square, mover).includes(mv.to) && legalSeeGainFor(fenAfter, p.square, mover) > 0) return null;
-    }
+  // Chased or not: a piece that lands where it hits something it can win (a
+  // fork, gotham-jelena 11…Bc6) made a move with a job, not a wasted trip.
+  for (const row of board.board()) for (const p of row) {
+    if (!p || p.color !== enemy || p.type === 'k') continue;
+    if (board.attackers(p.square, mover).includes(mv.to) && legalSeeGainFor(fenAfter, p.square, mover) > 0) return null;
   }
 
   // THE DETOUR — the second move lands where the first could have gone.

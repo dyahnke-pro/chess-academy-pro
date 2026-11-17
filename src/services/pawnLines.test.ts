@@ -1,27 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pawnOpensCastling, pawnCutsGuard } from './pawnLines';
-import { readBoard } from './boardComputers';
-
-describe('pawnOpensCastling', () => {
-  // Danya, Ytkf3qZTj74 6.f3: "f3 opens the g1–a7 diagonal; with Black's bishop
-  // on c5, White can no longer castle short."
-  const FEN = 'r1b1k1nr/pppp1ppp/2N2q2/2b5/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 1 6';
-  it('says the bishop now sees g1, so castling short is off', () => {
-    const r = pawnOpensCastling(FEN, 'f3', false);
-    expect(r?.text).toMatch(/bishop on c5/);
-    expect(r?.text).toMatch(/g1/);
-    expect(r?.text).toMatch(/castl/);
-    expect(r?.squares).toEqual(['c5', 'f2', 'g1']);
-    // From the student's seat (Black), the castling lost is theirs.
-    expect(readBoard('pawnOpensCastling', { fenBefore: FEN, san: 'f3', student: 'b' })?.text).toMatch(/your bishop on c5/);
-  });
-  it('is quiet with the bishop off that diagonal', () => {
-    expect(pawnOpensCastling('r1b1k1nr/ppppbppp/2N2q2/8/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 1 6', 'f3', false)).toBeNull();
-  });
-  it('is quiet when castling short was already gone', () => {
-    expect(pawnOpensCastling('r1b1k1nr/pppp1ppp/2N2q2/2b5/4P3/8/PPP2PPP/RNBQKB1R w Qkq - 1 6', 'f3', false)).toBeNull();
-  });
-});
+import { pawnCutsGuard } from './pawnLines';
 
 describe('pawnCutsGuard', () => {
   // Danya, 4T9-0D4SnMk 13...c3: "…c3 interferes: it blocks the queen's

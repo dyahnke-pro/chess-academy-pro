@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**754 lines · 14 exports · 29 importers · 21 tests · 0 audits**
+**754 lines · 14 exports · 30 importers · 22 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,7 @@
 - `src/services/exchangeNotFinished.test.ts`
 - `src/services/gamesCourse.ts`
 - `src/services/guardPressure.test.ts`
+- `src/services/kingGroupReads.test.ts`
 - `src/services/lessonVoice.story.test.ts`
 - `src/services/materialSites.test.ts`
 - `src/services/midExchangeStructure.test.ts`
@@ -52,13 +53,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `signedBand` (const) — 1 call site
-- `src/services/moveThoughtFacts.ts:793`
+- `src/services/moveThoughtFacts.ts:887`
 
 ### `evalReading` (function) — 4 call sites
 - `src/services/evalReading.test.ts:11`
 - `src/services/evalReading.test.ts:17`
 - `src/services/evalReading.test.ts:23`
-- `src/services/moveThoughtFacts.ts:790`
+- `src/services/moveThoughtFacts.ts:884`
 
 ### `moveAspects` (function) — 13 call sites
 - `src/services/captureLeadsTo.test.ts:26`
@@ -68,8 +69,8 @@
 - `src/services/exchangeNotFinished.test.ts:25`
 - `src/services/exchangeNotFinished.test.ts:295`
 - `src/services/midExchangeStructure.test.ts:13`
-- `src/services/moveThoughtFacts.ts:230`
-- `src/services/moveThoughtFacts.ts:1258`
+- `src/services/moveThoughtFacts.ts:231`
+- `src/services/moveThoughtFacts.ts:1354`
 - `src/services/reviewMoveBriefing.test.ts:71`
 - `src/services/reviewMoveBriefing.test.ts:73`
 - `src/test/captureSaidOnce.gate.test.ts:190`
@@ -101,25 +102,27 @@
 - `src/test/captureSaidOnce.gate.test.ts:186`
 
 ### `toClause` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:357`
+- `src/services/moveThoughtFacts.ts:366`
 - `src/services/reviewMoveBriefing.test.ts:182`
 - `src/services/reviewMoveBriefing.test.ts:185`
 
 ### `joinReview` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:357`
+- `src/services/moveThoughtFacts.ts:366`
 - `src/services/reviewMoveBriefing.test.ts:184`
 - `src/services/reviewMoveBriefing.test.ts:185`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newLessonVoice` (function) — 46 call sites
+### `newLessonVoice` (function) — 48 call sites
 - `src/hooks/useTeachWalkthrough.ts:902`
 - `src/hooks/useTeachWalkthrough.ts:903`
 - `src/services/danyaBench.measure.test.ts:460`
 - `src/services/decisionStakes.test.ts:50`
 - `src/services/exchangeNotFinished.test.ts:281`
 - `src/services/gamesCourse.ts:367`
+- `src/services/kingGroupReads.test.ts:12`
+- `src/services/kingGroupReads.test.ts:15`
 - `src/services/lessonVoice.story.test.ts:29`
 - `src/services/lessonVoice.story.test.ts:41`
 - `src/services/moveThoughtFacts.test.ts:21`
@@ -149,8 +152,8 @@
 - `src/services/moveThoughtFacts.test.ts:419`
 - `src/services/moveThoughtFacts.test.ts:434`
 - `src/services/moveThoughtFacts.test.ts:447`
-- `src/services/moveThoughtFacts.ts:896`
-- `src/services/moveThoughtFacts.ts:1027`
+- `src/services/moveThoughtFacts.ts:990`
+- `src/services/moveThoughtFacts.ts:1123`
 - `src/services/openingGenerator.ts:2058`
 - `src/services/openingGenerator.ts:2628`
 - `src/services/pieceRoute.test.ts:52`
@@ -188,6 +191,7 @@
 - `src/services/evalReading.test.ts`
 - `src/services/exchangeNotFinished.test.ts`
 - `src/services/guardPressure.test.ts`
+- `src/services/kingGroupReads.test.ts`
 - `src/services/lessonVoice.story.test.ts`
 - `src/services/materialSites.test.ts`
 - `src/services/midExchangeStructure.test.ts`

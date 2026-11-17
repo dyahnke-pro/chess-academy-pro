@@ -130,3 +130,13 @@ describe('chat answers with the trades (questionThought)', () => {
     expect(nc3.spoken).toMatch(/b2/);
   });
 });
+
+describe('a move that piles on the trade square keeps no trade off', () => {
+  it('colle800 15.Qg4: the queen joins the bishop on g5 — no "taking would trade bishops"', async () => {
+    const { tradeKeptAt } = await import('./tradeKept');
+    const fen = 'r1bqrnk1/5ppp/p1n1p3/1p1pP1bN/3p4/2PB4/PP3PPP/R1BQR1K1 w - - 0 15';
+    const line = (m: string, cp: number) => ({ moves: [m], evaluation: cp, mate: null });
+    expect(tradeKeptAt({ fenBefore: fen, san: 'Qg4', before: [line('d1g4', 300), line('c1g5', 0), line('h5g7', -100)], priorMove: null, theirLast: null } as never)).toBeNull();
+  });
+});
+

@@ -1,8 +1,8 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, door = computed in a Learn turn and decided by Learn's turn door (spoken when the door keeps it); a door-only row says why in `door` (an adapter of computers the other surfaces read, or Learn-only by design).",
  "graph": {
-  "files": 1658,
-  "nodes": 16350
+  "files": 1678,
+  "nodes": 16503
  },
  "totals": {
   "computers": 346,
@@ -27,8 +27,8 @@
     "no": 188
    },
    "chat": {
-    "yes": 221,
-    "no": 125
+    "yes": 223,
+    "no": 123
    },
    "tapped": {
     "yes": 159,
@@ -6183,12 +6183,14 @@
    "learn": "door",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "insights",
     "endgame"
@@ -6406,12 +6408,14 @@
    "learn": "door",
    "review": "yes",
    "lesson": "yes",
-   "chat": "no",
+   "chat": "yes",
    "tapped": "no",
    "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
+    "kid",
+    "campaign",
     "playSilent",
     "insights",
     "endgame"

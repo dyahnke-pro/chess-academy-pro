@@ -244,7 +244,6 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   evalReading: 'assess',
   compensation: 'assess',
   pawnBreak: 'assess',
-  pawnOpensCastling: 'is-my-move-safe',
   pawnCutsGuard: 'their-targets',
   chainBase: 'assess',
   pinnedPawnGuard: 'their-targets',

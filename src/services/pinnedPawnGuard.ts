@@ -12,6 +12,7 @@
 // pawn free to take back — then the pin is not the reason.
 //
 // PURE: chess.js + the SEE reader.
+import { seatPieceWords } from './pieceRef';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { squaresProof, type Proof } from './proof';
@@ -97,7 +98,9 @@ export function pinnedPawnGuard(fenBefore: string, san: string, mine: boolean): 
       if (legalSeeGainFor(unpinned.fen(), target, me) >= gain) continue;
       const own = mine ? 'your' : 'their';
       const other = mine ? 'their' : 'your';
-      const piece = `${own} ${NAME[m.piece]} on ${m.to}`;
+      // The square only when another of its kind could be meant ("their
+      // g-pawn" right after "g4 is a pawn break" says the square once).
+      const piece = seatPieceWords(afterFen, m.to, own, `${own} ${NAME[m.piece]} on ${m.to}`);
       const what = `${other} ${NAME[t.type]} on ${target}`;
       const text = rotateStem([
         `${cap(piece)} hits ${what}. The ${cell.square} pawn guards it, but it is pinned to the king and can't take back.`,

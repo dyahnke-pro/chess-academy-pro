@@ -1662,7 +1662,6 @@ export function computeMoveFacets(
       add(readBoardAll('oppositeBishops', { fenBefore, san, student: studentColorWB })[0]);
       // What the pawn move did to the lines through its squares, and a piece
       // at a chain's base or a pinned pawn guard (S4 pawns), both seats.
-      add(readBoardAll('pawnOpensCastling', { fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('pawnCutsGuard', { fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('chainBase', { fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('pinnedPawnGuard', { fenBefore, san, student: studentColorWB })[0]);

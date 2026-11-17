@@ -15,6 +15,7 @@
 // pawn another pawn also guards — then the chain does not lean on it.
 //
 // PURE: chess.js + the SEE reader.
+import { seatPieceWords } from './pieceRef';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { squaresProof, type Proof } from './proof';
@@ -83,7 +84,7 @@ export function chainBase(fenBefore: string, san: string, mine: boolean): ChainB
   const afterFen = after.fen();
   const own = mine ? 'your' : 'their';
   const other = mine ? 'their' : 'your';
-  const mover = `${own} ${NAME[m.piece]} on ${m.to}`;
+  const mover = seatPieceWords(afterFen, m.to, own, `${own} ${NAME[m.piece]} on ${m.to}`);
   const key = stemKeyOf(`${fenBefore}|${san}`);
   // The squares the moved piece reaches now and did not from where it stood.
   const reachesNow = (sq: Square, color: Color): boolean => after.attackers(sq, color).includes(m.to);

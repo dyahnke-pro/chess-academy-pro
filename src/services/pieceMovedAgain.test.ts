@@ -42,3 +42,13 @@ describe('pieceMovedAgain', () => {
     expect(readBoardAll('pieceMovedAgain', { history: AEK, fenBefore: new Chess().fen(), san: 'Be2', student: 'b', costCp: 0 })).toEqual([]);
   });
 });
+
+describe('a third move that lands a fork is a move with a job', () => {
+  it('gotham-jelena 11…Bc6: the bishop, chased by the queen, forks — no "third move" line', async () => {
+    const { Chess } = await import('chess.js');
+    const { pieceMovedAgain } = await import('./pieceMovedAgain');
+    const sans = ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'h4', 'h6', 'g4', 'Bd7', 'c4', 'dxc4', 'Bxc4', 'e6', 'Nc3', 'c5', 'd5', 'exd5', 'Qxd5', 'Qe7', 'Qxb7'];
+    void Chess;
+    expect(pieceMovedAgain(sans, 'Bc6', 'w', null)).toBeNull();
+  });
+});

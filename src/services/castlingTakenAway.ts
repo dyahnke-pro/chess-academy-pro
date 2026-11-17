@@ -18,6 +18,7 @@
 // piece and come out ahead — then the cover is one move deep, not a fact.
 //
 // PURE: chess.js and the one capture count (`legalSeeGainFor`).
+import { seatPieceWords } from './pieceRef';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { PIECE_NAMES } from '../types/tacticTypes';
@@ -112,7 +113,9 @@ function sentence(a: { mv: Move; from: string; moved: boolean; sq: string; wing:
   const role = a.sq[0] === 'f' || a.sq[0] === 'd' ? 'has to cross' : 'lands on';
   const wing = WING_WORD[a.wing];
   const key = stemKeyOf(`${a.fen}:${a.sq}`);
-  const coverer = `${coverOwner} ${a.piece} on ${a.from}`;
+  // The square only when another piece of its kind could be meant ("their
+  // queen", "your rook on d8"): the house rule, one shared namer.
+  const coverer = seatPieceWords(a.fen, a.from, coverOwner, `${coverOwner} ${a.piece} on ${a.from}`);
   if (a.moved) {
     // The piece that moved covers the square.
     return rotateStem([

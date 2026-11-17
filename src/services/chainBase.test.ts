@@ -8,7 +8,7 @@ describe('chainBase', () => {
   it('names the base it guards and the pawn it holds', () => {
     const r = chainBase(FEN, 'Bh6', true);
     expect(r?.act).toBe('guarded');
-    expect(r?.text).toMatch(/bishop on h6/);
+    expect(r?.text).toMatch(/dark-squared bishop/);
     expect(r?.text).toMatch(/f4, the (pawn at the )?base of your (pawn )?chain/);
     expect(r?.text).toMatch(/e3/);
   });

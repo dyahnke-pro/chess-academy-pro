@@ -18,6 +18,7 @@
 // call site — a claim with no caller fails.
 //
 // PURE: every computer here is pure; this module adds no chess of its own.
+import { ideaClaim } from './ideaKind';
 import { Chess, type Color } from 'chess.js';
 import { NO_PROOF, squaresProof, isProof, legalLineProof, type FactProof } from './proof';
 import type { FactStakes } from './factStakes';
@@ -70,7 +71,7 @@ import { lineCut } from './lineCut';
 import { harmlessPin, harmlessPinLine } from './harmlessPin';
 import { queenNet, queenNetLine } from './queenNet';
 import { bothSaved, bothSavedLine, type ReplyLine } from './bothSaved';
-import { pawnOpensCastling, pawnCutsGuard, type PawnLineRead } from './pawnLines';
+import { pawnCutsGuard, type PawnLineRead } from './pawnLines';
 import { chainBase } from './chainBase';
 import { pinnedPawnGuard } from './pinnedPawnGuard';
 import { castlingTakenAway } from './castlingTakenAway';
@@ -280,12 +281,7 @@ export interface BoardContexts {
    *  move `san` on `fenBefore` (either seat). `replies`: the engine's lines
    *  from the board after it, best first (White-POV cp); [] where none. */
   bothSaved: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
-  /** WHAT A PAWN MOVE DID TO THE LINES (`pawnLines`, S4 pawns): the move `san`
-   *  on `fenBefore` (either seat). The square the pawn left opened an enemy
-   *  slider onto a square the mover's king castles across, with the right
-   *  still there — that castling is off while the piece stays. */
-  pawnOpensCastling: { fenBefore: string; san: string; student: Color };
-  /** The square the pawn landed on cut an enemy slider off from a piece it
+  /** WHAT A PAWN MOVE DID TO THE LINES (`pawnLines`, S4 pawns): the square the pawn landed on cut an enemy slider off from a piece it
    *  guarded, which is hanging now and was not before. */
   pawnCutsGuard: { fenBefore: string; san: string; student: Color };
   /** THE BASE OF A PAWN CHAIN (`chainBase`): the move `san` on `fenBefore`
@@ -1437,7 +1433,9 @@ export const BOARD_COMPUTERS = {
       const mine = n.queenColor !== student;
       const text = queenNetLine(n, mine, fenAfter);
       const squares = [n.to, n.queen, ...n.taken, ...n.left];
-      return fact({ key: n.key, claims: [n.key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+      // One claim on the queen's squares with `queenHunt` (the same idea from
+      // the hunter's side): a move says one of them.
+      return fact({ key: n.key, claims: [n.key, `queen-run:${n.queen}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
         seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
     }),
     computer: 'queenNet',
@@ -1473,21 +1471,6 @@ export const BOARD_COMPUTERS = {
       weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
     },
   },
-  pawnOpensCastling: {
-    // His "f3 opens the g1–a7 diagonal; with Black's bishop on c5, White can
-    // no longer castle short" (Ytkf3qZTj74): the line the pawn opened, said
-    // about the move just played, both seats.
-    read: ({ fenBefore, san, student }, fact) => safe(() => pawnLineFact(pawnOpensCastling(fenBefore, san, new Chess(fenBefore).turn() === student), fenBefore, san, fact)),
-    computer: 'pawnOpensCastling',
-    kind: 'king-read',
-    phase: NOT_ENDING,
-    surfaces: {
-      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: S4_LEARN_OWED, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
-      tactics: { not: 'a puzzle poses one tactic; the castling square a pawn opened is the game\'s king safety' },
-      weaknesses: { not: 'a reading of the move just played — no question of the student\'s posed' },
-      think: THINK,
-    },
-  },
   pawnCutsGuard: {
     // His "…c4 cuts the line between the b3 queen and the f7 bishop", "…c3
     // interferes: it blocks the queen's diagonal to a5": the guard the pawn
@@ -1511,7 +1494,13 @@ export const BOARD_COMPUTERS = {
       const mine = new Chess(fenBefore).turn() === student;
       const r = chainBase(fenBefore, san, mine);
       if (!r) return null;
-      return fact({ key: r.key, claims: [r.key], text: r.text, proof: r.proof ?? NO_PROOF.description, squares: r.squares,
+      // A hit on their base is the move's pressure on that pawn: one claim
+      // with the board teacher's "your rook hits their pawn on c2, which has
+      // no guard" (`ideaClaim('pressure', …)`), so a turn says the hit once.
+      const mv = (() => { try { return new Chess(fenBefore).move(san); } catch { return null; } })();
+      const base = r.key.split(':')[2];
+      const hitClaim = r.act === 'hit' && mv && base ? [`move:${mv.from}${mv.to}:${ideaClaim('pressure', [base])}`] : [];
+      return fact({ key: r.key, claims: [r.key, ...hitClaim], text: r.text, proof: r.proof ?? NO_PROOF.description, squares: r.squares,
         stakes: r.gain ? { points: r.gain, plies: 1 } : null,
         seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
     }),
@@ -1687,7 +1676,7 @@ export const BOARD_COMPUTERS = {
       const key = `queen-hunt:${h.shape}:${h.queen}`;
       // The queen is what rides on it: hit now, or caught on its one square.
       const stakes = h.shape === 'one-square' && !h.net ? null : { points: 9, plies: h.shape === 'boxed' ? 1 : 2 };
-      return fact({ key, claims: [key], text, proof: squaresProof(text, h.squares) ?? NO_PROOF.description, squares: h.squares, stakes,
+      return fact({ key, claims: [key, `queen-run:${h.queen}`], text, proof: squaresProof(text, h.squares) ?? NO_PROOF.description, squares: h.squares, stakes,
         seat: mine ? 'student' : 'opponent', namesStudentMove: mine && h.shape === 'one-square' && !!h.net, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
     }),
     computer: 'queenHunt',
@@ -1734,7 +1723,9 @@ export const BOARD_COMPUTERS = {
       const text = outOfReachLine(o, mine ? 'your' : 'their', fenBefore);
       const squares = [o.square, o.contrast.square];
       const key = `out-of-reach:${o.square}:${o.contrast.left && 'now' in o.contrast.chase ? 'rescue' : 'square'}`;
-      return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+      // One claim with the square choice's "safe there" (`safe-route:<sq>`): a
+      // move says the piece is out of reach once.
+      return fact({ key, claims: [key, `safe-route:${o.square}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
         seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
     }),
     computer: 'outOfReach',

@@ -13,7 +13,7 @@ describe('castlingTakenAway', () => {
     expect(r?.denied).toBe('w');
     expect(r?.ownGoal).toBe(true);
     expect(r?.squares).toEqual(['c5', 'g1']);
-    expect(r?.text).toMatch(/bishop on c5/);
+    expect(r?.text).toMatch(/dark-squared bishop/);
     expect(r?.text).toMatch(/can't castle short/);
     // From White's seat it is the student's own move, said without naming it.
     const w = castlingTakenAway(fen, 'f3', 'w');
@@ -24,7 +24,7 @@ describe('castlingTakenAway', () => {
   it('hv0P9 10.Bxb4: the bishop on b4 covers f8, so Black cannot castle short', () => {
     const fen = before(['d4', 'e5', 'dxe5', 'Nc6', 'Nf3', 'Qe7', 'Bf4', 'Qb4+', 'Bd2', 'Qxb2', 'Nc3', 'Bb4', 'Rb1', 'Qa3', 'Nd5', 'Qa5', 'Nxb4', 'Nxb4']);
     const r = castlingTakenAway(fen, 'Bxb4', 'w');
-    expect(r?.text).toMatch(/Your bishop on b4/);
+    expect(r?.text).toMatch(/Your dark-squared bishop/);
     expect(r?.text).toMatch(/they can't castle short|They can't castle short/);
     // Through the registry, seated by the mover.
     const f = readBoardAll('castlingTaken', { fenBefore: fen, san: 'Bxb4', student: 'w' }).at(0);
