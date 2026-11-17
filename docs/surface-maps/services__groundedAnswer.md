@@ -389,8 +389,8 @@
 - `src/services/coachFeatureService.test.ts:70`
 - `src/services/coachFeatureService.test.ts:85`
 - `src/services/coachFeatureService.test.ts:92`
-- `src/services/coachFeatureService.ts:3618`
-- `src/services/coachFeatureService.ts:3650`
+- `src/services/coachFeatureService.ts:3621`
+- `src/services/coachFeatureService.ts:3653`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:15`
 - `src/services/explainBestMoveLines.test.ts:19`
@@ -1048,7 +1048,7 @@
 - `src/services/bluffDetector.ts:79`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:3983`
+- `src/services/coachFeatureService.ts:3986`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
@@ -1071,7 +1071,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3904`
+- `src/services/coachFeatureService.ts:3907`
 - `src/services/reviewNarrationFidelity.test.ts:107`
 - `src/services/reviewNarrationFidelity.test.ts:119`
 - `src/services/reviewNarrationFidelity.test.ts:127`
@@ -1087,7 +1087,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:4004`
+- `src/services/coachFeatureService.ts:4007`
 - `src/services/reviewNarrationFidelity.test.ts:177`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1125,10 +1125,10 @@
 - `src/services/coachApi.ts:6279`
 
 ### `seatPieceReferences` (re-export) — 40 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9380`
-- `src/services/coachFeatureService.ts:5420`
-- `src/services/coachFeatureService.ts:5509`
-- `src/services/coachFeatureService.ts:6555`
+- `src/components/Coach/CoachTeachPage.tsx:9385`
+- `src/services/coachFeatureService.ts:5423`
+- `src/services/coachFeatureService.ts:5512`
+- `src/services/coachFeatureService.ts:6558`
 - `src/services/liveTacticsContext.ts:486`
 - `src/services/liveTacticsContext.ts:495`
 - `src/services/lookaheadPlan.ts:141`

@@ -4,16 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**335 lines · 8 exports · 5 importers · 2 tests · 1 audits**
+**330 lines · 7 exports · 5 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1250) — names `factSelector`
-- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1343) — names `factSelector`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1413) — names `factSelector`, `selectFacts`, `supportedFacts`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4582) — names `factSelector`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6700) — names `factSelector`
-- **The standard post-deploy ritual** (CLAUDE.md:6804) — names `factSelector`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1366) — names `factSelector`
+- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1465) — names `factSelector`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1535) — names `factSelector`, `selectFacts`, `supportedFacts`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4705) — names `factSelector`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6880) — names `factSelector`
+- **The standard post-deploy ritual** (CLAUDE.md:6988) — names `factSelector`
 
 ## Who calls in
 
@@ -31,25 +31,22 @@
 ### `QuietFact` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `SupportLink` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `SAME_CLAIM_JACCARD` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `barForTier` (function) — 5 call sites
-- `src/services/coachDecider.ts:471`
+- `src/services/coachDecider.ts:514`
 - `src/services/factSelector.test.ts:79`
 - `src/services/factSelector.test.ts:80`
 - `src/services/factSelector.test.ts:81`
 - `src/services/factSelector.test.ts:85`
 
 ### `sameClaim` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2414`
-- `src/services/learnTurnDoor.ts:794`
+- `src/services/coachFeatureService.ts:2628`
+- `src/services/learnTurnDoor.ts:1043`
 
 ### `selectFacts` (function) — 18 call sites
-- `src/services/coachDecider.ts:465`
+- `src/services/coachDecider.ts:508`
 - `src/services/factSelector.test.ts:23`
 - `src/services/factSelector.test.ts:33`
 - `src/services/factSelector.test.ts:40`
@@ -69,7 +66,7 @@
 - `src/services/factSelector.test.ts:172`
 
 ### `supportedFacts` (function) — 10 call sites
-- `src/services/coachDecider.ts:481`
+- `src/services/coachDecider.ts:524`
 - `src/services/supportedFacts.test.ts:20`
 - `src/services/supportedFacts.test.ts:26`
 - `src/services/supportedFacts.test.ts:33`

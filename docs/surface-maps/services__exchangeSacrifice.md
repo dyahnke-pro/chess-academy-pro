@@ -25,7 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `exchangeSacrifice` (function) — 10 call sites
-- `src/services/boardComputers.ts:1716`
+- `src/services/boardComputers.ts:1732`
 - `src/services/exchangeSacrifice.test.ts:42`
 - `src/services/exchangeSacrifice.test.ts:53`
 - `src/services/exchangeSacrifice.test.ts:62`
@@ -38,13 +38,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `exchangeSacIdea` (function) — 2 call sites
 - `src/services/exchangeSacrifice.test.ts:58`
-- `src/services/moveThoughtFacts.ts:831`
+- `src/services/moveThoughtFacts.ts:841`
 
 ### `exchangeSacrificeSquares` (function) — 1 call site
-- `src/services/boardComputers.ts:1721`
+- `src/services/boardComputers.ts:1737`
 
 ### `exchangeSacrificeLine` (function) — 5 call sites
-- `src/services/boardComputers.ts:1720`
+- `src/services/boardComputers.ts:1736`
 - `src/services/exchangeSacrifice.test.ts:45`
 - `src/services/exchangeSacrifice.test.ts:56`
 - `src/services/exchangeSacrifice.test.ts:57`

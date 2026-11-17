@@ -4,15 +4,15 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1393 lines · 14 exports · 9 importers · 14 tests · 2 audits**
+**1425 lines · 14 exports · 9 importers · 13 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
 - **🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)** (CLAUDE.md:117) — names `getAdaptiveMove`
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:269) — names `replyMadeAChance`
-- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:503) — names `gameOpponentStrength`, `replyMadeAChance`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4741) — names `coachGameEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6900) — names `coachGameEngine`, `getAdaptiveMove`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:271) — names `replyMadeAChance`
+- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:542) — names `gameOpponentStrength`, `replyMadeAChance`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4786) — names `coachGameEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6965) — names `coachGameEngine`, `getAdaptiveMove`
 
 ## Who calls in
 
@@ -50,13 +50,13 @@
 - `src/services/ratingBands.test.ts:62`
 
 ### `getRandomLegalMove` (function) — 7 call sites
-- `src/components/Coach/CoachGamePage.tsx:2545`
-- `src/components/Coach/CoachGamePage.tsx:2560`
-- `src/components/Coach/CoachGamePage.tsx:2852`
-- `src/components/Coach/CoachGamePage.tsx:2890`
-- `src/components/Coach/CoachTeachPage.tsx:8652`
-- `src/components/Openings/OpeningPlayMode.tsx:810`
-- `src/components/Openings/OpeningPlayMode.tsx:835`
+- `src/components/Coach/CoachGamePage.tsx:2529`
+- `src/components/Coach/CoachGamePage.tsx:2544`
+- `src/components/Coach/CoachGamePage.tsx:2836`
+- `src/components/Coach/CoachGamePage.tsx:2874`
+- `src/components/Coach/CoachTeachPage.tsx:8669`
+- `src/components/Openings/OpeningPlayMode.tsx:839`
+- `src/components/Openings/OpeningPlayMode.tsx:864`
 
 ### `tryOpeningBookMove` (function) — 6 call sites
 - `src/services/coachGameEngine.test.ts:278`
@@ -70,7 +70,7 @@
 - `src/components/Coach/CoachGamePage.tsx:417`
 
 ### `pickTeachingReply` (function) — 3 call sites
-- `src/components/Coach/CoachGamePage.tsx:2288`
+- `src/components/Coach/CoachGamePage.tsx:2272`
 - `src/services/coachGameEngine.test.ts:490`
 - `src/services/coachLaneWiring.test.ts:378`
 
@@ -78,12 +78,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `replyMadeAChance` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8627`
+- `src/components/Coach/CoachTeachPage.tsx:8644`
 
 ### `getAdaptiveMove` (function) — 64 call sites
-- `src/components/Coach/CoachGamePage.tsx:2355`
-- `src/components/Coach/CoachTeachPage.tsx:8547`
-- `src/components/Openings/OpeningPlayMode.tsx:797`
+- `src/components/Coach/CoachGamePage.tsx:2339`
+- `src/components/Coach/CoachTeachPage.tsx:8560`
+- `src/components/Openings/OpeningPlayMode.tsx:826`
 - `src/services/coachGameEngine.test.ts:78`
 - `src/services/coachGameEngine.test.ts:88`
 - `src/services/coachGameEngine.test.ts:96`
@@ -149,9 +149,9 @@
 ### `getTargetStrength` (function) — 14 call sites
 - `src/App.tsx:169`
 - `src/components/Coach/CoachGamePage.tsx:401`
-- `src/components/Coach/CoachGamePage.tsx:2290`
-- `src/components/Coach/CoachGamePage.tsx:2355`
-- `src/components/Coach/CoachTeachPage.tsx:8546`
+- `src/components/Coach/CoachGamePage.tsx:2274`
+- `src/components/Coach/CoachGamePage.tsx:2339`
+- `src/components/Coach/CoachTeachPage.tsx:8559`
 - `src/components/Openings/OpeningPlayMode.tsx:92`
 - `src/services/coachGameEngine.test.ts:230`
 - `src/services/coachGameEngine.test.ts:234`
@@ -165,11 +165,11 @@
 ### `studentPlayingRating` (re-export) — 21 call sites
 - `src/App.tsx:170`
 - `src/components/Coach/CoachGamePage.tsx:353`
-- `src/components/Coach/CoachTeachPage.tsx:8545`
-- `src/components/Coach/CoachTeachPage.tsx:10868`
-- `src/components/Coach/CoachTeachPage.tsx:13949`
+- `src/components/Coach/CoachTeachPage.tsx:8558`
+- `src/components/Coach/CoachTeachPage.tsx:10906`
+- `src/components/Coach/CoachTeachPage.tsx:14066`
 - `src/components/Openings/OpeningPlayMode.tsx:68`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:1012`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:1013`
 - `src/hooks/useEndgamePlayout.ts:391`
 - `src/services/coachGameEngine.test.ts:513`
 - `src/services/coachGameEngine.test.ts:519`
@@ -195,17 +195,17 @@
 - `src/services/engineStrength.ts:127`
 
 ### `gameOpponentStrength` (re-export) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:2250`
-- `src/components/Coach/CoachTeachPage.tsx:8545`
-- `src/components/Openings/OpeningPlayMode.tsx:796`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:1012`
+- `src/components/Coach/CoachGamePage.tsx:2234`
+- `src/components/Coach/CoachTeachPage.tsx:8558`
+- `src/components/Openings/OpeningPlayMode.tsx:825`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:1013`
 - `src/hooks/useEndgamePlayout.ts:391`
 - `src/services/engineStrength.ts:117`
 
 ### `emitOpponentStrength` (re-export) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:2260`
-- `src/components/Coach/CoachGamePage.tsx:2299`
-- `src/components/Coach/CoachGamePage.tsx:2323`
+- `src/components/Coach/CoachGamePage.tsx:2244`
+- `src/components/Coach/CoachGamePage.tsx:2283`
+- `src/components/Coach/CoachGamePage.tsx:2307`
 - `src/services/coachPlaySession.ts:212`
 - `src/services/engineStrength.test.ts:96`
 - `src/services/engineStrength.ts:157`
@@ -221,7 +221,6 @@
 - `src/services/coachPlaySession.test.ts`
 - `src/services/coachTurnTruth.test.ts`
 - `src/services/engineStrength.test.ts`
-- `src/services/gemCrushLines.computed.test.ts`
 - `src/services/missionDialEngine.test.ts`
 - `src/services/ratingBands.test.ts`
 - `src/test/algoAuditContract.test.ts`

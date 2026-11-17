@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2831 lines · 80 exports · 158 importers · 29 tests · 2 audits**
+**2831 lines · 80 exports · 159 importers · 29 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -59,6 +59,7 @@
 - `src/services/enginePlanContext.ts`
 - `src/services/exchangeIdeas.ts`
 - `src/services/exchangeLedger.ts`
+- `src/services/exchangeSacrifice.ts`
 - `src/services/factStakes.ts`
 - `src/services/falseAlarm.ts`
 - `src/services/fileTrade.ts`
@@ -226,7 +227,7 @@
 - `src/services/bookMoveWhy.ts:346`
 - `src/services/bookMoveWhy.ts:460`
 - `src/services/bookMoveWhy.ts:479`
-- `src/services/coachFeatureService.ts:3794`
+- `src/services/coachFeatureService.ts:3797`
 - `src/services/groundedAnswer.ts:7409`
 - `src/services/moveIntent.ts:469`
 - `src/services/moveIntent.ts:486`
@@ -311,7 +312,7 @@
 - `src/services/structureReads.ts:137`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12975`
+- `src/components/Coach/CoachTeachPage.tsx:12980`
 - `src/services/learnBoardTeaching.ts:1586`
 - `src/services/principleAttribution.ts:359`
 - `src/services/principleAttribution.ts:862`
@@ -322,7 +323,7 @@
 - `src/services/orderByThreat.ts:110`
 - `src/services/prophylaxis.ts:105`
 
-### `legalSeeGainFor` (function) — 149 call sites
+### `legalSeeGainFor` (function) — 151 call sites
 - `src/coach/focus/castlingWatch.ts:159`
 - `src/coach/focus/castlingWatch.ts:161`
 - `src/coach/focus/focusChances.ts:388`
@@ -375,6 +376,8 @@
 - `src/services/exchangeLedger.ts:562`
 - `src/services/exchangeLedger.ts:571`
 - `src/services/exchangeLedger.ts:572`
+- `src/services/exchangeSacrifice.ts:166`
+- `src/services/exchangeSacrifice.ts:176`
 - `src/services/falseAlarm.ts:62`
 - `src/services/flexibleMove.ts:148`
 - `src/services/flexibleMove.ts:205`
@@ -506,7 +509,7 @@
 - `src/services/thinkingExchangeChain.ts:59`
 
 ### `signedLegalSeeFor` (function) — 40 call sites
-- `src/components/Coach/CoachTeachPage.tsx:930`
+- `src/components/Coach/CoachTeachPage.tsx:931`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -590,8 +593,8 @@
 
 ### `findHangingBySee` (function) — 29 call sites
 - `src/coach/chatTurnAnswers.ts:211`
-- `src/components/Coach/CoachTeachPage.tsx:9166`
-- `src/components/Coach/CoachTeachPage.tsx:9172`
+- `src/components/Coach/CoachTeachPage.tsx:9171`
+- `src/components/Coach/CoachTeachPage.tsx:9177`
 - `src/services/bothSaved.ts:73`
 - `src/services/computedMaterialTruth.corpus.test.ts:216`
 - `src/services/computedMaterialTruth.corpus.test.ts:226`

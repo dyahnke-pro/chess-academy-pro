@@ -51,11 +51,11 @@
 - `src/data/endgame-side-correctness.test.ts:51`
 - `src/data/grounding/groundingLib.ts:56`
 - `src/data/groundingMistakes.test.ts:38`
-- `src/services/boardComputers.ts:455`
-- `src/services/boardComputers.ts:1886`
-- `src/services/boardComputers.ts:1904`
-- `src/services/boardComputers.ts:1920`
-- `src/services/boardComputers.ts:1938`
+- `src/services/boardComputers.ts:485`
+- `src/services/boardComputers.ts:1993`
+- `src/services/boardComputers.ts:2011`
+- `src/services/boardComputers.ts:2027`
+- `src/services/boardComputers.ts:2045`
 - `src/services/conceptEngine.test.ts:19`
 - `src/services/conceptEngine.test.ts:20`
 - `src/services/groundedMoveWhy.ts:83`
@@ -131,7 +131,7 @@
 - `src/services/conceptEngine.test.ts:328`
 - `src/services/endgameDrillService.test.ts:163`
 - `src/services/missedTacticService.ts:212`
-- `src/services/puzzleConceptExplanation.ts:142`
+- `src/services/puzzleConceptExplanation.ts:143`
 - `src/services/puzzleConceptHint.ts:108`
 - `src/services/refutedAlternative.ts:172`
 - `src/services/tacticTypeUnification.test.ts:61`
@@ -142,7 +142,7 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8721`
+- `src/components/Coach/CoachTeachPage.tsx:8726`
 - `src/services/learnWalkBlumenfeld.test.ts:142`
 - `src/services/positionFacts.ts:1506`
 - `src/services/positionFacts.ts:1508`
@@ -153,16 +153,16 @@
 - `src/services/reviewFullData.ts:763`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8724`
+- `src/components/Coach/CoachTeachPage.tsx:8729`
 - `src/services/dnaLineNarrator.ts:57`
 - `src/services/projectedLineVoice.ts:99`
-- `src/services/puzzleConceptExplanation.ts:131`
+- `src/services/puzzleConceptExplanation.ts:132`
 - `src/services/reviewFullData.ts:758`
 - `src/services/tacticAlertService.ts:148`
 - `src/services/tacticTypeUnification.test.ts:207`
 - `src/test/auditConceptGameplayCues.test.ts:24`
 
-### `materialBalance` (re-export) — 67 call sites
+### `materialBalance` (re-export) — 68 call sites
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:41`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:90`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:94`
@@ -224,6 +224,7 @@
 - `src/services/narratedContinuation.test.ts:18`
 - `src/services/narratedContinuation.test.ts:20`
 - `src/services/opponentMoveReads.ts:447`
+- `src/services/pawnMajority.ts:130`
 - `src/services/pieceValues.ts:46`
 - `src/services/positionReadingService.ts:1853`
 - `src/services/practicalReads.ts:31`
