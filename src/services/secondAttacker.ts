@@ -10,12 +10,14 @@
 // same exchange wins material, or taking there is mate. A newcomer smaller
 // than the target is a plain attack, not a count, and is left to the threat
 // readers. Both seats. PURE: chess.js and the legal exchange.
+import { openSentence } from '../utils/openSentence';
+import { unmarked } from '../utils/sanMark';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor, asIfToMove } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
-import { andList } from '../utils/andList';
+import { andList, withArticle } from '../utils/andList';
 
 const NAME = PIECE_NAMES as Readonly<Record<PieceSymbol, string>>;
 const worth = (t: PieceSymbol): number => (t === 'k' ? 100 : MATERIAL_VALUE[t] ?? 0);
@@ -127,7 +129,7 @@ export function secondAttackerLine(s: SecondAttacker, own: 'your' | 'their', fen
   // (the speedrun replay 2026-11-17: "your knight and the queen on f6 both hit
   // their knight on d4. That's three attackers").
   const join = s.attackers > 2
-    ? `${cap(own)} ${nc} adds a ${ORDINAL[s.attackers] ?? 'new'} attacker on ${target}.`
+    ? `${cap(own)} ${nc} adds ${withArticle(`${ORDINAL[s.attackers] ?? 'new'} attacker`)} on ${target}.`
     : rotateStem([
       `${cap(own)} ${nc} joins ${partner} against ${target}.`,
       `Now ${own} ${nc} and ${partner} both hit ${target}.`,
@@ -137,11 +139,11 @@ export function secondAttackerLine(s: SecondAttacker, own: 'your' | 'their', fen
   // Their capture is THEIR threat, said as one ("Taking on c3 now wins a
   // piece" about their bishop read as advice to the student).
   const point = s.mate
-    ? `${s.mate.replace(/#$/, '')} would be mate.`
+    ? `${unmarked(s.mate)} would be mate.`
     : own === 'your' ? `Taking on ${s.target} now wins ${wins(s.gain)}.` : `They threaten to take on ${s.target} and win ${wins(s.gain)}.`;
   return `${join} ${tally} ${point}`;
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

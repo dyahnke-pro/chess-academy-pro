@@ -11,6 +11,7 @@
 //      of the pinner, the king or queen stepping off the line), while the
 //      pinner's side never takes the pinned piece first.
 // PURE: chess.js and the engine line the surface hands in.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -173,5 +174,5 @@ export function harmlessPinLine(h: HarmlessPin, pinnerIsStudent: boolean, fenAft
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

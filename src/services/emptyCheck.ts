@@ -7,6 +7,7 @@
 // quiet block or a king step — no capture of the checker, so the check simply
 // ran out. Then the checking piece has to move again: a check is a tempo only
 // when it wins something. PURE: chess.js.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type PieceSymbol } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -44,13 +45,13 @@ export function emptyCheckAt(fenBefore: string, san: string, costCp: number | nu
  *  three phrasings rotated on the board. */
 export function emptyCheckLine(e: EmptyCheck, own: 'your' | 'their', fen: string): string {
   const who = own === 'your' ? 'they' : 'you';
-  const Who = who[0].toUpperCase() + who.slice(1);
+  const Who = openSentence(who);
   const p = NAME[e.piece];
   const ans = e.kind === 'block' ? `block it with ${e.reply}` : `step aside with ${e.reply}`;
-  const Own = own[0].toUpperCase() + own.slice(1);
+  const Own = openSentence(own);
   return rotateStem([
     `${Own} ${p}'s check goes nowhere: ${who} simply ${ans}. Now the ${p} has to move again. A check only helps when it wins something.`,
     `${Who} ${ans}, and that check is over. ${Own} ${p} is left to move a second time. Give check when it gains something, not because it's there.`,
-    `That check by ${own} ${p} runs out at once, since ${who} ${ans}. The ${p} has spent a move for nothing.`,
+    `That check by ${own} ${p} runs out at once, since ${who} ${ans}. The ${p} has spent a move and gained no time.`,
   ], stemKeyOf(`${fen}|${e.san}`));
 }

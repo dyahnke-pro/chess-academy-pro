@@ -13,6 +13,7 @@
 // Nothing else: a wing with one road is the ordinary game.
 //
 // PURE: chess.js.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { andList } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -89,5 +90,5 @@ export function castlingWing(fenBefore: string, san: string, student: Color): Ca
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

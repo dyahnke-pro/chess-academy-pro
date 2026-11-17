@@ -14,7 +14,9 @@ import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { getWeaknessLifecycle } from './weaknessLifecycle';
 import { buildWeaknessSignals, type WeaknessSignal } from './weaknessSignal';
 import { onWeaknessModelChanged } from './weaknessModelEvents';
-import { capabilityProven, getCapabilityProfile } from './capabilityEvidence';
+import { capabilityProven, getCapabilityProfile, type CapabilityProfile } from './capabilityEvidence';
+import { beginnerPrior, beginnerVerdict, type BeginnerVerdict } from './beginnerRegister';
+import { useAppStore } from '../stores/appStore';
 import { loadInaccuracyVoice } from './inaccuracyVoice';
 
 /** The tags the positive record has PROVEN — the ONE definition
@@ -113,3 +115,40 @@ export function invalidateWeaknessSignals(): void {
 // zero callers, so a slip the sweep recorded did not reach the next narration
 // for five minutes. The writers emit on the leaf event; this is the one reader.
 onWeaknessModelChanged(invalidateWeaknessSignals);
+
+/** THE BEGINNER REGISTER for this student, read off their record
+ *  (`beginnerRegister.beginnerVerdict`). One loader, memoized, dropped when the
+ *  record changes — every surface that speaks in the register reads it here. */
+let beginnerCache: { prior: boolean; verdict: BeginnerVerdict } | null = null;
+let beginnerInflight: Promise<BeginnerVerdict> | null = null;
+
+/** The register's cold-start prior for the active profile. */
+export function beginnerPriorNow(): boolean {
+  return beginnerPrior(useAppStore.getState().activeProfile);
+}
+
+/** The last verdict read, or the prior when none has been read yet. */
+export function beginnerRegisterNow(): boolean {
+  const prior = beginnerPriorNow();
+  return beginnerCache && beginnerCache.prior === prior ? beginnerCache.verdict.beginner : prior;
+}
+
+export async function loadBeginnerRegister(): Promise<BeginnerVerdict> {
+  const prior = beginnerPriorNow();
+  if (beginnerCache && beginnerCache.prior === prior) return beginnerCache.verdict;
+  if (beginnerInflight) return beginnerInflight;
+  beginnerInflight = (async () => {
+    try {
+      const profile = await getCapabilityProfile('use').catch((): CapabilityProfile => new Map());
+      const verdict = beginnerVerdict(new Map([...profile.entries()].map(([tag, e]) => [tag, e.hold] as const)), prior);
+      beginnerCache = { prior, verdict };
+      return verdict;
+    } finally {
+      beginnerInflight = null;
+    }
+  })();
+  return beginnerInflight;
+}
+
+onWeaknessModelChanged(() => { beginnerCache = null; });
+

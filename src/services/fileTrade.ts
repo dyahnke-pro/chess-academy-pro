@@ -14,6 +14,8 @@
 // `MISTAKE_CP`): the line states what the trade does, never that the move was
 // best. PURE: chess.js and the
 // position reader.
+import { openSentence } from '../utils/openSentence';
+import { CAPTURE_VALUE } from './pieceValues';
 import { Chess, type PieceSymbol, type Square } from 'chess.js';
 import { signedLegalSeeFor } from './positionReadingService';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -79,8 +81,7 @@ export function fileTradeAt(fenBefore: string, san: string, costCp: number | nul
   // THE HAND-OFF: their cheapest retake, then no major of theirs on the file.
   const retakes = c.moves({ verbose: true }).filter((m) => m.to === mv.to && m.captured);
   if (retakes.length === 0) return null;
-  const VAL: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
-  const retake = [...retakes].sort((a, b) => VAL[a.piece] - VAL[b.piece])[0];
+  const retake = [...retakes].sort((a, b) => CAPTURE_VALUE[a.piece] - CAPTURE_VALUE[b.piece])[0];
   // A rook or queen that takes back holds the file itself.
   if (retake.piece === 'r' || retake.piece === 'q') return null;
   c.move(retake);
@@ -101,7 +102,7 @@ export function fileTradeAt(fenBefore: string, san: string, costCp: number | nul
 /** Said from the mover's seat, one idea a sentence, rotated on the board. */
 export function fileTradeLine(t: FileTrade, moverIsStudent: boolean, fen: string): string {
   const s = tradeSeat(moverIsStudent);
-  const Own = s.own.charAt(0).toUpperCase() + s.own.slice(1);
+  const Own = openSentence(s.own);
   const key = stemKeyOf(`${fen}|file|${t.file}`);
   if (t.kind === 'challenge') {
     const f = `${s.opp} rook on ${t.facing.square}`;

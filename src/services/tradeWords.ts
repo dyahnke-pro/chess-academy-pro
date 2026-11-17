@@ -1,11 +1,11 @@
 // tradeWords — the shared words of the trade computers (`tradeOffer`,
 // `fileTrade`, `pawnEndingTrade`, `tradeKept`): the seat a line is said from,
 // the lead said as the thing it is, the engine's score from a seat. PURE.
+import { seatCp } from './winChance';
 import { Chess, type Color, type PieceSymbol } from 'chess.js';
 import { materialBalance } from './pieceValues';
 import { quietBalance } from './material';
 import type { AnalysisLine } from '../types';
-import { MATE_EVAL_VALUE } from './engineConstants';
 
 /** The seat a line is said from: the mover is the student ("you") or not. */
 export interface TradeSeat {
@@ -59,8 +59,8 @@ export function leadWord(fen: string, side: Color): string | null {
 
 /** A line's score for `side`, in centipawns (a mate is the mate value). */
 export function scoreFor(l: AnalysisLine, side: Color): number {
-  const cp = l.mate !== null ? (l.mate > 0 ? MATE_EVAL_VALUE : -MATE_EVAL_VALUE) : l.evaluation;
-  return side === 'w' ? cp : -cp;
+  // The one converter (`winChance.seatCp`): a mate folds the same everywhere.
+  return seatCp(l, side);
 }
 
 /** The move as uci. */

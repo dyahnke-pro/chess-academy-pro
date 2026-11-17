@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**116 lines · 4 exports · 9 importers · 6 tests · 0 audits**
+**155 lines · 7 exports · 10 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:7010) — names `weaknessSignalLoader`
+- **The standard post-deploy ritual** (CLAUDE.md:7031) — names `weaknessSignalLoader`
 
 ## Who calls in
 
@@ -20,14 +20,15 @@
 - `src/services/studentNeedLoader.ts`
 - `src/services/studentRecord.ts`
 - `src/services/tacticAlertService.ts`
+- `src/services/upNextLoader.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
 
 ## Exports and every call site
 
 ### `loadWeaknessSignals` (function) — 9 call sites
 - `src/components/Openings/OpeningPlayMode.tsx:84`
-- `src/hooks/useWeaknessSignals.ts:23`
-- `src/services/coachFeatureService.ts:6357`
+- `src/hooks/useWeaknessSignals.ts:24`
+- `src/services/coachFeatureService.ts:6419`
 - `src/services/loopCloses.review.integration.test.ts:82`
 - `src/services/puzzleService.ts:353`
 - `src/services/studentNeedLoader.ts:235`
@@ -40,7 +41,7 @@
 - `src/services/learnRecordWatch.ts:29`
 
 ### `loadFadeLevels` (function) — 1 call site
-- `src/hooks/useWeaknessSignals.ts:40`
+- `src/hooks/useWeaknessSignals.ts:41`
 
 ### `invalidateWeaknessSignals` (function) — 6 call sites
 - `src/services/loopCloses.review.integration.test.ts:62`
@@ -49,6 +50,18 @@
 - `src/services/recordReaders.oneRead.test.ts:90`
 - `src/services/weaknessSignalLoader.green.test.ts:42`
 - `src/services/weaknessSignalLoader.green.test.ts:53`
+
+### `beginnerPriorNow` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `beginnerRegisterNow` (function) — 2 call sites
+- `src/hooks/useWeaknessSignals.ts:54`
+- `src/hooks/useWeaknessSignals.ts:58`
+
+### `loadBeginnerRegister` (function) — 3 call sites
+- `src/hooks/useWeaknessSignals.ts:57`
+- `src/services/upNextLoader.ts:75`
+- `src/services/upNextLoader.ts:123`
 
 ## Tests
 

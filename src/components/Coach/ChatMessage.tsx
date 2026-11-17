@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import type { ChatMessage as ChatMessageType } from '../../types';
 import { stripCoachMarkup } from '../../services/sanitizeCoachText';
 import { useLocalizedContent } from '../../services/coachChatText';
-import { useBeginnerRegister } from '../../hooks/useBeginnerRegister';
+import { useBeginnerRegister } from '../../hooks/useWeaknessSignals';
 import { movesInWords } from '../../utils/sanToSpeech';
 
 /** Render basic markdown-style formatting: **bold** and *italic*.

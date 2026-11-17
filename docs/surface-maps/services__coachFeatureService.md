@@ -345,10 +345,10 @@
 - `src/services/coachFeatureService.test.ts:626`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8881`
-- `src/components/Coach/CoachTeachPage.tsx:8984`
-- `src/components/Coach/CoachTeachPage.tsx:11954`
-- `src/components/Coach/CoachTeachPage.tsx:12356`
+- `src/components/Coach/CoachTeachPage.tsx:8879`
+- `src/components/Coach/CoachTeachPage.tsx:8982`
+- `src/components/Coach/CoachTeachPage.tsx:11952`
+- `src/components/Coach/CoachTeachPage.tsx:12354`
 - `src/services/coachFeatureService.test.ts:912`
 - `src/services/coachFeatureService.test.ts:913`
 - `src/services/phaseTransitionDetector.test.ts:575`

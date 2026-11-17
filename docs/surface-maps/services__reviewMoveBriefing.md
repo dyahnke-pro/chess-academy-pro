@@ -121,8 +121,8 @@
 - `src/services/decisionStakes.test.ts:50`
 - `src/services/exchangeNotFinished.test.ts:281`
 - `src/services/gamesCourse.ts:367`
-- `src/services/kingGroupReads.test.ts:12`
-- `src/services/kingGroupReads.test.ts:15`
+- `src/services/kingGroupReads.test.ts:13`
+- `src/services/kingGroupReads.test.ts:16`
 - `src/services/lessonVoice.story.test.ts:29`
 - `src/services/lessonVoice.story.test.ts:41`
 - `src/services/moveThoughtFacts.test.ts:21`

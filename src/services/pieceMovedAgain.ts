@@ -17,6 +17,8 @@
 //     rule is how the lead is used.
 //
 // PURE: chess.js and the one capture count (`legalSeeGainFor`).
+import { openSentence } from '../utils/openSentence';
+import { minorsAtHome } from './development';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { PIECE_NAMES } from '../types/tacticTypes';
@@ -28,11 +30,6 @@ const OPENING_PLIES = 30;
 /** Under this cost (cp) the engine calls the move fine: its trip is not this
  *  move's lesson, unless a kick sent it. */
 const FINE_CP = 30;
-
-const HOME_MINORS: Record<Color, readonly string[]> = {
-  w: ['b1', 'g1', 'c1', 'f1'],
-  b: ['b8', 'g8', 'c8', 'f8'],
-};
 
 const ORDINAL = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
 
@@ -58,10 +55,9 @@ interface Tracked {
 
 /** Minor pieces of `c` still on their first squares. */
 function homeMinors(b: Chess, c: Color): string[] {
-  return HOME_MINORS[c].filter((sq) => {
-    const p = b.get(sq as Square);
-    return !!p && p.color === c && (p.type === 'n' || p.type === 'b');
-  });
+  // The one table of starting squares (`development`).
+  // Knights first, then bishops, each by file: "their knight on g1 and bishop on c1".
+  return minorsAtHome(b, c).sort((x, y) => (x.type === y.type ? x.square.localeCompare(y.square) : x.type === 'n' ? -1 : 1)).map((m) => m.square);
 }
 
 function placement(fen: string): string {
@@ -196,5 +192,5 @@ export function pieceMovedAgain(history: readonly string[], san: string, student
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

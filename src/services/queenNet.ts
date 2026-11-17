@@ -12,6 +12,7 @@
 // count of squares — never "trapped": a block or a counter-move may still
 // save it, which is the engine's question, not this one.
 // PURE: chess.js and the legal static exchange.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
@@ -118,5 +119,5 @@ export function queenNetLine(n: QueenNet, moverIsStudent: boolean, fenAfter: str
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

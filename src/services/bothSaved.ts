@@ -12,6 +12,8 @@
 // and the engine's own reads. The sibling of `desperado` (two hanging, sell the
 // one you cannot save).
 // PURE: chess.js, the position reader and the engine reads the surface hands in.
+import { openSentence } from '../utils/openSentence';
+import { seatCp } from './winChance';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { findHangingBySee, legalSeeGainFor } from './positionReadingService';
 import { PIECE_NAMES } from '../types/tacticTypes';
@@ -37,8 +39,9 @@ export interface BothSaved {
 
 /** White-POV score of a line, mate folded in. */
 function score(l: ReplyLine): number | null {
-  if (l.mate != null) return l.mate > 0 ? 100000 - l.mate : -100000 - l.mate;
-  return l.cp;
+  // The one converter (`winChance.seatCp`) folds the mate.
+  if (l.cp == null && l.mate == null) return null;
+  return seatCp({ evaluation: l.cp ?? 0, mate: l.mate }, 'w');
 }
 
 /** Is the piece on `square` lost after the move (`fenAfter`, `them` to move)?
@@ -106,5 +109,5 @@ export function bothSavedLine(b: BothSaved, own: 'your' | 'their', fenAfter: str
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

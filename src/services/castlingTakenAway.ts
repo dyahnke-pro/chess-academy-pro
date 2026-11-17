@@ -18,6 +18,7 @@
 // piece and come out ahead — then the cover is one move deep, not a fact.
 //
 // PURE: chess.js and the one capture count (`legalSeeGainFor`).
+import { openSentence } from '../utils/openSentence';
 import { seatPieceWords } from './pieceRef';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
@@ -132,5 +133,5 @@ function sentence(a: { mv: Move; from: string; moved: boolean; sq: string; wing:
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

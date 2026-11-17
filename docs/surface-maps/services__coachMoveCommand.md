@@ -19,17 +19,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `fenBeforeLastMove` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:4365`
-- `src/components/Coach/CoachTeachPage.tsx:4857`
+- `src/components/Coach/CoachTeachPage.tsx:4363`
+- `src/components/Coach/CoachTeachPage.tsx:4855`
 - `src/services/coachMoveCommand.test.ts:190`
 - `src/services/coachMoveCommand.test.ts:198`
 - `src/services/coachMoveCommand.test.ts:201`
 - `src/services/coachMoveCommand.test.ts:202`
 
 ### `parseCoachMoveCommand` (function) — 39 call sites
-- `src/components/Coach/CoachTeachPage.tsx:4365`
-- `src/components/Coach/CoachTeachPage.tsx:4857`
-- `src/components/Coach/CoachTeachPage.tsx:8491`
+- `src/components/Coach/CoachTeachPage.tsx:4363`
+- `src/components/Coach/CoachTeachPage.tsx:4855`
+- `src/components/Coach/CoachTeachPage.tsx:8489`
 - `src/services/coachMoveCommand.test.ts:11`
 - `src/services/coachMoveCommand.test.ts:18`
 - `src/services/coachMoveCommand.test.ts:24`

@@ -10,6 +10,7 @@
 // is sound (the engine's cost) and the engine still has the mover ahead. Rooks
 // on a file are `fileTrade`'s; a capture is a trade MADE, which `readTrade`
 // and `queenTradeRead` judge. PURE: chess.js and the position reader.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type PieceSymbol, type Square } from 'chess.js';
 import { signedLegalSeeFor } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
@@ -75,10 +76,10 @@ export function tradeOfferLine(o: TradeOffer, moverIsStudent: boolean, fen: stri
   const p = PIECE_WORD[o.piece];
   const f = `${s.opp} ${PIECE_WORD[o.facing.piece]} on ${o.facing.square}`;
   const What = o.piece === 'q' ? 'the queen trade' : 'a trade';
-  const Up = o.up.charAt(0).toUpperCase() + o.up.slice(1);
+  const Up = openSentence(o.up);
   return rotateStem([
     `The ${p} on ${o.square} offers ${What} with ${f}. ${Up} up, every trade brings ${s.own} won ending closer.`,
-    `${s.own.charAt(0).toUpperCase() + s.own.slice(1)} ${p} on ${o.square} stands face to face with ${f}. ${s.are.charAt(0).toUpperCase() + s.are.slice(1)} ${o.up} up, so a trade suits ${s.sub === 'you' ? 'you' : 'them'}.`,
+    `${openSentence(s.own)} ${p} on ${o.square} stands face to face with ${f}. ${openSentence(s.are)} ${o.up} up, so a trade suits ${s.sub === 'you' ? 'you' : 'them'}.`,
     `The ${p} on ${o.square} invites ${What}. With ${o.up} more, the fewer pieces left, the easier the win.`,
   ], stemKeyOf(`${fen}|offer|${o.square}`));
 }

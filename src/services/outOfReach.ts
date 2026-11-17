@@ -10,6 +10,7 @@
 // or one move would have), or the engine's other square for the same piece.
 // Equal or bigger pieces may still reach it — the line says "smaller". Both
 // seats. PURE: chess.js.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
 import { sideToMoveAs } from './threatOut';
@@ -117,7 +118,7 @@ export function outOfReachLine(o: OutOfReach, own: 'your' | 'their', fen: string
   const key = stemKeyOf(`${fen}|outOfReach|${o.square}`);
   const lead = rotateStem([
     `${cap(own)} ${p} on ${o.square} is out of reach: ${reach}.`,
-    `On ${o.square} ${own} ${p} can't be chased: ${reach}.`,
+    `On ${o.square} ${own} ${p} is safe for now: ${reach}.`,
     `${cap(own)} ${p} settles on ${o.square}, where ${reach}.`,
   ], key);
   const c = o.contrast;
@@ -128,5 +129,5 @@ export function outOfReachLine(o: OutOfReach, own: 'your' | 'their', fen: string
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

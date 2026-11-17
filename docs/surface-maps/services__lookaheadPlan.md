@@ -57,7 +57,7 @@
 - `src/services/replayFence.modern1690.test.ts:82`
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9263`
+- `src/components/Coach/CoachTeachPage.tsx:9261`
 - `src/services/coachFeatureService.ts:4874`
 - `src/services/computedVoiceAudit.report.test.ts:247`
 - `src/services/dnaLineNarrator.ts:59`
@@ -83,7 +83,7 @@
 - `src/services/turningPoints.ts:201`
 
 ### `seatedTacticLine` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9274`
+- `src/components/Coach/CoachTeachPage.tsx:9272`
 - `src/services/seatedTacticLine.test.ts:10`
 - `src/services/seatedTacticLine.test.ts:15`
 - `src/services/seatedTacticLine.test.ts:21`
@@ -92,8 +92,8 @@
 - `src/services/seatedTacticLine.test.ts:40`
 
 ### `pinConsequence` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9280`
-- `src/components/Coach/CoachTeachPage.tsx:9382`
+- `src/components/Coach/CoachTeachPage.tsx:9278`
+- `src/components/Coach/CoachTeachPage.tsx:9380`
 - `src/services/lookaheadPlan.test.ts:1047`
 - `src/services/lookaheadPlan.test.ts:1050`
 - `src/services/pinConsequence.test.ts:8`
@@ -213,11 +213,11 @@
 
 ### `stepBothArcs` (function) — 2 call sites
 - `src/components/Coach/CoachGamePage.tsx:3033`
-- `src/components/Coach/CoachTeachPage.tsx:11743`
+- `src/components/Coach/CoachTeachPage.tsx:11741`
 
 ### `planFromUci` (function) — 40 call sites
 - `src/components/Coach/CoachGamePage.tsx:3028`
-- `src/components/Coach/CoachTeachPage.tsx:11726`
+- `src/components/Coach/CoachTeachPage.tsx:11724`
 - `src/services/betterMoveSeveralPieces.test.ts:20`
 - `src/services/claimTruth.manual.test.ts:130`
 - `src/services/coachLaneWiring.test.ts:35`
@@ -262,7 +262,7 @@
 - `src/services/walkOct1Learn.test.ts:115`
 
 ### `forkConsequence` (re-export) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9277`
+- `src/components/Coach/CoachTeachPage.tsx:9275`
 - `src/services/reviewFullData.ts:945`
 - `src/services/tacticVocabulary.ts:211`
 
@@ -335,9 +335,9 @@
 - `src/test/thinkMarkClosed.gate.test.ts:77`
 
 ### `withAnnouncement` (re-export) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11754`
-- `src/components/Coach/CoachTeachPage.tsx:11755`
-- `src/components/Coach/CoachTeachPage.tsx:12396`
+- `src/components/Coach/CoachTeachPage.tsx:11752`
+- `src/components/Coach/CoachTeachPage.tsx:11753`
+- `src/components/Coach/CoachTeachPage.tsx:12394`
 - `src/services/planArc.heldAnnouncement.test.ts:32`
 - `src/services/planArc.ts:163`
 

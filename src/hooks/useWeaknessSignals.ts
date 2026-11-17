@@ -4,8 +4,9 @@
 // latest set at fire-time without forcing a re-render on the board. Coaching
 // surfaces (learn/play/openings) call this; kid surfaces NEVER do.
 
-import { useEffect, useRef } from 'react';
-import { loadFadeLevels, loadWeaknessSignals } from '../services/weaknessSignalLoader';
+import { useEffect, useRef, useState } from 'react';
+import { beginnerRegisterNow, loadBeginnerRegister, loadFadeLevels, loadWeaknessSignals } from '../services/weaknessSignalLoader';
+import { useAppStore } from '../stores/appStore';
 import { onWeaknessModelSettled } from '../services/weaknessModelEvents';
 import type { WeaknessSignal } from '../services/weaknessSignal';
 import type { FadeLevel } from '../services/fadeText';
@@ -44,3 +45,21 @@ export function useFadeLevels(): React.RefObject<ReadonlyMap<string, FadeLevel>>
   }, []);
   return ref;
 }
+
+/** The beginner register for this student, from their record
+ *  (`beginnerRegister`): the prior answers until the record loads, and the
+ *  verdict follows the record as it changes. */
+export function useBeginnerRegister(): boolean {
+  const profile = useAppStore((st) => st.activeProfile);
+  const [beginner, setBeginner] = useState<boolean>(() => beginnerRegisterNow());
+  useEffect(() => {
+    let alive = true;
+    const load = (): void => { void loadBeginnerRegister().then((v) => { if (alive) setBeginner(v.beginner); }); };
+    setBeginner(beginnerRegisterNow());
+    load();
+    const off = onWeaknessModelSettled(load);
+    return () => { alive = false; off(); };
+  }, [profile?.skillBand, profile?.currentRating]);
+  return beginner;
+}
+

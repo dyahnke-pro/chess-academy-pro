@@ -7,6 +7,9 @@
 // forced mate in one or two (checks only, every defence tried — chess.js
 // brute force, so the mate is exact). Said on the move that makes it so: the
 // piece was not poisoned before. Both seats. PURE: chess.js and the exchange.
+import { openSentence } from '../utils/openSentence';
+import { sideToMoveAs } from './threatOut';
+import { unmarked } from '../utils/sanMark';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { PIECE_NAMES } from '../types/tacticTypes';
@@ -83,12 +86,8 @@ export function poisonedPiece(fenBefore: string, san: string): PoisonedPiece | n
     if (!p) continue;
     // New with this move: before it, taking the piece was not answered by mate.
     const sqBefore = cell.square === mv.to ? mv.from : cell.square;
-    let asThem: string | null = null;
-    try {
-      const parts = fenBefore.split(' ');
-      parts[1] = them; parts[3] = '-';
-      asThem = new Chess(parts.join(' ')).fen();
-    } catch { asThem = null; }
+    // The one null-move rule (`sideToMoveAs`): a side in check cannot pass.
+    const asThem = sideToMoveAs(fenBefore, them);
     if (asThem && poisonedOn(asThem, sqBefore, them)) continue;
     return { square: cell.square, piece: cell.type, capture: p.capture, mate: p.mate };
   }
@@ -99,7 +98,7 @@ export function poisonedPiece(fenBefore: string, san: string): PoisonedPiece | n
  *  phrasings rotated on the board. */
 export function poisonedPieceLine(p: PoisonedPiece, own: 'your' | 'their', fen: string): string {
   const piece = `${own} ${NAME[p.piece]} on ${p.square}`;
-  const mate = p.mate.map((s) => s.replace(/#$/, '')).join(' ');
+  const mate = unmarked(p.mate.join(' '));
   const key = stemKeyOf(`${fen}|poisonedPiece|${p.square}`);
   return rotateStem([
     `${cap(piece)} looks loose, but it can't be taken. After ${p.capture}, ${mate} is mate.`,
@@ -109,5 +108,5 @@ export function poisonedPieceLine(p: PoisonedPiece, own: 'your' | 'their', fen: 
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

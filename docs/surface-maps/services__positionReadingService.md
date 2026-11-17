@@ -227,8 +227,8 @@
 - `src/services/moveIntent.ts:486`
 - `src/services/moveIntent.ts:556`
 - `src/services/practicalReads.ts:177`
-- `src/services/queenHunt.ts:57`
-- `src/services/queenNet.ts:55`
+- `src/services/queenHunt.ts:58`
+- `src/services/queenNet.ts:56`
 - `src/services/reviewTeachingPoints.ts:103`
 - `src/services/reviewTeachingPoints.ts:469`
 - `src/services/reviewTeachingPoints.ts:680`
@@ -306,14 +306,14 @@
 - `src/services/structureReads.ts:137`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12971`
+- `src/components/Coach/CoachTeachPage.tsx:12969`
 - `src/services/learnBoardTeaching.ts:1586`
 - `src/services/principleAttribution.ts:359`
 - `src/services/principleAttribution.ts:860`
 
 ### `bestCaptureGainFor` (function) — 4 call sites
 - `src/services/causalChain.ts:734`
-- `src/services/orderByThreat.ts:76`
+- `src/services/orderByThreat.ts:77`
 - `src/services/orderByThreat.ts:110`
 - `src/services/prophylaxis.ts:105`
 
@@ -347,13 +347,13 @@
 - `src/services/bluffDetector.ts:54`
 - `src/services/bluffDetector.ts:148`
 - `src/services/boardState.ts:42`
-- `src/services/bothSaved.ts:48`
+- `src/services/bothSaved.ts:51`
 - `src/services/captureLeadsTo.ts:30`
-- `src/services/castlingTakenAway.ts:94`
+- `src/services/castlingTakenAway.ts:95`
 - `src/services/causalChain.ts:45`
-- `src/services/chainBase.ts:101`
-- `src/services/chainBase.ts:114`
+- `src/services/chainBase.ts:102`
 - `src/services/chainBase.ts:115`
+- `src/services/chainBase.ts:116`
 - `src/services/checkIsNotAGuard.test.ts:39`
 - `src/services/computedMaterialTruth.corpus.test.ts:120`
 - `src/services/computedMaterialTruth.corpus.test.ts:145`
@@ -401,17 +401,17 @@
 - `src/services/opensCheck.ts:71`
 - `src/services/orderByThreat.ts:114`
 - `src/services/pawnJudgement.ts:303`
-- `src/services/pawnLines.ts:114`
 - `src/services/pawnLines.ts:115`
-- `src/services/pieceCage.ts:45`
-- `src/services/pieceCage.ts:85`
-- `src/services/pieceMovedAgain.ts:139`
-- `src/services/pieceMovedAgain.ts:149`
-- `src/services/pinnedPawnGuard.ts:93`
-- `src/services/pinnedPawnGuard.ts:98`
+- `src/services/pawnLines.ts:116`
+- `src/services/pieceCage.ts:47`
+- `src/services/pieceCage.ts:87`
+- `src/services/pieceMovedAgain.ts:135`
+- `src/services/pieceMovedAgain.ts:145`
+- `src/services/pinnedPawnGuard.ts:94`
+- `src/services/pinnedPawnGuard.ts:99`
 - `src/services/planRace.ts:576`
 - `src/services/planStep.ts:52`
-- `src/services/poisonedPiece.ts:51`
+- `src/services/poisonedPiece.ts:54`
 - `src/services/positionCharacter.ts:161`
 - `src/services/practicalReads.ts:42`
 - `src/services/practicalReads.ts:68`
@@ -426,12 +426,12 @@
 - `src/services/pvPlayback.ts:221`
 - `src/services/pvPlayback.ts:225`
 - `src/services/queenGrabTrap.ts:49`
-- `src/services/queenHunt.ts:132`
+- `src/services/queenHunt.ts:133`
 - `src/services/ruleException.ts:46`
 - `src/services/safetyHabits.ts:54`
 - `src/services/safetyHabits.ts:149`
-- `src/services/secondAttacker.ts:69`
 - `src/services/secondAttacker.ts:71`
+- `src/services/secondAttacker.ts:73`
 - `src/services/slipDepth.ts:122`
 - `src/services/speedRunReads.ts:165`
 - `src/services/speedRunReads.ts:176`
@@ -457,8 +457,8 @@
 - `src/services/threatAnswer.ts:220`
 - `src/services/tiedDefender.ts:45`
 - `src/services/tiedDefender.ts:52`
-- `src/services/tradeKept.ts:96`
-- `src/services/tradeKept.ts:105`
+- `src/services/tradeKept.ts:97`
+- `src/services/tradeKept.ts:106`
 - `src/services/weighedMoves.ts:644`
 - `src/services/weighedMoves.ts:712`
 
@@ -487,23 +487,23 @@
 - `src/services/opponentMoveReads.ts:284`
 - `src/services/opponentMoveReads.ts:498`
 - `src/services/opponentMoveReads.ts:513`
-- `src/services/pieceCage.ts:36`
+- `src/services/pieceCage.ts:38`
 - `src/services/practicalReads.ts:160`
 - `src/services/practicalReads.ts:189`
 - `src/services/practicalReads.ts:221`
-- `src/services/secondAttacker.ts:54`
+- `src/services/secondAttacker.ts:56`
 - `src/services/thinkingExchangeChain.ts:59`
 
 ### `signedLegalSeeFor` (function) — 39 call sites
-- `src/components/Coach/CoachTeachPage.tsx:929`
+- `src/components/Coach/CoachTeachPage.tsx:927`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
 - `src/services/countMethod.ts:44`
 - `src/services/countMethod.ts:51`
 - `src/services/countMethod.ts:73`
-- `src/services/fileTrade.ts:73`
-- `src/services/fileTrade.ts:97`
+- `src/services/fileTrade.ts:75`
+- `src/services/fileTrade.ts:98`
 - `src/services/gambitIdea.ts:113`
 - `src/services/gambitIdea.ts:114`
 - `src/services/gameEndReads.ts:169`
@@ -530,8 +530,8 @@
 - `src/services/reviewFullData.ts:483`
 - `src/services/skillQuestions.ts:48`
 - `src/services/threatAnswerEvidence.ts:69`
-- `src/services/tradeKept.ts:173`
-- `src/services/tradeOffer.ts:60`
+- `src/services/tradeKept.ts:174`
+- `src/services/tradeOffer.ts:61`
 - `src/services/tradeQuality.ts:232`
 - `src/services/trappedPiece.ts:90`
 
@@ -578,9 +578,9 @@
 
 ### `findHangingBySee` (function) — 29 call sites
 - `src/coach/chatTurnAnswers.ts:211`
-- `src/components/Coach/CoachTeachPage.tsx:9165`
-- `src/components/Coach/CoachTeachPage.tsx:9171`
-- `src/services/bothSaved.ts:70`
+- `src/components/Coach/CoachTeachPage.tsx:9163`
+- `src/components/Coach/CoachTeachPage.tsx:9169`
+- `src/services/bothSaved.ts:73`
 - `src/services/computedMaterialTruth.corpus.test.ts:216`
 - `src/services/computedMaterialTruth.corpus.test.ts:226`
 - `src/services/conversionMethod.ts:65`

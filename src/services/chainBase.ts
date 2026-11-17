@@ -15,6 +15,7 @@
 // pawn another pawn also guards — then the chain does not lean on it.
 //
 // PURE: chess.js + the SEE reader.
+import { openSentence } from '../utils/openSentence';
 import { seatPieceWords } from './pieceRef';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
@@ -101,7 +102,7 @@ export function chainBase(fenBefore: string, san: string, mine: boolean): ChainB
       if (legalSeeGainFor(fenBefore, sq, them) < 1 || legalSeeGainFor(afterFen, sq, them) > 0) continue;
       const tip = held.join(' and ');
       const text = rotateStem([
-        `${cap(mover)} now guards ${sq}, the base of ${own} pawn chain. ${sq} is the only pawn holding ${tip}, so if it falls, ${tip} is left on its own.`,
+        `${cap(mover)} now guards ${sq}, the base of ${own} pawn chain. ${sq} is the only pawn holding ${tip}, so without it, ${tip} has no pawn behind it.`,
         `${cap(mover)} covers ${sq}, the pawn at the base of ${own} chain. It is the only pawn holding ${tip}.`,
         `${cap(mover)} props up ${sq}, the base of ${own} pawn chain. Lose ${sq} and ${tip} has no pawn behind it.`,
       ], key);
@@ -131,5 +132,5 @@ export function chainBase(fenBefore: string, san: string, mine: boolean): ChainB
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

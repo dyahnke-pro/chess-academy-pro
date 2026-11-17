@@ -12,7 +12,7 @@
 
 - **22** modules record a MISS.
 - **12** record a HOLD (`capabilityEvidence`).
-- **5** read the capability profile back.
+- **4** read the capability profile back.
 
 Green has a reader — the heat map can lower as well as raise.
 
@@ -45,7 +45,7 @@ fact-computer count (which excludes infrastructure) lives in
 `surfaceComposition.scan.test.ts`, and duplicating its INFRA list here would be
 exactly the drifting-constant the rot rule bans.
 
-- **CoachTeachPage.tsx**: 111
+- **CoachTeachPage.tsx**: 110
 - **CoachGamePage.tsx**: 38
 - **CoachGameReview.tsx**: 46
 

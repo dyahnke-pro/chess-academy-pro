@@ -17,6 +17,7 @@
 //   horizon-plan    — past the master games, the board's plan under the SAME
 //                     aim keys the plan thread uses, so the plan never repeats
 // PURE given its `movesAt` reader; the caller ranks, dedupes and speaks.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import { detectOpeningByOrder } from './openingDetectionService';
 import { openingNameForBoard } from './openingAnnouncement';
@@ -224,7 +225,7 @@ function knightDistance(owner: 'your' | 'their', from: string, moves: number, fe
   return `${words} is ${moves === 1 ? 'one move' : `${countWord(moves)} moves`} from it`;
 }
 
-const capFirst = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+const capFirst = (t: string): string => openSentence(t);
 
 /** The ply whose move gave the board its current name (null: none did). */
 function namedAtPly(history: readonly string[], name: string): number | null {

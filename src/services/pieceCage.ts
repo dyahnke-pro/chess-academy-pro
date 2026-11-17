@@ -10,12 +10,14 @@
 // the move took at least one of its squares away, and the moved piece itself
 // covers every square taken. Pure (chess.js and the legal exchange read).
 // Both seats.
+import { isOnHomeSquare } from './development';
 import { Chess, type Color, type Square } from 'chess.js';
 import { legalSeeGainFor, asIfToMove } from './positionReadingService';
 import { andList } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
-const OPENING_SQUARES = new Set(['b1', 'g1', 'b8', 'g8', 'c3', 'f3', 'c6', 'f6']);
+/** A knight's first squares out (its home squares come from `development`). */
+const FIRST_SQUARES = new Set(['c3', 'f3', 'c6', 'f6']);
 
 export interface PieceCage {
   /** The caged knight's square. */
@@ -80,7 +82,7 @@ export function pieceCage(fenBefore: string, san: string, mine: boolean): PieceC
     // A knight at home or on its first square (c3, f3, c6, f6) is short of
     // squares in every opening — the centre is contested, that is all (the
     // replay's 2…Nc6 "takes e5 from their knight on f3" was no cage).
-    if (OPENING_SQUARES.has(sq)) continue;
+    if (isOnHomeSquare('n', side, sq) || FIRST_SQUARES.has(sq)) continue;
     // A knight already lost where it stands is trapped, a different lesson.
     if (legalSeeGainFor(after.fen(), sq, mover) > 0) continue;
     const was = safeSquares(fenBefore, sq, side);

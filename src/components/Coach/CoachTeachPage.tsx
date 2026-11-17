@@ -119,9 +119,7 @@ import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { usePhaseNarration } from '../../hooks/usePhaseNarration';
 import { useStudentNeed } from '../../hooks/useStudentNeed';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
-import { useBeginnerRegister } from '../../hooks/useBeginnerRegister';
-import { loadBeginnerRegister } from '../../services/beginnerRegisterLoader';
-import { useFadeLevels, useWeaknessSignals } from '../../hooks/useWeaknessSignals';
+import { useBeginnerRegister, useFadeLevels, useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import { useStudentRecord } from '../../hooks/useStudentRecord';
 import { EverythingPanel } from './EverythingPanel';
 import { GameSettingsButton } from './GameSettingsButton';
@@ -3246,7 +3244,7 @@ export function CoachTeachPage({ mode }: {
       lichess: activeProfile?.preferences?.lichessUsername,
     };
     const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
-    const plan = await thinkingLesson.plan({ usernames, rating, beginner: (await loadBeginnerRegister()).beginner });
+    const plan = await thinkingLesson.plan({ usernames, rating, beginner: beginnerRef.current });
     if (!plan) {
       void thinkingLesson.noLessonLine().then((line) => coachDrillSay(line));
       return;

@@ -5,6 +5,8 @@
 // The board fact: the move played mates, and another move on the same board
 // mates too. Counted by chess.js over every legal move (a promotion to two
 // pieces on the same square is one move). Both seats. PURE: chess.js.
+import { openSentence } from '../utils/openSentence';
+import { unmarked } from '../utils/sanMark';
 import { Chess } from 'chess.js';
 import { andList } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -37,7 +39,7 @@ export function everyMate(fenBefore: string, san: string): EveryMate | null {
     c.undo();
     if (mate) { seen.add(k); others.push(m.san.replace(/#$/, '')); }
   }
-  return others.length > 0 ? { played: mv.san.replace(/#$/, ''), others } : null;
+  return others.length > 0 ? { played: unmarked(mv.san), others } : null;
 }
 
 /** Said in the human voice, phrasings rotated on the board. */
@@ -49,11 +51,11 @@ export function everyMateLine(e: EveryMate, own: 'your' | 'their', fen: string):
   const count = n === 2 ? 'two' : n === 3 ? 'three' : String(n);
   return rotateStem([
     `${cap(count)} moves mate here: ${all}. Once you see one, look for the others.`,
-    `${e.played} is mate, and so ${e.others.length === 1 ? 'is' : 'are'} ${andList(e.others)}. When one mate is there, check for another.`,
+    `${unmarked(e.played)} is mate, and so ${e.others.length === 1 ? 'is' : 'are'} ${andList(e.others)}. When one mate is there, check for another.`,
     `${cap(who)} have ${count} ways to mate here: ${all}. Found one? Keep looking for the rest.`,
   ], key);
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

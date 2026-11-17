@@ -9,7 +9,7 @@ describe('pawnCutsGuard', () => {
     const r = pawnCutsGuard(FEN, 'c3', true);
     expect(r?.text).toMatch(/queen on d2/);
     expect(r?.text).toMatch(/knight on a5/);
-    expect(r?.text).toMatch(/hanging/);
+    expect(r?.text).toMatch(/no guard/);
     expect(r?.gain).toBe(3);
   });
   // Danya, BGTBTghFQDI 9…c4: "…c4 cuts the line between the b3 queen and the

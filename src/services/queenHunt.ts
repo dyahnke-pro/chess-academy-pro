@@ -14,6 +14,7 @@
 // A safe square is read with the trapped-piece computer's own rule: not hit by
 // a smaller piece, and not hit while unguarded; a capture is safe when the
 // exchange there does not lose. PURE: chess.js and the trapped-piece computer.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { trappedAt } from './trappedPiece';
 import { legalSeeGainOn, legalSeeGainFor } from './positionReadingService';
@@ -183,5 +184,5 @@ export function queenHuntLine(h: QueenHunt, own: 'your' | 'their', fen: string):
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

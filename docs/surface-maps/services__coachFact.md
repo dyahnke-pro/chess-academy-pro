@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**606 lines · 16 exports · 37 importers · 15 tests · 0 audits**
+**606 lines · 16 exports · 38 importers · 16 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -33,6 +33,7 @@
 - `src/services/factRelations.test.ts`
 - `src/services/factSelector.ts`
 - `src/services/gameStory.ts`
+- `src/services/kingGroupReads.test.ts`
 - `src/services/knownSlips.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/methodComputers.chat.test.ts`
@@ -100,7 +101,7 @@
 
 ### `placeFact` (function) — 20 call sites
 - `src/services/boardComputers.ts:1025`
-- `src/services/boardComputers.ts:1852`
+- `src/services/boardComputers.ts:1854`
 - `src/services/learnTurnDoor.ts:755`
 - `src/services/moveThoughtFacts.ts:208`
 - `src/services/moveThoughtFacts.ts:610`
@@ -110,7 +111,7 @@
 - `src/services/moveThoughtFacts.ts:1275`
 - `src/services/moveThoughtFacts.ts:1307`
 - `src/services/moveThoughtFacts.ts:1324`
-- `src/services/openingStory.ts:421`
+- `src/services/openingStory.ts:422`
 - `src/services/positionFacts.ts:556`
 - `src/services/reviewFacet.ts:85`
 - `src/services/reviewFacet.ts:113`
@@ -122,7 +123,7 @@
 
 ### `stakesOf` (function) — 19 call sites
 - `src/services/boardComputers.ts:1026`
-- `src/services/boardComputers.ts:1852`
+- `src/services/boardComputers.ts:1854`
 - `src/services/coachFact.test.ts:112`
 - `src/services/coachFact.test.ts:118`
 - `src/services/coachFact.test.ts:119`
@@ -135,7 +136,7 @@
 - `src/services/moveThoughtFacts.ts:1276`
 - `src/services/moveThoughtFacts.ts:1308`
 - `src/services/moveThoughtFacts.ts:1325`
-- `src/services/openingStory.ts:422`
+- `src/services/openingStory.ts:423`
 - `src/services/positionFacts.ts:564`
 - `src/services/reviewFacet.ts:96`
 - `src/services/teachingFact.ts:98`
@@ -168,6 +169,7 @@
 - `src/services/decisionStakes.test.ts`
 - `src/services/defenceComputersChat.test.ts`
 - `src/services/factRelations.test.ts`
+- `src/services/kingGroupReads.test.ts`
 - `src/services/methodComputers.chat.test.ts`
 - `src/services/oneGroupTable.gate.test.ts`
 - `src/services/openingComputers.wired.test.ts`

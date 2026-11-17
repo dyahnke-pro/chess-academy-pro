@@ -16,6 +16,7 @@
 // consequence, or a guard cut from a piece nobody attacks, is no lesson.
 //
 // PURE: chess.js + the SEE reader.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { squaresProof, type Proof } from './proof';
@@ -119,9 +120,9 @@ export function pawnCutsGuard(fenBefore: string, san: string, mine: boolean): Pa
     const guard = `${other} ${NAME[s.type]} on ${s.square}`;
     const pawn = `${own} pawn on ${p.to}`;
     const text = rotateStem([
-      `${cap(victim)} just lost its guard: ${pawn} cuts it off from ${guard}. The ${NAME[guarded.type]} is hanging now.`,
-      `${cap(pawn)} stands between ${guard} and ${victim}. That ${NAME[guarded.type]} has no guard left, and it is hanging.`,
-      `With ${pawn}, ${guard} no longer guards ${victim}. The ${NAME[guarded.type]} is hanging.`,
+      `${cap(victim)} just lost its guard: ${pawn} cuts it off from ${guard}. The ${NAME[guarded.type]} has no guard now.`,
+      `${cap(pawn)} stands between ${guard} and ${victim}. That ${NAME[guarded.type]} has no guard left.`,
+      `With ${pawn}, ${guard} no longer guards ${victim}. The ${NAME[guarded.type]} has no guard now.`,
     ], stemKeyOf(`${fenBefore}|${san}`));
     const squaresSaid = [p.to, s.square, guarded.square];
     return { key: `guard-cut:${p.to}:${guarded.square}`, text, squares: squaresSaid, proof: squaresProof(text, squaresSaid), mine, gain };
@@ -130,5 +131,5 @@ export function pawnCutsGuard(fenBefore: string, san: string, mine: boolean): Pa
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

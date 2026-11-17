@@ -9,6 +9,7 @@
 // has them winning it, and the move cost little. Grounded twice: the ending by
 // the line's own moves played on the board, the win by the engine's score.
 // PURE: chess.js.
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -76,7 +77,7 @@ export function pawnEndingTradeLine(t: PawnEndingTrade, moverIsStudent: boolean,
   const pair = pieces.length === 2 && pieces[0] === pieces[1] ? `the ${pieces[0]}s` : 'the last pieces';
   return rotateStem([
     `Trading ${pair} leaves a king-and-pawn ending ${t.up} up. With no pieces left to stop ${t.up === 'a pawn' ? 'it' : 'them'}, ${extra}.`,
-    `${pair.charAt(0).toUpperCase() + pair.slice(1)} come off, and it's a pawn ending with ${s.own} ${t.up === 'a pawn' ? 'extra pawn' : 'extra pawns'}. That ending wins, so ${s.sub} trade into it.`,
+    `${openSentence(pair)} come off, and it's a pawn ending with ${s.own} ${t.up === 'a pawn' ? 'extra pawn' : 'extra pawns'}. That ending wins, so ${s.sub} trade into it.`,
     `Off go ${pair}, into a pawn ending ${t.up} up. There's nothing left to defend against the extra ${t.up === 'a pawn' ? 'pawn' : 'pawns'}, and it wins.`,
   ], stemKeyOf(`${fen}|pawn-ending|${t.squares.join('')}`));
 }

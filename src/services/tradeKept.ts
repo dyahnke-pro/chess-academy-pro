@@ -18,6 +18,7 @@
 //    nothing of the mover's.
 // No reason, nothing said: "keep the tension" alone is a slogan. PURE: chess.js
 // and the position reader.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { signedLegalSeeFor, legalSeeGainFor } from './positionReadingService';
 import { settledLeadFor, type LastMove } from './material';
@@ -202,7 +203,7 @@ export function tradeKeptAt(input: TradeKeptInput): TradeKept | null {
 /** Said from the mover's seat, one idea a sentence, rotated on the board. */
 export function tradeKeptLine(k: TradeKept, moverIsStudent: boolean, fen: string): string {
   const s = tradeSeat(moverIsStudent);
-  const Own = s.own.charAt(0).toUpperCase() + s.own.slice(1);
+  const Own = openSentence(s.own);
   const p = PIECE_WORD[k.trade.piece];
   const x = PIECE_WORD[k.trade.captured];
   const what = k.trade.piece === k.trade.captured ? `${p}s` : `${p} for ${x}`;
@@ -214,13 +215,13 @@ export function tradeKeptLine(k: TradeKept, moverIsStudent: boolean, fen: string
       const by = `${s.opp} ${PIECE_WORD[r.by.piece]} on ${r.by.square}`;
       return rotateStem([
         `${Own} ${p} on ${k.trade.from} also guards the ${g} against ${by}. Trade it on ${k.trade.to}, and that ${PIECE_WORD[r.guarded.piece]} is left loose.`,
-        `Taking on ${k.trade.to} was there, but the ${p} on ${k.trade.from} is the guard of the ${g}. After the trade, ${by} would win it.`,
+        `Taking on ${k.trade.to} was there, but the ${p} on ${k.trade.from} is the guard of the ${g}. After the trade, ${by} takes it.`,
       ], key);
     }
     case 'pressure':
       return rotateStem([
         `${Own} ${p} on ${k.trade.from} is pressing ${s.opp} king, hitting ${r.squares.join(' and ')}. Trading it on ${k.trade.to} would let that pressure go, so it stays.`,
-        `Taking on ${k.trade.to} was there, but the ${p} on ${k.trade.from} bears down on the king. ${s.opp.charAt(0).toUpperCase() + s.opp.slice(1)} ${x} on ${k.trade.to} does nothing like that, so there's no reason to swap.`,
+        `Taking on ${k.trade.to} was there, but the ${p} on ${k.trade.from} bears down on the king. ${openSentence(s.opp)} ${x} on ${k.trade.to} does nothing like that, so there's no reason to swap.`,
       ], key);
     case 'behind':
       return k.steppedAway
@@ -234,7 +235,7 @@ export function tradeKeptLine(k: TradeKept, moverIsStudent: boolean, fen: string
         ], key);
     case 'no-threat':
       return rotateStem([
-        `${s.opp.charAt(0).toUpperCase() + s.opp.slice(1)} ${x} on ${k.trade.to} offers a trade, but it threatens nothing. There's no need to take it, so the tension stays.`,
+        `${openSentence(s.opp)} ${x} on ${k.trade.to} offers a trade, but it threatens nothing. There's no need to take it, so the tension stays.`,
         `The ${x} on ${k.trade.to} can be traded, but it isn't threatening anything. Trade only with a reason, and here there isn't one.`,
       ], key);
   }

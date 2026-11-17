@@ -1798,7 +1798,9 @@ export const BOARD_COMPUTERS = {
       const mine = new Chess(fenBefore).turn() === student;
       const text = everyMateLine(e, mine ? 'your' : 'their', fenBefore);
       const key = `every-mate:${[e.played, ...e.others].join(',')}`;
-      return fact({ key, claims: [key], text, proof: NO_PROOF.stated, squares: [], stakes: null,
+      // The proof is the mating squares, each one played by chess.js on the board.
+      const squares = [e.played, ...e.others].flatMap((m) => { try { return [new Chess(fenBefore).move(m).to as string]; } catch { return []; } });
+      return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
         seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
     }),
     computer: 'everyMate',

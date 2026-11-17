@@ -38,6 +38,9 @@ function exportedFns(src: string): string[] {
 // narration renderers, and computers already reached THROUGH another chat lane.
 // Adding a name here is a deliberate, reviewed exception; keep it justified.
 const NOT_A_CHAT_LANE = new Set<string>([
+  // the one "does that move just drop something" helper (WO-SPEEDRUN-01 S2):
+  // a check other reads run, never a fact said on its own
+  'bestCaptureGainFor',
   // an INPUT to deliberation's "trading queens throws away your space" read —
   // it reaches chat through that sentence, not as a fact of its own
   'computeTerritory',

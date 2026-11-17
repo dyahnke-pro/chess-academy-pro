@@ -18,6 +18,7 @@
 //   · X must still be playable after Y and R (the two moves really swap).
 //
 // Pure (chess.js + the wanted-moves reader). Both seats.
+import { MATERIAL_VALUE } from './pieceValues';
 import { Chess, type Color } from 'chess.js';
 import { theirWantedMoves, type TheirWant } from './prophylaxis';
 import { seatPieceWords } from './pieceRef';
@@ -88,7 +89,6 @@ export function orderByThreat(fenBefore: string, san: string, line: readonly str
   return checkOrder(fenBefore, san, me, x, y, mine, yPv);
 }
 
-const WORTH: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
 /** THE CHECK THE ORDER PREVENTS. The engine's answer to the follow-up played
  *  first is a check; after the move played, that check is illegal or drops
@@ -111,7 +111,7 @@ function checkOrder(
   // After the move played, the check is gone: illegal, or the checker drops.
   const cx = new Chess(x.fen);
   const rx = uciMove(cx, yPv[0]);
-  if (rx && legalSeeGainFor(cx.fen(), rx.to, me) < Math.min(1, WORTH[rx.piece])) return null;
+  if (rx && legalSeeGainFor(cx.fen(), rx.to, me) < Math.min(1, MATERIAL_VALUE[rx.piece])) return null;
   // X must still be playable after Y and the check is answered (a real swap).
   const own = mine ? 'your' : 'their';
   const theirs = mine ? 'their' : 'your';
@@ -127,7 +127,7 @@ function checkOrder(
       if (!cell || cell.color !== me || cell.type === 'k') continue;
       if (!c.attackers(cell.square, next.color).includes(next.to)) continue;
       const file = cell.square.charCodeAt(0) - 97;
-      const key = -c.attackers(cell.square, me).length * 100 + WORTH[cell.type] * 10 - Math.abs(file - 3.5);
+      const key = -c.attackers(cell.square, me).length * 100 + MATERIAL_VALUE[cell.type] * 10 - Math.abs(file - 3.5);
       if (!hit || key > hit.key) hit = { square: cell.square, piece: cell.type, key };
     }
     const answered = block.piece === 'k' ? `${own} king steps aside` : `${mine ? 'you block' : 'they block'} it`;

@@ -12,6 +12,7 @@
 // pawn free to take back — then the pin is not the reason.
 //
 // PURE: chess.js + the SEE reader.
+import { openSentence } from '../utils/openSentence';
 import { seatPieceWords } from './pieceRef';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
@@ -118,5 +119,5 @@ export function pinnedPawnGuard(fenBefore: string, san: string, mine: boolean): 
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

@@ -23,7 +23,7 @@ import { lessonStepForCard, loadThinkingTransfer } from './thinkingLessonStart';
 import { transferGapLine, worstGap } from './thinkingTransfer';
 import type { StepChoice } from './thinkingLessonPlan';
 import { THINKING_STEPS } from './thinkingSteps';
-import { loadBeginnerRegister } from './beginnerRegisterLoader';
+import { loadBeginnerRegister } from './weaknessSignalLoader';
 import { START_FUNDAMENTALS_KEY } from './activeBite';
 import { RING_SIZE, dayKey } from './trainingWeek';
 import { logAppAudit } from './appAuditor';
