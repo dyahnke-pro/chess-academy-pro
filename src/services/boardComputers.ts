@@ -1856,7 +1856,7 @@ export const BOARD_COMPUTERS = {
     phase: NOT_ENDING,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
-      learn: S4_LEARN_OWED,
+      learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'the record half is principleAttribution\'s early-queen-sortie on the student\'s own queen move' },
       think: { not: 'it counts the queen\'s trips across the game\'s moves; a step board is one position' },
@@ -1881,7 +1881,7 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
-      learn: S4_LEARN_OWED,
+      learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
     },
