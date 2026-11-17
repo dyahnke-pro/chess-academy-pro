@@ -346,6 +346,9 @@ export interface PvLine {
   /** Root decision tension: the runner-up candidate within 40cp — Danya's
    *  "it's actually hard to decide" moment, as a computable fact. */
   closeAlternative: { san: string; gapCp: number } | null;
+  /** The board where the engine's WHOLE line ends, when `plies` were cut
+   *  short of it (a plan read to its horizon). Absent: the last ply's board. */
+  lineEndFen?: string;
 }
 
 const PIECE_WORD: Record<string, string> = {

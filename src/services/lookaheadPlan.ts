@@ -552,6 +552,8 @@ function planFor(
    *  before it, so a recapture is the other half of a trade, never a win.
    *  Null when the line starts on a quiet board. */
   exchangePrior: { fenBefore: string; san: string } | null,
+  /** Where the engine's whole line ends (`PvLine.lineEndFen`). */
+  lineEndFen?: string,
 ): SidePlan {
   const mine = plies.slice(0, PLAN_HORIZON).filter((p) => p.moverColor === color);
   const destinations = new Map<string, number>();
@@ -713,12 +715,32 @@ function planFor(
       try {
         const end = new Chess(endFen);
         const owner = color === 'white' ? 'w' : 'b';
+        // …AND IT MUST STILL BE PASSED there (BGTB speedrun review: "d5 would
+        // create a passed pawn on d5" — the line's cxd4 cxd4 made it passed,
+        // and its own bxc3 put a pawn back on c3 in front of it).
+        // The line's last board too, past the horizon: a pawn the line plays
+        // back in front of it later un-passes it, a capture later does not.
+        const lineEnd = lineEndFen ?? plies.at(-1)?.fenAfter;
+        const passedAtLineEnd = lineEnd ? describeStructure(lineEnd)?.pawns.passedPawns[owner] ?? [] : [];
+        const fileAtLineEnd = (file: string): string[] => {
+          if (!lineEnd) return [];
+          const b = new Chess(lineEnd);
+          const out: string[] = [];
+          for (let r = 1; r <= 8; r += 1) {
+            const pc = b.get(`${file}${r}` as never) as { type?: string; color?: string } | undefined;
+            if (pc?.type === 'p' && pc.color === owner) out.push(`${file}${r}`);
+          }
+          return out;
+        };
+        const passedAtEnd = (describeStructure(endFen)?.pawns.passedPawns[owner] ?? [])
+          .filter((sq) => fileAtLineEnd(sq[0]).every((at) => passedAtLineEnd.includes(at)));
         const survives = (sq: string): boolean => {
           const r0 = Number(sq[1]);
           for (let r = 1; r <= 8; r += 1) {
             if (owner === 'w' ? r < r0 : r > r0) continue;
-            const pc = end.get(`${sq[0]}${r}` as never) as { type?: string; color?: string } | undefined;
-            if (pc?.type === 'p' && pc.color === owner) return true;
+            const at = `${sq[0]}${r}`;
+            const pc = end.get(at as never) as { type?: string; color?: string } | undefined;
+            if (pc?.type === 'p' && pc.color === owner && passedAtEnd.includes(at)) return true;
           }
           return false;
         };
@@ -1219,8 +1241,8 @@ export function buildLookaheadPlan(
 ): LookaheadPlan | null {
   if (line.plies.length < 4) return null;
 
-  const white = planFor(line.plies, 'white', exchangePrior);
-  const black = planFor(line.plies, 'black', exchangePrior);
+  const white = planFor(line.plies, 'white', exchangePrior, line.lineEndFen);
+  const black = planFor(line.plies, 'black', exchangePrior, line.lineEndFen);
   const mine = studentColor === 'white' ? white : black;
   const theirs = studentColor === 'white' ? black : white;
   mine.text = describePlan(mine, 'mine', said);
@@ -1715,8 +1737,13 @@ export function planFromUci(
     prevCap = afterCapture(prevCap, mv);
   }
   if (plies.length < 4) return shortLineRead(fen, uciMoves, studentColor);
+  // The rest of the line, past the horizon: what it does to the plan's claims
+  // (a passer it un-passes later) is read off where it really ends.
+  for (const uci of uciMoves.slice(PLAN_HORIZON)) {
+    try { if (!board.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined })) break; } catch { break; }
+  }
   return buildLookaheadPlan(
-    { plies, rootEvalCp: 0, terminalEvalCp: null, delivers: true, closeAlternative: null },
+    { plies, rootEvalCp: 0, terminalEvalCp: null, delivers: true, closeAlternative: null, lineEndFen: board.fen() },
     studentColor,
     said,
     exchangePrior,
