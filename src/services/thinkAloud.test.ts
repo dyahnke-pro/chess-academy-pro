@@ -141,6 +141,12 @@ describe('what they keep doing — the same mistake twice is named (Learn audit 
     const sans = ['e4', 'e5', 'Nf3', 'Nf6', 'Bc4', 'Be7', 'd3', 'O-O', 'Nc3', 'h6', 'Be3', 'g5'];
     expect(habitReads(sans, 'b', NO_SOUND_PLIES).kingPawnPushes).toBe(2);
   });
+  it('with the other queen gone, a king-side pawn push is an endgame pawn, not a weakening (Danya -Am8glebGwQ 32.h4 33.h5: "find the passed pawn and push it")', async () => {
+    const { habitReads } = await import('./thinkAloud');
+    // Queens off on move 4; White castles and pushes h and g in front of its king.
+    const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'd4', 'exd4', 'Qxd4', 'Nxd4', 'Nxd4', 'Qh4', 'Nf3', 'Qxe4+', 'Be2', 'Qxe2+', 'Kxe2', 'Nf6', 'Re1', 'Be7', 'Kf1', 'O-O', 'Kg1', 'd6', 'h4', 'Bd7', 'g4', 'Rfe8'];
+    expect(habitReads(sans, 'w', NO_SOUND_PLIES).kingPawnPushes).toBe(0);
+  });
 });
 
 describe('a habit is said once a game (Black walk 2026-10-19)', () => {

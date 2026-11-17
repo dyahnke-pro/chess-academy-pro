@@ -6241,9 +6241,47 @@ function varyRepeatedStems(segments: ReviewMoveSegment[]): void {
       return forms[n % forms.length];
     });
 
+    // THE SQUARE QUESTION, THE GRADE AND THE PAWN DAMAGE — three facts a game
+    // can earn on many different moves, each in one fixed shape (prod Review
+    // audit 2026-11-17: "Why that square for your bishop?" ×4, "… was an
+    // inaccuracy, costing about a point" ×3, "It also leaves them with an
+    // isolated pawn on the d-file" ×3 in one game). Every fact stays; the
+    // first keeps its words and the rest take the next shape, by occurrence.
+    t = t.replace(/\bWhy (?:that square|[a-h][1-8]) for (your|their) (knight|bishop|rook|queen|king)\? /, (m0: string, who: string, piece: string) => {
+      const n = bump('square-why');
+      if (n === 0) return m0;
+      const forms = [
+        `${openSentence(who)} ${piece} had other squares, and they were worse. `,
+        `Look at where else ${who} ${piece} could have gone. `,
+        `A word on the square ${who} ${piece} chose. `,
+      ];
+      return forms[(n - 1) % forms.length];
+    });
+    t = t.replace(/\b(Your|Their) ([^.,!?]{1,40}?) was (an inaccuracy|a mistake|a blunder), costing ([^.!?]+)\./, (m0: string, whose: string, move: string, grade: string, cost: string) => {
+      const n = bump(`grade:${grade}`);
+      if (n === 0) return m0;
+      const forms = [
+        `${whose} ${move} cost ${cost} — ${grade}.`,
+        `${openSentence(grade)}: ${whose.toLowerCase()} ${move} gave up ${cost}.`,
+        `That ${move} was ${grade} too, worth ${cost}.`,
+      ];
+      return forms[(n - 1) % forms.length];
+    });
+    t = t.replace(/\bleaves (them|you) with (an isolated pawn|doubled pawns) on the ([a-h])-file\b/, (m0: string, who: string, kind: string, file: string) => {
+      const n = bump('pawn-damage');
+      if (n === 0) return m0;
+      const poss = who === 'them' ? 'their' : 'your';
+      const forms = kind === 'an isolated pawn'
+        ? [`leaves ${poss} ${file}-pawn isolated`, `gives ${who} an isolated ${file}-pawn`, `cuts ${poss} ${file}-pawn off from its neighbours`]
+        : [`doubles ${poss} pawns on the ${file}-file`, `gives ${who} doubled ${file}-pawns`, `stacks ${poss} pawns on the ${file}-file`];
+      return forms[(n - 1) % forms.length];
+    });
+
     s.narration = t;
   }
 }
+/** The stem-variety pass, for its gate (`reviewStemVariety.test.ts`). */
+export const varyRepeatedStemsForTests = varyRepeatedStems;
 
 /** The display name behind the ONE opening key — for a surface that holds a
  *  stored game's key and needs to say the opening. */

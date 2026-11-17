@@ -95,7 +95,11 @@ export function outsidePasserDecoy(fen: string, color: C): DecoyRead | null {
   return {
     passer: outside.square,
     wing: side,
-    text: `Your outside passed pawn on ${outside.square} is a decoy: push it, and while their king goes to stop it, yours walks over and takes the pawns on the ${side}.`,
+    // THE DECOY IS KEPT FAR AWAY, NOT PUSHED (Danya, kYbh2NTFsS8 34…g5, the
+    // engine with him): their king is already inside its square, so every
+    // push only shortens the walk it takes to eat the pawn — and that walk is
+    // the time your king spends taking the other wing.
+    text: `Your outside passed pawn on ${outside.square} is a decoy: their king has to go and take it, and while it does, yours walks over and takes the pawns on the ${side}. Leave it where it is — each push shortens their king's walk.`,
     squares: [outside.square, ...theirWing],
   };
 }

@@ -18,7 +18,9 @@ describe('passerKinds', () => {
 describe('outsidePasserDecoy', () => {
   it('the far passer drags their king away while yours takes the other wing', () => {
     const d = outsidePasserDecoy('8/4kppp/8/8/P7/8/4KPPP/8 w - - 0 1', 'w');
-    expect(d?.text).toBe('Your outside passed pawn on a4 is a decoy: push it, and while their king goes to stop it, yours walks over and takes the pawns on the kingside.');
+    expect(d?.text).toBe('Your outside passed pawn on a4 is a decoy: their king has to go and take it, and while it does, yours walks over and takes the pawns on the kingside. Leave it where it is — each push shortens their king\'s walk.');
+    // Never "push it": their king is inside the square, so a push only shortens its walk.
+    expect(d?.text).not.toMatch(/push it/);
   });
   it('silent with pieces on, and when their king cannot catch it (that is the square rule)', () => {
     expect(outsidePasserDecoy('8/4kppp/8/8/P7/8/4KPPP/7R w - - 0 1', 'w')).toBeNull();

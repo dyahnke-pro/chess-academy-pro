@@ -11,6 +11,7 @@
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { reachWords } from '../utils/reachWords';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
+import { outsidePasserDecoy } from './endgamePawnReads';
 import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
@@ -398,7 +399,17 @@ export function deriveNextPlanFacts(
     })
     .map((sq, i) => ({ sq, i }))
     .sort((a, b) => pushesLeft(a.sq) - pushesLeft(b.sq) || Number(kingInFront(a.sq)) - Number(kingInFront(b.sq)) || kingReach(b.sq) - kingReach(a.sq) || a.i - b.i)[0]?.sq;
-  if (passer) {
+  // THE OUTSIDE PASSER IN A PAWN ENDING IS A DECOY, NOT A RUNNER (Danya,
+  // kYbh2NTFsS8 37…Kf5: "leave the h-pawn, walk to the queenside"; the engine
+  // with him). Their king is already inside its square, so "escort it home"
+  // walks the king the wrong way: the plan is to let their king take it and
+  // spend that time on the other wing — the one decoy computer decides.
+  const decoy = passer ? outsidePasserDecoy(fen, studentColorWB) : null;
+  if (passer && decoy && decoy.passer === passer) {
+    add('passer', `use your passed pawn on ${passer} as a decoy`, `using your passed pawn on ${passer} as a decoy`,
+      `Their king has to go and take it. While it does, march your king to the pawns on the ${decoy.wing}. Leave the pawn where it is — each push shortens their king's walk`,
+      [passer, ...decoy.squares.filter((q) => q !== passer)]);
+  } else if (passer) {
     const queensOn = all.some((c) => c.type === 'q');
     // ONE STEP A SENTENCE (the human register, David 2026-11-08): the count,
     // the piece in the way, the escort, the pushes — never one breath held

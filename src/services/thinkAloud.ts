@@ -296,7 +296,12 @@ export function habitReads(sans: readonly string[], opp: 'w' | 'b', sound: Reado
       const king = c.board().flat().find((x) => x?.type === 'k' && x.color === opp);
       const homeRank = opp === 'w' ? '1' : '8';
       const castled = !!king && king.square[1] === homeRank && 'abcgh'.includes(king.square[0]);
-      if (castled && king && Math.abs(m.from.charCodeAt(0) - king.square.charCodeAt(0)) <= 1) kingPawnPushes += 1;
+      // A WEAKENING ONLY WHILE THERE IS SOMETHING TO WEAKEN IT FOR: with the
+      // other side's queen gone, a pawn in front of the king is an endgame pawn
+      // — often a passer to push (Danya, -Am8glebGwQ 32.h4: "find the passed
+      // pawn and push it", heard as "every push leaves a hole beside it").
+      const attackerQueen = c.board().flat().some((x) => x?.type === 'q' && x.color === me);
+      if (castled && king && attackerQueen && Math.abs(m.from.charCodeAt(0) - king.square.charCodeAt(0)) <= 1) kingPawnPushes += 1;
     }
   }
   return { looseMoves, kingPawnPushes };

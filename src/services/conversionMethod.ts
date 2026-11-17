@@ -18,6 +18,7 @@
 // `describeStructure`), or null when the mover is not clearly ahead. No
 // engine; the eval gate belongs to the caller that already holds one.
 import { Chess, type Square } from 'chess.js';
+import { outsidePasserDecoy } from './endgamePawnReads';
 import { describeStructure } from './boardStructure';
 import { findHangingBySee, captureRead } from './positionReadingService';
 import { homeMinorCount } from './development';
@@ -129,7 +130,12 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
     // "and pieces" only when there are pieces — a pawn ending escorts with the
     // king alone (hand walk 2026-09-27).
     const escorts = pieces(student) > 0 ? 'your king and pieces' : 'your king';
-    text = `Your passed pawn on ${passer} is the win — push it, with ${escorts} escorting it one safe square at a time.`;
+    // A pawn ending whose outside passer their king already catches: the pawn
+    // is the decoy, never the runner (`outsidePasserDecoy`, the one reader).
+    const decoy = outsidePasserDecoy(c.fen(), student);
+    text = decoy && decoy.passer === passer
+      ? `Your passed pawn on ${passer} wins as a decoy — their king has to go and take it, and yours takes the pawns on the ${decoy.wing} meanwhile.`
+      : `Your passed pawn on ${passer} is the win — push it, with ${escorts} escorting it one safe square at a time.`;
   }
   return { step, edge, passer, text };
 }
