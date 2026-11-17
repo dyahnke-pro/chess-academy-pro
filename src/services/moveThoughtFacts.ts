@@ -74,6 +74,7 @@ import { moveThreat } from './moveThreat';
 import type { AnalysisLine } from '../types';
 import { gambitIdea } from './gambitIdea';
 import { campIdea } from './intoTheirCamp';
+import { exchangeSacIdea } from './exchangeSacrifice';
 
 export interface MoveThoughtInput {
   fenBefore: string;
@@ -816,6 +817,12 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // per candidate the weighing reads (`weighReads`).
     for (const f of readBoardAll('flexibleMove', { fenBefore: i.fenBefore, san: i.san, student, reads: weighReads })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'order', weight: 52 });
+    }
+    // THE EXCHANGE SACRIFICE, both seats (Danya's "give up the rook, because
+    // in return you get a monster"): the rook given on purpose, the engine's
+    // read per candidate vouching, and what it buys.
+    for (const f of readBoardAll('exchangeSacrifice', { fenBefore: i.fenBefore, san: i.san, student, reads: weighReads })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: exchangeSacIdea(f.claims[0] ?? ''), weight: 62 });
     }
     // Getting into their camp, both seats (Danya's speedruns): a piece gets in
     // and hits what they cannot keep, the rooks on the seventh, a rook lift or

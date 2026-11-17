@@ -1695,6 +1695,9 @@ export function computeMoveFacets(
       // engine holds as good as each other, the one that keeps the important
       // moves open — off the record's one read per candidate.
       add(readBoardAll('flexibleMove', { fenBefore, san, student: studentColorWB, reads: ctx.teaching.weigh.reads })[0]);
+      // The exchange sacrifice, both seats: the rook given on purpose and what
+      // it buys, off the same read per candidate.
+      add(readBoardAll('exchangeSacrifice', { fenBefore, san, student: studentColorWB, reads: ctx.teaching.weigh.reads })[0]);
     }
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.

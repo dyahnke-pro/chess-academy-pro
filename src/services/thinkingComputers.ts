@@ -256,6 +256,7 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   windmill: 'forcing-moves',
   minorMatchup: 'assess',
   flexibleMove: 'candidates',
+  exchangeSacrifice: 'calculate',
   intoTheirCamp: 'assess',
   tradeOfferAt: 'assess',
   fileTradeAt: 'assess',
