@@ -530,7 +530,6 @@ function knownSlipFact(r: ReturnType<typeof knownSlip>, fen: string, fact: MakeF
 
 /** S4 PAWNS: no Learn lane reads these yet (a lane is a door decision of its
  *  own — `learnTurnDoor` LEARN_LANES and its roles). */
-const S4_LEARN_OWED = { not: 'owed — Learn speaks through its door\'s lanes, and no lane reads it yet (learnTurnDoor)' } as const;
 
 /** A pawn-line read as the one fact, on the board after the move. */
 function pawnLineFact(r: PawnLineRead | null, fenBefore: string, san: string, fact: MakeFact): CoachFact | null {
@@ -681,7 +680,7 @@ export const BOARD_COMPUTERS = {
       learn: LEARN,
       review: { wired: 'services/coachFeatureService.ts' },
       play: PLAY_ASK,
-      chat: { not: 'owed — chat answers "what is this opening" through openingIdentityQuery' },
+      chat: CHAT_VIA_THOUGHT,
       tactics: { not: 'a puzzle has no opening story' },
       weaknesses: { not: 'owed — a named structure cost left unanswered is a broken answer the record could keep' },
       think: THINK_BOOK,
@@ -1056,7 +1055,7 @@ export const BOARD_COMPUTERS = {
       lesson: { not: 'the line\'s next move is the answer, said on it as the answer to their last move (moveThoughtFacts: bindingFact) or its job' },
       learn: LEARN,
       review: { not: 'the student\'s next ply says the answer: its job when it met the threat, the error and the better move when it did not' },
-      play: PLAY_ASK, chat: { not: 'owed — chat answers the threat with its own takingTheAttackerAnswers/keepItClause; fold them onto threatAnswer (one answer computer)' }, tactics: TACTICS_NA, weaknesses: WEAK_OWED,
+      play: PLAY_ASK, chat: { not: 'chat\'s threat question reads the same must-defend computer (assembleThreatAnswer → computeMustDefend: each target, what hits and guards it, the moves that keep it); "why that move?" says how a move meets a threat through the thought\'s rescue and guard facts' }, tactics: TACTICS_NA, weaknesses: WEAK_OWED,
       think: { not: 'answers a threat a surface just named; the answer-danger step names its own key' },
     },
   },
@@ -1073,7 +1072,7 @@ export const BOARD_COMPUTERS = {
     computer: 'theirMoveStructure',
     kind: 'judgement',
     phase: ANY,
-    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { not: 'about the opponent\'s last move; chat reads the board judgements (structureBoard)' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK, think: THINK },
   },
   structureBoard: {
     read: ({ fen, student }, fact) => safe(() => boardStructure(fen, student).map((r) => structureFact(r, fact, fen, 'student'))),
@@ -1749,7 +1748,7 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
-      learn: S4_LEARN_OWED,
+      learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
     },
@@ -1774,7 +1773,7 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
-      learn: S4_LEARN_OWED,
+      learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
     },
@@ -1798,7 +1797,7 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
-      learn: S4_LEARN_OWED,
+      learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
     },

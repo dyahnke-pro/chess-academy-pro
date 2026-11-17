@@ -29,15 +29,7 @@ describe('boardComputers — the one registry', () => {
           // The composer reads the opening-theory and move-gain computers directly (gaps A-B, 2026-11-12).
           openingTheory: /openingTheoryFacts\(/, moveGains: /moveStops\(/,
         };
-        // Learn through the ONE shared fact set (`learnSharedFacts`, the
-        // 'thought' lane): it reaches a computer only while the page hands the
-        // shared facts through it and the computer's lesson file — the shared
-        // set's producer — reads it by id.
-        const lesson = spec.surfaces.lesson?.wired;
-        const viaShared = ans.wired === 'services/learnSharedFacts.ts' && !!lesson
-          && /sharedFactsForLearn\(/.test(readFileSync(resolve(SRC, 'components/Coach/CoachTeachPage.tsx'), 'utf8'))
-          && new RegExp(`readBoard(All)?\\('${id}'`).test(readFileSync(resolve(SRC, lesson), 'utf8'));
-        if (!viaRegistry && !viaShared && !(fnByComputer[id]?.test(code))) bad.push(`${id}/${surface}: ${ans.wired} never calls it`);
+        if (!viaRegistry && !(fnByComputer[id]?.test(code))) bad.push(`${id}/${surface}: ${ans.wired} never calls it`);
       }
     }
     expect(bad).toEqual([]);
