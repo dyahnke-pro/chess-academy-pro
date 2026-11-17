@@ -3,6 +3,7 @@ import { useRememberedThread } from '../../hooks/useRememberedThread';
 import { useNavigate } from 'react-router-dom';
 import { MessageCircle, X } from 'lucide-react';
 import { ChatMessage } from '../Coach/ChatMessage';
+import { PlayLineButton } from '../Board/PlayLineButton';
 import { ChatInput } from '../Coach/ChatInput';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { useLineWalk } from '../../hooks/useLineWalk';
@@ -105,6 +106,7 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
           // The answer is spine-grounded (dispatchCoachTurn → coachService.ask);
           // the post-hoc strip is DELETED (David 2026-07-09 — "finish ripping").
           const grounded = answer.text;
+          if (answer.lines?.length) lineWalk.state(answer.lines);
           if (answer.autoWalk) lineWalk.walk(answer.autoWalk);
           useCoachMemoryStore.getState().appendConversationMessage({ surface: 'chat-home', role: 'coach', text: grounded, trigger: null });
           setMessages((prev) => [...prev, {
@@ -156,13 +158,14 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
         </button>
       </div>
       <div className="flex-1 min-h-0 overflow-y-auto px-3 py-2 space-y-2">
-        {lineWalk.walkFen && (
-          <div className="w-48 mx-auto" data-testid="masterclass-walk-board">
-            <ConsistentChessboard fen={lineWalk.walkFen} arrows={lineWalk.walkArrows} interactive={false} boardOrientation={walkSide} showLastMoveHighlight />
+        {(lineWalk.walkFen || lineWalk.stated.length > 0) && (
+          <div className="w-48 mx-auto flex flex-col gap-1" data-testid="masterclass-walk-board">
+            <ConsistentChessboard fen={lineWalk.walkFen ?? lineWalk.stated[0]?.startFen ?? ''} arrows={lineWalk.walkArrows} interactive={false} boardOrientation={walkSide} showLastMoveHighlight />
+            <PlayLineButton onPlay={lineWalk.playStated} testId="masterclass-play-line" wide />
           </div>
         )}
         {messages.map((m) => (
-          <ChatMessage key={m.id} message={m} onWalkLine={lineWalk.walk} />
+          <ChatMessage key={m.id} message={m} />
         ))}
         {busy && <p className="text-xs text-theme-text-muted px-2">Coach is thinking…</p>}
       </div>

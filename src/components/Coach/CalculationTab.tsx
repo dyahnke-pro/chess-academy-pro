@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { PlayLineButton } from '../Board/PlayLineButton';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { TacticsPageHeader } from '../Tactics/TacticsPageHeader';
 import { useEndgamePlayout } from '../../hooks/useEndgamePlayout';
@@ -493,6 +494,7 @@ function AdaptivePuzzleRunner({
 
   const controls = (
     <div className="flex flex-col gap-3 px-2 pb-4">
+      <PlayLineButton onPlay={lineWalk.playStated} testId="calc-play-line" wide />
       <div className="rounded-xl border border-theme-border bg-theme-surface p-3 flex flex-col gap-2">
         {fromGame && (
           <div
@@ -542,7 +544,7 @@ function AdaptivePuzzleRunner({
             fen={drill.fen}
             studentColor={studentSide}
             route="/tactics/calculation"
-            onWalkLine={lineWalk.walk}
+            lineWalk={lineWalk}
             onAnswerMarks={lineWalk.markAnswer}
             shownLine={shownSolution(drill.fen, drill.solution ?? EMPTY_LINE)}
             testIdPrefix="calc-ask"

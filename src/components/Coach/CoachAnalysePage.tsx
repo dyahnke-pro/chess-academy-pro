@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { ChatInput } from './ChatInput';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
-import { WalkLineButton } from '../Board/WalkLineButton';
+import { PlayLineButton } from '../Board/PlayLineButton';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -21,7 +21,7 @@ import {
 } from '../../services/streamingSpeaker';
 import { SENTENCE_END_RE, sanitizeCoachText, unwrapSpineError } from '../../services/sanitizeCoachText';
 import { logAppAudit } from '../../services/appAuditor';
-import type { WalkableLine, StockfishAnalysis } from '../../types';
+import type { StockfishAnalysis } from '../../types';
 import type { TacticsLiveContext } from '../../coach/types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
@@ -46,7 +46,6 @@ export function CoachAnalysePage(): JSX.Element {
   const [candidateMoves, setCandidateMoves] = useState<string[]>([]);
   // The line the last answer proved, walkable on this board (one coach: the
   // same proof every screen with a board plays out).
-  const [answerLine, setAnswerLine] = useState<WalkableLine | null>(null);
   const studentSide: 'white' | 'black' = game.fen.split(' ')[1] === 'b' ? 'black' : 'white';
   const lineWalk = useLineWalk(studentSide, 'analyse.lineWalk');
 
@@ -199,7 +198,7 @@ export function CoachAnalysePage(): JSX.Element {
 
   const handleFollowUp = useCallback(async (question: string) => {
     setLoading(true);
-    setAnswerLine(null);
+    lineWalk.state([]);
     lineWalk.clear();
     voiceService.stop();
     tacticsRef.current = null; // reset until this ask's tactics is built
@@ -267,7 +266,7 @@ export function CoachAnalysePage(): JSX.Element {
     const finalText = unwrapSpineError(result.text);
     // An answer the door computed does not stream: show it whole.
     if (finalText && !response) show(finalText);
-    setAnswerLine(result.lines?.[0] ?? null);
+    lineWalk.state(result.lines ?? []);
     if (result.autoWalk) lineWalk.walk(result.autoWalk);
     if (!finalText) {
       void logAppAudit({
@@ -333,6 +332,7 @@ export function CoachAnalysePage(): JSX.Element {
             onMove={handleMoveOnBoard}
           />
           )}
+          <div className="mt-1"><PlayLineButton onPlay={lineWalk.playStated} testId="analyse-walk-line-btn" wide /></div>
         </div>
       </div>
 
@@ -367,9 +367,6 @@ export function CoachAnalysePage(): JSX.Element {
             <p className="text-sm text-theme-text leading-relaxed whitespace-pre-wrap" data-testid="coach-explanation">
               {coachExplanation}
             </p>
-          )}
-          {answerLine && !loading && (
-            <div className="mt-2"><WalkLineButton line={answerLine} onWalk={lineWalk.walk} testId="analyse-walk-line-btn" /></div>
           )}
         </motion.div>
       )}

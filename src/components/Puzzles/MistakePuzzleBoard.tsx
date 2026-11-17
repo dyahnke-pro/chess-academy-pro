@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { useLiveMarks, type LiveMarks } from '../../hooks/useLiveMarks';
-import { WalkLineButton } from '../Board/WalkLineButton';
+import { PlayLineButton } from '../Board/PlayLineButton';
 import { BoardQuestionBox } from '../Board/BoardQuestionBox';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { positionAsk, positionPosed } from '../../services/moveInsight';
@@ -371,8 +371,9 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   liveMarksRef.current = liveMarks;
   // The last wrong try's line, walkable (David 2026-10-05: "Button tap to
   // play out any lines the user wants").
-  const [walkable, setWalkable] = useState<WalkableLine | null>(null);
   const lineWalk = useLineWalk(puzzle.playerColor);
+  const { state: stateLines } = lineWalk;
+  const setWalkable = useCallback((line: WalkableLine | null): void => { stateLines(line ? [line] : []); }, [stateLines]);
   const clearWalk = lineWalk.clear;
   useEffect(() => { liveMarksRef.current?.clear(); setWalkable(null); clearWalk(); }, [puzzle.id, clearWalk]);
   const continuedForRef = useRef<string | null>(null);
@@ -1226,9 +1227,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         />
         )}
       </div>
-      {walkable && state === 'playing' && (
-        <div className="px-1"><WalkLineButton line={walkable} onWalk={lineWalk.walk} testId="mistake-walk-line-btn" /></div>
-      )}
+      <div className="px-1"><PlayLineButton onPlay={lineWalk.playStated} testId="mistake-walk-line-btn" wide /></div>
 
       {/* Keep-playing status (R4) */}
       {state === 'freeplay' && (
@@ -1320,7 +1319,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
               fen={puzzle.fen}
               studentColor={puzzle.fen.split(' ')[1] === 'b' ? 'black' : 'white'}
               route="/tactics"
-              onWalkLine={lineWalk.walk}
+              lineWalk={lineWalk}
               onAnswerMarks={lineWalk.markAnswer}
               shownLine={shownSolution(puzzle.fen, movesRef.current.map((m) => `${m.from}${m.to}${m.promotion ?? ''}`))}
               engineBestMoveUci={puzzle.bestMove}

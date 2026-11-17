@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo, type ReactNode } from 'react';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { useLiveMarks } from '../../hooks/useLiveMarks';
-import { WalkLineButton } from '../Board/WalkLineButton';
+import { PlayLineButton } from '../Board/PlayLineButton';
 import { BoardQuestionBox } from '../Board/BoardQuestionBox';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { autopilotRecapture, lastMoveAlong, positionAsk, positionPosed } from '../../services/moveInsight';
@@ -175,7 +175,6 @@ export function PuzzleBoard({
   const conceptSpokenRef = useRef<string | null>(null);
   // The last wrong try's line, walkable (David 2026-10-05: "Button tap to
   // play out any lines the user wants"). Cleared with the arrows.
-  const [walkable, setWalkable] = useState<WalkableLine | null>(null);
   const tryTokenRef = useRef(0);
   /** A wrong try's refutation is still being read. While it is, a coaching
    *  line the SAME miss triggered (the struggle coach's method beat) waits and
@@ -231,6 +230,8 @@ export function PuzzleBoard({
   const liveMarksRef = useRef(liveMarks);
   liveMarksRef.current = liveMarks;
   const lineWalk = useLineWalk(userColor);
+  const { state: stateLines } = lineWalk;
+  const setWalkable = useCallback((line: WalkableLine | null): void => { stateLines(line ? [line] : []); }, [stateLines]);
 
   // GROUNDED solve geometry (David 2026-06-28): replay the puzzle to compute
   // what the FINAL (solving) move actually does — "forks the king and rook",
@@ -847,9 +848,7 @@ export function PuzzleBoard({
           {subtitle}
         </p>
       )}
-      {walkable && state === 'playing' && (
-        <div className="px-1"><WalkLineButton line={walkable} onWalk={lineWalk.walk} testId="puzzle-walk-line-btn" /></div>
-      )}
+      <div className="px-1"><PlayLineButton onPlay={lineWalk.playStated} testId="puzzle-walk-line-btn" wide /></div>
 
       {/* ONE control row (David 2026-10-04: on a short phone the old two rows
           pushed Hint / Show solution under the bottom nav). The puzzle's own
@@ -920,7 +919,7 @@ export function PuzzleBoard({
             fen={solverFen}
             studentColor={userColor}
             route="/tactics"
-            onWalkLine={lineWalk.walk}
+            lineWalk={lineWalk}
             onAnswerMarks={lineWalk.markAnswer}
             shownLine={solutionShown}
             testIdPrefix="puzzle-ask"

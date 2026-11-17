@@ -29,8 +29,8 @@ import { SENTENCE_END_RE, sanitizeCoachText, unwrapSpineError } from '../../serv
 import { logAppAudit } from '../../services/appAuditor';
 import { useAppStore } from '../../stores/appStore';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
-import type { StockfishAnalysis, WalkableLine } from '../../types';
-import { WalkLineButton } from '../Board/WalkLineButton';
+import type { StockfishAnalysis } from '../../types';
+import { PlayLineButton } from '../Board/PlayLineButton';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import type { TacticsLiveContext } from '../../coach/types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
@@ -62,7 +62,6 @@ export function ExplainPositionSessionView({
   const [loading, setLoading] = useState<boolean>(true);
   const [voiceMuted, setVoiceMuted] = useState<boolean>(true);
   // The line the last answer proved, walkable on this board (one coach).
-  const [answerLine, setAnswerLine] = useState<WalkableLine | null>(null);
   const lineWalk = useLineWalk(orientation, 'explain.lineWalk');
   const mountedRef = useRef<boolean>(true);
   // Streaming-voice dispatcher: same pattern as CoachAnalysePage.
@@ -216,7 +215,7 @@ export function ExplainPositionSessionView({
     async (question: string) => {
       if (!analysis) return;
       setLoading(true);
-      setAnswerLine(null);
+      lineWalk.state([]);
       lineWalk.clear();
       voiceService.stop();
       tacticsRef.current = null; // reset until this ask's tactics is built
@@ -278,7 +277,7 @@ export function ExplainPositionSessionView({
       const finalText = unwrapSpineError(result.text);
       // An answer the door computed does not stream: show it whole.
       if (finalText && !response) show(finalText);
-      setAnswerLine(result.lines?.[0] ?? null);
+      lineWalk.state(result.lines ?? []);
       if (result.autoWalk) lineWalk.walk(result.autoWalk);
       if (!finalText) {
         void logAppAudit({
@@ -336,11 +335,14 @@ export function ExplainPositionSessionView({
   );
 
   const controls = (
+    <div className="flex flex-col gap-2">
+    <PlayLineButton onPlay={lineWalk.playStated} testId="explain-walk-line-btn" wide />
     <ChatInput
       onSend={(text) => void handleFollowUp(text)}
       disabled={loading}
       placeholder="Ask a follow-up about this position…"
     />
+    </div>
   );
 
   return (
@@ -375,9 +377,6 @@ export function ExplainPositionSessionView({
               >
                 {explanation}
               </p>
-            )}
-            {answerLine && !loading && (
-              <div className="mt-2"><WalkLineButton line={answerLine} onWalk={lineWalk.walk} testId="explain-walk-line-btn" /></div>
             )}
           </motion.div>
         ) : undefined

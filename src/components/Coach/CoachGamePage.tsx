@@ -1065,20 +1065,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     tacticAnimTimersRef.current = [];
   }, []);
 
-  /** Auto-play interval ref for tactic line step-through */
-  const tacticAutoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const clearTacticAutoPlay = useCallback(() => {
-    if (tacticAutoPlayRef.current) {
-      clearInterval(tacticAutoPlayRef.current);
-      tacticAutoPlayRef.current = null;
-    }
-  }, []);
-
   const showTipBubble = useCallback((text: string, tacticLine?: TacticLineData) => {
     if (tipBubbleTimerRef.current) clearTimeout(tipBubbleTimerRef.current);
     clearTacticAnimation();
-    clearTacticAutoPlay();
     setTipBubbleText(text);
     setTipTacticLine(tacticLine ?? null);
     setShowingTacticLine(false);
@@ -1087,11 +1076,27 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       setTipTacticLine(null);
       setShowingTacticLine(false);
     }, 12000);
-  }, [clearTacticAnimation, clearTacticAutoPlay]);
+  }, [clearTacticAnimation]);
 
-  /** Show button: build FEN array and auto-play through the tactic line */
+  /** The tip's tactic as a line the one walker plays. */
+  const tipWalkable = useMemo((): WalkableLine | null => {
+    if (!tipTacticLine) return null;
+    try {
+      const c = new Chess(tipTacticLine.fen);
+      const plies: WalkableLine['plies'] = [];
+      for (const uci of tipTacticLine.uciMoves) {
+        const fenBefore = c.fen();
+        const mv = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined });
+        plies.push({ san: mv.san, uci, fenBefore, fenAfter: c.fen() });
+      }
+      return plies.length > 0 ? { label: plies[0].san, startFen: tipTacticLine.fen, plies } : null;
+    } catch { return null; }
+  }, [tipTacticLine]);
+
+  /** Show button: the tactic plays on the ONE line walker (the same Play
+   *  line every board has); the step controls then rest on its last move. */
   const handleShowTactic = useCallback(() => {
-    if (!tipTacticLine) return;
+    if (!tipWalkable) return;
     // Cancel auto-dismiss — user is actively viewing
     if (tipBubbleTimerRef.current) {
       clearTimeout(tipBubbleTimerRef.current);
@@ -1099,59 +1104,28 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     }
     setShowingTacticLine(true);
     clearTacticAnimation();
-    clearTacticAutoPlay();
-
-    try {
-      const chess = new Chess(tipTacticLine.fen);
-      const fens: string[] = [];
-      for (const uci of tipTacticLine.uciMoves) {
-        const from = uci.slice(0, 2);
-        const to = uci.slice(2, 4);
-        const promotion = uci.length > 4 ? uci[4] : undefined;
-        chess.move({ from, to, promotion });
-        fens.push(chess.fen());
-      }
-
-      setShowFens(fens);
-      setShowIndex(0);
-      setTemporaryFen(fens[0]);
-      setTemporaryLabel('Tactic preview');
-
-      // Auto-play through remaining moves at 800ms intervals
-      if (fens.length > 1) {
-        let step = 1;
-        tacticAutoPlayRef.current = setInterval(() => {
-          if (step >= fens.length) {
-            clearTacticAutoPlay();
-            return;
-          }
-          setShowIndex(step);
-          setTemporaryFen(fens[step]);
-          step++;
-        }, 800);
-      }
-    } catch {
-      // Fallback: just show the text notation
-    }
-  }, [tipTacticLine, clearTacticAnimation, clearTacticAutoPlay]);
+    const fens = tipWalkable.plies.map((p) => p.fenAfter);
+    setShowFens(fens);
+    setShowIndex(fens.length - 1);
+    setTemporaryFen(fens[fens.length - 1]);
+    setTemporaryLabel('Tactic preview');
+  }, [tipWalkable, clearTacticAnimation]);
 
   /** Step backward in the shown tactic line */
   const handleShowPrev = useCallback(() => {
-    clearTacticAutoPlay();
     if (showIndex <= 0 || showFens.length === 0) return;
     const newIndex = showIndex - 1;
     setShowIndex(newIndex);
     setTemporaryFen(showFens[newIndex]);
-  }, [showIndex, showFens, clearTacticAutoPlay]);
+  }, [showIndex, showFens]);
 
   /** Step forward in the shown tactic line */
   const handleShowNext = useCallback(() => {
-    clearTacticAutoPlay();
     if (showIndex >= showFens.length - 1) return;
     const newIndex = showIndex + 1;
     setShowIndex(newIndex);
     setTemporaryFen(showFens[newIndex]);
-  }, [showIndex, showFens, clearTacticAutoPlay]);
+  }, [showIndex, showFens]);
 
   /** Enter Explore Ahead mode from the current shown position */
   const handleEnterExplore = useCallback(() => {
@@ -1633,6 +1607,16 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
   /** A live turn — the in-move actions apply; a blocking card is not one. */
   const live = gameState.status === 'playing';
+
+  // THE LINE JUST STATED (the one Play-line button plays it): the tip's tactic
+  // while its bubble is up, else the line Why proved.
+  const { state: stateLines, playStated } = lineWalk;
+  useEffect(() => {
+    stateLines(tipWalkable ? [tipWalkable] : whyLine ? [whyLine] : []);
+  }, [stateLines, tipWalkable, whyLine]);
+  const playLine = playStated
+    ? (): void => { if (tipWalkable) handleShowTactic(); playStated(); }
+    : null;
 
   // Compute the displayed FEN based on navigation state
   const displayFen = practicePosition?.fen
@@ -4758,7 +4742,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               onRead={live ? handleReadPosition : null}
               reading={positionNarration.isNarrating}
               onWhy={live && !isCoachThinking ? () => { void askWhy(); } : null}
-              onPlayLine={live && tipTacticLine ? handleShowTactic : live && whyLine ? () => lineWalk.walk(whyLine) : null}
+              onPlayLine={live ? playLine : null}
               testIds={{ back: 'nav-prev', forward: 'nav-next', hint: 'hint-button', read: 'read-position-btn', why: 'why-button', line: 'show-tactic-line-btn' }}
               extras={<>
                 <button onClick={goToFirstMove} disabled={gameState.moves.length === 0 || viewedMoveIndex === -1} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="First move" data-testid="nav-first"><ChevronsLeft size={12} /></button>
@@ -4845,7 +4829,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             <GameChatPanel
               ref={gameChatRef}
               fen={game.fen}
-              onWalkLine={lineWalk.walk}
+              lineWalk={lineWalk}
               getLiveFen={game.getFen}
               pgn={game.history.join(' ')}
               moveNumber={moveCountRef.current}

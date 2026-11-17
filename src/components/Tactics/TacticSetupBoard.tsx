@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { positionAsk, positionPosed, pvSans } from '../../services/moveInsight';
 import { shownSolution, walkableLine } from '../../services/proof';
 import { useLineWalk } from '../../hooks/useLineWalk';
-import { WalkLineButton } from '../Board/WalkLineButton';
+import { PlayLineButton } from '../Board/PlayLineButton';
 import { BoardQuestionBox } from '../Board/BoardQuestionBox';
 import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
@@ -137,8 +137,9 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
   const orientation = puzzle.playerColor === 'black' ? 'black' : 'white';
   // The last wrong try's line, walkable (David 2026-10-05: "Button tap to
   // play out any lines the user wants").
-  const [walkable, setWalkable] = useState<WalkableLine | null>(null);
   const lineWalk = useLineWalk(orientation);
+  const { state: stateLines } = lineWalk;
+  const setWalkable = useCallback((line: WalkableLine | null): void => { stateLines(line ? [line] : []); }, [stateLines]);
   const clearWalk = lineWalk.clear;
   useEffect(() => { setWalkable(null); clearWalk(); }, [puzzle.id, clearWalk]);
 
@@ -571,9 +572,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
         />
         )}
       </div>
-      {walkable && (boardState === 'thinking' || boardState === 'incorrect') && (
-        <div className="px-1"><WalkLineButton line={walkable} onWalk={lineWalk.walk} testId="setup-walk-line-btn" /></div>
-      )}
+      <div className="px-1"><PlayLineButton onPlay={lineWalk.playStated} testId="setup-walk-line-btn" wide /></div>
 
       {/* Hint and Show Solution share ONE row so both sit above the bottom
           nav on a short phone (David 2026-10-04); the ladder text goes below. */}
@@ -610,7 +609,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
             fen={puzzle.setupFen}
             studentColor={orientation}
             route="/tactics/setup"
-            onWalkLine={lineWalk.walk}
+            lineWalk={lineWalk}
             onAnswerMarks={lineWalk.markAnswer}
             shownLine={shownSolution(puzzle.setupFen, line)}
             engineBestMoveUci={line[0]}

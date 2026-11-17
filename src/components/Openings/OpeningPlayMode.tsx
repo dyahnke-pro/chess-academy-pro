@@ -561,6 +561,23 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   }, [game.fen, latestTopLines]);
 
   // Show-the-line reveal — draws the punish arrow + speaks the (move-naming) line.
+  /** The punish line on the board — the callout's arrows played as moves
+   *  from this position, the reveal said as its first move lands. The one
+   *  Play-line button plays it (it is the line just stated while the callout
+   *  waits); pressing it is the reveal. */
+  const punishLine = useMemo((): WalkableLine | null => {
+    if (!punishCue) return null;
+    const c = new Chess(game.fen);
+    const plies: WalkableLine['plies'] = [];
+    for (const a of punishCue.arrows) {
+      const fenBefore = c.fen();
+      let mv: ReturnType<Chess['move']> | null = null;
+      try { mv = c.move({ from: a.startSquare, to: a.endSquare, promotion: 'q' }); } catch { mv = null; }
+      if (!mv) break;
+      plies.push({ san: mv.san, uci: `${mv.from}${mv.to}${mv.promotion ?? ''}`, fenBefore, fenAfter: c.fen(), why: plies.length === 0 ? punishCue.reveal : null });
+    }
+    return plies.length > 0 ? { label: plies[0].san, startFen: game.fen, plies } : null;
+  }, [punishCue, game.fen]);
   const revealPunishLine = useCallback((): void => {
     if (!punishCue) return;
     setPunishRevealed(true);
@@ -572,8 +589,9 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       summary: `reveal: ${punishCue.reveal.slice(0, 120)}`,
       fen: game.fen,
     });
-    void voiceService.speak(punishCue.reveal);
-  }, [punishCue, game.fen]);
+    // A callout whose arrows are not a line on this board still reveals.
+    if (!punishLine) void voiceService.speak(punishCue.reveal);
+  }, [punishCue, punishLine, game.fen]);
 
   // ─── Lichess cloud eval on position change ────────────────────────────
   useEffect(() => {
@@ -614,6 +632,15 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     withhold: null,      // greyed while a punish callout is unrevealed, below
   });
   const punishPending = !!punishCue && !punishRevealed;
+  // THE LINE JUST STATED (the one Play-line button plays it): the punish line
+  // while its callout waits, else the line Why proved.
+  const { state: stateLines, playStated } = lineWalk;
+  useEffect(() => {
+    stateLines(punishPending && punishLine ? [punishLine] : whyLine ? [whyLine] : []);
+  }, [stateLines, punishPending, punishLine, whyLine]);
+  const playLine = punishPending
+    ? (): void => { revealPunishLine(); playStated?.(); }
+    : playStated;
 
   const goToFirstMove = useCallback(() => {
     if (moveHistory.length === 0) return;
@@ -1218,7 +1245,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
             onRead={punishPending ? null : () => { void positionRead.narrate(); }}
             reading={positionRead.isNarrating}
             onWhy={punishPending || whyLoading ? null : () => { void askWhy(); }}
-            onPlayLine={punishPending ? revealPunishLine : whyLine ? () => lineWalk.walk(whyLine) : null}
+            onPlayLine={playLine}
             testIds={{ back: 'nav-prev', forward: 'nav-next', hint: 'hint-button', read: 'read-position-btn', why: 'why-button', line: 'show-the-line' }}
             extras={<>
               <button onClick={goToFirstMove} disabled={moveHistory.length === 0 || viewedMoveIndex === -1} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="First move" data-testid="nav-first"><ChevronsLeft size={12} /></button>
@@ -1300,7 +1327,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
           <div className="flex-1 min-h-0 overflow-hidden">
             <GameChatPanel
               fen={game.fen}
-              onWalkLine={lineWalk.walk}
+              lineWalk={lineWalk}
               getLiveFen={game.getFen}
               pgn={game.history.join(' ')}
               moveNumber={moveCountRef.current}

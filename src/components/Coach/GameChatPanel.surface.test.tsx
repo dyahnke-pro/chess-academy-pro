@@ -104,13 +104,15 @@ describe('a proof line walks even where the screen gives no board', () => {
     vi.clearAllMocks();
     useAppStore.setState({ activeProfile: buildUserProfile({ id: 'main', name: 'Player', aiDataConsent: 'granted' }) });
   });
-  it('the walk button plays the line on the panel board', async () => {
+  it('the line shows on the panel board, with the one Play-line button under it', async () => {
     const line = walkableLine(START, ['e4', 'e5'], 'e4');
     mockDispatch.mockResolvedValue({ text: 'The best move is e4.', lines: [line], toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek' });
     mountDrawerAt('/');
     await ask("what's the best move?");
-    const btn = await screen.findByTestId('message-walk-line-0');
-    act(() => { fireEvent.click(btn); });
     await waitFor(() => expect(screen.getByTestId('chat-panel-walk-board')).toBeInTheDocument());
+    const btn = screen.getByTestId('chat-panel-play-line');
+    expect(btn).not.toBeDisabled();
+    expect(screen.queryByTestId('message-walk-line-0')).toBeNull();
+    act(() => { fireEvent.click(btn); });
   });
 });

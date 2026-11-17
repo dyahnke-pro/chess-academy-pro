@@ -15,7 +15,7 @@ import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 import type { LiveState } from '../../coach/types';
 import { sanitizeCoachText } from '../../services/sanitizeCoachText';
 import { voiceService } from '../../services/voiceService';
-import { WalkLineButton } from './WalkLineButton';
+import type { LineWalk } from '../../hooks/useLineWalk';
 import type { WalkableLine } from '../../types';
 
 interface BoardQuestionBoxProps {
@@ -24,8 +24,10 @@ interface BoardQuestionBoxProps {
   studentColor: 'white' | 'black';
   /** The route, so the coach knows which screen it was asked on. */
   route: string;
-  /** Plays a line on the screen's board — the walk button and "show me". */
-  onWalkLine: (line: WalkableLine) => void;
+  /** The screen's ONE line walker: the answer's lines go into its "line just
+   *  stated" slot (the one Play-line button under the board plays them), and
+   *  "show me" walks now. */
+  lineWalk: Pick<LineWalk, 'walk' | 'state'>;
   /** Puts the answer's marks on the screen's board as they are said — every
    *  square it names lit, every move arrowed, its line drawn ply by ply
    *  (`useLineWalk.markAnswer`). REQUIRED: an answer that names squares with
@@ -47,19 +49,17 @@ interface BoardQuestionBoxProps {
 }
 
 export function BoardQuestionBox({
-  fen, studentColor, route, onWalkLine, onAnswerMarks, shownLine, engineBestMoveUci, moveHistory, fallback, testIdPrefix, placeholder,
+  fen, studentColor, route, lineWalk, onAnswerMarks, shownLine, engineBestMoveUci, moveHistory, fallback, testIdPrefix, placeholder,
 }: BoardQuestionBoxProps): JSX.Element {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [reply, setReply] = useState('');
-  const [line, setLine] = useState<WalkableLine | null>(null);
 
   const ask = useCallback(async (): Promise<void> => {
     const question = input.trim();
     if (!question || loading) return;
     setLoading(true);
     setReply('');
-    setLine(null);
     voiceService.stop();
     try {
       const liveState: LiveState = {
@@ -83,8 +83,8 @@ export function BoardQuestionBox({
         );
         text = sanitizeCoachText(answer.text);
         answerLines = answer.lines ?? [];
-        setLine(answer.lines?.[0] ?? null);
-        if (answer.autoWalk) { onWalkLine(answer.autoWalk); walking = true; }
+        if (answerLines.length) lineWalk.state(answerLines);
+        if (answer.autoWalk) { lineWalk.walk(answer.autoWalk); walking = true; }
       } catch {
         text = '';
       }
@@ -99,7 +99,7 @@ export function BoardQuestionBox({
     } finally {
       setLoading(false);
     }
-  }, [input, loading, fen, studentColor, route, shownLine, engineBestMoveUci, moveHistory, fallback, onWalkLine, onAnswerMarks]);
+  }, [input, loading, fen, studentColor, route, shownLine, engineBestMoveUci, moveHistory, fallback, lineWalk, onAnswerMarks]);
 
   return (
     <div className="flex flex-col gap-1.5" data-testid={`${testIdPrefix}-box`}>
@@ -144,9 +144,6 @@ export function BoardQuestionBox({
         <p className="text-sm text-theme-text bg-theme-accent/5 border border-theme-accent/30 rounded-lg p-3 mt-1" data-testid={`${testIdPrefix}-reply`}>
           {reply}
         </p>
-      )}
-      {line && !loading && (
-        <WalkLineButton line={line} onWalk={onWalkLine} testId={`${testIdPrefix}-walk-line-btn`} />
       )}
     </div>
   );

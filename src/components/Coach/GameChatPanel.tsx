@@ -10,7 +10,8 @@ import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
 import { dispatchCoachTurn, openTurnRead } from '../../coach/dispatchCoachTurn';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
-import { useLineWalk } from '../../hooks/useLineWalk';
+import { useLineWalk, type LineWalk } from '../../hooks/useLineWalk';
+import { PlayLineButton } from '../Board/PlayLineButton';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
@@ -31,7 +32,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
-import type { ChatMessage as ChatMessageType, BoardAnnotationCommand, WalkableLine } from '../../types';
+import type { ChatMessage as ChatMessageType, BoardAnnotationCommand } from '../../types';
 import { uid } from '../../utils/uid';
 import { registerCoachHands, actuate, actionForCommand } from '../../services/coachActuator';
 import { readSpokenSquares } from '../../services/spokenSquares';
@@ -68,9 +69,11 @@ interface GameChatPanelProps {
   /** When set, this thread is shown again on reopen (persistent memory):
    *  a key naming the thread, e.g. `opening-play:<openingId>`. */
   rememberThreadKey?: string;
-  /** Walk a line an answer proved on this screen's board (the answer's
-   *  `lines`). Absent: the screen has no board to walk it on. */
-  onWalkLine?: (line: WalkableLine) => void;
+  /** The screen's ONE line walker: an answer's `lines` go into its "line
+   *  just stated" slot, and the one Play-line button under the screen's board
+   *  plays them. Absent: the screen has no board, so the lines walk on this
+   *  panel's own small board, with the same button under it. */
+  lineWalk?: Pick<LineWalk, 'walk' | 'state'>;
   /**
    * Live FEN getter off the underlying chess.js instance. `fen` (above) is
    * a React snapshot that lags the true board by a render, so building the
@@ -214,7 +217,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
   function GameChatPanel(
     {
       fen,
-      onWalkLine,
+      lineWalk: hostLineWalk,
       getLiveFen,
       getPlanArc,
       playerColor,
@@ -253,7 +256,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     // gets the proof: the line walks on a small board in this panel. One
     // coach — every answer's line can be played out wherever it is asked.
     const ownLineWalk = useLineWalk(playerColor, 'chatPanel.lineWalk');
-    const walkLine = onWalkLine ?? ownLineWalk.walk;
+    const lineWalk = hostLineWalk ?? ownLineWalk;
 
     // 🔒 THE HANDS REACH THE SPINE FROM HERE (2026-09-21, David: "A. Not even a
     // question" + "this is a unified coach, so all changes get made to all
@@ -1321,8 +1324,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             },
           };
           setMessages((prev) => [...prev, assistantMsg]);
-          // "Show me": play the line the coach just proved, now.
-          if (answer.autoWalk) walkLine(answer.autoWalk);
+          // The answer's lines are the line just stated; "show me" walks now.
+          if (answer.lines?.length) lineWalk.state(answer.lines);
+          if (answer.autoWalk) lineWalk.walk(answer.autoWalk);
           // WO-BRAIN-04: thread the coach reply into conversation
           // history so future envelopes carry the back-and-forth.
           useCoachMemoryStore.getState().appendConversationMessage({
@@ -1622,8 +1626,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             : {}),
         };
         setMessages((prev) => [...prev, assistantMsg]);
-          // "Show me": play the line the coach just proved, now.
-          if (answer.autoWalk) walkLine(answer.autoWalk);
+          // The answer's lines are the line just stated; "show me" walks now.
+          if (answer.lines?.length) lineWalk.state(answer.lines);
+          if (answer.autoWalk) lineWalk.walk(answer.autoWalk);
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: 'chat-home',
           role: 'coach',
@@ -1710,9 +1715,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           aria-relevant="additions"
           aria-label="In-game coach chat messages"
         >
-          {!onWalkLine && ownLineWalk.walkFen && (
-            <div className="w-48 mx-auto" data-testid="chat-panel-walk-board">
-              <ConsistentChessboard fen={ownLineWalk.walkFen} arrows={ownLineWalk.walkArrows} interactive={false} boardOrientation={playerColor} showLastMoveHighlight />
+          {!hostLineWalk && (ownLineWalk.walkFen || ownLineWalk.stated.length > 0) && (
+            <div className="w-48 mx-auto flex flex-col gap-1" data-testid="chat-panel-walk-board">
+              <ConsistentChessboard fen={ownLineWalk.walkFen ?? ownLineWalk.stated[0]?.startFen ?? fen} arrows={ownLineWalk.walkArrows} interactive={false} boardOrientation={playerColor} showLastMoveHighlight />
+              <PlayLineButton onPlay={ownLineWalk.playStated} testId="chat-panel-play-line" wide />
             </div>
           )}
                     {isStreaming && (
@@ -1749,7 +1755,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   : { opacity: 0.7 }
               }
             >
-              <ChatMessage message={msg} onWalkLine={walkLine} />
+              <ChatMessage message={msg} />
             </div>
           ))}
 

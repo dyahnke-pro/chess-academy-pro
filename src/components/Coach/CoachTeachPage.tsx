@@ -1689,6 +1689,7 @@ export function CoachTeachPage({ mode }: {
   useEffect(() => () => stopLearnTranscript(), []);
   /** A CALCULATED LINE ON THE BOARD — the one shared walker (useLineWalk). */
   const lineWalk = useLineWalk(playerColor, 'teach.lineWalk');
+  const { state: stateLines, playStated } = lineWalk;
   /** The board gives up height so the board bar stays on screen (phones). */
   const boardFit = useBoardFit(game.history.length);
   /** Shows the Why button once a proof-bearing conclusion has been spoken.
@@ -1697,26 +1698,31 @@ export function CoachTeachPage({ mode }: {
   const [whyReady, setWhyReady] = useState(false);
   const noteSpokenProofs = useCallback((kept: readonly { proof?: FactProof }[]): void => {
     for (const f of kept) {
-      if (isProof(f.proof)) { learnMemRef.current.lastProof = f.proof; setWhyReady(true); }
+      if (isProof(f.proof)) {
+        learnMemRef.current.lastProof = f.proof;
+        setWhyReady(true);
+        const pl = f.proof.line && f.proof.line.sans.length > 0 ? walkableLine(f.proof.line.fen, f.proof.line.sans, f.proof.line.sans[0]) : null;
+        if (pl) stateLines([pl]);
+      }
     }
-  }, []);
+  }, [stateLines]);
   const { walkFen: lineWalkFen, walkArrows: lineWalkArrows, tokenRef: lineWalkTokenRef,
     setWalkFen: setLineWalkFen, setWalkArrows: setLineWalkArrows, arrowsOf: lineArrowsOf,
     clear: clearLineWalk, walk: walkLine } = lineWalk;
   // Read by the stable queue callback (named-move arrows need the seat).
   const playerColorRef = useRef(playerColor);
   playerColorRef.current = playerColor;
-  /** THE LAST LINE THE COACH SAID, for the board bar's Play line (David
-   *  2026-11-08: "lines get multiple arrows and a play out line button"):
-   *  any kept fact's own line, not only a proof's. */
-  const [lastSpokenLine, setLastSpokenLine] = useState<{ fen: string; sans: readonly string[] } | null>(null);
+  /** THE LAST LINE THE COACH SAID goes into the one walker's "line just
+   *  stated" slot (David 2026-11-08: "lines get multiple arrows and a play out
+   *  line button"): any kept fact's own line, not only a proof's. */
   const noteSpokenLines = useCallback((kept: readonly { lines?: readonly { fen: string; sans: readonly string[] }[]; text: string }[]): void => {
     for (const f of kept) {
       if (f.text.includes(THINK_MARK)) continue;
       const line = f.lines?.find((l) => l.sans.length >= 2);
-      if (line) setLastSpokenLine({ fen: line.fen, sans: [...line.sans] });
+      const walkable = line ? walkableLine(line.fen, line.sans, line.sans[0]) : null;
+      if (walkable) stateLines([walkable]);
     }
-  }, []);
+  }, [stateLines]);
   /** Each kept fact's own lines on the board, its moves in order, with the
    *  fact's sentence (a question's lines are its answer: they wait). */
   const linesOfKept = useCallback((kept: VoicePackage['kept'], boardFen: string): Array<{ arrows: BoardArrow[]; said: string }> => {
@@ -2055,7 +2061,7 @@ export function CoachTeachPage({ mode }: {
     // game one's "a pin freezes the piece in front" kept game two's first pin
     // bare).
     learnMemRef.current.newGame();
-    setLastSpokenLine(null);
+    stateLines([]);
   }, []);
   /** T3 (2026-09-20): plies where the deciding computer kept a `key-moment`
    *  clause — the coach ANNOUNCED the critical moment before the student moved.
@@ -8351,7 +8357,8 @@ export function CoachTeachPage({ mode }: {
             : {}),
           ...(result.lines && result.lines.length > 0 ? { lines: result.lines } : {}),
         }]);
-        // "Show me" answered at the door: play the line now.
+        // The answer's lines are the line just stated; "show me" walks now.
+        if (result.lines?.length) stateLines(result.lines);
         if (result.autoWalk) walkLine(result.autoWalk);
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: 'chat-teach',
@@ -14203,17 +14210,6 @@ export function CoachTeachPage({ mode }: {
     if (line) setLineWalkArrows(lineArrowsOf(line));
     void coachDrillSay(said, line ? { lines: [line] } : undefined);
   }, [coachDrillSay, lineArrowsOf, setLineWalkArrows]);
-  /** PLAY LINE — walks the proof's line on the board, only on this press. */
-  /** The line Play line walks: the last line the coach said — a kept fact's
-   *  own line, or the last proof's (marks map 2026-11-08: a spoken line with no
-   *  proof had no button). */
-  const playableLine = lastSpokenLine ?? (learnMemRef.current.lastProof?.line?.sans.length ? learnMemRef.current.lastProof.line : null);
-  const handlePlayProofLine = useCallback((): void => {
-    const src = lastSpokenLine ?? learnMemRef.current.lastProof?.line ?? null;
-    if (!src || src.sans.length === 0) return;
-    const line = walkableLine(src.fen, src.sans, src.sans[0]);
-    if (line) walkLine(line);
-  }, [walkLine, lastSpokenLine]);
   const handleReadPosition = useCallback(() => {
     void positionNarration.narrate();
   }, [positionNarration]);
@@ -15232,7 +15228,7 @@ export function CoachTeachPage({ mode }: {
             onRead={handleReadPosition}
             reading={positionNarration.isNarrating}
             onWhy={whyReady && learnMemRef.current.lastProof ? handleWhy : null}
-            onPlayLine={playableLine ? handlePlayProofLine : null}
+            onPlayLine={playStated}
             testIds={{ back: 'teach-nav-prev', forward: 'teach-nav-next', hint: 'teach-hint-btn', read: 'teach-read-position-btn', why: 'teach-why-btn', line: 'teach-play-line-btn' }}
             extras={<>
               <button onClick={goToFirstMove} disabled={!canStepBack} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="First move" data-testid="teach-nav-first"><ChevronsLeft size={12} /></button>
@@ -15719,7 +15715,7 @@ export function CoachTeachPage({ mode }: {
                   : { opacity: 0.7 }
               }
             >
-              <ChatMessage message={msg} onPickChoice={pickCoachChoice} onWalkLine={walkLine} />
+              <ChatMessage message={msg} onPickChoice={pickCoachChoice} />
             </div>
           ))}
 

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { ChevronLeft, ChevronRight, Lightbulb, Volume2, Loader2, HelpCircle, Play } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Lightbulb, Volume2, Loader2, HelpCircle } from 'lucide-react';
+import { BOARD_BUTTON_CLASS, PlayLineButton } from './PlayLineButton';
 
 /** The six core buttons — the same six, in the same order, on every board. */
 type BoardBarButton = 'back' | 'forward' | 'hint' | 'read' | 'why' | 'line';
@@ -63,7 +64,7 @@ export function CoachBoardBar(props: CoachBoardBarProps): JSX.Element {
       case 'hint': return <Lightbulb size={16} />;
       case 'read': return props.reading ? <Loader2 size={16} className="animate-spin" /> : <Volume2 size={16} />;
       case 'why': return <HelpCircle size={16} />;
-      case 'line': return <Play size={16} />;
+      case 'line': return null;
     }
   };
   const order: BoardBarButton[] = ['back', 'forward', 'hint', 'read', 'why', 'line'];
@@ -72,13 +73,15 @@ export function CoachBoardBar(props: CoachBoardBarProps): JSX.Element {
       <div className="grid grid-cols-6 gap-1 w-full">
         {order.map((b) => {
           const on = handler[b];
+          // The line button is THE one Play-line button every board shares.
+          if (b === 'line') return <PlayLineButton key={b} onPlay={on} testId={props.testIds?.line ?? 'board-bar-line'} />;
           return (
             <button
               key={b}
               type="button"
               onClick={on ?? undefined}
               disabled={!on}
-              className="flex flex-col items-center justify-center gap-0.5 min-h-[44px] px-1 py-1 rounded-lg border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+              className={BOARD_BUTTON_CLASS}
               data-testid={props.testIds?.[b] ?? `board-bar-${b}`}
               aria-label={ARIA[b]}
               data-level={b === 'hint' ? props.hintLevel : undefined}

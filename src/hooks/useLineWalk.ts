@@ -12,6 +12,7 @@ import { markItems } from '../services/markAnchors';
 import { scheduleMarks } from '../services/markPacing';
 import { voiceService } from '../services/voiceService';
 import { leadEyeSquareStyle } from './useBoardTheme';
+import { usePieceSound } from './usePieceSound';
 
 /** The key-square fill Review lights its squares with. */
 const KEY_SQUARE_FILL = '#eab308';
@@ -22,12 +23,21 @@ const MARKS_LINGER_MS = 3500;
  *  never strands them: they start at the deadline). */
 const ON_AIR_WAIT_MS = 4000;
 
-interface LineWalk {
+export interface LineWalk {
   /** The position to show while a line is on the board; null = the live board. */
   walkFen: string | null;
   walkArrows: BoardArrow[];
   /** Step a line move by move, then return to the live board. */
   walk: (line: WalkableLine) => void;
+  /** THE LINE THE COACH LAST STATED — the one slot every source writes
+   *  (the narration's line, a chat or question answer's line, a theory
+   *  branch's alternative, the punish line). The one Play-line button under
+   *  the board plays it (`playStated`); a new statement replaces it. */
+  stated: readonly WalkableLine[];
+  state: (lines: readonly WalkableLine[]) => void;
+  /** Walk every stated line, one after another — null when none is stated,
+   *  so the button greys out. */
+  playStated: (() => void) | null;
   /** End any line on the board now. */
   clear: () => void;
   /** Every ply's arrow, through the arrow door, coloured by whose move it is. */
@@ -56,6 +66,8 @@ const sleep = (ms: number): Promise<void> => new Promise((r) => window.setTimeou
 
 export function useLineWalk(studentColor: 'white' | 'black', source = 'lineWalk'): LineWalk {
   const [walkFen, setWalkFen] = useState<string | null>(null);
+  const [stated, setStated] = useState<readonly WalkableLine[]>([]);
+  const { playMoveSound } = usePieceSound();
   const [walkArrows, setWalkArrows] = useState<BoardArrow[]>([]);
   const [markArrows, setMarkArrows] = useState<BoardArrow[]>([]);
   const [markHighlights, setMarkHighlights] = useState<string[]>([]);
@@ -136,29 +148,50 @@ export function useLineWalk(studentColor: 'white' | 'black', source = 'lineWalk'
     });
   }, [studentColor, arrowsOf]);
 
-  const walk = useCallback((line: WalkableLine): void => {
+  /** One line on the board: its start, then each move with its arrow and its
+   *  sound — and its reason, said, when the line carries one — then back. */
+  const walkOne = useCallback(async (line: WalkableLine, token: number): Promise<boolean> => {
+    setWalkFen(line.startFen);
+    setWalkArrows([]);
+    await sleep(600);
+    const plyArrows = arrowsOf(line);
+    for (const ply of line.plies) {
+      if (tokenRef.current !== token) return false;
+      setWalkFen(ply.fenAfter);
+      const hop = plyArrows.find((a) => a.startSquare === ply.uci.slice(0, 2) && a.endSquare === ply.uci.slice(2, 4));
+      setWalkArrows(hop ? [hop] : []);
+      try { playMoveSound(ply.san); } catch { /* sound is optional */ }
+      // A tapped line is read aloud whatever the narration setting (the
+      // explicit read-aloud carve-out, CLAUDE.md G5).
+      if (ply.why) await Promise.race([voiceService.speakReadAloud(ply.why), sleep(12000)]).catch(() => undefined);
+      if (tokenRef.current !== token) return false;
+      await sleep(1000);
+    }
+    return true;
+  }, [arrowsOf, playMoveSound]);
+
+  const walkLines = useCallback((lines: readonly WalkableLine[]): void => {
     const token = ++tokenRef.current;
-    // A walk takes the board: an answer's marks come down.
+    // A walk takes the board: an answer's marks come down, the voice stops.
     markTokenRef.current += 1;
     setMarkArrows([]);
     setMarkHighlights([]);
+    voiceService.stop();
     void (async () => {
-      setWalkFen(line.startFen);
-      setWalkArrows([]);
-      await sleep(600);
-      const plyArrows = arrowsOf(line);
-      for (const ply of line.plies) {
-        if (tokenRef.current !== token) return;
-        setWalkFen(ply.fenAfter);
-        const hop = plyArrows.find((a) => a.startSquare === ply.uci.slice(0, 2) && a.endSquare === ply.uci.slice(2, 4));
-        setWalkArrows(hop ? [hop] : []);
-        await sleep(1000);
+      for (const line of lines) {
+        if (!(await walkOne(line, token))) return;
       }
       await sleep(900);
       if (tokenRef.current === token) { setWalkFen(null); setWalkArrows([]); }
     })();
-  }, [arrowsOf]);
+  }, [walkOne]);
+
+  const walk = useCallback((line: WalkableLine): void => { walkLines([line]); }, [walkLines]);
+  const state = useCallback((lines: readonly WalkableLine[]): void => {
+    setStated(lines.filter((l) => l.plies.length > 0));
+  }, []);
+  const playStated = stated.length > 0 ? (): void => walkLines(stated) : null;
 
   const markSquareStyles = Object.fromEntries(markHighlights.map((sq) => [sq, leadEyeSquareStyle(KEY_SQUARE_FILL)]));
-  return { walkFen, walkArrows, walk, clear, arrowsOf, tokenRef, setWalkFen, setWalkArrows, markArrows, markHighlights, markSquareStyles, markAnswer };
+  return { walkFen, walkArrows, walk, stated, state, playStated, clear, arrowsOf, tokenRef, setWalkFen, setWalkArrows, markArrows, markHighlights, markSquareStyles, markAnswer };
 }

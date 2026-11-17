@@ -1546,6 +1546,9 @@ export interface WalkPly {
   uci: string;
   fenBefore: string;
   fenAfter: string;
+  /** The move's computed reason, said as the walk plays it (a theory
+   *  branch's alternative carries one per move; most lines carry none). */
+  why?: string | null;
 }
 
 /** A computed line the board DRAWS (arrows) and WALKS (a button) — one shape

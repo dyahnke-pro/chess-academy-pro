@@ -237,6 +237,33 @@ function lineArrow(fenBefore: string, uci: string, studentColor: 'white' | 'blac
  *  Gate: `CoachGameReview.noQuestions.test.ts`. */
 export const REVIEW_ASKS_QUESTIONS = false;
 
+/** A ply's spoken line (its arrows, in order) as a line the one walker plays. */
+function spokenArrowsLine(arrows: ReadonlyArray<{ uci: string; fenBefore: string; fenAfter: string }>): WalkableLine | null {
+  const plies: WalkableLine['plies'] = [];
+  for (const a of arrows) {
+    if (!a.uci || a.uci.length < 4) continue;
+    let san: string | null = null;
+    try { san = new Chess(a.fenBefore).move({ from: a.uci.slice(0, 2), to: a.uci.slice(2, 4), promotion: a.uci.length > 4 ? a.uci.slice(4) : undefined })?.san ?? null; } catch { san = null; }
+    if (san) plies.push({ san, uci: a.uci, fenBefore: a.fenBefore, fenAfter: a.fenAfter });
+  }
+  return plies.length > 0 ? { label: plies[0].san, startFen: plies[0].fenBefore, plies } : null;
+}
+
+/** A theory branch's untaken alternative as a line the one walker plays, each
+ *  move with its computed reason said as it lands. */
+function exploreWalkable(line: ExploreLine): WalkableLine | null {
+  const c = new Chess(line.fromFen);
+  const plies: WalkableLine['plies'] = [];
+  for (const step of line.steps) {
+    const fenBefore = c.fen();
+    let mv: ReturnType<Chess['move']> | null = null;
+    try { mv = c.move(step.san); } catch { mv = null; }
+    if (!mv) break;
+    plies.push({ san: mv.san, uci: `${mv.from}${mv.to}${mv.promotion ?? ''}`, fenBefore, fenAfter: c.fen(), why: step.why });
+  }
+  return plies.length > 0 ? { label: plies[0].san, startFen: line.fromFen, plies } : null;
+}
+
 export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const {
     moves, playerColor, result,
@@ -307,6 +334,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // was asked at.
   const [askExpanded, setAskExpanded] = useState(false);
   const [askMessages, setAskMessages] = useState<ChatMessageType[]>([]);
+  /** THE ONE LINE WALKER — every line this page plays goes through it. */
+  const lineWalk = useLineWalk(playerColor, 'review.lineWalk');
   // The ask thread for THIS game is shown again on reopen (persistent memory).
   useRememberedThread(props.gameId ? `review:${props.gameId}` : null, askMessages, setAskMessages);
   const [isAskStreaming, setIsAskStreaming] = useState(false);
@@ -405,7 +434,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // playout the instant the walk advances or a card opens; the set stops a
   // ply's line re-playing. Declared here (above handleWalkForward) so the nav
   // handler can cancel a running playout on any forward tap.
-  const spokenLineTokenRef = useRef(0);
   // AUTO lead-the-eye arrows for a spoken future line (David 2026-09-07: "I just
   // want the arrows to appear as the moves are spoken" — without moving the
   // pieces). A token supersedes an in-flight reveal on any ply change.
@@ -1136,10 +1164,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       if (nextPly >= speakable - 2) onNeedMoreGraded?.();
       if (nextPly > speakable) return { advanced: false, stop: 'reading-ahead' };
     }
-    // A forward tap always supersedes an in-flight spoken-line (delta) playout —
-    // whether it advances the ply or opens a card. Bumping the token aborts the
-    // async loop; the auto-clear effect tears its overlay down.
-    spokenLineTokenRef.current += 1;
+    // A forward tap always supersedes a line on the board.
+    lineWalk.clear();
     // FORWARD IS AN ESCAPE HATCH — never a frozen board (David 2026-07-19: "a
     // card popped up… i want to click forward to ignore it but the board is
     // frozen"). When the why-picker faucet is open, forward DISMISSES it and
@@ -1945,7 +1971,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setWalkExplorationArrows(null);
     setTheoryCaption(null);
     setTheoryLecturePlaying(false);
-  }, [theoryBeats, theoryLecturePlaying, playMoveSound, walkPlayback]);
+    // The branches the lecture named are the lines just stated: the one
+    // Play-line button plays the untaken alternatives, each move with its why.
+    if (theoryLectureTokenRef.current === token) {
+      const alternatives = beats.flatMap((b) => b.explore ?? []).map(exploreWalkable).filter((l): l is WalkableLine => !!l);
+      if (alternatives.length > 0) lineWalk.state(alternatives);
+    }
+  }, [theoryBeats, theoryLecturePlaying, playMoveSound, walkPlayback, lineWalk]);
 
   const stopOpeningTheory = useCallback((): void => {
     theoryLectureTokenRef.current += 1;
@@ -2032,61 +2064,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     }
   }, [theoryLecturePlaying, playMoveSound]);
-
-  /** EXPLORE AN UNTAKEN LINE (David 2026-07-23: "the button lets users decide if
-   *  they want to listen/learn them, instead of forcing more theory"). Plays one
-   *  C8 alternative out on the exploration board — arrow + move sound + the
-   *  computed per-move why — only when the student TAPS its chip. Rides the
-   *  theory-lecture token so Stop and every nav-cancel kills it too. */
-  const playExploreLine = useCallback(async (line: ExploreLine): Promise<void> => {
-    const token = ++theoryLectureTokenRef.current; // cancels any running lecture
-    voiceService.stop();
-    setTheoryLecturePlaying(true);
-    const waitIdle = async (maxMs = 20000): Promise<void> => {
-      const start = performance.now();
-      while (voiceService.isPlaying() && performance.now() - start < maxMs) {
-        if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) return;
-        await new Promise((r) => setTimeout(r, 120));
-      }
-    };
-    const speak = async (text: string, caption?: string): Promise<void> => {
-      setTheoryCaption(caption ?? text);
-      const t0 = performance.now();
-      try { await reviewSay(text); } catch { /* voice off */ }
-      await waitIdle();
-      const dwell = Math.min(4500, 1000 + text.length * 22);
-      const elapsed = performance.now() - t0;
-      if (elapsed < dwell) await new Promise((r) => setTimeout(r, dwell - elapsed));
-    };
-    try {
-      setWalkExplorationFen(line.fromFen);
-      setWalkExplorationArrows(null);
-      await speak(`The ${line.san} line — here's how it goes.`);
-      let prevFen = line.fromFen;
-      for (const step of line.steps) {
-        if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) return;
-        try {
-          const cc = new Chess(prevFen);
-          const m = cc.move(step.san);
-          if (m) setWalkExplorationArrows(lineArrow(prevFen, `${m.from}${m.to}`, playerColor));
-        } catch { /* arrow is a bonus */ }
-        setWalkExplorationFen(step.fenAfter);
-        setWalkExplorationSan(step.san);
-        playMoveSound(step.san);
-        prevFen = step.fenAfter;
-        if (step.why) await speak(step.why, `${step.san} — ${step.why}`);
-        else { setTheoryCaption(step.san); await new Promise((r) => setTimeout(r, 1200)); }
-      }
-    } finally {
-      if (theoryLectureTokenRef.current === token && walkMountedRef.current) {
-        setWalkExplorationFen(null);
-        setWalkExplorationSan(null);
-        setWalkExplorationArrows(null);
-        setTheoryCaption(null);
-        setTheoryLecturePlaying(false);
-      }
-    }
-  }, [playMoveSound]);
 
   const resumeAfterFaucet = useCallback((): void => {
     resetFaucet();
@@ -2203,52 +2180,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // (cuts any narration and goes now). Fully token-guarded so a nav-away or a
   // second invocation supersedes it; the freeze-fix auto-clear tears the overlay
   // down on ply change.
-  const walkSpokenLine = useCallback(async (
-    arrows: NonNullable<ReviewMoveSegment['spokenLineArrows']>,
-    anchorPly: number,
-    opts?: { waitForVoice?: boolean },
-  ): Promise<void> => {
-    const token = ++spokenLineTokenRef.current;
-    const alive = (): boolean =>
-      spokenLineTokenRef.current === token && walkMountedRef.current && walkPlyRef.current === anchorPly;
-    if (opts?.waitForVoice) {
-      // Let the segment's own narration (which SPOKE this line) finish first, so
-      // the visual playout lands as its illustration — not over the top of it.
-      const start = performance.now();
-      const idleMax = isReviewUncapped() ? 26000 : 12000;
-      while (voiceService.isPlaying() && performance.now() - start < idleMax) {
-        if (!alive()) return;
-        await new Promise((r) => setTimeout(r, 120));
-      }
-    } else {
-      voiceService.stop(); // button: cut any narration and walk it now
-    }
-    if (!alive()) return;
-    for (const a of arrows) {
-      if (!alive()) return;
-      if (!a.uci || a.uci.length < 4) continue;
-      const from = a.uci.slice(0, 2);
-      const to = a.uci.slice(2, 4);
-      let san: string | null = null;
-      try {
-        const mv = new Chess(a.fenBefore).move({
-          from, to, promotion: a.uci.length > 4 ? a.uci.slice(4) : undefined,
-        });
-        san = mv?.san ?? null;
-      } catch { san = null; }
-      setWalkExplorationFen(a.fenAfter);
-      setWalkExplorationSan(san);
-      setWalkExplorationArrows(lineArrow(a.fenBefore, `${from}${to}`, playerColor));
-      if (san) { try { playMoveSound(san); } catch { /* sound optional */ } }
-      await new Promise((r) => setTimeout(r, 1050));
-    }
-    if (!alive()) return;
-    await new Promise((r) => setTimeout(r, 700)); // hold the final frame a beat
-    if (!alive()) return;
-    setWalkExplorationFen(null);
-    setWalkExplorationSan(null);
-    setWalkExplorationArrows(null);
-  }, [playMoveSound]);
   // (The delta line no longer plays ITSELF on ply landing — "Walk the line" is
   // a button now, like "Show me": David 2026-09-05, "plays out automatically
   // (I want it by button only)".)
@@ -2298,7 +2229,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // THE ONE LINE WALKER: a line an answer proved plays out on the review
   // board, then the board returns to the ply (one coach — the same proof
   // every screen with a board can walk).
-  const lineWalk = useLineWalk(playerColor, 'review.lineWalk');
   const barFen = useMemo<string>(() => {
     const seg = walkPlayback.currentSegment;
     if (seg) return seg.fenAfter;
@@ -2361,16 +2291,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }
   }, [walkPlayback, playerColor, playerRating, weaknessSignalsRef]);
   const reviewWhyLine = reviewWhy && reviewWhy.ply === walkPlayback.currentPly ? reviewWhy.line : null;
-  const playReviewLine = useCallback((): void => {
-    const ply = walkPlayback.currentPly;
-    if (reviewWhyLine) {
-      void walkSpokenLine(reviewWhyLine.plies.map((p) => ({ uci: p.uci, fenBefore: p.fenBefore, fenAfter: p.fenAfter })), ply, { waitForVoice: false });
-      return;
-    }
-    const seg = walkPlayback.currentSegment;
-    if (seg?.spokenLineArrows && seg.spokenLineArrows.length >= 2) void walkSpokenLine(seg.spokenLineArrows, ply, { waitForVoice: false });
-  }, [walkPlayback, reviewWhyLine, walkSpokenLine]);
-  const canPlayReviewLine = !!reviewWhyLine || (walkPlayback.currentSegment?.spokenLineArrows?.length ?? 0) >= 2;
+  // THE LINE JUST STATED (the one Play-line button under the board plays it):
+  // Why's proof line at this ply, else the line the ply's narration spoke.
+  const { state: stateLines, playStated } = lineWalk;
+  const segLine = walkPlayback.currentSegment?.spokenLineArrows;
+  useEffect(() => {
+    if (reviewWhyLine) { stateLines([reviewWhyLine]); return; }
+    stateLines(segLine && segLine.length >= 2 ? [spokenArrowsLine(segLine)].filter((l): l is WalkableLine => !!l) : []);
+  }, [stateLines, reviewWhyLine, segLine]);
+  // A line on the board pauses the walk, so its next ply does not talk over it.
+  const playReviewLine = playStated ? (): void => { walkPlayback.pause('line'); playStated(); } : null;
 
   // EVERY MARK APPEARS AS IT IS STATED (David 2026-09-07 "I just want the
   // arrows to appear as the moves are spoken" → 2026-11-08 "Key squares get
@@ -2939,6 +2869,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             prevText.trim().length > 0
               ? prevText
               : (spokenDisplayText.trim() || answer.text.replace(VOICE_MARKER_RE, '').trim()));
+          if (answer.lines && answer.lines.length > 0) stateLines(answer.lines);
           if (answer.autoWalk) lineWalk.walk(answer.autoWalk);
           if (answer.lines && answer.lines.length > 0) {
             const lines = answer.lines;
@@ -3655,7 +3586,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 onRead={questionOpen ? null : () => { walkPlayback.pause('read'); void reviewRead.narrate(); }}
                 reading={reviewRead.isNarrating}
                 onWhy={!questionOpen && walkPlayback.currentSegment ? () => { void handleReviewWhy(); } : null}
-                onPlayLine={!questionOpen && canPlayReviewLine ? playReviewLine : null}
+                onPlayLine={!questionOpen ? playReviewLine : null}
                 testIds={{ back: 'review-back-btn', forward: 'review-forward-btn', hint: 'walk-show-me-btn', read: 'review-read-position-btn', why: 'review-why-btn', line: 'walk-the-line-btn' }}
                 extras={<>
                   <button onClick={walkPlayback.goToStart} disabled={walkPlayback.currentPly === 0} className="flex items-center gap-1 text-[11px] px-2 py-1 rounded-md border whitespace-nowrap disabled:opacity-40 border-theme-border" style={{ color: 'var(--color-text)' }} aria-label="Jump to start" data-testid="review-start-btn"><SkipBack size={12} /></button>
@@ -3683,9 +3614,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   {theoryBeats && theoryBeats.length > 0 && (
                     <button onClick={() => { if (theoryLecturePlaying) stopOpeningTheory(); else void playOpeningTheory(); }} className="flex items-center gap-1 text-[11px] px-2 py-1 rounded-md border whitespace-nowrap disabled:opacity-40 border-sky-500/40 bg-sky-500/10" style={{ color: 'var(--color-text)' }} data-testid="walk-theory-btn"><BookOpen size={12} />{theoryLecturePlaying ? 'Stop theory' : 'Theory'}</button>
                   )}
-                  {(theoryBeats ?? []).flatMap((b) => b.explore ?? []).map((line) => (
-                    <button key={`explore-${line.san}`} onClick={() => { void playExploreLine(line); }} disabled={theoryLecturePlaying} className="flex items-center gap-1 text-[11px] px-2 py-1 rounded-md border whitespace-nowrap disabled:opacity-40 border-violet-500/40 bg-violet-500/10" style={{ color: 'var(--color-text)' }} data-testid={`walk-explore-btn-${line.san}`}><BookOpen size={12} />{`Explore ${line.san}`}</button>
-                  ))}
                 </>}
               />
             </div>
@@ -4052,7 +3980,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                         key={m.id}
                         message={m}
                         isStreaming={isAskStreaming && m.role === 'assistant' && i === askMessages.length - 1}
-                        onWalkLine={lineWalk.walk}
                       />
                     ))}
                     <div ref={askScrollEndRef} />
