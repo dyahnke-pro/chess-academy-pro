@@ -72,6 +72,14 @@ export function takeBackAhead(
 ): CaptureLeadsTo | null {
   if (!prev?.square || !mv.captured || prev.square !== mv.to || prev.net <= 0) return null;
   if ((MATERIAL_VALUE[mv.captured] ?? 0) <= prev.net || read.net < 1) return null;
+  // A TAKE-BACK THEY CAN TAKE BACK AGAIN is ahead only when it stays ahead
+  // after they take the capturer (speedrun _4xbS0Crtic: "Nxe4 would win a
+  // knight for a pawn" — …Rxe4 takes the knight straight back, an even trade).
+  if (!read.final) {
+    let capturer = 0;
+    try { capturer = MATERIAL_VALUE[new Chess(read.fenAfter).get(mv.to as never)?.type ?? 'p'] ?? 0; } catch { /* unreadable — keep the count */ }
+    if (read.net - capturer < 1) return null;
+  }
   const gave = ONE_PIECE[prev.net];
   if (gave) return { kind: 'nets', captured: mv.captured, free: false, gave };
   const lead = materialBalance(read.fenAfter) * (mover(read.fenAfter) === 'w' ? 1 : -1);
