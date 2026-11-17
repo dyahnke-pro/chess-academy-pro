@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { introHead } from '../test/introPattern';
 import { Chess } from 'chess.js';
-import { lessonThought, lessonBoardFacts, moveThoughtFacts, LESSON_STUDENT_LANE } from './moveThoughtFacts';
+import { lessonThought, lessonBoardFacts, moveThoughtFacts, questionThought, LESSON_STUDENT_LANE } from './moveThoughtFacts';
 import { newLessonVoice, BRIEFING_LINE_PLIES } from './reviewMoveBriefing';
 import { captureContextsAlong } from './pvPlayback';
 import { NO_PREV_CAPTURE } from './captureRun';
@@ -456,6 +456,11 @@ describe('a lesson move carries the board reads Review makes, only when the move
   const input = (fenBefore: string, san: string) => ({ theory: true, story: false, fenBefore, san, prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, theirLast: null, history: [], reads: null, costCp: null, tense: 'now' as const, plainThreatsSeen: false });
   it('the move that makes it says it', () => {
     expect(lessonBoardFacts(input(BXE4, 'Bxe4')).map((f) => f.text).join(' ')).toMatch(/Let them open the d-file/);
+  });
+  it('chat answers a question about the move with it too (David: "Learn needs to be able to answer the questions about the line")', () => {
+    const { tense: _t, ...asked } = input(BXE4, 'Bxe4');
+    const groups = new Set(lessonBoardFacts(input(BXE4, 'Bxe4')).map((f) => f.group));
+    expect(questionThought(asked, groups, null, null).spoken).toMatch(/Let them open the d-file/);
   });
   it('a quiet move after it does not say it again', () => {
     const c = new Chess(BXE4); c.move('Bxe4'); c.move('Kg2');

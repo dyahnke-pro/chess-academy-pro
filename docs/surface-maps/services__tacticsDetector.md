@@ -107,7 +107,7 @@
 - `src/services/mistakeNarration.ts:396`
 - `src/services/moveInsight.ts:117`
 - `src/services/moveInsight.ts:1065`
-- `src/services/moveThoughtFacts.ts:967`
+- `src/services/moveThoughtFacts.ts:969`
 - `src/services/oneSkewerRule.test.ts:18`
 - `src/services/openingGenerator.ts:3594`
 - `src/services/openingSlip.ts:122`

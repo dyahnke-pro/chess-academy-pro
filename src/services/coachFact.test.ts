@@ -61,7 +61,10 @@ describe('CoachFact — the one fact shape (WO-STORY-MATRIX-01 P1-3)', () => {
         // So did the teaching moves' new computers (2026-11-05, `teachingMove`)
         // and the club index's known slips (`knownSlip`, a choice the board
         // weighs: said in the choices step its kind's group gives).
-        if (f.source !== 'weighed' && f.source !== 'teachingMove' && f.source !== 'knownSlip') expect(f.step).toBe(stepBefore(f));
+        // And the move order read off the board (`orderByThreat`, gap B1,
+        // 2026-11-12): "…Nf6 straight away would allow a3" is the thought's
+        // "not yet, first this", the step its kind's group gives.
+        if (f.source !== 'weighed' && f.source !== 'teachingMove' && f.source !== 'knownSlip' && f.kind !== 'move-order') expect(f.step).toBe(stepBefore(f));
         expect(COMPUTER_CATALOG[f.computer]).toBeDefined();
       }
     }

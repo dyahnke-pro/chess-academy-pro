@@ -69,7 +69,7 @@
 - `src/services/exchangeNotFinished.test.ts:295`
 - `src/services/midExchangeStructure.test.ts:13`
 - `src/services/moveThoughtFacts.ts:230`
-- `src/services/moveThoughtFacts.ts:1244`
+- `src/services/moveThoughtFacts.ts:1246`
 - `src/services/reviewMoveBriefing.test.ts:71`
 - `src/services/reviewMoveBriefing.test.ts:73`
 - `src/test/captureSaidOnce.gate.test.ts:190`
@@ -150,7 +150,7 @@
 - `src/services/moveThoughtFacts.test.ts:434`
 - `src/services/moveThoughtFacts.test.ts:447`
 - `src/services/moveThoughtFacts.ts:882`
-- `src/services/moveThoughtFacts.ts:1013`
+- `src/services/moveThoughtFacts.ts:1015`
 - `src/services/openingGenerator.ts:2058`
 - `src/services/openingGenerator.ts:2628`
 - `src/services/pieceRoute.test.ts:52`

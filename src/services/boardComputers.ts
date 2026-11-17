@@ -270,7 +270,6 @@ const PLAY_ASK = { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING); rea
 /** CHAT ASKS ABOUT A MOVE THROUGH THE ONE COMPOSER (`questionThought` →
  *  `moveThoughtFacts`): a computer that file reads is in every move answer. */
 const CHAT_VIA_THOUGHT = { wired: 'services/moveThoughtFacts.ts' } as const;
-const CHAT_OWED = { not: 'owed — one-coach P4: a chat lane reads it from the registry' } as const;
 /** The live composer reads it for every surface that does not read it itself
  *  — chat's board answers and the tapped read on Play (2026-10-15). */
 const COMPOSER = { wired: 'services/positionFacts.ts' } as const;
@@ -719,7 +718,7 @@ export const BOARD_COMPUTERS = {
     computer: 'provenThreatLine',
     kind: 'threat',
     phase: ANY,
-    surfaces: { lesson: LESSON_NO_STUDENT_MOVE, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: { not: 'said with a threat warning a surface named; the step\'s own question asks for the threat' } },
+    surfaces: { lesson: LESSON_NO_STUDENT_MOVE, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { not: 'chat\'s threat question reads the same must-defend computer (groundedAnswer.assembleThreatAnswer → computeMustDefend) and proves each target there; this read proves a warning another surface wrote' }, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: { not: 'said with a threat warning a surface named; the step\'s own question asks for the threat' } },
   },
   threatAnswer: {
     // The threat and its answer are one claim: the answer is proven by the
@@ -745,7 +744,7 @@ export const BOARD_COMPUTERS = {
       lesson: { not: 'the line\'s next move is the answer, said on it as the answer to their last move (moveThoughtFacts: bindingFact) or its job' },
       learn: LEARN,
       review: { not: 'the student\'s next ply says the answer: its job when it met the threat, the error and the better move when it did not' },
-      play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED,
+      play: PLAY_ASK, chat: { not: 'owed — chat answers the threat with its own takingTheAttackerAnswers/keepItClause; fold them onto threatAnswer (one answer computer)' }, tactics: TACTICS_NA, weaknesses: WEAK_OWED,
       think: { not: 'answers a threat a surface just named; the answer-danger step names its own key' },
     },
   },
@@ -794,7 +793,7 @@ export const BOARD_COMPUTERS = {
     computer: 'planThreadTurn',
     kind: 'plan-now',
     phase: ANY,
-    surfaces: { lesson: { not: 'a lesson says ONE plan, the one the strongest games show where its line ends (openingGenerator.lessonPlanOutro → computedPlanAt); the per-move plan thread follows a game the student plays' }, learn: LEARN, review: { wired: 'services/coachFeatureService.ts' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: { not: 'a plan carried across a game\'s moves; a step board is one position' } },
+    surfaces: { lesson: { not: 'a lesson says ONE plan, the one the strongest games show where its line ends (openingGenerator.lessonPlanOutro → computedPlanAt); the per-move plan thread follows a game the student plays' }, learn: LEARN, review: { wired: 'services/coachFeatureService.ts' }, play: PLAY_ASK, chat: { not: 'chat\'s plan question is answered by the same plan computer the thread speaks (groundedAnswer.assemblePlanMethodAnswer → planChoice.methodRead); the thread itself is one game\'s memory' }, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: { not: 'a plan carried across a game\'s moves; a step board is one position' } },
   },
   tacticGeometry: {
     read: (ctx, fact) => safe(() => geometryReads(ctx).map((r) => fact({
@@ -987,7 +986,7 @@ export const BOARD_COMPUTERS = {
       learn: LEARN,
       review: { wired: 'services/coachFeatureService.ts' },
       play: PLAY_ASK,
-      chat: CHAT_OWED,
+      chat: CHAT_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a tree of replies is said beside the move it follows; the answer, when the reply comes, is graded as the mover\'s own next move' },
       think: THINK,
@@ -1028,7 +1027,7 @@ export const BOARD_COMPUTERS = {
       learn: LEARN,
       review: { wired: 'services/coachFeatureService.ts' },
       play: PLAY_ASK,
-      chat: CHAT_OWED,
+      chat: CHAT_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'no record row for inducing mistakes yet — grey, taught in full; the reply that falls for it is recorded as the focus chance it leaves' },
       think: THINK,
@@ -1111,7 +1110,7 @@ export const BOARD_COMPUTERS = {
     kind: 'pawn-break',
     phase: ANY,
     surfaces: {
-      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED,
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
       tactics: { not: 'a puzzle poses one tactic; a break is a plan of the game it is played in' },
       weaknesses: { not: 'a break named after it is played is graded by the move\'s own cost; its timing is breakRace\'s question (mistimed-pawn-break)' },
       think: THINK,
@@ -1132,7 +1131,7 @@ export const BOARD_COMPUTERS = {
     kind: 'opposite-bishops',
     phase: ANY,
     surfaces: {
-      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED,
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
       tactics: { not: 'a puzzle poses one tactic; the bishops are the game\'s structure' },
       weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
       think: THINK,
@@ -1158,7 +1157,7 @@ export const BOARD_COMPUTERS = {
     kind: 'plan-steps',
     phase: ANY,
     surfaces: {
-      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED,
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
       tactics: { not: 'a puzzle poses one tactic; a plan is the quiet stretch of a game' },
       weaknesses: { not: 'a plan read off the engine\'s line — no question of the student\'s posed' },
       think: THINK,
@@ -1178,7 +1177,7 @@ export const BOARD_COMPUTERS = {
     kind: 'compensation',
     phase: ANY,
     surfaces: {
-      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED,
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
       tactics: { not: 'a puzzle poses one tactic; compensation is the standing of a whole position' },
       weaknesses: { not: 'a reading of the position — no question of the student\'s posed' },
       think: THINK,

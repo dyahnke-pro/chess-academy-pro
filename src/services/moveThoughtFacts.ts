@@ -885,7 +885,9 @@ export function questionThought(asked: Omit<MoveThoughtInput, 'phrases' | 'tense
   const alt = refuted ? refutedFact(refuted, input.fenBefore, input.moverIsStudent !== false ? 'student' : 'opponent') : null;
   const purpose = purposeFact(input, voice);
   const next = reason ? nextBestFact(reason, input.fenBefore, input.moverIsStudent !== false ? 'student' : 'opponent') : null;
-  const all = [...facts, ...(alt ? [alt] : []), ...(next ? [next] : []), ...(purpose ? [purpose] : []), ...studentMoveFacts(input)];
+  // The board reads a lesson says on the move answer a question about it too
+  // (David 2026-11-17: "Learn needs to be able to answer the questions about the line").
+  const all = [...facts, ...(alt ? [alt] : []), ...(next ? [next] : []), ...(purpose ? [purpose] : []), ...studentMoveFacts(input), ...lessonBoardFacts(input)];
   // A story line about the board, not the move ("both kings are on the
   // kingside"), answers no question about a move: the lesson's thread only.
   return composeThought(all.filter((f) => groups.has(f.group) && !(f.source === 'openingStory' && !MOVE_STEPS_OF_STORY.has(f.step))), 'chat', voice, NOT_LED, null);
