@@ -240,6 +240,7 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   evalReading: 'assess',
   compensation: 'assess',
   pawnBreak: 'assess',
+  desperadoAt: 'answer-danger',
 };
 
 /** The step a computer serves, or null when no step board carries it. */

@@ -61,6 +61,7 @@ import { computeMustDefend } from './threatOut';
 import { moveOrder } from './moveOrder';
 import { readBoardAll, readKey } from './boardComputers';
 import { thinkStepOf } from './thinkingComputers';
+import { desperadoAt, desperadoLine } from './desperado';
 import type { ThinkingStep } from './thinkingSteps';
 import type { WeighRead } from './weighedMoves';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
@@ -432,6 +433,13 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       `The order matters: ${order.follow} straight away would allow ${order.answer}, which ${does}`,
     ], stemKeyOf(`${i.fenBefore}|${i.san}|order`));
     add('move-order', 'orderByThreat', 'moveGains', 'order', said, said, order.squares, 72, false, [`order-board:${order.follow}>${order.answer}`]);
+  }
+
+  // TWO PIECES HANGING: SELL THE ONE YOU CANNOT SAVE (desperado, Danya 1Rejj):
+  // the engine's best move is a capture by one of two hanging pieces.
+  {
+    const d = desperadoAt(i.fenBefore, i.san, i.reads?.before[0]?.moves[0] ?? null);
+    if (d) add('defence-idea', 'desperadoAt', 'desperado', 'rescue', desperadoLine(d, mine ? 'your' : 'their'), undefined, [d.from, d.to, d.other.square], 66, false, [`desperado:${d.from}${d.to}`]);
   }
 
   // TRANSPOSITION AND ANALOGY (gaps A7, A11): "this transposes into the

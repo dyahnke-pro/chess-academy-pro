@@ -595,6 +595,7 @@ const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
   teachingMove: 'services/pawnBreak.ts#pawnBreak',
   evalRead: 'services/reviewMoveBriefing.ts#evalReading',
   boardRead: 'services/boardComputers.ts#readBoardAll',
+  desperado: 'services/desperado.ts#desperadoAt',
 };
 
 /** Review's facet tags and the live composer's clause kinds (ONE vocabulary,

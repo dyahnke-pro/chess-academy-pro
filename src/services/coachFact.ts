@@ -465,6 +465,7 @@ export const COMPUTER_CATALOG = {
   planSteps: { file: 'services/planSteps.ts', says: 'the plan\'s next steps in the engine\'s quiet line: the mover\'s next two or three moves and what ties them (a square they line up on, a break they build to, castling to finish)' },
   evalReading: { file: 'services/reviewMoveBriefing.ts', says: 'the position\'s standing in words when a move changed it (a band change or a real swing): who is better and the board\'s reason — material, the more exposed king, a passed pawn, an isolated pawn' },
   compensation: { file: 'services/compensation.ts', says: 'who is better when one side is down material, and the board\'s reason for it: a development lead, a king left in the middle, the bishop pair, an advanced passed pawn' },
+  desperadoAt: { file: 'services/desperado.ts', says: 'two of the mover\'s pieces hanging, and the engine\'s best move sells the one that is lost anyway: it captures on its way out' },
   pawnBreak: { file: 'services/pawnBreak.ts', says: 'the pawn break and what it is for: the pawn it strikes (the base of their chain), the file it opens for the rooks, the bishop it frees' },
 } satisfies Record<string, CatalogRow>;
 
