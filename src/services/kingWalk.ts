@@ -104,6 +104,9 @@ export function castleByHand(fen: string, me: Color): CastleByHandPlan | null {
     target = sq('g', home);
     const f2 = sq('f', second);
     if (at(b, f2) && king !== f2) return null;
+    // …and the king can step there: a square their piece covers is no route
+    // (speedrun Ytkf3 12.Ke2: "the king to f2" with their bishop on c5 on it).
+    if (king !== f2 && b.attackers(f2 as Square, me === 'w' ? 'b' : 'w').length > 0) return null;
     const toF2 = king === f2 ? [] : [`the king to ${f2}`];
     steps = [...knightStep, ...toF2, ...rookStep, `the king to ${target}`];
     nextKingSquare = toF2.length ? f2 : target;

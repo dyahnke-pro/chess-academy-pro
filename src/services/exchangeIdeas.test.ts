@@ -175,6 +175,8 @@ describe('nuggets', () => {
     expect(r.text).toMatch(/knight on c3 stands in front of your c-pawn — that pawn wants to go to c4/);
     expect(cPawnBlock(fa('d4 d5 c4 e6'), 'Nc3', 'w', null)).toBeNull(); // the c-pawn already moved
     expect(cPawnBlock(fa('d4 d5'), 'Nc3', 'w', 'Nc3')).toBeNull(); // the engine's own move
+    // An e-pawn opening is no d-pawn opening (speedrun QUk: the Advance French).
+    expect(cPawnBlock('r3kb1r/pp1b1ppp/1qn1p2n/2ppP3/3P4/3B1N2/PPP2PPP/RNBQR1K1 w kq - 8 8', 'Nc3', 'w', null)).toBeNull();
   });
 });
 

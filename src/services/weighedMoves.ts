@@ -609,9 +609,11 @@ function pawnKick(fenAfter: string, sq: string, side: Color): string | null {
     if (!after) continue;
     try { after.move(m.san); } catch { continue; }
     if (!after.attackers(sq as Square, them).includes(m.to)) continue;
-    // The push must not just drop the pawn: guarded, or nothing takes it.
-    const takers = after.attackers(m.to, side);
-    if (takers.length > 0 && after.attackers(m.to, them).length === 0) continue;
+    // The push must not just drop the pawn, counted to the end of the trades
+    // (speedrun kYbh2 7.Be2: "on c4 it would be kicked by your d-pawn" —
+    // …d5 there loses the pawn, three attackers against two guards; it is
+    // the square that stops …d5).
+    if (legalSeeGainFor(after.fen(), m.to, side) >= 1) continue;
     return m.san;
   }
   return null;

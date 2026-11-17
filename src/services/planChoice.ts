@@ -107,7 +107,7 @@ export function methodRead(
   const w = findWorstPlacedPiece(chess, student);
   let worst: MethodRead['worst'] = null;
   if (w?.kind === 'no-file-rook' && w.file) {
-    worst = { phrase: `your rook on ${w.sq}, with no open file yet`, square: w.sq, step: `put a rook on the open ${w.file}-file`, to: holdPlayable && w.reach ? [] : [w.reach ?? `${w.file}${student === 'w' ? '1' : '8'}`], ...(w.reach && !holdPlayable ? { route: [w.sq, w.reach] } : {}) };
+    worst = { phrase: `your rook on ${w.sq}, still off the open ${w.file}-file`, square: w.sq, step: `put a rook on the open ${w.file}-file`, to: holdPlayable && w.reach ? [] : [w.reach ?? `${w.file}${student === 'w' ? '1' : '8'}`], ...(w.reach && !holdPlayable ? { route: [w.sq, w.reach] } : {}) };
   } else if (w) {
     const r = worstPieceRoute(fen, w.sq);
     worst = { phrase: `your ${PIECE_NOUN[w.type]} on ${w.sq}`, square: w.sq, step: r ? `walk your ${PIECE_NOUN[w.type]} to ${r.target}` : null, to: r && !holdPlayable ? [...r.route] : [], ...(r && !holdPlayable ? { route: [w.sq, ...r.route] } : {}) };

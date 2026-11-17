@@ -95,3 +95,11 @@ describe('where to put the king (his 7…Kf8: "not g6 or f6 — you\'d get mated
     expect(mateByChecks(new Chess().fen(), 3)).toBeNull();
   });
 });
+
+describe('castle by hand walks only where the king may stand', () => {
+  it('no route through a square their bishop covers (speedrun Ytkf3 12.Ke2, Bc5 on f2)', () => {
+    const fen = 'r1b1k2r/ppp1nppp/2p5/2b2P2/2B1P3/8/P1PQ2PP/qN2K2R w Kkq - 0 12';
+    expect(castleByHandMove(fen, 'Ke2', 'your')).toBeNull();
+  });
+});
+

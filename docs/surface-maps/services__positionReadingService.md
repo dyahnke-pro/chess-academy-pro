@@ -300,7 +300,7 @@
 - `src/services/orderByThreat.ts:110`
 - `src/services/prophylaxis.ts:105`
 
-### `legalSeeGainFor` (function) — 122 call sites
+### `legalSeeGainFor` (function) — 123 call sites
 - `src/coach/focus/castlingWatch.ts:159`
 - `src/coach/focus/castlingWatch.ts:161`
 - `src/coach/focus/focusChances.ts:388`
@@ -422,7 +422,8 @@
 - `src/services/threatAnswer.ts:220`
 - `src/services/tiedDefender.ts:45`
 - `src/services/tiedDefender.ts:52`
-- `src/services/weighedMoves.ts:682`
+- `src/services/weighedMoves.ts:616`
+- `src/services/weighedMoves.ts:684`
 
 ### `asIfToMove` (function) — 27 call sites
 - `src/coach/focus/focusChances.ts:306`
@@ -677,8 +678,8 @@
 - `src/services/reviewFullData.ts:1170`
 
 ### `pieceScope` (function) — 2 call sites
-- `src/services/nextPlans.ts:231`
-- `src/services/nextPlans.ts:235`
+- `src/services/nextPlans.ts:233`
+- `src/services/nextPlans.ts:237`
 
 ### `findXrays` (function) — 7 call sites
 - `src/services/danyaBehaviors.ts:826`

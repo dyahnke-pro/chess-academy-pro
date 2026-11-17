@@ -773,11 +773,14 @@ export function cPawnBlock(fenBefore: string, san: string, student: Side, bestSa
   const at = (sq: string): { type: string; color: string } | null => c.get(sq as Square) ?? null;
   const ownD = at(w ? 'd4' : 'd5'); const theirD = at(w ? 'd5' : 'd4');
   const cPawn = at(w ? 'c2' : 'c7');
-  const ownE4 = at(w ? 'e4' : 'e5');
+  // A D-PAWN OPENING: the e-pawn has not gone two squares. An e-pawn on e4 or
+  // e5 is an e-pawn opening (speedrun QUk: the Advance French, e4–e5, said
+  // "in a d-pawn opening" while White's c-pawn goes to c3).
+  const ownEs = (w ? ['e4', 'e5', 'e6'] : ['e5', 'e4', 'e3']).map((s2) => at(s2));
   if (!ownD || ownD.type !== 'p' || ownD.color !== student) return null;
   if (!theirD || theirD.type !== 'p' || theirD.color === student) return null;
   if (!cPawn || cPawn.type !== 'p' || cPawn.color !== student) return null;
-  if (ownE4 && ownE4.type === 'p' && ownE4.color === student) return null;
+  if (ownEs.some((p) => p && p.type === 'p' && p.color === student)) return null;
   const cTarget = w ? 'c4' : 'c5';
   const text = `In a d-pawn opening the knight on ${blockSq} stands in front of your c-pawn — that pawn wants to go to ${cTarget} first and hit their centre.`;
   const sq = [blockSq, w ? 'c2' : 'c7', cTarget, w ? 'd5' : 'd4'];

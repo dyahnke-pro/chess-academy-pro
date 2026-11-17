@@ -25,7 +25,7 @@ describe('planThread — stated once, stopped with its proof', () => {
     expect(withoutTags(line)).toMatch(/^How do you find a plan\? .* ‖ Checks, captures, threats: [^.]*\. Their weakness: their king, still on f8\./);
     // THE ANSWERS ARE THE PLAN (David 2026-10-15: "That doesn't line up"):
     // the worst piece's step, then the weakness's — never an unrelated pick.
-    expect(line).toMatch(/Your worst piece: your rook on a1, with no open file yet\./);
+    expect(line).toMatch(/Your worst piece: your rook on a1, still off the open e-file\./);
     expect(line).toMatch(/So the plan: put a rook on the open e-file\. Attack their king on f8 before it gets out\. Why that target\? With the centre opening, it can be attacked before it reaches safety\.$/);
     const second = planThreadTurn(t, { ply: 24, fenBefore: KING_F8, fenAfter: after(KING_F8, 'Kg8'), student: 'w', holdPlayable: false, studentBestUci: null });
     expect(second[0].text).toBe('Their king stepped to g8, out of the open centre — the attack on it is off. That plan is off.');

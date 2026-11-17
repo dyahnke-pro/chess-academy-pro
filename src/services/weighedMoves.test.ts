@@ -299,3 +299,12 @@ describe('two moves of the same worth in a lost game hold nothing', () => {
     expect(alsoGood({ fenBefore: fen, san: 'Nh5', student: 'b', rating: 1500, reads })).toBeNull();
   });
 });
+
+describe('a kick that loses the pawn is no kick', () => {
+  it('speedrun kYbh2 7.Be2: …d5 drops the pawn, so c4 is no square the bishop is kicked from', () => {
+    const fen = 'r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 4 7';
+    const t = squareChoice({ fenBefore: fen, san: 'Be2', student: 'b', rating: 700, reads: null, priorMove: null, beaten: null, namesStudentMoves: false })?.text ?? '';
+    expect(t).not.toMatch(/kicked by your d-pawn/);
+  });
+});
+

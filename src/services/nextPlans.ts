@@ -186,11 +186,13 @@ export function findWorstPlacedPiece(
 
 /** The reason a worst piece is the worst, as a predicate after "the knight on
  *  a5" — the one wording every reader says it with. */
-export function worstReason(w: Pick<WorstPiece, 'kind' | 'm'>): string {
+export function worstReason(w: Pick<WorstPiece, 'kind' | 'm' | 'file'>): string {
   switch (w.kind) {
     case 'rim-knight': return 'is stuck on the rim';
     case 'bad-bishop': return 'is hemmed in behind its own pawns';
-    case 'no-file-rook': return 'has no open file yet';
+    // The file IS open — the rook is not on it (speedrun 4T9: "your rook on a8,
+    // with no open file yet. So the plan: put a rook on the open c-file").
+    case 'no-file-rook': return w.file ? `is still off the open ${w.file}-file` : 'is still off the open file';
     default: return reachWords(w.m);
   }
 }
