@@ -68,6 +68,7 @@
 - `src/services/guardRemoval.ts`
 - `src/services/holdResource.ts`
 - `src/services/inaccuracyCall.ts`
+- `src/services/intoTheirCamp.ts`
 - `src/services/isolatedOneOwner.test.ts`
 - `src/services/kickMap.ts`
 - `src/services/kingAttackReads.ts`
@@ -379,6 +380,8 @@
 - `src/services/guardRemoval.ts:139`
 - `src/services/guardRemoval.ts:155`
 - `src/services/guardRemoval.ts:160`
+- `src/services/intoTheirCamp.ts:163`
+- `src/services/intoTheirCamp.ts:200`
 - `src/services/kickMap.ts:47`
 - `src/services/kickMap.ts:54`
 - `src/services/kingAttackReads.ts:147`
@@ -759,9 +762,10 @@
 - `src/services/positionReadingService.test.ts:821`
 - `src/services/positionReadingService.test.ts:824`
 
-### `findRookLift` (function) — 6 call sites
+### `findRookLift` (function) — 7 call sites
 - `src/services/danyaBehaviors.ts:845`
 - `src/services/groundedAnswer.ts:6979`
+- `src/services/intoTheirCamp.ts:220`
 - `src/services/positionReadingService.test.ts:827`
 - `src/services/positionReadingService.test.ts:830`
 - `src/services/rookLiftPinned.test.ts:5`

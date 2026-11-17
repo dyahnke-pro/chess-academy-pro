@@ -73,6 +73,7 @@ import { allowedClause, costReason } from './costReason';
 import { moveThreat } from './moveThreat';
 import type { AnalysisLine } from '../types';
 import { gambitIdea } from './gambitIdea';
+import { campIdea } from './intoTheirCamp';
 
 export interface MoveThoughtInput {
   fenBefore: string;
@@ -810,6 +811,12 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // per candidate the weighing reads (`weighReads`).
     for (const f of readBoardAll('flexibleMove', { fenBefore: i.fenBefore, san: i.san, student, reads: weighReads })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'order', weight: 52 });
+    }
+    // Getting into their camp, both seats (Danya's speedruns): a piece gets in
+    // and hits what they cannot keep, the rooks on the seventh, a rook lift or
+    // swing, the rooks connected — or still cut off on move 12.
+    for (const f of readBoardAll('intoTheirCamp', { fenBefore: i.fenBefore, san: i.san, student })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: campIdea(f.claims[0] ?? ''), weight: 58 });
     }
     // What the pawn move did to the lines through its squares, the piece at a
     // chain's base, the pawn guard pinned to its king (S4 pawns).

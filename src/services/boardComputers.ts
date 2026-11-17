@@ -73,6 +73,7 @@ import { queenNet, queenNetLine } from './queenNet';
 import { bothSaved, bothSavedLine, type ReplyLine } from './bothSaved';
 import { perpetualCheck, perpetualStartedBy, perpetualLine, winningAnyway, windmill, windmillStartedBy, windmillLine } from './repeatingChecks';
 import { minorMatchup } from './minorMatchup';
+import { intoTheirCamp, intoTheirCampLine } from './intoTheirCamp';
 import { flexibleMove, flexibleMoveLine, flexibleMoveSquares } from './flexibleMove';
 import { pawnCutsGuard, type PawnLineRead } from './pawnLines';
 import { chainBase } from './chainBase';
@@ -298,6 +299,12 @@ export interface BoardContexts {
    *  the closed board and the outpost, or the open board for the bishop — or
    *  that leaves a bishop the wrong colour for its rook's pawn. */
   minorMatchup: { fenBefore: string; san: string; student: Color };
+  /** GETTING INTO THEIR CAMP (`intoTheirCamp`, Danya's speedruns): the move
+   *  `san` on `fenBefore` (either seat) gets a piece into their half and hits
+   *  what they cannot keep, puts the rooks on the seventh, lifts or swings a
+   *  rook toward their king, connects the rooks — or, on move 12, leaves them
+   *  still cut off. */
+  intoTheirCamp: { fenBefore: string; san: string; student: Color };
   /** THE FLEXIBLE MOVE (`flexibleMove`, the option principle): the move `san`
    *  on `fenBefore` (either seat) against the moves the engine holds near the
    *  best. `reads`: the engine's lines from the board before the move, one per
@@ -1591,6 +1598,30 @@ export const BOARD_COMPUTERS = {
       learn: { not: 'owed — not in the Learn turn door yet (CoachTeachPage reads none of its lanes); the composer and Review say it' },
       tactics: { not: 'a puzzle poses one tactic; the minors\' matchup is the game\'s structure' },
       weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
+    },
+  },
+  intoTheirCamp: {
+    // His "you infiltrate with the rook to d7", "you reach the seventh",
+    // "you lift the rook to f3", "the queen to d2, connecting the rooks".
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const x = intoTheirCamp(fenBefore, san);
+      if (!x) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mine = new Chess(fenBefore).turn() === student;
+      const text = intoTheirCampLine(x, mine ? 'your' : 'their', fenAfter);
+      // One claim with the structure read's doubled seventh, so a turn says it once.
+      const claims = x.kind === 'seventh-doubled' ? [x.key] : [x.key, `camp:${x.kind}:${x.moved.to}`];
+      return fact({ key: x.key, claims, text, proof: squaresProof(text, x.squares) ?? NO_PROOF.description, squares: x.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'intoTheirCamp',
+    kind: 'move-job',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: { not: 'owed — not in the Learn turn door yet (CoachTeachPage reads none of its lanes); the composer and Review say it' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
     },
   },
   flexibleMove: {
