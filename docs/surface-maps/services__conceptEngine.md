@@ -51,11 +51,11 @@
 - `src/data/endgame-side-correctness.test.ts:51`
 - `src/data/grounding/groundingLib.ts:56`
 - `src/data/groundingMistakes.test.ts:38`
-- `src/services/boardComputers.ts:449`
-- `src/services/boardComputers.ts:1856`
-- `src/services/boardComputers.ts:1874`
-- `src/services/boardComputers.ts:1890`
-- `src/services/boardComputers.ts:1908`
+- `src/services/boardComputers.ts:455`
+- `src/services/boardComputers.ts:1886`
+- `src/services/boardComputers.ts:1904`
+- `src/services/boardComputers.ts:1920`
+- `src/services/boardComputers.ts:1938`
 - `src/services/conceptEngine.test.ts:19`
 - `src/services/conceptEngine.test.ts:20`
 - `src/services/groundedMoveWhy.ts:83`
@@ -225,7 +225,7 @@
 - `src/services/narratedContinuation.test.ts:20`
 - `src/services/opponentMoveReads.ts:447`
 - `src/services/pieceValues.ts:46`
-- `src/services/positionReadingService.ts:1828`
+- `src/services/positionReadingService.ts:1853`
 - `src/services/practicalReads.ts:31`
 - `src/services/sideMaterial.test.ts:12`
 - `src/services/tradeWords.ts:36`

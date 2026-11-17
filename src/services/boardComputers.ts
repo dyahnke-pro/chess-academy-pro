@@ -83,6 +83,7 @@ import { castlingTakenAway } from './castlingTakenAway';
 import { castlingWing } from './castlingWing';
 import { pieceMovedAgain } from './pieceMovedAgain';
 import { queenChased, queenChasedLine } from './queenChased';
+import { blockade, blockadeLine } from './blockade';
 import { tradeOfferAt, tradeOfferLine } from './tradeOffer';
 import { fileTradeAt, fileTradeLine } from './fileTrade';
 import { pawnEndingTradeAt, pawnEndingTradeLine } from './pawnEndingTrade';
@@ -342,6 +343,11 @@ export interface BoardContexts {
    *  move from the start, ending on `fenBefore`) hits the other side's early
    *  queen with tempo in the first twelve moves, either seat. */
   queenChased: { history: readonly string[]; fenBefore: string; san: string; student: Color };
+  /** THE BLOCKADE (`blockade`, Danya's "a blockading knight on d5"): the move
+   *  `san` on `fenBefore` (either seat) puts a piece directly in front of an
+   *  enemy passed or isolated pawn, or walks the blockader of a passed pawn
+   *  away. */
+  blockade: { fenBefore: string; san: string; student: Color };
   /** THE TRADES (Danya speedruns, S4 trades): the move `san` on `fenBefore`
    *  (either seat), with the engine's cost of it for its mover (`costCp`) and
    *  its score after it from the mover's seat (`afterCp`) — a quiet offer of
@@ -1849,6 +1855,30 @@ export const BOARD_COMPUTERS = {
       tactics: TACTICS_NA,
       weaknesses: { not: 'the record half is principleAttribution\'s early-queen-sortie on the student\'s own queen move' },
       think: { not: 'it counts the queen\'s trips across the game\'s moves; a step board is one position' },
+    },
+  },
+  // His "you already have the dream: a blockading knight on d5" and "Black
+  // throws the rook to b8 to blockade the pawn" — and the blockader that
+  // walks away. Both seats.
+  blockade: {
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const b = blockade(fenBefore, san);
+      if (!b) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mine = b.side === student;
+      const text = blockadeLine(b, mine ? 'your' : 'their', fenAfter);
+      const squares = [b.square, b.pawn];
+      return fact({ key: b.key, claims: [b.key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'blockade',
+    kind: 'judgement',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: S4_LEARN_OWED,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
     },
   },
   tradeOffer: {

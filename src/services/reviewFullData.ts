@@ -1667,6 +1667,9 @@ export function computeMoveFacets(
       add(readBoardAll('oppositeBishops', { fenBefore, san, student: studentColorWB })[0]);
       // Knight against bishop made by this move, and which minor is better.
       add(readBoardAll('minorMatchup', { fenBefore, san, student: studentColorWB })[0]);
+      // A piece in front of a passed or isolated pawn, or the blockader of a
+      // passer walking away, both seats.
+      add(readBoardAll('blockade', { fenBefore, san, student: studentColorWB })[0]);
       // What the pawn move did to the lines through its squares, and a piece
       // at a chain's base or a pinned pawn guard (S4 pawns), both seats.
       add(readBoardAll('pawnCutsGuard', { fenBefore, san, student: studentColorWB })[0]);
