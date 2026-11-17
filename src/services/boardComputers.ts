@@ -67,6 +67,11 @@ import { openingTheoryFacts } from './openingTheory';
 import { moveStops } from './moveStops';
 import { pieceOutFirst } from './pieceOutFirst';
 import { lineCut } from './lineCut';
+import { tradeOfferAt, tradeOfferLine } from './tradeOffer';
+import { fileTradeAt, fileTradeLine } from './fileTrade';
+import { pawnEndingTradeAt, pawnEndingTradeLine } from './pawnEndingTrade';
+import { tradeKeptAt, tradeKeptLine, type TradeKeptInput } from './tradeKept';
+import type { AnalysisLine } from '../types';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses' | 'think';
 
@@ -235,6 +240,19 @@ export interface BoardContexts {
    *  seat), with the board reason that pays for it. `line`: the engine's line
    *  from `fenAfter` (UCI) — a capture or check next is a trade still going. */
   compensation: { fenAfter: string; student: Color; studentCp: number; line: readonly string[] };
+  /** THE TRADES (Danya speedruns, S4 trades): the move `san` on `fenBefore`
+   *  (either seat), with the engine's cost of it for its mover (`costCp`) and
+   *  its score after it from the mover's seat (`afterCp`) — a quiet offer of
+   *  an even trade while ahead. */
+  tradeOffer: { fenBefore: string; san: string; student: Color; costCp: number | null; afterCp: number | null };
+  /** A rook trade for an open file: the challenge, or the trade that hands
+   *  the file over. `line`: the engine's line after the move (uci). */
+  fileTrade: { fenBefore: string; san: string; student: Color; costCp: number | null; line: readonly string[] | null };
+  /** The trade into a won king-and-pawn ending, along the engine's line after
+   *  the move (`after`, the opponent to move). */
+  pawnEndingTrade: { fenBefore: string; san: string; student: Color; costCp: number | null; after: AnalysisLine | null };
+  /** An even trade on offer kept off the board, with the board's reason. */
+  tradeKept: TradeKeptInput & { student: Color };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -305,6 +323,11 @@ function safe<T>(f: () => T | null): T | null {
   try { return f(); } catch { return null; }
 }
 
+/** The side to move on `fen`. */
+function sideToMove(fen: string): Color {
+  return fen.split(' ')[1] === 'b' ? 'b' : 'w';
+}
+
 /** The board after one move, or null when it does not play there. */
 function boardAfter(fen: string, san: string): string | null {
   try { const b = new Chess(fen); b.move(san); return b.fen(); } catch { return null; }
@@ -346,6 +369,19 @@ function knownSlipFact(r: ReturnType<typeof knownSlip>, fen: string, fact: MakeF
   return fact({ key: r.key, claims: [r.key], text: r.text, proof: r.proof, squares: r.squares, stakes: r.stakes, seat: r.seat,
     namesStudentMove: r.namesStudentMove, thread: LOCAL_THREAD, fen, role: 'teach', ...(r.proof.line ? { lines: [r.proof.line] } : {}), ...(r.heldForm ? { heldForm: r.heldForm } : {}) });
 }
+
+/** THE TRADE COMPUTERS' SURFACES (S4 trades): each reads the engine lines
+ *  around one move, which the move composer has on every surface it serves. */
+const TRADE_SURFACES: Record<CoachSurface, SurfaceAnswer> = {
+  lesson: { wired: 'services/moveThoughtFacts.ts' },
+  learn: { not: 'owed: each reads the engine lines around the move (the cost, the lines before it, the line after), and Learn\'s door reads its history-only rows' },
+  review: { wired: 'services/moveThoughtFacts.ts' },
+  play: PLAY_ASK,
+  chat: CHAT_VIA_THOUGHT,
+  tactics: { not: 'a puzzle poses one tactic; a trade is a game move\'s choice' },
+  weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+  think: THINK,
+};
 
 export const BOARD_COMPUTERS = {
   pinBreakOwn: {
@@ -1183,6 +1219,73 @@ export const BOARD_COMPUTERS = {
       weaknesses: { not: 'a reading of the position — no question of the student\'s posed' },
       think: THINK,
     },
+  },
+  tradeOffer: {
+    read: ({ fenBefore, san, student, costCp, afterCp }, fact) => safe(() => {
+      const mine = sideToMove(fenBefore) === student;
+      const o = tradeOfferAt(fenBefore, san, costCp, afterCp, mine);
+      if (!o) return null;
+      const text = tradeOfferLine(o, mine, fenBefore);
+      const squares = [o.square, o.facing.square];
+      const key = `offer:${o.square}${o.facing.square}`;
+      return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore, role: 'teach' });
+    }),
+    computer: 'tradeOfferAt',
+    kind: 'trade',
+    phase: ANY,
+    surfaces: TRADE_SURFACES,
+  },
+  fileTrade: {
+    read: ({ fenBefore, san, student, costCp, line }, fact) => safe(() => {
+      const t = fileTradeAt(fenBefore, san, costCp, line);
+      if (!t) return null;
+      const mine = sideToMove(fenBefore) === student;
+      const text = fileTradeLine(t, mine, fenBefore);
+      const squares = t.kind === 'challenge' ? [t.rook, t.facing.square] : [t.on, t.next.from, t.next.to];
+      const key = `file:${t.file}`;
+      return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore, role: 'teach' });
+    }),
+    computer: 'fileTradeAt',
+    kind: 'trade',
+    phase: ANY,
+    surfaces: TRADE_SURFACES,
+  },
+  pawnEndingTrade: {
+    read: ({ fenBefore, san, student, costCp, after }, fact) => safe(() => {
+      const t = pawnEndingTradeAt(fenBefore, san, after, costCp);
+      if (!t) return null;
+      const mine = sideToMove(fenBefore) === student;
+      const text = pawnEndingTradeLine(t, mine, fenBefore);
+      // One claim a game: the next trade on the way into the same ending is
+      // the same idea.
+      const key = 'pawn-ending';
+      return fact({ key, claims: [`trade:${key}`], text, proof: squaresProof(text, t.squares) ?? NO_PROOF.description, squares: t.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore, role: 'teach',
+        lines: [{ fen: fenBefore, sans: t.sans }] });
+    }),
+    computer: 'pawnEndingTradeAt',
+    kind: 'trade',
+    phase: ANY,
+    surfaces: TRADE_SURFACES,
+  },
+  tradeKept: {
+    read: (ctx, fact) => safe(() => {
+      const k = tradeKeptAt(ctx);
+      if (!k) return null;
+      const mine = sideToMove(ctx.fenBefore) === ctx.student;
+      const text = tradeKeptLine(k, mine, ctx.fenBefore);
+      const r = k.reason;
+      const squares = [k.trade.from, k.trade.to, ...(r.kind === 'guard' ? [r.guarded.square, r.by.square] : r.kind === 'pressure' ? r.squares : [])];
+      const key = `kept:${k.trade.from}${k.trade.to}:${r.kind}`;
+      return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(ctx.fenBefore, ctx.san) ?? ctx.fenBefore, role: 'teach' });
+    }),
+    computer: 'tradeKeptAt',
+    kind: 'capture-choice',
+    phase: ANY,
+    surfaces: TRADE_SURFACES,
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };
 

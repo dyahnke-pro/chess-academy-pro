@@ -454,6 +454,29 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     if (e) add('method', 'emptyCheckAt', 'emptyCheck', 'check', emptyCheckLine(e, mine ? 'your' : 'their', i.fenBefore), undefined, e.squares, 58, false, [`empty-check:${e.squares.join('')}`]);
   }
 
+  // THE TRADES (Danya speedruns, S4): the even trade offered while ahead, the
+  // rook trade for an open file, the trade into a won pawn ending, and the
+  // trade on offer kept off the board for a reason the board proves — each
+  // read off the engine lines around the move, through the one registry.
+  if (i.reads) {
+    const mover = sideOf(i.fenBefore);
+    const studentWB: 'w' | 'b' = mine ? mover : mover === 'w' ? 'b' : 'w';
+    const a0: AnalysisLine | null = i.reads.after.length > 0 ? i.reads.after[0] : null;
+    const afterCp = a0 ? (a0.mate != null ? (a0.mate > 0 ? 1 : -1) * MATE_EVAL_VALUE : a0.evaluation) * (mover === 'w' ? 1 : -1) : null;
+    const priorMove = (() => {
+      if (!i.theirLast) return null;
+      try { const m = new Chess(i.theirLast.fenBefore).move(i.theirLast.san); return { to: m.to, captured: m.captured ?? null }; } catch { return null; }
+    })();
+    const base = { fenBefore: i.fenBefore, san: i.san, student: studentWB, costCp: i.costCp };
+    const trades = [
+      ...readBoardAll('tradeOffer', { ...base, afterCp }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 64 })),
+      ...readBoardAll('fileTrade', { ...base, line: a0?.moves ?? null }).map((f) => ({ f, idea: 'file' as IdeaKind, weight: 66 })),
+      ...readBoardAll('pawnEndingTrade', { ...base, after: a0 }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 70 })),
+      ...readBoardAll('tradeKept', { fenBefore: i.fenBefore, san: i.san, student: studentWB, before: i.reads.before, priorMove, theirLast: i.theirLast }).map((f) => ({ f, idea: 'choice' as IdeaKind, weight: 58 })),
+    ];
+    for (const { f, idea, weight } of trades) facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea, weight });
+  }
+
   // TRANSPOSITION AND ANALOGY (gaps A7, A11): "this transposes into the
   // Exchange French"; "a reversed Sicilian", "an Alekhine with c3 and c5
   // thrown in". Every name is a real DB position (the offline index).

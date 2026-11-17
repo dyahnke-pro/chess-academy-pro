@@ -467,6 +467,10 @@ export const COMPUTER_CATALOG = {
   compensation: { file: 'services/compensation.ts', says: 'who is better when one side is down material, and the board\'s reason for it: a development lead, a king left in the middle, the bishop pair, an advanced passed pawn' },
   emptyCheckAt: { file: 'services/emptyCheck.ts', says: 'a check that cost half a pawn and is answered by a block or a king step: the checking piece has to move again' },
   desperadoAt: { file: 'services/desperado.ts', says: 'two of the mover\'s pieces hanging, and the engine\'s best move sells the one that is lost anyway: it captures on its way out' },
+  tradeOfferAt: { file: 'services/tradeOffer.ts', says: 'a quiet queen, bishop or knight move that offers an even trade while the mover is ahead: every trade brings the won ending closer' },
+  fileTradeAt: { file: 'services/fileTrade.ts', says: 'a rook trade for an open file: the challenge (trade, it is even; step off, the file is the mover\'s) or the trade that hands the file to the mover\'s other rook or queen' },
+  pawnEndingTradeAt: { file: 'services/pawnEndingTrade.ts', says: 'a capture that trades the last pieces, along the engine\'s line, into a king-and-pawn ending the mover is pawns up and winning' },
+  tradeKeptAt: { file: 'services/tradeKept.ts', says: 'an even trade on offer that the move kept off the board, with the board\'s reason: the piece guards a man, presses the king, the mover is behind, or the offered piece threatens nothing' },
   pawnBreak: { file: 'services/pawnBreak.ts', says: 'the pawn break and what it is for: the pawn it strikes (the base of their chain), the file it opens for the rooks, the bishop it frees' },
 } satisfies Record<string, CatalogRow>;
 

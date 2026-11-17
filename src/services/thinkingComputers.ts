@@ -241,6 +241,10 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   compensation: 'assess',
   pawnBreak: 'assess',
   desperadoAt: 'answer-danger',
+  tradeOfferAt: 'assess',
+  fileTradeAt: 'assess',
+  pawnEndingTradeAt: 'assess',
+  tradeKeptAt: 'candidates',
   emptyCheckAt: 'is-my-move-safe',
 };
 
