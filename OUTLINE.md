@@ -21,6 +21,20 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000zg. WO-SPEEDRUN-01 — 20 Danya speedrun games against the app, every coach surface on one door (David 2026-11-17, PLAN.md)
+- ✅ S0a real-app tapes: Review 20/20 games, Learn 18/20 (two Black-seat 1.e3 games re-running)
+- 🟠 S0b regrade of the 764 teaching points on both surfaces (Review done on the old build; Learn owed; both re-run on the fixed build)
+- ✅ S1 How to think reads the one registry (`THINK_STEP`, gate + CLAUDE.md rule)
+- 🟠 S1b every surface on the one door: ✅ the registry's stale chat answers corrected (7 were wired through `questionThought` and marked owed); 🟠 lessons' 11 owed reads (need per-computer "did the move do it" gating, bench-measured); 🟠 Tactics/My Mistakes/Calculation explainers into the registry — measured first: the tied-defender read fires on 4 of 400 deflection puzzles, all off-target, so it stays out; Weaknesses 13 owed
+- ✅ S2 ~35 false lines fixed at their producers (passer, take-back retaken, queen trade, f-file king, missed stop, give-back capture line, "asks", trapped rescue, fork traded off, tempo kick, rim-knight read deleted, bishop pair handed, move order reads checks: "…e5 at once allows Bb5+")
+- ✅ S2b one "does that move just drop something" helper (`bestCaptureGainFor`): three private copies merged; the wants reader (pins, forks, kicks) uses it
+- ✅ new computers in the human voice (desperado, empty check: rotated, piece-led, no move name in Learn)
+- 🟠 S3 wire the quiet computers to say the teaching point (driven by the regrade)
+- 🟠 S4 the missing computers (17 groups)
+- 🟠 S5 beginner register chosen by the record
+- 🟠 S6 rebuild tapes, regrade, bench, ship-check, main, prod audits
+- 🟠 David's call: show the opponent's failed tactic ("Bg5 looks like a pin, but drops the knight") in Review and lessons, not in Learn
+
 ## 000zf. WO-OPENINGS-REWRITE-01 — every opening tab rewritten, one computed beat a move; Levy's taught lines (David 2026-11-11, PLAN.md)
 - ✅ R1 fact sheets per move (masters, engine at fixed depth, board facts, notes); beats written by hand from them (docs/OPENING-WATCH-BEATS.md)
 - 🟠 R2 one-beat-a-move gate ✅ (810 of 819 lessons in a shrink-only baseline); per-tab plan/model/trap census owed

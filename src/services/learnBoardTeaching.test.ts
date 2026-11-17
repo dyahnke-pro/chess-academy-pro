@@ -199,7 +199,9 @@ describe('a target is named with its owner', () => {
     // …gxf6 takes the pawn straight back, so it "hits" nothing on g7 (task
     // 172: a claim made before the exchange is finished). What the capture
     // leaves on the board is said instead — still with its owner.
-    expect(point?.text).toBe('The capture means your h-pawn is isolated now — a target with no neighbor to defend it.');
+    // CORRECTED 2026-11-17: after gxf6 the g7 pawn still stands beside h7, so
+    // the h-pawn is isolated only once …gxf6 takes back — "now" was false.
+    expect(point?.text).toBe('Once you take back, your h-pawn is isolated — a target with no neighbor to defend it.');
     expect(point?.text).not.toMatch(/the pawn on g7/);
   });
 });

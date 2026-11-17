@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**104 lines · 2 exports · 4 importers · 2 tests · 0 audits**
+**109 lines · 2 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,39 +27,39 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/capabilityEvidence.lane.test.ts:40`
 - `src/services/capabilityEvidence.lane.test.ts:49`
 - `src/services/learnBoardTeaching.namedStep.test.ts:9`
-- `src/services/learnBoardTeaching.ts:214`
-- `src/services/learnBoardTeaching.ts:229`
-- `src/services/learnBoardTeaching.ts:230`
-- `src/services/learnBoardTeaching.ts:238`
-- `src/services/learnBoardTeaching.ts:246`
-- `src/services/learnBoardTeaching.ts:257`
-- `src/services/learnBoardTeaching.ts:274`
-- `src/services/learnBoardTeaching.ts:282`
-- `src/services/learnBoardTeaching.ts:287`
-- `src/services/learnBoardTeaching.ts:289`
-- `src/services/learnBoardTeaching.ts:294`
+- `src/services/learnBoardTeaching.ts:224`
+- `src/services/learnBoardTeaching.ts:239`
+- `src/services/learnBoardTeaching.ts:240`
+- `src/services/learnBoardTeaching.ts:248`
+- `src/services/learnBoardTeaching.ts:256`
+- `src/services/learnBoardTeaching.ts:267`
+- `src/services/learnBoardTeaching.ts:284`
+- `src/services/learnBoardTeaching.ts:292`
 - `src/services/learnBoardTeaching.ts:297`
+- `src/services/learnBoardTeaching.ts:299`
 - `src/services/learnBoardTeaching.ts:304`
-- `src/services/learnBoardTeaching.ts:320`
-- `src/services/learnBoardTeaching.ts:331`
-- `src/services/learnBoardTeaching.ts:354`
-- `src/services/learnBoardTeaching.ts:375`
-- `src/services/learnBoardTeaching.ts:394`
-- `src/services/learnBoardTeaching.ts:410`
-- `src/services/learnBoardTeaching.ts:429`
-- `src/services/learnBoardTeaching.ts:490`
-- `src/services/learnBoardTeaching.ts:515`
-- `src/services/learnBoardTeaching.ts:534`
-- `src/services/learnBoardTeaching.ts:548`
-- `src/services/learnBoardTeaching.ts:561`
-- `src/services/learnBoardTeaching.ts:577`
-- `src/services/learnBoardTeaching.ts:818`
-- `src/services/learnBoardTeaching.ts:985`
-- `src/services/learnBoardTeaching.ts:993`
-- `src/services/learnBoardTeaching.ts:1054`
-- `src/services/learnBoardTeaching.ts:1087`
-- `src/services/learnBoardTeaching.ts:1245`
-- `src/services/learnBoardTeaching.ts:1270`
+- `src/services/learnBoardTeaching.ts:307`
+- `src/services/learnBoardTeaching.ts:314`
+- `src/services/learnBoardTeaching.ts:330`
+- `src/services/learnBoardTeaching.ts:341`
+- `src/services/learnBoardTeaching.ts:364`
+- `src/services/learnBoardTeaching.ts:385`
+- `src/services/learnBoardTeaching.ts:404`
+- `src/services/learnBoardTeaching.ts:420`
+- `src/services/learnBoardTeaching.ts:439`
+- `src/services/learnBoardTeaching.ts:500`
+- `src/services/learnBoardTeaching.ts:525`
+- `src/services/learnBoardTeaching.ts:544`
+- `src/services/learnBoardTeaching.ts:558`
+- `src/services/learnBoardTeaching.ts:571`
+- `src/services/learnBoardTeaching.ts:587`
+- `src/services/learnBoardTeaching.ts:844`
+- `src/services/learnBoardTeaching.ts:1013`
+- `src/services/learnBoardTeaching.ts:1021`
+- `src/services/learnBoardTeaching.ts:1089`
+- `src/services/learnBoardTeaching.ts:1126`
+- `src/services/learnBoardTeaching.ts:1291`
+- `src/services/learnBoardTeaching.ts:1316`
 - `src/services/orderTeaching.ts:60`
 - `src/services/orderTeaching.ts:67`
 - `src/services/orderTeaching.ts:80`

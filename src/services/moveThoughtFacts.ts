@@ -434,7 +434,9 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       `Why not ${order.follow} first? It would allow ${order.answer}, which ${does}`,
       `The order matters: ${order.follow} straight away would allow ${order.answer}, which ${does}`,
     ], stemKeyOf(`${i.fenBefore}|${i.san}|order`));
-    add('move-order', 'orderByThreat', 'moveGains', 'order', said, said, order.squares, 72, false, [`order-board:${order.follow}>${order.answer}`]);
+    // ONE CLAIM WITH THE STOP ON THE SAME REPLY: "it stops …c4" and "Re1 at
+    // once would allow …c4" are one idea (colle800 16.e5) — the stop says it.
+    add('move-order', 'orderByThreat', 'moveGains', 'order', said, said, order.squares, 72, false, [`order-board:${order.follow}>${order.answer}`, `stops:${order.answer}`]);
   }
 
   // TWO PIECES HANGING: SELL THE ONE YOU CANNOT SAVE (desperado, Danya 1Rejj):

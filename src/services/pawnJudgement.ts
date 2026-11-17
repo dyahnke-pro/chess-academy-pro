@@ -120,6 +120,7 @@ export function fixOnBishopColour(fenBefore: string, san: string, student: Color
   return {
     act: 'fix-on-bishop-colour', squares: [r.mv.to, y, myBishop], proof, key: `fix-colour:${y}`,
     text: `${subject} freezes their ${y} pawn on ${withArticle(shade(y))} square, where your bishop can go after it${theirsGone ? ', and they have no bishop of that colour to guard it' : ''}.`,
+    alsoText: `It also freezes their ${y} pawn on ${withArticle(shade(y))} square, where your bishop can go after it${theirsGone ? ', and they have no bishop of that colour to guard it' : ''}.`,
   };
 }
 

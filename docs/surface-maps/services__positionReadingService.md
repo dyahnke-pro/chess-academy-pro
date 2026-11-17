@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2787 lines · 77 exports · 138 importers · 28 tests · 2 audits**
+**2806 lines · 78 exports · 138 importers · 28 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -294,7 +294,13 @@
 - `src/services/principleAttribution.ts:359`
 - `src/services/principleAttribution.ts:860`
 
-### `legalSeeGainFor` (function) — 123 call sites
+### `bestCaptureGainFor` (function) — 4 call sites
+- `src/services/causalChain.ts:734`
+- `src/services/orderByThreat.ts:76`
+- `src/services/orderByThreat.ts:110`
+- `src/services/prophylaxis.ts:105`
+
+### `legalSeeGainFor` (function) — 122 call sites
 - `src/coach/focus/castlingWatch.ts:159`
 - `src/coach/focus/castlingWatch.ts:161`
 - `src/coach/focus/focusChances.ts:388`
@@ -326,7 +332,6 @@
 - `src/services/boardState.ts:42`
 - `src/services/captureLeadsTo.ts:30`
 - `src/services/causalChain.ts:45`
-- `src/services/causalChain.ts:721`
 - `src/services/checkIsNotAGuard.test.ts:39`
 - `src/services/computedMaterialTruth.corpus.test.ts:120`
 - `src/services/computedMaterialTruth.corpus.test.ts:145`
@@ -371,8 +376,8 @@
 - `src/services/nextPlans.ts:57`
 - `src/services/notYetPlayed.ts:66`
 - `src/services/openingSlip.ts:125`
-- `src/services/orderByThreat.ts:43`
-- `src/services/pawnJudgement.ts:302`
+- `src/services/orderByThreat.ts:114`
+- `src/services/pawnJudgement.ts:303`
 - `src/services/planRace.ts:576`
 - `src/services/planStep.ts:52`
 - `src/services/positionCharacter.ts:161`
@@ -384,8 +389,8 @@
 - `src/services/practicalReads.ts:290`
 - `src/services/principleAttribution.ts:395`
 - `src/services/prophylaxis.ts:99`
-- `src/services/prophylaxis.ts:146`
-- `src/services/prophylaxis.ts:239`
+- `src/services/prophylaxis.ts:152`
+- `src/services/prophylaxis.ts:245`
 - `src/services/pvPlayback.ts:221`
 - `src/services/pvPlayback.ts:225`
 - `src/services/queenGrabTrap.ts:49`
@@ -401,7 +406,7 @@
 - `src/services/speedRunReads.ts:409`
 - `src/services/speedRunReads.ts:463`
 - `src/services/speedRunReads.ts:470`
-- `src/services/squareJudgement.ts:232`
+- `src/services/squareJudgement.ts:234`
 - `src/services/tacticAlertService.ts:335`
 - `src/services/tacticGeometry.ts:318`
 - `src/services/tacticGeometry.ts:414`
@@ -482,7 +487,7 @@
 - `src/services/reviewFullData.ts:483`
 - `src/services/skillQuestions.ts:48`
 - `src/services/threatAnswerEvidence.ts:69`
-- `src/services/tradeQuality.ts:221`
+- `src/services/tradeQuality.ts:232`
 - `src/services/trappedPiece.ts:90`
 
 ### `takingTheAttackerAnswers` (function) — 9 call sites
@@ -533,7 +538,7 @@
 - `src/services/computedMaterialTruth.corpus.test.ts:216`
 - `src/services/computedMaterialTruth.corpus.test.ts:226`
 - `src/services/conversionMethod.ts:65`
-- `src/services/desperado.ts:36`
+- `src/services/desperado.ts:38`
 - `src/services/groundedAnswer.ts:2636`
 - `src/services/groundedAnswer.ts:3773`
 - `src/services/moveInsight.ts:263`
@@ -619,8 +624,8 @@
 - `src/services/positionalTruth.corpus.test.ts:55`
 - `src/services/positionalTruth.corpus.test.ts:81`
 - `src/services/positionalTruth.corpus.test.ts:86`
-- `src/services/tradeQuality.ts:228`
-- `src/services/tradeQuality.ts:384`
+- `src/services/tradeQuality.ts:239`
+- `src/services/tradeQuality.ts:397`
 - `src/services/walk3.test.ts:13`
 
 ### `findWeakSquares` (function) — 9 call sites
@@ -759,8 +764,8 @@
 - `src/services/isolatedOneOwner.test.ts:21`
 - `src/services/moveInsight.ts:338`
 - `src/services/pawnJudgement.ts:49`
-- `src/services/pawnJudgement.ts:139`
-- `src/services/pawnJudgement.ts:268`
+- `src/services/pawnJudgement.ts:140`
+- `src/services/pawnJudgement.ts:269`
 - `src/services/playCommentary.ts:490`
 - `src/services/positionReadingService.test.ts:155`
 - `src/services/positionReadingService.test.ts:160`

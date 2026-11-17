@@ -1,6 +1,6 @@
 import { Chess } from 'chess.js';
 import { describe, it, expect } from 'vitest';
-import { parseCoachMoveCommand } from './coachMoveCommand';
+import { parseCoachMoveCommand, fenBeforeLastMove } from './coachMoveCommand';
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 // After 1.d4 Nf6 2.c4 — Black to move.
@@ -181,5 +181,24 @@ describe('a bare square is the pawn push, never a capture (pass-3 walk 2026-10-0
     expect(cmd?.san).not.toBe('axb5');
     c.move('Nc3');
     expect(parseCoachMoveCommand('play b5', c.fen(), 'black')?.san).toBe('b5');
+  });
+});
+
+describe('a correction is read where the coach played (speedrun Learn tape, 2026-11-17)', () => {
+  it('"no, play e3 instead" after 1.e4 replaces e4, though e3 is illegal after it', () => {
+    const after = new Chess(); after.move('e4');
+    const cmd = parseCoachMoveCommand('no, play e3 instead', after.fen(), 'white', fenBeforeLastMove(['e4']));
+    expect(cmd?.san).toBe('e3');
+    expect(cmd?.corrects).toBe(true);
+    // Without the board before the move it could not be read — the old defect.
+    expect(parseCoachMoveCommand('no, play e3 instead', after.fen(), 'white')).toBeNull();
+  });
+  it('a plain dictation is untouched by the board before the move', () => {
+    const after = new Chess(); after.move('e4');
+    expect(parseCoachMoveCommand('play e5', after.fen(), 'white', fenBeforeLastMove(['e4']))?.corrects).toBe(false);
+  });
+  it('the board before the last move', () => {
+    expect(fenBeforeLastMove([])).toBeNull();
+    expect(fenBeforeLastMove(['e4'])).toBe(new Chess().fen());
   });
 });

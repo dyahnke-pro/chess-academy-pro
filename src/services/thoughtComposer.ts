@@ -456,7 +456,12 @@ export function composeThought(
       pick(f, said(f.alsoText ?? f.text));
       continue;
     }
-    if (!lead) { if (pick(f)) leadOf.set(f.step, f); continue; }
+    // THE MOVE NAMED ONCE (human voice rule 3): a fact that has its words for
+    // "behind a line that named the move" says them once a move step has
+    // spoken, whatever its own step ("You play e5 — … It also freezes their
+    // e6 pawn", never "e5 freezes" a third time, colle800 16.e5).
+    const moveNamed = picked.some((p) => MOVE_STEPS.has(p.step));
+    if (!lead) { if (pick(f, moveNamed && f.alsoText ? { ...f, text: f.alsoText } : f)) leadOf.set(f.step, f); continue; }
     pick(f, { ...f, text: f.alsoText ?? f.text });
   }
 

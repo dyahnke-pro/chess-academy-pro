@@ -267,6 +267,9 @@ const NOT_ENDING: ReadonlySet<GamePhase | 'any'> = new Set<GamePhase>(['opening'
 const LEARN = { wired: 'components/Coach/CoachTeachPage.tsx' } as const;
 const REVIEW = { wired: 'services/reviewFullData.ts' } as const;
 const PLAY_ASK = { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING); reached on ask through the shared read — owed, one-coach P4' } as const;
+/** CHAT ASKS ABOUT A MOVE THROUGH THE ONE COMPOSER (`questionThought` →
+ *  `moveThoughtFacts`): a computer that file reads is in every move answer. */
+const CHAT_VIA_THOUGHT = { wired: 'services/moveThoughtFacts.ts' } as const;
 const CHAT_OWED = { not: 'owed — one-coach P4: a chat lane reads it from the registry' } as const;
 /** The live composer reads it for every surface that does not read it itself
  *  — chat's board answers and the tapped read on Play (2026-10-15). */
@@ -838,7 +841,7 @@ export const BOARD_COMPUTERS = {
     computer: 'castleByHandMove',
     kind: 'castling',
     phase: NOT_ENDING,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { not: 'owed — chat answers a king question through positionAsk, which reads castleByHand' }, tactics: TACTICS_NA, weaknesses: { not: 'the record half is positionPosed: castleByHand poses king-stuck-center' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NA, weaknesses: { not: 'the record half is positionPosed: castleByHand poses king-stuck-center' }, think: THINK },
   },
   kingFromCentre: {
     read: ({ fenBefore, san, student }, fact) => safe(() => {
@@ -851,7 +854,7 @@ export const BOARD_COMPUTERS = {
     computer: 'kingFromCentre',
     kind: 'nugget',
     phase: NOT_ENDING,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'a rule of thumb poses no question of its own; the king walk it closes is recorded through castleByHand' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NA, weaknesses: { not: 'a rule of thumb poses no question of its own; the king walk it closes is recorded through castleByHand' }, think: THINK },
   },
   keptHome: {
     read: ({ fenBefore, san, student }, fact) => safe(() => {
@@ -868,7 +871,7 @@ export const BOARD_COMPUTERS = {
     computer: 'keptHome',
     kind: 'held',
     phase: NOT_ENDING,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'a piece kept home on purpose is a choice, not a skill the board poses' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NA, weaknesses: { not: 'a piece kept home on purpose is a choice, not a skill the board poses' }, think: THINK },
   },
   kingSquares: {
     // His 7…Kf8: "obviously not g6 or f6 — you'd get mated … the king to f8 is
@@ -883,7 +886,7 @@ export const BOARD_COMPUTERS = {
     computer: 'kingSquares',
     kind: 'contrast',
     phase: ANY,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'the record half is capabilitiesPosed: a forced king walk with a mated square poses missed-opponents-threat' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NA, weaknesses: { not: 'the record half is capabilitiesPosed: a forced king walk with a mated square poses missed-opponents-threat' }, think: THINK },
   },
   knownSlip: {
     // THE KNOWN MISTAKES AND TRAPS (David 2026-11-04: "it needs to be in
@@ -1049,7 +1052,7 @@ export const BOARD_COMPUTERS = {
     computer: 'temptingRefuted',
     kind: 'refuted',
     phase: ANY,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'a move not played poses nothing to record; the move played is graded by its own cost' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NA, weaknesses: { not: 'a move not played poses nothing to record; the move played is graded by its own cost' }, think: THINK },
   },
   alsoGood: {
     // His "Qe7 or Qc6 — Qc6, the bishop is still great" (2.3%): two moves of
@@ -1072,7 +1075,7 @@ export const BOARD_COMPUTERS = {
     computer: 'alsoGood',
     kind: 'contrast',
     phase: ANY,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'two moves of one worth pose no question the student can miss' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NA, weaknesses: { not: 'two moves of one worth pose no question the student can miss' }, think: THINK },
   },
   squareChoice: {
     // His "Bf4 runs into Nxd4, Bg5 is kicked by h6, Bd2 hangs the knight —
@@ -1089,7 +1092,7 @@ export const BOARD_COMPUTERS = {
     computer: 'squareChoice',
     kind: 'contrast',
     phase: ANY,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: { not: 'a square ruled out is a choice explained, not a skill the board poses' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NA, weaknesses: { not: 'a square ruled out is a choice explained, not a skill the board poses' }, think: THINK },
   },
   pawnBreak: {
     // His "c5 attacking the base of the pawn chain", "open the d-file", "f4,

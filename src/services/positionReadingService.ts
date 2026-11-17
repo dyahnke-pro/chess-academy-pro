@@ -220,6 +220,25 @@ export function signedCaptureRead(fen: string, square: Square, capturingColor: C
   return seeReadsStanding(fen, square, capturingColor) ? signedLegalSeeFor(fen, square, capturingColor) : null;
 }
 
+/** THE MOST `side` CAN WIN WITH ONE CAPTURE on `fen`, each capture counted to
+ *  the end of its trades (legal SEE), in pawns; 0 when nothing wins. The one
+ *  "does that move just drop something?" read — a want, a threat or a chain
+ *  link that leaves the other side this much is no plan (2026-11-17: three
+ *  private copies of this loop had grown in causalChain, orderByThreat and,
+ *  missing, in the wants reader, where …e5 "allowed Bg5" with …exd4 winning
+ *  the knight). Either side, whoever is to move. */
+export function bestCaptureGainFor(fen: string, side: Color): number {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return 0; }
+  let best = 0;
+  for (const row of c.board()) for (const p of row) {
+    if (!p || p.color === side || p.type === 'k') continue;
+    const g = legalSeeGainFor(fen, p.square, side);
+    if (g > best) best = g;
+  }
+  return best;
+}
+
 export function legalSeeGainFor(fen: string, square: Square, capturingColor: Color): number {
   const asIf = asIfToMove(fen, capturingColor);
   return asIf ? legalSeeGain(asIf, square) : 0;

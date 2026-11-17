@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { findProphylaxis, prophylaxisLine, prophylaxisProof } from './prophylaxis';
+import { findProphylaxis, prophylaxisLine, prophylaxisProof, theirWantedMoves } from './prophylaxis';
 
 const after = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
 
@@ -60,5 +60,14 @@ describe('a pawn that stands on their square takes it first (Danya BGTB: "after 
     const p = { kind: 'kick', intent: { san: 'c4', from: 'c5', to: 'c4', piece: 'p' }, victim: { square: 'd3', piece: 'q' },
       prevention: { san: 'c4', from: 'c3', to: 'c4', piece: 'p' }, squares: ['c4', 'd3'] } as unknown as Parameters<typeof prophylaxisProof>[0];
     expect(prophylaxisProof(p).full).toBe('c4 would hit your queen on d3, and your pawn gets there first');
+  });
+});
+
+describe('a want that drops more than it wins is no plan (2026-11-17)', () => {
+  it('Najdorf …e5 at once: Bg5 would pin the knight, but …exd4 wins the knight on d4', () => {
+    const c = new Chess();
+    for (const s of ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'e5']) c.move(s);
+    const wants = theirWantedMoves(c.fen(), 'b');
+    expect(wants.some((w) => w.san === 'Bg5')).toBe(false);
   });
 });

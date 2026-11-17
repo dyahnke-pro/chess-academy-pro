@@ -21,7 +21,7 @@
 import { Chess, type Color } from 'chess.js';
 import { theirWantedMoves, type TheirWant } from './prophylaxis';
 import { seatPieceWords } from './pieceRef';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGainFor, bestCaptureGainFor } from './positionReadingService';
 import { PIECE_NAMES } from '../types/tacticTypes';
 
 export interface OrderPoint {
@@ -35,17 +35,6 @@ export interface OrderPoint {
 }
 
 /** Is X's order the point? `mine`: the student moved (words in their seat). */
-/** The most the side `me` can win by one capture on the board `c` (me to
- *  move), counted to the end of its trades, in pawns. */
-function wonAfter(c: Chess, me: Color): number {
-  let best = 0;
-  for (const row of c.board()) for (const cell of row) {
-    if (!cell || cell.color === me || cell.type === 'k') continue;
-    best = Math.max(best, legalSeeGainFor(c.fen(), cell.square, me));
-  }
-  return best;
-}
-
 /** `yPv`: the engine's line after the follow-up played first (UCI, its
  *  reply first) — from the fan read before the move; null where the surface
  *  has none. It is how a CHECK the order prevents is found: a check is no
@@ -84,7 +73,7 @@ export function orderByThreat(fenBefore: string, san: string, line: readonly str
       // …AND THE REPLY DOES NOT JUST LOSE MATERIAL: a reply that leaves the
       // mover a winning capture is no reason to fear the order (Danya 4T9
       // 9…Nxd4: "Why not …e5 first? It would allow Bg5" — …exd4 wins a knight).
-      if (wonAfter(c, me) >= 1) continue;
+      if (bestCaptureGainFor(c.fen(), me) >= 1) continue;
       if (!c.move(san)) continue;
     } catch { continue; }
     const [v, ...rest] = w.hit;
@@ -118,7 +107,7 @@ function checkOrder(
   const r = uciMove(c, yPv[0]);
   if (!r || !c.inCheck()) return null;
   // The check must not simply lose for them after the follow-up.
-  if (wonAfter(c, me) >= 1) return null;
+  if (bestCaptureGainFor(c.fen(), me) >= 1) return null;
   // After the move played, the check is gone: illegal, or the checker drops.
   const cx = new Chess(x.fen);
   const rx = uciMove(cx, yPv[0]);

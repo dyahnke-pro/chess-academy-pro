@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**149 lines · 1 exports · 3 importers · 2 tests · 3 audits**
+**173 lines · 2 exports · 3 importers · 2 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,10 +18,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `parseCoachMoveCommand` (function) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3744`
-- `src/components/Coach/CoachTeachPage.tsx:4294`
-- `src/components/Coach/CoachTeachPage.tsx:8012`
+### `fenBeforeLastMove` (function) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:4363`
+- `src/components/Coach/CoachTeachPage.tsx:4855`
+- `src/services/coachMoveCommand.test.ts:190`
+- `src/services/coachMoveCommand.test.ts:198`
+- `src/services/coachMoveCommand.test.ts:201`
+- `src/services/coachMoveCommand.test.ts:202`
+
+### `parseCoachMoveCommand` (function) — 39 call sites
+- `src/components/Coach/CoachTeachPage.tsx:4363`
+- `src/components/Coach/CoachTeachPage.tsx:4855`
+- `src/components/Coach/CoachTeachPage.tsx:8489`
 - `src/services/coachMoveCommand.test.ts:11`
 - `src/services/coachMoveCommand.test.ts:18`
 - `src/services/coachMoveCommand.test.ts:24`
@@ -53,6 +61,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachMoveCommand.test.ts:168`
 - `src/services/coachMoveCommand.test.ts:180`
 - `src/services/coachMoveCommand.test.ts:183`
+- `src/services/coachMoveCommand.test.ts:190`
+- `src/services/coachMoveCommand.test.ts:194`
+- `src/services/coachMoveCommand.test.ts:198`
 - `src/test/takebackCorrectionRoute.test.ts:20`
 - `src/test/takebackCorrectionRoute.test.ts:27`
 

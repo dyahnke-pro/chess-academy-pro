@@ -94,45 +94,45 @@
 - `src/services/learnTurnDoor.ts:1412`
 
 ### `placeFact` (function) — 19 call sites
-- `src/services/boardComputers.ts:788`
-- `src/services/boardComputers.ts:1222`
+- `src/services/boardComputers.ts:791`
+- `src/services/boardComputers.ts:1225`
 - `src/services/learnTurnDoor.ts:755`
 - `src/services/moveThoughtFacts.ts:206`
-- `src/services/moveThoughtFacts.ts:568`
-- `src/services/moveThoughtFacts.ts:588`
-- `src/services/moveThoughtFacts.ts:657`
-- `src/services/moveThoughtFacts.ts:671`
-- `src/services/moveThoughtFacts.ts:1098`
-- `src/services/moveThoughtFacts.ts:1130`
-- `src/services/moveThoughtFacts.ts:1147`
+- `src/services/moveThoughtFacts.ts:571`
+- `src/services/moveThoughtFacts.ts:591`
+- `src/services/moveThoughtFacts.ts:660`
+- `src/services/moveThoughtFacts.ts:674`
+- `src/services/moveThoughtFacts.ts:1110`
+- `src/services/moveThoughtFacts.ts:1142`
+- `src/services/moveThoughtFacts.ts:1159`
 - `src/services/openingStory.ts:419`
 - `src/services/positionFacts.ts:556`
 - `src/services/reviewFacet.ts:85`
 - `src/services/reviewFacet.ts:113`
 - `src/services/reviewFacet.ts:125`
-- `src/services/teachingFact.ts:91`
+- `src/services/teachingFact.ts:96`
 - `src/services/thoughtComposer.ts:159`
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 19 call sites
-- `src/services/boardComputers.ts:789`
-- `src/services/boardComputers.ts:1222`
+- `src/services/boardComputers.ts:792`
+- `src/services/boardComputers.ts:1225`
 - `src/services/coachFact.test.ts:107`
 - `src/services/coachFact.test.ts:113`
 - `src/services/coachFact.test.ts:114`
 - `src/services/learnTurnDoor.ts:756`
 - `src/services/moveThoughtFacts.ts:207`
-- `src/services/moveThoughtFacts.ts:568`
-- `src/services/moveThoughtFacts.ts:589`
-- `src/services/moveThoughtFacts.ts:658`
-- `src/services/moveThoughtFacts.ts:672`
-- `src/services/moveThoughtFacts.ts:1099`
-- `src/services/moveThoughtFacts.ts:1131`
-- `src/services/moveThoughtFacts.ts:1148`
+- `src/services/moveThoughtFacts.ts:571`
+- `src/services/moveThoughtFacts.ts:592`
+- `src/services/moveThoughtFacts.ts:661`
+- `src/services/moveThoughtFacts.ts:675`
+- `src/services/moveThoughtFacts.ts:1111`
+- `src/services/moveThoughtFacts.ts:1143`
+- `src/services/moveThoughtFacts.ts:1160`
 - `src/services/openingStory.ts:420`
 - `src/services/positionFacts.ts:564`
 - `src/services/reviewFacet.ts:96`
-- `src/services/teachingFact.ts:93`
+- `src/services/teachingFact.ts:98`
 - `src/test/doorFact.ts:24`
 
 ### `COMPUTER_CATALOG` (const) — 0 call sites

@@ -28,7 +28,7 @@
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
 import type { FundamentalId } from './principleAttribution';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
-import { legalSeeGainFor, standsSafe } from './positionReadingService';
+import { legalSeeGainFor, standsSafe, bestCaptureGainFor } from './positionReadingService';
 import { developedMinorCount, homeMinorCount } from './development';
 import { diff, snapshot, type RelationKind, type RelationSnapshot } from './relations';
 
@@ -711,19 +711,6 @@ function chainTargetSquare(chain: CausalChain): Square | null {
  *  Tries each CAPTURING move for `side` as a hypothetical focus (both patterns'
  *  tactic is a capture) and returns the first that fires a chain, plus its SAN.
  *  Pure lookahead — nothing is committed to the game. */
-/** The side to move's best capture on `board`, by the legal exchange count. */
-function bestCaptureGain(board: Chess): number {
-  const mover = board.turn();
-  const fen = board.fen();
-  let best = 0;
-  for (const row of board.board()) for (const p of row) {
-    if (!p || p.color === mover || p.type === 'k') continue;
-    const g = legalSeeGainFor(fen, p.square, mover);
-    if (g > best) best = g;
-  }
-  return best;
-}
-
 function chainAvailableFor(g: GameBoards, plyBefore: number, side: Color): { chain: CausalChain; moveSan: string } | null {
   if (plyBefore > g.moves.length) return null;
   const board = new Chess(g.fens[plyBefore]);
@@ -744,7 +731,7 @@ function chainAvailableFor(g: GameBoards, plyBefore: number, side: Color): { cha
     // A WIN THAT DROPS MORE THAN IT TAKES IS NO WIN (Danya 0WPN 9…Nc3+: "They
     // can win your bishop with Kxd2" — and …Nxd1 takes the queen). After the
     // capture, the other side's best capture anywhere must not be worth more.
-    if (bestCaptureGain(next) > gain) continue;
+    if (bestCaptureGainFor(next.fen(), next.turn()) > gain) continue;
     const chain = chainOn(boardsWith(g, plyBefore, played, next.fen()), plyBefore + 1);
     if (chain) return { chain, moveSan: m.san };
   }

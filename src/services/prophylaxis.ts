@@ -17,7 +17,7 @@
 import { sideToMoveAs } from './threatOut';
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGainFor, bestCaptureGainFor } from './positionReadingService';
 import type { Proof } from './proof';
 import type { SpokenLine } from './voicePackage';
 import type { TacticType } from '../types';
@@ -97,6 +97,12 @@ function intents(fen: string, me: Color): Intent[] {
     // The move must be safe for them where it lands — a pin or kick that just
     // loses the piece is no plan of theirs.
     if (legalSeeGainFor(after.fen(), m.to, me) > 0) { board.undo(); continue; }
+    // …nor drop material elsewhere: a pin or a kick wins nothing yet, so one
+    // that leaves the student a winning capture (a pawn or more, counted to the
+    // end of the trades) is no plan; a fork wins its victim, so it is no plan
+    // only when the capture it allows is worth as much (Najdorf …e5 at once
+    // "allows Bg5" — but …exd4 then wins the knight on d4).
+    const drops = bestCaptureGainFor(after.fen(), me);
     if (m.piece === 'p') {
       // A pawn kick: the pawn lands hitting a student minor (or bigger), safely.
       const f = m.to.charCodeAt(0) - 97;
@@ -106,13 +112,13 @@ function intents(fen: string, me: Color): Intent[] {
         const sq = `${String.fromCharCode(97 + f + df)}${r + 1}` as Square;
         const pc = after.get(sq);
         if (pc && pc.color === me && VAL[pc.type] >= 3 && pc.type !== 'k') {
-          out.push({ m, kind: 'kick', victim: { square: sq, piece: pc.type }, hits: [sq] });
+          if (drops < 1) out.push({ m, kind: 'kick', victim: { square: sq, piece: pc.type }, hits: [sq] });
           break;
         }
       }
     } else {
       const v = pinVictim(after, m, me);
-      if (v) out.push({ m, kind: 'pin', victim: { square: v.square, piece: v.piece }, hits: [v.square, v.behind] });
+      if (v) { if (drops < 1) out.push({ m, kind: 'pin', victim: { square: v.square, piece: v.piece }, hits: [v.square, v.behind] }); }
       else {
         // A FORK: the piece lands hitting two of the student's pieces each
         // worth more than it (or the king and one more).
@@ -124,7 +130,7 @@ function intents(fen: string, me: Color): Intent[] {
         }
         if (hit.length >= 2) {
           const victim = hit.filter((h) => h.piece !== 'k').sort((a, b) => VAL[b.piece] - VAL[a.piece])[0];
-          if (victim) out.push({ m, kind: 'fork', victim, hits: hit.map((h) => h.square) });
+          if (victim && drops < VAL[victim.piece]) out.push({ m, kind: 'fork', victim, hits: hit.map((h) => h.square) });
         }
       }
     }

@@ -27,6 +27,8 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
  *  made by `teachingFact`. */
 export type TeachingFact = CoachFact & {
   lane: LearnLane;
+  /** The same fact said behind a line that already named the move. */
+  alsoText?: string;
   /** The analytics event this line fires when queued. */
   event: { name: string; props: Record<string, string | number | boolean> } | null;
   /** The arrows that illustrate THIS line, computed with it (David 2026-09-30:
@@ -68,6 +70,9 @@ interface TeachingParts {
   role?: FacetRole;
   /** The fact without the move it names (`CoachFact.heldForm`). */
   heldForm?: HeldForm;
+  /** Said behind a line that already named the move ("It also freezes …"):
+   *  the one composer speaks it once the turn has named the move. */
+  alsoText?: string;
 }
 
 /** What the page does with the fact. */

@@ -418,7 +418,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
     const priced = i.cpLoss;
     if (priced !== null) for (const s of studentMoveStructure({ fenBefore: i.fenBefore, san: i.san, student: me, cpLoss: priced, bestSan: i.bestSan, bestUci: i.bestLine?.moves ?? [], reply: i.reply, namesBetterMove: false, namesStudentMoves: i.namesStudentMoves })) {
       out.push(teachingFact('structureJudgement', {
-        computer: 'studentMoveStructure', kind: 'judgement', ...mine, names: NAMES_NO_MOVE, proof: s.proof, text: s.text, squares: s.squares, claims: [s.key],
+        computer: 'studentMoveStructure', kind: 'judgement', ...mine, names: NAMES_NO_MOVE, proof: s.proof, text: s.text, squares: s.squares, claims: [s.key], ...(s.alsoText ? { alsoText: s.alsoText } : {}),
         ...(s.stakes ? { stakes: s.stakes } : {}),
       }, { event: { name: 'coach_structure_judgement', props: { surface: 'coach-teach', act: s.act } }, arrows: [], ...(s.held ? { evidence: s.held } : {}) }));
     }

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1995 lines · 12 exports · 23 importers · 30 tests · 0 audits**
+**1997 lines · 12 exports · 23 importers · 30 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -110,8 +110,8 @@
 - `src/services/reviewWalkCT.test.ts:51`
 - `src/services/reviewWalkCT.test.ts:74`
 - `src/services/reviewWalkCT.test.ts:91`
-- `src/services/tacticGeometry.test.ts:268`
-- `src/services/tacticGeometry.test.ts:273`
+- `src/services/tacticGeometry.test.ts:272`
+- `src/services/tacticGeometry.test.ts:277`
 - `src/services/unifiedBetterMoveReason.test.ts:39`
 - `src/services/weighedMoves.test.ts:250`
 - `src/services/weighedMoves.test.ts:263`

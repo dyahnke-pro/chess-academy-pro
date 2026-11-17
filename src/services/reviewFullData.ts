@@ -1545,6 +1545,8 @@ export function computeMoveFacets(
       // SAID ONCE BY ITS OWN KEY, as Learn's ledger says it ("Their king went
       // kingside … so the plan changes" spoke on three moves of one game).
       f.identity = `once:${r.key}`;
+      // Behind a line that named the move it says "It also …", never the move again.
+      if (r.alsoText) f.follow = r.alsoText;
       recSquares(f, r.squares);
       recProof(f, r.proof);
       recStakes(f, r.stakes);

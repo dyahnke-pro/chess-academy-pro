@@ -91,6 +91,11 @@ export interface StructureRead {
    *  sentence names the better move; the proof is then the squares, never the
    *  move's line. */
   heldForm?: { text: string; squares: string[]; proof: Proof };
+  /** The same judgement said BEHIND a line that already named the move
+   *  ("It also freezes their e6 pawn …") — the human voice's full name once
+   *  (colle800 16.e5 said e5 three times). Present where `text` opens with the
+   *  move as its subject. */
+  alsoText?: string;
 }
 
 export const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };

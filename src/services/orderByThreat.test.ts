@@ -53,3 +53,19 @@ describe('the order a check decides (David 2026-11-17: "Model Bb5+")', () => {
   });
 });
 
+
+describe('the order and the stop on one reply are one idea (colle800 16.e5)', () => {
+  it('"it stops …c4" speaks; "Re1 straight away would allow …c4" is the same idea and is held', async () => {
+    const { moveThoughtFacts } = await import('./moveThoughtFacts');
+    const { composeThought } = await import('./thoughtComposer');
+    const { NO_PREV_CAPTURE } = await import('./captureRun');
+    const sans = ['d4', 'd5', 'Nf3', 'Nf6', 'e3', 'e6', 'Bd3', 'c5', 'c3', 'Nc6', 'O-O', 'Be7', 'Nbd2', 'a6', 'e4', 'O-O'];
+    const facts = moveThoughtFacts({ fenBefore: after(sans), san: 'e5', plainThreatsSeen: false, tense: 'past', moverIsStudent: true,
+      prev: NO_PREV_CAPTURE, line: ['Nd7', 'Re1', 'b5'], theirLast: null, story: false, history: sans, phrases: null, reads: null, costCp: null, theory: false });
+    expect(facts.some((f) => f.computer === 'orderByThreat' && /…c4/.test(f.text))).toBe(true);
+    expect(facts.some((f) => f.computer === 'moveStops' && /…c4/.test(f.text))).toBe(true);
+    const spoken = composeThought(facts, 'review', null, new Set(), null).spoken;
+    expect(spoken).toMatch(/stops …c4/);
+    expect(spoken).not.toMatch(/would allow …c4/);
+  }, 60_000);
+});

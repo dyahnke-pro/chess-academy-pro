@@ -64,6 +64,18 @@ const REPORT_RE = /\b(?:i|we)\s+(?:just\s+)?(?:played|play|moved|went)\b/i;
  *  student's turn. En-passant cleared (it can't survive a null move); the
  *  probe inside parseSpokenMove try/catches any position chess.js rejects. */
 
+/** The board before the last move of a game played from the start (`history`
+ *  in SAN), or null for an empty or unreadable history — what a correction of
+ *  the coach's last move is read against. */
+export function fenBeforeLastMove(history: readonly string[]): string | null {
+  if (history.length === 0) return null;
+  try {
+    const c = new Chess();
+    for (const s of history.slice(0, -1)) c.move(s);
+    return c.fen();
+  } catch { return null; }
+}
+
 /**
  * Parse a dictated coach-move command against `fen`. Returns null when the
  * text isn't a command or names no unambiguous legal move — the caller then
@@ -73,6 +85,13 @@ export function parseCoachMoveCommand(
   text: string,
   fen: string,
   coachColor?: 'white' | 'black',
+  /** The board BEFORE the coach's last move, where the surface keeps the game
+   *  (null: none). A correction is read there first — the move it names
+   *  replaces the coach's move, so it must be legal where that move was
+   *  played, not after it (speedrun Learn tape, 1.e4 corrected to "no, play e3
+   *  instead": on the board after e4 the e-pawn has left e2, so e3 read as
+   *  illegal and the correction was lost). */
+  beforeLastMove: string | null = null,
 ): CoachMoveCommand | null {
   const trimmed = text.trim();
   if (!trimmed || trimmed.length > 80) return null;
@@ -111,6 +130,11 @@ export function parseCoachMoveCommand(
     phrase = afterPrefix.slice(verb[0].length).trim();
   }
   if (!phrase) return null;
+
+  if (corrects && beforeLastMove) {
+    const replaced = parseSpokenMove(phrase, beforeLastMove);
+    if (replaced) return { ...replaced, playableNow: false, corrects };
+  }
 
   // ON THE STUDENT'S TURN THE COACH'S SIDE IS READ FIRST (David 2026-09-24
   // match game: "play c6" with White to move parsed as White's Bc6+ — legal,

@@ -227,7 +227,7 @@ import type { WalkthroughSession } from '../../types/walkthrough';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { narrateContinuationMove } from '../../services/continuationMoveNarration';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
-import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
+import { parseCoachMoveCommand, fenBeforeLastMove } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { noteCoverageForLine } from '../../services/danyaTeachingService';
 
@@ -4360,7 +4360,7 @@ export function CoachTeachPage({ mode }: {
       // source of truth — and the parser returning null for a bare "undo" is
       // what keeps this router's real job intact.
       const correctionNamesAMove = routed?.kind === 'take_back_move'
-        && parseCoachMoveCommand(text, liveFenRef.current, playerColor === 'white' ? 'black' : 'white')?.corrects === true;
+        && parseCoachMoveCommand(text, liveFenRef.current, playerColor === 'white' ? 'black' : 'white', fenBeforeLastMove(gameRef.current.history))?.corrects === true;
       if (routed && !correctionNamesAMove && (routed.kind === 'take_back_move' || routed.kind === 'reset_board')) {
         setMessages((prev) => [...prev, { id: uid('cmd-u'), role: 'user', content: text, timestamp: Date.now() }]);
         const outcome = routed.kind === 'take_back_move'
@@ -4852,7 +4852,7 @@ export function CoachTeachPage({ mode }: {
       !opts?.gameOverStep &&
       !walkthrough.isActive
     ) {
-      const cmd = parseCoachMoveCommand(trimmedText, liveFenRef.current, playerColor === 'white' ? 'black' : 'white');
+      const cmd = parseCoachMoveCommand(trimmedText, liveFenRef.current, playerColor === 'white' ? 'black' : 'white', fenBeforeLastMove(gameRef.current.history));
       if (cmd) {
         const cmdTurnId = freshTurnId('coach-move-command');
         const appendTurn = (ack: string): void => {
