@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { detectTacticLine, detectTacticType, detectMissedTactics, legacyTacticGeometry } from './missedTacticService';
+import { detectTacticLine, detectTacticType, detectMissedTactics } from './missedTacticService';
 import type { CoachGameMove } from '../types';
 import { MOTIF_READER_CASES } from '../test/motifReaderCases';
 
@@ -88,7 +88,6 @@ describe('detectTacticType', () => {
     // White rook captures knight: Rxc6 removes the guard.
     // After Rxc6, bishop on e5 is undefended.
     const fen = '4k3/8/2n5/4b3/8/8/8/2R1K3 w - - 0 1';
-    expect(legacyTacticGeometry(fen, 'c1c6')).toBe('removing_the_guard');
   });
 
   it('returns tactical_sequence for invalid input', () => {
@@ -259,7 +258,6 @@ describe('detectTacticType — priority ordering', () => {
     // therefore does NOT return 'fork' here. This pins the legacy priority
     // geometry only.
     const fen = 'r4k2/8/8/8/8/8/8/3RK3 w - - 0 1';
-    expect(legacyTacticGeometry(fen, 'd1d8')).toBe('fork');
     expect(detectTacticType(fen, 'd1d8')).not.toBe('fork');
   });
 
@@ -299,7 +297,6 @@ describe('detectTacticType — trapped_piece', () => {
     // the bishop is NOT lost. The legacy tail used to say "trapped"; it now
     // reads the one trapped computer, which checks the escape's defence.
     const fen = '7k/8/8/8/2p5/8/b2N4/4R1K1 w - - 0 1';
-    expect(legacyTacticGeometry(fen, 'e1a1')).not.toBe('trapped_piece');
     expect(detectTacticType(fen, 'e1a1')).not.toBe('trapped_piece');
   });
 
@@ -321,13 +318,11 @@ describe('legacy geometry — clearance (theme-only now; the classifier never pr
     // then reach d4. That shape also matches a rook simply hanging on a
     // defended square (Rd8+ Rxd8), which is why the motif is theme-only now.
     const fen = '6k1/8/8/5b2/3N4/8/8/3R2K1 w - - 0 1';
-    expect(legacyTacticGeometry(fen, 'd4e6')).toBe('clearance');
     expect(detectTacticType(fen, 'd4e6')).not.toBe('clearance');
   });
 
   it('the old geometry rejected clearance when the destination is not defended', () => {
     const fen = '6k1/8/8/8/3N4/8/8/3R2K1 w - - 0 1';
-    expect(legacyTacticGeometry(fen, 'd4e6')).not.toBe('clearance');
   });
 });
 
@@ -336,13 +331,11 @@ describe('legacy geometry — x_ray (the static shape is never named; the recapt
     // Rb4 with white Pb5 in front of black Rb7: static geometry with no
     // winnability — the shape tacticsDetector deliberately declined to name.
     const fen = '7k/1r6/8/1P6/8/8/8/1R4K1 w - - 0 1';
-    expect(legacyTacticGeometry(fen, 'b1b4')).toBe('x_ray');
     expect(detectTacticType(fen, 'b1b4')).not.toBe('x_ray');
   });
 
   it('the old geometry rejected x-ray when the piece behind is worth less than 3', () => {
     const fen = '7k/1p6/8/1P6/8/8/8/1R4K1 w - - 0 1';
-    expect(legacyTacticGeometry(fen, 'b1b4')).not.toBe('x_ray');
   });
 });
 

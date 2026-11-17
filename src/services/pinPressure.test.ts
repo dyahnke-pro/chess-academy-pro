@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { findPinPressure, isPinPressureMove } from './pinPressure';
+import { findPinPressure } from './pinPressure';
 
 // Bg5 pins the f6-knight to the queen on d8 (e7 is empty), and e4-e5 attacks
 // the knight with a pawn: the knight cannot step away without losing the
@@ -33,8 +33,9 @@ describe('pinPressure — put pressure on the pinned piece', () => {
   });
 
   it('matches a played move by its squares, never its SAN', () => {
-    expect(isPinPressureMove(PILE_ON, 'e4', 'e5')).toBe(true);
-    expect(isPinPressureMove(PILE_ON, 'a2', 'a3')).toBe(false);
+    const by = (from: string, to: string): boolean => findPinPressure(PILE_ON).some((p) => p.moves.some((m) => m.from === from && m.to === to));
+    expect(by('e4', 'e5')).toBe(true);
+    expect(by('a2', 'a3')).toBe(false);
   });
 
   it('only for the side to move holding the pin', () => {
@@ -46,14 +47,13 @@ describe('pinPressure — put pressure on the pinned piece', () => {
 
 describe('pinPressure — against the student', () => {
   it('reads the opponent\'s pile-on threat on the student\'s pinned piece (either seat, one computer)', async () => {
-    const { findPinPressure: f, pinPressureThreat } = await import('./pinPressure');
+    const { findPinPressure: f } = await import('./pinPressure');
     // Black to move on the pile-on board: White holds the pin, so the threat
     // against Black's knight is e5 — the same answer read from Black's seat.
     const blackToMove = PILE_ON.replace(' w KQkq', ' b KQkq');
     const threat = f(blackToMove, 'w');
     expect(threat[0]?.pinned).toBe('f6');
     expect(threat[0]?.moves[0].san).toBe('e5');
-    expect(pinPressureThreat(PILE_ON)[0]?.pinned).toBe('f6');
   });
 });
 

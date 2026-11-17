@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { discoveryRevealed } from './lineGeometry';
-import { legacyTacticGeometry } from './missedTacticService';
 
 // Black queen d8, pawn d7, a white knight on d4 down the file.
 const FEN = '3qk3/3p4/8/8/3N4/8/8/4K3 b - - 0 1';
@@ -12,7 +11,6 @@ describe('lineGeometry — the one discovery test', () => {
     expect(discoveryRevealed(c, 'd7', 'd6', 'b')).toBeNull();
     // The missed-tactic copy read straight through d6 and called it a
     // discovered attack on the knight (census 2026-10-10).
-    expect(legacyTacticGeometry(FEN, 'd7d6')).not.toBe('discovered_attack');
   });
   it('a pawn that steps OFF the line uncovers the queen on the knight', () => {
     const fen = '3qk3/3p4/4B3/8/3N4/8/8/4K3 b - - 0 1';

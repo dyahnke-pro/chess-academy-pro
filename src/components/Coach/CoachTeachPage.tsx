@@ -76,6 +76,9 @@ import { cheaperAttackerHit, gambitPoint, kingPawnUnderFire, type CheaperHit, mi
 import { habitSaidKey, learnMoveReason, learnReasonDue, learnReplyWait, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, learnHangingWarning, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 import { captureRunAfterMove, captureRunOfPgn } from '../../services/captureRun';
+import { moveThoughtFacts } from '../../services/moveThoughtFacts';
+import type { IntentReads } from '../../services/moveIntent';
+import { sharedFactsForLearn } from '../../services/learnSharedFacts';
 
 /** A LINE A LEARN PRODUCER QUEUES for the late wave, as it knows it — made
  *  the one fact by `queueSpokenHint` (WO-STORY-MATRIX-01 P1-6e). */
@@ -12538,6 +12541,9 @@ export function CoachTeachPage({ mode }: {
                 // and the coach then moved from. `uciSanAt` turns either side's
                 // best move into something speakable.
                 const mid = await midTurnRead;
+                // The student move's reads in the shape every surface's fact set takes
+                // (`IntentReads`), filled where the quiet-move read builds them.
+                let sharedReads: IntentReads | null = null;
                 // THE PUNISHING LINE lands on the live grade now that the
                 // post-move read is in (C3): the saved Learn game then carries
                 // the same `pv` shape the sweep persists, and the record path
@@ -13060,6 +13066,7 @@ export function CoachTeachPage({ mode }: {
                           passAfter: againRead?.topLines ?? [],
                           reply: replyUci,
                         } : null;
+                        sharedReads = intentReads;
                         // The default read first; when it finds nothing, the move's
                         // follow-up in the engine's own line, and only a CONCRETE
                         // stopped threat (mate, check, material).
@@ -13458,6 +13465,41 @@ export function CoachTeachPage({ mode }: {
                     }
                   }
                 } catch { /* the callout is a bonus, never a blocker */ }
+
+                // ONE COACH (David 2026-11-17: "all computers feed the coach to all
+                // surfaces. It's only the narrations that differ"): the fact set the
+                // lesson, Review and chat read for the student's move, for every
+                // computer Learn's own lanes did not say this turn. The door decides
+                // what speaks; a fact naming the student's next move is held.
+                try {
+                  const queued = pendingVoiceRef.current;
+                  if (fenBefore && preStudentRead?.topLines?.length && mid?.topLines?.length && queued && samePosition(queued.fen, fenAfterReply)) {
+                    const theirLast = ((): { fenBefore: string; san: string } | null => {
+                      const h = move.history;
+                      if (h.length < 2) return null;
+                      try { const b = new Chess(); for (const san of h.slice(0, -2)) b.move(san); return { fenBefore: b.fen(), san: h[h.length - 2] }; } catch { return null; }
+                    })();
+                    const reads: IntentReads = sharedReads ?? { before: preStudentRead.topLines, after: mid.topLines, passBefore: [], passAfter: [] };
+                    const facts = moveThoughtFacts({
+                      fenBefore, san: move.san, moverIsStudent: true, plainThreatsSeen: false, tense: 'past', theory: true, story: true,
+                      prev: captureRunOfPgn(move.pgn, move.history.length - 1), line: null, history: move.history.slice(0, -1), theirLast,
+                      phrases: null, reads, costCp: studentCpLoss,
+                    });
+                    // And THEIR reply, the same set from the other seat (both seats).
+                    const afterReply = samePosition(nextBoardFen ?? '', fenAfterReply) ? await nextBoardRead : null;
+                    const replyFacts = reply && afterReply?.topLines?.length ? moveThoughtFacts({
+                      fenBefore: move.fen, san: reply, moverIsStudent: false, plainThreatsSeen: false, tense: 'past', theory: true, story: true,
+                      prev: captureRunOfPgn(move.pgn, move.history.length), line: null, history: move.history, theirLast: { fenBefore, san: move.san },
+                      phrases: null, reads: { before: mid.topLines, after: afterReply.topLines, passBefore: [], passAfter: [] }, costCp: null,
+                    }) : [];
+                    if (liveFenRef.current === fenAfterReply) {
+                      const said = new Set(queued.lines.map((l) => l.computer as string));
+                      for (const parts of sharedFactsForLearn([...facts, ...replyFacts], { fenNow: fenAfterReply, student: playerColor === 'white' ? 'w' : 'b', saidComputers: said })) {
+                        queueSpokenHint(fenAfterReply, parts);
+                      }
+                    }
+                  }
+                } catch { /* the shared facts are a bonus, never a blocker */ }
 
                 const pending = pendingVoiceRef.current;
                 // NOTE-PRIMARY (David 2026-08-23): if a farmed corpus note taught

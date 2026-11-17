@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { detectTacticType, legacyTacticGeometry } from './missedTacticService';
+import { detectTacticType } from './missedTacticService';
 
 // ── Promotion ──────────────────────────────────────────────────────────────
 describe('audit: promotion', () => {
@@ -115,7 +115,6 @@ describe('audit: discovered_attack', () => {
   it('legacy geometry: the unguarded rook — the queen just takes it, Qxe1+, and the unified classifier refuses the label', () => {
     // The old fixture: geometry says "discovered attack", but …Qxe1+ wins the
     // rook — not a tactic for White (same refusal as removing the guard below).
-    expect(legacyTacticGeometry('k7/4q3/8/8/4B3/8/8/K3R3 w - - 0 1', 'e4f5')).toBe('discovered_attack');
     expect(detectTacticType('k7/4q3/8/8/4B3/8/8/K3R3 w - - 0 1', 'e4f5')).not.toBe('discovered_attack');
   });
 
@@ -133,7 +132,6 @@ describe('audit: removing_the_guard', () => {
     // was never attacked afterwards anyway. The legacy tail still returns the
     // label; the unified classifier does not (tacticTypeUnification.test.ts
     // pins the real removal-of-guard shape).
-    expect(legacyTacticGeometry('k7/8/4q3/3b4/8/8/8/3R3K w - - 0 1', 'd1d5')).toBe('removing_the_guard');
     expect(detectTacticType('k7/8/4q3/3b4/8/8/8/3R3K w - - 0 1', 'd1d5')).not.toBe('removing_the_guard');
   });
 

@@ -7,8 +7,8 @@
  * (`missedTacticService.detectTacticType`) that TAGGED what a student is weak
  * at. The same board could be a "pin" in the weakness bucket and a "fork" in
  * the coach's mouth. Now `detectTacticType` is a projection of the engine's
- * answer through `tacticVocabulary`; the old geometry survives only as a
- * declared, shrink-only tail.
+ * answer through `tacticVocabulary`; the old one-ply geometry was deleted
+ * (WO-TIE-01, 2026-11-17 — no product caller).
  *
  * Every fixture below was probed against the live engine before it was
  * pinned — none is authored from memory (G3 applies to test boards too).
@@ -17,7 +17,7 @@ import { describe, it, expect } from 'vitest';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { Chess } from 'chess.js';
-import { detectTacticType, legacyTacticGeometry, TACTIC_TYPE_AUTHORITY } from './missedTacticService';
+import { detectTacticType, TACTIC_TYPE_AUTHORITY } from './missedTacticService';
 import { conceptForLine, tacticInvariant } from './conceptEngine';
 import { TACTIC_TO_PATTERN, toTacticType } from './tacticVocabulary';
 import { getCoachingMessage } from './tacticAlertService';
@@ -103,22 +103,6 @@ describe('TACTIC_TYPE_AUTHORITY — who decides each motif is DECLARED, exhausti
     expect(detectTacticType('3q2kr/7p/4pn2/8/3N4/8/1B3PPP/R5K1 w - - 0 1', 'd4e6', ['d4e6', 'd8d7', 'b2f6', 'h7h6'])).toBe('trapped_piece');
   });
 
-  it('the old geometry is DEAD in product code — no non-test file imports it (source scan)', () => {
-    const ROOT = resolve(__dirname, '..');
-    const offenders: string[] = [];
-    const walk = (dir: string): void => {
-      for (const name of readdirSync(dir)) {
-        const p = join(dir, name);
-        if (statSync(p).isDirectory()) { walk(p); continue; }
-        if (!/\.(ts|tsx)$/.test(name) || /\.test\.(ts|tsx)$/.test(name)) continue;
-        if (p.endsWith('missedTacticService.ts')) continue; // the definition itself
-        if (readFileSync(p, 'utf8').includes('legacyTacticGeometry')) offenders.push(p.slice(ROOT.length + 1));
-      }
-    };
-    walk(ROOT);
-    expect(offenders, 'legacyTacticGeometry must have no product caller').toEqual([]);
-  });
-
   it('every engine-authority motif is PROVEN by a fixture the engine actually names (a wire that does not fire is not a wire)', () => {
     const engineMembers = ALL_TACTICS.filter((t) => TACTIC_TYPE_AUTHORITY[t] === 'engine');
     const covered = new Set(ENGINE_FIXTURES.map((f) => f.tactic));
@@ -141,33 +125,28 @@ describe('detectTacticType — the engine\'s reality gate holds (the legacy fals
   it('a check plus ONE DEFENDED equal piece is not a fork (legacy said fork)', () => {
     // Rc8+ checks Ke8 and hits Nb8, but the knight is guarded by Ra8 — nothing is won.
     const fen = 'rn2k3/8/8/8/8/8/8/2R1K3 w - - 0 1';
-    expect(legacyTacticGeometry(fen, 'c1c8')).toBe('fork');
     expect(detectTacticType(fen, 'c1c8')).not.toBe('fork');
   });
 
   it('a "fork" whose forker simply hangs to one of its targets is not a fork (legacy said fork)', () => {
     // Rd8+ "forks" Kf8 and Ra8 — and Ra8 takes the rook. Forker-safety gate.
     const fen = 'r4k2/8/8/8/8/8/8/3RK3 w - - 0 1';
-    expect(legacyTacticGeometry(fen, 'd1d8')).toBe('fork');
     expect(detectTacticType(fen, 'd1d8')).not.toBe('fork');
   });
 
   it('capturing a guard that is itself defended by the guarded piece is a losing trade, not removing the guard (legacy said removing_the_guard)', () => {
     // Rxd5 Qxd5 — the "guard" was covered by the queen it guarded.
     const fen = 'k7/8/4q3/3b4/8/8/8/3R3K w - - 0 1';
-    expect(legacyTacticGeometry(fen, 'd1d5')).toBe('removing_the_guard');
     expect(detectTacticType(fen, 'd1d5')).not.toBe('removing_the_guard');
   });
 
   it('a piece with a DEFENDED escape square is not trapped — the legacy tail agrees now (one trapped computer)', () => {
     // Ra1 hits Ba2; b1/b3 are covered by Nd2 — but black\'s c4 pawn defends b3, so ...Bb3 holds.
     const fen = '7k/8/8/8/2p5/8/b2N4/4R1K1 w - - 0 1';
-    expect(legacyTacticGeometry(fen, 'e1a1')).not.toBe('trapped_piece');
     expect(detectTacticType(fen, 'e1a1')).not.toBe('trapped_piece');
   });
 
   it('a delivered smothered mate is a checkmate, not the "fork" the legacy geometry saw', () => {
-    expect(legacyTacticGeometry('6rk/6pp/8/4N3/8/8/8/6K1 w - - 0 1', 'e5f7')).toBe('fork');
     expect(detectTacticType('6rk/6pp/8/4N3/8/8/8/6K1 w - - 0 1', 'e5f7')).toBe('checkmate');
   });
 });
@@ -194,15 +173,12 @@ describe('detectTacticType — the old geometry\'s answers are never surfaced', 
   it('the old geometry\'s static shapes are never produced by the classifier', () => {
     // Its "clearance" also fires on a rook hanging on a defended square; its
     // "x-ray" is static geometry. Both are now read off the LINE only.
-    expect(legacyTacticGeometry('6k1/8/8/5b2/3N4/8/8/3R2K1 w - - 0 1', 'd4e6')).toBe('clearance');
     expect(detectTacticType('6k1/8/8/5b2/3N4/8/8/3R2K1 w - - 0 1', 'd4e6')).toBe('tactical_sequence');
-    expect(legacyTacticGeometry('7k/1r6/8/1P6/8/8/8/1R4K1 w - - 0 1', 'b1b4')).toBe('x_ray');
     expect(detectTacticType('7k/1r6/8/1P6/8/8/8/1R4K1 w - - 0 1', 'b1b4')).toBe('tactical_sequence');
   });
 
   it('an engine-silent board is the sentinel, whatever the old geometry said', () => {
     const fen = 'r4k2/8/8/8/8/8/8/3RK3 w - - 0 1';
-    expect(legacyTacticGeometry(fen, 'd1d8')).toBe('fork');
     expect(detectTacticType(fen, 'd1d8')).toBe('tactical_sequence');
   });
 

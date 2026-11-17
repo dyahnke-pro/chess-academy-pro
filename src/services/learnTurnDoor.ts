@@ -234,7 +234,13 @@ export type LearnLane =
   | 'oppositeBishops'
   // ── the plan's next steps and compensation (2026-11-12) ──
   | 'planSteps'
-  | 'compensation';
+  | 'compensation'
+  // ── ONE COACH (David 2026-11-17: "all computers feed the coach to all
+  //    surfaces. It's only the narrations that differ"): the shared fact set
+  //    the lesson, Review and chat read (`moveThoughtFacts`), said in Learn
+  //    for the computers Learn's own lanes do not run. Each fact keeps its
+  //    own kind, so the door places it as it places the same fact elsewhere.
+  | 'thought';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
@@ -302,6 +308,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   oppositeBishops: 'verdict',
   planSteps: 'point',
   compensation: 'verdict',
+  thought: 'point',
 };
 
 
@@ -412,6 +419,7 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   oppositeBishops: phaseOfComputer(BOARD_COMPUTERS.oppositeBishops.phase),
   planSteps: phaseOfComputer(BOARD_COMPUTERS.planSteps.phase),
   compensation: phaseOfComputer(BOARD_COMPUTERS.compensation.phase),
+  thought: 'any',
 };
 
 /** Is this lane's fact out of place on this board? */
@@ -466,6 +474,7 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   oppositeBishops: { factKind: BOARD_COMPUTERS.oppositeBishops.kind, kind: 'computed', why: 'opposite-coloured bishops and what they mean with what is left — the attacker\'s game with heavy pieces on, the drawish ending without', lead: 56 },
   planSteps: { factKind: BOARD_COMPUTERS.planSteps.kind, kind: 'computed', why: 'the plan\'s next quiet steps off the engine\'s line and what ties them — a square they aim at, a break, castling to finish', lead: 50 },
   compensation: { factKind: BOARD_COMPUTERS.compensation.kind, kind: 'computed', why: 'a side down material and still level or better, with the board reason that pays for it', lead: 52 },
+  thought: { factKind: 'concept', kind: 'computed', why: 'the shared fact set every surface reads (moveThoughtFacts), for the computers Learn\'s own lanes do not run — each fact placed by its own kind', lead: 50 },
   // ── the moves a player weighs (weighedMoves, 2026-11-05): said about the
   // move just played — the natural move that fails, with its line; the move
   // of the same worth and the board's difference (held while it may still be
@@ -736,7 +745,7 @@ export type LaneFact = CoachFact & {
 function laneKind(lane: LearnLane, factKind: string | undefined): CoachFactKind {
   // The plan lane carries the plan thread's own kind where it has one (the
   // worst piece's road, round 5), like the behaviour lane carries its own.
-  return (lane === 'positionFacts' || lane === 'phase' || lane === 'behavior' || lane === 'planArc') && factKind && isCoachFactKind(factKind) ? factKind : LEARN_LANES[lane].factKind;
+  return (lane === 'positionFacts' || lane === 'phase' || lane === 'behavior' || lane === 'planArc' || lane === 'thought') && factKind && isCoachFactKind(factKind) ? factKind : LEARN_LANES[lane].factKind;
 }
 
 /** THE ONE MAKER OF A LEARN FACT (WO-STORY-MATRIX-01 P1-6e), called where

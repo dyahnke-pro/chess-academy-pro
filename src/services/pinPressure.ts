@@ -147,23 +147,6 @@ export function findPinPressure(fen: string, holder?: Color): PinPressure[] {
   return out;
 }
 
-/** Whether a played move is one of the pressure moves on this board — by
- *  COORDINATES, never the SAN string (the same move renders "Nxd4" or "Nexd4"). */
-export function isPinPressureMove(fen: string, from: string, to: string): boolean {
-  return findPinPressure(fen).some((p) => p.moves.some((m) => m.from === from && m.to === to));
-}
-
-/**
- * AGAINST the student: after the student's move (`fenAfter`, opponent to
- * move), can the opponent pile on a pin and win the student's piece? The
- * threat the student walked into, or failed to meet. [] when none.
- */
-export function pinPressureThreat(fenAfter: string): PinPressure[] {
-  let mover: Color;
-  try { mover = new Chess(fenAfter).turn(); } catch { return []; }
-  return findPinPressure(fenAfter, mover);
-}
-
 /** The principle, said AGAINST the student (rotated by the caller). */
 export const PIN_PRESSURE_WARNING = [
   'Your pinned piece is a target — they can attack it again and it cannot run.',

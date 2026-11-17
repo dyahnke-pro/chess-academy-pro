@@ -13,6 +13,24 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🎯 WO-TIE-01 — add what is missing and tie every loose end (David 2026-11-17: "This is the build where we add what is missing and tie ALL lose ends together" → "Remember we have a unified coach. So all computers feed the coach to all surfaces. It's only the narrations that differ. Same with chat." → "let's find a happy medium" on agents vs solo)
+
+**One coach:** every computer feeds the ONE fact set (`moveThoughtFacts` + the registry); each surface's rules decide what is said (Play silent, Learn names no move unasked, theory in Review's button). A computer only one screen's own code reads is the loose end.
+
+**How it is built (the happy medium):** the lead builds the core (it all touches the same shared files); agents build only the separate new computers, at most 3 at once, each in its own worktree and branch, saving as they finish; usage checked between waves.
+
+- **T0 ship speedrun-01** — ship-check green, push `teach-points` → `main`, live chunk, muted prod audits.
+- **T1 the have-check** — his transcript ideas placed on the board he said them at (902 ideas on 720 boards), the app's facts on each; per concept: said there, the mapped computer fired, said elsewhere (base). Fix what stays silent at its producer.
+- **T2 new computers (agents)** — wave 1: repeating checks (perpetual + windmill), minor-piece matchup (knight vs bishop, wrong-coloured bishop), the flexible move (Option Principle, above). Wave 2: into their camp (infiltration, connecting the rooks, coordination; rook lift + seventh rank reused), and the extensions: stalemate tricks for both seats, exchange sacrifice, pawn majority, queen chased early, fortress, blockade and rook lift into the move thought (today chat only).
+- **T3 Learn onto the one fact set** — `moveThoughtFacts` reaches Learn nowhere today (`docs/computer-reach.json`: learn = no); Learn calls registry computers one by one inline. The tie: Learn's turn takes the shared facts for the student's move and their reply (the same `IntentReads` it already builds), on one lane whose kind is the fact's own, deduped by the door. Then 93 computers Learn never reads and 110 Review never reads are re-measured; each left off a surface says why in code.
+- **T4 the other screens onto the one door** — Tactics, My Mistakes, calculation, setup, analysis practice, endgame (task #200).
+- **T5 WO-TIERS-01 + the record ties** — fact / key concept / advanced concept on every computer, each tied to the skill it serves; the 11 places a computer teaches but cannot record a miss.
+- **T6 WO-SET-WEAKNESS-01** — the coach sets up what the student needs, inside this build.
+- **T7 loose ends** — the one dead computer deleted; the 9 leftover agent worktrees removed (the 20 side branches from Nov 11–12 were checked 2026-11-17: every course and fix is already in, later versions — nothing lost); the ~30 open tasks closed (done / folded in / brought to David).
+- **T8 ship** — one ship-check, `main`, live check, muted Learn / Review / chat prod audits read line by line.
+
+Dropped (David 2026-11-17): the 98 missing transcripts and the 75 translated-caption re-pulls; the sweep stays at 320 videos / 18,368 ideas.
+
 ## 🎯 THE FLEXIBLE MOVE — the Option Principle, computed (David 2026-11-17: "Flexible move has a clear definition. Find it so we calculate it correctly. It's the one that allows the most options.")
 
 The definition is the **Option Principle** (Weaver Adams 1939; Hans Berliner, *The System*, 1999): make the move that does the least to reduce your options to make other important moves (develop the knight before the bishop, because the bishop has more good squares to choose from). Nimzowitsch called the early central pawn advances "committal" for the same reason. Computed, never guessed:

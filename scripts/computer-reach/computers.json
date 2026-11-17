@@ -1427,16 +1427,6 @@
   ]
  },
  {
-  "name": "legacyTacticGeometry (old one-ply classifier)",
-  "file": "services/missedTacticService.ts",
-  "fn": "legacyTacticGeometry",
-  "says": "The pre-P4b one-ply tactic type with no reality gate",
-  "origin": "map",
-  "nodes": [
-   "services/missedTacticService.ts#legacyTacticGeometry"
-  ]
- },
- {
   "name": "mistakeNarration — generateMistakeNarration / whatTheMoveAllowed / keepsWhatWasDropped",
   "file": "services/mistakeNarration.ts",
   "fn": "whatTheMoveAllowed",

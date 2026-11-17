@@ -127,8 +127,8 @@ coach's fingertips.")
   is a PROJECTION of `conceptEngine.conceptForLine` through `tacticVocabulary` —
   the tag a student's weakness bucket carries (`TacticType`) and the concept the
   coach teaches (`TacticPatternType`) come from the same walk. `TACTIC_TYPE_AUTHORITY`
-  declares who decides each motif; `legacyTacticGeometry` is test-only (gate:
-  `tacticTypeUnification.test.ts`). `TACTIC_TEACHING.concept` derives from
+  declares who decides each motif (gate: `tacticTypeUnification.test.ts`); the
+  old one-ply geometry was deleted (WO-TIE-01, 2026-11-17). `TACTIC_TEACHING.concept` derives from
   `tacticInvariant` — one definition of a fork in the app.
 
 **Causal chain (SHIPPED — see `docs/plans/2026-09-07-causal-chain-engine.md`)**

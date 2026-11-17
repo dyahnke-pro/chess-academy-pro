@@ -92,7 +92,6 @@
   "src/services/middlegamePlanService.ts::getPlanById",
   "src/services/middlegamePlanService.ts::storePlans",
   "src/services/missedTacticService.ts::TACTIC_TYPE_AUTHORITY",
-  "src/services/missedTacticService.ts::legacyTacticGeometry",
   "src/services/modelGameService.ts::countModelGames",
   "src/services/modelGameService.ts::getAllModelGames",
   "src/services/modelGameService.ts::getModelGameById",
