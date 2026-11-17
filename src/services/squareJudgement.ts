@@ -410,6 +410,11 @@ export function mutualRestriction(fen: string, student: Color): StructureRead | 
         const dr = Math.sign(rankNum(k) - rankNum(b));
         if (Math.abs(fileIdx(k) - fileIdx(b)) !== Math.abs(rankNum(k) - rankNum(b)) || df === 0) continue;
         if (firstOnRay(c, b, df, dr) !== k) continue;
+        // A knight at the END of the diagonal blocks nothing — the bishop just
+        // attacks it (Danya LJa5 8…dxe4: "Their knight on h3 blocks your
+        // light-squared bishop" with c8–h3 the bishop's whole diagonal).
+        const beyondF = fileIdx(k) + df; const beyondR = rankNum(k) + dr;
+        if (beyondF < 0 || beyondF > 7 || beyondR < 1 || beyondR > 8) continue;
         const theirs = knightSide !== student;
         const text = theirs
           ? `Their knight on ${k} blocks your bishop on ${b}, a fair price: the knight is stuck on the rim.`

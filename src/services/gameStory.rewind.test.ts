@@ -22,7 +22,7 @@ const asWhite = (fen: string): string => fen.replace(' b ', ' w ');
  *  when its line spoke (the door kept it), at the ply the board is on. */
 function planTurn(mem: ReturnType<typeof createLearnMemory>, ply: number): string[] {
   const trial = mem.story.plans().thread;
-  const lines = planThreadTurn(trial, { ply, fenBefore: OPEN_C, fenAfter: asWhite(OPEN_C), student: 'w', holdPlayable: false });
+  const lines = planThreadTurn(trial, { ply, fenBefore: OPEN_C, fenAfter: asWhite(OPEN_C), student: 'w', holdPlayable: false, studentBestUci: null });
   const desk = mem.story.plans();
   if (adoptPlanTrial(desk.thread, trial, lines.map((l) => l.claim), lines.map((l) => l.claim))) mem.story.setPlans(ply, desk);
   // The think-pause tokens are per line; the words are what the student hears.

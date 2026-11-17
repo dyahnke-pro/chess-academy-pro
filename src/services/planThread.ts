@@ -170,6 +170,10 @@ export function planThreadTurn(
     /** REQUIRED: Learn, before the student's move, holds a plan step that is a
      *  legal move right now (LEARN NAMES NO MOVE UNASKED); Review names it. */
     holdPlayable: boolean;
+    /** REQUIRED: the engine's best move for the student on `fenAfter` (UCI),
+     *  or null when the surface has none. "Take their pawn first" is said only
+     *  when it is the move the engine plays. */
+    studentBestUci: string | null;
   },
 ): PlanThreadLine[] {
   const out: PlanThreadLine[] = [];
@@ -249,7 +253,7 @@ export function planThreadTurn(
   // extra piece to convert outranks all three questions, and saying the
   // questions before an unrelated plan is what made them not line up.
   const methodOwns = top.kind !== 'passer' && top.kind !== 'convert';
-  const read = !t.methodSaid && methodOwns ? methodRead(args.fenAfter, args.student, args.holdPlayable) : null;
+  const read = !t.methodSaid && methodOwns ? methodRead(args.fenAfter, args.student, args.holdPlayable, args.studentBestUci) : null;
   const mp = read ? methodPlanSentence(read, args.fenAfter) : null;
   // WHY THIS ONE — the reason it outranks the next plan on the board. Asked as
   // a question when no method question already opened the line (one pause).

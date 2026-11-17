@@ -99,3 +99,13 @@ describe('lineBuilds — what a quiet line of theirs builds', () => {
     expect(lost).not.toMatch(/passed pawn/);
   });
 });
+
+// Danya speedrun 4e6zHMBUgvg after 16.Bxd4: "Their Be3 looks aimed at your
+// c-pawn, but its real point is your rook on f8" — the rook is won by another
+// piece; the bishop's move never reaches it.
+describe('the real point is what the moving piece itself wins', () => {
+  it('a rook the knight wins is not the bishop move\'s point', () => {
+    const line = lineOf('6k1/8/8/2p5/8/3N4/1r1B4/4K3 w - - 0 1', ['Be3', 'Kf7', 'Nxb2']);
+    expect(threatPurpose(line, 'b') ?? '').not.toMatch(/real point/);
+  });
+});

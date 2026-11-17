@@ -75,7 +75,7 @@ describe('the method\'s answers make the plan', () => {
   it('rook to the open file, knight to the hole, then the break — and why that order', async () => {
     const { planThreadTurn } = await import('./planThread');
     const { emptyPlanThread } = await import('./gameStory');
-    const line = planThreadTurn(emptyPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b', holdPlayable: false })[0]?.text ?? '';
+    const line = planThreadTurn(emptyPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b', holdPlayable: false, studentBestUci: null })[0]?.text ?? '';
     expect(line).toMatch(/Your worst piece: your rook on a8, with no open file yet\./);
     expect(line).toMatch(/So the plan: put a rook on the open c-file\. Bring your knight on e8 to d4, by way of c7 and e6 — no pawn of theirs can attack it there\. Then break open with the push to d6 or f6\./);
     expect(line).toMatch(/Why in that order\? A break opens the position/);
@@ -90,7 +90,7 @@ describe('the method\'s answers make the plan', () => {
     const { planThreadTurn } = await import('./planThread');
     const { emptyPlanThread } = await import('./gameStory');
     const passer = '6k1/5ppp/8/P7/8/8/5PPP/6K1 w - - 0 30';
-    const line = planThreadTurn(emptyPlanThread(), { ply: 59, fenBefore: passer, fenAfter: passer, student: 'w', holdPlayable: false })[0]?.text ?? '';
+    const line = planThreadTurn(emptyPlanThread(), { ply: 59, fenBefore: passer, fenAfter: passer, student: 'w', holdPlayable: false, studentBestUci: null })[0]?.text ?? '';
     expect(line).toMatch(/passed pawn/);
     expect(line).not.toMatch(/How do you find a plan/);
   });
@@ -104,7 +104,7 @@ describe('the plan traces its routes', () => {
     const { planThreadTurn } = await import('./planThread');
     const { emptyPlanThread } = await import('./gameStory');
     const { Chess } = await import('chess.js');
-    const l = planThreadTurn(emptyPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b', holdPlayable: false })[0];
+    const l = planThreadTurn(emptyPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b', holdPlayable: false, studentBestUci: null })[0];
     expect(l?.arrows?.map((a) => a.from + a.to)).toEqual(['a8c8', 'e8c7', 'c7e6', 'e6d4', 'd7d6', 'f7f6']);
     for (const a of l?.arrows ?? []) {
       const parts = a.fen.split(' '); parts[1] = 'b';
@@ -148,7 +148,7 @@ describe('a why question is never asked twice in a game', () => {
     t.methodSaid = true;
     t.whyAsked.add('seizing the open c-file');
     const fen = '6k1/1P3ppp/8/8/8/8/5PPP/2r3K1 w - - 0 30';
-    const line = planThreadTurn(t, { ply: 59, fenBefore: fen, fenAfter: fen, student: 'w', holdPlayable: false })[0]?.text ?? '';
+    const line = planThreadTurn(t, { ply: 59, fenBefore: fen, fenAfter: fen, student: 'w', holdPlayable: false, studentBestUci: null })[0]?.text ?? '';
     expect(line).not.toMatch(/Why this one and not seizing the open c-file\?/);
   });
 });
@@ -181,5 +181,18 @@ describe('a passer is named by its file (David replay 2026-10-19, move 49)', () 
     const w = planWorth({ kind: 'passer', squares: ['d6'] } as unknown as Parameters<typeof planWorth>[0]);
     expect(w).toMatch(/your d-pawn/);
     expect(w).not.toMatch(/d6/);
+  });
+});
+
+// Danya speedrun BGTBTghFQDI after 6…a6: "So the plan: trade on d4 first —
+// material on offer comes before any plan" — the engine plays Bd5 (+1.1);
+// cxd4 is −0.3. A capture the engine does not play is no "material first".
+describe('material first only when the engine takes it', () => {
+  const fen = 'rnbqkb1r/1p1p1ppp/p7/2p5/2Bpn3/2P2N2/PP3PPP/RNBQ1RK1 w kq - 0 7';
+  it('no take-first step when the best move is Bd5', () => {
+    expect(methodRead(fen, 'w', false, 'c4d5')?.cct?.step ?? '').not.toMatch(/first — material/);
+  });
+  it('CONTROL: with no engine read the board read still speaks', () => {
+    expect(methodRead(fen, 'w', false, null)?.cct?.step ?? '').toMatch(/first/);
   });
 });

@@ -50,7 +50,7 @@ export function threatPurpose(line: PvLine, student: Color): string | null {
   const endQ = queens(last.fenAfter);
   if (startQ === 2 && endQ === 0) return `${looks}, but its real point is trading queens into an ending they win.`;
   // The biggest student piece the line actually wins, if it is a different one.
-  const won = piecesWon(line);
+  const won = piecesWonByMover(line);
   if (!won || won.square === apparent.square || VALUE[won.piece] < VALUE[apparent.piece]) return null;
   return `${looks}, but its real point is your ${NAME[won.piece]} on ${won.square}.`;
 }
@@ -104,6 +104,40 @@ export function lineBuilds(line: PvLine): string | null {
  *  your bishop on f6" — the d7 bishop went to f6 inside the line and was taken
  *  there; it was the same bishop, and f6 was empty). `origin` follows each of
  *  the other side's pieces back to its square at the start of the line. */
+function piecesWonByMover(line: PvLine): { piece: PieceSymbol; square: Square } | null {
+  const owner = line.plies[0]?.moverColor;
+  if (!owner) return null;
+  const origin = new Map<string, Square>();
+  // THE POINT OF THE MOVE IS WHAT THAT PIECE WINS (Danya 4e6z 16.Bxd4: "Their
+  // Be3 looks aimed at your c-pawn, but its real point is your rook on f8" — no
+  // diagonal from e3 reaches f8; another piece took the rook later). Only a
+  // capture made by the piece that moved first, and kept (not taken straight
+  // back), is its real point.
+  let mover: string | null = line.plies[0]?.uci.slice(2, 4) ?? null;
+  let won: { piece: PieceSymbol; square: Square } | null = null;
+  line.plies.forEach((p, i) => {
+    const from = p.uci.slice(0, 2) as Square;
+    const to = p.uci.slice(2, 4) as Square;
+    if (p.moverColor !== owner) {
+      origin.set(to, origin.get(from) ?? from);
+      origin.delete(from);
+      if (to === mover) mover = null; // the piece was taken
+      return;
+    }
+    const byMover = i > 0 && from === mover;
+    if (from === mover) mover = to;
+    let taken: PieceSymbol | null = null;
+    try { taken = new Chess(p.fenBefore).get(to)?.type ?? null; } catch { taken = null; }
+    if (!taken || !byMover) return;
+    const next = line.plies[i + 1];
+    if (next && next.uci.slice(2, 4) === to) return; // taken straight back: a trade
+    const startedOn = origin.get(to) ?? to;
+    origin.delete(to);
+    if (!won || VALUE[taken] > VALUE[won.piece]) won = { piece: taken, square: startedOn };
+  });
+  return won;
+}
+
 function piecesWon(line: PvLine): { piece: PieceSymbol; square: Square } | null {
   const owner = line.plies[0]?.moverColor;
   if (!owner) return null;

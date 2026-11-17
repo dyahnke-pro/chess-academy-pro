@@ -66,6 +66,11 @@ export function detectBluff(fenBefore: string, san: string, bestReplySan: string
       // no need to react" beside "watch out — it pins your knight"). A slider
       // with the victim's king or a bigger piece behind its target binds it.
       if (pinsBehind(after, mv.to, sq, victim)) return null;
+      // A GUARD IT TRADES OFF IS NOT A BLUFF (Danya lyUZn 10.Bg5: "it wins
+      // nothing — no need to react" — Bxf6 and the pawn on e4 the knight
+      // guarded falls). After the trade on the target, the mover wins
+      // something else.
+      if (removesGuard(after, mv.to, sq, mover)) return null;
       if (cell.type !== 'p') targets.push({ piece: cell.type, square: sq });
     }
   }
@@ -118,4 +123,30 @@ export function bluffClause(b: Bluff, opening: boolean): string {
   const list = hit.length === 1 ? hit[0] : `${hit.slice(0, -1).join(', ')} and ${hit[hit.length - 1]}`;
   const next = opening ? 'keep developing' : 'keep improving your pieces';
   return `Their ${NAME[b.piece]} on ${b.square} looks aggressive, hitting ${list}, but it wins nothing — no need to react. ${openSentence(next)}`;
+}
+
+/** Does taking `target` with the piece on `from` (and their cheapest take-back)
+ *  leave the mover a winning capture somewhere else — a guard removed? */
+function removesGuard(board: Chess, from: Square, target: Square, mover: 'w' | 'b'): boolean {
+  try {
+    const c = new Chess(board.fen());
+    const victim: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+    const fen0 = c.fen().split(' ');
+    fen0[1] = mover; fen0[3] = '-';
+    const t = new Chess(fen0.join(' '));
+    if (!t.move({ from, to: target })) return false;
+    const backs = t.moves({ verbose: true }).filter((m) => m.to === target && !!m.captured)
+      .sort((a, b) => (MATERIAL_VALUE[a.piece] ?? 0) - (MATERIAL_VALUE[b.piece] ?? 0));
+    if (backs[0]) t.move(backs[0].san);
+    if (t.turn() !== mover) return false;
+    const fen = t.fen();
+    // Only what the TARGET itself was guarding: the guard removed, never a
+    // piece another recapturer left behind.
+    for (const row of t.board()) for (const p of row) {
+      if (!p || p.color !== victim || p.type === 'k') continue;
+      if (!board.attackers(p.square, victim).includes(target)) continue;
+      if (legalSeeGainFor(fen, p.square, mover) > 0) return true;
+    }
+    return false;
+  } catch { return false; }
 }

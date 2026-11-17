@@ -2905,7 +2905,7 @@ function* reviewSegmentSteps(
         // Their move follows the student's: the ply before is the student's own
         // (`planStepLine` checks the side to move on that board).
         const prevStudent = i > 0 && moves[i - 1] ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null;
-        for (const r of readBoardAll('planThread', { thread: planTrial, ply: m.ply, fenBefore: fenPair.fenBefore, fenAfter: fenPair.fenAfter, student: studentColorWB, studentPovCp: povCp, studentMove: prevStudent, holdPlayable: false })) {
+        for (const r of readBoardAll('planThread', { thread: planTrial, ply: m.ply, fenBefore: fenPair.fenBefore, fenAfter: fenPair.fenAfter, student: studentColorWB, studentPovCp: povCp, studentMove: prevStudent, holdPlayable: false, studentBestUci: m.pv?.afterPlayed?.[0] ?? null })) {
           // Review has no think pause: the question and its answer run on.
           const key = readKey(r);
           const raw = fact(r.computer, r.kind, r.text, {

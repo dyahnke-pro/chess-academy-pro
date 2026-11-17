@@ -11260,6 +11260,8 @@ export function CoachTeachPage({ mode }: {
                         student: playerColor === 'white' ? 'w' : 'b',
                         // Before the student's move: a plan step they could play now is held.
                         holdPlayable: true,
+                        // Learn reads the board before the engine's read of it lands.
+                        studentBestUci: null,
                         // The student's own move, credited when it was a step of the plan
                         // — only when the replayed history lands on this very board.
                         studentMove: (() => {

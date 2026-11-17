@@ -67,3 +67,11 @@ describe('never a bluff when something real is there', () => {
     expect(detectBluff(before(at('Rd3')), 'Rd3', null)).toBeNull();
   });
 });
+
+// Danya speedrun lyUZn39V6TY, 10.Bg5: "it wins nothing — no need to react" —
+// Bxf6 removes the only guard of the pawn on e4, and Nxe4 wins it.
+describe('a guard it can trade off is no bluff', () => {
+  it('10.Bg5 is a threat, not a bluff', () => {
+    expect(detectBluff('r1b1kb1r/1p2pppp/2n2n2/1p6/2pPpB2/P1P5/1P1N1PPP/R3KBNR w KQkq - 0 10', 'Bg5', null)).toBeNull();
+  });
+});

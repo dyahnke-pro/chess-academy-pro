@@ -65,6 +65,10 @@ export function methodRead(
   /** Learn before the student's move: a step that is a legal move right now
    *  is held (LEARN NAMES NO MOVE UNASKED). Review names it — the game is over. */
   holdPlayable = false,
+  /** The engine's best move for the student here (UCI), or null when unknown:
+   *  a capture the engine does not play is no "material first" (Danya lyUZn
+   *  15…: "take their pawn first" when …Nxe5 runs into h5). */
+  bestUci: string | null = null,
 ): MethodRead | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
@@ -117,7 +121,7 @@ export function methodRead(
   // A capture one reply away is the student's move too (OS-11 g4 9…dxe4: "take
   // their pawn on c3, the piece attacking your pawn" on their move, played two
   // moves later) — held whoever is to move.
-  const cct = cctRead(fen, student, holdPlayable);
+  const cct = cctRead(fen, student, holdPlayable, bestUci);
   if (!weakness && !worst && breaks.length === 0 && !cct?.step) return null;
   return { weakness, worst, breaks, breakPushes: breakHeld ? [] : breakPushes, ...(breakHeld ? { breakHeld } : {}), ...(cct ? { cct } : {}) };
 }
@@ -136,11 +140,13 @@ function cctRead(
    *  first", prod 2026-10-20). The answer says something is there; the
    *  square waits for the move, and `credit` keeps what crediting needs. */
   holdCapture = false,
+  bestUci: string | null = null,
 ): MethodRead['cct'] | null {
   const u = readBoardUrgency(fen, student === 'w' ? 'white' : 'black');
   if (!u) return null;
   const biggestSave = u.save[0]?.value ?? 0;
-  if (u.win && u.win.value >= biggestSave) {
+  const engineTakes = !bestUci || bestUci.slice(2, 4) === u.win?.square;
+  if (u.win && u.win.value >= biggestSave && engineTakes) {
     // FREE only when nothing guards it. A guarded piece that still falls is
     // said by what the ledger nets over the trades on its square (prod Review
     // 2026-10-29: "their pawn on g6 is free to take" with f7 guarding it — it
