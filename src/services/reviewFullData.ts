@@ -1660,6 +1660,12 @@ export function computeMoveFacets(
       add(readBoardAll('pawnBreak', { fenBefore, san, student: studentColorWB, lastTo })[0]);
       // Opposite-coloured bishops settled by this move, and what they mean.
       add(readBoardAll('oppositeBishops', { fenBefore, san, student: studentColorWB })[0]);
+      // What the pawn move did to the lines through its squares, and a piece
+      // at a chain's base or a pinned pawn guard (S4 pawns), both seats.
+      add(readBoardAll('pawnOpensCastling', { fenBefore, san, student: studentColorWB })[0]);
+      add(readBoardAll('pawnCutsGuard', { fenBefore, san, student: studentColorWB })[0]);
+      add(readBoardAll('chainBase', { fenBefore, san, student: studentColorWB })[0]);
+      add(readBoardAll('pinnedPawnGuard', { fenBefore, san, student: studentColorWB })[0]);
       // The plan's next steps off the engine's line after the move, and the
       // compensation a side down material is playing for (2026-11-12).
       if (ctx.playedLineUci.length) add(readBoardAll('planSteps', { fenAfter, line: ctx.playedLineUci, student: studentColorWB, played: playedUci(fenBefore, san) })[0]);

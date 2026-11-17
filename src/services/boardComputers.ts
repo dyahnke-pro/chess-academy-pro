@@ -70,6 +70,9 @@ import { lineCut } from './lineCut';
 import { harmlessPin, harmlessPinLine } from './harmlessPin';
 import { queenNet, queenNetLine } from './queenNet';
 import { bothSaved, bothSavedLine, type ReplyLine } from './bothSaved';
+import { pawnOpensCastling, pawnCutsGuard, type PawnLineRead } from './pawnLines';
+import { chainBase } from './chainBase';
+import { pinnedPawnGuard } from './pinnedPawnGuard';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses' | 'think';
 
@@ -251,6 +254,23 @@ export interface BoardContexts {
    *  move `san` on `fenBefore` (either seat). `replies`: the engine's lines
    *  from the board after it, best first (White-POV cp); [] where none. */
   bothSaved: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
+  /** WHAT A PAWN MOVE DID TO THE LINES (`pawnLines`, S4 pawns): the move `san`
+   *  on `fenBefore` (either seat). The square the pawn left opened an enemy
+   *  slider onto a square the mover's king castles across, with the right
+   *  still there — that castling is off while the piece stays. */
+  pawnOpensCastling: { fenBefore: string; san: string; student: Color };
+  /** The square the pawn landed on cut an enemy slider off from a piece it
+   *  guarded, which is hanging now and was not before. */
+  pawnCutsGuard: { fenBefore: string; san: string; student: Color };
+  /** THE BASE OF A PAWN CHAIN (`chainBase`): the move `san` on `fenBefore`
+   *  (either seat) brings a piece to guard the mover's own base, lost by the
+   *  count before and held after, or to hit the other side's base, held
+   *  before and lost by the count after. */
+  chainBase: { fenBefore: string; san: string; student: Color };
+  /** A GUARD THAT CAN'T TAKE BACK (`pinnedPawnGuard`): the move `san` on
+   *  `fenBefore` (either seat) hits a square whose pawn guard is pinned to its
+   *  king, and the pin is why the square is lost by the count. */
+  pinnedPawnGuard: { fenBefore: string; san: string; student: Color };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -360,6 +380,18 @@ function knownSlipFact(r: ReturnType<typeof knownSlip>, fen: string, fact: MakeF
   if (!r) return null;
   return fact({ key: r.key, claims: [r.key], text: r.text, proof: r.proof, squares: r.squares, stakes: r.stakes, seat: r.seat,
     namesStudentMove: r.namesStudentMove, thread: LOCAL_THREAD, fen, role: 'teach', ...(r.proof.line ? { lines: [r.proof.line] } : {}), ...(r.heldForm ? { heldForm: r.heldForm } : {}) });
+}
+
+/** S4 PAWNS: no Learn lane reads these yet (a lane is a door decision of its
+ *  own — `learnTurnDoor` LEARN_LANES and its roles). */
+const S4_LEARN_OWED = { not: 'owed — Learn speaks through its door\'s lanes, and no lane reads it yet (learnTurnDoor)' } as const;
+
+/** A pawn-line read as the one fact, on the board after the move. */
+function pawnLineFact(r: PawnLineRead | null, fenBefore: string, san: string, fact: MakeFact): CoachFact | null {
+  if (!r) return null;
+  return fact({ key: r.key, claims: [r.key], text: r.text, proof: r.proof ?? NO_PROOF.description, squares: r.squares,
+    stakes: r.gain ? { points: r.gain, plies: 1 } : null,
+    seat: r.mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
 }
 
 export const BOARD_COMPUTERS = {
@@ -1266,6 +1298,79 @@ export const BOARD_COMPUTERS = {
       learn: { not: 'owed — not in the Learn turn door yet (CoachTeachPage reads none of its lanes); the composer and Review say it' },
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  pawnOpensCastling: {
+    // His "f3 opens the g1–a7 diagonal; with Black's bishop on c5, White can
+    // no longer castle short" (Ytkf3qZTj74): the line the pawn opened, said
+    // about the move just played, both seats.
+    read: ({ fenBefore, san, student }, fact) => safe(() => pawnLineFact(pawnOpensCastling(fenBefore, san, new Chess(fenBefore).turn() === student), fenBefore, san, fact)),
+    computer: 'pawnOpensCastling',
+    kind: 'king-read',
+    phase: NOT_ENDING,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: S4_LEARN_OWED, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
+      tactics: { not: 'a puzzle poses one tactic; the castling square a pawn opened is the game\'s king safety' },
+      weaknesses: { not: 'a reading of the move just played — no question of the student\'s posed' },
+      think: THINK,
+    },
+  },
+  pawnCutsGuard: {
+    // His "…c4 cuts the line between the b3 queen and the f7 bishop", "…c3
+    // interferes: it blocks the queen's diagonal to a5": the guard the pawn
+    // cut and the piece left hanging, both seats.
+    read: ({ fenBefore, san, student }, fact) => safe(() => pawnLineFact(pawnCutsGuard(fenBefore, san, new Chess(fenBefore).turn() === student), fenBefore, san, fact)),
+    computer: 'pawnCutsGuard',
+    kind: 'tactic',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: S4_LEARN_OWED, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
+      tactics: { not: 'owed — a puzzle\'s interference is named by its classifier (detectTacticType); this reads a game move' },
+      weaknesses: { not: 'the hanging piece it leaves is graded and filed by the move\'s own cost and the threat record' },
+      think: THINK,
+    },
+  },
+  chainBase: {
+    // His "f4 is the base of the chain; if it falls e3 follows, so guard it
+    // with …Bh6" (lyUZn39V6TY): the piece that comes to a chain's base, to
+    // guard it or to hit it, both seats.
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const mine = new Chess(fenBefore).turn() === student;
+      const r = chainBase(fenBefore, san, mine);
+      if (!r) return null;
+      return fact({ key: r.key, claims: [r.key], text: r.text, proof: r.proof ?? NO_PROOF.description, squares: r.squares,
+        stakes: r.gain ? { points: r.gain, plies: 1 } : null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'chainBase',
+    kind: 'judgement',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: S4_LEARN_OWED, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
+      tactics: { not: 'a puzzle poses one tactic; a chain\'s base is the structure of a game' },
+      weaknesses: { not: 'a reading of the move just played — the pawn it guards or wins is graded by the move\'s own cost' },
+      think: THINK,
+    },
+  },
+  pinnedPawnGuard: {
+    // His "f7 is pinned to the king, so e6 is weak; Rc6 threatens Rxe6+"
+    // (-Am8glebGwQ): the square whose pawn guard can't take back, both seats.
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const mine = new Chess(fenBefore).turn() === student;
+      const r = pinnedPawnGuard(fenBefore, san, mine);
+      if (!r) return null;
+      return fact({ key: r.key, claims: [r.key], text: r.text, proof: r.proof ?? NO_PROOF.description, squares: r.squares,
+        stakes: { points: r.gain, plies: 1 },
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'pinnedPawnGuard',
+    kind: 'tactic',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: S4_LEARN_OWED, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
+      tactics: { not: 'owed — a puzzle\'s pin is named by its classifier (detectTacticType); this reads a game move' },
+      weaknesses: { not: 'the square it wins is graded by the move\'s own cost; the pin itself is recorded by the pin readers' },
+      think: THINK,
     },
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };
