@@ -18,22 +18,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `threatPurpose` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5724`
+- `src/services/coachFeatureService.ts:5741`
 - `src/services/threatPurpose.test.ts:26`
 - `src/services/threatPurpose.test.ts:31`
 - `src/services/threatPurpose.test.ts:37`
 - `src/services/threatPurpose.test.ts:109`
 
 ### `lineBuilds` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5725`
+- `src/services/coachFeatureService.ts:5742`
 - `src/services/threatPurpose.test.ts:88`
 - `src/services/threatPurpose.test.ts:91`
 - `src/services/threatPurpose.test.ts:95`
 - `src/services/threatPurpose.test.ts:98`
 
 ### `lineRestatesClaim` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5605`
-- `src/services/coachFeatureService.ts:5691`
+- `src/services/coachFeatureService.ts:5622`
+- `src/services/coachFeatureService.ts:5708`
 - `src/services/threatPurpose.test.ts:50`
 - `src/services/threatPurpose.test.ts:51`
 - `src/services/threatPurpose.test.ts:55`

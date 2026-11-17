@@ -669,9 +669,11 @@ export function pawnSquareTaken(fenBefore: string, san: string, cpLoss: number):
   try { board = new Chess(fenBefore); } catch { return null; }
   const race = pawnSquareRaces(fenBefore, board.turn()).find((r) => r.yourReady === 0 && r.yourPush.replace(/[+#]$/, '') === san.replace(/[+#]$/, ''));
   if (!race) return null;
-  // The square named once (the human register: full name once, then "it").
+  // The square is the move's own, named by the move already ("You go e5 …
+  // Your pawn got to e5 first", the robotic counter 2026-11-17): said as
+  // "there" (the human register: full name once, then "it").
   return {
-    text: `Your pawn got to ${race.square} first, so their ${race.square[0]}-pawn can never reach it now: the square is yours.`,
+    text: `Your pawn got there first, so their ${race.square[0]}-pawn can never reach it now: the square is yours.`,
     squares: [race.square],
     race,
   };

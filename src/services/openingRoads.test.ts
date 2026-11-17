@@ -15,7 +15,7 @@ const fenOf = (sans: readonly string[]): string => { const c = new Chess(); sans
 describe('roadReason — what each road allows', () => {
   it('the Najdorf over the Classical: what …a6 takes away, and how masters meet the other road', () => {
     expect(roadReason({ prefix: FORK, chosenSan: 'a6', chosenName: 'Sicilian Defense: Najdorf Variation', altSan: 'Nc6', altName: 'Sicilian Defense: Classical Variation', student: 'b', movesAt })?.text)
-      .toMatch(/^…a6 takes b5 away from their knights on d4 and c3 and their bishop on f1\./);
+      .toMatch(/^…a6 takes b5 away from their knights on d4 and c3, and their bishop on f1\./);
   });
   it('the road not taken is never described (lead 2026-10-20: "the Giuoco Piano is mostly met by the Classical")', () => {
     expect(roadReason({ prefix: FORK, chosenSan: 'a6', chosenName: 'Sicilian Defense: Najdorf Variation', altSan: 'Nc6', altName: 'Sicilian Defense: Classical Variation', student: 'b', movesAt })?.text).not.toMatch(/other main road|mostly met by/);

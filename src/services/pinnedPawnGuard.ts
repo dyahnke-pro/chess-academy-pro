@@ -102,10 +102,13 @@ export function pinnedPawnGuard(fenBefore: string, san: string, mine: boolean): 
       // g-pawn" right after "g4 is a pawn break" says the square once).
       const piece = seatPieceWords(afterFen, m.to, own, `${own} ${NAME[m.piece]} on ${m.to}`);
       const what = `${other} ${NAME[t.type]} on ${target}`;
+      // The pin is said with what pins it: the board lights the pinner, so the
+      // words name it (the marks sweep 2026-11-17: c4 lit, never said).
+      const pinnerWords = seatPieceWords(afterFen, pinner, own, `${own} ${NAME[after.get(pinner)?.type ?? 'b']} on ${pinner}`);
       const text = rotateStem([
-        `${cap(piece)} hits ${what}. The ${cell.square} pawn guards it, but it is pinned to the king and can't take back.`,
-        `${cap(other)} pawn on ${cell.square} is pinned to the king, so it doesn't really guard ${target}. ${cap(piece)} goes after ${what}.`,
-        `${cap(piece)} attacks ${what}. Its pawn guard on ${cell.square} is pinned to the king, and a pinned pawn can't recapture.`,
+        `${cap(piece)} hits ${what}. The ${cell.square} pawn guards it, but ${pinnerWords} pins it to the king, so it can't take back.`,
+        `${cap(pinnerWords)} pins ${other} pawn on ${cell.square} to the king, so it doesn't really guard ${target}. ${cap(piece)} goes after ${what}.`,
+        `${cap(piece)} attacks ${what}. Its pawn guard on ${cell.square} is pinned to the king by ${pinnerWords}, and a pinned pawn can't recapture.`,
       ], stemKeyOf(`${fenBefore}|${san}`));
       const squaresSaid = [m.to, target, cell.square, pinner];
       return { key: `pinned-guard:${cell.square}:${target}`, text, squares: squaresSaid, proof: squaresProof(text, squaresSaid), mine, gain };

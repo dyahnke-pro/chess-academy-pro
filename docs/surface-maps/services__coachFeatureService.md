@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6782 lines · 35 exports · 75 importers · 90 tests · 4 audits**
+**6799 lines · 35 exports · 75 importers · 90 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -203,14 +203,14 @@
 - `src/services/coachFeatureService.openingStory.test.ts:58`
 - `src/services/coachFeatureService.openingStory.test.ts:72`
 - `src/services/coachFeatureService.openingStory.test.ts:85`
-- `src/services/coachFeatureService.openingStory.test.ts:105`
-- `src/services/coachFeatureService.openingStory.test.ts:124`
-- `src/services/coachFeatureService.openingStory.test.ts:130`
-- `src/services/coachFeatureService.openingStory.test.ts:143`
-- `src/services/coachFeatureService.openingStory.test.ts:157`
-- `src/services/coachFeatureService.openingStory.test.ts:182`
-- `src/services/coachFeatureService.openingStory.test.ts:206`
-- `src/services/coachFeatureService.openingStory.test.ts:224`
+- `src/services/coachFeatureService.openingStory.test.ts:106`
+- `src/services/coachFeatureService.openingStory.test.ts:125`
+- `src/services/coachFeatureService.openingStory.test.ts:131`
+- `src/services/coachFeatureService.openingStory.test.ts:144`
+- `src/services/coachFeatureService.openingStory.test.ts:158`
+- `src/services/coachFeatureService.openingStory.test.ts:183`
+- `src/services/coachFeatureService.openingStory.test.ts:207`
+- `src/services/coachFeatureService.openingStory.test.ts:225`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
 - `src/services/coachFeatureService.planChange.test.ts:48`
@@ -345,10 +345,10 @@
 - `src/services/coachFeatureService.test.ts:626`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8875`
-- `src/components/Coach/CoachTeachPage.tsx:8978`
-- `src/components/Coach/CoachTeachPage.tsx:11948`
-- `src/components/Coach/CoachTeachPage.tsx:12350`
+- `src/components/Coach/CoachTeachPage.tsx:8881`
+- `src/components/Coach/CoachTeachPage.tsx:8984`
+- `src/components/Coach/CoachTeachPage.tsx:11954`
+- `src/components/Coach/CoachTeachPage.tsx:12356`
 - `src/services/coachFeatureService.test.ts:912`
 - `src/services/coachFeatureService.test.ts:913`
 - `src/services/phaseTransitionDetector.test.ts:575`

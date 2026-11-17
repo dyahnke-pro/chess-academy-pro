@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**678 lines · 9 exports · 9 importers · 8 tests · 0 audits**
+**680 lines · 9 exports · 9 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5855) — names `BEAT_GROUNDS`, `openingStory`
-- **The standard post-deploy ritual** (CLAUDE.md:6928) — names `openingStory`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5898) — names `BEAT_GROUNDS`, `openingStory`
+- **The standard post-deploy ritual** (CLAUDE.md:6972) — names `openingStory`
 
 ## Who calls in
 
@@ -41,13 +41,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `storyPlanAfter` (function) — 2 call sites
-- `src/services/moveThoughtFacts.ts:446`
-- `src/services/moveThoughtFacts.ts:515`
+- `src/services/moveThoughtFacts.ts:504`
+- `src/services/moveThoughtFacts.ts:579`
 
 ### `openingStoryAt` (function) — 14 call sites
-- `src/services/boardComputers.ts:443`
+- `src/services/boardComputers.ts:598`
 - `src/services/holeKey.test.ts:15`
-- `src/services/learnBoardTeaching.test.ts:217`
+- `src/services/learnBoardTeaching.test.ts:219`
 - `src/services/openingStory.test.ts:23`
 - `src/services/openingStory.test.ts:30`
 - `src/services/openingStory.test.ts:38`
@@ -64,7 +64,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `prefetchOpeningStory` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:93`
+- `src/services/learnBoardTeaching.ts:94`
 - `src/services/openingStory.test.ts:173`
 
 ## Tests

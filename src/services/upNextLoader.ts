@@ -23,9 +23,8 @@ import { lessonStepForCard, loadThinkingTransfer } from './thinkingLessonStart';
 import { transferGapLine, worstGap } from './thinkingTransfer';
 import type { StepChoice } from './thinkingLessonPlan';
 import { THINKING_STEPS } from './thinkingSteps';
-import { isBeginnerMode } from './ratingBands';
+import { loadBeginnerRegister } from './beginnerRegisterLoader';
 import { START_FUNDAMENTALS_KEY } from './activeBite';
-import { useAppStore } from '../stores/appStore';
 import { RING_SIZE, dayKey } from './trainingWeek';
 import { logAppAudit } from './appAuditor';
 import { dueEndgameReviews } from './endgameDueReview';
@@ -73,7 +72,7 @@ export function freeUserOnPaywall(): boolean {
  *  page opened, the Italian / Two Knights main line watched, a coach game
  *  played. Empty outside beginner mode. */
 async function loadStartSteps(): Promise<StartStep[]> {
-  if (!isBeginnerMode(useAppStore.getState().activeProfile)) return [];
+  if (!(await loadBeginnerRegister()).beginner) return [];
   const [fund, italian, twoKnights, coachGames] = await Promise.all([
     db.meta.get(START_FUNDAMENTALS_KEY).catch(() => undefined),
     db.openings.get('italian-game').catch(() => undefined),
@@ -121,7 +120,7 @@ async function loadThinkingSignal(): Promise<ThinkingSignal | null> {
   const transfer = await loadThinkingTransfer();
   const gap = worstGap(transfer);
   return thinkingSignalFrom(
-    await lessonStepForCard(tiles, isBeginnerMode(useAppStore.getState().activeProfile), transfer).catch(() => null),
+    await lessonStepForCard(tiles, (await loadBeginnerRegister()).beginner, transfer).catch(() => null),
     tiles,
     gap ? transferGapLine(gap) : null,
   );

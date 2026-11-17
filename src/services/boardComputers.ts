@@ -18,7 +18,7 @@
 // call site — a claim with no caller fails.
 //
 // PURE: every computer here is pure; this module adds no chess of its own.
-import { ideaClaim } from './ideaKind';
+import { ideaClaim, type IdeaKind } from './ideaKind';
 import { Chess, type Color } from 'chess.js';
 import { NO_PROOF, squaresProof, isProof, legalLineProof, type FactProof } from './proof';
 import type { FactStakes } from './factStakes';
@@ -474,6 +474,24 @@ const TRADE_SURFACES: Record<CoachSurface, SurfaceAnswer> = {
   weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
   think: THINK,
 };
+
+/** The claim a move's idea on squares carries in the composer
+ *  (`move:<from><to>:idea:<kind>:<squares>`), so a registry read and the
+ *  briefing's own line for the same idea are one claim. Null on an illegal move. */
+function moveIdeaClaim(fenBefore: string, san: string, kind: IdeaKind, squares: readonly string[]): string | null {
+  try {
+    const mv = new Chess(fenBefore).move(san);
+    return `move:${mv.from}${mv.to}:${ideaClaim(kind, squares.filter((q) => q !== mv.from && q !== mv.to))}`;
+  } catch { return null; }
+}
+
+/** The square choice's own claim (`weighedMoves` key `square:<uci>`). */
+function squareChoiceClaim(fenBefore: string, san: string): string | null {
+  try {
+    const mv = new Chess(fenBefore).move(san);
+    return `square:${mv.from}${mv.to}${mv.promotion ?? ''}`;
+  } catch { return null; }
+}
 
 export const BOARD_COMPUTERS = {
   pinBreakOwn: {
@@ -1497,9 +1515,11 @@ export const BOARD_COMPUTERS = {
       // A hit on their base is the move's pressure on that pawn: one claim
       // with the board teacher's "your rook hits their pawn on c2, which has
       // no guard" (`ideaClaim('pressure', …)`), so a turn says the hit once.
-      const mv = (() => { try { return new Chess(fenBefore).move(san); } catch { return null; } })();
+      // A hit on an UNGUARDED base is also Review's "their knight now hits
+      // your h-pawn, and nothing guards it" (`loose:<sq>`): one claim.
       const base = r.key.split(':')[2];
-      const hitClaim = r.act === 'hit' && mv && base ? [`move:${mv.from}${mv.to}:${ideaClaim('pressure', [base])}`] : [];
+      const pressure = r.act === 'hit' && base ? moveIdeaClaim(fenBefore, san, 'pressure', [base]) : null;
+      const hitClaim = [...(pressure ? [pressure] : []), ...(r.act === 'hit' && r.loose && base ? [`loose:${base}`] : [])];
       return fact({ key: r.key, claims: [r.key, ...hitClaim], text: r.text, proof: r.proof ?? NO_PROOF.description, squares: r.squares,
         stakes: r.gain ? { points: r.gain, plies: 1 } : null,
         seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
@@ -1676,7 +1696,10 @@ export const BOARD_COMPUTERS = {
       const key = `queen-hunt:${h.shape}:${h.queen}`;
       // The queen is what rides on it: hit now, or caught on its one square.
       const stakes = h.shape === 'one-square' && !h.net ? null : { points: 9, plies: h.shape === 'boxed' ? 1 : 2 };
-      return fact({ key, claims: [key, `queen-run:${h.queen}`], text, proof: squaresProof(text, h.squares) ?? NO_PROOF.description, squares: h.squares, stakes,
+      // …and one with the briefing's "your bishop goes after their queen on
+      // a4" (`pressure` on the queen's square): a turn says the hunt once.
+      const hit = moveIdeaClaim(fenBefore, san, 'pressure', [h.queen]);
+      return fact({ key, claims: [key, `queen-run:${h.queen}`, ...(hit ? [hit] : [])], text, proof: squaresProof(text, h.squares) ?? NO_PROOF.description, squares: h.squares, stakes,
         seat: mine ? 'student' : 'opponent', namesStudentMove: mine && h.shape === 'one-square' && !!h.net, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
     }),
     computer: 'queenHunt',
@@ -1725,14 +1748,17 @@ export const BOARD_COMPUTERS = {
       const key = `out-of-reach:${o.square}:${o.contrast.left && 'now' in o.contrast.chase ? 'rescue' : 'square'}`;
       // One claim with the square choice's "safe there" (`safe-route:<sq>`): a
       // move says the piece is out of reach once.
-      return fact({ key, claims: [key, `safe-route:${o.square}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+      // …and with "Why that square for your knight?" (`squareChoice`): both
+      // answer why the piece went there, so a turn says one of them.
+      const why = squareChoiceClaim(fenBefore, san);
+      return fact({ key, claims: [key, `safe-route:${o.square}`, ...(why ? [why] : [])], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
         seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
     }),
     computer: 'outOfReach',
-    kind: 'move-job',
+    kind: 'contrast',
     phase: ANY,
     surfaces: {
-      lesson: LESSON_BOARD, learn: KING_LEARN_OWED, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
+      lesson: LESSON_BOARD, learn: KING_LEARN_OWED, review: { wired: 'services/reviewFullData.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of where a piece stands — no question of the student\'s posed' },
       think: THINK,

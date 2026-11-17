@@ -21,6 +21,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000zh. WO-SPEEDRUN-02 — the full sweep of his three speedrun series (David 2026-11-17, PLAN.md)
+- 🟠 queued: every game of the three series (his words: "oh my lands, the sensei, and theory speed run"), teaching points graded per surface; starts after WO-SPEEDRUN-01 ships
+
 ## 000zg. WO-SPEEDRUN-01 — 20 Danya speedrun games against the app, every coach surface on one door (David 2026-11-17, PLAN.md)
 - ✅ S0a real-app tapes: Review 20/20 games, Learn 18/20 (two Black-seat 1.e3 games re-running)
 - 🟠 S0b regrade of the 764 teaching points on both surfaces (Review done on the old build; Learn owed; both re-run on the fixed build)
@@ -29,11 +32,13 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ S2 ~35 false lines fixed at their producers (passer, take-back retaken, queen trade, f-file king, missed stop, give-back capture line, "asks", trapped rescue, fork traded off, tempo kick, rim-knight read deleted, bishop pair handed, move order reads checks: "…e5 at once allows Bb5+")
 - ✅ S2b one "does that move just drop something" helper (`bestCaptureGainFor`): three private copies merged; the wants reader (pins, forks, kicks) uses it
 - ✅ new computers in the human voice (desperado, empty check: rotated, piece-led, no move name in Learn)
-- 🟠 S3 wire the quiet computers to say the teaching point (driven by the regrade)
-- 🟠 S4 the missing computers (17 groups)
-- 🟠 S5 beginner register chosen by the record
+- ✅ S3 measured: only 39 of 1,217 points were held by the door; 97% of misses had no computer → S4
+- ✅ S4 22 computers in six groups, both seats, Review + lessons + chat + How to think (Learn lanes owed); duplicates folded, two contradictions fixed
+- 🟠 S4b owed: Learn lanes for the new computers; chat's threat answer repeats its take-the-attacker line
+- ✅ S5 one beginner register, chosen by the record (Beginner tactics held → past it); `isBeginnerMode` deleted
+- ✅ S5b chat answers in full on all ten chat boxes: no record or register limit (an asked mate is stated); the trap a move sets and opening theory now reach chat (gate `chatAnswersInFull`)
 - 🟠 S6 rebuild tapes, regrade, bench, ship-check, main, prod audits
-- 🟠 David's call: show the opponent's failed tactic ("Bg5 looks like a pin, but drops the knight") in Review and lessons, not in Learn
+- ✅ the opponent's failed tactic said in Review and lessons after the real reason ("Bg5 looks like a pin, but it fails"), not in Learn
 
 ## 000zf. WO-OPENINGS-REWRITE-01 — every opening tab rewritten, one computed beat a move; Levy's taught lines (David 2026-11-11, PLAN.md)
 - ✅ R1 fact sheets per move (masters, engine at fixed depth, board facts, notes); beats written by hand from them (docs/OPENING-WATCH-BEATS.md)

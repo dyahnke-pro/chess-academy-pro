@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import type { ChatMessage as ChatMessageType } from '../../types';
 import { stripCoachMarkup } from '../../services/sanitizeCoachText';
 import { useLocalizedContent } from '../../services/coachChatText';
-import { useAppStore } from '../../stores/appStore';
-import { coreRatingTier } from '../../services/ratingBands';
+import { useBeginnerRegister } from '../../hooks/useBeginnerRegister';
 import { movesInWords } from '../../utils/sanToSpeech';
 
 /** Render basic markdown-style formatting: **bold** and *italic*.
@@ -111,13 +110,13 @@ function ActionButton({ action, onClick }: {
  *  surfaces and the seventh. See `services/coachChatText.ts`. */
 export function ChatMessage({ message, isStreaming, onPickChoice }: ChatMessageProps): JSX.Element {
   // THE BEGINNER REGISTER (2026-10-02: real users asked what "G" and "bxe7"
-  // mean). Below 1000 — and unrated, which defaults there: an empty record
-  // teaches — every move in a coach bubble reads in words with its notation
-  // after it. Phrasing only; how much the coach says is not the rating's call.
+  // mean). While the student's record says beginner (`beginnerRegister` — the
+  // Beginner tactics not yet held; an empty record teaches) every move in a
+  // coach bubble reads in words with its notation after it. Phrasing only.
   // The words are English, so they are written on the English source INSIDE
   // the translation door, never over a translated bubble (chat-surfaces audit
   // 2026-11-06: "Su respuesta más fuerte es bishop to b6 (Bb6)").
-  const beginner = useAppStore((s) => coreRatingTier(s.activeProfile?.currentRating) === 'beginner');
+  const beginner = useBeginnerRegister();
   const shownContent = useLocalizedContent(message.content, message.role, {
     streaming: isStreaming,
     ...(beginner && message.role === 'assistant' ? { renderEnglish: movesInWords } : {}),

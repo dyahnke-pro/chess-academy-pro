@@ -13,6 +13,15 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🏃 WO-SPEEDRUN-02 — the full speedrun sweep, three series (David 2026-11-17: "Once this is working, and all subsequent builds are done, I want another sweep for teaching points. But a full sweep of speed runs 'oh my lands, the sensei, and theory speed run'. But we finish this build completely first.")
+
+Queued; starts only after WO-SPEEDRUN-01 has shipped and its prod audits are read. The same measure as WO-SPEEDRUN-01, over every game of his three speedrun series, not a sample:
+- list his teaching points;
+- replay his moves on the real app (Review, Learn, chat);
+- grade each point per surface;
+- fix the wrong lines at their producers;
+- build the missing computers.
+
 ## 🏃 WO-SPEEDRUN-01 — 20 Danya speedrun games against the app, one coach on every surface (David 2026-11-17: "build the missing computers. Wire the teaching narrations for the ones we have. Unify the coach. And adjust the narrations to match how Danya teaches lower elo players" → "Agreed"; then "It's not just how to think that needs unification. It's all coach surfaces" · "We upgraded our narrations a little while ago. Make sure these new computers adopt it" · "Why cut that corner? Model Bb5+")
 
 **The measure.** 10 high and 10 low (<800) speedrun games, his moves replayed on the real app: Review tapes (20/20) and Learn tapes (18/20 — the two 1.e3 games with the student as Black need the coach's first move swapped, re-running). 764 teaching points listed off his commentary (411 high, 353 low), each graded against what the app said. ~90 of his ideas have no computer (17 groups); the largest gap is not a missing computer but selection — the "why not the other move" computers exist and often stay quiet.
@@ -27,7 +36,43 @@
 
 **Every surface on the one door — what the registry says.** It already asks every computer about every surface. Corrected: seven chat answers marked "owed" were wired all along (chat's move questions compose through `questionThought` → `moveThoughtFacts`). Owed for real: 11 lesson reads (each needs a "did the move do it" gate before it can speak on a lesson's move; bench-measured), 13 Weaknesses, the Tactics/My Mistakes/Calculation explainers (named pattern, spot cue, method, slip read) into the registry. Measured before wiring Tactics: the tied-defender read fires on 4 of 400 real deflection/overload puzzles, all off-target ("their pawn on c3 is tied to d4" on a removing-the-guard puzzle) — its "not for Tactics" answer is honest. A first try that replaced the puzzle's computed idea with the composer's thought was reverted: it said "You deliver checkmate" where the puzzle says "That pattern is called Smothered Mate" — the unification must ADD the concept engine's pattern to the composer, never trade it away.
 
-**Open (David's call).** The opponent's failed tactic — "Bg5 looks like a pin, but it drops the knight on d4" — proposed for Review and the lessons, after the real reason; not in Learn.
+**The opponent's failed tactic (David: "Yes", 2026-11-17).** Review and the lessons say it after the real reason, when it is a real tempting try: "Bg5 looks like a pin, but it fails" (`weighedMoves.tryLooksLike`, read off the tactic detector for the mover on the move's own square). Not in Learn.
+
+**S3 — the quiet computers (measured, then built).** Of the 1,217 graded points the replay could join to a weighed line, only 39 were held by the door; spot checks agreed. 97% of the misses have no computer behind them, so the work was S4, not wiring.
+
+**S4 — the missing computers, both seats, every surface through `moveThoughtFacts`.** 22 computers in six groups:
+- defence: harmlessPin, queenNet, bothSaved;
+- pawns: pawnCutsGuard, chainBase, pinnedPawnGuard;
+- opening: castlingTaken, castlingWing, pieceMovedAgain;
+- trades: tradeOffer, fileTrade, pawnEndingTrade, tradeKept;
+- king: queenHunt, secondAttacker, outOfReach, poisonedPiece, everyMate;
+- method: pieceCage, opensCheck, captureOrder, knightSquareTaken.
+
+Each reaches Review, the lessons (`lessonBoardFacts`, both seats), chat (`questionThought`, so Learn can answer "why?" about the line, David: "Make sure all computers are tied to the chat surface") and How to think. Learn's lanes for them are owed.
+
+Folded when merged: pawnOpensCastling was deleted (castlingTaken reads the same 6.f3 line); queenNet and queenHunt share one claim, as do outOfReach with the square choice and chainBase with the board teacher's pressure. Two contradictions were found reading the 24 new baseline turns, both fixed: tradeKept beside a winning pile-up (colle800 15.Qg4), and pieceMovedAgain on a chased piece that lands a fork (11…Bc6). Open: chat's threat answer repeats its own take-the-attacker line (`assembleThreatAnswer`); the recapture-choice gap the pawns group noted.
+
+**The replay with the merged computers (S6 read, 2026-11-17).** 68 of 981 Review turns changed and 1 of 476 Learn turns. Every changed sentence was read against its board, and none was false. Five problems were in how they were said, each fixed at its producer:
+- the queen hunt said the attack on the queen twice (it now shares the board teacher's pressure claim);
+- the out-of-reach read said "why that square" beside the square choice (now one choice line in Review's choices);
+- a hit on an unguarded chain base said "short of guards" beside "nothing guards it" (one claim, and the right words);
+- the second attacker said "both" with three attackers, and their capture read as advice ("Taking on c3 now wins a piece" → "They threaten to take on c3 and win a piece");
+- "knights on d4 and c3 and their bishop" got its comma.
+
+**S5 — the beginner register, chosen by the record.** There were two rules for one register. Chat wrote moves in words below a 1000 rating; Learn rode the fundamental every turn for a self-reported beginner below 1000. Neither read the board. Now there is one verdict, `beginnerRegister.beginnerVerdict`:
+- The Beginner tactics, pooled over both seats, once posed 8+ times, decide.
+- The student is past the register when the focus's own gate opens the Intermediate level (`openMotifLevels`).
+- Before that, the prior decides: the first-run answer, else the measured rating (an empty record teaches).
+
+Read by chat, Learn's door, the thinking lesson and Up next. `isBeginnerMode` is deleted.
+
+**Chat answers in full, on every chat box (David 2026-11-17: "All chat surfaces! NOT JUST LEARN" → "I don't want chat limited for beginners as far as what it can say/identify").** All ten question boxes go through the one door (`dispatchCoachTurn`) to the one thought (`questionThought` → `moveThoughtFacts`, with `lessonBoardFacts` inside), composed with no record, so nothing fades in chat.
+
+Two limits were found and removed:
+- A forced mate asked about was posed as "can you see it?" when the record proved calculation (`asksToSee` in the asked paths of `movePurposeEngine`). An asked question is now always answered; that test stays Learn's, where nobody asked.
+- The trap a move sets (`baitSet`) and the opening theory (`openingTheory`) were marked as reaching chat, but no question asked for their groups. Both move questions now ask for them, theory last.
+
+The beginner register touches chat in one place only: a move written in words in the bubble. Gate: `chatAnswersInFull.gate.test.ts` (no chat module reads the record or the register to limit an answer; every computer wired to chat through the thought lands in a group a question asks). Changed for one group: a student who skipped the first-run question and is unrated now starts in the register (grey teaches) until the record says otherwise. Gate: `beginnerRegister.gate.test.ts`.
 
 ## 📖 WO-OPENINGS-REWRITE-01 — every opening tab rewritten, one computed beat a move, thin openings first; Levy's taught lines (David 2026-11-11: "How well do the opening tabs teach the trompowski?" → "I want you to find as many Levy taught lines as possible. We also need to make sure every other opening is strong. This should have already been done. This concerns me." → "Also check master DB to find his lines. I want a full rewrite of the opening tab. But it needs to be done deterministically. I want 1 beat per move explaining the why, the move order, this is our chance to teach like Naroditski, and we don't do it. We start with the thin openings." → "And yes. Ok to swarm")
 

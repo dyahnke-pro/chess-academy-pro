@@ -26,4 +26,21 @@ describe('secondAttacker — a second attacker makes the count', () => {
     // Qe2 instead of Qf3: the queen does not reach f6.
     expect(secondAttacker(QF3, 'Qe2')).toBeNull();
   });
+
+  // The speedrun replay (2026-11-17): their capture said as their threat, and
+  // "both" only for two attackers.
+  it('their count is their threat, and a third attacker is the third', () => {
+    const BB4 = 'r1b1kbnr/pppp1ppp/2n5/4P3/8/2N2N2/PqPBPPPP/R2QKB1R b KQkq - 1 6'; // hv0P9kotpJw 6…Bb4
+    const a = secondAttacker(BB4, 'Bb4');
+    expect(a).not.toBeNull();
+    const line = secondAttackerLine(a!, 'their', BB4);
+    expect(line).toMatch(/They threaten to take on c3 and win a piece\./);
+    expect(line).not.toMatch(/^.*Taking on c3/);
+    const NC6 = 'rnb1r1k1/pppp1p2/5q1p/2b3p1/3N4/2P3B1/P1P1BPPP/R2QK2R b KQ - 2 12'; // _4xbS0Crtic 12…Nc6
+    const b = secondAttacker(NC6, 'Nc6');
+    expect(b?.attackers).toBe(3);
+    const three = secondAttackerLine(b!, 'your', NC6);
+    expect(three).toMatch(/adds a third attacker on their knight on d4\./);
+    expect(three).not.toMatch(/both hit|second attacker/);
+  });
 });

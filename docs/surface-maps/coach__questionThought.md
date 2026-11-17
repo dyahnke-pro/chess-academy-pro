@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**139 lines · 7 exports · 5 importers · 3 tests · 0 audits**
+**139 lines · 7 exports · 6 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/questionThought.test.ts`
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/movePurposeEngine.ts`
+- `src/test/chatAnswersInFull.gate.test.ts`
 
 ## Exports and every call site
 
@@ -48,13 +49,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/questionThought.test.ts:78`
 - `src/services/danyaBench.measure.test.ts:470`
 - `src/services/danyaBench.measure.test.ts:472`
-- `src/services/movePurposeEngine.ts:131`
+- `src/services/movePurposeEngine.ts:127`
 
 ## Tests
 
 - `src/coach/boardTurnAnswer.planOrder.test.ts`
 - `src/coach/questionThought.test.ts`
 - `src/services/danyaBench.measure.test.ts`
+- `src/test/chatAnswersInFull.gate.test.ts`
 
 ## Audits that reach it
 

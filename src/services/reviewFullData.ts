@@ -1646,7 +1646,12 @@ export function computeMoveFacets(
       // The engine's better move when this move cost an inaccuracy or more:
       // the square choice is not asked of a piece it took elsewhere.
       const beaten = Math.max(0, ctx.costCp ?? 0) >= INACCURACY_CP ? ctx.bestLineUci[0] ?? null : null;
-      add(readBoardAll('squareChoice', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior, beaten, namesStudentMoves: true })[0]);
+      const choice = readBoardAll('squareChoice', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior, beaten, namesStudentMoves: true })[0];
+      add(choice);
+      // Why that square, the other way round: the piece put where nothing can
+      // chase it (`outOfReach`). One answer a move — the same claim as the
+      // square choice, so it speaks only where that one did not.
+      if (!choice) add(readBoardAll('outOfReach', { fenBefore, san, student: studentColorWB, altUcis: (w.reads ?? []).map((l) => l.moves[0] ?? '') })[0]);
     }
     // THE TEACHING MOVES' NEW COMPUTERS, both seats (2026-11-05): the pawn
     // break and what it is for — the pawn it strikes, the file it opens for

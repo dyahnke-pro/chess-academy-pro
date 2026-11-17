@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**606 lines · 16 exports · 36 importers · 14 tests · 0 audits**
+**606 lines · 16 exports · 37 importers · 15 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -51,6 +51,7 @@
 - `src/services/thinkingComputers.ts`
 - `src/services/thoughtComposer.ts`
 - `src/services/tradeComputers.test.ts`
+- `src/test/chatAnswersInFull.gate.test.ts`
 - `src/test/doorFact.ts`
 - `src/test/learnDoorFixtures.ts`
 
@@ -82,8 +83,8 @@
 - `src/services/boardComputers.test.ts:78`
 - `src/services/coachFact.test.ts:86`
 - `src/services/coachFact.test.ts:87`
-- `src/services/coachFeatureService.ts:2691`
-- `src/services/coachFeatureService.ts:3296`
+- `src/services/coachFeatureService.ts:2708`
+- `src/services/coachFeatureService.ts:3313`
 - `src/services/learnTurnDoor.ts:337`
 - `src/services/learnTurnDoor.ts:1023`
 - `src/services/learnTurnDoor.ts:1080`
@@ -97,9 +98,9 @@
 - `src/services/learnTurnDoor.ts:1359`
 - `src/services/learnTurnDoor.ts:1412`
 
-### `placeFact` (function) — 19 call sites
-- `src/services/boardComputers.ts:1007`
-- `src/services/boardComputers.ts:1826`
+### `placeFact` (function) — 20 call sites
+- `src/services/boardComputers.ts:1025`
+- `src/services/boardComputers.ts:1852`
 - `src/services/learnTurnDoor.ts:755`
 - `src/services/moveThoughtFacts.ts:208`
 - `src/services/moveThoughtFacts.ts:610`
@@ -109,18 +110,19 @@
 - `src/services/moveThoughtFacts.ts:1275`
 - `src/services/moveThoughtFacts.ts:1307`
 - `src/services/moveThoughtFacts.ts:1324`
-- `src/services/openingStory.ts:419`
+- `src/services/openingStory.ts:421`
 - `src/services/positionFacts.ts:556`
 - `src/services/reviewFacet.ts:85`
 - `src/services/reviewFacet.ts:113`
 - `src/services/reviewFacet.ts:125`
 - `src/services/teachingFact.ts:96`
 - `src/services/thoughtComposer.ts:159`
+- `src/test/chatAnswersInFull.gate.test.ts:43`
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 19 call sites
-- `src/services/boardComputers.ts:1008`
-- `src/services/boardComputers.ts:1826`
+- `src/services/boardComputers.ts:1026`
+- `src/services/boardComputers.ts:1852`
 - `src/services/coachFact.test.ts:112`
 - `src/services/coachFact.test.ts:118`
 - `src/services/coachFact.test.ts:119`
@@ -133,7 +135,7 @@
 - `src/services/moveThoughtFacts.ts:1276`
 - `src/services/moveThoughtFacts.ts:1308`
 - `src/services/moveThoughtFacts.ts:1325`
-- `src/services/openingStory.ts:420`
+- `src/services/openingStory.ts:422`
 - `src/services/positionFacts.ts:564`
 - `src/services/reviewFacet.ts:96`
 - `src/services/teachingFact.ts:98`
@@ -173,6 +175,7 @@
 - `src/services/pawnBreak.test.ts`
 - `src/services/thinkingComputers.gate.test.ts`
 - `src/services/tradeComputers.test.ts`
+- `src/test/chatAnswersInFull.gate.test.ts`
 
 ## Audits that reach it
 

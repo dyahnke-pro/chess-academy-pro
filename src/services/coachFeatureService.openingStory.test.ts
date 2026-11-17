@@ -91,7 +91,8 @@ describe('review walk — both seats, captures included (BACKLOG §6)', () => {
     expect(at(9)).not.toMatch(/and you can take back/);
     expect(at(11)).toMatch(new RegExp(MOVE_HEAD + String.raw`hits your queen on d8 and your rook on h8 at once\.`));
     expect(at(12)).toMatch(new RegExp(MOVE_HEAD + String.raw`gets you a knight for the pawn they took, but your king has left its back rank to do it, out in the open — that is what they gave the knight for\.`));
-    expect(at(15)).toMatch(new RegExp(MOVE_HEAD + String.raw`adds a third attacker on your knight on d5, so it needs an answer this move\.`));
+    // The count reads it (`secondAttacker`): the third attacker, the guards, the threat.
+    expect(at(15)).toMatch(new RegExp(MOVE_HEAD + String.raw`adds a third attacker on your knight on d5\. That's three attackers, and the queen on d8 and the king guard it\. They threaten to take on d5 and win a piece, so it needs an answer this move\.`));
     // The pin was said with 7…Ke6's guard; 8…Nb4 says only its own guard.
     // 8…Nb4 hits c2 AND holds the pinned knight: both halves — the rule says
     // c2, the move's thought the guard (WO-ONE-COACH-01 Build 5).
@@ -107,7 +108,7 @@ describe('review walk — a move job is ranked by what the move changes', () => 
     return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
   }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? ''); };
   it('4.Ng5: a new attack outranks a guard — the knight joins the c4 bishop against f7', () => {
-    expect(walk()[6]).toMatch(new RegExp(MOVE_HEAD + String.raw`joins their bishop on c4 against your pawn on f7, so it needs an answer this move\.`));
+    expect(walk()[6]).toMatch(new RegExp(MOVE_HEAD + String.raw`(?:joins the bishop on c4 against|adds a second attacker on) your pawn on f7.*only the king guards it\. They threaten to take on f7 and win a pawn, so it needs an answer this move\.`));
   }, 30_000);
   // The check is said first, in the move itself ("They play queen to f3,
   // check: …"), then what the move does.

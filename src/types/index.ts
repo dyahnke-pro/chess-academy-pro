@@ -1362,7 +1362,7 @@ export interface UserProfile {
    *  and puzzleRating. See strengthCalibrationService. */
   strengthCalibrated?: boolean;
   /** The band picked on the first-run strength screen (or `skipped`). Absent
-   *  on profiles that never saw it. Read through `isBeginnerMode`. */
+   *  on profiles that never saw it. Read through `beginnerRegister.beginnerPrior` (the register's cold-start prior). */
   skillBand?: import('../services/ratingBands').SelfReportedBand;
   /** Consent for sending gameplay data (board positions, chat questions,
    *  and — when the mic is used — the spoken transcript) to the third-party

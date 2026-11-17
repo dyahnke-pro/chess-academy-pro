@@ -105,7 +105,7 @@
 - `src/services/tacticGeometry.test.ts:200`
 
 ### `geometryReads` (function) — 2 call sites
-- `src/services/boardComputers.ts:1016`
+- `src/services/boardComputers.ts:1034`
 - `src/services/tacticGeometry.test.ts:206`
 
 ### `geometryMotif` (function) — 3 call sites

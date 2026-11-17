@@ -49,9 +49,12 @@ export async function moveReason(fenBefore: string, san: string, seat: 'student'
   prevCapture: PrevCaptureContext | null): Promise<DecisiveReason | null> {
   const reads = await readIntentReads(fenBefore, san);
   if (!reads) return null;
-  // The student's own record decides whether a mate is posed as a test.
-  const asksToSee = seat === 'student' ? await calculationProven() : false;
-  return decisiveReason({ fenBefore, san, reads, seat, prevCapture, asksToSee, namesStudentMoves: true });
+  // ASKED, SO ANSWERED (David 2026-11-17: "I don't want chat limited for
+  // beginners … if they ask a complex question about a deep line, coach
+  // should reply with the appropriate answer"): a forced mate the student
+  // asked about is stated, whatever their record — the "can you see it?" test
+  // is Learn's, where nobody asked.
+  return decisiveReason({ fenBefore, san, reads, seat, prevCapture, namesStudentMoves: true });
 }
 
 /** WHAT THE MOVE SETS UP (the three facts, WO-THINK-01): the mover's next move
@@ -66,15 +69,6 @@ export async function moveDeepFact(fenBefore: string, san: string, seat: 'studen
   try { pv = (await stockfishEngine.analyzeWithBudget(fenAfter, DEPTH, BUDGET_MS)).topLines?.find((l) => l.rank === 1)?.moves ?? []; } catch { return null; }
   const deep = deepFact(fenBefore, san, uciToSans(fenAfter, pv), seat === 'student');
   return deep ? { text: `${seat === 'student' ? 'Your' : 'Their'} ${san} is ${deep.text}.`, squares: deep.squares } : null;
-}
-
-/** Calculation PROVEN on the student's own record (heat map green). Lazy, so
- *  this engine module never drags the database in at load. */
-async function calculationProven(): Promise<boolean> {
-  try {
-    const { getCapabilityProfile, capabilityProven } = await import('./capabilityEvidence');
-    return capabilityProven((await getCapabilityProfile()).get('calculation-depth'));
-  } catch { return false; }
 }
 
 /** "WHAT'S THE BEST MOVE?" ASKED (David 2026-10-17: "I also want why Qd3 is
@@ -95,8 +89,7 @@ export async function askedBestMove(fen: string, prevCapture: PrevCaptureContext
   const san = pvSan[0];
   if (!san) return null;
   const reads = await readIntentReads(fen, san, lines);
-  const asksToSee = await calculationProven();
-  const reason = reads ? decisiveReason({ fenBefore: fen, san, reads, seat: 'student', prevCapture, asksToSee, namesStudentMoves: true }) : null;
+  const reason = reads ? decisiveReason({ fenBefore: fen, san, reads, seat: 'student', prevCapture, namesStudentMoves: true }) : null;
   return { uci: top.moves[0], san, evalCp: typeof top.evaluation === 'number' ? top.evaluation : null, mateIn: top.mate ?? null, pvSan, reason };
 }
 
@@ -130,7 +123,7 @@ export async function askedMoveThought(
   try { const m = new Chess(fenBefore).move(san); uci = `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; }
   const me = board.studentColor === 'white' ? 'w' : 'b';
   const seat: 'student' | 'opponent' = (fenBefore.split(' ')[1] === 'b' ? 'b' : 'w') === me ? 'student' : 'opponent';
-  const reason = q === 'opponent-move' ? null : decisiveReason({ fenBefore, san, reads, seat, prevCapture: captureRunOfMoves(null, board.history), asksToSee: seat === 'student' ? await calculationProven() : false, namesStudentMoves: true });
+  const reason = q === 'opponent-move' ? null : decisiveReason({ fenBefore, san, reads, seat, prevCapture: captureRunOfMoves(null, board.history), namesStudentMoves: true });
   const answer = answerQuestionThought(q, { fen: board.fen, history: board.history, studentColor: board.studentColor, bestUci: uci, reads, reason });
   return answer ? { ...answer, reason } : null;
 }

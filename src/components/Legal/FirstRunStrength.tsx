@@ -13,7 +13,7 @@ import type { SelfReportedBand } from '../../services/ratingBands';
  *
  * Shown after the AI-consent prompt, once. A pick seeds the first opponent's
  * strength and, for "New to chess" / "Beginner", turns on beginner mode
- * (`isBeginnerMode`) until their own games show they have outgrown it. Skip
+ * (`beginnerRegister`) until their own games show they have outgrown it. Skip
  * keeps the app fully adaptive. Mounted once at the app root.
  */
 export function FirstRunStrength(): JSX.Element | null {

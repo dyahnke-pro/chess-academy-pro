@@ -4,18 +4,17 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**219 lines · 7 exports · 51 importers · 7 tests · 0 audits**
+**198 lines · 6 exports · 49 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:1128) — names `ratingBands`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4683) — names `explorerBandFor`, `ratingBands`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4713) — names `explorerBandFor`, `ratingBands`
-- **🔒🔒 ONE PUSH, NOT FIVE — ship-check remembers, and you check BEFORE you push (David 2026-09-24, furious: "You NEED TO FIGURE THIS SHIT OUT!! LOCK THIS IN FOR FUTURE SESSIONS").** (CLAUDE.md:7220) — names `ratingBands`
+- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:1165) — names `ratingBands`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4720) — names `explorerBandFor`, `ratingBands`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4750) — names `explorerBandFor`, `ratingBands`
+- **🔒🔒 ONE PUSH, NOT FIVE — ship-check remembers, and you check BEFORE you push (David 2026-09-24, furious: "You NEED TO FIGURE THIS SHIT OUT!! LOCK THIS IN FOR FUTURE SESSIONS").** (CLAUDE.md:7258) — names `ratingBands`
 
 ## Who calls in
 
-- `src/components/Coach/ChatMessage.tsx`
 - `src/components/Coach/CoachAnalysePage.tsx`
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachGameReview.tsx`
@@ -35,7 +34,7 @@
 - `src/hooks/usePositionNarration.ts`
 - `src/hooks/useStudentNeed.ts`
 - `src/services/amateurPlayCache.ts`
-- `src/services/beginnerMode.test.ts`
+- `src/services/beginnerRegister.ts`
 - `src/services/causalChainVoice.ts`
 - `src/services/clubReplies.test.ts`
 - `src/services/coachDrillService.ts`
@@ -63,14 +62,13 @@
 - `src/services/strengthCalibrationService.ts`
 - `src/services/teachingSelector.ts`
 - `src/services/theoryDeparture.ts`
-- `src/services/upNextLoader.ts`
 - `src/services/weaknessSpine.ts`
 - `src/services/whyBestMove.ts`
 
 ## Exports and every call site
 
 ### `coreRatingTier` (function) — 12 call sites
-- `src/components/Coach/ChatMessage.tsx:123`
+- `src/services/beginnerRegister.ts:45`
 - `src/services/hintRegister.ts:66`
 - `src/services/ratingBands.test.ts:15`
 - `src/services/ratingBands.test.ts:16`
@@ -88,22 +86,6 @@
 
 ### `SelfReportedBand` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
-
-### `isBeginnerMode` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3239`
-- `src/components/Coach/CoachTeachPage.tsx:8777`
-- `src/components/Coach/CoachTeachPage.tsx:10293`
-- `src/components/Coach/CoachTeachPage.tsx:12363`
-- `src/services/beginnerMode.test.ts:8`
-- `src/services/beginnerMode.test.ts:9`
-- `src/services/beginnerMode.test.ts:12`
-- `src/services/beginnerMode.test.ts:15`
-- `src/services/beginnerMode.test.ts:16`
-- `src/services/beginnerMode.test.ts:17`
-- `src/services/beginnerMode.test.ts:18`
-- `src/services/beginnerMode.test.ts:19`
-- `src/services/upNextLoader.ts:76`
-- `src/services/upNextLoader.ts:124`
 
 ### `explorerBandFor` (function) — 14 call sites
 - `src/components/Openings/ReplyTree.tsx:69`
@@ -129,7 +111,6 @@
 
 ## Tests
 
-- `src/services/beginnerMode.test.ts`
 - `src/services/clubReplies.test.ts`
 - `src/services/coachGameEngine.test.ts`
 - `src/services/dbService.test.ts`

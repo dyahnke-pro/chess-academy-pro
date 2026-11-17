@@ -104,7 +104,10 @@ function piecesWords(ps: ReadonlyArray<{ piece: string; from: string }>): string
     const sqs = byKind.get(p.piece) ?? [];
     if (!sqs.includes(p.from)) byKind.set(p.piece, [...sqs, p.from]);
   }
-  return andList([...byKind].map(([k, sqs], n) => `${n > 0 ? 'their ' : ''}${PIECE[k]}${sqs.length > 1 ? 's' : ''} on ${andList(sqs)}`));
+  const items = [...byKind].map(([k, sqs], n) => `${n > 0 ? 'their ' : ''}${PIECE[k]}${sqs.length > 1 ? 's' : ''} on ${andList(sqs)}`);
+  // A list inside a list takes the comma, or the two "and"s run together
+  // ("their knights on d4 and c3 and their bishop on f1").
+  return items.length === 2 && items[0].includes(' and ') ? `${items[0]}, and ${items[1]}` : andList(items);
 }
 
 /** THE one name for a road: the variation's own name, whole — "Sicilian

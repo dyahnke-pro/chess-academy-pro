@@ -42,7 +42,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12378`
+- `src/components/Coach/CoachTeachPage.tsx:12384`
 - `src/services/gameStory.rewind.test.ts:27`
 - `src/services/planThread.test.ts:106`
 - `src/services/planThread.test.ts:113`
@@ -57,7 +57,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planThreadTurn` (function) — 26 call sites
-- `src/services/boardComputers.ts:1001`
+- `src/services/boardComputers.ts:1019`
 - `src/services/gameStory.rewind.test.ts:25`
 - `src/services/planArcFade.test.ts:31`
 - `src/services/planChoice.test.ts:78`

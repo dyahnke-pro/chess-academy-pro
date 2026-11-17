@@ -118,7 +118,9 @@ import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { usePhaseNarration } from '../../hooks/usePhaseNarration';
 import { useStudentNeed } from '../../hooks/useStudentNeed';
-import { DEFAULT_STUDENT_RATING, isBeginnerMode } from '../../services/ratingBands';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { useBeginnerRegister } from '../../hooks/useBeginnerRegister';
+import { loadBeginnerRegister } from '../../services/beginnerRegisterLoader';
 import { useFadeLevels, useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import { useStudentRecord } from '../../hooks/useStudentRecord';
 import { EverythingPanel } from './EverythingPanel';
@@ -3244,7 +3246,7 @@ export function CoachTeachPage({ mode }: {
       lichess: activeProfile?.preferences?.lichessUsername,
     };
     const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
-    const plan = await thinkingLesson.plan({ usernames, rating, beginner: isBeginnerMode(activeProfile) });
+    const plan = await thinkingLesson.plan({ usernames, rating, beginner: (await loadBeginnerRegister()).beginner });
     if (!plan) {
       void thinkingLesson.noLessonLine().then((line) => coachDrillSay(line));
       return;
@@ -8676,6 +8678,10 @@ export function CoachTeachPage({ mode }: {
   const weaknessSignalsRef = useWeaknessSignals();
   // Proven skills — the Learn door fades their lanes to the short phrasing.
   const provenTagsRef = useFadeLevels();
+  // THE BEGINNER REGISTER, from the student's record (`beginnerRegister`).
+  const beginnerRegister = useBeginnerRegister();
+  const beginnerRef = useRef(beginnerRegister);
+  beginnerRef.current = beginnerRegister;
   /** The student's whole record (weaknesses, capabilities, heat) — the threat
    *  voice reads it (`learnThreatVoice`); refreshed when the model settles. */
   const studentRecordRef = useStudentRecord();
@@ -8783,7 +8789,7 @@ export function CoachTeachPage({ mode }: {
       const live = t && samePosition(t.fen, liveFenRef.current ?? '')
         ? { fen: t.fen, ply: t.ply, slipCp: t.slip(), priceSettled: t.settled(), price: t.price(), midExchange: t.midExchange, said: t.said(), holds: turnHoldsFor(t.fen) }
         : null;
-      const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.story.heard(live?.fen ?? fen).sentences, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), owner: live && t ? t.owner : 'open', chance: live ? chanceHoldAt(live.fen) : null });
+      const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.story.heard(live?.fen ?? fen).sentences, priorLead: prior, green: provenTagsRef.current, beginner: beginnerRef.current, owner: live && t ? t.owner : 'open', chance: live ? chanceHoldAt(live.fen) : null });
       // A pointer said in the phase wave prompts the move it points at.
       if (d?.pointed && live) announcedBoardsRef.current.add(live.fen.split(' ').slice(0, 2).join(' '));
       if (!d) {
@@ -10296,7 +10302,7 @@ export function CoachTeachPage({ mode }: {
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
       // Each fact made by the one maker, numbered for this wave (P1-6e).
-    ].map((f, i) => learnFact(`instant:${i}`, f)), priorKeys: turnHeard().sentences, priorLead: null, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), turnHolds: turnHoldsFor(args.fenAfterReply), owner: args.owner, chance: chanceHoldAt(args.fenAfterReply) });
+    ].map((f, i) => learnFact(`instant:${i}`, f)), priorKeys: turnHeard().sentences, priorLead: null, green: provenTagsRef.current, beginner: beginnerRef.current, turnHolds: turnHoldsFor(args.fenAfterReply), owner: args.owner, chance: chanceHoldAt(args.fenAfterReply) });
     // Every lane's speak/silent answer is the door's lane table now
     // (`learnTurnDoor.LEARN_LANES`), not a kind whitelist applied after the
     // fact. NO COUNT CAP (David 2026-09-13) still holds — repetition is caught
@@ -12368,7 +12374,7 @@ export function CoachTeachPage({ mode }: {
                     // if it outranks what the instant wave led with.
                     priorLead: instantLead,
                     green: provenTagsRef.current,
-                    beginner: isBeginnerMode(useAppStore.getState().activeProfile),
+                    beginner: beginnerRef.current,
                   });
                   const hintPkg = lateDecision.pkg;
                   // The plan thread adopts its tried turn only if a line of it spoke.

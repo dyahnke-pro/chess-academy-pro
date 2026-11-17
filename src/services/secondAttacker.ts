@@ -101,6 +101,7 @@ function mateByCapture(fen: string, sq: Square): string | null {
 
 const NUMBER = ['no', 'one', 'two', 'three', 'four', 'five'];
 const count = (n: number): string => NUMBER[n] ?? String(n);
+const ORDINAL: Record<number, string> = { 3: 'third', 4: 'fourth', 5: 'fifth' };
 
 function wins(gain: number): string {
   if (gain >= 5) return 'a rook';
@@ -115,22 +116,29 @@ export function secondAttackerLine(s: SecondAttacker, own: 'your' | 'their', fen
   const other = own === 'your' ? 'their' : 'your';
   const nc = NAME[s.newcomer.piece];
   const partner = `the ${NAME[s.partner.piece]} on ${s.partner.square}`;
-  const target = s.targetPiece === 'p' ? s.target : `${other} ${NAME[s.targetPiece]} on ${s.target}`;
+  const target = `${other} ${NAME[s.targetPiece]} on ${s.target}`;
   const guardName = (g: { square: Square; piece: PieceSymbol }): string => (g.piece === 'k' ? 'the king' : `the ${NAME[g.piece]} on ${g.square}`);
   const guarded = s.guards.length === 0 ? 'nothing guards it'
     : s.guards.length === 1 && s.guards[0].piece === 'k' ? 'only the king guards it'
       : s.guards.length <= 2 ? `${andList(s.guards.map(guardName))} ${s.guards.length === 1 ? 'guards' : 'guard'} it`
         : `${count(s.guards.length)} pieces guard it`;
   const key = stemKeyOf(`${fen}|secondAttacker|${s.target}`);
-  const join = rotateStem([
-    `${cap(own)} ${nc} joins ${partner} against ${target}.`,
-    `Now ${own} ${nc} and ${partner} both hit ${target}.`,
-    `${cap(own)} ${nc} adds a second attacker on ${target}, beside ${partner}.`,
-  ], key);
+  // "Both" only when there are two: a third attacker is said as the third
+  // (the speedrun replay 2026-11-17: "your knight and the queen on f6 both hit
+  // their knight on d4. That's three attackers").
+  const join = s.attackers > 2
+    ? `${cap(own)} ${nc} adds a ${ORDINAL[s.attackers] ?? 'new'} attacker on ${target}.`
+    : rotateStem([
+      `${cap(own)} ${nc} joins ${partner} against ${target}.`,
+      `Now ${own} ${nc} and ${partner} both hit ${target}.`,
+      `${cap(own)} ${nc} adds a second attacker on ${target}, beside ${partner}.`,
+    ], key);
   const tally = `That's ${count(s.attackers)} attackers, and ${guarded}.`;
+  // Their capture is THEIR threat, said as one ("Taking on c3 now wins a
+  // piece" about their bishop read as advice to the student).
   const point = s.mate
     ? `${s.mate.replace(/#$/, '')} would be mate.`
-    : `Taking on ${s.target} now wins ${wins(s.gain)}.`;
+    : own === 'your' ? `Taking on ${s.target} now wins ${wins(s.gain)}.` : `They threaten to take on ${s.target} and win ${wins(s.gain)}.`;
   return `${join} ${tally} ${point}`;
 }
 

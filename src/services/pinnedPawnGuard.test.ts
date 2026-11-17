@@ -9,7 +9,9 @@ describe('pinnedPawnGuard', () => {
     expect(r?.text).toMatch(/Your rook hits/);
     expect(r?.text).toMatch(/e6/);
     expect(r?.text).toMatch(/f7/);
-    expect(r?.text).toMatch(/pinned to the king/);
+    expect(r?.text).toMatch(/pin(?:s|ned)\b.* to the king/);
+    // The pinner is lit, so it is named (the marks sweep 2026-11-17).
+    expect(r?.text).toMatch(/your queen/);
     expect(r?.squares).toEqual(['c6', 'e6', 'f7', 'h5']);
   });
   it('is quiet when the queen does not pin the f-pawn', () => {

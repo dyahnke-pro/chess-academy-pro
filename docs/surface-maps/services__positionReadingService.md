@@ -221,7 +221,7 @@
 - `src/services/bookMoveWhy.ts:346`
 - `src/services/bookMoveWhy.ts:460`
 - `src/services/bookMoveWhy.ts:479`
-- `src/services/coachFeatureService.ts:3777`
+- `src/services/coachFeatureService.ts:3794`
 - `src/services/groundedAnswer.ts:7397`
 - `src/services/moveIntent.ts:469`
 - `src/services/moveIntent.ts:486`
@@ -306,7 +306,7 @@
 - `src/services/structureReads.ts:137`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12965`
+- `src/components/Coach/CoachTeachPage.tsx:12971`
 - `src/services/learnBoardTeaching.ts:1586`
 - `src/services/principleAttribution.ts:359`
 - `src/services/principleAttribution.ts:860`
@@ -351,9 +351,9 @@
 - `src/services/captureLeadsTo.ts:30`
 - `src/services/castlingTakenAway.ts:94`
 - `src/services/causalChain.ts:45`
-- `src/services/chainBase.ts:99`
-- `src/services/chainBase.ts:112`
-- `src/services/chainBase.ts:113`
+- `src/services/chainBase.ts:101`
+- `src/services/chainBase.ts:114`
+- `src/services/chainBase.ts:115`
 - `src/services/checkIsNotAGuard.test.ts:39`
 - `src/services/computedMaterialTruth.corpus.test.ts:120`
 - `src/services/computedMaterialTruth.corpus.test.ts:145`
@@ -401,8 +401,8 @@
 - `src/services/opensCheck.ts:71`
 - `src/services/orderByThreat.ts:114`
 - `src/services/pawnJudgement.ts:303`
+- `src/services/pawnLines.ts:114`
 - `src/services/pawnLines.ts:115`
-- `src/services/pawnLines.ts:116`
 - `src/services/pieceCage.ts:45`
 - `src/services/pieceCage.ts:85`
 - `src/services/pieceMovedAgain.ts:139`
@@ -495,7 +495,7 @@
 - `src/services/thinkingExchangeChain.ts:59`
 
 ### `signedLegalSeeFor` (function) — 39 call sites
-- `src/components/Coach/CoachTeachPage.tsx:927`
+- `src/components/Coach/CoachTeachPage.tsx:929`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -578,8 +578,8 @@
 
 ### `findHangingBySee` (function) — 29 call sites
 - `src/coach/chatTurnAnswers.ts:211`
-- `src/components/Coach/CoachTeachPage.tsx:9159`
 - `src/components/Coach/CoachTeachPage.tsx:9165`
+- `src/components/Coach/CoachTeachPage.tsx:9171`
 - `src/services/bothSaved.ts:70`
 - `src/services/computedMaterialTruth.corpus.test.ts:216`
 - `src/services/computedMaterialTruth.corpus.test.ts:226`

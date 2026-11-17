@@ -33,6 +33,8 @@ export interface ChainBaseRead {
   act: 'guarded' | 'hit';
   /** The base won by the count after a hit, in pawns. */
   gain: number | null;
+  /** A hit base with no guard at all (said "nothing guards it"). */
+  loose: boolean;
 }
 
 const sqAt = (f: number, r: number): Square | null => (f < 0 || f > 7 || r < 1 || r > 8 ? null : (`${String.fromCharCode(97 + f)}${r}` as Square));
@@ -100,11 +102,11 @@ export function chainBase(fenBefore: string, san: string, mine: boolean): ChainB
       const tip = held.join(' and ');
       const text = rotateStem([
         `${cap(mover)} now guards ${sq}, the base of ${own} pawn chain. ${sq} is the only pawn holding ${tip}, so if it falls, ${tip} is left on its own.`,
-        `${cap(mover)} covers ${sq}, the pawn at the base of ${own} chain. It holds ${tip}, so the chain leans on ${sq}.`,
+        `${cap(mover)} covers ${sq}, the pawn at the base of ${own} chain. It is the only pawn holding ${tip}.`,
         `${cap(mover)} props up ${sq}, the base of ${own} pawn chain. Lose ${sq} and ${tip} has no pawn behind it.`,
       ], key);
       const squaresSaid = [m.to, sq, ...held];
-      return { key: `chain-base:guard:${sq}`, text, squares: squaresSaid, proof: squaresProof(text, squaresSaid), mine, act: 'guarded', gain: null };
+      return { key: `chain-base:guard:${sq}`, text, squares: squaresSaid, proof: squaresProof(text, squaresSaid), mine, act: 'guarded', gain: null, loose: false };
     }
     // HIT: your piece comes to their base.
     const held = baseOf(after, sq, them);
@@ -112,13 +114,18 @@ export function chainBase(fenBefore: string, san: string, mine: boolean): ChainB
     const gain = legalSeeGainFor(afterFen, sq, me);
     if (gain < 1 || legalSeeGainFor(fenBefore, sq, me) > 0) continue;
     const tip = held.join(' and ');
+    // A base with no guard at all is "nothing guards it", never "short of
+    // guards" (the speedrun replay 2026-11-17: "…and h6 is short of guards"
+    // beside "nothing guards it" for the same pawn).
+    const loose = after.attackers(sq, them).length === 0;
+    const guards = loose ? 'nothing guards it' : 'it is short of guards';
     const text = rotateStem([
-      `${cap(mover)} hits ${sq}, the base of ${other} pawn chain. ${sq} holds ${tip}, and right now it is short of guards.`,
-      `${cap(mover)} goes after ${sq}, the pawn at the base of ${other} chain. It holds ${tip}, and right now it has too few guards.`,
-      `${cap(mover)} attacks ${sq}, the base of ${other} pawn chain. Without ${sq}, ${tip} has no pawn behind it, and ${sq} is short of guards.`,
+      `${cap(mover)} hits ${sq}, the base of ${other} pawn chain. ${sq} holds ${tip}, and right now ${guards}.`,
+      `${cap(mover)} goes after ${sq}, the pawn at the base of ${other} chain. It holds ${tip}, and right now ${loose ? 'nothing guards it' : 'it has too few guards'}.`,
+      `${cap(mover)} attacks ${sq}, the base of ${other} pawn chain. Without ${sq}, ${tip} has no pawn behind it, and ${loose ? `nothing guards ${sq}` : `${sq} is short of guards`}.`,
     ], key);
     const squaresSaid = [m.to, sq, ...held];
-    return { key: `chain-base:hit:${sq}`, text, squares: squaresSaid, proof: squaresProof(text, squaresSaid), mine, act: 'hit', gain };
+    return { key: `chain-base:hit:${sq}`, text, squares: squaresSaid, proof: squaresProof(text, squaresSaid), mine, act: 'hit', gain, loose };
   }
   return null;
 }

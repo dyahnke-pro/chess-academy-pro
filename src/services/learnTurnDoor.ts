@@ -877,7 +877,7 @@ export function decideTurn(
   /** The tags the student's record has PROVEN (`loadProvenTags`) — lanes on
    *  them fade to their short phrasing. Null when the record is not loaded. */
   green?: FadeLevels | null,
-  /** Beginner mode (`isBeginnerMode`): the fundamental behind a slip and the
+  /** The beginner register (`beginnerRegister`, from the record): the fundamental behind a slip and the
    *  beginner's rule a move breaks ride every turn instead of competing for
    *  the lead (David 2026-10-02: "Explain fundamentals"). Register only — the
    *  other lanes decide exactly as for anyone else. */

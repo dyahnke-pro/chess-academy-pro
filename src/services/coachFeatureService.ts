@@ -480,8 +480,25 @@ export function segmentMarks(
   })();
   const base = seg.planArrows?.length ? [...seg.planArrows] : better && betterSaid ? [better] : [];
   const arrows = [...base, ...named.filter((n) => !base.some((b) => b.startSquare === n.startSquare && b.endSquare === n.endSquare))];
-  // The spoken line, each ply on the board before it.
-  const plies = seg.spokenLineArrows ?? [];
+  // The spoken line, each ply on the board before it — only while the words
+  // still say it (NO MARKS WITHOUT WORDS, the same rule as the better move): a
+  // later pass that drops the line's sentence (a one-claim collapse, the
+  // say-once ledger) leaves its arrows behind otherwise, painted at the turn's
+  // end over words about something else (marks sweep 2026-11-17: the queen
+  // net's turn drew a line nobody said).
+  const lineIsSaid = ((): boolean => {
+    const said = new Set(extractMentionedSans(seg.narration ?? '').map((x) => x.replace(/^…/, '').replace(/[+#?!]/g, '')));
+    // …by its moves, or by where they go ("it heads on to e6 a move later").
+    const named = new Set((seg.narration ?? '').match(/\b[a-h][1-8]\b/g) ?? []);
+    return (seg.spokenLineArrows ?? []).some((a) => {
+      if (named.has(a.uci.slice(2, 4))) return true;
+      try {
+        const m = new Chess(a.fenBefore).move({ from: a.uci.slice(0, 2), to: a.uci.slice(2, 4), promotion: a.uci[4] as 'q' | undefined });
+        return !!m && said.has(m.san.replace(/[+#]/g, ''));
+      } catch { return false; }
+    });
+  })();
+  const plies = lineIsSaid ? seg.spokenLineArrows ?? [] : [];
   const drawnPlies = plies.length >= 2
     ? plies.flatMap((a) => {
       if (!a.uci || a.uci.length < 4) return [];

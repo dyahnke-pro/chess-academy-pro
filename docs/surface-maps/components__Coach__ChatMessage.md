@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**358 lines · 2 exports · 9 importers · 6 tests · 5 audits**
+**357 lines · 2 exports · 9 importers · 6 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
-- **Test Data Factories** (CLAUDE.md:6024) — names `ChatMessage`
+- **Test Data Factories** (CLAUDE.md:6044) — names `ChatMessage`
 
 ## Who calls in
 
