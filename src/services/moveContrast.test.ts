@@ -12,8 +12,8 @@ describe('contrastMoves', () => {
     // The pawn is named by its file (`pieceRef`); a2 is lit, not read out.
     expect(contrastClause(c!, FEN, 'w', null)).toBe('The difference between Rfd1 and Rad1: Rfd1 keeps your a-pawn defended, and Rad1 leaves it with no guard');
     // Played, the move is "your move": the turn names it once.
-    expect(contrastClause(c!, FEN, 'w', 'Rfd1')).toBe('Here Rad1 would leave your a-pawn with no guard, and your move keeps it defended');
-    expect(contrastClause(c!, FEN, 'w', 'Rad1')).toBe('Here Rfd1 keeps your a-pawn defended, and your move leaves it with no guard');
+    expect(contrastClause(c!, FEN, 'w', 'Rfd1')).toMatch(/^Your move keeps your a-pawn (defended, where Rad1 would have left it with no guard|guarded\. After Rad1 it would have had no guard)$/);
+    expect(contrastClause(c!, FEN, 'w', 'Rad1')).toMatch(/^Your move leaves your a-pawn (with no guard, where Rfd1 would have kept it defended|unguarded\. After Rfd1 it would still have been defended)$/);
   });
 
   it('the order of the arguments does not change the answer', () => {

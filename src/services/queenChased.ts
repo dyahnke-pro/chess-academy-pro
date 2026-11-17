@@ -99,7 +99,7 @@ export function queenChasedLine(q: QueenChased, queenOwn: 'your' | 'their', fenA
     ], key)
     : rotateStem([
       `${Q} queen on ${q.queen} has moved ${TIMES[q.queenMoves] ?? `${q.queenMoves} times`}, and ${they} have ${piecesOut(q.developed)} out.`,
-      `That's ${COUNT[q.queenMoves] ?? String(q.queenMoves)} moves for ${queenOwn} queen on ${q.queen} and ${piecesOut(q.developed)} developed.`,
+      `${openSentence(COUNT[q.queenMoves] ?? String(q.queenMoves))} moves for ${queenOwn} queen, now on ${q.queen}, and ${q.developed === 0 ? 'not one piece' : `only ${piecesOut(q.developed)}`} developed.`,
     ], key);
   const hit = rotateStem([
     `${H} ${hitter} hits it, so it has to move again.`,

@@ -9,6 +9,7 @@
 //
 // Plan-layer teaching: the door orders it after safety and principle, and a
 // student who has proven the plan layer does not hear it.
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { Chess, type Color, type Square } from 'chess.js';
 import { pieceRef } from './pieceRef';
 import { findLoosePieces } from './loosePieces';
@@ -104,8 +105,19 @@ export function contrastClause(
 ): string {
   const piece = pieceRef(fen, c.square, student)?.words ?? `your ${NAME[c.piece] ?? 'piece'} on ${c.square}`;
   const bare = (san: string): string => san.replace(/[+#!?]+$/, '');
-  if (played && bare(played) === bare(c.keeps)) return `Here ${c.drops} would leave ${piece} with no guard, and your move keeps it defended`;
-  if (played && bare(played) === bare(c.drops)) return `Here ${c.keeps} keeps ${piece} defended, and your move leaves it with no guard`;
+  // Said as what YOUR move did to the piece, the other move as the comparison:
+  // "Here b3 keeps your g-pawn defended" read as if b3 guarded it (decision
+  // baseline, colle800 Bd3 — the bishop that left f1 was the guard). Two
+  // phrasings, rotated on the board (human voice rule 6).
+  const key = stemKeyOf(fen);
+  if (played && bare(played) === bare(c.keeps)) return rotateStem([
+    `Your move keeps ${piece} defended, where ${c.drops} would have left it with no guard`,
+    `Your move keeps ${piece} guarded. After ${c.drops} it would have had no guard`,
+  ], key);
+  if (played && bare(played) === bare(c.drops)) return rotateStem([
+    `Your move leaves ${piece} with no guard, where ${c.keeps} would have kept it defended`,
+    `Your move leaves ${piece} unguarded. After ${c.keeps} it would still have been defended`,
+  ], key);
   // Led by a word, never the SAN (spoken, a leading SAN opens lowercase).
   return `The difference between ${c.keeps} and ${c.drops}: ${c.keeps} keeps ${piece} defended, and ${c.drops} leaves it with no guard`;
 }
