@@ -22,6 +22,7 @@ import { orderByThreat } from './orderByThreat';
 import { namedStructureFormed, namedStructureLine } from './namedStructure';
 import { pieceOutFirst } from './pieceOutFirst';
 import { lineCut } from './lineCut';
+import { pieceCage } from './pieceCage';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { criticalityThresholds } from './criticalityScan';
 import { knownSlipIndexNow, knownSlipsAt } from './knownSlips';
@@ -52,7 +53,7 @@ import { moveIntent, intentRule, type IntentReads } from './moveIntent';
 import { buildDeliberation, ruleOuts, NOTHING_SAID } from './deliberation';
 import { refutedAltProof, type RefutedAlternative } from './refutedAlternativeCore';
 import { costStakes, isStaked, stakeWc, NO_STAKES } from './factStakes';
-import { moverCp, wcGap, type LineScore } from './winChance';
+import { moverCp, seatCp, wcGap, type LineScore } from './winChance';
 import { playedUci } from './planSteps';
 import { evalReading, signedBand } from './reviewMoveBriefing';
 import { counterThreatTeaching, planChoiceTeaching, studentMoveTeaching } from './learnBoardTeaching';
@@ -558,6 +559,12 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   const cut = lineCut(i.fenBefore, i.san, mine);
   if (cut) add('aspect-own-weakness', 'lineCut', 'moveGains', 'weakness', lead(`cuts ${cut.piece} off from ${cut.lost}`), `It also cuts ${cut.piece} off from ${cut.lost}`, cut.squares, 46, false, [`cut:${cut.squares.join('')}`]);
 
+  // THE CAGE (Danya, 32.e4: "e4 takes d5; the knight can only shuttle between
+  // b6 and a8"): the move takes the squares their knight needs. A move that
+  // loses big is not credited with it.
+  const cage = losesBig ? null : pieceCage(i.fenBefore, i.san, mine);
+  if (cage) add('aspect-their-weakness', 'pieceCage', 'moveGains', 'prevent', lead(cage.clause), `It also ${cage.clause}`, cage.squares, 62, false, [`cage:${cage.knight}`]);
+
   // WHAT THE MOVE STOPS (gap B2): their pin, kick, fork or safe check that
   // worked before the move and no longer does — "it stops …Bg4, which would
   // pin your knight on f3 against your queen". Both seats.
@@ -814,6 +821,27 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       ...readBoardAll('poisonedPiece', { fenBefore: i.fenBefore, san: i.san, student }).map((f) => ({ f, idea: 'mate' as IdeaKind, weight: 80 })),
     ];
     for (const { f, idea, weight } of moveReads) facts.push({ ...f, namesStudentMove: false, source: 'boardRead', idea, weight });
+    // DANYA'S METHOD POINTS (S4, 2026-11-17), through the one registry: the
+    // check the move cleared and then gave ("…Ne4 opens the queen's d8–h4
+    // diagonal, so …Qh4+ comes next"), the capture with check taken first
+    // ("first take the rook with check, then collect the other one"), and a
+    // pawn on its knight's natural square ("…c6 takes away the b8 knight's
+    // square"). A lesson shows its line, so its moves are named.
+    for (const f of readBoardAll('opensCheck', { fenBefore: i.fenBefore, san: i.san, line: i.line, student, tense: i.tense })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'check', weight: 58, altFen: i.fenBefore });
+    }
+    for (const f of readBoardAll('captureOrder', { fenBefore: i.fenBefore, san: i.san, line: i.line, reads: i.reads?.before ?? [], student, tense: i.tense })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'moveOrder', idea: 'order', weight: 70, altFen: i.fenBefore });
+    }
+    // The move's cost from one search, or — where the surface has none (an
+    // asked question) — off the reads around it: the best before against the
+    // read after, the mover's view (no mate read: no number).
+    const bestBefore = i.reads?.before[0];
+    const readCost = bestBefore && after0r && bestBefore.mate == null && after0r.mate == null
+      ? Math.max(0, seatCp(bestBefore, moverOfMove) - seatCp(after0r, moverOfMove)) : null;
+    for (const f of readBoardAll('knightSquareTaken', { fenBefore: i.fenBefore, san: i.san, student, costCp: i.costCp ?? readCost })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'develop', weight: 46, altFen: i.fenBefore });
+    }
     // THE PLAN'S NEXT STEPS and COMPENSATION (2026-11-12, the writers' "Bd3
     // and Qc2, both aimed at h7" and "a pawn down but slightly better"), off
     // the lesson's read after the move. A lesson shows its line: every move

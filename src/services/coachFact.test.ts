@@ -38,7 +38,9 @@ function benchMoves(every: number): Array<{ fenBefore: string; san: string; prev
 /** The step every lesson fact carried before the one fact shape (`5e4b632`):
  *  the in-between move in `notYet`, every other fact in the mover's step. */
 function stepBefore(f: ThoughtFact): string {
-  return f.source === 'notYet' ? 'notYet' : f.seat === 'student' ? 'yours' : 'theirs';
+  // The move-order facts came after (orderByThreat, captureOrder): "not yet,
+  // first this" too, said in that step by their kind.
+  return f.source === 'notYet' || f.kind === 'move-order' ? 'notYet' : f.seat === 'student' ? 'yours' : 'theirs';
 }
 
 describe('CoachFact — the one fact shape (WO-STORY-MATRIX-01 P1-3)', () => {
