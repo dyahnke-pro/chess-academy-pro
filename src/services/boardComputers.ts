@@ -67,6 +67,10 @@ import { openingTheoryFacts } from './openingTheory';
 import { moveStops } from './moveStops';
 import { pieceOutFirst } from './pieceOutFirst';
 import { lineCut } from './lineCut';
+import { pieceCage } from './pieceCage';
+import { opensCheck } from './opensCheck';
+import { captureOrder, type OrderRead } from './captureOrder';
+import { knightSquareTaken } from './knightSquareTaken';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses' | 'think';
 
@@ -129,6 +133,15 @@ export interface BoardContexts {
   /** What each of the last two moves of `history` stops, the order it kept,
    *  the line it cut (gaps B1-B3). `follow`: the line after, when known. */
   moveGains: { history: readonly string[]; student: Color };
+  /** The moved piece stepped off a line and opened a check its side gives in
+   *  `line` (the moves after `san`, the reply first) on its second move after. */
+  opensCheck: { fenBefore: string; san: string; line: readonly string[] | null; student: Color; tense: 'past' | 'now' };
+  /** Two pieces to take, the one with check first (`line`: the moves after
+   *  `san`; `reads`: the mover's fan at `fenBefore`, White's view). */
+  captureOrder: { fenBefore: string; san: string; line: readonly string[] | null; reads: readonly OrderRead[]; student: Color; tense: 'past' | 'now' };
+  /** A c- or f-pawn on its knight's natural square, the knight at home
+   *  (`costCp`: the move's cost to its mover, or null — then nothing). */
+  knightSquareTaken: { fenBefore: string; san: string; student: Color; costCp: number | null };
   /** The club index's known mistakes and traps on the last two moves of
    *  `history` (Learn): a slip either side played, else the slip waiting. */
   slipsOnLine: { history: readonly string[]; student: Color };
@@ -600,6 +613,8 @@ export const BOARD_COMPUTERS = {
         if (o) say(`out:${o.pawn}`, `brings the ${o.piece} out before ${o.pawn} closes its road`, o.squares);
         const c = lineCut(fenBefore, san, mine);
         if (c) say(`cut:${c.squares.join('')}`, `cuts ${c.piece} off from ${c.lost}`, c.squares);
+        const cage = pieceCage(fenBefore, san, mine);
+        if (cage) say(`cage:${cage.knight}`, cage.clause, cage.squares);
       }
       return out.length > 0 ? out : null;
     }),
@@ -614,6 +629,92 @@ export const BOARD_COMPUTERS = {
       chat: { wired: 'services/moveThoughtFacts.ts' },
       tactics: { not: 'a puzzle poses one tactic' },
       weaknesses: { not: 'a reading of the move, no question of the student\'s posed' },
+      think: THINK,
+    },
+  },
+  // A MOVE THAT CLEARS A CHECK (Danya, …Ne4 "opens the queen's d8–h4
+  // diagonal, so …Qh4+ comes next"): the road opened, then used.
+  opensCheck: {
+    read: ({ fenBefore, san, line, student, tense }, fact) => safe(() => {
+      const mover: Color = new Chess(fenBefore).turn();
+      const mine = mover === student;
+      const o = opensCheck(fenBefore, san, line, mine, tense);
+      const on = o ? boardAfter(fenBefore, san) : null;
+      if (!o || !on) return null;
+      const text = `${mine ? 'Your move' : `Their ${mover === 'b' ? '…' : ''}${san}`} ${o.clause}.`;
+      const proof = squaresProof(text, o.squares);
+      if (!proof) return null;
+      const key = `opens-check:${o.from}${o.to}`;
+      return fact({ key, claims: [key], text, proof, squares: o.squares, stakes: null, seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: on, role: 'teach' });
+    }),
+    computer: 'opensCheck',
+    kind: 'does',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' },
+      learn: { not: 'it names the check still to come — on the student\'s move that is their next move (Learn names no move unasked); their check is the threat the door already reads' },
+      review: { wired: 'services/moveThoughtFacts.ts' },
+      play: { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING)' },
+      chat: { wired: 'services/moveThoughtFacts.ts' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move, no question of the student\'s posed' },
+      think: THINK,
+    },
+  },
+  // TWO THINGS TO TAKE, THE ONE WITH CHECK FIRST (Danya, Nxb8+: "first take
+  // the rook with check, then collect the other one"), the reads proving it.
+  captureOrder: {
+    read: ({ fenBefore, san, line, reads, student, tense }, fact) => safe(() => {
+      const mover: Color = new Chess(fenBefore).turn();
+      const mine = mover === student;
+      const o = captureOrder(fenBefore, san, line, reads, mine, tense);
+      const on = o ? boardAfter(fenBefore, san) : null;
+      if (!o || !on) return null;
+      const proof = squaresProof(o.text, o.squares);
+      if (!proof) return null;
+      const key = `capture-order:${o.first.square}${o.second.square}`;
+      return fact({ key, claims: [key], text: o.text, proof, squares: o.squares, stakes: null, seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: on, role: 'teach' });
+    }),
+    computer: 'captureOrder',
+    kind: 'move-order',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' },
+      learn: { not: 'it names the second capture, the student\'s next move (Learn names no move unasked)' },
+      review: { wired: 'services/moveThoughtFacts.ts' },
+      play: { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING)' },
+      chat: { wired: 'services/moveThoughtFacts.ts' },
+      tactics: { not: 'a puzzle poses one tactic; the order is its solution, played out' },
+      weaknesses: WEAK_OWED,
+      think: THINK,
+    },
+  },
+  // A PAWN ON THE KNIGHT'S SQUARE (Danya, 2…c6: "takes away the b8 knight's
+  // natural square"), only on a move that cost an inaccuracy or more.
+  knightSquareTaken: {
+    read: ({ fenBefore, san, student, costCp }, fact) => safe(() => {
+      const mover: Color = new Chess(fenBefore).turn();
+      const mine = mover === student;
+      const k = knightSquareTaken(fenBefore, san, mine, costCp);
+      const on = k ? boardAfter(fenBefore, san) : null;
+      if (!k || !on) return null;
+      const text = `${mine ? 'Your move' : `Their ${mover === 'b' ? '…' : ''}${san}`} ${k.clause}.`;
+      const proof = squaresProof(text, k.squares);
+      if (!proof) return null;
+      const key = `knight-square:${k.pawnSquare}`;
+      return fact({ key, claims: [key], text, proof, squares: k.squares, stakes: null, seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: on, role: 'teach' });
+    }),
+    computer: 'knightSquareTaken',
+    kind: 'principle',
+    phase: NOT_ENDING,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' },
+      learn: { not: 'it reads the move\'s cost, which the live board learns only after the reply — owed with the verdict\'s own reads' },
+      review: { wired: 'services/moveThoughtFacts.ts' },
+      play: { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING)' },
+      chat: { wired: 'services/moveThoughtFacts.ts' },
+      tactics: TACTICS_NA,
+      weaknesses: WEAK_OWED,
       think: THINK,
     },
   },
