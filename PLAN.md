@@ -13,6 +13,18 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🎯 WO-SET-WEAKNESS-01 — the coach sets up what the student needs to work on, in the game (David 2026-11-17: "I want the coach to be able to set user weaknesses during games. It should be able to read the position and then calculate how to set up things the user needs to work on. This should happen naturally, like the tactics focus but more broad and natural.") — QUEUED after WO-SPEEDRUN-02
+
+**What it is.** The tactics focus already plants a chance at the student's rung and carries a missed pattern into the next game (`focusPlant`, `OwedPattern`). This widens it to every skill on the record that is red or grey: a bad bishop, a weak square, king safety, the right trade, an endgame technique, not only tactics. The record names the skill; the coach reads the board and finds a natural move of its own that leads to a position asking that skill.
+
+**Where it breaks, and the shape that survives:**
+- Most skills cannot be set up in one move. A tactic can; a structure needs steering over several moves. So the search is a few moves deep: of the coach's own human-model moves at the student's rating, which lead (by the engine's line) to a board that poses the skill (`positionPosed`/`capabilitiesPosed`, the same scoring the record uses).
+- Never a stronger or weaker coach (§ LEARN FOCUS: harder means subtler). A steered move must be one the human model gives real weight at that rating, and cost the coach no more than the plant budget allows.
+- A find on a steered board counts half, a miss in full (the existing `replyMadeAChance` rule); the opponent's strength never learns from it.
+- Silent, like the carry: no callout. The door explains the miss as it does any other.
+- One computer: the plant's search generalised over the skill list, not a second planner.
+- Audit: a seeded red skill (e.g. a bad-bishop hold rate) must appear posed in the next game more often than on a control device, with the coach's moves still inside its model.
+
 ## 🏃 WO-SPEEDRUN-02 — the full speedrun sweep, three series (David 2026-11-17: "Once this is working, and all subsequent builds are done, I want another sweep for teaching points. But a full sweep of speed runs 'oh my lands, the sensei, and theory speed run'. But we finish this build completely first.")
 
 Queued; starts only after WO-SPEEDRUN-01 has shipped and its prod audits are read. The same measure as WO-SPEEDRUN-01, over every game of his three speedrun series, not a sample:
@@ -73,6 +85,12 @@ Two limits were found and removed:
 - The trap a move sets (`baitSet`) and the opening theory (`openingTheory`) were marked as reaching chat, but no question asked for their groups. Both move questions now ask for them, theory last.
 
 The beginner register touches chat in one place only: a move written in words in the bubble. Gate: `chatAnswersInFull.gate.test.ts` (no chat module reads the record or the register to limit an answer; every computer wired to chat through the thought lands in a group a question asks). Changed for one group: a student who skipped the first-run question and is unrated now starts in the register (grey teaches) until the record says otherwise. Gate: `beginnerRegister.gate.test.ts`.
+
+**A sound named move gets its own thought.** Asked "is Nxe5 good?" (or "why is X best?") about a move as sound as the engine's best but not the best itself, chat answered with the weighing only, so the computers that read the move itself never spoke. Now the move's own thought leads and the comparison follows (`deliberation.namedIsSound`, `boardTurnAnswer`). A move that drops material keeps the weighing alone.
+
+**The audit asks the computers about their calculations** (David 2026-11-17: "make sure the computers can answer questions about their calculations"): `scripts/audit-speedrun-chat-prod.mjs` puts 12 of Danya's boards, one per built computer, to the chat, with three questions each: the computer's own calculation, a follow-up on it, and "calculate the main line". On a fresh device (an empty record, so the beginner register) the last must still come back as the line.
+
+**His viewers' questions, asked of our coach** (David 2026-11-17: "Ask the questions Danya's viewers asked during the speed runs. See if our coach can produce answers similar to his"). The captions carry no board, so `scripts/danya-viewer-questions.mjs` finds it: the moves he says are lined up with the game's moves from the voiced notes, and a question is kept only when its move is legal for the right seat on that board. Of 317 question moments in 251 videos, 32 were placed; read against their boards, 24 held (8 dropped: the opponent's move put on his turn, the bishop to g4 read as the pawn, garbled captions, an off-topic answer, duplicates). `audit-danya-viewer-questions-prod.mjs` asks the 24 through the chat and sets each answer beside his.
 
 ## 📖 WO-OPENINGS-REWRITE-01 — every opening tab rewritten, one computed beat a move, thin openings first; Levy's taught lines (David 2026-11-11: "How well do the opening tabs teach the trompowski?" → "I want you to find as many Levy taught lines as possible. We also need to make sure every other opening is strong. This should have already been done. This concerns me." → "Also check master DB to find his lines. I want a full rewrite of the opening tab. But it needs to be done deterministically. I want 1 beat per move explaining the why, the move order, this is our chance to teach like Naroditski, and we don't do it. We start with the thin openings." → "And yes. Ok to swarm")
 

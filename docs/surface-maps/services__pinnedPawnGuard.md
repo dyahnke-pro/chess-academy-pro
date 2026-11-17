@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**124 lines · 2 exports · 2 importers · 1 tests · 0 audits**
+**124 lines · 2 exports · 2 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,7 +20,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PinnedPawnGuardRead` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `pinnedPawnGuard` (function) — 3 call sites
+### `pinnedPawnGuard` (function) — 4 call sites
+- `scripts/audit-speedrun-chat-prod.mjs:55`
 - `src/services/boardComputers.ts:1542`
 - `src/services/pinnedPawnGuard.test.ts:8`
 - `src/services/pinnedPawnGuard.test.ts:18`
@@ -35,4 +36,4 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._
+- `scripts/audit-speedrun-chat-prod.mjs`

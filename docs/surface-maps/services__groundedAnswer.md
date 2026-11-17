@@ -122,7 +122,7 @@
 - `src/services/groundedAnswer.test.ts:1639`
 
 ### `evalPhrase` (function) — 1 call site
-- `src/coach/boardTurnAnswer.ts:511`
+- `src/coach/boardTurnAnswer.ts:525`
 
 ### `parsePiecePurpose` (function) — 7 call sites
 - `src/services/piecePurpose.test.ts:17`

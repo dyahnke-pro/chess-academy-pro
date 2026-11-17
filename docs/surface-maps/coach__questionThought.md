@@ -34,7 +34,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/boardTurnAnswer.planOrder.test.ts:42`
 - `src/coach/boardTurnAnswer.planOrder.test.ts:43`
 - `src/coach/boardTurnAnswer.planOrder.test.ts:44`
-- `src/coach/boardTurnAnswer.ts:179`
+- `src/coach/boardTurnAnswer.ts:193`
 
 ### `QuestionContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
