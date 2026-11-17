@@ -24,3 +24,14 @@ describe('kick or trap (contract 2026-10-10)', () => {
     expect(pawnHit(fen, last)?.trapped).toBe(false);
   });
 });
+
+describe('a rescue that costs more than the piece is no rescue', () => {
+  // Speedrun _4xbS0Crtic, …g4 against Bf3: every bishop move loses it, and
+  // Qxf7+ only delays the capture by giving the queen away.
+  it('…g4 traps the bishop on f3', () => {
+    const c = new Chess('6k1/pp2rp2/2pp1q1p/5bp1/3b4/1Q3BB1/P1P2PPP/3R2K1 b - - 1 21');
+    const mv = c.move('g4');
+    expect(trappedAt(c.fen(), 'f3')).not.toBeNull();
+    expect(pawnHit(c.fen(), mv)?.trapped).toBe(true);
+  });
+});

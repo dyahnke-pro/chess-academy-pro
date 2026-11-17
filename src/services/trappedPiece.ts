@@ -61,6 +61,10 @@ export function trappedAt(fen: string, sq: string): { attackerSquare: string } |
     if (m.from === sq) continue;
     const after = new Chess(ownerFen);
     try { after.move(m.san); } catch { continue; }
+    // A RESCUE THAT COSTS MORE THAN THE PIECE IS NO RESCUE (speedrun
+    // _4xbS0Crtic, …g4 against Bf3: "kicks their bishop off f3, gaining time" —
+    // Qxf7+ stops the capture for one move and throws the queen away).
+    if (legalSeeGainOn(after, m.to) - (m.captured ? VAL[m.captured] ?? 0 : 0) >= val) continue;
     if (!stillWinnable(after, sq, side, val)) return null;
   }
   return { attackerSquare: cheapAtk ?? attackers[0] };
