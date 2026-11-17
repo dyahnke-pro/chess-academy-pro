@@ -21,6 +21,7 @@
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { countWords } from '../utils/countWords';
+import { hasRook } from '../utils/hasRook';
 import { Chess, type Square } from 'chess.js';
 import { computePlyFacts, afterCapture, NO_PREV_CAPTURE } from './pvPlayback';
 import { describeStructure } from './boardStructure';
@@ -555,6 +556,7 @@ function planFor(
   const mine = plies.slice(0, PLAN_HORIZON).filter((p) => p.moverColor === color);
   const destinations = new Map<string, number>();
   const opening = new Set<string>();
+  const rooksToUse = !!mine[0]?.fenBefore && hasRook(mine[0].fenBefore, color === 'white' ? 'w' : 'b');
   const trading: string[] = [];
   const outposts: string[] = [];
   const passedPawns: string[] = [];
@@ -594,7 +596,8 @@ function planFor(
       const letter = /^[KQRBN]/.exec(ply.san)?.[0] ?? 'P';
       journeys.set(to, { piece: PIECE_WORD[letter.toLowerCase()] ?? 'pawn', path: [from, to] });
     }
-    for (const f of ply.facts.newOpenFiles) opening.add(f);
+    // A file is a road only for a side with a rook to use it (`hasRook`).
+    if (rooksToUse) for (const f of ply.facts.newOpenFiles) opening.add(f);
     const taken = capturedPiece(ply.facts.captured);
     if (taken) {
       trading.push(taken);

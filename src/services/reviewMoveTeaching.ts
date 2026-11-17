@@ -16,6 +16,7 @@
  */
 import type { IdeaKind } from './ideaKind';
 import { centreDistance, centreOffsets } from '../utils/centreDistance';
+import { hasRook } from '../utils/hasRook';
 import { Chess } from 'chess.js';
 import { pawnHit } from './trappedPiece';
 import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause } from './keySquares';
@@ -695,7 +696,7 @@ export function buildReviewMoveTeachingFact(
         && (choice
           ? left(now, f) && (after.pawns.halfOpenFiles[moverKey].includes(f) || now.pawns.halfOpenFiles[moverKey].includes(f))
           : after.pawns.halfOpenFiles[moverKey].includes(f)));
-      if (gainedHalfOpen.length) {
+      if (gainedHalfOpen.length && hasRook(chess.fen(), mv.color)) {
         // TOWARD THE KING it faces (11.gxf3: the g-file opens toward yours).
         const f = gainedHalfOpen[0];
         const enemyKing = chess.board().flat().find((c) => c && c.type === 'k' && c.color !== mv.color);

@@ -28,6 +28,7 @@ import { introWithGerund, introWithPredicate, type IntroTense } from '../utils/m
 import { evalBand, evalBandWords } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { settledLeadFor, type LastMove } from './material';
+import { hasRook } from '../utils/hasRook';
 import { Chess } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
 import { actsFromItsSquare, exchangeEnd } from './material';
@@ -536,7 +537,7 @@ export function moveAspects(input: {
   // Said as a move's own fact, the file it opens is a road for the rooks long
   // after this move (S-LONG-HORIZON, round 4: his "we get the g-file" is about
   // the play to come).
-  if (settled.newOpenFiles.length > 0 && structureStands) aspects.push({ kind: 'aspect-opens-file', text: `opening the ${settled.newOpenFiles[0]}-file`, verb: `opens the ${settled.newOpenFiles[0]}-file`, horizon: ', a road for the rooks from now on', idea: 'file', squares: [], weight: 44 });
+  if (settled.newOpenFiles.length > 0 && structureStands && hasRook(fenAfter, moverWB)) aspects.push({ kind: 'aspect-opens-file', text: `opening the ${settled.newOpenFiles[0]}-file`, verb: `opens the ${settled.newOpenFiles[0]}-file`, horizon: ', a road for the rooks from now on', idea: 'file', squares: [], weight: 44 });
 
   // 8. Structural damage the move INFLICTS on the opponent vs CONCEDES in its own
   //    camp — both are real ramifications; the self-inflicted one is a downside.

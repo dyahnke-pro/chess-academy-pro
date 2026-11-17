@@ -15,7 +15,7 @@ const fenOf = (sans: readonly string[]): string => { const c = new Chess(); sans
 describe('roadReason — what each road allows', () => {
   it('the Najdorf over the Classical: what …a6 takes away, and how masters meet the other road', () => {
     expect(roadReason({ prefix: FORK, chosenSan: 'a6', chosenName: 'Sicilian Defense: Najdorf Variation', altSan: 'Nc6', altName: 'Sicilian Defense: Classical Variation', student: 'b', movesAt })?.text)
-      .toMatch(/^…a6 takes b5 away from their knights on d4 and c3, and their bishop on f1\./);
+      .toMatch(/^…a6 takes b5 away from their knights on d4 and c3 and their bishop on f1\./);
   });
   it('the road not taken is never described (lead 2026-10-20: "the Giuoco Piano is mostly met by the Classical")', () => {
     expect(roadReason({ prefix: FORK, chosenSan: 'a6', chosenName: 'Sicilian Defense: Najdorf Variation', altSan: 'Nc6', altName: 'Sicilian Defense: Classical Variation', student: 'b', movesAt })?.text).not.toMatch(/other main road|mostly met by/);
@@ -100,5 +100,13 @@ describe('roads as said', () => {
   it('two moves that only bring a piece out are no reason to choose one', () => {
     const KIDP = ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6'];
     expect(roadReason({ prefix: KIDP, chosenSan: 'Nf3', chosenName: `${KID}: Normal Variation, Rare Defenses`, altSan: 'Be2', altName: `${KID}: Normal Variation, Standard Development`, student: 'w', movesAt: () => null })).toBeNull();
+  });
+});
+
+describe('one piece is named once (Danya Review tapes: "their queens on d8 and d8")', () => {
+  it('the French Advance: e5 takes d6 and f6 from the queen once', () => {
+    const t = roadReason({ prefix: ['e4', 'e6', 'd4', 'd5'], chosenSan: 'e5', chosenName: 'French Defense: Advance Variation', altSan: 'Nc3', altName: 'French Defense: Paulsen Variation', student: 'w', movesAt: () => null })?.text ?? '';
+    expect(t).not.toMatch(/d8 and d8|queens on/);
+    expect(t).toMatch(/queen on d8/);
   });
 });

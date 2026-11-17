@@ -97,9 +97,14 @@ function scoreFor(m: LocalDbMove | undefined, student: 'w' | 'b'): number | null
 
 /** "knights on d4 and c3 and bishop on f1" — one noun per kind of piece. */
 function piecesWords(ps: ReadonlyArray<{ piece: string; from: string }>): string {
+  // One piece is one piece, however many squares it loses: "their queens on d8
+  // and d8" counted the queen once per square (Danya Review tapes, 3 games).
   const byKind = new Map<string, string[]>();
-  for (const p of ps) byKind.set(p.piece, [...(byKind.get(p.piece) ?? []), p.from]);
-  return [...byKind].map(([k, sqs]) => `${PIECE[k]}${sqs.length > 1 ? 's' : ''} on ${andList(sqs)}`).join(', and their ');
+  for (const p of ps) {
+    const sqs = byKind.get(p.piece) ?? [];
+    if (!sqs.includes(p.from)) byKind.set(p.piece, [...sqs, p.from]);
+  }
+  return andList([...byKind].map(([k, sqs], n) => `${n > 0 ? 'their ' : ''}${PIECE[k]}${sqs.length > 1 ? 's' : ''} on ${andList(sqs)}`));
 }
 
 /** THE one name for a road: the variation's own name, whole — "Sicilian
