@@ -360,8 +360,10 @@ function landsSafely(chess: Chess, m: Move): boolean {
   return r !== null && r <= 0;
 }
 /** After `attacker`'s move `m`, the enemy pieces (non-pawn, ≥3pts) it newly attacks
- *  that must respond — the attacker cannot be taken for free (a real tempo). */
-function tempoTargets(chess: Chess, m: Move, attacker: Color): Square[] {
+ *  that must respond — the attacker cannot be taken for free (a real tempo).
+ *  THE one kick test: the record's tempo-handed and early-queen-sortie read it,
+ *  and so does the queen chased in the opening (`queenChased`). */
+export function tempoTargets(chess: Chess, m: Move, attacker: Color): Square[] {
   const c = appliedVerbose(chess, m);
   if (!c) return [];
   // Capturing the attacker must LOSE material for the defender (strictly), else

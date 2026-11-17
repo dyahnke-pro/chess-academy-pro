@@ -771,6 +771,11 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     for (const f of readBoardAll('pieceMovedAgain', { history: i.history, fenBefore: i.fenBefore, san: i.san, student, costCp: i.costCp })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'develop', weight: 50 });
     }
+    // The early queen chased with tempo, both seats (his "the knight to c3
+    // with tempo, hitting the queen"): the queen's moves against the pieces out.
+    for (const f of readBoardAll('queenChased', { history: i.history, fenBefore: i.fenBefore, san: i.san, student })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'tempo', weight: 56 });
+    }
     // The castling the move took away, and which way the king castled
     // against their pawns (S4, his speedruns).
     for (const f of [...readBoardAll('castlingTaken', { fenBefore: i.fenBefore, san: i.san, student }), ...readBoardAll('castlingWing', { fenBefore: i.fenBefore, san: i.san, student })]) {

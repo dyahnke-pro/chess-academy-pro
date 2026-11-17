@@ -265,6 +265,7 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   castlingTakenAway: 'am-i-safe',
   castlingWing: 'am-i-safe',
   pieceMovedAgain: GAME,
+  queenChased: GAME,
   queenHunt: 'candidates',
   secondAttacker: 'candidates',
   outOfReach: 'assess',

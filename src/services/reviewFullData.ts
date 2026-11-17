@@ -1684,6 +1684,9 @@ export function computeMoveFacets(
       add(readBoardAll('queenNet', { fenBefore, san, student: studentColorWB })[0]);
       // Getting into their camp, both seats (Danya's speedruns).
       add(readBoardAll('intoTheirCamp', { fenBefore, san, student: studentColorWB })[0]);
+      // The early queen chased with tempo, both seats, off the game's own
+      // moves before this one.
+      add(readBoardAll('queenChased', { history: ctx.allSans.slice(0, ply - 1), fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('stalemateTrick', { fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('bothSaved', { fenBefore, san, student: studentColorWB, replies: ctx.playedLineUci.length ? [{ cp: ctx.evaluation != null && storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: null, moves: ctx.playedLineUci }] : [] })[0]);
       // A windmill and a perpetual check, both seats (repeatingChecks), one

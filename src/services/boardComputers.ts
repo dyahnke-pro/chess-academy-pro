@@ -82,6 +82,7 @@ import { pinnedPawnGuard } from './pinnedPawnGuard';
 import { castlingTakenAway } from './castlingTakenAway';
 import { castlingWing } from './castlingWing';
 import { pieceMovedAgain } from './pieceMovedAgain';
+import { queenChased, queenChasedLine } from './queenChased';
 import { tradeOfferAt, tradeOfferLine } from './tradeOffer';
 import { fileTradeAt, fileTradeLine } from './fileTrade';
 import { pawnEndingTradeAt, pawnEndingTradeLine } from './pawnEndingTrade';
@@ -336,6 +337,11 @@ export interface BoardContexts {
    *  before `san` from the start position, which must arrive at `fenBefore`;
    *  `costCp`: the move's cost, null unknown). */
   pieceMovedAgain: { history: readonly string[]; fenBefore: string; san: string; student: Color; costCp: number | null };
+  /** THE EARLY QUEEN CHASED (`queenChased`, Danya's "the knight to c3 with
+   *  tempo, hitting the queen"): the move `san` played after `history` (every
+   *  move from the start, ending on `fenBefore`) hits the other side's early
+   *  queen with tempo in the first twelve moves, either seat. */
+  queenChased: { history: readonly string[]; fenBefore: string; san: string; student: Color };
   /** THE TRADES (Danya speedruns, S4 trades): the move `san` on `fenBefore`
    *  (either seat), with the engine's cost of it for its mover (`costCp`) and
    *  its score after it from the mover's seat (`afterCp`) — a quiet offer of
@@ -1809,6 +1815,40 @@ export const BOARD_COMPUTERS = {
       review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NA,
       weaknesses: { not: 'the record half is principleAttribution\'s same-piece-twice on the student\'s own costly move' },
       think: { not: 'it counts a piece\'s trips across the game\'s moves; a step board is one position' },
+    },
+  },
+  // His "you develop the knight to c3 with tempo, hitting the queen on d5"
+  // and "Ng5 hits the queen": the early queen chased, with the time count —
+  // the queen's moves against the pieces its side has out. Both seats.
+  queenChased: {
+    read: ({ history, fenBefore, san, student }, fact) => safe(() => {
+      // The moves must be this board's game from the start, or the count is
+      // of another game's queen (a lesson line set up mid-game).
+      const board = new Chess();
+      for (const m of history) board.move(m);
+      if (board.fen().split(' ')[0] !== fenBefore.split(' ')[0]) return null;
+      const q = queenChased(history, san);
+      if (!q) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mine = q.queenSide !== student;
+      const text = queenChasedLine(q, mine ? 'their' : 'your', fenAfter);
+      const squares = [q.queen, q.hitter.square];
+      // One claim with the queen hunt and the queen's escapes (the same queen
+      // hit), and with the briefing's pressure on the queen's square: a turn
+      // says the hit once.
+      const hit = moveIdeaClaim(fenBefore, san, 'pressure', [q.queen]);
+      return fact({ key: q.key, claims: [q.key, `queen-run:${q.queen}`, ...(hit ? [hit] : [])], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'queenChased',
+    kind: 'move-job',
+    phase: NOT_ENDING,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
+      learn: S4_LEARN_OWED,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'the record half is principleAttribution\'s early-queen-sortie on the student\'s own queen move' },
+      think: { not: 'it counts the queen\'s trips across the game\'s moves; a step board is one position' },
     },
   },
   tradeOffer: {
