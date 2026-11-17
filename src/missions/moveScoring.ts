@@ -36,6 +36,9 @@ export interface ScoringCandidate {
   uci: string;
   /** What the move costs the coach against its best, centipawns, ≥ 0. */
   cpLoss: number;
+  /** The engine's line from this move (UCI, the move first), when the read
+   *  carried one — a scorer that looks past the move reads it. */
+  line?: readonly string[];
 }
 
 export interface ScoringContext {

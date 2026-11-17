@@ -60,10 +60,28 @@ export function posesNeededSkill(fen: string, uci: string, needs: ReadonlySet<Mi
     .filter((t) => needs.has(t) && !before.has(t));
 }
 
+/** THE STEER LOOKS A MOVE PAST ITSELF (David 2026-11-17: "calculate how to set
+ *  up things"): a structure is rarely set in one move. When the move itself
+ *  asks nothing, the coach's own line is read on — the student's best answer,
+ *  then the coach's next move — and a needed skill asked there counts, at
+ *  half the pull (it rests on the line being played). */
+export function neededSkillAlong(fen: string, uci: string, line: readonly string[] | null, needs: ReadonlySet<MisconceptionTagId>): { skills: MisconceptionTagId[]; now: boolean } {
+  const now = posesNeededSkill(fen, uci, needs);
+  if (now.length > 0 || !line || line.length < 3 || line[0] !== uci) return { skills: now, now: true };
+  try {
+    const c = new Chess(fen);
+    for (const u of line.slice(0, 2)) c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+    return { skills: posesNeededSkill(c.fen(), line[2], needs), now: false };
+  } catch {
+    return { skills: [], now: true };
+  }
+}
+
 export function skillSteerScore(candidate: ScoringCandidate, ctx: ScoringContext): number {
   if (!ctx.focus || ctx.focus.needs.size === 0) return 0;
   if (isGift(ctx.fen, candidate.uci, ctx.coach)) return -1;
-  return posesNeededSkill(ctx.fen, candidate.uci, ctx.focus.needs).length > 0 ? 1 : 0;
+  const r = neededSkillAlong(ctx.fen, candidate.uci, candidate.line ?? null, ctx.focus.needs);
+  return r.skills.length === 0 ? 0 : r.now ? 1 : 0.5;
 }
 
 registerScorer('skillSteer', skillSteerScore);

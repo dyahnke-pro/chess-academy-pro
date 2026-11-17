@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { posesNeededSkill, skillSteerScore, STEER_SKILLS } from './skillSteer';
+import { posesNeededSkill, skillSteerScore, neededSkillAlong, STEER_SKILLS } from './skillSteer';
 import type { ScoringContext } from '../moveScoring';
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
 
@@ -23,6 +23,15 @@ describe('skillSteer (WO-SET-WEAKNESS-01): the coach sets up a skill the record 
   });
   it('never a gift: …Qxg2 drops the queen to Bxg2, whatever it poses', () => {
     expect(skillSteerScore({ uci: 'g6g2', cpLoss: 0 }, ctx(STEER_SKILLS))).toBe(-1);
+  });
+  it('a move that asks nothing now, whose line sets the skill up a move later, pulls at half', () => {
+    // …a6 asks nothing; the coach's line goes on Nc3 …Bd6, which asks it.
+    expect(posesNeededSkill(FEN, 'a7a6', new Set(['passive-rook']))).toEqual([]);
+    const line = ['a7a6', 'b1c3', 'f8d6'];
+    expect(neededSkillAlong(FEN, 'a7a6', line, new Set(['passive-rook']))).toEqual({ skills: ['passive-rook'], now: false });
+    expect(skillSteerScore({ uci: 'a7a6', cpLoss: 0, line }, ctx(['passive-rook']))).toBe(0.5);
+    // No line, nothing to read on.
+    expect(skillSteerScore({ uci: 'a7a6', cpLoss: 0 }, ctx(['passive-rook']))).toBe(0);
   });
   it('off a focus game it says nothing', () => {
     expect(skillSteerScore({ uci: 'f8d6', cpLoss: 0 }, { ...ctx(['passive-rook']), focus: null })).toBe(0);

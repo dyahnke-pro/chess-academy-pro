@@ -20,7 +20,7 @@ import { hasActiveWeights, scoreCandidates, weightsForDials, type ScorerWeights,
 // Every scorer module registers itself (WO-CAMPAIGN-MASTER).
 import '../missions/scorers';
 import { posesDefendSeat } from '../missions/scorers/focus';
-import { posesNeededSkill } from '../missions/scorers/skillSteer';
+import { neededSkillAlong } from '../missions/scorers/skillSteer';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findFocusPlant, type FocusPlantAsk, type FocusPlantPick, type FocusPlantReject } from '../coach/focus/focusPlant';
 import type { FocusId, FocusSeat } from '../coach/focus/focusCard';
@@ -785,7 +785,11 @@ async function applyMoveScorers(
   if (!analysis || analysis.topLines.length === 0) return chosen;
   const coach = fen.split(' ')[1] === 'b' ? 'b' : 'w';
   const candidates = candidatesFromLines(fen, analysis.topLines)
-    .map((c) => ({ uci: sanToUci(fen, c.san) ?? '', cpLoss: c.cpLoss }))
+    .map((c) => {
+      const uci = sanToUci(fen, c.san) ?? '';
+      const line = analysis.topLines.find((l) => l.moves[0] === uci)?.moves;
+      return { uci, cpLoss: c.cpLoss, ...(line ? { line } : {}) };
+    })
     .filter((c) => c.uci);
   const ctx: ScoringContext = {
     fen,
@@ -818,7 +822,8 @@ async function applyMoveScorers(
   // THE SKILL STEER (WO-SET-WEAKNESS-01): the swap set up a positional skill
   // the record needs — steered too, so the student's answer counts half and a
   // find never raises the coach's strength.
-  const skillsSet = mission.focus && !focusSteer ? posesNeededSkill(fen, pick.uci, new Set(mission.focus.needs)) : [];
+  const pickLine = candidates.find((c) => c.uci === pick.uci)?.line ?? null;
+  const skillsSet = mission.focus && !focusSteer ? neededSkillAlong(fen, pick.uci, pickLine, new Set(mission.focus.needs)).skills : [];
   if (skillsSet.length > 0 && mission.focus) {
     void logAppAudit({
       kind: 'skill-steer',
