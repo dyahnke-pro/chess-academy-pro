@@ -474,6 +474,9 @@ export const COMPUTER_CATALOG = {
   pawnCutsGuard: { file: 'services/pawnLines.ts', says: 'the square a pawn lands on cuts an enemy slider off from a piece it guarded, which is hanging now' },
   chainBase: { file: 'services/chainBase.ts', says: 'a piece that comes to the base of a pawn chain — to guard your own, lost by the count before, or to hit theirs, lost by the count after' },
   pinnedPawnGuard: { file: 'services/pinnedPawnGuard.ts', says: 'a square whose pawn guard is pinned to its king and can\'t take back, hit by the move just played' },
+  castlingTakenAway: { file: 'services/castlingTakenAway.ts', says: 'the move just played took castling away: a square the king must cross or land on is now covered, by the piece that moved or along the line it opened' },
+  castlingWing: { file: 'services/castlingWing.ts', says: 'which way the king castled against their pawns: toward files they have no pawn on (roads for their rooks) or away from them' },
+  pieceMovedAgain: { file: 'services/pieceMovedAgain.ts', says: 'one piece moved again while the others wait at home: two moves where one would do, back on a square it stood on, its third trip with minors undeveloped' },
   pawnBreak: { file: 'services/pawnBreak.ts', says: 'the pawn break and what it is for: the pawn it strikes (the base of their chain), the file it opens for the rooks, the bishop it frees' },
 } satisfies Record<string, CatalogRow>;
 

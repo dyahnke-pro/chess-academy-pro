@@ -249,6 +249,9 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   queenNet: 'calculate',
   bothSaved: 'answer-danger',
   emptyCheckAt: 'is-my-move-safe',
+  castlingTakenAway: 'am-i-safe',
+  castlingWing: 'am-i-safe',
+  pieceMovedAgain: GAME,
 };
 
 /** The step a computer serves, or null when no step board carries it. */

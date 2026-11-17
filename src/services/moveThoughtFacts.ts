@@ -727,6 +727,16 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     for (const f of readBoardAll('pawnBreak', { fenBefore: i.fenBefore, san: i.san, student, lastTo })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'file', weight: 55 });
     }
+    // One piece moved again while the others wait at home (S4, his "the
+    // bishop has moved five times for nothing").
+    for (const f of readBoardAll('pieceMovedAgain', { history: i.history, fenBefore: i.fenBefore, san: i.san, student, costCp: i.costCp })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'develop', weight: 50 });
+    }
+    // The castling the move took away, and which way the king castled
+    // against their pawns (S4, his speedruns).
+    for (const f of [...readBoardAll('castlingTaken', { fenBefore: i.fenBefore, san: i.san, student }), ...readBoardAll('castlingWing', { fenBefore: i.fenBefore, san: i.san, student })]) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'king-safety', weight: 55 });
+    }
     // Opposite-coloured bishops settled by this move — a plan for the game.
     for (const f of readBoardAll('oppositeBishops', { fenBefore: i.fenBefore, san: i.san, student })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 50 });

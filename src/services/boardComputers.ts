@@ -73,6 +73,9 @@ import { bothSaved, bothSavedLine, type ReplyLine } from './bothSaved';
 import { pawnOpensCastling, pawnCutsGuard, type PawnLineRead } from './pawnLines';
 import { chainBase } from './chainBase';
 import { pinnedPawnGuard } from './pinnedPawnGuard';
+import { castlingTakenAway } from './castlingTakenAway';
+import { castlingWing } from './castlingWing';
+import { pieceMovedAgain } from './pieceMovedAgain';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses' | 'think';
 
@@ -271,6 +274,14 @@ export interface BoardContexts {
    *  `fenBefore` (either seat) hits a square whose pawn guard is pinned to its
    *  king, and the pin is why the square is lost by the count. */
   pinnedPawnGuard: { fenBefore: string; san: string; student: Color };
+  /** The move just played took castling away, either side's (S4 opening). */
+  castlingTaken: { fenBefore: string; san: string; student: Color };
+  /** A castling move read against their pawns: toward open files, or away. */
+  castlingWing: { fenBefore: string; san: string; student: Color };
+  /** One piece moved again while the others wait (`history`: every move
+   *  before `san` from the start position, which must arrive at `fenBefore`;
+   *  `costCp`: the move's cost, null unknown). */
+  pieceMovedAgain: { history: readonly string[]; fenBefore: string; san: string; student: Color; costCp: number | null };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -1371,6 +1382,68 @@ export const BOARD_COMPUTERS = {
       tactics: { not: 'owed — a puzzle\'s pin is named by its classifier (detectTacticType); this reads a game move' },
       weaknesses: { not: 'the square it wins is graded by the move\'s own cost; the pin itself is recorded by the pin readers' },
       think: THINK,
+    },
+  },
+  // S4, his speedruns' opening ideas (2026-11-17). "f3 opens the g1–a7
+  // diagonal; with Black's bishop on c5, White can no longer castle short" ·
+  // "on b4 the bishop covers f8 and stops Black castling".
+  castlingTaken: {
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const r = castlingTakenAway(fenBefore, san, student);
+      if (!r) return null;
+      const mine = new Chess(fenBefore).turn() === student;
+      return fact({ key: r.key, claims: [r.key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'castlingTakenAway',
+    kind: 'king-read',
+    phase: NOT_ENDING,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: { not: 'owed — Learn\'s door has no lane for it yet; Learn hears the castling it blocks through ownCastlingBlocked on the live board' },
+      review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move just played — the castling it costs is recorded by the king-stuck-center watch' }, think: THINK,
+    },
+  },
+  // "Castle long: Black's g- and h-pawns are gone, so castling short hands
+  // him open files to attack."
+  castlingWing: {
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const r = castlingWing(fenBefore, san, student);
+      if (!r) return null;
+      return fact({ key: r.key, claims: [r.key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,
+        seat: r.mover === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'castlingWing',
+    kind: 'king-read',
+    phase: NOT_ENDING,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: { not: 'owed — Learn\'s door has no lane for it yet' },
+      review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the castling move just played — no question of the student\'s posed' }, think: THINK,
+    },
+  },
+  // "White's bishop has moved five times for nothing" · "Bd7 then Bg4 spends
+  // two moves on one bishop".
+  pieceMovedAgain: {
+    read: ({ history, fenBefore, san, student, costCp }, fact) => safe(() => {
+      // The moves must be this board's game from the start, or the count is
+      // of another game's pieces (a lesson line set up mid-game).
+      const board = new Chess();
+      for (const m of history) board.move(m);
+      if (board.fen().split(' ')[0] !== fenBefore.split(' ')[0]) return null;
+      const r = pieceMovedAgain(history, san, student, costCp);
+      if (!r) return null;
+      return fact({ key: r.key, claims: [r.key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,
+        seat: r.mover === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'pieceMovedAgain',
+    kind: 'fundamental',
+    phase: NOT_ENDING,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: { not: 'owed — Learn\'s door has no lane for it yet; the student\'s own costly re-move is filed as same-piece-twice' },
+      review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NA,
+      weaknesses: { not: 'the record half is principleAttribution\'s same-piece-twice on the student\'s own costly move' },
+      think: { not: 'it counts a piece\'s trips across the game\'s moves; a step board is one position' },
     },
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };
