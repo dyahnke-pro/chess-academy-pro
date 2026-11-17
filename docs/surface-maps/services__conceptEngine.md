@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:392) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6946) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6984) — names `conceptEngine`
 
 ## Who calls in
 
@@ -42,15 +42,20 @@
 
 ## Exports and every call site
 
-### `sideToMove` (function) — 14 call sites
+### `sideToMove` (function) — 19 call sites
+- `src/components/Coach/ExplainPositionSessionView.tsx:157`
 - `src/components/Coach/ExplainPositionSessionView.tsx:158`
-- `src/components/Coach/ExplainPositionSessionView.tsx:159`
+- `src/components/Coach/ExplainPositionSessionView.tsx:255`
 - `src/components/Coach/ExplainPositionSessionView.tsx:256`
-- `src/components/Coach/ExplainPositionSessionView.tsx:257`
 - `src/data/endgame-side-correctness.test.ts:27`
 - `src/data/endgame-side-correctness.test.ts:51`
 - `src/data/grounding/groundingLib.ts:56`
 - `src/data/groundingMistakes.test.ts:38`
+- `src/services/boardComputers.ts:415`
+- `src/services/boardComputers.ts:1649`
+- `src/services/boardComputers.ts:1667`
+- `src/services/boardComputers.ts:1683`
+- `src/services/boardComputers.ts:1701`
 - `src/services/conceptEngine.test.ts:19`
 - `src/services/conceptEngine.test.ts:20`
 - `src/services/groundedMoveWhy.ts:83`
@@ -137,7 +142,7 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8705`
+- `src/components/Coach/CoachTeachPage.tsx:8718`
 - `src/services/learnWalkBlumenfeld.test.ts:142`
 - `src/services/positionFacts.ts:1506`
 - `src/services/positionFacts.ts:1508`
@@ -148,16 +153,16 @@
 - `src/services/reviewFullData.ts:763`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8708`
+- `src/components/Coach/CoachTeachPage.tsx:8721`
 - `src/services/dnaLineNarrator.ts:57`
 - `src/services/projectedLineVoice.ts:99`
 - `src/services/puzzleConceptExplanation.ts:131`
 - `src/services/reviewFullData.ts:758`
 - `src/services/tacticAlertService.ts:148`
-- `src/services/tacticTypeUnification.test.ts:223`
+- `src/services/tacticTypeUnification.test.ts:231`
 - `src/test/auditConceptGameplayCues.test.ts:24`
 
-### `materialBalance` (re-export) — 66 call sites
+### `materialBalance` (re-export) — 67 call sites
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:41`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:90`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:94`
@@ -198,7 +203,7 @@
 - `scripts/pro-repertoire/mine-ruy-traps.mjs:90`
 - `scripts/pro-repertoire/mine-ruy-traps.mjs:94`
 - `scripts/pro-repertoire/mine-ruy-traps.mjs:103`
-- `src/services/captureRun.ts:77`
+- `src/services/captureRun.ts:85`
 - `src/services/compensation.ts:57`
 - `src/services/conceptEngine.test.ts:24`
 - `src/services/conceptEngine.test.ts:26`
@@ -220,9 +225,10 @@
 - `src/services/narratedContinuation.test.ts:20`
 - `src/services/opponentMoveReads.ts:447`
 - `src/services/pieceValues.ts:46`
-- `src/services/positionReadingService.ts:1804`
-- `src/services/practicalReads.ts:30`
+- `src/services/positionReadingService.ts:1828`
+- `src/services/practicalReads.ts:31`
 - `src/services/sideMaterial.test.ts:12`
+- `src/services/tradeWords.ts:36`
 - `src/test/onePieceValueTable.test.ts:46`
 
 ## Tests

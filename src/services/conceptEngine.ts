@@ -217,7 +217,7 @@ export function renderMatchupConcept(m: MatchupResult, defending: boolean): Comp
 import { detectTactics } from './tacticsDetector';
 import { classifyMatchup } from './endgameMatchup';
 import {
-  detectOpposition, detectKeySquares, detectRuleOfSquare, detectRookPawnCorner,
+  detectOpposition, detectKeySquares, detectRuleOfSquare, detectRookPawnCorner, wrongBishopDrawText,
   detectLucena, detectPhilidor, detectBackRankDefence, detectCutOff, detectRookBehindPasser,
   detectBareKingMate, detectTwoPawnsVsKing,
 } from './endgameTechnique';
@@ -425,7 +425,7 @@ function namedTechniqueFor(fen: string, cls: MatchupClass, defending: boolean): 
   if (wrong?.kind === 'wrong-bishop') {
     return technique(
       'wrong-rook-pawn-bishop', 'The wrong-bishop draw',
-      `The ${wrong.pawn} pawn is a rook pawn, and the bishop never touches its promotion corner on ${wrong.corner}. With the defending king in that corner nothing can evict it, so the pawn cannot be forced through: a wrong-bishop draw.`,
+      wrongBishopDrawText(wrong),
       'Wrong bishop — the corner holds.', [wrong.pawn, wrong.corner], 0.7,
     );
   }

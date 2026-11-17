@@ -71,6 +71,7 @@ import { lineCut } from './lineCut';
 import { harmlessPin, harmlessPinLine } from './harmlessPin';
 import { queenNet, queenNetLine } from './queenNet';
 import { bothSaved, bothSavedLine, type ReplyLine } from './bothSaved';
+import { minorMatchup } from './minorMatchup';
 import { pawnCutsGuard, type PawnLineRead } from './pawnLines';
 import { chainBase } from './chainBase';
 import { pinnedPawnGuard } from './pinnedPawnGuard';
@@ -281,6 +282,12 @@ export interface BoardContexts {
    *  move `san` on `fenBefore` (either seat). `replies`: the engine's lines
    *  from the board after it, best first (White-POV cp); [] where none. */
   bothSaved: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
+  /** KNIGHT AGAINST BISHOP (`minorMatchup`): the move `san` on `fenBefore`
+   *  (either seat) that leaves one knight against one bishop, settled, with a
+   *  verdict it did not have before — the good knight against the bad bishop,
+   *  the closed board and the outpost, or the open board for the bishop — or
+   *  that leaves a bishop the wrong colour for its rook's pawn. */
+  minorMatchup: { fenBefore: string; san: string; student: Color };
   /** WHAT A PAWN MOVE DID TO THE LINES (`pawnLines`, S4 pawns): the square the pawn landed on cut an enemy slider off from a piece it
    *  guarded, which is hanging now and was not before. */
   pawnCutsGuard: { fenBefore: string; san: string; student: Color };
@@ -1487,6 +1494,26 @@ export const BOARD_COMPUTERS = {
       learn: { not: 'owed — not in the Learn turn door yet (CoachTeachPage reads none of its lanes); the composer and Review say it' },
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  minorMatchup: {
+    // The minors' matchup (David 2026-11-17): "you trade into a good knight
+    // against their bad bishop", both seats, on the move that makes it.
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const m = minorMatchup(fenBefore, san, student);
+      if (!m) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      return fact({ key: m.key, claims: [m.key], text: m.text, proof: squaresProof(m.text, m.squares) ?? NO_PROOF.description, squares: m.squares, stakes: null,
+        seat: m.winner === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'minorMatchup',
+    kind: 'judgement',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: { not: 'owed — not in the Learn turn door yet (CoachTeachPage reads none of its lanes); the composer and Review say it' },
+      tactics: { not: 'a puzzle poses one tactic; the minors\' matchup is the game\'s structure' },
+      weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
     },
   },
   pawnCutsGuard: {

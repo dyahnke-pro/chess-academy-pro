@@ -473,6 +473,7 @@ export const COMPUTER_CATALOG = {
   harmlessPin: { file: 'services/harmlessPin.ts', says: 'a pin the move just made that will not hold: a pawn guards the pinned piece and the engine\'s line ends the pin within two of their moves (castling, a piece between, a pawn kick)' },
   queenNet: { file: 'services/queenNet.ts', says: 'the move takes a safe square from the other side\'s raiding (or attacked) queen and leaves it one safe square or none, each square read by the legal exchange' },
   bothSaved: { file: 'services/bothSaved.ts', says: 'two of the mover\'s pieces hanging, and the move steps one of them to a square that guards the other, both safe after it by the legal exchange or the engine\'s own replies' },
+  minorMatchup: { file: 'services/minorMatchup.ts', says: 'one knight against one bishop, settled, and which is better: the knight against a bad bishop or on a closed board with an outpost, the bishop on an open board with pawns on both wings; and the bishop the wrong colour for its rook\'s pawn, a draw' },
   desperadoAt: { file: 'services/desperado.ts', says: 'two of the mover\'s pieces hanging, and the engine\'s best move sells the one that is lost anyway: it captures on its way out' },
   pawnCutsGuard: { file: 'services/pawnLines.ts', says: 'the square a pawn lands on cuts an enemy slider off from a piece it guarded, which has no guard now' },
   chainBase: { file: 'services/chainBase.ts', says: 'a piece that comes to the base of a pawn chain — to guard your own, lost by the count before, or to hit theirs, lost by the count after' },

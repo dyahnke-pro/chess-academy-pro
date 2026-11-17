@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**606 lines · 16 exports · 38 importers · 16 tests · 0 audits**
+**607 lines · 16 exports · 38 importers · 16 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -100,17 +100,17 @@
 - `src/services/learnTurnDoor.ts:1412`
 
 ### `placeFact` (function) — 20 call sites
-- `src/services/boardComputers.ts:1025`
-- `src/services/boardComputers.ts:1854`
+- `src/services/boardComputers.ts:1032`
+- `src/services/boardComputers.ts:1881`
 - `src/services/learnTurnDoor.ts:755`
 - `src/services/moveThoughtFacts.ts:208`
 - `src/services/moveThoughtFacts.ts:610`
 - `src/services/moveThoughtFacts.ts:630`
 - `src/services/moveThoughtFacts.ts:699`
 - `src/services/moveThoughtFacts.ts:713`
-- `src/services/moveThoughtFacts.ts:1275`
-- `src/services/moveThoughtFacts.ts:1307`
-- `src/services/moveThoughtFacts.ts:1324`
+- `src/services/moveThoughtFacts.ts:1279`
+- `src/services/moveThoughtFacts.ts:1311`
+- `src/services/moveThoughtFacts.ts:1328`
 - `src/services/openingStory.ts:422`
 - `src/services/positionFacts.ts:556`
 - `src/services/reviewFacet.ts:85`
@@ -122,8 +122,8 @@
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 19 call sites
-- `src/services/boardComputers.ts:1026`
-- `src/services/boardComputers.ts:1854`
+- `src/services/boardComputers.ts:1033`
+- `src/services/boardComputers.ts:1881`
 - `src/services/coachFact.test.ts:112`
 - `src/services/coachFact.test.ts:118`
 - `src/services/coachFact.test.ts:119`
@@ -133,9 +133,9 @@
 - `src/services/moveThoughtFacts.ts:631`
 - `src/services/moveThoughtFacts.ts:700`
 - `src/services/moveThoughtFacts.ts:714`
-- `src/services/moveThoughtFacts.ts:1276`
-- `src/services/moveThoughtFacts.ts:1308`
-- `src/services/moveThoughtFacts.ts:1325`
+- `src/services/moveThoughtFacts.ts:1280`
+- `src/services/moveThoughtFacts.ts:1312`
+- `src/services/moveThoughtFacts.ts:1329`
 - `src/services/openingStory.ts:423`
 - `src/services/positionFacts.ts:564`
 - `src/services/reviewFacet.ts:96`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2806 lines · 78 exports · 153 importers · 28 tests · 2 audits**
+**2806 lines · 78 exports · 154 importers · 28 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -77,6 +77,7 @@
 - `src/services/liveTacticsContext.ts`
 - `src/services/material.ts`
 - `src/services/methodSignals.ts`
+- `src/services/minorMatchup.ts`
 - `src/services/minorityLeverCheck.test.ts`
 - `src/services/mistakeNarration.ts`
 - `src/services/moveAllowed.ts`
@@ -494,7 +495,7 @@
 - `src/services/secondAttacker.ts:56`
 - `src/services/thinkingExchangeChain.ts:59`
 
-### `signedLegalSeeFor` (function) — 39 call sites
+### `signedLegalSeeFor` (function) — 40 call sites
 - `src/components/Coach/CoachTeachPage.tsx:927`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
@@ -518,6 +519,7 @@
 - `src/services/learnWalkOct3c.test.ts:60`
 - `src/services/learnWalkOct3c.test.ts:66`
 - `src/services/liteMoves.test.ts:139`
+- `src/services/minorMatchup.ts:78`
 - `src/services/opponentMoveReads.ts:214`
 - `src/services/opponentMoveReads.ts:383`
 - `src/services/opponentMoveReads.ts:446`
@@ -630,7 +632,9 @@
 ### `PieceQualityKind` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `bishopBlockingPawns` (function) — 4 call sites
+### `bishopBlockingPawns` (function) — 6 call sites
+- `src/services/minorMatchup.ts:91`
+- `src/services/minorMatchup.ts:108`
 - `src/services/positionReadingService.test.ts:888`
 - `src/services/positionReadingService.test.ts:893`
 - `src/services/positionReadingService.test.ts:899`
@@ -641,7 +645,7 @@
 - `src/services/principleAttribution.ts:1674`
 - `src/services/reviewTeachingPoints.ts:206`
 
-### `findPieceQuality` (function) — 31 call sites
+### `findPieceQuality` (function) — 32 call sites
 - `src/services/concessionBeat.ts:318`
 - `src/services/concessionBeat.ts:320`
 - `src/services/concessionBeat.ts:326`
@@ -649,6 +653,7 @@
 - `src/services/danyaBehaviors.ts:553`
 - `src/services/danyaExploitability.test.ts:100`
 - `src/services/groundedAnswer.ts:7023`
+- `src/services/minorMatchup.ts:88`
 - `src/services/nextPlans.ts:127`
 - `src/services/pieceValueRead.ts:532`
 - `src/services/positionReadingService.test.ts:106`
@@ -690,7 +695,7 @@
 - `src/services/groundedAnswer.ts:6706`
 - `src/services/groundedAnswer.ts:6916`
 
-### `holeTargets` (function) — 7 call sites
+### `holeTargets` (function) — 8 call sites
 - `src/services/boardPlanFacts.ts:103`
 - `src/services/boardPlanFacts.ts:104`
 - `src/services/danyaBehaviors.ts:784`
@@ -698,6 +703,7 @@
 - `src/services/danyaExploitability.test.ts:70`
 - `src/services/danyaExploitability.test.ts:91`
 - `src/services/groundedAnswer.ts:6990`
+- `src/services/minorMatchup.ts:94`
 
 ### `findColorComplexWeakness` (function) — 8 call sites
 - `src/services/computedTruth.fuzz.test.ts:154`

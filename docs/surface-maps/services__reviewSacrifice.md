@@ -56,7 +56,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planStopped.ts:61`
 - `src/services/reviewConcepts.ts:221`
 - `src/services/reviewFullData.ts:1095`
-- `src/services/reviewFullData.ts:1742`
+- `src/services/reviewFullData.ts:1744`
 - `src/services/reviewSacrifice.test.ts:114`
 - `src/services/reviewSacrifice.test.ts:124`
 - `src/services/reviewSacrifice.test.ts:128`

@@ -779,6 +779,10 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     for (const f of readBoardAll('oppositeBishops', { fenBefore: i.fenBefore, san: i.san, student })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 50 });
     }
+    // Knight against bishop made by this move, and which minor is better.
+    for (const f of readBoardAll('minorMatchup', { fenBefore: i.fenBefore, san: i.san, student })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 50 });
+    }
     // DEFENCE, both seats (Danya's speedruns, 2026-11-17): a pin that will
     // not hold, the queen's escapes counted, two hanging pieces one move saves.
     for (const f of readBoardAll('harmlessPin', { fenBefore: i.fenBefore, san: i.san, student, line: i.reads?.after[0]?.moves ?? [] })) {
