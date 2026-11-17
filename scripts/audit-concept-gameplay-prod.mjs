@@ -342,24 +342,26 @@ async function pieceProbe(page, listener) {
         if (text.replace(/^C\s*/, '').length > 10) break;
       }
       console.log(`[piece-latency] ${Date.now() - askedAt}ms`);
-      const walks = await last.locator('[data-testid^="message-walk-line-"]').count();
+      // One Play-line button under the board (2026-11-17): an answer that
+      // carries lines STATES them there, so the button turns live.
+      const playLine = page.locator('[data-testid="teach-play-line-btn"]');
+      const walks = (await playLine.count()) > 0 && (await playLine.isEnabled().catch(() => false)) ? 1 : 0;
       console.log(`[piece] ask="${ask}" walks=${walks} → ${text.slice(0, 260)}`);
       // PIN the button now: `last` is a lazy "newest bubble" locator, and in a
       // long game newer bubbles land after the answer — the click then hit a
       // bubble with no Walk button (H3 false-failed once the game played on).
-      if (walks > 0) { answered = { ask, text, walks, last, walk0: await last.locator('[data-testid="message-walk-line-0"]').elementHandle().catch(() => null) }; break; }
+      if (walks > 0) { answered = { ask, text, walks, playLine }; break; }
     }
     for (const e of listener.getCapturedEvents().filter((x) => x.source === 'coachService.pieceOptions')) console.log(`[piece-stage] ${e.summary}`);
     record('H1. a "couldn\'t they just move X?" ask is answered by the COMPUTER (job → squares → refutation → verdict)', !!answered && /\b(Where can|So (yes|no)|So [A-Z][a-z]?[a-h1-8x+]* was about as good|comes down to the best square|the question is just its best square|square that holds|gives up its guard|is attacked|holds?\.)\b/.test(answered.text), answered ? answered.text.slice(0, 200) : 'no ask produced walkable lines');
-    record('H2. the answer carries a Walk button per calculated line', !!answered && answered.walks > 0, answered ? `${answered.walks} walk button(s)` : '0');
+    record('H2. the answer states its line to the Play-line button under the board', !!answered && answered.walks > 0, answered ? 'Play line live' : 'Play line greyed');
     if (answered) {
       // While the answer is spoken the board SHOWS the question's position
       // (`line-walk-active`). Baseline only once it has handed back.
       const active = page.locator('[data-testid="line-walk-active"]');
       for (let t = Date.now(); Date.now() - t < 45_000 && (await active.count()) > 0;) await page.waitForTimeout(500);
       const live = await readPlacement(page);
-      if (answered.walk0) await answered.walk0.click({ force: true }).catch(() => {});
-      else await answered.last.locator('[data-testid="message-walk-line-0"]').click({ force: true }).catch(() => {});
+      await answered.playLine.click({ force: true }).catch(() => {});
       let moved = false;
       for (let t = Date.now(); Date.now() - t < 8000 && !moved;) { await page.waitForTimeout(300); moved = (await active.count()) > 0; }
       let back = false;
@@ -367,7 +369,7 @@ async function pieceProbe(page, listener) {
         await page.waitForTimeout(500);
         back = (await active.count()) === 0 && samePlacement(await readPlacement(page), live);
       }
-      record('H3. Walk plays the line on the board and returns to the game', moved && back, `moved=${moved} returned=${back}`);
+      record('H3. Play line plays the line on the board and returns to the game', moved && back, `moved=${moved} returned=${back}`);
     }
 
 }

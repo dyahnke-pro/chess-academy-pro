@@ -108,7 +108,7 @@ async function ask(text) {
     if (stable >= 2) break;
   }
   const rows = (await chatRows()).slice(rowsBefore);
-  const walkButtons = (await get('/js', 'return document.querySelectorAll("[data-testid*=walk-line], [data-testid=message-walk-lines]").length')) ?? 0;
+  const walkButtons = (await get('/js', 'return document.querySelectorAll("[data-testid*=walk-line]:not([disabled]), [data-testid*=play-line]:not([disabled]), [data-testid=board-bar-line]:not([disabled])").length')) ?? 0;
   return { walkButtons, answer: last, secs: Math.round((Date.now() - t0) / 100) / 10, row: rows[rows.length - 1] ?? null, url: await get('/js', 'return location.href') };
 }
 
