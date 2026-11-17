@@ -256,6 +256,11 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   castlingTakenAway: 'am-i-safe',
   castlingWing: 'am-i-safe',
   pieceMovedAgain: GAME,
+  queenHunt: 'candidates',
+  secondAttacker: 'candidates',
+  outOfReach: 'assess',
+  poisonedPiece: 'calculate',
+  everyMate: 'forcing-moves',
 };
 
 /** The step a computer serves, or null when no step board carries it. */

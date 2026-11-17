@@ -81,6 +81,11 @@ import { fileTradeAt, fileTradeLine } from './fileTrade';
 import { pawnEndingTradeAt, pawnEndingTradeLine } from './pawnEndingTrade';
 import { tradeKeptAt, tradeKeptLine, type TradeKeptInput } from './tradeKept';
 import type { AnalysisLine } from '../types';
+import { queenHunt, queenHuntLine } from './queenHunt';
+import { secondAttacker, secondAttackerLine } from './secondAttacker';
+import { outOfReach, outOfReachLine } from './outOfReach';
+import { poisonedPiece, poisonedPieceLine } from './poisonedPiece';
+import { everyMate, everyMateLine } from './everyMate';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses' | 'think';
 
@@ -300,6 +305,24 @@ export interface BoardContexts {
   pawnEndingTrade: { fenBefore: string; san: string; student: Color; costCp: number | null; after: AnalysisLine | null };
   /** An even trade on offer kept off the board, with the board's reason. */
   tradeKept: TradeKeptInput & { student: Color };
+  /** THE QUEEN HUNT (`queenHunt`, S4 king group): the move `san` from
+   *  `fenBefore` hits the other side's queen and leaves it no safe square, or
+   *  one (and the move that traps it there); or the mover's queen leaves a
+   *  square one move would have trapped. `line`: the engine's line after the
+   *  move (UCI, the reply first), or null. */
+  queenHunt: { fenBefore: string; san: string; student: Color; line: readonly string[] | null };
+  /** A SECOND ATTACKER (`secondAttacker`): the move joins a piece already on a
+   *  target and the count now wins it, or taking there mates. */
+  secondAttacker: { fenBefore: string; san: string; student: Color };
+  /** OUT OF REACH (`outOfReach`): the moved piece lands where no pawn and no
+   *  smaller piece can chase it, against a square where it could be chased.
+   *  `altUcis`: the engine's top moves before the move (UCI). */
+  outOfReach: { fenBefore: string; san: string; student: Color; altUcis: readonly string[] };
+  /** THE POISONED PIECE (`poisonedPiece`): after the move a piece that looks
+   *  loose cannot be taken — every capture walks into mate in one or two. */
+  poisonedPiece: { fenBefore: string; san: string; student: Color };
+  /** EVERY MATE (`everyMate`): the move mates, and another move mated too. */
+  everyMate: { fenBefore: string; san: string; student: Color };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -362,6 +385,9 @@ function structureFact(r: StructureRead, fact: MakeFact, fen: string, seat: Fact
     ...(r.heldForm ? { heldForm: { text: r.heldForm.text, proof: r.heldForm.proof, squares: [...r.heldForm.squares] } } : {}),
   });
 }
+/** Learn's turn door reads its lanes, not the registry's composer reads; a
+ *  move read of the S4 king group joins it as a lane — owed. */
+const KING_LEARN_OWED = { not: 'owed — Learn\'s door (learnTurnDoor) reads its own lanes; this read joins it as a lane' } as const;
 const STRUCT_TACTICS = { not: 'a structural judgement is about a game\'s plan; a puzzle poses one tactic' } as const;
 const STRUCT_WEAK = { not: 'owed — the weakness record keeps tags, not the structure read; the held rows ride recordTeachingEvidence' } as const;
 
@@ -1547,6 +1573,125 @@ export const BOARD_COMPUTERS = {
     kind: 'capture-choice',
     phase: ANY,
     surfaces: TRADE_SURFACES,
+  },
+  queenHunt: {
+    // His "…Bg4 attacks it and it has no safe square" and "after …Qa2, Ra1
+    // traps it" (S4 king group): the queen's safe squares read with the
+    // trapped-piece computer's rule, both seats.
+    read: ({ fenBefore, san, student, line }, fact) => safe(() => {
+      const h = queenHunt(fenBefore, san, line);
+      if (!h) return null;
+      const mine = new Chess(fenBefore).turn() === student;
+      const text = queenHuntLine(h, mine ? 'your' : 'their', fenBefore);
+      const key = `queen-hunt:${h.shape}:${h.queen}`;
+      // The queen is what rides on it: hit now, or caught on its one square.
+      const stakes = h.shape === 'one-square' && !h.net ? null : { points: 9, plies: h.shape === 'boxed' ? 1 : 2 };
+      return fact({ key, claims: [key], text, proof: squaresProof(text, h.squares) ?? NO_PROOF.description, squares: h.squares, stakes,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: mine && h.shape === 'one-square' && !!h.net, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'queenHunt',
+    kind: 'move-job',
+    phase: ANY,
+    surfaces: {
+      lesson: LESSON_BOARD, learn: KING_LEARN_OWED, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — the queen lost or kept is graded by the move\'s own cost' },
+      think: THINK,
+    },
+  },
+  secondAttacker: {
+    // His "Qf3 adds a second attacker to f6, so taking twice on f6 becomes the
+    // threat" and the queen-and-bishop pair on f7 (S4 king group).
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const a = secondAttacker(fenBefore, san);
+      if (!a) return null;
+      const mine = new Chess(fenBefore).turn() === student;
+      const text = secondAttackerLine(a, mine ? 'your' : 'their', fenBefore);
+      const squares = [a.target, a.newcomer.square, a.partner.square];
+      const key = `second-attacker:${a.target}:${a.mate ? 'mate' : 'win'}`;
+      const stakes = a.mate ? mateStakes(mine ? 'you' : 'them', 1, false) : { points: a.gain, plies: 1 };
+      return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'secondAttacker',
+    kind: 'move-job',
+    phase: ANY,
+    surfaces: {
+      lesson: LESSON_BOARD, learn: KING_LEARN_OWED, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'the threat the count makes — its answer or its miss is graded by the reply\'s own cost' },
+      think: THINK,
+    },
+  },
+  outOfReach: {
+    // His "put the bishop where nothing can attack it; on f5 it could be
+    // chased by g4" (S4 king group): said only against a chaseable square.
+    read: ({ fenBefore, san, student, altUcis }, fact) => safe(() => {
+      const o = outOfReach(fenBefore, san, altUcis);
+      if (!o) return null;
+      const mine = new Chess(fenBefore).turn() === student;
+      const text = outOfReachLine(o, mine ? 'your' : 'their', fenBefore);
+      const squares = [o.square, o.contrast.square];
+      const key = `out-of-reach:${o.square}:${o.contrast.left && 'now' in o.contrast.chase ? 'rescue' : 'square'}`;
+      return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'outOfReach',
+    kind: 'move-job',
+    phase: ANY,
+    surfaces: {
+      lesson: LESSON_BOARD, learn: KING_LEARN_OWED, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of where a piece stands — no question of the student\'s posed' },
+      think: THINK,
+    },
+  },
+  poisonedPiece: {
+    // His "if …fxg5, Bxh5+ Rxh5 Qxh5 is mate, so the g5 bishop can't be
+    // taken" (S4 king group): the mate read by brute force, so it is exact.
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const p = poisonedPiece(fenBefore, san);
+      if (!p) return null;
+      const mine = new Chess(fenBefore).turn() === student;
+      const text = poisonedPieceLine(p, mine ? 'your' : 'their', fenBefore);
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const key = `poisoned:${p.square}`;
+      const proof = legalLineProof(fenAfter, [p.capture, ...p.mate], lineSeatAt(fenAfter, student), true) ?? squaresProof(text, [p.square]) ?? NO_PROOF.description;
+      return fact({ key, claims: [key], text, proof, squares: [p.square], stakes: mateStakes(mine ? 'you' : 'them', 1 + 2 * Math.ceil(p.mate.length / 2), false),
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter,
+        ...(isProof(proof) && proof.line ? { lines: [proof.line] } : {}) });
+    }),
+    computer: 'poisonedPiece',
+    kind: 'move-job',
+    phase: ANY,
+    surfaces: {
+      lesson: LESSON_BOARD, learn: KING_LEARN_OWED, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a capture refused is graded by the reply\'s own cost; the mate missed by missed-their-mate' },
+      think: THINK,
+    },
+  },
+  everyMate: {
+    // His "after Kf1 there are two mates in one, …Qf2# and …Bh3#; look for
+    // both" (S4 king group): every mating move counted by chess.js.
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const e = everyMate(fenBefore, san);
+      if (!e) return null;
+      const mine = new Chess(fenBefore).turn() === student;
+      const text = everyMateLine(e, mine ? 'your' : 'their', fenBefore);
+      const key = `every-mate:${[e.played, ...e.others].join(',')}`;
+      return fact({ key, claims: [key], text, proof: NO_PROOF.stated, squares: [], stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+    }),
+    computer: 'everyMate',
+    kind: 'move-job',
+    phase: ANY,
+    surfaces: {
+      lesson: LESSON_BOARD, learn: KING_LEARN_OWED, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT,
+      tactics: { not: 'a puzzle poses one mate; its other mates are the puzzle\'s alternative solutions' },
+      weaknesses: { not: 'the game is over on a mate — no question of the student\'s left to grade' },
+      think: THINK,
+    },
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };
 

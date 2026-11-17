@@ -230,6 +230,14 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   const read = moveAspects({ fenBefore: i.fenBefore, san: i.san, prev: i.prev, moverIsStudent: i.moverIsStudent, follow });
   if (read?.mate) {
     add('checkmate', 'moveAspects', 'briefing', 'mate', `${i.moverIsStudent === undefined ? 'This delivers' : mine ? 'You deliver' : 'They deliver'} checkmate — the king has no reply`, undefined, [], 100);
+    // EVERY MATE ON THE BOARD (his "two mates in one, look for both"): the
+    // other moves that mated, said behind the mate — the choices it had.
+    if (i.moverIsStudent !== undefined) {
+      const student = mine ? sideOf(i.fenBefore) : sideOf(fenAfter);
+      for (const f of readBoardAll('everyMate', { fenBefore: i.fenBefore, san: i.san, student })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'boardRead', idea: 'choice', weight: 70 });
+      }
+    }
     return facts;
   }
   for (const a of read?.aspects ?? []) {
@@ -789,6 +797,23 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     for (const f of readBoardAll('chainBase', { fenBefore: i.fenBefore, san: i.san, student })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: f.stakes ? 'pressure' : 'guard', weight: 50 });
     }
+    // THE S4 KING GROUP's move reads (Danya's speedruns): the queen hunted or
+    // saved, the second attacker that makes the count, the piece put out of
+    // reach, the piece poisoned by a mate (every mate is read with the mate,
+    // above). Each is the
+    // move's own job, so it leads the same idea the job and the fundamentals
+    // say more plainly ("attacks their queen", "joins your bishop", "the a4
+    // outpost").
+    const moveReads: Array<{ f: CoachFact; idea: IdeaKind; weight: number }> = [
+      // A queen with nowhere to run is a tactic: it says more than the bare hit.
+      ...readBoardAll('queenHunt', { fenBefore: i.fenBefore, san: i.san, student, line: i.reads?.after[0]?.moves ?? null }).map((f) => ({ f, idea: 'tactic' as IdeaKind, weight: 74 })),
+      // The count wins material (or mates): more than the job's bare "joins".
+      ...readBoardAll('secondAttacker', { fenBefore: i.fenBefore, san: i.san, student }).map((f) => ({ f, idea: (readKey(f).endsWith(':mate') ? 'mate' : 'win-material') as IdeaKind, weight: 72 })),
+      // Out of an attack it is the piece's rescue said with more; else its square.
+      ...readBoardAll('outOfReach', { fenBefore: i.fenBefore, san: i.san, student, altUcis: (i.reads?.before ?? []).map((l) => l.moves[0] ?? '') }).map((f) => ({ f, idea: (readKey(f).endsWith(':rescue') ? 'rescue' : 'outpost') as IdeaKind, weight: 86 })),
+      ...readBoardAll('poisonedPiece', { fenBefore: i.fenBefore, san: i.san, student }).map((f) => ({ f, idea: 'mate' as IdeaKind, weight: 80 })),
+    ];
+    for (const { f, idea, weight } of moveReads) facts.push({ ...f, namesStudentMove: false, source: 'boardRead', idea, weight });
     // THE PLAN'S NEXT STEPS and COMPENSATION (2026-11-12, the writers' "Bd3
     // and Qc2, both aimed at h7" and "a pawn down but slightly better"), off
     // the lesson's read after the move. A lesson shows its line: every move

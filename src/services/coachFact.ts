@@ -482,6 +482,11 @@ export const COMPUTER_CATALOG = {
   pawnEndingTradeAt: { file: 'services/pawnEndingTrade.ts', says: 'a capture that trades the last pieces, along the engine\'s line, into a king-and-pawn ending the mover is pawns up and winning' },
   tradeKeptAt: { file: 'services/tradeKept.ts', says: 'an even trade on offer that the move kept off the board, with the board\'s reason: the piece guards a man, presses the king, the mover is behind, or the offered piece threatens nothing' },
   pawnBreak: { file: 'services/pawnBreak.ts', says: 'the pawn break and what it is for: the pawn it strikes (the base of their chain), the file it opens for the rooks, the bishop it frees' },
+  queenHunt: { file: 'services/queenHunt.ts', says: 'a queen hit by a smaller piece with no safe square to run to, or one (and the move that traps it there); or a queen that leaves a square one move would have trapped it on' },
+  secondAttacker: { file: 'services/secondAttacker.ts', says: 'a piece joins another against a target: the count of attackers and guards, and what taking there now wins (or the mate it threatens)' },
+  outOfReach: { file: 'services/outOfReach.ts', says: 'a piece put where no pawn and no smaller piece can chase it, against the square where it could be chased' },
+  poisonedPiece: { file: 'services/poisonedPiece.ts', says: 'a piece that looks loose but cannot be taken: every capture of it walks into a forced mate in one or two' },
+  everyMate: { file: 'services/everyMate.ts', says: 'the mate played, and the other moves that mate on the same board' },
 } satisfies Record<string, CatalogRow>;
 
 export type ComputerName = keyof typeof COMPUTER_CATALOG;
