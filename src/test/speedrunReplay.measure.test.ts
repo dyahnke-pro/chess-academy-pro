@@ -4,13 +4,21 @@
 // each surface would speak on each of his moves, on the build in hand, with no
 // browser. Run on demand:
 //   SPEEDRUN_REPLAY=<dir with games.json and reads/> npx vitest run src/test/speedrunReplay.measure.test.ts
-// writes audit-reports/speedrun-replay.json.
+// writes audit-reports/speedrun-replay.json, and audit-reports/speedrun-weighed.json:
+// every line each deciding place WEIGHED on each move (said or held, and why,
+// `everythingEvents`) — how a regrade tells a quiet computer from a missing one.
 import { describe, it } from 'vitest';
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { learnSource, reviewSource, type FixtureGame } from './replaySources';
 import type { PlyReads } from './replayGame';
+import { onEverything, type EverythingRow } from '../services/everythingEvents';
 
 const DIR = process.env.SPEEDRUN_REPLAY;
+
+/** A weighed row, kept small: the board, the move, and each line's computer,
+ *  words, whether it spoke and why not. */
+const slim = (r: EverythingRow) => ({ door: r.door, ply: r.at?.ply ?? null, san: r.at?.san ?? null, fen: r.at?.fen ?? null,
+  lines: r.lines.map((l) => ({ c: l.computer, k: l.kind, t: l.text, said: l.said, why: l.why })) });
 
 describe.skipIf(!DIR)('speedrun replay', () => {
   it('walks every game through Learn and Review', async () => {
@@ -25,6 +33,7 @@ describe.skipIf(!DIR)('speedrun replay', () => {
       }
     }
     const out: Record<string, { set: string; review: string[]; learn: string[] }> = {};
+    const weighed: Record<string, { review: ReturnType<typeof slim>[]; learn: ReturnType<typeof slim>[] }> = {};
     for (const g of games) {
       const rs: PlyReads[] = [];
       for (let k = 0; k < g.sans.length; k++) {
@@ -33,9 +42,23 @@ describe.skipIf(!DIR)('speedrun replay', () => {
       }
       if (rs.length < g.sans.length) continue;
       const fg: FixtureGame = { id: g.video, rating: g.set === 'low' ? 700 : 2000, studentSide: g.studentSide, sans: g.sans, reads: rs };
-      out[g.video] = { set: g.set, review: (await reviewSource(fg)).spoken, learn: (await learnSource(fg)).spoken };
+      const rows: EverythingRow[] = [];
+      const off = onEverything((r) => { rows.push(r); });
+      let review: string[] = [];
+      let learn: string[] = [];
+      try {
+        review = (await reviewSource(fg)).spoken;
+        const cut = rows.length;
+        learn = (await learnSource(fg)).spoken;
+        weighed[g.video] = {
+          review: rows.slice(0, cut).map(slim),
+          learn: rows.slice(cut).map(slim),
+        };
+      } finally { off(); }
+      out[g.video] = { set: g.set, review, learn };
     }
     if (!existsSync('audit-reports')) mkdirSync('audit-reports');
     writeFileSync('audit-reports/speedrun-replay.json', JSON.stringify(out, null, 1));
+    writeFileSync('audit-reports/speedrun-weighed.json', JSON.stringify(weighed));
   }, 3_600_000);
 });
