@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**198 lines · 6 exports · 49 importers · 6 tests · 0 audits**
+**198 lines · 6 exports · 50 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -45,6 +45,7 @@
 - `src/services/dbService.ts`
 - `src/services/engineStrength.test.ts`
 - `src/services/engineStrength.ts`
+- `src/services/flexibleMove.ts`
 - `src/services/hintRegister.ts`
 - `src/services/homeOpeningPlan.ts`
 - `src/services/moveThoughtFacts.ts`

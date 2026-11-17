@@ -805,6 +805,12 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'tactic', weight: 68 });
       }
     }
+    // THE FLEXIBLE MOVE, both seats (the option principle): of moves as good
+    // as each other, the one that keeps the important moves open — the read
+    // per candidate the weighing reads (`weighReads`).
+    for (const f of readBoardAll('flexibleMove', { fenBefore: i.fenBefore, san: i.san, student, reads: weighReads })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'order', weight: 52 });
+    }
     // What the pawn move did to the lines through its squares, the piece at a
     // chain's base, the pawn guard pinned to its king (S4 pawns).
     for (const f of [...readBoardAll('pawnCutsGuard', { fenBefore: i.fenBefore, san: i.san, student }), ...readBoardAll('pinnedPawnGuard', { fenBefore: i.fenBefore, san: i.san, student })]) {

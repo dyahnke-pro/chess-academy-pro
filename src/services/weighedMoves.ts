@@ -750,6 +750,20 @@ function faultsOn(fenBefore: string, m: Move, own: 'your' | 'their', other: 'you
   return out;
 }
 
+/** Does the board show no fault on the square `move` takes the piece to: it
+ *  hangs nothing, no pawn kicks it there, it shuts in none of the mover's own
+ *  bishops — `faultsOn` without its words. The flexible move's good
+ *  square (`flexibleMove`) reads it, so the two say "good square" the same way. */
+export function squareIsSound(fenBefore: string, move: string): boolean {
+  const m = moveOn(fenBefore, move);
+  if (!m) return false;
+  if (hangsAfter(fenBefore, m) || blocksOwn(fenBefore, m)) return false;
+  const after = boardOf(fenBefore);
+  if (!after) return false;
+  try { after.move(m.san); } catch { return false; }
+  return !pawnKick(after.fen(), m.to, m.color);
+}
+
 export interface SquareChoice {
   /** The piece and the square it went to. */
   piece: string;

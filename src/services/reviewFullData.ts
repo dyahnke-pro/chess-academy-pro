@@ -1688,6 +1688,10 @@ export function computeMoveFacets(
       // side is winning anyway.
       add(readBoardAll('windmill', { fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('perpetualCheck', { fenBefore, san, student: studentColorWB, replies: ctx.evaluation == null ? [] : [{ cp: storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: storedMate(ctx.evaluation), moves: ctx.playedLineUci }] })[0]);
+      // The flexible move, both seats (the option principle): of moves the
+      // engine holds as good as each other, the one that keeps the important
+      // moves open — off the record's one read per candidate.
+      add(readBoardAll('flexibleMove', { fenBefore, san, student: studentColorWB, reads: ctx.teaching.weigh.reads })[0]);
     }
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.
