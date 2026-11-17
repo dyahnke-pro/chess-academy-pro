@@ -29,6 +29,8 @@
 - **T7 loose ends** — the one dead computer deleted; the 9 leftover agent worktrees removed (the 20 side branches from Nov 11–12 were checked 2026-11-17: every course and fix is already in, later versions — nothing lost); the ~30 open tasks closed (done / folded in / brought to David).
 - **T8 ship** — one ship-check, `main`, live check, muted Learn / Review / chat prod audits read line by line.
 
+**Status 2026-11-17 (night):** T2 BUILT — 11 new computers (repeating checks, minor matchup, flexible move, into their camp, stalemate tricks, exchange sacrifice, pawn majority, queen chased, fortress, blockade, rook lift) in the one fact set; chat answers "why <move>?" on every one, both seats (`chatAnswersEveryComputer.test.ts`). T3 BUILT — Learn reads `moveThoughtFacts` on the `thought` lane (`learnSharedFacts.ts`); the door holds or speaks, chat answers either way (David: "Move thought should still reach learn, it's just not spoken by the decider"). T5/T6 BUILT (WO-TIERS-01, WO-SET-WEAKNESS-01 below). OPEN: (a) eight computers still live only inside Review's walk and never reach the shared set, so Learn's chat cannot answer about them — the tempting capture, their threat's purpose, the move's merit, the move comparison, the strategic concept, the forced sequence, the piece itinerary, Review's own move intent (`docs/computer-reach.json`, learn = no); (b) T4 the other screens onto the one door (#200).
+
 Dropped (David 2026-11-17): the 98 missing transcripts and the 75 translated-caption re-pulls; the sweep stays at 320 videos / 18,368 ideas.
 
 ## 🎯 THE FLEXIBLE MOVE — the Option Principle, computed (David 2026-11-17: "Flexible move has a clear definition. Find it so we calculate it correctly. It's the one that allows the most options.")

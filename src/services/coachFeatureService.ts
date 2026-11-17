@@ -3095,7 +3095,10 @@ function* reviewSegmentSteps(
         // ply (David 2026-09-15, reading the real review: "your knight sits on a
         // protected outpost on d4 … Your knight sits on an outpost at d4"). Two
         // computers, one fact, one sentence.
-        if (f.tag === 'structure') {
+        // Only the inventory computer's facet is a list of sub-claims; any
+        // other structure fact (a majority, a blockade) is a sentence, and the
+        // atomizer would split it at its commas and rejoin the halves with "and".
+        if (f.tag === 'structure' && f.computer === 'describeStructure') {
           const outpostSquaresAlreadySaid = new Set(
             keptRaw.filter((k) => /outpost/i.test(k.text)).flatMap((k) => k.text.match(/\b[a-h][1-8]\b/g) ?? []),
           );

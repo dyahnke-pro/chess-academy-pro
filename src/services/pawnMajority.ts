@@ -204,8 +204,10 @@ export function pawnMajorityLine(x: PawnMajority, student: Color, fenAfter: stri
   const own = mine ? 'your' : 'their';
   const who = mine ? 'you' : 'them';
   const ratio = `${num(g.count)} pawns against ${num(g.against)}`;
-  // The pawn the move just pushed is "that pawn": the turn already named it.
-  const lead = g.lead === x.to && x.event === 'advance' ? 'that pawn' : g.lead ? `${own} pawn on ${g.lead}` : null;
+  // The pawn the move just pushed is named by its file ("your f-pawn"): the
+  // turn already named its square, and "that pawn" points at nothing once a
+  // line about another piece stands between them.
+  const lead = g.lead === x.to && x.event === 'advance' ? `${own} ${g.lead[0]}-pawn` : g.lead ? `${own} pawn on ${g.lead}` : null;
   switch (x.event) {
     case 'created': {
       if (x.split) {

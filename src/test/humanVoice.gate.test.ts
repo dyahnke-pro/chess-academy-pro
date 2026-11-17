@@ -32,6 +32,15 @@ describe('the robotic patterns only fall', () => {
     expect(Object.keys(counts).sort()).toEqual(Object.keys(ceiling).sort());
   });
 
+  // A word said twice back to back ("four pawns against two and and that
+  // pawn") is a broken splice, never a style: no spoken line may carry one.
+  it('no spoken line repeats a word back to back', () => {
+    const doubled = /\b(\w+) \1\b/i;
+    const hits = Object.entries(baseline).flatMap(([key, rec]) => rec.spoken.filter((l) => doubled.test(l)).map((l) => `${key} ${l}`));
+    expect(hits).toEqual([]);
+    expect(doubled.test('four pawns against two and and that pawn')).toBe(true);
+  });
+
   it('negative control: the robotic patterns are found', () => {
     expect(roboticMarks('The plan is to break with a4; put a rook on the d file; improve your rook on a1.').map((m) => m.mark)).toContain('semicolon');
     expect(roboticMarks('Their Nxe5 was a mistake — the stronger move was f6 — it would guard e5.').map((m) => m.mark)).toContain('dash-chain');

@@ -62,7 +62,7 @@ describe('every new computer answers in chat (one coach)', () => {
       });
       expect(ans, `${c.id}: chat had no answer`).not.toBeNull();
       const said = (ans?.text ?? '').toLowerCase();
-      const hit = own.some((f) => [f.text, f.alsoText ?? ''].some((t) => sentences(t).some((s) => said.includes(s.toLowerCase()))));
+      const hit = own.some((f) => sentences(f.text).some((s) => said.includes(s.toLowerCase())));
       expect(hit, `${c.id}: answer "${ans?.text}" — the computer said "${own.map((f) => f.text).join(' | ')}"`).toBe(true);
     });
   }
