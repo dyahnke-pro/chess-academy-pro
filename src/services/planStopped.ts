@@ -28,6 +28,13 @@ function theirMove(fenBefore: string, fenAfter: string): Move | null {
   return null;
 }
 
+/** A king square a castled king would use: a wing file on its own first two ranks. */
+function shelteredKingSquare(sq: string, color: Color): boolean {
+  const rank = Number(sq[1]);
+  const home = color === 'w' ? rank <= 2 : rank >= 7;
+  return home && 'abgh'.includes(sq[0]);
+}
+
 const noun = (t: PieceSymbol): string => PIECE_NOUN[t] ?? 'piece';
 
 /** Does the piece now on `from` (after the move) attack `sq`? */
@@ -48,7 +55,10 @@ const PROOF: Record<PlanKind, Proof> = {
     // and the next plan, reading the same board, said "attack their king on f1
     // before it gets out"). A king step that leaves it stuck is no stop.
     if (m.piece === 'k') {
-      return enemyKingStuckInCenter(after.fen(), student) ? null : `Their king stepped to ${m.to}, out of the open centre — the attack on it is off.`;
+      // …AND OUT OF THE CENTRE MEANS SHELTERED: a king that walks to f6 is
+      // more exposed, not safe (Danya BGTB 11…Kf6). Off only on a wing square
+      // of its own first two ranks.
+      return enemyKingStuckInCenter(after.fen(), student) || !shelteredKingSquare(m.to, m.color) ? null : `Their king stepped to ${m.to}, out of the open centre — the attack on it is off.`;
     }
     if (plan.file && m.piece === 'p' && m.to[0] === plan.file) return `Their pawn on ${m.to} closes the ${plan.file}-file the attack needed.`;
     return null;

@@ -110,7 +110,10 @@ export function theirMoveCost(fenBefore: string, san: string, studentColor: 'w' 
       const behind = them === 'w' ? Number(b[1]) < Number(mv.to[1]) : Number(b[1]) > Number(mv.to[1]);
       if (!behind) continue;
       const drop = bishopMobility(before, b) - bishopMobility(after, b);
-      if (drop >= 3) {
+      // SHUT IN means it has nowhere left to go: …c5 in the French leaves the
+      // f8 bishop e7 and d6, and is no shut-in (Danya speedrun tapes: said in
+      // 8 of 20 games, of a bishop with two or more squares left).
+      if (drop >= 3 && bishopMobility(after, b) <= 1) {
         return {
           kind: 'bishop-shut',
           text: `Their ${played} shuts in their own bishop on ${b} — the pawn now sits on its colour, right in its way.`,

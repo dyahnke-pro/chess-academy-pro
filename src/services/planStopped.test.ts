@@ -65,3 +65,13 @@ describe('the second block in a row is said like a coach', () => {
     expect(planStoppedLine(proof, 3, PASSER, 'w')).toContain('the position is holding level');
   });
 });
+
+describe('a king walking out is off the attack only when it reaches shelter', () => {
+  it('…Kf6 is more exposed, not safe (Danya BGTB 11…Kf6)', () => {
+    const before = 'rnbq1b1r/3pk1pp/p7/8/2ppR3/1QP2N2/PP3PPP/RNB3K1 b - - 0 11';
+    const after = 'rnbq1b1r/3p2pp/p4k2/8/2ppR3/1QP2N2/PP3PPP/RNB3K1 w - - 1 12';
+    for (const plan of deriveNextPlanFacts(before, 'w', { namesStudentMoves: true }).filter((p) => p.kind === 'king-attack')) {
+      expect(planStoppedProof(plan, before, after, 'w') ?? '').not.toMatch(/the attack on it is off/);
+    }
+  });
+});

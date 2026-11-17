@@ -61,3 +61,13 @@ describe('a bishop out in front of the chain is not shut in (chat probe 2026-10-
     expect(theirMoveCost(c.fen(), 'e6', 'w')?.text).toMatch(/shuts in their own bishop on c8/);
   });
 });
+
+describe('a bishop is shut in only when it has nowhere left to go', () => {
+  const at = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
+  it('…c5 in the French leaves the f8 bishop e7 and d6: no shut-in (Danya tapes, 8 of 20 games)', () => {
+    expect(theirMoveCost(at(['e4', 'e6', 'd4', 'd5', 'e5']), 'c5', 'w')?.kind).not.toBe('bishop-shut');
+  });
+  it('…d6 after …e5 leaves the f8 bishop only e7: shut in', () => {
+    expect(theirMoveCost(at(['e4', 'e5', 'Nf3']), 'd6', 'w')?.kind).toBe('bishop-shut');
+  });
+});
