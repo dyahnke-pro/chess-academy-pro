@@ -54,3 +54,11 @@ describe('prevent, one move early, with the move held', () => {
     expect(src).toMatch(/queueSpokenHint\(probe\.fen\(\), \{ computer: phRead\.computer, text: phRead\.heldForm\.text, lane: 'prophylaxis', proof: phRead\.heldForm\.proof/);
   });
 });
+
+describe('a pawn that stands on their square takes it first (Danya BGTB: "after c4 the pawn covers c4")', () => {
+  it('never says a pawn covers its own square', () => {
+    const p = { kind: 'kick', intent: { san: 'c4', from: 'c5', to: 'c4', piece: 'p' }, victim: { square: 'd3', piece: 'q' },
+      prevention: { san: 'c4', from: 'c3', to: 'c4', piece: 'p' }, squares: ['c4', 'd3'] } as unknown as Parameters<typeof prophylaxisProof>[0];
+    expect(prophylaxisProof(p).full).toBe('c4 would hit your queen on d3, and your pawn gets there first');
+  });
+});

@@ -265,8 +265,10 @@ export function prophylaxisKey(theirSquare: string): string {
 
 /** The proof: what their move would do, and why it no longer works. Exact. */
 export function prophylaxisProof(p: Prophylaxis): Proof {
+  // A pawn that STANDS on the square their move wanted takes it first; it does
+  // not "cover" its own square (Danya BGTB: "after c4 the pawn covers c4").
   const covers = p.prevention.piece === 'p'
-    ? `after ${p.prevention.san} the pawn covers ${p.intent.to}`
+    ? (p.prevention.to === p.intent.to ? `your pawn gets there first` : `after ${p.prevention.san} the pawn covers ${p.intent.to}`)
     : `after ${p.prevention.san} it no longer works`;
   return {
     kind: 'squares', exact: true,
