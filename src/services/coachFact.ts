@@ -468,6 +468,11 @@ export const COMPUTER_CATALOG = {
   emptyCheckAt: { file: 'services/emptyCheck.ts', says: 'a check that cost half a pawn and is answered by a block or a king step: the checking piece has to move again' },
   desperadoAt: { file: 'services/desperado.ts', says: 'two of the mover\'s pieces hanging, and the engine\'s best move sells the one that is lost anyway: it captures on its way out' },
   pawnBreak: { file: 'services/pawnBreak.ts', says: 'the pawn break and what it is for: the pawn it strikes (the base of their chain), the file it opens for the rooks, the bishop it frees' },
+  queenHunt: { file: 'services/queenHunt.ts', says: 'a queen hit by a smaller piece with no safe square to run to, or one (and the move that traps it there); or a queen that leaves a square one move would have trapped it on' },
+  secondAttacker: { file: 'services/secondAttacker.ts', says: 'a piece joins another against a target: the count of attackers and guards, and what taking there now wins (or the mate it threatens)' },
+  outOfReach: { file: 'services/outOfReach.ts', says: 'a piece put where no pawn and no smaller piece can chase it, against the square where it could be chased' },
+  poisonedPiece: { file: 'services/poisonedPiece.ts', says: 'a piece that looks loose but cannot be taken: every capture of it walks into a forced mate in one or two' },
+  everyMate: { file: 'services/everyMate.ts', says: 'the mate played, and the other moves that mate on the same board' },
 } satisfies Record<string, CatalogRow>;
 
 export type ComputerName = keyof typeof COMPUTER_CATALOG;

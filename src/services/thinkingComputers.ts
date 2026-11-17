@@ -242,6 +242,11 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   pawnBreak: 'assess',
   desperadoAt: 'answer-danger',
   emptyCheckAt: 'is-my-move-safe',
+  queenHunt: 'candidates',
+  secondAttacker: 'candidates',
+  outOfReach: 'assess',
+  poisonedPiece: 'calculate',
+  everyMate: 'forcing-moves',
 };
 
 /** The step a computer serves, or null when no step board carries it. */
